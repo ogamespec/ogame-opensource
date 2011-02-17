@@ -17,7 +17,11 @@
 
 = Панель ресурсов =
 
+<img src="http://ogamespec.com/imgstore/oldogame_respane.jpg">
+
 = Левое меню =
+
+<img src="http://ogamespec.com/imgstore/oldogame_leftmenu.jpg">
 
 = Содержимое игровых страниц =
 
