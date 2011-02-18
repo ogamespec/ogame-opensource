@@ -1,0 +1,33 @@
+#combox_container {
+    margin-top:10px;
+    }
+#combox {
+    display:block;
+    position:relative;
+    /*border:5px solid skyblue;*/
+    background-image:url(/evolution/cominfo/comboxBild_6.jpg);
+    width:513px;
+    height:166px;
+    }
+#combox:hover {
+    text-decoration:none;
+    }
+#anfang {
+    position:absolute;;
+    top:7px;
+    right:10px;
+    font-family:tahoma;
+    color: orange; /*f2d9c5;*/
+    background-image:url(/evolution/cominfo/transp.gif);
+    font-size:17px;
+    font-weight:bold;
+    }
+#ende {
+    position:absolute;
+    bottom:7px;
+    right:10px;
+    font-family:tahoma;
+    color:black;
+    font-size:18px;
+    font-weight:bold;
+    } 
