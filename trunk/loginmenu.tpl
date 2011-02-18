@@ -25,7 +25,7 @@
          <span><input tabindex="3" maxlength="20" type="password" class="eingabe" name="pass" style="width:113px;top:0px" alt=Пароль /></span>
          <td style="padding-top:2px;">
          <!--<span class="link" onclick="submitLogin()" style="padding-left:7px;">LOGIN</span>-->
-         <input type="image" src="../img/login_button.jpg" alt="Login" class="loginButton" name="button" id="button" onmouseover="document.getElementById('button').src='../img/login_button2.jpg';" onmouseout="document.getElementById('button').src='../img/login_button.jpg';">
+         <input type="image" src="img/login_button.jpg" alt="Login" class="loginButton" name="button" id="button" onmouseover="document.getElementById('button').src='img/login_button2.jpg';" onmouseout="document.getElementById('button').src='img/login_button.jpg';">
 
          </form>
      </tr></table>
