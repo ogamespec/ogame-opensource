@@ -1,4 +1,4 @@
-<?
+<?php
 
 // LOCA - Localization Engine.
 
@@ -28,6 +28,9 @@ function loca_init ($loca_host, $loca_user, $loca_pass, $loca_dbname, $lang, $pr
 
     // Выбрать проект.
     $loca_project = loca_project_id ($proj);
+    if ($loca_project == -1) {
+        return false;
+    }
 
     return $loca_ready;
 }

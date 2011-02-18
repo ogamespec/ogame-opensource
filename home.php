@@ -1,6 +1,6 @@
 <?php
 
-require_once "loca.php";
+include ('loca_startpage.php');
 include ('common.php');
 
 include ('w3c.txt');
