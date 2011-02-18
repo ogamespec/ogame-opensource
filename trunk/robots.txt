@@ -1,0 +1,3 @@
+# Erlaubt allen Spidern alls zu Indexieren
+User-agent: *
+Disallow:
