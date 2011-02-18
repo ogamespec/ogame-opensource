@@ -7,8 +7,8 @@
 <head>
 <meta name="author" content="Gameforge Productions GmbH" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?=loca("META_CHARSET");?>" />
-<meta name="keywords" content=<?=loca("META_KEYWORDS");?> />
-<meta name="description" content=<?=loca("META_DESCRIPTION");?> />
+<meta name="keywords" content="<?=loca("META_KEYWORDS");?>" />
+<meta name="description" content="<?=loca("META_DESCRIPTION");?>" />
 <meta name="robots" content="index, follow" />
 <meta name="language" content="ru" />
 <meta name="distribution" content="global" />
@@ -20,7 +20,7 @@
 <meta http-equiv="pragma" content="no-cache" />
 
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<title><?=$SERVERNAME?></title>
+<title><?=loca("SERVERNAME");?></title>
 </head>
 
 <frameset rows="*,0,0" frameborder="no" border="0" framespacing="0">

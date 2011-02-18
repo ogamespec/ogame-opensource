@@ -2,8 +2,8 @@
 <head>
 <meta name="author" content="Gameforge Productions GmbH" />
 <meta http-equiv="content-type" content="text/html; charset=<?=loca("META_CHARSET");?>" />
-<meta name="keywords" content=<?=loca("META_KEYWORDS");?> />
-<meta name="description" content=<?=loca("META_DESCRIPTION");?> />
+<meta name="keywords" content="<?=loca("META_KEYWORDS");?>" />
+<meta name="description" content="<?=loca("META_DESCRIPTION");?>" />
 <meta name="robots" content="index, follow" />
 <meta name="language" content="ru" />
 <meta name="distribution" content="global" />
