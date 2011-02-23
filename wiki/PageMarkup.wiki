@@ -181,7 +181,7 @@ errorbox.style.display='block';
 
 = Левое меню =
 
-Левое меню - статичный HTML-код. У некоторых страниц его нет (`Заметки`, `Друзья`)
+Левое меню - статичный HTML-код. У некоторых страниц его нет (`Заметки`)
 
 <img src="http://ogamespec.com/imgstore/oldogame_leftmenu.jpg">
 
