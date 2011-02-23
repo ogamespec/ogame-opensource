@@ -181,7 +181,282 @@ errorbox.style.display='block';
 
 = Левое меню =
 
+Левое меню - статичный HTML-код. У некоторых страниц его нет (`Заметки`, `Друзья`)
+
 <img src="http://ogamespec.com/imgstore/oldogame_leftmenu.jpg">
+
+{{{
+
+<!-- LEFTMENU -->
+
+    <div id='leftmenu'>
+    
+<script language="JavaScript">
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+
+<script language="JavaScript">
+function popUp(URL) {
+  day = new Date();
+  id = day.getTime();
+  eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=1,scrollbars=1,location=1,statusbar=1,menubar=0,resizable=1,width=120,height=60,alwaysLowered=Yes');");
+}
+
+</script>
+
+
+<center>
+
+<div id='menu'>
+<a href="mailto:barrierefrei@ogame.de" title="Проблемы, касающиеся игроков со слабым зрением, отправляйте на barrierefrei@ogame.de." style="width:1px;"></a>
+<p style="width:110px;"><NOBR>Вселенная 5 (<a href="index.php?page=changelog&session=f79788caa724">v 0.83</a>)</NOBR></p>
+
+<table width="110" cellspacing="0" cellpadding="0">
+ <tr>
+  <td><img src="http://uni5.ogame.ru/evolution/gfx/ogame-produktion.jpg" width="110" height="40" /></td>
+ </tr>
+
+    
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=f79788caa724' accesskey="o">Обзор</a>
+
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=b_building&session=f79788caa724' accesskey="z">Постройки</a>
+    </font></div>
+
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=f79788caa724' accesskey="s">Сырьё</a>
+    </font></div>
+  </td>
+
+ </tr>
+
+  <tr>
+  <td>
+   <div align="center" ><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=f79788caa724' accesskey=""><font color='FF8900'>Скупщик</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+
+ </tr>
+ 
+  
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=f79788caa724&mode=Forschung' accesskey="i">Исследования</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=f79788caa724&mode=Flotte' accesskey="v">Верфь</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=f79788caa724&mode=Flotte' accesskey="f">Флот</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=f79788caa724' accesskey="t">Технологии</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=f79788caa724&no_header=1' accesskey="g">Галактика</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+
+     <a href='index.php?page=buildings&session=f79788caa724&mode=Verteidigung' accesskey="x">Оборона</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src="http://uni5.ogame.ru/evolution/gfx/info-help.jpg" width="110" height="19"></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=f79788caa724' accesskey="a">Мой альянс</a>
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://board.ogame.ru/" target="_blank" accesskey="m" >Форум</a><!-- external link to board -->
+   </font></div>
+  </td>
+ </tr>
+ 
+
+    <tr>
+       <td align=center>
+
+       <a id='darkmatter2' style='cursor:pointer; width:110px;'
+         href='index.php?page=micropayment&session=f79788caa724' accesskey="o"><b>Офицерское казино</a></b>
+       </div>
+      </td>
+     </tr>
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+  <a href='index.php?page=statistics&session=f79788caa724' accesskey="k">Статистика</a>
+
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=f79788caa724' accesskey="p">Поиск</a>
+    </font></div>
+
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://tutorial.ogame.ru" target="_blank" accesskey="2" >Туториал</a><!-- external link to ogame tutorial -->
+   </font></div>
+  </td>
+
+ </tr>
+ 
+ <tr>
+  <td><img src="http://uni5.ogame.ru/evolution/gfx/user-menu.jpg" width="110" height="35"></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=messages&dsp=1&session=f79788caa724' accesskey="b">Сообщения</a>
+
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=f79788caa724&no_header=1", "Notizen");' accesskey="e">Заметки</a>
+    </font></div>
+
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=f79788caa724' accesskey="d">Друзья</a>
+    </font></div>
+  </td>
+
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=f79788caa724' accesskey="n">Настройки</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=f79788caa724' accesskey="q">Выход</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ 
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href="http://ogame.ru/regeln.html" target="_blank">Правила</a> <!-- external link to rules -->
+   </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://ogame.ru/portal/?go=contact&lang=ru" target="_blank">О нас</a> <!-- external link to impressum -->
+   </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+
+<!-- GFAnalytics -->
+ <img src="http://analytics.gameforge.de/cp.php?game=ogame&lang=ru&gr=5&action=login&uid=167658" style="display:none" />
+ <img src="http://adsm.gameforge.de/login.gif?game=ogame&lang=ru&gr=5&action=login&uid={USER_ID}&email={USER_EMAIL}&nicname={USER_LOGIN}" style="display:none" />
+ <!-- /GFAnalytics -->
+ </div>
+
+    </div>
+
+<!-- END LEFTMENU -->
+}}}
+
+Блок: 
+{{{
+<!-- GFAnalytics -->
+ <img src="http://analytics.gameforge.de/cp.php?game=ogame&lang=ru&gr=5&action=login&uid=167658" style="display:none" />
+ <img src="http://adsm.gameforge.de/login.gif?game=ogame&lang=ru&gr=5&action=login&uid={USER_ID}&email={USER_EMAIL}&nicname={USER_LOGIN}" style="display:none" />
+ <!-- /GFAnalytics -->
+ </div>
+}}}
+вставляется только один раз, после входа пользователя в игру (в Обзоре). Тут кстати синтаксическая ошибка - лишний раз закрывается тег </div>.
 
 = Содержимое игровых страниц =
 
