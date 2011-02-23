@@ -17,4 +17,4 @@
  * Альянсовый движок и список друзей (ally.php)
  * Движок управления заметками (notes.php)
 
-http://code.google.com/p/ogame-opensource/wiki/EngineMessages
+[http://code.google.com/p/ogame-opensource/wiki/EngineMessages]
