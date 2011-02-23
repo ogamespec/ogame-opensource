@@ -66,6 +66,115 @@ function reloadImages() {
 
 = Хвост =
 
+{{{
+<script> 
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script> 
+ 
+<div id='messagebox'> 
+<center> 
+{MESSAGE_TEXT}</center> 
+</div> 
+<div id='errorbox'> 
+<center> 
+{ERROR_TEXT}</center> 
+</div> 
+ 
+<script> 
+headerHeight = 81;
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = "_blank";
+  }
+}
+ 
+</script> 
+<style> 
+.layer {
+    z-index:999999999;
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 757px; 
+    height: 475px; 
+    background-color: #040e1e;
+    border: 3px double orange;
+    padding: 0;
+    opacity: .90;
+}
+</style> 
+ </body> 
+</html>
+}}}
+
+В хвосте находятся следующие элементы:
+ * Контейнеры для сообщения и ошибки. Сообщение - это небольшой текст наверху страницы, заключенный в зеленую рамочку, например:<br><img src="http://ogamespec.com/imgstore/whc4d6523a207802.jpg"><br>Ошибка - аналогично, но цвет рамки красный:<br><img src="http://ogamespec.com/imgstore/whc4d6524bb241af.jpg">
+ * Небеольшой скрипт, для расчёта Y-координат контента, при наличии сообщения и/или ошибки.
+ * Какой-то непонятный стиль `layer`, где используется неясно. Возможно просто артефакт от старых версий.
+
+Для всплывающих окон наподобии `Заметок` хвост имеет немного другой вид:
+
+{{{
+...
+headerHeight = 81;
+...
+}}}
+
+заменяется на :
+
+{{{
+...
+messagebox.style.top='0px';
+headerHeight = 0;
+contentbox.style.left='0px';
+contentbox.style.width='100%';
+...
+}}}
+
+чтобы сдвинуть контент страницы в левый верхний угол.
+
+В меню `Галактика` :
+
+{{{
+...
+headerHeight = 81;
+...
+}}}
+
+заменяется на :
+
+{{{
+...
+messagebox.style.top='0px';
+headerHeight = 0;
+...
+}}}
+
+Так как в Галактике нет панели ресурсов.
+
+Также если {MESSAGE_TEXT} или {ERROR_TEXT} не пустые, добавляется две инструкции для создания видимости этих контейнеров:
+
+{{{
+...
+headerHeight = 81;
+messagebox.style.display='block';
+errorbox.style.display='block';
+...
+}}}
+
+Контейнер сообщений и ошибки могут одновременно находиться на странице.
+
 = Панель ресурсов =
 
 <img src="http://ogamespec.com/imgstore/oldogame_respane.jpg">
