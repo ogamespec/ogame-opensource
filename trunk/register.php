@@ -36,7 +36,19 @@ if (parent.frames.length == 0) {
 <?php include ('content_register.tpl'); ?>
 
 <script>
-document.loginForm.universe.focus();
+<?php
+
+    require_once "uni.php";
+
+    if ( key_exists("linkuni", $_GET) ) echo "registerForm.universe.value = \"".$UniList[$_GET['linkuni']]['uniurl']."\";\n";
+    if ( key_exists("v", $_POST) )
+    {
+        echo "document.registerForm.character.value = '".$_POST['character']."';\n";
+        echo "document.registerForm.email.value = '".$_POST['email']."';\n";
+        echo "document.registerForm.universe.value = '".$_POST['universe']."';\n";
+    }
+    else echo "document.registerForm.character.focus();\n";
+?>
 </script>
 
 </body>
