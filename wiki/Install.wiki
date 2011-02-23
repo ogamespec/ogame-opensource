@@ -13,7 +13,7 @@ $db_host="localhost";
 $db_user="root";
 $db_pass="root";
 $db_name="ogame";
-$db_prefix="agame_";
+$db_prefix="uni1_";
 $db_secret="";
 ?>
 }}}
