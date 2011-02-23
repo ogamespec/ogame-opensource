@@ -15,6 +15,55 @@
 
 = Заголовок =
 
+{{{
+ 
+<html> 
+ <head> 
+  <link rel='stylesheet' type='text/css' href='css/default.css' /> 
+  <link rel='stylesheet' type='text/css' href='css/formate.css' /> 
+ 
+  <script language="JavaScript">var session="1f855da316dd";</script> 
+  <meta http-equiv="content-type" content="text/html; charset=koi8-r" /> 
+ 
+<link rel="stylesheet" type="text/css" href="css/combox.css"> 
+<link rel="stylesheet" type="text/css" href="{USER_SKIN_PATH}formate.css" /> 
+ 
+<title>Вселенная 15 ОГейм</title> 
+ 
+  <script src="js/utilities.js" type="text/javascript"></script> 
+  <script language="JavaScript"> 
+  </script> 
+<script type="text/javascript" src="js/overLib/overlib.js"></script> 
+<!-- HEADER --> 
+ 
+<script language="JavaScript"> 
+function onBodyLoad() {
+    window.setTimeout("reloadImages()", 100);
+}
+ 
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != "")) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script> 
+ 
+</head> 
+<body style="overflow: hidden;" onload="onBodyLoad();" onunload="" > 
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div> 
+}}}
+
+Краткое описание компонентов заголовка:
+ * Подгружаются дефолтные стили `css/default.css` и `css/formate.css`, которые затем перегружаются стилем установленного скина `{USER_SKIN_PATH}formate.css`. Небольшая особенность: в пути к скину в конце всегда должна стоять `/` иначе format.css слепится с путём к скину и итоговый путь будет неверным.
+ * Установка кодировки через META-тег. Как видно тут ещё используется кодировка koi8-r, потому что сохранение страниц началось до повсевместного ввода кодировки utf-8 в игру.
+ * Подгружается скрипт оверлеев `overlib.js`. Оверлеи - это всплывающие окна, которые выплывают к примеру в Галактике при наведении мышки на картинку планеты:<br><img src="http://ogamespec.com/imgstore/whc4d651ccc14f0a.jpg"><br>Скрипт `overlib.js` кстати OpenSource.
+ * устанавливается таймер на вызов функции `reloadImages()` каждые 100ms. Эта функция принудительно перегружает все картинки `img`, у которых `class=reloadimage`. Я таких в игре не встречал.
+ * Подгружается скрипт `js/utilities.js` 
+ * Устанавливается заголовок страницы, например *`Вселенная 15 ОГейм`*
+
+
 = Хвост =
 
 = Панель ресурсов =
