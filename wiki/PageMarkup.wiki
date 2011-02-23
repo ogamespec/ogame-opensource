@@ -451,8 +451,7 @@ function popUp(URL) {
 Блок: 
 {{{
 <!-- GFAnalytics -->
- <img src="http://analytics.gameforge.de/cp.php?game=ogame&lang=ru&gr=5&action=login&uid=167658" style="display:none" />
- <img src="http://adsm.gameforge.de/login.gif?game=ogame&lang=ru&gr=5&action=login&uid={USER_ID}&email={USER_EMAIL}&nicname={USER_LOGIN}" style="display:none" />
+...
  <!-- /GFAnalytics -->
  </div>
 }}}
