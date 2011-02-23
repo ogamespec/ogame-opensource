@@ -1,0 +1,24 @@
+@charset "utf8";
+#registration table {
+}
+
+#registration table tr {
+  height: 20;
+}
+
+#registration table th {
+    text-align: left;
+    vertical-align: text-top;
+}
+
+.error {
+	color: red;
+}
+
+.warning {
+	color: orange;
+}
+
+.fine {
+	color: lime;
+}
