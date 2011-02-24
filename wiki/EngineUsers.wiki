@@ -1,0 +1,65 @@
+#summary Движок управления пользователями
+
+= Introduction =
+
+Add your content here.
+
+= API =
+
+SendGreetingsMail
+SendChangeMail
+SendGreetingsMessage
+IsUserExist
+IsEmailExist
+CreateUser
+RemoveUser
+ValidateUser
+CheckPassword
+ChangeEmail
+ChangeActivationCode
+SelectPlanet
+LoadUser
+UpdateLastClick
+IsPlayerNewbie
+IsPlayerStrong
+
+= Database =
+
+Структура таблицы `users`:
+
+|| *столбец* || *SQL тип* || *описание* ||
+|| player_id|| INT PRIMARY KEY || Порядковый номер пользователя||
+|| ally_id || INT|| Номер альянса в котором состоит игрок (0 - без альянса)||
+|| joindate|| INT UNSIGNED|| Дата вступления в альянс||
+|| allyrank|| INT|| Ранг игрока в альянсе||
+|| session|| CHAR (12)|| Сессия для ссылок||
+|| private_session|| CHAR(32)|| Приватная сессия для кукисов||
+|| name|| CHAR(20)|| Имя пользователя lower-case для сравнения||
+|| oname|| CHAR(20)|| Имя пользователя оригинальное||
+|| name_changed|| INT|| Имя пользователя изменено? (1 или 0)||
+|| name_until|| INT UNSIGNED|| Когда можно поменять имя пользователя в следующий раз||
+|| password|| CHAR(32)|| MD5-хеш пароля||
+|| pemail|| CHAR(50)|| Постоянный почтовый адрес||
+|| email|| CHAR(50)|| Временный почтовый адрес||
+|| email_changed|| INT|| Временный почтовый адрес изменен||
+|| email_until|| INT UNSIGNED|| Когда заменить постоянный email на временный||
+|| vacation|| INT|| Аккаунт в режиме отпуска||
+|| vacation_until|| INT UNSIGNED|| Когда можно выключить режим отпуска||
+|| lastlogin|| INT UNSIGNED|| Последняя дата входа в игру||
+|| lastclick|| INT UNSIGNED|| Последний щелчок мышкой, для определения активности игрока||
+|| ip_addr|| || IP адрес пользователя||
+|| validated|| INT|| Пользователь активирован. Если пользователь не активирован, то ему запрещено посылать игровые сообщения и заявки в альянсы.||
+|| validatemd|| CHAR(32)|| Код активации||
+|| hplanetid|| INT|| Порядковый номер Главной планеты||
+|| admin|| INT|| 0 - обычный игрок, 1 - оператор, 2 - администратор||
+|| sortby|| INT|| Порядок сортировки планет: 0 - порядку колонизации, 1 - координатам, 2 - алфавиту||
+|| sortorder|| INT|| Порядок: 0 - по возрастанию, 1 - по убыванию||
+|| skin|| CHAR(80)|| Путь для скина. Получается путем слепления пути к хосту и названием скина, но длина строки не более 80 символов.||
+|| useskin|| INT|| Показывать скин, если 0 - то показывать скин по умолчанию||
+|| deact_ip|| INT|| Выключить проверку IP||
+|| maxspy|| INT|| Кол-во шпионских зондов (1 по умолчанию, 0...99)||
+|| maxfleetmsg|| INT|| Максимальные сообщения о флоте в Галактику (3 по умолчанию, 0...99, 0=1)||
+|| aktplanet|| INT|| Текущая выбранная планета.||
+|| score1,2,3|| INT UNSIGNED|| Очки за постройки, флот, исследования||
+|| place1,2,3|| INT|| Место за постройки, флот, исследования.||
+|| rXXX|| INT|| Уровень исследования XXX||
