@@ -31,4 +31,4 @@ Add your content here.
 || nextbuddy|| INT|| Номер следующей заявки на дружбу||
 || nexterror|| INT|| Номер следующей ошибки||
 || nexttask|| INT|| Номер следующего задания в глобальной очереди событий||
-|| startdate|| INT UNSIGNED|| Дата открытия вселенной||
+|| startdate|| INT UNSIGNED|| Дата открытия вселенной time()||
