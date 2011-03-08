@@ -59,8 +59,8 @@ if (file_exists ("config.php"))
 if ( key_exists("install", $_POST) && CheckParameters() )
 {
     $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','queue');
-    $unicols = array ('name','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','nextuser','usercount','nextplanet','nextally','nextmsg','nextnote','nextbuddy','nexterror','nexttask','startdate');
-    $unitype = array ('TEXT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT UNSIGNED');
+    $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','nextplanet','nextally','nextmsg','nextnote','nextbuddy','nexterror','nexttask','startdate');
+    $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT UNSIGNED');
     $usercols = array ( 'player_id', 'ally_id', 'joindate', 'allyrank', 'session', 'private_session', 'name', 'oname', 'name_changed', 'name_until', 'password', 'pemail', 'email',
                                'email_changed', 'email_until', 'vacation', 'vacation_until', 
                                'lastlogin', 'lastclick', 'ip_addr', 'validated', 'validatemd', 'hplanetid', 'admin', 'sortby', 'sortorder',
@@ -131,7 +131,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
 
     // Создать вселенную.
     $query = "INSERT INTO ".$_POST["db_prefix"]."uni SET ";
-    $query .= "name = '".$_POST["uni_name"]."', ";
+    $query .= "num = '".$_POST["uni_num"]."', ";
     $query .= "speed = '".$_POST["uni_speed"]."', ";
     $query .= "galaxies = '".$_POST["uni_galaxies"]."', ";
     $query .= "systems = '".$_POST["uni_systems"]."', ";
@@ -141,6 +141,8 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "did = '".$_POST["uni_did"]."', ";
     $query .= "rapid = '".($_POST["uni_rapid"]==="on"?1:0)."', ";
     $query .= "moons = '".($_POST["uni_moons"]==="on"?1:0)."', ";
+    $query .= "defrepair = '70', ";
+    $query .= "defrepair_delta = '10', ";
     $query .= "nextuser = '100000', ";
     $query .= "usercount = '1', ";
     $query .= "nextplanet = '10000', ";
@@ -156,7 +158,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
 
     // Создать администраторский аккаунт (Legor).
 
-    // Создать планету Arrakis [1:1:2] и луну.
+    // Создать планету Arrakis [1:1:2] и луну Mond.
 
     // Сохранить файл конфигурации.
     $file = fopen ("config.php", "wb");
@@ -213,7 +215,7 @@ td.c { background-color: #334445; }
 <tr><td><a title='Используется при генерации паролей и сессий'>Секретное слово</a></td><td><input type=text type=password class='text' name='db_secret'></td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan=2 class='c'>Настройки вселенной</td></tr>
-<tr><td><a title='Название будет указано в заголовке окна и над главным меню в игре.'>Название вселенной</a></td><td><input type=text value='Вселенная 1' class='text' name='uni_name'></td></tr>
+<tr><td><a title='Номер вселенной будет указан в заголовке окна и над главным меню в игре.'>Номер вселенной</a></td><td><input type=text value='1' class='text' name='uni_num'></td></tr>
 <tr><td><a title='Ускорение влияет на скорость добычи ресурсов, длительность построек и проведение исследований, скорость летящих флотов, минимальную длительность Режима Отпуска.'>Ускорение</a></td><td><input type=text value='1' class='text' name='uni_speed'></td></tr>
 <tr><td>Количество галактик</td><td><input type=text value='9' class='text' name='uni_galaxies'></td></tr>
 <tr><td>Количество систем</td><td><input type=text value='499' class='text' name='uni_systems'></td></tr>
