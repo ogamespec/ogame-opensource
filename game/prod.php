@@ -309,7 +309,7 @@ function ProdResources ( $planet_id, $time_from, $time_to )
 {
     global $db_prefix;
     $planet = GetPlanet ( $planet_id );
-    if ( $planet['type'] == 0) return;
+    if ( $planet['type'] == 0) return;        // луна
     $diff = $time_to - $time_from;
 
     $unitab = LoadUniverse ( );
