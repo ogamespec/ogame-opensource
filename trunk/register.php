@@ -41,11 +41,13 @@ if (parent.frames.length == 0) {
     require_once "uni.php";
 
     if ( key_exists("linkuni", $_GET) ) echo "registerForm.universe.value = \"".$UniList[$_GET['linkuni']]['uniurl']."\";\n";
-    if ( key_exists("v", $_POST) )
+    if ( key_exists("errorCode", $_GET) )
     {
-        echo "document.registerForm.character.value = '".$_POST['character']."';\n";
-        echo "document.registerForm.email.value = '".$_POST['email']."';\n";
-        echo "document.registerForm.universe.value = '".$_POST['universe']."';\n";
+        echo "document.registerForm.character.value = '".$_GET['character']."';\n";
+        echo "document.registerForm.email.value = '".$_GET['email']."';\n";
+        echo "document.registerForm.universe.value = '".$_GET['universe']."';\n";
+        if ( !$_GET['agb'] ) echo "showInfo (\"204\");\n";
+        if ( $_GET['errorCode'] ) echo "printMessage (\"".$_GET['errorCode']."\");\n";
     }
     else echo "document.registerForm.character.focus();\n";
 ?>
