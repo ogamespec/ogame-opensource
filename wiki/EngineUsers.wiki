@@ -37,14 +37,13 @@ IsPlayerStrong
 || name|| CHAR(20)|| Имя пользователя lower-case для сравнения||
 || oname|| CHAR(20)|| Имя пользователя оригинальное||
 || name_changed|| INT|| Имя пользователя изменено? (1 или 0)||
-|| name_until|| INT UNSIGNED|| Когда можно поменять имя пользователя в следующий раз time()||
-|| password|| CHAR(32)|| MD5-хеш пароля||
+|| password|| CHAR(32)|| MD5-хеш пароля и секретного слова ||
 || pemail|| CHAR(50)|| Постоянный почтовый адрес||
 || email|| CHAR(50)|| Временный почтовый адрес||
 || email_changed|| INT|| Временный почтовый адрес изменен||
-|| email_until|| INT UNSIGNED|| Когда заменить постоянный email на временный time()||
 || vacation|| INT|| Аккаунт в режиме отпуска||
 || vacation_until|| INT UNSIGNED|| Когда можно выключить режим отпуска time()||
+|| banned|| INT|| Аккаунт заблокирован||
 || lastlogin|| INT UNSIGNED|| Последняя дата входа в игру time()||
 || lastclick|| INT UNSIGNED|| Последний щелчок мышкой, для определения активности игрока time()||
 || ip_addr|| CHAR(15)|| IP адрес пользователя||
