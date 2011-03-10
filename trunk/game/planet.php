@@ -161,7 +161,7 @@ function EnumPlanets ()
 }
 
 // Получить состояние планеты (массив).
-function GetPlanet ($uni, $planet_id)
+function GetPlanet ( $planet_id)
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."planets WHERE planet_id = '".$planet_id."'";
@@ -183,6 +183,22 @@ function GetPlanet ($uni, $planet_id)
     $planet['factor'] = 1;
     if ( $planet['e'] < 0 ) $planet['factor'] = max (0, 1 - abs ($planet['e']) / $planet['econs']);
     return $planet;
+}
+
+// Если у планеты есть луна, возвратить её ID, иначе возвратить 0.
+function PlanetHasMoon ( $planet_id )
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE planet_id = '".$planet_id."'";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0) return 0;    // Планета не найдена
+    $planet = dbarray ($result);
+    if ( $planet['type'] == 0) return 0;        // Планета сама является луной
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$planet['g']."' AND s = '".$planet['s']."' AND p = '".$planet['p']."' AND type = 0";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0) return 0;    // Луна у планеты не найдена.
+    $planet = dbarray ($result);
+    return $planet['planet_id'];
 }
 
 // Длина имени планеты не более 20 символов (слово (Луна) тоже учитывается)
