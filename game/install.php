@@ -129,6 +129,25 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     //echo "<br>$query<br>";
     dbquery ($query);
 
+    // Создать технический аккаунт "space"
+    $opt = " (";
+    $user = array( 0, $now, 0, 0, 0, "",  "", "space", "space", 0, 0, "", "", "",
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, "0.0.0.0", 1, "", 0, 0, 0, 0,
+                        "evolution/", 1, 1, 1, 3, 0,
+                        0, 0, 0,
+                        0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+    foreach ($user as $i=>$entry)
+    {
+        if ($i != 0) $opt .= ", ";
+        $opt .= "'".$user[$i]."'";
+    }
+    $opt .= ")";
+    $query = "INSERT INTO ".$_POST["db_prefix"]."users VALUES".$opt;
+    dbquery( $query);
+
     // Создать администраторский аккаунт (Legor).
     $md = md5 ($_POST['admin_pass'] . $_POST['db_secret']);
     $opt = " (";
