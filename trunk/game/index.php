@@ -46,10 +46,9 @@ function scriptname () {
     return $break[count($break) - 1]; 
 }
 function hostname () {
-    $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
-    $break = explode ('/', $host);
-    $break[count($break)-1] = '';
-    return implode ('/', $break); 
+    $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+    $pos = strrpos ( $host, "/game/index.php" );
+    return substr ( $host, 0, $pos+1 );
 }
 
 function nicenum ($number)
@@ -108,7 +107,12 @@ function RedirectHome ()
 
 // *****************************************************************************
 
+// Игровые страницы.
+
 if ( $_GET['page'] === "overview" ) { include "pages/overview.php"; exit(); }
+else if ( $_GET['page'] === "resources" ) { include "pages/resources.php"; exit(); }
+else if ( $_GET['page'] === "techtree" ) { include "pages/techtree.php"; exit(); }
+else if ( $_GET['page'] === "techtreedetails" ) { include "pages/techtreedetails.php"; exit(); }
 
 RedirectHome ();
 

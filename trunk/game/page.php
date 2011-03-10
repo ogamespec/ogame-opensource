@@ -32,7 +32,7 @@ function UserSkin ()
 {
     global $GlobalUser;
     if ($GlobalUser['useskin']) return $GlobalUser['skin'];
-    else return "evolution/";
+    else return hostname () . "evolution/";
 }
 
 function PageHeader ($page, $noheader=false, $leftmenu=true)
@@ -130,6 +130,8 @@ function ResourceList ($m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
     global $GlobalUser;
     $sess = $GlobalUser['session'];
 
+    $prem = 0;
+
     $mcol = $kcol = $dcol = $ecol = "";
     if ($m >= $mmax) $mcol = "color='#ff0000'";
     if ($k >= $kmax) $kcol = "color='#ff0000'";
@@ -144,23 +146,25 @@ function ResourceList ($m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
     echo "<img border='0' src='".UserSkin()."images/kristall.gif' width='42' height='22'>\n</td>\n";
     echo "<td align='center' width='85' class='header'>\n";
     echo "<img border='0' src='".UserSkin()."images/deuterium.gif' width='42' height='22'>\n</td>\n";
-    echo "<td align='center' width='85' class='header'>\n";
-    echo "<a href=index.php?page=micropayment&session=$sess>\n";
-    echo "<img border='0' src='img/dm_klein_2.jpg' width='42' height='22' title='Тёмная материя'></a>\n</td>\n";
+    if ($prem) {
+        echo "<td align='center' width='85' class='header'>\n";
+        echo "<a href=index.php?page=micropayment&session=$sess>\n";
+        echo "<img border='0' src='img/dm_klein_2.jpg' width='42' height='22' title='Тёмная материя'></a>\n</td>\n";
+    }
     echo "<td align='center' width='85' class='header'>\n";
     echo "<img border='0' src='".UserSkin()."images/energie.gif' width='42' height='22'>\n</td>\n</tr>\n";
     echo "<tr class='header'>\n";
     echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Металл</font></b></i></td>\n";
     echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Кристалл</font></b></i></td>\n";
     echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Дейтерий</font></b></i></td>\n";
-    echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Тёмная материя</font></b></i></td>\n";
+    if ($prem) echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Тёмная материя</font></b></i></td>\n";
     echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Энергия</font></b></i></td>\n";
     echo "</tr>\n";
     echo "<tr class='header'>\n";
     echo "    <td align='center' class='header' width='90'><font $mcol>".nicenum($m)."</font></td>\n";
     echo "    <td align='center' class='header' width='90'><font $kcol>".nicenum($k)."</font></td>\n";
     echo "    <td align='center' class='header' width='90'><font $dcol>".nicenum($d)."</font></td>\n";
-    echo "    <td align='center' class='header' width='90'><font color='#FFFFFF'>".nicenum($dm)."</font></td>\n";
+    if ($prem) echo "    <td align='center' class='header' width='90'><font color='#FFFFFF'>".nicenum($dm)."</font></td>\n";
     echo "    <td align='center' class='header' width='90'><font $ecol>".nicenum($enow)."</font>/".nicenum($emax)."</td>\n\n";
     echo "</tr>\n";
     echo "</table></td>\n";
@@ -174,6 +178,8 @@ function LeftMenu ()
 {
     global $GlobalUser;
     $sess = $GlobalUser['session'];
+
+    $prem = 0;
 
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
@@ -266,13 +272,15 @@ function LeftMenu ()
     echo "   </font></div> \n";
     echo "  </td> \n";
     echo " </tr> \n\n";
-    echo "    <tr>\n";
-    echo "       <td align=center>\n";
-    echo "       <a id='darkmatter2' style='cursor:pointer; width:110px;'\n";
-    echo "         href='index.php?page=micropayment&session=".$sess."' accesskey=\"o\"><b>Офицеры</a></b>\n";
-    echo "       </div>\n";
-    echo "      </td>\n";
-    echo "     </tr>\n\n";
+    if ($prem) {
+        echo "    <tr>\n";
+        echo "       <td align=center>\n";
+        echo "       <a id='darkmatter2' style='cursor:pointer; width:110px;'\n";
+        echo "         href='index.php?page=micropayment&session=".$sess."' accesskey=\"o\"><b>Офицеры</a></b>\n";
+        echo "       </div>\n";
+        echo "      </td>\n";
+        echo "     </tr>\n\n";
+    }
     echo " <tr>\n";
     echo "  <td><img src='".UserSkin()."gfx/user-menu.jpg' width='110' height='35'></td>\n";
     echo " </tr>\n\n";
