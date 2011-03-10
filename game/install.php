@@ -8,38 +8,9 @@ $InstallError = "<font color=gold>Используйте подсказки пр
 
 require_once "db.php";
 
-$db_prefix = "";
-
-// Увеличить глобальный счетчик вселенной и возвратить его последнее значение.
-function IncrementDBGlobal ( $name)
-{
-    global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."uni;";
-    $result = dbquery ($query);
-    $unitab = dbarray ($result);
-    $id = $unitab[$name]++;
-    $query = "UPDATE ".$db_prefix."uni"." SET $name = ".$unitab[$name].";";
-    dbquery ($query);
-    return $id;
-}
-
-// Добавить строку в таблицу.
-function AddDBRow ( $row, $tabname )
-{
-    global $db_prefix;
-    $opt = " (";
-    foreach ($row as $i=>$entry)
-    {
-        if ($i != 0) $opt .= ", ";
-        $opt .= "'".$row[$i]."'";
-    }
-    $opt .= ")";
-    $query = "INSERT INTO ".$db_prefix."$tabname VALUES".$opt;
-    dbquery( $query);
-}
-
 ob_start ();
 
+// Проверить настройки вселенной.
 function CheckParameters ()
 {
     global $InstallError;
@@ -61,18 +32,20 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','queue');
     $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','nextplanet','nextally','nextmsg','nextnote','nextbuddy','nexterror','nexttask','startdate');
     $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT UNSIGNED');
-    $usercols = array ( 'player_id', 'ally_id', 'joindate', 'allyrank', 'session', 'private_session', 'name', 'oname', 'name_changed', 'name_until', 'password', 'pemail', 'email',
-                               'email_changed', 'email_until', 'vacation', 'vacation_until', 
+    $usercols = array ( 'player_id', 'regdate', 'ally_id', 'joindate', 'allyrank', 'session', 'private_session', 'name', 'oname', 'name_changed', 'name_until', 'password', 'pemail', 'email',
+                               'email_changed', 'email_until', 'disable', 'disable_until', 'vacation', 'vacation_until', 'banned', 'banned_until', 'noattack', 'noattack_until',
                                'lastlogin', 'lastclick', 'ip_addr', 'validated', 'validatemd', 'hplanetid', 'admin', 'sortby', 'sortorder',
                                'skin', 'useskin', 'deact_ip', 'maxspy', 'maxfleetmsg', 'aktplanet',
-                               'dm', 'dmfree', 
+                               'dm', 'dmfree', 'sniff',
                                'score1', 'score2', 'score3', 'place1', 'place2', 'place3',
+                               'oldscore1', 'oldscore2', 'oldscore3', 'oldplace1', 'oldplace2', 'oldplace3',
                                'r106', 'r108', 'r109', 'r110', 'r111', 'r113', 'r114', 'r115', 'r117', 'r118', 'r120', 'r121', 'r122', 'r123', 'r124', 'r199' );
-    $usertype = array (  'INT PRIMARY KEY', 'INT', 'INT', 'INT UNSIGNED', 'CHAR(12)', 'CHAR(32)', 'CHAR(20)', 'CHAR(20)', 'INT', 'INT UNSIGNED', 'CHAR(32)', 'CHAR(50)', 'CHAR(50)',
-                                'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 
+    $usertype = array (  'INT PRIMARY KEY', 'INT UNSIGNED', 'INT', 'INT', 'INT UNSIGNED', 'CHAR(12)', 'CHAR(32)', 'CHAR(20)', 'CHAR(20)', 'INT', 'INT UNSIGNED', 'CHAR(32)', 'CHAR(50)', 'CHAR(50)',
+                                'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 
                                 'INT UNSIGNED', 'INT UNSIGNED', 'CHAR(15)', 'INT', 'CHAR(32)', 'INT', 'INT', 'INT', 'INT', 'CHAR(80)', 'INT', 'INT', 'INT', 'INT', 'INT',
-                                'INT UNSIGNED', 'INT UNSIGNED',
-                                'INT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 
+                                'INT UNSIGNED', 'INT UNSIGNED', 'INT', 
+                                'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 
+                                'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 
                                 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
     $planetcols = array ( 'planet_id', 'name', 'type', 'g', 's', 'p', 'owner_id', 'diameter', 'temp', 'fields', 'maxfields', 'date', 
                                 'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
@@ -98,8 +71,8 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $notestype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'INT', 'INT', 'INT UNSIGNED' );
     $errorscols = array ( 'error_id', 'owner_id', 'ip', 'agent', 'url', 'text', 'date' );
     $errorstype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'INT UNSIGNED' );
-    $queuecols = array ( 'task_id', 'owner_id', 'type', 'sub_id', 'obj_id', 'level', 'start', 'end' );
-    $queuetype = array ( 'INT PRIMARY KEY', 'INT', 'CHAR(20)', 'INT', 'INT', 'INT', 'INT UNSIGNED', 'INT UNSIGNED' );
+    $queuecols = array ( 'task_id', 'owner_id', 'type', 'sub_id', 'obj_id', 'level', 'start', 'end', 'prio' );
+    $queuetype = array ( 'INT PRIMARY KEY', 'INT', 'CHAR(20)', 'INT', 'INT', 'INT', 'INT UNSIGNED', 'INT UNSIGNED', 'INT' );
     $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$queuecols);
     $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$queuetype);
     $now = time();
@@ -157,8 +130,54 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     dbquery ($query);
 
     // Создать администраторский аккаунт (Legor).
+    $md = md5 ($_POST['admin_pass'] . $_POST['db_secret']);
+    $opt = " (";
+    $user = array( 1, $now, 0, 0, 0, "",  "", "legor", "Legor", 0, 0, $md, $_POST['admin_email'], $_POST['admin_email'],
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, "0.0.0.0", 1, "", 1, 2, 0, 0,
+                        "evolution/", 1, 1, 1, 3, 1,
+                        1000000, 0, 0,
+                        0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+    foreach ($user as $i=>$entry)
+    {
+        if ($i != 0) $opt .= ", ";
+        $opt .= "'".$user[$i]."'";
+    }
+    $opt .= ")";
+    $query = "INSERT INTO ".$_POST["db_prefix"]."users VALUES".$opt;
+    dbquery( $query);
 
     // Создать планету Arrakis [1:1:2] и луну Mond.
+    $opt = " (";
+    $planet = array( 1, "Arakis", 102, 1, 1, 2, 1, 12800, 40, 0, 163, $now,
+                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                           500, 500, 0, 1, 1, 1, 1, 1, 1, $now, $now );
+    foreach ($planet as $i=>$entry)
+    {
+        if ($i != 0) $opt .= ", ";
+        $opt .= "'".$planet[$i]."'";
+    }
+    $opt .= ")";
+    $query = "INSERT INTO ".$_POST["db_prefix"]."planets VALUES".$opt;
+    dbquery( $query);
+    $opt = " (";
+    $planet = array( 2, "Mond", 0, 1, 1, 2, 1, 8944, 10, 0, 0, $now,
+                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                           0, 0, 0, 1, 1, 1, 1, 1, 1, $now, $now );
+    foreach ($planet as $i=>$entry)
+    {
+        if ($i != 0) $opt .= ", ";
+        $opt .= "'".$planet[$i]."'";
+    }
+    $opt .= ")";
+    $query = "INSERT INTO ".$_POST["db_prefix"]."planets VALUES".$opt;
+    dbquery( $query);
 
     // Сохранить файл конфигурации.
     $file = fopen ("config.php", "wb");
