@@ -227,7 +227,7 @@ function ValidateUser ($code)
     }
     $user = dbarray ($result);
     if (!$user['validated'])
-    {    // Заменить постонный адрес временным после активации.
+    {    // Заменить постоянный адрес временным после активации.
         $query = "UPDATE ".$db_prefix."users SET pemail = '".$user['email']."' WHERE player_id = ".$user['player_id'];
         dbquery ($query);
     }
@@ -361,6 +361,102 @@ function PremiumStatus ($user)
         $prem[$i.'_days'] = $d;
     }
     return $prem;
+}
+
+// Вызывается при нажатии на "Выход" в меню.
+function Logout ( $session )
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$session."'";
+    $result = dbquery ($query);
+    if (dbrows ($result) == 0) return;
+    $user = dbarray ($result);
+    $player_id = $user['player_id'];
+    $unitab = LoadUniverse ();
+    $uni = $unitab['num'];
+    $query = "UPDATE ".$db_prefix."users SET session = '' WHERE player_id = $player_id";
+    dbquery ($query);
+    setcookie ( "prsess_".$player_id."_".$uni, '');
+}
+
+// Вызывается при загрузке каждой игровой страницы.
+function CheckSession ( $session )
+{
+    global $db_prefix, $GlobalUser;
+    // Получить ID-пользователя и номер вселенной из публичной сессии.
+    $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$session."'";
+    $result = dbquery ($query);
+    if (dbrows ($result) == 0) { RedirectHome(); return FALSE; }
+    $GlobalUser = dbarray ($result);
+    $unitab = LoadUniverse ();
+    $uni = $unitab['num'];
+    $prsess = $_COOKIE ['prsess_'.$GlobalUser['player_id'].'_'.$uni];
+    //if ( $prsess !== $GlobalUser['private_session']) { InvalidSessionPage (); return FALSE; }
+    $ip = $_SERVER['REMOTE_ADDR'];
+    if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
+    return TRUE;
+}
+
+// Login - Вызывается с главной страницы, после регистрации или активации нового пользователя.
+function Login ( $login, $pass, $passmd="" )
+{
+    global $db_prefix;
+
+    $unitab = LoadUniverse ();
+    $uni = $unitab['num'];
+
+    if  ( $player_id = CheckPassword ($login, $pass, $passmd ) )
+    {
+        $lastlogin = time ();
+        // Создать приватную сессию.
+        $prsess = md5 ( $login . $lastlogin . $db_secret);
+        // Создать публичную сессию
+        $sess = substr (md5 ( $prsess . sha1 ($pass) . $db_secret . $lastlogin), 0, 12);
+
+        // Записать приватную сессию в кукисы и обновить БД.
+        setcookie ( "prsess_".$player_id."_".$uni, $prsess);
+        $query = "UPDATE ".$db_prefix."users SET lastlogin = $lastlogin, session = '".$sess."', private_session = '".$prsess."' WHERE player_id = $player_id";
+        dbquery ($query);
+
+        // Записать IP-адрес.
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $query = "UPDATE ".$db_prefix."users SET ip_addr = '".$ip."' WHERE player_id = $player_id";
+        dbquery ($query);
+
+        //echo "ID пользователя: $player_id<br>Приватная сессия: $prsess<br>Публичная сессия: $sess<br>IP-адрес: $ip";
+
+        // Выбрать Главную планету текущей.
+        $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$sess."'";
+        $result = dbquery ($query);
+        $user = dbarray ($result);
+        SelectPlanet ($player_id, $user['hplanetid']);
+
+        // Редирект на Обзор Главной планеты.
+        echo "<html><head><meta http-equiv='refresh' content='0;url=../index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
+    }
+    else
+    {
+        echo "<html> <head> <center>\n";
+        echo " <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n";
+        echo "  <link rel='stylesheet' type='text/css' href='css/default.css' />\n";
+        echo "  <link rel='stylesheet' type='text/css' href='css/formate.css' />\n";
+        echo " <title>Ошибка</title>\n";
+        echo "</head>\n";
+        echo "<body topmargin='0' leftmargin='0' marginwidth='0' marginheight='0' >\n";
+        echo " <br><br>\n";
+        echo " <table width='519'>\n";
+        echo " <tr>\n";
+        echo "   <td class='c' align='center' ><font color='red'>Ошибка</font></td>\n";
+        echo "  </tr>\n";
+        echo "  <tr>\n";
+        echo "   <th class='errormessage'>Вы пытались войти во вселенную ".$uni." под ником ".$login.".</th>\n";
+        echo "  </tr>\n";
+        echo "  <tr>\n";
+        echo "   <th class='errormessage'>Такого аккаунта не существует либо Вы неправильно ввели пароль. <br>Введите <a href='index.php'>правильный пароль</a> либо воспользуйтесь <a href='index.php?page=mail'>восстановлением пароля</a>.<br>Также Вы можете создать <a href='index.php?page=reg'>новый аккаунт</a>.</th>\n";
+        echo "  </tr> </table> </center></body></html>\n";
+    }
+    ob_end_flush ();
+    exit ();
 }
 
 ?>

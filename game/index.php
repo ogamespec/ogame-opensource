@@ -26,6 +26,17 @@ dbquery("SET NAMES 'utf8';");
 dbquery("SET CHARACTER SET 'utf8';");
 dbquery("SET SESSION collation_connection = 'utf8_general_ci';");
 
+require_once "uni.php";
+require_once "prod.php";
+require_once "planet.php";
+require_once "user.php";
+require_once "msg.php";
+require_once "notes.php";
+require_once "queue.php";
+require_once "galaxy.php";
+require_once "loca_game.php";
+require_once "page.php";
+
 // *****************************************************************************
 // Вспомогательные функции.
 
@@ -96,6 +107,8 @@ function RedirectHome ()
 }
 
 // *****************************************************************************
+
+if ( $_GET['page'] === "overview" ) { include "pages/overview.php"; exit(); }
 
 RedirectHome ();
 
