@@ -43,4 +43,32 @@ function dbfree ($result) {
     @mysql_free_result ($result);
 }
 
+// Увеличить глобальный счетчик вселенной и возвратить его последнее значение.
+function IncrementDBGlobal ( $name)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."uni".";";
+    $result = dbquery ($query);
+    $unitab = dbarray ($result);
+    $id = $unitab[$name]++;
+    $query = "UPDATE ".$db_prefix."uni"." SET $name = ".$unitab[$name].";";
+    dbquery ($query);
+    return $id;
+}
+
+// Добавить строку в таблицу.
+function AddDBRow ( $row, $tabname )
+{
+    global $db_prefix;
+    $opt = " (";
+    foreach ($row as $i=>$entry)
+    {
+        if ($i != 0) $opt .= ", ";
+        $opt .= "'".$row[$i]."'";
+    }
+    $opt .= ")";
+    $query = "INSERT INTO ".$db_prefix."$tabname VALUES".$opt;
+    dbquery( $query);
+}
+
 ?>

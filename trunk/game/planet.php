@@ -80,7 +80,7 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $debris=20000
 
     // Проверить не занято-ли место?
     if ($moon) $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND type = 0";
-    else $query = "SELECT * FROM ".$db_prefix."planets WHERE AND g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND type <> 0";
+    else $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND type <> 0";
     $result = dbquery ($query);
     if ( dbrows ($result) != 0 ) return 0;
 
