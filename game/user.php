@@ -178,7 +178,7 @@ function CreateUser ( $name, $pass, $email)
     $user = array( $id, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, $email, $email,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, "0.0.0.0", 0, $ack, $homeplanet, 0, 0, 0,
-                        "evolution/", 1, 0, 1, 3, $homeplanet,
+                        hostname() . "evolution/", 1, 0, 1, 3, $homeplanet,
                         0, 0, 0, 
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,

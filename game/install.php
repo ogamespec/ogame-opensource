@@ -8,6 +8,12 @@ $InstallError = "<font color=gold>Используйте подсказки пр
 
 require_once "db.php";
 
+function hostname () {
+    $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+    $pos = strrpos ( $host, "/game/install.php" );
+    return substr ( $host, 0, $pos+1 );
+}
+
 ob_start ();
 
 // Проверить настройки вселенной.
@@ -134,7 +140,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $user = array( 0, $now, 0, 0, 0, "",  "", "space", "space", 0, 0, "", "", "",
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, "0.0.0.0", 1, "", 0, 0, 0, 0,
-                        "evolution/", 1, 1, 1, 3, 0,
+                        "/", 1, 1, 1, 3, 0,
                         0, 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
@@ -154,7 +160,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $user = array( 1, $now, 0, 0, 0, "",  "", "legor", "Legor", 0, 0, $md, $_POST['admin_email'], $_POST['admin_email'],
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, "0.0.0.0", 1, "", 1, 2, 0, 0,
-                        "evolution/", 1, 1, 1, 3, 1,
+                        hostname() . "evolution/", 1, 1, 1, 3, 1,
                         1000000, 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
