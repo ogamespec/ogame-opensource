@@ -17,7 +17,6 @@ header('Pragma:no-cache');
 
 $GlobalUser = array ();
 
-require_once "startpage.php";
 require_once "config.php";
 require_once "db.php";
 
