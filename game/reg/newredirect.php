@@ -8,7 +8,6 @@ if ( !file_exists ("../config.php"))
     exit ();
 }
 
-require_once "../startpage.php";
 require_once "../config.php";
 require_once "../db.php";
 

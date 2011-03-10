@@ -205,6 +205,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     {
         fwrite ($file, "<?php\r\n");
         fwrite ($file, "// Создано автоматически НЕ ИЗМЕНЯТЬ!\r\n");
+        fwrite ($file, "$"."StartPage=\"". $_POST["startpage"] ."\";\r\n");
         fwrite ($file, "$"."db_host=\"". $_POST["db_host"] ."\";\r\n");
         fwrite ($file, "$"."db_user=\"". $_POST["db_user"] ."\";\r\n");
         fwrite ($file, "$"."db_pass=\"". $_POST["db_pass"] ."\";\r\n");
@@ -242,7 +243,9 @@ td.c { background-color: #334445; }
 
 <font color=red><?=$InstallError?></font>
 
-<table id='install_form'>
+<table id='install_form'
+<tr><td>&nbsp;</td></tr>
+<tr><td>Стартовая страница</td><td><input type=text value='http://ogame.ru' class='text' name='startpage'></td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan=2 class='c'>Настройки базы данных</td></tr>
 <tr><td>Хост</td><td><input type=text value='localhost' class='text' name='db_host'></td></tr>
