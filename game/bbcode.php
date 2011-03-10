@@ -1242,4 +1242,11 @@ class bb_u extends bbcode {
     }
 }
 
+// Преобразовать BB-коды в HTML.
+function bb ($text)
+{
+    $bb = new bbcode ($text);
+    return $bb->get_html ();
+}
+
 ?>
