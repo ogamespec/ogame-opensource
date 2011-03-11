@@ -122,14 +122,14 @@ foreach ($reqs as $i => $req )
 
             echo "<tr> \n";
             echo "<td class=l> \n";
-            echo "<table width=\"100%\" border=0 cellspacing=0 cellpadding=0><tr><td align=left><a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$c\">".$desc[$c]."</a> \n";
+            echo "<table width=\"100%\" border=0 cellspacing=0 cellpadding=0><tr><td align=left><a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$c\">".loca("NAME_$c")."</a> \n";
             echo "</td><td align=right>$details</td></tr></table></td> \n";
 
             echo "<td class=l> \n";
             foreach ($entry as $obj => $lvl ) {
                 $ok = MeetRequirement ( $GlobalUser, $aktplanet, $obj, $lvl );
-                if ($ok) echo "<font color=\"#00ff00\">".$desc[$obj]." (уровень $lvl)</font><br /> \n";
-                else echo "<font color=\"#ff0000\">".$desc[$obj]." (уровень $lvl)</font><br /> \n";
+                if ($ok) echo "<font color=\"#00ff00\">".loca("NAME_$obj")." (уровень $lvl)</font><br /> \n";
+                else echo "<font color=\"#ff0000\">".loca("NAME_$obj")." (уровень $lvl)</font><br /> \n";
             }
             echo "</td> \n";
         }

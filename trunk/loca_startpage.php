@@ -6,7 +6,7 @@ require_once "loca.php";
 $LocaHost = "localhost";
 $LocaUser = "toor";
 $LocaPass = "qwerty";
-$LocaDB = "ogame";
+$LocaDB = "startpage";
 
 // Язык стартовой страницы
 $LocaLang = "ru";
