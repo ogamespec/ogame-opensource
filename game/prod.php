@@ -239,6 +239,12 @@ function ResearchDuration ( $id, $lvl, $reslab, $speed )
     return $secs;
 }
 
+// Расчёт МИС.
+function ResearchNetwork ( $planetid, $id )
+{
+    return 1;
+}
+
 // Возвратить строку длительности по дням, часам, минутам, секундам.
 function BuildDurationFormat ( $seconds )
 {
