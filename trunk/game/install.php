@@ -39,30 +39,31 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','nextplanet','nextally','nextmsg','nextnote','nextbuddy','nexterror','nexttask','startdate');
     $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT UNSIGNED');
     $usercols = array ( 'player_id', 'regdate', 'ally_id', 'joindate', 'allyrank', 'session', 'private_session', 'name', 'oname', 'name_changed', 'name_until', 'password', 'pemail', 'email',
-                               'email_changed', 'email_until', 'disable', 'disable_until', 'vacation', 'vacation_until', 'banned', 'banned_until', 'noattack', 'noattack_until',
-                               'lastlogin', 'lastclick', 'ip_addr', 'validated', 'validatemd', 'hplanetid', 'admin', 'sortby', 'sortorder',
-                               'skin', 'useskin', 'deact_ip', 'maxspy', 'maxfleetmsg', 'aktplanet',
-                               'dm', 'dmfree', 'sniff',
-                               'score1', 'score2', 'score3', 'place1', 'place2', 'place3',
-                               'oldscore1', 'oldscore2', 'oldscore3', 'oldplace1', 'oldplace2', 'oldplace3',
-                               'r106', 'r108', 'r109', 'r110', 'r111', 'r113', 'r114', 'r115', 'r117', 'r118', 'r120', 'r121', 'r122', 'r123', 'r124', 'r199' );
+                        'email_changed', 'email_until', 'disable', 'disable_until', 'vacation', 'vacation_until', 'banned', 'banned_until', 'noattack', 'noattack_until',
+                        'lastlogin', 'lastclick', 'ip_addr', 'validated', 'validatemd', 'hplanetid', 'admin', 'sortby', 'sortorder',
+                        'skin', 'useskin', 'deact_ip', 'maxspy', 'maxfleetmsg', 'lang', 'aktplanet',
+                        'dm', 'dmfree', 'sniff',
+                        'score1', 'score2', 'score3', 'place1', 'place2', 'place3',
+                        'oldscore1', 'oldscore2', 'oldscore3', 'oldplace1', 'oldplace2', 'oldplace3',
+                        'r106', 'r108', 'r109', 'r110', 'r111', 'r113', 'r114', 'r115', 'r117', 'r118', 'r120', 'r121', 'r122', 'r123', 'r124', 'r199' );
     $usertype = array (  'INT PRIMARY KEY', 'INT UNSIGNED', 'INT', 'INT', 'INT UNSIGNED', 'CHAR(12)', 'CHAR(32)', 'CHAR(20)', 'CHAR(20)', 'INT', 'INT UNSIGNED', 'CHAR(32)', 'CHAR(50)', 'CHAR(50)',
-                                'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 
-                                'INT UNSIGNED', 'INT UNSIGNED', 'CHAR(15)', 'INT', 'CHAR(32)', 'INT', 'INT', 'INT', 'INT', 'CHAR(80)', 'INT', 'INT', 'INT', 'INT', 'INT',
-                                'INT UNSIGNED', 'INT UNSIGNED', 'INT', 
-                                'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 
-                                'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 
-                                'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
+                         'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 
+                         'INT UNSIGNED', 'INT UNSIGNED', 'CHAR(15)', 'INT', 'CHAR(32)', 'INT', 'INT', 'INT', 'INT',
+                         'CHAR(80)', 'INT', 'INT', 'INT', 'INT', 'CHAR(4)', 'INT',
+                         'INT UNSIGNED', 'INT UNSIGNED', 'INT', 
+                         'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 
+                         'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 
+                         'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
     $planetcols = array ( 'planet_id', 'name', 'type', 'g', 's', 'p', 'owner_id', 'diameter', 'temp', 'fields', 'maxfields', 'date', 
-                                'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
-                                'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
-                                'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
-                                'm', 'k', 'd', 'mprod', 'kprod', 'dprod', 'sprod', 'fprod', 'ssprod', 'lastpeek', 'lastakt' );
+                          'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
+                          'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
+                          'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
+                          'm', 'k', 'd', 'mprod', 'kprod', 'dprod', 'sprod', 'fprod', 'ssprod', 'lastpeek', 'lastakt' );
     $planettype = array ( 'INT PRIMARY KEY', 'CHAR(20)', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT UNSIGNED',
-                                 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 
-                                 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT',
-                                 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 
-                                 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT UNSIGNED', 'INT UNSIGNED' );
+                          'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 
+                          'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT',
+                          'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 
+                          'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT UNSIGNED', 'INT UNSIGNED' );
     $allycols = array ( 'ally_id', 'tag', 'name', 'owner_id', 'homepage', 'imglogo', 'open', 'exttext', 'inttext', 'apptext', 'nextrank', 'nextapp' );
     $allytype = array ( 'INT PRIMARY KEY', 'TEXT', 'TEXT', 'INT', 'TEXT', 'TEXT', 'INT', 'TEXT', 'TEXT', 'TEXT', 'INT', 'INT' );
     $rankscols = array ( 'rank_id', 'ally_id', 'name', 'rights' );
@@ -140,7 +141,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $user = array( 0, $now, 0, 0, 0, "",  "", "space", "space", 0, 0, "", "", "",
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, "0.0.0.0", 1, "", 0, 0, 0, 0,
-                        "/", 1, 1, 1, 3, 0,
+                        "/", 1, 1, 1, 3, 'ru', 0,
                         0, 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
@@ -160,7 +161,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $user = array( 1, $now, 0, 0, 0, "",  "", "legor", "Legor", 0, 0, $md, $_POST['admin_email'], $_POST['admin_email'],
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, "0.0.0.0", 1, "", 1, 2, 0, 0,
-                        hostname() . "evolution/", 1, 1, 1, 3, 1,
+                        hostname() . "evolution/", 1, 1, 1, 3, 'ru', 1,
                         1000000, 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,

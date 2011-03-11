@@ -1,7 +1,5 @@
 <?php
 
-$StartPage = "http://localhost/ogame-opensource";
-
 // Главный модуль, через который осуществляется доступ к другим страницам.
 ob_start ();
 

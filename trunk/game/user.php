@@ -41,6 +41,7 @@ useskin: Показывать скин, если 0 - то показывать �
 deact_ip: Выключить проверку IP (INT)
 maxspy: Кол-во шпионских зондов (1 по умолчанию, 0...99) (INT)
 maxfleetmsg: Максимальные сообщения о флоте в Галактику (3 по умолчанию, 0...99, 0=1) (INT)
+lang: Язык интерфейса (определяется автоматически при регистрации, по умолчанию "ru") (CHAR(4))
 aktplanet: Текущая выбранная планета. (INT)
 dm: Покупная ТМ (INT)
 dmfree: ТМ найденная в экспедиции (INT)
@@ -53,6 +54,8 @@ rXXX: Уровень исследования XXX (INT)
 
 Q - для обработки этого события используется задание в очереди задач.
 */
+
+require_once "geoip.php";
 
 function mail_utf8($to, $subject = '(No subject)', $message = '', $header = '') {
   $header_ = 'MIME-Version: 1.0' . "\r\n" . 'Content-type: text/plain; charset=UTF-8' . "\r\n";
@@ -175,10 +178,16 @@ function CreateUser ( $name, $pass, $email)
     }
     $homeplanet = CreatePlanet ( $g, $s, $p, $id, 0);
 
+    // Определить язык пользователя по его IP-адресу.
+    $ip = $_SERVER['REMOTE_ADDR'];
+    if ( $ip === "127.0.0.1" ) $lang = "ru";
+    else $lang = CountryCodeFromIP ( $ip );
+    if ( $lang !== "ru" ) $lang = "ru";        // Добавить сюда больше языков.
+
     $user = array( $id, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, $email, $email,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, "0.0.0.0", 0, $ack, $homeplanet, 0, 0, 0,
-                        hostname() . "evolution/", 1, 0, 1, 3, $homeplanet,
+                        0, 0, $ip, 0, $ack, $homeplanet, 0, 0, 0,
+                        hostname() . "evolution/", 1, 0, 1, 3, $lang, $homeplanet,
                         0, 0, 0, 
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
@@ -390,17 +399,19 @@ function CheckSession ( $session )
     $GlobalUser = dbarray ($result);
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
-    $prsess = $_COOKIE ['prsess_'.$GlobalUser['player_id'].'_'.$uni];
-    //if ( $prsess !== $GlobalUser['private_session']) { InvalidSessionPage (); return FALSE; }
     $ip = $_SERVER['REMOTE_ADDR'];
-    if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
+    $prsess = $_COOKIE ['prsess_'.$GlobalUser['player_id'].'_'.$uni];
+    if ( $ip !== "127.0.0.1" ) {
+        if ( $prsess !== $GlobalUser['private_session'] ) { InvalidSessionPage (); return FALSE; }
+        if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
+    }
     return TRUE;
 }
 
 // Login - Вызывается с главной страницы, после регистрации или активации нового пользователя.
 function Login ( $login, $pass, $passmd="" )
 {
-    global $db_prefix;
+    global $db_prefix, $db_secret;
 
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
@@ -414,7 +425,7 @@ function Login ( $login, $pass, $passmd="" )
         $sess = substr (md5 ( $prsess . sha1 ($pass) . $db_secret . $lastlogin), 0, 12);
 
         // Записать приватную сессию в кукисы и обновить БД.
-        setcookie ( "prsess_".$player_id."_".$uni, $prsess);
+        setcookie ( "prsess_".$player_id."_".$uni, $prsess, time()+24*60*60, "/" );
         $query = "UPDATE ".$db_prefix."users SET lastlogin = $lastlogin, session = '".$sess."', private_session = '".$prsess."' WHERE player_id = $player_id";
         dbquery ($query);
 

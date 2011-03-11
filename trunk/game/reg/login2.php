@@ -22,6 +22,12 @@ dbquery("SET NAMES 'utf8';");
 dbquery("SET CHARACTER SET 'utf8';");
 dbquery("SET SESSION collation_connection = 'utf8_general_ci';");
 
+function hostname () {
+    $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+    $pos = strrpos ( $host, "/game/reg/login2.php" );
+    return substr ( $host, 0, $pos+1 );
+}
+
 if ( $_SERVER['REQUEST_METHOD'] === "POST" ) Login ( $_POST['login'], $_POST['pass']);
 else if ($_SERVER['REQUEST_METHOD'] === "GET") Login ( $_GET['login'], $_GET['pass']);
 
