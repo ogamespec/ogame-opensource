@@ -26,6 +26,7 @@ dbquery("SET NAMES 'utf8';");
 dbquery("SET CHARACTER SET 'utf8';");
 dbquery("SET SESSION collation_connection = 'utf8_general_ci';");
 
+require_once "bbcode.php";
 require_once "uni.php";
 require_once "prod.php";
 require_once "planet.php";
@@ -62,10 +63,10 @@ function Error ($text)
     global $GlobalUser;
     if ( !$GlobalUser ) return;
 
-    $id = IncrementDBGlobal ( $GlobalUser['uni'], 'nexterror' );
+    $id = IncrementDBGlobal ( 'nexterror' );
     $now = time ();
 
-    $error = array ( $id, $GlobalUser['uni'], $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], bb($text), $now );
+    $error = array ( $id, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], bb($text), $now );
     AddDBRow ( $error, 'errors' );
 
     Logout ( $_GET['session'] );    // Завершить сессию.
@@ -92,10 +93,10 @@ function Debug ($message)
     global $GlobalUser;
     if ( !$GlobalUser ) return;
 
-    $id = IncrementDBGlobal ( $GlobalUser['uni'], 'nexterror' );
+    $id = IncrementDBGlobal ( 'nexterror' );
     $now = time ();
 
-    $error = array ( $id, $GlobalUser['uni'], $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], "DEBUG: " . bb($message), $now );
+    $error = array ( $id, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], "DEBUG: " . bb($message), $now );
     AddDBRow ( $error, 'errors' );
 }
 
@@ -110,6 +111,9 @@ function RedirectHome ()
 // Игровые страницы.
 
 if ( $_GET['page'] === "overview" ) { include "pages/overview.php"; exit(); }
+else if ( $_GET['page'] === "buildings" ) { include "pages/buildings.php"; exit (); }
+else if ( $_GET['page'] === "renameplanet" ) { include "pages/renameplanet.php"; exit (); }
+else if ( $_GET['page'] === "b_building" ) { include "pages/b_building.php"; exit (); }
 else if ( $_GET['page'] === "resources" ) { include "pages/resources.php"; exit(); }
 else if ( $_GET['page'] === "techtree" ) { include "pages/techtree.php"; exit(); }
 else if ( $_GET['page'] === "techtreedetails" ) { include "pages/techtreedetails.php"; exit(); }

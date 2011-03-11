@@ -119,7 +119,6 @@ else echo "<th>\n</th>\n";
 // Показать картинку планеты.
 echo "<th colspan=\"2\">\n<img src=\"".GetPlanetImage ( UserSkin (), $aktplanet['type'] )."\" width=\"200\" height=\"200\">\n";
 
-/*
 $result = GetBuildQueue ( $aktplanet['planet_id'] );
 $cnt = dbrows ( $result );
 if ( $cnt > 0 )
@@ -131,7 +130,6 @@ if ( $cnt > 0 )
     echo "</script></center><br>\n";
 }
 echo "</th>\n";
-*/
 
 // Список планет.
 echo "<th class='s'>\n";
