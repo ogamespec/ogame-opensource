@@ -95,7 +95,7 @@ $maxreclevel = -1;
 
 function walk_tree ($arr, $id)
 {
-    global $reqs, $desc, $reclevel, $maxreclevel, $tree;
+    global $reqs, $reclevel, $maxreclevel, $tree;
     $reclevel++;
     if ($reclevel >= $maxreclevel) $maxreclevel = $reclevel;
     if ($arr == null) { $reclevel--; return; }
@@ -121,7 +121,7 @@ echo "<center> \n";
 echo "<table width=270> \n";
 echo "<tr> \n";
 echo "<td class=c align=center nowrap> \n";
-echo "Условия для <a href=\"index.php?page=infos&session=$session&gid=$id\">'".$desc[$id]."'</a></td> \n";
+echo "Условия для <a href=\"index.php?page=infos&session=$session&gid=$id\">'".loca("NAME_$id")."'</a></td> \n";
 echo "</tr> \n";
 
 walk_tree ( $reqs[$id], $id );
@@ -142,7 +142,7 @@ for ($i=$maxreclevel-1,$n=0; $i>=0; $i--,$n++)
         echo "    <td class=l align=center> \n";
         echo "    <table width=\"100%\" border=0> \n";
         echo "    <tr> \n";
-        echo "        <td align=left> <font color=\"$color\"> ".$desc[$v]." (уровень $level) </font> </td> \n";
+        echo "        <td align=left> <font color=\"$color\"> ".loca("NAME_$v")." (уровень $level) </font> </td> \n";
         echo "        <td align=right> <a href=\"index.php?page=techtreedetails&session=$session&tid=$v\">[i]</a> </td> \n";
         echo "    </tr> \n";
         echo "    </td> \n";
