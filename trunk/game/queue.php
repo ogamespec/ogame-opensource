@@ -164,7 +164,7 @@ function BuildEnque ( $planet_id, $id, $destroy )
     }
     else $lvl = $nowlevel + 1;
 
-    $unitab = LoadUniverse ( $GlobalUser['uni'] );
+    $unitab = LoadUniverse ( );
     $speed = $unitab['speed'];
 
     // Только первая постройка.
@@ -237,7 +237,7 @@ function GetBuildQueue ( $planet_id)
 // Завершить снос/строительство постройки.
 function Queue_Build_End ($queue)
 {
-    global $db_prefix, $desc;
+    global $db_prefix;
 
     $id = $queue['obj_id'];
     $lvl = $queue['level'];
@@ -253,8 +253,8 @@ function Queue_Build_End ($queue)
 
     RemoveQueue ( $queue['task_id'], 0 );
 
-    if ($queue['type'] === "Build" ) Debug ( "Строительство ".$desc[$id]." уровня $lvl на планете $planet_id завершено." );
-    else Debug ( "Снос ".$desc[$id]." уровня $lvl на планете $planet_id завершен." );
+    if ($queue['type'] === "Build" ) Debug ( "Строительство ".loca("NAME_$id")." уровня $lvl на планете $planet_id завершено." );
+    else Debug ( "Снос ".loca("NAME_$id")." уровня $lvl на планете $planet_id завершен." );
 }
 
 // Отменить снос/строительство постройки.
@@ -291,7 +291,7 @@ function Queue_Build_Cancel ($queue)
 // Списать ресурсы. Если ресурсов недостаточно или не выполнены условия - отменить задание строительства.
 function Queue_DecRes_End ($queue)
 {
-    global $db_prefix, $GlobalUser, $desc;
+    global $db_prefix, $GlobalUser;
 
     $q = LoadQueue ($queue['sub_id']);
     if ($q == null)
@@ -309,7 +309,7 @@ function Queue_DecRes_End ($queue)
     $m = $k = $d = $e = 0;
     BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
 
-    Debug ( "DecRes - списать ресы $m $k $d за " . $desc[$id] . " уровень $lvl" );
+    Debug ( "DecRes - списать ресы $m $k $d за " . loca("NAME_$id") . " уровень $lvl" );
 
     $planet = GetPlanet ($planet_id);
 
@@ -352,33 +352,33 @@ function GetShipyardQueue ($planet_id)
 // Начать исследование на планете (включает в себя все проверки).
 function StartResearch ($player_id, $planet_id, $id)
 {
-	global $db_prefix;
+    global $db_prefix;
 	
-	// Требования к уровню лаборатории для запуска исследования.
-	$RequireLab = array ( 106=>3, 108=>1, 109=>4, 110=>6, 111=>2, 113=>1, 114=>7, 115=>1, 117=>2, 118=>7, 120=>1, 121=>4, 122=>4, 123=>10, 124=>3, 199=>12 );
+    // Требования к уровню лаборатории для запуска исследования.
+    $RequireLab = array ( 106=>3, 108=>1, 109=>4, 110=>6, 111=>2, 113=>1, 114=>7, 115=>1, 117=>2, 118=>7, 120=>1, 121=>4, 122=>4, 123=>10, 124=>3, 199=>12 );
 
-	Debug ("Запустить исследование $id на планете $planet_id игрока $player_id" );
+    Debug ("Запустить исследование ".loca("NAME_$id")." на планете $planet_id игрока $player_id" );
 
-	// Исследование уже ведется?
-	$result = GetResearchQueue ( $player_id);
-	$resq = dbarray ($result);
-	if ($resq) return;
+    // Исследование уже ведется?
+    $result = GetResearchQueue ( $player_id);
+    $resq = dbarray ($result);
+    if ($resq) return;
 
-	// Получить уровень исследования.
-	$user = LoadUser ( $player_id );
-	$level = $user['r'.$id] + 1;
+    // Получить уровень исследования.
+    $user = LoadUser ( $player_id );
+    $level = $user['r'.$id] + 1;
 
-	// Проверить условия.
-	$planet = GetPlanet ( $planet_id );
-	$m = $k = $d = $e = 0;
-	ResearchPrice ( $id, $level, &$m, &$k, &$d, &$e );
+    // Проверить условия.
+    $planet = GetPlanet ( $planet_id );
+    $m = $k = $d = $e = 0;
+    ResearchPrice ( $id, $level, &$m, &$k, &$d, &$e );
 
-	if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && ResearchMeetRequirement ( $user, $planet, $id ) && $planet['b31'] >= $RequireLab[$id] ) {
-    	$unitab = LoadUniverse ( $user['uni'] );
-    	$speed = $unitab['speed'];
-		$now = time ();
-		$reslab = ResearchNetwork ( $planet['planet_id'], $id );
-		$seconds = ResearchDuration ( $id, $level, $reslab, $speed);
+    if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && ResearchMeetRequirement ( $user, $planet, $id ) && $planet['b31'] >= $RequireLab[$id] ) {
+        $unitab = LoadUniverse ( );
+        $speed = $unitab['speed'];
+        $now = time ();
+        $reslab = ResearchNetwork ( $planet['planet_id'], $id );
+        $seconds = ResearchDuration ( $id, $level, $reslab, $speed);
 
         // Списать ресурсы.
         $planet['m'] -= $m;
@@ -387,9 +387,9 @@ function StartResearch ($player_id, $planet_id, $id)
         $query = "UPDATE ".$db_prefix."planets SET m = '".$planet['m']."', k = '".$planet['k']."', d = '".$planet['d']."', lastpeek = '".$now."' WHERE planet_id = $planet_id";
         dbquery ($query);
 
-		//echo "--------------------- Запустить исследование $id на планете $planet_id игрока $player_id, уровень $level, продолжительность $seconds" ;
-		AddQueue ($player_id, "Research", $planet_id, $id, $level, $now, $seconds);
-	}
+        //echo "--------------------- Запустить исследование $id на планете $planet_id игрока $player_id, уровень $level, продолжительность $seconds" ;
+        AddQueue ($player_id, "Research", $planet_id, $id, $level, $now, $seconds);
+    }
 }
 
 // Отменить исследование.
@@ -411,7 +411,7 @@ function GetResearchQueue ($player_id)
 // Закончить исследование.
 function Queue_Research_End ($queue)
 {
-	global $db_prefix, $desc;
+	global $db_prefix;
 
     $id = $queue['obj_id'];
     $lvl = $queue['level'];
@@ -428,7 +428,7 @@ function Queue_Research_End ($queue)
 
     RemoveQueue ( $queue['task_id'], 0 );
 
-    Debug ( "Исследование ".$desc[$id]." уровня $lvl для пользователя $player_id завершено." );
+    Debug ( "Исследование ".loca("NAME_$id")." уровня $lvl для пользователя $player_id завершено." );
 }
 
 // ===============================================================================================================
