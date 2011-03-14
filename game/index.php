@@ -123,6 +123,7 @@ else if ( $_GET['page'] === "messages" ) { include "pages/messages.php"; exit ()
 else if ( $_GET['page'] === "writemessages" ) { include "pages/writemessages.php"; exit (); }
 else if ( $_GET['page'] === "notizen" ) { include "pages/notizen.php"; exit (); }
 else if ( $_GET['page'] === "buddy" ) { include "pages/buddy.php"; exit (); }
+else if ( $_GET['page'] === "changelog" ) { include "pages/changelog.php"; exit (); }
 
 RedirectHome ();
 

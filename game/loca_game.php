@@ -251,6 +251,11 @@ if ($res == false) {
         loca_add("EMPIRE_AVG", "В среднем по планете");
         loca_add("EMPIRE_SUM" , "Сумма");
 
+        // История изменений.
+        loca_add("CHANGELOG_VERSION", "Версия");
+        loca_add("CHANGELOG_DESC", "Описание");
+        include "loca_changelog.php";
+
     }
     loca_close ();
 
