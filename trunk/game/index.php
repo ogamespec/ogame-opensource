@@ -111,6 +111,7 @@ function RedirectHome ()
 // Игровые страницы.
 
 if ( $_GET['page'] === "overview" ) { include "pages/overview.php"; exit(); }
+else if ( $_GET['page'] === "imperium" ) { include "pages/imperium.php"; exit (); }
 else if ( $_GET['page'] === "buildings" ) { include "pages/buildings.php"; exit (); }
 else if ( $_GET['page'] === "renameplanet" ) { include "pages/renameplanet.php"; exit (); }
 else if ( $_GET['page'] === "b_building" ) { include "pages/b_building.php"; exit (); }

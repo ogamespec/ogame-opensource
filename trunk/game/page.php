@@ -206,6 +206,13 @@ function LeftMenu ()
     echo "    </font></div>\n";
     echo "  </td>\n";
     echo " </tr>\n\n";
+    echo "  <tr>\n";
+    echo "  <td>\n";
+    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
+    echo "     <a href='index.php?page=imperium&session=$sess&planettype=1&no_header=1' accesskey=\"r\">".loca("MENU_EMPIRE")."</a>\n";
+    echo "    </font></div>\n";
+    echo "  </td>\n";
+    echo " </tr>\n\n";
     echo " <tr>\n";
     echo "  <td>\n";
     echo "   <div align='center'><font color='#FFFFFF'>\n";
@@ -338,7 +345,7 @@ function LeftMenu ()
     echo "    </div>\n";
 }
 
-function PageFooter ($msg="", $error="", $popup=false)
+function PageFooter ($msg="", $error="", $popup=false, $headerH=81)
 {
     global $GlobalUser;
 
@@ -358,13 +365,12 @@ function PageFooter ($msg="", $error="", $popup=false)
     echo "<div id='errorbox'><center>".$error."</center></div>\n";
     echo "<script>\n";
     if ($popup) echo "messagebox.style.top='0px';\n";
+    echo "headerHeight = $headerH;\n";
     if ($popup)
     {
-        echo "headerHeight = 0;\n";
         echo "contentbox.style.left='0px';\n";
         echo "contentbox.style.width='100%';\n";
     }
-    else echo "headerHeight = 81;\n";
     echo $msgdisplay . $errdisplay;
     echo "errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';\n";
     echo "contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';\n";
