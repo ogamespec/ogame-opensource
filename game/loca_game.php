@@ -22,6 +22,7 @@ if ($res == false) {
 
         // Меню.
         loca_add("MENU_OVERVIEW", "Обзор");
+        loca_add("MENU_EMPIRE", "Империя");
         loca_add("MENU_BUILDING", "Постройки");
         loca_add("MENU_RESOURCES", "Сырьё");
         loca_add("MENU_RESEARCH", "Исследования");
@@ -229,6 +230,26 @@ if ($res == false) {
         loca_add("LONG_408", "Дальнейшее развитие малого щитового купола. Он может сдерживать ещё более сильные атаки на планету, поглощая значительно большее количество энергии.");
         loca_add("LONG_502", "Ракеты-перехватчики уничтожают атакующие межпланетные ракеты. Одна ракета-перехватчик уничтожает одну межпланетную ракету.");
         loca_add("LONG_503", "Межпланетные ракеты уничтожают защиту противника. Уничтоженные межпланетными ракетами оборонительные сооружения больше не восстанавливаются.");
+
+        // Империя.
+        loca_add("EMPIRE_OVERVIEW", "Обзор империи");
+        loca_add("EMPIRE_PLANETS", "Планеты");
+        loca_add("EMPIRE_MOONS", "Луны");
+        loca_add("EMPIRE_RES", "Сырьё");
+        loca_add("EMPIRE_M", "Металл");
+        loca_add("EMPIRE_K", "Кристалл");
+        loca_add("EMPIRE_D", "Дейтерий");
+        loca_add("EMPIRE_E", "Энергия");
+        loca_add("EMPIRE_BUILDINGS", "Постройки");
+        loca_add("EMPIRE_RESEARCH", "Исследование");
+        loca_add("EMPIRE_FLEET", "Корабли");
+        loca_add("EMPIRE_DEFENSE", "Оборона");
+        loca_add("EMPIRE_NAME", "Название");
+        loca_add("EMPIRE_COORD", "Координаты");
+        loca_add("EMPIRE_FIELDS", "Поля");
+        loca_add("EMPIRE_ACTION", "Щёлкнуть 1 раз: обзор, постройки, 2 раза: строить");
+        loca_add("EMPIRE_AVG", "В среднем по планете");
+        loca_add("EMPIRE_SUM" , "Сумма");
 
     }
     loca_close ();
