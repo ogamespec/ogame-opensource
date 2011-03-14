@@ -24,6 +24,12 @@ dbquery("SET SESSION collation_connection = 'utf8_general_ci';");
 
 // Проверить регистрационные данные.
 
+function hostname () {
+    $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+    $pos = strrpos ( $host, "/game/reg/newredirect.php" );
+    return substr ( $host, 0, $pos+1 );
+}
+
 function isValidEmail($email){
 	return eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$", $email);
 }
