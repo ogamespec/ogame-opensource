@@ -36,6 +36,7 @@ require_once "queue.php";
 require_once "galaxy.php";
 require_once "loca_game.php";
 require_once "page.php";
+require_once "ally.php";
 require_once "battle.php";
 
 // *****************************************************************************
@@ -119,10 +120,14 @@ else if ( $_GET['page'] === "resources" ) { include "pages/resources.php"; exit(
 else if ( $_GET['page'] === "infos" ) { include "pages/infos.php"; exit (); }
 else if ( $_GET['page'] === "techtree" ) { include "pages/techtree.php"; exit(); }
 else if ( $_GET['page'] === "techtreedetails" ) { include "pages/techtreedetails.php"; exit(); }
+else if ( $_GET['page'] === "galaxy" ) { include "pages/galaxy.php"; exit (); }
+else if ( $_GET['page'] === "allianzen" ) { include "pages/allianzen.php"; exit (); }
 else if ( $_GET['page'] === "messages" ) { include "pages/messages.php"; exit (); }
 else if ( $_GET['page'] === "writemessages" ) { include "pages/writemessages.php"; exit (); }
 else if ( $_GET['page'] === "notizen" ) { include "pages/notizen.php"; exit (); }
 else if ( $_GET['page'] === "buddy" ) { include "pages/buddy.php"; exit (); }
+else if ( $_GET['page'] === "options" ) { include "pages/options.php"; exit (); }
+else if ( $_GET['page'] === "logout" ) { include "pages/logout.php"; exit (); }
 else if ( $_GET['page'] === "changelog" ) { include "pages/changelog.php"; exit (); }
 
 RedirectHome ();
