@@ -36,6 +36,7 @@ require_once "queue.php";
 require_once "galaxy.php";
 require_once "loca_game.php";
 require_once "page.php";
+require_once "battle.php";
 
 // *****************************************************************************
 // Вспомогательные функции.
@@ -114,8 +115,13 @@ else if ( $_GET['page'] === "buildings" ) { include "pages/buildings.php"; exit 
 else if ( $_GET['page'] === "renameplanet" ) { include "pages/renameplanet.php"; exit (); }
 else if ( $_GET['page'] === "b_building" ) { include "pages/b_building.php"; exit (); }
 else if ( $_GET['page'] === "resources" ) { include "pages/resources.php"; exit(); }
+else if ( $_GET['page'] === "infos" ) { include "pages/infos.php"; exit (); }
 else if ( $_GET['page'] === "techtree" ) { include "pages/techtree.php"; exit(); }
 else if ( $_GET['page'] === "techtreedetails" ) { include "pages/techtreedetails.php"; exit(); }
+else if ( $_GET['page'] === "messages" ) { include "pages/messages.php"; exit (); }
+else if ( $_GET['page'] === "writemessages" ) { include "pages/writemessages.php"; exit (); }
+else if ( $_GET['page'] === "notizen" ) { include "pages/notizen.php"; exit (); }
+else if ( $_GET['page'] === "buddy" ) { include "pages/buddy.php"; exit (); }
 
 RedirectHome ();
 
