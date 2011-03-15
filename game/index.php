@@ -77,6 +77,9 @@ else if ( $_GET['page'] === "renameplanet" ) { include "pages/renameplanet.php";
 else if ( $_GET['page'] === "b_building" ) { include "pages/b_building.php"; exit (); }
 else if ( $_GET['page'] === "resources" ) { include "pages/resources.php"; exit(); }
 else if ( $_GET['page'] === "infos" ) { include "pages/infos.php"; exit (); }
+else if ( $_GET['page'] === "flotten1" ) { include "pages/flotten1.php"; exit (); }
+else if ( $_GET['page'] === "flotten2" ) { include "pages/flotten2.php"; exit (); }
+else if ( $_GET['page'] === "flotten3" ) { include "pages/flotten3.php"; exit (); }
 else if ( $_GET['page'] === "techtree" ) { include "pages/techtree.php"; exit(); }
 else if ( $_GET['page'] === "techtreedetails" ) { include "pages/techtreedetails.php"; exit(); }
 else if ( $_GET['page'] === "galaxy" ) { include "pages/galaxy.php"; exit (); }
@@ -90,6 +93,7 @@ else if ( $_GET['page'] === "buddy" ) { include "pages/buddy.php"; exit (); }
 else if ( $_GET['page'] === "options" ) { include "pages/options.php"; exit (); }
 else if ( $_GET['page'] === "logout" ) { include "pages/logout.php"; exit (); }
 else if ( $_GET['page'] === "changelog" ) { include "pages/changelog.php"; exit (); }
+else if ( $_GET['page'] === "pranger" ) { include "pages/pranger.php"; exit (); }
 
 RedirectHome ();
 

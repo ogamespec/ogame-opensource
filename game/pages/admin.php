@@ -56,7 +56,9 @@ function Admin_Users ()
     global $session;
     global $db_prefix;
 
-    if ( key_exists("player_id", $_GET) ) {
+    // Обработка POST-запроса.
+
+    if ( key_exists("player_id", $_GET) ) {        // Информация об игроке
         $user = LoadUser ( $_GET['player_id'] );
         print_r ($user);
     }
@@ -91,9 +93,70 @@ function Admin_Planets ()
     global $session;
     global $db_prefix;
 
-    if ( key_exists("cp", $_GET) ) {
+    $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
+
+    // Обработка POST-запроса.
+    if ( method () === "POST" ) {
+
+        //print_r ( $_POST );
+    }
+
+    if ( key_exists("cp", $_GET) ) {     // Информация о планете.
         $planet = GetPlanet ( $_GET['cp'] );
-        print_r ($planet);
+        $user = LoadUser ( $planet['owner_id'] );
+        $moon_id = PlanetHasMoon ( $planet['planet_id'] );
+
+        echo "<table>\n";
+        echo "<form action=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\" method=\"POST\" >\n";
+        echo "<tr><td class=c colspan=2>Планета \"".$planet['name']."\" (<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>)</td>\n";
+        echo "       <td class=c >Постройки</td> <td class=c >Флот</td> <td class=c >Оборона</td> </tr>\n";
+        echo "<tr><th><img src=\"".GetPlanetImage (UserSkin(), $planet['type'])."\"></th><th>";
+        if ($moon_id) {
+            $moon = GetPlanet ($moon_id);
+            echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$moon['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $moon['type'])."\"><br>\n";
+            echo $moon['name'] . "</a>";
+        }
+        echo "</th>";
+
+        echo "<th valign=top><table>\n";
+        foreach ( $buildmap as $i=>$gid) {
+            echo "<tr><th>".loca("NAME_$gid")."</th><th><input type=\"text\" size=3 name=\"b$gid\" value=\"".$planet["b$gid"]."\" /></th></tr>\n";
+        }
+        echo "</table></th>\n";
+
+        echo "<th valign=top><table>\n";
+        foreach ( $fleetmap as $i=>$gid) {
+            echo "<tr><th>".loca("NAME_$gid")."</th><th><input type=\"text\" size=6 name=\"f$gid\" value=\"".$planet["f$gid"]."\" /></th></tr>\n";
+        }
+        echo "</table></th>\n";
+
+        echo "<th valign=top><table>\n";
+        foreach ( $defmap as $i=>$gid) {
+            echo "<tr><th>".loca("NAME_$gid")."</th><th><input type=\"text\" size=6 name=\"d$gid\" value=\"".$planet["d$gid"]."\" /></th></tr>\n";
+        }
+        echo "</table></th>\n";
+
+        echo "</tr>\n";
+
+        echo "<tr><th>Дата создания</th><th>".date ("Y-m-d H:i:s", $planet['date'])."</th> </tr>\n";
+        echo "<tr><th>Последняя активность</th><th>".date ("Y-m-d H:i:s", $planet['lastakt'])."</th></tr>\n";
+        echo "<tr><th>Последнее обновление</th><th>".date ("Y-m-d H:i:s", $planet['lastpeek'])."</th></tr>\n";
+        echo "<tr><th>Диаметр</th><th>".nicenum($planet['diameter'])." км (".$planet['fields']." из ".$planet['maxfields']." полей)</th></tr>\n";
+        echo "<tr><th>Температура</th><th>от ".$planet['temp']."°C до ".($planet['temp']+40)."°C</th></tr>\n";
+        echo "<tr><th>Координаты</th><th>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</th></tr>\n";
+
+        echo "<tr><td class=c colspan=2>Ресурсы</td></tr>\n";
+        echo "<tr><th>Металл</th><th><input type=\"text\" name=\"m\" value=\"".ceil($planet['m'])."\" /></th></tr>\n";
+        echo "<tr><th>Кристалл</th><th><input type=\"text\" name=\"k\" value=\"".ceil($planet['k'])."\" /></th></tr>\n";
+        echo "<tr><th>Дейтерий</th><th><input type=\"text\" name=\"d\" value=\"".ceil($planet['d'])."\" /></th></tr>\n";
+        echo "<tr><th>Энергия</th><th>".$planet['e']." / ".$planet['emax']."</th></tr>\n";
+        echo "<tr><th>Коэффициент производства</th><th>".$planet['factor']."</th></tr>\n";
+
+        echo "<tr><th colspan=8><input type=\"submit\" value=\"Сохранить\" /></th></tr>\n";
+        echo "</form>\n";
+        echo "</table>\n";
     }
     else {
         $query = "SELECT * FROM ".$db_prefix."planets ORDER BY date DESC LIMIT 25";
