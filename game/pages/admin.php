@@ -49,6 +49,76 @@ function Admin_Home ()
 }
 
 // ========================================================================================
+// Пользователи.
+
+function Admin_Users ()
+{
+    global $session;
+    global $db_prefix;
+
+    if ( key_exists("player_id", $_GET) ) {
+        $user = LoadUser ( $_GET['player_id'] );
+        print_r ($user);
+    }
+    else {
+        $query = "SELECT * FROM ".$db_prefix."users ORDER BY regdate DESC LIMIT 25";
+        $result = dbquery ($query);
+
+        echo "Новые пользователи:<br>\n";
+        echo "<table>\n";
+        echo "<tr><td class=c>Дата регистрации</td><td class=c>Главная планета</td><td class=c>Имя игрока</td></tr>\n";
+        $rows = dbrows ($result);
+        while ($rows--) 
+        {
+            $user = dbarray ( $result );
+            $hplanet = GetPlanet ( $user['hplanetid'] );
+
+            echo "<tr><th>".date ("Y-m-d H:i:s", $user['regdate'])."</th>";
+            echo "<th>[".$hplanet['g'].":".$hplanet['s'].":".$hplanet['p']."] <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$hplanet['planet_id']."\">".$hplanet['name']."</a></th>";
+            echo "<th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a></th></tr>\n";
+        }
+        echo "</table>\n";
+    }
+
+    // Поиск пользователей
+}
+
+// ========================================================================================
+// Планеты.
+
+function Admin_Planets ()
+{
+    global $session;
+    global $db_prefix;
+
+    if ( key_exists("cp", $_GET) ) {
+        $planet = GetPlanet ( $_GET['cp'] );
+        print_r ($planet);
+    }
+    else {
+        $query = "SELECT * FROM ".$db_prefix."planets ORDER BY date DESC LIMIT 25";
+        $result = dbquery ($query);
+
+        echo "Новые планеты:<br>\n";
+        echo "<table>\n";
+        echo "<tr><td class=c>Дата создания</td><td class=c>Координаты</td><td class=c>Планета</td><td class=c>Игрок</td></tr>\n";
+        $rows = dbrows ($result);
+        while ($rows--) 
+        {
+            $planet = dbarray ( $result );
+            $user = LoadUser ( $planet['owner_id'] );
+
+            echo "<tr><th>".date ("Y-m-d H:i:s", $planet['date'])."</th><th>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</th>";
+            echo "<th><a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\">".$planet['name']."</a></th>";
+            echo "<th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a></th></tr>\n";
+        }
+        echo "</table>\n";
+    }
+
+    // Поиск планет
+}
+
+// ========================================================================================
 // Глобальная очередь событий.
 
 function QueueDesc ( $queue )
@@ -167,6 +237,8 @@ echo "<center>\n";
 echo "<table width=\"750\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\">\n\n";
 
 if ( $mode === "Home" ) Admin_Home ();
+else if ( $mode === "Users" ) Admin_Users ();
+else if ( $mode === "Planets" ) Admin_Planets ();
 else if ( $mode === "Queue" ) Admin_Queue ();
 else if ( $mode === "Uni" ) Admin_Uni ();
 else if ( $mode === "Errors" ) Admin_Errors ();
