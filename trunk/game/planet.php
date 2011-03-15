@@ -40,7 +40,7 @@
 /*
 planet_id: Порядковый номер
 name: Название планеты CHAR(20)
-R type: тип планеты (порядковый номер картинки), если 0 - то это луна.
+R type: тип планеты (порядковый номер картинки), если 0 - то это луна, если 10000 - это поле обломков.
 g,s,p: координаты где расположена планета
 owner_id: Порядковый номер пользователя-владельца
 R diameter: Диаметр планеты
@@ -61,6 +61,8 @@ R - случайные параметры
 
 чистка систем от "уничтоженных планет" происходит каждые сутки в 01-10 по серверу.
 существует "уничтоженная планета" 1 сутки (24 часа) + остаток времени до 01-10 серверного следующего за этими сутками дня.
+
+поля обломков - это специальный тип планеты. (type: 10000)
 
 */
 
@@ -160,6 +162,15 @@ function EnumPlanets ()
     return $result;
 }
 
+// Перечислить все планеты в Галактике.
+function EnumPlanetsGalaxy ($g, $s)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND (type > 0 AND type < 10000)";
+    $result = dbquery ($query);
+    return $result;
+}
+
 // Получить состояние планеты (массив).
 function GetPlanet ( $planet_id)
 {
@@ -245,6 +256,29 @@ function UpdatePlanetActivity ( $planet_id)
     $now = time ();
     $query = "UPDATE ".$db_prefix."planets SET lastakt = $now WHERE planet_id = $planet_id";
     dbquery ($query);
+}
+
+// Управление полями обломков.
+// Загрузка ПО осуществляется вызовом GetPlanet. Удаление ПО осуществляется вызовом DestroyPlanet.
+
+// Проверяет, есть ли на данных координатах ПО. Возвращает id ПО, или 0.
+function HasDebris ($g, $s, $p)
+{
+}
+
+// Создаёт новое ПО по указанным координатам
+function CreateDebris ($g, $s, $p, $owner_id)
+{
+}
+
+// Собрать ПО указанной грузоподъёмностью. В переменные m/k попадает собранное ПО.
+function HarvestDebris ($id, $cargo, &$m, &$k)
+{
+}
+
+// Насыпать лома в указанное ПО
+function AddDebris ($id, $m, $k)
+{
 }
 
 ?>

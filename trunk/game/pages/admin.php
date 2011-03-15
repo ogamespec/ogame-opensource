@@ -55,6 +55,7 @@ function Admin_Users ()
 {
     global $session;
     global $db_prefix;
+    global $GlobalUser;
 
     // Обработка POST-запроса.
 
@@ -92,15 +93,28 @@ function Admin_Planets ()
 {
     global $session;
     global $db_prefix;
+    global $GlobalUser;
 
     $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
 
     // Обработка POST-запроса.
-    if ( method () === "POST" ) {
+    if ( method () === "POST" && $GlobalUser['admin'] >= 2 ) {
+        $cp = $_GET['cp'];
+        $now = time();
+        $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
+                          'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
+                          'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
+                          'm', 'k', 'd' );
 
-        //print_r ( $_POST );
+        $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
+        foreach ( $param as $i=>$p ) {
+            if ( $i == 0 ) $query .= "$p=".$_POST[$p];
+            else $query .= ", $p=".$_POST[$p];
+        }
+        $query .= " WHERE planet_id=$cp;";
+        dbquery ($query);
     }
 
     if ( key_exists("cp", $_GET) ) {     // Информация о планете.
