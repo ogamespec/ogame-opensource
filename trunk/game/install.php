@@ -35,7 +35,7 @@ if (file_exists ("config.php"))
 // Сохранить настройки.
 if ( key_exists("install", $_POST) && CheckParameters() )
 {
-    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','queue');
+    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','queue');
     $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','nextplanet','nextally','nextmsg','nextnote','nextbuddy','nexterror','nexttask','startdate');
     $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT UNSIGNED');
     $usercols = array ( 'player_id', 'regdate', 'ally_id', 'joindate', 'allyrank', 'session', 'private_session', 'name', 'oname', 'name_changed', 'name_until', 'password', 'pemail', 'email',
@@ -78,10 +78,12 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $notestype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'INT', 'INT', 'INT UNSIGNED' );
     $errorscols = array ( 'error_id', 'owner_id', 'ip', 'agent', 'url', 'text', 'date' );
     $errorstype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'INT UNSIGNED' );
+    $debugcols = array ( 'error_id', 'owner_id', 'ip', 'agent', 'url', 'text', 'date' );
+    $debugtype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'INT UNSIGNED' );
     $queuecols = array ( 'task_id', 'owner_id', 'type', 'sub_id', 'obj_id', 'level', 'start', 'end', 'prio' );
     $queuetype = array ( 'INT PRIMARY KEY', 'INT', 'CHAR(20)', 'INT', 'INT', 'INT', 'INT UNSIGNED', 'INT UNSIGNED', 'INT' );
-    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$queuecols);
-    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$queuetype);
+    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$queuecols);
+    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$debugtype, &$queuetype);
     $now = time();
 
     //print_r ($_POST);

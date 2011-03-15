@@ -22,6 +22,7 @@ if ($res == false) {
 
         // Меню.
         loca_add("MENU_OVERVIEW", "Обзор");
+        loca_add("MENU_ADMIN", "* Админка *");
         loca_add("MENU_EMPIRE", "Империя");
         loca_add("MENU_BUILDING", "Постройки");
         loca_add("MENU_RESOURCES", "Сырьё");
@@ -31,7 +32,7 @@ if ($res == false) {
         loca_add("MENU_GALAXY", "Галактика");
         loca_add("MENU_DEFENSE", "Оборона");
         loca_add("MENU_ALLY", "Мой альянс");
-        loca_add("MENU_FORUM", "Форум");
+        loca_add("MENU_BOARD", "Форум");
         loca_add("MENU_PAYMENT", "Офицеры");
         loca_add("MENU_MESSAGES", "Сообщения");
         loca_add("MENU_NOTES", "Заметки");
