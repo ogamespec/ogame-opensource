@@ -298,6 +298,27 @@ function LeftMenu ()
         echo "     </tr>\n\n";
     }
     echo " <tr>\n";
+    echo "  <td>\n";
+    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
+    echo "  <a href='index.php?page=statistics&session=$sess' accesskey=\"k\">".loca("MENU_STAT")."</a>\n";
+    echo "    </font></div>\n";
+    echo "  </td>\n";
+    echo " </tr>\n\n";
+    echo " <tr>\n";
+    echo "  <td>\n";
+    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
+    echo "     <a href='index.php?page=suche&session=$sess' accesskey=\"p\">".loca("MENU_SEARCH")."</a>\n";
+    echo "    </font></div>\n";
+    echo "  </td>\n";
+    echo " </tr>\n\n";
+    echo " <tr>\n";
+    echo "  <td>\n";
+    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
+    echo "    <a href=\"http://tutorial\" target=\"_blank\" accesskey=\"^\" >".loca("MENU_TUTORIAL")."</a><!-- external link to ogame tutorial -->\n";
+    echo "   </font></div>\n";
+    echo "  </td>\n";
+    echo " </tr>\n\n";
+    echo " <tr>\n";
     echo "  <td><img src='".UserSkin()."gfx/user-menu.jpg' width='110' height='35'></td>\n";
     echo " </tr>\n\n";
     echo " <tr>\n";

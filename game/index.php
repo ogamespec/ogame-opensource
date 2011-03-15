@@ -81,6 +81,8 @@ else if ( $_GET['page'] === "techtree" ) { include "pages/techtree.php"; exit();
 else if ( $_GET['page'] === "techtreedetails" ) { include "pages/techtreedetails.php"; exit(); }
 else if ( $_GET['page'] === "galaxy" ) { include "pages/galaxy.php"; exit (); }
 else if ( $_GET['page'] === "allianzen" ) { include "pages/allianzen.php"; exit (); }
+else if ( $_GET['page'] === "statistics" ) { include "pages/statistics.php"; exit (); }
+else if ( $_GET['page'] === "suche" ) { include "pages/suche.php"; exit (); }
 else if ( $_GET['page'] === "messages" ) { include "pages/messages.php"; exit (); }
 else if ( $_GET['page'] === "writemessages" ) { include "pages/writemessages.php"; exit (); }
 else if ( $_GET['page'] === "notizen" ) { include "pages/notizen.php"; exit (); }
