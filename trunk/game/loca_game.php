@@ -34,6 +34,9 @@ if ($res == false) {
         loca_add("MENU_ALLY", "Мой альянс");
         loca_add("MENU_BOARD", "Форум");
         loca_add("MENU_PAYMENT", "Офицеры");
+        loca_add("MENU_STAT", "Статистика");
+        loca_add("MENU_SEARCH", "Поиск");
+        loca_add("MENU_TUTORIAL", "Туториал");
         loca_add("MENU_MESSAGES", "Сообщения");
         loca_add("MENU_NOTES", "Заметки");
         loca_add("MENU_BUDDY", "Друзья");
