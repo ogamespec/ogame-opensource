@@ -166,7 +166,7 @@ $uni = LoadUniverse ( );
 echo "<tr><th> Диаметр </th><th colspan=3>".nicenum($aktplanet['diameter'])." км     (застроенная территория: <a title=\"застроенная территория\">".$aktplanet['fields']." </a> из <a title=\"максимально доступная для застройки территория\">".$aktplanet['maxfields']." </a> полей)   </th></tr>\n";
 echo "<tr><th> Температура </th> <th colspan=3> от ".$aktplanet['temp']."°C до ".($aktplanet['temp']+40)."°C</th> </tr>   \n";
 echo "<tr><th> Координаты</th><th colspan=3><a href=\"index.php?page=galaxy&galaxy=".$aktplanet['g']."&system=".$aktplanet['s']."&position=".$aktplanet['p']."&session=".$_GET['session']."\" >[".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."]</a></th></tr>\n";
-echo "<tr><th> Очки</th><th colspan=3>".nicenum($GlobalUser['score1'])." (место <a href='index.php?page=statistics&session=".$_GET['session']."&start=".(floor($GlobalUser['place1']/100)*100+1)."'>".nicenum($GlobalUser['place1'])."</a> из ".nicenum($uni['usercount']).")</th></tr>     \n";
+echo "<tr><th> Очки</th><th colspan=3>".nicenum(floor($GlobalUser['score1']/1000))." (место <a href='index.php?page=statistics&session=".$_GET['session']."&start=".(floor($GlobalUser['place1']/100)*100+1)."'>".nicenum($GlobalUser['place1'])."</a> из ".nicenum($uni['usercount']).")</th></tr>     \n";
 
 echo "</table>\n<br><br><br><br><br>\n";
 echo "</center>\n";

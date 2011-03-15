@@ -4,6 +4,7 @@
 function GetPlanetSmallImage ($skinpath, $type)
 {
     if ($type == 0) return $skinpath."planeten/small/s_mond.jpg";
+    else if ($type == 10000) return $skinpath."planeten/debris.jpg";
     else
     {
         if ($type >= 101 && $type <= 110) return sprintf ( "%splaneten/small/s_trockenplanet%02d.jpg", $skinpath, $type - 100);
@@ -18,6 +19,7 @@ function GetPlanetSmallImage ($skinpath, $type)
 function GetPlanetImage ($skinpath, $type)
 {
     if ($type == 0) return $skinpath."planeten/mond.jpg";
+    else if ($type == 10000) return $skinpath."planeten/debris.jpg";
     else
     {
         if ($type >= 101 && $type <= 110) return sprintf ( "%splaneten/trockenplanet%02d.jpg", $skinpath, $type - 100);

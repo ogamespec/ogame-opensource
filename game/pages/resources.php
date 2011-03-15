@@ -143,7 +143,7 @@ if ($aktplanet['b1']) {
     $color1 = $m_hourly ? "<font color='00FF00'>" : "";
     $color2 = $m_cons ? "<font color='FF0000'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".$desc[1]." (уровень ".$aktplanet['b1'].")</th><th>&nbsp;</th>   <th> \n";
+	echo "<th>".loca("NAME_1")." (уровень ".$aktplanet['b1'].")</th><th>&nbsp;</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        $color1".nicenum2($m_hourly)."</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
@@ -157,7 +157,7 @@ if ($aktplanet['b2']) {
     $color1 = $k_hourly ? "<font color='00FF00'>" : "";
     $color2 = $k_cons ? "<font color='FF0000'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".$desc[2]." (уровень ".$aktplanet['b2'].")</th><th>&nbsp;</th>   <th> \n";
+	echo "<th>".loca("NAME_2")." (уровень ".$aktplanet['b2'].")</th><th>&nbsp;</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        $color1".nicenum2($k_hourly)."</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
@@ -171,7 +171,7 @@ if ($aktplanet['b3']) {
     $color1 = $d_hourly ? "<font color='00FF00'>" : "";
     $color2 = $d_cons ? "<font color='FF0000'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".$desc[3]." (уровень ".$aktplanet['b3'].")</th><th>&nbsp;</th>   <th> \n";
+	echo "<th>".loca("NAME_3")." (уровень ".$aktplanet['b3'].")</th><th>&nbsp;</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       $color1".nicenum2($d_hourly)."</font>   <th>\n";
@@ -184,7 +184,7 @@ if ($aktplanet['b3']) {
 if ($aktplanet['b4']) {
     $color = $s_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".$desc[4]." (уровень ".$aktplanet['b4'].")</th><th>&nbsp;</th>   <th> \n";
+	echo "<th>".loca("NAME_4")." (уровень ".$aktplanet['b4'].")</th><th>&nbsp;</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
@@ -198,7 +198,7 @@ if ($aktplanet['b12']) {
     $color1 = $f_cons ? "<font color='FF0000'>" : "";
     $color2 = $f_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".$desc[12]." (уровень ".$aktplanet['b12'].")</th><th>&nbsp;</th>   <th> \n";
+	echo "<th>".loca("NAME_12")." (уровень ".$aktplanet['b12'].")</th><th>&nbsp;</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       $color1".nicenum2($f_cons)."</font>   <th>\n";
@@ -211,7 +211,7 @@ if ($aktplanet['b12']) {
 if ($aktplanet['f212']) {
     $color = $ss_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".$desc[212]." (кол-во ".$aktplanet['f212'].")</th><th>&nbsp;</th>   <th> \n";
+	echo "<th>".loca("NAME_212")." (кол-во ".$aktplanet['f212'].")</th><th>&nbsp;</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";

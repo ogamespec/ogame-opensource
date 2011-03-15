@@ -30,7 +30,6 @@ require_once "user.php";
 require_once "msg.php";
 require_once "notes.php";
 require_once "queue.php";
-require_once "galaxy.php";
 require_once "loca_game.php";
 require_once "page.php";
 require_once "ally.php";

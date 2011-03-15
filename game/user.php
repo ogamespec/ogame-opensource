@@ -50,6 +50,7 @@ score1,2,3: Очки за постройки, флот, исследования
 place1,2,3: Место за постройки, флот, исследования (INT)
 oldscore1,2,3: Старые очки за постройки, флот, исследования (BIGINT UNSIGNED, INT UNSIGNED, INT UNSIGNED )
 oldplace1,2,3: старое место за постройки, флот, исследования (INT)
+scoredate: Время сохранения старой статистики (INT UNSIGNED)
 rXXX: Уровень исследования XXX (INT)
 
 Q - для обработки этого события используется задание в очереди задач.
@@ -190,7 +191,7 @@ function CreateUser ( $name, $pass, $email)
                         hostname() . "evolution/", 1, 0, 1, 3, $lang, $homeplanet,
                         0, 0, 0, 
                         0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     AddDBRow ( $user, "users" );
 
@@ -468,6 +469,72 @@ function Login ( $login, $pass, $passmd="" )
     }
     ob_end_flush ();
     exit ();
+}
+
+// Пересчёт статистики.
+function RecalcStats ($player_id)
+{
+    global $db_prefix;
+    $points = $fpoints = $rpoints = 0;
+
+    // Планеты/луны + стоящие флоты
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$player_id."'";
+    $result = dbquery ($query);
+    $rows = dbrows ($result);
+    while ($rows--) {
+        $planet = dbarray ($result);
+        $pts = $fpts = 0;
+        PlanetPrice ($planet, &$pts, &$fpts);
+        $points += $pts;
+        $fpoints += $fpts;
+    }
+
+    // Исследования
+    $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
+    $user = LoadUser ($player_id);
+    foreach ($resmap as $i=>$gid) {
+        $m = $k = $d = $e = 0;
+        $level = $user["r$gid"];
+        $rpoints += $level;
+        if ($level > 0) {
+            ResearchPrice ( $gid, $level, &$m, &$k, &$d, &$e );
+            $points += ($m + $k + $d);
+        }
+    }
+
+    // Летящие флоты
+
+    $query = "UPDATE ".$db_prefix."users SET ";
+    $query .= "oldplace1=place1, oldplace2=place2, oldplace3=place3, ";
+    $query .= "score1=$points, score2=$fpoints, score3=$rpoints, oldscore1=$points, oldscore2=$fpoints, oldscore3=$rpoints WHERE player_id = $player_id;";
+    dbquery ($query);
+}
+
+// Пересчитать места всех игроков.
+function RecalcRanks ()
+{
+    global $db_prefix;
+
+    // Очки
+    dbquery ("SET @pos := 0;");
+    $query = "UPDATE ".$db_prefix."users
+              SET place1 = (SELECT @pos := @pos+1)
+              ORDER BY score1 DESC";
+    dbquery ($query);
+
+    // Флот
+    dbquery ("SET @pos := 0;");
+    $query = "UPDATE ".$db_prefix."users
+              SET place2 = (SELECT @pos := @pos+1)
+              ORDER BY score2 DESC";
+    dbquery ($query);
+
+    // Исследования
+    dbquery ("SET @pos := 0;");
+    $query = "UPDATE ".$db_prefix."users
+              SET place3 = (SELECT @pos := @pos+1)
+              ORDER BY score3 DESC";
+    dbquery ($query);
 }
 
 ?>
