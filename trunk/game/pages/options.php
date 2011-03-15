@@ -12,7 +12,7 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
-PageHeader ("changelog");
+PageHeader ("options");
 ?>
 
 <!-- CONTENT AREA -->

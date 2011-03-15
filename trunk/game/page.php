@@ -250,6 +250,13 @@ function LeftMenu ()
     echo "    </font></div> \n";
     echo "  </td> \n";
     echo " </tr> \n\n";
+    echo " <tr>\n";
+    echo "  <td>\n";
+    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
+    echo "     <a href='index.php?page=flotten1&session=$sess&mode=Flotte' accesskey=\"f\">".loca("MENU_FLEET")."</a>\n";
+    echo "    </font></div>\n";
+    echo "  </td>\n";
+    echo " </tr>\n\n";
     echo " <tr> \n";
     echo "  <td> \n";
     echo "   <div align=\"center\"><font color=\"#FFFFFF\"> \n";

@@ -28,6 +28,7 @@ if ($res == false) {
         loca_add("MENU_RESOURCES", "Сырьё");
         loca_add("MENU_RESEARCH", "Исследования");
         loca_add("MENU_SHIPYARD", "Верфь");
+        loca_add("MENU_FLEET", "Флот");
         loca_add("MENU_TECHTREE", "Технологии");
         loca_add("MENU_GALAXY", "Галактика");
         loca_add("MENU_DEFENSE", "Оборона");
