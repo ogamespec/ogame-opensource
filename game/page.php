@@ -206,6 +206,15 @@ function LeftMenu ()
     echo "    </font></div>\n";
     echo "  </td>\n";
     echo " </tr>\n\n";
+    if ( $GlobalUser['admin'] > 0 ) {
+        echo " <tr>\n";
+        echo "  <td>\n";
+        echo "   <div align='center'><font color='#FFFFFF'>\n";
+        echo "     <a href='index.php?page=admin&session=".$sess."' >".loca("MENU_ADMIN")."</a>\n";
+        echo "    </font></div>\n";
+        echo "  </td>\n";
+        echo " </tr>\n\n";
+    }
     echo "  <tr>\n";
     echo "  <td>\n";
     echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
@@ -275,7 +284,7 @@ function LeftMenu ()
     echo "  <tr> \n";
     echo "  <td> \n";
     echo "   <div align=\"center\"><font color=\"#FFFFFF\"> \n";
-    echo "    <a href=\"http://board.oldogame.ru/\" target=\"_blank\" accesskey=\"m\" >".loca("MENU_FORUM")."</a><!-- external link to board --> \n";
+    echo "    <a href=\"http://board.oldogame.ru/\" target=\"_blank\" accesskey=\"m\" >".loca("MENU_BOARD")."</a><!-- external link to board --> \n";
     echo "   </font></div> \n";
     echo "  </td> \n";
     echo " </tr> \n\n";

@@ -38,6 +38,7 @@ require_once "loca_game.php";
 require_once "page.php";
 require_once "ally.php";
 require_once "battle.php";
+require_once "debug.php";
 
 // *****************************************************************************
 // Вспомогательные функции.
@@ -58,49 +59,6 @@ function nicenum ($number)
     return number_format($number,0,",",".");
 }
 
-// Ошибка, аварийное завершение программы.
-function Error ($text)
-{
-    global $GlobalUser;
-    if ( !$GlobalUser ) return;
-
-    $id = IncrementDBGlobal ( 'nexterror' );
-    $now = time ();
-
-    $error = array ( $id, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], bb($text), $now );
-    AddDBRow ( $error, 'errors' );
-
-    Logout ( $_GET['session'] );    // Завершить сессию.
-
-    ob_clean ();    // Отменить предыдущий HTML.
-    PageHeader ("error", true, false);
-
-    echo "<center><font size=\"3\"><b>\n";
-    echo "<br /><br />\n";
-    echo "<font color=\"#FF0000\">Произошла ошибка</font>\n";
-    echo "<br /><br />\n";
-    echo "Аварийное завершение прогарммы.<br/><br/>Обратитесь в Службу поддержки или на форум, в раздел \"Ошибки\".\n";
-    echo "<br /><br />\n";
-    echo "Error-ID: $id</b></font></center>\n";
-
-    PageFooter ();
-    ob_end_flush ();
-    exit ();
-}
-
-// Добавить отладочное сообщение.
-function Debug ($message)
-{
-    global $GlobalUser;
-    if ( !$GlobalUser ) return;
-
-    $id = IncrementDBGlobal ( 'nexterror' );
-    $now = time ();
-
-    $error = array ( $id, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], "DEBUG: " . bb($message), $now );
-    AddDBRow ( $error, 'errors' );
-}
-
 function RedirectHome ()
 {
     global $StartPage;
@@ -112,6 +70,7 @@ function RedirectHome ()
 // Игровые страницы.
 
 if ( $_GET['page'] === "overview" ) { include "pages/overview.php"; exit(); }
+else if ( $_GET['page'] === "admin" ) { include "pages/admin.php"; exit (); }
 else if ( $_GET['page'] === "imperium" ) { include "pages/imperium.php"; exit (); }
 else if ( $_GET['page'] === "buildings" ) { include "pages/buildings.php"; exit (); }
 else if ( $_GET['page'] === "renameplanet" ) { include "pages/renameplanet.php"; exit (); }
