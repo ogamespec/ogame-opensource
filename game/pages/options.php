@@ -12,6 +12,20 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
+function IsChecked ($option)
+{
+    global $GlobalUser;
+    if ( $GlobalUser[$option] ) return "checked=checked";
+    else return "";
+}
+
+function IsSelected ($option, $value)
+{
+    global $GlobalUser;
+    if ( $GlobalUser[$option] == $value ) return "selected";
+    else return "";
+}
+
 PageHeader ("options");
 ?>
 
@@ -20,13 +34,131 @@ PageHeader ("options");
 <center>
  <table width="519">
 
- <form action="index.php?page=options&session=149c500e570c&mode=change" method="POST" >
-  
+<?php
+    // ======================================================================================
+    // Аккаунт неактивирован.
 
+    if ( $GlobalUser['validated'] == 0 ) {
+
+        // Обработать POST-запрос.
+        if ( method () === "POST") {
+
+            print_r ($_POST);
+        }
+
+?>
+
+ <form action="index.php?page=options&session=<?=$session;?>&mode=change" method="POST" > 
+        <input type="hidden" name="design"     value='on' /> 
+    <tr><td class="c" colspan ="2">Данные пользователя</td></tr> 
+    <tr> 
+        <th><a title="Этот адрес можно в любое время изменить. Через 7 дней без изменений он станет постоянным.">Адрес</a></th> 
+        <th><input type="text" name="db_email" maxlength="100" size="20" value="<?=$GlobalUser['email'];?>" /></th> 
+    </tr> 
+    <tr> 
+        <th>Пароль</th> 
+        <th><input type="password" name="db_password" size ="20" value="" /></th> 
+    </tr> 
+    <tr> 
+        <th colspan=2><input type="submit" value="Используйте введённый адрес" /></th> 
+    </tr> 
+    </form> 
+    <form action="index.php?page=options&session=<?=$session;?>" method="POST" > 
+    <input type=hidden name="validate" value="1"> 
+    <tr> 
+        <th colspan=2> 
+                    <p style="color:#ff0000;padding-top:10px;padding-bottom:5px;">Ваш игровой акаунт ещё не активирован. Тут Вы можете заказать письмо с активационной ссылкой.</p> 
+            <input type="submit" value="Заказать активационную ссылку" /> 
+        </th> 
+    </tr> 
+   </form> 
+ </table> 
+
+<?php
+    // ======================================================================================
+    // Режим отпуска включен.
+
+    }
+    else if ( $GlobalUser['vacation'] )
+    {
+
+        // Обработать POST-запрос.
+        if ( method () === "POST") {
+
+            print_r ($_POST);
+        }
+?>
+
+ <form action="index.php?page=options&session=<?=$session;?>&mode=change" method="POST" >
+  <tr> <td class="c" colspan="2">Режим отпуска</td>  </tr>
+  <tr>   </tr>
+  <tr> <th colspan=2>   Режим отпуска включён. Отпуск минимум до:<br />
+     <?=date ("d.m.Y. H:i:s", $GlobalUser['vacation_until']);?>   </th>   </tr>
+<?php
+    if ( time () >= $GlobalUser['vacation_until'] )
+    {
+?>
+     <tr>
+   <th>
+      отключить   </th>
+   <th><input type="checkbox" name="urlaub_aus" />
+   </th>
+  </tr>
+<?php
+    }
+    else
+    {
+?>
+             <tr>
+               <th><a title="Если поставить здесь галочку, то через 7 дней аккаунт автоматически полностью удалится.">Удалить аккаунт</a></th>
+               <th><input type="checkbox" name="db_deaktjava" <?=IsChecked("disable");?> />
+      <?php
+    if ($GlobalUser['disable']) echo "am: " . date ("Y-m-d H:i:s", $GlobalUser['disable_until']) . "<input type='hidden' name=loeschen_am value=".date ("Y-m-d H:i:s", $GlobalUser['disable_until']).">";
+?>           </th>
+              </tr>
+<?php
+    }
+?>
+
+     <tr>   <th colspan=2><input type="submit" value="Сохранить изменения" /></th>  </tr>
+ </form>
+ </table>
+
+<?php
+    // ======================================================================================
+    // Обычное меню.
+
+    }
+    else
+    {
+
+        // Обработать POST-запрос.
+        if ( method () === "POST") {
+
+            print_r ($_POST);
+        }
+?>
+
+ <form action="index.php?page=options&session=<?=$session;?>&mode=change" method="POST" >
      <tr><td class="c" colspan ="2">Данные пользователя</td></tr>
 <tr>
+<?php
+    if ( $GlobalUser['name_changed'] )
+    {
+?>
       <th><a title="Имя можно изменять только раз в 7 дней.">Имя</a></th>
-   <th>Example-</th>
+   <th><?=$GlobalUser['oname'];?></th>
+<?php
+    }
+    else
+    {
+?>
+      <th>Имя</th>
+   <th><input type="text" name="db_character" size ="20" value="<?=$GlobalUser['oname'];?>" /><br/></th>
+<?php
+    }
+?>
+
     </tr>
   <tr>
   <th>Старый пароль</th>
@@ -44,12 +176,12 @@ PageHeader ("options");
   </tr>
   <tr>
   <th><a title="Этот адрес можно в любое время изменить. Через 7 дней без изменений он станет постоянным.">Адрес</a></th>
-  <th><input type="text" name="db_email" maxlength="100" size="20" value="ogamespec@gmail.com" /></th>
+  <th><input type="text" name="db_email" maxlength="100" size="20" value="<?=$GlobalUser['email'];?>" /></th>
   </tr>
   <tr>
   <th>Постоянный адрес</th>
 
-   <th>ogamespec@gmail.com</th>
+   <th><?=$GlobalUser['pemail'];?></th>
   </tr>
    <tr><th colspan="2">
   </tr>
@@ -61,9 +193,9 @@ PageHeader ("options");
    <th>Сортировка планет по:</th>
    <th>
    <select name="settings_sort">
-    <option value="0" selected >порядку колонизации</option>
-    <option value="1" >координатам</option>
-    <option value="2" >алфавиту</option>
+    <option value="0" <?=IsSelected("sortby", 0);?> >порядку колонизации</option>
+    <option value="1" <?=IsSelected("sortby", 1);?> >координатам</option>
+    <option value="2" <?=IsSelected("sortby", 2);?> >алфавиту</option>
    </select>
 
    </th>
@@ -72,15 +204,15 @@ PageHeader ("options");
    <th>Порядок сортировки:</th>
    <th>
    <select name="settings_order">
-     <option value="0" selected>по возрастанию</option>
-     <option value="1" >по убыванию</option>
+     <option value="0" <?=IsSelected("sortorder", 0);?>>по возрастанию</option>
+     <option value="1" <?=IsSelected("sortorder", 1);?>>по убыванию</option>
 
    </select>
    </th>
  </tr>
 
   <th>Путь для скинов (напр. C:/ogame/kartinki/)<br /> <a href="http://graphics.ogame-cluster.net/download/" target="_blank">Скачать</a></th>
-   <th><input type=text name="dpath" maxlength="80" size="40" value="http://graphics.ogame-cluster.net/download/use/evolution/" /> <br />
+   <th><input type=text name="dpath" maxlength="80" size="40" value="<?=$GlobalUser['skin'];?>" /> <br />
   </select>
 
    </th>
@@ -89,13 +221,13 @@ PageHeader ("options");
   <th>Показать скин</th>
    <th>
     <input type="checkbox" name="design"
-    checked=checked />
+    <?=IsChecked("useskin");?> />
    </th>
   </tr>
 
   <tr>
     <th><a title="Проверка IP означает, что автоматически последует выгрузка, если меняется IP или двое людей с разными IP зашли под одним аккаунтом. Отключение проверки IP может быть небезопасным!">Деактивировать проверку IP</a></th>
-   <th><input type="checkbox" name="noipcheck"  /></th>
+   <th><input type="checkbox" name="noipcheck"  <?=IsChecked("deact_ip");?>/></th>
   </tr>
   <tr>
    <td class="c" colspan="2">Настройки просмотра галактики</td>
@@ -103,7 +235,7 @@ PageHeader ("options");
   <tr>
 
    <th><a title="Кол-во шпионских зондов, которые при каждом сканировании посылаются из меню Галактика.">Кол-во шпионских зондов</a></th>
-   <th><input type="text" name="spio_anz" maxlength="2" size="2" value="1" /></th>
+   <th><input type="text" name="spio_anz" maxlength="2" size="2" value="<?=$GlobalUser['maxspy'];?>" /></th>
   </tr>
   <!--<tr>
    <th>Просмотреть название</th>
@@ -111,8 +243,58 @@ PageHeader ("options");
   </tr>-->
   <tr>
    <th>Максимальные сообщения о флоте</th>
-   <th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="3" /></th>
+   <th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="<?=$GlobalUser['maxfleetmsg'];?>" /></th>
   </tr>
+
+<?php
+    if (0)    // Дополнительные настройки Командира
+    {
+?>
+  </tr>
+     <tr>
+   <th>Сочетания клавиш</th>
+   <th>показать</th>
+  </tr>
+      <tr>
+   <th><img src="<?=UserSkin();?>img/e.gif" alt="" />   Шпионаж</th>
+
+   <th><input type="checkbox" name="settings_esp" checked='checked'/></th>
+   </tr>
+      <tr>
+   <th><img src="<?=UserSkin();?>img/m.gif" alt="" />   Написать сообщение</th>
+   <th><input type="checkbox" name="settings_wri" checked='checked'/></th>
+   </tr>
+      <tr>
+   <th><img src="<?=UserSkin();?>img/b.gif" alt="" />   Предложение стать другом</th>
+
+   <th><input type="checkbox" name="settings_bud" checked='checked'/></th>
+   </tr>
+      <tr>
+   <th><img src="<?=UserSkin();?>img/r.gif" alt="" />   Ракетная атака</th>
+   <th><input type="checkbox" name="settings_mis" checked='checked'/></th>
+   </tr>
+      <tr>
+   <th><img src="<?=UserSkin();?>img/s.gif" alt="" />   Просмотреть сообщение</th>
+
+   <th><input type="checkbox" name="settings_rep" checked='checked'/></th>
+   </tr>
+      <tr>
+   <td class="c" colspan="2">Настройки сообщений</td>
+   <tr>
+   <th>не сортировать по папкам</th>
+  <th><input type="checkbox" name="settings_folders"  checked='checked'/></th>
+</tr>
+
+<tr>
+    <td class="c" colspan="2"><font color='FF8900'>Newsfeed</font></td>
+</tr>
+<tr>
+    <th>Активировать<input type=hidden name="feed_submit" value="1"></th>
+    <th><input type="checkbox" name="feed_activated"  /></th>
+</tr>
+<?php
+    }
+?>
 
       
   <tr>
@@ -128,8 +310,10 @@ PageHeader ("options");
   </tr>
   <tr>
    <th><a title="Если поставить здесь галочку, то через 7 дней аккаунт автоматически полностью удалится.">Удалить аккаунт</a></th>
-   <th><input type="checkbox" name="db_deaktjava"  />
-      </th>
+   <th><input type="checkbox" name="db_deaktjava"  <?=IsChecked("disable");?>/>
+      <?php
+    if ($GlobalUser['disable']) echo "am: " . date ("Y-m-d H:i:s", $GlobalUser['disable_until']);
+?> </th>
   </tr>
   <tr>
    <th colspan=2><input type="submit" value="Сохранить изменения" /></th>
@@ -138,6 +322,10 @@ PageHeader ("options");
    
  </form>
  </table>
+
+<?php
+    }
+?>
 
 <br><br><br><br>
 </center>
