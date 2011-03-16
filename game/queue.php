@@ -448,6 +448,20 @@ function GetOfficerLeft ($player_id, $off)
     else return 0;
 }
 
+// Вернуть ID события удаления аккаунта, или 0, если аккаунт не удаляется.
+function GetDeleteAccountTaskID ( $player_id)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'DeleteAccount' AND owner_id = $player_id";
+    $result = dbquery ($query);
+    if ( $result )
+    {
+        $queue = dbarray ($result);
+        return $queue['task_id'];
+    }
+    else return 0;    
+}
+
 // ===============================================================================================================
 // Вселенная
 

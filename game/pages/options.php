@@ -27,6 +27,9 @@ function IsSelected ($option, $value)
 }
 
 PageHeader ("options");
+
+$unitab = LoadUniverse ();
+$speed = $unitab['speed'];
 ?>
 
 <!-- CONTENT AREA -->
@@ -135,7 +138,60 @@ PageHeader ("options");
         // Обработать POST-запрос.
         if ( method () === "POST") {
 
-            print_r ($_POST);
+            if ( $GlobalUser['name_changed'] == 0 && $_POST['db_character'] !== $GlobalUser['oname'] ) {        // Сменить имя.
+                echo "Сменить имя<br>";
+            }
+
+            if ( $_POST['newpass1'] !== "" ) {        // Сменить пароль
+                echo "Сменить пароль<br>";
+            }
+
+            if ( $_POST['db_email'] !== $GlobalUser['pemail'] ) {        // Сменить адрес
+                echo "Сменить адрес<br>";
+            }
+
+            if ( $_POST['urlaubs_modus'] === "on" && $GlobalUser['vacation'] == 0 ) {        // Включить режим отпуска
+                $vacation_until = time() + (2 * 24 * 60 * 60) / $speed;
+
+                $query = "UPDATE ".$db_prefix."users SET vacation=1,vacation_until=$vacation_until WHERE player_id=".$GlobalUser['player_id'];
+                dbquery ($query);
+                $GlobalUser['vacation'] = 1;
+                $GlobalUser['vacation_until'] = $vacation_until;
+            }
+
+            if ( $_POST['db_deaktjava'] === "on" && $GlobalUser['disable'] == 0 ) {        // Поставить аккаунт на удаление
+                $disable_until = time() + (7 * 24 * 60 * 60);
+
+                $query = "UPDATE ".$db_prefix."users SET disable=1,disable_until=$disable_until WHERE player_id=".$GlobalUser['player_id'];
+                dbquery ($query);
+                $GlobalUser['disable'] = 1;
+                $GlobalUser['disable_until'] = $disable_until;
+
+                AddQueue ( $GlobalUser['player_id'], "DeleteAccount", 0, 0, 0, time(), 7*24*60*60);
+            }
+
+            if ( !key_exists("db_deaktjava", $_POST) && $GlobalUser['disable'] ) {    // Отменить удаление аккаунта
+                $query = "UPDATE ".$db_prefix."users SET disable=0,disable_until=0 WHERE player_id=".$GlobalUser['player_id'];
+                dbquery ($query);
+                $GlobalUser['disable'] = 0;
+                $GlobalUser['disable_until'] = 0;
+
+                $id = GetDeleteAccountTaskID ( $GlobalUser['player_id'] );
+                if ($id)  RemoveQueue ( $id, 0);
+            }
+
+            // dpath design noipcheck
+
+            $sortby = min ( max(0, $_POST['settings_sort']), 2);
+            $sortorder = min ( max(0, $_POST['settings_order']), 1);
+            $maxspy = min( max (1, $_POST['spio_anz']), 99);
+            $maxfleetmsg = min( max (1, $_POST['settings_fleetactions']), 99);
+            $query = "UPDATE ".$db_prefix."users SET sortby=$sortby, sortorder=$sortorder, maxspy=$maxspy, maxfleetmsg=$maxfleetmsg WHERE player_id=".$GlobalUser['player_id'];
+            dbquery ($query);
+            $GlobalUser['sortby'] = $sortby;
+            $GlobalUser['sortorder'] = $sortorder;
+            $GlobalUser['maxspy'] = $maxspy;
+            $GlobalUser['maxfleetmsg'] = $maxfleetmsg;
         }
 ?>
 
