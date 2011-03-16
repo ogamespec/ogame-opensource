@@ -7,26 +7,6 @@ if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 $OverviewMessage = "";
 $OverviewError = "";
 
-// Символьные описания объектов
-$desc[1] = "Рудник по добыче металла";
-$desc[2] = "Рудник по добыче кристалла";
-$desc[3] = "Синтезатор дейтерия";
-$desc[4] = "Солнечная электростанция";
-$desc[12] = "Термоядерная электростанция";
-$desc[14] = "Фабрика роботов";
-$desc[15] = "Фабрика нанитов";
-$desc[21] = "Верфь";
-$desc[22] = "Хранилище металла";
-$desc[23] = "Хранилище кристалла";
-$desc[24] = "Ёмкость для дейтерия";
-$desc[31] = "Исследовательская лаборатория";
-$desc[33] = "Терраформер";
-$desc[34] = "Склад альянса";
-$desc[41] = "Лунная база";
-$desc[42] = "Сенсорная фаланга";
-$desc[43] = "Ворота";
-$desc[44] = "Ракетная шахта";
-
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
 
 $now = time();
@@ -125,7 +105,7 @@ if ( $cnt > 0 )
 {
     $queue = dbarray ($result);
     $left = $queue['end'] - time ();
-    echo "<br><center>".$desc[$queue['obj_id']] . " ".$queue['type']." (".$queue['level'].")<div id=\"bxx\" title=\"".$queue['end']."\" class=\"z\"></div><SCRIPT language=JavaScript>\n";
+    echo "<br><center>".loca("NAME_".$queue['obj_id']) . " ".$queue['type']." (".$queue['level'].")<div id=\"bxx\" title=\"".$queue['end']."\" class=\"z\"></div><SCRIPT language=JavaScript>\n";
     echo "pp=\"".$left."\"; ps=\"".$_GET['session']."\"; t_building();\n";
     echo "</script></center><br>\n";
 }
@@ -149,7 +129,7 @@ for ($i=0; $i<$num; $i++)
         $cnt = dbrows ( $qresult );
         if ( $cnt > 0 ) {
             $queue = dbarray ($qresult);
-            echo $desc[$queue['obj_id']] . $queue['type'];
+            echo loca("NAME_".$queue['obj_id']) . $queue['type'];
         }
         else echo "";
         dbfree ( $qresult );
