@@ -19,8 +19,8 @@ PageHeader ("overview");
 
 // *******************************************************************
 
-//CreatePlanet (1, 1, 123, 8, 1 );
-//CreatePlanet (1, 3, 13, 3, 1 );
+//CreatePlanet (1, 123, 8, 1 );
+//CreatePlanet ( 3, 13, 3, 1 );
 
 $stime = time ();
 if ( key_exists ('lgn', $_GET) && $_GET['lgn'] == 1 ) UpdatePlanetActivity ( $aktplanet['planet_id'] );  // Обновить активность на Главной планете при входе в игру.

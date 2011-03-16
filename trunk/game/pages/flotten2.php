@@ -1,5 +1,7 @@
 <?php
 
+// Флот 2: подготавливает координаты цели
+
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
 $now = time();
@@ -9,6 +11,13 @@ ProdResources ( $GlobalUser['aktplanet'], $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
+
+if ( method() !== "POST" )
+{
+    echo "<html><head><meta http-equiv='refresh' content='0;url=index.php?page=flotten1&session=$session' /></head><body></body>";
+    ob_end_flush ();
+    die ();
+}
 
 PageHeader ("flotten2");
 ?>
@@ -32,24 +41,42 @@ PageHeader ("flotten2");
 
 <center>
 <table width="519" border="0" cellpadding="0" cellspacing="1">
-<form action="index.php?page=flotten3&session=3ff7ae974331" method="POST">
-<input name="thisgalaxy" type="hidden" value="1" />
-<input name="thissystem" type="hidden" value="260" />
-<input name="thisplanet" type="hidden" value="4" />
-<input name="thisplanettype" type="hidden" value="1" />
+<form action="index.php?page=flotten3&session=<?=$session;?>" method="POST">
+<input name="thisgalaxy" type="hidden" value="<?=$aktplanet['g'];?>" />
+<input name="thissystem" type="hidden" value="<?=$aktplanet['s'];?>" />
+<input name="thisplanet" type="hidden" value="<?=$aktplanet['p'];?>" />
+<input name="thisplanettype" type="hidden" value="<?=GetPlanetType($aktplanet);?>" />
 <input name="speedfactor" type="hidden" value="1" />
-<input name="thisresource1" type="hidden" value="52530" />
-<input name="thisresource2" type="hidden" value="15695" />
-<input name="thisresource3" type="hidden" value="4721" />
-   <input type="hidden" name="ship203" value="22" />
-  <input type="hidden" name="consumption203" value="50" />
-  <input type="hidden" name="speed203" value="15000" />
+<input name="thisresource1" type="hidden" value="<?=floor($aktplanet['m']);?>" />
+<input name="thisresource2" type="hidden" value="<?=floor($aktplanet['k']);?>" />
+<input name="thisresource3" type="hidden" value="<?=floor($aktplanet['d']);?>" />
 
-  <input type="hidden" name="capacity203" value="25000" />
-     <input type="hidden" name="ship215" value="30" />
-  <input type="hidden" name="consumption215" value="250" />
-  <input type="hidden" name="speed215" value="34000" />
-  <input type="hidden" name="capacity215" value="750" />
+<?php
+
+    // Список флотов.
+
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+
+    $total = 0;
+    foreach ($fleetmap as $i=>$gid) 
+    {
+        $total += $_POST["ship$gid"];
+        if ( key_exists("ship$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"ship$gid\" value=\"".$_POST["ship$gid"]."\" />\n";
+        if ( key_exists("consumption$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"consumption$gid\" value=\"".$_POST["consumption$gid"]."\" />\n";
+        if ( key_exists("speed$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"speed$gid\" value=\"".$_POST["speed$gid"]."\" />\n";
+        if ( key_exists("capacity$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"capacity$gid\" value=\"".$_POST["capacity$gid"]."\" />\n";
+    }
+
+    if ( $total == 0 )    // Флот не выбран.
+    {
+        ob_end_clean ();
+        echo "<html><head><meta http-equiv='refresh' content='0;url=index.php?page=flotten1&session=$session' /></head><body></body>";
+        die ();
+    }
+
+?>
+
+
     <tr height="20">
   <td colspan="2" class="c">Отправление флота</td>
  </tr>
@@ -57,9 +84,9 @@ PageHeader ("flotten2");
  <tr height="20">
   <th width="50%">Координаты цели</th>
   <th>
-   <input name="galaxy" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="1" />
-   <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="260" />
-   <input name="planet" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="4" />
+   <input name="galaxy" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?=$aktplanet['g'];?>" />
+   <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?=$aktplanet['s'];?>" />
+   <input name="planet" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?=$aktplanet['p'];?>" />
    <select name="planettype" onChange="shortInfo()" onKeyUp="shortInfo()">
      <option value="1" >планета </option>
 
@@ -107,91 +134,30 @@ PageHeader ("flotten2");
 
   <tr height="20">
   <td colspan="2" class="c">Планета</td>
+
   </tr>
-    <tr height="20">
-   
-   <th>
 
-   <a href="javascript:setTarget(1,104,6,1); shortInfo()">
-   Cold Plains 1:104:6</a>
-    </th>
+<?php
 
+    // Список планет.
+    $result = EnumPlanets ();
+    $rows = dbrows ($result);
+    $leftcol = true;
+    while ($rows--)
+    {
+        $planet = dbarray ($result);
+        if ( $planet['planet_id'] == $aktplanet['planet_id'] || GetPlanetType($planet) == 2 ) continue;
+        if ( $leftcol ) echo "<tr height=\"20\">\n";
+        echo "<th><a href=\"javascript:setTarget(".$planet['g'].",".$planet['s'].",".$planet['p'].",".GetPlanetType($planet)."); shortInfo()\">\n".$planet['name']." ".$planet['g'].":".$planet['s'].":".$planet['p']."</a></th>\n";
+        if ( !$leftcol ) echo "</tr>\n";
+        $leftcol ^= 1;
+    }
+    if ( !$leftcol ) {
+        echo "     <th>&nbsp; </th>\n";
+        echo "</tr>\n";
+    }
 
-   <th>
-   <a href="javascript:setTarget(1,242,13,1); shortInfo()">
-   Чёрный Глаз 1:242:13</a>
-    </th>
-
-   </tr>
-  <tr height="20">
-   
-   <th>
-   <a href="javascript:setTarget(1,244,4,1); shortInfo()">
-   Great Marsh 1:244:4</a>
-    </th>
-
-
-   <th>
-
-   <a href="javascript:setTarget(1,255,4,1); shortInfo()">
-   Lost City 1:255:4</a>
-    </th>
-
-   </tr>
-  <tr height="20">
-   
-   <th>
-   <a href="javascript:setTarget(1,255,4,3); shortInfo()">
-   Lost Moon (Луна) 1:255:4</a>
-
-    </th>
-
-
-   <th>
-   <a href="javascript:setTarget(1,260,4,3); shortInfo()">
-   Frigid Moon (Луна) 1:260:4</a>
-    </th>
-
-   </tr>
-  <tr height="20">
-
-   
-   <th>
-   <a href="javascript:setTarget(1,286,5,1); shortInfo()">
-   Rocky Waste 1:286:5</a>
-    </th>
-
-
-   <th>
-   <a href="javascript:setTarget(1,286,5,3); shortInfo()">
-   Rocky Moon (Луна) 1:286:5</a>
-
-    </th>
-
-   </tr>
-  <tr height="20">
-   
-   <th>
-   <a href="javascript:setTarget(1,335,6,1); shortInfo()">
-   Far Oasis 1:335:6</a>
-    </th>
-
-   <th>
-   <a href="javascript:setTarget(1,396,6,1); shortInfo()">
-   Stony Field 1:396:6</a>
-    </th>
-
-   </tr>
-  <tr height="20">
-   
-   <th>
-
-   <a href="javascript:setTarget(1,414,4,1); shortInfo()">
-   Durance of Hate 1:414:4</a>
-    </th>
-
-     <th>&nbsp; </th>
-</tr>
+?>
 
    </th>
   </tr>

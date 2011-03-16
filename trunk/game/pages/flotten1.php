@@ -1,5 +1,7 @@
 <?php
 
+// Флот 1: подготавливает состав флота
+
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
 $now = time();
@@ -109,7 +111,7 @@ PageHeader ("flotten1");
 
 
   
-<form action="index.php?page=flotten2&session=3ff7ae974331" method="POST">
+<form action="index.php?page=flotten2&session=<?=$session;?>" method="POST">
   <table width="519" border="0" cellpadding="0" cellspacing="1">
           <tr height="20">
   <td colspan="4" class="c">Новое задание: выбрать корабли</td>
@@ -122,29 +124,40 @@ PageHeader ("flotten1");
     <th>-</th>
     <th>-</th>
    </tr>
-   <tr height="20">
 
-    <th><a title="Скорость: 15000">Большой транспорт</a></th>
-    <th>22<input type="hidden" name="maxship203" value="22"/></th>
-<!--    <th>15000 -->
-     <input type="hidden" name="consumption203" value="50"/>
-     <input type="hidden" name="speed203" value="15000" /></th>
-     <input type="hidden" name="capacity203" value="25000" /></th>
-     <th><a href="javascript:maxShip('ship203');" >все</a> </th>
+<?php
 
-     <th><input name="ship203" size="10" value="0" alt="Большой транспорт 22"/></th>
-   </tr>
-   <tr height="20">
-    <th><a title="Скорость: 34000">Линейный крейсер</a></th>
-    <th>30<input type="hidden" name="maxship215" value="30"/></th>
-<!--    <th>34000 -->
-     <input type="hidden" name="consumption215" value="250"/>
-     <input type="hidden" name="speed215" value="34000" /></th>
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
 
-     <input type="hidden" name="capacity215" value="750" /></th>
-     <th><a href="javascript:maxShip('ship215');" >все</a> </th>
-     <th><input name="ship215" size="10" value="0" alt="Линейный крейсер 30"/></th>
-   </tr>
+    foreach ($fleetmap as $i=>$gid) {
+        
+        $amount = $aktplanet["f$gid"];
+        if ($amount > 0) {
+            $speed = FleetSpeed ($gid, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118']);
+            $cargo = FleetCargo ($gid);
+            $cons = FleetCons ( $gid);
+
+            echo "   <tr height=\"20\">\n";
+            echo "    <th><a title=\"Скорость: $speed\">".loca("NAME_$gid")."</a></th>\n";
+            echo "    <th>$amount<input type=\"hidden\" name=\"maxship$gid\" value=\"$amount\"/></th>\n";
+            echo "<!--    <th>$speed -->\n";
+            echo "     <input type=\"hidden\" name=\"consumption$gid\" value=\"$cons\"/>\n";
+            echo "     <input type=\"hidden\" name=\"speed$gid\" value=\"$speed\" /></th>\n";
+            echo "     <input type=\"hidden\" name=\"capacity$gid\" value=\"$cargo\" /></th>\n";
+            if ( $speed ) {
+                echo "     <th><a href=\"javascript:maxShip('ship$gid');\" >все</a> </th>\n";
+                echo "     <th><input name=\"ship$gid\" size=\"10\" value=\"0\" alt=\"".loca("NAME_$gid")." $amount\"/></th>\n";
+            }
+            else {
+                echo "     <th></th>\n";
+                echo "     <th></th>\n";
+            }
+            echo "   </tr>\n\n";
+        }
+    }
+
+?>
+
    <tr height="20">
   <th colspan="2"><a href="javascript:noShips();" >Обнулить</a></th>
   <th colspan="2"><a href="javascript:maxShips();" >Все корабли</a></th>
