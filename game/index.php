@@ -36,6 +36,7 @@ require_once "queue.php";
 require_once "loca_game.php";
 require_once "page.php";
 require_once "ally.php";
+require_once "fleet.php";
 require_once "battle.php";
 require_once "debug.php";
 
@@ -79,6 +80,7 @@ else if ( $_GET['page'] === "infos" ) { include "pages/infos.php"; exit (); }
 else if ( $_GET['page'] === "flotten1" ) { include "pages/flotten1.php"; exit (); }
 else if ( $_GET['page'] === "flotten2" ) { include "pages/flotten2.php"; exit (); }
 else if ( $_GET['page'] === "flotten3" ) { include "pages/flotten3.php"; exit (); }
+else if ( $_POST['page'] === "flottenversand" ) { include "pages/flottenversand.php"; exit (); }
 else if ( $_GET['page'] === "techtree" ) { include "pages/techtree.php"; exit(); }
 else if ( $_GET['page'] === "techtreedetails" ) { include "pages/techtreedetails.php"; exit(); }
 else if ( $_GET['page'] === "galaxy" ) { include "pages/galaxy.php"; exit (); }

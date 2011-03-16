@@ -281,4 +281,12 @@ function AddDebris ($id, $m, $k)
 {
 }
 
+// Получить игровой тип планеты.
+function GetPlanetType ($planet)
+{
+    if ( $planet['type'] == 0) return 3;
+    else if ( $planet['type'] == 10000) return 2;
+    else return 1;
+}
+
 ?>
