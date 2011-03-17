@@ -1,5 +1,21 @@
 <?php
 
+// Флот 3: вывод списка заданий, загрузка ресурсов.
+
+/*
+Список типов заданий:
+1 - Атака
+2 - Совместная атака
+3 - Транспорт
+4 - Оставить
+5 - Держаться
+6 - Шпионаж
+7 - Колонизировать
+8 - Переработать
+9 - Уничтожить
+15 - Экспедиция
+*/
+
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
 $now = time();
@@ -44,28 +60,20 @@ PageHeader ("flotten3");
 
 <?php
     // Координаты цели и данные о ресурсах.
-
-    $keys = array ( "thisgalaxy", "thissystem", "thisplanet", "thisplanettype", "speedfactor", "thisresource1", "thisresource2", "thisresource3", "galaxy", "system", "planet", "planettype" );
-
-?>
-
-<input name="thisgalaxy" type="hidden" value="1" />
-<input name="thissystem" type="hidden" value="260" />
-<input name="thisplanet" type="hidden" value="4" />
-<input name="thisplanettype" type="hidden" value="1" />
-<input name="speedfactor" type="hidden" value="1" />
-<input name="thisresource1" type="hidden" value="52579" />
-<input name="thisresource2" type="hidden" value="15710" />
-<input name="thisresource3" type="hidden" value="4725" />
-<input name="galaxy" type="hidden" value="1" />
-<input name="system" type="hidden" value="255" />
-<input name="planet" type="hidden" value="4" />
-<input name="planettype" type="hidden" value="1" />
-
-<?php
+    echo "<input name=\"thisgalaxy\" type=\"hidden\" value=\"".$_POST['thisgalaxy']."\" />\n";
+    echo "<input name=\"thissystem\" type=\"hidden\" value=\"".$_POST['thissystem']."\" />\n";
+    echo "<input name=\"thisplanet\" type=\"hidden\" value=\"".$_POST['thisplanet']."\" />\n";
+    echo "<input name=\"thisplanettype\" type=\"hidden\" value=\"".$_POST['thisplanettype']."\" />\n";
+    echo "<input name=\"speedfactor\" type=\"hidden\" value=\"".$_POST['speedfactor']."\" />\n";
+    echo "<input name=\"thisresource1\" type=\"hidden\" value=\"".floor($aktplanet['m'])."\" />\n";
+    echo "<input name=\"thisresource2\" type=\"hidden\" value=\"".floor($aktplanet['k'])."\" />\n";
+    echo "<input name=\"thisresource3\" type=\"hidden\" value=\"".floor($aktplanet['d'])."\" />\n";
+    echo "<input name=\"galaxy\" type=\"hidden\" value=\"".$_POST['galaxy']."\" />\n";
+    echo "<input name=\"system\" type=\"hidden\" value=\"".$_POST['system']."\" />\n";
+    echo "<input name=\"planet\" type=\"hidden\" value=\"".$_POST['planet']."\" />\n";
+    echo "<input name=\"planettype\" type=\"hidden\" value=\"".$_POST['planettype']."\" />\n\n";
 
     // Список флотов.
-
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
 
     $total = 0;
@@ -85,10 +93,11 @@ PageHeader ("flotten3");
         die ();
     }
 
+    echo "<input type=\"hidden\" name=\"speed\" value=\"".$_POST['speed']."\" />\n";
 ?>
 
 <tr height="20" align="left">
-<td class="c" colspan="2">1:255:4 - планета</td>
+<td class="c" colspan="2"><?=floor($_POST['galaxy']);?>:<?=floor($_POST['system']);?>:<?=floor($_POST['planet']);?> - <?=loca("FLEET_PLANETTYPE_".$_POST['planettype']);?></td>
 
 </tr>
 <tr valign="top" align="left">
@@ -97,17 +106,51 @@ PageHeader ("flotten3");
   <tr height="20">
   <td class="c" colspan="2">Задание</td>
   </tr>
-    <tr height="20">
-<th>
-  <input type="radio" name="order" value="3" >Транспорт<br />
 
-     </th>
-  </tr>
-  <tr height="20">
-<th>
-  <input type="radio" name="order" value="4" >Оставить<br />
-     </th>
-  </tr>
+<?php
+    // Отобразить список доступных заданий.
+
+    $origin = LoadPlanet ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['thisplanettype'] );
+    $target = LoadPlanet ( $_POST['galaxy'], $_POST['system'], $_POST['planet'], $_POST['planettype'] );
+    $fleet = array ();
+
+    foreach ($fleetmap as $i=>$gid) 
+    {
+        if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = $_POST["ship$gid"];
+        else $fleet[$gid] = 0;
+    }
+
+    $missions = FleetAvailableMissions ( $origin, $target, $fleet );
+    if ( count ($missions) == 0 )
+    {
+        echo "<tr>\n";
+        echo "   <th><font color=\"red\">Нет подходящих заданий</font></th>\n";
+        echo "</tr>\n";
+    }
+    else
+    {
+        foreach ($missions as $i=>$id) 
+        {
+            if ($id == 15)        // Экспедиция.
+            {
+                echo "    <tr height=\"20\">\n";
+                echo "<th>\n";
+                echo "  <input type=\"radio\" name=\"order\" value=\"15\" checked='checked'>".loca("FLEET_ORDER_$id")."<br />\n";
+                echo "  <br><font color=red>ВНИМАНИЕ! Экспедиция - очень рискованная миссия, не предназначенная для сэйва.</font>   </th>\n";
+                echo "  </tr>\n";
+            }
+            else
+            {
+                echo "    <tr height=\"20\">\n";
+                echo "<th>\n";
+                echo "  <input type=\"radio\" name=\"order\" value=\"$id\" >".loca("FLEET_ORDER_$id")."<br />\n";
+                echo "     </th>\n";
+                echo "  </tr>\n";
+            }
+        }
+    }
+?>
+
    </table>
 </th>
 
@@ -120,18 +163,18 @@ PageHeader ("flotten3");
       <th>Металл</th>
       <th><a href="javascript:maxResource('1');">max</a></th>
 
-      <th><input name="resource1" type="text" alt="Металл 52579" size="10" onChange="calculateTransportCapacity();" /></th>
+      <th><input name="resource1" type="text" alt="Металл <?=floor($aktplanet['m']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
      </tr>
        <tr height="20">
       <th>Кристалл</th>
       <th><a href="javascript:maxResource('2');">max</a></th>
-      <th><input name="resource2" type="text" alt="Кристалл 15710" size="10" onChange="calculateTransportCapacity();" /></th>
+      <th><input name="resource2" type="text" alt="Кристалл <?=floor($aktplanet['k']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
      </tr>
        <tr height="20">
 
       <th>Дейтерий</th>
       <th><a href="javascript:maxResource('3');">max</a></th>
-      <th><input name="resource3" type="text" alt="Дейтерий 4725" size="10" onChange="calculateTransportCapacity();" /></th>
+      <th><input name="resource3" type="text" alt="Дейтерий <?=floor($aktplanet['d']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
      </tr>
        <tr height="20">
   <th>Остаток</th>

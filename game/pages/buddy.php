@@ -6,7 +6,6 @@ $BuddyError = "";
 
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
-
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
