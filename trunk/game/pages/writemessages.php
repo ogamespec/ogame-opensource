@@ -3,8 +3,12 @@
 // Написать сообщение игроку.
 
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
-UpdatePlanet ( $GlobalUser['aktplanet'] );
+if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], $_GET['cp']);
+$now = time();
+UpdateQueue ( $now );
+$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+ProdResources ( $GlobalUser['aktplanet'], $aktplanet['lastpeek'], $now );
+UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 
 PageHeader ("writemessages");
@@ -13,7 +17,8 @@ function SendNotActivated ()
 {
     global $GlobalUser;
 
-    $uni = 1;
+    $unitab = LoadUniverse ();
+    $uni = $unitab['num'];
 
     echo "<html>\n";
     echo " <head>\n";

@@ -256,6 +256,22 @@ if ($res == false) {
         loca_add("EMPIRE_AVG", "В среднем по планете");
         loca_add("EMPIRE_SUM" , "Сумма");
 
+        // Флот.
+        loca_add("FLEET_PLANETTYPE_1", "планета");
+        loca_add("FLEET_PLANETTYPE_2", "поле обломков");
+        loca_add("FLEET_PLANETTYPE_3", "луна");
+        loca_add("FLEET_ORDER_1", "Атака");
+        loca_add("FLEET_ORDER_2", "Совместная атака");
+        loca_add("FLEET_ORDER_3", "Транспорт");
+        loca_add("FLEET_ORDER_4", "Оставить");
+        loca_add("FLEET_ORDER_5", "Держаться");
+        loca_add("FLEET_ORDER_6", "Шпионаж");
+        loca_add("FLEET_ORDER_7", "Колонизировать");
+        loca_add("FLEET_ORDER_8", "Переработать");
+        loca_add("FLEET_ORDER_9", "Уничтожить");
+        loca_add("FLEET_ORDER_14", "Испытания");
+        loca_add("FLEET_ORDER_15", "Экспедиция");
+
         // История изменений.
         loca_add("CHANGELOG_VERSION", "Версия");
         loca_add("CHANGELOG_DESC", "Описание");

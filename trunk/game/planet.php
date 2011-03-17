@@ -186,14 +186,28 @@ function GetPlanet ( $planet_id)
 				       prod_fusion($planet['b12'], $user['r113'], $planet['fprod'])  + 
 					 prod_sat($planet['temp']+40) * $planet['f212'] * $planet['ssprod'] ;
 
-	$planet['econs'] = ( cons_metal ($planet['b1']) * $planet['mprod'] + 
-					   cons_crys ($planet['b2']) * $planet['kprod'] + 
-					   cons_deut ($planet['b3']) * $planet['dprod'] );
+    $planet['econs'] = ( cons_metal ($planet['b1']) * $planet['mprod'] + 
+                                 cons_crys ($planet['b2']) * $planet['kprod'] + 
+                                 cons_deut ($planet['b3']) * $planet['dprod'] );
 
     $planet['e'] = floor ( $planet['emax'] - $planet['econs'] );
     $planet['factor'] = 1;
     if ( $planet['e'] < 0 ) $planet['factor'] = max (0, 1 - abs ($planet['e']) / $planet['econs']);
     return $planet;
+}
+
+// Загрузить состояние планеты по указанным координатам (без предварительной обработки)
+// Вернуть массив $planet, или NULL.
+function LoadPlanet ($g, $s, $p, $type)
+{
+    global $db_prefix;
+    if ($type == 1) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type > 0 AND type < 10000);";
+    else if ($type == 2) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=10000;";
+    else if ($type == 3) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=0;";
+    else return NULL;
+    $result = dbquery ($query);
+    if ( $result ) return dbarray ($result);
+    else return NULL;
 }
 
 // Если у планеты есть луна, возвратить её ID, иначе возвратить 0.

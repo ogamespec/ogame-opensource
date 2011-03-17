@@ -88,10 +88,10 @@ PageHeader ("flotten2");
    <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?=$aktplanet['s'];?>" />
    <input name="planet" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?=$aktplanet['p'];?>" />
    <select name="planettype" onChange="shortInfo()" onKeyUp="shortInfo()">
-     <option value="1" >планета </option>
+     <option value="1" ><?=loca("FLEET_PLANETTYPE_1");?> </option>
 
-  <option value="2" >поле обломков </option>
-  <option value="3" >луна </option>
+  <option value="2" ><?=loca("FLEET_PLANETTYPE_2");?> </option>
+  <option value="3" ><?=loca("FLEET_PLANETTYPE_3");?> </option>
    </select>
  </tr>
  <tr height="20">

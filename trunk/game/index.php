@@ -80,7 +80,7 @@ else if ( $_GET['page'] === "infos" ) { include "pages/infos.php"; exit (); }
 else if ( $_GET['page'] === "flotten1" ) { include "pages/flotten1.php"; exit (); }
 else if ( $_GET['page'] === "flotten2" ) { include "pages/flotten2.php"; exit (); }
 else if ( $_GET['page'] === "flotten3" ) { include "pages/flotten3.php"; exit (); }
-else if ( $_POST['page'] === "flottenversand" ) { include "pages/flottenversand.php"; exit (); }
+else if ( $_GET['page'] === "flottenversand" ) { include "pages/flottenversand.php"; exit (); }
 else if ( $_GET['page'] === "techtree" ) { include "pages/techtree.php"; exit(); }
 else if ( $_GET['page'] === "techtreedetails" ) { include "pages/techtreedetails.php"; exit(); }
 else if ( $_GET['page'] === "galaxy" ) { include "pages/galaxy.php"; exit (); }
