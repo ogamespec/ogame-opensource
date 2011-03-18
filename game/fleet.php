@@ -24,6 +24,32 @@ shipXX: количество кораблей каждого типа (INT)
 
 В Обзоре все последующие задания "предсказываются", их нет на самом деле. В меню Флот показано описание заданий приближенное к данным базы данных.
 
+Типы заданий:
+
+1          Атака убывает
+101       Атака возвращается
+2          Совместная атака убывает
+102      Совместная атака возвращается
+3         Транспорт убывает
+103      Транспорт возвращается
+4         Оставить убывает
+5         Держаться убывает
+105      Держаться возвращается
+205     Держаться на орбите
+6         Шпионаж убывает
+106      Шпионаж возвращается
+7         Колонизировать убывает
+107      Колонизировать возвращается
+8         Переработать убывает
+108     Переработать возвращается
+9         Уничтожить убывает
+109      Уничтожить возвращается
+14        Испытание убывает
+114      Испытание возвращается
+15        Экспедиция убывает
+115      Экспедиция возвращается
+215      Экспедиция на орбите
+
 */
 
 // ==================================================================================
@@ -56,27 +82,30 @@ X:0
 если во флоте только спай     Шпионаж
 */
 
-function FleetAvailableMissions ( $origin, $target, $fleet )
+function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thisplanettype, $galaxy, $system, $planet, $planettype, $fleet )
 {
     $missions = array ( );
+
+    $origin = LoadPlanet ( $thisgalaxy, $thissystem, $thisplanet, $thisplanettype );
+    $target = LoadPlanet ( $galaxy, $system, $planet, $planettype );
+
+    if ( $planet >= 16 )         // Экспедиция
+    {
+        $missions[0] = 15;
+        return $missions;
+    }
+
+    if ( $planettype == 2)        // поле обломков.
+    {
+        if ( $fleet[209] > 0 ) $missions[0] = 8;    // Переработать, если во флоте есть рабы
+        return $missions;
+    }
 
     if ( $target == NULL )        // пустое место
     {
         $missions[0] = 3;        // Транспорт
         $missions[1] = 1;        // Атака
         if ( $fleet[208] > 0 ) $missions[2] = 7;    // Колонизировать, если во флоте есть колонизатор
-        return $missions;
-    }
-
-    if ( $target['p'] >= 16 )         // Экспедиция
-    {
-        $missions[0] = 15;
-        return $missions;
-    }
-
-    if ( GetPlanetType($target) == 2)        // поле обломков.
-    {
-        if ( $fleet[209] > 0 ) $missions[0] = 8;    // Переработать, если во флоте есть рабы
         return $missions;
     }
 
@@ -115,48 +144,190 @@ function FleetAvailableMissions ( $origin, $target, $fleet )
 // Расчёт полётов.
 
 // Расстояние.
-function FlightDistance ($origin, $target)
+function FlightDistance ( $thisgalaxy, $thissystem, $thisplanet, $galaxy, $system, $planet )
 {
+    if ($thisgalaxy == $galaxy) {
+        if ($thissystem == $system) {
+            if ($planet == $thisplanet) $dist = 5;
+            else $dist = abs ($planet - $thisplanet) * 5 + 1000;
+        }
+        else $dist = abs ($system - $thissystem) * 5 * 19 + 2700;
+    }
+    else $dist = abs ($galaxy - $thisgalaxy) * 20000;
+    return $dist;
 }
 
 // Групповая скорость флота.
 function FlightSpeed ($fleet, $combustion, $impulse, $hyper)
 {
+    $minspeed = FleetSpeed ( 210, $combustion, $impulse, $hyper );        // самый быстрый кораблик - ШЗ
+    foreach ($fleet as $id=>$amount)
+    {
+        $speed = FleetSpeed ( $id, $combustion, $impulse, $hyper);
+        if ( $id == 0 || $speed == 0 ) continue;
+        if ($speed < $minspeed) $minspeed = $speed;
+    }
+    return $minspeed;
 }
 
 // Потребление дейтерия на полёт всем флотом.
-function FlightCons ($fleet, $dist)
+function FlightCons ($fleet, $dist, $slowest_speed, $combustion, $impulse, $hyper, $probeOnly)
 {
+    $cons = 0;
+    foreach ($fleet as $id=>$amount)
+    {
+        if ($probeOnly && $id == 210) continue;
+        if ($amount > 0) {
+            $spd = 35000 / ( $slowest_speed - 10) * sqrt($dist * 10 / $slowest_speed);
+            $basecons = $amount * FleetCons ($id, $combustion, $impulse, $hyper );
+            $cons += $basecons * $dist / 35000 ;//* (($spd / 10) + 1) * (($spd / 10) + 1);
+        }
+    }
+    $cons = round($cons) + 1;
+    return $cons;
+}
+
+// Время полёта в секундах, при заданном проценте.
+function FlightTime ($dist, $slowest_speed, $prc, $xspeed)
+{
+    return round ( (35000 / ($prc/10) * sqrt ($dist * 10 / $slowest_speed ) + 10) / $xspeed );
 }
 
 // ==================================================================================
 // Параметры кораблей.
 
+$FleetParam = array (        // структура, щит, атака, грузоподъемность, скорость, потребление
+    202 => array ( 4000, 10, 5, 5000, 5000, 10 ),
+    203 => array ( 12000, 25, 5, 25000, 7500, 50 ),
+    204 => array ( 4000, 10, 50, 50, 12500, 20 ),
+    205 => array ( 10000, 25, 150, 100, 10000, 75 ),
+    206 => array ( 27000, 50, 400, 800, 15000, 300 ),
+    207 => array ( 60000, 200, 1000, 1500, 10000, 500 ),
+    208 => array ( 30000, 100, 50, 7500, 2500, 1000 ),
+    209 => array ( 16000, 10, 1, 20000, 2000, 300 ),
+    210 => array ( 1000, 0, 0, 5, 100000000, 1 ),
+    211 => array ( 75000, 500, 1000, 500, 4000, 1000 ),
+    212 => array ( 2000, 1, 1, 0, 0, 0 ),
+    213 => array ( 110000, 500, 2000, 2000, 5000, 1000 ),
+    214 => array ( 9000000, 50000, 200000, 1000000, 100, 1 ),
+    215 => array ( 70000, 400, 700, 750, 10000, 250 )
+);
+
+// Скорость кораблика
+// 202-Р/И, 203-Р, 204-Р, 205-И, 206-И, 207-Г, 208-И, 209-Р, 210-Р, 211-И/Г, 212-Р, 213-Г, 214-Г, 215-Г
 function FleetSpeed ( $id, $combustion, $impulse, $hyper)
 {
-    return 1000;
+    global $FleetParam;
+
+    $baseSpeed = $FleetParam[$id][4];
+
+    switch ($id) {
+        case 202:
+            if ($impulse >= 5) return ($baseSpeed + 5000) * (1 + 0.2 * $impulse);
+            else return $baseSpeed * (1 + 0.1 * $combustion);
+        case 211:
+            if ($hyper >= 8) return ($baseSpeed + 1000) * (1 + 0.3 * $hyper);
+            else return $baseSpeed * (1 + 0.2 * $impulse);            
+        case 203:
+        case 204:
+        case 209:
+        case 210:
+        case 212:
+            return $baseSpeed * (1 + 0.1 * $combustion);
+        case 205:
+        case 206:
+        case 208:
+            return $baseSpeed * (1 + 0.2 * $impulse);
+        case 207:
+        case 213:
+        case 214:
+        case 215:
+            return $baseSpeed * (1 + 0.3 * $hyper);
+        default: return $baseSpeed;
+    }
 }
 
 function FleetCargo ( $id )
 {
-    return 100;
+    global $FleetParam;
+    return $FleetParam[$id][3];
 }
 
-function FleetCons ($id)
+function FleetCons ($id, $combustion, $impulse, $hyper )
 {
-    return 10;
+    global $FleetParam;
+    if ($id == 202 && $impulse >= 5) return $FleetParam[$id][5] + 10;
+    else return $FleetParam[$id][5];
 }
 
 // ==================================================================================
 
 // Отправить флот. Никаких проверок не производится. Возвращает ID флота.
-function DispatchFleet ()
+function DispatchFleet ($fleet, $origin, $target, $order, $seconds)
 {
+    $now = time ();
+    $prio = 0;
+    $union_id = 0;
+    $m = $k = $d = 0;
+    $mission = 1;
+    $deploy_time = 0;
+
+    // Добавить флот.
+    $fleet_id = IncrementDBGlobal ('nextfleet');
+    $fleet_obj = array ( $fleet_id, $origin['owner_id'], $union_id, $m, $k, $d, $mission, $origin['planet_id'], $target['planet_id'], $deploy_time,
+                                 0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
+    AddDBRow ($fleet_obj, 'fleet');
+
+    // Добавить задание в глобальную очередь событий.
+    AddQueue ( $origin['owner_id'], "Fleet", $fleet_id, 0, 0, $now, $seconds, $prio );
+    return $fleet_id;
 }
 
 // Отозвать флот (если это возможно)
 function RecallFleet ($fleet_id)
 {
+}
+
+// Загрузить флот
+function LoadFleet ($fleet_id)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."fleet WHERE fleet_id = '".$fleet_id."'";
+    $result = dbquery ($query);
+    return dbarray ($result);
+}
+
+// Получить описание задания (для отладки)
+function GetMissionNameDebug ($num)
+{
+    switch ($num)
+    {
+        case 1    :      return "Атака убывает";
+        case 101 :      return "Атака возвращается";
+        case 2    :      return "Совместная атака убывает";
+        case 102 :     return "Совместная атака возвращается";
+        case 3    :     return "Транспорт убывает";
+        case 103 :     return "Транспорт возвращается";
+        case 4    :     return "Оставить убывает";
+        case 5   :      return "Держаться убывает";
+        case 105 :     return "Держаться возвращается";
+        case 205 :    return "Держаться на орбите";
+        case 6   :      return "Шпионаж убывает";
+        case 106 :     return "Шпионаж возвращается";
+        case 7    :     return "Колонизировать убывает";
+        case 107 :     return "Колонизировать возвращается";
+        case 8    :     return "Переработать убывает";
+        case 108 :    return "Переработать возвращается";
+        case 9   :      return "Уничтожить убывает";
+        case 109:      return "Уничтожить возвращается";
+        case 14  :      return "Испытание убывает";
+        case 114:      return "Испытание возвращается";
+        case 15  :      return "Экспедиция убывает";
+        case 115:      return "Экспедиция возвращается";
+        case 215:      return "Экспедиция на орбите";
+
+        default: return "Неизвестно";
+    }
 }
 
 ?>

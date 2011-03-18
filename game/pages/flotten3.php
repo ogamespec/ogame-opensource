@@ -110,8 +110,6 @@ PageHeader ("flotten3");
 <?php
     // Отобразить список доступных заданий.
 
-    $origin = LoadPlanet ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['thisplanettype'] );
-    $target = LoadPlanet ( $_POST['galaxy'], $_POST['system'], $_POST['planet'], $_POST['planettype'] );
     $fleet = array ();
 
     foreach ($fleetmap as $i=>$gid) 
@@ -120,7 +118,8 @@ PageHeader ("flotten3");
         else $fleet[$gid] = 0;
     }
 
-    $missions = FleetAvailableMissions ( $origin, $target, $fleet );
+    $missions = FleetAvailableMissions ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['thisplanettype'], $_POST['galaxy'], $_POST['system'], $_POST['planet'], $_POST['planettype'], $fleet );
+
     if ( count ($missions) == 0 )
     {
         echo "<tr>\n";

@@ -43,6 +43,13 @@ $session = $_GET['session'];
 
 PageHeader ("flottenversand");
 
+$unitab = LoadUniverse ();
+$unispeed = $unitab['speed'];
+
+$result = EnumFleetQueue ( $GlobalUser['player_id'] );
+$nowfleet = dbrows ($result);
+$maxfleet = $GlobalUser['r108'] + 1;
+
 ?>
 
 <!-- CONTENT AREA -->
@@ -55,26 +62,50 @@ PageHeader ("flottenversand");
 
 $order = $_POST['order'];
 
+// Список флотов.
+$fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+$fleet = array ();
+foreach ($fleetmap as $i=>$gid) 
+{
+    if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = $_POST["ship$gid"];
+    else $fleet[$gid] = 0;
+}
+$probeOnly = false;
+
 $origin = LoadPlanet ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['thisplanettype'] );
 $target = LoadPlanet ( $_POST['galaxy'], $_POST['system'], $_POST['planet'], $_POST['planettype'] );
 
-if ($origin['planet_id'] == $target['planet_id'] ) FleetError ( "И как ты это себе представляешь?" );
+if (  ( $_POST['thisgalaxy'] == $_POST['galaxy'] ) &&
+        ( $_POST['thissystem'] == $_POST['system'] ) &&
+        ( $_POST['thisplanet'] ==  $_POST['planet'] ) &&
+        ( $_POST['thisplanettype'] == $_POST['planettype'] ) 
+  ) FleetError ( "И как ты это себе представляешь?" );
 
 $origin_user = LoadUser ( $origin['owner_id'] );
 $target_user = LoadUser ( $target['owner_id'] );
 
 if ( $origin_user['vacation'] ) FleetError ( "Находясь в режиме отпуска нельзя отправлять флот!" );
 if ( $target_user['vacation'] ) FleetError ( "Этот игрок находится в режиме отпуска!" );
-
-//Достигнута максимальная численность флотов
+if ( $nowfleet >= $maxfleet ) FleetError ( "Достигнута максимальная численность флотов" );
 
 if ( $origin_user['ip_addr'] !== "127.0.0.1" )        // для локальных подключений не делать проверку на мультоводство
 {
     if ( $origin_user['ip_addr'] === $target_user['ip_addr'] && $origin_user['player_id'] != $target_user['player_id'] ) FleetError ( "Невозможно приблизиться к игроку!" );
 }
 
+// Рассчитать расстояние, время полёта и затраты дейтерия.
+$dist = FlightDistance ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['galaxy'], $_POST['system'], $_POST['planet'] );
+$slowest_speed = FlightSpeed ( $fleet, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] );
+$flighttime = FlightTime ( $dist, $slowest_speed, $_POST['speed'] / 10, $unispeed );
+$cons = FlightCons ( $fleet, $dist, $slowest_speed, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'], $probeOnly );
+$cargo = 0;
+foreach ($fleet as $id=>$amount)
+{
+    if ($id != 210) $cargo += FleetCargo ($id) * $amount;        // не считать зонды.
+}
+
 //Недостаточно места в грузовом отсеке!
-//Недостаточно топлива!
+//if ($origin['d'] < $cons) FleetError ( "Недостаточно топлива!" );
 
 //if (!colony) Планета необитаема либо должна быть колонизирована!
 
@@ -155,6 +186,12 @@ else {
 
     print_r ( $_POST);
 
+    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime);
+    $queue = GetFleetQueue ($fleet_id);
+
+    echo "<br>";
+    print_r ( $queue);
+
 ?>
 
    <tr height="20">
@@ -166,13 +203,13 @@ else {
   <th>Задание</th><th><?=loca("FLEET_ORDER_$order");?></th>
    </tr>
    <tr height="20">
-     <th>Расстояние</th><th>5</th>
+     <th>Расстояние</th><th><?=nicenum($dist);?></th>
    </tr>
    <tr height="20">
-      <th>Скорость</th><th>3.600</th>
+      <th>Скорость</th><th><?=nicenum($slowest_speed);?></th>
    </tr>
    <tr height="20">
-      <th>Потребление</th><th>2</th>
+      <th>Потребление</th><th><?=nicenum($cons);?></th>
    </tr>
    <tr height="20">
      <th>Отправлен с</th><th><a href="index.php?page=galaxy&galaxy=<?=$_POST['thisgalaxy'];?>&system=<?=$_POST['thissystem'];?>&position=<?=$_POST['thisplanet'];?>&session=<?=$session;?>" >[<?=$_POST['thisgalaxy'];?>:<?=$_POST['thissystem'];?>:<?=$_POST['thisplanet'];?>]</a></th>
@@ -181,7 +218,7 @@ else {
      <th>Отправлен на</th><th><a href="index.php?page=galaxy&galaxy=<?=$_POST['galaxy'];?>&system=<?=$_POST['system'];?>&position=<?=$_POST['planet'];?>&session=<?=$session;?>" >[<?=$_POST['galaxy'];?>:<?=$_POST['system'];?>:<?=$_POST['planet'];?>]</a></th>
    </tr>
    <tr height="20">
-     <th>Время прибытия</th><th>Thu Mar 17 10:53:01</th>
+     <th>Время прибытия</th><th><?=$flighttime;?></th>
    </tr>
    <tr height="20">
      <th>Время возврата</th><th>Thu Mar 17 11:00:03</th>
@@ -189,17 +226,18 @@ else {
    <tr height="20">
      <td class="c" colspan="2">Корабли</td>
    </tr>
-      <tr height="20">
-     <th width="50%">Kleiner Transporter</th><th>10</th>
-   </tr>
-      <tr height="20">
-     <th width="50%">Großer Transporter</th><th>55</th>
-   </tr>
-      <tr height="20">
-     <th width="50%">Recycler</th><th>1</th>
-   </tr>
 
 <?php
+    // Список кораблей.
+    foreach ($fleet as $id=>$amount)
+    {
+        if ( $amount > 0 ) {
+            echo "      <tr height=\"20\">\n";
+            echo "     <th width=\"50%\">".loca("NAME_$id")."</th><th>".nicenum($amount)."</th>\n";
+            echo "   </tr>\n";
+        }
+    }
+
 }
 ?>
 
