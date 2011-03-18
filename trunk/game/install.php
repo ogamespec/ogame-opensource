@@ -35,9 +35,9 @@ if (file_exists ("config.php"))
 // Сохранить настройки.
 if ( key_exists("install", $_POST) && CheckParameters() )
 {
-    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','queue');
-    $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','nextplanet','nextally','nextmsg','nextnote','nextbuddy','nexterror','nexttask','startdate');
-    $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT UNSIGNED');
+    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','queue','fleet');
+    $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','nextplanet','nextally','nextmsg','nextnote','nextbuddy','nexterror','nexttask','nextfleet','startdate');
+    $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT UNSIGNED');
     $usercols = array ( 'player_id', 'regdate', 'ally_id', 'joindate', 'allyrank', 'session', 'private_session', 'name', 'oname', 'name_changed', 'name_until', 'password', 'pemail', 'email',
                         'email_changed', 'email_until', 'disable', 'disable_until', 'vacation', 'vacation_until', 'banned', 'banned_until', 'noattack', 'noattack_until',
                         'lastlogin', 'lastclick', 'ip_addr', 'validated', 'validatemd', 'hplanetid', 'admin', 'sortby', 'sortorder',
@@ -82,8 +82,12 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $debugtype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'INT UNSIGNED' );
     $queuecols = array ( 'task_id', 'owner_id', 'type', 'sub_id', 'obj_id', 'level', 'start', 'end', 'prio' );
     $queuetype = array ( 'INT PRIMARY KEY', 'INT', 'CHAR(20)', 'INT', 'INT', 'INT', 'INT UNSIGNED', 'INT UNSIGNED', 'INT' );
-    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$queuecols);
-    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$debugtype, &$queuetype);
+    $fleetcols = array ( 'fleet_id', 'owner_id', 'union_id', 'm', 'k', 'd', 'mission', 'start_planet', 'target_planet', 'deploy_time',
+                                 'ship200', 'ship201', 'ship202', 'ship203', 'ship204', 'ship205', 'ship206', 'ship207', 'ship208', 'ship209', 'ship210', 'ship211', 'ship212', 'ship213', 'ship214', 'ship215' );
+    $fleettype = array ( 'INT PRIMARY KEY', 'INT', 'INT', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT', 'INT', 'INT', 'INT', 'INT',
+                                 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
+    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$queuecols, &$fleetcols);
+    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$debugtype, &$queuetype, &$fleettype);
     $now = time();
 
     //print_r ($_POST);
@@ -134,6 +138,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "nextbuddy = '1', ";
     $query .= "nexterror = '10000', ";
     $query .= "nexttask = '1', ";
+    $query .= "nextfleet = '10000', ";
     $query .= "startdate = '".$now."' ";
     //echo "<br>$query<br>";
     dbquery ($query);

@@ -12,7 +12,29 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
+function FleetMissionText ($num)
+{
+    if ($num >= 200)
+    {
+        $desc = "<a title=\"На планете\">(Д)</a>";
+        $num -= 200;
+    }
+    else if ($num >= 100)
+    {
+        $desc = "<a title=\"Возвращение к планете\">(В)</a>";
+        $num -= 100;
+    }
+    else $desc = "<a title=\"Уход на задание\">(У)</a>";
+
+    echo "      <a title=\"\">".loca("FLEET_ORDER_$num")."</a>\n$desc\n";
+}
+
 PageHeader ("flotten1");
+
+$result = EnumFleetQueue ( $GlobalUser['player_id'] );
+$nowfleet = $rows = dbrows ($result);
+$maxfleet = $GlobalUser['r108'] + 1;
+
 ?>
 
 <!-- CONTENT AREA -->
@@ -32,7 +54,7 @@ PageHeader ("flotten1");
    <tr>
 
     <td style='background-color:transparent;'>
-    Флоты 2 / 13    </td>
+    Флоты <?=$rows;?> / <?=$maxfleet;?>    </td>
     <td align=right style='background-color:transparent;'>
       0/2 Экспедиции    
     </td>
@@ -52,60 +74,73 @@ PageHeader ("flotten1");
     <th>Прибудет</th>
     <th>Приказ</th>
    </tr>
+<?php
+
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+
+    if ($rows)
+    {
+        $row = 1;
+        while ($rows--)
+        {
+            $queue = dbarray ($result);
+            $fleet = LoadFleet ($queue['sub_id']);
+            $origin = GetPlanet ($fleet['start_planet']);
+            $target = GetPlanet ($fleet['target_planet']);
+            $target_user = LoadUser ( $target['owner_id'] );
+?>
      <tr height="20">
-    <th>1</th>
+    <th><?=$row;?></th>
 
     <th>
-      <a title="">Переработать</a>
-      <a title="Уход на задание">(У)</a>
+<?
+    echo FleetMissionText ($fleet['mission']);
+?>
     </th>
-    <th> <a title="Малый транспорт: 440 
-Большой транспорт: 397 
-Лёгкий истребитель: 1.393 
-Тяжёлый истребитель: 2 
-Крейсер: 331 
-Линкор: 125 
-Переработчик: 902 
-Шпионский зонд: 9 
-Бомбардировщик: 72 
-Уничтожитель: 152 
-Звезда смерти: 1 
-Линейный крейсер: 200 
-">4.024</a></th>
-    <th><a href="index.php?page=galaxy&galaxy=1&system=260&position=4&session=3ff7ae974331" >[1:260:4]</a></th>
+    <th> <a title="<?php
+        $totalships = 0;
+        foreach ( $fleetmap as $i=>$gid)
+        {
+            if ( $fleet["ship$gid"] > 0 ) {
+                echo loca("NAME_$gid") . ": " . nicenum($fleet["ship$gid"]) . " \n";
+                $totalships += $fleet["ship$gid"];
+            }
+        }
+?>
+"><?=nicenum($totalships);?></a></th>
+    <th><a href="index.php?page=galaxy&galaxy=<?=$origin['g'];?>&system=<?=$origin['s'];?>&position=<?=$origin['p'];?>&session=<?=$session;?>" >[<?=$origin['g'];?>:<?=$origin['s'];?>:<?=$origin['p'];?>]</a></th>
 
-    <th>Mon Nov 30 12:31:06</th>
-    <th><a href="index.php?page=galaxy&galaxy=1&system=260&position=4&session=3ff7ae974331" >[1:260:4]</a>    <br />Andorianin    </th>
-    <th>Mon Nov 30 13:08:33</th>
+    <th><?=date ( "D M j G:i:s", $queue['start']);?></th>
+    <th><a href="index.php?page=galaxy&galaxy=<?=$target['g'];?>&system=<?=$target['s'];?>&position=<?=$target['p'];?>&session=<?=$session;?>" >[<?=$target['g'];?>:<?=$target['s'];?>:<?=$target['p'];?>]</a>    <br /><?=$target_user['oname'];?>    </th>
+    <th><?=date ( "D M j G:i:s", $queue['end']);?></th>
     <th>
-         <form action="index.php?page=flotten1&session=3ff7ae974331" method="POST">
-    <input type="hidden" name="order_return" value="29114802" />
-
+         <form action="index.php?page=flotten1&session=<?=$session;?>" method="POST">
+    <input type="hidden" name="order_return" value="<?=$fleet['fleet_id'];?>" />
         <input type="submit" value="Отзыв" />
      </form>
             </th>
    </tr>
-   <tr height="20">
-    <th>2</th>
-    <th>
-      <a title="">Оставить</a>
 
-      <a title="Уход на задание">(У)</a>
-    </th>
-    <th> <a title="Линейный крейсер: 420 
-">420</a></th>
-    <th><a href="index.php?page=galaxy&galaxy=1&system=244&position=4&session=3ff7ae974331" >[1:244:4]</a></th>
-    <th>Mon Nov 30 12:09:52</th>
-    <th><a href="index.php?page=galaxy&galaxy=1&system=255&position=4&session=3ff7ae974331" >[1:255:4]</a>    <br />Andorianin    </th>
-
-    <th>Mon Nov 30 22:22:15</th>
-    <th>
-         <form action="index.php?page=flotten1&session=3ff7ae974331" method="POST">
-    <input type="hidden" name="order_return" value="29114692" />
-        <input type="submit" value="Отзыв" />
-     </form>
-            </th>
-   </tr>
+<?php
+            $row++;
+        }
+    }
+    else
+    {
+?>
+   <tr height="20"> 
+    <th>-</th> 
+    <th>-</th> 
+    <th>-</th> 
+    <th>-</th> 
+    <th>-</th> 
+    <th>-</th> 
+    <th>-</th> 
+    <th>-</th> 
+   </tr> 
+<?php
+    }
+?>
 
   </table>
 
@@ -113,7 +148,17 @@ PageHeader ("flotten1");
   
 <form action="index.php?page=flotten2&session=<?=$session;?>" method="POST">
   <table width="519" border="0" cellpadding="0" cellspacing="1">
-          <tr height="20">
+<?php
+    if ($nowfleet >= $maxfleet)
+    {
+?>
+         <tr height="20">
+      <th colspan="4"><font color="red">Достигнута максимальная численность флота!</font></th>
+   </tr>
+<?php
+    }
+?>
+       <tr height="20">
   <td colspan="4" class="c">Новое задание: выбрать корабли</td>
    </tr>
    <tr height="20">
@@ -134,8 +179,8 @@ PageHeader ("flotten1");
         $amount = $aktplanet["f$gid"];
         if ($amount > 0) {
             $speed = FleetSpeed ($gid, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118']);
-            $cargo = FleetCargo ($gid);
-            $cons = FleetCons ( $gid);
+            $cargo = FleetCargo ($gid );
+            $cons = FleetCons ( $gid, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118']);
 
             echo "   <tr height=\"20\">\n";
             echo "    <th><a title=\"Скорость: $speed\">".loca("NAME_$gid")."</a></th>\n";

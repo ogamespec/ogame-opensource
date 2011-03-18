@@ -217,7 +217,7 @@ function QueueDesc ( $queue )
         case "DeleteAccount": return "Удалить аккаунт";
     }
 
-    return "Неизвестное тип задания (type=$type, sub_id=$sub_id, obj_id=$obj_id, level=$level)";
+    return "Неизвестный тип задания (type=$type, sub_id=$sub_id, obj_id=$obj_id, level=$level)";
 }
 
 function Admin_Queue ()

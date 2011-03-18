@@ -85,6 +85,36 @@ if ($num) echo "<tr><th colspan=\"4\"><a href=\"index.php?page=messages&dsp=1&se
 echo "<tr><th>    Серверное время   </th> <th colspan=3>".date ( "D M j G:i:s", $stime)."</th></tr>\n";
 echo "<tr><td colspan='4' class='c'>  События   </td> </tr>\n";
 
+//DEBUG
+$tasklist = EnumFleetQueue ( $GlobalUser['player_id'] );
+$rows = dbrows ($tasklist);
+while ($rows--)
+{
+    $queue = dbarray ($tasklist);
+    $start_time = $queue['start'];
+    $end_time = $queue['end'];
+    $prio = $queue['prio'];
+
+    $fleet = LoadFleet ( $queue['sub_id'] );
+    $origin = GetPlanet ( $fleet['start_planet'] );
+    $target = GetPlanet ( $fleet['target_planet'] );
+
+    echo "<tr><th colspan=4>";
+    echo "Отправлен ".date ( "D M j G:i:s", $start_time).", прибывает ".date ( "D M j G:i:s", $end_time).", приоритет: $prio<br>\n";
+
+    echo "Задание: ".GetMissionNameDebug($fleet['mission']).", груз: ".nicenum($fleet['m'])." металла, ".nicenum($fleet['k'])." кристалла, ".nicenum($fleet['d'])." дейтерия<br>\n";
+    echo "Отправлен с: [".$origin['g'].":".$origin['s'].":".$origin['p']."] (".$origin['type'].") ".$origin['name'].", отправлен на: [".$target['g'].":".$target['s'].":".$target['p']."] (".$target['type'].") ".$target['name']."<br>\n";
+    $fleetstr = "";    
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    foreach ($fleetmap as $i=>$gid)
+    {
+        if ( $fleet["ship$gid"] > 0 ) $fleetstr .= loca("NAME_$gid") . ": " . nicenum ($fleet["ship$gid"]) . ", ";
+    }
+    echo "Флот: $fleetstr";
+
+    echo "</td></tr>";
+}
+
 // Показать, если у планеты есть луна.
 $moonid = PlanetHasMoon ( $aktplanet['planet_id'] );
 if ($moonid)
