@@ -259,17 +259,25 @@ function AdjustShips ($fleet, $planet_id, $sign)
     dbquery ($query);
 }
 
+// Изменить количество ресурсов на планете.
+function AdjustResources ($m, $k, $d, $planet_id, $sign)
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."planets SET m=m $sign '".$m."', k=k $sign '".$k."', d=d $sign '".$d."' WHERE planet_id=$planet_id;";
+    //echo "$query<br>";
+    dbquery ($query);
+}
+
 // Отправить флот. Никаких проверок не производится. Возвращает ID флота.
-function DispatchFleet ($fleet, $origin, $target, $order, $seconds)
+function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d)
 {
     $now = time ();
     $prio = 0;
     $union_id = 0;
-    $m = $k = $d = 0;
     $deploy_time = 0;
 
     // HACK.
-    if ( $order == 6 ) $seconds = 30;
+    $seconds = 30;
 
     // Добавить флот.
     $fleet_id = IncrementDBGlobal ('nextfleet');
@@ -294,6 +302,14 @@ function LoadFleet ($fleet_id)
     $query = "SELECT * FROM ".$db_prefix."fleet WHERE fleet_id = '".$fleet_id."'";
     $result = dbquery ($query);
     return dbarray ($result);
+}
+
+// Удалить флот
+function DeleteFleet ($fleet_id)
+{
+    global $db_prefix;
+    $query = "DELETE FROM ".$db_prefix."fleet WHERE fleet_id = $fleet_id;";
+    dbquery ($query);
 }
 
 // Получить описание задания (для отладки)
@@ -332,21 +348,109 @@ function GetMissionNameDebug ($num)
 // ==================================================================================
 // Обработка заданий флота.
 
-// Шпионаж.
+// *** Атака ***
+
+function AttackArrive ($queue, $fleet_obj, $fleet)
+{
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+
+    $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    $target = GetPlanet ( $fleet_obj['target_planet'] );
+
+    $arg = "m=".$target['m']."&k=".$target['k']."&d=".$target['d'];
+
+    // Сформировать список атакующих
+    $arg .= "&anum=1&dnum=1";
+    foreach ( $fleetmap as $i=>$gid )
+    {
+        if ($fleet_obj["ship$gid"] > 0) $arg .= "&a0_f".($gid-202)."=".$fleet_obj["ship$gid"];
+    }
+
+    // Сформировать список обороняющихся
+    foreach ( $fleetmap as $i=>$gid )
+    {
+        if ( $target["f$gid"] > 0) $arg .= "&d0_f".($gid-202)."=".$target["f$gid"];
+    }
+    foreach ( $defmap as $i=>$gid )
+    {
+        if ( $target["d$gid"] > 0) $arg .= "&d_".($gid-401)."=".$target["d$gid"];
+    }
+
+    $arg .= "&fid=30&did=0&rf=1&gen=084";
+
+    $battle_report = system ("battle.exe \"$arg\"" );
+
+    DispatchFleet ($fleet, $origin, $target, 101, 30, 0, 0, 0);
+
+    SendMessage ( $fleet_obj['owner_id'], "Управление флотом", "Боевой доклад", "xxx", 0);
+}
+
+function AttackReturn ($queue, $fleet_obj, $fleet)
+{
+    AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['start_planet'], '+' );
+    AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
+}
+
+// *** Транспорт ***
+
+function TransportArrive ($queue, $fleet_obj, $fleet)
+{
+    $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    $target = GetPlanet ( $fleet_obj['target_planet'] );
+
+    AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $target['planet_id'], '+' );
+
+    DispatchFleet ($fleet, $origin, $target, 103, 30, 0, 0, 0);
+
+    SendMessage ( $fleet_obj['owner_id'], "Управление флотом", "Доставка груза", "Ваш флот достигает планеты [".$target['g'].":".$target['s'].":".$target['p']."] ".$target['name'].
+                                                                                                                          " и доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия", 0);
+}
+
+function TransportReturn ($queue, $fleet_obj, $fleet)
+{
+    AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
+}
+
+// *** Оставить ***
+
+function DeployArrive ($queue, $fleet_obj, $fleet)
+{
+    $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    $target = GetPlanet ( $fleet_obj['target_planet'] );
+
+    AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $target['planet_id'], '+' );
+    AdjustShips ( $fleet, $fleet_obj['target_planet'], '+' );
+
+    SendMessage ( $fleet_obj['owner_id'], "Управление флотом", "Размещение флота", "Ваш флот удерживает позицию на планете [".$target['g'].":".$target['s'].":".$target['p']."] ".$target['name'].
+                                                                                                                                " и доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия", 0);
+}
+
+// *** Держаться ***
+
+// *** Шпионаж ***
+
 function SpyArrive ($queue, $fleet_obj, $fleet)
 {
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
     $target = GetPlanet ( $fleet_obj['target_planet'] );
-    DispatchFleet ($fleet, $origin, $target, 106, 30);
+    DispatchFleet ($fleet, $origin, $target, 106, 30, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d']);
 
     SendMessage ( $fleet_obj['owner_id'], "Управление флотом", "Разведданные", "Наши шпионы не нашли ничего нового.", 0);
-    //Debug ("Шпионаж 1");
 }
 
 function SpyReturn ($queue, $fleet_obj, $fleet)
 {
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
 }
+
+// *** Колонизировать ***
+
+// *** Переработать ***
+
+// *** Уничтожить ***
+
+// *** Экспедиция ***
 
 function Queue_Fleet_End ($queue)
 {
@@ -357,11 +461,18 @@ function Queue_Fleet_End ($queue)
 
     switch ( $fleet_obj['mission'] )
     {
+        case 1: AttackArrive ($queue, $fleet_obj, $fleet); break;
+        case 101: AttackReturn ($queue, $fleet_obj, $fleet); break;
+        case 3: TransportArrive ($queue, $fleet_obj, $fleet); break;
+        case 103: TransportReturn ($queue, $fleet_obj, $fleet); break;
+        case 4: DeployArrive ($queue, $fleet_obj, $fleet); break;
         case 6: SpyArrive ($queue, $fleet_obj, $fleet); break;
         case 106: SpyReturn ($queue, $fleet_obj, $fleet); break;
+        default: Error ( "Неизвестное задание для флота: " . $fleet_obj['mission'] ); break;
     }
 
-    RemoveQueue ( $queue['task_id'], 0 );
+    DeleteFleet ($fleet_obj['fleet_id']);            // удалить флот
+    RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
 }
 
 ?>

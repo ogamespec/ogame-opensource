@@ -50,6 +50,8 @@ $result = EnumFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
 $maxfleet = $GlobalUser['r108'] + 1;
 
+$fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+
 ?>
 
 <!-- CONTENT AREA -->
@@ -60,10 +62,20 @@ $maxfleet = $GlobalUser['r108'] + 1;
 
 <?php
 
+// Превратить все пустые параметры в нули.
+
+if ( !key_exists('resource1', $_POST) ) $_POST['resource1'] = 0;
+if ( !key_exists('resource2', $_POST) ) $_POST['resource2'] = 0;
+if ( !key_exists('resource3', $_POST) ) $_POST['resource3'] = 0;
+
+foreach ($fleetmap as $i=>$gid)
+{
+    if ( !key_exists("ship$gid", $_POST) ) $_POST["ship$gid"] = 0;
+}
+
 $order = $_POST['order'];
 
 // Список флотов.
-$fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
 $fleet = array ();
 foreach ($fleetmap as $i=>$gid) 
 {
@@ -186,10 +198,11 @@ else {
 
     print_r ( $_POST);
 
-    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime);
+    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $_POST['resource1'], $_POST['resource2'], $_POST['resource3'] );
     $queue = GetFleetQueue ($fleet_id);
 
     // Поднять флот с планеты.
+    AdjustResources ( $_POST['resource1'], $_POST['resource2'], $_POST['resource3'], $origin['planet_id'], '-' );
     AdjustShips ( $fleet, $origin['planet_id'], '-' );
 
     echo "<br>";
