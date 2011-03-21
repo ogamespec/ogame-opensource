@@ -36,8 +36,10 @@ if (file_exists ("config.php"))
 if ( key_exists("install", $_POST) && CheckParameters() )
 {
     $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','queue','fleet');
-    $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','nextplanet','nextally','nextmsg','nextnote','nextbuddy','nexterror','nexttask','nextfleet','startdate');
-    $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT UNSIGNED');
+    $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','nextplanet','nextally','nextmsg','nextnote','nextbuddy','nexterror','nexttask','nextfleet', 
+                              'news1', 'news2', 'news_until', 'startdate' );
+    $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
+                              'TEXT', 'TEXT', 'INT UNSIGNED', 'INT UNSIGNED' );
     $usercols = array ( 'player_id', 'regdate', 'ally_id', 'joindate', 'allyrank', 'session', 'private_session', 'name', 'oname', 'name_changed', 'name_until', 'password', 'pemail', 'email',
                         'email_changed', 'email_until', 'disable', 'disable_until', 'vacation', 'vacation_until', 'banned', 'banned_until', 'noattack', 'noattack_until',
                         'lastlogin', 'lastclick', 'ip_addr', 'validated', 'validatemd', 'hplanetid', 'admin', 'sortby', 'sortorder',
@@ -139,6 +141,9 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "nexterror = '10000', ";
     $query .= "nexttask = '1', ";
     $query .= "nextfleet = '10000', ";
+    $query .= "news1 = '', ";
+    $query .= "news2 = '', ";
+    $query .= "news_until = '0', ";
     $query .= "startdate = '".$now."' ";
     //echo "<br>$query<br>";
     dbquery ($query);

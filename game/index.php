@@ -36,6 +36,7 @@ require_once "queue.php";
 require_once "loca_game.php";
 require_once "page.php";
 require_once "ally.php";
+require_once "unit.php";
 require_once "fleet.php";
 require_once "battle.php";
 require_once "debug.php";
@@ -63,6 +64,19 @@ function RedirectHome ()
 {
     global $StartPage;
     echo "<html><head><meta http-equiv='refresh' content='0;url=$StartPage' /></head><body></body>";
+}
+
+// Format string, according to tokens from the text. Tokens are represented as #1, #2 and so on.
+function va ($subject)
+{
+    $num_arg = func_num_args();
+    $pattern = array ();
+    for ($i=1; $i<$num_arg; $i++)
+    {
+        $pattern[$i-1] = "/#$i/";
+        $replace[$i-1] = func_get_arg($i);
+    }
+    return preg_replace($pattern, $replace, $subject);
 }
 
 // *****************************************************************************
