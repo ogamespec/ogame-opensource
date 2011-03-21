@@ -193,26 +193,6 @@ function FlightTime ($dist, $slowest_speed, $prc, $xspeed)
     return round ( (35000 / ($prc/10) * sqrt ($dist * 10 / $slowest_speed ) + 10) / $xspeed );
 }
 
-// ==================================================================================
-// Параметры кораблей.
-
-$FleetParam = array (        // структура, щит, атака, грузоподъемность, скорость, потребление
-    202 => array ( 4000, 10, 5, 5000, 5000, 10 ),
-    203 => array ( 12000, 25, 5, 25000, 7500, 50 ),
-    204 => array ( 4000, 10, 50, 50, 12500, 20 ),
-    205 => array ( 10000, 25, 150, 100, 10000, 75 ),
-    206 => array ( 27000, 50, 400, 800, 15000, 300 ),
-    207 => array ( 60000, 200, 1000, 1500, 10000, 500 ),
-    208 => array ( 30000, 100, 50, 7500, 2500, 1000 ),
-    209 => array ( 16000, 10, 1, 20000, 2000, 300 ),
-    210 => array ( 1000, 0, 0, 5, 100000000, 1 ),
-    211 => array ( 75000, 500, 1000, 500, 4000, 1000 ),
-    212 => array ( 2000, 1, 1, 0, 0, 0 ),
-    213 => array ( 110000, 500, 2000, 2000, 5000, 1000 ),
-    214 => array ( 9000000, 50000, 200000, 1000000, 100, 1 ),
-    215 => array ( 70000, 400, 700, 750, 10000, 250 )
-);
-
 // Скорость кораблика
 // 202-Р/И, 203-Р, 204-Р, 205-И, 206-И, 207-Г, 208-И, 209-Р, 210-Р, 211-И/Г, 212-Р, 213-Г, 214-Г, 215-Г
 function FleetSpeed ( $id, $combustion, $impulse, $hyper)
@@ -262,6 +242,23 @@ function FleetCons ($id, $combustion, $impulse, $hyper )
 
 // ==================================================================================
 
+// Изменить количество кораблей на планете.
+function AdjustShips ($fleet, $planet_id, $sign)
+{
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $db_prefix;
+
+    $query = "UPDATE ".$db_prefix."planets SET ";
+    foreach ($fleetmap as $i=>$gid)
+    {
+        if ($i > 0) $query .= ",";
+        $query .= "f$gid = f$gid $sign " . $fleet[$gid] ;
+    }
+    $query .= " WHERE planet_id=$planet_id;";
+    //echo "$query<br>";
+    dbquery ($query);
+}
+
 // Отправить флот. Никаких проверок не производится. Возвращает ID флота.
 function DispatchFleet ($fleet, $origin, $target, $order, $seconds)
 {
@@ -269,12 +266,14 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds)
     $prio = 0;
     $union_id = 0;
     $m = $k = $d = 0;
-    $mission = 1;
     $deploy_time = 0;
+
+    // HACK.
+    if ( $order == 6 ) $seconds = 30;
 
     // Добавить флот.
     $fleet_id = IncrementDBGlobal ('nextfleet');
-    $fleet_obj = array ( $fleet_id, $origin['owner_id'], $union_id, $m, $k, $d, $mission, $origin['planet_id'], $target['planet_id'], $deploy_time,
+    $fleet_obj = array ( $fleet_id, $origin['owner_id'], $union_id, $m, $k, $d, $order, $origin['planet_id'], $target['planet_id'], $deploy_time,
                                  0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
     AddDBRow ($fleet_obj, 'fleet');
 
@@ -328,6 +327,41 @@ function GetMissionNameDebug ($num)
 
         default: return "Неизвестно";
     }
+}
+
+// ==================================================================================
+// Обработка заданий флота.
+
+// Шпионаж.
+function SpyArrive ($queue, $fleet_obj, $fleet)
+{
+    $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    $target = GetPlanet ( $fleet_obj['target_planet'] );
+    DispatchFleet ($fleet, $origin, $target, 106, 30);
+
+    SendMessage ( $fleet_obj['owner_id'], "Управление флотом", "Разведданные", "Наши шпионы не нашли ничего нового.", 0);
+    //Debug ("Шпионаж 1");
+}
+
+function SpyReturn ($queue, $fleet_obj, $fleet)
+{
+    AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
+}
+
+function Queue_Fleet_End ($queue)
+{
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $fleet_obj = LoadFleet ( $queue['sub_id'] );
+    $fleet = array ();
+    foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj["ship$gid"];
+
+    switch ( $fleet_obj['mission'] )
+    {
+        case 6: SpyArrive ($queue, $fleet_obj, $fleet); break;
+        case 106: SpyReturn ($queue, $fleet_obj, $fleet); break;
+    }
+
+    RemoveQueue ( $queue['task_id'], 0 );
 }
 
 ?>

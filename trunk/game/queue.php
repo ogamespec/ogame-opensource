@@ -113,6 +113,7 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "Demolish" ) Queue_Build_End ($queue);
         else if ( $queue['type'] === "DecRes" ) Queue_DecRes_End ($queue);
         else if ( $queue['type'] === "Research" ) Queue_Research_End ($queue);
+        else if ( $queue['type'] === "Fleet" ) Queue_Fleet_End ($queue);
         else Error ( "queue: Неизвестный тип задания для глобальной очереди: " . $queue['type']);
     }
 }
@@ -411,12 +412,12 @@ function GetResearchQueue ($player_id)
 // Закончить исследование.
 function Queue_Research_End ($queue)
 {
-	global $db_prefix;
+    global $db_prefix;
 
     $id = $queue['obj_id'];
     $lvl = $queue['level'];
     $planet_id = $queue['sub_id'];
-	$player_id = $queue['owner_id'];
+    $player_id = $queue['owner_id'];
 
     // Рассчитать производство планеты с момента последнего обновления.
     $planet = GetPlanet ( $planet_id );
@@ -484,5 +485,7 @@ function EnumFleetQueue ($player_id)
     $result = dbquery ($query);
     return $result;
 }
+
+// Обработчик завершения задания флота находится в модуле fleet.php
 
 ?>

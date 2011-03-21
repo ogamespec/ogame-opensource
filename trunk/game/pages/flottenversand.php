@@ -189,6 +189,9 @@ else {
     $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime);
     $queue = GetFleetQueue ($fleet_id);
 
+    // Поднять флот с планеты.
+    AdjustShips ( $fleet, $origin['planet_id'], '-' );
+
     echo "<br>";
     print_r ( $queue);
 

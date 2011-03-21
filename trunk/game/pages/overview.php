@@ -14,6 +14,7 @@ UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
 ProdResources ( $GlobalUser['aktplanet'], $aktplanet['lastpeek'], $now );
 UpdateLastClick ( $GlobalUser['player_id'] );
+$session = $_GET['session'];
 
 PageHeader ("overview");
 
@@ -25,65 +26,88 @@ PageHeader ("overview");
 $stime = time ();
 if ( key_exists ('lgn', $_GET) && $_GET['lgn'] == 1 ) UpdatePlanetActivity ( $aktplanet['planet_id'] );  // Обновить активность на Главной планете при входе в игру.
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n\n";
+$uni = LoadUniverse ( );
 
-echo "<script type=\"text/javascript\">\n";
-echo "<!--\n";
-echo "function t_building() {\n";
-echo "	v = new Date();\n";
-echo "	var bxx = document.getElementById('bxx');\n";
-echo "	var timeout = 1;\n";
-echo "	n=new Date();\n";
-echo "	ss=pp;\n";
-echo "	aa=Math.round((n.getTime()-v.getTime())/1000.);\n";
-echo "	s=ss-aa;\n";
-echo "	m=0;\n";
-echo "	h=0;\n\n";
-echo "	if (s < 0) {\n";
-echo "		bxx.innerHTML='--';\n";
-echo "		if ((ss + 6) >= aa) {\n";
-echo "			window.setTimeout('document.location.href=\"index.php?page=overview&session='+ps+'\";', 1500);\n";
-echo "		}\n";
-echo "	} else {\n";
-echo "		if(s>59){\n";
-echo "			m=Math.floor(s/60);\n";
-echo "			s=s-m*60;\n";
-echo "		}\n";
-echo "        if(m>59){\n";
-echo "        	h=Math.floor(m/60);\n";
-echo "        	m=m-h*60;\n";
-echo "        }\n";
-echo "        if(s<10){\n";
-echo "        	s=\"0\"+s;\n";
-echo "        }\n";
-echo "        if(m<10){\n";
-echo "        	m=\"0\"+m;\n";
-echo "        }\n";
-echo "		bxx.innerHTML=h+\":\"+m+\":\"+s;\n";
-echo "	}\n";
-echo "	pp=pp-1;\n";
-echo "  	window.setTimeout(\"t_building();\", 999);\n";
-echo "}\n";
-echo "//-->\n";
-echo "</script>\n\n\n";
+?>
+
+<!-- CONTENT AREA --> 
+<div id='content'> 
+<center> 
+<script type="text/javascript"> 
+<!--
+function t_building() {
+    v = new Date();
+    var bxx = document.getElementById('bxx');
+    var timeout = 1;
+    n=new Date();
+    ss=pp;
+    aa=Math.round((n.getTime()-v.getTime())/1000.);
+    s=ss-aa;
+    m=0;
+    h=0;
+    
+    if (s < 0) {
+        bxx.innerHTML='--';
+        
+        if ((ss + 6) >= aa) {
+            window.setTimeout('document.location.href="index.php?page=overview&session='+ps+'";', 1500);
+        }
+    } else {
+        if(s>59){
+            m=Math.floor(s/60);
+            s=s-m*60;
+        }
+        if(m>59){
+            h=Math.floor(m/60);
+            m=m-h*60;
+        }
+        if(s<10){
+            s="0"+s;
+        }
+        if(m<10){
+            m="0"+m;
+        }
+        bxx.innerHTML=h+":"+m+":"+s;
+    }    
+    pp=pp-1;
+    window.setTimeout("t_building();", 999);
+}
+//--> 
+</script> 
+
+<?php
+    if (time() < $uni['news_until'])        // Показать новости?
+    {
+?>
+
+<!-- _________________ComBox___________________ --> 
+<div id="combox_container" > 
+<a id="combox" href="http://board.oldogame.ru/" target=_blank> 
+<div id="anfang"><?=$uni['news1'];?></div> 
+<div id="ende"><?=$uni['news2'];?></div> 
+</a> 
+</div> 
+<!-- _________________ComBox Ende _____________ --> 
+
+<?php
+    }
 
 // Меню планеты
 echo "<table width='519'>\n\n";
 echo "<tr><td class='c' colspan='4'>\n";
-if ($aktplanet['type'] == 0) $name = "Луна \"".$aktplanet['name']."\" на орбите [".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."]";
-else $name = "Планета \"".$aktplanet['name']."\"";
-echo "<a href='index.php?page=renameplanet&session=".$_GET['session']."&pl=".$aktplanet['planet_id']."' title='Меню планеты'>".$name."</a>     (".$GlobalUser['oname'].")\n";
+if ($aktplanet['type'] == 0) $name = va ( loca ("OVERVIEW_MOON"), $aktplanet['name'], $aktplanet['g'], $aktplanet['s'], $aktplanet['p'] );
+else $name = va ( loca("OVERVIEW_PLANET"), $aktplanet['name'] );
+
+echo "<a href='index.php?page=renameplanet&session=$session&pl=".$aktplanet['planet_id']."' title='".loca("OVERVIEW_PLANET_MENU")."'>".$name."</a>     (".$GlobalUser['oname'].")\n";
 echo "</td></tr>\n";
 
 // Новые сообщения.
 $num = UnreadMessages ( $GlobalUser['player_id'] );
-if ($num) echo "<tr><th colspan=\"4\"><a href=\"index.php?page=messages&dsp=1&session=".$_GET['session']."\">  Новых сообщений: $num   </th></tr>\n";
+if ($num) echo "<tr><th colspan=\"4\"><a href=\"index.php?page=messages&dsp=1&session=$session\">  ".va ( loca("OVERVIEW_NEWMSG"), $num )."   </th></tr>\n";
 
 // Время сервера и список событий.
-echo "<tr><th>    Серверное время   </th> <th colspan=3>".date ( "D M j G:i:s", $stime)."</th></tr>\n";
-echo "<tr><td colspan='4' class='c'>  События   </td> </tr>\n";
+echo "<tr><th>    ".loca("OVERVIEW_TIME")."   </th> <th colspan=3>".date ( "D M j G:i:s", $stime)."</th></tr>\n";
+echo "<tr><td colspan='4' class='c'>  ".loca("OVERVIEW_EVENTS")."   </td> </tr>\n";
 
 //DEBUG
 $tasklist = EnumFleetQueue ( $GlobalUser['player_id'] );
@@ -120,8 +144,8 @@ $moonid = PlanetHasMoon ( $aktplanet['planet_id'] );
 if ($moonid)
 {
     $moonobj = GetPlanet ( $moonid );
-    echo "<th>    ".$moonobj['name']." (Луна)     <br>\n";
-    echo "<a href=\"index.php?page=overview&session=".$_GET['session']."&cp=".$moonid."\"><img src=\"".GetPlanetSmallImage ( UserSkin (), 0 )."\" width=\"50\" alt=\"Луна\" height=\"50\" ></a>\n";
+    echo "<th>    ".$moonobj['name']." (".loca("MOON").")     <br>\n";
+    echo "<a href=\"index.php?page=overview&session=$session&cp=".$moonid."\"><img src=\"".GetPlanetSmallImage ( UserSkin (), 0 )."\" width=\"50\" alt=\"".loca("MOON")."\" height=\"50\" ></a>\n";
     echo "</th>\n";
 }
 else echo "<th>\n</th>\n";
@@ -136,7 +160,7 @@ if ( $cnt > 0 )
     $queue = dbarray ($result);
     $left = $queue['end'] - time ();
     echo "<br><center>".loca("NAME_".$queue['obj_id']) . " ".$queue['type']." (".$queue['level'].")<div id=\"bxx\" title=\"".$queue['end']."\" class=\"z\"></div><SCRIPT language=JavaScript>\n";
-    echo "pp=\"".$left."\"; ps=\"".$_GET['session']."\"; t_building();\n";
+    echo "pp=\"".$left."\"; ps=\"$session\"; t_building();\n";
     echo "</script></center><br>\n";
 }
 echo "</th>\n";
@@ -151,7 +175,7 @@ for ($i=0; $i<$num; $i++)
     $planet = dbarray ($result);
     if ($planet['type'] == 0 || $planet['planet_id'] == $aktplanet['planet_id'] || $planet['destroyed']) { $num--; $i--; continue; }
     if (($i%2) == 0) echo "<tr>\n";
-    echo "<th> ".$planet['name']."<br> <a href=\"index.php?page=overview&session=".$_GET['session']."&cp=".$planet['planet_id']."\" title=\"".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]\">";
+    echo "<th> ".$planet['name']."<br> <a href=\"index.php?page=overview&session=$session&cp=".$planet['planet_id']."\" title=\"".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]\">";
     echo "<img src=\"".GetPlanetImage ( UserSkin (), $planet['type'] )."\" width=\"50\" height=\"50\" title=\"".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]\" ></a>\n";
     echo "<br><center>";
     {    // Вывести текущее строительство
@@ -172,11 +196,10 @@ for ($i=0; $i<$num; $i++)
 echo "<tr></tr>\n</table>\n</th>\n\n";
 
 // Параметры планеты
-$uni = LoadUniverse ( );
-echo "<tr><th> Диаметр </th><th colspan=3>".nicenum($aktplanet['diameter'])." км     (застроенная территория: <a title=\"застроенная территория\">".$aktplanet['fields']." </a> из <a title=\"максимально доступная для застройки территория\">".$aktplanet['maxfields']." </a> полей)   </th></tr>\n";
-echo "<tr><th> Температура </th> <th colspan=3> от ".$aktplanet['temp']."°C до ".($aktplanet['temp']+40)."°C</th> </tr>   \n";
-echo "<tr><th> Координаты</th><th colspan=3><a href=\"index.php?page=galaxy&galaxy=".$aktplanet['g']."&system=".$aktplanet['s']."&position=".$aktplanet['p']."&session=".$_GET['session']."\" >[".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."]</a></th></tr>\n";
-echo "<tr><th> Очки</th><th colspan=3>".nicenum(floor($GlobalUser['score1']/1000))." (место <a href='index.php?page=statistics&session=".$_GET['session']."&start=".(floor($GlobalUser['place1']/100)*100+1)."'>".nicenum($GlobalUser['place1'])."</a> из ".nicenum($uni['usercount']).")</th></tr>     \n";
+echo "<tr><th> ".va(loca("OVERVIEW_DIAM"), nicenum($aktplanet['diameter']))."     ".va(loca("OVERVIEW_FIELDS"), $aktplanet['fields'], $aktplanet['maxfields'])."   </th></tr>\n";
+echo "<tr><th> ".va ( loca("OVERVIEW_TEMP"), $aktplanet['temp'], $aktplanet['temp']+40 )."   \n";
+echo "<tr><th> ".va ( loca("OVERVIEW_COORD"), "<a href=\"index.php?page=galaxy&galaxy=".$aktplanet['g']."&system=".$aktplanet['s']."&position=".$aktplanet['p']."&session=$session\" >[".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."]</a>")."\n";
+echo "<tr><th> ".va( loca("OVERVIEW_RANK"),  nicenum(floor($GlobalUser['score1']/1000)),  "<a href='index.php?page=statistics&session=$session&start=".(floor($GlobalUser['place1']/100)*100+1)."'>".nicenum($GlobalUser['place1'])."</a>", nicenum($uni['usercount']) )."     \n";
 
 echo "</table>\n<br><br><br><br><br>\n";
 echo "</center>\n";

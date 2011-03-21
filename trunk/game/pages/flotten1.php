@@ -172,8 +172,6 @@ $maxfleet = $GlobalUser['r108'] + 1;
 
 <?php
 
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-
     foreach ($fleetmap as $i=>$gid) {
         
         $amount = $aktplanet["f$gid"];
