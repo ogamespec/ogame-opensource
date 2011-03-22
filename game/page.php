@@ -48,6 +48,7 @@ function PageHeader ($page, $noheader=false, $leftmenu=true)
     echo " <head>\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/default.css' />\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/formate.css' />\n";
+    echo "  <script language=\"JavaScript\">var session=\"".$GlobalUser['session']."\";</script>\n";
     echo "  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n";
     echo "<link rel='stylesheet' type='text/css' href='css/combox.css'>\n";
     echo "<link rel='stylesheet' type='text/css' href='".UserSkin()."formate.css' />\n";

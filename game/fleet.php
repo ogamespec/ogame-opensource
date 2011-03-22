@@ -33,6 +33,7 @@ shipXX: количество кораблей каждого типа (INT)
 3         Транспорт убывает
 103      Транспорт возвращается
 4         Оставить убывает
+104     Оставить возвращается
 5         Держаться убывает
 105      Держаться возвращается
 205     Держаться на орбите
@@ -324,6 +325,7 @@ function GetMissionNameDebug ($num)
         case 3    :     return "Транспорт убывает";
         case 103 :     return "Транспорт возвращается";
         case 4    :     return "Оставить убывает";
+        case 104 :     return "Оставить возвращается";
         case 5   :      return "Держаться убывает";
         case 105 :     return "Держаться возвращается";
         case 205 :    return "Держаться на орбите";
@@ -347,6 +349,23 @@ function GetMissionNameDebug ($num)
 
 // ==================================================================================
 // Обработка заданий флота.
+
+function FleetList ($fleet)
+{
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $res = "";
+    foreach ( $fleetmap as $i=>$gid )
+    {
+        if ($fleet[$gid] > 0) $res .= loca("NAME_$gid") . ": " . nicenum ($fleet[$gid]) . " ";
+    }
+    return $res;
+}
+
+function PlanetName ($planet)
+{
+    if ($planet['type'] == 0) return $planet['name'] . " (".loca("MOON").")";
+    else return $planet['name'];
+}
 
 // *** Атака ***
 
@@ -386,12 +405,6 @@ function AttackArrive ($queue, $fleet_obj, $fleet)
     SendMessage ( $fleet_obj['owner_id'], "Управление флотом", "Боевой доклад", "xxx", 0);
 }
 
-function AttackReturn ($queue, $fleet_obj, $fleet)
-{
-    AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['start_planet'], '+' );
-    AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
-}
-
 // *** Транспорт ***
 
 function TransportArrive ($queue, $fleet_obj, $fleet)
@@ -399,17 +412,51 @@ function TransportArrive ($queue, $fleet_obj, $fleet)
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
     $target = GetPlanet ( $fleet_obj['target_planet'] );
 
+    $oldm = $target['m'];
+    $oldk = $target['k'];
+    $oldd = $target['d'];
+
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $target['planet_id'], '+' );
 
     DispatchFleet ($fleet, $origin, $target, 103, 30, 0, 0, 0);
 
-    SendMessage ( $fleet_obj['owner_id'], "Управление флотом", "Доставка груза", "Ваш флот достигает планеты [".$target['g'].":".$target['s'].":".$target['p']."] ".$target['name'].
-                                                                                                                          " и доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия", 0);
+    $text = "Ваш флот достигает планеты (\n" .
+                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
+                ") и доставляет свой груз:.\n" .
+                "<br/>\n" .
+                nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия.\n" .
+                "<br/>\n";
+    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Достижение планеты", $text, 5);
+
+    // Транспорт на чужую планету.
+    if ( $origin['owner_id'] != $target['owner_id'] )
+    {
+        $user = LoadUser ( $origin['owner_id'] );
+        $text = "Чужой флот игрока ".$user['oname']." доставляет на Вашу планету ".PlanetName($target)."\n" .
+                    "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
+                    "<br/>\n" .
+                    nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия\n" .
+                    "<br/>\n" .
+                    "Прежде у Вас было ".nicenum($oldm)." металла, ".nicenum($oldk)." кристалла и ".nicenum($oldd)." дейтерия.\n" .
+                    "<br/>\n" .
+                    "Теперь же у Вас ".nicenum($oldm+$fleet_obj['m'])." металла, ".nicenum($oldk+$fleet_obj['k'])." кристалла и ".nicenum($oldd+$fleet_obj['d'])." дейтерия.\n" .
+                    "<br/>\n";
+        SendMessage ( $target['owner_id'], "Наблюдение", "Чужой флот доставляет сырьё", $text, 5);
+    }
 }
 
-function TransportReturn ($queue, $fleet_obj, $fleet)
+function CommonReturn ($queue, $fleet_obj, $fleet)
 {
+    $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    $target = GetPlanet ( $fleet_obj['target_planet'] );
+
+    AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
+
+    $text = "Один из Ваших флотов ( ".FleetList($fleet)." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
+               "достигает ".PlanetName($origin)." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
+    if ( ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']) != 0 ) $text .= "Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия<br>";
+    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Возвращение флота", $text, 5);
 }
 
 // *** Оставить ***
@@ -422,8 +469,11 @@ function DeployArrive ($queue, $fleet_obj, $fleet)
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $target['planet_id'], '+' );
     AdjustShips ( $fleet, $fleet_obj['target_planet'], '+' );
 
-    SendMessage ( $fleet_obj['owner_id'], "Управление флотом", "Размещение флота", "Ваш флот удерживает позицию на планете [".$target['g'].":".$target['s'].":".$target['p']."] ".$target['name'].
-                                                                                                                                " и доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия", 0);
+    $text = "\nОдин из Ваших флотов (".FleetList($fleet).") достиг ".PlanetName($target)."\n" .
+               "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
+               ". Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия\n" .
+               "<br/>\n";
+    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Удержание флота", $text, 5);
 }
 
 // *** Держаться ***
@@ -432,11 +482,112 @@ function DeployArrive ($queue, $fleet_obj, $fleet)
 
 function SpyArrive ($queue, $fleet_obj, $fleet)
 {
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
+    $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
+    $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
+
+    $now = time();
+
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
     $target = GetPlanet ( $fleet_obj['target_planet'] );
-    DispatchFleet ($fleet, $origin, $target, 106, 30, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d']);
 
-    SendMessage ( $fleet_obj['owner_id'], "Управление флотом", "Разведданные", "Наши шпионы не нашли ничего нового.", 0);
+    $origin_user = LoadUser ( $origin['owner_id'] );
+    $target_user = LoadUser ( $target['owner_id'] );
+
+    $counter_max = 0;
+    $counter = 0;
+
+    $subj = "\n<span class=\"espionagereport\">\n" .
+                "Разведданные с ".PlanetName($target)."\n" .
+                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n";
+
+    $report = "";
+
+    // Шапка
+    $report .= "<table width=400><tr><td class=c colspan=4>Сырьё на ".PlanetName($target)." <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> (Игрок \'".$target_user['oname']."\')<br /> на ".date ("m-d H:i:s", $now)."</td></tr>\n";
+    $report .= "</div></font></TD></TR><tr><td>металла:</td><td>".nicenum($target['m'])."</td>\n";
+    $report .= "<td>кристалла:</td><td>".nicenum($target['k'])."</td></tr>\n";
+    $report .= "<tr><td>дейтерия:</td><td>".nicenum($target['d'])."</td>\n";
+    $report .= "<td>энергии:</td><td>".nicenum($target['emax'])."</td></tr>\n";
+    $report .= "</table>\n";
+
+    // Активность
+    $report .= "<table width=400><tr><td class=c colspan=4>     </td></tr>\n";
+    $report .= "<TR><TD colspan=4><div onmouseover=\'return overlib(\"&lt;font color=white&gt;Активность означает, что сканируемый игрок был активен на своей планете, либо на него был произведён вылет флота другого игрока.&lt;/font&gt;\", STICKY, MOUSEOFF, DELAY, 750, CENTER, WIDTH, 100, OFFSETX, -130, OFFSETY, -10);\' onmouseout=\'return nd();\'></TD></TR></table>\n";
+
+    // Флот
+    $report .= "<table width=400><tr><td class=c colspan=4>Флоты     </td></tr>\n";
+    $count = 0;
+    foreach ( $fleetmap as $i=>$gid )
+    {
+        $amount = $target["f$gid"];
+        if ( ($count % 2) == 0 ) $report .= "</tr>\n";
+        if ($amount > 0) {
+            $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
+            $count++;
+        }
+    }
+    $report .= "</table>\n";
+
+    // Оборона
+    $report .= "<table width=400><tr><td class=c colspan=4>Оборона     </td></tr>\n";
+    $count = 0;
+    foreach ( $defmap as $i=>$gid )
+    {
+        $amount = $target["d$gid"];
+        if ( ($count % 2) == 0 ) $report .= "</tr>\n";
+        if ($amount > 0) {
+            $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
+            $count++;
+        }
+    }
+    $report .= "</table>\n";
+
+    // Постройки
+    $report .= "<table width=400><tr><td class=c colspan=4>Постройки     </td></tr>\n";
+    $count = 0;
+    foreach ( $buildmap as $i=>$gid )
+    {
+        $amount = $target["b$gid"];
+        if ( ($count % 2) == 0 ) $report .= "</tr>\n";
+        if ($amount > 0) {
+            $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
+            $count++;
+        }
+    }
+    $report .= "</table>\n";
+
+    // Исследования
+    $report .= "<table width=400><tr><td class=c colspan=4>Исследования     </td></tr>\n";
+    $count = 0;
+    foreach ( $resmap as $i=>$gid )
+    {
+        $amount = $target_user["r$gid"];
+        if ( ($count % 2) == 0 ) $report .= "</tr>\n";
+        if ($amount > 0) {
+            $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
+            $count++;
+        }
+    }
+    $report .= "</table>\n";
+
+    $report .= "<center> Шанс на защиту от шпионажа:$counter%</center>\n";
+    $report .= "<center><a href=\'#\' onclick=\'showFleetMenu(".$target['g'].",".$target['s'].",".$target['p'].",".GetPlanetType($target).",1);\'>Атака</a></center>\n";
+
+    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", $subj, $report, 1);
+
+    // Отправить сообщение чужому игроку о шпионаже.
+    $text = "\nЧужой флот с планеты ".PlanetName($origin)."\n" .
+                "<a onclick=\"showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p'].");\" href=\"#\">[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>\n" .
+                "был обнаружен вблизи от планеты ".PlanetName($target)."\n" .
+                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
+                ". Шанс на защиту от шпионажа: $counter %\n" .
+                "</td>\n";
+    SendMessage ( $target['owner_id'], "Наблюдение", "Шпионаж", $text, 5);
+
+    // Вернуть флот.
+    DispatchFleet ($fleet, $origin, $target, 106, 30, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d']);
 }
 
 function SpyReturn ($queue, $fleet_obj, $fleet)
@@ -445,6 +596,54 @@ function SpyReturn ($queue, $fleet_obj, $fleet)
 }
 
 // *** Колонизировать ***
+
+function ColonizationArrive ($queue, $fleet_obj, $fleet)
+{
+    global $db_prefix;
+
+    $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    $target = GetPlanet ( $fleet_obj['target_planet'] );
+
+    $text = "\nФлот достигает заданных координат\n" . 
+               "<a href=\"javascript:showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].")\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n";
+
+    if ( $target['type'] == 10002 )    // если цель по прежнему фантом, то значит колонизация успешна
+    {
+        // если количество планет империи больше максимума, то не основывать новую колонию.
+        $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$fleet_obj['owner_id']."' AND (type > 0 AND type < 10000);";
+        $result = dbquery ($query);
+        $num_planets = dbrows ($result);
+        if ( $num_planets >= 9 )
+        {
+            $text .= ", и устанавливает, что эта планета пригодна для колонизации. Вскоре после начала освоения планеты поступает сообщение о беспорядках на главной планете, так как империя становится слишком большой и люди возвращаются обратно.\n";
+
+            // Добавить уничтоженную планету.
+            AbandonPlanet ( $target['g'], $target['s'], $target['p'] );
+
+            // Вернуть флот.
+            DispatchFleet ($fleet, $origin, $target, 107, 30, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d']);
+        }
+        else
+        {
+            $text .= ", находит там новую планету и сразу же начинает её освоение.\n";
+
+            // Удалить фантом колонизации.
+            DestroyPlanet ( $target['planet_id'] );
+
+            // Создать новую колонию.
+            CreatePlanet ( $target['g'], $target['s'], $target['p'], $fleet_obj['owner_id'], 1 );
+        }
+    }
+    else
+    {
+        $text .= ", , но не находит там пригодной для колонизации планеты. В подавленном состоянии поселенцы возвращаются обратно.\n";
+
+        // Вернуть флот.
+        DispatchFleet ($fleet, $origin, $target, 107, 30, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d']);
+    }
+
+    SendMessage ( $fleet_obj['owner_id'], "Поселенцы", "Доклад поселенцев", $text, 5);
+}
 
 // *** Переработать ***
 
@@ -462,12 +661,15 @@ function Queue_Fleet_End ($queue)
     switch ( $fleet_obj['mission'] )
     {
         case 1: AttackArrive ($queue, $fleet_obj, $fleet); break;
-        case 101: AttackReturn ($queue, $fleet_obj, $fleet); break;
+        case 101: CommonReturn ($queue, $fleet_obj, $fleet); break;
         case 3: TransportArrive ($queue, $fleet_obj, $fleet); break;
-        case 103: TransportReturn ($queue, $fleet_obj, $fleet); break;
+        case 103: CommonReturn ($queue, $fleet_obj, $fleet); break;
         case 4: DeployArrive ($queue, $fleet_obj, $fleet); break;
+        case 104: CommonReturn ($queue, $fleet_obj, $fleet); break;
         case 6: SpyArrive ($queue, $fleet_obj, $fleet); break;
         case 106: SpyReturn ($queue, $fleet_obj, $fleet); break;
+        case 7: ColonizationArrive ($queue, $fleet_obj, $fleet); break;
+        case 107: CommonReturn ($queue, $fleet_obj, $fleet); break;
         default: Error ( "Неизвестное задание для флота: " . $fleet_obj['mission'] ); break;
     }
 
