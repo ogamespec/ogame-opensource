@@ -160,6 +160,9 @@ switch ( $order )
     case '7':        // Колонизировать
 //Планета уже заселена!
 //Для колонизации надо послать колонизаторы!
+        // Если отправлен колонизатор - добавить фантом колонизации.
+        $id = CreateColonyPhantom ( $_POST['galaxy'], $_POST['system'], $_POST['planet'], $origin_user['player_id'] );
+        $target = GetPlanet ($id);
         break;
 
     case '8':        // Переработать

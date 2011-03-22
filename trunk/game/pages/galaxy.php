@@ -104,7 +104,7 @@ while ($num--)
 
     // Планета
     echo "<th width=\"30\">\n";
-    if ( !$planet['destroyed'] )
+    if ( $planet['type'] != 10001 )
     {
         echo "<a style=\"cursor:pointer\" onmouseover='return overlib(\"<table width=240>";
         echo "<tr><td class=c colspan=2 >Планета ".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]</td></tr>";
@@ -137,7 +137,7 @@ while ($num--)
         if ( $planet['lastakt'] > $ago15 ) $akt = "&nbsp;(*)";
         else if ( $planet['lastakt'] > $ago60) $akt = "&nbsp;(".floor(($now - $planet['lastakt'])/60)." min)";
     }
-    if ( $planet['destroyed'] ) echo "<th width=\"130\" style='white-space: nowrap;'>Уничтоженная планета$akt</th>\n";
+    if ( $planet['type'] == 10001 ) echo "<th width=\"130\" style='white-space: nowrap;'>Уничтоженная планета$akt</th>\n";
     else echo "<th width=\"130\" style='white-space: nowrap;'>".$planet['name']."$akt</th>\n";
 
     // луна
@@ -183,7 +183,7 @@ while ($num--)
     // Новичек или Сильный или Обычный
     // Приоритеты Обычного: Режим отпуска -> Заблокирован -> Давно неактивен -> Неактивен -> Без статуса
     echo "<th width=\"150\">\n";
-    if ( !$planet['destroyed'] )
+    if ( $planet['type'] != 10001 )
     {
         echo "<a style=\"cursor:pointer\" onmouseover=\"return overlib('<table width=240 >";
         echo "<tr><td class=c >Игрок ".$user['oname'].". Место в рейтинге - ".$user['place1']."</td></tr>";
@@ -219,7 +219,7 @@ while ($num--)
     echo "</th>\n";
 
     // Альянс
-    if ($user['ally_id'] && !$planet['destroyed'])
+    if ($user['ally_id'] && $planet['type'] != 10001)
     {
         $ally = LoadAlly ( $user['ally_id']);
         $allytext = $ally['tag'];
@@ -229,7 +229,7 @@ while ($num--)
 
     // Действия
     echo "<th width=\"125\" style='white-space: nowrap;'>\n";
-    if ( !$planet['destroyed'] && !$own)
+    if ( !$planet['type'] != 10001 && !$own)
     {
         echo "<a style=\"cursor:pointer\" onclick=\"javascript:doit(6, 1, 399, 4, 1, 1);\"><img src=\"".UserSkin()."img/e.gif\" border=\"0\" alt=\"Шпионаж\" title=\"Шпионаж\" /></a>\n";
         echo "<a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"Написать сообщение\" title=\"Написать сообщение\" /></a>\n";

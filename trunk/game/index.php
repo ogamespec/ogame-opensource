@@ -33,7 +33,6 @@ require_once "user.php";
 require_once "msg.php";
 require_once "notes.php";
 require_once "queue.php";
-require_once "loca_game.php";
 require_once "page.php";
 require_once "ally.php";
 require_once "unit.php";
@@ -109,6 +108,7 @@ else if ( $_GET['page'] === "options" ) { include "pages/options.php"; exit (); 
 else if ( $_GET['page'] === "logout" ) { include "pages/logout.php"; exit (); }
 else if ( $_GET['page'] === "changelog" ) { include "pages/changelog.php"; exit (); }
 else if ( $_GET['page'] === "pranger" ) { include "pages/pranger.php"; exit (); }
+else if ( $_GET['page'] === "bericht" ) { include "pages/bericht.php"; exit (); }
 
 RedirectHome ();
 

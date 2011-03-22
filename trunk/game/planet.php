@@ -157,7 +157,7 @@ function EnumPlanets ()
     else if ($GlobalUser['sortby'] == 2) $order = " ORDER BY name $asc";    
     else $order = "";
 
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$player_id."'".$order;
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$player_id."' AND type < 10000".$order;
     $result = dbquery ($query);
     return $result;
 }
@@ -166,7 +166,7 @@ function EnumPlanets ()
 function EnumPlanetsGalaxy ($g, $s)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND (type > 0 AND type < 10000)";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND (type > 0 AND type < 10002) AND type <> 10000";
     $result = dbquery ($query);
     return $result;
 }
@@ -301,6 +301,48 @@ function GetPlanetType ($planet)
     if ( $planet['type'] == 0) return 3;
     else if ( $planet['type'] == 10000) return 2;
     else return 1;
+}
+
+// Создать фантом колонизации. Вернуть ID.
+function CreateColonyPhantom ($g, $s, $p, $owner_id)
+{
+    $id = IncrementDBGlobal ( 'nextplanet' );
+    $planet = array( $id, "Planet", 10002, $g, $s, $p, $owner_id, 0, 0, 0, 0, time(),
+                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+    AddDBRow ( $planet, 'planets' );
+    return $id;
+}
+
+// Покинуть планету.
+function AbandonPlanet ($g, $s, $p)
+{
+    global $db_prefix;
+    $now = time ();
+
+    // Если на заданных координатах нет планеты, то просто добавить Уничтоженную планету.
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( type <> 0 AND type <> 10000);";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0 ) 
+    {
+        $id = IncrementDBGlobal ( 'nextplanet' );
+        $planet = array( $id, "Уничтоженная планета", 10001, $g, $s, $p, 0, 0, 0, 0, 0, $now,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, $now, $now );
+        AddDBRow ( $planet, 'planets' );
+    }
+
+    // Иначе изменить тип планеты на "Уничтоженная" и удалить луну, если есть.
+    else
+    {
+        $planet = dbarray ($result);
+        $query = "UPDATE ".$db_prefix."planets SET type = 10001, name = 'Уничтоженная планета', owner_id = 0, date = $now, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
+        dbquery ( $query );
+    }
 }
 
 ?>
