@@ -195,7 +195,7 @@ function t_building() {
 </script> 
 
 <?php
-    if (time() < $uni['news_until'])        // Показать новости?
+    if ( $now < $uni['news_until'])        // Показать новости?
     {
 ?>
 
