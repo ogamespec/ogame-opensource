@@ -31,7 +31,7 @@ function FleetMissionText ($num)
 
 PageHeader ("flotten1");
 
-$result = EnumFleetQueue ( $GlobalUser['player_id'] );
+$result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = $rows = dbrows ($result);
 $maxfleet = $GlobalUser['r108'] + 1;
 

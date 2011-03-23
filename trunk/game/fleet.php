@@ -50,6 +50,7 @@ shipXX: количество кораблей каждого типа (INT)
 15        Экспедиция убывает
 115      Экспедиция возвращается
 215      Экспедиция на орбите
+20        Ракетная атака
 
 */
 
@@ -86,6 +87,10 @@ X:0
 function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thisplanettype, $galaxy, $system, $planet, $planettype, $fleet )
 {
     $missions = array ( );
+
+    // HACK
+    $missions = array ( 1, 2, 3, 4, 5, 6, 7, 8, 9, 15 );
+    return $missions;
 
     $origin = LoadPlanet ( $thisgalaxy, $thissystem, $thisplanet, $thisplanettype );
     $target = LoadPlanet ( $galaxy, $system, $planet, $planettype );
@@ -342,6 +347,40 @@ function GetMissionNameDebug ($num)
         case 15  :      return "Экспедиция убывает";
         case 115:      return "Экспедиция возвращается";
         case 215:      return "Экспедиция на орбите";
+        case 20:       return "Ракетная атака";
+
+        default: return "Неизвестно";
+    }
+}
+
+// Получить описание задания (для отладки)
+function GetMissionName ($num)
+{
+    switch ($num)
+    {
+        case 1    :      return "Атака";
+        case 101 :      return "Атака";
+        case 2    :      return "Совместная атака";
+        case 102 :     return "Совместная атака";
+        case 3    :     return "Транспорт";
+        case 103 :     return "Транспорт";
+        case 4    :     return "Оставить";
+        case 104 :     return "Оставить";
+        case 5   :      return "Держаться";
+        case 105 :     return "Держаться";
+        case 205 :    return "Держаться";
+        case 6   :      return "Шпионаж";
+        case 106 :     return "Шпионаж";
+        case 7    :     return "Колонизировать";
+        case 107 :     return "Колонизировать";
+        case 8    :     return "Переработать";
+        case 108 :    return "Переработать";
+        case 9   :      return "Уничтожить";
+        case 109:      return "Уничтожить";
+        case 15  :      return "Экспедиция";
+        case 115:      return "Экспедиция";
+        case 215:      return "Экспедиция";
+        case 20:       return "Ракетная атака";
 
         default: return "Неизвестно";
     }

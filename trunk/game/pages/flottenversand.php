@@ -46,7 +46,7 @@ PageHeader ("flottenversand");
 $unitab = LoadUniverse ();
 $unispeed = $unitab['speed'];
 
-$result = EnumFleetQueue ( $GlobalUser['player_id'] );
+$result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
 $maxfleet = $GlobalUser['r108'] + 1;
 
