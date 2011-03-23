@@ -484,7 +484,7 @@ function EnumFleetQueue ($player_id)
     global $db_prefix;
     $query = "SELECT planet_id FROM ".$db_prefix."planets WHERE owner_id = $player_id";
     $query = "SELECT fleet_id FROM ".$db_prefix."fleet WHERE target_planet = ANY ($query) AND mission < 100";
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE sub_id = ANY ($query) OR owner_id = $player_id";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND sub_id = ANY ($query) OR owner_id = $player_id";
     $result = dbquery ($query);
     return $result;
 }

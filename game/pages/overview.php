@@ -118,6 +118,13 @@ function EventMissionClass ($order, $owner_id)
     }
 }
 
+// Цель ракетной атаки.
+function EventRakTarget ($typ)
+{
+    if ($typ > 0) return "Основная цель " . loca ("NAME_$typ");
+    else return "";
+}
+
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
 
 $now = time();
@@ -258,7 +265,7 @@ while ($rows--)
     $tasknum++;
 
     // Возвращается. Не показывать возврат чужих флотов.
-    if ( $mission < 100 && $queue['owner_id'] == $GlobalUser['player_id'] ) 
+    if ( $mission < 20 && $queue['owner_id'] == $GlobalUser['player_id'] && $mission != 4 ) 
     {
         $task[$tasknum]['start_time'] = $queue['end'];
         $task[$tasknum]['end_time'] = 2 * $queue['end'] - $queue['start'];
@@ -293,15 +300,31 @@ if ($tasknum > 0)
 
     foreach ($task as $i=>$t)
     {
-        $mssionclass = EventMissionClass ($t['mission'], $t['owner_id']);
-        echo "<tr class='".EventDirectionClass($t['mission'])."'>\n";
-        echo "<th><div id='bxx".($i+1)."' title='".max($t['end_time']-$now, 0)."'star='".$t['end_time']."'></div></th>\n";
-        echo "<th colspan='3'><span class='".EventDirectionClass($t['mission'])." $mssionclass'>Ваш <a href='#' onmouseover='return overlib(\"&lt;font color=white&gt;&lt;b&gt;".EventFleetList($t)."&lt;/b&gt;&lt;/font&gt;\");' onmouseout='return nd();' class='$mssionclass'>флот</a>";
-        echo "<a href='#' title='Большой транспорт 11'></a> с планеты ".EventPlanetName($t['thisname'], $t['thisplanettype'])." <a href=\"javascript:showGalaxy(".$t['thisgalaxy'].",".$t['thissystem'].",".$t['thisplanet'].")\" $mssionclass>[".$t['thisgalaxy'].":".$t['thissystem'].":".$t['thisplanet']."]</a> ";
-        echo "отправлен на планету ".EventPlanetName($t['name'], $t['planettype'])." <a href=\"javascript:showGalaxy(".$t['galaxy'].",".$t['system'].",".$t['planet'].")\" $mssionclass>[".$t['galaxy'].":".$t['system'].":".$t['planet']."]</a>. ";
-        echo "Задание: <a href='#' onmouseover='return overlib(\"&lt;font color=white&gt;&lt;b&gt;Транспорт: &lt;br /&gt; Металл: 164.835&lt;br /&gt;Кристалл: 71.826&lt;br /&gt;Дейтерий: 25.448&lt;/b&gt;&lt;/font&gt;\");' onmouseout='return nd();'' class='$mssionclass'>".GetMissionName($t['mission'])."</a>".EventFleetResources2($t)."</span>\n";
-        echo "</th>\n";
-        echo "</tr>\n\n";
+        if ( $t['mission'] == 20)         // Ракетная атака.
+        {
+            $own = "";
+            if ( $t['owner_id'] == $GlobalUser['player_id'] ) $own = "own";
+            echo "<tr>\n";
+            echo "<th><div id='bxx".($i+1)."' title='".max($t['end_time']-$now, 0)."'star='".$t['end_time']."'></div></th>\n";
+            echo "<th colspan='3'><span class='".$own."missile'>Ракетная атака (".$t["ship202"].") с планеты ".EventPlanetName($t['thisname'], $t['thisplanettype'])." ";
+            echo "<a href=\"javascript:showGalaxy(".$t['thisgalaxy'].",".$t['thissystem'].",".$t['thisplanet'].")\" >[".$t['thisgalaxy'].":".$t['thisplanet'].":".$t['thissystem']."]</a> ";
+            echo "на планету ".EventPlanetName($t['name'], $t['planettype'])." ";
+            echo "<a href=\"javascript:showGalaxy(".$t['galaxy'].",".$t['system'].",".$t['planet'].")\" ".$own.">[".$t['galaxy'].":".$t['system'].":".$t['planet']."]</a> ".EventRakTarget($t["ship203"])."</span>\n";
+            echo "</th>\n";
+            echo "</tr>\n\n";
+        }
+        else
+        {
+            $mssionclass = EventMissionClass ($t['mission'], $t['owner_id']);
+            echo "<tr class='".EventDirectionClass($t['mission'])."'>\n";
+            echo "<th><div id='bxx".($i+1)."' title='".max($t['end_time']-$now, 0)."'star='".$t['end_time']."'></div></th>\n";
+            echo "<th colspan='3'><span class='".EventDirectionClass($t['mission'])." $mssionclass'>Ваш <a href='#' onmouseover='return overlib(\"&lt;font color=white&gt;&lt;b&gt;".EventFleetList($t)."&lt;/b&gt;&lt;/font&gt;\");' onmouseout='return nd();' class='$mssionclass'>флот</a>";
+            echo "<a href='#' title='Большой транспорт 11'></a> с планеты ".EventPlanetName($t['thisname'], $t['thisplanettype'])." <a href=\"javascript:showGalaxy(".$t['thisgalaxy'].",".$t['thissystem'].",".$t['thisplanet'].")\" $mssionclass>[".$t['thisgalaxy'].":".$t['thissystem'].":".$t['thisplanet']."]</a> ";
+            echo "отправлен на планету ".EventPlanetName($t['name'], $t['planettype'])." <a href=\"javascript:showGalaxy(".$t['galaxy'].",".$t['system'].",".$t['planet'].")\" $mssionclass>[".$t['galaxy'].":".$t['system'].":".$t['planet']."]</a>. ";
+            echo "Задание: <a href='#' onmouseover='return overlib(\"&lt;font color=white&gt;&lt;b&gt;Транспорт: &lt;br /&gt; Металл: 164.835&lt;br /&gt;Кристалл: 71.826&lt;br /&gt;Дейтерий: 25.448&lt;/b&gt;&lt;/font&gt;\");' onmouseout='return nd();'' class='$mssionclass'>".GetMissionName($t['mission'])."</a>".EventFleetResources2($t)."</span>\n";
+            echo "</th>\n";
+            echo "</tr>\n\n";
+        }
     }
     echo "<script language=javascript>anz=".$tasknum.";t();</script>\n\n";
 }
