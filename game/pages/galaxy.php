@@ -69,6 +69,46 @@ echo "</tr>\n";
 echo "</table>\n";
 echo "</form>\n";
 
+/***** Форма запуска межпланетных ракет *****/
+
+    if (0) {
+
+?>
+
+   <form action="index.php?page=raketenangriff&session=f4fdf56ce44c&p1=6&p2=123&ft3=5&zp=4333060&pid=1343882027"  method="POST">   <tr>
+   <table border="0">
+    <tr>
+     <td class="c" colspan="2">
+      Запустить ракету на <a href="?cmd=0&id=http://www.ogame.freequenzart.de/skins/deepsunrise/&action=galaxy&no_header=1" >[1:1:15]</a>     </td>
+
+    </tr>
+    <tr>
+     <td class="c">
+     Кол-во ракет (5 в наличии):     <input type="text" name="anz" size="2" maxlength="2" /></td>
+    <td class="c">
+    Цель:
+     <select name="pziel">
+      <option value="0" selected>Все</option>
+<?php
+    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+    foreach ($defmap as $i=>$gid)
+    {
+        echo "       <option value=\"$gid\">".loca("NAME_$gid")."</option>\n";
+    }
+?>
+           </select>
+    </td>
+   </tr>
+   <tr>
+    <td class="c" colspan="2"><input type="submit" name="aktion" value="Атаковать"></td>
+   </tr>
+
+  </table>
+ </form>
+
+<?php
+    }
+
 /***** Заголовок таблицы *****/
 
 echo "<table width=\"569\">\n";
@@ -234,6 +274,7 @@ while ($num--)
         echo "<a style=\"cursor:pointer\" onclick=\"javascript:doit(6, 1, 399, 4, 1, 1);\"><img src=\"".UserSkin()."img/e.gif\" border=\"0\" alt=\"Шпионаж\" title=\"Шпионаж\" /></a>\n";
         echo "<a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"Написать сообщение\" title=\"Написать сообщение\" /></a>\n";
         echo "<a href=\"index.php?page=buddy&session=".$_GET['session']."&action=7&buddy_id=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/b.gif\" border=\"0\" alt=\"Предложение подружиться\" title=\"Предложение подружиться\" /></a>\n";
+//<a href="index.php?page=galaxy&session=$session&mode=1&p1=1&p2=260&ft3=14&pdd=34430944&zp=172794"><img src="http://localhost/evolution/img/r.gif" border="0" alt="Ракетная атака" title="Ракетная атака" /></a>
     }
     echo "</th>\n";
 
