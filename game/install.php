@@ -60,12 +60,12 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                           'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
                           'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
                           'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
-                          'm', 'k', 'd', 'mprod', 'kprod', 'dprod', 'sprod', 'fprod', 'ssprod', 'lastpeek', 'lastakt' );
+                          'm', 'k', 'd', 'mprod', 'kprod', 'dprod', 'sprod', 'fprod', 'ssprod', 'lastpeek', 'lastakt', 'gate_until' );
     $planettype = array ( 'INT PRIMARY KEY', 'CHAR(20)', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT UNSIGNED',
                           'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 
                           'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT',
                           'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 
-                          'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT UNSIGNED', 'INT UNSIGNED' );
+                          'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED' );
     $allycols = array ( 'ally_id', 'tag', 'name', 'owner_id', 'homepage', 'imglogo', 'open', 'exttext', 'inttext', 'apptext', 'nextrank', 'nextapp' );
     $allytype = array ( 'INT PRIMARY KEY', 'TEXT', 'TEXT', 'INT', 'TEXT', 'TEXT', 'INT', 'TEXT', 'TEXT', 'TEXT', 'INT', 'INT' );
     $rankscols = array ( 'rank_id', 'ally_id', 'name', 'rights' );
@@ -193,7 +193,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                           500, 500, 0, 1, 1, 1, 1, 1, 1, $now, $now );
+                           500, 500, 0, 1, 1, 1, 1, 1, 1, $now, $now, 0 );
     foreach ($planet as $i=>$entry)
     {
         if ($i != 0) $opt .= ", ";
@@ -207,7 +207,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                           0, 0, 0, 1, 1, 1, 1, 1, 1, $now, $now );
+                           0, 0, 0, 1, 1, 1, 1, 1, 1, $now, $now, 0 );
     foreach ($planet as $i=>$entry)
     {
         if ($i != 0) $opt .= ", ";
