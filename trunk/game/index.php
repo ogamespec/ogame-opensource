@@ -94,6 +94,7 @@ else if ( $_GET['page'] === "flotten1" ) { include "pages/flotten1.php"; exit ()
 else if ( $_GET['page'] === "flotten2" ) { include "pages/flotten2.php"; exit (); }
 else if ( $_GET['page'] === "flotten3" ) { include "pages/flotten3.php"; exit (); }
 else if ( $_GET['page'] === "flottenversand" ) { include "pages/flottenversand.php"; exit (); }
+else if ( $_GET['page'] === "fleet_templates" ) { include "pages/fleet_templates.php"; exit (); }
 else if ( $_GET['page'] === "techtree" ) { include "pages/techtree.php"; exit(); }
 else if ( $_GET['page'] === "techtreedetails" ) { include "pages/techtreedetails.php"; exit(); }
 else if ( $_GET['page'] === "galaxy" ) { include "pages/galaxy.php"; exit (); }
@@ -109,6 +110,8 @@ else if ( $_GET['page'] === "logout" ) { include "pages/logout.php"; exit (); }
 else if ( $_GET['page'] === "changelog" ) { include "pages/changelog.php"; exit (); }
 else if ( $_GET['page'] === "pranger" ) { include "pages/pranger.php"; exit (); }
 else if ( $_GET['page'] === "bericht" ) { include "pages/bericht.php"; exit (); }
+else if ( $_GET['page'] === "allianzdepot" ) { include "pages/allianzdepot.php"; exit (); }
+else if ( $_GET['page'] === "sprungtor" ) { include "pages/sprungtor.php"; exit (); }
 
 RedirectHome ();
 

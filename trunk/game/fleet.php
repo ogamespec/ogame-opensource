@@ -203,9 +203,9 @@ function FlightTime ($dist, $slowest_speed, $prc, $xspeed)
 // 202-Р/И, 203-Р, 204-Р, 205-И, 206-И, 207-Г, 208-И, 209-Р, 210-Р, 211-И/Г, 212-Р, 213-Г, 214-Г, 215-Г
 function FleetSpeed ( $id, $combustion, $impulse, $hyper)
 {
-    global $FleetParam;
+    global $UnitParam;
 
-    $baseSpeed = $FleetParam[$id][4];
+    $baseSpeed = $UnitParam[$id][4];
 
     switch ($id) {
         case 202:
@@ -235,15 +235,15 @@ function FleetSpeed ( $id, $combustion, $impulse, $hyper)
 
 function FleetCargo ( $id )
 {
-    global $FleetParam;
-    return $FleetParam[$id][3];
+    global $UnitParam;
+    return $UnitParam[$id][3];
 }
 
 function FleetCons ($id, $combustion, $impulse, $hyper )
 {
-    global $FleetParam;
-    if ($id == 202 && $impulse >= 5) return $FleetParam[$id][5] + 10;
-    else return $FleetParam[$id][5];
+    global $UnitParam;
+    if ($id == 202 && $impulse >= 5) return $UnitParam[$id][5] + 10;
+    else return $UnitParam[$id][5];
 }
 
 // ==================================================================================
@@ -410,38 +410,7 @@ function PlanetName ($planet)
 
 function AttackArrive ($queue, $fleet_obj, $fleet)
 {
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
-
-    $origin = GetPlanet ( $fleet_obj['start_planet'] );
-    $target = GetPlanet ( $fleet_obj['target_planet'] );
-
-    $arg = "m=".$target['m']."&k=".$target['k']."&d=".$target['d'];
-
-    // Сформировать список атакующих
-    $arg .= "&anum=1&dnum=1";
-    foreach ( $fleetmap as $i=>$gid )
-    {
-        if ($fleet_obj["ship$gid"] > 0) $arg .= "&a0_f".($gid-202)."=".$fleet_obj["ship$gid"];
-    }
-
-    // Сформировать список обороняющихся
-    foreach ( $fleetmap as $i=>$gid )
-    {
-        if ( $target["f$gid"] > 0) $arg .= "&d0_f".($gid-202)."=".$target["f$gid"];
-    }
-    foreach ( $defmap as $i=>$gid )
-    {
-        if ( $target["d$gid"] > 0) $arg .= "&d_".($gid-401)."=".$target["d$gid"];
-    }
-
-    $arg .= "&fid=30&did=0&rf=1&gen=084";
-
-    $battle_report = system ("battle.exe \"$arg\"" );
-
-    DispatchFleet ($fleet, $origin, $target, 101, 30, 0, 0, 0);
-
-    SendMessage ( $fleet_obj['owner_id'], "Управление флотом", "Боевой доклад", "xxx", 0);
+    StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'] );
 }
 
 // *** Транспорт ***
@@ -689,6 +658,21 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet)
 // *** Уничтожить ***
 
 // *** Экспедиция ***
+
+// *** Ракетная атака ***
+
+/*
+     <th>Командование флотом </th>
+     <th>Ракетная атака </th>
+    </tr>
+         <tr>
+       <td class="b"> </td><td colspan="3" class="b">5 ракетам из общего числа выпущенных ракет с планеты Klio <a href=# onclick=showGalaxy(1,263,10); >[1:263:10]</a>  удалось попасть на Вашу планету Frigid Highlands <a href=# onclick=showGalaxy(1,260,4); >[1:260:4]</a> !<br>5 ракет(-ы) было уничтожено Вашими ракетами-перехватчиками<br>:<br><table width=400><tr><td class=c colspan=4>Поражённая оборона</td></tr></tr><td>Ракета-перехватчик</td><td>40</td><td>Большой щитовой купол</td><td>1</td></tr><td>Малый щитовой купол</td><td>1</td><td>Ионное орудие</td><td>20</td></tr><td>Пушка Гаусса</td><td>30</td><td>Тяжёлый лазер</td><td>208</td></tr><td>Лёгкий лазер</td><td>301</td><td>Ракетная установка</td><td>123</td></table><br></td>
+
+    </tr>
+
+    RocketAttack ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'] );
+
+*/
 
 function Queue_Fleet_End ($queue)
 {

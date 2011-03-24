@@ -13,6 +13,8 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
+$fleetmap = array ( 215, 214, 213, 211, 210, 209, 208, 207, 206, 205, 204, 203, 202 );
+
 // ***************************************************************************************
 
 $unitab = LoadUniverse ( );
@@ -67,12 +69,12 @@ if ($gid > 200 && $gid < 300)    // Флот
     echo "<tr><td valign=\"top\"><img border=\"0\" src=\"".UserSkin()."gebaeude/$gid.gif\" width=\"120\" height=\"120\"></td>\n";
     echo "<td>".loca("LONG_$gid")."<br/>".rapid($gid)."</td>\n";
     echo "</tr></table></th></tr>\n";
-    echo "<tr><th>Структура</th><th>110.000</th></tr>\n";
-    echo "<tr><th>Мощность щита</th><th>500</th></tr>\n";
-    echo "<tr><th>Оценка атаки</th><th>2.000</th></tr>\n";
-    echo "<tr><th>Грузоподъёмность</th><th>2.000&nbsp;ед.</th></tr>\n";
-    echo "<tr><th>Начальная скорость</th><th>5.000</th></tr>\n";
-    echo "<tr><th>Потребление топлива (дейтерий)</th><th>1.000</th></tr>\n";
+    echo "<tr><th>Структура</th><th>".nicenum($UnitParam[$gid][0])."</th></tr>\n";
+    echo "<tr><th>Мощность щита</th><th>".nicenum($UnitParam[$gid][1])."</th></tr>\n";
+    echo "<tr><th>Оценка атаки</th><th>".nicenum($UnitParam[$gid][2])."</th></tr>\n";
+    echo "<tr><th>Грузоподъёмность</th><th>".nicenum(FleetCargo($gid))."&nbsp;ед.</th></tr>\n";
+    echo "<tr><th>Начальная скорость</th><th>".nicenum(FleetSpeed($gid, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118']))."</th></tr>\n";
+    echo "<tr><th>Потребление топлива (дейтерий)</th><th>".nicenum(FleetCons($gid, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118']))."</th></tr>\n";
     echo "</table></th></tr></table>\n";
 }
 else if ($gid > 400 && $gid < 500)    // Оборона.
@@ -85,9 +87,9 @@ else if ($gid > 400 && $gid < 500)    // Оборона.
     echo "<tr><td valign=\"top\"><img border=\"0\" src=\"".UserSkin()."gebaeude/$gid.gif\" width=\"120\" height=\"120\"></td>\n";
     echo "<td>".loca("LONG_$gid")."<br/>".rapid($gid)."</td>\n";
     echo "</tr></table></th></tr>\n";
-    echo "<tr><th>Структура</th><th>2.000</th></tr>\n";
-    echo "<tr><th>Мощность щита</th><th>20</th></tr>\n";
-    echo "<tr><th>Оценка атаки</th><th>80</th></tr>\n";
+    echo "<tr><th>Структура</th><th>".nicenum($DefenseParam[$gid][0])."</th></tr>\n";
+    echo "<tr><th>Мощность щита</th><th>".nicenum($DefenseParam[$gid][1])."</th></tr>\n";
+    echo "<tr><th>Оценка атаки</th><th>".nicenum($DefenseParam[$gid][2])."</th></tr>\n";
     echo "</th></tr></table>\n";
 }
 else if ($gid > 100 && $gid < 200)    // Исследования.
@@ -216,6 +218,170 @@ else
             else echo "<tr> <th> $i</th> <th>".nicenum($cap)." k</th> <th> <font color=\"#00FF00\">".nicenum($cap-$cap_now)." k</font></th> </tr>\n";
         }
         echo "</table>";
+    }
+    else if ( $gid == 34 )        // Склад альянса
+    {
+?>
+    </th>
+   </tr>
+</table>
+<form action="index.php?page=allianzdepot&session=<?=$session;?>" method=post>
+
+<table width='519'>
+<td class='c' colspan='2'>Вместимость: 20000/20000</td>
+  <tr>
+    <th>Флот KPEC:<br>Крейсер:4000<br></th>
+    <th>
+      зарядка<br>5214 сек<br>
+      <input tabindex='1' type='text' name='c1' size='5' maxlength='2' value='0' />ч<br>
+
+         Стоимость 120000 / ч    </th>
+  </tr>
+  <tr>
+    <th>Флот KPEC:<br>Линкор:2000<br>Линейный крейсер:930<br></th>
+    <th>
+      зарядка<br>5300 сек<br>
+
+      <input tabindex='2' type='text' name='c2' size='5' maxlength='2' value='0' />ч<br>
+         Стоимость 223250 / ч    </th>
+  </tr>
+  <tr>
+    <th>Флот KPEC:<br>Лёгкий истребитель:18660<br></th>
+    <th>
+      зарядка<br>5361 сек<br>
+
+      <input tabindex='3' type='text' name='c3' size='5' maxlength='2' value='0' />ч<br>
+         Стоимость 37320 / ч    </th>
+  </tr>
+  <tr>
+    <th>Флот KPEC:<br>Бомбардировщик:300<br>Уничтожитель:1200<br></th>
+    <th>
+
+      зарядка<br>5407 сек<br>
+      <input tabindex='4' type='text' name='c4' size='5' maxlength='2' value='0' />ч<br>
+         Стоимость 180000 / ч    </th>
+  </tr>
+  <tr>
+    <th>Флот Revo:<br>Крейсер:100<br></th>
+
+    <th>
+      зарядка<br>8930 сек<br>
+      <input tabindex='5' type='text' name='c5' size='5' maxlength='2' value='0' />ч<br>
+         Стоимость 3000 / ч    </th>
+  </tr>
+  <tr>
+    <th>Флот Revo:<br>Крейсер:800<br></th>
+
+    <th>
+      зарядка<br>12436 сек<br>
+      <input tabindex='6' type='text' name='c6' size='5' maxlength='2' value='0' />ч<br>
+         Стоимость 24000 / ч    </th>
+  </tr>
+  <tr>
+    <th>Флот Revo:<br>Крейсер:100<br></th>
+
+    <th>
+      зарядка<br>12473 сек<br>
+      <input tabindex='7' type='text' name='c7' size='5' maxlength='2' value='0' />ч<br>
+         Стоимость 3000 / ч    </th>
+  </tr>
+  <tr><th colspan='2'><input type='submit' value='Запустить ракету со снабжением'></th>
+</table>
+
+</form>
+<?php
+    }
+    else if ( $gid == 44 && $aktplanet["b44"] > 0)        // Ракетная шахта
+    {
+?>
+    </th> 
+   </tr> 
+</table> 
+Ваше хранилище может вмещать 10 межпланетных ракет или 20 ракет-перехватчиков.<br><table border=0> 
+ 
+<form action="index.php?page=infos&session=<?=$session;?>&gid=44"  method=post> 
+<tr> 
+ <td class=c>Тип</td><td class=c>Кол-во</td><td class=c>Снести</td> 
+ <td class=c></td></tr> 
+<tr><td class=c>Ракета-перехватчик</td><td class=c>20</td><td class=c><input type=text name="ab502" size=2 value=""></td><td class=c></td></tr><tr><td class=c colspan=4><input type=submit name=aktion value="Выполнить"></table><p></form>
+<?php
+    }
+    else if ( $gid == 42 )        // Сенсорная фаланга
+    {
+?>
+<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>радиус действия</td></tr><tr><th align=center >&nbsp;<FONT color=FFFFFF>1</FONT></th><th align=center >&nbsp;0&nbsp;</th></tr><tr><th align=center >&nbsp;<FONT color=FFFFFF>2</FONT></th><th align=center >&nbsp;3&nbsp;</th></tr><tr><th align=center >&nbsp;<FONT color=FFFFFF>3</FONT></th><th align=center >&nbsp;8&nbsp;</th></tr><tr><th align=center >&nbsp;<FONT color=FFFFFF>4</FONT></th><th align=center >&nbsp;15&nbsp;</th></tr></center></table></tr></th></table> 
+<?php
+    }
+    else if ( $gid == 43 && $aktplanet["b43"] > 0)        // Ворота
+    {
+        if ( $now >= $aktplanet["gate_until"] ) 
+        {
+?>
+    </th>
+   </tr>
+</table>
+<form action="index.php?page=sprungtor&session=<?=$session;?>" method="post">
+
+  <input type="hidden" name="qm" value="<?=$aktplanet['planet_id'];?>" />
+  <table border="1">
+    <tr>
+      <td>Луна-отправитель</td>
+      <td><a href="index.php?page=galaxy&galaxy=<?=$aktplanet['g'];?>&system=<?=$aktplanet['s'];?>&position=<?=$aktplanet['p'];?>&session=<?=$session;?>" >[<?=$aktplanet['g'];?>:<?=$aktplanet['s'];?>:<?=$aktplanet['p'];?>]</a></td>
+    </tr>
+    <tr>
+      <td>Целевая луна:</td>
+
+      <td>
+        <select name="zm">
+<?php
+    $result = EnumPlanets ();
+    $rows = dbrows ($result);
+    while ($rows--)
+    {
+        $planet = dbarray ($result);
+        if ( $planet['type'] != 0 || $now < $planet['gate_until'] ) continue;
+        echo "             <option value=\"".$planet['planet_id']."\">".PlanetName($planet)." <a href=\"index.php?page=galaxy&galaxy=".$planet['g']."&system=".$planet['s']."&position=".$planet['p']."&session=$session\" >[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a></option>\n";
+    }
+?>
+        </select>
+      </td>
+    </tr>
+  </table>
+  <table width="519">
+
+    <tr>
+      <td class="c" colspan="2">Использовать ворота: выбрать корабли</td>
+    </tr>
+<?php
+    foreach ($fleetmap as $i=>$gid)
+    {
+        $amount = $aktplanet["f$gid"];
+        if ($amount != 0)
+        {
+            echo "    <tr>\n";
+            echo "      <th><a href=\"index.php?page=infos&session=$session&gid=$gid\">".loca("NAME_$gid")."</a> (".nicenum($amount)." в наличии)</th>\n";
+            echo "      <th><input tabindex=\"1\" type=\"text\" name=\"c$gid\" size=\"7\" maxlength=\"7\" value=\"0\"></th>\n";
+            echo "    </tr>\n";
+        }
+    }
+?>
+    <tr> 
+      <th colspan="2"><input type="submit" value="Выполнить прыжок" /></th>
+    </tr> 
+  </table>
+</form>
+<?php
+        }
+        else        // Ворота не готовы.
+        {
+            $delta = $aktplanet["gate_until"] - $now;
+?>
+    </th>
+   </tr>
+</table>
+<center><font color=#FF0000>Ворота не готовы!<br>Следующий прыжок можно будет провести только через <?=date ('i\m\i\n s\s\e\c', $delta);?></font></center>
+<?php
+        }
     }
 
     echo "</table>\n";

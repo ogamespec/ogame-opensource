@@ -95,6 +95,8 @@ function Admin_Planets ()
     global $db_prefix;
     global $GlobalUser;
 
+    $SearchResult = "";
+
     $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
@@ -102,19 +104,60 @@ function Admin_Planets ()
     // Обработка POST-запроса.
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 ) {
         $cp = $_GET['cp'];
+        $action = $_GET['action'];
         $now = time();
-        $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
-                          'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
-                          'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
-                          'm', 'k', 'd' );
 
-        $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
-        foreach ( $param as $i=>$p ) {
-            if ( $i == 0 ) $query .= "$p=".$_POST[$p];
-            else $query .= ", $p=".$_POST[$p];
+        if ($action === "update")        // Обновить данные планеты.
+        {
+            $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
+                                       'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
+                                      'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
+                                      'm', 'k', 'd' );
+
+            $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
+            foreach ( $param as $i=>$p ) {
+                if ( $i == 0 ) $query .= "$p=".$_POST[$p];
+                else $query .= ", $p=".$_POST[$p];
+            }
+            $query .= " WHERE planet_id=$cp;";
+            dbquery ($query);
         }
-        $query .= " WHERE planet_id=$cp;";
-        dbquery ($query);
+        else if ( $action === "search" )        // Поиск
+        {
+            $searchtype = $_POST['type'];
+            if ( $_POST['searchtext'] === "" ) {
+                $SearchResult .= "Укажите строку для поиска<br>\n";
+                $searchtype = "none";
+            }
+            if ( $searchtype === "playername") {
+                $query = "SELECT player_id FROM ".$db_prefix."users WHERE oname LIKE '".$_POST['searchtext']."%'";
+                $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = ANY ($query);";
+            }
+            else if ( $searchtype === "planetname") {
+                $query = "SELECT * FROM ".$db_prefix."planets WHERE name LIKE '".$_POST['searchtext']."%';";
+            }
+            else if ( $searchtype === "allytag") {
+                $query = "SELECT ally_id FROM ".$db_prefix."ally WHERE tag LIKE '".$_POST['searchtext']."%'";
+                $query = "SELECT player_id FROM ".$db_prefix."users WHERE ally_id <> 0 AND ally_id = ANY ($query)";
+                $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = ANY ($query);";
+            }
+            if ($query) $result = dbquery ($query);
+            $SearchResult .= "<table>\n";
+            $rows = dbrows ($result);
+            if ( $rows > 0 )
+            {
+                while ($rows--)
+                {
+                    $planet = dbarray ( $result );
+                    $user = LoadUser ( $planet['owner_id'] );
+                    $SearchResult .= "<tr><th>".date ("Y-m-d H:i:s", $planet['date'])."</th><th>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</th>";
+                    $SearchResult .= "<th><a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\">".$planet['name']."</a></th>";
+                    $SearchResult .= "<th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a></th></tr>\n";
+                }
+            }
+            else $SearchResult .= "Ничего не найдено<br>\n";
+            $SearchResult .= "</table>\n";
+        }
     }
 
     if ( key_exists("cp", $_GET) ) {     // Информация о планете.
@@ -123,7 +166,7 @@ function Admin_Planets ()
         $moon_id = PlanetHasMoon ( $planet['planet_id'] );
 
         echo "<table>\n";
-        echo "<form action=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\" method=\"POST\" >\n";
+        echo "<form action=\"index.php?page=admin&session=$session&mode=Planets&action=update&cp=".$planet['planet_id']."\" method=\"POST\" >\n";
         echo "<tr><td class=c colspan=2>Планета \"".$planet['name']."\" (<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>)</td>\n";
         echo "       <td class=c >Постройки</td> <td class=c >Флот</td> <td class=c >Оборона</td> </tr>\n";
         echo "<tr><th><img src=\"".GetPlanetImage (UserSkin(), $planet['type'])."\"></th><th>";
@@ -176,6 +219,9 @@ function Admin_Planets ()
         $query = "SELECT * FROM ".$db_prefix."planets ORDER BY date DESC LIMIT 25";
         $result = dbquery ($query);
 
+        echo "    </th> \n";
+        echo "   </tr> \n";
+        echo "</table> \n";
         echo "Новые планеты:<br>\n";
         echo "<table>\n";
         echo "<tr><td class=c>Дата создания</td><td class=c>Координаты</td><td class=c>Планета</td><td class=c>Игрок</td></tr>\n";
@@ -190,9 +236,42 @@ function Admin_Planets ()
             echo "<th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a></th></tr>\n";
         }
         echo "</table>\n";
-    }
 
-    // Поиск планет
+?>
+       </th> 
+       </tr> 
+    </table>
+    Искать:<br>
+ <form action="index.php?page=admin&session=<?=$session;?>&mode=Planets&action=search" method="post">
+ <table>
+  <tr>
+   <th>
+    <select name="type">
+     <option value="playername">Имя игрока</option>
+     <option value="planetname" >Имя планеты</option>
+     <option value="allytag" >Аббревиатура альянса</option>
+    </select>
+    &nbsp;&nbsp;
+    <input type="text" name="searchtext" value=""/>
+    &nbsp;&nbsp;
+    <input type="submit" value="Искать" />
+   </th>
+  </tr>
+ </table>
+ </form>
+<?php
+
+        if ( $SearchResult !== "" )
+        {
+?>
+       </th> 
+       </tr> 
+    </table>
+    Результаты поиска:<br>
+    <?=$SearchResult;?>
+<?php
+        }
+    }
 }
 
 // ========================================================================================
