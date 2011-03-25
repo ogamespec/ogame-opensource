@@ -211,6 +211,9 @@ function t_building() {
 <?php
     }
 
+StartBattle ( 10125, 10002 );
+die ();
+
 // Меню планеты
 echo "<table width='519'>\n\n";
 echo "<tr><td class='c' colspan='4'>\n";
