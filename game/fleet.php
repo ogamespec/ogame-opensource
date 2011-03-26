@@ -283,7 +283,7 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d)
     $deploy_time = 0;
 
     // HACK.
-    $seconds = 3000000;
+    $seconds = 30;
 
     // Добавить флот.
     $fleet_id = IncrementDBGlobal ('nextfleet');

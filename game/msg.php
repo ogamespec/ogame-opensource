@@ -126,4 +126,14 @@ function MarkMessage ($player_id, $msg_id)
     dbquery ($query);
 }
 
+// Загрузить сообщение.
+function LoadMessage ( $msg_id )
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."messages WHERE msg_id = $msg_id";
+    $result = dbquery ($query);
+    if ( $result ) return dbarray ($result);
+    else return NULL;
+}
+
 ?>
