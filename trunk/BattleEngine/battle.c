@@ -952,7 +952,7 @@ void main(int argc, char **argv)
             while ((row = mysql_fetch_row(result)))
             {
                 for (id=0; id<14; id++) {
-                    a[anum].fleet[id] = atoi ( row[10+id] );
+                    a[anum].fleet[id] = atoi ( row[12+id] );
                 }
                 a[anum].fleet[10] = 0;
 

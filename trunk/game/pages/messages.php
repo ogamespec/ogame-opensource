@@ -36,6 +36,7 @@ while ($num--)
 {
     $msg = dbarray ($result);
     $pm = $msg['pm'];
+    if ($pm == 6) continue;    // Пропускать тексты боевых докладов.
     $msg['msgfrom'] = str_replace ( "{PUBLIC_SESSION}", $_GET['session'], $msg['msgfrom']);
     $msg['subj'] = str_replace ( "{PUBLIC_SESSION}", $_GET['session'], $msg['subj']);
     $msg['text'] = str_replace ( "{PUBLIC_SESSION}", $_GET['session'], $msg['text']);

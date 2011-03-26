@@ -6,6 +6,11 @@
 function StartBattle ( $fleet_id, $planet_id )
 {
     global  $db_host, $db_user, $db_pass, $db_name, $db_prefix;
+    $a = array ();
+    $d = array ();
+
+    $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
+    $d_result = array ( 1=>"combatreport_igotattacked_iwon", 0=>"combatreport_igotattacked_ilost", 2=>"combatreport_igotattacked_draw" );
 
     $unitab = LoadUniverse ();
     $fid = $unitab['fid'];
@@ -21,8 +26,33 @@ function StartBattle ( $fleet_id, $planet_id )
 
     $text = va ( $text, "Дата/Время:", "Произошёл бой между следующими флотами:", "Тип", "Кол-во.", "Воор.:", "Щиты", "Броня", "уничтожен" );
 
-    echo "$text";
-    die ();
+    // Список атакующих
+    $f = LoadFleet ( $fleet_id );
+    $a[0] = LoadUser ( $f['owner_id'] );
+
+    // Список обороняющихся
+    $p = GetPlanet ( $planet_id );
+    $d[0] = LoadUser ( $p['owner_id'] );
+
+    // Определить исход битвы.
+    $battle_result = 2;
+
+    // Разослать сообщения
+    foreach ( $a as $i=>$user )        // Атакующие
+    {
+        $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6 );
+        MarkMessage ( $user['player_id'], $bericht );
+        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [1:10:13] (A:5.000)</span></a>";
+        SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2 );
+    }
+
+    foreach ( $d as $i=>$user )        // Обороняющиеся
+    {
+        $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6 );
+        MarkMessage ( $user['player_id'], $bericht );
+        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$d_result[$battle_result]."\">Боевой доклад [1:10:13] (A:5.000)</span></a>";
+        SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2 );
+    }
 }
 
 // Ракетная атака.
