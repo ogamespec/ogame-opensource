@@ -41,19 +41,5 @@ typedef struct RoundInfo {
     unsigned    long memload;
 } RoundInfo;
 
-// Состояние битвы.
-typedef struct BattleState {
-    int         result;             // Результат боя, смотри SPECSIM_BATTLE_*
-    int         rounds;
-    RoundInfo   round;
-    u64         aloss, dloss;       // Потери атакующего и обороняющегося
-    u64         dm, dk;             // Поле обломков
-    u64         cm, ck, cd;         // Захвачено металла, кристалла, дейтерия
-    int         moonchance;         // Шанс образования луны
-    // Взорванная и восстановленная оборона.
-    unsigned long ExplodedDefense[8], ExplodedDefenseTotal;
-    unsigned long RepairDefense[8], RepairDefenseTotal;
-} BattleState;
-
 extern TechParam fleetParam[14];
 extern TechParam defenseParam[8];
