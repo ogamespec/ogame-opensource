@@ -231,6 +231,10 @@ unsigned long MyRand (unsigned long a, unsigned long b)
 
 // ==========================================================================================
 
+// Взорванная и восстановленная оборона.
+unsigned long ExplodedDefense[8], ExplodedDefenseTotal;
+unsigned long RepairDefense[8], RepairDefenseTotal;
+
 // Форматирование числа по тысячам. Спасибо Бонтчеву :)
 // Функция является non-reentrant. Это означает что её нельзя использовать несколько раз в одном выражении, 
 // потому что она всегда возвращает статический адрес, поэтому все значения будут одинаковыми.
@@ -360,8 +364,8 @@ long UnitShoot (Unit *a, int aweap, Unit *b, u64 *absorbed, u64 *loss, u64 *dm, 
                 *dm += (u64)(ceil(DefensePrice[b->obj_type-200].m * ((float)DefenseInDebris/100.0F)));
                 *dk += (u64)(ceil(DefensePrice[b->obj_type-200].k * ((float)DefenseInDebris/100.0F)));
                 *loss += (u64)(DefensePrice[b->obj_type-200].m + DefensePrice[b->obj_type-200].k);
-                //bst->ExplodedDefense[b->obj_type-200]++;
-                //bst->ExplodedDefenseTotal++;
+                ExplodedDefense[b->obj_type-200]++;
+                ExplodedDefenseTotal++;
             }
             else {
                 *dm += (u64)(ceil(FleetPrice[b->obj_type-100].m * ((float)FleetInDebris/100.0F)));
@@ -530,9 +534,13 @@ void DoBattle (Slot *a, int anum, Slot *d, int dnum, u64 met, u64 crys, u64 deut
 {
     char longstr1[32], longstr2[32], longstr3[32];  // Буферы для non-reentrant функции nicenum.
 
-    long slot, i, n, aobjs = 0, dobjs = 0, idx, rounds;
+    long slot, i, n, aobjs = 0, dobjs = 0, idx, rounds, sum = 0;
     long apower, rapidfire, rapidchance, repairchance, fastdraw;
     Unit *aunits, *dunits, *unit;
+
+    // При выводе оригинального боевого доклада есть ошибка: Малый щитовой купол выводится не в свою очередь, а перед Плазменным орудием.
+    // Чтобы быть максимально похожим на оригинальный доклад, при выводе восстановленной обороны используется таблица перестановки RepairMap.    
+    unsigned long RepairMap[8] = { 0, 1, 2, 3, 4, 6, 5, 7 };
 
     u64         shoots[2], spower[2], absorbed[2]; // Общая статистика по выстрелам.    
 
@@ -546,6 +554,10 @@ void DoBattle (Slot *a, int anum, Slot *d, int dnum, u64 met, u64 crys, u64 deut
 
     time (&rawtime);
     ptm = gmtime (&rawtime);
+
+    memset ( ExplodedDefense, 0, sizeof(ExplodedDefense) );
+    memset ( RepairDefense, 0, sizeof(RepairDefense) );
+    ExplodedDefenseTotal = RepairDefenseTotal = 0;
 
     printf ("#1 %02i-%02i %02i:%02i:%02i . #2<br>", ptm->tm_mon+1, ptm->tm_mday, ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
 
@@ -572,7 +584,7 @@ void DoBattle (Slot *a, int anum, Slot *d, int dnum, u64 met, u64 crys, u64 deut
         }
     }
 
-    // Флоты перед боем.
+    // Подготовить массив боевых единиц.
     aunits = InitBattleAttackers (a, anum, aobjs);
     if (aunits == NULL) {
         return;
@@ -671,8 +683,6 @@ void DoBattle (Slot *a, int anum, Slot *d, int dnum, u64 met, u64 crys, u64 deut
         printf ("In total, the defending fleet fires %s times with a total firepower of %s at the attacker. The attackers shields absorb %s damage", longstr1, longstr2, longstr3);
         printf ("</center>");
         
-        //if (fastdraw) { rounds=1; break; }
-
         printf ("<table border=1 width=100%%><tr>");
         for (slot=0; slot<anum; slot++) {
             GenSlot (aunits, slot, aobjs, a, d, 1, 0);
@@ -684,43 +694,77 @@ void DoBattle (Slot *a, int anum, Slot *d, int dnum, u64 met, u64 crys, u64 deut
         }
         printf ("</tr></table>");
 
+        if (fastdraw) break;
     }
     
     // Результаты боя.
     if (aobjs > 0 && dobjs == 0){ 
         Plunder (CalcCargo (aunits, aobjs), met, crys, deut, &cm, &ck, &cd);
+
+        strcpy (longstr1, nicenum(cm));
+        strcpy (longstr2, nicenum(ck));
+        strcpy (longstr3, nicenum(cd));
+        printf ("<p> РђС‚Р°РєСѓСЋС‰РёР№ РІС‹РёРіСЂР°Р» Р±РёС‚РІСѓ!<br>");
+        printf ("РћРЅ РїРѕР»СѓС‡Р°РµС‚ %s РјРµС‚Р°Р»Р»Р°, %s РєСЂРёСЃС‚Р°Р»Р»Р° Рё %s РґРµР№С‚РµСЂРёСЏ.", longstr1, longstr2, longstr3);
+        printf ("<br>");
+
     }
     else if (dobjs > 0 && aobjs == 0) { // Атакующий проиграл
+        printf ("<p> РћР±РѕСЂРѕРЅСЏСЋС‰РёР№СЃСЏ РІС‹РёРіСЂР°Р» Р±РёС‚РІСѓ!<br>");
     }
     else    // Ничья
     {
+        printf ("<p> Р‘РѕР№ РѕРєР°РЅС‡РёРІР°РµС‚СЃСЏ РІРЅРёС‡СЊСЋ, РѕР±Р° С„Р»РѕС‚Р° РІРѕР·РІСЂР°С‰Р°СЋС‚СЃСЏ РЅР° СЃРІРѕРё РїР»Р°РЅРµС‚С‹<br>");
     }
 
     moonchance = (int)((dm + dk) / 100000);
     if (moonchance > 20) moonchance = 20;
 
+    strcpy (longstr1, nicenum(aloss));
+    strcpy (longstr2, nicenum(dloss));
+    printf ("<p><br>");
+    printf ("РђС‚Р°РєСѓСЋС‰РёР№ РїРѕС‚РµСЂСЏР» %s РµРґРёРЅРёС†.<br>РћР±РѕСЂРѕРЅСЏСЋС‰РёР№СЃСЏ РїРѕС‚РµСЂСЏР» %s РµРґРёРЅРёС†.", longstr1, longstr2);
+    strcpy (longstr1, nicenum(dm));
+    strcpy (longstr2, nicenum(dk));
+    printf ("<br>");
+    printf ("РўРµРїРµСЂСЊ РЅР° СЌС‚РёС… РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµРЅРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚Р°С… РЅР°С…РѕРґРёС‚СЃСЏ %s РјРµС‚Р°Р»Р»Р° Рё %s РєСЂРёСЃС‚Р°Р»Р»Р°.", longstr1, longstr2);
+    if (moonchance) { 
+        printf ("<br>");
+        printf ("РЁР°РЅСЃ РїРѕСЏРІР»РµРЅРёСЏ Р»СѓРЅС‹ СЃРѕСЃС‚Р°РІРёР» %s %% ", nicenum(moonchance));
+    }
+
     // Восстановление обороны.
-/*
-    if (bst->ExplodedDefenseTotal) {
+    if (ExplodedDefenseTotal) {
         for (i=0; i<8; i++) {
-            if (bst->ExplodedDefense[i]) {
+            if (ExplodedDefense[i]) {
                 if (d[0].def[i] < 10) {
-                    for (n=0; n<bst->ExplodedDefense[i]; n++) {
-                        if ( SimRand (0, 99) < 70 ) { 
-                            bst->RepairDefense[i]++;
-                            bst->RepairDefenseTotal++;
+                    for (n=0; n<ExplodedDefense[i]; n++) {
+                        if ( MyRand (0, 99) < 70 ) { 
+                            RepairDefense[i]++;
+                            RepairDefenseTotal++;
                         }
                     }
                 }
                 else {
-                    repairchance = SimRand (60, 80);
-                    bst->RepairDefense[i] = repairchance * bst->ExplodedDefense[i] / 100;
-                    bst->RepairDefenseTotal += bst->RepairDefense[i];
+                    repairchance = MyRand (60, 80);
+                    RepairDefense[i] = repairchance * ExplodedDefense[i] / 100;
+                    RepairDefenseTotal += RepairDefense[i];
                 }
             }
         }
     }
-*/
+
+    if (RepairDefenseTotal) {
+        printf ("<br>");
+        for (i=0; i<8; i++) {
+            if (RepairDefense[RepairMap[i]]) {
+                if (sum > 0) printf (", ");
+                printf ("%i %s", RepairDefense[RepairMap[i]], "DefenseNames[RepairMap[i]]");
+                sum += RepairDefense[RepairMap[i]];
+            }
+        }
+        printf (" Р±С‹Р»Рё РїРѕРІСЂРµР¶РґРµРЅС‹ Рё РЅР°С…РѕРґСЏС‚СЃСЏ РІ СЂРµРјРѕРЅС‚Рµ.<br>");
+    }
     
     free (aunits);
     free (dunits);        
