@@ -56,8 +56,6 @@ rXXX: Уровень исследования XXX (INT)
 Q - для обработки этого события используется задание в очереди задач.
 */
 
-require_once "geoip.php";
-
 function mail_utf8($to, $subject = '(No subject)', $message = '', $header = '') {
   $header_ = 'MIME-Version: 1.0' . "\r\n" . 'Content-type: text/plain; charset=UTF-8' . "\r\n";
   mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $header_ . $header);
@@ -181,9 +179,7 @@ function CreateUser ( $name, $pass, $email)
 
     // Определить язык пользователя по его IP-адресу.
     $ip = $_SERVER['REMOTE_ADDR'];
-    if ( $ip === "127.0.0.1" ) $lang = "ru";
-    else $lang = CountryCodeFromIP ( $ip );
-    if ( $lang !== "ru" ) $lang = "ru";        // Добавить сюда больше языков.
+    $lang = "ru";
 
     $user = array( $id, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, $email, $email,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
