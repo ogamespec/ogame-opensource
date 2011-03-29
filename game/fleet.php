@@ -170,7 +170,7 @@ function FlightSpeed ($fleet, $combustion, $impulse, $hyper)
     foreach ($fleet as $id=>$amount)
     {
         $speed = FleetSpeed ( $id, $combustion, $impulse, $hyper);
-        if ( $id == 0 || $speed == 0 ) continue;
+        if ( $amount == 0 || $speed == 0 ) continue;
         if ($speed < $minspeed) $minspeed = $speed;
     }
     return $minspeed;
@@ -196,7 +196,7 @@ function FlightCons ($fleet, $dist, $slowest_speed, $combustion, $impulse, $hype
 // Время полёта в секундах, при заданном проценте.
 function FlightTime ($dist, $slowest_speed, $prc, $xspeed)
 {
-    return round ( (35000 / ($prc/10) * sqrt ($dist * 10 / $slowest_speed ) + 10) / $xspeed );
+    return round ( (35000 / ($prc*10) * sqrt ($dist * 10 / $slowest_speed ) + 10) / $xspeed );
 }
 
 // Скорость кораблика
@@ -283,7 +283,7 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d)
     $deploy_time = 0;
 
     // HACK.
-    $seconds = 30;
+    //$seconds = 30;
 
     // Добавить флот.
     $fleet_id = IncrementDBGlobal ('nextfleet');
