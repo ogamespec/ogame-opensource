@@ -210,7 +210,6 @@ else {
 
     echo "<br>";
     print_r ( $queue);
-
 ?>
 
    <tr height="20">
