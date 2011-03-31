@@ -113,6 +113,7 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "Demolish" ) Queue_Build_End ($queue);
         else if ( $queue['type'] === "DecRes" ) Queue_DecRes_End ($queue);
         else if ( $queue['type'] === "Research" ) Queue_Research_End ($queue);
+        else if ( $queue['type'] === "Shipyard" ) Queue_Shipyard_End ($queue);
         else if ( $queue['type'] === "Fleet" ) Queue_Fleet_End ($queue);
         else Error ( "queue: Неизвестный тип задания для глобальной очереди: " . $queue['type']);
     }
@@ -345,6 +346,93 @@ function GetShipyardQueue ($planet_id)
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Shipyard' AND sub_id = $planet_id ORDER BY start ASC";
     return dbquery ($query);
+}
+
+// Получить время окончания последнего задания на верфи, используется чтобы узнать время начала нового задания.
+function ShipyardLatestTime ($planet_id)
+{
+    global $db_prefix;
+
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Shipyard' AND sub_id = $planet_id ORDER BY end DESC";
+    $result = dbquery ($query);
+    if (dbrows($result) > 0) {
+        $queue = dbarray ($result);
+        return $queue['end'] + ($queue['end'] - $queue['start']) * ($queue['level'] - 1);
+    }
+    else return time ();
+}
+
+// Добавить флот/оборону на верфь ($gid - тип юнита, $value - количество)
+function AddShipyard ($player_id, $planet_id, $gid, $value )
+{
+    global $db_prefix;
+
+    $user = LoadUser ( $player_id );
+
+    $planet = GetPlanet ( $planet_id );
+    $m = $k = $d = $e = 0;
+    ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
+    $m *= $value;
+    $k *= $value;
+    $d *= $value;
+
+    if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && ShipyardMeetRequirement ($user, $planet, $gid) ) {
+        $unitab = LoadUniverse ( );
+        $speed = $unitab['speed'];
+        $now = ShipyardLatestTime ($planet_id);
+        $shipyard = $planet["b21"];
+        $nanits = $planet["b15"];
+        $seconds = ShipyardDuration ( $gid, $shipyard, $nanits, $speed );
+
+        // Списать ресурсы.
+        $planet['m'] -= $m;
+        $planet['k'] -= $k;
+        $planet['d'] -= $d;
+        $query = "UPDATE ".$db_prefix."planets SET m = '".$planet['m']."', k = '".$planet['k']."', d = '".$planet['d']."', lastpeek = '".$now."' WHERE planet_id = $planet_id";
+        dbquery ($query);
+
+        AddQueue ($player_id, "Shipyard", $planet_id, $gid, $value, $now, $seconds);
+        Debug ("Запустить постройку ".loca("NAME_$gid")." ($value) на планете [".$planet['g'].":".$planet['s'].":".$planet['p']."] ".$planet['name'] );
+    }
+}
+
+// Закончить постройку на верфи.
+function Queue_Shipyard_End ($queue)
+{
+    global $db_prefix;
+
+    $now = time ();
+    $gid = $queue['obj_id'];
+    $planet_id = $queue['sub_id'];
+    $planet = GetPlanet ($planet_id);
+
+    // Старые значения
+    $s = $queue['start'];
+    $e = $queue['end'];
+    $n = $queue['level'];
+    $one = $e - $s;
+
+    // Новые значения
+    $done =  min ($n, floor ( ($now - $s) / $one ));
+    $news = $s + $done * $one;
+    $newe = $e + $done * $one;
+
+    // Добавить флот на планете
+    if ($gid > 400) $query = "UPDATE ".$db_prefix."planets SET d$gid = d$gid + $done WHERE planet_id = $planet_id";
+    else $query = "UPDATE ".$db_prefix."planets SET f$gid = f$gid + $done WHERE planet_id = $planet_id";
+    dbquery ($query);
+
+    // Обновить задание или удалить его, если всё построено.
+    if ( $done < $n )
+    {
+        $query = "UPDATE ".$db_prefix."queue SET start = $news, end = $newe, level = level - $done WHERE task_id = ".$queue['task_id'];
+        dbquery ($query);
+        Debug ( "На верфи [".$planet['g'].":".$planet['s'].":".$planet['p']."] ".$planet['name']." построено ".loca("NAME_$gid")." ($done), осталось достроить (".($n-$done).")" );
+    }
+    else {
+        Debug ( "На верфи [".$planet['g'].":".$planet['s'].":".$planet['p']."] ".$planet['name']." завершена постройка ".loca("NAME_$gid")." ($done)" );
+        RemoveQueue ( $queue['task_id'], 0 );
+    }
 }
 
 // ===============================================================================================================
