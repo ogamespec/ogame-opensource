@@ -391,7 +391,6 @@ function PageFooter ($msg="", $error="", $popup=false, $headerH=81)
 
     if ( !$GlobalUser['validated']) $error = "<center> \nВаш игровой аккаунт ещё не активирован. Зайдите в <a href=index.php?page=options&session=".$GlobalUser['session'].">Настройки</a>, введите электронный адрес и получите на него активационную ссылку.<br></center>\n" . $error;
     else if ( $GlobalUser['disable']) $error = "<center>\nВаш аккаунт был поставлен на удаление. Дата удаления: ".date ("Y-m-d H:i:s", $GlobalUser['disable_until'])."<br></center>\n" . $error;
-    else if ( $GlobalUser['vacation']) $error = "<center>\nрежим отпуска<br></center>\n" . $error;
 
     $msgdisplay = "";
     if ($msg !== "") $msgdisplay = "messagebox.style.display='block';\n";

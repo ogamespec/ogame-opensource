@@ -192,6 +192,15 @@ function t_building() {
     window.setTimeout("t_building();", 999);
 }
 //--> 
+
+<?php
+// Выйти из фрейма.
+if ( $_GET['lgn'] == 1 )
+{
+    echo "top.location=\"index.php?page=overview&session=$session\"";
+}
+?>
+
 </script> 
 
 <?php
@@ -398,6 +407,8 @@ echo "</table>\n<br><br><br><br><br>\n";
 echo "</center>\n";
 echo "</div>\n";
 echo "<!-- END CONTENT AREA -->\n\n";
+
+if ( $GlobalUser['vacation']) $OverviewError = "<center>\nрежим отпуска<br></center>\n";
 
 PageFooter ($OverviewMessage, $OverviewError, false);
 ob_end_flush ();

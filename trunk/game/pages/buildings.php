@@ -13,13 +13,39 @@ UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
 // Обработка POST-запросов.
-if ( method () === "POST" )
+if ( method () === "POST" && !$GlobalUser['vacation'] )
 {
-    print_r ( $_POST );
+    foreach ( $_POST['fmenge'] as $gid=>$value )
+    {
+        if ( $value < 0 ) $value = 0;
+        if ( $value > 0 ) {
+            // Рассчитать количество (не больше, чем ресурсов на планете и не больше 999)
+            if ( $value > 999 ) $value = 999;
+
+            $m = $k = $d = $e = 0;
+            ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
+
+            if ( $aktplanet['m'] < $m || $aktplanet['k'] < $k || $aktplanet['d'] < $d ) continue;    // недостаточно ресурсов для одной единицы
+
+            // Купола.
+
+            if ($m) $cm = floor ($aktplanet['m'] / $m);
+            else $cm = 1000;
+            if ($k) $ck = floor ($aktplanet['k'] / $k);
+            else $ck = 1000;
+            if ($d) $cd = floor ($aktplanet['d'] / $d);
+            else $cd = 1000;
+            $v = min ( $cm, min ($ck, $cd) );
+            if ( $value > $v ) $value = $v;
+
+            AddShipyard ( $GlobalUser['player_id'], $aktplanet['planet_id'], $gid, $value );
+            $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // обновить состояние планеты.
+        }
+    }
 }
 
 // Обработка GET-запросов.
-if ( method () === "GET" )
+if ( method () === "GET"  && !$GlobalUser['vacation'] )
 {
 	if ( $_GET['mode'] === "Forschung" ) {
 		$result = GetResearchQueue ( $GlobalUser['player_id'] );
@@ -41,6 +67,18 @@ echo "<!-- CONTENT AREA -->\n";
 echo "<div id='content'>\n";
 echo "<center>\n";
 
+$result = GetShipyardQueue ($aktplanet['planet_id']);
+$rows = dbrows ($result);
+echo "<table>";
+while ( $rows-- ) 
+{
+    $queue = dbarray ( $result );
+    echo "<tr><td>";
+    print_r ( $queue );
+    echo "</td></tr>";
+}
+echo "</table>";
+
 echo "<title> \n";
 echo "Постройки#Gebaeude\n";
 echo "</title> \n";
@@ -49,10 +87,6 @@ echo "function setMax(key, number){\n";
 echo "    document.getElementsByName('fmenge['+key+']')[0].value=number;\n";
 echo "}\n";
 echo "</script> \n";
-
-if ( $_GET['mode'] === "Verteidigung" || $_GET['mode'] === "Flotte" ) {
-    echo "<form action=index.php?page=buildings&session=$session&mode=".$_GET['mode']." method=post>";
-}
 
 $unitab = LoadUniverse ( );
 $speed = $unitab['speed'];
@@ -71,6 +105,10 @@ if ( $_GET['mode'] === "Flotte" )
     if ( $busy ) {
         echo "<br><br><font color=#FF0000>Невозможно строить ни корабли ни оборонительные сооружения, так как верфь либо фабрика нанитов усовершенствуются</font><br><br>";
     }
+    if ( $GlobalUser['vacation'] ) {
+        echo "<font color=#FF0000><center>Режим отпуска минимум до  ".date ("Y-m-d H:i:s", $GlobalUser['vacation_until'])."</center></font>";
+    }
+    echo "<form action=index.php?page=buildings&session=$session&mode=".$_GET['mode']." method=post>";
     echo "<table align=top><tr><td style='background-color:transparent;'>  <table width=530>          <tr> \n";
     echo "          <td class=l colspan=\"2\">Описание</td> \n";
     echo "          <td class=l><b>Кол-во</b></td> \n";
@@ -126,6 +164,10 @@ if ( $_GET['mode'] === "Verteidigung" )
     if ( $busy ) {
         echo "<br><br><font color=#FF0000>Невозможно строить ни корабли ни оборонительные сооружения, так как верфь либо фабрика нанитов усовершенствуются</font><br><br>";
     }
+    if ( $GlobalUser['vacation'] ) {
+        echo "<font color=#FF0000><center>Режим отпуска минимум до  ".date ("Y-m-d H:i:s", $GlobalUser['vacation_until'])."</center></font>";
+    }
+    echo "<form action=index.php?page=buildings&session=$session&mode=".$_GET['mode']." method=post>";
     echo "<table align=top><tr><td style='background-color:transparent;'>  <table width=530>          <tr> \n";
     echo "          <td class=l colspan=\"2\">Описание</td> \n";
     echo "          <td class=l><b>Кол-во</b></td> \n";
@@ -179,6 +221,9 @@ if ( $_GET['mode'] === "Forschung" )
 
     if ( $busy ) {
         echo "<br><br><font color=#FF0000>Проведение исследований невозможно, так как исследовательская лаборатория усовершенствуется.</font><br /><br />";
+    }
+    if ( $GlobalUser['vacation'] ) {
+        echo "<font color=#FF0000><center>Режим отпуска минимум до  ".date ("Y-m-d H:i:s", $GlobalUser['vacation_until'])."</center></font>";
     }
     echo "<table align=top><tr><td style='background-color:transparent;'>  <table width=530>          <tr> \n";
     echo "          <td class=l colspan=\"2\">Описание</td> \n";
