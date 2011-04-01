@@ -67,18 +67,6 @@ echo "<!-- CONTENT AREA -->\n";
 echo "<div id='content'>\n";
 echo "<center>\n";
 
-$result = GetShipyardQueue ($aktplanet['planet_id']);
-$rows = dbrows ($result);
-echo "<table>";
-while ( $rows-- ) 
-{
-    $queue = dbarray ( $result );
-    echo "<tr><td>";
-    print_r ( $queue );
-    echo "</td></tr>";
-}
-echo "</table>";
-
 echo "<title> \n";
 echo "Постройки#Gebaeude\n";
 echo "</title> \n";
@@ -277,6 +265,140 @@ if ( $_GET['mode'] === "Forschung" )
 echo "</table>";
 if ( $_GET['mode'] === "Verteidigung" || $_GET['mode'] === "Flotte" ) echo "</form>";
 echo "</table>\n";
+
+if ( $_GET['mode'] === "Verteidigung" || $_GET['mode'] === "Flotte" )
+{
+    $result = GetShipyardQueue ($aktplanet['planet_id']);
+    $rows = dbrows ($result);
+    if ($rows)
+    {
+?>
+
+      <br>Сейчас производится: <div id="bx" class="z"></div>
+
+<!-- JAVASCRIPT -->
+<script  type="text/javascript">
+v = new Date();
+p = 0;
+g = 9;
+s = 0;
+hs = 0;
+of = 1;
+<?php
+    $c = "";
+    $b = "";
+    $a = "";
+    while ($rows--)
+    {
+        $queue = dbarray ($result);
+        $c .= ($queue['end'] - $queue['start']) . ",";
+        $b .= "\"".loca("NAME_".$queue['obj_id'])."\",";
+        $a .= "\"".$queue['level']."\",";
+    }
+?>
+c = new Array(<?=$c;?>"");
+b = new Array(<?=$b;?>"");
+a = new Array(<?=$a;?>"");
+aa = "Задания выполнены";
+
+
+function t() {
+    if (hs == 0) {
+        xd();
+        hs = 1;
+    }
+    n = new Date();
+    s = c[p]-g-Math.round((n.getTime()-v.getTime())/1000.);
+    s = Math.round(s);
+    m = 0;
+    h = 0;
+    if (s < 0) {
+        a[p]--;
+        xd();
+        if (a[p] <= 0) {
+            p++;
+            xd();
+        }
+        g = 0;
+        v = new Date();
+        s=0;
+    }
+    if (s > 59) {
+        m = Math.floor(s / 60);
+        s = s - m * 60;
+    }
+    if (m > 59) {
+        h = Math.floor(m / 60);
+        m = m - h * 60;
+    }
+    if (s < 10) {
+        s = "0" + s;
+    }
+    if (m < 10) {
+        m = "0" + m;
+    }
+    if (p > b.length - 2) {
+        document.getElementById("bx").innerHTML=aa ;
+    } else {
+        document.getElementById("bx").innerHTML=b[p]+" "+h+":"+m+":"+s;
+    }
+    window.setTimeout("t();", 200);
+}
+
+
+
+
+function xd() {
+    while (document.Atr.auftr.length > 0) {
+        document.Atr.auftr.options[document.Atr.auftr.length-1] = null;
+    }
+    if (p > b.length - 2) {
+        document.Atr.auftr.options[document.Atr.auftr.length] = new Option(aa);
+    }
+    for (iv = p; iv <= b.length - 2; iv++) {
+        if (a[iv] < 2) {
+            ae=" ";
+        }else{
+            ae=" ";
+        }
+        if (iv == p) {
+            act = " (производится)";
+        }else{
+            act = "";
+        }
+        document.Atr.auftr.options[document.Atr.auftr.length] = new Option(a[iv]+ae+" \""+b[iv]+"\""+act, iv + of);
+    }
+}
+
+window.onload = t;
+</script>
+<!-- JAVASCRIPT ENDE-->
+
+
+<br>
+<form name="Atr" method="get" action="index.php?page=buildings">
+<input type="hidden" name="session" value="<?=$session;?>">
+<input type="hidden" name="mode" value="Flotte">
+<table width="530">
+
+ <tr>
+    <td class="c" >Ожидаемые поручения</td>
+ </tr>
+ <tr>
+  <th ><select name="auftr" size="10"></select></th>
+   </tr>
+ <tr>
+  <td class="c" ></td>
+
+ </tr>
+</table>
+</form>
+Всё производство займёт
+
+  44 мин 54 сек<br>
+<?php
+    }
+}
 
 echo "<br><br><br><br>\n";
 echo "</center>\n";
