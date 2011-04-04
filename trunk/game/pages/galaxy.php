@@ -32,18 +32,234 @@ echo "<!-- CONTENT AREA -->\n";
 echo "<div id='content'>\n";
 echo "<center>\n\n";
 
-/*
-echo "$coord_g : $coord_s : $coord_p<br>";
-echo "GET: ";
-print_r ($_GET);
-echo "<br>POST: ";
-print_r ($_POST);
-echo "<br>";
-*/
+/***** Скрипты. *****/
+
+?>
+
+  <script  language="JavaScript">
+  function galaxy_submit(value) {
+      document.getElementById('auto').name = value;
+      document.getElementById('galaxy_form').submit();
+  }
+
+  function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+  }
+
+
+  var IE = document.all?true:false;
+
+  function mouseX(e){
+    if (IE) { // grab the x-y pos.s if browser is IE
+        return event.clientX + document.body.scrollLeft;
+    } else {
+        return e.pageX
+    }
+  }
+  function mouseY(e) {
+    if (IE) { // grab the x-y pos.s if browser is IE
+        return event.clientY + document.body.scrollTop;
+    }else {
+        return e.pageY;
+    }
+  }
+
+  </script>
+  <script language="JavaScript" src="js/tw-sack.js"></script>
+  <script type="text/javascript">
+  var ajax = new sack();
+  var strInfo = "";
+
+  function whenLoading(){
+      //var e = document.getElementById('fleetstatus');
+      //e.innerHTML = "Флот отсылается...";
+  }
+
+  function whenLoaded(){
+      //    var e = document.getElementById('fleetstatus');
+      // e.innerHTML = "Флот отослан...";
+  }
+
+  function whenInteractive(){
+      //var e = document.getElementById('fleetstatus');
+      // e.innerHTML = "Получение данных...";
+  }
+
+  /*
+  We can overwrite functions of the sack object easily. :-)
+  This function will replace the sack internal function runResponse(),
+  which normally evaluates the xml return value via eval(this.response).
+  */
+  function whenResponse(){
+
+      /*
+      *
+      *  600   OK
+      *  601   no planet exists there
+      *  602   no moon exists there
+      *  603   player is in noob protection
+      *  604   player is too strong
+      *  605   player is in u-mode
+      *  610   not enough espionage probes, sending x (parameter is the second return value)
+      *  611   no espionage probes, nothing send
+      *  612   no fleet slots free, nothing send
+      *  613   not enough deuterium to send a probe
+      *
+      */
+      // the first three digit long return value
+      retVals = this.response.split(" ");
+      // and the other content of the response
+      // but since we only got it if we can send some but not all probes
+      // theres no need to complicate things with better parsing
+
+      // each case gets a different table entry, no language file used :P
+      switch(parseInt(retVals[0])) {
+          case 600:
+          addToTable("done", "success");
+                    changeSlots(retVals[1]);
+          setShips("probes", retVals[2]);
+          setShips("recyclers", retVals[3]);
+          setShips("missiles", retVals[4]);
+                    break;
+          case 601:
+          addToTable("Произошла ошибка", "error");
+          break;
+          case 602:
+          addToTable("Ошибка, луны не существует", "error");
+          break;
+          case 603:
+          addToTable("Ошибка! К игроку невозможно подлететь, т.к. он находится под защитой для новичков! ", "error");
+          break;
+          case 604:
+          addToTable("Ошибка! К игроку невозможно подлететь, т.к. он находится под защитой для новичков! ", "error");
+          break;
+          case 605:
+          addToTable("Невозможно, игрок находится в режиме отпуска", "vacation");
+          break;
+          case 610:
+          addToTable("Ошибка, возможно послать только "+retVals[1]+" зондов, шлите", "notice");
+          break;
+          case 611:
+          addToTable("Шпионаж невозможен, у Вас нет зондов", "error");
+          break;
+          case 612:
+          addToTable("Недостаточно места для флота", "error");
+          break;
+          case 613:
+          addToTable("У Вас недостаточно дейтерия", "error");
+          break;
+          case 614:
+          addToTable("Здесь планеты нет", "error");
+          break;
+          case 615:
+          addToTable("Ошибка! Недостаточная грузоподъёмность!", "error");
+          break;
+          case 616:
+          addToTable("Одинаковый ай-пи!", "error");
+          break;
+      }
+  }
+
+  function doit(order, galaxy, system, planet, planettype, shipcount){
+      strInfo = "  Отправка "+shipcount+" кораблей"+(shipcount>1?"":"")+" на "+galaxy+":"+system+":"+planet+" ";
+      ajax.requestFile = "index.php?ajax=1&page=flottenversand&session=cabc5002190c";
+
+      // no longer needed, since we don't want to write the cryptic
+      // response somewhere into the output html
+      //ajax.element = 'fleetstatus';
+      //ajax.onLoading = whenLoading;
+      //ajax.onLoaded = whenLoaded;
+      //ajax.onInteractive = whenInteractive;
+
+      // added, overwrite the function runResponse with our own and
+      // turn on its execute flag
+      ajax.runResponse = whenResponse;
+      ajax.execute = true;
+
+      ajax.setVar("session", "<?=$session;?>");
+      ajax.setVar("order", order);
+      ajax.setVar("galaxy", galaxy);
+      ajax.setVar("system", system);
+      ajax.setVar("planet", planet);
+      ajax.setVar("planettype", planettype);
+      ajax.setVar("shipcount", shipcount);
+      ajax.setVar("speed", 10);
+      ajax.setVar("reply", "short");
+      ajax.runAJAX();
+  }
+
+  /*
+  * This function will manage the table we use to output up to three lines of
+  * actions the user did. If there is no action, the tr with id 'fleetstatusrow'
+  * will be hidden (display: none;) - if we want to output a line, its display
+  * value is cleaned and therefore its visible. If there are more than 2 lines
+  * we want to remove the first row to restrict the history to not more than
+  * 3 entries. After using the object function of the table we fill the newly
+  * created row with text. Let the browser do the parsing work. :D
+  */
+  function addToTable(strDataResult, strClass) {
+      var e = document.getElementById('fleetstatusrow');
+      var e2 = document.getElementById('fleetstatustable');
+      // make the table row visible
+      e.style.display = '';
+      if(e2.rows.length > 98) {
+          e2.deleteRow(98);
+      }
+      var row = e2.insertRow('test');
+      var td1 = document.createElement("td");
+      var td1text = document.createTextNode(strInfo);
+      td1.appendChild(td1text);
+      var td2 = document.createElement("td");
+      var span = document.createElement("span");
+      var spantext = document.createTextNode(strDataResult);
+      var spanclass = document.createAttribute("class");
+      spanclass.nodeValue = strClass;
+      span.setAttributeNode(spanclass);
+      span.appendChild(spantext);
+      td2.appendChild(span);
+      row.appendChild(td1);
+      row.appendChild(td2);
+
+  }
+
+  function changeSlots(slotsInUse) {
+      var e = document.getElementById('slots');
+      e.innerHTML = slotsInUse;
+  }
+
+  function setShips(ship, count) {
+      var e = document.getElementById(ship);
+      e.innerHTML = count;
+  }
+
+  function cursorevent(evt) {
+      evt = (evt) ? evt : ((event) ? event : null);
+      if(evt.keyCode == 37) {
+          galaxy_submit('systemLeft');
+      }
+
+      if(evt.keyCode == 39) {
+          galaxy_submit('systemRight');
+      }
+
+      if(evt.keyCode == 38) {
+          galaxy_submit('galaxyRight');
+      }
+
+      if(evt.keyCode == 40) {
+          galaxy_submit('galaxyLeft');
+      }
+
+  }
+  document.onkeydown = cursorevent;
+</script>
+
+<?php
 
 /***** Меню выбора солнечной системы. *****/
 
-echo "<form action=\"index.php?page=galaxy&no_header=1&session=".$_GET['session']."\" method=\"post\" id=\"galaxy_form\">\n";
+echo "  <center>\n<form action=\"index.php?page=galaxy&no_header=1&session=".$_GET['session']."\" method=\"post\" id=\"galaxy_form\">\n";
 echo "<input type=\"hidden\" name=\"session\" value=\"".$_GET['session']."\">\n";
 echo "<input type=\"hidden\" id=\"auto\" value=\"dr\">\n";
 echo "<table border=1 class='header' id='t1'>\n\n";
@@ -216,8 +432,25 @@ while ($num--)
     }
     echo "</th>\n";
 
-    // поле обломков
-    echo "<th width=\"30\"></th>\n";
+    // поле обломков (не показывать ПО < 500 единиц)
+    echo "<th width=\"30\">";
+    $debris_id = HasDebris ($coord_g, $coord_s, $p);
+    if ( $debris_id )
+    {
+        $debris = GetPlanet ($debris_id);
+        $harvesters = ceil ( ($debris['m'] + $debris['k']) / $UnitParam[209][3]);
+        if ( ($debris['m'] + $debris['k']) >= 500 )
+        {
+?>
+    <a style="cursor:pointer"
+       onmouseover="return overlib('<table width=240 ><tr><td class=c colspan=2 ></td></tr><tr><th width=80 ><img src=<?=UserSkin();?>planeten/debris.jpg height=75 width=75 alt=T /></th><th><table><tr><td class=c colspan=2>Ресурсы:</td></tr><tr><th>металл:</th><th><?=nicenum($debris['m']);?></th></tr><tr><th>кристалл:</th><th><?=nicenum($debris['k']);?></th></tr><tr><td class=c colspan=2>Действия:</tr><tr><th colspan=2 align=left ><a href=# onclick=doit(8,<?=$coord_g;?>,<?=$coord_s;?>,<?=$p;?>,2,<?=$harvesters;?>) >Переработать</a></tr></table></th></tr></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -40 );" onmouseout="return nd();"
+href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harvesters;?>)'
+>
+<img src="<?=UserSkin();?>planeten/debris.jpg" height="22" width="22" /></a>
+<?php
+        }
+    }
+    echo "</th>\n";
 
     // игрок (статус)
     // Новичек или Сильный или Обычный

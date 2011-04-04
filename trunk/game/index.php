@@ -112,6 +112,8 @@ else if ( $_GET['page'] === "pranger" ) { include "pages/pranger.php"; exit (); 
 else if ( $_GET['page'] === "bericht" ) { include "pages/bericht.php"; exit (); }
 else if ( $_GET['page'] === "allianzdepot" ) { include "pages/allianzdepot.php"; exit (); }
 else if ( $_GET['page'] === "sprungtor" ) { include "pages/sprungtor.php"; exit (); }
+else if ( $_GET['page'] === "micropayment" ) { include "pages/micropayment.php"; exit (); }
+else if ( $_GET['page'] === "trader" ) { include "pages/trader.php"; exit (); }
 
 RedirectHome ();
 
