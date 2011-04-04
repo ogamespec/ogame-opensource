@@ -57,16 +57,78 @@ function Admin_Users ()
     global $db_prefix;
     global $GlobalUser;
 
+    $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
+
     // Обработка POST-запроса.
 
     if ( key_exists("player_id", $_GET) ) {        // Информация об игроке
         $user = LoadUser ( $_GET['player_id'] );
         print_r ($user);
+?>
+    <table>
+    <form action="index.php?page=admin&session=<?=$session;?>&mode=Users&action=update&player_id=<?=$user['player_id'];?>" method="POST" >
+    <tr><td class=c><?=$user['oname'];?></td><td class=c>Настройки</td><td class=c>Исследования</td></tr>
+
+        <th valign=top><table>
+            <tr><th>ID</th><th>10001</th></tr>
+            <tr><th>Дата регистрации</th><th>10001</th></tr>
+            <tr><th>Альянс</th><th>10001</th></tr>
+            <tr><th>Дата вступления</th><th>10001</th></tr>
+            <tr><th>Постоянный адрес</th><th>10001</th></tr>
+            <tr><th>Временный адрес</th><th>10001</th></tr>
+            <tr><th>Удалить игрока</th><th>10001</th></tr>
+            <tr><th>Режим отпуска</th><th>10001</th></tr>
+            <tr><th>Заблокирован</th><th>10001</th></tr>
+            <tr><th>Бан атак</th><th>10001</th></tr>
+            <tr><th>Последний вход</th><th>10001</th></tr>
+            <tr><th>Активность</th><th>10001</th></tr>
+            <tr><th>IP адрес</th><th>10001</th></tr>
+            <tr><th>Активирован</th><th>10001</th></tr>
+            <tr><th>Главная планета</th><th>10001</th></tr>
+            <tr><th>Текущая планета</th><th>10001</th></tr>
+            <tr><th>Права</th><th>10001</th></tr>
+            <tr><th>Включить слежение</th><th>10001</th></tr>
+        </table></th>
+
+        <th valign=top><table>
+            <tr><th>Сортировка планет</th><th>10001</th></tr>
+            <tr><th>Порядок сортировки</th><th>10001</th></tr>
+            <tr><th>Скин</th><th>10001</th></tr>
+            <tr><th>Использовать скин</th><th>10001</th></tr>
+            <tr><th>Декативировать проверку IP</th><th>10001</th></tr>
+            <tr><th>Количество зондов</th><th>10001</th></tr>
+            <tr><th>Количество сообщений флота</th><th>10001</th></tr>
+            <tr><th>Язык интерфейса</th><th>10001</th></tr>
+            <tr><th colspan=2>&nbsp</th></tr>
+            <tr><td class=c colspan=2>Статистика</td></tr>
+            <tr><th>Очки (старые)</th><th>10001</th></tr>
+            <tr><th>Флот (старые)</th><th>10001</th></tr>
+            <tr><th>Исследования (старые)</th><th>10001</th></tr>
+            <tr><th>Очки</th><th>10001</th></tr>
+            <tr><th>Флот</th><th>10001</th></tr>
+            <tr><th>Исследования</th><th>10001</th></tr>
+            <tr><th>Дата старой статистики</th><th>10001</th></tr>
+        </table></th>
+
+        <th valign=top><table>
+<?php
+        foreach ( $resmap as $i=>$gid) {
+            echo "<tr><th>".loca("NAME_$gid")."</th><th><input type=\"text\" size=3 name=\"r$gid\" value=\"".$user["r$gid"]."\" /></th></tr>\n";
+        }
+?>
+        </table></th>
+    <tr><th colspan=3><input type="submit" value="Сохранить" /></th></tr>
+    </form>
+    </table>
+<?php
     }
     else {
         $query = "SELECT * FROM ".$db_prefix."users ORDER BY regdate DESC LIMIT 25";
         $result = dbquery ($query);
 
+        echo "    </th> \n";
+        echo "   </tr> \n";
+        echo "</table> \n";
         echo "Новые пользователи:<br>\n";
         echo "<table>\n";
         echo "<tr><td class=c>Дата регистрации</td><td class=c>Главная планета</td><td class=c>Имя игрока</td></tr>\n";
