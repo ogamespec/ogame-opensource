@@ -167,7 +167,7 @@ function EnumPlanets ()
 function EnumPlanetsGalaxy ($g, $s)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND (type > 0 AND type < 10002) AND type <> 10000";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND (type > 0 AND type < 10002) AND type <> 10000 ORDER BY p ASC";
     $result = dbquery ($query);
     return $result;
 }
