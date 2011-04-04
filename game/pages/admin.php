@@ -160,20 +160,67 @@ function Admin_Planets ()
         }
     }
 
+    // Обработка GET-запроса.
+    if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
+        $cp = $_GET['cp'];
+        $action = $_GET['action'];
+        $now = time();
+
+        if ( $action === "create_moon" )    // Создать луну
+        {
+            $planet = GetPlanet ($cp);
+            if ( $planet['type'] > 0 && $planet['type'] < 10000 )
+            {
+                if ( PlanetHasMoon ($cp) == 0 ) CreatePlanet ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id'], 0, 1);
+            }
+        }
+        else if ( $action === "create_debris" )    // Создать ПО
+        {
+            $planet = GetPlanet ($cp);
+            if ( $planet['type'] > 0 && $planet['type'] < 10000 )
+            {
+                if ( HasDebris ($planet['g'], $planet['s'], $planet['p']) == 0 ) CreateDebris ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id']);
+            }
+        }
+    }
+
     if ( key_exists("cp", $_GET) ) {     // Информация о планете.
         $planet = GetPlanet ( $_GET['cp'] );
         $user = LoadUser ( $planet['owner_id'] );
         $moon_id = PlanetHasMoon ( $planet['planet_id'] );
+        $debris_id = HasDebris ( $planet['g'], $planet['s'], $planet['p'] );
 
         echo "<table>\n";
         echo "<form action=\"index.php?page=admin&session=$session&mode=Planets&action=update&cp=".$planet['planet_id']."\" method=\"POST\" >\n";
         echo "<tr><td class=c colspan=2>Планета \"".$planet['name']."\" (<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>)</td>\n";
         echo "       <td class=c >Постройки</td> <td class=c >Флот</td> <td class=c >Оборона</td> </tr>\n";
-        echo "<tr><th><img src=\"".GetPlanetImage (UserSkin(), $planet['type'])."\"></th><th>";
-        if ($moon_id) {
-            $moon = GetPlanet ($moon_id);
-            echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$moon['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $moon['type'])."\"><br>\n";
-            echo $moon['name'] . "</a>";
+        echo "<tr><th><img src=\"".GetPlanetImage (UserSkin(), $planet['type'])."\">";
+        if ($planet['type'] == 10000 ) echo "<br>М: ".nicenum($planet['m'])."<br>К: ".nicenum($planet['k'])."<br>";
+        echo "</th><th>";
+        if ( $planet['type'] > 0 && $planet['type'] < 10000 )
+        {
+            if ($moon_id)
+            {
+                $moon = GetPlanet ($moon_id);
+                echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$moon['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $moon['type'])."\"><br>\n";
+                echo $moon['name'] . "</a>";
+            }
+            else echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=create_moon&cp=".$planet['planet_id']."\" >Создать луну</a>\n";
+            echo "<br/>\n";
+            if ($debris_id)
+            {
+                $debris = GetPlanet ($debris_id);
+                echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$debris['planet_id']."\"><img src=\"".UserSkin()."planeten/debris.jpg\"><br>\n";
+                echo $debris['name'] . "</a>";
+                echo "<br>М: ".nicenum($debris['m'])."<br>К: ".nicenum($debris['k'])."<br>";
+            }
+            else echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=create_debris&cp=".$planet['planet_id']."\" >Создать поле обломков</a>\n";
+        }
+        else
+        {
+            $parent = LoadPlanet ( $planet['g'], $planet['s'], $planet['p'], 1 );
+            echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$parent['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $parent['type'])."\"><br>\n";
+            echo $parent['name'] . "</a>";
         }
         echo "</th>";
 

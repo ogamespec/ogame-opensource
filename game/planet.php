@@ -40,7 +40,7 @@
 /*
 planet_id: Порядковый номер
 name: Название планеты CHAR(20)
-R type: тип планеты (порядковый номер картинки), если 0 - то это луна, если 10000 - это поле обломков, 10001 - уничтоженная планета, 10002 - фантом для колонизации
+R type: тип планеты (порядковый номер картинки), если 0 - то это луна, если 10000 - это поле обломков, 10001 - уничтоженная планета, 10002 - фантом для колонизации, 10003 - уничтоженная луна
 g,s,p: координаты где расположена планета
 owner_id: Порядковый номер пользователя-владельца
 R diameter: Диаметр планеты
@@ -211,7 +211,7 @@ function LoadPlanet ($g, $s, $p, $type)
     else return NULL;
 }
 
-// Если у планеты есть луна, возвратить её ID, иначе возвратить 0.
+// Если у планеты есть луна (даже уничтоженная), возвратить её ID, иначе возвратить 0.
 function PlanetHasMoon ( $planet_id )
 {
     global $db_prefix;
@@ -220,7 +220,7 @@ function PlanetHasMoon ( $planet_id )
     if ( dbrows ($result) == 0) return 0;    // Планета не найдена
     $planet = dbarray ($result);
     if ( $planet['type'] == 0) return 0;        // Планета сама является луной
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$planet['g']."' AND s = '".$planet['s']."' AND p = '".$planet['p']."' AND type = 0";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$planet['g']."' AND s = '".$planet['s']."' AND p = '".$planet['p']."' AND type = 0 OR type = 10003";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0) return 0;    // Луна у планеты не найдена.
     $planet = dbarray ($result);
@@ -279,21 +279,51 @@ function UpdatePlanetActivity ( $planet_id)
 // Проверяет, есть ли на данных координатах ПО. Возвращает id ПО, или 0.
 function HasDebris ($g, $s, $p)
 {
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = $g AND s = $s AND p = $p AND type = 10000";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0 ) return 0;
+    $debris = dbarray ($result);
+    return $debris['planet_id'];
 }
 
 // Создаёт новое ПО по указанным координатам
 function CreateDebris ($g, $s, $p, $owner_id)
 {
+    global $db_prefix;
+    $debris_id = HasDebris ($g, $s, $p);
+    if ($debris_id > 0 ) return $debris_id;
+    $now = time();
+    $id = IncrementDBGlobal ( 'nextplanet' );
+    $planet = array ( $id, "Поле обломков", 10000, $g, $s, $p, $owner_id, 0, 0, 0, 0, $now,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, $now, $now, 0 );
+    AddDBRow ( $planet, 'planets' );
+    return $id;
 }
 
 // Собрать ПО указанной грузоподъёмностью. В переменные m/k попадает собранное ПО.
 function HarvestDebris ($id, $cargo, &$m, &$k)
 {
+    global $db_prefix;
+    $debris = GetPlanet ($id);
+    $m = max (min ($debris['m'], $cargo / 2), 0);
+    $k = max (min ($debris['k'], $cargo / 2), 0);
+    $now = time ();
+    $planet_id = $debris['planet_id'];
+    $query = "UPDATE ".$db_prefix."planets SET m = m - $m, k = k - $k, lastpeek = $now WHERE planet_id = $planet_id";
+    dbquery ($query);
 }
 
 // Насыпать лома в указанное ПО
 function AddDebris ($id, $m, $k)
 {
+    global $db_prefix;
+    $now = time ();
+    $query = "UPDATE ".$db_prefix."planets SET m = m + $m, k = k + $k, lastpeek = $now WHERE planet_id = $id";
+    dbquery ($query);
 }
 
 // Получить игровой тип планеты.
@@ -324,12 +354,12 @@ function AbandonPlanet ($g, $s, $p)
     $now = time ();
 
     // Если на заданных координатах нет планеты, то просто добавить Уничтоженную планету.
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( type <> 0 AND type <> 10000);";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( type <> 0 AND type <> 10000 AND type <> 10003 );";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 ) 
     {
         $id = IncrementDBGlobal ( 'nextplanet' );
-        $planet = array( $id, "Уничтоженная планета", 10001, $g, $s, $p, 0, 0, 0, 0, 0, $now,
+        $planet = array( $id, "Уничтоженная планета", 10001, $g, $s, $p, 99999, 0, 0, 0, 0, $now,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -341,7 +371,7 @@ function AbandonPlanet ($g, $s, $p)
     else
     {
         $planet = dbarray ($result);
-        $query = "UPDATE ".$db_prefix."planets SET type = 10001, name = 'Уничтоженная планета', owner_id = 0, date = $now, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
+        $query = "UPDATE ".$db_prefix."planets SET type = 10001, name = 'Уничтоженная планета', owner_id = 99999, date = $now, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
         dbquery ( $query );
     }
 }
