@@ -77,14 +77,9 @@ function LoadAlly ($ally_id)
 function SearchAllyTag ($tag)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."ally WHERE tag LIKE '%".$tag."%'";
+    $query = "SELECT * FROM ".$db_prefix."ally WHERE tag LIKE '%".$tag."%' LIMIT 30";
     $result = dbquery ($query);
     return $result;
-}
-
-// Поиск альянсов по названию. Возвращает результат SQL-запроса.
-function SearchAllyName ($name)
-{
 }
 
 // ****************************************************************************
