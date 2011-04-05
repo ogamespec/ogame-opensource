@@ -70,6 +70,9 @@ function Admin_Users ()
     global $GlobalUser;
 
     $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
+    
+    $unitab = LoadUniverse ();
+    $speed = $unitab['speed'];
 
     // Обработка POST-запроса.
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 ) {
@@ -77,7 +80,44 @@ function Admin_Users ()
         $action = $_GET['action'];
         $now = time();
 
-        print_r ( $_POST );
+        if ($action === "update")        // Обновить данные пользователя.
+        {
+            $query = "UPDATE ".$db_prefix."users SET ";
+
+            foreach ( $resmap as $i=>$gid)
+            {
+                $query .= "r$gid = ".$_POST["r$gid"].", ";
+            }
+
+            if ( $_POST['deaktjava'] === "on" ) {
+                $query .= "disable = 1, disable_until = " . ($now+7*24*60*60).", ";
+            }
+            else $query .= "disable = 0, ";
+            if ( $_POST['vacation'] === "on" ) {
+                $query .= "vacation = 1, vacation_until = " . ($now+((2*24*60*60)/ $speed)) .", ";
+            }
+            else $query .= "vacation = 0, ";
+            if ( $_POST['banned'] !== "on" ) $query .= "banned = 0, ";
+            if ( $_POST['noattack'] !== "on" ) $query .= "noattack = 0, ";
+
+            $query .= "pemail = '".$_POST['pemail']."', ";
+            $query .= "email = '".$_POST['email']."', ";
+            $query .= "admin = '".$_POST['admin']."', ";
+            $query .= "validated = ".($_POST['validated']==="on"?1:0).", ";
+            $query .= "sniff = ".($_POST['sniff']==="on"?1:0).", ";
+
+            $query .= "sortby = '".$_POST['settings_sort']."', ";
+            $query .= "sortorder = '".$_POST['settings_order']."', ";
+            $query .= "skin = '".$_POST['dpath']."', ";
+            $query .= "useskin = ".($_POST['design']==="on"?1:0).", ";
+            $query .= "deact_ip = ".($_POST['deact_ip']==="on"?1:0).", ";
+            $query .= "maxspy = '".$_POST['spio_anz']."', ";
+            $query .= "maxfleetmsg = '".$_POST['settings_fleetactions']."', ";
+            $query .= "lang = '".$_POST['lang']."' ";
+
+            $query .= " WHERE player_id=$player_id;";
+            dbquery ($query);
+        }
     }
 
     if ( key_exists("player_id", $_GET) ) {        // Информация об игроке
@@ -122,7 +162,13 @@ function Admin_Users ()
     if ($user['noattack']) echo date ("Y-m-d H:i:s", $user['noattack_until']);
 ?></th></tr>
             <tr><th>Последний вход</th><th><?=date ("Y-m-d H:i:s", $user['lastlogin']);?></th></tr>
-            <tr><th>Активность</th><th><?=date ("Y-m-d H:i:s", $user['lastclick']);?></th></tr>
+            <tr><th>Активность</th><th>
+<?php
+    $now = time ();
+    echo date ("Y-m-d H:i:s", $user['lastclick']);
+    if ( ($now - $user['lastclick']) < 60*60 ) echo " (".floor(($now - $user['lastclick'])/60)." min)";
+?>
+</th></tr>
             <tr><th>IP адрес</th><th><?=$user['ip_addr'];?></th></tr>
             <tr><th>Активирован</th><th><input type="checkbox" name="validated" <?=IsChecked($user, "validated");?> /></th></tr>
             <tr><th>Главная планета</th><th>
