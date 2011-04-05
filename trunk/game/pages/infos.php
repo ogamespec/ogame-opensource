@@ -339,6 +339,8 @@ else
     while ($rows--)
     {
         $planet = dbarray ($result);
+        if ( $planet['planet_id'] == $aktplanet['planet_id'] ) continue;    // текущая луна
+        if ( $planet["b43"] == 0 ) continue;    // нет ворот
         if ( $planet['type'] != 0 || $now < $planet['gate_until'] ) continue;
         echo "             <option value=\"".$planet['planet_id']."\">".PlanetName($planet)." <a href=\"index.php?page=galaxy&galaxy=".$planet['g']."&system=".$planet['s']."&position=".$planet['p']."&session=$session\" >[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a></option>\n";
     }

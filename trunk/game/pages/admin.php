@@ -364,6 +364,24 @@ function Admin_Planets ()
                 if ( HasDebris ($planet['g'], $planet['s'], $planet['p']) == 0 ) CreateDebris ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id']);
             }
         }
+        else if ( $action === "cooldown_gates" )    // Остудить ворота
+        {
+            $planet = GetPlanet ($cp);
+            if ( $planet['type'] == 0 )
+            {
+                $query = "UPDATE ".$db_prefix."planets SET gate_until=0 WHERE planet_id=" . $planet['planet_id'];
+                dbquery ($query);
+            }
+        }
+        else if ( $action === "warmup_gates" )    // Нагреть ворота
+        {
+            $planet = GetPlanet ($cp);
+            if ( $planet['type'] == 0 )
+            {
+                $query = "UPDATE ".$db_prefix."planets SET gate_until=".($now+59*60+59)." WHERE planet_id=" . $planet['planet_id'];
+                dbquery ($query);
+            }
+        }
     }
 
     if ( key_exists("cp", $_GET) ) {     // Информация о планете.
@@ -371,6 +389,7 @@ function Admin_Planets ()
         $user = LoadUser ( $planet['owner_id'] );
         $moon_id = PlanetHasMoon ( $planet['planet_id'] );
         $debris_id = HasDebris ( $planet['g'], $planet['s'], $planet['p'] );
+        $now = time ();
 
         echo "<table>\n";
         echo "<form action=\"index.php?page=admin&session=$session&mode=Planets&action=update&cp=".$planet['planet_id']."\" method=\"POST\" >\n";
@@ -408,7 +427,17 @@ function Admin_Planets ()
 
         echo "<th valign=top><table>\n";
         foreach ( $buildmap as $i=>$gid) {
-            echo "<tr><th>".loca("NAME_$gid")."</th><th><input type=\"text\" size=3 name=\"b$gid\" value=\"".$planet["b$gid"]."\" /></th></tr>\n";
+            echo "<tr><th>".loca("NAME_$gid");
+            if ( $gid == 43 && $planet['type'] == 0 ) {    // управление воротами.
+                if ( $now >= $planet["gate_until"] ) {    // ворота готовы
+                    echo " <a href=\"index.php?page=admin&session=$session&mode=Planets&action=warmup_gates&cp=".$planet['planet_id']."\" >нагреть</a>";
+                }
+                else {    // ворота НЕ готовы
+                    $delta = $planet["gate_until"] - $now;
+                    echo " " . date ('i\m s\s', $delta) . " <a href=\"index.php?page=admin&session=$session&mode=Planets&action=cooldown_gates&cp=".$planet['planet_id']."\">остудить</a>";
+                }
+            }
+            echo "</th><th><input type=\"text\" size=3 name=\"b$gid\" value=\"".$planet["b$gid"]."\" /></th></tr>\n";
         }
         echo "</table></th>\n";
 
