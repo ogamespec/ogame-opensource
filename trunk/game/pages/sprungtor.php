@@ -70,23 +70,15 @@ if ( $GateError === "" )
         }
         $fleet[$gid] = $_POST["c$gid"];
     }
+    $fleet[212] = 0;    // лампы.
 }
 
 // Сделать переход
 if ( $GateError === "" )
 {
     // Перебросить флот
-    $query = "UPDATE ".$db_prefix."planets SET ";
-    $query2 = "UPDATE ".$db_prefix."planets SET ";
-    foreach ( $fleetmap as $i=>$gid)
-    {
-        $query .= "f$gid = f$gid + " . $fleet[$gid] . ", ";
-        $query2 .= "f$gid = f$gid - " . $fleet[$gid] . ", ";
-    }
-    $query .= " f212=f212 WHERE planet_id=$target_id";
-    $query2 .= " f212=f212 WHERE planet_id=$source_id";
-    dbquery ($query);
-    dbquery ($query2);
+    AdjustShips ( $fleet, $source_id, '-' );
+    AdjustShips ( $fleet, $target_id, '+' );
 
     // Нагреть ворота
     $now = time ();
