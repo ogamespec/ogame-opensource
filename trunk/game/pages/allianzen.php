@@ -13,6 +13,7 @@ $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
 ProdResources ( $GlobalUser['aktplanet'], $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
+$session = $_GET['session'];
 
 // Пользователь не состоит ни в каком альнсе, вывести меню для создания/поиска альянсов.
 function AllyPage_NoAlly ()
@@ -71,29 +72,6 @@ function AllyPage_SearchResult ($result)
     $SearchResults .= "</table><br>\n";
 }
 
-// Главная страница.
-function AllyPage_Home ()
-{
-    global $GlobalUser;
-    $ally = LoadAlly ($GlobalUser['ally_id']);
-
-    if ($ally['imglogo'] !== "") echo "<tr><th colspan=2><img src=\"img/preload.gif\" class=\"reloadimage\" title=\"pic.php?url=".$ally['imglogo']."\"></td></tr>\n";
-    echo "<table width=519>\n";
-    echo "<tr><td class=c colspan=2>Ваш альянс</td></tr>\n";
-    echo "<tr><th>Аббревиатура</th><th>".$ally['tag']."</th></tr>\n";
-    echo "<tr><th>Имя</th><th>".$ally['name']."</th></tr>\n";
-    echo "<tr><th>Члены</th><th>7 (<a href=\"index.php?page=allianzen&session=".$_GET['session']."&a=4\">список членов</a>)</th></tr>\n";
-    echo "<tr><th>Ваш ранг</th><th>Основатель (<a href=\"index.php?page=allianzen&session=".$_GET['session']."&a=5\">управление альянсом</a>)</th></tr>\n";
-    echo "<tr><th>Общее сообщение</th><th><a href=\"index.php?page=allianzen&session=".$_GET['session']."&a=17\">Послать общее сообщение</a></th></tr>\n";
-    echo "<tr><th colspan=2 height=100>\n";
-    echo $ally['exttext']."\n";
-    echo "</th></tr>\n";
-    echo "<tr><th>Домашняя страница</th><th><a href=\"redir.php?url=".$ally['homepage']."\" target=\"_blank\">".$ally['homepage']."</a></th></tr>\n";
-    echo "<tr><td class=c colspan=2>Внутренняя компетенция</th></tr>\n";
-    echo "<tr><th colspan=2 height=100></th></tr>\n";
-    echo "</table><br><br><br><br><br>\n";
-}
-
 // ***********************************************************
 
 // Ранг содержит особые символы
@@ -139,6 +117,12 @@ if ( $GlobalUser['ally_id'] == 0 )
 
 // ***********************************************************
 
+include "allianzen_main.php";
+include "allianzen_members.php";
+include "allianzen_ranks.php";
+include "allianzen_settings.php";
+include "allianzen_circular.php";
+
 PageHeader ("allianzen");
 
 echo "<!-- CONTENT AREA -->\n";
@@ -154,9 +138,16 @@ if ( $GlobalUser['ally_id'] == 0 )
 }
 else
 {
-
-    AllyPage_Home ();
-
+    if ( key_exists ('a', $_GET) )
+    {
+        if ( $_GET['a'] == 4 ) PageAlly_MemberList ();
+        else if ( $_GET['a'] == 5 ) PageAlly_Settings ();
+        else if ( $_GET['a'] == 6 || $_GET['a'] == 15 ) PageAlly_Ranks ();
+        else if ( $_GET['a'] == 7 ) PageAlly_MemberSettings ();
+        else if ( $_GET['a'] == 17 ) AllyPage_CircularMessage ();
+        else AllyPage_Home ();
+    }
+    else AllyPage_Home ();
 }
 
 echo "</center>\n";

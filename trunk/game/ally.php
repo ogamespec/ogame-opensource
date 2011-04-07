@@ -12,11 +12,11 @@
 // homepage: URL домашней страницы
 // imglogo: URL картинки логотипа
 // open: 0 - заявки запрещены (набор в альянс закрыт), 1 - заявки разрешены.
+// insertapp: 1 - автоматически подставлять шаблон заявки, 0 - не вставлять шаблон
 // exttext: Внешний текст (TEXT)
 // inttext: Внутренний текст (TEXT)
 // apptext: Текст заявки (TEXT)
 // nextrank: Порядковый номер следующего ранга (INT)
-// nextapp: Порядковый номер следующей заявки. (INT)
 
 // Создать альянс. Возвращает ID альянса.
 function CreateAlly ($owner_id, $tag, $name)
@@ -29,8 +29,12 @@ function CreateAlly ($owner_id, $tag, $name)
     $id = IncrementDBGlobal ( 'nextally' );
 
     // Добавить альянс.
-    $ally = array( $id, $tag, $name, $owner_id, "", "", 1, "Добро пожаловать на страничку альянса", "", "", 1, 1 );
+    $ally = array( $id, $tag, $name, $owner_id, "", "", 1, 0, "Добро пожаловать на страничку альянса", "", "", 0 );
     AddDBRow ( $ally, "ally" );
+
+    // Добавить ранги "Основатель" (0) и "Новичек" (1) .
+    SetRank ( $id, AddRank ( $id, "Основатель" ), 0x1FF );
+    SetRank ( $id, AddRank ( $id, "Новичек" ), 0 );
 
     // Обновить информацию пользователя-основателя.
     $joindate = time ();
@@ -82,11 +86,21 @@ function SearchAllyTag ($tag)
     return $result;
 }
 
+// Посчитать количество пользователей в альянсе.
+function CountAllyMembers ($ally_id)
+{
+    global $db_prefix;
+    if ( $ally_id <= 0 ) return 0;
+    $result = EnumerateAlly ($ally_id);
+    return dbrows ($result);
+}
+
 // ****************************************************************************
 // Ранги.
 
 // Разрешенные символы в названии ранга: [a-zA-Z0-9_-.]. Макс. длина - 30 символов
-// Не более 20 рангов на альянс.
+// Названия могут совпадать.
+// Не более 25 рангов на альянс.
 
 // 0x001: Распустить альянс
 // 0x002: Выгнать игрока
@@ -111,12 +125,12 @@ function AddRank ($ally_id, $name)
 }
 
 // Сохранить права для ранга.
-function SetRank ($rank_id, $rights)
+function SetRank ($ally_id, $rank_id, $rights)
 {
 }
 
 // Удалить ранг из альянса.
-function RemoveRank ($rank_id)
+function RemoveRank ($ally_id, $rank_id)
 {
 }
 
@@ -143,19 +157,25 @@ function GetUserRank ($player_id)
 // ally_id: ID альянса, которому принадлежит заявка
 // player_id: Номер пользователя, отправившего заявку 
 // text: Текст заявки (TEXT)
+// date: Дата подачи заявления time() (INT UNSIGNED)
 
 // Добавить заявку в альянс. Возвращает порядковый номер заявки.
 function AddApplication ($ally_id, $player_id, $text)
 {
 }
 
-// Удалить заявку из альянса.
+// Удалить заявку.
 function RemoveApplication ($app_id)
 {
 }
 
 // Перечислить все заявки в альянсе.
 function EnumApplications ($ally_id)
+{
+}
+
+// Пользователь уже подал заявку в альянс ? Если да - вернуть ID заявления, иначе вернуть 0.
+function GetUserApplication ($player_id)
 {
 }
 
