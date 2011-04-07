@@ -32,9 +32,9 @@ function CreateAlly ($owner_id, $tag, $name)
     $ally = array( $id, $tag, $name, $owner_id, "", "", 1, 0, "Добро пожаловать на страничку альянса", "", "", 0 );
     AddDBRow ( $ally, "ally" );
 
-    // Добавить ранги "Основатель" (0) и "Новичек" (1) .
+    // Добавить ранги "Основатель" (0) и "Новичок" (1) .
     SetRank ( $id, AddRank ( $id, "Основатель" ), 0x1FF );
-    SetRank ( $id, AddRank ( $id, "Новичек" ), 0 );
+    SetRank ( $id, AddRank ( $id, "Новичок" ), 0 );
 
     // Обновить информацию пользователя-основателя.
     $joindate = time ();
@@ -50,9 +50,10 @@ function DismissAlly ($ally_id)
 }
 
 // Перечислить всех игроков альянса.
-function EnumerateAlly ($ally_id)
+function EnumerateAlly ($ally_id, $sort_by=0, $order=0)
 {
     global $db_prefix;
+    if ($ally_id <= 0) return NULL;
     $query = "SELECT * FROM ".$db_prefix."users WHERE ally_id = $ally_id";
     $result = dbquery ($query);
     return $result;
@@ -121,32 +122,63 @@ function CountAllyMembers ($ally_id)
 // Добавить ранг с нулевыми правами в альянс. Возвращает порядковый номер ранга.
 function AddRank ($ally_id, $name)
 {
-
+    global $db_prefix;
+    if ($ally_id <= 0) return 0;
+    $ally = LoadAlly ($ally_id);
+    $rank = array ( $ally['nextrank'], $ally_id, $name, 0 );
+    $opt = " (";
+    foreach ($rank as $i=>$entry)
+    {
+        if ($i != 0) $opt .= ", ";
+        $opt .= "'".$rank[$i]."'";
+    }
+    $opt .= ")";
+    $query = "INSERT INTO ".$db_prefix."allyranks VALUES".$opt;
+    dbquery ($query);
+    $query = "UPDATE ".$db_prefix."ally SET nextrank = nextrank + 1 WHERE ally_id = $ally_id";
+    dbquery ($query);
+    return $ally['nextrank'];
 }
 
 // Сохранить права для ранга.
 function SetRank ($ally_id, $rank_id, $rights)
 {
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."allyranks SET rights = $rights WHERE ally_id = $ally_id AND rank_id = $rank_id";
+    dbquery ($query);
 }
 
 // Удалить ранг из альянса.
 function RemoveRank ($ally_id, $rank_id)
 {
+    global $db_prefix;
+    $query = "DELETE FROM ".$db_prefix."allyranks WHERE ally_id = $ally_id AND rank_id = $rank_id";
+    dbquery ($query);
 }
 
 // Перечислить все ранги в альянсе.
 function EnumRanks ($ally_id)
 {
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."allyranks WHERE ally_id = $ally_id";
+    return dbquery ($query);
 }
 
 // Назначить ранг определенному игроку.
 function SetUserRank ($player_id, $rank)
 {
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."users SET allyrank = $rank WHERE player_id = $player_id";
+    dbquery ($query);
 }
 
-// Получить ранг игрока
-function GetUserRank ($player_id)
+// Загрузить ранг.
+function LoadRank ($ally_id, $rank_id)
 {
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."allyranks WHERE ally_id = $ally_id AND rank_id = $rank_id";
+    $result = dbquery ($query);
+    return dbarray ($result);
 }
 
 // ****************************************************************************
