@@ -138,6 +138,8 @@ if ( $GlobalUser['ally_id'] == 0 )
 }
 else
 {
+    $ally = LoadAlly ($GlobalUser['ally_id']);
+
     if ( key_exists ('a', $_GET) )
     {
         if ( $_GET['a'] == 4 ) PageAlly_MemberList ();

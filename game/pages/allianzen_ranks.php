@@ -4,7 +4,14 @@
 
 function PageAlly_Ranks ()
 {
+    global $GlobalUser;
     global $session;
+    global $ally;
+
+    if ( method() === "POST" )
+    {
+        print_r ( $_POST );
+    }
 
 ?>
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script><br />
@@ -45,11 +52,22 @@ function PageAlly_Ranks ()
    <img src=img/r9.png>
   </th>
  </tr>
- <tr>
 <?php
-    echo "  <th><a href=\"index.php?page=allianzen&session=$session&a=15&d=2\"><img src=\"http://uni20.ogame.de/evolution/pic/abort.gif\" alt=\"Удалить ранг\" border=\"0\"></a></th>\n";
-    echo "  <th>&nbsp;1111&nbsp;</th>\n";
-    echo "  <th><input type=checkbox name=\"u2r0\"></th><th><input type=checkbox name=\"u2r1\"></th><th><input type=checkbox name=\"u2r2\"></th><th><input type=checkbox name=\"u2r3\"></th><th><input type=checkbox name=\"u2r4\"></th><th><input type=checkbox name=\"u2r5\"></th><th><input type=checkbox name=\"u2r6\"></th><th><input type=checkbox name=\"u2r7\"></th><th><input type=checkbox name=\"u2r8\"></th> </tr>\n";
+
+    $result = EnumRanks ( $ally['ally_id'] );
+    $rows = dbrows ($result);
+    while ($rows--)
+    {
+        $rank = dbarray ($result);
+        echo " <tr>\n";
+        echo "  <th><a href=\"index.php?page=allianzen&session=$session&a=15&d=".$rank['rank_id']."\"><img src=\"".UserSkin()."pic/abort.gif\" alt=\"Удалить ранг\" border=\"0\"></a></th>\n";
+        echo "  <th>&nbsp;".$rank['name']."&nbsp;</th>\n";
+        for ($r=0; $r<9; $r++) {
+            if ($rank['rights'] & (1 << $r))  echo "<th><input type=checkbox name=\"u".$rank['rank_id']."r$r\" checked></th>";
+            else echo "<th><input type=checkbox name=\"u".$rank['rank_id']."r$r\"></th>";
+        }
+        echo " </tr>\n";
+    }
 ?>
  <tr>
   <th colspan="11"><input type="submit" value="Сохранить"></th>
