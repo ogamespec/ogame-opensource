@@ -36,9 +36,9 @@ if (file_exists ("config.php"))
 if ( key_exists("install", $_POST) && CheckParameters() )
 {
     $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','queue','fleet');
-    $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','nextplanet','nextally','nextmsg','nextnote','nextbuddy','nexterror','nexttask','nextfleet', 
+    $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','nextplanet','nextally','nextapp','nextmsg','nextnote','nextbuddy','nexterror','nexttask','nextfleet', 
                               'news1', 'news2', 'news_until', 'startdate' );
-    $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
+    $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
                               'TEXT', 'TEXT', 'INT UNSIGNED', 'INT UNSIGNED' );
     $usercols = array ( 'player_id', 'regdate', 'ally_id', 'joindate', 'allyrank', 'session', 'private_session', 'name', 'oname', 'name_changed', 'name_until', 'password', 'pemail', 'email',
                         'email_changed', 'email_until', 'disable', 'disable_until', 'vacation', 'vacation_until', 'banned', 'banned_until', 'noattack', 'noattack_until',
@@ -66,12 +66,12 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                           'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT',
                           'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 
                           'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED' );
-    $allycols = array ( 'ally_id', 'tag', 'name', 'owner_id', 'homepage', 'imglogo', 'open', 'exttext', 'inttext', 'apptext', 'nextrank', 'nextapp' );
-    $allytype = array ( 'INT PRIMARY KEY', 'TEXT', 'TEXT', 'INT', 'TEXT', 'TEXT', 'INT', 'TEXT', 'TEXT', 'TEXT', 'INT', 'INT' );
+    $allycols = array ( 'ally_id', 'tag', 'name', 'owner_id', 'homepage', 'imglogo', 'open', 'insertapp', 'exttext', 'inttext', 'apptext', 'nextrank' );
+    $allytype = array ( 'INT PRIMARY KEY', 'TEXT', 'TEXT', 'INT', 'TEXT', 'TEXT', 'INT', 'INT', 'TEXT', 'TEXT', 'TEXT', 'INT' );
     $rankscols = array ( 'rank_id', 'ally_id', 'name', 'rights' );
     $rankstype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'INT' );
-    $appscols = array ( 'app_id', 'ally_id', 'player_id', 'text' );
-    $appstype = array ( 'INT PRIMARY KEY', 'INT', 'INT', 'TEXT' );
+    $appscols = array ( 'app_id', 'ally_id', 'player_id', 'text', 'date' );
+    $appstype = array ( 'INT PRIMARY KEY', 'INT', 'INT', 'TEXT', 'INT UNSIGNED' );
     $buddycols = array ( 'buddy_id', 'request_from', 'request_to', 'text', 'accepted' );
     $buddytype = array ( 'INT PRIMARY KEY', 'INT', 'INT', 'TEXT', 'INT' );
     $messagescols = array ( 'msg_id', 'owner_id', 'pm', 'msgfrom', 'subj', 'text', 'shown', 'date' );
@@ -135,6 +135,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "usercount = '1', ";
     $query .= "nextplanet = '10000', ";
     $query .= "nextally = '1', ";
+    $query .= "nextapp = '10000', ";
     $query .= "nextmsg = '10000', ";
     $query .= "nextnote = '1', ";
     $query .= "nextbuddy = '1', ";
