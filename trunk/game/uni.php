@@ -28,4 +28,12 @@ function DisableNews ()
     dbquery ($query);
 }
 
+// Установить параметры вселенной (все одновременно)
+function SetUniParam ($speed, $acs, $fid, $did, $defrepair, $defrepair_delta, $galaxies, $systems)
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."uni SET speed=$speed, acs=$acs, fid=$fid, did=$did, defrepair=$defrepair, defrepair_delta=$defrepair_delta, galaxies=$galaxies, systems=$systems";
+    dbquery ($query);
+}
+
 ?>
