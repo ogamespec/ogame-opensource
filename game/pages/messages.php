@@ -25,6 +25,11 @@ echo "<center>\n";
 //echo "GET: "; print_r ($_GET); echo "<br>";
 //echo "POST: "; print_r ($_POST); echo "<br>";
 
+if ( method() === "POST" )
+{
+    print_r ($_POST);
+}
+
 echo "<table class='header'><tr class='header'><td><table width=\"519\">\n";
 echo "<form action=\"index.php?page=messages&dsp=1&session=".$_GET['session']."\" method=\"POST\">\n";
 echo "<tr><td colspan=\"4\" class=\"c\">Сообщения</td></tr>\n";

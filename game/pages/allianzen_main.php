@@ -13,6 +13,14 @@ function AllyPage_Home ()
 
 ?>
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
+<?php
+    if ( $ally['imglogo'] !== "" ) 
+    {
+?>
+<tr><th colspan=2><img src="/game/img/preload.gif" class="reloadimage" title="pic.php?url=<?=$ally['imglogo'];?>"></td></tr>
+<?php
+    }
+?>
 <table width=519>
 <tr><td class=c colspan=2>Ваш альянс</td></tr>
 <tr><th>Аббревиатура</th><th><?=$ally['tag'];?></th></tr>

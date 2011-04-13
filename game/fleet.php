@@ -353,7 +353,7 @@ function GetMissionNameDebug ($num)
     }
 }
 
-// Получить описание задания (для отладки)
+// Получить описание задания
 function GetMissionName ($num)
 {
     switch ($num)

@@ -71,7 +71,7 @@ function SendMessage ($player_id, $from, $subj, $text, $pm)
     // Обработать параметры.
     if ($pm == 0) {
         $text = mb_substr ($text, 0, 2000, "UTF-8");
-        $text = bb ($text);
+        //$text = bb ($text);
     }
 
     // Получить количество сообщений для пользователя.
