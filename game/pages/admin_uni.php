@@ -18,12 +18,14 @@ function Admin_Uni ()
     {
         if ( key_exists ('news_upd', $_POST) )        // Обновить новости
         {
-            UpdateNews ( $_POST['news1'], $_POST['news2'], $_POST['news_upd'] );
+            if ( $_POST['news_upd'] > 0 ) UpdateNews ( $_POST['news1'], $_POST['news2'], $_POST['news_upd'] );
         }
         if ( $_POST['news_off'] === "on" )    // Убрать новости
         {
             DisableNews ();
         }
+
+        SetUniParam ( $_POST['speed'], $_POST['acs'], $_POST['fid'], $_POST['did'], $_POST['defrepair'], $_POST['defrepair_delta'], $_POST['galaxies'], $_POST['systems'] );
 
         //print_r ( $_POST );
     }
@@ -108,7 +110,7 @@ function Admin_Uni ()
 <tr><th>Новость 1</th><th><input type="text" name="news1" maxlength="99" size="20" value="<?=$unitab['news1'];?>" /></th></tr>
 <tr><th>Новость 2</th><th><input type="text" name="news2" maxlength="99" size="20" value="<?=$unitab['news2'];?>" /></th></tr>
 <?php
-    if ( $now > $unitab['news_until'] ) echo "<tr><th>Продлить новость</th><th><input type=\"text\" name=\"news_upd\" maxlength=\"3\" size=\"3\" value=\"1\" /> дн.</th></tr>\n";
+    if ( $now > $unitab['news_until'] ) echo "<tr><th>Продлить новость</th><th><input type=\"text\" name=\"news_upd\" maxlength=\"3\" size=\"3\" value=\"0\" /> дн.</th></tr>\n";
     else echo "<tr><th>Показывать новость до</th><th>".date ("Y-m-d H:i:s", $unitab['news_until'])." <input type=\"checkbox\" name=\"news_off\"  /> убрать</th></tr>\n";
 ?>
 <tr><th colspan=2><input type="submit" value="Сохранить" /></th></tr>
