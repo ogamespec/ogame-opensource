@@ -70,7 +70,7 @@ if ( key_exists ('gesendet', $_GET) )
             $from = $GlobalUser['oname'] . " <a href=\"index.php?page=galaxy&galaxy=".$ownhome['g']."&system=".$ownhome['s']."&position=".$ownhome['p']."&session={PUBLIC_SESSION}\">[".$ownhome['g'].":".$ownhome['s'].":".$ownhome['p']."]</a>\n";
             $subj = $subj . " <a href=\"index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=".$GlobalUser['player_id']."&re=1&betreff=Re:".$subj."\">\n"
                        . "<img border=\"0\" alt=\"Ответить\" src=\"".UserSkin()."img/m.gif\" /></a>\n";            
-            SendMessage ( $user['player_id'], $from, $subj, $text, 0);
+            SendMessage ( $user['player_id'], $from, $subj, bb($text), 0);
             $write_error = "<center><font color=#00FF00>Сообщение отправлено</font><br/></center>\n";
         }
     }

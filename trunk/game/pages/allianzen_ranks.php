@@ -8,9 +8,38 @@ function PageAlly_Ranks ()
     global $session;
     global $ally;
 
-    if ( method() === "POST" )
+    if ( method() === "POST" && $_GET['a'] == 15 ) 
     {
-        print_r ( $_POST );
+        if ( key_exists ('newrangname', $_POST) )       // создать ранг
+        {
+            AddRank ( $ally['ally_id'], $_POST['newrangname'] );
+        }
+        else                                                              // изменить ранги
+        {
+            $result = EnumRanks ( $ally['ally_id'] );
+            $rows = dbrows ($result);
+            while ($rows--)
+            {
+                $rank = dbarray ($result);
+                if ( $rank['rank_id'] == 0 || $rank['rank_id'] == 1 ) continue;    // Основателя и Новичка не меняем.
+                $mask = $rank['rights'];
+                for ($i=0; $i<9; $i++)
+                {
+                    if ( $_POST["u".$rank['rank_id']."r$i"] === "on" ) $mask |= (1 << $i);
+                    else $mask &= ~(1 << $i);
+                }
+                SetRank ( $ally['ally_id'], $rank['rank_id'], $mask );
+            }
+        }
+    }
+
+    if ( method () === "GET" && $_GET['a'] == 15 )    // удалить ранг
+    {
+        $rank_id = $_GET['d'];
+        if ( ! ($rank_id == 0 || $rank_id == 1)  )        // Основателя и Новичка не удаляем.
+        {
+            RemoveRank ( $ally['ally_id'], $rank_id );
+        }
     }
 
 ?>
@@ -59,6 +88,7 @@ function PageAlly_Ranks ()
     while ($rows--)
     {
         $rank = dbarray ($result);
+        if ( $rank['rank_id'] == 0 || $rank['rank_id'] == 1 ) continue;    // Основателя и Новичка не показываем.
         echo " <tr>\n";
         echo "  <th><a href=\"index.php?page=allianzen&session=$session&a=15&d=".$rank['rank_id']."\"><img src=\"".UserSkin()."pic/abort.gif\" alt=\"Удалить ранг\" border=\"0\"></a></th>\n";
         echo "  <th>&nbsp;".$rank['name']."&nbsp;</th>\n";

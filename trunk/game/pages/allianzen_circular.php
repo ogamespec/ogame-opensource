@@ -4,7 +4,57 @@
 
 function AllyPage_CircularMessage ()
 {
+    global $db_prefix;
+    global $GlobalUser;
     global $session;
+    global $ally;
+
+    if ( method () === "POST" && key_exists ('r', $_POST) )
+    {
+        $ally_id = $ally['ally_id'];
+        $rank_id = $_POST['r'];
+        if ( $rank_id == 0 ) $query = "SELECT * FROM ".$db_prefix."users WHERE ally_id = $ally_id";
+        else $query = "SELECT * FROM ".$db_prefix."users WHERE ally_id = $ally_id AND allyrank = $rank_id";
+        $result = dbquery ($query);
+        $rows = dbrows ( $result );
+        if ( $rows )
+        {
+?>
+<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
+<table width=519>
+<form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
+<tr><td class=c>Следующие игроки получили Ваше общее послание</td></tr>
+<tr><th>
+<?php
+            while ($rows--)
+            {
+                $user = dbarray ($result);
+                SendMessage ( $user['player_id'], 
+                                       va ( "Альянс [#1]", $ally['tag'] ),
+                                       va ( "Общее послание Вашему альянсу [#1]", $ally['tag'] ), 
+                                       va ( "Игрок #1 сообщает Вам следующее:<br>#2", $GlobalUser['oname'], bb ($_POST['text']) ), 0 );
+                echo $user['oname'] . "<br>\n";
+            }
+?>
+</th></tr>
+<tr><th><input type=submit value="Ok"></th></tr>
+</table></center></form>
+<?php
+        }
+        else
+        {
+?>
+<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
+<table width=519>
+<form action="index.php?page=allianzen&session=<?=$session;?>&a=17" method=POST>
+<tr><td class=c>Ошибка</td></tr>
+<tr><th>К сожалению, получатели не найдены</th></tr>
+<tr><th><input type=submit value="Назад"></th></tr>
+</table></center></form>
+<?php
+        }
+        return;
+    }
 
 ?>
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
@@ -14,8 +64,16 @@ function AllyPage_CircularMessage ()
 <tr><th>Получатель</th><th>
 <select name=r>
     <option value=0>Все игроки</option>
-    <option value=2>Только определённому рангу: 1111</option>
-    <option value=3>Только определённому рангу: 2222</option>
+<?php
+    $result = EnumRanks ( $ally['ally_id'] );
+    $rows = dbrows ($result);
+    while ($rows--)
+    {
+        $rank = dbarray ($result);
+        if ( $rank['rank_id'] == 0 || $rank['rank_id'] == 1 ) continue;    // Основателя и новичка не показываем
+        echo "    <option value=".$rank['rank_id'].">Только определённому рангу: ".$rank['name']."</option>\n";
+    }
+?>
 </select></th></tr>
 <tr><th>Текст сообщения (<span id="cntChars">0</span> / 2000 Симв.)</th><th><textarea name=text cols=60 rows=10 onkeyup="javascript:cntchar(2000)"></textarea></th></tr>
 <tr><th colspan=2><input type=submit value="Отправить"></th></tr></table></center></form>
