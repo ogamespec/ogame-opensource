@@ -194,21 +194,49 @@ function LoadRank ($ally_id, $rank_id)
 // Добавить заявку в альянс. Возвращает порядковый номер заявки.
 function AddApplication ($ally_id, $player_id, $text)
 {
+    $id = IncrementDBGlobal ( 'nextapp' );
+    $app = array ( $id, $ally_id, $player_id, $text, time() );
+    AddDBRow ( $app, "allyapps" );
+    return $id;
 }
 
 // Удалить заявку.
 function RemoveApplication ($app_id)
 {
+    global $db_prefix;
+    $query = "DELETE FROM ".$db_prefix."allyapps WHERE app_id = $app_id";
+    dbquery ($query);
 }
 
 // Перечислить все заявки в альянсе.
 function EnumApplications ($ally_id)
 {
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."allyapps WHERE ally_id = $ally_id";
+    return dbquery ($query);
 }
 
 // Пользователь уже подал заявку в альянс ? Если да - вернуть ID заявления, иначе вернуть 0.
 function GetUserApplication ($player_id)
 {
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."allyapps WHERE player_id = $player_id";
+    $result = dbquery ($query);
+    if ( dbrows ($result) > 0 )
+    {
+        $app = dbarray ($result);
+        return $app['app_id'];
+    }
+    else return 0;
+}
+
+// Загрузить заявление.
+function LoadApplication ($app_id)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."allyapps WHERE app_id = $app_id";
+    $result = dbquery ($query);
+    return dbarray ($result);
 }
 
 // ****************************************************************************
