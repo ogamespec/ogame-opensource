@@ -64,17 +64,18 @@ function mail_utf8($to, $subject = '(No subject)', $message = '', $header = '') 
 // Выслать приветственное письмо с ссылкой для активации аккаунта.
 function SendGreetingsMail ( $name, $pass, $email, $ack)
 {
-    global $Host;
+    $unitab = LoadUniverse ();
+    $uni = $unitab['num'];
     $text = "Приветствуем $name,\n\n" .
                 "Вы решили создать свою империю в $uni-й вселенной ОГейма!\n\n" .
                 "Нажмите на эту ссылку для активации Вашего аккаунта:\n" .
-                $Host."index.php?page=validate&ack=$ack\n\n" .
+                hostname()."game/validate.php?ack=$ack\n\n" .
                 "Ваши игровые данные:\n" .
                 "Игровое имя: $name\n" .
                 "Пароль: $pass\n" .
                 "Вселенная: $uni\n\n\n" .
-                "Если Вам понадобится помощь или совет других императоров, то всё это Вы сможете найти на нашем форуме (http://board.ogame.ru).\n\n" .
-                "Здесь (http://tutorial.ogame.ru) собрана вся информация, собранная игроками и членами команды для того, чтобы помочь новичкам как можно быстрее разобраться в игре.\n\n" .
+                "Если Вам понадобится помощь или совет других императоров, то всё это Вы сможете найти на нашем форуме (http://board.oldogame.ru).\n\n" .
+                "Здесь (http://tutorial.oldogame.ru) собрана вся информация, собранная игроками и членами команды для того, чтобы помочь новичкам как можно быстрее разобраться в игре.\n\n" .
                 "Желаем успехов в построении империи и удачи в предстоящих боях!\n\n" .
                 "Ваша команда ОГейма";
     //echo "<pre>$text</pre><br>\n";
@@ -85,11 +86,13 @@ function SendGreetingsMail ( $name, $pass, $email, $ack)
 function SendChangeMail ( $name, $email, $pemail, $ack)
 {
     global $Host;
+    $unitab = LoadUniverse ();
+    $uni = $unitab['num'];
     $text = "Приветствуем $name,\n\n" .
                "временный адрес e-mail Вашего аккаунта в $uni-й вселенной был изменён в настройках на $email.\n" .
                "Если Вы его не измените в течение недели, то он станет постоянным.\n\n" .
                "Чтобы беспрепятственно продолжить игру, подтвердите ваш новый адрес e-mail по следующей ссылке:\n\n" .
-               $Host."index.php?page=validate&ack=$ack\n\n" .
+               hostname()."game/validate.php?ack=$ack\n\n" .
                "Ваша команда OGame";
     mail_utf8 ( $pemail, "Ваш игровой электронный адрес изменён ", $text, "From: OGame Uni ru $uni <noreply@mmogame.com>");
 }
@@ -105,10 +108,8 @@ function SendGreetingsMessage ( $player_id)
         . "Выберите рудник по добыче металла и нажмите на \"строить\".\n"
         . "Теперь у Вас есть немного времени для ознакомления с игрой.\n"
         . "Помощь по игре Вы можете найти по этим ссылкам: \n"
-        . "[url=http://tutorial.ogame.ru/]Туториал (англ.)[/url]\n"
-        . "[url=http://board.ogame.ru]Форум[/url]\n"
-        . "Также Вы можете обратиться на канал службы поддержки:\n"
-        . "http://www.onlinegamesnet.net/javaChat.php\n"
+        . "[url=http://tutorial.oldogame.ru/]Туториал[/url]\n"
+        . "[url=http://board.oldogame.ru]Форум[/url]\n"
         . "\n"
         . "Тем временем Ваш рудник уже должен построиться.\n"
         . "Для работы рудников необходима энергия, для её получения постройте солнечную электростанцию.\n"
@@ -239,7 +240,7 @@ function ValidateUser ($code)
     }
     $query = "UPDATE ".$db_prefix."users SET validatemd = '', validated = 1 WHERE player_id = ".$user['player_id'];
     dbquery ($query);
-    Login ( $user['oname'], "", $user['password'] );
+    Login ( $user['oname'], "", $user['password'], 1 );
 }
 
 // Проверить пароль. Возвращает 0, или ID пользователя.
@@ -406,7 +407,7 @@ function CheckSession ( $session )
 }
 
 // Login - Вызывается с главной страницы, после регистрации или активации нового пользователя.
-function Login ( $login, $pass, $passmd="" )
+function Login ( $login, $pass, $passmd="", $from_validate=0 )
 {
     global $db_prefix, $db_secret;
 
@@ -440,7 +441,8 @@ function Login ( $login, $pass, $passmd="" )
         SelectPlanet ($player_id, $user['hplanetid']);
 
         // Редирект на Обзор Главной планеты.
-        echo "<html><head><meta http-equiv='refresh' content='0;url=../index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
+        if ( $from_validate) echo "<html><head><meta http-equiv='refresh' content='0;url=index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
+        else echo "<html><head><meta http-equiv='refresh' content='0;url=../index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
     }
     else
     {
