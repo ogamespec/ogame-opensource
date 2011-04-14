@@ -66,8 +66,8 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                           'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT',
                           'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 
                           'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED' );
-    $allycols = array ( 'ally_id', 'tag', 'name', 'owner_id', 'homepage', 'imglogo', 'open', 'insertapp', 'exttext', 'inttext', 'apptext', 'nextrank' );
-    $allytype = array ( 'INT PRIMARY KEY', 'TEXT', 'TEXT', 'INT', 'TEXT', 'TEXT', 'INT', 'INT', 'TEXT', 'TEXT', 'TEXT', 'INT' );
+    $allycols = array ( 'ally_id', 'tag', 'name', 'owner_id', 'homepage', 'imglogo', 'open', 'insertapp', 'exttext', 'inttext', 'apptext', 'nextrank', 'old_tag', 'old_name', 'tag_until', 'name_until' );
+    $allytype = array ( 'INT PRIMARY KEY', 'TEXT', 'TEXT', 'INT', 'TEXT', 'TEXT', 'INT', 'INT', 'TEXT', 'TEXT', 'TEXT', 'INT', 'TEXT', 'TEXT', 'INT UNSIGNED', 'INT UNSIGNED' );
     $rankscols = array ( 'rank_id', 'ally_id', 'name', 'rights' );
     $rankstype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'INT' );
     $appscols = array ( 'app_id', 'ally_id', 'player_id', 'text', 'date' );
