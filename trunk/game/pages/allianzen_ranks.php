@@ -7,6 +7,14 @@ function PageAlly_Ranks ()
     global $GlobalUser;
     global $session;
     global $ally;
+    global $AllianzenError;
+
+    $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
+    if ( ! ($myrank['rights'] & 0x020) )
+    {
+        $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
+        return;
+    }
 
     if ( method() === "POST" && $_GET['a'] == 15 ) 
     {

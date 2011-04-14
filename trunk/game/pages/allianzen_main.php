@@ -38,7 +38,11 @@ function AllyPage_Home ()
 ?>
 </th></tr>
 <tr><th>Члены</th><th><?=$members;?> (<a href="index.php?page=allianzen&session=<?=$session;?>&a=4">список членов</a>)</th></tr>
-<tr><th>Ваш ранг</th><th><?=$rank['name'];?> (<a href="index.php?page=allianzen&session=<?=$session;?>&a=5">управление альянсом</a>)</th></tr>
+<tr><th>Ваш ранг</th><th><?=$rank['name'];?>
+<?php
+    if ( $rank['rights'] & 0x020 ) echo " (<a href=\"index.php?page=allianzen&session=$session&a=5\">управление альянсом</a>)";
+?>
+</th></tr>
 <?php
     if ( $apps > 0 )
     {
@@ -47,7 +51,14 @@ function AllyPage_Home ()
 <?php
     }
 ?>
+<?php
+    if ( $rank['rights'] & 0x080 )
+    {
+?>
 <tr><th>Общее сообщение</th><th><a href="index.php?page=allianzen&session=<?=$session;?>&a=17">Послать общее сообщение</a></th></tr>
+<?php
+    }
+?>
 <tr><th colspan=2 height=100><?=$ally['exttext'];?></th></tr>
 <tr><th>Домашняя страница</th><th><a href="redir.php?url=<?=$ally['homepage'];?>" target="_blank"><?=$ally['homepage'];?></a></th></tr>
 <tr><td class=c colspan=2>Внутренняя компетенция</th></tr><tr><th colspan=2 height=100><?=$ally['inttext'];?></th></tr>

@@ -57,7 +57,9 @@ function PageAlly_ChangeTag ()
     if ( method() === "POST" && $_GET['a'] == 9 && $_GET['weiter'] == 1)
     {
         $now = time ();
-        if ( $now < $ally['tag_until'] ) $AllianzenError = "<center>\nПодождите до ".date ("Y-m-d H:i:s", $ally['tag_until'])."<br></center>";
+        $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
+        if ( ! ($myrank['rights'] & 0x020) ) $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
+        else if ( $now < $ally['tag_until'] ) $AllianzenError = "<center>\nПодождите до ".date ("Y-m-d H:i:s", $ally['tag_until'])."<br></center>";
         else
         {
             AllyChangeTag ( $ally['ally_id'], $_POST['newtag'] );
@@ -94,7 +96,9 @@ function PageAlly_ChangeName ()
     if ( method() === "POST" && $_GET['a'] == 10 && $_GET['weiter'] == 1)
     {
         $now = time ();
-        if ( $now < $ally['name_until'] ) $AllianzenError = "<center>\nПодождите до ".date ("Y-m-d H:i:s", $ally['name_until'])."<br></center>";
+        $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
+        if ( ! ($myrank['rights'] & 0x020) ) $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
+        else if ( $now < $ally['name_until'] ) $AllianzenError = "<center>\nПодождите до ".date ("Y-m-d H:i:s", $ally['name_until'])."<br></center>";
         else
         {
             AllyChangeName ( $ally['ally_id'], $_POST['newname'] );
