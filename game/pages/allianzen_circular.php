@@ -8,10 +8,17 @@ function AllyPage_CircularMessage ()
     global $GlobalUser;
     global $session;
     global $ally;
+    global $AllianzenError;
 
     if ( method () === "POST" && key_exists ('r', $_POST) )
     {
         $ally_id = $ally['ally_id'];
+        $myrank = LoadRank ( $ally_id, $GlobalUser['allyrank'] );
+        if ( ! ($myrank['rights'] & 0x080) )
+        {
+            $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
+            return;
+        }
         $rank_id = $_POST['r'];
         if ( $rank_id == 0 ) $query = "SELECT * FROM ".$db_prefix."users WHERE ally_id = $ally_id";
         else $query = "SELECT * FROM ".$db_prefix."users WHERE ally_id = $ally_id AND allyrank = $rank_id";
