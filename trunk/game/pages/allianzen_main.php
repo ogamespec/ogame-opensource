@@ -8,6 +8,7 @@ function AllyPage_Home ()
     global $session;
     global $ally;
 
+    $now = time ();
     $members = CountAllyMembers ( $ally['ally_id'] );
     $rank = LoadRank ( $GlobalUser['ally_id'], $GlobalUser['allyrank'] );
 
@@ -26,8 +27,16 @@ function AllyPage_Home ()
 ?>
 <table width=519>
 <tr><td class=c colspan=2>Ваш альянс</td></tr>
-<tr><th>Аббревиатура</th><th><?=$ally['tag'];?></th></tr>
-<tr><th>Имя</th><th><?=$ally['name'];?></th></tr>
+<tr><th>Аббревиатура</th><th><?=$ally['tag'];?>
+<?php
+    if ( $now < $ally['tag_until'] ) echo " (бывш. ".$ally['old_tag'].")";
+?>
+</th></tr>
+<tr><th>Имя</th><th><?=$ally['name'];?>
+<?php
+    if ( $now < $ally['name_until'] ) echo " (бывш. ".$ally['old_name'].")";
+?>
+</th></tr>
 <tr><th>Члены</th><th><?=$members;?> (<a href="index.php?page=allianzen&session=<?=$session;?>&a=4">список членов</a>)</th></tr>
 <tr><th>Ваш ранг</th><th><?=$rank['name'];?> (<a href="index.php?page=allianzen&session=<?=$session;?>&a=5">управление альянсом</a>)</th></tr>
 <?php

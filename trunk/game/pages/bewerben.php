@@ -28,7 +28,7 @@ if ( $_POST['weiter'] === "Образец" || $ally['insertapp'])
 }
 
 // Отправить заявление
-if ( $_POST['weiter'] === "Отправить" )
+if ( $_POST['weiter'] === "Отправить" && $ally['open'] )
 {
     AddApplication ( $ally['ally_id'], $GlobalUser['player_id'], $_POST['text'] );
 
@@ -51,6 +51,8 @@ if ( $_POST['weiter'] === "Отправить" )
     die();
 }
 
+if ( $ally['open'] )        // Подать заявление
+{
 ?>
 
 <!-- CONTENT AREA -->
@@ -69,6 +71,27 @@ if ( $_POST['weiter'] === "Отправить" )
 <!-- END CONTENT AREA -->
 
 <?php
+}
+else            // Заявление подать невозможно, альянс закрыт
+{
+?>
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<h1>Регистрироваться</h1>
+<table width=519>
+<form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
+<tr><td class=c>Подать заявку в альянс [<?=$ally['tag'];?>] невозможно</td></tr>
+<tr><th>Этот альянс сейчас не принимает новых членов</th></th></tr>
+<tr><th><input type=submit value="Назад"></th></tr></table></form></center><br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+
+<?php
+}
+
 PageFooter ();
 ob_end_flush ();
 ?>

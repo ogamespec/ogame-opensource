@@ -29,7 +29,7 @@ function CreateAlly ($owner_id, $tag, $name)
     $id = IncrementDBGlobal ( 'nextally' );
 
     // Добавить альянс.
-    $ally = array( $id, $tag, $name, $owner_id, "", "", 1, 0, "Добро пожаловать на страничку альянса", "", "", 0 );
+    $ally = array( $id, $tag, $name, $owner_id, "", "", 1, 0, "Добро пожаловать на страничку альянса", "", "", 0, "", "", 0, 0 );
     AddDBRow ( $ally, "ally" );
 
     // Добавить ранги "Основатель" (0) и "Новичок" (1) .
@@ -94,6 +94,34 @@ function CountAllyMembers ($ally_id)
     if ( $ally_id <= 0 ) return 0;
     $result = EnumerateAlly ($ally_id);
     return dbrows ($result);
+}
+
+// Изменить аббревиатуру альянса. Можно делать раз в 7 дней.
+function AllyChangeTag ($ally_id, $tag)
+{
+    global $db_prefix;
+    $now = time ();
+    $ally = LoadAlly ($ally_id);
+    if ( $now < $ally['tag_until'] ) return false;    // Время ещё пришло.
+    if ( $ally['tag'] === $tag ) return false;
+    $until = $now + 7 * 24 * 60 * 60;
+    $query = "UPDATE ".$db_prefix."ally SET old_tag = tag, tag = '".$tag."', tag_until = $until WHERE ally_id = $ally_id";
+    dbquery ($query);
+    return true;
+}
+
+// Изменить название альянса. Можно делать раз в 7 дней.
+function AllyChangeName ($ally_id, $name)
+{
+    global $db_prefix;
+    $now = time ();
+    $ally = LoadAlly ($ally_id);
+    if ( $now < $ally['name_until'] ) return false;    // Время ещё пришло.
+    if ( $ally['name'] === $name ) return false;
+    $until = $now + 7 * 24 * 60 * 60;
+    $query = "UPDATE ".$db_prefix."ally SET old_name = name, name = '".$name."', name_until = $until WHERE ally_id = $ally_id";
+    dbquery ($query);
+    return true;
 }
 
 // ****************************************************************************

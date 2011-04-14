@@ -177,9 +177,15 @@ else
         if ( $_GET['a'] == 3 ) PageAlly_Leave ();
         else if ( $_GET['a'] == 4 ) PageAlly_MemberList ();
         else if ( $_GET['a'] == 5 ) PageAlly_Settings ();
-        else if ( $_GET['a'] == 6 || $_GET['a'] == 15 ) PageAlly_Ranks ();
+        else if ( $_GET['a'] == 6 ) PageAlly_Ranks ();
         else if ( $_GET['a'] == 7 ) PageAlly_MemberSettings ();
+        else if ( $_GET['a'] == 9 ) PageAlly_ChangeTag ();
+        else if ( $_GET['a'] == 10 ) PageAlly_ChangeName ();
+        else if ( $_GET['a'] == 11 ) PageAlly_Settings ();
+        //else if ( $_GET['a'] == 12 ) PageAlly_Dismiss ();
+        else if ( $_GET['a'] == 15 ) PageAlly_Ranks ();
         else if ( $_GET['a'] == 17 ) AllyPage_CircularMessage ();
+        //else if ( $_GET['a'] == 18 ) AllyPage_Takeover ();
         else AllyPage_Home ();
     }
     else AllyPage_Home ();

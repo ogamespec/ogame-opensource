@@ -46,4 +46,78 @@ function PageAlly_Leave ()
 <?php
 }
 
+// Изменить аббревиатуру альянса.
+function PageAlly_ChangeTag ()
+{
+    global $GlobalUser;
+    global $session;
+    global $ally;
+    global $AllianzenError;
+
+    if ( method() === "POST" && $_GET['a'] == 9 && $_GET['weiter'] == 1)
+    {
+        $now = time ();
+        if ( $now < $ally['tag_until'] ) $AllianzenError = "<center>\nПодождите до ".date ("Y-m-d H:i:s", $ally['tag_until'])."<br></center>";
+        else
+        {
+            AllyChangeTag ( $ally['ally_id'], $_POST['newtag'] );
+?>
+<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
+<table width=519>
+<form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
+<tr><td class=c colspan=2>Подтвердить</td></tr>
+<tr><th colspan=2>Альянс с аббревиатурой "<?=$ally['tag'];?>" имеет теперь аббревиатуру "<?=$_POST['newtag'];?>"</th><tr>
+<tr><th colspan=2><input type=submit value="Ok"></th></tr></table></center></form>
+<?php
+            return;
+        }
+    }
+
+?>
+<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
+<table width=519>
+<form action="index.php?page=allianzen&session=<?=$session;?>&a=9&weiter=1" method=POST>
+<tr><td class=c colspan=2>Как следует переименовать альянс "<?=$ally['tag'];?>"?</td></tr>
+<tr><th>Новая аббревиатура: #1</th><th><input type=text name=newtag maxlength=8> <input type=submit value="Переименовать"></th></tr>
+</table></center></form>
+<?php
+}
+
+// Изменить название альянса.
+function PageAlly_ChangeName ()
+{
+    global $GlobalUser;
+    global $session;
+    global $ally;
+    global $AllianzenError;
+
+    if ( method() === "POST" && $_GET['a'] == 10 && $_GET['weiter'] == 1)
+    {
+        $now = time ();
+        if ( $now < $ally['name_until'] ) $AllianzenError = "<center>\nПодождите до ".date ("Y-m-d H:i:s", $ally['name_until'])."<br></center>";
+        else
+        {
+            AllyChangeName ( $ally['ally_id'], $_POST['newname'] );
+?>
+<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
+<table width=519>
+<form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
+<tr><td class=c colspan=2>Подтвердить</td></tr>
+<tr><th colspan=2>Альянс "<?=$ally['name'];?>" переименован в "<?=$_POST['newname'];?>"</th><tr>
+<tr><th colspan=2><input type=submit value="Ok"></th></tr></table></center></form>
+<?php
+            return;
+        }
+    }
+
+?>
+<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
+<table width=519>
+<form action="index.php?page=allianzen&session=<?=$session;?>&a=10&weiter=1" method=POST>
+<tr><td class=c colspan=2>Как следует переименовать альянс "<?=$ally['name'];?>"?</td></tr>
+<tr><th>Новое название:</th><th><input type=text name=newname maxlength=30> <input type=submit value="Переименовать"></th></tr>
+</table></center></form>
+<?php
+}
+
 ?>
