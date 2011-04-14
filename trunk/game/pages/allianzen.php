@@ -72,6 +72,29 @@ function AllyPage_SearchResult ($result)
     $SearchResults .= "</table><br>\n";
 }
 
+// Пользователь уже подал заявку в альянс.
+function AllyPage_Already ($app_id)
+{
+    global $session;
+
+    $app = LoadApplication ($app_id);
+    $ally = LoadAlly ( $app['ally_id'] );
+
+    if ( method () === "POST" )    // Отозвать заявление.
+    {
+        if ( key_exists ( 'bcancel', $_POST ) ) RemoveApplication ( $app['app_id'] );
+    }
+
+?>
+<table width=519>
+<form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
+<tr><td class=c colspan=2>Ваше заявление</td></tr>
+<tr><th colspan=2><?=va("Вы уже подали заявку в альянс [#1]. Подождите ответа либо отзовите своё заявление.", $ally['tag']);?></th></tr>
+<tr><th colspan=2><input type=submit name="bcancel" value="Отозвать заявление"></th></tr>
+</table></form><br><br><br><br>
+<?php
+}
+
 // ***********************************************************
 
 // Ранг содержит особые символы
@@ -122,6 +145,7 @@ include "allianzen_members.php";
 include "allianzen_ranks.php";
 include "allianzen_settings.php";
 include "allianzen_circular.php";
+include "allianzen_misc.php";
 
 PageHeader ("allianzen");
 
@@ -132,9 +156,17 @@ echo "<script src=\"js/cntchar.js\" type=\"text/javascript\"></script><script sr
 
 if ( $GlobalUser['ally_id'] == 0 )
 {
-    if ( key_exists ('a', $_GET) && $_GET['a'] == 1 ) AllyPage_CreateAlly ( $_POST['tag'], $_POST['name'] );
-    else if ( key_exists ('a', $_GET) && $_GET['a'] == 2 ) AllyPage_Search ( $_POST['suchtext'], $SearchResults );
-    else AllyPage_NoAlly ();
+    $app_id = GetUserApplication ($GlobalUser['player_id']);
+    if ( $app_id > 0 )
+    {
+        AllyPage_Already ($app_id);
+    }
+    else
+    {
+        if ( key_exists ('a', $_GET) && $_GET['a'] == 1 ) AllyPage_CreateAlly ( $_POST['tag'], $_POST['name'] );
+        else if ( key_exists ('a', $_GET) && $_GET['a'] == 2 ) AllyPage_Search ( $_POST['suchtext'], $SearchResults );
+        else AllyPage_NoAlly ();
+    }
 }
 else
 {
@@ -142,7 +174,8 @@ else
 
     if ( key_exists ('a', $_GET) )
     {
-        if ( $_GET['a'] == 4 ) PageAlly_MemberList ();
+        if ( $_GET['a'] == 3 ) PageAlly_Leave ();
+        else if ( $_GET['a'] == 4 ) PageAlly_MemberList ();
         else if ( $_GET['a'] == 5 ) PageAlly_Settings ();
         else if ( $_GET['a'] == 6 || $_GET['a'] == 15 ) PageAlly_Ranks ();
         else if ( $_GET['a'] == 7 ) PageAlly_MemberSettings ();

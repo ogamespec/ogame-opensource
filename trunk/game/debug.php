@@ -28,7 +28,7 @@ function Error ($text)
     echo "<br /><br />\n";
     echo "Error-ID: $id</b></font></center>\n";
 
-    PageFooter ();
+    //PageFooter ();
     ob_end_flush ();
     exit ();
 }
