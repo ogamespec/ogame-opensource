@@ -324,7 +324,7 @@ function LeftMenu ()
     echo " <tr>\n";
     echo "  <td>\n";
     echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
-    echo "    <a href=\"http://tutorial\" target=\"_blank\" accesskey=\"^\" >".loca("MENU_TUTORIAL")."</a><!-- external link to ogame tutorial -->\n";
+    echo "    <a href=\"http://tutorial.oldogame.ru/\" target=\"_blank\" accesskey=\"^\" >".loca("MENU_TUTORIAL")."</a><!-- external link to ogame tutorial -->\n";
     echo "   </font></div>\n";
     echo "  </td>\n";
     echo " </tr>\n\n";
