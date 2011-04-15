@@ -76,7 +76,7 @@ if ($apps > 0 )
 ?>
 <tr><th colspan=2>Заявление от <?=$user['oname'];?></th></tr>
 <form action="index.php?page=bewerbungen&session=<?=$session;?>&show=<?=$show;?>&sort=<?=$sort;?>" method=POST>
-<tr><th colspan=2><?=$app['text'];?></th></tr>
+<tr><th colspan=2><?=str_replace("\n", "\n<br>", $app['text']);?></th></tr>
 <tr><td class=c colspan=2>Реакция на это заявление</td></tr>
 <tr><th>&#160;</th><th><input type=submit name="aktion" value="Принять"></th></tr>
 <tr><th>Причина (по желанию) <span id="cntChars">0</span> / 2000 символов</th><th><textarea name="text" cols=40 rows=10 onkeyup="javascript:cntchar(2000)"></textarea></th></tr>

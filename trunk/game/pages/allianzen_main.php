@@ -63,12 +63,12 @@ function AllyPage_Home ()
 <?php
     }
 ?>
-<tr><th colspan=2 height=100><?=$ally['exttext'];?></th></tr>
+<tr><th colspan=2 height=100><?=bb($ally['exttext']);?></th></tr>
 <tr><th>Домашняя страница</th><th><a href="redir.php?url=<?=$ally['homepage'];?>" target="_blank"><?=$ally['homepage'];?></a></th></tr>
-<tr><td class=c colspan=2>Внутренняя компетенция</th></tr><tr><th colspan=2 height=100><?=$ally['inttext'];?></th></tr>
+<tr><td class=c colspan=2>Внутренняя компетенция</th></tr><tr><th colspan=2 height=100><?=bb($ally['inttext']);?></th></tr>
 </table><br>
 <?php
-    if ( $GlobalUser['allyrank'] != 0 )    // Основатель не может покинуть альянс, а только передать через управление.
+    if ( $GlobalUser['allyrank'] != 0 )    // Не показывать Основателю диалог выхода из альянса.
     {
 ?>
 <table width=519>
