@@ -6,8 +6,18 @@ function PageAlly_MemberList ()
 {
     global $session;
     global $ally;
+    global $GlobalUser;
+    global $AllianzenError;
+
+    $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
+    if ( ! ($myrank['rights'] & 0x008) )
+    {
+        $AllianzenError = "<center>\nПросмотр невозможен<br></center>";
+        return;
+    }
 
     $members = CountAllyMembers ( $ally['ally_id'] );
+    $now = time ();
 
 ?>
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
@@ -20,7 +30,9 @@ function PageAlly_MemberList ()
     <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=3&sort2=1">Очки</a></th>
     <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=0&sort2=1">Координаты</a></th>
     <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=4&sort2=1">Вступление</a></th>
-    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=5&sort2=1">Online</a></th></tr>
+<?php
+    if ( $myrank['rights'] & 0x040 ) echo "    <th><a href=\"index.php?page=allianzen&session=$session&a=4&sort1=5&sort2=1\">Online</a></th></tr>\n";
+?>
 <?php
     $result = EnumerateAlly ($ally['ally_id'], 0, 0);
     for ($i=0; $i<$members; $i++)
@@ -31,12 +43,22 @@ function PageAlly_MemberList ()
         echo "<tr>\n";
         echo "    <th>".($i+1)."</th>\n";
         echo "    <th>".$user['oname']."</th>\n";
-        echo "    <th><a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=0 alt=\"Написать сообщение\"></a></th>\n";
+        if ( $GlobalUser['player_id'] != $user['player_id'] ) {
+            echo "    <th><a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=0 alt=\"Написать сообщение\"></a></th>\n";
+        }
+        else echo "    <th></th>\n";
         echo "    <th>".$rank['name']."</th>\n";
         echo "    <th>".nicenum($user['score1'] / 1000)."</th>\n";
         echo "    <th><a href=\"index.php?page=galaxy&galaxy=".$hplanet['g']."&system=".$hplanet['s']."&position=".$hplanet['p']."&session=$session\" >[".$hplanet['g'].":".$hplanet['s'].":".$hplanet['p']."]</a></th>\n";
         echo "    <th>".date ("Y-m-d H:i:s", $user['joindate'])."</th>\n";
-        echo "    <th><font color=lime>Да</font></th></tr>\n";
+        if ( $myrank['rights'] & 0x040 )
+        {
+            $min = floor ( ($now - $user['lastclick']) / 60 );
+            if ( $min < 15 ) echo "    <th><font color=lime>Да</font></th>";
+            else if ( $min < 60 ) echo "    <th><font color=yellow>$min min</font></th>";
+            else echo "    <th><font color=red>Нет</font></th>";
+        }
+        echo "</tr>\n";
     }
 ?>
 </table>

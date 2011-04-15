@@ -20,12 +20,15 @@ function empty_row ($p)
 // Выбрать солнечную систему.
 if ( key_exists ('session', $_POST)) $coord_g = $_POST['galaxy'];
 else if ( key_exists ('galaxy', $_GET)) $coord_g = $_GET['galaxy'];
+else if ( key_exists ('p1', $_GET)) $coord_g = $_GET['p1'];
 else $coord_g = $aktplanet['g'];
 if ( key_exists ('session', $_POST)) $coord_s = $_POST['system'];
 else if ( key_exists ('system', $_GET)) $coord_s = $_GET['system'];
+else if ( key_exists ('p2', $_GET)) $coord_s = $_GET['p2'];
 else $coord_s = $aktplanet['s'];
 if ( key_exists ('session', $_POST)) $coord_p = 0;
 else if ( key_exists ('position', $_GET)) $coord_p = $_GET['position'];
+else if ( key_exists ('p3', $_GET)) $coord_p = $_GET['p3'];
 else $coord_p = $aktplanet['p'];
 
 echo "<!-- CONTENT AREA -->\n";
@@ -256,6 +259,35 @@ echo "<center>\n\n";
 </script>
 
 <?php
+
+// Недостаточно дейтерия?
+if ( ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s) && $aktplanet['d'] < 10 )
+{
+?>
+  <center>
+<br />
+<br />
+<br />
+<table width="519">
+<tr height="20">
+   <td class="c"><span class="error"> Ошибка</span></td>
+
+</tr>
+  <tr height="20">
+    <th><span class="error">Недостаточно дейтерия!</span></th>
+  </tr>
+</table>
+
+<?php
+}
+else
+{
+
+    // Списать 10 дейтерия за просмотр не домашней системы
+    if ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s )
+    {
+        AdjustResources (0, 0, 10, $aktplanet['planet_id'], '-');
+    }
 
 /***** Меню выбора солнечной системы. *****/
 
@@ -525,6 +557,8 @@ echo "<td class=\"c\" colspan=\"2\"><a href='#' onmouseover='return overlib(\"<t
 echo "</tr>\n";
 
 echo "</table>\n\n";
+
+}    // Недостаточно дейтерия
 
 echo "<br><br><br><br>\n";
 echo "</center>\n";
