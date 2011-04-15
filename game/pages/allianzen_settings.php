@@ -23,10 +23,20 @@ function PageAlly_Settings ()
         return;
     }
 
+    if ( $_GET['t'] < 1 || $_GET['t'] > 3 ) $_GET['t'] = 1;
+
     if ( method () === "POST" )
     {
-        if ( $_GET['a'] == 11 && $_GET['d'] == 1 )        // Изменить текст
+        if ( $_GET['a'] == 11 && $_GET['d'] == 1 )        // Изменить тексты
         {
+            $ally_id = $ally['ally_id'];
+            $insertapp = $_POST['bewforce'] & 1;
+            if ( $_GET['t'] == 2 ) $query = "UPDATE ".$db_prefix."ally SET inttext = '".$_POST['text']."' WHERE ally_id = $ally_id";
+            else if ( $_GET['t'] == 3 ) $query = "UPDATE ".$db_prefix."ally SET apptext = '".$_POST['text']."', insertapp = $insertapp WHERE ally_id = $ally_id";
+            else $query = "UPDATE ".$db_prefix."ally SET exttext = '".$_POST['text']."' WHERE ally_id = $ally_id";
+            dbquery ($query);
+
+            $ally = LoadAlly ($ally['ally_id']);
         }
 
         if ( $_GET['a'] == 11 && $_GET['d'] == 2 )        // Изменить установки
@@ -60,16 +70,41 @@ function PageAlly_Settings ()
 <a href="index.php?page=allianzen&session=<?=$session;?>&a=10"><img src="<?=UserSkin();?>pic/appwiz.gif" border=0 alt="Изменить название альянса (только 1 раз в неделю)"></a>
 </table><br>
 
-<form action="index.php?page=allianzen&session=<?=$session;?>&a=11&d=1" method=POST>
+<form action="index.php?page=allianzen&session=<?=$session;?>&a=11&d=1&t=<?=$_GET['t'];?>" method=POST>
 <table width=519>
 <tr><td class=c colspan=3>Редактировать текст</td></tr>
 <tr>
     <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=5&t=1">Внешний текст</a></th>
     <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=5&t=2">Внутренний текст</a></th>
     <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=5&t=3">Текст заявки</a></th></tr>
-<tr><td class=c colspan=3>Внешний текст альянса (<span id="cntChars">31</span> / 5000 символов)</td></tr>
-<tr><th colspan=3><textarea name="text" cols=70 rows=15 onkeyup="javascript:cntchar(5000)">Willkommen auf der Allianzseite</textarea></th></tr>
-<tr><th colspan=3><input type=hidden name=t value=1><input type=reset value="Удалить"> <input type=submit value="Сохранить"></th></tr>
+<tr><td class=c colspan=3>
+<?php
+    if ( $_GET['t'] == 2 ) echo "Внутренний текст альянса";
+    else if ( $_GET['t'] == 3 ) echo "Пример текста заявки";
+    else echo "Внешний текст альянса";
+?> (<span id="cntChars">
+<?php
+    if ( $_GET['t'] == 2 ) echo mb_strlen ($ally['inttext'], "UTF-8");
+    else if ( $_GET['t'] == 3 ) echo mb_strlen ($ally['apptext'], "UTF-8");
+    else echo mb_strlen ($ally['exttext'], "UTF-8");
+?></span> / 5000 символов)</td></tr>
+<tr><th colspan=3><textarea name="text" cols=70 rows=15 onkeyup="javascript:cntchar(5000)">
+<?php
+    if ( $_GET['t'] == 2 ) echo $ally['inttext'];
+    else if ( $_GET['t'] == 3 ) echo $ally['apptext'];
+    else echo $ally['exttext'];
+?></textarea></th></tr>
+<?php
+    if ( $_GET['t'] == 3)
+    {
+        echo "<tr><th colspan=3>Пример заявки <select name=bewforce><option value=0";
+        if ( $ally['insertapp'] == 0 ) echo " SELECTED";
+        echo ">не показывать автоматически</option><option value=1";
+        if ( $ally['insertapp'] == 1 ) echo " SELECTED";
+        echo ">показывать автоматически</option></select></th></tr>";
+    }
+?>
+<tr><th colspan=3><input type=reset value="Удалить"> <input type=submit value="Сохранить"></th></tr>
 </table>
 </form><br>
 
