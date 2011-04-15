@@ -37,7 +37,11 @@ function AllyPage_Home ()
     if ( $now < $ally['name_until'] ) echo " (бывш. ".$ally['old_name'].")";
 ?>
 </th></tr>
-<tr><th>Члены</th><th><?=$members;?> (<a href="index.php?page=allianzen&session=<?=$session;?>&a=4">список членов</a>)</th></tr>
+<tr><th>Члены</th><th><?=$members;?>
+<?php
+    if ( $rank['rights'] & 0x008 ) echo " (<a href=\"index.php?page=allianzen&session=$session&a=4\">список членов</a>)";
+?>
+</th></tr>
 <tr><th>Ваш ранг</th><th><?=$rank['name'];?>
 <?php
     if ( $rank['rights'] & 0x020 ) echo " (<a href=\"index.php?page=allianzen&session=$session&a=5\">управление альянсом</a>)";
