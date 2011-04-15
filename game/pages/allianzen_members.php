@@ -31,7 +31,7 @@ function PageAlly_MemberList ()
         echo "<tr>\n";
         echo "    <th>".($i+1)."</th>\n";
         echo "    <th>".$user['oname']."</th>\n";
-        echo "    <th><a href=\"index.php?page=writemessages&session=$session&messageziel=222942\"><img src=\"http://uni20.ogame.de/evolution/img/m.gif\" border=0 alt=\"Написать сообщение\"></a></th>\n";
+        echo "    <th><a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=0 alt=\"Написать сообщение\"></a></th>\n";
         echo "    <th>".$rank['name']."</th>\n";
         echo "    <th>".nicenum($user['score1'] / 1000)."</th>\n";
         echo "    <th><a href=\"index.php?page=galaxy&galaxy=".$hplanet['g']."&system=".$hplanet['s']."&position=".$hplanet['p']."&session=$session\" >[".$hplanet['g'].":".$hplanet['s'].":".$hplanet['p']."]</a></th>\n";
@@ -45,13 +45,53 @@ function PageAlly_MemberList ()
 
 function PageAlly_MemberSettings ()
 {
+    global $db_prefix;
     global $session;
+    global $ally;
+    global $GlobalUser;
+    global $AllianzenError;
+
+    $selected_user = 0;
+    if ( key_exists ('u', $_GET) ) $selected_user = $_GET['u'];
+
+    if ( method() === "GET" && $_GET['a'] == 13 && $selected_user)        // Выгнать игрока
+    {
+        $leaver = LoadUser ($selected_user);
+
+        $query = "UPDATE ".$db_prefix."users SET ally_id = 0 WHERE player_id = $selected_user";
+        dbquery ($query);
+
+        // Разослать сообщения членам альянса об исключении игрока
+        $result = EnumerateAlly ($ally['ally_id']);
+        $rows = dbrows ($result);
+        while ($rows--)
+        {
+            $user = dbarray ($result);
+            SendMessage ( $user['player_id'], va("Альянс [#1]", $ally['tag']), "Общее сообщение", va("Игрок #1 исключён из альянса.", $leaver['oname']), 0);
+        }
+
+        // Сообщение игроку об исключении.
+        SendMessage ( $leaver['player_id'], 
+                               va("Альянс [#1]", $ally['tag']), 
+                               va("Членство в альянсе [#1] окончено", $ally['tag']), 
+                               va("Игрок #1 исключает Вас из альянса [#2] .<br>Теперь Вы можете зарегистрироваться снова", $GlobalUser['oname'], $ally['tag']), 0);
+    }
+
+    if ( method() === "POST" && $_GET['a'] == 16 && $selected_user)        // Назначить ранг игроку
+    {
+        $newrank = $_POST['newrang'];
+        $query = "UPDATE ".$db_prefix."users SET allyrank = $newrank WHERE player_id = $selected_user";
+        dbquery ($query);
+    }
+
+    $now = time ();
+    $members = CountAllyMembers ( $ally['ally_id'] );
 
 ?>
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script><br>
 <a href="index.php?page=allianzen&session=<?=$session;?>&a=5">Назад к обзору</a>
 <table width=519>
-<tr><td class='c' colspan='10'>Список членов (кол-во: 1)</td></tr>
+<tr><td class='c' colspan='10'>Список членов (кол-во: <?=$members;?>)</td></tr>
 <tr>
     <th>N</th>
     <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=1&sort2=1">Имя</a></th>
@@ -62,16 +102,56 @@ function PageAlly_MemberSettings ()
     <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=4&sort2=1">Вступление</a></th>
     <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=5&sort2=1">Неактивный</a></th>
     <th>Функция</th></tr>
-<tr>
-    <th>1</th>
-    <th>spieler1</th>
-    <th></th>
-    <th>zzzz</th>
-    <th>0</th>
-    <th><a href="index.php?page=galaxy&galaxy=1&system=29&position=5&session=<?=$session;?>" >[1:29:5]</a></th>
-    <th>2011-04-07 08:01:43</th>
-    <th>0d</th>
-    <th>&nbsp;</th></tr>
+
+<?php
+    $result = EnumerateAlly ($ally['ally_id'], 0, 0);
+    for ($i=0; $i<$members; $i++)
+    {
+        $user = dbarray ($result);
+        $rank = LoadRank ( $user['ally_id'], $user['allyrank'] );
+        $hplanet = GetPlanet ($user['hplanetid']);
+        $days = floor ( ( $now - $user['lastclick'] ) / (60 * 60 * 24) );
+        echo "<tr>";
+        echo "<th>".($i+1)."</th>";
+        echo "<th>".$user['oname']."</th>";
+        if ( $GlobalUser['player_id'] != $user['player_id'] ) {
+            echo "<th><a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=0 alt=\"Написать сообщение\"></a></th>";
+        }
+        else echo "<th></th>";
+        echo "<th>".$rank['name']."</th>";
+        echo "<th>".nicenum($user['score1'] / 1000)."</th>";
+        echo "<th><a href=\"index.php?page=galaxy&galaxy=".$hplanet['g']."&system=".$hplanet['s']."&position=".$hplanet['p']."&session=$session\" >[".$hplanet['g'].":".$hplanet['s'].":".$hplanet['p']."]</a></th>";
+        echo "<th>".date ("Y-m-d H:i:s", $user['joindate'])."</th>";
+        echo "<th>".$days."d</th>";
+        if ( $user['allyrank'] > 0 ) {
+            echo "<th>";
+            echo "<a onmouseover='return overlib(\"<font color=white>Выгнать игрока</font>\", WIDTH, 100);' onmouseout='return nd();' alt='Выгнать игрока' href='javascript:if(confirm(\"Вы уверены, что игрок ".$user['oname']." должен покинуть альянс?\"))document.location=\"index.php?page=allianzen&session=$session&a=13&u=".$user['player_id']."\"';>";
+            echo "<img src='".UserSkin()."pic/abort.gif' alt='Выгнать игрока' border='0' ></a>";
+            echo "<a onmouseover=\"return overlib('<font color=white>Назначить ранг</font>', WIDTH, 100);\" onmouseout='return nd();' alt='Назначить ранг' href=\"index.php?page=allianzen&session=$session&a=7&u=".$user['player_id']."\">";
+            echo "<img src=\"".UserSkin()."pic/key.gif\" alt='Назначить ранг' border=0></a>&nbsp;&nbsp;&nbsp;&nbsp;";
+            echo "</th>";
+            echo "</tr>\n";
+
+            if ( $user['player_id'] == $selected_user )        // Вывести форму для задания ранга.
+            {
+                $rank_result = EnumRanks ( $ally['ally_id'] );
+                $rows = dbrows ($rank_result);
+                echo "<form action=\"index.php?page=allianzen&session=$session&a=16&u=$selected_user\" method=POST><tr><th colspan=3>Ранг для ".$user['oname'].":</th><th><select name=\"newrang\">";
+                while ($rows--)
+                {
+                    $user_rank = dbarray ( $rank_result );
+                    if ($user_rank['rank_id'] == 0) continue;
+                    echo "<option value=\"".$user_rank['rank_id']."\"";
+                    if ($user_rank['rank_id'] == $user['allyrank'] ) echo " SELECTED";
+                    echo ">".$user_rank['name']."\n";
+                }
+                echo "</th><th colspan=5><input type=submit value=\"Сохранить\"></th></tr></form>\n";
+            }
+        }
+        else echo "<th>&nbsp;</th></tr>\n";
+    }
+?>
+
 </table>
 <?php
 }
