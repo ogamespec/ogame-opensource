@@ -29,6 +29,16 @@ function FleetMissionText ($num)
     echo "      <a title=\"\">".loca("FLEET_ORDER_$num")."</a>\n$desc\n";
 }
 
+// Обработка POST-запросов
+if ( method () === "POST" )
+{
+    $fleet_id = $_POST['order_return'];
+    $fleet_obj = LoadFleet ( $fleet_id );
+    if (  ($fleet_obj['owner_id'] == $GlobalUser['player_id']) &&
+          ($fleet_obj['mission'] < 100 || $fleet_obj['mission'] > 200 )  ) 
+        RecallFleet ( $fleet_id );
+}
+
 PageHeader ("flotten1");
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );

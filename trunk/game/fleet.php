@@ -299,6 +299,20 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d)
 // Отозвать флот (если это возможно)
 function RecallFleet ($fleet_id)
 {
+    $fleet_obj = LoadFleet ($fleet_id);
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $fleet = array ();
+    foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj["ship$gid"];
+
+    $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    $target = GetPlanet ( $fleet_obj['target_planet'] );
+
+    if ($fleet_obj['mission'] < 100) DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] + 100, 30, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d']);
+    else DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] - 100, 30, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d']);
+
+    $queue = GetFleetQueue ($fleet_obj['fleet_id']);
+    DeleteFleet ($fleet_obj['fleet_id']);            // удалить флот
+    RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
 }
 
 // Загрузить флот
