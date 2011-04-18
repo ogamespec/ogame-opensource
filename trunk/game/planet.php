@@ -82,8 +82,8 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $debris=20000
     $id = $unitab['nextplanet']++;
 
     // Проверить не занято-ли место?
-    if ($moon) $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND type = 0";
-    else $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND type <> 0";
+    if ($moon) $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( type = 0 OR type = 10003 )";
+    else $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( ( type > 0 AND type < 10000) OR type = 10001 )";
     $result = dbquery ($query);
     if ( dbrows ($result) != 0 ) return 0;
 
@@ -374,6 +374,17 @@ function AbandonPlanet ($g, $s, $p)
         $query = "UPDATE ".$db_prefix."planets SET type = 10001, name = 'Уничтоженная планета', owner_id = 99999, date = $now, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
         dbquery ( $query );
     }
+}
+
+// Проверить есть ли уже планета на заданных координатах (для Колонизации). Учитываются также уничтоженные планеты.
+// Фантомы колонизации не учитываются (кто первый долетит)
+function HasPlanet ($g, $s, $p)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( ( type > 0 AND type < 10000) OR type = 10001 );";
+    $result = dbquery ($query);
+    if ( dbrows ($result) ) return 1;
+    else return 0;
 }
 
 ?>

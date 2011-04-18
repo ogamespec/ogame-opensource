@@ -142,8 +142,6 @@ PageHeader ("overview");
 
 //CreatePlanet (1, 123, 8, 1 );
 //CreatePlanet ( 3, 13, 3, 1 );
-//$debris_id = CreateDebris ( 1, 1, 2, 1);
-//AddDebris ($debris_id, 3000, 2000);
 
 if ( key_exists ('lgn', $_GET) && $_GET['lgn'] == 1 ) UpdatePlanetActivity ( $aktplanet['planet_id'] );  // Обновить активность на Главной планете при входе в игру.
 

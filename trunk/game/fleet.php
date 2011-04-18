@@ -283,7 +283,7 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d)
     $deploy_time = 0;
 
     // HACK.
-    //$seconds = 30;
+    $seconds = 20;
 
     // Добавить флот.
     $fleet_id = IncrementDBGlobal ('nextfleet');
@@ -615,7 +615,7 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet)
     $text = "\nФлот достигает заданных координат\n" . 
                "<a href=\"javascript:showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].")\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n";
 
-    if ( $target['type'] == 10002 )    // если цель по прежнему фантом, то значит колонизация успешна
+    if ( !HasPlanet($target['g'], $target['s'], $target['p']) )    // если место не занято, то значит колонизация успешна
     {
         // если количество планет империи больше максимума, то не основывать новую колонию.
         $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$fleet_obj['owner_id']."' AND (type > 0 AND type < 10000);";
@@ -639,7 +639,8 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet)
             DestroyPlanet ( $target['planet_id'] );
 
             // Создать новую колонию.
-            CreatePlanet ( $target['g'], $target['s'], $target['p'], $fleet_obj['owner_id'], 1 );
+            $id = CreatePlanet ( $target['g'], $target['s'], $target['p'], $fleet_obj['owner_id'], 1 );
+            Debug ( "Игроком ".$origin['owner_id']." колонизирована планета $id [".$target['g'].":".$target['s'].":".$target['p']."]");
         }
     }
     else
@@ -651,6 +652,23 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet)
     }
 
     SendMessage ( $fleet_obj['owner_id'], "Поселенцы", "Доклад поселенцев", $text, 5);
+}
+
+function ColonizationReturn ($queue, $fleet_obj, $fleet)
+{
+    $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    $target = GetPlanet ( $fleet_obj['target_planet'] );
+
+    AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['start_planet'], '+' );
+    AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
+
+    $text = "Один из Ваших флотов ( ".FleetList($fleet)." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
+               "достигает ".PlanetName($origin)." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
+    if ( ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']) != 0 ) $text .= "Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия<br>";
+    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Возвращение флота", $text, 5);
+
+    // Удалить фантом колонизации.
+    DestroyPlanet ( $target['planet_id'] );
 }
 
 // *** Переработать ***
@@ -692,7 +710,7 @@ function Queue_Fleet_End ($queue)
         case 6: SpyArrive ($queue, $fleet_obj, $fleet); break;
         case 106: SpyReturn ($queue, $fleet_obj, $fleet); break;
         case 7: ColonizationArrive ($queue, $fleet_obj, $fleet); break;
-        case 107: CommonReturn ($queue, $fleet_obj, $fleet); break;
+        case 107: ColonizationReturn ($queue, $fleet_obj, $fleet); break;
         default: Error ( "Неизвестное задание для флота: " . $fleet_obj['mission'] ); break;
     }
 

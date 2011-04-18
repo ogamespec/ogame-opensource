@@ -158,11 +158,13 @@ switch ( $order )
         break;
 
     case '7':        // Колонизировать
-//Планета уже заселена!
-//Для колонизации надо послать колонизаторы!
-        // Если отправлен колонизатор - добавить фантом колонизации.
-        $id = CreateColonyPhantom ( $_POST['galaxy'], $_POST['system'], $_POST['planet'], $origin_user['player_id'] );
-        $target = GetPlanet ($id);
+        if ( $fleet[208] == 0 ) FleetError ( "Для колонизации надо послать колонизаторы!" );
+        else if (HasPlanet ($_POST['galaxy'], $_POST['system'], $_POST['planet']) ) FleetError ( "Планета уже заселена!" );
+        else {
+            // Если отправлен колонизатор - добавить фантом колонизации.
+            $id = CreateColonyPhantom ( $_POST['galaxy'], $_POST['system'], $_POST['planet'], $origin_user['player_id'] );
+            $target = GetPlanet ($id);
+        }
         break;
 
     case '8':        // Переработать
