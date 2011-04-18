@@ -10,7 +10,7 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
-PageHeader ("galaxy");
+$unitab = LoadUniverse ();
 
 function empty_row ($p)
 {
@@ -30,6 +30,44 @@ if ( key_exists ('session', $_POST)) $coord_p = 0;
 else if ( key_exists ('position', $_GET)) $coord_p = $_GET['position'];
 else if ( key_exists ('p3', $_GET)) $coord_p = $_GET['p3'];
 else $coord_p = $aktplanet['p'];
+
+if ( $_POST['systemLeft'] === "dr" )
+{
+    $coord_s--;
+    if ( $coord_s < 1 ) $coord_s = 1;
+}
+else if ( $_POST['systemRight'] === "dr" )
+{
+    $coord_s++;
+    if ( $coord_s > $unitab['systems'] ) $coord_s = $unitab['systems'];
+}
+else if ( $_POST['galaxyLeft'] === "dr" )
+{
+    $coord_g--;
+    if ( $coord_g < 1 ) $coord_g = 1;
+}
+else if ( $_POST['galaxyRight'] === "dr" )
+{
+    $coord_g++;
+    if ( $coord_g > $unitab['galaxies'] ) $coord_g = $unitab['galaxies'];
+}
+
+$not_enough_deut = ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s) && $aktplanet['d'] < 10;
+
+// Списать 10 дейтерия за просмотр не домашней системы
+if ( !$not_enough_deut)
+{
+    if ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s )
+    {
+        AdjustResources (0, 0, 10, $aktplanet['planet_id'], '-');
+    }
+}
+
+$result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
+$nowfleet = dbrows ($result);
+$maxfleet = $GlobalUser['r108'] + 1;
+
+PageHeader ("galaxy");
 
 echo "<!-- CONTENT AREA -->\n";
 echo "<div id='content'>\n";
@@ -166,7 +204,7 @@ echo "<center>\n\n";
 
   function doit(order, galaxy, system, planet, planettype, shipcount){
       strInfo = "  Отправка "+shipcount+" кораблей"+(shipcount>1?"":"")+" на "+galaxy+":"+system+":"+planet+" ";
-      ajax.requestFile = "index.php?ajax=1&page=flottenversand&session=cabc5002190c";
+      ajax.requestFile = "index.php?ajax=1&page=flottenversand&session=<?=$session;?>";
 
       // no longer needed, since we don't want to write the cryptic
       // response somewhere into the output html
@@ -261,7 +299,7 @@ echo "<center>\n\n";
 <?php
 
 // Недостаточно дейтерия?
-if ( ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s) && $aktplanet['d'] < 10 )
+if ( $not_enough_deut )
 {
 ?>
   <center>
@@ -282,12 +320,6 @@ if ( ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s) && $aktplanet
 }
 else
 {
-
-    // Списать 10 дейтерия за просмотр не домашней системы
-    if ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s )
-    {
-        AdjustResources (0, 0, 10, $aktplanet['planet_id'], '-');
-    }
 
 /***** Меню выбора солнечной системы. *****/
 
@@ -537,7 +569,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     echo "<th width=\"125\" style='white-space: nowrap;'>\n";
     if ( !$planet['type'] != 10001 && !$own)
     {
-        echo "<a style=\"cursor:pointer\" onclick=\"javascript:doit(6, 1, 399, 4, 1, 1);\"><img src=\"".UserSkin()."img/e.gif\" border=\"0\" alt=\"Шпионаж\" title=\"Шпионаж\" /></a>\n";
+        echo "<a style=\"cursor:pointer\" onclick=\"javascript:doit(6, ".$planet['g'].",".$planet['s'].",".$planet['p'].", 1, 1);\"><img src=\"".UserSkin()."img/e.gif\" border=\"0\" alt=\"Шпионаж\" title=\"Шпионаж\" /></a>\n";
         echo "<a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"Написать сообщение\" title=\"Написать сообщение\" /></a>\n";
         echo "<a href=\"index.php?page=buddy&session=".$_GET['session']."&action=7&buddy_id=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/b.gif\" border=\"0\" alt=\"Предложение подружиться\" title=\"Предложение подружиться\" /></a>\n";
 //<a href="index.php?page=galaxy&session=$session&mode=1&p1=1&p2=260&ft3=14&pdd=34430944&zp=172794"><img src="http://localhost/evolution/img/r.gif" border="0" alt="Ракетная атака" title="Ракетная атака" /></a>
@@ -556,6 +588,19 @@ echo "<tr><td class=\"c\" colspan=\"6\">(Заселено ".$planets." план�
 echo "<td class=\"c\" colspan=\"2\"><a href='#' onmouseover='return overlib(\"<table><tr><td class=c colspan=2>Легенда</td></tr><tr><td width=125>сильный игрок</td><td><span class=strong>с</span></td></tr><tr><td>нуб</td><td><span class=noob>н</span></td></tr><tr><td>режим отпуска</td><td><span class=vacation>РО</span></td></tr><tr><td>заблокирован</td><td><span class=banned>з</span></td></tr><tr><td>неактивен 7 дней</td><td><span class=inactive>i</span></td></tr><tr><td>неактивен 28 дней</td><td><span class=longinactive>I</span></td></tr></table>\", ABOVE, WIDTH, 150, STICKY, MOUSEOFF, DELAY, 500, CENTER);' onmouseout='return nd();'>Легенда</a></td>\n";
 echo "</tr>\n";
 
+?>
+<tr>
+<td class="c" colspan="8">
+<span id="probes"><?=nicenum($aktplanet["f210"]);?></span> Шпионские зонды &nbsp;&nbsp;&nbsp;&nbsp;<span id="recyclers"><?=nicenum($aktplanet["f209"]);?></span> Переработчик  Дейтерий:  <?=nicenum($aktplanet["d"]);?>&nbsp;&nbsp;&nbsp;&nbsp;<span id='slots'><?=$nowfleet;?></span>&nbsp;из <?=$maxfleet;?> слотов находятся в эксплуатации</td>
+</tr>
+<tr style="display: none;" id="fleetstatusrow"><th colspan="8"><!--<div id="fleetstatus"></div>-->
+<table style="font-weight: bold;" width=100% id="fleetstatustable">
+<!-- will be filled with content later on while processing ajax replys -->
+</table>
+</th>
+</tr>
+
+<?php
 echo "</table>\n\n";
 
 }    // Недостаточно дейтерия

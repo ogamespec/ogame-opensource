@@ -41,6 +41,14 @@ if ( method () === "GET" )
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 $session = $_GET['session'];
 
+// Обработать вызовы AJAX
+if ( $_GET['ajax'] == 1)
+{
+    header ('Content-Type: text/html;');
+    echo "601 0 0 0 0";
+    die();
+}
+
 PageHeader ("flottenversand");
 
 $unitab = LoadUniverse ();
