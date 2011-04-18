@@ -305,16 +305,26 @@ function AddBuddy ($from, $to, $text)
 // Удалить запрос дружбы.
 function RemoveBuddy ($buddy_id)
 {
+    global $db_prefix;
+    $query = "DELETE FROM ".$db_prefix."buddy WHERE buddy_id = $buddy_id";
+    dbquery ($query);
 }
 
 // Подтвердить запрос дружбы.
 function AcceptBuddy ($buddy_id)
 {
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."buddy SET accepted = 1 WHERE buddy_id = $buddy_id";
+    dbquery ($query);
 }
 
 // Загрузить запос.
 function LoadBuddy ($buddy_id)
 {
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."buddy WHERE buddy_id = $buddy_id";
+    $result = dbquery ($query);
+    return dbarray ($result);
 }
 
 // Перечислить все отправленные запросы игрока (свои).
