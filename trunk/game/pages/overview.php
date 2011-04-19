@@ -220,7 +220,7 @@ if ( $_GET['lgn'] == 1 )
 <?php
     }
 
-//StartBattle ( 10000, 10000 );
+//StartBattle ( 10041, 10036 );
 //die ();
 
 // Меню планеты

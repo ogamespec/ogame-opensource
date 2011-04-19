@@ -725,7 +725,7 @@ function Queue_Fleet_End ($queue)
         case 106: SpyReturn ($queue, $fleet_obj, $fleet); break;
         case 7: ColonizationArrive ($queue, $fleet_obj, $fleet); break;
         case 107: ColonizationReturn ($queue, $fleet_obj, $fleet); break;
-        default: Error ( "Неизвестное задание для флота: " . $fleet_obj['mission'] ); break;
+        //default: Error ( "Неизвестное задание для флота: " . $fleet_obj['mission'] ); break;
     }
 
     DeleteFleet ($fleet_obj['fleet_id']);            // удалить флот

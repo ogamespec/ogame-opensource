@@ -20,7 +20,7 @@ function StartBattle ( $fleet_id, $planet_id )
     $arg = "\"db_host=$db_host&db_user=$db_user&db_pass=$db_pass&db_name=$db_name&db_prefix=$db_prefix&fleet_id=$fleet_id&planet_id=$planet_id&fid=$fid&did=$did&rf=$rf\"";
     ob_end_flush();
     ob_start ();
-    $text = system ( "battle.exe $arg" );
+    $text = system ( "../cgi-bin/battle $arg" );
     ob_end_clean ();
     ob_start ();
 
