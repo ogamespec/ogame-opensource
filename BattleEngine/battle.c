@@ -71,9 +71,8 @@
 #include <string.h>
 #include <time.h>
 #include <math.h>
-#include <windows.h>
-#include <mysql.h>
 #include "battle.h"
+#include "include/mysql.h"
 
 // Настройки выпадения лома.
 int DefenseInDebris = 0, FleetInDebris = 30;
