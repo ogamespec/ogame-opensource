@@ -1,5 +1,8 @@
 <?php
 
+$GalaxyMessage = "";
+$GalaxyError = "";
+
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
 $now = time();
@@ -15,6 +18,41 @@ $unitab = LoadUniverse ();
 function empty_row ($p)
 {
     echo "<tr><th width=\"30\"><a href=\"#\" >".$p."</a></th><th width=\"30\"></th><th width=\"130\" style='white-space: nowrap;'></th><th width=\"30\" style='white-space: nowrap;'></th><th width=\"30\"></th><th width=\"150\"></th><th width=\"80\"></th><th width=\"125\" style='white-space: nowrap;'></th></tr>\n\n";
+}
+
+// Ракетная атака.
+if ( method () === "POST" && $_POST['aktion'] === "Атаковать" )
+{
+    $amount = $_POST['anz'];        // Количество ракет
+    $type = $_POST['pziel'];        // Основная цель (0-все)
+    $origin = $aktplanet;
+    $target = GetPlanet ($_GET['pdd']);
+    $target_user = LoadUser ($target['owner_id']);
+    $dist = abs ($origin['s'] - $target['s']);
+    $ipm_radius = max (0, 5 * $GlobalUser['r117'] - 1);
+
+    if ( $target == NULL) $GalaxyError = "Нет цели";
+
+    if ( $GalaxyError === "" )    // Проверить допустимые параметры
+    {
+        if ($amount == 0) $GalaxyError = "Вы не выбрали количество ракет";
+        if ($amount > $aktplanet["d503"]) $GalaxyError = "Недостаточно межпланетных ракет!";
+        if ($dist > $ipm_radius) $GalaxyError = "Радиус действия (уровень исследования импульсного двигателя) Вашей межпланетной ракеты слишком мал!";
+    }
+
+    if ( $GalaxyError === "" )        // Проверить режимы игроков
+    {
+        if ($GlobalUser['vacation']) $GalaxyError = "В режиме отпуска нельзя запускать ракеты!";
+        else if ($target_user['vacation']) $GalaxyError = "Этот игрок находится в режиме отпуска!";
+        else if ($target['owner_id'] == $GlobalUser['player_id']) $GalaxyError = "Невозможно напасть на собственную планету!";
+        else if ( IsPlayerNewbie($target_user['player_id']) || IsPlayerStrong($target_user['player_id']) ) $GalaxyError = "Планета находится под защитой для новичков!";
+    }
+
+    if ( $GalaxyError === "" )
+    {
+        LaunchRockets ( $origin, $target, 30 + 60 * $dist, $type );
+        $GalaxyMessage = va ( "Запущено #1 ракет!", $amount );
+    }
 }
 
 // Выбрать солнечную систему.
@@ -60,6 +98,7 @@ if ( !$not_enough_deut)
     if ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s )
     {
         AdjustResources (0, 0, 10, $aktplanet['planet_id'], '-');
+        $aktplanet = GetPlanet ( $aktplanet['planet_id'] );
     }
 }
 
@@ -351,20 +390,26 @@ echo "</form>\n";
 
 /***** Форма запуска межпланетных ракет *****/
 
-    if (0) {
+    $system_radius = abs ($aktplanet['s'] - $coord_s);
+    $ipm_radius = max (0, 5 * $GlobalUser['r117'] - 1);
+    $show_ipm_button = ($system_radius <= $ipm_radius) && ($aktplanet["d503"] > 0);
+
+    if ($_GET['mode'] == 1) {
+
+        $target = GetPlanet ( $_GET['pdd'] );
 
 ?>
 
-   <form action="index.php?page=raketenangriff&session=f4fdf56ce44c&p1=6&p2=123&ft3=5&zp=4333060&pid=1343882027"  method="POST">   <tr>
+   <form action="index.php?page=galaxy&session=<?=$session;?>&p1=<?=$coord_g;?>&p2=<?=$coord_s;?>&p3=<?=$coord_p;?>&zp=<?=$_GET['zp'];?>&pdd=<?=$_GET['pdd'];?>"  method="POST">   <tr>
    <table border="0">
     <tr>
      <td class="c" colspan="2">
-      Запустить ракету на <a href="?cmd=0&id=http://www.ogame.freequenzart.de/skins/deepsunrise/&action=galaxy&no_header=1" >[1:1:15]</a>     </td>
+      Запустить ракету на <a href="index.php?page=galaxy&no_header=1&session=<?=$session;?>&p1=<?=$target['g'];?>&p2=<?=$target['s'];?>&p3=<?=$target['p'];?>" >[<?=$target['g'];?>:<?=$target['s'];?>:<?=$target['p'];?>]</a>     </td>
 
     </tr>
     <tr>
      <td class="c">
-     Кол-во ракет (5 в наличии):     <input type="text" name="anz" size="2" maxlength="2" /></td>
+     Кол-во ракет (<?=$aktplanet["d503"];?> в наличии):     <input type="text" name="anz" size="2" maxlength="2" /></td>
     <td class="c">
     Цель:
      <select name="pziel">
@@ -560,7 +605,9 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     if ($user['ally_id'] && $planet['type'] != 10001)
     {
         $ally = LoadAlly ( $user['ally_id']);
-        $allytext = $ally['tag'];
+        $allytext = "<a style=\"cursor:pointer\"\n";
+        $allytext .= "         onmouseover=\"return overlib('<table width=240 ><tr><td class=c >Альянс ".$ally['tag'].". Место в рейтинге - 151, численность - 2 чел.</td></tr><th><table><tr><td><a href=ainfo.php?allyid=".$ally['ally_id']." target=_ally>Представление альянса</a></td></tr><tr><td><a href=index.php?page=statistics&session=$session&start=101&who=ally >Статистика</a></td></tr></table></th></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETY, -50 );\" onmouseout=\"return nd();\">\n";
+        $allytext .= "   ".$ally['tag']." </a>";
     }
     else $allytext = "";
     echo "<th width=\"80\">$allytext</th>\n";
@@ -572,7 +619,10 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
         echo "<a style=\"cursor:pointer\" onclick=\"javascript:doit(6, ".$planet['g'].",".$planet['s'].",".$planet['p'].", 1, 1);\"><img src=\"".UserSkin()."img/e.gif\" border=\"0\" alt=\"Шпионаж\" title=\"Шпионаж\" /></a>\n";
         echo "<a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"Написать сообщение\" title=\"Написать сообщение\" /></a>\n";
         echo "<a href=\"index.php?page=buddy&session=".$_GET['session']."&action=7&buddy_id=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/b.gif\" border=\"0\" alt=\"Предложение подружиться\" title=\"Предложение подружиться\" /></a>\n";
-//<a href="index.php?page=galaxy&session=$session&mode=1&p1=1&p2=260&ft3=14&pdd=34430944&zp=172794"><img src="http://localhost/evolution/img/r.gif" border="0" alt="Ракетная атака" title="Ракетная атака" /></a>
+        if ( $show_ipm_button )
+        {
+            echo "<a href=\"index.php?page=galaxy&session=$session&mode=1&p1=".$planet['g']."&p2=".$planet['s']."&p3=".$planet['p']."&pdd=".$planet['planet_id']."&zp=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/r.gif\" border=\"0\" alt=\"Ракетная атака\" title=\"Ракетная атака\" /></a>";
+        }
     }
     echo "</th>\n";
 
@@ -591,7 +641,11 @@ echo "</tr>\n";
 ?>
 <tr>
 <td class="c" colspan="8">
-<span id="probes"><?=nicenum($aktplanet["f210"]);?></span> Шпионские зонды &nbsp;&nbsp;&nbsp;&nbsp;<span id="recyclers"><?=nicenum($aktplanet["f209"]);?></span> Переработчик  Дейтерий:  <?=nicenum($aktplanet["d"]);?>&nbsp;&nbsp;&nbsp;&nbsp;<span id='slots'><?=$nowfleet;?></span>&nbsp;из <?=$maxfleet;?> слотов находятся в эксплуатации</td>
+<?php
+    if ($aktplanet["f210"] > 0) echo "<span id=\"probes\">".nicenum($aktplanet["f210"])."</span> Шпионские зонды &nbsp;&nbsp;&nbsp;&nbsp;";
+    if ($aktplanet["f209"] > 0) echo "<span id=\"recyclers\">".nicenum($aktplanet["f209"])."</span> Переработчик  &nbsp;&nbsp;&nbsp;&nbsp;";
+    if ($aktplanet["d503"] > 0) echo "<span id=\"missiles\">".nicenum($aktplanet["d503"])."</span> Межпланетные ракеты  &nbsp;&nbsp;&nbsp;&nbsp;";
+?>Дейтерий:  <?=nicenum($aktplanet["d"]);?>&nbsp;&nbsp;&nbsp;&nbsp;<br/><span id='slots'><?=$nowfleet;?></span>&nbsp;из <?=$maxfleet;?> слотов находятся в эксплуатации</td>
 </tr>
 <tr style="display: none;" id="fleetstatusrow"><th colspan="8"><!--<div id="fleetstatus"></div>-->
 <table style="font-weight: bold;" width=100% id="fleetstatustable">
@@ -610,6 +664,6 @@ echo "</center>\n";
 echo "</div>\n";
 echo "<!-- END CONTENT AREA -->\n\n";
 
-PageFooter ();
+PageFooter ($GalaxyMessage, $GalaxyError);
 ob_end_flush ();
 ?>

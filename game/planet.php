@@ -178,6 +178,7 @@ function GetPlanet ( $planet_id)
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."planets WHERE planet_id = '".$planet_id."'";
     $result = dbquery ($query);
+    if ( dbrows($result) == 0 ) return NULL;
     $planet = dbarray ($result);
     $user = LoadUser ( $planet['owner_id'] );
     $planet['mmax'] = store_capacity ( $planet['b22'] );
