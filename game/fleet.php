@@ -401,8 +401,20 @@ function GetMissionName ($num)
 }
 
 // Запустить межпланетные ракеты
-function LaunchRockets ( $origin, $target, $seconds, $type )
+function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
 {
+    $now = time ();
+    $prio = 0;
+
+    // Добавить ракетную атаку.
+    $fleet_id = IncrementDBGlobal ('nextfleet');
+    $fleet_obj = array ( $fleet_id, $origin['owner_id'], 0, 0, 0, 0, 20, $origin['planet_id'], $target['planet_id'], 0,
+                                 0, 0, $amount, $type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+    AddDBRow ($fleet_obj, 'fleet');
+
+    // Добавить задание в глобальную очередь событий.
+    AddQueue ( $origin['owner_id'], "Fleet", $fleet_id, 0, 0, $now, $seconds, $prio );
+    return $fleet_id;
 }
 
 // ==================================================================================
@@ -417,12 +429,6 @@ function FleetList ($fleet)
         if ($fleet[$gid] > 0) $res .= loca("NAME_$gid") . ": " . nicenum ($fleet[$gid]) . " ";
     }
     return $res;
-}
-
-function PlanetName ($planet)
-{
-    if ($planet['type'] == 0) return $planet['name'] . " (".loca("MOON").")";
-    else return $planet['name'];
 }
 
 // *** Атака ***
@@ -698,18 +704,10 @@ function ColonizationReturn ($queue, $fleet_obj, $fleet)
 
 // *** Ракетная атака ***
 
-/*
-     <th>Командование флотом </th>
-     <th>Ракетная атака </th>
-    </tr>
-         <tr>
-       <td class="b"> </td><td colspan="3" class="b">5 ракетам из общего числа выпущенных ракет с планеты Klio <a href=# onclick=showGalaxy(1,263,10); >[1:263:10]</a>  удалось попасть на Вашу планету Frigid Highlands <a href=# onclick=showGalaxy(1,260,4); >[1:260:4]</a> !<br>5 ракет(-ы) было уничтожено Вашими ракетами-перехватчиками<br>:<br><table width=400><tr><td class=c colspan=4>Поражённая оборона</td></tr></tr><td>Ракета-перехватчик</td><td>40</td><td>Большой щитовой купол</td><td>1</td></tr><td>Малый щитовой купол</td><td>1</td><td>Ионное орудие</td><td>20</td></tr><td>Пушка Гаусса</td><td>30</td><td>Тяжёлый лазер</td><td>208</td></tr><td>Лёгкий лазер</td><td>301</td><td>Ракетная установка</td><td>123</td></table><br></td>
-
-    </tr>
-
+function RocketAttackArrive ($queue, $fleet_obj, $fleet)
+{
     RocketAttack ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'] );
-
-*/
+}
 
 function Queue_Fleet_End ($queue)
 {
@@ -730,6 +728,7 @@ function Queue_Fleet_End ($queue)
         case 106: SpyReturn ($queue, $fleet_obj, $fleet); break;
         case 7: ColonizationArrive ($queue, $fleet_obj, $fleet); break;
         case 107: ColonizationReturn ($queue, $fleet_obj, $fleet); break;
+        case 20: RocketAttackArrive ($queue, $fleet_obj, $fleet); break;
         //default: Error ( "Неизвестное задание для флота: " . $fleet_obj['mission'] ); break;
     }
 

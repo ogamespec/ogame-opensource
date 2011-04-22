@@ -50,7 +50,7 @@ if ( method () === "POST" && $_POST['aktion'] === "Атаковать" )
 
     if ( $GalaxyError === "" )
     {
-        LaunchRockets ( $origin, $target, 30 + 60 * $dist, $type );
+        LaunchRockets ( $origin, $target, 30 + 60 * $dist, $amount, $type );
         $GalaxyMessage = va ( "Запущено #1 ракет!", $amount );
     }
 }
@@ -392,7 +392,7 @@ echo "</form>\n";
 
     $system_radius = abs ($aktplanet['s'] - $coord_s);
     $ipm_radius = max (0, 5 * $GlobalUser['r117'] - 1);
-    $show_ipm_button = ($system_radius <= $ipm_radius) && ($aktplanet["d503"] > 0);
+    $show_ipm_button = ($system_radius <= $ipm_radius) && ($aktplanet["d503"] > 0) && ($aktplanet['g'] == $coord_g);
 
     if ($_GET['mode'] == 1) {
 

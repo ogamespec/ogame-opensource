@@ -388,4 +388,11 @@ function HasPlanet ($g, $s, $p)
     else return 0;
 }
 
+// Название планеты / луны
+function PlanetName ($planet)
+{
+    if ( $planet['type'] == 0 ) return $planet['name'] . " (".loca("MOON").")";
+    else return $planet['name'];
+}
+
 ?>
