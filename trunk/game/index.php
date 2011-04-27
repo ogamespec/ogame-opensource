@@ -98,6 +98,7 @@ else if ( $_GET['page'] === "fleet_templates" ) { include "pages/fleet_templates
 else if ( $_GET['page'] === "techtree" ) { include "pages/techtree.php"; exit(); }
 else if ( $_GET['page'] === "techtreedetails" ) { include "pages/techtreedetails.php"; exit(); }
 else if ( $_GET['page'] === "galaxy" ) { include "pages/galaxy.php"; exit (); }
+else if ( $_GET['page'] === "phalanx" ) { include "pages/phalanx.php"; exit (); }
 else if ( $_GET['page'] === "allianzen" ) { include "pages/allianzen.php"; exit (); }
 else if ( $_GET['page'] === "ainfo" ) { include "pages/ainfo.php"; exit (); }
 else if ( $_GET['page'] === "bewerben" ) { include "pages/bewerben.php"; exit (); }
