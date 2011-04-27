@@ -115,6 +115,7 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "Research" ) Queue_Research_End ($queue);
         else if ( $queue['type'] === "Shipyard" ) Queue_Shipyard_End ($queue);
         else if ( $queue['type'] === "Fleet" ) Queue_Fleet_End ($queue);
+        else if ( $queue['type'] === "UnloadAll" ) Queue_Relogin_End ($queue);
         else Error ( "queue: Неизвестный тип задания для глобальной очереди: " . $queue['type']);
     }
 }
@@ -553,6 +554,32 @@ function GetDeleteAccountTaskID ( $player_id)
 
 // ===============================================================================================================
 // Вселенная
+
+// Добавить задание отгрузки игроков, если его ещё не существует.
+// Вызывается при логине любого игрока.
+function AddReloginEvent ()
+{
+    global $db_prefix;
+
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'UnloadAll'";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0 )
+    {
+        $now = time ();
+        $when = mktime (3, 0, 0);
+        if ( date("H") >= 3 ) $when += 24*60*60;
+        $id = IncrementDBGlobal ('nexttask');
+        $queue = array ( $id, 99999, "UnloadAll", 0, 0, 0, $now, $when, 777 );
+        AddDBRow ( $queue, "queue" );
+    }
+}
+
+// Сделать отгрузку всех игроков.
+function Queue_Relogin_End ($queue)
+{
+    UnloadAll ();
+    RemoveQueue ( $queue['task_id'], 0 );
+}
 
 // ===============================================================================================================
 // Флот.

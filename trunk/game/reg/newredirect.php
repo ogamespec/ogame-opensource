@@ -15,6 +15,7 @@ require_once "../bbcode.php";
 require_once "../msg.php";
 require_once "../planet.php";
 require_once "../user.php";
+require_once "../queue.php";
 require_once "../uni.php";
 
 // Соединиться с базой данных

@@ -11,7 +11,7 @@ function mainmenu ($select)
     if ($select == 'reg') echo '    <div class="menupoint">' . loca("MENU_REG") . "</div>\n";
     else echo "    <a href=\"register.php\">" . loca("MENU_REG") . "</a>\n";
     if ($select == 'board') echo '    <div class="menupoint">' . loca("MENU_BOARD") . "</div>\n";
-    else echo "    <a href=\"" . loca("BOARDADDR") . "\">" . loca("MENU_BOARD") . "</a>\n";
+    else echo "    <a href=\"" . loca("BOARDADDR") . "\" target=_top>" . loca("MENU_BOARD") . "</a>\n";
 }
 
 ?>
