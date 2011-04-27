@@ -456,12 +456,16 @@ $tabindex = 3;
 $result = EnumPlanetsGalaxy ( $coord_g, $coord_s );
 $num = $planets = dbrows ($result);
 
+$phalanx_radius = $aktplanet['b42'] * $aktplanet['b42'] - 1;
+
 while ($num--)
 {
     $planet = dbarray ($result);
     $user = LoadUser ( $planet['owner_id']);
     $own = $user['player_id'] == $GlobalUser['player_id'];
     for ($p; $p<$planet['p']; $p++) empty_row ($p);
+
+    $phalanx = ($system_radius < $phalanx_radius) && ($aktplanet['type'] == 0) && ($planet['owner_id'] != $GlobalUser['player_id']);
 
     // Коорд.
     echo "<tr>\n";
@@ -483,6 +487,8 @@ while ($num--)
         else
         {
             echo "<a href=# onclick=doit(6,".$planet['g'].",".$planet['s'].",".$planet['p'].",1,1) >Шпионаж</a><br><br />";
+            if ($phalanx) echo "<a href=# onclick=fenster(&#039;index.php?page=phalanx&session=".$_GET['session']."&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."&#039;) >Фаланга</a><br />";
+            if ( $show_ipm_button ) echo "<a href=index.php?page=galaxy&no_header=1&session=$session&mode=1&p1=".$planet['g']."&p2=".$planet['s']."&p3=".$planet['p']."&pdd=".$planet['planet_id']."&zp=".$planet['owner_id']." >Ракетная атака</a><br />";
             echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=1 m>Атака</a><br />";
             echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=5 >Удерживать</a><br />";
             echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=3 >Транспорт</a><br />";
@@ -502,8 +508,10 @@ while ($num--)
         if ( $planet['lastakt'] > $ago15 ) $akt = "&nbsp;(*)";
         else if ( $planet['lastakt'] > $ago60) $akt = "&nbsp;(".floor(($now - $planet['lastakt'])/60)." min)";
     }
-    if ( $planet['type'] == 10001 ) echo "<th width=\"130\" style='white-space: nowrap;'>Уничтоженная планета$akt</th>\n";
-    else echo "<th width=\"130\" style='white-space: nowrap;'>".$planet['name']."$akt</th>\n";
+    if ( $planet['type'] == 10001 ) $planet_name = "Уничтоженная планета$akt";
+    else $planet_name = $planet['name'].$akt;
+    if ($phalanx) $planet_name = "<a href='#' onclick=fenster('index.php?page=phalanx&session=$session&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."',\"Bericht_Phalanx\") title=\"Фаланга\">" . $planet_name . "</a>";
+    echo "<th width=\"130\" style='white-space: nowrap;'>$planet_name</th>\n";
 
     // луна
     echo "<th width=\"30\" style='white-space: nowrap;'>\n";
@@ -529,6 +537,7 @@ while ($num--)
             else
             {
                 echo "<font color=#808080 >Шпионаж</font><br><br />";
+                if ( $show_ipm_button ) echo "<a href=index.php?page=galaxy&no_header=1&session=$session&mode=1&p1=".$moon['g']."&p2=".$moon['s']."&p3=".$moon['p']."&pdd=".$moon['planet_id']."&zp=".$moon['owner_id']." >Ракетная атака</a><br />";
                 echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=3 >Транспорт</a><br />";
                 echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=1 >Атака</a><br />";
                 echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=5 >Удерживать</a><br />";
