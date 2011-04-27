@@ -23,6 +23,7 @@ function QueueDesc ( $queue )
             $planet = GetPlanet ($sub_id);
             return "Задание на верфи: '".loca("NAME_$obj_id") . "' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
         case "DeleteAccount": return "Удалить аккаунт";
+        case "UnloadAll": return "Отгрузить всех игроков";
     }
 
     return "Неизвестный тип задания (type=$type, sub_id=$sub_id, obj_id=$obj_id, level=$level)";

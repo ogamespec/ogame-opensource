@@ -440,6 +440,9 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
         $user = dbarray ($result);
         SelectPlanet ($player_id, $user['hplanetid']);
 
+        // Задание глобальной отгрузки игроков.
+        AddReloginEvent ();
+
         // Редирект на Обзор Главной планеты.
         if ( $from_validate) echo "<html><head><meta http-equiv='refresh' content='0;url=index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
         else echo "<html><head><meta http-equiv='refresh' content='0;url=../index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
@@ -532,6 +535,14 @@ function RecalcRanks ()
     $query = "UPDATE ".$db_prefix."users
               SET place3 = (SELECT @pos := @pos+1)
               ORDER BY score3 DESC";
+    dbquery ($query);
+}
+
+// Отгрузить всех игроков
+function UnloadAll ()
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."users SET session = ''";
     dbquery ($query);
 }
 
