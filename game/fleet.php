@@ -52,6 +52,13 @@ shipXX: количество кораблей каждого типа (INT)
 215      Экспедиция на орбите
 20        Ракетная атака
 
+Структура таблицы САБов:
+union_id: ID союза = fleet_id * 16 (INT PRIMARY KEY)
+fleet_id: ID головного флота САБа (исходной Атаки) (INT)
+name: название союза. по умолчанию: "KV" + union_id (CHAR(20))
+playerXX: ID приглашенного игрока (INT), XX = 1...5
+players: количество приглашенных игроков (INT, не более 5)
+
 */
 
 // ==================================================================================
@@ -283,7 +290,7 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d)
     $deploy_time = 0;
 
     // HACK.
-    $seconds = 20;
+    //$seconds = 20;
 
     // Добавить флот.
     $fleet_id = IncrementDBGlobal ('nextfleet');
@@ -734,6 +741,103 @@ function Queue_Fleet_End ($queue)
 
     DeleteFleet ($fleet_obj['fleet_id']);            // удалить флот
     RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
+}
+
+// ==================================================================================
+
+// Управление САБами.
+
+// Создать САБ. $fleet_id - паровоз.
+function CreateUnion ($fleet_id)
+{
+    global $db_prefix;
+
+    $fleet_obj = LoadFleet ($fleet_id);
+
+    // Проверить есть ли уже союз?
+    if ( $fleet_obj['union_id'] != 0 ) return $fleet_obj['union_id'];
+
+    // Союзы можно создавать только для убывающих атак.
+    if ($fleet_obj['mission'] != 1) return 0;
+
+    // Добавить союз.
+    $union_id = $fleet_id << 8;
+    $union = array ( $union_id, $fleet_id, "KV$union_id", $fleet_obj['owner_id'], 0, 0, 0, 0, 1 );
+    AddDBRow ($union, 'union');
+
+    // Добавить флот в союз.
+    $query = "UPDATE ".$db_prefix."fleet SET union_id = $union_id WHERE fleet_id = $fleet_id";
+    dbquery ($query);
+    return $union_id;
+}
+
+function LoadUnion ($union_id)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."union WHERE union_id = $union_id";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0) return NULL;
+    else return dbarray ($result);
+}
+
+// Союз удаляется при отзыве, возврате или уничтожении паровоза.
+function RemoveUnion ($union_id)
+{
+    global $db_prefix;
+    $query = "DELETE FROM ".$db_prefix."union WHERE union_id = $union_id";
+    dbquery ($query);
+}
+
+// Переименовать САБ.
+function RenameUnion ($union_id, $name)
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."union SET name = '".$name."' WHERE union_id = $union_id";
+    dbquery ($query);
+}
+
+// Добавить нового участника в САБ.
+// Можно добавлять только друзей и соалов (кроме уже добавленных)
+function AddUnionMember ($union_id, $name)
+{
+    global $db_prefix;
+    global $GlobalUser;
+    $union = LoadUnion ($union_id);
+
+    // Пустое имя, ничего не делаем.
+    if ($name === "") return "";
+
+    // Достигнуто максимальное количество пользователей
+    if ( $union['players'] >= 5 ) return "Участвовать могут максимум 5 игроков!";
+
+    // Найти пользователя
+    $name = mb_strtolower ($name, 'UTF-8');
+    $query = "SELECT * FROM ".$db_prefix."users WHERE name = '".$name."' LIMIT 1";
+    $result = dbquery ($query);
+    if (dbrows ($result) == 0) return "Пользователь не найден";
+    $user = dbarray ($result);
+
+    // Проверить есть ли уже такой пользователь в САБе.
+    for ($i=1; $i<=$union['players']; $i++)
+    {
+        if ( $union["player$i"] == $user['player_id'] ) return "Такой пользователь уже добавлен в союз";    // есть.
+    }
+
+    // Проверить является ли пользователем другом или соалом.
+    if ( ! IsBuddy  ($GlobalUser['player_id'], $user['player_id']) )
+    {
+        if ($user['ally_id']) 
+        {
+            if (  ($user['ally_id'] != $GlobalUser['ally_id']) ) return "Пользователь должен быть в списке друзей или одном альянсе";
+        }
+        else return "Пользователь должен быть в списке друзей или одном альянсе";
+    }
+
+    // Добавить пользователя в САБ и послать ему сообщение о приглашении.
+    $n = $union['players'] + 1;
+    $query = "UPDATE ".$db_prefix."union SET player$n = ".$user['player_id'].", players = players + 1 WHERE union_id = $union_id";
+    dbquery ($query);
+    return "";
 }
 
 ?>
