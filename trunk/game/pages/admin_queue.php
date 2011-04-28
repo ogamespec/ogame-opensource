@@ -41,13 +41,15 @@ function Admin_Queue ()
     echo "<tr><td class=c>Время окончания</td><td class=c>Игрок</td><td class=c>Тип задания</td><td class=c>Описание</td><td class=c>Приоритет</td></tr>\n";
 
     $anz = $rows = dbrows ($result);
+    $bxx = 1;
     while ($rows--) 
     {
         $queue = dbarray ( $result );
         $user = LoadUser ( $queue['owner_id'] );
         $player_id = $user['player_id'];
-        echo "<tr><th> <table><tr><th><div id='bxx1' title='".($queue['end'] - $now)."' star='".$queue['start']."'></th>";
+        echo "<tr><th> <table><tr><th><div id='bxx".$bxx."' title='".($queue['end'] - $now)."' star='".$queue['start']."'></th>";
         echo "<tr><th>".date ("d.m.Y H:i:s", $queue['end'])."</th></tr></table></th><th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=$player_id\">".$user['oname']."</a></th><th>".$queue['type']."</th><th>".QueueDesc($queue)."</th><th>".$queue['prio']."</th></tr>\n";
+        $bxx++;
     }
     echo "<script language=javascript>anz=$anz;t();</script>\n";
 
