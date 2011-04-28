@@ -2,6 +2,9 @@
 
 // Флот 1: подготавливает состав флота
 
+$FleetMessage = "";
+$FleetError = "";
+
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
 $now = time();
@@ -29,14 +32,29 @@ function FleetMissionText ($num)
     echo "      <a title=\"\">".loca("FLEET_ORDER_$num")."</a>\n$desc\n";
 }
 
+$union_id = 0;
+
 // Обработка POST-запросов
 if ( method () === "POST" )
 {
-    $fleet_id = $_POST['order_return'];
-    $fleet_obj = LoadFleet ( $fleet_id );
-    if (  ($fleet_obj['owner_id'] == $GlobalUser['player_id']) &&
-          ($fleet_obj['mission'] < 100 || $fleet_obj['mission'] > 200 )  ) 
-        RecallFleet ( $fleet_id );
+    if ( key_exists ( 'order_return', $_POST) )         // Отзыв флота.
+    {
+        $fleet_id = $_POST['order_return'];
+        $fleet_obj = LoadFleet ( $fleet_id );
+        if (  ($fleet_obj['owner_id'] == $GlobalUser['player_id']) &&
+              ($fleet_obj['mission'] < 100 || $fleet_obj['mission'] > 200 )  ) 
+            RecallFleet ( $fleet_id );
+    }
+
+    else if ( key_exists ( 'order_union', $_POST) )     // Управление САБ.
+    {
+        $fleet_id = $_POST['order_union'];
+        $union_id = CreateUnion ($fleet_id);
+
+        if ( key_exists ( 'union_name', $_POST) ) RenameUnion ( $union_id, $_POST['union_name'] );    // переименовать
+
+        if ( key_exists ( 'user_name', $_POST) ) $FleetError = AddUnionMember ( $union_id, $_POST['user_name'] );    // добавить игрока
+    }
 }
 
 PageHeader ("flotten1");
@@ -125,6 +143,10 @@ $maxfleet = $GlobalUser['r108'] + 1;
     <th><?=date ( "D M j G:i:s", $queue['end']);?></th>
     <th>
          <form action="index.php?page=flotten1&session=<?=$session;?>" method="POST">
+    <input type="hidden" name="order_union" value="<?=$fleet['fleet_id'];?>" />
+        <input type="submit" value="Союз" />
+     </form>
+         <form action="index.php?page=flotten1&session=<?=$session;?>" method="POST">
     <input type="hidden" name="order_return" value="<?=$fleet['fleet_id'];?>" />
         <input type="submit" value="Отзыв" />
      </form>
@@ -154,6 +176,49 @@ $maxfleet = $GlobalUser['r108'] + 1;
 
   </table>
 
+<?php
+// ************************ Форма создания САБ атаки ************************
+
+    if ($union_id != 0)
+    {
+        $union = LoadUnion ($union_id);
+?>
+
+<form action="index.php?page=flotten1&session=<?=$session;?>" method="POST">
+    <input type="hidden" name="order_union" value="<?=$fleet['fleet_id'];?>" />
+  <table width="519" border="0" cellpadding="0" cellspacing="1">
+                    <tr><td class="c" colspan=2>Союз флотов <?=$union['name'];?></td></tr>
+                    <tr><td class="c" colspan=2>Изменить название союза</td></tr>
+                    <tr><th colspan=2>
+<input name="union_name" type="text" value="<?=$union['name'];?>" /> <br /><input type="submit" value="OK" />
+                    </th></tr>
+                    <tr>
+                        <td class="c">Приглашённые участники</td>
+                        <td class="c">Пригласить участника</td>
+                    </tr>
+                    <tr>
+                        <th width="50%">
+                            <select size="5">
+<?php
+    for ($i=1; $i<=$union['players']; $i++)
+    {
+        $player_id = $union["player$i"];
+        if ($player_id == $GlobalUser['player_id']) continue;    // не показывать себя в списке приглашенных
+        $user = LoadUser ($player_id);
+        echo "<option>".$user['oname']."</option>\n";
+    }
+?>
+                            </select>
+                        </th>
+                        <td>
+                            <input name="user_name" type="text" /> <br /><input type="submit" value="OK" />
+                        </td>
+                        <br />
+                    </tr>
+</table></form>
+<?php
+    }
+?>
 
   
 <form action="index.php?page=flotten2&session=<?=$session;?>" method="POST">
@@ -230,6 +295,6 @@ $maxfleet = $GlobalUser['r108'] + 1;
 <!-- END CONTENT AREA -->
 
 <?php
-PageFooter ();
+PageFooter ($FleetMessage, $FleetError);
 ob_end_flush ();
 ?>
