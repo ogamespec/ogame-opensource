@@ -2,6 +2,8 @@
 
 // Управление флотами.
 
+require_once "expedition.php"
+
 /*
 fleet_id: Порядковый номер флота в таблице (INT PRIMARY KEY)
 owner_id: Номер пользователя, которому принадлежит флот (INT)
