@@ -398,11 +398,14 @@ function PageFooter ($msg="", $error="", $popup=false, $headerH=81)
     global $pagetime;
     global $GlobalUser;
 
-    $mtime = microtime(); 
-    $mtime = explode(" ",$mtime); 
-    $mtime = $mtime[1] + $mtime[0];
-    $endtime = $mtime;
-    $msg = sprintf ( "Страница сгенерирована за %f секунд<br>", $endtime-$pagetime) . $msg;
+    if ( $GlobalUser['debug'] )
+    {
+        $mtime = microtime(); 
+        $mtime = explode(" ",$mtime); 
+        $mtime = $mtime[1] + $mtime[0];
+        $endtime = $mtime;
+        $msg = sprintf ( "Страница сгенерирована за %f секунд<br>", $endtime-$pagetime) . $msg;
+    }
 
     if ( !$GlobalUser['validated']) $error = "<center> \nВаш игровой аккаунт ещё не активирован. Зайдите в <a href=index.php?page=options&session=".$GlobalUser['session'].">Настройки</a>, введите электронный адрес и получите на него активационную ссылку.<br></center>\n" . $error;
     else if ( $GlobalUser['disable']) $error = "<center>\nВаш аккаунт был поставлен на удаление. Дата удаления: ".date ("Y-m-d H:i:s", $GlobalUser['disable_until'])."<br></center>\n" . $error;

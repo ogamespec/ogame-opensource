@@ -116,6 +116,7 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "Shipyard" ) Queue_Shipyard_End ($queue);
         else if ( $queue['type'] === "Fleet" ) Queue_Fleet_End ($queue);
         else if ( $queue['type'] === "UnloadAll" ) Queue_Relogin_End ($queue);
+        else if ( $queue['type'] === "DeleteAccount" ) Queue_DeleteAccount_End ($queue);
         else Error ( "queue: Неизвестный тип задания для глобальной очереди: " . $queue['type']);
     }
 }
@@ -550,6 +551,13 @@ function GetDeleteAccountTaskID ( $player_id)
         return $queue['task_id'];
     }
     else return 0;    
+}
+
+// Удалить аккаунт
+function Queue_DeleteAccount_End ($queue)
+{
+    RemoveUser ( $queue['owner_id'] );
+    // удалять задание не нужно, потому что все задания игрока удаляются в функции RemoveUser.
 }
 
 // ===============================================================================================================

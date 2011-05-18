@@ -57,6 +57,7 @@ function Admin_Users ()
             $query .= "admin = '".$_POST['admin']."', ";
             $query .= "validated = ".($_POST['validated']==="on"?1:0).", ";
             $query .= "sniff = ".($_POST['sniff']==="on"?1:0).", ";
+            $query .= "debug = ".($_POST['debug']==="on"?1:0).", ";
 
             $query .= "sortby = '".$_POST['settings_sort']."', ";
             $query .= "sortorder = '".$_POST['settings_order']."', ";
@@ -143,6 +144,7 @@ function Admin_Users ()
    </select>
 </th></tr>
             <tr><th>Включить слежение</th><th><input type="checkbox" name="sniff" <?=IsChecked($user, "sniff");?> /></th></tr>
+            <tr><th>Отладочная информация</th><th><input type="checkbox" name="debug" <?=IsChecked($user, "debug");?> /></th></tr>
         </table></th>
 
         <th valign=top><table>
