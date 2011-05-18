@@ -46,6 +46,7 @@ aktplanet: Текущая выбранная планета. (INT)
 dm: Покупная ТМ (INT)
 dmfree: ТМ найденная в экспедиции (INT)
 sniff: Включить слежение за историей переходов (Админка) (INT)
+debug: Включить отображение отладочной информации (INT)
 score1,2,3: Очки за постройки, флот, исследования (BIGINT UNSIGNED, INT UNSIGNED, INT UNSIGNED )
 place1,2,3: Место за постройки, флот, исследования (INT)
 oldscore1,2,3: Старые очки за постройки, флот, исследования (BIGINT UNSIGNED, INT UNSIGNED, INT UNSIGNED )
@@ -186,7 +187,7 @@ function CreateUser ( $name, $pass, $email)
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, $ip, 0, $ack, $homeplanet, 0, 0, 0,
                         hostname() . "evolution/", 1, 0, 1, 3, $lang, $homeplanet,
-                        0, 0, 0, 
+                        0, 0, 0, 0, 
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
@@ -205,10 +206,23 @@ function RemoveUser ( $player_id)
 {
     global $db_prefix;
 
-    // Аккаунт администратора нельзя удалить.
-    if ($player_id == 1) return;
+    // Аккаунты администратора и space нельзя удалить.
+    if ($player_id == 1 || $player_id == 99999) return;
 
-    $query = "DELETE FROM ".$db_prefix."users"." WHERE player_id = '".$player_id."'";
+    // Удалить все флоты игрока
+    $query = "DELETE FROM ".$db_prefix."fleet WHERE owner_id = $player_id";
+    dbquery ($query);
+
+    // Удалить все задания из очереди
+    $query = "DELETE FROM ".$db_prefix."queue WHERE owner_id = $player_id";
+    dbquery ($query);
+
+    // Удалить все планеты.
+    $query = "DELETE FROM ".$db_prefix."planets WHERE owner_id = $player_id";
+    dbquery ($query);
+
+    // Удалить игрока.
+    $query = "DELETE FROM ".$db_prefix."users WHERE player_id = $player_id";
     dbquery ($query);
 
     // Уменьшить количество пользователей.
