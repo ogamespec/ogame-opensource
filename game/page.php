@@ -44,6 +44,8 @@ function PageHeader ($page, $noheader=false, $leftmenu=true)
     global $pagetime;
     global $GlobalUser;
 
+    BrowseHistory ();
+
     $mtime = microtime(); 
     $mtime = explode(" ",$mtime); 
     $mtime = $mtime[1] + $mtime[0]; 

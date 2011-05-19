@@ -35,10 +35,12 @@ if (file_exists ("config.php"))
 // Сохранить настройки.
 if ( key_exists("install", $_POST) && CheckParameters() )
 {
-    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','queue','fleet','union');
-    $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','nextplanet','nextally','nextapp','nextmsg','nextnote','nextbuddy','nexterror','nexttask','nextfleet', 
+    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','fleet','union');
+    $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','freeze',
+                              'nextplanet','nextally','nextapp','nextmsg','nextnote','nextbuddy','nexterror','nexttask','nextfleet','nextlog',
                               'news1', 'news2', 'news_until', 'startdate' );
-    $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
+    $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
+                              'INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
                               'TEXT', 'TEXT', 'INT UNSIGNED', 'INT UNSIGNED' );
     $usercols = array ( 'player_id', 'regdate', 'ally_id', 'joindate', 'allyrank', 'session', 'private_session', 'name', 'oname', 'name_changed', 'name_until', 'password', 'pemail', 'email',
                         'email_changed', 'email_until', 'disable', 'disable_until', 'vacation', 'vacation_until', 'banned', 'banned_until', 'noattack', 'noattack_until',
@@ -82,6 +84,8 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $errorstype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'INT UNSIGNED' );
     $debugcols = array ( 'error_id', 'owner_id', 'ip', 'agent', 'url', 'text', 'date' );
     $debugtype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'INT UNSIGNED' );
+    $browsecols = array ( 'log_id', 'owner_id', 'url', 'method', 'date' );
+    $browsetype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'INT UNSIGNED' );
     $queuecols = array ( 'task_id', 'owner_id', 'type', 'sub_id', 'obj_id', 'level', 'start', 'end', 'prio' );
     $queuetype = array ( 'INT PRIMARY KEY', 'INT', 'CHAR(20)', 'INT', 'INT', 'INT', 'INT UNSIGNED', 'INT UNSIGNED', 'INT' );
     $fleetcols = array ( 'fleet_id', 'owner_id', 'union_id', 'm', 'k', 'd', 'mission', 'start_planet', 'target_planet', 'deploy_time',
@@ -90,8 +94,8 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                                  'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
     $unioncols = array ( 'union_id', 'fleet_id', 'name', 'player1', 'player2', 'player3', 'player4', 'player5', 'players' );
     $uniontype = array ( 'INT PRIMARY KEY', 'INT', 'CHAR(20)', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
-    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$queuecols, &$fleetcols, &$unioncols);
-    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$debugtype, &$queuetype, &$fleettype, &$uniontype);
+    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$browsecols, &$queuecols, &$fleetcols, &$unioncols);
+    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$debugtype, &$browsetype, &$queuetype, &$fleettype, &$uniontype);
     $now = time();
 
     //print_r ($_POST);
@@ -135,6 +139,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "defrepair_delta = '10', ";
     $query .= "nextuser = '100000', ";
     $query .= "usercount = '1', ";
+    $query .= "freeze = '1', ";
     $query .= "nextplanet = '10000', ";
     $query .= "nextally = '1', ";
     $query .= "nextapp = '10000', ";
@@ -144,6 +149,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "nexterror = '10000', ";
     $query .= "nexttask = '1', ";
     $query .= "nextfleet = '10000', ";
+    $query .= "nextlog = '10000', ";
     $query .= "news1 = '', ";
     $query .= "news2 = '', ";
     $query .= "news_until = '0', ";

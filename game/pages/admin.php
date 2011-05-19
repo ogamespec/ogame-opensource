@@ -69,6 +69,7 @@ echo "<center>\n";
 echo "<table width=\"750\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\">\n\n";
 
 if ( $mode === "Home" ) Admin_Home ();
+else if ( $mode === "Browse" ) Admin_Browse ();
 else if ( $mode === "Bans" ) Admin_Bans ();
 else if ( $mode === "Users" ) Admin_Users ();
 else if ( $mode === "Planets" ) Admin_Planets ();
