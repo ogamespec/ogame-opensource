@@ -63,4 +63,17 @@ function BackTrace ()
     return $trace;
 }
 
+// Сохранить историю переходов
+function BrowseHistory ()
+{
+    global $GlobalUser;
+
+    if ( $GlobalUser['sniff'] )
+    {
+        $id = IncrementDBGlobal ( 'nextlog' );
+        $log = array ( $id, $GlobalUser['player_id'], $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'], time() );
+        AddDBRow ( $log, 'browse' );
+    }
+}
+
 ?>

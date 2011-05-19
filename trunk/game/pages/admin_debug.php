@@ -7,10 +7,25 @@ function Admin_Debug ()
 {
     global $session;
     global $db_prefix;
+
+    if ( method () === "POST" )
+    {
+        $query = "SELECT * FROM ".$db_prefix."debug ORDER BY date DESC LIMIT 50";
+        $result = dbquery ($query);
+        $rows = dbrows ($result);
+        while ($rows--)
+        {
+            $msg = dbarray ( $result );
+            if ( $_POST["delmes".$msg['error_id']] === "on" || $_POST['deletemessages'] === "deleteall" )
+            {
+                $query = "DELETE FROM ".$db_prefix."debug WHERE error_id = " . $msg['error_id'];
+                dbquery ($query);
+            }
+        }
+    }
+
     $query = "SELECT * FROM ".$db_prefix."debug ORDER BY date DESC LIMIT 50";
     $result = dbquery ($query);
-
-    if ( method () === "POST" ) print_r ( $_POST );
 
 ?>
 
