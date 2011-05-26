@@ -379,14 +379,14 @@ function LeftMenu ()
     echo " <tr>\n";
     echo "  <td>\n";
     echo "   <div align='center'><font color='#FFFFFF'>\n";
-    echo "     <a href='index.php?page=rules' target='_blank'>".loca("MENU_RULES")."</a> <!-- external link to rules -->\n";
+    echo "     <a href='http://board.oldogame.ru/thread.php?threadid=16' target='_blank'>".loca("MENU_RULES")."</a> <!-- external link to rules -->\n";
     echo "   </font></div>\n";
     echo "  </td>\n";
     echo " </tr>\n\n";
     echo " <tr>\n";
     echo "  <td>\n";
     echo "   <div align='center'><font color='#FFFFFF'>\n";
-    echo "    <a href='zzz' target='_blank'>".loca("MENU_IMPRESSUM")."</a> <!-- external link to impressum -->\n";
+    echo "    <a href='http://oldogame.ru/impressum.php' target='_blank'>".loca("MENU_IMPRESSUM")."</a> <!-- external link to impressum -->\n";
     echo "   </font></div>\n";
     echo "  </td>\n";
     echo " </tr>\n\n";
