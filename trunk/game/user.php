@@ -561,4 +561,20 @@ function UnloadAll ()
     dbquery ($query);
 }
 
+// Сменить путь к скину
+function ChangeSkinPath ($player_id, $dpath)
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."users SET skin = '".$dpath."' WHERE player_id = $player_id";
+    dbquery ($query);
+}
+
+// Включить/выключить отображение скина. При выключенном скине отображается скин по умолчанию.
+function EnableSkin ($player_id, $enable)
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."users SET useskin = $enable WHERE player_id = $player_id";
+    dbquery ($query);
+}
+
 ?>

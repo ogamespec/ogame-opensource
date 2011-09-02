@@ -180,7 +180,11 @@ $speed = $unitab['speed'];
                 if ($id)  RemoveQueue ( $id, 0);
             }
 
-            // dpath design noipcheck
+            // Сохранить путь к скину + галочка показывать/выключить скин.
+            ChangeSkinPath ( $GlobalUser['player_id'], $_POST['dpath'] );
+            EnableSkin ( $GlobalUser['player_id'], ($_POST['design']==="on"?1:0) );
+
+            // Включить/выключить проверку IP адреса (noipcheck)
 
             $sortby = min ( max(0, $_POST['settings_sort']), 2);
             $sortorder = min ( max(0, $_POST['settings_order']), 1);
@@ -269,6 +273,52 @@ $speed = $unitab['speed'];
 
   <th>Путь для скинов (напр. C:/ogame/kartinki/)<br /> <a href="http://graphics.ogame-cluster.net/download/" target="_blank">Скачать</a></th>
    <th><input type=text name="dpath" maxlength="80" size="40" value="<?=$GlobalUser['skin'];?>" /> <br />
+  <?php
+            // Если путь к скину пустой выдать список доступных скинов на сервере графики.
+            if ( $GlobalUser['skin'] === "" ) {
+    ?>
+  <select name="dpath" size="1" >
+   <option selected>  </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/allesnurgeklaut/">allesnurgeklaut </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/ally-cpb/">ally-cpb </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/asgard/">asgard </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/aurora/">aurora </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/bluedream/">bluedream </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/bluegalaxy/">bluegalaxy </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/blueplanet/">blueplanet </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/bluechaos/">bluechaos </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/bluemx/">bluemx </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/brace/">brace </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/brotstyle/">brotstyle </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/dd/">dd </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/eclipse/">eclipse </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/empire/">empire </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/epicblue/">epicblue </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/evolution/">evolution </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/freakyfriday/">freakyfriday </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/g3cko/">g3cko </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/gruen/">gruen </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/infraos/">infraos </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/lambda/">lambda </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/lego/">lego </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/militaryskin/">militaryskin </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/okno/">okno </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/ovisio/">ovisio </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/ovisiofarbig/">ovisiofarbig </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/paint/">paint </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/quadratorstyle/">quadratorstyle </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/real/">real </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/redfuturistisch/">redfuturistisch </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/redvision/">redvision </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/reloaded/">reloaded </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/shadowpato/">shadowpato </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/simpel/">simpel </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/starwars/">starwars </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/w4wooden4ce/">w4wooden4ce </option>
+      <option value="http://graphics.ogame-cluster.net/download/use/xonic/">xonic </option>
+    <?php
+            }
+  ?>
   </select>
 
    </th>
