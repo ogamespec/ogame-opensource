@@ -48,7 +48,7 @@
      </div>
      <div id="downmenu">
         <a href="regeln.php"><?=loca("DOWN_RULES");?></a>&nbsp;
-        <a target="_blank" href="#"><?=loca("DOWN_IMPRINT");?></a>&nbsp;
+        <a target="_blank" href="impressum.php"><?=loca("DOWN_IMPRINT");?></a>&nbsp;
         <a target="_blank" href="#"><?=loca("DOWN_TAC");?></a>
 
      </div>    
