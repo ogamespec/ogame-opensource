@@ -13,6 +13,8 @@
 
 В HTML коде *{вот так}* будут показываться места, где PHP-код генерирует контент, например путь к скину или какие-нибудь параметры.
 
+Заранее извиняюсь, что часть текста на немецком, но я не успел сохранить разные незначительные страницы или их детали, пришлось потом дособирать инфу в единственной оставшейся вселенной без редизайна -- немецкой 20й вселенной. Не страшно, всё равно перевод немецких текстов у меня есть в русской локализации, главное чтобы HTML код соответствовал оригиналу.
+
 = Заголовок =
 
 {{{
@@ -463,6 +465,242 @@ function popUp(URL) {
 ==Постройки (page=b_building)==
 ==Сырьё (page=resources)==
 ==Исследования (page=buildings&mode=Forschung)==
+Если на планете/луне нет лабы, выводится сообщение : "Для этого необходимо построить исследовательскую лабораторию!"
+{{{
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<title>
+Постройки#Gebaeude
+</title>
+<script type="text/javascript">
+
+function setMax(key, number){
+    document.getElementsByName('fmenge['+key+']')[0].value=number;
+}
+</script>
+<table align=top><tr><td style='background-color:transparent;'>  <table width=530>          <tr>
+          <td class=l colspan="2">Описание</td>
+          <td class=l><b>Кол-во</b></td>
+          </tr>
+
+          
+<table><tr><td class=c>Для этого необходимо построить исследовательскую лабораторию!</td></tr></table></table></table>
+<br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+}}}
+
+Если на планете есть лаборатория, то выводится таблица исследований.
+Каждая строка таблицы -- одно исследование.
+В таблице перечислены только те исследование, которые можно исследовать в данной лаборатории. Если исследование можно запустить (ресурсов хватает), оно выделяется зеленым цветом, если нельзя (ресурсов не хватает) - красным. Если исследование уже запущено на одной из планет, то все ячейки пустые, за исключение текущего исследования, которое помечается ссылкой "отменить". Ссылка "отменить" показывается только на той планете, где было запущено исследование, на остальных планетах показываются пустые ячейки, а кнопка отмены неактивна.
+В Режиме Отпуска все исследования помечены красным, и вверху страницы показывается надпись : "Режим отпуска минимум до  2009-01-02 10:26:43".
+
+Шаблон таблицы :
+{{{
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<title>
+Постройки#Gebaeude
+</title>
+<script type="text/javascript">
+
+function setMax(key, number){
+    document.getElementsByName('fmenge['+key+']')[0].value=number;
+}
+</script>
+<table align=top><tr><td style='background-color:transparent;'>  <table width=530>          <tr>
+          <td class=l colspan="2">Описание</td>
+          <td class=l><b>Кол-во</b></td>
+          </tr>
+
+{ИССЛЕДОВАНИЕ 1}          
+
+{ИССЛЕДОВАНИЕ 2}
+
+{ИССЛЕДОВАНИЕ 3}
+
+....
+
+</table></table>
+
+<br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+}}}
+
+Для режима отпуска вначале таблицы такой текст:
+
+{{{
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<title>
+Постройки#Gebaeude
+</title>
+<script type="text/javascript">
+
+function setMax(key, number){
+    document.getElementsByName('fmenge['+key+']')[0].value=number;
+}
+</script>
+
+<font color=#FF0000><center>Режим отпуска минимум до  2009-01-02 10:26:43</center></font><table align=top><tr><td style='background-color:transparent;'> ........ дальше всё тоже самое
+}}}
+
+Ячейки таблицы (исследования) :
+
+Исследование можно запустить :
+
+{{{
+<tr>             <td class=l>
+                <a href=index.php?page=infos&session={SESSION}&gid=117>
+                <img border='0' src="{SKIN}gebaeude/117.gif" align='top' width='120' height='120'>
+                </a>
+                </td>
+        <td class=l><a href=index.php?page=infos&session={SESSION}&gid=117>Impulstriebwerk</a></a> (Stufe 4)<br>Das Impulstriebwerk basiert auf dem Rucksto?prinzip. Die Weiterentwicklung dieser Triebwerke macht einige Schiffe schneller, allerdings steigert jede Stufe die Geschwindigkeit nur um 20% des Grundwertes.<br>Benotigt: Metall: <b>32.000</b> Kristall: <b>64.000</b> Deuterium: <b>9.600</b><br>Produktionsdauer: 12h 0m <br></th><td class=k> <a href=index.php?page=buildings&session={SESSION}&mode=Forschung&bau=117><font color=#00FF00>Erforschen<br> von Stufe  5</font></a></td></tr>
+}}}
+
+Исследование нельзя запустить :
+
+{{{
+<tr>                <td class=l>
+                <a href=index.php?page=infos&session={SESSION}&gid=106>
+                <img border='0' src="{SKIN}gebaeude/106.gif" align='top' width='120' height='120'>
+                </a>
+                </td>
+        <td class=l><a href=index.php?page=infos&session={SESSION}&gid=106>Шпионаж</a></a> (уровень 13)<br>С помощью этой технологии добываются данные о других планетах.<br>Стоимость: Металл: <b>1.638.400</b> Кристалл: <b>8.192.000</b> Дейтерий: <b>1.638.400</b><br>Длительность: 8дн. 8ч 37мин 13сек<br></th><td class=k><font color=#FF0000>Исследовать<br> уровень  14</font></td></tr>
+}}}
+
+Исследоование запущено (пустая ячейка) :
+
+{{{
+<tr>                <td class=l>
+                <a href=index.php?page=infos&session={SESSION}&gid=106>
+                <img border='0' src="{SKIN}gebaeude/106.gif" align='top' width='120' height='120'>
+                </a>
+                </td>
+        <td class=l><a href=index.php?page=infos&session={SESSION}x&gid=106>Spionagetechnik</a></a> (Stufe 6)<br>Mit Hilfe dieser Technik lassen sich Informationen uber andere Planeten und Monde gewinnen.<br>Benotigt: Metall: <b>12.800</b> Kristall: <b>64.000</b> Deuterium: <b>12.800</b><br>Produktionsdauer: 10h 58m 17s<br></th><td class=k> - </td></tr>
+}}}
+
+Отменить исследование (только на планете откуда оно было запущено) :
+
+{{{
+<tr>                <td class=l>
+                <a href=index.php?page=infos&session={SESSION}&gid=113>
+                <img border='0' src="{SKIN}gebaeude/113.gif" align='top' width='120' height='120'>
+                </a>
+                </td>
+        <td class=l><a href=index.php?page=infos&session={SESSION}&gid=113>Energietechnik</a></a> (Stufe 6)<br>Die Beherrschung der unterschiedlichen Arten von Energie ist fur viele neue Technologien notwendig.<br>Benotigt: Kristall: <b>51.200</b> Deuterium: <b>25.600</b><br>Produktionsdauer: 6h 24m <br></th><td class=k>                <div id="bxx" class="z"></div>
+                <script   type="text/javascript">
+                v=new Date();
+                var bxx=document.getElementById('bxx');
+                function t(){
+                    n=new Date();
+                    ss=21551;
+                    s=ss-Math.round((n.getTime()-v.getTime())/1000.);
+                    m=0;h=0;
+                    if(s<0){
+    
+                        bxx.innerHTML='Abgeschlossen<br><a href=index.php?page=buildings&session={SESSION}&mode=Forschung&cp=1135279 >weiter</a>';
+                    }else{
+                        if(s>59){
+                            m=Math.floor(s/60);
+                            s=s-m*60
+                        }
+                        if(m>59){
+                            h=Math.floor(m/60);
+                            m=m-h*60
+                        }
+                        if(s<10){
+                            s="0"+s
+                        }
+                        if(m<10){
+                            m="0"+m
+                        }
+                        bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=buildings&session={SESSION}&unbau=113&mode=Forschung&cp=1135279"+
+                        ">Abbrechen</a>"                    }
+                    ;
+                    window.setTimeout("t();",999);
+                }
+                window.onload=t;
+                </script>
+    </td></tr>
+}}}
+
+Отменить исследование нельзя (на другой планете) :
+
+{{{
+<tr>                <td class=l>
+                <a href=index.php?page=infos&session={SESSION}&gid=113>
+                <img border='0' src="{SKIN}gebaeude/113.gif" align='top' width='120' height='120'>
+                </a>
+                </td>
+        <td class=l><a href=index.php?page=infos&session={SESSION}&gid=113>Energietechnik</a></a> (Stufe 6)<br>Die Beherrschung der unterschiedlichen Arten von Energie ist fur viele neue Technologien notwendig.<br>Benotigt: Kristall: <b>51.200</b> Deuterium: <b>25.600</b><br>Produktionsdauer: 7h 18m 51s<br></th><td class=k>                <div id="bxx" class="z"></div>
+                <script   type="text/javascript">
+                v=new Date();
+                var bxx=document.getElementById('bxx');
+                function t(){
+                    n=new Date();
+                    ss=21643;
+                    s=ss-Math.round((n.getTime()-v.getTime())/1000.);
+                    m=0;h=0;
+                    if(s<0){
+    
+                        bxx.innerHTML='Abgeschlossen<br><a href=index.php?page=buildings&session={SESSION}&mode=Forschung&cp=1143901 >weiter</a>';
+                    }else{
+                        if(s>59){
+                            m=Math.floor(s/60);
+                            s=s-m*60
+                        }
+                        if(m>59){
+                            h=Math.floor(m/60);
+                            m=m-h*60
+                        }
+                        if(s<10){
+                            s="0"+s
+                        }
+                        if(m<10){
+                            m="0"+m
+                        }
+                        bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=buildings&session={SESSION}&unbau=113&mode=Forschung&cp=1135279"+
+                                            }
+                    ;
+                    window.setTimeout("t();",999);
+                }
+                window.onload=t;
+                </script>
+    </td></tr>
+}}}
+
+Особый случай -- исследование 0го уровня, немного отличается :
+
+{{{
+<tr>                <td class=l>
+                <a href=index.php?page=infos&session=55851c46e726&gid=124>
+                <img border='0' src="{SKIN}gebaeude/124.gif" align='top' width='120' height='120'>
+                </a>
+                </td>
+        <td class=l><a href=index.php?page=infos&session={SESSION}&gid=124>Expeditionstechnik</a><br>Schiffe konnen mit einem Forschungsmodul ausgerustet werden, welches bei Forschungsreisen eine wissenschaftliche Aufarbeitung der gesammelten Daten ermoglicht.<br>Benotigt: Metall: <b>4.000</b> Kristall: <b>8.000</b> Deuterium: <b>4.000</b><br>Produktionsdauer: 1h 30m <br></th><td class=k> <a href=index.php?page=buildings&session={SESSION}&mode=Forschung&bau=124><font color=#00FF00> erforschen </font></a></td></tr>
+
+<tr>               <td class=l>
+
+                <a href=index.php?page=infos&session={SESSION}&gid=199>
+                <img border='0' src="{SKIN}gebaeude/199.gif" align='top' width='120' height='120'>
+                </a>
+                </td>
+        <td class=l><a href=index.php?page=infos&session={SESSION}&gid=199>Гравитационная технология</a><br>Путём запуска концентрированного заряда частиц гравитона можно создавать искусственное гравитационное поле, благодаря которому можно уничтожать корабли или даже луны.<br>Стоимость: Энергия: <b>300.000</b><br>Длительность: 1сек<br></th><td class=k><font color=#FF0000> исследовать </font></a></td></tr>
+}}}
+
+нет пометки *(уровень X)* и вместо надписи "Исследовать уровень 4", просто "исследовать".
+
+Ещё одна деталь : если для исследования не нужно Металла/Кристалла/Дейтерия/Энергии, то этот ресурс не указывается в стоимости исследования. Порядок вывода необходимых ресурсов : Металл -> Кристалл -> Дейтерий -> Энергия.
+
+Ну и естественно описание каждого исследования разное :-)
+
 ==Верфь (page=buildings&mode=Flotte)==
 ==Флот (page=flotten1)==
 ==Технологии (page=techtree)==
