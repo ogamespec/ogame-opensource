@@ -491,11 +491,13 @@ function setMax(key, number){
 </div>
 <!-- END CONTENT AREA -->
 }}}
+<img src="http://ogamespec.com/imgstore/whc4e64abb8e89f9.jpg">
 
 Если на планете есть лаборатория, то выводится таблица исследований.
 Каждая строка таблицы -- одно исследование.
 В таблице перечислены только те исследование, которые можно исследовать в данной лаборатории. Если исследование можно запустить (ресурсов хватает), оно выделяется зеленым цветом, если нельзя (ресурсов не хватает) - красным. Если исследование уже запущено на одной из планет, то все ячейки пустые, за исключение текущего исследования, которое помечается ссылкой "отменить". Ссылка "отменить" показывается только на той планете, где было запущено исследование, на остальных планетах показываются пустые ячейки, а кнопка отмены неактивна.
 В Режиме Отпуска все исследования помечены красным, и вверху страницы показывается надпись : "Режим отпуска минимум до  2009-01-02 10:26:43".
+Если одна из Исследовательский лабораторий усовершенствуется, выводится соотв. надпись и все доступные исследования становятся "красными".
 
 Шаблон таблицы :
 {{{
@@ -551,6 +553,29 @@ function setMax(key, number){
 <font color=#FF0000><center>Режим отпуска минимум до  2009-01-02 10:26:43</center></font><table align=top><tr><td style='background-color:transparent;'> ........ дальше всё тоже самое
 }}}
 
+<img src="http://ogamespec.com/imgstore/whc4e64abc08bd72.jpg">
+
+Если одна из лабораторий усовершенствуется :
+
+{{{
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<title>
+Постройки#Gebaeude
+</title>
+<script type="text/javascript">
+
+function setMax(key, number){
+    document.getElementsByName('fmenge['+key+']')[0].value=number;
+}
+</script>
+
+<br><br><font color=#FF0000>Проведение исследований невозможно, так как исследовательская лаборатория усовершенствуется.</font><br /><br /><table align=top><tr><td style='background-color:transparent;'> .... дальше тоже самое, но все исследования красные.
+}}}
+
+<img src="http://ogamespec.com/imgstore/whc4e64abc938c7a.jpg">
+
 Ячейки таблицы (исследования) :
 
 Исследование можно запустить :
@@ -575,6 +600,8 @@ function setMax(key, number){
         <td class=l><a href=index.php?page=infos&session={SESSION}&gid=106>Шпионаж</a></a> (уровень 13)<br>С помощью этой технологии добываются данные о других планетах.<br>Стоимость: Металл: <b>1.638.400</b> Кристалл: <b>8.192.000</b> Дейтерий: <b>1.638.400</b><br>Длительность: 8дн. 8ч 37мин 13сек<br></th><td class=k><font color=#FF0000>Исследовать<br> уровень  14</font></td></tr>
 }}}
 
+<img src="http://ogamespec.com/imgstore/whc4e64abd720600.jpg">
+
 Исследоование запущено (пустая ячейка) :
 
 {{{
@@ -585,6 +612,8 @@ function setMax(key, number){
                 </td>
         <td class=l><a href=index.php?page=infos&session={SESSION}x&gid=106>Spionagetechnik</a></a> (Stufe 6)<br>Mit Hilfe dieser Technik lassen sich Informationen uber andere Planeten und Monde gewinnen.<br>Benotigt: Metall: <b>12.800</b> Kristall: <b>64.000</b> Deuterium: <b>12.800</b><br>Produktionsdauer: 10h 58m 17s<br></th><td class=k> - </td></tr>
 }}}
+
+<img src="http://ogamespec.com/imgstore/whc4e64abdcaaa6b.jpg">
 
 Отменить исследование (только на планете откуда оно было запущено) :
 
@@ -676,6 +705,8 @@ function setMax(key, number){
     </td></tr>
 }}}
 
+<img src="http://ogamespec.com/imgstore/whc4e64abe3b58c1.jpg">
+
 Особый случай -- исследование 0го уровня, немного отличается :
 
 {{{
@@ -694,6 +725,8 @@ function setMax(key, number){
                 </td>
         <td class=l><a href=index.php?page=infos&session={SESSION}&gid=199>Гравитационная технология</a><br>Путём запуска концентрированного заряда частиц гравитона можно создавать искусственное гравитационное поле, благодаря которому можно уничтожать корабли или даже луны.<br>Стоимость: Энергия: <b>300.000</b><br>Длительность: 1сек<br></th><td class=k><font color=#FF0000> исследовать </font></a></td></tr>
 }}}
+
+<img src="http://ogamespec.com/imgstore/whc4e64abe9123e2.jpg">
 
 нет пометки *(уровень X)* и вместо надписи "Исследовать уровень 4", просто "исследовать".
 
