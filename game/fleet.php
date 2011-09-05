@@ -274,15 +274,6 @@ function AdjustShips ($fleet, $planet_id, $sign)
     dbquery ($query);
 }
 
-// Изменить количество ресурсов на планете.
-function AdjustResources ($m, $k, $d, $planet_id, $sign)
-{
-    global $db_prefix;
-    $query = "UPDATE ".$db_prefix."planets SET m=m $sign '".$m."', k=k $sign '".$k."', d=d $sign '".$d."' WHERE planet_id=$planet_id;";
-    //echo "$query<br>";
-    dbquery ($query);
-}
-
 // Отправить флот. Никаких проверок не производится. Возвращает ID флота.
 function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d)
 {

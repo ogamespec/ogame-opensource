@@ -22,6 +22,9 @@ function QueueDesc ( $queue )
         case "Shipyard":
             $planet = GetPlanet ($sub_id);
             return "Задание на верфи: '".loca("NAME_$obj_id") . "' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
+        case "Research":
+            $planet = GetPlanet ($sub_id);
+            return "Ведется исследование '".loca("NAME_$obj_id") . "' ($level) с планеты <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
         case "DeleteAccount": return "Удалить аккаунт";
         case "UnloadAll": return "Отгрузить всех игроков";
     }

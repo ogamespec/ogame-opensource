@@ -444,9 +444,6 @@ function Queue_Shipyard_End ($queue)
 function StartResearch ($player_id, $planet_id, $id)
 {
     global $db_prefix;
-	
-    // Требования к уровню лаборатории для запуска исследования.
-    $RequireLab = array ( 106=>3, 108=>1, 109=>4, 110=>6, 111=>2, 113=>1, 114=>7, 115=>1, 117=>2, 118=>7, 120=>1, 121=>4, 122=>4, 123=>10, 124=>3, 199=>12 );
 
     Debug ("Запустить исследование ".loca("NAME_$id")." на планете $planet_id игрока $player_id" );
 
@@ -464,7 +461,7 @@ function StartResearch ($player_id, $planet_id, $id)
     $m = $k = $d = $e = 0;
     ResearchPrice ( $id, $level, &$m, &$k, &$d, &$e );
 
-    if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && ResearchMeetRequirement ( $user, $planet, $id ) && $planet['b31'] >= $RequireLab[$id] ) {
+    if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && ResearchMeetRequirement ( $user, $planet, $id ) ) {
         $unitab = LoadUniverse ( );
         $speed = $unitab['speed'];
         $now = time ();
@@ -472,11 +469,7 @@ function StartResearch ($player_id, $planet_id, $id)
         $seconds = ResearchDuration ( $id, $level, $reslab, $speed);
 
         // Списать ресурсы.
-        $planet['m'] -= $m;
-        $planet['k'] -= $k;
-        $planet['d'] -= $d;
-        $query = "UPDATE ".$db_prefix."planets SET m = '".$planet['m']."', k = '".$planet['k']."', d = '".$planet['d']."', lastpeek = '".$now."' WHERE planet_id = $planet_id";
-        dbquery ($query);
+        AdjustResources ($m, $k, $d, $planet_id, '-');
 
         //echo "--------------------- Запустить исследование $id на планете $planet_id игрока $player_id, уровень $level, продолжительность $seconds" ;
         AddQueue ($player_id, "Research", $planet_id, $id, $level, $now, $seconds);
@@ -484,11 +477,36 @@ function StartResearch ($player_id, $planet_id, $id)
 }
 
 // Отменить исследование.
-function StopResearch ($player_id, $id)
+function StopResearch ($player_id)
 {
-	global $db_prefix;
+    global $db_prefix;
 
-	Debug ( "Отменить исследование $id у игрока $player_id" );
+    // Получить очередь исследований.
+    $result = GetResearchQueue ( $player_id);
+    if ( $result == null ) return;        // Исследование не ведется.
+    $resq = dbarray ($result);
+
+    $id = $resq['obj_id'];
+    $planet_id = $resq['sub_id'];
+    $level = $resq['level'];
+
+    // Получить стоимость исследования
+    $user = LoadUser ( $player_id );
+    $planet = GetPlanet ( $planet_id );
+    if ($planet['owner_id'] != $player_id )
+    {
+        Error ( "Невозможно отменить исследование -".loca("NAME_$id")."-, игрока ".$user['oname'].", запущенное на чужой планете [".$planet['g'].":".$planet['s'].":".$planet['p']."] " . PlanetName($planet) );
+        return;
+    }
+    $m = $k = $d = $e = 0;
+    ResearchPrice ( $id, $level, &$m, &$k, &$d, &$e );
+
+    // Вернуть ресурсы
+    AdjustResources ($m, $k, $d, $planet_id, '+');
+
+    RemoveQueue ( $resq['task_id'], 0 );
+
+    Debug ( "Отменить исследование -".loca("NAME_$id")."- у игрока ".$user['oname'] );
 }
 
 // Получить текущее исследование для аккаунта.
