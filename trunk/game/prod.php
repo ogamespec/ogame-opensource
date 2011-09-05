@@ -197,16 +197,21 @@ function ShipyardDuration ( $id, $shipyard, $nanits, $speed )
 
 function ResearchMeetRequirement ( $user, $planet, $id )
 {
-    if ( $id == 110 && ( $user['r113'] < 3 ) ) return false;
-    if ( $id == 114 && ( $user['r113'] < 5 || $user['r110'] < 5 ) ) return false;
-    if ( $id == 115 && ( $user['r113'] < 1 ) ) return false;
-    if ( $id == 117 && ( $user['r113'] < 1 ) ) return false;
-    if ( $id == 118 && ( $user['r114'] < 3 ) ) return false;
-    if ( $id == 120 && ( $user['r113'] < 2 ) ) return false;
-    if ( $id == 121 && ( $user['r120'] < 5 || $user['r113'] < 4 ) ) return false;
-    if ( $id == 122 && ( $user['r113'] < 8 || $user['r120'] < 10 || $user['r121'] < 5) ) return false;
-    if ( $id == 123 && ( $user['r108'] < 8 || $user['r114'] < 8 ) ) return false;
-    if ( $id == 124 && ( $user['r106'] < 4 || $user['r117'] < 3 ) ) return false;
+    if ( $id == 106 && ( $planet['b31'] < 3 ) ) return false;
+    if ( $id == 108 && ( $planet['b31'] < 1 ) ) return false;
+    if ( $id == 109 && ( $planet['b31'] < 4 ) ) return false;
+    if ( $id == 110 && ( $user['r113'] < 3 || $planet['b31'] < 6 ) ) return false;
+    if ( $id == 111 && ( $planet['b31'] < 2 ) ) return false;
+    if ( $id == 113 && ( $planet['b31'] < 1 ) ) return false;
+    if ( $id == 114 && ( $user['r113'] < 5 || $user['r110'] < 5 || $planet['b31'] < 7  ) ) return false;
+    if ( $id == 115 && ( $user['r113'] < 1 || $planet['b31'] < 1 ) ) return false;
+    if ( $id == 117 && ( $user['r113'] < 1 || $planet['b31'] < 2  ) ) return false;
+    if ( $id == 118 && ( $user['r114'] < 3 || $planet['b31'] < 7  ) ) return false;
+    if ( $id == 120 && ( $user['r113'] < 2 || $planet['b31'] < 1  ) ) return false;
+    if ( $id == 121 && ( $user['r120'] < 5 || $user['r113'] < 4 || $planet['b31'] < 4  ) ) return false;
+    if ( $id == 122 && ( $user['r113'] < 8 || $user['r120'] < 10 || $user['r121'] < 5 || $planet['b31'] < 4 ) ) return false;
+    if ( $id == 123 && ( $user['r108'] < 8 || $user['r114'] < 8 || $planet['b31'] < 10  ) ) return false;
+    if ( $id == 124 && ( $user['r106'] < 4 || $user['r117'] < 3 || $planet['b31'] < 3 ) ) return false;
     if ( $id == 199 && ( $planet['b31'] < 12 ) ) return false;
 
     return true;
@@ -216,9 +221,7 @@ function ResearchPrice ( $id, $lvl, &$m, &$k, &$d, &$e )
 {
     global $initial;
     if ($id == 199) {
-        $m = $initial[$id]['m'] * pow(3, $lvl-1);
-        $k = $initial[$id]['k'] * pow(3, $lvl-1);
-        $d = $initial[$id]['d'] * pow(3, $lvl-1);
+        $m = $k = $d = 0;
         $e = $initial[$id]['e'] * pow(3, $lvl-1);
     }
     else {
@@ -240,9 +243,38 @@ function ResearchDuration ( $id, $lvl, $reslab, $speed )
 }
 
 // Расчёт МИС.
+// Присоединить к текущей лаборатории +МИС лабораторий максимального уровня.
+// На выходе общий уровень "виртуальной" лаборатории.
 function ResearchNetwork ( $planetid, $id )
 {
-    return 1;
+    global $db_prefix;
+    $planet = GetPlanet ($planetid);
+    $player_id = $planet['owner_id'];
+    $user = LoadUser ($player_id);
+    $ign = $user ["r123"];
+    $reslab = $planet["b31"];
+    $labs = array ();
+    $labnum = 0;
+
+    // Перечислить планеты игрока (луны и прочие спец-объекты не перечислять). Также пропускать планеты у которых нет ИЛ.
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type < 10000 AND type > 0 AND b31 > 0";
+    $result = dbquery ($query);
+    $pnum = dbrows ( $result );
+
+    // Получить все доступные лабы, отсортированные по убыванию.
+    while ($pnum--)
+    {
+        $p = dbarray ($result);
+        if ( $p['planet_id'] == $planetid) continue;    // Пропустить текущую планету.
+        if ( ResearchMeetRequirement ( $user, $p, $id ) ) $labs[$labnum++] = $p["b31"];
+    }
+    rsort ( $labs );
+    //print_r ($labs ); echo "";
+
+    // Присоединить +МИС доступных лабораторий.
+    for ($i=0; $i<$ign && $i<$labnum; $i++) $reslab += $labs[$i];
+    //echo "$reslab <br>";
+    return $reslab;
 }
 
 // Возвратить строку длительности по дням, часам, минутам, секундам.

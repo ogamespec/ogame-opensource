@@ -53,10 +53,12 @@ if ( method () === "GET"  && !$GlobalUser['vacation'] )
 		if ( $resqueue == null )		// Исследование не ведется (запустить)
 		{
 			if ( key_exists ( 'bau', $_GET ) ) StartResearch ( $GlobalUser['player_id'], $aktplanet['planet_id'], $_GET['bau'] );
+                  $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // обновить состояние планеты.
 		}
 		else	// Ведется исследования (отменить)
 		{
-			if ( key_exists ( 'unbau', $_GET ) ) StopResearch ( $GlobalUser['player_id'], $_GET['unbau'] );
+			if ( key_exists ( 'unbau', $_GET ) ) StopResearch ( $GlobalUser['player_id'] );
+                  $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // обновить состояние планеты.
 		}
 	}
 }
@@ -207,6 +209,11 @@ if ( $_GET['mode'] === "Forschung" )
     $queue = dbarray ( $result );
     $busy = ( $queue['obj_id'] == 31 ) ;
 
+    // Проверить ведется ли исследование.
+    $res = GetResearchQueue ( $GlobalUser['player_id'] );
+    $resq = dbarray ($res);
+    $operating =  ( $resq != null );
+
     if ( $busy ) {
         echo "<br><br><font color=#FF0000>Проведение исследований невозможно, так как исследовательская лаборатория усовершенствуется.</font><br /><br />";
     }
@@ -222,7 +229,7 @@ if ( $_GET['mode'] === "Forschung" )
     if ( $aktplanet['b31'] ) {
         // Вывести список доступных исследований.
         foreach ( $resmap as $i => $id ) {
-            if ( !ResearchMeetRequirement ($GlobalUser, $aktplanet, $id) ) continue;
+            if ( ! ResearchMeetRequirement ($GlobalUser, $aktplanet, $id) ) continue;
 
             $reslab = ResearchNetwork ( $aktplanet['planet_id'], $id );
 
@@ -244,13 +251,60 @@ if ( $_GET['mode'] === "Forschung" )
             $t = ResearchDuration ( $id, $level, $reslab, $speed );
             echo "<br>Длительность: ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k>";
-            if ($GlobalUser['r'.$id]) {
-                if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>Исследовать<br> уровень  $level</font></a>";
-                else echo "<font color=#FF0000>Исследовать<br> уровень  $level</font>";
+            if ( $operating )        // Исследование проводится
+            {
+                if ( $id == $resq['obj_id'] )
+                {
+?>
+                <div id="bxx" class="z"></div>
+                <script   type="text/javascript">
+                v=new Date();
+                var bxx=document.getElementById('bxx');
+                function t(){
+                    n=new Date();
+                    ss=<?=($resq['end'] - $resq['start']);?>;
+                    s=ss-Math.round((n.getTime()-v.getTime())/1000.);
+                    m=0;h=0;
+                    if(s<0){
+    
+                        bxx.innerHTML='Окончено<br><a href=index.php?page=buildings&session=<?=$session;?>&mode=Forschung&cp=<?=$aktplanet['planet_id'];?> >дальше</a>';
+                    }else{
+                        if(s>59){
+                            m=Math.floor(s/60);
+                            s=s-m*60
+                        }
+                        if(m>59){
+                            h=Math.floor(m/60);
+                            m=m-h*60
+                        }
+                        if(s<10){
+                            s="0"+s
+                        }
+                        if(m<10){
+                            m="0"+m
+                        }
+                        bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=buildings&session=<?=$session;?>&unbau=<?=$id;?>&mode=Forschung&cp=<?=$resq['sub_id'];?>"+
+                        <?php
+                    if ( $aktplanet['planet_id'] == $resq['sub_id'] )  echo "\">Отменить</a>\"";   ?>                }
+                    ;
+                    window.setTimeout("t();",999);
+                }
+                window.onload=t;
+                </script>
+<?php
+                }
+                else echo " - ";
             }
-            else {
-                if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00> исследовать </font></a>";
-                else echo "<font color=#FF0000> исследовать </font></a>";
+            else        // Исследование не проводится.
+            {
+                if ($GlobalUser['r'.$id]) {
+                    if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) && !$busy) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>Исследовать<br> уровень  $level</font></a>";
+                    else echo "<font color=#FF0000>Исследовать<br> уровень  $level</font>";
+                }
+                else {
+                    if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) && !$busy) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00> исследовать </font></a>";
+                    else echo "<font color=#FF0000> исследовать </font></a>";
+                }
             }
             echo "</td></tr>";
         }

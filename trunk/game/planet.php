@@ -395,4 +395,13 @@ function PlanetName ($planet)
     else return $planet['name'];
 }
 
+// Изменить количество ресурсов на планете.
+function AdjustResources ($m, $k, $d, $planet_id, $sign)
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."planets SET m=m $sign '".$m."', k=k $sign '".$k."', d=d $sign '".$d."' WHERE planet_id=$planet_id;";
+    //echo "$query<br>";
+    dbquery ($query);
+}
+
 ?>
