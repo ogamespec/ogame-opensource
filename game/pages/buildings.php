@@ -28,6 +28,7 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             if ( $aktplanet['m'] < $m || $aktplanet['k'] < $k || $aktplanet['d'] < $d ) continue;    // недостаточно ресурсов для одной единицы
 
             // Купола.
+            if ( $gid == 407 || $gid == 408 ) $value = 1;
 
             if ($m) $cm = floor ($aktplanet['m'] / $m);
             else $cm = 1000;
@@ -186,7 +187,8 @@ if ( $_GET['mode'] === "Verteidigung" )
             $t = ShipyardDuration ( $id, $aktplanet['b21'], $aktplanet['b15'], $speed );
             echo "<br>Длительность: ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
-            if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
+            if ( ($id == 407 || $id == 408) && $aktplanet['d'.$id] > 0 ) echo "<font color=#FF0000>Щитовой купол можно строить только 1 раз.</font>";
+            else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
             echo "</td></tr>";
         }
     
@@ -262,7 +264,7 @@ if ( $_GET['mode'] === "Forschung" )
                 var bxx=document.getElementById('bxx');
                 function t(){
                     n=new Date();
-                    ss=<?=($resq['end'] - $resq['start']);?>;
+                    ss=<?=($resq['end'] - time());?>;
                     s=ss-Math.round((n.getTime()-v.getTime())/1000.);
                     m=0;h=0;
                     if(s<0){
@@ -342,12 +344,14 @@ of = 1;
     $c = "";
     $b = "";
     $a = "";
+    $total_time = 0;
     while ($rows--)
     {
         $queue = dbarray ($result);
         $c .= ($queue['end'] - $queue['start']) . ",";
         $b .= "\"".loca("NAME_".$queue['obj_id'])."\",";
         $a .= "\"".$queue['level']."\",";
+        $total_time += ($queue['end'] - $queue['start']) * $queue['level'];
     }
 ?>
 c = new Array(<?=$c;?>"");
@@ -449,7 +453,7 @@ window.onload = t;
 </form>
 Всё производство займёт
 
-  44 мин 54 сек<br>
+  <?=BuildDurationFormat ($total_time); ?><br>
 <?php
     }
 }
