@@ -369,6 +369,21 @@ function AddShipyard ($player_id, $planet_id, $gid, $value )
 {
     global $db_prefix;
 
+    // Если в очереди уже строится купол такого же типа, то не добавлять ещё один купол в очередь.
+    $result = GetShipyardQueue ($planet_id);
+    $tasknum = dbrows ($result);
+    while ($tasknum--)
+    {
+        $queue = dbarray ( $result );
+        if ( $queue['obj_id'] == 407 || $queue['obj_id'] == 408 )
+        {
+            if ( $queue['obj_id'] == $gid ) return;    // в очереди строится купол такого же типа.
+        }
+    }
+
+    // Щитовые купола можно строить не более 1 единицы.
+    if ( ($gid == 407 || $gid == 408) && $value > 1 ) $value = 1;
+
     $user = LoadUser ( $player_id );
 
     $planet = GetPlanet ( $planet_id );
@@ -469,7 +484,11 @@ function StartResearch ($player_id, $planet_id, $id)
         $seconds = ResearchDuration ( $id, $level, $reslab, $speed);
 
         // Списать ресурсы.
-        AdjustResources ($m, $k, $d, $planet_id, '-');
+        $planet['m'] -= $m;
+        $planet['k'] -= $k;
+        $planet['d'] -= $d;
+        $query = "UPDATE ".$db_prefix."planets SET m = '".$planet['m']."', k = '".$planet['k']."', d = '".$planet['d']."', lastpeek = '".$now."' WHERE planet_id = $planet_id";
+        dbquery ($query);
 
         //echo "--------------------- Запустить исследование $id на планете $planet_id игрока $player_id, уровень $level, продолжительность $seconds" ;
         AddQueue ($player_id, "Research", $planet_id, $id, $level, $now, $seconds);
@@ -502,7 +521,11 @@ function StopResearch ($player_id)
     ResearchPrice ( $id, $level, &$m, &$k, &$d, &$e );
 
     // Вернуть ресурсы
-    AdjustResources ($m, $k, $d, $planet_id, '+');
+    $planet['m'] += $m;
+    $planet['k'] += $k;
+    $planet['d'] += $d;
+    $query = "UPDATE ".$db_prefix."planets SET m = '".$planet['m']."', k = '".$planet['k']."', d = '".$planet['d']."', lastpeek = '".$now."' WHERE planet_id = $planet_id";
+    dbquery ($query);
 
     RemoveQueue ( $resq['task_id'], 0 );
 
