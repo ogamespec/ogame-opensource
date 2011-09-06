@@ -21,14 +21,14 @@ function Admin_Planets ()
         $action = $_GET['action'];
         $now = time();
 
-        print_r ( $_POST);
+        //print_r ( $_POST);
 
         if ($action === "update")        // Обновить данные планеты.
         {
             $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
                                        'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
                                       'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
-                                      'm', 'k', 'd' );
+                                      'm', 'k', 'd', 'type' );
 
             $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
             foreach ( $param as $i=>$p ) {
@@ -192,7 +192,7 @@ function Admin_Planets ()
         echo "<tr><th>Дата создания</th><th>".date ("Y-m-d H:i:s", $planet['date'])."</th> <td colspan=10 class=c>Картинка планеты</td></tr>";
 
         echo "<tr><th>Последняя активность</th><th>".date ("Y-m-d H:i:s", $planet['lastakt'])."</th> <th colspan=3 rowspan=11 valign=top> \n";
-        {    // картинки планет.
+        if ($planet['type'] > 0 && $planet['type'] < 10000) {    // картинки планет.
             $RockPlanets = array ( 101, 102, 103, 104, 105, 106, 107, 108, 109, 110 );
             $JunglePlanets = array ( 201, 202, 203, 204, 205, 206, 207, 208, 209, 210 );
             $NormalPlanets = array ( 301, 302, 303, 304, 305, 306, 307 );
@@ -202,7 +202,7 @@ function Admin_Planets ()
             echo "<tr><td>";
             foreach ( $RockPlanets as $i=>$id )
             {
-                echo "     <input type=\"radio\" name=\"ptype\" value=$id ";
+                echo "     <input type=\"radio\" name=\"type\" value=$id ";
                 if ( $id == $planet['type'] ) echo " checked ";
                 echo "  >\n";
                 echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
@@ -211,7 +211,7 @@ function Admin_Planets ()
             echo "<tr><td>";
             foreach ( $JunglePlanets as $i=>$id )
             {
-                echo "     <input type=\"radio\" name=\"ptype\" value=$id ";
+                echo "     <input type=\"radio\" name=\"type\" value=$id ";
                 if ( $id == $planet['type'] ) echo " checked ";
                 echo "  >\n";
                 echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
@@ -220,7 +220,7 @@ function Admin_Planets ()
             echo "<tr><td>";
             foreach ( $NormalPlanets as $i=>$id )
             {
-                echo "     <input type=\"radio\" name=\"ptype\" value=$id ";
+                echo "     <input type=\"radio\" name=\"type\" value=$id ";
                 if ( $id == $planet['type'] ) echo " checked ";
                 echo "  >\n";
                 echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
@@ -229,7 +229,7 @@ function Admin_Planets ()
             echo "<tr><td>";
             foreach ( $WaterPlanets as $i=>$id )
             {
-                echo "     <input type=\"radio\" name=\"ptype\" value=$id ";
+                echo "     <input type=\"radio\" name=\"type\" value=$id ";
                 if ( $id == $planet['type'] ) echo " checked ";
                 echo "  >\n";
                 echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
@@ -238,7 +238,7 @@ function Admin_Planets ()
             echo "<tr><td>";
             foreach ( $IcePlanets as $i=>$id )
             {
-                echo "     <input type=\"radio\" name=\"ptype\" value=$id ";
+                echo "     <input type=\"radio\" name=\"type\" value=$id ";
                 if ( $id == $planet['type'] ) echo " checked ";
                 echo "  >\n";
                 echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
