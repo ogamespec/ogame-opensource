@@ -85,6 +85,6 @@ echo "</center>\n";
 echo "</div>\n";
 echo "<!-- END CONTENT AREA -->\n";
 
-PageFooter ("", "", false, 81);
+PageFooter ("", "", false, 0);
 ob_end_flush ();
 ?>

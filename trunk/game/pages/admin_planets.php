@@ -21,6 +21,8 @@ function Admin_Planets ()
         $action = $_GET['action'];
         $now = time();
 
+        print_r ( $_POST);
+
         if ($action === "update")        // Обновить данные планеты.
         {
             $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
@@ -187,8 +189,64 @@ function Admin_Planets ()
 
         echo "</tr>\n";
 
-        echo "<tr><th>Дата создания</th><th>".date ("Y-m-d H:i:s", $planet['date'])."</th> </tr>\n";
-        echo "<tr><th>Последняя активность</th><th>".date ("Y-m-d H:i:s", $planet['lastakt'])."</th></tr>\n";
+        echo "<tr><th>Дата создания</th><th>".date ("Y-m-d H:i:s", $planet['date'])."</th> <td colspan=10 class=c>Картинка планеты</td></tr>";
+
+        echo "<tr><th>Последняя активность</th><th>".date ("Y-m-d H:i:s", $planet['lastakt'])."</th> <th colspan=3 rowspan=11 valign=top> \n";
+        {    // картинки планет.
+            $RockPlanets = array ( 101, 102, 103, 104, 105, 106, 107, 108, 109, 110 );
+            $JunglePlanets = array ( 201, 202, 203, 204, 205, 206, 207, 208, 209, 210 );
+            $NormalPlanets = array ( 301, 302, 303, 304, 305, 306, 307 );
+            $WaterPlanets = array ( 401, 402, 403, 404, 405, 406, 407, 408, 409 );
+            $IcePlanets = array ( 501, 502, 503, 504, 505, 506, 507, 508, 509, 510 );
+            echo "<table>";
+            echo "<tr><td>";
+            foreach ( $RockPlanets as $i=>$id )
+            {
+                echo "     <input type=\"radio\" name=\"ptype\" value=$id ";
+                if ( $id == $planet['type'] ) echo " checked ";
+                echo "  >\n";
+                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
+            }
+            echo "</td></tr>";
+            echo "<tr><td>";
+            foreach ( $JunglePlanets as $i=>$id )
+            {
+                echo "     <input type=\"radio\" name=\"ptype\" value=$id ";
+                if ( $id == $planet['type'] ) echo " checked ";
+                echo "  >\n";
+                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
+            }
+            echo "</td></tr>";
+            echo "<tr><td>";
+            foreach ( $NormalPlanets as $i=>$id )
+            {
+                echo "     <input type=\"radio\" name=\"ptype\" value=$id ";
+                if ( $id == $planet['type'] ) echo " checked ";
+                echo "  >\n";
+                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
+            }
+            echo "</td></tr>";
+            echo "<tr><td>";
+            foreach ( $WaterPlanets as $i=>$id )
+            {
+                echo "     <input type=\"radio\" name=\"ptype\" value=$id ";
+                if ( $id == $planet['type'] ) echo " checked ";
+                echo "  >\n";
+                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
+            }
+            echo "</td></tr>";
+            echo "<tr><td>";
+            foreach ( $IcePlanets as $i=>$id )
+            {
+                echo "     <input type=\"radio\" name=\"ptype\" value=$id ";
+                if ( $id == $planet['type'] ) echo " checked ";
+                echo "  >\n";
+                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
+            }
+            echo "</td></tr>";
+            echo "</table>";
+        }
+        echo "</th> </tr>\n";
         echo "<tr><th>Последнее обновление</th><th>".date ("Y-m-d H:i:s", $planet['lastpeek'])."</th></tr>\n";
         echo "<tr><th>Диаметр</th><th>".nicenum($planet['diameter'])." км (".$planet['fields']." из ".$planet['maxfields']." полей)</th></tr>\n";
         echo "<tr><th>Температура</th><th>от ".$planet['temp']."°C до ".($planet['temp']+40)."°C</th></tr>\n";
