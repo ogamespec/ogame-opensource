@@ -29,6 +29,12 @@ function Admin_Home ()
 {
     global $session;
 ?>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
     <table width=100% border="0" cellpadding="0" cellspacing="1" align="top" class="s">
     <tr>
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Fleetlogs"><img src="img/admin_fleetlogs.png"><br>Контроль полётов</a></th>
