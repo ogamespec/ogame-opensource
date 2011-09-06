@@ -193,7 +193,7 @@ function BuildEnque ( $planet_id, $id, $destroy )
 
         // Добавить в очередь
         $type = $destroy ? "Demolish" : "Build";
-        AddQueue ( $GlobalUser['player_id'], $type, $planet_id, $id, $lvl, $now, floor (BuildDuration ( $id, $lvl-1, $planet['b14'], $planet['b15'], $speed )) );
+        AddQueue ( $GlobalUser['player_id'], $type, $planet_id, $id, $lvl, $now, floor (BuildDuration ( $id, $lvl, $planet['b14'], $planet['b15'], $speed )) );
     }
     else
     {
@@ -202,7 +202,7 @@ function BuildEnque ( $planet_id, $id, $destroy )
 
         // Добавить в очередь
         $type = $destroy ? "Demolish" : "Build";
-        $qid = AddQueue ( $GlobalUser['player_id'], $type, $planet_id, $id, $lvl, $now, floor (BuildDuration ( $id, $lvl-1, $planet['b14'], $planet['b15'], $speed )) );
+        $qid = AddQueue ( $GlobalUser['player_id'], $type, $planet_id, $id, $lvl, $now, floor (BuildDuration ( $id, $lvl, $planet['b14'], $planet['b15'], $speed )) );
 
         // Добавить событие списывания ресов (время окончания = время начала добавляемого задания).
         $q = LoadQueue ($qid);
