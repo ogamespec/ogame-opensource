@@ -394,12 +394,12 @@ else
         echo "<table width=519 >\n";
         echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">Снести: ".loca("NAME_$gid")." Level ".$aktplanet['b'.$gid]." уничтожить?</a></td></tr>\n";
         $m = $k = $d = $e = 0;
-        BuildPrice ( $gid, $aktplanet['b'.$gid]-2, &$m, &$k, &$d, &$e );
+        BuildPrice ( $gid, $aktplanet['b'.$gid]-1, &$m, &$k, &$d, &$e );
         echo "<br><tr><th>Необходимо ";
         if ($m) echo "металла:<b>".nicenum($m)."</b> ";
         if ($k) echo "кристалла:<b>".nicenum($k)."</b> ";
         if ($d) echo "дейтерия:<b>".nicenum($d)."</b> ";
-        $t = BuildDuration ( $gid, $aktplanet['b'.$gid]-2, $aktplanet['b14'], $aktplanet['b15'], $speed );
+        $t = BuildDuration ( $gid, $aktplanet['b'.$gid]-1, $aktplanet['b14'], $aktplanet['b15'], $speed );
         echo "<tr><th><br>Продолжительность сноса:  ".BuildDurationFormat ( $t )."<br></th></tr></table>\n";
     }
 }
