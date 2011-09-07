@@ -164,10 +164,13 @@ foreach ( $buildmap as $i => $id )
                 $left = $queue0['end'] - time ();
                 echo "<td class=k><div id=\"bxx\" class=\"z\"></div><SCRIPT language=JavaScript>pp='".$left."'; pk='1'; pm='remove'; pl='".$aktplanet['planet_id']."'; ps='".$_GET['session']."'; t();</script>\n";
             }
-			else echo "<td class=k>";
+            else echo "<td class=k>";
         }
         else {
-			if ( $id == 31 && $reslab_operating ) {
+                  if ( $aktplanet['fields'] >= $aktplanet['maxfields'] ) {
+                        echo "<td class=l><font color=#FF0000>Нет места! </font>";
+                  }
+			else if ( $id == 31 && $reslab_operating ) {
 				echo "<td class=l><font  color=#FF0000>В процессе</font> <br>";
 			}
    			else if ( $lvl == 0 )
