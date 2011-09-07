@@ -14,6 +14,7 @@ function GetPlanetSmallImage ($skinpath, $type)
         else if ($type >= 301 && $type <= 307) return sprintf ( "%splaneten/small/s_normaltempplanet%02d.jpg", $skinpath, $type - 300);
         else if ($type >= 401 && $type <= 409) return sprintf ( "%splaneten/small/s_wasserplanet%02d.jpg", $skinpath, $type - 400);
         else if ($type >= 501 && $type <= 510) return sprintf ( "%splaneten/small/s_eisplanet%02d.jpg", $skinpath, $type - 500);
+        else return "img/admin_planets.png";        // Специальные объекты галактики (уничтоженные планеты и пр.)
     }
 }
 
@@ -29,6 +30,7 @@ function GetPlanetImage ($skinpath, $type)
         else if ($type >= 301 && $type <= 307) return sprintf ( "%splaneten/normaltempplanet%02d.jpg", $skinpath, $type - 300);
         else if ($type >= 401 && $type <= 409) return sprintf ( "%splaneten/wasserplanet%02d.jpg", $skinpath, $type - 400);
         else if ($type >= 501 && $type <= 510) return sprintf ( "%splaneten/eisplanet%02d.jpg", $skinpath, $type - 500);
+        else return "img/admin_planets.png";    // Специальные объекты галактики (уничтоженные планеты и пр.)
     }
 }
 

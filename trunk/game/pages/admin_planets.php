@@ -36,7 +36,18 @@ function Admin_Planets ()
                 else $query .= ", $p=".$_POST[$p];
             }
             $query .= " WHERE planet_id=$cp;";
-            dbquery ($query);
+
+            if ( key_exists ( "delete_planet", $_POST ) )        // Удалить планету. Главную планету удалить нельзя.
+            {
+                $planet = GetPlanet ($cp);
+                $user = LoadUser ($planet['owner_id']);
+                if ( $user['hplanetid'] != $cp)
+                {
+                    DestroyPlanet ($cp);
+                    $_GET['cp'] = $user['hplanetid'];        // перенаправить на главную планету.
+                }
+            }
+            else dbquery ($query);        // Обновить данные планеты
         }
         else if ( $action === "search" )        // Поиск
         {
@@ -259,7 +270,7 @@ function Admin_Planets ()
         echo "<tr><th>Энергия</th><th>".$planet['e']." / ".$planet['emax']."</th></tr>\n";
         echo "<tr><th>Коэффициент производства</th><th>".$planet['factor']."</th></tr>\n";
 
-        echo "<tr><th colspan=8><input type=\"submit\" value=\"Сохранить\" /></th></tr>\n";
+        echo "<tr><th colspan=8><input type=\"submit\" value=\"Сохранить\" />  <input type=\"submit\" name=\"delete_planet\" value=\"Удалить\" /> </th></tr>\n";
         echo "</form>\n";
         echo "</table>\n";
     }
