@@ -92,8 +92,8 @@ else if ( $_POST['galaxyRight'] === "dr" )
 
 $not_enough_deut = ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s) && $aktplanet['d'] < 10;
 
-// Списать 10 дейтерия за просмотр не домашней системы
-if ( !$not_enough_deut)
+// Списать 10 дейтерия за просмотр не домашней системы (только для обычных пользователей)
+if ( !$not_enough_deut && $GlobalUser['admin'] == 0 )
 {
     if ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s )
     {
@@ -338,7 +338,8 @@ echo "<center>\n\n";
 <?php
 
 // Недостаточно дейтерия?
-if ( $not_enough_deut )
+// Операторы и администраторы могут просматривать Галактику без затрат дейтерия.
+if ( $not_enough_deut && $GlobalUser['admin'] == 0 )
 {
 ?>
   <center>

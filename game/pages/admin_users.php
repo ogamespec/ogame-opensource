@@ -71,6 +71,16 @@ function Admin_Users ()
             $query .= " WHERE player_id=$player_id;";
             dbquery ($query);
         }
+
+        if ($action === "create_planet")        // Создать планету
+        {
+            $g = $_POST['g'];    if ($g === "" ) $g = 1;
+            $s = $_POST['s'];    if ($s === "" ) $s = 1;
+            $p = $_POST['p'];    if ($p === "" ) $p = 1;
+            $query = "SELECT * FROM ".$db_prefix."planets WHERE g = $g AND s = $s AND p = $p AND (type > 0 AND type < 10000);";
+            $result = dbquery ( $query );
+            if ( dbrows ($result) == 0 ) CreatePlanet ($g, $s, $p, $_GET['player_id'] );
+        }
     }
 
     if ( key_exists("player_id", $_GET) ) {        // Информация об игроке
@@ -194,6 +204,37 @@ function Admin_Users ()
     <tr><th colspan=3><input type="submit" value="Сохранить" /></th></tr>
     </form>
     </table>
+
+    <br>
+    <table> 
+    <form action="index.php?page=admin&session=<?=$session;?>&mode=Users&action=create_planet&player_id=<?=$user['player_id'];?>" method="POST" >
+    <tr><td class=c colspan=20>Список планет</td></tr>
+    <tr>
+<?php
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$_GET['player_id']."' ORDER BY g ASC, s ASC, p ASC";
+    $result = dbquery ($query);
+    $rows = dbrows ($result);
+    $counter = 0;
+    while ($rows--)
+    {
+        $p = dbarray ($result);
+?>
+    <td> <img src="<?=GetPlanetSmallImage( "../evolution/", $p['type']);?>" width="32px" height="32px"></td>
+    <td> <a href="index.php?page=admin&session=<?=$session;?>&mode=Planets&cp=<?=$p['planet_id'];?>"> <?=PlanetName($p);?> </a>
+            [<a href="index.php?page=galaxy&session=<?=$session;?>&galaxy=<?=$p['g'];?>&system=<?=$p['s'];?>"><?=$p['g'];?>:<?=$p['s'];?>:<?=$p['p'];?></a>] </td>
+<?
+        $counter++;
+        if ( $counter > 9) {
+            $counter = 0;
+            echo "</tr>\n<tr>\n";
+        }
+    }
+?>
+    </tr>
+    <tr><td colspan=20> Координаты: <input name="g" size=2> <input name="s" size=2> <input name="p" size=2> <input type="submit" value="Создать планету"></td></tr>
+    </form>
+    </table>
+
 <?php
     }
     else {
