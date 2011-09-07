@@ -577,4 +577,12 @@ function EnableSkin ($player_id, $enable)
     dbquery ($query);
 }
 
+// Выдать список операторов вселенной
+function EnumOperators ()
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."users WHERE admin = 1 ORDER BY player_id ASC;";
+    return dbquery ($query);
+}
+
 ?>

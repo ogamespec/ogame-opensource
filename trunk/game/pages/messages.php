@@ -16,6 +16,7 @@ PageHeader ("messages");
 // *******************************************************************
 
 $MAXMSG = 10;        // Количество сообщений на странице.
+$uni = LoadUniverse ();
 
 DeleteExpiredMessages ( $GlobalUser['player_id'] );    // Удалить сообщения которые хранятся дольше 24 часов.
 
@@ -85,6 +86,20 @@ echo "<tr><td colspan=\"4\"><center>     </center></td></tr>\n";
 echo "<input type=\"hidden\" name=\"messages\" value=\"1\" />\n";
 echo "</form>\n";
 echo "<tr><td class=\"c\" colspan=\"4\">Операторы</td></tr>\n";
+
+    $result = EnumOperators ();
+    $rows = dbrows ($result);
+    while ($rows--)
+    {
+        $oper = dbarray ($result);
+?>
+                <tr>
+            <th colspan="4" valign="left">
+            <?=$oper['oname'];?>            <a href="mailto:<?=$oper['email'];?>?subject=<?=va("Вопрос от #1 из #2-й вселенной", $GlobalUser['oname'], $uni['num']);?>" ><img src="<?=UserSkin();?>img/m.gif" border="0" alt="Написать сообщение"></a>          </th>
+        </tr>
+<?php
+    }
+
 echo "</table></td></tr></table>\n";
 echo "<br><br><br><br>\n";
 echo "</center>\n";
