@@ -15,6 +15,8 @@ PageHeader ("messages");
 
 // *******************************************************************
 
+$MAXMSG = 10;        // Количество сообщений на странице.
+
 DeleteExpiredMessages ( $GlobalUser['player_id'] );    // Удалить сообщения которые хранятся дольше 24 часов.
 
 // Заголовок таблицы
@@ -27,7 +29,25 @@ echo "<center>\n";
 
 if ( method() === "POST" )
 {
-    print_r ($_POST);
+    //print_r ($_POST);
+
+    $player_id = $GlobalUser['player_id'];
+
+    if ( $_POST['deletemessages'] === "deleteall" ) DeleteAllMessages ( $player_id );    // Удалить все сообщения
+    else
+    {
+        $result = EnumMessages ( $GlobalUser['player_id'], $MAXMSG);
+        $num = dbrows ($result);
+        while ($num--)
+        {
+            $msg = dbarray ($result);
+            $msg_id = $msg['msg_id'];
+            if ( $_POST["sneak" . $msg_id] === "on" ) {}    // Сообщить оператору
+            if ( $_POST["delmes" . $msg_id] === "on" && $_POST['deletemessages'] === "deletemarked" ) DeleteMessage ( $player_id, $msg_id );    // Удалить выделенные
+            if ( $_POST["delmes" . $msg_id] !== "on" && $_POST['deletemessages'] === "deletenonmarked" ) DeleteMessage ( $player_id, $msg_id );    // Удалить невыделенные
+            if ( $_POST['deletemessages'] === "deleteallshown" ) DeleteMessage ( $player_id, $msg_id );    // Удалить показанные
+        }
+    }
 }
 
 echo "<table class='header'><tr class='header'><td><table width=\"519\">\n";
@@ -35,7 +55,7 @@ echo "<form action=\"index.php?page=messages&dsp=1&session=".$_GET['session']."\
 echo "<tr><td colspan=\"4\" class=\"c\">Сообщения</td></tr>\n";
 echo "<tr><th>Действие</th><th>Дата</th><th>От</th><th>Тема</th></tr>\n";
 
-$result = EnumMessages ( $GlobalUser['player_id'], 10);
+$result = EnumMessages ( $GlobalUser['player_id'], $MAXMSG);
 $num = dbrows ($result);
 while ($num--)
 {

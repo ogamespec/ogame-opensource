@@ -136,4 +136,12 @@ function LoadMessage ( $msg_id )
     else return NULL;
 }
 
+// Удалить все сообщения
+function DeleteAllMessages ($player_id)
+{
+    global $db_prefix;
+    $query = "DELETE FROM ".$db_prefix."messages WHERE owner_id = $player_id";
+    dbquery ($query);
+}
+
 ?>
