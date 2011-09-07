@@ -251,8 +251,12 @@ function Queue_Build_End ($queue)
     $planet = GetPlanet ( $planet_id );
     ProdResources ( $planet_id, $planet['lastpeek'], $queue['end'] );
 
-    // Обновить уровень постройки в базе данных.
-    $query = "UPDATE ".$db_prefix."planets SET ".('b'.$id)." = $lvl WHERE planet_id = $planet_id";
+    // Количество полей на планете.
+    if ($queue['type'] === "Build" ) $fields = "fields = fields + 1";
+    else $fields = "fields = fields - 1";
+
+    // Обновить уровень постройки и количество полей в базе данных.
+    $query = "UPDATE ".$db_prefix."planets SET ".('b'.$id)." = $lvl, $fields WHERE planet_id = $planet_id";
     dbquery ($query);
 
     RemoveQueue ( $queue['task_id'], 0 );
