@@ -431,6 +431,16 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
 
     if  ( $player_id = CheckPassword ($login, $pass, $passmd ) )
     {
+        // Пользователь заблокирован?
+        $user = LoadUser ( $player_id );
+        if ($user['banned'])
+        {
+            UpdateLastClick ( $player_id );        // Обновить активность пользователя, чтобы можно было продлять удаление.
+            echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/reg/errorpage.php?errorcode=3&arg1=$uni&arg2=$login&arg3=".$user['banned_until']."' /></head><body></body>";
+            ob_end_flush ();
+            exit ();
+        }
+
         $lastlogin = time ();
         // Создать приватную сессию.
         $prsess = md5 ( $login . $lastlogin . $db_secret);
@@ -459,29 +469,11 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
         AddReloginEvent ();
 
         // Редирект на Обзор Главной планеты.
-        if ( $from_validate) echo "<html><head><meta http-equiv='refresh' content='0;url=index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
-        else echo "<html><head><meta http-equiv='refresh' content='0;url=../index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
+        echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
     }
     else
     {
-        echo "<html> <head> <center>\n";
-        echo " <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n";
-        echo "  <link rel='stylesheet' type='text/css' href='css/default.css' />\n";
-        echo "  <link rel='stylesheet' type='text/css' href='css/formate.css' />\n";
-        echo " <title>Ошибка</title>\n";
-        echo "</head>\n";
-        echo "<body topmargin='0' leftmargin='0' marginwidth='0' marginheight='0' >\n";
-        echo " <br><br>\n";
-        echo " <table width='519'>\n";
-        echo " <tr>\n";
-        echo "   <td class='c' align='center' ><font color='red'>Ошибка</font></td>\n";
-        echo "  </tr>\n";
-        echo "  <tr>\n";
-        echo "   <th class='errormessage'>Вы пытались войти во вселенную ".$uni." под ником ".$login.".</th>\n";
-        echo "  </tr>\n";
-        echo "  <tr>\n";
-        echo "   <th class='errormessage'>Такого аккаунта не существует либо Вы неправильно ввели пароль. <br>Введите <a href='index.php'>правильный пароль</a> либо воспользуйтесь <a href='index.php?page=mail'>восстановлением пароля</a>.<br>Также Вы можете создать <a href='index.php?page=reg'>новый аккаунт</a>.</th>\n";
-        echo "  </tr> </table> </center></body></html>\n";
+        echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/reg/errorpage.php?errorcode=2&arg1=$uni&arg2=$login' /></head><body></body>";
     }
     ob_end_flush ();
     exit ();
