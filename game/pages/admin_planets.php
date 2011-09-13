@@ -257,6 +257,7 @@ function Admin_Planets ()
             echo "</td></tr>";
             echo "</table>";
         }
+        else echo "<input type=\"hidden\" name=\"type\" value=\"".$planet['type']."\" >\n";
         echo "</th> </tr>\n";
         echo "<tr><th>Последнее обновление</th><th>".date ("Y-m-d H:i:s", $planet['lastpeek'])."</th></tr>\n";
         echo "<tr><th>Диаметр</th><th>".nicenum($planet['diameter'])." км (".$planet['fields']." из ".$planet['maxfields']." полей)</th></tr>\n";
