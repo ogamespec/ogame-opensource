@@ -60,8 +60,8 @@ $uni = $unitab['num'];
 
     $target = GetPlanet ( $_GET['spid'] );
 
-    $outofrange = false;
-    if ( $aktplanet['g'] != $target['g'] )  $outofrange = true;
+    $outofrange = false;                    // Проверить радиус фаланги
+    if ( $aktplanet['g'] != $target['g'] || $aktplanet["b42"] <= 0 )  $outofrange = true;
     else {
         $range = $aktplanet["b42"] * $aktplanet["b42"] - 1;
         if ( abs($aktplanet['s'] - $target['s']) > $range) $outofrange = true;
@@ -82,7 +82,7 @@ $uni = $unitab['num'];
     else if (                                        // Попытка читерства
         $target['owner_id'] == $GlobalUser['player_id']         ||          // скан своих планет
         $aktplanet['owner_id'] != $GlobalUser['player_id']      ||         // скан с чужой луны/планеты
-        !( ( $target['type'] > 0 && $target['type'] < 10000 ) || $target['type'] == 10001 )   ||           // скан НЕ (планеты и уничтоженной планеты)
+        !( ( $target['type'] > 0 && $target['type'] < 10000 ) || $target['type'] == 10001 )   ||           // скан НЕ (планеты или уничтоженной планеты)
         $outofrange                                                                        // скан за пределом радиуса фаланги.
     )        
     {
