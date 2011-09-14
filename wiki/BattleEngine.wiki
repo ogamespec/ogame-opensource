@@ -37,8 +37,8 @@ FID = 30
 DID = 0
 Attackers = N
 Defenders = M
-AttackerN = (PLANET_ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
-DefenderM = (PLANET_ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
+AttackerN = (ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
+DefenderM = (ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
 }}}
 
 Rapidfire - 1: включить скорострел, 0 - без скорострела<br>
@@ -51,7 +51,7 @@ Defenders - количество обороняющихся слотов (M = 1.
 
 для каждого атакера и дефа соответствующие строки Attacker0, Attacker1, Defender0 итд. счёт ведется с нуля.
 
-PLANET_ID - ID планеты, которой принадлежит слот, в расчётах не используется
+ID - ID планеты/флота, которым принадлежит слот, в расчётах не используется
 
 WEAP - уровень Оружейной технологии<br>
 SHLD - уровень Щитовой технологии<br>
@@ -105,12 +105,12 @@ Array (
             'aabsorb' => Щиты атакующего поглощают 355.453
 
             'attackers' => Array (    // слоты атакующих
-                  [0] => Array ( 'planet_id'=>100002, 202=>5, 203=>6, ... ),   // флоты
+                  [0] => Array ( 'id'=>100002, 202=>5, 203=>6, ... ),   // флоты
                   [1] => Array ( )
             )
 
             'defenders' => Array (    // слоты обороняющихся
-                  [0] => Array ( 'planet_id'=>100006, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // флоты и оборона
+                  [0] => Array ( 'id'=>100006, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // флоты и оборона
                   [1] => Array ( )
             )
 
@@ -120,13 +120,15 @@ Array (
 )
 }}}
 
+Для атакующих и защитников 1...m - id это fleet_id их флотов. Для обороняющегося #0 id это planet_id его планеты.
+
 Расчёт захваченных ресурсов, восстановленной обороны и шанс возникновения луны (и её создание) производится скриптом battle.php, на основании полученных данных.
 
 Пример :
 
 serialized() - данные, которые помещаются в поле "result":
 {{{
-a:4:{s:6:"rounds";a:1:{i:0;a:8:{s:6:"ashoot";d:47;s:6:"apower";d:18800000;s:7:"dabsorb";d:6501;s:6:"dshoot";d:7528;s:6:"dpower";d:3545091;s:7:"aabsorb";d:621887;s:9:"attackers";a:1:{i:0;a:15:{s:9:"planet_id";i:10029;i:202;i:0;i:203;i:0;i:204;i:0;i:205;i:0;i:206;i:0;i:207;i:0;i:208;i:0;i:209;i:0;i:210;i:0;i:211;i:0;i:212;i:0;i:213;i:0;i:214;i:0;i:215;i:0;}}s:9:"defenders";a:1:{i:0;a:23:{s:9:"planet_id";i:1;i:202;i:21;i:203;i:17;i:204;i:0;i:205;i:3;i:206;i:3;i:207;i:1;i:208;i:5512;i:209;i:4;i:210;i:32;i:211;i:0;i:212;i:45;i:213;i:6;i:214;i:2;i:215;i:1639;i:401;i:165;i:402;i:12;i:403;i:11;i:404;i:3;i:405;i:4;i:406;i:0;i:407;i:1;i:408;i:1;}}}}s:6:"result";s:4:"dwon";s:2:"dm";d:2229800;s:2:"dk";d:2001400;}
+a:4:{s:6:"rounds";a:1:{i:0;a:8:{s:6:"ashoot";d:47;s:6:"apower";d:18800000;s:7:"dabsorb";d:6501;s:6:"dshoot";d:7528;s:6:"dpower";d:3545091;s:7:"aabsorb";d:621887;s:9:"attackers";a:1:{i:0;a:15:{s:2:"id";i:10188;i:202;i:0;i:203;i:0;i:204;i:0;i:205;i:0;i:206;i:0;i:207;i:0;i:208;i:0;i:209;i:0;i:210;i:0;i:211;i:0;i:212;i:0;i:213;i:0;i:214;i:0;i:215;i:0;}}s:9:"defenders";a:1:{i:0;a:23:{s:2:"id";i:1;i:202;i:21;i:203;i:17;i:204;i:0;i:205;i:3;i:206;i:3;i:207;i:1;i:208;i:5512;i:209;i:4;i:210;i:32;i:211;i:0;i:212;i:45;i:213;i:6;i:214;i:2;i:215;i:1639;i:401;i:165;i:402;i:12;i:403;i:11;i:404;i:3;i:405;i:4;i:406;i:0;i:407;i:1;i:408;i:1;}}}}s:6:"result";s:4:"dwon";s:2:"dm";d:2229800;s:2:"dk";d:2001400;}
 }}}
 
 unserialized() - данные, готовые для обработки PHP-скриптом:
@@ -147,7 +149,7 @@ Array
                         (
                             [0] => Array
                                 (
-                                    [planet_id] => 10029
+                                    [id] => 10188
                                     [202] => 0
                                     [203] => 0
                                     [204] => 0
@@ -170,7 +172,7 @@ Array
                         (
                             [0] => Array
                                 (
-                                    [planet_id] => 1
+                                    [id] => 1
                                     [202] => 21
                                     [203] => 17
                                     [204] => 0
