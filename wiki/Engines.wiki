@@ -12,7 +12,7 @@
  * [EngineUni Движок управления параметрами вселенной] (uni.php)
  * Движок разметки игровых страниц (генерация HTML) (page.php)
  * [EngineTaskQueue Движок глобальной очереди событий] (queue.php)
- * Боевой движок (battle.php)
+ * [BattleEngine Боевой движок] (battle.php)
  * Движок управления флотами (fleet.php)
  * [EngineMessages Движок сообщений] (msg.php)
  * Альянсовый движок и список друзей (ally.php)
