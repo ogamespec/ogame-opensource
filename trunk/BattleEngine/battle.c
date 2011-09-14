@@ -74,6 +74,45 @@
 #include "battle.h"
 #include "include/mysql.h"
 
+/*
+Формат выходных данных
+Выходные данные представлены в формате для PHP-функции unserialize().
+
+Формат (после преобразования unserialize()):
+
+Array (
+   'result' => 'awon' (Атакующий выиграл), 'dwon' (Обороняющийся выиграл), 'draw' (Ничья)
+   'dm' => количество металла в Поле обломков
+   'dk' => количество кристалла в Поле обломков
+
+   'rounds' => Array (
+       [0] => Array (
+            'ashoot' => Атакующий флот делает: 988 выстрела(ов)
+            'apower' => общей мощностью 512.720.100
+            'dabsorb' => Щиты обороняющегося поглощают 43.724
+            'dshoot' => Обороняющийся флот делает 1.651 выстрела(ов)
+            'dpower' => общей мощностью 428.728
+            'aabsorb' => Щиты атакующего поглощают 355.453
+
+            'attackers' => Array (    // слоты атакующих
+                  [0] => Array ( 'id'=>100002, 202=>5, 203=>6, ... ),   // флоты
+                  [1] => Array ( )
+            )
+
+            'defenders' => Array (    // слоты обороняющихся
+                  [0] => Array ( 'id'=>100006, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // флоты и оборона
+                  [1] => Array ( )
+            )
+
+       ),
+       [1] => Array ( ... )   // следующий раунд
+   )
+)
+
+*/
+
+char ResultBuffer[64*1024];     // Буфер выходных данных.
+
 // Настройки выпадения лома.
 int DefenseInDebris = 0, FleetInDebris = 30;
 int Rapidfire = 1;  // 1: вкл стрельбу очередями.
@@ -230,30 +269,20 @@ unsigned long MyRand (unsigned long a, unsigned long b)
 
 // ==========================================================================================
 
-// Взорванная и восстановленная оборона.
-unsigned long ExplodedDefense[8], ExplodedDefenseTotal;
-unsigned long RepairDefense[8], RepairDefenseTotal;
-
-// Форматирование числа по тысячам. Спасибо Бонтчеву :)
-// Функция является non-reentrant. Это означает что её нельзя использовать несколько раз в одном выражении, 
-// потому что она всегда возвращает статический адрес, поэтому все значения будут одинаковыми.
-// Для этого нужно копировать результат работы во временные буферы.
-static char *nicenum (u64 n)
+static char *longnumber (u64 n)
 {
-	static char retbuf [32];
-	char *p = &retbuf [sizeof (retbuf) - 1];
-	int i = 0;
+    static char retbuf [32];
+    char *p = &retbuf [sizeof (retbuf) - 1];
+    int i = 0;
 
     if (n == 0) return "0";
-	*p = '\0';
-	for (i = 0; n; i++)
-	{
-		if (((i % 3) == 0) && (i != 0))
-			*--p = '.';
-		*--p = '0' + n % 10;
-		n /= 10;
-	}
-	return p;
+    *p = '\0';
+    for (i = 0; n; i++)
+    {
+        *--p = '0' + n % 10;
+        n /= 10;
+    }
+    return p;
 }
 
 // Установить настройки выпадения лома.
@@ -330,7 +359,7 @@ Unit *InitBattleDefenders (Slot *d, int dnum, int objs)
 // Выстрел a => b. Возвращает урон. aweap - уровень оружейной технологии для юнита "a".
 // absorbed - накопитель поглощённого щитами урона (для того, кого атакуют, то есть для юнита "b").
 // loss - накопитель потерь (стоимость юнита металл+кристалл).
-long UnitShoot (Unit *a, int aweap, Unit *b, u64 *absorbed, u64 *loss, u64 *dm, u64 *dk )
+long UnitShoot (Unit *a, int aweap, Unit *b, u64 *absorbed, u64 *dm, u64 *dk )
 {
     float prc, depleted;
     long apower, adelta = 0;
@@ -362,14 +391,10 @@ long UnitShoot (Unit *a, int aweap, Unit *b, u64 *absorbed, u64 *loss, u64 *dm, 
             if (b->obj_type > 200) {
                 *dm += (u64)(ceil(DefensePrice[b->obj_type-200].m * ((float)DefenseInDebris/100.0F)));
                 *dk += (u64)(ceil(DefensePrice[b->obj_type-200].k * ((float)DefenseInDebris/100.0F)));
-                *loss += (u64)(DefensePrice[b->obj_type-200].m + DefensePrice[b->obj_type-200].k);
-                ExplodedDefense[b->obj_type-200]++;
-                ExplodedDefenseTotal++;
             }
             else {
                 *dm += (u64)(ceil(FleetPrice[b->obj_type-100].m * ((float)FleetInDebris/100.0F)));
                 *dk += (u64)(ceil(FleetPrice[b->obj_type-100].k * ((float)FleetInDebris/100.0F)));
-                *loss += (u64)(FleetPrice[b->obj_type-100].m + FleetPrice[b->obj_type-100].k);
             }
             b->exploded = 1;
         }
@@ -392,49 +417,6 @@ int WipeExploded (Unit **slot, int amount)
     return exploded;
 }
 
-// Посчитать грузоподъёмность флота.
-u64 CalcCargo (Unit *units, int amount)
-{
-    int i;
-    u64 cargo = 0;
-    for (i=0; i<amount; i++) {
-        if (units[i].obj_type < 200) cargo += fleetParam[units[i].obj_type - 100].cargo;
-    }
-    return cargo;
-}
-
-// Захват добычи.
-void Plunder (u64 cargo, u64 m, u64 k, u64 d, u64 *mcap, u64 *kcap, u64 *dcap )
-{
-    u64 total, mc, kc, dc, half, bonus;
-    m /=2; k/=2; d /= 2;
-    total = m+k+d;
-    
-    mc = cargo / 3;
-    if (m < mc) mc = m;
-    cargo = cargo - mc;
-    kc = cargo / 2;
-    if (k < kc) kc = k;
-    cargo = cargo - kc;
-    dc = cargo;
-    if (d < dc)
-    {
-        dc = d;
-        cargo = cargo - dc;
-        m = m - mc;
-        half = cargo / 2;
-        bonus = half;
-        if (m < half) bonus = m;
-        mc += bonus;
-        cargo = cargo - bonus;
-        k = k - kc;
-        if (k < cargo) kc += k;
-        else kc += cargo;
-    }    
-    
-    *mcap = mc; *kcap = kc; *dcap = dc;
-}
-
 // Проверить бой на быструю ничью. Если ни у одного юнита броня не повреждена, то бой заканчивается ничьей досрочно.
 int CheckFastDraw (Unit *aunits, int aobjs, Unit *dunits, int dobjs)
 {
@@ -450,127 +432,53 @@ int CheckFastDraw (Unit *aunits, int aobjs, Unit *dunits, int dobjs)
 
 // Сгенерировать HTML-код слота.
 // Если techs = 1, то показать технологии (в раундах технологии показывать не надо).
-static void GenSlot (Unit *units, int slot, int objnum, Slot *a, Slot *d, int attacker, int techs)
+static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, Slot *d, int attacker)
 {
-    char *SlotCaption[2] = { "Defender", "Attacker" };
     Slot *s = attacker ? a : d;
-    Unit *u;
     Slot coll;
-    int n, i;
+    Unit *u;
+    int n, i, count = 0;
     unsigned long sum = 0;
 
+    // Собрать все юниты в слот.
     memset (&coll, 0, sizeof(Slot));
-    coll.weap = s[slot].weap;
-    coll.shld = s[slot].shld;
-    coll.armor = s[slot].armor;
-
-    // Собрать всё в один слот.
-    if (techs) {
-        for (i=0; i<14; i++) { coll.fleet[i] = s[slot].fleet[i]; sum += s[slot].fleet[i]; }
-        for (i=0; i<8; i++) { coll.def[i] = s[slot].def[i]; sum += s[slot].def[i]; }
-    }
-    else {
-        for (i=0; i<objnum; i++) {
-            u = &units[i];
-            if (u->slot_id == slot) {
-                if (u->obj_type < 200) { coll.fleet[u->obj_type-100]++; sum++; }
-                else { coll.def[u->obj_type-200]++; sum++; }
-            }
+    for (i=0; i<objnum; i++) {
+        u = &units[i];
+        if (u->slot_id == slot) {
+            if (u->obj_type < 200) { coll.fleet[u->obj_type-100]++; sum++; }
+            else { coll.def[u->obj_type-200]++; sum++; }
         }
     }
 
-    printf ("<th><br><center>%s %s (<a href=\"#\">[%i:%i:%i]</a>)<br>", SlotCaption[attacker], s[slot].name, s[slot].g, s[slot].s, s[slot].p);
-    if (sum > 0) {
-        if (techs) printf ("Р’РѕРѕСЂСѓР¶РµРЅРёРµ: %i%% Р©РёС‚С‹: %i%% Р‘СЂРѕРЅСЏ: %i%%", s[slot].weap*10, s[slot].shld*10, s[slot].armor*10 );
-        printf ("<table border=1>");
-        printf ("<tr><th>#3</th>");
-        for (n=0; n<14; n++) {
-            if (coll.fleet[n] > 0) printf ("<th>%s</th>", "FleetShort[n]");
-        }
-        for (n=0; n<8; n++) {
-            if (coll.def[n] > 0) printf ("<th>%s</th>", "DefenseShort[n]");
-        }
-        printf ("</tr>");
-        printf ("<tr><th>#4</th>");
-        for (n=0; n<14; n++) {
-            if (coll.fleet[n] > 0) printf ("<th>%s</th>", nicenum((u64)coll.fleet[n]));
-        }
-        for (n=0; n<8; n++) {
-            if (coll.def[n] > 0) printf ("<th>%s</th>", nicenum((u64)coll.def[n]));
-        }
-        printf ("</tr>");
-        printf ("<tr><th>#5</th>");
-        for (n=0; n<14; n++) {
-            if (coll.fleet[n] > 0) printf ("<th>%s</th>", nicenum((u64)(fleetParam[n].attack * (10+coll.weap) / 10)));
-        }
-        for (n=0; n<8; n++) {
-            if (coll.def[n] > 0) printf ("<th>%s</th>", nicenum((u64)(defenseParam[n].attack * (10+coll.weap) / 10)));
-        }
-        printf ("</tr>");
-        printf ("<tr><th>#6</th>");
-        for (n=0; n<14; n++) {
-            if (coll.fleet[n] > 0) printf ("<th>%s</th>", nicenum((u64)(fleetParam[n].shield * (10+coll.shld) / 10)));
-        }
-        for (n=0; n<8; n++) {
-            if (coll.def[n] > 0) printf ("<th>%s</th>", nicenum((u64)(defenseParam[n].shield * (10+coll.shld) / 10)));
-        }
-        printf ("</tr>");
-        printf ("<tr><th>#7</th>");
-        for (n=0; n<14; n++) {
-            if (coll.fleet[n] > 0) printf ("<th>%s</th>", nicenum((u64)(fleetParam[n].structure * (10+coll.armor) / 100)));
-        }
-        for (n=0; n<8; n++) {
-            if (coll.def[n] > 0) printf ("<th>%s</th>", nicenum((u64)(defenseParam[n].structure * (10+coll.armor) / 100)));
-        }
-        printf ("</tr>");
-        printf ("</table>");
+    if ( attacker) ptr += sprintf ( ptr, "i:%i;a:15:{", slot );
+    else ptr += sprintf ( ptr, "i:%i;a:23:{", slot );
+
+    ptr += sprintf (ptr, "s:2:\"id\";i:%i;", s[slot].id );
+
+    for (n=0; n<14; n++) {      // Флоты
+        ptr += sprintf ( ptr, "i:%i;i:%i;", 202+n, coll.fleet[n]);
     }
-    else printf ("#8");
-    printf ("</center></th>");
+
+    if ( !attacker)             // Оборона
+    {
+        for (n=0; n<8; n++) {
+            ptr += sprintf ( ptr, "i:%i;i:%i;", 401+n, coll.def[n]);
+        }
+    }
+
+    ptr += sprintf ( ptr, "}" );
+    return ptr;
 }
 
-void DoBattle (Slot *a, int anum, Slot *d, int dnum, u64 met, u64 crys, u64 deut)
+int DoBattle (Slot *a, int anum, Slot *d, int dnum)
 {
-    char longstr1[32], longstr2[32], longstr3[32];  // Буферы для non-reentrant функции nicenum.
-
     long slot, i, n, aobjs = 0, dobjs = 0, idx, rounds, sum = 0;
-    long apower, rapidfire, rapidchance, repairchance, fastdraw;
+    long apower, rapidfire, rapidchance, fastdraw;
     Unit *aunits, *dunits, *unit;
-
-    // При выводе оригинального боевого доклада есть ошибка: Малый щитовой купол выводится не в свою очередь, а перед Плазменным орудием.
-    // Чтобы быть максимально похожим на оригинальный доклад, при выводе восстановленной обороны используется таблица перестановки RepairMap.    
-    unsigned long RepairMap[8] = { 0, 1, 2, 3, 4, 6, 5, 7 };
+    char * ptr = ResultBuffer, * res, *round_patch;
 
     u64         shoots[2], spower[2], absorbed[2]; // Общая статистика по выстрелам.    
-
-    u64         aloss = 0, dloss = 0;       // Потери атакующего и обороняющегося
     u64         dm = 0, dk = 0;             // Поле обломков
-    u64         cm, ck, cd;         // Захвачено металла, кристалла, дейтерия
-    int         moonchance;         // Шанс образования луны
-
-    struct tm *ptm;
-    time_t rawtime;
-
-    time (&rawtime);
-    ptm = gmtime (&rawtime);
-
-    memset ( ExplodedDefense, 0, sizeof(ExplodedDefense) );
-    memset ( RepairDefense, 0, sizeof(RepairDefense) );
-    ExplodedDefenseTotal = RepairDefenseTotal = 0;
-
-    printf ("#1 %02i-%02i %02i:%02i:%02i . #2<br>", ptm->tm_mon+1, ptm->tm_mday, ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
-
-    // Флоты перед боем.
-    printf ("<table border=1 width=100%%><tr>");
-    for (slot=0; slot<anum; slot++) {
-        GenSlot (NULL, slot, 0, a, d, 1, 1);
-    }
-    printf ("</tr></table>");
-    printf ("<table border=1 width=100%%><tr>");
-    for (slot=0; slot<dnum; slot++) {
-        GenSlot (NULL, slot, 0, a, d, 0, 1);
-    }
-    printf ("</tr></table>");
 
     // Посчитать количесчтво юнитов до боя.
     for (i=0; i<anum; i++) {
@@ -586,12 +494,16 @@ void DoBattle (Slot *a, int anum, Slot *d, int dnum, u64 met, u64 crys, u64 deut
     // Подготовить массив боевых единиц.
     aunits = InitBattleAttackers (a, anum, aobjs);
     if (aunits == NULL) {
-        return;
+        return 0;
     }
     dunits = InitBattleDefenders (d, dnum, dobjs);
     if (dunits == NULL) {
-        return;
+        return 0;
     }
+
+    ptr += sprintf (ptr, "a:4:{");
+    round_patch = ptr + 15;
+    ptr += sprintf (ptr, "s:6:\"rounds\";a:X:{");
 
     for (rounds=0; rounds<6; rounds++)
     {
@@ -625,7 +537,7 @@ void DoBattle (Slot *a, int anum, Slot *d, int dnum, u64 met, u64 crys, u64 deut
                     // Выстрел.
                     while (rapidfire) {
                         idx = MyRand (0, dobjs-1);
-                        apower = UnitShoot (unit, a[slot].weap, &dunits[idx], &absorbed[1], &dloss, &dm, &dk );
+                        apower = UnitShoot (unit, a[slot].weap, &dunits[idx], &absorbed[1], &dm, &dk );
                         shoots[0]++;
                         spower[0] += apower;
                         if (unit->obj_type < 200) { // Только флот обладает стрельбой очередями.
@@ -648,7 +560,7 @@ void DoBattle (Slot *a, int anum, Slot *d, int dnum, u64 met, u64 crys, u64 deut
                     // Выстрел.
                     while (rapidfire) {
                         idx = MyRand (0, aobjs-1);
-                        apower = UnitShoot (unit, d[slot].weap, &aunits[idx], &absorbed[0], &aloss, &dm, &dk );
+                        apower = UnitShoot (unit, d[slot].weap, &aunits[idx], &absorbed[0], &dm, &dk );
                         shoots[1]++;
                         spower[1] += apower;
                         if (unit->obj_type < 200) { // Только флот обладает стрельбой очередями.
@@ -670,103 +582,50 @@ void DoBattle (Slot *a, int anum, Slot *d, int dnum, u64 met, u64 crys, u64 deut
         aobjs -= WipeExploded (&aunits, aobjs);
         dobjs -= WipeExploded (&dunits, dobjs);
 
-        strcpy (longstr1, nicenum(shoots[0]));
-        strcpy (longstr2, nicenum(spower[0]));
-        strcpy (longstr3, nicenum(absorbed[1]));
-        printf ("<br><center>");
-        printf ("The attacking fleet fires %s times with a total firepower of %s at the defender. The defending shields absorb %s damage", longstr1, longstr2, longstr3);
-        printf ("<br>");
-        strcpy (longstr1, nicenum(shoots[1]));
-        strcpy (longstr2, nicenum(spower[1]));
-        strcpy (longstr3, nicenum(absorbed[0]));
-        printf ("In total, the defending fleet fires %s times with a total firepower of %s at the attacker. The attackers shields absorb %s damage", longstr1, longstr2, longstr3);
-        printf ("</center>");
-        
-        printf ("<table border=1 width=100%%><tr>");
+        // Round.
+        ptr += sprintf ( ptr, "i:%i;a:8:", rounds );
+        ptr += sprintf ( ptr, "{s:6:\"ashoot\";d:%s;", longnumber(shoots[0]) );
+        ptr += sprintf ( ptr, "s:6:\"apower\";d:%s;", longnumber(spower[0]) ); 
+        ptr += sprintf ( ptr, "s:7:\"dabsorb\";d:%s;", longnumber(absorbed[1]) );
+        ptr += sprintf ( ptr, "s:6:\"dshoot\";d:%s;", longnumber(shoots[1]) );
+        ptr += sprintf ( ptr, "s:6:\"dpower\";d:%s;", longnumber(spower[1]) );
+        ptr += sprintf ( ptr, "s:7:\"aabsorb\";d:%s;", longnumber(absorbed[0]) );
         for (slot=0; slot<anum; slot++) {
-            GenSlot (aunits, slot, aobjs, a, d, 1, 0);
+            ptr += sprintf ( ptr, "s:9:\"attackers\";a:%i:{", anum );
+            ptr = GenSlot (ptr, aunits, slot, aobjs, a, d, 1);
+            ptr += sprintf ( ptr, "}" );
         }
-        printf ("</tr></table>");
-        printf ("<table border=1 width=100%%><tr>");
         for (slot=0; slot<dnum; slot++) {
-            GenSlot (dunits, slot, dobjs, a, d, 0, 0);
+            ptr += sprintf ( ptr, "s:9:\"defenders\";a:%i:{", dnum );
+            ptr = GenSlot (ptr, dunits, slot, dobjs, a, d, 0);
+            ptr += sprintf ( ptr, "}" );
         }
-        printf ("</tr></table>");
+        ptr += sprintf ( ptr, "}" );
 
         if (fastdraw) break;
     }
+
+    *round_patch = '0' + (rounds);
     
     // Результаты боя.
-    if (aobjs > 0 && dobjs == 0){ 
-        Plunder (CalcCargo (aunits, aobjs), met, crys, deut, &cm, &ck, &cd);
-
-        strcpy (longstr1, nicenum(cm));
-        strcpy (longstr2, nicenum(ck));
-        strcpy (longstr3, nicenum(cd));
-        printf ("<p> РђС‚Р°РєСѓСЋС‰РёР№ РІС‹РёРіСЂР°Р» Р±РёС‚РІСѓ!<br>");
-        printf ("РћРЅ РїРѕР»СѓС‡Р°РµС‚ %s РјРµС‚Р°Р»Р»Р°, %s РєСЂРёСЃС‚Р°Р»Р»Р° Рё %s РґРµР№С‚РµСЂРёСЏ.", longstr1, longstr2, longstr3);
-        printf ("<br>");
-
+    if (aobjs > 0 && dobjs == 0){ // Атакующий выиграл
+        res = "awon";
     }
     else if (dobjs > 0 && aobjs == 0) { // Атакующий проиграл
-        printf ("<p> РћР±РѕСЂРѕРЅСЏСЋС‰РёР№СЃСЏ РІС‹РёРіСЂР°Р» Р±РёС‚РІСѓ!<br>");
+        res = "dwon";
     }
     else    // Ничья
     {
-        printf ("<p> Р‘РѕР№ РѕРєР°РЅС‡РёРІР°РµС‚СЃСЏ РІРЅРёС‡СЊСЋ, РѕР±Р° С„Р»РѕС‚Р° РІРѕР·РІСЂР°С‰Р°СЋС‚СЃСЏ РЅР° СЃРІРѕРё РїР»Р°РЅРµС‚С‹<br>");
+        res = "draw";
     }
 
-    moonchance = (int)((dm + dk) / 100000);
-    if (moonchance > 20) moonchance = 20;
-
-    strcpy (longstr1, nicenum(aloss));
-    strcpy (longstr2, nicenum(dloss));
-    printf ("<p><br>");
-    printf ("РђС‚Р°РєСѓСЋС‰РёР№ РїРѕС‚РµСЂСЏР» %s РµРґРёРЅРёС†.<br>РћР±РѕСЂРѕРЅСЏСЋС‰РёР№СЃСЏ РїРѕС‚РµСЂСЏР» %s РµРґРёРЅРёС†.", longstr1, longstr2);
-    strcpy (longstr1, nicenum(dm));
-    strcpy (longstr2, nicenum(dk));
-    printf ("<br>");
-    printf ("РўРµРїРµСЂСЊ РЅР° СЌС‚РёС… РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµРЅРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚Р°С… РЅР°С…РѕРґРёС‚СЃСЏ %s РјРµС‚Р°Р»Р»Р° Рё %s РєСЂРёСЃС‚Р°Р»Р»Р°.", longstr1, longstr2);
-    if (moonchance) { 
-        printf ("<br>");
-        printf ("РЁР°РЅСЃ РїРѕСЏРІР»РµРЅРёСЏ Р»СѓРЅС‹ СЃРѕСЃС‚Р°РІРёР» %s %% ", nicenum(moonchance));
-    }
-
-    // Восстановление обороны.
-    if (ExplodedDefenseTotal) {
-        for (i=0; i<8; i++) {
-            if (ExplodedDefense[i]) {
-                if (d[0].def[i] < 10) {
-                    for (n=0; n<ExplodedDefense[i]; n++) {
-                        if ( MyRand (0, 99) < 70 ) { 
-                            RepairDefense[i]++;
-                            RepairDefenseTotal++;
-                        }
-                    }
-                }
-                else {
-                    repairchance = MyRand (60, 80);
-                    RepairDefense[i] = repairchance * ExplodedDefense[i] / 100;
-                    RepairDefenseTotal += RepairDefense[i];
-                }
-            }
-        }
-    }
-
-    if (RepairDefenseTotal) {
-        printf ("<br>");
-        for (i=0; i<8; i++) {
-            if (RepairDefense[RepairMap[i]]) {
-                if (sum > 0) printf (", ");
-                printf ("%i %s", RepairDefense[RepairMap[i]], "DefenseNames[RepairMap[i]]");
-                sum += RepairDefense[RepairMap[i]];
-            }
-        }
-        printf (" Р±С‹Р»Рё РїРѕРІСЂРµР¶РґРµРЅС‹ Рё РЅР°С…РѕРґСЏС‚СЃСЏ РІ СЂРµРјРѕРЅС‚Рµ.<br>");
-    }
+    ptr += sprintf (ptr, "}s:6:\"result\";s:4:\"%s\";", res);
+    ptr += sprintf (ptr, "s:2:\"dm\";d:%s;", longnumber (dm));
+    ptr += sprintf (ptr, "s:2:\"dk\";d:%s;}", longnumber (dk));
     
     free (aunits);
-    free (dunits);        
+    free (dunits);
+    return 1;
 }
 
 // ==========================================================================================
@@ -836,7 +695,7 @@ static void AddSimParam (char *name, char *string)
     simargc ++;
 }
 
-static void PrintSimParams (void)
+static void PrintParams (void)
 {
     long i;
     SimParam *p;
@@ -908,109 +767,193 @@ static char *GetSimParamS (char *name, char *def)
     else return p->string;
 }
 
+/*
+
+Формат входных данных
+Входные данные содержат исходные параметры битвы в текстовом формате. Для удобства разбора в Си, значения представлены в формате "переменная = значение".
+
+Rapidfire = 1
+FID = 30
+DID = 0
+Attackers = N
+Defenders = M
+AttackerN = (ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
+DefenderM = (ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
+
+*/
+
+void StartBattle (char *text, MYSQL *conn, char * db_prefix, int battle_id)
+{
+    Slot *a, *d;
+    int rf, fid, did, i, res;
+    int anum = 0, dnum = 0;
+    char query[64*1024], *ptr, line[1000], buf[64], *lp;
+
+    ptr = strstr (text, "Rapidfire");       // Скорострел
+    if ( ptr ) {
+        ptr = strstr ( ptr, "=" ) + 1;
+        rf = atoi (ptr);
+    }
+    else rf = 1;
+
+    ptr = strstr (text, "FID");             // Флот в обломки
+    if ( ptr ) {
+        ptr = strstr ( ptr, "=" ) + 1;
+        fid = atoi (ptr);
+    }
+    else fid = 30;
+
+    ptr = strstr (text, "DID");             // Оборона в обломки
+    if ( ptr ) {
+        ptr = strstr ( ptr, "=" ) + 1;
+        did = atoi (ptr);
+    }
+    else did = 0;
+
+    ptr = strstr (text, "Attackers");        // Количество атакующих
+    if ( ptr ) {
+        ptr = strstr ( ptr, "=" ) + 1;
+        anum = atoi (ptr);
+    }
+    else anum = 0;
+    ptr = strstr (text, "Defenders");        // Количество обороняющиъся
+    if ( ptr ) {
+        ptr = strstr ( ptr, "=" ) + 1;
+        dnum = atoi (ptr);
+    }
+    else dnum = 0;
+
+    if ( anum == 0 || dnum == 0) return;
+
+    a = (Slot *)malloc ( anum * sizeof (Slot) );    // Выделить память под слоты.
+    memset ( a, 0, anum * sizeof (Slot) );
+    d = (Slot *)malloc ( dnum * sizeof (Slot) );
+    memset ( d, 0, dnum * sizeof (Slot) );
+
+    // Атакующие.
+    for (i=0; i<anum; i++)
+    {
+        sprintf ( buf, "Attacker%i", i );
+        ptr = strstr (text, buf);
+        if ( ptr ) {
+            lp = line;
+            ptr = strstr ( ptr, "=" ) + 1;
+            while ( *ptr != '(' ) ptr++;
+            ptr++;
+            while ( *ptr != ')' ) *lp++ = *ptr++;
+            *lp++ = 0;
+        }
+
+        // (ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
+        sscanf ( line, "%i " "%i %i %i " "%i %i %i %i %i %i %i %i %i %i %i %i %i %i", 
+                       &a[i].id, 
+                       &a[i].weap, &a[i].shld, &a[i].armor,
+                       &a[i].fleet[0], // MT
+                       &a[i].fleet[1], // BT
+                       &a[i].fleet[2], // LF
+                       &a[i].fleet[3], // HF
+                       &a[i].fleet[4], // CR
+                       &a[i].fleet[5], // LINK
+                       &a[i].fleet[6], // COLON
+                       &a[i].fleet[7], // REC
+                       &a[i].fleet[8], // SPY
+                       &a[i].fleet[9], // BOMB
+                       &a[i].fleet[10], // SS
+                       &a[i].fleet[11], // DEST
+                       &a[i].fleet[12], // DS
+                       &a[i].fleet[13] ); // BC
+    }
+
+    // Обороняющиеся.
+    for (i=0; i<dnum; i++)
+    {
+        sprintf ( buf, "Defender%i", i );
+        ptr = strstr (text, buf);
+        if ( ptr ) {
+            lp = line;
+            ptr = strstr ( ptr, "=" ) + 1;
+            while ( *ptr != '(' ) ptr++;
+            ptr++;
+            while ( *ptr != ')' ) *lp++ = *ptr++;
+            *lp++ = 0;
+        }
+
+        // (ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
+        sscanf ( line, "%i " "%i %i %i " "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i", 
+                       &d[i].id, 
+                       &d[i].weap, &a[i].shld, &a[i].armor,
+                       &d[i].fleet[0], // MT
+                       &d[i].fleet[1], // BT
+                       &d[i].fleet[2], // LF
+                       &d[i].fleet[3], // HF
+                       &d[i].fleet[4], // CR
+                       &d[i].fleet[5], // LINK
+                       &d[i].fleet[6], // COLON
+                       &d[i].fleet[7], // REC
+                       &d[i].fleet[8], // SPY
+                       &d[i].fleet[9], // BOMB
+                       &d[i].fleet[10], // SS
+                       &d[i].fleet[11], // DEST
+                       &d[i].fleet[12], // DS
+                       &d[i].fleet[13], // BC
+                       &d[i].def[0], // RT
+                       &d[i].def[1], // LL
+                       &d[i].def[2], // HL
+                       &d[i].def[3], // GS
+                       &d[i].def[4], // IC
+                       &d[i].def[5], // PL
+                       &d[i].def[6], // SDOM
+                       &d[i].def[7] // LDOM
+                ); 
+    }
+
+    // Настройки боевого движка.
+    SetDebrisOptions ( fid, did );
+    SetRapidfire ( rf );
+
+    // **** НАЧАТЬ БИТВУ ****
+    res = DoBattle ( a, anum, d, dnum );
+
+    // Записать результаты в БД.
+    if ( res > 0 )
+    {
+        sprintf ( query, "UPDATE %sbattledata SET result = \'%s\' WHERE battle_id = %i", db_prefix, ResultBuffer, battle_id );
+        mysql_query ( conn, query );    
+    }
+}
+
 void main(int argc, char **argv)
 {
-    Slot a[16], d[16];
-    int anum = 0, dnum = 0;
-    u64 met, crys, deut;
-
-    memset (a, 0, sizeof (a));
-    memset (d, 0, sizeof (d));
-
 	if ( argc < 2 ) return;
 
 	ParseQueryString ( argv[1] );
-	//PrintSimParams ();
+	//PrintParams ();
 
-	// Соединиться с базой данных и выбрать всех атакующих и обороняющихся.
+	// Соединиться с базой данных и выбрать исходные данные.
     {
         char query[1024], *db_prefix = GetSimParamS("db_prefix", "");
-        int fleet_id = GetSimParamI("fleet_id", 0), planet_id = GetSimParamI("planet_id", 0);
+        int battle_id = GetSimParamI("battle_id", 0);
         MYSQL *conn;
         MYSQL_RES *result;
+        MYSQL_ROW row;
 
-        if ( fleet_id == 0 || planet_id == 0 ) return;
+        if ( battle_id == 0 ) return;
 
         conn = mysql_init(NULL);
         if(conn == NULL) { printf ("(ERROR): 1"); return; }
 
         if ( ! mysql_real_connect(conn, GetSimParamS("db_host", "localhost"), GetSimParamS("db_user", "root"), GetSimParamS("db_pass", "root"), GetSimParamS("db_name", "ogame"),0,NULL,0) ) { printf ("(ERROR): 2"); return; }
 
-        // Получить слоты атакеров.
-        sprintf ( query, "SELECT * FROM %sfleet WHERE fleet_id = %i", db_prefix, fleet_id );
+        // Получить исходные данные.
+        sprintf ( query, "SELECT * FROM %sbattledata WHERE battle_id = %i", db_prefix, battle_id );
         mysql_query ( conn, query );
         result = mysql_store_result ( conn );
         if ( result == NULL ) { printf ("(ERROR): 3"); return; }
+        row = mysql_fetch_row(result);
 
-        {
-            MYSQL_ROW row;
-            unsigned int num_fields;
-            unsigned int id;
-
-            num_fields = mysql_num_fields(result);
-            while ((row = mysql_fetch_row(result)))
-            {
-                for (id=0; id<14; id++) {
-                    a[anum].fleet[id] = atoi ( row[12+id] );
-                }
-                a[anum].fleet[10] = 0;
-
-                a[anum].g = 1;
-                a[anum].s = 122;
-                a[anum].p = 13;
-
-                a[anum].weap = a[anum].shld = a[anum].armor = 8;
-
-                anum++;
-            }
-        }
-
-        // Получить слоты дефов.
-        sprintf ( query, "SELECT * FROM %splanets WHERE planet_id = %i", db_prefix, planet_id );
-        mysql_query ( conn, query );
-        result = mysql_store_result ( conn );
-        if ( result == NULL ) { printf ("(ERROR): 4"); return; }
-
-        {
-            MYSQL_ROW row;
-            unsigned int num_fields;
-            unsigned int id;
-
-            num_fields = mysql_num_fields(result);
-            (row = mysql_fetch_row(result));
-            {
-                for (id=0; id<14; id++) {
-                    d[dnum].fleet[id] = atoi ( row[40+id] );
-                }
-                for (id=0; id<8; id++) {
-                    d[dnum].def[id] = atoi ( row[30+id] );
-                }
-
-                // Ресурсы на планете
-                met = (u64)atof ( row[54] );
-                crys = (u64)atof ( row[55] );
-                deut = (u64)atof ( row[56] );
-
-                d[dnum].g = atoi ( row[3] );
-                d[dnum].s = atoi ( row[4] );
-                d[dnum].p = atoi ( row[5] );
-
-                d[dnum].weap = d[dnum].shld = d[dnum].armor = 10;
-
-                dnum++;
-            }
-        }
-
-        // Флоты на удержании.
-
+        // Разобрать исходные данные в двоичный формат и начать битву.
+        MySrand ((unsigned long)time(NULL));
+        StartBattle ( row[1], conn, db_prefix, battle_id );
         mysql_close(conn);
     }
-
-    // Настройки боевого движка.
-    SetDebrisOptions ( GetSimParamI ("did", 0), GetSimParamI ("fid", 30) );
-    SetRapidfire ( GetSimParamI ("rf", 1) );
-
-    // Начать бой.
-	MySrand ((unsigned long)time(NULL));
-	DoBattle (a, anum, d, dnum, met, crys, deut);
 }

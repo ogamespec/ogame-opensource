@@ -20,8 +20,7 @@ typedef struct Slot
     unsigned    long fleet[14];         // Флот
     unsigned    long def[8];            // Оборона
     int         weap, shld, armor;      // Технологии
-    int         g, s, p;                // Координаты
-    unsigned    char name[128];         // Имя игрока
+    int         id;                     // ID планеты / флота
 } Slot;
 
 // Данные юнита.
@@ -33,14 +32,6 @@ typedef struct Unit {
     long    hull, hullmax;
     long    shield, shieldmax;
 } Unit;
-
-// Данные по раунду.
-typedef struct RoundInfo {
-    Unit        *aunits, *dunits;       // Данные юнитов на конец раунда
-    int         aunum, dunum;
-    u64         shoots[2], spower[2], absorbed[2]; // Общая статистика по выстрелам.    
-    unsigned    long memload;
-} RoundInfo;
 
 extern TechParam fleetParam[14];
 extern TechParam defenseParam[8];

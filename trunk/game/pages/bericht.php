@@ -32,7 +32,8 @@ $session = $_GET['session'];
     $msg = LoadMessage ( $_GET['bericht'] );
     if ( $msg['owner_id'] == $GlobalUser['player_id'] ) echo $msg['text'];
 ?>
-    </td>
+    
+</td>
 
    </tr>
 </table>

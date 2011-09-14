@@ -35,13 +35,13 @@ if (file_exists ("config.php"))
 // Сохранить настройки.
 if ( key_exists("install", $_POST) && CheckParameters() )
 {
-    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','fleet','union');
+    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','fleet','union','battledata');
     $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','freeze',
-                              'nextplanet','nextally','nextapp','nextmsg','nextnote','nextbuddy','nexterror','nexttask','nextfleet','nextlog',
-                              'news1', 'news2', 'news_until', 'startdate' );
+                              'nextplanet','nextally','nextapp','nextmsg','nextnote','nextbuddy','nexterror','nexttask','nextfleet','nextbattle','nextlog',
+                              'news1', 'news2', 'news_until', 'startdate', 'battle_engine' );
     $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
                               'INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
-                              'TEXT', 'TEXT', 'INT UNSIGNED', 'INT UNSIGNED' );
+                              'TEXT', 'TEXT', 'INT UNSIGNED', 'INT UNSIGNED', 'TEXT' );
     $usercols = array ( 'player_id', 'regdate', 'ally_id', 'joindate', 'allyrank', 'session', 'private_session', 'name', 'oname', 'name_changed', 'name_until', 'password', 'pemail', 'email',
                         'email_changed', 'email_until', 'disable', 'disable_until', 'vacation', 'vacation_until', 'banned', 'banned_until', 'noattack', 'noattack_until',
                         'lastlogin', 'lastclick', 'ip_addr', 'validated', 'validatemd', 'hplanetid', 'admin', 'sortby', 'sortorder',
@@ -94,8 +94,10 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                                  'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
     $unioncols = array ( 'union_id', 'fleet_id', 'name', 'player1', 'player2', 'player3', 'player4', 'player5', 'players' );
     $uniontype = array ( 'INT PRIMARY KEY', 'INT', 'CHAR(20)', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
-    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$browsecols, &$queuecols, &$fleetcols, &$unioncols);
-    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$debugtype, &$browsetype, &$queuetype, &$fleettype, &$uniontype);
+    $battledatacols = array ( 'battle_id', 'source', 'result' );
+    $battledatatype = array ( 'INT PRIMARY KEY', 'TEXT', 'TEXT' );
+    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$browsecols, &$queuecols, &$fleetcols, &$unioncols, &$battledatacols);
+    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$debugtype, &$browsetype, &$queuetype, &$fleettype, &$uniontype, &$battledatatype);
     $now = time();
 
     //print_r ($_POST);
@@ -149,11 +151,13 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "nexterror = '10000', ";
     $query .= "nexttask = '1', ";
     $query .= "nextfleet = '10000', ";
+    $query .= "nextbattle = '1', ";
     $query .= "nextlog = '10000', ";
     $query .= "news1 = '', ";
     $query .= "news2 = '', ";
     $query .= "news_until = '0', ";
-    $query .= "startdate = '".$now."' ";
+    $query .= "startdate = '".$now."', ";
+    $query .= "battle_engine = '".$_POST["uni_battle_engine"]."' ";
     //echo "<br>$query<br>";
     dbquery ($query);
 
@@ -294,6 +298,7 @@ td.c { background-color: #334445; }
 <tr><td><a title='Оборона в Обломки. Указанное количество процентов обороны выпадает в виде обломков. Если указано 0, то ОВО отключено.'>Обломки обороны</a></td><td><input type=text value='0' class='text' name='uni_did'></td></tr>
 <tr><td><a title='Корабли получают возможность повторного выстрела'>Скорострел</a></td><td><input type=checkbox class='text' name='uni_rapid' CHECKED></td></tr>
 <tr><td>Луны и Звезды Смерти</td><td><input type=checkbox class='text' name='uni_moons' CHECKED></td></tr>
+<tr><td>Путь к боевому движку</td><td><input type=text value='../cgi-bin/battle' class='text' name='uni_battle_engine'></td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan=2 class='c'>Аккаунт администратора игры (Legor)</td></tr>
 <tr><td>E-Mail</td><td><input type=text class='text' name='admin_email'></td></tr>
