@@ -6,13 +6,76 @@ function Plunder ( $planet, $a, $res, &$cm, &$ck, &$cd )
 {
 }
 
-function GenSlot ( $user, $planet, $unitmap, $fleet, $defense, $show_techs )
+function GenSlot ( $user, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $attack )
 {
+    global $UnitParam;
+
+//$UnitParam = array (        // структура, щит, атака, грузоподъемность, скорость, потребление
+//    202 => array ( 4000, 10, 5, 5000, 5000, 10 ),
+
+    $text = "<th><br>";
+
+    $weap = $user["r109"];
+    $shld = $user["r110"];
+    $armor = $user["r111"];
+
+    $text .= "<center>";
+    if ($attack) $text .= "Флот атакующего";
+    else $text .= "Обороняющийся";
+    $text .= " ".$user['oname']." (<a href=# onclick=showGalaxy($g,$s,$p); >[$g:$s:$p]</a>)";
+    if ($show_techs) $text .= "<br>Вооружение: ".($weap * 10)."% Щиты: ".($shld * 10)."% Броня: ".($armor * 10)."% ";
+
+    $sum = 0;
+    foreach ( $unitmap as $i=>$gid )
+    {
+            if ( $gid > 400 ) $sum += $defense[$gid];
+            else $sum += $fleet[$gid];
+    }
+
+    if ( $sum > 0 )
+    {
+
+/*
+<tr><th>Тип</th><th>Б. трансп.</th><th>Бомб.</th><th>Лин. Кр.</th></tr>
+<tr><th>Кол-во.</th><th>20</th><th>40</th><th>100</th></tr>
+<tr><th>Воор.:</th><th>11</th><th>2.200</th><th>1.540</th></tr>
+<tr><th>Щиты</th><th>53</th><th>1.050</th><th>840</th></tr>
+<tr><th>Броня</th><th>2.520</th><th>15.750</th><th>14.700</th></tr>
+*/
+
+        $text .= "<table border=1>";
+
+        $text .= "<tr><th>Тип</th>";
+        foreach ( $unitmap as $i=>$gid )
+        {
+            if ( $gid > 400 ) $n = $defense[$gid];
+            else $n = $fleet[$gid];
+            if ( $n > 0 ) $text .= "<th>".loca("SNAME_$gid")."</th>";
+        }
+        $text .= "</tr>";
+
+        $text .= "<tr><th>Кол-во.</th>";
+        foreach ( $unitmap as $i=>$gid )
+        {
+            if ( $gid > 400 ) $n = $defense[$gid];
+            else $n = $fleet[$gid];
+            if ( $n > 0 ) $text .= "<th>".nicenum($n)."</th>";
+        }
+        $text .= "</tr>";
+
+        $text .= "</table>";
+    }
+    else $text .= "<br>уничтожен";
+
+    $text .= "</center></th>";
+    return $text;
 }
 
 // Сгенерировать боевой доклад.
 function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance )
 {
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
     $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $dmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 401, 402, 403, 404, 405, 406, 407, 408 );
 
@@ -22,13 +85,61 @@ function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moon
     $text .= "Дата/Время: ".date ("m-d H:i:s", $now)." . Произошёл бой между следующими флотами:<br>";
 
     // Флоты перед боем.
-//<table border=1 width=100%><tr><th><br><center>Флот атакующего Andorianin (<a href=# onclick=showGalaxy(1,260,4); >[1:260:4]</a>)<br>Вооружение: 120% Щиты: 110% Броня: 110% <table border=1><tr><th>Тип</th><th>Б. трансп.</th><th>Бомб.</th><th>Лин. Кр.</th></tr><tr><th>Кол-во.</th><th>20</th><th>40</th><th>100</th></tr><tr><th>Воор.:</th><th>11</th><th>2.200</th><th>1.540</th></tr><tr><th>Щиты</th><th>53</th><th>1.050</th><th>840</th></tr><tr><th>Броня</th><th>2.520</th><th>15.750</th><th>14.700</th></tr></table></center></th></tr></table><table border=1 width=100%><tr><th><br><center>Обороняющийся big303 (<a href=# onclick=showGalaxy(1,182,11); >[1:182:11]</a>)<br>Вооружение: 50% Щиты: 70% Броня: 50% <table border=1><tr><th>Тип</th><th>РУ</th><th>Лёг. лазер</th><th>Тяж. лазер</th><th>Гаусс</th><th>Ион</th><th>М. купол</th><th>Б. купол</th></tr><tr><th>Кол-во.</th><th>100</th><th>100</th><th>100</th><th>2</th><th>18</th><th>1</th><th>1</th></tr><tr><th>Воор.:</th><th>120</th><th>150</th><th>375</th><th>1.650</th><th>225</th><th>2</th><th>2</th></tr><tr><th>Щиты</th><th>34</th><th>43</th><th>170</th><th>340</th><th>850</th><th>3.400</th><th>17.000</th></tr><tr><th>Броня</th><th>300</th><th>300</th><th>1.200</th><th>5.250</th><th>1.200</th><th>3.000</th><th>15.000</th></tr></table></center></th></th></tr></table>
+    $text .= "<table border=1 width=100%><tr>";
+    foreach ($a as $i=>$attacker)
+    {
+        $text .= GenSlot ( $attacker, $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker['fleet'], null, 1, 1 );
+    }
+    $text .= "</tr></table>";
+    $text .= "<table border=1 width=100%><tr>";
+    foreach ($d as $i=>$defender)
+    {
+        $text .= GenSlot ( $defender, $defender['g'], $defender['s'], $defender['p'], $dmap, $defender['fleet'], $defender['defense'], 1, 0 );
+    }
+    $text .= "</tr></table>";
 
     // Раунды.
     foreach ( $res['rounds'] as $i=>$round)
     {
         $text .= "<br><center>Атакующий флот делает: ".nicenum($round['ashoot'])." выстрела(ов) общей мощностью ".nicenum($round['apower'])." по обороняющемуся. Щиты обороняющегося поглощают ".nicenum($round['dabsorb'])." мощности выстрелов";
         $text .= "<br>Обороняющийся флот делает ".nicenum($round['dshoot'])." выстрела(ов) общей мощностью ".nicenum($round['dpower'])." выстрела(ов) по атакующему. Щиты атакующего поглощают ".nicenum($round['aabsorb'])." мощности выстрелов</center>";
+
+        $text .= "<table border=1 width=100%><tr>";        // Атакующие
+        foreach ( $round['attackers'] as $n=>$attacker )
+        {
+            $f = LoadFleet ( $attacker['id'] );
+            $user = LoadUser ( $f['owner_id'] );
+            $start_planet = GetPlanet ( $f['start_planet'] );
+            $user['fleet'] = array ();
+            foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $attacker[$gid];
+            $text .= GenSlot ( $user, $start_planet['g'], $start_planet['s'], $start_planet['p'], $amap, $user['fleet'], null, 0, 1 );
+        }
+        $text .= "</tr></table>";
+
+        $text .= "<table border=1 width=100%><tr>";        // Оборняющиеся
+        foreach ( $round['defenders'] as $n=>$defender )
+        {
+            if ( $n == 0 )
+            {
+                $p = GetPlanet ( $defender['id'] );
+                $user = LoadUser ( $p['owner_id'] );
+                $user['fleet'] = array ();
+                $user['defense'] = array ();
+                foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $defender[$gid];
+                foreach ($defmap as $g=>$gid) $user['defense'][$gid] = $defender[$gid];
+                $text .= GenSlot ( $user, $p['g'], $p['s'], $p['p'], $dmap, $user['fleet'], $user['defense'], 0, 0 );
+            }
+            else
+            {
+                $f = LoadFleet ( $defender['id'] );
+                $user = LoadUser ( $f['owner_id'] );
+                $start_planet = GetPlanet ( $f['start_planet'] );
+                $user['fleet'] = array ();
+                foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $defender[$gid];
+                $text .= GenSlot ( $user, $start_planet['g'], $start_planet['s'], $start_planet['p'], $amap, $user['fleet'], null, 0, 0 );
+            }
+        }
+        $text .= "</tr></table>";
     }
 
 //<table border=1 width=100%><tr><th><br><center>Флот атакующего Andorianin (<a href=# onclick=showGalaxy(1,260,4); >[1:260:4]</a>)<table border=1><tr><th>Тип</th><th>Б. трансп.</th><th>Бомб.</th><th>Лин. Кр.</th></tr><tr><th>Кол-во.</th><th>20</th><th>40</th><th>100</th></tr><tr><th>Воор.:</th><th>11</th><th>2.200</th><th>1.540</th></tr><tr><th>Щиты</th><th>53</th><th>1.050</th><th>840</th></tr><tr><th>Броня</th><th>2.520</th><th>15.750</th><th>14.700</th></tr></table></center></th></tr></table><table border=1 width=100%><tr><th><br><center>Обороняющийся big303 (<a href=# onclick=showGalaxy(1,182,11); >[1:182:11]</a>)<table border=1><tr><th>Тип</th><th>РУ</th><th>Лёг. лазер</th><th>Тяж. лазер</th><th>М. купол</th><th>Б. купол</th></tr><tr><th>Кол-во.</th><th>10</th><th>12</th><th>8</th><th>1</th><th>1</th></tr><tr><th>Воор.:</th><th>120</th><th>150</th><th>375</th><th>2</th><th>2</th></tr><tr><th>Щиты</th><th>34</th><th>43</th><th>170</th><th>3.400</th><th>17.000</th></tr><tr><th>Броня</th><th>300</th><th>300</th><th>1.200</th><th>3.000</th><th>15.000</th></tr></table></center></th></th></tr></table>
@@ -75,6 +186,10 @@ function StartBattle ( $fleet_id, $planet_id )
     $a[0] = LoadUser ( $f['owner_id'] );
     $a[0]['fleet'] = array ();
     foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = $f["ship$gid"];
+    $start_planet = GetPlanet ( $f['start_planet'] );
+    $a[0]['g'] = $start_planet['g'];
+    $a[0]['s'] = $start_planet['s'];
+    $a[0]['p'] = $start_planet['p'];
 
     // Список обороняющихся
     $p = GetPlanet ( $planet_id );
@@ -83,6 +198,9 @@ function StartBattle ( $fleet_id, $planet_id )
     $d[0]['defense'] = array ();
     foreach ($fleetmap as $i=>$gid) $d[0]['fleet'][$gid] = $p["f$gid"];
     foreach ($defmap as $i=>$gid) $d[0]['defense'][$gid] = $p["d$gid"];
+    $d[0]['g'] = $p['g'];
+    $d[0]['s'] = $p['s'];
+    $d[0]['p'] = $p['p'];
 
     $source .= "Rapidfire = $rf\n";
     $source .= "FID = $fid\n";
@@ -127,6 +245,20 @@ function StartBattle ( $fleet_id, $planet_id )
     if ( $res['result'] === "awon" ) $battle_result = 0;
     else if ( $res['result'] === "dwon" ) $battle_result = 1;
     else $battle_result = 2;
+
+    // Восстановить оборону
+
+    // Рассчитать общие потери
+
+    // Модифицировать флоты и планету в соответствии с потерями
+
+    // Захватить ресурсы
+
+    // Создать поле обломков.
+    $debris_id = CreateDebris ( $p['g'], $p['s'], $p['p'], $p['owner_id'] );
+    AddDebris ( $debris_id, $res['dm'], $res['dk'] );
+
+    // Создать луну
 
     // Сгенерировать боевой доклад.
     $text = BattleReport ( $a, $d, $res, time(), 1234, 5678, 1, 2, 3, 1 );

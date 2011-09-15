@@ -110,6 +110,30 @@ if ($res == false) {
         loca_add("NAME_502", "Ракета-перехватчик");
         loca_add("NAME_503", "Межпланетная ракета");
 
+        loca_add("SNAME_202", "М. трансп.");
+        loca_add("SNAME_203", "Б. трансп.");
+        loca_add("SNAME_204", "Л. истр.");
+        loca_add("SNAME_205", "Т. истр.");
+        loca_add("SNAME_206", "Крейсер");
+        loca_add("SNAME_207", "Линк");
+        loca_add("SNAME_208", "Колонизатор");
+        loca_add("SNAME_209", "Переработчик");
+        loca_add("SNAME_210", "Шп. зонд");
+        loca_add("SNAME_211", "Бомб.");
+        loca_add("SNAME_212", "Солн. спутник");
+        loca_add("SNAME_213", "Уничт.");
+        loca_add("SNAME_214", "ЗС");
+        loca_add("SNAME_215", "Лин. Кр.");
+
+        loca_add("SNAME_401", "РУ");
+        loca_add("SNAME_402", "Лёг. лазер");
+        loca_add("SNAME_403", "Тяж. лазер");
+        loca_add("SNAME_404", "Гаусс");
+        loca_add("SNAME_405", "Ион");
+        loca_add("SNAME_406", "Плазма");
+        loca_add("SNAME_407", "М. купол");
+        loca_add("SNAME_408", "Б. купол");
+
         // Краткое описание
         loca_add("SHORT_1", "Основной поставщик сырья для строительства несущих структур построек и кораблей.");
         loca_add("SHORT_2", "Основной поставщик сырья для электронных строительных элементов и сплавов.");
