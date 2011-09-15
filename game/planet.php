@@ -70,8 +70,8 @@ R - случайные параметры
 // Создать планету. Возвращает planet_id, или 0 если позиция занята.
 // colony: 1 - создать колонию, 0 - Главная планета
 // moon: 1 - создать луну
-// debris: количество обломков для шанса создания луны
-function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $debris=2000000)
+// moonchance: шанс возникновения луны (для размера луны)
+function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0)
 {
     global $db_prefix;
 

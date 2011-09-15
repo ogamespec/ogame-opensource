@@ -10,9 +10,6 @@ function GenSlot ( $user, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $
 {
     global $UnitParam;
 
-//$UnitParam = array (        // структура, щит, атака, грузоподъемность, скорость, потребление
-//    202 => array ( 4000, 10, 5, 5000, 5000, 10 ),
-
     $text = "<th><br>";
 
     $weap = $user["r109"];
@@ -34,15 +31,6 @@ function GenSlot ( $user, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $
 
     if ( $sum > 0 )
     {
-
-/*
-<tr><th>Тип</th><th>Б. трансп.</th><th>Бомб.</th><th>Лин. Кр.</th></tr>
-<tr><th>Кол-во.</th><th>20</th><th>40</th><th>100</th></tr>
-<tr><th>Воор.:</th><th>11</th><th>2.200</th><th>1.540</th></tr>
-<tr><th>Щиты</th><th>53</th><th>1.050</th><th>840</th></tr>
-<tr><th>Броня</th><th>2.520</th><th>15.750</th><th>14.700</th></tr>
-*/
-
         $text .= "<table border=1>";
 
         $text .= "<tr><th>Тип</th>";
@@ -63,6 +51,33 @@ function GenSlot ( $user, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $
         }
         $text .= "</tr>";
 
+        $text .= "<tr><th>Воор.:</th>";
+        foreach ( $unitmap as $i=>$gid )
+        {
+            if ( $gid > 400 ) $n = $defense[$gid];
+            else $n = $fleet[$gid];
+            if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][2] * (10 + $weap ) / 10 )."</th>";
+        }
+        $text .= "</tr>";
+
+        $text .= "<tr><th>Щиты</th>";
+        foreach ( $unitmap as $i=>$gid )
+        {
+            if ( $gid > 400 ) $n = $defense[$gid];
+            else $n = $fleet[$gid];
+            if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][1] * (10 + $shld ) / 10 )."</th>";
+        }
+        $text .= "</tr>";
+
+        $text .= "<tr><th>Броня</th>";
+        foreach ( $unitmap as $i=>$gid )
+        {
+            if ( $gid > 400 ) $n = $defense[$gid];
+            else $n = $fleet[$gid];
+            if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][0] * (10 + $armor ) / 100 )."</th>";
+        }
+        $text .= "</tr>";
+
         $text .= "</table>";
     }
     else $text .= "<br>уничтожен";
@@ -72,7 +87,7 @@ function GenSlot ( $user, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $
 }
 
 // Сгенерировать боевой доклад.
-function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance )
+function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
@@ -142,21 +157,19 @@ function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moon
         $text .= "</tr></table>";
     }
 
-//<table border=1 width=100%><tr><th><br><center>Флот атакующего Andorianin (<a href=# onclick=showGalaxy(1,260,4); >[1:260:4]</a>)<table border=1><tr><th>Тип</th><th>Б. трансп.</th><th>Бомб.</th><th>Лин. Кр.</th></tr><tr><th>Кол-во.</th><th>20</th><th>40</th><th>100</th></tr><tr><th>Воор.:</th><th>11</th><th>2.200</th><th>1.540</th></tr><tr><th>Щиты</th><th>53</th><th>1.050</th><th>840</th></tr><tr><th>Броня</th><th>2.520</th><th>15.750</th><th>14.700</th></tr></table></center></th></tr></table><table border=1 width=100%><tr><th><br><center>Обороняющийся big303 (<a href=# onclick=showGalaxy(1,182,11); >[1:182:11]</a>)<table border=1><tr><th>Тип</th><th>РУ</th><th>Лёг. лазер</th><th>Тяж. лазер</th><th>М. купол</th><th>Б. купол</th></tr><tr><th>Кол-во.</th><th>10</th><th>12</th><th>8</th><th>1</th><th>1</th></tr><tr><th>Воор.:</th><th>120</th><th>150</th><th>375</th><th>2</th><th>2</th></tr><tr><th>Щиты</th><th>34</th><th>43</th><th>170</th><th>3.400</th><th>17.000</th></tr><tr><th>Броня</th><th>300</th><th>300</th><th>1.200</th><th>3.000</th><th>15.000</th></tr></table></center></th></th></tr></table>
-
-//<br><center>Атакующий флот делает: 450 выстрела(ов) общей мощностью 880.220 по обороняющемуся. Щиты обороняющегося поглощают 23.939 мощности выстрелов
-//<br>Обороняющийся флот делает 32 выстрела(ов) общей мощностью 6.002 выстрела(ов) по атакующему. Щиты атакующего поглощают 5.044 мощности выстрелов</center>
-//<table border=1 width=100%><tr><th><br><center>Флот атакующего Andorianin (<a href=# onclick=showGalaxy(1,260,4); >[1:260:4]</a>)<table border=1><tr><th>Тип</th><th>Б. трансп.</th><th>Бомб.</th><th>Лин. Кр.</th></tr><tr><th>Кол-во.</th><th>20</th><th>40</th><th>100</th></tr><tr><th>Воор.:</th><th>11</th><th>2.200</th><th>1.540</th></tr><tr><th>Щиты</th><th>53</th><th>1.050</th><th>840</th></tr><tr><th>Броня</th><th>2.520</th><th>15.750</th><th>14.700</th></tr></table></center></th></tr></table><table border=1 width=100%><tr><th><br><center>Обороняющийся big303 (<a href=# onclick=showGalaxy(1,182,11); >[1:182:11]</a>)<table border=1><tr><th>Тип</th><th>Б. купол</th></tr><tr><th>Кол-во.</th><th>1</th></tr><tr><th>Воор.:</th><th>2</th></tr><tr><th>Щиты</th><th>17.000</th></tr><tr><th>Броня</th><th>15.000</th></tr></table></center></th></th></tr></table>
-
-//<br><center>Атакующий флот делает: 160 выстрела(ов) общей мощностью 242.220 по обороняющемуся. Щиты обороняющегося поглощают 18.500 мощности выстрелов
-//<br>Обороняющийся флот делает 1 выстрела(ов) общей мощностью 1 выстрела(ов) по атакующему. Щиты атакующего поглощают 1 мощности выстрелов</center>
-//<table border=1 width=100%><tr><th><br><center>Флот атакующего Andorianin (<a href=# onclick=showGalaxy(1,260,4); >[1:260:4]</a>)<table border=1><tr><th>Тип</th><th>Б. трансп.</th><th>Бомб.</th><th>Лин. Кр.</th></tr><tr><th>Кол-во.</th><th>20</th><th>40</th><th>100</th></tr><tr><th>Воор.:</th><th>11</th><th>2.200</th><th>1.540</th></tr><tr><th>Щиты</th><th>53</th><th>1.050</th><th>840</th></tr><tr><th>Броня</th><th>2.520</th><th>15.750</th><th>14.700</th></tr></table></center></th></tr></table><table border=1 width=100%><tr><th><br><center>Обороняющийся big303 (<a href=# onclick=showGalaxy(1,182,11); >[1:182:11]</a>)<br>уничтожен</center></th></th></tr></table>
-
     // Результаты боя.
 //<!--A:167658,W:167658-->
-    $text .= "<p> Атакующий выиграл битву!<br>Он получает<br>".nicenum($cm)." металла, ".nicenum($ck)." кристалла и ".nicenum($cd)." дейтерия.<br>";
-    $text .= "<p><br>Атакующий потерял ".nicenum($aloss)." единиц.<br>Обороняющийся потерял ".nicenum($dloss)." единиц.<br>";
-    $text .= "Теперь на этих пространственных координатах находится ".nicenum($res['dm'])." металла и ".nicenum($res['dk'])." кристалла.";
+    if ( $res['result'] === "awon" )
+    {
+        $text .= "<p> Атакующий выиграл битву!<br>Он получает<br>".nicenum($cm)." металла, ".nicenum($ck)." кристалла и ".nicenum($cd)." дейтерия.";
+    }
+    else if ( $res['result'] === "dwon" ) $text .= "<p> Обороняющийся выиграл битву!";
+    else if ( $res['result'] === "draw" ) $text .= "<p> Бой оканчивается вничью, оба флота возвращаются на свои планеты";
+    else Error ("Неизвестный исход битвы!");
+    $text .= "<br><p><br>Атакующий потерял ".nicenum($aloss)." единиц.<br>Обороняющийся потерял ".nicenum($dloss)." единиц.";
+    $text .= "<br>Теперь на этих пространственных координатах находится ".nicenum($res['dm'])." металла и ".nicenum($res['dk'])." кристалла.";
+    if ( $moonchance ) $text .= "<br>Шанс появления луны составил $moonchance %";
+    if ( $mooncreated ) $text .= "<br>Невероятные массы свободного металла и кристалла сближаются и образуют форму некого спутника на орбите планеты. ";
 
     return $text;
 }
@@ -250,18 +263,27 @@ function StartBattle ( $fleet_id, $planet_id )
 
     // Рассчитать общие потери
 
-    // Модифицировать флоты и планету в соответствии с потерями
-
     // Захватить ресурсы
+
+    // Модифицировать флоты и планету в соответствии с потерями и захваченными ресурсами
+
+    // Изменить статистику игроков
 
     // Создать поле обломков.
     $debris_id = CreateDebris ( $p['g'], $p['s'], $p['p'], $p['owner_id'] );
     AddDebris ( $debris_id, $res['dm'], $res['dk'] );
 
     // Создать луну
+    $mooncreated = false;
+    $moonchance = min ( floor ( ($res['dm'] + $res['dk']) / 100000), 20 );
+    if ( PlanetHasMoon ( $planet_id ) ) $moonchance = 0;
+    if ( mt_rand (1, 100) <= $moonchance ) {
+        CreatePlanet ( $p['g'], $p['s'], $p['p'], $p['owner_id'], 0, 1, $moonchance );
+        $mooncreated = true;
+    }
 
     // Сгенерировать боевой доклад.
-    $text = BattleReport ( $a, $d, $res, time(), 1234, 5678, 1, 2, 3, 1 );
+    $text = BattleReport ( $a, $d, $res, time(), 1234, 5678, 1, 2, 3, $moonchance, $mooncreated );
 
     // Разослать сообщения
     foreach ( $a as $i=>$user )        // Атакующие
