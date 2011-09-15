@@ -131,7 +131,7 @@ function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moon
         }
         $text .= "</tr></table>";
 
-        $text .= "<table border=1 width=100%><tr>";        // Оборняющиеся
+        $text .= "<table border=1 width=100%><tr>";        // Обороняющиеся
         foreach ( $round['defenders'] as $n=>$defender )
         {
             if ( $n == 0 )
