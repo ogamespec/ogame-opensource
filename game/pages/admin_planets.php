@@ -98,7 +98,7 @@ function Admin_Planets ()
             $planet = GetPlanet ($cp);
             if ( $planet['type'] > 0 && $planet['type'] < 10000 )
             {
-                if ( PlanetHasMoon ($cp) == 0 ) CreatePlanet ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id'], 0, 1);
+                if ( PlanetHasMoon ($cp) == 0 ) CreatePlanet ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id'], 0, 1, 20);
             }
         }
         else if ( $action === "create_debris" )    // Создать ПО
