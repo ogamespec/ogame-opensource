@@ -383,32 +383,33 @@ function PlanetPrice ($planet, &$points, &$fpoints)
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
 
+    $m = $k = $d = $e = 0;
     $points = $fpoints = 0;
 
     foreach ( $buildmap as $i=>$gid ) {        // Постройки
-        $m = $k = $d = $e = 0;
         $level = $planet["b$gid"];
         if ($level > 0){
-            BuildPrice ( $gid, $level, $m, $k, $d, $e );
-            $points += ($m + $k + $d);
+            for ( $lv = 1; $lv<=$level; $lv ++ )
+            {
+                BuildPrice ( $gid, $lv, &$m, &$k, &$d, &$e );
+                $points += ($m + $k + $d);
+            }
         }
     }
 
     foreach ( $fleetmap as $i=>$gid ) {        // Флот
-        $m = $k = $d = $e = 0;
         $level = $planet["f$gid"];
         if ($level > 0){
-            ShipyardPrice ( $gid, $m, $k, $d, $e );
+            ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
             $points += ($m + $k + $d) * $level;
             $fpoints += $level;
         }
     }
 
     foreach ( $defmap as $i=>$gid ) {        // Оборона
-        $m = $k = $d = $e = 0;
         $level = $planet["d$gid"];
         if ($level > 0){
-            ShipyardPrice ( $gid, $m, $k, $d, $e );
+            ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
             $points += ($m + $k + $d) * $level;
         }
     }

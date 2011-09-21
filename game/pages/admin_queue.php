@@ -26,6 +26,7 @@ function QueueDesc ( $queue )
             $planet = GetPlanet ($sub_id);
             return "Ведется исследование '".loca("NAME_$obj_id") . "' ($level) с планеты <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
         case "DeleteAccount": return "Удалить аккаунт";
+        case "RecalcPoints": return "Пересчитать статистику";
         case "UnloadAll": return "Отгрузить всех игроков";
     }
 
