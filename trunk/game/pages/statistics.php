@@ -14,8 +14,13 @@ $session = $_GET['session'];
 
 PageHeader ("statistics");
 
-RecalcStats ( $GlobalUser['player_id'] );
-RecalcRanks ();
+$start = -1;
+if ( key_exists ( "start", $_POST ) ) $start = $_POST['start'];
+if ( key_exists ( "start", $_GET ) ) $start = $_GET['start'];
+
+$type = "";
+if ( key_exists ( "type", $_POST ) ) $type = $_POST['type'];
+if ( key_exists ( "type", $_GET ) ) $type = $_GET['type'];
 ?>
 
 <!-- CONTENT AREA --> 
@@ -27,7 +32,7 @@ RecalcRanks ();
   <!-- begin head table --> 
   <table width="525"> 
     <tr> 
-      <td class="c">Статистика (по состоянию на: 2008-12-12, 11:57:46)</td> 
+      <td class="c">Статистика (по состоянию на: <?=date ("Y-m-d, H:i:s", $now);?>)</td> 
     </tr> 
     <tr> 
       <th> 
@@ -43,44 +48,25 @@ RecalcRanks ();
         &nbsp;по&nbsp;
               
         <select name="type"> 
-          <option value="ressources" >Очкам</option> 
-          <option value="fleet" >Флотам</option> 
-          <option value="research" >Исследованиям</option> 
+          <option value="ressources" <? if ($type==="ressources") echo "selected"; ?>>Очкам</option> 
+          <option value="fleet" <? if ($type==="fleet") echo "selected"; ?>>Флотам</option> 
+          <option value="research" <? if ($type==="research") echo "selected"; ?>>Исследованиям</option> 
         </select> 
           
         &nbsp;на месте        <select name="start"> 
-          <option value="-1" >[Собственная позиция]</option> 
-          <option value="1" >1-100</option> 
-          <option value="101" >101-200</option> 
-          <option value="201" >201-300</option> 
-          <option value="301" >301-400</option> 
-          <option value="401" >401-500</option> 
-          <option value="501" >501-600</option> 
-          <option value="601" >601-700</option> 
-          <option value="701" >701-800</option> 
-          <option value="801" >801-900</option> 
-          <option value="901" >901-1000</option> 
-          <option value="1001" >1001-1100</option> 
-          <option value="1101" >1101-1200</option> 
-          <option value="1201" >1201-1300</option> 
-          <option value="1301" >1301-1400</option> 
-          <option value="1401" >1401-1500</option> 
-          <option value="1501" >1501-1600</option> 
-          <option value="1601" >1601-1700</option> 
-          <option value="1701" >1701-1800</option> 
-          <option value="1801" >1801-1900</option> 
-          <option value="1901" selected>1901-2000</option> 
-          <option value="2001" >2001-2100</option> 
-          <option value="2101" >2101-2200</option> 
-          <option value="2201" >2201-2300</option> 
-          <option value="2301" >2301-2400</option> 
-          <option value="2401" >2401-2500</option> 
-          <option value="2501" >2501-2600</option> 
-          <option value="2601" >2601-2700</option> 
-          <option value="2701" >2701-2800</option> 
-          <option value="2801" >2801-2900</option> 
-          <option value="2901" >2901-3000</option> 
-          <option value="3001" >3001-3100</option> 
+          <option value="-1" <? if ( $start == -1 ) echo "selected";?>>[Собственная позиция]</option> 
+<?php
+    // Выпадающий список игроков/альянсов
+    $uni = LoadUniverse ();
+    $count = $uni['usercount'];
+    $i = 1;
+    do {
+        echo "          <option value=\"$i\" ";
+        if ( $start == $i ) echo "selected";
+        echo ">$i-".($i+99)."</option> \n";
+        $i += 100;
+    } while ( $i < $count );
+?>
         </select> 
           
         <input type="hidden" id="sort_per_member" name="sort_per_member" value="0" /> 
@@ -106,19 +92,26 @@ RecalcRanks ();
 
 <?php
 
-$query = "SELECT * FROM ".$db_prefix."users ORDER BY place1;";
+if ( $type === "" ) $type = "ressources";
+
+if ( $type === "fleet" ) $query = "SELECT * FROM ".$db_prefix."users WHERE place2 >= $start AND place2 < ".($start+99)." ORDER BY place2;";
+else if ( $type === "research" ) $query = "SELECT * FROM ".$db_prefix."users WHERE place3 >= $start AND place3 < ".($start+99)." ORDER BY place3;";
+else $query = "SELECT * FROM ".$db_prefix."users WHERE place1 >= $start AND place1 < ".($start+99)." ORDER BY place1;";
+
 $result = dbquery ($query);
 $rows = dbrows ($result);
 while ($rows--) {
     $user = dbarray ($result);
-    $place = $user['place1'];
-    $diff = $user['place1'] - $user['oldplace1'];
+
+    if ( $type === "fleet" ) { $place = $user['place2']; $diff = $user['place2'] - $user['oldplace2']; $score = $user['score2']; }
+    else if ( $type === "research" ) { $place = $user['place3']; $diff = $user['place3'] - $user['oldplace3']; $score = $user['score3']; }
+    else { $place = $user['place1']; $diff = $user['place1'] - $user['oldplace1']; $score = $user['score1'] / 1000; }
 
     echo "  <tr> \n";
     echo "    <!-- rank --> \n";
     echo "    <th> \n";
     echo "      $place&nbsp;&nbsp;\n\n";
-    echo "      <a href='#' onmouseover='return overlib(\"<font color=87CEEB>*</font><br/><font color=white>С 2008-12-12 04:05:02\");' onmouseout='return nd();'><font color='87CEEB'>*</font></a> \n";
+    echo "      <a href='#' onmouseover='return overlib(\"<font color=87CEEB>*</font><br/><font color=white>С 2008-m-d 04:05:02\");' onmouseout='return nd();'><font color='87CEEB'>*</font></a> \n";
     echo "    </th> \n\n";
 
     $home = GetPlanet ( $user['hplanetid'] );
@@ -144,10 +137,18 @@ while ($rows--) {
 
     echo "    <!-- points --> \n";
     echo "    <th> \n";
-    echo "      ".nicenum($user['score1'] / 1000)."    </th> \n\n";
+    echo "      ".nicenum($score)."    </th> \n\n";
     echo "  </tr> \n";
 }
+
+echo "</table>\n";
+echo "<!-- end user -->\n";
 ?>
+
+<!-- end statistic data --><br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
 
 <?php
 PageFooter ();

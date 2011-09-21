@@ -468,6 +468,9 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
         // Задание глобальной отгрузки игроков.
         AddReloginEvent ();
 
+        // Задание персчёта очков игрока.
+        AddRecalcPointsEvent ($player_id);
+
         // Редирект на Обзор Главной планеты.
         echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
     }
@@ -483,6 +486,7 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
 function RecalcStats ($player_id)
 {
     global $db_prefix;
+    $m = $k = $d = $e = 0;
     $points = $fpoints = $rpoints = 0;
 
     // Планеты/луны + стоящие флоты
@@ -501,20 +505,42 @@ function RecalcStats ($player_id)
     $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
     $user = LoadUser ($player_id);
     foreach ($resmap as $i=>$gid) {
-        $m = $k = $d = $e = 0;
         $level = $user["r$gid"];
         $rpoints += $level;
         if ($level > 0) {
-            ResearchPrice ( $gid, $level, &$m, &$k, &$d, &$e );
-            $points += ($m + $k + $d);
+            for ( $lv = 1; $lv<=$level; $lv ++ )
+            {
+                ResearchPrice ( $gid, $lv, &$m, &$k, &$d, &$e );
+                $points += ($m + $k + $d);
+            }
         }
     }
 
     // Летящие флоты
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $result = EnumOwnFleetQueue ( $player_id );
+    $rows = dbrows ($result);
+    while ($rows--)
+    {
+        $fleet = dbarray ( $result );
+
+        foreach ( $fleetmap as $i=>$gid ) {        // Флот
+            $level = $fleet["ship$gid"];
+            if ($level > 0){
+                ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
+                $points += ($m + $k + $d) * $level;
+                $fpoints += $level;
+            }
+        }
+    
+        if ( $fleet['ship202'] > 0 ) {        // МПР
+            ShipyardPrice ( 503, &$m, &$k, &$d, &$e );
+            $points += ($m + $k + $d) * $fleet['ship202'];
+        }
+    }
 
     $query = "UPDATE ".$db_prefix."users SET ";
-    $query .= "oldplace1=place1, oldplace2=place2, oldplace3=place3, ";
-    $query .= "score1=$points, score2=$fpoints, score3=$rpoints, oldscore1=$points, oldscore2=$fpoints, oldscore3=$rpoints WHERE player_id = $player_id;";
+    $query .= "score1=$points, score2=$fpoints, score3=$rpoints WHERE player_id = $player_id;";
     dbquery ($query);
 }
 
