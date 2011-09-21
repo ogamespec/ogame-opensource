@@ -117,7 +117,7 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     {
         if ($colony)
         {
-            if ($p <= 3) $type = $diam = mt_rand ( 50, 120 ) * 72;
+            if ($p <= 3) $diam = mt_rand ( 50, 120 ) * 72;
             else if ($p >= 4 && $p <= 6) $diam = mt_rand ( 50, 150 ) * 120;
             else if ($p >= 7 && $p <= 9) $diam = mt_rand ( 50, 120 ) * 120;
             else if ($p >= 10 && $p <= 12) $diam = mt_rand ( 50, 120 ) * 96;

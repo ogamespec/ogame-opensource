@@ -124,6 +124,33 @@ function AllyChangeName ($ally_id, $name)
     return true;
 }
 
+// Пересчитать места всех альянсов.
+function RecalcAllyRanks ()
+{
+    global $db_prefix;
+
+    // Очки
+    dbquery ("SET @pos := 0;");
+    $query = "UPDATE ".$db_prefix."ally
+              SET place1 = (SELECT @pos := @pos+1)
+              ORDER BY score1 DESC";
+    dbquery ($query);
+
+    // Флот
+    dbquery ("SET @pos := 0;");
+    $query = "UPDATE ".$db_prefix."ally
+              SET place2 = (SELECT @pos := @pos+1)
+              ORDER BY score2 DESC";
+    dbquery ($query);
+
+    // Исследования
+    dbquery ("SET @pos := 0;");
+    $query = "UPDATE ".$db_prefix."ally
+              SET place3 = (SELECT @pos := @pos+1)
+              ORDER BY score3 DESC";
+    dbquery ($query);
+}
+
 // ****************************************************************************
 // Ранги.
 
