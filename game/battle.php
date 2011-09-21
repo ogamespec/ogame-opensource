@@ -248,6 +248,8 @@ function StartBattle ( $fleet_id, $planet_id )
     if ( $result == null ) return;
     $battle = dbarray ($result);
 
+    Debug ( $battle['result'] );
+
     $res = unserialize($battle['result']);
 
     // Удалить уже ненужные боевые данные.

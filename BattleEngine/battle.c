@@ -389,12 +389,12 @@ long UnitShoot (Unit *a, int aweap, Unit *b, u64 *absorbed, u64 *dm, u64 *dk )
     if (b->hull <= b->hullmax * 0.7 && b->shield == 0) {    // Взорвать и отвалить лома.
         if (MyRand (0, 99) >= ((b->hull * 100) / b->hullmax) || b->hull == 0) {
             if (b->obj_type > 200) {
-                *dm += (u64)(ceil(DefensePrice[b->obj_type-200].m * ((float)DefenseInDebris/100.0F)));
-                *dk += (u64)(ceil(DefensePrice[b->obj_type-200].k * ((float)DefenseInDebris/100.0F)));
+                *dm += (u64)(ceil(DefensePrice[b->obj_type-200].m * ((float)DefenseInDebris/100.0f)));
+                *dk += (u64)(ceil(DefensePrice[b->obj_type-200].k * ((float)DefenseInDebris/100.0f)));
             }
             else {
-                *dm += (u64)(ceil(FleetPrice[b->obj_type-100].m * ((float)FleetInDebris/100.0F)));
-                *dk += (u64)(ceil(FleetPrice[b->obj_type-100].k * ((float)FleetInDebris/100.0F)));
+                *dm += (u64)(ceil(FleetPrice[b->obj_type-100].m * ((float)FleetInDebris/100.0f)));
+                *dk += (u64)(ceil(FleetPrice[b->obj_type-100].k * ((float)FleetInDebris/100.0f)));
             }
             b->exploded = 1;
         }
@@ -908,8 +908,8 @@ void StartBattle (char *text, MYSQL *conn, char * db_prefix, int battle_id)
     }
 
     // Настройки боевого движка.
-    SetDebrisOptions ( fid, did );
-    SetRapidfire ( rf );
+    //SetDebrisOptions ( fid, did );
+    //SetRapidfire ( rf );
 
     // **** НАЧАТЬ БИТВУ ****
     res = DoBattle ( a, anum, d, dnum );
