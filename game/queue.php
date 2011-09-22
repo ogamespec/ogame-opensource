@@ -147,6 +147,9 @@ function BuildEnque ( $planet_id, $id, $destroy )
     global $db_prefix, $GlobalUser;
     $maxcnt = 5;
 
+    // Терраформер и Лунную базу нельзя снести.
+    if ( $destroy && ($id == 33 || $id == 41) ) return;
+
     $result = GetBuildQueue ( $planet_id );
     $cnt = dbrows ( $result );
     if ( $cnt >= $maxcnt ) { /*echo "Очередь построек заполнена!<br>";*/ return; }
@@ -256,7 +259,13 @@ function Queue_Build_End ($queue)
     ProdResources ( $planet_id, $planet['lastpeek'], $queue['end'] );
 
     // Количество полей на планете.
-    if ($queue['type'] === "Build" ) $fields = "fields = fields + 1";
+    if ($queue['type'] === "Build" )
+    {
+        $fields = "fields = fields + 1";
+        // Специальная обработка для постройки Терраформера или Лунной базы -- добавить максимальное количество полей.
+        if ( $id == 33 ) $fields .= ", maxfields = maxfields + 5";
+        if ( $id == 41 ) $fields .= ", maxfields = maxfields + 3";
+    }
     else $fields = "fields = fields - 1";
 
     // Обновить уровень постройки и количество полей в базе данных.

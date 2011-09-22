@@ -389,8 +389,9 @@ else
     echo "</table>\n";
 
     // Снос постройки.
+    // Терраформер и лунную базу снести нельзя.
 
-    if ( $aktplanet['b'.$gid] ) {
+    if ( $aktplanet['b'.$gid] && !($gid == 33 || $gid == 41) ) {
         echo "<table width=519 >\n";
         echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">Снести: ".loca("NAME_$gid")." Level ".$aktplanet['b'.$gid]." уничтожить?</a></td></tr>\n";
         $m = $k = $d = $e = 0;
