@@ -50,6 +50,10 @@ function Admin_Home ()
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Errors"><img src="img/admin_error.png"><br>Ошибки</a></th>
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Debug"><img src="img/admin_debug.png"><br>Отладочные сообщения</a></th>
     </tr>
+    <tr>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=BattleSim"><img src="img/admin_sim.png"><br>Симулятор</a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Broadcast"><img src="img/admin_broadcast.png"><br>Общее сообщение</a></th>
+    </tr>
     </table>
 <?php
 }
@@ -64,6 +68,8 @@ include "admin_queue.php";
 include "admin_uni.php";
 include "admin_errors.php";
 include "admin_debug.php";
+include "admin_sim.php";
+include "admin_broadcast.php";
 
 // ========================================================================================
 
@@ -83,6 +89,8 @@ else if ( $mode === "Queue" ) Admin_Queue ();
 else if ( $mode === "Uni" ) Admin_Uni ();
 else if ( $mode === "Errors" ) Admin_Errors ();
 else if ( $mode === "Debug" ) Admin_Debug ();
+else if ( $mode === "BattleSim" ) Admin_BattleSim ();
+else if ( $mode === "Broadcast" ) Admin_Broadcast ();
 else Admin_Home ();
 
 echo "</table>\n";
