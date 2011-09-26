@@ -3,7 +3,7 @@
 // ========================================================================================
 // Боевой симулятор.
 
-function SimBattle ( $a, $d )
+function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result )
 {
     global  $db_host, $db_user, $db_pass, $db_name, $db_prefix;
 
@@ -12,10 +12,12 @@ function SimBattle ( $a, $d )
 
     $unitab = LoadUniverse ();
 
-    print_r ( $a );
-    echo "<br>";
-    print_r ( $d );
-    echo "<br>";
+    if ( $debug ) {
+        print_r ( $a );
+        echo "<br>";
+        print_r ( $d );
+        echo "<br><hr>";
+    }
 
     // *** Сгенерировать исходные данные
 
@@ -36,7 +38,7 @@ function SimBattle ( $a, $d )
     foreach ($defmap as $i=>$gid) $source .= $d[0]['defense'][$gid] . " ";
     $source .= ")\n";
 
-    //echo $source . "<hr>";
+    if ($debug) echo $source . "<hr>";
 
     $battle_id = IncrementDBGlobal ("nextbattle");
     $battle = array ( $battle_id, $source, '' );
@@ -55,8 +57,12 @@ function SimBattle ( $a, $d )
     $battle = dbarray ($result);
 
     $res = unserialize($battle['result']);
-    //print_r ($res);
-    //echo "<hr>";
+    if ( $debug ) {
+        print_r ( $battle );
+        echo "<hr>";
+        print_r ($res);
+        echo "<hr>";
+    }
 
     // Удалить уже ненужные боевые данные.
     $query = "DELETE FROM ".$db_prefix."battledata WHERE battle_id = $battle_id";
@@ -68,6 +74,10 @@ function SimBattle ( $a, $d )
     if ( mt_rand (1, 100) <= $moonchance ) {
         $mooncreated = true;
     }
+
+    if ( $res['result'] === "awon" ) $battle_result = 0;
+    else if ( $res['result'] === "dwon" ) $battle_result = 1;
+    else $battle_result = 2;
 
     // Сгенерировать боевой доклад.
     return BattleReport ( $a, $d, $res, time(), 1234, 5678, 1, 2, 3, $moonchance, $mooncreated, true );
@@ -81,6 +91,12 @@ function Admin_BattleSim ()
 
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+
+    $unitab = LoadUniverse ();
+    $rf = $unitab['rapid'];
+    $fid = $unitab['fid'];
+    $did = $unitab['did'];
+    $debug = false;
 
     $BattleReport = "";
 
@@ -153,24 +169,44 @@ function Admin_BattleSim ()
         }
 
         // Симулировать битву
-        $BattleReport = SimBattle ( $a, $d );
+        $battle_result = 0;
+        if ( $_POST['debug'] === "on" ) $debug = true;
+        else $debug = false;
+        if ( $_POST['rapid'] === "on" ) $rf = $_POST['rapid'];
+        else $rf = 0;
+        if ( $_POST['fid'] === "" ) $fid = 0;
+        else $fid = $_POST['fid'];
+        if ( $_POST['did'] === "" ) $did = 0;
+        else $did = $_POST['did'];
+        $BattleReport = SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result );
     }
 
     // --------------------------------------------------------------------------------------------------------------------------
     // Таблица ввода параметров симуляции.
 
+    function getval($name)
+    {
+        if ( $_POST[$name] != "" ) return "value=\"".$_POST[$name]."\" ";
+    }
+
+    function getval2($arr, $id)
+    {
+        if ( $_POST[$arr][$id] != 0 ) return "value=\"".$_POST[$arr][$id]."\" ";
+        else return "";
+    }
+
 ?>
 
 <table cellpadding=0 cellspacing=0>
 <form action="index.php?page=admin&session=<?=$session;?>&mode=BattleSim" method="POST">
-<input type="hidden" name="dnum" value="1" />
 <input type="hidden" name="anum" value="1" />
+<input type="hidden" name="dnum" value="1" />
 
-<tr>        <td class=c>Оборояющийся</td>        <td class=c>Атакующий</td>        </tr>
+<tr>        <td class=c>Атакующий</td>        <td class=c>Оборояющийся</td>        </tr>
 
 <tr> 
-<td> Вооружение: <input name="d0_weap" size=2> Щиты: <input name="d0_shld" size=2> Броня: <input name="d0_armor" size=2></td>   
-<td> Вооружение: <input name="a0_weap" size=2> Щиты: <input name="a0_shld" size=2> Броня: <input name="a0_armor" size=2></td>   
+<td> Вооружение: <input name="a0_weap" size=2 <?=getval('a0_weap');?> > Щиты: <input name="a0_shld" size=2 <?=getval('a0_shld');?>> Броня: <input name="a0_armor" size=2 <?=getval('a0_armor');?>></td>   
+<td> Вооружение: <input name="d0_weap" size=2 <?=getval('d0_weap');?>> Щиты: <input name="d0_shld" size=2 <?=getval('d0_shld');?>> Броня: <input name="d0_armor" size=2 <?=getval('d0_armor');?>></td>   
 </tr>
 
         <tr> <th valign=top>
@@ -181,18 +217,22 @@ function Admin_BattleSim ()
     foreach ($fleetmap as $i=>$gid)
     {
 ?>
-           <tr><td> <?=loca("NAME_$gid");?> : </td> <td> <input name="d0[<?=$gid;?>]" size=5> </td> </tr>
+           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input name="a0[<?=$gid;?>]" size=5  <?=getval2('a0', $gid);?> > </td> </tr>
 <?php
     }
 
-    echo "<tr><td class=c><b>Оборона</b></td></tr>\n";
-    foreach ($defmap as $i=>$gid)
-    {
 ?>
-           <tr><td> <?=loca("NAME_$gid");?> : </td> <td> <input name="d0[<?=$gid;?>]" size=5> </td> </tr>
-<?php
-    }
-?>
+
+<tr><td colspan=2> 
+<table>
+<tr><td class=c colspan=2>Настройки</td></tr>
+<tr><td>Отладочная информация</td><td><input type="checkbox" name="debug" <? if($debug) echo "checked"; ?> ></td></tr>
+<tr><td>Скорострел</td><td><input type="checkbox" name="rapid" <? if($rf) echo "checked"; ?> ></td></tr>
+<tr><td>Флот в обломки</td><td><input name="fid" size=3 value="<?=$fid;?>"> </td></tr>
+<tr><td>Оборона в обломки</td><td><input name="did" size=3 value="<?=$did;?>"></td></tr>
+</table>
+</td></tr>
+
         </table>
         </th>
 
@@ -204,27 +244,35 @@ function Admin_BattleSim ()
     foreach ($fleetmap as $i=>$gid)
     {
 ?>
-           <tr><td> <?=loca("NAME_$gid");?> : </td> <td> <input name="a0[<?=$gid;?>]" size=5> </td> </tr>
+           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input name="d0[<?=$gid;?>]" size=5  <?=getval2('d0', $gid);?> > </td> </tr>
+<?php
+    }
+
+
+    echo "<tr><td class=c><b>Оборона</b></td></tr>\n";
+    foreach ($defmap as $i=>$gid)
+    {
+?>
+           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input name="d0[<?=$gid;?>]" size=5  <?=getval2('d0', $gid);?> > </td> </tr>
 <?php
     }
 ?>
         </table>
         </th></tr>
 
-<tr><td colspan=2> 
-<table>
-<tr><td class=c colspan=2>Настройки</td></tr>
-<tr><td>Скорострел</td><td><input type="checkbox" name="rapid"></td></tr>
-<tr><td>Флот в обломки</td><td><input name="fid" size=3 value="30"> </td></tr>
-<tr><td>Оборона в обломки</td><td><input name="did" size=3 value="0"></td></tr>
-</table>
-</td></tr>
-
 <tr><td colspan=2><center><input type="submit" value="Начать бой"></center></td></tr>
 </form>
 </table>
 
-<?=$BattleReport;?>
+<?php
+    if ( $BattleReport !== "" ) {
+        $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
+        $bericht = SendMessage ( $GlobalUser['player_id'], "Командование флотом", "Боевой доклад", $BattleReport, 6 );
+        MarkMessage ( $GlobalUser['player_id'], $bericht );
+        $subj = "<a href=\"#\" onclick=\"fenster('index.php?page=bericht&session=$session&bericht=$bericht', 'Bericht_Kampf');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [1:10:13] (A:5.000)</span></a>";
+        echo "$subj<br>";
+    }
+?>
 
 <?php
 
