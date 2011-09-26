@@ -189,7 +189,7 @@ function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moon
     }
     else if ( $res['result'] === "dwon" ) $text .= "<p> Обороняющийся выиграл битву!";
     else if ( $res['result'] === "draw" ) $text .= "<p> Бой оканчивается вничью, оба флота возвращаются на свои планеты";
-    else Error ("Неизвестный исход битвы!");
+    //else Error ("Неизвестный исход битвы!");
     $text .= "<br><p><br>Атакующий потерял ".nicenum($aloss)." единиц.<br>Обороняющийся потерял ".nicenum($dloss)." единиц.";
     $text .= "<br>Теперь на этих пространственных координатах находится ".nicenum($res['dm'])." металла и ".nicenum($res['dk'])." кристалла.";
     if ( $moonchance ) $text .= "<br>Шанс появления луны составил $moonchance %";

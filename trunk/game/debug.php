@@ -21,7 +21,7 @@ function Error ($text)
 
     echo "<center><font size=\"3\"><b>\n";
     echo "<br /><br />\n";
-    echo "<font color=\"#FF0000\">Произошла ошибка</font>\n";
+    echo "<font color=\"#FF0000\">Произошла ошибка</font> - $text\n";
     echo "<br /><br />\n";
     echo BackTrace() . "<br /><br />\n";
     echo "Аварийное завершение программы.<br/><br/>Обратитесь в Службу поддержки или на форум, в раздел \"Ошибки\".\n";
