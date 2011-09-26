@@ -87,7 +87,7 @@ function GenSlot ( $user, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $
 }
 
 // Сгенерировать боевой доклад.
-function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated )
+function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $fakeids=false )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
@@ -122,9 +122,17 @@ function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moon
         $text .= "<table border=1 width=100%><tr>";        // Атакующие
         foreach ( $round['attackers'] as $n=>$attacker )
         {
-            $f = LoadFleet ( $attacker['id'] );
-            $user = LoadUser ( $f['owner_id'] );
-            $start_planet = GetPlanet ( $f['start_planet'] );
+            if ( $fakeids ) {
+                $user = array ();
+                $start_planet['g'] = mt_rand (1, 9);
+                $start_planet['s'] = mt_rand (1, 499);
+                $start_planet['p'] = mt_rand (1, 15);
+            }
+            else {
+                $f = LoadFleet ( $attacker['id'] );
+                $user = LoadUser ( $f['owner_id'] );
+                $start_planet = GetPlanet ( $f['start_planet'] );
+            }
             $user['fleet'] = array ();
             foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $attacker[$gid];
             $text .= GenSlot ( $user, $start_planet['g'], $start_planet['s'], $start_planet['p'], $amap, $user['fleet'], null, 0, 1 );
@@ -136,8 +144,16 @@ function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moon
         {
             if ( $n == 0 )
             {
-                $p = GetPlanet ( $defender['id'] );
-                $user = LoadUser ( $p['owner_id'] );
+                if ( $fakeids ) {
+                    $user = array ();
+                    $user['g'] = mt_rand (1, 9);
+                    $user['s'] = mt_rand (1, 499);
+                    $user['p'] = mt_rand (1, 15);
+                }
+                else {
+                    $p = GetPlanet ( $defender['id'] );
+                    $user = LoadUser ( $p['owner_id'] );
+                }
                 $user['fleet'] = array ();
                 $user['defense'] = array ();
                 foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $defender[$gid];
@@ -146,9 +162,17 @@ function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moon
             }
             else
             {
-                $f = LoadFleet ( $defender['id'] );
-                $user = LoadUser ( $f['owner_id'] );
-                $start_planet = GetPlanet ( $f['start_planet'] );
+                if ( $fakeids ) {
+                    $user = array ();
+                    $start_planet['g'] = mt_rand (1, 9);
+                    $start_planet['s'] = mt_rand (1, 499);
+                    $start_planet['p'] = mt_rand (1, 15);
+                }
+                else {
+                    $f = LoadFleet ( $defender['id'] );
+                    $user = LoadUser ( $f['owner_id'] );
+                    $start_planet = GetPlanet ( $f['start_planet'] );
+                }
                 $user['fleet'] = array ();
                 foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $defender[$gid];
                 $text .= GenSlot ( $user, $start_planet['g'], $start_planet['s'], $start_planet['p'], $amap, $user['fleet'], null, 0, 0 );
