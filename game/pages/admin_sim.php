@@ -3,7 +3,7 @@
 // ========================================================================================
 // Боевой симулятор.
 
-function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result )
+function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, &$dloss )
 {
     global  $db_host, $db_user, $db_pass, $db_name, $db_prefix;
 
@@ -68,6 +68,10 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result )
     $query = "DELETE FROM ".$db_prefix."battledata WHERE battle_id = $battle_id";
     dbquery ($query);
 
+    // Рассчитать общие потери
+    $aloss = $dloss = 0;
+    CalcLosses ( $a, $d, $res, &$aloss, &$dloss );
+
     // Создать луну
     $mooncreated = false;
     $moonchance = min ( floor ( ($res['dm'] + $res['dk']) / 100000), 20 );
@@ -80,7 +84,7 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result )
     else $battle_result = 2;
 
     // Сгенерировать боевой доклад.
-    return BattleReport ( $a, $d, $res, time(), 1234, 5678, 1, 2, 3, $moonchance, $mooncreated, true );
+    return BattleReport ( $a, $d, $res, time(), $aloss, $dloss, 1, 2, 3, $moonchance, $mooncreated, true );
 }
 
 function Admin_BattleSim ()
@@ -99,6 +103,7 @@ function Admin_BattleSim ()
     $debug = false;
 
     $BattleReport = "";
+    $aloss = $dloss = 0;
 
     // --------------------------------------------------------------------------------------------------------------------------
     // Обработка POST-запроса.
@@ -178,7 +183,7 @@ function Admin_BattleSim ()
         else $fid = $_POST['fid'];
         if ( $_POST['did'] === "" ) $did = 0;
         else $did = $_POST['did'];
-        $BattleReport = SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result );
+        $BattleReport = SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, &$dloss );
     }
 
     // --------------------------------------------------------------------------------------------------------------------------
@@ -269,7 +274,7 @@ function Admin_BattleSim ()
         $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
         $bericht = SendMessage ( $GlobalUser['player_id'], "Командование флотом", "Боевой доклад", $BattleReport, 6 );
         MarkMessage ( $GlobalUser['player_id'], $bericht );
-        $subj = "<a href=\"#\" onclick=\"fenster('index.php?page=bericht&session=$session&bericht=$bericht', 'Bericht_Kampf');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [1:10:13] (A:5.000)</span></a>";
+        $subj = "<a href=\"#\" onclick=\"fenster('index.php?page=bericht&session=$session&bericht=$bericht', 'Bericht_Kampf');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$d[0]['g'].":".$d[0]['s'].":".$d[0]['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
         echo "$subj<br>";
     }
 ?>

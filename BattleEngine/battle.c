@@ -908,8 +908,8 @@ void StartBattle (char *text, MYSQL *conn, char * db_prefix, int battle_id)
     }
 
     // Настройки боевого движка.
-    //SetDebrisOptions ( fid, did );
-    //SetRapidfire ( rf );
+    SetDebrisOptions ( did, fid );
+    SetRapidfire ( rf );
 
     // **** НАЧАТЬ БИТВУ ****
     res = DoBattle ( a, anum, d, dnum );

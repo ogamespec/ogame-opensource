@@ -20,7 +20,7 @@
 13-15: DIAM = RAND (50, 150) * 96
 
 Температура (планеты):
-1-3: 75 77 79 84 80 83
+1-3: 75 77 79 84 80 83 86
 4-6: 22 29 25 24 25 21 27 21 26 20 22 21 21 20 23 28 27 30 18 19 25 31
 7-9: -1 -3 -6 3 -4
 10-12: -27 -34 -23 -27 -31 -25 -21 -29
@@ -130,7 +130,7 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     $fields = floor (pow (($diam / 1000), 2));
 
     // Температура
-    if ($p <= 3) $temp = mt_rand (75, 84);
+    if ($p <= 3) $temp = mt_rand (75, 86);
     else if ($p >= 4 && $p <= 6) $temp = mt_rand (18, 31);
     else if ($p >= 7 && $p <= 9) $temp = mt_rand (-6, 3);
     else if ($p >= 10 && $p <= 12) $temp = mt_rand (-34, -21);
