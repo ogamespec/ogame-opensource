@@ -6,6 +6,87 @@ function Plunder ( $planet, $a, $res, &$cm, &$ck, &$cd )
 {
 }
 
+// Рассчитать потери (не учитывать восстановленную оборону).
+function CalcLosses ( $a, $d, $res, &$aloss, &$dloss )
+{
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+    $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $dmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 401, 402, 403, 404, 405, 406, 407, 408 );
+
+    $met = $kris = $deut = $energy = 0;
+    $aprice = $dprice = 0;
+
+    // Стоимость юнитов до боя.
+    foreach ($a as $i=>$attacker)                // Атакующие
+    {
+        foreach ( $fleetmap as $n=>$gid )
+        {
+            $amount = $attacker['fleet'][$gid];
+            if ( $amount > 0 ) {
+                ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
+                $aprice += ( $met + $kris + $deut ) * $amount;
+            }
+        }
+    }
+
+    foreach ($d as $i=>$defender)            // Обороняющиеся
+    {
+        foreach ( $fleetmap as $n=>$gid )
+        {
+            $amount = $defender['fleet'][$gid];
+            if ( $amount > 0 ) {
+                ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
+                $dprice += ( $met + $kris + $deut ) * $amount;
+            }
+        }
+        foreach ( $defmap as $n=>$gid )
+        {
+            $amount = $defender['defense'][$gid];
+            if ( $amount > 0 ) {
+                ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
+                $dprice += ( $met + $kris + $deut ) * $amount;
+            }
+        }
+    }
+
+    // Стоимость юнитов в последнем раунде.
+    $rounds = count ( $res['rounds'] );
+    if ( $rounds > 0 ) 
+    {
+        $last = $res['rounds'][$rounds - 1];
+        $alast = $dlast = 0;
+
+        foreach ( $last['attackers'] as $i=>$attacker )        // Атакующие
+        {
+            foreach ( $amap as $n=>$gid )
+            {
+                $amount = $attacker[$gid];
+                if ( $amount > 0 ) {
+                    ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
+                    $alast += ( $met + $kris + $deut ) * $amount;
+                }
+            }
+        }
+
+        foreach ( $last['defenders'] as $i=>$defender )        // Обороняющиеся
+        {
+            foreach ( $dmap as $n=>$gid )
+            {
+                $amount = $defender[$gid];
+                if ( $amount > 0 ) {
+                    ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
+                    $dlast += ( $met + $kris + $deut ) * $amount;
+                }
+            }
+        }
+
+        $aloss = $aprice - $alast;
+        $dloss = $dprice - $dlast;
+    }
+    else $aloss = $dloss = 0;
+}
+
 function GenSlot ( $user, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $attack )
 {
     global $UnitParam;
@@ -287,7 +368,9 @@ function StartBattle ( $fleet_id, $planet_id )
 
     // Восстановить оборону
 
-    // Рассчитать общие потери
+    // Рассчитать общие потери (учитывать дейтерий)
+    $aloss = $dloss = 0;
+    CalcLosses ( $a, $d, $res, &$aloss, &$dloss );
 
     // Захватить ресурсы
 
@@ -309,14 +392,14 @@ function StartBattle ( $fleet_id, $planet_id )
     }
 
     // Сгенерировать боевой доклад.
-    $text = BattleReport ( $a, $d, $res, time(), 1234, 5678, 1, 2, 3, $moonchance, $mooncreated );
+    $text = BattleReport ( $a, $d, $res, time(), $aloss, $aloss, 1, 2, 3, $moonchance, $mooncreated );
 
     // Разослать сообщения
     foreach ( $a as $i=>$user )        // Атакующие
     {
         $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6 );
         MarkMessage ( $user['player_id'], $bericht );
-        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [1:10:13] (A:5.000)</span></a>";
+        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
         SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2 );
     }
 
@@ -324,7 +407,7 @@ function StartBattle ( $fleet_id, $planet_id )
     {
         $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6 );
         MarkMessage ( $user['player_id'], $bericht );
-        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$d_result[$battle_result]."\">Боевой доклад [1:10:13] (A:5.000)</span></a>";
+        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$d_result[$battle_result]."\">Боевой доклад [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
         SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2 );
     }
 }
