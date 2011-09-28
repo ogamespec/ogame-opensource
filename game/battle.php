@@ -200,7 +200,8 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             $target = GetPlanet ( $fleet_obj['target_planet'] );
             $ships = 0;
             foreach ( $fleetmap as $i=>$gid ) $ships += $attacker[$gid];
-            $cargo = ( FleetCargoSummary ( $attacker ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
+            if ( $sum_cargo == 0) $cargo = 0;
+            else $cargo = ( FleetCargoSummary ( $attacker ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+100, 30, $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2);
         }
 
@@ -227,7 +228,8 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             $target = GetPlanet ( $fleet_obj['target_planet'] );
             $ships = 0;
             foreach ( $fleetmap as $i=>$gid ) $ships += $attacker['fleet'][$gid];
-            $cargo = ( FleetCargoSummary ( $attacker['fleet'] ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
+            if ( $sum_cargo == 0) $cargo = 0;
+            else $cargo = ( FleetCargoSummary ( $attacker['fleet'] ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+100, 30, $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2);
         }
 
