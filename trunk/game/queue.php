@@ -26,6 +26,8 @@
 
 Статичный пересчёт очков игрока : 0:10 по серверу
 
+Виртуальное ПО исчезает в понедельник в 1:10 по серверу, если на/от него не летит ни одного флота и если там 0 ресурсов.
+
 Запись задания в таблице БД:
 task_id: уникальный номер задания (INT)
 owner_id: номер пользователя которому принадлежит задание  (INT)
@@ -192,11 +194,7 @@ function BuildEnque ( $planet_id, $id, $destroy )
         $now = time ();
 
         // Списать ресурсы.
-        $planet['m'] -= $m;
-        $planet['k'] -= $k;
-        $planet['d'] -= $d;
-        $query = "UPDATE ".$db_prefix."planets SET m = '".$planet['m']."', k = '".$planet['k']."', d = '".$planet['d']."', lastpeek = '".$now."' WHERE planet_id = $planet_id";
-        dbquery ($query);
+        AdjustResources ( $m, $k, $d, $planet_id, '-' );
 
         // Добавить в очередь
         $type = $destroy ? "Demolish" : "Build";
@@ -292,16 +290,7 @@ function Queue_Build_Cancel ($queue)
     {
         $m = $k = $d = $e = 0;
         BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
-
-        $now = time ();
-
-        $planet = GetPlanet ($planet_id);
-        $planet['m'] += $m;
-        $planet['k'] += $k;
-        $planet['d'] += $d;
-        $query = "UPDATE ".$db_prefix."planets SET m = '".$planet['m']."', k = '".$planet['k']."', d = '".$planet['d']."', lastpeek = '".$now."'  WHERE planet_id = $planet_id";
-        dbquery ($query);
-
+        AdjustResources ( $m, $k, $d, $planet_id, '+' );
         Debug ( "Build_Cancel - возвращаем ресы $m $k $d" );
     }
     else Debug ( "Build_Cancel - ресы возвращать не нужно" );
@@ -339,11 +328,7 @@ function Queue_DecRes_End ($queue)
         $now = time ();
 
         // Списать ресурсы.
-        $planet['m'] -= $m;
-        $planet['k'] -= $k;
-        $planet['d'] -= $d;
-        $query = "UPDATE ".$db_prefix."planets SET m = '".$planet['m']."', k = '".$planet['k']."', d = '".$planet['d']."', lastpeek = '".$now."' WHERE planet_id = $planet_id";
-        dbquery ($query);
+        AdjustResources ( $m, $k, $d, $planet_id, '-' );
 
         Debug ( "DecRes - списали $m $k $d");
     }
@@ -419,11 +404,7 @@ function AddShipyard ($player_id, $planet_id, $gid, $value )
         $seconds = ShipyardDuration ( $gid, $shipyard, $nanits, $speed );
 
         // Списать ресурсы.
-        $planet['m'] -= $m;
-        $planet['k'] -= $k;
-        $planet['d'] -= $d;
-        $query = "UPDATE ".$db_prefix."planets SET m = '".$planet['m']."', k = '".$planet['k']."', d = '".$planet['d']."', lastpeek = '".$now."' WHERE planet_id = $planet_id";
-        dbquery ($query);
+        AdjustResources ( $m, $k, $d, $planet_id, '-' );
 
         AddQueue ($player_id, "Shipyard", $planet_id, $gid, $value, $now, $seconds);
         Debug ("Запустить постройку ".loca("NAME_$gid")." ($value) на планете [".$planet['g'].":".$planet['s'].":".$planet['p']."] ".$planet['name'] );
@@ -501,11 +482,7 @@ function StartResearch ($player_id, $planet_id, $id)
         $seconds = ResearchDuration ( $id, $level, $reslab, $speed);
 
         // Списать ресурсы.
-        $planet['m'] -= $m;
-        $planet['k'] -= $k;
-        $planet['d'] -= $d;
-        $query = "UPDATE ".$db_prefix."planets SET m = '".$planet['m']."', k = '".$planet['k']."', d = '".$planet['d']."', lastpeek = '".$now."' WHERE planet_id = $planet_id";
-        dbquery ($query);
+        AdjustResources ( $m, $k, $d, $planet_id, '-' );
 
         //echo "--------------------- Запустить исследование $id на планете $planet_id игрока $player_id, уровень $level, продолжительность $seconds" ;
         AddQueue ($player_id, "Research", $planet_id, $id, $level, $now, $seconds);
@@ -538,11 +515,7 @@ function StopResearch ($player_id)
     ResearchPrice ( $id, $level, &$m, &$k, &$d, &$e );
 
     // Вернуть ресурсы
-    $planet['m'] += $m;
-    $planet['k'] += $k;
-    $planet['d'] += $d;
-    $query = "UPDATE ".$db_prefix."planets SET m = '".$planet['m']."', k = '".$planet['k']."', d = '".$planet['d']."', lastpeek = '".$now."' WHERE planet_id = $planet_id";
-    dbquery ($query);
+    AdjustResources ( $m, $k, $d, $planet_id, '+' );
 
     RemoveQueue ( $resq['task_id'], 0 );
 

@@ -83,6 +83,19 @@ function Admin_Users ()
         }
     }
 
+    // Обработка GET-запроса.
+    if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
+        $player_id = $_GET['player_id'];
+        $action = $_GET['action'];
+        $now = time();
+
+        if ( $action === "recalc_stats" )    // Пересчитать статистику
+        {
+            RecalcStats ($player_id);
+            RecalcRanks ();
+        }
+    }
+
     if ( key_exists("player_id", $_GET) ) {        // Информация об игроке
         $user = LoadUser ( $_GET['player_id'] );
 ?>
@@ -192,6 +205,7 @@ function Admin_Users ()
             <tr><th>Флот</th><th><?=nicenum($user['score2']);?> / <?=nicenum($user['place2']);?></th></tr>
             <tr><th>Исследования</th><th><?=nicenum($user['score3']);?> / <?=nicenum($user['place3']);?></th></tr>
             <tr><th>Дата старой статистики</th><th><?=date ("Y-m-d H:i:s", $user['scoredate']);?></th></tr>
+            <tr><th colspan=2><a href="index.php?page=admin&session=<?=$session;?>&mode=Users&action=recalc_stats&player_id=<?=$user['player_id'];?>" >Пересчитать статистику</a></th></tr>
         </table></th>
 
         <th valign=top><table>

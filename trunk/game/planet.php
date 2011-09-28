@@ -38,8 +38,6 @@
 Максимальный = floor (1000*(20 + 3 * Шанс)^0,5) km 
 
 FIELDS = FLOOR ( (DIAM / 1000) ^ 2 )
-DIAM = FX? ( FIELDS )
-
 */
 
 /*
@@ -413,8 +411,8 @@ function PlanetName ($planet)
 function AdjustResources ($m, $k, $d, $planet_id, $sign)
 {
     global $db_prefix;
-    $query = "UPDATE ".$db_prefix."planets SET m=m $sign '".$m."', k=k $sign '".$k."', d=d $sign '".$d."' WHERE planet_id=$planet_id;";
-    //echo "$query<br>";
+    $now = time ();
+    $query = "UPDATE ".$db_prefix."planets SET m=m $sign '".$m."', k=k $sign '".$k."', d=d $sign '".$d."', lastpeek = '".$now."' WHERE planet_id=$planet_id;";
     dbquery ($query);
 }
 
