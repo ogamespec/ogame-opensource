@@ -185,9 +185,6 @@ switch ( $order )
 //Для уничтожения луны необходима звезда смерти.
         break;
 
-    case '14':        // Испытательный полёт
-        beak;
-
     case '15':       // Экспедиция
 //Цель экспедиции недействительна!
         break;
@@ -211,7 +208,7 @@ else {
 
     print_r ( $_POST);
 
-    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $_POST['resource1'], $_POST['resource2'], $_POST['resource3'] );
+    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $_POST['resource1'], $_POST['resource2'], $_POST['resource3'], $cons );
     $queue = GetFleetQueue ($fleet_id);
 
     // Поднять флот с планеты.

@@ -59,9 +59,12 @@ if ( method () === "POST" )
 
 PageHeader ("flotten1");
 
-$result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
+$result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );    // Количество флотов
 $nowfleet = $rows = dbrows ($result);
 $maxfleet = $GlobalUser['r108'] + 1;
+
+$expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Количество экспедиций
+$maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 
 ?>
 
@@ -84,7 +87,7 @@ $maxfleet = $GlobalUser['r108'] + 1;
     <td style='background-color:transparent;'>
     Флоты <?=$rows;?> / <?=$maxfleet;?>    </td>
     <td align=right style='background-color:transparent;'>
-      0/2 Экспедиции    
+      <?=$expnum;?>/<?=$maxexp;?> Экспедиции    
     </td>
     </tr>
     </table>

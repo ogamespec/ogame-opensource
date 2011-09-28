@@ -2,11 +2,38 @@
 
 // Боевой движок OGame.
 
-function Plunder ( $planet, $a, $res, &$cm, &$ck, &$cd )
+// Захватить ресурсы.
+function Plunder ( $cargo, $m, $k, $d, &$cm, &$ck, &$cd )
 {
+    $m /=2; $k /=2; $d /= 2;
+    $total = $m+$k+$d;
+    
+    $mc = $cargo / 3;
+    if ($m < $mc) $mc = $m;
+    $cargo = $cargo - $mc;
+    $kc = $cargo / 2;
+    if ($k < $kc) $kc = $k;
+    $cargo = $cargo - $kc;
+    $dc = $cargo;
+    if ($d < $dc)
+    {
+        $dc = $d;
+        $cargo = $cargo - $dc;
+        $m = $m - $mc;
+        $half = $cargo / 2;
+        $bonus = $half;
+        if ($m < $half) $bonus = $m;
+        $mc += $bonus;
+        $cargo = $cargo - $bonus;
+        $k = $k - $kc;
+        if ($k < $cargo) $kc += $k;
+        else $kc += $cargo;
+    }
+
+    $cm = floor($mc); $ck = floor($kc); $cd = floor($dc);
 }
 
-// Рассчитать потери (не учитывать восстановленную оборону).
+// Рассчитать общие потери (не учитывать восстановленную оборону).
 function CalcLosses ( $a, $d, $res, &$aloss, &$dloss )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
@@ -87,6 +114,35 @@ function CalcLosses ( $a, $d, $res, &$aloss, &$dloss )
     else $aloss = $dloss = 0;
 }
 
+// Суммарная грузоподъемность флотов в последнем раунде.
+function CargoSummaryLastRound ( $a, $res )
+{
+    $cargo = 0;
+    $rounds = count ( $res['rounds'] );
+    if ( $rounds > 0 ) 
+    {
+        $last = $res['rounds'][$rounds - 1];
+
+        foreach ( $last['attackers'] as $i=>$attacker )        // Атакующие
+        {
+            $f = LoadFleet ( $attacker['id'] );
+            $cargo += FleetCargoSummary ( $attacker ) - ($f['m'] + $f['k'] + $f['d']) - $f['fuel'];
+        }
+    }
+    else
+    {
+        foreach ($a as $i=>$attacker)                // Атакующие
+        {
+            $f = LoadFleet ( $attacker['id'] );
+            $cargo += FleetCargoSummary ( $attacker['fleet'] ) - ($f['m'] + $f['k'] + $f['d']) - $f['fuel'];
+        }
+    }
+    return $cargo;
+}
+
+// Модифицировать флоты и планету (добавить/отнять ресурсы, развернуть атакующие флоты, если остались корабли)
+
+// Сгенерировать HTML-код одного слота.
 function GenSlot ( $user, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $attack )
 {
     global $UnitParam;
@@ -308,6 +364,8 @@ function StartBattle ( $fleet_id, $planet_id )
     $a[0]['g'] = $start_planet['g'];
     $a[0]['s'] = $start_planet['s'];
     $a[0]['p'] = $start_planet['p'];
+    $a[0]['id'] = $fleet_id;
+    $a[0]['points'] = $a[0]['fpoints'] = 0;
 
     // Список обороняющихся
     $p = GetPlanet ( $planet_id );
@@ -319,6 +377,8 @@ function StartBattle ( $fleet_id, $planet_id )
     $d[0]['g'] = $p['g'];
     $d[0]['s'] = $p['s'];
     $d[0]['p'] = $p['p'];
+    $d[0]['id'] = $planet_id;
+    $d[0]['points'] = $d[0]['fpoints'] = 0;
 
     $source .= "Rapidfire = $rf\n";
     $source .= "FID = $fid\n";
@@ -327,11 +387,11 @@ function StartBattle ( $fleet_id, $planet_id )
     $source .= "Attackers = 1\n";
     $source .= "Defenders = 1\n";
 
-    $source .= "Attacker0 = (".$f['fleet_id']." ";
+    $source .= "Attacker0 = (".$a[0]['id']." ";
     $source .= $a[0]['r109'] . " " . $a[0]['r110'] . " " . $a[0]['r111'] . " ";
     foreach ($fleetmap as $i=>$gid) $source .= $a[0]['fleet'][$gid] . " ";
     $source .= ")\n";
-    $source .= "Defender0 = ($planet_id ";
+    $source .= "Defender0 = (".$d[0]['id']." ";
     $source .= $d[0]['r109'] . " " . $d[0]['r110'] . " " . $d[0]['r111'] . " ";
     foreach ($fleetmap as $i=>$gid) $source .= $d[0]['fleet'][$gid] . " ";
     foreach ($defmap as $i=>$gid) $source .= $d[0]['defense'][$gid] . " ";
@@ -353,8 +413,6 @@ function StartBattle ( $fleet_id, $planet_id )
     if ( $result == null ) return;
     $battle = dbarray ($result);
 
-    Debug ( $battle['result'] );
-
     $res = unserialize($battle['result']);
 
     // Удалить уже ненужные боевые данные.
@@ -368,15 +426,26 @@ function StartBattle ( $fleet_id, $planet_id )
 
     // Восстановить оборону
 
-    // Рассчитать общие потери (учитывать дейтерий)
+    // Рассчитать общие потери (учитывать дейтерий и восстановленную оборону)
     $aloss = $dloss = 0;
     CalcLosses ( $a, $d, $res, &$aloss, &$dloss );
+    // TODO: отнять от потерь восстановленную оборону
 
     // Захватить ресурсы
+    $cm = $ck = $cd = 0;
+    if ( $battle_result == 0 )
+    {
+        $sum_cargo = CargoSummaryLastRound ( $a, $res );
+        Plunder ( $sum_cargo, $p['m'], $p['k'], $p['d'], &$cm, &$ck, &$cd );
+    }
 
     // Модифицировать флоты и планету в соответствии с потерями и захваченными ресурсами
+    AdjustResources ( $cm, $ck, $cd, $planet_id, '-' );
 
     // Изменить статистику игроков
+    //foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
+    //foreach ( $d as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
+    RecalcRanks ();
 
     // Создать поле обломков.
     $debris_id = CreateDebris ( $p['g'], $p['s'], $p['p'], $p['owner_id'] );
@@ -391,8 +460,11 @@ function StartBattle ( $fleet_id, $planet_id )
         $mooncreated = true;
     }
 
+    // Обновить активность на планете.
+    UpdatePlanetActivity ( $planet_id );
+
     // Сгенерировать боевой доклад.
-    $text = BattleReport ( $a, $d, $res, time(), $aloss, $aloss, 1, 2, 3, $moonchance, $mooncreated );
+    $text = BattleReport ( $a, $d, $res, time(), $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated );
 
     // Разослать сообщения
     foreach ( $a as $i=>$user )        // Атакующие
@@ -476,6 +548,9 @@ function RocketAttack ( $fleet_id, $planet_id )
         }
     }
     $text .= "</table><br>\n";
+
+    // Обновить активность на планете.
+    UpdatePlanetActivity ( $planet_id );
 
     SendMessage ( $target_user['player_id'], "Командование флотом", "Ракетная атака", $text, 2);
 }
