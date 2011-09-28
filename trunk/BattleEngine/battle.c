@@ -388,7 +388,7 @@ long UnitShoot (Unit *a, int aweap, Unit *b, u64 *absorbed, u64 *dm, u64 *dk )
     }
     if (b->hull <= b->hullmax * 0.7 && b->shield == 0) {    // Взорвать и отвалить лома.
         if (MyRand (0, 99) >= ((b->hull * 100) / b->hullmax) || b->hull == 0) {
-            if (b->obj_type > 200) {
+            if (b->obj_type >= 200) {
                 *dm += (u64)(ceil(DefensePrice[b->obj_type-200].m * ((float)DefenseInDebris/100.0f)));
                 *dk += (u64)(ceil(DefensePrice[b->obj_type-200].k * ((float)DefenseInDebris/100.0f)));
             }
@@ -522,7 +522,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
         for (i=0; i<dobjs; i++) {
             if (dunits[i].exploded) dunits[i].shield = dunits[i].shieldmax = 0;
             else {
-                if (dunits[i].obj_type > 200) dunits[i].shield = dunits[i].shieldmax = defenseParam[dunits[i].obj_type-200].shield * (10+d[dunits[i].slot_id].shld) / 10;
+                if (dunits[i].obj_type >= 200) dunits[i].shield = dunits[i].shieldmax = defenseParam[dunits[i].obj_type-200].shield * (10+d[dunits[i].slot_id].shld) / 10;
                 else dunits[i].shield = dunits[i].shieldmax = fleetParam[dunits[i].obj_type-100].shield * (10+d[dunits[i].slot_id].shld) / 10;
             }
         }
@@ -881,7 +881,7 @@ void StartBattle (char *text, MYSQL *conn, char * db_prefix, int battle_id)
         // (ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
         sscanf ( line, "%i " "%i %i %i " "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i", 
                        &d[i].id, 
-                       &d[i].weap, &a[i].shld, &a[i].armor,
+                       &d[i].weap, &d[i].shld, &d[i].armor,
                        &d[i].fleet[0], // MT
                        &d[i].fleet[1], // BT
                        &d[i].fleet[2], // LF

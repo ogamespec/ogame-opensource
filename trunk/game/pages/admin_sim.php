@@ -68,9 +68,12 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
     $query = "DELETE FROM ".$db_prefix."battledata WHERE battle_id = $battle_id";
     dbquery ($query);
 
+    // Восстановить оборону
+    $repaired = RepairDefense ( $d, $res, $unitab['defrepair'], $unitab['defrepair_delta'] );
+
     // Рассчитать общие потери
     $aloss = $dloss = 0;
-    CalcLosses ( $a, $d, $res, &$aloss, &$dloss );
+    CalcLosses ( $a, $d, $res, $repaired, &$aloss, &$dloss );
 
     // Создать луну
     $mooncreated = false;
@@ -84,7 +87,7 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
     else $battle_result = 2;
 
     // Сгенерировать боевой доклад.
-    return BattleReport ( $a, $d, $res, time(), $aloss, $dloss, 1, 2, 3, $moonchance, $mooncreated, true );
+    return BattleReport ( $a, $d, $res, time(), $aloss, $dloss, 1, 2, 3, $moonchance, $mooncreated, $repaired, true );
 }
 
 function Admin_BattleSim ()
