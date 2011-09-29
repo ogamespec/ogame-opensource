@@ -104,7 +104,7 @@ function DeleteMessage ($player_id, $msg_id)
 function EnumMessages ($player_id, $max)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id ORDER BY date DESC LIMIT $max";
+    $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id ORDER BY date DESC, msg_id DESC LIMIT $max";
     $result = dbquery ($query);
     return $result;
 }
