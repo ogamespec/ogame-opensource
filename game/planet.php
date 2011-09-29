@@ -318,14 +318,35 @@ function CreateDebris ($g, $s, $p, $owner_id)
 }
 
 // Собрать ПО указанной грузоподъёмностью. В переменные m/k попадает собранное ПО.
-function HarvestDebris ($id, $cargo, &$m, &$k)
+function HarvestDebris ($planet_id, $cargo, &$m, &$k)
 {
     global $db_prefix;
-    $debris = GetPlanet ($id);
-    $m = max (min ($debris['m'], $cargo / 2), 0);
-    $k = max (min ($debris['k'], $cargo / 2), 0);
+    $debris = GetPlanet ($planet_id);
+
+    $dm = $debris['m'];
+    $dk = $debris['k'];
+
+    if ( ($dm + $dk) <= $cargo )    // Сумма лома меньше грузоподъемности рабов; можно собрать все:
+    {
+        $m = $dm;
+        $k = $dk;
+    }
+    else if ( min ($dm, $dk) >= ($cargo / 2) )   // Количество реса, который меньше, превышает половину грузоподъемности; грузим поровну:
+    {
+        $m = $k = floor ( $cargo / 2 );
+    }
+    else if ( $dm >= $dk )    // Металла больше кристалла, кристалла меньше половину грузоподъемности; грузим всего кристалла и сколько хватит металла:
+    {
+        $m = $dk + ($cargo - $dk * 2);
+        $k = $dk;
+    }
+    else    // Кристалла больше металла, металла меньше половину грузоподъемности; грузим всего металла и сколько хватит кристалла:
+    {
+        $m = $dm;
+        $k = $dm + ($cargo - $dm * 2);
+    }
+
     $now = time ();
-    $planet_id = $debris['planet_id'];
     $query = "UPDATE ".$db_prefix."planets SET m = m - $m, k = k - $k, lastpeek = $now WHERE planet_id = $planet_id";
     dbquery ($query);
 }
@@ -414,6 +435,11 @@ function AdjustResources ($m, $k, $d, $planet_id, $sign)
     $now = time ();
     $query = "UPDATE ".$db_prefix."planets SET m=m $sign '".$m."', k=k $sign '".$k."', d=d $sign '".$d."', lastpeek = '".$now."' WHERE planet_id=$planet_id;";
     dbquery ($query);
+}
+
+// Уничтожить луну, развернуть флоты, модифицировать статистику игрока.
+function DestroyMoon ($planet_id)
+{
 }
 
 ?>

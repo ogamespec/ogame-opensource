@@ -569,7 +569,7 @@ function StartBattle ( $fleet_id, $planet_id )
     // Создать луну
     $mooncreated = false;
     $moonchance = min ( floor ( ($res['dm'] + $res['dk']) / 100000), 20 );
-    if ( PlanetHasMoon ( $planet_id ) ) $moonchance = 0;
+    if ( PlanetHasMoon ( $planet_id ) || $p['type'] == 0 || $p['type'] == 10003 ) $moonchance = 0;
     if ( mt_rand (1, 100) <= $moonchance ) {
         CreatePlanet ( $p['g'], $p['s'], $p['p'], $p['owner_id'], 0, 1, $moonchance );
         $mooncreated = true;
@@ -603,6 +603,8 @@ function StartBattle ( $fleet_id, $planet_id )
         SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2 );
         $mailbox[ $user['player_id'] ] = true;
     }
+
+    return $battle_result;
 }
 
 // Ракетная атака.
