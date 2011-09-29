@@ -202,7 +202,11 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             foreach ( $fleetmap as $i=>$gid ) $ships += $attacker[$gid];
             if ( $sum_cargo == 0) $cargo = 0;
             else $cargo = ( FleetCargoSummary ( $attacker ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
-            if ($ships > 0) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+100, 30, $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2);
+            if ($ships > 0) {
+                if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker );
+                else $result = 0;
+                if ( ($result & 2) == 0 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+100, 30, $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2);
+            }
         }
 
         foreach ( $last['defenders'] as $i=>$defender )        // Обороняющиеся
@@ -230,7 +234,11 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             foreach ( $fleetmap as $i=>$gid ) $ships += $attacker['fleet'][$gid];
             if ( $sum_cargo == 0) $cargo = 0;
             else $cargo = ( FleetCargoSummary ( $attacker['fleet'] ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
-            if ($ships > 0) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+100, 30, $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2);
+            if ($ships > 0) {
+                if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['fleet'] );
+                else $result = 0;
+                if ( ($result & 2) == 0 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+100, 30, $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2);
+            }
         }
 
     }
@@ -450,6 +458,100 @@ function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moon
     return $text;
 }
 
+// Лунная атака.
+function GravitonAttack ($fleet_obj, $fleet)
+{
+    $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    $target = GetPlanet ( $fleet_obj['target_planet'] );
+
+    if ( $fleet[214] == 0 ) return;
+    if ( ! ($target['type'] == 0 || $target['type'] == 10003) ) Error ( "Уничтожать можно только луны!" );
+
+    $diam = $target['diameter'];
+    $rips = $fleet[214];
+    $moonchance = (100 - sqrt($diam)) * sqrt($rips);
+    $ripchance = sqrt ($diam) / 2;
+    $moondes =  mt_rand(1, 999) < $moonchance * 10;
+    $ripdes = mt_rand(1, 999) < $ripchance * 10;
+
+    if ( !$ripdes && !$moondes )
+    {
+            $atext = va ( "Флот с #1 #2 достигает луны планеты на #3 .\n" .
+                                "Структура луны не была достаточно ослаблена, флот возвращается обратно.\n" .
+                                "<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %;", 
+                                PlanetName ($origin), "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
+                                round ($moonchance), round ($ripchance)
+                            );
+            $dtext = va ( "Флот с планеты #1 #2 достигает луны Вашей планеты на #3.\n" .
+                                "Лёгкие сотрясения на твоей луне указывают на неудавшуюся атаку на лунную структуру; атакующий флот, не выполнив задания, возвращается обратно на #4 #5.\n" .
+                                "<br>Шанс на уничтожение луны: #6 %. Шанс на уничтожение звезды смерти:#7 %;", 
+                                PlanetName ($origin), "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
+                                PlanetName ($origin), "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", 
+                                round ($moonchance), round ($ripchance)
+                             );
+            $result  = 0;
+    }
+
+    else if ( !$ripdes && $moondes )
+    {
+            $atext = va ( "Флот с планеты #1 #2 достигает луны планеты на #3 .\n".
+                               "Вооружение звезды смерти отстреливают на луну череду зарядов гравитонов, которые приводят к мощному сотрясению и уничтожению спутника. Все постройки на луне уничтожаются. Полный успех. Флот возвращается на родную планету бухать по этому поводу.\n".
+                               "<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %",
+                                PlanetName ($origin), "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
+                                round ($moonchance), round ($ripchance)
+                            );
+            $dtext = va ( "Флот с планеты #1 #2 достигает луны твоей планеты на #3.\n".
+                                "Всё более усиливающаяся вибрация сотрясает этот спутник. Луна начинает деформироваться и в конце концов разлетается на миллионы кусочков. Это был тяжёлый удар для Вашей империи. Флот противника возвращается обратно.\n".
+                                "<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %",
+                                PlanetName ($origin), "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
+                                round ($moonchance), round ($ripchance)
+                             );
+
+            DestroyMoon ( $target['planet_id'] );
+            $result  = 1;
+    }
+
+    else if ( $ripdes && !$moondes )
+    {
+            $atext = va ( "Флот с планеты #1 #2 достигает луны планеты на #3 . Звезда смерти направляет свою гравитонную пушку на спутник. Лёгкие вибрации сотрясают поверхность луны. Но что-то тут не так. Гравитонная пушка приводит звезду смерти в колебания. Начинается отдача. Звезда смерти разлетается на миллионы кусочков. Возникающая при этом ударная волна уничтожает весь Ваш флот. Доигрался...\n".
+                                "<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %",
+                                PlanetName ($origin), "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
+                                round ($moonchance), round ($ripchance)
+                            );
+            $dtext = va ( "Флот с планеты #1 #2 достигает луны Вашей планеты  на #3.\n".
+                                "Лёгкие сотрясения на твоей луне указывают на неудавшуюся атаку на лунную структуру. Неожиданно они прекращаются. Гигантский взрыв сотрясает пространство. Атакующий флот исчезает с экранов радаров. Несрастуха вышла...\n".
+                                "<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %",
+                                PlanetName ($origin), "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
+                                round ($moonchance), round ($ripchance)
+                             );
+            $result  = 2;
+    }
+
+    else if ( $ripdes && $moondes )
+    {
+            $atext = va ( "Флот с планеты #1 #2  достигает луны на орбите планеты #3 . Ваша звезда смерти направляет свою гравитонную пушку на спутник. Толчки на поверхности луны всё нарастают. Луна начинает деформироваться и разрывается. Гигантские обломки летят на Ваш флот. Отступать уже поздно. Весь Ваш флот уничтожается градом обломков. Какой облом...\n".
+                                "<br>Шансы на уничтожение луны: #4 %. Шансы на уничтожение звезды смерти: #5%.",
+                                PlanetName ($origin), "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
+                                round ($moonchance), round ($ripchance)
+                            );
+            $dtext = va ( "Флот с планеты #1 #2 достигает луны Вашей планеты на #3.\n".
+                                "Всё более усиливающиеся толчки сотрясают спутник. Луна начинает деформироваться и разрывается в конце концов на миллионы кусочков. Внезапно вражеский флот исчезает с экранов Ваших радаров. Что-то там у них не так, наверное пришибло обломками...\n".
+                                "<br>Шансы на уничтожение луны: #4 %. Шансы на уничтожение звезды смерти:#5 %.",
+                                PlanetName ($origin), "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
+                                round ($moonchance), round ($ripchance)
+                             );
+
+            $result  = 3;
+            DestroyMoon ( $target['planet_id'] );
+    }
+
+    // Разослать сообщения.
+    SendMessage ( $origin['owner_id'], "Командование флотом", "Лунная атака", $atext, 5);
+    SendMessage ( $target['owner_id'], "Командование флотом", "Лунные толчки", $dtext, 5);
+
+    return $result;
+}
+
 // Начать битву между атакующим fleet_id и обороняющимся planet_id.
 function StartBattle ( $fleet_id, $planet_id )
 {
@@ -554,14 +656,6 @@ function StartBattle ( $fleet_id, $planet_id )
         Plunder ( $sum_cargo, $p['m'], $p['k'], $p['d'], &$cm, &$ck, &$cd );
     }
 
-    // Модифицировать флоты и планету в соответствии с потерями и захваченными ресурсами
-    WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_cargo );
-
-    // Изменить статистику игроков
-    //foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
-    //foreach ( $d as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
-    RecalcRanks ();
-
     // Создать поле обломков.
     $debris_id = CreateDebris ( $p['g'], $p['s'], $p['p'], $p['owner_id'] );
     AddDebris ( $debris_id, $res['dm'], $res['dk'] );
@@ -603,6 +697,14 @@ function StartBattle ( $fleet_id, $planet_id )
         SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2 );
         $mailbox[ $user['player_id'] ] = true;
     }
+
+    // Модифицировать флоты и планету в соответствии с потерями и захваченными ресурсами
+    WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_cargo );
+
+    // Изменить статистику игроков
+    //foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
+    //foreach ( $d as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
+    RecalcRanks ();
 
     return $battle_result;
 }
