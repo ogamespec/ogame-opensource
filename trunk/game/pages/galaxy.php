@@ -499,6 +499,9 @@ while ($num--)
     }
     echo "</th>\n";
 
+    $moon_id = PlanetHasMoon ( $planet['planet_id'] );
+    if ($moon_id) $moon = GetPlanet ( $moon_id );
+
     // Название (активность)
     $now = time ();
     $ago15 = $now - 15 * 60;
@@ -506,8 +509,10 @@ while ($num--)
     $akt = "";
     if (!$own)
     {
-        if ( $planet['lastakt'] > $ago15 ) $akt = "&nbsp;(*)";
-        else if ( $planet['lastakt'] > $ago60) $akt = "&nbsp;(".floor(($now - $planet['lastakt'])/60)." min)";
+        $activity = $planet['lastakt'];
+        if ($moon_id && $moon['lastakt'] > $planet['lastakt'] ) $activity = $moon['lastakt'];
+        if ( $activity > $ago15 ) $akt = "&nbsp;(*)";
+        else if ( $activity > $ago60) $akt = "&nbsp;(".floor(($now - $activity)/60)." min)";
     }
     if ( $planet['type'] == 10001 ) $planet_name = "Уничтоженная планета$akt";
     else $planet_name = $planet['name'].$akt;
@@ -516,10 +521,8 @@ while ($num--)
 
     // луна
     echo "<th width=\"30\" style='white-space: nowrap;'>\n";
-    $moon_id = PlanetHasMoon ( $planet['planet_id'] );
     if ($moon_id)
     {
-        $moon = GetPlanet ( $moon_id );
         if (!$moon['destroyed'])
         {
             echo "<a onmouseout=\"return nd();\" onmouseover=\"return overlib('<table width=240 ><tr>";
