@@ -25,18 +25,27 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
     $source .= "FID = $fid\n";
     $source .= "DID = $did\n";
 
-    $source .= "Attackers = 1\n";
-    $source .= "Defenders = 1\n";
+    $anum = count ($a);
+    $dnum = count ($d);
 
-    $source .= "Attacker0 = (".mt_rand(1,10000)." ";
-    $source .= $a[0]['r109'] . " " . $a[0]['r110'] . " " . $a[0]['r111'] . " ";
-    foreach ($fleetmap as $i=>$gid) $source .= $a[0]['fleet'][$gid] . " ";
-    $source .= ")\n";
-    $source .= "Defender0 = (".mt_rand(1,10000)." ";
-    $source .= $d[0]['r109'] . " " . $d[0]['r110'] . " " . $d[0]['r111'] . " ";
-    foreach ($fleetmap as $i=>$gid) $source .= $d[0]['fleet'][$gid] . " ";
-    foreach ($defmap as $i=>$gid) $source .= $d[0]['defense'][$gid] . " ";
-    $source .= ")\n";
+    $source .= "Attackers = $anum\n";
+    $source .= "Defenders = $dnum\n";
+
+    for ( $n=0; $n<$anum; $n++)
+    {
+        $source .= "Attacker$n = (".mt_rand(1,10000)." ";
+        $source .= $a[$n]['r109'] . " " . $a[$n]['r110'] . " " . $a[$n]['r111'] . " ";
+        foreach ($fleetmap as $i=>$gid) $source .= $a[$n]['fleet'][$gid] . " ";
+        $source .= ")\n";
+    }
+    for ( $n=0; $n<$dnum; $n++)
+    {
+        $source .= "Defender$n = (".mt_rand(1,10000)." ";
+        $source .= $d[$n]['r109'] . " " . $d[$n]['r110'] . " " . $d[$n]['r111'] . " ";
+        foreach ($fleetmap as $i=>$gid) $source .= $d[$n]['fleet'][$gid] . " ";
+        foreach ($defmap as $i=>$gid) $source .= $d[$n]['defense'][$gid] . " ";
+        $source .= ")\n";
+    }
 
     if ($debug) echo $source . "<hr>";
 
