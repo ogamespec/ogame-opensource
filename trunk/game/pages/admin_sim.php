@@ -104,6 +104,7 @@ function Admin_BattleSim ()
     $fid = $unitab['fid'];
     $did = $unitab['did'];
     $debug = false;
+    $maxslot = $unitab['acs'] * $unitab['acs'];
 
     $BattleReport = "";
     $aloss = $dloss = 0;
@@ -140,8 +141,8 @@ function Admin_BattleSim ()
             $a[$i]['fleet'] = array ();
             foreach ( $fleetmap as $n=>$gid)
             {
-                if ( $_POST["a$i"][$gid] === "" ) $_POST["a$i"][$gid] = 0;
-                $a[$i]['fleet'][$gid] = $_POST["a$i"][$gid];
+                if ( $_POST["a".$i."_$gid"] === "" ) $_POST["a".$i."_$gid"] = 0;
+                $a[$i]['fleet'][$gid] = $_POST["a".$i."_$gid"];
             }
         }
 
@@ -164,15 +165,15 @@ function Admin_BattleSim ()
             $d[$i]['fleet'] = array ();
             foreach ( $fleetmap as $n=>$gid)
             {
-                if ( $_POST["d$i"][$gid] === "" ) $_POST["d$i"][$gid] = 0;
-                $d[$i]['fleet'][$gid] = $_POST["d$i"][$gid];
+                if ( $_POST["d".$i."_$gid"] === "" ) $_POST["d".$i."_$gid"] = 0;
+                $d[$i]['fleet'][$gid] = $_POST["d".$i."_$gid"];
             }
 
             $d[$i]['defense'] = array ();
             foreach ( $defmap as $n=>$gid)
             {
-                if ( $_POST["d$i"][$gid] === "" ) $_POST["d$i"][$gid] = 0;
-                $d[$i]['defense'][$gid] = $_POST["d$i"][$gid];
+                if ( $_POST["d".$i."_$gid"] === "" ) $_POST["d".$i."_$gid"] = 0;
+                $d[$i]['defense'][$gid] = $_POST["d".$i."_$gid"];
             }
         }
 
@@ -205,27 +206,139 @@ function Admin_BattleSim ()
 
 ?>
 
-<table cellpadding=0 cellspacing=0>
-<form action="index.php?page=admin&session=<?=$session;?>&mode=BattleSim" method="POST">
-<input type="hidden" name="anum" value="1" />
-<input type="hidden" name="dnum" value="1" />
+<script language="JavaScript">
 
-<tr>        <td class=c>Атакующий</td>        <td class=c>Оборояющийся</td>        </tr>
+var maxslot = <?=$maxslot;?>;
+
+function toint (num)
+{
+    if ( typeof (num) == "undefined" ) num = 0;
+    return parseInt (num);
+}
+
+// Пересчитать количество атакующих и обороняющихся.
+function RecalcAttackersDefendersNum ()
+{
+    var anum = dnum = 1;
+    var fleet = [ 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 ];
+    var defense = [ 401, 402, 403, 404, 405, 406, 407, 408 ];
+
+    for ( n=0; n<maxslot; n++ )        // Атакующие
+    {
+        sum = 0;
+        for (var i in fleet) {
+            value = toint (document.getElementById ( "a"+n+"_" + fleet[i] ).value);
+            if ( value ) sum += value;
+        }
+        if ( sum > 0 ) anum = n + 1;
+    }
+
+    for ( n=0; n<maxslot; n++ )        // Обороняющиеся
+    {
+        sum = 0;
+        for (var i in fleet) {
+            value = toint (document.getElementById ( "d"+n+"_" + fleet[i] ).value);
+            if ( value ) sum += value;
+        }
+        for (var i in defense) {
+            value = toint (document.getElementById ( "d"+n+"_" + defense[i] ).value);
+            if ( value ) sum += value;
+        }
+        if ( sum > 0 ) dnum = n + 1;
+    }
+
+    document.getElementById ( "anum" ).value = anum;
+    document.getElementById ( "dnum" ).value = dnum;
+    //alert ( "Атакующих : " + anum + ", Обороняющихся : " + dnum );
+}
+
+// При смене слота - занести данные из массива слотов в ячейки ввода
+function OnChangeSlot (attacker)
+{
+    var fleet = [ 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 ];
+    var defense = [ 401, 402, 403, 404, 405, 406, 407, 408 ];
+
+    if (attacker) {
+        slot = document.simForm.aslot.value - 1;
+        for (var i in fleet) {
+            value = toint (document.getElementById ( "a"+slot+"_" + fleet[i] ).value);
+            if (value) document.getElementById ( "a_" + fleet[i] ).value = value;
+            else document.getElementById ( "a_" + fleet[i] ).value = "";
+        }
+    }
+    else {
+        slot = document.simForm.dslot.value - 1;
+        for (var i in fleet) {
+            value = toint (document.getElementById ( "d"+slot+"_" + fleet[i] ).value);
+            if ( value ) document.getElementById ( "d_" + fleet[i] ).value = value;
+            else document.getElementById ( "d_" + fleet[i] ).value = "";
+        }
+        for (var i in defense) {
+            value = toint (document.getElementById ( "d"+slot+"_" + defense[i] ).value);
+            if (value) document.getElementById ( "d_" + defense[i] ).value = value;
+            else document.getElementById ( "d_" + defense[i] ).value = "";
+        }
+    }
+}
+
+// При изменении ячейки - внести данные из неё в массив слотов
+function OnChangeValue (attacker, id)
+{
+    if (attacker) {
+        slot = document.simForm.aslot.value - 1;
+        document.getElementById ( "a"+slot+"_" + id ).value = document.getElementById ( "a_" + id ).value;
+    }
+    else {
+        slot = document.simForm.dslot.value - 1;
+        document.getElementById ( "d"+slot+"_" + id ).value = document.getElementById ( "d_" + id ).value;
+    }
+
+    RecalcAttackersDefendersNum ();
+}
+
+RecalcAttackersDefendersNum ();
+
+</script>
+
+<table cellpadding=0 cellspacing=0>
+<form name="simForm" action="index.php?page=admin&session=<?=$session;?>&mode=BattleSim" method="POST" >
+
+<?php
+    for ( $n=0; $n<$maxslot; $n++ )
+    {
+        foreach ($fleetmap as $i=>$gid) echo "<input type=\"hidden\" id=\"a".$n."_$gid\" name=\"a".$n."_$gid\" value=\"0\"> \n";
+        foreach ($fleetmap as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"0\"> \n";
+        foreach ($defmap as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"0\"> \n";
+        echo "<input type=\"hidden\" id=\"a".$n."_weap\" name=\"a".$n."_weap\" size=2 > <input type=\"hidden\" id=\"a".$n."_shld\" name=\"a".$n."_shld\" size=2 > <input type=\"hidden\" id=\"a".$n."_armor\" name=\"a".$n."_armor\" size=2 > \n";
+        echo "<input type=\"hidden\" id=\"d".$n."_weap\" name=\"d".$n."_weap\" size=2 > <input type=\"hidden\" id=\"d".$n."_shld\" name=\"d".$n."_shld\" size=2 > <input type=\"hidden\" id=\"d".$n."_armor\" name=\"d".$n."_armor\" size=2 > \n";
+    }
+?>
+
+<input type="hidden" id="anum" name="anum" value="1" />
+<input type="hidden" id="anum" name="dnum" value="1" />
+
+<tr>        <td class=c>Атакующий</td>                <td class=c>Оборояющийся</td>  </tr>
 
 <tr> 
-<td> Вооружение: <input name="a0_weap" size=2 <?=getval('a0_weap');?> > Щиты: <input name="a0_shld" size=2 <?=getval('a0_shld');?>> Броня: <input name="a0_armor" size=2 <?=getval('a0_armor');?>></td>   
-<td> Вооружение: <input name="d0_weap" size=2 <?=getval('d0_weap');?>> Щиты: <input name="d0_shld" size=2 <?=getval('d0_shld');?>> Броня: <input name="d0_armor" size=2 <?=getval('d0_armor');?>></td>   
+<td> Вооружение: <input id="a_weap" size=2 > Щиты: <input id="a_shld" size=2 > Броня: <input id="a_armor" size=2 ></td>   
+<td> Вооружение: <input id="d_weap" size=2 > Щиты: <input id="d_shld" size=2 > Броня: <input id="d_armor" size=2 ></td>   
 </tr>
 
         <tr> <th valign=top>
         <table>
 <?php
 
-    echo "<tr><td class=c><b>Флот</b></td></tr>\n";
+    echo "<tr><td class=c><b>Флот</b></td> ";
+    if ( $maxslot > 0) {
+        echo "<td>Слот: <select name=\"aslot\" onchange=\"OnChangeSlot(1);\">\n";
+        for ( $n=1; $n<=$maxslot; $n++) echo "<option value=\"$n\">$n</option>\n";
+        echo "</select> </td> ";
+    }
+    echo " </tr>\n";
     foreach ($fleetmap as $i=>$gid)
     {
 ?>
-           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input name="a0[<?=$gid;?>]" size=5  <?=getval2('a0', $gid);?> > </td> </tr>
+           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input id="a_<?=$gid;?>" size=5  onKeyUp="OnChangeValue(1, <?=$gid;?>);"> </td> </tr>
 <?php
     }
 
@@ -248,11 +361,17 @@ function Admin_BattleSim ()
         <table>
 <?php
 
-    echo "<tr><td class=c><b>Флот</b></td></tr>\n";
+    echo "<tr><td class=c><b>Флот</b></td>";
+    if ( $maxslot > 0) {
+        echo "<td>Слот: <select name=\"dslot\" onchange=\"OnChangeSlot(0);\">\n";
+        for ( $n=1; $n<=$maxslot; $n++) echo "<option value=\"$n\">$n</option>\n";
+        echo "</select> </td> ";
+    }
+    echo "</tr>\n";
     foreach ($fleetmap as $i=>$gid)
     {
 ?>
-           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input name="d0[<?=$gid;?>]" size=5  <?=getval2('d0', $gid);?> > </td> </tr>
+           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input id="d_<?=$gid;?>" size=5 onKeyUp="OnChangeValue(0, <?=$gid;?>);"> </td> </tr>
 <?php
     }
 
@@ -261,7 +380,7 @@ function Admin_BattleSim ()
     foreach ($defmap as $i=>$gid)
     {
 ?>
-           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input name="d0[<?=$gid;?>]" size=5  <?=getval2('d0', $gid);?> > </td> </tr>
+           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input id="d_<?=$gid;?>" size=5 onKeyUp="OnChangeValue(0, <?=$gid;?>);"> </td> </tr>
 <?php
     }
 ?>
