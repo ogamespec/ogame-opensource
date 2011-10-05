@@ -37,10 +37,10 @@ if ( key_exists("install", $_POST) && CheckParameters() )
 {
     $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','fleet','union','battledata');
     $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','freeze',
-                              'nextplanet','nextally','nextapp','nextmsg','nextnote','nextbuddy','nexterror','nexttask','nextfleet','nextbattle','nextlog',
+                              'nextplanet','nextally','nextapp','nextmsg','nextnote','nextbuddy','nexterror','nexttask','nextfleet','nextunion','nextbattle','nextlog',
                               'news1', 'news2', 'news_until', 'startdate', 'battle_engine' );
     $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
-                              'INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
+                              'INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
                               'TEXT', 'TEXT', 'INT UNSIGNED', 'INT UNSIGNED', 'TEXT' );
     $usercols = array ( 'player_id', 'regdate', 'ally_id', 'joindate', 'allyrank', 'session', 'private_session', 'name', 'oname', 'name_changed', 'name_until', 'password', 'pemail', 'email',
                         'email_changed', 'email_until', 'disable', 'disable_until', 'vacation', 'vacation_until', 'banned', 'banned_until', 'noattack', 'noattack_until',
@@ -96,8 +96,8 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                                  'ship200', 'ship201', 'ship202', 'ship203', 'ship204', 'ship205', 'ship206', 'ship207', 'ship208', 'ship209', 'ship210', 'ship211', 'ship212', 'ship213', 'ship214', 'ship215' );
     $fleettype = array ( 'INT PRIMARY KEY', 'INT', 'INT', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT', 'INT', 'INT', 'INT', 'INT',
                                  'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
-    $unioncols = array ( 'union_id', 'fleet_id', 'name', 'player1', 'player2', 'player3', 'player4', 'player5', 'players' );
-    $uniontype = array ( 'INT PRIMARY KEY', 'INT', 'CHAR(20)', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
+    $unioncols = array ( 'union_id', 'fleet_id', 'name', 'players' );
+    $uniontype = array ( 'INT PRIMARY KEY', 'INT', 'CHAR(20)', 'TEXT' );
     $battledatacols = array ( 'battle_id', 'source', 'result' );
     $battledatatype = array ( 'INT PRIMARY KEY', 'TEXT', 'TEXT' );
     $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$browsecols, &$queuecols, &$fleetcols, &$unioncols, &$battledatacols);
@@ -155,6 +155,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "nexterror = '10000', ";
     $query .= "nexttask = '1', ";
     $query .= "nextfleet = '10000', ";
+    $query .= "nextunion = '10000', ";
     $query .= "nextbattle = '1', ";
     $query .= "nextlog = '10000', ";
     $query .= "news1 = '', ";

@@ -110,6 +110,8 @@ PageHeader ("flotten3");
 <?php
     // Отобразить список доступных заданий.
 
+    $mission_acs = $mission_exp = $mission_hold = false;
+
     $fleet = array ();
 
     foreach ($fleetmap as $i=>$gid) 
@@ -130,6 +132,10 @@ PageHeader ("flotten3");
     {
         foreach ($missions as $i=>$id) 
         {
+            if ( $id == 2 ) $mission_acs = true;
+            if ( $id == 5 ) $mission_hold = true;
+            if ( $id == 15 ) $mission_exp = true;
+
             if ($id == 15)        // Экспедиция.
             {
                 echo "    <tr height=\"20\">\n";
@@ -187,6 +193,98 @@ PageHeader ("flotten3");
   <tr height="20">
   <th>&nbsp; </th>
   </tr>
+
+
+<?php
+    // ----------------------------------------------------------------------------------------------------
+    // Список боевых союзов
+
+    $unions = EnumUnion ( $GlobalUser['player_id'] );
+
+    if ( $mission_acs && count($unions) > 0 )
+    {
+?>
+
+    <tr height="20">
+     <td class="c" colspan="3">Боевые союзы</td>
+  </tr>
+  <tr height="20">
+   <th colspan="3">
+    <select name="union2" >
+<?php
+    foreach ( $unions as $i=>$union )
+    {
+        echo "          <option value=\"".$union['union_id']."\">".$union['name']."</option>\n";
+    }
+?>           </select> 
+      </th>
+  </tr>
+
+  <tr height="20">
+  <th>&nbsp; </th>
+  </tr>
+
+<?
+    }
+?>
+
+<?php
+    // ----------------------------------------------------------------------------------------------------
+    // Время удержания
+
+    if ( $mission_hold )
+    {
+?>
+
+    <tr height="20">
+     <td class="c" colspan="3">Время пребывания</td>
+  </tr>
+  <tr height="20">
+   <th colspan="3">
+    <select name="holdingtime" >
+          <option value="0">0</option>
+          <option value="1" selected>1</option>
+          <option value="2">2</option>
+          <option value="4">4</option>
+          <option value="8">8</option>
+          <option value="16">16</option>
+          <option value="32">32</option>
+           </select> 
+      Время в часах   </th>
+  </tr>
+
+<?
+    }
+?>
+
+
+<?php
+    // ----------------------------------------------------------------------------------------------------
+    // Время пребывания в экспедиции
+
+    if ( $mission_exp && $GlobalUser['r124'] > 0 )
+    {
+?>
+
+    <tr height="20">
+     <td class="c" colspan="3">Время пребывания</td>
+  </tr>
+  <tr height="20">
+   <th colspan="3">
+    <select name="expeditiontime" >
+<?php
+    for ($i=1; $i<=$GlobalUser['r124']; $i++)
+    {
+        echo "          <option value=\"$i\">$i</option>\n";
+    }
+?>           </select> 
+      Время в часах   </th>
+  </tr>
+
+
+<?
+    }
+?>
 
    
     </table>

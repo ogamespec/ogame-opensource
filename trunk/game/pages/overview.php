@@ -123,7 +123,7 @@ $moonid = PlanetHasMoon ( $aktplanet['planet_id'] );
 if ($moonid)
 {
     $moonobj = GetPlanet ( $moonid );
-    echo "<th>    ".$moonobj['name']." (".loca("MOON").")     <br>\n";
+    echo "<th>    ".$moonobj['name']."     <br>\n";
     echo "<a href=\"index.php?page=overview&session=$session&cp=".$moonid."\"><img src=\"".GetPlanetSmallImage ( UserSkin (), 0 )."\" width=\"50\" alt=\"".loca("MOON")."\" height=\"50\" ></a>\n";
     echo "</th>\n";
 }
