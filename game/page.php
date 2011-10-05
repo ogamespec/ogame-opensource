@@ -133,9 +133,7 @@ function PlanetsDropList ($page)
         if ($cp == $GlobalUser['aktplanet']) $sel = "selected";
         $g = $planet['g']; $s = $planet['s']; $p = $planet['p'];
         $name = $planet['name'];
-        $moon = "";
-        if ($planet['type'] == 0) $moon = " (Луна)";
-        echo "    <option value='index.php?page=".$page."&session=$sess&cp=$cp$gid$tid$mode' $sel>$name$moon  <a href='index.php?page=galaxy&galaxy=$g&system=$s&position=$p&session=$sess&cp=$cp$gid$tid$mode' >[$g:$s:$p]</a></option>\n";
+        echo "    <option value='index.php?page=".$page."&session=$sess&cp=$cp$gid$tid$mode' $sel>$name  <a href='index.php?page=galaxy&galaxy=$g&system=$s&position=$p&session=$sess&cp=$cp$gid$tid$mode' >[$g:$s:$p]</a></option>\n";
     }
     echo "</select></table></td></tr></table></td>\n\n";
 }

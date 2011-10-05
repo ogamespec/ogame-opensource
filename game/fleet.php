@@ -290,7 +290,7 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
     $deploy_time = 0;
 
     // HACK.
-    $seconds = 10;
+    //$seconds = 10;
 
     // Добавить флот.
     $fleet_id = IncrementDBGlobal ('nextfleet');
@@ -473,7 +473,7 @@ function TransportArrive ($queue, $fleet_obj, $fleet)
     if ( $origin['owner_id'] != $target['owner_id'] )
     {
         $user = LoadUser ( $origin['owner_id'] );
-        $text = "Чужой флот игрока ".$user['oname']." доставляет на Вашу планету ".PlanetName($target)."\n" .
+        $text = "Чужой флот игрока ".$user['oname']." доставляет на Вашу планету ".$target['name']."\n" .
                     "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
                     "<br/>\n" .
                     nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия\n" .
@@ -500,7 +500,7 @@ function CommonReturn ($queue, $fleet_obj, $fleet)
     UpdatePlanetActivity ( $fleet_obj['start_planet'] );
 
     $text = "Один из Ваших флотов ( ".FleetList($fleet)." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
-               "достигает ".PlanetName($origin)." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
+               "достигает ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
     if ( ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']) != 0 ) $text .= "Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия<br>";
     SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Возвращение флота", $text, 5);
 }
@@ -517,7 +517,7 @@ function DeployArrive ($queue, $fleet_obj, $fleet)
     AdjustShips ( $fleet, $fleet_obj['target_planet'], '+' );
     UpdatePlanetActivity ( $target['planet_id'] );
 
-    $text = "\nОдин из Ваших флотов (".FleetList($fleet).") достиг ".PlanetName($target)."\n" .
+    $text = "\nОдин из Ваших флотов (".FleetList($fleet).") достиг ".$target['name']."\n" .
                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
                ". Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия\n" .
                "<br/>\n";
@@ -547,13 +547,13 @@ function SpyArrive ($queue, $fleet_obj, $fleet)
     $counter = 0;
 
     $subj = "\n<span class=\"espionagereport\">\n" .
-                "Разведданные с ".PlanetName($target)."\n" .
+                "Разведданные с ".$target['name']."\n" .
                 "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n";
 
     $report = "";
 
     // Шапка
-    $report .= "<table width=400><tr><td class=c colspan=4>Сырьё на ".PlanetName($target)." <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> (Игрок \'".$target_user['oname']."\')<br /> на ".date ("m-d H:i:s", $now)."</td></tr>\n";
+    $report .= "<table width=400><tr><td class=c colspan=4>Сырьё на ".$target['name']." <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> (Игрок \'".$target_user['oname']."\')<br /> на ".date ("m-d H:i:s", $now)."</td></tr>\n";
     $report .= "</div></font></TD></TR><tr><td>металла:</td><td>".nicenum($target['m'])."</td>\n";
     $report .= "<td>кристалла:</td><td>".nicenum($target['k'])."</td></tr>\n";
     $report .= "<tr><td>дейтерия:</td><td>".nicenum($target['d'])."</td>\n";
@@ -626,9 +626,9 @@ function SpyArrive ($queue, $fleet_obj, $fleet)
     SendMessage ( $fleet_obj['owner_id'], "Командование флотом", $subj, $report, 1);
 
     // Отправить сообщение чужому игроку о шпионаже.
-    $text = "\nЧужой флот с планеты ".PlanetName($origin)."\n" .
+    $text = "\nЧужой флот с планеты ".$origin['name']."\n" .
                 "<a onclick=\"showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p'].");\" href=\"#\">[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>\n" .
-                "был обнаружен вблизи от планеты ".PlanetName($target)."\n" .
+                "был обнаружен вблизи от планеты ".$target['name']."\n" .
                 "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
                 ". Шанс на защиту от шпионажа: $counter %\n" .
                 "</td>\n";
@@ -707,7 +707,7 @@ function ColonizationReturn ($queue, $fleet_obj, $fleet)
     UpdatePlanetActivity ( $fleet_obj['start_planet'] );
 
     $text = "Один из Ваших флотов ( ".FleetList($fleet)." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
-               "достигает ".PlanetName($origin)." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
+               "достигает ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
     if ( ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']) != 0 ) $text .= "Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия<br>";
     SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Возвращение флота", $text, 5);
 

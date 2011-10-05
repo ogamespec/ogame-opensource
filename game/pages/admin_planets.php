@@ -149,7 +149,7 @@ function Admin_Planets ()
             {
                 $moon = GetPlanet ($moon_id);
                 echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$moon['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $moon['type'])."\"><br>\n";
-                echo $moon['name'] . " (".loca("MOON").")</a>";
+                echo $moon['name'] . "</a>";
             }
             else echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=create_moon&cp=".$planet['planet_id']."\" >Создать луну</a>\n";
             echo "<br/><br/>\n";

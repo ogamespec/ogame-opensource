@@ -508,7 +508,7 @@ function StopResearch ($player_id)
     $planet = GetPlanet ( $planet_id );
     if ($planet['owner_id'] != $player_id )
     {
-        Error ( "Невозможно отменить исследование -".loca("NAME_$id")."-, игрока ".$user['oname'].", запущенное на чужой планете [".$planet['g'].":".$planet['s'].":".$planet['p']."] " . PlanetName($planet) );
+        Error ( "Невозможно отменить исследование -".loca("NAME_$id")."-, игрока ".$user['oname'].", запущенное на чужой планете [".$planet['g'].":".$planet['s'].":".$planet['p']."] " . $planet['name'] );
         return;
     }
     $m = $k = $d = $e = 0;
