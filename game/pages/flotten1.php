@@ -203,10 +203,10 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
                         <th width="50%">
                             <select size="5">
 <?php
-    for ($i=1; $i<=$union['players']; $i++)
+    for ($i=0; $i<=$union['players']; $i++)
     {
-        $player_id = $union["player$i"];
-        if ($player_id == $GlobalUser['player_id']) continue;    // не показывать себя в списке приглашенных
+        $player_id = $union["player"][$i];
+        //if ($player_id == $GlobalUser['player_id']) continue;    // не показывать себя в списке приглашенных
         $user = LoadUser ($player_id);
         echo "<option>".$user['oname']."</option>\n";
     }

@@ -369,7 +369,7 @@ function AddDebris ($id, $m, $k)
 // Получить игровой тип планеты.
 function GetPlanetType ($planet)
 {
-    if ( $planet['type'] == 0) return 3;
+    if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return 3;
     else if ( $planet['type'] == 10000) return 2;
     else return 1;
 }
@@ -425,13 +425,6 @@ function HasPlanet ($g, $s, $p)
     $result = dbquery ($query);
     if ( dbrows ($result) ) return 1;
     else return 0;
-}
-
-// Название планеты / луны
-function PlanetName ($planet)
-{
-    if ( $planet['type'] == 0 ) return $planet['name'] . " (".loca("MOON").")";
-    else return $planet['name'];
 }
 
 // Изменить количество ресурсов на планете.

@@ -55,8 +55,7 @@ shipXX: количество кораблей каждого типа (INT)
 union_id: ID союза = fleet_id * 16 (INT PRIMARY KEY)
 fleet_id: ID головного флота САБа (исходной Атаки) (INT)
 name: название союза. по умолчанию: "KV" + union_id (CHAR(20))
-playerXX: ID приглашенного игрока (INT), XX = 1...5
-players: количество приглашенных игроков (INT, не более 5)
+players: ID приглашенных игроков, через запятую (TEXT)
 
 */
 
@@ -93,6 +92,9 @@ X:0
 function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thisplanettype, $galaxy, $system, $planet, $planettype, $fleet )
 {
     $missions = array ( );
+
+    // HACK
+    return array ( 1, 2, 3, 4, 5, 6, 7, 8, 9, 15 );
 
     $origin = LoadPlanet ( $thisgalaxy, $thissystem, $thisplanet, $thisplanettype );
     $target = LoadPlanet ( $galaxy, $system, $planet, $planettype );
@@ -810,8 +812,8 @@ function CreateUnion ($fleet_id)
     if ($fleet_obj['mission'] != 1) return 0;
 
     // Добавить союз.
-    $union_id = $fleet_id << 8;
-    $union = array ( $union_id, $fleet_id, "KV$union_id", $fleet_obj['owner_id'], 0, 0, 0, 0, 1 );
+    $union_id = IncrementDBGlobal ('nextunion');
+    $union = array ( $union_id, $fleet_id, "KV$union_id", $fleet_obj['owner_id'] );
     AddDBRow ($union, 'union');
 
     // Добавить флот в союз.
@@ -826,7 +828,10 @@ function LoadUnion ($union_id)
     $query = "SELECT * FROM ".$db_prefix."union WHERE union_id = $union_id";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0) return NULL;
-    else return dbarray ($result);
+    $union = dbarray ($result);
+    $union['player'] = explode (",", $union['players'] );
+    $union['players'] = count ($union['player']);
+    return $union;
 }
 
 // Союз удаляется при отзыве, возврате или уничтожении паровоза.
@@ -867,9 +872,9 @@ function AddUnionMember ($union_id, $name)
     $user = dbarray ($result);
 
     // Проверить есть ли уже такой пользователь в САБе.
-    for ($i=1; $i<=$union['players']; $i++)
+    for ($i=0; $i<=$union['players']; $i++)
     {
-        if ( $union["player$i"] == $user['player_id'] ) return "Такой пользователь уже добавлен в союз";    // есть.
+        if ( $union["player"][$i] == $user['player_id'] ) return "Такой пользователь уже добавлен в союз";    // есть.
     }
 
     // Проверить является ли пользователем другом или соалом.
@@ -883,10 +888,31 @@ function AddUnionMember ($union_id, $name)
     }
 
     // Добавить пользователя в САБ и послать ему сообщение о приглашении.
-    $n = $union['players'] + 1;
-    $query = "UPDATE ".$db_prefix."union SET player$n = ".$user['player_id'].", players = players + 1 WHERE union_id = $union_id";
+    $union['player'][$union['players']] = $user['player_id'];
+    $query = "UPDATE ".$db_prefix."union SET players = '".implode(",", $union['player'])."' WHERE union_id = $union_id";
     dbquery ($query);
     return "";
+}
+
+// Перечислить союзы в которых состоит игрок
+function EnumUnion ($player_id)
+{
+    global $db_prefix;
+    $count = 0;
+    $unions = array ();
+    $query = "SELECT * FROM ".$db_prefix."union ";
+    $result = dbquery ($query);
+    $rows = dbrows ($result);
+    while ($rows--)
+    {
+        $union = dbarray ($result);
+        $union['player'] = explode (",", $union['players'] );
+        $union['players'] = count ($union['player']);
+        for ($i=0; $i<=$union['players']; $i++) {
+            if ( $union["player"][$i] == $user['player_id'] ) $unions[$count++] = $union;
+        }
+    }
+    return $unions;
 }
 
 ?>
