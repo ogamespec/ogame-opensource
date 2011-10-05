@@ -261,8 +261,14 @@ function RenamePlanet ($planet_id, $name)
     if (preg_match ($pattern, $name)) return;    // Запрещенные символы.
     $pattern = '/[\\\\()*\"\']/';
     $name = preg_replace ($pattern, '', $name);
-    if (strlen ($name) == 0) $name = "планета";
+    if (strlen ($name) == 0) {
+        if ( $planet['type'] == 0 ) $name = "Луна";
+        else $name = "планета";
+    }
     $name = preg_replace ('/\s\s+/', ' ', $name);    // Вырезать лишние пробелы.
+
+    // Если планета -- луна, то добавить приставку.
+    if ( $planet['type'] == 0 ) $name .= " (".loca("MOON").")";
 
     // Если всё нормально - сменить имя планеты.
     $query = "UPDATE ".$db_prefix."planets SET name = '".$name."' WHERE planet_id = $planet_id";

@@ -50,6 +50,7 @@ if ( key_exists("page", $_POST) && $_POST['page'] === "renameplanet")
     if ( $_POST['aktion'] === "Переименовать" )
     {
         RenamePlanet ( $GlobalUser['aktplanet'], $_POST['newname'] );
+        $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
     }
     else if ( $_POST['aktion'] === "Покинуть колонию" )
     {
@@ -89,11 +90,6 @@ if ( key_exists("page", $_POST) && $_POST['page'] === "renameplanet")
 
 $name = $aktplanet['name'];
 $maxlen = 20;
-if ($aktplanet['type'] == 0)
-{
-    $name .= " (Луна)";
-    $maxlen -= mb_strlen (" (Луна)", "UTF-8");
-}
 
 PageHeader ("renameplanet");
 
