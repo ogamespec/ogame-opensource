@@ -206,17 +206,20 @@ if ($FleetError) {
 // Все проверки прошли удачно, можно отправлять флот.
 else {
 
-    print_r ( $_POST);
+    //print_r ( $_POST);
 
-    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $_POST['resource1'], $_POST['resource2'], $_POST['resource3'], $cons );
+    if ( key_exists ('union2', $_POST) ) $union_id = $_POST['union2'];
+    else $union_id = 0;
+
+    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $_POST['resource1'], $_POST['resource2'], $_POST['resource3'], $cons, $union_id );
     $queue = GetFleetQueue ($fleet_id);
 
     // Поднять флот с планеты.
     AdjustResources ( $_POST['resource1'], $_POST['resource2'], $_POST['resource3'], $origin['planet_id'], '-' );
     AdjustShips ( $fleet, $origin['planet_id'], '-' );
 
-    echo "<br>";
-    print_r ( $queue);
+    //echo "<br>";
+    //print_r ( $queue);
 ?>
 
    <tr height="20">

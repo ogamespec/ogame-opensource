@@ -52,9 +52,9 @@ shipXX: количество кораблей каждого типа (INT)
 20        Ракетная атака
 
 Структура таблицы САБов:
-union_id: ID союза = fleet_id * 16 (INT PRIMARY KEY)
+union_id: ID союза (INT PRIMARY KEY)
 fleet_id: ID головного флота САБа (исходной Атаки) (INT)
-name: название союза. по умолчанию: "KV" + union_id (CHAR(20))
+name: название союза. по умолчанию: "KV" + число (CHAR(20))
 players: ID приглашенных игроков, через запятую (TEXT)
 
 */
@@ -138,7 +138,6 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
             $missions[$i++] = 5;        // Держаться
             if ( $fleet[214] > 0 && GetPlanetType($target) == 3 ) $missions[$i++] = 9;    // Уничтожить
             if ( $fleet[210] > 0  ) $missions[$i++] = 6;    // Шпионаж
-            return $missions;
         }
         else        // все остальные
         {
@@ -146,8 +145,16 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
             $missions[$i++] = 1;        // Атака
             if ( $fleet[214] > 0 && GetPlanetType($target) == 3 ) $missions[$i++] = 9;    // Уничтожить
             if ( $fleet[210] > 0  ) $missions[$i++] = 6;    // Шпионаж
-            return $missions;
         }
+
+        // Если целевая планета есть в списке совместных атак, добавить задание
+        $unions = EnumUnion ( $origin_user['player_id'] );
+        foreach ( $unions as $u=>$union ) {
+            $fleet_obj = LoadFleet ( $union['fleet_id'] );
+            $fleet_target = GetPlanet ( $fleet_obj['target_planet'] );
+            if ( $fleet_target['planet_id'] == $target['planet_id'] ) $missions[$i++] = 2;    // Совместная атака
+        }
+        return $missions;
     }
 }
 
@@ -284,19 +291,27 @@ function AdjustShips ($fleet, $planet_id, $sign)
 }
 
 // Отправить флот. Никаких проверок не производится. Возвращает ID флота.
-function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, $cons)
+function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, $cons, $union_id=0)
 {
     $now = time ();
     $prio = 200 + $order;
-    $union_id = 0;
+    $flight_time = $seconds;
     $deploy_time = 0;
 
     // HACK.
     //$seconds = 10;
 
+    // Добавление союзного флота.
+    if ( $union_id > 0 )
+    {
+        $union = LoadUnion ( $union_id );
+        $queue = GetFleetQueue ( $union['fleet_id'] );
+        $seconds = $queue['end'] - $now;
+    }
+
     // Добавить флот.
     $fleet_id = IncrementDBGlobal ('nextfleet');
-    $fleet_obj = array ( $fleet_id, $origin['owner_id'], $union_id, $m, $k, $d, $cons, $order, $origin['planet_id'], $target['planet_id'], $deploy_time,
+    $fleet_obj = array ( $fleet_id, $origin['owner_id'], $union_id, $m, $k, $d, $cons, $order, $origin['planet_id'], $target['planet_id'], $flight_time, $deploy_time,
                                  0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
     AddDBRow ($fleet_obj, 'fleet');
 
@@ -322,6 +337,7 @@ function RecallFleet ($fleet_id)
     $queue = GetFleetQueue ($fleet_obj['fleet_id']);
     DeleteFleet ($fleet_obj['fleet_id']);            // удалить флот
     RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
+    if ( $fleet_obj['mission'] == 1 && $fleet_obj['union_id'] > 0 ) RemoveUnion ($fleet_obj['union_id']);    // удалить союз
 }
 
 // Загрузить флот
@@ -459,7 +475,7 @@ function TransportArrive ($queue, $fleet_obj, $fleet)
     $oldd = $target['d'];
 
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $target['planet_id'], '+' );
-    UpdatePlanetActivity ( $target['planet_id'] );
+    UpdatePlanetActivity ( $target['planet_id'], $queue['end'] );
 
     DispatchFleet ($fleet, $origin, $target, 103, 30, 0, 0, 0, $fleet_obj['fuel'] / 2);
 
@@ -499,7 +515,7 @@ function CommonReturn ($queue, $fleet_obj, $fleet)
 
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
-    UpdatePlanetActivity ( $fleet_obj['start_planet'] );
+    UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 
     $text = "Один из Ваших флотов ( ".FleetList($fleet)." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
                "достигает ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
@@ -517,7 +533,7 @@ function DeployArrive ($queue, $fleet_obj, $fleet)
     // Также выгрузить половину топлива
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'] + $fleet_obj['fuel'] / 2, $target['planet_id'], '+' );
     AdjustShips ( $fleet, $fleet_obj['target_planet'], '+' );
-    UpdatePlanetActivity ( $target['planet_id'] );
+    UpdatePlanetActivity ( $target['planet_id'], $queue['end'] );
 
     $text = "\nОдин из Ваших флотов (".FleetList($fleet).") достиг ".$target['name']."\n" .
                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
@@ -637,7 +653,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet)
     SendMessage ( $target['owner_id'], "Наблюдение", "Шпионаж", $text, 5);
 
     // Обновить активность на чужой планете.
-    UpdatePlanetActivity ( $fleet_obj['target_planet'] );
+    UpdatePlanetActivity ( $fleet_obj['target_planet'], $queue['end'] );
 
     // Вернуть флот.
     DispatchFleet ($fleet, $origin, $target, 106, 30, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2);
@@ -646,6 +662,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet)
 function SpyReturn ($queue, $fleet_obj, $fleet)
 {
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
+    UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 }
 
 // *** Колонизировать ***
@@ -706,7 +723,7 @@ function ColonizationReturn ($queue, $fleet_obj, $fleet)
 
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
-    UpdatePlanetActivity ( $fleet_obj['start_planet'] );
+    UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 
     $text = "Один из Ваших флотов ( ".FleetList($fleet)." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
                "достигает ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
@@ -774,6 +791,7 @@ function Queue_Fleet_End ($queue)
     {
         case 1: AttackArrive ($queue, $fleet_obj, $fleet); break;
         case 101: CommonReturn ($queue, $fleet_obj, $fleet); break;
+        case 102: CommonReturn ($queue, $fleet_obj, $fleet); break;
         case 3: TransportArrive ($queue, $fleet_obj, $fleet); break;
         case 103: CommonReturn ($queue, $fleet_obj, $fleet); break;
         case 4: DeployArrive ($queue, $fleet_obj, $fleet); break;
@@ -813,7 +831,8 @@ function CreateUnion ($fleet_id)
 
     // Добавить союз.
     $union_id = IncrementDBGlobal ('nextunion');
-    $union = array ( $union_id, $fleet_id, "KV$union_id", $fleet_obj['owner_id'] );
+    $union_name = "KV" . ($union_id * mt_rand (230,270));
+    $union = array ( $union_id, $fleet_id, $union_name, $fleet_obj['owner_id'] );
     AddDBRow ($union, 'union');
 
     // Добавить флот в союз.
@@ -834,11 +853,13 @@ function LoadUnion ($union_id)
     return $union;
 }
 
-// Союз удаляется при отзыве, возврате или уничтожении паровоза.
+// Союз удаляется при отзыве, или достижении цели
 function RemoveUnion ($union_id)
 {
     global $db_prefix;
-    $query = "DELETE FROM ".$db_prefix."union WHERE union_id = $union_id";
+    $query = "DELETE FROM ".$db_prefix."union WHERE union_id = $union_id";        // удалить запись союза
+    dbquery ($query);
+    $query = "UPDATE ".$db_prefix."fleet SET union_id = 0 WHERE union_id = $union_id";        // удалить ссылку на союз для совместных атак
     dbquery ($query);
 }
 
