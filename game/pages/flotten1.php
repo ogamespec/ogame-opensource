@@ -225,6 +225,30 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 
   
 <form action="index.php?page=flotten2&session=<?=$session;?>" method="POST">
+<?php
+    if ( key_exists ( 'galaxy', $_GET ) ) {
+        $target_galaxy = $_GET['galaxy'];
+
+        if ( key_exists ( 'system', $_GET ) ) $target_system = $_GET['system'];
+        else  $target_system = 0;
+
+        if ( key_exists ( 'planet', $_GET ) ) $target_planet = $_GET['planet'];
+        else  $target_planet = 0;
+
+        if ( key_exists ( 'planettype', $_GET ) ) $target_planettype = $_GET['planettype'];
+        else  $target_planettype = 0;
+
+        if ( key_exists ( 'target_mission', $_GET ) ) $target_mission = $_GET['target_mission'];
+        else  $target_mission = 0;
+?>
+     <input type="hidden" name="target_galaxy" value="<?=$target_galaxy;?>" />
+   <input type="hidden" name="target_system" value="<?=$target_system;?>" />
+   <input type="hidden" name="target_planet" value="<?=$target_planet;?>" />
+   <input type="hidden" name="target_planettype" value="<?=$target_planettype;?>" />
+   <input type="hidden" name="target_mission" value="<?=$target_mission;?>" />
+<?php
+    }
+?>
   <table width="519" border="0" cellpadding="0" cellspacing="1">
 <?php
     if ($nowfleet >= $maxfleet)

@@ -42,6 +42,30 @@ PageHeader ("flotten2");
 <center>
 <table width="519" border="0" cellpadding="0" cellspacing="1">
 <form action="index.php?page=flotten3&session=<?=$session;?>" method="POST">
+<?php
+    if ( key_exists ( 'target_mission', $_POST ) ) {
+        $target_misson = $_POST['target_mission'];
+?>
+<input type="hidden" name="target_mission" value="<?=$target_misson;?>" />
+<?php
+    }
+
+    if ( key_exists ( 'target_galaxy', $_POST ) ) $target_galaxy = $_POST['target_galaxy'];
+    else $target_galaxy = $aktplanet['g'];
+
+    if ( key_exists ( 'target_system', $_POST ) ) $target_system = $_POST['target_system'];
+    else $target_system = $aktplanet['s'];
+
+    if ( key_exists ( 'target_planet', $_POST ) ) $target_planet = $_POST['target_planet'];
+    else $target_planet = $aktplanet['p'];
+
+    function planettype ($n)
+    {
+        if ( key_exists ( 'target_planettype', $_POST ) ) {
+            if ( $_POST['target_planettype'] == $n ) echo "selected";
+        }
+    }
+?>
 <input name="thisgalaxy" type="hidden" value="<?=$aktplanet['g'];?>" />
 <input name="thissystem" type="hidden" value="<?=$aktplanet['s'];?>" />
 <input name="thisplanet" type="hidden" value="<?=$aktplanet['p'];?>" />
@@ -84,14 +108,13 @@ PageHeader ("flotten2");
  <tr height="20">
   <th width="50%">Координаты цели</th>
   <th>
-   <input name="galaxy" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?=$aktplanet['g'];?>" />
-   <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?=$aktplanet['s'];?>" />
-   <input name="planet" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?=$aktplanet['p'];?>" />
+   <input name="galaxy" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?=$target_galaxy;?>" />
+   <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?=$target_system;?>" />
+   <input name="planet" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?=$target_planet;?>" />
    <select name="planettype" onChange="shortInfo()" onKeyUp="shortInfo()">
-     <option value="1" ><?=loca("FLEET_PLANETTYPE_1");?> </option>
-
-  <option value="2" ><?=loca("FLEET_PLANETTYPE_2");?> </option>
-  <option value="3" ><?=loca("FLEET_PLANETTYPE_3");?> </option>
+     <option value="1" <?=planettype(1);?>><?=loca("FLEET_PLANETTYPE_1");?> </option>
+  <option value="2" <?=planettype(2);?>><?=loca("FLEET_PLANETTYPE_2");?> </option>
+  <option value="3" <?=planettype(3);?>><?=loca("FLEET_PLANETTYPE_3");?> </option>
    </select>
  </tr>
  <tr height="20">
@@ -104,7 +127,6 @@ PageHeader ("flotten2");
          <option value="8">80</option>
          <option value="7">70</option>
          <option value="6">60</option>
-
          <option value="5">50</option>
          <option value="4">40</option>
          <option value="3">30</option>
@@ -120,7 +142,6 @@ PageHeader ("flotten2");
  <tr height="20">
   <th>Продолжительность (в одну сторону)</th><th><div id="duration">-</div></th>
  </tr>
-
  <tr height="20">
   <th>Потребление топлива</th><th><div id="consumption">-</div></th>
  </tr>
@@ -128,13 +149,10 @@ PageHeader ("flotten2");
   <th>Максимальная скорость</th><th><div id="maxspeed">-</div></th>
  </tr>
  <tr height="20">
-
   <th>Грузоподъёмность</th><th><div id="storage">572.500</div></th>
  </tr>
-
   <tr height="20">
   <td colspan="2" class="c">Планета</td>
-
   </tr>
 
 <?php

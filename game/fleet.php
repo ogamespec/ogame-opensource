@@ -94,7 +94,7 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
     $missions = array ( );
 
     // HACK
-    return array ( 1, 2, 3, 4, 5, 6, 7, 8, 9, 15 );
+    //return array ( 1, 3, 4, 5, 6, 7, 8, 9, 15 );
 
     $origin = LoadPlanet ( $thisgalaxy, $thissystem, $thisplanet, $thisplanettype );
     $target = LoadPlanet ( $galaxy, $system, $planet, $planettype );
