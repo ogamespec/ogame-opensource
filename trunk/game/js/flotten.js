@@ -25,7 +25,7 @@ function setTarget(galaxy, solarsystem, planet, planettype) {
 }
 
 function setMission(mission) {
-    document.getElementsByName('target_mission')[0].selectedIndex = mission;
+    document.getElementsByName('order')[0].selectedIndex = mission;
     return;
 }
 

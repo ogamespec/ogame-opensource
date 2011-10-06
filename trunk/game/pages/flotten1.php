@@ -145,14 +145,28 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
     <th><a href="index.php?page=galaxy&galaxy=<?=$target['g'];?>&system=<?=$target['s'];?>&position=<?=$target['p'];?>&session=<?=$session;?>" >[<?=$target['g'];?>:<?=$target['s'];?>:<?=$target['p'];?>]</a>    <br /><?=$target_user['oname'];?>    </th>
     <th><?=date ( "D M j G:i:s", $queue['end']);?></th>
     <th>
+<?php
+    if ( $fleet['mission'] == 1 )
+    {
+?>
          <form action="index.php?page=flotten1&session=<?=$session;?>" method="POST">
     <input type="hidden" name="order_union" value="<?=$fleet['fleet_id'];?>" />
         <input type="submit" value="Союз" />
      </form>
+<?php
+    }
+?>
+<?php
+    if ( $fleet['mission'] < 100 || $fleet['mission'] > 200 )
+    {
+?>
          <form action="index.php?page=flotten1&session=<?=$session;?>" method="POST">
     <input type="hidden" name="order_return" value="<?=$fleet['fleet_id'];?>" />
         <input type="submit" value="Отзыв" />
      </form>
+<?php
+    }
+?>
             </th>
    </tr>
 

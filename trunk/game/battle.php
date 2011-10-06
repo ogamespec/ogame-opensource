@@ -571,10 +571,14 @@ function StartBattle ( $fleet_id, $planet_id )
     $did = $unitab['did'];
     $rf = $unitab['rapid'];
 
+    // *** Союзные атаки не должны вступать битву. Игнорировать их.
+    $f = LoadFleet ( $fleet_id );
+    if ( $f['mission'] != 1 && $f['union_id'] > 0 ) return;
+
     // *** Сгенерировать исходные данные
 
     // Список атакующих
-    $f = LoadFleet ( $fleet_id );
+    //$f = LoadFleet ( $fleet_id );
     $a[0] = LoadUser ( $f['owner_id'] );
     $a[0]['fleet'] = array ();
     foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = $f["ship$gid"];
@@ -671,7 +675,8 @@ function StartBattle ( $fleet_id, $planet_id )
     }
 
     // Обновить активность на планете.
-    UpdatePlanetActivity ( $planet_id );
+    $queue = GetFleetQueue ( $fleet_id );
+    UpdatePlanetActivity ( $planet_id, $queue['end'] );
 
     // Сгенерировать боевой доклад.
     $text = BattleReport ( $a, $d, $res, time(), $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired );
@@ -776,7 +781,8 @@ function RocketAttack ( $fleet_id, $planet_id )
     $text .= "</table><br>\n";
 
     // Обновить активность на планете.
-    UpdatePlanetActivity ( $planet_id );
+    $queue = GetFleetQueue ( $fleet_id );
+    UpdatePlanetActivity ( $planet_id, $queue['end'] );
 
     SendMessage ( $target_user['player_id'], "Командование флотом", "Ракетная атака", $text, 2);
 }

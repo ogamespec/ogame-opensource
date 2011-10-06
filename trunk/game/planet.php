@@ -284,10 +284,11 @@ function DestroyPlanet ($planet_id)
 }
 
 // Обновить активность на планете
-function UpdatePlanetActivity ( $planet_id)
+function UpdatePlanetActivity ( $planet_id, $t=0)
 {
     global $db_prefix;
-    $now = time ();
+    if ($t == 0) $now = time ();
+    else $now = $t;
     $query = "UPDATE ".$db_prefix."planets SET lastakt = $now WHERE planet_id = $planet_id";
     dbquery ($query);
 }

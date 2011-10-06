@@ -43,6 +43,7 @@ PageHeader ("flotten2");
 <table width="519" border="0" cellpadding="0" cellspacing="1">
 <form action="index.php?page=flotten3&session=<?=$session;?>" method="POST">
 <?php
+
     if ( key_exists ( 'target_mission', $_POST ) ) {
         $target_misson = $_POST['target_mission'];
 ?>
@@ -182,7 +183,30 @@ PageHeader ("flotten2");
 
   <tr height="20">
      <td colspan="2" class="c">Боевые союзы  </tr>
- <tr height="20"><th colspan="2">-</th></tr>
+
+<?php
+
+    // Список боевых союзов.
+    $unions = EnumUnion ( $GlobalUser['player_id']);
+    $union_count = count ($unions);
+    if ( $union_count > 0 )
+    {
+        $now = time ();
+        foreach ( $unions as $i=>$union )
+        {
+            $fleet_obj = LoadFleet ( $union['fleet_id'] );
+            $queue = GetFleetQueue ( $union['fleet_id'] );
+            $target = GetPlanet ( $fleet_obj['target_planet'] );
+            echo "  <tr height=\"20\">";
+            echo "<th><div id='bxx".($i+1)."' title='".max($queue['end']-$now, 0)."'star='".$queue['end']."'></div></th>";
+            echo "<th><a href=\"javascript:setTarget(".$target['g'].",".$target['s'].",".$target['p'].",".GetPlanetType($target)."); shortInfo()\">";
+            echo $union['name']." [".$target['g'].":".$target['s'].":".$target['p']."]</a></th></tr>\n";
+        }
+        echo "<script language=javascript>anz=".$union_count.";t();</script>\n\n";
+    }
+    else echo " <tr height=\"20\"><th colspan=\"2\">-</th></tr>\n";
+?>
+
 <tr height="20">
  <th colspan="2">
   <input type="submit" value="Дальше" />
