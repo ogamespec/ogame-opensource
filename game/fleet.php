@@ -936,4 +936,12 @@ function EnumUnion ($player_id)
     return $unions;
 }
 
+// Перечислить флоты союза
+function EnumUnionFleets ($union_id)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."fleet WHERE union_id = $union_id";
+    return dbquery ( $query );
+}
+
 ?>
