@@ -110,6 +110,20 @@ PageHeader ("flotten3");
 <?php
     // Отобразить список доступных заданий.
 
+    function is_checked ($mission)
+    {
+        if ( key_exists ( 'target_mission', $_POST ) ) {
+            if ( $_POST['target_mission'] == $mission ) return "checked";
+        }
+    }
+
+    function is_selected ($union_id)
+    {
+        if ( key_exists ( 'union2', $_POST ) ) {
+            if ( $_POST['union2'] == $union_id ) return "selected";
+        }
+    }
+
     $mission_acs = $mission_exp = $mission_hold = false;
 
     $fleet = array ();
@@ -121,6 +135,7 @@ PageHeader ("flotten3");
     }
 
     $missions = FleetAvailableMissions ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['thisplanettype'], $_POST['galaxy'], $_POST['system'], $_POST['planet'], $_POST['planettype'], $fleet );
+    if ( key_exists ( 'union2', $_POST ) ) $missions[] = 2;    // Совместная атака.
 
     if ( count ($missions) == 0 )
     {
@@ -148,7 +163,7 @@ PageHeader ("flotten3");
             {
                 echo "    <tr height=\"20\">\n";
                 echo "<th>\n";
-                echo "  <input type=\"radio\" name=\"order\" value=\"$id\" >".loca("FLEET_ORDER_$id")."<br />\n";
+                echo "  <input type=\"radio\" name=\"order\" value=\"$id\" ".is_checked($id).">".loca("FLEET_ORDER_$id")."<br />\n";
                 echo "     </th>\n";
                 echo "  </tr>\n";
             }
@@ -214,7 +229,7 @@ PageHeader ("flotten3");
 <?php
     foreach ( $unions as $i=>$union )
     {
-        echo "          <option value=\"".$union['union_id']."\">".$union['name']."</option>\n";
+        echo "          <option value=\"".$union['union_id']."\" ".is_selected($union['union_id']).">".$union['name']."</option>\n";
     }
 ?>           </select> 
       </th>
