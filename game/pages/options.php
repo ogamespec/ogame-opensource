@@ -2,6 +2,9 @@
 
 // Настройки.
 
+$OptionsMessage = "";
+$OptionsError = "";
+
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
 $now = time();
@@ -139,11 +142,30 @@ $speed = $unitab['speed'];
         if ( method () === "POST") {
 
             if ( $GlobalUser['name_changed'] == 0 && $_POST['db_character'] !== $GlobalUser['oname'] ) {        // Сменить имя.
+                //Это имя уже существует.
+                //Имя должно содержать от 3-х до 20-ти символов.
+                //Недопустимое имя!
+
                 echo "Сменить имя<br>";
             }
 
             if ( $_POST['newpass1'] !== "" ) {        // Сменить пароль
-                echo "Сменить пароль<br>";
+
+                if ( $_POST['newpass1'] !== $_POST['newpass1'] ) $OptionsError = "Новые пароли не совпадают.";
+                if ( strlen ( $_POST['newpass1'] ) < 8 ) $OptionsError = "Пароль должен состоять минимум из 8 символов";
+                if ( !preg_match ( "/^[_a-zA-Z0-9]+$/", $_POST['newpass1'] ) ) $OptionsError = "Пароль содержит особый символ.";
+                if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $OptionsError = "Неправильный старый пароль.";
+
+                //Вы хотите использовать небезопасный пароль, измените его на более безопасный.
+
+                if ( $OptionsError === "" )
+                {
+                    $md5 = md5 ($_POST['newpass1'] . $db_secret );
+                    $query = "UPDATE ".$db_prefix."users SET password = '".$md5."' WHERE player_id = " . $GlobalUser['player_id'];
+                    dbquery ($query);
+                    $OptionsError = "Пароль изменён.";
+                    Logout ( $GlobalUser['session'] );
+                }
             }
 
             if ( $_POST['db_email'] !== $GlobalUser['pemail'] ) {        // Сменить адрес
@@ -181,6 +203,7 @@ $speed = $unitab['speed'];
             }
 
             // Сохранить путь к скину + галочка показывать/выключить скин.
+            //Это внешний путь для скина. ID этой сессии на используемом сервере может быть опознан!
             ChangeSkinPath ( $GlobalUser['player_id'], $_POST['dpath'] );
             EnableSkin ( $GlobalUser['player_id'], ($_POST['design']==="on"?1:0) );
 
@@ -439,6 +462,6 @@ $speed = $unitab['speed'];
 <!-- END CONTENT AREA -->
 
 <?php
-PageFooter ();
+PageFooter ($OptionsMessage, $OptionsError);
 ob_end_flush ();
 ?>
