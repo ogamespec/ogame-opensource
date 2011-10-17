@@ -29,7 +29,9 @@ function CreateAlly ($owner_id, $tag, $name)
     $id = IncrementDBGlobal ( 'nextally' );
 
     // Добавить альянс.
-    $ally = array( $id, $tag, $name, $owner_id, "", "", 1, 0, "Добро пожаловать на страничку альянса", "", "", 0, "", "", 0, 0 );
+    $ally = array( $id, $tag, $name, $owner_id, "", "", 1, 0, "Добро пожаловать на страничку альянса", "", "", 0, "", "", 0, 0,
+                        0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0 );
     AddDBRow ( $ally, "ally" );
 
     // Добавить ранги "Основатель" (0) и "Новичок" (1) .
