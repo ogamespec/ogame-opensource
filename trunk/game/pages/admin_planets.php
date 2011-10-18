@@ -127,6 +127,10 @@ function Admin_Planets ()
                 dbquery ($query);
             }
         }
+        else if ( $action === "recalc_fields" )    // Пересчитать поля
+        {
+            RecalcFields ($cp);
+        }
     }
 
     if ( key_exists("cp", $_GET) ) {     // Информация о планете.
@@ -260,7 +264,8 @@ function Admin_Planets ()
         else echo "<input type=\"hidden\" name=\"type\" value=\"".$planet['type']."\" >\n";
         echo "</th> </tr>\n";
         echo "<tr><th>Последнее обновление</th><th>".date ("Y-m-d H:i:s", $planet['lastpeek'])."</th></tr>\n";
-        echo "<tr><th>Диаметр</th><th>".nicenum($planet['diameter'])." км (".$planet['fields']." из ".$planet['maxfields']." полей)</th></tr>\n";
+        echo "<tr><th>Диаметр</th><th>".nicenum($planet['diameter'])." км (".$planet['fields']." из ".$planet['maxfields']." полей) ";
+        echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=recalc_fields&cp=".$planet['planet_id']."\" >пересчитать</a> </th></tr>\n";
         echo "<tr><th>Температура</th><th>от ".$planet['temp']."°C до ".($planet['temp']+40)."°C</th></tr>\n";
         echo "<tr><th>Координаты</th><th>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</th></tr>\n";
 
