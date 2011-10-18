@@ -75,7 +75,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                                'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 
                                'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 'INT UNSIGNED' );
     $rankscols = array ( 'rank_id', 'ally_id', 'name', 'rights' );
-    $rankstype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'INT' );
+    $rankstype = array ( 'INT', 'INT', 'TEXT', 'INT' );
     $appscols = array ( 'app_id', 'ally_id', 'player_id', 'text', 'date' );
     $appstype = array ( 'INT PRIMARY KEY', 'INT', 'INT', 'TEXT', 'INT UNSIGNED' );
     $buddycols = array ( 'buddy_id', 'request_from', 'request_to', 'text', 'accepted' );
