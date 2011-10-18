@@ -442,4 +442,19 @@ function DestroyMoon ($planet_id)
 {
 }
 
+// Пересчитать поля.
+function RecalcFields ($planet_id)
+{
+    global $db_prefix;
+    $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
+    $planet = GetPlanet ($planet_id);
+    $fields = 0;
+    if ( $planet['type'] == 0 || $planet['type'] == 10003 ) $maxfields = 1;    // луна
+    else $maxfields = floor (pow (($planet['diameter'] / 1000), 2));    // планета
+    foreach ( $buildmap as $i=>$gid ) $fields += $planet["b$gid"];
+    $maxfields += 5 * $planet["b33"] + 3 * $planet["b41"];    // терраформер и ЛБ
+    $query = "UPDATE ".$db_prefix."planets SET fields=$fields, maxfields=$maxfields WHERE planet_id=$planet_id;";
+    dbquery ($query);
+}
+
 ?>
