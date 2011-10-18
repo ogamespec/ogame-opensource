@@ -131,6 +131,21 @@ function Admin_Planets ()
         {
             RecalcFields ($cp);
         }
+        else if ( $action === "random_diam" )    // Случайный диаметр (только для планет)
+        {
+            $planet = GetPlanet ($cp);
+            if ( GetPlanetType ($planet) == 1 )
+            {
+                $p = $planet['p'];
+                if ($p <= 3) $diam = mt_rand ( 50, 120 ) * 72;
+                else if ($p >= 4 && $p <= 6) $diam = mt_rand ( 50, 150 ) * 120;
+                else if ($p >= 7 && $p <= 9) $diam = mt_rand ( 50, 120 ) * 120;
+                else if ($p >= 10 && $p <= 12) $diam = mt_rand ( 50, 120 ) * 96;
+                else if ($p >= 13 && $p <= 15) $diam = mt_rand ( 50, 150 ) * 96;
+                $query = "UPDATE ".$db_prefix."planets SET diameter=$diam WHERE planet_id=" . $planet['planet_id'];
+                dbquery ($query);
+            }
+        }
     }
 
     if ( key_exists("cp", $_GET) ) {     // Информация о планете.
@@ -214,22 +229,22 @@ function Admin_Planets ()
             $WaterPlanets = array ( 401, 402, 403, 404, 405, 406, 407, 408, 409 );
             $IcePlanets = array ( 501, 502, 503, 504, 505, 506, 507, 508, 509, 510 );
             echo "<table>";
-            echo "<tr><td>";
+            echo "<tr><td><nobr>";
             foreach ( $RockPlanets as $i=>$id )
             {
-                echo "     <input type=\"radio\" name=\"type\" value=$id ";
+                echo "    <input type=\"radio\" name=\"type\" value=$id ";
                 if ( $id == $planet['type'] ) echo " checked ";
                 echo "  >\n";
-                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
+                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\" title=\"Каменные, позиции 1-3\" > \n";
             }
-            echo "</td></tr>";
+            echo "</nobr></td></tr>";
             echo "<tr><td>";
             foreach ( $JunglePlanets as $i=>$id )
             {
                 echo "     <input type=\"radio\" name=\"type\" value=$id ";
                 if ( $id == $planet['type'] ) echo " checked ";
                 echo "  >\n";
-                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
+                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\" title=\"Джунгли, позиции 4-6\" > \n";
             }
             echo "</td></tr>";
             echo "<tr><td>";
@@ -238,7 +253,7 @@ function Admin_Planets ()
                 echo "     <input type=\"radio\" name=\"type\" value=$id ";
                 if ( $id == $planet['type'] ) echo " checked ";
                 echo "  >\n";
-                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
+                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\" title=\"Нормальные, позиции 7-9\" > \n";
             }
             echo "</td></tr>";
             echo "<tr><td>";
@@ -247,7 +262,7 @@ function Admin_Planets ()
                 echo "     <input type=\"radio\" name=\"type\" value=$id ";
                 if ( $id == $planet['type'] ) echo " checked ";
                 echo "  >\n";
-                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
+                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\" title=\"Водяные, позиции 10-12\" > \n";
             }
             echo "</td></tr>";
             echo "<tr><td>";
@@ -256,7 +271,7 @@ function Admin_Planets ()
                 echo "     <input type=\"radio\" name=\"type\" value=$id ";
                 if ( $id == $planet['type'] ) echo " checked ";
                 echo "  >\n";
-                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\"> \n";
+                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\" title=\"Ледяные, позиции 13-15\" > \n";
             }
             echo "</td></tr>";
             echo "</table>";
@@ -264,8 +279,9 @@ function Admin_Planets ()
         else echo "<input type=\"hidden\" name=\"type\" value=\"".$planet['type']."\" >\n";
         echo "</th> </tr>\n";
         echo "<tr><th>Последнее обновление</th><th>".date ("Y-m-d H:i:s", $planet['lastpeek'])."</th></tr>\n";
-        echo "<tr><th>Диаметр</th><th>".nicenum($planet['diameter'])." км (".$planet['fields']." из ".$planet['maxfields']." полей) ";
-        echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=recalc_fields&cp=".$planet['planet_id']."\" >пересчитать</a> </th></tr>\n";
+        echo "<tr><th>Диаметр <br><a href=\"index.php?page=admin&session=$session&mode=Planets&action=random_diam&cp=".$planet['planet_id']."\" >новый диаметр</a>  </th><th>".nicenum($planet['diameter'])." км (".$planet['fields']." из ".$planet['maxfields']." полей) ";
+        echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=recalc_fields&cp=".$planet['planet_id']."\" >пересчитать поля</a> ";
+        echo "</th></tr>\n";
         echo "<tr><th>Температура</th><th>от ".$planet['temp']."°C до ".($planet['temp']+40)."°C</th></tr>\n";
         echo "<tr><th>Координаты</th><th>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</th></tr>\n";
 
