@@ -121,6 +121,7 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "Shipyard" ) Queue_Shipyard_End ($queue);
         else if ( $queue['type'] === "Fleet" ) Queue_Fleet_End ($queue);
         else if ( $queue['type'] === "UnloadAll" ) Queue_Relogin_End ($queue);
+        else if ( $queue['type'] === "CleanDebris" ) Queue_CleanDebris_End ($queue);
         else if ( $queue['type'] === "DeleteAccount" ) Queue_DeleteAccount_End ($queue);
         else if ( $queue['type'] === "RecalcPoints" ) Queue_RecalcPoints_End ($queue);
         else Error ( "queue: Неизвестный тип задания для глобальной очереди: " . $queue['type']);
@@ -645,6 +646,37 @@ function Queue_Relogin_End ($queue)
 {
     UnloadAll ();
     RemoveQueue ( $queue['task_id'], 0 );
+}
+
+// Добавить задание чистки виртуальных ПО, если его ещё не существует.
+// Вызывается при логине любого игрока.
+function AddCleanDebrisEvent ()
+{
+    global $db_prefix;
+
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'CleanDebris'";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0 )
+    {
+        $now = time ();
+        $week = mktime(0, 0, 0, date('m'), date('d')-date('w'), date('Y')) + 24 * 60 * 60;
+        $when = $week + 7 * 24 * 60 * 60 + 10 * 60;
+        $id = IncrementDBGlobal ('nexttask');
+        $queue = array ( $id, 99999, "CleanDebris", 0, 0, 0, $now, $when, 600 );
+        AddDBRow ( $queue, "queue" );
+    }
+}
+
+// Чистка виртуальных ПО.
+function Queue_CleanDebris_End ($queue)
+{
+    global $db_prefix;
+    $query = "SELECT target_planet FROM ".$db_prefix."fleet WHERE mission = 8 OR mission = 108";
+    $query = "DELETE FROM ".$db_prefix."planets WHERE (type=10000 AND m=0 AND k=0) AND planet_id <> ALL ($query)";
+    dbquery ( $query );
+    Debug ( "Удалено виртуальных ПО : " . mysql_affected_rows() );
+    RemoveQueue ( $queue['task_id'], 0 );
+    AddCleanDebrisEvent ();
 }
 
 // ===============================================================================================================

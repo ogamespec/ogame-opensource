@@ -466,8 +466,9 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
         $user = dbarray ($result);
         SelectPlanet ($player_id, $user['hplanetid']);
 
-        // Задание глобальной отгрузки игроков.
+        // Задание глобальной отгрузки игроков, чистки виртуальных ПО
         AddReloginEvent ();
+        AddCleanDebrisEvent ();
 
         // Задание персчёта очков игрока.
         AddRecalcPointsEvent ($player_id);
@@ -584,9 +585,13 @@ function RecalcRanks ()
 // Отгрузить всех игроков
 function UnloadAll ()
 {
-    global $db_prefix;
+    global $db_prefix, $StartPage;
     $query = "UPDATE ".$db_prefix."users SET session = ''";
     dbquery ($query);
+
+    ob_clean ();
+    echo "<script>document.location.href='".$StartPage."';</script>Вы долго отсутствовали 0. (Войдите снова)<br>";
+    ob_end_flush ();
 }
 
 // Сменить путь к скину
