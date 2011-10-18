@@ -209,16 +209,18 @@ $speed = $unitab['speed'];
 
             // Включить/выключить проверку IP адреса (noipcheck)
 
+            $lang = $_POST['lang'];
             $sortby = min ( max(0, $_POST['settings_sort']), 2);
             $sortorder = min ( max(0, $_POST['settings_order']), 1);
             $maxspy = min( max (1, $_POST['spio_anz']), 99);
             $maxfleetmsg = min( max (1, $_POST['settings_fleetactions']), 99);
-            $query = "UPDATE ".$db_prefix."users SET sortby=$sortby, sortorder=$sortorder, maxspy=$maxspy, maxfleetmsg=$maxfleetmsg WHERE player_id=".$GlobalUser['player_id'];
+            $query = "UPDATE ".$db_prefix."users SET sortby=$sortby, sortorder=$sortorder, maxspy=$maxspy, maxfleetmsg=$maxfleetmsg, lang='".$lang."' WHERE player_id=".$GlobalUser['player_id'];
             dbquery ($query);
             $GlobalUser['sortby'] = $sortby;
             $GlobalUser['sortorder'] = $sortorder;
             $GlobalUser['maxspy'] = $maxspy;
             $GlobalUser['maxfleetmsg'] = $maxfleetmsg;
+            $GlobalUser['lang'] = $lang;
         }
 ?>
 
@@ -272,6 +274,18 @@ $speed = $unitab['speed'];
   <td class="c" colspan="2">Общие настройки</td>
   </tr>
   <tr>
+
+   <th>Язык:</th>
+   <th>
+   <select name="lang">
+<?php
+    foreach ( $Languages as $lang_id=>$lang_name ) {
+        echo "    <option value=\"".$lang_id."\" " . IsSelected("lang", $lang_id)." >$lang_name</option>\n";
+    }
+?>
+   </select>
+   </th>
+  </tr>
 
    <th>Сортировка планет по:</th>
    <th>

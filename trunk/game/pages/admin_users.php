@@ -191,9 +191,12 @@ function Admin_Users ()
             <tr><th>Количество сообщений флота</th><th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="<?=$user['maxfleetmsg'];?>" /></th></tr>
             <tr><th>Язык интерфейса</th><th>
    <select name="lang">
-     <option value="de" <?=IsSelected($user, "lang", "de");?>>de</option>
-     <option value="en" <?=IsSelected($user, "lang", "en");?>>en</option>
-     <option value="ru" <?=IsSelected($user, "lang", "ru");?>>ru</option>
+<?php
+    global $Languages;
+    foreach ( $Languages as $lang_id=>$lang_name ) {
+        echo "    <option value=\"".$lang_id."\" " . IsSelected($user, "lang", $lang_id)." >$lang_name</option>\n";
+    }
+?>
    </select>
 </th></tr>
             <tr><th colspan=2>&nbsp</th></tr>
