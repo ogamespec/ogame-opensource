@@ -2,17 +2,51 @@
 
 require_once "loca.php";
 
-$LocaLang = "ru";
+// Список языков
+$Languages = array ( 
+    'ae' => "اللغة العربية", 
+    'ar' => "Español", 
+    'ba' => "Босански", 
+    'bg' => "Български", 
+    'cn' => "中文", 
+    'cz' => "Český", 
+    'de' => "Deutsch", 
+    'dk' => "Dansk", 
+    'en' => "English", 
+    'es' => "Español", 
+    'fi' => "Suomi", 
+    'fr' => "Français", 
+    'gr' => "Ελληνικά", 
+    'hr' => "Hrvatski", 
+    'hu' => "Magyar", 
+    'it' => "Italiano", 
+    'jp' => "日本語", 
+    'lt' => "Lietuvių", 
+    'lv' => "Latviešu", 
+    'nl' => "Nederlandse", 
+    'no' => "Norsk", 
+    'pl' => "Polski", 
+    'pt' => "Português", 
+    'ro' => "Română", 
+    'rs' => "Српски", 
+    'ru' => "Русский", 
+    'sk' => "Slovenčina", 
+    'se' => "Svenska", 
+    'tr' => "Türkçe", 
+    'tw' => "臺灣話", 
+    'ua' => "Українська",
+);
 
-$res = loca_init ( $db_host, $db_user, $db_pass, $db_name, $LocaLang, "OGame" );
+$res = loca_init ( $db_host, $db_user, $db_pass, $db_name, "OGame" );
 if ($res == false) {
     loca_reset ( $db_host, $db_user, $db_pass, $db_name );
 
     // Добавим проект
     loca_add_project ( "OGame" );
+    $loca_project = loca_project_id ( "OGame" );
 
     // "ru"
-    loca_init ( $db_host, $db_user, $db_pass, $db_name, "ru", "OGame" );
+    $loca_lang = "ru";
     {
         loca_add("METAL" , "Металл");
         loca_add("CRYSTAL" , "Кристалл");
@@ -316,9 +350,6 @@ if ($res == false) {
         include "loca_changelog.php";
 
     }
-    loca_close ();
-
-    loca_init ( $db_host, $db_user, $db_pass, $db_name, $LocaLang, "OGame" );
 }
 
 ?>

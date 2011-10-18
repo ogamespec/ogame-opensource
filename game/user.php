@@ -187,8 +187,8 @@ function CreateUser ( $name, $pass, $email)
     $user = array( $id, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, $email, $email,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, $ip, 0, $ack, $homeplanet, 0, 0, 0,
-                        hostname() . "evolution/", 1, 0, 1, 3, $lang, $homeplanet,
-                        0, 0, 0, 0, 0, 
+                        hostname() . "evolution/", 1, 0, 0, 1, 3, $lang, $homeplanet,
+                        0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
@@ -404,7 +404,7 @@ function Logout ( $session )
 // Вызывается при загрузке каждой игровой страницы.
 function CheckSession ( $session )
 {
-    global $db_prefix, $GlobalUser;
+    global $db_prefix, $GlobalUser, $loca_lang;
     // Получить ID-пользователя и номер вселенной из публичной сессии.
     $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$session."'";
     $result = dbquery ($query);
@@ -418,6 +418,7 @@ function CheckSession ( $session )
         if ( $prsess !== $GlobalUser['private_session'] ) { InvalidSessionPage (); return FALSE; }
         if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
     }
+    $loca_lang = $GlobalUser['lang'];
     return TRUE;
 }
 

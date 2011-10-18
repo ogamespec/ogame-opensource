@@ -12,7 +12,7 @@ $loca_project = -1;     // Используемый проект.
 // lang: язык, используемый для вызова loca.
 // proj: название проекта, например "OGame Startpage".
 // Возвращает true, если соединение с LOCA установлено, или false если нет.
-function loca_init ($loca_host, $loca_user, $loca_pass, $loca_dbname, $lang, $proj)
+function loca_init ($loca_host, $loca_user, $loca_pass, $loca_dbname, $proj)
 {
     global $loca_connect, $loca_ready, $loca_lang, $loca_project;
     $loca_connect = @mysql_connect($loca_host, $loca_user, $loca_pass, true);
@@ -20,7 +20,6 @@ function loca_init ($loca_host, $loca_user, $loca_pass, $loca_dbname, $lang, $pr
     $loca_select = @mysql_select_db($loca_dbname, $loca_connect);
     if (!$loca_select) return false;
     $loca_ready = $loca_connect && $loca_select;
-    $loca_lang = $lang;
 
     @mysql_query ("SET NAMES 'utf8';", $loca_connect);
     @mysql_query ("SET CHARACTER SET 'utf8';", $loca_connect);
