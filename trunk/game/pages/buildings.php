@@ -328,6 +328,24 @@ if ( $_GET['mode'] === "Verteidigung" || $_GET['mode'] === "Flotte" )
     $rows = dbrows ($result);
     if ($rows)
     {
+        $first = true;
+        $c = "";
+        $b = "";
+        $a = "";
+        $total_time = 0;
+        while ($rows--)
+        {
+            $queue = dbarray ($result);
+            if ( $first ) {
+                $g = $now - $queue['start'];
+                $first = false;
+            }
+            $c .= ($queue['end'] - $queue['start']) . ",";
+            $b .= "\"".loca("NAME_".$queue['obj_id'])."\",";
+            $a .= "\"".$queue['level']."\",";
+            $total_time += ($queue['end'] - $queue['start']) * $queue['level'];
+        }
+        $total_time -= $g;
 ?>
 
       <br>Сейчас производится: <div id="bx" class="z"></div>
@@ -336,24 +354,10 @@ if ( $_GET['mode'] === "Verteidigung" || $_GET['mode'] === "Flotte" )
 <script  type="text/javascript">
 v = new Date();
 p = 0;
-g = 9;
+g = <?=$g;?>;
 s = 0;
 hs = 0;
 of = 1;
-<?php
-    $c = "";
-    $b = "";
-    $a = "";
-    $total_time = 0;
-    while ($rows--)
-    {
-        $queue = dbarray ($result);
-        $c .= ($queue['end'] - $queue['start']) . ",";
-        $b .= "\"".loca("NAME_".$queue['obj_id'])."\",";
-        $a .= "\"".$queue['level']."\",";
-        $total_time += ($queue['end'] - $queue['start']) * $queue['level'];
-    }
-?>
 c = new Array(<?=$c;?>"");
 b = new Array(<?=$b;?>"");
 a = new Array(<?=$a;?>"");
