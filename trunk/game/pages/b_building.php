@@ -6,7 +6,7 @@ if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], $_GET['cp']);
 
 // Обработка параметров.
-if ( key_exists ('modus', $_GET) )
+if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] )
 {
     if ( $_GET['modus'] === 'add' ) BuildEnque ( $_GET['planet'], $_GET['techid'], 0 );
     else if ( $_GET['modus'] === 'destroy' ) BuildEnque ( $_GET['planet'], $_GET['techid'], 1 );
@@ -80,6 +80,10 @@ echo "}\n";
 echo "//-->\n";
 echo "</script>\n";
 
+if ( $GlobalUser['vacation'] ) {
+    echo "<font color=#FF0000><center>Режим отпуска минимум до  ".date ("Y-m-d H:i:s", $GlobalUser['vacation_until'])."</center></font>\n\n";
+}
+
 echo "<table align=top ><tr><td style='background-color:transparent;'>\n";
 echo "<table width=\"530\">\n";
 
@@ -87,6 +91,11 @@ echo "<table width=\"530\">\n";
 $result = GetResearchQueue ( $GlobalUser['player_id'] );
 $resqueue = dbarray ($result);
 $reslab_operating = ($resqueue != null);
+
+// Проверить ведется ли постройка на верфи.
+$result = GetShipyardQueue ( $aktplanet['planet_id'] );
+$shipqueue = dbarray ($result);
+$shipyard_operating = ($shipqueue != null);
 
 // Вывести очередь построек (если активен Командир)
 $result = GetBuildQueue ( $aktplanet['planet_id'] );
@@ -145,6 +154,9 @@ foreach ( $buildmap as $i => $id )
 			if ( $id == 31 && $reslab_operating ) {
 				echo "<td class=l><font  color=#FF0000>В процессе</font> <br>";
 			}
+			else if ( ($id == 15 || $id == 21 ) && $shipyard_operating ) {
+				echo "<td class=l><font  color=#FF0000>В процессе</font> <br>";
+			}
    			else if ( $lvl == 0 )
       		{
         		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00> строить </font></a>\n";
@@ -171,6 +183,9 @@ foreach ( $buildmap as $i => $id )
                         echo "<td class=l><font color=#FF0000>Нет места! </font>";
                   }
 			else if ( $id == 31 && $reslab_operating ) {
+				echo "<td class=l><font  color=#FF0000>В процессе</font> <br>";
+			}
+			else if ( ($id == 15 || $id == 21 ) && $shipyard_operating ) {
 				echo "<td class=l><font  color=#FF0000>В процессе</font> <br>";
 			}
    			else if ( $lvl == 0 )
