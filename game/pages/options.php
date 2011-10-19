@@ -168,17 +168,21 @@ $speed = $unitab['speed'];
                 }
             }
 
-            if ( $_POST['db_email'] !== $GlobalUser['pemail'] ) {        // Сменить адрес
+            if ( $_POST['db_email'] !== $GlobalUser['pemail'] && $_POST['db_email'] !== "" ) {        // Сменить адрес
                 echo "Сменить адрес<br>";
             }
 
             if ( $_POST['urlaubs_modus'] === "on" && $GlobalUser['vacation'] == 0 ) {        // Включить режим отпуска
                 $vacation_until = time() + (2 * 24 * 60 * 60) / $speed;
 
-                $query = "UPDATE ".$db_prefix."users SET vacation=1,vacation_until=$vacation_until WHERE player_id=".$GlobalUser['player_id'];
-                dbquery ($query);
-                $GlobalUser['vacation'] = 1;
-                $GlobalUser['vacation_until'] = $vacation_until;
+                if ( CanEnableVacation ($GlobalUser['player_id']) ) {
+                    $query = "UPDATE ".$db_prefix."users SET vacation=1,vacation_until=$vacation_until WHERE player_id=".$GlobalUser['player_id'];
+                    dbquery ($query);
+                    $GlobalUser['vacation'] = 1;
+                    $GlobalUser['vacation_until'] = $vacation_until;
+                    Goto ( "options" );
+                }
+                else $OptionsError = "Режим отпуска включается только тогда, когда на планете ничего не строится и не исследуется.";
             }
 
             if ( $_POST['db_deaktjava'] === "on" && $GlobalUser['disable'] == 0 ) {        // Поставить аккаунт на удаление

@@ -490,4 +490,13 @@ function InvalidSessionPage ()
     echo "    Error-ID: MD5  </b></font></center> </body></html>\n";
 }
 
+function Goto ($page, $param="")
+{
+    global $GlobalUser;
+    ob_end_clean ();
+    $url = "index.php?page=$page&session=".$GlobalUser['session'].$param;
+    @header( 'Location: ' . $url);
+    die ( "<html><head><meta http-equiv='refresh' content='0;url=$url' /></head><body></body></html>" );
+}
+
 ?>

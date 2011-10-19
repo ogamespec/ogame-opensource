@@ -619,6 +619,16 @@ function Queue_RecalcPoints_End ($queue)
     RemoveQueue ( $queue['task_id'], 0 );
 }
 
+// Можно уйти в РО или нет.
+function CanEnableVacation ($player_id)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE (type = 'Build' OR type = 'Demolish' OR type = 'Research' OR type = 'Shipyard' OR type = 'Fleet') AND owner_id = $player_id";
+    $result = dbquery ( $query );
+    if ( dbrows ($result) > 0 ) return false;
+    else return true;
+}
+
 // ===============================================================================================================
 // Вселенная
 
