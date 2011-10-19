@@ -12,12 +12,7 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
-if ( method() !== "POST" )
-{
-    echo "<html><head><meta http-equiv='refresh' content='0;url=index.php?page=flotten1&session=$session' /></head><body></body>";
-    ob_end_flush ();
-    die ();
-}
+if ( method() !== "POST" ) Goto ( "flotten1" );
 
 PageHeader ("flotten2");
 ?>
@@ -80,24 +75,26 @@ PageHeader ("flotten2");
 
     // Список флотов.
 
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // без солнечного спутника
 
     $total = 0;
     foreach ($fleetmap as $i=>$gid) 
     {
-        $total += $_POST["ship$gid"];
-        if ( key_exists("ship$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"ship$gid\" value=\"".$_POST["ship$gid"]."\" />\n";
-        if ( key_exists("consumption$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"consumption$gid\" value=\"".$_POST["consumption$gid"]."\" />\n";
-        if ( key_exists("speed$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"speed$gid\" value=\"".$_POST["speed$gid"]."\" />\n";
-        if ( key_exists("capacity$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"capacity$gid\" value=\"".$_POST["capacity$gid"]."\" />\n";
+        // Ограничить количество флотов максимальным количеством на планете.
+        if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet["f$gid"] , abs ($_POST["ship$gid"]) );
+        else $amount = 0;
+        $total += $amount;
+
+        if ( $amount > 0 ) {
+            if ( key_exists("ship$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"ship$gid\" value=\"".$amount."\" />\n";
+            if ( key_exists("consumption$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"consumption$gid\" value=\"".$_POST["consumption$gid"]."\" />\n";
+            if ( key_exists("speed$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"speed$gid\" value=\"".$_POST["speed$gid"]."\" />\n";
+            if ( key_exists("capacity$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"capacity$gid\" value=\"".$_POST["capacity$gid"]."\" />\n";
+        }
     }
 
-    if ( $total == 0 )    // Флот не выбран.
-    {
-        ob_end_clean ();
-        echo "<html><head><meta http-equiv='refresh' content='0;url=index.php?page=flotten1&session=$session' /></head><body></body>";
-        die ();
-    }
+    // Флот не выбран.
+    if ( $total == 0 ) Goto ( "flotten1" );
 
 ?>
 
