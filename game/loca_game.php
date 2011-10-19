@@ -45,6 +45,43 @@ if ($res == false) {
     loca_add_project ( "OGame" );
     $loca_project = loca_project_id ( "OGame" );
 
+    // "de"
+    $loca_lang = "de";
+    {
+        loca_add("METAL" , "Metall");
+        loca_add("CRYSTAL" , "Kristall");
+        loca_add("DEUTERIUM" , "Deuterium");
+        loca_add("ENERGY" , "Energie");
+        loca_add("DM" , "Dunkle Materie");
+        loca_add("MOON" , "Mond");
+
+        // Меню.
+        loca_add("MENU_OVERVIEW", "Übersicht");
+        loca_add("MENU_ADMIN", "*Admin Area*");
+        loca_add("MENU_EMPIRE", "Imperium");
+        loca_add("MENU_BUILDING", "Gebäude");
+        loca_add("MENU_RESOURCES", "Rohstoffe");
+        loca_add("MENU_RESEARCH", "Forschung");
+        loca_add("MENU_SHIPYARD", "Schiffswerft");
+        loca_add("MENU_FLEET", "Flotte");
+        loca_add("MENU_TECHTREE", "Technik");
+        loca_add("MENU_GALAXY", "Galaxie");
+        loca_add("MENU_DEFENSE", "Verteidigung");
+        loca_add("MENU_ALLY", "Allianzen");
+        loca_add("MENU_BOARD", "Forum");
+        loca_add("MENU_PAYMENT", "Offizierskasino");
+        loca_add("MENU_STAT", "Statistiken");
+        loca_add("MENU_SEARCH", "Suche");
+        loca_add("MENU_TUTORIAL", "Hilfe");
+        loca_add("MENU_MESSAGES", "Nachrichten");
+        loca_add("MENU_NOTES", "Notizen");
+        loca_add("MENU_BUDDY", "Buddylist");
+        loca_add("MENU_OPTIONS", "Einstellungen");
+        loca_add("MENU_LOGOUT", "Logout");
+        loca_add("MENU_RULES", "Regeln");
+        loca_add("MENU_IMPRESSUM", "Impressum");
+    }
+
     // "ru"
     $loca_lang = "ru";
     {
@@ -341,7 +378,6 @@ if ($res == false) {
         loca_add("FLEET_ORDER_7", "Колонизировать");
         loca_add("FLEET_ORDER_8", "Переработать");
         loca_add("FLEET_ORDER_9", "Уничтожить");
-        loca_add("FLEET_ORDER_14", "Испытания");
         loca_add("FLEET_ORDER_15", "Экспедиция");
 
         // История изменений.
