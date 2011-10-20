@@ -112,6 +112,7 @@ if (
      ($_POST['planet'] < 1 || $_POST['planet'] > 16)
  ) {
     $PageError = "Cheater!";
+    FleetError ( "Планета необитаема либо должна быть колонизирована!" );
     FleetError ( "Cheater!" );
 }
 
