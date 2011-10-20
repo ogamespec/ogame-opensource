@@ -75,6 +75,10 @@ if ( !key_exists('resource1', $_POST) ) $_POST['resource1'] = 0;
 if ( !key_exists('resource2', $_POST) ) $_POST['resource2'] = 0;
 if ( !key_exists('resource3', $_POST) ) $_POST['resource3'] = 0;
 
+$_POST['resource1'] = min ( $aktplanet['m'], abs($_POST['resource1']) );
+$_POST['resource2'] = min ( $aktplanet['k'], abs($_POST['resource2']) );
+$_POST['resource3'] = min ( $aktplanet['d'], abs($_POST['resource3']) );
+
 foreach ($fleetmap as $i=>$gid)
 {
     if ( !key_exists("ship$gid", $_POST) ) $_POST["ship$gid"] = 0;
@@ -118,14 +122,32 @@ $dist = FlightDistance ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thi
 $slowest_speed = FlightSpeed ( $fleet, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] );
 $flighttime = FlightTime ( $dist, $slowest_speed, $_POST['speed'] / 10, $unispeed );
 $cons = FlightCons ( $fleet, $dist, $slowest_speed, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'], $probeOnly );
-$cargo = 0;
+$cargo = $spycargo = 0;
 foreach ($fleet as $id=>$amount)
 {
     if ($id != 210) $cargo += FleetCargo ($id) * $amount;        // не считать зонды.
+    else $spycargo = FleetCargo ($id) * $amount;
 }
 
-//Недостаточно места в грузовом отсеке!
-//if ($origin['d'] < $cons) FleetError ( "Недостаточно топлива!" );
+if ($origin['d'] < $cons) FleetError ( "Недостаточно топлива!" );
+else if ( $cons > ($cargo + $spycargo) ) FleetError ( "Недостаточно места в грузовом отсеке!" );
+$cargo -= $cons;
+
+// Ограничить перевозимые ресурсы грузоподъемностью флота.
+$cargo_m = $cargo_k = $cargo_d = 0;
+$space = $cargo;
+if ( $space > 0 ) {
+    $cargo_m = min ( $space, $_POST['resource1'] );
+    $space -= $cargo_m;
+}
+if ( $space > 0 ) {
+    $cargo_k = min ( $space, $_POST['resource2'] );
+    $space -= $cargo_k;
+}
+if ( $space > 0 ) {
+    $cargo_d = min ( $space, $_POST['resource3'] );
+    $space -= $cargo_d;
+}
 
 //if (!colony) Планета необитаема либо должна быть колонизирована!
 
@@ -211,11 +233,11 @@ else {
     if ( key_exists ('union2', $_POST) ) $union_id = $_POST['union2'];
     else $union_id = 0;
 
-    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $_POST['resource1'], $_POST['resource2'], $_POST['resource3'], $cons, $union_id );
+    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $cargo_m, $cargo_k, $cargo_d, $cons, $union_id );
     $queue = GetFleetQueue ($fleet_id);
 
     // Поднять флот с планеты.
-    AdjustResources ( $_POST['resource1'], $_POST['resource2'], $_POST['resource3'], $origin['planet_id'], '-' );
+    AdjustResources ( $cargo_m, $cargo_k, $cargo_d + $cons, $origin['planet_id'], '-' );
     AdjustShips ( $fleet, $origin['planet_id'], '-' );
 
     //echo "<br>";
