@@ -233,7 +233,7 @@ else {
     if ( key_exists ('union2', $_POST) ) $union_id = $_POST['union2'];
     else $union_id = 0;
 
-    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $cargo_m, $cargo_k, $cargo_d, $cons, $union_id );
+    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $cargo_m, $cargo_k, $cargo_d, $cons, time(), $union_id );
     $queue = GetFleetQueue ($fleet_id);
 
     // Поднять флот с планеты.

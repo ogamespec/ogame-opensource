@@ -11,6 +11,7 @@ fuel: Загруженное топливо на полёт (дейтерий) (
 mission: Тип задания (INT)
 start_planet: Старт (INT)
 target_planet: Финиш (INT)
+flight_time: Время полёта в одну сторону в секундах (INT)
 deploy_time: Время удержания флота в секундах (INT)
 shipXX: количество кораблей каждого типа (INT)
 
@@ -291,15 +292,12 @@ function AdjustShips ($fleet, $planet_id, $sign)
 }
 
 // Отправить флот. Никаких проверок не производится. Возвращает ID флота.
-function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, $cons, $union_id=0)
+function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, $cons, $when, $union_id=0)
 {
-    $now = time ();
+    $now = $when;
     $prio = 200 + $order;
     $flight_time = $seconds;
     $deploy_time = 0;
-
-    // HACK.
-    //$seconds = 10;
 
     // Добавление союзного флота.
     if ( $union_id > 0 )
@@ -323,6 +321,7 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
 // Отозвать флот (если это возможно)
 function RecallFleet ($fleet_id)
 {
+    $now = time ();
     $fleet_obj = LoadFleet ($fleet_id);
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $fleet = array ();
@@ -330,11 +329,11 @@ function RecallFleet ($fleet_id)
 
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
     $target = GetPlanet ( $fleet_obj['target_planet'] );
-
-    if ($fleet_obj['mission'] < 100) DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] + 100, 30, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2);
-    else DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] - 100, 30, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2);
-
     $queue = GetFleetQueue ($fleet_obj['fleet_id']);
+
+    if ($fleet_obj['mission'] < 100) DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] + 100, $now-$queue['start'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $now);
+    else DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] - 100, $now-$queue['start'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $now);
+
     DeleteFleet ($fleet_obj['fleet_id']);            // удалить флот
     RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
     if ( $fleet_obj['mission'] == 1 && $fleet_obj['union_id'] > 0 ) RemoveUnion ($fleet_obj['union_id']);    // удалить союз
@@ -474,7 +473,7 @@ function TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $target['planet_id'], '+' );
     UpdatePlanetActivity ( $target['planet_id'], $queue['end'] );
 
-    DispatchFleet ($fleet, $origin, $target, 103, 30, 0, 0, 0, $fleet_obj['fuel'] / 2);
+    DispatchFleet ($fleet, $origin, $target, 103, $fleet_obj['flight_time'], 0, 0, 0, $fleet_obj['fuel'] / 2, $queue['end']);
 
     $text = "Ваш флот достигает планеты (\n" .
                 "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
@@ -544,7 +543,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
     $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
 
-    $now = time();
+    $now = $queue['end'];
 
     $origin_user = LoadUser ( $origin['owner_id'] );
     $target_user = LoadUser ( $target['owner_id'] );
@@ -644,7 +643,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     UpdatePlanetActivity ( $fleet_obj['target_planet'], $queue['end'] );
 
     // Вернуть флот.
-    DispatchFleet ($fleet, $origin, $target, 106, 30, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2);
+    DispatchFleet ($fleet, $origin, $target, 106, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
 }
 
 function SpyReturn ($queue, $fleet_obj, $fleet)
@@ -676,7 +675,7 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
             AbandonPlanet ( $target['g'], $target['s'], $target['p'] );
 
             // Вернуть флот.
-            DispatchFleet ($fleet, $origin, $target, 107, 30, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2);
+            DispatchFleet ($fleet, $origin, $target, 107, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
         }
         else
         {
@@ -695,7 +694,7 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         $text .= ", , но не находит там пригодной для колонизации планеты. В подавленном состоянии поселенцы возвращаются обратно.\n";
 
         // Вернуть флот.
-        DispatchFleet ($fleet, $origin, $target, 107, 30, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2);
+        DispatchFleet ($fleet, $origin, $target, 107, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
     }
 
     SendMessage ( $fleet_obj['owner_id'], "Поселенцы", "Доклад поселенцев", $text, 5);
@@ -736,7 +735,7 @@ function RecycleArrive ($queue, $fleet_obj, $fleet, $origin, $target)
                    "Добыто ".nicenum($dm)." металла и ".nicenum($dk)." кристалла." ;
 
     // Вернуть флот.
-    DispatchFleet ($fleet, $origin, $target, 108, 30, $fleet_obj['m'] + $dm, $fleet_obj['k'] + $dk, $fleet_obj['d'], $fleet_obj['fuel'] / 2);
+    DispatchFleet ($fleet, $origin, $target, 108, $fleet_obj['flight_time'], $fleet_obj['m'] + $dm, $fleet_obj['k'] + $dk, $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
 
     SendMessage ( $fleet_obj['owner_id'], "Флот ", $subj, $report, 5);
 }
