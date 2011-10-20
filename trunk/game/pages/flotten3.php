@@ -28,6 +28,21 @@ $session = $_GET['session'];
 
 if ( method() !== "POST" ) Goto ( "flotten1" );
 
+$uni = LoadUniverse ();
+
+$galaxy = floor ( abs ($_POST['galaxy']) );
+$system = floor ( abs ($_POST['system']) );
+$planet = floor ( abs ($_POST['planet']) );
+
+if ( $galaxy < 1 ) $galaxy = 1;
+if ( $galaxy > $uni['galaxies'] ) $galaxy = $uni['galaxies'];
+
+if ( $system < 1 ) $system = 1;
+if ( $system > $uni['systems'] ) $system = $uni['systems'];
+
+if ( $planet < 0 ) $planet = 0;
+if ( $planet > 16 ) $planet = 16;
+
 PageHeader ("flotten3");
 ?>
 
@@ -63,9 +78,9 @@ PageHeader ("flotten3");
     echo "<input name=\"thisresource1\" type=\"hidden\" value=\"".floor($aktplanet['m'])."\" />\n";
     echo "<input name=\"thisresource2\" type=\"hidden\" value=\"".floor($aktplanet['k'])."\" />\n";
     echo "<input name=\"thisresource3\" type=\"hidden\" value=\"".floor($aktplanet['d'])."\" />\n";
-    echo "<input name=\"galaxy\" type=\"hidden\" value=\"".$_POST['galaxy']."\" />\n";
-    echo "<input name=\"system\" type=\"hidden\" value=\"".$_POST['system']."\" />\n";
-    echo "<input name=\"planet\" type=\"hidden\" value=\"".$_POST['planet']."\" />\n";
+    echo "<input name=\"galaxy\" type=\"hidden\" value=\"".$galaxy."\" />\n";
+    echo "<input name=\"system\" type=\"hidden\" value=\"".$system."\" />\n";
+    echo "<input name=\"planet\" type=\"hidden\" value=\"".$planet."\" />\n";
     echo "<input name=\"planettype\" type=\"hidden\" value=\"".$_POST['planettype']."\" />\n\n";
 
     // Список флотов.
@@ -94,7 +109,7 @@ PageHeader ("flotten3");
 ?>
 
 <tr height="20" align="left">
-<td class="c" colspan="2"><?=floor($_POST['galaxy']);?>:<?=floor($_POST['system']);?>:<?=floor($_POST['planet']);?> - <?=loca("FLEET_PLANETTYPE_".$_POST['planettype']);?></td>
+<td class="c" colspan="2"><?=$galaxy;?>:<?=$system;?>:<?=$planet;?> - <?=loca("FLEET_PLANETTYPE_".$_POST['planettype']);?></td>
 
 </tr>
 <tr valign="top" align="left">
@@ -131,7 +146,7 @@ PageHeader ("flotten3");
         else $fleet[$gid] = 0;
     }
 
-    $missions = FleetAvailableMissions ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['thisplanettype'], $_POST['galaxy'], $_POST['system'], $_POST['planet'], $_POST['planettype'], $fleet );
+    $missions = FleetAvailableMissions ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['thisplanettype'], $galaxy, $system, $planet, $_POST['planettype'], $fleet );
     if ( $_POST['union2'] > 0 ) $missions[] = 2;    // Совместная атака.
 
     if ( count ($missions) == 0 )
