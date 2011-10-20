@@ -770,6 +770,8 @@ function Queue_Fleet_End ($queue)
     $target = GetPlanet ( $fleet_obj['target_planet'] );
     ProdResources ( $target['planet_id'], $target['lastpeek'], $queue['end'] );
     ProdResources ( $origin['planet_id'], $origin['lastpeek'], $queue['end'] );
+    $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    $target = GetPlanet ( $fleet_obj['target_planet'] );
 
     switch ( $fleet_obj['mission'] )
     {
