@@ -18,6 +18,7 @@
 15 - Экспедиция
 */
 
+$PageError = "";
 $FleetError = false;
 $FleetErrorText = "";
 
@@ -104,6 +105,15 @@ if (  ( $_POST['thisgalaxy'] == $_POST['galaxy'] ) &&
         ( $_POST['thisplanet'] ==  $_POST['planet'] ) &&
         ( $_POST['thisplanettype'] == $_POST['planettype'] ) 
   ) FleetError ( "И как ты это себе представляешь?" );
+
+if (
+     ($_POST['galaxy'] < 1 || $_POST['galaxy'] > $unitab['galaxies'])  ||
+     ($_POST['system'] < 1 || $_POST['system'] > $unitab['systems'])  ||
+     ($_POST['planet'] < 1 || $_POST['planet'] > 16)
+ ) {
+    $PageError = "Cheater!";
+    FleetError ( "Cheater!" );
+}
 
 $origin_user = LoadUser ( $origin['owner_id'] );
 $target_user = LoadUser ( $target['owner_id'] );
@@ -298,6 +308,6 @@ else {
 <!-- END CONTENT AREA -->
 
 <?php
-PageFooter ();
+PageFooter ("", $PageError);
 ob_end_flush ();
 ?>
