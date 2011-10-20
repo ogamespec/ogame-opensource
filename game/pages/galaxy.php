@@ -622,7 +622,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     {
         $ally = LoadAlly ( $user['ally_id']);
         $allytext = "<a style=\"cursor:pointer\"\n";
-        $allytext .= "         onmouseover=\"return overlib('<table width=240 ><tr><td class=c >Альянс ".$ally['tag'].". Место в рейтинге - 151, численность - 2 чел.</td></tr><th><table><tr><td><a href=ainfo.php?allyid=".$ally['ally_id']." target=_ally>Представление альянса</a></td></tr><tr><td><a href=index.php?page=statistics&session=$session&start=101&who=ally >Статистика</a></td></tr></table></th></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETY, -50 );\" onmouseout=\"return nd();\">\n";
+        $allytext .= "         onmouseover=\"return overlib('<table width=240 ><tr><td class=c >Альянс ".$ally['tag'].". Место в рейтинге - ???, численность - ".CountAllyMembers($user['ally_id'])." чел.</td></tr><th><table><tr><td><a href=ainfo.php?allyid=".$ally['ally_id']." target=_ally>Представление альянса</a></td></tr><tr><td><a href=index.php?page=statistics&session=$session&start=101&who=ally >Статистика</a></td></tr></table></th></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETY, -50 );\" onmouseout=\"return nd();\">\n";
         $allytext .= "   ".$ally['tag']." </a>";
     }
     else $allytext = "";
