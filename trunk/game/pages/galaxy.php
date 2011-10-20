@@ -69,6 +69,12 @@ else if ( key_exists ('position', $_GET)) $coord_p = $_GET['position'];
 else if ( key_exists ('p3', $_GET)) $coord_p = $_GET['p3'];
 else $coord_p = $aktplanet['p'];
 
+if ($coord_g < 1 ) $coord_g = 1;
+if ($coord_g > $unitab['galaxies'] ) $coord_g = $unitab['galaxies'];
+
+if ($coord_s < 1 ) $coord_s = 1;
+if ($coord_s > $unitab['systems'] ) $coord_s = $unitab['systems'];
+
 if ( $_POST['systemLeft'] === "dr" )
 {
     $coord_s--;
