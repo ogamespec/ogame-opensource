@@ -196,6 +196,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
         foreach ( $last['attackers'] as $i=>$attacker )        // Атакующие
         {
             $fleet_obj = LoadFleet ( $attacker['id'] );
+            $queue = GetFleetQueue ($fleet_obj['fleet_id']);
             $origin = GetPlanet ( $fleet_obj['start_planet'] );
             $target = GetPlanet ( $fleet_obj['target_planet'] );
             $ships = 0;
@@ -205,7 +206,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             if ($ships > 0) {
                 if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker );
                 else $result = 0;
-                if ( ($result & 2) == 0 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+100, 30, $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2);
+                if ( ($result & 2) == 0 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
             }
         }
 
@@ -228,6 +229,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
         foreach ( $a as $i=>$attacker )            // Атакующие
         {
             $fleet_obj = LoadFleet ( $attacker['id'] );
+            $queue = GetFleetQueue ($fleet_obj['fleet_id']);
             $origin = GetPlanet ( $fleet_obj['start_planet'] );
             $target = GetPlanet ( $fleet_obj['target_planet'] );
             $ships = 0;
@@ -237,7 +239,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             if ($ships > 0) {
                 if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['fleet'] );
                 else $result = 0;
-                if ( ($result & 2) == 0 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+100, 30, $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2);
+                if ( ($result & 2) == 0 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
             }
         }
 

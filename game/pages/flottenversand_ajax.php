@@ -128,7 +128,7 @@ if ( $aktplanet['d'] < $cons ) AjaxSendError (613);        // не хватае�
 if ( $cargo < $cons ) AjaxSendError (615);        // нет места в грузовом отсеке для дейтерия
 
 // Отправить флот.
-DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, 0, 0, 0, $cons, 0 );
+DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, 0, 0, 0, $cons, time(), 0 );
 
 // Поднять флот с планеты.
 AdjustResources ( 0, 0, $cons, $aktplanet['planet_id'], '-' );
