@@ -221,7 +221,7 @@ echo "<center>\n\n";
           addToTable("Ошибка, возможно послать только "+retVals[1]+" зондов, шлите", "notice");
           break;
           case 611:
-          addToTable("Шпионаж невозможен, у Вас нет зондов", "error");
+          addToTable("Ошибка! Нет кораблей для отправки", "error");
           break;
           case 612:
           addToTable("Недостаточно места для флота", "error");
@@ -283,8 +283,8 @@ echo "<center>\n\n";
       var e2 = document.getElementById('fleetstatustable');
       // make the table row visible
       e.style.display = '';
-      if(e2.rows.length > 98) {
-          e2.deleteRow(98);
+      if(e2.rows.length > <?=($GlobalUser['maxfleetmsg'] - 1);?>) {
+          e2.deleteRow(<?=($GlobalUser['maxfleetmsg'] - 1);?>);
       }
       var row = e2.insertRow('test');
       var td1 = document.createElement("td");
@@ -540,14 +540,17 @@ while ($num--)
             }
             else
             {
-                echo "<font color=#808080 >Шпионаж</font><br><br />";
+                //echo "<font color=#808080 >Шпионаж</font><br><br />";
+                echo "<a href=# onclick=doit(6,".$moon['g'].",".$moon['s'].",".$moon['p'].",3,".$GlobalUser['maxspy'].") >Шпионаж</a><br><br />";
                 if ( $show_ipm_button ) echo "<a href=index.php?page=galaxy&no_header=1&session=$session&mode=1&p1=".$moon['g']."&p2=".$moon['s']."&p3=".$moon['p']."&pdd=".$moon['planet_id']."&zp=".$moon['owner_id']." >Ракетная атака</a><br />";
                 echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=3 >Транспорт</a><br />";
                 echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=1 >Атака</a><br />";
                 echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=5 >Удерживать</a><br />";
                 echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=9 >Уничтожить</a><br />";
             }
-            echo "</th></tr></table></tr></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -110 );\" style=\"cursor: pointer;\">\n";
+            echo "</th></tr></table></tr></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -110 );\" style=\"cursor: pointer;\" \n";
+            echo " href='#' onclick='doit(6, ".$moon['g'].", ".$moon['s'].", ".$moon['p'].", 3, ".$GlobalUser['maxspy'].")' \n";
+            echo ">\n";
             echo "<img width=\"22\" height=\"22\" alt=\"Луна (размер: 4358)\" src=\"".GetPlanetSmallImage ( UserSkin(), $moon['type'] )."\"/></a>\n";
         }
         else echo "<div style=\"border: 2pt solid #FF0000;\"><img src=\"".GetPlanetSmallImage ( UserSkin(), $moon['type'] )."\" alt=\"Луна (размер: ".$moon['diameter'].")\" height=\"22\" width=\"22\" onmouseover=\"return overlib('<font color=white><b>Покинута</b></font>', WIDTH, 75);\" onmouseout=\"return nd();\"/></div>\n";
@@ -629,7 +632,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     echo "<th width=\"125\" style='white-space: nowrap;'>\n";
     if ( !$planet['type'] != 10001 && !$own)
     {
-        echo "<a style=\"cursor:pointer\" onclick=\"javascript:doit(6, ".$planet['g'].",".$planet['s'].",".$planet['p'].", 1, 1);\"><img src=\"".UserSkin()."img/e.gif\" border=\"0\" alt=\"Шпионаж\" title=\"Шпионаж\" /></a>\n";
+        echo "<a style=\"cursor:pointer\" onclick=\"javascript:doit(6, ".$planet['g'].",".$planet['s'].",".$planet['p'].", 1, ".$GlobalUser['maxspy'].");\"><img src=\"".UserSkin()."img/e.gif\" border=\"0\" alt=\"Шпионаж\" title=\"Шпионаж\" /></a>\n";
         echo "<a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"Написать сообщение\" title=\"Написать сообщение\" /></a>\n";
         echo "<a href=\"index.php?page=buddy&session=".$_GET['session']."&action=7&buddy_id=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/b.gif\" border=\"0\" alt=\"Предложение подружиться\" title=\"Предложение подружиться\" /></a>\n";
         if ( $show_ipm_button )

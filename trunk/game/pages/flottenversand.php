@@ -40,13 +40,12 @@ if ( method () === "GET" )
 
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 $session = $_GET['session'];
+$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
 
 // Обработать вызовы AJAX
 if ( $_GET['ajax'] == 1)
 {
-    header ('Content-Type: text/html;');
-    echo "601 0 0 0 0";
-    die();
+    include "flottenversand_ajax.php";
 }
 
 PageHeader ("flottenversand");
@@ -87,9 +86,10 @@ $order = $_POST['order'];
 $fleet = array ();
 foreach ($fleetmap as $i=>$gid) 
 {
-    if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = $_POST["ship$gid"];
+    if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = min ( $aktplanet["f$gid"], $_POST["ship$gid"] );
     else $fleet[$gid] = 0;
 }
+$fleet[212] = 0;        // солнечные спутники не летают.
 $probeOnly = false;
 
 $origin = LoadPlanet ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['thisplanettype'] );
@@ -151,7 +151,7 @@ switch ( $order )
         break;
 
     case '4':        // Оставить
-//Флоты можно располагать только на собственной планете!
+        if ( $target['owner_id'] !== $GlobalUser['player_id'] ) FleetError ( "Флоты можно располагать только на собственной планете!" );
         break;
 
     case '5':        // Держаться
@@ -176,13 +176,13 @@ switch ( $order )
         break;
 
     case '8':        // Переработать
-//При переработке можно приближаться только к полям обломков!
-//Для переработки надо послать переработчик!
+        if ( $fleet[209] == 0 ) FleetError ( "Для переработки надо послать переработчик!" );
+        else if ($target['type'] != 10000 ) FleetError ( "При переработке можно приближаться только к полям обломков!" );
         break;
 
     case '9':        // Уничтожить
-//Уничтожать можно только луны!
-//Для уничтожения луны необходима звезда смерти.
+        if ( $fleet[214] == 0 ) FleetError ( "Для уничтожения луны необходима звезда смерти." );
+        else if ($target['type'] != 0 ) FleetError ( "Уничтожать можно только луны!" );
         break;
 
     case '15':       // Экспедиция
@@ -190,7 +190,7 @@ switch ( $order )
         break;
 
     default:
-//Необходимо выбрать задание!
+        FleetError ( "Необходимо выбрать задание!" );
         break;
 }
 

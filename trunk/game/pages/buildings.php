@@ -128,7 +128,7 @@ if ( $_GET['mode'] === "Flotte" )
             $t = ShipyardDuration ( $id, $aktplanet['b21'], $aktplanet['b15'], $speed );
             echo "<br>Длительность: ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
-            if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
+            if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) && !$busy) echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
             echo "</td></tr>";
         }
 
@@ -187,8 +187,10 @@ if ( $_GET['mode'] === "Verteidigung" )
             $t = ShipyardDuration ( $id, $aktplanet['b21'], $aktplanet['b15'], $speed );
             echo "<br>Длительность: ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
-            if ( ($id == 407 || $id == 408) && $aktplanet['d'.$id] > 0 ) echo "<font color=#FF0000>Щитовой купол можно строить только 1 раз.</font>";
-            else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
+            if ( !$busy ) {
+                if ( ($id == 407 || $id == 408) && $aktplanet['d'.$id] > 0 ) echo "<font color=#FF0000>Щитовой купол можно строить только 1 раз.</font>";
+                else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
+            }
             echo "</td></tr>";
         }
     
