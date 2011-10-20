@@ -458,18 +458,15 @@ function FleetList ($fleet)
 
 // *** Атака ***
 
-function AttackArrive ($queue, $fleet_obj, $fleet)
+function AttackArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'] );
 }
 
 // *** Транспорт ***
 
-function TransportArrive ($queue, $fleet_obj, $fleet)
+function TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    $origin = GetPlanet ( $fleet_obj['start_planet'] );
-    $target = GetPlanet ( $fleet_obj['target_planet'] );
-
     $oldm = $target['m'];
     $oldk = $target['k'];
     $oldd = $target['d'];
@@ -504,11 +501,8 @@ function TransportArrive ($queue, $fleet_obj, $fleet)
     }
 }
 
-function CommonReturn ($queue, $fleet_obj, $fleet)
+function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    $origin = GetPlanet ( $fleet_obj['start_planet'] );
-    $target = GetPlanet ( $fleet_obj['target_planet'] );
-
     if ( $fleet_obj['m'] < 0 ) $fleet_obj['m'] = 0;    // Защита от отрицательных ресурсов (на всякий случай)
     if ( $fleet_obj['k'] < 0 ) $fleet_obj['k'] = 0;
     if ( $fleet_obj['d'] < 0 ) $fleet_obj['d'] = 0;
@@ -525,11 +519,8 @@ function CommonReturn ($queue, $fleet_obj, $fleet)
 
 // *** Оставить ***
 
-function DeployArrive ($queue, $fleet_obj, $fleet)
+function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    $origin = GetPlanet ( $fleet_obj['start_planet'] );
-    $target = GetPlanet ( $fleet_obj['target_planet'] );
-
     // Также выгрузить половину топлива
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'] + $fleet_obj['fuel'] / 2, $target['planet_id'], '+' );
     AdjustShips ( $fleet, $fleet_obj['target_planet'], '+' );
@@ -546,7 +537,7 @@ function DeployArrive ($queue, $fleet_obj, $fleet)
 
 // *** Шпионаж ***
 
-function SpyArrive ($queue, $fleet_obj, $fleet)
+function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
@@ -554,9 +545,6 @@ function SpyArrive ($queue, $fleet_obj, $fleet)
     $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
 
     $now = time();
-
-    $origin = GetPlanet ( $fleet_obj['start_planet'] );
-    $target = GetPlanet ( $fleet_obj['target_planet'] );
 
     $origin_user = LoadUser ( $origin['owner_id'] );
     $target_user = LoadUser ( $target['owner_id'] );
@@ -667,12 +655,9 @@ function SpyReturn ($queue, $fleet_obj, $fleet)
 
 // *** Колонизировать ***
 
-function ColonizationArrive ($queue, $fleet_obj, $fleet)
+function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     global $db_prefix;
-
-    $origin = GetPlanet ( $fleet_obj['start_planet'] );
-    $target = GetPlanet ( $fleet_obj['target_planet'] );
 
     $text = "\nФлот достигает заданных координат\n" . 
                "<a href=\"javascript:showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].")\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n";
@@ -716,11 +701,8 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet)
     SendMessage ( $fleet_obj['owner_id'], "Поселенцы", "Доклад поселенцев", $text, 5);
 }
 
-function ColonizationReturn ($queue, $fleet_obj, $fleet)
+function ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    $origin = GetPlanet ( $fleet_obj['start_planet'] );
-    $target = GetPlanet ( $fleet_obj['target_planet'] );
-
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
@@ -736,11 +718,8 @@ function ColonizationReturn ($queue, $fleet_obj, $fleet)
 
 // *** Переработать ***
 
-function RecycleArrive ($queue, $fleet_obj, $fleet)
+function RecycleArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    $origin = GetPlanet ( $fleet_obj['start_planet'] );
-    $target = GetPlanet ( $fleet_obj['target_planet'] );
-
     if ( $fleet[209] == 0 ) Error ( "Попытка сбора ПО без переработчиков" );
     if ( $target['type'] != 10000 ) Error ( "Перерабатывать можно только поля обломков!" );
 
@@ -764,7 +743,7 @@ function RecycleArrive ($queue, $fleet_obj, $fleet)
 
 // *** Уничтожить ***
 
-function DestroyArrive ($queue, $fleet_obj, $fleet)
+function DestroyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'] );
 }
@@ -775,7 +754,7 @@ require_once "expedition.php";
 
 // *** Ракетная атака ***
 
-function RocketAttackArrive ($queue, $fleet_obj, $fleet)
+function RocketAttackArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     RocketAttack ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'] );
 }
@@ -787,24 +766,30 @@ function Queue_Fleet_End ($queue)
     $fleet = array ();
     foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj["ship$gid"];
 
+    // Обновить выработку ресурсов на планетах
+    $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    $target = GetPlanet ( $fleet_obj['target_planet'] );
+    ProdResources ( $target['planet_id'], $target['lastpeek'], $queue['end'] );
+    ProdResources ( $origin['planet_id'], $origin['lastpeek'], $queue['end'] );
+
     switch ( $fleet_obj['mission'] )
     {
-        case 1: AttackArrive ($queue, $fleet_obj, $fleet); break;
-        case 101: CommonReturn ($queue, $fleet_obj, $fleet); break;
-        case 102: CommonReturn ($queue, $fleet_obj, $fleet); break;
-        case 3: TransportArrive ($queue, $fleet_obj, $fleet); break;
-        case 103: CommonReturn ($queue, $fleet_obj, $fleet); break;
-        case 4: DeployArrive ($queue, $fleet_obj, $fleet); break;
-        case 104: CommonReturn ($queue, $fleet_obj, $fleet); break;
-        case 6: SpyArrive ($queue, $fleet_obj, $fleet); break;
-        case 106: SpyReturn ($queue, $fleet_obj, $fleet); break;
-        case 7: ColonizationArrive ($queue, $fleet_obj, $fleet); break;
-        case 107: ColonizationReturn ($queue, $fleet_obj, $fleet); break;
-        case 8: RecycleArrive ($queue, $fleet_obj, $fleet); break;
-        case 108: CommonReturn ($queue, $fleet_obj, $fleet); break;
-        case 9: DestroyArrive ($queue, $fleet_obj, $fleet); break;
-        case 109: CommonReturn ($queue, $fleet_obj, $fleet); break;
-        case 20: RocketAttackArrive ($queue, $fleet_obj, $fleet); break;
+        case 1: AttackArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 101: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 102: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 3: TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 103: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 4: DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 104: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 6: SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 106: SpyReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 7: ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 107: ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 8: RecycleArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 108: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 9: DestroyArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 109: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 20: RocketAttackArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
         //default: Error ( "Неизвестное задание для флота: " . $fleet_obj['mission'] ); break;
     }
 
