@@ -227,6 +227,8 @@ switch ( $order )
         break;
 }
 
+FleetError ( "Полёты отключены" );
+
 //Ваши флоты ввязались в бой.
 
 if ($FleetError) {
