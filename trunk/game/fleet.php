@@ -432,8 +432,8 @@ function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
 
     // Добавить ракетную атаку.
     $fleet_id = IncrementDBGlobal ('nextfleet');
-    $fleet_obj = array ( $fleet_id, $origin['owner_id'], 0, 0, 0, 0, 20, $origin['planet_id'], $target['planet_id'], 0,
-                                 0, 0, $amount, $type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+    $fleet_obj = array ( $fleet_id, $origin['owner_id'], 0, 0, 0, 0, 0, 20, $origin['planet_id'], $target['planet_id'], $seconds, 0,
+                                 $amount, $type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     AddDBRow ($fleet_obj, 'fleet');
 
     // Добавить задание в глобальную очередь событий.
