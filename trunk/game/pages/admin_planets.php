@@ -28,7 +28,7 @@ function Admin_Planets ()
             $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
                                        'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
                                       'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
-                                      'm', 'k', 'd', 'type' );
+                                      'm', 'k', 'd', 'g', 's', 'p', 'type' );
 
             $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
             foreach ( $param as $i=>$p ) {
@@ -155,6 +155,69 @@ function Admin_Planets ()
         $debris_id = HasDebris ( $planet['g'], $planet['s'], $planet['p'] );
         $now = time ();
 
+        // Парсер шпионских докладов.
+?>
+<script>
+
+function php_str_replace(search, replace, subject) {
+    // http://kevin.vanzonneveld.net
+    var s = subject;
+    var ra = r instanceof Array, sa = s instanceof Array;
+    var f = [].concat(search);
+    var r = [].concat(replace);
+    var i = (s = [].concat(s)).length;
+    var j = 0;
+    while (j = 0, i--) {
+        if (s[i]) {
+            while (s[i] = (s[i]+'').split(f[j]).join(ra ? r[j] || '' : r[0]), ++j in f){};
+        }
+    }
+    return sa ? s : s[0];
+}
+
+function spio ()
+{
+    var TechNames = {
+<?php
+    foreach ( $buildmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
+    foreach ( $fleetmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
+    foreach ( $defmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
+?>
+    };
+
+    var text = document.getElementById ("spiotext" ).value;
+    text = php_str_replace (".", "", text);
+
+    for ( var name in TechNames ) {
+        var id = TechNames[name];
+        pos = text.indexOf ( name );
+        if ( pos > 0 ) {
+            obj = text.substr ( pos );
+            found = obj.match ("("+name+"[\\s]+)([0-9]{1,})");
+            document.getElementById ( "obj" + id ) . value = parseInt(found[2]);
+        }
+    }
+
+}
+
+function reset ()
+{
+    var ids = [
+<?php
+    foreach ( $buildmap as $i=>$gid ) echo "$gid, ";
+    foreach ( $fleetmap as $i=>$gid ) echo "$gid, ";
+    foreach ( $defmap as $i=>$gid ) echo "$gid, ";
+?>
+    ];
+
+    for ( var i in ids ) {
+        document.getElementById ( "obj" + ids[i] ) . value = 0;
+    }
+}
+</script>
+
+<?php
+
         echo "<table>\n";
         echo "<form action=\"index.php?page=admin&session=$session&mode=Planets&action=update&cp=".$planet['planet_id']."\" method=\"POST\" >\n";
         echo "<tr><td class=c colspan=2>Планета \"".$planet['name']."\" (<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>)</td>\n";
@@ -180,6 +243,12 @@ function Admin_Planets ()
                 echo "<br>М: ".nicenum($debris['m'])."<br>К: ".nicenum($debris['k'])."<br>";
             }
             else echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=create_debris&cp=".$planet['planet_id']."\" >Создать поле обломков</a>\n";
+
+?>
+        <br><br><textarea rows=10 cols=10 id="spiotext"></textarea>
+        <a href="#" onclick="javascript:spio();">Разобрать данные доклада</a> <br>
+        <a href="#" onclick="javascript:reset();">Сбросить</a>
+<?php
         }
         else
         {
@@ -201,19 +270,19 @@ function Admin_Planets ()
                     echo " " . date ('i\m s\s', $delta) . " <a href=\"index.php?page=admin&session=$session&mode=Planets&action=cooldown_gates&cp=".$planet['planet_id']."\">остудить</a>";
                 }
             }
-            echo "</th><th><input type=\"text\" size=3 name=\"b$gid\" value=\"".$planet["b$gid"]."\" /></th></tr>\n";
+            echo "</th><th><input id=\"obj$gid\" type=\"text\" size=3 name=\"b$gid\" value=\"".$planet["b$gid"]."\" /></th></tr>\n";
         }
         echo "</table></th>\n";
 
         echo "<th valign=top><table>\n";
         foreach ( $fleetmap as $i=>$gid) {
-            echo "<tr><th>".loca("NAME_$gid")."</th><th><input type=\"text\" size=6 name=\"f$gid\" value=\"".$planet["f$gid"]."\" /></th></tr>\n";
+            echo "<tr><th>".loca("NAME_$gid")."</th><th><input id=\"obj$gid\" type=\"text\" size=6 name=\"f$gid\" value=\"".$planet["f$gid"]."\" /></th></tr>\n";
         }
         echo "</table></th>\n";
 
         echo "<th valign=top><table>\n";
         foreach ( $defmap as $i=>$gid) {
-            echo "<tr><th>".loca("NAME_$gid")."</th><th><input type=\"text\" size=6 name=\"d$gid\" value=\"".$planet["d$gid"]."\" /></th></tr>\n";
+            echo "<tr><th>".loca("NAME_$gid")."</th><th><input id=\"obj$gid\" type=\"text\" size=6 name=\"d$gid\" value=\"".$planet["d$gid"]."\" /></th></tr>\n";
         }
         echo "</table></th>\n";
 
@@ -283,7 +352,7 @@ function Admin_Planets ()
         echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=recalc_fields&cp=".$planet['planet_id']."\" >пересчитать поля</a> ";
         echo "</th></tr>\n";
         echo "<tr><th>Температура</th><th>от ".$planet['temp']."°C до ".($planet['temp']+40)."°C</th></tr>\n";
-        echo "<tr><th>Координаты</th><th>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</th></tr>\n";
+        echo "<tr><th>Координаты</th><th>[<input type=\"text\" name=\"g\" value=\"".$planet['g']."\" size=1 />:<input type=\"text\" name=\"s\" value=\"".$planet['s']."\" size=2 />:<input type=\"text\" name=\"p\" value=\"".$planet['p']."\" size=1 />]</th></tr>\n";
 
         echo "<tr><td class=c colspan=2>Ресурсы</td></tr>\n";
         echo "<tr><th>Металл</th><th><input type=\"text\" name=\"m\" value=\"".ceil($planet['m'])."\" /></th></tr>\n";
