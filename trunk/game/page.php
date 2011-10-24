@@ -69,6 +69,7 @@ function PageHeader ($page, $noheader=false, $leftmenu=true)
     echo "  <script language='JavaScript'>\n";
     echo "  </script>\n";
     echo "<script type='text/javascript' src='js/overLib/overlib.js'></script>\n";
+    echo "<script type=\"application/javascript\" src=\"js/iscroll-lite.js\"></script>\n";
     echo "<!-- HEADER -->\n\n";
     echo "<script language='JavaScript'>\n";
     echo "function onBodyLoad() {\n";
@@ -462,6 +463,15 @@ function PageFooter ($msg="", $error="", $popup=false, $headerH=81)
     echo "    opacity: .90;\n";
     echo "}\n";
     echo "</style>\n";
+
+    if ( $popup == false ) {
+?>
+<script type="text/javascript">
+var myScroll = new iScroll('content');
+</script>
+<?php
+    }
+
     echo "</body></html>\n";
 }
 

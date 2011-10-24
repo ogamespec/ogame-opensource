@@ -243,12 +243,6 @@ function reset ()
                 echo "<br>М: ".nicenum($debris['m'])."<br>К: ".nicenum($debris['k'])."<br>";
             }
             else echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=create_debris&cp=".$planet['planet_id']."\" >Создать поле обломков</a>\n";
-
-?>
-        <br><br><textarea rows=10 cols=10 id="spiotext"></textarea>
-        <a href="#" onclick="javascript:spio();">Разобрать данные доклада</a> <br>
-        <a href="#" onclick="javascript:reset();">Сбросить</a>
-<?php
         }
         else
         {
@@ -256,6 +250,11 @@ function reset ()
             echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$parent['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $parent['type'])."\"><br>\n";
             echo $parent['name'] . "</a>";
         }
+?>
+        <br><br><textarea rows=10 cols=10 id="spiotext"></textarea>
+        <a href="#" onclick="javascript:spio();">Разобрать данные доклада</a> <br>
+        <a href="#" onclick="javascript:reset();">Сбросить</a>
+<?php
         echo "</th>";
 
         echo "<th valign=top><table>\n";
