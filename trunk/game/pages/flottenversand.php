@@ -133,11 +133,12 @@ $dist = FlightDistance ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thi
 $slowest_speed = FlightSpeed ( $fleet, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] );
 $flighttime = FlightTime ( $dist, $slowest_speed, $_POST['speed'] / 10, $unispeed );
 $cons = FlightCons ( $fleet, $dist, $slowest_speed, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'], $probeOnly );
-$cargo = $spycargo = 0;
+$cargo = $spycargo = $numships = 0;
 foreach ($fleet as $id=>$amount)
 {
     if ($id != 210) $cargo += FleetCargo ($id) * $amount;        // не считать зонды.
     else $spycargo = FleetCargo ($id) * $amount;
+    $numships += $amount;
 }
 
 if ($origin['d'] < $cons) FleetError ( "Недостаточно топлива!" );
@@ -162,7 +163,7 @@ if ( $space > 0 ) {
 
 //if (!colony) Планета необитаема либо должна быть колонизирована!
 
-//if (nofleet) Вы не выбрали корабли либо выбрали, но слишком мало!
+if ($numships <= 0) FleetError ( "Вы не выбрали корабли либо выбрали, но слишком мало!" );
 
 switch ( $order )
 {
@@ -170,6 +171,7 @@ switch ( $order )
 //Планета находится под защитой для новичков!
 //Невозможно напасть на собственную планету!
 //Запрет на атаки до #1
+        FleetError ( "Запрет на атаки до #1" );
         break;
 
     case '2':        // Совместная атака
@@ -178,6 +180,7 @@ switch ( $order )
 //Атаковать флоты (?)
 //Вы слишком медленны, чтобы присоединиться к этому флоту
 //Запрет на атаки до #1
+        FleetError ( "Запрет на атаки до #1" );
         break;
 
     case '3':        // Транспорт
@@ -191,6 +194,7 @@ switch ( $order )
 //Задерживаться можно только у друзей и коллег по альянсу!
 //Задерживаться могут только XX игроков!
 //Задерживаться могут только XX Удерживать флоты!
+        FleetError ( "Задерживаться можно только у друзей и коллег по альянсу!" );
         break;
 
     case '6':        // Шпионаж
@@ -219,15 +223,13 @@ switch ( $order )
         break;
 
     case '15':       // Экспедиция
-//Цель экспедиции недействительна!
+        FleetError ( "Цель экспедиции недействительна!" );
         break;
 
     default:
         FleetError ( "Необходимо выбрать задание!" );
         break;
 }
-
-//FleetError ( "Полёты отключены" );
 
 //Ваши флоты ввязались в бой.
 
