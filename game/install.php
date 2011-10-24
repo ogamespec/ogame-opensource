@@ -93,7 +93,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $queuecols = array ( 'task_id', 'owner_id', 'type', 'sub_id', 'obj_id', 'level', 'start', 'end', 'prio' );
     $queuetype = array ( 'INT PRIMARY KEY', 'INT', 'CHAR(20)', 'INT', 'INT', 'INT', 'INT UNSIGNED', 'INT UNSIGNED', 'INT' );
     $fleetcols = array ( 'fleet_id', 'owner_id', 'union_id', 'm', 'k', 'd', 'fuel', 'mission', 'start_planet', 'target_planet', 'flight_time', 'deploy_time',
-                                 'ship200', 'ship201', 'ship202', 'ship203', 'ship204', 'ship205', 'ship206', 'ship207', 'ship208', 'ship209', 'ship210', 'ship211', 'ship212', 'ship213', 'ship214', 'ship215' );
+                                 'ipm_amount', 'ipm_target', 'ship202', 'ship203', 'ship204', 'ship205', 'ship206', 'ship207', 'ship208', 'ship209', 'ship210', 'ship211', 'ship212', 'ship213', 'ship214', 'ship215' );
     $fleettype = array ( 'INT PRIMARY KEY', 'INT', 'INT', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT', 'INT', 'INT', 'INT', 'INT',
                                  'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
     $unioncols = array ( 'union_id', 'fleet_id', 'name', 'players' );

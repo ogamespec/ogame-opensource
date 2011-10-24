@@ -723,8 +723,8 @@ function RocketAttack ( $fleet_id, $planet_id )
     global $UnitParam;
 
     $fleet = LoadFleet ($fleet_id);
-    $amount = $fleet['ship202'];
-    $primary = $fleet['ship203'];
+    $amount = $fleet['ipm_amount'];
+    $primary = $fleet['ipm_target'];
     if ($primary == 0) $primary = 401;
     $origin = GetPlanet ($fleet['start_planet']);
     $target = GetPlanet ($planet_id);
