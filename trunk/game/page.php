@@ -41,7 +41,7 @@ function UserSkin ()
     else return hostname () . "evolution/";
 }
 
-function PageHeader ($page, $noheader=false, $leftmenu=true)
+function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", $redirect_sec=0)
 {
     global $pagetime;
     global $GlobalUser;
@@ -62,6 +62,9 @@ function PageHeader ($page, $noheader=false, $leftmenu=true)
     echo "  <link rel='stylesheet' type='text/css' href='css/formate.css' />\n";
     echo "  <script language=\"JavaScript\">var session=\"".$GlobalUser['session']."\";</script>\n";
     echo "  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n";
+    if ( $redirect_page !== "" ) {
+        echo "  <meta http-equiv=\"refresh\" content=\"".$redirect_sec."; URL=index.php?page=".$redirect_page."&session=".$GlobalUser['session']."&redirect=1\">\n\n";
+    }
     echo "<link rel='stylesheet' type='text/css' href='css/combox.css'>\n";
     echo "<link rel='stylesheet' type='text/css' href='".UserSkin()."formate.css' />\n";
     echo "<title>Вселенная $uni ОГейм</title>\n";

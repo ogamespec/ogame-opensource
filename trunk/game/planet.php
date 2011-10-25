@@ -457,4 +457,30 @@ function RecalcFields ($planet_id)
     dbquery ($query);
 }
 
+// Бесконечные дали.
+function CreateOuterSpace ($g, $s, $p)
+{
+    global $db_prefix;
+
+    // Если там уже есть объект, вернуть его ID.
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type = 20000;";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0 ) 
+    {
+        $id = IncrementDBGlobal ( 'nextplanet' );
+        $planet = array( $id, "Бесконечные дали", 20000, $g, $s, $p, 99999, 0, 0, 0, 0, time(),
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+        AddDBRow ( $planet, 'planets' );
+    }
+    else
+    {
+        $planet = dbarray ($result);
+        $id = $planet['planet_id'];
+    }
+    return $id;
+}
+
 ?>
