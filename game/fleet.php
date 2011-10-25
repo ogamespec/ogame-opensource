@@ -292,12 +292,11 @@ function AdjustShips ($fleet, $planet_id, $sign)
 }
 
 // Отправить флот. Никаких проверок не производится. Возвращает ID флота.
-function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, $cons, $when, $union_id=0)
+function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, $cons, $when, $union_id=0, $deploy_time=0)
 {
     $now = $when;
     $prio = 200 + $order;
     $flight_time = $seconds;
-    $deploy_time = 0;
 
     // Добавление союзного флота.
     if ( $union_id > 0 )
@@ -533,6 +532,35 @@ function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 }
 
 // *** Держаться ***
+
+// Посчитать количество флотов, отправленных на удержание на указанной планете (летящих и находящихся на орбите)
+function GetHoldingFleetsCount ($planet_id)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."fleet WHERE (mission = 5 OR mission = 105) AND target_planet = $planet_id;";
+    $result = dbquery ($query);
+    return dbrows ($result);
+}
+
+// Проверить можно ли отправить флот игроку на удержание на планету (одновременно на планете могут удерживать свои флоты не более XX игроков)
+function CanStandHold ( $planet_id, $player_id )
+{
+    return true;
+}
+
+function HoldingArrive ($queue, $fleet_obj, $fleet, $origin, $target)
+{
+    // Запустить задание удержания на орбите.
+    // Время удержания сделать временем полёта (чтобы потом его можно было использовать при возврате флота)
+    DispatchFleet ($fleet, $origin, $target, 205, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end'], 0, $fleet_obj['flight_time']);
+}
+
+function HoldingHold ($queue, $fleet_obj, $fleet, $origin, $target)
+{
+    // Вернуть флот.
+    // В качестве времени полёта используется время удержания.
+    DispatchFleet ($fleet, $origin, $target, 105, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end']);
+}
 
 // *** Шпионаж ***
 
@@ -782,6 +810,9 @@ function Queue_Fleet_End ($queue)
         case 103: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case 4: DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case 104: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 5: HoldingArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 205: HoldingHold ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 105: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case 6: SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case 106: SpyReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case 7: ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
@@ -790,6 +821,9 @@ function Queue_Fleet_End ($queue)
         case 108: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case 9: DestroyArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case 109: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 15: ExpeditionArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 215: ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 115: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case 20: RocketAttackArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
         //default: Error ( "Неизвестное задание для флота: " . $fleet_obj['mission'] ); break;
     }

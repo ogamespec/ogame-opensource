@@ -135,6 +135,12 @@ function FleetSpan ( $fleet_entry )
     $d = $fleet_entry['d'];
 
     if (0) {}
+    else if ($mission == 1)            // Атака
+    {
+        if ($dir == 0) echo "<span class='flight ownattack'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='ownattack'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> с ".PlanetFrom($origin, "ownattack")." отправлен на ".PlanetTo($target, "ownattack").". Задание: ".Cargo($m,$k,$d,"ownattack","Атаковать")."</span>";
+        else if ($dir == 1) echo "<span class='return ownattack'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='ownattack'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a>, отправленный с ".PlanetFrom($origin, "ownattack").", возвращается на ".PlanetTo($target, "ownattack").". Задание: ".Cargo($m,$k,$d,"ownattack","Атаковать")."</span>";
+        else if ($dir == 0x10) echo "<span class='attack'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='attack'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "attack")." отправлен на ".PlanetTo($target, "attack").". Задание: Атаковать</span>";
+    }
     else if ($mission == 2)            // Совместная атака
     {
         if ($dir == 0) echo "<span class='federation'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='ownfederation'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> с ".PlanetFrom($origin, "ownfederation")." отправлен на ".PlanetTo($target, "ownfederation").". Задание: ".Cargo($m,$k,$d,"ownfederation","Совместная атака")."</span>";
@@ -233,8 +239,8 @@ function EventList ()
         $tasknum++;
 
         // Для убывающих или удерживаемых флотов добавить псевдозадание возврата.
-        // Не показывать возвраты чужих флотов.
-        if ( ($fleet_obj['mission'] < 100 || $fleet_obj['mission'] > 200) && $fleet_obj['owner_id'] == $GlobalUser['player_id'] )
+        // Не показывать возвраты чужих флотов и задание Оставить.
+        if ( ($fleet_obj['mission'] < 100 || $fleet_obj['mission'] > 200) && $fleet_obj['owner_id'] == $GlobalUser['player_id'] && $fleet_obj['mission'] != 4 )
         {
             // Время отправления и прибытия
             $task[$tasknum]['start_time'] = $queue['end'];

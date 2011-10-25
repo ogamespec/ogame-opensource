@@ -49,7 +49,7 @@ if ( $_GET['ajax'] == 1)
     include "flottenversand_ajax.php";
 }
 
-PageHeader ("flottenversand");
+PageHeader ("flottenversand", false, true, "flotten1", 1);
 
 $unitab = LoadUniverse ();
 $unispeed = $unitab['speed'];
@@ -191,15 +191,16 @@ switch ( $order )
         break;
 
     case '5':        // Держаться
-//Задерживаться можно только у друзей и коллег по альянсу!
-//Задерживаться могут только XX игроков!
-//Задерживаться могут только XX Удерживать флоты!
-        FleetError ( "Задерживаться можно только у друзей и коллег по альянсу!" );
+        $maxhold_fleets = $unitab['acs'] * $unitab['acs'];
+        $maxhold_users = $unitab['acs'];
+        if ( GetHoldingFleetsCount ($target['planet_id']) >= $maxhold_fleets ) FleetError ("Задерживаться могут только $maxhold_fleets Удерживать флоты!");
+        if ( ! CanStandHold ( $target['planet_id'], $origin['owner_id'] ) ) FleetError ("Задерживаться могут только $maxhold_users игроков!");
+        if ( ! ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) FleetError ("Задерживаться можно только у друзей и коллег по альянсу!");
         break;
 
     case '6':        // Шпионаж
-//На этой планете нельзя шпионить из-за защиты для новичков!
-//Нельзя шпионить на собственной планете!
+        if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Нельзя шпионить на собственной планете!" );
+        if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "На этой планете нельзя шпионить из-за защиты для новичков!" );
         break;
 
     case '7':        // Колонизировать
@@ -223,7 +224,20 @@ switch ( $order )
         break;
 
     case '15':       // Экспедиция
-        FleetError ( "Цель экспедиции недействительна!" );
+        $manned = 0;
+        foreach ($fleet as $id=>$amount)
+        {
+            if ($id != 210) $manned += $amount;        // не считать зонды.
+        }
+        $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Количество экспедиций
+        $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
+        if ( $expnum == $maxexp ) FleetError ( "Слишком много одновременных экспедиций" );
+        if ( $manned == 0 ) FleetError ( "Экспедиция должна состоять как минимум из одного управляемого людьми корабля." );
+        if ( $_POST['planet'] != 16 ) FleetError ( "Цель экспедиции недействительна!" );
+        else {
+            $id = CreateOuterSpace ( $_POST['galaxy'], $_POST['system'], $_POST['planet'] );
+            $target = GetPlanet ($id);
+        }
         break;
 
     default:
@@ -245,10 +259,31 @@ else {
 
     //print_r ( $_POST);
 
-    if ( key_exists ('union2', $_POST) ) $union_id = $_POST['union2'];
+    if ( key_exists ('union2', $_POST) ) $union_id = floor ($_POST['union2']);
     else $union_id = 0;
 
-    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $cargo_m, $cargo_k, $cargo_d, $cons, time(), $union_id );
+    // Время удержания
+    $hold_time = 0;
+    if ( $order == 15 ) {    // Экспедиция
+        if ( key_exists ('expeditiontime', $_POST) ) {
+            $hold_time = floor ($_POST['expeditiontime']);
+            if ( $hold_time > $GlobalUser['r124'] ) $hold_time = $GlobalUser['r124'];
+            if ( $hold_time < 1 ) $hold_time = 1;
+        }
+        else $hold_time = 1;
+        $hold_time *= 60*60;        // перевести в секунды
+    }
+    else if ( $order == 5 ) {    // Держаться
+        if ( key_exists ('holdingtime', $_POST) ) {
+            $hold_time = floor ($_POST['holdingtime']);
+            if ( $hold_time > 32 ) $hold_time = 32;
+            if ( $hold_time < 0 ) $hold_time = 0;
+        }
+        else $hold_time = 0;
+        $hold_time *= 60*60;        // перевести в секунды
+    }
+
+    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $cargo_m, $cargo_k, $cargo_d, $cons, time(), $union_id, $hold_time );
     $queue = GetFleetQueue ($fleet_id);
 
     // Поднять флот с планеты.
@@ -283,10 +318,10 @@ else {
      <th>Отправлен на</th><th><a href="index.php?page=galaxy&galaxy=<?=$_POST['galaxy'];?>&system=<?=$_POST['system'];?>&position=<?=$_POST['planet'];?>&session=<?=$session;?>" >[<?=$_POST['galaxy'];?>:<?=$_POST['system'];?>:<?=$_POST['planet'];?>]</a></th>
    </tr>
    <tr height="20">
-     <th>Время прибытия</th><th><?=$flighttime;?></th>
+     <th>Время прибытия</th><th><?=date("D M j G:i:s", $queue['end']);?></th>
    </tr>
    <tr height="20">
-     <th>Время возврата</th><th>Thu Mar 17 11:00:03</th>
+     <th>Время возврата</th><th><?=date("D M j G:i:s", $queue['end'] + $flighttime + $hold_time);?></th>
     </tr>
    <tr height="20">
      <td class="c" colspan="2">Корабли</td>
