@@ -524,7 +524,8 @@ function RecalcStats ($player_id)
     $rows = dbrows ($result);
     while ($rows--)
     {
-        $fleet = dbarray ( $result );
+        $queue = dbarray ( $result );
+        $fleet = LoadFleet ( $queue['sub_id'] );
 
         foreach ( $fleetmap as $i=>$gid ) {        // Флот
             $level = $fleet["ship$gid"];
@@ -535,9 +536,9 @@ function RecalcStats ($player_id)
             }
         }
     
-        if ( $fleet['ship202'] > 0 ) {        // МПР
+        if ( $fleet['ipm_amount'] > 0 ) {        // МПР
             ShipyardPrice ( 503, &$m, &$k, &$d, &$e );
-            $points += ($m + $k + $d) * $fleet['ship202'];
+            $points += ($m + $k + $d) * $fleet['ipm_amount'];
         }
     }
 
