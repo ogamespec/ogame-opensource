@@ -168,10 +168,9 @@ if ($numships <= 0) FleetError ( "Вы не выбрали корабли либ
 switch ( $order )
 {
     case '1':        // Атака
-//Планета находится под защитой для новичков!
-//Невозможно напасть на собственную планету!
+        if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
+        else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Невозможно напасть на собственную планету!" );
 //Запрет на атаки до #1
-        FleetError ( "Запрет на атаки до #1" );
         break;
 
     case '2':        // Совместная атака

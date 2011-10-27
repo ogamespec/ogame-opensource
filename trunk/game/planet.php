@@ -483,4 +483,19 @@ function CreateOuterSpace ($g, $s, $p)
     return $id;
 }
 
+// Установить флот и оборону на планете.
+function SetPlanetFleetDefense ( $planet_id, $objects )
+{
+    global $db_prefix;
+    $param = array (  'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 
+                      'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215' );
+    $query = "UPDATE ".$db_prefix."planets SET ";
+    foreach ( $param as $i=>$p ) {
+        if ( $i == 0 ) $query .= "$p=".$objects[$p];
+        else $query .= ", $p=".$objects[$p];
+    }
+    $query .= " WHERE planet_id=$planet_id;";
+    dbquery ($query);
+}
+
 ?>
