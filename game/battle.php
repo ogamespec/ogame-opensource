@@ -216,8 +216,8 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             {
                 AdjustResources ( $cm, $ck, $cd, $defender['id'], '-' );
                 $objects = array ();
-                foreach ( $fleetmap as $i=>$gid ) $objects["f$gid"] = $defender[$gid];
-                foreach ( $defmap as $i=>$gid ) $objects["d$gid"] = $defender[$gid];
+                foreach ( $fleetmap as $i=>$gid ) $objects["f$gid"] = $defender[$gid] ? $defender[$gid] : 0;
+                foreach ( $defmap as $i=>$gid ) $objects["d$gid"] = $defender[$gid] ? $defender[$gid] : 0;
                 SetPlanetFleetDefense ( $defender['id'], $objects );
             }
             else        // Флоты на удержании
@@ -253,8 +253,8 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             {
                 AdjustResources ( $cm, $ck, $cd, $defender['id'], '-' );
                 $objects = array ();
-                foreach ( $fleetmap as $i=>$gid ) $objects["f$gid"] = $defender[$gid];
-                foreach ( $defmap as $i=>$gid ) $objects["d$gid"] = $defender[$gid];
+                foreach ( $fleetmap as $i=>$gid ) $objects["f$gid"] = $defender[$gid] ? $defender[$gid] : 0;
+                foreach ( $defmap as $i=>$gid ) $objects["d$gid"] = $defender[$gid] ? $defender[$gid] : 0;
                 SetPlanetFleetDefense ( $defender['id'], $objects );
             }
             else        // Флоты на удержании
