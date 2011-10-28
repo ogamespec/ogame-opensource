@@ -40,7 +40,7 @@ $system = $_POST['system'];
 $planet = $_POST['planet'];
 $planettype = $_POST['planettype'];
 $shipcount = abs ($_POST['shipcount']);
-$speed = 10;
+$speed = 1;
 
 // Проверить параметры.
 
