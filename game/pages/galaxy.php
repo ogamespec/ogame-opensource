@@ -112,7 +112,7 @@ $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
 $maxfleet = $GlobalUser['r108'] + 1;
 
-PageHeader ("galaxy");
+PageHeader ("galaxy", true);
 
 echo "<!-- CONTENT AREA -->\n";
 echo "<div id='content'>\n";
@@ -686,6 +686,6 @@ echo "</center>\n";
 echo "</div>\n";
 echo "<!-- END CONTENT AREA -->\n\n";
 
-PageFooter ($GalaxyMessage, $GalaxyError);
+PageFooter ($GalaxyMessage, $GalaxyError, false, 0);
 ob_end_flush ();
 ?>
