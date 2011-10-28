@@ -295,6 +295,7 @@ function EventList ()
         $tasknum++;
     }
 
+    $anz = 0;
     if ($tasknum > 0)
     {
         sksort ( $task, 'end_time', true);        // Сортировать по времени прибытия.
@@ -302,11 +303,13 @@ function EventList ()
 
         foreach ($task as $i=>$t)
         {
+            $seconds = max($t['end_time']-$now, 0);
+            if ( $seconds <= 0 ) continue;
             if ($t['fleets'] > 1) echo "<tr class=''>\n";
             else if ($t['dir'] == 0) echo "<tr class='flight'>\n";
             else if ($t['dir'] == 1) echo "<tr class='return'>\n";
             else if ($t['dir'] == 2) echo "<tr class='holding'>\n";
-            echo "<th><div id='bxx".($i+1)."' title='".max($t['end_time']-$now, 0)."'star='".$t['end_time']."'></div></th>\n";
+            echo "<th><div id='bxx".($i+1)."' title='".$seconds."'star='".$t['end_time']."'></div></th>\n";
             echo "<th colspan='3'>";
             for ($fl=0; $fl<$t['fleets']; $fl++)
             {
@@ -314,8 +317,9 @@ function EventList ()
                 if ($t['fleets'] > 1) echo "<br /><br />";
             }
             echo "</th></tr>\n\n";
+            $anz++;
         }
-        echo "<script language=javascript>anz=".$tasknum.";t();</script>\n\n";
+        if ($anz) echo "<script language=javascript>anz=".$anz.";t();</script>\n\n";
     }
 }
 
