@@ -301,7 +301,7 @@ function IsEnoughResources ($planet, $m, $k, $d, $e)
     if ( $m && $planet['m'] < $m ) return false;
     if ( $k && $planet['k'] < $k ) return false;
     if ( $d && $planet['d'] < $d ) return false;
-    if ( $e && $planet['e'] < $e ) return false;
+    if ( $e && $planet['emax'] < $e ) return false;
     return true;
 }
 
