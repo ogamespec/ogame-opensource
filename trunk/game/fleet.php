@@ -550,6 +550,9 @@ function CanStandHold ( $planet_id, $player_id )
 
 function HoldingArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
+    // Обновить активность на планете.
+    UpdatePlanetActivity ( $fleet_obj['target_planet'], $queue['end'] );
+
     // Запустить задание удержания на орбите.
     // Время удержания сделать временем полёта (чтобы потом его можно было использовать при возврате флота)
     DispatchFleet ($fleet, $origin, $target, 205, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end'], 0, $fleet_obj['flight_time']);
@@ -701,9 +704,6 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
             // Добавить уничтоженную планету.
             AbandonPlanet ( $target['g'], $target['s'], $target['p'] );
-
-            // Вернуть флот.
-            DispatchFleet ($fleet, $origin, $target, 107, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
         }
         else
         {
@@ -714,12 +714,23 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
             // Создать новую колонию.
             $id = CreatePlanet ( $target['g'], $target['s'], $target['p'], $fleet_obj['owner_id'], 1 );
+            $target = GetPlanet ($id);
             Debug ( "Игроком ".$origin['owner_id']." колонизирована планета $id [".$target['g'].":".$target['s'].":".$target['p']."]");
         }
+
+        // Отнять от флота 1 колонизатор и вернуть флот, если что-то осталось.
+        $fleet[208]--;
+        if ( $fleet[208] < 0 ) $fleet[208] = 0;
+        $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+        $num_ships = 0;
+        foreach ($fleetmap as $i=>$gid) {
+            $num_ships += $fleet[$gid];
+        }
+        if ($num_ships > 0) DispatchFleet ($fleet, $origin, $target, 107, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
     }
     else
     {
-        $text .= ", , но не находит там пригодной для колонизации планеты. В подавленном состоянии поселенцы возвращаются обратно.\n";
+        $text .= ", но не находит там пригодной для колонизации планеты. В подавленном состоянии поселенцы возвращаются обратно.\n";
 
         // Вернуть флот.
         DispatchFleet ($fleet, $origin, $target, 107, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
@@ -740,7 +751,7 @@ function ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target)
     SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Возвращение флота", $text, 5);
 
     // Удалить фантом колонизации.
-    DestroyPlanet ( $target['planet_id'] );
+    if ($target['type'] == 10002) DestroyPlanet ( $target['planet_id'] );
 }
 
 // *** Переработать ***
