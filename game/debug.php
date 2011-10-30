@@ -71,7 +71,9 @@ function BrowseHistory ()
     if ( $GlobalUser['sniff'] )
     {
         $id = IncrementDBGlobal ( 'nextlog' );
-        $log = array ( $id, $GlobalUser['player_id'], $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'], time() );
+        $getdata = serialize ( $_GET );
+        $postdata = serialize ( $_POST );
+        $log = array ( $id, $GlobalUser['player_id'], $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'], $getdata, $postdata, time() );
         AddDBRow ( $log, 'browse' );
     }
 }

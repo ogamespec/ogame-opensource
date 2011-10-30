@@ -35,7 +35,7 @@ if (file_exists ("config.php"))
 // Сохранить настройки.
 if ( key_exists("install", $_POST) && CheckParameters() )
 {
-    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','fleet','union','battledata');
+    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','fleet','union','battledata','fleetlogs');
     $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','nextuser','usercount','freeze',
                               'nextplanet','nextally','nextapp','nextmsg','nextnote','nextbuddy','nexterror','nexttask','nextfleet','nextunion','nextbattle','nextlog',
                               'news1', 'news2', 'news_until', 'startdate', 'battle_engine' );
@@ -69,11 +69,11 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                           'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 
                           'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED' );
     $allycols = array ( 'ally_id', 'tag', 'name', 'owner_id', 'homepage', 'imglogo', 'open', 'insertapp', 'exttext', 'inttext', 'apptext', 'nextrank', 'old_tag', 'old_name', 'tag_until', 'name_until',
-                               'score1', 'score2', 'score3', 'place1', 'place2', 'place3',
-                               'oldscore1', 'oldscore2', 'oldscore3', 'oldplace1', 'oldplace2', 'oldplace3', 'scoredate' );
+                        'score1', 'score2', 'score3', 'place1', 'place2', 'place3',
+                        'oldscore1', 'oldscore2', 'oldscore3', 'oldplace1', 'oldplace2', 'oldplace3', 'scoredate' );
     $allytype = array ( 'INT PRIMARY KEY', 'TEXT', 'TEXT', 'INT', 'TEXT', 'TEXT', 'INT', 'INT', 'TEXT', 'TEXT', 'TEXT', 'INT', 'TEXT', 'TEXT', 'INT UNSIGNED', 'INT UNSIGNED',
-                               'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 
-                               'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 'INT UNSIGNED' );
+                        'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 
+                        'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 'INT UNSIGNED' );
     $rankscols = array ( 'rank_id', 'ally_id', 'name', 'rights' );
     $rankstype = array ( 'INT', 'INT', 'TEXT', 'INT' );
     $appscols = array ( 'app_id', 'ally_id', 'player_id', 'text', 'date' );
@@ -88,20 +88,26 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $errorstype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'INT UNSIGNED' );
     $debugcols = array ( 'error_id', 'owner_id', 'ip', 'agent', 'url', 'text', 'date' );
     $debugtype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'INT UNSIGNED' );
-    $browsecols = array ( 'log_id', 'owner_id', 'url', 'method', 'date' );
-    $browsetype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'INT UNSIGNED' );
+    $browsecols = array ( 'log_id', 'owner_id', 'url', 'method', 'getdata', 'postdata', 'date' );
+    $browsetype = array ( 'INT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'INT UNSIGNED' );
     $queuecols = array ( 'task_id', 'owner_id', 'type', 'sub_id', 'obj_id', 'level', 'start', 'end', 'prio' );
     $queuetype = array ( 'INT PRIMARY KEY', 'INT', 'CHAR(20)', 'INT', 'INT', 'INT', 'INT UNSIGNED', 'INT UNSIGNED', 'INT' );
     $fleetcols = array ( 'fleet_id', 'owner_id', 'union_id', 'm', 'k', 'd', 'fuel', 'mission', 'start_planet', 'target_planet', 'flight_time', 'deploy_time',
-                                 'ipm_amount', 'ipm_target', 'ship202', 'ship203', 'ship204', 'ship205', 'ship206', 'ship207', 'ship208', 'ship209', 'ship210', 'ship211', 'ship212', 'ship213', 'ship214', 'ship215' );
+                         'ipm_amount', 'ipm_target', 'ship202', 'ship203', 'ship204', 'ship205', 'ship206', 'ship207', 'ship208', 'ship209', 'ship210', 'ship211', 'ship212', 'ship213', 'ship214', 'ship215' );
     $fleettype = array ( 'INT PRIMARY KEY', 'INT', 'INT', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT', 'INT', 'INT', 'INT', 'INT',
-                                 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
+                         'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
     $unioncols = array ( 'union_id', 'fleet_id', 'name', 'players' );
     $uniontype = array ( 'INT PRIMARY KEY', 'INT', 'CHAR(20)', 'TEXT' );
     $battledatacols = array ( 'battle_id', 'source', 'result' );
     $battledatatype = array ( 'INT PRIMARY KEY', 'TEXT', 'TEXT' );
-    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$browsecols, &$queuecols, &$fleetcols, &$unioncols, &$battledatacols);
-    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$debugtype, &$browsetype, &$queuetype, &$fleettype, &$uniontype, &$battledatatype);
+    $fleetlogscols = array ( 'log_id', 'owner_id', 'union_id', 'm', 'k', 'd', 'fuel', 'mission', 'flight_time', 'deploy_time', 'start', 'end',
+                             'origin_g', 'origin_s', 'origin_p', 'origin_type', 'target_g', 'target_s', 'target_p', 'target_type', 
+                             'ipm_amount', 'ipm_target', 'ship202', 'ship203', 'ship204', 'ship205', 'ship206', 'ship207', 'ship208', 'ship209', 'ship210', 'ship211', 'ship212', 'ship213', 'ship214', 'ship215' );
+    $fleetlogstype = array ( 'INT PRIMARY KEY', 'INT', 'INT', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT', 'INT', 'INT', 'INT UNSIGNED', 'INT UNSIGNED',
+                             'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 
+                             'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
+    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$browsecols, &$queuecols, &$fleetcols, &$unioncols, &$battledatacols, &$fleetlogscols);
+    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$debugtype, &$browsetype, &$queuetype, &$fleettype, &$uniontype, &$battledatatype, &$fleetlogstype);
     $now = time();
 
     //print_r ($_POST);
@@ -157,7 +163,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "nextfleet = '10000', ";
     $query .= "nextunion = '10000', ";
     $query .= "nextbattle = '1', ";
-    $query .= "nextlog = '10000', ";
+    $query .= "nextlog = '1', ";
     $query .= "news1 = '', ";
     $query .= "news2 = '', ";
     $query .= "news_until = '0', ";
