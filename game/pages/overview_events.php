@@ -99,7 +99,8 @@ function PlanetFrom ($planet, $mission)
 {
     $res = "";
     if ( GetPlanetType ($planet) == 1 ) $res .= "планеты";
-    $res .= " " . $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
+    if ( $planet['type'] == 10002 || $planet['type'] == 20000 ) $res = " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
+    else $res .= " " . $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     return $res;
 }
 
@@ -107,7 +108,8 @@ function PlanetTo ($planet, $mission)
 {
     $res = "";
     if ( GetPlanetType ($planet) == 1 ) $res .= "планету";
-    $res .= " " . $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
+    if ( $planet['type'] == 10002 || $planet['type'] == 20000 ) $res = " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
+    else $res .= " " . $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     return $res;
 }
 
@@ -157,11 +159,24 @@ function FleetSpan ( $fleet_entry )
         if ($dir == 0) echo "<span class='flight owndeploy'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='owndeploy'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> с ".PlanetFrom($origin, "owndeploy")." отправлен на ".PlanetTo($target, "owndeploy").". Задание: ".Cargo($m,$k,$d,"owndeploy","Оставить")."</span>";
         else if ($dir == 1) echo "<span class='return owndeploy'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='owndeploy'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> с ".PlanetFrom($origin, "owndeploy")." отправлен на ".PlanetTo($target, "owndeploy").". Задание: ".Cargo($m,$k,$d,"owndeploy","Оставить")."</span>";
     }
+    else if ($mission == 5)            // Держаться
+    {
+        if ($dir == 0) echo "<span class='flight ownhold'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='ownhold'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> с ".PlanetFrom($origin, "ownhold")." отправлен на ".PlanetTo($target, "ownhold").". Задание: ".Cargo($m,$k,$d,"ownhold","Держаться")."</span>";
+        else if ($dir == 1) echo "<span class='return ownhold'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='ownhold'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a>, отправленный с ".PlanetFrom($origin, "ownhold").", возвращается на ".PlanetTo($target, "ownhold").". Задание: ".Cargo($m,$k,$d,"ownhold","Держаться")."</span>";
+        else if ($dir == 2) echo "<span class='holding ownhold'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='ownhold'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a>, отправленный с ".PlanetFrom($origin, "ownhold").", находится на орбите ".PlanetFrom($target, "ownhold").". Задание: ".Cargo($m,$k,$d,"ownhold","Держаться")."</span>";
+        else if ($dir == 0x20) echo "<span class='flight hold'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='hold'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "hold")." отправлен на ".PlanetFrom($target, "hold").". Задание: Держаться</span>";
+        else if ($dir == 0x22) echo "<span class='holding hold'>".PlayerDetails($owner)." удерживает альянсовый <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='hold'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> с ".PlanetFrom($origin, "hold")." на орбите ".PlanetFrom($target, "hold").". Задание: Держаться</span>";
+    }
     else if ($mission == 6)            // Шпионаж
     {
         if ($dir == 0) echo "<span class='flight ownespionage'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='ownespionage'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> с ".PlanetFrom($origin, "ownespionage")." отправлен на ".PlanetTo($target, "ownespionage").". Задание: ".Cargo($m,$k,$d,"ownespionage","Шпионаж")."</span>";
         else if ($dir == 1) echo "<span class='return ownespionage'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='ownespionage'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> с ".PlanetFrom($origin, "ownespionage")." отправлен на ".PlanetTo($target, "ownespionage").". Задание: ".Cargo($m,$k,$d,"ownespionage","Шпионаж")."</span>";
         else if ($dir == 0x10) echo "<span class='flight espionage'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='espionage'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "espionage")." отправлен на ".PlanetTo($target, "espionage").". Задание: Шпионаж</span>";
+    }
+    else if ($mission == 7)            // Колонизировать
+    {
+        if ($dir == 0) echo "<span class='flight owncolony'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='owncolony'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> с ".PlanetFrom($origin, "owncolony")." отправлен на позицию ".PlanetTo($target, "owncolony").". Задание: ".Cargo($m,$k,$d,"owncolony","Колонизировать")."</span>";
+        else if ($dir == 1) echo "<span class='return owncolony''>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='owncolony''>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a>, отправленный с позиции ".PlanetFrom($origin, "owncolony").", возвращается на ".PlanetTo($target, "owncolony").". Задание: ".Cargo($m,$k,$d,"owncolony","Колонизировать")."</span>";
     }
     else if ($mission == 8)            // Переработать
     {
@@ -179,6 +194,12 @@ function FleetSpan ( $fleet_entry )
         if ($dir == 0) echo "<span class='attack'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='ownattack'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> с ".PlanetFrom($origin, "ownattack")." отправлен на ".PlanetTo($target, "ownattack").". Задание: ".Cargo($m,$k,$d,"ownattack","Атаковать")."</span>";
         else if ($dir == 0x10) echo "<span class='attack'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='attack'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "attack")." отправлен на ".PlanetTo($target, "attack").". Задание: Атаковать</span>";
         else if ($dir == 0x20) echo "<span class='ownattack'>Альянсовый <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='ownattack'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "ownattack")." отправлен на ".PlanetTo($target, "ownattack").". Задание: Атаковать</span>";
+    }
+    else if ($mission == 15)            // Экспедиция
+    {
+        if ($dir == 0) echo "<span class='flight ownexpedition'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='ownexpedition'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> отправленный с ".PlanetFrom($origin, "ownexpedition")." достигает позиции ".PlanetTo($target, "ownexpedition").". Задание: ".Cargo($m,$k,$d,"ownexpedition","Экспедиция")."</span>";
+        else if ($dir == 1) echo "<span class='return ownexpedition'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='ownexpedition'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> возвращается на ".PlanetTo($target, "ownexpedition")." после приказа ".Cargo($m,$k,$d,"ownexpedition","Экспедиция")."</span>";
+        else if ($dir == 2) echo "<span class='holding ownexpedition'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='ownexpedition'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a>, отправленный с ".PlanetFrom($origin, "ownexpedition")." исследует позицию ".PlanetFrom($target, "ownexpedition").". Задание: ".Cargo($m,$k,$d,"ownexpedition","Экспедиция")."</span>";
     }
     else echo "Задание Тип:$mission, Dir:$dir, Флот: " .TitleFleet($fleet,0). ", с " .PlanetFrom($origin, ""). " на " .PlanetTo($target, ""). ", " . Cargo ($m, $k, $d,"","Груз");
 }
@@ -238,6 +259,28 @@ function EventList ()
 
         $tasknum++;
 
+        // Для убывающей экспедиции или держаться добавить псевдозадание удерживания.
+        // Не показывать чужие флоты.
+        if ( ($fleet_obj['mission'] == 5 || $fleet_obj['mission'] == 15) && $fleet_obj['owner_id'] == $GlobalUser['player_id'] )
+        {
+            // Время отправления и прибытия
+            $task[$tasknum]['start_time'] = $queue['end'];
+            $task[$tasknum]['end_time'] = 2 * $queue['end'] - $queue['start'];
+
+            // Флот
+            $task[$tasknum]['fleets'] = 1;
+            $task[$tasknum]['fleet'][0] = array ();
+            foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj["ship$gid"];
+            $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
+            $task[$tasknum]['fleet'][0]['m'] = $task[$tasknum]['fleet'][0]['k'] = $task[$tasknum]['fleet'][0]['d'] = 0;
+            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
+            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
+            $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
+            $task[$tasknum]['fleet'][0]['dir'] = 2;
+            $task[$tasknum]['fleet'][0]['assign'] = 0;
+            $tasknum++;
+        }
+
         // Для убывающих или удерживаемых флотов добавить псевдозадание возврата.
         // Не показывать возвраты чужих флотов и задание Оставить.
         if ( ($fleet_obj['mission'] < 100 || $fleet_obj['mission'] > 200) && $fleet_obj['owner_id'] == $GlobalUser['player_id'] && $fleet_obj['mission'] != 4 )
@@ -245,6 +288,7 @@ function EventList ()
             // Время отправления и прибытия
             $task[$tasknum]['start_time'] = $queue['end'];
             $task[$tasknum]['end_time'] = 2 * $queue['end'] - $queue['start'];
+            if ( GetMission ($fleet_obj) == 5 || GetMission ($fleet_obj) == 15 ) $task[$tasknum]['end_time'] += $fleet_obj['deploy_time'];
 
             // Флот
             $task[$tasknum]['fleets'] = 1;
