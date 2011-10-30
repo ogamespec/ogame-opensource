@@ -273,6 +273,34 @@ function Admin_Users ()
             echo "<th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a></th></tr>\n";
         }
         echo "</table>\n";
+
+?>
+
+    <br>
+    <table>
+<?php
+        $when = time () - 24 * 60 * 60;
+        $query = "SELECT * FROM ".$db_prefix."users WHERE lastclick >= $when ORDER BY oname ASC";
+        $result = dbquery ($query);
+        $rows = dbrows ($result);
+?>
+    <tr><td class=c>Активные за последние 24 часа (<?=$rows;?>)</td></tr>
+    <tr><td>
+<?php
+        $first = true;
+        while ($rows--) 
+        {
+            $user = dbarray ( $result );
+            if ( $first ) $first = false;
+            else echo ", ";
+            echo "<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>";
+        }
+?>
+    </td></tr>
+    </table>
+
+<?php
+
     }
 
     // Поиск пользователей
