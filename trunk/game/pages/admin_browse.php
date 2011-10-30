@@ -11,11 +11,25 @@ function Admin_Browse ()
     $result = dbquery ($query);
 
     $rows = dbrows ($result);
+    echo "Последняя история переходов (50 записей):<br>";
+    echo "<table>\n";
     while ($rows--) 
     {
         $log = dbarray ( $result );
-        print_r ($log);
-        echo "<br/>";
+        $user = LoadUser ( $log['owner_id'] );
+?>
+        <tr><td><table>
+        <tr> <th> <?=$user['oname'];?> </th> <th> <?=$log['url'];?> </th> </tr>
+        <tr> <th rowspan=2>
+        <?=$log['method'];?><br>
+        <?=date ("d M Y", $log['date']);?><br>
+        <?=date ("H:i:s", $log['date']);?>
+        </th> <th> <?=print_r( unserialize($log['getdata']) );?> </th> </tr>
+        <tr> <th> <?=print_r( unserialize($log['postdata']) );?> </th> </tr>
+        </table></td></tr>
+
+<?php
     }
+    echo "</table>\n";
 }
 ?>
