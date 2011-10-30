@@ -709,12 +709,8 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         {
             $text .= ", находит там новую планету и сразу же начинает её освоение.\n";
 
-            // Удалить фантом колонизации.
-            DestroyPlanet ( $target['planet_id'] );
-
             // Создать новую колонию.
             $id = CreatePlanet ( $target['g'], $target['s'], $target['p'], $fleet_obj['owner_id'], 1 );
-            $target = GetPlanet ($id);
             Debug ( "Игроком ".$origin['owner_id']." колонизирована планета $id [".$target['g'].":".$target['s'].":".$target['p']."]");
         }
 
@@ -727,6 +723,9 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
             $num_ships += $fleet[$gid];
         }
         if ($num_ships > 0) DispatchFleet ($fleet, $origin, $target, 107, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
+        else {
+            if ($target['type'] == 10002) DestroyPlanet ( $target['planet_id'] );
+        }
     }
     else
     {
