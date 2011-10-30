@@ -65,8 +65,8 @@ function Admin_Queue ()
         }
     }
 
-    if ( $player_id > 0 ) $query = "SELECT * FROM ".$db_prefix."queue WHERE owner_id=$player_id ORDER BY end ASC, prio DESC";
-    else $query = "SELECT * FROM ".$db_prefix."queue ORDER BY end ASC, prio DESC LIMIT 50";
+    if ( $player_id > 0 ) $query = "SELECT * FROM ".$db_prefix."queue WHERE type <> 'Fleet' AND owner_id=$player_id ORDER BY end ASC, prio DESC";
+    else $query = "SELECT * FROM ".$db_prefix."queue WHERE type <> 'Fleet' ORDER BY end ASC, prio DESC LIMIT 50";
     $result = dbquery ($query);
     $now = time ();
 
