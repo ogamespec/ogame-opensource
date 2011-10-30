@@ -20,7 +20,7 @@
 13-15: DIAM = RAND (50, 150) * 96
 
 Температура (планеты):
-1-3: 75 77 79 84 80 83 86
+1-3: 75 77 79 84 80 83 86 87
 4-6: 22 29 25 24 25 21 27 21 26 20 22 21 21 20 23 28 27 30 18 19 25 31
 7-9: -1 -3 -6 3 -4
 10-12: -27 -34 -23 -27 -31 -25 -21 -29
@@ -128,7 +128,7 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     $fields = floor (pow (($diam / 1000), 2));
 
     // Температура
-    if ($p <= 3) $temp = mt_rand (75, 86);
+    if ($p <= 3) $temp = mt_rand (75, 87);
     else if ($p >= 4 && $p <= 6) $temp = mt_rand (18, 31);
     else if ($p >= 7 && $p <= 9) $temp = mt_rand (-6, 3);
     else if ($p >= 10 && $p <= 12) $temp = mt_rand (-34, -21);
@@ -395,7 +395,7 @@ function AbandonPlanet ($g, $s, $p)
     $now = time ();
 
     // Если на заданных координатах нет планеты, то просто добавить Уничтоженную планету.
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( type <> 0 AND type <> 10000 AND type <> 10003 );";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( type <> 0 AND type <> 10000 AND type <> 10002 AND type <> 10003 );";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 ) 
     {
@@ -412,6 +412,13 @@ function AbandonPlanet ($g, $s, $p)
     else
     {
         $planet = dbarray ($result);
+        $moon_id = PlanetHasMoon ($planet['planet_id']);
+        if ( $moon_id )
+        {
+            $moon = GetPlanet ( $moon_id );
+            $query = "UPDATE ".$db_prefix."planets SET type = 10003, owner_id = 99999, date = $now, lastakt = $now WHERE planet_id = " . $moon['planet_id'] . ";";
+            dbquery ( $query );
+        }
         $query = "UPDATE ".$db_prefix."planets SET type = 10001, name = 'Уничтоженная планета', owner_id = 99999, date = $now, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
         dbquery ( $query );
     }
