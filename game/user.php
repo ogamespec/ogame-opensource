@@ -414,7 +414,7 @@ function CheckSession ( $session )
     $uni = $unitab['num'];
     $ip = $_SERVER['REMOTE_ADDR'];
     $prsess = $_COOKIE ['prsess_'.$GlobalUser['player_id'].'_'.$uni];
-    if ( $ip !== "127.0.0.1" ) {
+    if ( $ip !== "127.0.0.1" && !$GlobalUser['deact_ip'] ) {
         if ( $prsess !== $GlobalUser['private_session'] ) { InvalidSessionPage (); return FALSE; }
         if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
     }

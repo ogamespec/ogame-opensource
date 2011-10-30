@@ -28,7 +28,7 @@ function Admin_Planets ()
             $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
                                        'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
                                       'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
-                                      'm', 'k', 'd', 'g', 's', 'p', 'type' );
+                                      'm', 'k', 'd', 'g', 's', 'p', 'diameter', 'type' );
 
             $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
             foreach ( $param as $i=>$p ) {
@@ -47,7 +47,10 @@ function Admin_Planets ()
                     $_GET['cp'] = $user['hplanetid'];        // перенаправить на главную планету.
                 }
             }
-            else dbquery ($query);        // Обновить данные планеты
+            else {                                        // Обновить данные планеты
+                dbquery ($query);        
+                RecalcFields ($cp);
+            }
         }
         else if ( $action === "search" )        // Поиск
         {
@@ -184,12 +187,30 @@ function spio ()
     foreach ( $defmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
 ?>
     };
+    var ResNames = {
+<?php
+        echo "\"".loca("METAL")."\": 'm', ";
+        echo "\"".loca("CRYSTAL")."\": 'k', ";
+        echo "\"".loca("DEUTERIUM")."\": 'd', ";
+?>
+    };
 
     var text = document.getElementById ("spiotext" ).value;
     text = php_str_replace (".", "", text);
+    text = php_str_replace (":", "", text);
 
     for ( var name in TechNames ) {
         var id = TechNames[name];
+        pos = text.indexOf ( name );
+        if ( pos > 0 ) {
+            obj = text.substr ( pos );
+            found = obj.match ("("+name+"[\\s]+)([0-9]{1,})");
+            document.getElementById ( "obj" + id ) . value = parseInt(found[2]);
+        }
+    }
+
+    for ( var name in ResNames ) {
+        var id = ResNames[name];
         pos = text.indexOf ( name );
         if ( pos > 0 ) {
             obj = text.substr ( pos );
@@ -347,16 +368,16 @@ function reset ()
         else echo "<input type=\"hidden\" name=\"type\" value=\"".$planet['type']."\" >\n";
         echo "</th> </tr>\n";
         echo "<tr><th>Последнее обновление</th><th>".date ("Y-m-d H:i:s", $planet['lastpeek'])."</th></tr>\n";
-        echo "<tr><th>Диаметр <br><a href=\"index.php?page=admin&session=$session&mode=Planets&action=random_diam&cp=".$planet['planet_id']."\" >новый диаметр</a>  </th><th>".nicenum($planet['diameter'])." км (".$planet['fields']." из ".$planet['maxfields']." полей) ";
+        echo "<tr><th>Диаметр <br><a href=\"index.php?page=admin&session=$session&mode=Planets&action=random_diam&cp=".$planet['planet_id']."\" >новый диаметр</a>  </th><th><input size=5 type=\"text\" name=\"diameter\" value=\"".$planet['diameter']."\" /> км (".$planet['fields']." из ".$planet['maxfields']." полей) ";
         echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=recalc_fields&cp=".$planet['planet_id']."\" >пересчитать поля</a> ";
         echo "</th></tr>\n";
         echo "<tr><th>Температура</th><th>от ".$planet['temp']."°C до ".($planet['temp']+40)."°C</th></tr>\n";
         echo "<tr><th>Координаты</th><th>[<input type=\"text\" name=\"g\" value=\"".$planet['g']."\" size=1 />:<input type=\"text\" name=\"s\" value=\"".$planet['s']."\" size=2 />:<input type=\"text\" name=\"p\" value=\"".$planet['p']."\" size=1 />]</th></tr>\n";
 
         echo "<tr><td class=c colspan=2>Ресурсы</td></tr>\n";
-        echo "<tr><th>Металл</th><th><input type=\"text\" name=\"m\" value=\"".ceil($planet['m'])."\" /></th></tr>\n";
-        echo "<tr><th>Кристалл</th><th><input type=\"text\" name=\"k\" value=\"".ceil($planet['k'])."\" /></th></tr>\n";
-        echo "<tr><th>Дейтерий</th><th><input type=\"text\" name=\"d\" value=\"".ceil($planet['d'])."\" /></th></tr>\n";
+        echo "<tr><th>Металл</th><th><input id=\"objm\" type=\"text\" name=\"m\" value=\"".ceil($planet['m'])."\" /></th></tr>\n";
+        echo "<tr><th>Кристалл</th><th><input id=\"objk\" type=\"text\" name=\"k\" value=\"".ceil($planet['k'])."\" /></th></tr>\n";
+        echo "<tr><th>Дейтерий</th><th><input id=\"objd\" type=\"text\" name=\"d\" value=\"".ceil($planet['d'])."\" /></th></tr>\n";
         echo "<tr><th>Энергия</th><th>".$planet['e']." / ".$planet['emax']."</th></tr>\n";
         echo "<tr><th>Коэффициент производства</th><th>".$planet['factor']."</th></tr>\n";
 
