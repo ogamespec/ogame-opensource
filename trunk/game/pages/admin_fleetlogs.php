@@ -27,7 +27,7 @@ function Admin_Fleetlogs ()
     
     $now = time ();
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type='Fleet' ";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type='Fleet' ORDER BY end ASC";
     $result = dbquery ($query);
     $anz = $rows = dbrows ($result);
     $bxx = 1;
@@ -58,7 +58,8 @@ function Admin_Fleetlogs ()
         <th><?=date ("d.m.Y", $queue['end']);?> <br> <?=date ("H:i:s", $queue['end']);?></th>
         <th>
 <?php
-    echo $fleet_obj['flight_time'] . " сек.";
+    echo "<nobr>".BuildDurationFormat ($fleet_obj['flight_time']) . "</nobr><br>";
+    echo "<nobr>".$fleet_obj['flight_time'] . " сек.</nobr>";
 ?>
         </th>
         <th>
@@ -109,6 +110,8 @@ function Admin_Fleetlogs ()
         </tr>
 
 <?php
+
+        $bxx++;
 
     }
     echo "<script language=javascript>anz=$anz;t();</script>\n";
