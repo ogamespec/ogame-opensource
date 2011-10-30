@@ -77,9 +77,7 @@ function Admin_Users ()
             $g = $_POST['g'];    if ($g === "" ) $g = 1;
             $s = $_POST['s'];    if ($s === "" ) $s = 1;
             $p = $_POST['p'];    if ($p === "" ) $p = 1;
-            $query = "SELECT * FROM ".$db_prefix."planets WHERE g = $g AND s = $s AND p = $p AND (type > 0 AND type < 10000);";
-            $result = dbquery ( $query );
-            if ( dbrows ($result) == 0 ) CreatePlanet ($g, $s, $p, $_GET['player_id'] );
+            if ( ! HasPlanet ( $g, $s, $p ) ) CreatePlanet ($g, $s, $p, $_GET['player_id'] );
         }
     }
 
@@ -228,7 +226,7 @@ function Admin_Users ()
     <tr><td class=c colspan=20>Список планет</td></tr>
     <tr>
 <?php
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$_GET['player_id']."' ORDER BY g ASC, s ASC, p ASC";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$_GET['player_id']."' ORDER BY g ASC, s ASC, p ASC, type DESC";
     $result = dbquery ($query);
     $rows = dbrows ($result);
     $counter = 0;
