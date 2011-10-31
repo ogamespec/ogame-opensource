@@ -142,19 +142,31 @@ $speed = $unitab['speed'];
         if ( method () === "POST") {
 
             if ( $GlobalUser['name_changed'] == 0 && $_POST['db_character'] !== $GlobalUser['oname'] ) {        // Сменить имя.
-                //Это имя уже существует.
-                //Имя должно содержать от 3-х до 20-ти символов.
-                //Недопустимое имя!
+                $forbidden = explode ( ",", "hitler, fick, adolf, legor, aleena, ogame, mainman, fishware, osama, bin laden, stalin, goebbels, drecksjude, saddam, space, ringkeeper, administration" );
+                if ( IsUserExist ( $_POST['db_character'] )) $OptionsError = "Это имя уже существует.";
+                else if ( mb_strlen ($_POST['db_character']) < 3 || mb_strlen ($_POST['db_character']) > 20 ) $OptionsError = "Имя должно содержать от 3-х до 20-ти символов.";
+                else if ( preg_match ( '/[<>()\[\]{}\\\\\/\`\"\'.,:;*+]/', $_POST['db_character'] )) $OptionsError = "Имя не должно содержать спец-символы.";
+                $lower = mb_strtolower ($_POST['db_character'], 'UTF-8');
+                foreach ( $forbidden as $i=>$name) {
+                    if ( $lower === $name ) $OptionsError = "Недопустимое имя!";
+                }
 
-                echo "Сменить имя<br>";
+                if ( $OptionsError === "" )
+                {
+                    ChangeName ( $GlobalUser['player_id'], $_POST['db_character'] );
+                    $OptionsError = "Имя пользователя изменено. Раз в неделю это возможно. Войдите снова.";
+                    $GlobalUser['name_changed'] = 1;
+                    $GlobalUser['oname'] = $_POST['db_character'] ;
+                    Logout ( $GlobalUser['session'] );
+                }
             }
 
-            if ( $_POST['newpass1'] !== "" ) {        // Сменить пароль
+            else if ( $_POST['newpass1'] !== "" ) {        // Сменить пароль
 
                 if ( $_POST['newpass1'] !== $_POST['newpass1'] ) $OptionsError = "Новые пароли не совпадают.";
-                if ( strlen ( $_POST['newpass1'] ) < 8 ) $OptionsError = "Пароль должен состоять минимум из 8 символов";
-                if ( !preg_match ( "/^[_a-zA-Z0-9]+$/", $_POST['newpass1'] ) ) $OptionsError = "Пароль содержит особый символ.";
-                if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $OptionsError = "Неправильный старый пароль.";
+                else if ( !preg_match ( "/^[_a-zA-Z0-9]+$/", $_POST['newpass1'] ) ) $OptionsError = "Пароль содержит особый символ.";
+                else if ( strlen ( $_POST['newpass1'] ) < 8 ) $OptionsError = "Пароль должен состоять минимум из 8 символов";
+                else if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $OptionsError = "Неправильный старый пароль.";
 
                 //Вы хотите использовать небезопасный пароль, измените его на более безопасный.
 
@@ -168,7 +180,7 @@ $speed = $unitab['speed'];
                 }
             }
 
-            if ( $_POST['db_email'] !== $GlobalUser['pemail'] && $_POST['db_email'] !== "" ) {        // Сменить адрес
+            else if ( $_POST['db_email'] !== $GlobalUser['pemail'] && $_POST['db_email'] !== "" ) {        // Сменить адрес
                 echo "Сменить адрес<br>";
             }
 

@@ -289,6 +289,16 @@ function ChangeEmail ( $name, $email)
     return 1;
 }
 
+// Сменить имя пользователя.
+function ChangeName ( $player_id, $name )
+{
+    global $db_prefix;
+    $lower = mb_strtolower ($name, 'UTF-8');
+    $query = "UPDATE ".$db_prefix."users SET name = '".$lower."', oname = '".$name."' WHERE player_id = $player_id";
+    dbquery ($query);
+    AddAllowNameEvent ($player_id);
+}
+
 // Сменить код активации. Возвращает новый код.
 function ChangeActivationCode ( $name)
 {

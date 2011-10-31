@@ -125,6 +125,7 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "CleanDebris" ) Queue_CleanDebris_End ($queue);
         else if ( $queue['type'] === "DeleteAccount" ) Queue_DeleteAccount_End ($queue);
         else if ( $queue['type'] === "RecalcPoints" ) Queue_RecalcPoints_End ($queue);
+        else if ( $queue['type'] === "AllowName" ) Queue_AllowName_End ($queue);
         else if ( $queue['type'] === "Debug" ) Queue_Debug_End ($queue);
         else Error ( "queue: Неизвестный тип задания для глобальной очереди: " . $queue['type']);
     }
@@ -629,6 +630,36 @@ function CanEnableVacation ($player_id)
     $result = dbquery ( $query );
     if ( dbrows ($result) > 0 ) return false;
     else return true;
+}
+
+// Добавить задание разрешения смены имени.
+function AddAllowNameEvent ($player_id)
+{
+    global $db_prefix;
+
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'AllowName' AND owner_id = $player_id";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0 )
+    {
+        $now = time ();
+        $when = $now + 7 * 24 * 60 * 60;
+        $id = IncrementDBGlobal ('nexttask');
+        $queue = array ( $id, $player_id, "AllowName", 0, 0, 0, $now, $when, 0 );
+        AddDBRow ( $queue, "queue" );
+        $query = "UPDATE ".$db_prefix."users SET name_changed = 1, name_until = $when WHERE player_id = $player_id";
+        dbquery ($query);
+        Debug ( $query );
+    }
+}
+
+// Разрешить сменить имя.
+function Queue_AllowName_End ($queue)
+{
+    global $db_prefix;
+    $player_id = $queue['owner_id'];
+    $query = "UPDATE ".$db_prefix."users SET name_changed = 0 WHERE player_id = $player_id";
+    dbquery ($query);
+    RemoveQueue ( $queue['task_id'], 0 );
 }
 
 // ===============================================================================================================
