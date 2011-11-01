@@ -156,10 +156,23 @@ function CreateUser ( $name, $pass, $email)
     $query = "SELECT * FROM ".$db_prefix."uni".";";
     $result = dbquery ($query);
     $unitab = dbarray ($result);
-    $id = $unitab['nextuser']++;
     $unitab['usercount']++;
-    $query = "UPDATE ".$db_prefix."uni"." SET nextuser = ".$unitab['nextuser'].", usercount = ".$unitab['usercount'].";";
+    $query = "UPDATE ".$db_prefix."uni"." SET usercount = ".$unitab['usercount'].";";
     dbquery ($query);
+
+    // Определить язык пользователя по его IP-адресу.
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $lang = "ru";
+
+    $user = array( '', time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, $email, $email,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, $ip, 0, $ack, 0, 0, 0, 0,
+                        hostname() . "evolution/", 1, 0, 1, 3, $lang, 0,
+                        0, 0, 0, 0, 0, 
+                        0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+    $id = AddDBRow ( $user, "users" );
 
     // Создать Главную планету.
     // 1. g = s = 1, p = 4.
@@ -180,19 +193,8 @@ function CreateUser ( $name, $pass, $email)
     }
     $homeplanet = CreatePlanet ( $g, $s, $p, $id, 0);
 
-    // Определить язык пользователя по его IP-адресу.
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $lang = "ru";
-
-    $user = array( $id, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, $email, $email,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, $ip, 0, $ack, $homeplanet, 0, 0, 0,
-                        hostname() . "evolution/", 1, 0, 0, 1, 3, $lang, $homeplanet,
-                        0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-    AddDBRow ( $user, "users" );
+    $query = "UPDATE ".$db_prefix."users SET hplanetid = $homeplanet, aktplanet = $homeplanet WHERE player_id = $id;";
+    dbquery ( $query );
 
     // Выслать приветственное письмо и сообщение.
     SendGreetingsMail ( $origname, $pass, $email, $ack);
@@ -507,6 +509,7 @@ function RecalcStats ($player_id)
     $rows = dbrows ($result);
     while ($rows--) {
         $planet = dbarray ($result);
+        if ( $planet['type'] >= 10000 ) continue;        // считать только планеты и луны.
         $pts = $fpts = 0;
         PlanetPrice ($planet, &$pts, &$fpts);
         $points += $pts;
@@ -516,14 +519,17 @@ function RecalcStats ($player_id)
     // Исследования
     $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
     $user = LoadUser ($player_id);
-    foreach ($resmap as $i=>$gid) {
-        $level = $user["r$gid"];
-        $rpoints += $level;
-        if ($level > 0) {
-            for ( $lv = 1; $lv<=$level; $lv ++ )
-            {
-                ResearchPrice ( $gid, $lv, &$m, &$k, &$d, &$e );
-                $points += ($m + $k + $d);
+    if ( $user != null )
+    {
+        foreach ($resmap as $i=>$gid) {
+            $level = $user["r$gid"];
+            $rpoints += $level;
+            if ($level > 0) {
+                for ( $lv = 1; $lv<=$level; $lv ++ )
+                {
+                    ResearchPrice ( $gid, $lv, &$m, &$k, &$d, &$e );
+                    $points += ($m + $k + $d);
+                }
             }
         }
     }

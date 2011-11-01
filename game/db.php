@@ -69,6 +69,7 @@ function AddDBRow ( $row, $tabname )
     $opt .= ")";
     $query = "INSERT INTO ".$db_prefix."$tabname VALUES".$opt;
     dbquery( $query);
+    return mysql_insert_id ();
 }
 
 ?>

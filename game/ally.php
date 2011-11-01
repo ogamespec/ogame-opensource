@@ -25,14 +25,11 @@ function CreateAlly ($owner_id, $tag, $name)
     $tag = mb_substr ($tag, 0, 8, "UTF-8");    // Огранчить длину строк
     $name = mb_substr ($name, 0, 30, "UTF-8");
 
-    // Получить следующий уникальный номер и увеличить его на 1 для следующего альянса.
-    $id = IncrementDBGlobal ( 'nextally' );
-
     // Добавить альянс.
-    $ally = array( $id, $tag, $name, $owner_id, "", "", 1, 0, "Добро пожаловать на страничку альянса", "", "", 0, "", "", 0, 0,
+    $ally = array( '', $tag, $name, $owner_id, "", "", 1, 0, "Добро пожаловать на страничку альянса", "", "", 0, "", "", 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0 );
-    AddDBRow ( $ally, "ally" );
+    $id = AddDBRow ( $ally, "ally" );
 
     // Добавить ранги "Основатель" (0) и "Новичок" (1) .
     SetRank ( $id, AddRank ( $id, "Основатель" ), 0x1FF );
@@ -251,9 +248,8 @@ function LoadRank ($ally_id, $rank_id)
 // Добавить заявку в альянс. Возвращает порядковый номер заявки.
 function AddApplication ($ally_id, $player_id, $text)
 {
-    $id = IncrementDBGlobal ( 'nextapp' );
-    $app = array ( $id, $ally_id, $player_id, $text, time() );
-    AddDBRow ( $app, "allyapps" );
+    $app = array ( '', $ally_id, $player_id, $text, time() );
+    $id = AddDBRow ( $app, "allyapps" );
     return $id;
 }
 
@@ -322,12 +318,9 @@ function AddBuddy ($from, $to, $text)
     // Пользователи уже друзья?
     if ( IsBuddy ($from, $to) ) return 0;
 
-    // Получить следующий уникальный номер и увеличить его на 1 для следующего запроса.
-    $id = IncrementDBGlobal ('nextbuddy');
-
     // Добавить запрос.
-    $buddy = array( $id, $from, $to, $text, 0 );
-    AddDBRow ( $buddy, "buddy" );
+    $buddy = array( '', $from, $to, $text, 0 );
+    $id = AddDBRow ( $buddy, "buddy" );
     return $id;
 }
 

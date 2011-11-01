@@ -74,9 +74,8 @@ prio: приоритет события, используется для соб�
 // Добавить задание в очередь. Возвращает ID добавленного задания.
 function AddQueue ($owner_id, $type, $sub_id, $obj_id, $level, $now, $seconds, $prio=0)
 {
-    $id = IncrementDBGlobal ('nexttask');
-    $queue = array ( $id, $owner_id, $type, $sub_id, $obj_id, $level, $now, $now+$seconds, $prio );
-    AddDBRow ( $queue, "queue" );
+    $queue = array ( '', $owner_id, $type, $sub_id, $obj_id, $level, $now, $now+$seconds, $prio );
+    $id = AddDBRow ( $queue, "queue" );
     return $id;
 }
 
@@ -608,8 +607,7 @@ function AddRecalcPointsEvent ($player_id)
         $now = time ();
         $when = mktime (0, 10, 0);
         if ( date("H") >= 0 && date ("i") >= 10 ) $when += 24*60*60;
-        $id = IncrementDBGlobal ('nexttask');
-        $queue = array ( $id, $player_id, "RecalcPoints", 0, 0, 0, $now, $when, 500 );
+        $queue = array ( '', $player_id, "RecalcPoints", 0, 0, 0, $now, $when, 500 );
         AddDBRow ( $queue, "queue" );
     }
 }
@@ -643,9 +641,8 @@ function AddAllowNameEvent ($player_id)
     {
         $now = time ();
         $when = $now + 7 * 24 * 60 * 60;
-        $id = IncrementDBGlobal ('nexttask');
-        $queue = array ( $id, $player_id, "AllowName", 0, 0, 0, $now, $when, 0 );
-        AddDBRow ( $queue, "queue" );
+        $queue = array ( '', $player_id, "AllowName", 0, 0, 0, $now, $when, 0 );
+        $id = AddDBRow ( $queue, "queue" );
         $query = "UPDATE ".$db_prefix."users SET name_changed = 1, name_until = $when WHERE player_id = $player_id";
         dbquery ($query);
         Debug ( $query );
@@ -678,9 +675,8 @@ function AddReloginEvent ()
         $now = time ();
         $when = mktime (3, 0, 0);
         if ( date("H") >= 3 ) $when += 24*60*60;
-        $id = IncrementDBGlobal ('nexttask');
-        $queue = array ( $id, 99999, "UnloadAll", 0, 0, 0, $now, $when, 777 );
-        AddDBRow ( $queue, "queue" );
+        $queue = array ( '', 99999, "UnloadAll", 0, 0, 0, $now, $when, 777 );
+        $id = AddDBRow ( $queue, "queue" );
     }
 }
 
@@ -704,9 +700,8 @@ function AddCleanDebrisEvent ()
         $now = time ();
         $week = mktime(0, 0, 0, date('m'), date('d')-date('w'), date('Y')) + 24 * 60 * 60;
         $when = $week + 7 * 24 * 60 * 60 + 10 * 60;
-        $id = IncrementDBGlobal ('nexttask');
-        $queue = array ( $id, 99999, "CleanDebris", 0, 0, 0, $now, $when, 600 );
-        AddDBRow ( $queue, "queue" );
+        $queue = array ( '', 99999, "CleanDebris", 0, 0, 0, $now, $when, 600 );
+        $id = AddDBRow ( $queue, "queue" );
     }
 }
 
@@ -726,9 +721,8 @@ function Queue_CleanDebris_End ($queue)
 function AddDebugEvent ($when)
 {
     $now = time ();
-    $id = IncrementDBGlobal ('nexttask');
-    $queue = array ( $id, 99999, "Debug", 0, 0, 0, $now, $when, 9999 );
-    AddDBRow ( $queue, "queue" );
+    $queue = array ( '', 99999, "Debug", 0, 0, 0, $now, $when, 9999 );
+    $id = AddDBRow ( $queue, "queue" );
 }
 
 // Отладочное событие.

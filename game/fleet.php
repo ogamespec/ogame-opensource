@@ -307,10 +307,9 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
     }
 
     // Добавить флот.
-    $fleet_id = IncrementDBGlobal ('nextfleet');
-    $fleet_obj = array ( $fleet_id, $origin['owner_id'], $union_id, $m, $k, $d, $cons, $order, $origin['planet_id'], $target['planet_id'], $flight_time, $deploy_time,
+    $fleet_obj = array ( '', $origin['owner_id'], $union_id, $m, $k, $d, $cons, $order, $origin['planet_id'], $target['planet_id'], $flight_time, $deploy_time,
                                  0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
-    AddDBRow ($fleet_obj, 'fleet');
+    $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
     // Добавить задание в глобальную очередь событий.
     AddQueue ( $origin['owner_id'], "Fleet", $fleet_id, 0, 0, $now, $seconds, $prio );
@@ -430,10 +429,9 @@ function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
     $prio = 200 + 20;
 
     // Добавить ракетную атаку.
-    $fleet_id = IncrementDBGlobal ('nextfleet');
-    $fleet_obj = array ( $fleet_id, $origin['owner_id'], 0, 0, 0, 0, 0, 20, $origin['planet_id'], $target['planet_id'], $seconds, 0,
+    $fleet_obj = array ( '', $origin['owner_id'], 0, 0, 0, 0, 0, 20, $origin['planet_id'], $target['planet_id'], $seconds, 0,
                                  $amount, $type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-    AddDBRow ($fleet_obj, 'fleet');
+    $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
     // Добавить задание в глобальную очередь событий.
     AddQueue ( $origin['owner_id'], "Fleet", $fleet_id, 0, 0, $now, $seconds, $prio );
@@ -860,10 +858,9 @@ function CreateUnion ($fleet_id)
     if ($fleet_obj['mission'] != 1) return 0;
 
     // Добавить союз.
-    $union_id = IncrementDBGlobal ('nextunion');
-    $union_name = "KV" . ($union_id * mt_rand (230,270));
-    $union = array ( $union_id, $fleet_id, $union_name, $fleet_obj['owner_id'] );
-    AddDBRow ($union, 'union');
+    $union = array ( '', $fleet_id, "", $fleet_obj['owner_id'] );
+    $union_id = AddDBRow ($union, 'union');
+    RenameUnion ( $union_id, "KV" . ($union_id * mt_rand (230,270)) );
 
     // Добавить флот в союз.
     $query = "UPDATE ".$db_prefix."fleet SET union_id = $union_id WHERE fleet_id = $fleet_id";
