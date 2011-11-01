@@ -152,6 +152,8 @@ function CreateUser ( $name, $pass, $email)
     $md = md5 ($pass . $db_secret);
     $ack = md5(time ().$db_secret);
 
+    error_reporting ( E_ALL );
+
     // Получить следующий уникальный номер и увеличить его на 1 для следующего пользователя.
     $query = "SELECT * FROM ".$db_prefix."uni".";";
     $result = dbquery ($query);
@@ -197,7 +199,7 @@ function CreateUser ( $name, $pass, $email)
     dbquery ( $query );
 
     // Выслать приветственное письмо и сообщение.
-    SendGreetingsMail ( $origname, $pass, $email, $ack);
+    if ( $ip !== "127.0.0.1" ) SendGreetingsMail ( $origname, $pass, $email, $ack);
     SendGreetingsMessage ( $id);
 
     // Удалить неактивированного пользователя через 3 дня.
@@ -486,10 +488,12 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
         AddRecalcPointsEvent ($player_id);
 
         // Редирект на Обзор Главной планеты.
+        header ( "Location: ".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1" );
         echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
     }
     else
     {
+        header ( "Location: ".hostname()."game/reg/errorpage.php?errorcode=2&arg1=$uni&arg2=$login" );
         echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/reg/errorpage.php?errorcode=2&arg1=$uni&arg2=$login' /></head><body></body>";
     }
     ob_end_flush ();

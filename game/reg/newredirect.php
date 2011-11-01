@@ -13,6 +13,7 @@ require_once "../db.php";
 
 require_once "../bbcode.php";
 require_once "../msg.php";
+require_once "../prod.php";
 require_once "../planet.php";
 require_once "../user.php";
 require_once "../queue.php";
@@ -52,7 +53,7 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
     if ($RegError == 0 && $AGB)
     {
         CreateUser ( $_POST['character'], $_POST['password'], $_POST['email'] );
-        //Login ( $_POST['character'], $_POST['password'] );
+        Login ( $_POST['character'], $_POST['password'] );
         exit ();
     }
 

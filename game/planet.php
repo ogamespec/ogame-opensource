@@ -78,11 +78,6 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
 {
     global $db_prefix;
 
-    // Получить следующий уникальный номер
-    $query = "SELECT * FROM ".$db_prefix."uni".";";
-    $result = dbquery ($query);
-    $unitab = dbarray ($result);
-
     // Проверить не занято-ли место?
     if ($moon) $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( type = 0 OR type = 10003 )";
     else $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( ( type > 0 AND type < 10000) OR type = 10001 )";
@@ -148,9 +143,6 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
                                  500, 500, 0, 1, 1, 1, 1, 1, 1, $now, $now, 0 );
     $id = AddDBRow ( $planet, "planets" );
 
-    // Увеличить уникальный номер на 1 для следующей планеты.
-    $query = "UPDATE ".$db_prefix."uni"." SET nextplanet = ".$unitab['nextplanet'].";";
-    dbquery ($query);
     return $id;
 }
 

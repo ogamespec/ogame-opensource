@@ -82,6 +82,81 @@ if ($res == false) {
         loca_add("MENU_IMPRESSUM", "Impressum");
     }
 
+    // "en"
+    $loca_lang = "en";
+    {
+        loca_add("METAL" , "Metal");
+        loca_add("CRYSTAL" , "Crystal");
+        loca_add("DEUTERIUM" , "Deuterium");
+        loca_add("ENERGY" , "Energy");
+        loca_add("DM" , "Dark Matter");
+        loca_add("MOON" , "Moon");
+
+        // Названия игровых объектов
+        loca_add("NAME_1", "Metal Mine");
+        loca_add("NAME_2", "Crystal Mine");
+        loca_add("NAME_3", "Deuterium Synthesizer");
+        loca_add("NAME_4", "Solar Plant");
+        loca_add("NAME_12", "Fusion Reactor");
+        loca_add("NAME_14", "Robotics Factory");
+        loca_add("NAME_15", "Nanite Factory");
+        loca_add("NAME_21", "Shipyard");
+        loca_add("NAME_22", "Metal Storage");
+        loca_add("NAME_23", "Crystal Storage");
+        loca_add("NAME_24", "Deuterium Tank");
+        loca_add("NAME_31", "Research Lab");
+        loca_add("NAME_33", "Terraformer");
+        loca_add("NAME_34", "Alliance Depot");
+        loca_add("NAME_41", "Lunar Base");
+        loca_add("NAME_42", "Sensor Phalanx");
+        loca_add("NAME_43", "Jump Gate");
+        loca_add("NAME_44", "Missile Silo");
+
+        loca_add("NAME_106", "Espionage Technology");
+        loca_add("NAME_108", "Computer Technology");
+        loca_add("NAME_109", "Weapons Technology");
+        loca_add("NAME_110", "Shielding Technology");
+        loca_add("NAME_111", "Armour Technology");
+        loca_add("NAME_113", "Energy Technology");
+        loca_add("NAME_114", "Hyperspace Technology");
+        loca_add("NAME_115", "Combustion Drive");
+        loca_add("NAME_117", "Impulse Drive");
+        loca_add("NAME_118", "Hyperspace Drive");
+        loca_add("NAME_120", "Laser Technology");
+        loca_add("NAME_121", "Ion Technology");
+        loca_add("NAME_122", "Plasma Technology");
+        loca_add("NAME_123", "Intergalactic Research Network");
+        loca_add("NAME_124", "Экспедиционная технология");
+        loca_add("NAME_199", "Graviton Technology");
+
+        loca_add("NAME_202", "Small Cargo");
+        loca_add("NAME_203", "Large Cargo");
+        loca_add("NAME_204", "Light Fighter");
+        loca_add("NAME_205", "Heavy Fighter");
+        loca_add("NAME_206", "Cruiser");
+        loca_add("NAME_207", "Battleship");
+        loca_add("NAME_208", "Colony Ship");
+        loca_add("NAME_209", "Recycler");
+        loca_add("NAME_210", "Espionage Probe");
+        loca_add("NAME_211", "Bomber");
+        loca_add("NAME_212", "Solar Satellite");
+        loca_add("NAME_213", "Destroyer");
+        loca_add("NAME_214", "Deathstar");
+        loca_add("NAME_215", "Battlecruiser");
+
+        loca_add("NAME_401", "Rocket Launcher");
+        loca_add("NAME_402", "Light Laser");
+        loca_add("NAME_403", "Heavy Laser");
+        loca_add("NAME_404", "Gauss Cannon");
+        loca_add("NAME_405", "Ion Cannon");
+        loca_add("NAME_406", "Plasma Turret");
+        loca_add("NAME_407", "Small Shield Dome");
+        loca_add("NAME_408", "Large Shield Dome");
+        loca_add("NAME_502", "Anti-Ballistic Missiles");
+        loca_add("NAME_503", "Interplanetary Missiles");
+
+    }
+
     // "ru"
     $loca_lang = "ru";
     {
