@@ -5,6 +5,7 @@
 
 function Admin_Planets ()
 {
+    global $loca_lang;
     global $session;
     global $db_prefix;
     global $GlobalUser;
@@ -182,16 +183,44 @@ function spio ()
 {
     var TechNames = {
 <?php
+
+    $old_lang = $loca_lang;
+
+    $loca_lang = "de";
     foreach ( $buildmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
     foreach ( $fleetmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
     foreach ( $defmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
+
+    $loca_lang = "en";
+    foreach ( $buildmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
+    foreach ( $fleetmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
+    foreach ( $defmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
+
+    $loca_lang = "ru";
+    foreach ( $buildmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
+    foreach ( $fleetmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
+    foreach ( $defmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
+
 ?>
     };
     var ResNames = {
 <?php
+        $loca_lang = "de";
         echo "\"".loca("METAL")."\": 'm', ";
         echo "\"".loca("CRYSTAL")."\": 'k', ";
         echo "\"".loca("DEUTERIUM")."\": 'd', ";
+
+        $loca_lang = "en";
+        echo "\"".loca("METAL")."\": 'm', ";
+        echo "\"".loca("CRYSTAL")."\": 'k', ";
+        echo "\"".loca("DEUTERIUM")."\": 'd', ";
+
+        $loca_lang = "ru";
+        echo "\"".loca("METAL")."\": 'm', ";
+        echo "\"".loca("CRYSTAL")."\": 'k', ";
+        echo "\"".loca("DEUTERIUM")."\": 'd', ";
+
+    $loca_lang = $old_lang;
 ?>
     };
 

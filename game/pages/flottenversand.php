@@ -49,8 +49,6 @@ if ( $_GET['ajax'] == 1)
     include "flottenversand_ajax.php";
 }
 
-PageHeader ("flottenversand", false, true, "flotten1", 1);
-
 $unitab = LoadUniverse ();
 $unispeed = $unitab['speed'];
 
@@ -59,16 +57,6 @@ $nowfleet = dbrows ($result);
 $maxfleet = $GlobalUser['r108'] + 1;
 
 $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-
-?>
-
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
-  <script language="JavaScript" src="js/flotten.js"></script>
-  <table width="519" border="0" cellpadding="0" cellspacing="1">
-
-<?php
 
 // Превратить все пустые параметры в нули.
 
@@ -249,6 +237,19 @@ switch ( $order )
 //Ваши флоты ввязались в бой.
 
 if ($FleetError) {
+
+    PageHeader ("flottenversand", false, true, "flotten1", 1);
+
+?>
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+  <script language="JavaScript" src="js/flotten.js"></script>
+  <table width="519" border="0" cellpadding="0" cellspacing="1">
+
+<?php
+
     echo "  <tr height=\"20\">\n";
     echo "     <td class=\"c\"><span class=\"error\"> Флот не удалось отправить!</span></td>\n";
     echo "  </tr>\n";
@@ -293,7 +294,18 @@ else {
 
     //echo "<br>";
     //print_r ( $queue);
+
+    $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+
+    PageHeader ("flottenversand", false, true, "flotten1", 1);
+
 ?>
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+  <script language="JavaScript" src="js/flotten.js"></script>
+  <table width="519" border="0" cellpadding="0" cellspacing="1">
 
    <tr height="20">
     <td class="c" colspan="2">
