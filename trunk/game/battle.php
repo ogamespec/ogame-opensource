@@ -640,9 +640,8 @@ function StartBattle ( $fleet_id, $planet_id )
     foreach ($defmap as $i=>$gid) $source .= $d[0]['defense'][$gid] . " ";
     $source .= ")\n";
 
-    $battle_id = IncrementDBGlobal ("nextbattle");
-    $battle = array ( $battle_id, $source, '' );
-    AddDBRow ( $battle, "battledata");
+    $battle = array ( '', $source, '' );
+    $battle_id = AddDBRow ( $battle, "battledata");
 
     // *** Передать данные боевому движку
 

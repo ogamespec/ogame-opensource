@@ -82,7 +82,6 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     $query = "SELECT * FROM ".$db_prefix."uni".";";
     $result = dbquery ($query);
     $unitab = dbarray ($result);
-    $id = $unitab['nextplanet']++;
 
     // Проверить не занято-ли место?
     if ($moon) $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( type = 0 OR type = 10003 )";
@@ -137,17 +136,17 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
 
     // Добавить планету
     $now = time();
-    if ($moon) $planet = array( $id, $name, $type, $g, $s, $p, $owner_id, $diam, $temp, 0, 1, $now,
+    if ($moon) $planet = array( '', $name, $type, $g, $s, $p, $owner_id, $diam, $temp, 0, 1, $now,
                                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                           0, 0, 0, 1, 1, 1, 1, 1, 1, $now, $now, 0 );
-    else $planet = array( $id, $name, $type, $g, $s, $p, $owner_id, $diam, $temp, 0, $fields, $now,
+    else $planet = array( '', $name, $type, $g, $s, $p, $owner_id, $diam, $temp, 0, $fields, $now,
                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                  500, 500, 0, 1, 1, 1, 1, 1, 1, $now, $now, 0 );
-    AddDBRow ( $planet, "planets" );
+    $id = AddDBRow ( $planet, "planets" );
 
     // Увеличить уникальный номер на 1 для следующей планеты.
     $query = "UPDATE ".$db_prefix."uni"." SET nextplanet = ".$unitab['nextplanet'].";";
@@ -314,13 +313,12 @@ function CreateDebris ($g, $s, $p, $owner_id)
     $debris_id = HasDebris ($g, $s, $p);
     if ($debris_id > 0 ) return $debris_id;
     $now = time();
-    $id = IncrementDBGlobal ( 'nextplanet' );
-    $planet = array ( $id, "Поле обломков", 10000, $g, $s, $p, $owner_id, 0, 0, 0, 0, $now,
+    $planet = array ( '', "Поле обломков", 10000, $g, $s, $p, $owner_id, 0, 0, 0, 0, $now,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, $now, $now, 0 );
-    AddDBRow ( $planet, 'planets' );
+    $id = AddDBRow ( $planet, 'planets' );
     return $id;
 }
 
@@ -378,13 +376,12 @@ function GetPlanetType ($planet)
 // Создать фантом колонизации. Вернуть ID.
 function CreateColonyPhantom ($g, $s, $p, $owner_id)
 {
-    $id = IncrementDBGlobal ( 'nextplanet' );
-    $planet = array( $id, "Planet", 10002, $g, $s, $p, $owner_id, 0, 0, 0, 0, time(),
+    $planet = array( '', "Planet", 10002, $g, $s, $p, $owner_id, 0, 0, 0, 0, time(),
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-    AddDBRow ( $planet, 'planets' );
+    $id = AddDBRow ( $planet, 'planets' );
     return $id;
 }
 
@@ -399,8 +396,7 @@ function AbandonPlanet ($g, $s, $p)
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 ) 
     {
-        $id = IncrementDBGlobal ( 'nextplanet' );
-        $planet = array( $id, "Уничтоженная планета", 10001, $g, $s, $p, 99999, 0, 0, 0, 0, $now,
+        $planet = array( '', "Уничтоженная планета", 10001, $g, $s, $p, 99999, 0, 0, 0, 0, $now,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -474,13 +470,12 @@ function CreateOuterSpace ($g, $s, $p)
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 ) 
     {
-        $id = IncrementDBGlobal ( 'nextplanet' );
-        $planet = array( $id, "Бесконечные дали", 20000, $g, $s, $p, 99999, 0, 0, 0, 0, time(),
+        $planet = array( '', "Бесконечные дали", 20000, $g, $s, $p, 99999, 0, 0, 0, 0, time(),
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-        AddDBRow ( $planet, 'planets' );
+        $id = AddDBRow ( $planet, 'planets' );
     }
     else
     {

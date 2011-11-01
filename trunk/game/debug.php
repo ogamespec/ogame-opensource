@@ -8,11 +8,10 @@ function Error ($text)
     global $GlobalUser;
     if ( !$GlobalUser ) return;
 
-    $id = IncrementDBGlobal ( 'nexterror' );
     $now = time ();
 
-    $error = array ( $id, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], bb($text), $now );
-    AddDBRow ( $error, 'errors' );
+    $error = array ( '', $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], bb($text), $now );
+    $id = AddDBRow ( $error, 'errors' );
 
     Logout ( $_GET['session'] );    // Завершить сессию.
 
@@ -39,11 +38,10 @@ function Debug ($message)
     global $GlobalUser;
     if ( !$GlobalUser ) return;
 
-    $id = IncrementDBGlobal ( 'nexterror' );
     $now = time ();
 
-    $error = array ( $id, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], bb($message), $now );
-    AddDBRow ( $error, 'debug' );
+    $error = array ( '', $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], bb($message), $now );
+    $id = AddDBRow ( $error, 'debug' );
 }
 
 // Трассировка вызовов.
@@ -70,10 +68,9 @@ function BrowseHistory ()
 
     if ( $GlobalUser['sniff'] )
     {
-        $id = IncrementDBGlobal ( 'nextlog' );
         $getdata = serialize ( $_GET );
         $postdata = serialize ( $_POST );
-        $log = array ( $id, $GlobalUser['player_id'], $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'], $getdata, $postdata, time() );
+        $log = array ( '', $GlobalUser['player_id'], $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'], $getdata, $postdata, time() );
         AddDBRow ( $log, 'browse' );
     }
 }

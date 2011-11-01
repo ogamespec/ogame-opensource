@@ -31,11 +31,8 @@ function AddNote ( $player_id, $subj, $text, $prio )
     if ($prio < 0) $prio = 0;
     if ($prio > 2) $prio = 2;
 
-    // Получить следующий уникальный номер и увеличить его на 1 для следующего пользователя.
-    $id = IncrementDBGlobal ( 'nextnote' );
-
     // Записать заметку в БД.
-    $note = array( $id, $player_id, $subj, $text, mb_strlen ($text, "UTF-8"), $prio, time() );
+    $note = array( '', $player_id, $subj, $text, mb_strlen ($text, "UTF-8"), $prio, time() );
     AddDBRow ( $note, "notes" );
 }
 

@@ -82,12 +82,9 @@ function SendMessage ($player_id, $from, $subj, $text, $pm)
         DeleteOldestMessage ($player_id);
     }
 
-    // Получить следующий уникальный номер и увеличить его на 1 для следующего сообщения.
-    $id = IncrementDBGlobal ( 'nextmsg' );
-
     // Добавить сообщение.
-    $msg = array( $id, $player_id, $pm, $from, $subj, $text, 0, time() );
-    AddDBRow ( $msg, "messages" );
+    $msg = array( '', $player_id, $pm, $from, $subj, $text, 0, time() );
+    $id = AddDBRow ( $msg, "messages" );
 
     return $id;
 }
