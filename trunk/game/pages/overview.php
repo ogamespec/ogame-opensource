@@ -188,6 +188,7 @@ echo "</div>\n";
 echo "<!-- END CONTENT AREA -->\n\n";
 
 if ( $GlobalUser['vacation']) $OverviewError = "<center>\nрежим отпуска<br></center>\n";
+if ( $uni['freeze'] ) $OverviewError .= "<center>\nВселенная поставлена на паузу.<br></center>\n";
 
 PageFooter ($OverviewMessage, $OverviewError, false);
 ob_end_flush ();

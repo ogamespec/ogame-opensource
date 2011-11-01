@@ -100,6 +100,8 @@ $probeOnly = false;
 $origin = LoadPlanet ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['thisplanettype'] );
 $target = LoadPlanet ( $_POST['galaxy'], $_POST['system'], $_POST['planet'], $_POST['planettype'] );
 
+if ( $unitab['freeze'] ) FleetError ("Невозможно отправить флот, Вселенная поставлена на паузу." );
+
 if (  ( $_POST['thisgalaxy'] == $_POST['galaxy'] ) &&
         ( $_POST['thissystem'] == $_POST['system'] ) &&
         ( $_POST['thisplanet'] ==  $_POST['planet'] ) &&
