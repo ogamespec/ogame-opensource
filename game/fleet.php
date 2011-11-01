@@ -294,6 +294,9 @@ function AdjustShips ($fleet, $planet_id, $sign)
 // Отправить флот. Никаких проверок не производится. Возвращает ID флота.
 function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, $cons, $when, $union_id=0, $deploy_time=0)
 {
+    $uni = LoadUniverse ( );
+    if ( $uni['freeze'] ) return;
+
     $now = $when;
     $prio = 200 + $order;
     $flight_time = $seconds;
@@ -319,6 +322,9 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
 // Отозвать флот (если это возможно)
 function RecallFleet ($fleet_id)
 {
+    $uni = LoadUniverse ( );
+    if ( $uni['freeze'] ) return;
+
     $now = time ();
     $fleet_obj = LoadFleet ($fleet_id);
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
@@ -425,6 +431,9 @@ function GetMissionName ($num)
 // Запустить межпланетные ракеты
 function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
 {
+    $uni = LoadUniverse ( );
+    if ( $uni['freeze'] ) return;
+
     $now = time ();
     $prio = 200 + 20;
 

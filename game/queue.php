@@ -9,7 +9,7 @@
 События всех игроков выстраиваются в общую очередь. Очередь дискретна - каждое событие синхронизировано посекундно.
 Проверка на завершение события (движение очереди) осуществляется когда игроки совершаются какие-либо действия (переходят по страницам).
 Если два события попадают на одну секунду, то они обрабатываются в порядке приоритета (например если Атака совпадает по времени с Переработать,
-на тех же координатах, то вначале обрабатывается Атака, а потом Переработать).
+на тех же координатах, то вначале обрабатывается Атака, а потом Переработать).  
 
 Каждое событие имеет начало (время запуска) и конец (время завершения события). Некоторые события можно отменить. Отмена некоторых событий порождает 
 другие события (например отмена задания флота порождает новое задание возврата флота).
@@ -108,6 +108,10 @@ function RemoveQueue ($task_id, $cb)
 function UpdateQueue ($until)
 {
     global $db_prefix;
+
+    $uni = LoadUniverse ( );
+    if ( $uni['freeze'] ) return;
+
     $query = "SELECT * FROM ".$db_prefix."queue WHERE end <= $until ORDER BY end ASC, prio DESC";
     $result = dbquery ($query);
 
@@ -151,6 +155,9 @@ function BuildEnque ( $planet_id, $id, $destroy )
 {
     global $db_prefix, $GlobalUser;
     $maxcnt = 5;
+
+    $uni = LoadUniverse ( );
+    if ( $uni['freeze'] ) return;
 
     // Терраформер и Лунную базу нельзя снести.
     if ( $destroy && ($id == 33 || $id == 41) ) return;
@@ -222,6 +229,9 @@ function BuildEnque ( $planet_id, $id, $destroy )
 function BuildDeque ( $planet_id, $listid )
 {
     global $db_prefix, $GlobalUser;
+
+    $uni = LoadUniverse ( );
+    if ( $uni['freeze'] ) return;
 
     // Загрузить очередь. Отсортирована по времени начала событий.
     $result = GetBuildQueue ( $planet_id );
@@ -374,6 +384,9 @@ function AddShipyard ($player_id, $planet_id, $gid, $value )
 {
     global $db_prefix;
 
+    $uni = LoadUniverse ( );
+    if ( $uni['freeze'] ) return;
+
     // Если в очереди уже строится купол такого же типа, то не добавлять ещё один купол в очередь.
     $result = GetShipyardQueue ($planet_id);
     $tasknum = dbrows ($result);
@@ -461,6 +474,9 @@ function StartResearch ($player_id, $planet_id, $id)
 {
     global $db_prefix;
 
+    $uni = LoadUniverse ( );
+    if ( $uni['freeze'] ) return;
+
     Debug ("Запустить исследование ".loca("NAME_$id")." на планете $planet_id игрока $player_id" );
 
     // Исследование уже ведется?
@@ -496,6 +512,9 @@ function StartResearch ($player_id, $planet_id, $id)
 function StopResearch ($player_id)
 {
     global $db_prefix;
+
+    $uni = LoadUniverse ( );
+    if ( $uni['freeze'] ) return;
 
     // Получить очередь исследований.
     $result = GetResearchQueue ( $player_id);
