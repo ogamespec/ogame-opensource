@@ -72,4 +72,21 @@ function AddDBRow ( $row, $tabname )
     return mysql_insert_id ();
 }
 
+function LockTables ()
+{
+    global $db_prefix;
+    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','fleet','union','battledata','fleetlogs');
+    $query = "LOCK TABLES loca_projects WRITE, loca_table WRITE";
+    foreach ( $tabs as $i=>$name ) 
+    {
+        $query .= ", ".$db_prefix.$name." WRITE";
+    }
+    dbquery ($query);
+}
+
+function UnlockTables ()
+{
+    dbquery ( "UNLOCK TABLES" );
+}
+
 ?>
