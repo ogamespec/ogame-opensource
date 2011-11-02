@@ -415,4 +415,21 @@ function PlanetPrice ($planet, &$points, &$fpoints)
     }
 }
 
+// Стоимость флота
+function FleetPrice ( $fleet_obj, &$points, &$fpoints )
+{
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $m = $k = $d = $e = 0;
+    $points = $fpoints = 0;
+
+    foreach ( $fleetmap as $i=>$gid ) {        // Флот
+        $level = $fleet_obj["ship$gid"];
+        if ($level > 0){
+            ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
+            $points += ($m + $k + $d) * $level;
+            $fpoints += $level;
+        }
+    }
+}
+
 ?>
