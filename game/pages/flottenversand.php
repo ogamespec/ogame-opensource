@@ -122,7 +122,7 @@ if ( $origin_user['ip_addr'] !== "127.0.0.1" )        // для локальны
 $dist = FlightDistance ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['galaxy'], $_POST['system'], $_POST['planet'] );
 $slowest_speed = FlightSpeed ( $fleet, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] );
 $flighttime = FlightTime ( $dist, $slowest_speed, $_POST['speed'] / 10, $unispeed );
-$cons = FlightCons ( $fleet, $dist, $slowest_speed, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'], $probeOnly );
+$cons = FlightCons ( $fleet, $dist, $flighttime, $slowest_speed, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'], $probeOnly );
 $cargo = $spycargo = $numships = 0;
 foreach ($fleet as $id=>$amount)
 {
