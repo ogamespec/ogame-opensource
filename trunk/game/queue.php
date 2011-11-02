@@ -37,7 +37,6 @@ type: тип задания, каждый тип имеет свой обраб�
     "EngineerOff"    -- заканчивается офицер: Инженер
     "GeologeOff"     -- заканчивается офицер: Геолог
     "TechnocrateOff" -- заканчивается офицер: Технократ
-    "DeleteAccount"     -- удалить аккаунт
     "UnbanPlayer"    -- разбанить игрока
     "ChangeEmail"    -- записать постоянный почтовый адрес
     "AllowName"    -- разрешить смену имени игрока
@@ -129,7 +128,6 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "CleanDebris" ) Queue_CleanDebris_End ($queue);
         else if ( $queue['type'] === "CleanPlanets" ) Queue_CleanPlanets_End ($queue);
         else if ( $queue['type'] === "CleanPlayers" ) Queue_CleanPlayers_End ($queue);
-        else if ( $queue['type'] === "DeleteAccount" ) Queue_DeleteAccount_End ($queue);
         else if ( $queue['type'] === "RecalcPoints" ) Queue_RecalcPoints_End ($queue);
         else if ( $queue['type'] === "AllowName" ) Queue_AllowName_End ($queue);
         else if ( $queue['type'] === "Debug" ) Queue_Debug_End ($queue);
