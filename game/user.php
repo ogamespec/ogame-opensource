@@ -209,7 +209,7 @@ function CreateUser ( $name, $pass, $email)
 
 // Полность удалить игрока, все его планеты и флоты.
 // Развернуть флоты летящие на игрока.
-function RemoveUser ( $player_id)
+function RemoveUser ( $player_id, $when)
 {
     global $db_prefix;
 
@@ -222,7 +222,7 @@ function RemoveUser ( $player_id)
     while ($rows--) {
         $queue = dbarray ($result);
         $fleet_obj = LoadFleet ( $queue['sub_id'] );
-        if ($fleet_obj['owner_id'] != $player_id && $fleet_obj['mission'] < 100 ) RecallFleet ( $fleet_obj['fleet_id'] );
+        if ($fleet_obj['owner_id'] != $player_id && $fleet_obj['mission'] < 100 ) RecallFleet ( $fleet_obj['fleet_id'], $when );
     }
 
     // Удалить все флоты игрока
@@ -490,6 +490,7 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
         AddReloginEvent ();
         AddCleanDebrisEvent ();
         AddCleanPlanetsEvent ();
+        AddCleanPlayersEvent ();
 
         // Задание персчёта очков игрока.
         AddRecalcPointsEvent ($player_id);

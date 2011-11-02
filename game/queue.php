@@ -45,6 +45,7 @@ type: тип задания, каждый тип имеет свой обраб�
     "UnloadAll"      -- сделать релогин всех игроков
     "CleanDebris"    -- чистка виртуальных полей обломков
     "CleanPlanets"   -- удаление уничтоженных планет / покинутых лун
+    "CleanPlayers"   -- удаление неактивных игроков и поставленных на удаление (1:10)
     "UpdateStats"    -- сохранение старых очков статистики
     "RecalcPoints"    -- пересчёт статистики игроков
     "Build"          -- постройка на планете (sub_id - номер планеты, obj_id - тип постройки)
@@ -127,6 +128,7 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "UnloadAll" ) Queue_Relogin_End ($queue);
         else if ( $queue['type'] === "CleanDebris" ) Queue_CleanDebris_End ($queue);
         else if ( $queue['type'] === "CleanPlanets" ) Queue_CleanPlanets_End ($queue);
+        else if ( $queue['type'] === "CleanPlayers" ) Queue_CleanPlayers_End ($queue);
         else if ( $queue['type'] === "DeleteAccount" ) Queue_DeleteAccount_End ($queue);
         else if ( $queue['type'] === "RecalcPoints" ) Queue_RecalcPoints_End ($queue);
         else if ( $queue['type'] === "AllowName" ) Queue_AllowName_End ($queue);
@@ -610,7 +612,7 @@ function GetDeleteAccountTaskID ( $player_id)
 // Удалить аккаунт
 function Queue_DeleteAccount_End ($queue)
 {
-    RemoveUser ( $queue['owner_id'] );
+    RemoveUser ( $queue['owner_id'], $queue['end'] );
     // удалять задание не нужно, потому что все задания игрока удаляются в функции RemoveUser.
 }
 
@@ -763,6 +765,43 @@ function Queue_CleanPlanets_End ($queue)
     Debug ( "Чистка уничтоженных планет" );
     RemoveQueue ( $queue['task_id'], 0 );
     AddCleanPlanetsEvent ();
+}
+
+// Добавить задание чистки ишек и игроков поставленных на удаление
+// Вызывается при логине любого игрока.
+function AddCleanPlayersEvent ()
+{
+    global $db_prefix;
+
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'CleanPlayers'";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0 )
+    {
+        $now = time ();
+        $when = mktime (1, 10, 0);
+        if ( date("H") >= 1 && date("i") >= 10 ) $when += 24*60*60;
+        $queue = array ( '', 99999, "CleanPlayers", 0, 0, 0, $now, $when, 900 );
+        $id = AddDBRow ( $queue, "queue" );
+    }
+}
+
+// Удалить игроков и ишки
+function Queue_CleanPlayers_End ($queue)
+{
+    global $db_prefix;
+
+    $when = $queue['end'] - 35*24*60*60;
+    $query = "SELECT * FROM ".$db_prefix."users WHERE lastclick < $when AND admin < 1 AND lastclick <> 0";
+    $result = dbquery ( $query );
+    $rows = dbrows ( $result );
+    while ($rows-- )
+    {
+        $user = dbarray ( $result );
+        RemoveUser ( $user['player_id'], $queue['end'] );
+    }
+
+    RemoveQueue ( $queue['task_id'], 0 );
+    AddCleanPlayersEvent ();
 }
 
 // Добавить отладочное событие.

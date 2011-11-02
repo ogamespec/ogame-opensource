@@ -31,6 +31,7 @@ function QueueDesc ( $queue )
         case "UnloadAll": return "Отгрузить всех игроков";
         case "CleanDebris": return "Чистка виртуальных ПО";
         case "CleanPlanets": return "Чистка уничтоженных планет";
+        case "CleanPlayers": return "Удаление неактивных игроков и поставленных на удаление";
     }
 
     return "Неизвестный тип задания (type=$type, sub_id=$sub_id, obj_id=$obj_id, level=$level)";
