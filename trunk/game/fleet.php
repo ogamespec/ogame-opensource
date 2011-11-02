@@ -331,6 +331,9 @@ function RecallFleet ($fleet_id, $now=0)
     $fleet = array ();
     foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj["ship$gid"];
 
+    // Если флот уже развернут, ничего не делать
+    if ( $fleet_obj['mission'] >= 100 && $fleet_obj['mission'] < 200 ) return;
+
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
     $target = GetPlanet ( $fleet_obj['target_planet'] );
     $queue = GetFleetQueue ($fleet_obj['fleet_id']);
@@ -980,6 +983,26 @@ function EnumUnionFleets ($union_id)
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."fleet WHERE union_id = $union_id";
     return dbquery ( $query );
+}
+
+// ==================================================================================
+
+// Запретить обработку флотов пока производятся расчёты боевого движка
+// Мы не можем использовать средства MySQL по защелкиванию базы, потому что боевой движок находится в другом процессе.
+// Поэтому используется нехитрый прием критической секции через защелкивание файла
+
+function FleetLock ()
+{
+    $BattleLock = fopen('battlelock', 'r+');
+    while (flock($BattleLock, LOCK_EX) == 0) sleep (1);
+    fclose ( $BattleLock );    
+}
+
+function FleetUnlock ()
+{
+    $BattleLock = fopen('battlelock', 'r+');
+    flock($BattleLock, LOCK_UN); // release the lock
+    fclose ( $BattleLock );
 }
 
 ?>

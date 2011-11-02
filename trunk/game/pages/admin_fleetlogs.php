@@ -24,8 +24,24 @@ function Admin_Fleetlogs ()
 {
     global $session;
     global $db_prefix;
-    
+
     $now = time ();
+
+    // Обработка POST-запросов.
+    $player_id = 0;
+    if ( method () === "POST" )
+    {
+        if ( key_exists ( "order_end", $_POST ) ) {        // Завершить задание
+            $id = $_POST['order_end'];
+            $query = "UPDATE ".$db_prefix."queue SET end=$now WHERE task_id=$id";
+            dbquery ( $query );
+        }
+
+        if ( key_exists ( "order_return", $_POST ) ) {        // Развернуть флот
+            $queue = LoadQueue ( $_POST['order_return'] );
+            RecallFleet ( $queue['sub_id'] );
+        }
+    }
 
     $query = "SELECT * FROM ".$db_prefix."queue WHERE type='Fleet' ORDER BY end ASC";
     $result = dbquery ($query);
@@ -33,7 +49,7 @@ function Admin_Fleetlogs ()
     $bxx = 1;
 
     echo "<table>\n";
-    echo "<tr><td class=c>N</td> <td class=c>Таймер</td> <td class=c>Задание</td> <td class=c>Отправлен</td> <td class=c>Прибывает</td><td class=c>Время полёта</td> <td class=c>Старт</td> <td class=c>Цель</td> <td class=c>Флот</td> <td class=c>Груз</td> <td class=c>САБ</td> <td class=c>Приказ</td> </tr>\n";
+    echo "<tr><td class=c>N</td> <td class=c>Таймер</td> <td class=c>Задание</td> <td class=c>Отправлен</td> <td class=c>Прибывает</td><td class=c>Время полёта</td> <td class=c>Старт</td> <td class=c>Цель</td> <td class=c>Флот</td> <td class=c>Груз</td> <td class=c>САБ</td> <td class=c colspan=2>Приказ</td> </tr>\n";
 
     while ($rows--)
     {
@@ -117,7 +133,17 @@ function Admin_Fleetlogs ()
     else echo "-";
 ?>
         </th>
-        <th <?=$style;?> >x</th>
+        <th <?=$style;?> >
+         <form action="index.php?page=admin&session=<?=$session;?>&mode=Fleetlogs" method="POST">
+    <input type="hidden" name="order_end" value="<?=$queue['task_id'];?>" />
+        <input type="submit" value="F" />
+     </form>
+        </th><th <?=$style;?> >
+         <form action="index.php?page=admin&session=<?=$session;?>&mode=Fleetlogs" method="POST">
+    <input type="hidden" name="order_return" value="<?=$queue['task_id'];?>" />
+        <input type="submit" value="R" />
+     </form>
+        </th>
         </tr>
 
 <?php
