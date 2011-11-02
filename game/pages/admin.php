@@ -26,6 +26,7 @@ $mode = $_GET['mode'];
 function AdminUserName ($user)
 {
     global $session;
+
     $name = $user['oname'];
 
     $week = time() - 604800;

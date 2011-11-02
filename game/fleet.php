@@ -709,8 +709,8 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         {
             $text .= ", и устанавливает, что эта планета пригодна для колонизации. Вскоре после начала освоения планеты поступает сообщение о беспорядках на главной планете, так как империя становится слишком большой и люди возвращаются обратно.\n";
 
-            // Добавить уничтоженную планету.
-            AbandonPlanet ( $target['g'], $target['s'], $target['p'] );
+            // Добавить покинутую планету.
+            AbandonPlanet ( $target['g'], $target['s'], $target['p'], $queue['end'] );
         }
         else
         {
@@ -719,11 +719,13 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
             // Создать новую колонию.
             $id = CreatePlanet ( $target['g'], $target['s'], $target['p'], $fleet_obj['owner_id'], 1 );
             Debug ( "Игроком ".$origin['owner_id']." колонизирована планета $id [".$target['g'].":".$target['s'].":".$target['p']."]");
+
+            // Отнять от флота 1 колонизатор
+            $fleet[208]--;
+            if ( $fleet[208] < 0 ) $fleet[208] = 0;
         }
 
-        // Отнять от флота 1 колонизатор и вернуть флот, если что-то осталось.
-        $fleet[208]--;
-        if ( $fleet[208] < 0 ) $fleet[208] = 0;
+        // Вернуть флот, если что-то осталось.
         $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
         $num_ships = 0;
         foreach ($fleetmap as $i=>$gid) {

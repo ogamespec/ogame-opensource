@@ -30,6 +30,7 @@ function QueueDesc ( $queue )
         case "AllowName": return "Разрешить сменить имя";
         case "UnloadAll": return "Отгрузить всех игроков";
         case "CleanDebris": return "Чистка виртуальных ПО";
+        case "CleanPlanets": return "Чистка уничтоженных планет";
     }
 
     return "Неизвестный тип задания (type=$type, sub_id=$sub_id, obj_id=$obj_id, level=$level)";
