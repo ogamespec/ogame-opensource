@@ -207,12 +207,23 @@ function CreateUser ( $name, $pass, $email)
     return $id;
 }
 
+// Полность удалить игрока, все его планеты и флоты.
+// Развернуть флоты летящие на игрока.
 function RemoveUser ( $player_id)
 {
     global $db_prefix;
 
     // Аккаунты администратора и space нельзя удалить.
     if ($player_id == 1 || $player_id == 99999) return;
+
+    // Развернуть все флоты, летящие на игрока.
+    $result = EnumFleetQueue ($player_id);
+    $rows = dbrows ( $result );
+    while ($rows--) {
+        $queue = dbarray ($result);
+        $fleet_obj = LoadFleet ( $queue['sub_id'] );
+        if ($fleet_obj['owner_id'] != $player_id && $fleet_obj['mission'] < 100 ) RecallFleet ( $fleet_obj['fleet_id'] );
+    }
 
     // Удалить все флоты игрока
     $query = "DELETE FROM ".$db_prefix."fleet WHERE owner_id = $player_id";
@@ -231,12 +242,7 @@ function RemoveUser ( $player_id)
     dbquery ($query);
 
     // Уменьшить количество пользователей.
-    $query = "SELECT * FROM ".$db_prefix."uni".";";
-    $result = dbquery ($query);
-    $unitab = dbarray ($result);
-    $unitab['usercount']--;
-    if ($unitab['usercount'] < 0) $unitab['usercount'] = 0;
-    $query = "UPDATE ".$db_prefix."uni"." SET usercount = ".$unitab['usercount'].";";
+    $query = "UPDATE ".$db_prefix."uni SET usercount = usercount - 1;";
     dbquery ($query);
 }
 
