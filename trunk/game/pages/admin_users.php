@@ -270,7 +270,7 @@ function Admin_Users ()
 
             echo "<tr><th>".date ("Y-m-d H:i:s", $user['regdate'])."</th>";
             echo "<th>[".$hplanet['g'].":".$hplanet['s'].":".$hplanet['p']."] <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$hplanet['planet_id']."\">".$hplanet['name']."</a></th>";
-            echo "<th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a></th></tr>\n";
+            echo "<th>".AdminUserName($user)."</th></tr>\n";
         }
         echo "</table>\n";
 
@@ -293,7 +293,7 @@ function Admin_Users ()
             $user = dbarray ( $result );
             if ( $first ) $first = false;
             else echo ", ";
-            echo "<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>";
+            echo AdminUserName($user);
         }
 ?>
     </td></tr>

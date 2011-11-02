@@ -156,9 +156,9 @@ function EnumPlanets ()
     // sortby: Порядок сортировки планет: 0 - порядку колонизации (planet_id), 1 - координатам, 2 - алфавиту
     // sortorder: Порядок: 0 - по возрастанию, 1 - по убыванию
     $asc = $GlobalUser['sortorder'] == 0 ? "ASC" : "DESC";
-    if ($GlobalUser['sortby'] == 0) $order = " ORDER BY planet_id $asc";
-    else if ($GlobalUser['sortby'] == 1) $order = " ORDER BY g $asc, s $asc, p $asc";
-    else if ($GlobalUser['sortby'] == 2) $order = " ORDER BY name $asc";    
+    if ($GlobalUser['sortby'] == 0) $order = " ORDER BY planet_id $asc, type DESC";
+    else if ($GlobalUser['sortby'] == 1) $order = " ORDER BY g $asc, s $asc, p $asc, type DESC";
+    else if ($GlobalUser['sortby'] == 2) $order = " ORDER BY name $asc, type DESC";
     else $order = "";
 
     $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$player_id."' AND type < 10000".$order;
