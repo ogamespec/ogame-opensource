@@ -433,7 +433,7 @@ if (Langue != '')
 		var valeur = new Array(2,2,8,37,8,130,10,25,20,100);
 		var prix = new Array(0,0,0,0,0,0,0,0,0,0);
 		
-		for (var f=44; f<tdnode.length ; f++)
+		for (var f=54; f<tdnode.length ; f++)
 		{
 			if(tdnode[f].innerHTML.length<1000)
 			{
@@ -467,7 +467,7 @@ if (Langue != '')
 		var prixInitial = new Array(1.4,1,1,0.8,1,1.2,6,1,6.6,36,0.3,1.4,7,800,16);
 		var prix = new Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 		
-		for (var f=44; f<tdnode.length ; f++)
+		for (var f=54; f<tdnode.length ; f++)
 		{
 			if(tdnode[f].innerHTML.length<1000)
 			{
@@ -500,7 +500,7 @@ if (Langue != '')
 		var prix = new Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 		var prod=new Array(0,0,0);
 		
-		for (var f=44; f<tdnode.length ; f++)
+		for (var f=54; f<tdnode.length ; f++)
 		{
 			if(tdnode[f].innerHTML.length<1000)
 			{
@@ -816,7 +816,7 @@ if (Langue != '')
 		
 		/* ****************************** Affichage ********************************/
 		
-		var tr_evenements = document.getElementsByTagName('tbody')[4];
+		var tr_evenements = document.getElementsByTagName('tbody')[5];
 		var tr1 = tr_evenements.appendChild(document.createElement('tr'));
 		tr1.innerHTML = '<td class="c" colspan="4" width="96%">'+Pointdetails+'</td><td style="background-color:transparent;"><a TITLE="'+AffBBcode+'";><img id="copybbcode" style="margin-left:-20px; position:relative;" src="data:image/gif;base64,R0lGODlhEAAQAPUAAChsKDA8EdrtwXvEApjWAYnNAur13EZRKoPJAidsJ8PjmJPTAcTxAIzDSJ3ZAbjJmqPdAZPKTJrVGozMHKfgAbvsALXoAHWRCXTAAqviAa/YepnMRFxlQ73hipSahLrgfJTQJ6ncN63If7PbfKPYOMHhl7HmALbch5+lkXS2BIekB4mtBni3BJTLRGu6AnmTCYzHPpS2Sc7t3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAADIALAAAAAAQABAAAAaOQJlwSCwaE4Bk0igERAzQaARQBDQE2Cy2kSA2FJ3OY1xSmGFDp2b0EXk8qI/m1KLKAK4BiBQKxTgcIAMYdgAYKQEBB4sHiQgDhQMsiZSUBQiRBQsEGSYqiQQFkE0IBQQQK5QUDguYQxOmEBcXLwyrBRNEABsLDhUMwBALG3ZpEpwWFRYEEsVFSEpdTNNFQQA7"/></a></td>';
 		// On rajoute la zone de texte, mais invisible :
