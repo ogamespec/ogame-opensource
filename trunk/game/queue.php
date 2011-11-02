@@ -126,6 +126,7 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "Fleet" ) Queue_Fleet_End ($queue);
         else if ( $queue['type'] === "UnloadAll" ) Queue_Relogin_End ($queue);
         else if ( $queue['type'] === "CleanDebris" ) Queue_CleanDebris_End ($queue);
+        else if ( $queue['type'] === "CleanPlanets" ) Queue_CleanPlanets_End ($queue);
         else if ( $queue['type'] === "DeleteAccount" ) Queue_DeleteAccount_End ($queue);
         else if ( $queue['type'] === "RecalcPoints" ) Queue_RecalcPoints_End ($queue);
         else if ( $queue['type'] === "AllowName" ) Queue_AllowName_End ($queue);
@@ -734,6 +735,34 @@ function Queue_CleanDebris_End ($queue)
     Debug ( "Удалено виртуальных ПО : " . mysql_affected_rows() );
     RemoveQueue ( $queue['task_id'], 0 );
     AddCleanDebrisEvent ();
+}
+
+// Добавить задание чистки удаленных планет и лун, если его ещё не существует.
+// Вызывается при логине любого игрока.
+function AddCleanPlanetsEvent ()
+{
+    global $db_prefix;
+
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'CleanPlanets'";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0 )
+    {
+        $now = time ();
+        $when = mktime (1, 10, 0);
+        if ( date("H") >= 1 && date("i") >= 10 ) $when += 24*60*60;
+        $queue = array ( '', 99999, "CleanPlanets", 0, 0, 0, $now, $when, 700 );
+        $id = AddDBRow ( $queue, "queue" );
+    }
+}
+
+// Чистка уничтоженных планет.
+function Queue_CleanPlanets_End ($queue)
+{
+    global $db_prefix;
+
+    Debug ( "Чистка уничтоженных планет" );
+    RemoveQueue ( $queue['task_id'], 0 );
+    AddCleanPlanetsEvent ();
 }
 
 // Добавить отладочное событие.
