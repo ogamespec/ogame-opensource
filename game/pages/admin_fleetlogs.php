@@ -33,52 +33,63 @@ function Admin_Fleetlogs ()
     $bxx = 1;
 
     echo "<table>\n";
-    echo "<tr><td class=c>Таймер</td> <td class=c>Задание</td> <td class=c>Отправлен</td> <td class=c>Прибывает</td><td class=c>Время полёта</td> <td class=c>Старт</td> <td class=c>Цель</td> <td class=c>Флот</td> <td class=c>Груз</td> <td class=c>САБ</td> <td class=c>Приказ</td> </tr>\n";
+    echo "<tr><td class=c>N</td> <td class=c>Таймер</td> <td class=c>Задание</td> <td class=c>Отправлен</td> <td class=c>Прибывает</td><td class=c>Время полёта</td> <td class=c>Старт</td> <td class=c>Цель</td> <td class=c>Флот</td> <td class=c>Груз</td> <td class=c>САБ</td> <td class=c>Приказ</td> </tr>\n";
 
     while ($rows--)
     {
         $queue = dbarray ( $result );
         $fleet_obj = LoadFleet ( $queue['sub_id'] );
 
+        $points = $fpoints = 0;
+        FleetPrice ( $fleet_obj, &$points, &$fpoints );
+        $style = "";
+        if ( $points >= 100000000 ) {
+            if ( $fleet_obj['mission'] <= 2 ) $style = " style=\"background-color: FireBrick;\" ";
+            else $style = " style=\"background-color: DarkGreen;\" ";
+        }
+
 ?>
 
-        <tr>
-        <th>
+        <tr <?=$style;?> >
+
+        <th <?=$style;?> > <?=$bxx;?> </th>
+
+        <th <?=$style;?> >
 <?php
-    echo "<table><tr><th><div id='bxx".$bxx."' title='".($queue['end'] - $now)."' star='".$queue['start']."'> </th>";
-    echo "<tr><th>".date ("d.m.Y H:i:s", $queue['end'])."</th></tr></table>";
+    echo "<table><tr $style ><th $style ><div id='bxx".$bxx."' title='".($queue['end'] - $now)."' star='".$queue['start']."'> </th>";
+    echo "<tr><th $style >".date ("d.m.Y H:i:s", $queue['end'])."</th></tr></table>";
 ?>
         </th>
-        <th>
+        <th <?=$style;?> >
 <?php
     echo FleetlogsMissionText ( $fleet_obj['mission'] );
 ?>
         </th>
-        <th><?=date ("d.m.Y", $queue['start']);?> <br> <?=date ("H:i:s", $queue['start']);?></th>
-        <th><?=date ("d.m.Y", $queue['end']);?> <br> <?=date ("H:i:s", $queue['end']);?></th>
-        <th>
+        <th <?=$style;?> ><?=date ("d.m.Y", $queue['start']);?> <br> <?=date ("H:i:s", $queue['start']);?></th>
+        <th <?=$style;?> ><?=date ("d.m.Y", $queue['end']);?> <br> <?=date ("H:i:s", $queue['end']);?></th>
+        <th <?=$style;?> >
 <?php
     echo "<nobr>".BuildDurationFormat ($fleet_obj['flight_time']) . "</nobr><br>";
     echo "<nobr>".$fleet_obj['flight_time'] . " сек.</nobr>";
 ?>
         </th>
-        <th>
+        <th <?=$style;?> >
 <?php
     $planet = GetPlanet ( $fleet_obj['start_planet'] );
     $user = LoadUser ( $planet['owner_id'] );
-    echo $planet['name'] . " [".$planet['g'].":".$planet['s'].":".$planet['p']."] <br>";
-    echo $user['oname'];
+    echo AdminPlanetName($planet) . " " . AdminPlanetCoord($planet) . " <br>";
+    echo AdminUserName($user);
 ?>
         </th>
-        <th>
+        <th <?=$style;?> >
 <?php
     $planet = GetPlanet ( $fleet_obj['target_planet'] );
     $user = LoadUser ( $planet['owner_id'] );
-    echo $planet['name'] . " [".$planet['g'].":".$planet['s'].":".$planet['p']."] <br>";
-    echo $user['oname'];
+    echo AdminPlanetName($planet) . " " . AdminPlanetCoord($planet). " <br>";
+    echo AdminUserName($user);
 ?>
         </th>
-        <th>
+        <th <?=$style;?> >
 <?php
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     foreach ($fleetmap as $i=>$gid) {
@@ -87,7 +98,7 @@ function Admin_Fleetlogs ()
     }
 ?>
         </th>
-        <th>
+        <th <?=$style;?> >
 <?php
     $total = $fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d'];
     if ( $total > 0 ) {
@@ -98,7 +109,7 @@ function Admin_Fleetlogs ()
     else echo "-";
 ?>
         </th>
-        <th>
+        <th <?=$style;?> >
 <?php
     if ( $fleet_obj['union_id'] ) {
         echo $fleet_obj['union_id'];
@@ -106,7 +117,7 @@ function Admin_Fleetlogs ()
     else echo "-";
 ?>
         </th>
-        <th>x</th>
+        <th <?=$style;?> >x</th>
         </tr>
 
 <?php
