@@ -320,12 +320,12 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
 }
 
 // Отозвать флот (если это возможно)
-function RecallFleet ($fleet_id)
+function RecallFleet ($fleet_id, $now=0)
 {
     $uni = LoadUniverse ( );
     if ( $uni['freeze'] ) return;
 
-    $now = time ();
+    if ($now == 0) $now = time ();
     $fleet_obj = LoadFleet ($fleet_id);
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $fleet = array ();
