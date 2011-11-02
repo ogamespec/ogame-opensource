@@ -205,7 +205,7 @@ $speed = $unitab['speed'];
                 $GlobalUser['disable'] = 1;
                 $GlobalUser['disable_until'] = $disable_until;
 
-                AddQueue ( $GlobalUser['player_id'], "DeleteAccount", 0, 0, 0, time(), 7*24*60*60);
+                AddQueue ( $GlobalUser['player_id'], "DeleteAccount", 0, 0, 0, time(), 7*24*60*60, 800);
             }
 
             if ( !key_exists("db_deaktjava", $_POST) && $GlobalUser['disable'] ) {    // Отменить удаление аккаунта
