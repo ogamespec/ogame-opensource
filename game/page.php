@@ -147,7 +147,7 @@ function ResourceList ($m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
     global $GlobalUser;
     $sess = $GlobalUser['session'];
 
-    $prem = 0;
+    $prem = 1;
 
     $mcol = $kcol = $dcol = $ecol = "";
     if ($m >= $mmax) $mcol = "color='#ff0000'";
@@ -163,7 +163,8 @@ function ResourceList ($m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
     echo "<img border='0' src='".UserSkin()."images/kristall.gif' width='42' height='22'>\n</td>\n";
     echo "<td align='center' width='85' class='header'>\n";
     echo "<img border='0' src='".UserSkin()."images/deuterium.gif' width='42' height='22'>\n</td>\n";
-    if ($prem) {
+    if ($prem)
+    {
         echo "<td align='center' width='85' class='header'>\n";
         echo "<a href=index.php?page=micropayment&session=$sess>\n";
         echo "<img border='0' src='img/dm_klein_2.jpg' width='42' height='22' title='".loca("DM")."'></a>\n</td>\n";
@@ -187,8 +188,69 @@ function ResourceList ($m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
     echo "</table></td>\n";
 }
 
+function calco (&$img, &$days, &$action, $now, $qcmd, $who)
+{
+    global $GlobalUser;
+    //$end = $GlobalUser[$who];
+    $end = GetOfficerLeft ( $GlobalUser['player_id'], $qcmd[$who] );
+    if ($end <= $now) $img[$who] = "_un";
+    else
+    {
+        $d = ($end - $now) / (60*60*24);
+        if ( $d  > 0 )
+        {
+            $days[$who] = "&lt;font color=lime&gt;Активен&lt;/font&gt; ещё ".ceil($d)." д.";
+            $action[$who] = "Продлить!";
+        }
+    }
+}
+
 function OficeerList ()
 {
+    global $GlobalUser;
+    $sess = $GlobalUser['session'];
+    $img = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '');
+    $days = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '');
+    $action = array ( 'commander' => 'Заказать!', 'admiral' => 'Заказать!', 'engineer' => 'Заказать!', 'geologist' => 'Заказать!', 'technocrat' => 'Заказать!');
+    $qcmd = array ( 'commander' => 'CommanderOff', 'admiral' => 'AdmiralOff', 'engineer' => 'EngineerOff', 'geologist' => 'GeologeOff', 'technocrat' => 'TechnocrateOff');
+
+    $now = time ();
+
+    calco (&$img, &$days, &$action, $now, &$qcmd, 'commander');
+    calco (&$img, &$days, &$action, $now, &$qcmd, 'admiral');
+    calco (&$img, &$days, &$action, $now, &$qcmd, 'engineer');
+    calco (&$img, &$days, &$action, $now, &$qcmd, 'geologist');
+    calco (&$img, &$days, &$action, $now, &$qcmd, 'technocrat');
+
+    echo "<td class='header'>\n";
+    echo "<table class='header' align=left>\n";
+    echo "<tr class='header'>\n\n";
+    echo "    <td align='center' width='35' class='header'>\n";
+    echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
+    echo "	<img border='0' src='img/commander_ikon".$img['commander'].".gif' width='32' height='32' alt='Командир ОГейма'\n";
+    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['commander']."<br>Командир ОГейма</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['commander']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
+    echo "    </a></td>\n\n";
+    echo "    <td align='center' width='35' class='header'>\n";
+    echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
+    echo "	<img border='0' src='img/admiral_ikon".$img['admiral'].".gif' width='32' height='32' alt='Адмирал'\n";
+    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['admiral']."<br>Адмирал</font><br><font size=1 color=skyblue>&amp;nbsp;Макс. кол-во флотов +2</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['admiral']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
+    echo "    </a></td>\n\n";
+    echo "    <td align='center' width='35' class='header'>\n";
+    echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
+    echo "	<img border='0' src='img/ingenieur_ikon".$img['engineer'].".gif' width='32' height='32' alt='Инженер'\n";
+    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['engineer']."<br>Инженер</font><br><font size=1 color=skyblue>Сокращает вдвое потери в обороне+10% больше энергии</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['engineer']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
+    echo "    </a></td>\n\n";
+    echo "    <td align='center' width='35' class='header'>\n";
+    echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
+    echo "	<img border='0' src='img/geologe_ikon".$img['geologist'].".gif' width='32' height='32' alt='Геолог'\n";
+    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['geologist']."<br>Геолог</font><br><font size=1 color=skyblue>+10% доход от шахты</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['geologist']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
+    echo "    </a></td>\n\n";
+    echo "    <td align='center' width='35' class='header'>\n";
+    echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
+    echo "	<img border='0' src='img/technokrat_ikon".$img['technocrat'].".gif' width='32' height='32' alt='Технократ'\n";
+    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['technocrat']."<br>Технократ</font><br><font size=1 color=skyblue>+2 уровень шпионажа, 25% меньше времени на исследования</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['technocrat']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
+    echo "    </a></td>\n\n";
+    echo "<td align='center' class='header'></td></tr></table></td>\n\n";
 }
 
 function LeftMenu ()
