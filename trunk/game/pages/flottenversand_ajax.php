@@ -125,7 +125,7 @@ $probeOnly = false;
 $dist = FlightDistance ( $aktplanet['g'], $aktplanet['s'], $aktplanet['p'], $galaxy, $system, $planet );
 $slowest_speed = FlightSpeed ( $fleet, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118'] );
 $flighttime = FlightTime ( $dist, $slowest_speed, $speed, $unispeed );
-$cons = FlightCons ( $fleet, $dist, $slowest_speed, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118'], $probeOnly );
+$cons = FlightCons ( $fleet, $dist, $flighttime, $slowest_speed, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118'], $probeOnly );
 
 if ( $aktplanet['d'] < $cons ) AjaxSendError (613);        // не хватает дейта на полёт
 if ( $cargo < $cons ) AjaxSendError (615);        // нет места в грузовом отсеке для дейтерия
