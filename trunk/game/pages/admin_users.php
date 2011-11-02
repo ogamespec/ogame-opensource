@@ -42,14 +42,9 @@ function Admin_Users ()
             }
 
             if ( $_POST['deaktjava'] === "on" ) {
-                if ( GetDeleteAccountTaskID($player_id) == 0 ) {
                     $query .= "disable = 1, disable_until = " . ($now+7*24*60*60).", ";
-                    AddQueue ( $player_id, "DeleteAccount", 0, 0, 0, time(), 7*24*60*60, 800);
-                }
             }
             else {
-                $id = GetDeleteAccountTaskID ( $player_id );
-                if ($id)  RemoveQueue ( $id, 0);
                 $query .= "disable = 0, ";
             }
             if ( $_POST['vacation'] === "on" ) {

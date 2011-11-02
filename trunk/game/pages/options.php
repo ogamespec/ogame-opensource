@@ -204,8 +204,6 @@ $speed = $unitab['speed'];
                 dbquery ($query);
                 $GlobalUser['disable'] = 1;
                 $GlobalUser['disable_until'] = $disable_until;
-
-                AddQueue ( $GlobalUser['player_id'], "DeleteAccount", 0, 0, 0, time(), 7*24*60*60, 800);
             }
 
             if ( !key_exists("db_deaktjava", $_POST) && $GlobalUser['disable'] ) {    // Отменить удаление аккаунта
@@ -213,9 +211,6 @@ $speed = $unitab['speed'];
                 dbquery ($query);
                 $GlobalUser['disable'] = 0;
                 $GlobalUser['disable_until'] = 0;
-
-                $id = GetDeleteAccountTaskID ( $GlobalUser['player_id'] );
-                if ($id)  RemoveQueue ( $id, 0);
             }
 
             // Сохранить путь к скину + галочка показывать/выключить скин.

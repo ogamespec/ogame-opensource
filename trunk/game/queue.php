@@ -595,27 +595,6 @@ function GetOfficerLeft ($player_id, $off)
     else return 0;
 }
 
-// Вернуть ID события удаления аккаунта, или 0, если аккаунт не удаляется.
-function GetDeleteAccountTaskID ( $player_id)
-{
-    global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'DeleteAccount' AND owner_id = $player_id";
-    $result = dbquery ($query);
-    if ( $result )
-    {
-        $queue = dbarray ($result);
-        return $queue['task_id'];
-    }
-    else return 0;    
-}
-
-// Удалить аккаунт
-function Queue_DeleteAccount_End ($queue)
-{
-    RemoveUser ( $queue['owner_id'], $queue['end'] );
-    // удалять задание не нужно, потому что все задания игрока удаляются в функции RemoveUser.
-}
-
 // Добавить задание пересчёта очков у игрока, если его ещё не существует.
 // Вызывается при логине любого игрока.
 function AddRecalcPointsEvent ($player_id)
@@ -790,6 +769,18 @@ function Queue_CleanPlayers_End ($queue)
 {
     global $db_prefix;
 
+    // Удаление игроков, поставленных на удаление
+    $when = $queue['end'];
+    $query = "SELECT * FROM ".$db_prefix."users WHERE disable_until >= $when AND admin < 1 AND disable <> 0";
+    $result = dbquery ( $query );
+    $rows = dbrows ( $result );
+    while ($rows-- )
+    {
+        $user = dbarray ( $result );
+        RemoveUser ( $user['player_id'], $queue['end'] );
+    }
+
+    // Удаление игроков, неактивных более 35 дней
     $when = $queue['end'] - 35*24*60*60;
     $query = "SELECT * FROM ".$db_prefix."users WHERE lastclick < $when AND admin < 1 AND lastclick <> 0";
     $result = dbquery ( $query );
