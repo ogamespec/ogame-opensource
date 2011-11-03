@@ -252,8 +252,15 @@ function EventList ()
         $task[$tasknum]['fleet'][0]['m'] = $fleet_obj['m'];
         $task[$tasknum]['fleet'][0]['k'] = $fleet_obj['k'];
         $task[$tasknum]['fleet'][0]['d'] = $fleet_obj['d'];
-        $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
-        $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
+        if ( $fleet_obj['mission'] < 100 ) {
+            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
+            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
+        }
+        else
+        {
+            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['target_planet'];
+            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['start_planet'];
+        }
         $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
         GetDirectionAssignment ($fleet_obj, &$task[$tasknum]['fleet'][0]['dir'], &$task[$tasknum]['fleet'][0]['assign'] );
 

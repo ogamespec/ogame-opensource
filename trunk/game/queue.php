@@ -843,6 +843,15 @@ function EnumOwnFleetQueue ($player_id)
     return $result;
 }
 
+// Перечислить флоты летящие от или на планету.
+function EnumPlanetFleets ($planet_id)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."fleet WHERE start_planet = $planet_id OR target_planet = $planet_id;";
+    $result = dbquery ($query);
+    return $result;
+}
+
 // Обработчик завершения задания флота находится в модуле fleet.php
 
 ?>
