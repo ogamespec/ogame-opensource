@@ -2,8 +2,3 @@
 order allow,deny
 deny from all
 </Files>
-
-<Files battlelock>
-order allow,deny
-deny from all
-</Files>
