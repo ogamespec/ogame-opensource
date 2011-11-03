@@ -10,6 +10,7 @@ $OverviewError = "";
 require_once "overview_events.php";
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 
 $now = time();
 UpdateQueue ( $now );

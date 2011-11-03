@@ -323,12 +323,18 @@ function ChangeActivationCode ( $name)
 // Выбрать текущую планету.
 function SelectPlanet ($player_id, $cp)
 {
-    global $db_prefix, $GlobalUser;
+    global $db_prefix;
     $planet = GetPlanet ($cp);    // Нельзя выбирать чужие планеты.
     if ($planet['owner_id'] != $player_id) return;
     $query = "UPDATE ".$db_prefix."users SET aktplanet = '".$cp."' WHERE player_id = '".$player_id."'";
     dbquery ($query);
-    $GlobalUser['aktplanet'] = $cp;
+}
+
+// Получить ID текущей планеты
+function GetSelectedPlanet ( $player_id )
+{
+    $user = LoadUser ( $player_id );
+    return $user['aktplanet'];
 }
 
 // Загрузить пользователя.

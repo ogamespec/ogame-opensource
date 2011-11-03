@@ -434,8 +434,33 @@ function AdjustResources ($m, $k, $d, $planet_id, $sign)
 }
 
 // Уничтожить луну, развернуть флоты, модифицировать статистику игрока.
-function DestroyMoon ($planet_id)
+function DestroyMoon ($moon_id, $when)
 {
+    global $db_prefix;
+
+    $moon = GetPlanet ( $moon_id );
+    $planet = LoadPlanet ( $moon['g'], $moon['s'], $moon['p'], 1 );
+    if ( $moon == NULL || $planet == NULL ) return;
+
+    // Развернуть флоты летящие на луну
+    $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = $moon_id AND mission < 100;";
+    $result = dbquery ( $query );
+    $rows = dbrows ($result);
+    while ( $rows-- )
+    {
+        $fleet_obj = dbarray ( $result );
+        RecallFleet ( $fleet_obj['fleet_id'], $when );
+    }
+
+    // Перенаправить возвращающиеся и улетающие флоты на планету.
+    $query = "UPDATE ".$db_prefix."fleet SET start_planet = ".$planet['planet_id']." WHERE start_planet = $moon_id;";
+    dbquery ( $query );
+
+    // Всё остальное уничтожается безвозвратно
+    DestroyPlanet ( $moon_id );
+
+    // Сделать текущей планетой - планету под уничтоженной луной
+    SelectPlanet ( $planet['owner_id'], $planet['planet_id'] );
 }
 
 // Пересчитать поля.

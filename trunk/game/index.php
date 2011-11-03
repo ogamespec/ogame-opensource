@@ -40,6 +40,11 @@ require_once "fleet.php";
 require_once "battle.php";
 require_once "debug.php";
 
+if (0)
+{
+    die ( "Maintanance" );
+}
+
 // *****************************************************************************
 // Вспомогательные функции.
 

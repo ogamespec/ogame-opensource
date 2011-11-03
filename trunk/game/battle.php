@@ -204,7 +204,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             if ( $sum_cargo == 0) $cargo = 0;
             else $cargo = ( FleetCargoSummary ( $attacker ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) {
-                if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker );
+                if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker, $queue['end'] );
                 else $result = 0;
                 if ( ($result & 2) == 0 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
             }
@@ -244,7 +244,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             if ( $sum_cargo == 0) $cargo = 0;
             else $cargo = ( FleetCargoSummary ( $attacker['fleet'] ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) {
-                if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['fleet'] );
+                if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['fleet'], $queue['end'] );
                 else $result = 0;
                 if ( ($result & 2) == 0 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
             }
@@ -486,7 +486,7 @@ function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moon
 }
 
 // Лунная атака.
-function GravitonAttack ($fleet_obj, $fleet)
+function GravitonAttack ($fleet_obj, $fleet, $when)
 {
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
     $target = GetPlanet ( $fleet_obj['target_planet'] );
@@ -535,7 +535,7 @@ function GravitonAttack ($fleet_obj, $fleet)
                                 floor ($moonchance), floor ($ripchance)
                              );
 
-            DestroyMoon ( $target['planet_id'] );
+            DestroyMoon ( $target['planet_id'], $when );
             $result  = 1;
     }
 
@@ -569,8 +569,8 @@ function GravitonAttack ($fleet_obj, $fleet)
                                 floor ($moonchance), floor ($ripchance)
                              );
 
+            DestroyMoon ( $target['planet_id'], $when );
             $result  = 3;
-            DestroyMoon ( $target['planet_id'] );
     }
 
     // Разослать сообщения.
