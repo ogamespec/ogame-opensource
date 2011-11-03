@@ -991,24 +991,4 @@ function EnumUnionFleets ($union_id)
     return dbquery ( $query );
 }
 
-// ==================================================================================
-
-// Запретить обработку флотов пока производятся расчёты боевого движка
-// Мы не можем использовать средства MySQL по защелкиванию базы, потому что боевой движок находится в другом процессе.
-// Поэтому используется нехитрый прием критической секции через защелкивание файла
-
-function FleetLock ()
-{
-    $BattleLock = fopen('battlelock', 'r+');
-    while (flock($BattleLock, LOCK_EX) == 0) sleep (1);
-    fclose ( $BattleLock );    
-}
-
-function FleetUnlock ()
-{
-    $BattleLock = fopen('battlelock', 'r+');
-    flock($BattleLock, LOCK_UN); // release the lock
-    fclose ( $BattleLock );
-}
-
 ?>

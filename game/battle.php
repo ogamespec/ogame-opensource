@@ -646,26 +646,22 @@ function StartBattle ( $fleet_id, $planet_id )
     foreach ($defmap as $i=>$gid) $source .= $d[0]['defense'][$gid] . " ";
     $source .= ")\n";
 
-    $battle = array ( '', $source, '' );
-    $battle_id = AddDBRow ( $battle, "battledata");
+    $battle = array ( '', $source, "" );
+    $battle_id = AddDBRow ( $battle, "battledata" );
+
+    $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
+    fwrite ( $bf, $source );
+    fclose ( $bf );
 
     // *** Передать данные боевому движку
 
-    $arg = "\"db_host=$db_host&db_user=$db_user&db_pass=$db_pass&db_name=$db_name&db_prefix=$db_prefix&battle_id=$battle_id\"";
+    $arg = "\"battle_id=$battle_id\"";
     system ( $unitab['battle_engine'] . " $arg" );
 
     // *** Обработать выходные данные
 
-    $query = "SELECT * FROM ".$db_prefix."battledata WHERE battle_id = $battle_id";
-    $result = dbquery ($query);
-    if ( $result == null ) return;
-    $battle = dbarray ($result);
-
-    $res = unserialize($battle['result']);
-
-    // Удалить уже ненужные боевые данные.
-    $query = "DELETE FROM ".$db_prefix."battledata WHERE battle_id = $battle_id";
-    dbquery ($query);
+    $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
+    $res = unserialize($battleres);
 
     // Определить исход битвы.
     if ( $res['result'] === "awon" ) $battle_result = 0;

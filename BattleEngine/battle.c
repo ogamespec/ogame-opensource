@@ -72,7 +72,6 @@
 #include <time.h>
 #include <math.h>
 #include "battle.h"
-#include "include/mysql.h"
 
 /*
 Формат выходных данных
@@ -191,6 +190,49 @@ static long DefenseRapid[][8] = {
  { 955, 955, 999, 980, 999, 0, 0, 0 },
  { 0, 0, 0, 0, 0, 0, 0, 0 }
 };
+
+// ==========================================================================================
+
+// load data from file
+void * FileLoad(char *filename, unsigned long *size, char * mode)
+{
+    FILE*   f;
+    void*   buffer;
+    unsigned long     filesize;
+
+    if(size) *size = 0;
+
+    f = fopen(filename, mode);
+    if(f == NULL) return NULL;
+
+    fseek(f, 0, SEEK_END);
+    filesize = ftell(f);
+    fseek(f, 0, SEEK_SET);
+
+    buffer = malloc(filesize + 10);
+    if(buffer == NULL)
+    {
+        fclose(f);
+        return NULL;
+    }
+    memset ( buffer, 0, filesize+10);
+
+    fread(buffer, filesize, 1, f);
+    fclose(f);
+    if(size) *size = filesize;    
+    return buffer;
+}
+
+// save data in file
+int FileSave(char *filename, void *data, unsigned long size)
+{
+    FILE *f = fopen(filename, "wt");
+    if(f == NULL) return 0;
+
+    fwrite(data, size, 1, f);
+    fclose(f);
+    return 1;
+}
 
 // ==========================================================================================
 // Генератор случайных чисел.
@@ -782,12 +824,13 @@ DefenderM = (ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS
 
 */
 
-void StartBattle (char *text, MYSQL *conn, char * db_prefix, int battle_id)
+void StartBattle (char *text, int battle_id)
 {
+    char filename[1024];
     Slot *a, *d;
     int rf, fid, did, i, res;
     int anum = 0, dnum = 0;
-    char query[64*1024], *ptr, line[1000], buf[64], *lp;
+    char *ptr, line[1000], buf[64], *lp;
 
     ptr = strstr (text, "Rapidfire");       // Скорострел
     if ( ptr ) {
@@ -917,13 +960,16 @@ void StartBattle (char *text, MYSQL *conn, char * db_prefix, int battle_id)
     // Записать результаты в БД.
     if ( res > 0 )
     {
-        sprintf ( query, "UPDATE %sbattledata SET result = \'%s\' WHERE battle_id = %i", db_prefix, ResultBuffer, battle_id );
-        mysql_query ( conn, query );    
+        sprintf ( filename, "battleresult/battle_%i.txt", battle_id );
+        FileSave ( filename, ResultBuffer, strlen (ResultBuffer) );
     }
 }
 
 void main(int argc, char **argv)
 {
+    char filename[1024];
+    char *battle_data;
+
 	if ( argc < 2 ) return;
 
 	ParseQueryString ( argv[1] );
@@ -931,29 +977,15 @@ void main(int argc, char **argv)
 
 	// Соединиться с базой данных и выбрать исходные данные.
     {
-        char query[1024], *db_prefix = GetSimParamS("db_prefix", "");
         int battle_id = GetSimParamI("battle_id", 0);
-        MYSQL *conn;
-        MYSQL_RES *result;
-        MYSQL_ROW row;
-
+        
         if ( battle_id == 0 ) return;
 
-        conn = mysql_init(NULL);
-        if(conn == NULL) { printf ("(ERROR): 1"); return; }
-
-        if ( ! mysql_real_connect(conn, GetSimParamS("db_host", "localhost"), GetSimParamS("db_user", "root"), GetSimParamS("db_pass", "root"), GetSimParamS("db_name", "ogame"),0,NULL,0) ) { printf ("(ERROR): 2"); return; }
-
-        // Получить исходные данные.
-        sprintf ( query, "SELECT * FROM %sbattledata WHERE battle_id = %i", db_prefix, battle_id );
-        mysql_query ( conn, query );
-        result = mysql_store_result ( conn );
-        if ( result == NULL ) { printf ("(ERROR): 3"); return; }
-        row = mysql_fetch_row(result);
+        sprintf ( filename, "battledata/battle_%i.txt", battle_id );
+        battle_data = FileLoad ( filename, NULL, "rt" );
 
         // Разобрать исходные данные в двоичный формат и начать битву.
         MySrand ((unsigned long)time(NULL));
-        StartBattle ( row[1], conn, db_prefix, battle_id );
-        mysql_close(conn);
+        StartBattle ( battle_data, battle_id );
     }
 }

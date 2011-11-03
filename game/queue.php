@@ -112,16 +112,14 @@ function UpdateQueue ($until)
     $uni = LoadUniverse ( );
     if ( $uni['freeze'] ) return;
 
+    LockTables ();
+
     $query = "SELECT * FROM ".$db_prefix."queue WHERE end <= $until ORDER BY end ASC, prio DESC";
     $result = dbquery ($query);
 
     $rows = dbrows ($result);
     while ($rows--) {
         $queue = dbarray ($result);
-
-        if ( $queue['type'] !== "Fleet" ) LockTables ();
-        else FleetLock ();
-
         if ( $queue['type'] === "Build" ) Queue_Build_End ($queue);
         else if ( $queue['type'] === "Demolish" ) Queue_Build_End ($queue);
         else if ( $queue['type'] === "DecRes" ) Queue_DecRes_End ($queue);
@@ -136,10 +134,9 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "AllowName" ) Queue_AllowName_End ($queue);
         else if ( $queue['type'] === "Debug" ) Queue_Debug_End ($queue);
         else Error ( "queue: Неизвестный тип задания для глобальной очереди: " . $queue['type']);
-
-        if ( $queue['type'] !== "Fleet" ) UnlockTables ();
-        else FleetUnlock ();
     }
+
+    UnlockTables ();
 }
 
 // ===============================================================================================================
