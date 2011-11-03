@@ -789,6 +789,12 @@ function RocketAttack ( $fleet_id, $planet_id )
         }
     }
 
+    // Записать назад потери обороны.
+    SetPlanetDefense ( $planet_id, $target );
+
+    // Изменить статистику игроков
+    RecalcRanks ();
+
     $text = "$amount ракетам из общего числа выпущенных ракет с планеты ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>  ";
     $text .= "удалось попасть на Вашу планету ".$target['name']." <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> !<br>";
     if ($ipm_destroyed) $text .= "$ipm_destroyed ракет(-ы) было уничтожено Вашими ракетами-перехватчиками<br>:<br>";

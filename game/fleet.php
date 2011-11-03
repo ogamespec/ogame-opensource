@@ -437,8 +437,14 @@ function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
     $uni = LoadUniverse ( );
     if ( $uni['freeze'] ) return;
 
+    if ( $amount > $origin['d503'] ) return;    // Нельзя запустить ракет больше чем имеется на планете
+
     $now = time ();
     $prio = 200 + 20;
+
+    // Списать МПР с планеты.
+    $origin['d503'] -= $amount;
+    SetPlanetDefense ( $origin['planet_id'], $origin );
 
     // Добавить ракетную атаку.
     $fleet_obj = array ( '', $origin['owner_id'], 0, 0, 0, 0, 0, 20, $origin['planet_id'], $target['planet_id'], $seconds, 0,
