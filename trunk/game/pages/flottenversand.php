@@ -83,7 +83,6 @@ foreach ($fleetmap as $i=>$gid)
     else $fleet[$gid] = 0;
 }
 $fleet[212] = 0;        // солнечные спутники не летают.
-$probeOnly = false;
 
 $origin = LoadPlanet ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['thisplanettype'] );
 $target = LoadPlanet ( $_POST['galaxy'], $_POST['system'], $_POST['planet'], $_POST['planettype'] );
@@ -122,7 +121,7 @@ if ( $origin_user['ip_addr'] !== "127.0.0.1" )        // для локальны
 $dist = FlightDistance ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['galaxy'], $_POST['system'], $_POST['planet'] );
 $slowest_speed = FlightSpeed ( $fleet, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] );
 $flighttime = FlightTime ( $dist, $slowest_speed, $_POST['speed'] / 10, $unispeed );
-$cons = FlightCons ( $fleet, $dist, $flighttime, $slowest_speed, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'], $probeOnly );
+$cons = FlightCons ( $fleet, $dist, $flighttime, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] );
 $cargo = $spycargo = $numships = 0;
 foreach ($fleet as $id=>$amount)
 {
@@ -151,14 +150,13 @@ if ( $space > 0 ) {
     $space -= $cargo_d;
 }
 
-//if (!colony) Планета необитаема либо должна быть колонизирована!
-
 if ($numships <= 0) FleetError ( "Вы не выбрали корабли либо выбрали, но слишком мало!" );
 
 switch ( $order )
 {
     case '1':        // Атака
-        if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
+        if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
+        else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
         else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Невозможно напасть на собственную планету!" );
 //Запрет на атаки до #1
         break;
@@ -173,6 +171,7 @@ switch ( $order )
         break;
 
     case '3':        // Транспорт
+        if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
         break;
 
     case '4':        // Оставить
