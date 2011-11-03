@@ -535,7 +535,7 @@ function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
 function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     // Также выгрузить половину топлива
-    AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'] + $fleet_obj['fuel'] / 2, $target['planet_id'], '+' );
+    AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'] + floor ($fleet_obj['fuel'] / 2), $target['planet_id'], '+' );
     AdjustShips ( $fleet, $fleet_obj['target_planet'], '+' );
     UpdatePlanetActivity ( $target['planet_id'], $queue['end'] );
 
