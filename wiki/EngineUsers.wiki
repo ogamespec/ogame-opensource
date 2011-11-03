@@ -45,7 +45,7 @@ IsPlayerStrong
 Структура таблицы `users`:
 
 || *столбец* || *SQL тип* || *описание* ||
-||player_id||INT PRIMARY KEY||Порядковый номер пользователя||
+||player_id||INT AUTO_INCREMENT PRIMARY KEY||Порядковый номер пользователя, начинается со 100000||
 ||regdate||INT UNSIGNED||Дата регистрации аккаунта time()||
 ||ally_id||INT||Номер альянса в котором состоит игрок (0 - без альянса)||
 ||joindate||INT UNSIGNED||Дата вступления в альянс time()||
