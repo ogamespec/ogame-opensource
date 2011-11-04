@@ -22,10 +22,10 @@ function Admin_Broadcast ()
 
         if ( $write_error === "" )
         {
-            if ( $cat == 1 ) $query = "SELECT * FROM ".$db_prefix."users WHERE score1 < 5000 AND admin = 0;";        // Новичкам (менее 5.000 очков)
-            else if ( $cat == 2 ) $query = "SELECT * FROM ".$db_prefix."users WHERE place1 < 100 AND admin = 0;";        // Игрокам из топ100
+            if ( $cat == 1 ) $query = "SELECT * FROM ".$db_prefix."users WHERE score1 < 5000;";        // Новичкам (менее 5.000 очков)
+            else if ( $cat == 2 ) $query = "SELECT * FROM ".$db_prefix."users WHERE place1 < 100;";        // Игрокам из топ100
             else if ( $cat == 3 ) $query = "SELECT * FROM ".$db_prefix."users WHERE admin = 1;";        // Операторам
-            else $query = "SELECT * FROM ".$db_prefix."users WHERE admin = 0;";                // Всем
+            else $query = "SELECT * FROM ".$db_prefix."users;";                // Всем
 
             $ownhome = GetPlanet ( $GlobalUser['hplanetid'] );
 
