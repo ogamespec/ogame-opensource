@@ -454,6 +454,7 @@ if ($res == false) {
         loca_add("FLEET_ORDER_8", "Переработать");
         loca_add("FLEET_ORDER_9", "Уничтожить");
         loca_add("FLEET_ORDER_15", "Экспедиция");
+        loca_add("FLEET_ORDER_21", "Атака");
 
         // История изменений.
         loca_add("CHANGELOG_VERSION", "Версия");
