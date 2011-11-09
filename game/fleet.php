@@ -51,6 +51,8 @@ shipXX: количество кораблей каждого типа (INT)
 115      Экспедиция возвращается
 215      Экспедиция на орбите
 20        Ракетная атака
+21        Атака (паровоз САБ) убывает
+121       Атака (паровоз САБ) возращается
 
 Структура таблицы САБов:
 union_id: ID союза (INT PRIMARY KEY)
@@ -300,14 +302,6 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
     $prio = 200 + $order;
     $flight_time = $seconds;
 
-    // Добавление союзного флота.
-    if ( $union_id > 0 )
-    {
-        $union = LoadUnion ( $union_id );
-        $queue = GetFleetQueue ( $union['fleet_id'] );
-        $seconds = $queue['end'] - $now;
-    }
-
     // Добавить флот.
     $fleet_obj = array ( '', $origin['owner_id'], $union_id, $m, $k, $d, $cons, $order, $origin['planet_id'], $target['planet_id'], $flight_time, $deploy_time,
                                  0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
@@ -392,6 +386,8 @@ function GetMissionNameDebug ($num)
         case 115:      return "Экспедиция возвращается";
         case 215:      return "Экспедиция на орбите";
         case 20:       return "Ракетная атака";
+        case 21  :      return "Атака САБ убывает";
+        case 121 :      return "Атака САБ возвращается";
 
         default: return "Неизвестно";
     }
@@ -425,6 +421,8 @@ function GetMissionName ($num)
         case 115:      return "Экспедиция";
         case 215:      return "Экспедиция";
         case 20:       return "Ракетная атака";
+        case 21  :      return "Атака";
+        case 121 :      return "Атака";
 
         default: return "Неизвестно";
     }
@@ -552,7 +550,7 @@ function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 function GetHoldingFleetsCount ($planet_id)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."fleet WHERE (mission = 5 OR mission = 105) AND target_planet = $planet_id;";
+    $query = "SELECT * FROM ".$db_prefix."fleet WHERE (mission = 5 OR mission = 205) AND target_planet = $planet_id;";
     $result = dbquery ($query);
     return dbrows ($result);
 }
@@ -852,6 +850,8 @@ function Queue_Fleet_End ($queue)
         case 215: ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case 115: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case 20: RocketAttackArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 21: AttackArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 121: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
         //default: Error ( "Неизвестное задание для флота: " . $fleet_obj['mission'] ); break;
     }
 
@@ -881,8 +881,8 @@ function CreateUnion ($fleet_id)
     $union_id = AddDBRow ($union, 'union');
     RenameUnion ( $union_id, "KV" . ($union_id * mt_rand (230,270)) );
 
-    // Добавить флот в союз.
-    $query = "UPDATE ".$db_prefix."fleet SET union_id = $union_id WHERE fleet_id = $fleet_id";
+    // Добавить флот в союз и изменить тип Атаки.
+    $query = "UPDATE ".$db_prefix."fleet SET union_id = $union_id, mission = 21 WHERE fleet_id = $fleet_id";
     dbquery ($query);
     return $union_id;
 }
@@ -976,7 +976,7 @@ function EnumUnion ($player_id)
         $union['player'] = explode (",", $union['players'] );
         $union['players'] = count ($union['player']);
         for ($i=0; $i<=$union['players']; $i++) {
-            if ( $union["player"][$i] == $user['player_id'] ) $unions[$count++] = $union;
+            if ( $union["player"][$i] == $player_id ) $unions[$count++] = $union;
         }
     }
     return $unions;
@@ -988,6 +988,33 @@ function EnumUnionFleets ($union_id)
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."fleet WHERE union_id = $union_id";
     return dbquery ( $query );
+}
+
+// Обновить время прибытия всех флотов союза
+function UpdateUnionTime ($union_id, $end)
+{
+    global $db_prefix;
+    $result = EnumUnionFleets ($union_id);
+    $rows = dbrows ($result);
+    while ($rows--)
+    {
+        $fleet_obj = dbarray ($result);
+        $queue = GetFleetQueue ( $fleet_obj['fleet_id'] );
+        $queue_id = $queue['task_id'];
+        $query = "UPDATE ".$db_prefix."queue SET end = $end WHERE task_id = $queue_id";
+        dbquery ($query);
+    }
+}
+
+// Перечислить флоты на удержании
+function GetHoldingFleets ($planet_id)
+{
+    global $db_prefix;
+    $uni = LoadUniverse ();    // ограничить количество флотов настройками вселенной
+    $max = $uni['acs'] * $uni['acs'] - 1;
+    $query = "SELECT * FROM ".$db_prefix."fleet WHERE mission = 205 AND target_planet = $planet_id LIMIT $max";
+    $result = dbquery ($query);
+    return $result;
 }
 
 ?>

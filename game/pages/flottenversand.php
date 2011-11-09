@@ -167,7 +167,7 @@ switch ( $order )
 //Атаковать флоты (?)
 //Вы слишком медленны, чтобы присоединиться к этому флоту
 //Запрет на атаки до #1
-        FleetError ( "Запрет на атаки до #1" );
+        //FleetError ( "Запрет на атаки до #1" );
         break;
 
     case '3':        // Транспорт
@@ -260,7 +260,7 @@ else {
 
     //print_r ( $_POST);
 
-    if ( key_exists ('union2', $_POST) ) $union_id = floor ($_POST['union2']);
+    if ( key_exists ('union2', $_POST) && $order == 2 ) $union_id = floor ($_POST['union2']);
     else $union_id = 0;
 
     // Время удержания
@@ -286,6 +286,7 @@ else {
 
     $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $cargo_m, $cargo_k, $cargo_d, $cons, time(), $union_id, $hold_time );
     $queue = GetFleetQueue ($fleet_id);
+    if ( $union_id ) UpdateUnionTime ( $union_id, $queue['end'] );
 
     // Поднять флот с планеты.
     AdjustResources ( $cargo_m, $cargo_k, $cargo_d + $cons, $origin['planet_id'], '-' );

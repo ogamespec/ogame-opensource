@@ -49,14 +49,12 @@ if ( method () === "POST" )
 
     else if ( key_exists ( 'order_union', $_POST) )     // Управление САБ.
     {
-/*
         $fleet_id = $_POST['order_union'];
         $union_id = CreateUnion ($fleet_id);
 
         if ( key_exists ( 'union_name', $_POST) ) RenameUnion ( $union_id, $_POST['union_name'] );    // переименовать
 
         if ( key_exists ( 'user_name', $_POST) ) $FleetError = AddUnionMember ( $union_id, $_POST['user_name'] );    // добавить игрока
-*/
     }
 }
 
@@ -149,7 +147,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
     <th><?=date ( "D M j G:i:s", $queue['end']);?></th>
     <th>
 <?php
-    if ( $fleet['mission'] == 1 )
+    if ( $fleet['mission'] == 1 || $fleet['mission'] == 21 )
     {
 ?>
          <form action="index.php?page=flotten1&session=<?=$session;?>" method="POST">

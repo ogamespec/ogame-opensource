@@ -600,23 +600,49 @@ function StartBattle ( $fleet_id, $planet_id )
 
     // *** Союзные атаки не должны вступать битву. Игнорировать их.
     $f = LoadFleet ( $fleet_id );
-    if ( $f['mission'] != 1 && $f['union_id'] > 0 ) return;
+    if ( $f['mission'] != 21 && $f['union_id'] > 0 ) return;
 
     // *** Сгенерировать исходные данные
 
     // Список атакующих
-    //$f = LoadFleet ( $fleet_id );
-    $a[0] = LoadUser ( $f['owner_id'] );
-    $a[0]['fleet'] = array ();
-    foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = $f["ship$gid"];
-    $start_planet = GetPlanet ( $f['start_planet'] );
-    $a[0]['g'] = $start_planet['g'];
-    $a[0]['s'] = $start_planet['s'];
-    $a[0]['p'] = $start_planet['p'];
-    $a[0]['id'] = $fleet_id;
-    $a[0]['points'] = $a[0]['fpoints'] = 0;
+    $anum = 0;
+    if ( $f['mission'] != 21 )    // Одиночная атака
+    {
+        $a[0] = LoadUser ( $f['owner_id'] );
+        $a[0]['fleet'] = array ();
+        foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = $f["ship$gid"];
+        $start_planet = GetPlanet ( $f['start_planet'] );
+        $a[0]['g'] = $start_planet['g'];
+        $a[0]['s'] = $start_planet['s'];
+        $a[0]['p'] = $start_planet['p'];
+        $a[0]['id'] = $fleet_id;
+        $a[0]['points'] = $a[0]['fpoints'] = 0;
+        $anum++;
+    }
+    else        // Совместная атака
+    {
+        $result = EnumUnionFleets ( $f['union_id'] );
+        $rows = dbrows ($result);
+        while ($rows--)
+        {
+            $fleet_obj = dbarray ($result);
+
+            $a[$anum] = LoadUser ( $fleet_obj['owner_id'] );
+            $a[$anum]['fleet'] = array ();
+            foreach ($fleetmap as $i=>$gid) $a[$anum]['fleet'][$gid] = $fleet_obj["ship$gid"];
+            $start_planet = GetPlanet ( $fleet_obj['start_planet'] );
+            $a[$anum]['g'] = $start_planet['g'];
+            $a[$anum]['s'] = $start_planet['s'];
+            $a[$anum]['p'] = $start_planet['p'];
+            $a[$anum]['id'] = $fleet_obj['fleet_id'];
+            $a[$anum]['points'] = $a[$anum]['fpoints'] = 0;
+
+            $anum++;
+        }
+    }
 
     // Список обороняющихся
+    $dnum = 0;
     $p = GetPlanet ( $planet_id );
     $d[0] = LoadUser ( $p['owner_id'] );
     $d[0]['fleet'] = array ();
@@ -628,23 +654,52 @@ function StartBattle ( $fleet_id, $planet_id )
     $d[0]['p'] = $p['p'];
     $d[0]['id'] = $planet_id;
     $d[0]['points'] = $d[0]['fpoints'] = 0;
+    $dnum++;
+
+    // Флоты на удержании
+    $result = GetHoldingFleets ($planet_id);
+    $rows = dbrows ($result);
+    while ($rows--)
+    {
+        $fleet_obj = dbarray ($result);
+
+        $d[$dnum] = LoadUser ( $fleet_obj['owner_id'] );
+        $d[$dnum]['fleet'] = array ();
+        $d[$dnum]['defense'] = array ();
+        foreach ($fleetmap as $i=>$gid) $d[$dnum]['fleet'][$gid] = $fleet_obj["ship$gid"];
+        foreach ($defmap as $i=>$gid) $d[$dnum]['defense'][$gid] = 0;
+        $start_planet = GetPlanet ( $fleet_obj['start_planet'] );
+        $d[$dnum]['g'] = $start_planet['g'];
+        $d[$dnum]['s'] = $start_planet['s'];
+        $d[$dnum]['p'] = $start_planet['p'];
+        $d[$dnum]['id'] = $fleet_obj['fleet_id'];
+        $d[$dnum]['points'] = $d[$dnum]['fpoints'] = 0;
+
+        $dnum++;
+    }
 
     $source .= "Rapidfire = $rf\n";
     $source .= "FID = $fid\n";
     $source .= "DID = $did\n";
 
-    $source .= "Attackers = 1\n";
-    $source .= "Defenders = 1\n";
+    $source .= "Attackers = ".$anum."\n";
+    $source .= "Defenders = ".$dnum."\n";
 
-    $source .= "Attacker0 = (".$a[0]['id']." ";
-    $source .= $a[0]['r109'] . " " . $a[0]['r110'] . " " . $a[0]['r111'] . " ";
-    foreach ($fleetmap as $i=>$gid) $source .= $a[0]['fleet'][$gid] . " ";
-    $source .= ")\n";
-    $source .= "Defender0 = (".$d[0]['id']." ";
-    $source .= $d[0]['r109'] . " " . $d[0]['r110'] . " " . $d[0]['r111'] . " ";
-    foreach ($fleetmap as $i=>$gid) $source .= $d[0]['fleet'][$gid] . " ";
-    foreach ($defmap as $i=>$gid) $source .= $d[0]['defense'][$gid] . " ";
-    $source .= ")\n";
+    foreach ($a as $num=>$attacker)
+    {
+        $source .= "Attacker".$num." = (".$attacker['id']." ";
+        $source .= $attacker['r109'] . " " . $attacker['r110'] . " " . $attacker['r111'] . " ";
+        foreach ($fleetmap as $i=>$gid) $source .= $attacker['fleet'][$gid] . " ";
+        $source .= ")\n";
+    }
+    foreach ($d as $num=>$defender)
+    {
+        $source .= "Defender".$num." = (".$defender['id']." ";
+        $source .= $defender['r109'] . " " . $defender['r110'] . " " . $defender['r111'] . " ";
+        foreach ($fleetmap as $i=>$gid) $source .= $defender['fleet'][$gid] . " ";
+        foreach ($defmap as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
+        $source .= ")\n";
+    }
 
     $battle = array ( '', $source, "" );
     $battle_id = AddDBRow ( $battle, "battledata" );

@@ -632,16 +632,16 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
         ptr += sprintf ( ptr, "s:6:\"dshoot\";d:%s;", longnumber(shoots[1]) );
         ptr += sprintf ( ptr, "s:6:\"dpower\";d:%s;", longnumber(spower[1]) );
         ptr += sprintf ( ptr, "s:7:\"aabsorb\";d:%s;", longnumber(absorbed[0]) );
+        ptr += sprintf ( ptr, "s:9:\"attackers\";a:%i:{", anum );
         for (slot=0; slot<anum; slot++) {
-            ptr += sprintf ( ptr, "s:9:\"attackers\";a:%i:{", anum );
             ptr = GenSlot (ptr, aunits, slot, aobjs, a, d, 1);
-            ptr += sprintf ( ptr, "}" );
         }
+        ptr += sprintf ( ptr, "}" );
+        ptr += sprintf ( ptr, "s:9:\"defenders\";a:%i:{", dnum );
         for (slot=0; slot<dnum; slot++) {
-            ptr += sprintf ( ptr, "s:9:\"defenders\";a:%i:{", dnum );
             ptr = GenSlot (ptr, dunits, slot, dobjs, a, d, 0);
-            ptr += sprintf ( ptr, "}" );
         }
+        ptr += sprintf ( ptr, "}" );
         ptr += sprintf ( ptr, "}" );
 
         if (fastdraw) break;
