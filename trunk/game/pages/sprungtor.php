@@ -32,7 +32,7 @@ $total = 0;
 foreach ( $fleetmap as $i=>$gid)
 {
     if ( !key_exists ( "c$gid", $_POST) )  $_POST["c$gid"] = 0;
-    $total += $_POST["c$gid"];
+    $total += floor (abs ($_POST["c$gid"]));
 }
 
 $source = GetPlanet ( $source_id );
@@ -64,12 +64,13 @@ if ( $GateError === "" )
     $fleet = array ();
     foreach ( $fleetmap as $i=>$gid)
     {
-        if ( $_POST["c$gid"] > $source["f$gid"] ) 
+        $amount = floor (abs($_POST["c$gid"]));
+        if ( $amount > $source["f$gid"] ) 
         {
             $GateError .= "<center>\nНедостаточно кораблей в наличии.<br></center>\n";
             break;
         }
-        $fleet[$gid] = $_POST["c$gid"];
+        $fleet[$gid] = $amount;
     }
     $fleet[212] = 0;    // лампы.
 }
