@@ -3,7 +3,7 @@
 // Управление пользователями.
 
 /*
-player_id: Порядковый номер пользователя (INT PRIMARY KEY)
+player_id: Порядковый номер пользователя (INT AUTO_INCREMENT PRIMARY KEY)
 regdate: Дата регистрации аккаунта (INT UNSIGNED)
 ally_id: Номер альянса в котором состоит игрок (0 - без альянса) (INT)
 joindate: Дата вступления в альянс (INT UNSIGNED)

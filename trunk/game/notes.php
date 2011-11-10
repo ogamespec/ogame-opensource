@@ -3,7 +3,7 @@
 // Заметки.
 
 // Записи в таблице БД:
-// note_id: Порядковый номер заметки (INT)
+// note_id: Порядковый номер заметки (INT AUTO_INCREMENT PRIMARY KEY)
 // owner_id: ID пользователя (INT)
 // subj: Тема заметки (CHAR(30))
 // text: Текст заметки (TEXT)
