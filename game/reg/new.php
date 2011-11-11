@@ -1,10 +1,141 @@
+<?php
+
+// Проверить, если файл конфигурации отсутствует - редирект на страницу установки игры.
+if ( !file_exists ("../config.php"))
+{
+    echo "<html><head><meta http-equiv='refresh' content='0;url=../install.php' /></head><body></body></html>";
+    ob_end_flush ();
+    exit ();
+}
+
+require_once "../config.php";
+require_once "../db.php";
+
+require_once "../bbcode.php";
+require_once "../msg.php";
+require_once "../prod.php";
+require_once "../planet.php";
+require_once "../user.php";
+require_once "../queue.php";
+require_once "../uni.php";
+
+function method () { return $_SERVER['REQUEST_METHOD']; }
+
+function hostname () {
+    $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+    $pos = strrpos ( $host, "/game/reg/new.php" );
+    return substr ( $host, 0, $pos+1 );
+}
+
+function isValidEmail($email){
+	return eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$", $email);
+}
+
+// Format string, according to tokens from the text. Tokens are represented as #1, #2 and so on.
+function va ($subject)
+{
+    $num_arg = func_num_args();
+    $pattern = array ();
+    for ($i=1; $i<$num_arg; $i++)
+    {
+        $pattern[$i-1] = "/#$i/";
+        $replace[$i-1] = func_get_arg($i);
+    }
+    return preg_replace($pattern, $replace, $subject);
+}
+
+function gen_trivial_password ($len = 8)
+{
+    $r = '';
+    for($i=0; $i<$len; $i++)
+        $r .= chr(rand(0, 25) + ord('a'));
+    return $r;
+}
+
+// Соединиться с базой данных
+dbconnect ($db_host, $db_user, $db_pass, $db_name);
+dbquery("SET NAMES 'utf8';");
+dbquery("SET CHARACTER SET 'utf8';");
+dbquery("SET SESSION collation_connection = 'utf8_general_ci';");
+
+$uni = LoadUniverse ();
+$uninum = $uni['num'];
+
+$error = $agbclass = "";
+if ( method() === "POST" )        // Зарегистрировать игрока.
+{
+    if ( !key_exists ( "agb", $_POST ) ) {
+        $error = "Для того, чтобы начать игру Вы должны принять Основные Положения!";
+        $agbclass = "error";
+    }
+
+    else if ( mb_strlen ($_POST['character']) < 3 || mb_strlen ($_POST['character']) > 20 ) $error = "Имя #1 содержит недопустимые символы или слишком мало/много символов!";
+    else if ( IsUserExist ( $_POST['character'])) $error = va ( "Имя #1 уже существует", $_POST['character'] ) ;
+    else if ( !isValidEmail ($_POST['email']) ) $error = va ( "Адрес #1 недействителен!", $_POST['email'] ) ;
+    else if ( IsEmailExist ( $_POST['email'])) $error = va ( "Адрес #1 уже существует!", $_POST['email'] );
+
+    if ( $error === "" )
+    {
+        $password = gen_trivial_password ();
+        CreateUser ( $_POST['character'], $password, $_POST['email'] );
+
+?>
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="http://graphics.ogame-cluster.net/download/use/evolutionformate.css">
-<link rel="stylesheet" type="text/css" href="/game/css/registration.css" />
+<link rel="stylesheet" type="text/css" href="<?=hostname();?>evolution/formate.css">
+<link rel="stylesheet" type="text/css" href="<?=hostname();?>game/css/registration.css" />
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<script language="JavaScript" src="/game/js/tw-sack.js"></script>
-<script language="JavaScript" src="/game/js/registration.js"></script>
+</head>
+<body >
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<center>
+<h1 style="font-size: 22;">Огейм Вселенная <?=$uninum;?> Регистрация</h1>
+<table width="704">
+<tr>
+<td class="c"><h3><font color="lime">Регистрация прошла удачно!</font></h3></td>
+</tr>
+<tr>
+<th style="text-align: left;">
+<?php
+    echo va("Поздравляем, <span class='fine'>#1</span>!<br /><br />Вы удачно прошли регистрацию в Огейм (<span class='fine'>#2</span>). <br />\n".
+            "Скоро Вы получите на адрес <span class='fine'>#3</span> письмо с паролем и некоторыми важными ссылками.<br />\n".
+            "Для того, чтобы играть, Вы должны войти через <a href='".$StartPage."'>главную страницу</a>.<br />\n".
+            "На последующей картинке Вы увидите, как это правильно сделать.<br /><br />\n" .
+            "<center><a href='#4' style='text-decoration: underline;font-size: large;'>Вперёд!</a></center><br /><br /> \n" .
+            "Удачи<br /> \n" .
+            "Ваша команда ОГейм</th>", 
+         $_POST['character'], "Вселенная $uninum", $_POST['email'], $StartPage );
+?>
+</tr>
+</table>
+<div style="position:relative; width: 700px; height: 300px; color: #000000; text-align: left; border: 1px solid #415680;"><a href="http://ogame.de/portal"><img src="login.jpg" width="700" height="300" alt="" /></a>
+	<div style="position:absolute; top:135px; left:170px; width:130px; height:16px;">Вселенная <?=$uninum;?></div>
+	<div style="position:absolute; top:135px; left:345px; width:85px; height:16px;"><?=$_POST['character'];?></div>
+
+	<div style="position:absolute; top:135px; left:435px; width:85px; height:16px;">********</div>
+
+	<div style="position:absolute; top:155px; left:170px; width:92px; padding:4px; background-color:#FFFFCC;">Выберите вселенную</div>
+	<div style="position:absolute; top:155px; left:345px; width:76px; padding:4px; background-color:#FFFFCC;">Введите имя</div>
+	<div style="position:absolute; top:155px; left:440px; width:76px; padding:4px; background-color:#FFFFCC;">И присланный пароль!</div>
+
+</div>
+</center>
+</body>
+</html>
+<?php
+        die ();
+    }
+}
+
+?>
+
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="<?=hostname();?>evolution/formate.css">
+<link rel="stylesheet" type="text/css" href="<?=hostname();?>game/css/registration.css" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<script language="JavaScript" src="<?=hostname();?>game/js/tw-sack.js"></script>
+<script language="JavaScript" src="<?=hostname();?>game/js/registration.js"></script>
 <script language="JavaScript">
 function printMessage(code, div) {
     var textclass = "";
@@ -72,9 +203,23 @@ function printMessage(code, div) {
 <body>
 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 <center>
-<h1 style="font-size: 22;">Огейм Вселенная 5 Регистрация</h1>
+<h1 style="font-size: 22;">Огейм Вселенная <?=$uninum;?> Регистрация</h1>
 
 <form id="registration" method="POST">
+<?php
+    if ( $error !== "" ) {
+?>
+<table width="700">
+ <tr>
+  <td class="c">Ошибка</td>
+ </tr>
+ <tr>
+  <th class="warning"><?=$error;?></th>
+ </tr>
+</table>
+<?php
+    }
+?>
 <table width="700">
  <tr>
   <td>
@@ -89,7 +234,7 @@ function printMessage(code, div) {
     <tr>
      <th class="">Электронный адрес</th><th><input name="email" size="20" value="" onfocus="javascript:showInfo('202');javascript:pollEmail();" onblur="javascript:stopPollingEmail();" /></th>
     </tr>
-     <th class="">Я соглашаюсь с <a href='#' target='_blank'>Основными Положениями</a></th><th><input type="checkbox" name="agb" onfocus="javascript:showInfo('204');"/></th>
+     <th class="<?=$agbclass;?>">Я соглашаюсь с <a href='#' target='_blank'>Основными Положениями</a></th><th><input type="checkbox" name="agb" onfocus="javascript:showInfo('204');"/></th>
     </tr>
 
         <tr>

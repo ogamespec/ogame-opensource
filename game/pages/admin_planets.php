@@ -29,7 +29,7 @@ function Admin_Planets ()
             $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
                                        'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
                                       'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
-                                      'm', 'k', 'd', 'g', 's', 'p', 'diameter', 'type' );
+                                      'm', 'k', 'd', 'g', 's', 'p', 'diameter', 'type', 'temp' );
 
             $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
             foreach ( $param as $i=>$p ) {
@@ -400,7 +400,7 @@ function reset ()
         echo "<tr><th>Диаметр <br><a href=\"index.php?page=admin&session=$session&mode=Planets&action=random_diam&cp=".$planet['planet_id']."\" >новый диаметр</a>  </th><th><input size=5 type=\"text\" name=\"diameter\" value=\"".$planet['diameter']."\" /> км (".$planet['fields']." из ".$planet['maxfields']." полей) ";
         echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=recalc_fields&cp=".$planet['planet_id']."\" >пересчитать поля</a> ";
         echo "</th></tr>\n";
-        echo "<tr><th>Температура</th><th>от ".$planet['temp']."°C до ".($planet['temp']+40)."°C</th></tr>\n";
+        echo "<tr><th>Температура</th><th>от <input size=5 type=\"text\" name=\"temp\" value=\"".$planet['temp']."\" />°C до ".($planet['temp']+40)."°C</th></tr>\n";
         echo "<tr><th>Координаты</th><th>[<input type=\"text\" name=\"g\" value=\"".$planet['g']."\" size=1 />:<input type=\"text\" name=\"s\" value=\"".$planet['s']."\" size=2 />:<input type=\"text\" name=\"p\" value=\"".$planet['p']."\" size=1 />]</th></tr>\n";
 
         echo "<tr><td class=c colspan=2>Ресурсы</td></tr>\n";
