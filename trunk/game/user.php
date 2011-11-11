@@ -81,7 +81,7 @@ function SendGreetingsMail ( $name, $pass, $email, $ack)
                 "Желаем успехов в построении империи и удачи в предстоящих боях!\n\n" .
                 "Ваша команда ОГейма";
     //echo "<pre>$text</pre><br>\n";
-    mail_utf8 ( $email, "Добро пожаловать в ОГейм ", $text, "From: OGame Uni ru $uni <noreply@mmogame.com>");
+    mail_utf8 ( $email, "Добро пожаловать в ОГейм ", $text, "From: OGame Uni ru $uni <noreply@oldogame.ru>");
 }
 
 // Выслать письмо, подтверждающее смену адреса.
@@ -96,7 +96,7 @@ function SendChangeMail ( $name, $email, $pemail, $ack)
                "Чтобы беспрепятственно продолжить игру, подтвердите ваш новый адрес e-mail по следующей ссылке:\n\n" .
                hostname()."game/validate.php?ack=$ack\n\n" .
                "Ваша команда OGame";
-    mail_utf8 ( $pemail, "Ваш игровой электронный адрес изменён ", $text, "From: OGame Uni ru $uni <noreply@mmogame.com>");
+    mail_utf8 ( $pemail, "Ваш игровой электронный адрес изменён ", $text, "From: OGame Uni ru $uni <noreply@oldogame.ru>");
 }
 
 // Выслать приветственное сообщение.
@@ -651,6 +651,29 @@ function EnumOperators ()
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."users WHERE admin = 1 ORDER BY player_id ASC;";
     return dbquery ($query);
+}
+
+// Повторно выслать пароль и ссылку для активации.
+function ReactivateUser ($player_id)
+{
+    global $db_prefix, $db_secret;
+    $user = LoadUser ($player_id);
+    if ($user == null) return;
+
+    $len = 8;
+    $r = '';
+    for($i=0; $i<$len; $i++)
+        $r .= chr(rand(0, 25) + ord('a'));
+    $pass = $r;
+    $md = md5 ($pass . $db_secret);
+
+    $name = $user['oname'];
+    $email = $user['pemail'];
+    $ack = md5(time ().$db_secret);
+
+    $query = "UPDATE ".$db_prefix."users SET validatemd = '".$ack."', validated = 0, password = '".$md."' WHERE player_id = $player_id";
+    dbquery ($query);
+    if ( $_SERVER['REMOTE_ADDR'] !== "127.0.0.1" ) SendGreetingsMail ( $name, $pass, $email, $ack);
 }
 
 ?>

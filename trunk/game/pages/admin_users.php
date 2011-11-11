@@ -94,6 +94,11 @@ function Admin_Users ()
             RecalcStats ($player_id);
             RecalcRanks ();
         }
+
+        if ( $action === "reactivate" )     // Выслать новый пароль
+        {
+            ReactivateUser ( $player_id );
+        }
     }
 
     if ( key_exists("player_id", $_GET) ) {        // Информация об игроке
@@ -146,7 +151,7 @@ function Admin_Users ()
 ?>
 </th></tr>
             <tr><th>IP адрес</th><th><?=$user['ip_addr'];?></th></tr>
-            <tr><th>Активирован</th><th><input type="checkbox" name="validated" <?=IsChecked($user, "validated");?> /></th></tr>
+            <tr><th>Активирован</th><th><input type="checkbox" name="validated" <?=IsChecked($user, "validated");?> /> <a href="index.php?page=admin&session=<?=$session;?>&mode=Users&action=reactivate&player_id=<?=$user['player_id'];?>">выслать пароль</a></th></tr>
             <tr><th>Главная планета</th><th>
 <?php
     $planet = GetPlanet ($user['hplanetid']);
