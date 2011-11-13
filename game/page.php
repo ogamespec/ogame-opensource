@@ -315,6 +315,17 @@ function LeftMenu ()
     echo "    </font></div> \n";
     echo "  </td> \n";
     echo " </tr> \n\n";
+
+?>
+  <tr>
+  <td>
+   <div align="center" ><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=<?=$sess;?>' accesskey=""><font color='FF8900'>Скупщик</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+ </tr>
+<?php
+
     echo " <tr> \n";
     echo "  <td> \n";
     echo "   <div align=\"center\"><font color=\"#FFFFFF\"> \n";
@@ -374,7 +385,7 @@ function LeftMenu ()
     echo "   </font></div> \n";
     echo "  </td> \n";
     echo " </tr> \n\n";
-    if ($prem) {
+    if (1) {
         echo "    <tr>\n";
         echo "       <td align=center>\n";
         echo "       <a id='darkmatter2' style='cursor:pointer; width:110px;'\n";
