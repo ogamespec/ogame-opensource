@@ -96,9 +96,7 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
 {
     $missions = array ( );
 
-    // HACK
-    //return array ( 1, 3, 4, 5, 6, 7, 8, 9, 15 );
-
+    $uni = LoadUniverse ();
     $origin = LoadPlanet ( $thisgalaxy, $thissystem, $thisplanet, $thisplanettype );
     $target = LoadPlanet ( $galaxy, $system, $planet, $planettype );
 
@@ -138,7 +136,7 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
         {
             $missions[$i++] = 3;        // Транспорт
             $missions[$i++] = 1;        // Атака
-            $missions[$i++] = 5;        // Держаться
+            if ( $uni['acs'] > 0 ) $missions[$i++] = 5;        // Держаться
             if ( $fleet[214] > 0 && GetPlanetType($target) == 3 ) $missions[$i++] = 9;    // Уничтожить
             if ( $fleet[210] > 0  ) $missions[$i++] = 6;    // Шпионаж
         }
@@ -892,7 +890,7 @@ function LoadUnion ($union_id)
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."union WHERE union_id = $union_id";
     $result = dbquery ($query);
-    if ( dbrows ($result) == 0) return NULL;
+    if ( dbrows ($result) == 0) return null;
     $union = dbarray ($result);
     $union['player'] = explode (",", $union['players'] );
     $union['players'] = count ($union['player']);
@@ -1015,6 +1013,16 @@ function GetHoldingFleets ($planet_id)
     $query = "SELECT * FROM ".$db_prefix."fleet WHERE mission = 205 AND target_planet = $planet_id LIMIT $max";
     $result = dbquery ($query);
     return $result;
+}
+
+function IsPlayerInUnion ($player_id, $union)
+{
+    if ( $union == null ) return false;
+    foreach ( $union['player'] as $i=>$pid )
+    {
+        if ( $pid == $player_id ) return true;
+    }
+    return false;
 }
 
 ?>
