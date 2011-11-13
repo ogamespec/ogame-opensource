@@ -17,6 +17,7 @@ function dbquery ($query, $mute=FALSE)
 {
     $result = @mysql_query($query);
     if (!$result && $mute==FALSE) {
+        echo "$query <br>";
         echo mysql_error();
         return false;
     }
