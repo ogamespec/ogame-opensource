@@ -74,6 +74,7 @@ foreach ($fleetmap as $i=>$gid)
 }
 
 $order = $_POST['order'];
+$union_id = 0;
 
 // Список флотов.
 $fleet = array ();
@@ -162,8 +163,12 @@ switch ( $order )
         break;
 
     case '2':        // Совместная атака
+        if ( key_exists ('union2', $_POST) ) $union_id = floor ($_POST['union2']);
+        else $union_id = 0;
+        if ( $unitab['acs'] == 0 ) $union_id = 0;
+        $union = LoadUnion ($union_id);
+        if ( ! IsPlayerInUnion ( $GlobalUser['player_id'], $union) || $union == null ) FleetError ( "Вы не приглашены в этот альянс" );
 //Планета находится под защитой для новичков
-//Вы не приглашены в этот альянс
 //Атаковать флоты (?)
 //Вы слишком медленны, чтобы присоединиться к этому флоту
 //Запрет на атаки до #1
@@ -189,6 +194,7 @@ switch ( $order )
     case '6':        // Шпионаж
         if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Нельзя шпионить на собственной планете!" );
         if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "На этой планете нельзя шпионить из-за защиты для новичков!" );
+//Запрет на атаки до #1
         break;
 
     case '7':        // Колонизировать
@@ -209,6 +215,7 @@ switch ( $order )
     case '9':        // Уничтожить
         if ( $fleet[214] == 0 ) FleetError ( "Для уничтожения луны необходима звезда смерти." );
         else if ($target['type'] != 0 ) FleetError ( "Уничтожать можно только луны!" );
+//Запрет на атаки до #1
         break;
 
     case '15':       // Экспедиция
@@ -259,9 +266,6 @@ if ($FleetError) {
 else {
 
     //print_r ( $_POST);
-
-    if ( key_exists ('union2', $_POST) && $order == 2 ) $union_id = floor ($_POST['union2']);
-    else $union_id = 0;
 
     // Время удержания
     $hold_time = 0;

@@ -34,6 +34,7 @@ function FleetMissionText ($num)
 }
 
 $union_id = 0;
+$uni = LoadUniverse ();
 
 // Обработка POST-запросов
 if ( method () === "POST" )
@@ -47,7 +48,7 @@ if ( method () === "POST" )
             RecallFleet ( $fleet_id );
     }
 
-    else if ( key_exists ( 'order_union', $_POST) )     // Управление САБ.
+    else if ( key_exists ( 'order_union', $_POST) && $uni['acs'] > 0 )     // Управление САБ.
     {
         $fleet_id = $_POST['order_union'];
         $union_id = CreateUnion ($fleet_id);
@@ -147,7 +148,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
     <th><?=date ( "D M j G:i:s", $queue['end']);?></th>
     <th>
 <?php
-    if ( $fleet['mission'] == 1 || $fleet['mission'] == 21 )
+    if ( ($fleet['mission'] == 1 || $fleet['mission'] == 21) && $uni['acs'] > 0 )
     {
 ?>
          <form action="index.php?page=flotten1&session=<?=$session;?>" method="POST">
@@ -197,7 +198,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 <?php
 // ************************ Форма создания САБ атаки ************************
 
-    if ($union_id != 0)
+    if ($union_id != 0 && $uni['acs'] > 0 )
     {
         $union = LoadUnion ($union_id);
 ?>
