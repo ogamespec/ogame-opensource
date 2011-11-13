@@ -1009,7 +1009,7 @@ function GetHoldingFleets ($planet_id)
 {
     global $db_prefix;
     $uni = LoadUniverse ();    // ограничить количество флотов настройками вселенной
-    $max = $uni['acs'] * $uni['acs'] - 1;
+    $max = max (0, $uni['acs'] * $uni['acs'] - 1);
     $query = "SELECT * FROM ".$db_prefix."fleet WHERE mission = 205 AND target_planet = $planet_id LIMIT $max";
     $result = dbquery ($query);
     return $result;
