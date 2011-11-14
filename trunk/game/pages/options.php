@@ -193,6 +193,8 @@ $speed = $unitab['speed'];
                     dbquery ($query);
                     $GlobalUser['vacation'] = 1;
                     $GlobalUser['vacation_until'] = $vacation_until;
+                    $query = "UPDATE ".$db_prefix."planets SET mprod = 0, kprod = 0, dprod = 0, sprod = 0, fprod = 0, ssprod = 0 WHERE owner_id = " . $GlobalUser['player_id'];
+                    dbquery ($query);
                     Goto ( "options" );
                 }
                 else $OptionsError = "Режим отпуска включается только тогда, когда на планете ничего не строится и не исследуется.";
