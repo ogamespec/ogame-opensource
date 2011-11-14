@@ -621,6 +621,7 @@ function StartBattle ( $fleet_id, $planet_id )
     }
     else        // Совместная атака
     {
+        RemoveUnion ( $f['union_id'] );    // удалить союз
         $result = EnumUnionFleets ( $f['union_id'] );
         $rows = dbrows ($result);
         while ($rows--)
@@ -761,22 +762,25 @@ function StartBattle ( $fleet_id, $planet_id )
     // Разослать сообщения
     $mailbox = array ();
 
-    foreach ( $a as $i=>$user )        // Атакующие
-    {
-        if ( $mailbox[ $user['player_id'] ] == true ) continue;
-        $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6 );
-        MarkMessage ( $user['player_id'], $bericht );
-        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-        SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2 );
-        $mailbox[ $user['player_id'] ] = true;
-    }
-
     foreach ( $d as $i=>$user )        // Обороняющиеся
     {
         if ( $mailbox[ $user['player_id'] ] == true ) continue;
         $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6 );
         MarkMessage ( $user['player_id'], $bericht );
         $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$d_result[$battle_result]."\">Боевой доклад [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
+        SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2 );
+        $mailbox[ $user['player_id'] ] = true;
+    }
+
+    // Если флот уничтожен за 1 или 2 раунда - не показывать лог боя для атакующих.
+    if ( count($res['rounds']) <= 2 && $battle_result == 1 ) $text = "Контакт с флотом потерян. <br> Это означает, что его уничтожили первым же залпом <!--A:$aloss,W:$dloss-->";
+
+    foreach ( $a as $i=>$user )        // Атакующие
+    {
+        if ( $mailbox[ $user['player_id'] ] == true ) continue;
+        $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6 );
+        MarkMessage ( $user['player_id'], $bericht );
+        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
         SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2 );
         $mailbox[ $user['player_id'] ] = true;
     }
