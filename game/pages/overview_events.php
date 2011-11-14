@@ -321,6 +321,7 @@ function EventList ()
     foreach ( $unions as $u=>$union)
     {
         $queue = GetFleetQueue ($union['fleet_id']);
+        if ( $queue == null ) continue;
 
         // Время отправления и прибытия
         $task[$tasknum]['start_time'] = $queue['start'];

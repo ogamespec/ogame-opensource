@@ -334,7 +334,10 @@ function RecallFleet ($fleet_id, $now=0)
 
     DeleteFleet ($fleet_obj['fleet_id']);            // удалить флот
     RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
-    if ( $fleet_obj['mission'] == 1 && $fleet_obj['union_id'] > 0 ) RemoveUnion ($fleet_obj['union_id']);    // удалить союз
+    if ( $fleet_obj['mission'] == 21 && $fleet_obj['union_id'] > 0 ) {
+        RemoveUnion ($fleet_obj['union_id']);    // удалить союз
+        CancelUnionFleets ($fleet_obj['union_id']);    // союзные флоты летят дальше сами по себе (без союза)
+    }
 }
 
 // Загрузить флот
@@ -828,6 +831,7 @@ function Queue_Fleet_End ($queue)
     {
         case 1: AttackArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case 101: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
+        case 2: AttackArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case 102: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case 3: TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case 103: CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
@@ -903,7 +907,13 @@ function RemoveUnion ($union_id)
     global $db_prefix;
     $query = "DELETE FROM ".$db_prefix."union WHERE union_id = $union_id";        // удалить запись союза
     dbquery ($query);
-    $query = "UPDATE ".$db_prefix."fleet SET union_id = 0 WHERE union_id = $union_id";        // удалить ссылку на союз для совместных атак
+}
+
+// Удалить ссылку на союз для совместных атак. Вызывается при отмене САБа.
+function CancelUnionFleets ($union_id)
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."fleet SET union_id = 0 WHERE union_id = $union_id";        
     dbquery ($query);
 }
 
