@@ -2,6 +2,7 @@
 
 // Обзор.
 
+SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 
 $OverviewMessage = "";
@@ -9,7 +10,7 @@ $OverviewError = "";
 
 require_once "overview_events.php";
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], (int)$_GET['cp']);
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 
 $now = time();
@@ -23,7 +24,7 @@ PageHeader ("overview");
 
 // *******************************************************************
 
-if ( key_exists ('lgn', $_GET) && $_GET['lgn'] == 1 ) UpdatePlanetActivity ( $aktplanet['planet_id'] );  // Обновить активность на Главной планете при входе в игру.
+if ( key_exists ('lgn', $_GET) && (int)$_GET['lgn'] == 1 ) UpdatePlanetActivity ( $aktplanet['planet_id'] );  // Обновить активность на Главной планете при входе в игру.
 
 $uni = LoadUniverse ( );
 

@@ -6,7 +6,10 @@
 function Error ($text)
 {
     global $GlobalUser;
-    if ( !$GlobalUser ) return;
+    if ( !$GlobalUser ) {
+        $GlobalUser = array ();
+        $GlobalUser['player_id'] = 0;
+    }
 
     $now = time ();
 
@@ -73,6 +76,12 @@ function BrowseHistory ()
         $log = array ( '', $GlobalUser['player_id'], $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'], $getdata, $postdata, time() );
         AddDBRow ( $log, 'browse' );
     }
+}
+
+// Проверка безопасности.
+function SecurityCheck ( $match, $text, $notes )
+{
+    if ( !preg_match ( $match, $text ) ) Error ( "Нарушение безопасности: " . $notes );
 }
 
 ?>
