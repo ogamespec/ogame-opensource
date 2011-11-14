@@ -2,6 +2,7 @@
 
 // Сырьё.
 
+SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -12,8 +13,8 @@ ProdResources ( $GlobalUser['aktplanet'], $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 
-// Обработка POST-запросов.
-if ( method () === "POST" )
+// Обработка POST-запросов (в РО изменять настройки энергии нельзя)
+if ( method () === "POST" && !$GlobalUser['vacation'] )
 {
     //print_r ( $_POST );
 
