@@ -39,6 +39,7 @@ require_once "unit.php";
 require_once "fleet.php";
 require_once "battle.php";
 require_once "debug.php";
+require_once "galaxytool.php";
 
 if (0)
 {

@@ -718,6 +718,7 @@ function Queue_CleanDebris_End ($queue)
     Debug ( "Удалено виртуальных ПО : " . mysql_affected_rows() );
     RemoveQueue ( $queue['task_id'], 0 );
     AddCleanDebrisEvent ();
+    GalaxyToolUpdate ();
 }
 
 // Добавить задание чистки удаленных планет и лун, если его ещё не существует.
