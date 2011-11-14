@@ -150,7 +150,7 @@ function Admin_Users ()
     if ( ($now - $user['lastclick']) < 60*60 ) echo " (".floor(($now - $user['lastclick'])/60)." min)";
 ?>
 </th></tr>
-            <tr><th>IP адрес</th><th><?=$user['ip_addr'];?></th></tr>
+            <tr><th>IP адрес</th><th><a href="http://nic.ru/whois/?query=<?=$user['ip_addr'];?>" target=_blank><?=$user['ip_addr'];?></a></th></tr>
             <tr><th>Активирован</th><th><input type="checkbox" name="validated" <?=IsChecked($user, "validated");?> /> <a href="index.php?page=admin&session=<?=$session;?>&mode=Users&action=reactivate&player_id=<?=$user['player_id'];?>">выслать пароль</a></th></tr>
             <tr><th>Главная планета</th><th>
 <?php
