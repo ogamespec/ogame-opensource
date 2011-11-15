@@ -176,7 +176,7 @@ function CargoSummaryLastRound ( $a, $res )
             $cargo += FleetCargoSummary ( $attacker['fleet'] ) - ($f['m'] + $f['k'] + $f['d']) - $f['fuel'];
         }
     }
-    return $cargo;
+    return max ( 0, $cargo );
 }
 
 // Модифицировать флоты и планету (добавить/отнять ресурсы, развернуть атакующие флоты, если остались корабли)

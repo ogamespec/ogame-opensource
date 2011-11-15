@@ -7,6 +7,7 @@ if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 
 loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "technames", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "fleet", $GlobalUser['lang'] );
 
