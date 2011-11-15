@@ -124,10 +124,10 @@ else
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>Производство в час</td><td class='c'>Разница</td><td class='c'>Энергетический баланс</td><td class='c'>Разница</td> \n";
         $level = $aktplanet['b'.$gid]-2;
         if ($level <= 0) $level = 1;
-        $prod_now = prod_metal ($aktplanet['b'.$gid], $aktplanet['mprod'] );
+        $prod_now = prod_metal ($aktplanet['b'.$gid], 1 );
         $cons_now = -cons_metal ($aktplanet['b'.$gid]);
         for ($i=$level; $i<$level+15; $i++) {
-            $prod = prod_metal ($i, $aktplanet['mprod'] );
+            $prod = prod_metal ($i, 1 );
             $cons = -cons_metal ($i);
 
             if ($i==$aktplanet['b'.$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
@@ -144,10 +144,10 @@ else
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>Производство в час</td><td class='c'>Разница</td><td class='c'>Энергетический баланс</td><td class='c'>Разница</td> \n";
         $level = $aktplanet['b'.$gid]-2;
         if ($level <= 0) $level = 1;
-        $prod_now = prod_crys ($aktplanet['b'.$gid], $aktplanet['kprod'] );
+        $prod_now = prod_crys ($aktplanet['b'.$gid], 1 );
         $cons_now = -cons_crys ($aktplanet['b'.$gid]);
         for ($i=$level; $i<$level+15; $i++) {
-            $prod = prod_crys ($i, $aktplanet['kprod'] );
+            $prod = prod_crys ($i, 1 );
             $cons = -cons_crys ($i);
 
             if ($i==$aktplanet['b'.$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
@@ -164,10 +164,10 @@ else
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>Производство в час</td><td class='c'>Разница</td><td class='c'>Энергетический баланс</td><td class='c'>Разница</td> \n";
         $level = $aktplanet['b'.$gid]-2;
         if ($level <= 0) $level = 1;
-        $prod_now = prod_deut ($aktplanet['b'.$gid], $aktplanet['temp']+40, $aktplanet['dprod'] );
+        $prod_now = prod_deut ($aktplanet['b'.$gid], $aktplanet['temp']+40, 1 );
         $cons_now = -cons_deut ($aktplanet['b'.$gid]);
         for ($i=$level; $i<$level+15; $i++) {
-            $prod = prod_deut ($i, $aktplanet['temp']+40, $aktplanet['dprod'] );
+            $prod = prod_deut ($i, $aktplanet['temp']+40, 1 );
             $cons = -cons_deut ($i);
 
             if ($i==$aktplanet['b'.$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
@@ -184,9 +184,9 @@ else
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>Энергетический баланс</td><td class='c'>Разница</td>\n";
         $level = $aktplanet['b'.$gid]-2;
         if ($level <= 0) $level = 1;
-        $prod_now = prod_solar ($aktplanet['b'.$gid], $aktplanet['sprod'] );
+        $prod_now = prod_solar ($aktplanet['b'.$gid], 1 );
         for ($i=$level; $i<$level+15; $i++) {
-            $prod = prod_solar ($i, $aktplanet['sprod'] );
+            $prod = prod_solar ($i, 1 );
 
             if ($i==$aktplanet['b'.$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
             else echo "<tr> <th> $i</th> ";
@@ -200,10 +200,10 @@ else
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>Энергетический баланс</td><td class='c'>Разница</td><td class='c'>Потребление дейтерия</td><td class='c'>Разница</td>\n";
         $level = $aktplanet['b'.$gid]-2;
         if ($level <= 0) $level = 1;
-        $prod_now = prod_fusion ($aktplanet['b'.$gid], $GlobalUser['r113'], $aktplanet['fprod'] );
-        $cons_now = -cons_fusion ($aktplanet['b'.$gid], $aktplanet['fprod'] );
+        $prod_now = prod_fusion ($aktplanet['b'.$gid], $GlobalUser['r113'], 1 );
+        $cons_now = -cons_fusion ($aktplanet['b'.$gid], 1 );
         for ($i=$level; $i<$level+15; $i++) {
-            $prod = prod_fusion ($i, $GlobalUser['r113'], $aktplanet['fprod'] );
+            $prod = prod_fusion ($i, $GlobalUser['r113'], 1 );
             $cons = -cons_fusion ($i, $aktplanet['fprod'] );
 
             if ($i==$aktplanet['b'.$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
