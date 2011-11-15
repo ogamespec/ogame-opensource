@@ -141,7 +141,7 @@ function BuildDuration ( $id, $lvl, $robots, $nanits, $speed )
 {
     $m = $k = $d = $e = 0;
     BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
-    $secs = ( ( ($m + $k) / (2500 * (1 + $robots)) ) * pow (0.5, $nanits) * 60*60 ) / $speed;
+    $secs = floor ( ( ( ($m + $k) / (2500 * (1 + $robots)) ) * pow (0.5, $nanits) * 60*60 ) / $speed );
     if ($secs < 1) $secs = 1;
     return $secs;
 }
@@ -190,7 +190,7 @@ function ShipyardDuration ( $id, $shipyard, $nanits, $speed )
 {
     $m = $k = $d = $e = 0;
     ShipyardPrice ($id, &$m, &$k, &$d, &$e );
-    $secs = ( ( ($m + $k) / (2500 * (1 + $shipyard)) ) * pow (0.5, $nanits) * 60*60 ) / $speed;
+    $secs = floor ( ( ( ($m + $k) / (2500 * (1 + $shipyard)) ) * pow (0.5, $nanits) * 60*60 ) / $speed );
     if ($secs < 1) $secs = 1;
     return $secs;
 }

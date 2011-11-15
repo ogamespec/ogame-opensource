@@ -417,8 +417,7 @@ function AddShipyard ($player_id, $planet_id, $gid, $value )
     $d *= $value;
 
     if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && ShipyardMeetRequirement ($user, $planet, $gid) ) {
-        $unitab = LoadUniverse ( );
-        $speed = $unitab['speed'];
+        $speed = $uni['speed'];
         $now = ShipyardLatestTime ($planet_id);
         $shipyard = $planet["b21"];
         $nanits = $planet["b15"];
@@ -428,7 +427,7 @@ function AddShipyard ($player_id, $planet_id, $gid, $value )
         AdjustResources ( $m, $k, $d, $planet_id, '-' );
 
         AddQueue ($player_id, "Shipyard", $planet_id, $gid, $value, $now, $seconds);
-        Debug ("Запустить постройку ".loca("NAME_$gid")." ($value) на планете [".$planet['g'].":".$planet['s'].":".$planet['p']."] ".$planet['name'] );
+        Debug ("Запустить постройку ".loca("NAME_$gid")." ($value) на планете [".$planet['g'].":".$planet['s'].":".$planet['p']."] ".$planet['name'] . ", длительность $seconds сек." );
     }
 }
 
@@ -499,8 +498,7 @@ function StartResearch ($player_id, $planet_id, $id)
     ResearchPrice ( $id, $level, &$m, &$k, &$d, &$e );
 
     if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && ResearchMeetRequirement ( $user, $planet, $id ) ) {
-        $unitab = LoadUniverse ( );
-        $speed = $unitab['speed'];
+        $speed = $uni['speed'];
         $now = time ();
         $reslab = ResearchNetwork ( $planet['planet_id'], $id );
         $seconds = ResearchDuration ( $id, $level, $reslab, $speed);
