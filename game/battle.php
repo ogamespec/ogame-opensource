@@ -757,6 +757,7 @@ function StartBattle ( $fleet_id, $planet_id )
     UpdatePlanetActivity ( $planet_id, $queue['end'] );
 
     // Сгенерировать боевой доклад.
+    loca_add ( "techshortnames", "ru" );
     $text = BattleReport ( $a, $d, $res, time(), $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired );
 
     // Разослать сообщения
