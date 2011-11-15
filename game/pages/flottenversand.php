@@ -42,11 +42,6 @@ if ( method () === "GET" )
 SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 
-loca_add ( "common", $GlobalUser['lang'] );
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "fleetorder", $GlobalUser['lang'] );
-loca_add ( "fleet", $GlobalUser['lang'] );
-
 $session = $_GET['session'];
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
 
@@ -55,6 +50,12 @@ if ( $_GET['ajax'] == 1)
 {
     include "flottenversand_ajax.php";
 }
+
+loca_add ( "common", $GlobalUser['lang'] );
+loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "technames", $GlobalUser['lang'] );
+loca_add ( "fleetorder", $GlobalUser['lang'] );
+loca_add ( "fleet", $GlobalUser['lang'] );
 
 $unitab = LoadUniverse ();
 $unispeed = $unitab['speed'];

@@ -98,7 +98,7 @@ function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", 
         echo "<tr class='header' >\n";
         $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
         PlanetsDropList ($page);
-        ResourceList ($aktplanet['m'], $aktplanet['k'], $aktplanet['d'], $aktplanet['e'], $aktplanet['emax'], $GlobalUser['dm']+$GlobalUser['dmfree'], $aktplanet['mmax'], $aktplanet['kmax'], $aktplanet['dmax']);
+        ResourceList (floor($aktplanet['m']), floor($aktplanet['k']), floor($aktplanet['d']), $aktplanet['e'], $aktplanet['emax'], $GlobalUser['dm']+$GlobalUser['dmfree'], $aktplanet['mmax'], $aktplanet['kmax'], $aktplanet['dmax']);
         OficeerList ();
         echo "</tr>\n";
         echo "</table>\n";
