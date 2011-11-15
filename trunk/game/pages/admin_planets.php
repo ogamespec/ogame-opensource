@@ -184,6 +184,14 @@ function spio ()
     var TechNames = {
 <?php
 
+    loca_add ( "common", "de" );
+    loca_add ( "common", "en" );
+    loca_add ( "common", "ru" );
+
+    loca_add ( "technames", "de" );
+    loca_add ( "technames", "en" );
+    loca_add ( "technames", "ru" );
+
     $old_lang = $loca_lang;
 
     $loca_lang = "de";

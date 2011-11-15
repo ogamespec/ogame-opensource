@@ -16,7 +16,14 @@
 15 - Экспедиция
 */
 
+SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
+
+loca_add ( "common", $GlobalUser['lang'] );
+loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "fleetorder", $GlobalUser['lang'] );
+loca_add ( "fleet", $GlobalUser['lang'] );
+
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
