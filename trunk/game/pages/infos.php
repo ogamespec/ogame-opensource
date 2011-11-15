@@ -204,7 +204,7 @@ else
         $cons_now = -cons_fusion ($aktplanet['b'.$gid], 1 );
         for ($i=$level; $i<$level+15; $i++) {
             $prod = prod_fusion ($i, $GlobalUser['r113'], 1 );
-            $cons = -cons_fusion ($i, $aktplanet['fprod'] );
+            $cons = -cons_fusion ($i, 1 );
 
             if ($i==$aktplanet['b'.$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
             else echo "<tr> <th> $i</th> ";

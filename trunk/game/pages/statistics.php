@@ -123,22 +123,42 @@ while ($rows--) {
     $home = GetPlanet ( $user['hplanetid'] );
     echo "    <!-- nick --> \n";
     echo "    <th> \n";
-    echo "       <a href=\"index.php?page=galaxy&no_header=1&session=$session&p1=".$home['g']."&p2=".$home['s']."&p3=".$home['p']."\" style='color:FFFFFF' >      \n\n";
-    echo $user['oname'] . "</a> \n";
+    if ( $user['player_id'] == $GlobalUser['player_id'] ) {
+        echo "<a href=\"#\" style='color:lime;'>\n";
+        echo $user['oname'] . "</a>\n";
+    }
+    else {
+        echo "       <a href=\"index.php?page=galaxy&no_header=1&session=$session&p1=".$home['g']."&p2=".$home['s']."&p3=".$home['p']."\" style='color:FFFFFF' >      \n\n";
+        echo $user['oname'] . "</a> \n";
+    }
     echo "    </th> \n\n";
 
     echo "    <!--  message-icon --> \n";
     echo "    <th> \n";
-    echo "      <a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\"> \n";
-    echo "        <img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"Написать сообщение\" /> \n";
-    echo "      </a> \n";
+    if ( $user['player_id'] != $GlobalUser['player_id'] ) {
+        echo "      <a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\"> \n";
+        echo "        <img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"Написать сообщение\" /> \n";
+        echo "      </a> \n";
+    }
     echo "    &nbsp;\n";
     echo "    </th> \n\n";
 
     echo "    <!--  ally --> \n";
     echo "    <th> \n";
-    echo "      <a href=\"index.php?page=allianzen&session=$session\"> \n";
-    echo "              </a> \n";
+    if ( $user['ally_id'] == $GlobalUser['ally_id'] ) {
+        $ally = LoadAlly ( $user['ally_id'] );
+        echo " 	  <a href=\"index.php?page=allianzen&session=$session\">\n";
+        echo "        ".$ally['tag']."      </a>\n";
+    }
+    else if ( $user['ally_id'] ) {
+        $ally = LoadAlly ( $user['ally_id'] );
+        echo "   	  <a href='ainfo.php?allyid=".$user['ally_id']."' target='_ally'>\n";
+        echo "        ".$ally['tag']."      </a>\n";
+    }
+    else {
+        echo "      <a href=\"index.php?page=allianzen&session=$session\"> \n";
+        echo "              </a> \n";
+    }
     echo "    </th> \n\n";
 
     echo "    <!-- points --> \n";
