@@ -21,7 +21,7 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
-if ( method() !== "POST" ) Goto ( "flotten1" );
+if ( method() !== "POST" ) MyGoto ( "flotten1" );
 
 PageHeader ("flotten2");
 ?>
@@ -103,7 +103,7 @@ PageHeader ("flotten2");
     }
 
     // Флот не выбран.
-    if ( $total == 0 ) Goto ( "flotten1" );
+    if ( $total == 0 ) MyGoto ( "flotten1" );
 
 ?>
 

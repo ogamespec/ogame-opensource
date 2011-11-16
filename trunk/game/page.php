@@ -576,7 +576,7 @@ function InvalidSessionPage ()
     echo "    Error-ID: MD5  </b></font></center> </body></html>\n";
 }
 
-function Goto ($page, $param="")
+function MyGoto ($page, $param="")
 {
     global $GlobalUser;
     ob_end_clean ();
