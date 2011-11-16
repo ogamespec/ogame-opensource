@@ -35,7 +35,7 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
-if ( method() !== "POST" ) Goto ( "flotten1" );
+if ( method() !== "POST" ) MyGoto ( "flotten1" );
 
 $uni = LoadUniverse ();
 
@@ -112,7 +112,7 @@ PageHeader ("flotten3");
     }
 
     // Флот не выбран.
-    if ( $total == 0 ) Goto ( "flotten1" );
+    if ( $total == 0 ) MyGoto ( "flotten1" );
 
     echo "<input type=\"hidden\" name=\"speed\" value=\"".$_POST['speed']."\" />\n";
 ?>

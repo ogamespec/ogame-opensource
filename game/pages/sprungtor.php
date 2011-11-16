@@ -95,7 +95,7 @@ if ( $GateError === "" )
     dbquery ($query);
 
     // Сделать редирект на ворота целевой луны
-    Goto ( "infos", "&cp=$target_id&gid=43" );
+    MyGoto ( "infos", "&cp=$target_id&gid=43" );
 }
 
 echo "</center>\n";
