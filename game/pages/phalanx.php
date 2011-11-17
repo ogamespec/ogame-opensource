@@ -3,6 +3,11 @@
 SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 
+loca_add ( "common", $GlobalUser['lang'] );
+loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "technames", $GlobalUser['lang'] );
+loca_add ( "fleetorder", $GlobalUser['lang'] );
+
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
@@ -100,11 +105,9 @@ require_once "phalanx_events.php";
         PhalanxEventList ($target['planet_id']);
 
         // Списать 5000 дейтерия.
-/*
-        $aktplanet['d'] -= 5000;
+        $aktplanet['d'] -= 1000;
         $query = "UPDATE ".$db_prefix."planets SET d = '".$aktplanet['d']."', lastpeek = '".$now."' WHERE planet_id = " . $aktplanet['planet_id'];
         dbquery ($query);
-*/
     }
 
 ?></table>
