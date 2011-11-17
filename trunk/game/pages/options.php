@@ -47,6 +47,19 @@ $speed = $unitab['speed'];
  <table width="519">
 
 <?php
+
+    // Выключить Режим Отпуска.
+    if ( method () === "POST") {
+
+        if ( time () >= $GlobalUser['vacation_until'] && $_POST['urlaub_aus'] === "on" && $GlobalUser['vacation'] )
+        {
+            $OptionsError = "Ну что, ".$GlobalUser['oname'].", как был отдых?. Не забудьте восстановить производство сырья и удачи в дальнейшей игре.\n<br/>\n";
+            $query = "UPDATE ".$db_prefix."users SET vacation=0,vacation_until=0 WHERE player_id=".$GlobalUser['player_id'];
+            dbquery ($query);
+            $GlobalUser['vacation'] = $GlobalUser['vacation_until'] = 0;
+        }
+    }
+
     // ======================================================================================
     // Аккаунт неактивирован.
 
@@ -94,11 +107,6 @@ $speed = $unitab['speed'];
     else if ( $GlobalUser['vacation'] )
     {
 
-        // Обработать POST-запрос.
-        if ( method () === "POST") {
-
-            print_r ($_POST);
-        }
 ?>
 
  <form action="index.php?page=options&session=<?=$session;?>&mode=change" method="POST" >
@@ -145,7 +153,7 @@ $speed = $unitab['speed'];
     {
 
         // Обработать POST-запрос.
-        if ( method () === "POST") {
+        if ( method () === "POST" && !key_exists ( 'urlaub_aus', $_POST) ) {
 
             if ( $GlobalUser['name_changed'] == 0 && $_POST['db_character'] !== $GlobalUser['oname'] ) {        // Сменить имя.
                 $forbidden = explode ( ",", "hitler, fick, adolf, legor, aleena, ogame, mainman, fishware, osama, bin laden, stalin, goebbels, drecksjude, saddam, space, ringkeeper, administration" );
