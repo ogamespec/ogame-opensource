@@ -95,9 +95,9 @@ else if ($gid > 400 && $gid < 500)    // Оборона.
     echo "<tr><td valign=\"top\"><img border=\"0\" src=\"".UserSkin()."gebaeude/$gid.gif\" width=\"120\" height=\"120\"></td>\n";
     echo "<td>".loca("LONG_$gid")."<br/>".rapid($gid)."</td>\n";
     echo "</tr></table></th></tr>\n";
-    echo "<tr><th>Структура</th><th>".nicenum($DefenseParam[$gid][0])."</th></tr>\n";
-    echo "<tr><th>Мощность щита</th><th>".nicenum($DefenseParam[$gid][1])."</th></tr>\n";
-    echo "<tr><th>Оценка атаки</th><th>".nicenum($DefenseParam[$gid][2])."</th></tr>\n";
+    echo "<tr><th>Структура</th><th>".nicenum($UnitParam[$gid][0])."</th></tr>\n";
+    echo "<tr><th>Мощность щита</th><th>".nicenum($UnitParam[$gid][1])."</th></tr>\n";
+    echo "<tr><th>Оценка атаки</th><th>".nicenum($UnitParam[$gid][2])."</th></tr>\n";
     echo "</th></tr></table>\n";
 }
 else if ($gid > 100 && $gid < 200)    // Исследования.
