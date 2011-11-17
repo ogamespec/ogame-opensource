@@ -67,7 +67,7 @@ function OverFleet ($fleet, $summary)
     $sum = 0;
     if ( $summary ) {
         foreach ($fleetmap as $i=>$gid) $sum += $fleet[$gid];
-        $res .= "Численность кораблей: 1 &lt;br&gt;";
+        $res .= "Численность кораблей: $sum &lt;br&gt;";
     }
     foreach ($fleetmap as $i=>$gid) {
         $amount = $fleet[$gid];
