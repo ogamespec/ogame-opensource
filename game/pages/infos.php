@@ -317,7 +317,17 @@ else
     else if ( $gid == 42 )        // Сенсорная фаланга
     {
 ?>
-<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>радиус действия</td></tr><tr><th align=center >&nbsp;<FONT color=FFFFFF>1</FONT></th><th align=center >&nbsp;0&nbsp;</th></tr><tr><th align=center >&nbsp;<FONT color=FFFFFF>2</FONT></th><th align=center >&nbsp;3&nbsp;</th></tr><tr><th align=center >&nbsp;<FONT color=FFFFFF>3</FONT></th><th align=center >&nbsp;8&nbsp;</th></tr><tr><th align=center >&nbsp;<FONT color=FFFFFF>4</FONT></th><th align=center >&nbsp;15&nbsp;</th></tr></center></table></tr></th></table> 
+<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>радиус действия</td></tr>
+<?php
+        $level = $aktplanet['b'.$gid]-3;
+        if ($level <= 0) $level = 1;
+        for ($i=$level; $i<$aktplanet['b'.$gid]+5; $i++) {
+            $radius = $i*$i-1;
+            if ($i==$aktplanet['b'.$gid]) echo "<tr><th align=center >&nbsp;<FONT color=FF0000>$i</FONT></th><th align=center >&nbsp;$radius&nbsp;</th></tr>";
+            else echo "<tr><th align=center >&nbsp;<FONT color=FFFFFF>$i</FONT></th><th align=center >&nbsp;$radius&nbsp;</th></tr>";
+        }
+?>
+</center></table></tr></th></table> 
 <?php
     }
     else if ( $gid == 43 && $aktplanet["b43"] > 0)        // Ворота
@@ -363,14 +373,14 @@ else
       <td class="c" colspan="2">Использовать ворота: выбрать корабли</td>
     </tr>
 <?php
-    foreach ($fleetmap as $i=>$gid)
+    foreach ($fleetmap as $i=>$id)
     {
-        $amount = $aktplanet["f$gid"];
+        $amount = $aktplanet["f$id"];
         if ($amount != 0)
         {
             echo "    <tr>\n";
-            echo "      <th><a href=\"index.php?page=infos&session=$session&gid=$gid\">".loca("NAME_$gid")."</a> (".nicenum($amount)." в наличии)</th>\n";
-            echo "      <th><input tabindex=\"1\" type=\"text\" name=\"c$gid\" size=\"7\" maxlength=\"7\" value=\"0\"></th>\n";
+            echo "      <th><a href=\"index.php?page=infos&session=$session&gid=$id\">".loca("NAME_$id")."</a> (".nicenum($amount)." в наличии)</th>\n";
+            echo "      <th><input tabindex=\"1\" type=\"text\" name=\"c$id\" size=\"7\" maxlength=\"7\" value=\"0\"></th>\n";
             echo "    </tr>\n";
         }
     }
