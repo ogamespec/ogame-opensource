@@ -523,6 +523,9 @@ function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 
+    $origin_user = LoadUser ( $origin['owner_id'] );
+    loca_add ( "technames", $origin_user['lang'] );
+
     $text = "Один из Ваших флотов ( ".FleetList($fleet)." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
                "достигает ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
     if ( ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']) != 0 ) $text .= "Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия<br>";
@@ -537,6 +540,9 @@ function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'] + floor ($fleet_obj['fuel'] / 2), $target['planet_id'], '+' );
     AdjustShips ( $fleet, $fleet_obj['target_planet'], '+' );
     UpdatePlanetActivity ( $target['planet_id'], $queue['end'] );
+
+    $origin_user = LoadUser ( $origin['owner_id'] );
+    loca_add ( "technames", $origin_user['lang'] );
 
     $text = "\nОдин из Ваших флотов (".FleetList($fleet).") достиг ".$target['name']."\n" .
                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
@@ -592,6 +598,8 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
     $origin_user = LoadUser ( $origin['owner_id'] );
     $target_user = LoadUser ( $target['owner_id'] );
+
+    loca_add ( "technames", $origin_user['lang'] );
 
     $counter_max = 0;
     $counter = 0;
@@ -759,6 +767,9 @@ function ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target)
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
+
+    $origin_user = LoadUser ( $origin['owner_id'] );
+    loca_add ( "technames", $origin_user['lang'] );
 
     $text = "Один из Ваших флотов ( ".FleetList($fleet)." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
                "достигает ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";

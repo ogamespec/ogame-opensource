@@ -87,11 +87,13 @@ if ( $GateError === "" )
     AdjustShips ( $fleet, $source_id, '-' );
     AdjustShips ( $fleet, $target_id, '+' );
 
+    $cooldown = $now+59*60+59;
+
     // Нагреть ворота
     $now = time ();
-    $query = "UPDATE ".$db_prefix."planets SET gate_until=".($now+60*60)." WHERE planet_id=$source_id";
+    $query = "UPDATE ".$db_prefix."planets SET gate_until=".$cooldown." WHERE planet_id=$source_id";
     dbquery ($query);
-    $query = "UPDATE ".$db_prefix."planets SET gate_until=".($now+60*60)." WHERE planet_id=$target_id";
+    $query = "UPDATE ".$db_prefix."planets SET gate_until=".$cooldown." WHERE planet_id=$target_id";
     dbquery ($query);
 
     // Сделать редирект на ворота целевой луны
