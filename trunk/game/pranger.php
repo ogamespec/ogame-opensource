@@ -21,7 +21,7 @@ dbquery("SET NAMES 'utf8';");
 dbquery("SET CHARACTER SET 'utf8';");
 dbquery("SET SESSION collation_connection = 'utf8_general_ci';");
 
-require_once "loca_game.php";
+require_once "loca.php";
 require_once "bbcode.php";
 require_once "uni.php";
 require_once "prod.php";
@@ -30,7 +30,6 @@ require_once "user.php";
 require_once "msg.php";
 require_once "notes.php";
 require_once "queue.php";
-require_once "loca_game.php";
 require_once "page.php";
 require_once "ally.php";
 require_once "battle.php";
