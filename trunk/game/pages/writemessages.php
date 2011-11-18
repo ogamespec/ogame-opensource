@@ -100,7 +100,7 @@ echo "<tr>\n";
 echo "<th> Сообщение(<span id=\"cntChars\">0</span> / 2000 символов) </th>\n";
 echo "<th><textarea name=\"text\" cols=\"40\" rows=\"10\" size=\"100\" onkeyup=\"javascript:cntchar(2000)\"></textarea></th>\n";
 echo "</tr>\n";
-echo "<tr><th colspan=\"2\"><input type=\"submit\" value=\"Показать\" /></th></tr> \n\n";
+echo "<tr><th colspan=\"2\"><input type=\"submit\" value=\"Отправить\" /></th></tr> \n\n";
 
 echo "</table></form>\n";
 echo "<br><br><br><br>\n";
