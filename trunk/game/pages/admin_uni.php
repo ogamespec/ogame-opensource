@@ -14,7 +14,7 @@ function Admin_Uni ()
     global $session;
     $now = time ();
 
-    if ( method () === "POST" )
+    if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
     {
         if ( key_exists ('news_upd', $_POST) )        // Обновить новости
         {
