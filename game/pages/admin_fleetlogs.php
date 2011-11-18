@@ -29,7 +29,7 @@ function Admin_Fleetlogs ()
 
     // Обработка POST-запросов.
     $player_id = 0;
-    if ( method () === "POST" )
+    if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
     {
         if ( key_exists ( "order_end", $_POST ) ) {        // Завершить задание
             $id = $_POST['order_end'];
