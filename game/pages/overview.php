@@ -84,7 +84,7 @@ function t_building() {
 // Выйти из фрейма.
 if ( $_GET['lgn'] == 1 )
 {
-    echo "top.location=\"index.php?page=overview&session=$session\"";
+    echo "top.location.href=\"index.php?page=overview&session=$session\"";
 }
 ?>
 
