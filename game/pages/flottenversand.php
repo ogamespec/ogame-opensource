@@ -16,6 +16,7 @@
 8 - Переработать
 9 - Уничтожить
 15 - Экспедиция
+21 - Атака САБ (паровоз)
 */
 
 $PageError = "";
@@ -175,12 +176,14 @@ switch ( $order )
         else $union_id = 0;
         if ( $unitab['acs'] == 0 ) $union_id = 0;
         $union = LoadUnion ($union_id);
+        $head_queue = GetFleetQueue ( $union['fleet_id'] );
+        $acs_flighttime = $head_queue['end'] - time();
         if ( ! IsPlayerInUnion ( $GlobalUser['player_id'], $union) || $union == null ) FleetError ( "Вы не приглашены в этот альянс" );
-//Планета находится под защитой для новичков
-//Атаковать флоты (?)
-//Вы слишком медленны, чтобы присоединиться к этому флоту
+        else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Невозможно напасть на собственную планету!" );
+        else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
+        else if ( $flighttime > $acs_flighttime * 1.3 ) FleetError ( "Вы слишком медленны, чтобы присоединиться к этому флоту" );
+//Атаковать флоты (>16 флотов нельзя)
 //Запрет на атаки до #1
-        //FleetError ( "Запрет на атаки до #1" );
         break;
 
     case '3':        // Транспорт

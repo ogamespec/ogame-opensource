@@ -1,4 +1,6 @@
 <?php
+    header('Pragma:no-cache');
+
     require_once "loca_startpage.php";
 ?>
 
