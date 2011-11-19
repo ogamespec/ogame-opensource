@@ -868,8 +868,25 @@ function Queue_Fleet_End ($queue)
         //default: Error ( "Неизвестное задание для флота: " . $fleet_obj['mission'] ); break;
     }
 
-    DeleteFleet ($fleet_obj['fleet_id']);            // удалить флот
-    RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
+    if ( $fleet_obj['union_id'] )    // удалить все флоты и задания союза, чтобы совместная атака больше не срабатывала
+    {
+        $union_id = $fleet_obj['union_id'];
+        $result = EnumUnionFleets ( $union_id );
+        $rows = dbrows ($result);
+        while ($rows--)
+        {
+            $fleet_obj = dbarray ($result);
+            $queue = GetFleetQueue ( $fleet_obj['fleet_id'] );
+            DeleteFleet ($fleet_obj['fleet_id']);    // удалить флот
+            RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
+        }
+        RemoveUnion ( $union_id );    // удалить союз
+    }
+    else
+    {
+        DeleteFleet ($fleet_obj['fleet_id']);    // удалить флот
+        RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
+    }
 }
 
 // ==================================================================================

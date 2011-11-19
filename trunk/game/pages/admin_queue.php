@@ -40,6 +40,7 @@ function Admin_Queue ()
 {
     global $session;
     global $db_prefix;
+    global $GlobalUser;
 
     // Обработка POST-запросов.
     $player_id = 0;

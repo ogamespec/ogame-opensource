@@ -24,6 +24,7 @@ function Admin_Fleetlogs ()
 {
     global $session;
     global $db_prefix;
+    global $GlobalUser;
 
     $now = time ();
 

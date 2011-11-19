@@ -600,13 +600,12 @@ function StartBattle ( $fleet_id, $planet_id )
 
     // *** Союзные атаки не должны вступать битву. Игнорировать их.
     $f = LoadFleet ( $fleet_id );
-    if ( $f['mission'] != 21 && $f['union_id'] > 0 ) return;
 
     // *** Сгенерировать исходные данные
 
     // Список атакующих
     $anum = 0;
-    if ( $f['mission'] != 21 )    // Одиночная атака
+    if ( $f['union_id'] == 0 )    // Одиночная атака
     {
         $a[0] = LoadUser ( $f['owner_id'] );
         $a[0]['fleet'] = array ();
@@ -621,7 +620,6 @@ function StartBattle ( $fleet_id, $planet_id )
     }
     else        // Совместная атака
     {
-        RemoveUnion ( $f['union_id'] );    // удалить союз
         $result = EnumUnionFleets ( $f['union_id'] );
         $rows = dbrows ($result);
         while ($rows--)
