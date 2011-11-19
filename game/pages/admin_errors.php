@@ -7,6 +7,7 @@ function Admin_Errors ()
 {
     global $session;
     global $db_prefix;
+    global $GlobalUser;
 
     if ( method () === "POST" )
     {
