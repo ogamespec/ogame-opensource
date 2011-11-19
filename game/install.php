@@ -94,8 +94,8 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                          'ipm_amount', 'ipm_target', 'ship202', 'ship203', 'ship204', 'ship205', 'ship206', 'ship207', 'ship208', 'ship209', 'ship210', 'ship211', 'ship212', 'ship213', 'ship214', 'ship215' );
     $fleettype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'INT', 'INT', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT', 'INT', 'INT', 'INT', 'INT',
                          'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
-    $unioncols = array ( 'union_id', 'fleet_id', 'name', 'players' );
-    $uniontype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'INT', 'CHAR(20)', 'TEXT' );
+    $unioncols = array ( 'union_id', 'fleet_id', 'target_player', 'name', 'players' );
+    $uniontype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'INT', 'INT', 'CHAR(20)', 'TEXT' );
     $battledatacols = array ( 'battle_id', 'source', 'result' );
     $battledatatype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'TEXT', 'TEXT' );
     $fleetlogscols = array ( 'log_id', 'owner_id', 'union_id', 'm', 'k', 'd', 'fuel', 'mission', 'flight_time', 'deploy_time', 'start', 'end',

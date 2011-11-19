@@ -344,7 +344,7 @@ function EventList ()
 
                 // Время отправления и прибытия
                 $task[$tasknum]['start_time'] = $queue['end'];
-                $task[$tasknum]['end_time'] = 2 * $queue['end'] - $queue['start'];
+                $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['flight_time'];
 
                 // Флот
                 $task[$tasknum]['fleets'] = 1;

@@ -889,10 +889,16 @@ function CreateUnion ($fleet_id)
     // Союзы можно создавать только для убывающих атак.
     if ($fleet_obj['mission'] != 1) return 0;
 
+    $target_planet = GetPlanet ( $fleet_obj['target_planet'] );
+    $target_player = $target_planet['owner_id'];
+
+    // Нельзя создать союз против себя самого
+    if ( $target_player == $fleet_obj['owner_id'] ) return 0;
+
     // Добавить союз.
-    $union = array ( '', $fleet_id, "", $fleet_obj['owner_id'] );
+    $union = array ( '', $fleet_id, $target_player, "", $fleet_obj['owner_id'] );
     $union_id = AddDBRow ($union, 'union');
-    RenameUnion ( $union_id, "KV" . ($union_id * mt_rand (230,270)) );
+    RenameUnion ( $union_id, "KV" . ($union_id * mt_rand (230,270) * 12345 ) );
 
     // Добавить флот в союз и изменить тип Атаки.
     $query = "UPDATE ".$db_prefix."fleet SET union_id = $union_id, mission = 21 WHERE fleet_id = $fleet_id";
@@ -980,7 +986,7 @@ function AddUnionMember ($union_id, $name)
     return "";
 }
 
-// Перечислить союзы в которых состоит игрок
+// Перечислить союзы в которых состоит игрок, а также союзы, целью которых он является.
 function EnumUnion ($player_id)
 {
     global $db_prefix;
@@ -995,7 +1001,7 @@ function EnumUnion ($player_id)
         $union['player'] = explode (",", $union['players'] );
         $union['players'] = count ($union['player']);
         for ($i=0; $i<=$union['players']; $i++) {
-            if ( $union["player"][$i] == $player_id ) $unions[$count++] = $union;
+            if ( $union["player"][$i] == $player_id || $union['target_player'] == $player_id ) { $unions[$count++] = $union; break; }
         }
     }
     return $unions;
@@ -1009,7 +1015,7 @@ function EnumUnionFleets ($union_id)
     return dbquery ( $query );
 }
 
-// Обновить время прибытия всех флотов союза
+// Обновить время прибытия всех флотов союза. Вернуть новое время прибытия союза.
 function UpdateUnionTime ($union_id, $end)
 {
     global $db_prefix;
@@ -1019,10 +1025,26 @@ function UpdateUnionTime ($union_id, $end)
     {
         $fleet_obj = dbarray ($result);
         $queue = GetFleetQueue ( $fleet_obj['fleet_id'] );
+        $union_time = $queue['end'];
         $queue_id = $queue['task_id'];
-        $query = "UPDATE ".$db_prefix."queue SET end = $end WHERE task_id = $queue_id";
-        dbquery ($query);
+        if ( $end > $queue['end'] )
+        {
+            $union_time = $end;
+            $query = "UPDATE ".$db_prefix."queue SET end = $end WHERE task_id = $queue_id";
+            dbquery ($query);
+        }
     }
+    return $union_time;
+}
+
+// Обновить время прибытия флота
+function UpdateFleetTime ($fleet_id, $when)
+{
+    global $db_prefix;
+    $queue = GetFleetQueue ($fleet_id);
+    $queue_id = $queue['task_id'];
+    $query = "UPDATE ".$db_prefix."queue SET end = $when WHERE task_id = $queue_id";
+    dbquery ($query);
 }
 
 // Перечислить флоты на удержании

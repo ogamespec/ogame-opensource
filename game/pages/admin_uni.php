@@ -11,6 +11,7 @@ function UniIsSelected ($option, $value)
 
 function Admin_Uni ()
 {
+    global $GlobalUser;
     global $session;
     $now = time ();
 
