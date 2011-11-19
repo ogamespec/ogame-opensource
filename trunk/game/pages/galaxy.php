@@ -564,7 +564,7 @@ while ($num--)
             echo "</th></tr></table></tr></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -110 );\" style=\"cursor: pointer;\" \n";
             echo " href='#' onclick='doit(6, ".$moon['g'].", ".$moon['s'].", ".$moon['p'].", 3, ".$GlobalUser['maxspy'].")' \n";
             echo ">\n";
-            echo "<img width=\"22\" height=\"22\" alt=\"Луна (размер: 4358)\" src=\"".GetPlanetSmallImage ( UserSkin(), $moon['type'] )."\"/></a>\n";
+            echo "<img width=\"22\" height=\"22\" alt=\"Луна (размер: ".$moon['diameter'].")\" src=\"".GetPlanetSmallImage ( UserSkin(), $moon['type'] )."\"/></a>\n";
         }
         else echo "<div style=\"border: 2pt solid #FF0000;\"><img src=\"".GetPlanetSmallImage ( UserSkin(), $moon['type'] )."\" alt=\"Луна (размер: ".$moon['diameter'].")\" height=\"22\" width=\"22\" onmouseover=\"return overlib('<font color=white><b>Покинута</b></font>', WIDTH, 75);\" onmouseout=\"return nd();\"/></div>\n";
     }
