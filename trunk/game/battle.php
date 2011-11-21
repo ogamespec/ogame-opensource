@@ -225,6 +225,14 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             }
             else        // Флоты на удержании
             {
+                $ships = 0;
+                foreach ( $fleetmap as $i=>$gid ) $ships += $defender[$gid];
+                if ( $ships > 0 ) SetFleet ( $defender['id'], $defender );
+                else {
+                    $queue = GetFleetQueue ($defender['id']);
+                    DeleteFleet ($defender['id']);    // удалить флот
+                    RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
+                }
             }
         }
     }
@@ -265,6 +273,14 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             }
             else        // Флоты на удержании
             {
+                $ships = 0;
+                foreach ( $fleetmap as $i=>$gid ) $ships += $defender[$gid];
+                if ( $ships > 0 ) SetFleet ( $defender['id'], $defender );
+                else {
+                    $queue = GetFleetQueue ($defender['id']);
+                    DeleteFleet ($defender['id']);    // удалить флот
+                    RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
+                }
             }
         }
 
