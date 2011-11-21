@@ -357,6 +357,20 @@ function DeleteFleet ($fleet_id)
     dbquery ($query);
 }
 
+// Изменить флот.
+function SetFleet ($fleet_id, $fleet)
+{
+    global $db_prefix;
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $query = "UPDATE ".$db_prefix."fleet SET ";
+    foreach ( $fleetmap as $i=>$gid ) {
+        if ( $i == 0 ) $query .= "ship".$gid."=".$fleet[$gid];
+        else $query .= ", ship".$gid."=".$fleet[$gid];
+    }
+    $query .= " WHERE fleet_id=$fleet_id;";
+    dbquery ($query);
+}
+
 // Получить описание задания (для отладки)
 function GetMissionNameDebug ($num)
 {
