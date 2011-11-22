@@ -178,6 +178,8 @@ function CreateUser ( $name, $pass, $email)
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     $id = AddDBRow ( $user, "users" );
 
+    LogIPAddress ( $ip, $id, 1 );
+
     // Создать Главную планету.
     // 1. g = s = 1, p = 4.
     // 2. Если p >= 12: s = s + 1, p = 4. Если s == 500: g = g + 1, s = 1. (Перейти на следующую систему/галактику)
@@ -510,6 +512,8 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
         // Редирект на Обзор Главной планеты.
         header ( "Location: ".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1" );
         echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
+
+        LogIPAddress ( $ip, $player_id );
     }
     else
     {

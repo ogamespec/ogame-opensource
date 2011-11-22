@@ -84,4 +84,11 @@ function SecurityCheck ( $match, $text, $notes )
     if ( !preg_match ( $match, $text ) ) Error ( "Нарушение безопасности: " . $notes );
 }
 
+// Добавить IP адрес в таблицу.
+function LogIPAddress ( $ip, $user_id, $reg=0)
+{
+    $log = array ( '', $ip, $user_id, $reg, time () );
+    AddDBRow ( $log, 'iplogs' );
+}
+
 ?>
