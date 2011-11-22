@@ -224,7 +224,7 @@ function PlanetHasMoon ( $planet_id )
     $result = dbquery ($query);
     if ( dbrows ($result) == 0) return 0;    // Планета не найдена
     $planet = dbarray ($result);
-    if ( $planet['type'] == 0) return 0;        // Планета сама является луной
+    if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return 0;        // Планета сама является луной
     $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$planet['g']."' AND s = '".$planet['s']."' AND p = '".$planet['p']."' AND type = 0 OR type = 10003";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0) return 0;    // Луна у планеты не найдена.

@@ -30,6 +30,7 @@ function Admin_Planets ()
                                        'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
                                       'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
                                       'm', 'k', 'd', 'g', 's', 'p', 'diameter', 'type', 'temp' );
+            $moon_param = array ( 'g', 's', 'p' );
 
             $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
             foreach ( $param as $i=>$p ) {
@@ -49,7 +50,20 @@ function Admin_Planets ()
                 }
             }
             else {                                        // Обновить данные планеты
-                dbquery ($query);        
+
+                $moon_id = PlanetHasMoon ( $cp );        // Переместить луну за планетой.
+                if ( $moon_id )
+                {
+                    $mquery = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
+                    foreach ( $moon_param as $i=>$p ) {
+                        if ( $i == 0 ) $mquery .= "$p=".$_POST[$p];
+                        else $mquery .= ", $p=".$_POST[$p];
+                    }
+                    $mquery .= " WHERE planet_id=$moon_id;";
+                    dbquery ($mquery);
+                }
+
+                dbquery ($query);
                 RecalcFields ($cp);
             }
         }
