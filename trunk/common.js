@@ -59,6 +59,10 @@ function printMessage(code, div) {
             text = "<?=loca("ERROR_107");?>";
             textclass = "warning"; 
             break;
+        case "108":
+            text = "<?=loca("ERROR_108");?>";
+            textclass = "warning"; 
+            break;
         case "201":
             text = "<?=loca("TIP_201");?>";
             break;
