@@ -345,12 +345,12 @@ function cons_fusion ($lvl, $pr) { return ceil (10 * $lvl * pow (1.1, $lvl) * $p
 // ВНИМАНИЕ: Из расчета исключаются внешние события, типа окончания действия офицеров, атаки другого игрока, завершение постройки здания итп.
 function ProdResources ( $planet_id, $time_from, $time_to )
 {
-    global $db_prefix;
+    global $db_prefix, $GlobalUni;
     $planet = GetPlanet ( $planet_id );
     if ( $planet['type'] == 0 || $planet['type'] >= 10000 ) return;        // луна или другой объект
     $diff = $time_to - $time_from;
 
-    $unitab = LoadUniverse ( );
+    $unitab = $GlobalUni;
     $speed = $unitab['speed'];
 
     $hourly = prod_metal ($planet['b1'], $planet['mprod']) * $planet['factor'] * $speed + 20 * $speed;        // Металл

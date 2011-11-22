@@ -20,7 +20,7 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
-$unitab = LoadUniverse ();
+$unitab = $GlobalUni;
 
 function empty_row ($p)
 {
@@ -536,7 +536,7 @@ while ($num--)
     echo "<th width=\"30\" style='white-space: nowrap;'>\n";
     if ($moon_id)
     {
-        if (!$moon['destroyed'])
+        if ($moon['type'] == 0)
         {
             echo "<a onmouseout=\"return nd();\" onmouseover=\"return overlib('<table width=240 ><tr>";
             echo "<td class=c colspan=2 >Луна ".$moon['name']." [".$moon['g'].":".$moon['s'].":".$moon['p']."]</td></tr>";
@@ -661,7 +661,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
 for ($p; $p<=15; $p++) empty_row ($p);
 
 /***** Низ таблицы *****/
-echo "<tr><th style='height:32px;'>16</th><th colspan='7'><a href ='#'>Бесконечные дали</a></th></tr>\n\n";
+echo "<tr><th style='height:32px;'>16</th><th colspan='7'><a href ='index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$coord_g."&system=".$coord_s."&planet=16&planettype=1&target_mission=15'>Бесконечные дали</a></th></tr>\n\n";
 
 echo "<tr><td class=\"c\" colspan=\"6\">(Заселено ".$planets." планет)</td>\n";
 echo "<td class=\"c\" colspan=\"2\"><a href='#' onmouseover='return overlib(\"<table><tr><td class=c colspan=2>Легенда</td></tr><tr><td width=125>сильный игрок</td><td><span class=strong>с</span></td></tr><tr><td>нуб</td><td><span class=noob>н</span></td></tr><tr><td>режим отпуска</td><td><span class=vacation>РО</span></td></tr><tr><td>заблокирован</td><td><span class=banned>з</span></td></tr><tr><td>неактивен 7 дней</td><td><span class=inactive>i</span></td></tr><tr><td>неактивен 28 дней</td><td><span class=longinactive>I</span></td></tr></table>\", ABOVE, WIDTH, 150, STICKY, MOUSEOFF, DELAY, 500, CENTER);' onmouseout='return nd();'>Легенда</a></td>\n";
