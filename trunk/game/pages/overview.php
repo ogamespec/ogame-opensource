@@ -32,7 +32,7 @@ PageHeader ("overview");
 
 if ( key_exists ('lgn', $_GET) && (int)$_GET['lgn'] == 1 ) UpdatePlanetActivity ( $aktplanet['planet_id'] );  // Обновить активность на Главной планете при входе в игру.
 
-$uni = LoadUniverse ( );
+$uni = $GlobalUni;
 
 ?>
 

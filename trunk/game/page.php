@@ -45,6 +45,7 @@ function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", 
 {
     global $pagetime;
     global $GlobalUser;
+    global $GlobalUni;
 
     BrowseHistory ();
 
@@ -53,7 +54,7 @@ function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", 
     $mtime = $mtime[1] + $mtime[0]; 
     $pagetime = $mtime;
 
-    $unitab = LoadUniverse ();
+    $unitab = $GlobalUni;
     $uni = $unitab['num'];
 
     echo "<html>\n";
@@ -191,7 +192,6 @@ function ResourceList ($m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
 function calco (&$img, &$days, &$action, $now, $qcmd, $who)
 {
     global $GlobalUser;
-    //$end = $GlobalUser[$who];
     $end = GetOfficerLeft ( $GlobalUser['player_id'], $qcmd[$who] );
     if ($end <= $now) $img[$who] = "_un";
     else
@@ -256,11 +256,12 @@ function OficeerList ()
 function LeftMenu ()
 {
     global $GlobalUser;
+    global $GlobalUni;
     $sess = $GlobalUser['session'];
 
     $prem = 0;
 
-    $unitab = LoadUniverse ();
+    $unitab = $GlobalUni;
     $uni = $unitab['num'];
 
     echo "   <div id='leftmenu'>\n\n";
@@ -474,6 +475,7 @@ function PageFooter ($msg="", $error="", $popup=false, $headerH=81)
 {
     global $pagetime;
     global $GlobalUser;
+    global $query_counter, $query_log;
 
     if ( $GlobalUser['debug'] )
     {
@@ -481,7 +483,8 @@ function PageFooter ($msg="", $error="", $popup=false, $headerH=81)
         $mtime = explode(" ",$mtime); 
         $mtime = $mtime[1] + $mtime[0];
         $endtime = $mtime;
-        $msg = sprintf ( "Страница сгенерирована за %f секунд<br>", $endtime-$pagetime) . $msg;
+        $msg = sprintf ( "Страница сгенерирована за %f секунд<br>Количество SQL запросов: %d<br>", $endtime-$pagetime, $query_counter) . $msg;
+        echo $query_log;
     }
 
     if ( !$GlobalUser['validated']) $error = "<center> \nВаш игровой аккаунт ещё не активирован. Зайдите в <a href=index.php?page=options&session=".$GlobalUser['session'].">Настройки</a>, введите электронный адрес и получите на него активационную ссылку.<br></center>\n" . $error;

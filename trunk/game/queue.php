@@ -108,8 +108,9 @@ function RemoveQueue ($task_id, $cb)
 function UpdateQueue ($until)
 {
     global $db_prefix;
+    global $GlobalUni;
 
-    $uni = LoadUniverse ( );
+    $uni = $GlobalUni;
     if ( $uni['freeze'] ) return;
 
     LockTables ();
@@ -158,10 +159,10 @@ function HasDecRes ($queue)
 // Добавить новую постройку/снос в очередь
 function BuildEnque ( $planet_id, $id, $destroy )
 {
-    global $db_prefix, $GlobalUser;
+    global $db_prefix, $GlobalUser, $GlobalUni;
     $maxcnt = 5;
 
-    $uni = LoadUniverse ( );
+    $uni = $GlobalUni;
     if ( $uni['freeze'] ) return;
 
     // Терраформер и Лунную базу нельзя снести.
@@ -192,7 +193,7 @@ function BuildEnque ( $planet_id, $id, $destroy )
     }
     else $lvl = $nowlevel + 1;
 
-    $unitab = LoadUniverse ( );
+    $unitab = $GlobalUni;
     $speed = $unitab['speed'];
 
     // Только первая постройка.
@@ -233,9 +234,9 @@ function BuildEnque ( $planet_id, $id, $destroy )
 // Отменить постройку/снос
 function BuildDeque ( $planet_id, $listid )
 {
-    global $db_prefix, $GlobalUser;
+    global $db_prefix, $GlobalUser, $GlobalUni;
 
-    $uni = LoadUniverse ( );
+    $uni = $GlobalUni;
     if ( $uni['freeze'] ) return;
 
     // Загрузить очередь. Отсортирована по времени начала событий.
@@ -387,9 +388,9 @@ function ShipyardLatestTime ($planet_id)
 // Добавить флот/оборону на верфь ($gid - тип юнита, $value - количество)
 function AddShipyard ($player_id, $planet_id, $gid, $value )
 {
-    global $db_prefix;
+    global $db_prefix, $GlobalUni;
 
-    $uni = LoadUniverse ( );
+    $uni = $GlobalUni;
     if ( $uni['freeze'] ) return;
 
     // Если в очереди уже строится купол такого же типа, то не добавлять ещё один купол в очередь.
@@ -476,9 +477,9 @@ function Queue_Shipyard_End ($queue)
 // Начать исследование на планете (включает в себя все проверки).
 function StartResearch ($player_id, $planet_id, $id)
 {
-    global $db_prefix;
+    global $db_prefix, $GlobalUni;
 
-    $uni = LoadUniverse ( );
+    $uni = $GlobalUni;
     if ( $uni['freeze'] ) return;
 
     Debug ("Запустить исследование ".loca("NAME_$id")." на планете $planet_id игрока $player_id" );
@@ -514,9 +515,9 @@ function StartResearch ($player_id, $planet_id, $id)
 // Отменить исследование.
 function StopResearch ($player_id)
 {
-    global $db_prefix;
+    global $db_prefix, $GlobalUni;
 
-    $uni = LoadUniverse ( );
+    $uni = $GlobalUni;
     if ( $uni['freeze'] ) return;
 
     // Получить очередь исследований.

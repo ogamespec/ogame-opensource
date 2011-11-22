@@ -2,8 +2,12 @@
 
 // Работа за базой данных MySQL.
 
+$query_counter = 0;
+$query_log = "";
+
 function dbconnect ($db_host, $db_user, $db_pass, $db_name)
 {
+    global  $query_counter, $query_log;
     $db_connect = @mysql_connect($db_host, $db_user, $db_pass);
     $db_select = @mysql_select_db($db_name);
     if (!$db_connect) {
@@ -11,10 +15,25 @@ function dbconnect ($db_host, $db_user, $db_pass, $db_name)
     } elseif (!$db_select) {
         die("<div style='font-family:Verdana;font-size:11px;text-align:center;'><b>Unable to select MySQL database</b><br>".mysql_errno()." : ".mysql_error()."</div>");
     }
+
+    $query = 'SHOW FULL PROCESSLIST';
+    $result = mysql_query($query);
+    while (($row = mysql_fetch_assoc($result)))
+    {
+        if ($row['db'] != $db_name) continue; // только для определенной базы
+        if ($row['Command'] != 'Sleep') continue; // если запрос не дремлет, то не убиваем его :)
+        mysql_query('KILL ' . $row['Id']);
+    }
+
+    $query_counter = 0;
+    $query_log = "";
 }
 
 function dbquery ($query, $mute=FALSE)
 {
+    global  $query_counter, $query_log;
+    $query_counter ++;
+    $query_log .= $query . "<br>\n";
     $result = @mysql_query($query);
     if (!$result && $mute==FALSE) {
         echo "$query <br>";

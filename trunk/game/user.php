@@ -58,6 +58,8 @@ rXXX: Уровень исследования XXX (INT)
 Q - для обработки этого события используется задание в очереди задач.
 */
 
+$UserCache = array ();
+
 function mail_utf8($to, $subject = '(No subject)', $message = '', $header = '') {
   $header_ = 'MIME-Version: 1.0' . "\r\n" . 'Content-type: text/plain; charset=UTF-8' . "\r\n";
   mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $header_ . $header);
@@ -340,10 +342,13 @@ function GetSelectedPlanet ( $player_id )
 // Загрузить пользователя.
 function LoadUser ( $player_id)
 {
-    global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."users WHERE player_id = '".$player_id."'";
+    global $db_prefix, $UserCache;
+    if ( isset ( $UserCache [ $player_id ] ) ) return  $UserCache [ $player_id ];
+    $query = "SELECT * FROM ".$db_prefix."users WHERE player_id = '".$player_id."' LIMIT 1";
     $result = dbquery ($query);
-    return dbarray ($result);
+    $user = dbarray ($result);
+    $UserCache [ $player_id ] = $user;
+    return $user;
 }
 
 // Обновить активность пользователя (НЕ ПЛАНЕТЫ).
@@ -430,13 +435,13 @@ function Logout ( $session )
 // Вызывается при загрузке каждой игровой страницы.
 function CheckSession ( $session )
 {
-    global $db_prefix, $GlobalUser, $loca_lang;
+    global $db_prefix, $GlobalUser, $loca_lang, $GlobalUni;
     // Получить ID-пользователя и номер вселенной из публичной сессии.
     $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$session."'";
     $result = dbquery ($query);
     if (dbrows ($result) == 0) { RedirectHome(); return FALSE; }
     $GlobalUser = dbarray ($result);
-    $unitab = LoadUniverse ();
+    $unitab = $GlobalUni;
     $uni = $unitab['num'];
     $ip = $_SERVER['REMOTE_ADDR'];
     $prsess = $_COOKIE ['prsess_'.$GlobalUser['player_id'].'_'.$uni];

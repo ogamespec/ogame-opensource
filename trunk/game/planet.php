@@ -180,7 +180,7 @@ function EnumPlanetsGalaxy ($g, $s)
 function GetPlanet ( $planet_id)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE planet_id = '".$planet_id."'";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE planet_id = '".$planet_id."' LIMIT 1";
     $result = dbquery ($query);
     if ( dbrows($result) == 0 ) return NULL;
     $planet = dbarray ($result);
@@ -207,9 +207,9 @@ function GetPlanet ( $planet_id)
 function LoadPlanet ($g, $s, $p, $type)
 {
     global $db_prefix;
-    if ($type == 1) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type > 0 AND type < 10000);";
-    else if ($type == 2) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=10000;";
-    else if ($type == 3) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=0;";
+    if ($type == 1) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type > 0 AND type < 10000) LIMIT 1;";
+    else if ($type == 2) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=10000 LIMIT 1;";
+    else if ($type == 3) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=0 LIMIT 1;";
     else return NULL;
     $result = dbquery ($query);
     if ( $result ) return dbarray ($result);
