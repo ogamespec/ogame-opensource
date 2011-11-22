@@ -65,11 +65,16 @@ $uninum = $uni['num'];
 $error = $agbclass = "";
 if ( method() === "POST" )        // Зарегистрировать игрока.
 {
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $now = time ();
+    $last = GetLastRegistrationByIP ( $ip );
+
     if ( !key_exists ( "agb", $_POST ) ) {
         $error = "Для того, чтобы начать игру Вы должны принять Основные Положения!";
         $agbclass = "error";
     }
 
+    else if ( ( $now - $last ) < 10 * 60 && $ip !== "127.0.0.1" ) $error = "Регистрация с одного айпи не чаще одного раза за 10 минут!";
     else if ( mb_strlen ($_POST['character']) < 3 || mb_strlen ($_POST['character']) > 20 ) $error = "Имя #1 содержит недопустимые символы или слишком мало/много символов!";
     else if ( IsUserExist ( $_POST['character'])) $error = va ( "Имя #1 уже существует", $_POST['character'] ) ;
     else if ( !isValidEmail ($_POST['email']) ) $error = va ( "Адрес #1 недействителен!", $_POST['email'] ) ;
@@ -175,6 +180,10 @@ function printMessage(code, div) {
             break;
         case "107":
             text = "Адрес недействителен!";
+            textclass = "warning";
+            break;
+        case "108":
+            text = "Регистрация с одного айпи не чаще одного раза за 10 минут!";
             textclass = "warning";
             break;
         case "201":

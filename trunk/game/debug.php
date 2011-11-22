@@ -91,4 +91,18 @@ function LogIPAddress ( $ip, $user_id, $reg=0)
     AddDBRow ( $log, 'iplogs' );
 }
 
+// Получить последнию регистрацию с указанного IP адреса.
+function GetLastRegistrationByIP ( $ip )
+{
+    global $db_prefix;
+
+    $query = "SELECT * FROM ".$db_prefix."iplogs WHERE ip = '".$ip."' AND reg = 1 ORDER BY date DESC LIMIT 1";
+    $result = dbquery ( $query );
+    if ( $result == null ) return 0;
+    else {
+        $row = dbarray ( $result );
+        return $row['date'];
+    }
+}
+
 ?>
