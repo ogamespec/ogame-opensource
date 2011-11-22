@@ -330,6 +330,7 @@ function SelectPlanet ($player_id, $cp)
     if ($planet['owner_id'] != $player_id) return;
     $query = "UPDATE ".$db_prefix."users SET aktplanet = '".$cp."' WHERE player_id = '".$player_id."'";
     dbquery ($query);
+    InvalidateUserCache ();
 }
 
 // Получить ID текущей планеты

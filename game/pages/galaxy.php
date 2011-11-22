@@ -345,7 +345,7 @@ echo "<center>\n\n";
       }
 
   }
-  document.onkeydown = cursorevent;
+  document.onkeyup = cursorevent;
 </script>
 
 <?php
