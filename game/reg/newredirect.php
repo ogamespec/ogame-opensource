@@ -18,6 +18,7 @@ require_once "../planet.php";
 require_once "../user.php";
 require_once "../queue.php";
 require_once "../uni.php";
+require_once "../debug.php";
 
 // Соединиться с базой данных
 dbconnect ($db_host, $db_user, $db_pass, $db_name);
