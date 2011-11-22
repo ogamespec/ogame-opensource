@@ -681,4 +681,11 @@ function ReactivateUser ($player_id)
     if ( $_SERVER['REMOTE_ADDR'] !== "127.0.0.1" ) SendGreetingsMail ( $name, $pass, $email, $ack);
 }
 
+// Очистить кеш игроков.
+function InvalidateUserCache ()
+{
+    global $UserCache;
+    $UserCache = array ();
+}
+
 ?>

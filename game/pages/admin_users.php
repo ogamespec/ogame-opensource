@@ -102,6 +102,7 @@ function Admin_Users ()
     }
 
     if ( key_exists("player_id", $_GET) ) {        // Информация об игроке
+        InvalidateUserCache ();
         $user = LoadUser ( $_GET['player_id'] );
 ?>
     <table>
