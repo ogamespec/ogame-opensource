@@ -1014,6 +1014,22 @@ function AddUnionMember ($union_id, $name)
     $union['player'][$union['players']] = $user['player_id'];
     $query = "UPDATE ".$db_prefix."union SET players = '".implode(",", $union['player'])."' WHERE union_id = $union_id";
     dbquery ($query);
+
+    $target_player = LoadUser ( $union['target_player'] );
+    $head_fleet = LoadFleet ( $union['fleet_id'] );
+    $target_planet = GetPlanet ( $head_fleet['target_planet'] );
+    $queue = GetFleetQueue ( $union['fleet_id'] );
+
+    $text = va ("#1 приглашает Вас на миссию #2 против игрока #3 на планете <a href=\"#\" onClick=showGalaxy(#4,#5,#6)><b><u>[#7:#8:#9]</u></b></a>. ",
+                        $GlobalUser['oname'], 
+                        $union['name'], 
+                        $target_player['oname'], 
+                        $target_planet['g'], $target_planet['s'], $target_planet['p'], 
+                        $target_planet['g'], $target_planet['s'], $target_planet['p']
+                    ) .
+                    va ( "Прибытие флота назначено на #1. ВНИМАНИЕ: время прибытия может измениться из-за скорости других задействованных флотов!", date ( "D M Y H:i:s", $queue['end'] ) );
+    SendMessage ( $user['player_id'], $GlobalUser['oname'], "Приглашение к совместной атаке", $text, 5 );
+
     return "";
 }
 
