@@ -46,6 +46,23 @@ function CreateAlly ($owner_id, $tag, $name)
 // Распустить альянс.
 function DismissAlly ($ally_id)
 {
+    global $db_prefix;
+
+    // Сделать ally_id и ранги всех игроков альянса 0.
+    $query = "UPDATE ".$db_prefix."users SET ally_id = 0, joindate = 0, allyrank = 0 WHERE ally_id = $ally_id";
+    dbquery ($query);
+
+    // Удалить ранги из таблицы рангов
+    $query = "DELETE FROM ".$db_prefix."allyranks WHERE ally_id = $ally_id";
+    dbquery ($query);
+
+    // Удалить все необработанные заявки
+    $query = "DELETE FROM ".$db_prefix."allyapps WHERE ally_id = $ally_id";
+    dbquery ($query);
+
+    // Удалить запись из таблицы альянсов.
+    $query = "DELETE FROM ".$db_prefix."ally WHERE ally_id = $ally_id";
+    dbquery ($query);
 }
 
 // Перечислить всех игроков альянса.

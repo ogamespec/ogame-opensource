@@ -185,7 +185,7 @@ else
         else if ( $_GET['a'] == 9 ) PageAlly_ChangeTag ();
         else if ( $_GET['a'] == 10 ) PageAlly_ChangeName ();
         else if ( $_GET['a'] == 11 ) PageAlly_Settings ();
-        //else if ( $_GET['a'] == 12 ) PageAlly_Dismiss ();
+        else if ( $_GET['a'] == 12 ) PageAlly_Dismiss ();
         else if ( $_GET['a'] == 13 ) PageAlly_MemberSettings ();    // выгнать игрока
         else if ( $_GET['a'] == 15 ) PageAlly_Ranks ();
         else if ( $_GET['a'] == 16 ) PageAlly_MemberSettings ();    // назначить ранг игроку
