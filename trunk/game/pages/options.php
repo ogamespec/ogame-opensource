@@ -177,7 +177,7 @@ $speed = $unitab['speed'];
 
             else if ( $_POST['newpass1'] !== "" ) {        // Сменить пароль
 
-                if ( $_POST['newpass1'] !== $_POST['newpass1'] ) $OptionsError = "Новые пароли не совпадают.";
+                if ( $_POST['newpass1'] !== $_POST['newpass2'] ) $OptionsError = "Новые пароли не совпадают.";
                 else if ( !preg_match ( "/^[_a-zA-Z0-9]+$/", $_POST['newpass1'] ) ) $OptionsError = "Пароль содержит особый символ.";
                 else if ( strlen ( $_POST['newpass1'] ) < 8 ) $OptionsError = "Пароль должен состоять минимум из 8 символов";
                 else if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $OptionsError = "Неправильный старый пароль.";
