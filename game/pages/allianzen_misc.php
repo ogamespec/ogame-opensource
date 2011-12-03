@@ -124,4 +124,57 @@ function PageAlly_ChangeName ()
 <?php
 }
 
+// Распустить альянс.
+function PageAlly_Dismiss ()
+{
+    global $GlobalUser;
+    global $session;
+    global $ally;
+    global $AllianzenError;
+
+    if ( method() === "POST" && $_GET['a'] == 12 && $_GET['weiter'] == 1)
+    {
+        $now = time ();
+        $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
+        if ( ! ($myrank['rights'] & 0x001) ) $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
+        else
+        {
+            // Послать всем игрокам сообщение о роспуске альянса.
+            $from = $ally['name'];
+            $subj = va ( "Членство в альянсе[#1]окончено", $ally['tag'] );
+            $text = va ( "Игрок #1 распустил альянс [#2].<br>Теперь Вы можете вступить в другой альянс или создать свой собственный", $GlobalUser['oname'], $ally['tag'] );
+
+            $result = EnumerateAlly ($ally['ally_id']);
+            $rows = dbrows ($result);
+            while ($rows--)
+            {
+                $user = dbarray ($result);
+                SendMessage ( $user['player_id'], $from, $subj, $text, 0);
+            }
+
+            // Распустить альянс
+            DismissAlly ( $ally['ally_id'] );
+
+?>
+<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script><table width="519">
+<form action="index.php?page=allianzen&session=<?=$session;?>" method="POST">
+ <tr><td class="c">Альянс был распущен.</td></tr>
+ <tr><th><br><input type=submit value="Ok"></th></tr>
+</form>
+</table><br><br><br><br>
+<?php
+        }
+        return;
+    }
+
+?>
+<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
+<table width=519>
+<form action="index.php?page=allianzen&session=<?=$session;?>&a=12&weiter=1" method=POST>
+<tr><td class=c colspan=2>Вы действительно хотите распустить "<?=$ally['name'];?>" альянс?</td></tr>
+<tr><th>Внимание!</th><th>Восстановление альянса будет невозможно<br>
+и все его члены покинут его!</th></tr>
+<tr><th colspan=2><br><input type=submit value="Да, хочу!"></th></tr></table></center></form><br><br><br><br>
+<?php
+}
 ?>
