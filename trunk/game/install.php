@@ -44,7 +44,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                         'email_changed', 'email_until', 'disable', 'disable_until', 'vacation', 'vacation_until', 'banned', 'banned_until', 'noattack', 'noattack_until',
                         'lastlogin', 'lastclick', 'ip_addr', 'validated', 'validatemd', 'hplanetid', 'admin', 'sortby', 'sortorder',
                         'skin', 'useskin', 'deact_ip', 'maxspy', 'maxfleetmsg', 'lang', 'aktplanet',
-                        'dm', 'dmfree', 'sniff', 'debug', 'redesign', 
+                        'dm', 'dmfree', 'sniff', 'debug', 'redesign', 'trader', 'rate_m', 'rate_k', 'rate_d',
                         'score1', 'score2', 'score3', 'place1', 'place2', 'place3',
                         'oldscore1', 'oldscore2', 'oldscore3', 'oldplace1', 'oldplace2', 'oldplace3', 'scoredate',
                         'r106', 'r108', 'r109', 'r110', 'r111', 'r113', 'r114', 'r115', 'r117', 'r118', 'r120', 'r121', 'r122', 'r123', 'r124', 'r199' );
@@ -52,7 +52,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                          'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 
                          'INT UNSIGNED', 'INT UNSIGNED', 'CHAR(15)', 'INT', 'CHAR(32)', 'INT', 'INT', 'INT', 'INT',
                          'CHAR(80)', 'INT', 'INT', 'INT', 'INT', 'CHAR(4)', 'INT',
-                         'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT',
+                         'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 'INT', 'DOUBLE', 'DOUBLE', 'DOUBLE', 
                          'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 
                          'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 'INT UNSIGNED',
                          'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );

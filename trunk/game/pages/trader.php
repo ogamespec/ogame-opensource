@@ -26,15 +26,28 @@ if ( method () === "POST" )
 
 PageHeader ("trader");
 
+if ( $GlobalUser['trader'] > 0 )
+{
+    $offer_id = $GlobalUser['trader'];
+    if ( $offer_id == 1) $amount = floor ($aktplanet['m']);
+    else if ( $offer_id == 2) $amount = floor ($aktplanet['k']);
+    else if ( $offer_id == 3) $amount = floor ($aktplanet['d']);
+    $mmax = max (0, $aktplanet['mmax'] - $aktplanet['m'] );
+    $kmax = max (0, $aktplanet['kmax'] - $aktplanet['k'] );
+    $dmax = max (0, $aktplanet['dmax'] - $aktplanet['d'] );
+    $storage = "0, " . $mmax . ", " . $kmax . ", " . $dmax;
+    $factor = "0, " . $GlobalUser['rate_m'] . ", " . $GlobalUser['rate_k'] . ", " . $GlobalUser['rate_d'];
+}
+
 ?>
 <!-- CONTENT AREA -->
 <div id='content'>
 <center>
 <script>
-storage      = new Array();
-factor       = new Array();
-offer_id     = ;
-offer_amount = ;
+storage      = new Array(<?=$storage;?>);
+factor       = new Array(<?=$factor;?>);
+offer_id     = <?=$offer_id;?>;
+offer_amount = <?=$amount;?>;
 offer_costs  = 0;
 
 function number_format(number, decimals, dec_point, thousands_sep) {
@@ -136,8 +149,13 @@ function setMaxValue(id) {
 <form action="index.php?page=trader&session=<?=$session;?>" name="TraderForm" method="POST">
 	<TABLE class="c" width='520px'>
 		<tr>
-	
-			<td class="c"align='center' >Скупщик не найден!</td>
+
+<?php
+    if ( $GlobalUser['trader'] > 0 ) {
+        echo "			<td class=\"c\"align='center' >XXXX</td>\n";
+    }
+    else echo "			<td class=\"c\"align='center' >Скупщик не найден!</td>\n";
+?>	
 	
 			</tr>
 		<tr>
@@ -151,12 +169,91 @@ function setMaxValue(id) {
 				!				<br>
 				<div id='darkmatter2'>Вызвать скупщика стоит 2500 тёмной материи.</div><br><br>
 
-				<input type='submit' name='call_trader' value='Вызвать скупщика'>
+<?php
+    if ( $GlobalUser['trader'] > 0 ) echo "				<input type='submit' name='call_trader' value='Вызвать другого скупщика'>\n";
+    else echo "				<input type='submit' name='call_trader' value='Вызвать скупщика'>\n";
+?>
 			</th>
 		</tr>
 	</TABLE>	
 	<br>
 </form>	
+<?php
+    if ( $GlobalUser['trader'] > 0 )
+    {
+?>
+<form action="index.php?page=trader&session=<?=$session;?>" name="TraderForm" method="POST">
+    <TABLE width='520px'>
+        <TR>
+            <TD colspan=4 class="c" align='center'>Jetzt Rohstoffe tauschen</TD>
+        </TR>
+        
+        <TR>
+            <th></th>
+            <th></th>
+            <th>Freier Lagerraum</th>
+            <th>Tauschkurse</th>
+        </TR>
+        
+        
+        <TR>
+            <th class="c" align="center" width=25% >Металл</th>
+                          <th class="c" align='center' width=25% ><span id="1_value">0</span></th>
+              <th class="c" align='center' width=25% >
+<?php
+    if ( $GlobalUser['trader'] != 1 ) echo "<span id=\"1_storage\">".nicenum($mmax)."</span>";
+    else echo "---";
+?>
+</th>
+                        
+            <th class="c" align='center' width=25% >
+                          <font size=3><b><?=$GlobalUser['rate_m'];?></b></font>
+                        </th>           
+        </TR>
+        
+        <TR>
+            <th class="c" align="center" width=25% >Кристалл</th>
+                          <th class="c" align='center' width=25% ><input type="text" size="9" name="2_value" value="0" style="text-align:right;" onkeyup='checkValue(2);'> <a href="#" onClick="setMaxValue(2);">max</a></th>
+              <th class="c" align='center' width=25% >
+<?php
+    if ( $GlobalUser['trader'] != 2 ) echo "<span id=\"2_storage\">".nicenum($kmax)."</span>";
+    else echo "---";
+?>
+</th>
+                        
+            <th class="c" align='center' width=25% >
+                          <a href=# onmouseover="return overlib('<font color=white>Ein Metall ergibt 0.6 Kristall</font>');" onmouseout="return nd();">
+                          <font size=3><b><?=$GlobalUser['rate_k'];?></b></font>
+                          </a>
+                        </th>           
+        </TR>
+        
+        <TR>
+            <th class="c" align="center" width=25% >Дейтерий</th>
+                          <th class="c" align='center' width=25% ><input type="text" size="9" name="3_value" value="0" style="text-align:right;" onkeyup='checkValue(3);'> <a href="#" onClick="setMaxValue(3);">max</a></th>
+              <th class="c" align='center' width=25% >
+<?php
+    if ( $GlobalUser['trader'] != 3 ) echo "<span id=\"3_storage\">".nicenum($dmax)."</span>";
+    else echo "---";
+?>
+</th>
+                        
+            <th class="c" align='center' width=25% >
+                          <a href=# onmouseover="return overlib('<font color=white>Ein Metall ergibt 0.28 Deuterium</font>');" onmouseout="return nd();">
+                          <font size=3><b><?=$GlobalUser['rate_d'];?></b></font>
+                          </a>
+                        </th>           
+        </TR>
+        
+        <tr>
+        <th class="c" align="center" colspan=4 ><br>Скупщик поставляет столько, сколько могут вместить ваши хранилища.       <br><br><input type=submit name='trade' value='Rohstoffe tauschen!'>
+        </th>
+        </tr>
+    </TABLE>
+</form> 
+<?php
+    }
+?>
 	<br><br><br><br>
 </center>
 </div>
