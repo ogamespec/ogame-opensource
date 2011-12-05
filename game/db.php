@@ -16,6 +16,7 @@ function dbconnect ($db_host, $db_user, $db_pass, $db_name)
         die("<div style='font-family:Verdana;font-size:11px;text-align:center;'><b>Unable to select MySQL database</b><br>".mysql_errno()." : ".mysql_error()."</div>");
     }
 
+/*
     $query = 'SHOW FULL PROCESSLIST';
     $result = mysql_query($query);
     while (($row = mysql_fetch_assoc($result)))
@@ -24,6 +25,7 @@ function dbconnect ($db_host, $db_user, $db_pass, $db_name)
         if ($row['Command'] != 'Sleep') continue; // если запрос не дремлет, то не убиваем его :)
         mysql_query('KILL ' . $row['Id']);
     }
+*/
 
     $query_counter = 0;
     $query_log = "";
