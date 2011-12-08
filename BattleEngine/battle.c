@@ -644,7 +644,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
         ptr += sprintf ( ptr, "}" );
         ptr += sprintf ( ptr, "}" );
 
-        if (fastdraw) break;
+        if (fastdraw) { rounds ++; break; }
     }
 
     *round_patch = '0' + (rounds);
