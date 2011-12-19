@@ -74,6 +74,7 @@ if ( key_exists("page", $_POST) && $_POST['page'] === "renameplanet")
         else
         {
             // Проверить принадлежит планета этому пользователю.
+/*
             $planet = GetPlanet ( $_POST['deleteid'] );
             if ( $planet['owner_id'] == $GlobalUser['player_id'] )
             {
@@ -90,6 +91,7 @@ if ( key_exists("page", $_POST) && $_POST['page'] === "renameplanet")
                 }
             }
             else $RenameError = "<center>\nЧужие планеты нельзя удалять!<br></center>\n";
+*/
         }
     }
 }
