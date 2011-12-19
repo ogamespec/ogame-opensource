@@ -168,6 +168,8 @@ switch ( $order )
         if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
         else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
         else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Невозможно напасть на собственную планету!" );
+
+        //FleetError ( "Запрет на атаки до #1" );
 //Запрет на атаки до #1
         break;
 
@@ -184,6 +186,8 @@ switch ( $order )
         else if ( $flighttime > $acs_flighttime * 1.3 ) FleetError ( "Вы слишком медленны, чтобы присоединиться к этому флоту" );
 //Атаковать флоты (>16 флотов нельзя)
 //Запрет на атаки до #1
+
+        //FleetError ( "Запрет на атаки до #1" );
         break;
 
     case '3':        // Транспорт
@@ -205,6 +209,8 @@ switch ( $order )
     case '6':        // Шпионаж
         if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Нельзя шпионить на собственной планете!" );
         if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "На этой планете нельзя шпионить из-за защиты для новичков!" );
+
+        //FleetError ( "Запрет на атаки до #1" );
 //Запрет на атаки до #1
         break;
 
@@ -227,6 +233,8 @@ switch ( $order )
         if ( $fleet[214] == 0 ) FleetError ( "Для уничтожения луны необходима звезда смерти." );
         else if ($target['type'] != 0 ) FleetError ( "Уничтожать можно только луны!" );
 //Запрет на атаки до #1
+
+        //FleetError ( "Запрет на атаки до #1" );
         break;
 
     case '15':       // Экспедиция

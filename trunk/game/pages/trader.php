@@ -2,10 +2,12 @@
 
 // Скупщик.
 
-//Недостаточно тёмной материи!
-//Недостаточно места в хранилищах!
-//Недостаточно материала для торговли!
-//Достать тёмную материю
+$TraderMessage = "";
+$TraderError = "";
+
+//Недостаточно тёмной материи!<br>
+//Недостаточно места в хранилищах!<br>
+//Недостаточно материала для торговли!<br>
 
 SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
@@ -25,7 +27,24 @@ UpdateLastClick ( $GlobalUser['player_id'] );
 // Обработка POST-запросов.
 if ( method () === "POST" )
 {
-    print_r ( $_POST );
+    $dm = $GlobalUser['dm'] + $GlobalUser['dmfree'];
+
+    if ( $GlobalUser['trader'] > 0 )
+    {
+        print_r ( $_POST );
+    }
+    else
+    {
+        if ( $dm < 2500 )
+        {
+            $not_enough = true;
+            $TraderError = "Недостаточно тёмной материи!<br>";
+        }
+        else
+        {
+            $not_enough = false;
+        }
+    }
 
 }
 
@@ -190,6 +209,16 @@ function setMaxValue(id) {
 				<div id='darkmatter2'>Вызвать скупщика стоит 2500 тёмной материи.</div><br><br>
 
 <?php
+    if ( $not_enough )
+    {
+?>
+	<a id='darkmatter2' href='index.php?page=payment&session=<?=$session;?>' style='cursor:pointer; text-align:center;width:100px;height:60px;'>
+	<b><div id='darkmatter2'><img border="0" src="img/DMaterie.jpg" width="60" height="60"><br>Достать тёмную материю</a></b><br><br><br>
+<?php
+    }
+?>
+
+<?php
     if ( $GlobalUser['trader'] > 0 ) echo "				<input type='submit' name='call_trader' value='Вызвать другого скупщика'>\n";
     else echo "				<input type='submit' name='call_trader' value='Вызвать скупщика'>\n";
 ?>
@@ -281,6 +310,6 @@ function setMaxValue(id) {
 <!-- END CONTENT AREA -->
 
 <?php
-PageFooter ();
+PageFooter ($TraderMessage, $TraderError);
 ob_end_flush ();
 ?>
