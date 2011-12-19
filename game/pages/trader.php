@@ -2,6 +2,11 @@
 
 // Скупщик.
 
+//Недостаточно тёмной материи!
+//Недостаточно места в хранилищах!
+//Недостаточно материала для торговли!
+//Достать тёмную материю
+
 SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 
@@ -26,6 +31,12 @@ if ( method () === "POST" )
 
 PageHeader ("trader");
 
+function is_selected ( $a, $b )
+{
+    if ( $a == $b ) return "selected";
+    else return "";
+}
+
 if ( $GlobalUser['trader'] > 0 )
 {
     $offer_id = $GlobalUser['trader'];
@@ -37,6 +48,14 @@ if ( $GlobalUser['trader'] > 0 )
     $dmax = max (0, $aktplanet['dmax'] - $aktplanet['d'] );
     $storage = "0, " . $mmax . ", " . $kmax . ", " . $dmax;
     $factor = "0, " . $GlobalUser['rate_m'] . ", " . $GlobalUser['rate_k'] . ", " . $GlobalUser['rate_d'];
+
+    $resname = array ( "", "Металл", "Кристалл", "Дейтерий" );
+
+    if ( $GlobalUser['trader'] == 1 ) $ratewhat = $GlobalUser['rate_m'];
+    else if ( $GlobalUser['trader'] == 2 ) $ratewhat = $GlobalUser['rate_k'];
+    else if ( $GlobalUser['trader'] == 3 ) $ratewhat = $GlobalUser['rate_k'];
+    else $ratewhat = 1.0;
+
 }
 
 ?>
@@ -152,7 +171,8 @@ function setMaxValue(id) {
 
 <?php
     if ( $GlobalUser['trader'] > 0 ) {
-        echo "			<td class=\"c\"align='center' >XXXX</td>\n";
+
+        echo "			<td class=\"c\"align='center' >".va ("Есть скупщик, которому Вы может продать #1.", $resname[$GlobalUser['trader']] ) ."</td>\n";
     }
     else echo "			<td class=\"c\"align='center' >Скупщик не найден!</td>\n";
 ?>	
@@ -162,9 +182,9 @@ function setMaxValue(id) {
 			<th class="c" align='center'><br>
 				Вы хотите продать				<select name="offer_id" style="color: lime;">
 
-				  <option value="1" >Металл</option>
-				  <option value="2" >Кристалл</option>
-				  <option value="3" >Дейтерий</option>
+				  <option value="1" <?=is_selected($GlobalUser['trader'], 1);?>>Металл</option>
+				  <option value="2" <?=is_selected($GlobalUser['trader'], 2);?>>Кристалл</option>
+				  <option value="3" <?=is_selected($GlobalUser['trader'], 3);?>>Дейтерий</option>
 				</select>		
 				!				<br>
 				<div id='darkmatter2'>Вызвать скупщика стоит 2500 тёмной материи.</div><br><br>
@@ -181,18 +201,19 @@ function setMaxValue(id) {
 <?php
     if ( $GlobalUser['trader'] > 0 )
     {
+
 ?>
 <form action="index.php?page=trader&session=<?=$session;?>" name="TraderForm" method="POST">
     <TABLE width='520px'>
         <TR>
-            <TD colspan=4 class="c" align='center'>Jetzt Rohstoffe tauschen</TD>
+            <TD colspan=4 class="c" align='center'>Обменять</TD>
         </TR>
         
         <TR>
             <th></th>
             <th></th>
-            <th>Freier Lagerraum</th>
-            <th>Tauschkurse</th>
+            <th>Свободное место хранилище</th>
+            <th>Курс обмена</th>
         </TR>
         
         
@@ -222,7 +243,7 @@ function setMaxValue(id) {
 </th>
                         
             <th class="c" align='center' width=25% >
-                          <a href=# onmouseover="return overlib('<font color=white>Ein Metall ergibt 0.6 Kristall</font>');" onmouseout="return nd();">
+                          <a href=# onmouseover="return overlib('<font color=white><?=va("Один #1 даёт #2 #3", $resname[$GlobalUser['trader']], round($GlobalUser['rate_k'] / $ratewhat, 2), $resname[2] );?></font>');" onmouseout="return nd();">
                           <font size=3><b><?=$GlobalUser['rate_k'];?></b></font>
                           </a>
                         </th>           
@@ -239,14 +260,14 @@ function setMaxValue(id) {
 </th>
                         
             <th class="c" align='center' width=25% >
-                          <a href=# onmouseover="return overlib('<font color=white>Ein Metall ergibt 0.28 Deuterium</font>');" onmouseout="return nd();">
+                          <a href=# onmouseover="return overlib('<font color=white><?=va("Один #1 даёт #2 #3", $resname[$GlobalUser['trader']], round($GlobalUser['rate_d'] / $ratewhat, 2), $resname[3] );?></font>');" onmouseout="return nd();">
                           <font size=3><b><?=$GlobalUser['rate_d'];?></b></font>
                           </a>
                         </th>           
         </TR>
         
         <tr>
-        <th class="c" align="center" colspan=4 ><br>Скупщик поставляет столько, сколько могут вместить ваши хранилища.       <br><br><input type=submit name='trade' value='Rohstoffe tauschen!'>
+        <th class="c" align="center" colspan=4 ><br>Скупщик поставляет столько, сколько могут вместить ваши хранилища.       <br><br><input type=submit name='trade' value='Обменять!'>
         </th>
         </tr>
     </TABLE>
