@@ -5,10 +5,6 @@
 $TraderMessage = "";
 $TraderError = "";
 
-//Недостаточно тёмной материи!<br>
-//Недостаточно места в хранилищах!<br>
-//Недостаточно материала для торговли!<br>
-
 SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 
@@ -115,7 +111,50 @@ if ( method () === "POST" )
                 CallNewTrader ();
             }
         }
-        else print_r ( $_POST );
+        else if ( key_exists ( 'trade', $_POST) )
+        {
+            if ( $GlobalUser['trader'] == 1)
+            {
+                $crys = floor ( min ( $aktplanet['kmax'], $aktplanet['k'] + str_replace ( ".", "", $_POST['2_value'] ) ) );
+                $deut = floor ( min ( $aktplanet['dmax'], $aktplanet['d'] + str_replace ( ".", "", $_POST['3_value'] ) ) );
+                $met = floor ( str_replace ( ".", "", $_POST['2_value'] ) * $GlobalUser['rate_m'] / $GlobalUser['rate_k'] ) + 
+                       floor ( str_replace ( ".", "", $_POST['3_value'] ) * $GlobalUser['rate_m'] / $GlobalUser['rate_d'] );
+                $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
+                dbquery ( $query );
+                $query = "UPDATE ".$db_prefix."planets SET m = m - '".$met."', k = '".$crys."', d = '".$deut."' WHERE planet_id = " . $aktplanet['planet_id'];
+                dbquery ( $query );
+                $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+            }
+
+            else if ( $GlobalUser['trader'] == 2)
+            {
+                $met = floor ( min ( $aktplanet['mmax'], $aktplanet['m'] + str_replace ( ".", "", $_POST['1_value'] ) ) );
+                $deut = floor ( min ( $aktplanet['dmax'], $aktplanet['d'] + str_replace ( ".", "", $_POST['3_value'] ) ) );
+                $crys = floor ( str_replace ( ".", "", $_POST['1_value'] ) * $GlobalUser['rate_k'] / $GlobalUser['rate_m'] ) + 
+                        floor ( str_replace ( ".", "", $_POST['3_value'] ) * $GlobalUser['rate_k'] / $GlobalUser['rate_d'] );
+                $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
+                dbquery ( $query );
+                $query = "UPDATE ".$db_prefix."planets SET k = k - '".$crys."', m = '".$met."', d = '".$deut."' WHERE planet_id = " . $aktplanet['planet_id'];
+                dbquery ( $query );
+                $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+            }
+
+            else if ( $GlobalUser['trader'] == 3)
+            {
+                $met = floor ( min ( $aktplanet['mmax'], $aktplanet['m'] + str_replace ( ".", "", $_POST['1_value'] ) ) );
+                $crys = floor ( min ( $aktplanet['kmax'], $aktplanet['k'] + str_replace ( ".", "", $_POST['2_value'] ) ) );
+                $deut = floor ( str_replace ( ".", "", $_POST['1_value'] ) * $GlobalUser['rate_d'] / $GlobalUser['rate_m'] ) + 
+                        floor ( str_replace ( ".", "", $_POST['2_value'] ) * $GlobalUser['rate_d'] / $GlobalUser['rate_k'] );
+                $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
+                dbquery ( $query );
+                $query = "UPDATE ".$db_prefix."planets SET d = d - '".$deut."', k = '".$crys."', m = '".$met."' WHERE planet_id = " . $aktplanet['planet_id'];
+                dbquery ( $query );
+                $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+            }
+
+//Недостаточно места в хранилищах!<br>
+//Недостаточно материала для торговли!<br>
+        }
     }
     else        // Вызвать (нового) скупщика
     {
@@ -157,7 +196,7 @@ if ( $GlobalUser['trader'] > 0 )
 
     if ( $GlobalUser['trader'] == 1 ) $ratewhat = $GlobalUser['rate_m'];
     else if ( $GlobalUser['trader'] == 2 ) $ratewhat = $GlobalUser['rate_k'];
-    else if ( $GlobalUser['trader'] == 3 ) $ratewhat = $GlobalUser['rate_k'];
+    else if ( $GlobalUser['trader'] == 3 ) $ratewhat = $GlobalUser['rate_d'];
     else $ratewhat = 1.0;
 
 }
@@ -333,7 +372,10 @@ function setMaxValue(id) {
         
         <TR>
             <th class="c" align="center" width=25% >Металл</th>
-                          <th class="c" align='center' width=25% ><span id="1_value">0</span></th>
+<?php
+    if ( $GlobalUser['trader'] == 1 ) echo "                          <th class=\"c\" align='center' width=25% ><span id=\"1_value\">0</span></th>\n";
+    else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"1_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(1);'> <a href=\"#\" onClick=\"setMaxValue(1);\">max</a></th>\n";
+?>
               <th class="c" align='center' width=25% >
 <?php
     if ( $GlobalUser['trader'] != 1 ) echo "<span id=\"1_storage\">".nicenum($mmax)."</span>";
@@ -342,13 +384,32 @@ function setMaxValue(id) {
 </th>
                         
             <th class="c" align='center' width=25% >
+<?php
+    if ( $GlobalUser['trader'] != 1 )
+    {
+?>
+                          <a href=# onmouseover="return overlib('<font color=white><?=va("Один #1 даёт #2 #3", $resname[$GlobalUser['trader']], round($GlobalUser['rate_m'] / $ratewhat, 2), $resname[1] );?></font>');" onmouseout="return nd();">
+<?php
+    }
+?>
                           <font size=3><b><?=$GlobalUser['rate_m'];?></b></font>
+<?php
+    if ( $GlobalUser['trader'] != 1 )
+    {
+?>
+                          </a>
+<?php
+    }
+?>
                         </th>           
         </TR>
         
         <TR>
             <th class="c" align="center" width=25% >Кристалл</th>
-                          <th class="c" align='center' width=25% ><input type="text" size="9" name="2_value" value="0" style="text-align:right;" onkeyup='checkValue(2);'> <a href="#" onClick="setMaxValue(2);">max</a></th>
+<?php
+    if ( $GlobalUser['trader'] == 2 ) echo "                          <th class=\"c\" align='center' width=25% ><span id=\"2_value\">0</span></th>\n";
+    else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"2_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(2);'> <a href=\"#\" onClick=\"setMaxValue(2);\">max</a></th>\n";
+?>
               <th class="c" align='center' width=25% >
 <?php
     if ( $GlobalUser['trader'] != 2 ) echo "<span id=\"2_storage\">".nicenum($kmax)."</span>";
@@ -357,15 +418,32 @@ function setMaxValue(id) {
 </th>
                         
             <th class="c" align='center' width=25% >
+<?php
+    if ( $GlobalUser['trader'] != 2 )
+    {
+?>
                           <a href=# onmouseover="return overlib('<font color=white><?=va("Один #1 даёт #2 #3", $resname[$GlobalUser['trader']], round($GlobalUser['rate_k'] / $ratewhat, 2), $resname[2] );?></font>');" onmouseout="return nd();">
+<?php
+    }
+?>
                           <font size=3><b><?=$GlobalUser['rate_k'];?></b></font>
+<?php
+    if ( $GlobalUser['trader'] != 2 )
+    {
+?>
                           </a>
+<?php
+    }
+?>
                         </th>           
         </TR>
         
         <TR>
             <th class="c" align="center" width=25% >Дейтерий</th>
-                          <th class="c" align='center' width=25% ><input type="text" size="9" name="3_value" value="0" style="text-align:right;" onkeyup='checkValue(3);'> <a href="#" onClick="setMaxValue(3);">max</a></th>
+<?php
+    if ( $GlobalUser['trader'] == 3 ) echo "                          <th class=\"c\" align='center' width=25% ><span id=\"3_value\">0</span></th>\n";
+    else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"3_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(3);'> <a href=\"#\" onClick=\"setMaxValue(3);\">max</a></th>\n";
+?>
               <th class="c" align='center' width=25% >
 <?php
     if ( $GlobalUser['trader'] != 3 ) echo "<span id=\"3_storage\">".nicenum($dmax)."</span>";
@@ -374,9 +452,23 @@ function setMaxValue(id) {
 </th>
                         
             <th class="c" align='center' width=25% >
+<?php
+    if ( $GlobalUser['trader'] != 3 )
+    {
+?>
                           <a href=# onmouseover="return overlib('<font color=white><?=va("Один #1 даёт #2 #3", $resname[$GlobalUser['trader']], round($GlobalUser['rate_d'] / $ratewhat, 2), $resname[3] );?></font>');" onmouseout="return nd();">
+<?php
+    }
+?>
                           <font size=3><b><?=$GlobalUser['rate_d'];?></b></font>
+<?php
+    if ( $GlobalUser['trader'] != 3 )
+    {
+?>
                           </a>
+<?php
+    }
+?>
                         </th>           
         </TR>
         
