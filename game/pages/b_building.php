@@ -134,10 +134,8 @@ for ( $i=0; $i<$cnt; $i++ )
 foreach ( $buildmap as $i => $id )
 {
     $lvl = $aktplanet['b'.$id];
-    if ( ! BuildMeetRequirement ( $GlobalUser, $aktplanet, $id ) )
-    {
-        if ( $lvl <= 0 ) continue;
-    }
+    if ( ! BuildMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) continue;
+
     echo "<tr><td class=l>";
     echo "<a href=index.php?page=infos&session=$session&gid=".$id.">";
     echo "<img border='0' src=\"".UserSkin()."gebaeude/".$id.".gif\" align='top' width='120' height='120'></a></td>";
@@ -175,8 +173,7 @@ foreach ( $buildmap as $i => $id )
 			}
    			else
       		{
-                  if ( ! BuildMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<td class=l><font  color=#FF0000>невозможно</font> <br>";
-        		else if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>Совершенствовать <br> до уровня  ".($lvl+1)."</font></a>\n";
+        		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>Совершенствовать <br> до уровня  ".($lvl+1)."</font></a>\n";
           		else echo "<td class=l><font color=#FF0000>Совершенствовать <br> до уровня  ".($lvl+1)."</font>";
 			}
         }
@@ -207,8 +204,7 @@ foreach ( $buildmap as $i => $id )
 			}
    			else
       		{
-                  if ( ! BuildMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<td class=l><font  color=#FF0000>невозможно</font> <br>";
-        		else if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>Совершенствовать <br> до уровня  ".($lvl+1)."</font></a>\n";
+        		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>Совершенствовать <br> до уровня  ".($lvl+1)."</font></a>\n";
           		else echo "<td class=l><font color=#FF0000>Совершенствовать <br> до уровня  ".($lvl+1)."</font>";
 			}
 		}
