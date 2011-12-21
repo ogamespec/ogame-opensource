@@ -2,6 +2,9 @@
 
 // Заказ офицеров.
 
+$MicropaymentMessage = "";
+$MicropaymentError = "";
+
 SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 
@@ -17,6 +20,56 @@ ProdResources ( $GlobalUser['aktplanet'], $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
+
+function OfficerLeft ( $qcmd )
+{
+    global $GlobalUser;
+    $now = time ();
+    $end = GetOfficerLeft ( $GlobalUser['player_id'], $qcmd );
+    if ( $end <= $now ) return "<font color=red>Неактивный</font>";
+    else
+    {
+        $d = ceil ( ($end - $now) / (60*60*24) );
+        return "<strong><font color=lime>Активен</font> ещё $d д.</strong>";
+    }
+}
+
+// Обработать GET-запрос.
+if ( key_exists ( 'buynow', $_GET ) )
+{
+    $qcmd = array ( 1 => "CommanderOff", 2 => "AdmiralOff", 3 => "EngineerOff", 4 => "GeologeOff", 5 => "GeologeOff" );
+    $type = intval ( $_GET['type'] );
+    $days = intval ( $_GET['days'] );
+    if ( $days == 7 || $days == 90 )
+    {
+        $dm = $GlobalUser['dm'] + $GlobalUser['dmfree'];
+        if ( $days == 90) $required = 100000;
+        else if ( $days == 7) $required = 10000;
+        if ( $dm < $required )
+        {
+            $MicropaymentError = "Недостаточно тёмной материи!<br>";
+        }
+        else
+        {
+            if ( $type >= 1 && $type <= 5 )
+            {
+                // Списать ТМ.
+                if ( $GlobalUser['dm'] >= $required ) $GlobalUser['dm'] -= $required;
+                else {
+                    $GlobalUser['dmfree'] -= $required - $GlobalUser['dm'];
+                    $GlobalUser['dm'] = 0;
+                }
+
+                $query = "UPDATE ".$db_prefix."users SET dm = '".$GlobalUser['dm']."', dmfree = '".$GlobalUser['dmfree']."' WHERE player_id = " . $GlobalUser['player_id'];
+                dbquery ( $query );
+
+                RecruitOfficer ( $GlobalUser['player_id'], $qcmd[$type], $days * 24 * 60 * 60 );
+                
+                $MicropaymentMessage = "Продление прошло успешно!<br>";
+            }
+        }
+    }
+}
 
 PageHeader ("micropayment");
 
@@ -65,7 +118,7 @@ echo "<center>\n";
                                                 <td class=l rowspan="2"><img border='0' src="img/commander_stern_gross.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b>Командир ОГейма</b>(<b>
-                        <font color=red>Неактивный</font></b>)<br>
+                        <?=OfficerLeft("CommanderOff");?></b>)<br>
 
                             Ранг командира неоднократно оправдал себя в современном ведении боя. Благодаря упрощённой структуре Ваши приказы могут исполняться быстрее, что позволит Вам сохранять контроль над всей Вашей империей! Вы сможете развивать стратегии, позволяющей всегда быть на шаг впереди противника.                         <div style="margin:4px 4px;">
                             <table>
@@ -108,7 +161,7 @@ echo "<center>\n";
                                                 <td class=l rowspan="2"><img border='0' src="img/ogame_admiral.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b>Адмирал</b>(<b>
-                        <font color=red>Неактивный</font></b>)<br>
+                        <?=OfficerLeft("AdmiralOff");?>)<br>
                             Адмирал - это испытанный войной ветеран и гениальный стратег. Даже в самых горячих боях он не теряет обзора и поддерживает контакт с подчинёнными ему адмиралами. Мудрый правитель может полностью положиться на него в бою и тем самым использовать для боя больше кораблей.<br>
                             <div style="margin:4px 4px;">
                             <table><tr><td><img src="img/admiral_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="Адмирал"></td>
@@ -139,7 +192,7 @@ echo "<center>\n";
                                                 <td class=l rowspan="2"><img border='0' src="img/ogame_ingenieur.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b>Инженер</b>(<b>
-                        <strong><font color=lime>Активен</font> ещё 2 д.</strong></b>)<br>
+                        <?=OfficerLeft("EngineerOff");?></b>)<br>
 
                             Инженер - это специалист по управлению энергией. В мирное время он повышает уровень энергетических сетей на колониях. В случае нападения он снабжает энергетические системы планетарных защит и предотвращает перегрузки, что ведёт к значительно меньшей степени потерь в бою.<br>
                             <div style="margin:4px 4px;">
@@ -170,7 +223,7 @@ echo "<center>\n";
                                                 <td class=l rowspan="2"><img border='0' src="img/ogame_geologe.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b>Геолог</b>(<b>
-                        <font color=red>Неактивный</font></b>)<br>
+                        <?=OfficerLeft("GeologeOff");?></b>)<br>
                             Геолог - это признанный эксперт в астроминералогии и -кристаллографии. Со своей командой металлургов и химиков он поддерживает межпланетные правительства при разработке новых источников ресурсов и оптимизации их очистки.<br>
                             <div style="margin:4px 4px;">
                             <table><tr><td><img src="img/geologe_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="Геолог"></td>
@@ -202,7 +255,7 @@ echo "<center>\n";
                                                 <td class=l rowspan="2"><img border='0' src="img/ogame_technokrat.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b>Технократ</b>(<b>
-                        <font color=red>Неактивный</font></b>)<br>
+                        <?=OfficerLeft("TechnocrateOff");?></b>)<br>
 
                             Гильдия технократов - это гениальные учёные, и их всегда можно найти там, где заканчивается грань технически возможного. Их код никогда не сможет разгадать ни один нормальный человек, и одним своим присутствием они вдохновляют учёных империи.<br>
                             <div style="margin:4px 4px;">
@@ -239,6 +292,6 @@ echo "</center>\n";
 echo "</div>\n";
 echo "<!-- END CONTENT AREA -->\n";
 
-PageFooter ();
+PageFooter ($MicropaymentMessage, $MicropaymentError);
 ob_end_flush ();
 ?>
