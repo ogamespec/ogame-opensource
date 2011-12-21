@@ -124,6 +124,7 @@ if ( method () === "POST" )
                 $query = "UPDATE ".$db_prefix."planets SET m = m - '".$met."', k = '".$crys."', d = '".$deut."' WHERE planet_id = " . $aktplanet['planet_id'];
                 dbquery ( $query );
                 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+                $GlobalUser['trader'] = 0;
             }
 
             else if ( $GlobalUser['trader'] == 2)
@@ -137,6 +138,7 @@ if ( method () === "POST" )
                 $query = "UPDATE ".$db_prefix."planets SET k = k - '".$crys."', m = '".$met."', d = '".$deut."' WHERE planet_id = " . $aktplanet['planet_id'];
                 dbquery ( $query );
                 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+                $GlobalUser['trader'] = 0;
             }
 
             else if ( $GlobalUser['trader'] == 3)
@@ -150,6 +152,7 @@ if ( method () === "POST" )
                 $query = "UPDATE ".$db_prefix."planets SET d = d - '".$deut."', k = '".$crys."', m = '".$met."' WHERE planet_id = " . $aktplanet['planet_id'];
                 dbquery ( $query );
                 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+                $GlobalUser['trader'] = 0;
             }
 
 //Недостаточно места в хранилищах!<br>

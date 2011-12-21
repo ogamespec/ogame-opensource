@@ -134,6 +134,13 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "RecalcPoints" ) Queue_RecalcPoints_End ($queue);
         else if ( $queue['type'] === "AllowName" ) Queue_AllowName_End ($queue);
         else if ( $queue['type'] === "Debug" ) Queue_Debug_End ($queue);
+
+        else if ( $queue['type'] === "CommanderOff" ) Queue_Officer_End ($queue);
+        else if ( $queue['type'] === "AdmiralOff" ) Queue_Officer_End ($queue);
+        else if ( $queue['type'] === "EngineerOff" ) Queue_Officer_End ($queue);
+        else if ( $queue['type'] === "GeologeOff" ) Queue_Officer_End ($queue);
+        else if ( $queue['type'] === "TechnocrateOff" ) Queue_Officer_End ($queue);
+
         else Error ( "queue: Неизвестный тип задания для глобальной очереди: " . $queue['type']);
     }
 
@@ -594,6 +601,31 @@ function GetOfficerLeft ($player_id, $off)
         return $queue['end'];
     }
     else return 0;
+}
+
+// Продлить офицера на указанное количество секунд.
+function RecruitOfficer ( $player_id, $off, $seconds )
+{
+    global $db_prefix;
+
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".$off."' AND owner_id = $player_id LIMIT 1";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0 )
+    {
+        AddQueue ( $player_id, $off, 0, 0, 0, time (), $seconds, 0 );
+    }
+    else
+    {
+        $queue = dbarray ( $result );
+        $query = "UPDATE ".$db_prefix."queue SET end = end + $seconds WHERE task_id = " . $queue['task_id'];
+        dbquery ($query);
+    }
+}
+
+// Закончилось действие офицера.
+function Queue_Officer_End ($queue)
+{
+    RemoveQueue ( $queue['task_id'], 0 );
 }
 
 // Добавить задание пересчёта очков у игрока, если его ещё не существует.
