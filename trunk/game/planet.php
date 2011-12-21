@@ -185,12 +185,17 @@ function GetPlanet ( $planet_id)
     if ( dbrows($result) == 0 ) return NULL;
     $planet = dbarray ($result);
     $user = LoadUser ( $planet['owner_id'] );
+
+    $prem = PremiumStatus ($user);
+    if ( $prem['engineer'] ) $e_factor = 1.1;
+    else $e_factor = 1.0;
+
     $planet['mmax'] = store_capacity ( $planet['b22'] );
     $planet['kmax'] = store_capacity ( $planet['b23'] );
     $planet['dmax'] = store_capacity ( $planet['b24'] );
-    $planet['emax'] = prod_solar($planet['b4'], $planet['sprod'])  + 
-				       prod_fusion($planet['b12'], $user['r113'], $planet['fprod'])  + 
-					 prod_sat($planet['temp']+40) * $planet['f212'] * $planet['ssprod'] ;
+    $planet['emax'] = prod_solar($planet['b4'], $planet['sprod']) * $e_factor  + 
+				       prod_fusion($planet['b12'], $user['r113'], $planet['fprod']) * $e_factor  + 
+					 prod_sat($planet['temp']+40) * $planet['f212'] * $planet['ssprod'] * $e_factor ;
 
     $planet['econs'] = ( cons_metal ($planet['b1']) * $planet['mprod'] + 
                                  cons_crys ($planet['b2']) * $planet['kprod'] + 

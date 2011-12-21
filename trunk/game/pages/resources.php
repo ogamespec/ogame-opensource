@@ -18,6 +18,28 @@ ProdResources ( $GlobalUser['aktplanet'], $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 
+$prem = PremiumStatus ($GlobalUser);
+if ( $prem['geologist'] )
+{
+    $geologe_text = "<img border=\"0\" src=\"img/geologe_ikon.gif\" alt=\"Геолог\" onmouseover='return overlib(\"<font color=#ffffff>Геолог</font>\", WIDTH, 80);' onmouseout='return nd();' width=\"20\" height=\"20\">";
+    $g_factor = 1.1;
+}
+else
+{
+    $geologe_text = "&nbsp;";
+    $g_factor = 1.0;
+}
+if ( $prem['engineer'] )
+{
+    $engineer_text = "<img border=\"0\" src=\"img/ingenieur_ikon.gif\" alt=\"Инженер\" onmouseover='return overlib(\"<font color=#ffffff>Инженер</font>\", WIDTH, 80);' onmouseout='return nd();' width=\"20\" height=\"20\">";
+    $e_factor = 1.1;
+}
+else
+{
+    $engineer_text = "&nbsp;";
+    $e_factor = 1.0;
+}
+
 // Обработка POST-запросов (в РО изменять настройки энергии нельзя)
 if ( method () === "POST" && !$GlobalUser['vacation'] )
 {
@@ -101,12 +123,12 @@ $speed = $unitab['speed'];
 $planet = $aktplanet;
 
 // Производство.
-$m_hourly = prod_metal ($planet['b1'], $planet['mprod']) * $planet['factor'] * $speed;
-$k_hourly = prod_crys ($planet['b2'], $planet['kprod']) * $planet['factor'] * $speed;
-$d_hourly = prod_deut ($planet['b3'], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed;
-$s_prod = prod_solar($planet['b4'], $planet['sprod']);
-$f_prod = prod_fusion($planet['b12'], $GlobalUser['r113'], $planet['fprod']);
-$ss_prod = prod_sat($planet['temp']+40) * $planet['f212'] * $planet['ssprod'];
+$m_hourly = prod_metal ($planet['b1'], $planet['mprod']) * $planet['factor'] * $speed * $g_factor;
+$k_hourly = prod_crys ($planet['b2'], $planet['kprod']) * $planet['factor'] * $speed * $g_factor;
+$d_hourly = prod_deut ($planet['b3'], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed * $g_factor;
+$s_prod = prod_solar($planet['b4'], $planet['sprod']) * $e_factor;
+$f_prod = prod_fusion($planet['b12'], $GlobalUser['r113'], $planet['fprod']) * $e_factor;
+$ss_prod = prod_sat($planet['temp']+40) * $planet['f212'] * $planet['ssprod'] * $e_factor;
 
 // Потребление.
 $m_cons = cons_metal ($planet['b1']) * $planet['mprod'] * $speed;
@@ -150,7 +172,7 @@ if ($aktplanet['b1']) {
     $color1 = $m_hourly ? "<font color='00FF00'>" : "";
     $color2 = $m_cons ? "<font color='FF0000'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_1")." (уровень ".$aktplanet['b1'].")</th><th>&nbsp;</th>   <th> \n";
+	echo "<th>".loca("NAME_1")." (уровень ".$aktplanet['b1'].")</th><th>".$geologe_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        $color1".nicenum2($m_hourly)."</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
@@ -164,7 +186,7 @@ if ($aktplanet['b2']) {
     $color1 = $k_hourly ? "<font color='00FF00'>" : "";
     $color2 = $k_cons ? "<font color='FF0000'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_2")." (уровень ".$aktplanet['b2'].")</th><th>&nbsp;</th>   <th> \n";
+	echo "<th>".loca("NAME_2")." (уровень ".$aktplanet['b2'].")</th><th>".$geologe_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        $color1".nicenum2($k_hourly)."</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
@@ -178,7 +200,7 @@ if ($aktplanet['b3']) {
     $color1 = $d_hourly ? "<font color='00FF00'>" : "";
     $color2 = $d_cons ? "<font color='FF0000'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_3")." (уровень ".$aktplanet['b3'].")</th><th>&nbsp;</th>   <th> \n";
+	echo "<th>".loca("NAME_3")." (уровень ".$aktplanet['b3'].")</th><th>".$geologe_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       $color1".nicenum2($d_hourly)."</font>   <th>\n";
@@ -191,7 +213,7 @@ if ($aktplanet['b3']) {
 if ($aktplanet['b4']) {
     $color = $s_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_4")." (уровень ".$aktplanet['b4'].")</th><th>&nbsp;</th>   <th> \n";
+	echo "<th>".loca("NAME_4")." (уровень ".$aktplanet['b4'].")</th><th>".$engineer_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
@@ -205,7 +227,7 @@ if ($aktplanet['b12']) {
     $color1 = $f_cons ? "<font color='FF0000'>" : "";
     $color2 = $f_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_12")." (уровень ".$aktplanet['b12'].")</th><th>&nbsp;</th>   <th> \n";
+	echo "<th>".loca("NAME_12")." (уровень ".$aktplanet['b12'].")</th><th>".$engineer_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       $color1".nicenum2($f_cons)."</font>   <th>\n";
@@ -218,7 +240,7 @@ if ($aktplanet['b12']) {
 if ($aktplanet['f212']) {
     $color = $ss_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_212")." (кол-во ".$aktplanet['f212'].")</th><th>&nbsp;</th>   <th> \n";
+	echo "<th>".loca("NAME_212")." (кол-во ".$aktplanet['f212'].")</th><th>".$engineer_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
