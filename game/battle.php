@@ -9,6 +9,8 @@ function RepairDefense ( $d, $res, $defrepair, $defrepair_delta )
     $exploded = array ( 401=>0, 402=>0, 403=>0, 404=>0, 405=>0, 406=>0, 407=>0, 408=>0 );
     $exploded_total = 0;
 
+    $prem = PremiumStatus ($d[0]);
+
     $rounds = count ( $res['rounds'] );
     if ( $rounds > 0 ) 
     {
@@ -17,6 +19,7 @@ function RepairDefense ( $d, $res, $defrepair, $defrepair_delta )
         foreach ( $exploded as $gid=>$amount )
         {
             $exploded[$gid] = $d[0]['defense'][$gid] - $last['defenders'][0][$gid];
+            if ( $prem['engineer'] ) $exploded[$gid] = floor ($exploded[$gid] / 2);
             $exploded_total += $exploded[$gid];
         }
 

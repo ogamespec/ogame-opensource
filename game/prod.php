@@ -348,25 +348,30 @@ function ProdResources ( $planet_id, $time_from, $time_to )
     global $db_prefix, $GlobalUni;
     $planet = GetPlanet ( $planet_id );
     if ( $planet['type'] == 0 || $planet['type'] >= 10000 ) return;        // луна или другой объект
+    $user = LoadUser ($planet['owner_id']);
     $diff = $time_to - $time_from;
 
     $unitab = $GlobalUni;
     $speed = $unitab['speed'];
 
-    $hourly = prod_metal ($planet['b1'], $planet['mprod']) * $planet['factor'] * $speed + 20 * $speed;        // Металл
+    $prem = PremiumStatus ($user);
+    if ( $prem['geologist'] ) $g_factor = 1.1;
+    else $g_factor = 1.0;
+
+    $hourly = prod_metal ($planet['b1'], $planet['mprod']) * $planet['factor'] * $speed * $g_factor + 20 * $speed;        // Металл
     if ( $planet['m'] < $planet['mmax'] ) {
         $planet['m'] += ($hourly * $diff) / 3600;
         if ( $planet['m'] >= $planet['mmax'] ) $planet['m'] = $planet['mmax'];
     }
 
-    $hourly = prod_crys ($planet['b2'], $planet['kprod']) * $planet['factor'] * $speed + 10 * $speed;        // Кристалл
+    $hourly = prod_crys ($planet['b2'], $planet['kprod']) * $planet['factor'] * $speed * $g_factor + 10 * $speed;        // Кристалл
     if ( $planet['k'] < $planet['kmax'] ) {
         $planet['k'] += ($hourly * $diff) / 3600;
         if ( $planet['k'] >= $planet['kmax'] ) $planet['k'] = $planet['kmax'];
     }
 
-    $hourly = prod_deut ($planet['b3'], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed;    // Дейтерий
-	$hourly -= cons_fusion ( $planet['b12'], $planet['fprod'] ) * $speed;	// термояд
+    $hourly = prod_deut ($planet['b3'], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed * $g_factor;    // Дейтерий
+    $hourly -= cons_fusion ( $planet['b12'], $planet['fprod'] ) * $speed;	// термояд
     if ( $planet['d'] < $planet['dmax'] ) {
         $planet['d'] += ($hourly * $diff) / 3600;
         if ( $planet['d'] >= $planet['dmax'] ) $planet['d'] = $planet['dmax'];
