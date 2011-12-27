@@ -205,6 +205,21 @@ function FleetSpan ( $fleet_entry )
         else if ($dir == 1) echo "<span class='return ownexpedition'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='ownexpedition'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> возвращается на ".PlanetTo($origin, "ownexpedition")." после приказа ".Cargo($m,$k,$d,"ownexpedition","Экспедиция")."</span>";
         else if ($dir == 2) echo "<span class='holding ownexpedition'>Ваш <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,0)."\");' onmouseout='return nd();' class='ownexpedition'>флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a>, отправленный с ".PlanetFrom($origin, "ownexpedition")." исследует позицию ".PlanetFrom($target, "ownexpedition").". Задание: ".Cargo($m,$k,$d,"ownexpedition","Экспедиция")."</span>";
     }
+    else if ($mission == 20)          // Ракетная атака
+    {
+        if ($dir == 0)
+        {
+            echo "<span class='ownmissile'>Ракетная атака (".$fleet_entry['ipm_amount'].") с ".PlanetFrom($origin, "")." на ".PlanetTo($target, "own")." ";
+            if ( $fleet_entry['ipm_target'] > 0 ) echo "Основная цель " . loca ("NAME_".$fleet_entry['ipm_target']);
+            echo "</span>";
+        }
+        else if ($dir == 0x10)
+        {
+            echo "<span class='missile'>Ракетная атака (".$fleet_entry['ipm_amount'].") с ".PlanetFrom($origin, "")." на ".PlanetTo($target, "")." ";
+            if ( $fleet_entry['ipm_target'] > 0 ) echo "Основная цель " . loca ("NAME_".$fleet_entry['ipm_target']);
+            echo "</span>";
+        }
+    }
     else echo "Задание Тип:$mission, Dir:$dir, Флот: " .TitleFleet($fleet,0). ", с " .PlanetFrom($origin, ""). " на " .PlanetTo($target, ""). ", " . Cargo ($m, $k, $d,"","Груз");
 }
 
@@ -266,6 +281,11 @@ function EventList ()
             $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['start_planet'];
         }
         $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
+        if ($fleet_obj['mission'] == 20)
+        {
+            $task[$tasknum]['fleet'][0]['ipm_amount'] = $fleet_obj['ipm_amount'];
+            $task[$tasknum]['fleet'][0]['ipm_target'] = $fleet_obj['ipm_target'];
+        }
         GetDirectionAssignment ($fleet_obj, &$task[$tasknum]['fleet'][0]['dir'], &$task[$tasknum]['fleet'][0]['assign'] );
 
         $tasknum++;
@@ -293,8 +313,8 @@ function EventList ()
         }
 
         // Для убывающих или удерживаемых флотов добавить псевдозадание возврата.
-        // Не показывать возвраты чужих флотов и задание Оставить.
-        if ( ($fleet_obj['mission'] < 100 || $fleet_obj['mission'] > 200) && $fleet_obj['owner_id'] == $GlobalUser['player_id'] && $fleet_obj['mission'] != 4 )
+        // Не показывать возвраты чужих флотов, задание Оставить и Ракетную атаку.
+        if ( ($fleet_obj['mission'] < 100 || $fleet_obj['mission'] > 200) && $fleet_obj['owner_id'] == $GlobalUser['player_id'] && $fleet_obj['mission'] != 4 && $fleet_obj['mission'] != 20 )
         {
             // Время отправления и прибытия
             $task[$tasknum]['start_time'] = $queue['end'];

@@ -566,7 +566,7 @@ function RecalcStats ($player_id)
 
     // Летящие флоты
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $result = EnumOwnFleetQueue ( $player_id );
+    $result = EnumOwnFleetQueue ( $player_id, 1 );
     $rows = dbrows ($result);
     while ($rows--)
     {

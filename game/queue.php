@@ -867,10 +867,16 @@ function EnumFleetQueue ($player_id)
 }
 
 // Перечислить только свои задания флота.
-function EnumOwnFleetQueue ($player_id)
+// ipm: 1 -- учитывать также летящие МПР (для пересчёта очков)
+function EnumOwnFleetQueue ($player_id, $ipm=0)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND owner_id = $player_id ORDER BY end ASC, prio DESC";
+    if ($ipm) $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND owner_id = $player_id ORDER BY end ASC, prio DESC";
+    else
+    {
+        $query = "SELECT fleet_id FROM ".$db_prefix."fleet WHERE mission <> 20 AND owner_id = $player_id";
+        $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND sub_id = ANY ($query)";
+    }
     $result = dbquery ($query);
     return $result;
 }
