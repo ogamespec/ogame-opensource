@@ -400,9 +400,16 @@ function AddShipyard ($player_id, $planet_id, $gid, $value )
     $uni = $GlobalUni;
     if ( $uni['freeze'] ) return;
 
+    // Щитовые купола можно строить не более 1 единицы.
+    if ( ($gid == 407 || $gid == 408) && $value > 1 ) $value = 1;
+
+    $planet = GetPlanet ( $planet_id );
+
     // Если в очереди уже строится купол такого же типа, то не добавлять ещё один купол в очередь.
+    // Ограничить количество заказанных ракет уже строящимися
     $result = GetShipyardQueue ($planet_id);
     $tasknum = dbrows ($result);
+    $rak_space = $planet['b44'] * 10 - ($planet['d502'] + 2 * $planet['d503']);
     while ($tasknum--)
     {
         $queue = dbarray ( $result );
@@ -410,14 +417,19 @@ function AddShipyard ($player_id, $planet_id, $gid, $value )
         {
             if ( $queue['obj_id'] == $gid ) return;    // в очереди строится купол такого же типа.
         }
+        if ( $queue['obj_id'] == 502 || $queue['obj_id'] == 503 )
+        {
+            if ( $queue['obj_id'] == 502 ) $rak_space -= $queue['level'];
+            else $rak_space -= 2 * $queue['level'];
+        }
     }
 
-    // Щитовые купола можно строить не более 1 единицы.
-    if ( ($gid == 407 || $gid == 408) && $value > 1 ) $value = 1;
+    if ( $gid == 502 ) $value = min ( $rak_space, $value );
+    if ( $gid == 503 ) $value = min ( floor ($rak_space / 2), $value );
+    if ( $value <= 0 ) return;
 
     $user = LoadUser ( $player_id );
 
-    $planet = GetPlanet ( $planet_id );
     $m = $k = $d = $e = 0;
     ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
     $m *= $value;
