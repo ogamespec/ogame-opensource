@@ -38,6 +38,11 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             // Купола.
             if ( $gid == 407 || $gid == 408 ) $value = 1;
 
+            // Ограничить количество ракет вместимостью шахты.
+            $free_space = $aktplanet['b44'] * 10 - ($aktplanet['d502'] + 2 * $aktplanet['d503']);
+            if ( $gid == 502 ) $value = min ( $free_space, $value );
+            if ( $gid == 503 ) $value = min ( floor ($free_space / 2), $value );
+            
             if ($m) $cm = floor ($aktplanet['m'] / $m);
             else $cm = 1000;
             if ($k) $ck = floor ($aktplanet['k'] / $k);
