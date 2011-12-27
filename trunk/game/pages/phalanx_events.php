@@ -150,6 +150,11 @@ function FleetSpan ( $fleet_entry )
     else if ( $mission == 8 ) {    // Переработать
         echo "<span class='return phalanx_fleet'>Мирный <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> возвратится с ".PlanetFrom($target, "phalanx_fleet")." на ".PlanetTo($origin, "phalanx_fleet").". Задание: <span class='ownclass'>Переработать</span></span>";
     }
+    else if ($mission == 20 ) {    // Ракетная атака
+        echo "<span class='missile'>Ракетная атака (".$fleet_entry['ipm_amount'].") с ".PlanetFrom($origin, "phalanx_fleet")." на ".PlanetTo($target, "phalanx_fleet")." ";
+        if ( $fleet_entry['ipm_target'] > 0 ) echo "Основная цель " . loca ("NAME_".$fleet_entry['ipm_target']);
+        echo "</span>";
+    }
     else echo "Unknown mission LOL $mission";
 }
 
@@ -225,6 +230,11 @@ function PhalanxEventList ($planet_id)
         $task[$tasknum]['fleet'][0]['mission'] = GetMission ( $fleet_obj );
         if ( $fleet_obj['target_planet'] == $planet_id ) $task[$tasknum]['fleet'][0]['dir'] = 1;    // на планету
         else $task[$tasknum]['fleet'][0]['dir'] = 0;    // возврат
+        if ($fleet_obj['mission'] == 20)
+        {
+            $task[$tasknum]['fleet'][0]['ipm_amount'] = $fleet_obj['ipm_amount'];
+            $task[$tasknum]['fleet'][0]['ipm_target'] = $fleet_obj['ipm_target'];
+        }
 
         $tasknum++;
     }

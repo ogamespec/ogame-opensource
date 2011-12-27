@@ -301,18 +301,47 @@ else
     }
     else if ( $gid == 44 && $aktplanet["b44"] > 0)        // Ракетная шахта
     {
+        $rak_space = $aktplanet["b44"] * 10;
+        if ( key_exists ( 'aktion', $_POST) )
+        {
+            $aktplanet['d502'] -= min ( $aktplanet['d502'], intval ( $_POST['ab502'] ) );
+            $aktplanet['d503'] -= min ($aktplanet['d503'], intval ( $_POST['ab503'] ) );
+            SetPlanetDefense ( $aktplanet['planet_id'], $aktplanet );
+        }
+
 ?>
     </th> 
    </tr> 
 </table> 
-Ваше хранилище может вмещать 10 межпланетных ракет или 20 ракет-перехватчиков.<br><table border=0> 
- 
+Ваше хранилище может вмещать <?=$rak_space/2;?> межпланетных ракет или <?=$rak_space;?> ракет-перехватчиков.<br><table border=0> 
+
+<?php
+    if ( ($aktplanet['d502'] + $aktplanet['d503']) > 0 )  
+    {
+?>
 <form action="index.php?page=infos&session=<?=$session;?>&gid=44"  method=post> 
 <tr> 
  <td class=c>Тип</td><td class=c>Кол-во</td><td class=c>Снести</td> 
  <td class=c></td></tr> 
-<tr><td class=c>Ракета-перехватчик</td><td class=c>20</td><td class=c><input type=text name="ab502" size=2 value=""></td><td class=c></td></tr><tr><td class=c colspan=4><input type=submit name=aktion value="Выполнить"></table><p></form>
 <?php
+            if ($aktplanet['d502'] > 0) 
+            {
+?>
+<tr><td class=c><?=loca("NAME_502");?></td><td class=c><?=$aktplanet['d502'];?></td><td class=c><input type=text name="ab502" size=2 value=""></td><td class=c></td></tr>
+<?php
+            }
+?>
+<?php
+            if ($aktplanet['d503'] > 0) 
+            {
+?>
+<tr><td class=c><?=loca("NAME_503");?></td><td class=c><?=$aktplanet['d503'];?></td><td class=c><input type=text name="ab503" size=2 value=""></td><td class=c></td></tr>
+<?php
+            }
+?>
+<tr><td class=c colspan=4><input type=submit name=aktion value="Выполнить"></table><p></form>
+<?php
+        }
     }
     else if ( $gid == 42 )        // Сенсорная фаланга
     {
@@ -408,8 +437,9 @@ else
 
     // Снос постройки.
     // Терраформер и лунную базу снести нельзя.
+    // Ракетную шахту можно снести только если на планете нет ракет.
 
-    if ( $aktplanet['b'.$gid] && !($gid == 33 || $gid == 41) ) {
+    if ( $aktplanet['b'.$gid] && !($gid == 33 || $gid == 41 || $gid == 44) ) {
         echo "<table width=519 >\n";
         echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">Снести: ".loca("NAME_$gid")." Level ".$aktplanet['b'.$gid]." уничтожить?</a></td></tr>\n";
         $m = $k = $d = $e = 0;
@@ -421,6 +451,23 @@ else
         $t = BuildDuration ( $gid, $aktplanet['b'.$gid]-1, $aktplanet['b14'], $aktplanet['b15'], $speed );
         echo "<tr><th><br>Продолжительность сноса:  ".BuildDurationFormat ( $t )."<br></th></tr></table>\n";
     }
+
+    if ( $gid == 44 && $aktplanet['b'.$gid])    // Ракетная шахта
+    {
+        $raknum = $aktplanet['d502'] + $aktplanet['d503'];
+        echo "<table width=519 >\n";
+        if ( $raknum == 0 ) echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">Снести: ".loca("NAME_$gid")." Level ".$aktplanet['b'.$gid]." уничтожить?</a></td></tr>\n";
+        else echo "<tr><td class=c align=center>об оборонительных сооружениях</a></td></tr>";
+        $m = $k = $d = $e = 0;
+        BuildPrice ( $gid, $aktplanet['b'.$gid]-1, &$m, &$k, &$d, &$e );
+        echo "<br><tr><th>Необходимо ";
+        if ($m) echo "металла:<b>".nicenum($m)."</b> ";
+        if ($k) echo "кристалла:<b>".nicenum($k)."</b> ";
+        if ($d) echo "дейтерия:<b>".nicenum($d)."</b> ";
+        $t = BuildDuration ( $gid, $aktplanet['b'.$gid]-1, $aktplanet['b14'], $aktplanet['b15'], $speed );
+        echo "<tr><th><br>Продолжительность сноса:  ".BuildDurationFormat ( $t )."<br></th></tr></table>\n";
+    }
+
 }
 
 echo "<br><br><br><br>\n";
