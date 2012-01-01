@@ -59,6 +59,10 @@ if ( $planet < 1 || $planet > 15 ) AjaxSendError ();    // неправильн�
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
 $maxfleet = $GlobalUser['r108'] + 1;
+
+$prem = PremiumStatus ($GlobalUser);
+if ( $prem['admiral'] ) $maxfleet += 2;
+
 if ( $nowfleet >= $maxfleet ) AjaxSendError (612);
 
 $target = LoadPlanet ( $galaxy, $system, $planet, $planettype );    // загрузить целевую планету

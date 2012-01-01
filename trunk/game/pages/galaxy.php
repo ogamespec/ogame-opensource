@@ -119,6 +119,9 @@ $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
 $maxfleet = $GlobalUser['r108'] + 1;
 
+$prem = PremiumStatus ($GlobalUser);
+if ( $prem['admiral'] ) $maxfleet += 2;
+
 PageHeader ("galaxy", true);
 
 echo "<!-- CONTENT AREA -->\n";
