@@ -73,6 +73,9 @@ $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );    // Количест
 $nowfleet = $rows = dbrows ($result);
 $maxfleet = $GlobalUser['r108'] + 1;
 
+$prem = PremiumStatus ($GlobalUser);
+if ( $prem['admiral'] ) $maxfleet += 2;
+
 $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Количество экспедиций
 $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 
@@ -95,7 +98,20 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
    <tr>
 
     <td style='background-color:transparent;'>
+<?php
+    if ($prem['admiral'])
+    {
+?>
+    <div style="margin-top:2;margin-bottom:2;">Флоты <?=$rows;?> / <?=($maxfleet-2);?> <b><font style="color:lime;">+2</font></b> <img border="0" alt="Адмирал" src="img/admiral_ikon.gif" onmouseover='return overlib("&lt;font color=white &gt;Адмирал&lt;/font&gt;", WIDTH, 100);' onmouseout="return nd();" width="20" height="20" style="vertical-align:middle;"></div>
+<?php
+    }
+    else
+    {
+?>
     Флоты <?=$rows;?> / <?=$maxfleet;?>    </td>
+<?php
+    }
+?>
     <td align=right style='background-color:transparent;'>
       <?=$expnum;?>/<?=$maxexp;?> Экспедиции    
     </td>
