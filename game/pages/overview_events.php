@@ -198,7 +198,7 @@ function FleetSpan ( $fleet_entry )
     else if ($mission == 6)            // Шпионаж
     {
         if ($dir == 0) echo "<span class='flight ownespionage'>Ваш ".OverFleet($fleet,0,"ownespionage")."флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> с ".PlanetFrom($origin, "ownespionage")." отправлен на ".PlanetTo($target, "ownespionage").". Задание: ".Cargo($m,$k,$d,"ownespionage","Шпионаж")."</span>";
-        else if ($dir == 1) echo "<span class='return ownespionage'>Ваш ".OverFleet($fleet,0,"ownespionage")."флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> с ".PlanetFrom($origin, "ownespionage")." отправлен на ".PlanetTo($target, "ownespionage").". Задание: ".Cargo($m,$k,$d,"ownespionage","Шпионаж")."</span>";
+        else if ($dir == 1) echo "<span class='return ownespionage'>Ваш ".OverFleet($fleet,0,"ownespionage")."флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a>, отправленный с ".PlanetFrom($origin, "ownespionage").", возвращается на ".PlanetTo($target, "ownespionage").". Задание: ".Cargo($m,$k,$d,"ownespionage","Шпионаж")."</span>";
         else if ($dir == 0x10) echo "<span class='flight espionage'>Боевой ".OverFleet($fleet,1,"espionage")."флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "espionage")." отправлен на ".PlanetTo($target, "espionage").". Задание: Шпионаж</span>";
     }
     else if ($mission == 7)            // Колонизировать

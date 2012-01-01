@@ -13,6 +13,8 @@ start_planet: Старт (INT)
 target_planet: Финиш (INT)
 flight_time: Время полёта в одну сторону в секундах (INT)
 deploy_time: Время удержания флота в секундах (INT)
+ipm_amount: Количество межлпланетных ракет (INT)
+ipm_target: id цели для межпланетных ракет, 0 - все (INT)
 shipXX: количество кораблей каждого типа (INT)
 
 Задания флота оформляются в виде события для глобальной очереди.
@@ -618,6 +620,10 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $counter_max = 0;
     $counter = 0;
 
+    $diff = abs ( $target_user['r106'] - $origin_user['r106'] );
+    if ( $target_user['r106'] > $origin_user['r106'] ) $level = $fleet_obj['ship210'] - pow ( $diff, 2 );
+    else $level = $fleet_obj['ship210'] + pow ( $diff, 2 );
+
     $subj = "\n<span class=\"espionagereport\">\n" .
                 "Разведданные с ".$target['name']."\n" .
                 "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n";
@@ -637,60 +643,68 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $report .= "<TR><TD colspan=4><div onmouseover=\'return overlib(\"&lt;font color=white&gt;Активность означает, что сканируемый игрок был активен на своей планете, либо на него был произведён вылет флота другого игрока.&lt;/font&gt;\", STICKY, MOUSEOFF, DELAY, 750, CENTER, WIDTH, 100, OFFSETX, -130, OFFSETY, -10);\' onmouseout=\'return nd();\'></TD></TR></table>\n";
 
     // Флот
-    $report .= "<table width=400><tr><td class=c colspan=4>Флоты     </td></tr>\n";
-    $count = 0;
-    foreach ( $fleetmap as $i=>$gid )
-    {
-        $amount = $target["f$gid"];
-        if ( ($count % 2) == 0 ) $report .= "</tr>\n";
-        if ($amount > 0) {
-            $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
-            $count++;
+    if ( $level >= 2 ) {
+        $report .= "<table width=400><tr><td class=c colspan=4>Флоты     </td></tr>\n";
+        $count = 0;
+        foreach ( $fleetmap as $i=>$gid )
+        {
+            $amount = $target["f$gid"];
+            if ( ($count % 2) == 0 ) $report .= "</tr>\n";
+            if ($amount > 0) {
+                $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
+                $count++;
+            }
         }
+        $report .= "</table>\n";
     }
-    $report .= "</table>\n";
 
     // Оборона
-    $report .= "<table width=400><tr><td class=c colspan=4>Оборона     </td></tr>\n";
-    $count = 0;
-    foreach ( $defmap as $i=>$gid )
-    {
-        $amount = $target["d$gid"];
-        if ( ($count % 2) == 0 ) $report .= "</tr>\n";
-        if ($amount > 0) {
-            $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
-            $count++;
+    if ( $level >= 3 ) {
+        $report .= "<table width=400><tr><td class=c colspan=4>Оборона     </td></tr>\n";
+        $count = 0;
+        foreach ( $defmap as $i=>$gid )
+        {
+            $amount = $target["d$gid"];
+            if ( ($count % 2) == 0 ) $report .= "</tr>\n";
+            if ($amount > 0) {
+                $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
+                $count++;
+            }
         }
+        $report .= "</table>\n";
     }
-    $report .= "</table>\n";
 
     // Постройки
-    $report .= "<table width=400><tr><td class=c colspan=4>Постройки     </td></tr>\n";
-    $count = 0;
-    foreach ( $buildmap as $i=>$gid )
-    {
-        $amount = $target["b$gid"];
-        if ( ($count % 2) == 0 ) $report .= "</tr>\n";
-        if ($amount > 0) {
-            $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
-            $count++;
+    if ( $level >= 5 ) {
+        $report .= "<table width=400><tr><td class=c colspan=4>Постройки     </td></tr>\n";
+        $count = 0;
+        foreach ( $buildmap as $i=>$gid )
+        {
+            $amount = $target["b$gid"];
+            if ( ($count % 2) == 0 ) $report .= "</tr>\n";
+            if ($amount > 0) {
+                $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
+                $count++;
+            }
         }
+        $report .= "</table>\n";
     }
-    $report .= "</table>\n";
 
     // Исследования
-    $report .= "<table width=400><tr><td class=c colspan=4>Исследования     </td></tr>\n";
-    $count = 0;
-    foreach ( $resmap as $i=>$gid )
-    {
-        $amount = $target_user["r$gid"];
-        if ( ($count % 2) == 0 ) $report .= "</tr>\n";
-        if ($amount > 0) {
-            $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
-            $count++;
+    if ( $level >= 7 ) {
+        $report .= "<table width=400><tr><td class=c colspan=4>Исследования     </td></tr>\n";
+        $count = 0;
+        foreach ( $resmap as $i=>$gid )
+        {
+            $amount = $target_user["r$gid"];
+            if ( ($count % 2) == 0 ) $report .= "</tr>\n";
+            if ($amount > 0) {
+                $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
+                $count++;
+            }
         }
+        $report .= "</table>\n";
     }
-    $report .= "</table>\n";
 
     $report .= "<center> Шанс на защиту от шпионажа:$counter%</center>\n";
     $report .= "<center><a href=\'#\' onclick=\'showFleetMenu(".$target['g'].",".$target['s'].",".$target['p'].",".GetPlanetType($target).",1);\'>Атака</a></center>\n";
@@ -710,6 +724,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     UpdatePlanetActivity ( $fleet_obj['target_planet'], $queue['end'] );
 
     // Вернуть флот.
+    //StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'] );
     DispatchFleet ($fleet, $origin, $target, 106, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
 }
 
