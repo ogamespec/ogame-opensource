@@ -615,14 +615,35 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $origin_user = LoadUser ( $origin['owner_id'] );
     $target_user = LoadUser ( $target['owner_id'] );
 
+    $origin_ships = $target_ships = 0;
+    foreach ( $fleetmap as $i=>$gid )
+    {
+        $origin_ships += $fleet_obj["ship$gid"];
+        $target_ships += $target["f$gid"];
+    }
+
+    $origin_prem = PremiumStatus ($origin_user);
+    $target_prem = PremiumStatus ($target_user);
+    $origin_tech = $origin_user['r106'];
+    if ($origin_prem['technocrat']) $origin_tech += 2;
+    $target_tech = $target_user['r106'];
+    if ($target_prem['technocrat']) $target_tech += 2;
+
     loca_add ( "technames", $origin_user['lang'] );
 
     $counter_max = 0;
     $counter = 0;
 
-    $diff = abs ( $target_user['r106'] - $origin_user['r106'] );
-    if ( $target_user['r106'] > $origin_user['r106'] ) $level = $fleet_obj['ship210'] - pow ( $diff, 2 );
-    else $level = $fleet_obj['ship210'] + pow ( $diff, 2 );
+    $diff = abs ( $target_tech - $origin_tech );
+    if ( $target_tech > $origin_tech ) {
+        $level = $fleet_obj['ship210'] - pow ( $diff, 2 );
+        $counter_max = min (100, floor((($target_ships / 4) * $origin_ships) / pow ( 2, $diff )));
+    }
+    else {
+        $level = $fleet_obj['ship210'] + pow ( $diff, 2 );
+        $counter_max = min (100, floor((($target_ships / 4) * $origin_ships) * pow ( 2, $diff )));
+    }
+    $counter = mt_rand ( 0, $counter_max );
 
     $subj = "\n<span class=\"espionagereport\">\n" .
                 "Разведданные с ".$target['name']."\n" .
@@ -724,8 +745,8 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     UpdatePlanetActivity ( $fleet_obj['target_planet'], $queue['end'] );
 
     // Вернуть флот.
-    //StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'] );
-    DispatchFleet ($fleet, $origin, $target, 106, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
+    if ( mt_rand (0, 99) < $counter ) StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'] );
+    else DispatchFleet ($fleet, $origin, $target, 106, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
 }
 
 function SpyReturn ($queue, $fleet_obj, $fleet)

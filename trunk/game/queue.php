@@ -512,6 +512,10 @@ function StartResearch ($player_id, $planet_id, $id)
     $user = LoadUser ( $player_id );
     $level = $user['r'.$id] + 1;
 
+    $prem = PremiumStatus ($user);
+    if ( $prem['technocrat'] ) $r_factor = 1.1;
+    else $r_factor = 1.0;
+
     // Проверить условия.
     $planet = GetPlanet ( $planet_id );
     $m = $k = $d = $e = 0;
@@ -521,7 +525,7 @@ function StartResearch ($player_id, $planet_id, $id)
         $speed = $uni['speed'];
         $now = time ();
         $reslab = ResearchNetwork ( $planet['planet_id'], $id );
-        $seconds = ResearchDuration ( $id, $level, $reslab, $speed);
+        $seconds = ResearchDuration ( $id, $level, $reslab, $speed * $r_factor);
 
         // Списать ресурсы.
         AdjustResources ( $m, $k, $d, $planet_id, '-' );
