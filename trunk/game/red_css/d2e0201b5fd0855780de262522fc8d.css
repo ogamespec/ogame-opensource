@@ -1,0 +1,309 @@
+@charset "utf-8";
+
+#resources #inhalt #planet #slots,
+#station #inhalt #planet #slots,
+#station-moon #inhalt #planet #slots {
+	color:#848484;
+}
+
+#slots a:link,
+#slots a:visited,
+#slots a:active,
+#slots2 a:link,
+#slots2 a:visited,
+#slots2 a:active  {
+	color:#848484;
+	text-decoration:none;
+}
+
+#slots a:hover,
+#slots a:hover,
+#slots2 a:hover,
+#slots a:hover,
+#slots2 a:hover {
+	color:#A4A4A4;
+	text-decoration:underline;
+}
+
+#resources #RessLayer {
+	width:669px; 
+	height:375px; 
+	background: transparent url(http://gf1.geo.gfsrv.net/cdn31/6d9df44ffadc89257e9485c3bb59da.gif) no-repeat;
+	color:#848484;
+	font-size:11px;
+	line-height:14px;
+}
+#resources #RessLayer h3 {
+	padding:0px; 
+	float:left; 
+	width: 630px; 
+	font-weight:700; 
+	color:#969696; 
+	font-size:12px; 
+	text-align:center;
+}
+
+#resources #RessLayer h3 span {
+	display:block;
+	margin:6px 0px 0px;
+}
+
+#resourceSettings #inhalt table,
+div#resourceSettings table {
+	margin:10px auto 0px auto;
+	border-collapse:collapse;
+	clear:both;
+        border: 1px solid black;
+        background-color: #0D1014;
+}
+
+div#resourceSettings table {width:315px;}
+#resourceSettings #inhalt table {width:600px;}
+
+#resourceSettings #inhalt td#factor,
+#resourceSettings td#factor{
+	font-weight:700; 
+	text-align:center; 
+	line-height:27px;
+	vertical-align:middle; 
+	color:#d3d3d3; 
+}
+
+#resourceSettings #inhalt td#factor .secondcol,
+#resourceSettings td#factor .secondcol{ display:block; float:none; margin:0px;}
+
+#resourceSettings #inhalt td#factor span.factorkey,
+#resourceSettings td#factor span.factorkey { color:#9c0; float:left; display:inline;}
+#resourceSettings #inhalt td#factor span.factorbutton,
+#resourceSettings td#factor span.factorbutton {float:right; margin-left:13px; display:inline;}
+
+#resourceSettings #inhalt td.textRight,
+#resourceSettings td.textRight{	text-align:right; }
+#resourceSettings #inhalt td.label,
+#resourceSettings td.label {
+	color:grey;
+	text-align:left; 
+	padding-left:5px;
+}
+
+#resourceSettings #inhalt tr.hover td,
+#resourceSettings tr.hover td {	background-color:#23282d;}
+
+#resourceSettings #inhalt td,
+#resourceSettings #RessLayer td { font-size: 11px;}
+
+#resourceSettings .mainRS td,
+#resourceSettings .mainRS th {
+	text-align:right;
+	height:20px;
+}
+
+#resourceSettings #inhalt td em,
+#resourceSettings td em {
+	font-style:normal;
+	font-weight:700;
+}
+
+#resourceSettings #inhalt th,
+#resourceSettings th {
+	font-weight:700;
+	padding-bottom:0px;
+	vertical-align:middle;
+}
+
+#resourceSettings #inhalt tr.summary td,
+#resourceSettings tr.summary td {
+	border-top:1px dotted #848484;
+}
+
+#resourceSettings #inhalt select,
+#resourceSettings select {
+	background-color:#000000;
+	border:1px solid #848484;
+	font-size:10px;
+	line-height:12px;
+	width:53px;
+}
+
+#resourceSettings #inhalt input.new,
+#resourceSettings input.new {
+	background-color:#333;
+	border:1px solid #848484;
+	color:#848484;
+	font-size:10px;
+	margin:3px 0px;
+	padding:0px 3px;
+}
+
+#resourceSettings #inhalt td.left2,
+#resourceSettings td.left2 { padding-left:2px; }
+
+#resources #RessLayer a.close {
+	margin:7px 13px 0px 0px;
+	display:inline; /* IE6 */
+	float:right;
+}
+
+
+#resources div.detail_screen div#description p {
+	float:left;
+	width:624px;
+}
+
+#resources div.detail_screen div#description p.isStorage {
+    float:left;
+    width:490px;
+}
+
+table.demolishinfo {
+	width:100%;
+}
+
+table.demolishinfo td.res {
+	text-align:right;
+	padding-right:5px;
+	}
+table.demolishinfo td.value {
+	text-align:right;
+	padding-right:15px;
+}
+
+#resourceSettings #inhalt .headerRS,
+#resourceSettings #inhalt .footerRS,
+#resourceSettings .headerRS,
+#resourceSettings .footerRS{
+	background: transparent url(http://gf1.geo.gfsrv.net/cdn3d/32469184f13227d35e7cb4bdab93ae.gif) no-repeat;
+	line-height:normal;
+	height: 29px;
+}
+
+#resourceSettings #inhalt .mainRS,
+#resourceSettings .mainRS {
+	background: transparent url(http://gf1.geo.gfsrv.net/cdn03/db530b4ddcbe680361a6f837ce0dd7.gif) repeat-y;
+        padding-top:10px;
+}
+#resourceSettings #inhalt .footerRS,
+#resourceSettings .footerRS {
+	background: transparent url(http://gf1.geo.gfsrv.net/cdnbe/04a7b39dc27c29c4c2cadd3fd44ec0.gif) no-repeat;
+}
+#resources #buttonz ul#building li a:hover,
+#resources-moon #buttonz ul#building li a:hover,
+#resources #buttonz ul#building li a.active,
+#resources #buttonz ul#building li a.active:link,
+#resources-moon #buttonz ul#building li a.active,
+#resources #buttonz ul#building li div.construction a:hover,
+#resources-moon #buttonz ul#building li div.construction a:hover,
+#resources-moon #buttonz ul#building li a.active:link {
+    background:url(http://gf1.geo.gfsrv.net/cdn53/ce2e012805bae16d3bc0967600eb58.gif) no-repeat;
+    color:#ff9600;  
+    text-decoration:none;   
+}
+
+#resources #buttonz ul#building li div.construction a:hover,
+#resources-moon #buttonz ul#building li div.construction a:hover {
+    background:url(http://gf1.geo.gfsrv.net/cdn91/9c93d3dba7052ea7fd1758007e7959.gif) no-repeat;
+}
+
+#resources #buttonz ul#building li a:hover,
+#resources-moon #buttonz ul#building li a:hover {
+    background:url(http://gf1.geo.gfsrv.net/cdn53/ce2e012805bae16d3bc0967600eb58.gif) no-repeat;
+}
+	
+#resources div.detail_screen div.pic {
+    float:left;
+    height:200px;
+    margin-left:2px; 
+    position: relative;
+    width:200px;
+    background: url(http://gf1.geo.gfsrv.net/cdnc8/ee8957ff753fd07a1b34ccc5c2c534.jpg) no-repeat;
+}
+
+#resources div.detail_screen div#resources_1_Xlarge{
+    background-position: 0px 0px;
+}
+#resources div.detail_screen div#resources_2_Xlarge{
+    background-position: -200px 0px;
+}
+#resources div.detail_screen div#resources_3_Xlarge{
+    background-position: -400px 0px;
+}
+#resources div.detail_screen div#resources_4_Xlarge{
+    background-position: -600px 0px;
+}
+#resources div.detail_screen div#resources_12_Xlarge{
+    background-position: -800px 0px;
+}
+#resources div.detail_screen div#resources_212_Xlarge{
+    background-position: -1000px 0px;
+}
+#resources div.detail_screen div#resources_22_Xlarge{
+    background-position: -1200px 0px;
+}
+#resources div.detail_screen div#resources_23_Xlarge{
+    background-position: -1400px 0px;
+}
+#resources div.detail_screen div#resources_24_Xlarge{
+    background-position: -1600px 0px;
+}
+#resources div.detail_screen div#resources_25_Xlarge{
+    background-position: -1800px 0px;
+}
+#resources div.detail_screen div#resources_26_Xlarge{
+    background-position: -2000px 0px;
+}
+#resources div.detail_screen div#resources_27_Xlarge{
+    background-position: -2200px 0px;
+}
+
+#resources table tr#vactionInfo td div.overmark
+{
+    padding:55px;
+}
+/*
+#resources table th,
+#resources table td
+{
+    padding-top: 4px;
+}*/
+
+div#resourceSettingsActions{
+    width:376px;
+    margin: 0px auto;
+    display:block;
+    background-color:  #13181D;
+    margin:5px auto;
+    padding:5px;
+    border: 1px solid black;
+}
+
+div#resourceSettingsActions span.prodFactor
+{
+    float: left;
+    padding-top: 5px;
+}
+
+
+div#resourceSettings span.energyManagerIcon {
+    background: url(http://gf1.geo.gfsrv.net/cdn61/f405cc3228df96533931af631c609c.jpg) no-repeat;
+    width: 18px;
+    height: 18px;
+    float: left;
+}
+
+div#resourceSettings span.metall {
+    background-position: -54px;
+}
+
+div#resourceSettings span.crystal {
+    background-position: -36px;
+}
+
+div#resourceSettings span.energy {
+    background-position: -18px;
+}
+
+div#resourceSettings table.list td b {
+    font-weight: bold;
+    color: #6F9FC8;
+}
+

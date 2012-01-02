@@ -1,0 +1,455 @@
+@charset "utf-8";
+/* global */
+#cluetip-close img {
+  border: 0;
+}
+#cluetip-title {
+  overflow: hidden;
+}
+#cluetip-title #cluetip-close {
+  float: right;
+  position: relative;
+}
+#cluetip-waitimage {
+  width: 43px;
+  height: 11px;
+  position: absolute;
+  background-image: url(http://gf1.geo.gfsrv.net/cdnfb/16b564be36a9e13589e04528636041.gif);
+}
+.cluetip-arrows {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: -11px;
+  height: 22px;
+  width: 11px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+#cluetip-extra {
+  display: none;
+}
+
+/***************************************
+   =cluetipClass: 'default' 
+-------------------------------------- */
+
+.cluetip-default {
+  background-color: yellow;
+}
+.cluetip-default #cluetip-outer {
+  position: relative;
+  margin: 0;
+  background-color: #1b1d1f;
+}
+.cluetip-default h3#cluetip-title {
+  margin: 0 0 5px;
+  padding: 0 10px 4px;
+  line-height:20px;
+  vertical-align:middle;
+  font-size: 1.1em;
+  font-weight: normal;
+  background-color: #87876a;
+  color: #fff;
+}
+.cluetip-default #cluetip-title a {
+  color: #d9d9c2;
+  font-size: 0.95em;
+}  
+.cluetip-default #cluetip-inner {
+  padding: 4px;
+  font-size:10px;
+  border:1px solid #313131;
+  text-align: center;
+}
+.cluetip-default div#cluetip-close { 
+  text-align: right;
+  margin: 0 5px 5px;
+  color: #900;
+}
+
+/* default arrows */
+
+.clue-right-default .cluetip-arrows {
+  background-image: url(http://gf1.geo.gfsrv.net/cdnc1/d6d558c9d489de8ec7c4cca03ef153.gif);
+}
+.clue-left-default .cluetip-arrows {
+  background-image: url(http://gf1.geo.gfsrv.net/cdn7d/fb67cc8d247bfa4789985227c829a6.gif);
+  left: 100%;
+  margin-right: -11px;
+}
+.clue-top-default .cluetip-arrows {
+  background-image: url(http://gf1.geo.gfsrv.net/cdn90/1d74b5f9f7c62df8ef8c56470735a5.gif);
+  top: 100%;
+  left: 50%;
+  margin-left: -11px;
+  height: 11px;
+  width: 22px;  
+}  
+.clue-bottom-default .cluetip-arrows {
+  background-image: url(http://gf1.geo.gfsrv.net/cdn89/2761f30234d3026b1eaa9eec9b19e6.gif);
+  top: -11px;
+  left: 50%;
+  margin-left: -11px;
+  height: 11px;
+  width: 22px;
+}
+
+
+
+
+/***************************************
+   =cluetipClass: 'event' 
+-------------------------------------- */
+
+.cluetip-event {}
+
+.cluetip-event #cluetip-outer {
+  position: relative;
+  margin: 0;
+  background-color: #1b1d1f;
+}
+.cluetip-event h3#cluetip-title {
+  margin: 0 0 -1px;
+  line-height:28px;
+  vertical-align:middle;
+  padding: 0;
+  text-align:center;
+  font-size:11px;
+  font-weight: bold;
+  background-color: #1B1D1F;
+  border-left:1px solid #313131;
+  border-top:1px solid #313131;
+  border-right:1px solid #313131;
+  border-bottom: 1px dotted #313131;
+  color: #848484;
+}
+.cluetip-event #cluetip-title a {
+  color: #d9d9c2;
+  font-size: 0.95em;
+}  
+.cluetip-event #cluetip-inner {
+  padding: 4px;
+  font-size:10px;
+  border:1px solid #313131;
+  text-align:left;
+}
+.cluetip-event div#cluetip-close { 
+  text-align: right;
+  margin: 5px 5px 0;
+  color: #900;
+}
+
+/* event arrows */
+
+.clue-right-event .cluetip-arrows {
+  background-image: url(http://gf1.geo.gfsrv.net/cdnac/8c7708745a2e0f1a76d1e5929115e2.gif);
+}
+.clue-left-event .cluetip-arrows {
+  background-image: url(http://gf1.geo.gfsrv.net/cdn7d/fb67cc8d247bfa4789985227c829a6.gif);
+  left: 100%;
+  margin-right: -11px;
+}
+.clue-top-event .cluetip-arrows {
+  background-image: url(http://gf1.geo.gfsrv.net/cdn90/1d74b5f9f7c62df8ef8c56470735a5.gif);
+  top: 100%;
+  left: 50%;
+  margin-left: -10px;
+  height: 11px;
+  width: 22px;  
+}  
+.clue-bottom-event .cluetip-arrows {
+  background-image: url(http://gf1.geo.gfsrv.net/cdn89/2761f30234d3026b1eaa9eec9b19e6.gif);
+  top: -11px;
+  left: 50%;
+  margin-left: -11px;
+  height: 11px;
+  width: 22px;
+}
+
+.cluetip-arrows { left:-10px; }
+
+
+
+
+
+/***************************************
+   =cluetipClass: 'advice' 
+-------------------------------------- */
+
+.cluetip-advice {}
+
+.cluetip-advice #cluetip-outer {
+  position: relative;
+  margin: 0;
+  background-color: #1b1d1f;
+}
+.cluetip-advice h3#cluetip-title {
+  margin: 0 0 -1px;
+  padding: 0;
+  line-height:20px;
+  vertical-align:middle;
+  text-align:center;
+  font-size:11px;
+  font-weight: bold;
+  background-color: #1B1D1F;
+  border-left:1px solid #313131;
+  border-top:1px solid #313131;
+  border-right:1px solid #313131;
+  border-bottom: 1px dotted #313131;
+  color: #cc0000;
+}
+.cluetip-advice #cluetip-title a {
+  color: #d9d9c2;
+  font-size: 0.95em;
+}  
+.cluetip-advice #cluetip-inner {
+  padding: 4px;
+  font-size:10px;
+  border:1px solid #313131;
+}
+.cluetip-advice div#cluetip-close { 
+  text-align: right;
+  margin: 0 5px 5px;
+  color: #900;
+}
+
+
+/***************************************
+   =cluetipClass: 'impact' 
+-------------------------------------- */
+
+.cluetip-impact {}
+
+.cluetip-impact #cluetip-outer,
+.cluetip-impact2 #cluetip-outer {
+  position: relative;
+  margin: 0;
+  background-color: #1B1D1F;
+}
+.cluetip-impact h3#cluetip-title,
+.cluetip-impact2 h3#cluetip-title {
+  margin: 0 0 -1px;
+  padding: 0;
+  line-height:20px;
+  vertical-align:middle;
+  text-align:center;
+  font-size:11px;
+  font-weight: bold;
+  background-color: #1B1D1F;
+  border:1px solid #313131;
+  color: #848484;
+}
+.cluetip-impact #cluetip-title a,
+.cluetip-impact2 #cluetip-title a {
+  color: #d9d9c2;
+  font-size: 0.95em;
+}  
+.cluetip-impact #cluetip-inner,
+.cluetip-impact2 #cluetip-inner {
+  padding: 4px;
+  font-size:10px;
+  border:1px solid #313131	;
+  text-align:center;
+}
+
+.cluetip-impact2 #cluetip-inner { text-align:center;}
+
+.cluetip-impact div#cluetip-close,
+.cluetip-impact2 div#cluetip-close { 
+  text-align: right;
+  margin: 0 5px 5px;
+  color: #900;
+}
+
+
+
+
+
+
+/***************************************
+   =cluetipClass: 'jtip'
+-------------------------------------- */
+.cluetip-jtip {
+  background-color: transparent;
+}
+.cluetip-jtip #cluetip-outer {
+  border: 2px solid #ccc;
+  position: relative;
+  background-color: #fff;
+}
+
+.cluetip-jtip h3#cluetip-title {
+  margin: 0 0 5px;
+  padding: 2px 5px;
+  font-size: 16px;
+  font-weight: normal;
+  background-color: #ccc;
+  color: #333;
+}
+
+.cluetip-jtip #cluetip-inner {
+  padding: 0 5px 5px;
+  display: inline-block;
+}
+.cluetip-jtip div#cluetip-close { 
+  text-align: right;
+  margin: 0 5px 5px;
+  color: #900;
+}
+
+/* jtip arrows */
+
+.clue-right-jtip .cluetip-arrows {
+  background-image: url(http://gf1.geo.gfsrv.net/cdn82/e3cc641e50a1c0e5f3c6efdc5f5667.gif);
+}
+.clue-left-jtip .cluetip-arrows {
+  background-image: url(http://gf1.geo.gfsrv.net/cdn8c/3898e1f5faeed0ec7021bdf38a2f11.gif);
+  left: 100%;
+  margin-right: -11px;
+}
+.clue-top-jtip .cluetip-arrows {
+  background-image: url(http://gf1.geo.gfsrv.net/cdn90/1d74b5f9f7c62df8ef8c56470735a5.gif);
+  top: 100%;
+  left: 50%;
+  margin-left: -11px;
+  height: 11px;
+  width: 22px;  
+}  
+.clue-bottom-jtip .cluetip-arrows {
+  background-image: url(http://gf1.geo.gfsrv.net/cdn89/2761f30234d3026b1eaa9eec9b19e6.gif);
+  top: -11px;
+  left: 50%;
+  margin-left: -11px;
+  height: 11px;
+  width: 22px;
+}
+
+
+
+
+/***************************************
+   =cluetipClass: 'galaxy' 
+-------------------------------------- */
+
+.cluetip-galaxy {}
+
+.cluetip-galaxy #cluetip-outer {
+  position: relative;
+  margin: 0;
+  background-color: transparent;
+}
+.cluetip-galaxy h3#cluetip-title {
+  margin: 0 0 -1px;
+  padding: 0;
+  line-height:20px;
+  vertical-align:middle;
+  text-align:center;
+  font-size:11px;
+  font-weight: bold;
+  background-color: #1B1D1F;
+  border:1px solid #313131;
+  color: #848484;
+  display:none;
+}
+.cluetip-galaxy #cluetip-title a {
+  color: #d9d9c2;
+  font-size: 0.95em;
+}  
+.cluetip-galaxy #cluetip-inner {
+  padding: 0px;
+  font-size:10px;
+  border:0px solid #313131;
+}
+.cluetip-galaxy div#cluetip-close { 
+  text-align: right;
+  margin: 0 5px 5px;
+  color: #900;
+  display:none;
+}
+
+/***************************************
+   =cluetipClass: 'ereignisse' 
+-------------------------------------- */
+
+#cluetip-inner table.fleetinfo th {
+	color:#848484;
+	font-weight:700;
+}
+#cluetip-inner table.fleetinfo td, #movement table.fleetinfo th {
+	width:140px;
+	white-space:nowrap;
+	text-align:left;
+}
+
+#cluetip-inner .fleetinfo td {
+	width:140px;
+	white-space:nowrap;
+	text-align:left;
+}
+
+#cluetip-inner table.fleetinfo td.value {
+	text-align:right;
+}
+
+/* stupid IE6 HasLayout hack */
+.cluetip-rounded #cluetip-title,
+.cluetip-rounded #cluetip-inner {
+  zoom: 1;
+}
+
+/***************************************
+   =cluetipClass: 'player' 
+-------------------------------------- */
+
+.cluetip-player {}
+
+.cluetip-player #cluetip-outer {
+  position: relative;
+  margin: 0;
+  background-color: transparent;
+}
+.cluetip-player h3#cluetip-title {
+  margin: 0 0 -1px;
+  padding: 0;
+  line-height:20px;
+  vertical-align:middle;
+  text-align:center;
+  font-size:11px;
+  font-weight: bold;
+  background-color: #1B1D1F;
+  border:1px solid #313131;
+  color: #848484;
+  display:none;
+}
+
+.cluetip-player #cluetip-inner {
+  text-align: left;
+  padding: 10px;
+  border:0px solid #313131;
+  background-color: #0D1014;
+}
+
+.cluetip-player div#cluetip-close { 
+  text-align: right;
+  margin: 0 5px 5px;
+  color: #900;
+  display:none;
+}
+
+.cluetip-player a:link,
+.cluetip-player a:visited,
+.cluetip-player a:hover,
+.cluetip-player a:active {
+    color:#6F9FC8;
+    text-decoration:none;
+    cursor:pointer;
+    padding:2px 0;
+    margin-right: 2px;
+    width:160px;
+}
+
+.cluetip-player a:hover {    
+    color:#9c0;
+    text-decoration:underline;
+}

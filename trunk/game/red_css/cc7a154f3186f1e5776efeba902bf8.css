@@ -1,0 +1,283 @@
+@charset "utf-8";
+/* CSS Document */
+
+/**********************************************************
+***************    =Imperiumsansicht      *****************
+***********************************************************/
+
+
+#empire #planet {
+	background:url(http://gf1.geo.gfsrv.net/cdnc4/276722a28df65fe5211a8a73ec1209.jpg) no-repeat;
+	height: 250px;
+	margin: 0px auto;
+	position: relative;
+	width: 654px;
+	margin-bottom:3px;
+}
+
+#empire #planet.shortHeader {
+	background: url(http://gf1.geo.gfsrv.net/cdna9/8716d3d65ddb5a4a2f2d772526c214.jpg) no-repeat;
+}
+
+
+#empire #inhalt .shortCorner {
+	top:4px;	
+}
+
+#empire .c-left, 
+#empire .c-right {
+	height:39px;
+	position:absolute;	
+	top:214px;
+	width:28px;		
+}
+
+#movement .fromto {margin:0px;}
+
+#empire #tabs {
+	width:478px;
+	float:right;
+	overflow:hidden;
+}
+#empire #tabs ul#switch {
+	width:478px;
+	height:36px;
+	background-image: url(http://gf1.geo.gfsrv.net/cdn21/196a2e116842e9de90c3d77904a830.gif);
+	background-repeat: no-repeat;
+}
+
+.tabEmpire1 {	background-position: 0px 0px;	}
+.tabEmpire2 {	background-position: 0px -36px;	}
+.tabEmpire3 {	background-position: 0px -72px;	}
+.tabEmpire4 {	background-position: 0px -108px;	}
+
+
+
+#empire #tabs ul#switch li {
+	display:block;
+	width:73px;
+	height:25px;
+	padding-top:7px;
+	float:left;
+	text-align:center;
+}
+
+#empire #tabs ul#switch li#summe a { cursor:pointer; display:block;}
+
+#empire div.content {
+	padding-top:36px;
+}
+#empire div.content table {	width:100%;}
+
+#empire div.content table#planets .planetbg{
+	background:url(http://gf1.geo.gfsrv.net/cdnfe/a885a118daafdc3b6bba33376da0fb.gif) no-repeat;
+	height:184px;
+	width:158px;
+}
+
+#empire div.content table#planets .last{	padding-right:5px;}
+
+
+#empire div.content table#planets td.desc {
+	color:#c3c3c3;
+	padding-left:20px;
+	padding-right:5px;
+	text-align:left;
+}
+
+#empire div.content table.data td.desc {
+	color:#c3c3c3;
+	padding-left:20px;
+	width:135px;
+	text-align:left;
+}
+
+#empire div.content table#planets tr.desc-tr {
+/*	background:url(http://gf1.geo.gfsrv.net/cdn6d/be7dbdce11bfc515425313f490a279.gif) repeat-y 4px 0px;*/
+}
+
+#empire div.content table#planets tr.desc-tr-alt {
+/*	background:url(http://gf1.geo.gfsrv.net/cdn55/e56732a803f2f91e4866023480f280.gif) repeat-y 4px 0px;*/
+}
+
+#empire div.content table#planets table.data td.desc-footer {
+	background:url(http://gf1.geo.gfsrv.net/cdn38/7e49a18c9d3aaca2ef0b4410d93371.gif) no-repeat 5px 0px;
+	height:5px;
+}
+
+
+#empire div.content table#planets table.data td.value {
+	color:#848484;
+	font-size:11px;
+	height:20px;
+	background:url(http://gf1.geo.gfsrv.net/cdnfd/a82dbe20589ef4db885608cf1fe262.gif) no-repeat -4px 1px;
+	width:148px;
+	overflow:hidden;
+	white-space:nowrap;
+}
+
+#empire table.data td.value2 { 
+	height:20px;
+}
+
+#empire div.content table#planets table.data  a { text-decoration:none; cursor:pointer; color:#848484;}
+
+#empire div.content table#planets table.data .deactivated,
+#empire div.content table#planets table.data .deactivated a { color:#C00C0C;}
+
+#empire div.content table#planets table.data .active,
+#empire div.content table#planets table.data .active a { color:#FF00FF;}
+
+#empire div.content table#planets table.data .loop,
+#empire div.content table#planets table.data .loop a { color:#F4A460;}
+
+#empire div.content table#planets table.data tr.desc-tr td.value {	background:none;}
+
+#empire div.content table#planets table.data td.value a{ padding: 0px 2px;}
+
+
+#empire div.content table#planets td {
+	text-align:center;
+	font-size:11px;
+}
+
+#empire div.content table#planets table.data {
+	background:url(http://gf1.geo.gfsrv.net/cdnd7/8e6d64713f8aa28719c9db2a795d10.gif) repeat-y 5px 0px;
+}
+
+#empire div.content table#planets div.planetname,
+#empire div.content table#planets div.coords
+{
+	color:#a26d00;
+	font-size:11px;
+}
+
+#empire div.content table#planets div.fields,
+#empire div.content table#planets div.coords { 
+	color:#686868;
+	display:inline /*IE6 fix */
+} 
+
+#empire div.content table#planets div.coords { float:left; margin-left:7px;}
+#empire div.content table#planets div.fields { float:right; margin-right:8px;}
+
+#empire div.content table#planets div.planet img {
+	height:150px;
+	width:154px;
+}
+
+#empire div.content table#planets div.planet img.trans {
+	height:131px;
+}
+
+
+#empire div.content table#planets tr.resource td {
+	background-image:none;
+	background-color:transparent;
+
+}
+#empire div.content table#planets tr.resource td.switch {
+	background-image:url(http://gf1.geo.gfsrv.net/cdn55/b8f6a96622ee43464a31e49b764d6f.gif);
+	background-repeat:no-repeat;
+	cursor:pointer;	
+}
+
+#empire div.content table#planets tr.resource td.switchopen {
+	background-image:url(http://gf1.geo.gfsrv.net/cdn55/b8f6a96622ee43464a31e49b764d6f.gif);
+	background-repeat:no-repeat;
+	background-position:0px -56px;
+	cursor:pointer;		
+}
+
+#empire div.content table#planets tr.resource td.switchhover {
+	background-image:url(http://gf1.geo.gfsrv.net/cdn55/b8f6a96622ee43464a31e49b764d6f.gif);
+	background-repeat:no-repeat;
+	background-position:0px -28px;
+	cursor:pointer;		
+}
+
+#empire div.content table#planets tr.resource td.switchclosed {
+	background-image:url(http://gf1.geo.gfsrv.net/cdn55/b8f6a96622ee43464a31e49b764d6f.gif);
+	background-repeat:no-repeat;
+	background-position:0px -28px;
+	cursor:pointer;		
+}
+
+
+#empire div.content table#planets tr.resource td.switch:hover {
+
+}
+
+/*#empire div.content table#planets tr.resource td#res-td{
+	background-image:url(http://gf1.geo.gfsrv.net/cdn34/602f335077884f9af0c914c433291e.gif);
+	background-repeat:no-repeat;
+}*/
+
+
+#empire div.content table#planets td#res-td,
+#empire div.content table#planets td#base-td,
+#empire div.content table#planets td#def-td,
+#empire div.content table#planets td#research-td,
+#empire div.content table#planets td#ship-td {
+	height:28px;
+	overflow:hidden;
+	padding:0px 10px 0px 40px;
+	color:#576472;
+	font-size:12px;
+	font-weight:bold;
+	text-align:left;
+}
+
+#empire div.coords a:link,
+#empire div.coords a:visited,
+#empire div.coords a:hover,
+#empire div.coords a:active {
+	text-decoration:none;
+	color:#686868; 
+}
+
+#empire div.coords a:hover {
+	color:#cccccc;
+	text-decoration:underline;
+}
+
+
+#empire #tab-left {
+	height:152px;
+	width:98px;
+	float:right;
+}
+
+#empire #tab-left a {
+	display:block;
+	height:76px;
+	width:98px;
+	cursor:pointer;
+}
+
+#empire #tab-left a span {	display:none;}
+	
+#empire #tab-left a#planetsTab {			background:url(http://gf1.geo.gfsrv.net/cdnf3/1f090fbf07ac01c46401e1849fbceb.gif) no-repeat 0px -228px; }
+
+#empire #tab-left a#planetsTab:hover,
+#empire #tab-left a#planetsTab.active {		background:url(http://gf1.geo.gfsrv.net/cdnf3/1f090fbf07ac01c46401e1849fbceb.gif) no-repeat 0px -152px; }
+
+#empire #tab-left a#moonsTab {				background:url(http://gf1.geo.gfsrv.net/cdnf3/1f090fbf07ac01c46401e1849fbceb.gif) no-repeat 0px -76px; }
+
+#empire #tab-left a#moonsTab:hover,
+#empire #tab-left a#moonsTab.active {	background:url(http://gf1.geo.gfsrv.net/cdnf3/1f090fbf07ac01c46401e1849fbceb.gif) no-repeat 0px 0px;
+}
+
+#planets .data td.value a:hover {	color:#00F700;}
+
+td.col {	width:158px;}
+
+#empire td.value2 {
+	color:#848484;
+	font-weight: 700;
+	font-size:11px;
+}
+
+.borderfriendly {border: 1px solid #4af74d;}
+.borderneutral {border: 1px solid #fcce00;}
+.borderhostile {border: 1px solid #d43635;}

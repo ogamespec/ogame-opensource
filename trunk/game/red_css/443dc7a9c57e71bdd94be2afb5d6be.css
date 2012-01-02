@@ -1,0 +1,437 @@
+@charset "utf-8";
+/* CSS Document */
+
+/**********************************************************
+*************** =Forschung     *****************
+***********************************************************/
+
+
+#research #planet {
+	background-repeat: no-repeat;
+	height: 250px;
+	margin: 0px auto;
+	position: relative;
+	width: 654px;
+	margin-bottom:3px;
+}
+
+#research .c-left, 
+#research .c-right {
+	height:39px;
+	width:28px;	
+	position:absolute;	
+	top:214px;
+}
+
+div.buildingimg {
+	height:100%;
+	width:100%;
+	background-repeat:no-repeat;
+}
+
+#research li.on div.buildingimg,
+#research li div.pusher {	background-image: url(http://gf1.geo.gfsrv.net/cdn1b/bb4cee61259fdd1a04c693cfcaab20.png);}
+
+#research li.off div.buildingimg {	background-image: url(http://gf1.geo.gfsrv.net/cdn6c/ba2ff4c282a97235b284ded137b6ae.png);}
+#research li.disabled div.buildingimg {	background-image: url(http://gf1.geo.gfsrv.net/cdne1/2775c3b977ea510bde3cd7b6529dc6.png);}
+
+#research #buttonz li {
+	width:80px;
+	height:80px;
+	list-style-type:none; 
+	list-style-image:none; 
+	list-style-position:outside;
+}
+
+/* construction */
+
+#research #buttonz li a.detail_button:link,
+#research #buttonz li a.detail_button:visited,
+#research #buttonz li div.construction a:link,
+#research #buttonz li div.construction a:visited {
+    display:block;
+    height:80px;
+    width:80px;
+    background:url(http://gf1.geo.gfsrv.net/cdn42/e3d481656bab1b216428a98a2e022e.gif) no-repeat;
+    color:#ff9600;
+    text-decoration:none;   
+}
+
+
+#research #buttonz li div.construction a:link,
+#research #buttonz li div.construction a:visited {
+    background:url(http://gf1.geo.gfsrv.net/cdn6c/3c8fe32d22e51f7062901085f2fc12.gif) no-repeat;
+ 
+}
+
+#research #buttonz li div.construction a:hover, 
+#research #buttonz li div.construction a.active,
+#research #buttonz li a:hover, 
+#research #buttonz li a.active
+{
+	background:url(http://gf1.geo.gfsrv.net/cdn49/33b48c5ab13019eec2b94d04e3e5b0.gif) no-repeat;
+	color:#ff9600;	
+	text-decoration:none;	
+}
+
+#research #buttonz li a:hover, 
+#research #buttonz li a.active
+{
+    background:url(http://gf1.geo.gfsrv.net/cdnad/85ac39e8f55c11b1634688f52030a6.gif) no-repeat;
+}
+
+
+
+/* #research #buttonz ul#building li#button1 {	left:0px;}*/
+
+#research span.ecke {
+	position:relative;
+	float:left;
+    top:65px;
+    left:10px;
+    width:60px;
+	text-align:right;
+}
+#research span.level {
+	color:#ff9600;
+	font-size:11px;
+}
+/*
+#research #buttonz ul#building li#button1,
+#research #buttonz ul#building li#button9 {
+	left:0px;
+}
+#research #buttonz ul#building li#button2,
+#research #buttonz ul#building li#button10 {
+	left:81px;
+}
+#research #buttonz ul#building li#button3,
+#research #buttonz ul#building li#button11 {
+	left:162px;
+}
+#research #buttonz ul#building li#button4,
+#research #buttonz ul#building li#button12 {
+	left:243px;
+}
+#research #buttonz ul#building li#button5,
+#research #buttonz ul#building li#button13 {
+	left:324px;
+}
+#research #buttonz ul#building li#button6,
+#research #buttonz ul#building li#button14 {
+	left:405px;
+}
+#research #buttonz ul#building li#button7,
+#research #buttonz ul#building li#button15 {
+	left:486px;
+}
+#research #buttonz ul#building li#button8,
+#research #buttonz ul#building li#button16 {
+	left:567px;
+}
+
+#research #buttonz ul#building li#button9,
+#research #buttonz ul#building li#button10,
+#research #buttonz ul#building li#button11,
+#research #buttonz ul#building li#button12,
+#research #buttonz ul#building li#button13,
+#research #buttonz ul#building li#button14,
+#research #buttonz ul#building li#button15,
+#research #buttonz ul#building li#button16{
+	top:89px;
+}
+
+#research div.research109 div#b_research106,
+#research div.research109 div#b_research108,
+#research div.research110 div#b_research109,
+#research div.research109 div#b_research110,
+#research div.research109 div#b_research111,
+#research div.research109 div#b_research113,
+#research div.research109 div#b_research114,
+#research div.research109 div#b_research115,
+#research div.research109 div#b_research117,
+#research div.research109 div#b_research118,
+#research div.research109 div#b_research120,
+#research div.research109 div#b_research121,
+#research div.research109 div#b_research122,
+#research div.research109 div#b_research123,
+#research div.research109 div#b_research124,
+#research div.research109 div#b_research199 {
+	width: 80px;
+	background-image:url(http://gf1.geo.gfsrv.net/cdnbf/7003d961eca3e04a6f8577f19084fe.jpg);
+	background-repeat:no-repeat;
+	position:absolute;
+
+}
+*/
+
+#research li.on div.research106 div.buildingimg,
+#research li.off div.research106 div.buildingimg,
+#research li.disabled div.research106 div.buildingimg,
+#research li div.research106 div.buildingimg div.pusher {
+	background-position: 0px 0px;
+}
+#research li.on div.research108 div.buildingimg,
+#research li.off div.research108 div.buildingimg,
+#research li.disabled div.research108 div.buildingimg,
+#research li div.research108 div.buildingimg div.pusher {
+  background-position: -80px 0px;
+}
+
+#research li.on div.research109 div.buildingimg,
+#research li.off div.research109 div.buildingimg,
+#research li.disabled div.research109 div.buildingimg,
+#research li div.research109 div.buildingimg div.pusher {
+  background-position: -160px 0px;
+}
+
+li.on div.research110 div.buildingimg,
+li.off div.research110 div.buildingimg,
+li.disabled div.research110 div.buildingimg,
+li div.research110 div.buildingimg div.pusher {
+	background-position: -240px 0px;
+}
+li.on div.research111 div.buildingimg,
+li.off div.research111 div.buildingimg,
+li.disabled div.research111 div.buildingimg,
+li div.research111 div.buildingimg div.pusher {
+	background-position: -320px 0px;
+}
+li.on div.research113 div.buildingimg,
+li.off div.research113 div.buildingimg,
+li.disabled div.research113 div.buildingimg,
+li div.research113 div.buildingimg div.pusher {
+	background-position: -400px 0px;
+}
+li.on div.research114 div.buildingimg,
+li.off div.research114 div.buildingimg,
+li.disabled div.research114 div.buildingimg,
+li div.research114 div.buildingimg div.pusher {
+	background-position: -480px 0px;
+}
+li.on div.research115 div.buildingimg,
+li.off div.research115 div.buildingimg,
+li.disabled div.research115 div.buildingimg,
+li div.research115 div.buildingimg div.pusher {
+	background-position: -560px 0px;
+}
+
+li.on div.research117 div.buildingimg,
+li.off div.research117 div.buildingimg,
+li.disabled div.research117 div.buildingimg,
+li div.research117 div.buildingimg div.pusher {
+	background-position: -640px 0px;
+}
+
+li.on div.research118 div.buildingimg,
+li.off div.research118 div.buildingimg,
+li.disabled div.research118 div.buildingimg,
+li div.research118 div.buildingimg div.pusher {
+	background-position: -720px 0px;
+}
+li.on div.research120 div.buildingimg,
+li.off div.research120 div.buildingimg,
+li.disabled div.research120 div.buildingimg,
+li div.research120 div.buildingimg div.pusher {
+	background-position: -800px 0px;
+}
+li.on div.research121 div.buildingimg,
+li.off div.research121 div.buildingimg,
+li.disabled div.research121 div.buildingimg,
+li div.research121 div.buildingimg div.pusher {
+	background-position: -880px 0px;
+}
+li.on div.research122 div.buildingimg,
+li.off div.research122 div.buildingimg,
+li.disabled div.research122 div.buildingimg,
+li div.research122 div.buildingimg div.pusher {
+	background-position: -960px 0px;
+}
+li.on div.research123 div.buildingimg,
+li.off div.research123 div.buildingimg,
+li.disabled div.research123 div.buildingimg,
+li div.research123 div.buildingimg div.pusher {
+	background-position: -1040px 0px;
+}
+li.on div.research124 div.buildingimg,
+li.off div.research124 div.buildingimg,
+li.disabled div.research124 div.buildingimg,
+li div.research124 div.buildingimg div.pusher {
+	background-position: -1200px 0px;
+}
+li.on div.research199 div.buildingimg,
+li.off div.research199 div.buildingimg,
+li.disabled div.research199 div.buildingimg,
+li div.research199 div.buildingimg div.pusher {
+  background-position: -1120px 0px;
+}
+
+#research div.detail_screen div.pic {
+    float:left;
+    height:200px;
+    margin-left:2px; 
+    position: relative;
+    width:200px;
+    background: url(http://gf1.geo.gfsrv.net/cdnc7/32e98e31414c3245c33f6f29abf4ef.jpg) no-repeat;
+}
+
+#research div.detail_screen div#research_113_Xlarge{
+    background-position: 0px 0px;
+}
+#research div.detail_screen div#research_120_Xlarge{
+    background-position: -200px 0px;
+}
+#research div.detail_screen div#research_121_Xlarge{
+    background-position: -400px 0px;
+}
+#research div.detail_screen div#research_114_Xlarge{
+    background-position: -600px 0px;
+}
+#research div.detail_screen div#research_122_Xlarge{
+    background-position: -800px 0px;
+}
+#research div.detail_screen div#research_115_Xlarge{
+    background-position: -1000px 0px;
+}
+#research div.detail_screen div#research_117_Xlarge{
+    background-position: -1200px 0px;
+}
+#research div.detail_screen div#research_118_Xlarge{
+    background-position: -1400px 0px;
+}
+#research div.detail_screen div#research_106_Xlarge{
+    background-position: -1600px 0px;
+}
+#research div.detail_screen div#research_108_Xlarge{
+    background-position: -1800px 0px;
+}
+#research div.detail_screen div#research_124_Xlarge{
+    background-position: -2000px 0px;
+}
+#research div.detail_screen div#research_123_Xlarge{
+    background-position: -2200px 0px;
+}
+#research div.detail_screen div#research_199_Xlarge{
+    background-position: -2400px 0px;
+}
+#research div.detail_screen div#research_111_Xlarge{
+    background-position: -2600px 0px;
+}
+#research div.detail_screen div#research_109_Xlarge{
+    background-position: -2800px 0px;
+}
+#research div.detail_screen div#research_110_Xlarge{
+    background-position: -3000px 0px;
+}
+
+#research li .case { width:80px; height:80px;}
+
+/************************************************************
+*************         =Detailansicht *************************
+*************************************************************/
+
+#research div.detail_screen {
+	background-repeat:no-repeat;
+	height:250px;
+	background-image:url(http://gf1.geo.gfsrv.net/cdn99/5368907a3fd41c0a3a5bbf077fb24b.gif);
+	z-index:10;
+}
+
+#research div#action ul {
+	list-style:none; 
+	padding-top:15px; 
+	line-height:20px;
+}
+
+#research .detail_screen #action li.techtree,
+#research .detail_screen #action li.demolish {
+	top:20px;	
+}
+
+#research div#description {
+	width:640px; 
+	height:45px; 
+	margin: 5px 0px 0px 5px;
+}
+
+#research div#description .textlabel {
+	height:1px;
+	left:-9999px;
+	overflow:hidden;
+	position:absolute;
+	width:1px;
+}
+
+#research div#description p {
+	padding:0 8px; 
+	margin:0px; 
+	color:#576472; 
+	font-size:11px; 
+	width:630px; 
+	overflow:hidden;
+	height:41px;
+	float:left;
+}
+
+#research div#description p a.help {
+	display:block;
+	float:left;
+	height:18px;
+	width:18px;
+	margin: 3px 3px 0px 0px;
+}
+
+#research div#description p a.help:link,
+#research div#description p a.help:visited {	background:url(http://gf1.geo.gfsrv.net/cdn47/5a9f111474129aab80270fb8f08526.gif) no-repeat;}
+#research div#description p a.help:hover {	background:url(http://gf1.geo.gfsrv.net/cdna0/56f8dbcc585435b98d2a4d455a8e6e.gif) no-repeat;}
+
+#research div#description p a.help:active,
+#research div#description p a.help:focus {	background:url(http://gf1.geo.gfsrv.net/cdn47/5a9f111474129aab80270fb8f08526.gif) no-repeat;}
+
+
+
+.IEinline { display:inline;} /* IE6 Fix */
+
+#research .resRight { 	
+	margin-left:6px;
+	width:246px;
+}
+#research .resLeft {
+	margin-left:12px;
+	width:400px
+}
+
+#research #buttonz ul#base.activate li, #research #buttonz ul#base2.activate li, #research #buttonz ul#base3.activate li, #research #buttonz ul#base4.activate li {
+	 background-repeat:no-repeat;
+	 display:inline; /* IE Double Margin fix */
+	 float:left;	 
+	 height:80px;
+	 left:auto;
+	 margin:0px;
+	 position:relative;
+	 top:auto;
+	 width:80px;	 
+}
+
+#buttonz.wrapButtons {
+	background:transparent url(http://gf1.geo.gfsrv.net/cdn8f/62eceae400fa8116762698d86f12c9.gif) no-repeat;
+	height:250px;
+}
+
+#buttonz.wrapButtons h3 {
+	color:#6F9FC8;
+	font:normal normal 700 12px Verdana, Arial, Helvetica, sans-serif;
+	line-height:30px;
+	position:relative;
+	z-index:2;
+}
+
+div.extra_background {
+	width:650px;
+	height:23px;
+	position:absolute;
+	z-index:1;
+	bottom:113px;
+	left:10px;
+	background:url(http://gf1.geo.gfsrv.net/cdnd1/bf977db9ff03504bdb7043f36b83c2.gif) no-repeat;
+}
