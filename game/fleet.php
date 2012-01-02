@@ -637,11 +637,11 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $diff = abs ( $target_tech - $origin_tech );
     if ( $target_tech > $origin_tech ) {
         $level = $fleet_obj['ship210'] - pow ( $diff, 2 );
-        $counter_max = min (100, floor((($target_ships / 4) * $origin_ships) / pow ( 2, $diff )));
+        $counter_max = min (100, floor((($target_ships / 4) * $origin_ships) * pow ( 2, $diff )));
     }
     else {
         $level = $fleet_obj['ship210'] + pow ( $diff, 2 );
-        $counter_max = min (100, floor((($target_ships / 4) * $origin_ships) * pow ( 2, $diff )));
+        $counter_max = min (100, floor((($target_ships / 4) * $origin_ships) / pow ( 2, $diff )));
     }
     $counter = mt_rand ( 0, $counter_max );
 
