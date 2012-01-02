@@ -1,0 +1,1438 @@
+@charset "utf-8";
+/* CSS Document */
+
+/**********************************************************
+***************    =network      *****************
+***********************************************************/
+.subject{width:280px;}
+.icons{width:75px;}
+
+.combatreport {  color: #D43635;}
+
+.combatreport_ididattack_iwon {  color: #9c0;}
+a:hover span.combatreport_ididattack_iwon {color: #9c0;text-decoration:underline;}
+.combatreport_ididattack_ilost {  color: #D43635;}
+a:hover span.combatreport_ididattack_ilost {color: #D43635;text-decoration:underline;}
+.combatreport_ididattack_draw {  color: #fff;}
+a:hover span.combatreport_ididattack_draw {color: #fff;text-decoration:underline;}
+
+.combatreport_igotattacked_iwon {  color: #9c0;}
+.combatreport_igotattacked_ilost {  color: #D43635;}
+.combatreport_igotattacked_draw {  color: #D29D00;}
+
+.espionagereport {color: orange;}
+
+#netz #planet {
+	background: url(http://gf1.geo.gfsrv.net/cdn6d/f855a5a10214eb2fd95a2d19c16695.jpg) no-repeat;
+	height: 250px;
+	position: relative;
+	width: 654px;
+	margin:0 auto 3px auto;
+}
+
+#netz #planet.shortHeader {background:url(http://gf1.geo.gfsrv.net/cdn2d/ded100047f29022803100f6376e799.jpg) no-repeat;}
+
+#netz #inhalt .shortCorner, 
+#netz #inhalt .shortCorner {top: 4px;}
+
+#netz .c-left, 
+#netz .c-right {
+	height:39px;
+	width:28px;	
+	position:absolute;	
+	top:214px;
+}
+
+#netz .toggleHeader {z-index: 55;}
+#netz #tabs {
+	height:30px;
+	margin:4px 0px 0 0;
+	overflow:visible;
+}
+
+#netz #tabs ul#tabsabove li,
+#netz #tabs ul.tabsbelow li {
+	float:left;
+	text-align:center;
+	list-style-type:none;
+	height:24px;
+}
+
+#netz #tabs ul#tabsabove {
+	background:url(http://gf1.geo.gfsrv.net/cdnc4/39832f89cef469986df0928b304842.gif) no-repeat 0px 0px;
+	display:none;
+	width:663px;
+	height:35px;
+}
+
+#netz #message #tabs ul#tabsabove {background:url(http://gf1.geo.gfsrv.net/cdnc4/39832f89cef469986df0928b304842.gif) no-repeat 0px 0px;}
+#netz #alliance #tabs ul#tabsabove {background:url(http://gf1.geo.gfsrv.net/cdnc4/39832f89cef469986df0928b304842.gif) no-repeat 0px -35px;}
+#netz #buddy #tabs ul#tabsabove {background:url(http://gf1.geo.gfsrv.net/cdnc4/39832f89cef469986df0928b304842.gif) no-repeat 0px -70px;}
+
+#netz #tabs ul#tabsabove li {
+	width:221px;
+	display:block;
+	height:24px;	
+}
+
+/* Ein-/Ausblenden der unteren Zeile, je nach Seite... */
+
+#netz #message ul#tab-ally {display:block;}
+#netz #message ul#tab-ally,
+#netz #message ul#tab-buddy {display:none;}
+#netz #alliance ul#tab-ally {display:block;}
+#netz #alliance ul#tab-msg,
+#netz #alliance ul#tab-buddy {display:none;}
+#netz #buddy ul#tab-buddy {display:block;}
+#netz #buddy ul#tab-msg,
+#netz #buddy ul#tab-ally {display:none;}
+
+/* tabsbelow layout */
+
+#netz #eins, #netz #zwei, #netz #drei, #netz #vier {
+	background:url(http://gf1.geo.gfsrv.net/cdn03/db530b4ddcbe680361a6f837ce0dd7.gif) repeat-y;
+	margin:0;
+	padding:0 0 10px 0;
+	text-align:center;
+}
+
+#netz #tabs ul.tabsbelow {
+    background: url(http://gf1.geo.gfsrv.net/cdnef/bfb16d45a8ab1ca15ca3029feb8b44.gif) no-repeat 0px 0px;
+    height:25px;
+    padding:9px 0 0 30px; 
+}
+	
+#netz #tabs ul.tabsbelow li {
+	display:block;
+	text-align:center;
+	margin:0;
+}
+
+#netz #tabs ul.tabsbelow li a:link,
+#netz #tabs ul.tabsbelow li a:visited,
+#netz #tabs ul.tabsbelow li a:hover,
+#netz #tabs ul.tabsbelow li a:active {
+	color:#6f9fc8;
+	font-weight:700;
+	text-decoration:none;
+	display:block;
+	width:190px;
+	height:23px;				
+}
+
+#netz #alliance #tabs ul.tabsbelow li a:link,
+#netz #alliance #tabs ul.tabsbelow li a:visited,
+#netz #alliance #tabs ul.tabsbelow li a:hover,
+#netz #alliance #tabs ul.tabsbelow li a:active,
+#netz #inhalt #tabs ul.tabsbelow li a:link,
+#netz #inhalt #tabs ul.tabsbelow li a:visited,
+#netz #inhalt #tabs ul.tabsbelow li a:hover,
+#netz #inhalt #tabs ul.tabsbelow li a:active {
+	color:#848484;
+	font-weight:700;
+	text-decoration:none;
+	display:block;
+	width:150px;
+	height:23px;				
+}
+
+#netz #inhalt div.section {
+	background:url(http://gf1.geo.gfsrv.net/cdn03/db530b4ddcbe680361a6f837ce0dd7.gif) repeat-y;
+	width:630px;
+	height:22px;
+	margin:0 0 10px 20px;
+}
+
+#netz #inhalt div.section a:link,
+#netz #inhalt div.section a:visited,
+#netz #inhalt div.section a:hover,
+#netz #inhalt div.section a:active,
+#netz #inhalt div.section a:focus{ 
+	display:block;
+	text-align:center;
+	color:#6f9fc8;
+	font-weight:700;
+	height:22px;
+	text-decoration:none;	
+}
+
+#netz #inhalt div.section a:hover {	color:#fff;}
+
+#netz #inhalt div.section a span{ 
+	display:block;
+	padding-top:4px;
+}
+
+#netz #inhalt div.section a.closed { 
+	background:#13181D url(http://gf1.geo.gfsrv.net/cdn0b/d55059f8c9bab5ebf9e8a3563f26d1.gif) no-repeat 0px 0px;
+	border:1px solid #000;
+}
+
+#netz #inhalt div.section a.closed:hover { 
+	background:#23282D url(http://gf1.geo.gfsrv.net/cdn0b/d55059f8c9bab5ebf9e8a3563f26d1.gif) no-repeat 0px 0;
+	border:1px solid #000;
+}
+
+#netz #inhalt div.section a.opened { 
+	background:#13181D url(http://gf1.geo.gfsrv.net/cdn0b/d55059f8c9bab5ebf9e8a3563f26d1.gif) no-repeat 0px -22px;
+	border:1px solid #000;
+}
+#netz #inhalt div.section a.opened:hover { 
+	background:#23282D url(http://gf1.geo.gfsrv.net/cdn0b/d55059f8c9bab5ebf9e8a3563f26d1.gif) no-repeat 0px -22px;
+	border:1px solid #000;
+}
+
+#netz .contentz table {
+	border-collapse:collapse;
+	width:90%;
+	margin: 0 auto 0 auto;
+	font-weight:100;
+}
+
+#netz .contentz table a.save {
+	font-weight:700;
+	color:#fff;
+}
+
+#netz .contentz table th,
+#netz .contentz table th a:link {
+	color:#6f9fc8;
+	font-weight:bold;
+	padding:0 0 5px 0;
+	text-align:left;
+}
+#netz .contentz table td {color:#848484;text-align:left;}
+
+#netz .contentz table td.textCenter {text-align:center;}
+
+#netz .contentz table td.value { color:#848484;}
+
+#netz .contentz table.members th {padding-bottom:5px;}
+
+#netz .contentz table td.key {
+	width:180px;
+	padding:3px 0 3px 10px;
+	color:#848484;
+}
+
+#netz .contentz table.aktiv td {padding:10px;}
+
+#netz .contentz table td.value {
+	color:#848484;
+	margin:0;
+	text-align:center;
+	width:100px;
+}
+
+#netz .contentz table.spy2 {width:100%;}
+
+#netz .contentz table.spy2 td {
+	padding:3px 10px;
+	text-align:center;
+}
+
+#netz .contentz table td.item  {
+	width:170px;
+	color:#848484;
+	text-align:left;
+}
+
+#networkbewerbungen #netz .contentz table.members th { border-bottom: 1px dotted #767F88;}
+
+#networkbewerbungen #netz .contentz td.message {
+	background-color:#0d1014;
+	border:1px solid #000;
+}
+
+#netz .contentz table#reports { border-collapse: collapse;}
+#netz .contentz table#reports td,
+#netz .contentz table#reports th{
+	font-size:11px;
+	text-align:center;
+}
+
+#netz .contentz table#reports th {border-bottom: 1px dotted #848484;}
+
+#netz .contentz table#reports td.from {	white-space:nowrap;}
+
+#netz .contentz table#reports tr.switch {/*	cursor:pointer; */}
+
+#netz tr.report-tr td.wrapper { background-color:#111;}
+
+table.list tr.alt > td { background-color:#1A2128; }
+
+table.list tr.over > td { background-color: #071014; }
+
+table.spy tr.alt > td {	background-color:  transparent;}
+table.spy tr.over > td { background-color: transparent;}
+
+table.list tr.first th, 
+table.list tr.last td {		
+	background-color:#13181D;
+	padding-top:5px;
+}
+
+table.list tr.first th {
+/*	background: #000;	*/
+	padding:0 0 5px 0;
+	border-bottom:1px dotted #3F4E61;
+}
+table.list tr.last td {border-top:1px dotted #3F4E61;}
+
+div.loader { 
+	background-color:#13181D; 
+	margin:0px;	
+	padding:20px 0px;
+}
+
+#messages #netz #showSpyReportsNow {
+	border: 1px solid #2f2f2f;
+	margin:10px 5px;
+	padding: 10px 0px;
+}
+
+#netz .contentz #showSpyReportsNow table th.area {
+	background-color:#23282D; 
+	border:1px solid #000;
+	font-weight:700; 
+	padding:5px 0px;
+	text-align:center;
+	color:#6f9fc8;
+}
+
+#netz .contentz #showSpyReportsNow table th.area a {
+	color:#fff;
+	text-decoration:none;
+}
+
+#netz .contentz #showSpyReportsNow table th.area a:hover {text-decoration:underline;}
+
+div.mailWrapper {margin:0px auto;text-align:center;}
+
+table#mailz.list {	
+	margin:0px auto;
+	width:634px !important;
+}	
+
+table.list {width:612px;}
+table.list td { overflow:hidden;}
+
+table.list .check { width:22px; text-align:left;}
+
+table.list td.spacer0,
+table.list th.spacer0,
+table.list td.spacer,
+table.list th.spacer { 
+	padding:0px !important;
+	width:5px !important;
+}
+
+table.list td.from,
+table.list th.from { 	
+	padding-right:8px;
+	width:140px;
+}
+
+table.list td.subject,
+table.list th.subject { /*	width:230px; */}
+
+table.list td.date,
+table.list th.date { 	
+	width:142px;
+	padding-left:0px;
+	padding-right:5px;
+}
+
+table.list .actions {	
+	width:60px;
+	padding:0 0 0 5px;
+}
+
+#networkm #netz #message #inhalt .contentz table#mail.list td.from,
+#networkm #netz #message #inhalt .contentz table#mail.list th.from,
+#networkm #netz #message #inhalt .contentz table#mail.list td.subject,
+#networkm #netz #message #inhalt .contentz table#mail.list th.subject,
+#networkm #netz #message #inhalt .contentz table#mail.list td.date,
+#networkm #netz #message #inhalt .contentz table#mail.list th.date {padding-left:0px;}
+
+#netz tr.last .selectContainer { 
+	float:left;
+	width:160px;
+}
+
+#netz tr.last .selectContainer div {float:left;}
+
+.msgpersite {
+	float:left; 
+	font-weight:700; 
+	padding:0.4em; 
+	text-align:center;	
+	width:65px; 
+}
+
+#netz .contentz table.members tr td.desc,
+#netz .contentz table.members tr.alt td.desc {
+	background-image:none;
+	font-weight:normal;
+	padding:5px;
+	vertical-align:top;
+}
+
+#netz .contentz table.bborder tr td.desc,
+#netz .contentz table.bborder tr.alt td.desc {width:140px;}
+
+#netz .contentz table.members tr td.desc
+
+#netz .contentz table.members tr.alt td,
+#netz .contentz table.bborder tr.alt td {background: #13181D;}
+#netz .contentz table.members tr.over td,
+#netz .contentz table.bborder tr.over td {background: #212a33;}
+#netz .members tr.alt td.response {
+	background:none;
+	padding:0 0 20px 0;
+}
+
+#netz .members tr.alt td.response a.button188 {margin:5px 0 0 178px;}
+
+#netz .contentz a:link,
+#netz .contentz a:visited,
+#netz .contentz a:active {
+	color:#fff;
+	text-decoration:none;
+}
+
+#netz .contentz a:hover {text-decoration:underline;}
+
+#netz a.button188:hover {text-decoration:none;}
+
+#netz .contentz table td {
+	font-size:11px;
+	padding:4px 0 8px 0;
+}
+
+#netz .contentz table td.check, #netz .contentz table th.check {padding:4px 0 8px 4px;}
+
+#netz .contentz table#ranks tr.alt td.no_bg {background:#0D1014;}
+
+#netz .contentz table#ranks tr.alt td {background: #13181D;}
+
+#netz #alliance .application_textarea {
+	width:390px;
+	height:70px;
+	background-color:#274650;
+	color:#848484;
+	border: 1px solid #141A1E;
+	margin:0;
+}
+
+span.coordinates {font-weight:700;}
+#netz table#mail td span.coordinates a,
+#netz .contentz table#mailz a:link,
+#netz .contentz table#mailz a:visited,
+#netz .contentz table#mailz a:active {
+	color:#6F9FC8;
+	text-decoration:none;
+}
+#netz .contentz table#mailz a:hover,
+#netz table#mail td span.coordinates a:hover { text-decoration:underline;	}	
+	
+#netz table#mail td span.coordinates a { color:#848484;	}
+	
+#netz table#mail td a {
+	color:#848484;
+	text-decoration:underline;			
+}
+
+#netz table td.area {
+	background-color:#253046; 
+	font-weight:700; 
+	padding:3px 0px;
+}
+
+#netz table tr.areadetail {
+	border:1px solid #000; 
+	border-top:none; 
+}
+
+#netz table.fleetdefbuildings, #netz table.aktiv {
+	border:1px solid #000;
+}
+
+#netz .contentz table td.attack {	padding:10px 0px;}
+
+#netz .contentz table td.attack a {
+	background-color:#f10100;
+	padding:5px 10px;
+	text-decoration:none;
+}
+
+#netz .contentz table td.attack a span { 
+	color:#fff;
+	font-weight:700;
+}
+	
+#netz .contentz table th img {
+	height:16px;
+	width:16px;
+}
+
+#netz .contentz table td.delete-rank {width:26px;}
+
+#netz .contentz table td.delete-rank a:link,
+#netz .contentz table td.delete-rank a:visited,
+#netz .contentz table td.delete-rank a:active,
+#netz .contentz table td.delete-rank a:focus{
+	background:url(http://gf1.geo.gfsrv.net/cdn08/f8c5c66066361725846a887847a617.gif) no-repeat 0 0;
+	display:block;
+	width:17px;
+	height:17px;
+}
+
+#netz .contentz table td.delete-rank a:hover {background:url(http://gf1.geo.gfsrv.net/cdn08/f8c5c66066361725846a887847a617.gif) no-repeat -17px 0px;}
+
+#netz .contentz table td.delete-rank a span {display:none;}
+
+#netz .contentz table tr td.desc {padding-right:10px;}
+
+#netz #zwei .contentz table tr.alt td.desc {background:url(http://gf1.geo.gfsrv.net/cdn16/1355be6417cde42876f89d521b1826.gif) no-repeat 0px 0px;}
+#netz #zwei .contentz table tr.alt td.check1 {background:url(http://gf1.geo.gfsrv.net/cdne1/f652a900d426708cee9463ffac6889.gif) no-repeat 0px 0px;}
+#netz #zwei .contentz table tr.alt td.check {background:url(http://gf1.geo.gfsrv.net/cdne8/c51abf3a994df0b284833b312d1959.gif) repeat-x 0px 0px;}
+#netz #zwei .contentz table tr.alt td.check9 {background:url(http://gf1.geo.gfsrv.net/cdn0e/80427151ec5611a232a6c81f014960.gif) no-repeat 0px 0px;}
+
+#netz #alliance textarea,
+#netz .createnote textarea,
+textarea.textBox {
+	background-color:#274650;
+	border:1px solid #141A1E;
+	color:#848484;
+	font-size:11px; 
+	line-height:1.3em;
+	width:600px;
+        max-width:600px;
+	height:120px;
+	margin:0 auto 10px auto;
+	padding:5px;
+	display:block;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+}
+
+#netz #alliance .counter {
+	padding:0 6px 10px 0;
+	text-align:right;
+	vertical-align:top;
+}
+
+#netz #alliance .reason {
+	vertical-align:top;
+	width:155px;
+}
+
+#netz #alliance .buttons_application a.accept {
+	float:right;
+	margin:0;
+}
+
+#netz #alliance .buttons_application a.reject {
+	display:inline;
+	float:left;
+	margin:0 0 0 166px;
+}
+
+#netz .createnote td.desc {width:120px;}
+
+#netz #alliance #drei textarea,
+#netz #alliance #vier textarea {width:330px;}
+
+#netz #alliance .allycomm textarea,
+#netz .createnote textarea {
+	display:inline;
+	width:365px;
+        max-width:365px !important;
+}
+
+#netz .createnote  textarea.buddyText {width:600px;}
+
+#netz table#dissolveally td {
+	text-align:left;
+	vertical-align:top;
+}
+
+#netz table#dissolveally td.desc {
+	padding-left:5px;
+	vertical-align:top;
+	width:190px;
+}
+
+#netz .contentz table#preferences td {text-align:left;}
+
+
+.w300 {	width:300px;}
+
+.w200 {	width:200px;}
+
+.w100 {	width:100px;}
+
+#netz .contentz td input.confirm {
+	border-style:solid;
+	border-width:1px;
+	text-transform:uppercase;
+	background-color:#141E26;
+	color:#848484;
+	padding:0px 6px;
+	cursor:pointer;
+	font-weight:700;
+}
+
+#netz .contentz td select.choose:hover,
+#netz .contentz td input.confirm:hover {
+	background-color:#252f37;
+	color:#CCC;
+	cursor:pointer;
+}
+
+#netz #message div.contentz table#mail tr.last-tr:hover td {
+	background-color:transparent;
+	cursor:auto;
+}
+
+#netz .contentz table#mail td {
+	padding:2px 5px;
+	white-space:nowrap;
+	overflow:hidden;
+}
+
+#netz .contentz table td.wrapper table.notice {width:auto;}
+
+#netz .contentz table#mail td.wrapper table.notice td { white-space:normal;}
+
+#netz .contentz table#mail td.wrapper table.notice tr.areadetail {
+	border: 0px none transparent;
+	background-color:transparent;
+}
+
+#netz .contentz table#mail td tr.areadetail td {padding:6px 3px;}
+
+#netz .contentz table#mail.list tr.trigger:hover > td {
+	background-color:#171E24;
+	color:#c4c4c4;
+/*	cursor:pointer; */
+}	
+
+#netz .contentz table#dissolveally th,
+#netz .contentz table#assignally th,
+#netz .contentz table#changetag th,
+#netz .contentz table#changename th {padding:2px 0px;}
+
+#netz .contentz table#dissolveally th,
+#netz .contentz table#assignally th {
+	font: 700 11px Verdana, Arial, Helvetica, sans-serif;
+	padding:8px 0px 5px;
+}
+
+.bborder {	border:1px solid #141A1E;}
+
+table.members,
+table#changeAllyName,
+table#changeAllyTag,
+table#assignally,
+table#dissolveally {background-color:transparent; }
+
+#netz .contentz table.members th,
+#netz .contentz table#changeAllyName th,
+#netz .contentz table#changeAllyTag th {
+	border-bottom:1px dotted #848484;
+	padding:5px;
+	text-align:left;
+	vertical-align:top;
+}
+
+#netz .contentz table.members td,
+#netz .contentz table#changeAllyName td,
+#netz .contentz table#changeAllyTag td {padding:5px;text-align:left;}
+
+#netz .contentz table#dissolveally td.value,
+#netz .contentz table#assignally td.value,
+#netz .contentz table#changetag td.value,
+#netz .contentz table#changename td.value {text-align:left;}
+
+#netz .contentz table.members td.action_icons {vertical-align:top;}
+
+#netz .contentz table.members td.message {
+	border: 1px solid #141A1E;
+	color:#848484;
+	width:518px;
+}
+
+#alliance #section12 table.members,
+#alliance #section22 table.members {background: transparent; margin-bottom:10px;}
+
+#alliance #section12 table.members tr.alt td,
+#alliance #section22 table.members tr.alt td { background: #13181D;}
+
+#netz .contentz table td.member_score {padding:0 0 0 6px;}
+
+/* Subsection Tabs
+--------------------*/
+
+
+#netz ul.subsection_tabs,
+#messages #netz .addressBook ul.subsection_tabs {
+	border-bottom:1px solid #000;
+	clear:both;	
+	height:26px;	
+	list-style:none;
+	margin-left: 19px;	
+	padding:0;
+	width:640px;
+}
+
+#messages #netz .addressBook ul.subsection_tabs { 
+	margin-left:0px; 
+	width: 650px;
+}
+
+#netz ul.subsection_tabs li,
+#messages #netz .addressBook ul.subsection_tabs li {
+	float:left;
+	text-align:center;
+}
+
+#netz ul.subsection_tabs li a,
+#messages #netz .addressBook ul.subsection_tabs li a,
+#messages #netz .addressBook ul.subsection_tabs li a:link,
+#messages #netz .addressBook ul.subsection_tabs li a:visited,
+#messages #netz .addressBook ul.subsection_tabs li a:active {
+	color:#848484;
+	background:none;
+	display:block;
+	font-size:11px;	 	
+	height:25px;
+	margin:0 6px 0 6px;
+	text-decoration:none;	
+	width:148px;
+}
+
+#netz ul.subsection_tabs li a span,
+#messages #netz .addressBook ul.subsection_tabs li a span {
+	display:block;
+	padding-top:7px;
+}
+
+#netz ul.subsection_tabs li.ui-tabs-selected a,
+#netz ul.subsection_tabs li.ui-tabs-selected a:link,
+#netz ul.subsection_tabs li.ui-tabs-selected a:visited,
+#netz ul.subsection_tabs li.ui-tabs-selected a:active {
+	border-bottom:1px solid #0D1014;
+	background:url(http://gf1.geo.gfsrv.net/cdncc/7c8996be8a2ee3f64ddd96a9897e6d.gif) no-repeat 0px 0px;
+	text-decoration:none;
+	color:#fff;
+}
+
+#tabs_example_one a {color:#848484;}
+
+#netz ul.subsection_tabs li.ui-tabs-selected a:hover,
+#netz ul.subsection_tabs li a:hover {
+	border-bottom:1px solid #0D1014;
+	background:url(http://gf1.geo.gfsrv.net/cdncc/7c8996be8a2ee3f64ddd96a9897e6d.gif) no-repeat 0px 0px;
+	text-decoration:none;
+	color:#fff;
+}
+
+#messages #netz .addressBook ul.subsection_tabs li.ui-tabs-selected a,
+#messages #netz .addressBook ul.subsection_tabs li.ui-tabs-selected a:link,
+#messages #netz .addressBook ul.subsection_tabs li.ui-tabs-selected a:visited,
+#messages #netz .addressBook ul.subsection_tabs li.ui-tabs-selected a:hover,
+#messages #netz .addressBook ul.subsection_tabs li.ui-tabs-selected a:active,
+#messages #netz .addressBook ul.subsection_tabs li a:hover {
+	border-bottom:1px solid #0D1014;
+	background:url(http://gf1.geo.gfsrv.net/cdncc/7c8996be8a2ee3f64ddd96a9897e6d.gif) no-repeat 0px 0px;
+	margin-top:1px;
+	text-decoration:none;
+	color:#6f9fc8;
+}
+
+#netz #alliance ul.subsection_tabs li.ui-tabs-selected a,
+#netz #alliance ul.subsection_tabs li.ui-tabs-selected a:link,
+#netz #alliance ul.subsection_tabs li.ui-tabs-selected a:visited,
+#netz #alliance ul.subsection_tabs li.ui-tabs-selected a:hover,
+#netz #alliance ul.subsection_tabs li.ui-tabs-selected a:active,
+#netz #alliance ul.subsection_tabs li a:hover {background:url(http://gf1.geo.gfsrv.net/cdncc/7c8996be8a2ee3f64ddd96a9897e6d.gif) no-repeat 0px 0px;}
+
+#netz ul.register_tabs, 
+#messages #netz .addressBook ul.register_tabs {border-bottom:none;}
+
+#netz ul.register_tabs li a.active,
+#messages #netz .addressBook ul.register_tabs li a.active {	color:#fff;}
+
+#netz #inhalt div.sectioncontent div.contentdiv,
+#netz #inhalt div.sectioncontent div.contentz {
+	padding:15px 10px 0px;
+	background:url(http://gf1.geo.gfsrv.net/cdn9c/8ddb347c814d9c069e587bda6299e3.gif) repeat-y 5px 0px;
+	margin-bottom:0px;
+	position:relative;
+}
+
+#netz #inhalt div.sectioncontent div.footer {
+	background:url(http://gf1.geo.gfsrv.net/cdne4/cb02983b460225f8c1eaa40139f5c1.gif) no-repeat 5px 0px;
+	height:4px;
+	line-height:0px;
+	font-size:0px;
+	margin-bottom:5px;
+}
+
+#netz #tabs ul.tabsbelow li a span {
+	display:block;
+	padding-top:8px;
+}
+
+#netz #tabs ul#tabsabove li a:link,
+#netz #tabs ul#tabsabove li a:visited,
+#netz #tabs ul#tabsabove li a:active {
+	color:#91b0c4;
+	font-weight:700;
+	text-decoration:none;
+	display:block;
+	height:32px;
+}
+
+#netz #tabs ul#tabsabove li a:hover {
+	color:#fff;
+	padding: 1px 0px 0px 0;
+	display:block;
+}
+
+#netz #tabs ul#tabsabove li a span {
+	display:block;
+	padding-top:8px;
+}
+
+#netz #message #mail {border-collapse:collapse;}
+
+#netz table#notizen th {background:#13181D;}
+
+#netz table#notizen tr.alt td{ background:#0D1014;}
+
+#netz #message #mail th,
+#netz #message #notizen th {
+	border-bottom:1px dotted #3F4E61;
+	border-collapse:collapse;		
+	font-weight:700;
+	padding:2px 0px 2px 0px;
+}
+
+#netz #message #mail td.actions a:link,
+#netz #message #mail td.actions a:visited,
+#netz #message #mail td.actions a:hover,
+#netz #message #mail td.actions a:active {
+	margin-right:2px;
+	text-decoration:none;
+}
+
+#netz #alliance #eins .contentz #allypage,
+#netz #alliance #eins .contentz #allyinternpage {
+	margin:10px 20px;
+	overflow:auto;
+	padding:5px;
+	text-align:left;
+	width:605px;
+}
+
+#netz #inhalt .contentz {color:#848484;}
+
+#netz #inhalt #vier .contentz td.response a {
+	display:block;
+	color:#000;
+	line-height:27px;
+	margin:0px auto;
+	text-decoration:none;
+	text-transform:capitalize;
+}
+
+#netz #inhalt #vier .contentz td.response {
+	padding-top:8px;
+	padding-bottom:8px;
+}
+/*
+#netz #inhalt #vier .contentz td.response a:hover {
+	display:block;
+	background-color:#141414;
+	text-decoration:underline;
+	font-weight:700;	
+}
+*/
+#netz #inhalt .contentz td.action a {margin-left:5px;}
+
+#netz #inhalt #vier .contentz td.action {
+	padding:10px 0 0 0px; 
+	text-align:center;
+}
+
+#netz #inhalt #vier .contentz td.response {border-bottom:1px dotted #848484;}
+
+#netz #buddy #inhalt .contentz tr.head td,
+#netz #buddy #inhalt .contentz tr.separate td {border-bottom: 1px dotted #848484;}
+
+#netz #buddy #inhalt .contentz tr.head td {
+	background-color:#141414;
+	padding:10px 0 10px;
+}
+
+#netz #buddy #inhalt .contentz td.action {
+	padding:10px 0 10px 0px; 
+	text-align:center;
+}
+#netz #buddy #inhalt .contentz tr.accent td,
+.mailcontainer td.desc {font-weight:700;}
+
+
+/***********************************************
+		MAILS / NACHRICHTEN
+***********************************************/
+
+
+.mailcontainer,
+#sftcontainer,
+#techinfolayer {
+  	font-family: Verdana, Arial, SunSans-Regular, Sans-Serif;
+	font-size:11px;
+	color:#848484;
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:669px;
+	height:450px;
+	z-index:60; /* TO DO! */	
+    background:url(http://gf1.geo.gfsrv.net/cdn03/db530b4ddcbe680361a6f837ce0dd7.gif) repeat-y 0 0;
+	overflow-Y:auto;
+	overflow-x:hidden;
+}
+#sftcontainer .header{
+	background:url(http://gf1.geo.gfsrv.net/cdn3d/32469184f13227d35e7cb4bdab93ae.gif) no-repeat 0 0;
+	height:29px;
+	line-height:normal;
+	padding-top:6px;
+}
+
+#sftcontainer .footer{
+	height:29px;
+    background:url(http://gf1.geo.gfsrv.net/cdnbe/04a7b39dc27c29c4c2cadd3fd44ec0.gif) no-repeat 0 0;
+}
+
+.mailcontainer table {
+	border-collapse:collapse;
+	margin:0px auto;
+	width:615px;
+}
+
+#message .mailcontainer #mail th {padding:8px 3px;}
+
+.mailcontainer tr.mailinfo td,
+.mailcontainer tr.actionbar td,
+.mailcontainer td.mailbody {
+	border-bottom:1px dotted #3F4E61;
+	border-collapse:collapse;
+	padding:8px 0px;
+}
+
+.mailcontainer td,
+.mailcontainer th {
+	color:#848484;
+	text-align:center;
+}
+
+.mailcontainer td img {	border:0px;}
+
+.mailcontainer td.actions {
+/*	white-space:nowrap;*/
+}
+
+.mailcontainer td.mailbody {
+	padding:10px 15px;
+	text-align:left;
+	min-height:150px;
+}
+
+.mailcontainer tr.actionbar td {
+	text-align:right;
+	padding-right:10px;
+}
+
+.mailcontainer td input,
+.mailcontainer tr.answer textarea {
+	background-color:#1C1C1C;
+	color:#E3E3E3;
+	font-family:Verdana,Arial,Helvetica,sans-serif;	
+	border:1px dotted #848484;
+	color:#848484;	
+	font-size:11px;	
+}
+
+.mailcontainer tr.answer textarea {
+	height:70px;
+	width:345px;
+	display:block;
+	height:120px;
+	line-height:1em;
+	padding:5px;	
+}
+
+.mailcontainer tr.answer table {width:100%;}
+
+.mailcontainer td.answersubject {
+	text-align:left; 
+	padding:5px 0px 5px 11px;
+}
+
+.mailcontainer td.answerbox {padding:10px 0px;}
+
+.mailcontainer input.answersubject {width:200px; }
+
+/***************************
+			Notizen
+***************************/
+
+#netz #drei #notizen table {border-collapse:collapse;}
+
+#netz #drei #notizen th {border-bottom:1px dotted #848484;}
+
+#netz #drei #notizen th,
+#netz #drei #notizen td {padding:5px 3px;}
+
+#netz #drei #notizen tr.alt td {background-color:#13181D;}
+
+#netz #drei table.createnote select {
+	padding:0px;
+	margin:0px;
+}
+
+#netz #drei table.createnote td.value {text-align:left;}
+
+#netz #vier ul.subsection_tabs li a.active, 
+#netz #vier ul.subsection_tabs li a:hover {margin-top:0px;}
+
+#netz table.searchresults {
+	background:#13181D;
+	border-collapse:collapse;
+	width:95%;
+}
+
+#netz table.searchresults th {
+/*	background:#; */
+	border-bottom:1px dotted #848484;
+	font-weight:700;
+	padding:5px 0px;
+}
+
+.ptb10 { padding:10px 0px;}
+
+#netz table.searchresults td {	padding:2px 2px;	}
+#netz table.searchresults tr.alt td { background:#0D1014;	}
+#netz table.searchresults td.noResult { padding:10px 0px;}
+
+#netz table.searchresults td {text-align:right;}
+
+#netz table.searchresults tr.order th img {
+	width:7px;
+	height:4px;
+}
+
+#netz span.crucial,
+span.crucial {font-weight:700;}
+
+/* Subsection Tabs */
+/*--------------------*/
+
+#messages #netz ul.subsection_tabs {
+	list-style:none;
+	margin:0;
+	padding:0;
+	height:28px;
+	clear:both;
+	width:650px;
+}
+
+#messages #netz .contentz table.links tr.alt td {background-color: #0D1014; }
+
+#messages #netz ul.subsection_tabs li { overflow:hidden; }
+
+#messages #netz ul.subsection_tabs li span {
+	display:block;
+	padding:5px 0 0 0;
+}
+
+#messages #netz ul.subsection_tabs li span.msgSum {display:inline;}
+
+#messages #netz ul.subsection_tabs li {
+    width:108px;	
+    float:left;
+}
+
+#messages #netz ul.subsection_tabs li a {
+    background:url(http://gf1.geo.gfsrv.net/cdn2e/abe68ddd4ee6fbc2b83ab10c226d28.gif) no-repeat left 0;
+	color:#848484;
+    display:block;	
+	font-size:11px;
+    height:26px;
+    padding:0;	
+	text-decoration:none;
+	text-align:center;
+    width:108px;
+}
+
+#messages #netz .addressBook ul.subsection_tabs li {
+    width:160px;	
+    float:left;
+}
+
+#netz ul.subsection_tabs li a:link,
+#netz ul.subsection_tabs li a:visited,
+#netz ul.subsection_tabs li a:active {
+	color:#848484;
+}
+
+#netz ul.subsection_tabs li a:hover {color:#fff;}
+
+#messages #netz ul.subsection_tabs li a.active,
+#messages #netz ul.subsection_tabs li a:hover {
+	background:url(http://gf1.geo.gfsrv.net/cdn2e/abe68ddd4ee6fbc2b83ab10c226d28.gif) no-repeat -0px -26px;
+	color:#6f9fc8;
+}
+
+#messages #netz .contentz td select.choose,
+#netz .contentz td select.choose {
+	border:1px solid #515151;
+	background-color:#141E26;
+	color:#848484;
+	padding:0px;
+	margin:6px 0 0 5px;
+	width:275px;
+	vertical-align:top;
+	font-size:11px;
+}
+
+#messages #netz .contentz td select.choose:hover { background:#171E24;}
+
+#messages #netz .contentz td input.checker { border: 0px none;}
+
+#netz div.msg_content {
+    background-color:#14191F;
+    margin:4px 7px;
+    padding:15px 0;
+}
+
+#netz ul.register_tabs {border-bottom:none;}
+
+#netz ul.register_tabs li a.active {color:#fff;}
+
+#netz #inhalt div.sectioncontent div.contentdiv,
+#netz #inhalt div.sectioncontent div.contentz {
+	padding:0 10px 15px;
+	background:url(http://gf1.geo.gfsrv.net/cdn03/db530b4ddcbe680361a6f837ce0dd7.gif) repeat-y 0 0px;
+	margin-bottom:0px;
+	position:relative;
+}
+
+#netz #inhalt div.allyprefs .textfield {width:250px; }
+
+#netz #inhalt div.allyprefs .selectapplication { width:262px; padding-left:0px; padding-right:0px;}
+
+#netz .new_footer {
+	background:transparent url(http://gf1.geo.gfsrv.net/cdnbe/04a7b39dc27c29c4c2cadd3fd44ec0.gif) no-repeat;
+	display:block;
+	height:29px;
+	margin:0;
+	padding:0;
+}
+
+#netz #inhalt div.sectioncontent div.footer {
+	background:url(http://gf1.geo.gfsrv.net/cdne4/cb02983b460225f8c1eaa40139f5c1.gif) no-repeat 5px 0px;
+	display:none;
+	height:4px;
+	line-height:0px;
+	font-size:0px;
+	margin-bottom:5px;
+}
+
+#netz #tabs ul.tabsbelow li a:hover,
+#netz #tabs ul.tabsbelow li.aktiv{
+	color:#a7afb7;
+	background:url(http://gf1.geo.gfsrv.net/cdnec/a976293029e0bbb8edb219efe80fb5.gif) no-repeat 0px 0px;
+}
+
+#netz #alliance #tabs ul.tabsbelow li.aktiv{
+	color:#a7afb7;
+	background:url(http://gf1.geo.gfsrv.net/cdncc/7c8996be8a2ee3f64ddd96a9897e6d.gif) no-repeat 0px 0px;
+}
+
+#netz #inhalt #tabs ul.tabsbelow li.aktiv{
+	color:#fff;
+	background:url(http://gf1.geo.gfsrv.net/cdncc/7c8996be8a2ee3f64ddd96a9897e6d.gif) no-repeat 0px 0px;
+}
+
+#netz #tabs ul.tabsbelow li a span {
+	display:block;
+	padding-top:5px;
+}
+
+#netz #tabs ul.tabsbelow li.aktiv a span,
+#netz #inhalt #tabs ul.tabsbelow li a:hover,
+#netz #alliance #tabs ul.tabsbelow li a:hover {
+	background:none;
+	color:#fff;
+}
+
+#netz #tabs ul#tabsabove li a:link,
+#netz #tabs ul#tabsabove li a:visited {
+	color:#6f9fc8;
+	font-weight:700;
+	text-decoration:none;
+	display:block;
+	height:32px;
+}
+
+#netz #tabs ul#tabsabove li a:hover,
+#netz #tabs ul#tabsabove li a:active {
+	color:#fff;
+	padding: 0;
+	display:block;
+}
+
+#netz #alliance .createALLY input.button188 { 
+	height: 27px;
+	display:block;
+	line-height:27px;
+	margin: 0px auto; 
+	padding: 0px;	
+}
+
+.bewerbung .button188 {float:left;margin:10px;}
+
+#movement #sftcontainer {
+	background:url(http://gf1.geo.gfsrv.net/cdn85/e15f6af4946be6f9dbd999ccb0ec7b.gif) no-repeat 0 -400px;
+	height:282px;
+	margin:0px; 
+	overflow:hidden;	
+	padding-top:8px; 
+	width:669px;
+}
+
+select .underlined{
+    border-bottom:1px dashed #848484;
+    margin-bottom:5px;
+}
+
+#messageContent.noMessage {
+	background-color:#13181D; 
+	margin:0px; 
+	padding:20px 0px;
+}
+
+#messageContent.noMessage span {margin-left:10px;}
+
+a#newNote.button188 {
+	color:#0D1014;
+	display:block;
+	text-decoration:none;
+}
+
+#createNote {
+	width:669px;
+	height:375px;
+	background: url(http://gf1.geo.gfsrv.net/cdn31/6d9df44ffadc89257e9485c3bb59da.gif) no-repeat;
+	color:#848484;
+	font-size:11px;
+	position:relative;
+	line-height:14px;
+}
+
+#createNote h3 {
+	padding:0px;
+	font-weight:700;
+	color:#969696;
+	font-size:12px;
+	text-align:center;
+	line-height:32px;
+}
+
+#createNote a.close_details {
+	float:none;
+	margin:0px;
+	position:absolute;
+	left:639px; 
+	top:10px;
+}
+
+#createNote table {
+	width:90%;
+	margin:20px auto 0px;
+	font-weight:100;
+}
+
+#createNote textarea {
+	height:200px;
+	width:400px;
+	margin:0px;
+}
+
+#createNote td.value {	padding: 3px 0px 3px 5px;}
+
+#createNote .dropdown { font-size:12px; line-height:24px;}
+
+#createNote .textInput { padding: 3px 0px;}
+
+#ajaxLoad {
+    background: url(http://gf1.geo.gfsrv.net/cdnc2/af46a22d3943367992a4a77cb1e286.gif) no-repeat;
+    background-position: center left;
+    color:#848484;
+    margin: 0px auto 0 auto;
+    padding: 120px 0 0 10px;
+    width: 100px;
+    height: 125px;
+}
+
+#ajaxContent{ height:300px;}
+
+.preview {
+	bottom:18px;
+	position:absolute;
+	right:32px;
+ 	width:180px;
+}
+
+#box a.smallLink:hover { color:#9c0;}
+
+#messages tr.trigger{
+    height: 22px;
+    padding:4px 0;
+}
+
+#search.searchLayer .textInput {
+	background: #274650;
+	border: 1px solid #141A1E;
+	color:#848484;
+}
+
+#search.searchLayer #netz #inhalt ul.subsection_tabs {
+	margin:-1px 10px;
+	width:749px;
+}
+
+#search.searchLayer #netz #inhalt th { color:#6F9FC8;}
+
+#search.searchLayer #netz #inhalt td.action {padding-top:0px;}
+
+#search.searchLayer #netz #inhalt .contentz  {
+	width: 776px;
+	margin:0px auto;
+	padding:0;
+}
+#search.searchLayer td.noResult {
+	font-weight: bold;
+	text-align: center;
+	padding:10px 0px;
+}
+
+.pagebar {
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:11px;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:normal;
+	margin:0;
+	padding-bottom:5px;
+	padding-top:10px;
+	text-align:center;
+} 
+
+.pagebar a, 
+.pagebar a:link {
+	background:#000;
+	border:1px solid #22313B;
+	color:#6F9FC8;
+	padding:2px 6px;
+	text-decoration:none;
+}
+
+.pagebar a:hover {
+    background:#22313B;
+    border:1px solid #000;
+    font-weight: bold;
+}
+
+.activePager {
+    border:1px solid #000;
+    color: #FFFFFF;
+    background: #22313B;
+    font-weight: bold;
+    padding:2px 6px;
+}
+.pagebar a:hover {color:#9c0;}
+
+.pagebar b { padding:2px 6px;}
+
+.pagebar p { color:#9c0; margin:0px; padding:0px; text-align:center;}
+
+td.pagebar { padding:2px 0px; vertical-align: middle;}
+
+.addressBook .contentz {
+	background:#0d1014;
+	border-left:1px solid #000; 
+	border-right:1px solid #000; 
+	border-bottom:1px solid #000; 
+	margin:0px auto; 
+	padding: 5px 0px;
+	width:661px; 	
+}
+
+.addressBook .subsection_tabs {background:#0D1014;}
+
+.addressBook table.listMembers td.noUsers {
+	font-weight: 700;
+	padding: 10px 0px;
+	text-align:center;
+}
+
+#netz .addressBook table.listMembers {
+	border-collapse:collapse;
+	margin:10px auto;
+	width:620px;
+}
+
+#netz .addressBook table.listMembers td {padding:5px 0 5px 3px;}
+
+#netz .addressBook table.listMembers th {
+	border-bottom:1px dotted #3F4E61;
+	padding:5px 0 5px 3px;
+}
+
+.addressBook table.listMembers tr.alt td {background: #13181D;}
+
+#netz .addressBook table.listMembers th.date,
+#netz .addressBook table.listMembers td.date {
+	padding:5px 10px 5px 0;
+	text-align:right;
+}
+
+#netz .contentz table td.actions {
+	padding:5px 10px 5px 0;
+	text-align:right;
+}
+
+a.deleteIt, a.shareReport, a.hideReport {
+	float:left;
+	height:16px;
+	width:16px;
+	margin:0 5px 0 0;
+}
+
+.shareReport{background: url(http://gf1.geo.gfsrv.net/cdn98/41d4162c26d63b52ae9154f0042066.gif) no-repeat;}
+
+.hideReport{background: url(http://gf1.geo.gfsrv.net/cdn2d/4cb615d0dba32729d480d658d5125f.gif) no-repeat;}
+
+.message {
+    word-break: break-all;
+    word-wrap: break-word;
+}

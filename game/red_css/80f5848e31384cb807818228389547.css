@@ -1,0 +1,85 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* */
+
+#ie_message {
+	background:#000;
+	border-bottom:2px solid #6F9FC8;
+	display:block;	
+	font:bold 11px Arial;
+	line-height:16px;
+	padding:5px 10px;
+	text-align:center;
+}
+
+#ie_message a:link,
+#ie_message a:visited,
+#ie_message a:hover,
+#ie_message a:active {	color:#6F9FC8;}	
+
+#ie_message a:hover { color: #FCCE00;}
+
+#ie_message img { 
+	margin-right: 5px;
+	vertical-align:middle;
+}
+
+#cluetip {
+	z-index:5;
+}
+
+/* FadeBox */
+
+.fadeBox {
+   position:relative;
+   margin:-85px 0 0 -150px;
+}
+
+/* Imperium */
+
+#imperiumb div.content table#planets table#data {
+	background:url(http://gf1.geo.gfsrv.net/cdnd7/8e6d64713f8aa28719c9db2a795d10.gif) repeat-y 5px 0px;
+}
+
+#imperiumb div.content table#planets table#data td.desc-footer {
+	background:url(http://gf1.geo.gfsrv.net/cdn38/7e49a18c9d3aaca2ef0b4410d93371.gif) no-repeat 5px 0px;
+	height:5px;
+}
+
+#imperiumb div.content table#planets tr.resource td.switch {
+	background:url(http://gf1.geo.gfsrv.net/cdn34/602f335077884f9af0c914c433291e.gif) no-repeat 0px;
+	cursor:pointer;
+}
+
+#TTWrapper div.TTInner th span.spacing,
+#TTWrapper div.TTInner td span.spacing {
+	display:block;
+	margin-top:2px;
+}
+
+#techtree ul.subsection_tabs li {
+	margin-top:2px;
+}
+
+
+#statistics #row div.buttons a{
+	overflow:hidden;
+}
+
+/* Netzwerk -> Allianz */
+
+#netz #tabs ul.tabsbelow {
+	height:21px;
+}
+
+#netz .new_footer {
+	position:relative;
+	top:-20px;
+}
+
+#netz #inhalt div.section {
+	position:relative;
+	left:20px;
+	margin-left:0;
+}

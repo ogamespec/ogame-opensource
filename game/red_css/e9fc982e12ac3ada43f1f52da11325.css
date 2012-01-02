@@ -1,0 +1,492 @@
+#exodus-indicator {
+    position: relative;
+    width: 138px;
+    height: 63px;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    background: url(http://gf1.geo.gfsrv.net/cdn1b/475a1ccd7c3d81e9bb757f1548557a.png);
+    cursor: pointer;
+}
+
+#exodus-indicator div {
+    position: absolute;
+    left: 47px;
+    top: 21px;
+
+    width: 35px;
+    height: 20px;
+
+    background-position: 0 0;
+    background-repeat: no-repeat;
+}
+
+#exodus-indicator-acknowledged {
+    background-image: url(http://gf1.geo.gfsrv.net/cdnff/95a15ec4094e2f5ba1f12349d302eb.png);
+}
+
+#exodus-indicator-waiting {
+    background-image: url(http://gf1.geo.gfsrv.net/cdnc9/a64bb7a1b9620875f071a00c08b64e.gif);
+}
+
+#exodus-indicator-processed {
+    position: relative;
+    width: 138px;
+    height: 63px;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    background: url(http://gf1.geo.gfsrv.net/cdn0c/635528fe5c717cda8a97c8f16dd36f.png);
+    cursor: pointer;
+}
+
+#exodus-overlay {
+    z-index: 999;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    background-color: #000000;
+
+    opacity: 0.75;
+    filter: alpha(opacity=75);
+}
+
+#exodus-dialog {
+    z-index: 1000;
+
+    position: absolute;
+    left: 50%;
+    top: 50px;
+
+    width: 793px;
+    margin-left: -398px;
+
+    background-color: #0d1014;
+    border: 1px solid #000000;
+    text-align: left;
+
+    -moz-box-shadow: 0 0 0 1px #0d1014, 0 0 0 3px #000000, 0 0 4px 3px #ffffff;
+    -webkit-box-shadow: 0 0 0 1px #0d1014, 0 0 0 3px #000000, 0 0 4px 3px #ffffff;
+    box-shadow: 0 0 0 1px #0d1014, 0 0 0 3px #000000, 0 0 4px 3px #ffffff;
+
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#exodus-close {
+    position: absolute;
+    top: 0px;
+    right: 3px;
+
+    height: 17px;
+    width: 17px;
+    overflow: hidden;
+
+    background: url(http://gf1.geo.gfsrv.net/cdn8f/3dcffd80659f0cdd72cb8e922d0f5b.png) 0 0 no-repeat;
+    cursor: pointer;
+}
+
+#exodus-close:hover {
+    background-position: 0 -17px;
+}
+
+#exodus-header {
+    height: 35px;
+    overflow: hidden;
+    margin: 2px 4px 0 2px;
+
+    background: url(http://gf1.geo.gfsrv.net/cdn52/a2521ce1d8e2bc37d89c654a1c1382.png) 0 -35px repeat-x;
+}
+
+#exodus-header-content {
+    position: relative;
+    display: inline-block;
+
+    height: 33px;
+    overflow: hidden;
+    padding: 6px 30px 0 30px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    background: url(http://gf1.geo.gfsrv.net/cdn52/a2521ce1d8e2bc37d89c654a1c1382.png) 0 -70px repeat-x;
+
+    text-shadow: #000000 -1px -1px 2px;
+}
+
+#exodus-header-content:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 30px;
+    height: 35px;
+    overflow: hidden;   
+    content: '';
+
+    background: url(http://gf1.geo.gfsrv.net/cdn52/a2521ce1d8e2bc37d89c654a1c1382.png) 0 -105px no-repeat;
+}
+
+#exodus-header-content:after {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    width: 30px;
+    height: 35px;
+    overflow: hidden;
+    content: '';
+
+    background: url(http://gf1.geo.gfsrv.net/cdn52/a2521ce1d8e2bc37d89c654a1c1382.png) 0 0 no-repeat;
+}
+
+#exodus-content {
+    margin: 2px 4px 4px 4px;
+    padding: 5px 7px;
+
+    background-color: #14181d;
+    border-top: 2px solid #16202a;
+}
+
+#exodus-top-content {
+    padding: 2px 5px 5px 5px;
+    margin-bottom:10px;
+
+}
+
+#exodus-tab-content {
+    padding: 5px;
+
+    border: 1px solid #000000;
+    background-color: #0d1014;
+}
+
+#exodus-ally-content {
+    padding: 5px;
+
+    border: 1px solid #000000;
+    background-color: #0d1014;
+}
+
+#exodus-rules-content {
+    padding: 5px;
+
+    border: 1px solid #000000;
+    background-color: #0d1014;
+}
+
+
+
+/* Tab bar */
+#exodus-tab-bar {
+    margin: 0 0 -1px 0;
+    padding: 0 15px;
+
+    list-style-type: none;
+}
+
+#exodus-tab-bar li {
+    display: inline-block;
+    height: 22px;
+    
+    padding: 3px 5px 0 5px;
+    margin: 0 6px;
+
+    color: #768078;
+    cursor: pointer;
+}
+
+#exodus-tab-bar li.selected {
+    position: relative;
+    
+    background: url(http://gf1.geo.gfsrv.net/cdn2f/0b57b4a1e2f4391194b46c9e0dfb25.gif) 0 -50px repeat-x;
+    color: #6f9fc8;
+}
+
+#exodus-tab-bar li.selected:before {
+    position: absolute;
+    top: 0;
+    left: -6px;
+
+    width: 6px;
+    height: 25px;
+    overflow: hidden;
+    content: '';
+
+    background: url(http://gf1.geo.gfsrv.net/cdn2f/0b57b4a1e2f4391194b46c9e0dfb25.gif) 0 0 no-repeat;
+}
+
+#exodus-tab-bar li.selected:after {
+    position: absolute;
+    top: 0;
+    right: -6px;
+
+    width: 6px;
+    height: 25px;
+    overflow: hidden;
+    content: '';
+
+    background: url(http://gf1.geo.gfsrv.net/cdn2f/0b57b4a1e2f4391194b46c9e0dfb25.gif) 0 -25px no-repeat;
+}
+
+/* Universe treeview */
+#exodus-universe-treeview-header {
+    padding: 4px 8px;
+
+    background-color: #13181c;
+}
+
+#exodus-universe-treeview-header span {
+    display: inline-block;
+    vertical-align: middle;
+
+    color: #6f9fc8;
+    font-weight: bold;
+}
+
+#exodus-universe-treeview {
+    height: 240px;
+
+    margin: 0;
+    padding: 0;
+
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    list-style-type: none;
+    border-top: 1px dotted #4c5157;
+    border-bottom: 1px dotted #4c5157;
+}
+
+#exodus-universe-treeview li {
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+#exodus-universe-treeview li.even {
+    background-color: #13181c;
+}
+
+#exodus-universe-treeview li span {
+    display: inline-block;
+    vertical-align: top;
+}
+
+#exodus-universe-treeview-header .exodus-universe-treeview-column-checkbox {
+    font-size: 20px;
+}
+
+.exodus-universe-treeview-column-checkbox {
+    width: 30px;
+    padding-top: 1px;
+}
+
+.exodus-universe-treeview-column-checkbox span {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+
+    background: url(http://gf1.geo.gfsrv.net/cdn7f/ef81f2e2dd4e90f14192ba5886b361.gif) no-repeat;
+}
+
+.exodus-universe-treeview-column-name {
+    width: 120px;
+}
+
+.exodus-universe-treeview-column-startdate {
+    width: 100px;
+}
+
+.exodus-universe-treeview-column-players {
+    width: 100px;
+}
+
+.exodus-universe-treeview-column-free-spaces {
+    width: 120px;
+}
+
+.exodus-universe-treeview-column-features {
+    width: 340px;
+}
+
+#exodus-universe-treeview li.row-selected {
+    background-color: #2d4153;
+}
+
+#exodus-universe-treeview li.row-selected .exodus-universe-treeview-column-checkbox span {
+    background-position: 0px 0;
+}
+
+#exodus-universe-treeview li.server-selected .exodus-universe-treeview-column-checkbox span {
+    background-position: -16px 0;
+}
+
+#exodus-universe-treeview li.disabled .exodus-universe-treeview-column-checkbox span {
+    background-position: -32px 0;
+}
+
+#exodus-next-migration {
+    border: 1px solid #6F9FC8;
+    margin-left:    10px;
+    padding-left:   5px;
+    padding-right:  5px;
+    padding-top:    1px;
+    padding-bottom: 1px;
+    color: #6F9FC8
+}
+
+/* Error */
+.exodus-error {
+    display: inline-block;
+    padding: 3px 0 3px 30px;
+    
+    color: #a0090b;
+}
+
+.exodus-error b {
+    font-weight: bold;
+}
+
+/* Button style */
+.exodus-button {
+    display: inline-block;
+
+    margin: 10px;
+    height: 38px;
+
+    text-shadow: #000000 0 0  1px;
+    cursor: default;
+}
+
+.exodus-button.confirm,
+.exodus-button.cancel {
+    cursor: pointer;
+}
+
+.exodus-button div {
+    display: inline-block;
+    height: 38px;
+
+    vertical-align: middle;
+    
+    background-image: url(http://gf1.geo.gfsrv.net/cdnd5/57498199ca04368fe6432d66ea71c9.gif);
+}
+
+.exodus-button .exodus-button-left,
+.exodus-button .exodus-button-right {
+    width: 20px;
+    overflow: hidden;
+
+    background-repeat: no-repeat;
+}
+
+.exodus-button .exodus-button-label {
+    height: 29px;
+    padding-top: 9px;
+
+    background-repeat: repeat-x;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* Inactive */
+.exodus-button .exodus-button-left {
+    background-position: 0 -152px;
+}
+
+.exodus-button .exodus-button-right {
+    background-position: -20px -152px;
+}
+
+.exodus-button .exodus-button-label {
+    background-position: 0 -380px;
+}
+
+.exodus-button:hover .exodus-button-left {
+    background-position: 0 -190px;
+}
+
+.exodus-button:hover .exodus-button-right {
+    background-position: -20px -190px;
+}
+
+.exodus-button:hover .exodus-button-label {
+    background-position: 0 -418px;
+}
+
+/* Confirm */
+.exodus-button.confirm .exodus-button-left {
+    background-position: 0 0;
+}
+
+.exodus-button.confirm .exodus-button-right {
+    background-position: -20px 0;
+}
+
+.exodus-button.confirm .exodus-button-label {
+    background-position: 0 -228px;
+}
+
+.exodus-button.confirm:hover .exodus-button-left {
+    background-position: 0 -38px;
+}
+
+.exodus-button.confirm:hover .exodus-button-right {
+    background-position: -20px -38px;
+}
+
+.exodus-button.confirm:hover .exodus-button-label {
+    background-position: 0 -266px;
+}
+
+/* Cancel */
+.exodus-button.cancel .exodus-button-left {
+    background-position: 0 -76px;
+}
+
+.exodus-button.cancel .exodus-button-right {
+    background-position: -20px -76px;
+}
+
+.exodus-button.cancel .exodus-button-label {
+    background-position: 0 -304px;
+}
+
+.exodus-button.cancel:hover .exodus-button-left {
+    background-position: 0 -114px;
+}
+
+.exodus-button.cancel:hover .exodus-button-right {
+    background-position: -20px -114px;
+}
+
+.exodus-button.cancel:hover .exodus-button-label {
+    background-position: 0 -342px;
+}
+
+.exodus-rule-title {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.exodus-rule-description {
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    text-align: justify;
+}
+
+#exodus-timer.end-soon {
+    color: red;
+}
