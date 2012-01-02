@@ -229,6 +229,10 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
 if ( $_GET['mode'] === "Forschung" )
 {
+    $prem = PremiumStatus ($GlobalUser);
+    if ( $prem['technocrat'] ) $r_factor = 1.1;
+    else $r_factor = 1.0;
+
     // Проверить не строится ли Исследовательская лаборатория.
     $result = GetBuildQueue ( $aktplanet['planet_id'] );
     $queue = dbarray ( $result );
@@ -265,7 +269,11 @@ if ( $_GET['mode'] === "Forschung" )
             echo "                </a>\n";
             echo "                </td>\n";
             echo "        <td class=l><a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
-            if ($GlobalUser['r'.$id]) echo "</a> (уровень ".$GlobalUser['r'.$id].")";
+            if ($GlobalUser['r'.$id]) echo "</a> (уровень ".$GlobalUser['r'.$id];
+            if ( $id == 106 && $prem['technocrat'] ) { 
+                echo " <b><font style=\"color:lime;\">+2</font></b> <img border=\"0\" src=\"img/technokrat_ikon.gif\" alt=\"Технократ\" onmouseover=\"return overlib('<font color=white>Технократ</font>', WIDTH, 100);\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
+            }
+            if ($GlobalUser['r'.$id]) echo ")";
             $m = $k = $d = $e = 0;
             ResearchPrice ( $id, $level, &$m, &$k, &$d, &$e );
             echo "<br>".loca("SHORT_$id")."<br>Стоимость:";
@@ -273,7 +281,7 @@ if ( $_GET['mode'] === "Forschung" )
             if ($k) echo " Кристалл: <b>".nicenum($k)."</b>";
             if ($d) echo " Дейтерий: <b>".nicenum($d)."</b>";
             if ($e) echo " Энергия: <b>".nicenum($e)."</b>";
-            $t = ResearchDuration ( $id, $level, $reslab, $speed );
+            $t = ResearchDuration ( $id, $level, $reslab, $speed * $r_factor );
             echo "<br>Длительность: ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k>";
             if ( $operating )        // Исследование проводится

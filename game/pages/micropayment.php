@@ -37,7 +37,7 @@ function OfficerLeft ( $qcmd )
 // Обработать GET-запрос.
 if ( key_exists ( 'buynow', $_GET ) )
 {
-    $qcmd = array ( 1 => "CommanderOff", 2 => "AdmiralOff", 3 => "EngineerOff", 4 => "GeologeOff", 5 => "GeologeOff" );
+    $qcmd = array ( 1 => "CommanderOff", 2 => "AdmiralOff", 3 => "EngineerOff", 4 => "GeologeOff", 5 => "TechnocrateOff" );
     $type = intval ( $_GET['type'] );
     $days = intval ( $_GET['days'] );
     if ( $days == 7 || $days == 90 )
