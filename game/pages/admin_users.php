@@ -61,6 +61,9 @@ function Admin_Users ()
             $query .= "sniff = ".($_POST['sniff']==="on"?1:0).", ";
             $query .= "debug = ".($_POST['debug']==="on"?1:0).", ";
 
+            $query .= "dm = '".$_POST['dm']."', ";
+            $query .= "dmfree = '".$_POST['dmfree']."', ";
+
             $query .= "sortby = '".$_POST['settings_sort']."', ";
             $query .= "sortorder = '".$_POST['settings_order']."', ";
             $query .= "skin = '".$_POST['dpath']."', ";
@@ -72,6 +75,13 @@ function Admin_Users ()
 
             $query .= " WHERE player_id=$player_id;";
             dbquery ($query);
+
+            $qname = array ( 'CommanderOff', 'AdmiralOff', 'EngineerOff', 'GeologeOff', 'TechnocrateOff' );
+            foreach ( $qname as $i=>$qcmd )
+            {
+                $days = intval ( $_POST[$qcmd] );
+                if ( $days > 0 ) RecruitOfficer ( $player_id, $qcmd, $days * 24 * 60 * 60 );
+            }
         }
 
         if ($action === "create_planet")        // Создать планету
@@ -214,7 +224,47 @@ function Admin_Users ()
             <tr><th>Флот</th><th><?=nicenum($user['score2']);?> / <?=nicenum($user['place2']);?></th></tr>
             <tr><th>Исследования</th><th><?=nicenum($user['score3']);?> / <?=nicenum($user['place3']);?></th></tr>
             <tr><th>Дата старой статистики</th><th><?=date ("Y-m-d H:i:s", $user['scoredate']);?></th></tr>
-            <tr><th colspan=2><a href="index.php?page=admin&session=<?=$session;?>&mode=Users&action=recalc_stats&player_id=<?=$user['player_id'];?>" >Пересчитать статистику</a></th></tr>
+            <tr><th colspan=2><a href="index.php?page=admin&session=<?=$session;?>&mode=Users&action=recalc_stats&player_id=<?=$user['player_id'];?>" >[Пересчитать статистику]</a></th></tr>
+
+            <tr><th colspan=2>&nbsp</th></tr>
+            <tr><td class=c colspan=2>Офицеры</td></tr>
+            <tr><th colspan=2><table><tr>
+<?php
+    $oname = array ( 'Командир ОГейма', 'Адмирал', 'Инженер', 'Геолог', 'Технократ' );
+    $odesc = array ( '', 
+                             '<font size=1 color=skyblue>&amp;nbsp;Макс. кол-во флотов +2</font>', 
+                             '<font size=1 color=skyblue>Сокращает вдвое потери в обороне+10% больше энергии</font>',
+                             '<font size=1 color=skyblue>+10% доход от шахты</font>',
+                             '<font size=1 color=skyblue>+2 уровень шпионажа, 25% меньше времени на исследования</font>' );
+    $qname = array ( 'CommanderOff', 'AdmiralOff', 'EngineerOff', 'GeologeOff', 'TechnocrateOff' );
+    $imgname = array ( 'commander', 'admiral', 'ingenieur', 'geologe', 'technokrat');
+
+    $now = time ();
+
+    foreach ( $qname as $i=>$qcmd )
+    {
+        $end = GetOfficerLeft ( $user['player_id'], $qname[$i] );
+
+        $img = "";
+        if ($end <= $now) {
+            $img = "_un";
+            $days = "";
+        }
+        else {
+            $d = ($end - $now) / (60*60*24);
+            if ( $d  > 0 ) $days = "&lt;font color=lime&gt;Активен&lt;/font&gt; ещё ".ceil($d)." д.";
+        }
+
+        echo "    <td align='center' width='35' class='header'>\n";
+        echo "	<img border='0' src='img/".$imgname[$i]."_ikon".$img.".gif' width='32' height='32' alt='".$oname[$i]."'\n";
+        echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days."<br>".$oname[$i]."</font><br>".$odesc[$i]."<br></b></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
+        echo "    </td> <td><input type=\"text\" name=\"".$qname[$i]."\" size=\"3\" /></td>\n\n";
+    }
+?>
+        </tr></table></th></tr>
+
+            <tr><th colspan=2><i>Чтобы продлить офицера укажите необходимое количество дней в полях ввода</i></th></tr>
+
         </table></th>
 
         <th valign=top><table>
@@ -223,6 +273,8 @@ function Admin_Users ()
             echo "<tr><th>".loca("NAME_$gid")."</th><th><input type=\"text\" size=3 name=\"r$gid\" value=\"".$user["r$gid"]."\" /></th></tr>\n";
         }
 ?>
+        <tr><th>Найденная Тёмная Материя</th><th><input type="text" size=5 name="dmfree" value="<?=$user['dmfree'];?>" /></th></tr>
+        <tr><th>Покупная Тёмная Материя</th><th><input type="text" size=5 name="dm" value="<?=$user['dm'];?>" /></th></tr>
         </table></th>
     <tr><th colspan=3><input type="submit" value="Сохранить" /></th></tr>
     </form>
