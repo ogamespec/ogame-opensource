@@ -208,6 +208,9 @@ function CreateUser ( $name, $pass, $email)
     if ( $ip !== "127.0.0.1" ) SendGreetingsMail ( $origname, $pass, $email, $ack);
     SendGreetingsMessage ( $id);
 
+    // Активировать Командира на 9999 дней.
+    RecruitOfficer ( $id, 'CommanderOff', 9999 * 24 * 60 * 60 );
+
     // Удалить неактивированного пользователя через 3 дня.
 
     return $id;
