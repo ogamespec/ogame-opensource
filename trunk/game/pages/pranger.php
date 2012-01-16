@@ -2,6 +2,10 @@
 
 // Столб позора.
 
+    // Добавить пользователя на столб позора
+//    $entry = array( '', $admin_name, $user_name, $ban_when, $ban_until, $reason );
+//    AddDBRow ( $entry, "pranger" );
+
 $internal = key_exists ( 'session', $_GET );
 
 if ($internal)
@@ -34,6 +38,8 @@ else
     loca_add ( "menu", 'ru' );
 }
 
+$uni = LoadUniverse ();
+
 // ************************************************************************************
 ?>
 
@@ -49,7 +55,7 @@ else
    <body>
    <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
   <center>
-   <h1>Позорный столб 20</h1>
+   <h1>Позорный столб <?=$uni['num'];?></h1>
    <p>Здесь написано кто, почему и на сколько заблокирован. 
 <br />Блокировка со стороны Совета Админов и системы НЕ обсуждается. 
 <br />Внимание! С автоматической темой сообщения Ваше сообщение будет обработано быстрее.</p>
@@ -62,19 +68,34 @@ else
      <td class="c">Заблокирован до</td>
      <td class="c">Причина</td>
     </tr>
-        <tr height="20">
-     <th>Fri Jun 25 2010 19:51:40 </th>
 
-          <th>
-       Oceolot     </th>
-     
-     <th>Skywolf</th>
-     <th>Sat Jun 26 2010 19:51:40</th>
-     <th>Beleidigung</th>
-    </tr>
+<?php
+    $from = intval ( $_GET['from'] );
+    $query = "SELECT * FROM ".$db_prefix."pranger ORDER BY ban_when DESC LIMIT $from, 50";
+    $result = dbquery ($query);
+    $total = $rows = dbrows ( $result );
+    while ( $rows-- )
+    {
+        $entry = dbarray ( $result );
+        echo "        <tr height=\"20\">\n";
+        echo "     <th>".date("D M j Y G:i:s", $entry['ban_when'])." </th>\n\n";
+        echo "          <th>\n";
+        echo "       ".$entry['admin_name']."     </th>\n\n";
+        echo "     <th>".$entry['user_name']."</th>\n";
+        echo "     <th>".date("D M j Y G:i:s", $entry['ban_until'])."</th>\n";
+        echo "     <th>".$entry['reason']."</th>\n";
+        echo "    </tr>\n";
+    }
+
+?>
        <tr>
    <th colspan="5">
-        <a href="pranger.php?from=50">Следующие 50 >></a>
+<?php
+    if ($internal) $pranger_url = "index.php?page=pranger&session=$session&from";
+    else $pranger_url = "pranger.php?from";
+    if ($from >= 50) echo "     <a href=\"".$pranger_url."=".($from-50)."\"><< Предыдущие 50</a>&nbsp;&nbsp;&nbsp;&nbsp;\n";
+    if ($total >= 50) echo "        <a href=\"".$pranger_url."=".($from+50)."\">Следующие 50 >></a>\n";
+?>
       </th>
    </tr>
    </table>
