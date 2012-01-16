@@ -35,7 +35,7 @@ if (file_exists ("config.php"))
 // Сохранить настройки.
 if ( key_exists("install", $_POST) && CheckParameters() )
 {
-    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','fleet','union','battledata','fleetlogs','iplogs');
+    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','fleet','union','battledata','fleetlogs','iplogs','pranger');
     $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','usercount','freeze',
                               'news1', 'news2', 'news_until', 'startdate', 'battle_engine' );
     $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
@@ -106,8 +106,10 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                              'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
     $iplogscols = array ( 'log_id', 'ip', 'user_id', 'reg', 'date' );
     $iplogstype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'CHAR(16)', 'INT', 'INT', 'INT UNSIGNED' );
-    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$browsecols, &$queuecols, &$fleetcols, &$unioncols, &$battledatacols, &$fleetlogscols, &$iplogscols);
-    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$debugtype, &$browsetype, &$queuetype, &$fleettype, &$uniontype, &$battledatatype, &$fleetlogstype, &$iplogstype);
+    $prangercols = array ( 'ban_id', 'admin_name', 'user_name', 'ban_when', 'ban_until', 'reason' );
+    $prangertype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'CHAR(20)', 'CHAR(20)', 'INT UNSIGNED', 'INT UNSIGNED', 'TEXT' );
+    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$browsecols, &$queuecols, &$fleetcols, &$unioncols, &$battledatacols, &$fleetlogscols, &$iplogscols, &$prangercols);
+    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$debugtype, &$browsetype, &$queuetype, &$fleettype, &$uniontype, &$battledatatype, &$fleetlogstype, &$iplogstype, &$prangertype);
     $now = time();
 
     //print_r ($_POST);
