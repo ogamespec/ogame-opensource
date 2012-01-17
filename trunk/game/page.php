@@ -462,7 +462,7 @@ function LeftMenu ()
     echo " <tr>\n";
     echo "  <td>\n";
     echo "   <div align='center'><font color='#FFFFFF'>\n";
-    echo "    <a href='http://oldogame.ru/impressum.php' target='_blank'>".loca("MENU_IMPRESSUM")."</a> <!-- external link to impressum -->\n";
+    echo "    <a href='".hostname()."impressum.php' target='_blank'>".loca("MENU_IMPRESSUM")."</a> <!-- external link to impressum -->\n";
     echo "   </font></div>\n";
     echo "  </td>\n";
     echo " </tr>\n\n";

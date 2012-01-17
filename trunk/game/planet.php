@@ -389,12 +389,12 @@ function AbandonPlanet ($g, $s, $p, $now=0)
     global $db_prefix;
     if ( $now == 0) $now = time ();
 
-    // Если на заданных координатах нет планеты, то добавить Покинутую планету.
+    // Если на заданных координатах нет планеты, то добавить Покинутую колонию.
     $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( type <> 0 AND type <> 10000 AND type <> 10002 AND type <> 10003 );";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 ) 
     {
-        $planet = array( '', "Покинутая  планета", 10001, $g, $s, $p, 99999, 0, 0, 0, 0, $now,
+        $planet = array( '', "Покинутая колония", 10001, $g, $s, $p, 99999, 0, 0, 0, 0, $now,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
