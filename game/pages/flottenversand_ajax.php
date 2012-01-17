@@ -54,6 +54,7 @@ if ( $order == 6 && ! ($planettype == 1 || $planettype == 3) )  AjaxSendError ()
 if ( $galaxy < 1 || $galaxy > $uni['galaxies'] ) AjaxSendError ();    // неправильные координаты (Галактика)
 if ( $system < 1 || $system > $uni['systems'] ) AjaxSendError ();    // неправильные координаты (Система)
 if ( $planet < 1 || $planet > 15 ) AjaxSendError ();    // неправильные координаты (Позиция)
+if ( $GlobalUser['vacation'] ) AjaxSendError (605);    // игрок в режиме отпуска
 
 // Проверить свободные слоты
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
