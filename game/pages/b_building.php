@@ -114,10 +114,11 @@ for ( $i=0; $i<$cnt; $i++ )
     if ($i == 0) $queue0 = $queue;
     if ( $prem['commander'] )
     {
-        echo "<tr><td class=\"l\" colspan=\"2\">".($i+1).".: ".$desc[$queue['obj_id']]. " ".$queue['type']. " ".date ( "D M j G:i:s", $queue['end'])." , уровень ".$queue['level'];
+        echo "<tr><td class=\"l\" colspan=\"2\">".($i+1).".: ".loca("NAME_".$queue['obj_id']). " , уровень ".$queue['level'];
+        if ( $queue['type'] === "Demolish" ) echo "\n Снести";
         if ($i==0) {
             echo "<td class=\"k\"><div id=\"bxx\" class=\"z\"></div><SCRIPT language=JavaScript>\n";
-            echo "                  pp=\"".($queue['end']-$queue['start'])."\"\n";
+            echo "                  pp=\"".($queue['end']-$now)."\"\n";
             echo "                  pk=\"1\"\n";
             echo "                  pm=\"remove\"\n";
             echo "                  pl=\"".$aktplanet['planet_id']."\"\n";
