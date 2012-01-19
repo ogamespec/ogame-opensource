@@ -32,6 +32,14 @@ if (file_exists ("config.php"))
     exit ();
 }
 
+function gen_trivial_password ($len = 8)
+{
+    $r = '';
+    for($i=0; $i<$len; $i++)
+        $r .= chr(rand(0, 25) + ord('a'));
+    return $r;
+}
+
 // Сохранить настройки.
 if ( key_exists("install", $_POST) && CheckParameters() )
 {
@@ -40,7 +48,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                               'news1', 'news2', 'news_until', 'startdate', 'battle_engine' );
     $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
                               'TEXT', 'TEXT', 'INT UNSIGNED', 'INT UNSIGNED', 'TEXT' );
-    $usercols = array ( 'player_id', 'regdate', 'ally_id', 'joindate', 'allyrank', 'session', 'private_session', 'name', 'oname', 'name_changed', 'name_until', 'password', 'pemail', 'email',
+    $usercols = array ( 'player_id', 'regdate', 'ally_id', 'joindate', 'allyrank', 'session', 'private_session', 'name', 'oname', 'name_changed', 'name_until', 'password', 'temp_pass', 'pemail', 'email',
                         'email_changed', 'email_until', 'disable', 'disable_until', 'vacation', 'vacation_until', 'banned', 'banned_until', 'noattack', 'noattack_until',
                         'lastlogin', 'lastclick', 'ip_addr', 'validated', 'validatemd', 'hplanetid', 'admin', 'sortby', 'sortorder',
                         'skin', 'useskin', 'deact_ip', 'maxspy', 'maxfleetmsg', 'lang', 'aktplanet',
@@ -48,7 +56,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                         'score1', 'score2', 'score3', 'place1', 'place2', 'place3',
                         'oldscore1', 'oldscore2', 'oldscore3', 'oldplace1', 'oldplace2', 'oldplace3', 'scoredate',
                         'r106', 'r108', 'r109', 'r110', 'r111', 'r113', 'r114', 'r115', 'r117', 'r118', 'r120', 'r121', 'r122', 'r123', 'r124', 'r199' );
-    $usertype = array (  'INT AUTO_INCREMENT PRIMARY KEY', 'INT UNSIGNED', 'INT', 'INT', 'INT UNSIGNED', 'CHAR(12)', 'CHAR(32)', 'CHAR(20)', 'CHAR(20)', 'INT', 'INT UNSIGNED', 'CHAR(32)', 'CHAR(50)', 'CHAR(50)',
+    $usertype = array (  'INT AUTO_INCREMENT PRIMARY KEY', 'INT UNSIGNED', 'INT', 'INT', 'INT UNSIGNED', 'CHAR(12)', 'CHAR(32)', 'CHAR(20)', 'CHAR(20)', 'INT', 'INT UNSIGNED', 'CHAR(32)', 'CHAR(32)', 'CHAR(50)', 'CHAR(50)',
                          'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 
                          'INT UNSIGNED', 'INT UNSIGNED', 'CHAR(15)', 'INT', 'CHAR(32)', 'INT', 'INT', 'INT', 'INT',
                          'CHAR(80)', 'INT', 'INT', 'INT', 'INT', 'CHAR(4)', 'INT',
@@ -162,8 +170,9 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     dbquery ($query);
 
     // Создать технический аккаунт "space"
+    $md = md5 ( gen_trivial_password() . $_POST['db_secret'] );
     $opt = " (";
-    $user = array( 99999, $now, 0, 0, 0, "",  "", "space", "space", 0, 0, "", "", "",
+    $user = array( 99999, $now, 0, 0, 0, "",  "", "space", "space", 0, 0, $md, "", "", "",
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, "0.0.0.0", 1, "", 1, 2, 0, 0,
                         hostname() . "evolution/", 1, 1, 1, 3, 'ru', 0,
@@ -183,7 +192,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     // Создать администраторский аккаунт (Legor).
     $md = md5 ($_POST['admin_pass'] . $_POST['db_secret']);
     $opt = " (";
-    $user = array( 1, $now, 0, 0, 0, "",  "", "legor", "Legor", 0, 0, $md, $_POST['admin_email'], $_POST['admin_email'],
+    $user = array( 1, $now, 0, 0, 0, "",  "", "legor", "Legor", 0, 0, $md, "", $_POST['admin_email'], $_POST['admin_email'],
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, "0.0.0.0", 1, "", 1, 2, 0, 0,
                         hostname() . "evolution/", 1, 1, 1, 3, 'ru', 1,
