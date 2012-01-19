@@ -15,6 +15,7 @@ oname: Имя пользователя оригинальное (CHAR(20))
 name_changed: Имя пользователя изменено? (1 или 0) (INT)
 Q name_until: Когда можно поменять имя пользователя в следующий раз (INT UNSIGNED)
 password: MD5-хеш пароля и секретного слова (CHAR(32))
+temp_pass: MD5-хеш пароля для восстановления и секретного слова (CHAR(32))
 pemail: Постоянный почтовый адрес (CHAR(50))
 email: Временный почтовый адрес (CHAR(50))
 email_changed: Временный почтовый адрес изменен (INT)
@@ -170,7 +171,7 @@ function CreateUser ( $name, $pass, $email)
     $ip = $_SERVER['REMOTE_ADDR'];
     $lang = "ru";
 
-    $user = array( '', time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, $email, $email,
+    $user = array( '', time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, "", $email, $email,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, $ip, 0, $ack, 0, 0, 0, 0,
                         hostname() . "evolution/", 1, 0, 1, 3, $lang, 0,

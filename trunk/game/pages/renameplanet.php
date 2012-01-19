@@ -68,8 +68,8 @@ if ( key_exists("page", $_POST) && $_POST['page'] === "renameplanet")
         if ( CheckPassword ( $GlobalUser['name'], $_POST['pw']) == 0 )
         {
             $RenameError = "<center>\n" . 
-                                   "Пароль неверный.<BR><BR>  Если Вы забыли пароль, нажмите <A HREF=mail.php>сюда</A> <BR><BR>  или  попробуйте <a\n" .
-                                   "href=".$Host." target='_top'> ещё раз</a> .<br></center>\n\n" ;
+                                   "Пароль неверный.<BR><BR>  Если Вы забыли пароль, нажмите <A HREF=reg/mail.php>сюда</A> <BR><BR>  или  попробуйте <a\n" .
+                                   "href=".hostname()." target='_top'> ещё раз</a> .<br></center>\n\n" ;
         }
         else
         {
