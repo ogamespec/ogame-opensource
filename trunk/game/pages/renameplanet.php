@@ -80,6 +80,9 @@ if ( key_exists("page", $_POST) && $_POST['page'] === "renameplanet")
             {
                 // Главную планету нельзя удалить.
                 if ( $_POST['deleteid'] == $GlobalUser['hplanetid'] ) $RenameError = "<center>\nНельзя покинуть главную планету!<br></center>\n";
+
+//Флоты с этой планеты ещё не вернулись!
+//Ваши флоты ещё на пути к этой планете!
                 else
                 {
                     DestroyPlanet ( $_POST['deleteid'], 48 );

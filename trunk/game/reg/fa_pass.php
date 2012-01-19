@@ -50,6 +50,7 @@ function gen_trivial_password ($len = 8)
 }
 
 /*
+From: welcome@ogame.ru
 Subj: Пароль огейм
 
 "О xxx, приветствуем Вас!
@@ -65,7 +66,7 @@ Subj: Пароль огейм
 Ваша команда ОГейм."
 */
 
-$pass_ok = true;
+$pass_ok = false;
 
 ?>
 

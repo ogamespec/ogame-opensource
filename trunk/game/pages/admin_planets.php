@@ -95,7 +95,7 @@ function Admin_Planets ()
                 {
                     $planet = dbarray ( $result );
                     $user = LoadUser ( $planet['owner_id'] );
-                    $SearchResult .= "<tr><th>".date ("Y-m-d H:i:s", $planet['date'])."</th><th>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</th>";
+                    $SearchResult .= "<tr><th>".date ("Y-m-d H:i:s", $planet['date'])."</th><th>".AdminPlanetCoord($planet)."</th>";
                     $SearchResult .= "<th><a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\">".$planet['name']."</a></th>";
                     $SearchResult .= "<th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a></th></tr>\n";
                 }
@@ -452,7 +452,7 @@ function reset ()
             $planet = dbarray ( $result );
             $user = LoadUser ( $planet['owner_id'] );
 
-            echo "<tr><th>".date ("Y-m-d H:i:s", $planet['date'])."</th><th>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</th>";
+            echo "<tr><th>".date ("Y-m-d H:i:s", $planet['date'])."</th><th>".AdminPlanetCoord($planet)."</th>";
             echo "<th><a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\">".$planet['name']."</a></th>";
             echo "<th>".AdminUserName($user)."</th></tr>\n";
         }

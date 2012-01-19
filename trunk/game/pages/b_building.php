@@ -161,7 +161,10 @@ foreach ( $buildmap as $i => $id )
         }
         else
         {
-                  if ( $id == 31 && $reslab_operating ) {
+                  if ( $aktplanet['fields'] >= $aktplanet['maxfields'] ) {
+                        echo "<td class=l><font color=#FF0000>Нет места! </font>";
+                  }
+                  else if ( $id == 31 && $reslab_operating ) {
 				echo "<td class=l><font  color=#FF0000>В процессе</font> <br>";
 			}
 			else if ( ($id == 15 || $id == 21 ) && $shipyard_operating ) {
