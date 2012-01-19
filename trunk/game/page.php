@@ -111,6 +111,17 @@ function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", 
     echo "<!-- END LEFTMENU -->\n\n";
 }
 
+function DropListHasMoon ($plist, $planet)
+{
+    foreach ( $plist as $i=>$p )
+    {
+        if ( $p['type'] == 0 ) {
+            if ( $p['g'] == $planet['g'] && $p['s'] == $planet['s'] && $p['p'] == $planet['p'] ) return $p;
+        }
+    }
+    return NULL;
+}
+
 function PlanetsDropList ($page)
 {
     global $GlobalUser;
@@ -125,21 +136,38 @@ function PlanetsDropList ($page)
     echo "<td class='header'>\n";
     echo "<table class='header'>\n";
     echo "<select size='1' onchange='haha(this)'>\n";
-    
+
+    $plist = array ();
     $num = dbrows ($result);
+    for ($n=0; $n<$num; $n++) $plist[] = dbarray ($result);
+
+    if (key_exists ('gid', $_GET)) $gid = "&gid=".$_GET['gid'];
+    if (key_exists ('tid', $_GET)) $tid = "&tid=".$_GET['tid'];
+    if (key_exists ('mode', $_GET)) $mode = "&mode=".$_GET['mode'];
+
     for ($n=0; $n<$num; $n++)
     {
-        if (key_exists ('gid', $_GET)) $gid = "&gid=".$_GET['gid'];
-        if (key_exists ('tid', $_GET)) $tid = "&tid=".$_GET['tid'];
-        if (key_exists ('mode', $_GET)) $mode = "&mode=".$_GET['mode'];
-        $planet = dbarray ($result);
+        $planet = $plist[$n];
+        if ($planet['type'] == 0) continue;
         $cp = $planet['planet_id'];
         $sel = "";
         if ($cp == $GlobalUser['aktplanet']) $sel = "selected";
         $g = $planet['g']; $s = $planet['s']; $p = $planet['p'];
         $name = $planet['name'];
         echo "    <option value='index.php?page=".$page."&session=$sess&cp=$cp$gid$tid$mode' $sel>$name  <a href='index.php?page=galaxy&galaxy=$g&system=$s&position=$p&session=$sess&cp=$cp$gid$tid$mode' >[$g:$s:$p]</a></option>\n";
+
+        $moon = DropListHasMoon ($plist, $planet);
+        if ($moon) {
+            $planet = $moon;
+            $cp = $planet['planet_id'];
+            $sel = "";
+            if ($cp == $GlobalUser['aktplanet']) $sel = "selected";
+            $g = $planet['g']; $s = $planet['s']; $p = $planet['p'];
+            $name = $planet['name'];
+            echo "    <option value='index.php?page=".$page."&session=$sess&cp=$cp$gid$tid$mode' $sel>$name  <a href='index.php?page=galaxy&galaxy=$g&system=$s&position=$p&session=$sess&cp=$cp$gid$tid$mode' >[$g:$s:$p]</a></option>\n";
+        }
     }
+
     echo "</select></table></td></tr></table></td>\n\n";
 }
 
