@@ -100,14 +100,14 @@ function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", 
         $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
         PlanetsDropList ($page);
         ResourceList (floor($aktplanet['m']), floor($aktplanet['k']), floor($aktplanet['d']), $aktplanet['e'], $aktplanet['emax'], $GlobalUser['dm']+$GlobalUser['dmfree'], $aktplanet['mmax'], $aktplanet['kmax'], $aktplanet['dmax']);
-        OficeerList ();
+        $coma = OficeerList ();
         echo "</tr>\n";
         echo "</table>\n";
         echo "</div><!-- END HEADER -->\n\n";
     }
 
     echo "<!-- LEFTMENU -->\n\n";
-    if ($leftmenu) LeftMenu ();
+    if ($leftmenu) LeftMenu ($coma);
     echo "<!-- END LEFTMENU -->\n\n";
 }
 
@@ -176,8 +176,6 @@ function ResourceList ($m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
     global $GlobalUser;
     $sess = $GlobalUser['session'];
 
-    $prem = 1;
-
     $mcol = $kcol = $dcol = $ecol = "";
     if ($m >= $mmax) $mcol = "color='#ff0000'";
     if ($k >= $kmax) $kcol = "color='#ff0000'";
@@ -192,26 +190,25 @@ function ResourceList ($m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
     echo "<img border='0' src='".UserSkin()."images/kristall.gif' width='42' height='22'>\n</td>\n";
     echo "<td align='center' width='85' class='header'>\n";
     echo "<img border='0' src='".UserSkin()."images/deuterium.gif' width='42' height='22'>\n</td>\n";
-    if ($prem)
-    {
-        echo "<td align='center' width='85' class='header'>\n";
-        echo "<a href=index.php?page=micropayment&session=$sess>\n";
-        echo "<img border='0' src='img/dm_klein_2.jpg' width='42' height='22' title='".loca("DM")."'></a>\n</td>\n";
-    }
+    echo "<td align='center' width='85' class='header'>\n";
+    echo "<a href=index.php?page=micropayment&session=$sess>\n";
+    echo "<img border='0' src='img/dm_klein_2.jpg' width='42' height='22' title='".loca("DM")."'></a>\n</td>\n";
     echo "<td align='center' width='85' class='header'>\n";
     echo "<img border='0' src='".UserSkin()."images/energie.gif' width='42' height='22'>\n</td>\n</tr>\n";
+
     echo "<tr class='header'>\n";
     echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>".loca("METAL")."</font></b></i></td>\n";
     echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>".loca("CRYSTAL")."</font></b></i></td>\n";
     echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>".loca("DEUTERIUM")."</font></b></i></td>\n";
-    if ($prem) echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>".loca("DM")."</font></b></i></td>\n";
+    echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>".loca("DM")."</font></b></i></td>\n";
     echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>".loca("ENERGY")."</font></b></i></td>\n";
     echo "</tr>\n";
+
     echo "<tr class='header'>\n";
     echo "    <td align='center' class='header' width='90'><font $mcol>".nicenum($m)."</font></td>\n";
     echo "    <td align='center' class='header' width='90'><font $kcol>".nicenum($k)."</font></td>\n";
     echo "    <td align='center' class='header' width='90'><font $dcol>".nicenum($d)."</font></td>\n";
-    if ($prem) echo "    <td align='center' class='header' width='90'><font color='#FFFFFF'>".nicenum($dm)."</font></td>\n";
+    echo "    <td align='center' class='header' width='90'><font color='#FFFFFF'>".nicenum($dm)."</font></td>\n";
     echo "    <td align='center' class='header' width='90'><font $ecol>".nicenum($enow)."</font>/".nicenum($emax)."</td>\n\n";
     echo "</tr>\n";
     echo "</table></td>\n";
@@ -279,15 +276,15 @@ function OficeerList ()
     echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['technocrat']."<br>Технократ</font><br><font size=1 color=skyblue>+2 уровень шпионажа, 25% меньше времени на исследования</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['technocrat']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
     echo "    </a></td>\n\n";
     echo "<td align='center' class='header'></td></tr></table></td>\n\n";
+
+    return $days['commander'] !== '';
 }
 
-function LeftMenu ()
+function LeftMenu ($coma)
 {
     global $GlobalUser;
     global $GlobalUni;
     $sess = $GlobalUser['session'];
-
-    $prem = 0;
 
     $unitab = $GlobalUni;
     $uni = $unitab['num'];
@@ -323,13 +320,18 @@ function LeftMenu ()
         echo "  </td>\n";
         echo " </tr>\n\n";
     }
-    echo "  <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
-    echo "     <a href='index.php?page=imperium&session=$sess&planettype=1&no_header=1' accesskey=\"r\">".loca("MENU_EMPIRE")."</a>\n";
-    echo "    </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
+
+    if ( $coma )
+    {
+        echo "  <tr>\n";
+        echo "  <td>\n";
+        echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
+        echo "     <a href='index.php?page=imperium&session=$sess&planettype=1&no_header=1' accesskey=\"r\">".loca("MENU_EMPIRE")."</a>\n";
+        echo "    </font></div>\n";
+        echo "  </td>\n";
+        echo " </tr>\n\n";
+    }
+
     echo " <tr>\n";
     echo "  <td>\n";
     echo "   <div align='center'><font color='#FFFFFF'>\n";
