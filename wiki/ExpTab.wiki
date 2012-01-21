@@ -11,6 +11,14 @@
 ||chance_depleted_min|| INT || см. `Счетчик посещений` ||
 ||chance_depleted_med|| INT || см. `Счетчик посещений` ||
 ||chance_depleted_max|| INT || см. `Счетчик посещений` ||
+||chance_alien|| INT || см. `Удачная экспедиция` ||
+||chance_pirates|| INT || см. `Удачная экспедиция` ||
+||chance_dm|| INT || см. `Удачная экспедиция` ||
+||chance_lost|| INT || см. `Удачная экспедиция` ||
+||chance_delay|| INT || см. `Удачная экспедиция` ||
+||chance_accel|| INT || см. `Удачная экспедиция` ||
+||chance_res|| INT || см. `Удачная экспедиция` ||
+||chance_fleet|| INT || см. `Удачная экспедиция` ||
 
 = Счетчик посещений =
 
@@ -22,3 +30,19 @@
 depleted_min+1 ... depleted_med: Шанс успешной экспедиции уменьшается на chance_depleted_min%<br>
 depleted_med+1 ... depleted_max: Шанс успешной экспедиции уменьшается на chance_depleted_med%<br>
 depleted_max+1 ... ∞: Шанс успешной экспедиции уменьшается на chance_depleted_max%
+
+= Удачная экспедиция =
+
+Как бросается кубик: 
+  # Случайное число в интервале [0; 99] = chance.
+  # Каскадная проверка:
+{{{
+if ( chance >= chance_alien) Встреча с чужими
+else if ( chance >= chance_pirates) Встреча с пиратами
+else if ( chance >= chance_dm) Нахождение Тёмной материи
+else if ( chance >= chance_lost) Потеря всего флота 
+else if ( chance >= chance_delay) Задержка возврата экспедиции
+else if ( chance >= chance_accel) Ускорение возврата экспедиции
+else if ( chance >= chance_res) Нахождение ресурсов
+else if ( chance >= chance_fleet) Нахождение кораблей
+else Нахождение Скупщика}}}
