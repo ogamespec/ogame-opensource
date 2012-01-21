@@ -73,6 +73,8 @@ function Admin_Queue ()
     $result = dbquery ($query);
     $now = time ();
 
+    AdminPanel();
+
     echo "<table>\n";
     echo "<tr><td class=c>Время окончания</td><td class=c>Игрок</td><td class=c>Тип задания</td><td class=c>Описание</td><td class=c>Приоритет</td><td class=c>Управление</td></tr>\n";
 

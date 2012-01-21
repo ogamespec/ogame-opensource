@@ -1,8 +1,8 @@
 <?php
 
-// Админка : жалобы пользователей на сообщения.
+// Админка : настройки экспедиции.
 
-function Admin_Reports ()
+function Admin_Expedition ()
 {
     global $session;
     global $db_prefix;
@@ -16,7 +16,7 @@ function Admin_Reports ()
 
 <?=AdminPanel();?>
 
-TODO
+XXX.
 
 <?php
 }

@@ -309,6 +309,8 @@ RecalcAttackersDefendersNum ();
 
 </script>
 
+<?=AdminPanel();?>
+
 <table cellpadding=0 cellspacing=0>
 <form name="simForm" action="index.php?page=admin&session=<?=$session;?>&mode=BattleSim" method="POST" >
 

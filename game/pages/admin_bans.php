@@ -18,6 +18,8 @@ function Admin_Bans ()
 
 ?>
 
+<?=AdminPanel();?>
+
 <table>
 
 <!-- Результаты поиска -->

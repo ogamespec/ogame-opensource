@@ -55,6 +55,8 @@ function Admin_Fleetlogs ()
     $anz = $rows = dbrows ($result);
     $bxx = 1;
 
+    AdminPanel();
+
     echo "<table>\n";
     echo "<tr><td class=c>N</td> <td class=c>Таймер</td> <td class=c>Задание</td> <td class=c>Отправлен</td> <td class=c>Прибывает</td><td class=c>Время полёта</td> <td class=c>Старт</td> <td class=c>Цель</td> <td class=c>Флот</td> <td class=c>Груз</td> <td class=c>САБ</td> <td class=c colspan=3>Приказ</td> </tr>\n";
 
