@@ -4,12 +4,21 @@
 Настройки можно поменять через админку.
 
 || *столбец* || *SQL тип* || *описание* ||
+||chance_success|| INT || Шанс удачной экспедиции ||
 ||depleted_min|| INT || см. `Счетчик посещений` ||
 ||depleted_med|| INT || см. `Счетчик посещений` ||
 ||depleted_max|| INT || см. `Счетчик посещений` ||
+||chance_depleted_min|| INT || см. `Счетчик посещений` ||
+||chance_depleted_med|| INT || см. `Счетчик посещений` ||
+||chance_depleted_max|| INT || см. `Счетчик посещений` ||
 
 = Счетчик посещений =
 
 0 ... depleted_min => depleted_min+1 ... depleted_med => depleted_med+1 ... depleted_max => depleted_max+1 ... ∞
 
-Каждый диапазон влияет на шанс получения удачного события.
+Каждый диапазон влияет на шанс получения удачного события:
+
+0 ... depleted_min: Шанс успешной экспедиции не уменьшается
+depleted_min+1 ... depleted_med: Шанс успешной экспедиции уменьшается на chance_depleted_min%
+depleted_med+1 ... depleted_max: Шанс успешной экспедиции уменьшается на chance_depleted_med%
+depleted_max+1 ... ∞: Шанс успешной экспедиции уменьшается на chance_depleted_max%
