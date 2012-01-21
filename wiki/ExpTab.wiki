@@ -18,7 +18,7 @@
 
 Каждый диапазон влияет на шанс получения удачного события:
 
-0 ... depleted_min: Шанс успешной экспедиции не уменьшается
-depleted_min+1 ... depleted_med: Шанс успешной экспедиции уменьшается на chance_depleted_min%
-depleted_med+1 ... depleted_max: Шанс успешной экспедиции уменьшается на chance_depleted_med%
+0 ... depleted_min: Шанс успешной экспедиции не уменьшается<br>
+depleted_min+1 ... depleted_med: Шанс успешной экспедиции уменьшается на chance_depleted_min%<br>
+depleted_med+1 ... depleted_max: Шанс успешной экспедиции уменьшается на chance_depleted_med%<br>
 depleted_max+1 ... ∞: Шанс успешной экспедиции уменьшается на chance_depleted_max%
