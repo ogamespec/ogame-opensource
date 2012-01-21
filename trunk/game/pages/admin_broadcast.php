@@ -47,6 +47,8 @@ function Admin_Broadcast ()
 
 ?>
 
+<?=AdminPanel();?>
+
 <?=$write_error;?>
 
 <table>

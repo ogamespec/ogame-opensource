@@ -30,6 +30,8 @@ function Admin_Debug ()
 
 ?>
 
+<?=AdminPanel();?>
+
 <table class='header'><tr class='header'><td><table width="519">
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Debug" method="POST">
 <tr><td colspan="4" class="c">Сообщения</td></tr>

@@ -73,6 +73,58 @@ function AdminPlanetCoord ($p)
     return "[<a href=\"index.php?page=galaxy&session=$session&galaxy=".$p['g']."&system=".$p['s']."\">".$p['g'].":".$p['s'].":".$p['p']."</a>]";
 }
 
+// Админ-панель для быстрого перехода.
+function AdminPanel ()
+{
+    global $session;
+?>
+
+<table><tr><td>
+
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Fleetlogs"><img src="img/admin_fleetlogs.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Контроль полётов</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Browse"><img src="img/admin_browse.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>История переходов</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Reports"><img src="img/admin_report.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Жалобы</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Bans"><img src="img/admin_ban.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Баны</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Users"><img src="img/admin_users.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Пользователи</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Planets"><img src="img/admin_planets.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Планеты</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Queue"><img src="img/admin_queue.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Задания</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Uni"><img src="img/admin_uni.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Настройки Вселенной</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Errors"><img src="img/admin_error.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Ошибки</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Debug"><img src="img/admin_debug.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Отладочные сообщения</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+<a href="index.php?page=admin&session=<?=$session;?>&mode=BattleSim"><img src="img/admin_sim.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Симулятор</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Broadcast"><img src="img/admin_broadcast.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Общее сообщение</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Expedition"><img src="<?=hostname();?>evolution/gebaeude/210.gif" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Настройки экспедиции</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+</td></tr></table><br/>
+
+<?php
+}
+
 // ========================================================================================
 // Главная страница.
 
@@ -104,6 +156,7 @@ function Admin_Home ()
     <tr>
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=BattleSim"><img src="img/admin_sim.png"><br>Симулятор</a></th>
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Broadcast"><img src="img/admin_broadcast.png"><br>Общее сообщение</a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Expedition"><img src="<?=hostname();?>evolution/gebaeude/210.gif"><br>Настройки экспедиции</a></th>
     </tr>
     </table>
 <?php
@@ -121,6 +174,7 @@ include "admin_errors.php";
 include "admin_debug.php";
 include "admin_sim.php";
 include "admin_broadcast.php";
+include "admin_expedition.php";
 
 // ========================================================================================
 
@@ -134,6 +188,7 @@ echo "<table width=\"750\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\">\n\n
 if ( $mode === "Home" ) Admin_Home ();
 else if ( $mode === "Fleetlogs" ) Admin_Fleetlogs ();
 else if ( $mode === "Browse" ) Admin_Browse ();
+else if ( $mode === "Reports" ) Admin_Reports ();
 else if ( $mode === "Bans" ) Admin_Bans ();
 else if ( $mode === "Users" ) Admin_Users ();
 else if ( $mode === "Planets" ) Admin_Planets ();
@@ -143,6 +198,7 @@ else if ( $mode === "Errors" ) Admin_Errors ();
 else if ( $mode === "Debug" ) Admin_Debug ();
 else if ( $mode === "BattleSim" ) Admin_BattleSim ();
 else if ( $mode === "Broadcast" ) Admin_Broadcast ();
+else if ( $mode === "Expedition" ) Admin_Expedition ();
 else Admin_Home ();
 
 echo "</table>\n";

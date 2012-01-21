@@ -34,6 +34,8 @@ function Admin_Uni ()
     $unitab = LoadUniverse ();
 ?>
 
+<?=AdminPanel();?>
+
 <table >
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Uni" method="POST" >
 <tr><td class=c colspan=2>Настройки Вселенной <?=$unitab['num'];?></td></tr>

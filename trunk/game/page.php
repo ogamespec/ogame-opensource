@@ -105,6 +105,11 @@ function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", 
         echo "</table>\n";
         echo "</div><!-- END HEADER -->\n\n";
     }
+    else 
+    {
+        $end = GetOfficerLeft ( $GlobalUser['player_id'], 'CommanderOff' );
+        $coma = $end > time ();
+    }
 
     echo "<!-- LEFTMENU -->\n\n";
     if ($leftmenu) LeftMenu ($coma);

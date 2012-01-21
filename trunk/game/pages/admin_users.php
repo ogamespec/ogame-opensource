@@ -115,6 +115,9 @@ function Admin_Users ()
         InvalidateUserCache ();
         $user = LoadUser ( $_GET['player_id'] );
 ?>
+
+    <?=AdminPanel();?>
+
     <table>
     <form action="index.php?page=admin&session=<?=$session;?>&mode=Users&action=update&player_id=<?=$user['player_id'];?>" method="POST" >
     <tr><td class=c><?=$user['oname'];?></td><td class=c>Настройки</td><td class=c>Исследования</td></tr>
@@ -315,6 +318,8 @@ function Admin_Users ()
     else {
         $query = "SELECT * FROM ".$db_prefix."users ORDER BY regdate DESC LIMIT 25";
         $result = dbquery ($query);
+
+        AdminPanel();
 
         echo "    </th> \n";
         echo "   </tr> \n";

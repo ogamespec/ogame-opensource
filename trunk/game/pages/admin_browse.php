@@ -12,6 +12,8 @@ function Admin_Browse ()
     $query = "SELECT * FROM ".$db_prefix."browse ORDER BY date DESC LIMIT 50";
     $result = dbquery ($query);
 
+    AdminPanel();
+
     $rows = dbrows ($result);
     echo "Последняя история переходов (50 записей):<br>";
     echo "<table>\n";

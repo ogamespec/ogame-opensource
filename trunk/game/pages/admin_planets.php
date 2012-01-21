@@ -290,6 +290,8 @@ function reset ()
 
 <?php
 
+        AdminPanel();
+
         echo "<table>\n";
         echo "<form action=\"index.php?page=admin&session=$session&mode=Planets&action=update&cp=".$planet['planet_id']."\" method=\"POST\" >\n";
         echo "<tr><td class=c colspan=2>Планета \"".$planet['name']."\" (<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>)</td>\n";
@@ -439,6 +441,8 @@ function reset ()
     else {
         $query = "SELECT * FROM ".$db_prefix."planets ORDER BY date DESC LIMIT 25";
         $result = dbquery ($query);
+
+        AdminPanel();
 
         echo "    </th> \n";
         echo "   </tr> \n";
