@@ -760,6 +760,13 @@ function AddReloginEvent ()
 // Сделать отгрузку всех игроков.
 function Queue_Relogin_End ($queue)
 {
+    // Чистка непосещаемых бесконечных далей.
+    global $db_prefix;
+    $query = "SELECT target_planet FROM ".$db_prefix."fleet WHERE mission = 15 OR mission = 115 OR mission = 215";
+    $query = "DELETE FROM ".$db_prefix."planets WHERE type=20000 AND planet_id <> ALL ($query)";
+    dbquery ( $query );
+    Debug ( "Удалено бесконечных далей : " . mysql_affected_rows() );
+
     UnloadAll ();
     RemoveQueue ( $queue['task_id'], 0 );
 }
