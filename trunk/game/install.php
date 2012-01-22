@@ -245,7 +245,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
 
     // Добавить параметры экспедиции.
     $opt = " (";
-    $exptab = array ( 80, 25, 50, 75, 25, 50, 75, 1, 2, 3, 4, 5, 6, 7, 8 );
+    $exptab = array ( 70, 25, 50, 75, 25, 50, 75, 95, 85, 70, 69, 63, 60, 25, 1 );
     foreach ($exptab as $i=>$entry)
     {
         if ($i != 0) $opt .= ", ";

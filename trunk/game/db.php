@@ -98,7 +98,7 @@ function AddDBRow ( $row, $tabname )
 function LockTables ()
 {
     global $db_prefix;
-    $tabs = array ('users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','fleet','union','battledata','fleetlogs','iplogs');
+    $tabs = array ('users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','fleet','union','battledata','fleetlogs','iplogs','exptab');
     $query = "LOCK TABLES ".$db_prefix."uni WRITE";
     foreach ( $tabs as $i=>$name ) 
     {

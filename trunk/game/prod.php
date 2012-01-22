@@ -349,6 +349,7 @@ function ProdResources ( $planet_id, $time_from, $time_to )
     $planet = GetPlanet ( $planet_id );
     if ( $planet['type'] == 0 || $planet['type'] >= 10000 ) return;        // луна или другой объект
     $user = LoadUser ($planet['owner_id']);
+    if ( $user['player_id'] == 99999 ) return;    // технический аккаунт space
     $diff = $time_to - $time_from;
 
     $unitab = $GlobalUni;

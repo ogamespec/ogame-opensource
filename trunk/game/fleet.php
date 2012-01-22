@@ -510,7 +510,7 @@ function TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target)
                 "<br/>\n" .
                 nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия.\n" .
                 "<br/>\n";
-    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Достижение планеты", $text, 5);
+    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Достижение планеты", $text, 5, $queue['end']);
 
     // Транспорт на чужую планету.
     if ( $origin['owner_id'] != $target['owner_id'] )
@@ -525,7 +525,7 @@ function TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target)
                     "<br/>\n" .
                     "Теперь же у Вас ".nicenum($oldm+$fleet_obj['m'])." металла, ".nicenum($oldk+$fleet_obj['k'])." кристалла и ".nicenum($oldd+$fleet_obj['d'])." дейтерия.\n" .
                     "<br/>\n";
-        SendMessage ( $target['owner_id'], "Наблюдение", "Чужой флот доставляет сырьё", $text, 5);
+        SendMessage ( $target['owner_id'], "Наблюдение", "Чужой флот доставляет сырьё", $text, 5, $queue['end']);
     }
 }
 
@@ -545,7 +545,7 @@ function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
     $text = "Один из Ваших флотов ( ".FleetList($fleet)." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
                "достигает ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
     if ( ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']) != 0 ) $text .= "Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия<br>";
-    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Возвращение флота", $text, 5);
+    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Возвращение флота", $text, 5, $queue['end']);
 }
 
 // *** Оставить ***
@@ -564,7 +564,7 @@ function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
                ". Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия\n" .
                "<br/>\n";
-    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Удержание флота", $text, 5);
+    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Удержание флота", $text, 5, $queue['end']);
 }
 
 // *** Держаться ***
@@ -730,7 +730,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $report .= "<center> Шанс на защиту от шпионажа:$counter%</center>\n";
     $report .= "<center><a href=\'#\' onclick=\'showFleetMenu(".$target['g'].",".$target['s'].",".$target['p'].",".GetPlanetType($target).",1);\'>Атака</a></center>\n";
 
-    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", $subj, $report, 1);
+    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", $subj, $report, 1, $queue['end']);
 
     // Отправить сообщение чужому игроку о шпионаже.
     $text = "\nЧужой флот с планеты ".$origin['name']."\n" .
@@ -739,7 +739,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
                 "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
                 ". Шанс на защиту от шпионажа: $counter %\n" .
                 "</td>\n";
-    SendMessage ( $target['owner_id'], "Наблюдение", "Шпионаж", $text, 5);
+    SendMessage ( $target['owner_id'], "Наблюдение", "Шпионаж", $text, 5, $queue['end']);
 
     // Обновить активность на чужой планете.
     UpdatePlanetActivity ( $fleet_obj['target_planet'], $queue['end'] );
@@ -809,7 +809,7 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         DispatchFleet ($fleet, $origin, $target, 107, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
     }
 
-    SendMessage ( $fleet_obj['owner_id'], "Поселенцы", "Доклад поселенцев", $text, 5);
+    SendMessage ( $fleet_obj['owner_id'], "Поселенцы", "Доклад поселенцев", $text, 5, $queue['end']);
 }
 
 function ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target)
@@ -824,7 +824,7 @@ function ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target)
     $text = "Один из Ваших флотов ( ".FleetList($fleet)." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
                "достигает ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
     if ( ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']) != 0 ) $text .= "Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия<br>";
-    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Возвращение флота", $text, 5);
+    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Возвращение флота", $text, 5, $queue['end']);
 
     // Удалить фантом колонизации.
     if ($target['type'] == 10002) DestroyPlanet ( $target['planet_id'] );
@@ -852,7 +852,7 @@ function RecycleArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     // Вернуть флот.
     DispatchFleet ($fleet, $origin, $target, 108, $fleet_obj['flight_time'], $fleet_obj['m'] + $dm, $fleet_obj['k'] + $dk, $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
 
-    SendMessage ( $fleet_obj['owner_id'], "Флот ", $subj, $report, 5);
+    SendMessage ( $fleet_obj['owner_id'], "Флот ", $subj, $report, 5, $queue['end']);
 }
 
 // *** Уничтожить ***
