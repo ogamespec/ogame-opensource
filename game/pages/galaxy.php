@@ -490,7 +490,7 @@ while ($num--)
 
     // Планета
     echo "<th width=\"30\">\n";
-    if ( $planet['type'] != 10001 )
+    if ( $planet['type'] > 0 && $planet['type'] < 10000 )
     {
         echo "<a style=\"cursor:pointer\" onmouseover='return overlib(\"<table width=240>";
         echo "<tr><td class=c colspan=2 >Планета ".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]</td></tr>";
@@ -650,7 +650,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
 
     // Действия
     echo "<th width=\"125\" style='white-space: nowrap;'>\n";
-    if ( !$planet['type'] != 10001 && !$own)
+    if ( $planet['type'] != 10001 && !$own)
     {
         echo "<a style=\"cursor:pointer\" onclick=\"javascript:doit(6, ".$planet['g'].",".$planet['s'].",".$planet['p'].", 1, ".$GlobalUser['maxspy'].");\"><img src=\"".UserSkin()."img/e.gif\" border=\"0\" alt=\"Шпионаж\" title=\"Шпионаж\" /></a>\n";
         echo "<a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"Написать сообщение\" title=\"Написать сообщение\" /></a>\n";

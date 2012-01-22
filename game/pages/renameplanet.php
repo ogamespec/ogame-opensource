@@ -51,7 +51,7 @@ function PlanetDestroyMenu ()
 }
 
 // Обработка POST-запросов.
-if ( key_exists("page", $_POST) && $_POST['page'] === "renameplanet")
+if ( method() === "POST" )
 {
     if ( $_POST['aktion'] === "Переименовать" )
     {
@@ -74,27 +74,53 @@ if ( key_exists("page", $_POST) && $_POST['page'] === "renameplanet")
         else
         {
             // Проверить принадлежит планета этому пользователю.
-/*
             $planet = GetPlanet ( $_POST['deleteid'] );
             if ( $planet['owner_id'] == $GlobalUser['player_id'] )
             {
                 // Главную планету нельзя удалить.
                 if ( $_POST['deleteid'] == $GlobalUser['hplanetid'] ) $RenameError = "<center>\nНельзя покинуть главную планету!<br></center>\n";
-
-//Флоты с этой планеты ещё не вернулись!
-//Ваши флоты ещё на пути к этой планете!
                 else
                 {
-                    DestroyPlanet ( $_POST['deleteid'], 48 );
-                    // Если у планеты есть луна, покинуть её тоже.
-                    $moonid = PlanetHasMoon ( $_POST['deleteid'] );
-                    if ( $moonid ) DestroyPlanet ( $moonid, 48 );
+                    $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = " . $_POST['deleteid'] . " AND owner_id = " . $GlobalUser['player_id'];
+                    $result = dbquery ( $query );
+                    if ( dbrows ($result) > 0 ) $RenameError = "<center>\nВаши флоты ещё на пути к этой планете!<br></center>\n";
+
+                    if ( $RenameError === "" )
+                    {
+                        $query = "SELECT * FROM ".$db_prefix."fleet WHERE start_planet = " . $_POST['deleteid'];
+                        $result = dbquery ( $query );
+                        if ( dbrows ($result) > 0 ) $RenameError = "<center>\nФлоты с этой планеты ещё не вернулись!<br></center>\n";
+                    }
+
+                    if ( $RenameError === "" )
+                    {
+                        $moon_id = PlanetHasMoon ($planet['planet_id']);
+                        if ( $moon_id )
+                        {
+                            $moon = GetPlanet ( $moon_id );        // Удалять только целый луны.
+                            if ( $moon['type'] == 0 )
+                            {
+                                $query = "UPDATE ".$db_prefix."planets SET type = 10003, owner_id = 99999, date = $now, lastakt = $now WHERE planet_id = " . $moon_id . ";";
+                                dbquery ( $query );
+
+                                // Удалить очередь заданий луны.
+                                $query = "DELETE FROM ".$db_prefix."queue WHERE (type = 'Shipyard' OR type = 'Build' OR type = 'Demolish') AND sub_id = " . $moon_id;
+                                dbquery ( $query );
+                            }
+                        }
+                        if ($planet['type'] == 0) $query = "UPDATE ".$db_prefix."planets SET type = 10003, owner_id = 99999, date = $now, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
+                        else $query = "UPDATE ".$db_prefix."planets SET type = 10001, owner_id = 99999, date = $now, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
+                        dbquery ( $query );
+
+                        // Удалить очередь заданий планеты.
+                        $query = "DELETE FROM ".$db_prefix."queue WHERE (type = 'Shipyard' OR type = 'Build' OR type = 'Demolish') AND sub_id = " . $planet['planet_id'];
+                        dbquery ( $query );
+                    }
+
                     // Редирект на Главную планету.
                     SelectPlanet ($GlobalUser['player_id'], $GlobalUser['hplanetid']);
                 }
             }
-            else $RenameError = "<center>\nЧужие планеты нельзя удалять!<br></center>\n";
-*/
         }
     }
 }

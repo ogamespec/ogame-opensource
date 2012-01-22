@@ -212,9 +212,9 @@ function GetPlanet ( $planet_id)
 function LoadPlanet ($g, $s, $p, $type)
 {
     global $db_prefix;
-    if ($type == 1) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type > 0 AND type < 10000) LIMIT 1;";
+    if ($type == 1) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ((type > 0 AND type < 10000) OR type = 10001) LIMIT 1;";
     else if ($type == 2) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=10000 LIMIT 1;";
-    else if ($type == 3) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=0 LIMIT 1;";
+    else if ($type == 3) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type=0 OR type=10003) LIMIT 1;";
     else return NULL;
     $result = dbquery ($query);
     if ( $result ) return dbarray ($result);
@@ -230,7 +230,7 @@ function PlanetHasMoon ( $planet_id )
     if ( dbrows ($result) == 0) return 0;    // Планета не найдена
     $planet = dbarray ($result);
     if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return 0;        // Планета сама является луной
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$planet['g']."' AND s = '".$planet['s']."' AND p = '".$planet['p']."' AND type = 0 OR type = 10003";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$planet['g']."' AND s = '".$planet['s']."' AND p = '".$planet['p']."' AND (type = 0 OR type = 10003)";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0) return 0;    // Луна у планеты не найдена.
     $planet = dbarray ($result);
@@ -383,38 +383,22 @@ function CreateColonyPhantom ($g, $s, $p, $owner_id)
     return $id;
 }
 
-// Покинуть планету.
-function AbandonPlanet ($g, $s, $p, $now=0)
+// Добавить покинутую колонию.
+function CreateAbandonedColony ($g, $s, $p, $when)
 {
     global $db_prefix;
-    if ( $now == 0) $now = time ();
 
     // Если на заданных координатах нет планеты, то добавить Покинутую колонию.
     $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( type <> 0 AND type <> 10000 AND type <> 10002 AND type <> 10003 );";
     $result = dbquery ($query);
-    if ( dbrows ($result) == 0 ) 
+    if ( dbrows ($result) == 0 )
     {
-        $planet = array( '', "Покинутая колония", 10001, $g, $s, $p, 99999, 0, 0, 0, 0, $now,
+        $planet = array( '', "Покинутая колония", 10001, $g, $s, $p, 99999, 0, 0, 0, 0, $when,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, $now, $now, 0, 0 );
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, $when, $when, 0, 0 );
         AddDBRow ( $planet, 'planets' );
-    }
-
-    // Иначе изменить тип планеты на "Уничтоженная" и удалить луну, если есть.
-    else
-    {
-        $planet = dbarray ($result);
-        $moon_id = PlanetHasMoon ($planet['planet_id']);
-        if ( $moon_id )
-        {
-            $moon = GetPlanet ( $moon_id );
-            $query = "UPDATE ".$db_prefix."planets SET type = 10003, owner_id = 99999, date = $now, lastakt = $now WHERE planet_id = " . $moon['planet_id'] . ";";
-            dbquery ( $query );
-        }
-        $query = "UPDATE ".$db_prefix."planets SET type = 10001, name = 'Уничтоженная планета', owner_id = 99999, date = $now, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
-        dbquery ( $query );
     }
 }
 

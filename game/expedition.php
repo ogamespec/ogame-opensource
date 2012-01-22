@@ -37,7 +37,7 @@ function Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target)
 }
 
 // Сообщение бортового инженера (счетчик посещений)
-function BoardEngineerReport ($expcount, $exptab)
+function Logbook ($expcount, $exptab)
 {
     $msg_1 = array (
         'Бортовой журнал, дополнение связиста: Эта часть вселенной наверное ещё не исследована.',
@@ -130,6 +130,10 @@ function Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target)
         $msg = $small[$n];
     }
 
+    $dm *= 3;
+
+    $msg .= "<br>Было добыто ".nicenum($dm)." Тёмная материя";
+
     // Зачислить ТМ
     $query = "UPDATE ".$db_prefix."users SET dmfree = dmfree + '".$dm."' WHERE player_id=$player_id;";
     dbquery ($query);
@@ -212,7 +216,7 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
         {
             if ( $chance >= $exptab['chance_alien'] ) $text = Exp_NothingHappens/*Exp_BattleAliens*/ ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_pirates'] ) $text = Exp_NothingHappens/*Exp_BattlePirates*/ ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_dm'] ) $text = Exp_NothingHappens/*Exp_DarkMatterFound*/ ($queue, $fleet_obj, $fleet, $origin, $target);
+            else if ( $chance >= $exptab['chance_dm'] ) $text = Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_lost'] ) $text = Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_delay'] ) $text = Exp_NothingHappens/*Exp_DelayFleet*/ ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_accel'] ) $text = Exp_NothingHappens/*Exp_AccelFleet*/ ($queue, $fleet_obj, $fleet, $origin, $target);
@@ -228,7 +232,7 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
     AdjustResources ( 1, 0, 0, $target['planet_id'], '+' );
 
     // Бортовой журнал, дополнение связиста
-    if ( $fleet[210] > 0 ) $text .= "\n<br/><br/>" . BoardEngineerReport ( $expcount, $exptab);
+    if ( $fleet[210] > 0 ) $text .= "\n<br/>\n<br/>\n" . Logbook ( $expcount, $exptab);
 
     SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Результат экспедиции [".$target['g'].":".$target['s'].":".$target['p']."]", $text, 3, $queue['end']);
 }
