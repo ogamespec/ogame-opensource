@@ -43,7 +43,7 @@ function gen_trivial_password ($len = 8)
 // Сохранить настройки.
 if ( key_exists("install", $_POST) && CheckParameters() )
 {
-    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','fleet','union','battledata','fleetlogs','iplogs','pranger');
+    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','fleet','union','battledata','fleetlogs','iplogs','pranger','exptab');
     $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','usercount','freeze',
                               'news1', 'news2', 'news_until', 'startdate', 'battle_engine' );
     $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
@@ -116,8 +116,12 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $iplogstype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'CHAR(16)', 'INT', 'INT', 'INT UNSIGNED' );
     $prangercols = array ( 'ban_id', 'admin_name', 'user_name', 'ban_when', 'ban_until', 'reason' );
     $prangertype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'CHAR(20)', 'CHAR(20)', 'INT UNSIGNED', 'INT UNSIGNED', 'TEXT' );
-    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$browsecols, &$queuecols, &$fleetcols, &$unioncols, &$battledatacols, &$fleetlogscols, &$iplogscols, &$prangercols);
-    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$debugtype, &$browsetype, &$queuetype, &$fleettype, &$uniontype, &$battledatatype, &$fleetlogstype, &$iplogstype, &$prangertype);
+    $exptabcols = array ( 'chance_success', 'depleted_min', 'depleted_med', 'depleted_max', 'chance_depleted_min', 'chance_depleted_med', 'chance_depleted_max',
+                          'chance_alien', 'chance_pirates', 'chance_dm', 'chance_lost', 'chance_delay', 'chance_accel', 'chance_res', 'chance_fleet' );
+    $exptabtype = array ( 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT',
+                          'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
+    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$browsecols, &$queuecols, &$fleetcols, &$unioncols, &$battledatacols, &$fleetlogscols, &$iplogscols, &$prangercols, &$exptabcols);
+    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$debugtype, &$browsetype, &$queuetype, &$fleettype, &$uniontype, &$battledatatype, &$fleetlogstype, &$iplogstype, &$prangertype, &$exptabtype);
     $now = time();
 
     //print_r ($_POST);
@@ -237,6 +241,18 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     }
     $opt .= ")";
     $query = "INSERT INTO ".$_POST["db_prefix"]."planets VALUES".$opt;
+    dbquery( $query);
+
+    // Добавить параметры экспедиции.
+    $opt = " (";
+    $exptab = array ( 80, 25, 50, 75, 25, 50, 75, 1, 2, 3, 4, 5, 6, 7, 8 );
+    foreach ($exptab as $i=>$entry)
+    {
+        if ($i != 0) $opt .= ", ";
+        $opt .= "'".$exptab[$i]."'";
+    }
+    $opt .= ")";
+    $query = "INSERT INTO ".$_POST["db_prefix"]."exptab VALUES".$opt;
     dbquery( $query);
 
     // Установить счетчики автоинкремента.
