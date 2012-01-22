@@ -43,7 +43,7 @@ FIELDS = FLOOR ( (DIAM / 1000) ^ 2 )
 /*
 planet_id: Порядковый номер (INT AUTO_INCREMENT PRIMARY KEY)
 name: Название планеты CHAR(20)
-R type: тип планеты (порядковый номер картинки), если 0 - то это луна, если 10000 - это поле обломков, 10001 - уничтоженная планета, 10002 - фантом для колонизации, 10003 - уничтоженная луна, 20000 - бесконечные дали
+R type: тип планеты (порядковый номер картинки), если 0 - то это луна, если 10000 - это поле обломков, 10001 - уничтоженная планета, 10002 - фантом для колонизации, 10003 - уничтоженная луна, 10004 - покинутая колония, 20000 - бесконечные дали
 g,s,p: координаты где расположена планета
 owner_id: Порядковый номер пользователя-владельца
 R diameter: Диаметр планеты
@@ -81,7 +81,7 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
 
     // Проверить не занято-ли место?
     if ($moon) $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( type = 0 OR type = 10003 )";
-    else $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( ( type > 0 AND type < 10000) OR type = 10001 )";
+    else $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( ( type > 0 AND type < 10000) OR type = 10001 OR type = 10004 )";
     $result = dbquery ($query);
     if ( dbrows ($result) != 0 ) return 0;
 
@@ -171,7 +171,7 @@ function EnumPlanets ()
 function EnumPlanetsGalaxy ($g, $s)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND (type > 0 AND type < 10002) AND type <> 10000 ORDER BY p ASC";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND ((type > 0 AND type < 10002) AND type <> 10000) OR type = 10004 ORDER BY p ASC";
     $result = dbquery ($query);
     return $result;
 }
@@ -386,14 +386,10 @@ function CreateColonyPhantom ($g, $s, $p, $owner_id)
 // Добавить покинутую колонию.
 function CreateAbandonedColony ($g, $s, $p, $when)
 {
-    global $db_prefix;
-
     // Если на заданных координатах нет планеты, то добавить Покинутую колонию.
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( type <> 0 AND type <> 10000 AND type <> 10002 AND type <> 10003 );";
-    $result = dbquery ($query);
-    if ( dbrows ($result) == 0 )
+    if ( !HasPlanet ( $g, $s, $p ) )
     {
-        $planet = array( '', "Покинутая колония", 10001, $g, $s, $p, 99999, 0, 0, 0, 0, $when,
+        $planet = array( '', "Покинутая колония", 10004, $g, $s, $p, 99999, 0, 0, 0, 0, $when,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -402,12 +398,12 @@ function CreateAbandonedColony ($g, $s, $p, $when)
     }
 }
 
-// Проверить есть ли уже планета на заданных координатах (для Колонизации). Учитываются также уничтоженные планеты.
+// Проверить есть ли уже планета на заданных координатах (для Колонизации). Учитываются также уничтоженные планеты и покинутые колонии.
 // Фантомы колонизации не учитываются (кто первый долетит)
 function HasPlanet ($g, $s, $p)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( ( type > 0 AND type < 10000) OR type = 10001 );";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( ( type > 0 AND type < 10000) OR type = 10001 OR type = 10004 );";
     $result = dbquery ($query);
     if ( dbrows ($result) ) return 1;
     else return 0;
