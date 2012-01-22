@@ -245,9 +245,9 @@ switch ( $order )
         }
         $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Количество экспедиций
         $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
-        if ( $expnum == $maxexp ) FleetError ( "Слишком много одновременных экспедиций" );
-        if ( $manned == 0 ) FleetError ( "Экспедиция должна состоять как минимум из одного управляемого людьми корабля." );
-        if ( $_POST['planet'] != 16 ) FleetError ( "Цель экспедиции недействительна!" );
+        if ( $expnum >= $maxexp ) FleetError ( "Слишком много одновременных экспедиций" );
+        else if ( $manned == 0 ) FleetError ( "Экспедиция должна состоять как минимум из одного управляемого людьми корабля." );
+        else if ( $_POST['planet'] != 16 ) FleetError ( "Цель экспедиции недействительна!" );
         else {
             $id = CreateOuterSpace ( $_POST['galaxy'], $_POST['system'], $_POST['planet'] );
             $target = GetPlanet ($id);

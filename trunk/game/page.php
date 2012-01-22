@@ -5,7 +5,7 @@ $pagetime = 0;
 // Получить маленькую картинку планеты.
 function GetPlanetSmallImage ($skinpath, $type)
 {
-    if ($type == 0) return $skinpath."planeten/small/s_mond.jpg";
+    if ($type == 0 || $type == 10003) return $skinpath."planeten/small/s_mond.jpg";
     else if ($type == 10000) return $skinpath."planeten/debris.jpg";
     else
     {
@@ -21,7 +21,7 @@ function GetPlanetSmallImage ($skinpath, $type)
 // Получить большую картинку планеты.
 function GetPlanetImage ($skinpath, $type)
 {
-    if ($type == 0) return $skinpath."planeten/mond.jpg";
+    if ($type == 0 || $type == 10003) return $skinpath."planeten/mond.jpg";
     else if ($type == 10000) return $skinpath."planeten/debris.jpg";
     else
     {

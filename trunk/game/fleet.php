@@ -774,8 +774,8 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         {
             $text .= ", и устанавливает, что эта планета пригодна для колонизации. Вскоре после начала освоения планеты поступает сообщение о беспорядках на главной планете, так как империя становится слишком большой и люди возвращаются обратно.\n";
 
-            // Добавить покинутую планету.
-            AbandonPlanet ( $target['g'], $target['s'], $target['p'], $queue['end'] );
+            // Добавить покинутую колонию.
+            CreateAbandonedColony ( $target['g'], $target['s'], $target['p'], $queue['end'] );
         }
         else
         {
