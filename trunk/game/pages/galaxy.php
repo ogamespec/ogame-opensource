@@ -532,6 +532,7 @@ while ($num--)
         else if ( $activity > $ago60) $akt = "&nbsp;(".floor(($now - $activity)/60)." min)";
     }
     if ( $planet['type'] == 10001 ) $planet_name = "Уничтоженная планета$akt";
+    else if ( $planet['type'] == 10004 ) { $planet_name = "Покинутая колония$akt"; $phalanx = false; }
     else $planet_name = $planet['name'].$akt;
     if ($phalanx) $planet_name = "<a href='#' onclick=fenster('index.php?page=phalanx&session=$session&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."',\"Bericht_Phalanx\") title=\"Фаланга\">" . $planet_name . "</a>";
     echo "<th width=\"130\" style='white-space: nowrap;'>$planet_name</th>\n";
@@ -600,7 +601,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     // Приоритеты Обычного: Режим отпуска -> Заблокирован -> Давно неактивен -> Неактивен -> Без статуса
     $stat = "";
     echo "<th width=\"150\">\n";
-    if ( $planet['type'] != 10001 )
+    if ( !($planet['type'] == 10001 || $planet['type'] == 10004) )
     {
         echo "<a style=\"cursor:pointer\" onmouseover=\"return overlib('<table width=240 >";
         echo "<tr><td class=c >Игрок ".$user['oname'].". Место в рейтинге - ".$user['place1']."</td></tr>";
@@ -638,7 +639,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     echo "</th>\n";
 
     // Альянс
-    if ($user['ally_id'] && $planet['type'] != 10001)
+    if ($user['ally_id'] && !($planet['type'] == 10001 || $planet['type'] == 10004) )
     {
         $ally = LoadAlly ( $user['ally_id']);
         $allytext = "<a style=\"cursor:pointer\"\n";
@@ -650,7 +651,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
 
     // Действия
     echo "<th width=\"125\" style='white-space: nowrap;'>\n";
-    if ( $planet['type'] != 10001 && !$own)
+    if ( !($planet['type'] == 10001 || $planet['type'] == 10004) && !$own)
     {
         echo "<a style=\"cursor:pointer\" onclick=\"javascript:doit(6, ".$planet['g'].",".$planet['s'].",".$planet['p'].", 1, ".$GlobalUser['maxspy'].");\"><img src=\"".UserSkin()."img/e.gif\" border=\"0\" alt=\"Шпионаж\" title=\"Шпионаж\" /></a>\n";
         echo "<a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"Написать сообщение\" title=\"Написать сообщение\" /></a>\n";
