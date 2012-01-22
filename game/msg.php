@@ -64,9 +64,11 @@ function DeleteOldestMessage ($player_id)
 }
 
 // Послать сообщение. Возвращает id нового сообщения. (может вызываться откуда угодно)
-function SendMessage ($player_id, $from, $subj, $text, $pm)
+function SendMessage ($player_id, $from, $subj, $text, $pm, $when=0)
 {
     global $db_prefix;
+
+    if ($when == 0) $when = time ();
 
     // Обработать параметры.
     if ($pm == 0) {
@@ -83,7 +85,7 @@ function SendMessage ($player_id, $from, $subj, $text, $pm)
     }
 
     // Добавить сообщение.
-    $msg = array( '', $player_id, $pm, $from, $subj, $text, 0, time() );
+    $msg = array( '', $player_id, $pm, $from, $subj, $text, 0, $when );
     $id = AddDBRow ( $msg, "messages" );
 
     return $id;
