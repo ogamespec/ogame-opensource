@@ -2,6 +2,15 @@
 
 // Экспедиции.
 
+// Посчитать количество активных экспедиций у выбранного игрока.
+function GetExpeditionsCount ($player_id)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."fleet WHERE (mission = 15 OR mission = 115 OR mission = 215) AND owner_id = $player_id;";
+    $result = dbquery ($query);
+    return dbrows ($result);
+}
+
 // Загрузить настройки экспедиции.
 function LoadExpeditionSettings ()
 {
@@ -9,6 +18,36 @@ function LoadExpeditionSettings ()
     $query = "SELECT * FROM ".$db_prefix."exptab;";
     $result = dbquery ($query);
     return dbarray ($result);
+}
+
+// Посчитать очки экспедиционного флота.
+function ExpPoints ( $fleet )
+{
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $m = $k = $d = $e = 0;
+    $structure = 0;
+
+    foreach ( $fleetmap as $i=>$gid )
+    {
+        $amount = $fleet[$gid];
+        ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
+        $structure += ($m + $k) * $amount;
+    }
+
+    return $structure / 1000;
+}
+
+// Верхний предел экспедиционных очков.
+function ExpUpperLimit ()
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."users ORDER BY score1 DESC LIMIT 1";
+    $result = dbquery ($query);
+    if ( $result ) {
+        $user = dbarray ($result);
+        if ( $user['score1'] >= 5000000000 ) return 12000;
+    }
+    return 9000;
 }
 
 // Ничего не произошло.
@@ -75,36 +114,6 @@ function Logbook ($expcount, $exptab)
         $n = mt_rand ( 0, count($msg_4) - 1 );
         return $msg_4[$n];
     }
-}
-
-// Посчитать очки экспедиционного флота.
-function ExpPoints ( $fleet )
-{
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $m = $k = $d = $e = 0;
-    $structure = 0;
-
-    foreach ( $fleetmap as $i=>$gid )
-    {
-        $amount = $fleet[$gid];
-        ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
-        $structure += ($m + $k) * $amount;
-    }
-
-    return $structure / 1000;
-}
-
-// Верхний предел экспедиционных очков.
-function ExpUpperLimit ()
-{
-    global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."users ORDER BY score1 DESC LIMIT 1";
-    $result = dbquery ($query);
-    if ( $result ) {
-        $user = dbarray ($result);
-        if ( $user['score1'] >= 5000000000 ) return 12000;
-    }
-    return 9000;
 }
 
 // ------------- 
@@ -312,7 +321,7 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     $exptab = LoadExpeditionSettings ();
 
-    $hold_time = 1;
+    $hold_time = $fleet_obj['flight_time'] / 3600;
 
     $origin_user = LoadUser ( $origin['owner_id'] );
     loca_add ( "common", $origin_user['lang'] );
@@ -352,15 +361,6 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
     if ( $fleet[210] > 0 ) $text .= "\n<br/>\n<br/>\n" . Logbook ( $expcount, $exptab);
 
     SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Результат экспедиции [".$target['g'].":".$target['s'].":".$target['p']."]", $text, 3, $queue['end']);
-}
-
-// Посчитать количество активных экспедиций у выбранного игрока.
-function GetExpeditionsCount ($player_id)
-{
-    global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."fleet WHERE (mission = 15 OR mission = 115 OR mission = 215) AND owner_id = $player_id;";
-    $result = dbquery ($query);
-    return dbrows ($result);
 }
 
 ?>
