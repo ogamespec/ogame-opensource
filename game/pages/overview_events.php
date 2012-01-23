@@ -321,7 +321,7 @@ function EventList ()
         {
             // Время отправления и прибытия
             $task[$tasknum]['start_time'] = $queue['end'];
-            $task[$tasknum]['end_time'] = 2 * $queue['end'] - $queue['start'];
+            $task[$tasknum]['end_time'] = $task[$tasknum]['start_time'] + $fleet_obj['deploy_time'];
 
             // Флот
             $task[$tasknum]['fleets'] = 1;
@@ -344,7 +344,10 @@ function EventList ()
             // Время отправления и прибытия
             $task[$tasknum]['start_time'] = $queue['end'];
             $task[$tasknum]['end_time'] = 2 * $queue['end'] - $queue['start'];
-            if ( GetMission ($fleet_obj) == 5 || GetMission ($fleet_obj) == 15 ) $task[$tasknum]['end_time'] += $fleet_obj['deploy_time'];
+            if ( GetMission ($fleet_obj) == 5 || GetMission ($fleet_obj) == 15 ) {
+                if ( $fleet_obj['mission'] > 200) $task[$tasknum]['end_time'] = $task[$tasknum]['start_time'] + $fleet_obj['deploy_time'];
+                else $task[$tasknum]['end_time'] = $task[$tasknum]['start_time'] + $fleet_obj['deploy_time'] + $fleet_obj['flight_time'];
+            }
 
             // Флот
             $task[$tasknum]['fleets'] = 1;
