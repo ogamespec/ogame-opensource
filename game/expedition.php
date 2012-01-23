@@ -122,11 +122,88 @@ function Logbook ($expcount, $exptab)
 // Встреча с чужими
 function Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target)
 {
+    $weak = array (
+        'Ваш экспедиционный флот испытал не особо дружественный первый контакт с неизвестной расой.',
+        'Какие-то корабли неизвестного происхождения без предупреждения атаковали Ваш экспедиционный флот!',
+        'На нашу экспедицию напала небольшая группа неизвестных кораблей!',
+        'Экспедиционный флот сообщает о контакте с неизвестными кораблями. Сообщения невозможно расшифровать, но судя по всему чужой флот активирует свои орудия.',
+    );
+    $medium = array (
+        'Неизвестная раса атакует наш экспедиционный флот!',
+        'Ваш экспедиционный флот по всей видимости вторгся на территорию неизвестной, но крайне агрессивной инопланетной расы.',
+        'Связь с нашим экспедиционным флотом прервалась. Насколько можно судить по расшифровкам последнего сообщения, флот находится под массивным обстрелом неидентифицированного флота.',
+    );
+    $strong = array (
+        'На вашу экспедицию напал вражеский флот пришельцев, имеются тяжёлые потери!',
+        'Огромный союз кристаллических кораблей неизвестного происхождения держит прямой курс на наш экспедиционный фот. Нам остаётся ожидать наихудшего.',
+    );
+
+    // Определить уровень чужих
+    $chance = mt_rand (0, 99);
+    if ( $chance >= 99 ) {        // сильные
+        $level = 2;
+        $n = mt_rand ( 0, count($strong) - 1 );
+        $msg = $strong[$n];
+    }
+    else if ( $chance >= 90 ) {    // средние
+        $level = 1;
+        $n = mt_rand ( 0, count($medium) - 1 );
+        $msg = $medium[$n];
+    }
+    else {    // слабые
+        $level = 0;
+        $n = mt_rand ( 0, count($weak) - 1 );
+        $msg = $weak[$n];
+    }
+
+    ExpeditionBattle ( $fleet_obj['fleet_id'], 0, $level );
+
+    return $msg;
 }
+
+// ---
 
 // Встреча с пиратами
 function Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target)
 {
+    $weak = array (
+        'Пара отчаянных космических пиратов попыталась захватить наш флот.',
+        'Нам пришлось обороняться от пиратов, которых, к счастью, было не так много.',
+        'Мы перехватили переговоры пьяных пиратов. По всей видимости на нас должны напасть.',
+        'Наш экспедиционный флот сообщает, что некий Моа Тикарр и его дикая свора требуют безоговорочной капитуляции нашего флота. Если они предпримут что-то серьёзное, то вынуждены будут испытать на себе наши орудия.',
+        'Нас атакуют какие-то варвары. И хотя их примитивные корабли даже отдалённо не заслуживают называться кораблями и не способны причинить нам вреда, но если обстрел примет сколько-нибудь серьёзный масштаб, то нам придётся открыть ответный огонь.',
+    );
+    $medium = array (
+        'Ваш экспедиционный флот пережил неприятную встречу с космическими пиратами.',
+        'Мы попались в лапы звёздным пиратам! Бой был неизбежен.',
+        'Сигнал о помощи, на который последовала экспедиция, оказался приманкой звёздных пиратов. Бой был неизбежен.',
+    );
+    $strong = array (
+        'Пойманные сигналы исходили не от инопланетной расы, а от секретной пиратской базы! Они были не в особом восторге от нашего появления.',
+        'Экспедиционный флот сообщает о жестоких боях с неизвестными кораблями!',
+    );
+
+    // Определить уровень пиратов
+    $chance = mt_rand (0, 99);
+    if ( $chance >= 99 ) {        // сильные
+        $level = 2;
+        $n = mt_rand ( 0, count($strong) - 1 );
+        $msg = $strong[$n];
+    }
+    else if ( $chance >= 90 ) {    // средние
+        $level = 1;
+        $n = mt_rand ( 0, count($medium) - 1 );
+        $msg = $medium[$n];
+    }
+    else {    // слабые
+        $level = 0;
+        $n = mt_rand ( 0, count($weak) - 1 );
+        $msg = $weak[$n];
+    }
+
+    ExpeditionBattle ( $fleet_obj['fleet_id'], 1, $level );
+
+    return $msg;
 }
 
 // ---
@@ -204,14 +281,18 @@ function Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target)
     return $msg[$n];
 }
 
+// ---
+
 // Задержка возврата экспедиции
 function Exp_DelayFleet ($queue, $fleet_obj, $fleet, $origin, $target)
 {
+    return Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target);
 }
 
 // Ускорение возврата экспедиции
 function Exp_AccelFleet ($queue, $fleet_obj, $fleet, $origin, $target)
 {
+    return Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target);
 }
 
 // ---
@@ -301,11 +382,13 @@ function Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target)
 // Нахождение кораблей
 function Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target)
 {
+    return Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target);
 }
 
 // Нахождение Скупщика
 function Exp_TraderFound ($queue, $fleet_obj, $fleet, $origin, $target)
 {
+    return Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target);
 }
 
 // -------------
@@ -340,19 +423,22 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
         $chance = mt_rand ( 0, 99 );
         if ($chance >= $chance_depleted)    // Удачная экспедиция.
         {
-            if ( $chance >= $exptab['chance_alien'] ) $text = Exp_NothingHappens/*Exp_BattleAliens*/ ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_pirates'] ) $text = Exp_NothingHappens/*Exp_BattlePirates*/ ($queue, $fleet_obj, $fleet, $origin, $target);
+            if ( $chance >= $exptab['chance_alien'] ) $text = Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target);
+            else if ( $chance >= $exptab['chance_pirates'] ) $text = Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_dm'] ) $text = Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_lost'] ) $text = Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_delay'] ) $text = Exp_NothingHappens/*Exp_DelayFleet*/ ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_accel'] ) $text = Exp_NothingHappens/*Exp_AccelFleet*/ ($queue, $fleet_obj, $fleet, $origin, $target);
+            else if ( $chance >= $exptab['chance_delay'] ) $text = Exp_DelayFleet ($queue, $fleet_obj, $fleet, $origin, $target);
+            else if ( $chance >= $exptab['chance_accel'] ) $text = Exp_AccelFleet ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_res'] ) $text = Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_fleet'] ) $text = Exp_NothingHappens/*Exp_FleetFound*/ ($queue, $fleet_obj, $fleet, $origin, $target);
-            else $text = Exp_NothingHappens/*Exp_TraderFound*/ ($queue, $fleet_obj, $fleet, $origin, $target);
+            else if ( $chance >= $exptab['chance_fleet'] ) $text = Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target);
+            else $text = Exp_TraderFound ($queue, $fleet_obj, $fleet, $origin, $target);
         }
         else $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target);
     }
     else $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target);
+
+    // DEBUG
+    //$text = Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target);
 
     // Обновляем счётчик посещений экспедиции на планете.
     AdjustResources ( 1, 0, 0, $target['planet_id'], '+' );
