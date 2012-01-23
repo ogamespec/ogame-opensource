@@ -77,6 +77,36 @@ function Logbook ($expcount, $exptab)
     }
 }
 
+// Посчитать очки экспедиционного флота.
+function ExpPoints ( $fleet )
+{
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $m = $k = $d = $e = 0;
+    $structure = 0;
+
+    foreach ( $fleetmap as $i=>$gid )
+    {
+        $amount = $fleet[$gid];
+        ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
+        $structure += ($m + $k) * $amount;
+    }
+
+    return $structure / 1000;
+}
+
+// Верхний предел экспедиционных очков.
+function ExpUpperLimit ()
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."users ORDER BY score1 DESC LIMIT 1";
+    $result = dbquery ($query);
+    if ( $result ) {
+        $user = dbarray ($result);
+        if ( $user['score1'] >= 5000000000 ) return 12000;
+    }
+    return 9000;
+}
+
 // ------------- 
 // Удачные события экспедиции
 
@@ -89,6 +119,8 @@ function Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target)
 function Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target)
 {
 }
+
+// ---
 
 // Нахождение Тёмной материи
 function Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target)
@@ -145,6 +177,8 @@ function Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target)
     return $msg;
 }
 
+// ---
+
 // Потеря всего флота
 function Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target)
 {
@@ -171,10 +205,89 @@ function Exp_AccelFleet ($queue, $fleet_obj, $fleet, $origin, $target)
 {
 }
 
+// ---
+
 // Нахождение ресурсов
 function Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target)
 {
+    $small = array (
+        'Ваша экспедиция нашла маленькое скопление астероидов, из которого можно добыть некоторые ресурсы.',
+        'На удалённом планетоиде были найдены легко доступные залежи ресурсов, которые были успешно доставлены на борт.',
+        'Экспедиция наткнулась на радиоактивно облучённого планетоида с крайне ядовитой атмосферой. Однако сканы показали, что этот планетоид очень богат полезными ископаемыми. При помощи роботов учёные пытаются получить самый максимум.',
+        'Ваша экспедиция натолкнулась на обломки корабля из какой-то древней битвы. Отдельные компоненты ещё можно собрать и переработать.'
+    );
+    $medium = array (
+        'Ваша экспедиция нашла древний заполненный грузом конвой. Некоторые ресурсы удалось доставить на борт.',
+        'На маленькой луне с собственной атмосферой ваша экспедиция нашла крупные залежи ресурсов.',
+        'Мы встретили маленький конвой гражданских кораблей, которому срочно требуется пища и медикаменты. Взамен мы получили целую кучу полезных ресурсов.',
+    );
+    $large = array (
+        'Пояс из минералов вокруг неизвестной планеты содержал невероятные количества ресурсов. Экспедиционный флот сообщает о полных хранилищах!',
+        'Ваш экспедиционный флот сообщает о нахождении обломков огромного инопланетного корабля. Его технология им абсолютно неизвестна, но отдельные его части можно пустить на ресурсы.',
+    );
+    $footer = array (
+        'Запись в бортовом журнале первого офицера: Мы забили каждый уголок корабля, но всех ресурсов взять с собой всё равно не сможем.',
+        'Запись в бортовом журнале первого офицера: Было бы у нас хотя бы на пару транспортов больше! А так мы оставляем целую кучу ресурсов.',
+        'Запись в бортовом журнале первого офицера: Хоть мы и выкинули всё ненужное за борт, но места для ресурсов всё равно не хватает.',
+        'Запись в бортовом журнале первого офицера: Даже после переоборудования столовой и кают-компании места для ресурсов не хватает всё равно.',
+    );
+    $resname = array ( loca ("METAL"), loca ("CRYSTAL"), loca ("DEUTERIUM" ) );
+
+    // Рассчитать тип найденного ресурса
+    $type = mt_rand (0, 2);
+
+    // Рассчитать тип месторождения
+    $chance = mt_rand (0, 99);
+    if ( $chance >= 99 ) {        // крупное
+        $roll = mt_rand (51, 100) * 2;
+        $n = mt_rand ( 0, count($large) - 1 );
+        $msg = $large[$n];
+    }
+    else if ( $chance >= 90 ) {    // среднее
+        $roll = mt_rand (26, 50) * 2;
+        $n = mt_rand ( 0, count($medium) - 1 );
+        $msg = $medium[$n];
+    }
+    else {    // маленькое
+        $roll = mt_rand (5, 25) * 2;
+        $n = mt_rand ( 0, count($small) - 1 );
+        $msg = $small[$n];
+    }
+
+    if ( $type == 1) $roll /= 2;
+    else if ( $type == 2) $roll /= 3;
+
+    // Рассчитать количество найденного ресурса
+    $points = min ( max ( 200, ExpPoints ($fleet)), ExpUpperLimit() );
+    $cargo = FleetCargoSummary ($fleet);
+    $amount = $roll * $points;
+
+    // Количество найденных ресурсов уменьшается до общей грузоподъемности флота
+    if ( $cargo < $amount ) {
+        $amount = $cargo;
+        $no_cargo = true;
+    }
+    else $no_cargo = false;
+
+    $msg .= "<br>Было добыто ".nicenum($amount)." " . $resname[$type];
+    if ( $no_cargo ) {
+        $n = mt_rand ( 0, count($footer) - 1 );
+        $msg .= "<br><br>" . $footer[$n];
+    }
+
+    $m = $k = $d = 0;
+    if ( $type == 0) $m = $amount;
+    else if ( $type == 1) $k = $amount;
+    else if ( $type == 2) $d = $amount;
+
+    // Вернуть флот.
+    // В качестве времени полёта используется время удержания.
+    DispatchFleet ($fleet, $origin, $target, 115, $fleet_obj['deploy_time'], $fleet_obj['m'] + $m, $fleet_obj['k'] + $k, $fleet_obj['d'] + $d, 0, $queue['end']);
+
+    return $msg;
 }
+
+// ---
 
 // Нахождение кораблей
 function Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target)
@@ -201,6 +314,10 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
 
     $hold_time = 1;
 
+    $origin_user = LoadUser ( $origin['owner_id'] );
+    loca_add ( "common", $origin_user['lang'] );
+    loca_add ( "technames", $origin_user['lang'] );
+
     // Событие экспедиции.
     $chance = mt_rand ( 0, 99 );
     if ( $chance < ($exptab['chance_success'] + $hold_time) )
@@ -220,7 +337,7 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
             else if ( $chance >= $exptab['chance_lost'] ) $text = Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_delay'] ) $text = Exp_NothingHappens/*Exp_DelayFleet*/ ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_accel'] ) $text = Exp_NothingHappens/*Exp_AccelFleet*/ ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_res'] ) $text = Exp_NothingHappens/*Exp_ResourcesFound*/ ($queue, $fleet_obj, $fleet, $origin, $target);
+            else if ( $chance >= $exptab['chance_res'] ) $text = Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_fleet'] ) $text = Exp_NothingHappens/*Exp_FleetFound*/ ($queue, $fleet_obj, $fleet, $origin, $target);
             else $text = Exp_NothingHappens/*Exp_TraderFound*/ ($queue, $fleet_obj, $fleet, $origin, $target);
         }
