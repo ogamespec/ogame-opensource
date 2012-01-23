@@ -897,4 +897,317 @@ function RocketAttack ( $fleet_id, $planet_id )
     SendMessage ( $target_user['player_id'], "Командование флотом", "Ракетная атака", $text, 2);
 }
 
+// -----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Модифицировать флот (после битвы с чужими/пиратами)
+function WritebackBattleResultsExpedition ( $a, $d, $res )
+{
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+
+    // Бой с раундами.
+
+    $rounds = count ( $res['rounds'] );
+    if ( $rounds > 0 ) 
+    {
+        $last = $res['rounds'][$rounds - 1];        
+
+        foreach ( $last['attackers'] as $i=>$attacker )        // Атакующие
+        {
+            $fleet_obj = LoadFleet ( $attacker['id'] );
+            $queue = GetFleetQueue ($fleet_obj['fleet_id']);
+            $origin = GetPlanet ( $fleet_obj['start_planet'] );
+            $target = GetPlanet ( $fleet_obj['target_planet'] );
+            $ships = 0;
+            foreach ( $fleetmap as $i=>$gid ) $ships += $attacker[$gid];
+
+            // Вернуть флот, если что-то осталось.
+            // В качестве времени полёта используется время удержания.
+            if ($ships > 0) DispatchFleet ($attacker, $origin, $target, 115, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
+        }
+
+    }
+
+    // Бой без раундов.
+
+    else 
+    {
+        foreach ( $a as $i=>$attacker )            // Атакующие
+        {
+            $fleet_obj = LoadFleet ( $attacker['id'] );
+            $queue = GetFleetQueue ($fleet_obj['fleet_id']);
+            $origin = GetPlanet ( $fleet_obj['start_planet'] );
+            $target = GetPlanet ( $fleet_obj['target_planet'] );
+            $ships = 0;
+            foreach ( $fleetmap as $i=>$gid ) $ships += $attacker['fleet'][$gid];
+
+            // Вернуть флот, если что-то осталось.
+            // В качестве времени полёта используется время удержания.
+            if ($ships > 0)  DispatchFleet ($attacker['fleet'], $origin, $target, 115, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
+        }
+
+    }
+}
+
+// Сгенерировать боевой доклад.
+function BattleReportExpedition ( $a, $d, $res, $now, $pirates, $exp_g, $exp_s, $exp_p )
+{
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+    $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $dmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 401, 402, 403, 404, 405, 406, 407, 408 );
+
+    $text = "";
+
+    // Заголовок доклада.
+    $text .= "Дата/Время: ".date ("m-d H:i:s", $now)." . Произошёл бой между следующими флотами:<br>";
+
+    // Флоты перед боем.
+    $text .= "<table border=1 width=100%><tr>";
+    foreach ($a as $i=>$attacker)
+    {
+        $text .= GenSlot ( $attacker, $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker['fleet'], null, 1, 1 );
+    }
+    $text .= "</tr></table>";
+    $text .= "<table border=1 width=100%><tr>";
+    foreach ($d as $i=>$defender)
+    {
+        $text .= GenSlot ( $defender, $defender['g'], $defender['s'], $defender['p'], $dmap, $defender['fleet'], $defender['defense'], 1, 0 );
+    }
+    $text .= "</tr></table>";
+
+    // Раунды.
+    foreach ( $res['rounds'] as $i=>$round)
+    {
+        $text .= "<br><center>Атакующий флот делает: ".nicenum($round['ashoot'])." выстрела(ов) общей мощностью ".nicenum($round['apower'])." по обороняющемуся. Щиты обороняющегося поглощают ".nicenum($round['dabsorb'])." мощности выстрелов";
+        $text .= "<br>Обороняющийся флот делает ".nicenum($round['dshoot'])." выстрела(ов) общей мощностью ".nicenum($round['dpower'])." выстрела(ов) по атакующему. Щиты атакующего поглощают ".nicenum($round['aabsorb'])." мощности выстрелов</center>";
+
+        $text .= "<table border=1 width=100%><tr>";        // Атакующие
+        foreach ( $round['attackers'] as $n=>$attacker )
+        {
+            $f = LoadFleet ( $attacker['id'] );
+            $user = LoadUser ( $f['owner_id'] );
+            $start_planet = GetPlanet ( $f['start_planet'] );
+            $user['fleet'] = array ();
+            foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $attacker[$gid];
+            $text .= GenSlot ( $user, $start_planet['g'], $start_planet['s'], $start_planet['p'], $amap, $user['fleet'], null, 0, 1 );
+        }
+        $text .= "</tr></table>";
+
+        $text .= "<table border=1 width=100%><tr>";        // Обороняющиеся
+        foreach ( $round['defenders'] as $n=>$defender )
+        {
+            $user = array ();
+            if ( $pirates ) $user['oname'] = "Piraten";
+            else $user['oname'] = "Aliens";
+            $user['fleet'] = array ();
+            $user['defense'] = array ();
+            foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $defender[$gid];
+            foreach ($defmap as $g=>$gid) $user['defense'][$gid] = 0;
+            $text .= GenSlot ( $user, $exp_g, $exp_s, $exp_p, $dmap, $user['fleet'], $user['defense'], 0, 0 );
+        }
+        $text .= "</tr></table>";
+    }
+
+    // Результаты боя.
+//<!--A:167658,W:167658-->
+    if ( $res['result'] === "awon" ) $text .= "<p> Атакующий выиграл битву!";
+    else if ( $res['result'] === "dwon" ) $text .= "<p> Обороняющийся выиграл битву!";
+    else if ( $res['result'] === "draw" ) $text .= "<p> Бой оканчивается вничью, оба флота возвращаются на свои планеты";
+
+    return $text;
+}
+
+// Битва с чужими / пиратами.
+// Состав флота чужих/пиратов определяется параметром level ( 0: слабые, 1: средние, 2: сильные )
+function ExpeditionBattle ( $fleet_id, $pirates, $level )
+{
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+
+    $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
+
+    global  $db_host, $db_user, $db_pass, $db_name, $db_prefix;
+    $a = array ();
+    $d = array ();
+
+    $unitab = LoadUniverse ();
+    $fid = $unitab['fid'];
+    $did = $unitab['did'];
+    $rf = $unitab['rapid'];
+
+    // *** Союзные атаки не должны вступать битву. Игнорировать их.
+    $f = LoadFleet ( $fleet_id );
+
+    // *** Сгенерировать исходные данные
+
+    // Список атакующих
+    $anum = 0;
+    $a[0] = LoadUser ( $f['owner_id'] );
+    $a[0]['fleet'] = array ();
+    foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = $f["ship$gid"];
+    $start_planet = GetPlanet ( $f['start_planet'] );
+    $a[0]['g'] = $start_planet['g'];
+    $a[0]['s'] = $start_planet['s'];
+    $a[0]['p'] = $start_planet['p'];
+    $a[0]['id'] = $fleet_id;
+    $a[0]['points'] = $a[0]['fpoints'] = 0;
+    $anum++;
+
+    // Список обороняющихся
+    $dnum = 0;
+    $d[0] = LoadUser ( 99999 );
+    if ( $pirates ) {
+        $d[0]['oname'] = "Piraten";
+        $d[0]['r109'] = max (0, $a[0]['r109'] - 3);
+        $d[0]['r110'] = max (0, $a[0]['r110'] - 3);
+        $d[0]['r111'] = max (0, $a[0]['r111'] - 3);
+    }
+    else {
+        $d[0]['oname'] = "Aliens";
+        $d[0]['r109'] = $a[0]['r109'] + 3;
+        $d[0]['r110'] = $a[0]['r110'] + 3;
+        $d[0]['r111'] = $a[0]['r111'] + 3;
+    }
+    $d[0]['fleet'] = array ();
+    $d[0]['defense'] = array ();
+    foreach ($fleetmap as $i=>$gid) {        // Определить состав флота пиратов / чужих
+
+        if ( $pirates ) {
+            // Пиратский флот, Округление состава флота вниз.
+            // Нормальный - 30% +/- 3% от количества кораблей вашего флота + 5 ЛИ
+            // Сильный - 50% +/- 5% от количества кораблей вашего флота + 3 Крейсера
+            // Оч. Сильный - 80% +/- 8% от количества кораблей вашего флота + 2 Линка
+
+            if ( $a[0]['fleet'][$gid] > 0 )
+            {
+                if ( $level == 0 ) $ratio = mt_rand ( 27, 33 ) / 100;
+                else if ( $level == 1 ) $ratio = mt_rand ( 45, 55 ) / 100;
+                else if ( $level == 2 ) $ratio = mt_rand ( 72, 88 ) / 100;
+                $d[0]['fleet'][$gid] = floor ($a[0]['fleet'][$gid] * $ratio);
+            }
+            else $d[0]['fleet'][$gid] = 0;
+        }
+        else {
+            // Флот Чужих, Округление состава флота вверх.
+            // Нормальный - 40% +/- 4% от количества кораблей вашего флота + 5 ТИ
+            // Сильный - 60% +/- 6% от количества кораблей вашего флота + 3 Линейки
+            // Оч. Сильный - 90% +/- 9% от количества кораблей вашего флота + 2 Уника
+
+            if ( $a[0]['fleet'][$gid] > 0 )
+            {
+                if ( $level == 0 ) $ratio = mt_rand ( 36, 44 ) / 100;
+                else if ( $level == 1 ) $ratio = mt_rand ( 54, 66 ) / 100;
+                else if ( $level == 2 ) $ratio = mt_rand ( 81, 99 ) / 100;
+                $d[0]['fleet'][$gid] = ceil ($a[0]['fleet'][$gid] * $ratio);
+            }
+            else $d[0]['fleet'][$gid] = 0;
+        }
+
+    }
+
+    if ( $pirates ) {
+        if ( $level == 0 ) $d[0]['fleet'][204] += 5;
+        else if ( $level == 1 ) $d[0]['fleet'][206] += 3;
+        else if ( $level == 2 ) $d[0]['fleet'][207] += 2;
+    }
+    else {
+        if ( $level == 0 ) $d[0]['fleet'][205] += 5;
+        else if ( $level == 1 ) $d[0]['fleet'][215] += 3;
+        else if ( $level == 2 ) $d[0]['fleet'][213] += 2;
+    }
+
+    foreach ($defmap as $i=>$gid) $d[0]['defense'][$gid] = 0;
+    $target_planet = GetPlanet ( $f['target_planet'] );
+    $d[0]['g'] = $target_planet['g'];
+    $d[0]['s'] = $target_planet['s'];
+    $d[0]['p'] = $target_planet['p'];
+    $d[0]['id'] = $target_planet['planet_id'];
+    $d[0]['points'] = $d[0]['fpoints'] = 0;
+    $dnum++;
+
+    $source .= "Rapidfire = $rf\n";
+    $source .= "FID = $fid\n";
+    $source .= "DID = $did\n";
+
+    $source .= "Attackers = ".$anum."\n";
+    $source .= "Defenders = ".$dnum."\n";
+
+    foreach ($a as $num=>$attacker)
+    {
+        $source .= "Attacker".$num." = (".$attacker['id']." ";
+        $source .= $attacker['r109'] . " " . $attacker['r110'] . " " . $attacker['r111'] . " ";
+        foreach ($fleetmap as $i=>$gid) $source .= $attacker['fleet'][$gid] . " ";
+        $source .= ")\n";
+    }
+    foreach ($d as $num=>$defender)
+    {
+        $source .= "Defender".$num." = (".$defender['id']." ";
+        $source .= $defender['r109'] . " " . $defender['r110'] . " " . $defender['r111'] . " ";
+        foreach ($fleetmap as $i=>$gid) $source .= $defender['fleet'][$gid] . " ";
+        foreach ($defmap as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
+        $source .= ")\n";
+    }
+
+    $battle = array ( '', $source, "" );
+    $battle_id = AddDBRow ( $battle, "battledata" );
+
+    $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
+    fwrite ( $bf, $source );
+    fclose ( $bf );
+
+    // *** Передать данные боевому движку
+
+    $arg = "\"battle_id=$battle_id\"";
+    system ( $unitab['battle_engine'] . " $arg" );
+
+    // *** Обработать выходные данные
+
+    $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
+    $res = unserialize($battleres);
+
+    // Определить исход битвы.
+    if ( $res['result'] === "awon" ) $battle_result = 0;
+    else if ( $res['result'] === "dwon" ) $battle_result = 1;
+    else $battle_result = 2;
+
+    // Рассчитать общие потери (учитывать дейтерий и восстановленную оборону)
+    $aloss = $dloss = 0;
+    CalcLosses ( $a, $d, $res, array ( ), &$aloss, &$dloss );
+
+    // Сгенерировать боевой доклад.
+    loca_add ( "techshortnames", "de" );
+    loca_add ( "techshortnames", "en" );
+    loca_add ( "techshortnames", "ru" );
+    loca_add ( "technames", "de" );
+    loca_add ( "technames", "en" );
+    loca_add ( "technames", "ru" );
+    $text = BattleReportExpedition ( $a, $d, $res, time(), $pirates, $target_planet['g'], $target_planet['s'], $target_planet['p'] );
+
+    // Разослать сообщения
+    $mailbox = array ();
+
+    // Если флот уничтожен за 1 или 2 раунда - не показывать лог боя для атакующих.
+    if ( count($res['rounds']) <= 2 && $battle_result == 1 ) $text = "Контакт с флотом потерян. <br> Это означает, что его уничтожили первым же залпом <!--A:$aloss,W:$dloss-->";
+
+    foreach ( $a as $i=>$user )        // Атакующие
+    {
+        if ( $mailbox[ $user['player_id'] ] == true ) continue;
+        $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6 );
+        MarkMessage ( $user['player_id'], $bericht );
+        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$target_planet['g'].":".$target_planet['s'].":".$target_planet['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
+        SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2 );
+        $mailbox[ $user['player_id'] ] = true;
+    }
+
+    // Модифицировать флот
+    WritebackBattleResultsExpedition ( $a, $d, $res );
+
+    // Изменить статистику игроков
+    //foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
+    //foreach ( $d as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
+    RecalcRanks ();
+
+    return $battle_result;
+}
+
 ?>
