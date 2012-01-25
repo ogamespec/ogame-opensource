@@ -1019,7 +1019,7 @@ function BattleReportExpedition ( $a, $d, $res, $now, $pirates, $exp_g, $exp_s, 
 
 // Битва с чужими / пиратами.
 // Состав флота чужих/пиратов определяется параметром level ( 0: слабые, 1: средние, 2: сильные )
-function ExpeditionBattle ( $fleet_id, $pirates, $level )
+function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
@@ -1192,10 +1192,10 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level )
     foreach ( $a as $i=>$user )        // Атакующие
     {
         if ( $mailbox[ $user['player_id'] ] == true ) continue;
-        $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6 );
+        $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6, $when );
         MarkMessage ( $user['player_id'], $bericht );
         $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$target_planet['g'].":".$target_planet['s'].":".$target_planet['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-        SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2 );
+        SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2, $when );
         $mailbox[ $user['player_id'] ] = true;
     }
 
