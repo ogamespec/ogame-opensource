@@ -156,7 +156,7 @@ function Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target)
         $msg = $weak[$n];
     }
 
-    ExpeditionBattle ( $fleet_obj['fleet_id'], 0, $level );
+    ExpeditionBattle ( $fleet_obj['fleet_id'], 0, $level, $queue['end'] );
 
     return $msg;
 }
@@ -201,7 +201,7 @@ function Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target)
         $msg = $weak[$n];
     }
 
-    ExpeditionBattle ( $fleet_obj['fleet_id'], 1, $level );
+    ExpeditionBattle ( $fleet_obj['fleet_id'], 1, $level, $queue['end'] );
 
     return $msg;
 }
@@ -439,6 +439,7 @@ function ExpeditionArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
 function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
 {
+    global $loca_lang;
     $exptab = LoadExpeditionSettings ();
 
     $hold_time = $fleet_obj['flight_time'] / 3600;
@@ -446,6 +447,7 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
     $origin_user = LoadUser ( $origin['owner_id'] );
     loca_add ( "common", $origin_user['lang'] );
     loca_add ( "technames", $origin_user['lang'] );
+    $loca_lang = $origin_user['lang'];
 
     // Событие экспедиции.
     $chance = mt_rand ( 0, 99 );
@@ -475,7 +477,7 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
     else $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target);
 
     // DEBUG
-    //$text = Exp_DelayFleet ($queue, $fleet_obj, $fleet, $origin, $target);
+    //$text = Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target);
 
     // Обновляем счётчик посещений экспедиции на планете.
     AdjustResources ( 1, 0, 0, $target['planet_id'], '+' );
