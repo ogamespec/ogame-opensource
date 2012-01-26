@@ -214,6 +214,8 @@ function CreateUser ( $name, $pass, $email)
 
     // Удалить неактивированного пользователя через 3 дня.
 
+    RecalcRanks ();
+
     return $id;
 }
 
@@ -254,6 +256,8 @@ function RemoveUser ( $player_id, $when)
     // Уменьшить количество пользователей.
     $query = "UPDATE ".$db_prefix."uni SET usercount = usercount - 1;";
     dbquery ($query);
+
+    RecalcRanks ();
 }
 
 // Произвести активацию пользователя.
@@ -513,6 +517,7 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
         AddCleanPlayersEvent ();
 
         // Задание персчёта очков игрока.
+        AddUpdateStatsEvent ();
         AddRecalcPointsEvent ($player_id);
 
         // Редирект на Обзор Главной планеты.

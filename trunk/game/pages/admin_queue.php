@@ -25,12 +25,20 @@ function QueueDesc ( $queue )
         case "Research":
             $planet = GetPlanet ($sub_id);
             return "Ведется исследование '".loca("NAME_$obj_id") . "' ($level) с планеты <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
+        case "UpdateStats": return "Сохранить старую статистику";
         case "RecalcPoints": return "Пересчитать статистику";
         case "AllowName": return "Разрешить сменить имя";
         case "UnloadAll": return "Отгрузить всех игроков";
         case "CleanDebris": return "Чистка виртуальных ПО";
         case "CleanPlanets": return "Чистка уничтоженных планет";
         case "CleanPlayers": return "Удаление неактивных игроков и поставленных на удаление";
+
+        case "CommanderOff": return "Заканчивается офицер: Командир";
+        case "AdmiralOff": return "Заканчивается офицер: Адмирал";
+        case "EngineerOff": return "Заканчивается офицер: Инженер";
+        case "GeologeOff": return "Заканчивается офицер: Геолог";
+        case "TechnocrateOff": return "Заканчивается офицер: Технократ";
+
     }
 
     return "Неизвестный тип задания (type=$type, sub_id=$sub_id, obj_id=$obj_id, level=$level)";

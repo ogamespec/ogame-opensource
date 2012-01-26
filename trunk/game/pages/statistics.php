@@ -117,7 +117,9 @@ while ($rows--) {
     echo "    <!-- rank --> \n";
     echo "    <th> \n";
     echo "      $place&nbsp;&nbsp;\n\n";
-    echo "      <a href='#' onmouseover='return overlib(\"<font color=87CEEB>*</font><br/><font color=white>С 2008-m-d 04:05:02\");' onmouseout='return nd();'><font color='87CEEB'>*</font></a> \n";
+    if ( $diff < 0 ) echo "      <a href='#' onmouseover='return overlib(\"<font color=lime>+".abs($diff)."</font><br/><font color=white>С ".date ("Y-m-d H:i:s", $user['scoredate'])."\");' onmouseout='return nd();'><font color='lime'>+</font></a> \n";
+    else if ( $diff > 0 ) echo "      <a href='#' onmouseover='return overlib(\"<font color=red>-".abs($diff)."</font><br/><font color=white>С ".date ("Y-m-d H:i:s", $user['scoredate'])."\");' onmouseout='return nd();'><font color='red'>-</font></a> \n";
+    else echo "      <a href='#' onmouseover='return overlib(\"<font color=87CEEB>*</font><br/><font color=white>С ".date ("Y-m-d H:i:s", $user['scoredate'])."\");' onmouseout='return nd();'><font color='87CEEB'>*</font></a> \n";
     echo "    </th> \n\n";
 
     $home = GetPlanet ( $user['hplanetid'] );
