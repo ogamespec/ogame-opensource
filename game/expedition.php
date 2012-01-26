@@ -275,6 +275,12 @@ function Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target)
         'Экспедиционный флот не вернулся из прыжка, и наши учёные теперь ломают над этим голову, но всё указывает на то, что с флотом можно распрощаться навсегда.'
     );
 
+    // Списать очки.
+    $points = $fpoints = 0;
+    FleetPrice ( $fleet_obj, &$points, &$fpoints );
+    AdjustStats ( $fleet_obj['owner_id'], $points, $fpoints, 0, '-' );
+    RecalcRanks ();
+
     // Флот возвращать не нужно...
 
     $n = mt_rand ( 0, count($msg) - 1 );
@@ -386,7 +392,7 @@ function Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target)
 
     // Рассчитать количество найденного ресурса
     $points = min ( max ( 200, ExpPoints ($fleet)), ExpUpperLimit() );
-    $cargo = FleetCargoSummary ($fleet);
+    $cargo = max (0, FleetCargoSummary ($fleet) - ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']));
     $amount = $roll * $points;
 
     // Количество найденных ресурсов уменьшается до общей грузоподъемности флота
@@ -419,13 +425,203 @@ function Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target)
 // Нахождение кораблей
 function Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    return Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target);
+    global $UnitParam;
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+
+    $small = array (
+        'Мы натолкнулись на остатки предыдущей экспедиции! Наши техники пытаются найти среди обломков что-то летающее.',
+        'Ваша экспедиция наткнулась на старинную звёздную крепость, уже целую вечность покинутую. В ангаре крепости стоит ещё несколько кораблей. Техники исследуют их на предмет исправности.',
+        'Наша экспедиция нашла планету, почти полностью разрушенную постоянными войнами. На орбите дрейфуют различные обломки. Техники пытаются отремонтировать некоторые из них, в надежде получить информацию, что там произошло.',
+        'Мы нашли покинутую пиратскую базу. В ангаре ещё стоит несколько старых кораблей. Наши техники смотрят, могут ли они ещё летать.',
+    );
+    $medium = array (
+        'Мы нашли остатки армады. Техники экспедиционного флота сразу же принялись за неповреждённые корабли и пытаются починить их.',
+        'Наша экспедиция натолкнулась на древнюю автоматическую верфь. Несколько кораблей находятся ещё в фазе производства и наши техники пытаются восстановить энергообеспечение верфи.',
+    );
+    $large = array (
+        'Мы нашли огромное кладбище космических кораблей. Некоторым техникам из экспедиции удалось восстановить несколько штук.',
+        'Мы обнаружили планету со следами цивилизации. С орбиты можно распознать огромный порт, единственный оставшийся целым. Группа техников и пилотов отправилась на поверхность планеты, чтобы поискать ещё пригодные к использованию корабли.',
+    );
+    $footer = array (
+        'Бортовой журнал, дополнение офицера-механика: Было бы у нас хотя бы пару штук кораблей! Было бы намного легче тащить это богатство.',
+        'Бортовой журнал, дополнение офицера-механика: К сожалению у нас не хватает места, чтобы довезти до дома все эти прекрасные корабли.',
+        'Бортовой журнал, дополнение офицера-механика: К сожалению нам не хватает места, чтоб загрузить все найденные корабли.',
+    );
+
+    $points = $fpoints = 0;
+    $found = array ();
+
+    // Рассчитать количество найденного флота
+    $chance = mt_rand (0, 99);
+    if ( $chance >= 99 ) {        // крупный
+        $roll = mt_rand (101, 200);
+        $n = mt_rand ( 0, count($large) - 1 );
+        $msg = $large[$n];
+    }
+    else if ( $chance >= 90 ) {    // средний
+        $roll = mt_rand (51, 100);
+        $n = mt_rand ( 0, count($medium) - 1 );
+        $msg = $medium[$n];
+    }
+    else {    // маленький
+        $roll = mt_rand (2, 50);
+        $n = mt_rand ( 0, count($small) - 1 );
+        $msg = $small[$n];
+    }
+
+    // Рассчитать структуру найденного флота.
+    $epoints = min ( ExpPoints ($fleet), ExpUpperLimit() );
+    $structure = max ( 7000, floor ($roll * $epoints / 2) );
+    $no_structure = false;
+
+    // Возможные типы найденных кораблей
+    if ( $fleet[210] > 0 ) $found = array ( 210, 202 );    // шпик
+    if ( $fleet[202] > 0 ) $found = array ( 210, 202, 203 );    // мт
+    if ( $fleet[204] > 0 ) $found = array ( 210, 202, 204, 203 );    // ли
+    if ( $fleet[203] > 0 ) $found = array ( 210, 202, 204, 203, 205 );    // бт
+    if ( $fleet[205] > 0 ) $found = array ( 210, 202, 204, 203, 205, 206 );    // ти
+    if ( $fleet[206] > 0 ) $found = array ( 210, 202, 204, 203, 205, 206, 207 );    // крейсер
+    if ( $fleet[207] > 0 ) $found = array ( 210, 202, 204, 203, 205, 206, 207, 215 );     // линкор
+    if ( $fleet[215] > 0 ) $found = array ( 210, 202, 204, 203, 205, 206, 207, 215, 211 );    // линейка
+    if ( $fleet[211] > 0 ) $found = array ( 210, 202, 204, 203, 205, 206, 207, 215, 211, 213 );    // бомбер
+    if ( $fleet[213] > 0 ) $found = array ( 210, 202, 204, 203, 205, 206, 207, 215, 211, 213 );    // уник
+
+    // Составить список найденных типов кораблей, каждый тип корабля может быть найден с равной вероятностью.
+    $found_ids = array ();
+    if ( count ($found) > 0)
+    {
+        shuffle (&$found);
+        $chance = floor(1 / count ($found) * 100);
+        foreach ($found as $i=>$id)
+        {
+            $roll = mt_rand ( 0, 99 );
+            if ($roll < $chance) $found_ids[] = $id;
+        }
+    }
+
+    // Соcтавить список найденного флота.
+    $found_fleet = array ( );
+    foreach ( $found_ids as $i=>$id )
+    {
+        $max = floor ( $structure / $UnitParam[$id][0] );
+        if ( $max > 0 ) $amount = mt_rand (1, $max);
+        else $amount = 0;
+        if ( $amount == 0 ) { $no_structure = true; break; }    // не хватило структуры для остального флота
+        $found_fleet[$id] = $amount;
+        $structure -= $amount * $UnitParam[$id][0];
+    }
+
+    // Вывести список найденного флота и посчитать его стоимость.
+    if ( count($found_fleet) > 0 )
+    {
+        $msg .= "<br><br>К флоту присоединились:";
+        foreach ( $found_fleet as $id=>$amount)
+        {
+            $m = $k = $d = $e = 0;
+            ShipyardPrice ( $id, &$m, &$k, &$d, &$e );            
+            $points += ($m + $k + $d) * $amount;
+            $fpoints += $amount;
+            $msg .= "<br>" . loca ("NAME_$id") . " " . nicenum ($amount);
+            $fleet[$id] += $amount;    // Добавить корабли к экспедиционному флоту
+        }
+    }
+
+    // Зачислить очки, если найден хотя бы один корабль
+    if ( $fpoints > 0 ) {
+        AdjustStats ( $fleet_obj['owner_id'], $points, $fpoints, 0, '+' );
+        RecalcRanks ();
+    }
+
+    if ( $no_structure ) {
+        $n = mt_rand ( 0, count($footer) - 1 );
+        $msg .= "<br><br>" . $footer[$n];
+    }
+
+    // Вернуть флот.
+    // В качестве времени полёта используется время удержания.
+    DispatchFleet ($fleet, $origin, $target, 115, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end']);
+
+    return $msg;
 }
+
+// ---
 
 // Нахождение Скупщика
 function Exp_TraderFound ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    return Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target);
+    global $db_prefix;
+    $player_id = $fleet_obj['owner_id'];
+
+    $msg = array (
+        'Ваш экспедиционный флот вышел на контакт с какой-то стеснительной инопланетной расой. Они заявили, что хотят отправить в Ваши миры своего представителя с товарами на обмен.',
+        'Ваш экспедиционный флот поймал сигнал помощи. Он исходил от огромного мега-транспорта, попавшего в гравитационное поле одного планетоида. После освобождения транспорта, его капитан празднично объявил о занесении своих спасителей в качестве эксклюзивных клиентов в свою чёрную книгу.',
+    );
+
+    $user = LoadUser ( $player_id );
+    if ( $user['trader'] == 0 ) $offer_id = mt_rand ( 1, 3 );
+    else $offer_id = $user['trader'];
+    $rate_sum = $user['rate_m'] + $user['rate_k'] + $user['rate_d'];
+
+    // Сгенерировать курсы.
+    $rand = mt_rand (0, 99);
+    if ( $rand < 10 ) {
+        $rate_m = 3;
+        $rate_k = 2;
+        $rate_d = 1;
+    }
+    else if ( $rand < 20 ) {
+
+        if ( $offer_id == 1) {
+            $rate_m = 3;
+            $rate_k = 1.60;
+            $rate_d = 0.80;
+        }
+
+        else if ( $offer_id == 2) {
+            $rate_m = 2.40;
+            $rate_k = 2;
+            $rate_d = 0.80;
+        }
+
+        else if ( $offer_id == 3) {
+            $rate_m = 2.40;
+            $rate_k = 1.60;
+            $rate_d = 1;
+        }
+
+    }
+    else {
+        if ( $offer_id == 1) {
+            $rate_m = 3;
+            $rate_k = mt_rand ( 140, 200) / 100;
+            $rate_d = mt_rand ( 70, 100) / 100;
+        }
+
+        else if ( $offer_id == 2) {
+            $rate_m = mt_rand ( 210, 300) / 100;
+            $rate_k = 2;
+            $rate_d = mt_rand ( 70, 100) / 100;
+        }
+
+        else if ( $offer_id == 3) {
+            $rate_m = mt_rand ( 210, 300) / 100;
+            $rate_k = mt_rand ( 140, 200) / 100;
+            $rate_d = 1;
+        }
+    }
+
+    // Зачислить Скупщика.
+    if ( $user['trader'] == 0 || ($rate_m + $rate_k + $rate_d) > $rate_sum ) {
+        $query = "UPDATE ".$db_prefix."users SET trader = $offer_id, rate_m = '$rate_m', rate_k = '$rate_k', rate_d = '$rate_d' WHERE player_id=$player_id;";
+        dbquery ($query);
+    }
+
+    // Вернуть флот.
+    // В качестве времени полёта используется время удержания.
+    DispatchFleet ($fleet, $origin, $target, 115, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end']);
+
+    $n = mt_rand ( 0, count($msg) - 1 );
+    return $msg[$n];
 }
 
 // -------------
@@ -477,7 +673,7 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
     else $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target);
 
     // DEBUG
-    //$text = Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target);
+    //$text = Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target);
 
     // Обновляем счётчик посещений экспедиции на планете.
     AdjustResources ( 1, 0, 0, $target['planet_id'], '+' );

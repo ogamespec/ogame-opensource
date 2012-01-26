@@ -1,6 +1,6 @@
 <?php
 
-// Работа за базой данных MySQL.
+// Работа с базой данных MySQL.
 
 $query_counter = 0;
 $query_log = "";
