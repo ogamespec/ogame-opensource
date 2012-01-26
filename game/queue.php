@@ -131,6 +131,7 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "CleanDebris" ) Queue_CleanDebris_End ($queue);
         else if ( $queue['type'] === "CleanPlanets" ) Queue_CleanPlanets_End ($queue);
         else if ( $queue['type'] === "CleanPlayers" ) Queue_CleanPlayers_End ($queue);
+        else if ( $queue['type'] === "UpdateStats" ) Queue_UpdateStats_End ($queue);
         else if ( $queue['type'] === "RecalcPoints" ) Queue_RecalcPoints_End ($queue);
         else if ( $queue['type'] === "AllowName" ) Queue_AllowName_End ($queue);
         else if ( $queue['type'] === "Debug" ) Queue_Debug_End ($queue);
@@ -327,6 +328,20 @@ function Queue_Build_End ($queue)
 
     if ($queue['type'] === "Build" ) Debug ( "Строительство ".loca("NAME_$id")." уровня $lvl на планете $planet_id завершено." );
     else Debug ( "Снос ".loca("NAME_$id")." уровня $lvl на планете $planet_id завершен." );
+
+    // Добавить очки. Места пересчитывать только для крупных построек.
+    $m = $k = $d = $e = 0;
+    if ( $queue['type'] === "Build" ) {
+        BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
+        $points = $m + $k + $d;
+        AdjustStats ( $queue['owner_id'], $points, 0, 0, '+');
+    }
+    else {
+        BuildPrice ( $id, $lvl+1, &$m, &$k, &$d, &$e );
+        $points = $m + $k + $d;
+        AdjustStats ( $queue['owner_id'], $points, 0, 0, '-');
+    }
+    if ( $lvl > 10 ) RecalcRanks ();
 }
 
 // Отменить снос/строительство постройки.
@@ -504,16 +519,26 @@ function Queue_Shipyard_End ($queue)
     else $query = "UPDATE ".$db_prefix."planets SET f$gid = f$gid + $done WHERE planet_id = $planet_id";
     dbquery ($query);
 
+    // Добавить очки.
+    $m = $k = $d = $enrg = 0;
+    ShipyardPrice ( $gid, &$m, &$k, &$d, &$enrg );
+    $points = ($m + $k + $d) * $done;
+    if ($gid < 400) $fpoints = $done;
+    else $fpoints = 0;
+    AdjustStats ( $queue['owner_id'], $points, $fpoints, 0, '+');
+
     // Обновить задание или удалить его, если всё построено.
     if ( $done < $n )
     {
         $query = "UPDATE ".$db_prefix."queue SET start = $news, end = $newe, level = level - $done WHERE task_id = ".$queue['task_id'];
         dbquery ($query);
         //Debug ( "На верфи [".$planet['g'].":".$planet['s'].":".$planet['p']."] ".$planet['name']." построено ".loca("NAME_$gid")." ($done), осталось достроить (".($n-$done).")" );
+        if ( $one > 60 ) RecalcRanks ();
     }
     else {
         //Debug ( "На верфи [".$planet['g'].":".$planet['s'].":".$planet['p']."] ".$planet['name']." завершена постройка ".loca("NAME_$gid")." ($done)" );
         RemoveQueue ( $queue['task_id'], 0 );
+        RecalcRanks ();
     }
 }
 
@@ -625,6 +650,13 @@ function Queue_Research_End ($queue)
     dbquery ($query);
 
     RemoveQueue ( $queue['task_id'], 0 );
+
+    // Добавить очки.
+    $m = $k = $d = $e = 0;
+    ResearchPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
+    $points = $m + $k + $d;
+    AdjustStats ( $queue['owner_id'], $points, 0, 1, '+');
+    RecalcRanks ();
 
     Debug ( "Исследование ".loca("NAME_$id")." уровня $lvl для пользователя $player_id завершено." );
 }
@@ -738,6 +770,45 @@ function Queue_AllowName_End ($queue)
 
 // ===============================================================================================================
 // Вселенная
+
+// Добавить задание сохранения "старой" статистики.
+// Вызывается при логине любого игрока.
+function AddUpdateStatsEvent ($now=0)
+{
+    global $db_prefix;
+
+    if ($now == 0) $now = time ();
+
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'UpdateStats'";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0 )
+    {
+        $today = getdate ( $now );
+        $hours = $today['hours'];
+        if ( $hours >= 8 && $hours < 16 ) $when = mktime ( 16, 5, 0 );
+        else if ( $hours >= 16 && $hours < 20 ) $when = mktime ( 20, 5, 0 );
+        else $when = mktime ( 8, 5, 0, $today['mon'], $today['mday'] + 1 );
+
+        $queue = array ( '', 99999, "UpdateStats", 0, 0, 0, $now, $when, 510 );
+        AddDBRow ( $queue, "queue" );
+    }
+}
+
+// Сохранить "старые" очки игроков и альянсов.
+function Queue_UpdateStats_End ($queue)
+{
+    global $db_prefix;
+
+    $when = $queue['end'];
+    $query = "UPDATE ".$db_prefix."users SET oldscore1 = score1, oldscore2 = score2, oldscore3 = score3, oldplace1 = place1, oldplace2 = place2, oldplace3 = place3, scoredate = $when;";
+    dbquery ( $query ); 
+    $query = "UPDATE ".$db_prefix."ally SET oldscore1 = score1, oldscore2 = score2, oldscore3 = score3, oldplace1 = place1, oldplace2 = place2, oldplace3 = place3, scoredate = $when;";
+    dbquery ( $query ); 
+
+    RemoveQueue ( $queue['task_id'], 0 );
+    AddUpdateStatsEvent ($when);
+    Debug ( date ("H:i", $when) . " - Old scores saved" );
+}
 
 // Добавить задание отгрузки игроков, если его ещё не существует.
 // Вызывается при логине любого игрока.

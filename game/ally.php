@@ -17,6 +17,15 @@
 // inttext: Внутренний текст (TEXT)
 // apptext: Текст заявки (TEXT)
 // nextrank: Порядковый номер следующего ранга (INT)
+// old_tag: Старая аббревиатура альянса (CHAR(8))
+// old_name: Старое название альянса (CHAR(30))
+// tag_until: Когда можно сменить аббревиатуру альянса (INT UNSIGNED)
+// name_until: Когда можно сменить аббревиатуру альянса (INT UNSIGNED)
+// score1,2,3: Очки за постройки, флот, исследования (BIGINT UNSIGNED, INT UNSIGNED, INT UNSIGNED )
+// place1,2,3: Место за постройки, флот, исследования (INT)
+// oldscore1,2,3: Старые очки за постройки, флот, исследования (BIGINT UNSIGNED, INT UNSIGNED, INT UNSIGNED )
+// oldplace1,2,3: старое место за постройки, флот, исследования (INT)
+// scoredate: Время сохранения старой статистики (INT UNSIGNED)
 
 // Создать альянс. Возвращает ID альянса.
 function CreateAlly ($owner_id, $tag, $name)

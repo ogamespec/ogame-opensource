@@ -304,9 +304,28 @@ else
         $rak_space = $aktplanet["b44"] * 10;
         if ( key_exists ( 'aktion', $_POST) )
         {
-            $aktplanet['d502'] -= min ( $aktplanet['d502'], intval ( $_POST['ab502'] ) );
-            $aktplanet['d503'] -= min ($aktplanet['d503'], intval ( $_POST['ab503'] ) );
-            SetPlanetDefense ( $aktplanet['planet_id'], $aktplanet );
+            $m = $k = $d = $e = 0;
+
+            $amount1 = min ( $aktplanet['d502'], intval ( $_POST['ab502'] ) );
+            if ( $amount1 > 0) {
+                $aktplanet['d502'] -= $amount1;
+                ShipyardPrice ( 502, &$m, &$k, &$d, &$e );
+                $points  = ( $m + $k + $d ) * $amount1;
+                AdjustStats ( $aktplanet['owner_id'], $points, 0, 0, '-');
+            }
+
+            $amount2 = min ($aktplanet['d503'], intval ( $_POST['ab503'] ) );
+            if ( $amount2 > 0) {
+                $aktplanet['d503'] -= $amount2;
+                ShipyardPrice ( 503, &$m, &$k, &$d, &$e );
+                $points  = ( $m + $k + $d ) * $amount2;
+                AdjustStats ( $aktplanet['owner_id'], $points, 0, 0, '-');
+            }
+
+            if ( ($amount1 + $amount2) > 0 ) {
+                SetPlanetDefense ( $aktplanet['planet_id'], $aktplanet );
+                RecalcRanks ();
+            }
         }
 
 ?>
