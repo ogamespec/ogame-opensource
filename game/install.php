@@ -1,5 +1,7 @@
 <?php
 
+// ВЕРСИЯ 2.
+
 // Установочный файл.
 // Создает все необходимые таблицы в базе данных, а также файл конфигурации config.php, для доступа к базе.
 // Не работет, если файл config.php создан.
@@ -40,88 +42,139 @@ function gen_trivial_password ($len = 8)
     return $r;
 }
 
+// Структура таблиц.
+// -------------------------------------------------------------------------------------------------------------------------
+
+$tab_uni = array (        // Вселенная
+    'num'=>'INT','speed'=>'FLOAT','galaxies'=>'INT','systems'=>'INT','maxusers'=>'INT','acs'=>'INT','fid'=>'INT','did'=>'INT','rapid'=>'INT','moons'=>'INT','defrepair'=>'INT','defrepair_delta'=>'INT','usercount','freeze'=>'INT',
+    'news1'=>'TEXT', 'news2'=>'TEXT', 'news_until'=>'INT UNSIGNED', 'startdate'=>'INT UNSIGNED', 'battle_engine'=>'TEXT'
+);
+
+$tab_users = array (    // Пользователи
+    'player_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'regdate'=>'INT UNSIGNED', 'ally_id'=>'INT', 'joindate'=>'INT UNSIGNED', 'allyrank'=>'INT', 'session'=>'CHAR(12)', 'private_session'=>'CHAR(32)', 'name'=>'CHAR(20)', 'oname'=>'CHAR(20)', 'name_changed'=>'INT', 'name_until'=>'INT UNSIGNED', 'password'=>'CHAR(32)', 'temp_pass'=>'CHAR(32)', 'pemail'=>'CHAR(50)', 'email'=>'CHAR(50)',
+    'email_changed'=>'INT', 'email_until'=>'INT UNSIGNED', 'disable'=>'INT', 'disable_until'=>'INT UNSIGNED', 'vacation'=>'INT', 'vacation_until'=>'INT UNSIGNED', 'banned'=>'INT', 'banned_until'=>'INT UNSIGNED', 'noattack'=>'INT', 'noattack_until'=>'INT UNSIGNED',
+    'lastlogin'=>'INT UNSIGNED', 'lastclick'=>'INT UNSIGNED', 'ip_addr'=>'CHAR(15)', 'validated'=>'INT', 'validatemd'=>'CHAR(32)', 'hplanetid'=>'INT', 'admin'=>'INT', 'sortby'=>'INT', 'sortorder'=>'INT',
+    'skin'=>'CHAR(80)', 'useskin'=>'INT', 'deact_ip'=>'INT', 'maxspy'=>'INT', 'maxfleetmsg'=>'INT', 'lang'=>'CHAR(4)', 'aktplanet'=>'INT',
+    'dm'=>'INT UNSIGNED', 'dmfree'=>'INT UNSIGNED', 'sniff'=>'INT', 'debug'=>'INT', 'redesign'=>'INT', 'trader'=>'INT', 'rate_m'=>'DOUBLE', 'rate_k'=>'DOUBLE', 'rate_d'=>'DOUBLE',
+    'score1'=>'BIGINT UNSIGNED', 'score2'=>'INT UNSIGNED', 'score3'=>'INT UNSIGNED', 'place1'=>'INT', 'place2'=>'INT', 'place3'=>'INT',
+    'oldscore1'=>'BIGINT UNSIGNED', 'oldscore2'=>'INT UNSIGNED', 'oldscore3'=>'INT UNSIGNED', 'oldplace1'=>'INT', 'oldplace2'=>'INT', 'oldplace3'=>'INT', 'scoredate'=>'INT UNSIGNED',
+    'r106'=>'INT', 'r108'=>'INT', 'r109'=>'INT', 'r110'=>'INT', 'r111'=>'INT', 'r113'=>'INT', 'r114'=>'INT', 'r115'=>'INT', 'r117'=>'INT', 'r118'=>'INT', 'r120'=>'INT', 'r121'=>'INT', 'r122'=>'INT', 'r123'=>'INT', 'r124'=>'INT', 'r199'=>'INT'
+);
+
+$tab_planets = array (    // Планеты
+    'planet_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'name'=>'CHAR(20)', 'type'=>'INT', 'g'=>'INT', 's'=>'INT', 'p'=>'INT', 'owner_id'=>'INT', 'diameter'=>'INT', 'temp'=>'INT', 'fields'=>'INT', 'maxfields'=>'INT', 'date'=>'INT UNSIGNED', 
+    'b1'=>'INT', 'b2'=>'INT', 'b3'=>'INT', 'b4'=>'INT', 'b12'=>'INT', 'b14'=>'INT', 'b15'=>'INT', 'b21'=>'INT', 'b22'=>'INT', 'b23'=>'INT', 'b24'=>'INT', 'b31'=>'INT', 'b33'=>'INT', 'b34'=>'INT', 'b41'=>'INT', 'b42'=>'INT', 'b43'=>'INT', 'b44'=>'INT',
+    'd401'=>'INT', 'd402'=>'INT', 'd403'=>'INT', 'd404'=>'INT', 'd405'=>'INT', 'd406'=>'INT', 'd407'=>'INT', 'd408'=>'INT', 'd502'=>'INT', 'd503'=>'INT',
+    'f202'=>'INT', 'f203'=>'INT', 'f204'=>'INT', 'f205'=>'INT', 'f206'=>'INT', 'f207'=>'INT', 'f208'=>'INT', 'f209'=>'INT', 'f210'=>'INT', 'f211'=>'INT', 'f212'=>'INT', 'f213'=>'INT', 'f214'=>'INT', 'f215'=>'INT',
+    'm'=>'DOUBLE', 'k'=>'DOUBLE', 'd'=>'DOUBLE', 'mprod'=>'DOUBLE', 'kprod'=>'DOUBLE', 'dprod'=>'DOUBLE', 'sprod'=>'DOUBLE', 'fprod'=>'DOUBLE', 'ssprod'=>'DOUBLE', 'lastpeek'=>'INT UNSIGNED', 'lastakt'=>'INT UNSIGNED', 'gate_until'=>'INT UNSIGNED', 'remove'=>'INT UNSIGNED'
+);
+
+$tab_ally = array (    // Альянсы
+    'ally_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'tag'=>'TEXT', 'name'=>'TEXT', 'owner_id'=>'INT', 'homepage'=>'TEXT', 'imglogo'=>'TEXT', 'open'=>'INT', 'insertapp'=>'INT', 'exttext'=>'TEXT', 'inttext'=>'TEXT', 'apptext'=>'TEXT', 'nextrank'=>'INT', 'old_tag'=>'TEXT', 'old_name'=>'TEXT', 'tag_until'=>'INT UNSIGNED', 'name_until'=>'INT UNSIGNED',
+    'score1'=>'BIGINT UNSIGNED', 'score2'=>'INT UNSIGNED', 'score3'=>'INT UNSIGNED', 'place1'=>'INT', 'place2'=>'INT', 'place3'=>'INT',
+    'oldscore1'=>'BIGINT UNSIGNED', 'oldscore2'=>'INT UNSIGNED', 'oldscore3'=>'INT UNSIGNED', 'oldplace1'=>'INT', 'oldplace2'=>'INT', 'oldplace3'=>'INT', 'scoredate'=>'INT UNSIGNED'
+);
+
+$tab_allyranks = array (    // Ранги в альянсе
+    'rank_id'=>'INT', 'ally_id'=>'INT', 'name'=>'TEXT', 'rights'=>'INT'
+);
+
+$tab_allyapps = array (    // Заявки в альянс
+    'app_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'ally_id'=>'INT', 'player_id'=>'INT', 'text'=>'TEXT', 'date'=>'INT UNSIGNED'
+);
+
+$tab_buddy = array (    // Друзья
+    'buddy_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'request_from'=>'INT', 'request_to'=>'INT', 'text'=>'TEXT', 'accepted'=>'INT'
+);
+
+$tab_messages = array (    // Сообщения
+    'msg_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'pm'=>'INT', 'msgfrom'=>'TEXT', 'subj'=>'TEXT', 'text'=>'TEXT', 'shown'=>'INT', 'date'=>'INT UNSIGNED'
+);
+
+$tab_notes = array (    // Заметки
+    'note_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'subj'=>'TEXT', 'text'=>'TEXT', 'textsize'=>'INT', 'prio'=>'INT', 'date'=>'INT UNSIGNED'
+);
+
+$tab_notes = array (    // Заметки
+    'note_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'subj'=>'TEXT', 'text'=>'TEXT', 'textsize'=>'INT', 'prio'=>'INT', 'date'=>'INT UNSIGNED'
+);
+
+$tab_errors = array (    // Ошибки
+    'error_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'ip'=>'TEXT', 'agent'=>'TEXT', 'url'=>'TEXT', 'text'=>'TEXT', 'date'=>'INT UNSIGNED'
+);
+
+$tab_debug = array (    // Отладочные сообщения
+    'error_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'ip'=>'TEXT', 'agent'=>'TEXT', 'url'=>'TEXT', 'text'=>'TEXT', 'date'=>'INT UNSIGNED'
+);
+
+$tab_browse = array (    // История переходов
+    'log_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'url'=>'TEXT', 'method'=>'TEXT', 'getdata'=>'TEXT', 'postdata'=>'TEXT', 'date'=>'INT UNSIGNED'
+);
+
+$tab_queue = array (    // Очередь событий
+    'task_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'type'=>'CHAR(20)', 'sub_id'=>'INT', 'obj_id'=>'INT', 'level'=>'INT', 'start'=>'INT UNSIGNED', 'end'=>'INT UNSIGNED', 'prio'=>'INT'
+);
+
+$tab_fleet = array (    // Флот
+    'fleet_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'union_id'=>'INT', 'm'=>'DOUBLE', 'k'=>'DOUBLE', 'd'=>'DOUBLE', 'fuel'=>'INT', 'mission'=>'INT', 'start_planet'=>'INT', 'target_planet'=>'INT', 'flight_time'=>'INT', 'deploy_time'=>'INT',
+    'ipm_amount'=>'INT', 'ipm_target'=>'INT', 'ship202'=>'INT', 'ship203'=>'INT', 'ship204'=>'INT', 'ship205'=>'INT', 'ship206'=>'INT', 'ship207'=>'INT', 'ship208'=>'INT', 'ship209'=>'INT', 'ship210'=>'INT', 'ship211'=>'INT', 'ship212'=>'INT', 'ship213'=>'INT', 'ship214'=>'INT', 'ship215'=>'INT'
+);
+
+$tab_union = array (    // САБы
+    'union_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'fleet_id'=>'INT', 'target_player'=>'INT', 'name'=>'CHAR(20)', 'players'=>'TEXT'
+);
+
+$tab_battledata = array (    // Данные для боевого движка (deprecated)
+    'battle_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'source'=>'TEXT', 'result'=>'TEXT'
+);
+
+$tab_fleetlogs = array (    // Логи полётов
+    'log_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'union_id'=>'INT', 'm'=>'DOUBLE', 'k'=>'DOUBLE', 'd'=>'DOUBLE', 'fuel'=>'INT', 'mission'=>'INT', 'flight_time'=>'INT', 'deploy_time'=>'INT', 'start'=>'INT UNSIGNED', 'end'=>'INT UNSIGNED',
+    'origin_g'=>'INT', 'origin_s'=>'INT', 'origin_p'=>'INT', 'origin_type'=>'INT', 'target_g'=>'INT', 'target_s'=>'INT', 'target_p'=>'INT', 'target_type'=>'INT', 
+    'ipm_amount'=>'INT', 'ipm_target'=>'INT', 'ship202'=>'INT', 'ship203'=>'INT', 'ship204'=>'INT', 'ship205'=>'INT', 'ship206'=>'INT', 'ship207'=>'INT', 'ship208'=>'INT', 'ship209'=>'INT', 'ship210'=>'INT', 'ship211'=>'INT', 'ship212'=>'INT', 'ship213'=>'INT', 'ship214'=>'INT', 'ship215'=>'INT'
+);
+
+$tab_iplogs = array (    // Логи IP
+    'log_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'ip'=>'CHAR(16)', 'user_id'=>'INT', 'reg'=>'INT', 'date'=>'INT UNSIGNED'
+);
+
+$tab_pranger = array (    // Столб позора
+    'ban_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'admin_name'=>'CHAR(20)', 'user_name'=>'CHAR(20)', 'ban_when'=>'INT UNSIGNED', 'ban_until'=>'INT UNSIGNED', 'reason'=>'TEXT'
+);
+
+$tab_exptab = array (    // Настройки экспедиции
+    'chance_success'=>'INT', 'depleted_min'=>'INT', 'depleted_med'=>'INT', 'depleted_max'=>'INT', 'chance_depleted_min'=>'INT', 'chance_depleted_med'=>'INT', 'chance_depleted_max'=>'INT',
+    'chance_alien'=>'INT', 'chance_pirates'=>'INT', 'chance_dm'=>'INT', 'chance_lost'=>'INT', 'chance_delay'=>'INT', 'chance_accel'=>'INT', 'chance_res'=>'INT', 'chance_fleet'=>'INT'
+);
+
+$tabs = array (
+    'uni' => &$tab_uni,
+    'users' => &$tab_users,
+    'planets' => &$tab_planets,
+    'ally' => &$tab_ally,
+    'allyranks' => &$tab_allyranks,
+    'allyapps' => &$tab_allyapps,
+    'buddy' => &$tab_buddy,
+    'messages' => &$tab_messages,
+    'notes' => &$tab_notes,
+    'errors' => &$tab_errors,
+    'debug' => &$tab_debug,
+    'browse' => &$tab_browse,
+    'queue' => &$tab_queue,
+    'fleet' => &$tab_fleet,
+    'union' => &$tab_union,
+    'battledata' => &$tab_battledata,
+    'fleetlogs' => &$tab_fleetlogs,
+    'iplogs' => &$tab_iplogs,
+    'pranger' => &$tab_pranger,
+    'exptab' => &$tab_exptab,
+);
+
+// -------------------------------------------------------------------------------------------------------------------------
+
 // Сохранить настройки.
 if ( key_exists("install", $_POST) && CheckParameters() )
 {
-    $tabs = array ('uni','users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','fleet','union','battledata','fleetlogs','iplogs','pranger','exptab');
-    $unicols = array ('num','speed','galaxies','systems','maxusers','acs','fid','did','rapid','moons','defrepair','defrepair_delta','usercount','freeze',
-                              'news1', 'news2', 'news_until', 'startdate', 'battle_engine' );
-    $unitype = array ('INT','FLOAT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT','INT',
-                              'TEXT', 'TEXT', 'INT UNSIGNED', 'INT UNSIGNED', 'TEXT' );
-    $usercols = array ( 'player_id', 'regdate', 'ally_id', 'joindate', 'allyrank', 'session', 'private_session', 'name', 'oname', 'name_changed', 'name_until', 'password', 'temp_pass', 'pemail', 'email',
-                        'email_changed', 'email_until', 'disable', 'disable_until', 'vacation', 'vacation_until', 'banned', 'banned_until', 'noattack', 'noattack_until',
-                        'lastlogin', 'lastclick', 'ip_addr', 'validated', 'validatemd', 'hplanetid', 'admin', 'sortby', 'sortorder',
-                        'skin', 'useskin', 'deact_ip', 'maxspy', 'maxfleetmsg', 'lang', 'aktplanet',
-                        'dm', 'dmfree', 'sniff', 'debug', 'redesign', 'trader', 'rate_m', 'rate_k', 'rate_d',
-                        'score1', 'score2', 'score3', 'place1', 'place2', 'place3',
-                        'oldscore1', 'oldscore2', 'oldscore3', 'oldplace1', 'oldplace2', 'oldplace3', 'scoredate',
-                        'r106', 'r108', 'r109', 'r110', 'r111', 'r113', 'r114', 'r115', 'r117', 'r118', 'r120', 'r121', 'r122', 'r123', 'r124', 'r199' );
-    $usertype = array (  'INT AUTO_INCREMENT PRIMARY KEY', 'INT UNSIGNED', 'INT', 'INT', 'INT UNSIGNED', 'CHAR(12)', 'CHAR(32)', 'CHAR(20)', 'CHAR(20)', 'INT', 'INT UNSIGNED', 'CHAR(32)', 'CHAR(32)', 'CHAR(50)', 'CHAR(50)',
-                         'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 'INT', 'INT UNSIGNED', 
-                         'INT UNSIGNED', 'INT UNSIGNED', 'CHAR(15)', 'INT', 'CHAR(32)', 'INT', 'INT', 'INT', 'INT',
-                         'CHAR(80)', 'INT', 'INT', 'INT', 'INT', 'CHAR(4)', 'INT',
-                         'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 'INT', 'DOUBLE', 'DOUBLE', 'DOUBLE', 
-                         'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 
-                         'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 'INT UNSIGNED',
-                         'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
-    $planetcols = array ( 'planet_id', 'name', 'type', 'g', 's', 'p', 'owner_id', 'diameter', 'temp', 'fields', 'maxfields', 'date', 
-                          'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
-                          'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
-                          'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
-                          'm', 'k', 'd', 'mprod', 'kprod', 'dprod', 'sprod', 'fprod', 'ssprod', 'lastpeek', 'lastakt', 'gate_until', 'remove' );
-    $planettype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'CHAR(20)', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT UNSIGNED',
-                          'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 
-                          'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT',
-                          'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 
-                          'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED' );
-    $allycols = array ( 'ally_id', 'tag', 'name', 'owner_id', 'homepage', 'imglogo', 'open', 'insertapp', 'exttext', 'inttext', 'apptext', 'nextrank', 'old_tag', 'old_name', 'tag_until', 'name_until',
-                        'score1', 'score2', 'score3', 'place1', 'place2', 'place3',
-                        'oldscore1', 'oldscore2', 'oldscore3', 'oldplace1', 'oldplace2', 'oldplace3', 'scoredate' );
-    $allytype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'TEXT', 'TEXT', 'INT', 'TEXT', 'TEXT', 'INT', 'INT', 'TEXT', 'TEXT', 'TEXT', 'INT', 'TEXT', 'TEXT', 'INT UNSIGNED', 'INT UNSIGNED',
-                        'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 
-                        'BIGINT UNSIGNED', 'INT UNSIGNED', 'INT UNSIGNED', 'INT', 'INT', 'INT', 'INT UNSIGNED' );
-    $rankscols = array ( 'rank_id', 'ally_id', 'name', 'rights' );
-    $rankstype = array ( 'INT', 'INT', 'TEXT', 'INT' );
-    $appscols = array ( 'app_id', 'ally_id', 'player_id', 'text', 'date' );
-    $appstype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'INT', 'INT', 'TEXT', 'INT UNSIGNED' );
-    $buddycols = array ( 'buddy_id', 'request_from', 'request_to', 'text', 'accepted' );
-    $buddytype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'INT', 'INT', 'TEXT', 'INT' );
-    $messagescols = array ( 'msg_id', 'owner_id', 'pm', 'msgfrom', 'subj', 'text', 'shown', 'date' );
-    $messagestype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'INT', 'INT', 'TEXT', 'TEXT', 'TEXT', 'INT', 'INT UNSIGNED' );
-    $notescols = array ( 'note_id', 'owner_id', 'subj', 'text', 'textsize', 'prio', 'date' );
-    $notestype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'INT', 'INT', 'INT UNSIGNED' );
-    $errorscols = array ( 'error_id', 'owner_id', 'ip', 'agent', 'url', 'text', 'date' );
-    $errorstype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'INT UNSIGNED' );
-    $debugcols = array ( 'error_id', 'owner_id', 'ip', 'agent', 'url', 'text', 'date' );
-    $debugtype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'INT UNSIGNED' );
-    $browsecols = array ( 'log_id', 'owner_id', 'url', 'method', 'getdata', 'postdata', 'date' );
-    $browsetype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'INT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'INT UNSIGNED' );
-    $queuecols = array ( 'task_id', 'owner_id', 'type', 'sub_id', 'obj_id', 'level', 'start', 'end', 'prio' );
-    $queuetype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'INT', 'CHAR(20)', 'INT', 'INT', 'INT', 'INT UNSIGNED', 'INT UNSIGNED', 'INT' );
-    $fleetcols = array ( 'fleet_id', 'owner_id', 'union_id', 'm', 'k', 'd', 'fuel', 'mission', 'start_planet', 'target_planet', 'flight_time', 'deploy_time',
-                         'ipm_amount', 'ipm_target', 'ship202', 'ship203', 'ship204', 'ship205', 'ship206', 'ship207', 'ship208', 'ship209', 'ship210', 'ship211', 'ship212', 'ship213', 'ship214', 'ship215' );
-    $fleettype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'INT', 'INT', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT', 'INT', 'INT', 'INT', 'INT',
-                         'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
-    $unioncols = array ( 'union_id', 'fleet_id', 'target_player', 'name', 'players' );
-    $uniontype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'INT', 'INT', 'CHAR(20)', 'TEXT' );
-    $battledatacols = array ( 'battle_id', 'source', 'result' );
-    $battledatatype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'TEXT', 'TEXT' );
-    $fleetlogscols = array ( 'log_id', 'owner_id', 'union_id', 'm', 'k', 'd', 'fuel', 'mission', 'flight_time', 'deploy_time', 'start', 'end',
-                             'origin_g', 'origin_s', 'origin_p', 'origin_type', 'target_g', 'target_s', 'target_p', 'target_type', 
-                             'ipm_amount', 'ipm_target', 'ship202', 'ship203', 'ship204', 'ship205', 'ship206', 'ship207', 'ship208', 'ship209', 'ship210', 'ship211', 'ship212', 'ship213', 'ship214', 'ship215' );
-    $fleetlogstype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'INT', 'INT', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'DOUBLE', 'INT', 'INT', 'INT', 'INT UNSIGNED', 'INT UNSIGNED',
-                             'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 
-                             'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
-    $iplogscols = array ( 'log_id', 'ip', 'user_id', 'reg', 'date' );
-    $iplogstype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'CHAR(16)', 'INT', 'INT', 'INT UNSIGNED' );
-    $prangercols = array ( 'ban_id', 'admin_name', 'user_name', 'ban_when', 'ban_until', 'reason' );
-    $prangertype = array ( 'INT AUTO_INCREMENT PRIMARY KEY', 'CHAR(20)', 'CHAR(20)', 'INT UNSIGNED', 'INT UNSIGNED', 'TEXT' );
-    $exptabcols = array ( 'chance_success', 'depleted_min', 'depleted_med', 'depleted_max', 'chance_depleted_min', 'chance_depleted_med', 'chance_depleted_max',
-                          'chance_alien', 'chance_pirates', 'chance_dm', 'chance_lost', 'chance_delay', 'chance_accel', 'chance_res', 'chance_fleet' );
-    $exptabtype = array ( 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT',
-                          'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT', 'INT' );
-    $tabrows = array (&$unicols, &$usercols, &$planetcols, &$allycols, &$rankscols, &$appscols, &$buddycols, &$messagescols, &$notescols, &$errorscols, &$debugcols, &$browsecols, &$queuecols, &$fleetcols, &$unioncols, &$battledatacols, &$fleetlogscols, &$iplogscols, &$prangercols, &$exptabcols);
-    $tabtypes = array (&$unitype, &$usertype, &$planettype, &$allytype, &$rankstype, &$appstype, &$buddytype, &$messagestype, &$notestype, &$errorstype, &$debugtype, &$browsetype, &$queuetype, &$fleettype, &$uniontype, &$battledatatype, &$fleetlogstype, &$iplogstype, &$prangertype, &$exptabtype);
     $now = time();
 
     //print_r ($_POST);
@@ -131,21 +184,22 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     dbquery("SET NAMES 'utf8';");
     dbquery("SET CHARACTER SET 'utf8';");
     dbquery("SET SESSION collation_connection = 'utf8_general_ci';");
-    foreach ($tabs as $i => $name)
+
+    foreach ( $tabs as $tabname => $tab )
     {
         $opt = " (";
-        $rows = $tabrows[$i];
-        $types = $tabtypes[$i];
-        foreach ($rows as $row => $rowname)
+        $first = true;
+        foreach ( $tab as $row => $type ) 
         {
-            if ($row != 0) $opt .= ", ";
-            $opt .= $rows[$row] . " " . $types[$row];
+            if ( !$first ) $opt .= ", ";
+            if ( $first ) $first = false;
+            $opt .= $row . " " . $type;
         }
         $opt .= ")";
 
-        $query = 'DROP TABLE IF EXISTS '.$_POST["db_prefix"].$tabs[$i];
+        $query = 'DROP TABLE IF EXISTS '.$_POST["db_prefix"].$tabname;
         dbquery ($query, TRUE);
-        $query = 'CREATE TABLE '.$_POST["db_prefix"].$tabs[$i].$opt." CHARACTER SET utf8 COLLATE utf8_general_ci";
+        $query = 'CREATE TABLE '.$_POST["db_prefix"].$tabname.$opt." CHARACTER SET utf8 COLLATE utf8_general_ci";
         dbquery ($query, TRUE);
     }
 
