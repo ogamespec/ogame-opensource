@@ -105,6 +105,14 @@ function RemoveQueue ($task_id, $cb)
     dbquery ($query);
 }
 
+// Продлить задание ещё на указанное количество секунд
+function ProlongQueue ($task_id, $seconds)
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."queue SET end = end + $seconds WHERE task_id = $task_id";
+    dbquery ($query);
+}
+
 // Проверить задания очереди на завершение до момента времени $until.
 function UpdateQueue ($until)
 {
