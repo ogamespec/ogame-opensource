@@ -32,6 +32,9 @@ function QueueDesc ( $queue )
         case "CleanDebris": return "Чистка виртуальных ПО";
         case "CleanPlanets": return "Чистка уничтоженных планет";
         case "CleanPlayers": return "Удаление неактивных игроков и поставленных на удаление";
+        case "AI":
+            $planet = GetPlanet ($sub_id);
+            return "Задание бота с планеты " . AdminPlanetName ( $planet ) . ", стратегия $obj_id";
 
         case "CommanderOff": return "Заканчивается офицер: Командир";
         case "AdmiralOff": return "Заканчивается офицер: Адмирал";

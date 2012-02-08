@@ -40,6 +40,7 @@ require_once "fleet.php";
 require_once "battle.php";
 require_once "debug.php";
 require_once "galaxytool.php";
+require_once "bot.php";
 
 if (0)
 {
