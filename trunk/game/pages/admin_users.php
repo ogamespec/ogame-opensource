@@ -109,6 +109,16 @@ function Admin_Users ()
         {
             ReactivateUser ( $player_id );
         }
+
+        if ( $action === "bot_start" )    // Запустить бота
+        {
+            StartBot ($player_id);
+        }
+
+        if ( $action === "bot_stop" )    // Остановить бота
+        {
+            StopBot ($player_id);
+        }
     }
 
     if ( key_exists("player_id", $_GET) ) {        // Информация об игроке
@@ -187,6 +197,21 @@ function Admin_Users ()
 </th></tr>
             <tr><th>Включить слежение</th><th><input type="checkbox" name="sniff" <?=IsChecked($user, "sniff");?> /></th></tr>
             <tr><th>Отладочная информация</th><th><input type="checkbox" name="debug" <?=IsChecked($user, "debug");?> /></th></tr>
+
+<?php
+    if ( IsBot ($user['player_id']) )
+    {
+?>
+            <tr><th colspan=2><a href="index.php?page=admin&session=<?=$session;?>&mode=Users&action=bot_stop&player_id=<?=$user['player_id'];?>" >[Остановить бота]</a></th></tr>
+<?php
+    }
+    else
+    {
+?>
+            <tr><th colspan=2><a href="index.php?page=admin&session=<?=$session;?>&mode=Users&action=bot_start&player_id=<?=$user['player_id'];?>" >[Запустить бота]</a></th></tr>
+<?php
+    }
+?>
         </table></th>
 
         <th valign=top><table>
