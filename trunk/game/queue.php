@@ -54,6 +54,7 @@ type: тип задания, каждый тип имеет свой обраб�
     "Fleet"            -- Задание флота / Атака МПР (sub_id - номер записи в таблице флота)
     "DecRes"         -- Списать ресурсы на планете (sub_id - номер задания постройки для определения количества ресурсов)
     "Debug"          -- отладочное событие
+    "AI"                 -- задания для бота
 sub_id: дополнительный номер, разный у каждого типа задания, например для постройки - ID планеты, для задания флота - ID флота (INT)
 obj_id: дополнительный номер, разный у каждого типа задания, например для постройки - ID здания (INT)
 level: уровень постройки / количество заказанных единиц на верфи (INT)
@@ -135,6 +136,7 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "RecalcPoints" ) Queue_RecalcPoints_End ($queue);
         else if ( $queue['type'] === "AllowName" ) Queue_AllowName_End ($queue);
         else if ( $queue['type'] === "Debug" ) Queue_Debug_End ($queue);
+        else if ( $queue['type'] === "AI" ) Queue_Bot_End ($queue);
 
         else if ( $queue['type'] === "CommanderOff" ) Queue_Officer_End ($queue);
         else if ( $queue['type'] === "AdmiralOff" ) Queue_Officer_End ($queue);
@@ -935,7 +937,7 @@ function Queue_CleanPlayers_End ($queue)
         RemoveUser ( $user['player_id'], $queue['end'] );
     }
 
-    // Удаление игроков, неактивных более 35 дней
+    // Удаление игроков, неактивных более 35 дней. Неактивных ботов не удалять.
     $when = $queue['end'] - 35*24*60*60;
     $query = "SELECT * FROM ".$db_prefix."users WHERE lastclick < $when AND admin < 1 AND lastclick <> 0";
     $result = dbquery ( $query );
@@ -943,7 +945,7 @@ function Queue_CleanPlayers_End ($queue)
     while ($rows-- )
     {
         $user = dbarray ( $result );
-        RemoveUser ( $user['player_id'], $queue['end'] );
+        if ( !IsBot ($user['player_id']) ) RemoveUser ( $user['player_id'], $queue['end'] );
     }
 
     RemoveQueue ( $queue['task_id'], 0 );
