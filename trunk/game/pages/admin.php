@@ -120,6 +120,9 @@ onmouseover="return overlib('<center><font size=1 color=white><b>Общее со
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Expedition"><img src="<?=hostname();?>evolution/gebaeude/210.gif" width='32' height='32'
 onmouseover="return overlib('<center><font size=1 color=white><b>Настройки экспедиции</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Logins"><img src="img/admin_logins.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Логины</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
 </td></tr></table><br/>
 
 <?php
@@ -157,6 +160,7 @@ function Admin_Home ()
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=BattleSim"><img src="img/admin_sim.png"><br>Симулятор</a></th>
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Broadcast"><img src="img/admin_broadcast.png"><br>Общее сообщение</a></th>
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Expedition"><img src="<?=hostname();?>evolution/gebaeude/210.gif"><br>Настройки экспедиции</a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Logins"><img src="img/admin_logins.png"><br>Логины</a></th>
     </tr>
     </table>
 <?php
@@ -175,6 +179,7 @@ include "admin_debug.php";
 include "admin_sim.php";
 include "admin_broadcast.php";
 include "admin_expedition.php";
+include "admin_logins.php";
 
 // ========================================================================================
 
@@ -199,6 +204,7 @@ else if ( $mode === "Debug" ) Admin_Debug ();
 else if ( $mode === "BattleSim" ) Admin_BattleSim ();
 else if ( $mode === "Broadcast" ) Admin_Broadcast ();
 else if ( $mode === "Expedition" ) Admin_Expedition ();
+else if ( $mode === "Logins" ) Admin_Logins ();
 else Admin_Home ();
 
 echo "</table>\n";
