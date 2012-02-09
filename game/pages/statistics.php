@@ -111,7 +111,7 @@ while ($rows--) {
 
     if ( $type === "fleet" ) { $place = $user['place2']; $diff = $user['place2'] - $user['oldplace2']; $score = $user['score2']; }
     else if ( $type === "research" ) { $place = $user['place3']; $diff = $user['place3'] - $user['oldplace3']; $score = $user['score3']; }
-    else { $place = $user['place1']; $diff = $user['place1'] - $user['oldplace1']; $score = $user['score1'] / 1000; }
+    else { $place = $user['place1']; $diff = $user['place1'] - $user['oldplace1']; $score = floor($user['score1'] / 1000); }
 
     echo "  <tr> \n";
     echo "    <!-- rank --> \n";

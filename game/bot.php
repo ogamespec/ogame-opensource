@@ -5,6 +5,12 @@
 // Интеллект ботов - секретная инфорация.
 require_once "bot_rev1.php";
 
+// Вернуть описание стратегии бота.
+function GetBotStrategy ($n)
+{
+    return GetBotStrategy_Rev1 ($n);
+}
+
 // Запустить бота. Для каждой планеты бота выбирается оптимальная стратегия развития.
 function StartBot ($player_id)
 {
