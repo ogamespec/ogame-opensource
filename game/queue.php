@@ -198,11 +198,14 @@ function HasDecRes ($queue)
 */
 
 // Добавить новую постройку/снос в очередь
-function BuildEnque ( $planet_id, $id, $destroy )
+function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
 {
-    global $db_prefix, $GlobalUser, $GlobalUni;
+    global $db_prefix, $GlobalUni;
 
-    $prem = PremiumStatus ($GlobalUser);
+    $planet = GetPlanet ( $planet_id );
+    $user = LoadUser ( $planet['owner_id'] );
+
+    $prem = PremiumStatus ($user);
     //if ($prem['commander']) $maxcnt = 5;
     //else $maxcnt = 1;
     $maxcnt = 1;
@@ -225,7 +228,6 @@ function BuildEnque ( $planet_id, $id, $destroy )
     }
 
     // Определить добавляемый уровень.
-    $planet = GetPlanet ( $planet_id );
     $nowlevel = $planet['b'.$id];
     for ($i=0; $i<$cnt; $i++)
     {
@@ -250,16 +252,16 @@ function BuildEnque ( $planet_id, $id, $destroy )
         if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) ) { /*echo "Недостаточно ресурсов!<br>";*/ return; }
 
         // Проверить доступные технологии.
-        if ( !BuildMeetRequirement ( $GlobalUser, $planet, $id ) ) { /*echo "Не выполнены условия для постройки!<br>";*/ return; }
+        if ( !BuildMeetRequirement ( $user, $planet, $id ) ) { /*echo "Не выполнены условия для постройки!<br>";*/ return; }
 
-        $now = time ();
+        if ( $now == 0 ) $now = time ();
 
         // Списать ресурсы.
         AdjustResources ( $m, $k, $d, $planet_id, '-' );
 
         // Добавить в очередь
         $type = $destroy ? "Demolish" : "Build";
-        AddQueue ( $GlobalUser['player_id'], $type, $planet_id, $id, $lvl, $now, floor (BuildDuration ( $id, $lvl, $planet['b14'], $planet['b15'], $speed )) );
+        AddQueue ( $user['player_id'], $type, $planet_id, $id, $lvl, $now, floor (BuildDuration ( $id, $lvl, $planet['b14'], $planet['b15'], $speed )) );
     }
     else
     {
@@ -268,18 +270,18 @@ function BuildEnque ( $planet_id, $id, $destroy )
 
         // Добавить в очередь
         $type = $destroy ? "Demolish" : "Build";
-        $qid = AddQueue ( $GlobalUser['player_id'], $type, $planet_id, $id, $lvl, $now, floor (BuildDuration ( $id, $lvl, $planet['b14'], $planet['b15'], $speed )) );
+        $qid = AddQueue ( $user['player_id'], $type, $planet_id, $id, $lvl, $now, floor (BuildDuration ( $id, $lvl, $planet['b14'], $planet['b15'], $speed )) );
 
         // Добавить событие списывания ресов (время окончания = время начала добавляемого задания).
         $q = LoadQueue ($qid);
-        AddQueue ( $GlobalUser['player_id'], "DecRes", $q['task_id'], 0, 0, $q['start'], 0 );
+        AddQueue ( $user['player_id'], "DecRes", $q['task_id'], 0, 0, $q['start'], 0 );
     }
 }
 
 // Отменить постройку/снос
 function BuildDeque ( $planet_id, $listid )
 {
-    global $db_prefix, $GlobalUser, $GlobalUni;
+    global $db_prefix, $GlobalUni;
 
     $uni = $GlobalUni;
     if ( $uni['freeze'] ) return;
@@ -379,7 +381,7 @@ function Queue_Build_Cancel ($queue)
 // Списать ресурсы. Если ресурсов недостаточно или не выполнены условия - отменить задание строительства.
 function Queue_DecRes_End ($queue)
 {
-    global $db_prefix, $GlobalUser;
+    global $db_prefix;
 
     $q = LoadQueue ($queue['sub_id']);
     if ($q == null)
@@ -400,8 +402,9 @@ function Queue_DecRes_End ($queue)
     Debug ( "DecRes - списать ресы $m $k $d за " . loca("NAME_$id") . " уровень $lvl" );
 
     $planet = GetPlanet ($planet_id);
+    $user = LoadUser ($planet['owner_id']);
 
-    if ( IsEnoughResources ($planet, $m, $k, $d, $e) && BuildMeetRequirement ( $GlobalUser, $planet, $id ) )
+    if ( IsEnoughResources ($planet, $m, $k, $d, $e) && BuildMeetRequirement ( $user, $planet, $id ) )
     {
         $now = time ();
 
@@ -431,7 +434,7 @@ function GetShipyardQueue ($planet_id)
 }
 
 // Получить время окончания последнего задания на верфи, используется чтобы узнать время начала нового задания.
-function ShipyardLatestTime ($planet_id)
+function ShipyardLatestTime ($planet_id, $now)
 {
     global $db_prefix;
 
@@ -441,11 +444,14 @@ function ShipyardLatestTime ($planet_id)
         $queue = dbarray ($result);
         return $queue['end'] + ($queue['end'] - $queue['start']) * ($queue['level'] - 1);
     }
-    else return time ();
+    else {
+        if ($now == 0) $now = time ();
+        return $now;
+    }
 }
 
 // Добавить флот/оборону на верфь ($gid - тип юнита, $value - количество)
-function AddShipyard ($player_id, $planet_id, $gid, $value )
+function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
 {
     global $db_prefix, $GlobalUni;
 
@@ -490,7 +496,7 @@ function AddShipyard ($player_id, $planet_id, $gid, $value )
 
     if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && ShipyardMeetRequirement ($user, $planet, $gid) ) {
         $speed = $uni['speed'];
-        $now = ShipyardLatestTime ($planet_id);
+        $now = ShipyardLatestTime ($planet_id, $now);
         $shipyard = $planet["b21"];
         $nanits = $planet["b15"];
         $seconds = ShipyardDuration ( $gid, $shipyard, $nanits, $speed );
@@ -556,7 +562,7 @@ function Queue_Shipyard_End ($queue)
 // Исследования
 
 // Начать исследование на планете (включает в себя все проверки).
-function StartResearch ($player_id, $planet_id, $id)
+function StartResearch ($player_id, $planet_id, $id, $now)
 {
     global $db_prefix, $GlobalUni;
 
@@ -585,7 +591,7 @@ function StartResearch ($player_id, $planet_id, $id)
 
     if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && ResearchMeetRequirement ( $user, $planet, $id ) ) {
         $speed = $uni['speed'];
-        $now = time ();
+        if ($now == 0) $now = time ();
         $reslab = ResearchNetwork ( $planet['planet_id'], $id );
         $seconds = ResearchDuration ( $id, $level, $reslab, $speed * $r_factor);
 
