@@ -307,6 +307,16 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
                                  0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
     $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
+    // DEBUG
+    $fleetlog = $fleet_obj;
+    $fleetlog['fleet_id'] = $fleet_id;
+    $fleetlog['date_start'] = $now;
+    $fleetlog['date_end'] = $now + $seconds;
+    $fleetlog['prio'] = $prio;
+    $f = fopen ( 'fleetlogs/fleetlogs.txt', 'a' );
+    fwrite ( $f, serialize ($fleetlog) . "\n\n" );
+    fclose ( $f );
+
     // Добавить задание в глобальную очередь событий.
     AddQueue ( $origin['owner_id'], "Fleet", $fleet_id, 0, 0, $now, $seconds, $prio );
     return $fleet_id;
