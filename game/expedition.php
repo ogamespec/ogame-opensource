@@ -661,7 +661,8 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
             if ( $chance >= $exptab['chance_alien'] ) $text = Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_pirates'] ) $text = Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_dm'] ) $text = Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_lost'] ) $text = Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target);
+            //else if ( $chance >= $exptab['chance_lost'] ) $text = Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target);
+            else if ( $chance >= $exptab['chance_lost'] ) $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_delay'] ) $text = Exp_DelayFleet ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_accel'] ) $text = Exp_AccelFleet ($queue, $fleet_obj, $fleet, $origin, $target);
             else if ( $chance >= $exptab['chance_res'] ) $text = Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target);
