@@ -115,8 +115,8 @@ if ( method () === "POST" )
         {
             if ( $GlobalUser['trader'] == 1)
             {
-                $crys = floor ( min ( $aktplanet['kmax'], $aktplanet['k'] + str_replace ( ".", "", $_POST['2_value'] ) ) );
-                $deut = floor ( min ( $aktplanet['dmax'], $aktplanet['d'] + str_replace ( ".", "", $_POST['3_value'] ) ) );
+                $crys = floor ( $aktplanet['k'] + str_replace ( ".", "", $_POST['2_value'] ) );
+                $deut = floor ( $aktplanet['d'] + str_replace ( ".", "", $_POST['3_value'] ) );
                 $met = floor ( str_replace ( ".", "", $_POST['2_value'] ) * $GlobalUser['rate_m'] / $GlobalUser['rate_k'] ) + 
                        floor ( str_replace ( ".", "", $_POST['3_value'] ) * $GlobalUser['rate_m'] / $GlobalUser['rate_d'] );
                 $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
@@ -129,8 +129,8 @@ if ( method () === "POST" )
 
             else if ( $GlobalUser['trader'] == 2)
             {
-                $met = floor ( min ( $aktplanet['mmax'], $aktplanet['m'] + str_replace ( ".", "", $_POST['1_value'] ) ) );
-                $deut = floor ( min ( $aktplanet['dmax'], $aktplanet['d'] + str_replace ( ".", "", $_POST['3_value'] ) ) );
+                $met = floor ( $aktplanet['m'] + str_replace ( ".", "", $_POST['1_value'] ) );
+                $deut = floor ( $aktplanet['d'] + str_replace ( ".", "", $_POST['3_value'] ) );
                 $crys = floor ( str_replace ( ".", "", $_POST['1_value'] ) * $GlobalUser['rate_k'] / $GlobalUser['rate_m'] ) + 
                         floor ( str_replace ( ".", "", $_POST['3_value'] ) * $GlobalUser['rate_k'] / $GlobalUser['rate_d'] );
                 $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
@@ -143,8 +143,8 @@ if ( method () === "POST" )
 
             else if ( $GlobalUser['trader'] == 3)
             {
-                $met = floor ( min ( $aktplanet['mmax'], $aktplanet['m'] + str_replace ( ".", "", $_POST['1_value'] ) ) );
-                $crys = floor ( min ( $aktplanet['kmax'], $aktplanet['k'] + str_replace ( ".", "", $_POST['2_value'] ) ) );
+                $met = floor ( $aktplanet['m'] + str_replace ( ".", "", $_POST['1_value'] ) );
+                $crys = floor ( $aktplanet['k'] + str_replace ( ".", "", $_POST['2_value'] ) );
                 $deut = floor ( str_replace ( ".", "", $_POST['1_value'] ) * $GlobalUser['rate_d'] / $GlobalUser['rate_m'] ) + 
                         floor ( str_replace ( ".", "", $_POST['2_value'] ) * $GlobalUser['rate_d'] / $GlobalUser['rate_k'] );
                 $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
