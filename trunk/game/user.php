@@ -704,4 +704,34 @@ function InvalidateUserCache ()
     $UserCache = array ();
 }
 
+// Вернуть имя игрока со ссылкой на страницу редактирования и статусом (ишка, РО и пр.)
+function AdminUserName ($user)
+{
+    global $session;
+
+    $name = $user['oname'];
+
+    $week = time() - 604800;
+    $week3 = time() - 604800*3;
+
+    $status = "";
+    if ( $user['lastclick'] <= $week ) $status .= "i";
+    if ( $user['lastclick'] <= $week3 ) $status .= "I";
+    if ( $user['vacation'] ) $status .= "РО";
+    if ( $user['banned'] ) $status .= "з";
+    if ( $user['noattack'] ) $status .= "А";
+    if ( $user['disable'] ) $status .= "g";
+    if ( $status !== "" ) $name .= " ($status)";
+
+    if ( $user['disable'] ) $name = "<font color=orange>$name</font>";
+    else if ( $user['banned'] ) $name = "<font color=red>$name</font>";
+    else if ( $user['noattack'] ) $name = "<font color=yellow>$name</font>";
+    else if ( $user['vacation'] ) $name = "<font color=skyBlue>$name</font>";
+    else if ( $user['lastclick'] <= $week3 ) $name = "<font color=#999999>$name</font>";
+    else if ( $user['lastclick'] <= $week ) $name = "<font color=#cccccc>$name</font>";
+
+    $name = "<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">$name</a>";
+    return $name;
+}
+
 ?>

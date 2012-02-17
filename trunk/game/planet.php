@@ -517,4 +517,18 @@ function SetPlanetDefense ( $planet_id, $objects )
     dbquery ($query);
 }
 
+// Вернуть название планеты со ссылкой на админку.
+function AdminPlanetName ($planet)
+{
+    global $session;
+    return "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\">".$planet['name']."</a>";
+}
+
+// Вернуть строку координат планеты со ссылкой на галактику
+function AdminPlanetCoord ($p)
+{
+    global $session;
+    return "[<a href=\"index.php?page=galaxy&session=$session&galaxy=".$p['g']."&system=".$p['s']."\">".$p['g'].":".$p['s'].":".$p['p']."</a>]";
+}
+
 ?>
