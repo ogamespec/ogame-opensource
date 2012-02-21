@@ -229,6 +229,7 @@ else
     }
     else if ( $gid == 34 )        // Склад альянса
     {
+        $depot_cap = 10000 * pow ( 2, $aktplanet['b34'] );
 ?>
     </th>
    </tr>
@@ -236,63 +237,38 @@ else
 <form action="index.php?page=allianzdepot&session=<?=$session;?>" method=post>
 
 <table width='519'>
-<td class='c' colspan='2'>Вместимость: 20000/20000</td>
-  <tr>
-    <th>Флот KPEC:<br>Крейсер:4000<br></th>
-    <th>
-      зарядка<br>5214 сек<br>
-      <input tabindex='1' type='text' name='c1' size='5' maxlength='2' value='0' />ч<br>
+<td class='c' colspan='2'>Вместимость: <?=nicenum(min(floor($aktplanet['d']), $depot_cap));?>/<?=nicenum($depot_cap);?></td>
+<?php
 
-         Стоимость 120000 / ч    </th>
-  </tr>
-  <tr>
-    <th>Флот KPEC:<br>Линкор:2000<br>Линейный крейсер:930<br></th>
-    <th>
-      зарядка<br>5300 сек<br>
+    $fmap = array_reverse ($fleetmap);
 
-      <input tabindex='2' type='text' name='c2' size='5' maxlength='2' value='0' />ч<br>
-         Стоимость 223250 / ч    </th>
-  </tr>
-  <tr>
-    <th>Флот KPEC:<br>Лёгкий истребитель:18660<br></th>
-    <th>
-      зарядка<br>5361 сек<br>
+    $result = GetHoldingFleets ($aktplanet['planet_id']);
+    $rows = dbrows ($result);
+    $c = 1;
+    while ($rows--)
+    {
+        $fleet_obj = dbarray ( $result );
+        $user = LoadUser ($fleet_obj['owner_id']);
 
-      <input tabindex='3' type='text' name='c3' size='5' maxlength='2' value='0' />ч<br>
-         Стоимость 37320 / ч    </th>
-  </tr>
-  <tr>
-    <th>Флот KPEC:<br>Бомбардировщик:300<br>Уничтожитель:1200<br></th>
-    <th>
+        $load = 5214;
+        $cons = 120000;
 
-      зарядка<br>5407 сек<br>
-      <input tabindex='4' type='text' name='c4' size='5' maxlength='2' value='0' />ч<br>
-         Стоимость 180000 / ч    </th>
-  </tr>
-  <tr>
-    <th>Флот Revo:<br>Крейсер:100<br></th>
+        echo "  <tr>\n";
+        echo "    <th>Флот ".$user['oname'].":<br>";
+        foreach ($fmap as $i=>$id) {
+            $amount = $fleet_obj["ship".$id];
+            if ($amount > 0) echo loca ("NAME_".$id).":".$amount."<br>";
+        }
+        echo "</th>\n";
+        echo "    <th>\n";
+        echo "      зарядка<br>$load сек<br>\n";
+        echo "      <input tabindex='".$c."' type='text' name='c".$c."' size='5' maxlength='2' value='0' />ч<br>\n\n";
+        echo "         Стоимость $cons / ч    </th>\n";
+        echo "  </tr>\n";
+        $c ++;
+    }
 
-    <th>
-      зарядка<br>8930 сек<br>
-      <input tabindex='5' type='text' name='c5' size='5' maxlength='2' value='0' />ч<br>
-         Стоимость 3000 / ч    </th>
-  </tr>
-  <tr>
-    <th>Флот Revo:<br>Крейсер:800<br></th>
-
-    <th>
-      зарядка<br>12436 сек<br>
-      <input tabindex='6' type='text' name='c6' size='5' maxlength='2' value='0' />ч<br>
-         Стоимость 24000 / ч    </th>
-  </tr>
-  <tr>
-    <th>Флот Revo:<br>Крейсер:100<br></th>
-
-    <th>
-      зарядка<br>12473 сек<br>
-      <input tabindex='7' type='text' name='c7' size='5' maxlength='2' value='0' />ч<br>
-         Стоимость 3000 / ч    </th>
-  </tr>
+?>
   <tr><th colspan='2'><input type='submit' value='Запустить ракету со снабжением'></th>
 </table>
 
