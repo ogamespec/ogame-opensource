@@ -84,12 +84,16 @@ function Admin_Users ()
             }
         }
 
-        if ($action === "create_planet")        // Создать планету
+        if ($action === "create_planet")        // Создать планету, остановить выработку шахт
         {
             $g = $_POST['g'];    if ($g === "" ) $g = 1;
             $s = $_POST['s'];    if ($s === "" ) $s = 1;
             $p = $_POST['p'];    if ($p === "" ) $p = 1;
-            if ( ! HasPlanet ( $g, $s, $p ) ) CreatePlanet ($g, $s, $p, $_GET['player_id'] );
+            if ( ! HasPlanet ( $g, $s, $p ) ) { 
+                $planet_id = CreatePlanet ($g, $s, $p, $_GET['player_id'] );
+                $query = "UPDATE ".$db_prefix."planets SET mprod = 0, kprod = 0, dprod = 0 WHERE planet_id = " . $planet_id;
+                dbquery ( $query );
+            }
         }
     }
 
