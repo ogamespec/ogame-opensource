@@ -3,23 +3,6 @@
 // ========================================================================================
 // Текущие полёты игроков, а также логи полётов
 
-function FleetlogsMissionText ($num)
-{
-    if ($num >= 200)
-    {
-        $desc = "<a title=\"На планете\">(Д)</a>";
-        $num -= 200;
-    }
-    else if ($num >= 100)
-    {
-        $desc = "<a title=\"Возвращение к планете\">(В)</a>";
-        $num -= 100;
-    }
-    else $desc = "<a title=\"Уход на задание\">(У)</a>";
-
-    echo "      <a title=\"\">".loca("FLEET_ORDER_$num")."</a>\n$desc\n";
-}
-
 function Admin_Fleetlogs ()
 {
     global $session;
