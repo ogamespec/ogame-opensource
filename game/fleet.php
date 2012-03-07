@@ -304,18 +304,17 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
 
     // Добавить флот.
     $fleet_obj = array ( '', $origin['owner_id'], $union_id, $m, $k, $d, $cons, $order, $origin['planet_id'], $target['planet_id'], $flight_time, $deploy_time,
-                                 0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
+                         0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
     $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
-    // DEBUG
-    $fleetlog = $fleet_obj;
-    $fleetlog['fleet_id'] = $fleet_id;
-    $fleetlog['date_start'] = $now;
-    $fleetlog['date_end'] = $now + $seconds;
-    $fleetlog['prio'] = $prio;
-    $f = fopen ( 'fleetlogs/fleetlogs.txt', 'a' );
-    fwrite ( $f, serialize ($fleetlog) . "\n\n" );
-    fclose ( $f );
+    // Запись в лог
+    $weeks = $now - 4 * (7 * 24 * 60 * 60);
+    $query = "DELETE FROM ".$db_prefix."fleetlogs WHERE start < $weeks;";
+    dbquery ($query);
+    $fleetlog = array ( '', $origin['owner_id'], $union_id, $m, $k, $d, $cons, $order, $flight_time, $deploy_time, $now, $now+$seconds, 
+                        $origin['g'], $origin['s'], $origin['p'], $origin['type'], $target['g'], $target['s'], $target['p'], $target['type'], 
+                        0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
+    AddDBRow ($fleetlog, 'fleetlogs');
 
     // Добавить задание в глобальную очередь событий.
     AddQueue ( $origin['owner_id'], "Fleet", $fleet_id, 0, 0, $now, $seconds, $prio );
@@ -472,8 +471,17 @@ function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
 
     // Добавить ракетную атаку.
     $fleet_obj = array ( '', $origin['owner_id'], 0, 0, 0, 0, 0, 20, $origin['planet_id'], $target['planet_id'], $seconds, 0,
-                                 $amount, $type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+                         $amount, $type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     $fleet_id = AddDBRow ($fleet_obj, 'fleet');
+
+    // Запись в лог
+    $weeks = $now - 4 * (7 * 24 * 60 * 60);
+    $query = "DELETE FROM ".$db_prefix."fleetlogs WHERE start < $weeks;";
+    dbquery ($query);
+    $fleetlog = array ( '', $origin['owner_id'], 0, 0, 0, 0, 0, 20, $seconds, 0, $now, $now+$seconds, 
+                        $origin['g'], $origin['s'], $origin['p'], $origin['type'], $target['g'], $target['s'], $target['p'], $target['type'], 
+                        $amount, $type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+    AddDBRow ($fleetlog, 'fleetlogs');
 
     // Добавить задание в глобальную очередь событий.
     AddQueue ( $origin['owner_id'], "Fleet", $fleet_id, 0, 0, $now, $seconds, $prio );
