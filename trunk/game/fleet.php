@@ -312,7 +312,7 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
     $weeks = $now - 4 * (7 * 24 * 60 * 60);
     $query = "DELETE FROM ".$db_prefix."fleetlogs WHERE start < $weeks;";
     dbquery ($query);
-    $fleetlog = array ( '', $origin['owner_id'], $union_id, $m, $k, $d, $cons, $order, $flight_time, $deploy_time, $now, $now+$seconds, 
+    $fleetlog = array ( '', $origin['owner_id'], $target['owner_id'], $union_id, $m, $k, $d, $cons, $order, $flight_time, $deploy_time, $now, $now+$seconds, 
                         $origin['g'], $origin['s'], $origin['p'], $origin['type'], $target['g'], $target['s'], $target['p'], $target['type'], 
                         0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
     AddDBRow ($fleetlog, 'fleetlogs');
@@ -480,7 +480,7 @@ function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
     $weeks = $now - 4 * (7 * 24 * 60 * 60);
     $query = "DELETE FROM ".$db_prefix."fleetlogs WHERE start < $weeks;";
     dbquery ($query);
-    $fleetlog = array ( '', $origin['owner_id'], 0, 0, 0, 0, 0, 20, $seconds, 0, $now, $now+$seconds, 
+    $fleetlog = array ( '', $origin['owner_id'], $target['owner_id'], 0, 0, 0, 0, 0, 20, $seconds, 0, $now, $now+$seconds, 
                         $origin['g'], $origin['s'], $origin['p'], $origin['type'], $target['g'], $target['s'], $target['p'], $target['type'], 
                         $amount, $type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     AddDBRow ($fleetlog, 'fleetlogs');
@@ -1169,6 +1169,57 @@ function IsPlayerInUnion ($player_id, $union)
         if ( $pid == $player_id ) return true;
     }
     return false;
+}
+
+// Логи полётов.
+
+function FleetlogsMissionText ($num)
+{
+    if ($num >= 200)
+    {
+        $desc = "<a title=\"На планете\">(Д)</a>";
+        $num -= 200;
+    }
+    else if ($num >= 100)
+    {
+        $desc = "<a title=\"Возвращение к планете\">(В)</a>";
+        $num -= 100;
+    }
+    else $desc = "<a title=\"Уход на задание\">(У)</a>";
+
+    echo "      <a title=\"\">".loca("FLEET_ORDER_$num")."</a>\n$desc\n";
+}
+
+function FleetlogsFromPlayer ($player_id, $missions)
+{
+    global $db_prefix;
+
+    if ( count ($missions) == 0 ) return null;
+
+    $list = "";
+    foreach ($missions as $i=>$num) {
+        if ($i > 0) $list .= "OR ";
+        $list .= "mission = $num ";
+    }
+
+    $query = "SELECT * FROM ".$db_prefix."fleetlogs WHERE (".$list.") AND owner_id = $player_id ORDER BY start ASC;";
+    return dbquery ( $query );
+}
+
+function FleetlogsToPlayer ($player_id, $missions)
+{
+    global $db_prefix;
+
+    if ( count ($missions) == 0 ) return null;
+
+    $list = "";
+    foreach ($missions as $i=>$num) {
+        if ($i > 0) $list .= "OR ";
+        $list .= "mission = $num ";
+    }
+
+    $query = "SELECT * FROM ".$db_prefix."fleetlogs WHERE (".$list.") AND owner_id <> target_id AND target_id = $player_id ORDER BY start ASC;";
+    return dbquery ( $query );
 }
 
 ?>

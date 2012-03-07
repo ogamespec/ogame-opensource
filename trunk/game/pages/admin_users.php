@@ -3,6 +3,42 @@
 // ========================================================================================
 // Пользователи.
 
+$FleetMissionList = array (
+    0 => array ( 1, 101, 2, 102, 3, 103, 4, 104, 5, 105, 205, 6, 106, 7, 107, 8, 108, 9, 109, 15, 115, 215, 20, 21, 121 ),
+    1 => array ( 1, 101 ),
+    2 => array ( 2, 102 ),
+    3 => array ( 3, 103 ),
+    4 => array ( 4, 104 ),
+    5 => array ( 5, 105, 205 ),
+    6 => array ( 6, 106 ), 
+    7 => array ( 7, 107 ), 
+    8 => array ( 8, 108 ), 
+    9 => array ( 9, 109 ), 
+    15 => array ( 15, 115, 215 ), 
+    20 => array ( 20 ), 
+    21 => array ( 21, 121 ), 
+);
+
+function LinkFleetsFrom ($user, $mission)
+{
+    global $session, $FleetMissionList;
+    $result = FleetlogsFromPlayer ( $user['player_id'], $FleetMissionList[$mission] );
+    if ( $result ) $rows = dbrows ($result);
+    else $rows = 0;
+    if ( $rows ) return "<a href=\"index.php?page=admin&session=".$session."&mode=Users&action=fleetlogs&player_id=".$user['player_id']."&mission=".$mission."&from=1\">".$rows."</a>";
+    else return "0";
+}
+
+function LinkFleetsTo ($user, $mission)
+{
+    global $session, $FleetMissionList;
+    $result = FleetlogsToPlayer ( $user['player_id'], $FleetMissionList[$mission] );
+    if ( $result ) $rows = dbrows ($result);
+    else $rows = 0;
+    if ( $rows ) return "<a href=\"index.php?page=admin&session=".$session."&mode=Users&action=fleetlogs&player_id=".$user['player_id']."&mission=".$mission."&from=0\">".$rows."</a>";
+    else return "0";
+}
+
 function IsChecked ($user, $option)
 {
     if ( $user[$option] ) return "checked=checked";
@@ -20,6 +56,9 @@ function Admin_Users ()
     global $session;
     global $db_prefix;
     global $GlobalUser;
+    global $FleetMissionList;
+
+    $now = time();
 
     $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
     
@@ -30,7 +69,6 @@ function Admin_Users ()
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 ) {
         $player_id = $_GET['player_id'];
         $action = $_GET['action'];
-        $now = time();
 
         if ($action === "update")        // Обновить данные пользователя.
         {
@@ -134,7 +172,7 @@ function Admin_Users ()
 
     <table>
     <form action="index.php?page=admin&session=<?=$session;?>&mode=Users&action=update&player_id=<?=$user['player_id'];?>" method="POST" >
-    <tr><td class=c><?=$user['oname'];?></td><td class=c>Настройки</td><td class=c>Исследования</td></tr>
+    <tr><td class=c><?=AdminUserName($user);?></td><td class=c>Настройки</td><td class=c>Исследования</td></tr>
 
         <th valign=top><table>
             <tr><th>ID</th><th><?=$user['player_id'];?></th></tr>
@@ -341,6 +379,129 @@ function Admin_Users ()
     <tr><td colspan=20> Координаты: <input name="g" size=2> <input name="s" size=2> <input name="p" size=2> <input type="submit" value="Создать планету"></td></tr>
     </form>
     </table>
+
+    <br>
+    <table>
+
+<?php
+        if ( $_GET['action'] === 'fleetlogs' ) {
+
+            echo "<tr><td class=c colspan=11>Логи полётов</td></tr>\n";
+
+            if ( $_GET['from'] == 1 ) $result = FleetlogsFromPlayer ( $user['player_id'], $FleetMissionList[$_GET['mission']] );
+            else $result = FleetlogsToPlayer ( $user['player_id'], $FleetMissionList[$_GET['mission']] );
+
+            $anz = $rows = dbrows ( $result );
+            echo "<tr><td class=c>N</td> <td class=c>Таймер</td> <td class=c>Задание</td> <td class=c>Отправлен</td> <td class=c>Прибывает</td><td class=c>Время полёта</td> <td class=c>Старт</td> <td class=c>Цель</td> <td class=c>Флот</td> <td class=c>Груз</td> <td class=c>САБ</td> </tr>\n";
+            $bxx = 1;
+            while ($rows--)
+            {
+                $fleet_obj = dbarray ($result);
+
+                $points = $fpoints = 0;
+                FleetPrice ( $fleet_obj, &$points, &$fpoints );
+                $style = "";
+                if ( $points >= 100000000 ) {
+                    if ( $fleet_obj['mission'] <= 2 ) $style = " style=\"background-color: FireBrick;\" ";
+                    else $style = " style=\"background-color: DarkGreen;\" ";
+                }
+?>
+        <tr <?=$style;?> >
+
+        <th <?=$style;?> > <?=$bxx;?> </th>
+
+        <th <?=$style;?> >
+<?php
+    echo "<table><tr $style ><th $style ><div id='bxx".$bxx."' title='".($fleet_obj['end'] - $now)."' star='".$fleet_obj['start']."'> </th>";
+    echo "<tr><th $style >".date ("d.m.Y H:i:s", $fleet_obj['end'])."</th></tr></table>";
+?>
+        </th>
+        <th <?=$style;?> >
+<?php
+    echo FleetlogsMissionText ( $fleet_obj['mission'] );
+?>
+        </th>
+        <th <?=$style;?> ><?=date ("d.m.Y", $fleet_obj['start']);?> <br> <?=date ("H:i:s", $fleet_obj['start']);?></th>
+        <th <?=$style;?> ><?=date ("d.m.Y", $fleet_obj['end']);?> <br> <?=date ("H:i:s", $fleet_obj['end']);?></th>
+        <th <?=$style;?> >
+<?php
+    echo "<nobr>".BuildDurationFormat ($fleet_obj['flight_time']) . "</nobr><br>";
+    echo "<nobr>".$fleet_obj['flight_time'] . " сек.</nobr>";
+?>
+        </th>
+        <th <?=$style;?> >
+<?php
+    echo "[".$fleet_obj['origin_g'].":".$fleet_obj['origin_s'].":".$fleet_obj['origin_p']."]";
+    $u = LoadUser ( $fleet_obj['owner_id'] );
+    echo " <br>" . AdminUserName($u);
+?>
+        </th>
+        <th <?=$style;?> >
+<?php
+    echo "[".$fleet_obj['target_g'].":".$fleet_obj['target_s'].":".$fleet_obj['target_p']."]";
+    $u = LoadUser ( $fleet_obj['target_id'] );
+    echo " <br>" . AdminUserName($u);
+?>
+        </th>
+        <th <?=$style;?> >
+<?php
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    foreach ($fleetmap as $i=>$gid) {
+        $amount = $fleet_obj["ship".$gid];
+        if ( $amount > 0 ) echo loca ("NAME_$gid") . ":" . nicenum($amount) . " ";
+    }
+?>
+        </th>
+        <th <?=$style;?> >
+<?php
+    $total = $fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d'];
+    if ( $total > 0 ) {
+        echo "М: " . nicenum ($fleet_obj['m']) . "<br>" ;
+        echo "К: " . nicenum ($fleet_obj['k']) . "<br>" ;
+        echo "Д: " . nicenum ($fleet_obj['d']) ;
+    }
+    else echo "-";
+?>
+        </th>
+        <th <?=$style;?> >
+<?php
+    if ( $fleet_obj['union_id'] ) {
+        echo $fleet_obj['union_id'];
+    }
+    else echo "-";
+?>
+        </th>
+
+        </tr>
+<?php
+            $bxx ++;
+            }
+            echo "<script language=javascript>anz=$anz;t();</script>\n";
+        }
+        else
+        {
+?>
+
+    <tr><td class=c colspan=3>Логи полётов</td></tr>
+    <tr><td>Задание</td><td>от <?=$user['oname'];?></td><td>на <?=$user['oname'];?></td></tr>
+    <tr><td>Все</td><td><?=LinkFleetsFrom($user,0);?></td><td><?=LinkFleetsTo($user,0);?></td></tr>
+    <tr><td>Атака</td><td><?=LinkFleetsFrom($user,1);?></td><td><?=LinkFleetsTo($user,1);?></td></tr>
+    <tr><td>Совместная атака</td><td><?=LinkFleetsFrom($user,2);?></td><td><?=LinkFleetsTo($user,2);?></td></tr>
+    <tr><td>Транспорт</td><td><?=LinkFleetsFrom($user,3);?></td><td><?=LinkFleetsTo($user,3);?></td></tr>
+    <tr><td>Оставить</td><td><?=LinkFleetsFrom($user,4);?></td><td><?=LinkFleetsTo($user,4);?></td></tr>
+    <tr><td>Держаться</td><td><?=LinkFleetsFrom($user,5);?></td><td><?=LinkFleetsTo($user,5);?></td></tr>
+    <tr><td>Шпионаж</td><td><?=LinkFleetsFrom($user,6);?></td><td><?=LinkFleetsTo($user,6);?></td></tr>
+    <tr><td>Колонизировать</td><td><?=LinkFleetsFrom($user,7);?></td><td><?=LinkFleetsTo($user,7);?></td></tr>
+    <tr><td>Переработать</td><td><?=LinkFleetsFrom($user,8);?></td><td><?=LinkFleetsTo($user,8);?></td></tr>
+    <tr><td>Уничтожить</td><td><?=LinkFleetsFrom($user,9);?></td><td><?=LinkFleetsTo($user,9);?></td></tr>
+    <tr><td>Экспедиция</td><td><?=LinkFleetsFrom($user,15);?></td><td><?=LinkFleetsTo($user,15);?></td></tr>
+    <tr><td>Ракетная атака</td><td><?=LinkFleetsFrom($user,20);?></td><td><?=LinkFleetsTo($user,20);?></td></tr>
+    <tr><td>Атака (САБ)</td><td><?=LinkFleetsFrom($user,21);?></td><td><?=LinkFleetsTo($user,21);?></td></tr>
+    </table>
+
+<?php
+        }
+?>
 
 <?php
     }
