@@ -46,7 +46,7 @@ function gen_trivial_password ($len = 8)
 // -------------------------------------------------------------------------------------------------------------------------
 
 $tab_uni = array (        // Вселенная
-    'num'=>'INT','speed'=>'FLOAT','galaxies'=>'INT','systems'=>'INT','maxusers'=>'INT','acs'=>'INT','fid'=>'INT','did'=>'INT','rapid'=>'INT','moons'=>'INT','defrepair'=>'INT','defrepair_delta'=>'INT','usercount','freeze'=>'INT',
+    'num'=>'INT','speed'=>'FLOAT','galaxies'=>'INT','systems'=>'INT','maxusers'=>'INT','acs'=>'INT','fid'=>'INT','did'=>'INT','rapid'=>'INT','moons'=>'INT','defrepair'=>'INT','defrepair_delta'=>'INT','usercount'=>'INT','freeze'=>'INT',
     'news1'=>'TEXT', 'news2'=>'TEXT', 'news_until'=>'INT UNSIGNED', 'startdate'=>'INT UNSIGNED', 'battle_engine'=>'TEXT'
 );
 
