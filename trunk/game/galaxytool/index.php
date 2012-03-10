@@ -122,6 +122,7 @@ sksort ( $delta, 'delta_score' );
 
 echo "<br/><font size=+2 color=lime>Приросты за последние 7 дней:</font><br/>\n";
 $first = true;
+$count = 0;
 foreach ( $delta as $id=>$user)
 {
     $d = $user['delta_score'];
@@ -133,11 +134,14 @@ foreach ( $delta as $id=>$user)
         else echo "<a href='index.php?user=".$user['id']."' title='+".nicenum ( $d / 1000 )."'>".$user['name'];
         if ( $d > 30000000 ) echo " (+" . nicenum ( $d / 1000 ) . ")";
         echo "</a>";
+        $count++;
     }
 }
+if ($count >= 3) echo "<br><small><i>Всего : $count</i></small>";
 
 echo "<br/><br/><font size=+2 color=red>Спады за последние 7 дней:</font><br/>\n";
 $first = true;
+$count = 0;
 foreach ( $delta as $id=>$user)
 {
     $d = $user['delta_score'];
@@ -148,11 +152,14 @@ foreach ( $delta as $id=>$user)
         echo "<a href='index.php?user=".$user['id']."' title='-".nicenum ( abs($d) / 1000 )."'>".$user['name'];
         if ( $d < -30000000 ) echo " (-" . nicenum ( abs($d) / 1000 ) . ")";
         echo "</a>";
+        $count++;
     }
 }
+if ($count >= 3) echo "<br><small><i>Всего : $count</i></small>";
 
 echo "<br/><br/><span class='longinactive'><font size=+2>Неактивные и заблокированные:</font></span><br/>\n";
 $first = true;
+$count = 0;
 foreach ( $delta as $id=>$user)
 {
     $d = $user['delta_score'];
@@ -171,8 +178,10 @@ foreach ( $delta as $id=>$user)
         else if ( $user['i'] ) echo " (i)</span>";
         else if ( $user['b'] ) echo " (з)</span>";
         echo "</a>";
+        $count++;
     }
 }
+if ($count >= 3) echo "<br><small><i>Всего : $count</i></small>";
 
 ?>
 
