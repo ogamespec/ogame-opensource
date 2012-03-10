@@ -22,13 +22,23 @@ function nicenum ($number)
     return number_format($number,0,",",".");
 }
 
-function PlayerPlanets ($player_id)
+function PlayerDetails ($player_id)
 {
-    global $galaxy, $stats;
+    global $galaxy, $stats, $ally;
 
     $planets = array ();
-    echo "<br><br><font size=+2>Планеты игрока ".$stats[$player_id]['name'].":</font>";
+    echo "<br><br><font size=+2>".$stats[$player_id]['name'].":</font>";
 
+    echo "<table cellpadding=0 cellspacing=0><tr>";
+
+    echo "<td class=b>";
+    echo "Очки : ".nicenum($stats[$player_id]['points'] / 1000)."<br>";
+    echo "Флот : ".nicenum($stats[$player_id]['fpoints'])."<br>";
+    echo "Исследования : ".nicenum($stats[$player_id]['rpoints'])."<br>";
+    if ( $stats[$player_id]['ally_id'] ) echo "Альянс : [".$ally[$stats[$player_id]['ally_id']]['name']."]<br>";
+    echo "</td>";
+
+    echo "<td class=b><b>Планеты</b>:";
     foreach ( $galaxy as $planet_id=>$planet )
     {
         if ( $planet['owner_id'] == $player_id && $planet['type'] < 10000 )
@@ -47,6 +57,8 @@ function PlayerPlanets ($player_id)
         echo "<br/>" . $planet['name'];
         echo " [" . $planet['g'] . ":" . $planet['s'] . ":" . $planet['p'] . "]";
     }
+
+    echo "</td></tr></table>";
 }
 
 // Here is a function to sort an array by the key of his sub-array
@@ -80,7 +92,7 @@ function sksort (&$array, $subkey="id", $sort_ascending=false)
 
 $last_update = filemtime ( 'galaxy.txt' );
 
-echo "<br>Данные на " . date ( "m.d.Y H:i:s", $last_update ) . "<br>";
+echo "<br>Данные на " . date ( "d.m.Y H:i:s", $last_update ) . "<br>";
 
 $ally = unserialize ( file_get_contents ( 'ally_statistics.txt' ) );
 $old_ally = unserialize ( file_get_contents ( 'ally_statistics_old.txt' ) );
@@ -117,7 +129,8 @@ foreach ( $delta as $id=>$user)
     {
         if (!$first) echo ", ";
         else $first = false;
-        echo "<a href='index.php?user=".$user['id']."' title='+".nicenum ( $d / 1000 )."'>".$user['name'];
+        if ( $d < 1000 ) echo "<a href='index.php?user=".$user['id']."' title='~0'>".$user['name'];
+        else echo "<a href='index.php?user=".$user['id']."' title='+".nicenum ( $d / 1000 )."'>".$user['name'];
         if ( $d > 30000000 ) echo " (+" . nicenum ( $d / 1000 ) . ")";
         echo "</a>";
     }
@@ -148,15 +161,15 @@ foreach ( $delta as $id=>$user)
         if (!$first) echo ", ";
         else $first = false;
         echo "<a href='index.php?user=".$user['id']."'>";
-        if ( $user['i'] ) echo "<span class='inactive'>";
+        if ( $user['v'] ) echo "<span class='vacation'>";
         else if ( $user['iI'] ) echo "<span class='longinactive'>";
+        else if ( $user['i'] ) echo "<span class='inactive'>";
         else if ( $user['b'] ) echo "<span class='banned'>";
-        else if ( $user['v'] ) echo "<span class='vacation'>";
         echo $user['name'];
-        if ( $user['i'] ) echo " (i)</span>";
+        if ( $user['v'] ) echo " (РО)</span>";
         else if ( $user['iI'] ) echo " (iI)</span>";
+        else if ( $user['i'] ) echo " (i)</span>";
         else if ( $user['b'] ) echo " (з)</span>";
-        else if ( $user['v'] ) echo " (РО)</span>";
         echo "</a>";
     }
 }
@@ -170,7 +183,7 @@ foreach ( $delta as $id=>$user)
 if ( $_SERVER['REQUEST_METHOD'] === "GET" && key_exists ( 'user', $_GET ) )
 {
     $player_id = $_GET['user'];
-    PlayerPlanets ($player_id);
+    PlayerDetails ($player_id);
 }
 
 if ( $_SERVER['REQUEST_METHOD'] === "POST" )
@@ -180,7 +193,7 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
     {
         $percent = 0;
         similar_text ( mb_strtolower ($_POST['login']), mb_strtolower ($user['name']), &$percent );
-        if ( $percent > 75 ) PlayerPlanets ($id);
+        if ( $percent > 75 ) PlayerDetails ($id);
 
         //echo $user['name'] . " = " . $percent . "<br>";
     }
