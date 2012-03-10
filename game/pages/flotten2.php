@@ -75,7 +75,7 @@ PageHeader ("flotten2");
 <input name="thissystem" type="hidden" value="<?=$aktplanet['s'];?>" />
 <input name="thisplanet" type="hidden" value="<?=$aktplanet['p'];?>" />
 <input name="thisplanettype" type="hidden" value="<?=GetPlanetType($aktplanet);?>" />
-<input name="speedfactor" type="hidden" value="1" />
+<input name="speedfactor" type="hidden" value="<?=$GlobalUni['speed'];?>" />
 <input name="thisresource1" type="hidden" value="<?=floor($aktplanet['m']);?>" />
 <input name="thisresource2" type="hidden" value="<?=floor($aktplanet['k']);?>" />
 <input name="thisresource3" type="hidden" value="<?=floor($aktplanet['d']);?>" />

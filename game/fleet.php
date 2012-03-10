@@ -192,13 +192,13 @@ function FlightSpeed ($fleet, $combustion, $impulse, $hyper)
 }
 
 // Потребление дейтерия на полёт всем флотом.
-function FlightCons ($fleet, $dist, $flighttime, $combustion, $impulse, $hyper)
+function FlightCons ($fleet, $dist, $flighttime, $combustion, $impulse, $hyper, $speedfactor)
 {
     $cons = 0;
     foreach ($fleet as $id=>$amount)
     {
         if ($amount > 0) {
-            $spd = 35000 / ( $flighttime - 10) * sqrt($dist * 10 / FleetSpeed($id, $combustion, $impulse, $hyper ) );
+            $spd = 35000 / ( $flighttime * $speedfactor - 10) * sqrt($dist * 10 / FleetSpeed($id, $combustion, $impulse, $hyper ) );
             $basecons = $amount * FleetCons ($id, $combustion, $impulse, $hyper );
             $cons += $basecons * $dist / 35000 * (($spd / 10) + 1) * (($spd / 10) + 1);
         }
