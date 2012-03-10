@@ -386,13 +386,13 @@ function Admin_Users ()
 <?php
         if ( $_GET['action'] === 'fleetlogs' ) {
 
-            echo "<tr><td class=c colspan=11>Логи полётов</td></tr>\n";
+            echo "<tr><td class=c colspan=12>Логи полётов</td></tr>\n";
 
             if ( $_GET['from'] == 1 ) $result = FleetlogsFromPlayer ( $user['player_id'], $FleetMissionList[$_GET['mission']] );
             else $result = FleetlogsToPlayer ( $user['player_id'], $FleetMissionList[$_GET['mission']] );
 
             $anz = $rows = dbrows ( $result );
-            echo "<tr><td class=c>N</td> <td class=c>Таймер</td> <td class=c>Задание</td> <td class=c>Отправлен</td> <td class=c>Прибывает</td><td class=c>Время полёта</td> <td class=c>Старт</td> <td class=c>Цель</td> <td class=c>Флот</td> <td class=c>Груз</td> <td class=c>САБ</td> </tr>\n";
+            echo "<tr><td class=c>N</td> <td class=c>Таймер</td> <td class=c>Задание</td> <td class=c>Отправлен</td> <td class=c>Прибывает</td><td class=c>Время полёта</td> <td class=c>Старт</td> <td class=c>Цель</td> <td class=c>Флот</td> <td class=c>Ресурсы на планете</td> <td class=c>Груз</td> <td class=c>САБ</td> </tr>\n";
             $bxx = 1;
             while ($rows--)
             {
@@ -450,6 +450,17 @@ function Admin_Users ()
         $amount = $fleet_obj["ship".$gid];
         if ( $amount > 0 ) echo loca ("NAME_$gid") . ":" . nicenum($amount) . " ";
     }
+?>
+        </th>
+        <th <?=$style;?> >
+<?php
+    $total = $fleet_obj['pm'] + $fleet_obj['pk'] + $fleet_obj['pd'];
+    if ( $total > 0 ) {
+        echo "М: " . nicenum ($fleet_obj['pm']) . "<br>" ;
+        echo "К: " . nicenum ($fleet_obj['pk']) . "<br>" ;
+        echo "Д: " . nicenum ($fleet_obj['pd']) ;
+    }
+    else echo "-";
 ?>
         </th>
         <th <?=$style;?> >

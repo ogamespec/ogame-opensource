@@ -88,7 +88,7 @@ if ( $order == 6 )
 
     if ( $target['owner_id'] == $GlobalUser['player_id'] ) AjaxSendError ();    // Своя планета
     if ( $GlobalUser['noattack'] ) AjaxSendError ();    // Бан атак
-    if ( $target_user['admin'] > 0 ) AjaxSendError ();    // администрацию сканить нельзя
+    //if ( $target_user['admin'] > 0 ) AjaxSendError ();    // администрацию сканить нельзя
     if ( IsPlayerNewbie ($target_user['player_id']) ) AjaxSendError (603);    // защита новичков
     if ( IsPlayerStrong ($target_user['player_id']) ) AjaxSendError (604);    // защита сильных
     if ( $target_user['vacation'] ) AjaxSendError (605);    // игрок в режиме отпуска
