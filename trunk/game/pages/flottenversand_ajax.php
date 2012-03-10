@@ -94,7 +94,7 @@ if ( $order == 6 )
     if ( $target_user['vacation'] ) AjaxSendError (605);    // игрок в режиме отпуска
     if ( $amount == 0 ) AjaxSendError (611);    // нет кораблей для отправки
     if ( $GlobalUser['ip_addr'] !== "127.0.0.1" ) {
-        if ( $target_user['ip_addr'] === $GlobalUser['ip_addr'] ) AjaxSendError (616);    // мультиалярм
+        //if ( $target_user['ip_addr'] === $GlobalUser['ip_addr'] ) AjaxSendError (616);    // мультиалярм
     }
 
     // Сформировать флот.
@@ -129,7 +129,7 @@ if ( $order == 8 )
 $dist = FlightDistance ( $aktplanet['g'], $aktplanet['s'], $aktplanet['p'], $galaxy, $system, $planet );
 $slowest_speed = FlightSpeed ( $fleet, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118'] );
 $flighttime = FlightTime ( $dist, $slowest_speed, $speed, $unispeed );
-$cons = FlightCons ( $fleet, $dist, $flighttime, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118'] );
+$cons = FlightCons ( $fleet, $dist, $flighttime, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118'], $unispeed );
 
 if ( $aktplanet['d'] < $cons ) AjaxSendError (613);        // не хватает дейта на полёт
 if ( $cargo < $cons ) AjaxSendError (615);        // нет места в грузовом отсеке для дейтерия
