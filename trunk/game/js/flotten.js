@@ -30,7 +30,7 @@ function setMission(mission) {
 }
 
 function setUnion(unionid) {
-    document.getElementsByName('union2')[0].selectedIndex = unionid;
+    document.getElementsByName('union2')[0].value = unionid;
 }
 
 function setTargetLong(galaxy, solarsystem, planet, planettype, mission, cnt) {

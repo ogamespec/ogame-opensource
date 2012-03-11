@@ -600,7 +600,7 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
 }
 
 // Начать битву между атакующим fleet_id и обороняющимся planet_id.
-function StartBattle ( $fleet_id, $planet_id )
+function StartBattle ( $fleet_id, $planet_id, $when )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
@@ -780,7 +780,7 @@ function StartBattle ( $fleet_id, $planet_id )
     loca_add ( "technames", "de" );
     loca_add ( "technames", "en" );
     loca_add ( "technames", "ru" );
-    $text = BattleReport ( $a, $d, $res, time(), $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired );
+    $text = BattleReport ( $a, $d, $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired );
 
     // Разослать сообщения
     $mailbox = array ();
@@ -788,10 +788,10 @@ function StartBattle ( $fleet_id, $planet_id )
     foreach ( $d as $i=>$user )        // Обороняющиеся
     {
         if ( $mailbox[ $user['player_id'] ] == true ) continue;
-        $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6 );
+        $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6, $when );
         MarkMessage ( $user['player_id'], $bericht );
         $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$d_result[$battle_result]."\">Боевой доклад [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-        SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2 );
+        SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2, $when );
         $mailbox[ $user['player_id'] ] = true;
     }
 
@@ -801,10 +801,10 @@ function StartBattle ( $fleet_id, $planet_id )
     foreach ( $a as $i=>$user )        // Атакующие
     {
         if ( $mailbox[ $user['player_id'] ] == true ) continue;
-        $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6 );
+        $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6, $when );
         MarkMessage ( $user['player_id'], $bericht );
         $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-        SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2 );
+        SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2, $when );
         $mailbox[ $user['player_id'] ] = true;
     }
 
