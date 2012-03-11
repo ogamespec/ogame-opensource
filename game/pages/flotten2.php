@@ -197,6 +197,7 @@ PageHeader ("flotten2");
     $union_count = count ($unions);
     if ( $union_count > 0 )
     {
+        echo "<input type=\"hidden\" name=\"union2\" value=\"0\" >";
         $now = time ();
         foreach ( $unions as $i=>$union )
         {
@@ -205,7 +206,7 @@ PageHeader ("flotten2");
             $target = GetPlanet ( $fleet_obj['target_planet'] );
             echo "  <tr height=\"20\">";
             echo "<th><div id='bxx".($i+1)."' title='".max($queue['end']-$now, 0)."'star='".$queue['end']."'></div></th>";
-            echo "<th><a href=\"javascript:setTarget(".$target['g'].",".$target['s'].",".$target['p'].",".GetPlanetType($target)."); shortInfo()\">";
+            echo "<th><a href=\"javascript:setTarget(".$target['g'].",".$target['s'].",".$target['p'].",".GetPlanetType($target)."); setUnion(".$union['union_id']."); shortInfo()\">";
             echo $union['name']." [".$target['g'].":".$target['s'].":".$target['p']."]</a></th></tr>\n";
         }
         echo "<script language=javascript>anz=".$union_count.";t();</script>\n\n";

@@ -155,7 +155,7 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
         foreach ( $unions as $u=>$union ) {
             $fleet_obj = LoadFleet ( $union['fleet_id'] );
             $fleet_target = GetPlanet ( $fleet_obj['target_planet'] );
-            if ( $fleet_target['planet_id'] == $target['planet_id'] ) $missions[$i++] = 2;    // Совместная атака
+            if ( $fleet_target['planet_id'] == $target['planet_id'] ) { $missions[$i++] = 2; break; }    // Совместная атака
         }
         return $missions;
     }
@@ -508,7 +508,7 @@ function FleetList ($fleet)
 
 function AttackArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'] );
+    StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'], $queue['end'] );
 }
 
 // *** Транспорт ***
@@ -765,7 +765,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     UpdatePlanetActivity ( $fleet_obj['target_planet'], $queue['end'] );
 
     // Вернуть флот.
-    if ( mt_rand (0, 99) < $counter ) StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'] );
+    if ( mt_rand (0, 99) < $counter ) StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'], $queue['end'] );
     else DispatchFleet ($fleet, $origin, $target, 106, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
 }
 
@@ -879,7 +879,7 @@ function RecycleArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
 function DestroyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'] );
+    StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'], $queue['end'] );
 }
 
 // *** Экспедиция ***
@@ -1025,7 +1025,7 @@ function CancelUnionFleets ($union_id)
 function RenameUnion ($union_id, $name)
 {
     global $db_prefix;
-    $query = "UPDATE ".$db_prefix."union SET name = '".$name."' WHERE union_id = $union_id";
+    $query = "UPDATE ".$db_prefix."union SET name = '".$name."' WHERE union_id = " . intval ($union_id);
     dbquery ($query);
 }
 

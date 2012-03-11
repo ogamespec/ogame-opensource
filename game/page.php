@@ -73,7 +73,6 @@ function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", 
     echo "  <script language='JavaScript'>\n";
     echo "  </script>\n";
     echo "<script type='text/javascript' src='js/overLib/overlib.js'></script>\n";
-    echo "<script type=\"application/javascript\" src=\"js/iscroll-lite.js\"></script>\n";
     echo "<!-- HEADER -->\n\n";
     echo "<script language='JavaScript'>\n";
     echo "function onBodyLoad() {\n";

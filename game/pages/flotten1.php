@@ -58,7 +58,7 @@ if ( method () === "POST" )
 
     else if ( key_exists ( 'order_union', $_POST) && $uni['acs'] > 0 )     // Управление САБ.
     {
-        $fleet_id = $_POST['order_union'];
+        $fleet_id = intval ($_POST['order_union']);
         $union_id = CreateUnion ($fleet_id);
 
         if ( key_exists ( 'union_name', $_POST) ) RenameUnion ( $union_id, $_POST['union_name'] );    // переименовать
@@ -225,6 +225,8 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
     if ($union_id != 0 && $uni['acs'] > 0 )
     {
         $union = LoadUnion ($union_id);
+        $fleet = LoadFleet ( $union['fleet_id'] );
+
 ?>
 
 <form action="index.php?page=flotten1&session=<?=$session;?>" method="POST">

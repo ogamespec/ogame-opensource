@@ -156,7 +156,6 @@ PageHeader ("flotten3");
     }
 
     $missions = FleetAvailableMissions ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['thisplanettype'], $galaxy, $system, $planet, $_POST['planettype'], $fleet );
-    if ( $_POST['union2'] > 0 ) $missions[] = 2;    // Совместная атака.
 
     if ( count ($missions) == 0 )
     {
