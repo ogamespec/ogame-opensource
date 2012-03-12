@@ -482,7 +482,7 @@ while ($num--)
     $own = $user['player_id'] == $GlobalUser['player_id'];
     for ($p; $p<$planet['p']; $p++) empty_row ($p);
 
-    $phalanx = ($system_radius < $phalanx_radius) && ($aktplanet['type'] == 0) && ($planet['owner_id'] != $GlobalUser['player_id']);
+    $phalanx = ($system_radius <= $phalanx_radius) && ($aktplanet['type'] == 0) && ($planet['owner_id'] != $GlobalUser['player_id']);
 
     // Коорд.
     echo "<tr>\n";
