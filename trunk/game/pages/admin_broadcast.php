@@ -33,12 +33,16 @@ function Admin_Broadcast ()
             $subj = $subj . " <a href=\"index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=".$GlobalUser['player_id']."&re=1&betreff=Re:".$subj."\">\n"
                         . "</a>\n";            
 
+            $text = str_replace ( '\"', "&quot;", bb($text) );
+            $text = str_replace ( '\'', "&rsquo;", $text );
+            $text = str_replace ( '\`', "&lsquo;", $text );
+
             $result = dbquery ($query);
             $usernum = $rows = dbrows ($result);
             while ($rows--)
             {
                 $user = dbarray ($result);
-                SendMessage ( $user['player_id'], $from, $subj, bb($text), 5);
+                SendMessage ( $user['player_id'], $from, $subj, $text, 5);
             }
             if ($usernum > 0) $write_error = "<center><font color=#00FF00>Сообщение отправлено $usernum пользователям.</font><br/></center>\n";
             else $write_error = "<center><font color=#00FF00>Адресаты не найдены.</font><br/></center>\n";

@@ -84,10 +84,6 @@ function SendMessage ($player_id, $from, $subj, $text, $pm, $when=0)
         DeleteOldestMessage ($player_id);
     }
 
-    $text = str_replace ( '\"', "&quot;", $text );
-    $text = str_replace ( '\'', "&rsquo;", $text );
-    $text = str_replace ( '\`', "&lsquo;", $text );
-
     // Добавить сообщение.
     $msg = array( '', $player_id, $pm, $from, $subj, $text, 0, $when );
     $id = AddDBRow ( $msg, "messages" );
