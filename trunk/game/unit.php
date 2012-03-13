@@ -32,7 +32,7 @@ $RapidFire[202] = array ( 210 => 5, 212 => 5 );
 $RapidFire[203] = array ( 210 => 5, 212 => 5 );
 $RapidFire[204] = array ( 210 => 5, 212 => 5 );
 $RapidFire[205] = array ( 202 => 3, 210 => 5, 212 => 5 );
-$RapidFire[206] = array ( 205 => 6, 210 => 5, 212 => 5, 401 => 10 );
+$RapidFire[206] = array ( 204 => 6, 210 => 5, 212 => 5, 401 => 10 );
 $RapidFire[207] = array ( 210 => 5, 212 => 5 );
 $RapidFire[208] = array ( 210 => 5, 212 => 5 );
 $RapidFire[209] = array ( 210 => 5, 212 => 5 );
