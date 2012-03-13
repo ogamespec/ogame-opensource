@@ -31,9 +31,14 @@ function PageAlly_Settings ()
         {
             $ally_id = $ally['ally_id'];
             $insertapp = $_POST['bewforce'] & 1;
-            if ( $_GET['t'] == 2 ) $query = "UPDATE ".$db_prefix."ally SET inttext = '".$_POST['text']."' WHERE ally_id = $ally_id";
-            else if ( $_GET['t'] == 3 ) $query = "UPDATE ".$db_prefix."ally SET apptext = '".$_POST['text']."', insertapp = $insertapp WHERE ally_id = $ally_id";
-            else $query = "UPDATE ".$db_prefix."ally SET exttext = '".$_POST['text']."' WHERE ally_id = $ally_id";
+
+            $text = str_replace ( '\"', "&quot;", $_POST['text'] );
+            $text = str_replace ( '\'', "&rsquo;", $text );
+            $text = str_replace ( '\`', "&lsquo;", $text );
+
+            if ( $_GET['t'] == 2 ) $query = "UPDATE ".$db_prefix."ally SET inttext = '".$text."' WHERE ally_id = $ally_id";
+            else if ( $_GET['t'] == 3 ) $query = "UPDATE ".$db_prefix."ally SET apptext = '".$text."', insertapp = $insertapp WHERE ally_id = $ally_id";
+            else $query = "UPDATE ".$db_prefix."ally SET exttext = '".$text."' WHERE ally_id = $ally_id";
             dbquery ($query);
 
             $ally = LoadAlly ($ally['ally_id']);

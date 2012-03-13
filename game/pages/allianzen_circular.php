@@ -33,13 +33,18 @@ function AllyPage_CircularMessage ()
 <tr><td class=c>Следующие игроки получили Ваше общее послание</td></tr>
 <tr><th>
 <?php
+
+            $text = str_replace ( '\"', "&quot;", bb($_POST['text']) );
+            $text = str_replace ( '\'', "&rsquo;", $text );
+            $text = str_replace ( '\`', "&lsquo;", $text );
+
             while ($rows--)
             {
                 $user = dbarray ($result);
                 SendMessage ( $user['player_id'], 
                                        va ( "Альянс [#1]", $ally['tag'] ),
                                        va ( "Общее послание Вашему альянсу [#1]", $ally['tag'] ), 
-                                       va ( "Игрок #1 сообщает Вам следующее:<br>#2", $GlobalUser['oname'], bb ($_POST['text']) ), 0 );
+                                       va ( "Игрок #1 сообщает Вам следующее:<br>#2", $GlobalUser['oname'], $text ), 0 );
                 echo $user['oname'] . "<br>\n";
             }
 ?>
