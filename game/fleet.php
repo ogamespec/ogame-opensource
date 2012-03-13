@@ -862,7 +862,7 @@ function RecycleArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $cargo = min ($recycler_cargo, $sum_cargo);
 
     $dm = $dk = 0;
-    HarvestDebris ( $target['planet_id'], $cargo, &$dm, &$dk );
+    HarvestDebris ( $target['planet_id'], $cargo, &$dm, &$dk, $queue['end'] );
 
     $subj = "\n<span class=\"espionagereport\">Разведданные</span>\n";   
     $report = "Переработчики в количестве ".nicenum($fleet[209])." штук обладают общей грузоподъёмностью в ".nicenum($cargo).". " .
