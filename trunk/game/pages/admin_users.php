@@ -106,6 +106,7 @@ function Admin_Users ()
             $query .= "sortorder = '".$_POST['settings_order']."', ";
             $query .= "skin = '".$_POST['dpath']."', ";
             $query .= "useskin = ".($_POST['design']==="on"?1:0).", ";
+            $query .= "redesign = ".($_POST['redesign']==="on"?1:0).", ";
             $query .= "deact_ip = ".($_POST['deact_ip']==="on"?1:0).", ";
             $query .= "maxspy = '".$_POST['spio_anz']."', ";
             $query .= "maxfleetmsg = '".$_POST['settings_fleetactions']."', ";
@@ -272,6 +273,7 @@ function Admin_Users ()
 </th></tr>
             <tr><th>Скин</th><th><input type=text name="dpath" maxlength="80" size="40" value="<?=$user['skin'];?>" /></th></tr>
             <tr><th>Использовать скин</th><th><input type="checkbox" name="design" <?=IsChecked($user, "useskin");?> /></th></tr>
+            <tr><th>Редизайн</th><th><input type="checkbox" name="redesign" <?=IsChecked($user, "redesign");?> /></th></tr>
             <tr><th>Декативировать проверку IP</th><th><input type="checkbox" name="deact_ip" <?=IsChecked($user, "deact_ip");?> /></th></tr>
             <tr><th>Количество зондов</th><th><input type="text" name="spio_anz" maxlength="2" size="2" value="<?=$user['maxspy'];?>" /></th></tr>
             <tr><th>Количество сообщений флота</th><th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="<?=$user['maxfleetmsg'];?>" /></th></tr>
