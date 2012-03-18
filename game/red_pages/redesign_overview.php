@@ -7,7 +7,6 @@
 // TODO : ИССЛЕДОВАНИЯ
 // TODO : ВЕРФЬ
 // TODO : картинки лун и планет
-// TODO : картинка луны при её наличии (div)
 
 SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
@@ -34,6 +33,27 @@ include "redesign_header.php";
 include "redesign_leftmenu.php";
 include "redesign_planetlist.php";
 
+function planet_header ($planet)
+{
+    $type = $planet['type'];
+    if ( $type == 0 ) return "red_images/57a80a58c7a48b8d27316b753dd259.jpg";
+    else if ($type >= 101 && $type <= 110) return "red_images/planet/header/header_dry.jpg";
+    else if ($type >= 201 && $type <= 210) return "red_images/planet/header/header_jungle.jpg";
+    else if ($type >= 301 && $type <= 307) return "red_images/planet/header/header_normal.jpg";
+    else if ($type >= 401 && $type <= 409) return "red_images/planet/header/header_water.jpg";
+    else if ($type >= 501 && $type <= 510) return "red_images/planet/header/header_ice.jpg";
+}
+
+function planet_link ($planet)
+{
+    $type = $planet['type'];
+    if ($type >= 101 && $type <= 110) return "red_images/19826c23562f7f3ea60505d69b1593.jpg";
+    else if ($type >= 201 && $type <= 210) return "red_images/81c8ca1de92bafbbe8e4cd841a11ad.jpg";
+    else if ($type >= 301 && $type <= 307) return "red_images/1669b8f0ad16eaab1a73e6081e7e85.jpg";
+    else if ($type >= 401 && $type <= 409) return "red_images/303e39867fbca9db429e0c6343c508.jpg";
+    else if ($type >= 501 && $type <= 510) return "red_images/8c832f875f06ebc8e838dbff070856.jpg";
+}
+
 ?>
 
             <!-- CONTENT AREA -->
@@ -41,7 +61,7 @@ include "redesign_planetlist.php";
                                     <div id="eventboxContent" style="display: none"><img height="16" width="16" src="red_images/3f9884806436537bdec305aa26fc60.gif" /></div>
                                 
 <div id="inhalt">
-    <div id="planet" style="background-image:url(red_images/c3029ffc95e61a790b403b9e3eb18f.jpg);">
+    <div id="planet" style="background-image:url(<?=planet_header($aktplanet);?>);">
         <h2>
             <a href="javascript:void(0);" class="openPlanetrenameGiveupBox">
                 <p class="planetNameOverview">Обзор -</p>
@@ -95,6 +115,40 @@ include "redesign_planetlist.php";
          </a>
         </div>
     </div>
+
+<?php
+
+    if ( $aktplanet['type'] == 0 )
+    {
+        $pl = LoadPlanet ( $aktplanet['g'], $aktplanet['s'], $aktplanet['p'], 1 );
+?>
+        <div id="planet_as_moon">
+        	<a 	href="index.php?page=overview&session=<?=$session;?>&cp=<?=$pl['planet_id'];?>"
+            	class="tipsStandard"
+                title="|Перейти к Планета  ">
+            	<img alt="" src="<?=planet_link($pl);?>">
+            </a>
+        </div>
+<?php
+    }
+    else
+    {
+        $moon_id = PlanetHasMoon ( $aktplanet['planet_id'] );
+        if ( $moon_id )
+        {
+            $moon = GetPlanet ( $moon_id )
+?>
+        <div id="moon">
+        	<a 	href="index.php?page=overview&session=<?=$session;?>&cp=<?=$moon['planet_id'];?>"
+            	class="tipsStandard"
+                title="|Перейти к Луна  ">
+            	<img alt="" src="red_images/17e17069847b09b3d1ef6d03729107.gif">
+            </a>
+        </div>
+<?php
+        }
+    }
+?>
         
     </div>    <div class="c-left"></div>
     <div class="c-right"></div>

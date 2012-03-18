@@ -113,7 +113,7 @@ function get_building ( $planet_id )
                                                                                 <a class="moonlink tipsStandard"
                                href="index.php?page=overview&session=<?=$session;?>&cp=<?=$moon['planet_id'];?>"
                                title="|<B>Перейти на <?=$moon['name'];?></B>">
-                                <img src="red_images/7b05c61b8fa8c483a464cb423cb02b.gif" width="16" height="16" alt="" class="icon-moon"/>
+                                <img src="red_images/8e0e6034049bd64e18a1804b42f179.gif" width="16" height="16" alt="" class="icon-moon"/>
                             </a>
 <?php
     }
