@@ -625,6 +625,7 @@ function HoldingHold ($queue, $fleet_obj, $fleet, $origin, $target)
 
 function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
+    global $UnitParam;
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
     $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
@@ -635,10 +636,11 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $origin_user = LoadUser ( $origin['owner_id'] );
     $target_user = LoadUser ( $target['owner_id'] );
 
-    $origin_ships = $target_ships = 0;
+    $origin_ships = $target_ships = $origin_cost = 0;
     foreach ( $fleetmap as $i=>$gid )
     {
         $origin_ships += $fleet_obj["ship$gid"];
+        $origin_cost += $fleet_obj["ship$gid"] * $UnitParam[$gid][0];
         $target_ships += $target["f$gid"];
     }
 
@@ -651,9 +653,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
     loca_add ( "technames", $origin_user['lang'] );
 
-    $counter_max = 0;
-    $counter = 0;
-
+/*
     $diff = abs ( $target_tech - $origin_tech );
     if ( $target_tech > $origin_tech ) {
         $level = $fleet_obj['ship210'] - pow ( $diff, 2 );
@@ -664,6 +664,17 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         $counter_max = min (100, floor((($target_ships / 4) * $origin_ships) / pow ( 2, $diff )));
     }
     $counter = mt_rand ( 0, $counter_max );
+*/
+
+    $level = $origin_tech - $target_tech;
+    $level = $level * abs($level) - 1 + $origin_ships;
+    $cost = $origin_cost / 1000 / 400;
+    $c = sqrt ( pow (2,($origin_ships-($level+1))) ) * ($cost * sqrt($target_ships)*5);
+    if ($c > 2) $c = 2;
+    $c = rand (0, $c*100) / 100;
+    if ($c < 0) $c = 0;
+    if ($c > 1) $c = 1;
+    $counter = $c * 100;
 
     $subj = "\n<span class=\"espionagereport\">\n" .
                 "Разведданные с ".$target['name']."\n" .
@@ -684,7 +695,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $report .= "<TR><TD colspan=4><div onmouseover=\'return overlib(\"&lt;font color=white&gt;Активность означает, что сканируемый игрок был активен на своей планете, либо на него был произведён вылет флота другого игрока.&lt;/font&gt;\", STICKY, MOUSEOFF, DELAY, 750, CENTER, WIDTH, 100, OFFSETX, -130, OFFSETY, -10);\' onmouseout=\'return nd();\'></TD></TR></table>\n";
 
     // Флот
-    if ( $level >= 2 ) {
+    if ( $level > 0 ) {
         $report .= "<table width=400><tr><td class=c colspan=4>Флоты     </td></tr>\n";
         $count = 0;
         foreach ( $fleetmap as $i=>$gid )
@@ -700,7 +711,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     }
 
     // Оборона
-    if ( $level >= 3 ) {
+    if ( $level > 1 ) {
         $report .= "<table width=400><tr><td class=c colspan=4>Оборона     </td></tr>\n";
         $count = 0;
         foreach ( $defmap as $i=>$gid )
@@ -716,7 +727,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     }
 
     // Постройки
-    if ( $level >= 5 ) {
+    if ( $level > 3 ) {
         $report .= "<table width=400><tr><td class=c colspan=4>Постройки     </td></tr>\n";
         $count = 0;
         foreach ( $buildmap as $i=>$gid )
@@ -732,7 +743,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     }
 
     // Исследования
-    if ( $level >= 7 ) {
+    if ( $level > 5 ) {
         $report .= "<table width=400><tr><td class=c colspan=4>Исследования     </td></tr>\n";
         $count = 0;
         foreach ( $resmap as $i=>$gid )
@@ -747,7 +758,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         $report .= "</table>\n";
     }
 
-    $report .= "<center> Шанс на защиту от шпионажа:$counter%</center>\n";
+    $report .= "<center> Шанс на защиту от шпионажа:".floor($counter)."%</center>\n";
     $report .= "<center><a href=\'#\' onclick=\'showFleetMenu(".$target['g'].",".$target['s'].",".$target['p'].",".GetPlanetType($target).",1);\'>Атака</a></center>\n";
 
     SendMessage ( $fleet_obj['owner_id'], "Командование флотом", $subj, $report, 1, $queue['end']);
@@ -765,7 +776,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     UpdatePlanetActivity ( $fleet_obj['target_planet'], $queue['end'] );
 
     // Вернуть флот.
-    if ( mt_rand (0, 99) < $counter ) StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'], $queue['end'] );
+    if ( mt_rand (0, 100) < $counter ) StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'], $queue['end'] );
     else DispatchFleet ($fleet, $origin, $target, 106, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
 }
 

@@ -99,9 +99,9 @@ else if ( $_GET['page'] === "renameplanet" ) { include "pages/renameplanet.php";
 else if ( $_GET['page'] === "b_building" ) { include "pages/b_building.php"; exit (); }
 else if ( $_GET['page'] === "resources" ) { include "pages/resources.php"; exit(); }
 else if ( $_GET['page'] === "infos" ) { include "pages/infos.php"; exit (); }
-else if ( $_GET['page'] === "flotten1" ) { include "pages/flotten1.php"; exit (); }
-else if ( $_GET['page'] === "flotten2" ) { include "pages/flotten2.php"; exit (); }
-else if ( $_GET['page'] === "flotten3" ) { include "pages/flotten3.php"; exit (); }
+else if ( $_GET['page'] === "flotten1" || $_GET['page'] === "fleet1" ) { include "pages/flotten1.php"; exit (); }
+else if ( $_GET['page'] === "flotten2" || $_GET['page'] === "fleet2" ) { include "pages/flotten2.php"; exit (); }
+else if ( $_GET['page'] === "flotten3" || $_GET['page'] === "fleet3" ) { include "pages/flotten3.php"; exit (); }
 else if ( $_GET['page'] === "flottenversand" ) { include "pages/flottenversand.php"; exit (); }
 else if ( $_GET['page'] === "fleet_templates" ) { include "pages/fleet_templates.php"; exit (); }
 else if ( $_GET['page'] === "techtree" ) { include "pages/techtree.php"; exit(); }
@@ -112,13 +112,13 @@ else if ( $_GET['page'] === "allianzen" ) { include "pages/allianzen.php"; exit 
 else if ( $_GET['page'] === "ainfo" ) { include "pages/ainfo.php"; exit (); }
 else if ( $_GET['page'] === "bewerben" ) { include "pages/bewerben.php"; exit (); }
 else if ( $_GET['page'] === "bewerbungen" ) { include "pages/bewerbungen.php"; exit (); }
-else if ( $_GET['page'] === "statistics" ) { include "pages/statistics.php"; exit (); }
-else if ( $_GET['page'] === "suche" ) { include "pages/suche.php"; exit (); }
+else if ( $_GET['page'] === "statistics" || $_GET['page'] === "highscore" ) { include "pages/statistics.php"; exit (); }
+else if ( $_GET['page'] === "suche" || $_GET['page'] === "search" ) { include "pages/suche.php"; exit (); }
 else if ( $_GET['page'] === "messages" ) { include "pages/messages.php"; exit (); }
 else if ( $_GET['page'] === "writemessages" ) { include "pages/writemessages.php"; exit (); }
 else if ( $_GET['page'] === "notizen" ) { include "pages/notizen.php"; exit (); }
-else if ( $_GET['page'] === "buddy" ) { include "pages/buddy.php"; exit (); }
-else if ( $_GET['page'] === "options" ) { include "pages/options.php"; exit (); }
+else if ( $_GET['page'] === "buddy" || $_GET['page'] === "buddies" ) { include "pages/buddy.php"; exit (); }
+else if ( $_GET['page'] === "options" || $_GET['page'] === "preferences" ) { include "pages/options.php"; exit (); }
 else if ( $_GET['page'] === "logout" ) { include "pages/logout.php"; exit (); }
 else if ( $_GET['page'] === "changelog" ) { include "pages/changelog.php"; exit (); }
 else if ( $_GET['page'] === "pranger" ) { include "pages/pranger.php"; exit (); }
