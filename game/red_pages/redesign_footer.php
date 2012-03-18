@@ -8,7 +8,7 @@
             <div class="content">
                 <div class="fleft textLeft">
                     <a href="index.php?page=changelog&session=<?=$session;?>" class="tipsStandard" title="|Последние изменения">
-                                                    0.84                                            </a>
+                                                    0.8.4                                            </a>
                     <a class="homeLink" href="http://www.gameforge.de" target="_blank">
                         © 2003 - 2012 Gameforge Productions GmbH                    </a>
                 </div>

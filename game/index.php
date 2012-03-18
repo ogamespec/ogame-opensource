@@ -93,7 +93,7 @@ function va ($subject)
 
 if ( $_GET['page'] === "overview" ) { include "pages/overview.php"; exit(); }
 else if ( $_GET['page'] === "admin" ) { include "pages/admin.php"; exit (); }
-else if ( $_GET['page'] === "imperium" ) { include "pages/imperium.php"; exit (); }
+else if ( $_GET['page'] === "imperium" || $_GET['page'] === "empire" ) { include "pages/imperium.php"; exit (); }
 else if ( $_GET['page'] === "buildings" ) { include "pages/buildings.php"; exit (); }
 else if ( $_GET['page'] === "renameplanet" ) { include "pages/renameplanet.php"; exit (); }
 else if ( $_GET['page'] === "b_building" ) { include "pages/b_building.php"; exit (); }
@@ -108,7 +108,7 @@ else if ( $_GET['page'] === "techtree" ) { include "pages/techtree.php"; exit();
 else if ( $_GET['page'] === "techtreedetails" ) { include "pages/techtreedetails.php"; exit(); }
 else if ( $_GET['page'] === "galaxy" ) { include "pages/galaxy.php"; exit (); }
 else if ( $_GET['page'] === "phalanx" ) { include "pages/phalanx.php"; exit (); }
-else if ( $_GET['page'] === "allianzen" ) { include "pages/allianzen.php"; exit (); }
+else if ( $_GET['page'] === "allianzen" || $_GET['page'] === "alliance" ) { include "pages/allianzen.php"; exit (); }
 else if ( $_GET['page'] === "ainfo" ) { include "pages/ainfo.php"; exit (); }
 else if ( $_GET['page'] === "bewerben" ) { include "pages/bewerben.php"; exit (); }
 else if ( $_GET['page'] === "bewerbungen" ) { include "pages/bewerbungen.php"; exit (); }
@@ -125,9 +125,17 @@ else if ( $_GET['page'] === "pranger" ) { include "pages/pranger.php"; exit (); 
 else if ( $_GET['page'] === "bericht" ) { include "pages/bericht.php"; exit (); }
 else if ( $_GET['page'] === "allianzdepot" ) { include "pages/allianzdepot.php"; exit (); }
 else if ( $_GET['page'] === "sprungtor" ) { include "pages/sprungtor.php"; exit (); }
-else if ( $_GET['page'] === "micropayment" ) { include "pages/micropayment.php"; exit (); }
+else if ( $_GET['page'] === "micropayment" || $_GET['page'] === "premium" ) { include "pages/micropayment.php"; exit (); }
 else if ( $_GET['page'] === "payment" ) { include "pages/payment.php"; exit (); }
 else if ( $_GET['page'] === "trader" ) { include "pages/trader.php"; exit (); }
+
+// Redesign
+else if ( $_GET['page'] === "station" ) { include "red_pages/redesign_station.php"; exit (); }
+else if ( $_GET['page'] === "resourceSettings" ) { include "red_pages/redesign_resourceSettings.php"; exit (); }
+else if ( $_GET['page'] === "research" ) { include "red_pages/redesign_research.php"; exit (); }
+else if ( $_GET['page'] === "shipyard" ) { include "red_pages/redesign_shipyard.php"; exit (); }
+else if ( $_GET['page'] === "defense" ) { include "red_pages/redesign_defense.php"; exit (); }
+else if ( $_GET['page'] === "globalTechtree" ) { include "red_pages/redesign_globalTechtree.php"; exit (); }
 
 RedirectHome ();
 

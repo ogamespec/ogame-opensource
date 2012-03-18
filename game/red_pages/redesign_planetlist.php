@@ -3,15 +3,29 @@
 // Redesign : список планет
 
 // TODO : картинки планет
+// TODO : картинка луны
 // TODO : крупный список планет (когда их мало)
 // TODO : иконка для сноса постройки
 // TODO : иконки атаки
-// TODO : обрамление текущей планеты
 
-function is_active ( $planet_id )
+function planet_image ( $planet, $num_planets )
 {
-    global $aktplanet;
+    $type = $planet['type'];
+    $path = "red_images/planets/";
+    if ($type >= 101 && $type <= 110) $path .= "dry_" . ($type - 100);
+    else if ($type >= 201 && $type <= 210) $path .= "jungle_" . ($type - 200);
+    else if ($type >= 301 && $type <= 307) $path .= "normal_" . ($type - 300);
+    else if ($type >= 401 && $type <= 409) $path .= "water_" . ($type - 400);
+    else if ($type >= 501 && $type <= 510) $path .= "ice_" . ($type - 500);
+    if ( $num_planets <= 4 ) $path .= "_3";
+    else $path .= "_1";
+    $path .= ".gif";
+    return $path;
+}
 
+function is_active ( $planet, $aktplanet )
+{
+    if ( $planet['g'] == $aktplanet['g'] && $planet['s'] == $aktplanet['s'] && $planet['p'] == $aktplanet['p'] ) return "active";
     return "";
 }
 
@@ -49,17 +63,32 @@ function get_building ( $planet_id )
         if ( $planet['type'] == 0 ) $moons[] = $planet;
         else $planets[] = $planet;
     }
+    $num_planets = count ( $planets );
 
 ?>
 
             <!-- RIGHTMENU -->
             <div id="rechts">
-                                
-    <div id="cutty">
+
+<?php
+    if ( $num_planets <= 4 )
+    {
+?>
+    <div id="norm">
+        <div id="myWorlds">                                
+<?php
+    }
+    else
+    {
+?>
+     <div id="cutty">
         <div id="myPlanets">
+<?php
+    }
+?>
                 <div id="countColonies">    
                     <p class="textCenter tipsStandard" title="|Количество доступных планет">
-                        <span><?=count($planets);?>/<?=$maxplanets;?></span> Планеты                    </p>    
+                        <span><?=$num_planets;?>/<?=$maxplanets;?></span> Планеты                    </p>    
                 </div>
 
 <?php
@@ -67,11 +96,12 @@ function get_building ( $planet_id )
     foreach ( $planets as $i=>$planet )
     {
 ?>
+                                                            
                                         <div class="smallplanet">
                         <a href="index.php?page=overview&session=<?=$session;?>&cp=<?=$planet['planet_id'];?>"
                            title="|&lt;B&gt;<?=$planet['name'];?> [<?=$planet['g'];?>:<?=$planet['s'];?>:<?=$planet['p'];?>]&lt;/B&gt;&lt;BR&gt;<?=nicenum($planet['diameter']);?>км (<?=$planet['fields'];?>/<?=$planet['maxfields'];?>)&lt;BR&gt;от <?=$planet['temp'];?>°C до <?=($planet['temp'] + 40);?>°C"
-                           class="planetlink <?=is_active($planet['planet_id']);?> tipsStandard">
-                            <img class="planetPic" src="red_images/51ec5f9a7d6e4254a19cf2ffe2937e.gif"/>
+                           class="planetlink <?=is_active($planet, $aktplanet);?> tipsStandard">
+                            <img class="planetPic" src="<?=planet_image($planet, $num_planets);?>"/>
                             <span class="planet-name"><?=$planet['name'];?></span>
                             <span class="planet-koords">[<?=$planet['g'];?>:<?=$planet['s'];?>:<?=$planet['p'];?>]</span>
                         </a>
