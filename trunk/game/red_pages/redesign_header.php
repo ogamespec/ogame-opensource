@@ -15,7 +15,7 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=7"/>
 <meta name="ogame-session" content="<?=$session;?>"/>
-<meta name="ogame-version" content="0.84"/>
+<meta name="ogame-version" content="0.8.4"/>
 <meta name="ogame-timestamp" content="<?=$now;?>"/>
 <meta name="ogame-universe" content="<?=hostname();?>"/>
 <meta name="ogame-universe-speed" content="<?=$GlobalUni['speed'];?>"/>
@@ -80,7 +80,7 @@ if ( $_GET['lgn'] == 1 )
         <title>Вселенная <?=$GlobalUni['num'];?> ОГейм</title>
             </head>
 
-    <body id="overview">
+    <body id="<?=$_GET['page'];?>">
         <div class="contentBoxBody">
             <noscript>
                 <div id="messagecenter">
@@ -141,29 +141,29 @@ if ( $_GET['lgn'] == 1 )
                 <li><a href="index.php?page=preferences&session=<?=$session;?>" accesskey="">Настройки</a></li>
                 <li><a href="http://support.oldogame.ru/" target="_blank">Служба поддержки</a></li>
                 <li><a href="index.php?page=logout&session=<?=$session;?>" accesskey="">Выход</a></li>
-                <li id="OGameClock">18.03.2012 <span>10:46:44</span></li>
+                <li id="OGameClock"><?=date("d.m.Y", $now);?> <span><?=date("H:i:s", $now);?></span></li>
 			</ul>
 
         </div>    	<ul id="resources">
         	<li id="metal_box" class="metal tipsTitle"
-            	title="Металл:| Доступно: &lt;span class=''&gt;28.650&lt;/span&gt;&lt;br&gt;Вместимость хранилищ: &lt;span class=''&gt;865.000&lt;/span&gt;&lt;br&gt;Сейчас производится: &lt;span class='undermark'&gt;+13.354&lt;/span&gt;&lt;br&gt;Вместимость укрытий: &lt;span class='overermark'&gt;0&lt;/span&gt;">
-                <img src="red_images/ccdb3fc0cb8f7b4fc8633f5f5eaa86.gif" />
+            	title="Металл:| Доступно: &lt;span class=''&gt;28.650&lt;/span&gt;&lt;br&gt;Вместимость хранилищ: &lt;span class=''&gt;865.000&lt;/span&gt;&lt;br&gt;Сейчас производится: &lt;span class='undermark'&gt;+13.354&lt;/span&gt;">
+                <img src="red_images/layout/ressourcen_metall.gif" />
                     <span class="value">
                         <span id="resources_metal" class="">
                             28.650                   </span>
                    </span>
             </li>
         	<li id="crystal_box" class="crystal tipsTitle"
-            	title="Кристалл:| Доступно: &lt;span class=''&gt;22.194&lt;/span&gt;&lt;br&gt;Вместимость хранилищ: &lt;span class=''&gt;470.000&lt;/span&gt;&lt;br&gt;Сейчас производится: &lt;span class='undermark'&gt;+6.832&lt;/span&gt;&lt;br&gt;Вместимость укрытий: &lt;span class='overermark'&gt;0&lt;/span&gt;">
-                <img src="red_images/452d7fd11d754e0f09ec2b2350e063.gif" />
+            	title="Кристалл:| Доступно: &lt;span class=''&gt;22.194&lt;/span&gt;&lt;br&gt;Вместимость хранилищ: &lt;span class=''&gt;470.000&lt;/span&gt;&lt;br&gt;Сейчас производится: &lt;span class='undermark'&gt;+6.832&lt;/span&gt;">
+                <img src="red_images/layout/ressourcen_kristal.gif" />
                 <span class="value">
                     <span id="resources_crystal" class="">
                         22.194                </span>
                 </span>
             </li>
         	<li id="deuterium_box" class="deuterium tipsTitle"
-            	title="Дейтерий:| Доступно: &lt;span class=''&gt;118.755&lt;/span&gt;&lt;br&gt;Вместимость хранилищ: &lt;span class=''&gt;255.000&lt;/span&gt;&lt;br&gt;Сейчас производится: &lt;span class='undermark'&gt;+3.439&lt;/span&gt;&lt;br&gt;Вместимость укрытий: &lt;span class='overermark'&gt;0&lt;/span&gt;">
-                <img src="red_images/e37d45b77518ddf8bbccd5e772a395.gif" />
+            	title="Дейтерий:| Доступно: &lt;span class=''&gt;118.755&lt;/span&gt;&lt;br&gt;Вместимость хранилищ: &lt;span class=''&gt;255.000&lt;/span&gt;&lt;br&gt;Сейчас производится: &lt;span class='undermark'&gt;+3.439&lt;/span&gt;">
+                <img src="red_images/layout/ressourcen_deuterium.gif" />
                 <span class="value">
                 	<span id="resources_deuterium" class="">
                         118.755               	</span>
@@ -171,20 +171,20 @@ if ( $_GET['lgn'] == 1 )
             </li>
         	<li id="energy_box" class="energy tipsTitle"
             	title="Энергия:| Доступно: &lt;span class=''&gt;22&lt;/span&gt;&lt;br/&gt;Сейчас производится:: &lt;span class='undermark'&gt;+12.577&lt;/span&gt;&lt;br/&gt;Потребление: &lt;span class='overmark'&gt;-12.555&lt;/span&gt;">
-				<img src="red_images/0d68fe5d39bbb4c94a2372626ec83f.gif" />
+				<img src="red_images/layout/ressourcen_energie.gif" />
                     <span class="value">
                     	<span id="resources_energy" class="">
 							22						</span>
                     </span>
             </li>
         	<li id="darkmatter_box" class="darkmatter tipsTitle"
-            	title="Темная Материя:| Доступно: &lt;span class=''&gt;331.115&lt;/span&gt;&lt;br/&gt;Покупная: &lt;span class=''&gt;126.000&lt;/span&gt;&lt;br/&gt;Найденная: &lt;span class=''&gt;5.195&lt;/span&gt;">
+            	title="Темная Материя:| Доступно: &lt;span class=''&gt;<?=nicenum($GlobalUser['dm'] + $GlobalUser['dmfree']);?>&lt;/span&gt;&lt;br/&gt;Покупная: &lt;span class=''&gt;<?=nicenum($GlobalUser['dm']);?>&lt;/span&gt;&lt;br/&gt;Найденная: &lt;span class=''&gt;<?=nicenum($GlobalUser['dmfree']);?>&lt;/span&gt;">
 				<a href="index.php?page=premium&session=<?=$session;?>&openDetail=1">
-					<img src="red_images/401d1a91ff40dc7c8acfa4377d3d65.gif" />
+					<img src="red_images/layout/ressourcen_DM.gif" />
 				</a>
                 <span class="value">
                 	<span id="resources_darkmatter">
-						731.995					</span>
+						<?=nicenum($GlobalUser['dm'] + $GlobalUser['dmfree']);?>					</span>
                 </span>
             </li>
       </ul>

@@ -1,4 +1,8 @@
-            <!-- LEFTMENU -->
+<?php
+
+// TODO: подсветка кнопок
+
+?>            <!-- LEFTMENU -->
 
 <div id="links">
 
@@ -70,7 +74,7 @@
 
         <li>
         <span class="menu_icon">
-                                    <a href="index.php?page=globalTechtree&open=all&session=<?=$session;?>"
+                                    <a href="index.php?page=globalTechtree&session=<?=$session;?>&open=all"
                    class=""
                    target="_blank">
           	        <img class="mouseSwitch" 

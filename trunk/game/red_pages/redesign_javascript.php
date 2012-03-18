@@ -45,11 +45,12 @@
 
 
     // Monat Tag, Jahr Stunden:Minuten:Sekunden
-    var serverTime = new Date(2012, 3, 18, 10, 46, 44);
+    var serverTime = new Date(<?=date("Y", $now);?>, <?=date("m", $now);?>, <?=date("d", $now);?>, <?=date("H", $now);?>, <?=date("i", $now);?>, <?=date("s", $now);?>);
     var localTime = new Date();
     localTS = localTime.getTime();
     // Zeitdifferenz Server-Client herausrechnen
-    var startServerTime = localTime.getTime() - (14400000) - localTime.getTimezoneOffset()*60*1000; // GMT+1+Sommerzeit - offset
+    //var startServerTime = localTime.getTime() - (14400000) - localTime.getTimezoneOffset()*60*1000; // GMT+1+Sommerzeit - offset
+    var startServerTime = serverTime;
 
     var LocalizationStrings = {"timeunits":{"short":{"year":"\u0433","month":"\u043c","week":"\u043d\u0435\u0434","day":"\u0434","hour":"\u0447","minute":"\u043c","second":"\u0441"}},"status":{"ready":"\u0433\u043e\u0442\u043e\u0432\u043e"},"decimalPoint":".","thousandSeperator":".","unitMega":"\u041c","unitKilo":"\u041a","unitMilliard":"\u0413","error":"\u041e\u0448\u0438\u0431\u043e\u0447\u043a\u0430","loading":"\u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0430..."};
 
@@ -147,7 +148,7 @@ function UhrzeitAnzeigen()
 {
     var currTime = new Date(); 
     // Differenz Server und Clienttime herausrechnen, um Serverzeit zu erhalten
-    currTime.setTime((1332053204000-startServerTime)+ currTime.getTime()) ;
+    currTime.setTime((<?=($now * 1000);?>-startServerTime)+ currTime.getTime()) ;
     // globale Serverzeit setzen (wird von diversen Funktionen genutzt)
     serverTime = currTime;
     Uhrzeitanzeige = getFormatedDate(currTime.getTime(), '[d].[m].[Y] <span>[H]:[i]:[s]</span>');
