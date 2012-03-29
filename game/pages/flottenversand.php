@@ -124,7 +124,7 @@ $origin_user = LoadUser ( $origin['owner_id'] );
 $target_user = LoadUser ( $target['owner_id'] );
 
 if ( $origin_user['vacation'] ) FleetError ( "Находясь в режиме отпуска нельзя отправлять флот!" );
-if ( $target_user['vacation'] ) FleetError ( "Этот игрок находится в режиме отпуска!" );
+if ( $target_user['vacation'] && $order != 8 ) FleetError ( "Этот игрок находится в режиме отпуска!" );
 if ( $nowfleet >= $maxfleet ) FleetError ( "Достигнута максимальная численность флотов" );
 
 if ( $origin_user['ip_addr'] !== "127.0.0.1" )        // для локальных подключений не делать проверку на мультоводство
