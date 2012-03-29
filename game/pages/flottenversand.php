@@ -208,6 +208,7 @@ switch ( $order )
     case '6':        // Шпионаж
         if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Нельзя шпионить на собственной планете!" );
         if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "На этой планете нельзя шпионить из-за защиты для новичков!" );
+        if ( $fleet[210] == 0 ) FleetError ( "Для шпионажа необходимы шпионские зонды." );
 
         //FleetError ( "Запрет на атаки до #1" );
 //Запрет на атаки до #1
