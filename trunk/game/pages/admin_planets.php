@@ -296,7 +296,7 @@ function reset ()
         echo "<form action=\"index.php?page=admin&session=$session&mode=Planets&action=update&cp=".$planet['planet_id']."\" method=\"POST\" >\n";
         echo "<tr><td class=c colspan=2>Планета \"".$planet['name']."\" (<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>)</td>\n";
         echo "       <td class=c >Постройки</td> <td class=c >Флот</td> <td class=c >Оборона</td> </tr>\n";
-        echo "<tr><th><img src=\"".GetPlanetImage (UserSkin(), $planet['type'])."\">";
+        echo "<tr><th><img src=\"".GetPlanetImage (UserSkin(), $planet)."\">";
         if ($planet['type'] == 10000 ) echo "<br>М: ".nicenum($planet['m'])."<br>К: ".nicenum($planet['k'])."<br>";
         echo "</th><th>";
         if ( $planet['type'] > 0 && $planet['type'] < 10000 )
@@ -304,7 +304,7 @@ function reset ()
             if ($moon_id)
             {
                 $moon = GetPlanet ($moon_id);
-                echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$moon['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $moon['type'])."\"><br>\n";
+                echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$moon['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $moon)."\"><br>\n";
                 echo $moon['name'] . "</a>";
             }
             else echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=create_moon&cp=".$planet['planet_id']."\" >Создать луну</a>\n";
@@ -321,7 +321,7 @@ function reset ()
         else
         {
             $parent = LoadPlanet ( $planet['g'], $planet['s'], $planet['p'], 1 );
-            echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$parent['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $parent['type'])."\"><br>\n";
+            echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$parent['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $parent)."\"><br>\n";
             echo $parent['name'] . "</a>";
         }
 ?>
@@ -361,64 +361,10 @@ function reset ()
 
         echo "</tr>\n";
 
-        echo "<tr><th>Дата создания</th><th>".date ("Y-m-d H:i:s", $planet['date'])."</th> <td colspan=10 class=c>Картинка планеты</td></tr>";
+        echo "<tr><th>Дата создания</th><th>".date ("Y-m-d H:i:s", $planet['date'])."</th> <td colspan=10 class=c>&nbsp;</td></tr>";
 
         echo "<tr><th>Последняя активность</th><th>".date ("Y-m-d H:i:s", $planet['lastakt'])."</th> <th colspan=3 rowspan=11 valign=top> \n";
-        if ($planet['type'] > 0 && $planet['type'] < 10000) {    // картинки планет.
-            $RockPlanets = array ( 101, 102, 103, 104, 105, 106, 107, 108, 109, 110 );
-            $JunglePlanets = array ( 201, 202, 203, 204, 205, 206, 207, 208, 209, 210 );
-            $NormalPlanets = array ( 301, 302, 303, 304, 305, 306, 307 );
-            $WaterPlanets = array ( 401, 402, 403, 404, 405, 406, 407, 408, 409 );
-            $IcePlanets = array ( 501, 502, 503, 504, 505, 506, 507, 508, 509, 510 );
-            echo "<table>";
-            echo "<tr><td><nobr>";
-            foreach ( $RockPlanets as $i=>$id )
-            {
-                echo "    <input type=\"radio\" name=\"type\" value=$id ";
-                if ( $id == $planet['type'] ) echo " checked ";
-                echo "  >\n";
-                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\" title=\"Каменные, позиции 1-3\" > \n";
-            }
-            echo "</nobr></td></tr>";
-            echo "<tr><td>";
-            foreach ( $JunglePlanets as $i=>$id )
-            {
-                echo "     <input type=\"radio\" name=\"type\" value=$id ";
-                if ( $id == $planet['type'] ) echo " checked ";
-                echo "  >\n";
-                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\" title=\"Джунгли, позиции 4-6\" > \n";
-            }
-            echo "</td></tr>";
-            echo "<tr><td>";
-            foreach ( $NormalPlanets as $i=>$id )
-            {
-                echo "     <input type=\"radio\" name=\"type\" value=$id ";
-                if ( $id == $planet['type'] ) echo " checked ";
-                echo "  >\n";
-                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\" title=\"Нормальные, позиции 7-9\" > \n";
-            }
-            echo "</td></tr>";
-            echo "<tr><td>";
-            foreach ( $WaterPlanets as $i=>$id )
-            {
-                echo "     <input type=\"radio\" name=\"type\" value=$id ";
-                if ( $id == $planet['type'] ) echo " checked ";
-                echo "  >\n";
-                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\" title=\"Водяные, позиции 10-12\" > \n";
-            }
-            echo "</td></tr>";
-            echo "<tr><td>";
-            foreach ( $IcePlanets as $i=>$id )
-            {
-                echo "     <input type=\"radio\" name=\"type\" value=$id ";
-                if ( $id == $planet['type'] ) echo " checked ";
-                echo "  >\n";
-                echo "     <img src=\"".  GetPlanetSmallImage ( "../evolution/", $id ) . "\" width=\"32px\" height=\"32px\" title=\"Ледяные, позиции 13-15\" > \n";
-            }
-            echo "</td></tr>";
-            echo "</table>";
-        }
-        else echo "<input type=\"hidden\" name=\"type\" value=\"".$planet['type']."\" >\n";
+        echo "<input type=\"hidden\" name=\"type\" value=\"".$planet['type']."\" >\n";
         echo "</th> </tr>\n";
         echo "<tr><th>Последнее обновление</th><th>".date ("Y-m-d H:i:s", $planet['lastpeek'])."</th></tr>\n";
         echo "<tr><th>Диаметр <br><a href=\"index.php?page=admin&session=$session&mode=Planets&action=random_diam&cp=".$planet['planet_id']."\" >новый диаметр</a>  </th><th><input size=5 type=\"text\" name=\"diameter\" value=\"".$planet['diameter']."\" /> км (".$planet['fields']." из ".$planet['maxfields']." полей) ";

@@ -86,7 +86,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     {
         echo "            <th style=\"padding: 20px;\">  \n";
         echo "                    <a href=\"index.php?page=overview&session=$session&cp=".$planet['planet_id']."\">\n";
-        echo "                        <img src=\"".GetPlanetImage(UserSkin(), $planet['type'])."\" width=\"75\" height=\"71\" border=\"0\">\n";
+        echo "                        <img src=\"".GetPlanetImage(UserSkin(), $planet)."\" width=\"75\" height=\"71\" border=\"0\">\n";
         echo "                    </a>\n";
         echo "            </th>   \n";
     }
