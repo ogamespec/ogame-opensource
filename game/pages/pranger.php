@@ -16,7 +16,7 @@ if ($internal)
     loca_add ( "common", $GlobalUser['lang'] );
     loca_add ( "menu", $GlobalUser['lang'] );
 
-    if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+    if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
     $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
     $now = time();
     UpdateQueue ( $now );

@@ -10,7 +10,7 @@ if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -74,20 +74,20 @@ if ( method() === "POST" )
         else
         {
             // Проверить принадлежит планета этому пользователю.
-            $planet = GetPlanet ( $_POST['deleteid'] );
+            $planet = GetPlanet ( intval($_POST['deleteid']) );
             if ( $planet['owner_id'] == $GlobalUser['player_id'] )
             {
                 // Главную планету нельзя удалить.
-                if ( $_POST['deleteid'] == $GlobalUser['hplanetid'] ) $RenameError = "<center>\nНельзя покинуть главную планету!<br></center>\n";
+                if ( intval($_POST['deleteid']) == $GlobalUser['hplanetid'] ) $RenameError = "<center>\nНельзя покинуть главную планету!<br></center>\n";
                 else
                 {
-                    $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = " . $_POST['deleteid'] . " AND owner_id = " . $GlobalUser['player_id'];
+                    $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = " . intval($_POST['deleteid']) . " AND owner_id = " . $GlobalUser['player_id'];
                     $result = dbquery ( $query );
                     if ( dbrows ($result) > 0 ) $RenameError = "<center>\nВаши флоты ещё на пути к этой планете!<br></center>\n";
 
                     if ( $RenameError === "" )
                     {
-                        $query = "SELECT * FROM ".$db_prefix."fleet WHERE start_planet = " . $_POST['deleteid'];
+                        $query = "SELECT * FROM ".$db_prefix."fleet WHERE start_planet = " . intval($_POST['deleteid']);
                         $result = dbquery ( $query );
                         if ( dbrows ($result) > 0 ) $RenameError = "<center>\nФлоты с этой планеты ещё не вернулись!<br></center>\n";
                     }

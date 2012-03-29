@@ -8,7 +8,7 @@ if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -22,7 +22,7 @@ PageHeader ("bewerben");
 
 if ( ! $GlobalUser['validated'] ) Error ( "Эта функция возможна только после активации учетной записи игрока." );
 
-$ally_id = $_GET['allyid'];
+$ally_id = intval($_GET['allyid']);
 $ally = LoadAlly ($ally_id);
 
 // Загрузить образец заявки.
@@ -36,7 +36,9 @@ if ( $_POST['weiter'] === "Образец" || $ally['insertapp'])
 // Отправить заявление
 if ( $_POST['weiter'] === "Отправить" && $ally['open'] )
 {
-    AddApplication ( $ally['ally_id'], $GlobalUser['player_id'], $_POST['text'] );
+    $text = $_POST['text'];
+    if ( !get_magic_quotes_gpc () ) $text = addslashes ( $text );
+    AddApplication ( $ally['ally_id'], $GlobalUser['player_id'], $text );
 
 ?>
 <!-- CONTENT AREA -->

@@ -10,7 +10,7 @@ if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval ($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -204,8 +204,8 @@ function Buddy_Outcome ()
 function Buddy_Request ()
 {
     global $GlobalUser;
-    $user = LoadUser ($_GET['buddy_id']);
-    echo "<form action=\"?page=buddy&session=".$_GET['session']."&action=1&buddy_id=".$_GET['buddy_id']."\" method=\"POST\">\n";
+    $user = LoadUser ( intval ($_GET['buddy_id']) );
+    echo "<form action=\"?page=buddy&session=".$_GET['session']."&action=1&buddy_id=".intval($_GET['buddy_id'])."\" method=\"POST\">\n";
     echo "<table width=\"519\">\n";
     echo " <tr>\n<td class=\"c\" colspan=\"2\">Предложение подружиться</td>\n</tr>\n";
     echo " <tr>\n<th>Игрок</th>\n<th>".$user['oname']."</th>\n</tr>\n";
@@ -228,7 +228,7 @@ echo "<center>\n";
 if ( key_exists ('action', $_GET) && $_GET['action'] == 1 && $_GET['buddy_id'])    // Добавить свою заявку.
 {
     $from = $GlobalUser['player_id'];
-    $to = $_GET['buddy_id'];
+    $to = intval ($_GET['buddy_id']);
     if ($from != $to)
     {
         $buddy_id = AddBuddy ( $from, $to, $_POST['text']);
@@ -239,7 +239,7 @@ if ( key_exists ('action', $_GET) && $_GET['action'] == 1 && $_GET['buddy_id']) 
 }
 else if ( key_exists ('action', $_GET) && $_GET['action'] == 2 && $_GET['buddy_id'])    // Принять запрос
 {
-    $buddy_id = $_GET['buddy_id'];
+    $buddy_id = intval ($_GET['buddy_id']);
     $buddy = LoadBuddy ($buddy_id);
     AcceptBuddy ($buddy_id);
     SendMessage ( $buddy['request_from'], "Список друзей", "Подтверждение", va("Игрок #1 внёс Вас в список друзей", $GlobalUser['oname']), 0);
@@ -247,7 +247,7 @@ else if ( key_exists ('action', $_GET) && $_GET['action'] == 2 && $_GET['buddy_i
 }
 else if ( key_exists ('action', $_GET) && $_GET['action'] == 3 && $_GET['buddy_id'])    // Отклонить запрос
 {
-    $buddy_id = $_GET['buddy_id'];
+    $buddy_id = intval ($_GET['buddy_id']);
     $buddy = LoadBuddy ($buddy_id);
     RemoveBuddy ($buddy_id);
     SendMessage ( $buddy['request_from'], "Список друзей", "Предложение подружиться", va("Игрок #1 отверг Ваше предложение подружиться", $GlobalUser['oname']), 0);
@@ -255,7 +255,7 @@ else if ( key_exists ('action', $_GET) && $_GET['action'] == 3 && $_GET['buddy_i
 }
 else if ( key_exists ('action', $_GET) && $_GET['action'] == 4 && $_GET['buddy_id'])    // Отозвать свой запрос.
 {
-    $buddy_id = $_GET['buddy_id'];
+    $buddy_id = intval ($_GET['buddy_id']);
     $buddy = LoadBuddy ($buddy_id);
     if ( $buddy['request_from'] == $GlobalUser['player_id'] )    // только свои
     {
@@ -269,7 +269,7 @@ else if ( key_exists ('action', $_GET) && $_GET['action'] == 6 ) Buddy_Outcome (
 else if ( key_exists ('action', $_GET) && $_GET['action'] == 7 ) Buddy_Request ();    // Окно отправки заявки.
 else if ( key_exists ('action', $_GET) && $_GET['action'] == 8 && $_GET['buddy_id'])    // Удалить из списка
 {
-    $buddy_id = $_GET['buddy_id'];
+    $buddy_id = intval ($_GET['buddy_id']);
     $buddy = LoadBuddy ($buddy_id);
     if ($buddy['request_from'] == $GlobalUser['player_id'] )    // только свои
     {

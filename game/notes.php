@@ -31,10 +31,6 @@ function AddNote ( $player_id, $subj, $text, $prio )
     if ($prio < 0) $prio = 0;
     if ($prio > 2) $prio = 2;
 
-    $text = str_replace ( '\"', "&quot;", $text );
-    $text = str_replace ( '\'', "&rsquo;", $text );
-    $text = str_replace ( '\`', "&lsquo;", $text );
-
     // Записать заметку в БД.
     $note = array( '', $player_id, $subj, $text, mb_strlen ($text, "UTF-8"), $prio, time() );
     AddDBRow ( $note, "notes" );
@@ -51,10 +47,6 @@ function UpdateNote ( $player_id, $note_id, $subj, $text, $prio )
     $subj = mb_substr ($subj, 0, 30, "UTF-8");
     if ($prio < 0) $prio = 0;
     if ($prio > 2) $prio = 2;
-
-    $text = str_replace ( '\"', "&quot;", $text );
-    $text = str_replace ( '\'', "&rsquo;", $text );
-    $text = str_replace ( '\`', "&lsquo;", $text );
 
     $query = "UPDATE ".$db_prefix."notes SET subj = '".$subj."', text = '".$text."', textsize = '".mb_strlen($text, "UTF-8")."', prio = '".$prio."', date = '".time()."' WHERE owner_id = $player_id AND note_id = $note_id";
     dbquery ($query);

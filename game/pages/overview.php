@@ -18,7 +18,7 @@ $OverviewError = "";
 
 require_once "overview_events.php";
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], (int)$_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 
 $now = time();
@@ -32,7 +32,7 @@ PageHeader ("overview");
 
 // *******************************************************************
 
-if ( key_exists ('lgn', $_GET) && (int)$_GET['lgn'] == 1 ) UpdatePlanetActivity ( $aktplanet['planet_id'] );  // Обновить активность на Главной планете при входе в игру.
+if ( key_exists ('lgn', $_GET) && intval($_GET['lgn']) == 1 ) UpdatePlanetActivity ( $aktplanet['planet_id'] );  // Обновить активность на Главной планете при входе в игру.
 
 $uni = $GlobalUni;
 
@@ -84,7 +84,7 @@ function t_building() {
 
 <?php
 // Выйти из фрейма.
-if ( $_GET['lgn'] == 1 )
+if ( intval($_GET['lgn']) == 1 )
 {
     echo "top.location.href=\"index.php?page=overview&session=$session\"";
 }

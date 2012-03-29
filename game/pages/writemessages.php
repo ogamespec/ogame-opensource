@@ -8,7 +8,7 @@ if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -49,7 +49,7 @@ function SendNotActivated ()
 
 // *******************************************************************
 
-$user = LoadUser ( $_GET['messageziel'] );
+$user = LoadUser ( intval($_GET['messageziel']) );
 $home = GetPlanet ( $user['hplanetid']);
 $ownhome = GetPlanet ( $GlobalUser['hplanetid']);
 
@@ -94,7 +94,7 @@ echo "<div id='content'>\n";
 echo "<center>\n";
 echo $write_error;
 echo "<center>\n";
-echo "<form action=\"index.php?page=writemessages&session=".$_GET['session']."&gesendet=1&messageziel=".$_GET['messageziel']."\" method=\"post\">\n";
+echo "<form action=\"index.php?page=writemessages&session=".$_GET['session']."&gesendet=1&messageziel=".intval($_GET['messageziel'])."\" method=\"post\">\n";
 echo "<table width=\"519\">\n\n";
 
 //echo "GET: "; print_r ($_GET); echo "<br>";

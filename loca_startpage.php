@@ -4,7 +4,7 @@ require_once "loca.php";
 
 // Конфигурация сервера на котором находятся БД LOCA.
 $LocaHost = "localhost";
-$LocaUser = "toor";
+$LocaUser = "root";
 $LocaPass = "qwerty";
 $LocaDB = "startpage";
 

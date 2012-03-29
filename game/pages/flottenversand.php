@@ -73,29 +73,29 @@ if ( !key_exists('resource1', $_POST) ) $_POST['resource1'] = 0;
 if ( !key_exists('resource2', $_POST) ) $_POST['resource2'] = 0;
 if ( !key_exists('resource3', $_POST) ) $_POST['resource3'] = 0;
 
-$_POST['resource1'] = min ( $aktplanet['m'], abs($_POST['resource1']) );
-$_POST['resource2'] = min ( $aktplanet['k'], abs($_POST['resource2']) );
-$_POST['resource3'] = min ( $aktplanet['d'], abs($_POST['resource3']) );
+$_POST['resource1'] = min ( $aktplanet['m'], abs(intval($_POST['resource1'])) );
+$_POST['resource2'] = min ( $aktplanet['k'], abs(intval($_POST['resource2'])) );
+$_POST['resource3'] = min ( $aktplanet['d'], abs(intval($_POST['resource3'])) );
 
 foreach ($fleetmap as $i=>$gid)
 {
     if ( !key_exists("ship$gid", $_POST) ) $_POST["ship$gid"] = 0;
 }
 
-$order = $_POST['order'];
+$order = intval($_POST['order']);
 $union_id = 0;
 
 // Список флотов.
 $fleet = array ();
 foreach ($fleetmap as $i=>$gid) 
 {
-    if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = min ( $aktplanet["f$gid"], $_POST["ship$gid"] );
+    if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = min ( $aktplanet["f$gid"], intval($_POST["ship$gid"]) );
     else $fleet[$gid] = 0;
 }
 $fleet[212] = 0;        // солнечные спутники не летают.
 
-$origin = LoadPlanet ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['thisplanettype'] );
-$target = LoadPlanet ( $_POST['galaxy'], $_POST['system'], $_POST['planet'], $_POST['planettype'] );
+$origin = LoadPlanet ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['thisplanettype']) );
+$target = LoadPlanet ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), intval($_POST['planettype']) );
 
 if ( $unitab['freeze'] ) FleetError ("Невозможно отправить флот, Вселенная поставлена на паузу." );
 
@@ -106,9 +106,9 @@ if (  ( $_POST['thisgalaxy'] == $_POST['galaxy'] ) &&
   ) FleetError ( "И как ты это себе представляешь?" );
 
 if (
-     ($_POST['galaxy'] < 1 || $_POST['galaxy'] > $unitab['galaxies'])  ||
-     ($_POST['system'] < 1 || $_POST['system'] > $unitab['systems'])  ||
-     ($_POST['planet'] < 1 || $_POST['planet'] > 16)
+     (intval($_POST['galaxy']) < 1 || intval($_POST['galaxy']) > $unitab['galaxies'])  ||
+     (intval($_POST['system']) < 1 || intval($_POST['system']) > $unitab['systems'])  ||
+     (intval($_POST['planet']) < 1 || intval($_POST['planet']) > 16)
  ) {
     $PageError = "Cheater!";
     FleetError ( "Планета необитаема либо должна быть колонизирована!" );
@@ -128,9 +128,9 @@ if ( $origin_user['ip_addr'] !== "127.0.0.1" )        // для локальны
 }
 
 // Рассчитать расстояние, время полёта и затраты дейтерия.
-$dist = FlightDistance ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['galaxy'], $_POST['system'], $_POST['planet'] );
+$dist = FlightDistance ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']) );
 $slowest_speed = FlightSpeed ( $fleet, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] );
-$flighttime = FlightTime ( $dist, $slowest_speed, $_POST['speed'] / 10, $unispeed );
+$flighttime = FlightTime ( $dist, $slowest_speed, intval($_POST['speed']) / 10, $unispeed );
 $cons = FlightCons ( $fleet, $dist, $flighttime, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'], $unispeed );
 $cargo = $spycargo = $numships = 0;
 foreach ($fleet as $id=>$amount)
@@ -148,15 +148,15 @@ $cargo -= $cons;
 $cargo_m = $cargo_k = $cargo_d = 0;
 $space = $cargo;
 if ( $space > 0 ) {
-    $cargo_m = min ( $space, $_POST['resource1'] );
+    $cargo_m = min ( $space, intval($_POST['resource1']) );
     $space -= $cargo_m;
 }
 if ( $space > 0 ) {
-    $cargo_k = min ( $space, $_POST['resource2'] );
+    $cargo_k = min ( $space, intval($_POST['resource2']) );
     $space -= $cargo_k;
 }
 if ( $space > 0 ) {
-    $cargo_d = min ( $space, $_POST['resource3'] );
+    $cargo_d = min ( $space, intval($_POST['resource3']) );
     $space -= $cargo_d;
 }
 
@@ -170,11 +170,10 @@ switch ( $order )
         else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Невозможно напасть на собственную планету!" );
 
         //FleetError ( "Запрет на атаки до #1" );
-//Запрет на атаки до #1
         break;
 
     case '2':        // Совместная атака
-        if ( key_exists ('union2', $_POST) ) $union_id = floor ($_POST['union2']);
+        if ( key_exists ('union2', $_POST) ) $union_id = floor (intval($_POST['union2']));
         else $union_id = 0;
         if ( $unitab['acs'] == 0 ) $union_id = 0;
         $union = LoadUnion ($union_id);
@@ -216,10 +215,10 @@ switch ( $order )
 
     case '7':        // Колонизировать
         if ( $fleet[208] == 0 ) FleetError ( "Для колонизации надо послать колонизаторы!" );
-        else if (HasPlanet ($_POST['galaxy'], $_POST['system'], $_POST['planet']) ) FleetError ( "Планета уже заселена!" );
+        else if (HasPlanet (intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet'])) ) FleetError ( "Планета уже заселена!" );
         else {
             // Если отправлен колонизатор - добавить фантом колонизации.
-            $id = CreateColonyPhantom ( $_POST['galaxy'], $_POST['system'], $_POST['planet'], $origin_user['player_id'] );
+            $id = CreateColonyPhantom ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), $origin_user['player_id'] );
             $target = GetPlanet ($id);
         }
         break;
@@ -247,9 +246,9 @@ switch ( $order )
         $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
         if ( $expnum >= $maxexp ) FleetError ( "Слишком много одновременных экспедиций" );
         else if ( $manned == 0 ) FleetError ( "Экспедиция должна состоять как минимум из одного управляемого людьми корабля." );
-        else if ( $_POST['planet'] != 16 ) FleetError ( "Цель экспедиции недействительна!" );
+        else if ( intval($_POST['planet']) != 16 ) FleetError ( "Цель экспедиции недействительна!" );
         else {
-            $id = CreateOuterSpace ( $_POST['galaxy'], $_POST['system'], $_POST['planet'] );
+            $id = CreateOuterSpace ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']) );
             $target = GetPlanet ($id);
         }
         break;
@@ -290,7 +289,7 @@ else {
     $hold_time = 0;
     if ( $order == 15 ) {    // Экспедиция
         if ( key_exists ('expeditiontime', $_POST) ) {
-            $hold_time = floor ($_POST['expeditiontime']);
+            $hold_time = floor (intval($_POST['expeditiontime']));
             if ( $hold_time > $GlobalUser['r124'] ) $hold_time = $GlobalUser['r124'];
             if ( $hold_time < 1 ) $hold_time = 1;
         }
@@ -299,7 +298,7 @@ else {
     }
     else if ( $order == 5 ) {    // Держаться
         if ( key_exists ('holdingtime', $_POST) ) {
-            $hold_time = floor ($_POST['holdingtime']);
+            $hold_time = floor (intval($_POST['holdingtime']));
             if ( $hold_time > 32 ) $hold_time = 32;
             if ( $hold_time < 0 ) $hold_time = 0;
         }
@@ -351,10 +350,10 @@ else {
       <th>Потребление</th><th><?=nicenum($cons);?></th>
    </tr>
    <tr height="20">
-     <th>Отправлен с</th><th><a href="index.php?page=galaxy&galaxy=<?=$_POST['thisgalaxy'];?>&system=<?=$_POST['thissystem'];?>&position=<?=$_POST['thisplanet'];?>&session=<?=$session;?>" >[<?=$_POST['thisgalaxy'];?>:<?=$_POST['thissystem'];?>:<?=$_POST['thisplanet'];?>]</a></th>
+     <th>Отправлен с</th><th><a href="index.php?page=galaxy&galaxy=<?=intval($_POST['thisgalaxy']);?>&system=<?=intval($_POST['thissystem']);?>&position=<?=intval($_POST['thisplanet']);?>&session=<?=$session;?>" >[<?=intval($_POST['thisgalaxy']);?>:<?=intval($_POST['thissystem']);?>:<?=intval($_POST['thisplanet']);?>]</a></th>
    </tr>
    <tr height="20">
-     <th>Отправлен на</th><th><a href="index.php?page=galaxy&galaxy=<?=$_POST['galaxy'];?>&system=<?=$_POST['system'];?>&position=<?=$_POST['planet'];?>&session=<?=$session;?>" >[<?=$_POST['galaxy'];?>:<?=$_POST['system'];?>:<?=$_POST['planet'];?>]</a></th>
+     <th>Отправлен на</th><th><a href="index.php?page=galaxy&galaxy=<?=intval($_POST['galaxy']);?>&system=<?=intval($_POST['system']);?>&position=<?=intval($_POST['planet']);?>&session=<?=$session;?>" >[<?=intval($_POST['galaxy']);?>:<?=intval($_POST['system']);?>:<?=intval($_POST['planet']);?>]</a></th>
    </tr>
    <tr height="20">
      <th>Время прибытия</th><th><?=date("D M j G:i:s", $queue['end']);?></th>

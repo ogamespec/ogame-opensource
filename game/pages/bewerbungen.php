@@ -8,7 +8,7 @@ if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -23,9 +23,9 @@ PageHeader ("bewerbungen");
 $ally = LoadAlly ( $GlobalUser['ally_id'] );
 
 $show = 0;
-if ( key_exists ( 'show', $_GET ) ) $show = $_GET['show'];
+if ( key_exists ( 'show', $_GET ) ) $show = intval($_GET['show']);
 $sort = 1;
-if ( key_exists ( 'sort', $_GET ) ) $sort = $_GET['sort'] & 1;
+if ( key_exists ( 'sort', $_GET ) ) $sort = intval($_GET['sort']) & 1;
 
 if ( method () === "POST" )
 {
@@ -82,7 +82,7 @@ if ($apps > 0 )
 ?>
 <tr><th colspan=2>Заявление от <?=$user['oname'];?></th></tr>
 <form action="index.php?page=bewerbungen&session=<?=$session;?>&show=<?=$show;?>&sort=<?=$sort;?>" method=POST>
-<tr><th colspan=2><?=str_replace("\n", "\n<br>", $app['text']);?></th></tr>
+<tr><th colspan=2><?=str_replace("\n", "\n<br>", stripslashes($app['text']) );?></th></tr>
 <tr><td class=c colspan=2>Реакция на это заявление</td></tr>
 <tr><th>&#160;</th><th><input type=submit name="aktion" value="Принять"></th></tr>
 <tr><th>Причина (по желанию) <span id="cntChars">0</span> / 2000 символов</th><th><textarea name="text" cols=40 rows=10 onkeyup="javascript:cntchar(2000)"></textarea></th></tr>

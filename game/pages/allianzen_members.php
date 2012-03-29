@@ -74,7 +74,7 @@ function PageAlly_MemberSettings ()
     global $AllianzenError;
 
     $selected_user = 0;
-    if ( key_exists ('u', $_GET) ) $selected_user = $_GET['u'];
+    if ( key_exists ('u', $_GET) ) $selected_user = intval($_GET['u']);
 
     if ( method() === "GET" && $_GET['a'] == 13 && $selected_user)        // Выгнать игрока
     {
@@ -101,7 +101,7 @@ function PageAlly_MemberSettings ()
 
     if ( method() === "POST" && $_GET['a'] == 16 && $selected_user)        // Назначить ранг игроку
     {
-        $newrank = $_POST['newrang'];
+        $newrank = intval($_POST['newrang']);
         $query = "UPDATE ".$db_prefix."users SET allyrank = $newrank WHERE player_id = $selected_user";
         dbquery ($query);
     }

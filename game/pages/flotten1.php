@@ -14,7 +14,7 @@ loca_add ( "technames", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "fleet", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -49,7 +49,7 @@ if ( method () === "POST" )
 {
     if ( key_exists ( 'order_return', $_POST) )         // Отзыв флота.
     {
-        $fleet_id = $_POST['order_return'];
+        $fleet_id = intval ($_POST['order_return']);
         $fleet_obj = LoadFleet ( $fleet_id );
         if (  ($fleet_obj['owner_id'] == $GlobalUser['player_id']) &&
               ($fleet_obj['mission'] < 100 || $fleet_obj['mission'] > 200 )  ) 
@@ -269,18 +269,18 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 <form action="index.php?page=flotten2&session=<?=$session;?>" method="POST">
 <?php
     if ( key_exists ( 'galaxy', $_GET ) ) {
-        $target_galaxy = $_GET['galaxy'];
+        $target_galaxy = intval ($_GET['galaxy']);
 
-        if ( key_exists ( 'system', $_GET ) ) $target_system = $_GET['system'];
+        if ( key_exists ( 'system', $_GET ) ) $target_system = intval ($_GET['system']);
         else  $target_system = 0;
 
-        if ( key_exists ( 'planet', $_GET ) ) $target_planet = $_GET['planet'];
+        if ( key_exists ( 'planet', $_GET ) ) $target_planet = intval ($_GET['planet']);
         else  $target_planet = 0;
 
-        if ( key_exists ( 'planettype', $_GET ) ) $target_planettype = $_GET['planettype'];
+        if ( key_exists ( 'planettype', $_GET ) ) $target_planettype = intval ($_GET['planettype']);
         else  $target_planettype = 0;
 
-        if ( key_exists ( 'target_mission', $_GET ) ) $target_mission = $_GET['target_mission'];
+        if ( key_exists ( 'target_mission', $_GET ) ) $target_mission = intval ($_GET['target_mission']);
         else  $target_mission = 0;
 ?>
      <input type="hidden" name="target_galaxy" value="<?=$target_galaxy;?>" />

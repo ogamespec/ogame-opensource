@@ -10,7 +10,7 @@ loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "technames", $GlobalUser['lang'] );
 loca_add ( "empire", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -22,7 +22,7 @@ $session = $_GET['session'];
 
 PageHeader ("imperium", true);
 
-$planettype = $_GET['planettype'];
+$planettype = intval($_GET['planettype']);
 
 // Загрузить список планет/лун.
 $plist = array ();

@@ -9,7 +9,7 @@ loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "technames", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 
 $now = time();
@@ -122,7 +122,7 @@ function MeetRequirement ( $user, $planet, $id, $level )
     else return $planet['b'.$id] >= $level;
 }
 
-$id = $_GET['tid'];
+$id = intval($_GET['tid']);
 
 echo "<center> \n";
 echo "<table width=270> \n";

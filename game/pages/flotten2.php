@@ -11,7 +11,7 @@ loca_add ( "technames", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "fleet", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval ($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -49,25 +49,25 @@ PageHeader ("flotten2");
 <?php
 
     if ( key_exists ( 'target_mission', $_POST ) ) {
-        $target_misson = $_POST['target_mission'];
+        $target_misson = intval ($_POST['target_mission']);
 ?>
 <input type="hidden" name="target_mission" value="<?=$target_misson;?>" />
 <?php
     }
 
-    if ( key_exists ( 'target_galaxy', $_POST ) ) $target_galaxy = $_POST['target_galaxy'];
+    if ( key_exists ( 'target_galaxy', $_POST ) ) $target_galaxy = intval ($_POST['target_galaxy']);
     else $target_galaxy = $aktplanet['g'];
 
-    if ( key_exists ( 'target_system', $_POST ) ) $target_system = $_POST['target_system'];
+    if ( key_exists ( 'target_system', $_POST ) ) $target_system = intval ($_POST['target_system']);
     else $target_system = $aktplanet['s'];
 
-    if ( key_exists ( 'target_planet', $_POST ) ) $target_planet = $_POST['target_planet'];
+    if ( key_exists ( 'target_planet', $_POST ) ) $target_planet = intval ($_POST['target_planet']);
     else $target_planet = $aktplanet['p'];
 
     function planettype ($n)
     {
         if ( key_exists ( 'target_planettype', $_POST ) ) {
-            if ( $_POST['target_planettype'] == $n ) echo "selected";
+            if ( intval ($_POST['target_planettype']) == $n ) echo "selected";
         }
     }
 ?>
@@ -90,15 +90,15 @@ PageHeader ("flotten2");
     foreach ($fleetmap as $i=>$gid) 
     {
         // Ограничить количество флотов максимальным количеством на планете.
-        if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet["f$gid"] , abs ($_POST["ship$gid"]) );
+        if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet["f$gid"] , abs (intval ($_POST["ship$gid"])) );
         else $amount = 0;
         $total += $amount;
 
         if ( $amount > 0 ) {
             if ( key_exists("ship$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"ship$gid\" value=\"".$amount."\" />\n";
-            if ( key_exists("consumption$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"consumption$gid\" value=\"".$_POST["consumption$gid"]."\" />\n";
-            if ( key_exists("speed$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"speed$gid\" value=\"".$_POST["speed$gid"]."\" />\n";
-            if ( key_exists("capacity$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"capacity$gid\" value=\"".$_POST["capacity$gid"]."\" />\n";
+            if ( key_exists("consumption$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"consumption$gid\" value=\"".intval ($_POST["consumption$gid"])."\" />\n";
+            if ( key_exists("speed$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"speed$gid\" value=\"".intval($_POST["speed$gid"])."\" />\n";
+            if ( key_exists("capacity$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"capacity$gid\" value=\"".intval ($_POST["capacity$gid"])."\" />\n";
         }
     }
 

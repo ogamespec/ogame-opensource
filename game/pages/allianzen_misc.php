@@ -60,6 +60,8 @@ function PageAlly_ChangeTag ()
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
         if ( ! ($myrank['rights'] & 0x020) ) $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
         else if ( $now < $ally['tag_until'] ) $AllianzenError = "<center>\nПодождите до ".date ("Y-m-d H:i:s", $ally['tag_until'])."<br></center>";
+        else if (mb_strlen ($_POST['newtag'], "UTF-8")  < 3) $AllianzenError = "<center>\nАббревиатура альянса слишком коротка<br></center>";
+        else if (IsAllyTagExist ($_POST['newtag'])) $AllianzenError = "<center>\nАльянс ".$_POST['newtag']." к сожалению уже существует!<br></center>";
         else
         {
             AllyChangeTag ( $ally['ally_id'], $_POST['newtag'] );
@@ -99,6 +101,7 @@ function PageAlly_ChangeName ()
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
         if ( ! ($myrank['rights'] & 0x020) ) $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
         else if ( $now < $ally['name_until'] ) $AllianzenError = "<center>\nПодождите до ".date ("Y-m-d H:i:s", $ally['name_until'])."<br></center>";
+        else if (mb_strlen ($_POST['newname'], "UTF-8")  < 3) $AllianzenError = "<center>\nНазвание альянса слишком короткое<br></center>";
         else
         {
             AllyChangeName ( $ally['ally_id'], $_POST['newname'] );

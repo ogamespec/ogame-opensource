@@ -25,7 +25,7 @@ loca_add ( "technames", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "fleet", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval ($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -39,9 +39,9 @@ if ( method() !== "POST" ) MyGoto ( "flotten1" );
 
 $uni = LoadUniverse ();
 
-$galaxy = floor ( abs ($_POST['galaxy']) );
-$system = floor ( abs ($_POST['system']) );
-$planet = floor ( abs ($_POST['planet']) );
+$galaxy = floor ( abs ( intval($_POST['galaxy']) ) );
+$system = floor ( abs ( intval ($_POST['system']) ) );
+$planet = floor ( abs ( intval ($_POST['planet']) ) );
 
 if ( $galaxy < 1 ) $galaxy = 1;
 if ( $galaxy > $uni['galaxies'] ) $galaxy = $uni['galaxies'];
@@ -79,18 +79,18 @@ PageHeader ("flotten3");
 
 <?php
     // Координаты цели и данные о ресурсах.
-    echo "<input name=\"thisgalaxy\" type=\"hidden\" value=\"".$_POST['thisgalaxy']."\" />\n";
-    echo "<input name=\"thissystem\" type=\"hidden\" value=\"".$_POST['thissystem']."\" />\n";
-    echo "<input name=\"thisplanet\" type=\"hidden\" value=\"".$_POST['thisplanet']."\" />\n";
-    echo "<input name=\"thisplanettype\" type=\"hidden\" value=\"".$_POST['thisplanettype']."\" />\n";
-    echo "<input name=\"speedfactor\" type=\"hidden\" value=\"".$_POST['speedfactor']."\" />\n";
+    echo "<input name=\"thisgalaxy\" type=\"hidden\" value=\"".intval($_POST['thisgalaxy'])."\" />\n";
+    echo "<input name=\"thissystem\" type=\"hidden\" value=\"".intval($_POST['thissystem'])."\" />\n";
+    echo "<input name=\"thisplanet\" type=\"hidden\" value=\"".intval($_POST['thisplanet'])."\" />\n";
+    echo "<input name=\"thisplanettype\" type=\"hidden\" value=\"".intval($_POST['thisplanettype'])."\" />\n";
+    echo "<input name=\"speedfactor\" type=\"hidden\" value=\"".intval($_POST['speedfactor'])."\" />\n";
     echo "<input name=\"thisresource1\" type=\"hidden\" value=\"".floor($aktplanet['m'])."\" />\n";
     echo "<input name=\"thisresource2\" type=\"hidden\" value=\"".floor($aktplanet['k'])."\" />\n";
     echo "<input name=\"thisresource3\" type=\"hidden\" value=\"".floor($aktplanet['d'])."\" />\n";
     echo "<input name=\"galaxy\" type=\"hidden\" value=\"".$galaxy."\" />\n";
     echo "<input name=\"system\" type=\"hidden\" value=\"".$system."\" />\n";
     echo "<input name=\"planet\" type=\"hidden\" value=\"".$planet."\" />\n";
-    echo "<input name=\"planettype\" type=\"hidden\" value=\"".$_POST['planettype']."\" />\n\n";
+    echo "<input name=\"planettype\" type=\"hidden\" value=\"".intval($_POST['planettype'])."\" />\n\n";
 
     // Список флотов.
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // без солнечного спутника
@@ -99,26 +99,26 @@ PageHeader ("flotten3");
     foreach ($fleetmap as $i=>$gid) 
     {
         // Ограничить количество флотов максимальным количеством на планете.
-        if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet["f$gid"] , abs ($_POST["ship$gid"]) );
+        if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet["f$gid"] , abs ( intval($_POST["ship$gid"]) ) );
         else $amount = 0;
         $total += $amount;
 
         if ( $amount > 0 ) {
             if ( key_exists("ship$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"ship$gid\" value=\"".$amount."\" />\n";
-            if ( key_exists("consumption$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"consumption$gid\" value=\"".$_POST["consumption$gid"]."\" />\n";
-            if ( key_exists("speed$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"speed$gid\" value=\"".$_POST["speed$gid"]."\" />\n";
-            if ( key_exists("capacity$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"capacity$gid\" value=\"".$_POST["capacity$gid"]."\" />\n";
+            if ( key_exists("consumption$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"consumption$gid\" value=\"".intval($_POST["consumption$gid"])."\" />\n";
+            if ( key_exists("speed$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"speed$gid\" value=\"".intval($_POST["speed$gid"])."\" />\n";
+            if ( key_exists("capacity$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"capacity$gid\" value=\"".intval($_POST["capacity$gid"])."\" />\n";
         }
     }
 
     // Флот не выбран.
     if ( $total == 0 ) MyGoto ( "flotten1" );
 
-    echo "<input type=\"hidden\" name=\"speed\" value=\"".$_POST['speed']."\" />\n";
+    echo "<input type=\"hidden\" name=\"speed\" value=\"".intval($_POST['speed'])."\" />\n";
 ?>
 
 <tr height="20" align="left">
-<td class="c" colspan="2"><?=$galaxy;?>:<?=$system;?>:<?=$planet;?> - <?=loca("FLEET_PLANETTYPE_".$_POST['planettype']);?></td>
+<td class="c" colspan="2"><?=$galaxy;?>:<?=$system;?>:<?=$planet;?> - <?=loca("FLEET_PLANETTYPE_".intval($_POST['planettype']));?></td>
 
 </tr>
 <tr valign="top" align="left">
@@ -134,14 +134,14 @@ PageHeader ("flotten3");
     function is_checked ($mission)
     {
         if ( key_exists ( 'target_mission', $_POST ) ) {
-            if ( $_POST['target_mission'] == $mission ) return "checked";
+            if ( intval($_POST['target_mission']) == $mission ) return "checked";
         }
     }
 
     function is_selected ($union_id)
     {
         if ( key_exists ( 'union2', $_POST ) ) {
-            if ( $_POST['union2'] == $union_id ) return "selected";
+            if ( intval($_POST['union2']) == $union_id ) return "selected";
         }
     }
 
@@ -151,11 +151,13 @@ PageHeader ("flotten3");
 
     foreach ($fleetmap as $i=>$gid) 
     {
-        if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = $_POST["ship$gid"];
+        if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = intval($_POST["ship$gid"]);
         else $fleet[$gid] = 0;
     }
 
-    $missions = FleetAvailableMissions ( $_POST['thisgalaxy'], $_POST['thissystem'], $_POST['thisplanet'], $_POST['thisplanettype'], $galaxy, $system, $planet, $_POST['planettype'], $fleet );
+    $missions = FleetAvailableMissions ( 
+					intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['thisplanettype']),
+					$galaxy, $system, $planet, intval($_POST['planettype']), $fleet );
 
     if ( count ($missions) == 0 )
     {

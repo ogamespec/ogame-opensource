@@ -6,7 +6,7 @@
 //echo $_SERVER['HTTP_REFERER'];
 
 $now = time ();
-$allyid = $_GET['allyid'];
+$allyid = intval($_GET['allyid']);
 $ally = LoadAlly ($allyid);
 
 $members = CountAllyMembers ( $ally['ally_id'] );

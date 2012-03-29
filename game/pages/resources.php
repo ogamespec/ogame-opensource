@@ -11,7 +11,7 @@ loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "technames", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -45,7 +45,12 @@ else
 // Обработка POST-запросов (в РО изменять настройки энергии нельзя)
 if ( method () === "POST" && !$GlobalUser['vacation'] )
 {
-    //print_r ( $_POST );
+    $_POST['last1'] = intval($_POST['last1']);
+    $_POST['last2'] = intval($_POST['last2']);
+    $_POST['last3'] = intval($_POST['last3']);
+    $_POST['last4'] = intval($_POST['last4']);
+    $_POST['last12'] = intval($_POST['last12']);
+    $_POST['last212'] = intval($_POST['last212']);
 
     // Проверка на неверные параметры.
     if ( $_POST['last1'] > 100 || $_POST['last2'] > 100 || $_POST['last3'] > 100 ||

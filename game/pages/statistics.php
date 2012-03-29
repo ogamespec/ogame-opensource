@@ -8,7 +8,7 @@ if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -21,8 +21,8 @@ $session = $_GET['session'];
 PageHeader ("statistics");
 
 $start = -1;
-if ( key_exists ( "start", $_POST ) ) $start = $_POST['start'];
-if ( key_exists ( "start", $_GET ) ) $start = $_GET['start'];
+if ( key_exists ( "start", $_POST ) ) $start = intval($_POST['start']);
+if ( key_exists ( "start", $_GET ) ) $start = intval($_GET['start']);
 
 $type = "";
 if ( key_exists ( "type", $_POST ) ) $type = $_POST['type'];
