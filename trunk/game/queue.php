@@ -202,6 +202,9 @@ function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
 {
     global $db_prefix, $GlobalUni;
 
+    $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
+    if ( ! in_array ( $id, $buildmap ) ) return;
+
     $planet = GetPlanet ( $planet_id );
     $user = LoadUser ( $planet['owner_id'] );
 
@@ -455,6 +458,9 @@ function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
 {
     global $db_prefix, $GlobalUni;
 
+    $techmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
+    if ( ! in_array ( $gid, $techmap ) ) return;
+
     $uni = $GlobalUni;
     if ( $uni['freeze'] ) return;
 
@@ -565,6 +571,9 @@ function Queue_Shipyard_End ($queue)
 function StartResearch ($player_id, $planet_id, $id, $now)
 {
     global $db_prefix, $GlobalUni;
+
+    $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
+    if ( ! in_array ( $id, $resmap ) ) return;
 
     $uni = $GlobalUni;
     if ( $uni['freeze'] ) return;
