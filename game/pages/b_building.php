@@ -93,7 +93,8 @@ if ( $GlobalUser['vacation'] ) {
 }
 
 echo "<table align=top ><tr><td style='background-color:transparent;'>\n";
-echo "<table width=\"530\">\n";
+if ( $GlobalUser['useskin'] ) echo "<table width=\"530\">\n";
+else echo "<table width=\"468\">\n";
 
 // Проверить ведется ли исследование или нет.
 $result = GetResearchQueue ( $GlobalUser['player_id'] );
@@ -137,9 +138,14 @@ foreach ( $buildmap as $i => $id )
     $lvl = $aktplanet['b'.$id];
     if ( ! BuildMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) continue;
 
-    echo "<tr><td class=l>";
-    echo "<a href=index.php?page=infos&session=$session&gid=".$id.">";
-    echo "<img border='0' src=\"".UserSkin()."gebaeude/".$id.".gif\" align='top' width='120' height='120'></a></td>";
+    echo "<tr>";
+
+    if ( $GlobalUser['useskin'] ) {
+        echo "<td class=l>";
+        echo "<a href=index.php?page=infos&session=$session&gid=".$id.">";
+        echo "<img border='0' src=\"".UserSkin()."gebaeude/".$id.".gif\" align='top' width='120' height='120'></a></td>";
+    }
+
     echo "<td class=l>";
     echo "<a href=index.php?page=infos&session=$session&gid=".$id.">".loca("NAME_$id")."</a></a>";
     if ( $lvl ) echo " (уровень ".$lvl.")";

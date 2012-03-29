@@ -250,6 +250,8 @@ $speed = $unitab['speed'];
             $GlobalUser['lang'] = $lang;
             $GlobalUser['deact_ip'] = $deactip;
             $GlobalUser['redesign'] = $redesign;
+            $GlobalUser['skin'] = $_POST['dpath'];
+            $GlobalUser['useskin'] = ($_POST['design']==="on"?1:0);
         }
 ?>
 

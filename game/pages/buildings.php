@@ -113,7 +113,10 @@ if ( $_GET['mode'] === "Flotte" )
         echo "<font color=#FF0000><center>Режим отпуска минимум до  ".date ("Y-m-d H:i:s", $GlobalUser['vacation_until'])."</center></font>";
     }
     echo "<form action=index.php?page=buildings&session=$session&mode=".$_GET['mode']." method=post>";
-    echo "<table align=top><tr><td style='background-color:transparent;'>  <table width=530>          <tr> \n";
+    echo "<table align=top><tr><td style='background-color:transparent;'>  ";
+    if ( $GlobalUser['useskin'] ) echo "<table width=\"530\">\n";
+    else echo "<table width=\"468\">\n";
+    echo "         <tr> \n";
     echo "          <td class=l colspan=\"2\">Описание</td> \n";
     echo "          <td class=l><b>Кол-во</b></td> \n";
     echo "          </tr> \n\n";
@@ -127,12 +130,17 @@ if ( $_GET['mode'] === "Flotte" )
                 if ($aktplanet['f'.$id] <= 0) continue;
             }
 
-            echo "<tr>    			<td class=l>\n";
-            echo "    			<a href=index.php?page=infos&session=$session&gid=$id>\n";
-            echo "    			<img border='0' src=\"".UserSkin()."gebaeude/$id.gif\" align='top' width='120' height='120'>\n";
-            echo "    			</a>\n";
-            echo "    			</td>\n";
-            echo "        <td class=l><a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
+            echo "<tr>    			";
+            if ( $GlobalUser['useskin'] ) {
+                echo "                <td class=l>\n";
+                echo "    			<a href=index.php?page=infos&session=$session&gid=$id>\n";
+                echo "    			<img border='0' src=\"".UserSkin()."gebaeude/$id.gif\" align='top' width='120' height='120'>\n";
+                echo "    			</a>\n";
+                echo "    			</td>\n";
+                echo "        <td class=l >";
+            }
+            else echo "        <td class=l colspan=2>";
+            echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($aktplanet['f'.$id]) echo "</a> (в наличии ".$aktplanet['f'.$id].")";
             $m = $k = $d = $e = 0;
             ShipyardPrice ( $id, &$m, &$k, &$d, &$e );
@@ -176,7 +184,10 @@ if ( $_GET['mode'] === "Verteidigung" )
         echo "<font color=#FF0000><center>Режим отпуска минимум до  ".date ("Y-m-d H:i:s", $GlobalUser['vacation_until'])."</center></font>";
     }
     echo "<form action=index.php?page=buildings&session=$session&mode=".$_GET['mode']." method=post>";
-    echo "<table align=top><tr><td style='background-color:transparent;'>  <table width=530>          <tr> \n";
+    echo "<table align=top><tr><td style='background-color:transparent;'>  ";
+    if ( $GlobalUser['useskin'] ) echo "<table width=\"530\">\n";
+    else echo "<table width=\"468\">\n";
+    echo "          <tr> \n";
     echo "          <td class=l colspan=\"2\">Описание</td> \n";
     echo "          <td class=l><b>Кол-во</b></td> \n";
     echo "          </tr> \n\n";
@@ -190,12 +201,17 @@ if ( $_GET['mode'] === "Verteidigung" )
                 if($aktplanet['d'.$id] == 0) continue;
             }
 
-            echo "<tr>    			<td class=l>\n";
-            echo "    			<a href=index.php?page=infos&session=$session&gid=$id>\n";
-            echo "    			<img border='0' src=\"".UserSkin()."gebaeude/$id.gif\" align='top' width='120' height='120'>\n";
-            echo "    			</a>\n";
-            echo "    			</td>\n";
-            echo "        <td class=l><a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
+            echo "<tr>    			";
+            if ( $GlobalUser['useskin'] ) {
+                echo "                <td class=l>\n";
+                echo "    			<a href=index.php?page=infos&session=$session&gid=$id>\n";
+                echo "    			<img border='0' src=\"".UserSkin()."gebaeude/$id.gif\" align='top' width='120' height='120'>\n";
+                echo "    			</a>\n";
+                echo "    			</td>\n";
+                echo "        <td class=l >";
+            }
+            else echo "        <td class=l colspan=2>";
+            echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($aktplanet['d'.$id]) echo "</a> (в наличии ".$aktplanet['d'.$id].")";
             $m = $k = $d = $e = 0;
             ShipyardPrice ( $id, &$m, &$k, &$d, &$e );
@@ -249,7 +265,10 @@ if ( $_GET['mode'] === "Forschung" )
     if ( $GlobalUser['vacation'] ) {
         echo "<font color=#FF0000><center>Режим отпуска минимум до  ".date ("Y-m-d H:i:s", $GlobalUser['vacation_until'])."</center></font>";
     }
-    echo "<table align=top><tr><td style='background-color:transparent;'>  <table width=530>          <tr> \n";
+    echo "<table align=top><tr><td style='background-color:transparent;'>  ";
+    if ( $GlobalUser['useskin'] ) echo "<table width=\"530\">\n";
+    else echo "<table width=\"468\">\n";
+    echo "          <tr> \n";
     echo "          <td class=l colspan=\"2\">Описание</td> \n";
     echo "          <td class=l><b>Кол-во</b></td> \n";
     echo "          </tr> \n\n";
@@ -263,12 +282,17 @@ if ( $_GET['mode'] === "Forschung" )
             $reslab = ResearchNetwork ( $aktplanet['planet_id'], $id );
 
             $level = $GlobalUser['r'.$id]+1;
-            echo "<tr>             <td class=l>\n";
-            echo "                <a href=index.php?page=infos&session=$session&gid=$id>\n";
-            echo "                <img border='0' src=\"".UserSkin()."gebaeude/$id.gif\" align='top' width='120' height='120'>\n";
-            echo "                </a>\n";
-            echo "                </td>\n";
-            echo "        <td class=l><a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
+            echo "<tr>             ";
+            if ( $GlobalUser['useskin'] ) {
+                echo "                <td class=l>\n";
+                echo "    			<a href=index.php?page=infos&session=$session&gid=$id>\n";
+                echo "    			<img border='0' src=\"".UserSkin()."gebaeude/$id.gif\" align='top' width='120' height='120'>\n";
+                echo "    			</a>\n";
+                echo "    			</td>\n";
+                echo "        <td class=l >";
+            }
+            else echo "        <td class=l colspan=2>";
+            echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($GlobalUser['r'.$id]) echo "</a> (уровень ".$GlobalUser['r'.$id];
             if ( $id == 106 && $prem['technocrat'] ) { 
                 echo " <b><font style=\"color:lime;\">+2</font></b> <img border=\"0\" src=\"img/technokrat_ikon.gif\" alt=\"Технократ\" onmouseover=\"return overlib('<font color=white>Технократ</font>', WIDTH, 100);\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
