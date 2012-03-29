@@ -2,25 +2,10 @@
 
 require_once "loca.php";
 
-// Конфигурация сервера на котором находятся БД LOCA.
-$LocaHost = "localhost";
-$LocaUser = "root";
-$LocaPass = "qwerty";
-$LocaDB = "startpage";
-
-// Язык стартовой страницы
-$LocaLang = "ru";
-
-// Создать таблицы LOCA и добавить проект OGame Startpage.
-$res = loca_init ( $LocaHost, $LocaUser, $LocaPass, $LocaDB, $LocaLang, "OGame Startpage" );
-if ($res == false) {
-    loca_reset ( $LocaHost, $LocaUser, $LocaPass, $LocaDB );
-
-    // Добавим проект OGame Startpage
-    loca_add_project ( "OGame Startpage" );
+// Создать таблицы LOCA
 
     // "ru"
-    loca_init ( $LocaHost, $LocaUser, $LocaPass, $LocaDB, "ru", "OGame Startpage" );
+    $LocaLang = "ru";
     {
         loca_add("SERVERNAME" , "OGame Open Source");
         loca_add("SERVERADDR" , "oldogame.ru");
@@ -84,9 +69,5 @@ if ($res == false) {
         loca_add("ABOUT_TEXT9",  "Желаете потерроризировать соседей? Или хотите мстить за слабых?");
         loca_add("ABOUT_STORY",  "Тогда прочтите историю ОГейма");
     }
-    loca_close ();
-
-    loca_init ( $LocaHost, $LocaUser, $LocaPass, $LocaDB, $LocaLang, "OGame Startpage" );
-}
 
 ?>
