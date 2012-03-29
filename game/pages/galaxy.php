@@ -494,7 +494,7 @@ while ($num--)
     {
         echo "<a style=\"cursor:pointer\" onmouseover='return overlib(\"<table width=240>";
         echo "<tr><td class=c colspan=2 >Планета ".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]</td></tr>";
-        echo "<tr><th width=80 ><img src=".GetPlanetSmallImage ( UserSkin(), $planet['type'] )." height=75 width=75 /></th>";
+        echo "<tr><th width=80 ><img src=".GetPlanetSmallImage ( UserSkin(), $planet )." height=75 width=75 /></th>";
         echo "<th align=left >";
         if ($own)
         {
@@ -512,7 +512,7 @@ while ($num--)
         }
         if ($GlobalUser['admin'] >= 2) echo "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id'].">Управление планетой</a><br />";
         echo "</th></tr></table>\", STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -40 );' onmouseout=\"return nd();\">\n";
-        echo "<img src=\"".GetPlanetSmallImage ( UserSkin(), $planet['type'] )."\" height=\"30\" width=\"30\"/></a>\n";
+        echo "<img src=\"".GetPlanetSmallImage ( UserSkin(), $planet )."\" height=\"30\" width=\"30\"/></a>\n";
     }
     echo "</th>\n";
 
@@ -545,7 +545,7 @@ while ($num--)
         {
             echo "<a onmouseout=\"return nd();\" onmouseover=\"return overlib('<table width=240 ><tr>";
             echo "<td class=c colspan=2 >Луна ".$moon['name']." [".$moon['g'].":".$moon['s'].":".$moon['p']."]</td></tr>";
-            echo "<tr><th width=80 ><img src=".GetPlanetSmallImage ( UserSkin(), $moon['type'] )." height=75 width=75 alt=\'Луна (размер: ".$moon['diameter'].")\'/></th>";
+            echo "<tr><th width=80 ><img src=".GetPlanetSmallImage ( UserSkin(), $moon )." height=75 width=75 alt=\'Луна (размер: ".$moon['diameter'].")\'/></th>";
             echo "<th><table width=120 ><tr><td colspan=2 class=c >Свойства</td></tr>";
             echo "<tr><th>размер:</td><th>".nicenum($moon['diameter'])."</td></tr>";
             echo "<tr><th>температура:</td><th>".$moon['temp']."</td></tr>";
@@ -570,9 +570,9 @@ while ($num--)
             echo "</th></tr></table></tr></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -110 );\" style=\"cursor: pointer;\" \n";
             echo " href='#' onclick='doit(6, ".$moon['g'].", ".$moon['s'].", ".$moon['p'].", 3, ".$GlobalUser['maxspy'].")' \n";
             echo ">\n";
-            echo "<img width=\"22\" height=\"22\" alt=\"Луна (размер: ".$moon['diameter'].")\" src=\"".GetPlanetSmallImage ( UserSkin(), $moon['type'] )."\"/></a>\n";
+            echo "<img width=\"22\" height=\"22\" alt=\"Луна (размер: ".$moon['diameter'].")\" src=\"".GetPlanetSmallImage ( UserSkin(), $moon )."\"/></a>\n";
         }
-        else echo "<div style=\"border: 2pt solid #FF0000;\"><img src=\"".GetPlanetSmallImage ( UserSkin(), $moon['type'] )."\" alt=\"Луна (размер: ".$moon['diameter'].")\" height=\"22\" width=\"22\" onmouseover=\"return overlib('<font color=white><b>Покинута</b></font>', WIDTH, 75);\" onmouseout=\"return nd();\"/></div>\n";
+        else echo "<div style=\"border: 2pt solid #FF0000;\"><img src=\"".GetPlanetSmallImage ( UserSkin(), $moon )."\" alt=\"Луна (размер: ".$moon['diameter'].")\" height=\"22\" width=\"22\" onmouseover=\"return overlib('<font color=white><b>Покинута</b></font>', WIDTH, 75);\" onmouseout=\"return nd();\"/></div>\n";
     }
     echo "</th>\n";
 

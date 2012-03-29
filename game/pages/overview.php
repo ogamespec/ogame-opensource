@@ -134,13 +134,13 @@ if ($moonid)
 {
     $moonobj = GetPlanet ( $moonid );
     echo "<th>    ".$moonobj['name']."     <br>\n";
-    echo "<a href=\"index.php?page=overview&session=$session&cp=".$moonid."\"><img src=\"".GetPlanetSmallImage ( UserSkin (), 0 )."\" width=\"50\" alt=\"".loca("MOON")."\" height=\"50\" ></a>\n";
+    echo "<a href=\"index.php?page=overview&session=$session&cp=".$moonid."\"><img src=\"".GetPlanetSmallImage ( UserSkin (), $moonobj )."\" width=\"50\" alt=\"".loca("MOON")."\" height=\"50\" ></a>\n";
     echo "</th>\n";
 }
 else echo "<th>\n</th>\n";
 
 // Показать картинку планеты.
-echo "<th colspan=\"2\">\n<img src=\"".GetPlanetImage ( UserSkin (), $aktplanet['type'] )."\" width=\"200\" height=\"200\">\n";
+echo "<th colspan=\"2\">\n<img src=\"".GetPlanetImage ( UserSkin (), $aktplanet )."\" width=\"200\" height=\"200\">\n";
 
 $result = GetBuildQueue ( $aktplanet['planet_id'] );
 $cnt = dbrows ( $result );
@@ -167,7 +167,7 @@ for ($i=0; $i<$num; $i++)
     if ($planet['type'] == 0 || $planet['planet_id'] == $aktplanet['planet_id'] || $planet['destroyed']) { $num--; $i--; continue; }
     if (($i%2) == 0) echo "<tr>\n";
     echo "<th> ".$planet['name']."<br> <a href=\"index.php?page=overview&session=$session&cp=".$planet['planet_id']."\" title=\"".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]\">";
-    echo "<img src=\"".GetPlanetImage ( UserSkin (), $planet['type'] )."\" width=\"50\" height=\"50\" title=\"".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]\" ></a>\n";
+    echo "<img src=\"".GetPlanetImage ( UserSkin (), $planet )."\" width=\"50\" height=\"50\" title=\"".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]\" ></a>\n";
     echo "<br><center>";
     {    // Вывести текущее строительство
         $qresult = GetBuildQueue ( $planet['planet_id'] );

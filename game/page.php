@@ -3,35 +3,41 @@
 $pagetime = 0;
 
 // Получить маленькую картинку планеты.
-function GetPlanetSmallImage ($skinpath, $type)
+function GetPlanetSmallImage ($skinpath, $planet)
 {
-    if ($type == 0 || $type == 10003) return $skinpath."planeten/small/s_mond.jpg";
-    else if ($type == 10000) return $skinpath."planeten/debris.jpg";
-    else
+    if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return $skinpath."planeten/small/s_mond.jpg";
+    else if ($planet['type'] == 10000) return $skinpath."planeten/debris.jpg";    
+    else if ($planet['type'] < 10000 )
     {
-        if ($type >= 101 && $type <= 110) return sprintf ( "%splaneten/small/s_trockenplanet%02d.jpg", $skinpath, $type - 100);
-        else if ($type >= 201 && $type <= 210) return sprintf ( "%splaneten/small/s_dschjungelplanet%02d.jpg", $skinpath, $type - 200);
-        else if ($type >= 301 && $type <= 307) return sprintf ( "%splaneten/small/s_normaltempplanet%02d.jpg", $skinpath, $type - 300);
-        else if ($type >= 401 && $type <= 409) return sprintf ( "%splaneten/small/s_wasserplanet%02d.jpg", $skinpath, $type - 400);
-        else if ($type >= 501 && $type <= 510) return sprintf ( "%splaneten/small/s_eisplanet%02d.jpg", $skinpath, $type - 500);
-        else return "img/admin_planets.png";        // Специальные объекты галактики (уничтоженные планеты и пр.)
+        $p = $planet['p'];
+        $id = $planet['planet_id'] % 7 + 1;
+        if ($p <= 3) return sprintf ( "%splaneten/small/s_trockenplanet%02d.jpg", $skinpath, $id);
+        else if ($p >= 4 && $p <= 6) return sprintf ( "%splaneten/small/s_dschjungelplanet%02d.jpg", $skinpath, $id);
+        else if ($p >= 7 && $p <= 9) return sprintf ( "%splaneten/small/s_normaltempplanet%02d.jpg", $skinpath, $id);
+        else if ($p >= 10 && $p <= 12) return sprintf ( "%splaneten/small/s_wasserplanet%02d.jpg", $skinpath, $id);
+        else if ($p >= 13 && $p <= 15) return sprintf ( "%splaneten/small/s_eisplanet%02d.jpg", $skinpath, $id);
+        else return sprintf ( "%splaneten/small/s_eisplanet%02d.jpg", $skinpath, $id);
     }
+    else return "img/admin_planets.png";        // Специальные объекты галактики (уничтоженные планеты и пр.)
 }
 
 // Получить большую картинку планеты.
-function GetPlanetImage ($skinpath, $type)
+function GetPlanetImage ($skinpath, $planet)
 {
-    if ($type == 0 || $type == 10003) return $skinpath."planeten/mond.jpg";
-    else if ($type == 10000) return $skinpath."planeten/debris.jpg";
-    else
+    if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return $skinpath."planeten/mond.jpg";
+    else if ($planet['type'] == 10000) return $skinpath."planeten/debris.jpg";
+    else if ($planet['type'] < 10000 )
     {
-        if ($type >= 101 && $type <= 110) return sprintf ( "%splaneten/trockenplanet%02d.jpg", $skinpath, $type - 100);
-        else if ($type >= 201 && $type <= 210) return sprintf ( "%splaneten/dschjungelplanet%02d.jpg", $skinpath, $type - 200);
-        else if ($type >= 301 && $type <= 307) return sprintf ( "%splaneten/normaltempplanet%02d.jpg", $skinpath, $type - 300);
-        else if ($type >= 401 && $type <= 409) return sprintf ( "%splaneten/wasserplanet%02d.jpg", $skinpath, $type - 400);
-        else if ($type >= 501 && $type <= 510) return sprintf ( "%splaneten/eisplanet%02d.jpg", $skinpath, $type - 500);
-        else return "img/admin_planets.png";    // Специальные объекты галактики (уничтоженные планеты и пр.)
+        $p = $planet['p'];
+        $id = $planet['planet_id'] % 7 + 1;
+        if ($p <= 3) return sprintf ( "%splaneten/trockenplanet%02d.jpg", $skinpath, $id);
+        else if ($p >= 4 && $p <= 6) return sprintf ( "%splaneten/dschjungelplanet%02d.jpg", $skinpath, $id);
+        else if ($p >= 7 && $p <= 9) return sprintf ( "%splaneten/normaltempplanet%02d.jpg", $skinpath, $id);
+        else if ($p >= 10 && $p <= 12) return sprintf ( "%splaneten/wasserplanet%02d.jpg", $skinpath, $id);
+        else if ($p >= 13 && $p <= 15) return sprintf ( "%splaneten/eisplanet%02d.jpg", $skinpath, $id);
+        else return sprintf ( "%splaneten/eisplanet%02d.jpg", $skinpath, $id);
     }
+    else return "img/admin_planets.png";        // Специальные объекты галактики (уничтоженные планеты и пр.)
 }
 
 function UserSkin ()
@@ -136,7 +142,7 @@ function PlanetsDropList ($page)
     echo "<td class='header' style='width:5;' >\n";
     echo "<table class='header'>\n";
     echo "<tr class='header'>\n";
-    echo "<td class='header'><img src='".GetPlanetSmallImage(UserSkin(), $aktplanet['type'])."' width='50' height='50'></td>\n";
+    echo "<td class='header'><img src='".GetPlanetSmallImage(UserSkin(), $aktplanet)."' width='50' height='50'></td>\n";
     echo "<td class='header'>\n";
     echo "<table class='header'>\n";
     echo "<select size='1' onchange='haha(this)'>\n";

@@ -366,7 +366,7 @@ function Admin_Users ()
     {
         $p = dbarray ($result);
 ?>
-    <td> <img src="<?=GetPlanetSmallImage( "../evolution/", $p['type']);?>" width="32px" height="32px"></td>
+    <td> <img src="<?=GetPlanetSmallImage( "../evolution/", $p);?>" width="32px" height="32px"></td>
     <td> <a href="index.php?page=admin&session=<?=$session;?>&mode=Planets&cp=<?=$p['planet_id'];?>"> <?=$p['name'];?> </a>
             [<a href="index.php?page=galaxy&session=<?=$session;?>&galaxy=<?=$p['g'];?>&system=<?=$p['s'];?>"><?=$p['g'];?>:<?=$p['s'];?>:<?=$p['p'];?></a>] </td>
 <?
