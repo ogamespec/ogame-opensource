@@ -30,7 +30,7 @@ function PageAlly_Settings ()
         if ( $_GET['a'] == 11 && $_GET['d'] == 1 )        // Изменить тексты
         {
             $ally_id = $ally['ally_id'];
-            $insertapp = $_POST['bewforce'] & 1;
+            $insertapp = intval($_POST['bewforce']) & 1;
 
             $text = str_replace ( '\"', "&quot;", $_POST['text'] );
             $text = str_replace ( '\'', "&rsquo;", $text );
@@ -47,15 +47,18 @@ function PageAlly_Settings ()
         if ( $_GET['a'] == 11 && $_GET['d'] == 2 )        // Изменить установки
         {
             $ally_id = $ally['ally_id'];
-            $query = "UPDATE ".$db_prefix."ally SET open = " . ($_POST['bew'] == 0 ? 1 : 0);
+            $query = "UPDATE ".$db_prefix."ally SET open = " . (intval($_POST['bew']) == 0 ? 1 : 0);
             $query .= ", homepage = '".$_POST['hp']."'";
             $query .= ", imglogo = '".$_POST['logo']."'";
             $query .= " WHERE ally_id = $ally_id";
             dbquery ($query);
 
             if ($_POST['fname'] !== "") {    // Название ранга основателя
-                $query = "UPDATE ".$db_prefix."allyranks SET name = '".$_POST['fname']."' WHERE ally_id = $ally_id AND rank_id = 0";
-                dbquery ($query);
+                if ( !preg_match ("/^[a-zA-Z0-9\.\_\-]+$/", $_POST['fname'] ) ) $AllianzenError = "<center>\nРанг содержит особые символы<br></center>";
+                else {
+                    $query = "UPDATE ".$db_prefix."allyranks SET name = '".$_POST['fname']."' WHERE ally_id = $ally_id AND rank_id = 0";
+                    dbquery ($query);
+                }
             }
             
             $ally = LoadAlly ($ally['ally_id']);
@@ -75,7 +78,7 @@ function PageAlly_Settings ()
 <a href="index.php?page=allianzen&session=<?=$session;?>&a=10"><img src="<?=UserSkin();?>pic/appwiz.gif" border=0 alt="Изменить название альянса (только 1 раз в неделю)"></a>
 </table><br>
 
-<form action="index.php?page=allianzen&session=<?=$session;?>&a=11&d=1&t=<?=$_GET['t'];?>" method=POST>
+<form action="index.php?page=allianzen&session=<?=$session;?>&a=11&d=1&t=<?=intval($_GET['t']);?>" method=POST>
 <table width=519>
 <tr><td class=c colspan=3>Редактировать текст</td></tr>
 <tr>

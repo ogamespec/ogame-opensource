@@ -37,12 +37,12 @@ if (
     !key_exists ( "shipcount", $_POST ) 
  )  AjaxSendError ();
 
-$order = $_POST['order'];
-$galaxy = $_POST['galaxy'];
-$system = $_POST['system'];
-$planet = $_POST['planet'];
-$planettype = $_POST['planettype'];
-$shipcount = abs ($_POST['shipcount']);
+$order = intval($_POST['order']);
+$galaxy = intval($_POST['galaxy']);
+$system = intval($_POST['system']);
+$planet = intval($_POST['planet']);
+$planettype = intval($_POST['planettype']);
+$shipcount = abs (intval($_POST['shipcount']));
 $speed = 1;
 
 // Проверить параметры.

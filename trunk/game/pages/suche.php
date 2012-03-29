@@ -6,7 +6,7 @@ if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -21,10 +21,19 @@ PageHeader ("suche");
 $SearchResult = "";
 $searchtext = "";
 
-// Вырезать из строки поиска всякие инжекции.
-function SecureText ( $text, $type )
+// Вырезать из строки всякие инжекции.
+function SecureText ( $text )
 {
-    return $text;
+    $search = array ( "'<script[^>]*?>.*?</script>'si",  // Вырезает javaScript
+                      "'<[\/\!]*?[^<>]*?>'si",           // Вырезает HTML-теги
+                      "'([\r\n])[\s]+'" );             // Вырезает пробельные символы
+    $replace = array ("", "", "\\1", "\\1" );
+    $str = preg_replace($search, $replace, $text);
+    $str = str_replace ("`", "", $str);
+    $str = str_replace ("'", "", $str);
+    $str = str_replace ("\"", "", $str);
+    $str = str_replace ("%0", "", $str);
+    return $str;
 }
 
 function search_selected ( $opt )
@@ -35,7 +44,7 @@ function search_selected ( $opt )
 
 if ( method () === "POST" )
 {
-    $searchtext = SecureText ( $_POST['searchtext'], $_POST['type'] );
+    $searchtext = SecureText ( $_POST['searchtext'] );
 
     $query = "";
     if ( $_POST['type'] === "playername" ) $query = "SELECT * FROM ".$db_prefix."users WHERE oname LIKE '".$searchtext."%' LIMIT 25";

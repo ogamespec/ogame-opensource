@@ -10,7 +10,7 @@ if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -28,16 +28,16 @@ echo "<center>\n";
 
 $fleetmap = array ( 215, 214, 213, 211, 210, 209, 208, 207, 206, 205, 204, 203, 202 );
 
-if ( key_exists ( 'qm', $_POST) ) $source_id = $_POST['qm'];
+if ( key_exists ( 'qm', $_POST) ) $source_id = intval($_POST['qm']);
 else $source_id = 0;
-if ( key_exists ( 'zm', $_POST) ) $target_id = $_POST['zm'];
+if ( key_exists ( 'zm', $_POST) ) $target_id = intval($_POST['zm']);
 else $target_id = 0;
 
 $total = 0;
 foreach ( $fleetmap as $i=>$gid)
 {
     if ( !key_exists ( "c$gid", $_POST) )  $_POST["c$gid"] = 0;
-    $total += floor (abs ($_POST["c$gid"]));
+    $total += floor (abs (intval($_POST["c$gid"])));
 }
 
 $source = GetPlanet ( $source_id );
@@ -69,7 +69,7 @@ if ( $GateError === "" )
     $fleet = array ();
     foreach ( $fleetmap as $i=>$gid)
     {
-        $amount = floor (abs($_POST["c$gid"]));
+        $amount = floor (abs(intval($_POST["c$gid"])));
         if ( $amount > $source["f$gid"] ) 
         {
             $GateError .= "<center>\nНедостаточно кораблей в наличии.<br></center>\n";

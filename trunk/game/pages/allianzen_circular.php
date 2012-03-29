@@ -19,7 +19,7 @@ function AllyPage_CircularMessage ()
             $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
             return;
         }
-        $rank_id = $_POST['r'];
+        $rank_id = intval($_POST['r']);
         if ( $rank_id == 0 ) $query = "SELECT * FROM ".$db_prefix."users WHERE ally_id = $ally_id";
         else $query = "SELECT * FROM ".$db_prefix."users WHERE ally_id = $ally_id AND allyrank = $rank_id";
         $result = dbquery ($query);

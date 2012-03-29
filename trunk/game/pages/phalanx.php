@@ -8,7 +8,7 @@ loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "technames", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -68,7 +68,7 @@ require_once "phalanx_events.php";
 
 <?php
 
-    $target = GetPlanet ( $_GET['spid'] );
+    $target = GetPlanet ( intval($_GET['spid']) );
 
     $outofrange = false;                    // Проверить радиус фаланги
     if ( $aktplanet['g'] != $target['g'] || $aktplanet["b42"] <= 0 )  $outofrange = true;

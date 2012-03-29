@@ -10,7 +10,7 @@ loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "technames", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -30,10 +30,10 @@ function empty_row ($p)
 // Ракетная атака.
 if ( method () === "POST" && $_POST['aktion'] === "Атаковать" )
 {
-    $amount = $_POST['anz'];        // Количество ракет
-    $type = $_POST['pziel'];        // Основная цель (0-все)
+    $amount = intval($_POST['anz']);        // Количество ракет
+    $type = intval($_POST['pziel']);        // Основная цель (0-все)
     $origin = $aktplanet;
-    $target = GetPlanet ($_GET['pdd']);
+    $target = GetPlanet (intval($_GET['pdd']));
     $target_user = LoadUser ($target['owner_id']);
     $dist = abs ($origin['s'] - $target['s']);
     $ipm_radius = max (0, 5 * $GlobalUser['r117'] - 1);
@@ -63,17 +63,17 @@ if ( method () === "POST" && $_POST['aktion'] === "Атаковать" )
 }
 
 // Выбрать солнечную систему.
-if ( key_exists ('session', $_POST)) $coord_g = $_POST['galaxy'];
-else if ( key_exists ('galaxy', $_GET)) $coord_g = $_GET['galaxy'];
-else if ( key_exists ('p1', $_GET)) $coord_g = $_GET['p1'];
+if ( key_exists ('session', $_POST)) $coord_g = intval($_POST['galaxy']);
+else if ( key_exists ('galaxy', $_GET)) $coord_g = intval($_GET['galaxy']);
+else if ( key_exists ('p1', $_GET)) $coord_g = intval($_GET['p1']);
 else $coord_g = $aktplanet['g'];
-if ( key_exists ('session', $_POST)) $coord_s = $_POST['system'];
-else if ( key_exists ('system', $_GET)) $coord_s = $_GET['system'];
-else if ( key_exists ('p2', $_GET)) $coord_s = $_GET['p2'];
+if ( key_exists ('session', $_POST)) $coord_s = intval($_POST['system']);
+else if ( key_exists ('system', $_GET)) $coord_s = intval($_GET['system']);
+else if ( key_exists ('p2', $_GET)) $coord_s = intval($_GET['p2']);
 else $coord_s = $aktplanet['s'];
 if ( key_exists ('session', $_POST)) $coord_p = 0;
-else if ( key_exists ('position', $_GET)) $coord_p = $_GET['position'];
-else if ( key_exists ('p3', $_GET)) $coord_p = $_GET['p3'];
+else if ( key_exists ('position', $_GET)) $coord_p = intval($_GET['position']);
+else if ( key_exists ('p3', $_GET)) $coord_p = intval($_GET['p3']);
 else $coord_p = $aktplanet['p'];
 
 if ($coord_g < 1 ) $coord_g = 1;
@@ -413,11 +413,11 @@ echo "</form>\n";
 
     if ($_GET['mode'] == 1) {
 
-        $target = GetPlanet ( $_GET['pdd'] );
+        $target = GetPlanet ( intval($_GET['pdd']) );
 
 ?>
 
-   <form action="index.php?page=galaxy&session=<?=$session;?>&p1=<?=$coord_g;?>&p2=<?=$coord_s;?>&p3=<?=$coord_p;?>&zp=<?=$_GET['zp'];?>&pdd=<?=$_GET['pdd'];?>"  method="POST">   <tr>
+   <form action="index.php?page=galaxy&session=<?=$session;?>&p1=<?=$coord_g;?>&p2=<?=$coord_s;?>&p3=<?=$coord_p;?>&zp=<?=intval($_GET['zp']);?>&pdd=<?=intval($_GET['pdd']);?>"  method="POST">   <tr>
    <table border="0">
     <tr>
      <td class="c" colspan="2">

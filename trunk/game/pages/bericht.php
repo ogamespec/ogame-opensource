@@ -3,7 +3,7 @@
 SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -32,7 +32,7 @@ $session = $_GET['session'];
     <td>
 
 <?php
-    $msg = LoadMessage ( $_GET['bericht'] );
+    $msg = LoadMessage ( intval($_GET['bericht']) );
     if ( $msg['owner_id'] == $GlobalUser['player_id'] ) echo $msg['text'];
 ?>
     

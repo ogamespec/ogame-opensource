@@ -11,7 +11,7 @@ if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -121,7 +121,7 @@ if ( method () === "POST" )
                        floor ( str_replace ( ".", "", $_POST['3_value'] ) * $GlobalUser['rate_m'] / $GlobalUser['rate_d'] );
                 $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
                 dbquery ( $query );
-                $query = "UPDATE ".$db_prefix."planets SET m = m - '".$met."', k = '".$crys."', d = '".$deut."' WHERE planet_id = " . $aktplanet['planet_id'];
+                $query = "UPDATE ".$db_prefix."planets SET m = m - '".intval($met)."', k = '".intval($crys)."', d = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
                 dbquery ( $query );
                 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
                 $GlobalUser['trader'] = 0;
@@ -135,7 +135,7 @@ if ( method () === "POST" )
                         floor ( str_replace ( ".", "", $_POST['3_value'] ) * $GlobalUser['rate_k'] / $GlobalUser['rate_d'] );
                 $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
                 dbquery ( $query );
-                $query = "UPDATE ".$db_prefix."planets SET k = k - '".$crys."', m = '".$met."', d = '".$deut."' WHERE planet_id = " . $aktplanet['planet_id'];
+                $query = "UPDATE ".$db_prefix."planets SET k = k - '".intval($crys)."', m = '".intval($met)."', d = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
                 dbquery ( $query );
                 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
                 $GlobalUser['trader'] = 0;
@@ -149,7 +149,7 @@ if ( method () === "POST" )
                         floor ( str_replace ( ".", "", $_POST['2_value'] ) * $GlobalUser['rate_d'] / $GlobalUser['rate_k'] );
                 $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
                 dbquery ( $query );
-                $query = "UPDATE ".$db_prefix."planets SET d = d - '".$deut."', k = '".$crys."', m = '".$met."' WHERE planet_id = " . $aktplanet['planet_id'];
+                $query = "UPDATE ".$db_prefix."planets SET d = d - '".intval($deut)."', k = '".intval($crys)."', m = '".intval($met)."' WHERE planet_id = " . $aktplanet['planet_id'];
                 dbquery ( $query );
                 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
                 $GlobalUser['trader'] = 0;

@@ -10,7 +10,7 @@ loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "technames", $GlobalUser['lang'] );
 loca_add ( "techshort", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval ($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
@@ -52,7 +52,7 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             $v = min ( $cm, min ($ck, $cd) );
             if ( $value > $v ) $value = $v;
 
-            AddShipyard ( $GlobalUser['player_id'], $aktplanet['planet_id'], $gid, $value );
+            AddShipyard ( $GlobalUser['player_id'], $aktplanet['planet_id'], intval ($gid), intval ($value) );
             $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // обновить состояние планеты.
         }
     }
@@ -66,7 +66,7 @@ if ( method () === "GET"  && !$GlobalUser['vacation'] )
 		$resqueue = dbarray ($result);
 		if ( $resqueue == null )		// Исследование не ведется (запустить)
 		{
-			if ( key_exists ( 'bau', $_GET ) ) StartResearch ( $GlobalUser['player_id'], $aktplanet['planet_id'], $_GET['bau'] );
+			if ( key_exists ( 'bau', $_GET ) ) StartResearch ( $GlobalUser['player_id'], $aktplanet['planet_id'], intval ($_GET['bau']) );
                   $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // обновить состояние планеты.
 		}
 		else	// Ведется исследования (отменить)

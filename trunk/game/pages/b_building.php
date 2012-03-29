@@ -10,15 +10,15 @@ loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "technames", $GlobalUser['lang'] );
 loca_add ( "techshort", $GlobalUser['lang'] );
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], $_GET['cp']);
+if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], intval ($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 
 // Обработка параметров.
 if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] )
 {
-    if ( $_GET['modus'] === 'add' ) BuildEnque ( $_GET['planet'], $_GET['techid'], 0 );
-    else if ( $_GET['modus'] === 'destroy' ) BuildEnque ( $_GET['planet'], $_GET['techid'], 1 );
-    else if ( $_GET['modus'] === 'remove' ) BuildDeque ( $_GET['planet'], $_GET['listid'] );
+    if ( $_GET['modus'] === 'add' ) BuildEnque ( intval ($_GET['planet']), intval ($_GET['techid']), 0 );
+    else if ( $_GET['modus'] === 'destroy' ) BuildEnque ( intval ($_GET['planet']), intval ($_GET['techid']), 1 );
+    else if ( $_GET['modus'] === 'remove' ) BuildDeque ( intval ($_GET['planet']), intval ($_GET['listid']) );
 }
 
 $now = time();
