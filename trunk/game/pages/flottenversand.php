@@ -4,6 +4,8 @@
 // Если флот отправлен успешно - вывести краткую информацию, иначе вывести ошибку.
 // Через 3 секунды делается редирект на первую страницу отправки флота.
 
+$BlockAttack = 0;
+
 /*
 Список типов заданий:
 1 - Атака
@@ -171,8 +173,7 @@ switch ( $order )
         if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
         else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
         else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Невозможно напасть на собственную планету!" );
-
-        //FleetError ( "Запрет на атаки до #1" );
+        else if ($BlockAttack) FleetError ( "Запрет на атаки до #1" );
         break;
 
     case '2':        // Совместная атака
@@ -186,10 +187,8 @@ switch ( $order )
         else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Невозможно напасть на собственную планету!" );
         else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
         else if ( $flighttime > $acs_flighttime * 1.3 ) FleetError ( "Вы слишком медленны, чтобы присоединиться к этому флоту" );
+        else if ($BlockAttack) FleetError ( "Запрет на атаки до #1" );
 //Атаковать флоты (>16 флотов нельзя)
-//Запрет на атаки до #1
-
-        //FleetError ( "Запрет на атаки до #1" );
         break;
 
     case '3':        // Транспорт
@@ -212,8 +211,7 @@ switch ( $order )
         if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Нельзя шпионить на собственной планете!" );
         if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "На этой планете нельзя шпионить из-за защиты для новичков!" );
         if ( $fleet[210] == 0 ) FleetError ( "Для шпионажа необходимы шпионские зонды." );
-
-        //FleetError ( "Запрет на атаки до #1" );
+        if ($BlockAttack) FleetError ( "Запрет на атаки до #1" );
         break;
 
     case '7':        // Колонизировать
@@ -234,8 +232,7 @@ switch ( $order )
     case '9':        // Уничтожить
         if ( $fleet[214] == 0 ) FleetError ( "Для уничтожения луны необходима звезда смерти." );
         else if ($target['type'] != 0 ) FleetError ( "Уничтожать можно только луны!" );
-
-        //FleetError ( "Запрет на атаки до #1" );
+        else if ($BlockAttack) FleetError ( "Запрет на атаки до #1" );
         break;
 
     case '15':       // Экспедиция
