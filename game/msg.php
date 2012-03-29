@@ -43,6 +43,10 @@ function DeleteExpiredMessages ($player_id)
     $now = time ();
     $hours24 = 60 * 60 * 24;
 
+    // Не удалять сообщения администрации.
+    $user = LoadUser ($player_id);
+    if ($user['admin'] > 0 ) return;
+
     $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id";
     $result = dbquery ($query);
     $num = dbrows ($result);
