@@ -491,4 +491,45 @@ function AdminPlanetCoord ($p)
     return "[<a href=\"index.php?page=galaxy&session=$session&galaxy=".$p['g']."&system=".$p['s']."\">".$p['g'].":".$p['s'].":".$p['p']."</a>]";
 }
 
+// Создать главную планету, вернуть ID созданной планеты
+function CreateHomePlanet ($player_id)
+{
+    global $db_prefix;
+    $ss = 15;
+    $uni = LoadUniverse ();
+
+    $ppg = $ss * $uni['systems'];        // количество планет в галактике
+
+    $sg = 1;        // стартовая галактика для регистрации
+    $planet = array ();
+    for ( $i=0; $i<($sg-1)*$ppg; $i++) $planet[$i] = 1;
+    for ( $i; $i<$uni['galaxies']*$ppg; $i++) $planet[$i] = 0;
+
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g >= $sg AND p <= $ss AND ((type > 0 AND type < 10000) OR type = 10001 OR type = 10004) ORDER BY g, s, p";
+    $result = dbquery ($query);
+    $rows = dbrows ( $result );
+    while ($rows--)
+    {
+        $destination = dbarray ($result);
+        $d = ( ($destination['g'] - 1) * $ppg ) + ($destination['s'] - 1) * $ss + $destination['p'] - 1;
+        $planet[$d] = 1;
+    }
+
+    $d = ($sg - 1) * $ppg;
+    while ($d < $ppg*9) 
+    {
+        $g = floor ( $d / $ppg ) + 1;
+        $dd = $d - ($g - 1) * $ppg;
+        $s = floor ($dd/$ss) + 1;
+        $p = $dd % $ss + 1;
+
+        if ( !$planet[floor($d)] && $g>=1 && $p>3 && $p<13 ) {
+            return CreatePlanet ( $g, $s, $p, $player_id, 0);
+        }
+        $d += 1.3;
+    }
+
+    Error ( "No more planets!!!" );
+}
+
 ?>
