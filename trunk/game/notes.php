@@ -14,18 +14,22 @@
 function LoadNote ( $player_id, $note_id )
 {
     global $db_prefix;    
-    $query = "SELECT * FROM ".$db_prefix."notes WHERE owner_id = $player_id AND note_id = $note_id";
+    $query = "SELECT * FROM ".$db_prefix."notes WHERE owner_id = $player_id AND note_id = $note_id LIMIT 1";
     $result = dbquery ($query);
     return dbarray ($result);
 }
 
 function AddNote ( $player_id, $subj, $text, $prio )
 {
-    global $db_prefix;
+    global $db_prefix, $loca_lang;
+
+    $user = LoadPlayer ($player_id);
+    $loca_lang = $user['lang'];
+    loca_add ( "notes", $user['lang'] );
 
     // Проверить параметры.
-    if ($subj === "") $subj = "без темы";
-    if ($text === "") $text = "пусто";
+    if ($subj === "") $subj = loca ("NOTE_NO_SUBJ");
+    if ($text === "") $text = loca ("NOTE_NO_TEXT");
     $text = mb_substr ($text, 0, 5000, "UTF-8");
     $subj = mb_substr ($subj, 0, 30, "UTF-8");
     if ($prio < 0) $prio = 0;
@@ -38,11 +42,19 @@ function AddNote ( $player_id, $subj, $text, $prio )
 
 function UpdateNote ( $player_id, $note_id, $subj, $text, $prio )
 {
-    global $db_prefix;
+    global $db_prefix, $loca_lang;
+
+    // Чужие заметки трогать нельзя
+    $note = LoadNote ($note_id);
+    if ( $note['owner_id'] != $player_id ) return;
+
+    $user = LoadPlayer ($player_id);
+    $loca_lang = $user['lang'];
+    loca_add ( "notes", $user['lang'] );
 
     // Проверить параметры.
-    if ($subj === "") $subj = "без темы";
-    if ($text === "") $text = "пусто";
+    if ($subj === "") $subj = loca ("NOTE_NO_SUBJ");
+    if ($text === "") $text = loca ("NOTE_NO_TEXT");
     $text = mb_substr ($text, 0, 5000, "UTF-8");
     $subj = mb_substr ($subj, 0, 30, "UTF-8");
     if ($prio < 0) $prio = 0;
@@ -55,6 +67,11 @@ function UpdateNote ( $player_id, $note_id, $subj, $text, $prio )
 function DelNote ( $player_id, $note_id )
 {
     global $db_prefix;
+
+    // Чужие заметки трогать нельзя
+    $note = LoadNote ($note_id);
+    if ( $note['owner_id'] != $player_id ) return;
+
     $query = "DELETE FROM ".$db_prefix."notes WHERE owner_id = $player_id AND note_id = $note_id";
     dbquery ($query);
 }
