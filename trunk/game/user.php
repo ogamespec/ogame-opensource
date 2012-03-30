@@ -184,23 +184,7 @@ function CreateUser ( $name, $pass, $email)
     LogIPAddress ( $ip, $id, 1 );
 
     // Создать Главную планету.
-    // 1. g = s = 1, p = 4.
-    // 2. Если p >= 12: s = s + 1, p = 4. Если s == 500: g = g + 1, s = 1. (Перейти на следующую систему/галактику)
-    // 3. Если позиция не занята - записать [g:s:p] как Главную планету новому пользователю.
-    // 4. p = p + 1 или 2. Перейти на 2.
-    $g = $s = 1; $p = 3;
-    while (1)
-    {
-        $p += rand (1, 2);
-        if ( $p >= 12) {
-            $s++; $p = 4;
-            if ($s == 500) { $g++; $s = 1; }
-        }
-        $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND type <> 0";
-        $result = dbquery ($query);
-        if (dbrows ($result) == 0) break;
-    }
-    $homeplanet = CreatePlanet ( $g, $s, $p, $id, 0);
+    $homeplanet = CreateHomePlanet ($id);
 
     $query = "UPDATE ".$db_prefix."users SET hplanetid = $homeplanet, aktplanet = $homeplanet WHERE player_id = $id;";
     dbquery ( $query );
