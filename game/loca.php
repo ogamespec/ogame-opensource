@@ -4,37 +4,37 @@
 
 // Список языков
 $Languages = array ( 
-    'ae' => "اللغة العربية", 
-    'ar' => "Español", 
-    'ba' => "Босански", 
-    'bg' => "Български", 
-    'cn' => "中文", 
-    'cz' => "Český", 
+#    'ae' => "اللغة العربية", 
+#    'ar' => "Español", 
+#    'ba' => "Босански", 
+#    'bg' => "Български", 
+#    'cn' => "中文", 
+#    'cz' => "Český", 
     'de' => "Deutsch", 
-    'dk' => "Dansk", 
+#    'dk' => "Dansk", 
     'en' => "English", 
-    'es' => "Español", 
-    'fi' => "Suomi", 
-    'fr' => "Français", 
-    'gr' => "Ελληνικά", 
-    'hr' => "Hrvatski", 
-    'hu' => "Magyar", 
-    'it' => "Italiano", 
-    'jp' => "日本語", 
-    'lt' => "Lietuvių", 
-    'lv' => "Latviešu", 
-    'nl' => "Nederlandse", 
-    'no' => "Norsk", 
-    'pl' => "Polski", 
-    'pt' => "Português", 
-    'ro' => "Română", 
-    'rs' => "Српски", 
+#    'es' => "Español", 
+#    'fi' => "Suomi", 
+#    'fr' => "Français", 
+#    'gr' => "Ελληνικά", 
+#    'hr' => "Hrvatski", 
+#    'hu' => "Magyar", 
+#    'it' => "Italiano", 
+#    'jp' => "日本語", 
+#    'lt' => "Lietuvių", 
+#    'lv' => "Latviešu", 
+#    'nl' => "Nederlandse", 
+#    'no' => "Norsk", 
+#    'pl' => "Polski", 
+#    'pt' => "Português", 
+#    'ro' => "Română", 
+#    'rs' => "Српски", 
     'ru' => "Русский", 
-    'sk' => "Slovenčina", 
-    'se' => "Svenska", 
-    'tr' => "Türkçe", 
-    'tw' => "臺灣話", 
-    'ua' => "Українська",
+#    'sk' => "Slovenčina", 
+#    'se' => "Svenska", 
+#    'tr' => "Türkçe", 
+#    'tw' => "臺灣話", 
+#    'ua' => "Українська",
 );
 
 $loca_lang = "en";        // Используемый язык. Можно менять в любое время.
@@ -67,6 +67,7 @@ function loca_add ( $section, $lang )
     else if ( $section === "empire" ) include "loca/empire.php";
     else if ( $section === "fleet" ) include "loca/fleet.php";
     else if ( $section === "overview" ) include "loca/overview.php";
+    else if ( $section === "notes" ) include "loca/notes.php";
 }
 
 ?>
