@@ -75,11 +75,30 @@ function DismissAlly ($ally_id)
 }
 
 // Перечислить всех игроков альянса.
+// Сортировка : 0 - Координаты, 1 - Имя, 2 - Статус, 3 - Очки, 4 - Вступление, 5 - Онлайн
+// Порядок : 0 - по возрастанию, 1 - по убыванию
 function EnumerateAlly ($ally_id, $sort_by=0, $order=0)
 {
     global $db_prefix;
     if ($ally_id <= 0) return NULL;
-    $query = "SELECT * FROM ".$db_prefix."users WHERE ally_id = $ally_id";
+
+    switch ( $sort_by ) 
+    {
+        case 1 : $sort = " ORDER BY oname "; break;
+        case 2 : $sort = " ORDER BY allyrank "; break;
+        case 3 : $sort = " ORDER BY score1 "; break;
+        case 4 : $sort = " ORDER BY joindate "; break;
+        case 5 : $sort = " ORDER BY lastclick "; break;
+        default : $sort = " ORDER BY player_id "; break;
+    }
+    if ( $order ) $sort .= " DESC";
+
+    $query = "SELECT u.oname, u.ally_id, u.allyrank, u.score1, u.player_id, u.hplanetid, u.joindate, u.lastclick, r.name, p.g, p.s, p.p " .
+			 "	FROM ".$db_prefix."users u " .
+			 "	LEFT  JOIN ".$db_prefix."allyranks r ON u.ally_id = r.ally_id AND u.allyrank = r.rank_id " .
+			 "  LEFT  JOIN ".$db_prefix."planets p ON u.hplanetid = p.planet_id " .
+			 "	WHERE u.ally_id = $ally_id " . $sort;
+
     $result = dbquery ($query);
     return $result;
 }

@@ -1021,7 +1021,7 @@ function EnumOwnFleetQueue ($player_id, $ipm=0)
     else
     {
         $query = "SELECT fleet_id FROM ".$db_prefix."fleet WHERE mission <> 20 AND owner_id = $player_id";
-        $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND sub_id = ANY ($query)";
+        $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND sub_id = ANY ($query) ORDER BY end ASC, prio DESC";
     }
     $result = dbquery ($query);
     return $result;

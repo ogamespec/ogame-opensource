@@ -19,22 +19,26 @@ function PageAlly_MemberList ()
     $members = CountAllyMembers ( $ally['ally_id'] );
     $now = time ();
 
+    $sort1 = intval ($_GET['sort1']);
+    $sort2 = intval ($_GET['sort2']) ^ 1;
+
 ?>
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
 <table width=519>
 <tr><td class='c' colspan='10'>список членов (Кол-во: <?=$members;?>)</td></tr>
 <tr>
     <th>N</th>
-    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=1&sort2=1">Имя</a></th>
-    <th> </th><th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=2&sort2=1">Статус</a></th>
-    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=3&sort2=1">Очки</a></th>
-    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=0&sort2=1">Координаты</a></th>
-    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=4&sort2=1">Вступление</a></th>
+    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=1&sort2=<?=$sort2;?>">Имя</a></th>
+    <th> </th><th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=2&sort2=<?=$sort2;?>">Статус</a></th>
+    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=3&sort2=<?=$sort2;?>">Очки</a></th>
+    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=0&sort2=<?=$sort2;?>">Координаты</a></th>
+    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=4&sort2=<?=$sort2;?>">Вступление</a></th>
 <?php
-    if ( $myrank['rights'] & 0x040 ) echo "    <th><a href=\"index.php?page=allianzen&session=$session&a=4&sort1=5&sort2=1\">Online</a></th></tr>\n";
+    if ( $myrank['rights'] & 0x040 ) echo "    <th><a href=\"index.php?page=allianzen&session=$session&a=4&sort1=5&sort2=".$sort2."\">Online</a></th></tr>\n";
+    if ( ($myrank['rights'] & 0x040) == 0 && $sort1 == 5 ) $sort1 = 0;
 ?>
 <?php
-    $result = EnumerateAlly ($ally['ally_id'], 0, 0);
+    $result = EnumerateAlly ($ally['ally_id'], intval ($_GET['sort1']), intval ($_GET['sort2']));
     for ($i=0; $i<$members; $i++)
     {
         $user = dbarray ($result);
@@ -109,6 +113,9 @@ function PageAlly_MemberSettings ()
     $now = time ();
     $members = CountAllyMembers ( $ally['ally_id'] );
 
+    $sort1 = intval ($_GET['sort1']);
+    $sort2 = intval ($_GET['sort2']) ^ 1;
+
 ?>
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script><br>
 <a href="index.php?page=allianzen&session=<?=$session;?>&a=5">Назад к обзору</a>
@@ -116,17 +123,17 @@ function PageAlly_MemberSettings ()
 <tr><td class='c' colspan='10'>Список членов (кол-во: <?=$members;?>)</td></tr>
 <tr>
     <th>N</th>
-    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=1&sort2=1">Имя</a></th>
+    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=1&sort2=<?=$sort2;?>">Имя</a></th>
     <th> </th>
-    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=2&sort2=1">Статус</a></th>
-    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=3&sort2=1">Очки</a></th>
-    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=0&sort2=1">Координаты</a></th>
-    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=4&sort2=1">Вступление</a></th>
-    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=5&sort2=1">Неактивный</a></th>
+    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=2&sort2=<?=$sort2;?>">Статус</a></th>
+    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=3&sort2=<?=$sort2;?>">Очки</a></th>
+    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=0&sort2=<?=$sort2;?>">Координаты</a></th>
+    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=4&sort2=<?=$sort2;?>">Вступление</a></th>
+    <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=7&sort1=5&sort2=<?=$sort2;?>">Неактивный</a></th>
     <th>Функция</th></tr>
 
 <?php
-    $result = EnumerateAlly ($ally['ally_id'], 0, 0);
+    $result = EnumerateAlly ($ally['ally_id'], intval ($_GET['sort1']), intval ($_GET['sort2']));
     for ($i=0; $i<$members; $i++)
     {
         $user = dbarray ($result);
