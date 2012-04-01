@@ -67,7 +67,7 @@ function Admin_Users ()
 
     // Обработка POST-запроса.
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 ) {
-        $player_id = $_GET['player_id'];
+        $player_id = intval ($_GET['player_id']);
         $action = $_GET['action'];
 
         if ($action === "update")        // Обновить данные пользователя.
@@ -76,7 +76,7 @@ function Admin_Users ()
 
             foreach ( $resmap as $i=>$gid)
             {
-                $query .= "r$gid = ".$_POST["r$gid"].", ";
+                $query .= "r$gid = ".intval ($_POST["r$gid"]).", ";
             }
 
             if ( $_POST['deaktjava'] === "on" ) {
@@ -99,17 +99,17 @@ function Admin_Users ()
             $query .= "sniff = ".($_POST['sniff']==="on"?1:0).", ";
             $query .= "debug = ".($_POST['debug']==="on"?1:0).", ";
 
-            $query .= "dm = '".$_POST['dm']."', ";
-            $query .= "dmfree = '".$_POST['dmfree']."', ";
+            $query .= "dm = '".intval ($_POST['dm'])."', ";
+            $query .= "dmfree = '".intval ($_POST['dmfree'])."', ";
 
-            $query .= "sortby = '".$_POST['settings_sort']."', ";
-            $query .= "sortorder = '".$_POST['settings_order']."', ";
+            $query .= "sortby = '".intval ($_POST['settings_sort'])."', ";
+            $query .= "sortorder = '".intval ($_POST['settings_order'])."', ";
             $query .= "skin = '".$_POST['dpath']."', ";
             $query .= "useskin = ".($_POST['design']==="on"?1:0).", ";
             $query .= "redesign = ".($_POST['redesign']==="on"?1:0).", ";
             $query .= "deact_ip = ".($_POST['deact_ip']==="on"?1:0).", ";
-            $query .= "maxspy = '".$_POST['spio_anz']."', ";
-            $query .= "maxfleetmsg = '".$_POST['settings_fleetactions']."', ";
+            $query .= "maxspy = '".intval ($_POST['spio_anz'])."', ";
+            $query .= "maxfleetmsg = '".intval ($_POST['settings_fleetactions'])."', ";
             $query .= "lang = '".$_POST['lang']."' ";
 
             $query .= " WHERE player_id=$player_id;";
@@ -138,7 +138,7 @@ function Admin_Users ()
 
     // Обработка GET-запроса.
     if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
-        $player_id = $_GET['player_id'];
+        $player_id = intval ($_GET['player_id']);
         $action = $_GET['action'];
         $now = time();
 
@@ -166,7 +166,7 @@ function Admin_Users ()
 
     if ( key_exists("player_id", $_GET) ) {        // Информация об игроке
         InvalidateUserCache ();
-        $user = LoadUser ( $_GET['player_id'] );
+        $user = LoadUser ( intval ($_GET['player_id']) );
 ?>
 
     <?=AdminPanel();?>
@@ -358,7 +358,7 @@ function Admin_Users ()
     <tr><td class=c colspan=20>Список планет</td></tr>
     <tr>
 <?php
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$_GET['player_id']."' ORDER BY g ASC, s ASC, p ASC, type DESC";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".intval ($_GET['player_id'])."' ORDER BY g ASC, s ASC, p ASC, type DESC";
     $result = dbquery ($query);
     $rows = dbrows ($result);
     $counter = 0;

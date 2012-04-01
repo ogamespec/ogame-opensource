@@ -69,14 +69,14 @@ function Admin_Queue ()
         }
 
         if ( key_exists ( "order_end", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Завершить задание
-            $id = $_POST['order_end'];
+            $id = intval ($_POST['order_end']);
             $now = time ();
             $query = "UPDATE ".$db_prefix."queue SET end=$now WHERE task_id=$id";
             dbquery ( $query );
         }
 
         if ( key_exists ( "order_remove", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Удалить задание
-            RemoveQueue ( $_POST['order_cancel'], 0 );
+            RemoveQueue ( intval ($_POST['order_cancel']), 0 );
         }
     }
 
