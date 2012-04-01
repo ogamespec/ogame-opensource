@@ -168,6 +168,25 @@ function AllyChangeName ($ally_id, $name)
     return true;
 }
 
+// Пересчёт очков альянс (на основе очков игроков)
+function RecalcAllyStats ()
+{
+    global $db_prefix;
+
+    $query = "SELECT * FROM ".$db_prefix."ally ";
+    $result = dbquery ( $query );
+    $rows = dbrows ( $result );
+    while ($rows--)
+    {
+        $ally = dbarray ( $result );
+        $query = "SELECT SUM(score1) AS sum1, SUM(score2) AS sum2, SUM(score3) AS sum3 FROM ".$db_prefix."users WHERE ally_id = " . $ally['ally_id'];
+        $res = dbquery ($query);
+        $score = dbarray ( $res );
+        $query = "UPDATE ".$db_prefix."ally SET score1 = '".$score['sum1']."', score2 = '".$score['sum2']."', score3 = '".$score['sum3']."' WHERE ally_id = " . $ally['ally_id'];
+        dbquery ( $query );
+    }
+}
+
 // Пересчитать места всех альянсов.
 function RecalcAllyRanks ()
 {

@@ -47,6 +47,7 @@ type: тип задания, каждый тип имеет свой обраб�
     "CleanPlayers"   -- удаление неактивных игроков и поставленных на удаление (1:10)
     "UpdateStats"    -- сохранение старых очков статистики
     "RecalcPoints"    -- пересчёт статистики игроков
+    "RecalcAllyPoints" -- пересчёт статистики альянсов
     "Build"          -- постройка на планете (sub_id - номер планеты, obj_id - тип постройки)
     "Demolish"       -- снос на планете (sub_id - номер планеты, obj_id - тип постройки)
     "Research"       -- исследование (sub_id - номер планеты где было запущено исследование, obj_id - тип исследования)
@@ -142,6 +143,7 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "CleanPlayers" ) Queue_CleanPlayers_End ($queue);
         else if ( $queue['type'] === "UpdateStats" ) Queue_UpdateStats_End ($queue);
         else if ( $queue['type'] === "RecalcPoints" ) Queue_RecalcPoints_End ($queue);
+        else if ( $queue['type'] === "RecalcAllyPoints" ) Queue_RecalcAllyPoints_End ($queue);
         else if ( $queue['type'] === "AllowName" ) Queue_AllowName_End ($queue);
         else if ( $queue['type'] === "Debug" ) Queue_Debug_End ($queue);
         else if ( $queue['type'] === "AI" ) Queue_Bot_End ($queue);
@@ -973,6 +975,32 @@ function Queue_CleanPlayers_End ($queue)
 
     RemoveQueue ( $queue['task_id'], 0 );
     AddCleanPlayersEvent ();
+}
+
+// Добавить задание пересчёта очков у игрока, если его ещё не существует.
+// Вызывается при логине любого игрока.
+function AddRecalcAllyPointsEvent ()
+{
+    global $db_prefix;
+
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'RecalcAllyPoints' ";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0 )
+    {
+        $now = time ();
+        $when = mktime (0, 10, 0);
+        if ( date("H") >= 0 && date ("i") >= 10 ) $when += 24*60*60;
+        $queue = array ( '', 99999, "RecalcAllyPoints", 0, 0, 0, $now, $when, 400 );
+        AddDBRow ( $queue, "queue" );
+    }
+}
+
+// Пересчитать количество набранных очков игрока и его место в статистике.
+function Queue_RecalcAllyPoints_End ($queue)
+{
+    RecalcAllyStats ();
+    RecalcAllyRanks ();
+    RemoveQueue ( $queue['task_id'], 0 );
 }
 
 // Добавить отладочное событие.
