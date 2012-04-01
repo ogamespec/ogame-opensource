@@ -21,6 +21,7 @@
         $LOCA["ru"]["FLEET_ORDER_8"] ="Переработать";
         $LOCA["ru"]["FLEET_ORDER_9"] ="Уничтожить";
         $LOCA["ru"]["FLEET_ORDER_15"] ="Экспедиция";
+        $LOCA["ru"]["FLEET_ORDER_20"] ="Ракетная атака";
         $LOCA["ru"]["FLEET_ORDER_21"] ="Атака";
     }
 

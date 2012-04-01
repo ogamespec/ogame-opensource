@@ -16,19 +16,19 @@ function Admin_Fleetlogs ()
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
     {
         if ( key_exists ( "order_2min", $_POST ) ) {        // -2 минуты до оконачания задания
-            $id = $_POST['order_2min'];
+            $id = intval ($_POST['order_2min']);
             $query = "UPDATE ".$db_prefix."queue SET end=".($now+2*60)." WHERE task_id=$id";
             dbquery ( $query );
         }
 
         if ( key_exists ( "order_end", $_POST ) ) {        // Завершить задание
-            $id = $_POST['order_end'];
+            $id = intval ($_POST['order_end']);
             $query = "UPDATE ".$db_prefix."queue SET end=$now WHERE task_id=$id";
             dbquery ( $query );
         }
 
         if ( key_exists ( "order_return", $_POST ) ) {        // Развернуть флот
-            $queue = LoadQueue ( $_POST['order_return'] );
+            $queue = LoadQueue ( intval ($_POST['order_return']) );
             RecallFleet ( $queue['sub_id'] );
         }
     }

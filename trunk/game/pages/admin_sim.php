@@ -128,8 +128,8 @@ function Admin_BattleSim ()
         $a = array ();
         $d = array ();
 
-        $anum = $_POST['anum'];
-        $dnum = $_POST['dnum'];
+        $anum = intval ($_POST['anum']);
+        $dnum = intval ($_POST['dnum']);
 
         // Атакующие 
         for ($i=0; $i<$anum; $i++)
@@ -138,9 +138,9 @@ function Admin_BattleSim ()
             if ( $_POST["a".$i."_shld"] === "" ) $_POST["a".$i."_shld"] = 0;
             if ( $_POST["a".$i."_armor"] === "" ) $_POST["a".$i."_armor"] = 0;
 
-            $a[$i]['r109'] = $_POST["a".$i."_weap"];
-            $a[$i]['r110'] = $_POST["a".$i."_shld"];
-            $a[$i]['r111'] = $_POST["a".$i."_armor"];
+            $a[$i]['r109'] = intval ($_POST["a".$i."_weap"]);
+            $a[$i]['r110'] = intval ($_POST["a".$i."_shld"]);
+            $a[$i]['r111'] = intval ($_POST["a".$i."_armor"]);
             $a[$i]['oname'] = "Attacker$i";
     
             $a[$i]['g'] = mt_rand (1, 9);
@@ -151,7 +151,7 @@ function Admin_BattleSim ()
             foreach ( $fleetmap as $n=>$gid)
             {
                 if ( $_POST["a".$i."_$gid"] === "" ) $_POST["a".$i."_$gid"] = 0;
-                $a[$i]['fleet'][$gid] = $_POST["a".$i."_$gid"];
+                $a[$i]['fleet'][$gid] = intval ($_POST["a".$i."_$gid"]);
             }
         }
 
@@ -162,9 +162,9 @@ function Admin_BattleSim ()
             if ( $_POST["d".$i."_shld"] === "" ) $_POST["d".$i."_shld"] = 0;
             if ( $_POST["d".$i."_armor"] === "" ) $_POST["d".$i."_armor"] = 0;
 
-            $d[$i]['r109'] = $_POST["d".$i."_weap"];
-            $d[$i]['r110'] = $_POST["d".$i."_shld"];
-            $d[$i]['r111'] = $_POST["d".$i."_armor"];
+            $d[$i]['r109'] = intval ($_POST["d".$i."_weap"]);
+            $d[$i]['r110'] = intval ($_POST["d".$i."_shld"]);
+            $d[$i]['r111'] = intval ($_POST["d".$i."_armor"]);
             $d[$i]['oname'] = "Defender$i";
     
             $d[$i]['g'] = mt_rand (1, 9);
@@ -175,14 +175,14 @@ function Admin_BattleSim ()
             foreach ( $fleetmap as $n=>$gid)
             {
                 if ( $_POST["d".$i."_$gid"] === "" ) $_POST["d".$i."_$gid"] = 0;
-                $d[$i]['fleet'][$gid] = $_POST["d".$i."_$gid"];
+                $d[$i]['fleet'][$gid] = intval ($_POST["d".$i."_$gid"]);
             }
 
             $d[$i]['defense'] = array ();
             foreach ( $defmap as $n=>$gid)
             {
                 if ( $_POST["d".$i."_$gid"] === "" ) $_POST["d".$i."_$gid"] = 0;
-                $d[$i]['defense'][$gid] = $_POST["d".$i."_$gid"];
+                $d[$i]['defense'][$gid] = intval ($_POST["d".$i."_$gid"]);
             }
         }
 
@@ -190,12 +190,12 @@ function Admin_BattleSim ()
         $battle_result = 0;
         if ( $_POST['debug'] === "on" ) $debug = true;
         else $debug = false;
-        if ( $_POST['rapid'] === "on" ) $rf = $_POST['rapid'];
+        if ( $_POST['rapid'] === "on" ) $rf = true;
         else $rf = 0;
         if ( $_POST['fid'] === "" ) $fid = 0;
-        else $fid = $_POST['fid'];
+        else $fid = intval ($_POST['fid']);
         if ( $_POST['did'] === "" ) $did = 0;
-        else $did = $_POST['did'];
+        else $did = intval ($_POST['did']);
         $BattleReport = SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, &$dloss );
     }
 

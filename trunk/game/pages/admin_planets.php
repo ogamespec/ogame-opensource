@@ -18,7 +18,7 @@ function Admin_Planets ()
 
     // Обработка POST-запроса.
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 ) {
-        $cp = $_GET['cp'];
+        $cp = intval ($_GET['cp']);
         $action = $_GET['action'];
         $now = time();
 
@@ -107,7 +107,7 @@ function Admin_Planets ()
 
     // Обработка GET-запроса.
     if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
-        $cp = $_GET['cp'];
+        $cp = intval ($_GET['cp']);
         $action = $_GET['action'];
         $now = time();
 
@@ -167,7 +167,7 @@ function Admin_Planets ()
     }
 
     if ( key_exists("cp", $_GET) ) {     // Информация о планете.
-        $planet = GetPlanet ( $_GET['cp'] );
+        $planet = GetPlanet ( intval ($_GET['cp']) );
         $user = LoadUser ( $planet['owner_id'] );
         $moon_id = PlanetHasMoon ( $planet['planet_id'] );
         $debris_id = HasDebris ( $planet['g'], $planet['s'], $planet['p'] );
