@@ -153,8 +153,11 @@ if ( $who === 'ally' ) {
     
     <!--  name -->
     <th>
-      
-      <a href="ainfo.php?allyid=<?=$ally['ally_id'];?>" target='_ally'>
+
+<?php
+    if ( $ally['ally_id'] == $GlobalUser['ally_id'] ) echo "      <a href=\"#\" style='color:lime;'>\n";
+    else echo "      <a href=\"ainfo.php?allyid=".$ally['ally_id']."\" target='_ally'>      \n";
+?>
  
       <?=$ally['tag'];?>    </a>
     </th>
