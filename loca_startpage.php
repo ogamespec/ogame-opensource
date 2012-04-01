@@ -12,7 +12,7 @@ require_once "loca.php";
         loca_add("BOARDADDR"  , "http://board.oldogame.ru");
 
         loca_add("META_CHARSET" , "utf-8");
-        loca_add("META_KEYWORDS" , "онлайн игра, он-лайн игра, ММОГ, MMOG, дейтерий, стратегия");
+        loca_add("META_KEYWORDS" , "ogame, old, старый дизайн, онлайн игра, он-лайн игра, ММОГ, MMOG, дейтерий, стратегия");
         loca_add("META_DESCRIPTION" , "ОГейм - легендарная космическая стратегия! Откройте вселенную вместе с тысячами игроков!");
 
         loca_add("ERROR_0" , "OK");

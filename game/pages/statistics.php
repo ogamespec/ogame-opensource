@@ -166,7 +166,7 @@ if ( $who === 'ally' ) {
     <th>
 <?php
     if ( $GlobalUser['ally_id'] == 0 ) {
-        echo "      <a href=\"index.php?page=bewerben&session=".$session."&allytag=".$ally['tag']."\">\n";
+        echo "      <a href=\"index.php?page=bewerben&session=".$session."&allyid=".$ally['ally_id']."\">\n";
         echo "        <img src=\"".UserSkin()."/img/m.gif\" border=\"0\" alt=\"Написать сообщение\" />\n";
         echo "      </a>\n";
     }
