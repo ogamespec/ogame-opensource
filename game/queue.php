@@ -76,7 +76,7 @@ prio: приоритет события, используется для соб�
 // Добавить задание в очередь. Возвращает ID добавленного задания.
 function AddQueue ($owner_id, $type, $sub_id, $obj_id, $level, $now, $seconds, $prio=0)
 {
-    $queue = array ( '', $owner_id, $type, $sub_id, $obj_id, $level, $now, $now+$seconds, $prio );
+    $queue = array ( null, $owner_id, $type, $sub_id, $obj_id, $level, $now, $now+$seconds, $prio );
     $id = AddDBRow ( $queue, "queue" );
     return $id;
 }
@@ -743,7 +743,7 @@ function AddRecalcPointsEvent ($player_id)
         $now = time ();
         $when = mktime (0, 10, 0);
         if ( date("H") >= 0 && date ("i") >= 10 ) $when += 24*60*60;
-        $queue = array ( '', $player_id, "RecalcPoints", 0, 0, 0, $now, $when, 500 );
+        $queue = array ( null, $player_id, "RecalcPoints", 0, 0, 0, $now, $when, 500 );
         AddDBRow ( $queue, "queue" );
     }
 }
@@ -777,7 +777,7 @@ function AddAllowNameEvent ($player_id)
     {
         $now = time ();
         $when = $now + 7 * 24 * 60 * 60;
-        $queue = array ( '', $player_id, "AllowName", 0, 0, 0, $now, $when, 0 );
+        $queue = array ( null, $player_id, "AllowName", 0, 0, 0, $now, $when, 0 );
         $id = AddDBRow ( $queue, "queue" );
         $query = "UPDATE ".$db_prefix."users SET name_changed = 1, name_until = $when WHERE player_id = $player_id";
         dbquery ($query);
@@ -816,7 +816,7 @@ function AddUpdateStatsEvent ($now=0)
         else if ( $hours >= 16 && $hours < 20 ) $when = mktime ( 20, 5, 0 );
         else $when = mktime ( 8, 5, 0, $today['mon'], $today['mday'] + 1 );
 
-        $queue = array ( '', 99999, "UpdateStats", 0, 0, 0, $now, $when, 510 );
+        $queue = array ( null, 99999, "UpdateStats", 0, 0, 0, $now, $when, 510 );
         AddDBRow ( $queue, "queue" );
     }
 }
@@ -850,7 +850,7 @@ function AddReloginEvent ()
         $now = time ();
         $when = mktime (3, 0, 0);
         if ( date("H") >= 3 ) $when += 24*60*60;
-        $queue = array ( '', 99999, "UnloadAll", 0, 0, 0, $now, $when, 777 );
+        $queue = array ( null, 99999, "UnloadAll", 0, 0, 0, $now, $when, 777 );
         $id = AddDBRow ( $queue, "queue" );
     }
 }
@@ -882,7 +882,7 @@ function AddCleanDebrisEvent ()
         $now = time ();
         $week = mktime(0, 0, 0, date('m'), date('d')-date('w'), date('Y')) + 24 * 60 * 60;
         $when = $week + 7 * 24 * 60 * 60 + 10 * 60;
-        $queue = array ( '', 99999, "CleanDebris", 0, 0, 0, $now, $when, 600 );
+        $queue = array ( null, 99999, "CleanDebris", 0, 0, 0, $now, $when, 600 );
         $id = AddDBRow ( $queue, "queue" );
     }
 }
@@ -913,7 +913,7 @@ function AddCleanPlanetsEvent ()
         $now = time ();
         $when = mktime (1, 10, 0);
         if ( date("H") >= 1 && date("i") >= 10 ) $when += 24*60*60;
-        $queue = array ( '', 99999, "CleanPlanets", 0, 0, 0, $now, $when, 700 );
+        $queue = array ( null, 99999, "CleanPlanets", 0, 0, 0, $now, $when, 700 );
         $id = AddDBRow ( $queue, "queue" );
     }
 }
@@ -941,7 +941,7 @@ function AddCleanPlayersEvent ()
         $now = time ();
         $when = mktime (1, 10, 0);
         if ( date("H") >= 1 && date("i") >= 10 ) $when += 24*60*60;
-        $queue = array ( '', 99999, "CleanPlayers", 0, 0, 0, $now, $when, 900 );
+        $queue = array ( null, 99999, "CleanPlayers", 0, 0, 0, $now, $when, 900 );
         $id = AddDBRow ( $queue, "queue" );
     }
 }
@@ -990,7 +990,7 @@ function AddRecalcAllyPointsEvent ()
         $now = time ();
         $when = mktime (0, 10, 0);
         if ( date("H") >= 0 && date ("i") >= 10 ) $when += 24*60*60;
-        $queue = array ( '', 99999, "RecalcAllyPoints", 0, 0, 0, $now, $when, 400 );
+        $queue = array ( null, 99999, "RecalcAllyPoints", 0, 0, 0, $now, $when, 400 );
         AddDBRow ( $queue, "queue" );
     }
 }
@@ -1007,7 +1007,7 @@ function Queue_RecalcAllyPoints_End ($queue)
 function AddDebugEvent ($when)
 {
     $now = time ();
-    $queue = array ( '', 99999, "Debug", 0, 0, 0, $now, $when, 9999 );
+    $queue = array ( null, 99999, "Debug", 0, 0, 0, $now, $when, 9999 );
     $id = AddDBRow ( $queue, "queue" );
 }
 

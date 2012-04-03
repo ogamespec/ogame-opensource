@@ -89,7 +89,7 @@ function SendMessage ($player_id, $from, $subj, $text, $pm, $when=0)
     }
 
     // Добавить сообщение.
-    $msg = array( '', $player_id, $pm, $from, $subj, $text, 0, $when );
+    $msg = array( null, $player_id, $pm, $from, $subj, $text, 0, $when );
     $id = AddDBRow ( $msg, "messages" );
 
     return $id;

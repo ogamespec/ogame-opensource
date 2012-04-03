@@ -36,7 +36,7 @@ function AddNote ( $player_id, $subj, $text, $prio )
     if ($prio > 2) $prio = 2;
 
     // Записать заметку в БД.
-    $note = array( '', $player_id, $subj, $text, mb_strlen ($text, "UTF-8"), $prio, time() );
+    $note = array( null, $player_id, $subj, $text, mb_strlen ($text, "UTF-8"), $prio, time() );
     AddDBRow ( $note, "notes" );
 }
 
