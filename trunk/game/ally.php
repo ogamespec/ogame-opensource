@@ -35,7 +35,7 @@ function CreateAlly ($owner_id, $tag, $name)
     $name = mb_substr ($name, 0, 30, "UTF-8");
 
     // Добавить альянс.
-    $ally = array( '', $tag, $name, $owner_id, "", "", 1, 0, "Добро пожаловать на страничку альянса", "", "", 0, "", "", 0, 0,
+    $ally = array( null, $tag, $name, $owner_id, "", "", 1, 0, "Добро пожаловать на страничку альянса", "", "", 0, "", "", 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0 );
     $id = AddDBRow ( $ally, "ally" );
@@ -312,7 +312,7 @@ function LoadRank ($ally_id, $rank_id)
 // Добавить заявку в альянс. Возвращает порядковый номер заявки.
 function AddApplication ($ally_id, $player_id, $text)
 {
-    $app = array ( '', $ally_id, $player_id, $text, time() );
+    $app = array ( null, $ally_id, $player_id, $text, time() );
     $id = AddDBRow ( $app, "allyapps" );
     return $id;
 }
@@ -383,7 +383,7 @@ function AddBuddy ($from, $to, $text)
     if ( IsBuddy ($from, $to) ) return 0;
 
     // Добавить запрос.
-    $buddy = array( '', $from, $to, $text, 0 );
+    $buddy = array( null, $from, $to, $text, 0 );
     $id = AddDBRow ( $buddy, "buddy" );
     return $id;
 }

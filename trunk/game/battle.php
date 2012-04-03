@@ -719,7 +719,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $source .= ")\n";
     }
 
-    $battle = array ( '', $source, "" );
+    $battle = array ( null, $source, "" );
     $battle_id = AddDBRow ( $battle, "battledata" );
 
     $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
@@ -1148,7 +1148,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
         $source .= ")\n";
     }
 
-    $battle = array ( '', $source, "" );
+    $battle = array ( null, $source, "" );
     $battle_id = AddDBRow ( $battle, "battledata" );
 
     $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );

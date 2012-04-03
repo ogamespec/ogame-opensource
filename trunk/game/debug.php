@@ -13,7 +13,7 @@ function Error ($text)
 
     $now = time ();
 
-    $error = array ( '', $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], bb($text), $now );
+    $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], bb($text), $now );
     $id = AddDBRow ( $error, 'errors' );
 
     Logout ( $_GET['session'] );    // Завершить сессию.
@@ -43,7 +43,7 @@ function Debug ($message)
 
     $now = time ();
 
-    $error = array ( '', $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], bb($message), $now );
+    $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], bb($message), $now );
     $id = AddDBRow ( $error, 'debug' );
 }
 
@@ -73,7 +73,7 @@ function BrowseHistory ()
     {
         $getdata = serialize ( $_GET );
         $postdata = serialize ( $_POST );
-        $log = array ( '', $GlobalUser['player_id'], $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'], $getdata, $postdata, time() );
+        $log = array ( null, $GlobalUser['player_id'], $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'], $getdata, $postdata, time() );
         AddDBRow ( $log, 'browse' );
     }
 }
@@ -87,7 +87,7 @@ function SecurityCheck ( $match, $text, $notes )
 // Добавить IP адрес в таблицу.
 function LogIPAddress ( $ip, $user_id, $reg=0)
 {
-    $log = array ( '', $ip, $user_id, $reg, time () );
+    $log = array ( null, $ip, $user_id, $reg, time () );
     AddDBRow ( $log, 'iplogs' );
 }
 

@@ -281,7 +281,7 @@ function CreateDebris ($g, $s, $p, $owner_id)
     $debris_id = HasDebris ($g, $s, $p);
     if ($debris_id > 0 ) return $debris_id;
     $now = time();
-    $planet = array ( '', "Поле обломков", 10000, $g, $s, $p, $owner_id, 0, 0, 0, 0, $now,
+    $planet = array ( null, "Поле обломков", 10000, $g, $s, $p, $owner_id, 0, 0, 0, 0, $now,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -334,7 +334,7 @@ function GetPlanetType ($planet)
 // Создать фантом колонизации. Вернуть ID.
 function CreateColonyPhantom ($g, $s, $p, $owner_id)
 {
-    $planet = array( '', "Planet", 10002, $g, $s, $p, $owner_id, 0, 0, 0, 0, time(),
+    $planet = array( null, "Planet", 10002, $g, $s, $p, $owner_id, 0, 0, 0, 0, time(),
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -349,7 +349,7 @@ function CreateAbandonedColony ($g, $s, $p, $when)
     // Если на заданных координатах нет планеты, то добавить Покинутую колонию.
     if ( !HasPlanet ( $g, $s, $p ) )
     {
-        $planet = array( '', "Покинутая колония", 10004, $g, $s, $p, 99999, 0, 0, 0, 0, $when,
+        $planet = array( null, "Покинутая колония", 10004, $g, $s, $p, 99999, 0, 0, 0, 0, $when,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -433,7 +433,7 @@ function CreateOuterSpace ($g, $s, $p)
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 ) 
     {
-        $planet = array( '', "Бесконечные дали", 20000, $g, $s, $p, 99999, 0, 0, 0, 0, time(),
+        $planet = array( null, "Бесконечные дали", 20000, $g, $s, $p, 99999, 0, 0, 0, 0, time(),
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
