@@ -304,7 +304,7 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
     $flight_time = $seconds;
 
     // Добавить флот.
-    $fleet_obj = array ( '', $origin['owner_id'], $union_id, $m, $k, $d, $cons, $order, $origin['planet_id'], $target['planet_id'], $flight_time, $deploy_time,
+    $fleet_obj = array ( null, $origin['owner_id'], $union_id, $m, $k, $d, $cons, $order, $origin['planet_id'], $target['planet_id'], $flight_time, $deploy_time,
                          0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
     $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
@@ -312,7 +312,7 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
     $weeks = $now - 4 * (7 * 24 * 60 * 60);
     $query = "DELETE FROM ".$db_prefix."fleetlogs WHERE start < $weeks;";
     dbquery ($query);
-    $fleetlog = array ( '', $origin['owner_id'], $target['owner_id'], $union_id, $origin['m'], $origin['k'], $origin['d'], $m, $k, $d, $cons, $order, $flight_time, $deploy_time, $now, $now+$seconds, 
+    $fleetlog = array ( null, $origin['owner_id'], $target['owner_id'], $union_id, $origin['m'], $origin['k'], $origin['d'], $m, $k, $d, $cons, $order, $flight_time, $deploy_time, $now, $now+$seconds, 
                         $origin['g'], $origin['s'], $origin['p'], $origin['type'], $target['g'], $target['s'], $target['p'], $target['type'], 
                         0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
     AddDBRow ($fleetlog, 'fleetlogs');
@@ -472,7 +472,7 @@ function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
     SetPlanetDefense ( $origin['planet_id'], $origin );
 
     // Добавить ракетную атаку.
-    $fleet_obj = array ( '', $origin['owner_id'], 0, 0, 0, 0, 0, 20, $origin['planet_id'], $target['planet_id'], $seconds, 0,
+    $fleet_obj = array ( null, $origin['owner_id'], 0, 0, 0, 0, 0, 20, $origin['planet_id'], $target['planet_id'], $seconds, 0,
                          $amount, $type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
@@ -480,7 +480,7 @@ function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
     $weeks = $now - 4 * (7 * 24 * 60 * 60);
     $query = "DELETE FROM ".$db_prefix."fleetlogs WHERE start < $weeks;";
     dbquery ($query);
-    $fleetlog = array ( '', $origin['owner_id'], $target['owner_id'], 0, 0, 0, 0, 0, 0, 0, 0, 20, $seconds, 0, $now, $now+$seconds, 
+    $fleetlog = array ( null, $origin['owner_id'], $target['owner_id'], 0, 0, 0, 0, 0, 0, 0, 0, 20, $seconds, 0, $now, $now+$seconds, 
                         $origin['g'], $origin['s'], $origin['p'], $origin['type'], $target['g'], $target['s'], $target['p'], $target['type'], 
                         $amount, $type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     AddDBRow ($fleetlog, 'fleetlogs');
@@ -994,7 +994,7 @@ function CreateUnion ($fleet_id)
     if ( $target_player == $fleet_obj['owner_id'] ) return 0;
 
     // Добавить союз.
-    $union = array ( '', $fleet_id, $target_player, "", $fleet_obj['owner_id'] );
+    $union = array ( null, $fleet_id, $target_player, "", $fleet_obj['owner_id'] );
     $union_id = AddDBRow ($union, 'union');
     RenameUnion ( $union_id, "KV" . ($union_id * mt_rand (230,270) * 12345 ) );
 
