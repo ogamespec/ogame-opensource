@@ -87,7 +87,7 @@ function AddDBRow ( $row, $tabname )
     foreach ($row as $i=>$entry)
     {
         if ($i != 0) $opt .= ", ";
-        if ( $row[$i] == null) $opt .= 'NULL';
+        if ( $row[$i] == null && $i == 0 ) $opt .= 'NULL';
         else $opt .= "'".$row[$i]."'";
     }
     $opt .= ")";
