@@ -87,7 +87,8 @@ function AddDBRow ( $row, $tabname )
     foreach ($row as $i=>$entry)
     {
         if ($i != 0) $opt .= ", ";
-        $opt .= "'".$row[$i]."'";
+        if ( $row[$i] == null) $opt .= 'NULL';
+        else $opt .= "'".$row[$i]."'";
     }
     $opt .= ")";
     $query = "INSERT INTO ".$db_prefix."$tabname VALUES".$opt;
