@@ -505,7 +505,7 @@ function CreateHomePlanet ($player_id)
     for ( $i=0; $i<($sg-1)*$ppg; $i++) $planet[$i] = 1;
     for ( $i; $i<$uni['galaxies']*$ppg; $i++) $planet[$i] = 0;
 
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g >= $sg AND p <= $ss AND ((type > 0 AND type < 10000) OR type = 10001 OR type = 10004) ORDER BY g, s, p";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g >= $sg AND p <= $ss AND type <> 10002 ORDER BY g, s, p";
     $result = dbquery ($query);
     $rows = dbrows ( $result );
     while ($rows--)
