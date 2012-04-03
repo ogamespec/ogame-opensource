@@ -34,8 +34,8 @@ function Admin_Planets ()
 
             $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
             foreach ( $param as $i=>$p ) {
-                if ( $i == 0 ) $query .= "$p=".$_POST[$p];
-                else $query .= ", $p=".$_POST[$p];
+                if ( $i == 0 ) $query .= "$p=".intval($_POST[$p]);
+                else $query .= ", $p=".intval($_POST[$p]);
             }
             $query .= " WHERE planet_id=$cp;";
 
@@ -56,8 +56,8 @@ function Admin_Planets ()
                 {
                     $mquery = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
                     foreach ( $moon_param as $i=>$p ) {
-                        if ( $i == 0 ) $mquery .= "$p=".$_POST[$p];
-                        else $mquery .= ", $p=".$_POST[$p];
+                        if ( $i == 0 ) $mquery .= "$p=".intval($_POST[$p]);
+                        else $mquery .= ", $p=".intval($_POST[$p]);
                     }
                     $mquery .= " WHERE planet_id=$moon_id;";
                     dbquery ($mquery);
