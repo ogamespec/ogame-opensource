@@ -171,7 +171,7 @@ function CreateUser ( $name, $pass, $email)
     $ip = $_SERVER['REMOTE_ADDR'];
     $lang = "ru";
 
-    $user = array( '', time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, "", $email, $email,
+    $user = array( null, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, "", $email, $email,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, $ip, 0, $ack, 0, 0, 0, 0,
                         hostname() . "evolution/", 1, 0, 1, 3, $lang, 0,

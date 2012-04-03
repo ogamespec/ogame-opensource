@@ -102,12 +102,12 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
 
     // Добавить планету
     $now = time();
-    if ($moon) $planet = array( '', $name, $type, $g, $s, $p, $owner_id, $diam, $temp, 0, 1, $now,
+    if ($moon) $planet = array( null, $name, $type, $g, $s, $p, $owner_id, $diam, $temp, 0, 1, $now,
                                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                           0, 0, 0, 1, 1, 1, 1, 1, 1, $now, $now, 0, 0 );
-    else $planet = array( '', $name, $type, $g, $s, $p, $owner_id, $diam, $temp, 0, $fields, $now,
+    else $planet = array( null, $name, $type, $g, $s, $p, $owner_id, $diam, $temp, 0, $fields, $now,
                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
