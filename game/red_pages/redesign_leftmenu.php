@@ -192,6 +192,7 @@
             </a>
     </li>
 
+<? if ( $GlobalUser['admin'] > 0 ) { ?>
         <li>
         <span class="menu_icon">
                 </span>
@@ -202,6 +203,7 @@
                 <span class="textlabel">Одминко</span>
             </a>
     </li>
+<? } ?>
 
     </ul>
 
