@@ -945,7 +945,31 @@ function Queue_CleanPlanets_End ($queue)
 {
     global $db_prefix;
 
-    Debug ( "Чистка уничтоженных планет" );
+    $when = $queue['end'];
+    $queue = "SELECT * FROM ".$db_prefix."planets WHERE remove >= $when";
+    $result = dbquery ( $queue );
+    $rows = dbrows ( $result );
+    $count = 0;
+    while ( $rows-- ) 
+    {
+        $planet = dbarray ( $result );
+        $planet_id = $planet['planet_id'];
+
+        // Развернуть флоты, летящие на удаляемую планету.
+        $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = $planet_id AND mission < 100;";
+        $fleet_result = dbquery ( $query );
+        $fleets = dbrows ($fleet_result);
+        while ( $fleets-- )
+        {
+            $fleet_obj = dbarray ( $fleet_result );
+            RecallFleet ( $fleet_obj['fleet_id'], $when );
+        }
+
+        DestroyPlanet ( $planet_id );
+        $count++;
+    }
+
+    Debug ( "Чистка уничтоженных планет ($count)" );
     RemoveQueue ( $queue['task_id'], 0 );
     AddCleanPlanetsEvent ();
 }

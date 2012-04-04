@@ -94,13 +94,14 @@ if ( method() === "POST" )
 
                     if ( $RenameError === "" )
                     {
+                        $when = $now + 24*3600;
                         $moon_id = PlanetHasMoon ($planet['planet_id']);
                         if ( $moon_id )
                         {
                             $moon = GetPlanet ( $moon_id );        // Удалять только целый луны.
                             if ( $moon['type'] == 0 )
                             {
-                                $query = "UPDATE ".$db_prefix."planets SET type = 10003, owner_id = 99999, date = $now, lastakt = $now WHERE planet_id = " . $moon_id . ";";
+                                $query = "UPDATE ".$db_prefix."planets SET type = 10003, owner_id = 99999, date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $moon_id . ";";
                                 dbquery ( $query );
 
                                 // Удалить очередь заданий луны.
@@ -108,8 +109,8 @@ if ( method() === "POST" )
                                 dbquery ( $query );
                             }
                         }
-                        if ($planet['type'] == 0) $query = "UPDATE ".$db_prefix."planets SET type = 10003, owner_id = 99999, date = $now, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
-                        else $query = "UPDATE ".$db_prefix."planets SET type = 10001, owner_id = 99999, date = $now, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
+                        if ($planet['type'] == 0) $query = "UPDATE ".$db_prefix."planets SET type = 10003, owner_id = 99999, date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
+                        else $query = "UPDATE ".$db_prefix."planets SET type = 10001, owner_id = 99999, date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
                         dbquery ( $query );
 
                         // Удалить очередь заданий планеты.
@@ -119,6 +120,7 @@ if ( method() === "POST" )
 
                     // Редирект на Главную планету.
                     SelectPlanet ($GlobalUser['player_id'], $GlobalUser['hplanetid']);
+                    MyGoto ( "renameplanet" );
                 }
             }
         }

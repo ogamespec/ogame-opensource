@@ -296,7 +296,7 @@ function reset ()
         echo "<form action=\"index.php?page=admin&session=$session&mode=Planets&action=update&cp=".$planet['planet_id']."\" method=\"POST\" >\n";
         echo "<tr><td class=c colspan=2>Планета \"".$planet['name']."\" (<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>)</td>\n";
         echo "       <td class=c >Постройки</td> <td class=c >Флот</td> <td class=c >Оборона</td> </tr>\n";
-        echo "<tr><th><img src=\"".GetPlanetImage (UserSkin(), $planet)."\">";
+        echo "<tr><th><img src=\"".GetPlanetImage (UserSkin(), $planet)."\"> <br>Тип: " . $planet['type'];
         if ($planet['type'] == 10000 ) echo "<br>М: ".nicenum($planet['m'])."<br>К: ".nicenum($planet['k'])."<br>";
         echo "</th><th>";
         if ( $planet['type'] > 0 && $planet['type'] < 10000 )
@@ -361,9 +361,23 @@ function reset ()
 
         echo "</tr>\n";
 
-        echo "<tr><th>Дата создания</th><th>".date ("Y-m-d H:i:s", $planet['date'])."</th> <td colspan=10 class=c>&nbsp;</td></tr>";
-
-        echo "<tr><th>Последняя активность</th><th>".date ("Y-m-d H:i:s", $planet['lastakt'])."</th> <th colspan=3 rowspan=11 valign=top> \n";
+        echo "<tr><th>Дата создания</th><th>".date ("Y-m-d H:i:s", $planet['date'])."</th> <td colspan=10 class=c>Заметки</td></tr>";
+        echo "<tr><th>Дата удаления</th><th>".date ("Y-m-d H:i:s", $planet['remove'])."</th> <th colspan=3 rowspan=12 valign=top> ";
+?>
+        <table><tr><td>
+        Типы планет: <br>
+        0 - луна <br>
+        1 - планета <br>
+        10000 - поле обломков <br>
+        10001 - уничтоженная планета <br>
+        10002 - фантом колонизации (существует только во время полёта колонизатора) <br>
+        10003 - уничтоженная луна <br>
+        10004 - покинутая колония (создается на месте 10й колонии) <br>
+        20000 - бесконечные дали (экспедиция)
+        </td></tr></table>
+<?
+        echo "</th> </tr>";
+        echo "<tr><th>Последняя активность</th><th>".date ("Y-m-d H:i:s", $planet['lastakt'])."</th>  \n";
         echo "<input type=\"hidden\" name=\"type\" value=\"".$planet['type']."\" >\n";
         echo "</th> </tr>\n";
         echo "<tr><th>Последнее обновление</th><th>".date ("Y-m-d H:i:s", $planet['lastpeek'])."</th></tr>\n";
