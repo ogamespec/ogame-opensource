@@ -1100,8 +1100,8 @@ function AddUnionMember ($union_id, $name)
     return "";
 }
 
-// Перечислить союзы в которых состоит игрок, а также союзы, целью которых он является.
-function EnumUnion ($player_id)
+// Перечислить союзы в которых состоит игрок, а также союзы, целью которых он является (если не установлен флаг friendly).
+function EnumUnion ($player_id, $friendly=0)
 {
     global $db_prefix;
     $count = 0;
@@ -1115,7 +1115,7 @@ function EnumUnion ($player_id)
         $union['player'] = explode (",", $union['players'] );
         $union['players'] = count ($union['player']);
         for ($i=0; $i<=$union['players']; $i++) {
-            if ( $union["player"][$i] == $player_id || $union['target_player'] == $player_id ) { $unions[$count++] = $union; break; }
+            if ( $union["player"][$i] == $player_id || ( $union['target_player'] == $player_id && !$friendly )) { $unions[$count++] = $union; break; }
         }
     }
     return $unions;
