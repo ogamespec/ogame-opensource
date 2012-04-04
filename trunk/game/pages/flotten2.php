@@ -193,7 +193,7 @@ PageHeader ("flotten2");
 <?php
 
     // Список боевых союзов.
-    $unions = EnumUnion ( $GlobalUser['player_id']);
+    $unions = EnumUnion ( $GlobalUser['player_id'], 1);
     $union_count = count ($unions);
     if ( $union_count > 0 )
     {
