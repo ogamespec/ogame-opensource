@@ -2,10 +2,6 @@
 
 // Столб позора.
 
-    // Добавить пользователя на столб позора
-//    $entry = array( null, $admin_name, $user_name, $ban_when, $ban_until, $reason );
-//    AddDBRow ( $entry, "pranger" );
-
 $internal = key_exists ( 'session', $_GET );
 
 if ($internal)

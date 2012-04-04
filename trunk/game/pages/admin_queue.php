@@ -33,6 +33,8 @@ function QueueDesc ( $queue )
         case "CleanDebris": return "Чистка виртуальных ПО";
         case "CleanPlanets": return "Чистка уничтоженных планет";
         case "CleanPlayers": return "Удаление неактивных игроков и поставленных на удаление";
+        case "UnbanPlayer": return "Разбанить игрока";
+        case "AllowAttacks": return "Разрешить атаки";
         case "AI":
             $planet = GetPlanet ($sub_id);
             return "Задание бота с планеты " . AdminPlanetName ( $planet ) . ", стратегия: " . GetBotStrategy($obj_id);

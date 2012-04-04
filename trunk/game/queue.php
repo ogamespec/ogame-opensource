@@ -145,6 +145,8 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "RecalcPoints" ) Queue_RecalcPoints_End ($queue);
         else if ( $queue['type'] === "RecalcAllyPoints" ) Queue_RecalcAllyPoints_End ($queue);
         else if ( $queue['type'] === "AllowName" ) Queue_AllowName_End ($queue);
+        else if ( $queue['type'] === "UnbanPlayer" ) Queue_UnbanPlayer_End ($queue);
+        else if ( $queue['type'] === "AllowAttacks" ) Queue_AllowAttacks_End ($queue);
         else if ( $queue['type'] === "Debug" ) Queue_Debug_End ($queue);
         else if ( $queue['type'] === "AI" ) Queue_Bot_End ($queue);
 
@@ -791,6 +793,26 @@ function Queue_AllowName_End ($queue)
     global $db_prefix;
     $player_id = $queue['owner_id'];
     $query = "UPDATE ".$db_prefix."users SET name_changed = 0 WHERE player_id = $player_id";
+    dbquery ($query);
+    RemoveQueue ( $queue['task_id'], 0 );
+}
+
+// Разбанить игрока
+function Queue_UnbanPlayer_End ($queue)
+{
+    global $db_prefix;
+    $player_id = $queue['owner_id'];
+    $query = "UPDATE ".$db_prefix."users SET banned = 0, banned_until = 0 WHERE player_id = $player_id";
+    dbquery ($query);
+    RemoveQueue ( $queue['task_id'], 0 );
+}
+
+// Разрешить атаки
+function Queue_AllowAttacks_End ($queue)
+{
+    global $db_prefix;
+    $player_id = $queue['owner_id'];
+    $query = "UPDATE ".$db_prefix."users SET noattack = 0, noattack_until = 0 WHERE player_id = $player_id";
     dbquery ($query);
     RemoveQueue ( $queue['task_id'], 0 );
 }

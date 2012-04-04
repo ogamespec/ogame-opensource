@@ -719,4 +719,54 @@ function AdminUserName ($user)
     return $name;
 }
 
+// Забанить игрока.
+function BanUser ($player_id, $seconds, $vmode)
+{
+    global $db_prefix;
+    $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'UnbanPlayer' AND owner_id = $player_id";
+    dbquery ($query);
+    $now = time ();
+    $when = $now + $seconds;
+    $queue = array ( null, $player_id, "UnbanPlayer", 0, 0, 0, $now, $when, 0 );
+    $id = AddDBRow ( $queue, "queue" );
+    $query = "UPDATE ".$db_prefix."users SET banned = 1, banned_until = $when";
+    if ( $vmode ) $query .= ", vacation = 1, vacation_until = $when";
+    $query .= " WHERE player_id = $player_id";
+    dbquery ($query);
+}
+
+// Запретить атаки.
+function BanUserAttacks ($player_id, $seconds)
+{
+    global $db_prefix;
+    $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'AllowAttacks' AND owner_id = $player_id";
+    dbquery ($query);
+    $now = time ();
+    $when = $now + $seconds;
+    $queue = array ( null, $player_id, "AllowAttacks", 0, 0, 0, $now, $when, 0 );
+    $id = AddDBRow ( $queue, "queue" );
+    $query = "UPDATE ".$db_prefix."users SET noattack = 1, noattack_until = $when WHERE player_id = $player_id";
+    dbquery ($query);
+}
+
+// Разбанить игрока
+function UnbanUser ($player_id)
+{
+    global $db_prefix;
+    $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'UnbanPlayer' AND owner_id = $player_id";
+    dbquery ($query);
+    $query = "UPDATE ".$db_prefix."users SET banned = 0, banned_until = 0 WHERE player_id = $player_id";
+    dbquery ($query);
+}
+
+// Разрешить атаки
+function UnbanUserAttacks ($player_id)
+{
+    global $db_prefix;
+    $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'AllowAttacks' AND owner_id = $player_id";
+    dbquery ($query);
+    $query = "UPDATE ".$db_prefix."users SET noattack = 0, noattack_until = 0 WHERE player_id = $player_id";
+    dbquery ($query);
+}
+
 ?>
