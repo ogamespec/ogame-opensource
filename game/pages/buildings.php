@@ -66,7 +66,7 @@ if ( method () === "GET"  && !$GlobalUser['vacation'] )
 		$resqueue = dbarray ($result);
 		if ( $resqueue == null )		// Исследование не ведется (запустить)
 		{
-			if ( key_exists ( 'bau', $_GET ) ) StartResearch ( $GlobalUser['player_id'], $aktplanet['planet_id'], intval ($_GET['bau']) );
+			if ( key_exists ( 'bau', $_GET ) ) StartResearch ( $GlobalUser['player_id'], $aktplanet['planet_id'], intval ($_GET['bau']), $now );
                   $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // обновить состояние планеты.
 		}
 		else	// Ведется исследования (отменить)
