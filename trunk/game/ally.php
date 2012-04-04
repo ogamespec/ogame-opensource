@@ -181,9 +181,11 @@ function RecalcAllyStats ()
         $ally = dbarray ( $result );
         $query = "SELECT SUM(score1) AS sum1, SUM(score2) AS sum2, SUM(score3) AS sum3 FROM ".$db_prefix."users WHERE ally_id = " . $ally['ally_id'];
         $res = dbquery ($query);
-        $score = dbarray ( $res );
-        $query = "UPDATE ".$db_prefix."ally SET score1 = '".$score['sum1']."', score2 = '".$score['sum2']."', score3 = '".$score['sum3']."' WHERE ally_id = " . $ally['ally_id'];
-        dbquery ( $query );
+        if ( dbrows ($res) > 0 ) {
+            $score = dbarray ( $res );
+            $query = "UPDATE ".$db_prefix."ally SET score1 = '".intval($score['sum1'])."', score2 = '".intval($score['sum2'])."', score3 = '".intval($score['sum3'])."' WHERE ally_id = " . $ally['ally_id'];
+            dbquery ( $query );
+        }
     }
 }
 
