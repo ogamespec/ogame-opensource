@@ -98,8 +98,8 @@ if ( method () === "POST" )
             if ( $_POST['type'] === "playername" )
             {
                 $user = dbarray ( $result );
-                $homeplanet = GetPlanet ( $user['hplanetid'] );
-                $ally = LoadAlly ( $user['ally_id'] );
+                $homeplanet = GetPlanet ( intval($user['hplanetid']) );
+                $ally = LoadAlly ( intval($user['ally_id']) );
                 $name = $user['oname'];
                 $buttons = "<a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\" alt=\"Послать сообщение\" ><img src=\"".UserSkin()."/img/m.gif\" alt=\"Послать сообщение\" title=\"Послать сообщение\" /></a><a href='index.php?page=buddy&session=$session&action=7&buddy_id=".$user['player_id']."' alt='Предложение подружиться'><img src='".UserSkin()."/img/b.gif' border=0 alt='Предложение подружиться' title='Предложение подружиться'></a>";
                 $allyurl = "ainfo.php?allyid=".$user['ally_id'];
@@ -118,8 +118,8 @@ if ( method () === "POST" )
             else if ( $_POST['type'] === "planetname" )
             {
                 $planet = dbarray ( $result );
-                $user = LoadUser ( $planet['owner_id'] );
-                $ally = LoadAlly ( $user['ally_id'] );
+                $user = LoadUser ( intval($planet['owner_id']) );
+                $ally = LoadAlly ( intval($user['ally_id']) );
                 $name = $user['oname'];
                 $buttons = "<a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\" alt=\"Послать сообщение\"><img src=\"".UserSkin()."/img/m.gif\" alt=\"Послать сообщение\" title=\"Послать сообщение\" /></a><a href='index.php?page=buddy&session=$session&action=7&buddy_id=".$user['player_id']."' alt='Предложение подружиться'><img src='".UserSkin()."/img/b.gif' border=0 alt='Предложение подружиться' title='Предложение подружиться'></a>";
                 $allyurl = "ainfo.php?allyid=".$user['ally_id'];
