@@ -116,11 +116,11 @@ if ( method() === "POST" )
                         // Удалить очередь заданий планеты.
                         $query = "DELETE FROM ".$db_prefix."queue WHERE (type = 'Shipyard' OR type = 'Build' OR type = 'Demolish') AND sub_id = " . $planet['planet_id'];
                         dbquery ( $query );
-                    }
 
-                    // Редирект на Главную планету.
-                    SelectPlanet ($GlobalUser['player_id'], $GlobalUser['hplanetid']);
-                    MyGoto ( "renameplanet" );
+                        // Редирект на Главную планету.
+                        SelectPlanet ($GlobalUser['player_id'], $GlobalUser['hplanetid']);
+                        MyGoto ( "renameplanet" );
+                    }
                 }
             }
         }
