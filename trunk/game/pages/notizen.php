@@ -102,7 +102,7 @@ else
     echo "<tr>\n";
     echo "  <td class=c></td>\n";
     echo "  <td class=c>".loca("NOTE_DATE")."</td>\n";
-    echo "  <td class=c>".loca("NOTE_BACK")."</td>\n";
+    echo "  <td class=c>".loca("NOTE_SUBJ")."</td>\n";
     echo "  <td class=c>".loca("NOTE_SIZE")."</td>\n";
     echo "</tr>\n\n";
 
