@@ -946,8 +946,8 @@ function Queue_CleanPlanets_End ($queue)
     global $db_prefix;
 
     $when = $queue['end'];
-    $queue = "SELECT * FROM ".$db_prefix."planets WHERE remove >= $when";
-    $result = dbquery ( $queue );
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE remove >= $when";
+    $result = dbquery ( $query );
     $rows = dbrows ( $result );
     $count = 0;
     while ( $rows-- ) 
