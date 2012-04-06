@@ -819,84 +819,6 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     return $battle_result;
 }
 
-// Ракетная атака.
-function RocketAttack ( $fleet_id, $planet_id )
-{
-    global $UnitParam;
-
-    $fleet = LoadFleet ($fleet_id);
-    $amount = $fleet['ipm_amount'];
-    $primary = $fleet['ipm_target'];
-    if ($primary == 0) $primary = 401;
-    $origin = GetPlanet ($fleet['start_planet']);
-    $target = GetPlanet ($planet_id);
-    $origin_user = LoadUser ($origin['owner_id']);
-    $target_user = LoadUser ($target['owner_id']);
-
-    // Отбить атаку МПР перехватчиками
-    $ipm = $amount;
-    $abm = $target['d502'];
-    $ipm = max (0, $ipm - $abm);
-    $ipm_destroyed = $amount - $ipm;
-    $target['d502'] -= $ipm_destroyed;
-
-    // Расчитать потери обороны, если еще остались МПР
-    if ($ipm > 0)
-    {
-        $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
-        $maxdamage = $ipm * 12000 * (1 + $origin_user['r109'] / 10);
-        foreach ($defmap as $i=>$gid)
-        {
-            if ($gid == 401) $id = $primary;
-            else if ($gid <= $primary) $id = $gid - 1;
-            else $id = $gid;
-            $armor = $UnitParam[$id][0] * 0.1 * (10+$target_user['r111']) / 10;
-            $count = $target["d$id"];
-            $damage = $maxdamage - $armor * $count;
-            $destroyed = 0;
-            if ($damage > 0) {
-                $destroyed = $count;
-                $target["d$id"] = 0;
-            }
-            else {
-                $destroyed = floor ( $maxdamage / $armor );
-                $target["d$id"] -= $destroyed;
-            }
-            $maxdamage -= $destroyed * $armor;
-            if ($maxdamage <= 0) break;
-        }
-    }
-
-    // Записать назад потери обороны.
-    SetPlanetDefense ( $planet_id, $target );
-
-    // Изменить статистику игроков
-    RecalcRanks ();
-
-    $text = "$amount ракетам из общего числа выпущенных ракет с планеты ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>  ";
-    $text .= "удалось попасть на Вашу планету ".$target['name']." <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> !<br>";
-    if ($ipm_destroyed) $text .= "$ipm_destroyed ракет(-ы) было уничтожено Вашими ракетами-перехватчиками<br>:<br>";
-
-    $defmap = array ( 503, 502, 408, 407, 406, 405, 404, 403, 402, 401 );
-    $text .= "<table width=400><tr><td class=c colspan=4>Поражённая оборона</td></tr>";
-    $n = 0;
-    foreach ( $defmap as $i=>$gid )
-    {
-        if ( ($n % 2) == 0 ) $text .= "</tr>";
-        if ( $target["d$gid"] ) {
-            $text .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($target["d$gid"])."</td>";
-            $n++;
-        }
-    }
-    $text .= "</table><br>\n";
-
-    // Обновить активность на планете.
-    $queue = GetFleetQueue ( $fleet_id );
-    UpdatePlanetActivity ( $planet_id, $queue['end'] );
-
-    SendMessage ( $target_user['player_id'], "Командование флотом", "Ракетная атака", $text, 2);
-}
-
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Модифицировать флот (после битвы с чужими/пиратами)
@@ -1208,6 +1130,89 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     RecalcRanks ();
 
     return $battle_result;
+}
+
+// -----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Ракетная атака.
+function RocketAttack ( $fleet_id, $planet_id )
+{
+    global $UnitParam;
+
+    $fleet = LoadFleet ($fleet_id);
+    $amount = $fleet['ipm_amount'];
+    $primary = $fleet['ipm_target'];
+    $origin = GetPlanet ($fleet['start_planet']);
+    $target = GetPlanet ($planet_id);
+    $origin_user = LoadUser ($origin['owner_id']);
+    $target_user = LoadUser ($target['owner_id']);
+
+    // Отбить атаку МПР перехватчиками
+    $ipm = $amount;
+    $abm = $target['d502'];
+    $ipm = max (0, $ipm - $abm);
+    $ipm_destroyed = $amount - $ipm;
+    $target['d502'] -= $ipm_destroyed;
+
+    $maxdamage = $ipm * 12000 * (1 + $origin_user['r109'] / 10);
+
+    // Произвести атаку первичной цели
+    if ( $primary > 0 && $ipm > 0 )
+    {
+        $armor = $UnitParam[$primary][0] * (1 + 0.1 * $target_user['r111']) / 10;
+        $count = $target["d$primary"];
+        $destroyed = min ( floor ( $maxdamage / $armor ), $count );
+        $target["d$id"] -= $destroyed;
+        $maxdamage -= $destroyed * $armor;
+        $maxdamage -= $destroyed;
+    }
+
+    // Расчитать потери обороны, если еще остались МПР
+    if ($maxdamage > 0)
+    {
+        $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
+        foreach ($defmap as $i=>$id)
+        {
+            if ($id == $primary) continue;
+            $armor = $UnitParam[$id][0] * (1 + 0.1 * $target_user['r111']) / 10;
+            $count = $target["d$id"];
+            if ($count == 0) continue;
+            $destroyed = min ( floor ( $maxdamage / $armor ), $count );
+            $target["d$id"] -= $destroyed;
+            $maxdamage -= $destroyed * $armor;
+            $maxdamage -= $destroyed;
+            if ($maxdamage <= 0) break;
+        }
+    }
+
+    // Записать назад потери обороны.
+    SetPlanetDefense ( $planet_id, $target );
+
+    // Изменить статистику игроков
+    RecalcRanks ();
+
+    $text = "$amount ракетам из общего числа выпущенных ракет с планеты ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>  ";
+    $text .= "удалось попасть на Вашу планету ".$target['name']." <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> !<br>";
+    if ($ipm_destroyed) $text .= "$ipm_destroyed ракет(-ы) было уничтожено Вашими ракетами-перехватчиками<br>:<br>";
+
+    $defmap = array ( 503, 502, 408, 407, 406, 405, 404, 403, 402, 401 );
+    $text .= "<table width=400><tr><td class=c colspan=4>Поражённая оборона</td></tr>";
+    $n = 0;
+    foreach ( $defmap as $i=>$gid )
+    {
+        if ( ($n % 2) == 0 ) $text .= "</tr>";
+        if ( $target["d$gid"] ) {
+            $text .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($target["d$gid"])."</td>";
+            $n++;
+        }
+    }
+    $text .= "</table><br>\n";
+
+    // Обновить активность на планете.
+    $queue = GetFleetQueue ( $fleet_id );
+    UpdatePlanetActivity ( $planet_id, $queue['end'] );
+
+    SendMessage ( $target_user['player_id'], "Командование флотом", "Ракетная атака", $text, 2);
 }
 
 ?>
