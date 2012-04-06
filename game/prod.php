@@ -324,7 +324,7 @@ function prod_fusion ($lvl, $energo, $pr)
 function prod_sat ($maxtemp)
 {
     $prod = floor (($maxtemp / 4) + 20);
-    return min ( max (1, $prod), 50 );
+    return max (1, $prod);
 }
 
 // Выработка шахт
