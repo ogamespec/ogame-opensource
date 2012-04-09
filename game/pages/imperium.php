@@ -42,8 +42,6 @@ if ( $planettype == 1 || $planettype == 3)
     }
 }
 
-$cols = $num + 2;
-
 $unitab = LoadUniverse ( );
 $speed = $unitab['speed'];
 
@@ -65,13 +63,12 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## Tablehead 
 <!-- ## -->
         <tr height="20" valign="left">
-            <td class="c" colspan="<?=$cols;?>"><?=loca("EMPIRE_OVERVIEW");?></td>
+            <td class="c" colspan="<?=($num+2);?>"><?=loca("EMPIRE_OVERVIEW");?></td>
         </tr>
         
         <tr height="20">
-            <th colspan="4"><a href="index.php?page=imperium&no_header=1&session=<?=$session;?>&planettype=1"><?=loca("EMPIRE_PLANETS");?></a></th>
-            <th colspan="5"><a href="index.php?page=imperium&no_header=1&session=<?=$session;?>&planettype=3"><?=loca("EMPIRE_MOONS");?></a></th>
-
+            <th colspan="<?=ceil($num/2);?>"><a href="index.php?page=imperium&no_header=1&session=<?=$session;?>&planettype=1"><?=loca("EMPIRE_PLANETS");?></a></th>
+            <th colspan="<?=( ceil($num/2)+(1 - $num%2) );?>"><a href="index.php?page=imperium&no_header=1&session=<?=$session;?>&planettype=3"><?=loca("EMPIRE_MOONS");?></a></th>
             <th>&nbsp;</th>
         </tr>
 
@@ -154,7 +151,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## Resources-Head
 <!-- ## -->
         <tr height="20">
-            <td align="left" class="c" colspan="<?=$cols;?>"><?=loca("EMPIRE_RES");?></td>
+            <td align="left" class="c" colspan="<?=($num+2);?>"><?=loca("EMPIRE_RES");?></td>
         </tr>
 
 <!-- ## 
@@ -270,7 +267,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## -->
 
         <tr height="20">
-            <td align="left" class="c" colspan="<?=$cols;?>"><?=loca("EMPIRE_BUILDINGS");?></td>
+            <td align="left" class="c" colspan="<?=($num+2);?>"><?=loca("EMPIRE_BUILDINGS");?></td>
         </tr>
         
 <!-- ## 
@@ -316,7 +313,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## Research-Head
 <!-- ## -->
         <tr height="20">
-            <td align="left" class="c" colspan="<?=$cols;?>"><?=loca("EMPIRE_RESEARCH");?></td>
+            <td align="left" class="c" colspan="<?=($num+2);?>"><?=loca("EMPIRE_RESEARCH");?></td>
         </tr>
 
         
@@ -355,7 +352,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## Ships-Head
 <!-- ## --> 
         <tr height="20">
-            <td align="left" class="c" colspan="<?=$cols;?>"><?=loca("EMPIRE_FLEET");?></td>
+            <td align="left" class="c" colspan="<?=($num+2);?>"><?=loca("EMPIRE_FLEET");?></td>
         </tr>
         
 <!-- ## 
@@ -405,7 +402,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## -->     
         <tr height="20">
 
-            <td align="left" class="c" colspan="<?=$cols;?>"><?=loca("EMPIRE_DEFENSE");?></td>
+            <td align="left" class="c" colspan="<?=($num+2);?>"><?=loca("EMPIRE_DEFENSE");?></td>
         </tr>
         
 <!-- ## 

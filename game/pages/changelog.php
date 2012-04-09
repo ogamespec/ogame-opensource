@@ -41,8 +41,8 @@ PageHeader ("changelog");
   <table width="668">
    <tr>
 
-    <td class="c"><?=loca("CHANGELOG_VERSION");?></td>
-    <td class="c"><?=loca("CHANGELOG_DESC");?></td>
+    <td class="c"><?=loca('CHANGELOG_VERSION');?></td>
+    <td class="c"><?=loca('CHANGELOG_DESC');?></td>
    </tr>
 
 <?php
