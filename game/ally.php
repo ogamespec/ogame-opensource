@@ -183,7 +183,7 @@ function RecalcAllyStats ()
         $res = dbquery ($query);
         if ( dbrows ($res) > 0 ) {
             $score = dbarray ( $res );
-            $query = "UPDATE ".$db_prefix."ally SET score1 = '".intval($score['sum1'])."', score2 = '".intval($score['sum2'])."', score3 = '".intval($score['sum3'])."' WHERE ally_id = " . $ally['ally_id'];
+            $query = "UPDATE ".$db_prefix."ally SET score1 = '".$score['sum1']."', score2 = '".$score['sum2']."', score3 = '".$score['sum3']."' WHERE ally_id = " . $ally['ally_id'];
             dbquery ( $query );
         }
     }
