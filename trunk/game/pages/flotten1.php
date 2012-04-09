@@ -59,11 +59,16 @@ if ( method () === "POST" )
     else if ( key_exists ( 'order_union', $_POST) && $uni['acs'] > 0 )     // Управление САБ.
     {
         $fleet_id = intval ($_POST['order_union']);
-        $union_id = CreateUnion ($fleet_id);
 
-        if ( key_exists ( 'union_name', $_POST) ) RenameUnion ( $union_id, $_POST['union_name'] );    // переименовать
+        if ( key_exists ( 'union_name', $_POST) ) {
+            $union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
+            RenameUnion ( $union_id, $_POST['union_name'] );    // переименовать
+        }
 
-        if ( key_exists ( 'user_name', $_POST) ) $FleetError = AddUnionMember ( $union_id, $_POST['user_name'] );    // добавить игрока
+        if ( key_exists ( 'user_name', $_POST) ) { 
+            $union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
+            $FleetError = AddUnionMember ( $union_id, $_POST['user_name'] );    // добавить игрока
+        }
     }
 }
 
@@ -222,10 +227,15 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 <?php
 // ************************ Форма создания САБ атаки ************************
 
-    if ($union_id != 0 && $uni['acs'] > 0 )
+    if ( key_exists ( 'order_union', $_POST) && $uni['acs'] > 0 )
     {
-        $union = LoadUnion ($union_id);
-        $fleet = LoadFleet ( $union['fleet_id'] );
+        $fleet = LoadFleet ( intval ($_POST['order_union']) );
+        if ( $fleet['union_id'] ) $union = LoadUnion ( $fleet['union_id'] ); 
+        else {
+            $union = array ();
+            $union['name'] = "KV" . $fleet['fleet_id'];
+            $union["player"][] = $GlobalUser['player_id'];
+        }
 
 ?>
 

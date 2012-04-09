@@ -346,10 +346,6 @@ function RecallFleet ($fleet_id, $now=0)
 
     DeleteFleet ($fleet_obj['fleet_id']);            // удалить флот
     RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
-    if ( $fleet_obj['mission'] == 21 && $fleet_obj['union_id'] > 0 ) {
-        RemoveUnion ($fleet_obj['union_id']);    // удалить союз
-        CancelUnionFleets ($fleet_obj['union_id']);    // союзные флоты летят дальше сами по себе (без союза)
-    }
 }
 
 // Загрузить флот
@@ -974,8 +970,8 @@ function Queue_Fleet_End ($queue)
 
 // Управление САБами.
 
-// Создать САБ. $fleet_id - паровоз.
-function CreateUnion ($fleet_id)
+// Создать САБ. $fleet_id - паровоз. $name - название союза.
+function CreateUnion ($fleet_id, $name)
 {
     global $db_prefix;
 
@@ -994,9 +990,8 @@ function CreateUnion ($fleet_id)
     if ( $target_player == $fleet_obj['owner_id'] ) return 0;
 
     // Добавить союз.
-    $union = array ( null, $fleet_id, $target_player, "", $fleet_obj['owner_id'] );
+    $union = array ( null, $fleet_id, $target_player, $name, $fleet_obj['owner_id'] );
     $union_id = AddDBRow ($union, 'union');
-    RenameUnion ( $union_id, "KV" . ($union_id * mt_rand (230,270) * 12345 ) );
 
     // Добавить флот в союз и изменить тип Атаки.
     $query = "UPDATE ".$db_prefix."fleet SET union_id = $union_id, mission = 21 WHERE fleet_id = $fleet_id";
@@ -1016,19 +1011,11 @@ function LoadUnion ($union_id)
     return $union;
 }
 
-// Союз удаляется при отзыве, или достижении цели
+// Союз удаляется при отзыве последнего флота союза, или достижении цели
 function RemoveUnion ($union_id)
 {
     global $db_prefix;
     $query = "DELETE FROM ".$db_prefix."union WHERE union_id = $union_id";        // удалить запись союза
-    dbquery ($query);
-}
-
-// Удалить ссылку на союз для совместных атак. Вызывается при отмене САБа.
-function CancelUnionFleets ($union_id)
-{
-    global $db_prefix;
-    $query = "UPDATE ".$db_prefix."fleet SET union_id = 0 WHERE union_id = $union_id";        
     dbquery ($query);
 }
 
@@ -1141,7 +1128,7 @@ function UpdateUnionTime ($union_id, $end)
         $queue = GetFleetQueue ( $fleet_obj['fleet_id'] );
         $union_time = $queue['end'];
         $queue_id = $queue['task_id'];
-        if ( $end > $queue['end'] )
+        //if ( $end > $queue['end'] )
         {
             $union_time = $end;
             $query = "UPDATE ".$db_prefix."queue SET end = $end WHERE task_id = $queue_id";

@@ -77,11 +77,15 @@ require_once "phalanx_events.php";
         if ( abs($aktplanet['s'] - $target['s']) > $range) $outofrange = true;
     }
 
+/*
     if ( $GlobalUser['vacation'] )            // Игрок в режиме отпуска.
     {
         echo "<font color=#FF0000><center>Режим отпуска минимум до  ".date ("Y-m-d H:i:s", $GlobalUser['vacation_until'])."</center></font>";
     }
-    else if ( $aktplanet["b42"] <= 0 )        // Попытка скана фаланги с планеты или с другой луны без фаланги
+    else
+*/
+
+    if ( $aktplanet["b42"] <= 0 )        // Попытка скана фаланги с планеты или с другой луны без фаланги
     {
         echo "<font color=#FF0000>Не мухлевать!</font>";
     }
