@@ -11,9 +11,13 @@ function Error ($text)
         $GlobalUser['player_id'] = 0;
     }
 
+    $text = str_replace ( '\"', "&quot;", bb($text) );
+    $text = str_replace ( '\'', "&rsquo;", $text );
+    $text = str_replace ( '\`', "&lsquo;", $text );
+
     $now = time ();
 
-    $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], bb($text), $now );
+    $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], $text, $now );
     $id = AddDBRow ( $error, 'errors' );
 
     Logout ( $_GET['session'] );    // Завершить сессию.
@@ -41,9 +45,13 @@ function Debug ($message)
     global $GlobalUser;
     if ( !$GlobalUser ) return;
 
+    $message = str_replace ( '\"', "&quot;", bb($message) );
+    $message = str_replace ( '\'', "&rsquo;", $message );
+    $message = str_replace ( '\`', "&lsquo;", $message );
+
     $now = time ();
 
-    $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], bb($message), $now );
+    $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], $message, $now );
     $id = AddDBRow ( $error, 'debug' );
 }
 
