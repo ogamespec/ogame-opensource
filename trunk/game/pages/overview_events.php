@@ -402,7 +402,7 @@ function EventList ()
             $fleet_obj = dbarray ($result);
 
             $queue = GetFleetQueue ($fleet_obj['fleet_id']);
-            $task[$tasknum]['end_time'] = $queue['end'];
+            $task[$tn]['end_time'] = $queue['end'];
 
             // Для убывающих или удерживаемых флотов добавить псевдозадание возврата.
             // Не показывать возвраты чужих флотов и задание Оставить.
@@ -411,7 +411,6 @@ function EventList ()
                 $tasknum++;
 
                 // Время отправления и прибытия
-                $task[$tasknum]['start_time'] = $queue['end'];
                 $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['flight_time'];
 
                 // Флот

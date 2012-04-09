@@ -945,7 +945,7 @@ function Queue_Fleet_End ($queue)
         //default: Error ( "Неизвестное задание для флота: " . $fleet_obj['mission'] ); break;
     }
 
-    if ( $fleet_obj['union_id'] )    // удалить все флоты и задания союза, чтобы совместная атака больше не срабатывала
+    if ( $fleet_obj['union_id'] && $fleet_obj['mission'] < 100 )    // удалить все флоты и задания союза, чтобы совместная атака больше не срабатывала
     {
         $union_id = $fleet_obj['union_id'];
         $result = EnumUnionFleets ( $union_id );
