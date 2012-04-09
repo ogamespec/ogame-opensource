@@ -619,7 +619,6 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     $did = $unitab['did'];
     $rf = $unitab['rapid'];
 
-    // *** Союзные атаки не должны вступать битву. Игнорировать их.
     $f = LoadFleet ( $fleet_id );
 
     // *** Сгенерировать исходные данные

@@ -392,13 +392,6 @@ function EventList ()
     $unions = EnumUnion ( $GlobalUser['player_id'] );
     foreach ( $unions as $u=>$union)
     {
-        $queue = GetFleetQueue ($union['fleet_id']);
-        if ( $queue == null ) continue;
-
-        // Время отправления и прибытия
-        $task[$tasknum]['start_time'] = $queue['start'];
-        $task[$tasknum]['end_time'] = $queue['end'];
-
         // Флоты
         $result = EnumUnionFleets ( $union['union_id'] );
         $task[$tasknum]['fleets'] = $rows = dbrows ( $result );
@@ -407,6 +400,9 @@ function EventList ()
         while ($rows--)
         {
             $fleet_obj = dbarray ($result);
+
+            $queue = GetFleetQueue ($fleet_obj['fleet_id']);
+            $task[$tasknum]['end_time'] = $queue['end'];
 
             // Для убывающих или удерживаемых флотов добавить псевдозадание возврата.
             // Не показывать возвраты чужих флотов и задание Оставить.
