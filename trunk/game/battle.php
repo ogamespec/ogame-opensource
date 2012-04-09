@@ -203,13 +203,13 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             $origin = GetPlanet ( $fleet_obj['start_planet'] );
             $target = GetPlanet ( $fleet_obj['target_planet'] );
             $ships = 0;
-            foreach ( $fleetmap as $i=>$gid ) $ships += $attacker[$gid];
+            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker[$gid];
             if ( $sum_cargo == 0) $cargo = 0;
             else $cargo = ( FleetCargoSummary ( $attacker ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) {
                 if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker, $queue['end'] );
                 else $result = 0;
-                if ( ($result & 2) == 0 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
+                if ( $result < 2 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
             }
         }
 
@@ -219,8 +219,8 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             {
                 AdjustResources ( $cm, $ck, $cd, $defender['id'], '-' );
                 $objects = array ();
-                foreach ( $fleetmap as $i=>$gid ) $objects["f$gid"] = $defender[$gid] ? $defender[$gid] : 0;
-                foreach ( $defmap as $i=>$gid ) {
+                foreach ( $fleetmap as $ii=>$gid ) $objects["f$gid"] = $defender[$gid] ? $defender[$gid] : 0;
+                foreach ( $defmap as $ii=>$gid ) {
                     $objects["d$gid"] = $repaired[$gid] ? $repaired[$gid] : 0;
                     $objects["d$gid"] += $defender[$gid];
                 }
@@ -229,7 +229,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             else        // Флоты на удержании
             {
                 $ships = 0;
-                foreach ( $fleetmap as $i=>$gid ) $ships += $defender[$gid];
+                foreach ( $fleetmap as $ii=>$gid ) $ships += $defender[$gid];
                 if ( $ships > 0 ) SetFleet ( $defender['id'], $defender );
                 else {
                     $queue = GetFleetQueue ($defender['id']);
@@ -251,13 +251,13 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             $origin = GetPlanet ( $fleet_obj['start_planet'] );
             $target = GetPlanet ( $fleet_obj['target_planet'] );
             $ships = 0;
-            foreach ( $fleetmap as $i=>$gid ) $ships += $attacker['fleet'][$gid];
+            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['fleet'][$gid];
             if ( $sum_cargo == 0) $cargo = 0;
             else $cargo = ( FleetCargoSummary ( $attacker['fleet'] ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) {
                 if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['fleet'], $queue['end'] );
                 else $result = 0;
-                if ( ($result & 2) == 0 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
+                if ( $result < 2 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
             }
         }
 
@@ -267,8 +267,8 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             {
                 AdjustResources ( $cm, $ck, $cd, $defender['id'], '-' );
                 $objects = array ();
-                foreach ( $fleetmap as $i=>$gid ) $objects["f$gid"] = $defender[$gid] ? $defender[$gid] : 0;
-                foreach ( $defmap as $i=>$gid ) {
+                foreach ( $fleetmap as $ii=>$gid ) $objects["f$gid"] = $defender[$gid] ? $defender[$gid] : 0;
+                foreach ( $defmap as $ii=>$gid ) {
                     $objects["d$gid"] = $repaired[$gid] ? $repaired[$gid] : 0;
                     $objects["d$gid"] += $defender[$gid];
                 }
@@ -277,7 +277,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             else        // Флоты на удержании
             {
                 $ships = 0;
-                foreach ( $fleetmap as $i=>$gid ) $ships += $defender[$gid];
+                foreach ( $fleetmap as $ii=>$gid ) $ships += $defender[$gid];
                 if ( $ships > 0 ) SetFleet ( $defender['id'], $defender );
                 else {
                     $queue = GetFleetQueue ($defender['id']);
@@ -521,6 +521,8 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
     $moondes =  mt_rand(1, 999) < $moonchance * 10;
     $ripdes = mt_rand(1, 999) < $ripchance * 10;
 
+    $ripdes = $moondes = 1;
+
     if ( !$ripdes && !$moondes )
     {
             $atext = va ( "Флот с #1 #2 достигает луны планеты на #3 .\n" .
@@ -554,7 +556,7 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
                                 floor ($moonchance), floor ($ripchance)
                              );
 
-            DestroyMoon ( $target['planet_id'], $when );
+            DestroyMoon ( $target['planet_id'], $when, $fleet_obj['fleet_id'] );
             $result  = 1;
     }
 
@@ -588,7 +590,7 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
                                 floor ($moonchance), floor ($ripchance)
                              );
 
-            DestroyMoon ( $target['planet_id'], $when );
+            DestroyMoon ( $target['planet_id'], $when, $fleet_obj['fleet_id'] );
             $result  = 3;
     }
 
@@ -840,7 +842,7 @@ function WritebackBattleResultsExpedition ( $a, $d, $res )
             $origin = GetPlanet ( $fleet_obj['start_planet'] );
             $target = GetPlanet ( $fleet_obj['target_planet'] );
             $ships = 0;
-            foreach ( $fleetmap as $i=>$gid ) $ships += $attacker[$gid];
+            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker[$gid];
 
             // Вернуть флот, если что-то осталось.
             // В качестве времени полёта используется время удержания.
@@ -860,7 +862,7 @@ function WritebackBattleResultsExpedition ( $a, $d, $res )
             $origin = GetPlanet ( $fleet_obj['start_planet'] );
             $target = GetPlanet ( $fleet_obj['target_planet'] );
             $ships = 0;
-            foreach ( $fleetmap as $i=>$gid ) $ships += $attacker['fleet'][$gid];
+            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['fleet'][$gid];
 
             // Вернуть флот, если что-то осталось.
             // В качестве времени полёта используется время удержания.

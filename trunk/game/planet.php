@@ -381,7 +381,8 @@ function AdjustResources ($m, $k, $d, $planet_id, $sign)
 }
 
 // Уничтожить луну, развернуть флоты, модифицировать статистику игрока.
-function DestroyMoon ($moon_id, $when)
+// fleet_id - ID флота уничтожившего луну. Разворот этого флота контролируется боевым движком.
+function DestroyMoon ($moon_id, $when, $fleet_id)
 {
     global $db_prefix;
 
@@ -390,7 +391,7 @@ function DestroyMoon ($moon_id, $when)
     if ( $moon == NULL || $planet == NULL ) return;
 
     // Развернуть флоты летящие на луну
-    $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = $moon_id AND mission < 100;";
+    $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = $moon_id AND mission < 100 AND fleet_id <> $fleet_id;";
     $result = dbquery ( $query );
     $rows = dbrows ($result);
     while ( $rows-- )
