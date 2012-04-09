@@ -194,7 +194,14 @@ PageHeader ("flotten2");
 
     // Список боевых союзов.
     $unions = EnumUnion ( $GlobalUser['player_id'], 1);
-    $union_count = count ($unions);
+
+    $union_count = 0;
+    foreach ( $unions as $i=>$union )
+    {
+        $fleet_obj = LoadFleet ( $union['fleet_id'] );
+        if ( $fleet_obj['union_id'] == $union['union_id'] ) $union_count ++;
+    }
+
     if ( $union_count > 0 )
     {
         echo "<input type=\"hidden\" name=\"union2\" value=\"0\" >";
@@ -202,6 +209,7 @@ PageHeader ("flotten2");
         foreach ( $unions as $i=>$union )
         {
             $fleet_obj = LoadFleet ( $union['fleet_id'] );
+            if ( $fleet_obj['union_id'] != $union['union_id'] ) continue;
             $queue = GetFleetQueue ( $union['fleet_id'] );
             $target = GetPlanet ( $fleet_obj['target_planet'] );
             echo "  <tr height=\"20\">";
