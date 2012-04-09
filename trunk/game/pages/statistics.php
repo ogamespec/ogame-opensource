@@ -125,6 +125,9 @@ if ( $type === "" ) $type = "ressources";
 
 if ( $who === 'ally' ) {
 
+    RecalcAllyStats ();
+    RecalcAllyRanks ();
+
     if ( $type === "fleet" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE place2 >= $start AND place2 < ".($start+99)." ORDER BY place2;";
     else if ( $type === "research" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE place3 >= $start AND place3 < ".($start+99)." ORDER BY place3;";
     else $query = "SELECT * FROM ".$db_prefix."ally WHERE place1 >= $start AND place1 < ".($start+99)." ORDER BY place1;";
