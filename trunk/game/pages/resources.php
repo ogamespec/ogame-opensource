@@ -154,6 +154,18 @@ echo "<center> \n";
 echo "<br> \n";
 echo "<br> \n";
 echo "Коэффициент производства: ".round($aktplanet['factor'],2)."\n";
+
+// Не известно для чего, но это есть в оригинальной игре.
+$count = 0;
+$result = EnumPlanets ();
+$rows = dbrows ($result);
+while ($rows--)
+{
+    $pl = dbarray ($result);
+    if ( $pl['type'] != 0 ) $count++;
+}
+if ( $count > 9 ) echo "<br><font color=#ff000>На этой планете наблюдаются беспорядки, так как империя слишком велика.</font>";
+
 echo "<form action=\"index.php?page=resources&session=".$_GET['session']."\" method=\"post\" id='ressourcen'> \n";
 echo "<input type=hidden name='screen' id='screen'> \n";
 echo "<table width=\"550\"> \n";
