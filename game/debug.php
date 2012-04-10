@@ -11,7 +11,7 @@ function Error ($text)
         $GlobalUser['player_id'] = 0;
     }
 
-    $text = str_replace ( '\"', "&quot;", bb($text) );
+    $text = str_replace ( '\"', "&quot;", ($text) );
     $text = str_replace ( '\'', "&rsquo;", $text );
     $text = str_replace ( '\`', "&lsquo;", $text );
 
@@ -45,7 +45,7 @@ function Debug ($message)
     global $GlobalUser;
     if ( !$GlobalUser ) return;
 
-    $message = str_replace ( '\"', "&quot;", bb($message) );
+    $message = str_replace ( '\"', "&quot;", ($message) );
     $message = str_replace ( '\'', "&rsquo;", $message );
     $message = str_replace ( '\`', "&lsquo;", $message );
 
