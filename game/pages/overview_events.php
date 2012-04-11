@@ -394,52 +394,57 @@ function EventList ()
     {
         // Флоты
         $result = EnumUnionFleets ( $union['union_id'] );
-        $task[$tasknum]['fleets'] = $rows = dbrows ( $result );
-        $f = 0;
-        $tn = $tasknum;
-        while ($rows--)
+        $rows = dbrows ( $result );
+
+        if ( $rows > 0 )    // Не показывать пустые союзы.
         {
-            $fleet_obj = dbarray ($result);
-
-            $queue = GetFleetQueue ($fleet_obj['fleet_id']);
-            $task[$tn]['end_time'] = $queue['end'];
-
-            // Для убывающих или удерживаемых флотов добавить псевдозадание возврата.
-            // Не показывать возвраты чужих флотов и задание Оставить.
-            if ( $fleet_obj['mission'] < 100 && $fleet_obj['owner_id'] == $GlobalUser['player_id'] )
+            $task[$tasknum]['fleets'] = $rows;
+            $f = 0;
+            $tn = $tasknum;
+            while ($rows--)
             {
-                $tasknum++;
+                $fleet_obj = dbarray ($result);
 
-                // Время отправления и прибытия
-                $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['flight_time'];
+                $queue = GetFleetQueue ($fleet_obj['fleet_id']);
+                $task[$tn]['end_time'] = $queue['end'];
 
-                // Флот
-                $task[$tasknum]['fleets'] = 1;
-                $task[$tasknum]['fleet'][0] = array ();
-                foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj["ship$gid"];
-                $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
-                $task[$tasknum]['fleet'][0]['m'] = $task[$tasknum]['fleet'][0]['k'] = $task[$tasknum]['fleet'][0]['d'] = 0;
-                $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['target_planet'];
-                $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['start_planet'];
-                $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
-                $task[$tasknum]['fleet'][0]['dir'] = 1;
-                $task[$tasknum]['fleet'][0]['assign'] = 0;
+                // Для убывающих или удерживаемых флотов добавить псевдозадание возврата.
+                // Не показывать возвраты чужих флотов и задание Оставить.
+                if ( $fleet_obj['mission'] < 100 && $fleet_obj['owner_id'] == $GlobalUser['player_id'] )
+                {
+                    $tasknum++;
+
+                    // Время отправления и прибытия
+                    $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['flight_time'];
+
+                    // Флот
+                    $task[$tasknum]['fleets'] = 1;
+                    $task[$tasknum]['fleet'][0] = array ();
+                    foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj["ship$gid"];
+                    $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
+                    $task[$tasknum]['fleet'][0]['m'] = $task[$tasknum]['fleet'][0]['k'] = $task[$tasknum]['fleet'][0]['d'] = 0;
+                    $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['target_planet'];
+                    $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['start_planet'];
+                    $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
+                    $task[$tasknum]['fleet'][0]['dir'] = 1;
+                    $task[$tasknum]['fleet'][0]['assign'] = 0;
+                }
+
+                $task[$tn]['fleet'][$f] = array ();
+                foreach ( $fleetmap as $id=>$gid ) $task[$tn]['fleet'][$f][$gid] = $fleet_obj["ship$gid"];
+                $task[$tn]['fleet'][$f]['owner_id'] = $fleet_obj['owner_id'];
+                $task[$tn]['fleet'][$f]['m'] = $fleet_obj['m'];
+                $task[$tn]['fleet'][$f]['k'] = $fleet_obj['k'];
+                $task[$tn]['fleet'][$f]['d'] = $fleet_obj['d'];
+                $task[$tn]['fleet'][$f]['origin_id'] = $fleet_obj['start_planet'];
+                $task[$tn]['fleet'][$f]['target_id'] = $fleet_obj['target_planet'];
+                $task[$tn]['fleet'][$f]['mission'] = GetMission ($fleet_obj);
+                GetDirectionAssignment ($fleet_obj, &$task[$tn]['fleet'][$f]['dir'], &$task[$tn]['fleet'][$f]['assign'] );
+                $f++;
             }
 
-            $task[$tn]['fleet'][$f] = array ();
-            foreach ( $fleetmap as $id=>$gid ) $task[$tn]['fleet'][$f][$gid] = $fleet_obj["ship$gid"];
-            $task[$tn]['fleet'][$f]['owner_id'] = $fleet_obj['owner_id'];
-            $task[$tn]['fleet'][$f]['m'] = $fleet_obj['m'];
-            $task[$tn]['fleet'][$f]['k'] = $fleet_obj['k'];
-            $task[$tn]['fleet'][$f]['d'] = $fleet_obj['d'];
-            $task[$tn]['fleet'][$f]['origin_id'] = $fleet_obj['start_planet'];
-            $task[$tn]['fleet'][$f]['target_id'] = $fleet_obj['target_planet'];
-            $task[$tn]['fleet'][$f]['mission'] = GetMission ($fleet_obj);
-            GetDirectionAssignment ($fleet_obj, &$task[$tn]['fleet'][$f]['dir'], &$task[$tn]['fleet'][$f]['assign'] );
-            $f++;
+            $tasknum++;
         }
-
-        $tasknum++;
     }
 
     $anz = 0;
