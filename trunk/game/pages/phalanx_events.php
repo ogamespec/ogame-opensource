@@ -202,13 +202,15 @@ function PhalanxEventList ($planet_id)
     $task = array ();
     $tasknum = 0;
 
+    $unions = array ();
+
     while ($rows--)
     {
         $fleet_obj = dbarray ($result);
         $queue = GetFleetQueue ($fleet_obj['fleet_id']);
 
         // Союзные флоты собираются отдельно
-        if ( $fleet_obj['union_id'] > 0 && $fleet_obj['target_planet'] == $planet_id && $fleet_obj['mission'] == 21 )
+        if ( $fleet_obj['union_id'] > 0 && $fleet_obj['target_planet'] == $planet_id && !$unions[ $fleet_obj['union_id'] ])
         {
             $task[$tasknum]['end_time'] = $queue['end'];
 
@@ -229,6 +231,7 @@ function PhalanxEventList ($planet_id)
                 $task[$tasknum]['fleet'][$f]['dir'] = 1;    // на планету
                 $f++;
             }
+            $unions[ $fleet_obj['union_id'] ] = 1;
 
             $tasknum++;
             continue;
