@@ -904,6 +904,7 @@ function Queue_Fleet_End ($queue)
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $fleet_obj = LoadFleet ( $queue['sub_id'] );
+    if ( $fleet_obj == null ) return;
     $fleet = array ();
     foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj["ship$gid"];
 
@@ -1116,8 +1117,8 @@ function EnumUnionFleets ($union_id)
     return dbquery ( $query );
 }
 
-// Обновить время прибытия всех флотов союза. Вернуть новое время прибытия союза.
-function UpdateUnionTime ($union_id, $end)
+// Обновить время прибытия всех флотов союза, за исключением fleet_id. Вернуть новое время прибытия союза.
+function UpdateUnionTime ($union_id, $end, $fleet_id, $force_set=false)
 {
     global $db_prefix;
     $result = EnumUnionFleets ($union_id);
@@ -1125,10 +1126,11 @@ function UpdateUnionTime ($union_id, $end)
     while ($rows--)
     {
         $fleet_obj = dbarray ($result);
+        if ( $fleet_obj['fleet_id'] == $fleet_id ) continue;
         $queue = GetFleetQueue ( $fleet_obj['fleet_id'] );
         $union_time = $queue['end'];
         $queue_id = $queue['task_id'];
-        //if ( $end > $queue['end'] )
+        if ( $end > $union_time || $force_set )
         {
             $union_time = $end;
             $query = "UPDATE ".$db_prefix."queue SET end = $end WHERE task_id = $queue_id";

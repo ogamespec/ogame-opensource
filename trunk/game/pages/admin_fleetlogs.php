@@ -17,14 +17,28 @@ function Admin_Fleetlogs ()
     {
         if ( key_exists ( "order_2min", $_POST ) ) {        // -2 минуты до оконачания задания
             $id = intval ($_POST['order_2min']);
-            $query = "UPDATE ".$db_prefix."queue SET end=".($now+2*60)." WHERE task_id=$id";
-            dbquery ( $query );
+            $queue = LoadQueue ( $id );
+            $fleet_obj = LoadFleet ( $queue['sub_id'] );
+            if ( $fleet_obj['union_id'] ) {
+                UpdateUnionTime ( $fleet_obj['union_id'], $now+2*60, 0, true );
+            }
+            else {
+                $query = "UPDATE ".$db_prefix."queue SET end=".($now+2*60)." WHERE task_id=$id";
+                dbquery ( $query );
+            }
         }
 
         if ( key_exists ( "order_end", $_POST ) ) {        // Завершить задание
             $id = intval ($_POST['order_end']);
-            $query = "UPDATE ".$db_prefix."queue SET end=$now WHERE task_id=$id";
-            dbquery ( $query );
+            $queue = LoadQueue ( $id );
+            $fleet_obj = LoadFleet ( $queue['sub_id'] );
+            if ( $fleet_obj['union_id'] ) {
+                UpdateUnionTime ( $fleet_obj['union_id'], $now, 0, true );
+            }
+            else {
+                $query = "UPDATE ".$db_prefix."queue SET end=$now WHERE task_id=$id";
+                dbquery ( $query );
+            }
         }
 
         if ( key_exists ( "order_return", $_POST ) ) {        // Развернуть флот
@@ -129,7 +143,7 @@ function Admin_Fleetlogs ()
         <th <?=$style;?> >
          <form action="index.php?page=admin&session=<?=$session;?>&mode=Fleetlogs" method="POST">
     <input type="hidden" name="order_2min" value="<?=$queue['task_id'];?>" />
-        <input type="submit" value="2" />
+        <input type="submit" value="2m" />
      </form>
         </th>
         <th <?=$style;?> >

@@ -308,7 +308,7 @@ else {
     $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $cargo_m, $cargo_k, $cargo_d, $cons, time(), $union_id, $hold_time );
     $queue = GetFleetQueue ($fleet_id);
     if ( $union_id ) {
-        $union_time = UpdateUnionTime ( $union_id, $queue['end'] );
+        $union_time = UpdateUnionTime ( $union_id, $queue['end'], $fleet_id );
         UpdateFleetTime ( $fleet_id, $union_time );
     }
 
