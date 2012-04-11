@@ -346,6 +346,14 @@ function RecallFleet ($fleet_id, $now=0)
 
     DeleteFleet ($fleet_obj['fleet_id']);            // удалить флот
     RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
+
+    // Если отозван последний флот союза, то удалить союз.
+    $union_id = $fleet_obj['union_id'];
+    if ( $union_id && ( $fleet_obj['mission'] == 2 || $fleet_obj['mission'] == 21 ) ) 
+    {
+        $result = EnumUnionFleets ($union_id);
+        if ( dbrows ( $result ) == 0 ) RemoveUnion ( $union_id );    // удалить союз
+    }
 }
 
 // Загрузить флот
