@@ -56,19 +56,16 @@ if ( method () === "POST" )
             RecallFleet ( $fleet_id );
     }
 
-    else if ( key_exists ( 'order_union', $_POST) && $uni['acs'] > 0 )     // Управление САБ.
-    {
-        $fleet_id = intval ($_POST['order_union']);
+    else if ( key_exists ( 'union_name', $_POST) && $uni['acs'] > 0 ) {
+        $fleet_id = intval ($_POST['flotten']);
+        $union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
+        RenameUnion ( $union_id, $_POST['union_name'] );    // переименовать
+    }
 
-        if ( key_exists ( 'union_name', $_POST) ) {
-            $union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
-            RenameUnion ( $union_id, $_POST['union_name'] );    // переименовать
-        }
-
-        if ( key_exists ( 'user_name', $_POST) ) { 
-            $union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
-            $FleetError = AddUnionMember ( $union_id, $_POST['user_name'] );    // добавить игрока
-        }
+    else if ( key_exists ( 'user_name', $_POST) && $uni['acs'] > 0 ) { 
+        $fleet_id = intval ($_POST['flotten']);
+        $union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
+        $FleetError = AddUnionMember ( $union_id, $_POST['user_name'] );    // добавить игрока
     }
 }
 
@@ -240,7 +237,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 ?>
 
 <form action="index.php?page=flotten1&session=<?=$session;?>" method="POST">
-    <input type="hidden" name="order_union" value="<?=$fleet['fleet_id'];?>" />
+    <input type="hidden" name="flotten" value="<?=$fleet['fleet_id'];?>" />
   <table width="519" border="0" cellpadding="0" cellspacing="1">
                     <tr><td class="c" colspan=2>Союз флотов <?=$union['name'];?></td></tr>
                     <tr><td class="c" colspan=2>Изменить название союза</td></tr>
