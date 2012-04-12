@@ -355,8 +355,44 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
    <tr height="20">
   <th colspan="2"><a href="javascript:noShips();" >Обнулить</a></th>
   <th colspan="2"><a href="javascript:maxShips();" >Все корабли</a></th>
-
    </tr>
+
+<?php
+    if ( $prem['commander'] )        // Стандартные флоты
+    {
+        $temp_map = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // без сс
+
+        echo "      <tr height=\"20\">\n";
+        echo "      <td colspan=\"4\" class=\"c\"><u><a href=\"index.php?page=fleet_templates&session=$session\">Стандартные</a></u></td>\n";
+        echo "      </tr>\n";
+
+        $query = "SELECT * FROM ".$db_prefix."template WHERE owner_id = ".$GlobalUser['player_id']." ORDER BY date DESC";
+        $result = dbquery ( $query );
+        $rows = dbrows ( $result );
+        $count = 0;
+        while ( $rows-- )
+        {
+            if ( $count == 0 ) echo "                  <tr height=\"20\" >\n";
+            $temp = dbarray ( $result );
+
+            echo "       <th colspan=2>\n";
+            echo "       <a href=\"javascript:setShips(";
+            foreach ( $temp_map as $i=>$gid ) {
+                if ( $i ) echo ",";
+                echo $temp["ship$gid"];
+            }
+            echo ");\">\n";
+            echo "       ".$temp['name']."</a>\n";
+            echo "        </th>\n";
+
+            $count++;
+            if ( $count == 2 ) {
+                echo "           </tr>\n";
+                $count = 0;
+            }
+        }
+    }
+?>
  
    <tr height="20">
     <th colspan="4"><input type="submit" value="Дальше" /></th>

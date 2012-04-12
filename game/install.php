@@ -147,6 +147,11 @@ $tab_exptab = array (    // Настройки экспедиции
     'chance_alien'=>'INT', 'chance_pirates'=>'INT', 'chance_dm'=>'INT', 'chance_lost'=>'INT', 'chance_delay'=>'INT', 'chance_accel'=>'INT', 'chance_res'=>'INT', 'chance_fleet'=>'INT'
 );
 
+$tab_template = array (    // Стандартные флоты
+    'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'name'=>'CHAR(30)', 'date'=>'INT UNSIGNED',
+    'ship202'=>'INT', 'ship203'=>'INT', 'ship204'=>'INT', 'ship205'=>'INT', 'ship206'=>'INT', 'ship207'=>'INT', 'ship208'=>'INT', 'ship209'=>'INT', 'ship210'=>'INT', 'ship211'=>'INT', 'ship212'=>'INT', 'ship213'=>'INT', 'ship214'=>'INT', 'ship215'=>'INT',
+);
+
 $tabs = array (
     'uni' => &$tab_uni,
     'users' => &$tab_users,
@@ -168,6 +173,7 @@ $tabs = array (
     'iplogs' => &$tab_iplogs,
     'pranger' => &$tab_pranger,
     'exptab' => &$tab_exptab,
+    'template' => &$tab_template,
 );
 
 // -------------------------------------------------------------------------------------------------------------------------
