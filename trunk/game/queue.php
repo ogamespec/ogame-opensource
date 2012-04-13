@@ -743,8 +743,7 @@ function AddRecalcPointsEvent ($player_id)
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime (0, 10, 0);
-        if ( date("H") >= 0 && date ("i") >= 10 ) $when += 24*60*60;
+        $when = mktime(0, 10, 0, date("m"), date("d")+1, date("y"));
         $queue = array ( null, $player_id, "RecalcPoints", 0, 0, 0, $now, $when, 500 );
         AddDBRow ( $queue, "queue" );
     }
@@ -870,8 +869,7 @@ function AddReloginEvent ()
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime (3, 0, 0);
-        if ( date("H") >= 3 ) $when += 24*60*60;
+        $when = mktime(3, 0, 0, date("m"), date("d")+1, date("y"));;
         $queue = array ( null, 99999, "UnloadAll", 0, 0, 0, $now, $when, 777 );
         $id = AddDBRow ( $queue, "queue" );
     }
@@ -933,8 +931,7 @@ function AddCleanPlanetsEvent ()
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime (1, 10, 0);
-        if ( date("H") >= 1 && date("i") >= 10 ) $when += 24*60*60;
+        $when = mktime(1, 10, 0, date("m"), date("d")+1, date("y"));
         $queue = array ( null, 99999, "CleanPlanets", 0, 0, 0, $now, $when, 700 );
         $id = AddDBRow ( $queue, "queue" );
     }
@@ -946,7 +943,7 @@ function Queue_CleanPlanets_End ($queue)
     global $db_prefix;
 
     $when = $queue['end'];
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE remove <= $when";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE remove <= $when AND remove <> 0";
     $result = dbquery ( $query );
     $rows = dbrows ( $result );
     $count = 0;
@@ -985,8 +982,7 @@ function AddCleanPlayersEvent ()
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime (1, 10, 0);
-        if ( date("H") >= 1 && date("i") >= 10 ) $when += 24*60*60;
+        $when = mktime(1, 10, 0, date("m"), date("d")+1, date("y"));
         $queue = array ( null, 99999, "CleanPlayers", 0, 0, 0, $now, $when, 900 );
         $id = AddDBRow ( $queue, "queue" );
     }
@@ -999,7 +995,7 @@ function Queue_CleanPlayers_End ($queue)
 
     // Удаление игроков, поставленных на удаление
     $when = $queue['end'];
-    $query = "SELECT * FROM ".$db_prefix."users WHERE disable_until <= $when AND admin < 1 AND disable <> 0";
+    $query = "SELECT * FROM ".$db_prefix."users WHERE disable_until <= $when AND disable_until <> 0 AND admin < 1 AND disable <> 0";
     $result = dbquery ( $query );
     $rows = dbrows ( $result );
     while ($rows-- )
@@ -1034,8 +1030,7 @@ function AddRecalcAllyPointsEvent ()
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime (0, 10, 0);
-        if ( date("H") >= 0 && date ("i") >= 10 ) $when += 24*60*60;
+        $when = mktime(0, 10, 0, date("m"), date("d")+1, date("y"));
         $queue = array ( null, 99999, "RecalcAllyPoints", 0, 0, 0, $now, $when, 400 );
         AddDBRow ( $queue, "queue" );
     }
