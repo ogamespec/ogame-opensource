@@ -946,7 +946,7 @@ function Queue_CleanPlanets_End ($queue)
     global $db_prefix;
 
     $when = $queue['end'];
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE remove >= $when";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE remove <= $when";
     $result = dbquery ( $query );
     $rows = dbrows ( $result );
     $count = 0;
@@ -999,7 +999,7 @@ function Queue_CleanPlayers_End ($queue)
 
     // Удаление игроков, поставленных на удаление
     $when = $queue['end'];
-    $query = "SELECT * FROM ".$db_prefix."users WHERE disable_until >= $when AND admin < 1 AND disable <> 0";
+    $query = "SELECT * FROM ".$db_prefix."users WHERE disable_until <= $when AND admin < 1 AND disable <> 0";
     $result = dbquery ( $query );
     $rows = dbrows ( $result );
     while ($rows-- )
