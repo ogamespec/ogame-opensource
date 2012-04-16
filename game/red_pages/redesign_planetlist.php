@@ -132,12 +132,14 @@ function get_building ( $planet_id )
 
 <?php
 
+    $thispage = $_GET['page'];
+
     foreach ( $planets as $i=>$planet )
     {
 ?>
                                                             
                                         <div class="smallplanet">
-                        <a href="index.php?page=overview&session=<?=$session;?>&cp=<?=$planet['planet_id'];?>"
+                        <a href="index.php?page=<?=$thispage;?>&session=<?=$session;?>&cp=<?=$planet['planet_id'];?>"
                            title="|&lt;B&gt;<?=$planet['name'];?> [<?=$planet['g'];?>:<?=$planet['s'];?>:<?=$planet['p'];?>]&lt;/B&gt;&lt;BR&gt;<?=nicenum($planet['diameter']);?>км (<?=$planet['fields'];?>/<?=$planet['maxfields'];?>)&lt;BR&gt;от <?=$planet['temp'];?>°C до <?=($planet['temp'] + 40);?>°C"
                            class="planetlink <?=is_active($planet, $aktplanet);?> tipsStandard">
                             <img class="planetPic" src="<?=planet_image($planet, $num_planets);?>"/>
@@ -150,7 +152,7 @@ function get_building ( $planet_id )
     {
 ?>
                                                                                 <a class="moonlink tipsStandard"
-                               href="index.php?page=overview&session=<?=$session;?>&cp=<?=$moon['planet_id'];?>"
+                               href="index.php?page=<?=$thispage;?>&session=<?=$session;?>&cp=<?=$moon['planet_id'];?>"
                                title="|<B>Перейти на <?=$moon['name'];?></B>">
                                 <img src="red_images/<?=$moonPictures[$moon['s'] % 5 + 1];?>" width="16" height="16" alt="" class="icon-moon"/>
                             </a>
@@ -161,7 +163,7 @@ function get_building ( $planet_id )
     if ( $queue )
     {
 ?>
-            <a class="constructionIcon tipsStandard" href="index.php?page=overview&session=<?=$session;?>&cp=<?=$planet['planet_id'];?>" title="|<?=loca("NAME_".$queue['obj_id']);?>">
+            <a class="constructionIcon tipsStandard" href="index.php?page=<?=$thispage;?>&session=<?=$session;?>&cp=<?=$planet['planet_id'];?>" title="|<?=loca("NAME_".$queue['obj_id']);?>">
                     <img src="red_images/8d5601022c4f91d22c90802ee65393.gif" height="12" width="12" />
                     </a>
 <?php
@@ -173,7 +175,7 @@ function get_building ( $planet_id )
         if ( $queue )
         {
 ?>
-                                                            <a class="constructionIcon moon tipsStandard" href="index.php?page=overview&session=<?=$session;?>&cp=<?=$moon['planet_id'];?>" title="|<?=loca("NAME_".$queue['obj_id']);?>">
+                                                            <a class="constructionIcon moon tipsStandard" href="index.php?page=<?=$thispage;?>&session=<?=$session;?>&cp=<?=$moon['planet_id'];?>" title="|<?=loca("NAME_".$queue['obj_id']);?>">
                                                                     <img src="red_images/8d5601022c4f91d22c90802ee65393.gif" height="12" width="12" />
                                                                     </a>
 <?php

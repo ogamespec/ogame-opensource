@@ -246,12 +246,12 @@ if ( $_GET['lgn'] == 1 )
 	        </div>
 	        <br class="clearfloat" />
 		</div><!-- #message-wrapper -->
-		<div id="helper">
+<?/*		<div id="helper">
             <a class="tipsStandard" 
                href="index.php?page=tutorial&session=<?=$session;?>"
                title="|Курс обучения">
             </a>
-        </div>
+        </div> */?>
         <div id="selectedPlanetName" class="textCenter">Колония</div>
  </div><!-- Info -->
 

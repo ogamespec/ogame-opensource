@@ -118,7 +118,7 @@ else if ( $_GET['page'] === "messages" ) { include "pages/messages.php"; exit ()
 else if ( $_GET['page'] === "writemessages" ) { include "pages/writemessages.php"; exit (); }
 else if ( $_GET['page'] === "notizen" ) { include "pages/notizen.php"; exit (); }
 else if ( $_GET['page'] === "buddy" || $_GET['page'] === "buddies" ) { include "pages/buddy.php"; exit (); }
-else if ( $_GET['page'] === "options" || $_GET['page'] === "preferences" ) { include "pages/options.php"; exit (); }
+else if ( $_GET['page'] === "options" ) { include "pages/options.php"; exit (); }
 else if ( $_GET['page'] === "logout" ) { include "pages/logout.php"; exit (); }
 else if ( $_GET['page'] === "changelog" ) { include "pages/changelog.php"; exit (); }
 else if ( $_GET['page'] === "pranger" ) { include "pages/pranger.php"; exit (); }
@@ -136,6 +136,7 @@ else if ( $_GET['page'] === "research" ) { include "red_pages/redesign_research.
 else if ( $_GET['page'] === "shipyard" ) { include "red_pages/redesign_shipyard.php"; exit (); }
 else if ( $_GET['page'] === "defense" ) { include "red_pages/redesign_defense.php"; exit (); }
 else if ( $_GET['page'] === "globalTechtree" ) { include "red_pages/redesign_globalTechtree.php"; exit (); }
+else if ( $_GET['page'] === "preferences" ) { include "red_pages/redesign_preferences.php"; exit (); }
 
 RedirectHome ();
 
