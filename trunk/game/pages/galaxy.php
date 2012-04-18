@@ -503,7 +503,7 @@ while ($num--)
         }
         else
         {
-            echo "<a href=# onclick=doit(6,".$planet['g'].",".$planet['s'].",".$planet['p'].",1,1) >Шпионаж</a><br><br />";
+            echo "<a href=# onclick=doit(6,".$planet['g'].",".$planet['s'].",".$planet['p'].",1,".$GlobalUser['maxspy'].") >Шпионаж</a><br><br />";
             if ($phalanx) echo "<a href=# onclick=fenster(&#039;index.php?page=phalanx&session=".$_GET['session']."&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."&#039;) >Фаланга</a><br />";
             if ( $show_ipm_button ) echo "<a href=index.php?page=galaxy&no_header=1&session=$session&mode=1&p1=".$planet['g']."&p2=".$planet['s']."&p3=".$planet['p']."&pdd=".$planet['planet_id']."&zp=".$planet['owner_id']." >Ракетная атака</a><br />";
             echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=1 m>Атака</a><br />";
