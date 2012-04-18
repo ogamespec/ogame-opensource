@@ -79,6 +79,9 @@ onmouseover="return overlib('<center><font size=1 color=white><b>Настрой�
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Logins"><img src="img/admin_logins.png" width='32' height='32'
 onmouseover="return overlib('<center><font size=1 color=white><b>Логины</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Checksum"><img src="img/admin_checksum.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Целостность кода</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
 </td></tr></table><br/>
 
 <?php
@@ -117,6 +120,7 @@ function Admin_Home ()
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Broadcast"><img src="img/admin_broadcast.png"><br>Общее сообщение</a></th>
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Expedition"><img src="<?=hostname();?>evolution/gebaeude/210.gif"><br>Настройки экспедиции</a></th>
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Logins"><img src="img/admin_logins.png"><br>Логины</a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Checksum"><img src="img/admin_checksum.png"><br>Целостность кода</a></th>
     </tr>
     </table>
 <?php
@@ -136,6 +140,7 @@ include "admin_sim.php";
 include "admin_broadcast.php";
 include "admin_expedition.php";
 include "admin_logins.php";
+include "admin_checksum.php";
 
 // ========================================================================================
 
@@ -161,6 +166,7 @@ else if ( $mode === "BattleSim" ) Admin_BattleSim ();
 else if ( $mode === "Broadcast" ) Admin_Broadcast ();
 else if ( $mode === "Expedition" ) Admin_Expedition ();
 else if ( $mode === "Logins" ) Admin_Logins ();
+else if ( $mode === "Checksum" ) Admin_Checksum ();
 else Admin_Home ();
 
 echo "</table>\n";
