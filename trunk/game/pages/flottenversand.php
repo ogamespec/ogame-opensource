@@ -173,7 +173,8 @@ switch ( $order )
         if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
         else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
         else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Невозможно напасть на собственную планету!" );
-        else if ($BlockAttack) FleetError ( "Запрет на атаки до #1" );
+        else if ($BlockAttack) FleetError ( "Запрет на атаки" );
+        else if ($GlobalUser['noattack']) FleetError ( va ( "Запрет на атаки до #1", date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
         break;
 
     case '2':        // Совместная атака
@@ -183,12 +184,15 @@ switch ( $order )
         $union = LoadUnion ($union_id);
         $head_queue = GetFleetQueue ( $union['fleet_id'] );
         $acs_flighttime = $head_queue['end'] - time();
+        $enum_result = EnumUnionFleets ($union_id);
+        $acs_fleets = dbrows ($enum_result);
         if ( ! IsPlayerInUnion ( $GlobalUser['player_id'], $union) || $union == null ) FleetError ( "Вы не приглашены в этот альянс" );
         else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Невозможно напасть на собственную планету!" );
         else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
         else if ( $flighttime > $acs_flighttime * 1.3 ) FleetError ( "Вы слишком медленны, чтобы присоединиться к этому флоту" );
-        else if ($BlockAttack) FleetError ( "Запрет на атаки до #1" );
-//Атаковать флоты (>16 флотов нельзя)
+        else if ($BlockAttack) FleetError ( "Запрет на атаки" );
+        else if ($GlobalUser['noattack']) FleetError ( va ( "Запрет на атаки до #1", date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
+        else if ($acs_fleets >= $unitab['acs'] * $unitab['acs']) FleetError ( va ("Атаковать флоты (>#1 флотов нельзя)", $unitab['acs'] * $unitab['acs']) );
         break;
 
     case '3':        // Транспорт
@@ -209,9 +213,10 @@ switch ( $order )
 
     case '6':        // Шпионаж
         if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Нельзя шпионить на собственной планете!" );
-        if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "На этой планете нельзя шпионить из-за защиты для новичков!" );
-        if ( $fleet[210] == 0 ) FleetError ( "Для шпионажа необходимы шпионские зонды." );
-        if ($BlockAttack) FleetError ( "Запрет на атаки до #1" );
+        else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "На этой планете нельзя шпионить из-за защиты для новичков!" );
+        else if ( $fleet[210] == 0 ) FleetError ( "Для шпионажа необходимы шпионские зонды." );
+        else if ($BlockAttack) FleetError ( "Запрет на атаки" );
+        else if ($GlobalUser['noattack']) FleetError ( va ( "Запрет на атаки до #1", date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
         break;
 
     case '7':        // Колонизировать
@@ -232,7 +237,8 @@ switch ( $order )
     case '9':        // Уничтожить
         if ( $fleet[214] == 0 ) FleetError ( "Для уничтожения луны необходима звезда смерти." );
         else if ($target['type'] != 0 ) FleetError ( "Уничтожать можно только луны!" );
-        else if ($BlockAttack) FleetError ( "Запрет на атаки до #1" );
+        else if ($BlockAttack) FleetError ( "Запрет на атаки" );
+        else if ($GlobalUser['noattack']) FleetError ( va ( "Запрет на атаки до #1", date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
         break;
 
     case '15':       // Экспедиция
