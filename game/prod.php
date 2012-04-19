@@ -382,14 +382,14 @@ function ProdResources ( $planet_id, $time_from, $time_to )
 }
 
 // Стоимость планеты в очках.
-function PlanetPrice ($planet, &$points, &$fpoints)
+function PlanetPrice ($planet, &$points, &$fpoints, &$fleet_pts, &$defense_pts)
 {
     $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
 
     $m = $k = $d = $e = 0;
-    $points = $fpoints = 0;
+    $points = $fpoints = $fleet_pts = $defense_pts = 0;
 
     foreach ( $buildmap as $i=>$gid ) {        // Постройки
         $level = $planet["b$gid"];
@@ -407,6 +407,7 @@ function PlanetPrice ($planet, &$points, &$fpoints)
         if ($level > 0){
             ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
             $points += ($m + $k + $d) * $level;
+            $fleet_pts += ($m + $k + $d) * $level;
             $fpoints += $level;
         }
     }
@@ -416,6 +417,7 @@ function PlanetPrice ($planet, &$points, &$fpoints)
         if ($level > 0){
             ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
             $points += ($m + $k + $d) * $level;
+            $defense_pts += ($m + $k + $d) * $level;
         }
     }
 }

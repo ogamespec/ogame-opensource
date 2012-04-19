@@ -534,8 +534,8 @@ function RecalcStats ($player_id)
     while ($rows--) {
         $planet = dbarray ($result);
         if ( $planet['type'] >= 10000 ) continue;        // считать только планеты и луны.
-        $pts = $fpts = 0;
-        PlanetPrice ($planet, &$pts, &$fpts);
+        $pts = $fpts = $fleet_pts = $def_pts = 0;
+        PlanetPrice ($planet, &$pts, &$fpts, &$fleet_pts, &$def_pts );
         $points += $pts;
         $fpoints += $fpts;
     }

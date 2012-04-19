@@ -19,7 +19,8 @@
 
     // Загрузить список вселенных.
     foreach ( $UniList as $i=>$val) {
-        echo "<option value=\"".$val['uniurl']."\" > $i. ".loca("LOGIN_UNI")."</option>\n";
+        if ( is_int($i) ) echo "<option value=\"".$val['uniurl']."\" > $i. ".loca("LOGIN_UNI")."</option>\n";
+        else echo "<option value=\"".$val['uniurl']."\" >$i</option>\n";
     }
 
 ?>
