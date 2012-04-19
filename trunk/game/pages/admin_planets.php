@@ -297,6 +297,12 @@ function reset ()
         echo "<tr><td class=c colspan=2>Планета \"".$planet['name']."\" (<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>)</td>\n";
         echo "       <td class=c >Постройки</td> <td class=c >Флот</td> <td class=c >Оборона</td> </tr>\n";
         echo "<tr><th><img src=\"".GetPlanetImage (UserSkin(), $planet)."\"> <br>Тип: " . $planet['type'];
+        $points = $fpoints = $fleet_pts = $defense_pts = 0;
+        PlanetPrice ( $planet, &$points, &$fpoints, &$fleet_pts, &$defense_pts );
+        echo "<br>Стоимость : " . nicenum($points / 1000) ;
+        echo "<br>Постройки : " . nicenum( ($points - ($fleet_pts+$defense_pts) ) / 1000) ;
+        echo "<br>Флот : " . nicenum($fleet_pts / 1000) ;
+        echo "<br>Оборона : " . nicenum($defense_pts / 1000) ;
         if ($planet['type'] == 10000 ) echo "<br>М: ".nicenum($planet['m'])."<br>К: ".nicenum($planet['k'])."<br>";
         echo "</th><th>";
         if ( $planet['type'] > 0 && $planet['type'] < 10000 )
