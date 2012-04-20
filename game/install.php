@@ -152,6 +152,10 @@ $tab_template = array (    // Стандартные флоты
     'ship202'=>'INT', 'ship203'=>'INT', 'ship204'=>'INT', 'ship205'=>'INT', 'ship206'=>'INT', 'ship207'=>'INT', 'ship208'=>'INT', 'ship209'=>'INT', 'ship210'=>'INT', 'ship211'=>'INT', 'ship212'=>'INT', 'ship213'=>'INT', 'ship214'=>'INT', 'ship215'=>'INT',
 );
 
+$tab_botvars = array (    // Переменные бота
+    'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'var'=>'TEXT', 'value'=>'TEXT'
+);
+
 $tabs = array (
     'uni' => &$tab_uni,
     'users' => &$tab_users,
@@ -174,6 +178,7 @@ $tabs = array (
     'pranger' => &$tab_pranger,
     'exptab' => &$tab_exptab,
     'template' => &$tab_template,
+    'botvars' => &$tab_botvars,
 );
 
 // -------------------------------------------------------------------------------------------------------------------------
