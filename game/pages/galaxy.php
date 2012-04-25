@@ -516,8 +516,9 @@ while ($num--)
     }
     echo "</th>\n";
 
-    $moon_id = PlanetHasMoon ( $planet['planet_id'] );
-    if ($moon_id) $moon = GetPlanet ( $moon_id );
+    $moon = LoadPlanet ( $coord_g, $coord_s, $p, 3 );
+    if ( $moon ) $moon_id = $moon['planet_id'];
+    else $moon_id = 0;
 
     // Название (активность)
     $now = time ();
@@ -578,10 +579,9 @@ while ($num--)
 
     // поле обломков (не показывать ПО < 500 единиц)
     echo "<th width=\"30\">";
-    $debris_id = HasDebris ($coord_g, $coord_s, $p);
-    if ( $debris_id )
+    $debris = LoadPlanet ( $coord_g, $coord_s, $p, 2 );
+    if ( $debris )
     {
-        $debris = GetPlanet ($debris_id);
         $harvesters = ceil ( ($debris['m'] + $debris['k']) / $UnitParam[209][3]);
         if ( ($debris['m'] + $debris['k']) >= 500 )
         {

@@ -75,7 +75,7 @@ function Plunder ( $cargo, $m, $k, $d, &$cm, &$ck, &$cd )
 }
 
 // Рассчитать общие потери (учитывая восстановленную оборону).
-function CalcLosses ( $a, $d, $res, $repaired, &$aloss, &$dloss )
+function CalcLosses ( &$a, &$d, $res, $repaired, &$aloss, &$dloss )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
@@ -94,6 +94,8 @@ function CalcLosses ( $a, $d, $res, $repaired, &$aloss, &$dloss )
             if ( $amount > 0 ) {
                 ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
                 $aprice += ( $met + $kris + $deut ) * $amount;
+                $a[$i]['points'] += ( $met + $kris + $deut ) * $amount;
+                $a[$i]['fpoints'] += $amount;
             }
         }
     }
@@ -106,6 +108,8 @@ function CalcLosses ( $a, $d, $res, $repaired, &$aloss, &$dloss )
             if ( $amount > 0 ) {
                 ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
                 $dprice += ( $met + $kris + $deut ) * $amount;
+                $d[$i]['points'] += ( $met + $kris + $deut ) * $amount;
+                $d[$i]['fpoints'] += $amount;
             }
         }
         foreach ( $defmap as $n=>$gid )
@@ -114,6 +118,7 @@ function CalcLosses ( $a, $d, $res, $repaired, &$aloss, &$dloss )
             if ( $amount > 0 ) {
                 ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
                 $dprice += ( $met + $kris + $deut ) * $amount;
+                $d[$i]['points'] += ( $met + $kris + $deut ) * $amount;
             }
         }
     }
@@ -133,6 +138,8 @@ function CalcLosses ( $a, $d, $res, $repaired, &$aloss, &$dloss )
                 if ( $amount > 0 ) {
                     ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
                     $alast += ( $met + $kris + $deut ) * $amount;
+                    $a[$i]['points'] -= ( $met + $kris + $deut ) * $amount;
+                    $a[$i]['fpoints'] -= $amount;
                 }
             }
         }
@@ -146,6 +153,8 @@ function CalcLosses ( $a, $d, $res, $repaired, &$aloss, &$dloss )
                 if ( $amount > 0 ) {
                     ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
                     $dlast += ( $met + $kris + $deut ) * $amount;
+                    $d[$i]['points'] -= ( $met + $kris + $deut ) * $amount;
+                    if ( $gid < 400 ) $d[$i]['fpoints'] -= $amount;
                 }
             }
         }
@@ -153,7 +162,15 @@ function CalcLosses ( $a, $d, $res, $repaired, &$aloss, &$dloss )
         $aloss = $aprice - $alast;
         $dloss = $dprice - $dlast;
     }
-    else $aloss = $dloss = 0;
+    else { 
+        foreach ($a as $i=>$attacker) {
+            $a[$i]['points'] = $a[$i]['fpoints'] = 0;
+        }
+        foreach ($d as $i=>$defender) {
+            $d[$i]['points'] = $d[$i]['fpoints'] = 0;
+        }
+        $aloss = $dloss = 0;
+    }
 }
 
 // Суммарная грузоподъемность флотов в последнем раунде.
@@ -747,7 +764,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
 
     // Рассчитать общие потери (учитывать дейтерий и восстановленную оборону)
     $aloss = $dloss = 0;
-    CalcLosses ( $a, $d, $res, $repaired, &$aloss, &$dloss );
+    CalcLosses ( &$a, &$d, $res, $repaired, &$aloss, &$dloss );
 
     // Захватить ресурсы
     $cm = $ck = $cd = 0;
@@ -813,8 +830,8 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_cargo );
 
     // Изменить статистику игроков
-    //foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
-    //foreach ( $d as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
+    foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
+    foreach ( $d as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
     RecalcRanks ();
 
     return $battle_result;
@@ -1095,7 +1112,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 
     // Рассчитать общие потери (учитывать дейтерий и восстановленную оборону)
     $aloss = $dloss = 0;
-    CalcLosses ( $a, $d, $res, array ( ), &$aloss, &$dloss );
+    CalcLosses ( &$a, &$d, $res, array ( ), &$aloss, &$dloss );
 
     // Сгенерировать боевой доклад.
     loca_add ( "techshortnames", "de" );
@@ -1126,8 +1143,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     WritebackBattleResultsExpedition ( $a, $d, $res );
 
     // Изменить статистику игроков
-    //foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
-    //foreach ( $d as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
+    foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
     RecalcRanks ();
 
     return $battle_result;
