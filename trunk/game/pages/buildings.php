@@ -249,10 +249,10 @@ if ( $_GET['mode'] === "Forschung" )
     if ( $prem['technocrat'] ) $r_factor = 1.1;
     else $r_factor = 1.0;
 
-    // Проверить не строится ли Исследовательская лаборатория.
-    $result = GetBuildQueue ( $aktplanet['planet_id'] );
-    $queue = dbarray ( $result );
-    $busy = ( $queue['obj_id'] == 31 ) ;
+    // Исследовательская лаборатория усовершенствуется хоть на одной планете ?
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = 31 AND (type = 'Build' OR type = 'Demolish') AND start < $now";
+    $result = dbquery ( $query );
+    $busy = ( dbrows ($result) > 0 );
 
     // Проверить ведется ли исследование.
     $res = GetResearchQueue ( $GlobalUser['player_id'] );
@@ -355,11 +355,11 @@ if ( $_GET['mode'] === "Forschung" )
             else        // Исследование не проводится.
             {
                 if ($GlobalUser['r'.$id]) {
-                    if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) && !$busy) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>Исследовать<br> уровень  $level</font></a>";
+                    if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>Исследовать<br> уровень  $level</font></a>";
                     else echo "<font color=#FF0000>Исследовать<br> уровень  $level</font>";
                 }
                 else {
-                    if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) && !$busy) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00> исследовать </font></a>";
+                    if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00> исследовать </font></a>";
                     else echo "<font color=#FF0000> исследовать </font></a>";
                 }
             }
