@@ -319,7 +319,7 @@ function GetBuildQueue ( $planet_id)
 // Завершить снос/строительство постройки.
 function Queue_Build_End ($queue)
 {
-    global $db_prefix;
+    global $db_prefix, $GlobalUser;
 
     $id = $queue['obj_id'];
     $lvl = $queue['level'];
@@ -327,6 +327,7 @@ function Queue_Build_End ($queue)
 
     // Рассчитать производство планеты с момента последнего обновления.
     $planet = GetPlanet ( $planet_id );
+    $player_id = $planet['owner_id'];
     ProdResources ( &$planet, $planet['lastpeek'], $queue['end'] );
 
     // Количество полей на планете.
@@ -361,6 +362,8 @@ function Queue_Build_End ($queue)
         AdjustStats ( $queue['owner_id'], $points, 0, 0, '-');
     }
     if ( $lvl > 10 ) RecalcRanks ();
+
+    if ( $GlobalUser['player_id'] == $player_id) $GlobalUser = LoadUser ( $player_id );    // обновить данные текущего пользователя
 }
 
 // Отменить снос/строительство постройки.
@@ -522,12 +525,13 @@ function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
 // Закончить постройку на верфи.
 function Queue_Shipyard_End ($queue)
 {
-    global $db_prefix;
+    global $db_prefix, $GlobalUser;
 
     $now = time ();
     $gid = $queue['obj_id'];
     $planet_id = $queue['sub_id'];
     $planet = GetPlanet ($planet_id);
+    $player_id = $planet['owner_id'];
 
     // Старые значения
     $s = $queue['start'];
@@ -566,6 +570,8 @@ function Queue_Shipyard_End ($queue)
         RemoveQueue ( $queue['task_id'], 0 );
         RecalcRanks ();
     }
+
+    if ( $GlobalUser['player_id'] == $player_id) $GlobalUser = LoadUser ( $player_id );    // обновить данные текущего пользователя
 }
 
 // ===============================================================================================================
@@ -683,9 +689,6 @@ function Queue_Research_End ($queue)
     $query = "UPDATE ".$db_prefix."users SET ".('r'.$id)." = $lvl WHERE player_id = $player_id";
     dbquery ($query);
 
-    // Если исследование завершилось для текущего пользователя, обновить его данные.
-    if ( $GlobalUser['player_id'] == $player_id ) $GlobalUser['r'.$id] = $lvl;
-
     RemoveQueue ( $queue['task_id'], 0 );
 
     // Добавить очки.
@@ -696,6 +699,8 @@ function Queue_Research_End ($queue)
     RecalcRanks ();
 
     Debug ( "Исследование ".loca("NAME_$id")." уровня $lvl для пользователя $player_id завершено." );
+
+    if ( $GlobalUser['player_id'] == $player_id) $GlobalUser = LoadUser ( $player_id );    // обновить данные текущего пользователя
 }
 
 // ===============================================================================================================
