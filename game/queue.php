@@ -589,6 +589,11 @@ function StartResearch ($player_id, $planet_id, $id, $now)
     $resq = dbarray ($result);
     if ($resq) return;
 
+    // Исследовательская лаборатория усовершенствуется хоть на одной планете ?
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = 31 AND (type = 'Build' OR type = 'Demolish') AND start < $now";
+    $result = dbquery ( $query );
+    if ( dbrows ($result) > 0 ) return;
+
     // Получить уровень исследования.
     $user = LoadUser ( $player_id );
     $level = $user['r'.$id] + 1;
