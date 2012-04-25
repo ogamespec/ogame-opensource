@@ -327,7 +327,7 @@ function Queue_Build_End ($queue)
 
     // Рассчитать производство планеты с момента последнего обновления.
     $planet = GetPlanet ( $planet_id );
-    ProdResources ( $planet_id, $planet['lastpeek'], $queue['end'] );
+    ProdResources ( &$planet, $planet['lastpeek'], $queue['end'] );
 
     // Количество полей на планете.
     if ($queue['type'] === "Build" )
@@ -672,7 +672,7 @@ function Queue_Research_End ($queue)
 
     // Рассчитать производство планеты с момента последнего обновления.
     $planet = GetPlanet ( $planet_id );
-    ProdResources ( $planet_id, $planet['lastpeek'], $queue['end'] );
+    ProdResources ( &$planet, $planet['lastpeek'], $queue['end'] );
 
     // Обновить уровень исследования в базе данных.
     $query = "UPDATE ".$db_prefix."users SET ".('r'.$id)." = $lvl WHERE player_id = $player_id";
