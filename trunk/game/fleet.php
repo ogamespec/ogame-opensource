@@ -975,7 +975,10 @@ function Queue_Fleet_End ($queue)
     }
 
     $player_id = $fleet_obj['owner_id'];
-    if ( $GlobalUser['player_id'] == $player_id) $GlobalUser = LoadUser ( $player_id );    // обновить данные текущего пользователя
+    if ( $GlobalUser['player_id'] == $player_id) { 
+        InvalidateUserCache ();
+        $GlobalUser = LoadUser ( $player_id );    // обновить данные текущего пользователя
+    }
 }
 
 // ==================================================================================

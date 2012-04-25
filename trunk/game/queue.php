@@ -363,7 +363,10 @@ function Queue_Build_End ($queue)
     }
     if ( $lvl > 10 ) RecalcRanks ();
 
-    if ( $GlobalUser['player_id'] == $player_id) $GlobalUser = LoadUser ( $player_id );    // обновить данные текущего пользователя
+    if ( $GlobalUser['player_id'] == $player_id) {
+        InvalidateUserCache ();
+        $GlobalUser = LoadUser ( $player_id );    // обновить данные текущего пользователя
+    }
 }
 
 // Отменить снос/строительство постройки.
@@ -571,7 +574,10 @@ function Queue_Shipyard_End ($queue)
         RecalcRanks ();
     }
 
-    if ( $GlobalUser['player_id'] == $player_id) $GlobalUser = LoadUser ( $player_id );    // обновить данные текущего пользователя
+    if ( $GlobalUser['player_id'] == $player_id) {
+        InvalidateUserCache ();
+        $GlobalUser = LoadUser ( $player_id );    // обновить данные текущего пользователя
+    }
 }
 
 // ===============================================================================================================
@@ -700,7 +706,10 @@ function Queue_Research_End ($queue)
 
     Debug ( "Исследование ".loca("NAME_$id")." уровня $lvl для пользователя $player_id завершено." );
 
-    if ( $GlobalUser['player_id'] == $player_id) $GlobalUser = LoadUser ( $player_id );    // обновить данные текущего пользователя
+    if ( $GlobalUser['player_id'] == $player_id) {
+        InvalidateUserCache ();
+        $GlobalUser = LoadUser ( $player_id );    // обновить данные текущего пользователя
+    }
 }
 
 // ===============================================================================================================
