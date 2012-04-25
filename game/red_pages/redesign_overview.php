@@ -17,7 +17,7 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-ProdResources ( $GlobalUser['aktplanet'], $aktplanet['lastpeek'], $now );
+ProdResources ( &$aktplanet, $aktplanet['lastpeek'], $now );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
