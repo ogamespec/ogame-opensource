@@ -911,6 +911,7 @@ function RocketAttackArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
 function Queue_Fleet_End ($queue)
 {
+    global $GlobalUser;
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $fleet_obj = LoadFleet ( $queue['sub_id'] );
     if ( $fleet_obj == null ) return;
@@ -972,6 +973,9 @@ function Queue_Fleet_End ($queue)
         DeleteFleet ($fleet_obj['fleet_id']);    // удалить флот
         RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
     }
+
+    $player_id = $fleet_obj['owner_id'];
+    if ( $GlobalUser['player_id'] == $player_id) $GlobalUser = LoadUser ( $player_id );    // обновить данные текущего пользователя
 }
 
 // ==================================================================================
