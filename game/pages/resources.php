@@ -138,11 +138,11 @@ $f_prod = prod_fusion($planet['b12'], $GlobalUser['r113'], $planet['fprod']) * $
 $ss_prod = prod_sat($planet['temp']+40) * $planet['f212'] * $planet['ssprod'] * $e_factor;
 
 // Потребление.
-$m_cons = cons_metal ($planet['b1']) * $planet['mprod'] * $speed;
+$m_cons = cons_metal ($planet['b1']) * $planet['mprod'];
 $m_cons0 = round ($m_cons * $planet['factor']);
-$k_cons = cons_crys ($planet['b2']) * $planet['kprod'] * $speed;
+$k_cons = cons_crys ($planet['b2']) * $planet['kprod'];
 $k_cons0 = round ($k_cons * $planet['factor']);
-$d_cons = cons_deut ($planet['b3']) * $planet['dprod'] * $speed;
+$d_cons = cons_deut ($planet['b3']) * $planet['dprod'];
 $d_cons0 = round ($d_cons * $planet['factor']);
 $f_cons = - cons_fusion ( $planet['b12'], $planet['fprod'] ) * $speed;
 
