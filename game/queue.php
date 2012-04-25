@@ -663,7 +663,7 @@ function GetResearchQueue ($player_id)
 // Закончить исследование.
 function Queue_Research_End ($queue)
 {
-    global $db_prefix;
+    global $db_prefix, $GlobalUser;
 
     $id = $queue['obj_id'];
     $lvl = $queue['level'];
@@ -677,6 +677,9 @@ function Queue_Research_End ($queue)
     // Обновить уровень исследования в базе данных.
     $query = "UPDATE ".$db_prefix."users SET ".('r'.$id)." = $lvl WHERE player_id = $player_id";
     dbquery ($query);
+
+    // Если исследование завершилось для текущего пользователя, обновить его данные.
+    if ( $GlobalUser['player_id'] == $player_id ) $GlobalUser['r'.$id] = $lvl;
 
     RemoveQueue ( $queue['task_id'], 0 );
 
