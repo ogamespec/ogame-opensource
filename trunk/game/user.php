@@ -62,6 +62,7 @@ Q - для обработки этого события используется
 */
 
 $UserCache = array ();
+$PremiumCache = array ();
 
 function mail_utf8($to, $subject = '(No subject)', $message = '', $header = '') {
   $header_ = 'MIME-Version: 1.0' . "\r\n" . 'Content-type: text/plain; charset=UTF-8' . "\r\n";
@@ -395,6 +396,9 @@ function IsPlayerStrong ( $player_id)
 // Получить статус командиров на аккаунте.
 function PremiumStatus ($user)
 {
+    global $PremiumCache;
+    if ( isset ( $PremiumCache [ $user['player_id'] ] ) ) return  $PremiumCache [ $user['player_id'] ];
+
     $prem = array ();
     $qcmd = array ( 'commander' => 'CommanderOff', 'admiral' => 'AdmiralOff', 'engineer' => 'EngineerOff', 'geologist' => 'GeologeOff', 'technocrat' => 'TechnocrateOff');
 
@@ -410,6 +414,7 @@ function PremiumStatus ($user)
         $prem[$i] = $enabled;
         $prem[$i.'_days'] = $d;
     }
+    $PremiumCache[ $user['player_id'] ]  = $prem;
     return $prem;
 }
 
