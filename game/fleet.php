@@ -341,8 +341,9 @@ function RecallFleet ($fleet_id, $now=0)
     $target = GetPlanet ( $fleet_obj['target_planet'] );
     $queue = GetFleetQueue ($fleet_obj['fleet_id']);
 
+    // Для отзыва миссий с удержанием в качестве времени обратного полёта используется время удержания.
     if ($fleet_obj['mission'] < 100) DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] + 100, $now-$queue['start'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $now);
-    else DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] - 100, $now-$queue['start'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $now);
+    else DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] - 100, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $now);
 
     DeleteFleet ($fleet_obj['fleet_id']);            // удалить флот
     RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
