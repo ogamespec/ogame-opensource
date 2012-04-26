@@ -31,6 +31,8 @@ if (parent.frames.length == 0) {
 
 <div id="mainmenu">
 <?php mainmenu ("home"); ?>
+<br><br>
+<?php include ('stat.php'); ?>
 </div>
 
 <?php include ('content_home.tpl'); ?>
