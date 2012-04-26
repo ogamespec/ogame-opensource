@@ -46,7 +46,7 @@ R - случайные параметры
 // colony: 1 - создать колонию, 0 - Главная планета
 // moon: 1 - создать луну
 // moonchance: шанс возникновения луны (для размера луны)
-function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0)
+function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0, $when=0)
 {
     global $db_prefix;
 
@@ -101,7 +101,8 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     }
 
     // Добавить планету
-    $now = time();
+    if ( $when == 0 ) $now = time();
+    else $now = $when;
     if ($moon) $planet = array( null, $name, $type, $g, $s, $p, $owner_id, $diam, $temp, 0, 1, $now,
                                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                           0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

@@ -818,7 +818,7 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
             $text .= ", находит там новую планету и сразу же начинает её освоение.\n";
 
             // Создать новую колонию.
-            $id = CreatePlanet ( $target['g'], $target['s'], $target['p'], $fleet_obj['owner_id'], 1 );
+            $id = CreatePlanet ( $target['g'], $target['s'], $target['p'], $fleet_obj['owner_id'], 1, 0, 0, $queue['end'] );
             Debug ( "Игроком ".$origin['owner_id']." колонизирована планета $id [".$target['g'].":".$target['s'].":".$target['p']."]");
 
             // Отнять от флота 1 колонизатор
