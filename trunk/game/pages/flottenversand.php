@@ -129,7 +129,28 @@ if ( $nowfleet >= $maxfleet ) FleetError ( "Достигнута максима�
 
 if ( $origin_user['ip_addr'] !== "127.0.0.1" )        // для локальных подключений не делать проверку на мультоводство
 {
-    //if ( $origin_user['ip_addr'] === $target_user['ip_addr'] && $origin_user['player_id'] != $target_user['player_id'] ) FleetError ( "Невозможно приблизиться к игроку!" );
+    if ( $origin_user['ip_addr'] === $target_user['ip_addr'] && $origin_user['player_id'] != $target_user['player_id'] ) FleetError ( "Невозможно приблизиться к игроку!" );
+}
+
+// Время удержания
+$hold_time = 0;
+if ( $order == 15 ) {    // Экспедиция
+    if ( key_exists ('expeditiontime', $_POST) ) {
+        $hold_time = floor (intval($_POST['expeditiontime']));
+        if ( $hold_time > $GlobalUser['r124'] ) $hold_time = $GlobalUser['r124'];
+        if ( $hold_time < 1 ) $hold_time = 1;
+    }
+    else $hold_time = 1;
+    $hold_time *= 60*60;        // перевести в секунды
+}
+else if ( $order == 5 ) {    // Держаться
+    if ( key_exists ('holdingtime', $_POST) ) {
+        $hold_time = floor (intval($_POST['holdingtime']));
+        if ( $hold_time > 32 ) $hold_time = 32;
+        if ( $hold_time < 0 ) $hold_time = 0;
+    }
+    else $hold_time = 0;
+    $hold_time *= 60*60;        // перевести в секунды
 }
 
 // Рассчитать расстояние, время полёта и затраты дейтерия.
@@ -143,6 +164,9 @@ foreach ($fleet as $id=>$amount)
     if ($id != 210) $cargo += FleetCargo ($id) * $amount;        // не считать зонды.
     else $spycargo = FleetCargo ($id) * $amount;
     $numships += $amount;
+
+    $hours = $hold_time / 3600;    // затраты на удержание
+    $cons += $hours * $amount * FleetCons ($id, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] ) / 10;
 }
 
 if ($origin['d'] < $cons) FleetError ( "Недостаточно топлива!" );
@@ -289,27 +313,6 @@ if ($FleetError) {
 else {
 
     //print_r ( $_POST);
-
-    // Время удержания
-    $hold_time = 0;
-    if ( $order == 15 ) {    // Экспедиция
-        if ( key_exists ('expeditiontime', $_POST) ) {
-            $hold_time = floor (intval($_POST['expeditiontime']));
-            if ( $hold_time > $GlobalUser['r124'] ) $hold_time = $GlobalUser['r124'];
-            if ( $hold_time < 1 ) $hold_time = 1;
-        }
-        else $hold_time = 1;
-        $hold_time *= 60*60;        // перевести в секунды
-    }
-    else if ( $order == 5 ) {    // Держаться
-        if ( key_exists ('holdingtime', $_POST) ) {
-            $hold_time = floor (intval($_POST['holdingtime']));
-            if ( $hold_time > 32 ) $hold_time = 32;
-            if ( $hold_time < 0 ) $hold_time = 0;
-        }
-        else $hold_time = 0;
-        $hold_time *= 60*60;        // перевести в секунды
-    }
 
     $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $cargo_m, $cargo_k, $cargo_d, $cons, time(), $union_id, $hold_time );
     $queue = GetFleetQueue ($fleet_id);
