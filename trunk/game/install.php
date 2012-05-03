@@ -46,7 +46,7 @@ function gen_trivial_password ($len = 8)
 // -------------------------------------------------------------------------------------------------------------------------
 
 $tab_uni = array (        // Вселенная
-    'num'=>'INT','speed'=>'FLOAT','galaxies'=>'INT','systems'=>'INT','maxusers'=>'INT','acs'=>'INT','fid'=>'INT','did'=>'INT','rapid'=>'INT','moons'=>'INT','defrepair'=>'INT','defrepair_delta'=>'INT','usercount'=>'INT','freeze'=>'INT',
+    'num'=>'INT','speed'=>'FLOAT','fspeed'=>'FLOAT','galaxies'=>'INT','systems'=>'INT','maxusers'=>'INT','acs'=>'INT','fid'=>'INT','did'=>'INT','rapid'=>'INT','moons'=>'INT','defrepair'=>'INT','defrepair_delta'=>'INT','usercount'=>'INT','freeze'=>'INT',
     'news1'=>'TEXT', 'news2'=>'TEXT', 'news_until'=>'INT UNSIGNED', 'startdate'=>'INT UNSIGNED', 'battle_engine'=>'TEXT'
 );
 
@@ -218,6 +218,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query = "INSERT INTO ".$_POST["db_prefix"]."uni SET ";
     $query .= "num = '".$_POST["uni_num"]."', ";
     $query .= "speed = '".$_POST["uni_speed"]."', ";
+    $query .= "fspeed = '".$_POST["uni_fspeed"]."', ";
     $query .= "galaxies = '".$_POST["uni_galaxies"]."', ";
     $query .= "systems = '".$_POST["uni_systems"]."', ";
     $query .= "maxusers = '".$_POST["uni_maxusers"]."', ";
@@ -396,7 +397,8 @@ td.c { background-color: #334445; }
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan=2 class='c'>Настройки вселенной</td></tr>
 <tr><td><a title='Номер вселенной будет указан в заголовке окна и над главным меню в игре.'>Номер вселенной</a></td><td><input type=text value='1' class='text' name='uni_num'></td></tr>
-<tr><td><a title='Ускорение влияет на скорость добычи ресурсов, длительность построек и проведение исследований, скорость летящих флотов, минимальную длительность Режима Отпуска.'>Ускорение</a></td><td><input type=text value='1' class='text' name='uni_speed'></td></tr>
+<tr><td><a title='Ускорение игры влияет на скорость добычи ресурсов, длительность построек и проведение исследований, минимальную длительность Режима Отпуска.'>Ускорение</a></td><td><input type=text value='1' class='text' name='uni_speed'></td></tr>
+<tr><td><a title='Ускорение флота влияет только на скорость летящих флотов'>Ускорение флота</a></td><td><input type=text value='1' class='text' name='uni_fspeed'></td></tr>
 <tr><td>Количество галактик</td><td><input type=text value='9' class='text' name='uni_galaxies'></td></tr>
 <tr><td>Количество систем</td><td><input type=text value='499' class='text' name='uni_systems'></td></tr>
 <tr><td><a title='Максимальное количество аккаунтов. После достижения этого значения регистрация закрывается до тех пор, пока не освободится место.'>Максимум игроков</a></td><td><input type=text value='12500' class='text' name='uni_maxusers'></td></tr>

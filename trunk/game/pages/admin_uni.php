@@ -26,7 +26,7 @@ function Admin_Uni ()
             DisableNews ();
         }
 
-        SetUniParam ( $_POST['speed'], $_POST['acs'], $_POST['fid'], $_POST['did'], $_POST['defrepair'], $_POST['defrepair_delta'], $_POST['galaxies'], $_POST['systems'] );
+        SetUniParam ( $_POST['speed'], $_POST['fspeed'], $_POST['acs'], $_POST['fid'], $_POST['did'], $_POST['defrepair'], $_POST['defrepair_delta'], $_POST['galaxies'], $_POST['systems'] );
 
         //print_r ( $_POST );
     }
@@ -46,7 +46,7 @@ function Admin_Uni ()
 <tr><th>Количество систем в галактике</th><th><input type="text" name="systems" maxlength="3" size="3" value="<?=$unitab['systems'];?>" /></th></tr>
 
   <tr>
-   <th>Ускорение</th>
+   <th>Ускорение игры</th>
    <th>
    <select name="speed">
      <option value="1" <?=UniIsSelected($unitab['speed'], 1);?>>1x</option>
@@ -59,6 +59,24 @@ function Admin_Uni ()
      <option value="8" <?=UniIsSelected($unitab['speed'], 8);?>>8x</option>
      <option value="9" <?=UniIsSelected($unitab['speed'], 9);?>>9x</option>
      <option value="10" <?=UniIsSelected($unitab['speed'], 10);?>>10x</option>
+   </select>
+   </th>
+ </tr>
+
+  <tr>
+   <th>Ускорение флота</th>
+   <th>
+   <select name="fspeed">
+     <option value="1" <?=UniIsSelected($unitab['fspeed'], 1);?>>1x</option>
+     <option value="2" <?=UniIsSelected($unitab['fspeed'], 2);?>>2x</option>
+     <option value="3" <?=UniIsSelected($unitab['fspeed'], 3);?>>3x</option>
+     <option value="4" <?=UniIsSelected($unitab['fspeed'], 4);?>>4x</option>
+     <option value="5" <?=UniIsSelected($unitab['fspeed'], 5);?>>5x</option>
+     <option value="6" <?=UniIsSelected($unitab['fspeed'], 6);?>>6x</option>
+     <option value="7" <?=UniIsSelected($unitab['fspeed'], 7);?>>7x</option>
+     <option value="8" <?=UniIsSelected($unitab['fspeed'], 8);?>>8x</option>
+     <option value="9" <?=UniIsSelected($unitab['fspeed'], 9);?>>9x</option>
+     <option value="10" <?=UniIsSelected($unitab['fspeed'], 10);?>>10x</option>
    </select>
    </th>
  </tr>

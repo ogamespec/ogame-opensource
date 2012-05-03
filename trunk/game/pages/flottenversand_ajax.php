@@ -8,7 +8,7 @@ BrowseHistory ();
 
 $uni = LoadUniverse ();
 if ( $uni['freeze'] ) AjaxSendError ();    // Вселенная на паузе.
-$unispeed = $uni['speed'];
+$unispeed = $uni['fspeed'];
 $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
 
 function AjaxSendError ($id=601)

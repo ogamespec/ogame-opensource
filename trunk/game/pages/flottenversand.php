@@ -61,7 +61,7 @@ loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "fleet", $GlobalUser['lang'] );
 
 $unitab = LoadUniverse ();
-$unispeed = $unitab['speed'];
+$unispeed = $unitab['fspeed'];
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
