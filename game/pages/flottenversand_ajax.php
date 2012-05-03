@@ -88,13 +88,13 @@ if ( $order == 6 )
 
     if ( $target['owner_id'] == $GlobalUser['player_id'] ) AjaxSendError ();    // Своя планета
     if ( $GlobalUser['noattack'] || $BlockAttack ) AjaxSendError ();    // Бан атак
-    //if ( $target_user['admin'] > 0 ) AjaxSendError ();    // администрацию сканить нельзя
+    if ( $target_user['admin'] > 0 ) AjaxSendError ();    // администрацию сканить нельзя
     if ( IsPlayerNewbie ($target_user['player_id']) ) AjaxSendError (603);    // защита новичков
     if ( IsPlayerStrong ($target_user['player_id']) ) AjaxSendError (604);    // защита сильных
     if ( $target_user['vacation'] ) AjaxSendError (605);    // игрок в режиме отпуска
     if ( $amount == 0 ) AjaxSendError (611);    // нет кораблей для отправки
     if ( $GlobalUser['ip_addr'] !== "127.0.0.1" ) {
-        //if ( $target_user['ip_addr'] === $GlobalUser['ip_addr'] ) AjaxSendError (616);    // мультиалярм
+        if ( $target_user['ip_addr'] === $GlobalUser['ip_addr'] ) AjaxSendError (616);    // мультиалярм
     }
 
     // Сформировать флот.
