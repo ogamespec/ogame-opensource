@@ -812,7 +812,7 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
             $text .= ", и устанавливает, что эта планета пригодна для колонизации. Вскоре после начала освоения планеты поступает сообщение о беспорядках на главной планете, так как империя становится слишком большой и люди возвращаются обратно.\n";
 
             // Добавить покинутую колонию.
-            CreateAbandonedColony ( $target['g'], $target['s'], $target['p'], $queue['end'] );
+            $id = CreateAbandonedColony ( $target['g'], $target['s'], $target['p'], $queue['end'] );
         }
         else
         {
@@ -833,7 +833,11 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         foreach ($fleetmap as $i=>$gid) {
             $num_ships += $fleet[$gid];
         }
-        if ($num_ships > 0) DispatchFleet ($fleet, $origin, $target, 107, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
+        if ($num_ships > 0) {
+            if ($target['type'] == 10002) DestroyPlanet ( $target['planet_id'] );
+            $target = GetPlanet ($id);
+            DispatchFleet ($fleet, $origin, $target, 107, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
+        }
         else {
             if ($target['type'] == 10002) DestroyPlanet ( $target['planet_id'] );
         }
