@@ -248,7 +248,7 @@ switch ( $order )
         else if (HasPlanet (intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet'])) ) FleetError ( "Планета уже заселена!" );
         else {
             // Если отправлен колонизатор - добавить фантом колонизации.
-            $id = CreateColonyPhantom ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), $origin_user['player_id'] );
+            $id = CreateColonyPhantom ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), 99999 );
             $target = GetPlanet ($id);
         }
         break;
