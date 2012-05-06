@@ -328,7 +328,13 @@ else {
     //echo "<br>";
     //print_r ( $queue);
 
+    $before_m = $aktplanet['m'];
+    $before_k = $aktplanet['k'];
+    $before_d = $aktplanet['d'];
     $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+    if ( $aktplanet['d'] < 0 ) {
+        Debug ( "Флот отправлен ГРУЗ: $cargo_m, $cargo_k, $cargo_d, ЗАТРАТЫ: $cons, РЕСЫ НА ПЛАНЕТЕ ДО ЗАПУСКА: $before_m, $before_k, $before_d, РЕСЫ FLEET3: ".$_POST['resource1'].", ".$_POST['resource2'].", ".$_POST['resource3'] );
+    }
 
     PageHeader ("flottenversand", false, true, "flotten1", 1);
 

@@ -170,7 +170,9 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
     <th><a href="index.php?page=galaxy&galaxy=<?=$origin['g'];?>&system=<?=$origin['s'];?>&position=<?=$origin['p'];?>&session=<?=$session;?>" >[<?=$origin['g'];?>:<?=$origin['s'];?>:<?=$origin['p'];?>]</a></th>
 
     <th><?=date ( "D M j G:i:s", $queue['start']);?></th>
-    <th><a href="index.php?page=galaxy&galaxy=<?=$target['g'];?>&system=<?=$target['s'];?>&position=<?=$target['p'];?>&session=<?=$session;?>" >[<?=$target['g'];?>:<?=$target['s'];?>:<?=$target['p'];?>]</a>    <br /><?=$target_user['oname'];?>    </th>
+    <th><a href="index.php?page=galaxy&galaxy=<?=$target['g'];?>&system=<?=$target['s'];?>&position=<?=$target['p'];?>&session=<?=$session;?>" >[<?=$target['g'];?>:<?=$target['s'];?>:<?=$target['p'];?>]</a><?php
+    if ( ! ($target['type'] == 10002 || $target['type'] == 20000) ) echo "   <br />" . $target_user['oname'];
+?>    </th>
     <th><?=date ( "D M j G:i:s", $queue['end']);?></th>
     <th>
 <?php
