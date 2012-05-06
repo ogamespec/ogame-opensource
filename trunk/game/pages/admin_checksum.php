@@ -145,8 +145,8 @@ function Admin_Checksum ()
     foreach ( $engine_files as $i=>$filename ) {
         $md = md5_file($filename) ;
         echo "<tr><td>$filename</td><td>$md</td>";
-        if ( $engine_md[$filename] === $md ) echo "<td><font color=green>OK</font></td>";
-        else echo "<td><font color=red>BAD</font></td>";
+        if ( $engine_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
+        else echo "<td><font color=red><b>BAD</b></font></td>";
         echo "</tr>";
     }
 ?>
@@ -160,8 +160,8 @@ function Admin_Checksum ()
     foreach ( $page_files as $i=>$filename ) {
         $md = md5_file($filename) ;
         echo "<tr><td>$filename</td><td>$md</td>";
-        if ( $page_md[$filename] === $md ) echo "<td><font color=green>OK</font></td>";
-        else echo "<td><font color=red>BAD</font></td>";
+        if ( $page_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
+        else echo "<td><font color=red><b>BAD</b></font></td>";
         echo "</tr>";
     }
 ?>
@@ -175,8 +175,8 @@ function Admin_Checksum ()
     foreach ( $reg_files as $i=>$filename ) {
         $md = md5_file($filename) ;
         echo "<tr><td>$filename</td><td>$md</td>";
-        if ( $reg_md[$filename] === $md ) echo "<td><font color=green>OK</font></td>";
-        else echo "<td><font color=red>BAD</font></td>";
+        if ( $reg_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
+        else echo "<td><font color=red><b>BAD</b></font></td>";
         echo "</tr>";
     }
 ?>
