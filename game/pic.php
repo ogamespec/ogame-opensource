@@ -1,5 +1,8 @@
 <?php
 
+header('Location: '.$_REQUEST['url']);
+die ();
+
 // Скрипт для отображения картинок и проверки их на вредоносное ПО.
 
 if ( !key_exists ('url', $_GET)) die ();
