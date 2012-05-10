@@ -250,7 +250,7 @@ if ( $_GET['mode'] === "Forschung" )
     else $r_factor = 1.0;
 
     // Исследовательская лаборатория усовершенствуется хоть на одной планете ?
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = 31 AND (type = 'Build' OR type = 'Demolish') AND start < $now";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = 31 AND (type = 'Build' OR type = 'Demolish') AND start < $now AND owner_id = " . $GlobalUser['player_id'];
     $result = dbquery ( $query );
     $busy = ( dbrows ($result) > 0 );
 
