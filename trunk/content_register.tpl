@@ -28,8 +28,10 @@
     require_once "uni.php";
 
     foreach ( $UniList as $i=>$val) {
-        echo "<option value=\"".$val['uniurl']."\" >$i";
-        if (0) echo " (очень советуем!)";
+        echo "<option value=\"".$val['uniurl']."\" ";
+        if ($i == 3) echo "selected";
+        echo ">$i";
+        if ($i == 3) echo " (очень советуем!)";
         echo "</option>\n";
     }
 ?>
