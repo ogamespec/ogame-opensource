@@ -602,7 +602,7 @@ function StartResearch ($player_id, $planet_id, $id, $now)
     if ($resq) return;
 
     // Исследовательская лаборатория усовершенствуется хоть на одной планете ?
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = 31 AND (type = 'Build' OR type = 'Demolish') AND start < $now";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = 31 AND (type = 'Build' OR type = 'Demolish') AND start < $now$query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = 31 AND (type = 'Build' OR type = 'Demolish') AND start < $now AND owner_id = " . $player_id;
     $result = dbquery ( $query );
     if ( dbrows ($result) > 0 ) return;
 
