@@ -56,13 +56,13 @@ if ( method () === "POST" )
             RecallFleet ( $fleet_id );
     }
 
-    else if ( key_exists ( 'union_name', $_POST) && $uni['acs'] > 0 ) {
+    if ( key_exists ( 'union_name', $_POST) && $uni['acs'] > 0 ) {
         $fleet_id = intval ($_POST['flotten']);
         $union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
         RenameUnion ( $union_id, $_POST['union_name'] );    // переименовать
     }
 
-    else if ( key_exists ( 'user_name', $_POST) && $uni['acs'] > 0 ) { 
+    if ( key_exists ( 'user_name', $_POST) && $uni['acs'] > 0 ) { 
         $fleet_id = intval ($_POST['flotten']);
         $union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
         $FleetError = AddUnionMember ( $union_id, $_POST['user_name'] );    // добавить игрока
