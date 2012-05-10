@@ -45,6 +45,13 @@ else
 // Обработка POST-запросов (в РО изменять настройки энергии нельзя)
 if ( method () === "POST" && !$GlobalUser['vacation'] )
 {
+    if ( key_exists ( 'last1', $_POST ) ) $exist1 = true;
+    if ( key_exists ( 'last2', $_POST ) ) $exist2 = true;
+    if ( key_exists ( 'last3', $_POST ) ) $exist3 = true;
+    if ( key_exists ( 'last4', $_POST ) ) $exist4 = true;
+    if ( key_exists ( 'last12', $_POST ) ) $exist12 = true;
+    if ( key_exists ( 'last212', $_POST ) ) $exist212 = true;
+
     $_POST['last1'] = intval($_POST['last1']);
     $_POST['last2'] = intval($_POST['last2']);
     $_POST['last3'] = intval($_POST['last3']);
@@ -72,8 +79,17 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
     $last212 = round ($_POST['last212'] / 10) * 10 / 100;
 
     $planet_id = $aktplanet['planet_id'];
-    $query = "UPDATE ".$db_prefix."planets SET mprod = $last1, kprod = $last2, dprod = $last3, sprod = $last4, fprod = $last12, ssprod = $last212 WHERE planet_id = $planet_id";
-    dbquery ($query);
+    if ( $exist1 || $exist2 || $exist3 || $exist4 || $exist12 || $exist212 ) {
+        $query = "UPDATE ".$db_prefix."planets SET ";
+        if ($exist1) $query .= "mprod = $last1, ";
+        if ($exist2) $query .= "kprod = $last2, ";
+        if ($exist3) $query .= "dprod = $last3, ";
+        if ($exist4) $query .= "sprod = $last4, ";
+        if ($exist12) $query .= "fprod = $last12, ";
+        if ($exist212) $query .= "ssprod = $last212, ";
+        $query .= " type = type WHERE planet_id = $planet_id";
+        dbquery ($query);
+    }
 
     $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // перегрузить планету.
 }
