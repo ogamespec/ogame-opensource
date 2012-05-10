@@ -149,7 +149,7 @@ function IsEmailExist ( $email, $name="")
 
 // Проверок на правильность не делается! Этим занимается процедура регистрации.
 // Возвращает ID созданного пользователя.
-function CreateUser ( $name, $pass, $email)
+function CreateUser ( $name, $pass, $email, $bot=false)
 {
     global $db_prefix, $db_secret;
     $origname = $name;
@@ -191,8 +191,10 @@ function CreateUser ( $name, $pass, $email)
     dbquery ( $query );
 
     // Выслать приветственное письмо и сообщение.
-    if ( $ip !== "127.0.0.1" ) SendGreetingsMail ( $origname, $pass, $email, $ack);
-    SendGreetingsMessage ( $id);
+    if ( !$bot ) {
+        if ( $ip !== "127.0.0.1" ) SendGreetingsMail ( $origname, $pass, $email, $ack);
+        SendGreetingsMessage ( $id);
+    }
 
     // Активировать Командира на 9999 дней.
     RecruitOfficer ( $id, 'CommanderOff', 9999 * 24 * 60 * 60 );
