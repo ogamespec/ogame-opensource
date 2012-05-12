@@ -127,7 +127,7 @@ else
         $prod_now = prod_metal ($aktplanet['b'.$gid], 1 );
         $cons_now = -cons_metal ($aktplanet['b'.$gid]);
         for ($i=$level; $i<$level+15; $i++) {
-            $prod = prod_metal ($i, 1 );
+            $prod = prod_metal ($i, 1 ) * $speed;
             $cons = -cons_metal ($i);
 
             if ($i==$aktplanet['b'.$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
@@ -147,7 +147,7 @@ else
         $prod_now = prod_crys ($aktplanet['b'.$gid], 1 );
         $cons_now = -cons_crys ($aktplanet['b'.$gid]);
         for ($i=$level; $i<$level+15; $i++) {
-            $prod = prod_crys ($i, 1 );
+            $prod = prod_crys ($i, 1 ) * $speed;
             $cons = -cons_crys ($i);
 
             if ($i==$aktplanet['b'.$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
@@ -167,7 +167,7 @@ else
         $prod_now = prod_deut ($aktplanet['b'.$gid], $aktplanet['temp']+40, 1 );
         $cons_now = -cons_deut ($aktplanet['b'.$gid]);
         for ($i=$level; $i<$level+15; $i++) {
-            $prod = prod_deut ($i, $aktplanet['temp']+40, 1 );
+            $prod = prod_deut ($i, $aktplanet['temp']+40, 1 ) * $speed;
             $cons = -cons_deut ($i);
 
             if ($i==$aktplanet['b'.$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
@@ -204,7 +204,7 @@ else
         $cons_now = -cons_fusion ($aktplanet['b'.$gid], 1 );
         for ($i=$level; $i<$level+15; $i++) {
             $prod = prod_fusion ($i, $GlobalUser['r113'], 1 );
-            $cons = -cons_fusion ($i, 1 );
+            $cons = -cons_fusion ($i, 1 ) * $speed;
 
             if ($i==$aktplanet['b'.$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
             else echo "<tr> <th> $i</th> ";
