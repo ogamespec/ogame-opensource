@@ -823,8 +823,13 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
             Debug ( "Игроком ".$origin['owner_id']." колонизирована планета $id [".$target['g'].":".$target['s'].":".$target['p']."]");
 
             // Отнять от флота 1 колонизатор
-            $fleet[208]--;
-            if ( $fleet[208] < 0 ) $fleet[208] = 0;
+            if ( $fleet[208] > 0 ) {
+                $fleet[208]--;
+                $met = $kris = $deut = $energy = 0;
+                ShipyardPrice ( 208, &$met, &$kris, &$deut, &$energy );            
+                AdjustStats ( $origin['owner_id'], ($met + $kris + $deut), 1, 0, '-' );
+                RecalcRanks ();
+            }
         }
 
         // Вернуть флот, если что-то осталось.
