@@ -226,7 +226,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             if ($ships > 0) {
                 if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker, $queue['end'] );
                 else $result = 0;
-                if ( $result < 2 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
+                if ( $result < 2 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $fleet_obj['m']+$cm * $cargo, $fleet_obj['k']+$ck * $cargo, $fleet_obj['d']+$cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
             }
         }
 
@@ -274,7 +274,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             if ($ships > 0) {
                 if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['fleet'], $queue['end'] );
                 else $result = 0;
-                if ( $result < 2 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $cm * $cargo, $ck * $cargo, $cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
+                if ( $result < 2 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $fleet_obj['m']+$cm * $cargo, $fleet_obj['k']+$ck * $cargo, $fleet_obj['d']+$cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
             }
         }
 
