@@ -3,13 +3,13 @@
 // Управление ботами.
 
 // Интеллект ботов - секретная инфорация.
-require_once "bot_rev1.php";
+//require_once "bot_rev1.php";
 
 // Вернуть описание стратегии бота.
 function GetBotStrategy ($n)
 {
-    return GetBotStrategy_Rev1 ($n);
-    //return "";
+    //return GetBotStrategy_Rev1 ($n);
+    return "";
 }
 
 // Добавить бота.
@@ -38,7 +38,7 @@ function AddBot ($name)
 // Запустить бота. Для каждой планеты бота выбирается оптимальная стратегия развития.
 function StartBot ($player_id)
 {
-    if ( !IsBot ($player_id) ) StartBot_Rev1 ($player_id);
+    //if ( !IsBot ($player_id) ) StartBot_Rev1 ($player_id);
 }
 
 // Остановить бота (просто удалить все задания AI)
@@ -64,8 +64,8 @@ function IsBot ($player_id)
 // Событие завершения заданий для бота. Вызывается из queue.php
 function Queue_Bot_End ($queue)
 {
-    Queue_Bot_End_Rev1 ($queue);
-    //RemoveQueue ($queue['task_id']);
+    //Queue_Bot_End_Rev1 ($queue);
+    RemoveQueue ($queue['task_id']);
 }
 
 // Переменные бота​.

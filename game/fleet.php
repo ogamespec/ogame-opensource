@@ -700,13 +700,23 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $report .= "<table width=400><tr><td class=c colspan=4>     </td></tr>\n";
     $report .= "<TR><TD colspan=4><div onmouseover=\'return overlib(\"&lt;font color=white&gt;Активность означает, что сканируемый игрок был активен на своей планете, либо на него был произведён вылет флота другого игрока.&lt;/font&gt;\", STICKY, MOUSEOFF, DELAY, 750, CENTER, WIDTH, 100, OFFSETX, -130, OFFSETY, -10);\' onmouseout=\'return nd();\'></TD></TR></table>\n";
 
+    // Флот на удержании
+    $result = GetHoldingFleets ( $target['planet_id'] );
+    $holding_fleet = array ();
+    while ( $fobj = dbarray ($result) )
+    {
+        foreach ( $fleetmap as $i=>$gid ) {
+            $holding_fleet[$gid] += $fobj["ship$gid"];
+        }
+    }
+
     // Флот
     if ( $level > 0 ) {
         $report .= "<table width=400><tr><td class=c colspan=4>Флоты     </td></tr>\n";
         $count = 0;
         foreach ( $fleetmap as $i=>$gid )
         {
-            $amount = $target["f$gid"];
+            $amount = $target["f$gid"] + $holding_fleet[$gid];
             if ( ($count % 2) == 0 ) $report .= "</tr>\n";
             if ($amount > 0) {
                 $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
