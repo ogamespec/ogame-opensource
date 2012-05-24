@@ -87,7 +87,8 @@ if ( $GateError === "" )
     AdjustShips ( $fleet, $source_id, '-' );
     AdjustShips ( $fleet, $target_id, '+' );
 
-    $cooldown = $now+59*60+59;
+    $cooldown_time = (60*60) / $GlobalUni['fspeed'] - 1;
+    $cooldown = $now + $cooldown_time;
 
     // Нагреть ворота
     $now = time ();

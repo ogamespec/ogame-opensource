@@ -199,7 +199,8 @@ $speed = $unitab['speed'];
             }
 
             if ( $_POST['urlaubs_modus'] === "on" && $GlobalUser['vacation'] == 0 ) {        // Включить режим отпуска
-                $vacation_until = time() + (2 * 24 * 60 * 60) / $speed;
+                $vacation_min = max ( 12*60*60, (2 * 24 * 60 * 60) / $speed);    // не менее 12 часов
+                $vacation_until = time() + $vacation_min;
 
                 if ( CanEnableVacation ($GlobalUser['player_id']) ) {
                     $query = "UPDATE ".$db_prefix."users SET vacation=1,vacation_until=$vacation_until WHERE player_id=".$GlobalUser['player_id'];
