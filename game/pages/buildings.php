@@ -25,6 +25,9 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
 {
     foreach ( $_POST['fmenge'] as $gid=>$value )
     {
+        $result = GetShipyardQueue ( $aktplanet['planet_id'] );    // Ограничить количество заказов на верфи.
+        if ( dbrows ($result)  >= 99 ) $value = 0;
+
         if ( $value < 0 ) $value = 0;
         if ( $value > 0 ) {
             // Рассчитать количество (не больше, чем ресурсов на планете и не больше 999)
