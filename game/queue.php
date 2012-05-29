@@ -190,9 +190,9 @@ function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
     $user = LoadUser ( $planet['owner_id'] );
 
     $prem = PremiumStatus ($user);
-    if ($prem['commander']) $maxcnt = 5;
-    else $maxcnt = 1;
-    //$maxcnt = 1;
+    //if ($prem['commander']) $maxcnt = 5;
+    //else $maxcnt = 1;
+    $maxcnt = 1;
 
     $uni = $GlobalUni;
     if ( $uni['freeze'] ) return;
@@ -241,7 +241,7 @@ function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
         if ( $planet['type'] == 0 && ( $id == 1 || $id == 2 || $id == 3 || $id == 4 || $id == 12 || $id == 15 || $id == 22 || $id == 23 || $id == 24 || $id == 31 || $id == 33 || $id == 44 ) ) return;
 
         // Проверить количество полей
-        if ( $planet['fields'] >= $planet['maxfields'] ) return;
+        if ( $planet['fields'] >= $planet['maxfields'] && !$destroy ) return;
 
         $result = GetResearchQueue ( $user['player_id'] );
         $resqueue = dbarray ($result);
@@ -460,7 +460,7 @@ function Queue_DecRes_End ($queue)
         else if ( $planet['type'] == 0 && ( $id == 1 || $id == 2 || $id == 3 || $id == 4 || $id == 12 || $id == 15 || $id == 22 || $id == 23 || $id == 24 || $id == 31 || $id == 33 || $id == 44 ) ) $text = "Неверный тип планеты.";
 
         // Проверить количество полей
-        else if ( $planet['fields'] >= $planet['maxfields'] ) $text = "На планете нет места для строительства.";
+        else if ( $planet['fields'] >= $planet['maxfields'] && $q['type'] === 'Build' ) $text = "На планете нет места для строительства.";
 
         // Идет исследование или строительство на верфи
         else if ( $id == 31 && $reslab_operating ) $text = "Идёт исследование!";
