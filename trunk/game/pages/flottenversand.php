@@ -169,7 +169,7 @@ foreach ($fleet as $id=>$amount)
     $cons += $hours * $amount * FleetCons ($id, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] ) / 10;
 }
 
-// Ограничить перевозимые ресурсы грузоподъемностью флота.
+// Ограничить перевозимые ресурсы грузоподъемностью флота и затратами на полёт.
 $cargo_m = $cargo_k = $cargo_d = 0;
 $space = $cargo - $cons;
 if ( $space > 0 ) {
@@ -181,7 +181,7 @@ if ( $space > 0 ) {
     $space -= $cargo_k;
 }
 if ( $space > 0 ) {
-    $cargo_d = min ( $space, intval($_POST['resource3']) );
+    $cargo_d = min ( $space, intval($_POST['resource3']) - $cons );
     $space -= $cargo_d;
 }
 
