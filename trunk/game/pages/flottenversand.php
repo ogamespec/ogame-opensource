@@ -169,13 +169,9 @@ foreach ($fleet as $id=>$amount)
     $cons += $hours * $amount * FleetCons ($id, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] ) / 10;
 }
 
-if ($origin['d'] < $cons) FleetError ( "Недостаточно топлива!" );
-else if ( $cons > ($cargo + $spycargo) ) FleetError ( "Недостаточно места в грузовом отсеке!" );
-$cargo -= $cons;
-
 // Ограничить перевозимые ресурсы грузоподъемностью флота.
 $cargo_m = $cargo_k = $cargo_d = 0;
-$space = $cargo;
+$space = $cargo - $cons;
 if ( $space > 0 ) {
     $cargo_m = min ( $space, intval($_POST['resource1']) );
     $space -= $cargo_m;
@@ -188,6 +184,9 @@ if ( $space > 0 ) {
     $cargo_d = min ( $space, intval($_POST['resource3']) );
     $space -= $cargo_d;
 }
+
+if ( ( $origin['d'] + $cargo_d) < $cons) FleetError ( "Недостаточно топлива!" );
+else if ( $cons > ($cargo + $spycargo) ) FleetError ( "Недостаточно места в грузовом отсеке!" );
 
 if ($numships <= 0) FleetError ( "Вы не выбрали корабли либо выбрали, но слишком мало!" );
 
