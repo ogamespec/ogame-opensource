@@ -192,8 +192,8 @@ function FleetSpan ( $fleet_entry )
         if ($dir == 0) echo "<span class='flight ownhold'>Ваш ".OverFleet($fleet,0,"ownhold")."флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a> с ".PlanetFrom($origin, "ownhold")." отправлен на ".PlanetTo($target, "ownhold").". Задание: ".Cargo($m,$k,$d,"ownhold","Держаться")."</span>";
         else if ($dir == 1) echo "<span class='return ownhold'>Ваш ".OverFleet($fleet,0,"ownhold")."флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a>, отправленный с ".PlanetFrom($origin, "ownhold").", возвращается на ".PlanetTo($target, "ownhold").". Задание: ".Cargo($m,$k,$d,"ownhold","Держаться")."</span>";
         else if ($dir == 2) echo "<span class='holding ownhold'>Ваш ".OverFleet($fleet,0,"ownhold")."флот</a><a href='#' title='".TitleFleet($fleet,0)."'></a>, отправленный с ".PlanetFrom($origin, "ownhold").", находится на орбите ".PlanetFrom($target, "ownhold").". Задание: ".Cargo($m,$k,$d,"ownhold","Держаться")."</span>";
-        else if ($dir == 0x20) echo "<span class='flight hold'>Мирный ".OverFleet($fleet,1,"hold")."флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "hold")." отправлен на ".PlanetFrom($target, "hold").". Задание: <span class='ownclass'>Держаться</span></span>";
-        else if ($dir == 0x22) echo "<span class='holding hold'>".PlayerDetails($owner)." удерживает альянсовый ".OverFleet($fleet,1,"hold")."флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> с ".PlanetFrom($target, "hold")." на орбите ".PlanetFrom($origin, "hold").". Задание: Держаться</span>";
+        else if ($dir == 0x20) echo "<span class='flight hold'>Мирный ".OverFleet($fleet,1,"hold")."флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "hold")." отправлен на ".PlanetTo($target, "hold").". Задание: <span class='ownclass'>Держаться</span></span>";
+        else if ($dir == 0x22) echo "<span class='holding hold'>".PlayerDetails($owner)." удерживает альянсовый ".OverFleet($fleet,1,"hold")."флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> с ".PlanetFrom($origin, "hold")." на орбите ".PlanetFrom($target, "hold").". Задание: Держаться</span>";
     }
     else if ($mission == 6)            // Шпионаж
     {
@@ -299,7 +299,7 @@ function EventList ()
         $task[$tasknum]['fleet'][0]['m'] = $fleet_obj['m'];
         $task[$tasknum]['fleet'][0]['k'] = $fleet_obj['k'];
         $task[$tasknum]['fleet'][0]['d'] = $fleet_obj['d'];
-        if ( $fleet_obj['mission'] < 100 ) {
+        if ( $fleet_obj['mission'] < 100 || $fleet_obj['mission'] > 200 ) {
             $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
             $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
         }
