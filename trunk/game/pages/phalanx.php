@@ -109,7 +109,7 @@ require_once "phalanx_events.php";
         PhalanxEventList ($target['planet_id']);
 
         // Списать 5000 дейтерия.
-        $aktplanet['d'] -= 1000;
+        $aktplanet['d'] -= 5000;
         $query = "UPDATE ".$db_prefix."planets SET d = '".$aktplanet['d']."', lastpeek = '".$now."' WHERE planet_id = " . $aktplanet['planet_id'];
         dbquery ($query);
     }
