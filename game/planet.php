@@ -229,6 +229,7 @@ function RenamePlanet ($planet_id, $name)
     if (preg_match ($pattern, $name)) return;    // Запрещенные символы.
     $pattern = '/[\\\\()*\"\']/';
     $name = preg_replace ($pattern, '', $name);
+    $name = trim ($name);
     if (strlen ($name) == 0) {
         if ( $planet['type'] == 0 ) $name = "Луна";
         else $name = "планета";
