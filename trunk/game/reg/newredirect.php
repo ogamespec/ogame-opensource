@@ -49,7 +49,7 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
 
     if ( ( $now - $last ) < 10 * 60 && $ip !== "127.0.0.1" ) $RegError = 108;
     else if ( strlen ($_POST['password']) < 8 ) $RegError = 107;
-    else if ( mb_strlen ($_POST['character']) < 3 || mb_strlen ($_POST['character']) > 20 ) $RegError = 103;
+    else if ( mb_strlen ($_POST['character']) < 3 || mb_strlen ($_POST['character']) > 20 || preg_match ('/[;,<>()\`\"\']/', $_POST['character']) ) $RegError = 103;
     else if ( IsUserExist ( $_POST['character'])) $RegError = 101;
     else if ( !isValidEmail ($_POST['email']) ) $RegError = 104;
     else if ( IsEmailExist ( $_POST['email'])) $RegError = 102;

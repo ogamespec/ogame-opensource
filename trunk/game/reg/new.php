@@ -75,7 +75,7 @@ if ( method() === "POST" )        // Зарегистрировать игрок
     }
 
     else if ( ( $now - $last ) < 10 * 60 && $ip !== "127.0.0.1" ) $error = "Регистрация с одного айпи не чаще одного раза за 10 минут!";
-    else if ( mb_strlen ($_POST['character']) < 3 || mb_strlen ($_POST['character']) > 20 ) $error = "Имя #1 содержит недопустимые символы или слишком мало/много символов!";
+    else if ( mb_strlen ($_POST['character']) < 3 || mb_strlen ($_POST['character']) > 20 || preg_match ('/[;,<>()\`\"\']/', $_POST['character']) ) $error = va ( "Имя #1 содержит недопустимые символы или слишком мало/много символов!", $_POST['character'] );
     else if ( IsUserExist ( $_POST['character'])) $error = va ( "Имя #1 уже существует", $_POST['character'] ) ;
     else if ( !isValidEmail ($_POST['email']) ) $error = va ( "Адрес #1 недействителен!", $_POST['email'] ) ;
     else if ( IsEmailExist ( $_POST['email'])) $error = va ( "Адрес #1 уже существует!", $_POST['email'] );

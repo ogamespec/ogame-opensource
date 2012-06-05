@@ -20,7 +20,9 @@ typedef struct Slot
     unsigned    long fleet[14];         // Флот
     unsigned    long def[8];            // Оборона
     int         weap, shld, armor;      // Технологии
-    int         id;                     // ID планеты / флота
+    char        name[64];               // Имя игрока
+    int         g, s, p;                // Координаты
+    int         id;                     // ID
 } Slot;
 
 // Данные юнита.
