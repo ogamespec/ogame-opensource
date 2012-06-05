@@ -308,20 +308,16 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
 }
 
 // Сгенерировать HTML-код одного слота.
-function GenSlot ( $user, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $attack )
+function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $attack )
 {
     global $UnitParam;
 
     $text = "<th><br>";
 
-    $weap = $user["r109"];
-    $shld = $user["r110"];
-    $armor = $user["r111"];
-
     $text .= "<center>";
     if ($attack) $text .= "Флот атакующего";
     else $text .= "Обороняющийся";
-    $text .= " ".$user['oname']." (<a href=# onclick=showGalaxy($g,$s,$p); >[$g:$s:$p]</a>)";
+    $text .= " ".$name." (<a href=# onclick=showGalaxy($g,$s,$p); >[$g:$s:$p]</a>)";
     if ($show_techs) $text .= "<br>Вооружение: ".($weap * 10)."% Щиты: ".($shld * 10)."% Броня: ".($armor * 10)."% ";
 
     $sum = 0;
@@ -389,7 +385,7 @@ function GenSlot ( $user, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $
 }
 
 // Сгенерировать боевой доклад.
-function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired, $fakeids=false )
+function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
@@ -403,15 +399,15 @@ function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moon
 
     // Флоты перед боем.
     $text .= "<table border=1 width=100%><tr>";
-    foreach ($a as $i=>$attacker)
+    foreach ( $res['before']['attackers'] as $i=>$attacker)
     {
-        $text .= GenSlot ( $attacker, $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker['fleet'], null, 1, 1 );
+        $text .= GenSlot ( $attacker['weap'], $attacker['shld'], $attacker['armr'], $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 1, 1 );
     }
     $text .= "</tr></table>";
     $text .= "<table border=1 width=100%><tr>";
-    foreach ($d as $i=>$defender)
+    foreach ( $res['before']['defenders'] as $i=>$defender)
     {
-        $text .= GenSlot ( $defender, $defender['g'], $defender['s'], $defender['p'], $dmap, $defender['fleet'], $defender['defense'], 1, 0 );
+        $text .= GenSlot ( $defender['weap'], $defender['shld'], $defender['armr'], $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 1, 0 );
     }
     $text .= "</tr></table>";
 
@@ -424,61 +420,15 @@ function BattleReport ( $a, $d, $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moon
         $text .= "<table border=1 width=100%><tr>";        // Атакующие
         foreach ( $round['attackers'] as $n=>$attacker )
         {
-            if ( $fakeids ) {
-                $user = array ();
-                $start_planet['g'] = mt_rand (1, 9);
-                $start_planet['s'] = mt_rand (1, 499);
-                $start_planet['p'] = mt_rand (1, 15);
-            }
-            else {
-                $f = LoadFleet ( $attacker['id'] );
-                $user = LoadUser ( $f['owner_id'] );
-                $start_planet = GetPlanet ( $f['start_planet'] );
-            }
-            $user['fleet'] = array ();
-            foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $attacker[$gid];
-            $text .= GenSlot ( $user, $start_planet['g'], $start_planet['s'], $start_planet['p'], $amap, $user['fleet'], null, 0, 1 );
+            $text .= GenSlot ( 0, 0, 0, $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 0, 1 );
         }
         $text .= "</tr></table>";
 
         $text .= "<table border=1 width=100%><tr>";        // Обороняющиеся
         foreach ( $round['defenders'] as $n=>$defender )
         {
-            if ( $n == 0 )
-            {
-                if ( $fakeids ) {
-                    $user = array ();
-                    $user['g'] = mt_rand (1, 9);
-                    $user['s'] = mt_rand (1, 499);
-                    $user['p'] = mt_rand (1, 15);
-                }
-                else {
-                    $p = GetPlanet ( $defender['id'] );
-                    $user = LoadUser ( $p['owner_id'] );
-                }
-                $user['fleet'] = array ();
-                $user['defense'] = array ();
-                foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $defender[$gid];
-                foreach ($defmap as $g=>$gid) $user['defense'][$gid] = $defender[$gid];
-                $text .= GenSlot ( $user, $p['g'], $p['s'], $p['p'], $dmap, $user['fleet'], $user['defense'], 0, 0 );
-            }
-            else
-            {
-                if ( $fakeids ) {
-                    $user = array ();
-                    $start_planet['g'] = mt_rand (1, 9);
-                    $start_planet['s'] = mt_rand (1, 499);
-                    $start_planet['p'] = mt_rand (1, 15);
-                }
-                else {
-                    $f = LoadFleet ( $defender['id'] );
-                    $user = LoadUser ( $f['owner_id'] );
-                    $start_planet = GetPlanet ( $f['start_planet'] );
-                }
-                $user['fleet'] = array ();
-                foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $defender[$gid];
-                $text .= GenSlot ( $user, $start_planet['g'], $start_planet['s'], $start_planet['p'], $amap, $user['fleet'], null, 0, 0 );
-            }
+            if ( $n == 0 ) $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 0, 0 );
+            else $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $amap, $defender, null, 0, 0 );
         }
         $text .= "</tr></table>";
     }
@@ -723,14 +673,18 @@ function StartBattle ( $fleet_id, $planet_id, $when )
 
     foreach ($a as $num=>$attacker)
     {
-        $source .= "Attacker".$num." = (".$attacker['id']." ";
+        $source .= "Attacker".$num." = (<".$attacker['oname']."> ";
+        $source .= $attacker['id'] . " ";
+        $source .= $attacker['g'] . " " . $attacker['s'] . " " . $attacker['p'] . " ";
         $source .= $attacker['r109'] . " " . $attacker['r110'] . " " . $attacker['r111'] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $attacker['fleet'][$gid] . " ";
         $source .= ")\n";
     }
     foreach ($d as $num=>$defender)
     {
-        $source .= "Defender".$num." = (".$defender['id']." ";
+        $source .= "Defender".$num." = (<".$defender['oname']."> ";
+        $source .= $defender['id'] . " ";
+        $source .= $defender['g'] . " " . $defender['s'] . " " . $defender['p'] . " ";
         $source .= $defender['r109'] . " " . $defender['r110'] . " " . $defender['r111'] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $defender['fleet'][$gid] . " ";
         foreach ($defmap as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
@@ -798,7 +752,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     loca_add ( "technames", "de" );
     loca_add ( "technames", "en" );
     loca_add ( "technames", "ru" );
-    $text = BattleReport ( $a, $d, $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired );
+    $text = BattleReport ( $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired );
 
     // Разослать сообщения
     $mailbox = array ();
@@ -889,7 +843,7 @@ function WritebackBattleResultsExpedition ( $a, $d, $res )
 }
 
 // Сгенерировать боевой доклад.
-function BattleReportExpedition ( $a, $d, $res, $now, $pirates, $exp_g, $exp_s, $exp_p )
+function ShortBattleReport ( $res, $now )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
@@ -903,15 +857,20 @@ function BattleReportExpedition ( $a, $d, $res, $now, $pirates, $exp_g, $exp_s, 
 
     // Флоты перед боем.
     $text .= "<table border=1 width=100%><tr>";
-    foreach ($a as $i=>$attacker)
+    foreach ( $res['before']['attackers'] as $i=>$attacker)
     {
-        $text .= GenSlot ( $attacker, $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker['fleet'], null, 1, 1 );
+        $text .= GenSlot ( $attacker['weap'], $attacker['shld'], $attacker['armr'], $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 1, 1 );
     }
     $text .= "</tr></table>";
     $text .= "<table border=1 width=100%><tr>";
-    foreach ($d as $i=>$defender)
+    foreach ( $res['before']['defenders'] as $i=>$defender)
     {
-        $text .= GenSlot ( $defender, $defender['g'], $defender['s'], $defender['p'], $dmap, $defender['fleet'], $defender['defense'], 1, 0 );
+        $user = array ();
+        $user['fleet'] = array ();
+        $user['defense'] = array ();
+        foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $defender[$gid];
+        foreach ($defmap as $g=>$gid) $user['defense'][$gid] = 0;
+        $text .= GenSlot ( $defender['weap'], $defender['shld'], $defender['armr'], $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 1, 0 );
     }
     $text .= "</tr></table>";
 
@@ -924,26 +883,14 @@ function BattleReportExpedition ( $a, $d, $res, $now, $pirates, $exp_g, $exp_s, 
         $text .= "<table border=1 width=100%><tr>";        // Атакующие
         foreach ( $round['attackers'] as $n=>$attacker )
         {
-            $f = LoadFleet ( $attacker['id'] );
-            $user = LoadUser ( $f['owner_id'] );
-            $start_planet = GetPlanet ( $f['start_planet'] );
-            $user['fleet'] = array ();
-            foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $attacker[$gid];
-            $text .= GenSlot ( $user, $start_planet['g'], $start_planet['s'], $start_planet['p'], $amap, $user['fleet'], null, 0, 1 );
+            $text .= GenSlot ( 0, 0, 0, $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 0, 1 );
         }
         $text .= "</tr></table>";
 
         $text .= "<table border=1 width=100%><tr>";        // Обороняющиеся
         foreach ( $round['defenders'] as $n=>$defender )
         {
-            $user = array ();
-            if ( $pirates ) $user['oname'] = "Piraten";
-            else $user['oname'] = "Aliens";
-            $user['fleet'] = array ();
-            $user['defense'] = array ();
-            foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $defender[$gid];
-            foreach ($defmap as $g=>$gid) $user['defense'][$gid] = 0;
-            $text .= GenSlot ( $user, $exp_g, $exp_s, $exp_p, $dmap, $user['fleet'], $user['defense'], 0, 0 );
+            $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 0, 0 );
         }
         $text .= "</tr></table>";
     }
@@ -1074,14 +1021,18 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 
     foreach ($a as $num=>$attacker)
     {
-        $source .= "Attacker".$num." = (".$attacker['id']." ";
+        $source .= "Attacker".$num." = (<".$attacker['oname']."> ";
+        $source .= $attacker['id'] . " ";
+        $source .= $attacker['g'] . " " . $attacker['s'] . " " . $attacker['p'] . " ";
         $source .= $attacker['r109'] . " " . $attacker['r110'] . " " . $attacker['r111'] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $attacker['fleet'][$gid] . " ";
         $source .= ")\n";
     }
     foreach ($d as $num=>$defender)
     {
-        $source .= "Defender".$num." = (".$defender['id']." ";
+        $source .= "Defender".$num." = (<".$defender['oname']."> ";
+        $source .= $defender['id'] . " ";
+        $source .= $defender['g'] . " " . $defender['s'] . " " . $defender['p'] . " ";
         $source .= $defender['r109'] . " " . $defender['r110'] . " " . $defender['r111'] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $defender['fleet'][$gid] . " ";
         foreach ($defmap as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
@@ -1121,7 +1072,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     loca_add ( "technames", "de" );
     loca_add ( "technames", "en" );
     loca_add ( "technames", "ru" );
-    $text = BattleReportExpedition ( $a, $d, $res, time(), $pirates, $target_planet['g'], $target_planet['s'], $target_planet['p'] );
+    $text = ShortBattleReport ( $res, $when );
 
     // Разослать сообщения
     $mailbox = array ();

@@ -85,6 +85,9 @@ onmouseover="return overlib('<center><font size=1 color=white><b>Целостн�
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Bots"><img src="img/admin_bots.png" width='32' height='32'
 onmouseover="return overlib('<center><font size=1 color=white><b>Управление ботами</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
+<a href="index.php?page=admin&session=<?=$session;?>&mode=BattleReport"><img src="img/admin_battle.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>Боевые доклады</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
 </td></tr></table><br/>
 
 <?php
@@ -127,6 +130,7 @@ function Admin_Home ()
     </tr>
     <tr>
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Bots"><img src="img/admin_bots.png"><br>Управление ботами</a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=BattleReport"><img src="img/admin_battle.png"><br>Боевые доклады</a></th>
     </tr>
     </table>
 <?php
@@ -148,6 +152,7 @@ include "admin_expedition.php";
 include "admin_logins.php";
 include "admin_checksum.php";
 include "admin_bots.php";
+include "admin_battle.php";
 
 // ========================================================================================
 
@@ -175,6 +180,7 @@ else if ( $mode === "Expedition" ) Admin_Expedition ();
 else if ( $mode === "Logins" ) Admin_Logins ();
 else if ( $mode === "Checksum" ) Admin_Checksum ();
 else if ( $mode === "Bots" ) Admin_Bots ();
+else if ( $mode === "BattleReport" ) Admin_BattleReport ();
 else Admin_Home ();
 
 echo "</table>\n";

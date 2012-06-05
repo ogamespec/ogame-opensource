@@ -54,14 +54,12 @@
 /*
 Устройство движка.
 
-Движок представляет собой черный ящик. На вход подаются начальные условия (получаются из базы данных):
-- список атакующих и обороняющихся 
-- количество металла, кристалла и дейтерия на планете
+Движок представляет собой черный ящик. На вход подаются начальные условия (получаются из файла):
 - настройки боевой системы (процент обороны и флота в обломки, скорострел)
+- список атакующих и обороняющихся 
 
 На выходе движок генерирует:
-- результаты боя (записываются в базу данных)
-- HTML-код боевого доклада (выводится в stdout)
+- результаты боя (записываются в выходной файл)
 */
 
 // Для того чтобы номера объектов умещались в один байт (для экономии памяти), нумерация флота начинается от 100 (вместо 202), а обороны от 200 (вместо 401).
@@ -84,7 +82,21 @@ Array (
    'dm' => количество металла в Поле обломков
    'dk' => количество кристалла в Поле обломков
 
-   'rounds' => Array (
+   'before' => Array (  // Флоты перед боем
+            'attackers' => Array (    // слоты атакующих
+                  [0] => Array ( 'name' => имя игрока, 'id'=>100002, 'g' => 1, 's' => 2 'p' => 3, 'weap' => 10, 'shld' => 11, 'armr' => 12, 202=>5, 203=>6, ... ),   // флоты
+                  [1] => Array ( )
+            )
+
+            'defenders' => Array (    // слоты обороняющихся
+                  [0] => Array ( 'name' => имя игрока, 'id'=>100006, 'g' => 1, 's' => 2 'p' => 3, 'weap' => 10, 'shld' => 11, 'armr' => 12, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // флоты и оборона
+                  [1] => Array ( )
+            )
+
+       ),
+   )
+
+   'rounds' => Array (  // Раунды
        [0] => Array (
             'ashoot' => Атакующий флот делает: 988 выстрела(ов)
             'apower' => общей мощностью 512.720.100
@@ -94,12 +106,12 @@ Array (
             'aabsorb' => Щиты атакующего поглощают 355.453
 
             'attackers' => Array (    // слоты атакующих
-                  [0] => Array ( 'id'=>100002, 202=>5, 203=>6, ... ),   // флоты
+                  [0] => Array ( 'name' => имя игрока, 'id'=>100002, 'g' => 1, 's' => 2 'p' => 3, 202=>5, 203=>6, ... ),   // флоты
                   [1] => Array ( )
             )
 
             'defenders' => Array (    // слоты обороняющихся
-                  [0] => Array ( 'id'=>100006, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // флоты и оборона
+                  [0] => Array ( 'name' => имя игрока, 'id'=>100006, 'g' => 1, 's' => 2 'p' => 3, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // флоты и оборона
                   [1] => Array ( )
             )
 
@@ -252,7 +264,7 @@ void init_genrand(unsigned long s)
     mt[0]= s & 0xffffffffUL;
     for (mti=1; mti<N; mti++) {
         mt[mti] = 
-	    (1812433253UL * (mt[mti-1] ^ (mt[mti-1] >> 30)) + mti); 
+        (1812433253UL * (mt[mti-1] ^ (mt[mti-1] >> 30)) + mti); 
         mt[mti] &= 0xffffffffUL;
     }
 }
@@ -474,7 +486,7 @@ int CheckFastDraw (Unit *aunits, int aobjs, Unit *dunits, int dobjs)
 
 // Сгенерировать HTML-код слота.
 // Если techs = 1, то показать технологии (в раундах технологии показывать не надо).
-static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, Slot *d, int attacker)
+static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, Slot *d, int attacker, int techs)
 {
     Slot *s = attacker ? a : d;
     Slot coll;
@@ -492,10 +504,26 @@ static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, S
         }
     }
 
-    if ( attacker) ptr += sprintf ( ptr, "i:%i;a:15:{", slot );
-    else ptr += sprintf ( ptr, "i:%i;a:23:{", slot );
+    if ( techs ) {
+        if ( attacker) ptr += sprintf ( ptr, "i:%i;a:22:{", slot );
+        else ptr += sprintf ( ptr, "i:%i;a:30:{", slot );
+    }
+    else {
+        if ( attacker) ptr += sprintf ( ptr, "i:%i;a:19:{", slot );
+        else ptr += sprintf ( ptr, "i:%i;a:27:{", slot );
+    }
 
+    ptr += sprintf (ptr, "s:4:\"name\";s:%i:\"%s\";", strlen(s[slot].name), s[slot].name );
     ptr += sprintf (ptr, "s:2:\"id\";i:%i;", s[slot].id );
+    ptr += sprintf (ptr, "s:1:\"g\";i:%i;", s[slot].g );
+    ptr += sprintf (ptr, "s:1:\"s\";i:%i;", s[slot].s );
+    ptr += sprintf (ptr, "s:1:\"p\";i:%i;", s[slot].p );
+
+    if ( techs ) {
+        ptr += sprintf (ptr, "s:4:\"weap\";i:%i;", s[slot].weap );
+        ptr += sprintf (ptr, "s:4:\"shld\";i:%i;", s[slot].shld );
+        ptr += sprintf (ptr, "s:4:\"armr\";i:%i;", s[slot].armor );
+    }
 
     for (n=0; n<14; n++) {      // Флоты
         ptr += sprintf ( ptr, "i:%i;i:%i;", 202+n, coll.fleet[n]);
@@ -543,7 +571,22 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
         return 0;
     }
 
-    ptr += sprintf (ptr, "a:4:{");
+    ptr += sprintf (ptr, "a:5:{");
+
+    // Флоты до боя
+    ptr += sprintf (ptr, "s:6:\"before\";a:2:{");
+    ptr += sprintf ( ptr, "s:9:\"attackers\";a:%i:{", anum );
+    for (slot=0; slot<anum; slot++) {
+        ptr = GenSlot (ptr, aunits, slot, aobjs, a, d, 1, 1);
+    }
+    ptr += sprintf ( ptr, "}" );
+    ptr += sprintf ( ptr, "s:9:\"defenders\";a:%i:{", dnum );
+    for (slot=0; slot<dnum; slot++) {
+        ptr = GenSlot (ptr, dunits, slot, dobjs, a, d, 0, 1);
+    }
+    ptr += sprintf ( ptr, "}" );
+    ptr += sprintf ( ptr, "}" );
+
     round_patch = ptr + 15;
     ptr += sprintf (ptr, "s:6:\"rounds\";a:X:{");
 
@@ -634,12 +677,12 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
         ptr += sprintf ( ptr, "s:7:\"aabsorb\";d:%s;", longnumber(absorbed[0]) );
         ptr += sprintf ( ptr, "s:9:\"attackers\";a:%i:{", anum );
         for (slot=0; slot<anum; slot++) {
-            ptr = GenSlot (ptr, aunits, slot, aobjs, a, d, 1);
+            ptr = GenSlot (ptr, aunits, slot, aobjs, a, d, 1, 0);
         }
         ptr += sprintf ( ptr, "}" );
         ptr += sprintf ( ptr, "s:9:\"defenders\";a:%i:{", dnum );
         for (slot=0; slot<dnum; slot++) {
-            ptr = GenSlot (ptr, dunits, slot, dobjs, a, d, 0);
+            ptr = GenSlot (ptr, dunits, slot, dobjs, a, d, 0, 0);
         }
         ptr += sprintf ( ptr, "}" );
         ptr += sprintf ( ptr, "}" );
@@ -819,8 +862,8 @@ FID = 30
 DID = 0
 Attackers = N
 Defenders = M
-AttackerN = (ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
-DefenderM = (ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
+AttackerN = (<NAME> ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
+DefenderM = (<NAME> ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
 
 */
 
@@ -830,7 +873,7 @@ void StartBattle (char *text, int battle_id)
     Slot *a, *d;
     int rf, fid, did, i, res;
     int anum = 0, dnum = 0;
-    char *ptr, line[1000], buf[64], *lp;
+    char *ptr, line[3000], buf[64], *lp, *tmp;
 
     ptr = strstr (text, "Rapidfire");       // Скорострел
     if ( ptr ) {
@@ -887,9 +930,19 @@ void StartBattle (char *text, int battle_id)
             *lp++ = 0;
         }
 
-        // (ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
-        sscanf ( line, "%i " "%i %i %i " "%i %i %i %i %i %i %i %i %i %i %i %i %i %i", 
+        // Вырезать имя
+        lp = line;
+        tmp = a[i].name;
+        while ( *lp == '<' ) lp++;              // найти начало имени
+        while ( *lp != '>' ) *tmp++ = *lp++;    // вырезать символы до >
+        *tmp++ = 0;
+        lp++;
+        while ( *lp <= ' ' ) lp++;              // пропустить пробелы
+        
+        // (<NAME> ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
+        sscanf ( lp, "%i " "%i %i %i " "%i %i %i " "%i %i %i %i %i %i %i %i %i %i %i %i %i %i", 
                        &a[i].id, 
+                       &a[i].g, &a[i].s, &a[i].p,
                        &a[i].weap, &a[i].shld, &a[i].armor,
                        &a[i].fleet[0], // MT
                        &a[i].fleet[1], // BT
@@ -921,9 +974,19 @@ void StartBattle (char *text, int battle_id)
             *lp++ = 0;
         }
 
-        // (ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
-        sscanf ( line, "%i " "%i %i %i " "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i", 
+        // Вырезать имя
+        lp = line;
+        tmp = d[i].name;
+        while ( *lp == '<' ) lp++;              // найти начало имени
+        while ( *lp != '>' ) *tmp++ = *lp++;    // вырезать символы до >
+        *tmp++ = 0;
+        lp++;
+        while ( *lp <= ' ' ) lp++;              // пропустить пробелы
+
+        // (<NAME> ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
+        sscanf ( lp, "%i " "%i %i %i " "%i %i %i " "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i", 
                        &d[i].id, 
+                       &d[i].g, &d[i].s, &d[i].p,
                        &d[i].weap, &d[i].shld, &d[i].armor,
                        &d[i].fleet[0], // MT
                        &d[i].fleet[1], // BT
@@ -970,12 +1033,12 @@ void main(int argc, char **argv)
     char filename[1024];
     char *battle_data;
 
-	if ( argc < 2 ) return;
+    if ( argc < 2 ) return;
 
-	ParseQueryString ( argv[1] );
-	//PrintParams ();
+    ParseQueryString ( argv[1] );
+    //PrintParams ();
 
-	// Соединиться с базой данных и выбрать исходные данные.
+    // Загрузить исходный файл и выбрать исходные данные.
     {
         int battle_id = GetSimParamI("battle_id", 0);
         
