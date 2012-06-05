@@ -29,8 +29,8 @@ FID = 30
 DID = 0
 Attackers = N
 Defenders = M
-AttackerN = (ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
-DefenderM = (ID WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
+AttackerN = (<NAME> ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
+DefenderM = (<NAME> ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
 }}}
 
 Rapidfire - 1: включить скорострел, 0 - без скорострела<br>
@@ -43,7 +43,9 @@ Defenders - количество обороняющихся слотов (M = 1.
 
 для каждого атакера и дефа соответствующие строки Attacker0, Attacker1, Defender0 итд. счёт ведется с нуля.
 
+NAME - имя игрока (для боевого доклада, в расчётах не используется)
 ID - ID планеты/флота, которым принадлежит слот, в расчётах не используется
+G,S,P - координаты (для боевого доклада, в расчётах не используется)
 
 WEAP - уровень Оружейной технологии<br>
 SHLD - уровень Щитовой технологии<br>
@@ -87,7 +89,21 @@ Array (
    'dm' => количество металла в Поле обломков
    'dk' => количество кристалла в Поле обломков
 
-   'rounds' => Array (
+   'before' => Array (  // Флоты перед боем
+            'attackers' => Array (    // слоты атакующих
+                  [0] => Array ( 'name' => имя игрока, 'id'=>100002, 'g' => 1, 's' => 2 'p' => 3, 'weap' => 10, 'shld' => 11, 'armr' => 12, 202=>5, 203=>6, ... ),   // флоты
+                  [1] => Array ( )
+            )
+
+            'defenders' => Array (    // слоты обороняющихся
+                  [0] => Array ( 'name' => имя игрока, 'id'=>100006, 'g' => 1, 's' => 2 'p' => 3, 'weap' => 10, 'shld' => 11, 'armr' => 12, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // флоты и оборона
+                  [1] => Array ( )
+            )
+
+       ),
+   )
+
+   'rounds' => Array (  // Раунды
        [0] => Array (
             'ashoot' => Атакующий флот делает: 988 выстрела(ов)
             'apower' => общей мощностью 512.720.100
@@ -97,12 +113,12 @@ Array (
             'aabsorb' => Щиты атакующего поглощают 355.453
 
             'attackers' => Array (    // слоты атакующих
-                  [0] => Array ( 'id'=>100002, 202=>5, 203=>6, ... ),   // флоты
+                  [0] => Array ( 'name' => имя игрока, 'id'=>100002, 'g' => 1, 's' => 2 'p' => 3, 202=>5, 203=>6, ... ),   // флоты
                   [1] => Array ( )
             )
 
             'defenders' => Array (    // слоты обороняющихся
-                  [0] => Array ( 'id'=>100006, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // флоты и оборона
+                  [0] => Array ( 'name' => имя игрока, 'id'=>100006, 'g' => 1, 's' => 2 'p' => 3, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // флоты и оборона
                   [1] => Array ( )
             )
 
