@@ -100,7 +100,6 @@ Array (
                   [1] => Array ( )
             )
 
-       ),
    )
 
    'rounds' => Array (  // Раунды
