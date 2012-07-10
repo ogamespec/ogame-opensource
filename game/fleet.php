@@ -798,6 +798,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
 function SpyReturn ($queue, $fleet_obj, $fleet)
 {
+    AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 }
