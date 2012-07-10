@@ -114,50 +114,72 @@ if ( method () === "POST" )
         }
         else if ( key_exists ( 'trade', $_POST) )
         {
+            $TraderError = '';
+
+            $value_1 = abs (str_replace ( ".", "", $_POST['1_value'] ));
+            $value_2 = abs (str_replace ( ".", "", $_POST['2_value'] ));
+            $value_3 = abs (str_replace ( ".", "", $_POST['3_value'] ));
+
             if ( $GlobalUser['trader'] == 1)
             {
-                $crys = floor ( $aktplanet['k'] + str_replace ( ".", "", $_POST['2_value'] ) );
-                $deut = floor ( $aktplanet['d'] + str_replace ( ".", "", $_POST['3_value'] ) );
-                $met = floor ( str_replace ( ".", "", $_POST['2_value'] ) * $GlobalUser['rate_m'] / $GlobalUser['rate_k'] ) + 
-                       floor ( str_replace ( ".", "", $_POST['3_value'] ) * $GlobalUser['rate_m'] / $GlobalUser['rate_d'] );
-                $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
-                dbquery ( $query );
-                $query = "UPDATE ".$db_prefix."planets SET m = m - '".intval($met)."', k = '".intval($crys)."', d = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
-                dbquery ( $query );
-                $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-                $GlobalUser['trader'] = 0;
+                $crys = floor ( $aktplanet['k'] + $value_2 );
+                $deut = floor ( $aktplanet['d'] + $value_3 );
+                $met = floor ( $value_2 * $GlobalUser['rate_m'] / $GlobalUser['rate_k'] ) + 
+                       floor ( $value_3 * $GlobalUser['rate_m'] / $GlobalUser['rate_d'] );
+
+                if ( $met > $aktplanet['m']) $TraderError = "Недостаточно материала для торговли!<br>";
+                else if ( $crys > $aktplanet['kmax'] || $deut > $aktplanet['dmax'] ) $TraderError = "Недостаточно места в хранилищах!<br>";
+
+                if ( $TraderError === '' && $met > 0 ) {
+                    $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
+                    dbquery ( $query );
+                    $query = "UPDATE ".$db_prefix."planets SET m = m - '".intval($met)."', k = '".intval($crys)."', d = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
+                    dbquery ( $query );
+                    $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+                    $GlobalUser['trader'] = 0;
+                }
             }
 
             else if ( $GlobalUser['trader'] == 2)
             {
-                $met = floor ( $aktplanet['m'] + str_replace ( ".", "", $_POST['1_value'] ) );
-                $deut = floor ( $aktplanet['d'] + str_replace ( ".", "", $_POST['3_value'] ) );
-                $crys = floor ( str_replace ( ".", "", $_POST['1_value'] ) * $GlobalUser['rate_k'] / $GlobalUser['rate_m'] ) + 
-                        floor ( str_replace ( ".", "", $_POST['3_value'] ) * $GlobalUser['rate_k'] / $GlobalUser['rate_d'] );
-                $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
-                dbquery ( $query );
-                $query = "UPDATE ".$db_prefix."planets SET k = k - '".intval($crys)."', m = '".intval($met)."', d = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
-                dbquery ( $query );
-                $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-                $GlobalUser['trader'] = 0;
+                $met = floor ( $aktplanet['m'] + $value_1 );
+                $deut = floor ( $aktplanet['d'] + $value_3 );
+                $crys = floor ( $value_1 * $GlobalUser['rate_k'] / $GlobalUser['rate_m'] ) + 
+                        floor ( $value_3 * $GlobalUser['rate_k'] / $GlobalUser['rate_d'] );
+
+                if ( $crys > $aktplanet['k']) $TraderError = "Недостаточно материала для торговли!<br>";
+                else if ( $met > $aktplanet['mmax'] || $deut > $aktplanet['dmax'] ) $TraderError = "Недостаточно места в хранилищах!<br>";
+
+                if ( $TraderError === '' && $crys > 0 ) {
+                    $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
+                    dbquery ( $query );
+                    $query = "UPDATE ".$db_prefix."planets SET k = k - '".intval($crys)."', m = '".intval($met)."', d = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
+                    dbquery ( $query );
+                    $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+                    $GlobalUser['trader'] = 0;
+                }
             }
 
             else if ( $GlobalUser['trader'] == 3)
             {
-                $met = floor ( $aktplanet['m'] + str_replace ( ".", "", $_POST['1_value'] ) );
-                $crys = floor ( $aktplanet['k'] + str_replace ( ".", "", $_POST['2_value'] ) );
-                $deut = floor ( str_replace ( ".", "", $_POST['1_value'] ) * $GlobalUser['rate_d'] / $GlobalUser['rate_m'] ) + 
-                        floor ( str_replace ( ".", "", $_POST['2_value'] ) * $GlobalUser['rate_d'] / $GlobalUser['rate_k'] );
-                $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
-                dbquery ( $query );
-                $query = "UPDATE ".$db_prefix."planets SET d = d - '".intval($deut)."', k = '".intval($crys)."', m = '".intval($met)."' WHERE planet_id = " . $aktplanet['planet_id'];
-                dbquery ( $query );
-                $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-                $GlobalUser['trader'] = 0;
+                $met = floor ( $aktplanet['m'] + $value_1 );
+                $crys = floor ( $aktplanet['k'] + $value_2 );
+                $deut = floor ( $value_1 * $GlobalUser['rate_d'] / $GlobalUser['rate_m'] ) + 
+                        floor ( $value_2 * $GlobalUser['rate_d'] / $GlobalUser['rate_k'] );
+
+                if ( $deut > $aktplanet['d']) $TraderError .= "Недостаточно материала для торговли!<br>";
+                else if ( $met > $aktplanet['mmax'] || $crys > $aktplanet['kmax'] ) $TraderError .= "Недостаточно места в хранилищах!<br>";
+
+                if ( $TraderError === '' && $deut > 0 ) {
+                    $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
+                    dbquery ( $query );
+                    $query = "UPDATE ".$db_prefix."planets SET d = d - '".intval($deut)."', k = '".intval($crys)."', m = '".intval($met)."' WHERE planet_id = " . $aktplanet['planet_id'];
+                    dbquery ( $query );
+                    $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+                    $GlobalUser['trader'] = 0;
+                }
             }
 
-//Недостаточно места в хранилищах!<br>
-//Недостаточно материала для торговли!<br>
         }
     }
     else        // Вызвать (нового) скупщика
