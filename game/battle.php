@@ -1130,7 +1130,7 @@ function RocketAttack ( $fleet_id, $planet_id )
         $armor = $UnitParam[$primary][0] * (1 + 0.1 * $target_user['r111']) / 10;
         $count = $target["d$primary"];
         $destroyed = min ( floor ( $maxdamage / $armor ), $count );
-        $target["d$id"] -= $destroyed;
+        $target["d$primary"] -= $destroyed;
         $maxdamage -= $destroyed * $armor;
         $maxdamage -= $destroyed;
     }
