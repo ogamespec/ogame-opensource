@@ -72,6 +72,10 @@ if ( $prem['admiral'] ) $maxfleet += 2;
 
 $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
 
+// Ограничитель скорости и кратно 10.
+$fleetspeed = round ( abs(intval($_POST['speed'])) / 10) * 10 / 100;
+$fleetspeed = min ( max (10, $fleetspeed), 100 );
+
 // Превратить все пустые параметры в нули.
 
 if ( !key_exists('resource1', $_POST) ) $_POST['resource1'] = 0;
@@ -156,7 +160,7 @@ else if ( $order == 5 ) {    // Держаться
 // Рассчитать расстояние, время полёта и затраты дейтерия.
 $dist = FlightDistance ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']) );
 $slowest_speed = FlightSpeed ( $fleet, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] );
-$flighttime = FlightTime ( $dist, $slowest_speed, intval($_POST['speed']) / 10, $unispeed );
+$flighttime = FlightTime ( $dist, $slowest_speed, $fleetspeed / 10, $unispeed );
 $cons = FlightCons ( $fleet, $dist, $flighttime, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'], $unispeed );
 $cargo = $spycargo = $numships = 0;
 foreach ($fleet as $id=>$amount)
