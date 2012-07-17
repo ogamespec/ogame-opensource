@@ -244,6 +244,14 @@ function RemoveUser ( $player_id, $when)
     $query = "UPDATE ".$db_prefix."uni SET usercount = usercount - 1;";
     dbquery ($query);
 
+    // Удалить заявки в альянс
+    $apply_id = GetUserApplication ( $player_id );
+    if ( $apply_id ) RemoveApplication ($apply_id);
+
+    // Удалить из списка друзей
+    $query = "DELETE FROM ".$db_prefix."buddy WHERE request_from = $player_id OR request_to = $player_id";
+    dbquery ($query);
+
     RecalcRanks ();
 }
 
