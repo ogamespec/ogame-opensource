@@ -601,6 +601,9 @@ function InvalidSessionPage ()
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
 
+    $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], 'Сессия недействительна.', time() );
+    $id = AddDBRow ( $error, 'errors' );
+
     echo "<html> <head>\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/default.css' />\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/formate.css' />\n";
@@ -616,7 +619,7 @@ function InvalidSessionPage ()
     echo "<br>- Ваш ай-пи адрес изменился с момента последнего входа; \n";
     echo "<br>- Вы пользуетесь интернетом через AOL или прокси. Отключите проверку ай-пи в меню \"Настройки\" в Вашем аккаунте.    \n";
     echo "    <br /><br />\n";
-    echo "    Error-ID: MD5  </b></font></center> </body></html>\n";
+    echo "    Error-ID: ".$id."  </b></font></center> </body></html>\n";
 }
 
 function MyGoto ($page, $param="")
