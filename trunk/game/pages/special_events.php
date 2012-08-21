@@ -134,10 +134,16 @@ wpp="<?=($queue['end']-$now);?>"; ps="<?=$session;?>"; t_wipe();
     else echo "<font color=red>Вы исчерпали доступный запас времени</font>";
 ?>
 </th></tr>
+<tr><th>    Затраченное время  </th> <th colspan=3>
+<?php
+    $acctime = ($now - $GlobalUser['regdate']) + ( 3*365*24*60*60 - $TimeLimit );
+    echo BuildDurationFormat ($acctime);
+?>
+</th></tr>
 <?php
     if ( $attack_ban && $TimeLimit > 0 ) {
 ?>
-<tr><th>    Ускорить задания   </th> <th colspan=3>
+<tr><th>    Ускорить время   </th> <th colspan=3>
 <form action="?page=overview&session=<?=$session;?>" method="POST">
 <table>
 <tr><td>Часов <input type=text size=2 name="speedup_h" value="<?=$speed_h;?>"></td>
