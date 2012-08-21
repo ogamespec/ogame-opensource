@@ -48,6 +48,15 @@ if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 $session = $_GET['session'];
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
 
+$unitab = LoadUniverse ();
+$unispeed = $unitab['fspeed'];
+
+if ($unitab['special'] ) {
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'GlobalAttackBan' ";
+    $result = dbquery ($query);
+    $BlockAttack = dbrows($result) > 0;
+}
+
 // Обработать вызовы AJAX
 if ( $_GET['ajax'] == 1)
 {
@@ -59,9 +68,6 @@ loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "technames", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "fleet", $GlobalUser['lang'] );
-
-$unitab = LoadUniverse ();
-$unispeed = $unitab['fspeed'];
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
