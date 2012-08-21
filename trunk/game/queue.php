@@ -55,7 +55,7 @@ type: тип задания, каждый тип имеет свой обраб�
     "Fleet"            -- Задание флота / Атака МПР (sub_id - номер записи в таблице флота)
     "DecRes"         -- Списать ресурсы на планете (sub_id - номер задания постройки для определения количества ресурсов)
     "Debug"          -- отладочное событие
-    "AI"                 -- задания для бота
+    "AI"              -- задания для бота
 sub_id: дополнительный номер, разный у каждого типа задания, например для постройки - ID планеты, для задания флота - ID флота (INT)
 obj_id: дополнительный номер, разный у каждого типа задания, например для постройки - ID здания (INT)
 level: уровень постройки / количество заказанных единиц на верфи (INT)
@@ -131,32 +131,36 @@ function UpdateQueue ($until)
     $rows = dbrows ($result);
     while ($rows--) {
         $queue = dbarray ($result);
-        if ( $queue['type'] === "Build" ) Queue_Build_End ($queue);
-        else if ( $queue['type'] === "Demolish" ) Queue_Build_End ($queue);
-        else if ( $queue['type'] === "DecRes" ) Queue_DecRes_End ($queue);
-        else if ( $queue['type'] === "Research" ) Queue_Research_End ($queue);
-        else if ( $queue['type'] === "Shipyard" ) Queue_Shipyard_End ($queue);
-        else if ( $queue['type'] === "Fleet" ) Queue_Fleet_End ($queue);
-        else if ( $queue['type'] === "UnloadAll" ) Queue_Relogin_End ($queue);
-        else if ( $queue['type'] === "CleanDebris" ) Queue_CleanDebris_End ($queue);
-        else if ( $queue['type'] === "CleanPlanets" ) Queue_CleanPlanets_End ($queue);
-        else if ( $queue['type'] === "CleanPlayers" ) Queue_CleanPlayers_End ($queue);
-        else if ( $queue['type'] === "UpdateStats" ) Queue_UpdateStats_End ($queue);
-        else if ( $queue['type'] === "RecalcPoints" ) Queue_RecalcPoints_End ($queue);
-        else if ( $queue['type'] === "RecalcAllyPoints" ) Queue_RecalcAllyPoints_End ($queue);
-        else if ( $queue['type'] === "AllowName" ) Queue_AllowName_End ($queue);
-        else if ( $queue['type'] === "UnbanPlayer" ) Queue_UnbanPlayer_End ($queue);
-        else if ( $queue['type'] === "AllowAttacks" ) Queue_AllowAttacks_End ($queue);
-        else if ( $queue['type'] === "Debug" ) Queue_Debug_End ($queue);
-        else if ( $queue['type'] === "AI" ) Queue_Bot_End ($queue);
 
-        else if ( $queue['type'] === "CommanderOff" ) Queue_Officer_End ($queue);
-        else if ( $queue['type'] === "AdmiralOff" ) Queue_Officer_End ($queue);
-        else if ( $queue['type'] === "EngineerOff" ) Queue_Officer_End ($queue);
-        else if ( $queue['type'] === "GeologeOff" ) Queue_Officer_End ($queue);
-        else if ( $queue['type'] === "TechnocrateOff" ) Queue_Officer_End ($queue);
+        if ( !SpecialEvent ( $queue ) )
+        {
+            if ( $queue['type'] === "Build" ) Queue_Build_End ($queue);
+            else if ( $queue['type'] === "Demolish" ) Queue_Build_End ($queue);
+            else if ( $queue['type'] === "DecRes" ) Queue_DecRes_End ($queue);
+            else if ( $queue['type'] === "Research" ) Queue_Research_End ($queue);
+            else if ( $queue['type'] === "Shipyard" ) Queue_Shipyard_End ($queue);
+            else if ( $queue['type'] === "Fleet" ) Queue_Fleet_End ($queue);
+            else if ( $queue['type'] === "UnloadAll" ) Queue_Relogin_End ($queue);
+            else if ( $queue['type'] === "CleanDebris" ) Queue_CleanDebris_End ($queue);
+            else if ( $queue['type'] === "CleanPlanets" ) Queue_CleanPlanets_End ($queue);
+            else if ( $queue['type'] === "CleanPlayers" ) Queue_CleanPlayers_End ($queue);
+            else if ( $queue['type'] === "UpdateStats" ) Queue_UpdateStats_End ($queue);
+            else if ( $queue['type'] === "RecalcPoints" ) Queue_RecalcPoints_End ($queue);
+            else if ( $queue['type'] === "RecalcAllyPoints" ) Queue_RecalcAllyPoints_End ($queue);
+            else if ( $queue['type'] === "AllowName" ) Queue_AllowName_End ($queue);
+            else if ( $queue['type'] === "UnbanPlayer" ) Queue_UnbanPlayer_End ($queue);
+            else if ( $queue['type'] === "AllowAttacks" ) Queue_AllowAttacks_End ($queue);
+            else if ( $queue['type'] === "Debug" ) Queue_Debug_End ($queue);
+            else if ( $queue['type'] === "AI" ) Queue_Bot_End ($queue);
 
-        else Error ( "queue: Неизвестный тип задания для глобальной очереди: " . $queue['type']);
+            else if ( $queue['type'] === "CommanderOff" ) Queue_Officer_End ($queue);
+            else if ( $queue['type'] === "AdmiralOff" ) Queue_Officer_End ($queue);
+            else if ( $queue['type'] === "EngineerOff" ) Queue_Officer_End ($queue);
+            else if ( $queue['type'] === "GeologeOff" ) Queue_Officer_End ($queue);
+            else if ( $queue['type'] === "TechnocrateOff" ) Queue_Officer_End ($queue);
+
+            else Error ( "queue: Неизвестный тип задания для глобальной очереди: " . $queue['type']);
+        }
     }
 
     UnlockTables ();
@@ -1135,7 +1139,6 @@ function AddDebugEvent ($when)
     $queue = array ( null, 99999, "Debug", 0, 0, 0, $now, $when, 9999 );
     $id = AddDBRow ( $queue, "queue" );
 }
-
 // Отладочное событие.
 function Queue_Debug_End ($queue)
 {

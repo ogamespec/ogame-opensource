@@ -22,6 +22,8 @@ $session = $_GET['session'];
 
 $unitab = $GlobalUni;
 
+$defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+
 function empty_row ($p)
 {
     echo "<tr><th width=\"30\"><a href=\"#\" >".$p."</a></th><th width=\"30\"></th><th width=\"130\" style='white-space: nowrap;'></th><th width=\"30\" style='white-space: nowrap;'></th><th width=\"30\"></th><th width=\"150\"></th><th width=\"80\"></th><th width=\"125\" style='white-space: nowrap;'></th></tr>\n\n";
@@ -30,8 +32,8 @@ function empty_row ($p)
 // Ракетная атака.
 if ( method () === "POST" && $_POST['aktion'] === "Атаковать" )
 {
-    $amount = intval($_POST['anz']);        // Количество ракет
-    $type = intval($_POST['pziel']);        // Основная цель (0-все)
+    $amount = abs(intval($_POST['anz']));        // Количество ракет
+    $type = abs(intval($_POST['pziel']));        // Основная цель (0-все)
     $origin = $aktplanet;
     $target = GetPlanet (intval($_GET['pdd']));
     $target_user = LoadUser ($target['owner_id']);
@@ -39,6 +41,8 @@ if ( method () === "POST" && $_POST['aktion'] === "Атаковать" )
     $ipm_radius = max (0, 5 * $GlobalUser['r117'] - 1);
 
     if ( $target == NULL) $GalaxyError = "Нет цели";
+
+    if ( !in_array ($type, $defmap ) ) $type = 0;
 
     if ( $GalaxyError === "" )    // Проверить допустимые параметры
     {
@@ -432,7 +436,6 @@ echo "</form>\n";
      <select name="pziel">
       <option value="0" selected>Все</option>
 <?php
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
     foreach ($defmap as $i=>$gid)
     {
         echo "       <option value=\"$gid\">".loca("NAME_$gid")."</option>\n";
