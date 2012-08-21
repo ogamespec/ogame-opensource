@@ -201,6 +201,8 @@ function CreateUser ( $name, $pass, $email, $bot=false)
 
     // Удалить неактивированного пользователя через 3 дня.
 
+    SetVar ( $id, "TimeLimit", 3*365*24*60*60 );
+
     RecalcRanks ();
 
     return $id;
