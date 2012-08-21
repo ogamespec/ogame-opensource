@@ -41,6 +41,7 @@ require_once "battle.php";
 require_once "debug.php";
 require_once "galaxytool.php";
 require_once "bot.php";
+require_once "events.php";
 
 if (0)
 {

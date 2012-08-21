@@ -307,6 +307,7 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
     // Добавить флот.
     $fleet_obj = array ( null, $origin['owner_id'], $union_id, $m, $k, $d, $cons, $order, $origin['planet_id'], $target['planet_id'], $flight_time, $deploy_time,
                          0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
+    SpecialEventsDispatchFleetCallback ( &$fleet_obj );
     $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
     // Запись в лог

@@ -46,8 +46,8 @@ function gen_trivial_password ($len = 8)
 // -------------------------------------------------------------------------------------------------------------------------
 
 $tab_uni = array (        // Вселенная
-    'num'=>'INT','speed'=>'FLOAT','fspeed'=>'FLOAT','galaxies'=>'INT','systems'=>'INT','maxusers'=>'INT','acs'=>'INT','fid'=>'INT','did'=>'INT','rapid'=>'INT','moons'=>'INT','defrepair'=>'INT','defrepair_delta'=>'INT','usercount'=>'INT','freeze'=>'INT',
-    'news1'=>'TEXT', 'news2'=>'TEXT', 'news_until'=>'INT UNSIGNED', 'startdate'=>'INT UNSIGNED', 'battle_engine'=>'TEXT'
+    'num'=>'INT PRIMARY KEY','speed'=>'FLOAT','fspeed'=>'FLOAT','galaxies'=>'INT','systems'=>'INT','maxusers'=>'INT','acs'=>'INT','fid'=>'INT','did'=>'INT','rapid'=>'INT','moons'=>'INT','defrepair'=>'INT','defrepair_delta'=>'INT','usercount'=>'INT','freeze'=>'INT',
+    'news1'=>'TEXT', 'news2'=>'TEXT', 'news_until'=>'INT UNSIGNED', 'startdate'=>'INT UNSIGNED', 'battle_engine'=>'TEXT', 'special'=>'INT'
 );
 
 $tab_users = array (    // Пользователи
@@ -89,10 +89,6 @@ $tab_buddy = array (    // Друзья
 
 $tab_messages = array (    // Сообщения
     'msg_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'pm'=>'INT', 'msgfrom'=>'TEXT', 'subj'=>'TEXT', 'text'=>'TEXT', 'shown'=>'INT', 'date'=>'INT UNSIGNED'
-);
-
-$tab_notes = array (    // Заметки
-    'note_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'subj'=>'TEXT', 'text'=>'TEXT', 'textsize'=>'INT', 'prio'=>'INT', 'date'=>'INT UNSIGNED'
 );
 
 $tab_notes = array (    // Заметки
@@ -235,7 +231,8 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "news2 = '', ";
     $query .= "news_until = '0', ";
     $query .= "startdate = '".$now."', ";
-    $query .= "battle_engine = '".$_POST["uni_battle_engine"]."' ";
+    $query .= "battle_engine = '".$_POST["uni_battle_engine"]."', ";
+    $query .= "special = '".($_POST["uni_special"]==="on"?1:0)."' ";
     //echo "<br>$query<br>";
     dbquery ($query);
 
@@ -407,6 +404,7 @@ td.c { background-color: #334445; }
 <tr><td><a title='Оборона в Обломки. Указанное количество процентов обороны выпадает в виде обломков. Если указано 0, то ОВО отключено.'>Обломки обороны</a></td><td><input type=text value='0' class='text' name='uni_did'></td></tr>
 <tr><td><a title='Корабли получают возможность повторного выстрела'>Скорострел</a></td><td><input type=checkbox class='text' name='uni_rapid' CHECKED></td></tr>
 <tr><td>Луны и Звезды Смерти</td><td><input type=checkbox class='text' name='uni_moons' CHECKED></td></tr>
+<tr><td><a title='Перезапуск вселенной каждый день в 20:00. Игроку даётся 3 года игрового времени для мгновенного завершения любых заданий, кроме боевых.'>Специальная Вселенная</a></td><td><input type=checkbox class='text' name='uni_special' ></td></tr>
 <tr><td>Путь к боевому движку</td><td><input type=text value='../cgi-bin/battle' class='text' name='uni_battle_engine'></td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan=2 class='c'>Аккаунт администратора игры (Legor)</td></tr>

@@ -175,6 +175,7 @@ function GetPlanet ( $planet_id)
     $planet['e'] = floor ( $planet['emax'] - $planet['econs'] );
     $planet['factor'] = 1;
     if ( $planet['e'] < 0 ) $planet['factor'] = max (0, 1 - abs ($planet['e']) / $planet['econs']);
+    SpecialEventsGetPlanetCallback ( &$planet );
     return $planet;
 }
 

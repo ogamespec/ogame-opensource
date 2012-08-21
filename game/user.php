@@ -509,12 +509,13 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
         $user = dbarray ($result);
         SelectPlanet ($player_id, $user['hplanetid']);
 
-        // Задание глобальной отгрузки игроков, чистки виртуальных ПО, чистки уничтоженных планет, пересчёт статистики альянсов
+        // Задание глобальной отгрузки игроков, чистки виртуальных ПО, чистки уничтоженных планет, пересчёт статистики альянсов и прочие глобальные события
         AddReloginEvent ();
         AddCleanDebrisEvent ();
         AddCleanPlanetsEvent ();
         AddCleanPlayersEvent ();
         AddRecalcAllyPointsEvent ();
+        SpecialEventsLoginCallback ();
 
         // Задание пересчёта очков игрока.
         AddUpdateStatsEvent ();
