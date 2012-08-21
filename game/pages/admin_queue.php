@@ -11,6 +11,9 @@ function QueueDesc ( $queue )
     $obj_id = $queue['obj_id'];
     $level = $queue['level'];
 
+    $desc = SpecialEventDescription ($type);
+    if ( $desc ) return $desc;
+
     switch ( $type )
     {
         case "Build":
@@ -38,7 +41,6 @@ function QueueDesc ( $queue )
         case "AI":
             $planet = GetPlanet ($sub_id);
             return "Задание бота с планеты " . AdminPlanetName ( $planet ) . ", стратегия: " . GetBotStrategy($obj_id);
-        case "WipeUniverse": return "Вайп вселенной";
 
         case "CommanderOff": return "Заканчивается офицер: Командир";
         case "AdmiralOff": return "Заканчивается офицер: Адмирал";

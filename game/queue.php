@@ -592,11 +592,12 @@ function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
 }
 
 // Закончить постройку на верфи.
-function Queue_Shipyard_End ($queue)
+function Queue_Shipyard_End ($queue, $when=0)
 {
     global $db_prefix, $GlobalUser;
 
-    $now = time ();
+    if ($when == 0) $now = time ();
+    else $now = $when;
     $gid = $queue['obj_id'];
     $planet_id = $queue['sub_id'];
     $planet = GetPlanet ($planet_id);

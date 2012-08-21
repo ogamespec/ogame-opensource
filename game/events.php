@@ -18,6 +18,17 @@ function SpecialEventsDispatchFleetCallback ( &$fleet_obj )
 {
 }
 
+// Вернуть описание специального события для админки, или null, если это не специальное событие
+function SpecialEventDescription ($type)
+{
+    switch ( $type )
+    {
+        case "WipeUniverse": return "Вайп вселенной";
+        case "GlobalAttackBan": return "Глобальный бан атак";
+    }
+    return null;
+}
+
 // -----------------------------------------------------------------------------------------------------
 // Обработчики специальных событий
 
@@ -28,6 +39,7 @@ function SpecialEventsDispatchFleetCallback ( &$fleet_obj )
 function SpecialEvent ($queue )
 {
     if ( $queue['type'] === "WipeUniverse" ) Queue_WipeUniverse_End ($queue);
+    else if ( $queue['type'] === "GlobalAttackBan" ) Queue_GlobalAttackBan_End ($queue);
     else return 0;
 }
 
@@ -43,15 +55,25 @@ function AddWipeUniverseEvent ()
     if ( dbrows ($result) == 0 && $uni['special'] )
     {
         $now = time ();
-        $when = mktime(20, 0, 0, date("m"), date("d")+1, date("y"));
+        $when = mktime(10, 0, 0, date("m"), date("d")+1, date("y"));
         $queue = array ( null, 99999, "WipeUniverse", 0, 0, 0, $now, $when, 1000 );
-        AddDBRow ( $queue, "queue" );        
+        AddDBRow ( $queue, "queue" );
+        
+        // Включить глобальную блокировку атак до 20:00.
+        $when = mktime(20, 0, 0, date("m"), date("d")+1, date("y"));
+        $queue = array ( null, 99999, "GlobalAttackBan", 0, 0, 0, $now, $when, 1000 );
+        AddDBRow ( $queue, "queue" );
     }
 }
 // Обработчик вайпа вселенной.
 function Queue_WipeUniverse_End ($queue)
 {
     WipeUniverse ();
+}
+// Обработчик глобального блока атак.
+function Queue_GlobalAttackBan_End ($queue)
+{
+    RemoveQueue ($queue['task_id'], 0);
 }
 
 ?>
