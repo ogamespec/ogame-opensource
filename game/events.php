@@ -24,7 +24,8 @@ function SpecialEventDescription ($type)
     switch ( $type )
     {
         case "WipeUniverse": return "Вайп вселенной";
-        case "GlobalAttackBan": return "Глобальный бан атак";
+        case "GlobalAttackBan": return "Фаза подготовки активна";
+        case "GlobalAttackUnban": return "Фаза боевых действий активна";
     }
     return null;
 }
@@ -38,8 +39,9 @@ function SpecialEventDescription ($type)
 // Вернуть 0, если событие не специальное.
 function SpecialEvent ($queue )
 {
-    if ( $queue['type'] === "WipeUniverse" ) Queue_WipeUniverse_End ($queue);
-    else if ( $queue['type'] === "GlobalAttackBan" ) Queue_GlobalAttackBan_End ($queue);
+    if ( $queue['type'] === "WipeUniverse" ) { Queue_WipeUniverse_End ($queue); return 1; }
+    else if ( $queue['type'] === "GlobalAttackBan" ) { Queue_GlobalAttackBan_End ($queue); return 1; }
+    else if ( $queue['type'] === "GlobalAttackUnban" ) { Queue_GlobalAttackUnban_End ($queue); return 1; }
     else return 0;
 }
 
@@ -55,12 +57,12 @@ function AddWipeUniverseEvent ()
     if ( dbrows ($result) == 0 && $uni['special'] )
     {
         $now = time ();
-        $when = mktime(10, 0, 0, date("m"), date("d")+1, date("y"));
+        $when = mktime(10, 0, 0, date("m"), date("d")+7, date("y"));
         $queue = array ( null, 99999, "WipeUniverse", 0, 0, 0, $now, $when, 1000 );
         AddDBRow ( $queue, "queue" );
         
-        // Включить глобальную блокировку атак до 20:00.
-        $when = mktime(20, 0, 0, date("m"), date("d")+1, date("y"));
+        // Включить глобальную блокировку атак на 5 часов.
+        $when = $now + 5*60*60;
         $queue = array ( null, 99999, "GlobalAttackBan", 0, 0, 0, $now, $when, 1000 );
         AddDBRow ( $queue, "queue" );
     }
@@ -70,10 +72,25 @@ function Queue_WipeUniverse_End ($queue)
 {
     WipeUniverse ();
 }
-// Обработчик глобального блока атак.
+// Обработчик установки глобального блока атак.
 function Queue_GlobalAttackBan_End ($queue)
 {
     RemoveQueue ($queue['task_id'], 0);
+
+    // Отключить глобальную блокировку атак на 5 часов.
+    $when = $queue['end'] + 5*60*60;
+    $queue = array ( null, 99999, "GlobalAttackUnban", 0, 0, 0, $now, $when, 1000 );
+    AddDBRow ( $queue, "queue" );
+}
+// Обработчик снятия глобального блока атак.
+function Queue_GlobalAttackUnban_End ($queue)
+{
+    RemoveQueue ($queue['task_id'], 0);
+
+    // Включить глобальную блокировку атак на 5 часов.
+    $when = $queue['end'] + 5*60*60;
+    $queue = array ( null, 99999, "GlobalAttackBan", 0, 0, 0, $now, $when, 1000 );
+    AddDBRow ( $queue, "queue" );
 }
 
 ?>

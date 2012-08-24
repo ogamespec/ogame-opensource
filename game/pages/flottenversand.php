@@ -200,6 +200,10 @@ else if ( $cons > ($cargo + $spycargo) ) FleetError ( "Недостаточно 
 
 if ($numships <= 0) FleetError ( "Вы не выбрали корабли либо выбрали, но слишком мало!" );
 
+if ( ( 
+( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
+ IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
+
 switch ( $order )
 {
     case '1':        // Атака
