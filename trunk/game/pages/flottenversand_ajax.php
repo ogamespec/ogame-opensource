@@ -80,6 +80,10 @@ $probes = $aktplanet['f210'];
 $recyclers = $aktplanet['f209'];
 $missiles = $aktplanet['d503'];
 
+if ( ( 
+( $GlobalUser['ally_id'] == $target_user['ally_id'] && $GlobalUser['ally_id'] > 0 )   || 
+ IsBuddy ( $GlobalUser['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
+
 /* ************ ШПИОНАЖ ************  */
 
 if ( $order == 6 )
