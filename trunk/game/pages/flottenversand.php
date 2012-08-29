@@ -208,13 +208,13 @@ else if ( $cons > ($cargo + $spycargo) ) FleetError ( "Недостаточно 
 
 if ($numships <= 0) FleetError ( "Вы не выбрали корабли либо выбрали, но слишком мало!" );
 
-if ( ( 
-( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
- IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
-
 switch ( $order )
 {
     case '1':        // Атака
+        if ( ( 
+            ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
+             IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
+
         if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
         else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
         else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Невозможно напасть на собственную планету!" );
@@ -223,6 +223,10 @@ switch ( $order )
         break;
 
     case '2':        // Совместная атака
+        if ( ( 
+            ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
+             IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
+
         if ( key_exists ('union2', $_POST) ) $union_id = floor (intval($_POST['union2']));
         else $union_id = 0;
         if ( $unitab['acs'] == 0 ) $union_id = 0;
@@ -257,6 +261,10 @@ switch ( $order )
         break;
 
     case '6':        // Шпионаж
+        if ( ( 
+            ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
+             IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
+
         if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Нельзя шпионить на собственной планете!" );
         else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "На этой планете нельзя шпионить из-за защиты для новичков!" );
         else if ( $fleet[210] == 0 ) FleetError ( "Для шпионажа необходимы шпионские зонды." );
@@ -280,6 +288,10 @@ switch ( $order )
         break;
 
     case '9':        // Уничтожить
+        if ( ( 
+            ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
+             IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
+
         if ( $fleet[214] == 0 ) FleetError ( "Для уничтожения луны необходима звезда смерти." );
         else if ($target['type'] != 0 ) FleetError ( "Уничтожать можно только луны!" );
         else if ($BlockAttack) FleetError ( "Запрет на атаки" );
