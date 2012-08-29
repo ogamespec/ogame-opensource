@@ -609,7 +609,7 @@ function AdjustStats ( $player_id, $points, $fpoints, $rpoints, $sign )
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."users SET ";
-    $query .= "score1=score1 $sign '".$points."', score2=score2 $sign '".$fpoints."', score3=score3 $sign '".$rpoints."' WHERE player_id = $player_id AND admin = 0;";
+    $query .= "score1=score1 $sign '".$points."', score2=score2 $sign '".$fpoints."', score3=score3 $sign '".$rpoints."' WHERE player_id = $player_id AND banned = 0 AND admin = 0;";
     dbquery ($query);
     //Debug ( "Adjust $player_id POINT=$sign$points FLEET=$sign$fpoints RESEARCH=$sign$rpoints" );
 }
