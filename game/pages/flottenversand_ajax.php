@@ -45,6 +45,14 @@ $planettype = intval($_POST['planettype']);
 $shipcount = abs (intval($_POST['shipcount']));
 $speed = 1;
 
+// Нельзя отправлять флот, если предыдущий отправлен менее секунды назад.
+$result = EnumOwnFleetQueueSpecial ( $GlobalUser['player_id'] );
+$rows = dbrows ($result);
+if ( $rows ) {
+    $queue = dbarray ($result);
+    if ( abs(time () - $queue['start']) < 1 ) AjaxSendError ();
+}
+
 // Проверить параметры.
 
 if ( $planettype < 1 || $planettype > 3 ) AjaxSendError ();    // неверная цель
@@ -138,6 +146,12 @@ $cons = FlightCons ( $fleet, $dist, $flighttime, $GlobalUser['r115'], $GlobalUse
 if ( $aktplanet['d'] < $cons ) AjaxSendError (613);        // не хватает дейта на полёт
 if ( $cargo < $cons ) AjaxSendError (615);        // нет места в грузовом отсеке для дейтерия
 
+// Fleet lock
+$fleetlock = "temp/fleetlock_" . $aktplanet['planet_id'];
+if ( file_exists ($fleetlock) ) AjaxSendError ();
+$f = fopen ( $fleetlock, 'w' );
+fclose ($f);
+
 // Отправить флот.
 DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, 0, 0, 0, $cons, time(), 0 );
 
@@ -145,6 +159,8 @@ DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, 0, 0, 0, $cons
 AdjustResources ( 0, 0, $cons, $aktplanet['planet_id'], '-' );
 AdjustShips ( $fleet, $aktplanet['planet_id'], '-' );
 UpdatePlanetActivity ($aktplanet['planet_id']);
+
+unlink ( $fleetlock );
 
 AjaxSendDone ( $nowfleet+1, $probes, $recyclers, $missiles );
 ?>

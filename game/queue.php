@@ -1184,6 +1184,16 @@ function EnumOwnFleetQueue ($player_id, $ipm=0)
     return $result;
 }
 
+// Для проверки отправки флота менее секунды назад
+function EnumOwnFleetQueueSpecial ($player_id)
+{
+    global $db_prefix;
+    $query = "SELECT fleet_id FROM ".$db_prefix."fleet WHERE mission < 20 AND owner_id = $player_id";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND sub_id = ANY ($query) ORDER BY start DESC";
+    $result = dbquery ($query);
+    return $result;
+}
+
 // Перечислить флоты летящие от или на планету.
 function EnumPlanetFleets ($planet_id)
 {

@@ -63,6 +63,14 @@ if ( $_GET['ajax'] == 1)
     include "flottenversand_ajax.php";
 }
 
+// Нельзя отправлять флот, если предыдущий отправлен менее секунды назад.
+$result = EnumOwnFleetQueueSpecial ( $GlobalUser['player_id'] );
+$rows = dbrows ($result);
+if ( $rows ) {
+    $queue = dbarray ($result);
+    if ( abs(time () - $queue['start']) < 1 ) MyGoto ( "flotten1" );
+}
+
 loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "technames", $GlobalUser['lang'] );
@@ -327,6 +335,12 @@ else {
 
     //print_r ( $_POST);
 
+    // Fleet lock
+    $fleetlock = "temp/fleetlock_" . $aktplanet['planet_id'];
+    if ( file_exists ($fleetlock) ) MyGoto ( "flotten1" );
+    $f = fopen ( $fleetlock, 'w' );
+    fclose ($f);
+
     $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $cargo_m, $cargo_k, $cargo_d, $cons, time(), $union_id, $hold_time );
     $queue = GetFleetQueue ($fleet_id);
     if ( $union_id ) {
@@ -337,6 +351,8 @@ else {
     // Поднять флот с планеты.
     AdjustResources ( $cargo_m, $cargo_k, $cargo_d + $cons, $origin['planet_id'], '-' );
     AdjustShips ( $fleet, $origin['planet_id'], '-' );
+
+    unlink ( $fleetlock );
 
     //echo "<br>";
     //print_r ( $queue);
