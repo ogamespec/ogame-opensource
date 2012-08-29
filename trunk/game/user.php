@@ -601,7 +601,7 @@ function RecalcStats ($player_id)
     }
 
     $query = "UPDATE ".$db_prefix."users SET ";
-    $query .= "score1=$points, score2=$fpoints, score3=$rpoints WHERE player_id = $player_id;";
+    $query .= "score1=$points, score2=$fpoints, score3=$rpoints WHERE player_id = $player_id AND banned <> 1;";
     dbquery ($query);
 }
 
@@ -747,7 +747,7 @@ function BanUser ($player_id, $seconds, $vmode)
     $when = $now + $seconds;
     $queue = array ( null, $player_id, "UnbanPlayer", 0, 0, 0, $now, $when, 0 );
     $id = AddDBRow ( $queue, "queue" );
-    $query = "UPDATE ".$db_prefix."users SET banned = 1, banned_until = $when";
+    $query = "UPDATE ".$db_prefix."users SET score1 = 0, score2 = 0, score3 = 0, banned = 1, banned_until = $when";
     if ( $vmode ) $query .= ", vacation = 1, vacation_until = $when";
     $query .= " WHERE player_id = $player_id";
     dbquery ($query);
@@ -775,6 +775,8 @@ function UnbanUser ($player_id)
     dbquery ($query);
     $query = "UPDATE ".$db_prefix."users SET banned = 0, banned_until = 0 WHERE player_id = $player_id";
     dbquery ($query);
+    RecalcStats ($player_id);
+    RecalcRanks ();
 }
 
 // Разрешить атаки
