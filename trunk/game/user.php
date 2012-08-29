@@ -601,7 +601,7 @@ function RecalcStats ($player_id)
     }
 
     $query = "UPDATE ".$db_prefix."users SET ";
-    $query .= "score1=$points, score2=$fpoints, score3=$rpoints WHERE player_id = $player_id AND banned <> 1;";
+    $query .= "score1=$points, score2=$fpoints, score3=$rpoints WHERE player_id = $player_id AND (banned <> 1 OR admin > 0);";
     dbquery ($query);
 }
 
@@ -609,7 +609,7 @@ function AdjustStats ( $player_id, $points, $fpoints, $rpoints, $sign )
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."users SET ";
-    $query .= "score1=score1 $sign '".$points."', score2=score2 $sign '".$fpoints."', score3=score3 $sign '".$rpoints."' WHERE player_id = $player_id;";
+    $query .= "score1=score1 $sign '".$points."', score2=score2 $sign '".$fpoints."', score3=score3 $sign '".$rpoints."' WHERE player_id = $player_id AND admin = 0;";
     dbquery ($query);
     //Debug ( "Adjust $player_id POINT=$sign$points FLEET=$sign$fpoints RESEARCH=$sign$rpoints" );
 }
@@ -618,6 +618,10 @@ function AdjustStats ( $player_id, $points, $fpoints, $rpoints, $sign )
 function RecalcRanks ()
 {
     global $db_prefix;
+
+    // Специальная обработка для админов
+    $query = "UPDATE ".$db_prefix."users SET score1 = -1, score2 = -1, score3 = -1 WHERE admin > 0";
+    dbquery ($query);
 
     // Очки
     dbquery ("SET @pos := 0;");
@@ -638,6 +642,10 @@ function RecalcRanks ()
     $query = "UPDATE ".$db_prefix."users
               SET place3 = (SELECT @pos := @pos+1)
               ORDER BY score3 DESC";
+    dbquery ($query);
+
+    // Специальная обработка для админов
+    $query = "UPDATE ".$db_prefix."users SET place1 = 0, place2 = 0, place3 = 0 WHERE admin > 0";
     dbquery ($query);
 }
 
