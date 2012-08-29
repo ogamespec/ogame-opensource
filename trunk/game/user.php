@@ -759,6 +759,7 @@ function BanUser ($player_id, $seconds, $vmode)
     if ( $vmode ) $query .= ", vacation = 1, vacation_until = $when";
     $query .= " WHERE player_id = $player_id";
     dbquery ($query);
+    RecalcRanks ();
 }
 
 // Запретить атаки.
