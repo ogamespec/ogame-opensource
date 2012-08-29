@@ -4,6 +4,13 @@
 
 $internal = key_exists ( 'session', $_GET );
 
+// Исправленная версия date
+function MyDate ( $fmt, $timestamp )
+{
+    $date = new DateTime ('@' . $timestamp);
+    return $date->format ($fmt);
+}
+
 if ($internal)
 {
     SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
@@ -78,7 +85,7 @@ $uni = LoadUniverse ();
         echo "          <th>\n";
         echo "       ".$entry['admin_name']."     </th>\n\n";
         echo "     <th>".$entry['user_name']."</th>\n";
-        echo "     <th>".date("D M j Y G:i:s", $entry['ban_until'])."</th>\n";
+        echo "     <th>".MyDate("D M j Y G:i:s", $entry['ban_until'])."</th>\n";
         echo "     <th>".$entry['reason']."</th>\n";
         echo "    </tr>\n";
     }
