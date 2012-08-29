@@ -210,6 +210,12 @@ if ( $who === 'ally' ) {
 
 else {
 
+    if ( $start == -1 ) {
+        if ( $type === "fleet" ) $start = (floor($GlobalUser['place2']/100)*100+1);
+        else if ( $type === "research" ) $start = (floor($GlobalUser['place3']/100)*100+1);
+        else $start = (floor($GlobalUser['place1']/100)*100+1);
+    }
+
     if ( $type === "fleet" ) $query = "SELECT * FROM ".$db_prefix."users WHERE place2 >= $start AND place2 < ".($start+99)." ORDER BY place2;";
     else if ( $type === "research" ) $query = "SELECT * FROM ".$db_prefix."users WHERE place3 >= $start AND place3 < ".($start+99)." ORDER BY place3;";
     else $query = "SELECT * FROM ".$db_prefix."users WHERE place1 >= $start AND place1 < ".($start+99)." ORDER BY place1;";
