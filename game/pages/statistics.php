@@ -210,7 +210,7 @@ if ( $who === 'ally' ) {
 
 else {
 
-    if ( $start == -1 ) {
+    if ( $start <= 0 ) {
         if ( $type === "fleet" ) $start = (floor($GlobalUser['place2']/100)*100+1);
         else if ( $type === "research" ) $start = (floor($GlobalUser['place3']/100)*100+1);
         else $start = (floor($GlobalUser['place1']/100)*100+1);
