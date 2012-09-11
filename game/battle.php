@@ -488,8 +488,6 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
     $moondes =  mt_rand(1, 999) < $moonchance * 10;
     $ripdes = mt_rand(1, 999) < $ripchance * 10;
 
-    $ripdes = $moondes = 1;
-
     if ( !$ripdes && !$moondes )
     {
             $atext = va ( "Флот с #1 #2 достигает луны планеты на #3 .\n" .
