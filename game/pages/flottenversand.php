@@ -360,7 +360,8 @@ else {
     loca_add ( "technames", "en" );
     loca_add ( "technames", "ru" );
     UserLog ( $aktplanet['owner_id'], "FLEET", 
-     "Отправка флота $fleet_id: " . GetMissionNameDebug ($order) . "<br>" .
+     "Отправка флота $fleet_id: " . GetMissionNameDebug ($order) . " " .
+     $origin['name'] ." [".$origin['g'].":".$origin['s'].":".$origin['p']."] -&gt; ".$target['name']." [".$target['g'].":".$target['s'].":".$target['p']."]<br>" .
      DumpFleet ($fleet) . "<br>" .
      "Время полёта: " . BuildDurationFormat ($flighttime) . ", удержание: " . BuildDurationFormat ($hold_time) . ", затраты дейтерия: " . nicenum ($cons) . ", союз: " . $union_id );
 
