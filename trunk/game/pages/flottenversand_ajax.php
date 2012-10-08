@@ -159,7 +159,8 @@ loca_add ( "technames", "de" );
 loca_add ( "technames", "en" );
 loca_add ( "technames", "ru" );
 UserLog ( $aktplanet['owner_id'], "FLEET", 
- "Отправка флота $fleet_id (AJAX): " . GetMissionNameDebug ($order) . "<br>" .
+ "Отправка флота $fleet_id (AJAX): " . GetMissionNameDebug ($order) . " " .
+ $aktplanet['name'] ." [".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."] -&gt; ".$target['name']." [".$target['g'].":".$target['s'].":".$target['p']."]<br>" .
  DumpFleet ($fleet) . "<br>" .
  "Время полёта: " . BuildDurationFormat ($flighttime) . ", затраты дейтерия: " . nicenum ($cons) );
 

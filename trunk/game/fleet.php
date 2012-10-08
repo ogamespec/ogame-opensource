@@ -336,16 +336,19 @@ function RecallFleet ($fleet_id, $now=0)
     $fleet = array ();
     foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj["ship$gid"];
 
-    UserLog ( $fleet_obj['owner_id'], "FLEET", 
-     "Отзыв флота ".$fleet_obj['fleet_id'].": " . GetMissionNameDebug ($fleet_obj['mission']) . "<br>" .
-     DumpFleet ($fleet) );
-
     // Если флот уже развернут, ничего не делать
     if ( $fleet_obj['mission'] >= 100 && $fleet_obj['mission'] < 200 ) return;
 
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
     $target = GetPlanet ( $fleet_obj['target_planet'] );
     $queue = GetFleetQueue ($fleet_obj['fleet_id']);
+
+    if ($fleet_obj['mission'] < 100) $new_mission = $fleet_obj['mission'] + 100;
+    else $new_mission = $fleet_obj['mission'] - 100;
+    UserLog ( $fleet_obj['owner_id'], "FLEET", 
+     "Отзыв флота ".$fleet_obj['fleet_id'].": " . GetMissionNameDebug ($new_mission) . " " .
+     $origin['name'] ." [".$origin['g'].":".$origin['s'].":".$origin['p']."] &lt;- ".$target['name']." [".$target['g'].":".$target['s'].":".$target['p']."]<br>" .
+     DumpFleet ($fleet) );
 
     // Для отзыва миссий с удержанием в качестве времени обратного полёта используется время удержания.
     if ($fleet_obj['mission'] < 100) DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] + 100, $now-$queue['start'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $now);
