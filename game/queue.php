@@ -187,11 +187,19 @@ function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
 {
     global $db_prefix, $GlobalUni;
 
-    $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
-    if ( ! in_array ( $id, $buildmap ) ) return;
-
     $planet = GetPlanet ( $planet_id );
     $user = LoadUser ( $planet['owner_id'] );
+
+    loca_add ( "technames", "de" );
+    loca_add ( "technames", "en" );
+    loca_add ( "technames", "ru" );
+
+    // Запишем действие пользователя, даже если он делает что-то не так
+    if ($destroy) UserLog ( $planet['owner_id'], "BUILD", "Снос ".loca("NAME_$id")." ".($planet['b'.$id]-1)." на планете $planet_id");
+    else UserLog ( $planet['owner_id'], "BUILD", "Постройка ".loca("NAME_$id")." ".($planet['b'.$id]+1)." на планете $planet_id");
+
+    $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
+    if ( ! in_array ( $id, $buildmap ) ) return;
 
     $prem = PremiumStatus ($user);
     //if ($prem['commander']) $maxcnt = 5;
@@ -298,6 +306,10 @@ function BuildDeque ( $planet_id, $listid )
 {
     global $db_prefix, $GlobalUni;
 
+    loca_add ( "technames", "de" );
+    loca_add ( "technames", "en" );
+    loca_add ( "technames", "ru" );
+
     $uni = $GlobalUni;
     if ( $uni['freeze'] ) return;
 
@@ -313,6 +325,8 @@ function BuildDeque ( $planet_id, $listid )
     $listid--;
     if ( $listid < 0 || $listid >= $cnt ) return;    // Невозможно удалить несуществующую очередь.
 
+    $planet = GetPlanet ($queue[$listid]['sub_id']);
+    UserLog ( $planet['owner_id'], "BUILD", "Отмена строительства ".loca("NAME_".$queue[$listid]['obj_id'])." ".$queue[$listid]['level'].", слот ($listid) на планете $planet_id");
     RemoveQueue ( $queue[$listid]['task_id'], 1 );
 }
 
@@ -534,6 +548,13 @@ function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
 {
     global $db_prefix, $GlobalUni;
 
+    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
+    loca_add ( "technames", "de" );
+    loca_add ( "technames", "en" );
+    loca_add ( "technames", "ru" );
+    if ( in_array ( $gid, $defmap ) ) UserLog ( $player_id, "DEFENSE", "Запустить постройку ".loca("NAME_$gid")." ($value) на планете $planet_id");
+    else UserLog ( $player_id, "SHIPYARD", "Запустить постройку ".loca("NAME_$gid")." ($value) на планете $planet_id");
+
     $techmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
     if ( ! in_array ( $gid, $techmap ) ) return;
 
@@ -587,7 +608,6 @@ function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
         AdjustResources ( $m, $k, $d, $planet_id, '-' );
 
         AddQueue ($player_id, "Shipyard", $planet_id, $gid, $value, $now, $seconds);
-        Debug ("Запустить постройку ".loca("NAME_$gid")." ($value) на планете [".$planet['g'].":".$planet['s'].":".$planet['p']."] ".$planet['name'] . ", длительность $seconds сек." );
     }
 }
 
@@ -655,13 +675,18 @@ function StartResearch ($player_id, $planet_id, $id, $now)
 {
     global $db_prefix, $GlobalUni;
 
+    $planet = GetPlanet ( $planet_id );
+
+    loca_add ( "technames", "de" );
+    loca_add ( "technames", "en" );
+    loca_add ( "technames", "ru" );
+    UserLog ( $player_id, "RESEARCH", "Запустить исследование ".loca("NAME_$id")." на планете $planet_id");
+
     $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
     if ( ! in_array ( $id, $resmap ) ) return;
 
     $uni = $GlobalUni;
     if ( $uni['freeze'] ) return;
-
-    Debug ("Запустить исследование ".loca("NAME_$id")." на планете $planet_id игрока $player_id" );
 
     // Исследование уже ведется?
     $result = GetResearchQueue ( $player_id);
@@ -682,7 +707,6 @@ function StartResearch ($player_id, $planet_id, $id, $now)
     else $r_factor = 1.0;
 
     // Проверить условия.
-    $planet = GetPlanet ( $planet_id );
     $m = $k = $d = $e = 0;
     ResearchPrice ( $id, $level, &$m, &$k, &$d, &$e );
 
@@ -733,7 +757,10 @@ function StopResearch ($player_id)
 
     RemoveQueue ( $resq['task_id'], 0 );
 
-    Debug ( "Отменить исследование -".loca("NAME_$id")."- у игрока ".$user['oname'] );
+    loca_add ( "technames", "de" );
+    loca_add ( "technames", "en" );
+    loca_add ( "technames", "ru" );
+    UserLog ( $player_id, "RESEARCH", "Отменить исследование ".loca("NAME_$id"));
 }
 
 // Получить текущее исследование для аккаунта.
@@ -1093,9 +1120,9 @@ function Queue_CleanPlayers_End ($queue)
         RemoveUser ( $user['player_id'], $queue['end'] );
     }
 
-    // Удаление игроков, неактивных более 35 дней. Неактивных ботов не удалять.
+    // Удаление игроков, неактивных более 35 дней. Неактивных ботов и игроков с купленной ТМ не удалять.
     $when = $queue['end'] - 35*24*60*60;
-    $query = "SELECT * FROM ".$db_prefix."users WHERE lastclick < $when AND admin < 1 AND lastclick <> 0";
+    $query = "SELECT * FROM ".$db_prefix."users WHERE lastclick < $when AND admin < 1 AND lastclick <> 0 AND dm = 0";
     $result = dbquery ( $query );
     $rows = dbrows ( $result );
     while ($rows-- )

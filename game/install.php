@@ -152,6 +152,10 @@ $tab_botvars = array (    // Переменные бота
     'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'var'=>'TEXT', 'value'=>'TEXT'
 );
 
+$tab_userlogs = array (    // Логи действий пользователей (и операторов). Срабатывают когда юзер что-то нажимает
+    'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'date'=>'INT UNSIGNED', 'type'=>'TEXT', 'text'=>'TEXT',
+);
+
 $tabs = array (
     'uni' => &$tab_uni,
     'users' => &$tab_users,
@@ -175,6 +179,7 @@ $tabs = array (
     'exptab' => &$tab_exptab,
     'template' => &$tab_template,
     'botvars' => &$tab_botvars,
+    'userlogs' => &$tab_userlogs,
 );
 
 // -------------------------------------------------------------------------------------------------------------------------

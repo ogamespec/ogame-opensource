@@ -234,8 +234,10 @@ function RemoveUser ( $player_id, $when)
     $query = "DELETE FROM ".$db_prefix."queue WHERE owner_id = $player_id";
     dbquery ($query);
 
-    // Удалить все планеты.
-    $query = "DELETE FROM ".$db_prefix."planets WHERE owner_id = $player_id";
+    // Удалить все планеты, кроме ПО, которые переходят во владения space.
+    $query = "DELETE FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type <> 10000";
+    dbquery ($query);
+    $query = "UPDATE ".$db_prefix."planets SET owner_id = 99999 WHERE owner_id = $player_id AND type = 10000";
     dbquery ($query);
 
     // Удалить игрока.
