@@ -336,6 +336,10 @@ function RecallFleet ($fleet_id, $now=0)
     $fleet = array ();
     foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj["ship$gid"];
 
+    UserLog ( $fleet_obj['owner_id'], "FLEET", 
+     "Отзыв флота ".$fleet_obj['fleet_id'].": " . GetMissionNameDebug ($fleet_obj['mission']) . "<br>" .
+     DumpFleet ($fleet) );
+
     // Если флот уже развернут, ничего не делать
     if ( $fleet_obj['mission'] >= 100 && $fleet_obj['mission'] < 200 ) return;
 
@@ -1256,6 +1260,17 @@ function FleetlogsToPlayer ($player_id, $missions)
 
     $query = "SELECT * FROM ".$db_prefix."fleetlogs WHERE (".$list.") AND owner_id <> target_id AND target_id = $player_id ORDER BY start ASC;";
     return dbquery ( $query );
+}
+
+function DumpFleet ($fleet)
+{
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $result = "";
+    foreach ($fleetmap as $i=>$gid) {
+        $amount = $fleet[$gid];
+        if ( $amount != 0 ) $result .= loca ("NAME_$gid") . " " . nicenum($amount) . " ";
+    }
+    return $result;
 }
 
 ?>

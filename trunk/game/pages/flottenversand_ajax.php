@@ -153,7 +153,15 @@ $f = fopen ( $fleetlock, 'w' );
 fclose ($f);
 
 // Отправить флот.
-DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, 0, 0, 0, $cons, time(), 0 );
+$fleet_id = DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, 0, 0, 0, $cons, time(), 0 );
+
+loca_add ( "technames", "de" );
+loca_add ( "technames", "en" );
+loca_add ( "technames", "ru" );
+UserLog ( $aktplanet['owner_id'], "FLEET", 
+ "Отправка флота $fleet_id (AJAX): " . GetMissionNameDebug ($order) . "<br>" .
+ DumpFleet ($fleet) . "<br>" .
+ "Время полёта: " . BuildDurationFormat ($flighttime) . ", затраты дейтерия: " . nicenum ($cons) );
 
 // Поднять флот с планеты.
 AdjustResources ( 0, 0, $cons, $aktplanet['planet_id'], '-' );

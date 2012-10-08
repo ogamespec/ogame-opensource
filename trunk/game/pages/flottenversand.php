@@ -355,6 +355,15 @@ else {
 
     $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $cargo_m, $cargo_k, $cargo_d, $cons, time(), $union_id, $hold_time );
     $queue = GetFleetQueue ($fleet_id);
+
+    loca_add ( "technames", "de" );
+    loca_add ( "technames", "en" );
+    loca_add ( "technames", "ru" );
+    UserLog ( $aktplanet['owner_id'], "FLEET", 
+     "Отправка флота $fleet_id: " . GetMissionNameDebug ($order) . "<br>" .
+     DumpFleet ($fleet) . "<br>" .
+     "Время полёта: " . BuildDurationFormat ($flighttime) . ", удержание: " . BuildDurationFormat ($hold_time) . ", затраты дейтерия: " . nicenum ($cons) . ", союз: " . $union_id );
+
     if ( $union_id ) {
         $union_time = UpdateUnionTime ( $union_id, $queue['end'], $fleet_id );
         UpdateFleetTime ( $fleet_id, $union_time );
