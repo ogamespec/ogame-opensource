@@ -113,4 +113,12 @@ function GetLastRegistrationByIP ( $ip )
     }
 }
 
+// Логи действия пользователей.
+function UserLog ($owner_id, $type, $text, $when=0)
+{
+    if ($when == 0) $when = time ();
+    $log = array ( null, $owner_id, $when, $type, $text );
+    AddDBRow ( $log, 'userlogs' );
+}
+
 ?>

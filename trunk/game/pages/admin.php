@@ -88,6 +88,9 @@ onmouseover="return overlib('<center><font size=1 color=white><b>Управле�
 <a href="index.php?page=admin&session=<?=$session;?>&mode=BattleReport"><img src="img/admin_battle.png" width='32' height='32'
 onmouseover="return overlib('<center><font size=1 color=white><b>Боевые доклады</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
+<a href="index.php?page=admin&session=<?=$session;?>&mode=UserLogs"><img src="img/admin_userlogs.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b>История действий</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
 </td></tr></table><br/>
 
 <?php
@@ -131,6 +134,7 @@ function Admin_Home ()
     <tr>
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Bots"><img src="img/admin_bots.png"><br>Управление ботами</a></th>
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=BattleReport"><img src="img/admin_battle.png"><br>Боевые доклады</a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=UserLogs"><img src="img/admin_userlogs.png"><br>История действий</a></th>
     </tr>
     </table>
 <?php
@@ -153,6 +157,7 @@ include "admin_logins.php";
 include "admin_checksum.php";
 include "admin_bots.php";
 include "admin_battle.php";
+include "admin_userlogs.php";
 
 // ========================================================================================
 
@@ -181,6 +186,7 @@ else if ( $mode === "Logins" ) Admin_Logins ();
 else if ( $mode === "Checksum" ) Admin_Checksum ();
 else if ( $mode === "Bots" ) Admin_Bots ();
 else if ( $mode === "BattleReport" ) Admin_BattleReport ();
+else if ( $mode === "UserLogs" ) Admin_UserLogs ();
 else Admin_Home ();
 
 echo "</table>\n";
