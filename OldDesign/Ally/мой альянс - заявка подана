@@ -1,0 +1,7 @@
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script><table width=519><form action="index.php" method=POST><tr><td class=c colspan=2>Ihre Bewerbung</td></tr><INPUT type=hidden name=session value=0c55d9bbdbb9><INPUT type=hidden name=page value='allianzen'><tr><th colspan=2>Sie haben sich bereits bei der Allianz [123] beworben. Bitte warten Sie bis Sie eine Antwort erhalten, oder ziehen Sie Ihre Bewerbung zuruck.</th></tr><tr><th colspan=2><input type=submit name="bcancel" value="Bewerbung zuruckziehen"></th></tr></table></form><br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->

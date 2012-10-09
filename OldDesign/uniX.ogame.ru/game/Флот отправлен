@@ -1,0 +1,61 @@
+<div id="content" style="top: 91px; height: 533px;">
+<center>
+<script src="js/flotten.js" language="JavaScript">
+<table width="519" cellspacing="1" cellpadding="0" border="0">
+<tbody>
+<tr height="20">
+<td class="c" colspan="2">
+<span class="success">Флот отправлен:</span>
+</td>
+</tr>
+<tr height="20">
+<th>Задание</th>
+<th>Экспедиция</th>
+</tr>
+<tr height="20">
+<th>Расстояние</th>
+<th>1.025</th>
+</tr>
+<tr height="20">
+<th>Скорость</th>
+<th>16.500</th>
+</tr>
+<tr height="20">
+<th>Потребление</th>
+<th>12</th>
+</tr>
+<tr height="20">
+<th>Отправлен с</th>
+<th>
+<a href="index.php?page=galaxy&galaxy=1&system=274&position=11&session=959b66886597">[1:274:11]</a>
+</th>
+</tr>
+<tr height="20">
+<th>Отправлен на</th>
+<th>
+<a href="index.php?page=galaxy&galaxy=1&system=274&position=16&session=959b66886597">[1:274:16]</a>
+</th>
+</tr>
+<tr height="20">
+<th>Время прибытия</th>
+<th>Fri Dec 11 22:13:53</th>
+</tr>
+<tr height="20">
+<th>Время возврата</th>
+<th>Sat Dec 12 0:00:02</th>
+</tr>
+<tr height="20">
+<td class="c" colspan="2">Корабли</td>
+</tr>
+<tr height="20">
+<th width="50%">Большой транспорт</th>
+<th>1</th>
+</tr>
+</tbody>
+</table>
+<br/>
+<br/>
+<br/>
+<br/>
+</center>
+</div>

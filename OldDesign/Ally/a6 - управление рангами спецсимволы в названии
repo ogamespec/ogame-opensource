@@ -1,0 +1,4 @@
+<div id='errorbox'>
+<center>
+Dein Spielerkonto ist noch nicht aktiviert. Bitte gehe in deine <a href=index.php?page=options&session=7ac20467c32b>Einstellungen</a>, gebe Deine E-Mail-Adresse an und lasse Dir einen Freischaltungslink zusenden.<br>Rang enthalt Sonderzeichen<br></center>
+</div>

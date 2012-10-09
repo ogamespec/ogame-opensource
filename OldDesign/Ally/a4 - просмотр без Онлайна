@@ -1,0 +1,9 @@
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script><table width=519><tr><td class='c' colspan='10'>Mitgliederliste (Anzahl: 2)</td></tr><tr><th>Nr.</th><th><a href="index.php?page=allianzen&session=2d1a47c57ca6&a=4&sort1=1&sort2=1">Name</a></th><th> </th><th><a href="index.php?page=allianzen&session=2d1a47c57ca6&a=4&sort1=2&sort2=1">Status</a></th><th><a href="index.php?page=allianzen&session=2d1a47c57ca6&a=4&sort1=3&sort2=1">Punkte</a></th><th><a href="index.php?page=allianzen&session=2d1a47c57ca6&a=4&sort1=0&sort2=1">Koord</a></th><th><a href="index.php?page=allianzen&session=2d1a47c57ca6&a=4&sort1=4&sort2=1">Beitritt</a></th></tr><tr><th>1</th><th>spieler234</th><th><a href="index.php?page=writemessages&session=2d1a47c57ca6&messageziel=223037"><img src="http://uni20.ogame.de/evolution/img/m.gif" border=0 alt="Nachricht schreiben"></a></th><th>Grunder</th><th>0</th><th><a href="index.php?page=galaxy&galaxy=1&system=1&position=11&session=2d1a47c57ca6" >[1:1:11]</a></th><th>2011-04-15 10:13:14</th></tr>
+<tr><th>2</th><th>spieler1</th><th></th><th>111</th><th>0</th><th><a href="index.php?page=galaxy&galaxy=1&system=29&position=5&session=2d1a47c57ca6" >[1:29:5]</a></th><th>2011-04-15 10:13:33</th></tr>
+</table><br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->

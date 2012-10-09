@@ -1,0 +1,1 @@
+<tr id="fleetstatusrow" style=""><th colspan="8"><!--<div id="fleetstatus"></div>--><table width="100%" id="fleetstatustable" style="font-weight: bold;"><!-- will be filled with content later on while processing ajax replys --><tbody><tr><td>  Отправка 3 кораблей на 1:265:4 </td><td><span class="error">Недостаточно места для флота</span></td></tr></tbody></table></th></tr>

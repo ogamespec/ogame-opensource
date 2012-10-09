@@ -1,0 +1,14 @@
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script><br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+
+
+
+<div id='errorbox'>
+<center>
+Dein Spielerkonto ist noch nicht aktiviert. Bitte gehe in deine <a href=index.php?page=options&session=7ac20467c32b>Einstellungen</a>, gebe Deine E-Mail-Adresse an und lasse Dir einen Freischaltungslink zusenden.<br>Der neue Name enthalt unzulassige Sonderzeichen oder ist zu kurz!<br></center>
+</div>

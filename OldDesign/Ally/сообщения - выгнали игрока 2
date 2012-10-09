@@ -1,0 +1,18 @@
+                <tr>
+     <th><input type="checkbox" name="delmes87151152" /></th>
+     <th>04-07 09:03:13</th>
+     <th>Allianz [123] </th>
+     <th>Mitgliedschaft in Allianz [123] beendet </th>
+    </tr>
+         <tr>
+       <td class="b"> </td><td colspan="3" class="b">Machtwechsel in Allianz spieler1 hat sie aus der Allianz [123] ausgeschlossen.<br>Sie konnen sich nun neu bewerben</td>
+    </tr>
+                <th colspan="4">
+       <input type="checkbox" name="sneak87151152" />
+       <input type="submit" value="Melden" />
+    </th>
+
+это уже игроку
+
+Членство в альянсе [123] окончено
+Игрок spieler1 исключает Вас из альянса [123] .<br>Теперь Вы можете зарегистрироваться снова

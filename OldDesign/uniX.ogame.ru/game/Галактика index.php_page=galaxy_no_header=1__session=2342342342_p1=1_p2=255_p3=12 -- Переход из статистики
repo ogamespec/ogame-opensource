@@ -1,0 +1,565 @@
+ 
+<html> 
+ <head> 
+  <link rel='stylesheet' type='text/css' href='css/default.css' /> 
+  <link rel='stylesheet' type='text/css' href='css/formate.css' /> 
+ 
+  <script language="JavaScript">var session="fbf1fbf38b69";</script> 
+  <meta http-equiv="content-type" content="text/html; charset=koi8-r" /> 
+ 
+<link rel="stylesheet" type="text/css" href="css/combox.css"> 
+<link rel="stylesheet" type="text/css" href="http://uni15.ogame.ru/evolution/formate.css" /> 
+ 
+<title>бЯЕКЕММЮЪ 15 нцЕИЛ</title> 
+ 
+  <script src="js/utilities.js" type="text/javascript"></script> 
+  <script language="JavaScript"> 
+  </script> 
+<script type="text/javascript" src="js/overLib/overlib.js"></script> 
+<!-- HEADER --> 
+ 
+<script language="JavaScript"> 
+function onBodyLoad() {
+    window.setTimeout("reloadImages()", 100);
+}
+ 
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != "")) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script> 
+ 
+</head> 
+<body style="overflow: hidden;" onload="onBodyLoad();" onunload="" > 
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div> 
+<!-- END HEADER --> 
+ 
+<!-- LEFTMENU --> 
+ 
+    <div id='leftmenu'> 
+    
+<script language="JavaScript"> 
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script> 
+ 
+<script language="JavaScript"> 
+function popUp(URL) {
+  day = new Date();
+  id = day.getTime();
+  eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=1,scrollbars=1,location=1,statusbar=1,menubar=0,resizable=1,width=120,height=60,alwaysLowered=Yes');");
+}
+ 
+</script> 
+ 
+ 
+<center> 
+ 
+<div id='menu'> 
+<a href="mailto:barrierefrei@ogame.de" title="оПНАКЕЛШ, ЙЮЯЮЧЫХЕЯЪ ХЦПНЙНБ ЯН ЯКЮАШЛ ГПЕМХЕЛ, НРОПЮБКЪИРЕ МЮ barrierefrei@ogame.de." style="width:1px;"></a> 
+<p style="width:110px;"><NOBR>бЯЕКЕММЮЪ 15 (<a href="index.php?page=changelog&session=fbf1fbf38b69">v 0.83</a>)</NOBR></p> 
+<table width="110" cellspacing="0" cellpadding="0"> 
+ <tr> 
+  <td><img src="http://uni15.ogame.ru/evolution/gfx/ogame-produktion.jpg" width="110" height="40" /></td> 
+ </tr> 
+ 
+    
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=overview&session=fbf1fbf38b69' accesskey="o">нАГНП</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=b_building&session=fbf1fbf38b69' accesskey="z">оНЯРПНИЙХ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=resources&session=fbf1fbf38b69' accesskey="s">яШПЭ╦</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+  <tr> 
+  <td> 
+   <div align="center" ><font color="#FFFFFF"> 
+     <a href='index.php?page=trader&session=fbf1fbf38b69' accesskey=""><font color='FF8900'>яЙСОЫХЙ</font></a> <!-- TODO Loca Keys --> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+  
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=buildings&session=fbf1fbf38b69&mode=Forschung' accesskey="i">хЯЯКЕДНБЮМХЪ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=buildings&session=fbf1fbf38b69&mode=Flotte' accesskey="v">бЕПТЭ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=flotten1&session=fbf1fbf38b69&mode=Flotte' accesskey="f">тКНР</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=techtree&session=fbf1fbf38b69' accesskey="t">рЕУМНКНЦХХ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=galaxy&session=fbf1fbf38b69&no_header=1' accesskey="g">цЮКЮЙРХЙЮ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=buildings&session=fbf1fbf38b69&mode=Verteidigung' accesskey="x">нАНПНМЮ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td><img src="http://uni15.ogame.ru/evolution/gfx/info-help.jpg" width="110" height="19"></td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=allianzen&session=fbf1fbf38b69' accesskey="a">лНИ ЮКЭЪМЯ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+  <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+    <a href="http://board.ogame.ru/" target="_blank" accesskey="m" >тНПСЛ</a><!-- external link to board --> 
+   </font></div> 
+  </td> 
+ </tr> 
+ 
+ 
+    <tr> 
+       <td align=center> 
+       <a id='darkmatter2' style='cursor:pointer; width:110px;'
+
+         href='index.php?page=micropayment&session=fbf1fbf38b69' accesskey="o"><b>нТХЖЕПЯЙНЕ ЙЮГХМН</a></b> 
+       </div> 
+      </td> 
+     </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+  <a href='index.php?page=statistics&session=fbf1fbf38b69' accesskey="k">яРЮРХЯРХЙЮ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=suche&session=fbf1fbf38b69' accesskey="p">оНХЯЙ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+    <a href="http://tutorial.ogame.ru" target="_blank" accesskey="2" >рСРНПХЮК</a><!-- external link to ogame tutorial --> 
+   </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td><img src="http://uni15.ogame.ru/evolution/gfx/user-menu.jpg" width="110" height="35"></td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=messages&dsp=1&session=fbf1fbf38b69' accesskey="b">яННАЫЕМХЪ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='#' onclick='fenster("index.php?page=notizen&session=fbf1fbf38b69&no_header=1", "Notizen");' accesskey="e">гЮЛЕРЙХ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=buddy&session=fbf1fbf38b69' accesskey="d">дПСГЭЪ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=options&session=fbf1fbf38b69' accesskey="n">мЮЯРПНИЙХ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=logout&session=fbf1fbf38b69' accesskey="q">бШУНД</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ 
+ 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href="http://ogame.ru/regeln.html" target="_blank">оПЮБХКЮ</a> <!-- external link to rules --> 
+   </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+    <a href="http://ogame.ru/portal/?go=contact&lang=ru" target="_blank">н МЮЯ</a> <!-- external link to impressum --> 
+   </font></div> 
+  </td> 
+ </tr> 
+ 
+ </table> 
+ </center> 
+ 
+    </div> 
+ 
+<!-- END LEFTMENU --> 
+ 
+<!-- CONTENT AREA --> 
+<div id='content'> 
+<center> 
+ 
+  <script  language="JavaScript"> 
+  function galaxy_submit(value) {
+      document.getElementById('auto').name = value;
+      document.getElementById('galaxy_form').submit();
+  }
+ 
+  function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+  }
+ 
+ 
+  var IE = document.all?true:false;
+ 
+  function mouseX(e){
+    if (IE) { // grab the x-y pos.s if browser is IE
+        return event.clientX + document.body.scrollLeft;
+    } else {
+        return e.pageX
+    }
+  }
+  function mouseY(e) {
+    if (IE) { // grab the x-y pos.s if browser is IE
+        return event.clientY + document.body.scrollTop;
+    }else {
+        return e.pageY;
+    }
+  }
+ 
+  </script> 
+  <script language="JavaScript" src="js/tw-sack.js"></script> 
+  <script type="text/javascript"> 
+  var ajax = new sack();
+  var strInfo = "";
+ 
+  function whenLoading(){
+      //var e = document.getElementById('fleetstatus');
+      //e.innerHTML = "тКНР НРЯШКЮЕРЯЪ...";
+  }
+ 
+  function whenLoaded(){
+      //    var e = document.getElementById('fleetstatus');
+      // e.innerHTML = "тКНР НРНЯКЮМ...";
+  }
+ 
+  function whenInteractive(){
+      //var e = document.getElementById('fleetstatus');
+      // e.innerHTML = "оНКСВЕМХЕ ДЮММШУ...";
+  }
+ 
+  /*
+  We can overwrite functions of the sack object easily. :-)
+  This function will replace the sack internal function runResponse(),
+  which normally evaluates the xml return value via eval(this.response).
+  */
+  function whenResponse(){
+ 
+      /*
+      *
+      *  600   OK
+      *  601   no planet exists there
+      *  602   no moon exists there
+      *  603   player is in noob protection
+      *  604   player is too strong
+      *  605   player is in u-mode
+      *  610   not enough espionage probes, sending x (parameter is the second return value)
+      *  611   no espionage probes, nothing send
+      *  612   no fleet slots free, nothing send
+      *  613   not enough deuterium to send a probe
+      *
+      */
+      // the first three digit long return value
+      retVals = this.response.split(" ");
+      // and the other content of the response
+      // but since we only got it if we can send some but not all probes
+      // theres no need to complicate things with better parsing
+ 
+      // each case gets a different table entry, no language file used :P
+      switch(parseInt(retVals[0])) {
+          case 600:
+          addToTable("done", "success");
+                    break;
+          case 601:
+          addToTable("оПНХГНЬКЮ НЬХАЙЮ", "error");
+          break;
+          case 602:
+          addToTable("нЬХАЙЮ, КСМШ МЕ ЯСЫЕЯРБСЕР", "error");
+          break;
+          case 603:
+          addToTable("нЬХАЙЮ! й ХЦПНЙС МЕБНГЛНФМН ОНДКЕРЕРЭ, Р.Й. НМ МЮУНДХРЯЪ ОНД ГЮЫХРНИ ДКЪ МНБХВЙНБ! ", "error");
+          break;
+          case 604:
+          addToTable("нЬХАЙЮ! й ХЦПНЙС МЕБНГЛНФМН ОНДКЕРЕРЭ, Р.Й. НМ МЮУНДХРЯЪ ОНД ГЮЫХРНИ ДКЪ МНБХВЙНБ! ", "error");
+          break;
+          case 605:
+          addToTable("мЕБНГЛНФМН, ХЦПНЙ МЮУНДХРЯЪ Б ПЕФХЛЕ НРОСЯЙЮ", "vacation");
+          break;
+          case 610:
+          addToTable("нЬХАЙЮ, БНГЛНФМН ОНЯКЮРЭ РНКЭЙН "+retVals[1]+" ГНМДНБ, ЬКХРЕ", "notice");
+          break;
+          case 611:
+          addToTable("ьОХНМЮФ МЕБНГЛНФЕМ, С бЮЯ МЕР ГНМДНБ", "error");
+          break;
+          case 612:
+          addToTable("мЕДНЯРЮРНВМН ЛЕЯРЮ ДКЪ ТКНРЮ", "error");
+          break;
+          case 613:
+          addToTable("с бЮЯ МЕДНЯРЮРНВМН ДЕИРЕПХЪ", "error");
+          break;
+          case 614:
+          addToTable("гДЕЯЭ ОКЮМЕРШ МЕР", "error");
+          break;
+          case 615:
+          addToTable("нЬХАЙЮ! мЕДНЯРЮРНВМЮЪ ЦПСГНОНДЗ╦ЛМНЯРЭ!", "error");
+          break;
+          case 616:
+          addToTable("нДХМЮЙНБШИ ЮИ-ОХ!", "error");
+          break;
+      }
+  }
+ 
+  function doit(order, galaxy, system, planet, planettype, shipcount){
+      strInfo = "  нРОПЮБЙЮ "+shipcount+" ЙНПЮАКЕИ"+(shipcount>1?"":"")+" МЮ "+galaxy+":"+system+":"+planet+" ";
+      ajax.requestFile = "index.php?ajax=1&page=flottenversand&session=fbf1fbf38b69";
+ 
+      // no longer needed, since we don't want to write the cryptic
+      // response somewhere into the output html
+      //ajax.element = 'fleetstatus';
+      //ajax.onLoading = whenLoading;
+      //ajax.onLoaded = whenLoaded;
+      //ajax.onInteractive = whenInteractive;
+ 
+      // added, overwrite the function runResponse with our own and
+      // turn on its execute flag
+      ajax.runResponse = whenResponse;
+      ajax.execute = true;
+ 
+      ajax.setVar("session", "fbf1fbf38b69");
+      ajax.setVar("order", order);
+      ajax.setVar("galaxy", galaxy);
+      ajax.setVar("system", system);
+      ajax.setVar("planet", planet);
+      ajax.setVar("planettype", planettype);
+      ajax.setVar("shipcount", shipcount);
+      ajax.setVar("speed", 10);
+      ajax.setVar("reply", "short");
+      ajax.runAJAX();
+  }
+ 
+  /*
+  * This function will manage the table we use to output up to three lines of
+  * actions the user did. If there is no action, the tr with id 'fleetstatusrow'
+  * will be hidden (display: none;) - if we want to output a line, its display
+  * value is cleaned and therefore its visible. If there are more than 2 lines
+  * we want to remove the first row to restrict the history to not more than
+  * 3 entries. After using the object function of the table we fill the newly
+  * created row with text. Let the browser do the parsing work. :D
+  */
+  function addToTable(strDataResult, strClass) {
+      var e = document.getElementById('fleetstatusrow');
+      var e2 = document.getElementById('fleetstatustable');
+      // make the table row visible
+      e.style.display = '';
+      if(e2.rows.length > 2) {
+          e2.deleteRow(2);
+      }
+      var row = e2.insertRow('test');
+      var td1 = document.createElement("td");
+      var td1text = document.createTextNode(strInfo);
+      td1.appendChild(td1text);
+      var td2 = document.createElement("td");
+      var span = document.createElement("span");
+      var spantext = document.createTextNode(strDataResult);
+      var spanclass = document.createAttribute("class");
+      spanclass.nodeValue = strClass;
+      span.setAttributeNode(spanclass);
+      span.appendChild(spantext);
+      td2.appendChild(span);
+      row.appendChild(td1);
+      row.appendChild(td2);
+ 
+  }
+ 
+  function changeSlots(slotsInUse) {
+      var e = document.getElementById('slots');
+      e.innerHTML = slotsInUse;
+  }
+ 
+  function setShips(ship, count) {
+      var e = document.getElementById(ship);
+      e.innerHTML = count;
+  }
+ 
+  function cursorevent(evt) {
+      evt = (evt) ? evt : ((event) ? event : null);
+      if(evt.keyCode == 37) {
+          galaxy_submit('systemLeft');
+      }
+ 
+      if(evt.keyCode == 39) {
+          galaxy_submit('systemRight');
+      }
+ 
+      if(evt.keyCode == 38) {
+          galaxy_submit('galaxyRight');
+      }
+ 
+      if(evt.keyCode == 40) {
+          galaxy_submit('galaxyLeft');
+      }
+ 
+  }
+  document.onkeydown = cursorevent;
+</script> 
+ 
+ 
+  <center> 
+<br /> 
+<br /> 
+<br /> 
+<table width="519"> 
+<tr height="20"> 
+   <td class="c"><span class="error"> нЬХАЙЮ</span></td> 
+</tr> 
+  <tr height="20"> 
+    <th><span class="error">мЕДНЯРЮРНВМН ДЕИРЕПХЪ!</span></th> 
+  </tr> 
+</table> 
+<br><br><br><br> 
+</center> 
+</div> 
+<!-- END CONTENT AREA --> 
+<script> 
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script> 
+ 
+<div id='messagebox'> 
+<center> 
+</center> 
+</div> 
+<div id='errorbox'> 
+<center> 
+бЮЬ ХЦПНБНИ ЮЙЙЮСМР ЕЫ╦ МЕ ЮЙРХБХПНБЮМ. гЮИДХРЕ Б <a href=index.php?page=options&session=fbf1fbf38b69>сЯРЮМНБЙХ</a>, ББЕДХРЕ ЩКЕЙРПНММШИ ЮДПЕЯ Х ОНКСВХРЕ МЮ МЕЦН ЮЙРХБЮЖХНММСЧ ЯЯШКЙС.<br></center> 
+</div> 
+ 
+<script> 
+messagebox.style.top='0px';
+headerHeight = 0;
+errorbox.style.display='block';
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = "_blank";
+  }
+}
+ 
+</script> 
+<style> 
+.layer {
+    z-index:999999999;
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 757px; 
+    height: 475px; 
+    background-color: #040e1e;
+    border: 3px double orange;
+    padding: 0;
+    opacity: .90;
+}
+</style> 
+ </body> 
+</html>

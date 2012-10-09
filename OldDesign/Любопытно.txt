@@ -1,0 +1,52 @@
+На сервере US не локализована метаинформация:
+
+<meta name="keywords" content="META_KEYWORDS" />
+<meta name="description" content="META_DESCRIPTION" />
+
+
+Что нужно локализовать:
+META_KEYWORDS
+META_DESCRIPTION
+
+Имя сервера: <title>OGame.ru</title>
+
+home.php:
+
+Строки в скриптах.
+
+CHOOSE_UNI      Вселенная...
+UNI             Вселенная
+
+MENU_START
+MENU_ABOUT
+MENU_PICTURES
+MENU_JOIN
+MENU_BOARD
+
+
+FORGOT_PASSWORD
+ACCEPT_TSC
+COPYRIGHT_RIGHTS        "Все права защищены"
+
+RULES
+IMPRINT
+TSC
+
+--------------------------
+
+HOME_HEADER
+HOME_TEXT1
+HOME_TEXT2
+HOME_JOINNOW
+
+
+ABOUT_HEADER
+ABOUT_TEXT
+ABOUT_READ_STORY
+
+STORY_HEADER
+"Join now!" не переводится =)
+
+PICT_HEADER
+PICT_SCREENSHOTS
+PICT_WALLPAPERS

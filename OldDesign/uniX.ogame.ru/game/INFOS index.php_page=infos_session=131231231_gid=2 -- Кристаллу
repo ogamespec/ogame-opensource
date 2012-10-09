@@ -1,0 +1,636 @@
+ 
+<html> 
+ <head> 
+  <link rel='stylesheet' type='text/css' href='css/default.css' /> 
+  <link rel='stylesheet' type='text/css' href='css/formate.css' /> 
+ 
+  <script language="JavaScript">var session="1f855da316dd";</script> 
+  <meta http-equiv="content-type" content="text/html; charset=koi8-r" /> 
+ 
+<link rel="stylesheet" type="text/css" href="css/combox.css"> 
+<link rel="stylesheet" type="text/css" href="http://uni15.ogame.ru/evolution/formate.css" /> 
+ 
+<title>бЯЕКЕММЮЪ 15 нцЕИЛ</title> 
+ 
+  <script src="js/utilities.js" type="text/javascript"></script> 
+  <script language="JavaScript"> 
+  </script> 
+<script type="text/javascript" src="js/overLib/overlib.js"></script> 
+<!-- HEADER --> 
+ 
+<script language="JavaScript"> 
+function onBodyLoad() {
+    window.setTimeout("reloadImages()", 100);
+}
+ 
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != "")) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script> 
+ 
+</head> 
+<body style="overflow: hidden;" onload="onBodyLoad();" onunload="" > 
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div> 
+<div id='header_top'><center> 
+<table class='header'> 
+<tr class='header' > 
+<td class='header' style='width:5;' > 
+      <table class='header'> 
+    <tr class='header'> 
+     <td class='header'><img src="http://uni15.ogame.ru/evolution/planeten/small/s_wasserplanet02.jpg" width="50" height="50"></td> 
+     <td class='header'> 
+      <table class='header'> 
+          <select size="1" onchange="haha(this)"> 
+                                                  <option value="/game/index.php?page=infos&session=1f855da316dd&cp=33922204&mode=&gid=2&messageziel=&re=0" selected>цКЮБМЮЪ ОКЮМЕРЮ                  <a href="index.php?page=galaxy&galaxy=1&system=127&position=12&session=1f855da316dd" >[1:127:12]</a></option> 
+                      </select> 
+      </table> 
+     </td> 
+    </tr> 
+  </table></td> 
+<td class='header'>   <table class='header' id='resources' border="0" cellspacing="0" cellpadding="0" padding-right='30' > 
+        <tr class='header'> 
+        
+             <td align="center" width="85" class='header'> 
+              <img border="0" src="http://uni15.ogame.ru/evolution/images/metall.gif" width="42" height="22"> 
+             </td> 
+             
+             <td align="center" width="85" class='header'> 
+              <img border="0" src="http://uni15.ogame.ru/evolution/images/kristall.gif" width="42" height="22"> 
+             </td> 
+             
+             <td align="center" width="85" class='header'> 
+              <img border="0" src="http://uni15.ogame.ru/evolution/images/deuterium.gif" width="42" height="22"> 
+             </td> 
+                     
+             <td align="center" width="85" class='header'> 
+             <a href=index.php?page=micropayment&session=1f855da316dd> 
+              <img border="0" src="img/dm_klein_2.jpg" width="42" height="22" title="р╦ЛМЮЪ ЛЮРЕПХЪ"></a> 
+             </td>       
+                         
+             <td align="center" width="85" class='header'> 
+              <img border="0" src="http://uni15.ogame.ru/evolution/images/energie.gif" width="42" height="22"> 
+             </td> 
+        </tr> 
+ 
+        <tr class='header'> 
+         <td align="center" class='header' width="85"><i><b><font color="#ffffff">лЕРЮКК</font></b></i></td> 
+         <td align="center" class='header' width="85"><i><b><font color="#ffffff">йПХЯРЮКК</font></b></i></td> 
+         <td align="center" class='header' width="85"><i><b><font color="#ffffff">дЕИРЕПХИ</font></b></i></td> 
+                    <td align="center" class='header' width="85"><i><b><font color="#ffffff">р╦ЛМЮЪ ЛЮРЕПХЪ</font></b></i></td> 
+              
+         <td align="center" class='header' width="85"><i><b><font color="#ffffff">щМЕПЦХЪ</font></b></i></td> 
+        </tr> 
+        <tr class='header'> 
+         <td align="center" class='header' width="90"><font >538</font></td> 
+         <td align="center" class='header' width="90"><font >519</font></td> 
+         <td align="center" class='header' width="90"><font >0</font></td> 
+                     <td align="center" class='header' width="90"><font color="#FFFFFF">0</font></DIV></td> 
+            
+         <td align="center" class='header' width="90"><font >0</font>/0</td> 
+        </tr> 
+   </table></td> 
+    <td class='header'> 
+<table class='header' align=left> 
+     <tr class='header'> 
+ 
+ 
+     <td align="center" width="35" class='header'> 
+         <a href='index.php?page=micropayment&session=1f855da316dd&session=1f855da316dd' accesskey="o"> 
+      <img border="0" src="img/commander_ikon_un.gif" width="32" height="32" alt="йНЛЮМДХП нцЕИЛЮ"
+
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>йНЛЮМДХП нцЕИЛЮ</font><br><br><a href=index.php?page=micropayment&session=1f855da316dd&session=1f855da316dd><font size=1 color=lime>гЮЙЮГЮРЭ!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();"> 
+      </a> 
+     </td> 
+     <td align="center" width="35" class='header'> 
+      <a href='index.php?page=micropayment&session=1f855da316dd&session=1f855da316dd' accesskey="o"> 
+      <img border="0" src="img/admiral_ikon_un.gif" width="32" height="32" alt="юДЛХПЮК"
+
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>юДЛХПЮК</font><br><font size=1 color=skyblue>&nbsp;лЮЙЯ. ЙНК-БН ТКНРНБ +2</font><br><br><a href=index.php?page=micropayment&session=1f855da316dd&session=1f855da316dd><font size=1 color=lime>гЮЙЮГЮРЭ!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();"> 
+ 
+      </a> 
+     </td> 
+     <td align="center" width="35" class='header'> 
+      <a href='index.php?page=micropayment&session=1f855da316dd&session=1f855da316dd' accesskey="o"> 
+      <img border="0" src="img/ingenieur_ikon_un.gif" width="32" height="32" alt="хМФЕМЕП"
+
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>хМФЕМЕП</font><br><font size=1 color=skyblue>яНЙПЮЫЮЕР БДБНЕ ОНРЕПХ Б НАНПНМЕ+10% АНКЭЬЕ ЩМЕПЦХХ</font><br><br><a href=index.php?page=micropayment&session=1f855da316dd&session=1f855da316dd><font size=1 color=lime>гЮЙЮГЮРЭ!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();"> 
+      </a> 
+     </td> 
+     <td align="center" width="35" class='header'> 
+      <a href='index.php?page=micropayment&session=1f855da316dd&session=1f855da316dd' accesskey="o"> 
+      <img border="0" src="img/geologe_ikon_un.gif" width="32" height="32" alt="цЕНКНЦ"
+
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>цЕНКНЦ</font><br><font size=1 color=skyblue>+10% ДНУНД НР ЬЮУРШ</font><br><br><a href=index.php?page=micropayment&session=1f855da316dd&session=1f855da316dd><font size=1 color=lime>гЮЙЮГЮРЭ!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();"> 
+      </a> 
+     </td> 
+     <td align="center" width="35" class='header'> 
+      <a href='index.php?page=micropayment&session=1f855da316dd&session=1f855da316dd' accesskey="o"> 
+      <img border="0" src="img/technokrat_ikon_un.gif" width="32" height="32" alt="рЕУМНЙПЮР" 
+
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>рЕУМНЙПЮР</font><br><font size=1 color=skyblue>+2 СПНБЕМЭ ЬОХНМЮФЮ, 25% ЛЕМЭЬЕ БПЕЛЕМХ МЮ ХЯЯКЕДНБЮМХЪ</font><br><br><a href=index.php?page=micropayment&session=1f855da316dd&session=1f855da316dd><font size=1 color=lime>гЮЙЮГЮРЭ!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();"> 
+      </a> 
+     </td> 
+     <td align="center" class='header'></td> 
+    </tr> 
+</table></td> 
+</tr> 
+</table> 
+</div><!-- END HEADER --> 
+ 
+<!-- LEFTMENU --> 
+ 
+    <div id='leftmenu'> 
+    
+<script language="JavaScript"> 
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script> 
+ 
+<script language="JavaScript"> 
+function popUp(URL) {
+  day = new Date();
+  id = day.getTime();
+  eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=1,scrollbars=1,location=1,statusbar=1,menubar=0,resizable=1,width=120,height=60,alwaysLowered=Yes');");
+}
+ 
+</script> 
+ 
+ 
+<center> 
+ 
+<div id='menu'> 
+<a href="mailto:barrierefrei@ogame.de" title="оПНАКЕЛШ, ЙЮЯЮЧЫХЕЯЪ ХЦПНЙНБ ЯН ЯКЮАШЛ ГПЕМХЕЛ, НРОПЮБКЪИРЕ МЮ barrierefrei@ogame.de." style="width:1px;"></a> 
+<p style="width:110px;"><NOBR>бЯЕКЕММЮЪ 15 (<a href="index.php?page=changelog&session=1f855da316dd">v 0.83</a>)</NOBR></p> 
+<table width="110" cellspacing="0" cellpadding="0"> 
+ <tr> 
+  <td><img src="http://uni15.ogame.ru/evolution/gfx/ogame-produktion.jpg" width="110" height="40" /></td> 
+ </tr> 
+ 
+    
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=overview&session=1f855da316dd' accesskey="o">нАГНП</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=b_building&session=1f855da316dd' accesskey="z">оНЯРПНИЙХ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=resources&session=1f855da316dd' accesskey="s">яШПЭ╦</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+  <tr> 
+  <td> 
+   <div align="center" ><font color="#FFFFFF"> 
+     <a href='index.php?page=trader&session=1f855da316dd' accesskey=""><font color='FF8900'>яЙСОЫХЙ</font></a> <!-- TODO Loca Keys --> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+  
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=buildings&session=1f855da316dd&mode=Forschung' accesskey="i">хЯЯКЕДНБЮМХЪ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=buildings&session=1f855da316dd&mode=Flotte' accesskey="v">бЕПТЭ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=flotten1&session=1f855da316dd&mode=Flotte' accesskey="f">тКНР</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=techtree&session=1f855da316dd' accesskey="t">рЕУМНКНЦХХ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=galaxy&session=1f855da316dd&no_header=1' accesskey="g">цЮКЮЙРХЙЮ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=buildings&session=1f855da316dd&mode=Verteidigung' accesskey="x">нАНПНМЮ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td><img src="http://uni15.ogame.ru/evolution/gfx/info-help.jpg" width="110" height="19"></td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=allianzen&session=1f855da316dd' accesskey="a">лНИ ЮКЭЪМЯ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+  <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+    <a href="http://board.ogame.ru/" target="_blank" accesskey="m" >тНПСЛ</a><!-- external link to board --> 
+   </font></div> 
+  </td> 
+ </tr> 
+ 
+ 
+    <tr> 
+       <td align=center> 
+       <a id='darkmatter2' style='cursor:pointer; width:110px;'
+
+         href='index.php?page=micropayment&session=1f855da316dd' accesskey="o"><b>нТХЖЕПЯЙНЕ ЙЮГХМН</a></b> 
+       </div> 
+      </td> 
+     </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+  <a href='index.php?page=statistics&session=1f855da316dd' accesskey="k">яРЮРХЯРХЙЮ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=suche&session=1f855da316dd' accesskey="p">оНХЯЙ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+    <a href="http://tutorial.ogame.ru" target="_blank" accesskey="2" >рСРНПХЮК</a><!-- external link to ogame tutorial --> 
+   </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td><img src="http://uni15.ogame.ru/evolution/gfx/user-menu.jpg" width="110" height="35"></td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=messages&dsp=1&session=1f855da316dd' accesskey="b">яННАЫЕМХЪ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='#' onclick='fenster("index.php?page=notizen&session=1f855da316dd&no_header=1", "Notizen");' accesskey="e">гЮЛЕРЙХ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=buddy&session=1f855da316dd' accesskey="d">дПСГЭЪ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=options&session=1f855da316dd' accesskey="n">мЮЯРПНИЙХ</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href='index.php?page=logout&session=1f855da316dd' accesskey="q">бШУНД</a> 
+    </font></div> 
+  </td> 
+ </tr> 
+ 
+ 
+ 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+     <a href="http://ogame.ru/regeln.html" target="_blank">оПЮБХКЮ</a> <!-- external link to rules --> 
+   </font></div> 
+  </td> 
+ </tr> 
+ 
+ <tr> 
+  <td> 
+   <div align="center"><font color="#FFFFFF"> 
+    <a href="http://ogame.ru/portal/?go=contact&lang=ru" target="_blank">н МЮЯ</a> <!-- external link to impressum --> 
+   </font></div> 
+  </td> 
+ </tr> 
+ 
+ </table> 
+ </center> 
+ 
+    </div> 
+ 
+<!-- END LEFTMENU --> 
+ 
+<!-- CONTENT AREA --> 
+<div id='content'> 
+<center> 
+ 
+<table width="519"> 
+   <tr> 
+     <td class="c">пСДМХЙ ОН ДНАШВЕ ЙПХЯРЮККЮ</td> 
+   </tr> 
+   <tr> 
+    <th> 
+     <table> 
+      <tr> 
+       <td><img border="0" src="http://uni15.ogame.ru/evolution/gebaeude/2.gif" align="top" width="120" height="120"></td> 
+       <td>нЯМНБМНИ ОНЯРЮБЫХЙ ЯШПЭЪ ДКЪ ЩКЕЙРПНММШУ ЯРПНХРЕКЭМШУ ЩКЕЛЕМРНБ Х ЯОКЮБНБ. дКЪ ДНАШВХ ЙПХЯРЮККЮ РПЕАСЕРЯЪ ОПХЛЕПМН БДБНЕ АНКЭЬЕ ЩМЕПЦХХ, ВЕЛ ДКЪ ДНАШВХ ЛЕРЮККЮ, ОНЩРНЛС НМ, ЯННРБЕРЯРБЕММН, ЖЕМХРЯЪ АНКЭЬЕ. йПХЯРЮКК РПЕАСЕРЯЪ ДКЪ БЯЕУ ЙНПЮАКЕИ Х ГДЮМХИ.
+й ЯНФЮКЕМХЧ, АНКЭЬХМЯРБН МЕНАУНДХЛШУ ДКЪ ЯРПНХРЕКЭЯРБЮ ЙНПЮАКЕИ ЙПХЯРЮККНБ НВЕМЭ ПЕДЙХ Х, ЙЮЙ Х АНКЭЬХМЯРБН ЛЕРЮККНБ,  ГЮКЕЦЮЧР МЮ АНКЭЬХУ ЦКСАХМЮУ. оНЩРНЛС ОПХ СЯНБЕПЬЕМЯРБНБЮМХХ ПСДМХЙЮ РЮЙФЕ ОНБШЬЮЕРЯЪ ОПНХГБНДЯРБН, РЮЙ ЙЮЙ НЯБЮХБЮЧРЯЪ АНКЕЕ ЙПСОМШЕ Х "ВХЯРШЕ" ГЮКЕФХ ЙПХЯРЮККНБ.</td> 
+      </tr> 
+     </table> 
+    </th> 
+   </tr> 
+<tr><th><p><center><table border=1 ><tr><td class='c'>сПНБЕМЭ</td><td class='c'>оПНХГБНДЯРБН Б ВЮЯ</td><td class='c'>пЮГМХЖЮ</td><td class='c'>щМЕПЦЕРХВЕЯЙХИ АЮКЮМЯ</td><td class='c'>пЮГМХЖЮ</td><tr> 
+<th> 
+1</th> 
+<th> 
+22</th> 
+<th> 
+ <font color="#00FF00">22</font></th> 
+<th> 
+-11</th> 
+<th> 
+ <font color="#FF0000">-11</font></th> 
+</tr> 
+<tr> 
+<th> 
+2</th> 
+<th> 
+48</th> 
+<th> 
+ <font color="#00FF00">48</font></th> 
+<th> 
+-25</th> 
+<th> 
+ <font color="#FF0000">-25</font></th> 
+</tr> 
+<tr> 
+<th> 
+3</th> 
+<th> 
+79</th> 
+<th> 
+ <font color="#00FF00">79</font></th> 
+<th> 
+-40</th> 
+<th> 
+ <font color="#FF0000">-40</font></th> 
+</tr> 
+<tr> 
+<th> 
+4</th> 
+<th> 
+117</th> 
+<th> 
+ <font color="#00FF00">117</font></th> 
+<th> 
+-59</th> 
+<th> 
+ <font color="#FF0000">-59</font></th> 
+</tr> 
+<tr> 
+<th> 
+5</th> 
+<th> 
+161</th> 
+<th> 
+ <font color="#00FF00">161</font></th> 
+<th> 
+-81</th> 
+<th> 
+ <font color="#FF0000">-81</font></th> 
+</tr> 
+<tr> 
+<th> 
+6</th> 
+<th> 
+212</th> 
+<th> 
+ <font color="#00FF00">212</font></th> 
+<th> 
+-107</th> 
+<th> 
+ <font color="#FF0000">-107</font></th> 
+</tr> 
+<tr> 
+<th> 
+7</th> 
+<th> 
+272</th> 
+<th> 
+ <font color="#00FF00">272</font></th> 
+<th> 
+-137</th> 
+<th> 
+ <font color="#FF0000">-137</font></th> 
+</tr> 
+<tr> 
+<th> 
+8</th> 
+<th> 
+342</th> 
+<th> 
+ <font color="#00FF00">342</font></th> 
+<th> 
+-172</th> 
+<th> 
+ <font color="#FF0000">-172</font></th> 
+</tr> 
+<tr> 
+<th> 
+9</th> 
+<th> 
+424</th> 
+<th> 
+ <font color="#00FF00">424</font></th> 
+<th> 
+-213</th> 
+<th> 
+ <font color="#FF0000">-213</font></th> 
+</tr> 
+<tr> 
+<th> 
+10</th> 
+<th> 
+518</th> 
+<th> 
+ <font color="#00FF00">518</font></th> 
+<th> 
+-260</th> 
+<th> 
+ <font color="#FF0000">-260</font></th> 
+</tr> 
+<tr> 
+<th> 
+11</th> 
+<th> 
+627</th> 
+<th> 
+ <font color="#00FF00">627</font></th> 
+<th> 
+-314</th> 
+<th> 
+ <font color="#FF0000">-314</font></th> 
+</tr> 
+<tr> 
+<th> 
+12</th> 
+<th> 
+753</th> 
+<th> 
+ <font color="#00FF00">753</font></th> 
+<th> 
+-377</th> 
+<th> 
+ <font color="#FF0000">-377</font></th> 
+</tr> 
+<tr> 
+<th> 
+13</th> 
+<th> 
+897</th> 
+<th> 
+ <font color="#00FF00">897</font></th> 
+<th> 
+-449</th> 
+<th> 
+ <font color="#FF0000">-449</font></th> 
+</tr> 
+<tr> 
+<th> 
+14</th> 
+<th> 
+1.063</th> 
+<th> 
+ <font color="#00FF00">1.063</font></th> 
+<th> 
+-532</th> 
+<th> 
+ <font color="#FF0000">-532</font></th> 
+</tr> 
+<tr> 
+<th> 
+15</th> 
+<th> 
+1.253</th> 
+<th> 
+ <font color="#00FF00">1.253</font></th> 
+<th> 
+-627</th> 
+<th> 
+ <font color="#FF0000">-627</font></th> 
+</tr> 
+</table></center></tr></th></table> 
+<br><br><br><br> 
+</center> 
+</div> 
+<!-- END CONTENT AREA --> 
+<script> 
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script> 
+ 
+<div id='messagebox'> 
+<center> 
+</center> 
+</div> 
+<div id='errorbox'> 
+<center> 
+бЮЬ ХЦПНБНИ ЮЙЙЮСМР ЕЫ╦ МЕ ЮЙРХБХПНБЮМ. гЮИДХРЕ Б <a href=index.php?page=options&session=1f855da316dd>сЯРЮМНБЙХ</a>, ББЕДХРЕ ЩКЕЙРПНММШИ ЮДПЕЯ Х ОНКСВХРЕ МЮ МЕЦН ЮЙРХБЮЖХНММСЧ ЯЯШКЙС.<br></center> 
+</div> 
+ 
+<script> 
+headerHeight = 81;
+errorbox.style.display='block';
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = "_blank";
+  }
+}
+ 
+</script> 
+<style> 
+.layer {
+    z-index:999999999;
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 757px; 
+    height: 475px; 
+    background-color: #040e1e;
+    border: 3px double orange;
+    padding: 0;
+    opacity: .90;
+}
+</style> 
+ </body> 
+</html>

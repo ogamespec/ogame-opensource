@@ -1,0 +1,105 @@
+ 
+<html> 
+ <head> 
+  <link rel='stylesheet' type='text/css' href='css/default.css' /> 
+  <link rel='stylesheet' type='text/css' href='css/formate.css' /> 
+ 
+  <script language="JavaScript">var session="f6c26e76c45a";</script> 
+  <meta http-equiv="content-type" content="text/html; charset=koi8-r" /> 
+ 
+<link rel="stylesheet" type="text/css" href="css/combox.css"> 
+<link rel="stylesheet" type="text/css" href="http://uni15.ogame.ru/evolution/formate.css" /> 
+ 
+<title>бЯЕКЕММЮЪ 15 нцЕИЛ</title> 
+ 
+  <script src="js/utilities.js" type="text/javascript"></script> 
+  <script language="JavaScript"> 
+  </script> 
+<script type="text/javascript" src="js/overLib/overlib.js"></script> 
+<!-- HEADER --> 
+ 
+<script language="JavaScript"> 
+function onBodyLoad() {
+    window.setTimeout("reloadImages()", 100);
+}
+ 
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != "")) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script> 
+ 
+</head> 
+<body style="overflow: hidden;" onload="onBodyLoad();" onunload="" > 
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div> 
+<!-- END HEADER --> 
+ 
+<!-- LEFTMENU --> 
+ 
+ 
+<!-- END LEFTMENU --> 
+ 
+<!-- CONTENT AREA --> 
+<div id='content'> 
+<center> 
+<script src="js/cntchar.js" type="text/javascript"></script> 
+<script src="js/win.js" type="text/javascript"></script> 
+<form action="?page=notizen&session=f6c26e76c45a" method=post><input type=hidden name=s value=1><table width=519><tr><td class=c colspan=2>яНЯРЮБХРЭ ГЮЛЕРЙС</td></tr><tr><th>бЮФМНЯРЭ</th><th><select name=u><option value=2>бЮФМН</option><option value=1>рЮЙ ЯЕАЕ</option><option value=0>мЕБЮФМН</option></select></th></tr><tr><th>рЕЛЮ</th><th><input type=text name=betreff size=30 maxlength=30 value=''></th></tr><tr><th>гЮЛЕРЙЮ (<span id="cntChars">0</span> / 5000 ЯХЛБНКНБ)</th><th><textarea name=text cols=60 rows=10 onkeyup="javascript:cntchar(5000)"></textarea></th></tr><tr><td class=c><a href=?page=notizen&session=f6c26e76c45a>мЮГЮД</a></td><td class=c><input type=submit value='яНУПЮМХРЭ'></td></tr></table></form><br><br><br><br> 
+</center> 
+</div> 
+<!-- END CONTENT AREA --> 
+<script> 
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script> 
+ 
+<div id='messagebox'> 
+<center> 
+</center> 
+</div> 
+<div id='errorbox'> 
+<center> 
+</center> 
+</div> 
+ 
+<script> 
+messagebox.style.top='0px';
+headerHeight = 0;
+contentbox.style.left='0px';
+contentbox.style.width='100%';
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = "_blank";
+  }
+}
+ 
+</script> 
+<style> 
+.layer {
+    z-index:999999999;
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 757px; 
+    height: 475px; 
+    background-color: #040e1e;
+    border: 3px double orange;
+    padding: 0;
+    opacity: .90;
+}
+</style> 
+ </body> 
+</html>

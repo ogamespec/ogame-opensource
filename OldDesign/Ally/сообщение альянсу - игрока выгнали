@@ -1,0 +1,13 @@
+                <tr>
+     <th><input type="checkbox" name="delmes87255848" /></th>
+     <th>04-15 09:31:21</th>
+     <th>Allianz [zzzz] </th>
+     <th>Rundmail </th>
+    </tr>
+         <tr>
+       <td class="b"> </td><td colspan="3" class="b">Der Spieler spieler1 wurde aus der Allianz ausgeschlossen.</td>
+    </tr>
+                <th colspan="4">
+       <input type="checkbox" name="sneak87255848" />
+       <input type="submit" value="Melden" />
+    </th>
