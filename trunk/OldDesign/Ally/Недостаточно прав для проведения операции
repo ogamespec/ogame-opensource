@@ -1,0 +1,24 @@
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script><br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+
+<div id='messagebox'>
+<center>
+</center>
+</div>
+<div id='errorbox'>
+<center>
+Sie haben nicht das notige Recht dafur!<br></center>
+</div>
+
+
+Ќедостаточно прав дл€ проведени€ операции

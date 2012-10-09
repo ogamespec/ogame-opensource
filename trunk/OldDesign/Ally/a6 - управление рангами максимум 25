@@ -1,0 +1,150 @@
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script><br />
+<a href="index.php?page=allianzen&session=7ac20467c32b&a=5">Zuruck zur Ubersicht</a>
+<table width="519">
+ <tr>
+  <td class="c" colspan="11">Rechte konfigurieren</td>
+ </tr>
+ <form action="index.php?page=allianzen&session=7ac20467c32b&a=15" method="POST">
+ <tr>
+  <th></th>
+  <th>Rangname</th>
+  <th>
+   <img src=img/r1.png>
+  </th>
+  <th>
+   <img src=img/r2.png>
+  </th>
+  <th>
+   <img src=img/r3.png>
+  </th>
+  <th>
+   <img src=img/r4.png>
+  </th>
+  <th>
+   <img src=img/r5.png>
+  </th>
+  <th>
+   <img src=img/r6.png>
+  </th>
+  <th>
+   <img src=img/r7.png>
+  </th>
+  <th>
+   <img src=img/r8.png>
+  </th>
+  <th>
+   <img src=img/r9.png>
+  </th>
+ </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=5"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;4&nbsp;</th>
+  <th><input type=checkbox name="u5r0"></th><th><input type=checkbox name="u5r1"></th><th><input type=checkbox name="u5r2"></th><th><input type=checkbox name="u5r3"></th><th><input type=checkbox name="u5r4"></th><th><input type=checkbox name="u5r5"></th><th><input type=checkbox name="u5r6"></th><th><input type=checkbox name="u5r7"></th><th><input type=checkbox name="u5r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=6"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;5&nbsp;</th>
+  <th><input type=checkbox name="u6r0"></th><th><input type=checkbox name="u6r1"></th><th><input type=checkbox name="u6r2"></th><th><input type=checkbox name="u6r3"></th><th><input type=checkbox name="u6r4"></th><th><input type=checkbox name="u6r5"></th><th><input type=checkbox name="u6r6"></th><th><input type=checkbox name="u6r7"></th><th><input type=checkbox name="u6r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=7"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;6&nbsp;</th>
+  <th><input type=checkbox name="u7r0"></th><th><input type=checkbox name="u7r1"></th><th><input type=checkbox name="u7r2"></th><th><input type=checkbox name="u7r3"></th><th><input type=checkbox name="u7r4"></th><th><input type=checkbox name="u7r5"></th><th><input type=checkbox name="u7r6"></th><th><input type=checkbox name="u7r7"></th><th><input type=checkbox name="u7r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=8"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;7&nbsp;</th>
+  <th><input type=checkbox name="u8r0"></th><th><input type=checkbox name="u8r1"></th><th><input type=checkbox name="u8r2"></th><th><input type=checkbox name="u8r3"></th><th><input type=checkbox name="u8r4"></th><th><input type=checkbox name="u8r5"></th><th><input type=checkbox name="u8r6"></th><th><input type=checkbox name="u8r7"></th><th><input type=checkbox name="u8r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=9"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;8&nbsp;</th>
+  <th><input type=checkbox name="u9r0"></th><th><input type=checkbox name="u9r1"></th><th><input type=checkbox name="u9r2"></th><th><input type=checkbox name="u9r3"></th><th><input type=checkbox name="u9r4"></th><th><input type=checkbox name="u9r5"></th><th><input type=checkbox name="u9r6"></th><th><input type=checkbox name="u9r7"></th><th><input type=checkbox name="u9r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=10"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;9&nbsp;</th>
+  <th><input type=checkbox name="u10r0"></th><th><input type=checkbox name="u10r1"></th><th><input type=checkbox name="u10r2"></th><th><input type=checkbox name="u10r3"></th><th><input type=checkbox name="u10r4"></th><th><input type=checkbox name="u10r5"></th><th><input type=checkbox name="u10r6"></th><th><input type=checkbox name="u10r7"></th><th><input type=checkbox name="u10r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=11"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;10&nbsp;</th>
+  <th><input type=checkbox name="u11r0"></th><th><input type=checkbox name="u11r1"></th><th><input type=checkbox name="u11r2"></th><th><input type=checkbox name="u11r3"></th><th><input type=checkbox name="u11r4"></th><th><input type=checkbox name="u11r5"></th><th><input type=checkbox name="u11r6"></th><th><input type=checkbox name="u11r7"></th><th><input type=checkbox name="u11r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=12"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;11&nbsp;</th>
+  <th><input type=checkbox name="u12r0"></th><th><input type=checkbox name="u12r1"></th><th><input type=checkbox name="u12r2"></th><th><input type=checkbox name="u12r3"></th><th><input type=checkbox name="u12r4"></th><th><input type=checkbox name="u12r5"></th><th><input type=checkbox name="u12r6"></th><th><input type=checkbox name="u12r7"></th><th><input type=checkbox name="u12r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=13"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;12&nbsp;</th>
+  <th><input type=checkbox name="u13r0"></th><th><input type=checkbox name="u13r1"></th><th><input type=checkbox name="u13r2"></th><th><input type=checkbox name="u13r3"></th><th><input type=checkbox name="u13r4"></th><th><input type=checkbox name="u13r5"></th><th><input type=checkbox name="u13r6"></th><th><input type=checkbox name="u13r7"></th><th><input type=checkbox name="u13r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=14"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;13&nbsp;</th>
+  <th><input type=checkbox name="u14r0"></th><th><input type=checkbox name="u14r1"></th><th><input type=checkbox name="u14r2"></th><th><input type=checkbox name="u14r3"></th><th><input type=checkbox name="u14r4"></th><th><input type=checkbox name="u14r5"></th><th><input type=checkbox name="u14r6"></th><th><input type=checkbox name="u14r7"></th><th><input type=checkbox name="u14r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=15"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;14&nbsp;</th>
+  <th><input type=checkbox name="u15r0"></th><th><input type=checkbox name="u15r1"></th><th><input type=checkbox name="u15r2"></th><th><input type=checkbox name="u15r3"></th><th><input type=checkbox name="u15r4"></th><th><input type=checkbox name="u15r5"></th><th><input type=checkbox name="u15r6"></th><th><input type=checkbox name="u15r7"></th><th><input type=checkbox name="u15r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=16"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;15&nbsp;</th>
+  <th><input type=checkbox name="u16r0"></th><th><input type=checkbox name="u16r1"></th><th><input type=checkbox name="u16r2"></th><th><input type=checkbox name="u16r3"></th><th><input type=checkbox name="u16r4"></th><th><input type=checkbox name="u16r5"></th><th><input type=checkbox name="u16r6"></th><th><input type=checkbox name="u16r7"></th><th><input type=checkbox name="u16r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=17"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;16&nbsp;</th>
+  <th><input type=checkbox name="u17r0"></th><th><input type=checkbox name="u17r1"></th><th><input type=checkbox name="u17r2"></th><th><input type=checkbox name="u17r3"></th><th><input type=checkbox name="u17r4"></th><th><input type=checkbox name="u17r5"></th><th><input type=checkbox name="u17r6"></th><th><input type=checkbox name="u17r7"></th><th><input type=checkbox name="u17r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=18"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;17&nbsp;</th>
+  <th><input type=checkbox name="u18r0"></th><th><input type=checkbox name="u18r1"></th><th><input type=checkbox name="u18r2"></th><th><input type=checkbox name="u18r3"></th><th><input type=checkbox name="u18r4"></th><th><input type=checkbox name="u18r5"></th><th><input type=checkbox name="u18r6"></th><th><input type=checkbox name="u18r7"></th><th><input type=checkbox name="u18r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=19"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;22&nbsp;</th>
+  <th><input type=checkbox name="u19r0"></th><th><input type=checkbox name="u19r1"></th><th><input type=checkbox name="u19r2"></th><th><input type=checkbox name="u19r3"></th><th><input type=checkbox name="u19r4"></th><th><input type=checkbox name="u19r5"></th><th><input type=checkbox name="u19r6"></th><th><input type=checkbox name="u19r7"></th><th><input type=checkbox name="u19r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=20"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;33&nbsp;</th>
+  <th><input type=checkbox name="u20r0"></th><th><input type=checkbox name="u20r1"></th><th><input type=checkbox name="u20r2"></th><th><input type=checkbox name="u20r3"></th><th><input type=checkbox name="u20r4"></th><th><input type=checkbox name="u20r5"></th><th><input type=checkbox name="u20r6"></th><th><input type=checkbox name="u20r7"></th><th><input type=checkbox name="u20r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=21"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;44&nbsp;</th>
+  <th><input type=checkbox name="u21r0"></th><th><input type=checkbox name="u21r1"></th><th><input type=checkbox name="u21r2"></th><th><input type=checkbox name="u21r3"></th><th><input type=checkbox name="u21r4"></th><th><input type=checkbox name="u21r5"></th><th><input type=checkbox name="u21r6"></th><th><input type=checkbox name="u21r7"></th><th><input type=checkbox name="u21r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=22"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;55&nbsp;</th>
+  <th><input type=checkbox name="u22r0"></th><th><input type=checkbox name="u22r1"></th><th><input type=checkbox name="u22r2"></th><th><input type=checkbox name="u22r3"></th><th><input type=checkbox name="u22r4"></th><th><input type=checkbox name="u22r5"></th><th><input type=checkbox name="u22r6"></th><th><input type=checkbox name="u22r7"></th><th><input type=checkbox name="u22r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=23"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;66&nbsp;</th>
+  <th><input type=checkbox name="u23r0"></th><th><input type=checkbox name="u23r1"></th><th><input type=checkbox name="u23r2"></th><th><input type=checkbox name="u23r3"></th><th><input type=checkbox name="u23r4"></th><th><input type=checkbox name="u23r5"></th><th><input type=checkbox name="u23r6"></th><th><input type=checkbox name="u23r7"></th><th><input type=checkbox name="u23r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=24"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;77&nbsp;</th>
+  <th><input type=checkbox name="u24r0"></th><th><input type=checkbox name="u24r1"></th><th><input type=checkbox name="u24r2"></th><th><input type=checkbox name="u24r3"></th><th><input type=checkbox name="u24r4"></th><th><input type=checkbox name="u24r5"></th><th><input type=checkbox name="u24r6"></th><th><input type=checkbox name="u24r7"></th><th><input type=checkbox name="u24r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=25"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;88&nbsp;</th>
+  <th><input type=checkbox name="u25r0"></th><th><input type=checkbox name="u25r1"></th><th><input type=checkbox name="u25r2"></th><th><input type=checkbox name="u25r3"></th><th><input type=checkbox name="u25r4"></th><th><input type=checkbox name="u25r5"></th><th><input type=checkbox name="u25r6"></th><th><input type=checkbox name="u25r7"></th><th><input type=checkbox name="u25r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=26"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;99&nbsp;</th>
+  <th><input type=checkbox name="u26r0"></th><th><input type=checkbox name="u26r1"></th><th><input type=checkbox name="u26r2"></th><th><input type=checkbox name="u26r3"></th><th><input type=checkbox name="u26r4"></th><th><input type=checkbox name="u26r5"></th><th><input type=checkbox name="u26r6"></th><th><input type=checkbox name="u26r7"></th><th><input type=checkbox name="u26r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=2"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;1111&nbsp;</th>
+  <th><input type=checkbox name="u2r0"></th><th><input type=checkbox name="u2r1"></th><th><input type=checkbox name="u2r2"></th><th><input type=checkbox name="u2r3"></th><th><input type=checkbox name="u2r4"></th><th><input type=checkbox name="u2r5"></th><th><input type=checkbox name="u2r6"></th><th><input type=checkbox name="u2r7"></th><th><input type=checkbox name="u2r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=3"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;2222&nbsp;</th>
+  <th><input type=checkbox name="u3r0"></th><th><input type=checkbox name="u3r1"></th><th><input type=checkbox name="u3r2"></th><th><input type=checkbox name="u3r3"></th><th><input type=checkbox name="u3r4"></th><th><input type=checkbox name="u3r5"></th><th><input type=checkbox name="u3r6"></th><th><input type=checkbox name="u3r7"></th><th><input type=checkbox name="u3r8"></th> </tr>
+ <tr>
+  <th><a href="index.php?page=allianzen&session=7ac20467c32b&a=15&d=4"><img src="http://uni20.ogame.de/evolution/pic/abort.gif" alt="Rang loschen" border="0"></a></th>
+  <th>&nbsp;3333&nbsp;</th>
+  <th><input type=checkbox name="u4r0"></th><th><input type=checkbox name="u4r1"></th><th><input type=checkbox name="u4r2"></th><th><input type=checkbox name="u4r3"></th><th><input type=checkbox name="u4r4"></th><th><input type=checkbox name="u4r5"></th><th><input type=checkbox name="u4r6"></th><th><input type=checkbox name="u4r7"></th><th><input type=checkbox name="u4r8"></th> </tr>
+ <tr>
+  <th colspan="11"><input type="submit" value="Speichern"></th>
+ </tr>
+</form>
+</table>
+<br /><form action="index.php?page=allianzen&session=7ac20467c32b&a=15" method=POST><table width=519><tr><td class=c colspan=2>Legende der Rechte</td></tr><tr><th><img src=img/r1.png></th><th>Allianz auflosen</th></tr><tr><th><img src=img/r2.png></th><th>User kicken</th></tr><tr><th><img src=img/r3.png></th><th>Bewerbungen einsehen</th></tr><tr><th><img src=img/r4.png></th><th>Memberliste sehen</th></tr><tr><th><img src=img/r5.png></th><th>Bewerbungen bearbeiten</th></tr><tr><th><img src=img/r6.png></th><th>Allianz verwalten</th></tr><tr><th><img src=img/r7.png></th><th>Onlinestatus in der Memberliste sehen</th></tr><tr><th><img src=img/r8.png></th><th>Rundschreiben verfassen</th></tr><tr><th><img src=img/r9.png></th><th>'Rechte Hand' (notig zum Ubertragen des Grunderstatus)</th></tr></form></table><br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->

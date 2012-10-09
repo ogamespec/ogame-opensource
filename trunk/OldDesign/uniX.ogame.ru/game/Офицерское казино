@@ -1,0 +1,679 @@
+<html>
+ <head>
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+
+  <script language="JavaScript">var session="d6df7f701899";</script>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" href="css/combox.css">
+<link rel="stylesheet" type="text/css" href="http://localhost/evolution/formate.css" />
+
+<title>Вселенная 5 ОГейм</title>
+
+  <script src="js/utilities.js" type="text/javascript"></script>
+  <script language="JavaScript">
+  </script>
+<script type="text/javascript" src="js/overLib/overlib.js"></script>
+<!-- HEADER -->
+
+<script language="JavaScript">
+function onBodyLoad() {
+    window.setTimeout("reloadImages()", 100);
+}
+
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != "")) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script>
+
+</head>
+<body style="overflow: hidden;" onload="onBodyLoad();" onunload="" >
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<div id='header_top'><center>
+<table class='header'>
+<tr class='header' >
+<td class='header' style='width:5;' >
+	  <table class='header'>
+    <tr class='header'>
+     <td class='header'><img src="http://localhost/evolution/planeten/small/s_mond.jpg" width="50" height="50"></td>
+     <td class='header'>
+	  <table class='header'>
+
+		  <select size="1" onchange="haha(this)">
+		  			  			  				  <option value="/game/index.php?page=micropayment&session=d6df7f701899&cp=34375493&mode=&gid=&messageziel=&re=0" >| Cold Plains				  <a href="index.php?page=galaxy&galaxy=1&system=104&position=6&session=d6df7f701899" >[1:104:6]</a></option>
+			  			  			  				  <option value="/game/index.php?page=micropayment&session=d6df7f701899&cp=34358852&mode=&gid=&messageziel=&re=0" >| Great Marsh				  <a href="index.php?page=galaxy&galaxy=1&system=244&position=4&session=d6df7f701899" >[1:244:4]</a></option>
+			  			  			  				  <option value="/game/index.php?page=micropayment&session=d6df7f701899&cp=34339853&mode=&gid=&messageziel=&re=0" >| Lost City				  <a href="index.php?page=galaxy&galaxy=1&system=255&position=4&session=d6df7f701899" >[1:255:4]</a></option>
+			  			  			  				  <option value="/game/index.php?page=micropayment&session=d6df7f701899&cp=34303952&mode=&gid=&messageziel=&re=0" >Frigid Highlands				  <a href="index.php?page=galaxy&galaxy=1&system=260&position=4&session=d6df7f701899" >[1:260:4]</a></option>
+
+			  			  			  				  <option value="/game/index.php?page=micropayment&session=d6df7f701899&cp=34413197&mode=&gid=&messageziel=&re=0" >Frigid Moon (Луна)				  <a href="index.php?page=galaxy&galaxy=1&system=260&position=4&session=d6df7f701899" >[1:260:4]</a></option>
+			  			  			  				  <option value="/game/index.php?page=micropayment&session=d6df7f701899&cp=34344166&mode=&gid=&messageziel=&re=0" >| Rocky Waste				  <a href="index.php?page=galaxy&galaxy=1&system=286&position=5&session=d6df7f701899" >[1:286:5]</a></option>
+			  			  			  				  <option value="/game/index.php?page=micropayment&session=d6df7f701899&cp=34440334&mode=&gid=&messageziel=&re=0" selected>Rocky Moon (Луна)				  <a href="index.php?page=galaxy&galaxy=1&system=286&position=5&session=d6df7f701899" >[1:286:5]</a></option>
+			  			  			  				  <option value="/game/index.php?page=micropayment&session=d6df7f701899&cp=34331259&mode=&gid=&messageziel=&re=0" >| Far Oasis				  <a href="index.php?page=galaxy&galaxy=1&system=335&position=6&session=d6df7f701899" >[1:335:6]</a></option>
+			  			  			  				  <option value="/game/index.php?page=micropayment&session=d6df7f701899&cp=34338086&mode=&gid=&messageziel=&re=0" >| Stony Field				  <a href="index.php?page=galaxy&galaxy=1&system=396&position=6&session=d6df7f701899" >[1:396:6]</a></option>
+
+			  			  			  				  <option value="/game/index.php?page=micropayment&session=d6df7f701899&cp=34330027&mode=&gid=&messageziel=&re=0" >| Durance of Hate				  <a href="index.php?page=galaxy&galaxy=1&system=414&position=4&session=d6df7f701899" >[1:414:4]</a></option>
+			  		  </select>
+	  </table>
+     </td>
+    </tr>
+  </table></td>
+<td class='header'>   <table class='header' id='resources' border="0" cellspacing="0" cellpadding="0" padding-right='30' >
+	    <tr class='header'>
+
+	    
+		     <td align="center" width="85" class='header'>
+		      <img border="0" src="http://localhost/evolution/images/metall.gif" width="42" height="22">
+		     </td>
+		     
+		     <td align="center" width="85" class='header'>
+		      <img border="0" src="http://localhost/evolution/images/kristall.gif" width="42" height="22">
+		     </td>
+		     
+		     <td align="center" width="85" class='header'>
+		      <img border="0" src="http://localhost/evolution/images/deuterium.gif" width="42" height="22">
+		     </td>
+
+	     		     
+		     <td align="center" width="85" class='header'>
+		     <a href=index.php?page=micropayment&session=d6df7f701899>
+		      <img border="0" src="img/dm_klein_2.jpg" width="42" height="22" title="Тёмная материя"></a>
+		     </td>	     
+	        		     
+		     <td align="center" width="85" class='header'>
+		      <img border="0" src="http://localhost/evolution/images/energie.gif" width="42" height="22">
+		     </td>
+	    </tr>
+
+	    <tr class='header'>
+
+	     <td align="center" class='header' width="85"><i><b><font color="#ffffff">Металл</font></b></i></td>
+	     <td align="center" class='header' width="85"><i><b><font color="#ffffff">Кристалл</font></b></i></td>
+	     <td align="center" class='header' width="85"><i><b><font color="#ffffff">Дейтерий</font></b></i></td>
+	     	     	<td align="center" class='header' width="85"><i><b><font color="#ffffff">Тёмная материя</font></b></i></td>	
+	          
+	     <td align="center" class='header' width="85"><i><b><font color="#ffffff">Энергия</font></b></i></td>
+	    </tr>
+	    <tr class='header'>
+
+	     <td align="center" class='header' width="90"><font color='#ff0000'>735.892</font></td>
+	     <td align="center" class='header' width="90"><font color='#ff0000'>5.856.995</font></td>
+	     <td align="center" class='header' width="90"><font color='#ff0000'>680.896</font></td>
+	     			 <td align="center" class='header' width="90"><font color="#FFFFFF">990</font></DIV></td>
+	        
+	     <td align="center" class='header' width="90"><font >0</font>/0</td>
+	    </tr>
+
+   </table></td>
+	<td class='header'>
+<table class='header' align=left>
+	 <tr class='header'>
+
+
+	 <td align="center" width="35" class='header'>
+	     <a href='index.php?page=micropayment&session=d6df7f701899&session=d6df7f701899' accesskey="o">
+	  <img border="0" src="img/commander_ikon_un.gif" width="32" height="32" alt="Командир ОГейма"
+		onmouseover="return overlib('<center><font size=1 color=white><b><br>Командир ОГейма</font><br><br><a href=index.php?page=micropayment&session=d6df7f701899&session=d6df7f701899><font size=1 color=lime>Заказать!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+	  </a>
+
+	 </td>
+	 <td align="center" width="35" class='header'>
+	  <a href='index.php?page=micropayment&session=d6df7f701899&session=d6df7f701899' accesskey="o">
+	  <img border="0" src="img/admiral_ikon_un.gif" width="32" height="32" alt="Адмирал"
+		onmouseover="return overlib('<center><font size=1 color=white><b><br>Адмирал</font><br><font size=1 color=skyblue>&amp;nbsp;Макс. кол-во флотов +2</font><br><br><a href=index.php?page=micropayment&session=d6df7f701899&session=d6df7f701899><font size=1 color=lime>Заказать!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+
+	  </a>
+	 </td>
+	 <td align="center" width="35" class='header'>
+	  <a href='index.php?page=micropayment&session=d6df7f701899&session=d6df7f701899' accesskey="o">
+
+	  <img border="0" src="img/ingenieur_ikon.gif" width="32" height="32" alt="Инженер"
+		onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;Активен&lt;/font&gt; ещё 2 д.<br>Инженер</font><br><font size=1 color=skyblue>Сокращает вдвое потери в обороне+10% больше энергии</font><br><br><a href=index.php?page=micropayment&session=d6df7f701899&session=d6df7f701899><font size=1 color=lime>Продлить!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+	  </a>
+	 </td>
+	 <td align="center" width="35" class='header'>
+	  <a href='index.php?page=micropayment&session=d6df7f701899&session=d6df7f701899' accesskey="o">
+	  <img border="0" src="img/geologe_ikon_un.gif" width="32" height="32" alt="Геолог"
+		onmouseover="return overlib('<center><font size=1 color=white><b><br>Геолог</font><br><font size=1 color=skyblue>+10% доход от шахты</font><br><br><a href=index.php?page=micropayment&session=d6df7f701899&session=d6df7f701899><font size=1 color=lime>Заказать!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+	  </a>
+	 </td>
+	 <td align="center" width="35" class='header'>
+
+	  <a href='index.php?page=micropayment&session=d6df7f701899&session=d6df7f701899' accesskey="o">
+	  <img border="0" src="img/technokrat_ikon_un.gif" width="32" height="32" alt="Технократ" 
+		onmouseover="return overlib('<center><font size=1 color=white><b><br>Технократ</font><br><font size=1 color=skyblue>+2 уровень шпионажа, 25% меньше времени на исследования</font><br><br><a href=index.php?page=micropayment&session=d6df7f701899&session=d6df7f701899><font size=1 color=lime>Заказать!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+	  </a>
+	 </td>
+	 <td align="center" class='header'></td>
+	</tr>
+</table></td>
+</tr>
+</table>
+</div><!-- END HEADER -->
+
+<!-- LEFTMENU -->
+
+	<div id='leftmenu'>
+	
+<script language="JavaScript">
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+
+<script language="JavaScript">
+function popUp(URL) {
+  day = new Date();
+  id = day.getTime();
+  eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=1,scrollbars=1,location=1,statusbar=1,menubar=0,resizable=1,width=120,height=60,alwaysLowered=Yes');");
+}
+
+</script>
+
+
+<center>
+
+<div id='menu'>
+<a href="mailto:barrierefrei@ogame.de" title="Проблемы, касающиеся игроков со слабым зрением, отправляйте на barrierefrei@ogame.de." style="width:1px;"></a>
+<p style="width:110px;"><NOBR>Вселенная 5 (<a href="index.php?page=changelog&session=d6df7f701899">v 0.84</a>)</NOBR></p>
+
+<table width="110" cellspacing="0" cellpadding="0">
+ <tr>
+  <td><img src="http://localhost/evolution/gfx/ogame-produktion.jpg" width="110" height="40" /></td>
+ </tr>
+
+    
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=d6df7f701899' accesskey="o">Обзор</a>
+
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=b_building&session=d6df7f701899' accesskey="z">Постройки</a>
+    </font></div>
+
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=d6df7f701899' accesskey="s">Сырьё</a>
+    </font></div>
+  </td>
+
+ </tr>
+
+  <tr>
+  <td>
+   <div align="center" ><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=d6df7f701899' accesskey=""><font color='FF8900'>Скупщик</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+
+ </tr>
+ 
+  
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=d6df7f701899&mode=Forschung' accesskey="i">Исследования</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=d6df7f701899&mode=Flotte' accesskey="v">Верфь</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=d6df7f701899&mode=Flotte' accesskey="f">Флот</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=d6df7f701899' accesskey="t">Технологии</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=d6df7f701899&no_header=1' accesskey="g">Галактика</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+
+     <a href='index.php?page=buildings&session=d6df7f701899&mode=Verteidigung' accesskey="x">Оборона</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src="http://localhost/evolution/gfx/info-help.jpg" width="110" height="19"></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=d6df7f701899' accesskey="a">Мой альянс</a>
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://board.ogame.ru/" target="_blank" accesskey="m" >Форум</a><!-- external link to board -->
+   </font></div>
+  </td>
+ </tr>
+ 
+
+ 	<tr>
+	   <td align=center>
+
+	   <a id='darkmatter2' style='cursor:pointer; width:110px;'
+	     href='index.php?page=micropayment&session=d6df7f701899' accesskey="o"><b>Офицерское казино</a></b>
+	   </div>
+	  </td>
+	 </tr>
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+  <a href='index.php?page=statistics&session=d6df7f701899' accesskey="k">Статистика</a>
+
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=d6df7f701899' accesskey="p">Поиск</a>
+    </font></div>
+
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://tutorial.ogame.ru" target="_blank" accesskey="^" >Туториал</a><!-- external link to ogame tutorial -->
+   </font></div>
+  </td>
+
+ </tr>
+ 
+ <tr>
+  <td><img src="http://localhost/evolution/gfx/user-menu.jpg" width="110" height="35"></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=messages&dsp=1&session=d6df7f701899' accesskey="b">Сообщения</a>
+
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=d6df7f701899&no_header=1", "Notizen");' accesskey="e">Заметки</a>
+    </font></div>
+
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=d6df7f701899' accesskey="d">Друзья</a>
+    </font></div>
+  </td>
+
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=d6df7f701899' accesskey="n">Настройки</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=d6df7f701899' accesskey="q">Выход</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ 
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href="http://ogame.ru/?ajax=true&page=rules" target="_blank">Правила</a> <!-- external link to rules -->
+   </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://agb.gameforge.de/index.php?lang=ru&art=impress&special=&&f_text=b1daf2&f_text_hover=ffffff&f_text_h=061229&f_text_hr=061229&f_text_hrbg=061229&f_text_hrborder=9EBDE4&f_text_font=arial%2C+arial%2C+arial%2C+sans-serif&f_bg=000000" target="_blank">О нас</a> <!-- external link to impressum -->
+   </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+
+	</div>
+
+<!-- END LEFTMENU -->
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+
+<!--
+<body>
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+-->
+<center>
+
+		  <div id="header" style="background-image:url('img/kasino_600x120.jpg'); width:600px;height:120px;">
+	     	<div id="headtext1" style="position:relative; top:25px; left:-160px;font-size:18px;font-weight:bold; color:f3d2b1;">Мудрому владыке ...</div>
+    	 	<div id="headtext2" style="position:relative;float:right;top:23px;left:-240px;font-size:13px;font-weight:bold;color:#c2f1fd;">... нужны умные <b><font size=4>советники.</font></b></div>
+    	 </div>
+				<table width=600>
+
+				<tr>
+					  <td colspan="3" class="c">Тёмная материя</td>
+
+				</tr>
+				<tr>
+					<td class=l><img border='0' src="img/DMaterie.jpg" align='top' width='120' height='120'>
+					</td>
+					<td class=l><strong>Тёмная материя</strong><br>
+							Тёмная материя - это такая субстанция, которая может храниться только в течение нескольких стандартных лет с большими затратами. Из неё можно добывать невероятные массы энергии. Способ её добычи очень сложен и опасен, поэтому она очень высоко ценится.							<div style="margin:4px 4px;">
+							<table><tr><td><img src="img/dm_klein_1.jpg" width="32" height="32" style="vertical-align:middle;"></td>
+							<td style='background-color:transparent;'><strong style="color:skyblue; vertical-align:middle;">При помощи этой субстанции можно нанять офицеров и командиров.</strong></td></tr></table>
+
+							</div></td>
+						<td class=l style="width:90px;text-align:center; vertical-align:middle;">
+												<a id='darkmatter2' href='index.php?page=payment&session=d6df7f701899' style='cursor:pointer; text-align:center;width:100px;height:60px;'><br>
+							<b><div id='darkmatter2'>Достать тёмную материю</a></b>
+						</DIV></td>
+					</tr>
+
+
+					<tr>
+
+					  <td colspan="3" class="c">Офицеры</td>
+					</tr>
+					<tr>
+
+					    						<td class=l rowspan="2"><img border='0' src="img/commander_stern_gross.jpg" align='top' width='120' height='120'></td>
+
+						<td class=l rowspan="2"><b>Командир ОГейма</b>(<b>
+						<font color=red>Неактивный</font></b>)<br>
+
+							Ранг командира неоднократно оправдал себя в современном ведении боя. Благодаря упрощённой структуре Ваши приказы могут исполняться быстрее, что позволит Вам сохранять контроль над всей Вашей империей! Вы сможете развивать стратегии, позволяющей всегда быть на шаг впереди противника.							<div style="margin:4px 4px;">
+							<table>
+								<tr>
+								<td><img src="img/commander_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="Командир ОГейма">
+								</td>
+								<td style='background-color:transparent;'><strong style="color:skyblue; vertical-align:middle;">Очередь для строительства, обзор империи, усовершенствованный обзор галактики, фильтр сообщений, никакой рекламы</strong>
+								</td>
+
+								</tr>
+							</table>
+							</div>
+						</td>
+													<td class=l style="width:90px;text-align:center; vertical-align:middle;">
+								<a href='index.php?page=micropayment&buynow=1&type=1&days=90&session=d6df7f701899' >
+								<b>3 месяца/месяцев за								<br><font color=lime>всего 100.000</font>
+								<br>Тёмная материя</b></a>
+
+							</td>
+							</tr>
+						<tr>
+							<td class=l style="width:90px;text-align:center; vertical-align:middle;">
+								<a href='index.php?page=micropayment&buynow=1&type=1&days=7&session=d6df7f701899' >
+								<b>1 неделя за								<br><font color=lime>10.000</font>
+								<br>Тёмная материя</b></a>
+
+							</td>
+						</tr>
+						
+
+
+
+					<tr>
+					  <td colspan="3" class="c" style='height:4px;'></td>
+					</tr>
+
+
+
+					<tr>
+					    						<td class=l rowspan="2"><img border='0' src="img/ogame_admiral.jpg" align='top' width='120' height='120'></td>
+
+						<td class=l rowspan="2"><b>Адмирал</b>(<b>
+						<font color=red>Неактивный</font></b>)<br>
+							Адмирал - это испытанный войной ветеран и гениальный стратег. Даже в самых горячих боях он не теряет обзора и поддерживает контакт с подчинёнными ему адмиралами. Мудрый правитель может полностью положиться на него в бою и тем самым использовать для боя больше кораблей.<br>
+							<div style="margin:4px 4px;">
+							<table><tr><td><img src="img/admiral_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="Адмирал"></td>
+							<td style='background-color:transparent;'><strong style="color:skyblue; vertical-align:middle;">&nbsp;Макс. кол-во флотов +2</strong></td></tr></table>
+
+							</div>
+												<td class=l style="width:90px;text-align:center; vertical-align:middle;">
+							<a href='index.php?page=micropayment&buynow=1&type=2&days=90&session=d6df7f701899' >
+							<b>3 месяца/месяцев за							<br><font color=lime>всего 100.000</font>
+							<br>Тёмная материя</b></a>
+						</td>
+					</tr>
+
+					<tr>
+						<td class=l style="width:90px;text-align:center; vertical-align:middle;">
+							<a href='index.php?page=micropayment&buynow=1&type=2&days=7&session=d6df7f701899' >
+							<b>1 неделя за							<br><font color=lime>10.000</font>
+							<br>Тёмная материя</b></a>
+						</td>
+					</tr>
+
+					
+					<tr>
+					  <td colspan="3" class="c" style='height:4px;'></td>
+					</tr>
+
+					<tr>
+					    						<td class=l rowspan="2"><img border='0' src="img/ogame_ingenieur.jpg" align='top' width='120' height='120'></td>
+
+						<td class=l rowspan="2"><b>Инженер</b>(<b>
+						<strong><font color=lime>Активен</font> ещё 2 д.</strong></b>)<br>
+
+							Инженер - это специалист по управлению энергией. В мирное время он повышает уровень энергетических сетей на колониях. В случае нападения он снабжает энергетические системы планетарных защит и предотвращает перегрузки, что ведёт к значительно меньшей степени потерь в бою.<br>
+							<div style="margin:4px 4px;">
+							<table><tr><td><img src="img/ingenieur_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="Инженер"></td>
+							<td style='background-color:transparent;'><strong style="color:skyblue; vertical-align:middle;">Сокращает вдвое потери в обороне+10% больше энергии</strong></td></tr></table>
+							</div>
+												<td class=l style="width:90px;text-align:center; vertical-align:middle;">
+							<a href='index.php?page=micropayment&buynow=1&type=3&days=90&session=d6df7f701899' >
+							<b>3 месяца/месяцев за							<br><font color=lime>всего 100.000</font>
+
+							<br>Тёмная материя</b></a>
+						</td>
+					</tr>
+					<tr>
+						<td class=l style="width:90px;text-align:center; vertical-align:middle;">
+							<a href='index.php?page=micropayment&buynow=1&type=3&days=7&session=d6df7f701899' >
+							<b>1 неделя за							<br><font color=lime>10.000</font>
+
+							<br>Тёмная материя</b></a>
+						</td>
+					</tr>
+						
+					<tr>
+					  <td colspan="3" class="c" style='height:4px;'></td>
+					</tr>
+
+					<tr>
+					    						<td class=l rowspan="2"><img border='0' src="img/ogame_geologe.jpg" align='top' width='120' height='120'></td>
+
+						<td class=l rowspan="2"><b>Геолог</b>(<b>
+						<font color=red>Неактивный</font></b>)<br>
+							Геолог - это признанный эксперт в астроминералогии и -кристаллографии. Со своей командой металлургов и химиков он поддерживает межпланетные правительства при разработке новых источников ресурсов и оптимизации их очистки.<br>
+							<div style="margin:4px 4px;">
+							<table><tr><td><img src="img/geologe_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="Геолог"></td>
+							<td style='background-color:transparent;'><strong style="color:skyblue; vertical-align:middle;">+10% доход от шахты</strong></td></tr></table>
+
+							</div>
+												<td class=l style="width:90px;text-align:center; vertical-align:middle;">
+							<a href='index.php?page=micropayment&buynow=1&type=4&days=90&session=d6df7f701899' >
+							<b>3 месяца/месяцев за							<br><font color=lime>всего 100.000</font>
+							<br>Тёмная материя</b></a>
+						</td>
+					</tr>
+
+					<tr>
+						<td class=l style="width:90px;text-align:center; vertical-align:middle;">
+							<a href='index.php?page=micropayment&buynow=1&type=4&days=7&session=d6df7f701899' >
+							<b>1 неделя за							<br><font color=lime>10.000</font>
+							<br>Тёмная материя</b></a>
+						</td>
+					</tr>
+
+						
+
+					<tr>
+					  <td colspan="3" class="c" style='height:4px;'></td>
+					</tr>
+
+					<tr>
+					    						<td class=l rowspan="2"><img border='0' src="img/ogame_technokrat.jpg" align='top' width='120' height='120'></td>
+
+						<td class=l rowspan="2"><b>Технократ</b>(<b>
+						<font color=red>Неактивный</font></b>)<br>
+
+							Гильдия технократов - это гениальные учёные, и их всегда можно найти там, где заканчивается грань технически возможного. Их код никогда не сможет разгадать ни один нормальный человек, и одним своим присутствием они вдохновляют учёных империи.<br>
+							<div style="margin:4px 4px;">
+							<table><tr><td><img src="img/technokrat_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="Технократ"></td>
+							<td style='background-color:transparent;'><strong style="color:skyblue; vertical-align:middle;">+2 уровень шпионажа, 25% меньше времени на исследования</strong></td></tr></table>
+							</div>
+											<td class=l style="width:90px;text-align:center; vertical-align:middle;">
+							<a href='index.php?page=micropayment&buynow=1&type=5&days=90&session=d6df7f701899' >
+							<b>3 месяца/месяцев за							<br><font color=lime>всего 100.000</font>
+
+							<br>Тёмная материя</b></a>
+						</td>
+					</tr>
+
+					<tr>
+						<td class=l style="width:90px;text-align:center; vertical-align:middle;">
+							<a href='index.php?page=micropayment&buynow=1&type=5&days=7&session=d6df7f701899' >
+							<b>1 неделя за							<br><font color=lime>10.000</font>
+
+							<br>Тёмная материя</b></a>
+						</td>
+					</tr>
+						
+
+    	  </table>
+    	  <br>
+
+
+
+
+<br><br><br><br>
+</center>
+
+</div>
+<!-- END CONTENT AREA -->
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+
+<div id='messagebox'>
+<center>
+</center>
+</div>
+<div id='errorbox'>
+<center>
+</center>
+</div>
+
+<script>
+headerHeight = 81;
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = "_blank";
+  }
+}
+
+</script>
+<style>
+.layer {
+	z-index:999999999;
+	position:absolute;
+	left: 0;
+	right: 0;
+	top: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 757px; 
+	height: 475px; 
+	background-color: #040e1e;
+	border: 3px double orange;
+	padding: 0;
+	opacity: .90;
+}
+
+</style>
+ </body>
+</html>

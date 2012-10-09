@@ -1,0 +1,18 @@
+<html>
+ <head>
+  <title>OGame Passwort versenden</title>
+<!--  <meta http-equiv="refresh" content="5; URL=http://ogame.de"> -->
+  <link rel="stylesheet" type="text/css" href="http://graphics.ogame-cluster.net/download/use/evolution/formate.css">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  </head>
+ <body>
+ <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<center>
+<table width="519">
+<tr>
+   <th><font color="lime">Das Passwort wurde an andor2 verschickt.</font></th>
+</tr>
+</table>
+</center>
+ </body>
+</html>

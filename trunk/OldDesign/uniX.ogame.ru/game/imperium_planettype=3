@@ -1,0 +1,920 @@
+<html>
+ <head>
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+
+  <script language="JavaScript">var session="e29a41cbf218";</script>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" href="css/combox.css">
+<link rel="stylesheet" type="text/css" href="http://localhost/evolution/formate.css" />
+
+<title>Вселенная 5 ОГейм</title>
+
+  <script src="js/utilities.js" type="text/javascript"></script>
+  <script language="JavaScript">
+  </script>
+<script type="text/javascript" src="js/overLib/overlib.js"></script>
+<!-- HEADER -->
+
+<script language="JavaScript">
+function onBodyLoad() {
+    window.setTimeout("reloadImages()", 100);
+}
+
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != "")) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script>
+
+</head>
+<body style="overflow: hidden;" onload="onBodyLoad();" onunload="" >
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<!-- END HEADER -->
+
+<!-- LEFTMENU -->
+
+	<div id='leftmenu'>
+	
+<script language="JavaScript">
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+
+<script language="JavaScript">
+function popUp(URL) {
+  day = new Date();
+  id = day.getTime();
+  eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=1,scrollbars=1,location=1,statusbar=1,menubar=0,resizable=1,width=120,height=60,alwaysLowered=Yes');");
+}
+
+</script>
+
+
+<center>
+
+<div id='menu'>
+<a href="mailto:barrierefrei@ogame.de" title="Проблемы, касающиеся игроков со слабым зрением, отправляйте на barrierefrei@ogame.de." style="width:1px;"></a>
+<p style="width:110px;"><NOBR>Вселенная 5 (<a href="index.php?page=changelog&session=e29a41cbf218">v 0.84</a>)</NOBR></p>
+<table width="110" cellspacing="0" cellpadding="0">
+ <tr>
+  <td><img src="http://localhost/evolution/gfx/ogame-produktion.jpg" width="110" height="40" /></td>
+ </tr>
+
+    
+ <tr>
+
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=e29a41cbf218' accesskey="o">Обзор</a>
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+  <td>
+
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=imperium&session=e29a41cbf218&planettype=1&no_header=1' accesskey="r">Империя</a>
+    </font></div>
+  </td>
+ </tr>
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+
+     <a href='index.php?page=b_building&session=e29a41cbf218' accesskey="z">Постройки</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=e29a41cbf218' accesskey="s">Сырьё</a>
+
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+  <td>
+   <div align="center" ><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=e29a41cbf218' accesskey=""><font color='FF8900'>Скупщик</font></a> <!-- TODO Loca Keys -->
+
+    </font></div>
+  </td>
+ </tr>
+ 
+  
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=e29a41cbf218&mode=Forschung' accesskey="i">Исследования</a>
+    </font></div>
+
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=e29a41cbf218&mode=Flotte' accesskey="v">Верфь</a>
+    </font></div>
+  </td>
+
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=e29a41cbf218&mode=Flotte' accesskey="f">Флот</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=e29a41cbf218' accesskey="t">Технологии</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=e29a41cbf218&no_header=1' accesskey="g">Галактика</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=e29a41cbf218&mode=Verteidigung' accesskey="x">Оборона</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src="http://localhost/evolution/gfx/info-help.jpg" width="110" height="19"></td>
+
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=e29a41cbf218' accesskey="a">Мой альянс</a>
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://board.ogame.ru/" target="_blank" accesskey="m" >Форум</a><!-- external link to board -->
+   </font></div>
+  </td>
+ </tr>
+ 
+
+ 	<tr>
+
+	   <td align=center>
+	   <a id='darkmatter2' style='cursor:pointer; width:110px;'
+	     href='index.php?page=micropayment&session=e29a41cbf218' accesskey="o"><b>Офицерское казино</a></b>
+	   </div>
+	  </td>
+	 </tr>
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+
+  <a href='index.php?page=statistics&session=e29a41cbf218' accesskey="k">Статистика</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=e29a41cbf218' accesskey="p">Поиск</a>
+
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://tutorial.ogame.ru" target="_blank" accesskey="^" >Туториал</a><!-- external link to ogame tutorial -->
+   </font></div>
+
+  </td>
+ </tr>
+ 
+ <tr>
+  <td><img src="http://localhost/evolution/gfx/user-menu.jpg" width="110" height="35"></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+
+     <a href='index.php?page=messages&dsp=1&session=e29a41cbf218' accesskey="b">Сообщения</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=e29a41cbf218&no_header=1", "Notizen");' accesskey="e">Заметки</a>
+
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=e29a41cbf218' accesskey="d">Друзья</a>
+    </font></div>
+
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=e29a41cbf218' accesskey="n">Настройки</a>
+    </font></div>
+  </td>
+
+ </tr>
+
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=e29a41cbf218' accesskey="q">Выход</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ 
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href="http://ogame.ru/?ajax=true&page=rules" target="_blank">Правила</a> <!-- external link to rules -->
+   </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://agb.gameforge.de/index.php?lang=ru&art=impress&special=&&f_text=b1daf2&f_text_hover=ffffff&f_text_h=061229&f_text_hr=061229&f_text_hrbg=061229&f_text_hrborder=9EBDE4&f_text_font=arial%2C+arial%2C+arial%2C+sans-serif&f_bg=000000" target="_blank">О нас</a> <!-- external link to impressum -->
+   </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+
+	</div>
+
+<!-- END LEFTMENU -->
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<script>t=0;</script>  
+
+<table width="750" border="0" cellpadding="0" cellspacing="1">
+
+<!-- ## 
+<!-- ## Tablehead 
+<!-- ## -->
+		<tr height="20" valign="left">
+			<td class="c" colspan="3">Обзор империи</td>
+   		</tr>
+   		
+		<tr height="20">
+			<th colspan="1"><a href="index.php?page=imperium&no_header=1&session=e29a41cbf218&planettype=1">Планеты</a></th>
+			<th colspan="1"><a href="index.php?page=imperium&no_header=1&session=e29a41cbf218&planettype=3">Луны</a></th>
+
+			<th>&nbsp;</th>
+		</tr>
+
+<!-- ## 
+<!-- ## Planetimages 
+<!-- ## -->
+		<tr height="75">		
+			<th width="75"></th>			
+ 
+			<th style="padding: 20px;">  
+			
+			    <div style="padding: 2px; width: 75px; background-color: #87CEEB;">         
+
+        
+	            <div style="padding: 2px;   background-color: #00FF00;">      
+        
+        
+					<a href="index.php?page=overview&session=e29a41cbf218&cp=34413197">
+						<img src="http://localhost/evolution/planeten/mond.jpg" width="71" height="71" border="0">
+         			</a>
+
+
+				</div>
+
+
+				</div>
+			</th>	
+  
+		</tr>
+		
+<!-- ## 
+<!-- ## Name 
+<!-- ## -->
+   		<tr height="20">
+    		<th width="75">Название</th>
+
+ 
+			<th width="75" >Frigid Moon (Луна)</th>
+		</tr>
+
+<!-- ## 
+<!-- ## Coordinates 
+<!-- ## -->
+		<tr height="20">
+			<th width="75">Координаты</th>
+ 
+			<th width="75" ><a href="index.php?page=galaxy&galaxy=1&system=260&position=4&session=e29a41cbf218" >[1:260:4]</a></th>
+   		</tr>
+
+<!-- ## 
+<!-- ## Fields 
+<!-- ## -->
+   		<tr height="20">
+    		<th width="75">Поля</th>
+		    <th width="75" >14/16</th>
+	    </tr>
+
+<!-- ## 
+<!-- ## Resources-Head
+<!-- ## -->
+		<tr height="20">
+			<td align="left" class="c" colspan="3">Сырьё</td>
+
+		</tr>
+
+<!-- ## 
+<!-- ## Resources (without Energy)
+<!-- ## -->
+ 
+   		<tr height="20">
+    		<th width="75">Металл</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=e29a41cbf218&cp=34413197&planettype=3">
+				        1.290 
+			    </a>
+				/ 
+				0			</th>
+
+		</tr>
+ 
+   		<tr height="20">
+    		<th width="75">Кристалл</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=e29a41cbf218&cp=34413197&planettype=3">
+				        95.669 
+			    </a>
+				/ 
+				0			</th>
+
+		</tr>
+ 
+   		<tr height="20">
+    		<th width="75">Дейтерий</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=e29a41cbf218&cp=34413197&planettype=3">
+				        79.061 
+			    </a>
+				/ 
+				0			</th>
+
+		</tr>
+		
+
+<!-- ## 
+<!-- ## Resources-Energy
+<!-- ## -->
+		<tr height="20">
+			<th width="75">Энергия</th>
+ 
+ 
+			<th width="75" >
+                    0 
+ 
+				/ 
+			    0			</th>
+		</tr>
+
+<!-- ## 
+<!-- ## Buildings-Head
+<!-- ## -->
+		<tr height="20">
+			<td align="left" class="c" colspan="3">Постройки</td>
+		</tr>
+		
+<!-- ## 
+<!-- ## Buildings
+<!-- ## -->		
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=14&planettype=3">
+                    Фабрика роботов                </a>
+
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=e29a41cbf218&planet=34413197&cp=34413197\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=e29a41cbf218&planettype=3&no_header=1&modus=add&planet=34413197&techid=14';t=0;"
+  				   title="Щёлкнуть 1 раз: обзор, постройки, 2 раза: строить">       
+			    	<font color="red">
+                        5                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+	
+		</tr>
+		<tr height="20">
+			<th width="75">
+
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=41&planettype=3">
+                    Лунная база                </a>
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=e29a41cbf218&planet=34413197&cp=34413197\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=e29a41cbf218&planettype=3&no_header=1&modus=add&planet=34413197&techid=41';t=0;"
+  				   title="Щёлкнуть 1 раз: обзор, постройки, 2 раза: строить">       
+			    	<font color="red">
+                        5                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+	
+		</tr>
+
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=42&planettype=3">
+                    Сенсорная фаланга                </a>
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=e29a41cbf218&planet=34413197&cp=34413197\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=e29a41cbf218&planettype=3&no_header=1&modus=add&planet=34413197&techid=42';t=0;"
+  				   title="Щёлкнуть 1 раз: обзор, постройки, 2 раза: строить">       
+			    	<font color="red">
+                        4                    </font>                    
+       
+    				</font>
+
+    			</a>    
+			</th>			
+	
+		</tr>
+
+<!-- ## 
+<!-- ## Research-Head
+<!-- ## -->
+		<tr height="20">
+			<td align="left" class="c" colspan="3">Исследование</td>
+		</tr>
+		
+<!-- ## 
+<!-- ## Researches
+<!-- ## -->		
+		<tr height="20">
+			<th width="75">
+
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=106&planettype=3">
+	                Шпионаж    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    12			    	    
+    				</font>
+    			</a>
+
+    
+			</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=108&planettype=3">
+	                Компьютерная технология    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    11			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=109&planettype=3">
+	                Оружейная технология    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    13			    	    
+    				</font>
+    			</a>
+
+    
+			</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=110&planettype=3">
+	                Щитовая технология    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    12			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=111&planettype=3">
+	                Броня космических кораблей    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    14			    	    
+    				</font>
+    			</a>
+
+    
+			</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=113&planettype=3">
+	                Энергетическая технология    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    12			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=114&planettype=3">
+	                Гиперпространственная технология    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    8			    	    
+    				</font>
+    			</a>
+
+    
+			</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=115&planettype=3">
+	                Реактивный двигатель    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    10			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=117&planettype=3">
+	                Импульсный двигатель    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    9			    	    
+    				</font>
+    			</a>
+
+    
+			</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=118&planettype=3">
+	                Гиперпространственный двигатель    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    7			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=120&planettype=3">
+	                Лазерная технология    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    12			    	    
+    				</font>
+    			</a>
+
+    
+			</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=121&planettype=3">
+	                Ионная технология    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    8			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=122&planettype=3">
+	                Плазменная технология    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    7			    	    
+    				</font>
+    			</a>
+
+    
+			</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=123&planettype=3">
+	                Межгалактическая исследовательская сеть    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    2			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=124&planettype=3">
+	                Экспедиционная технология    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Forschung&planettype=3">
+				    <font color ="lime">
+			    	    6			    	    
+    				</font>
+    			</a>
+
+    
+			</th>
+			
+		</tr>
+
+<!-- ## 
+<!-- ## Ships-Head
+<!-- ## -->	
+		<tr height="20">
+			<td align="left" class="c" colspan="3">Корабли</td>
+		</tr>
+		
+<!-- ## 
+<!-- ## Ships
+<!-- ## -->			
+		<tr height="20">
+			<th width="75">
+
+				<a href="index.php?page=infos&session=e29a41cbf218&gid=210&planettype=3">
+                    Шпионский зонд                </a>
+      		</th>
+ 
+			<th width="75" >
+ 
+			    <a href="index.php?page=buildings&session=e29a41cbf218&cp=34413197&mode=Flotte&planettype=3">
+				    <font color ="lime">
+                        209					</font>
+
+				</a>    
+	    	</th>
+			
+	   </tr>
+
+<!-- ## 
+<!-- ## Defense-Head
+<!-- ## -->		
+		<tr height="20">
+			<td align="left" class="c" colspan="3">Оборона</td>
+		</tr>
+		
+<!-- ## 
+<!-- ## Defense
+<!-- ## -->				
+
+<!-- ## 
+<!-- ## Footer
+<!-- ## -->		
+
+</table>
+
+<br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+
+<div id='messagebox'>
+<center>
+</center>
+</div>
+<div id='errorbox'>
+<center>
+</center>
+</div>
+
+<script>
+messagebox.style.top='0px';
+headerHeight = 0;
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = "_blank";
+  }
+}
+
+
+</script>
+<style>
+.layer {
+	z-index:999999999;
+	position:absolute;
+	left: 0;
+	right: 0;
+	top: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 757px; 
+	height: 475px; 
+	background-color: #040e1e;
+	border: 3px double orange;
+	padding: 0;
+	opacity: .90;
+}
+</style>
+ </body>
+</html>

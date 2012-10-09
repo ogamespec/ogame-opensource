@@ -1,0 +1,467 @@
+
+<html>
+ <head>
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+
+  <script language="JavaScript">var session="dfa2978dfc3b";</script>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" href="css/combox.css">
+<link rel="stylesheet" type="text/css" href="http://ogamespec.com/enveloper/formate.css" />
+
+<title>Вселенная 4 ОГейм</title>
+
+  <script src="js/utilities.js" type="text/javascript"></script>
+  <script language="JavaScript">
+  </script>
+<script type="text/javascript" src="js/overLib/overlib.js"></script>
+<!-- HEADER -->
+
+<script language="JavaScript">
+function onBodyLoad() {
+    window.setTimeout("reloadImages()", 100);
+}
+
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != "")) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script>
+
+</head>
+<body style="overflow: hidden;" onload="onBodyLoad();" onunload="" >
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<!-- END HEADER -->
+
+<!-- LEFTMENU -->
+
+	<div id='leftmenu'>
+	
+<script language="JavaScript">
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+
+<script language="JavaScript">
+function popUp(URL) {
+  day = new Date();
+  id = day.getTime();
+  eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=1,scrollbars=1,location=1,statusbar=1,menubar=0,resizable=1,width=120,height=60,alwaysLowered=Yes');");
+}
+
+</script>
+
+
+<center>
+
+<div id='menu'>
+<a href="mailto:barrierefrei@ogame.de" title="Проблемы, касающиеся игроков со слабым зрением, отправляйте на barrierefrei@ogame.de." style="width:1px;"></a>
+<p style="width:110px;"><NOBR>Вселенная 4 (<a href="index.php?page=changelog&session=dfa2978dfc3b">v 0.84</a>)</NOBR></p>
+<table width="110" cellspacing="0" cellpadding="0">
+ <tr>
+  <td><img src="http://ogamespec.com/enveloper/gfx/ogame-produktion.jpg" width="110" height="40" /></td>
+ </tr>
+
+    
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=dfa2978dfc3b' accesskey="o">Обзор</a>
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=imperium&session=dfa2978dfc3b&planettype=1&no_header=1' accesskey="r">Империя</a>
+    </font></div>
+  </td>
+ </tr>
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=b_building&session=dfa2978dfc3b' accesskey="z">Постройки</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=dfa2978dfc3b' accesskey="s">Сырьё</a>
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+  <td>
+   <div align="center" ><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=dfa2978dfc3b' accesskey=""><font color='FF8900'>Скупщик</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+ </tr>
+ 
+  
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=dfa2978dfc3b&mode=Forschung' accesskey="i">Исследования</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=dfa2978dfc3b&mode=Flotte' accesskey="v">Верфь</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=dfa2978dfc3b&mode=Flotte' accesskey="f">Флот</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=dfa2978dfc3b' accesskey="t">Технологии</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=dfa2978dfc3b&no_header=1' accesskey="g">Галактика</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=dfa2978dfc3b&mode=Verteidigung' accesskey="x">Оборона</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src="http://ogamespec.com/enveloper/gfx/info-help.jpg" width="110" height="19"></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=dfa2978dfc3b' accesskey="a">Мой альянс</a>
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://board.ogame.ru/" target="_blank" accesskey="m" >Форум</a><!-- external link to board -->
+   </font></div>
+  </td>
+ </tr>
+ 
+
+ 	<tr>
+	   <td align=center>
+	   <a id='darkmatter2' style='cursor:pointer; width:110px;'
+	     href='index.php?page=micropayment&session=dfa2978dfc3b' accesskey="o"><b>Офицерское казино</a></b>
+	   </div>
+	  </td>
+	 </tr>
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+  <a href='index.php?page=statistics&session=dfa2978dfc3b' accesskey="k">Статистика</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=dfa2978dfc3b' accesskey="p">Поиск</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://tutorial.ogame.ru" target="_blank" accesskey="^" >Туториал</a><!-- external link to ogame tutorial -->
+   </font></div>
+  </td>
+ </tr>
+ 
+ <tr>
+  <td><img src="http://ogamespec.com/enveloper/gfx/user-menu.jpg" width="110" height="35"></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=messages&dsp=1&session=dfa2978dfc3b' accesskey="b">Сообщения</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=dfa2978dfc3b&no_header=1", "Notizen");' accesskey="e">Заметки</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=dfa2978dfc3b' accesskey="d">Друзья</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=dfa2978dfc3b' accesskey="n">Настройки</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=dfa2978dfc3b' accesskey="q">Выход</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ 
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href="http://ogame.ru/?ajax=true&page=rules" target="_blank">Правила</a> <!-- external link to rules -->
+   </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://agb.gameforge.de/index.php?lang=ru&art=impress&special=&&f_text=b1daf2&f_text_hover=ffffff&f_text_h=061229&f_text_hr=061229&f_text_hrbg=061229&f_text_hrborder=9EBDE4&f_text_font=arial%2C+arial%2C+arial%2C+sans-serif&f_bg=000000" target="_blank">О нас</a> <!-- external link to impressum -->
+   </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+
+	</div>
+
+<!-- END LEFTMENU -->
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<script>t=0;</script>  
+
+<table width="750" border="0" cellpadding="0" cellspacing="1">
+
+<!-- ## 
+<!-- ## Tablehead 
+<!-- ## -->
+		<tr height="20" valign="left">
+			<td class="c" colspan="2">Обзор империи</td>
+   		</tr>
+   		
+		<tr height="20">
+			<th colspan="0"><a href="index.php?page=imperium&no_header=1&session=dfa2978dfc3b&planettype=1">Планеты</a></th>
+			<th colspan="1"><a href="index.php?page=imperium&no_header=1&session=dfa2978dfc3b&planettype=3">Луны</a></th>
+			<th>&nbsp;</th>
+		</tr>
+
+<!-- ## 
+<!-- ## Planetimages 
+<!-- ## -->
+		<tr height="75">		
+			<th width="75"></th>			
+  
+		</tr>
+		
+<!-- ## 
+<!-- ## Name 
+<!-- ## -->
+   		<tr height="20">
+    		<th width="75">Название</th>
+		</tr>
+
+<!-- ## 
+<!-- ## Coordinates 
+<!-- ## -->
+		<tr height="20">
+			<th width="75">Координаты</th>
+   		</tr>
+
+<!-- ## 
+<!-- ## Fields 
+<!-- ## -->
+   		<tr height="20">
+    		<th width="75">Поля</th>
+	    </tr>
+
+<!-- ## 
+<!-- ## Resources-Head
+<!-- ## -->
+		<tr height="20">
+			<td align="left" class="c" colspan="2">Сырьё</td>
+		</tr>
+
+<!-- ## 
+<!-- ## Resources (without Energy)
+<!-- ## -->
+ 
+   		<tr height="20">
+    		<th width="75">Металл</th>
+		</tr>
+ 
+   		<tr height="20">
+    		<th width="75">Кристалл</th>
+		</tr>
+ 
+   		<tr height="20">
+    		<th width="75">Дейтерий</th>
+		</tr>
+		
+
+<!-- ## 
+<!-- ## Resources-Energy
+<!-- ## -->
+		<tr height="20">
+			<th width="75">Энергия</th>
+		</tr>
+
+<!-- ## 
+<!-- ## Buildings-Head
+<!-- ## -->
+		<tr height="20">
+			<td align="left" class="c" colspan="2">Постройки</td>
+		</tr>
+		
+<!-- ## 
+<!-- ## Buildings
+<!-- ## -->		
+
+<!-- ## 
+<!-- ## Research-Head
+<!-- ## -->
+		<tr height="20">
+			<td align="left" class="c" colspan="2">Исследование</td>
+		</tr>
+		
+<!-- ## 
+<!-- ## Researches
+<!-- ## -->		
+
+<!-- ## 
+<!-- ## Ships-Head
+<!-- ## -->	
+		<tr height="20">
+			<td align="left" class="c" colspan="2">Корабли</td>
+		</tr>
+		
+<!-- ## 
+<!-- ## Ships
+<!-- ## -->			
+
+<!-- ## 
+<!-- ## Defense-Head
+<!-- ## -->		
+		<tr height="20">
+			<td align="left" class="c" colspan="2">Оборона</td>
+		</tr>
+		
+<!-- ## 
+<!-- ## Defense
+<!-- ## -->				
+
+<!-- ## 
+<!-- ## Footer
+<!-- ## -->		
+
+</table>
+<br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+
+<div id='messagebox'>
+<center>
+</center>
+</div>
+<div id='errorbox'>
+<center>
+</center>
+</div>
+
+<script>
+messagebox.style.top='0px';
+headerHeight = 0;
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = "_blank";
+  }
+}
+
+</script>
+<style>
+.layer {
+	z-index:999999999;
+	position:absolute;
+	left: 0;
+	right: 0;
+	top: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 757px; 
+	height: 475px; 
+	background-color: #040e1e;
+	border: 3px double orange;
+	padding: 0;
+	opacity: .90;
+}
+</style>
+ </body>
+</html>

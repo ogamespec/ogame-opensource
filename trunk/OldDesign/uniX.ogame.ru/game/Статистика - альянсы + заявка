@@ -1,0 +1,4893 @@
+
+<html>
+ <head>
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+
+  <script language="JavaScript">var session="7a3017303da1";</script>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" href="css/combox.css">
+<link rel="stylesheet" type="text/css" href="http://uni20.ogame.de/evolution/formate.css" />
+
+<title>Uni20 OGame</title>
+
+  <script src="js/utilities.js" type="text/javascript"></script>
+  <script language="JavaScript">
+  </script>
+<script type="text/javascript" src="js/overLib/overlib.js"></script>
+<!-- HEADER -->
+
+<script language="JavaScript">
+function onBodyLoad() {
+    window.setTimeout("reloadImages()", 100);
+}
+
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != "")) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script>
+
+</head>
+<body style="overflow: hidden;" onload="onBodyLoad();" onunload="" >
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<div id='header_top'><center>
+<table class='header'>
+<tr class='header' >
+<td class='header' style='width:5;' >
+      <table class='header'>
+    <tr class='header'>
+     <td class='header'><img src="http://uni20.ogame.de/evolution/planeten/small/s_normaltempplanet02.jpg" width="50" height="50"></td>
+     <td class='header'>
+      <table class='header'>
+          <select size="1" onchange="haha(this)">
+                                                  <option value="/game/index.php?page=statistics&session=7a3017303da1&cp=1212051&mode=&gid=&messageziel=&re=0" selected>Heimatplanet                  <a href="index.php?page=galaxy&galaxy=1&system=41&position=8&session=7a3017303da1" >[1:41:8]</a></option>
+                      </select>
+      </table>
+     </td>
+    </tr>
+  </table></td>
+<td class='header'>   <table class='header' id='resources' border="0" cellspacing="0" cellpadding="0" padding-right='30' >
+        <tr class='header'>
+        
+             <td align="center" width="85" class='header'>
+              <img border="0" src="http://uni20.ogame.de/evolution/images/metall.gif" width="42" height="22">
+             </td>
+             
+             <td align="center" width="85" class='header'>
+              <img border="0" src="http://uni20.ogame.de/evolution/images/kristall.gif" width="42" height="22">
+             </td>
+             
+             <td align="center" width="85" class='header'>
+              <img border="0" src="http://uni20.ogame.de/evolution/images/deuterium.gif" width="42" height="22">
+             </td>
+                     
+             <td align="center" width="85" class='header'>
+             <a href=index.php?page=micropayment&session=7a3017303da1>
+              <img border="0" src="img/dm_klein_2.jpg" width="42" height="22" title="Dunkle Materie"></a>
+             </td>       
+                         
+             <td align="center" width="85" class='header'>
+              <img border="0" src="http://uni20.ogame.de/evolution/images/energie.gif" width="42" height="22">
+             </td>
+        </tr>
+
+        <tr class='header'>
+         <td align="center" class='header' width="85"><i><b><font color="#ffffff">Metall</font></b></i></td>
+         <td align="center" class='header' width="85"><i><b><font color="#ffffff">Kristall</font></b></i></td>
+         <td align="center" class='header' width="85"><i><b><font color="#ffffff">Deuterium</font></b></i></td>
+                    <td align="center" class='header' width="85"><i><b><font color="#ffffff">Dunkle Materie</font></b></i></td> 
+              
+         <td align="center" class='header' width="85"><i><b><font color="#ffffff">Energie</font></b></i></td>
+        </tr>
+        <tr class='header'>
+         <td align="center" class='header' width="90"><font >500</font></td>
+         <td align="center" class='header' width="90"><font >500</font></td>
+         <td align="center" class='header' width="90"><font >0</font></td>
+                     <td align="center" class='header' width="90"><font color="#FFFFFF">0</font></DIV></td>
+            
+         <td align="center" class='header' width="90"><font >0</font>/0</td>
+        </tr>
+   </table></td>
+    <td class='header'>
+<table class='header' align=left>
+     <tr class='header'>
+
+
+     <td align="center" width="35" class='header'>
+         <a href='index.php?page=micropayment&session=7a3017303da1&session=7a3017303da1' accesskey="o">
+      <img border="0" src="img/commander_ikon_un.gif" width="32" height="32" alt="OGame Commander"
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>OGame Commander</font><br><br><a href=index.php?page=micropayment&session=7a3017303da1&session=7a3017303da1><font size=1 color=lime>Jetzt bestellen!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+      </a>
+     </td>
+     <td align="center" width="35" class='header'>
+      <a href='index.php?page=micropayment&session=7a3017303da1&session=7a3017303da1' accesskey="o">
+      <img border="0" src="img/admiral_ikon_un.gif" width="32" height="32" alt="Flottenadmiral"
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>Flottenadmiral</font><br><font size=1 color=skyblue>&amp;nbsp;Max. Flottenanzahl +2</font><br><br><a href=index.php?page=micropayment&session=7a3017303da1&session=7a3017303da1><font size=1 color=lime>Jetzt bestellen!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+
+      </a>
+     </td>
+     <td align="center" width="35" class='header'>
+      <a href='index.php?page=micropayment&session=7a3017303da1&session=7a3017303da1' accesskey="o">
+      <img border="0" src="img/ingenieur_ikon_un.gif" width="32" height="32" alt="Ingenieur"
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>Ingenieur</font><br><font size=1 color=skyblue>Halbiert Verluste an Verteidigungsanlagen,&lt;br&gt;&amp;nbsp;+10% Energieproduktion</font><br><br><a href=index.php?page=micropayment&session=7a3017303da1&session=7a3017303da1><font size=1 color=lime>Jetzt bestellen!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+      </a>
+     </td>
+     <td align="center" width="35" class='header'>
+      <a href='index.php?page=micropayment&session=7a3017303da1&session=7a3017303da1' accesskey="o">
+      <img border="0" src="img/geologe_ikon_un.gif" width="32" height="32" alt="Geologe"
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>Geologe</font><br><font size=1 color=skyblue>+10% Minenertrag</font><br><br><a href=index.php?page=micropayment&session=7a3017303da1&session=7a3017303da1><font size=1 color=lime>Jetzt bestellen!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+      </a>
+     </td>
+     <td align="center" width="35" class='header'>
+      <a href='index.php?page=micropayment&session=7a3017303da1&session=7a3017303da1' accesskey="o">
+      <img border="0" src="img/technokrat_ikon_un.gif" width="32" height="32" alt="Technokrat" 
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>Technokrat</font><br><font size=1 color=skyblue>+2 Spionagestufen,&lt;br&gt;25% weniger Forschungszeit</font><br><br><a href=index.php?page=micropayment&session=7a3017303da1&session=7a3017303da1><font size=1 color=lime>Jetzt bestellen!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+      </a>
+     </td>
+     <td align="center" class='header'></td>
+    </tr>
+</table></td>
+</tr>
+</table>
+</div><!-- END HEADER -->
+
+<!-- LEFTMENU -->
+
+    <div id='leftmenu'>
+    
+<script language="JavaScript">
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+
+<script language="JavaScript">
+function popUp(URL) {
+  day = new Date();
+  id = day.getTime();
+  eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=1,scrollbars=1,location=1,statusbar=1,menubar=0,resizable=1,width=120,height=60,alwaysLowered=Yes');");
+}
+
+</script>
+
+
+<center>
+
+<div id='menu'>
+<a href="mailto:barrierefrei@ogame.de" title="Blindenspezifische Probleme bitte an barrierefrei@ogame.de." style="width:1px;"></a>
+<p style="width:110px;"><NOBR>Universum 20 (<a href="index.php?page=changelog&session=7a3017303da1">v 0.84</a>)</NOBR></p>
+<table width="110" cellspacing="0" cellpadding="0">
+ <tr>
+  <td><img src="http://uni20.ogame.de/evolution/gfx/ogame-produktion.jpg" width="110" height="40" /></td>
+ </tr>
+
+    
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=7a3017303da1' accesskey="u">Ubersicht</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=b_building&session=7a3017303da1' accesskey="g">Gebaude</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=7a3017303da1' accesskey="r">Rohstoffe</a>
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+  <td>
+   <div align="center" ><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=7a3017303da1' accesskey=""><font color='FF8900'>Handler</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+ </tr>
+ 
+  
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=7a3017303da1&mode=Forschung' accesskey="f">Forschung</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=7a3017303da1&mode=Flotte' accesskey="w">Schiffswerft</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=7a3017303da1&mode=Flotte' accesskey="l">Flotte</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=7a3017303da1' accesskey="t">Technik</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=7a3017303da1&no_header=1' accesskey="x">Galaxie</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=7a3017303da1&mode=Verteidigung' accesskey="v">Verteidigung</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src="http://uni20.ogame.de/evolution/gfx/info-help.jpg" width="110" height="19"></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=7a3017303da1' accesskey="a">Allianzen</a>
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://board.ogame.de" target="_blank" accesskey="1" >Forum</a><!-- external link to board -->
+   </font></div>
+  </td>
+ </tr>
+ 
+
+    <tr>
+       <td align=center>
+       <a id='darkmatter2' style='cursor:pointer; width:110px;'
+         href='index.php?page=micropayment&session=7a3017303da1' accesskey="o"><b>Offizierskasino</a></b>
+       </div>
+      </td>
+     </tr>
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+  <a href='index.php?page=statistics&session=7a3017303da1' accesskey="k">Statistiken</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=7a3017303da1' accesskey="s">Suche</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://tutorial.ogame.de" target="_blank" accesskey="h" >Hilfe</a><!-- external link to ogame tutorial -->
+   </font></div>
+  </td>
+ </tr>
+ 
+ <tr>
+  <td><img src="http://uni20.ogame.de/evolution/gfx/user-menu.jpg" width="110" height="35"></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=messages&dsp=1&session=7a3017303da1' accesskey="n">Nachrichten</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=7a3017303da1&no_header=1", "Notizen");' accesskey="z">Notizen</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=7a3017303da1' accesskey="b">Buddylist</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=7a3017303da1' accesskey="e">Einstellungen</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=7a3017303da1' accesskey="q">Logout</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ 
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href="http://board.ogame.de/thread.php?threadid=435281" target="_blank">Regeln</a> <!-- external link to rules -->
+   </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://agb.gameforge.de/index.php?lang=de&art=impress&special=&&f_text=b1daf2&f_text_hover=ffffff&f_text_h=061229&f_text_hr=061229&f_text_hrbg=061229&f_text_hrborder=9EBDE4&f_text_font=arial%2C+arial%2C+arial%2C+sans-serif&f_bg=000000" target="_blank">Impressum</a> <!-- external link to impressum -->
+   </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+
+    </div>
+
+<!-- END LEFTMENU -->
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<!-- begin header form -->
+<form method="post" action='index.php?page=statistics&session=7a3017303da1' >
+  
+  <!-- begin head table -->
+  <table width="525">
+    <tr>
+      <td class="c">Statistiken (Stand: 2011-03-14, 10:47:31)</td>
+    </tr>
+    <tr>
+      <th>
+        
+
+        Welche&nbsp;
+          
+        <select name="who">
+          <option value="player" >Spieler</option>
+          <option value="ally" selected>Ally</option>
+        </select>
+          
+        &nbsp;ist bei&nbsp;
+              
+        <select name="type">
+          <option value="ressources" selected>Punkten</option>
+          <option value="fleet" >Flotten</option>
+          <option value="research" >Forschung</option>
+        </select>
+          
+        &nbsp;auf Platz        <select name="start">
+          <option value="-1" selected>[Eigene Position]</option>
+          <option value="1" >1-100</option>
+          <option value="101" >101-200</option>
+          <option value="201" >201-300</option>
+        </select>
+          
+        <input type="hidden" id="sort_per_member" name="sort_per_member" value="0" />
+        <input type=submit value="Absenden">
+      </th>
+    </tr>
+  </table>
+  <!-- end head table -->
+    
+</form>
+<!-- end header form -->
+  
+  
+<!-- begin statistic data -->
+<!-- begin ally -->
+<table width="519">
+  <tr>
+    <td class ="c" width="30">Platz</td>
+    <td class ="c">Allianz</td>
+    <td class="c">&nbsp;</td>
+    <td class ="c">Memb.</td>
+    <td class ="c"><a href="#" onClick="document.getElementById('sort_per_member').value=0; javascript:document.forms[0].submit();">Punkte</a></td>
+    <td class ="c"><a href="#" onClick="document.getElementById('sort_per_member').value=1; javascript:document.forms[0].submit();">pro Mitglied</a></td>
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      1&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=12276" target='_ally'>
+ 
+      ILLU    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=ILLU">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      8 </th>
+    
+    <!-- points -->
+    <th>
+      94.963.235     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      11.870.404      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      2&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=14005" target='_ally'>
+ 
+      PvD     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=PvD">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      9 </th>
+    
+    <!-- points -->
+    <th>
+      82.082.324     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      9.120.258      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      3&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23004" target='_ally'>
+ 
+      F  E    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=F++E">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      17    </th>
+    
+    <!-- points -->
+    <th>
+      67.625.329     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      3.977.961      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      4&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=20753" target='_ally'>
+ 
+      L.D     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=L.D">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      19    </th>
+    
+    <!-- points -->
+    <th>
+      47.820.189     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      2.516.852      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      5&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=14007" target='_ally'>
+ 
+      BBandFF     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=BBandFF">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      42.733.417     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      21.366.709      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      6&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23512" target='_ally'>
+ 
+      eXa     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=eXa">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      8 </th>
+    
+    <!-- points -->
+    <th>
+      32.897.034     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      4.112.129      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      7&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=22173" target='_ally'>
+ 
+      THOR    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=THOR">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      8 </th>
+    
+    <!-- points -->
+    <th>
+      26.750.961     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      3.343.870      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      8&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=5181" target='_ally'>
+ 
+      D.R.F   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=D.R.F">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      7 </th>
+    
+    <!-- points -->
+    <th>
+      25.537.506     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      3.648.215      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      9&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=4972" target='_ally'>
+ 
+      TME     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=TME">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      3 </th>
+    
+    <!-- points -->
+    <th>
+      12.478.308     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      4.159.436      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      10&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=7108" target='_ally'>
+ 
+      Peitsch     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=Peitsch">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      11.333.709     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      5.666.855      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      11&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=19253" target='_ally'>
+ 
+      HATE    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=HATE">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      3 </th>
+    
+    <!-- points -->
+    <th>
+      10.816.007     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      3.605.336      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      12&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=3286" target='_ally'>
+ 
+      BIFKA   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=BIFKA">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      9.839.954     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      9.839.954      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      13&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24075" target='_ally'>
+ 
+      D.Y.F   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=D.Y.F">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      19    </th>
+    
+    <!-- points -->
+    <th>
+      9.459.452     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      497.866      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      14&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=21982" target='_ally'>
+ 
+      MaP     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=MaP">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      6.939.580     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      6.939.580      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      15&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23033" target='_ally'>
+ 
+      ZzZzzzzz    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=ZzZzzzzz">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      5.930.861     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      5.930.861      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      16&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=18803" target='_ally'>
+ 
+      eragon      </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=eragon">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      3 </th>
+    
+    <!-- points -->
+    <th>
+      5.561.985     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      1.853.995      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      17&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=10095" target='_ally'>
+ 
+      TKDZ    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=TKDZ">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      5.266.594     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      5.266.594      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      18&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23624" target='_ally'>
+ 
+      PGF     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=PGF">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      9 </th>
+    
+    <!-- points -->
+    <th>
+      5.003.332     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      555.926      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      19&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=22752" target='_ally'>
+ 
+      a.b.o.      </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=a.b.o.">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      4 </th>
+    
+    <!-- points -->
+    <th>
+      4.579.314     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      1.144.829      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      20&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23859" target='_ally'>
+ 
+      OGame.ru    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=OGame.ru">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      16    </th>
+    
+    <!-- points -->
+    <th>
+      4.577.210     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      286.076      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      21&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=6010" target='_ally'>
+ 
+      DK      </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=DK">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      4.295.608     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      2.147.804      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      22&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=22031" target='_ally'>
+ 
+      TRS     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=TRS">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      4.142.746     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      4.142.746      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      23&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23528" target='_ally'>
+ 
+      ¹ 1     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=%E2%84%96+1">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      7 </th>
+    
+    <!-- points -->
+    <th>
+      4.128.547     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      589.792      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      24&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=16143" target='_ally'>
+ 
+      O.N.    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=O.N.">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      4.114.140     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      4.114.140      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      25&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24052" target='_ally'>
+ 
+      Anti_RD     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=Anti_RD">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      14    </th>
+    
+    <!-- points -->
+    <th>
+      3.883.306     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      277.379      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      26&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23901" target='_ally'>
+ 
+      ClawE.nl    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=ClawE.nl">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      14    </th>
+    
+    <!-- points -->
+    <th>
+      3.597.365     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      256.955      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      27&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24376" target='_ally'>
+ 
+      NEIN    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=NEIN">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      2.781.228     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      2.781.228      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      28&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=lime>+1</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='lime'>+</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23363" target='_ally'>
+ 
+      Gremium     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=Gremium">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      5 </th>
+    
+    <!-- points -->
+    <th>
+      2.506.119     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      501.224      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      29&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=red>-1</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='red'>-</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=7322" target='_ally'>
+ 
+      ERZENGEL    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=ERZENGEL">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      3 </th>
+    
+    <!-- points -->
+    <th>
+      2.495.371     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      831.790      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      30&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23953" target='_ally'>
+ 
+      NZS     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=NZS">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      5 </th>
+    
+    <!-- points -->
+    <th>
+      2.292.320     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      458.464      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      31&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24394" target='_ally'>
+ 
+      AOM     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=AOM">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      2.184.980     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      2.184.980      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      32&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=19010" target='_ally'>
+ 
+      FaKeRz      </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=FaKeRz">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      2.174.743     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      2.174.743      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      33&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24054" target='_ally'>
+ 
+      -PL-    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=-PL-">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      9 </th>
+    
+    <!-- points -->
+    <th>
+      1.990.272     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      221.141      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      34&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=22028" target='_ally'>
+ 
+      PDU     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=PDU">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      5 </th>
+    
+    <!-- points -->
+    <th>
+      1.937.018     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      387.404      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      35&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23407" target='_ally'>
+ 
+      The Gang    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=The+Gang">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      1.857.298     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      1.857.298      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      36&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=11862" target='_ally'>
+ 
+      ZENITH      </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=ZENITH">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      3 </th>
+    
+    <!-- points -->
+    <th>
+      1.834.391     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      611.464      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      37&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23685" target='_ally'>
+ 
+      eVo K   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=eVo+K">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      6 </th>
+    
+    <!-- points -->
+    <th>
+      1.753.545     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      292.258      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      38&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23778" target='_ally'>
+ 
+      REUNION     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=REUNION">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      5 </th>
+    
+    <!-- points -->
+    <th>
+      1.626.520     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      325.304      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      39&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24390" target='_ally'>
+ 
+      GENESIS     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=GENESIS">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      3 </th>
+    
+    <!-- points -->
+    <th>
+      1.595.102     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      531.701      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      40&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=22663" target='_ally'>
+ 
+      CoH     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=CoH">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      3 </th>
+    
+    <!-- points -->
+    <th>
+      1.533.880     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      511.293      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      41&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23460" target='_ally'>
+ 
+      S  F    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=S++F">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      4 </th>
+    
+    <!-- points -->
+    <th>
+      1.505.463     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      376.366      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      42&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23408" target='_ally'>
+ 
+      x..V..x     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=x..V..x">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      1.182.088     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      591.044      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      43&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=120" target='_ally'>
+ 
+      ooTPKoo     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=ooTPKoo">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      1.154.370     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      1.154.370      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      44&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=lime>+1</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='lime'>+</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=17613" target='_ally'>
+ 
+      Terraner    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=Terraner">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      1.106.275     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      1.106.275      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      45&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=red>-1</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='red'>-</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23849" target='_ally'>
+ 
+      RdOD    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=RdOD">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      8 </th>
+    
+    <!-- points -->
+    <th>
+      1.105.210     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      138.151      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      46&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23303" target='_ally'>
+ 
+      LuS     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=LuS">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      1.062.376     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      531.188      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      47&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24174" target='_ally'>
+ 
+      FMO     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=FMO">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      4 </th>
+    
+    <!-- points -->
+    <th>
+      913.352     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      228.338      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      48&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23495" target='_ally'>
+ 
+      GvP     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=GvP">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      889.850     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      444.925      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      49&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=22036" target='_ally'>
+ 
+      kiBa    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=kiBa">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      837.047     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      418.524      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      50&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23604" target='_ally'>
+ 
+      KoU     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=KoU">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      4 </th>
+    
+    <!-- points -->
+    <th>
+      654.015     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      163.504      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      51&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24330" target='_ally'>
+ 
+      Anti_RDW    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=Anti_RDW">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      8 </th>
+    
+    <!-- points -->
+    <th>
+      639.377     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      79.922      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      52&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24378" target='_ally'>
+ 
+      S.A.C   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=S.A.C">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      565.086     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      282.543      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      53&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23728" target='_ally'>
+ 
+      Nexus   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=Nexus">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      3 </th>
+    
+    <!-- points -->
+    <th>
+      549.305     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      183.102      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      54&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24329" target='_ally'>
+ 
+      Energy_N    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=Energy_N">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      4 </th>
+    
+    <!-- points -->
+    <th>
+      490.434     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      122.609      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      55&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=17934" target='_ally'>
+ 
+      PLNT    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=PLNT">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      463.482     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      463.482      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      56&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24361" target='_ally'>
+ 
+      N.o.D.      </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=N.o.D.">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      17    </th>
+    
+    <!-- points -->
+    <th>
+      415.037     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      24.414      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      57&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=19954" target='_ally'>
+ 
+      Joint   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=Joint">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      394.835     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      394.835      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      58&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=21912" target='_ally'>
+ 
+      MC      </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=MC">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      374.867     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      374.867      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      59&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23899" target='_ally'>
+ 
+      UFjO    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=UFjO">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      374.570     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      374.570      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      60&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=22758" target='_ally'>
+ 
+      AK 47   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=AK+47">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      310.122     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      310.122      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      61&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24260" target='_ally'>
+ 
+      .o.GdS.o    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=.o.GdS.o">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      3 </th>
+    
+    <!-- points -->
+    <th>
+      281.267     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      93.756      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      62&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24207" target='_ally'>
+ 
+      GSE     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=GSE">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      4 </th>
+    
+    <!-- points -->
+    <th>
+      278.244     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      69.561      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      63&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23539" target='_ally'>
+ 
+      <= GA =>    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=%3C%3D+GA+%3D%3E">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      271.766     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      135.883      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      64&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24234" target='_ally'>
+ 
+      CONS    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=CONS">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      260.691     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      260.691      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      65&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=22840" target='_ally'>
+ 
+      Boston      </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=Boston">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      224.286     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      112.143      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      66&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24168" target='_ally'>
+ 
+      OLD     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=OLD">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      9 </th>
+    
+    <!-- points -->
+    <th>
+      216.337     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      24.037      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      67&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24071" target='_ally'>
+ 
+      BW.     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=BW.">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      200.772     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      100.386      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      68&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=22225" target='_ally'>
+ 
+      010     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=010">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      177.586     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      177.586      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      69&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24302" target='_ally'>
+ 
+      Yakuza      </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=Yakuza">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      164.733     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      164.733      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      70&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24277" target='_ally'>
+ 
+      404     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=404">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      160.920     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      80.460      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      71&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24375" target='_ally'>
+ 
+      I C     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=I+C">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      12    </th>
+    
+    <!-- points -->
+    <th>
+      134.150     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      11.179      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      72&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=21595" target='_ally'>
+ 
+      alone   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=alone">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      108.239     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      108.239      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      73&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=21354" target='_ally'>
+ 
+      C.D     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=C.D">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      105.541     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      105.541      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      74&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24027" target='_ally'>
+ 
+      M.A.B.      </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=M.A.B.">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      103.389     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      103.389      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      75&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24237" target='_ally'>
+ 
+      LIFE    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=LIFE">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      99.019     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      49.510      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      76&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24154" target='_ally'>
+ 
+      DSH     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=DSH">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      97.437     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      48.719      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      77&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23510" target='_ally'>
+ 
+      0odRzo0     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=0odRzo0">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      97.280     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      97.280      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      78&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23153" target='_ally'>
+ 
+      UMT     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=UMT">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      87.091     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      43.546      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      79&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23939" target='_ally'>
+ 
+      kK.     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=kK.">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      85.381     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      85.381      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      80&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23992" target='_ally'>
+ 
+      ru Ogame    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=ru+Ogame">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      84.559     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      42.280      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      81&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23761" target='_ally'>
+ 
+      RDO66   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=RDO66">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      83.075     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      41.538      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      82&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24000" target='_ally'>
+ 
+      C M B   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=C+M+B">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      81.167     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      81.167      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      83&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24247" target='_ally'>
+ 
+      Energy      </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=Energy">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      77.972     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      77.972      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      84&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23470" target='_ally'>
+ 
+      GIRLS   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=GIRLS">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      69.201     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      69.201      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      85&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24366" target='_ally'>
+ 
+      .77.    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=.77.">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      68.875     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      34.438      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      86&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23842" target='_ally'>
+ 
+      RDO     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=RDO">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      65.651     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      32.826      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      87&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24233" target='_ally'>
+ 
+      HSB     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=HSB">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      3 </th>
+    
+    <!-- points -->
+    <th>
+      65.052     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      21.684      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      88&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24171" target='_ally'>
+ 
+      SFC     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=SFC">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      62.488     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      31.244      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      89&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=20874" target='_ally'>
+ 
+      OMA     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=OMA">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      61.446     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      61.446      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      90&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23848" target='_ally'>
+ 
+      _-IB-_      </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=_-IB-_">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      4 </th>
+    
+    <!-- points -->
+    <th>
+      60.109     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      15.027      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      91&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24227" target='_ally'>
+ 
+      ~WM~    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=%7EWM%7E">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      53.776     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      26.888      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      92&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=22953" target='_ally'>
+ 
+      C.o.S   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=C.o.S">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      52.947     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      52.947      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      93&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23608" target='_ally'>
+ 
+      F S M   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=F+S+M">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      52.040     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      52.040      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      94&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24360" target='_ally'>
+ 
+      B_V     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=B_V">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      3 </th>
+    
+    <!-- points -->
+    <th>
+      50.701     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      16.900      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      95&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=lime>+1</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='lime'>+</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24295" target='_ally'>
+ 
+      FLACK   </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=FLACK">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      5 </th>
+    
+    <!-- points -->
+    <th>
+      49.646     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      9.929      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      96&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=red>-1</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='red'>-</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23105" target='_ally'>
+ 
+      Empires     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=Empires">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      49.380     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      49.380      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      97&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=23718" target='_ally'>
+ 
+      L.o.v.E     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=L.o.v.E">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      48.693     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      24.347      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      98&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24282" target='_ally'>
+ 
+      Energy W    </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=Energy+W">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      40.966     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      20.483      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      99&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24182" target='_ally'>
+ 
+      TheOne      </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=TheOne">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      1 </th>
+    
+    <!-- points -->
+    <th>
+      40.288     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      40.288      
+              
+    </th>
+    
+  </tr>
+  
+  <tr>
+  
+    <!-- rank -->
+    <th>
+      100&nbsp;&nbsp;
+            
+      <a href='#' onmouseover='return overlib("<font color=87CEEB>*</font><br/><font color=white>Seit dem 2011-03-14 04:05:02");' onmouseout='return nd();'><font color='87CEEB'>*</font></a>
+    </th>
+    
+    <!--  name -->
+    <th>
+      
+      <a href="ainfo.php?allyid=24389" target='_ally'>
+ 
+      KFM     </a>
+    </th>
+    
+    <!-- bewerben -->
+    <th>
+      <a href="index.php?page=bewerben&session=7a3017303da1&allytag=KFM">
+        <img src="http://uni20.ogame.de/evolution/img/m.gif" border="0" alt="Nachricht schreiben" />
+      </a>
+      &nbsp;
+    </th>
+    
+    <!-- amount members -->
+    <th>
+      2 </th>
+    
+    <!-- points -->
+    <th>
+      39.521     
+      
+    </th>
+    
+    <!-- points per member -->
+    <th>
+      
+      19.761      
+              
+    </th>
+    
+  </tr>
+  
+</table>
+<!-- end ally -->
+
+<!-- end statistic data --><br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+
+<div id='messagebox'>
+<center>
+</center>
+</div>
+<div id='errorbox'>
+<center>
+Dein Spielerkonto ist noch nicht aktiviert. Bitte gehe in deine <a href=index.php?page=options&session=7a3017303da1>Einstellungen</a>, gebe Deine E-Mail-Adresse an und lasse Dir einen Freischaltungslink zusenden.<br></center>
+</div>
+
+<script>
+headerHeight = 81;
+errorbox.style.display='block';
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = "_blank";
+  }
+}
+
+</script>
+<style>
+.layer {
+    z-index:999999999;
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 757px; 
+    height: 475px; 
+    background-color: #040e1e;
+    border: 3px double orange;
+    padding: 0;
+    opacity: .90;
+}
+</style>
+ </body>
+</html>
