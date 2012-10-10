@@ -154,19 +154,15 @@ if ( $_GET['lgn'] == 1 )
             	title="Металл:| &lt;table class=&quot;resourceTooltip&quot;&gt;
             &lt;tr&gt;
                 &lt;th&gt;Доступно:&lt;/th&gt;
-                &lt;td&gt;&lt;span class=&quot;&quot;&gt;516&lt;/span&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;span class=&quot;&quot;&gt;<?=nicenum($aktplanet['m']);?>&lt;/span&gt;&lt;/td&gt;
             &lt;/tr&gt;
             &lt;tr&gt;
                 &lt;th&gt;Вместимость хранилищ:&lt;/th&gt;
-                &lt;td&gt;&lt;span class=&quot;&quot;&gt;10.000&lt;/span&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;span class=&quot;&quot;&gt;<?=nicenum($aktplanet['mmax']);?>&lt;/span&gt;&lt;/td&gt;
             &lt;/tr&gt;
             &lt;tr&gt;
                 &lt;th&gt;Сейчас производится:&lt;/th&gt;
                 &lt;td&gt;&lt;span class=&quot;undermark&quot;&gt;+120&lt;/span&gt;&lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;th&gt;Вместимость укрытий:&lt;/th&gt;
-                &lt;td&gt;&lt;span class=&quot;overermark&quot;&gt;0&lt;/span&gt;&lt;/td&gt;
             &lt;/tr&gt;
         &lt;/table&gt;">
                 <img src="red_images/ccdb3fc0cb8f7b4fc8633f5f5eaa86.gif" />
@@ -179,19 +175,15 @@ if ( $_GET['lgn'] == 1 )
             	title="Кристалл:| &lt;table class=&quot;resourceTooltip&quot;&gt;
             &lt;tr&gt;
                 &lt;th&gt;Доступно:&lt;/th&gt;
-                &lt;td&gt;&lt;span class=&quot;&quot;&gt;508&lt;/span&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;span class=&quot;&quot;&gt;<?=nicenum($aktplanet['k']);?>&lt;/span&gt;&lt;/td&gt;
             &lt;/tr&gt;
             &lt;tr&gt;
                 &lt;th&gt;Вместимость хранилищ:&lt;/th&gt;
-                &lt;td&gt;&lt;span class=&quot;&quot;&gt;10.000&lt;/span&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;span class=&quot;&quot;&gt;<?=nicenum($aktplanet['kmax']);?>&lt;/span&gt;&lt;/td&gt;
             &lt;/tr&gt;
             &lt;tr&gt;
                 &lt;th&gt;Сейчас производится:&lt;/th&gt;
                 &lt;td&gt;&lt;span class=&quot;undermark&quot;&gt;+60&lt;/span&gt;&lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;th&gt;Вместимость укрытий:&lt;/th&gt;
-                &lt;td&gt;&lt;span class=&quot;overermark&quot;&gt;0&lt;/span&gt;&lt;/td&gt;
             &lt;/tr&gt;
         &lt;/table&gt;">
                 <img src="red_images/452d7fd11d754e0f09ec2b2350e063.gif" />
@@ -204,19 +196,15 @@ if ( $_GET['lgn'] == 1 )
             	title="Дейтерий:| &lt;table class=&quot;resourceTooltip&quot;&gt;
             &lt;tr&gt;
                 &lt;th&gt;Доступно:&lt;/th&gt;
-                &lt;td&gt;&lt;span class=&quot;&quot;&gt;0&lt;/span&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;span class=&quot;&quot;&gt;<?=nicenum($aktplanet['d']);?>&lt;/span&gt;&lt;/td&gt;
             &lt;/tr&gt;
             &lt;tr&gt;
                 &lt;th&gt;Вместимость хранилищ:&lt;/th&gt;
-                &lt;td&gt;&lt;span class=&quot;&quot;&gt;10.000&lt;/span&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;span class=&quot;&quot;&gt;<?=nicenum($aktplanet['dmax']);?>&lt;/span&gt;&lt;/td&gt;
             &lt;/tr&gt;
             &lt;tr&gt;
                 &lt;th&gt;Сейчас производится:&lt;/th&gt;
                 &lt;td&gt;&lt;span class=&quot;overmark&quot;&gt;0&lt;/span&gt;&lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;th&gt;Вместимость укрытий:&lt;/th&gt;
-                &lt;td&gt;&lt;span class=&quot;overermark&quot;&gt;0&lt;/span&gt;&lt;/td&gt;
             &lt;/tr&gt;
         &lt;/table&gt;">
                 <img src="red_images/e37d45b77518ddf8bbccd5e772a395.gif" />
@@ -229,11 +217,11 @@ if ( $_GET['lgn'] == 1 )
             	title="Энергия:| &lt;table class=&quot;resourceTooltip&quot;&gt;
             &lt;tr&gt;
                 &lt;th&gt;Доступно:&lt;/th&gt;
-                &lt;td&gt;&lt;span class=&quot;&quot;&gt;0&lt;/span&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;span class=&quot;&quot;&gt;<?=nicenum($aktplanet['enow']);?>&lt;/span&gt;&lt;/td&gt;
             &lt;/tr&gt;
             &lt;tr&gt;
                 &lt;th&gt;Сейчас производится:&lt;/th&gt;
-                &lt;td&gt;&lt;span class=&quot;overmark&quot;&gt;0&lt;/span&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;span class=&quot;overmark&quot;&gt;<?=nicenum($aktplanet['emax']);?>&lt;/span&gt;&lt;/td&gt;
             &lt;/tr&gt;
             &lt;tr&gt;
                 &lt;th&gt;Потребление:&lt;/th&gt;
