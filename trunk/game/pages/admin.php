@@ -16,8 +16,6 @@
 // - Настройки Вселенной (только админ)
 // - Ошибки (только админ)
 
-SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
-if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 if ( $GlobalUser['admin'] == 0 ) RedirectHome ();    // обычным пользователям доступ запрещен
 
 loca_add ( "common", $GlobalUser['lang'] );

@@ -2,9 +2,6 @@
 
 // Список заявок на вступление в альянс.
 
-SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
-if (CheckSession ( $_GET['session'] ) == FALSE) die ();
-
 loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 
