@@ -6,7 +6,7 @@
 // TODO : ПОСТРОЙКИ
 // TODO : ИССЛЕДОВАНИЯ
 // TODO : ВЕРФЬ
-// TODO : картинки лун и планет
+// TODO : картинки лун
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], (int)$_GET['cp']);
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -54,18 +54,25 @@ function planet_link ($planet)
 
             <!-- CONTENT AREA -->
             <div id="contentWrapper">
-                                    <div id="eventboxContent" style="display: none"><img height="16" width="16" src="red_images/3f9884806436537bdec305aa26fc60.gif" /></div>
+                                                    <div id="eventboxContent" style="display: none"><img height="16" width="16" src="red_images/3f9884806436537bdec305aa26fc60.gif" /></div>
                                 
 <div id="inhalt">
     <div id="planet" style="background-image:url(<?=planet_header($aktplanet);?>);">
-        <h2>
-            <a href="javascript:void(0);" class="openPlanetrenameGiveupBox">
-                <p class="planetNameOverview">Обзор -</p>
-                <span id="planetNameHeader">
-                    <?=$aktplanet['name'];?>                    </span>
-                <img class="hinted tipsStandard" title="|покинуть/переименовать Планета" src="red_images/1f57d944fff38ee51d49c027f574ef.gif" />
-            </a>
-        </h2>
+        
+    <div id="detailWrapper">
+        <div id="header_text">
+            <h2>
+                                    <a href="javascript:void(0);" class="openPlanetRenameGiveupBox">
+                        <p class="planetNameOverview">Обзор -</p>
+                        <span id="planetNameHeader">
+                            <?=$aktplanet['name'];?>                        </span>
+                        <img class="hinted tooltip" title="Покинуть/переименовать" src="red_images/1f57d944fff38ee51d49c027f574ef.gif" />
+                    </a>
+                            </h2>
+        </div>
+        <div id="detail" class="detail_screen">
+            <div id="techDetailLoading"></div>
+        </div>
         <div id="planetdata">
                         <div class="overlay"></div>
                         <div id="planetDetails">
@@ -74,7 +81,7 @@ function planet_link ($planet)
                         <td class="desc" >
                             <span id="diameterField"></span>
                         </td>
-                        <td class="data tipsStandard" title="|Диаметр, количество использованных и максимально доступных полей">
+                        <td class="data">
                             <span id="diameterContentField"></span>
                          </td>
                     </tr>
@@ -82,7 +89,7 @@ function planet_link ($planet)
                         <td class="desc">
                             <span id="temperatureField"></span>
                         </td>
-                        <td class="data tipsStandard" title="|Температура">
+                        <td class="data">
                             <span id="temperatureContentField"></span>
                         </td>
                     </tr>
@@ -90,78 +97,58 @@ function planet_link ($planet)
                         <td class="desc">
                             <span id="positionField"></span>
                         </td>
-                        <td class="data tipsStandard" title="|Координаты">
+                        <td class="data">
                             <span id="positionContentField"></span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="desc"><span id="scoreField"></span></td>
-                        <td class="data tipsStandard" title="|Статистика">
+                        <td class="desc">
+                            <span id="scoreField"></span></td>
+                        <td class="data">
                             <span id="scoreContentField"></span>
                         </td>
                     </tr>
+
                 </table>
             </div>
 
         <div id="planetOptions">
-    
-         <a href="javascript:void(0);" class="tipsStandard" title="|Другие настройки планеты" onclick='openPlanetRenameGiveupBox();'>
-             <span class="planetMoveOverviewGivUpLink">покинуть/переименовать</span>
-             <div class="planetMoveIcons settings planetMoveGiveUp"></div>
+            
+         <a class="dark_highlight_tablet float_right openPlanetRenameGiveupBox" href="javascript:void(0);">
+             <span class="planetMoveOverviewGivUpLink">Покинуть/переименовать</span>
+             <span class="planetMoveIcons settings planetMoveGiveUp icon"></span>
          </a>
         </div>
     </div>
-
-<?php
-
-    if ( $aktplanet['type'] == 0 )
-    {
-        $pl = LoadPlanet ( $aktplanet['g'], $aktplanet['s'], $aktplanet['p'], 1 );
-?>
-        <div id="planet_as_moon">
-        	<a 	href="index.php?page=overview&session=<?=$session;?>&cp=<?=$pl['planet_id'];?>"
-            	class="tipsStandard"
-                title="|Перейти к Планета  ">
-            	<img alt="" src="<?=planet_link($pl);?>">
-            </a>
-        </div>
-<?php
-    }
-    else
-    {
-        $moon_id = PlanetHasMoon ( $aktplanet['planet_id'] );
-        if ( $moon_id )
-        {
-            $moon = GetPlanet ( $moon_id )
-?>
-        <div id="moon">
-        	<a 	href="index.php?page=overview&session=<?=$session;?>&cp=<?=$moon['planet_id'];?>"
-            	class="tipsStandard"
-                title="|Перейти к Луна  ">
-            	<img alt="" src="red_images/17e17069847b09b3d1ef6d03729107.gif">
-            </a>
-        </div>
-<?php
-        }
-    }
-?>
+    </div>
+           
+        <div id="buffBar">
+        <ul class="active_items">
+            <li data-uuid=""><a class="activate_item border3px" href="javascript:void(0);" ref="1"></a></li>
+                    </ul>
+        <div class="activate_item_div"></div>
+    </div>  
+   
+             
         
     </div>    <div class="c-left"></div>
     <div class="c-right"></div>
+    <div id="overviewBottom">
 
 <div class="content-box-s">
 	<div class="header">
     	<h3>Постройки</h3>
     </div>
 		<div class="content">
-			<table cellpadding="0" cellspacing="0" class="construction">
+			<table cellpadding="0" cellspacing="0" class="construction active">
 				<tr>
 					<td colspan="2" class="idle">
-                    	<a class="tipsStandard" 
-                    	   title="|В данный момент ничего не строится на этой планете. Нажмите здесь, чтобы попасть в меню Сырье." 
-                    	   href="index.php?page=resources&session=<?=$session;?>">
-                    	   Очередь построек пуста!                    	</a>
-                    </td>
+                                                    <a class="tooltip js_hideTipOnMobile
+                               "
+                               title="В данный момент ничего не строится на этой планете. Нажмите здесь, чтобы попасть в меню Сырье."
+                               href="index.php?page=resources&session=<?=$session;?>">
+                               Очередь построек пуста!<br/>(К ресурсам)                            </a>
+                                            </td>
 				</tr>
   
 			</table>
@@ -170,57 +157,37 @@ function planet_link ($planet)
 </div>
 
 <div class="content-box-s">
-	<div class="header"><h3>Исследования</h3></div>
-	<div class="content">
-		<table cellpadding="0" cellspacing="0" class="construction">
- 
-				<tr>
-				<th colspan="2">Щитовая технология</th>
-			</tr>
-			<tr class="data">
-				<td class="building" rowspan="3">
-	                <a href="javascript:void(0);" 
-	                	onclick="cancelResearch(110,'Вы действительно хотите отменить исследование Щитовая технология уровня 12 на планете Колония [1:150:9]?'); return false;"
-	                 	class="tipsStandard" 
-	                    title="|Вы действительно хотите отменить исследование Щитовая технология уровня 12 на планете Колония [1:150:9]?">
-	                	<img class="queuePic" src="red_images/990b8dac9ab69451384eacee2509b3.jpg" alt="Щитовая технология" height="40" width="40">
-	                </a>
-					<a href="javascript:void(0);" 
-	                	onclick="cancelResearch(110,'Вы действительно хотите отменить исследование Щитовая технология уровня 12 на планете Колония [1:150:9]?'); return false;"
-	                 	class="tipsStandard abortNow" 
-	                    title="|Вы действительно хотите отменить исследование Щитовая технология уровня 12 на планете Колония [1:150:9]?">
-	                	<img src="red_images/3e567d6f16d040326c7a0ea29a4f41.gif" width="15" height="15"> 
-	                </a>                    
-                </td>
-				<td class="desc ausbau">
-					Исследовать до <span class="level"> Уровень 12</span>
-                </td>
-			</tr>
-            <tr class="data">
-            	<td class="desc">Продолжительность:</td>
-            </tr>
-            <tr class="data">
-            	<td class="desc timer">
-                	<span id="researchCountdown">загрузка...</span>
-                </td>
-            </tr>
-   
-		</table>                   
-	</div>
-	<div class="footer"></div>
-</div>
-
-<div class="content-box-s">
-    <div class="header"><h3>Верфь</h3></div>
+    <div class="header"><h3>Исследования</h3></div>
         <div class="content">    
-                <table cellspacing="0" cellpadding="0" class="construction">
+            <table cellspacing="0" cellpadding="0" class="construction active">
                 <tbody>
                 <tr>
                     <td colspan="2" class="idle">
-                        <a class="tipsStandard" 
-                           title="|В данный момент на этой планете не строятся корабли или оборона. Нажмите здесь, чтобы попасть в меню Верфь." 
+                                                    <a class="tooltip js_hideTipOnMobile
+                               "
+                               title="В данный момент ничего не исследуется. Нажмите здесь, чтобы попасть в меню Исследования."
+                               href="index.php?page=research&session=<?=$session;?>">
+                               Не ведется никаких исследований.<br/>(К исследованиям)                            </a>
+                                            </td>
+                </tr>   
+                </tbody>
+                </table>
+        </div>
+    <div class="footer"></div>
+</div>
+<div class="content-box-s">
+    <div class="header"><h3>Верфь</h3></div>
+        <div class="content">    
+            <table cellspacing="0" cellpadding="0" class="construction active">
+                <tbody>
+                <tr>
+                    <td colspan="2" class="idle">
+                                                <a class="tooltip js_hideTipOnMobile
+                           "
+                           title="В данный момент на этой планете не строятся корабли или оборона. Нажмите здесь, чтобы попасть в меню Верфь."
                            href="index.php?page=shipyard&session=<?=$session;?>">
-                           Корабли/оборона не производятся в данный момент.                        </a>
+                           Корабли/оборона не производятся в данный момент.<br/>(К верфи)                        </a>
+                        
                     </td>
                 </tr>   
                 </tbody>
@@ -230,8 +197,8 @@ function planet_link ($planet)
 </div>
 <div class="clearfloat"></div>
 
-    
-    
+    <div class="clearfloat"></div>
+    </div><!-- #overviewBottom -->
 </div>
                             </div>
             <!-- END CONTENT AREA -->
