@@ -14,9 +14,6 @@ $changelog = array (
     "0.78", "0.78a", "0.78b", "0.78c", "0.80", "0.81", "0.82", "0.83", "0.84"
 );
 
-SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
-if (CheckSession ( $_GET['session'] ) == FALSE) die ();
-
 loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "changelog", $GlobalUser['lang'] );

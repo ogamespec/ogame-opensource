@@ -2,8 +2,6 @@
 
 // Выход
 
-if (CheckSession ( $_GET['session'] ) == FALSE) die ();
-
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet']);
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
