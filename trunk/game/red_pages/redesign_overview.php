@@ -8,9 +8,6 @@
 // TODO : ВЕРФЬ
 // TODO : картинки лун и планет
 
-SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
-if (CheckSession ( $_GET['session'] ) == FALSE) die ();
-
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], (int)$_GET['cp']);
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 
@@ -31,7 +28,6 @@ loca_add ( "overview", $GlobalUser['lang'] );
 
 include "redesign_header.php";
 include "redesign_leftmenu.php";
-include "redesign_planetlist.php";
 
 function planet_header ($planet)
 {
@@ -242,6 +238,7 @@ function planet_link ($planet)
 
 <?php
 
+include "redesign_planetlist.php";
 include "redesign_javascript.php";
 include "redesign_footer.php";
 
