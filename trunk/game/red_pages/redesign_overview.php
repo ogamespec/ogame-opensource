@@ -121,14 +121,6 @@ function planet_link ($planet)
         </div>
     </div>
     </div>
-           
-        <div id="buffBar">
-        <ul class="active_items">
-            <li data-uuid=""><a class="activate_item border3px" href="javascript:void(0);" ref="1"></a></li>
-                    </ul>
-        <div class="activate_item_div"></div>
-    </div>  
-   
              
         
     </div>    <div class="c-left"></div>
