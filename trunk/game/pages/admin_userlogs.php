@@ -47,13 +47,14 @@ function Admin_UserLogs ()
         // Шаг 2 : выбрать события указанной категории за промежуток времени
         $results = "";
         foreach ( $users as $i=>$user ) {
-            $query = "SELECT * FROM ".$db_prefix."userlogs WHERE owner_id = ".$user['player_id']." AND (date >= ".$since." AND date <= ".($since+$period).") AND type = '".$type."' ORDER BY date ASC";
+            if ( $type !== "ALL" ) $tstr = "AND type = '".$type."'";
+            $query = "SELECT * FROM ".$db_prefix."userlogs WHERE owner_id = ".$user['player_id']." AND (date >= ".$since." AND date <= ".($since+$period).") ".$tstr." ORDER BY date ASC";
             $result = dbquery ($query);
             $count = dbrows ($result);
             $results .= "<h2>История $type игрока ".AdminUserName($user)." ($count)</h2>\n";
-            $results .= "<table><tr><td class=\"c\">Дата</td><td class=\"c\">Действие</td></tr>\n";
+            $results .= "<table><tr><td class=\"c\">Дата</td><td class=\"c\">Тип</td><td class=\"c\">Действие</td></tr>\n";
             while ($log = dbarray ($result) ) {
-                $results .= "<tr><td>".date ("d.m.Y H:i:s", $log['date'])."</td><td>".$log['text']."</td></tr>\n";
+                $results .= "<tr><td>".date ("d.m.Y H:i:s", $log['date'])."</td><td>".$log['type']."</td><td>".$log['text']."</td></tr>\n";
             }
             $results .= "</table>";
         }
@@ -93,6 +94,7 @@ if ( method () === "GET" ) {
 <tr><td>Имя пользователя</td><td><input type="text" size=20 name="name"/> (можно примерно)</td></tr>
 <tr><td>Категория</td><td>
 <select name="type">
+<option value="ALL">Все</option>
 <option value="BUILD">Постройки / Снос</option>
 <option value="RESEARCH">Исследования</option>
 <option value="SHIPYARD">Постройка флота</option>
