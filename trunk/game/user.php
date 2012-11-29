@@ -149,7 +149,7 @@ function IsEmailExist ( $email, $name="")
 
 // Проверок на правильность не делается! Этим занимается процедура регистрации.
 // Возвращает ID созданного пользователя.
-function CreateUser ( $name, $pass, $email, $bot=false)
+function CreateUser ( $name, $pass, $email, $lang, $bot=false)
 {
     global $db_prefix, $db_secret;
     $origname = $name;
@@ -168,9 +168,7 @@ function CreateUser ( $name, $pass, $email, $bot=false)
     $query = "UPDATE ".$db_prefix."uni"." SET usercount = ".$unitab['usercount'].";";
     dbquery ($query);
 
-    // Определить язык пользователя по его IP-адресу.
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $lang = "ru";
+    if ( $lang !== 'en' && $lang !== 'ru' ) $lang = 'en';
 
     $user = array( null, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, "", $email, $email,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

@@ -85,7 +85,7 @@ if ( method() === "POST" )        // Зарегистрировать игрок
     if ( $error === "" )
     {
         $password = gen_trivial_password ();
-        CreateUser ( $_POST['character'], $password, $_POST['email'] );
+        CreateUser ( $_POST['character'], $password, $_POST['email'], $_POST['lang'] );
 
 ?>
 <html>

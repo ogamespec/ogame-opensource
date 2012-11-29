@@ -60,7 +60,7 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
     // Если все параметры верные - создать нового пользователя и войти в игру.
     if ($RegError == 0 && $AGB)
     {
-        CreateUser ( $_POST['character'], $_POST['password'], $_POST['email'] );
+        CreateUser ( $_POST['character'], $_POST['password'], $_POST['email'], $_POST['lang'] );
         Login ( $_POST['character'], $_POST['password'] );
         exit ();
     }
