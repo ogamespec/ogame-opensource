@@ -48,6 +48,7 @@ require_once "loca.php";
         loca_add("LOGIN_IMPRESSUM" , "T&C's");
         loca_add("LOGIN_REMIND" , "Forgot your password?");
 
+        loca_add("CHOOSELANG" , "Choose your language");
         loca_add("COPYRIGHT" , "All rights reserved.");
         loca_add("DOWN_RULES" , "Rules");
         loca_add("DOWN_IMPRINT" , "Imprint");
@@ -114,6 +115,7 @@ require_once "loca.php";
         loca_add("LOGIN_IMPRESSUM" , "Основные положения");
         loca_add("LOGIN_REMIND" , "Забыли пароль?");
 
+        loca_add("CHOOSELANG" , "Выберите свой язык");
         loca_add("COPYRIGHT" , "Все права защищены.");
         loca_add("DOWN_RULES" , "Правила");
         loca_add("DOWN_IMPRINT" , "Impressum");
