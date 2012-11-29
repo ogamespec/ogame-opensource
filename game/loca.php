@@ -55,19 +55,19 @@ function loca_add ( $section, $lang )
 {
     global $LOCA;
 
-    if ( $section === "common" ) include "loca/common.php";
-    else if ( $section === "fleetorder" ) include "loca/fleetorder.php";
-    else if ( $section === "menu" ) include "loca/menu.php";
-    else if ( $section === "techlong" ) include "loca/techlong.php";
-    else if ( $section === "technames" ) include "loca/technames.php";
-    else if ( $section === "techshort" ) include "loca/techshort.php";
-    else if ( $section === "techshortnames" ) include "loca/techshortnames.php";
+    if ( $section === "common" ) include "loca/".$lang."_".$lang."/common.php";
+    else if ( $section === "fleetorder" ) include "loca/".$lang."_".$lang."/fleetorder.php";
+    else if ( $section === "menu" ) include "loca/".$lang."_".$lang."/menu.php";
+    else if ( $section === "techlong" ) include "loca/".$lang."_".$lang."/techlong.php";
+    else if ( $section === "technames" ) include "loca/".$lang."_".$lang."/technames.php";
+    else if ( $section === "techshort" ) include "loca/".$lang."_".$lang."/techshort.php";
+    else if ( $section === "techshortnames" ) include "loca/".$lang."_".$lang."/techshortnames.php";
 
-    else if ( $section === "changelog" ) include "loca/changelog.php";
-    else if ( $section === "empire" ) include "loca/empire.php";
-    else if ( $section === "fleet" ) include "loca/fleet.php";
-    else if ( $section === "overview" ) include "loca/overview.php";
-    else if ( $section === "notes" ) include "loca/notes.php";
+    else if ( $section === "changelog" ) include "loca/".$lang."_".$lang."/changelog.php";
+    else if ( $section === "empire" ) include "loca/".$lang."_".$lang."/empire.php";
+    else if ( $section === "fleet" ) include "loca/".$lang."_".$lang."/fleet.php";
+    else if ( $section === "overview" ) include "loca/".$lang."_".$lang."/overview.php";
+    else if ( $section === "notes" ) include "loca/".$lang."_".$lang."/notes.php";
 }
 
 ?>
