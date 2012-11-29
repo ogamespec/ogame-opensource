@@ -2,15 +2,6 @@
 
 // Задания флота.
 
-{
-
-    if ( $lang === "de" ) {
-    }
-
-    else if ( $lang === "en" ) {
-    }
-
-    else if ( $lang === "ru" ) {
         $LOCA["ru"]["FLEET_ORDER_1"] ="Атака";
         $LOCA["ru"]["FLEET_ORDER_2"] ="Совместная атака";
         $LOCA["ru"]["FLEET_ORDER_3"] ="Транспорт";
@@ -23,7 +14,6 @@
         $LOCA["ru"]["FLEET_ORDER_15"] ="Экспедиция";
         $LOCA["ru"]["FLEET_ORDER_20"] ="Ракетная атака";
         $LOCA["ru"]["FLEET_ORDER_21"] ="Атака";
-    }
 
 }
 

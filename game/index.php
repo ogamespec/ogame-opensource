@@ -96,11 +96,7 @@ SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирован�
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 
 if ( $GlobalUser['redesign'] ) {
-
-    // Redesign
-    if ( $_GET['page'] === "overview" ) { include "red_pages/redesign_overview.php"; exit(); }
-    else if ( $_GET['page'] === "fetchResources" ) { include "red_pages/redesign_fetchResources.php"; exit(); }
-
+    include "redesign.php";
 }
 
 // Classic Ogame

@@ -2,15 +2,6 @@
 
 // Империя.
 
-{
-
-    if ( $lang === "de" ) {
-    }
-
-    else if ( $lang === "en" ) {
-    }
-
-    else if ( $lang === "ru" ) {
         $LOCA["ru"]["EMPIRE_OVERVIEW"] = "Обзор империи";
         $LOCA["ru"]["EMPIRE_PLANETS"] = "Планеты";
         $LOCA["ru"]["EMPIRE_MOONS"] = "Луны";
@@ -29,8 +20,5 @@
         $LOCA["ru"]["EMPIRE_ACTION"] = "Щёлкнуть 1 раз: обзор, постройки, 2 раза: строить";
         $LOCA["ru"]["EMPIRE_AVG"] = "В среднем по планете";
         $LOCA["ru"]["EMPIRE_SUM"] = "Сумма";
-    }
-
-}
 
 ?>

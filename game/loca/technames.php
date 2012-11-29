@@ -1,10 +1,9 @@
 <?php
 
-// Названия игровых объектов
+// In-game objects
 
-{
+// de
 
-    if ( $lang === "de" ) {
         $LOCA["de"]["NAME_1"] = "Metallmine";
         $LOCA["de"]["NAME_2"] = "Kristallmine";
         $LOCA["de"]["NAME_3"] = "Deuteriumsynthetisierer";
@@ -66,9 +65,9 @@
         $LOCA["de"]["NAME_408"] = "Große Schildkuppel";
         $LOCA["de"]["NAME_502"] = "Abfangrakete";
         $LOCA["de"]["NAME_503"] = "Interplanetarrakete";
-    }
 
-    else if ( $lang === "en" ) {
+// en
+
         $LOCA["en"]["NAME_1"] = "Metal Mine";
         $LOCA["en"]["NAME_2"] = "Crystal Mine";
         $LOCA["en"]["NAME_3"] = "Deuterium Synthesizer";
@@ -130,9 +129,9 @@
         $LOCA["en"]["NAME_408"] = "Large Shield Dome";
         $LOCA["en"]["NAME_502"] = "Anti-Ballistic Missiles";
         $LOCA["en"]["NAME_503"] = "Interplanetary Missiles";
-    }
 
-    else if ( $lang === "ru" ) {
+// ru
+
         $LOCA["ru"]["NAME_1"] = "Рудник по добыче металла";
         $LOCA["ru"]["NAME_2"] = "Рудник по добыче кристалла";
         $LOCA["ru"]["NAME_3"] = "Синтезатор дейтерия";
@@ -194,8 +193,5 @@
         $LOCA["ru"]["NAME_408"] = "Большой щитовой купол";
         $LOCA["ru"]["NAME_502"] = "Ракета-перехватчик";
         $LOCA["ru"]["NAME_503"] = "Межпланетная ракета";
-    }
-
-}
 
 ?>
