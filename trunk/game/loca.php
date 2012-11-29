@@ -1,13 +1,15 @@
 <?php
 
 // Новый движок LOCA, не использующий базу данных.
+// Original game load all loca's at every page access (they had 'english.php', 'deutch.php' and so on)
+// But actually you don't need it all at same time, only some of them (except very important ones)
 
 // Список языков
 $Languages = array ( 
 #    'ae' => "اللغة العربية", 
 #    'ar' => "Español", 
 #    'ba' => "Босански", 
-#    'bg' => "Български", 
+    'bg' => "Български", 
 #    'cn' => "中文", 
 #    'cz' => "Český", 
     'de' => "Deutsch", 
@@ -25,14 +27,14 @@ $Languages = array (
 #    'lv' => "Latviešu", 
 #    'nl' => "Nederlandse", 
 #    'no' => "Norsk", 
-#    'pl' => "Polski", 
+    'pl' => "Polski", 
 #    'pt' => "Português", 
 #    'ro' => "Română", 
 #    'rs' => "Српски", 
     'ru' => "Русский", 
 #    'sk' => "Slovenčina", 
 #    'se' => "Svenska", 
-#    'tr' => "Türkçe", 
+    'tr' => "Türkçe", 
 #    'tw' => "臺灣話", 
 #    'ua' => "Українська",
 );
@@ -51,23 +53,15 @@ function loca ($key)
 }
 
 // Добавить набор языковых ключей.
-function loca_add ( $section, $lang )
+function loca_add ( $section, $lang='en' )
 {
     global $LOCA;
 
-    if ( $section === "common" ) include "loca/".$lang."_".$lang."/common.php";
-    else if ( $section === "fleetorder" ) include "loca/".$lang."_".$lang."/fleetorder.php";
-    else if ( $section === "menu" ) include "loca/".$lang."_".$lang."/menu.php";
-    else if ( $section === "techlong" ) include "loca/".$lang."_".$lang."/techlong.php";
-    else if ( $section === "technames" ) include "loca/".$lang."_".$lang."/technames.php";
-    else if ( $section === "techshort" ) include "loca/".$lang."_".$lang."/techshort.php";
-    else if ( $section === "techshortnames" ) include "loca/".$lang."_".$lang."/techshortnames.php";
+    if ( $section === "common" ) include_once "loca/common.php";
+    else if ( $section === "technames" ) include_once "loca/technames.php";
+    else if ( $section === "battlereport" ) include_once "loca/battlereport.php";
 
-    else if ( $section === "changelog" ) include "loca/".$lang."_".$lang."/changelog.php";
-    else if ( $section === "empire" ) include "loca/".$lang."_".$lang."/empire.php";
-    else if ( $section === "fleet" ) include "loca/".$lang."_".$lang."/fleet.php";
-    else if ( $section === "overview" ) include "loca/".$lang."_".$lang."/overview.php";
-    else if ( $section === "notes" ) include "loca/".$lang."_".$lang."/notes.php";
+    else { include_once "loca/".$lang."_".$lang."/".$section.".php"; }
 }
 
 ?>

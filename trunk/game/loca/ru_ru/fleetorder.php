@@ -15,6 +15,4 @@
         $LOCA["ru"]["FLEET_ORDER_20"] ="Ракетная атака";
         $LOCA["ru"]["FLEET_ORDER_21"] ="Атака";
 
-}
-
 ?>

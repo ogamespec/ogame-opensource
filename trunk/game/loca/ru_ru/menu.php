@@ -28,6 +28,4 @@
         $LOCA["ru"]["MENU_RULES"] = "Правила";
         $LOCA["ru"]["MENU_IMPRESSUM"] = "О нас";
 
-}
-
 ?>

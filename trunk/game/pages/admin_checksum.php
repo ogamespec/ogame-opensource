@@ -26,6 +26,7 @@ function Admin_Checksum ()
         'galaxytool.php', 
         'index.php', 
         'install.php', 
+        'redesign.php', 
         'loca.php', 
         'msg.php', 
         'notes.php', 

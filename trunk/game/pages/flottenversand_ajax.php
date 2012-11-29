@@ -155,9 +155,7 @@ fclose ($f);
 // Отправить флот.
 $fleet_id = DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, 0, 0, 0, $cons, time(), 0 );
 
-loca_add ( "technames", "de" );
-loca_add ( "technames", "en" );
-loca_add ( "technames", "ru" );
+loca_add ( "technames" );
 UserLog ( $aktplanet['owner_id'], "FLEET", 
  "Отправка флота $fleet_id (AJAX): " . GetMissionNameDebug ($order) . " " .
  $aktplanet['name'] ." [".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."] -&gt; ".$target['name']." [".$target['g'].":".$target['s'].":".$target['p']."]<br>" .

@@ -14,7 +14,7 @@ $changelog = array (
     "0.78", "0.78a", "0.78b", "0.78c", "0.80", "0.81", "0.82", "0.83", "0.84"
 );
 
-loca_add ( "common", $GlobalUser['lang'] );
+loca_add ( "common" );
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "changelog", $GlobalUser['lang'] );
 

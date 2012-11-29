@@ -15,12 +15,8 @@ function Admin_BattleReport ()
         $battleres = file_get_contents ( $_REQUEST['file'] );
         $res = unserialize($battleres);
 
-        loca_add ( "techshortnames", "de" );
-        loca_add ( "techshortnames", "en" );
-        loca_add ( "techshortnames", "ru" );
-        loca_add ( "technames", "de" );
-        loca_add ( "technames", "en" );
-        loca_add ( "technames", "ru" );
+        loca_add ( "battlereport" );
+        loca_add ( "technames" );
 
         $text = ShortBattleReport ( $res, filemtime ($_REQUEST['file']) );
         echo $text;

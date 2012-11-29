@@ -6,6 +6,4 @@
         $LOCA["ru"]["FLEET_PLANETTYPE_2"] = "поле обломков";
         $LOCA["ru"]["FLEET_PLANETTYPE_3"] = "луна";
 
-}
-
 ?>
