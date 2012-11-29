@@ -50,6 +50,7 @@
                 <input type="hidden" name="v" value="3" /><input type="hidden" name="step" value="validate" /> 
                 <input type="hidden" name="try" value="2" /> 
                 <input type="hidden" name="kid" value="" /> 
+                <input type="hidden" name="lang" value="<?=$_COOKIE['ogamelang'];?>" /> 
                 
                                     <input type="hidden" name="errorCodeOn" value="1" />    
                                 
