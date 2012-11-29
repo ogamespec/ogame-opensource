@@ -168,6 +168,7 @@ function CreateUser ( $name, $pass, $email, $lang, $bot=false)
     $query = "UPDATE ".$db_prefix."uni"." SET usercount = ".$unitab['usercount'].";";
     dbquery ($query);
 
+    $ip = $_SERVER['REMOTE_ADDR'];
     if ( $lang !== 'en' && $lang !== 'ru' ) $lang = 'en';
 
     $user = array( null, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, "", $email, $email,
