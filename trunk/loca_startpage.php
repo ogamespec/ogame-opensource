@@ -138,4 +138,8 @@ require_once "loca.php";
         loca_add("ABOUT_STORY",  "Тогда прочтите историю ОГейма");
     }
 
+    // Язык стартовой страницы
+    $LocaLang = $_COOKIE['ogamelang'];
+    if ($LocaLang !== 'en' && $LocaLang !== 'ru') $LocaLang = "en";        // restrict unsupported languages
+
 ?>

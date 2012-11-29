@@ -1,9 +1,7 @@
 <?php
 
 // LOCA - Localization Engine.
-
-// Язык стартовой страницы
-$LocaLang = "ru";
+$LocaLang = "en";
 
 $LOCA = array ();
 
