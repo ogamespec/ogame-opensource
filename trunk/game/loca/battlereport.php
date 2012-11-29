@@ -1,16 +1,9 @@
 <?php
 
-// Левое меню.
+// Battle-report strings.
 
-{
+// ru
 
-    if ( $lang === "de" ) {
-    }
-
-    else if ( $lang === "en" ) {
-    }
-
-    else if ( $lang === "ru" ) {
         $LOCA["ru"]["SNAME_202"] = "М. трансп.";
         $LOCA["ru"]["SNAME_203"] = "Б. трансп.";
         $LOCA["ru"]["SNAME_204"] = "Л. истр.";
@@ -34,8 +27,5 @@
         $LOCA["ru"]["SNAME_406"] = "Плазма";
         $LOCA["ru"]["SNAME_407"] = "М. купол";
         $LOCA["ru"]["SNAME_408"] = "Б. купол";
-    }
-
-}
 
 ?>
