@@ -27,6 +27,8 @@ if (parent.frames.length == 0) {
 
 <div id="main">
 
+<?php include ('products.php'); ?>
+
 <?php include ('loginmenu.tpl'); ?>    
 
 <div id="mainmenu">
