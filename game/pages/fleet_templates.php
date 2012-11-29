@@ -4,9 +4,9 @@
 
 $MAX = 13;
 
-loca_add ( "common", $GlobalUser['lang'] );
+loca_add ( "common" );
+loca_add ( "technames" );
 loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "technames", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);

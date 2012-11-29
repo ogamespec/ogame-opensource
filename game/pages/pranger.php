@@ -13,7 +13,7 @@ function MyDate ( $fmt, $timestamp )
 
 if ($internal)
 {
-    loca_add ( "common", $GlobalUser['lang'] );
+    loca_add ( "common" );
     loca_add ( "menu", $GlobalUser['lang'] );
 
     if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
@@ -34,8 +34,7 @@ if ($internal)
 }
 else
 {
-    loca_add ( "common", 'ru' );
-    loca_add ( "menu", 'ru' );
+    loca_add ( "common" );
 }
 
 $uni = LoadUniverse ();

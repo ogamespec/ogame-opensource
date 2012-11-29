@@ -14,6 +14,4 @@
         $LOCA["ru"]["OVERVIEW_COORD" ] = "Координаты</th><th colspan=3>#1</th></tr>";
         $LOCA["ru"]["OVERVIEW_RANK" ] = "Очки</th><th colspan=3>#1 (место #2 из #3)</th></tr>";
 
-}
-
 ?>

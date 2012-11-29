@@ -68,9 +68,9 @@ if ( $rows ) {
     if ( abs(time () - $queue['start']) < 1 ) MyGoto ( "flotten1" );
 }
 
-loca_add ( "common", $GlobalUser['lang'] );
+loca_add ( "common" );
+loca_add ( "technames" );
 loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "technames", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "fleet", $GlobalUser['lang'] );
 

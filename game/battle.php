@@ -744,12 +744,8 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     UpdatePlanetActivity ( $planet_id, $queue['end'] );
 
     // Сгенерировать боевой доклад.
-    loca_add ( "techshortnames", "de" );
-    loca_add ( "techshortnames", "en" );
-    loca_add ( "techshortnames", "ru" );
-    loca_add ( "technames", "de" );
-    loca_add ( "technames", "en" );
-    loca_add ( "technames", "ru" );
+    loca_add ( "battlereport" );
+    loca_add ( "technames" );
     $text = BattleReport ( $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired );
 
     // Разослать сообщения
@@ -1064,12 +1060,9 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     CalcLosses ( &$a, &$d, $res, array ( ), &$aloss, &$dloss );
 
     // Сгенерировать боевой доклад.
-    loca_add ( "techshortnames", "de" );
-    loca_add ( "techshortnames", "en" );
-    loca_add ( "techshortnames", "ru" );
-    loca_add ( "technames", "de" );
-    loca_add ( "technames", "en" );
-    loca_add ( "technames", "ru" );
+    loca_add ( "battlereport" );
+    loca_add ( "technames" );
+    
     $text = ShortBattleReport ( $res, $when );
 
     // Разослать сообщения

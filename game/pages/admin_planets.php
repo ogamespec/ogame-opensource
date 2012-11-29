@@ -5,7 +5,7 @@
 
 function Admin_Planets ()
 {
-    global $loca_lang;
+    global $loca_lang, $Languages;
     global $session;
     global $db_prefix;
     global $GlobalUser;
@@ -198,49 +198,27 @@ function spio ()
     var TechNames = {
 <?php
 
-    loca_add ( "common", "de" );
-    loca_add ( "common", "en" );
-    loca_add ( "common", "ru" );
-
-    loca_add ( "technames", "de" );
-    loca_add ( "technames", "en" );
-    loca_add ( "technames", "ru" );
+    loca_add ( "common" );
+    loca_add ( "technames" );
 
     $old_lang = $loca_lang;
-
-    $loca_lang = "de";
-    foreach ( $buildmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
-    foreach ( $fleetmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
-    foreach ( $defmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
-
-    $loca_lang = "en";
-    foreach ( $buildmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
-    foreach ( $fleetmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
-    foreach ( $defmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
-
-    $loca_lang = "ru";
-    foreach ( $buildmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
-    foreach ( $fleetmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
-    foreach ( $defmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
+    foreach ( $Languages as $lang => $langname ) {
+        $loca_lang = $lang;
+        foreach ( $buildmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
+        foreach ( $fleetmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
+        foreach ( $defmap as $i=>$gid ) echo "\"".loca("NAME_$gid")."\": $gid, ";
+    }
 
 ?>
     };
     var ResNames = {
 <?php
-        $loca_lang = "de";
+    foreach ( $Languages as $lang => $langname ) {
+        $loca_lang = $lang;        
         echo "\"".loca("METAL")."\": 'm', ";
         echo "\"".loca("CRYSTAL")."\": 'k', ";
         echo "\"".loca("DEUTERIUM")."\": 'd', ";
-
-        $loca_lang = "en";
-        echo "\"".loca("METAL")."\": 'm', ";
-        echo "\"".loca("CRYSTAL")."\": 'k', ";
-        echo "\"".loca("DEUTERIUM")."\": 'd', ";
-
-        $loca_lang = "ru";
-        echo "\"".loca("METAL")."\": 'm', ";
-        echo "\"".loca("CRYSTAL")."\": 'k', ";
-        echo "\"".loca("DEUTERIUM")."\": 'd', ";
+    }
 
     $loca_lang = $old_lang;
 ?>
