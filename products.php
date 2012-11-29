@@ -44,5 +44,5 @@ function setlang(lang)
 <a href="#" onclick="javascript:setlang('se');"><img src="img/flags/se.gif" alt="Sweden" title="Sweden"></a>
 <a href="#" onclick="javascript:setlang('tr');"><img src="img/flags/tr.gif" alt="Turkey" title="Turkey"></a>
 <a href="#" onclick="javascript:setlang('tw');"><img src="img/flags/tw.gif" alt="Taiwan" title="Taiwan"></a>
-<a href="#">Выберите свой язык</a>
+<a href="#"><?=loca('CHOOSELANG');?></a>
 </div>
