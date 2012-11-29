@@ -8,3 +8,7 @@ Copy battle.c and battle.h to C:/lcc/bin and type in command line :
 lc battle.c -o battle.exe
 
 (USE lc INSTEAD lcc)
+
+And put battle executable to http://uni1.yoursever.com/game
+
+Path to battle engine should be: battle.exe
