@@ -2,7 +2,7 @@
 
 // Управление ботами.
 
-$dummy_bot = false;
+$dummy_bot = true;
 
 // Интеллект ботов - секретная инфорация.
 if ( !$dummy_bot) require_once "bot_rev1.php";
