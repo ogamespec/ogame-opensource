@@ -18,7 +18,7 @@ Location : /game/loca/common.php (_All languages are loaded at same time!_)
 
 == Tech names ==
 
-*NAME_xxx*
+*NAME_xxx*, where xxx is tech id.
 
 Location : /game/loca/technames.php (_All languages are loaded at same time!_)
 
