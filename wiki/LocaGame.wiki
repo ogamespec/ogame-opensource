@@ -2,6 +2,23 @@
 
 = Common =
 
+*METAL*
+*CRYSTAL*
+*DEUTERIUM*
+*ENERGY*
+*DM*
+*MOON*
+
+== Resources ==
+
+*NAME_xxx*
+
+Location : /game/loca/common.php
+
+== Tech names ==
+
+Location : /game/loca/technames.php
+
 == Left Menu ==
 
 http://oldogame.ru/images/leftmenu.jpg 
