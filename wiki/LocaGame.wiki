@@ -2,6 +2,8 @@
 
 = Common =
 
+== Resources ==
+
 *METAL*<br>
 *CRYSTAL*<br>
 *DEUTERIUM*<br>
@@ -9,13 +11,11 @@
 *DM*<br>
 *MOON*<br>
 
-== Resources ==
-
-*NAME_xxx*
-
 Location : /game/loca/common.php
 
 == Tech names ==
+
+*NAME_xxx*
 
 Location : /game/loca/technames.php
 
