@@ -24,6 +24,8 @@ Location : /game/loca/common.php (_All languages are loaded at same time!_)
 
 Location : /game/loca/technames.php (_All languages are loaded at same time!_)
 
+= Pages =
+
 == Left Menu ==
 
 Loaded only for some pages, which has it.
@@ -31,8 +33,6 @@ Loaded only for some pages, which has it.
 http://oldogame.ru/images/leftmenu.jpg 
 
 Location : /game/loca/x_x/menu.php
-
-= Pages =
 
 == Overview ==
 
