@@ -1,0 +1,9 @@
+#summary Game Locals
+
+= Common =
+
+http://oldogame.ru/images/menu.jpg 
+
+= Pages =
+
+http://oldogame.ru/images/overview.jpg 
