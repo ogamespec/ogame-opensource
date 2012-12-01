@@ -2,8 +2,6 @@
 
 // Флот 2: подготавливает координаты цели
 
-loca_add ( "common" );
-loca_add ( "technames" );
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "fleet", $GlobalUser['lang'] );

@@ -2,8 +2,6 @@
 
 // Строительство построек.
 
-loca_add ( "common" );
-loca_add ( "technames" );
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "techshort", $GlobalUser['lang'] );
 

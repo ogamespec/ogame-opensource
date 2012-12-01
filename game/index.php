@@ -41,7 +41,6 @@ require_once "battle.php";
 require_once "debug.php";
 require_once "galaxytool.php";
 require_once "bot.php";
-require_once "events.php";
 
 if (0)
 {
@@ -94,6 +93,9 @@ function va ($subject)
 
 SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
 if (CheckSession ( $_GET['session'] ) == FALSE) die ();
+
+loca_add ( "common" );
+loca_add ( "technames" );
 
 if ( $GlobalUser['redesign'] ) {
     include "redesign.php";

@@ -132,7 +132,6 @@ function UpdateQueue ($until)
     while ($rows--) {
         $queue = dbarray ($result);
 
-        if ( !SpecialEvent ( $queue ) )
         {
             if ( $queue['type'] === "Build" ) Queue_Build_End ($queue);
             else if ( $queue['type'] === "Demolish" ) Queue_Build_End ($queue);
