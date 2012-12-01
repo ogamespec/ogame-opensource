@@ -1,5 +1,8 @@
 #summary Game Locals
 
+If game engine cannot find some LOCA, it just echo "LOCA_NAME", instead its value.
+So you can easily spot untranslated parts around the game.
+
 = Common =
 
 == Resources ==
