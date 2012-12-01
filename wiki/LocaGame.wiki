@@ -2,13 +2,16 @@
 
 = Common =
 
+== Left Menu ==
+
 http://oldogame.ru/images/leftmenu.jpg 
 
 Location : /game/loca/x_x/menu.php
 
 = Pages =
 
-*Overview*<br>
+== Overview ==
+
 http://oldogame.ru/images/overview.jpg 
 
 Location : /game/loca/x_x/overview.php
