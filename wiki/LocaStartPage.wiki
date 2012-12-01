@@ -1,6 +1,6 @@
 #summary Start Page Locals
 
-Start page language settings are stored in 'ogamelang' cookie.
+Start page language settings are stored in *ogamelang* cookie.
 
 Install script and user registrations also share this cookie.
 Default user language after registration is set same as start page language.
