@@ -13,11 +13,15 @@
 
 Location : /game/loca/common.php
 
+===All languages are loaded at same time!===
+
 == Tech names ==
 
 *NAME_xxx*
 
 Location : /game/loca/technames.php
+
+===All languages are loaded at same time!===
 
 == Left Menu ==
 
