@@ -2,12 +2,12 @@
 
 = Common =
 
-*METAL*
-*CRYSTAL*
-*DEUTERIUM*
-*ENERGY*
-*DM*
-*MOON*
+*METAL*<br>
+*CRYSTAL*<br>
+*DEUTERIUM*<br>
+*ENERGY*<br>
+*DM*<br>
+*MOON*<br>
 
 == Resources ==
 
