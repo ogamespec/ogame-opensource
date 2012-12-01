@@ -5,6 +5,8 @@ So you can easily spot untranslated parts around the game.
 
 = Install script =
 
+*ogamelang* cookie used as install page language.
+
 [http://oldogame.ru/images/install.jpg http://oldogame.ru/images/install_sm.jpg]
 
 Location : /game/loca/x_x/install.php (_Same language as Start Page_)
