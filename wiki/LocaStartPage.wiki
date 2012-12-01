@@ -1,3 +1,4 @@
 #summary Start Page Locals
 
+== Home ==
 [http://oldogame.ru/images/startpage_home.jpg http://oldogame.ru/images/startpage_home_sm.jpg]
