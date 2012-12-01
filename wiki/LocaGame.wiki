@@ -8,6 +8,7 @@ Location : /game/loca/x_x/menu.php
 
 = Pages =
 
+Overview:
 http://oldogame.ru/images/overview.jpg 
 
 Location : /game/loca/x_x/overview.php
