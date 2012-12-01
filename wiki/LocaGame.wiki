@@ -5,6 +5,8 @@ So you can easily spot untranslated parts around the game.
 
 = Common =
 
+Resources and tech names are used widley in game, so they are always loaded.
+
 == Resources ==
 
 *METAL*<br>
