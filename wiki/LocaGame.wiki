@@ -11,17 +11,13 @@
 *DM*<br>
 *MOON*<br>
 
-Location : /game/loca/common.php
-
-===All languages are loaded at same time!===
+Location : /game/loca/common.php (_All languages are loaded at same time!_)
 
 == Tech names ==
 
 *NAME_xxx*
 
-Location : /game/loca/technames.php
-
-===All languages are loaded at same time!===
+Location : /game/loca/technames.php (_All languages are loaded at same time!_)
 
 == Left Menu ==
 
