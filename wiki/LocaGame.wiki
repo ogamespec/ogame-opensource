@@ -2,7 +2,7 @@
 
 = Common =
 
-http://oldogame.ru/images/menu.jpg 
+http://oldogame.ru/images/leftmenu.jpg 
 
 = Pages =
 
