@@ -3,8 +3,6 @@
 $GalaxyMessage = "";
 $GalaxyError = "";
 
-loca_add ( "common" );
-loca_add ( "technames" );
 loca_add ( "menu", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));

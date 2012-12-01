@@ -55,7 +55,14 @@ function loca ($key)
 // Добавить набор языковых ключей.
 function loca_add ( $section, $lang='en' )
 {
-    global $LOCA;
+    global $LOCA, $Languages;
+
+    // Проверить есть ли язык в списке (для исключения инъекций)
+    $found = false;
+    foreach ($Languages as $i=>$name ) {
+        if ( $i === $lang) { $found = true; break; }
+    }
+    if ( !$found ) return;
 
     if ( $section === "common" ) include_once "loca/common.php";
     else if ( $section === "technames" ) include_once "loca/technames.php";

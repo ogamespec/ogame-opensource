@@ -3,8 +3,6 @@
 // Информация на постройки, флот, оборону и исследования. 
 // Некоторые страницы (в частности постройки) содержат дополнительные сведения или элементы управления.
 
-loca_add ( "common" );
-loca_add ( "technames" );
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "techlong", $GlobalUser['lang'] );
 

@@ -6,9 +6,13 @@
 // Создает все необходимые таблицы в базе данных, а также файл конфигурации config.php, для доступа к базе.
 // Не работет, если файл config.php создан.
 
-$InstallError = "<font color=gold>Используйте подсказки при наведении мышкой на выбранные параметры</font>";
-
 require_once "db.php";
+require_once "loca.php";
+
+$loca_lang = $_COOKIE['ogamelang'];
+loca_add ( "install", $loca_lang );
+
+$InstallError = "<font color=gold>".loca('INSTALL_TIP')."</font>";
 
 function hostname () {
     $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
@@ -47,7 +51,7 @@ function gen_trivial_password ($len = 8)
 
 $tab_uni = array (        // Вселенная
     'num'=>'INT PRIMARY KEY','speed'=>'FLOAT','fspeed'=>'FLOAT','galaxies'=>'INT','systems'=>'INT','maxusers'=>'INT','acs'=>'INT','fid'=>'INT','did'=>'INT','rapid'=>'INT','moons'=>'INT','defrepair'=>'INT','defrepair_delta'=>'INT','usercount'=>'INT','freeze'=>'INT',
-    'news1'=>'TEXT', 'news2'=>'TEXT', 'news_until'=>'INT UNSIGNED', 'startdate'=>'INT UNSIGNED', 'battle_engine'=>'TEXT', 'special'=>'INT'
+    'news1'=>'TEXT', 'news2'=>'TEXT', 'news_until'=>'INT UNSIGNED', 'startdate'=>'INT UNSIGNED', 'battle_engine'=>'TEXT', 
 );
 
 $tab_users = array (    // Пользователи
@@ -237,7 +241,6 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "news_until = '0', ";
     $query .= "startdate = '".$now."', ";
     $query .= "battle_engine = '".$_POST["uni_battle_engine"]."', ";
-    $query .= "special = '".($_POST["uni_special"]==="on"?1:0)."' ";
     //echo "<br>$query<br>";
     dbquery ($query);
 
@@ -342,11 +345,11 @@ if ( key_exists("install", $_POST) && CheckParameters() )
 
     // Сохранить файл конфигурации.
     $file = fopen ("config.php", "wb");
-    if ($file == FALSE) $InstallError = "Не удалось сохранить файл конфигурации.";
+    if ($file == FALSE) $InstallError = loca('INSTALL_ERROR1');
     else
     {
         fwrite ($file, "<?php\r\n");
-        fwrite ($file, "// Создано автоматически НЕ ИЗМЕНЯТЬ!\r\n");
+        fwrite ($file, "// DO NOT MODIFY!\r\n");
         fwrite ($file, "$"."StartPage=\"". $_POST["startpage"] ."\";\r\n");
         fwrite ($file, "$"."db_host=\"". $_POST["db_host"] ."\";\r\n");
         fwrite ($file, "$"."db_user=\"". $_POST["db_user"] ."\";\r\n");
@@ -356,7 +359,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
         fwrite ($file, "$"."db_secret=\"". $_POST["db_secret"] ."\";\r\n");
         fwrite ($file, "?>");
         fclose ($file);
-        $InstallError = "<font color=lime>Установка завершена. Файл конфигурации создан.</font>";
+        $InstallError = "<font color=lime>".loca('INSTALL_DONE')."</font>";
     }
 }
 
@@ -365,16 +368,17 @@ if ( key_exists("install", $_POST) && CheckParameters() )
 <html>
 <head>
 <meta http-equiv='content-type' content='text/html; charset=utf-8' />
-<TITLE>Установка OGame</TITLE>
+<TITLE><?=loca('INSTALL_TITLE');?></TITLE>
 </head>
 
-<body style='background:#000000 url(img/space_background.jpg) no-repeat fixed right top; color: #fff;'>
+<body>
 
 <style>
+body { background:#000000 url(img/space_background.jpg) no-repeat fixed right top; color: #fff; }
 td.c { background-color: #334445; }
 .button { border: 1px solid; color: white; background-color: #334445; }
 .text { border: 1px solid; color: white; background-color: #334445; }
-#install_form { background: url(img/page_bg.png); }
+.install_form { background: url(img/page_bg.png); }
 </style>
 
 <center>
@@ -385,38 +389,52 @@ td.c { background-color: #334445; }
 
 <font color=red><?=$InstallError?></font>
 
-<table id='install_form'
+<table class='install_form'>
+
+<table class='install_form'>
+<tr><td valign=top>
+
+<table>
 <tr><td>&nbsp;</td></tr>
-<tr><td>Стартовая страница</td><td><input type=text value='http://ogame.ru' class='text' name='startpage'></td></tr>
+<tr><td><?=loca('INSTALL_STARTPAGE');?></td><td><input type=text value='http://ogame.ru' class='text' name='startpage'></td></tr>
 <tr><td>&nbsp;</td></tr>
-<tr><td colspan=2 class='c'>Настройки базы данных</td></tr>
-<tr><td>Хост</td><td><input type=text value='localhost' class='text' name='db_host'></td></tr>
-<tr><td>Пользователь</td><td><input type=text class='text' name='db_user'></td></tr>
-<tr><td>Пароль</td><td><input type=password class='text'  name='db_pass'></td></tr>
-<tr><td>Название БД</td><td><input type=text class='text' name='db_name'></td></tr>
-<tr><td><a title='Чтобы было легко найти все таблицы этой вселенной, задайте им общий префикс'>Префикс таблиц</a></td><td><input type=text value='uni1_' class='text' name='db_prefix'></td></tr>
-<tr><td><a title='Используется при генерации паролей и сессий'>Секретное слово</a></td><td><input type=text type=password class='text' name='db_secret'></td></tr>
+<tr><td colspan=2 class='c'><?=loca('INSTALL_DB');?></td></tr>
+<tr><td><?=loca('INSTALL_DB_HOST');?></td><td><input type=text value='localhost' class='text' name='db_host'></td></tr>
+<tr><td><?=loca('INSTALL_DB_USER');?></td><td><input type=text class='text' name='db_user'></td></tr>
+<tr><td><?=loca('INSTALL_DB_PASS');?></td><td><input type=password class='text'  name='db_pass'></td></tr>
+<tr><td><?=loca('INSTALL_DB_NAME');?></td><td><input type=text class='text' name='db_name'></td></tr>
+<tr><td><a title='<?=loca('INSTALL_TIP1');?>'><?=loca('INSTALL_DB_PREFIX');?></a></td><td><input type=text value='uni1_' class='text' name='db_prefix'></td></tr>
+<tr><td><a title='<?=loca('INSTALL_TIP2');?>'><?=loca('INSTALL_DB_SECRET');?></a></td><td><input type=text type=password class='text' name='db_secret'></td></tr>
+</table>
+
+</td><td valign=top>
+
+<table class='install_form'>
 <tr><td>&nbsp;</td></tr>
-<tr><td colspan=2 class='c'>Настройки вселенной</td></tr>
-<tr><td><a title='Номер вселенной будет указан в заголовке окна и над главным меню в игре.'>Номер вселенной</a></td><td><input type=text value='1' class='text' name='uni_num'></td></tr>
-<tr><td><a title='Ускорение игры влияет на скорость добычи ресурсов, длительность построек и проведение исследований, минимальную длительность Режима Отпуска.'>Ускорение</a></td><td><input type=text value='1' class='text' name='uni_speed'></td></tr>
-<tr><td><a title='Ускорение флота влияет только на скорость летящих флотов'>Ускорение флота</a></td><td><input type=text value='1' class='text' name='uni_fspeed'></td></tr>
-<tr><td>Количество галактик</td><td><input type=text value='9' class='text' name='uni_galaxies'></td></tr>
-<tr><td>Количество систем</td><td><input type=text value='499' class='text' name='uni_systems'></td></tr>
-<tr><td><a title='Максимальное количество аккаунтов. После достижения этого значения регистрация закрывается до тех пор, пока не освободится место.'>Максимум игроков</a></td><td><input type=text value='12500' class='text' name='uni_maxusers'></td></tr>
-<tr><td><a title='Максимальное количество приглашенных игроков для Совместной атаки. Максимальное количство флотов в САБ вычисляется по формуле N*4, где N - количетсво участников. При N=0 САБ отключен.'>Участников САБ</a></td><td><input type=text value='4' class='text' name='uni_acs'></td></tr>
-<tr><td><a title='Флот в Обломки. Указанное количество процентов флота выпадает в виде обломков. Если указано 0, то ФВО отключено.'>Обломки флота</a></td><td><input type=text value='30' class='text' name='uni_fid'></td></tr>
-<tr><td><a title='Оборона в Обломки. Указанное количество процентов обороны выпадает в виде обломков. Если указано 0, то ОВО отключено.'>Обломки обороны</a></td><td><input type=text value='0' class='text' name='uni_did'></td></tr>
-<tr><td><a title='Корабли получают возможность повторного выстрела'>Скорострел</a></td><td><input type=checkbox class='text' name='uni_rapid' CHECKED></td></tr>
-<tr><td>Луны и Звезды Смерти</td><td><input type=checkbox class='text' name='uni_moons' CHECKED></td></tr>
-<tr><td><a title='Перезапуск вселенной каждый день в 20:00. Игроку даётся 3 года игрового времени для мгновенного завершения любых заданий, кроме боевых.'>Специальная Вселенная</a></td><td><input type=checkbox class='text' name='uni_special' ></td></tr>
-<tr><td>Путь к боевому движку</td><td><input type=text value='../cgi-bin/battle' class='text' name='uni_battle_engine'></td></tr>
+<tr><td colspan=2 class='c'><?=loca('INSTALL_UNI');?></td></tr>
+<tr><td><a title='<?=loca('INSTALL_TIP3');?>'><?=loca('INSTALL_UNI_NUM');?></a></td><td><input type=text value='1' class='text' name='uni_num'></td></tr>
+<tr><td><a title='<?=loca('INSTALL_TIP4');?>'><?=loca('INSTALL_UNI_SPEED');?></a></td><td><input type=text value='1' class='text' name='uni_speed'></td></tr>
+<tr><td><a title='<?=loca('INSTALL_TIP5');?>'><?=loca('INSTALL_UNI_FLEETSPEED');?></a></td><td><input type=text value='1' class='text' name='uni_fspeed'></td></tr>
+<tr><td><?=loca('INSTALL_UNI_G');?></td><td><input type=text value='9' class='text' name='uni_galaxies'></td></tr>
+<tr><td><?=loca('INSTALL_UNI_S');?></td><td><input type=text value='499' class='text' name='uni_systems'></td></tr>
+<tr><td><a title='<?=loca('INSTALL_TIP6');?>'><?=loca('INSTALL_UNI_USERS');?></a></td><td><input type=text value='12500' class='text' name='uni_maxusers'></td></tr>
+<tr><td><a title='<?=loca('INSTALL_TIP7');?>'><?=loca('INSTALL_UNI_ACS');?></a></td><td><input type=text value='4' class='text' name='uni_acs'></td></tr>
+<tr><td><a title='<?=loca('INSTALL_TIP8');?>'><?=loca('INSTALL_UNI_FID');?></a></td><td><input type=text value='30' class='text' name='uni_fid'></td></tr>
+<tr><td><a title='<?=loca('INSTALL_TIP9');?>'><?=loca('INSTALL_UNI_DID');?></a></td><td><input type=text value='0' class='text' name='uni_did'></td></tr>
+<tr><td><a title='<?=loca('INSTALL_TIP10');?>'><?=loca('INSTALL_UNI_RAPID');?></a></td><td><input type=checkbox class='text' name='uni_rapid' CHECKED></td></tr>
+<tr><td><?=loca('INSTALL_UNI_MOONS');?></td><td><input type=checkbox class='text' name='uni_moons' CHECKED></td></tr>
+<tr><td><?=loca('INSTALL_UNI_BATTLE');?></td><td><input type=text value='../cgi-bin/battle' class='text' name='uni_battle_engine'></td></tr>
 <tr><td>&nbsp;</td></tr>
-<tr><td colspan=2 class='c'>Аккаунт администратора игры (Legor)</td></tr>
-<tr><td>E-Mail</td><td><input type=text class='text' name='admin_email'></td></tr>
-<tr><td>Пароль</td><td><input type=password class='text' name='admin_pass'></td></tr>
+<tr><td colspan=2 class='c'><?=loca('INSTALL_ADMIN');?> (Legor)</td></tr>
+<tr><td><?=loca('INSTALL_ADMIN_EMAIL');?></td><td><input type=text class='text' name='admin_email'></td></tr>
+<tr><td><?=loca('INSTALL_ADMIN_PASS');?></td><td><input type=password class='text' name='admin_pass'></td></tr>
 <tr><td>&nbsp;</td></tr>
-<tr><td colspan=2><center><input type=submit value='Инсталлировать' class='button'></center></td></tr>
+</table>
+
+</td></tr>
+
+<tr><td colspan=2><center><input type=submit value='<?=loca('INSTALL_INSTALL');?>' class='button'></center></td></tr>
+
 </table>
 
 </form>

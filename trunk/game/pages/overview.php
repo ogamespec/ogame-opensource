@@ -2,8 +2,6 @@
 
 // Обзор.
 
-loca_add ( "common" );
-loca_add ( "technames" );
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "overview", $GlobalUser['lang'] );
@@ -189,10 +187,6 @@ echo "<tr><th> ".va( loca("OVERVIEW_RANK"),  nicenum(floor($GlobalUser['score1']
 
 echo "</table>\n<br><br><br><br><br>\n";
 echo "</center>\n";
-
-// Управление и отображение информации специальных событий
-include "special_events.php";
-
 echo "</div>\n";
 echo "<!-- END CONTENT AREA -->\n\n";
 

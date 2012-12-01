@@ -18,7 +18,6 @@ require_once "../planet.php";
 require_once "../bot.php";
 require_once "../user.php";
 require_once "../queue.php";
-require_once "../events.php";
 require_once "../uni.php";
 require_once "../debug.php";
 

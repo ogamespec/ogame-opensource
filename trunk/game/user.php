@@ -518,7 +518,6 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
         AddCleanPlanetsEvent ();
         AddCleanPlayersEvent ();
         AddRecalcAllyPointsEvent ();
-        SpecialEventsLoginCallback ();
 
         // Задание пересчёта очков игрока.
         AddUpdateStatsEvent ();
