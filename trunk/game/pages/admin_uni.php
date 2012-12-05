@@ -34,9 +34,8 @@ function Admin_Uni ()
 
         $rapid = ($_POST['rapid'] === "on") ? 1 : 0;
         $moons = ($_POST['moons'] === "on") ? 1 : 0;
-        $special = ($_POST['special'] === "on") ? 1 : 0;
 
-        SetUniParam ( $_POST['speed'], $_POST['fspeed'], $_POST['acs'], $_POST['fid'], $_POST['did'], $_POST['defrepair'], $_POST['defrepair_delta'], $_POST['galaxies'], $_POST['systems'], $rapid, $moons, $special );
+        SetUniParam ( $_POST['speed'], $_POST['fspeed'], $_POST['acs'], $_POST['fid'], $_POST['did'], $_POST['defrepair'], $_POST['defrepair_delta'], $_POST['galaxies'], $_POST['systems'], $rapid, $moons );
 
         //print_r ( $_POST );
     }
@@ -138,7 +137,6 @@ function Admin_Uni ()
 
 <tr><th>Скорострел</th><th><input type="checkbox" name="rapid"  <?=UniIsChecked($unitab['rapid']);?> /></th></tr>
 <tr><th>Луны и Звёзды Смерти</th><th><input type="checkbox" name="moons" <?=UniIsChecked($unitab['moons']);?> /></th></tr>
-<tr><th>Специальная Вселенная</th><th><input type="checkbox" name="special" <?=UniIsChecked($unitab['special']);?> /></th></tr>
 <tr><th>Новость 1</th><th><input type="text" name="news1" maxlength="99" size="20" value="<?=$unitab['news1'];?>" /></th></tr>
 <tr><th>Новость 2</th><th><input type="text" name="news2" maxlength="99" size="20" value="<?=$unitab['news2'];?>" /></th></tr>
 <?php

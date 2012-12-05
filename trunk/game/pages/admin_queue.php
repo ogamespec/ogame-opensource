@@ -11,9 +11,6 @@ function QueueDesc ( $queue )
     $obj_id = $queue['obj_id'];
     $level = $queue['level'];
 
-    $desc = SpecialEventDescription ($type);
-    if ( $desc ) return $desc;
-
     switch ( $type )
     {
         case "Build":
