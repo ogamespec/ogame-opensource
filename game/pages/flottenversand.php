@@ -48,12 +48,6 @@ $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
 $unitab = LoadUniverse ();
 $unispeed = $unitab['fspeed'];
 
-if ($unitab['special'] ) {
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'GlobalAttackBan' ";
-    $result = dbquery ($query);
-    $BlockAttack = dbrows($result) > 0;
-}
-
 // Обработать вызовы AJAX
 if ( $_GET['ajax'] == 1)
 {
@@ -371,8 +365,8 @@ else {
 
     unlink ( $fleetlock );
 
-    //echo "<br>";
-    //print_r ( $queue);
+//    echo "<br>";
+//    print_r ( $queue);
 
     $before_m = $aktplanet['m'];
     $before_k = $aktplanet['k'];
