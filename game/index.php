@@ -103,7 +103,7 @@ if ( $GlobalUser['redesign'] ) {
 
 // Classic Ogame
 if ( $_GET['page'] === "overview" ) { include "pages/overview.php"; exit(); }
-else if ( $_GET['page'] === "admin" ) { include "pages/admin.php"; exit (); }
+else if ( $_GET['page'] === "admin" && $GlobalUser['admin'] > 0 ) { include "pages/admin.php"; exit (); }
 else if ( $_GET['page'] === "imperium" ) { include "pages/imperium.php"; exit (); }
 else if ( $_GET['page'] === "buildings" ) { include "pages/buildings.php"; exit (); }
 else if ( $_GET['page'] === "renameplanet" ) { include "pages/renameplanet.php"; exit (); }
