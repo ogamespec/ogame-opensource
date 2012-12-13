@@ -1,5 +1,7 @@
 #summary News archive
 
+*13.12.2012* : Tomasz and toolsche joined us. Welcome! Tomasz assigned to poland translation and redesign, toolsche take care of deutch translation. Good luck, have fun :)
+
 *10.03.2011* : After some brainstorm first OGame page was shown itself:<br>
 <img src="http://ogamespec.com/imgstore/whc4d78e760ba013.jpg"><br>
 EDIT: resources, techtree and techtreedetails are also SVNed.
