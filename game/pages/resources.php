@@ -3,6 +3,7 @@
 // Сырьё.
 
 loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "resources", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -162,7 +163,7 @@ $d_total = $d_hourly + $f_cons;
 echo "<center> \n";
 echo "<br> \n";
 echo "<br> \n";
-echo "Коэффициент производства: ".round($aktplanet['factor'],2)."\n";
+echo va(loca("RES_FACTOR")." ", round($aktplanet['factor'],2))."\n";
 
 // Не известно для чего, но это есть в оригинальной игре.
 $count = 0;
@@ -173,7 +174,7 @@ while ($rows--)
     $pl = dbarray ($result);
     if ( $pl['type'] != 0 ) $count++;
 }
-if ( $count > 9 ) echo "<br><font color=#ff000>На этой планете наблюдаются беспорядки, так как империя слишком велика.</font>";
+if ( $count > 9 ) echo "<br><font color=#ff000>".loca("RES_INFO")."</font>";
 
 echo "<form action=\"index.php?page=resources&session=".$_GET['session']."\" method=\"post\" id='ressourcen'> \n";
 echo "<input type=hidden name='screen' id='screen'> \n";
@@ -181,17 +182,17 @@ echo "<table width=\"550\"> \n";
 
 echo "  <tr> \n";
 echo "    <td class=\"c\" colspan=\"6\"> \n";
-echo "    Производство сырья на планете &quot;".$aktplanet['name']."&quot;\n";
+echo "    ".loca("RES_PROD")." &quot;".$aktplanet['name']."&quot;\n";
 echo "    </td> \n";
 echo "  </tr>\n";
 
 echo "  <tr> \n";
-echo "   <th colspan=\"2\"></th>    <th>Металл</th>    <th>Кристалл</th>    <th>Дейтерий</th>    <th>Энергия</th> \n";
+echo "   <th colspan=\"2\"></th>    <th>".loca("METAL")."</th>    <th>".loca("CRYSTAL")."</th>    <th>".loca("DEUTERIUM")."</th>    <th>".loca("ENERGY")."</th> \n";
 echo "  </tr>\n";
 
 // Естественное производство
 echo "  <tr> \n";
-echo "   <th colspan=\"2\">Естественное производство</th> \n";
+echo "   <th colspan=\"2\">".loca("RES_BASIC")."</th> \n";
 echo "   <td class=\"k\">".(20*$speed)."</td>    <td class=\"k\">".(10*$speed)."</td>    <td class=\"k\">0</td>    <td class=\"k\">0</td> \n";
 echo "  </tr>\n";
 
@@ -200,7 +201,7 @@ if ($aktplanet['b1']) {
     $color1 = $m_hourly ? "<font color='00FF00'>" : "";
     $color2 = $m_cons ? "<font color='FF0000'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_1")." (уровень ".$aktplanet['b1'].")</th><th>".$geologe_text."</th>   <th> \n";
+	echo "<th>".loca("NAME_1")." (".va(loca("RES_LEVEL"), $aktplanet['b1']).")</th><th>".$geologe_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        $color1".nicenum2($m_hourly)."</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
@@ -214,7 +215,7 @@ if ($aktplanet['b2']) {
     $color1 = $k_hourly ? "<font color='00FF00'>" : "";
     $color2 = $k_cons ? "<font color='FF0000'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_2")." (уровень ".$aktplanet['b2'].")</th><th>".$geologe_text."</th>   <th> \n";
+	echo "<th>".loca("NAME_2")." (".va(loca("RES_LEVEL"), $aktplanet['b2']).")</th><th>".$geologe_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        $color1".nicenum2($k_hourly)."</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
@@ -228,7 +229,7 @@ if ($aktplanet['b3']) {
     $color1 = $d_hourly ? "<font color='00FF00'>" : "";
     $color2 = $d_cons ? "<font color='FF0000'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_3")." (уровень ".$aktplanet['b3'].")</th><th>".$geologe_text."</th>   <th> \n";
+	echo "<th>".loca("NAME_3")." (".va(loca("RES_LEVEL"), $aktplanet['b3']).")</th><th>".$geologe_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       $color1".nicenum2($d_hourly)."</font>   <th>\n";
@@ -241,7 +242,7 @@ if ($aktplanet['b3']) {
 if ($aktplanet['b4']) {
     $color = $s_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_4")." (уровень ".$aktplanet['b4'].")</th><th>".$engineer_text."</th>   <th> \n";
+	echo "<th>".loca("NAME_4")." (".va(loca("RES_LEVEL"), $aktplanet['b4']).")</th><th>".$engineer_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
@@ -255,7 +256,7 @@ if ($aktplanet['b12']) {
     $color1 = $f_cons ? "<font color='FF0000'>" : "";
     $color2 = $f_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_12")." (уровень ".$aktplanet['b12'].")</th><th>".$engineer_text."</th>   <th> \n";
+	echo "<th>".loca("NAME_12")." (".va(loca("RES_LEVEL"), $aktplanet['b12']).")</th><th>".$engineer_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       $color1".nicenum2($f_cons)."</font>   <th>\n";
@@ -268,7 +269,7 @@ if ($aktplanet['b12']) {
 if ($aktplanet['f212']) {
     $color = $ss_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_212")." (кол-во ".$aktplanet['f212'].")</th><th>".$engineer_text."</th>   <th> \n";
+	echo "<th>".loca("NAME_212")." (".va(loca("RES_AMOUNT"), $aktplanet['b1']).")</th><th>".$engineer_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
@@ -279,19 +280,19 @@ if ($aktplanet['f212']) {
 
 // Хранилища
 echo "    <tr>   <tr> \n";
-echo "    <th colspan=\"2\">Вместимость</th> \n";
+echo "    <th colspan=\"2\">".loca("RES_CAPACITY")."</th> \n";
 echo "    <td class=\"k\"><font color=\"#00ff00\">".nicenum2($planet['mmax']/1000)."k</font></td> \n";
 echo "    <td class=\"k\"><font color=\"#00ff00\">".nicenum2($planet['kmax']/1000)."k</font></td> \n";
 echo "    <td class=\"k\"><font color=\"#00ff00\">".nicenum2($planet['dmax']/1000)."k</font></td> \n";
 echo "    <td class=\"k\"><font color=\"#00ff00\">-</font></td> \n";
 echo "    <td class=\"k\"> \n";
-echo "    <input type=\"submit\" name=\"action\" value=\"Посчитать\"></td> \n";
+echo "    <input type=\"submit\" name=\"action\" value=\"".loca("RES_CALCULATE")."\"></td> \n";
 echo "  </tr> \n";
 echo "  <tr>     <th colspan=\"6\" height=\"4\"></th>   </tr> \n";
 
 // Общая выработка
 echo "  <tr> \n";
-echo "    <th colspan=\"2\">Выработка в час:</th> \n";
+echo "    <th colspan=\"2\">".loca("RES_PER_HOUR")."</th> \n";
 echo "    <td class=\"k\">".rgnum($m_total)."</td> \n";
 echo "    <td class=\"k\">".rgnum($k_total)."</td> \n";
 echo "    <td class=\"k\">".rgnum($d_total)."</td> \n";
@@ -299,7 +300,7 @@ echo "    <td class=\"k\">".rgnum($planet['e'])."</td> \n";
 echo "  </tr> \n";
 
 echo "  <tr> \n";
-echo "    <th colspan=\"2\">Выработка в день:</th> \n";
+echo "    <th colspan=\"2\">".loca("RES_PER_DAY")."</th> \n";
 echo "    <td class=\"k\">".rgnum($m_total*24)."</td> \n";
 echo "    <td class=\"k\">".rgnum($k_total*24)."</td> \n";
 echo "    <td class=\"k\">".rgnum($d_total*24)."</td> \n";
@@ -307,7 +308,7 @@ echo "    <td class=\"k\">".rgnum($planet['e'])."</td> \n";
 echo "  </tr> \n";
 
 echo "  <tr> \n";
-echo "    <th colspan=\"2\">Выработка в неделю:</th> \n";
+echo "    <th colspan=\"2\">".loca("RES_PER_WEEK")."</th> \n";
 echo "    <td class=\"k\">".rgnum($m_total*24*7)."</td> \n";
 echo "    <td class=\"k\">".rgnum($k_total*24*7)."</td> \n";
 echo "    <td class=\"k\">".rgnum($d_total*24*7)."</td> \n";
