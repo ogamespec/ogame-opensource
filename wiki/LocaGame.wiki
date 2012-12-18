@@ -50,3 +50,23 @@ Location : /game/loca/x_x/menu.php
 http://oldogame.ru/images/overview.jpg 
 
 Location : /game/loca/x_x/overview.php
+
+== Resources ==
+
+http://oldogame.ru/images/resources.jpg 
+
+Location : /game/loca/x_x/resources.php
+
+== Tech tree / details ==
+
+[http://oldogame.ru/images/techtree.jpg http://oldogame.ru/images/techtree_sm.jpg]
+
+Location : /game/loca/x_x/techtree.php
+
+== Admin Tool ==
+
+Location : /game/loca/x_x/admin.php
+
+Main menu:
+
+[http://oldogame.ru/images/admin_main.jpg http://oldogame.ru/images/admin_main_sm.jpg]
