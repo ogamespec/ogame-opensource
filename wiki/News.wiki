@@ -1,5 +1,7 @@
 #summary News archive
 
+*18.12.2012* : New locas : buddy, resources and techtree.
+
 *13.12.2012* : Tomasz and toolsche joined us. Welcome! Tomasz assigned to poland translation and redesign, toolsche take care of deutch translation. Good luck, have fun :)
 
 *08.03.2012* : Added redesign to test how fast is it. Its damn sloooow )) And not because of server side, it simply overburned by javascript and css. Some teaser :
