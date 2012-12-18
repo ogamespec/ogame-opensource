@@ -20,6 +20,7 @@ if ( $GlobalUser['admin'] == 0 ) RedirectHome ();    // обычным поль�
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
+loca_add ( "admin", $GlobalUser['lang'] );
 
 UpdateQueue ( time () );
 $session = $_GET['session'];
@@ -34,58 +35,58 @@ function AdminPanel ()
 <table><tr><td>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Fleetlogs"><img src="img/admin_fleetlogs.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Контроль полётов</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_FLEETLOGS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Browse"><img src="img/admin_browse.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>История переходов</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_BROWSE");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Reports"><img src="img/admin_report.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Жалобы</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_REPORTS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Bans"><img src="img/admin_ban.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Баны</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_BANS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Users"><img src="img/admin_users.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Пользователи</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_USERS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Planets"><img src="img/admin_planets.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Планеты</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_PLANETS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Queue"><img src="img/admin_queue.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Задания</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_QUEUE");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Uni"><img src="img/admin_uni.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Настройки Вселенной</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_UNI");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Errors"><img src="img/admin_error.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Ошибки</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_ERRORS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Debug"><img src="img/admin_debug.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Отладочные сообщения</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_DEBUG");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=BattleSim"><img src="img/admin_sim.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Симулятор</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_BATTLESIM");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Broadcast"><img src="img/admin_broadcast.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Общее сообщение</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_BROADCAST");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Expedition"><img src="<?=hostname();?>evolution/gebaeude/210.gif" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Настройки экспедиции</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_EXPEDITION");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Logins"><img src="img/admin_logins.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Логины</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_LOGINS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Checksum"><img src="img/admin_checksum.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Целостность кода</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_CHECKSUM");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=Bots"><img src="img/admin_bots.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Управление ботами</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_BOTS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=BattleReport"><img src="img/admin_battle.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>Боевые доклады</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_BATTLELOGS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 <a href="index.php?page=admin&session=<?=$session;?>&mode=UserLogs"><img src="img/admin_userlogs.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b>История действий</b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_USERLOGS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 </td></tr></table><br/>
 
@@ -107,30 +108,30 @@ function Admin_Home ()
 
     <table width=100% border="0" cellpadding="0" cellspacing="1" align="top" class="s">
     <tr>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Fleetlogs"><img src="img/admin_fleetlogs.png"><br>Контроль полётов</a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Browse"><img src="img/admin_browse.png"><br>История переходов</a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Reports"><img src="img/admin_report.png"><br>Жалобы</a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Bans"><img src="img/admin_ban.png"><br>Баны</a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Users"><img src="img/admin_users.png"><br>Пользователи</a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Fleetlogs"><img src="img/admin_fleetlogs.png"><br><?=loca("ADM_MENU_FLEETLOGS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Browse"><img src="img/admin_browse.png"><br><?=loca("ADM_MENU_BROWSE");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Reports"><img src="img/admin_report.png"><br><?=loca("ADM_MENU_REPORTS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Bans"><img src="img/admin_ban.png"><br><?=loca("ADM_MENU_BANS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Users"><img src="img/admin_users.png"><br><?=loca("ADM_MENU_USERS");?></a></th>
     </tr>
     <tr>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Planets"><img src="img/admin_planets.png"><br>Планеты</a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Queue"><img src="img/admin_queue.png"><br>Задания</a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Uni"><img src="img/admin_uni.png"><br>Настройки Вселенной</a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Errors"><img src="img/admin_error.png"><br>Ошибки</a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Debug"><img src="img/admin_debug.png"><br>Отладочные сообщения</a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Planets"><img src="img/admin_planets.png"><br><?=loca("ADM_MENU_PLANETS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Queue"><img src="img/admin_queue.png"><br><?=loca("ADM_MENU_QUEUE");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Uni"><img src="img/admin_uni.png"><br><?=loca("ADM_MENU_UNI");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Errors"><img src="img/admin_error.png"><br><?=loca("ADM_MENU_ERRORS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Debug"><img src="img/admin_debug.png"><br><?=loca("ADM_MENU_DEBUG");?></a></th>
     </tr>
     <tr>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=BattleSim"><img src="img/admin_sim.png"><br>Симулятор</a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Broadcast"><img src="img/admin_broadcast.png"><br>Общее сообщение</a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Expedition"><img src="<?=hostname();?>evolution/gebaeude/210.gif"><br>Настройки экспедиции</a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Logins"><img src="img/admin_logins.png"><br>Логины</a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Checksum"><img src="img/admin_checksum.png"><br>Целостность кода</a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=BattleSim"><img src="img/admin_sim.png"><br><?=loca("ADM_MENU_BATTLESIM");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Broadcast"><img src="img/admin_broadcast.png"><br><?=loca("ADM_MENU_BROADCAST");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Expedition"><img src="<?=hostname();?>evolution/gebaeude/210.gif"><br><?=loca("ADM_MENU_EXPEDITION");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Logins"><img src="img/admin_logins.png"><br><?=loca("ADM_MENU_LOGINS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Checksum"><img src="img/admin_checksum.png"><br><?=loca("ADM_MENU_CHECKSUM");?></a></th>
     </tr>
     <tr>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Bots"><img src="img/admin_bots.png"><br>Управление ботами</a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=BattleReport"><img src="img/admin_battle.png"><br>Боевые доклады</a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=UserLogs"><img src="img/admin_userlogs.png"><br>История действий</a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Bots"><img src="img/admin_bots.png"><br><?=loca("ADM_MENU_BOTS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=BattleReport"><img src="img/admin_battle.png"><br><?=loca("ADM_MENU_BATTLELOGS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=UserLogs"><img src="img/admin_userlogs.png"><br><?=loca("ADM_MENU_USERLOGS");?></a></th>
     </tr>
     </table>
 <?php

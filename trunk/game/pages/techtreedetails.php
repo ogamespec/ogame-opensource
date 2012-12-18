@@ -3,6 +3,7 @@
 // Технологии (детали).
 
 loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "techtree", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -123,12 +124,12 @@ echo "<center> \n";
 echo "<table width=270> \n";
 echo "<tr> \n";
 echo "<td class=c align=center nowrap> \n";
-echo "Условия для <a href=\"index.php?page=infos&session=$session&gid=$id\">'".loca("NAME_$id")."'</a></td> \n";
+echo va( loca("TECHTREE_COND_FOR"), "<a href=\"index.php?page=infos&session=$session&gid=$id\">'".loca("NAME_$id")."'</a>") . "</td> \n";
 echo "</tr> \n";
 
 walk_tree ( $reqs[$id], $id );
 
-if ( $maxreclevel == 0 ) echo "<tr><td class=l align=center>Условий нет</td></tr> ";
+if ( $maxreclevel == 0 ) echo "<tr><td class=l align=center>".loca("TECHTREE_COND_NO")."</td></tr> ";
 
 for ($i=$maxreclevel-1,$n=0; $i>=0; $i--,$n++)
 {
@@ -144,7 +145,7 @@ for ($i=$maxreclevel-1,$n=0; $i>=0; $i--,$n++)
         echo "    <td class=l align=center> \n";
         echo "    <table width=\"100%\" border=0> \n";
         echo "    <tr> \n";
-        echo "        <td align=left> <font color=\"$color\"> ".loca("NAME_$v")." (уровень $level) </font> </td> \n";
+        echo "        <td align=left> <font color=\"$color\"> ".loca("NAME_$v")." ".va(loca("TECHTREE_LEVEL"),$level)." </font> </td> \n";
         echo "        <td align=right> <a href=\"index.php?page=techtreedetails&session=$session&tid=$v\">[i]</a> </td> \n";
         echo "    </tr> \n";
         echo "    </td> \n";

@@ -3,6 +3,7 @@
 // Технологии.
 
 loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "techtree", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -24,7 +25,7 @@ echo "<center>\n";
 // Список объектов что-чему требуется по категориям.
 
 $req_building = array (
-    "name" => "Постройки",
+    "name" => loca("TECHTREE_BUILDINGS"),
     1 => array (),
     2 => array (),
     3 => array (),
@@ -43,7 +44,7 @@ $req_building = array (
 );
 
 $req_research = array (
-    "name" => "Исследования",
+    "name" => loca("TECHTREE_RESEARCH"),
     106 => array (31=>3),
     108 => array (31=>1),
     109 => array (31=>4),
@@ -63,7 +64,7 @@ $req_research = array (
 );
 
 $req_fleet = array (
-    "name" => "Флот",
+    "name" => loca("TECHTREE_FLEET"),
     202 => array (21=>2, 115=>2),
     203 => array (21=>4, 115=>6),
     204 => array (21=>1, 115=>1),
@@ -81,7 +82,7 @@ $req_fleet = array (
 );
 
 $req_defense = array (
-    "name" => "Оборона",
+    "name" => loca("TECHTREE_DEFENSE"),
     401 => array (21=>1),
     402 => array (113=>1, 21=>2, 120=>3),
     403 => array (113=>3, 21=>4, 120=>6),
@@ -95,7 +96,7 @@ $req_defense = array (
 );
 
 $req_special = array (
-    "name" => "Особые постройки",
+    "name" => loca("TECHTREE_SPECIAL"),
     41 => array (),
     42 => array (41=>1),
     43 => array (41=>1, 114=>7),
@@ -116,7 +117,7 @@ foreach ($reqs as $i => $req )
 {
     foreach ($req as $c => $entry )
     {
-        if ( $c === "name" ) echo "<tr><td class=c>$entry</td><td class=c>Требуется</td></tr> \n";
+        if ( $c === "name" ) echo "<tr><td class=c>$entry</td><td class=c>".loca("TECHTREE_REQUIRED")."</td></tr> \n";
         else
         {
             if (count ($entry) == 0) $details = "&nbsp;";
@@ -130,8 +131,8 @@ foreach ($reqs as $i => $req )
             echo "<td class=l> \n";
             foreach ($entry as $obj => $lvl ) {
                 $ok = MeetRequirement ( $GlobalUser, $aktplanet, $obj, $lvl );
-                if ($ok) echo "<font color=\"#00ff00\">".loca("NAME_$obj")." (уровень $lvl)</font><br /> \n";
-                else echo "<font color=\"#ff0000\">".loca("NAME_$obj")." (уровень $lvl)</font><br /> \n";
+                if ($ok) echo "<font color=\"#00ff00\">".loca("NAME_$obj")." ".va(loca("TECHTREE_LEVEL"), $lvl)."</font><br /> \n";
+                else echo "<font color=\"#ff0000\">".loca("NAME_$obj")." ".va(loca("TECHTREE_LEVEL"), $lvl)."</font><br /> \n";
             }
             echo "</td> \n";
         }
