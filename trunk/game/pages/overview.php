@@ -113,7 +113,11 @@ echo "</td></tr>\n";
 
 // Новые сообщения.
 $num = UnreadMessages ( $GlobalUser['player_id'] );
-if ($num) echo "<tr><th colspan=\"4\"><a href=\"index.php?page=messages&dsp=1&session=$session\">  ".va ( loca("OVERVIEW_NEWMSG"), $num )."   </th></tr>\n";
+if ($num) {
+    if ($num > 1) $msgs = loca("OVERVIEW_MSGS");
+    else $msgs = "";
+    echo "<tr><th colspan=\"4\"><a href=\"index.php?page=messages&dsp=1&session=$session\">  ".va ( loca("OVERVIEW_NEWMSG"), $num, $msgs )."   </th></tr>\n";
+}
 
 // Время сервера и список событий.
 echo "<tr><th>    ".loca("OVERVIEW_TIME")."   </th> <th colspan=3>".date ( "D M j G:i:s", $now)."</th></tr>\n";
