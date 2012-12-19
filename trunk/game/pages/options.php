@@ -6,6 +6,7 @@ $OptionsMessage = "";
 $OptionsError = "";
 
 loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "options", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -35,6 +36,8 @@ PageHeader ("options");
 
 $unitab = LoadUniverse ();
 $speed = $unitab['speed'];
+
+$prem = PremiumStatus ($GlobalUser);
 ?>
 
 <!-- CONTENT AREA -->
@@ -49,7 +52,7 @@ $speed = $unitab['speed'];
 
         if ( time () >= $GlobalUser['vacation_until'] && $_POST['urlaub_aus'] === "on" && $GlobalUser['vacation'] )
         {
-            $OptionsError = "Ну что, ".$GlobalUser['oname'].", как был отдых?. Не забудьте восстановить производство сырья и удачи в дальнейшей игре.\n<br/>\n";
+            $OptionsError = va ( loca("OPTIONS_MSG_VMDISABLED"), $GlobalUser['oname'] ) . "\n<br/>\n";
             $query = "UPDATE ".$db_prefix."users SET vacation=0,vacation_until=0 WHERE player_id=".$GlobalUser['player_id'];
             dbquery ($query);
             $GlobalUser['vacation'] = $GlobalUser['vacation_until'] = 0;
@@ -71,9 +74,9 @@ $speed = $unitab['speed'];
 
  <form action="index.php?page=options&session=<?=$session;?>&mode=change" method="POST" > 
         <input type="hidden" name="design"     value='on' /> 
-    <tr><td class="c" colspan ="2">Данные пользователя</td></tr> 
+    <tr><td class="c" colspan ="2"><?=loca("OPTIONS_USER");?></td></tr> 
     <tr> 
-        <th><a title="Этот адрес можно в любое время изменить. Через 7 дней без изменений он станет постоянным.">Адрес</a></th> 
+        <th><a title="<?=loca("Этот адрес можно в любое время изменить. Через 7 дней без изменений он станет постоянным.");?>"><?=loca("OPTIONS_USER_EMAIL");?></a></th> 
         <th><input type="text" name="db_email" maxlength="100" size="20" value="<?=$GlobalUser['email'];?>" /></th> 
     </tr> 
     <tr> 
@@ -108,7 +111,7 @@ $speed = $unitab['speed'];
  <form action="index.php?page=options&session=<?=$session;?>&mode=change" method="POST" >
   <tr> <td class="c" colspan="2">Режим отпуска</td>  </tr>
   <tr>   </tr>
-  <tr> <th colspan=2>   Режим отпуска включён. Отпуск минимум до:<br />
+  <tr> <th colspan=2>   <?=loca("OPTIONS_MSG_VMENABLED");?><br />
      <?=date ("d.m.Y. H:i:s", $GlobalUser['vacation_until']);?>   </th>   </tr>
 <?php
     if ( time () >= $GlobalUser['vacation_until'] )
@@ -126,7 +129,7 @@ $speed = $unitab['speed'];
     {
 ?>
              <tr>
-               <th><a title="Если поставить здесь галочку, то через 7 дней аккаунт автоматически полностью удалится.">Удалить аккаунт</a></th>
+               <th><a title="<?=loca("OPTIONS_ACCOUNT_DEL_TIP");?>"><?=loca("OPTIONS_ACCOUNT_DEL");?></a></th>
                <th><input type="checkbox" name="db_deaktjava" <?=IsChecked("disable");?> />
       <?php
     if ($GlobalUser['disable']) echo "am: " . date ("Y-m-d H:i:s", $GlobalUser['disable_until']) . "<input type='hidden' name=loeschen_am value=".date ("Y-m-d H:i:s", $GlobalUser['disable_until']).">";
@@ -136,7 +139,7 @@ $speed = $unitab['speed'];
     }
 ?>
 
-     <tr>   <th colspan=2><input type="submit" value="Сохранить изменения" /></th>  </tr>
+     <tr>   <th colspan=2><input type="submit" value="<?=loca("OPTIONS_APPLY");?>" /></th>  </tr>
  </form>
  </table>
 
@@ -153,18 +156,18 @@ $speed = $unitab['speed'];
 
             if ( $GlobalUser['name_changed'] == 0 && $_POST['db_character'] !== $GlobalUser['oname'] ) {        // Сменить имя.
                 $forbidden = explode ( ",", "hitler, fick, adolf, legor, aleena, ogame, mainman, fishware, osama, bin laden, stalin, goebbels, drecksjude, saddam, space, ringkeeper, administration" );
-                if ( IsUserExist ( $_POST['db_character'] )) $OptionsError = "Это имя уже существует.";
-                else if ( mb_strlen ($_POST['db_character']) < 3 || mb_strlen ($_POST['db_character']) > 20 ) $OptionsError = "Имя должно содержать от 3-х до 20-ти символов.";
-                else if ( preg_match ( '/[<>()\[\]{}\\\\\/\`\"\'.,:;*+]/', $_POST['db_character'] )) $OptionsError = "Имя не должно содержать спец-символы.";
+                if ( IsUserExist ( $_POST['db_character'] )) $OptionsError = loca ("OPTIONS_ERR_EXISTNAME");
+                else if ( mb_strlen ($_POST['db_character']) < 3 || mb_strlen ($_POST['db_character']) > 20 ) $OptionsError = loca ("OPTIONS_ERR_NAME_3_20");
+                else if ( preg_match ( '/[<>()\[\]{}\\\\\/\`\"\'.,:;*+]/', $_POST['db_character'] )) $OptionsError = loca ("OPTIONS_ERR_NAME_SPECIAL");
                 $lower = mb_strtolower ($_POST['db_character'], 'UTF-8');
                 foreach ( $forbidden as $i=>$name) {
-                    if ( $lower === $name ) $OptionsError = "Недопустимое имя!";
+                    if ( $lower === $name ) $OptionsError = loca ("OPTIONS_ERR_NAME");
                 }
 
                 if ( $OptionsError === "" )
                 {
                     ChangeName ( $GlobalUser['player_id'], $_POST['db_character'] );
-                    $OptionsError = "Имя пользователя изменено. Раз в неделю это возможно. Войдите снова.";
+                    $OptionsError = loca ("OPTIONS_MSG_NAME");
                     $GlobalUser['name_changed'] = 1;
                     $GlobalUser['oname'] = $_POST['db_character'] ;
                     Logout ( $GlobalUser['session'] );
@@ -173,19 +176,17 @@ $speed = $unitab['speed'];
 
             else if ( $_POST['newpass1'] !== "" ) {        // Сменить пароль
 
-                if ( $_POST['newpass1'] !== $_POST['newpass2'] ) $OptionsError = "Новые пароли не совпадают.";
-                else if ( !preg_match ( "/^[_a-zA-Z0-9]+$/", $_POST['newpass1'] ) ) $OptionsError = "Пароль содержит особый символ.";
-                else if ( strlen ( $_POST['newpass1'] ) < 8 ) $OptionsError = "Пароль должен состоять минимум из 8 символов";
-                else if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $OptionsError = "Неправильный старый пароль.";
-
-                //Вы хотите использовать небезопасный пароль, измените его на более безопасный.
+                if ( $_POST['newpass1'] !== $_POST['newpass2'] ) $OptionsError = loca ("OPTIONS_ERR_NEWPASS");
+                else if ( !preg_match ( "/^[_a-zA-Z0-9]+$/", $_POST['newpass1'] ) ) $OptionsError = loca ("OPTIONS_ERR_PASS_SPECIAL");
+                else if ( strlen ( $_POST['newpass1'] ) < 8 ) $OptionsError = loca ("OPTIONS_ERR_PASS_8");
+                else if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $OptionsError = loca ("OPTIONS_ERR_OLDPASS");
 
                 if ( $OptionsError === "" )
                 {
                     $md5 = md5 ($_POST['newpass1'] . $db_secret );
                     $query = "UPDATE ".$db_prefix."users SET password = '".$md5."' WHERE player_id = " . $GlobalUser['player_id'];
                     dbquery ($query);
-                    $OptionsError = "Пароль изменён.";
+                    $OptionsError = loca ("OPTIONS_MSG_PASS");    // TODO: OPTIONS_MSG_UNSAFE, OPTIONS_MSG_SIMPLE
                     Logout ( $GlobalUser['session'] );
                 }
             }
@@ -207,7 +208,7 @@ $speed = $unitab['speed'];
                     dbquery ($query);
                     MyGoto ( "options" );
                 }
-                else $OptionsError = "Режим отпуска включается только тогда, когда на планете ничего не строится и не исследуется.";
+                else $OptionsError = loca ("OPTIONS_ERR_VM");
             }
 
             if ( $_POST['db_deaktjava'] === "on" && $GlobalUser['disable'] == 0 ) {        // Поставить аккаунт на удаление
@@ -227,7 +228,7 @@ $speed = $unitab['speed'];
             }
 
             // Сохранить путь к скину + галочка показывать/выключить скин.
-            //Это внешний путь для скина. ID этой сессии на используемом сервере может быть опознан!
+            // TODO : OPTIONS_MSG_SKIN
             ChangeSkinPath ( $GlobalUser['player_id'], $_POST['dpath'] );
             EnableSkin ( $GlobalUser['player_id'], ($_POST['design']==="on"?1:0) );
 
@@ -259,14 +260,14 @@ $speed = $unitab['speed'];
     if ( $GlobalUser['name_changed'] )
     {
 ?>
-      <th><a title="Имя можно изменять только раз в 7 дней.">Имя</a></th>
+      <th><a title="<?=loca("OPTIONS_ERR_NAME_WEEK");?>"><?=loca("OPTIONS_USER_NAME");?></a></th>
    <th><?=$GlobalUser['oname'];?></th>
 <?php
     }
     else
     {
 ?>
-      <th>Имя</th>
+      <th><?=loca("OPTIONS_USER_NAME");?></th>
    <th><input type="text" name="db_character" size ="20" value="<?=$GlobalUser['oname'];?>" /><br/></th>
 <?php
     }
@@ -274,36 +275,36 @@ $speed = $unitab['speed'];
 
     </tr>
   <tr>
-  <th>Старый пароль</th>
+  <th><?=loca("OPTIONS_USER_OLDPASS");?></th>
 
    <th><input type="password" name="db_password" size ="20" value="" /></th>
   </tr>
   <tr>
-  <th>Новый пароль (мин. 8 символов)</th>
+  <th><?=loca("OPTIONS_USER_NEWPASS1");?></th>
    <th><input type="password" name="newpass1" size="20" maxlength="40" /></th>
   </tr>
   <tr>
-  <th>Новый пароль (подтверждение)</th>
+  <th><?=loca("OPTIONS_USER_NEWPASS2");?></th>
 
    <th><input type="password" name="newpass2" size="20" maxlength="40" /></th>
   </tr>
   <tr>
-  <th><a title="Этот адрес можно в любое время изменить. Через 7 дней без изменений он станет постоянным.">Адрес</a></th>
+  <th><a title="<?=loca("OPTIONS_USER_EMAIL_TIP");?>"><?=loca("OPTIONS_USER_EMAIL");?></a></th>
   <th><input type="text" name="db_email" maxlength="100" size="20" value="<?=$GlobalUser['email'];?>" /></th>
   </tr>
   <tr>
-  <th>Постоянный адрес</th>
+  <th><?=loca("OPTIONS_USER_PEMAIL");?></th>
 
    <th><?=$GlobalUser['pemail'];?></th>
   </tr>
    <tr><th colspan="2">
   </tr>
   <tr>
-  <td class="c" colspan="2">Общие настройки</td>
+  <td class="c" colspan="2"><?=loca("OPTIONS_GENERAL");?></td>
   </tr>
   <tr>
 
-   <th>Язык:</th>
+   <th><?=loca("OPTIONS_GENERAL_LANG");?></th>
    <th>
    <select name="lang">
 <?php
@@ -315,28 +316,28 @@ $speed = $unitab['speed'];
    </th>
   </tr>
 
-   <th>Сортировка планет по:</th>
+   <th><?=loca("OPTIONS_GENERAL_ORDER");?></th>
    <th>
    <select name="settings_sort">
-    <option value="0" <?=IsSelected("sortby", 0);?> >порядку колонизации</option>
-    <option value="1" <?=IsSelected("sortby", 1);?> >координатам</option>
-    <option value="2" <?=IsSelected("sortby", 2);?> >алфавиту</option>
+    <option value="0" <?=IsSelected("sortby", 0);?> ><?=loca("OPTIONS_GENERAL_ORDER1");?></option>
+    <option value="1" <?=IsSelected("sortby", 1);?> ><?=loca("OPTIONS_GENERAL_ORDER2");?></option>
+    <option value="2" <?=IsSelected("sortby", 2);?> ><?=loca("OPTIONS_GENERAL_ORDER3");?></option>
    </select>
 
    </th>
   </tr>
   <tr>
-   <th>Порядок сортировки:</th>
+   <th><?=loca("OPTIONS_GENERAL_ORDERBY");?></th>
    <th>
    <select name="settings_order">
-     <option value="0" <?=IsSelected("sortorder", 0);?>>по возрастанию</option>
-     <option value="1" <?=IsSelected("sortorder", 1);?>>по убыванию</option>
+     <option value="0" <?=IsSelected("sortorder", 0);?>><?=loca("OPTIONS_GENERAL_ORDERBY1");?></option>
+     <option value="1" <?=IsSelected("sortorder", 1);?>><?=loca("OPTIONS_GENERAL_ORDERBY2");?></option>
 
    </select>
    </th>
  </tr>
 
-  <th>Путь для скинов (напр. C:/ogame/kartinki/)<br /> <a href="http://oldogame.ru/download/" target="_blank">Скачать</a></th>
+  <th><?=loca("OPTIONS_GENERAL_SKINPATH");?><br /> <a href="http://oldogame.ru/download/" target="_blank"><?=loca("OPTIONS_GENERAL_DOWNLOAD");?></a></th>
    <th><input type=text name="dpath" maxlength="80" size="40" value="<?=$GlobalUser['skin'];?>" /> <br />
   <?php
             // Если путь к скину пустой выдать список доступных скинов на сервере графики.
@@ -389,7 +390,7 @@ $speed = $unitab['speed'];
    </th>
   </tr>
   <tr>
-  <th>Показать скин</th>
+  <th><?=loca("OPTIONS_GENERAL_SHOWSKIN");?></th>
    <th>
     <input type="checkbox" name="design"
     <?=IsChecked("useskin");?> />
@@ -397,62 +398,62 @@ $speed = $unitab['speed'];
   </tr>
 
   <tr>
-    <th><a title="Проверка IP означает, что автоматически последует выгрузка, если меняется IP или двое людей с разными IP зашли под одним аккаунтом. Отключение проверки IP может быть небезопасным!">Деактивировать проверку IP</a></th>
+    <th><a title="<?=loca("OPTIONS_GENERAL_DEACTIP_TIP");?>"><?=loca("OPTIONS_GENERAL_DEACTIP");?></a></th>
    <th><input type="checkbox" name="noipcheck"  <?=IsChecked("deact_ip");?>/></th>
   </tr>
   <tr>
-   <td class="c" colspan="2">Настройки просмотра галактики</td>
+   <td class="c" colspan="2"><?=loca("OPTIONS_GALAXY");?></td>
   </tr>
   <tr>
 
-   <th><a title="Кол-во шпионских зондов, которые при каждом сканировании посылаются из меню Галактика.">Кол-во шпионских зондов</a></th>
+   <th><a title="<?=loca("OPTIONS_GALAXY_SPIES_TIP");?>"><?=loca("OPTIONS_GALAXY_SPIES");?></a></th>
    <th><input type="text" name="spio_anz" maxlength="2" size="2" value="<?=$GlobalUser['maxspy'];?>" /></th>
   </tr>
   <!--<tr>
-   <th>Просмотреть название</th>
+   <th><?=loca("OPTIONS_GALAXY_TOOLTIPTIME");?></th>
    <th><input type="text" name="settings_tooltiptime" maxlength="2" size="2" value="0" /> сек.</th>
   </tr>-->
   <tr>
-   <th>Максимальные сообщения о флоте</th>
+   <th><?=loca("OPTIONS_GALAXY_MAXMSG");?></th>
    <th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="<?=$GlobalUser['maxfleetmsg'];?>" /></th>
   </tr>
 
 <?php
-    if (0)    // Дополнительные настройки Командира
+    if ( $prem['commander'] )    // Дополнительные настройки Командира
     {
 ?>
   </tr>
      <tr>
-   <th>Сочетания клавиш</th>
-   <th>показать</th>
+   <th><?=loca("OPTIONS_GALAXY_KEYS");?></th>
+   <th><?=loca("OPTIONS_GALAXY_SHOWKEYS");?></th>
   </tr>
       <tr>
-   <th><img src="<?=UserSkin();?>img/e.gif" alt="" />   Шпионаж</th>
+   <th><img src="<?=UserSkin();?>img/e.gif" alt="" />   <?=loca("OPTIONS_GALAXY_SPY");?></th>
 
    <th><input type="checkbox" name="settings_esp" checked='checked'/></th>
    </tr>
       <tr>
-   <th><img src="<?=UserSkin();?>img/m.gif" alt="" />   Написать сообщение</th>
+   <th><img src="<?=UserSkin();?>img/m.gif" alt="" />   <?=loca("OPTIONS_GALAXY_MSG");?></th>
    <th><input type="checkbox" name="settings_wri" checked='checked'/></th>
    </tr>
       <tr>
-   <th><img src="<?=UserSkin();?>img/b.gif" alt="" />   Предложение стать другом</th>
+   <th><img src="<?=UserSkin();?>img/b.gif" alt="" />   <?=loca("OPTIONS_GALAXY_BUDDY");?></th>
 
    <th><input type="checkbox" name="settings_bud" checked='checked'/></th>
    </tr>
       <tr>
-   <th><img src="<?=UserSkin();?>img/r.gif" alt="" />   Ракетная атака</th>
+   <th><img src="<?=UserSkin();?>img/r.gif" alt="" />   <?=loca("OPTIONS_GALAXY_ROCKET");?></th>
    <th><input type="checkbox" name="settings_mis" checked='checked'/></th>
    </tr>
       <tr>
-   <th><img src="<?=UserSkin();?>img/s.gif" alt="" />   Просмотреть сообщение</th>
+   <th><img src="<?=UserSkin();?>img/s.gif" alt="" />   <?=loca("OPTIONS_GALAXY_REPORT");?></th>
 
    <th><input type="checkbox" name="settings_rep" checked='checked'/></th>
    </tr>
       <tr>
-   <td class="c" colspan="2">Настройки сообщений</td>
+   <td class="c" colspan="2"><?=loca("OPTIONS_MSG");?></td>
    <tr>
-   <th>не сортировать по папкам</th>
+   <th><?=loca("OPTIONS_MSG_SORT");?></th>
   <th><input type="checkbox" name="settings_folders"  checked='checked'/></th>
 </tr>
 
@@ -469,10 +470,10 @@ $speed = $unitab['speed'];
 
       
   <tr>
-     <td class="c" colspan="2">Режим отпуска / Удалить аккаунт</td>
+     <td class="c" colspan="2"><?=loca("OPTIONS_ACCOUNT");?></td>
   </tr>
   <tr>
-     <th><a title="Режим отпуска предназначен для того, чтобы оберегать Вас во время длительного отсутствия. Его можно активировать только тогда, когда ничего не строится (флоты, постройки или оборона) и не исследуется, а также если Вы никуда не посылали свои флоты. Когда он активирован, он защищает Вас от атак, однако уже начатые атаки продолжаются. Во время режима отпуска производство снижается до нуля, и после окончания этого режима надо его вручную выставлять на 100%. Режим отпуска длится минимум 2 дня, деактивировать его возможно только после этого срока.">Активировать режим отпуска</a></th>
+     <th><a title="<?=loca("OPTIONS_ACCOUNT_VM_TIP");?>"><?=loca("OPTIONS_ACCOUNT_VM");?></a></th>
    <th>
     <input type="checkbox" name="urlaubs_modus"
      />
@@ -480,14 +481,14 @@ $speed = $unitab['speed'];
 
   </tr>
   <tr>
-   <th><a title="Если поставить здесь галочку, то через 7 дней аккаунт автоматически полностью удалится.">Удалить аккаунт</a></th>
+   <th><a title="<?=loca("OPTIONS_ACCOUNT_DEL_TIP");?>"><?=loca("OPTIONS_ACCOUNT_DEL");?></a></th>
    <th><input type="checkbox" name="db_deaktjava"  <?=IsChecked("disable");?>/>
       <?php
     if ($GlobalUser['disable']) echo "am: " . date ("Y-m-d H:i:s", $GlobalUser['disable_until']);
 ?> </th>
   </tr>
   <tr>
-   <th colspan=2><input type="submit" value="Сохранить изменения" /></th>
+   <th colspan=2><input type="submit" value="<?=loca("OPTIONS_APPLY");?>" /></th>
 
   </tr>
    
