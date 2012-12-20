@@ -1,6 +1,7 @@
 <?php
 
 loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "search", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -14,6 +15,7 @@ $session = $_GET['session'];
 
 PageHeader ("suche");
 
+$SEARCH_LIMIT = 25;
 $SearchResult = "";
 $searchtext = "";
 
@@ -43,10 +45,10 @@ if ( method () === "POST" )
     $searchtext = SecureText ( $_POST['searchtext'] );
 
     $query = "";
-    if ( $_POST['type'] === "playername" ) $query = "SELECT * FROM ".$db_prefix."users WHERE oname LIKE '".$searchtext."%' LIMIT 25";
-    else if ( $_POST['type'] === "planetname" ) $query = "SELECT * FROM ".$db_prefix."planets WHERE name LIKE '".$searchtext."%' LIMIT 25";
-    else if ( $_POST['type'] === "allytag" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE tag LIKE '".$searchtext."%' LIMIT 25";
-    else if ( $_POST['type'] === "allyname" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE name LIKE '".$searchtext."%' LIMIT 25";
+    if ( $_POST['type'] === "playername" ) $query = "SELECT * FROM ".$db_prefix."users WHERE oname LIKE '".$searchtext."%' LIMIT $SEARCH_LIMIT";
+    else if ( $_POST['type'] === "planetname" ) $query = "SELECT * FROM ".$db_prefix."planets WHERE name LIKE '".$searchtext."%' LIMIT $SEARCH_LIMIT";
+    else if ( $_POST['type'] === "allytag" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE tag LIKE '".$searchtext."%' LIMIT $SEARCH_LIMIT";
+    else if ( $_POST['type'] === "allyname" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE name LIKE '".$searchtext."%' LIMIT $SEARCH_LIMIT";
 
     if ( $query !== "" ) $result = dbquery ( $query );
     if ( $result )
@@ -58,34 +60,34 @@ if ( method () === "POST" )
         if ( $_POST['type'] === "playername" )
         {
             $SearchResult .= "<tr>\n";
-            $SearchResult .= "<td class=\"c\">Имя/Название</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_NAME")."</td>\n";
             $SearchResult .= "<td class=\"c\">&nbsp;</td>\n";
-            $SearchResult .= "<td class=\"c\">Альянс</td>\n";
-            $SearchResult .= "<td class=\"c\">Планета</td>\n";
-            $SearchResult .= "<td class=\"c\">Координаты</td>\n";
-            $SearchResult .= "<td class=\"c\">Очки</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_ALLY")."</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_PLANET")."</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_COORDS")."</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_POINTS")."</td>\n";
             $SearchResult .= "</tr>\n";
         }
 
         else if ( $_POST['type'] === "planetname" )
         {
             $SearchResult .= "<tr>\n";
-            $SearchResult .= "<td class=\"c\">Имя/Название</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_NAME")."</td>\n";
             $SearchResult .= "<td class=\"c\">&nbsp;</td>\n";
-            $SearchResult .= "<td class=\"c\">Альянс</td>\n";
-            $SearchResult .= "<td class=\"c\">Планета</td>\n";
-            $SearchResult .= "<td class=\"c\">Координаты</td>\n";
-            $SearchResult .= "<td class=\"c\">Очки</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_ALLY")."</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_PLANET")."</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_COORDS")."</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_POINTS")."</td>\n";
             $SearchResult .= "</tr>\n";
         }
 
         else if ( $_POST['type'] === "allytag" || $_POST['type'] === "allyname" )
         {
             $SearchResult .= "<tr>\n";
-            $SearchResult .= "<td class=\"c\">Аббревиатура</td>\n";
-            $SearchResult .= "<td class=\"c\">Имя/Название</td>\n";
-            $SearchResult .= "<td class=\"c\">Члены</td>\n";
-            $SearchResult .= "<td class=\"c\">Очки</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_TAG")."</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_NAME")."</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_MEMBERS")."</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_POINTS")."</td>\n";
             $SearchResult .= "</tr>\n";
         }
 
@@ -97,7 +99,7 @@ if ( method () === "POST" )
                 $homeplanet = GetPlanet ( intval($user['hplanetid']) );
                 $ally = LoadAlly ( intval($user['ally_id']) );
                 $name = $user['oname'];
-                $buttons = "<a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\" alt=\"Послать сообщение\" ><img src=\"".UserSkin()."/img/m.gif\" alt=\"Послать сообщение\" title=\"Послать сообщение\" /></a><a href='index.php?page=buddy&session=$session&action=7&buddy_id=".$user['player_id']."' alt='Предложение подружиться'><img src='".UserSkin()."/img/b.gif' border=0 alt='Предложение подружиться' title='Предложение подружиться'></a>";
+                $buttons = "<a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\" alt=\"".loca("SEARCH_MESSAGE")."\" ><img src=\"".UserSkin()."/img/m.gif\" alt=\"".loca("SEARCH_MESSAGE")."\" title=\"".loca("SEARCH_MESSAGE")."\" /></a><a href='index.php?page=buddy&session=$session&action=7&buddy_id=".$user['player_id']."' alt='".loca("SEARCH_MESSAGE")."'><img src='".UserSkin()."/img/b.gif' border=0 alt='".loca("SEARCH_MESSAGE")."' title='".loca("SEARCH_MESSAGE")."'></a>";
                 $allyurl = "ainfo.php?allyid=".$user['ally_id'];
                 if ( $user['player_id'] == $GlobalUser['player_id'] ) {
                     $name = "<font color=\"lime\">$name</font>";
@@ -117,7 +119,7 @@ if ( method () === "POST" )
                 $user = LoadUser ( intval($planet['owner_id']) );
                 $ally = LoadAlly ( intval($user['ally_id']) );
                 $name = $user['oname'];
-                $buttons = "<a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\" alt=\"Послать сообщение\"><img src=\"".UserSkin()."/img/m.gif\" alt=\"Послать сообщение\" title=\"Послать сообщение\" /></a><a href='index.php?page=buddy&session=$session&action=7&buddy_id=".$user['player_id']."' alt='Предложение подружиться'><img src='".UserSkin()."/img/b.gif' border=0 alt='Предложение подружиться' title='Предложение подружиться'></a>";
+                $buttons = "<a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\" alt=\"".loca("SEARCH_MESSAGE")."\"><img src=\"".UserSkin()."/img/m.gif\" alt=\"".loca("SEARCH_MESSAGE")."\" title=\"".loca("SEARCH_MESSAGE")."\" /></a><a href='index.php?page=buddy&session=$session&action=7&buddy_id=".$user['player_id']."' alt='".loca("SEARCH_BUDDY")."'><img src='".UserSkin()."/img/b.gif' border=0 alt='".loca("SEARCH_BUDDY")."' title='".loca("SEARCH_BUDDY")."'></a>";
                 $allyurl = "ainfo.php?allyid=".$user['ally_id'];
                 if ( $user['player_id'] == $GlobalUser['player_id'] ) {
                     $name = "<font color=\"lime\">$name</font>";
@@ -158,20 +160,20 @@ if ( method () === "POST" )
  <form action="index.php?page=suche&session=<?=$session;?>" method="post"> 
  <table width="519"> 
   <tr> 
-   <td class="c">Поиск</td> 
+   <td class="c"><?=loca("SEARCH_SEARCH");?></td> 
   </tr> 
   <tr> 
    <th> 
     <select name="type"> 
-     <option value="playername" <?=search_selected("playername");?>>Имя игрока</option> 
-     <option value="planetname" <?=search_selected("planetname");?>>Название планеты</option> 
-     <option value="allytag" <?=search_selected("allytag");?>>Аббревиатура альянса</option> 
-     <option value="allyname" <?=search_selected("allyname");?>>Название альянса</option> 
+     <option value="playername" <?=search_selected("playername");?>><?=loca("SEARCH_SEL_USER");?></option> 
+     <option value="planetname" <?=search_selected("planetname");?>><?=loca("SEARCH_SEL_PLANET");?></option> 
+     <option value="allytag" <?=search_selected("allytag");?>><?=loca("SEARCH_SEL_TAG");?></option> 
+     <option value="allyname" <?=search_selected("allyname");?>><?=loca("SEARCH_SEL_ALLY");?></option> 
     </select> 
     &nbsp;&nbsp;
     <input type="text" name="searchtext" value="<?=$searchtext;?>"/> 
     &nbsp;&nbsp;
-    <input type="submit" value="Искать" /> 
+    <input type="submit" value="<?=loca("SEARCH_BUTTON");?>" /> 
    </th> 
   </tr> 
  </table> 
