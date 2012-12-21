@@ -1,7 +1,7 @@
 <?php
 
 // Battle-report strings.
-// !!! THIS STRING MUST BE EXAST SAME AS IN ORIGINAL GAME !!! Many tools (websim, log servers, battle report converters etc.) are rely on it.
+// !!! THESE STRINGS MUST BE EXAST SAME AS IN ORIGINAL GAME !!! Many tools (websim, log servers, battle report converters etc.) are rely on it.
 
 // ---------------------------------------------------------------------   de
 
