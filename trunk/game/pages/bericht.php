@@ -10,13 +10,16 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
+loca_add ( "battlereport" );
+$loca_lang = $GlobalUser['lang'];
+
 ?>
 
 <html>
 <HEAD>
 <LINK rel="stylesheet" type="text/css" href="<?=UserSkin();?>formate.css">
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <TITLE>Боевой доклад</TITLE>
+  <TITLE><?=loca("BATTLE_REPORT");?></TITLE>
   <script src="js/utilities.js" type="text/javascript"></script>
   <script type="text/javascript" src="js/overLib/overlib.js"></script>
   <script language="JavaScript">var session="<?=$session;?>";</script>
