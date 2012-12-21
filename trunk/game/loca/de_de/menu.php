@@ -1,5 +1,7 @@
 <?php
 
+$LOCA["de"]["MENU_DIS"] = "Bei Problemen oder fragen, könnt ihr euch an uns unter der Mailadresse \"barrierefrei@ogame.de\" wenden.";
+$LOCA["de"]["MENU_UNIVERSE"] = "Universum";
 $LOCA["de"]["MENU_OVERVIEW"] = "Übersicht";
 $LOCA["de"]["MENU_ADMIN"] = "*Admin Area*";
 $LOCA["de"]["MENU_EMPIRE"] = "Imperium";

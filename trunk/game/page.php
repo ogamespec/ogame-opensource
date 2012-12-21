@@ -308,8 +308,8 @@ function LeftMenu ($coma)
     echo "</script>\n";
     echo "<center>\n\n";
     echo "<div id='menu'>\n";
-    echo "<a href='mailto:barrierefrei@ogame.de' title='Проблемы, касающиеся игроков со слабым зрением, отправляйте на barrierefrei@ogame.de.' style='width:1px;'></a>\n";
-    echo "<p style='width:110px;'><NOBR>Вселенная ".$uni." (<a href='index.php?page=changelog&session=".$sess."'>v 0.84</a>)</NOBR></p>\n";
+    echo "<a href='mailto:barrierefrei@ogame.de' title='".loca("MENU_DIS")."' style='width:1px;'></a>\n";
+    echo "<p style='width:110px;'><NOBR>".loca("MENU_UNIVERSE")." ".$uni." (<a href='index.php?page=changelog&session=".$sess."'>v 0.84</a>)</NOBR></p>\n";
     echo "<table width='110' cellspacing='0' cellpadding='0'>\n";
     echo " <tr>\n";
     echo "  <td><img src='".UserSkin()."gfx/ogame-produktion.jpg' width='110' height='40' /></td>\n";
