@@ -1,7 +1,7 @@
 
 function changeAction(type) {
     if(type != "register" && document.loginForm.universe.value == '') {
-        alert('Вы не выбрали вселенную.');
+        alert('<?=loca("LOGIN_NOTCHOSEN");?>');
     }
     else {
         if(type == "login") {
