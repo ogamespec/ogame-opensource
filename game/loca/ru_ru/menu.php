@@ -2,6 +2,8 @@
 
 // Левое меню.
 
+$LOCA["ru"]["MENU_DIS"] = "Проблемы, касающиеся игроков со слабым зрением, отправляйте на barrierefrei@ogame.de.";
+$LOCA["ru"]["MENU_UNIVERSE"] = "Вселенная";
 $LOCA["ru"]["MENU_OVERVIEW"] = "Обзор";
 $LOCA["ru"]["MENU_ADMIN"] = "* Админка *";
 $LOCA["ru"]["MENU_EMPIRE"] = "Империя";
