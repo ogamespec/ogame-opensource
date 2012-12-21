@@ -11,7 +11,7 @@ function loca ($key)
 {
     global $LOCA, $LocaLang;
     if ( key_exists ( $key, $LOCA[$LocaLang]) ) return $LOCA[$LocaLang][$key];
-    else return "$LOCA";
+    else return "$key";
 }
 
 // Добавить новую версию ключа.

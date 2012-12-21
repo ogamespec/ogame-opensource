@@ -10,10 +10,10 @@ function ScreenShotName ($pic)
 {
     switch ($pic)
     {
-        case "overview": return "Обзор";
-        case "buildings": return "Постройки";
-        case "shipyard": return "Верфь";
-        case "empire": return "Империя";
+        case "overview": return loca("PICS_WALL1");
+        case "buildings": return loca("PICS_WALL2");
+        case "shipyard": return loca("PICS_WALL3");
+        case "empire": return loca("PICS_WALL4");
     }
     return "";
 }
