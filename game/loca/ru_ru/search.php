@@ -12,6 +12,7 @@ $LOCA["ru"]["SEARCH_NAME"] = "Имя/Название";
 $LOCA["ru"]["SEARCH_ALLY"] = "Альянс";
 $LOCA["ru"]["SEARCH_PLANET"] = "Планета";
 $LOCA["ru"]["SEARCH_COORDS"] = "Координаты";
+$LOCA["ru"]["SEARCH_PLACE"] = "Место";
 $LOCA["ru"]["SEARCH_POINTS"] = "Очки";
 $LOCA["ru"]["SEARCH_TAG"] = "Аббревиатура";
 $LOCA["ru"]["SEARCH_MEMBERS"] = "Члены";

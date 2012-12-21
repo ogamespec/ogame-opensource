@@ -57,7 +57,7 @@ if ( method () === "POST" )
 
         $SearchResult .= " <table width=\"519\">\n";
 
-        if ( $_POST['type'] === "playername" )
+        if ( $_POST['type'] === "playername" || $_POST['type'] === "planetname" )
         {
             $SearchResult .= "<tr>\n";
             $SearchResult .= "<td class=\"c\">".loca("SEARCH_NAME")."</td>\n";
@@ -65,22 +65,9 @@ if ( method () === "POST" )
             $SearchResult .= "<td class=\"c\">".loca("SEARCH_ALLY")."</td>\n";
             $SearchResult .= "<td class=\"c\">".loca("SEARCH_PLANET")."</td>\n";
             $SearchResult .= "<td class=\"c\">".loca("SEARCH_COORDS")."</td>\n";
-            $SearchResult .= "<td class=\"c\">".loca("SEARCH_POINTS")."</td>\n";
+            $SearchResult .= "<td class=\"c\">".loca("SEARCH_PLACE")."</td>\n";
             $SearchResult .= "</tr>\n";
         }
-
-        else if ( $_POST['type'] === "planetname" )
-        {
-            $SearchResult .= "<tr>\n";
-            $SearchResult .= "<td class=\"c\">".loca("SEARCH_NAME")."</td>\n";
-            $SearchResult .= "<td class=\"c\">&nbsp;</td>\n";
-            $SearchResult .= "<td class=\"c\">".loca("SEARCH_ALLY")."</td>\n";
-            $SearchResult .= "<td class=\"c\">".loca("SEARCH_PLANET")."</td>\n";
-            $SearchResult .= "<td class=\"c\">".loca("SEARCH_COORDS")."</td>\n";
-            $SearchResult .= "<td class=\"c\">".loca("SEARCH_POINTS")."</td>\n";
-            $SearchResult .= "</tr>\n";
-        }
-
         else if ( $_POST['type'] === "allytag" || $_POST['type'] === "allyname" )
         {
             $SearchResult .= "<tr>\n";
@@ -99,7 +86,7 @@ if ( method () === "POST" )
                 $homeplanet = GetPlanet ( intval($user['hplanetid']) );
                 $ally = LoadAlly ( intval($user['ally_id']) );
                 $name = $user['oname'];
-                $buttons = "<a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\" alt=\"".loca("SEARCH_MESSAGE")."\" ><img src=\"".UserSkin()."/img/m.gif\" alt=\"".loca("SEARCH_MESSAGE")."\" title=\"".loca("SEARCH_MESSAGE")."\" /></a><a href='index.php?page=buddy&session=$session&action=7&buddy_id=".$user['player_id']."' alt='".loca("SEARCH_MESSAGE")."'><img src='".UserSkin()."/img/b.gif' border=0 alt='".loca("SEARCH_MESSAGE")."' title='".loca("SEARCH_MESSAGE")."'></a>";
+                $buttons = "<a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\" alt=\"".loca("SEARCH_MESSAGE")."\" ><img src=\"".UserSkin()."/img/m.gif\" alt=\"".loca("SEARCH_MESSAGE")."\" title=\"".loca("SEARCH_MESSAGE")."\" /></a><a href='index.php?page=buddy&session=$session&action=7&buddy_id=".$user['player_id']."' alt='".loca("SEARCH_BUDDY")."'><img src='".UserSkin()."/img/b.gif' border=0 alt='".loca("SEARCH_BUDDY")."' title='".loca("SEARCH_BUDDY")."'></a>";
                 $allyurl = "ainfo.php?allyid=".$user['ally_id'];
                 if ( $user['player_id'] == $GlobalUser['player_id'] ) {
                     $name = "<font color=\"lime\">$name</font>";
