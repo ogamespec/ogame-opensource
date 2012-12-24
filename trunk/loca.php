@@ -10,6 +10,7 @@ $LOCA = array ();
 function loca ($key)
 {
     global $LOCA, $LocaLang;
+    if ( gettype($LOCA[$LocaLang]) !== "array" ) return "$key";
     if ( key_exists ( $key, $LOCA[$LocaLang]) ) return $LOCA[$LocaLang][$key];
     else return "$key";
 }
