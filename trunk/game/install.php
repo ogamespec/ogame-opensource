@@ -240,7 +240,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "news2 = '', ";
     $query .= "news_until = '0', ";
     $query .= "startdate = '".$now."', ";
-    $query .= "battle_engine = '".$_POST["uni_battle_engine"]."', ";
+    $query .= "battle_engine = '".$_POST["uni_battle_engine"]."'; ";
     //echo "<br>$query<br>";
     dbquery ($query);
 
