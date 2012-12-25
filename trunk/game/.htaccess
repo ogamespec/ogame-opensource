@@ -1,5 +1,7 @@
 AddDefaultCharset UTF-8
 
+php_value error_reporting 0
+
 <Files config.php>
 order allow,deny
 deny from all
