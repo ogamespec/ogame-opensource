@@ -269,7 +269,7 @@ if ($aktplanet['b12']) {
 if ($aktplanet['f212']) {
     $color = $ss_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_212")." (".va(loca("RES_AMOUNT"), $aktplanet['b1']).")</th><th>".$engineer_text."</th>   <th> \n";
+	echo "<th>".loca("NAME_212")." (".va(loca("RES_AMOUNT"), $aktplanet['f212']).")</th><th>".$engineer_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
