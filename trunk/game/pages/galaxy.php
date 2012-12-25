@@ -25,7 +25,7 @@ function empty_row ($p)
 }
 
 // Ракетная атака.
-if ( method () === "POST" && $_POST['aktion'] === "Атаковать" )
+if ( method () === "POST" && isset($_POST['aktion']) )
 {
     $amount = abs(intval($_POST['anz']));        // Количество ракет
     $type = abs(intval($_POST['pziel']));        // Основная цель (0-все)
@@ -81,22 +81,22 @@ if ($coord_g > $unitab['galaxies'] ) $coord_g = $unitab['galaxies'];
 if ($coord_s < 1 ) $coord_s = 1;
 if ($coord_s > $unitab['systems'] ) $coord_s = $unitab['systems'];
 
-if ( $_POST['systemLeft'] === "dr" )
+if ( isset($_POST['systemLeft']) )
 {
     $coord_s--;
     if ( $coord_s < 1 ) $coord_s = 1;
 }
-else if ( $_POST['systemRight'] === "dr" )
+else if ( isset($_POST['systemRight']) )
 {
     $coord_s++;
     if ( $coord_s > $unitab['systems'] ) $coord_s = $unitab['systems'];
 }
-else if ( $_POST['galaxyLeft'] === "dr" )
+else if ( isset($_POST['galaxyLeft']) )
 {
     $coord_g--;
     if ( $coord_g < 1 ) $coord_g = 1;
 }
-else if ( $_POST['galaxyRight'] === "dr" )
+else if ( isset($_POST['galaxyRight']) )
 {
     $coord_g++;
     if ( $coord_g > $unitab['galaxies'] ) $coord_g = $unitab['galaxies'];
@@ -410,7 +410,7 @@ echo "</form>\n";
     $ipm_radius = max (0, 5 * $GlobalUser['r117'] - 1);
     $show_ipm_button = ($system_radius <= $ipm_radius) && ($aktplanet["d503"] > 0) && ($aktplanet['g'] == $coord_g);
 
-    if ($_GET['mode'] == 1) {
+    if ( isset($_GET['mode']) ) {
 
         $target = GetPlanet ( intval($_GET['pdd']) );
 
