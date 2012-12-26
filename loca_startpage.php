@@ -482,7 +482,8 @@ Soruyorsundur kendine bunu sana niye anlattigimi. Söyle desem: Sana burada beni
     }
 
     // Язык стартовой страницы
-    $LocaLang = $_COOKIE['ogamelang'];
+    if ( !isset ($_COOKIE['ogamelang']) ) $LocaLang = "en";
+    else $LocaLang = $_COOKIE['ogamelang'];
 //    if ($LocaLang !== 'de' && $LocaLang !== 'en' && $LocaLang !== 'ru') $LocaLang = "en";        // restrict unsupported languages
 
 ?>
