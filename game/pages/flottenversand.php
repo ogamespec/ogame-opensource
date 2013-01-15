@@ -188,7 +188,7 @@ if ( $space > 0 ) {
     $space -= $cargo_k;
 }
 if ( $space > 0 ) {
-    $cargo_d = min ( $space, intval($_POST['resource3']) );
+    $cargo_d = min ( $space, intval($_POST['resource3']) - $cons );
     $space -= $cargo_d;
 }
 
