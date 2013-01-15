@@ -91,8 +91,10 @@ function va ($subject)
 
 // Игровые страницы.
 
-SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
-if (CheckSession ( $_GET['session'] ) == FALSE) die ();
+if ( key_exists ( 'session', $_GET ) ) {
+    SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
+    if (CheckSession ( $_GET['session'] ) == FALSE) die ();
+}
 
 loca_add ( "common" );
 loca_add ( "technames" );
