@@ -942,6 +942,11 @@ function Queue_Fleet_End ($queue)
     global $GlobalUser;
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $fleet_obj = LoadFleet ( $queue['sub_id'] );
+
+    if ( $fleet_obj['m'] < 0 ) $fleet_obj['m'] = 0;
+    if ( $fleet_obj['k'] < 0 ) $fleet_obj['k'] = 0;
+    if ( $fleet_obj['d'] < 0 ) $fleet_obj['d'] = 0;
+
     if ( $fleet_obj == null ) return;
     $fleet = array ();
     foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj["ship$gid"];
