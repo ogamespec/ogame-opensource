@@ -85,9 +85,9 @@ if ( !key_exists('resource1', $_POST) ) $_POST['resource1'] = 0;
 if ( !key_exists('resource2', $_POST) ) $_POST['resource2'] = 0;
 if ( !key_exists('resource3', $_POST) ) $_POST['resource3'] = 0;
 
-$_POST['resource1'] = min ( $aktplanet['m'], abs(intval($_POST['resource1'])) );
-$_POST['resource2'] = min ( $aktplanet['k'], abs(intval($_POST['resource2'])) );
-$_POST['resource3'] = min ( $aktplanet['d'], abs(intval($_POST['resource3'])) );
+$resource1 = min ( intval($aktplanet['m']), abs(intval($_POST['resource1'])) );
+$resource2 = min ( intval($aktplanet['k']), abs(intval($_POST['resource2'])) );
+$resource3 = min ( intval($aktplanet['d']), abs(intval($_POST['resource3'])) );
 
 foreach ($fleetmap as $i=>$gid)
 {
@@ -178,22 +178,22 @@ foreach ($fleet as $id=>$amount)
 
 // Ограничить перевозимые ресурсы грузоподъемностью флота и затратами на полёт.
 $cargo_m = $cargo_k = $cargo_d = 0;
-$space = $cargo - $cons;
+$space = $cargo;
 if ( $space > 0 ) {
-    $cargo_m = min ( $space, intval($_POST['resource1']) );
+    $cargo_m = min ( $space, $resource1 );
     $space -= $cargo_m;
 }
 if ( $space > 0 ) {
-    $cargo_k = min ( $space, intval($_POST['resource2']) );
+    $cargo_k = min ( $space, $resource2 );
     $space -= $cargo_k;
 }
-if ( $space > 0 ) {
-    $cargo_d = min ( $space, intval($_POST['resource3']) - $cons );
+if ( $space > 0 && $resource3 >= $cons ) {
+    $cargo_d = min ( $space, $resource3 - $cons );
     $space -= $cargo_d;
 }
 
-if ( ( $origin['d'] + $cargo_d) < $cons) FleetError ( "Недостаточно топлива!" );
-else if ( $cons > ($cargo + $spycargo) ) FleetError ( "Недостаточно места в грузовом отсеке!" );
+if ( ($origin['d'] - $cargo_d) < $cons) FleetError ( "Недостаточно топлива!" );
+else if ( $cons > ( ($cargo+$spycargo)-($cargo_m+$cargo_k+$cargo_d) ) ) FleetError ( "Недостаточно места в грузовом отсеке!" );
 
 if ($numships <= 0) FleetError ( "Вы не выбрали корабли либо выбрали, но слишком мало!" );
 
@@ -367,14 +367,6 @@ else {
 
 //    echo "<br>";
 //    print_r ( $queue);
-
-    $before_m = $aktplanet['m'];
-    $before_k = $aktplanet['k'];
-    $before_d = $aktplanet['d'];
-    $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-    if ( $aktplanet['d'] < 0 ) {
-        Debug ( "Флот отправлен ГРУЗ: $cargo_m, $cargo_k, $cargo_d, ЗАТРАТЫ: $cons, РЕСЫ НА ПЛАНЕТЕ ДО ЗАПУСКА: $before_m, $before_k, $before_d, РЕСЫ FLEET3: ".$_POST['resource1'].", ".$_POST['resource2'].", ".$_POST['resource3'] );
-    }
 
     PageHeader ("flottenversand", false, true, "flotten1", 1);
 

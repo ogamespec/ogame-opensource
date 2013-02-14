@@ -4,7 +4,7 @@
   <link rel='stylesheet' type='text/css' href='../css/formate.css' />
   <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
 <link rel='stylesheet' type='text/css' href='../css/combox.css'>
-<link rel='stylesheet' type='text/css' href='../evolution/formate.css' />
+<link rel='stylesheet' type='text/css' href='../../evolution/formate.css' />
 <title>Информационный Центр Огейм</title>
   <script language='JavaScript'>
   </script>
