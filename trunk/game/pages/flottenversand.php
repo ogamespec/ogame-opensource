@@ -188,7 +188,7 @@ if ( $space > 0 ) {
     $space -= $cargo_k;
 }
 if ( $space > 0 && $resource3 >= $cons ) {
-    $cargo_d = min ( $space, $resource3 - $cons );
+    $cargo_d = min ( $space, $resource3 );
     $space -= $cargo_d;
 }
 
