@@ -13,12 +13,18 @@ function QueueDesc ( $queue )
 
     switch ( $type )
     {
-        case "Build":
+        case "BuildStart":
             $planet = GetPlanet ($sub_id);
-            return "Постройка '".loca("NAME_$obj_id")."' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
-        case "Demolish":
+            return "Постройка начать '".loca("NAME_$obj_id")."' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
+        case "DemolishStart":
             $planet = GetPlanet ($sub_id);
-            return "Снос '".loca("NAME_$obj_id")."' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
+            return "Снос начать '".loca("NAME_$obj_id")."' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
+        case "BuildEnd":
+            $planet = GetPlanet ($sub_id);
+            return "Постройка завершить '".loca("NAME_$obj_id")."' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
+        case "DemolishEnd":
+            $planet = GetPlanet ($sub_id);
+            return "Снос завершить '".loca("NAME_$obj_id")."' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
         case "Shipyard":
             $planet = GetPlanet ($sub_id);
             return "Задание на верфи: '".loca("NAME_$obj_id") . "' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
