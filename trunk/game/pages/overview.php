@@ -146,7 +146,7 @@ if ( $cnt > 0 )
     $queue = dbarray ($result);
     $left = $queue['end'] - time ();
     echo "<br><center>".loca("NAME_".$queue['obj_id']) . " ";
-    if ( $queue['type'] === "Demolish" ) echo "Снести";
+    if ( $queue['type'] === "DemolishEnd" ) echo "Снести";
     echo " (".$queue['level'].")<div id=\"bxx\" title=\"".$queue['end']."\" class=\"z\"></div><SCRIPT language=JavaScript>\n";
     echo "pp=\"".$left."\"; ps=\"$session\"; t_building();\n";
     echo "</script></center><br>\n";

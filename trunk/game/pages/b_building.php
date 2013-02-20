@@ -111,7 +111,7 @@ for ( $i=0; $i<$cnt; $i++ )
     if ( $prem['commander'] )
     {
         echo "<tr><td class=\"l\" colspan=\"2\">".($i+1).".: ".loca("NAME_".$queue['obj_id']). " , уровень ".$queue['level'];
-        if ( $queue['type'] === "Demolish" ) echo "\n Снести";
+        if ( $queue['type'] === "DemolishEnd" ) echo "\n Снести";
         if ($i==0) {
             echo "<td class=\"k\"><div id=\"bxx\" class=\"z\"></div><SCRIPT language=JavaScript>\n";
             echo "                  pp=\"".($queue['end']-$now)."\"\n";

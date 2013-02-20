@@ -226,6 +226,7 @@ else
     else if ( $gid == 34 )        // Склад альянса
     {
         $depot_cap = 10000 * pow ( 2, $aktplanet['b34'] );
+        if ($aktplanet['b34']) $deut_avail = min(floor($aktplanet['d']), $depot_cap);
 ?>
     </th>
    </tr>
@@ -233,7 +234,7 @@ else
 <form action="index.php?page=allianzdepot&session=<?=$session;?>" method=post>
 
 <table width='519'>
-<td class='c' colspan='2'>Вместимость: <?=nicenum(min(floor($aktplanet['d']), $depot_cap));?>/<?=nicenum($depot_cap);?></td>
+<td class='c' colspan='2'>Вместимость: <?=$deut_avail;?>/<?=$depot_cap;?></td>
 <?php
 
     $fmap = array_reverse ($fleetmap);
@@ -244,22 +245,26 @@ else
     while ($rows--)
     {
         $fleet_obj = dbarray ( $result );
+        $queue = GetFleetQueue ( $fleet_obj['fleet_id'] );
         $user = LoadUser ($fleet_obj['owner_id']);
 
-        $load = 5214;
-        $cons = 120000;
+        $load = $queue['end'] - $now;
 
         echo "  <tr>\n";
         echo "    <th>Флот ".$user['oname'].":<br>";
+        $cons = 0;
         foreach ($fmap as $i=>$id) {
             $amount = $fleet_obj["ship".$id];
-            if ($amount > 0) echo loca ("NAME_".$id).":".$amount."<br>";
+            if ($amount > 0) { 
+                echo loca ("NAME_".$id).":".$amount."<br>";
+                $cons += $amount * FleetCons ($id, $user['r115'], $user['r117'], $user['r118']) / 10;
+            }
         }
         echo "</th>\n";
         echo "    <th>\n";
         echo "      зарядка<br>$load сек<br>\n";
         echo "      <input tabindex='".$c."' type='text' name='c".$c."' size='5' maxlength='2' value='0' />ч<br>\n\n";
-        echo "         Стоимость $cons / ч    </th>\n";
+        echo "         Стоимость ".ceil($cons)." / ч    </th>\n";
         echo "  </tr>\n";
         $c ++;
     }
