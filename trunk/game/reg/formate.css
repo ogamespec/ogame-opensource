@@ -1,0 +1,29 @@
+.{ font-family: "Arial", "Helvetica", "sans-serif"; font-size: 12px  }
+body{color:#ffffff;margin-top:1px; margin-left:1px;background:#050505}
+BODY            {  SCROLLBAR-BASE-COLOR: #000000; SCROLLBAR-ARROW-COLOR: #333333;}
+
+th{text-align:center;background-color:#606080}
+td.a{height:37px;text-align:center}
+td.b{font-weight:bold;background-color:#606080}
+td.c{font-weight:bold;text-align:center;background-color:#1030a0;color:#ffffff}
+td.f{background-color:#FF0000;color:#000000;font-weight:bold;text-align:center}
+td.g{font-weight:bold;text-align:right}
+td.h{text-align:center;color:#000000;background-color:#606080}
+td.i{text-align:center;color:#FF0000;background-color:#606080}
+td.j{text-align:center;color:#00FF00;background-color:#606080}
+td.k{text-align:center;background-color:#606080;font-weight:bold}
+td.l{background-color:#606080}
+td.m{font-weight:bold;text-align:right;width:86px}
+td.n{font-weight:bold;text-align:right;width:88px;text-align:center;color:#ffffff}
+td.o{text-align:center;color:#0000FF;background-color:#606080}
+td.q{font-weight:bold;font-size:12pt;text-align:center;vertical-align:middle} 
+td.r{text-align:right;background-color:#606080}
+td.v{font-weight:bold;text-align:right;background-color:#606080}
+td.s{background-color:#000000}
+#div.z{font-family:Arial;font-size:15;font-weight=bold;color:#0000FF}
+div.z{font-family:Arial;font-size:15;font-weight=bold;color:#CCCCCC}
+a{COLOR: #ffffff;text-decoration:none;font-weight:bold}
+a.s{color:#00FF00}
+a.t{color:#FF0000}
+a:hover{COLOR: #FF0000}
+
