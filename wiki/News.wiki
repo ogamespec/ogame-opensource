@@ -1,5 +1,7 @@
 #summary News archive
 
+*21.02.2013* : Alliance depot ready!
+
 *18.12.2012* : New locas : buddy, resources and techtree.
 
 *13.12.2012* : Tomasz and toolsche joined us. Welcome! Tomasz assigned to poland translation and redesign, toolsche take care of deutch translation. Good luck, have fun :)
