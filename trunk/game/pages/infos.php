@@ -223,7 +223,7 @@ else
         }
         echo "</table>";
     }
-    else if ( $gid == 34 )        // Склад альянса
+    else if ( $gid == 34 )                                    // Склад альянса
     {
         $depot_cap = 10000 * pow ( 2, $aktplanet['b34'] );
         if ($aktplanet['b34']) $deut_avail = min(floor($aktplanet['d']), $depot_cap);
