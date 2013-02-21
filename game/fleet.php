@@ -354,7 +354,7 @@ function RecallFleet ($fleet_id, $now=0)
     else DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] - 100, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $now);
 
     DeleteFleet ($fleet_obj['fleet_id']);            // удалить флот
-    RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
+    RemoveQueue ( $queue['task_id'] );    // удалить задание
 
     // Если отозван последний флот союза, то удалить союз.
     $union_id = $fleet_obj['union_id'];
@@ -997,14 +997,14 @@ function Queue_Fleet_End ($queue)
             $fleet_obj = dbarray ($result);
             $queue = GetFleetQueue ( $fleet_obj['fleet_id'] );
             DeleteFleet ($fleet_obj['fleet_id']);    // удалить флот
-            RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
+            RemoveQueue ( $queue['task_id'] );    // удалить задание
         }
         RemoveUnion ( $union_id );    // удалить союз
     }
     else
     {
         DeleteFleet ($fleet_obj['fleet_id']);    // удалить флот
-        RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
+        RemoveQueue ( $queue['task_id'] );    // удалить задание
     }
 
     $player_id = $fleet_obj['owner_id'];

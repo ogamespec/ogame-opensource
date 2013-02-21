@@ -251,7 +251,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
                 else {
                     $queue = GetFleetQueue ($defender['id']);
                     DeleteFleet ($defender['id']);    // удалить флот
-                    RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
+                    RemoveQueue ( $queue['task_id'] );    // удалить задание
                 }
             }
         }
@@ -299,7 +299,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
                 else {
                     $queue = GetFleetQueue ($defender['id']);
                     DeleteFleet ($defender['id']);    // удалить флот
-                    RemoveQueue ( $queue['task_id'], 0 );    // удалить задание
+                    RemoveQueue ( $queue['task_id'] );    // удалить задание
                 }
             }
         }
