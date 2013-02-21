@@ -84,7 +84,7 @@ function Admin_Queue ()
         }
 
         if ( key_exists ( "order_remove", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Удалить задание
-            RemoveQueue ( intval ($_POST['order_cancel']), 0 );
+            RemoveQueue ( intval ($_POST['order_cancel']) );
         }
     }
 
