@@ -190,23 +190,6 @@ function GetStartQueue ( $queue, $listid )
     else return 0;
 }
 
-// Получить событие окончания, связанное с событием старта
-function GetEndQueue ( $queue )
-{
-    global $db_prefix;
-    $start = $queue['end'];
-    $planet_id = $queue['sub_id'];
-    $id = $queue['obj_id'];
-    $lvl = $queue['level'];
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE (type = 'BuildEnd' OR type = 'DemolishEnd') AND start = $start AND sub_id = $planet_id AND obj_id = $id AND level = $lvl LIMIT 1";
-    $result = dbquery ($query);
-    if ( dbrows ($result) ) {
-        $task = dbarray ($result);
-        return $task['task_id'];
-    }
-    else return 0;
-}
-
 // Корректируем уровень построек
 function RestartBuildQueue ($planet_id, $start, $now )
 {
@@ -221,11 +204,12 @@ function RestartBuildQueue ($planet_id, $start, $now )
     for ($i=0; $i<$cnt; $i++) BuildEnque ( $planet_id, $queue[$i]['obj_id'], $queue[$i]['type'] === 'DemolishEnd' ? 1 : 0, $now++ );
 }
 
-// Удалить из очереди все постройки указанного типа
-function RemoveBuildings ($planet_id, $id)
+// Удалить из очереди все события указанной постройки
+function RemoveBuildTasks ($planet_id, $id, $lvl, $destroy)
 {
     global $db_prefix;
-    $query = "DELETE FROM ".$db_prefix."queue WHERE (type = 'BuildStart' OR type = 'DemolishStart' OR type = 'BuildEnd' OR type = 'DemolishEnd') AND sub_id = $planet_id AND obj_id = $id;";
+    if ( $destroy ) $query = "DELETE FROM ".$db_prefix."queue WHERE (type = 'DemolishStart' OR type = 'DemolishEnd') AND sub_id = $planet_id AND obj_id = $id AND level = $lvl;";
+    else $query = "DELETE FROM ".$db_prefix."queue WHERE (type = 'BuildStart' OR type = 'BuildEnd') AND sub_id = $planet_id AND obj_id = $id AND level = $lvl;";
     dbquery ($query);
 }
 
@@ -239,9 +223,10 @@ function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
     $planet = GetPlanet ( $planet_id );
     $user = LoadUser ( $planet['owner_id'] );
 
-    $prem = PremiumStatus ($user);
-    if ($prem['commander']) $maxcnt = 5;
-    else $maxcnt = 1;
+    //$prem = PremiumStatus ($user);
+    //if ($prem['commander']) $maxcnt = 5;
+    //else $maxcnt = 1;
+    $maxcnt = 1;
 
     if ($now == 0) $now = time ();
 
@@ -359,6 +344,9 @@ function Queue_BuildStart ($queue)
     $planet = GetPlanet ($planet_id);
     $user = LoadUser ($planet['owner_id']);
 
+    // Рассчитать производство планеты с момента последнего обновления.
+    ProdResources ( &$planet, $planet['lastpeek'], $queue['end'] );
+
     // Проверить все условия возможности постройки/сноса
     $text = '';
     {
@@ -400,9 +388,11 @@ function Queue_BuildStart ($queue)
 
     if ( $queue['type'] === 'DemolishStart' )
     {
+        $destroy = 1;
         if ( $id == 33 || $id == 41 ) $text = "Лунную базу и терраформер нельзя снести.";
         else if ( $planet["b".$id] <= 0 ) $text = "У Вас нет построек этого типа.";
     }
+    else $destroy = 0;
 
     if ( $text === '' )
     {
@@ -418,7 +408,7 @@ function Queue_BuildStart ($queue)
         SendMessage ( $user['player_id'], 'Системное сообщение', 'Производство отменено', $pre . "<br><br>" . $text, 5, $queue['end'] );
 
         // отменить строительство, недостаточно ресурсов или не выполнены условия.
-        RemoveBuildings ($planet_id, $id);
+        RemoveBuildTasks ($planet_id, $id, $lvl, $destroy);
         RestartBuildQueue ( $planet_id, $queue['start'], $queue['end'] );
     }
 }
