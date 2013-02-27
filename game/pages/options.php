@@ -2,6 +2,8 @@
 
 // Настройки.
 
+// Es wurden bereits 2 E-Mails an Dich geschickt. Heute ist kein weiterer E-Mail-Versand möglich, bitte versuch es morgen nochmal.
+
 $OptionsMessage = "";
 $OptionsError = "";
 
@@ -30,6 +32,10 @@ function IsSelected ($option, $value)
     global $GlobalUser;
     if ( $GlobalUser[$option] == $value ) return "selected";
     else return "";
+}
+
+function isValidEmail($email){
+	return eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$", $email);
 }
 
 PageHeader ("options");
@@ -67,7 +73,28 @@ $prem = PremiumStatus ($GlobalUser);
         // Обработать POST-запрос.
         if ( method () === "POST") {
 
-            print_r ($_POST);
+            $ip = $_SERVER['REMOTE_ADDR'];
+
+            if ( key_exists ( "validate", $_POST ) ) {    // Заказать активационную ссылку.
+                if ( $ip !== "127.0.0.1" ) SendChangeMail ( $GlobalUser['oname'], $GlobalUser['email'], $GlobalUser['pemail'], $GlobalUser['validatemd'] );
+                $OptionsMessage = loca ("OPTIONS_MSG_VALIDATE");
+            }
+            else if ( $_POST['db_email'] !== $GlobalUser['email'] && $_POST['db_email'] !== "" ) {        // Сменить адрес
+                $email = $_POST['db_email'];
+                if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $OptionsError = loca ("OPTIONS_ERR_NEEDPASS");
+                else if ( !isValidEmail ($email) ) $OptionsError = loca ("OPTIONS_ERR_EMAIL");
+                else if ( IsEmailExist ($email)) $OptionsError = loca ("OPTIONS_ERR_EMAILUSED");
+
+                if ( $OptionsError === "" )
+                {
+                    $ack = md5(time ().$db_secret);
+                    $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . $GlobalUser['player_id'];
+                    dbquery ($query);
+                    if ( $ip !== "127.0.0.1" ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
+                    $GlobalUser['email'] = $email;
+                    $OptionsError = loca ("OPTIONS_USER_EMAIL_TIP");
+                }
+            }
         }
 
 ?>
@@ -157,6 +184,7 @@ $prem = PremiumStatus ($GlobalUser);
             if ( $GlobalUser['name_changed'] == 0 && $_POST['db_character'] !== $GlobalUser['oname'] ) {        // Сменить имя.
                 $forbidden = explode ( ",", "hitler, fick, adolf, legor, aleena, ogame, mainman, fishware, osama, bin laden, stalin, goebbels, drecksjude, saddam, space, ringkeeper, administration" );
                 if ( IsUserExist ( $_POST['db_character'] )) $OptionsError = loca ("OPTIONS_ERR_EXISTNAME");
+                else if ( !CanChangeName ($GlobalUser['player_id']) ) $OptionsError = loca ("OPTIONS_ERR_NAME_WEEK");
                 else if ( mb_strlen ($_POST['db_character']) < 3 || mb_strlen ($_POST['db_character']) > 20 ) $OptionsError = loca ("OPTIONS_ERR_NAME_3_20");
                 else if ( preg_match ( '/[<>()\[\]{}\\\\\/\`\"\'.,:;*+]/', $_POST['db_character'] )) $OptionsError = loca ("OPTIONS_ERR_NAME_SPECIAL");
                 $lower = mb_strtolower ($_POST['db_character'], 'UTF-8');
@@ -191,8 +219,22 @@ $prem = PremiumStatus ($GlobalUser);
                 }
             }
 
-            else if ( $_POST['db_email'] !== $GlobalUser['pemail'] && $_POST['db_email'] !== "" ) {        // Сменить адрес
-                echo "Сменить адрес<br>";
+            else if ( $_POST['db_email'] !== $GlobalUser['email'] && $_POST['db_email'] !== "" ) {        // Сменить адрес
+                $email = $_POST['db_email'];
+                if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $OptionsError = loca ("OPTIONS_ERR_NEEDPASS");
+                else if ( !isValidEmail ($email) ) $OptionsError = loca ("OPTIONS_ERR_EMAIL");
+                else if ( IsEmailExist ($email)) $OptionsError = loca ("OPTIONS_ERR_EMAILUSED");
+
+                if ( $OptionsError === "" )
+                {
+                    $ip = $_SERVER['REMOTE_ADDR'];
+                    $ack = md5(time ().$db_secret);
+                    $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . $GlobalUser['player_id'];
+                    dbquery ($query);
+                    if ( $ip !== "127.0.0.1" ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
+                    $GlobalUser['email'] = $email;
+                    $OptionsError = loca ("OPTIONS_USER_EMAIL_TIP");
+                }
             }
 
             if ( $_POST['urlaubs_modus'] === "on" && $GlobalUser['vacation'] == 0 ) {        // Включить режим отпуска

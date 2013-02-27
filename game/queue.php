@@ -143,6 +143,7 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "RecalcPoints" ) Queue_RecalcPoints_End ($queue);
         else if ( $queue['type'] === "RecalcAllyPoints" ) Queue_RecalcAllyPoints_End ($queue);
         else if ( $queue['type'] === "AllowName" ) Queue_AllowName_End ($queue);
+        else if ( $queue['type'] === "ChangeEmail" ) Queue_ChangeEmail_End ($queue);
         else if ( $queue['type'] === "UnbanPlayer" ) Queue_UnbanPlayer_End ($queue);
         else if ( $queue['type'] === "AllowAttacks" ) Queue_AllowAttacks_End ($queue);
         else if ( $queue['type'] === "Debug" ) Queue_Debug_End ($queue);
@@ -859,6 +860,16 @@ function AddAllowNameEvent ($player_id)
     }
 }
 
+// Можно ли сменить имя игрока.
+function CanChangeName ($player_id)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'AllowName' AND owner_id = $player_id";
+    $result = dbquery ( $query );
+    if ( dbrows ($result) > 0 ) return false;
+    else return true;
+}
+
 // Разрешить сменить имя.
 function Queue_AllowName_End ($queue)
 {
@@ -885,6 +896,16 @@ function Queue_AllowAttacks_End ($queue)
     global $db_prefix;
     $player_id = $queue['owner_id'];
     $query = "UPDATE ".$db_prefix."users SET noattack = 0, noattack_until = 0 WHERE player_id = $player_id";
+    dbquery ($query);
+    RemoveQueue ( $queue['task_id'] );
+}
+
+// Обновить постоянный адрес почты
+function Queue_ChangeEmail_End ($queue)
+{
+    global $db_prefix;
+    $player_id = $queue['owner_id'];
+    $query = "UPDATE ".$db_prefix."users pemail = email WHERE player_id = $player_id;";
     dbquery ($query);
     RemoveQueue ( $queue['task_id'] );
 }

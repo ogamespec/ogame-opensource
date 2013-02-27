@@ -60,6 +60,7 @@ $LOCA["de"]["OPTIONS_MSG_VMENABLED"] = "Der Urlaubsmodus wurde eingeschaltet.<br
 //$LOCA["de"]["OPTIONS_MSG_VMDISABLED"] = "Ну что, #1, как был отдых?. Не забудьте восстановить производство сырья и удачи в дальнейшей игре.";
 $LOCA["de"]["OPTIONS_MSG_DEL"] = "Dein Account wurde auf löschen gestellt. Löschdatum:";
 $LOCA["de"]["OPTIONS_MSG_DEACTIP"] = "Du hast Einstellungen am IP-Check vorgenommen. Logge Dich bitte neu ein.";
+$LOCA["de"]["OPTIONS_MSG_VALIDATE"] = "Eine E-Mail zur Bestätigung Deines Spielerkontos wurde versandt. Klicke auf den Link in dieser Mail um Dein Konto freizuschalten.";
 
 $LOCA["de"]["OPTIONS_ERR_NEEDPASS"] = "Zum Ändern der E-Mail Adresse muss das Passwort eingegeben werden.";
 $LOCA["de"]["OPTIONS_ERR_OLDPASS"] = "Falsches altes Passwort.";

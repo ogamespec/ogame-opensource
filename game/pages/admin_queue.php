@@ -35,6 +35,7 @@ function QueueDesc ( $queue )
         case "RecalcPoints": return "Пересчитать статистику";
         case "RecalcAllyPoints": return "Пересчитать статистику альянсов";
         case "AllowName": return "Разрешить сменить имя";
+        case "ChangeEmail": return "Обновить постоянный адрес почты";
         case "UnloadAll": return "Отгрузить всех игроков";
         case "CleanDebris": return "Чистка виртуальных ПО";
         case "CleanPlanets": return "Чистка уничтоженных планет";
