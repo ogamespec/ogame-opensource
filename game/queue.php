@@ -856,7 +856,6 @@ function AddAllowNameEvent ($player_id)
         $id = AddDBRow ( $queue, "queue" );
         $query = "UPDATE ".$db_prefix."users SET name_changed = 1, name_until = $when WHERE player_id = $player_id";
         dbquery ($query);
-        Debug ( $query );
     }
 }
 
@@ -900,12 +899,26 @@ function Queue_AllowAttacks_End ($queue)
     RemoveQueue ( $queue['task_id'] );
 }
 
+// Добавить задание обновления постоянного почтового адреса
+function AddChangeEmailEvent ($player_id)
+{
+    global $db_prefix;
+
+    $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'ChangeEmail' AND owner_id = $player_id";
+    dbquery ($query);
+
+    $now = time ();
+    $when = $now + 7 * 24 * 60 * 60;
+    $queue = array ( null, $player_id, "ChangeEmail", 0, 0, 0, $now, $when, 0 );
+    $id = AddDBRow ( $queue, "queue" );
+}
+
 // Обновить постоянный адрес почты
 function Queue_ChangeEmail_End ($queue)
 {
     global $db_prefix;
     $player_id = $queue['owner_id'];
-    $query = "UPDATE ".$db_prefix."users pemail = email WHERE player_id = $player_id;";
+    $query = "UPDATE ".$db_prefix."users SET pemail = email WHERE player_id = $player_id;";
     dbquery ($query);
     RemoveQueue ( $queue['task_id'] );
 }

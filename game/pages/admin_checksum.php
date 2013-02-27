@@ -114,6 +114,7 @@ function Admin_Checksum ()
         'reg/check_registration.php', 
         'reg/errorpage.php', 
         'reg/fa_pass.php', 
+        'reg/login.php', 
         'reg/login2.php', 
         'reg/mail.php', 
         'reg/new.php', 
