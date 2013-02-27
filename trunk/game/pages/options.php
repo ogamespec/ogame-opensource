@@ -90,6 +90,7 @@ $prem = PremiumStatus ($GlobalUser);
                     $ack = md5(time ().$db_secret);
                     $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . $GlobalUser['player_id'];
                     dbquery ($query);
+                    AddChangeEmailEvent ($GlobalUser['player_id']);
                     if ( $ip !== "127.0.0.1" ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
                     $GlobalUser['email'] = $email;
                     $OptionsError = loca ("OPTIONS_USER_EMAIL_TIP");
@@ -219,7 +220,7 @@ $prem = PremiumStatus ($GlobalUser);
                 }
             }
 
-            else if ( $_POST['db_email'] !== $GlobalUser['email'] && $_POST['db_email'] !== "" ) {        // Сменить адрес
+            else if ( $_POST['db_email'] !== $GlobalUser['pemail'] && $_POST['db_email'] !== "" ) {        // Сменить адрес
                 $email = $_POST['db_email'];
                 if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $OptionsError = loca ("OPTIONS_ERR_NEEDPASS");
                 else if ( !isValidEmail ($email) ) $OptionsError = loca ("OPTIONS_ERR_EMAIL");
@@ -231,6 +232,7 @@ $prem = PremiumStatus ($GlobalUser);
                     $ack = md5(time ().$db_secret);
                     $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . $GlobalUser['player_id'];
                     dbquery ($query);
+                    AddChangeEmailEvent ($GlobalUser['player_id']);
                     if ( $ip !== "127.0.0.1" ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
                     $GlobalUser['email'] = $email;
                     $OptionsError = loca ("OPTIONS_USER_EMAIL_TIP");
