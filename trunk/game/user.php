@@ -93,7 +93,6 @@ function SendGreetingsMail ( $name, $pass, $email, $ack)
 // Выслать письмо, подтверждающее смену адреса.
 function SendChangeMail ( $name, $email, $pemail, $ack)
 {
-    global $Host;
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
     $text = "Приветствуем $name,\n\n" .
@@ -160,7 +159,7 @@ function CreateUser ( $name, $pass, $email, $lang, $bot=false)
 
     error_reporting ( E_ALL );
 
-    // Получить следующий уникальный номер и увеличить его на 1 для следующего пользователя.
+    // Увеличить счетчик пользователей во вселенной.
     $query = "SELECT * FROM ".$db_prefix."uni".";";
     $result = dbquery ($query);
     $unitab = dbarray ($result);

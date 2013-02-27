@@ -60,6 +60,7 @@ $LOCA["ru"]["OPTIONS_MSG_VMENABLED"] = "Режим отпуска включён
 $LOCA["ru"]["OPTIONS_MSG_VMDISABLED"] = "Ну что, #1, как был отдых?. Не забудьте восстановить производство сырья и удачи в дальнейшей игре.";
 $LOCA["ru"]["OPTIONS_MSG_DEL"] = "Ваш аккаунт был поставлен на удаление. Дата удаления:";
 $LOCA["ru"]["OPTIONS_MSG_DEACTIP"] = "Вы установили проверку IP. Войдите ещё раз.";
+$LOCA["ru"]["OPTIONS_MSG_VALIDATE"] = "Eine E-Mail zur Bestätigung Deines Spielerkontos wurde versandt. Klicke auf den Link in dieser Mail um Dein Konto freizuschalten.";
 
 $LOCA["ru"]["OPTIONS_ERR_NEEDPASS"] = "Для изменения адреса введите пароль.";
 $LOCA["ru"]["OPTIONS_ERR_OLDPASS"] = "Неправильный старый пароль.";
