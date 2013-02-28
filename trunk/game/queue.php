@@ -116,8 +116,7 @@ function UpdateQueue ($until)
     global $db_prefix;
     global $GlobalUni;
 
-    $uni = $GlobalUni;
-    if ( $uni['freeze'] ) return;
+    if ( $GlobalUni['freeze'] ) return;
 
     LockTables ();
 
@@ -205,6 +204,14 @@ function RestartBuildQueue ($planet_id, $start, $now )
     for ($i=0; $i<$cnt; $i++) BuildEnque ( $planet_id, $queue[$i]['obj_id'], $queue[$i]['type'] === 'DemolishEnd' ? 1 : 0, $now++ );
 }
 
+// Сделать выполнение всех заданий раньше на указанное количество секунд
+function FastenBuildQueue ($seconds)
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."queue SET start = start - $seconds, end = end - $seconds WHERE (type = 'BuildStart' OR type = 'BuildEnd' OR type = 'DemolishStart' OR type = 'DemolishEnd');";
+    dbquery ($query);
+}
+
 // Удалить из очереди все события указанной постройки
 function RemoveBuildTasks ($planet_id, $id, $lvl, $destroy)
 {
@@ -224,10 +231,9 @@ function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
     $planet = GetPlanet ( $planet_id );
     $user = LoadUser ( $planet['owner_id'] );
 
-    //$prem = PremiumStatus ($user);
-    //if ($prem['commander']) $maxcnt = 5;
-    //else $maxcnt = 1;
-    $maxcnt = 1;
+    $prem = PremiumStatus ($user);
+    if ($prem['commander']) $maxcnt = 5;
+    else $maxcnt = 1;
 
     if ($now == 0) $now = time ();
 
@@ -335,9 +341,12 @@ function BuildDeque ( $planet_id, $listid )
 
 function Queue_BuildStart ($queue)
 {
+    global $GlobalUni;
+
     $id = $queue['obj_id'];
     $lvl = $queue['level'];
     $planet_id = $queue['sub_id'];
+    $speed = $GlobalUni['speed'];
 
     $m = $k = $d = $e = 0;
     BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
@@ -410,7 +419,7 @@ function Queue_BuildStart ($queue)
 
         // отменить строительство, недостаточно ресурсов или не выполнены условия.
         RemoveBuildTasks ($planet_id, $id, $lvl, $destroy);
-        RestartBuildQueue ( $planet_id, $queue['start'], $queue['end'] );
+        FastenBuildQueue ( floor (BuildDuration ( $id, $lvl, $planet['b14'], $planet['b15'], $speed )) );
     }
 }
 
