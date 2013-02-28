@@ -13,18 +13,12 @@ function QueueDesc ( $queue )
 
     switch ( $type )
     {
-        case "BuildStart":
+        case "Build":
             $planet = GetPlanet ($sub_id);
-            return "Постройка начать '".loca("NAME_$obj_id")."' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
-        case "DemolishStart":
+            return "Постройка '".loca("NAME_$obj_id")."' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
+        case "Demolish":
             $planet = GetPlanet ($sub_id);
-            return "Снос начать '".loca("NAME_$obj_id")."' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
-        case "BuildEnd":
-            $planet = GetPlanet ($sub_id);
-            return "Постройка завершить '".loca("NAME_$obj_id")."' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
-        case "DemolishEnd":
-            $planet = GetPlanet ($sub_id);
-            return "Снос завершить '".loca("NAME_$obj_id")."' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
+            return "Снос '".loca("NAME_$obj_id")."' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
         case "Shipyard":
             $planet = GetPlanet ($sub_id);
             return "Задание на верфи: '".loca("NAME_$obj_id") . "' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
@@ -89,8 +83,8 @@ function Admin_Queue ()
         }
     }
 
-    if ( $player_id > 0 ) $query = "SELECT * FROM ".$db_prefix."queue WHERE type <> 'Fleet' AND owner_id=$player_id ORDER BY end ASC, prio DESC";
-    else $query = "SELECT * FROM ".$db_prefix."queue WHERE type <> 'Fleet' ORDER BY end ASC, prio DESC LIMIT 50";
+    if ( $player_id > 0 ) $query = "SELECT * FROM ".$db_prefix."queue WHERE (type <> 'Fleet' AND type <> 'CommanderOff') AND owner_id=$player_id ORDER BY end ASC, prio DESC";
+    else $query = "SELECT * FROM ".$db_prefix."queue WHERE (type <> 'Fleet' AND type <> 'CommanderOff') ORDER BY end ASC, prio DESC LIMIT 50";
     $result = dbquery ($query);
     $now = time ();
 

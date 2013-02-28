@@ -115,6 +115,10 @@ $tab_queue = array (    // Очередь событий
     'task_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'type'=>'CHAR(20)', 'sub_id'=>'INT', 'obj_id'=>'INT', 'level'=>'INT', 'start'=>'INT UNSIGNED', 'end'=>'INT UNSIGNED', 'prio'=>'INT'
 );
 
+$tab_buildqueue = array (    // Очередь построек
+    'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'planet_id'=>'INT', 'list_id'=>'INT', 'tech_id'=>'INT', 'level'=>'INT', 'destroy'=>'INT',
+);
+
 $tab_fleet = array (    // Флот
     'fleet_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'union_id'=>'INT', 'm'=>'DOUBLE', 'k'=>'DOUBLE', 'd'=>'DOUBLE', 'fuel'=>'INT', 'mission'=>'INT', 'start_planet'=>'INT', 'target_planet'=>'INT', 'flight_time'=>'INT', 'deploy_time'=>'INT',
     'ipm_amount'=>'INT', 'ipm_target'=>'INT', 'ship202'=>'INT', 'ship203'=>'INT', 'ship204'=>'INT', 'ship205'=>'INT', 'ship206'=>'INT', 'ship207'=>'INT', 'ship208'=>'INT', 'ship209'=>'INT', 'ship210'=>'INT', 'ship211'=>'INT', 'ship212'=>'INT', 'ship213'=>'INT', 'ship214'=>'INT', 'ship215'=>'INT'
@@ -174,6 +178,7 @@ $tabs = array (
     'debug' => &$tab_debug,
     'browse' => &$tab_browse,
     'queue' => &$tab_queue,
+    'buildqueue' => &$tab_buildqueue,
     'fleet' => &$tab_fleet,
     'union' => &$tab_union,
     'battledata' => &$tab_battledata,
@@ -339,6 +344,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."fleet AUTO_INCREMENT = 10000;" );
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."union AUTO_INCREMENT = 10000;" );
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."queue AUTO_INCREMENT = 1;" );
+    dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."buildqueue AUTO_INCREMENT = 1;" );
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."battledata AUTO_INCREMENT = 1;" );
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."fleetlogs AUTO_INCREMENT = 1;" );
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."iplogs AUTO_INCREMENT = 1;" );
