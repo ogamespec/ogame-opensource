@@ -110,8 +110,10 @@ for ( $i=0; $i<$cnt; $i++ )
     if ($i == 0) $queue0 = $queue;
     if ( $prem['commander'] )
     {
-        echo "<tr><td class=\"l\" colspan=\"2\">".($i+1).".: ".loca("NAME_".$queue['obj_id']). " , уровень ".$queue['level'];
-        if ( $queue['type'] === "DemolishEnd" ) echo "\n Снести";
+        if ( $queue['destroy'] ) $queue['level']++;
+        echo "<tr><td class=\"l\" colspan=\"2\">".($i+1).".: ".loca("NAME_".$queue['tech_id']);
+        if ($queue['level'] > 0) echo " , уровень ".$queue['level'];
+        if ( $queue['destroy'] ) echo "\n Снести";
         if ($i==0) {
             echo "<td class=\"k\"><div id=\"bxx\" class=\"z\"></div><SCRIPT language=JavaScript>\n";
             echo "                  pp=\"".($queue['end']-$now)."\"\n";
@@ -123,7 +125,7 @@ for ( $i=0; $i<$cnt; $i++ )
             echo "                  </script></tr>\n";
         }
         else {
-            echo "<td class=\"k\"><font color=\"red\"><a href=\"index.php?page=b_building&session=$session&modus=remove&listid=".($i+1)."&planet=".$aktplanet['planet_id']."\">удалить</a></font></td></td></tr>\n";
+            echo "<td class=\"k\"><font color=\"red\"><a href=\"index.php?page=b_building&session=$session&modus=remove&listid=".$queue['list_id']."&planet=".$aktplanet['planet_id']."\">удалить</a></font></td></td></tr>\n";
         }
     }
 }
@@ -185,7 +187,7 @@ foreach ( $buildmap as $i => $id )
     }
     else {
         if ( $cnt ) {
-            if ( $queue0['obj_id'] == $id )
+            if ( $queue0['tech_id'] == $id )
             {
                 $left = $queue0['end'] - time ();
                 echo "<td class=k><div id=\"bxx\" class=\"z\"></div><SCRIPT language=JavaScript>pp='".$left."'; pk='1'; pm='remove'; pl='".$aktplanet['planet_id']."'; ps='".$_GET['session']."'; t();</script>\n";

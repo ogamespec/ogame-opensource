@@ -116,7 +116,7 @@ $tab_queue = array (    // Очередь событий
 );
 
 $tab_buildqueue = array (    // Очередь построек
-    'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'planet_id'=>'INT', 'list_id'=>'INT', 'tech_id'=>'INT', 'level'=>'INT', 'destroy'=>'INT',
+    'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'planet_id'=>'INT', 'list_id'=>'INT', 'tech_id'=>'INT', 'level'=>'INT', 'destroy'=>'INT', 'start'=>'INT UNSIGNED', 'end'=>'INT UNSIGNED',
 );
 
 $tab_fleet = array (    // Флот

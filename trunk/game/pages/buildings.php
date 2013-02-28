@@ -102,7 +102,7 @@ if ( $_GET['mode'] === "Flotte" )
     // Проверить не строится ли Верфь или Фабрика нанитов.
     $result = GetBuildQueue ( $aktplanet['planet_id'] );
     $queue = dbarray ( $result );
-    $busy = ( $queue['obj_id'] == 21 || $queue['obj_id'] == 15 ) ;
+    $busy = ( $queue['tech_id'] == 21 || $queue['tech_id'] == 15 ) ;
 
     if ( $busy ) {
         echo "<br><br><font color=#FF0000>Невозможно строить ни корабли ни оборонительные сооружения, так как верфь либо фабрика нанитов усовершенствуются</font><br><br>";
@@ -173,7 +173,7 @@ if ( $_GET['mode'] === "Verteidigung" )
     // Проверить не строится ли Верфь или Фабрика нанитов.
     $result = GetBuildQueue ( $aktplanet['planet_id'] );
     $queue = dbarray ( $result );
-    $busy = ( $queue['obj_id'] == 21 || $queue['obj_id'] == 15 ) ;
+    $busy = ( $queue['tech_id'] == 21 || $queue['tech_id'] == 15 ) ;
 
     if ( $busy ) {
         echo "<br><br><font color=#FF0000>Невозможно строить ни корабли ни оборонительные сооружения, так как верфь либо фабрика нанитов усовершенствуются</font><br><br>";
