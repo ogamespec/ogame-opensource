@@ -168,7 +168,7 @@ function UpdateQueue ($until)
 }
 
 // ===============================================================================================================
-// Постройки (новые 2)
+// Постройки
 
 // Получить очередь строительства для планеты.
 function GetBuildQueue ( $planet_id )
@@ -296,10 +296,6 @@ function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
 
     if ($now == 0) $now = time ();
 
-    loca_add ( "technames", "de" );
-    loca_add ( "technames", "en" );
-    loca_add ( "technames", "ru" );
-
     // Запишем действие пользователя, даже если он делает что-то не так
     if ($destroy) UserLog ( $planet['owner_id'], "BUILD", "Снос ".loca("NAME_$id")." ".($planet['b'.$id]-1)." на планете $planet_id");
     else UserLog ( $planet['owner_id'], "BUILD", "Постройка ".loca("NAME_$id")." ".($planet['b'.$id]+1)." на планете $planet_id");
@@ -355,10 +351,6 @@ function BuildDeque ( $planet_id, $listid )
     global $db_prefix, $GlobalUni;
 
     if ( $GlobalUni['freeze'] ) return;
-
-    loca_add ( "technames", "de" );
-    loca_add ( "technames", "en" );
-    loca_add ( "technames", "ru" );
 
     $query = "SELECT * FROM ".$db_prefix."buildqueue WHERE planet_id = $planet_id AND list_id = $listid LIMIT 1;";
     $result = dbquery ($query);
@@ -462,332 +454,6 @@ function Queue_Build_End ($queue)
 }
 
 // ===============================================================================================================
-// Постройки
-
-/*
-
-// Приоритет окончания строительства/сноса выше начала следующей постройки/сноса
-
-// Получить очередь строительства для планеты.
-function GetBuildQueue ( $planet_id, $start=0)
-{
-    global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE (type = 'BuildEnd' OR type = 'DemolishEnd') AND start > $start AND sub_id = $planet_id ORDER BY start ASC";
-    return dbquery ($query);
-}
-
-// Получить событие старта для слота очереди listid
-function GetStartQueue ( $queue, $listid )
-{
-    global $db_prefix;
-    $start = $queue[$listid]['start'];
-    $planet_id = $queue[$listid]['sub_id'];
-    $id = $queue[$listid]['obj_id'];
-    $lvl = $queue[$listid]['level'];
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE (type = 'BuildStart' OR type = 'DemolishStart') AND end = $start AND sub_id = $planet_id AND obj_id = $id AND level = $lvl LIMIT 1";
-    $result = dbquery ($query);
-    if ( dbrows ($result) ) {
-        $task = dbarray ($result);
-        return $task['task_id'];
-    }
-    else return 0;
-}
-
-// Корректируем уровень построек
-function RestartBuildQueue ($planet_id, $start, $now )
-{
-    $result = GetBuildQueue ($planet_id, $start );
-    $cnt = dbrows ( $result );
-    $queue = array ();
-    for ($i=0; $i<$cnt; $i++) $queue[$i] = dbarray ($result);
-    for ($i=0; $i<$cnt; $i++) {
-        RemoveQueue ( GetStartQueue($queue, $i) );    // "Start"
-        RemoveQueue ( $queue[$i]['task_id'] );    // "End"
-    }
-    for ($i=0; $i<$cnt; $i++) BuildEnque ( $planet_id, $queue[$i]['obj_id'], $queue[$i]['type'] === 'DemolishEnd' ? 1 : 0, $now++ );
-}
-
-// Сделать выполнение всех заданий раньше на указанное количество секунд
-function FastenBuildQueue ($seconds)
-{
-    global $db_prefix;
-    $query = "UPDATE ".$db_prefix."queue SET start = start - $seconds, end = end - $seconds WHERE (type = 'BuildStart' OR type = 'BuildEnd' OR type = 'DemolishStart' OR type = 'DemolishEnd');";
-    dbquery ($query);
-}
-
-// Удалить из очереди все события указанной постройки
-function RemoveBuildTasks ($planet_id, $id, $lvl, $destroy)
-{
-    global $db_prefix;
-    if ( $destroy ) $query = "DELETE FROM ".$db_prefix."queue WHERE (type = 'DemolishStart' OR type = 'DemolishEnd') AND sub_id = $planet_id AND obj_id = $id AND level = $lvl;";
-    else $query = "DELETE FROM ".$db_prefix."queue WHERE (type = 'BuildStart' OR type = 'BuildEnd') AND sub_id = $planet_id AND obj_id = $id AND level = $lvl;";
-    dbquery ($query);
-}
-
-// Добавить новую постройку/снос в очередь
-function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
-{
-    global $db_prefix, $GlobalUni;
-
-    if ( $GlobalUni['freeze'] ) return;
-
-    $planet = GetPlanet ( $planet_id );
-    $user = LoadUser ( $planet['owner_id'] );
-
-    $prem = PremiumStatus ($user);
-    if ($prem['commander']) $maxcnt = 5;
-    else $maxcnt = 1;
-
-    if ($now == 0) $now = time ();
-
-    loca_add ( "technames", "de" );
-    loca_add ( "technames", "en" );
-    loca_add ( "technames", "ru" );
-
-    // Запишем действие пользователя, даже если он делает что-то не так
-    if ($destroy) UserLog ( $planet['owner_id'], "BUILD", "Снос ".loca("NAME_$id")." ".($planet['b'.$id]-1)." на планете $planet_id");
-    else UserLog ( $planet['owner_id'], "BUILD", "Постройка ".loca("NAME_$id")." ".($planet['b'.$id]+1)." на планете $planet_id");
-
-    $result = GetBuildQueue ( $planet_id );
-    $cnt = dbrows ( $result );
-    if ( $cnt >= $maxcnt ) return;    // Очередь построек заполнена
-
-    // В режиме отпуска нельзя строить
-    if ( $user['vacation'] ) return;
-
-    // Терраформер и Лунную базу нельзя снести.
-    if ( $destroy && ($id == 33 || $id == 41) && $cnt == 0 ) return;
-
-    // Загрузить очередь. Отсортирована по времени начала событий.
-    $queue = array ();
-    for ($i=0; $i<$cnt; $i++)
-    {
-        $queue[$i] = dbarray ($result);
-    }
-
-    // Определить добавляемый уровень.
-    $nowlevel = $planet['b'.$id];
-    for ($i=0; $i<$cnt; $i++)
-    {
-        if ( $queue[$i]['obj_id'] == $id ) $nowlevel = $queue[$i]['level'];
-    }
-
-    if ($destroy) {
-        $lvl = $nowlevel - 1;
-        if ($lvl < 0) return;        // Невозможно снести несуществующую постройку.
-    }
-    else $lvl = $nowlevel + 1;
-
-    // Определить время запуска следующей постройки.
-    if ( $cnt > 0 ) $now = $queue[$cnt-1]['end'];
-
-    $speed = $GlobalUni['speed'];
-
-    if ( $destroy ) {
-        $StartEvent = "DemolishStart";
-        $EndEvent = "DemolishEnd";
-    }
-    else {
-        $StartEvent = "BuildStart";
-        $EndEvent = "BuildEnd";
-    }
-
-    // Запуск событий "начало строительства" и "конец строительства".
-    AddQueue ( $user['player_id'], $StartEvent, $planet_id, $id, $lvl, $now, 0, 10 );
-    AddQueue ( $user['player_id'], $EndEvent, $planet_id, $id, $lvl, $now, floor (BuildDuration ( $id, $lvl, $planet['b14'], $planet['b15'], $speed )), 20 );
-}
-
-// Отменить постройку/снос
-function BuildDeque ( $planet_id, $listid )
-{
-    global $db_prefix, $GlobalUni;
-
-    if ( $GlobalUni['freeze'] ) return;
-
-    loca_add ( "technames", "de" );
-    loca_add ( "technames", "en" );
-    loca_add ( "technames", "ru" );
-
-    // Загрузить очередь. Отсортирована по времени начала событий.
-    $result = GetBuildQueue ( $planet_id );
-    $cnt = dbrows ( $result );
-    $queue = array ();
-    for ($i=0; $i<$cnt; $i++)
-    {
-        $queue[$i] = dbarray ($result);
-    }
-
-    $listid--;
-    if ( $listid < 0 || $listid >= $cnt ) return;    // Невозможно удалить несуществующую постройку.
-
-    $id = $queue[$listid]['obj_id'];
-    $lvl = $queue[$listid]['level'];
-
-    // Вернуть ресурсы, если это необходимо.
-    if ( $listid == 0 )
-    {
-        $m = $k = $d = $e = 0;
-        BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
-        AdjustResources ( $m, $k, $d, $planet_id, '+' );
-    }
-
-    $planet = GetPlanet ( $planet_id );
-    UserLog ( $planet['owner_id'], "BUILD", "Отмена строительства ".loca("NAME_".$queue[$listid]['obj_id'])." ".$queue[$listid]['level'].", слот ($listid) на планете $planet_id");
-
-    // Удалить обработчики событий
-    RemoveQueue ( GetStartQueue($queue, $listid) );    // "Start"
-    RemoveQueue ( $queue[$listid]['task_id'] );    // "End"
-
-    // Корректируем уровень построек
-    RestartBuildQueue ( $planet_id, $queue[$listid]['start'], time() );
-}
-
-function Queue_BuildStart ($queue)
-{
-    global $GlobalUni;
-
-    $id = $queue['obj_id'];
-    $lvl = $queue['level'];
-    $planet_id = $queue['sub_id'];
-    $speed = $GlobalUni['speed'];
-
-    $m = $k = $d = $e = 0;
-    BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
-
-    $planet = GetPlanet ($planet_id);
-    $user = LoadUser ($planet['owner_id']);
-
-    // Рассчитать производство планеты с момента последнего обновления.
-    ProdResources ( &$planet, $planet['lastpeek'], $queue['end'] );
-
-    // Проверить все условия возможности постройки/сноса
-    $text = '';
-    {
-        $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
-
-        $result = GetResearchQueue ( $user['player_id'] );
-        $resqueue = dbarray ($result);
-        $reslab_operating = ($resqueue != null);
-        $result = GetShipyardQueue ( $planet['planet_id'] );
-        $shipqueue = dbarray ($result);
-        $shipyard_operating = ($shipqueue != null);
-
-        // Не постройка
-        if ( ! in_array ( $id, $buildmap ) ) $text = "Неверный ID!";
-
-        // В режиме отпуска нельзя строить
-        else if ( $user['vacation'] ) $text = "В режиме отпуска (РО) строительство невозможно.";
-
-        // На чужой планете строить нельзя
-        else if ( $planet['owner_id'] != $user['player_id'] ) $text = "Неправильная планета!";
-
-        // Лунные постройки нельзя строить на планете, а планетарные на луне
-        else if ( $planet['type'] != 0 && ($id == 41 || $id == 42 || $id == 43) ) $text = "Неверный тип планеты.";
-        else if ( $planet['type'] == 0 && ( $id == 1 || $id == 2 || $id == 3 || $id == 4 || $id == 12 || $id == 15 || $id == 22 || $id == 23 || $id == 24 || $id == 31 || $id == 33 || $id == 44 ) ) $text = "Неверный тип планеты.";
-
-        // Проверить количество полей
-        else if ( $planet['fields'] >= $planet['maxfields'] && $queue['type'] === 'BuildStart' ) $text = "На планете нет места для строительства.";
-
-        // Идет исследование или строительство на верфи
-        else if ( $id == 31 && $reslab_operating ) $text = "Идёт исследование!";
-        else if ( ($id == 15 || $id == 21) && $shipyard_operating ) $text = "Корабельная верфь ещё занята.";
-
-        // Проверить доступное количество ресурсов на планете
-        else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) ) $text = "У Вас недостаточно ресурсов!";
-
-        // Проверить доступные технологии.
-        else if ( !BuildMeetRequirement ( $user, $planet, $id ) ) $text = "Необходимые требования не выполнены!";
-    }
-
-    if ( $queue['type'] === 'DemolishStart' )
-    {
-        $destroy = 1;
-        if ( $id == 33 || $id == 41 ) $text = "Лунную базу и терраформер нельзя снести.";
-        else if ( $planet["b".$id] <= 0 ) $text = "У Вас нет построек этого типа.";
-    }
-    else $destroy = 0;
-
-    if ( $text === '' )
-    {
-        // Списать ресурсы.
-        AdjustResources ( $m, $k, $d, $planet_id, '-' );
-        RemoveQueue ( $queue['task_id'] );
-    }
-    else 
-    {
-        if ( $queue['type'] === 'BuildStart' ) $pre = 'Заказ на строительство';
-        else if ( $queue['type'] === 'DemolishStart' ) $pre = 'Заказ на снос';
-        $pre = va ( "#1 для Вашей постройки #2 #3-го уровня на #4 выполнить не удалось.", $pre, loca ("NAME_$id"), $lvl, $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" >[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>" );
-        SendMessage ( $user['player_id'], 'Системное сообщение', 'Производство отменено', $pre . "<br><br>" . $text, 5, $queue['end'] );
-
-        // отменить строительство, недостаточно ресурсов или не выполнены условия.
-        RemoveBuildTasks ($planet_id, $id, $lvl, $destroy);
-        FastenBuildQueue ( floor (BuildDuration ( $id, $lvl, $planet['b14'], $planet['b15'], $speed )) );
-    }
-}
-
-function Queue_BuildEnd ($queue)
-{
-    global $db_prefix, $GlobalUser;
-
-    $id = $queue['obj_id'];
-    $lvl = $queue['level'];
-    $planet_id = $queue['sub_id'];
-
-    // Рассчитать производство планеты с момента последнего обновления.
-    $planet = GetPlanet ( $planet_id );
-    $player_id = $planet['owner_id'];
-    ProdResources ( &$planet, $planet['lastpeek'], $queue['end'] );
-
-    // Защита от дурака
-    if ( $queue['type'] === "BuildEnd" && $planet["b".$id] >= $lvl ) { RemoveQueue ( $queue['task_id'] ); return; }
-    if ( $queue['type'] === "DemolishEnd" && $planet["b".$id] <= $lvl ) { RemoveQueue ( $queue['task_id'] ); return; }
-
-    // Количество полей на планете.
-    if ($queue['type'] === "BuildEnd" )
-    {
-        $fields = "fields = fields + 1";
-        // Специальная обработка для постройки Терраформера или Лунной базы -- добавить максимальное количество полей.
-        if ( $id == 33 ) $fields .= ", maxfields = maxfields + 5";
-        if ( $id == 41 ) $fields .= ", maxfields = maxfields + 3";
-    }
-    else $fields = "fields = fields - 1";
-
-    // Обновить уровень постройки и количество полей в базе данных.
-    $query = "UPDATE ".$db_prefix."planets SET ".('b'.$id)." = $lvl, $fields WHERE planet_id = $planet_id";
-    dbquery ($query);
-
-    RemoveQueue ( $queue['task_id'] );
-
-    //if ($queue['type'] === "Build" ) Debug ( "Строительство ".loca("NAME_$id")." уровня $lvl на планете $planet_id завершено." );
-    //else Debug ( "Снос ".loca("NAME_$id")." уровня $lvl на планете $planet_id завершен." );
-
-    // Добавить очки. Места пересчитывать только для крупных построек.
-    $m = $k = $d = $e = 0;
-    if ( $queue['type'] === "BuildEnd" ) {
-        BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
-        $points = $m + $k + $d;
-        AdjustStats ( $queue['owner_id'], $points, 0, 0, '+');
-    }
-    else {
-        BuildPrice ( $id, $lvl+1, &$m, &$k, &$d, &$e );
-        $points = $m + $k + $d;
-        AdjustStats ( $queue['owner_id'], $points, 0, 0, '-');
-    }
-    if ( $lvl > 10 ) RecalcRanks ();
-
-    if ( $GlobalUser['player_id'] == $player_id) {
-        InvalidateUserCache ();
-        $GlobalUser = LoadUser ( $player_id );    // обновить данные текущего пользователя
-    }
-}
-
-function Queue_DemolishStart ($queue) { Queue_BuildStart ($queue); }
-function Queue_DemolishEnd ($queue) { Queue_BuildEnd ($queue); }
-
-*/
-
-// ===============================================================================================================
 // Верфь
 
 // Получить очередь заданий на верфи.
@@ -821,9 +487,7 @@ function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
     global $db_prefix, $GlobalUni;
 
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
-    loca_add ( "technames", "de" );
-    loca_add ( "technames", "en" );
-    loca_add ( "technames", "ru" );
+
     if ( in_array ( $gid, $defmap ) ) UserLog ( $player_id, "DEFENSE", "Запустить постройку ".loca("NAME_$gid")." ($value) на планете $planet_id");
     else UserLog ( $player_id, "SHIPYARD", "Запустить постройку ".loca("NAME_$gid")." ($value) на планете $planet_id");
 
@@ -949,9 +613,6 @@ function StartResearch ($player_id, $planet_id, $id, $now)
 
     $planet = GetPlanet ( $planet_id );
 
-    loca_add ( "technames", "de" );
-    loca_add ( "technames", "en" );
-    loca_add ( "technames", "ru" );
     UserLog ( $player_id, "RESEARCH", "Запустить исследование ".loca("NAME_$id")." на планете $planet_id");
 
     $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
@@ -1029,9 +690,6 @@ function StopResearch ($player_id)
 
     RemoveQueue ( $resq['task_id'] );
 
-    loca_add ( "technames", "de" );
-    loca_add ( "technames", "en" );
-    loca_add ( "technames", "ru" );
     UserLog ( $player_id, "RESEARCH", "Отменить исследование ".loca("NAME_$id"));
 }
 
