@@ -245,6 +245,9 @@ function PropagateBuildQueue ($planet_id, $from)
 
             $text = CanBuild ($user, $planet, $id, $destroy);
             if ( $text === '' ) {
+
+                Debug ( "PropagateBuildQueue: add" );
+
                 // Списать ресурсы
                 $m = $k = $d = $e = 0;
                 BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
@@ -262,6 +265,8 @@ function PropagateBuildQueue ($planet_id, $from)
                 break;
             }
             else {
+                Debug ( "PropagateBuildQueue: cant " . loca ("NAME_$id") . " " . $lvl );
+
                 if ( $destroy ) $pre = 'Заказ на снос';
                 else $pre = 'Заказ на строительство';
                 $pre = va ( "#1 для Вашей постройки #2 #3-го уровня на #4 выполнить не удалось.", $pre, loca ("NAME_$id"), $lvl, $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" >[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>" );
@@ -391,6 +396,8 @@ function BuildDeque ( $planet_id, $listid )
 function Queue_Build_End ($queue)
 {
     global $db_prefix, $GlobalUser;
+
+    Debug ( "Queue_Build_End" );
 
     $id = $queue['obj_id'];
     $lvl = $queue['level'];
