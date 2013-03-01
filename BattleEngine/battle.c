@@ -169,40 +169,6 @@ TechParam defenseParam[8] = { // ТТХ Обороны.
  { 100000, 10000, 1, 0 },
 };
 
-// Параметры скорострела.
-static long FleetRapid[][14] = {
- { 0, 0, 0, 0, 0, 0, 0, 0, 800, 0, 800, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0, 800, 0, 800, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0, 800, 0, 800, 0, 0, 0 },
- { 667, 0, 0, 0, 0, 0, 0, 0, 800, 0, 800, 0, 0, 0 },
- { 0, 0, 833, 0, 0, 0, 0, 0, 800, 0, 800, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0, 800, 0, 800, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0, 800, 0, 800, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0, 800, 0, 800, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0, 800, 0, 800, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0, 800, 0, 800, 0, 0, 500 },
- { 996, 996, 995, 990, 970, 966, 996, 996, 999, 960, 999, 800, 0, 933 },
- { 667, 667, 0, 750, 750, 857, 0, 0, 800, 0, 800, 0, 0, 0 }
-};
-static long DefenseRapid[][8] = {
- { 0, 0, 0, 0, 0, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0 },
- { 900, 0, 0, 0, 0, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0 },
- { 955, 955, 900, 0, 900, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0 },
- { 0, 900, 0, 0, 0, 0, 0, 0 },
- { 955, 955, 999, 980, 999, 0, 0, 0 },
- { 0, 0, 0, 0, 0, 0, 0, 0 }
-};
-
 // ==========================================================================================
 
 // load data from file
@@ -412,7 +378,6 @@ Unit *InitBattleDefenders (Slot *d, int dnum, int objs)
 
 // Выстрел a => b. Возвращает урон. aweap - уровень оружейной технологии для юнита "a".
 // absorbed - накопитель поглощённого щитами урона (для того, кого атакуют, то есть для юнита "b").
-// loss - накопитель потерь (стоимость юнита металл+кристалл).
 long UnitShoot (Unit *a, int aweap, Unit *b, u64 *absorbed, u64 *dm, u64 *dk )
 {
     float prc, depleted;
@@ -540,10 +505,66 @@ static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, S
     return ptr;
 }
 
+static int RapidFire (int atyp, int dtyp)
+{
+    int rapidfire = 0;
+
+    if ( atyp > 400 ) return 0;
+
+    // ЗСка против ШЗ/ламп
+    if (atyp==214 && (dtyp==210 || dtyp==212) && MyRand(1,10000)>8) rapidfire = 1;
+    // остальной флот против ШЗ/ламп
+    else if (atyp!=210 && (dtyp==210 || dtyp==212) && MyRand(1,100)>20) rapidfire = 1;
+    // ТИ против МТ
+    else if (atyp==205 && dtyp==202 && MyRand(1,100)>33) rapidfire = 1;
+    // крейсер против ЛИ
+    else if (atyp==206 && dtyp==204 && MyRand(1,1000)>166) rapidfire = 1;
+    // крейсер против РУ
+    else if (atyp==206 && dtyp==401 && MyRand(1,100)>10) rapidfire = 1;
+    // бомбер против легкой обороны
+    else if (atyp==211 && (dtyp==401 || dtyp==402) && MyRand(1,100)>20) rapidfire = 1;
+    // бомбер против средней обороны
+    else if (atyp==211 && (dtyp==403 || dtyp==405) && MyRand(1,100)>10) rapidfire = 1;
+    // уник против ЛК
+    else if (atyp==213 && dtyp==215 && MyRand(1,100)>50) rapidfire = 1;
+    // уник против ЛЛ
+    else if (atyp==213 && dtyp==402 && MyRand(1,100)>10) rapidfire = 1;
+    // ЛК против транспорта
+    else if (atyp==215 && (dtyp==202 || dtyp==203) && MyRand(1,100)>20) rapidfire = 1;
+    // ЛК против среднего флота
+    else if (atyp==215 && (dtyp==205 || dtyp==206) && MyRand(1,100)>25) rapidfire = 1;
+    // ЛК против линкоров
+    else if (atyp==215 && dtyp==207 && MyRand(1,1000)>143) rapidfire = 1;
+    // ЗС против гражданского флота
+    else if (atyp==214 && (dtyp==202 || dtyp==203 || dtyp==208 || dtyp==209) && MyRand(1,1000)>4) rapidfire = 1;
+    // ЗС против ЛИ
+    else if (atyp==214 && dtyp==204 && MyRand(1,1000)>5) rapidfire = 1;
+    // ЗС против ТИ
+    else if (atyp==214 && dtyp==205 && MyRand(1,1000)>10) rapidfire = 1;
+    // ЗС против крейсеров
+    else if (atyp==214 && dtyp==206 && MyRand(1,1000)>30) rapidfire = 1;
+    // ЗС против линкоров
+    else if (atyp==214 && dtyp==207 && MyRand(1,1000)>33) rapidfire = 1;
+    // ЗС против бомберов
+    else if (atyp==214 && dtyp==211 && MyRand(1,1000)>40) rapidfire = 1;
+    // ЗС против уников
+    else if (atyp==214 && dtyp==213 && MyRand(1,1000)>200) rapidfire = 1;
+    // ЗС против линеек
+    else if (atyp==214 && dtyp==215 && MyRand(1,1000)>66) rapidfire = 1;
+    // ЗС против легкой обороны
+    else if (atyp==214 && (dtyp==401 || dtyp==402) && MyRand(1,1000)>5) rapidfire = 1;
+    // ЗС против средней обороны
+    else if (atyp==214 && (dtyp==403 || dtyp==405) && MyRand(1,1000)>10) rapidfire = 1;
+    // ЗС против тяжелой обороны
+    else if (atyp==214 && dtyp==404 && MyRand(1,1000)>20) rapidfire = 1;
+
+    return rapidfire;
+}
+
 int DoBattle (Slot *a, int anum, Slot *d, int dnum)
 {
     long slot, i, n, aobjs = 0, dobjs = 0, idx, rounds, sum = 0;
-    long apower, rapidfire, rapidchance, fastdraw;
+    long apower, atyp, dtyp, rapid, rapidfire, rapidchance, fastdraw;
     Unit *aunits, *dunits, *unit;
     char * ptr = ResultBuffer, * res, *round_patch;
 
@@ -625,12 +646,16 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
                         apower = UnitShoot (unit, a[slot].weap, &dunits[idx], &absorbed[1], &dm, &dk );
                         shoots[0]++;
                         spower[0] += apower;
-                        if (unit->obj_type < 200) { // Только флот обладает стрельбой очередями.
-                            if (dunits[idx].obj_type < 200) rapidchance = FleetRapid[unit->obj_type-100][dunits[idx].obj_type-100];
-                            else rapidchance = DefenseRapid[unit->obj_type-100][dunits[idx].obj_type-200];
-                            rapidfire = MyRand (0, 999) < rapidchance;
-                        }
-                        else rapidfire = 0;
+
+                        // Перевести ID в обычный формат, чтобы было понятней.
+                        atyp = unit->obj_type;
+                        if ( atyp < 200 ) atyp += 102;
+                        else atyp += 201;
+                        dtyp = dunits[idx].obj_type;
+                        if ( dtyp < 200 ) dtyp += 102;
+                        else dtyp += 201;
+                        rapidfire = RapidFire (atyp, dtyp);
+
                         if (Rapidfire == 0) rapidfire = 0;
                     }
                 }
@@ -648,12 +673,16 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
                         apower = UnitShoot (unit, d[slot].weap, &aunits[idx], &absorbed[0], &dm, &dk );
                         shoots[1]++;
                         spower[1] += apower;
-                        if (unit->obj_type < 200) { // Только флот обладает стрельбой очередями.
-                            if (aunits[idx].obj_type < 200) rapidchance = FleetRapid[unit->obj_type-100][aunits[idx].obj_type-100];
-                            else rapidchance = DefenseRapid[unit->obj_type-100][aunits[idx].obj_type-200];
-                            rapidfire = MyRand (0, 999) < rapidchance;
-                        }
-                        else rapidfire = 0;
+
+                        // Перевести ID в обычный формат, чтобы было понятней.
+                        atyp = unit->obj_type;      
+                        if ( atyp < 200 ) atyp += 102;
+                        else atyp += 201;
+                        dtyp = aunits[idx].obj_type;
+                        if ( dtyp < 200 ) dtyp += 102;
+                        else dtyp += 201;
+                        rapidfire = RapidFire (atyp, dtyp);
+
                         if (Rapidfire == 0) rapidfire = 0;
                     }
                 }
