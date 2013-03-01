@@ -63,10 +63,6 @@ start: время начала задания (INT UNSIGNED)
 end: время окончания задания (INT UNSIGNED)
 prio: приоритет события, используется для событий, которые заканчиваются в одно и тоже время, чем выше приоритет, тем раньше выполнится событие (INT)
 
-Примеры запуска заданий: 
-Постройка шахты металла (3): AddQueue (player_id, "Build", planet_id, 1, 3, 241)
-Заказ ракетная установка (25): AddQueue (player_id, "Shipyard", planet_id, 401, 25, 14400)
-
 Как происходит обновление очереди:
 После очередного клика одного из юзеров проверяется каждое задание очереди на завершение. Если задание завершено - вызывается его обработчик и задание
 удаляется из очереди.
@@ -405,8 +401,13 @@ function Queue_Build_End ($queue)
     $planet_id = $bqueue['planet_id'];
 
     // Защита от дурака
-    //if ( $queue['type'] === "BuildEnd" && $planet["b".$id] >= $lvl ) { RemoveQueue ( $queue['task_id'] ); return; }
-    //if ( $queue['type'] === "DemolishEnd" && $planet["b".$id] <= $lvl ) { RemoveQueue ( $queue['task_id'] ); return; }
+    if ( ($queue['type'] === "Build" && $planet["b".$id] >= $lvl) ||
+         ($queue['type'] === "Demolish" && $planet["b".$id] <= $lvl) )
+    {
+        RemoveQueue ( $queue['task_id'] );
+        dbquery ( "DELETE FROM ".$db_prefix."buildqueue WHERE id = " . $queue['sub_id'] );
+        return;
+    }
 
     // Рассчитать производство планеты с момента последнего обновления.
     $planet = GetPlanet ( $planet_id );
