@@ -117,7 +117,7 @@ for ( $i=0; $i<$cnt; $i++ )
         if ($i==0) {
             echo "<td class=\"k\"><div id=\"bxx\" class=\"z\"></div><SCRIPT language=JavaScript>\n";
             echo "                  pp=\"".($queue['end']-$now)."\"\n";
-            echo "                  pk=\"1\"\n";
+            echo "                  pk=\"".$queue['list_id']."\"\n";
             echo "                  pm=\"remove\"\n";
             echo "                  pl=\"".$aktplanet['planet_id']."\"\n";
             echo "                  ps=\"$session\"\n";
