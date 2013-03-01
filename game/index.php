@@ -42,11 +42,6 @@ require_once "debug.php";
 require_once "galaxytool.php";
 require_once "bot.php";
 
-if (0)
-{
-    die ( "Maintanance" );
-}
-
 $GlobalUni = LoadUniverse ();
 
 // *****************************************************************************
@@ -94,6 +89,12 @@ function va ($subject)
 if ( key_exists ( 'session', $_GET ) ) {
     SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
     if (CheckSession ( $_GET['session'] ) == FALSE) die ();
+}
+
+if ( $GlobalUni['freeze'] && $GlobalUser['admin'] == 0 ) {
+    echo "<html><head><meta http-equiv='refresh' content='0;url=maintenance.php' /></head><body></body></html>";
+    ob_end_flush ();
+    exit ();
 }
 
 loca_add ( "common" );
