@@ -150,7 +150,7 @@ function IsEmailExist ( $email, $name="")
 // Возвращает ID созданного пользователя.
 function CreateUser ( $name, $pass, $email, $lang, $bot=false)
 {
-    global $db_prefix, $db_secret;
+    global $db_prefix, $db_secret, $Languages;
     $origname = $name;
     $name = mb_strtolower ($name, 'UTF-8');
     $email = mb_strtolower ($email, 'UTF-8');
@@ -168,7 +168,7 @@ function CreateUser ( $name, $pass, $email, $lang, $bot=false)
     dbquery ($query);
 
     $ip = $_SERVER['REMOTE_ADDR'];
-    if ( $lang !== 'de' && $lang !== 'en' && $lang !== 'ru' ) $lang = 'en';
+    if ( !key_exists ( $lang, $Languages ) ) $lang = 'en';
 
     $user = array( null, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, "", $email, $email,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -449,7 +449,7 @@ function Logout ( $session )
 // Вызывается при загрузке каждой игровой страницы.
 function CheckSession ( $session )
 {
-    global $db_prefix, $GlobalUser, $loca_lang, $GlobalUni;
+    global $db_prefix, $GlobalUser, $loca_lang, $Languages, $GlobalUni;
     // Получить ID-пользователя и номер вселенной из публичной сессии.
     $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$session."'";
     $result = dbquery ($query);
@@ -463,7 +463,10 @@ function CheckSession ( $session )
     if ( $ip !== "127.0.0.1" && !$GlobalUser['deact_ip'] ) {
         if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
     }
+
     $loca_lang = $GlobalUser['lang'];
+    if ( !key_exists ( $loca_lang, $Languages ) ) $GlobalUser['lang'] = $loca_lang = 'en';
+
     return TRUE;
 }
 
