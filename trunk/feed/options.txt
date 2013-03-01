@@ -1,0 +1,24 @@
+<tr>
+	<td class="c" colspan="2"><font color='FF8900'>Newsfeed</font></td>
+</tr>
+<tr>
+	<th>Aktivieren<input type=hidden name="feed_submit" value="1"></th>
+	<th><input type="checkbox" name="feed_activated" checked='checked' /></th>
+</tr>
+
+<tr>
+	<th>Format</th>
+	<th>
+	<select name="feed_type">
+		<option value="rss" selected >RSS</option>
+		<option value="atom"  >Atom</option>
+	</select>
+	</th>
+</tr>
+<tr>
+	<th>Link zum Feed</th>
+	<th>
+	<input readonly="1" size="40" type="text" name="feed_link" value="http://uni20.ogame.de/feed/show.php?feedid=5aa28084f43ad54d9c8f7dd92f774d03" /><br />
+	<a href="http://uni20.ogame.de/feed/show.php?feedid=5aa28084f43ad54d9c8f7dd92f774d03" target="_blank">aufrufen</a>
+	</th>
+</tr>
