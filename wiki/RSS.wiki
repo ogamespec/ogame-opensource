@@ -1,0 +1,3 @@
+#summary Реализация RSS-фида командира
+
+http://php.net/manual/en/features.http-auth.php
