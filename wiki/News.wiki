@@ -1,5 +1,10 @@
 #summary News archive
 
+*02.03.2013*<br>
+- Change email fixed<br>
+- Build queue<br>
+- Rapidfire fixed<br>
+
 *21.02.2013* : Alliance depot ready!
 
 *18.12.2012* : New locas : buddy, resources and techtree.
