@@ -34,8 +34,9 @@ function Admin_Uni ()
 
         $rapid = ($_POST['rapid'] === "on") ? 1 : 0;
         $moons = ($_POST['moons'] === "on") ? 1 : 0;
+        $freeze = ($_POST['freeze'] === "on") ? 1 : 0;
 
-        SetUniParam ( $_POST['speed'], $_POST['fspeed'], $_POST['acs'], $_POST['fid'], $_POST['did'], $_POST['defrepair'], $_POST['defrepair_delta'], $_POST['galaxies'], $_POST['systems'], $rapid, $moons );
+        SetUniParam ( $_POST['speed'], $_POST['fspeed'], $_POST['acs'], $_POST['fid'], $_POST['did'], $_POST['defrepair'], $_POST['defrepair_delta'], $_POST['galaxies'], $_POST['systems'], $rapid, $moons, $freeze );
 
         //print_r ( $_POST );
     }
@@ -143,6 +144,7 @@ function Admin_Uni ()
     if ( $now > $unitab['news_until'] ) echo "<tr><th>Продлить новость</th><th><input type=\"text\" name=\"news_upd\" maxlength=\"3\" size=\"3\" value=\"0\" /> дн.</th></tr>\n";
     else echo "<tr><th>Показывать новость до</th><th>".date ("Y-m-d H:i:s", $unitab['news_until'])." <input type=\"checkbox\" name=\"news_off\"  /> убрать</th></tr>\n";
 ?>
+<tr><th>Поставить вселенную на паузу</th><th><input type="checkbox" name="freeze"  <?=UniIsChecked($unitab['freeze']);?> /></th></tr>
 <tr><th colspan=2><input type="submit" value="Сохранить" /></th></tr>
 
 </form>

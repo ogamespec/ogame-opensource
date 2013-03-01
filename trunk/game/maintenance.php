@@ -1,6 +1,9 @@
 <?php
 
+require_once "config.php";
+require_once "db.php";
 require_once "loca.php";
+require_once "uni.php";
 
 $loca_lang = $_COOKIE['ogamelang'];
 loca_add ( "maintain", $loca_lang );
@@ -16,6 +19,20 @@ function va ($subject)
         $replace[$i-1] = func_get_arg($i);
     }
     return preg_replace($pattern, $replace, $subject);
+}
+
+// Соединиться с базой данных
+dbconnect ($db_host, $db_user, $db_pass, $db_name);
+dbquery("SET NAMES 'utf8';");
+dbquery("SET CHARACTER SET 'utf8';");
+dbquery("SET SESSION collation_connection = 'utf8_general_ci';");
+
+$GlobalUni = LoadUniverse ();
+
+if ( !$GlobalUni['freeze'] ) {
+    echo "<html><head><meta http-equiv='refresh' content='0;url=$StartPage' /></head><body></body>";
+    ob_end_flush ();
+    die ();
 }
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
