@@ -149,30 +149,30 @@ function BuildDuration ( $id, $lvl, $robots, $nanits, $speed )
 function ShipyardMeetRequirement ( $user, $planet, $id )
 {
     if ( $id == 202 && ( $planet['b21'] < 2  || $user['r115'] < 2 ) ) return false;
-    if ( $id == 203 && ( $planet['b21'] < 4  || $user['r115'] < 6 ) ) return false;
-    if ( $id == 204 && ( $planet['b21'] < 1  || $user['r115'] < 1 ) ) return false;
-    if ( $id == 205 && ( $planet['b21'] < 3  || $user['r111'] < 2 || $user['r117'] < 2 ) ) return false;
-    if ( $id == 206 && ( $planet['b21'] < 5  || $user['r117'] < 4 || $user['r121'] < 2 ) ) return false;
-    if ( $id == 207 && ( $planet['b21'] < 7  || $user['r118'] < 4 ) ) return false;
-    if ( $id == 208 && ( $planet['b21'] < 4  || $user['r117'] < 3 ) ) return false;
-    if ( $id == 209 && ( $planet['b21'] < 4  || $user['r115'] < 6 || $user['r110'] < 2 ) ) return false;
-    if ( $id == 210 && ( $planet['b21'] < 3  || $user['r115'] < 3 || $user['r106'] < 2 ) ) return false;
-    if ( $id == 211 && ( $planet['b21'] < 8  || $user['r117'] < 6 || $user['r122'] < 5 ) ) return false;
-    if ( $id == 212 && ( $planet['b21'] < 1  ) ) return false;
-    if ( $id == 213 && ( $planet['b21'] < 9  || $user['r118'] < 6 || $user['r114'] < 5 ) ) return false;
-    if ( $id == 214 && ( $planet['b21'] < 12 || $user['r118'] < 7 || $user['r114'] < 6 || $user['r199'] < 1 ) ) return false;
-    if ( $id == 215 && ( $planet['b21'] < 8  || $user['r114'] < 5 || $user['r120'] < 12 || $user['r118'] < 5 ) ) return false;
+    else if ( $id == 203 && ( $planet['b21'] < 4  || $user['r115'] < 6 ) ) return false;
+    else if ( $id == 204 && ( $planet['b21'] < 1  || $user['r115'] < 1 ) ) return false;
+    else if ( $id == 205 && ( $planet['b21'] < 3  || $user['r111'] < 2 || $user['r117'] < 2 ) ) return false;
+    else if ( $id == 206 && ( $planet['b21'] < 5  || $user['r117'] < 4 || $user['r121'] < 2 ) ) return false;
+    else if ( $id == 207 && ( $planet['b21'] < 7  || $user['r118'] < 4 ) ) return false;
+    else if ( $id == 208 && ( $planet['b21'] < 4  || $user['r117'] < 3 ) ) return false;
+    else if ( $id == 209 && ( $planet['b21'] < 4  || $user['r115'] < 6 || $user['r110'] < 2 ) ) return false;
+    else if ( $id == 210 && ( $planet['b21'] < 3  || $user['r115'] < 3 || $user['r106'] < 2 ) ) return false;
+    else if ( $id == 211 && ( $planet['b21'] < 8  || $user['r117'] < 6 || $user['r122'] < 5 ) ) return false;
+    else if ( $id == 212 && ( $planet['b21'] < 1  ) ) return false;
+    else if ( $id == 213 && ( $planet['b21'] < 9  || $user['r118'] < 6 || $user['r114'] < 5 ) ) return false;
+    else if ( $id == 214 && ( $planet['b21'] < 12 || $user['r118'] < 7 || $user['r114'] < 6 || $user['r199'] < 1 ) ) return false;
+    else if ( $id == 215 && ( $planet['b21'] < 8  || $user['r114'] < 5 || $user['r120'] < 12 || $user['r118'] < 5 ) ) return false;
 
-    if ( $id == 401 && ( $planet['b21'] < 1 ) ) return false;
-    if ( $id == 402 && ( $planet['b21'] < 2 || $user['r113'] < 1 || $user['r120'] < 3 ) ) return false;
-    if ( $id == 403 && ( $planet['b21'] < 4 || $user['r113'] < 3 || $user['r120'] < 6 ) ) return false;
-    if ( $id == 404 && ( $planet['b21'] < 6 || $user['r113'] < 6 || $user['r109'] < 3 || $user['r110'] < 1 ) ) return false;
-    if ( $id == 405 && ( $planet['b21'] < 4 || $user['r121'] < 4 ) ) return false;
-    if ( $id == 406 && ( $planet['b21'] < 8 || $user['r122'] < 7 ) ) return false;
-    if ( $id == 407 && ( $planet['b21'] < 1 || $user['r110'] < 2 ) ) return false;
-    if ( $id == 408 && ( $planet['b21'] < 6 || $user['r110'] < 6 ) ) return false;
-    if ( $id == 502 && ( $planet['b21'] < 1 || $planet['b44'] < 2 ) ) return false;
-    if ( $id == 503 && ( $planet['b21'] < 1 || $planet['b44'] < 4 || $user['r117'] < 1 ) ) return false;
+    else if ( $id == 401 && ( $planet['b21'] < 1 ) ) return false;
+    else if ( $id == 402 && ( $planet['b21'] < 2 || $user['r113'] < 1 || $user['r120'] < 3 ) ) return false;
+    else if ( $id == 403 && ( $planet['b21'] < 4 || $user['r113'] < 3 || $user['r120'] < 6 ) ) return false;
+    else if ( $id == 404 && ( $planet['b21'] < 6 || $user['r113'] < 6 || $user['r109'] < 3 || $user['r110'] < 1 ) ) return false;
+    else if ( $id == 405 && ( $planet['b21'] < 4 || $user['r121'] < 4 ) ) return false;
+    else if ( $id == 406 && ( $planet['b21'] < 8 || $user['r122'] < 7 ) ) return false;
+    else if ( $id == 407 && ( $planet['b21'] < 1 || $user['r110'] < 2 ) ) return false;
+    else if ( $id == 408 && ( $planet['b21'] < 6 || $user['r110'] < 6 ) ) return false;
+    else if ( $id == 502 && ( $planet['b21'] < 1 || $planet['b44'] < 2 ) ) return false;
+    else if ( $id == 503 && ( $planet['b21'] < 1 || $planet['b44'] < 4 || $user['r117'] < 1 ) ) return false;
 
     return true;
 }
@@ -198,21 +198,21 @@ function ShipyardDuration ( $id, $shipyard, $nanits, $speed )
 function ResearchMeetRequirement ( $user, $planet, $id )
 {
     if ( $id == 106 && ( $planet['b31'] < 3 ) ) return false;
-    if ( $id == 108 && ( $planet['b31'] < 1 ) ) return false;
-    if ( $id == 109 && ( $planet['b31'] < 4 ) ) return false;
-    if ( $id == 110 && ( $user['r113'] < 3 || $planet['b31'] < 6 ) ) return false;
-    if ( $id == 111 && ( $planet['b31'] < 2 ) ) return false;
-    if ( $id == 113 && ( $planet['b31'] < 1 ) ) return false;
-    if ( $id == 114 && ( $user['r113'] < 5 || $user['r110'] < 5 || $planet['b31'] < 7  ) ) return false;
-    if ( $id == 115 && ( $user['r113'] < 1 || $planet['b31'] < 1 ) ) return false;
-    if ( $id == 117 && ( $user['r113'] < 1 || $planet['b31'] < 2  ) ) return false;
-    if ( $id == 118 && ( $user['r114'] < 3 || $planet['b31'] < 7  ) ) return false;
-    if ( $id == 120 && ( $user['r113'] < 2 || $planet['b31'] < 1  ) ) return false;
-    if ( $id == 121 && ( $user['r120'] < 5 || $user['r113'] < 4 || $planet['b31'] < 4  ) ) return false;
-    if ( $id == 122 && ( $user['r113'] < 8 || $user['r120'] < 10 || $user['r121'] < 5 || $planet['b31'] < 4 ) ) return false;
-    if ( $id == 123 && ( $user['r108'] < 8 || $user['r114'] < 8 || $planet['b31'] < 10  ) ) return false;
-    if ( $id == 124 && ( $user['r106'] < 4 || $user['r117'] < 3 || $planet['b31'] < 3 ) ) return false;
-    if ( $id == 199 && ( $planet['b31'] < 12 ) ) return false;
+    else if ( $id == 108 && ( $planet['b31'] < 1 ) ) return false;
+    else if ( $id == 109 && ( $planet['b31'] < 4 ) ) return false;
+    else if ( $id == 110 && ( $user['r113'] < 3 || $planet['b31'] < 6 ) ) return false;
+    else if ( $id == 111 && ( $planet['b31'] < 2 ) ) return false;
+    else if ( $id == 113 && ( $planet['b31'] < 1 ) ) return false;
+    else if ( $id == 114 && ( $user['r113'] < 5 || $user['r110'] < 5 || $planet['b31'] < 7  ) ) return false;
+    else if ( $id == 115 && ( $user['r113'] < 1 || $planet['b31'] < 1 ) ) return false;
+    else if ( $id == 117 && ( $user['r113'] < 1 || $planet['b31'] < 2  ) ) return false;
+    else if ( $id == 118 && ( $user['r114'] < 3 || $planet['b31'] < 7  ) ) return false;
+    else if ( $id == 120 && ( $user['r113'] < 2 || $planet['b31'] < 1  ) ) return false;
+    else if ( $id == 121 && ( $user['r120'] < 5 || $user['r113'] < 4 || $planet['b31'] < 4  ) ) return false;
+    else if ( $id == 122 && ( $user['r113'] < 8 || $user['r120'] < 10 || $user['r121'] < 5 || $planet['b31'] < 4 ) ) return false;
+    else if ( $id == 123 && ( $user['r108'] < 8 || $user['r114'] < 8 || $planet['b31'] < 10  ) ) return false;
+    else if ( $id == 124 && ( $user['r106'] < 4 || $user['r117'] < 3 || $planet['b31'] < 3 ) ) return false;
+    else if ( $id == 199 && ( $planet['b31'] < 12 ) ) return false;
 
     return true;
 }
