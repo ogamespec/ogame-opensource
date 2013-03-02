@@ -174,7 +174,7 @@ for ($i=0; $i<$num; $i++)
         $cnt = dbrows ( $qresult );
         if ( $cnt > 0 ) {
             $queue = dbarray ($qresult);
-            echo loca("NAME_".$queue['obj_id']) ;
+            echo loca("NAME_".$queue['tech_id']) ;
         }
         else echo "";
         dbfree ( $qresult );
