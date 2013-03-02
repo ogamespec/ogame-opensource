@@ -516,6 +516,9 @@ function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
 
     $planet = GetPlanet ( $planet_id );
 
+    // Если на планете уже есть щитовой купол, то не строим.
+    if ( ($gid == 407 || $gid == 408) && $planet["d".$gid] > 0 ) return;
+
     // Если в очереди уже строится купол такого же типа, то не добавлять ещё один купол в очередь.
     // Ограничить количество заказанных ракет уже строящимися
     $result = GetShipyardQueue ($planet_id);
