@@ -36,52 +36,67 @@ echo "<!-- CONTENT AREA -->\n";
 echo "<div id='content'>\n";
 echo "<center>\n";
 
-echo "<script type=\"text/javascript\">\n";
-echo "<!--\n";
-echo "function t() {\n";
-echo "	v = new Date();\n";
-echo "	var bxx = document.getElementById('bxx');\n";
-echo "	var timeout = 1;\n";
-echo "	n=new Date();\n";
-echo "	ss=pp;\n";
-echo "	aa=Math.round((n.getTime()-v.getTime())/1000.);\n";
-echo "	s=ss-aa;\n";
-echo "	m=0;\n";
-echo "	h=0;\n";
-echo "	if ((ss + 3) < aa) {\n";
-echo "	  bxx.innerHTML=\"Окончено<br>\"+\"<a href=index.php?page=b_building&session=\"+ps+\"&planet=\"+pl+\">Дальше</a>\";\n";
-echo "	  if ((ss + 6) >= aa) {	    \n";
-echo "	  	window.setTimeout('document.location.href=\"index.php?page=b_building&session='+ps+'&planet='+pl+'\";', 3500);\n";
-echo "  	  }\n";
-echo "	} else {\n";
-echo "	if(s < 0) {\n";
-echo "            timeout = 0;\n";
-echo "            bxx.innerHTML=\"Окончено<br>\"+\"<a href=index.php?page=b_building&session=\"+ps+\"&planet=\"+pl+\">Дальше</a>\";\n";
-echo "	} else {\n";
-echo "		if(s>59){\n";
-echo "			m=Math.floor(s/60);\n";
-echo "			s=s-m*60;\n";
-echo "		}\n";
-echo "        if(m>59){\n";
-echo "        	h=Math.floor(m/60);\n";
-echo "        	m=m-h*60;\n";
-echo "        }\n";
-echo "        if(s<10){\n";
-echo "        	s=\"0\"+s;\n";
-echo "        }\n";
-echo "        if(m<10){\n";
-echo "        	m=\"0\"+m;\n";
-echo "        }\n";
-echo "        bxx.innerHTML=h+\":\"+m+\":\"+s+\"<br><a href=index.php?page=b_building&session=\"+ps+\"&listid=\"+pk+\"&modus=\"+pm+\"&planet=\"+pl+\">Отменить</a>\";\n";
-echo "	}    \n";
-echo "	pp=pp-1;\n";
-echo "	if (timeout == 1) {\n";
-echo "    	window.setTimeout(\"t();\", 999);\n";
-echo "    }\n";
-echo "    }\n";
-echo "}\n";
-echo "//-->\n";
-echo "</script>\n";
+?>
+<script type="text/javascript">
+<!--
+function t() {
+	v = new Date();
+	var bxx = document.getElementById('bxx');
+	var timeout = 1;
+	n=new Date();
+	ss=pp;
+	aa=Math.round((n.getTime()-v.getTime())/1000.);
+	s=ss-aa;
+	m=0;
+	h=0;
+	
+	if ((ss + 3) < aa) {
+	  bxx.innerHTML="Окончено<br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+">Дальше</a>";
+	  
+	  if ((ss + 6) >= aa) {	    
+	  	window.setTimeout('document.location.href="index.php?page=b_building&session='+ps+'&planet='+pl+'";', 3500);
+  	  }
+	} else {
+	if(s < 0) {
+	    if (1) {
+			bxx.innerHTML="Окончено<br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+">Дальше</a>";
+			window.setTimeout('document.location.href="index.php?page=b_building&session='+ps+'&planet='+pl+'";', 2000);
+		} else {
+			timeout = 0;
+			bxx.innerHTML="Окончено<br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+">Дальше</a>";
+		}
+	} else {
+		if(s>59){
+			m=Math.floor(s/60);
+			s=s-m*60;
+		}
+        if(m>59){
+        	h=Math.floor(m/60);
+        	m=m-h*60;
+        }
+        if(s<10){
+        	s="0"+s;
+        }
+        if(m<10){
+        	m="0"+m;
+        }
+        
+        if (1) {
+        	bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=b_building&session="+ps+"&listid="+pk+"&modus="+pm+"&planet="+pl+">Отменить</a>";
+    	} else {
+    		bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=b_building&session="+ps+"&listid="+pk+"&modus="+pm+"&planet="+pl+">Отменить</a>";
+    	}
+	}    
+	pp=pp-1;
+	if (timeout == 1) {
+    	window.setTimeout("t();", 999);
+    }
+    }
+}
+//-->
+</script>
+
+<?php
 
 if ( $GlobalUser['vacation'] ) {
     echo "<font color=#FF0000><center>Режим отпуска минимум до  ".date ("Y-m-d H:i:s", $GlobalUser['vacation_until'])."</center></font>\n\n";
