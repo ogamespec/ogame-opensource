@@ -428,7 +428,7 @@ function Queue_Build_End ($queue)
     }
 
     // Количество полей на планете.
-    if ($queue['type'] === "BuildEnd" )
+    if ($queue['type'] === "Build" )
     {
         $fields = "fields = fields + 1";
         // Специальная обработка для постройки Терраформера или Лунной базы -- добавить максимальное количество полей.
