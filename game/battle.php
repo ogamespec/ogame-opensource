@@ -594,7 +594,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     {
         $a[0] = LoadUser ( $f['owner_id'] );
         $a[0]['fleet'] = array ();
-        foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = $f["ship$gid"];
+        foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = abs($f["ship$gid"]);
         $start_planet = GetPlanet ( $f['start_planet'] );
         $a[0]['g'] = $start_planet['g'];
         $a[0]['s'] = $start_planet['s'];
@@ -613,7 +613,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
 
             $a[$anum] = LoadUser ( $fleet_obj['owner_id'] );
             $a[$anum]['fleet'] = array ();
-            foreach ($fleetmap as $i=>$gid) $a[$anum]['fleet'][$gid] = $fleet_obj["ship$gid"];
+            foreach ($fleetmap as $i=>$gid) $a[$anum]['fleet'][$gid] = abs($fleet_obj["ship$gid"]);
             $start_planet = GetPlanet ( $fleet_obj['start_planet'] );
             $a[$anum]['g'] = $start_planet['g'];
             $a[$anum]['s'] = $start_planet['s'];
@@ -631,8 +631,8 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     $d[0] = LoadUser ( $p['owner_id'] );
     $d[0]['fleet'] = array ();
     $d[0]['defense'] = array ();
-    foreach ($fleetmap as $i=>$gid) $d[0]['fleet'][$gid] = $p["f$gid"];
-    foreach ($defmap as $i=>$gid) $d[0]['defense'][$gid] = $p["d$gid"];
+    foreach ($fleetmap as $i=>$gid) $d[0]['fleet'][$gid] = abs($p["f$gid"]);
+    foreach ($defmap as $i=>$gid) $d[0]['defense'][$gid] = abs($p["d$gid"]);
     $d[0]['g'] = $p['g'];
     $d[0]['s'] = $p['s'];
     $d[0]['p'] = $p['p'];
@@ -650,7 +650,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $d[$dnum] = LoadUser ( $fleet_obj['owner_id'] );
         $d[$dnum]['fleet'] = array ();
         $d[$dnum]['defense'] = array ();
-        foreach ($fleetmap as $i=>$gid) $d[$dnum]['fleet'][$gid] = $fleet_obj["ship$gid"];
+        foreach ($fleetmap as $i=>$gid) $d[$dnum]['fleet'][$gid] = abs($fleet_obj["ship$gid"]);
         foreach ($defmap as $i=>$gid) $d[$dnum]['defense'][$gid] = 0;
         $start_planet = GetPlanet ( $fleet_obj['start_planet'] );
         $d[$dnum]['g'] = $start_planet['g'];
@@ -925,7 +925,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     $anum = 0;
     $a[0] = LoadUser ( $f['owner_id'] );
     $a[0]['fleet'] = array ();
-    foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = $f["ship$gid"];
+    foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = abs($f["ship$gid"]);
     $start_planet = GetPlanet ( $f['start_planet'] );
     $a[0]['g'] = $start_planet['g'];
     $a[0]['s'] = $start_planet['s'];
