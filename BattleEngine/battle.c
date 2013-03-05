@@ -743,7 +743,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
 }
 
 // ==========================================================================================
-// Инициализация боевого движка - получить данные из БД и распределить их по массивам.
+// Инициализация боевого движка - получить данные и распределить их по массивам.
 
 typedef struct SimParam {
     char    name[32];
@@ -1049,7 +1049,7 @@ void StartBattle (char *text, int battle_id)
     // **** НАЧАТЬ БИТВУ ****
     res = DoBattle ( a, anum, d, dnum );
 
-    // Записать результаты в БД.
+    // Записать результаты.
     if ( res > 0 )
     {
         sprintf ( filename, "battleresult/battle_%i.txt", battle_id );
