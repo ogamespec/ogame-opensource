@@ -94,14 +94,22 @@ if ( method() === "POST" )
                         $moon_id = PlanetHasMoon ($planet['planet_id']);
                         if ( $moon_id )
                         {
-                            $moon = GetPlanet ( $moon_id );        // Удалять только целый луны.
+                            $moon = GetPlanet ( $moon_id );        // Удалять только целые луны.
                             if ( $moon['type'] == 0 )
                             {
                                 $query = "UPDATE ".$db_prefix."planets SET type = 10003, owner_id = 99999, date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $moon_id . ";";
                                 dbquery ( $query );
 
-                                // Удалить очередь заданий луны.
-                                $query = "DELETE FROM ".$db_prefix."queue WHERE (type = 'Shipyard' OR type = 'Build' OR type = 'Demolish') AND sub_id = " . $moon_id;
+                                // Удалить очередь на верфи (луна).
+                                $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'Shipyard' AND sub_id = " . $moon_id;
+                                dbquery ( $query );
+                                // Удалить очередь построек (луна).
+                                $result = GetBuildQueue ($moon_id);
+                                while ( $row = dbarray ($result) ) {
+                                    $query = "DELETE FROM ".$db_prefix."queue WHERE (type = 'Build' OR type = 'Demolish') AND sub_id = " . $row['id'];
+                                    dbquery ( $query );
+                                }
+                                $query = "DELETE FROM ".$db_prefix."buildqueue WHERE planet_id = " . $moon_id;
                                 dbquery ( $query );
                             }
                         }
@@ -109,8 +117,16 @@ if ( method() === "POST" )
                         else $query = "UPDATE ".$db_prefix."planets SET type = 10001, owner_id = 99999, date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
                         dbquery ( $query );
 
-                        // Удалить очередь заданий планеты.
-                        $query = "DELETE FROM ".$db_prefix."queue WHERE (type = 'Shipyard' OR type = 'Build' OR type = 'Demolish') AND sub_id = " . $planet['planet_id'];
+                        // Удалить очередь на верфи (планета).
+                        $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'Shipyard' AND sub_id = " . $planet['planet_id'];
+                        dbquery ( $query );
+                        // Удалить очередь построек (планета).
+                        $result = GetBuildQueue ($planet['planet_id']);
+                        while ( $row = dbarray ($result) ) {
+                            $query = "DELETE FROM ".$db_prefix."queue WHERE (type = 'Build' OR type = 'Demolish') AND sub_id = " . $row['id'];
+                            dbquery ( $query );
+                        }
+                        $query = "DELETE FROM ".$db_prefix."buildqueue WHERE planet_id = " . $planet['planet_id'];
                         dbquery ( $query );
 
                         // Редирект на Главную планету.
