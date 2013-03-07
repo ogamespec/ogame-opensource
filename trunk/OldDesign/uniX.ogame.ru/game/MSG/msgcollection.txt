@@ -506,3 +506,8 @@ http://board.ogame.ru/thread.php?postid=1390572#post1390572
 </tr>
 
 -------------------------------------------------------------------------------
+
+03-07 06:49:03	Systemnachricht	Produktion abgebrochen
+Der Bauauftrag fur dein Gebaude Forschungslabor Stufe 1 auf Planet Kolonie [1:40:14] konnte nicht in Auftrag gegeben werden.
+
+Du hast nicht genug Resourcen !

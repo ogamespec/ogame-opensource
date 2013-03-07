@@ -1,0 +1,1711 @@
+
+<html>
+ <head>
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+
+  <script language="JavaScript">var session="47b68d7bdc4a";</script>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" href="css/combox.css">
+<link rel="stylesheet" type="text/css" href="http://uni20.ogame.de/evolution/formate.css" />
+
+<title>Uni20 OGame</title>
+
+  <script src="js/utilities.js" type="text/javascript"></script>
+  <script language="JavaScript">
+  </script>
+<script type="text/javascript" src="js/overLib/overlib.js"></script>
+<!-- HEADER -->
+
+<script language="JavaScript">
+function onBodyLoad() {
+    window.setTimeout("reloadImages()", 100);
+}
+
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != "")) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script>
+
+</head>
+<body style="overflow: hidden;" onload="onBodyLoad();" onunload="" >
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<!-- END HEADER -->
+
+<!-- LEFTMENU -->
+
+	<div id='leftmenu'>
+	
+<script language="JavaScript">
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+
+<script language="JavaScript">
+function popUp(URL) {
+  day = new Date();
+  id = day.getTime();
+  eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=1,scrollbars=1,location=1,statusbar=1,menubar=0,resizable=1,width=120,height=60,alwaysLowered=Yes');");
+}
+
+</script>
+
+
+<center>
+
+<div id='menu'>
+<a href="mailto:barrierefrei@ogame.de" title="Blindenspezifische Probleme bitte an barrierefrei@ogame.de." style="width:1px;"></a>
+<p style="width:110px;"><NOBR>Universum 20 (<a href="index.php?page=changelog&session=47b68d7bdc4a">v 0.84</a>)</NOBR></p>
+<table width="110" cellspacing="0" cellpadding="0">
+ <tr>
+  <td><img src="http://uni20.ogame.de/evolution/gfx/ogame-produktion.jpg" width="110" height="40" /></td>
+ </tr>
+
+    
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=47b68d7bdc4a' accesskey="ü">Übersicht</a>
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1' accesskey="i">Imperium</a>
+    </font></div>
+  </td>
+ </tr>
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=b_building&session=47b68d7bdc4a' accesskey="g">Gebäude</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=47b68d7bdc4a' accesskey="r">Rohstoffe</a>
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+  <td>
+   <div align="center" ><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=47b68d7bdc4a' accesskey=""><font color='FF8900'>Händler</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+ </tr>
+ 
+  
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=47b68d7bdc4a&mode=Forschung' accesskey="f">Forschung</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=47b68d7bdc4a&mode=Flotte' accesskey="w">Schiffswerft</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=47b68d7bdc4a&mode=Flotte' accesskey="l">Flotte</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=47b68d7bdc4a' accesskey="t">Technik</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=47b68d7bdc4a&no_header=1' accesskey="x">Galaxie</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=47b68d7bdc4a&mode=Verteidigung' accesskey="v">Verteidigung</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src="http://uni20.ogame.de/evolution/gfx/info-help.jpg" width="110" height="19"></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=47b68d7bdc4a' accesskey="a">Allianzen</a>
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://board.ogame.de" target="_blank" accesskey="1" >Forum</a><!-- external link to board -->
+   </font></div>
+  </td>
+ </tr>
+ 
+
+ 	<tr>
+	   <td align=center>
+	   <a id='darkmatter2' style='cursor:pointer; width:110px;'
+	     href='index.php?page=micropayment&session=47b68d7bdc4a' accesskey="o"><b>Offizierskasino</a></b>
+	   </div>
+	  </td>
+	 </tr>
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+  <a href='index.php?page=statistics&session=47b68d7bdc4a' accesskey="k">Statistiken</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=47b68d7bdc4a' accesskey="s">Suche</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://tutorial.ogame.de" target="_blank" accesskey="h" >Hilfe</a><!-- external link to ogame tutorial -->
+   </font></div>
+  </td>
+ </tr>
+ 
+ <tr>
+  <td><img src="http://uni20.ogame.de/evolution/gfx/user-menu.jpg" width="110" height="35"></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=messages&dsp=1&session=47b68d7bdc4a' accesskey="n">Nachrichten</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=47b68d7bdc4a&no_header=1", "Notizen");' accesskey="z">Notizen</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=47b68d7bdc4a' accesskey="b">Buddylist</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=47b68d7bdc4a' accesskey="e">Einstellungen</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=47b68d7bdc4a' accesskey="q">Logout</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ 
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href="http://board.ogame.de/thread.php?threadid=435281" target="_blank">Regeln</a> <!-- external link to rules -->
+   </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://agb.gameforge.de/index.php?lang=de&art=impress&special=&&f_text=b1daf2&f_text_hover=ffffff&f_text_h=061229&f_text_hr=061229&f_text_hrbg=061229&f_text_hrborder=9EBDE4&f_text_font=arial%2C+arial%2C+arial%2C+sans-serif&f_bg=000000" target="_blank">Impressum</a> <!-- external link to impressum -->
+   </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+
+	</div>
+
+<!-- END LEFTMENU -->
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<script>t=0;</script>  
+
+<table width="750" border="0" cellpadding="0" cellspacing="1">
+
+<!-- ## 
+<!-- ## Tablehead 
+<!-- ## -->
+		<tr height="20" valign="left">
+			<td class="c" colspan="6">Imperiumsübersicht</td>
+   		</tr>
+   		
+
+<!-- ## 
+<!-- ## Planetimages 
+<!-- ## -->
+		<tr height="75">		
+			<th width="75"></th>			
+ 
+			<th style="padding: 20px;">  
+			
+
+        
+        
+        
+					<a href="index.php?page=overview&session=47b68d7bdc4a&cp=1240663">
+						<img src="http://uni20.ogame.de/evolution/planeten/normaltempplanet05.jpg" width="75" height="71" border="0">
+         			</a>
+
+
+
+
+			</th>	
+ 
+			<th style="padding: 20px;">  
+			
+
+        
+        
+        
+					<a href="index.php?page=overview&session=47b68d7bdc4a&cp=1308380">
+						<img src="http://uni20.ogame.de/evolution/planeten/eisplanet04.jpg" width="75" height="71" border="0">
+         			</a>
+
+
+
+
+			</th>	
+ 
+			<th style="padding: 20px;">  
+			
+
+        
+        
+        
+					<a href="index.php?page=overview&session=47b68d7bdc4a&cp=1281073">
+						<img src="http://uni20.ogame.de/evolution/planeten/dschjungelplanet04.jpg" width="75" height="71" border="0">
+         			</a>
+
+
+
+
+			</th>	
+ 
+			<th style="padding: 20px;">  
+			
+
+        
+        
+        
+					<a href="index.php?page=overview&session=47b68d7bdc4a&cp=1281591">
+						<img src="http://uni20.ogame.de/evolution/planeten/dschjungelplanet04.jpg" width="75" height="71" border="0">
+         			</a>
+
+
+
+
+			</th>	
+  
+			
+			<th width="75">Summe</th>
+		</tr>
+		
+<!-- ## 
+<!-- ## Name 
+<!-- ## -->
+   		<tr height="20">
+    		<th width="75">Name</th>
+ 
+			<th width="75" >Planet</th>
+ 
+			<th width="75" >Kolonie</th>
+ 
+			<th width="75" >Kolonie</th>
+ 
+			<th width="75" >Kolonie</th>
+			<th width="75">&nbsp;</th>
+		</tr>
+
+<!-- ## 
+<!-- ## Coordinates 
+<!-- ## -->
+		<tr height="20">
+			<th width="75">Koordinaten</th>
+ 
+			<th width="75" ><a href="index.php?page=galaxy&galaxy=1&system=40&position=9&session=47b68d7bdc4a" >[1:40:9]</a></th>
+ 
+			<th width="75" ><a href="index.php?page=galaxy&galaxy=1&system=40&position=14&session=47b68d7bdc4a" >[1:40:14]</a></th>
+ 
+			<th width="75" ><a href="index.php?page=galaxy&galaxy=3&system=280&position=4&session=47b68d7bdc4a" >[3:280:4]</a></th>
+ 
+			<th width="75" ><a href="index.php?page=galaxy&galaxy=3&system=280&position=5&session=47b68d7bdc4a" >[3:280:5]</a></th>
+			<th width="75">&nbsp;</th>
+   		</tr>
+
+<!-- ## 
+<!-- ## Fields 
+<!-- ## -->
+   		<tr height="20">
+    		<th width="75">Felder</th>
+		    <th width="75" >97/163</th>
+		    <th width="75" >3/196</th>
+		    <th width="75" >33/290</th>
+		    <th width="75" >28/247</th>
+			<th width="75">161&nbsp;<a href='#' onMouseOver="return overlib('<font color=white>Durchschnitt pro Planet</font>');" onMouseOut="return nd();">(40)</a>&nbsp;/&nbsp;896&nbsp;<a href='#' onMouseOver="return overlib('<font color=white>Durchschnitt pro Planet</font>');" onMouseOut="return nd();">(224)</a></th>
+	    </tr>
+
+<!-- ## 
+<!-- ## Resources-Head
+<!-- ## -->
+		<tr height="20">
+			<td align="left" class="c" colspan="6">Rohstoffe</td>
+		</tr>
+
+<!-- ## 
+<!-- ## Resources (without Energy)
+<!-- ## -->
+ 
+   		<tr height="20">
+    		<th width="75">Metall</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=47b68d7bdc4a&cp=1240663&planettype=1">
+				        2.549 
+			    </a>
+				/ 
+				20			</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=47b68d7bdc4a&cp=1308380&planettype=1">
+				        14.793 
+			    </a>
+				/ 
+				53			</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=47b68d7bdc4a&cp=1281073&planettype=1">
+				        137.573 
+			    </a>
+				/ 
+				656			</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=47b68d7bdc4a&cp=1281591&planettype=1">
+				        112.665 
+			    </a>
+				/ 
+				534			</th>
+			<th width="75">267.580&nbsp;/&nbsp;1.263</th>
+		</tr>
+ 
+   		<tr height="20">
+    		<th width="75">Kristall</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=47b68d7bdc4a&cp=1240663&planettype=1">
+				        2.583 
+			    </a>
+				/ 
+				10			</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=47b68d7bdc4a&cp=1308380&planettype=1">
+				        4.631 
+			    </a>
+				/ 
+				10			</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=47b68d7bdc4a&cp=1281073&planettype=1">
+				        74.828 
+			    </a>
+				/ 
+				352			</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=47b68d7bdc4a&cp=1281591&planettype=1">
+				        43.917 
+			    </a>
+				/ 
+				222			</th>
+			<th width="75">125.960&nbsp;/&nbsp;594</th>
+		</tr>
+ 
+   		<tr height="20">
+    		<th width="75">Deuterium</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=47b68d7bdc4a&cp=1240663&planettype=1">
+				        -0 
+			    </a>
+				/ 
+				-172			</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=47b68d7bdc4a&cp=1308380&planettype=1">
+				        1 
+			    </a>
+				/ 
+				0			</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=47b68d7bdc4a&cp=1281073&planettype=1">
+				        4.204 
+			    </a>
+				/ 
+				27			</th>
+ 
+ 
+		     <th width="75" >
+				<a href="index.php?page=resources&session=47b68d7bdc4a&cp=1281591&planettype=1">
+				        3.364 
+			    </a>
+				/ 
+				13			</th>
+			<th width="75">7.569&nbsp;/&nbsp;-132</th>
+		</tr>
+		
+
+<!-- ## 
+<!-- ## Resources-Energy
+<!-- ## -->
+		<tr height="20">
+			<th width="75">Energie</th>
+ 
+ 
+			<th width="75" >
+                    553 
+ 
+				/ 
+			    553			</th>
+ 
+ 
+			<th width="75" >
+                    37 
+ 
+				/ 
+			    48			</th>
+ 
+ 
+			<th width="75" >
+                    193 
+ 
+				/ 
+			    627			</th>
+ 
+ 
+			<th width="75" >
+                    123 
+ 
+				/ 
+			    424			</th>
+			<th width="75">906 / 1.652 </th>
+		</tr>
+
+<!-- ## 
+<!-- ## Buildings-Head
+<!-- ## -->
+		<tr height="20">
+			<td align="left" class="c" colspan="6">Gebäude</td>
+		</tr>
+		
+<!-- ## 
+<!-- ## Buildings
+<!-- ## -->		
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=1&planettype=1">
+                    Metallmine                </a>
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1240663&cp=1240663\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1240663&techid=1';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+			    	<font color="red">
+                        19                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1308380&cp=1308380\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1308380&techid=1';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+		     		<font color ="lime">
+                        1                    </font>                    
+ 
+                        						
+	
+				
+					<a href="index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&planet=1308380&modus=remove&listid=1">
+						<font color="magenta">2</font>
+					</a>
+												
+	
+                        						
+	
+                        						
+	
+						
+					<font color="sandybrown">(<a href="index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&planet=1308380&modus=remove&listid=3"><font color="sandybrown">3</font></a>)</font>
+												
+	
+                        						
+	
+						
+					<font color="sandybrown">(<a href="index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&planet=1308380&modus=remove&listid=4"><font color="sandybrown">4</font></a>)</font>
+												
+	
+					
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1281073&cp=1281073\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1281073&techid=1';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+		     		<font color ="lime">
+                        9                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1281591&cp=1281591\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1281591&techid=1';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+		     		<font color ="lime">
+                        8                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+	
+			<th width="75">37 <a href='#' onMouseOver="return overlib('<font color=white>Durchschnitt pro Planet</font>');" onMouseOut="return nd();">(9.25)</a></th>
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=2&planettype=1">
+                    Kristallmine                </a>
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1240663&cp=1240663\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1240663&techid=2';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+			    	<font color="red">
+                        16                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+    			<font color="white">-</font>
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1281073&cp=1281073\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1281073&techid=2';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+		     		<font color ="lime">
+                        8                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1281591&cp=1281591\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1281591&techid=2';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+		     		<font color ="lime">
+                        6                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+	
+			<th width="75">30 <a href='#' onMouseOver="return overlib('<font color=white>Durchschnitt pro Planet</font>');" onMouseOut="return nd();">(10)</a></th>
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=3&planettype=1">
+                    Deuteriumsynthetisierer                </a>
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1240663&cp=1240663\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1240663&techid=3';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+			    	<font color="red">
+                        15                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+    			<font color="white">-</font>
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1281073&cp=1281073\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1281073&techid=3';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+		     		<font color ="lime">
+                        2                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1281591&cp=1281591\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1281591&techid=3';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+		     		<font color ="lime">
+                        1                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+	
+			<th width="75">18 <a href='#' onMouseOver="return overlib('<font color=white>Durchschnitt pro Planet</font>');" onMouseOut="return nd();">(6)</a></th>
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=4&planettype=1">
+                    Solarkraftwerk                </a>
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1240663&cp=1240663\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1240663&techid=4';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+			    	<font color="red">
+                        19                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1308380&cp=1308380\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1308380&techid=4';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+		     		<font color ="lime">
+                        2                    </font>                    
+ 
+                        						
+	
+                        						
+	
+                        						
+	
+                        						
+	
+					
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1281073&cp=1281073\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1281073&techid=4';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+		     		<font color ="lime">
+                        11                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1281591&cp=1281591\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1281591&techid=4';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+		     		<font color ="lime">
+                        9                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+	
+			<th width="75">41 <a href='#' onMouseOver="return overlib('<font color=white>Durchschnitt pro Planet</font>');" onMouseOut="return nd();">(10.25)</a></th>
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=12&planettype=1">
+                    Fusionskraftwerk                </a>
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1240663&cp=1240663\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1240663&techid=12';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+			    	<font color="red">
+                        8                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+    			<font color="white">-</font>
+			</th>			
+ 
+			<th width="75" >
+    			<font color="white">-</font>
+			</th>			
+ 
+			<th width="75" >
+    			<font color="white">-</font>
+			</th>			
+	
+			<th width="75">8 <a href='#' onMouseOver="return overlib('<font color=white>Durchschnitt pro Planet</font>');" onMouseOut="return nd();">(8)</a></th>
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=14&planettype=1">
+                    Roboterfabrik                </a>
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1240663&cp=1240663\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1240663&techid=14';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+			    	<font color="red">
+                        6                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+    			<font color="white">-</font>
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1281073&cp=1281073\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1281073&techid=14';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+		     		<font color ="lime">
+                        2                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1281591&cp=1281591\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1281591&techid=14';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+		     		<font color ="lime">
+                        4                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+	
+			<th width="75">12 <a href='#' onMouseOver="return overlib('<font color=white>Durchschnitt pro Planet</font>');" onMouseOut="return nd();">(4)</a></th>
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=21&planettype=1">
+                    Raumschiffwerft                </a>
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1240663&cp=1240663\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1240663&techid=21';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+			    	<font color="red">
+                        8                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+    			<font color="white">-</font>
+			</th>			
+ 
+			<th width="75" >
+    			<font color="white">-</font>
+			</th>			
+ 
+			<th width="75" >
+    			<font color="white">-</font>
+			</th>			
+	
+			<th width="75">8 <a href='#' onMouseOver="return overlib('<font color=white>Durchschnitt pro Planet</font>');" onMouseOut="return nd();">(8)</a></th>
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=31&planettype=1">
+                    Forschungslabor                </a>
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1240663&cp=1240663\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1240663&techid=31';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+			    	<font color="red">
+                        6                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+    			<font color="white">-</font>
+			</th>			
+ 
+			<th width="75" >
+ 
+				<a style="cursor:pointer" 
+				   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=47b68d7bdc4a&planet=1281073&cp=1281073\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=47b68d7bdc4a&planettype=1&no_header=1&modus=add&planet=1281073&techid=31';t=0;"
+  				   title="1x Klicken: Zur Gebäudeansicht, 2x Klicken: Gebäude Bauen">       
+		     		<font color ="lime">
+                        1                    </font>                    
+       
+    				</font>
+    			</a>    
+			</th>			
+ 
+			<th width="75" >
+    			<font color="white">-</font>
+			</th>			
+	
+			<th width="75">7 <a href='#' onMouseOver="return overlib('<font color=white>Durchschnitt pro Planet</font>');" onMouseOut="return nd();">(3.5)</a></th>
+		</tr>
+
+<!-- ## 
+<!-- ## Research-Head
+<!-- ## -->
+		<tr height="20">
+			<td align="left" class="c" colspan="6">Forschung</td>
+		</tr>
+		
+<!-- ## 
+<!-- ## Researches
+<!-- ## -->		
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=106&planettype=1">
+	                Spionagetechnik    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1240663&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    6			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1308380&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    6			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281073&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    6			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281591&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    6			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			<th width="75">6</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=108&planettype=1">
+	                Computertechnik    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1240663&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    5			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1308380&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    5			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281073&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    5			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281591&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    5			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			<th width="75">5</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=109&planettype=1">
+	                Waffentechnik    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1240663&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    4			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1308380&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    4			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281073&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    4			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281591&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    4			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			<th width="75">4</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=110&planettype=1">
+	                Schildtechnik    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1240663&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    4			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1308380&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    4			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281073&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    4			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281591&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    4			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			<th width="75">4</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=111&planettype=1">
+	                Raumschiffpanzerung    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1240663&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    4			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1308380&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    4			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281073&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    4			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281591&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    4			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			<th width="75">4</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=113&planettype=1">
+	                Energietechnik    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1240663&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    6			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1308380&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    6			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281073&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    6			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281591&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    6			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			<th width="75">6</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=115&planettype=1">
+	                Verbrennungstriebwerk    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1240663&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    6			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1308380&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    6			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281073&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    6			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281591&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    6			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			<th width="75">6</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=117&planettype=1">
+	                Impulstriebwerk    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1240663&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    3			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1308380&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    3			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281073&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    3			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281591&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    3			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			<th width="75">3</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=120&planettype=1">
+	                Lasertechnik    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1240663&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    10			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1308380&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    10			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281073&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    10			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281591&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    10			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			<th width="75">10</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=121&planettype=1">
+	                Ionentechnik    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1240663&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    5			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1308380&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    5			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281073&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    5			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281591&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    5			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			<th width="75">5</th>
+			
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=124&planettype=1">
+	                Expeditionstechnik    	        </a>
+			</th>
+		
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1240663&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    2			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1308380&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    2			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281073&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    2			    	    
+    				</font>
+    			</a>
+    
+			</th>
+ 
+			<th width="75" >
+ 
+    			<a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1281591&mode=Forschung&planettype=1">
+				    <font color ="lime">
+			    	    2			    	    
+    				</font>
+    			</a>
+    
+			</th>
+			<th width="75">2</th>
+			
+		</tr>
+
+<!-- ## 
+<!-- ## Ships-Head
+<!-- ## -->	
+		<tr height="20">
+			<td align="left" class="c" colspan="6">Schiffe</td>
+		</tr>
+		
+<!-- ## 
+<!-- ## Ships
+<!-- ## -->			
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=202&planettype=1">
+                    Kleiner Transporter                </a>
+      		</th>
+ 
+			<th width="75" >
+				<font color="white">-</font>
+	    	</th>
+ 
+			<th width="75" >
+ 
+			    <a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1308380&mode=Flotte&planettype=1">
+				    <font color ="lime">
+                        1					</font>
+				</a>    
+	    	</th>
+ 
+			<th width="75" >
+				<font color="white">-</font>
+	    	</th>
+ 
+			<th width="75" >
+				<font color="white">-</font>
+	    	</th>
+			<th width="75">1</th>
+			
+	   </tr>
+
+<!-- ## 
+<!-- ## Defense-Head
+<!-- ## -->		
+		<tr height="20">
+			<td align="left" class="c" colspan="6">Verteidigung</td>
+		</tr>
+		
+<!-- ## 
+<!-- ## Defense
+<!-- ## -->				
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=401&planettype=1">
+                    Raketenwerfer                </a>
+  			</th>
+ 
+			<th width="75" >
+ 
+			    <a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1240663&mode=Verteidigung&planettype=1">
+				    <font color="red">
+				        20					</font>
+    			</a>    
+			</th>
+ 
+			<th width="75" >
+			    <font color="white">-</font>
+			</th>
+ 
+			<th width="75" >
+			    <font color="white">-</font>
+			</th>
+ 
+			<th width="75" >
+			    <font color="white">-</font>
+			</th>
+			<th width="75">20</th>
+		</tr>
+		<tr height="20">
+			<th width="75">
+				<a href="index.php?page=infos&session=47b68d7bdc4a&gid=404&planettype=1">
+                    Gaußkanone                </a>
+  			</th>
+ 
+			<th width="75" >
+ 
+			    <a href="index.php?page=buildings&session=47b68d7bdc4a&cp=1240663&mode=Verteidigung&planettype=1">
+				    <font color="red">
+				        2					</font>
+    			</a>    
+			</th>
+ 
+			<th width="75" >
+			    <font color="white">-</font>
+			</th>
+ 
+			<th width="75" >
+			    <font color="white">-</font>
+			</th>
+ 
+			<th width="75" >
+			    <font color="white">-</font>
+			</th>
+			<th width="75">2</th>
+		</tr>
+
+<!-- ## 
+<!-- ## Footer
+<!-- ## -->		
+
+</table>
+<br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+
+<div id='messagebox'>
+<center>
+</center>
+</div>
+<div id='errorbox'>
+<center>
+</center>
+</div>
+
+<script>
+messagebox.style.top='0px';
+headerHeight = 0;
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = "_blank";
+  }
+}
+
+</script>
+<style>
+.layer {
+	z-index:999999999;
+	position:absolute;
+	left: 0;
+	right: 0;
+	top: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 757px; 
+	height: 475px; 
+	background-color: #040e1e;
+	border: 3px double orange;
+	padding: 0;
+	opacity: .90;
+}
+</style>
+ </body>
+</html>

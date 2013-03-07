@@ -7,6 +7,15 @@ loca_add ( "empire", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
+
+// Обработка параметров.
+if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] )
+{
+    if ( $_GET['modus'] === 'add' ) BuildEnque ( intval ($_GET['planet']), intval ($_GET['techid']), 0 );
+    else if ( $_GET['modus'] === 'destroy' ) BuildEnque ( intval ($_GET['planet']), intval ($_GET['techid']), 1 );
+    else if ( $_GET['modus'] === 'remove' ) BuildDeque ( intval ($_GET['planet']), intval ($_GET['listid']) );
+}
+
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
@@ -19,9 +28,16 @@ PageHeader ("imperium", true);
 
 $planettype = intval($_GET['planettype']);
 
+if ( $GlobalUni['moons'] ) {
+    if ( $planettype != 1 && $planettype != 3) $planettype = 1;
+}
+else {
+    if ( $planettype != 1 ) $planettype = 1;
+}
+
 // Загрузить список планет/лун.
 $plist = array ();
-$num = 0;
+$moons = $num = 0;
 
 if ( $planettype == 1 || $planettype == 3)
 {
@@ -30,6 +46,7 @@ if ( $planettype == 1 || $planettype == 3)
     while ($rows--)
     {
         $planet = dbarray ($result);
+        if ($planet['type'] == 0 ) $moons++;
         if ( $planettype == 1 && $planet['type'] == 0 ) continue;
         if ( $planettype == 3 && $planet['type'] != 0 ) continue;
         $plist[$num] = GetPlanet ($planet['planet_id']);
@@ -61,12 +78,18 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
         <tr height="20" valign="left">
             <td class="c" colspan="<?=($num+2);?>"><?=loca("EMPIRE_OVERVIEW");?></td>
         </tr>
-        
+
+<?php
+    if ( $moons && $GlobalUni['moons'] ) {
+?>        
         <tr height="20">
             <th colspan="<?=ceil($num/2);?>"><a href="index.php?page=imperium&no_header=1&session=<?=$session;?>&planettype=1"><?=loca("EMPIRE_PLANETS");?></a></th>
             <th colspan="<?=( ceil($num/2)+(1 - $num%2) );?>"><a href="index.php?page=imperium&no_header=1&session=<?=$session;?>&planettype=3"><?=loca("EMPIRE_MOONS");?></a></th>
             <th>&nbsp;</th>
         </tr>
+<?php
+    }
+?>
 
 <!-- ## 
 <!-- ## Planetimages 
@@ -287,15 +310,48 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
             foreach ( $plist as $j=>$planet )
             {
+
+                // Загрузить очередь построек планеты.
+                $bqueue = array ();
+                $result = GetBuildQueue ( $planet['planet_id'] );
+                while ( $row = dbarray ($result) ) {
+                    $bqueue[] = $row;
+                }
+
                 echo "            <th width=\"75\" >\n";
-                echo "                <a style=\"cursor:pointer\" \n";
-                echo "                   onClick=\"if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=$session&planet=".$planet['planet_id']."&cp=".$planet['planet_id']."\';t=0;',500);}\" \n";
-                echo "                   onDblClick=\"clearTimeout(t);document.location.href='index.php?page=imperium&session=$session&planettype=$planettype&no_header=1&modus=add&planet=".$planet['planet_id']."&techid=$gid';t=0;\"\n";
-                echo "                   title=\"Щёлкнуть 1 раз: обзор, постройки, 2 раза: строить\">       \n";
-                echo "                    <font color=\"red\">\n";
-                echo "                        ".$planet["b$gid"]."                    </font>                    \n\n";
-                echo "                    </font>\n";
-                echo "                </a>    \n";
+
+                if ( $planet["b$gid"] > 0 ) {
+                    echo "                <a style=\"cursor:pointer\" \n";
+                    echo "                   onClick=\"if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=$session&planet=".$planet['planet_id']."&cp=".$planet['planet_id']."\';t=0;',500);}\" \n";
+                    echo "                   onDblClick=\"clearTimeout(t);document.location.href='index.php?page=imperium&session=$session&planettype=$planettype&no_header=1&modus=add&planet=".$planet['planet_id']."&techid=$gid';t=0;\"\n";
+                    echo "                   title=\"Щёлкнуть 1 раз: обзор, постройки, 2 раза: строить\">       \n";
+
+                    if ( CanBuild ($GlobalUser, $planet, $gid, $planet["b$gid"]+1, 0) === "" ) {
+                        echo "                    <font color=\"lime\">\n";
+                    }
+                    else {
+                        echo "                    <font color=\"red\">\n";
+                    }
+
+                    echo "                        ".$planet["b$gid"]."                    </font>                    \n\n";
+                    echo "                    </font>\n";
+                    echo "                </a>    \n";
+
+                    // Build queue.
+                    foreach ( $bqueue as $i=>$row ) {
+                        if ( $row['tech_id'] != $gid || $row['planet_id'] != $planet['planet_id'] ) continue;
+                        if ( $i == 0 ) {
+                            echo "                    <a href=\"index.php?page=imperium&session=$session&planettype=$planettype&no_header=1&planet=".$planet['planet_id']."&modus=remove&listid=".$row['list_id']."\">\n";
+                            echo "                        <font color=\"magenta\">".$row['level']."</font>\n";
+                            echo "                    </a>\n\n";
+                        }
+                        else {
+                            echo "                    <font color=\"sandybrown\">(<a href=\"index.php?page=imperium&session=$session&planettype=$planettype&no_header=1&planet=".$planet['planet_id']."&modus=remove&listid=".$row['list_id']."\"><font color=\"sandybrown\">".$row['level']."</font></a>)</font>\n\n";
+                        }
+                    }
+                }
+                else echo "<font color=\"white\">-</font>\n";
+
                 echo "            </th>       \n";
             }
 
