@@ -198,7 +198,7 @@ function planet_link ($planet)
 <?php
 
 include "redesign_planetlist.php";
-include "redesign_javascript.php";
+include "javascript/overview.php";
 include "redesign_footer.php";
 
 ?>
