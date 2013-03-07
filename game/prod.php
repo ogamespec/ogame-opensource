@@ -71,7 +71,7 @@ function BuildMeetRequirement ( $user, $planet, $id )
 {
     if ( $planet['type'] == 0 )
     {
-        if ( $id == 1 || $id == 2 || $id == 3 || $id == 4 || $id == 12 || $id == 15 || $id == 22 || $id == 23 || $id == 24 || $id == 31 || $id == 33 || $id == 44 ) return false;
+        if ( $id == 1 || $id == 2 || $id == 3 || $id == 4 || $id == 12 || $id == 15 || $id == 31 || $id == 33 || $id == 44 ) return false;
     }
     else
     {
