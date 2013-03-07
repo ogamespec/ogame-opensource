@@ -164,7 +164,7 @@ $num = dbrows ($result);
 for ($i=0; $i<$num; $i++)
 {
     $planet = dbarray ($result);
-    if ($planet['type'] == 0 || $planet['planet_id'] == $aktplanet['planet_id'] || $planet['destroyed']) { $num--; $i--; continue; }
+    if ($planet['type'] == 0 || $planet['planet_id'] == $aktplanet['planet_id']) { $num--; $i--; continue; }
     if (($i%2) == 0) echo "<tr>\n";
     echo "<th> ".$planet['name']."<br> <a href=\"index.php?page=overview&session=$session&cp=".$planet['planet_id']."\" title=\"".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]\">";
     echo "<img src=\"".GetPlanetImage ( UserSkin (), $planet )."\" width=\"50\" height=\"50\" title=\"".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]\" ></a>\n";
