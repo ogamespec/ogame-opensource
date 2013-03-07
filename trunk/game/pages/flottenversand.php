@@ -200,12 +200,12 @@ if ($numships <= 0) FleetError ( "Вы не выбрали корабли либ
 switch ( $order )
 {
     case '1':        // Атака
-        if ( ( 
+        if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
+        else if ( ( 
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
              IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
 
-        if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
-        else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
+        if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
         else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Невозможно напасть на собственную планету!" );
         else if ($BlockAttack) FleetError ( "Запрет на атаки" );
         else if ($GlobalUser['noattack']) FleetError ( va ( "Запрет на атаки до #1", date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
@@ -244,13 +244,15 @@ switch ( $order )
     case '5':        // Держаться
         $maxhold_fleets = $unitab['acs'] * $unitab['acs'];
         $maxhold_users = $unitab['acs'];
+        if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
         if ( GetHoldingFleetsCount ($target['planet_id']) >= $maxhold_fleets ) FleetError ("Задерживаться могут только $maxhold_fleets Удерживать флоты!");
         if ( ! CanStandHold ( $target['planet_id'], $origin['owner_id'] ) ) FleetError ("Задерживаться могут только $maxhold_users игроков!");
         if ( ! ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) FleetError ("Задерживаться можно только у друзей и коллег по альянсу!");
         break;
 
     case '6':        // Шпионаж
-        if ( ( 
+        if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
+        else if ( ( 
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
              IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
 
@@ -277,7 +279,8 @@ switch ( $order )
         break;
 
     case '9':        // Уничтожить
-        if ( ( 
+        if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
+        else if ( ( 
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
              IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
 
