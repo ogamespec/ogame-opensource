@@ -99,6 +99,8 @@ $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 
 
 if ( $_GET['mode'] === "Flotte" )
 {
+    $prem = PremiumStatus ($GlobalUser);
+
     // Проверить не строится ли Верфь или Фабрика нанитов.
     $result = GetBuildQueue ( $aktplanet['planet_id'] );
     $queue = dbarray ( $result );
@@ -151,7 +153,16 @@ if ( $_GET['mode'] === "Flotte" )
             echo "<br>Длительность: ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>невозможно</font>";
-            else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) && !$busy) echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
+            else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) && !$busy) {
+                echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
+                if ( $prem['commander'] ) {
+                    $max = 999;
+                    if ( $m ) $max = floor (min ($max, $aktplanet['m'] / $m));
+                    if ( $k ) $max = floor (min ($max, $aktplanet['k'] / $k));
+                    if ( $d ) $max = floor (min ($max, $aktplanet['d'] / $d));
+                    echo "<br><a href=\"javascript:setMax($id, $max);\">(max. $max)</a>";
+                }
+            }
             echo "</td></tr>";
         }
 
@@ -170,6 +181,8 @@ $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
 
 if ( $_GET['mode'] === "Verteidigung" )
 {
+    $prem = PremiumStatus ($GlobalUser);
+
     // Проверить не строится ли Верфь или Фабрика нанитов.
     $result = GetBuildQueue ( $aktplanet['planet_id'] );
     $queue = dbarray ( $result );
@@ -224,7 +237,18 @@ if ( $_GET['mode'] === "Verteidigung" )
             if ( !$busy ) {
                 if ( ($id == 407 || $id == 408) && $aktplanet['d'.$id] > 0 ) echo "<font color=#FF0000>Щитовой купол можно строить только 1 раз.</font>";
                 else if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>невозможно</font>";
-                else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
+                else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) {
+                    echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
+                    if ( $prem['commander'] && !( $id == 407 || $id == 408 ) ) {
+                        if ( $id == 502 ) $max = $aktplanet['b44'] * 10 - (2*$aktplanet['d503'] + $aktplanet['d502']);
+                        else if ( $id == 503 ) $max = ($aktplanet['b44'] * 10 - (2*$aktplanet['d503'] + $aktplanet['d502'])) / 2;
+                        else $max = 999;
+                        if ( $m ) $max = floor (min ($max, $aktplanet['m'] / $m));
+                        if ( $k ) $max = floor (min ($max, $aktplanet['k'] / $k));
+                        if ( $d ) $max = floor (min ($max, $aktplanet['d'] / $d));
+                        echo "<br><a href=\"javascript:setMax($id, $max);\">(max. $max)</a>";
+                    }
+                }
             }
             echo "</td></tr>";
         }
