@@ -3,13 +3,13 @@
 // Боевой движок OGame.
 
 // Восстановление обороны.
-function RepairDefense ( $d, $res, $defrepair, $defrepair_delta )
+function RepairDefense ( $d, $res, $defrepair, $defrepair_delta, $premium=true )
 {
     $repaired = array ( 401=>0, 402=>0, 403=>0, 404=>0, 405=>0, 406=>0, 407=>0, 408=>0 );
     $exploded = array ( 401=>0, 402=>0, 403=>0, 404=>0, 405=>0, 406=>0, 407=>0, 408=>0 );
     $exploded_total = 0;
 
-    $prem = PremiumStatus ($d[0]);
+    if ( $premium) $prem = PremiumStatus ($d[0]);
 
     $rounds = count ( $res['rounds'] );
     if ( $rounds > 0 ) 

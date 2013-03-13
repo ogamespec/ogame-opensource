@@ -5,7 +5,7 @@
 
 function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, &$dloss )
 {
-    global  $db_host, $db_user, $db_pass, $db_name, $db_prefix;
+    global $db_prefix;
 
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
@@ -33,14 +33,14 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
 
     for ( $n=0; $n<$anum; $n++)
     {
-        $source .= "Attacker$n = (".mt_rand(1,10000)." ";
+        $source .= "Attacker$n = (<Attacker$n> ".mt_rand(1,10000)." 1 1 1 ";
         $source .= $a[$n]['r109'] . " " . $a[$n]['r110'] . " " . $a[$n]['r111'] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $a[$n]['fleet'][$gid] . " ";
         $source .= ")\n";
     }
     for ( $n=0; $n<$dnum; $n++)
     {
-        $source .= "Defender$n = (".mt_rand(1,10000)." ";
+        $source .= "Defender$n = (<Defender$n> ".mt_rand(1,10000)." 1 1 2 ";
         $source .= $d[$n]['r109'] . " " . $d[$n]['r110'] . " " . $d[$n]['r111'] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $d[$n]['fleet'][$gid] . " ";
         foreach ($defmap as $i=>$gid) $source .= $d[$n]['defense'][$gid] . " ";
@@ -49,23 +49,23 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
 
     if ($debug) echo $source . "<hr>";
 
-    $battle_id = IncrementDBGlobal ("nextbattle");
-    $battle = array ( $battle_id, $source, '' );
-    AddDBRow ( $battle, "battledata");
+    $battle = array ( $battle_id, $source, '', '', time() );
+    $battle_id = AddDBRow ( $battle, "battledata");
+
+    $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
+    fwrite ( $bf, $source );
+    fclose ( $bf );
 
     // *** Передать данные боевому движку
 
-    $arg = "\"db_host=$db_host&db_user=$db_user&db_pass=$db_pass&db_name=$db_name&db_prefix=$db_prefix&battle_id=$battle_id\"";
+    $arg = "\"battle_id=$battle_id\"";
     system ( $unitab['battle_engine'] . " $arg" );
 
     // *** Обработать выходные данные
 
-    $query = "SELECT * FROM ".$db_prefix."battledata WHERE battle_id = $battle_id";
-    $result = dbquery ($query);
-    if ( $result == null ) return;
-    $battle = dbarray ($result);
+    $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
+    $res = unserialize($battleres);
 
-    $res = unserialize($battle['result']);
     if ( $debug ) {
         print_r ( $battle );
         echo "<hr>";
@@ -78,11 +78,11 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
     dbquery ($query);
 
     // Восстановить оборону
-    $repaired = RepairDefense ( $d, $res, $unitab['defrepair'], $unitab['defrepair_delta'] );
+    $repaired = RepairDefense ( $d, $res, $unitab['defrepair'], $unitab['defrepair_delta'], false );
 
     // Рассчитать общие потери
     $aloss = $dloss = 0;
-    CalcLosses ( $a, $d, $res, $repaired, &$aloss, &$dloss );
+    CalcLosses ( &$a, &$d, $res, $repaired, &$aloss, &$dloss );
 
     // Создать луну
     $mooncreated = false;
@@ -96,7 +96,9 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
     else $battle_result = 2;
 
     // Сгенерировать боевой доклад.
-    return BattleReport ( $a, $d, $res, time(), $aloss, $dloss, 1, 2, 3, $moonchance, $mooncreated, $repaired, true );
+    loca_add ( "battlereport" );
+    loca_add ( "technames" );
+    return BattleReport ( $res, time(), $aloss, $dloss, 1, 2, 3, $moonchance, $mooncreated, $repaired );
 }
 
 function Admin_BattleSim ()
