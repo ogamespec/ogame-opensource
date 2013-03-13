@@ -116,9 +116,13 @@ function GetLastRegistrationByIP ( $ip )
 // Логи действия пользователей.
 function UserLog ($owner_id, $type, $text, $when=0)
 {
+    global $db_prefix;
     if ($when == 0) $when = time ();
     $log = array ( null, $owner_id, $when, $type, $text );
     AddDBRow ( $log, 'userlogs' );
+    $ago = $when - 2 * 7 * 24 * 60 * 60;
+    $query = "DELETE FROM ".$db_prefix."userlogs WHERE date < $ago;";
+    dbquery ($query);
 }
 
 ?>

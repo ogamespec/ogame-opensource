@@ -129,7 +129,7 @@ $tab_union = array (    // САБы
 );
 
 $tab_battledata = array (    // Данные для боевого движка (deprecated)
-    'battle_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'source'=>'TEXT', 'result'=>'TEXT'
+    'battle_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'source'=>'TEXT', 'title' => 'TEXT', 'report' => 'TEXT', 'date'=>'INT UNSIGNED'
 );
 
 $tab_fleetlogs = array (    // Логи полётов
