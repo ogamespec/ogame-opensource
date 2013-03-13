@@ -569,6 +569,7 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
 // Начать битву между атакующим fleet_id и обороняющимся planet_id.
 function StartBattle ( $fleet_id, $planet_id, $when )
 {
+    global $db_prefix;
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
 
@@ -689,7 +690,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $source .= ")\n";
     }
 
-    $battle = array ( null, $source, "" );
+    $battle = array ( null, $source, "", "", $when );
     $battle_id = AddDBRow ( $battle, "battledata" );
 
     $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
@@ -761,6 +762,11 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $mailbox[ $user['player_id'] ] = true;
     }
 
+    // Обновить лог боевого доклада
+    $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=admin&session={PUBLIC_SESSION}&mode=BattleReport&bericht=$battle_id\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
+    $query = "UPDATE ".$db_prefix."battledata SET title = '".$subj."', report = '".$text."' WHERE battle_id = $battle_id;";
+    dbquery ( $query );
+
     // Если флот уничтожен за 1 или 2 раунда - не показывать лог боя для атакующих.
     if ( count($res['rounds']) <= 2 && $battle_result == 1 ) $text = "Контакт с флотом потерян. <br> Это означает, что его уничтожили первым же залпом <!--A:$aloss,W:$dloss-->";
 
@@ -774,6 +780,11 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $mailbox[ $user['player_id'] ] = true;
     }
 
+    // Почистить старые боевые доклады
+    $ago = $when - 2 * 7 * 24 * 60 * 60;
+    $query = "DELETE FROM ".$db_prefix."battledata WHERE date < $ago;";
+    dbquery ($query);
+
     // Модифицировать флоты и планету в соответствии с потерями и захваченными ресурсами
     WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_cargo );
 
@@ -781,6 +792,10 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
     foreach ( $d as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
     RecalcRanks ();
+
+    // Чистим промежуточные данные боевого движка
+    unlink ( "battledata/battle_".$battle_id.".txt" );
+    unlink ( "battleresult/battle_".$battle_id.".txt" );
 
     return $battle_result;
 }
@@ -902,6 +917,7 @@ function ShortBattleReport ( $res, $now )
 // Состав флота чужих/пиратов определяется параметром level ( 0: слабые, 1: средние, 2: сильные )
 function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 {
+    global $db_prefix;
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
 
@@ -1033,7 +1049,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
         $source .= ")\n";
     }
 
-    $battle = array ( null, $source, "" );
+    $battle = array ( null, $source, "", "", $when );
     $battle_id = AddDBRow ( $battle, "battledata" );
 
     $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
@@ -1081,12 +1097,26 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
         $mailbox[ $user['player_id'] ] = true;
     }
 
+    // Обновить лог боевого доклада
+    $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=admin&session={PUBLIC_SESSION}&mode=BattleReport&bericht=$battle_id\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$target_planet['g'].":".$target_planet['s'].":".$target_planet['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
+    $query = "UPDATE ".$db_prefix."battledata SET title = '".$subj."', report = '".$text."' WHERE battle_id = $battle_id;";
+    dbquery ( $query );
+
+    // Почистить старые боевые доклады
+    $ago = $when - 2 * 7 * 24 * 60 * 60;
+    $query = "DELETE FROM ".$db_prefix."battledata WHERE date < $ago;";
+    dbquery ($query);
+
     // Модифицировать флот
     WritebackBattleResultsExpedition ( $a, $d, $res );
 
     // Изменить статистику игроков
     foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
     RecalcRanks ();
+
+    // Чистим промежуточные данные боевого движка
+    unlink ( "battledata/battle_".$battle_id.".txt" );
+    unlink ( "battleresult/battle_".$battle_id.".txt" );
 
     return $battle_result;
 }
