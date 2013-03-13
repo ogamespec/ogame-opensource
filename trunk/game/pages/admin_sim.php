@@ -33,14 +33,14 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
 
     for ( $n=0; $n<$anum; $n++)
     {
-        $source .= "Attacker$n = (<Attacker$n> ".mt_rand(1,10000)." 1 1 1 ";
+        $source .= "Attacker$n = (<Attacker$n> ".mt_rand(1,10000)." ".$a[$n]['g']." ".$a[$n]['s']." ".$a[$n]['p']." ";
         $source .= $a[$n]['r109'] . " " . $a[$n]['r110'] . " " . $a[$n]['r111'] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $a[$n]['fleet'][$gid] . " ";
         $source .= ")\n";
     }
     for ( $n=0; $n<$dnum; $n++)
     {
-        $source .= "Defender$n = (<Defender$n> ".mt_rand(1,10000)." 1 1 2 ";
+        $source .= "Defender$n = (<Defender$n> ".mt_rand(1,10000)." ".$d[$n]['g']." ".$d[$n]['s']." ".$d[$n]['p']." ";
         $source .= $d[$n]['r109'] . " " . $d[$n]['r110'] . " " . $d[$n]['r111'] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $d[$n]['fleet'][$gid] . " ";
         foreach ($defmap as $i=>$gid) $source .= $d[$n]['defense'][$gid] . " ";
