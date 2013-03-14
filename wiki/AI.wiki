@@ -53,3 +53,5 @@ http://ogamespec.com/imgstore/whc5138c41c4d579.jpg
 То есть стратегия из таблицы *botstat* это "заготовка" (object), которая помещается в таблицу *botqueue* в виде последовательности действий (instance).
 
 Программирование стратегий производится в специальном визуальном программаторе.
+
+<wiki:video url="http://www.youtube.com/watch?v=rCzImdVfRwE"/>
