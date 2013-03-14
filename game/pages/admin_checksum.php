@@ -27,6 +27,7 @@ function Admin_Checksum ()
         'index.php', 
         'install.php', 
         'loca.php', 
+        'maintenance.php', 
         'msg.php', 
         'notes.php', 
         'page.php', 
