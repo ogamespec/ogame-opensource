@@ -164,6 +164,15 @@ $tab_userlogs = array (    // Логи действий пользователе
     'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'date'=>'INT UNSIGNED', 'type'=>'TEXT', 'text'=>'TEXT',
 );
 
+$tab_botqueue = array (    // Задания бота (компилированные стратегии)
+    'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'type'=>'TEXT', 'eval'=>'TEXT',
+    'op1'=>'TEXT', 'op2'=>'TEXT', 'op3'=>'TEXT', 'op4'=>'TEXT', 'op5'=>'TEXT', 
+);
+
+$tab_botstrat = array (    // Стратегии бота
+    'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'name'=>'TEXT', 'source'=>'TEXT', 'comment'=>'TEXT',
+);
+
 $tabs = array (
     'uni' => &$tab_uni,
     'users' => &$tab_users,
