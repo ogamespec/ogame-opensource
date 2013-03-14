@@ -22,7 +22,9 @@ require_once "../uni.php";
 require_once "../debug.php";
 require_once "../loca.php";
 
-$loca_lang = $_COOKIE['ogamelang'];
+if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = "ru";
+else $loca_lang = $_COOKIE['ogamelang'];
+
 loca_add ( "reg", $loca_lang );
 
 function method () { return $_SERVER['REQUEST_METHOD']; }
