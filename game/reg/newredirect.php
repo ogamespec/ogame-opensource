@@ -20,6 +20,7 @@ require_once "../user.php";
 require_once "../queue.php";
 require_once "../uni.php";
 require_once "../debug.php";
+require_once "../loca.php";
 
 // Соединиться с базой данных
 dbconnect ($db_host, $db_user, $db_pass, $db_name);
@@ -56,10 +57,13 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
     else if ( IsEmailExist ( $_POST['email'])) $RegError = 102;
     else $RegError = 0;
 
+    if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $lang = "ru";
+    else $lang = $_COOKIE['ogamelang'];
+
     // Если все параметры верные - создать нового пользователя и войти в игру.
     if ($RegError == 0 && $AGB)
     {
-        CreateUser ( $_POST['character'], $_POST['password'], $_POST['email'], $_POST['lang'] );
+        CreateUser ( $_POST['character'], $_POST['password'], $_POST['email'], $lang );
         Login ( $_POST['character'], $_POST['password'] );
         exit ();
     }
