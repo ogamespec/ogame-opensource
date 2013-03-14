@@ -169,7 +169,7 @@ echo "<center>\n";
                             </div>
                                                 <td class=l style="width:90px;text-align:center; vertical-align:middle;">
                             <a href='index.php?page=micropayment&buynow=1&type=2&days=90&session=<?=$session;?>' >
-                            <b><?=loca("PREM_3MONTH");?>                          <br><font color=lime><?=loca("PREM_TOTAL");?> <?=nicenum($price[2]);?></font>
+                            <b><?=loca("PREM_3MONTH");?>                          <br><font color=lime><?=loca("PREM_TOTAL");?> <?=nicenum($price[2]*10);?></font>
                             <br><?=loca("DM");?></b></a>
                         </td>
                     </tr>
@@ -199,7 +199,7 @@ echo "<center>\n";
                             </div>
                                                 <td class=l style="width:90px;text-align:center; vertical-align:middle;">
                             <a href='index.php?page=micropayment&buynow=1&type=3&days=90&session=<?=$session;?>' >
-                            <b><?=loca("PREM_3MONTH");?>                          <br><font color=lime><?=loca("PREM_TOTAL");?> <?=nicenum($price[3]);?></font>
+                            <b><?=loca("PREM_3MONTH");?>                          <br><font color=lime><?=loca("PREM_TOTAL");?> <?=nicenum($price[3]*10);?></font>
 
                             <br><?=loca("DM");?></b></a>
                         </td>
@@ -230,7 +230,7 @@ echo "<center>\n";
                             </div>
                                                 <td class=l style="width:90px;text-align:center; vertical-align:middle;">
                             <a href='index.php?page=micropayment&buynow=1&type=4&days=90&session=<?=$session;?>' >
-                            <b><?=loca("PREM_3MONTH");?>                          <br><font color=lime><?=loca("PREM_TOTAL");?> <?=nicenum($price[4]);?></font>
+                            <b><?=loca("PREM_3MONTH");?>                          <br><font color=lime><?=loca("PREM_TOTAL");?> <?=nicenum($price[4]*10);?></font>
                             <br><?=loca("DM");?></b></a>
                         </td>
                     </tr>
@@ -261,7 +261,7 @@ echo "<center>\n";
                             </div>
                                             <td class=l style="width:90px;text-align:center; vertical-align:middle;">
                             <a href='index.php?page=micropayment&buynow=1&type=5&days=90&session=<?=$session;?>' >
-                            <b><?=loca("PREM_3MONTH");?>                          <br><font color=lime><?=loca("PREM_TOTAL");?> <?=nicenum($price[5]);?></font>
+                            <b><?=loca("PREM_3MONTH");?>                          <br><font color=lime><?=loca("PREM_TOTAL");?> <?=nicenum($price[5]*10);?></font>
 
                             <br><?=loca("DM");?></b></a>
                         </td>
