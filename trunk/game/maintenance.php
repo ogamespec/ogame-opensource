@@ -5,7 +5,9 @@ require_once "db.php";
 require_once "loca.php";
 require_once "uni.php";
 
-$loca_lang = $_COOKIE['ogamelang'];
+if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = "ru";
+else $loca_lang = $_COOKIE['ogamelang'];
+
 if ( !key_exists ( $loca_lang, $Languages ) ) $GlobalUser['lang'] = $loca_lang = 'en';
 loca_add ( "maintain", $loca_lang );
 
