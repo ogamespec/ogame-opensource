@@ -174,7 +174,7 @@ function Think_SmallCargo ($queue)
                 if ( $duration == 0 )
                 {
                     Debug ( "Ошибка очереди заданий бота в стратегии Малый Транспорт (".loca("NAME_".$obj_id)." ур. ".$level.")" );
-                    RemoveQueue ($queue['task_id'], 0);
+                    RemoveQueue ($queue['task_id']);
                     return;
                 }
 
@@ -185,7 +185,7 @@ function Think_SmallCargo ($queue)
         }
     }
 
-    RemoveQueue ($queue['task_id'], 0);
+    RemoveQueue ($queue['task_id']);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -201,7 +201,7 @@ function Queue_Bot_End_Rev1 ($queue)
             break;
 
         default:
-            RemoveQueue ($queue['task_id'], 0);
+            RemoveQueue ($queue['task_id']);
     }
 }
 
