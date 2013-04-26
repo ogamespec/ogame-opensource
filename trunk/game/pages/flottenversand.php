@@ -178,7 +178,7 @@ foreach ($fleet as $id=>$amount)
 
 // Ограничить перевозимые ресурсы грузоподъемностью флота и затратами на полёт.
 $cargo_m = $cargo_k = $cargo_d = 0;
-$space = $cargo;
+$space = $cargo - $cons;
 if ( $space > 0 ) {
     $cargo_m = min ( $space, $resource1 );
     $space -= $cargo_m;
@@ -187,7 +187,7 @@ if ( $space > 0 ) {
     $cargo_k = min ( $space, $resource2 );
     $space -= $cargo_k;
 }
-if ( $space > 0 && $resource3 >= $cons ) {
+if ( $space > 0 ) {
     $cargo_d = min ( $space, $resource3 );
     $space -= $cargo_d;
 }
@@ -348,9 +348,6 @@ else {
     $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $cargo_m, $cargo_k, $cargo_d, $cons, time(), $union_id, $hold_time );
     $queue = GetFleetQueue ($fleet_id);
 
-    loca_add ( "technames", "de" );
-    loca_add ( "technames", "en" );
-    loca_add ( "technames", "ru" );
     UserLog ( $aktplanet['owner_id'], "FLEET", 
      "Отправка флота $fleet_id: " . GetMissionNameDebug ($order) . " " .
      $origin['name'] ." [".$origin['g'].":".$origin['s'].":".$origin['p']."] -&gt; ".$target['name']." [".$target['g'].":".$target['s'].":".$target['p']."]<br>" .
@@ -367,6 +364,8 @@ else {
     AdjustShips ( $fleet, $origin['planet_id'], '-' );
 
     unlink ( $fleetlock );
+
+    //echo "Груз дейт : $cargo_d, Затраты соляры : $cons, Грузоподъемность : $cargo, Остаток в трюмах : $space<br>";
 
 //    echo "<br>";
 //    print_r ( $queue);
