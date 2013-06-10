@@ -318,6 +318,12 @@ function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
         $queue[$i] = dbarray ($result);
     }
 
+    // Нельзя в одну секунду добавлять в очередь несколько построек.
+    for ($i=0; $i<$cnt; $i++)
+    {
+        if ( $queue[$i]['start'] == $now ) return;
+    }    
+
     // Определить добавляемый уровень и порядок постройки (list_id).
     $nowlevel = $planet['b'.$id];
     $list_id = 0;
