@@ -10,7 +10,7 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-ProdResources ( &$aktplanet, $aktplanet['lastpeek'], $now );
+$aktplanet = ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
@@ -28,8 +28,8 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             // Рассчитать количество (не больше, чем ресурсов на планете и не больше 999)
             if ( $value > 999 ) $value = 999;
 
-            $m = $k = $d = $e = 0;
-            ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
+            $res = ShipyardPrice ( $gid );
+            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
 
             if ( $aktplanet['m'] < $m || $aktplanet['k'] < $k || $aktplanet['d'] < $d ) continue;    // недостаточно ресурсов для одной единицы
 
@@ -142,8 +142,8 @@ if ( $_GET['mode'] === "Flotte" )
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($aktplanet['f'.$id]) echo "</a> (в наличии ".$aktplanet['f'.$id].")";
-            $m = $k = $d = $e = 0;
-            ShipyardPrice ( $id, &$m, &$k, &$d, &$e );
+            $res = ShipyardPrice ( $id );
+            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             echo "<br>".loca("SHORT_$id")."<br>Стоимость:";
             if ($m) echo " Металл: <b>".nicenum($m)."</b>";
             if ($k) echo " Кристалл: <b>".nicenum($k)."</b>";
@@ -224,8 +224,8 @@ if ( $_GET['mode'] === "Verteidigung" )
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($aktplanet['d'.$id]) echo "</a> (в наличии ".$aktplanet['d'.$id].")";
-            $m = $k = $d = $e = 0;
-            ShipyardPrice ( $id, &$m, &$k, &$d, &$e );
+            $res = ShipyardPrice ( $id );
+            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             echo "<br>".loca("SHORT_$id")."<br>Стоимость:";
             if ($m) echo " Металл: <b>".nicenum($m)."</b>";
             if ($k) echo " Кристалл: <b>".nicenum($k)."</b>";
@@ -320,8 +320,8 @@ if ( $_GET['mode'] === "Forschung" )
                 echo " <b><font style=\"color:lime;\">+2</font></b> <img border=\"0\" src=\"img/technokrat_ikon.gif\" alt=\"Технократ\" onmouseover=\"return overlib('<font color=white>Технократ</font>', WIDTH, 100);\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
             }
             if ($GlobalUser['r'.$id]) echo ")";
-            $m = $k = $d = $e = 0;
-            ResearchPrice ( $id, $level, &$m, &$k, &$d, &$e );
+            $res = ResearchPrice ( $id, $level );
+            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             echo "<br>".loca("SHORT_$id")."<br>Стоимость:";
             if ($m) echo " Металл: <b>".nicenum($m)."</b>";
             if ($k) echo " Кристалл: <b>".nicenum($k)."</b>";

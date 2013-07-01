@@ -1,3 +1,25 @@
+<?php
+
+require_once "../loca.php";
+
+$loca_lang = $_COOKIE['ogamelang'];
+if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
+loca_add ( "galaxytool", $loca_lang );
+
+// Format string, according to tokens from the text. Tokens are represented as #1, #2 and so on.
+function va ($subject)
+{
+    $num_arg = func_num_args();
+    $pattern = array ();
+    for ($i=1; $i<$num_arg; $i++)
+    {
+        $pattern[$i-1] = "/#$i/";
+        $replace[$i-1] = func_get_arg($i);
+    }
+    return preg_replace($pattern, $replace, $subject);
+}
+
+?>
 <html>
  <head>
   <link rel='stylesheet' type='text/css' href='../css/default.css' />
@@ -5,7 +27,7 @@
   <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
 <link rel='stylesheet' type='text/css' href='../css/combox.css'>
 <link rel='stylesheet' type='text/css' href='../../evolution/formate.css' />
-<title>Информационный Центр Огейм</title>
+<title><?=loca("GALATOOL_TITLE");?></title>
   <script language='JavaScript'>
   </script>
 <script type='text/javascript' src='../js/overLib/overlib.js'></script>
@@ -32,13 +54,13 @@ function PlayerDetails ($player_id)
     echo "<table cellpadding=0 cellspacing=0><tr>";
 
     echo "<td class=b>";
-    echo "Очки : ".nicenum($stats[$player_id]['points'] / 1000)."<br>";
-    echo "Флот : ".nicenum($stats[$player_id]['fpoints'])."<br>";
-    echo "Исследования : ".nicenum($stats[$player_id]['rpoints'])."<br>";
-    if ( $stats[$player_id]['ally_id'] ) echo "Альянс : [".$ally[$stats[$player_id]['ally_id']]['name']."]<br>";
+    echo va ( loca("GALATOOL_POINTS"), nicenum($stats[$player_id]['points'] / 1000)) ."<br>";
+    echo va ( loca("GALATOOL_FLEET"), nicenum($stats[$player_id]['fpoints'])) ."<br>";
+    echo va ( loca("GALATOOL_RESEARCH"), nicenum($stats[$player_id]['rpoints'])) ."<br>";
+    if ( $stats[$player_id]['ally_id'] ) echo va ( loca("GALATOOL_ALLY"), $ally[$stats[$player_id]['ally_id']]['name']) ."<br>";
     echo "</td>";
 
-    echo "<td class=b><b>Планеты</b>:";
+    echo "<td class=b><b>".loca("GALATOOL_PLANETS")."</b>:";
     foreach ( $galaxy as $planet_id=>$planet )
     {
         if ( $planet['owner_id'] == $player_id && $planet['type'] < 10000 )
@@ -62,7 +84,7 @@ function PlayerDetails ($player_id)
 }
 
 // Here is a function to sort an array by the key of his sub-array
-function sksort (&$array, $subkey="id", $sort_ascending=false)
+function sksort ($array, $subkey="id", $sort_ascending=false)
 {
     if (count($array))
         $temp_array[key($array)] = array_shift($array);
@@ -86,13 +108,13 @@ function sksort (&$array, $subkey="id", $sort_ascending=false)
     }
 
     if ($sort_ascending) $array = array_reverse($temp_array);
-
     else $array = $temp_array;
+    return $array;
 }
 
 $last_update = filemtime ( 'galaxy.txt' );
 
-echo "<br>Данные на " . date ( "d.m.Y H:i:s", $last_update ) . "<br>";
+echo "<br>".va ( loca("GALATOOL_DATE"), date ( "d.m.Y H:i:s", $last_update )) . "<br>";
 
 $ally = unserialize ( file_get_contents ( 'ally_statistics.txt' ) );
 $old_ally = unserialize ( file_get_contents ( 'ally_statistics_old.txt' ) );
@@ -118,9 +140,9 @@ foreach ( $stats as $id=>$user )
     $delta[$id]['v'] = $user['v'];
 }
 
-sksort ( $delta, 'delta_score' );
+$delta = sksort ( $delta, 'delta_score' );
 
-echo "<br/><font size=+2 color=lime>Приросты за последние 7 дней:</font><br/>\n";
+echo "<br/><font size=+2 color=lime>".loca("GALATOOL_GROW")."</font><br/>\n";
 $first = true;
 $count = 0;
 foreach ( $delta as $id=>$user)
@@ -137,9 +159,9 @@ foreach ( $delta as $id=>$user)
         $count++;
     }
 }
-if ($count >= 3) echo "<br><small><i>Всего : $count</i></small>";
+if ($count >= 3) echo "<br><small><i>".va(loca("GALATOOL_TOTAL"), $count)."</i></small>";
 
-echo "<br/><br/><font size=+2 color=red>Спады за последние 7 дней:</font><br/>\n";
+echo "<br/><br/><font size=+2 color=red>".loca("GALATOOL_FALL")."</font><br/>\n";
 $first = true;
 $count = 0;
 foreach ( $delta as $id=>$user)
@@ -155,9 +177,9 @@ foreach ( $delta as $id=>$user)
         $count++;
     }
 }
-if ($count >= 3) echo "<br><small><i>Всего : $count</i></small>";
+if ($count >= 3) echo "<br><small><i>".va(loca("GALATOOL_TOTAL"), $count)."</i></small>";
 
-echo "<br/><br/><span class='longinactive'><font size=+2>Неактивные и заблокированные:</font></span><br/>\n";
+echo "<br/><br/><span class='longinactive'><font size=+2>".loca("GALATOOL_INACTIVE")."</font></span><br/>\n";
 $first = true;
 $count = 0;
 foreach ( $delta as $id=>$user)
@@ -181,11 +203,11 @@ foreach ( $delta as $id=>$user)
         $count++;
     }
 }
-if ($count >= 3) echo "<br><small><i>Всего : $count</i></small>";
+if ($count >= 3) echo "<br><small><i>".va(loca("GALATOOL_TOTAL"), $count)."</i></small>";
 
 ?>
 
-<br/><br/><small><i>Если у игрока прирост/спад был более 30.000 очков, то он указывается в скобках рядом с именем.</i></small>
+<br/><br/><small><i><?=loca("GALATOOL_NOTES");?></i></small>
 
 <?php
 
@@ -200,8 +222,7 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
     // Найти игрока.
     foreach ( $stats as $id=>$user)
     {
-        $percent = 0;
-        similar_text ( mb_strtolower ($_POST['login']), mb_strtolower ($user['name']), &$percent );
+        similar_text ( mb_strtolower ($_POST['login']), mb_strtolower ($user['name']), $percent );
         if ( $percent > 75 ) PlayerDetails ($id);
 
         //echo $user['name'] . " = " . $percent . "<br>";
@@ -212,9 +233,9 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
 
 <br><br>
 <form action="index.php" method="POST">
-Найти все планеты игрока : 
+<?=loca("GALATOOL_FIND");?>
 <input type=text name=login>
-<input type=submit value="Поиск">
+<input type=submit value="<?=loca("GALATOOL_SEARCH");?>">
 </form>
 
 </div>

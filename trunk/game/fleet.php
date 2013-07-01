@@ -954,8 +954,8 @@ function Queue_Fleet_End ($queue)
     // Обновить выработку ресурсов на планетах
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
     $target = GetPlanet ( $fleet_obj['target_planet'] );
-    ProdResources ( &$target, $target['lastpeek'], $queue['end'] );
-    ProdResources ( &$origin, $origin['lastpeek'], $queue['end'] );
+    $target = ProdResources ( $target, $target['lastpeek'], $queue['end'] );
+    $origin = ProdResources ( $origin, $origin['lastpeek'], $queue['end'] );
 
     switch ( $fleet_obj['mission'] )
     {

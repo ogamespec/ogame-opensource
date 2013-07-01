@@ -24,13 +24,13 @@ function LoadExpeditionSettings ()
 function ExpPoints ( $fleet )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $m = $k = $d = $e = 0;
     $structure = 0;
 
     foreach ( $fleetmap as $i=>$gid )
     {
         $amount = $fleet[$gid];
-        ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
+        $res = ShipyardPrice ( $gid );
+        $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
         $structure += ($m + $k) * $amount;
     }
 
@@ -490,7 +490,7 @@ function Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target)
     $found_ids = array ();
     if ( count ($found) > 0)
     {
-        shuffle (&$found);
+        shuffle ($found);
         $chance = floor(1 / count ($found) * 100);
         foreach ($found as $i=>$id)
         {
@@ -517,8 +517,8 @@ function Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target)
         $msg .= "<br><br>К флоту присоединились:";
         foreach ( $found_fleet as $id=>$amount)
         {
-            $m = $k = $d = $e = 0;
-            ShipyardPrice ( $id, &$m, &$k, &$d, &$e );            
+            $res = ShipyardPrice ( $id );
+            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             $points += ($m + $k + $d) * $amount;
             $fpoints += $amount;
             $msg .= "<br>" . loca ("NAME_$id") . " " . nicenum ($amount);

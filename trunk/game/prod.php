@@ -96,7 +96,7 @@ function BuildMeetRequirement ( $user, $planet, $id )
     return true;
 }
 
-function BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e )
+function BuildPrice ( $id, $lvl )
 {
     global $initial;
     switch ($id)
@@ -134,13 +134,15 @@ function BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e )
             $e = $initial[$id]['e'] * pow(2, $lvl-1);
             break;
     }
+    $res = array ( 'm' => $m, 'k' => $k, 'd' => $d, 'e' => $e );
+    return $res;
 }
 
 // Время строительства постройки $id уровня $lvl в секундах.
 function BuildDuration ( $id, $lvl, $robots, $nanits, $speed )
 {
-    $m = $k = $d = $e = 0;
-    BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
+    $res = BuildPrice ( $id, $lvl );
+    $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
     $secs = floor ( ( ( ($m + $k) / (2500 * (1 + $robots)) ) * pow (0.5, $nanits) * 60*60 ) / $speed );
     if ($secs < 1) $secs = 1;
     return $secs;
@@ -177,19 +179,21 @@ function ShipyardMeetRequirement ( $user, $planet, $id )
     return true;
 }
 
-function ShipyardPrice ( $id, &$m, &$k, &$d, &$e )
+function ShipyardPrice ( $id )
 {
     global $initial;
     $m = $initial[$id]['m'];
     $k = $initial[$id]['k'];
     $d = $initial[$id]['d'];
     $e = 0;
+    $res = array ( 'm' => $m, 'k' => $k, 'd' => $d, 'e' => $e );
+    return $res;
 }
 
 function ShipyardDuration ( $id, $shipyard, $nanits, $speed )
 {
-    $m = $k = $d = $e = 0;
-    ShipyardPrice ($id, &$m, &$k, &$d, &$e );
+    $res = ShipyardPrice ($id);
+    $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
     $secs = floor ( ( ( ($m + $k) / (2500 * (1 + $shipyard)) ) * pow (0.5, $nanits) * 60*60 ) / $speed );
     if ($secs < 1) $secs = 1;
     return $secs;
@@ -217,7 +221,7 @@ function ResearchMeetRequirement ( $user, $planet, $id )
     return true;
 }
 
-function ResearchPrice ( $id, $lvl, &$m, &$k, &$d, &$e )
+function ResearchPrice ( $id, $lvl )
 {
     global $initial;
     if ($id == 199) {
@@ -230,13 +234,15 @@ function ResearchPrice ( $id, $lvl, &$m, &$k, &$d, &$e )
         $d = $initial[$id]['d'] * pow(2, $lvl-1);
         $e = $initial[$id]['e'] * pow(2, $lvl-1);
     }
+    $res = array ( 'm' => $m, 'k' => $k, 'd' => $d, 'e' => $e );
+    return $res;
 }
 
 function ResearchDuration ( $id, $lvl, $reslab, $speed )
 {
     if ( $id == 199 ) return 1;
-    $m = $k = $d = $e = 0;
-    ResearchPrice ($id, $lvl, &$m, &$k, &$d, &$e );
+    $res= ResearchPrice ($id, $lvl );
+    $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
     $secs = floor ( ( ($m + $k) / (1000 * (1 + $reslab)) * 60*60 ) / $speed );
     if ($secs < 1) $secs = 1;
     return $secs;
@@ -342,12 +348,12 @@ function cons_fusion ($lvl, $pr) { return ceil (10 * $lvl * pow (1.1, $lvl) * $p
 
 // Расчитать прирост ресурсов. Ограничить емкостью хранилищ.
 // ВНИМАНИЕ: Из расчета исключаются внешние события, типа окончания действия офицеров, атаки другого игрока, завершение постройки здания итп.
-function ProdResources ( &$planet, $time_from, $time_to )
+function ProdResources ( $planet, $time_from, $time_to )
 {
     global $db_prefix, $GlobalUni;
-    if ( $planet['type'] == 0 || $planet['type'] >= 10000 ) return;        // луна или другой объект
+    if ( $planet['type'] != 1 ) return $planet;        // НЕ планета
     $user = LoadUser ($planet['owner_id']);
-    if ( $user['player_id'] == 99999 ) return;    // технический аккаунт space
+    if ( $user['player_id'] == 99999 ) return $planet;    // технический аккаунт space
     $diff = $time_to - $time_from;
 
     $unitab = $GlobalUni;
@@ -380,6 +386,7 @@ function ProdResources ( &$planet, $time_from, $time_to )
     $query = "UPDATE ".$db_prefix."planets SET m = '".$planet['m']."', k = '".$planet['k']."', d = '".$planet['d']."', lastpeek = '".$time_to."' WHERE planet_id = $planet_id";
     dbquery ($query);
     $planet['lastpeek'] = $time_to;
+    return $planet;
 }
 
 // Стоимость планеты в очках.
@@ -397,7 +404,8 @@ function PlanetPrice ($planet, &$points, &$fpoints, &$fleet_pts, &$defense_pts)
         if ($level > 0){
             for ( $lv = 1; $lv<=$level; $lv ++ )
             {
-                BuildPrice ( $gid, $lv, &$m, &$k, &$d, &$e );
+                $res = BuildPrice ( $gid, $lv );
+                $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
                 $points += ($m + $k + $d);
             }
         }
@@ -406,7 +414,8 @@ function PlanetPrice ($planet, &$points, &$fpoints, &$fleet_pts, &$defense_pts)
     foreach ( $fleetmap as $i=>$gid ) {        // Флот
         $level = $planet["f$gid"];
         if ($level > 0){
-            ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
+            $res = ShipyardPrice ( $gid);
+            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             $points += ($m + $k + $d) * $level;
             $fleet_pts += ($m + $k + $d) * $level;
             $fpoints += $level;
@@ -416,7 +425,8 @@ function PlanetPrice ($planet, &$points, &$fpoints, &$fleet_pts, &$defense_pts)
     foreach ( $defmap as $i=>$gid ) {        // Оборона
         $level = $planet["d$gid"];
         if ($level > 0){
-            ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
+            $res = ShipyardPrice ( $gid );
+            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             $points += ($m + $k + $d) * $level;
             $defense_pts += ($m + $k + $d) * $level;
         }
@@ -433,7 +443,8 @@ function FleetPrice ( $fleet_obj, &$points, &$fpoints )
     foreach ( $fleetmap as $i=>$gid ) {        // Флот
         $level = $fleet_obj["ship$gid"];
         if ($level > 0){
-            ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
+            $res = ShipyardPrice ( $gid );
+            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             $points += ($m + $k + $d) * $level;
             $fpoints += $level;
         }

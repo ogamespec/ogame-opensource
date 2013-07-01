@@ -12,7 +12,7 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet']);
-ProdResources ( &$aktplanet, $aktplanet['lastpeek'], $now );
+$aktplanet = ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
@@ -281,12 +281,11 @@ else
         $rak_space = $aktplanet["b44"] * 10;
         if ( key_exists ( 'aktion', $_POST) )
         {
-            $m = $k = $d = $e = 0;
-
             $amount1 = min ( $aktplanet['d502'], intval ( $_POST['ab502'] ) );
             if ( $amount1 > 0) {
                 $aktplanet['d502'] -= $amount1;
-                ShipyardPrice ( 502, &$m, &$k, &$d, &$e );
+                $res = ShipyardPrice ( 502 );
+                $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
                 $points  = ( $m + $k + $d ) * $amount1;
                 AdjustStats ( $aktplanet['owner_id'], $points, 0, 0, '-');
             }
@@ -294,7 +293,8 @@ else
             $amount2 = min ($aktplanet['d503'], intval ( $_POST['ab503'] ) );
             if ( $amount2 > 0) {
                 $aktplanet['d503'] -= $amount2;
-                ShipyardPrice ( 503, &$m, &$k, &$d, &$e );
+                $res = ShipyardPrice ( 503 );
+                $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
                 $points  = ( $m + $k + $d ) * $amount2;
                 AdjustStats ( $aktplanet['owner_id'], $points, 0, 0, '-');
             }
@@ -438,8 +438,8 @@ else
     if ( $aktplanet['b'.$gid] && !($gid == 33 || $gid == 41 || $gid == 44) ) {
         echo "<table width=519 >\n";
         echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">Снести: ".loca("NAME_$gid")." Level ".$aktplanet['b'.$gid]." уничтожить?</a></td></tr>\n";
-        $m = $k = $d = $e = 0;
-        BuildPrice ( $gid, $aktplanet['b'.$gid]-1, &$m, &$k, &$d, &$e );
+        $res = BuildPrice ( $gid, $aktplanet['b'.$gid]-1 );
+        $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
         echo "<br><tr><th>Необходимо ";
         if ($m) echo "металла:<b>".nicenum($m)."</b> ";
         if ($k) echo "кристалла:<b>".nicenum($k)."</b> ";
@@ -454,8 +454,8 @@ else
         echo "<table width=519 >\n";
         if ( $raknum == 0 ) echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">Снести: ".loca("NAME_$gid")." Level ".$aktplanet['b'.$gid]." уничтожить?</a></td></tr>\n";
         else echo "<tr><td class=c align=center>об оборонительных сооружениях</a></td></tr>";
-        $m = $k = $d = $e = 0;
-        BuildPrice ( $gid, $aktplanet['b'.$gid]-1, &$m, &$k, &$d, &$e );
+        $res = BuildPrice ( $gid, $aktplanet['b'.$gid]-1 );
+        $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
         echo "<br><tr><th>Необходимо ";
         if ($m) echo "металла:<b>".nicenum($m)."</b> ";
         if ($k) echo "кристалла:<b>".nicenum($k)."</b> ";
