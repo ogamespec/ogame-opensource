@@ -19,6 +19,31 @@ function va ($subject)
     return preg_replace($pattern, $replace, $subject);
 }
 
+function hostname () {
+    $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+    $pos = strrpos ( $host, "/game/galaxytool/index.php" );
+    return substr ( $host, 0, $pos+1 );
+}
+
+// Получить маленькую картинку планеты.
+function GetPlanetSmallImage ($skinpath, $planet)
+{
+    if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return $skinpath."planeten/small/s_mond.jpg";
+    else if ($planet['type'] == 10000) return $skinpath."planeten/debris.jpg";    
+    else if ($planet['type'] < 10000 )
+    {
+        $p = $planet['p'];
+        $id = $planet['planet_id'] % 7 + 1;
+        if ($p <= 3) return sprintf ( "%splaneten/small/s_trockenplanet%02d.jpg", $skinpath, $id);
+        else if ($p >= 4 && $p <= 6) return sprintf ( "%splaneten/small/s_dschjungelplanet%02d.jpg", $skinpath, $id);
+        else if ($p >= 7 && $p <= 9) return sprintf ( "%splaneten/small/s_normaltempplanet%02d.jpg", $skinpath, $id);
+        else if ($p >= 10 && $p <= 12) return sprintf ( "%splaneten/small/s_wasserplanet%02d.jpg", $skinpath, $id);
+        else if ($p >= 13 && $p <= 15) return sprintf ( "%splaneten/small/s_eisplanet%02d.jpg", $skinpath, $id);
+        else return sprintf ( "%splaneten/small/s_eisplanet%02d.jpg", $skinpath, $id);
+    }
+    else return "img/admin_planets.png";        // Специальные объекты галактики (уничтоженные планеты и пр.)
+}
+
 ?>
 <html>
  <head>
@@ -42,45 +67,6 @@ function va ($subject)
 function nicenum ($number)
 {
     return number_format($number,0,",",".");
-}
-
-function PlayerDetails ($player_id)
-{
-    global $galaxy, $stats, $ally;
-
-    $planets = array ();
-    echo "<br><br><font size=+2>".$stats[$player_id]['name'].":</font>";
-
-    echo "<table cellpadding=0 cellspacing=0><tr>";
-
-    echo "<td class=b>";
-    echo va ( loca("GALATOOL_POINTS"), nicenum($stats[$player_id]['points'] / 1000)) ."<br>";
-    echo va ( loca("GALATOOL_FLEET"), nicenum($stats[$player_id]['fpoints'])) ."<br>";
-    echo va ( loca("GALATOOL_RESEARCH"), nicenum($stats[$player_id]['rpoints'])) ."<br>";
-    if ( $stats[$player_id]['ally_id'] ) echo va ( loca("GALATOOL_ALLY"), $ally[$stats[$player_id]['ally_id']]['name']) ."<br>";
-    echo "</td>";
-
-    echo "<td class=b><b>".loca("GALATOOL_PLANETS")."</b>:";
-    foreach ( $galaxy as $planet_id=>$planet )
-    {
-        if ( $planet['owner_id'] == $player_id && $planet['type'] < 10000 )
-        {
-            $planets[$planet_id] = array ();
-            $planets[$planet_id]['name'] = $planet['name'];
-            $planets[$planet_id]['g'] = $planet['g'];
-            $planets[$planet_id]['s'] = $planet['s'];
-            $planets[$planet_id]['p'] = $planet['p'];
-            $planets[$planet_id]['type'] = $planet['type'];
-        }
-    }
-
-    foreach ( $planets as $id=>$planet )
-    {
-        echo "<br/>" . $planet['name'];
-        echo " [" . $planet['g'] . ":" . $planet['s'] . ":" . $planet['p'] . "]";
-    }
-
-    echo "</td></tr></table>";
 }
 
 // Here is a function to sort an array by the key of his sub-array
@@ -110,6 +96,78 @@ function sksort ($array, $subkey="id", $sort_ascending=false)
     if ($sort_ascending) $array = array_reverse($temp_array);
     else $array = $temp_array;
     return $array;
+}
+
+function PlayerDetails ($player_id)
+{
+    global $galaxy, $stats, $ally;
+
+    $planets = array ();
+    $moons = array ();
+    echo "<br><br><font size=+2>".$stats[$player_id]['name'].":</font>";
+
+    echo "<table cellpadding=0 cellspacing=0><tr>";
+
+    echo "<td class=b style=\"vertical-align:top\">";
+    echo va ( loca("GALATOOL_POINTS"), nicenum($stats[$player_id]['points'] / 1000)) ."<br>";
+    echo va ( loca("GALATOOL_FLEET"), nicenum($stats[$player_id]['fpoints'])) ."<br>";
+    echo va ( loca("GALATOOL_RESEARCH"), nicenum($stats[$player_id]['rpoints'])) ."<br>";
+    if ( $stats[$player_id]['ally_id'] ) echo va ( loca("GALATOOL_ALLY"), $ally[$stats[$player_id]['ally_id']]['name']) ."<br>";
+    echo "</td>";
+
+    foreach ( $galaxy as $planet_id=>$planet )
+    {
+        if ( $planet['owner_id'] == $player_id && $planet['type'] < 10000 )
+        {
+            $num = 1000000 * $planet['g'] + 1000 * $planet['s'] + 15 * $planet['p'];
+            if ( $planet['type'] == 0 )
+            {
+                $moons[$num] = array ();
+                $moons[$num]['name'] = $planet['name'];
+                $moons[$num]['type'] = 0;
+                $moons[$num]['present'] = 1;
+            }
+            else
+            {
+                $planets[$planet_id] = array ();
+                $planets[$planet_id]['name'] = $planet['name'];
+                $planets[$planet_id]['num'] = $num;
+                $planets[$planet_id]['g'] = $planet['g'];
+                $planets[$planet_id]['s'] = $planet['s'];
+                $planets[$planet_id]['p'] = $planet['p'];
+                $planets[$planet_id]['planet_id'] = $planet_id;
+                $planets[$planet_id]['type'] = 1;
+            }
+        }
+    }
+
+    $planets = sksort ( $planets, 'num', true );
+
+    echo "<td class=b><b>".loca("GALATOOL_PLANETS")."</b>:";
+    echo "<table>";
+    foreach ( $planets as $id=>$planet )
+    {
+        echo "<tr><td align=center><img src=\"". GetPlanetSmallImage ( hostname () . "/evolution/", $planet ) . "\" height=30px><br>\n";
+        echo $planet['name'];
+        echo " [" . $planet['g'] . ":" . $planet['s'] . ":" . $planet['p'] . "]</td></tr>";
+    }
+    echo "</table></td>";
+
+    echo "<td class=b><b>".loca("GALATOOL_MOONS")."</b>:";
+    echo "<table>";
+    foreach ( $planets as $id=>$planet )
+    {
+        if ( $moons[$planet['num']]['present'] == 1 ) {
+            echo "<tr><td align=center><img src=\"". GetPlanetSmallImage ( hostname () . "/evolution/", $moons[$planet['num']] ) . "\" height=30px><br>\n";
+            echo $moons[$planet['num']]['name'] . "</td></tr>";
+        }
+        else {
+            echo "<tr><td height=\"45px\"></td></tr>";
+        }
+    }
+    echo "</table></td>";
+
+    echo "</tr></table>";
 }
 
 $last_update = filemtime ( 'galaxy.txt' );
