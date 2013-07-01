@@ -66,13 +66,14 @@ function is_done ( $obj_id, $level, $user, $planet )
 
 // Проверить хватает ли ресурсов.
 // Если не хватает - вернуть время задержки.
-function enough_res ( $obj_id, $level, $planet, &$delay )
+function enough_res ( $obj_id, $level, $planet, $delay )
 {
     global $GlobalUni;
 
     $m = $k = $d = $e = 0;
     if ( $obj_id < 100 ) {
-        BuildPrice ( $obj_id, $level, &$m, &$k, &$d, &$e );
+        $res = BuildPrice ( $obj_id, $level );
+        $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
     }
     else if ( $obj_id >= 100 && $obj_id < 200 ) {
         ResearchPrice ( $obj_id, $level, &$m, &$k, &$d, &$e );
@@ -84,7 +85,7 @@ function enough_res ( $obj_id, $level, $planet, &$delay )
         $d *= $level;
     }
 
-    if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) ) return true;
+    if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) ) return 0;
     else
     {
         $g_factor = 1.0;
@@ -99,7 +100,7 @@ function enough_res ( $obj_id, $level, $planet, &$delay )
 
         $delay = 0 + $random_delta;
 
-        return false;
+        return $delay;
     }
 }
 
@@ -145,7 +146,7 @@ function Think_SmallCargo ($queue)
     $user = LoadUser ($queue['owner_id']);
     $planet = GetPlanet ($queue['sub_id']);
 
-    ProdResources ( &$planet, $planet['lastpeek'], $queue['end'] );
+    $planet = ProdResources ( $planet, $planet['lastpeek'], $queue['end'] );
 
     $SmallCargoQueue = array (
         array (4=>1), array (1=>1), array (1=>2), array (4=>2), array (1=>3), array (1=>4), array (4=>3), array (1=>5), array (2=>1), array (4=>4), 
@@ -161,8 +162,7 @@ function Think_SmallCargo ($queue)
             if ( ! is_done ($obj_id, $level, $user, $planet) )
             {
                 // Проверить хватает ли ресурсов. Если не хватает - подождать.
-                $delay = 0;
-                if ( ! enough_res ( $obj_id, $level, $planet, &$delay ) )
+                if ( ($delay = enough_res ( $obj_id, $level, $planet )) > 0 )
                 {
                     Debug ( "Не хватает ресурсов в стратегии Малый Транспорт (".loca("NAME_".$obj_id)." ур. ".$level.")" );
                     ProlongQueue ( $queue['task_id'], $delay );

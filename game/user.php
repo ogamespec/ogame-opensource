@@ -571,7 +571,8 @@ function RecalcStats ($player_id)
             if ($level > 0) {
                 for ( $lv = 1; $lv<=$level; $lv ++ )
                 {
-                    ResearchPrice ( $gid, $lv, &$m, &$k, &$d, &$e );
+                    $res = ResearchPrice ( $gid, $lv );
+                    $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
                     $points += ($m + $k + $d);
                 }
             }
@@ -590,14 +591,16 @@ function RecalcStats ($player_id)
         foreach ( $fleetmap as $i=>$gid ) {        // Флот
             $level = $fleet["ship$gid"];
             if ($level > 0){
-                ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
+                $res = ShipyardPrice ( $gid );
+                $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
                 $points += ($m + $k + $d) * $level;
                 $fpoints += $level;
             }
         }
     
         if ( $fleet['ipm_amount'] > 0 ) {        // МПР
-            ShipyardPrice ( 503, &$m, &$k, &$d, &$e );
+            $res = ShipyardPrice ( 503 );
+            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             $points += ($m + $k + $d) * $fleet['ipm_amount'];
         }
     }

@@ -19,7 +19,7 @@ if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] )
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-ProdResources ( &$aktplanet, $aktplanet['lastpeek'], $now );
+$aktplanet = ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
@@ -162,8 +162,8 @@ foreach ( $buildmap as $i => $id )
     echo "<a href=index.php?page=infos&session=$session&gid=".$id.">".loca("NAME_$id")."</a></a>";
     if ( $lvl ) echo " (уровень ".$lvl.")";
     echo "<br>". loca("SHORT_$id");
-    $m = $k = $d = $e = 0;
-    BuildPrice ( $id, $lvl+1, &$m, &$k, &$d, &$e );
+    $res = BuildPrice ( $id, $lvl+1 );
+    $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
     echo "<br>Стоимость:";
     if ($m) echo " Металл: <b>".nicenum($m)."</b>";
     if ($k) echo " Кристалл: <b>".nicenum($k)."</b>";

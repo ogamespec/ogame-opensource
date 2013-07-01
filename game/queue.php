@@ -178,8 +178,8 @@ function GetBuildQueue ( $planet_id )
 function CanBuild ($user, $planet, $id, $lvl, $destroy)
 {
     // Стоимость постройки
-    $m = $k = $d = $e = 0;
-    BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );    
+    $res = BuildPrice ( $id, $lvl );
+    $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
 
     $text = '';
     {
@@ -250,8 +250,8 @@ function PropagateBuildQueue ($planet_id, $from)
             $text = CanBuild ($user, $planet, $id, $lvl, $destroy);
             if ( $text === '' ) {
                 // Списать ресурсы
-                $m = $k = $d = $e = 0;
-                BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
+                $res = BuildPrice ( $id, $lvl );
+                $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
                 AdjustResources ( $m, $k, $d, $planet_id, '-' );
 
                 if ( $destroy ) $BuildEvent = "Demolish";
@@ -345,8 +345,8 @@ function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
 
         // Списать ресурсы для самой первой постройки
         if ( $list_id == 1) {
-            $m = $k = $d = $e = 0;
-            BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
+            $res = BuildPrice ( $id, $lvl );
+            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             AdjustResources ( $m, $k, $d, $planet_id, '-' );
         }
 
@@ -384,8 +384,8 @@ function BuildDeque ( $planet_id, $listid )
             $queue_id = $queue['task_id'];
 
             // Вернуть ресурсы
-            $m = $k = $d = $e = 0;
-            BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
+            $res = BuildPrice ( $id, $lvl );
+            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             AdjustResources ( $m, $k, $d, $planet_id, '+' );           
         }
         else $queue_id = 0;
@@ -422,7 +422,7 @@ function Queue_Build_End ($queue)
     // Рассчитать производство планеты с момента последнего обновления.
     $planet = GetPlanet ( $planet_id );
     $player_id = $planet['owner_id'];
-    ProdResources ( &$planet, $planet['lastpeek'], $queue['end'] );
+    $planet = ProdResources ( $planet, $planet['lastpeek'], $queue['end'] );
 
     // Защита от дурака
     if ( ($queue['type'] === "Build" && $planet["b".$id] >= $lvl) ||
@@ -451,14 +451,15 @@ function Queue_Build_End ($queue)
     dbquery ( "DELETE FROM ".$db_prefix."buildqueue WHERE id = " . $queue['sub_id'] );
 
     // Добавить очки. Места пересчитывать только для крупных построек.
-    $m = $k = $d = $e = 0;
     if ( $queue['type'] === "Build" ) {
-        BuildPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
+        $res = BuildPrice ( $id, $lvl );
+        $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
         $points = $m + $k + $d;
         AdjustStats ( $queue['owner_id'], $points, 0, 0, '+');
     }
     else {
-        BuildPrice ( $id, $lvl+1, &$m, &$k, &$d, &$e );
+        $res = BuildPrice ( $id, $lvl+1 );
+        $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
         $points = $m + $k + $d;
         AdjustStats ( $queue['owner_id'], $points, 0, 0, '-');
     }
@@ -550,8 +551,8 @@ function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
 
     $user = LoadUser ( $player_id );
 
-    $m = $k = $d = $e = 0;
-    ShipyardPrice ( $gid, &$m, &$k, &$d, &$e );
+    $res = ShipyardPrice ( $gid );
+    $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
     $m *= $value;
     $k *= $value;
     $d *= $value;
@@ -599,8 +600,8 @@ function Queue_Shipyard_End ($queue, $when=0)
     dbquery ($query);
 
     // Добавить очки.
-    $m = $k = $d = $enrg = 0;
-    ShipyardPrice ( $gid, &$m, &$k, &$d, &$enrg );
+    $res = ShipyardPrice ( $gid );
+    $m = $res['m']; $k = $res['k']; $d = $res['d']; $enrg = $res['e'];
     $points = ($m + $k + $d) * $done;
     if ($gid < 400) $fpoints = $done;
     else $fpoints = 0;
@@ -663,8 +664,8 @@ function StartResearch ($player_id, $planet_id, $id, $now)
     else $r_factor = 1.0;
 
     // Проверить условия.
-    $m = $k = $d = $e = 0;
-    ResearchPrice ( $id, $level, &$m, &$k, &$d, &$e );
+    $res = ResearchPrice ( $id, $level );
+    $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
 
     if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && ResearchMeetRequirement ( $user, $planet, $id ) ) {
         $speed = $uni['speed'];
@@ -705,8 +706,8 @@ function StopResearch ($player_id)
         Error ( "Невозможно отменить исследование -".loca("NAME_$id")."-, игрока ".$user['oname'].", запущенное на чужой планете [".$planet['g'].":".$planet['s'].":".$planet['p']."] " . $planet['name'] );
         return;
     }
-    $m = $k = $d = $e = 0;
-    ResearchPrice ( $id, $level, &$m, &$k, &$d, &$e );
+    $res = ResearchPrice ( $id, $level );
+    $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
 
     // Вернуть ресурсы
     AdjustResources ( $m, $k, $d, $planet_id, '+' );
@@ -736,7 +737,7 @@ function Queue_Research_End ($queue)
 
     // Рассчитать производство планеты с момента последнего обновления.
     $planet = GetPlanet ( $planet_id );
-    ProdResources ( &$planet, $planet['lastpeek'], $queue['end'] );
+    $planet = ProdResources ( $planet, $planet['lastpeek'], $queue['end'] );
 
     // Обновить уровень исследования в базе данных.
     $query = "UPDATE ".$db_prefix."users SET ".('r'.$id)." = $lvl WHERE player_id = $player_id";
@@ -745,8 +746,8 @@ function Queue_Research_End ($queue)
     RemoveQueue ( $queue['task_id'] );
 
     // Добавить очки.
-    $m = $k = $d = $e = 0;
-    ResearchPrice ( $id, $lvl, &$m, &$k, &$d, &$e );
+    $res = ResearchPrice ( $id, $lvl );
+    $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
     $points = $m + $k + $d;
     AdjustStats ( $queue['owner_id'], $points, 0, 1, '+');
     RecalcRanks ();

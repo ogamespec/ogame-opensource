@@ -19,7 +19,13 @@ function setlang(lang)
 
 </script>
 
-<div class="products">
+<div class="products" align="right">
+
+<a href="#" onclick="javascript:setlang('de');"><img src="img/flags/de.gif" alt="Deutschland" title="Deutschland"></a>
+<a href="#" onclick="javascript:setlang('en');"><img src="img/flags/gb.gif" alt="English" title="English"></a>
+<a href="#" onclick="javascript:setlang('ru');"><img src="img/flags/ru.gif" alt="Russia" title="Russia"></a>
+
+<!--
 <a href="#" onclick="javascript:setlang('br');"><img src="img/flags/br.gif" alt="Brazil" title="Brazil"></a>
 <a href="#" onclick="javascript:setlang('bg');"><img src="img/flags/bg.gif" alt="Bulgaria" title="Bulgaria"></a>
 <a href="#" onclick="javascript:setlang('cn');"><img src="img/flags/cn.gif" alt="China" title="China"></a>
@@ -44,5 +50,7 @@ function setlang(lang)
 <a href="#" onclick="javascript:setlang('se');"><img src="img/flags/se.gif" alt="Sweden" title="Sweden"></a>
 <a href="#" onclick="javascript:setlang('tr');"><img src="img/flags/tr.gif" alt="Turkey" title="Turkey"></a>
 <a href="#" onclick="javascript:setlang('tw');"><img src="img/flags/tw.gif" alt="Taiwan" title="Taiwan"></a>
+-->
+
 <a href="#"><?=loca('CHOOSELANG');?></a>
 </div>

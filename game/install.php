@@ -10,6 +10,7 @@ require_once "db.php";
 require_once "loca.php";
 
 $loca_lang = $_COOKIE['ogamelang'];
+if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
 loca_add ( "install", $loca_lang );
 
 $InstallError = "<font color=gold>".loca('INSTALL_TIP')."</font>";

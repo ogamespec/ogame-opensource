@@ -44,7 +44,7 @@ function RepairDefense ( $d, $res, $defrepair, $defrepair_delta, $premium=true )
 }
 
 // Захватить ресурсы.
-function Plunder ( $cargo, $m, $k, $d, &$cm, &$ck, &$cd )
+function Plunder ( $cargo, $m, $k, $d )
 {
     $m /=2; $k /=2; $d /= 2;
     $total = $m+$k+$d;
@@ -71,7 +71,8 @@ function Plunder ( $cargo, $m, $k, $d, &$cm, &$ck, &$cd )
         else $kc += $cargo;
     }
 
-    $cm = floor($mc); $ck = floor($kc); $cd = floor($dc);
+    $res = array ( 'cm' => floor($mc), 'ck' => floor($kc), 'cd' => floor($dc) );
+    return $res;
 }
 
 // Рассчитать общие потери (учитывая восстановленную оборону).
@@ -724,7 +725,8 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     if ( $battle_result == 0 )
     {
         $sum_cargo = CargoSummaryLastRound ( $a, $res );
-        Plunder ( $sum_cargo, $p['m'], $p['k'], $p['d'], &$cm, &$ck, &$cd );
+        $res = Plunder ( $sum_cargo, $p['m'], $p['k'], $p['d'] );
+        $cm = $res['cm']; $ck = $res['ck']; $cd = $res['cd'];
     }
 
     // Создать поле обломков.
