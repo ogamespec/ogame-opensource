@@ -8,6 +8,7 @@ $LOCA["ru"]["GALATOOL_FLEET"] = "Флот : #1";
 $LOCA["ru"]["GALATOOL_RESEARCH"] = "Исследования : #1";
 $LOCA["ru"]["GALATOOL_ALLY"] = "Альянс : [#1]";
 $LOCA["ru"]["GALATOOL_PLANETS"] = "Планеты";
+$LOCA["ru"]["GALATOOL_MOONS"] = "Луны";
 $LOCA["ru"]["GALATOOL_DATE"] = "Данные на #1";
 $LOCA["ru"]["GALATOOL_GROW"] = "Приросты за последние 7 дней:";
 $LOCA["ru"]["GALATOOL_FALL"] = "Спады за последние 7 дней:";

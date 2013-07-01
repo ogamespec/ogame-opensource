@@ -8,6 +8,7 @@ $LOCA["en"]["GALATOOL_FLEET"] = "Fleet : #1";
 $LOCA["en"]["GALATOOL_RESEARCH"] = "Research : #1";
 $LOCA["en"]["GALATOOL_ALLY"] = "Ally : [#1]";
 $LOCA["en"]["GALATOOL_PLANETS"] = "Planets";
+$LOCA["en"]["GALATOOL_MOONS"] = "Moons";
 $LOCA["en"]["GALATOOL_DATE"] = "Last updated #1";
 $LOCA["en"]["GALATOOL_GROW"] = "Grow last week:";
 $LOCA["en"]["GALATOOL_FALL"] = "Falls last week:";

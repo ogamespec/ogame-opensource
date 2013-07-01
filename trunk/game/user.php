@@ -525,6 +525,8 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
         AddUpdateStatsEvent ();
         AddRecalcPointsEvent ($player_id);
 
+        setcookie ( 'ogamelang', $user['lang'], time()+60*60*24*9999, "/" );
+
         // Редирект на Обзор Главной планеты.
         header ( "Location: ".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1" );
         echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
