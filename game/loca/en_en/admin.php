@@ -20,5 +20,6 @@ $LOCA["en"]["ADM_MENU_CHECKSUM"] = "Source Check";
 $LOCA["en"]["ADM_MENU_BOTS"] = "Bot Controls";
 $LOCA["en"]["ADM_MENU_BATTLELOGS"] = "Battle Reports";
 $LOCA["en"]["ADM_MENU_USERLOGS"] = "User Logs";
+$LOCA["en"]["ADM_MENU_BOTEDIT"] = "Bot Editor";
 
 ?>

@@ -12,12 +12,17 @@ function Admin_Expedition ()
     if ( method () === "POST" )
     {
     }
+
 ?>
 
 <?=AdminPanel();?>
 
-XXX.
+TODO: Планируется переработка параметров экспедиции.<br><br>
 
 <?php
+
+    $exptab = LoadExpeditionSettings ();
+    print_r ( $exptab );
+
 }
 ?>
