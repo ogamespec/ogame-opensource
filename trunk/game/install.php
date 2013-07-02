@@ -171,7 +171,7 @@ $tab_botqueue = array (    // Задания бота (компилирован�
 );
 
 $tab_botstrat = array (    // Стратегии бота
-    'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'name'=>'TEXT', 'source'=>'TEXT', 'comment'=>'TEXT',
+    'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'name'=>'TEXT', 'source'=>'TEXT',
 );
 
 $tabs = array (
@@ -199,6 +199,8 @@ $tabs = array (
     'template' => &$tab_template,
     'botvars' => &$tab_botvars,
     'userlogs' => &$tab_userlogs,
+    'botqueue' => &$tab_botqueue,
+    'botstrat' => &$tab_botstrat,
 );
 
 // -------------------------------------------------------------------------------------------------------------------------

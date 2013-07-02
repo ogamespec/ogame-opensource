@@ -20,5 +20,6 @@ $LOCA["ru"]["ADM_MENU_CHECKSUM"] = "Целостность кода";
 $LOCA["ru"]["ADM_MENU_BOTS"] = "Управление ботами";
 $LOCA["ru"]["ADM_MENU_BATTLELOGS"] = "Боевые доклады";
 $LOCA["ru"]["ADM_MENU_USERLOGS"] = "История действий";
+$LOCA["ru"]["ADM_MENU_BOTEDIT"] = "Редактор ботов";
 
 ?>

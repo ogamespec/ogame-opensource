@@ -48,6 +48,7 @@ function Admin_Checksum ()
         'pages/admin.php', 
         'pages/admin_bans.php', 
         'pages/admin_battle.php', 
+        'pages/admin_botedit.php', 
         'pages/admin_bots.php', 
         'pages/admin_broadcast.php', 
         'pages/admin_browse.php', 
