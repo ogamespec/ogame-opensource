@@ -45,8 +45,7 @@ function QueueDesc ( $queue )
         case "UnbanPlayer": return "Разбанить игрока";
         case "AllowAttacks": return "Разрешить атаки";
         case "AI":
-            $planet = GetPlanet ($sub_id);
-            return "Задание бота с планеты " . AdminPlanetName ( $planet ) . ", стратегия: " . GetBotStrategy($obj_id);
+            return "Задание бота ";
 
         case "CommanderOff": return "Заканчивается офицер: Командир";
         case "AdmiralOff": return "Заканчивается офицер: Адмирал";
