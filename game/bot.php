@@ -23,7 +23,7 @@ function AddBotQueue ($player_id, $strat_id, $block_id, $when, $seconds)
     dbquery ($query);
 }
 
-// Процессор блоков
+// Интерпретатор блоков
 function ExecuteBlock ($queue, $botqueue, $block, $childs )
 {
     global $db_prefix;
