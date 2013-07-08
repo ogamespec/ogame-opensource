@@ -24,6 +24,14 @@ function Admin_Botedit ()
         }
         else if ( $_POST['action'] === "save" ) {    // Сохранить
             $id = intval ( $_POST['strat'] );
+
+            // Сохранить текущий исходник в бекап
+            $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
+            $result = dbquery ($query);
+            $row = dbarray ($result);
+            $query = "UPDATE ".$db_prefix."botstrat SET source = '".$row['source']."' WHERE id = 1;";
+            dbquery ( $query );
+
             $source = $_POST['source'];
             if ( !get_magic_quotes_gpc () ) $source = addslashes ( $source );
             $query = "UPDATE ".$db_prefix."botstrat SET source = '".$source."' WHERE id = $id;";
@@ -76,6 +84,17 @@ function Admin_Botedit ()
 
   var ajax = new sack();
 
+  // define a converter from two data properties to Node.location
+  function toLocation(data, node) {
+    return new go.Point(data.x, data.y);
+  }
+
+  // define a reverse converter, from Node.location to two data properties
+  function fromLocation(loc, data) {
+    data.x = loc.x;
+    data.y = loc.y;
+  }
+
   function init() {
     var $ = go.GraphObject.make;  // for conciseness in defining templates
 
@@ -97,6 +116,7 @@ function Admin_Botedit ()
         // the Node.location is at the center of each node
         locationSpot: go.Spot.Center,
         isShadowed: shadows,
+        shadowOffset: new go.Point(3, 3),
         shadowColor: "#242424",
         // handle mouse enter/leave events to show/hide the ports
         mouseEnter: function(e, obj) { showPorts(obj.part, true); },
@@ -147,8 +167,8 @@ function Admin_Botedit ()
             new go.Binding("text", "text").makeTwoWay())),
         // four named ports, one on each side:
         makePort("T", go.Spot.Top, false, true),
-        makePort("L", go.Spot.Left, true, true),
-        makePort("R", go.Spot.Right, true, true),
+//        makePort("L", go.Spot.Left, true, true),
+//        makePort("R", go.Spot.Right, true, true),
         makePort("B", go.Spot.Bottom, true, false)
         ));
 
@@ -201,6 +221,61 @@ function Admin_Botedit ()
         // no ports, because no links are allowed to connect with a comment
         ));
 
+    myDiagram.nodeTemplateMap.add("Label",
+      $(go.Node, go.Panel.Spot, nodeStyle(),
+        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+        //new go.Binding("location", "", toLocation).makeTwoWay(fromLocation),
+        $(go.Panel, go.Panel.Auto,
+          $(go.Shape, "PrimitiveToCall",
+            { height: 45, angle:90, fill: graygrad, stroke: "rgb(17, 51, 6)" }),
+          $(go.TextBlock, "Label",
+            { margin: 5,
+              //wrap: go.TextBlock.WrapFit,
+              editable: true,
+              font: "bold 9pt Helvetica, Arial, sans-serif",
+              stroke: "rgb(255, 255, 255)" })),
+        makePort("L", go.Spot.Left, false, true),
+        makePort("R", go.Spot.Right, true, false),
+        makePort("B", go.Spot.Bottom, true, false)
+        ));
+
+
+    myDiagram.nodeTemplateMap.add("Branch",
+      $(go.Node, go.Panel.Spot, nodeStyle(),
+        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+        //new go.Binding("location", "", toLocation).makeTwoWay(fromLocation),
+        $(go.Panel, go.Panel.Auto,
+          $(go.Shape, "PrimitiveToCall",
+            { height: 45, angle:270, fill: graygrad, stroke: "rgb(17, 51, 6)" }),
+          $(go.TextBlock, "Branch",
+            { margin: 5,
+              wrap: go.TextBlock.WrapFit,
+              editable: true,
+              font: "bold 9pt Helvetica, Arial, sans-serif",
+              stroke: "rgb(255, 255, 255)" })),
+        makePort("T", go.Spot.Top, false, true),
+        makePort("L", go.Spot.Left, true, false),
+        makePort("R", go.Spot.Right, false, true)
+        ));
+
+    myDiagram.nodeTemplateMap.add("Cond",
+      $(go.Node, go.Panel.Spot, nodeStyle(),
+        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+        $(go.Panel, go.Panel.Auto,
+          $(go.Shape, "DataTransmission",
+            { height: 45, angle:90, fill: yellowgrad, stroke: "rgb(17, 51, 6)" }),
+          $(go.TextBlock, "Cond",
+            { margin: 5,
+              minSize: new go.Size(55, NaN),
+              wrap: go.TextBlock.WrapFit,
+              editable: true,
+              font: "bold 9pt Helvetica, Arial, sans-serif",
+              stroke: "rgb(0, 0, 0)" })),
+        makePort("T", go.Spot.Top, false, true),
+        makePort("R", go.Spot.Right, true, false),
+        makePort("B", go.Spot.Bottom, true, false)
+        ));
+
 
     // replace the default Link template in the linkTemplateMap
     myDiagram.linkTemplate =
@@ -249,9 +324,11 @@ function Admin_Botedit ()
     myPalette.nodeTemplateMap = myDiagram.nodeTemplateMap;  // share the templates used by myDiagram
     myPalette.model = new go.GraphLinksModel([  // specify the contents of the Palette
       { category: "Start", text: "Start" },
-      { text: "Step" },
-      { text: "???", figure: "Diamond" },
       { category: "End", text: "End" },
+      { text: "Step" },
+      { category: "Cond", text: "Cond", figure: "Diamond" },
+      { category: "Label", text: "Label" },
+      { category: "Branch", text: "Branch" },
       { category: "Comment", text: "Comment", figure: "RoundedRectangle" }
     ]);
   }
