@@ -5,7 +5,7 @@
 
 function QueueDesc ( $queue )
 {
-    global $session;
+    global $session, $db_prefix;
     $type = $queue['type'];
     $sub_id = $queue['sub_id'];
     $obj_id = $queue['obj_id'];
@@ -14,11 +14,19 @@ function QueueDesc ( $queue )
     switch ( $type )
     {
         case "Build":
-            $planet = GetPlanet ($sub_id);
-            return "Постройка '".loca("NAME_$obj_id")."' ($level) " ;
+            $query = "SELECT * FROM ".$db_prefix."buildqueue WHERE id = " . $queue['sub_id'] . " LIMIT 1";
+            $result = dbquery ($query);
+            $bqueue = dbarray ($result);
+            $planet_id = $bqueue['planet_id'];
+            $planet = GetPlanet ($planet_id);
+            return "Постройка '".loca("NAME_$obj_id")."' ($level) на планете " . AdminPlanetName ($planet);
         case "Demolish":
-            $planet = GetPlanet ($sub_id);
-            return "Снос '".loca("NAME_$obj_id")."' ($level) " ;
+            $query = "SELECT * FROM ".$db_prefix."buildqueue WHERE id = " . $queue['sub_id'] . " LIMIT 1";
+            $result = dbquery ($query);
+            $bqueue = dbarray ($result);
+            $planet_id = $bqueue['planet_id'];
+            $planet = GetPlanet ($planet_id);
+            return "Снос '".loca("NAME_$obj_id")."' ($level) на планете " . AdminPlanetName ($planet);
         case "Shipyard":
             $planet = GetPlanet ($sub_id);
             return "Задание на верфи: '".loca("NAME_$obj_id") . "' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
@@ -79,7 +87,7 @@ function Admin_Queue ()
         }
 
         if ( key_exists ( "order_remove", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Удалить задание
-            RemoveQueue ( intval ($_POST['order_cancel']) );
+            RemoveQueue ( intval ($_POST['order_remove']) );
         }
     }
 
@@ -91,7 +99,7 @@ function Admin_Queue ()
     AdminPanel();
 
     echo "<table>\n";
-    echo "<tr><td class=c>Время окончания</td><td class=c>Игрок</td><td class=c>Тип задания</td><td class=c>Описание</td><td class=c>Приоритет</td><td class=c>Управление</td></tr>\n";
+    echo "<tr><td class=c>Время окончания</td><td class=c>Игрок</td><td class=c>Тип задания</td><td class=c>Описание</td><td class=c>Приоритет</td><td class=c>ID</td><td class=c>Управление</td></tr>\n";
 
     $anz = $rows = dbrows ($result);
     $bxx = 1;
@@ -101,7 +109,7 @@ function Admin_Queue ()
         $user = LoadUser ( $queue['owner_id'] );
         $pid = $user['player_id'];
         echo "<tr><th> <table><tr><th><div id='bxx".$bxx."' title='".($queue['end'] - $now)."' star='".$queue['start']."'></th>";
-        echo "<tr><th>".date ("d.m.Y H:i:s", $queue['end'])."</th></tr></table></th><th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=$pid\">".$user['oname']."</a></th><th>".$queue['type']."</th><th>".QueueDesc($queue)."</th><th>".$queue['prio']."</th>\n";
+        echo "<tr><th>".date ("d.m.Y H:i:s", $queue['end'])."</th></tr></table></th><th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=$pid\">".$user['oname']."</a></th><th>".$queue['type']."</th><th>".QueueDesc($queue)."</th><th>".$queue['prio']."</th><th>".$queue['task_id']."</th>\n";
 ?>
     <th> 
          <form action="index.php?page=admin&session=<?=$session;?>&mode=Queue" method="POST">

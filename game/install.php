@@ -360,7 +360,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."battledata AUTO_INCREMENT = 1;" );
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."fleetlogs AUTO_INCREMENT = 1;" );
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."iplogs AUTO_INCREMENT = 1;" );
-    dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."botstrat AUTO_INCREMENT = 1;" );
+    dbquery ( "INSERT INTO ".$_POST["db_prefix"]."botstrat VALUES ( 1, 'backup, '')" );
 
     // Сохранить файл конфигурации.
     $file = fopen ("config.php", "wb");
