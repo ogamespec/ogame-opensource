@@ -1,5 +1,9 @@
 #summary News archive
 
+*08.07.2013*<br>
+Bot AI editor:<br>
+[http://ogamespec.com/imgstore/resized_whc51dabba016b15.jpg]
+
 *02.03.2013*<br>
 - Change email fixed<br>
 - Build queue<br>
