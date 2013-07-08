@@ -9,8 +9,6 @@ function Admin_Botedit ()
     global $db_prefix;
     global $GlobalUser;
 
-    $result = "";
-
     // Обработка POST-запроса.
     if ( method () === "POST" )
     {
@@ -42,11 +40,11 @@ function Admin_Botedit ()
         else if ( $_POST['action'] === "new" ) {    // Новая стратегия
             $name = $_POST['name'];
             if ( !get_magic_quotes_gpc () ) $name = addslashes ( $name );
-            $source = "{ \"class\": \"go.GraphLinksModel\", \n
-                         \"linkFromPortIdProperty\": \"fromPort\", \n
-                         \"linkToPortIdProperty\": \"toPort\", \n
-                         \"nodeDataArray\": [ ], \n
-                         \"linkDataArray\": [ ]} \n";
+            $source = "{ \"class\": \"go.GraphLinksModel\",
+                         \"linkFromPortIdProperty\": \"fromPort\",
+                         \"linkToPortIdProperty\": \"toPort\",
+                         \"nodeDataArray\": [ ],
+                         \"linkDataArray\": [ ]}";
             $strat = array ( '', $name, $source );
             AddDBRow ($strat, 'botstrat');
             ob_clean ();
@@ -84,21 +82,13 @@ function Admin_Botedit ()
 
   var ajax = new sack();
 
-  // define a converter from two data properties to Node.location
-  function toLocation(data, node) {
-    return new go.Point(data.x, data.y);
-  }
-
-  // define a reverse converter, from Node.location to two data properties
-  function fromLocation(loc, data) {
-    data.x = loc.x;
-    data.y = loc.y;
-  }
-
   function init() {
     var $ = go.GraphObject.make;  // for conciseness in defining templates
 
     myDiagram = new go.Diagram("myDiagram");  // must name or refer to the DIV HTML element
+
+    myDiagram.model.linkFromPortIdProperty = "fromPort";
+    myDiagram.model.linkToPortIdProperty = "toPort";
 
     // helper definitions for node templates
 
@@ -227,18 +217,16 @@ function Admin_Botedit ()
         //new go.Binding("location", "", toLocation).makeTwoWay(fromLocation),
         $(go.Panel, go.Panel.Auto,
           $(go.Shape, "PrimitiveToCall",
-            { height: 45, angle:90, fill: graygrad, stroke: "rgb(17, 51, 6)" }),
+            { height: 45, angle:90, fill: graygrad, stroke: "rgb(0, 0, 0)" }),
           $(go.TextBlock, "Label",
             { margin: 5,
               //wrap: go.TextBlock.WrapFit,
               editable: true,
               font: "bold 9pt Helvetica, Arial, sans-serif",
               stroke: "rgb(255, 255, 255)" })),
-        makePort("L", go.Spot.Left, false, true),
-        makePort("R", go.Spot.Right, true, false),
-        makePort("B", go.Spot.Bottom, true, false)
+        makePort("T", go.Spot.Top, true, true),
+        makePort("B", go.Spot.Bottom, true, true)
         ));
-
 
     myDiagram.nodeTemplateMap.add("Branch",
       $(go.Node, go.Panel.Spot, nodeStyle(),
@@ -246,16 +234,15 @@ function Admin_Botedit ()
         //new go.Binding("location", "", toLocation).makeTwoWay(fromLocation),
         $(go.Panel, go.Panel.Auto,
           $(go.Shape, "PrimitiveToCall",
-            { height: 45, angle:270, fill: graygrad, stroke: "rgb(17, 51, 6)" }),
+            { height: 45, angle:270, fill: graygrad, stroke: "rgb(0, 0, 0)" }),
           $(go.TextBlock, "Branch",
             { margin: 5,
               wrap: go.TextBlock.WrapFit,
               editable: true,
               font: "bold 9pt Helvetica, Arial, sans-serif",
               stroke: "rgb(255, 255, 255)" })),
-        makePort("T", go.Spot.Top, false, true),
-        makePort("L", go.Spot.Left, true, false),
-        makePort("R", go.Spot.Right, false, true)
+        makePort("T", go.Spot.Top, true, true),
+        makePort("B", go.Spot.Bottom, true, true)
         ));
 
     myDiagram.nodeTemplateMap.add("Cond",
@@ -353,6 +340,7 @@ function Admin_Botedit ()
 
   function whenSaved ()
   {
+      document.getElementById("mySavedModel").value = myDiagram.model.toJson();
   }
   function whenLoaded ()
   {
@@ -449,7 +437,7 @@ function Admin_Botedit ()
 </select>
   <button onclick="load()">Загрузить</button>
 </span>
-  <textarea id="mySavedModel" style="width:100%;height:300px; display:none;">
+  <textarea id="mySavedModel" style="width:100%;height:300px; display:block;">
 { "class": "go.GraphLinksModel",
   "linkFromPortIdProperty": "fromPort",
   "linkToPortIdProperty": "toPort",
