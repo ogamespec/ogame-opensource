@@ -30,7 +30,7 @@ function Admin_Botedit ()
             $query = "UPDATE ".$db_prefix."botstrat SET source = '".$row['source']."' WHERE id = 1;";
             dbquery ( $query );
 
-            $source = $_POST['source'];
+            $source = urldecode ( $_POST['source'] );
             if ( !get_magic_quotes_gpc () ) $source = addslashes ( $source );
             $query = "UPDATE ".$db_prefix."botstrat SET source = '".$source."' WHERE id = $id;";
             dbquery ( $query );
@@ -355,9 +355,9 @@ function Admin_Botedit ()
 
   // Show the diagram's model in JSON format that the user may have edited
   function save() {
-    var source = myDiagram.model.toJson();
+    var source = encodeURIComponent ( myDiagram.model.toJson() );
     var id = document.getElementById("strategyId").value;
-    if (id) {
+    if (id > 1) {
         ajax.requestFile = "index.php?page=admin&session=<?=$session;?>&mode=BotEdit";
         ajax.runResponse = whenSaved;
         ajax.execute = true;
