@@ -172,9 +172,6 @@ function Admin_Botedit ()
             { margin: 5,
               font: "bold 9pt Helvetica, Arial, sans-serif",
               stroke: "rgb(190, 247, 112)" })),
-        // three named ports, one on each side except the top, all output only:
-        makePort("L", go.Spot.Left, true, false),
-        makePort("R", go.Spot.Right, true, false),
         makePort("B", go.Spot.Bottom, true, false)
         ));
 
@@ -189,9 +186,7 @@ function Admin_Botedit ()
               font: "bold 9pt Helvetica, Arial, sans-serif",
               stroke: "rgb(255, 207, 169)" })),
         // three named ports, one on each side except the bottom, all input only:
-        makePort("T", go.Spot.Top, false, true),
-        makePort("L", go.Spot.Left, false, true),
-        makePort("R", go.Spot.Right, false, true)
+        makePort("T", go.Spot.Top, false, true)
         ));
 
     myDiagram.nodeTemplateMap.add("Comment",
@@ -259,6 +254,7 @@ function Admin_Botedit ()
               font: "bold 9pt Helvetica, Arial, sans-serif",
               stroke: "rgb(0, 0, 0)" })),
         makePort("T", go.Spot.Top, false, true),
+        makePort("L", go.Spot.Left, true, false),
         makePort("R", go.Spot.Right, true, false),
         makePort("B", go.Spot.Bottom, true, false)
         ));
@@ -437,7 +433,7 @@ function Admin_Botedit ()
 </select>
   <button onclick="load()">Загрузить</button>
 </span>
-  <textarea id="mySavedModel" style="width:100%;height:300px; display:block;">
+  <textarea id="mySavedModel" style="width:100%;height:300px; display:none;">
 { "class": "go.GraphLinksModel",
   "linkFromPortIdProperty": "fromPort",
   "linkToPortIdProperty": "toPort",
