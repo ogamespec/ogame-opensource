@@ -105,7 +105,7 @@ function Admin_Botedit ()
       return {
         // the Node.location is at the center of each node
         locationSpot: go.Spot.Center,
-        isShadowed: shadows,
+        isShadowed: false,//shadows,
         shadowOffset: new go.Point(3, 3),
         shadowColor: "#242424",
         // handle mouse enter/leave events to show/hide the ports
@@ -157,8 +157,8 @@ function Admin_Botedit ()
             new go.Binding("text", "text").makeTwoWay())),
         // four named ports, one on each side:
         makePort("T", go.Spot.Top, false, true),
-//        makePort("L", go.Spot.Left, true, true),
-//        makePort("R", go.Spot.Right, true, true),
+        makePort("L", go.Spot.Left, false, true),
+        makePort("R", go.Spot.Right, false, true),
         makePort("B", go.Spot.Bottom, true, false)
         ));
 
