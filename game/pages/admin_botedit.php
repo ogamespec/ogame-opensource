@@ -14,18 +14,67 @@ function Admin_Botedit ()
     // Обработка POST-запроса.
     if ( method () === "POST" )
     {
-    }
-
-    // Обработка GET-запроса.
-    if ( method () === "GET" )
-    {
+        if ( $_POST['action'] === "load" ) {        // Загрузить
+            $id = intval ( $_POST['strat'] );
+            $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
+            $result = dbquery ($query);
+            $row = dbarray ($result);
+            ob_clean ();
+            die ($row['source']);
+        }
+        else if ( $_POST['action'] === "save" ) {    // Сохранить
+            $id = intval ( $_POST['strat'] );
+            $source = $_POST['source'];
+            if ( !get_magic_quotes_gpc () ) $source = addslashes ( $source );
+            $query = "UPDATE ".$db_prefix."botstrat SET source = '".$source."' WHERE id = $id;";
+            dbquery ( $query );
+            ob_clean ();
+            die ();
+        }
+        else if ( $_POST['action'] === "new" ) {    // Новая стратегия
+            $name = $_POST['name'];
+            if ( !get_magic_quotes_gpc () ) $name = addslashes ( $name );
+            $source = "{ \"class\": \"go.GraphLinksModel\", \n
+                         \"linkFromPortIdProperty\": \"fromPort\", \n
+                         \"linkToPortIdProperty\": \"toPort\", \n
+                         \"nodeDataArray\": [ ], \n
+                         \"linkDataArray\": [ ]} \n";
+            $strat = array ( '', $name, $source );
+            AddDBRow ($strat, 'botstrat');
+            ob_clean ();
+            die ( );
+        }
+        else if ( $_POST['action'] === "rename" ) {    // Переименовать
+            $id = intval ( $_POST['strat'] );
+            $name = $_POST['name'];
+            if ( !get_magic_quotes_gpc () ) $name = addslashes ( $name );
+            $query = "UPDATE ".$db_prefix."botstrat SET name = '".$name."' WHERE id = $id;";
+            dbquery ( $query );
+            ob_clean ();
+            $query = "SELECT * FROM ".$db_prefix."botstrat ORDER BY id ASC";
+            $result = dbquery ($query);
+            echo "<option value=\"0\">-- Выберите стратегию --</option>\n";
+            while ($row = dbarray ($result) ) {
+                echo "<option value=\"".$row['id']."\"  ";
+                if ( $row['id'] == $id ) echo "selected";
+                echo ">".stripslashes($row['name'])."</option>\n";
+            }
+            die ( );
+        }
+        else {
+            ob_clean ();
+            die ();
+        }
     }
 
 ?>
 
 <script type="text/javascript" src="js/go.js"></script>
+<script type="text/javascript" src="js/tw-sack.js"></script>
 
 <script type="text/javascript" id="code">
+
+  var ajax = new sack();
 
   function init() {
     var $ = go.GraphObject.make;  // for conciseness in defining templates
@@ -218,15 +267,77 @@ function Admin_Botedit ()
     }
   }
 
+  function getSelectedText(elementId) {
+      var elt = document.getElementById(elementId);
+      if (elt.selectedIndex == -1)
+          return null;
+      return elt.options[elt.selectedIndex].text;
+  }
+
+  function whenSaved ()
+  {
+  }
+  function whenLoaded ()
+  {
+      myDiagram.model = go.Model.fromJson( this.response );
+      myDiagram.undoManager.isEnabled = true;
+      document.getElementById("strategyName").value = getSelectedText ('strategyId');
+  }
+  function whenNew ()
+  {
+      location.reload ();
+  }
+  function whenRename ()
+  {
+      document.getElementById("strategyId").innerHTML = this.response;
+  }
+
   // Show the diagram's model in JSON format that the user may have edited
   function save() {
-    var str = myDiagram.model.toJson();
-    document.getElementById("mySavedModel").value = str;
+    var source = myDiagram.model.toJson();
+    var id = document.getElementById("strategyId").value;
+    if (id) {
+        ajax.requestFile = "index.php?page=admin&session=<?=$session;?>&mode=BotEdit";
+        ajax.runResponse = whenSaved;
+        ajax.execute = true;
+        ajax.setVar("action", "save");
+        ajax.setVar("strat", id);
+        ajax.setVar("source", source);
+        ajax.runAJAX();
+    }
   }
+
   function load() {
-    var str = document.getElementById("mySavedModel").value;
-    myDiagram.model = go.Model.fromJson(str);
-    myDiagram.undoManager.isEnabled = true;
+    var id = document.getElementById("strategyId").value;
+    if (id) {
+        ajax.requestFile = "index.php?page=admin&session=<?=$session;?>&mode=BotEdit";
+        ajax.runResponse = whenLoaded;
+        ajax.execute = true;
+        ajax.setVar("action", "load");
+        ajax.setVar("strat", id );
+        ajax.runAJAX();
+    }
+  }
+  
+  function newstrat() {
+    var name = document.getElementById("strategyName").value;
+    ajax.requestFile = "index.php?page=admin&session=<?=$session;?>&mode=BotEdit";
+    ajax.runResponse = whenNew;
+    ajax.execute = true;
+    ajax.setVar("action", "new");
+    ajax.setVar("name", name);
+    ajax.runAJAX();
+  }
+
+  function rename() {
+    var name = document.getElementById("strategyName").value;
+    ajax.requestFile = "index.php?page=admin&session=<?=$session;?>&mode=BotEdit";
+    ajax.runResponse = whenRename;
+    ajax.execute = true;
+    ajax.setVar("action", "rename");
+    ajax.setVar("name", name);
+    ajax.setVar("strat", document.getElementById("strategyId").value );
+    ajax.runAJAX();
   }
 </script>
 
@@ -242,11 +353,22 @@ function Admin_Botedit ()
       <div id="myDiagram" style="background-color: #344566; border: solid 1px black; height: 500px"></div>
     </span>
   </div>
+
+<span style="float:left;">
+ <input type="text" size="50" id="strategyName"> <button onclick="newstrat()">Новая</button> <button onclick="rename()">Переименовать</button>
+</span>
+
 <span style="float:right;">
   <button onclick="save()">Сохранить</button>
-<select>
-<option value="1">Развитие до малого транспорта</option>
-<option value="2">Развитие до колонизатора</option>
+<select id="strategyId">
+<option value="0">-- Выберите стратегию --</option>
+<?php
+    $query = "SELECT * FROM ".$db_prefix."botstrat ORDER BY id ASC";
+    $result = dbquery ($query);
+    while ($row = dbarray ($result) ) {
+        echo "<option value=\"".$row['id']."\">".stripslashes($row['name'])."</option>\n";
+    }
+?>
 </select>
   <button onclick="load()">Загрузить</button>
 </span>
