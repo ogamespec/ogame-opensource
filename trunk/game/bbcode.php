@@ -887,7 +887,7 @@ class bb_a extends bbcode {
         'abbr','acronym','b','bbcode','code','color','font','i','img','nobb',
         's','size','strike','sub','sup','tt','u'
     );
-    function get_html() {
+    function get_html($elems = false) {
         $text = '';
         foreach ($this -> tree as $val) {
             if ('text' == $val['type']) { $text .= $val['str']; }
@@ -950,7 +950,7 @@ class bb_a extends bbcode {
 class bb_align extends bbcode {
     var $rbr = 1;
     var $ends = array('*','tr','td','th');
-    function get_html() {
+    function get_html($elems = false) {
         $align = '';
         if (isset($this -> attrib['justify'])) { $align = 'justify'; }
         if (isset($this -> attrib['left'])) { $align = 'left'; }
@@ -988,7 +988,7 @@ class bb_color extends bbcode {
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
-    function get_html() {
+    function get_html($elems = false) {
         $color = htmlspecialchars($this -> attrib['color']);
         return '<font color="'.$color.'">'.parent::get_html($this -> tree)
             .'</font>';
@@ -1006,7 +1006,7 @@ class bb_del extends bbcode {
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
-    function get_html() {
+    function get_html($elems = false) {
         return '<del>'.parent::get_html($this -> tree).'</del>';
     }
 }
@@ -1021,7 +1021,7 @@ class bb_email extends bbcode {
         'abbr','acronym','b','bbcode','code','color','email','font','i','img',
         'nobb','s','size','strike','sub','sup','tt','u'
     );
-    function get_html() {
+    function get_html($elems = false) {
         $attr = ' class="bb_email"';
         $href = $this -> attrib['email'];
         if (! $href) {
@@ -1060,7 +1060,7 @@ class bb_font extends bbcode {
         'font','font','google','i','img','nobb','s','size','strike','sub','sup',
         'tt','u','url'
     );
-    function get_html() {
+    function get_html($elems = false) {
         $face = $this -> attrib['font'];
         $attr = ' face="'.htmlspecialchars($face).'"';
         $color = isset($this -> attrib['color']) ? $this -> attrib['color'] : '';
@@ -1077,7 +1077,7 @@ class bb_hr extends bbcode {
     var $rbr = 1;
     var $ends = array();
     var $children = array();
-    function get_html() {
+    function get_html($elems = false) {
         return '<hr class="bb" />';
     }
 }
@@ -1093,7 +1093,7 @@ class bb_i extends bbcode {
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
-    function get_html() {
+    function get_html($elems = false) {
         return '<i>'.parent::get_html($this -> tree).'</i>';
     }
 }
@@ -1102,7 +1102,7 @@ class bb_i extends bbcode {
 class bb_img extends bbcode {
     var $ends = array();
     var $children = array();
-    function get_html() {
+    function get_html($elems = false) {
         $attr = 'alt=""';
         if (isset($this -> attrib['width'])) {
             $width = (int) $this -> attrib['width'];
@@ -1135,7 +1135,7 @@ class bb_img extends bbcode {
 class bb_quote extends bbcode {
     var $rbr = 1;
     var $ends = array();
-    function get_html() {
+    function get_html($elems = false) {
         $author = htmlspecialchars($this -> attrib['quote']);
         if ($author) $author = "(\n<b style=\"color: white;\">".$author."</b>\n)";
         $author = "<div style=\"border: 3px double rgb(65, 86, 128); padding: 1px 4px 2px;\">\nЦитата ".$author." </div>";
@@ -1155,7 +1155,7 @@ class bb_size extends bbcode {
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
-    function get_html() {
+    function get_html($elems = false) {
         $sign = '';
         if (strlen($this -> attrib['size'])) {
             $sign = $this -> attrib['size']{0};
@@ -1189,7 +1189,7 @@ class bb_strong extends bbcode {
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
-    function get_html() {
+    function get_html($elems = false) {
         return '<strong>'.parent::get_html($this -> tree).'</strong>';
     }
 }
@@ -1205,7 +1205,7 @@ class bb_sub extends bbcode {
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
-    function get_html() {
+    function get_html($elems = false) {
         return '<sub>'.parent::get_html($this -> tree).'</sub>';
     }
 }
@@ -1221,7 +1221,7 @@ class bb_sup extends bbcode {
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
-    function get_html() {
+    function get_html($elems = false) {
         return '<sup>'.parent::get_html($this -> tree).'</sup>';
     }
 }
@@ -1237,7 +1237,7 @@ class bb_u extends bbcode {
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
-    function get_html() {
+    function get_html($elems = false) {
         return '<u>'.parent::get_html($this -> tree).'</u>';
     }
 }
