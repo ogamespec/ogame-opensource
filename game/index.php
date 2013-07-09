@@ -1,6 +1,6 @@
 <?php
 
-//error_reporting ( E_ALL );
+#error_reporting ( E_ALL );
 
 // Главный модуль, через который осуществляется доступ к другим страницам.
 ob_start ();
