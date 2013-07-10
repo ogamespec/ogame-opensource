@@ -6,7 +6,7 @@ function Admin_Botedit ()
 {
     global $session;
     global $db_prefix;
-    global $GlobalUser;
+    global $GlobalUser, $GlobalUni;
 
     // Обработка POST-запроса.
     if ( method () === "POST" )
@@ -17,6 +17,7 @@ function Admin_Botedit ()
             $result = dbquery ($query);
             $row = dbarray ($result);
             ob_clean ();
+            setcookie ( "uni".$GlobalUni['num']."_".$GlobalUser['name']."_strategy", $id, 9999 );
             die ($row['source']);
         }
         else if ( $_POST['action'] === "save" ) {    // Сохранить
