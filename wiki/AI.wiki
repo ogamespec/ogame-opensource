@@ -83,7 +83,8 @@ http://ogamespec.com/imgstore/resized_whc51dabba016b15.jpg
 
 = Выполнение стратегий =
 
-<wiki:video url="http://www.twitch.tv/ogamespec/b/427574185"/>
+<wiki:video url="http://www.youtube.com/watch?v=2c5qsnrBOIc"/> 
+<wiki:video url="http://www.youtube.com/watch?v=QFo81_k5Uxs"/> 
 
 Вполнение блоков происходит один за одним, начиная с самого первого (Start).
 
