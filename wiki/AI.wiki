@@ -85,7 +85,7 @@ http://ogamespec.com/imgstore/resized_whc51dabba016b15.jpg
 
 Вполнение блоков происходит один за одним, начиная с самого первого (Start).
 
-http://ogamespec.com/imgstore/resized_whc51daf3e047512.jpg
+http://ogamespec.com/imgstore/resized_whc51dd447fe4417.jpg
 
 Работа блока зависит от его типа и содержимого.
 
