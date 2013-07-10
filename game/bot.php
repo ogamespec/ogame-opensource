@@ -66,10 +66,22 @@ function ExecuteBlock ($queue, $block, $childs )
             RemoveQueue ( $queue['task_id'] );
             break;
 
-/*
         case "Cond":        // Проверка условия
+            $result = eval ( "return ( " . $block['text'] . " );" );
+            //Debug ( "Проверка условия (".$block['text'].") = " . $result );
+            $block_id = 0xdeadbeef;
+            foreach ( $childs as $i=>$child ) {
+                if ( strtolower ($child['text']) === "no" && $result = false ) { $block_id = $child['to']; break; }
+                if ( strtolower ($child['text']) === "yes" && $result = true ) { $block_id = $child['to']; break; }
+                if ( preg_match('/([0-9]{1,2}|100)%/', $text, $matches) && $result = true ) {    // случайный переход
+                    $prc = str_replace ( "%", "", $matches[0]);
+                    if ( mt_rand (1, 100) <= $prc ) { $block_id = $child['to']; break; }
+                }
+            }
+            if ( $block_id != 0xdeadbeef ) AddBotQueue ( $player_id, $strat_id, $block_id, $queue['end'], $sleep );
+            else Debug ( "Не удалось выбрать условный переход." );
+            RemoveQueue ( $queue['task_id'] );
             break;
-*/
 
         default:    // Обычный блок (квадрат), выход один.
             $sleep = eval ( $block['text'] . ";" );
