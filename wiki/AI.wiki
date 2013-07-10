@@ -83,7 +83,7 @@ http://ogamespec.com/imgstore/resized_whc51dabba016b15.jpg
 
 = Выполнение стратегий =
 
-<object bgcolor='#000000' data='http://www.twitch.tv/widgets/archive_embed_player.swf' height='378' id='clip_embed_player_flash' type='application/x-shockwave-flash' width='620'><param name='movie' value='http://www.twitch.tv/widgets/archive_embed_player.swf' /><param name='allowScriptAccess' value='always' /><param name='allowNetworking' value='all' /><param name='allowFullScreen' value='true' /><param name='flashvars' value='archive_id=427574185&amp;start_volume=25&amp;auto_play=false&amp;title=OGame%2Bbot%2Bvisual%2Beditor&amp;channel=ogamespec' /></object><br /><a href="http://www.twitch.tv/ogamespec" class="trk" style="padding:2px 0px 4px; display:block; width: 320px; font-weight:normal; font-size:10px; text-decoration:underline; text-align:center;">Watch live video from ogamespec on TwitchTV</a>
+<wiki:video url="http://www.twitch.tv/ogamespec/b/427574185"/>
 
 Вполнение блоков происходит один за одним, начиная с самого первого (Start).
 
