@@ -19,6 +19,7 @@ function Admin_Checksum ()
         'battle_engine.php', 
         'bbcode.php', 
         'bot.php', 
+        'botapi.php', 
         'db.php', 
         'debug.php', 
         'expedition.php', 
