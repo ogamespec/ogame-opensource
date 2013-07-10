@@ -11,7 +11,7 @@ function Admin_Debug ()
 
     if ( method () === "POST" )
     {
-        $query = "SELECT * FROM ".$db_prefix."debug ORDER BY date DESC LIMIT 50";
+        $query = "SELECT * FROM ".$db_prefix."debug ORDER BY date DESC, error_id DESC LIMIT 50";
         $result = dbquery ($query);
         $rows = dbrows ($result);
         while ($rows--)
@@ -25,7 +25,7 @@ function Admin_Debug ()
         }
     }
 
-    $query = "SELECT * FROM ".$db_prefix."debug ORDER BY date DESC LIMIT 50";
+    $query = "SELECT * FROM ".$db_prefix."debug ORDER BY date DESC, error_id DESC LIMIT 50";
     $result = dbquery ($query);
 
 ?>

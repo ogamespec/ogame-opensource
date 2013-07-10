@@ -2,49 +2,81 @@
 
 // Управление ботами.
 
-// Удалить глобальное задание и связанные с ним задания бота
-function RemoveBotQueue ($task_id)
-{
-    global $db_prefix;
-    $query = "DELETE FROM ".$db_prefix."botqueue WHERE owner_id = " . $task_id;
-    dbquery ($query);
-    RemoveQueue ($task_id);
-}
+require_once "botapi.php";        // API
 
 // Добавить блок в очередь
 function AddBotQueue ($player_id, $strat_id, $block_id, $when, $seconds)
 {
-    global $db_prefix;
-    $queue = array ( '', $player_id, 'AI', 0, 0, 0, $when, $when+$seconds, 1000 );
-    $queue_id = AddDBRow ( $queue, 'queue' );
-    $botqueue  = array ( '', $queue_id, $strat_id, $block_id );
-    $botqueue_id = AddDBRow ( $botqueue, 'botqueue' );
-    $query = "UPDATE ".$db_prefix."queue SET sub_id = $botqueue_id WHERE task_id = $queue_id;";
-    dbquery ($query);
+    $queue = array ( '', $player_id, 'AI', $strat_id, $block_id, 0, $when, $when+$seconds, 1000 );
+    return AddDBRow ( $queue, 'queue' );
 }
 
 // Интерпретатор блоков
-function ExecuteBlock ($queue, $botqueue, $block, $childs )
+function ExecuteBlock ($queue, $block, $childs )
 {
     global $db_prefix;
 
+//    Debug ( "Bot trace : " . $block['key'] );
+
     $player_id = $queue['owner_id'];
-    $strat_id = $botqueue['strat_id'];
+    $strat_id = $queue['sub_id'];
 
     switch ( $block['category'] )
     {
         case "Start":
             $block_id = $childs[0]['to'];
             AddBotQueue ( $player_id, $strat_id, $block_id, $queue['end'], 0 );
-            RemoveBotQueue ( $queue['task_id'] );
+            RemoveQueue ( $queue['task_id'] );
             break;
 
-#        case "End":
-#            break;
+        case "End":
+            RemoveQueue ( $queue['task_id'] );    // Просто удалить блок, тем самым в очереди не остается ни одного задания AI исполняемой стратегии
+            break;
 
-        default:
-            Debug ( "Неизвестный блок : " . $block['category'] . ", текст: \"" . $block['text'] . "\", стратегия $strat_id" );
-            RemoveBotQueue ( $queue['task_id'] );
+        case "Label":     // Начать выполнение новой цепочки
+            // Выбрать из всех потомков тот, который выходит снизу блока (fromPort="B")
+            $block_id = $childs[0]['to'];
+            foreach ( $childs as $i=>$child ) {
+                if ( $child['fromPort'] === "B" ) {
+                    $block_id = $child['to'];
+                    break;
+                }            
+            }
+            AddBotQueue ( $player_id, $strat_id, $block_id, $queue['end'], 0 );
+            RemoveQueue ( $queue['task_id'] );
+            break;
+
+        case "Branch":    // Переход на другую метку с указанным текстом.
+            $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $strat_id LIMIT 1";
+            $result = dbquery ($query);
+            if ($result) {
+                $row = dbarray ($result);
+                $strat = json_decode ( $row['source'], true );
+                $done = false;
+                foreach ( $strat['nodeDataArray'] as $i=>$arr ) {
+                    if ( $arr['text'] === $block['text'] && $arr['category'] === "Label" ) {
+                        AddBotQueue ( $player_id, $strat_id, $arr['key'], $queue['end'], 0 );
+                        $done = true;
+                        break;
+                    }
+                }
+                if (!$done) Debug ( "Не удалось найти метку перехода \"".$block['text']."\"" );
+            }
+            else Debug ( "Не удалось загрузить текущую стратегию при обработке перехода." );
+            RemoveQueue ( $queue['task_id'] );
+            break;
+
+/*
+        case "Cond":        // Проверка условия
+            break;
+*/
+
+        default:    // Обычный блок (квадрат), выход один.
+            $sleep = eval ( $block['text'] . ";" );
+            if ( $sleep == NULL ) $sleep = 0;
+            $block_id = $childs[0]['to'];
+            AddBotQueue ( $player_id, $strat_id, $block_id, $queue['end'], $sleep );
+            RemoveQueue ( $queue['task_id'] );
             break;
     }
 }
@@ -99,12 +131,6 @@ function StopBot ($player_id)
     global $db_prefix;
     if ( IsBot ($player_id) ) 
     {
-        $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'AI' AND owner_id = $player_id";
-        $result = dbquery ( $query );
-        while ( $row = dbarray ($result) ) {
-            $query = "DELETE FROM ".$db_prefix."botqueue WHERE owner_id = " . $row['task_id'];
-            dbquery ($query);
-        }
         $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'AI' AND owner_id = $player_id";
         dbquery ($query);
     }
@@ -125,11 +151,7 @@ function Queue_Bot_End ($queue)
 {
     global $db_prefix;
 
-    $query = "SELECT * FROM ".$db_prefix."botqueue WHERE id = " . $queue['sub_id'];
-    $result = dbquery ($query);
-    $botqueue = dbarray ($result);
-
-    $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = ".$botqueue['strat_id']." LIMIT 1";
+    $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = ".$queue['sub_id']." LIMIT 1";
     $result = dbquery ($query);
     if ($result) {
         $row = dbarray ($result);
@@ -137,7 +159,7 @@ function Queue_Bot_End ($queue)
         $strat_id = $row['id'];
 
         foreach ( $strat['nodeDataArray'] as $i=>$arr ) {
-            if ( $arr['key'] == $botqueue['block_id'] ) {
+            if ( $arr['key'] == $queue['obj_id'] ) {
                 $block = $arr;
 
                 $childs = array ();
@@ -145,14 +167,13 @@ function Queue_Bot_End ($queue)
                     if ( $arr['from'] == $block['key'] ) $childs[] = $arr;
                 }
 
-                ExecuteBlock ($queue, $botqueue, $block, $childs );
+                ExecuteBlock ($queue, $block, $childs );
                 break;
             }
         }
 
     }
-    else Debug ( "Не удалось загрузить программу " . $botqueue['strat_id'] );
-
+    else Debug ( "Не удалось загрузить программу " . $queue['sub_id'] );
 }
 
 // Переменные бота​.
