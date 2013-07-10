@@ -33,7 +33,7 @@ if ( $_POST['weiter'] === "Образец" || $ally['insertapp'])
 if ( $_POST['weiter'] === "Отправить" && $ally['open'] )
 {
     $text = $_POST['text'];
-    if ( !get_magic_quotes_gpc () ) $text = addslashes ( $text );
+    $text = addslashes ( $text );
     AddApplication ( $ally['ally_id'], $GlobalUser['player_id'], $text );
 
 ?>

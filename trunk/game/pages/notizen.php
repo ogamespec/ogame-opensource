@@ -55,10 +55,8 @@ if ( key_exists ('s', $_POST) )    // Добавить/редактироват�
     $title = htmlspecialchars($_POST['betreff']);
     $text = $_POST['text'];
 
-    if ( !get_magic_quotes_gpc () ) {
-        $title = addslashes ( $title );
-        $text = addslashes ( $text );
-    }
+    $title = addslashes ( $title );
+    $text = addslashes ( $text );
 
     if ( intval($_POST['s']) == 1 ) AddNote ( $GlobalUser['player_id'], $title, $text, intval($_POST['u']) );
     else if ( intval($_POST['s']) == 2 ) UpdateNote ( $GlobalUser['player_id'], intval($_POST['n']), $title, $text, intval($_POST['u']) );

@@ -1,6 +1,5 @@
 <?php
 
-
 // Графический редактор интеллекта ботов.
 
 function Admin_Botedit ()
@@ -31,7 +30,7 @@ function Admin_Botedit ()
             dbquery ( $query );
 
             $source = urldecode ( $_POST['source'] );
-            if ( !get_magic_quotes_gpc () ) $source = addslashes ( $source );
+            $source = addslashes ( $source );
             $query = "UPDATE ".$db_prefix."botstrat SET source = '".$source."' WHERE id = $id;";
             dbquery ( $query );
             ob_clean ();
@@ -39,7 +38,7 @@ function Admin_Botedit ()
         }
         else if ( $_POST['action'] === "new" ) {    // Новая стратегия
             $name = $_POST['name'];
-            if ( !get_magic_quotes_gpc () ) $name = addslashes ( $name );
+            $name = addslashes ( $name );
             $source = "{ \"class\": \"go.GraphLinksModel\",
                          \"linkFromPortIdProperty\": \"fromPort\",
                          \"linkToPortIdProperty\": \"toPort\",
@@ -53,7 +52,7 @@ function Admin_Botedit ()
         else if ( $_POST['action'] === "rename" ) {    // Переименовать
             $id = intval ( $_POST['strat'] );
             $name = $_POST['name'];
-            if ( !get_magic_quotes_gpc () ) $name = addslashes ( $name );
+            $name = addslashes ( $name );
             $query = "UPDATE ".$db_prefix."botstrat SET name = '".$name."' WHERE id = $id;";
             dbquery ( $query );
             ob_clean ();
@@ -151,7 +150,7 @@ function Admin_Botedit ()
             { font: "bold 9pt Helvetica, Arial, sans-serif",
               stroke: "white",
               margin: 8,
-              maxSize: new go.Size(100, NaN),
+              maxSize: new go.Size(200, NaN),
               wrap: go.TextBlock.WrapFit,
               editable: true },
             new go.Binding("text", "text").makeTwoWay())),
@@ -168,10 +167,13 @@ function Admin_Botedit ()
         $(go.Panel, go.Panel.Auto,
           $(go.Shape, "Ellipse",
             { fill: greengrad, stroke: "rgb(17, 51, 6)" }),
-          $(go.TextBlock, "Start",
+          $(go.TextBlock,
             { margin: 5,
+              editable: true,
               font: "bold 9pt Helvetica, Arial, sans-serif",
-              stroke: "rgb(190, 247, 112)" })),
+              stroke: "rgb(190, 247, 112)" },
+            new go.Binding("text", "text").makeTwoWay()
+        )),
         makePort("B", go.Spot.Bottom, true, false)
         ));
 
@@ -183,8 +185,11 @@ function Admin_Botedit ()
             { fill: redgrad, stroke: "rgb(82, 6, 0)" }),
           $(go.TextBlock, "End",
             { margin: 5,
+              editable: true,
               font: "bold 9pt Helvetica, Arial, sans-serif",
-              stroke: "rgb(255, 207, 169)" })),
+              stroke: "rgb(255, 207, 169)" },
+            new go.Binding("text", "text").makeTwoWay()
+        )),
         // three named ports, one on each side except the bottom, all input only:
         makePort("T", go.Spot.Top, false, true)
         ));
@@ -213,12 +218,15 @@ function Admin_Botedit ()
         $(go.Panel, go.Panel.Auto,
           $(go.Shape, "PrimitiveToCall",
             { height: 45, angle:90, fill: graygrad, stroke: "rgb(0, 0, 0)" }),
-          $(go.TextBlock, "Label",
+          $(go.TextBlock,
             { margin: 5,
-              //wrap: go.TextBlock.WrapFit,
+              wrap: go.TextBlock.WrapFit,
+              textAlign: "center",
               editable: true,
               font: "bold 9pt Helvetica, Arial, sans-serif",
-              stroke: "rgb(255, 255, 255)" })),
+              stroke: "rgb(255, 255, 255)" },
+            new go.Binding("text", "text").makeTwoWay()
+        )),
         makePort("T", go.Spot.Top, true, true),
         makePort("B", go.Spot.Bottom, true, true)
         ));
@@ -230,13 +238,16 @@ function Admin_Botedit ()
         $(go.Panel, go.Panel.Auto,
           $(go.Shape, "PrimitiveToCall",
             { height: 45, angle:270, fill: graygrad, stroke: "rgb(0, 0, 0)" }),
-          $(go.TextBlock, "Branch",
+          $(go.TextBlock,
             { margin: 5,
               wrap: go.TextBlock.WrapFit,
+              textAlign: "center",
               editable: true,
               font: "bold 9pt Helvetica, Arial, sans-serif",
-              stroke: "rgb(255, 255, 255)" })),
-        makePort("T", go.Spot.Top, true, true),
+              stroke: "rgb(255, 255, 255)" },
+            new go.Binding("text", "text").makeTwoWay()
+        )),
+        makePort("T", go.Spot.Top, false, true),
         makePort("B", go.Spot.Bottom, true, true)
         ));
 
@@ -245,14 +256,17 @@ function Admin_Botedit ()
         new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
         $(go.Panel, go.Panel.Auto,
           $(go.Shape, "DataTransmission",
-            { height: 45, angle:90, fill: yellowgrad, stroke: "rgb(17, 51, 6)" }),
-          $(go.TextBlock, "Cond",
+            { height: 45, angle:90, fill: yellowgrad, stroke: "rgb(0, 0, 0)" }),
+          $(go.TextBlock,
             { margin: 5,
               minSize: new go.Size(55, NaN),
               wrap: go.TextBlock.WrapFit,
+              textAlign: "center",
               editable: true,
               font: "bold 9pt Helvetica, Arial, sans-serif",
-              stroke: "rgb(0, 0, 0)" })),
+              stroke: "rgb(0, 0, 0)" },
+            new go.Binding("text", "text").makeTwoWay()
+        )),
         makePort("T", go.Spot.Top, false, true),
         makePort("L", go.Spot.Left, true, false),
         makePort("R", go.Spot.Right, true, false),
@@ -278,7 +292,7 @@ function Admin_Botedit ()
           new go.Binding("visible", "visible").makeTwoWay(),
           $(go.Shape, "RoundedRectangle",  // the link shape
             { fill: "#F8F8F8", stroke: null }),
-          $(go.TextBlock, "Yes",  // the label
+          $(go.TextBlock, "Yes/No",  // the label
             { textAlign: "center",
               font: "10pt helvetica, arial, sans-serif",
               stroke: "#919191",
