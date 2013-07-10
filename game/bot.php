@@ -16,10 +16,10 @@ function ExecuteBlock ($queue, $block, $childs )
 {
     global $db_prefix;
 
-//    Debug ( "Bot trace : " . $block['key'] );
-
     $player_id = $queue['owner_id'];
     $strat_id = $queue['sub_id'];
+
+#    Debug ( "Bot trace : " . $block['category'] . "(".$block['key']."): " . $block['text'] );
 
     switch ( $block['category'] )
     {
@@ -68,15 +68,38 @@ function ExecuteBlock ($queue, $block, $childs )
 
         case "Cond":        // Проверка условия
             $result = eval ( "return ( " . $block['text'] . " );" );
-            //Debug ( "Проверка условия (".$block['text'].") = " . $result );
-            $block_id = 0xdeadbeef;
+            $block_id = $block_no = 0xdeadbeef;
+            $prefix = "";
             foreach ( $childs as $i=>$child ) {
-                if ( strtolower ($child['text']) === "no" && $result = false ) { $block_id = $child['to']; break; }
-                if ( strtolower ($child['text']) === "yes" && $result = true ) { $block_id = $child['to']; break; }
-                if ( preg_match('/([0-9]{1,2}|100)%/', $text, $matches) && $result = true ) {    // случайный переход
-                    $prc = str_replace ( "%", "", $matches[0]);
-                    if ( mt_rand (1, 100) <= $prc ) { $block_id = $child['to']; break; }
+                if ( strtolower ($child['text']) === "no" ) {
+                    if ( $result == false ) {
+#                        Debug ($block['text'] . " : ".$prefix."NO");
+                        $block_id = $child['to']; break;
+                    }
+                    else $block_no = $child['to'];
                 }
+                if ( strtolower ($child['text']) === "yes" && $result == true ) {
+#                    Debug ($block['text'] . " : YES");
+                    $block_id = $child['to']; break;
+                }
+                if ( preg_match('/([0-9]{1,2}|100)%/', $child['text'], $matches) && $result == true ) {    // случайный переход
+                    $prc = str_replace ( "%", "", $matches[0]);
+                    $roll = mt_rand (1, 100);
+                    if ( $roll <= $prc ) {
+#                        Debug ($block['text'] . " : PROBABLY($roll/$prc) YES");
+                        $block_id = $child['to']; break;
+                    }
+                    else {
+                        if ( $block_no == 0xdeadbeef ) {
+                            $prefix = "PROBABLY($roll/$prc) ";
+                            $result = false;
+                        }
+                        else {
+#                            Debug ($block['text'] . " : PROBABLY($roll/$prc) NO");
+                            $block_id = $block_no; break;
+                        }
+                    }
+                }    // случайный переход
             }
             if ( $block_id != 0xdeadbeef ) AddBotQueue ( $player_id, $strat_id, $block_id, $queue['end'], $sleep );
             else Debug ( "Не удалось выбрать условный переход." );
