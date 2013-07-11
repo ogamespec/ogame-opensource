@@ -11,11 +11,6 @@ function AddBotQueue ($player_id, $strat_id, $block_id, $when, $seconds)
     return AddDBRow ( $queue, 'queue' );
 }
 
-// Обработчик исключения при выполнении задач бота
-function BotException ($e)
-{
-}
-
 // Интерпретатор блоков
 function ExecuteBlock ($queue, $block, $childs )
 {
@@ -112,13 +107,7 @@ function ExecuteBlock ($queue, $block, $childs )
             break;
 
         default:    // Обычный блок (квадрат), выход один.
-            try {
-                $sleep = eval ( $block['text'] . ";" );
-            }
-            catch (Exception $e) {
-                BotException ($e);
-                $sleep = 0;
-            }
+            $sleep = eval ( $block['text'] . ";" );
             if ( $sleep == NULL ) $sleep = 0;
             $block_id = $childs[0]['to'];
             AddBotQueue ( $player_id, $strat_id, $block_id, $queue['end'], $sleep );
