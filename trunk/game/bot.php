@@ -112,14 +112,13 @@ function ExecuteBlock ($queue, $block, $childs )
             break;
 
         default:    // Обычный блок (квадрат), выход один.
-            $sleep = eval (
-        " try { " . $block['text'] . ";"
-        } catch (Exception $e) {
-            BotException ($e);
-        }"
-                );
-
-//$block['text'] . ";" );
+            try {
+                $sleep = eval ( $block['text'] . ";" );
+            }
+            catch (Exception $e) {
+                BotException ($e);
+                $sleep = 0;
+            }
             if ( $sleep == NULL ) $sleep = 0;
             $block_id = $childs[0]['to'];
             AddBotQueue ( $player_id, $strat_id, $block_id, $queue['end'], $sleep );
