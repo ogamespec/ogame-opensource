@@ -580,17 +580,6 @@ function PageFooter ($msg="", $error="", $popup=false, $headerH=81)
     echo "    opacity: .90;\n";
     echo "}\n";
     echo "</style>\n";
-
-/*
-    if ( $popup == false ) {
-?>
-<script type="text/javascript">
-var myScroll = new iScroll('content');
-</script>
-<?php
-    }
-*/
-
     echo "</body></html>\n";
 }
 

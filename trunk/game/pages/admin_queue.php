@@ -45,7 +45,19 @@ function QueueDesc ( $queue )
         case "UnbanPlayer": return "Разбанить игрока";
         case "AllowAttacks": return "Разрешить атаки";
         case "AI":
-            return "Задание бота ";
+            $strat_id = $queue['sub_id'];
+            $block_id = $queue['obj_id'];
+            $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $strat_id LIMIT 1;";
+            $result = dbquery ( $query );
+            $strat = dbarray ($result);
+            $source = json_decode ( $strat['source'], true );
+            foreach ( $source['nodeDataArray'] as $i=>$arr ) {
+                if ( $arr['key'] == $block_id ) {
+                    $block_text = $arr['text'];
+                    break;
+                }
+            }
+            return "Задание бота (стратегия ".$strat['name'].") : <br>$block_text";
 
         case "CommanderOff": return "Заканчивается офицер: Командир";
         case "AdmiralOff": return "Заканчивается офицер: Адмирал";
