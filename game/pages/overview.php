@@ -15,9 +15,10 @@ if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 
 $now = time();
-UpdateQueue ( $now );
+if ($GlobalUser['admin'] == 0) UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
 $aktplanet = ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
+
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 

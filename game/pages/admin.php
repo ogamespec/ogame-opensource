@@ -22,7 +22,6 @@ loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "admin", $GlobalUser['lang'] );
 
-UpdateQueue ( time () );
 $session = $_GET['session'];
 $mode = $_GET['mode'];
 
