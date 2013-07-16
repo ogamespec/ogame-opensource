@@ -104,6 +104,12 @@ if ( $GlobalUser['ally_id'] == 0 )
 {
     if ( $_GET['a'] == 1 && $_GET['weiter'] == 1 )    // Основать альянс.
     {
+        $_POST['tag'] = str_replace ( "\"", "", $_POST['tag']);
+        $_POST['tag'] = str_replace ( "'", "", $_POST['tag']);
+
+        $_POST['name'] = str_replace ( "\"", "", $_POST['name']);
+        $_POST['name'] = str_replace ( "'", "", $_POST['name']);
+
         if (mb_strlen ($_POST['tag'], "UTF-8")  < 3) $AllianzenError = "Аббревиатура альянса слишком коротка";
         else if (mb_strlen ($_POST['name'], "UTF-8")  < 3) $AllianzenError = "Название альянса слишком короткое";
         else if (IsAllyTagExist ($_POST['tag'])) $AllianzenError = "Альянс ".$_POST['tag']." к сожалению уже существует!";
