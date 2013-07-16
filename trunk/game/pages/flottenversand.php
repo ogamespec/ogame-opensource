@@ -343,14 +343,14 @@ else {
     $f = fopen ( $fleetlock, 'w' );
     fclose ($f);
 
-    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $cargo_m, $cargo_k, $cargo_d, $cons, time(), $union_id, $hold_time );
+    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $cargo_m, $cargo_k, $cargo_d, $cons['fleet'] + $cons['probes'], time(), $union_id, $hold_time );
     $queue = GetFleetQueue ($fleet_id);
 
     UserLog ( $aktplanet['owner_id'], "FLEET", 
      "Отправка флота $fleet_id: " . GetMissionNameDebug ($order) . " " .
      $origin['name'] ." [".$origin['g'].":".$origin['s'].":".$origin['p']."] -&gt; ".$target['name']." [".$target['g'].":".$target['s'].":".$target['p']."]<br>" .
      DumpFleet ($fleet) . "<br>" .
-     "Время полёта: " . BuildDurationFormat ($flighttime) . ", удержание: " . BuildDurationFormat ($hold_time) . ", затраты дейтерия: " . nicenum ($cons) . ", союз: " . $union_id );
+     "Время полёта: " . BuildDurationFormat ($flighttime) . ", удержание: " . BuildDurationFormat ($hold_time) . ", затраты дейтерия: " . nicenum ($cons['fleet'] + $cons['probes']) . ", союз: " . $union_id );
 
     if ( $union_id ) {
         $union_time = UpdateUnionTime ( $union_id, $queue['end'], $fleet_id );
@@ -362,8 +362,6 @@ else {
     AdjustShips ( $fleet, $origin['planet_id'], '-' );
 
     unlink ( $fleetlock );
-
-    //echo "Груз дейт : $cargo_d, Затраты соляры : $cons, Грузоподъемность : $cargo, Остаток в трюмах : $space<br>";
 
 //    echo "<br>";
 //    print_r ( $queue);
@@ -393,7 +391,7 @@ else {
       <th>Скорость</th><th><?=nicenum($slowest_speed);?></th>
    </tr>
    <tr height="20">
-      <th>Потребление</th><th><?=nicenum($cons);?></th>
+      <th>Потребление</th><th><?=nicenum($cons['fleet'] + $cons['probes']);?></th>
    </tr>
    <tr height="20">
      <th>Отправлен с</th><th><a href="index.php?page=galaxy&galaxy=<?=intval($_POST['thisgalaxy']);?>&system=<?=intval($_POST['thissystem']);?>&position=<?=intval($_POST['thisplanet']);?>&session=<?=$session;?>" >[<?=intval($_POST['thisgalaxy']);?>:<?=intval($_POST['thissystem']);?>:<?=intval($_POST['thisplanet']);?>]</a></th>
