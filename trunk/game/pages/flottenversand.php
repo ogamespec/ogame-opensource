@@ -164,21 +164,22 @@ else if ( $order == 5 ) {    // Держаться
 $dist = FlightDistance ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']) );
 $slowest_speed = FlightSpeed ( $fleet, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] );
 $flighttime = FlightTime ( $dist, $slowest_speed, $fleetspeed / 10, $unispeed );
-$cons = FlightCons ( $fleet, $dist, $flighttime, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'], $unispeed );
+$cons = FlightCons ( $fleet, $dist, $flighttime, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'], $unispeed, $hold_time / 3600 );
 $cargo = $spycargo = $numships = 0;
 foreach ($fleet as $id=>$amount)
 {
     if ($id != 210) $cargo += FleetCargo ($id) * $amount;        // не считать зонды.
     else $spycargo = FleetCargo ($id) * $amount;
     $numships += $amount;
-
-    $hours = $hold_time / 3600;    // затраты на удержание
-    $cons += $hours * $amount * FleetCons ($id, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] ) / 10;
 }
+
+$space = ( ($cargo + $spycargo) - ($cons['fleet'] + $cons['probes']) ) - ($spycargo - $cons['probes']);
+
+if ( $origin['d'] < ($cons['fleet'] + $cons['probes']) ) FleetError ( "Недостаточно топлива!" );
+else if ( $space < 0 ) FleetError ( "Недостаточно места в грузовом отсеке!" );
 
 // Ограничить перевозимые ресурсы грузоподъемностью флота и затратами на полёт.
 $cargo_m = $cargo_k = $cargo_d = 0;
-$space = $cargo - $cons;
 if ( $space > 0 ) {
     $cargo_m = min ( $space, $resource1 );
     $space -= $cargo_m;
@@ -191,9 +192,6 @@ if ( $space > 0 ) {
     $cargo_d = min ( $space, $resource3 );
     $space -= $cargo_d;
 }
-
-if ( ($origin['d'] - $cargo_d) < $cons) FleetError ( "Недостаточно топлива!" );
-else if ( $cons > ( ($cargo+$spycargo)-($cargo_m+$cargo_k+$cargo_d) ) ) FleetError ( "Недостаточно места в грузовом отсеке!" );
 
 if ($numships <= 0) FleetError ( "Вы не выбрали корабли либо выбрали, но слишком мало!" );
 
@@ -360,7 +358,7 @@ else {
     }
 
     // Поднять флот с планеты.
-    AdjustResources ( $cargo_m, $cargo_k, $cargo_d + $cons, $origin['planet_id'], '-' );
+    AdjustResources ( $cargo_m, $cargo_k, $cargo_d + $cons['fleet'] + $cons['probes'], $origin['planet_id'], '-' );
     AdjustShips ( $fleet, $origin['planet_id'], '-' );
 
     unlink ( $fleetlock );

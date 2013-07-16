@@ -578,13 +578,13 @@ while ($num--)
     }
     echo "</th>\n";
 
-    // поле обломков (не показывать ПО < 500 единиц)
+    // поле обломков (не показывать ПО <= 300 единиц)
     echo "<th width=\"30\">";
     $debris = LoadPlanet ( $coord_g, $coord_s, $p, 2 );
     if ( $debris )
     {
         $harvesters = ceil ( ($debris['m'] + $debris['k']) / $UnitParam[209][3]);
-        if ( ($debris['m'] + $debris['k']) >= 500 )
+        if ( ($debris['m'] + $debris['k']) > 300 )
         {
 ?>
     <a style="cursor:pointer"
