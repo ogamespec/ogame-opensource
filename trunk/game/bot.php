@@ -4,6 +4,10 @@
 
 require_once "botapi.php";        // API
 
+// Глобальные переменные бота.
+$BotID = 0;        // номер текущего бота
+$BotNow = 0;       // время начала выполнения задания бота
+
 // Добавить блок в очередь
 function AddBotQueue ($player_id, $strat_id, $block_id, $when, $seconds)
 {
@@ -14,9 +18,10 @@ function AddBotQueue ($player_id, $strat_id, $block_id, $when, $seconds)
 // Интерпретатор блоков
 function ExecuteBlock ($queue, $block, $childs )
 {
-    global $db_prefix;
+    global $db_prefix, $BotID, $BotNow;
 
-    $player_id = $queue['owner_id'];
+    $BotNow = $queue['end'];
+    $BotID = $queue['owner_id'];
     $strat_id = $queue['sub_id'];
 
 #    Debug ( "Bot trace : " . $block['category'] . "(".$block['key']."): " . $block['text'] );
@@ -25,7 +30,7 @@ function ExecuteBlock ($queue, $block, $childs )
     {
         case "Start":
             $block_id = $childs[0]['to'];
-            AddBotQueue ( $player_id, $strat_id, $block_id, $queue['end'], 0 );
+            AddBotQueue ( $BotID, $strat_id, $block_id, $BotNow, 0 );
             RemoveQueue ( $queue['task_id'] );
             break;
 
@@ -42,7 +47,7 @@ function ExecuteBlock ($queue, $block, $childs )
                     break;
                 }            
             }
-            AddBotQueue ( $player_id, $strat_id, $block_id, $queue['end'], 0 );
+            AddBotQueue ( $BotID, $strat_id, $block_id, $BotNow, 0 );
             RemoveQueue ( $queue['task_id'] );
             break;
 
@@ -55,7 +60,7 @@ function ExecuteBlock ($queue, $block, $childs )
                 $done = false;
                 foreach ( $strat['nodeDataArray'] as $i=>$arr ) {
                     if ( $arr['text'] === $block['text'] && $arr['category'] === "Label" ) {
-                        AddBotQueue ( $player_id, $strat_id, $arr['key'], $queue['end'], 0 );
+                        AddBotQueue ( $BotID, $strat_id, $arr['key'], $BotNow, 0 );
                         $done = true;
                         break;
                     }
@@ -101,7 +106,7 @@ function ExecuteBlock ($queue, $block, $childs )
                     }
                 }    // случайный переход
             }
-            if ( $block_id != 0xdeadbeef ) AddBotQueue ( $player_id, $strat_id, $block_id, $queue['end'], $sleep );
+            if ( $block_id != 0xdeadbeef ) AddBotQueue ( $BotID, $strat_id, $block_id, $BotNow, 0 );
             else Debug ( "Не удалось выбрать условный переход." );
             RemoveQueue ( $queue['task_id'] );
             break;
@@ -110,7 +115,7 @@ function ExecuteBlock ($queue, $block, $childs )
             $sleep = eval ( $block['text'] . ";" );
             if ( $sleep == NULL ) $sleep = 0;
             $block_id = $childs[0]['to'];
-            AddBotQueue ( $player_id, $strat_id, $block_id, $queue['end'], $sleep );
+            AddBotQueue ( $BotID, $strat_id, $block_id, $BotNow, $sleep );
             RemoveQueue ( $queue['task_id'] );
             break;
     }
@@ -142,22 +147,12 @@ function AddBot ($name)
 // Запустить бота (выполнить блок Start для стратегии _start)
 function StartBot ($player_id)
 {
-    global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."botstrat WHERE name = '_start' LIMIT 1";
-    $result = dbquery ($query);
-    if ($result) {
-        $row = dbarray ($result);
-        $strat = json_decode ( $row['source'], true );
-        $strat_id = $row['id'];
+    global $BotID, $BotNow;
 
-        foreach ( $strat['nodeDataArray'] as $i=>$arr ) {
-            if ( $arr['category'] === "Start" ) {
-                AddBotQueue ( $player_id, $strat_id, $arr['key'], time(), 0 );
-                break;
-            }
-        }
-    }
-    else Debug ( "Стартовая стратегия не найдена." );
+    $BotID = $player_id;
+    $BotNow = time ();
+
+    if ( BotExec("_start") == 0 ) Debug ( "Стартовая стратегия не найдена." );
 }
 
 // Остановить бота (просто удалить все задания AI)
