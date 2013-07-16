@@ -597,7 +597,7 @@ function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
     $text = "\nОдин из Ваших флотов (".FleetList($fleet).") достиг ".$target['name']."\n" .
                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
-               ". Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия\n" .
+               ". Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'] + floor ($fleet_obj['fuel'] / 2) )." дейтерия\n" .
                "<br/>\n";
     SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Удержание флота", $text, 5, $queue['end']);
 }
