@@ -56,6 +56,9 @@ function PageAlly_ChangeTag ()
 
     if ( method() === "POST" && $_GET['a'] == 9 && $_GET['weiter'] == 1)
     {
+        $_POST['newtag'] = str_replace ( "\"", "", $_POST['newtag']);
+        $_POST['newtag'] = str_replace ( "'", "", $_POST['newtag']);
+
         $now = time ();
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
         if ( ! ($myrank['rights'] & 0x020) ) $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
@@ -97,6 +100,9 @@ function PageAlly_ChangeName ()
 
     if ( method() === "POST" && $_GET['a'] == 10 && $_GET['weiter'] == 1)
     {
+        $_POST['newname'] = str_replace ( "\"", "", $_POST['newname']);
+        $_POST['newname'] = str_replace ( "'", "", $_POST['newname']);
+
         $now = time ();
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
         if ( ! ($myrank['rights'] & 0x020) ) $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
