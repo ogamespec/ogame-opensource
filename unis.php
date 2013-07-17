@@ -9,11 +9,6 @@ include ('header.tpl');
 ?>
 <link rel='stylesheet' type='text/css' href='css/styles.css' />
 <link rel='stylesheet' type='text/css' href='css/about.css' />
-<script language="JavaScript">
-if (parent.frames.length == 0) {
-    window.location = "/";
-}
-</script>
 <script src="js/functions.js" type="text/javascript"></script>
 <script language="JavaScript" src="js/tw-sack.js"></script>
 <script language="JavaScript" src="js/registration.js"></script>

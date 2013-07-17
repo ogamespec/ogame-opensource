@@ -76,14 +76,6 @@ function t_building() {
 }
 //--> 
 
-<?php
-// Выйти из фрейма.
-if ( intval($_GET['lgn']) == 1 )
-{
-    echo "top.location.href=\"index.php?page=overview&session=$session\"";
-}
-?>
-
 </script> 
 
 <?php
