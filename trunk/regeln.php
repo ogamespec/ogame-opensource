@@ -1,5 +1,10 @@
 <?php
 
+if ( !file_exists ("config.php")) {
+    include ("install.php");
+    die ();
+}
+
 include ('loca_startpage.php');
 include ('common.php');
 
@@ -21,6 +26,8 @@ include ('header.tpl');
 <a href="#pustekuchen" style="display:none;"><?=loca("LOGIN_LINK");?></a>
 
 <div id="main">
+
+<?php include ('products.php'); ?>
 
 <?php include ('loginmenu.tpl'); ?>    
 

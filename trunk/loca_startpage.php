@@ -120,6 +120,16 @@ require_once "loca.php";
         loca_add("JOIN_IACCEPT", "Ich akzeptiere die");
         loca_add("JOIN_TAC", "AGB");
         loca_add("JOIN_REGISTER", "Registrierung abschicken");
+
+        loca_add("INSTALL_MDB", "Master Database Einstellungen");
+        loca_add("INSTALL_MDB_TIP", "Die zentrale Datenbank auf einem anderen Server befinden (in der Regel in der gleichen Stelle und der Startseite) und speichert Informationen über alle Universen, Gutscheine und andere allgemeine Informationen.");
+        loca_add("INSTALL_MDB_HOST", "Host");
+        loca_add("INSTALL_MDB_USER", "Benutzer");
+        loca_add("INSTALL_MDB_PASS", "Passwort");
+        loca_add("INSTALL_MDB_NAME", "DB name");
+        loca_add("INSTALL_INSTALL", "Installieren");
+        loca_add("INSTALL_ERROR1", "Kann nicht speichern Konfigurationsdatei.");
+        loca_add("INSTALL_DONE", "Installieren abzuschließen. Config Datei erstellt.");
     }
 
     // "en"
@@ -230,6 +240,16 @@ require_once "loca.php";
         loca_add("JOIN_IACCEPT", "I accept the");
         loca_add("JOIN_TAC", "T&C's");
         loca_add("JOIN_REGISTER", "Join now!");
+
+        loca_add("INSTALL_MDB", "Master Database Settings");
+        loca_add("INSTALL_MDB_TIP", "The central database can be located on another server (usually in the same place where start page located) and stores information about all the universes, coupons and other general information.");
+        loca_add("INSTALL_MDB_HOST", "Host");
+        loca_add("INSTALL_MDB_USER", "User");
+        loca_add("INSTALL_MDB_PASS", "Password");
+        loca_add("INSTALL_MDB_NAME", "DB name");
+        loca_add("INSTALL_INSTALL", "Install");
+        loca_add("INSTALL_ERROR1", "Cannot save config file.");
+        loca_add("INSTALL_DONE", "Install complete. Config file created.");
     }
 
     // "ru"
@@ -349,8 +369,19 @@ require_once "loca.php";
         loca_add("JOIN_IACCEPT", "Я принимаю");
         loca_add("JOIN_TAC", "Основные положения");
         loca_add("JOIN_REGISTER", "Отправить регистрацию");
+
+        loca_add("INSTALL_MDB", "Настройки центральной базы данных");
+        loca_add("INSTALL_MDB_TIP", "Центральная база данных может находится на другом сервере (обычно там же, где и стартовая страница) и хранит информацию обо всех вселенных, купоны и пр. общую информацию");
+        loca_add("INSTALL_MDB_HOST", "Хост");
+        loca_add("INSTALL_MDB_USER", "Пользователь");
+        loca_add("INSTALL_MDB_PASS", "Пароль");
+        loca_add("INSTALL_MDB_NAME", "Название БД");
+        loca_add("INSTALL_INSTALL", "Инсталлировать");
+        loca_add("INSTALL_ERROR1", "Не удалось сохранить файл конфигурации.");
+        loca_add("INSTALL_DONE", "Установка завершена. Файл конфигурации создан.");
     }
 
+/*
     // "tr"
     $LocaLang = "tr";
     {
@@ -480,6 +511,7 @@ Soruyorsundur kendine bunu sana niye anlattigimi. Söyle desem: Sana burada beni
         loca_add("JOIN_TAC", "GIS");
         loca_add("JOIN_REGISTER", "Başvuruyu gönder");
     }
+*/
 
     // Язык стартовой страницы
     if ( !isset ($_COOKIE['ogamelang']) ) $LocaLang = "en";
