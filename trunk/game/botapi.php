@@ -41,6 +41,20 @@ function BotExec ($name)
     else return 0;
 }
 
+// Переменные бота​.
+
+function BotGetVar ( $var, $def_value=null )
+{
+    global $BotID, $BotNow;
+    return GetVar ( $BotID, $var, $def_value);
+}
+
+function BotSetVar ( $var, $value )
+{
+    global $BotID, $BotNow;
+    SetVar ( $BotID, $var, $value );
+}
+
 //------------------------------------------------------------------------------------
 // Строительство/снос построек, управление Сырьём
 
@@ -48,11 +62,34 @@ function BotExec ($name)
 function BotCanBuild ($obj_id)
 {
     global $BotID, $BotNow;
+    $user = LoadUser ($BotID);
+    $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $level = $aktplanet['b'.$obj_id] + 1;
+    $text = CanBuild ( $user, $aktplanet, $obj_id, $level, 0 );
+    return ( $text === '' );
 }
 
 // Начать постройку на активной планете.
 // Вернуть 0, если недостаточно условий или ресурсов для начала постройки. Вернуть количество секунд, которые нужно подождать пока завершится строительство.
 function BotBuild ($obj_id)
+{
+    global $BotID, $BotNow, $GlobalUni;
+    $user = LoadUser ($BotID);
+    $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $level = $aktplanet['b'.$obj_id] + 1;
+    $text = CanBuild ( $user, $aktplanet, $obj_id, $level, 0 );
+    if ( $text === '' ) {
+        $speed = $GlobalUni['speed'];
+        $duration = floor (BuildDuration ( $obj_id, $level, $aktplanet['b14'], $aktplanet['b15'], $speed ));
+        BuildEnque ( $user['aktplanet'], $obj_id, 0, $BotNow);
+        UpdatePlanetActivity ( $user['aktplanet'], $BotNow );
+        return $duration;
+    }
+    else return 0;
+}
+
+// Установить выработку сырья на активной планете (числа в процентах 0-100)
+function BotResourceSettings ( $met, $crys, $deut, $solar, $sats, $fusion )
 {
     global $BotID, $BotNow;
 }
