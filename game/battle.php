@@ -725,8 +725,8 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     if ( $battle_result == 0 )
     {
         $sum_cargo = CargoSummaryLastRound ( $a, $res );
-        $res = Plunder ( $sum_cargo, $p['m'], $p['k'], $p['d'] );
-        $cm = $res['cm']; $ck = $res['ck']; $cd = $res['cd'];
+        $captured = Plunder ( $sum_cargo, $p['m'], $p['k'], $p['d'] );
+        $cm = $captured['cm']; $ck = $captured['ck']; $cd = $captured['cd'];
     }
 
     // Создать поле обломков.
