@@ -1,7 +1,7 @@
 <?php
 
-if ( !file_exists ("config.php")) {
-    include ("install.php");
+if ( file_exists ("config.php")) {
+    include ("home.php");
     die ();
 }
 
@@ -32,12 +32,10 @@ include ('header.tpl');
 <?php include ('loginmenu.tpl'); ?>    
 
 <div id="mainmenu">
-<?php mainmenu ("home"); ?>
-<br><br>
-<?php include ('stat.php'); ?>
+<?php mainmenu ("install"); ?>
 </div>
 
-<?php include ('content_home.tpl'); ?>
+<?php include ('content_install.tpl'); ?>
 
 <script>
 document.loginForm.universe.focus();

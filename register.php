@@ -1,5 +1,10 @@
 <?php
 
+if ( !file_exists ("config.php")) {
+    include ("install.php");
+    die ();
+}
+
 include ('loca_startpage.php');
 include ('common.php');
 
