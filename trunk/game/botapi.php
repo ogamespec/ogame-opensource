@@ -11,14 +11,6 @@ function BotIdle ()
 {
 }
 
-// Получить уровень исследования
-function BotGetResearch ($n)
-{
-    global $BotID, $BotNow;
-    $bot = LoadUser ($BotID);
-    return $bot['r'.$n];
-}
-
 // Параллельно запустить новую стратегию бота. Вернуть 1, если ОК или 0, если не удалось запустить стратегию.
 function BotExec ($name)
 {
@@ -89,9 +81,46 @@ function BotBuild ($obj_id)
 }
 
 // Установить выработку сырья на активной планете (числа в процентах 0-100)
-function BotResourceSettings ( $met, $crys, $deut, $solar, $sats, $fusion )
+function BotResourceSettings ( $last1, $last2, $last3, $last4, $last12, $last212 )
 {
-    global $BotID, $BotNow;
+    global $db_prefix, $BotID, $BotNow;
+    $user = LoadUser ($BotID);
+    $aktplanet = GetPlanet ( $user['aktplanet'] );
+
+    if ( $last1 < 0 ) $last1 = 0;        // Не должно быть < 0.
+    if ( $last2 < 0 ) $last2 = 0;
+    if ( $last3 < 0 ) $last3 = 0;
+    if ( $last4 < 0 ) $last4 = 0;
+    if ( $last12 < 0 ) $last12 = 0;
+    if ( $last212 < 0 ) $last212 = 0;
+
+    if ( $last1 > 100 ) $last1 = 100;        // Не должно быть > 100.
+    if ( $last2 > 100 ) $last2 = 100;
+    if ( $last3 > 100 ) $last3 = 100;
+    if ( $last4 > 100 ) $last4 = 100;
+    if ( $last12 > 100 ) $last12 = 100;
+    if ( $last212 > 100 ) $last212 = 100;
+
+    // Сделать кратно 10.
+    $last1 = round ($last1 / 10) * 10 / 100;
+    $last2 = round ($last2 / 10) * 10 / 100;
+    $last3 = round ($last3 / 10) * 10 / 100;
+    $last4 = round ($last4 / 10) * 10 / 100;
+    $last12 = round ($last12 / 10) * 10 / 100;
+    $last212 = round ($last212 / 10) * 10 / 100;
+
+    $planet_id = $aktplanet['planet_id'];
+    $query = "UPDATE ".$db_prefix."planets SET ";
+    $query .= "mprod = $last1, ";
+    $query .= "kprod = $last2, ";
+    $query .= "dprod = $last3, ";
+    $query .= "sprod = $last4, ";
+    $query .= "fprod = $last12, ";
+    $query .= "ssprod = $last212 ";
+    $query .= " WHERE planet_id = $planet_id";
+    dbquery ($query);
+
+    UpdatePlanetActivity ( $planet_id, $BotNow );
 }
 
 //------------------------------------------------------------------------------------
@@ -99,5 +128,13 @@ function BotResourceSettings ( $met, $crys, $deut, $solar, $sats, $fusion )
 
 //------------------------------------------------------------------------------------
 // Исследования
+
+// Получить уровень исследования
+function BotGetResearch ($n)
+{
+    global $BotID, $BotNow;
+    $bot = LoadUser ($BotID);
+    return $bot['r'.$n];
+}
 
 ?>
