@@ -277,7 +277,7 @@
       myDiagram.undoManager.isEnabled = true;
       document.getElementById("strategyName").value = getSelectedText ('strategyId');
 
-      data = myDiagram.makeImageData ({ scale: 1 });
+      data = myDiagram.makeImageData ({ scale: 1, background: 'rgba(65, 86, 128, 0.9)', maxSize: new go.Size(10000, 10000) });
       document.getElementById("preview_img").src = data; 
   }
   function whenNew ()

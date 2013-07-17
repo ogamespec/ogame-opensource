@@ -14,7 +14,7 @@ $InstallError = "";
 // -------------------------------------------------------------------------------------------------------------------------
 
 $tab_unis = array (          // Вселенные
-    'id' => 'INT AUTO_INCREMENT PRIMARY KEY', 'num' => 'INT', 'dbshot' => 'TEXT', 'dbuser' => 'TEXT', 'dbpass' => 'TEXT', 'dbname' => 'TEXT', 'uniurl' => 'TEXT',
+    'id' => 'INT AUTO_INCREMENT PRIMARY KEY', 'num' => 'INT', 'dbhost' => 'TEXT', 'dbuser' => 'TEXT', 'dbpass' => 'TEXT', 'dbname' => 'TEXT', 'uniurl' => 'TEXT',
 );
 
 $tab_coupons = array (       // Купоны

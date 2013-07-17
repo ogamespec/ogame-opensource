@@ -26,7 +26,11 @@ PageHeader ("overview");
 
 // *******************************************************************
 
-if ( key_exists ('lgn', $_GET) && intval($_GET['lgn']) == 1 ) UpdatePlanetActivity ( $aktplanet['planet_id'] );  // Обновить активность на Главной планете при входе в игру.
+if ( key_exists ('lgn', $_GET) && intval($_GET['lgn']) == 1 )
+{
+
+    UpdatePlanetActivity ( $aktplanet['planet_id'] );  // Обновить активность на Главной планете при входе в игру.
+}
 
 $uni = $GlobalUni;
 
