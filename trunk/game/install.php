@@ -21,6 +21,12 @@ function hostname () {
     return substr ( $host, 0, $pos+1 );
 }
 
+function uniurl () {
+    $host = $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+    $pos = strrpos ( $host, "/game/install.php" );
+    return substr ( $host, 0, $pos );
+}
+
 ob_start ();
 
 // Проверить настройки вселенной.
@@ -356,6 +362,22 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."iplogs AUTO_INCREMENT = 1;" );
     dbquery ( "INSERT INTO ".$_POST["db_prefix"]."botstrat VALUES ( 1, 'backup', '')" );
 
+    // Записать вселенную в Мастер-базу.
+    $mdb_enable = ($_POST["mdb_enable"]==="on"?1:0);
+    if ($mdb_enable)
+    {
+        $mdb_connect = @mysql_connect($_POST["mdb_host"], $_POST["mdb_user"], $_POST["mdb_pass"], true);
+        $mdb_select = @mysql_select_db($_POST["mdb_name"], $mdb_connect);
+        $query = "SELECT id FROM unis";
+        $result = mysql_query ( $query, $mdb_connect );
+        if (!$result) {
+            $query = 'CREATE TABLE unis ( id INT AUTO_INCREMENT PRIMARY KEY, num INT, dbhost TEXT, dbuser TEXT, dbpass TEXT, dbname TEXT, uniurl TEXT ) CHARACTER SET utf8 COLLATE utf8_general_ci';
+            mysql_query ( $query, $mdb_connect );
+        }
+        $query = "INSERT INTO unis VALUES ( NULL, ".$_POST["uni_num"].", '".$_POST["db_host"]."', '".$_POST["db_user"]."', '".$_POST["db_pass"]."', '".$_POST["db_name"]."', '".uniurl()."' );";
+        mysql_query ( $query, $mdb_connect );
+    }
+
     // Сохранить файл конфигурации.
     $file = fopen ("config.php", "wb");
     if ($file == FALSE) $InstallError = loca('INSTALL_ERROR1');
@@ -370,6 +392,11 @@ if ( key_exists("install", $_POST) && CheckParameters() )
         fwrite ($file, "$"."db_name=\"". $_POST["db_name"] ."\";\r\n");
         fwrite ($file, "$"."db_prefix=\"". $_POST["db_prefix"] ."\";\r\n");
         fwrite ($file, "$"."db_secret=\"". $_POST["db_secret"] ."\";\r\n");
+        fwrite ($file, "$"."mdb_enable=". $mdb_enable .";\r\n");
+        fwrite ($file, "$"."mdb_host=\"". $_POST["mdb_host"] ."\";\r\n");
+        fwrite ($file, "$"."mdb_user=\"". $_POST["mdb_user"] ."\";\r\n");
+        fwrite ($file, "$"."mdb_pass=\"". $_POST["mdb_pass"] ."\";\r\n");
+        fwrite ($file, "$"."mdb_name=\"". $_POST["mdb_name"] ."\";\r\n");
         fwrite ($file, "?>");
         fclose ($file);
         $InstallError = "<font color=lime>".loca('INSTALL_DONE')."</font>";
@@ -418,6 +445,13 @@ td.c { background-color: #334445; }
 <tr><td><?=loca('INSTALL_DB_NAME');?></td><td><input type=text class='text' name='db_name'></td></tr>
 <tr><td><a title='<?=loca('INSTALL_TIP1');?>'><?=loca('INSTALL_DB_PREFIX');?></a></td><td><input type=text value='uni1_' class='text' name='db_prefix'></td></tr>
 <tr><td><a title='<?=loca('INSTALL_TIP2');?>'><?=loca('INSTALL_DB_SECRET');?></a></td><td><input type=text type=password class='text' name='db_secret'></td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td colspan=2 class='c'><a title='<?=loca('INSTALL_MDB_TIP');?>'><?=loca('INSTALL_MDB');?></a></td></tr>
+<tr><td><?=loca('INSTALL_MDB_ENABLE');?></td><td><input type=checkbox class='text' name='mdb_enable'></td></tr>
+<tr><td><?=loca('INSTALL_MDB_HOST');?></td><td><input type=text value='localhost' class='text' name='mdb_host'></td></tr>
+<tr><td><?=loca('INSTALL_MDB_USER');?></td><td><input type=text class='text' name='mdb_user'></td></tr>
+<tr><td><?=loca('INSTALL_MDB_PASS');?></td><td><input type=password class='text'  name='mdb_pass'></td></tr>
+<tr><td><?=loca('INSTALL_MDB_NAME');?></td><td><input type=text class='text' name='mdb_name'></td></tr>
 </table>
 
 </td><td valign=top>
