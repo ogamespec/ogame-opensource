@@ -81,7 +81,7 @@ function BotBuild ($obj_id)
 }
 
 // Установить выработку сырья на активной планете (числа в процентах 0-100)
-function BotResourceSettings ( $last1, $last2, $last3, $last4, $last12, $last212 )
+function BotResourceSettings ( $last1=100, $last2=100, $last3=100, $last4=100, $last12=100, $last212=100 )
 {
     global $db_prefix, $BotID, $BotNow;
     $user = LoadUser ($BotID);
@@ -135,6 +135,17 @@ function BotGetResearch ($n)
     global $BotID, $BotNow;
     $bot = LoadUser ($BotID);
     return $bot['r'.$n];
+}
+
+// Проверить - можем ли мы начать исследование на главной планете (1-да, 0-нет)
+function BotCanResearch ($obj_id)
+{
+}
+
+// Начать исследование на главной планете.
+// Вернуть 0, если недостаточно условий или ресурсов для начала исследования. Вернуть количество секунд, которые нужно подождать пока завершится исследование.
+function BotResearch ($obj_id)
+{
 }
 
 ?>
