@@ -90,6 +90,9 @@ onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_ME
 <a href="index.php?page=admin&session=<?=$session;?>&mode=BotEdit"><img src="img/admin_botedit.png" width='32' height='32'
 onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_BOTEDIT");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
+<a href="index.php?page=admin&session=<?=$session;?>&mode=Coupons"><img src="img/admin_coupons.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_COUPONS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
 </td></tr></table><br/>
 
 <?php
@@ -135,6 +138,7 @@ function Admin_Home ()
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=BattleReport"><img src="img/admin_battle.png"><br><?=loca("ADM_MENU_BATTLELOGS");?></a></th>
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=UserLogs"><img src="img/admin_userlogs.png"><br><?=loca("ADM_MENU_USERLOGS");?></a></th>
     <th><a href="index.php?page=admin&session=<?=$session;?>&mode=BotEdit"><img src="img/admin_botedit.png"><br><?=loca("ADM_MENU_BOTEDIT");?></a></th>
+    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Coupons"><img src="img/admin_coupons.png"><br><?=loca("ADM_MENU_COUPONS");?></a></th>
     </tr>
     </table>
 <?php
@@ -159,6 +163,7 @@ include "admin_bots.php";
 include "admin_battle.php";
 include "admin_userlogs.php";
 include "admin_botedit.php";
+include "admin_coupons.php";
 
 // ========================================================================================
 
@@ -189,6 +194,7 @@ else if ( $mode === "Bots" ) Admin_Bots ();
 else if ( $mode === "BattleReport" ) Admin_BattleReport ();
 else if ( $mode === "UserLogs" ) Admin_UserLogs ();
 else if ( $mode === "BotEdit" ) Admin_BotEdit ();
+else if ( $mode === "Coupons" ) Admin_Coupons ();
 else Admin_Home ();
 
 echo "</table>\n";
