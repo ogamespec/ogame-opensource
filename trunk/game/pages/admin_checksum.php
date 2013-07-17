@@ -54,6 +54,7 @@ function Admin_Checksum ()
         'pages/admin_broadcast.php', 
         'pages/admin_browse.php', 
         'pages/admin_checksum.php', 
+        'pages/admin_coupons.php', 
         'pages/admin_debug.php', 
         'pages/admin_errors.php', 
         'pages/admin_expedition.php', 
