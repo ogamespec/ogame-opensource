@@ -6,13 +6,21 @@ $LOCA["en"]["INSTALL_TITLE"] = "OGame Install";
 $LOCA["en"]["INSTALL_TIP"] = "Use mouseover on label names to get some tips";
 
 $LOCA["en"]["INSTALL_STARTPAGE"] = "Startpage Address";
-$LOCA["en"]["INSTALL_DB"] = "Database Settings";
+$LOCA["en"]["INSTALL_DB"] = "Universe Database Settings";
 $LOCA["en"]["INSTALL_DB_HOST"] = "Host";
 $LOCA["en"]["INSTALL_DB_USER"] = "User";
 $LOCA["en"]["INSTALL_DB_PASS"] = "Password";
 $LOCA["en"]["INSTALL_DB_NAME"] = "DB name";
 $LOCA["en"]["INSTALL_DB_PREFIX"] = "Table prefix";
 $LOCA["en"]["INSTALL_DB_SECRET"] = "Secret word";
+
+$LOCA["en"]["INSTALL_MDB"] = "Master Database Settings";
+$LOCA["en"]["INSTALL_MDB_TIP"] = "The central database can be located on another server (usually in the same place where start page located) and stores information about all the universes, coupons and other general information.";
+$LOCA["en"]["INSTALL_MDB_ENABLE"] = "Add this universe to master database?";
+$LOCA["en"]["INSTALL_MDB_HOST"] = "Host";
+$LOCA["en"]["INSTALL_MDB_USER"] = "User";
+$LOCA["en"]["INSTALL_MDB_PASS"] = "Password";
+$LOCA["en"]["INSTALL_MDB_NAME"] = "DB name";
 
 $LOCA["en"]["INSTALL_UNI"] = "Universe Settings";
 $LOCA["en"]["INSTALL_UNI_NUM"] = "Universe number";
