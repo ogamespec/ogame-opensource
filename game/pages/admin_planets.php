@@ -29,13 +29,16 @@ function Admin_Planets ()
             $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
                                        'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
                                       'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
-                                      'm', 'k', 'd', 'g', 's', 'p', 'diameter', 'type', 'temp' );
+                                      'm', 'k', 'd', 'g', 's', 'p', 'diameter', 'type', 'temp', 'mprod', 'kprod', 'dprod', 'sprod', 'fprod', 'ssprod' );
             $moon_param = array ( 'g', 's', 'p' );
 
             $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
             foreach ( $param as $i=>$p ) {
-                if ( $i == 0 ) $query .= "$p=".intval($_POST[$p]);
-                else $query .= ", $p=".intval($_POST[$p]);
+                if ( strpos ( $p, "prod") ) $query .= ", $p='".$_POST[$p]."'";
+                else {
+                    if ( $i == 0 ) $query .= "$p=".intval($_POST[$p]);
+                    else $query .= ", $p=".intval($_POST[$p]);
+                }
             }
             $query .= " WHERE planet_id=$cp;";
 
@@ -327,13 +330,72 @@ function reset ()
                     echo " " . date ('i\m s\s', $delta) . " <a href=\"index.php?page=admin&session=$session&mode=Planets&action=cooldown_gates&cp=".$planet['planet_id']."\">остудить</a>";
                 }
             }
-            echo "</th><th><input id=\"obj$gid\" type=\"text\" size=3 name=\"b$gid\" value=\"".$planet["b$gid"]."\" /></th></tr>\n";
+            echo "</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=3 name=\"b$gid\" value=\"".$planet["b$gid"]."\" />";
+
+            // управление шахтами и выработкой энергии.
+            if ( $gid == 1 && $planet['type'] != 0 ) {
+                echo "<select name='mprod'>\n";
+                for ($prc=0; $prc<=1; $prc+=0.1) {
+                    echo "<option value='$prc' ";
+                    if ( $planet["mprod"] == $prc."" ) echo " selected";
+                    echo ">".($prc * 100)."</option>\n";
+                }
+                echo "</select>\n";
+            }
+            if ( $gid == 2 && $planet['type'] != 0 ) {
+                echo "<select name='kprod'>\n";
+                for ($prc=0; $prc<=1; $prc+=0.1) {
+                    echo "<option value='$prc' ";
+                    if ( $planet["kprod"] == $prc."" ) echo " selected";
+                    echo ">".($prc * 100)."</option>\n";
+                }
+                echo "</select>\n";
+            }
+            if ( $gid == 3 && $planet['type'] != 0 ) {
+                echo "<select name='dprod'>\n";
+                for ($prc=0; $prc<=1; $prc+=0.1) {
+                    echo "<option value='$prc' ";
+                    if ( $planet["dprod"] == $prc."" ) echo " selected";
+                    echo ">".($prc * 100)."</option>\n";
+                }
+                echo "</select>\n";
+            }
+            if ( $gid == 4 && $planet['type'] != 0 ) {
+                echo "<select name='sprod'>\n";
+                for ($prc=0; $prc<=1; $prc+=0.1) {
+                    echo "<option value='$prc' ";
+                    if ( $planet["sprod"] == $prc."" ) echo " selected";
+                    echo ">".($prc * 100)."</option>\n";
+                }
+                echo "</select>\n";
+            }
+            if ( $gid == 12 && $planet['type'] != 0 ) {
+                echo "<select name='fprod'>\n";
+                for ($prc=0; $prc<=1; $prc+=0.1) {
+                    echo "<option value='$prc' ";
+                    if ( $planet["fprod"] == $prc."" ) echo " selected";
+                    echo ">".($prc * 100)."</option>\n";
+                }
+                echo "</select>\n";
+            }
+
+            echo "</nobr></th></tr>\n";
         }
         echo "</table></th>\n";
 
         echo "<th valign=top><table>\n";
         foreach ( $fleetmap as $i=>$gid) {
-            echo "<tr><th>".loca("NAME_$gid")."</th><th><input id=\"obj$gid\" type=\"text\" size=6 name=\"f$gid\" value=\"".$planet["f$gid"]."\" /></th></tr>\n";
+            echo "<tr><th>".loca("NAME_$gid")."</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=6 name=\"f$gid\" value=\"".$planet["f$gid"]."\" />";
+            if ( $gid == 212 && $planet['type'] != 0 ) {
+                echo "<select name='ssprod'>\n";
+                for ($prc=0; $prc<=1; $prc+=0.1) {
+                    echo "<option value='$prc' ";
+                    if ( $planet["ssprod"] == $prc."" ) echo " selected";
+                    echo ">".($prc * 100)."</option>\n";
+                }
+                echo "</select>\n";
+            }
+            echo "</nobr></th></tr>\n";
         }
         echo "</table></th>\n";
 
@@ -345,20 +407,26 @@ function reset ()
 
         echo "</tr>\n";
 
-        echo "<tr><th>Дата создания</th><th>".date ("Y-m-d H:i:s", $planet['date'])."</th> <td colspan=10 class=c>Заметки</td></tr>";
-        echo "<tr><th>Дата удаления</th><th>".date ("Y-m-d H:i:s", $planet['remove'])."</th> <th colspan=3 rowspan=12 valign=top> ";
+        echo "<tr><th>Дата создания</th><th>".date ("Y-m-d H:i:s", $planet['date'])."</th> <td colspan=10 class=c>Очередь построек</td></tr>";
+        echo "<tr><th>Дата удаления</th><th>".date ("Y-m-d H:i:s", $planet['remove'])."</th> <th colspan=3 rowspan=12 valign=top style='text-align: left;'> ";
+
+        $query = "SELECT * FROM ".$db_prefix."buildqueue WHERE planet_id = ".$planet['planet_id']." ORDER BY list_id ASC";
+        $result = dbquery ($query);
+        $anz = dbrows ($result);
+        echo "<table>";
+        $bxx = 1; $duration = 0;
+        while ( $row = dbarray ($result) ) {
+            echo "<tr><td> <table><tr><th><div id='bxx".$bxx."' title='".($row['end'] - $row['start'] - ($now-($row['start'] + $duration)))."' star='".$duration."'></th>";
+            echo "<tr><th>".date ("d.m.Y H:i:s", $row['end'] + $duration)."</th></tr></table></td>";
+            echo "<td><img width='32px' src='".UserSkin () . "gebaeude/".$row['tech_id'].".gif'></td>";
+            echo "<td><b>".loca("NAME_".$row['tech_id'])."</b><br>уровень ".$row['level']."</td></tr>";
+            $bxx++;
+            $duration += $row['end'] - $row['start'];
+        }
+        echo "</table>";
+        echo "<script language=javascript>anz=$anz;t();</script>\n";
 ?>
-        <table><tr><td>
-        Типы планет: <br>
-        0 - луна <br>
-        1 - планета <br>
-        10000 - поле обломков <br>
-        10001 - уничтоженная планета <br>
-        10002 - фантом колонизации (существует только во время полёта колонизатора) <br>
-        10003 - уничтоженная луна <br>
-        10004 - покинутая колония (создается на месте 10й колонии) <br>
-        20000 - бесконечные дали (экспедиция)
-        </td></tr></table>
+
 <?
         echo "</th> </tr>";
         echo "<tr><th>Последняя активность</th><th>".date ("Y-m-d H:i:s", $planet['lastakt'])."</th>  \n";
