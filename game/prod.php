@@ -351,7 +351,7 @@ function cons_fusion ($lvl, $pr) { return ceil (10 * $lvl * pow (1.1, $lvl) * $p
 function ProdResources ( $planet, $time_from, $time_to )
 {
     global $db_prefix, $GlobalUni;
-    if ( $planet['type'] != 1 ) return $planet;        // НЕ планета
+    if ( ! ( $planet['type'] > 0 && $planet['type'] < 10000) ) return $planet;        // НЕ планета
     $user = LoadUser ($planet['owner_id']);
     if ( $user['player_id'] == 99999 ) return $planet;    // технический аккаунт space
     $diff = $time_to - $time_from;
