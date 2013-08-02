@@ -846,8 +846,8 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
             if ( $fleet[208] > 0 ) {
                 $fleet[208]--;
                 $met = $kris = $deut = $energy = 0;
-                ShipyardPrice ( 208, &$met, &$kris, &$deut, &$energy );            
-                AdjustStats ( $origin['owner_id'], ($met + $kris + $deut), 1, 0, '-' );
+                $cost = ShipyardPrice ( 208 );
+                AdjustStats ( $origin['owner_id'], ($cost['m'] + $cost['k'] + $cost['d']), 1, 0, '-' );
                 RecalcRanks ();
             }
         }

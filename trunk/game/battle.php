@@ -83,7 +83,6 @@ function CalcLosses ( $a, $d, $res, $repaired )
     $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $dmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 401, 402, 403, 404, 405, 406, 407, 408 );
 
-    $met = $kris = $deut = $energy = 0;
     $aprice = $dprice = 0;
 
     // Стоимость юнитов до боя.
@@ -93,9 +92,9 @@ function CalcLosses ( $a, $d, $res, $repaired )
         {
             $amount = $attacker['fleet'][$gid];
             if ( $amount > 0 ) {
-                ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
-                $aprice += ( $met + $kris + $deut ) * $amount;
-                $a[$i]['points'] += ( $met + $kris + $deut ) * $amount;
+                $cost = ShipyardPrice ( $gid  );
+                $aprice += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
+                $a[$i]['points'] += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
                 $a[$i]['fpoints'] += $amount;
             }
         }
@@ -107,9 +106,9 @@ function CalcLosses ( $a, $d, $res, $repaired )
         {
             $amount = $defender['fleet'][$gid];
             if ( $amount > 0 ) {
-                ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
-                $dprice += ( $met + $kris + $deut ) * $amount;
-                $d[$i]['points'] += ( $met + $kris + $deut ) * $amount;
+                $cost = ShipyardPrice ( $gid );
+                $dprice += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
+                $d[$i]['points'] += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
                 $d[$i]['fpoints'] += $amount;
             }
         }
@@ -117,9 +116,9 @@ function CalcLosses ( $a, $d, $res, $repaired )
         {
             $amount = $defender['defense'][$gid];
             if ( $amount > 0 ) {
-                ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
-                $dprice += ( $met + $kris + $deut ) * $amount;
-                $d[$i]['points'] += ( $met + $kris + $deut ) * $amount;
+                $cost = ShipyardPrice ( $gid );
+                $dprice += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
+                $d[$i]['points'] += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
             }
         }
     }
@@ -137,9 +136,9 @@ function CalcLosses ( $a, $d, $res, $repaired )
             {
                 $amount = $attacker[$gid];
                 if ( $amount > 0 ) {
-                    ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
-                    $alast += ( $met + $kris + $deut ) * $amount;
-                    $a[$i]['points'] -= ( $met + $kris + $deut ) * $amount;
+                    $cost = ShipyardPrice ( $gid );
+                    $alast += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
+                    $a[$i]['points'] -= ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
                     $a[$i]['fpoints'] -= $amount;
                 }
             }
@@ -152,9 +151,9 @@ function CalcLosses ( $a, $d, $res, $repaired )
                 if ( $gid > 400 && $i == 0 ) $amount = $defender[$gid] + $repaired[$gid];
                 else $amount = $defender[$gid];
                 if ( $amount > 0 ) {
-                    ShipyardPrice ( $gid, &$met, &$kris, &$deut, &$energy );
-                    $dlast += ( $met + $kris + $deut ) * $amount;
-                    $d[$i]['points'] -= ( $met + $kris + $deut ) * $amount;
+                    $cost = ShipyardPrice ( $gid );
+                    $dlast += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
+                    $d[$i]['points'] -= ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
                     if ( $gid < 400 ) $d[$i]['fpoints'] -= $amount;
                 }
             }
@@ -1081,7 +1080,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 
     // Рассчитать общие потери (учитывать дейтерий и восстановленную оборону)
     $aloss = $dloss = 0;
-    CalcLosses ( $a, $d, $res, array() );
+    $loss = CalcLosses ( $a, $d, $res, array() );
     $a = $loss['a'];
     $d = $loss['d'];
     $aloss = $loss['aloss'];
