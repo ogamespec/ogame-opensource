@@ -429,8 +429,11 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
             echo "            <th width=\"75\" >\n";
             if ($amount > 0)
             {
-                $m = $k = $d = $e = 0;
-                ShipyardPrice ( $fleet, &$m, &$k, &$d, &$e );
+                $cost = ShipyardPrice ( $fleet );
+                $m = $cost['m'];
+                $k = $cost['k'];
+                $d = $cost['d'];
+                $e = $cost['e'];
                 $meet = IsEnoughResources ( $planet, $m, $k, $d, $e );
                 $color = $meet ? "lime" : "red";
 
@@ -479,8 +482,11 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
             echo "            <th width=\"75\" >\n";
             if ($amount > 0)
             {
-                $m = $k = $d = $e = 0;
-                ShipyardPrice ( $def, &$m, &$k, &$d, &$e );
+                $cost = ShipyardPrice ( $def );
+                $m = $cost['m'];
+                $k = $cost['k'];
+                $d = $cost['d'];
+                $e = $cost['e'];
                 $meet = IsEnoughResources ( $planet, $m, $k, $d, $e );
                 $color = $meet ? "lime" : "red";
 

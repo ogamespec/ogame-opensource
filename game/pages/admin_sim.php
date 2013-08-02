@@ -82,7 +82,7 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
 
     // Рассчитать общие потери
     $aloss = $dloss = 0;
-    CalcLosses ( $a, $d, $res, $repaired );
+    $loss = CalcLosses ( $a, $d, $res, $repaired );
     $a = $loss['a'];
     $d = $loss['d'];
     $aloss = $loss['aloss'];
