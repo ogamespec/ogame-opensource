@@ -76,7 +76,7 @@ function Plunder ( $cargo, $m, $k, $d )
 }
 
 // Рассчитать общие потери (учитывая восстановленную оборону).
-function CalcLosses ( &$a, &$d, $res, $repaired, &$aloss, &$dloss )
+function CalcLosses ( $a, $d, $res, $repaired )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
@@ -172,6 +172,8 @@ function CalcLosses ( &$a, &$d, $res, $repaired, &$aloss, &$dloss )
         }
         $aloss = $dloss = 0;
     }
+
+    return array ( 'a' => $a, 'd' => $d, 'aloss' => $aloss, 'dloss' => $dloss );
 }
 
 // Суммарная грузоподъемность флотов в последнем раунде.
@@ -718,7 +720,11 @@ function StartBattle ( $fleet_id, $planet_id, $when )
 
     // Рассчитать общие потери (учитывать дейтерий и восстановленную оборону)
     $aloss = $dloss = 0;
-    CalcLosses ( &$a, &$d, $res, $repaired, &$aloss, &$dloss );
+    $loss = CalcLosses ( $a, $d, $res, $repaired );
+    $a = $loss['a'];
+    $d = $loss['d'];
+    $aloss = $loss['aloss'];
+    $dloss = $loss['dloss'];
 
     // Захватить ресурсы
     $cm = $ck = $cd = 0;
@@ -1075,7 +1081,11 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 
     // Рассчитать общие потери (учитывать дейтерий и восстановленную оборону)
     $aloss = $dloss = 0;
-    CalcLosses ( &$a, &$d, $res, array ( ), &$aloss, &$dloss );
+    CalcLosses ( $a, $d, $res, array() );
+    $a = $loss['a'];
+    $d = $loss['d'];
+    $aloss = $loss['aloss'];
+    $dloss = $loss['dloss'];
 
     // Сгенерировать боевой доклад.
     loca_add ( "battlereport" );
