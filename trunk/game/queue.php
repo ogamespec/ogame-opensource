@@ -177,6 +177,8 @@ function GetBuildQueue ( $planet_id )
 // Проверить все условия возможности постройки/сноса
 function CanBuild ($user, $planet, $id, $lvl, $destroy)
 {
+    global $GlobalUni;
+
     // Стоимость постройки
     $res = BuildPrice ( $id, $lvl );
     $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
@@ -191,6 +193,8 @@ function CanBuild ($user, $planet, $id, $lvl, $destroy)
         $result = GetShipyardQueue ( $planet['planet_id'] );
         $shipqueue = dbarray ($result);
         $shipyard_operating = ($shipqueue != null);
+
+        if ( $GlobalUni['freeze'] ) return "Вселенная на паузе!";
 
         // Не постройка
         if ( ! in_array ( $id, $buildmap ) ) $text = "Неверный ID!";
@@ -630,30 +634,55 @@ function Queue_Shipyard_End ($queue, $when=0)
 // ===============================================================================================================
 // Исследования
 
+// Проверить все условия возможности запуска исследования
+function CanResearch ($user, $planet, $id, $lvl)
+{
+    global $db_prefix, $GlobalUni;
+
+    {
+        $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
+
+        if ( $GlobalUni['freeze'] ) return "Вселенная на паузе!";
+
+        // Исследование уже ведется?
+        $result = GetResearchQueue ( $user['player_id'] );
+        $resq = dbarray ($result);
+        if ($resq) return "Исследование уже ведется!";
+
+        // Исследовательская лаборатория усовершенствуется хоть на одной планете ?
+        $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = 31 AND (type = 'Build' OR type = 'Demolish') AND owner_id = " . $user['player_id'];
+        $result = dbquery ( $query );
+        $busy = ( dbrows ($result) > 0 );
+        if ( $busy ) return "Исследовательская лаборатория усовершенствуется!";
+
+        $res = ResearchPrice ( $id, $lvl );
+        $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
+
+        // Не исследование
+        if ( ! in_array ( $id, $resmap ) ) return "Неверный ID!";
+
+        // В режиме отпуска нельзя строить
+        else if ( $user['vacation'] ) return "В режиме отпуска (РО) исследование невозможно.";
+
+        // На чужой планете исследовать нельзя
+        else if ( $planet['owner_id'] != $user['player_id'] ) return "Неправильная планета!";
+
+        else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) ) return "У Вас недостаточно ресурсов!";
+
+        else if ( !ResearchMeetRequirement ( $user, $planet, $id ) ) return "Необходимые требования не выполнены!";
+    }
+    return "";
+}
+
 // Начать исследование на планете (включает в себя все проверки).
 function StartResearch ($player_id, $planet_id, $id, $now)
 {
     global $db_prefix, $GlobalUni;
+    $uni = $GlobalUni;
 
     $planet = GetPlanet ( $planet_id );
 
     UserLog ( $player_id, "RESEARCH", "Запустить исследование ".loca("NAME_$id")." на планете $planet_id");
-
-    $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
-    if ( ! in_array ( $id, $resmap ) ) return;
-
-    $uni = $GlobalUni;
-    if ( $uni['freeze'] ) return;
-
-    // Исследование уже ведется?
-    $result = GetResearchQueue ( $player_id);
-    $resq = dbarray ($result);
-    if ($resq) return;
-
-    // Исследовательская лаборатория усовершенствуется хоть на одной планете ?
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = 31 AND (type = 'Build' OR type = 'Demolish') AND start < $now AND owner_id = " . $player_id;
-    $result = dbquery ( $query );
-    if ( dbrows ($result) > 0 ) return;
 
     // Получить уровень исследования.
     $user = LoadUser ( $player_id );
@@ -664,17 +693,17 @@ function StartResearch ($player_id, $planet_id, $id, $now)
     else $r_factor = 1.0;
 
     // Проверить условия.
-    $res = ResearchPrice ( $id, $level );
-    $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
+    $text = CanResearch ( $user, $planet, $id, $level );
 
-    if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && ResearchMeetRequirement ( $user, $planet, $id ) ) {
+    if ( $text === "" ) {
         $speed = $uni['speed'];
         if ($now == 0) $now = time ();
         $reslab = ResearchNetwork ( $planet['planet_id'], $id );
         $seconds = ResearchDuration ( $id, $level, $reslab, $speed * $r_factor);
 
         // Списать ресурсы.
-        AdjustResources ( $m, $k, $d, $planet_id, '-' );
+        $res = ResearchPrice ( $id, $level );
+        AdjustResources ( $res['m'], $res['k'], $res['d'], $planet_id, '-' );
 
         //echo "--------------------- Запустить исследование $id на планете $planet_id игрока $player_id, уровень $level, продолжительность $seconds" ;
         AddQueue ($player_id, "Research", $planet_id, $id, $level, $now, $seconds);
