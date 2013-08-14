@@ -56,6 +56,7 @@ function BotCanBuild ($obj_id)
     global $BotID, $BotNow;
     $user = LoadUser ($BotID);
     $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $aktplanet = ProdResources ( $aktplanet, $aktplanet['lastpeek'], $BotNow );
     $level = $aktplanet['b'.$obj_id] + 1;
     $text = CanBuild ( $user, $aktplanet, $obj_id, $level, 0 );
     return ( $text === '' );
@@ -78,6 +79,15 @@ function BotBuild ($obj_id)
         return $duration;
     }
     else return 0;
+}
+
+// Получить уровень постройки
+function BotGetBuild ($n)
+{
+    global $BotID, $BotNow;
+    $bot = LoadUser ($BotID);
+    $aktplanet = GetPlanet ( $bot['aktplanet'] );
+    return $aktplanet['b'.$n];
 }
 
 // Установить выработку сырья на активной планете (числа в процентах 0-100)
@@ -125,6 +135,24 @@ function BotResourceSettings ( $last1=100, $last2=100, $last3=100, $last4=100, $
 
 //------------------------------------------------------------------------------------
 // Строительство флота/обороны (Верфь)
+function BotBuildFleet ($obj_id, $n)
+{
+    global $db_prefix, $BotID, $BotNow, $GlobalUni;
+    $user = LoadUser ($BotID);
+    $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $text = AddShipyard ($user['player_id'], $user['aktplanet'], $obj_id, $n, 0 );
+    if ( $text === '' ) {
+        $speed = $GlobalUni['speed'];
+        $now = ShipyardLatestTime ($aktplanet, $BotNow);
+        $shipyard = $aktplanet["b21"];
+        $nanits = $aktplanet["b15"];
+        $seconds = ShipyardDuration ( $obj_id, $shipyard, $nanits, $speed );
+        AddQueue ($user['player_id'], "Shipyard", $aktplanet['planet_id'], $obj_id, $n, $now, $seconds);
+        UpdatePlanetActivity ( $user['aktplanet'], $BotNow );
+        return $seconds;
+    }
+    else return 0;
+}
 
 //------------------------------------------------------------------------------------
 // Исследования
@@ -140,12 +168,36 @@ function BotGetResearch ($n)
 // Проверить - можем ли мы начать исследование на главной планете (1-да, 0-нет)
 function BotCanResearch ($obj_id)
 {
+    global $BotID, $BotNow;
+    $user = LoadUser ($BotID);
+    $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $aktplanet = ProdResources ( $aktplanet, $aktplanet['lastpeek'], $BotNow );
+    $level = $aktplanet['r'.$obj_id] + 1;
+    $text = CanResearch ($user, $aktplanet, $obj_id, $level);
+    return ($text === '' );
 }
 
 // Начать исследование на главной планете.
 // Вернуть 0, если недостаточно условий или ресурсов для начала исследования. Вернуть количество секунд, которые нужно подождать пока завершится исследование.
 function BotResearch ($obj_id)
 {
+    global $BotID, $BotNow, $GlobalUni;
+    $user = LoadUser ($BotID);
+    $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $level = $aktplanet['r'.$obj_id] + 1;
+    $text = StartResearch ($user[player_id], $user[aktplanet], $obj_id, 0);
+    if ( $text === '' ) {
+        $speed = $uni['speed'];
+        if ($now == 0) $now = time ();
+        $reslab = ResearchNetwork ( $user['planet_id'], $obj_id );
+        $prem = PremiumStatus ($user);
+        if ( $prem['technocrat'] ) $r_factor = 1.1;
+        else $r_factor = 1.0;
+        $seconds = ResearchDuration ( $obj_id, $level, $reslab, $speed * $r_factor);
+        UpdatePlanetActivity ( $user['aktplanet'], $BotNow );
+        return $seconds;
+    }
+    else return 0;
 }
 
 ?>
