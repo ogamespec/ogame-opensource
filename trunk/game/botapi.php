@@ -135,6 +135,7 @@ function BotResourceSettings ( $last1=100, $last2=100, $last3=100, $last4=100, $
 
 //------------------------------------------------------------------------------------
 // Строительство флота/обороны (Верфь)
+
 function BotBuildFleet ($obj_id, $n)
 {
     global $db_prefix, $BotID, $BotNow, $GlobalUni;

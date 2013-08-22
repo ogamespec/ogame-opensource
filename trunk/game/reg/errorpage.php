@@ -8,6 +8,8 @@ if ( !file_exists ("../config.php"))
     exit ();
 }
 
+include "../config.php";
+
 function hostname () {
     $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
     $pos = strrpos ( $host, "/game/reg/errorpage.php" );
@@ -44,7 +46,7 @@ function hostname () {
     {
         case '2': 
 ?>
-   <th class='errormessage'>Такого аккаунта не существует либо Вы неправильно ввели пароль. <br>Введите <a href='<?=hostname();?>'>правильный пароль</a> либо воспользуйтесь <a href='mail.php'>восстановлением пароля</a>.<br>Также Вы можете создать <a href='<?=hostname();?>'>новый аккаунт</a>.</th>   
+   <th class='errormessage'>Такого аккаунта не существует либо Вы неправильно ввели пароль. <br>Введите <a href='<?=$StartPage;?>'>правильный пароль</a> либо воспользуйтесь <a href='mail.php'>восстановлением пароля</a>.<br>Также Вы можете создать <a href='new.php'>новый аккаунт</a>.</th>   
 <?php
         break;
 
