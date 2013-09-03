@@ -17,6 +17,7 @@ function UniIsChecked ($option)
 
 function Admin_Uni ()
 {
+    global $db_prefix;
     global $GlobalUser;
     global $session;
     $now = time ();
@@ -37,6 +38,13 @@ function Admin_Uni ()
         $freeze = ($_POST['freeze'] === "on") ? 1 : 0;
 
         SetUniParam ( $_POST['speed'], $_POST['fspeed'], $_POST['acs'], $_POST['fid'], $_POST['did'], $_POST['defrepair'], $_POST['defrepair_delta'], $_POST['galaxies'], $_POST['systems'], $rapid, $moons, $freeze );
+
+        // Включить принудительное РО активным игрокам, если вселенная ставится на паузу.
+        if ( $freeze ) {
+            $days7 = $now - 7*24*60*60;
+            $query = "UPDATE ".$db_prefix."users SET vacation = 1, vacation_until = ".$now." WHERE lastclick >= $days7";
+            dbquery ( $query );
+        }
 
         //print_r ( $_POST );
     }

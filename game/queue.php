@@ -125,7 +125,7 @@ function UpdateQueue ($until)
 
     LockTables ();
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE end <= $until ORDER BY end ASC, prio DESC";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE end <= $until ORDER BY end ASC, prio DESC LIMIT 16";
     $result = dbquery ($query);
 
     $rows = dbrows ($result);
@@ -419,7 +419,11 @@ function Queue_Build_End ($queue)
     $lvl = $queue['level'];
     $query = "SELECT * FROM ".$db_prefix."buildqueue WHERE id = " . $queue['sub_id'] . " LIMIT 1";
     $result = dbquery ($query);
-    if ( dbrows ($result) == 0 ) Error ( "Нет постройки в очереди построек!");
+    if ( dbrows ($result) == 0 ) {
+        //Error ( "Нет постройки в очереди построек!");
+        RemoveQueue ( $queue['task_id'] );
+        return;
+    }
     $bqueue = dbarray ($result);
     $planet_id = $bqueue['planet_id'];
 
