@@ -31,6 +31,7 @@ if ( method() === "POST" )
         }
         else $CouponError = "Неверный код или купон уже погашен";
 
+
         //Код более не действителен.
         //Неверный код
     }
@@ -52,6 +53,7 @@ PageHeader ("payment");
 <center>
 
 <?php
+
     if ( $ShowActivateDlg )
     {
 ?>
