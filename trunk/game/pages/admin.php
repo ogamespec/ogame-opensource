@@ -22,6 +22,9 @@ loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "admin", $GlobalUser['lang'] );
 
+$AdminMessage = "";
+$AdminError = "";
+
 $session = $_GET['session'];
 $mode = $_GET['mode'];
 
@@ -203,6 +206,8 @@ echo "</center>\n";
 echo "</div>\n";
 echo "<!-- END CONTENT AREA -->\n";
 
-PageFooter ("", "", false, 0);
+if ( $AdminMessage || $AdminError ) PageFooter ($AdminMessage, $AdminError );
+else PageFooter ($AdminMessage, $AdminError, false, 0);
+
 ob_end_flush ();
 ?>
