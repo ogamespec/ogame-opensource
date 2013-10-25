@@ -23,8 +23,15 @@
 
 // Функция для отправки письма с кодом купона (UTF-8, HTML).
 function mail_html ($to, $subject = '(No subject)', $message = '', $header = '') {
-  $header_ = 'MIME-Version: 1.0' . "\n" . 'Content-type: text/html; charset=UTF-8' . "\n";
-  mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $header_ . $header);
+    if ( $ip !== "127.0.0.1" ) {
+        $header_ = 'MIME-Version: 1.0' . "\n" . 'Content-type: text/html; charset=UTF-8' . "\n";
+        mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $header_ . $header);
+    }
+
+    // Добавить лог в temp.
+    $f = fopen ( "temp/mailto.log", "a" );
+    fprintf ( $f, "To: %s\r\nSubj: %s\r\n\r\n%s\r\n", $to, $subject, $message );
+    fclose ($f);
 }
 
 // Link для соединения с мастер базой
@@ -185,6 +192,35 @@ function DeleteCoupon ($id)
         $query = "DELETE FROM coupons WHERE id = " . intval ($id);
         MDBQuery ($query);
     }
+}
+
+// Обработчик задания начисления купонов.
+// sub_id : Количество ТМ
+// obj_id : (Неактивен не менее ... дней << 16) | (Находится в игре более ... дней)
+// level : Периодичность ... дней
+function Queue_Coupon_End ($queue)
+{
+    global $db_prefix;
+
+    $now = $queue['end'];
+    $ip = $_SERVER['REMOTE_ADDR'];
+
+    // Выбрать пользователей согласно критериям.
+    $inactive_days = ($queue['obj_id'] >> 16) & 0xffff;
+    $ingame_days = $queue['obj_id'] & 0xffff;
+    $query = "SELECT * FROM ".$db_prefix."users WHERE regdate >= ".($now - $ingame_days * 24*60*60)." AND lastclick >= " . ($now - $inactive_days * 24*60*60);
+    $result = dbquery ($query);
+
+    while ( $user = dbarray ($result) )    // Разослать сообщения с купонами
+    {
+        $code = AddCoupon ( $queue['sub_id'] );
+        SendCoupon ( $user, $code );
+    }
+
+    // Продлить или завершить задание.
+    $seconds = $queue['level'] * 24 * 60 * 60;
+    if ( $seconds > 0 ) ProlongQueue ( $queue['task_id'], $seconds );
+    else RemoveQueue ( $queue['task_id'] );
 }
 
 ?>

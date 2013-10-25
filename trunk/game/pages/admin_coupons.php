@@ -23,6 +23,19 @@ function Admin_Coupons ()
 
         if ( $action === "add_date" )
         {
+            $ddmm = explode ( '.', $_POST['ddmm'] );
+            $hhmm = explode ( ':', $_POST['hhmm'] );
+
+            $now = time ();
+            $end = mktime ( $hhmm[0], $hhmm[1], 0, $ddmm[1], $ddmm[0] );
+
+            $inactive_days = intval ( $_POST['inactive_days'] );
+            $ingame_days = intval ( $_POST['ingame_days'] );
+            $darkmatter = intval ( $_POST['darkmatter'] );
+            $periodic = intval ( $_POST['periodic'] );
+
+            $queue = array ( null, 99999, "Coupon", $darkmatter, ($inactive_days << 16) | $ingame_days, $periodic, $now, $end, 520 );
+            AddDBRow ( $queue, "queue" );
         }
     }
 
@@ -31,14 +44,9 @@ function Admin_Coupons ()
     {
         $action = $_GET['action'];
 
-        if ( $action === "remove_one" )
-        {
-            DeleteCoupon ( $_GET['item_id'] );
-        }
+        if ( $action === "remove_one" ) DeleteCoupon ( $_GET['item_id'] );
 
-        if ( $action === "remove_date" )
-        {
-        }
+        if ( $action === "remove_date" ) RemoveQueue ( $_GET['item_id'] );
 
     }
 
@@ -103,6 +111,33 @@ $rows = MDBRows ( $result );
 </form>
 </td></tr>
 </table>
+
+<?php
+
+    // Вывести активные задания начисления купонов.
+
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Coupon' ORDER BY end ASC";
+    $result = dbquery ( $query );
+    while ( $queue = dbarray ($result) ) 
+    {
+        print_r ( $queue );
+        echo "<br>";
+    }
+
+?>
+
+<form action="index.php?page=admin&session=<?=$session;?>&mode=Coupons&action=add_date" method="POST">
+<table>
+<tr><td class="c"colspan=2>Купоны по праздникам</td></tr>
+<tr><td>День в формате ДД.ММ <input type="text" size="10" name="ddmm"></td><td>Время в формате ЧЧ:ММ <input type="text" size="10" name="hhmm" value="10:00"></td></tr>
+<tr><td>Темной материи на купон</td><td><input type="text" size="10" name="darkmatter" value="100000"> </td></tr>
+<tr><td>Отправлять игрокам неактивным не менее</td><td><input type="text" size="10" name="inactive_days" value="7"> дней</td></tr>
+<tr><td>Игроки должны играть не менее</td><td><input type="text" size="10" name="ingame_days" value="365"> дней</td></tr>
+<tr><td>Периодичность дней (0-без периодичности)</td><td><input type="text" size="10" name="periodic" value="365"> </td></tr>
+<tr><td colspan=2><input type="submit"></td></tr>
+</table>
+</form>
+
 
 <?php
 }
