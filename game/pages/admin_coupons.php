@@ -33,6 +33,7 @@ function Admin_Coupons ()
 
         if ( $action === "remove_one" )
         {
+            DeleteCoupon ( $_GET['item_id'] );
         }
 
         if ( $action === "remove_date" )
@@ -49,7 +50,7 @@ function Admin_Coupons ()
 
 // Вывести список купонов.
 
-$count = 15;
+$count = 15;        // количество купонов на страницу
 $from = intval ( $_GET['from'] );
 $total = TotalCoupons ();
 
@@ -74,10 +75,10 @@ $rows = MDBRows ( $result );
         echo "        <tr height=\"20\">\n";
         echo "     <th>".$entry['code']."</th>\n";
         echo "     <th>".nicenum($entry['amount'])."</th>\n";
-        echo "     <th>". ($entry['used'] ? "Да" : "Нет") ."</th>\n";
-        echo "     <th>".$entry['uni_num']."</th>\n";
+        echo "     <th>". ($entry['used'] ? "<font color=red>Да</font>" : "<font color=lime>Нет</font>") ."</th>\n";
+        echo "     <th>". ($entry['used'] ? $entry['user_uni'] : '-' ) ."</th>\n";
         echo "     <th>".$entry['user_name']."</th>\n";
-        echo "     <th>Удалить</th>\n";
+        echo "     <th><a href=\"index.php?page=admin&session=$session&mode=Coupons&action=remove_one&item_id=".$entry['id']."\">Удалить</a></th>\n";
         echo "    </tr>\n";
     }
 

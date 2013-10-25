@@ -168,13 +168,23 @@ function ActivateCoupon ($user, $code)
             $coupon = LoadCoupon ($id);
             $query = "UPDATE coupons SET used=1, user_uni='".$GlobalUni['num']."', user_id='".$user['player_id']."', user_name='".$user['oname']."' WHERE id = $id";    // погасить купон
             MDBQuery ($query);
-            $query = "UPDATE ".$db_prefix."users SET dm += '".$coupon['amount']."' WHERE id = " . $user['player_id'];    // добавить пользователю платной ТМ.
+            $query = "UPDATE ".$db_prefix."users SET dm = dm + ".$coupon['amount']." WHERE player_id = " . $user['player_id'];    // добавить пользователю платной ТМ.
             dbquery ($query);
             return TRUE;
         }
         else return FALSE;
     }
     else return FALSE;
+}
+
+// Удалить купон
+function DeleteCoupon ($id)
+{
+    if ( MDBConnect() )
+    {
+        $query = "DELETE FROM coupons WHERE id = " . intval ($id);
+        MDBQuery ($query);
+    }
 }
 
 ?>
