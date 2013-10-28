@@ -192,7 +192,7 @@ else
         else if ( $_GET['a'] == 15 ) PageAlly_Ranks ();
         else if ( $_GET['a'] == 16 ) PageAlly_MemberSettings ();    // назначить ранг игроку
         else if ( $_GET['a'] == 17 ) AllyPage_CircularMessage ();
-        //else if ( $_GET['a'] == 18 ) AllyPage_Takeover ();
+        else if ( $_GET['a'] == 18 ) AllyPage_Takeover ();
         else AllyPage_Home ();
     }
     else AllyPage_Home ();
