@@ -168,6 +168,14 @@ function AllyChangeName ($ally_id, $name)
     return true;
 }
 
+// Изменить основателя альянса
+function AllyChangeOwner ($ally_id, $owner_id)
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."ally SET owner_id = " . intval($owner_id);
+    dbquery ($query);
+}
+
 // Пересчёт очков альянс (на основе очков игроков)
 function RecalcAllyStats ()
 {
@@ -299,6 +307,15 @@ function LoadRank ($ally_id, $rank_id)
     $query = "SELECT * FROM ".$db_prefix."allyranks WHERE ally_id = $ally_id AND rank_id = $rank_id";
     $result = dbquery ($query);
     return dbarray ($result);
+}
+
+// Загрузить всех игроков альянса с указанным рангом
+function LoadUsersWithRank ($ally_id, $rank_id )
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."users WHERE ally_id = $ally_id AND allyrank = $rank_id ";
+    $result = dbquery ($query);
+    return $result;
 }
 
 // ****************************************************************************

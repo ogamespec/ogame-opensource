@@ -208,7 +208,7 @@ function Queue_Coupon_End ($queue)
     // Выбрать пользователей согласно критериям.
     $inactive_days = ($queue['obj_id'] >> 16) & 0xffff;
     $ingame_days = $queue['obj_id'] & 0xffff;
-    $query = "SELECT * FROM ".$db_prefix."users WHERE regdate >= ".($now - $ingame_days * 24*60*60)." AND lastclick >= " . ($now - $inactive_days * 24*60*60);
+    $query = "SELECT * FROM ".$db_prefix."users WHERE regdate < ".($now - $ingame_days * 24*60*60)." AND lastclick >= " . ($now - $inactive_days * 24*60*60);
     $result = dbquery ($query);
 
     while ( $user = dbarray ($result) )    // Разослать сообщения с купонами
