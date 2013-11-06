@@ -23,7 +23,7 @@ include ('header.tpl');
 </head>
 <body>
 
-<a href="#pustekuchen" style="display:none;"><?=loca("LOGIN_LINK");?></a>
+<a href="#pustekuchen" style="display:none;"><?php echo loca("LOGIN_LINK");?></a>
 
 <div id="main">
 

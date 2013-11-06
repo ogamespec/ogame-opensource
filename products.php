@@ -52,5 +52,5 @@ function setlang(lang)
 <a href="#" onclick="javascript:setlang('tw');"><img src="img/flags/tw.gif" alt="Taiwan" title="Taiwan"></a>
 -->
 
-<a href="#"><?=loca('CHOOSELANG');?></a>
+<a href="#"><?php echo loca('CHOOSELANG');?></a>
 </div>

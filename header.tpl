@@ -1,9 +1,9 @@
 <html>
 <head>
 <meta name="author" content="Gameforge Productions GmbH" />
-<meta http-equiv="content-type" content="text/html; charset=<?=loca("META_CHARSET");?>" />
-<meta name="keywords" content="<?=loca("META_KEYWORDS");?>" />
-<meta name="description" content="<?=loca("META_DESCRIPTION");?>" />
+<meta http-equiv="content-type" content="text/html; charset=<?php echo loca("META_CHARSET");?>" />
+<meta name="keywords" content="<?php echo loca("META_KEYWORDS");?>" />
+<meta name="description" content="<?php echo loca("META_DESCRIPTION");?>" />
 <meta name="robots" content="index, follow" />
 <meta name="language" content="ru" />
 <meta name="distribution" content="global" />
@@ -15,4 +15,4 @@
 <meta http-equiv="pragma" content="no-cache" />
 
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<title><?=loca("SERVERNAME");?></title>
+<title><?php echo loca("SERVERNAME");?></title>
