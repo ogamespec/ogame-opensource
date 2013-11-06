@@ -72,21 +72,21 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" ) {
 
 ?>
 
-<?=$InstallError;?> <br><br>
+<?php echo $InstallError;?> <br><br>
 
-<?=loca('INSTALL_MDB_TIP');?>
+<?php echo loca('INSTALL_MDB_TIP');?>
 <br>
 <br>
 
 <form action='install.php' method='POST'>
 
 <table>
-<tr><td colspan=2 class='c'><a title='<?=loca('INSTALL_MDB_TIP');?>'><?=loca('INSTALL_MDB');?></a></td></tr>
-<tr><td><?=loca('INSTALL_MDB_HOST');?></td><td><input type=text value='localhost' class='text' name='mdb_host'></td></tr>
-<tr><td><?=loca('INSTALL_MDB_USER');?></td><td><input type=text class='text' name='mdb_user'></td></tr>
-<tr><td><?=loca('INSTALL_MDB_PASS');?></td><td><input type=password class='text'  name='mdb_pass'></td></tr>
-<tr><td><?=loca('INSTALL_MDB_NAME');?></td><td><input type=text class='text' name='mdb_name'></td></tr>
-<tr><td colspan=2><center><input type=submit value='<?=loca('INSTALL_INSTALL');?>' class='button'></center></td></tr>
+<tr><td colspan=2 class='c'><a title='<?php echo loca('INSTALL_MDB_TIP');?>'><?php echo loca('INSTALL_MDB');?></a></td></tr>
+<tr><td><?php echo loca('INSTALL_MDB_HOST');?></td><td><input type=text value='localhost' class='text' name='mdb_host'></td></tr>
+<tr><td><?php echo loca('INSTALL_MDB_USER');?></td><td><input type=text class='text' name='mdb_user'></td></tr>
+<tr><td><?php echo loca('INSTALL_MDB_PASS');?></td><td><input type=password class='text'  name='mdb_pass'></td></tr>
+<tr><td><?php echo loca('INSTALL_MDB_NAME');?></td><td><input type=text class='text' name='mdb_name'></td></tr>
+<tr><td colspan=2><center><input type=submit value='<?php echo loca('INSTALL_INSTALL');?>' class='button'></center></td></tr>
 </table>
 
 </form>

@@ -1,7 +1,7 @@
 
 function changeAction(type) {
     if(type != "register" && document.loginForm.universe.value == '') {
-        alert('<?=loca("LOGIN_NOTCHOSEN");?>');
+        alert('<?php echo loca("LOGIN_NOTCHOSEN");?>');
     }
     else {
         if(type == "login") {
@@ -28,55 +28,55 @@ function printMessage(code, div) {
     }
     switch (code) {
         case "0":
-            text = "<?=loca("ERROR_0");?>";
+            text = "<?php echo loca("ERROR_0");?>";
             textclass = "fine"; 
             break;
         case "101":
-            text = "<?=loca("ERROR_101");?>";
+            text = "<?php echo loca("ERROR_101");?>";
             textclass = "warning"; 
             break;
         case "102":
-            text = "<?=loca("ERROR_102");?>";
+            text = "<?php echo loca("ERROR_102");?>";
             textclass = "warning"; 
             break;
         case "103":
-            text = "<?=loca("ERROR_103");?>";
+            text = "<?php echo loca("ERROR_103");?>";
             textclass = "warning"; 
             break;
         case "104":
-            text = "<?=loca("ERROR_104");?>";
+            text = "<?php echo loca("ERROR_104");?>";
             textclass = "warning"; 
             break;
         case "105":
-            text = "<?=loca("ERROR_105");?>";
+            text = "<?php echo loca("ERROR_105");?>";
             textclass = "fine"; 
             break;
         case "106":
-            text = "<?=loca("ERROR_106");?>";
+            text = "<?php echo loca("ERROR_106");?>";
             textclass = "fine"; 
             break;
         case "107":
-            text = "<?=loca("ERROR_107");?>";
+            text = "<?php echo loca("ERROR_107");?>";
             textclass = "warning"; 
             break;
         case "108":
-            text = "<?=loca("ERROR_108");?>";
+            text = "<?php echo loca("ERROR_108");?>";
             textclass = "warning"; 
             break;
         case "201":
-            text = "<?=loca("TIP_201");?>";
+            text = "<?php echo loca("TIP_201");?>";
             break;
         case "202":
-            text = "<?=loca("TIP_202");?>";
+            text = "<?php echo loca("TIP_202");?>";
             break;
         case "203":
-            text = "<?=loca("TIP_203");?>";
+            text = "<?php echo loca("TIP_203");?>";
             break;
         case "204":
-            text = "<?=loca("TIP_204");?>";
+            text = "<?php echo loca("TIP_204");?>";
             break;
         case "205":
-            text = "<?=loca("TIP_205");?>";
+            text = "<?php echo loca("TIP_205");?>";
             break;
         default:
             text = code;
