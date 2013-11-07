@@ -169,15 +169,15 @@ function Admin_Users ()
         $user = LoadUser ( intval ($_GET['player_id']) );
 ?>
 
-    <?=AdminPanel();?>
+    <?php echo AdminPanel();?>
 
     <table>
-    <form action="index.php?page=admin&session=<?=$session;?>&mode=Users&action=update&player_id=<?=$user['player_id'];?>" method="POST" >
-    <tr><td class=c><?=AdminUserName($user);?></td><td class=c>Настройки</td><td class=c>Исследования</td></tr>
+    <form action="index.php?page=admin&session=<?php echo $session;?>&mode=Users&action=update&player_id=<?php echo $user['player_id'];?>" method="POST" >
+    <tr><td class=c><?php echo AdminUserName($user);?></td><td class=c>Настройки</td><td class=c>Исследования</td></tr>
 
         <th valign=top><table>
-            <tr><th>ID</th><th><?=$user['player_id'];?></th></tr>
-            <tr><th>Дата регистрации</th><th><?=date ("Y-m-d H:i:s", $user['regdate']);?></th></tr>
+            <tr><th>ID</th><th><?php echo $user['player_id'];?></th></tr>
+            <tr><th>Дата регистрации</th><th><?php echo date ("Y-m-d H:i:s", $user['regdate']);?></th></tr>
             <tr><th>Альянс</th><th>
 <?php
     if ($user['ally_id']) {
@@ -191,25 +191,25 @@ function Admin_Users ()
     if ($user['ally_id']) echo date ("Y-m-d H:i:s", $user['joindate']);
 ?>
 </th></tr>
-            <tr><th>Постоянный адрес</th><th><input type="text" name="pemail" maxlength="100" size="20" value="<?=$user['pemail'];?>" /></th></tr>
-            <tr><th>Временный адрес</th><th><input type="text" name="email" maxlength="100" size="20" value="<?=$user['email'];?>" /></th></tr>
-            <tr><th>Удалить игрока</th><th><input type="checkbox" name="deaktjava"  <?=IsChecked($user, "disable");?>/>
+            <tr><th>Постоянный адрес</th><th><input type="text" name="pemail" maxlength="100" size="20" value="<?php echo $user['pemail'];?>" /></th></tr>
+            <tr><th>Временный адрес</th><th><input type="text" name="email" maxlength="100" size="20" value="<?php echo $user['email'];?>" /></th></tr>
+            <tr><th>Удалить игрока</th><th><input type="checkbox" name="deaktjava"  <?php echo IsChecked($user, "disable");?>/>
       <?php
     if ($user['disable']) echo date ("Y-m-d H:i:s", $user['disable_until']);
 ?></th></tr>
-            <tr><th>Режим отпуска</th><th><input type="checkbox" name="vacation"  <?=IsChecked($user, "vacation");?>/>
+            <tr><th>Режим отпуска</th><th><input type="checkbox" name="vacation"  <?php echo IsChecked($user, "vacation");?>/>
       <?php
     if ($user['vacation']) echo date ("Y-m-d H:i:s", $user['vacation_until']);
 ?></th></tr>
-            <tr><th>Заблокирован</th><th><input type="checkbox" name="banned"  <?=IsChecked($user, "banned");?>/>
+            <tr><th>Заблокирован</th><th><input type="checkbox" name="banned"  <?php echo IsChecked($user, "banned");?>/>
       <?php
     if ($user['banned']) echo date ("Y-m-d H:i:s", $user['banned_until']);
 ?></th></tr>
-            <tr><th>Бан атак</th><th><input type="checkbox" name="noattack"  <?=IsChecked($user, "noattack");?>/>
+            <tr><th>Бан атак</th><th><input type="checkbox" name="noattack"  <?php echo IsChecked($user, "noattack");?>/>
       <?php
     if ($user['noattack']) echo date ("Y-m-d H:i:s", $user['noattack_until']);
 ?></th></tr>
-            <tr><th>Последний вход</th><th><?=date ("Y-m-d H:i:s", $user['lastlogin']);?></th></tr>
+            <tr><th>Последний вход</th><th><?php echo date ("Y-m-d H:i:s", $user['lastlogin']);?></th></tr>
             <tr><th>Активность</th><th>
 <?php
     $now = time ();
@@ -217,8 +217,8 @@ function Admin_Users ()
     if ( ($now - $user['lastclick']) < 60*60 ) echo " (".floor(($now - $user['lastclick'])/60)." min)";
 ?>
 </th></tr>
-            <tr><th>IP адрес</th><th><a href="http://nic.ru/whois/?query=<?=$user['ip_addr'];?>" target=_blank><?=$user['ip_addr'];?></a></th></tr>
-            <tr><th>Активирован</th><th><input type="checkbox" name="validated" <?=IsChecked($user, "validated");?> /> <a href="index.php?page=admin&session=<?=$session;?>&mode=Users&action=reactivate&player_id=<?=$user['player_id'];?>">выслать пароль</a></th></tr>
+            <tr><th>IP адрес</th><th><a href="http://nic.ru/whois/?query=<?php echo $user['ip_addr'];?>" target=_blank><?php echo $user['ip_addr'];?></a></th></tr>
+            <tr><th>Активирован</th><th><input type="checkbox" name="validated" <?php echo IsChecked($user, "validated");?> /> <a href="index.php?page=admin&session=<?php echo $session;?>&mode=Users&action=reactivate&player_id=<?php echo $user['player_id'];?>">выслать пароль</a></th></tr>
             <tr><th>Главная планета</th><th>
 <?php
     $planet = GetPlanet ($user['hplanetid']);
@@ -233,25 +233,25 @@ function Admin_Users ()
 </th></tr>
             <tr><th>Права</th><th>
    <select name="admin">
-     <option value="0" <?=IsSelected($user, "admin", 0);?>>Пользователь</option>
-     <option value="1" <?=IsSelected($user, "admin", 1);?>>Оператор</option>
-     <option value="2" <?=IsSelected($user, "admin", 2);?>>Администратор</option>
+     <option value="0" <?php echo IsSelected($user, "admin", 0);?>>Пользователь</option>
+     <option value="1" <?php echo IsSelected($user, "admin", 1);?>>Оператор</option>
+     <option value="2" <?php echo IsSelected($user, "admin", 2);?>>Администратор</option>
    </select>
 </th></tr>
-            <tr><th>Включить слежение</th><th><input type="checkbox" name="sniff" <?=IsChecked($user, "sniff");?> /></th></tr>
-            <tr><th>Отладочная информация</th><th><input type="checkbox" name="debug" <?=IsChecked($user, "debug");?> /></th></tr>
+            <tr><th>Включить слежение</th><th><input type="checkbox" name="sniff" <?php echo IsChecked($user, "sniff");?> /></th></tr>
+            <tr><th>Отладочная информация</th><th><input type="checkbox" name="debug" <?php echo IsChecked($user, "debug");?> /></th></tr>
 
 <?php
     if ( IsBot ($user['player_id']) )
     {
 ?>
-            <tr><th colspan=2><a href="index.php?page=admin&session=<?=$session;?>&mode=Users&action=bot_stop&player_id=<?=$user['player_id'];?>" >[Остановить бота]</a></th></tr>
+            <tr><th colspan=2><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Users&action=bot_stop&player_id=<?php echo $user['player_id'];?>" >[Остановить бота]</a></th></tr>
 <?php
     }
     else
     {
 ?>
-            <tr><th colspan=2><a href="index.php?page=admin&session=<?=$session;?>&mode=Users&action=bot_start&player_id=<?=$user['player_id'];?>" >[Запустить бота]</a></th></tr>
+            <tr><th colspan=2><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Users&action=bot_start&player_id=<?php echo $user['player_id'];?>" >[Запустить бота]</a></th></tr>
 <?php
     }
 ?>
@@ -260,23 +260,23 @@ function Admin_Users ()
         <th valign=top><table>
             <tr><th>Сортировка планет</th><th>
    <select name="settings_sort">
-    <option value="0" <?=IsSelected($user, "sortby", 0);?> >порядку колонизации</option>
-    <option value="1" <?=IsSelected($user, "sortby", 1);?> >координатам</option>
-    <option value="2" <?=IsSelected($user, "sortby", 2);?> >алфавиту</option>
+    <option value="0" <?php echo IsSelected($user, "sortby", 0);?> >порядку колонизации</option>
+    <option value="1" <?php echo IsSelected($user, "sortby", 1);?> >координатам</option>
+    <option value="2" <?php echo IsSelected($user, "sortby", 2);?> >алфавиту</option>
    </select>
 </th></tr>
             <tr><th>Порядок сортировки</th><th>
    <select name="settings_order">
-     <option value="0" <?=IsSelected($user, "sortorder", 0);?>>по возрастанию</option>
-     <option value="1" <?=IsSelected($user, "sortorder", 1);?>>по убыванию</option>
+     <option value="0" <?php echo IsSelected($user, "sortorder", 0);?>>по возрастанию</option>
+     <option value="1" <?php echo IsSelected($user, "sortorder", 1);?>>по убыванию</option>
    </select>
 </th></tr>
-            <tr><th>Скин</th><th><input type=text name="dpath" maxlength="80" size="40" value="<?=$user['skin'];?>" /></th></tr>
-            <tr><th>Использовать скин</th><th><input type="checkbox" name="design" <?=IsChecked($user, "useskin");?> /></th></tr>
-            <tr><th>Редизайн</th><th><input type="checkbox" name="redesign" <?=IsChecked($user, "redesign");?> /></th></tr>
-            <tr><th>Декативировать проверку IP</th><th><input type="checkbox" name="deact_ip" <?=IsChecked($user, "deact_ip");?> /></th></tr>
-            <tr><th>Количество зондов</th><th><input type="text" name="spio_anz" maxlength="2" size="2" value="<?=$user['maxspy'];?>" /></th></tr>
-            <tr><th>Количество сообщений флота</th><th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="<?=$user['maxfleetmsg'];?>" /></th></tr>
+            <tr><th>Скин</th><th><input type=text name="dpath" maxlength="80" size="40" value="<?php echo $user['skin'];?>" /></th></tr>
+            <tr><th>Использовать скин</th><th><input type="checkbox" name="design" <?php echo IsChecked($user, "useskin");?> /></th></tr>
+            <tr><th>Редизайн</th><th><input type="checkbox" name="redesign" <?php echo IsChecked($user, "redesign");?> /></th></tr>
+            <tr><th>Декативировать проверку IP</th><th><input type="checkbox" name="deact_ip" <?php echo IsChecked($user, "deact_ip");?> /></th></tr>
+            <tr><th>Количество зондов</th><th><input type="text" name="spio_anz" maxlength="2" size="2" value="<?php echo $user['maxspy'];?>" /></th></tr>
+            <tr><th>Количество сообщений флота</th><th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="<?php echo $user['maxfleetmsg'];?>" /></th></tr>
             <tr><th>Язык интерфейса</th><th>
    <select name="lang">
 <?php
@@ -289,14 +289,14 @@ function Admin_Users ()
 </th></tr>
             <tr><th colspan=2>&nbsp</th></tr>
             <tr><td class=c colspan=2>Статистика</td></tr>
-            <tr><th>Очки (старые)</th><th><?=nicenum($user['oldscore1'] / 1000);?> / <?=nicenum($user['oldplace1']);?></th></tr>
-            <tr><th>Флот (старые)</th><th><?=nicenum($user['oldscore2']);?> / <?=nicenum($user['oldplace2']);?></th></tr>
-            <tr><th>Исследования (старые)</th><th><?=nicenum($user['oldscore3']);?> / <?=nicenum($user['oldplace3']);?></th></tr>
-            <tr><th>Очки</th><th><?=nicenum($user['score1'] / 1000);?> / <?=nicenum($user['place1']);?></th></tr>
-            <tr><th>Флот</th><th><?=nicenum($user['score2']);?> / <?=nicenum($user['place2']);?></th></tr>
-            <tr><th>Исследования</th><th><?=nicenum($user['score3']);?> / <?=nicenum($user['place3']);?></th></tr>
-            <tr><th>Дата старой статистики</th><th><?=date ("Y-m-d H:i:s", $user['scoredate']);?></th></tr>
-            <tr><th colspan=2><a href="index.php?page=admin&session=<?=$session;?>&mode=Users&action=recalc_stats&player_id=<?=$user['player_id'];?>" >[Пересчитать статистику]</a></th></tr>
+            <tr><th>Очки (старые)</th><th><?php echo nicenum($user['oldscore1'] / 1000);?> / <?php echo nicenum($user['oldplace1']);?></th></tr>
+            <tr><th>Флот (старые)</th><th><?php echo nicenum($user['oldscore2']);?> / <?php echo nicenum($user['oldplace2']);?></th></tr>
+            <tr><th>Исследования (старые)</th><th><?php echo nicenum($user['oldscore3']);?> / <?php echo nicenum($user['oldplace3']);?></th></tr>
+            <tr><th>Очки</th><th><?php echo nicenum($user['score1'] / 1000);?> / <?php echo nicenum($user['place1']);?></th></tr>
+            <tr><th>Флот</th><th><?php echo nicenum($user['score2']);?> / <?php echo nicenum($user['place2']);?></th></tr>
+            <tr><th>Исследования</th><th><?php echo nicenum($user['score3']);?> / <?php echo nicenum($user['place3']);?></th></tr>
+            <tr><th>Дата старой статистики</th><th><?php echo date ("Y-m-d H:i:s", $user['scoredate']);?></th></tr>
+            <tr><th colspan=2><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Users&action=recalc_stats&player_id=<?php echo $user['player_id'];?>" >[Пересчитать статистику]</a></th></tr>
 
             <tr><th colspan=2>&nbsp</th></tr>
             <tr><td class=c colspan=2>Офицеры</td></tr>
@@ -345,8 +345,8 @@ function Admin_Users ()
             echo "<tr><th>".loca("NAME_$gid")."</th><th><input type=\"text\" size=3 name=\"r$gid\" value=\"".$user["r$gid"]."\" /></th></tr>\n";
         }
 ?>
-        <tr><th>Найденная Тёмная Материя</th><th><input type="text" size=5 name="dmfree" value="<?=$user['dmfree'];?>" /></th></tr>
-        <tr><th>Покупная Тёмная Материя</th><th><input type="text" size=5 name="dm" value="<?=$user['dm'];?>" /></th></tr>
+        <tr><th>Найденная Тёмная Материя</th><th><input type="text" size=5 name="dmfree" value="<?php echo $user['dmfree'];?>" /></th></tr>
+        <tr><th>Покупная Тёмная Материя</th><th><input type="text" size=5 name="dm" value="<?php echo $user['dm'];?>" /></th></tr>
         </table></th>
     <tr><th colspan=3><input type="submit" value="Сохранить" /></th></tr>
     </form>
@@ -354,7 +354,7 @@ function Admin_Users ()
 
     <br>
     <table> 
-    <form action="index.php?page=admin&session=<?=$session;?>&mode=Users&action=create_planet&player_id=<?=$user['player_id'];?>" method="POST" >
+    <form action="index.php?page=admin&session=<?php echo $session;?>&mode=Users&action=create_planet&player_id=<?php echo $user['player_id'];?>" method="POST" >
     <tr><td class=c colspan=20>Список планет</td></tr>
     <tr>
 <?php
@@ -366,10 +366,10 @@ function Admin_Users ()
     {
         $p = dbarray ($result);
 ?>
-    <td> <img src="<?=GetPlanetSmallImage( "../evolution/", $p);?>" width="32px" height="32px"></td>
-    <td> <a href="index.php?page=admin&session=<?=$session;?>&mode=Planets&cp=<?=$p['planet_id'];?>"> <?=$p['name'];?> </a>
-            [<a href="index.php?page=galaxy&session=<?=$session;?>&galaxy=<?=$p['g'];?>&system=<?=$p['s'];?>"><?=$p['g'];?>:<?=$p['s'];?>:<?=$p['p'];?></a>] </td>
-<?
+    <td> <img src="<?php echo GetPlanetSmallImage( "../evolution/", $p);?>" width="32px" height="32px"></td>
+    <td> <a href="index.php?page=admin&session=<?php echo $session;?>&mode=Planets&cp=<?php echo $p['planet_id'];?>"> <?php echo $p['name'];?> </a>
+            [<a href="index.php?page=galaxy&session=<?php echo $session;?>&galaxy=<?php echo $p['g'];?>&system=<?php echo $p['s'];?>"><?php echo $p['g'];?>:<?php echo $p['s'];?>:<?php echo $p['p'];?></a>] </td>
+<?php
         $counter++;
         if ( $counter > 9) {
             $counter = 0;
@@ -408,44 +408,44 @@ function Admin_Users ()
                     else $style = " style=\"background-color: DarkGreen;\" ";
                 }
 ?>
-        <tr <?=$style;?> >
+        <tr <?php echo $style;?> >
 
-        <th <?=$style;?> > <?=$bxx;?> </th>
+        <th <?php echo $style;?> > <?php echo $bxx;?> </th>
 
-        <th <?=$style;?> >
+        <th <?php echo $style;?> >
 <?php
     echo "<table><tr $style ><th $style ><div id='bxx".$bxx."' title='".($fleet_obj['end'] - $now)."' star='".$fleet_obj['start']."'> </th>";
     echo "<tr><th $style >".date ("d.m.Y H:i:s", $fleet_obj['end'])."</th></tr></table>";
 ?>
         </th>
-        <th <?=$style;?> >
+        <th <?php echo $style;?> >
 <?php
     echo FleetlogsMissionText ( $fleet_obj['mission'] );
 ?>
         </th>
-        <th <?=$style;?> ><?=date ("d.m.Y", $fleet_obj['start']);?> <br> <?=date ("H:i:s", $fleet_obj['start']);?></th>
-        <th <?=$style;?> ><?=date ("d.m.Y", $fleet_obj['end']);?> <br> <?=date ("H:i:s", $fleet_obj['end']);?></th>
-        <th <?=$style;?> >
+        <th <?php echo $style;?> ><?php echo date ("d.m.Y", $fleet_obj['start']);?> <br> <?php echo date ("H:i:s", $fleet_obj['start']);?></th>
+        <th <?php echo $style;?> ><?php echo date ("d.m.Y", $fleet_obj['end']);?> <br> <?php echo date ("H:i:s", $fleet_obj['end']);?></th>
+        <th <?php echo $style;?> >
 <?php
     echo "<nobr>".BuildDurationFormat ($fleet_obj['flight_time']) . "</nobr><br>";
     echo "<nobr>".$fleet_obj['flight_time'] . " сек.</nobr>";
 ?>
         </th>
-        <th <?=$style;?> >
+        <th <?php echo $style;?> >
 <?php
     echo "[".$fleet_obj['origin_g'].":".$fleet_obj['origin_s'].":".$fleet_obj['origin_p']."]";
     $u = LoadUser ( $fleet_obj['owner_id'] );
     echo " <br>" . AdminUserName($u);
 ?>
         </th>
-        <th <?=$style;?> >
+        <th <?php echo $style;?> >
 <?php
     echo "[".$fleet_obj['target_g'].":".$fleet_obj['target_s'].":".$fleet_obj['target_p']."]";
     $u = LoadUser ( $fleet_obj['target_id'] );
     echo " <br>" . AdminUserName($u);
 ?>
         </th>
-        <th <?=$style;?> >
+        <th <?php echo $style;?> >
 <?php
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     foreach ($fleetmap as $i=>$gid) {
@@ -454,7 +454,7 @@ function Admin_Users ()
     }
 ?>
         </th>
-        <th <?=$style;?> >
+        <th <?php echo $style;?> >
 <?php
     $total = $fleet_obj['pm'] + $fleet_obj['pk'] + $fleet_obj['pd'];
     if ( $total > 0 ) {
@@ -465,7 +465,7 @@ function Admin_Users ()
     else echo "-";
 ?>
         </th>
-        <th <?=$style;?> >
+        <th <?php echo $style;?> >
 <?php
     $total = $fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d'];
     if ( $total > 0 ) {
@@ -476,7 +476,7 @@ function Admin_Users ()
     else echo "-";
 ?>
         </th>
-        <th <?=$style;?> >
+        <th <?php echo $style;?> >
 <?php
     if ( $fleet_obj['union_id'] ) {
         echo $fleet_obj['union_id'];
@@ -496,20 +496,20 @@ function Admin_Users ()
 ?>
 
     <tr><td class=c colspan=3>Логи полётов</td></tr>
-    <tr><td>Задание</td><td>от <?=$user['oname'];?></td><td>на <?=$user['oname'];?></td></tr>
-    <tr><td>Все</td><td><?=LinkFleetsFrom($user,0);?></td><td><?=LinkFleetsTo($user,0);?></td></tr>
-    <tr><td>Атака</td><td><?=LinkFleetsFrom($user,1);?></td><td><?=LinkFleetsTo($user,1);?></td></tr>
-    <tr><td>Совместная атака</td><td><?=LinkFleetsFrom($user,2);?></td><td><?=LinkFleetsTo($user,2);?></td></tr>
-    <tr><td>Транспорт</td><td><?=LinkFleetsFrom($user,3);?></td><td><?=LinkFleetsTo($user,3);?></td></tr>
-    <tr><td>Оставить</td><td><?=LinkFleetsFrom($user,4);?></td><td><?=LinkFleetsTo($user,4);?></td></tr>
-    <tr><td>Держаться</td><td><?=LinkFleetsFrom($user,5);?></td><td><?=LinkFleetsTo($user,5);?></td></tr>
-    <tr><td>Шпионаж</td><td><?=LinkFleetsFrom($user,6);?></td><td><?=LinkFleetsTo($user,6);?></td></tr>
-    <tr><td>Колонизировать</td><td><?=LinkFleetsFrom($user,7);?></td><td><?=LinkFleetsTo($user,7);?></td></tr>
-    <tr><td>Переработать</td><td><?=LinkFleetsFrom($user,8);?></td><td><?=LinkFleetsTo($user,8);?></td></tr>
-    <tr><td>Уничтожить</td><td><?=LinkFleetsFrom($user,9);?></td><td><?=LinkFleetsTo($user,9);?></td></tr>
-    <tr><td>Экспедиция</td><td><?=LinkFleetsFrom($user,15);?></td><td><?=LinkFleetsTo($user,15);?></td></tr>
-    <tr><td>Ракетная атака</td><td><?=LinkFleetsFrom($user,20);?></td><td><?=LinkFleetsTo($user,20);?></td></tr>
-    <tr><td>Атака (САБ)</td><td><?=LinkFleetsFrom($user,21);?></td><td><?=LinkFleetsTo($user,21);?></td></tr>
+    <tr><td>Задание</td><td>от <?php echo $user['oname'];?></td><td>на <?php echo $user['oname'];?></td></tr>
+    <tr><td>Все</td><td><?php echo LinkFleetsFrom($user,0);?></td><td><?php echo LinkFleetsTo($user,0);?></td></tr>
+    <tr><td>Атака</td><td><?php echo LinkFleetsFrom($user,1);?></td><td><?php echo LinkFleetsTo($user,1);?></td></tr>
+    <tr><td>Совместная атака</td><td><?php echo LinkFleetsFrom($user,2);?></td><td><?php echo LinkFleetsTo($user,2);?></td></tr>
+    <tr><td>Транспорт</td><td><?php echo LinkFleetsFrom($user,3);?></td><td><?php echo LinkFleetsTo($user,3);?></td></tr>
+    <tr><td>Оставить</td><td><?php echo LinkFleetsFrom($user,4);?></td><td><?php echo LinkFleetsTo($user,4);?></td></tr>
+    <tr><td>Держаться</td><td><?php echo LinkFleetsFrom($user,5);?></td><td><?php echo LinkFleetsTo($user,5);?></td></tr>
+    <tr><td>Шпионаж</td><td><?php echo LinkFleetsFrom($user,6);?></td><td><?php echo LinkFleetsTo($user,6);?></td></tr>
+    <tr><td>Колонизировать</td><td><?php echo LinkFleetsFrom($user,7);?></td><td><?php echo LinkFleetsTo($user,7);?></td></tr>
+    <tr><td>Переработать</td><td><?php echo LinkFleetsFrom($user,8);?></td><td><?php echo LinkFleetsTo($user,8);?></td></tr>
+    <tr><td>Уничтожить</td><td><?php echo LinkFleetsFrom($user,9);?></td><td><?php echo LinkFleetsTo($user,9);?></td></tr>
+    <tr><td>Экспедиция</td><td><?php echo LinkFleetsFrom($user,15);?></td><td><?php echo LinkFleetsTo($user,15);?></td></tr>
+    <tr><td>Ракетная атака</td><td><?php echo LinkFleetsFrom($user,20);?></td><td><?php echo LinkFleetsTo($user,20);?></td></tr>
+    <tr><td>Атака (САБ)</td><td><?php echo LinkFleetsFrom($user,21);?></td><td><?php echo LinkFleetsTo($user,21);?></td></tr>
     </table>
 
 <?php
@@ -552,7 +552,7 @@ function Admin_Users ()
         $result = dbquery ($query);
         $rows = dbrows ($result);
 ?>
-    <tr><td class=c>Активные за последние 24 часа (<?=$rows;?>)</td></tr>
+    <tr><td class=c>Активные за последние 24 часа (<?php echo $rows;?>)</td></tr>
     <tr><td>
 <?php
         $first = true;

@@ -52,7 +52,7 @@ ON t1.ip_addr = t2.ip_addr ORDER BY t1.ip_addr ASC, t1.name ASC";
             $rows0 = $rows = dbrows ($result );
 
 ?>
-<?=AdminPanel();?>
+<?php echo AdminPanel();?>
 
 <script>
 
@@ -71,10 +71,10 @@ function SetClearCheckbox (status)
 
 <!-- Результаты поиска -->
 <table>
-<form id="banform" action="index.php?page=admin&session=<?=$session;?>&mode=Bans&action=ban" method="POST" >
+<form id="banform" action="index.php?page=admin&session=<?php echo $session;?>&mode=Bans&action=ban" method="POST" >
 
 <tr> <td class=c> <input type="checkbox" onclick="SetClearCheckbox(this.checked);"> ID</td> <td class=c>Имя</td> <td class=c>Главная планета</td> <td class=c>Постоянный адрес</td> <td class=c>Временный адрес</td> <td class=c>IP адрес</td> <td class=c>Дата регистрации</td> </td>
-<?
+<?php
 
             if ( $rows == 0 ) echo "<tr><td colspan=7>Ничего не найдено. <a href=\"index.php?page=admin&session=$session&mode=Bans\">Назад</a></td></tr>";
 
@@ -82,14 +82,14 @@ function SetClearCheckbox (status)
                 $user = dbarray ( $result );
                 $hp = GetPlanet ( $user['hplanetid'] );
 ?>
-<tr> <th><input type="checkbox" name="id[<?=$user['player_id'];?>]" class="ids"/><?=$user['player_id'];?></th> 
-        <th><a><?=AdminUserName($user);?></a></th> 
-        <th><?=AdminPlanetCoord($hp);?> <?=AdminPlanetName($hp);?></th> 
-        <th><a><?=$user['pemail'];?></a></th> 
-        <th><a><?=$user['email'];?></a></th> 
-        <th><?=$user['ip_addr'];?></th> 
-        <th><?=date ("m-d-Y H:i:s", $user['regdate']);?></th> </tr>
-<?
+<tr> <th><input type="checkbox" name="id[<?php echo $user['player_id'];?>]" class="ids"/><?php echo $user['player_id'];?></th> 
+        <th><a><?php echo AdminUserName($user);?></a></th> 
+        <th><?php echo AdminPlanetCoord($hp);?> <?php echo AdminPlanetName($hp);?></th> 
+        <th><a><?php echo $user['pemail'];?></a></th> 
+        <th><a><?php echo $user['email'];?></a></th> 
+        <th><?php echo $user['ip_addr'];?></th> 
+        <th><?php echo date ("m-d-Y H:i:s", $user['regdate']);?></th> </tr>
+<?php
             } // while
 
             if ( $rows0 > 0 )
@@ -107,7 +107,7 @@ function SetClearCheckbox (status)
     <td><input name="days" type="text" size="5"> дней  <input name="hours" type="text" size="3"> часов</td> 
 
 </tr>
-<tr><th colspan=6> Причина: <textarea cols=40 rows=4 name="reason"><?="[url=mailto:".$GlobalUser['pemail']."]контакт[/url]";?></textarea></th><th><input type="submit" value="Отправить"></th></tr>
+<tr><th colspan=6> Причина: <textarea cols=40 rows=4 name="reason"><?php echo "[url=mailto:".$GlobalUser['pemail']."]контакт[/url]";?></textarea></th><th><input type="submit" value="Отправить"></th></tr>
 </form>
 </table>
 <?php
@@ -158,10 +158,10 @@ function SetClearCheckbox (status)
 
 <!-- Форма поиска -->
 
-<?=AdminPanel();?>
+<?php echo AdminPanel();?>
 
 <table>
-<form action="index.php?page=admin&session=<?=$session;?>&mode=Bans&action=search" method="POST" >
+<form action="index.php?page=admin&session=<?php echo $session;?>&mode=Bans&action=search" method="POST" >
 
 <tr><td class="c" colspan=2>Найти пользователей</td></tr>
 <tr>

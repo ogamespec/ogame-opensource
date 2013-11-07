@@ -278,12 +278,11 @@ function reset ()
         echo "<tr><td class=c colspan=2>Планета \"".$planet['name']."\" (<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>)</td>\n";
         echo "       <td class=c >Постройки</td> <td class=c >Флот</td> <td class=c >Оборона</td> </tr>\n";
         echo "<tr><th><img src=\"".GetPlanetImage (UserSkin(), $planet)."\"> <br>Тип: " . $planet['type'];
-        $points = $fpoints = $fleet_pts = $defense_pts = 0;
-        PlanetPrice ( $planet, &$points, &$fpoints, &$fleet_pts, &$defense_pts );
-        echo "<br>Стоимость : " . nicenum($points / 1000) ;
-        echo "<br>Постройки : " . nicenum( ($points - ($fleet_pts+$defense_pts) ) / 1000) ;
-        echo "<br>Флот : " . nicenum($fleet_pts / 1000) ;
-        echo "<br>Оборона : " . nicenum($defense_pts / 1000) ;
+        $pp = PlanetPrice ( $planet );
+        echo "<br>Стоимость : " . nicenum($pp['points'] / 1000) ;
+        echo "<br>Постройки : " . nicenum( ($pp['points'] - ($pp['fleet_pts']+$pp['defense_pts']) ) / 1000) ;
+        echo "<br>Флот : " . nicenum($pp['fleet_pts'] / 1000) ;
+        echo "<br>Оборона : " . nicenum($pp['defense_pts'] / 1000) ;
         if ($planet['type'] == 10000 ) echo "<br>М: ".nicenum($planet['m'])."<br>К: ".nicenum($planet['k'])."<br>";
         echo "</th><th>";
         if ( $planet['type'] > 0 && $planet['type'] < 10000 )
@@ -427,7 +426,7 @@ function reset ()
         echo "<script language=javascript>anz=$anz;t();</script>\n";
 ?>
 
-<?
+<?php
         echo "</th> </tr>";
         echo "<tr><th>Последняя активность</th><th>".date ("Y-m-d H:i:s", $planet['lastakt'])."</th>  \n";
         echo "<input type=\"hidden\" name=\"type\" value=\"".$planet['type']."\" >\n";
@@ -479,7 +478,7 @@ function reset ()
        </tr> 
     </table>
     Искать:<br>
- <form action="index.php?page=admin&session=<?=$session;?>&mode=Planets&action=search" method="post">
+ <form action="index.php?page=admin&session=<?php echo $session;?>&mode=Planets&action=search" method="post">
  <table>
   <tr>
    <th>
@@ -505,7 +504,7 @@ function reset ()
        </tr> 
     </table>
     Результаты поиска:<br>
-    <?=$SearchResult;?>
+    <?php echo $SearchResult;?>
 <?php
         }
     }

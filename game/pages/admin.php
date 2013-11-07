@@ -36,65 +36,65 @@ function AdminPanel ()
 
 <table><tr><td>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Fleetlogs"><img src="img/admin_fleetlogs.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_FLEETLOGS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Fleetlogs"><img src="img/admin_fleetlogs.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_FLEETLOGS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Browse"><img src="img/admin_browse.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_BROWSE");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Browse"><img src="img/admin_browse.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_BROWSE");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Reports"><img src="img/admin_report.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_REPORTS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Reports"><img src="img/admin_report.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_REPORTS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Bans"><img src="img/admin_ban.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_BANS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Bans"><img src="img/admin_ban.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_BANS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Users"><img src="img/admin_users.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_USERS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Users"><img src="img/admin_users.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_USERS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Planets"><img src="img/admin_planets.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_PLANETS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Planets"><img src="img/admin_planets.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_PLANETS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Queue"><img src="img/admin_queue.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_QUEUE");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Queue"><img src="img/admin_queue.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_QUEUE");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Uni"><img src="img/admin_uni.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_UNI");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Uni"><img src="img/admin_uni.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_UNI");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Errors"><img src="img/admin_error.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_ERRORS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Errors"><img src="img/admin_error.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_ERRORS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Debug"><img src="img/admin_debug.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_DEBUG");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Debug"><img src="img/admin_debug.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_DEBUG");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=BattleSim"><img src="img/admin_sim.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_BATTLESIM");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=BattleSim"><img src="img/admin_sim.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_BATTLESIM");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Broadcast"><img src="img/admin_broadcast.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_BROADCAST");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Broadcast"><img src="img/admin_broadcast.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_BROADCAST");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Expedition"><img src="<?=hostname();?>evolution/gebaeude/210.gif" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_EXPEDITION");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Expedition"><img src="<?php echo hostname();?>evolution/gebaeude/210.gif" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_EXPEDITION");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Logins"><img src="img/admin_logins.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_LOGINS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Logins"><img src="img/admin_logins.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_LOGINS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Checksum"><img src="img/admin_checksum.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_CHECKSUM");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Checksum"><img src="img/admin_checksum.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_CHECKSUM");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Bots"><img src="img/admin_bots.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_BOTS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Bots"><img src="img/admin_bots.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_BOTS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=BattleReport"><img src="img/admin_battle.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_BATTLELOGS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=BattleReport"><img src="img/admin_battle.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_BATTLELOGS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=UserLogs"><img src="img/admin_userlogs.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_USERLOGS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=UserLogs"><img src="img/admin_userlogs.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_USERLOGS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=BotEdit"><img src="img/admin_botedit.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_BOTEDIT");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=BotEdit"><img src="img/admin_botedit.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_BOTEDIT");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
-<a href="index.php?page=admin&session=<?=$session;?>&mode=Coupons"><img src="img/admin_coupons.png" width='32' height='32'
-onmouseover="return overlib('<center><font size=1 color=white><b><?=loca("ADM_MENU_COUPONS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Coupons"><img src="img/admin_coupons.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_COUPONS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
 </td></tr></table><br/>
 
@@ -116,32 +116,32 @@ function Admin_Home ()
 
     <table width=100% border="0" cellpadding="0" cellspacing="1" align="top" class="s">
     <tr>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Fleetlogs"><img src="img/admin_fleetlogs.png"><br><?=loca("ADM_MENU_FLEETLOGS");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Browse"><img src="img/admin_browse.png"><br><?=loca("ADM_MENU_BROWSE");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Reports"><img src="img/admin_report.png"><br><?=loca("ADM_MENU_REPORTS");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Bans"><img src="img/admin_ban.png"><br><?=loca("ADM_MENU_BANS");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Users"><img src="img/admin_users.png"><br><?=loca("ADM_MENU_USERS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Fleetlogs"><img src="img/admin_fleetlogs.png"><br><?php echo loca("ADM_MENU_FLEETLOGS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Browse"><img src="img/admin_browse.png"><br><?php echo loca("ADM_MENU_BROWSE");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Reports"><img src="img/admin_report.png"><br><?php echo loca("ADM_MENU_REPORTS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Bans"><img src="img/admin_ban.png"><br><?php echo loca("ADM_MENU_BANS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Users"><img src="img/admin_users.png"><br><?php echo loca("ADM_MENU_USERS");?></a></th>
     </tr>
     <tr>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Planets"><img src="img/admin_planets.png"><br><?=loca("ADM_MENU_PLANETS");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Queue"><img src="img/admin_queue.png"><br><?=loca("ADM_MENU_QUEUE");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Uni"><img src="img/admin_uni.png"><br><?=loca("ADM_MENU_UNI");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Errors"><img src="img/admin_error.png"><br><?=loca("ADM_MENU_ERRORS");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Debug"><img src="img/admin_debug.png"><br><?=loca("ADM_MENU_DEBUG");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Planets"><img src="img/admin_planets.png"><br><?php echo loca("ADM_MENU_PLANETS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Queue"><img src="img/admin_queue.png"><br><?php echo loca("ADM_MENU_QUEUE");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Uni"><img src="img/admin_uni.png"><br><?php echo loca("ADM_MENU_UNI");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Errors"><img src="img/admin_error.png"><br><?php echo loca("ADM_MENU_ERRORS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Debug"><img src="img/admin_debug.png"><br><?php echo loca("ADM_MENU_DEBUG");?></a></th>
     </tr>
     <tr>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=BattleSim"><img src="img/admin_sim.png"><br><?=loca("ADM_MENU_BATTLESIM");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Broadcast"><img src="img/admin_broadcast.png"><br><?=loca("ADM_MENU_BROADCAST");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Expedition"><img src="<?=hostname();?>evolution/gebaeude/210.gif"><br><?=loca("ADM_MENU_EXPEDITION");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Logins"><img src="img/admin_logins.png"><br><?=loca("ADM_MENU_LOGINS");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Checksum"><img src="img/admin_checksum.png"><br><?=loca("ADM_MENU_CHECKSUM");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=BattleSim"><img src="img/admin_sim.png"><br><?php echo loca("ADM_MENU_BATTLESIM");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Broadcast"><img src="img/admin_broadcast.png"><br><?php echo loca("ADM_MENU_BROADCAST");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Expedition"><img src="<?php echo hostname();?>evolution/gebaeude/210.gif"><br><?php echo loca("ADM_MENU_EXPEDITION");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Logins"><img src="img/admin_logins.png"><br><?php echo loca("ADM_MENU_LOGINS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Checksum"><img src="img/admin_checksum.png"><br><?php echo loca("ADM_MENU_CHECKSUM");?></a></th>
     </tr>
     <tr>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Bots"><img src="img/admin_bots.png"><br><?=loca("ADM_MENU_BOTS");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=BattleReport"><img src="img/admin_battle.png"><br><?=loca("ADM_MENU_BATTLELOGS");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=UserLogs"><img src="img/admin_userlogs.png"><br><?=loca("ADM_MENU_USERLOGS");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=BotEdit"><img src="img/admin_botedit.png"><br><?=loca("ADM_MENU_BOTEDIT");?></a></th>
-    <th><a href="index.php?page=admin&session=<?=$session;?>&mode=Coupons"><img src="img/admin_coupons.png"><br><?=loca("ADM_MENU_COUPONS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Bots"><img src="img/admin_bots.png"><br><?php echo loca("ADM_MENU_BOTS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=BattleReport"><img src="img/admin_battle.png"><br><?php echo loca("ADM_MENU_BATTLELOGS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=UserLogs"><img src="img/admin_userlogs.png"><br><?php echo loca("ADM_MENU_USERLOGS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=BotEdit"><img src="img/admin_botedit.png"><br><?php echo loca("ADM_MENU_BOTEDIT");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Coupons"><img src="img/admin_coupons.png"><br><?php echo loca("ADM_MENU_COUPONS");?></a></th>
     </tr>
     </table>
 <?php

@@ -1,6 +1,8 @@
 AddDefaultCharset UTF-8
 
-php_value error_reporting 0
+php_value error_reporting -1
+php_value display_errors 1
+php_value date.timezone 'Asia/Dubai'
 
 <Files config.php>
 order allow,deny

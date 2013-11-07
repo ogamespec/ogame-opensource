@@ -100,12 +100,12 @@ $prem = PremiumStatus ($GlobalUser);
 
 ?>
 
- <form action="index.php?page=options&session=<?=$session;?>&mode=change" method="POST" > 
+ <form action="index.php?page=options&session=<?php echo $session;?>&mode=change" method="POST" > 
         <input type="hidden" name="design"     value='on' /> 
-    <tr><td class="c" colspan ="2"><?=loca("OPTIONS_USER");?></td></tr> 
+    <tr><td class="c" colspan ="2"><?php echo loca("OPTIONS_USER");?></td></tr> 
     <tr> 
-        <th><a title="<?=loca("Этот адрес можно в любое время изменить. Через 7 дней без изменений он станет постоянным.");?>"><?=loca("OPTIONS_USER_EMAIL");?></a></th> 
-        <th><input type="text" name="db_email" maxlength="100" size="20" value="<?=$GlobalUser['email'];?>" /></th> 
+        <th><a title="<?php echo loca("Этот адрес можно в любое время изменить. Через 7 дней без изменений он станет постоянным.");?>"><?php echo loca("OPTIONS_USER_EMAIL");?></a></th> 
+        <th><input type="text" name="db_email" maxlength="100" size="20" value="<?php echo $GlobalUser['email'];?>" /></th> 
     </tr> 
     <tr> 
         <th>Пароль</th> 
@@ -115,7 +115,7 @@ $prem = PremiumStatus ($GlobalUser);
         <th colspan=2><input type="submit" value="Используйте введённый адрес" /></th> 
     </tr> 
     </form> 
-    <form action="index.php?page=options&session=<?=$session;?>" method="POST" > 
+    <form action="index.php?page=options&session=<?php echo $session;?>" method="POST" > 
     <input type=hidden name="validate" value="1"> 
     <tr> 
         <th colspan=2> 
@@ -136,11 +136,11 @@ $prem = PremiumStatus ($GlobalUser);
 
 ?>
 
- <form action="index.php?page=options&session=<?=$session;?>&mode=change" method="POST" >
+ <form action="index.php?page=options&session=<?php echo $session;?>&mode=change" method="POST" >
   <tr> <td class="c" colspan="2">Режим отпуска</td>  </tr>
   <tr>   </tr>
-  <tr> <th colspan=2>   <?=loca("OPTIONS_MSG_VMENABLED");?><br />
-     <?=date ("d.m.Y. H:i:s", $GlobalUser['vacation_until']);?>   </th>   </tr>
+  <tr> <th colspan=2>   <?php echo loca("OPTIONS_MSG_VMENABLED");?><br />
+     <?php echo date ("d.m.Y. H:i:s", $GlobalUser['vacation_until']);?>   </th>   </tr>
 <?php
     if ( time () >= $GlobalUser['vacation_until'] )
     {
@@ -157,8 +157,8 @@ $prem = PremiumStatus ($GlobalUser);
     {
 ?>
              <tr>
-               <th><a title="<?=loca("OPTIONS_ACCOUNT_DEL_TIP");?>"><?=loca("OPTIONS_ACCOUNT_DEL");?></a></th>
-               <th><input type="checkbox" name="db_deaktjava" <?=IsChecked("disable");?> />
+               <th><a title="<?php echo loca("OPTIONS_ACCOUNT_DEL_TIP");?>"><?php echo loca("OPTIONS_ACCOUNT_DEL");?></a></th>
+               <th><input type="checkbox" name="db_deaktjava" <?php echo IsChecked("disable");?> />
       <?php
     if ($GlobalUser['disable']) echo "am: " . date ("Y-m-d H:i:s", $GlobalUser['disable_until']) . "<input type='hidden' name=loeschen_am value=".date ("Y-m-d H:i:s", $GlobalUser['disable_until']).">";
 ?>           </th>
@@ -167,7 +167,7 @@ $prem = PremiumStatus ($GlobalUser);
     }
 ?>
 
-     <tr>   <th colspan=2><input type="submit" value="<?=loca("OPTIONS_APPLY");?>" /></th>  </tr>
+     <tr>   <th colspan=2><input type="submit" value="<?php echo loca("OPTIONS_APPLY");?>" /></th>  </tr>
  </form>
  </table>
 
@@ -297,58 +297,58 @@ $prem = PremiumStatus ($GlobalUser);
         }
 ?>
 
- <form action="index.php?page=options&session=<?=$session;?>&mode=change" method="POST" >
+ <form action="index.php?page=options&session=<?php echo $session;?>&mode=change" method="POST" >
      <tr><td class="c" colspan ="2">Данные пользователя</td></tr>
 <tr>
 <?php
     if ( $GlobalUser['name_changed'] )
     {
 ?>
-      <th><a title="<?=loca("OPTIONS_ERR_NAME_WEEK");?>"><?=loca("OPTIONS_USER_NAME");?></a></th>
-   <th><?=$GlobalUser['oname'];?></th>
+      <th><a title="<?php echo loca("OPTIONS_ERR_NAME_WEEK");?>"><?php echo loca("OPTIONS_USER_NAME");?></a></th>
+   <th><?php echo $GlobalUser['oname'];?></th>
 <?php
     }
     else
     {
 ?>
-      <th><?=loca("OPTIONS_USER_NAME");?></th>
-   <th><input type="text" name="db_character" size ="20" value="<?=$GlobalUser['oname'];?>" /><br/></th>
+      <th><?php echo loca("OPTIONS_USER_NAME");?></th>
+   <th><input type="text" name="db_character" size ="20" value="<?php echo $GlobalUser['oname'];?>" /><br/></th>
 <?php
     }
 ?>
 
     </tr>
   <tr>
-  <th><?=loca("OPTIONS_USER_OLDPASS");?></th>
+  <th><?php echo loca("OPTIONS_USER_OLDPASS");?></th>
 
    <th><input type="password" name="db_password" size ="20" value="" /></th>
   </tr>
   <tr>
-  <th><?=loca("OPTIONS_USER_NEWPASS1");?></th>
+  <th><?php echo loca("OPTIONS_USER_NEWPASS1");?></th>
    <th><input type="password" name="newpass1" size="20" maxlength="40" /></th>
   </tr>
   <tr>
-  <th><?=loca("OPTIONS_USER_NEWPASS2");?></th>
+  <th><?php echo loca("OPTIONS_USER_NEWPASS2");?></th>
 
    <th><input type="password" name="newpass2" size="20" maxlength="40" /></th>
   </tr>
   <tr>
-  <th><a title="<?=loca("OPTIONS_USER_EMAIL_TIP");?>"><?=loca("OPTIONS_USER_EMAIL");?></a></th>
-  <th><input type="text" name="db_email" maxlength="100" size="20" value="<?=$GlobalUser['email'];?>" /></th>
+  <th><a title="<?php echo loca("OPTIONS_USER_EMAIL_TIP");?>"><?php echo loca("OPTIONS_USER_EMAIL");?></a></th>
+  <th><input type="text" name="db_email" maxlength="100" size="20" value="<?php echo $GlobalUser['email'];?>" /></th>
   </tr>
   <tr>
-  <th><?=loca("OPTIONS_USER_PEMAIL");?></th>
+  <th><?php echo loca("OPTIONS_USER_PEMAIL");?></th>
 
-   <th><?=$GlobalUser['pemail'];?></th>
+   <th><?php echo $GlobalUser['pemail'];?></th>
   </tr>
    <tr><th colspan="2">
   </tr>
   <tr>
-  <td class="c" colspan="2"><?=loca("OPTIONS_GENERAL");?></td>
+  <td class="c" colspan="2"><?php echo loca("OPTIONS_GENERAL");?></td>
   </tr>
   <tr>
 
-   <th><?=loca("OPTIONS_GENERAL_LANG");?></th>
+   <th><?php echo loca("OPTIONS_GENERAL_LANG");?></th>
    <th>
    <select name="lang">
 <?php
@@ -360,29 +360,29 @@ $prem = PremiumStatus ($GlobalUser);
    </th>
   </tr>
 
-   <th><?=loca("OPTIONS_GENERAL_ORDER");?></th>
+   <th><?php echo loca("OPTIONS_GENERAL_ORDER");?></th>
    <th>
    <select name="settings_sort">
-    <option value="0" <?=IsSelected("sortby", 0);?> ><?=loca("OPTIONS_GENERAL_ORDER1");?></option>
-    <option value="1" <?=IsSelected("sortby", 1);?> ><?=loca("OPTIONS_GENERAL_ORDER2");?></option>
-    <option value="2" <?=IsSelected("sortby", 2);?> ><?=loca("OPTIONS_GENERAL_ORDER3");?></option>
+    <option value="0" <?php echo IsSelected("sortby", 0);?> ><?php echo loca("OPTIONS_GENERAL_ORDER1");?></option>
+    <option value="1" <?php echo IsSelected("sortby", 1);?> ><?php echo loca("OPTIONS_GENERAL_ORDER2");?></option>
+    <option value="2" <?php echo IsSelected("sortby", 2);?> ><?php echo loca("OPTIONS_GENERAL_ORDER3");?></option>
    </select>
 
    </th>
   </tr>
   <tr>
-   <th><?=loca("OPTIONS_GENERAL_ORDERBY");?></th>
+   <th><?php echo loca("OPTIONS_GENERAL_ORDERBY");?></th>
    <th>
    <select name="settings_order">
-     <option value="0" <?=IsSelected("sortorder", 0);?>><?=loca("OPTIONS_GENERAL_ORDERBY1");?></option>
-     <option value="1" <?=IsSelected("sortorder", 1);?>><?=loca("OPTIONS_GENERAL_ORDERBY2");?></option>
+     <option value="0" <?php echo IsSelected("sortorder", 0);?>><?php echo loca("OPTIONS_GENERAL_ORDERBY1");?></option>
+     <option value="1" <?php echo IsSelected("sortorder", 1);?>><?php echo loca("OPTIONS_GENERAL_ORDERBY2");?></option>
 
    </select>
    </th>
  </tr>
 
-  <th><?=loca("OPTIONS_GENERAL_SKINPATH");?><br /> <a href="http://oldogame.ru/download/" target="_blank"><?=loca("OPTIONS_GENERAL_DOWNLOAD");?></a></th>
-   <th><input type=text name="dpath" maxlength="80" size="40" value="<?=$GlobalUser['skin'];?>" /> <br />
+  <th><?php echo loca("OPTIONS_GENERAL_SKINPATH");?><br /> <a href="http://oldogame.ru/download/" target="_blank"><?php echo loca("OPTIONS_GENERAL_DOWNLOAD");?></a></th>
+   <th><input type=text name="dpath" maxlength="80" size="40" value="<?php echo $GlobalUser['skin'];?>" /> <br />
   <?php
             // Если путь к скину пустой выдать список доступных скинов на сервере графики.
             if ( $GlobalUser['skin'] === "" ) {
@@ -434,32 +434,32 @@ $prem = PremiumStatus ($GlobalUser);
    </th>
   </tr>
   <tr>
-  <th><?=loca("OPTIONS_GENERAL_SHOWSKIN");?></th>
+  <th><?php echo loca("OPTIONS_GENERAL_SHOWSKIN");?></th>
    <th>
     <input type="checkbox" name="design"
-    <?=IsChecked("useskin");?> />
+    <?php echo IsChecked("useskin");?> />
    </th>
   </tr>
 
   <tr>
-    <th><a title="<?=loca("OPTIONS_GENERAL_DEACTIP_TIP");?>"><?=loca("OPTIONS_GENERAL_DEACTIP");?></a></th>
-   <th><input type="checkbox" name="noipcheck"  <?=IsChecked("deact_ip");?>/></th>
+    <th><a title="<?php echo loca("OPTIONS_GENERAL_DEACTIP_TIP");?>"><?php echo loca("OPTIONS_GENERAL_DEACTIP");?></a></th>
+   <th><input type="checkbox" name="noipcheck"  <?php echo IsChecked("deact_ip");?>/></th>
   </tr>
   <tr>
-   <td class="c" colspan="2"><?=loca("OPTIONS_GALAXY");?></td>
+   <td class="c" colspan="2"><?php echo loca("OPTIONS_GALAXY");?></td>
   </tr>
   <tr>
 
-   <th><a title="<?=loca("OPTIONS_GALAXY_SPIES_TIP");?>"><?=loca("OPTIONS_GALAXY_SPIES");?></a></th>
-   <th><input type="text" name="spio_anz" maxlength="2" size="2" value="<?=$GlobalUser['maxspy'];?>" /></th>
+   <th><a title="<?php echo loca("OPTIONS_GALAXY_SPIES_TIP");?>"><?php echo loca("OPTIONS_GALAXY_SPIES");?></a></th>
+   <th><input type="text" name="spio_anz" maxlength="2" size="2" value="<?php echo $GlobalUser['maxspy'];?>" /></th>
   </tr>
   <!--<tr>
-   <th><?=loca("OPTIONS_GALAXY_TOOLTIPTIME");?></th>
+   <th><?php echo loca("OPTIONS_GALAXY_TOOLTIPTIME");?></th>
    <th><input type="text" name="settings_tooltiptime" maxlength="2" size="2" value="0" /> сек.</th>
   </tr>-->
   <tr>
-   <th><?=loca("OPTIONS_GALAXY_MAXMSG");?></th>
-   <th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="<?=$GlobalUser['maxfleetmsg'];?>" /></th>
+   <th><?php echo loca("OPTIONS_GALAXY_MAXMSG");?></th>
+   <th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="<?php echo $GlobalUser['maxfleetmsg'];?>" /></th>
   </tr>
 
 <?php
@@ -468,36 +468,36 @@ $prem = PremiumStatus ($GlobalUser);
 ?>
   </tr>
      <tr>
-   <th><?=loca("OPTIONS_GALAXY_KEYS");?></th>
-   <th><?=loca("OPTIONS_GALAXY_SHOWKEYS");?></th>
+   <th><?php echo loca("OPTIONS_GALAXY_KEYS");?></th>
+   <th><?php echo loca("OPTIONS_GALAXY_SHOWKEYS");?></th>
   </tr>
       <tr>
-   <th><img src="<?=UserSkin();?>img/e.gif" alt="" />   <?=loca("OPTIONS_GALAXY_SPY");?></th>
+   <th><img src="<?php echo UserSkin();?>img/e.gif" alt="" />   <?php echo loca("OPTIONS_GALAXY_SPY");?></th>
 
    <th><input type="checkbox" name="settings_esp" checked='checked'/></th>
    </tr>
       <tr>
-   <th><img src="<?=UserSkin();?>img/m.gif" alt="" />   <?=loca("OPTIONS_GALAXY_MSG");?></th>
+   <th><img src="<?php echo UserSkin();?>img/m.gif" alt="" />   <?php echo loca("OPTIONS_GALAXY_MSG");?></th>
    <th><input type="checkbox" name="settings_wri" checked='checked'/></th>
    </tr>
       <tr>
-   <th><img src="<?=UserSkin();?>img/b.gif" alt="" />   <?=loca("OPTIONS_GALAXY_BUDDY");?></th>
+   <th><img src="<?php echo UserSkin();?>img/b.gif" alt="" />   <?php echo loca("OPTIONS_GALAXY_BUDDY");?></th>
 
    <th><input type="checkbox" name="settings_bud" checked='checked'/></th>
    </tr>
       <tr>
-   <th><img src="<?=UserSkin();?>img/r.gif" alt="" />   <?=loca("OPTIONS_GALAXY_ROCKET");?></th>
+   <th><img src="<?php echo UserSkin();?>img/r.gif" alt="" />   <?php echo loca("OPTIONS_GALAXY_ROCKET");?></th>
    <th><input type="checkbox" name="settings_mis" checked='checked'/></th>
    </tr>
       <tr>
-   <th><img src="<?=UserSkin();?>img/s.gif" alt="" />   <?=loca("OPTIONS_GALAXY_REPORT");?></th>
+   <th><img src="<?php echo UserSkin();?>img/s.gif" alt="" />   <?php echo loca("OPTIONS_GALAXY_REPORT");?></th>
 
    <th><input type="checkbox" name="settings_rep" checked='checked'/></th>
    </tr>
       <tr>
-   <td class="c" colspan="2"><?=loca("OPTIONS_MSG");?></td>
+   <td class="c" colspan="2"><?php echo loca("OPTIONS_MSG");?></td>
    <tr>
-   <th><?=loca("OPTIONS_MSG_SORT");?></th>
+   <th><?php echo loca("OPTIONS_MSG_SORT");?></th>
   <th><input type="checkbox" name="settings_folders"  checked='checked'/></th>
 </tr>
 
@@ -514,10 +514,10 @@ $prem = PremiumStatus ($GlobalUser);
 
       
   <tr>
-     <td class="c" colspan="2"><?=loca("OPTIONS_ACCOUNT");?></td>
+     <td class="c" colspan="2"><?php echo loca("OPTIONS_ACCOUNT");?></td>
   </tr>
   <tr>
-     <th><a title="<?=loca("OPTIONS_ACCOUNT_VM_TIP");?>"><?=loca("OPTIONS_ACCOUNT_VM");?></a></th>
+     <th><a title="<?php echo loca("OPTIONS_ACCOUNT_VM_TIP");?>"><?php echo loca("OPTIONS_ACCOUNT_VM");?></a></th>
    <th>
     <input type="checkbox" name="urlaubs_modus"
      />
@@ -525,14 +525,14 @@ $prem = PremiumStatus ($GlobalUser);
 
   </tr>
   <tr>
-   <th><a title="<?=loca("OPTIONS_ACCOUNT_DEL_TIP");?>"><?=loca("OPTIONS_ACCOUNT_DEL");?></a></th>
-   <th><input type="checkbox" name="db_deaktjava"  <?=IsChecked("disable");?>/>
+   <th><a title="<?php echo loca("OPTIONS_ACCOUNT_DEL_TIP");?>"><?php echo loca("OPTIONS_ACCOUNT_DEL");?></a></th>
+   <th><input type="checkbox" name="db_deaktjava"  <?php echo IsChecked("disable");?>/>
       <?php
     if ($GlobalUser['disable']) echo "am: " . date ("Y-m-d H:i:s", $GlobalUser['disable_until']);
 ?> </th>
   </tr>
   <tr>
-   <th colspan=2><input type="submit" value="<?=loca("OPTIONS_APPLY");?>" /></th>
+   <th colspan=2><input type="submit" value="<?php echo loca("OPTIONS_APPLY");?>" /></th>
 
   </tr>
    

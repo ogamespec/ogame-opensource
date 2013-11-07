@@ -30,12 +30,12 @@ if ( key_exists ( "who", $_REQUEST ) ) $who = $_REQUEST['who'];
 <div id='content'> 
 <center> 
 <!-- begin header form --> 
-<form method="post" action='index.php?page=statistics&session=<?=$session;?>' > 
+<form method="post" action='index.php?page=statistics&session=<?php echo $session;?>' > 
   
   <!-- begin head table --> 
   <table width="525"> 
     <tr> 
-      <td class="c">Статистика (по состоянию на: <?=date ("Y-m-d, H:i:s", $now);?>)</td> 
+      <td class="c">Статистика (по состоянию на: <?php echo date ("Y-m-d, H:i:s", $now);?>)</td> 
     </tr> 
     <tr> 
       <th> 
@@ -44,20 +44,20 @@ if ( key_exists ( "who", $_REQUEST ) ) $who = $_REQUEST['who'];
         Какой&nbsp;
           
         <select name="who"> 
-          <option value="player" <? if( $who === 'player' ) echo "selected";?>>Игрок</option> 
-          <option value="ally" <? if( $who === 'ally' ) echo "selected";?>>Альянс</option> 
+          <option value="player" <?php if( $who === 'player' ) echo "selected";?>>Игрок</option> 
+          <option value="ally" <?php if( $who === 'ally' ) echo "selected";?>>Альянс</option> 
         </select> 
           
         &nbsp;по&nbsp;
               
         <select name="type"> 
-          <option value="ressources" <? if ($type==="ressources") echo "selected"; ?>>Очкам</option> 
-          <option value="fleet" <? if ($type==="fleet") echo "selected"; ?>>Флотам</option> 
-          <option value="research" <? if ($type==="research") echo "selected"; ?>>Исследованиям</option> 
+          <option value="ressources" <?php if ($type==="ressources") echo "selected"; ?>>Очкам</option> 
+          <option value="fleet" <?php if ($type==="fleet") echo "selected"; ?>>Флотам</option> 
+          <option value="research" <?php if ($type==="research") echo "selected"; ?>>Исследованиям</option> 
         </select> 
           
         &nbsp;на месте        <select name="start"> 
-          <option value="-1" <? if ( $start == -1 ) echo "selected";?>>[Собственная позиция]</option> 
+          <option value="-1" <?php if ( $start == -1 ) echo "selected";?>>[Собственная позиция]</option> 
 <?php
     // Выпадающий список игроков/альянсов
 
@@ -81,7 +81,7 @@ if ( key_exists ( "who", $_REQUEST ) ) $who = $_REQUEST['who'];
 ?>
         </select> 
           
-        <input type="hidden" id="sort_per_member" name="sort_per_member" value="<?=intval($_REQUEST['sort_per_member']);?>" /> 
+        <input type="hidden" id="sort_per_member" name="sort_per_member" value="<?php echo intval($_REQUEST['sort_per_member']);?>" /> 
         <input type=submit value="Показать"> 
       </th> 
     </tr> 
@@ -92,7 +92,7 @@ if ( key_exists ( "who", $_REQUEST ) ) $who = $_REQUEST['who'];
 <!-- end header form --> 
 
 <!-- begin statistic data --> 
-<? if ( $who === 'ally' ) { ?>
+<?php if ( $who === 'ally' ) { ?>
 <!-- begin ally -->
 <table width="519">
   <tr>
@@ -103,7 +103,7 @@ if ( key_exists ( "who", $_REQUEST ) ) $who = $_REQUEST['who'];
     <td class ="c"><a href="#" onClick="document.getElementById('sort_per_member').value=0; javascript:document.forms[0].submit();">Тыс. очков</a></td>
     <td class ="c"><a href="#" onClick="document.getElementById('sort_per_member').value=1; javascript:document.forms[0].submit();">На человека</a></td>
   </tr>
-<? } else { ?>
+<?php } else { ?>
 <!-- begin user --> 
 <table width="525"> 
   <tr> 
@@ -142,7 +142,7 @@ if ( $who === 'ally' ) {
   
     <!-- rank -->
     <th>
-      <?=$place;?>&nbsp;&nbsp;
+      <?php echo $place;?>&nbsp;&nbsp;
 
 <?php
         if ( $diff < 0 ) echo "      <a href='#' onmouseover='return overlib(\"<font color=lime>+".abs($diff)."</font><br/><font color=white>С ".date ("Y-m-d H:i:s", $ally['scoredate'])."\");' onmouseout='return nd();'><font color='lime'>+</font></a> \n";
@@ -158,7 +158,7 @@ if ( $who === 'ally' ) {
     else echo "      <a href=\"ainfo.php?allyid=".$ally['ally_id']."\" target='_ally'>      \n";
 ?>
  
-      <?=$ally['tag'];?>    </a>
+      <?php echo $ally['tag'];?>    </a>
     </th>
     
     <!-- bewerben -->
@@ -183,14 +183,14 @@ if ( $who === 'ally' ) {
     
     <!-- points -->
     <th>
-      <?=nicenum($score);?>     
+      <?php echo nicenum($score);?>     
       
     </th>
     
     <!-- points per member -->
     <th>
       
-      <?=nicenum ( ceil ( $score / $members) ) ;?>
+      <?php echo nicenum ( ceil ( $score / $members) ) ;?>
               
     </th>
     
