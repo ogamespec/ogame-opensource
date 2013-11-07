@@ -224,38 +224,63 @@ function ResourceList ($m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
     echo "</table></td>\n";
 }
 
-function calco (&$img, &$days, &$action, $now, $qcmd, $who)
+function calco ($now, $qcmd, $who)
 {
     global $GlobalUser;
+    $reply = array ();
     $end = GetOfficerLeft ( $GlobalUser['player_id'], $qcmd[$who] );
-    if ($end <= $now) $img[$who] = "_un";
+    if ($end <= $now) {
+        $reply['img'] = "_un";
+        $reply['days'] = '';
+        $reply['action'] = 'Заказать!';
+    }
     else
     {
         $d = ($end - $now) / (60*60*24);
         if ( $d  > 0 )
         {
-            $days[$who] = "&lt;font color=lime&gt;Активен&lt;/font&gt; ещё ".ceil($d)." д.";
-            $action[$who] = "Продлить!";
+            $reply['days'] = "&lt;font color=lime&gt;Активен&lt;/font&gt; ещё ".ceil($d)." д.";
+            $reply['action'] = "Продлить!";
         }
     }
+    return $reply;
 }
 
 function OficeerList ()
 {
     global $GlobalUser;
     $sess = $GlobalUser['session'];
-    $img = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '');
-    $days = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '');
-    $action = array ( 'commander' => 'Заказать!', 'admiral' => 'Заказать!', 'engineer' => 'Заказать!', 'geologist' => 'Заказать!', 'technocrat' => 'Заказать!');
+    $img = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '' );
+    $days = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '' );
+    $action = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '' );
     $qcmd = array ( 'commander' => 'CommanderOff', 'admiral' => 'AdmiralOff', 'engineer' => 'EngineerOff', 'geologist' => 'GeologeOff', 'technocrat' => 'TechnocrateOff');
 
     $now = time ();
 
-    calco (&$img, &$days, &$action, $now, &$qcmd, 'commander');
-    calco (&$img, &$days, &$action, $now, &$qcmd, 'admiral');
-    calco (&$img, &$days, &$action, $now, &$qcmd, 'engineer');
-    calco (&$img, &$days, &$action, $now, &$qcmd, 'geologist');
-    calco (&$img, &$days, &$action, $now, &$qcmd, 'technocrat');
+    $reply = calco ($now, $qcmd, 'commander');
+    $img['commander'] = $reply['img'];
+    $days['commander'] = $reply['days'];
+    $action['commander'] = $reply['action'];
+
+    $reply = calco ($now, $qcmd, 'admiral');
+    $img['admiral'] = $reply['img'];
+    $days['admiral'] = $reply['days'];
+    $action['admiral'] = $reply['action'];
+
+    $reply = calco ($now, $qcmd, 'engineer');
+    $img['engineer'] = $reply['img'];
+    $days['engineer'] = $reply['days'];
+    $action['engineer'] = $reply['action'];
+
+    $reply = calco ($now, $qcmd, 'geologist');
+    $img['geologist'] = $reply['img'];
+    $days['geologist'] = $reply['days'];
+    $action['geologist'] = $reply['action'];
+
+    $reply = calco ($now, $qcmd, 'technocrat');
+    $img['technocrat'] = $reply['img'];
+    $days['technocrat'] = $reply['days'];
+    $action['technocrat'] = $reply['action'];
 
     echo "<td class='header'>\n";
     echo "<table class='header' align=left>\n";
