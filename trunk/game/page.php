@@ -241,6 +241,7 @@ function calco ($now, $qcmd, $who)
         {
             $reply['days'] = "&lt;font color=lime&gt;Активен&lt;/font&gt; ещё ".ceil($d)." д.";
             $reply['action'] = "Продлить!";
+            $reply['img'] = '';
         }
     }
     return $reply;

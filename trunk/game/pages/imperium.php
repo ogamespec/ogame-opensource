@@ -76,15 +76,15 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## Tablehead 
 <!-- ## -->
         <tr height="20" valign="left">
-            <td class="c" colspan="<?=($num+2);?>"><?=loca("EMPIRE_OVERVIEW");?></td>
+            <td class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_OVERVIEW");?></td>
         </tr>
 
 <?php
     if ( $moons && $GlobalUni['moons'] ) {
 ?>        
         <tr height="20">
-            <th colspan="<?=ceil($num/2);?>"><a href="index.php?page=imperium&no_header=1&session=<?=$session;?>&planettype=1"><?=loca("EMPIRE_PLANETS");?></a></th>
-            <th colspan="<?=( ceil($num/2)+(1 - $num%2) );?>"><a href="index.php?page=imperium&no_header=1&session=<?=$session;?>&planettype=3"><?=loca("EMPIRE_MOONS");?></a></th>
+            <th colspan="<?php echo ceil($num/2);?>"><a href="index.php?page=imperium&no_header=1&session=<?php echo $session;?>&planettype=1"><?php echo loca("EMPIRE_PLANETS");?></a></th>
+            <th colspan="<?php echo ( ceil($num/2)+(1 - $num%2) );?>"><a href="index.php?page=imperium&no_header=1&session=<?php echo $session;?>&planettype=3"><?php echo loca("EMPIRE_MOONS");?></a></th>
             <th>&nbsp;</th>
         </tr>
 <?php
@@ -108,7 +108,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     }
 ?> 
             
-            <th width="75"><?=loca("EMPIRE_SUM");?></th>
+            <th width="75"><?php echo loca("EMPIRE_SUM");?></th>
 
         </tr>
 
@@ -116,7 +116,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## Name 
 <!-- ## -->
         <tr height="20">
-            <th width="75"><?=loca("EMPIRE_NAME");?></th>
+            <th width="75"><?php echo loca("EMPIRE_NAME");?></th>
  
 <?php
     foreach ( $plist as $i=>$planet )
@@ -132,7 +132,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## Coordinates 
 <!-- ## -->
         <tr height="20">
-            <th width="75"><?=loca("EMPIRE_COORD");?></th>
+            <th width="75"><?php echo loca("EMPIRE_COORD");?></th>
  
 <?php
     foreach ( $plist as $i=>$planet )
@@ -149,7 +149,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## Fields 
 <!-- ## -->
         <tr height="20">
-            <th width="75"><?=loca("EMPIRE_FIELDS");?></th>
+            <th width="75"><?php echo loca("EMPIRE_FIELDS");?></th>
 <?php
     $sum_fields = $sum_maxfields = 0;
     foreach ( $plist as $i=>$planet )
@@ -162,7 +162,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     $avg_fields = $num ? ceil ( $sum_fields / $num ) : 0;
     $avg_maxfields = $num ? ceil ( $sum_maxfields / $num ) : 0;
 ?>
-            <th width="75"><?=nicenum($sum_fields);?>&nbsp;<a href='#' onMouseOver="return overlib('<font color=white><?=loca("EMPIRE_AVG");?></font>');" onMouseOut="return nd();">(<?=nicenum($avg_fields);?>)</a>&nbsp;/&nbsp;<?=nicenum($sum_maxfields);?>&nbsp;<a href='#' onMouseOver="return overlib('<font color=white><?=loca("EMPIRE_AVG");?></font>');" onMouseOut="return nd();">(<?=nicenum($avg_maxfields);?>)</a></th>
+            <th width="75"><?php echo nicenum($sum_fields);?>&nbsp;<a href='#' onMouseOver="return overlib('<font color=white><?php echo loca("EMPIRE_AVG");?></font>');" onMouseOut="return nd();">(<?php echo nicenum($avg_fields);?>)</a>&nbsp;/&nbsp;<?php echo nicenum($sum_maxfields);?>&nbsp;<a href='#' onMouseOver="return overlib('<font color=white><?php echo loca("EMPIRE_AVG");?></font>');" onMouseOut="return nd();">(<?php echo nicenum($avg_maxfields);?>)</a></th>
 
         </tr>
 
@@ -170,7 +170,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## Resources-Head
 <!-- ## -->
         <tr height="20">
-            <td align="left" class="c" colspan="<?=($num+2);?>"><?=loca("EMPIRE_RES");?></td>
+            <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_RES");?></td>
         </tr>
 
 <!-- ## 
@@ -178,7 +178,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## -->
  
         <tr height="20">
-            <th width="75"><?=loca("EMPIRE_M");?></th>
+            <th width="75"><?php echo loca("EMPIRE_M");?></th>
 
 <?php
     $total = 0;
@@ -199,12 +199,12 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     $avg_prod = $num ? ceil ($avg_prod / $num) : 0;
 ?>
  
-            <th width="75"><?=nicenum($total);?>&nbsp;/&nbsp;<?=nicenum($avg_prod);?></th>
+            <th width="75"><?php echo nicenum($total);?>&nbsp;/&nbsp;<?php echo nicenum($avg_prod);?></th>
         </tr>
 
  
         <tr height="20">
-            <th width="75"><?=loca("EMPIRE_K");?></th>
+            <th width="75"><?php echo loca("EMPIRE_K");?></th>
  
 <?php 
     $total = 0;
@@ -225,12 +225,12 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     $avg_prod = $num ? ceil ($avg_prod / $num) : 0;
 ?>
 
-            <th width="75"><?=nicenum($total);?>&nbsp;/&nbsp;<?=nicenum($avg_prod);?></th>
+            <th width="75"><?php echo nicenum($total);?>&nbsp;/&nbsp;<?php echo nicenum($avg_prod);?></th>
 
         </tr>
  
         <tr height="20">
-            <th width="75"><?=loca("EMPIRE_D");?></th>
+            <th width="75"><?php echo loca("EMPIRE_D");?></th>
 
 <?php 
     $total = 0;
@@ -252,7 +252,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 ?>
   
 
-            <th width="75"><?=nicenum($total);?>&nbsp;/&nbsp;<?=nicenum($avg_prod);?></th>
+            <th width="75"><?php echo nicenum($total);?>&nbsp;/&nbsp;<?php echo nicenum($avg_prod);?></th>
         </tr>
         
 
@@ -260,7 +260,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## Resources-Energy
 <!-- ## -->
         <tr height="20">
-            <th width="75"><?=loca("EMPIRE_E");?></th>
+            <th width="75"><?php echo loca("EMPIRE_E");?></th>
 
 <?php
     $sum_e = 0;
@@ -278,7 +278,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     }
 ?>
 
-            <th width="75"><?=nicenum($sum_e);?> / <?=nicenum($sum_emax);?> </th>
+            <th width="75"><?php echo nicenum($sum_e);?> / <?php echo nicenum($sum_emax);?> </th>
         </tr>
 
 <!-- ## 
@@ -286,7 +286,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## -->
 
         <tr height="20">
-            <td align="left" class="c" colspan="<?=($num+2);?>"><?=loca("EMPIRE_BUILDINGS");?></td>
+            <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_BUILDINGS");?></td>
         </tr>
         
 <!-- ## 
@@ -365,7 +365,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## Research-Head
 <!-- ## -->
         <tr height="20">
-            <td align="left" class="c" colspan="<?=($num+2);?>"><?=loca("EMPIRE_RESEARCH");?></td>
+            <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_RESEARCH");?></td>
         </tr>
 
         
@@ -404,7 +404,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## Ships-Head
 <!-- ## --> 
         <tr height="20">
-            <td align="left" class="c" colspan="<?=($num+2);?>"><?=loca("EMPIRE_FLEET");?></td>
+            <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_FLEET");?></td>
         </tr>
         
 <!-- ## 
@@ -457,7 +457,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## -->     
         <tr height="20">
 
-            <td align="left" class="c" colspan="<?=($num+2);?>"><?=loca("EMPIRE_DEFENSE");?></td>
+            <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_DEFENSE");?></td>
         </tr>
         
 <!-- ## 

@@ -62,8 +62,9 @@ function Admin_Fleetlogs ()
         $queue = dbarray ( $result );
         $fleet_obj = LoadFleet ( $queue['sub_id'] );
 
-        $points = $fpoints = 0;
-        FleetPrice ( $fleet_obj, &$points, &$fpoints );
+        $fleet_price = FleetPrice ( $fleet_obj );
+        $points = $fleet_price['points'];
+        $fpoints = $fleet_price['fpoints'];
         $style = "";
         if ( $points >= 100000000 ) {
             if ( $fleet_obj['mission'] <= 2 ) $style = " style=\"background-color: FireBrick;\" ";

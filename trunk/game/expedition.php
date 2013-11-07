@@ -278,8 +278,8 @@ function Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target)
 
     // Списать очки.
     $points = $fpoints = 0;
-    FleetPrice ( $fleet_obj, &$points, &$fpoints );
-    AdjustStats ( $fleet_obj['owner_id'], $points, $fpoints, 0, '-' );
+    $price = FleetPrice ( $fleet_obj );
+    AdjustStats ( $fleet_obj['owner_id'], $price['points'], $price['fpoints'], 0, '-' );
     RecalcRanks ();
 
     // Флот возвращать не нужно...
