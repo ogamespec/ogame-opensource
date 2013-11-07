@@ -408,7 +408,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
 <html>
 <head>
 <meta http-equiv='content-type' content='text/html; charset=utf-8' />
-<TITLE><?=loca('INSTALL_TITLE');?></TITLE>
+<TITLE><?php echo loca('INSTALL_TITLE');?></TITLE>
 </head>
 
 <body>
@@ -427,7 +427,7 @@ td.c { background-color: #334445; }
 
 <img src='img/install.png'><br>
 
-<font color=red><?=$InstallError?></font>
+<font color=red><?php echo $InstallError;?></font>
 
 <table class='install_form'>
 
@@ -436,51 +436,51 @@ td.c { background-color: #334445; }
 
 <table>
 <tr><td>&nbsp;</td></tr>
-<tr><td><?=loca('INSTALL_STARTPAGE');?></td><td><input type=text value='http://ogame.ru' class='text' name='startpage'></td></tr>
+<tr><td><?php echo loca('INSTALL_STARTPAGE');?></td><td><input type=text value='http://ogame.ru' class='text' name='startpage'></td></tr>
 <tr><td>&nbsp;</td></tr>
-<tr><td colspan=2 class='c'><?=loca('INSTALL_DB');?></td></tr>
-<tr><td><?=loca('INSTALL_DB_HOST');?></td><td><input type=text value='localhost' class='text' name='db_host'></td></tr>
-<tr><td><?=loca('INSTALL_DB_USER');?></td><td><input type=text class='text' name='db_user'></td></tr>
-<tr><td><?=loca('INSTALL_DB_PASS');?></td><td><input type=password class='text'  name='db_pass'></td></tr>
-<tr><td><?=loca('INSTALL_DB_NAME');?></td><td><input type=text class='text' name='db_name'></td></tr>
-<tr><td><a title='<?=loca('INSTALL_TIP1');?>'><?=loca('INSTALL_DB_PREFIX');?></a></td><td><input type=text value='uni1_' class='text' name='db_prefix'></td></tr>
-<tr><td><a title='<?=loca('INSTALL_TIP2');?>'><?=loca('INSTALL_DB_SECRET');?></a></td><td><input type=text type=password class='text' name='db_secret'></td></tr>
+<tr><td colspan=2 class='c'><?php echo loca('INSTALL_DB');?></td></tr>
+<tr><td><?php echo loca('INSTALL_DB_HOST');?></td><td><input type=text value='localhost' class='text' name='db_host'></td></tr>
+<tr><td><?php echo loca('INSTALL_DB_USER');?></td><td><input type=text class='text' name='db_user'></td></tr>
+<tr><td><?php echo loca('INSTALL_DB_PASS');?></td><td><input type=password class='text'  name='db_pass'></td></tr>
+<tr><td><?php echo loca('INSTALL_DB_NAME');?></td><td><input type=text class='text' name='db_name'></td></tr>
+<tr><td><a title='<?php echo loca('INSTALL_TIP1');?>'><?php echo loca('INSTALL_DB_PREFIX');?></a></td><td><input type=text value='uni1_' class='text' name='db_prefix'></td></tr>
+<tr><td><a title='<?php echo loca('INSTALL_TIP2');?>'><?php echo loca('INSTALL_DB_SECRET');?></a></td><td><input type=text type=password class='text' name='db_secret'></td></tr>
 <tr><td>&nbsp;</td></tr>
-<tr><td colspan=2 class='c'><a title='<?=loca('INSTALL_MDB_TIP');?>'><?=loca('INSTALL_MDB');?></a></td></tr>
-<tr><td><?=loca('INSTALL_MDB_ENABLE');?></td><td><input type=checkbox class='text' name='mdb_enable'></td></tr>
-<tr><td><?=loca('INSTALL_MDB_HOST');?></td><td><input type=text value='localhost' class='text' name='mdb_host'></td></tr>
-<tr><td><?=loca('INSTALL_MDB_USER');?></td><td><input type=text class='text' name='mdb_user'></td></tr>
-<tr><td><?=loca('INSTALL_MDB_PASS');?></td><td><input type=password class='text'  name='mdb_pass'></td></tr>
-<tr><td><?=loca('INSTALL_MDB_NAME');?></td><td><input type=text class='text' name='mdb_name'></td></tr>
+<tr><td colspan=2 class='c'><a title='<?php echo loca('INSTALL_MDB_TIP');?>'><?php echo loca('INSTALL_MDB');?></a></td></tr>
+<tr><td><?php echo loca('INSTALL_MDB_ENABLE');?></td><td><input type=checkbox class='text' name='mdb_enable'></td></tr>
+<tr><td><?php echo loca('INSTALL_MDB_HOST');?></td><td><input type=text value='localhost' class='text' name='mdb_host'></td></tr>
+<tr><td><?php echo loca('INSTALL_MDB_USER');?></td><td><input type=text class='text' name='mdb_user'></td></tr>
+<tr><td><?php echo loca('INSTALL_MDB_PASS');?></td><td><input type=password class='text'  name='mdb_pass'></td></tr>
+<tr><td><?php echo loca('INSTALL_MDB_NAME');?></td><td><input type=text class='text' name='mdb_name'></td></tr>
 </table>
 
 </td><td valign=top>
 
 <table class='install_form'>
 <tr><td>&nbsp;</td></tr>
-<tr><td colspan=2 class='c'><?=loca('INSTALL_UNI');?></td></tr>
-<tr><td><a title='<?=loca('INSTALL_TIP3');?>'><?=loca('INSTALL_UNI_NUM');?></a></td><td><input type=text value='1' class='text' name='uni_num'></td></tr>
-<tr><td><a title='<?=loca('INSTALL_TIP4');?>'><?=loca('INSTALL_UNI_SPEED');?></a></td><td><input type=text value='1' class='text' name='uni_speed'></td></tr>
-<tr><td><a title='<?=loca('INSTALL_TIP5');?>'><?=loca('INSTALL_UNI_FLEETSPEED');?></a></td><td><input type=text value='1' class='text' name='uni_fspeed'></td></tr>
-<tr><td><?=loca('INSTALL_UNI_G');?></td><td><input type=text value='9' class='text' name='uni_galaxies'></td></tr>
-<tr><td><?=loca('INSTALL_UNI_S');?></td><td><input type=text value='499' class='text' name='uni_systems'></td></tr>
-<tr><td><a title='<?=loca('INSTALL_TIP6');?>'><?=loca('INSTALL_UNI_USERS');?></a></td><td><input type=text value='12500' class='text' name='uni_maxusers'></td></tr>
-<tr><td><a title='<?=loca('INSTALL_TIP7');?>'><?=loca('INSTALL_UNI_ACS');?></a></td><td><input type=text value='4' class='text' name='uni_acs'></td></tr>
-<tr><td><a title='<?=loca('INSTALL_TIP8');?>'><?=loca('INSTALL_UNI_FID');?></a></td><td><input type=text value='30' class='text' name='uni_fid'></td></tr>
-<tr><td><a title='<?=loca('INSTALL_TIP9');?>'><?=loca('INSTALL_UNI_DID');?></a></td><td><input type=text value='0' class='text' name='uni_did'></td></tr>
-<tr><td><a title='<?=loca('INSTALL_TIP10');?>'><?=loca('INSTALL_UNI_RAPID');?></a></td><td><input type=checkbox class='text' name='uni_rapid' CHECKED></td></tr>
-<tr><td><?=loca('INSTALL_UNI_MOONS');?></td><td><input type=checkbox class='text' name='uni_moons' CHECKED></td></tr>
-<tr><td><?=loca('INSTALL_UNI_BATTLE');?></td><td><input type=text value='../cgi-bin/battle' class='text' name='uni_battle_engine'></td></tr>
+<tr><td colspan=2 class='c'><?php echo loca('INSTALL_UNI');?></td></tr>
+<tr><td><a title='<?php echo loca('INSTALL_TIP3');?>'><?php echo loca('INSTALL_UNI_NUM');?></a></td><td><input type=text value='1' class='text' name='uni_num'></td></tr>
+<tr><td><a title='<?php echo loca('INSTALL_TIP4');?>'><?php echo loca('INSTALL_UNI_SPEED');?></a></td><td><input type=text value='1' class='text' name='uni_speed'></td></tr>
+<tr><td><a title='<?php echo loca('INSTALL_TIP5');?>'><?php echo loca('INSTALL_UNI_FLEETSPEED');?></a></td><td><input type=text value='1' class='text' name='uni_fspeed'></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_G');?></td><td><input type=text value='9' class='text' name='uni_galaxies'></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_S');?></td><td><input type=text value='499' class='text' name='uni_systems'></td></tr>
+<tr><td><a title='<?php echo loca('INSTALL_TIP6');?>'><?php echo loca('INSTALL_UNI_USERS');?></a></td><td><input type=text value='12500' class='text' name='uni_maxusers'></td></tr>
+<tr><td><a title='<?php echo loca('INSTALL_TIP7');?>'><?php echo loca('INSTALL_UNI_ACS');?></a></td><td><input type=text value='4' class='text' name='uni_acs'></td></tr>
+<tr><td><a title='<?php echo loca('INSTALL_TIP8');?>'><?php echo loca('INSTALL_UNI_FID');?></a></td><td><input type=text value='30' class='text' name='uni_fid'></td></tr>
+<tr><td><a title='<?php echo loca('INSTALL_TIP9');?>'><?php echo loca('INSTALL_UNI_DID');?></a></td><td><input type=text value='0' class='text' name='uni_did'></td></tr>
+<tr><td><a title='<?php echo loca('INSTALL_TIP10');?>'><?php echo loca('INSTALL_UNI_RAPID');?></a></td><td><input type=checkbox class='text' name='uni_rapid' CHECKED></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_MOONS');?></td><td><input type=checkbox class='text' name='uni_moons' CHECKED></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_BATTLE');?></td><td><input type=text value='../cgi-bin/battle' class='text' name='uni_battle_engine'></td></tr>
 <tr><td>&nbsp;</td></tr>
-<tr><td colspan=2 class='c'><?=loca('INSTALL_ADMIN');?> (Legor)</td></tr>
-<tr><td><?=loca('INSTALL_ADMIN_EMAIL');?></td><td><input type=text class='text' name='admin_email'></td></tr>
-<tr><td><?=loca('INSTALL_ADMIN_PASS');?></td><td><input type=password class='text' name='admin_pass'></td></tr>
+<tr><td colspan=2 class='c'><?php echo loca('INSTALL_ADMIN');?> (Legor)</td></tr>
+<tr><td><?php echo loca('INSTALL_ADMIN_EMAIL');?></td><td><input type=text class='text' name='admin_email'></td></tr>
+<tr><td><?php echo loca('INSTALL_ADMIN_PASS');?></td><td><input type=password class='text' name='admin_pass'></td></tr>
 <tr><td>&nbsp;</td></tr>
 </table>
 
 </td></tr>
 
-<tr><td colspan=2><center><input type=submit value='<?=loca('INSTALL_INSTALL');?>' class='button'></center></td></tr>
+<tr><td colspan=2><center><input type=submit value='<?php echo loca('INSTALL_INSTALL');?>' class='button'></center></td></tr>
 
 </table>
 
