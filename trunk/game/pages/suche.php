@@ -144,23 +144,23 @@ if ( method () === "POST" )
 <div id='content'> 
 <center> 
  <!-- begin search header --> 
- <form action="index.php?page=suche&session=<?=$session;?>" method="post"> 
+ <form action="index.php?page=suche&session=<?php echo $session;?>" method="post"> 
  <table width="519"> 
   <tr> 
-   <td class="c"><?=loca("SEARCH_SEARCH");?></td> 
+   <td class="c"><?php echo loca("SEARCH_SEARCH");?></td> 
   </tr> 
   <tr> 
    <th> 
     <select name="type"> 
-     <option value="playername" <?=search_selected("playername");?>><?=loca("SEARCH_SEL_USER");?></option> 
-     <option value="planetname" <?=search_selected("planetname");?>><?=loca("SEARCH_SEL_PLANET");?></option> 
-     <option value="allytag" <?=search_selected("allytag");?>><?=loca("SEARCH_SEL_TAG");?></option> 
-     <option value="allyname" <?=search_selected("allyname");?>><?=loca("SEARCH_SEL_ALLY");?></option> 
+     <option value="playername" <?php echo search_selected("playername");?>><?php echo loca("SEARCH_SEL_USER");?></option> 
+     <option value="planetname" <?php echo search_selected("planetname");?>><?php echo loca("SEARCH_SEL_PLANET");?></option> 
+     <option value="allytag" <?php echo search_selected("allytag");?>><?php echo loca("SEARCH_SEL_TAG");?></option> 
+     <option value="allyname" <?php echo search_selected("allyname");?>><?php echo loca("SEARCH_SEL_ALLY");?></option> 
     </select> 
     &nbsp;&nbsp;
-    <input type="text" name="searchtext" value="<?=$searchtext;?>"/> 
+    <input type="text" name="searchtext" value="<?php echo $searchtext;?>"/> 
     &nbsp;&nbsp;
-    <input type="submit" value="<?=loca("SEARCH_BUTTON");?>" /> 
+    <input type="submit" value="<?php echo loca("SEARCH_BUTTON");?>" /> 
    </th> 
   </tr> 
  </table> 
