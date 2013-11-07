@@ -200,6 +200,8 @@ echo "<!-- END CONTENT AREA -->\n\n";
 if ( $GlobalUser['vacation']) $OverviewError = "<center>\nрежим отпуска<br></center>\n";
 if ( $uni['freeze'] ) $OverviewError .= "<center>\nВселенная поставлена на паузу.<br></center>\n";
 
+if ( $GlobalUser['admin'] > 0 ) $OverviewMessage .= "<center>".loca("OVERVIEW_ADMIN_NOTE")."<br></center>\n";
+
 PageFooter ($OverviewMessage, $OverviewError, false);
 ob_end_flush ();
 ?>

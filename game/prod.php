@@ -437,11 +437,12 @@ function PlanetPrice ($planet)
 }
 
 // Стоимость флота
-function FleetPrice ( $fleet_obj, &$points, &$fpoints )
+function FleetPrice ( $fleet_obj )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $m = $k = $d = $e = 0;
     $points = $fpoints = 0;
+    $price = array ();
 
     foreach ( $fleetmap as $i=>$gid ) {        // Флот
         $level = $fleet_obj["ship$gid"];
@@ -452,6 +453,10 @@ function FleetPrice ( $fleet_obj, &$points, &$fpoints )
             $fpoints += $level;
         }
     }
+
+    $price['points'] = $points;
+    $price['fpoints'] = $fpoints;
+    return $price;
 }
 
 ?>

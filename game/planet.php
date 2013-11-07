@@ -294,10 +294,11 @@ function CreateDebris ($g, $s, $p, $owner_id)
     return $id;
 }
 
-// Собрать ПО указанной грузоподъёмностью. В переменные m/k попадает собранное ПО.
-function HarvestDebris ($planet_id, $cargo, &$m, &$k, $when)
+// Собрать ПО указанной грузоподъёмностью. В переменные $harvest m/k попадает собранное ПО.
+function HarvestDebris ($planet_id, $cargo, $when)
 {
     global $db_prefix;
+    $harvest = array ();
     $debris = GetPlanet ($planet_id);
 
     $dm = $debris['m'];
@@ -316,6 +317,10 @@ function HarvestDebris ($planet_id, $cargo, &$m, &$k, $when)
 
     $query = "UPDATE ".$db_prefix."planets SET m = m - $m, k = k - $k, lastpeek = $when WHERE planet_id = $planet_id";
     dbquery ($query);
+
+    $harvest['m'] = $m;
+    $harvest['k'] = $k;
+    return $harvest;
 }
 
 // Насыпать лома в указанное ПО

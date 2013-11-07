@@ -14,5 +14,6 @@ $LOCA["ru"]["OVERVIEW_FIELDS"] = "(застроенная территория: 
 $LOCA["ru"]["OVERVIEW_TEMP"] = "Температура </th> <th colspan=3> от #1°C до #2°C</th> </tr>";
 $LOCA["ru"]["OVERVIEW_COORD"] = "Координаты</th><th colspan=3>#1</th></tr>";
 $LOCA["ru"]["OVERVIEW_RANK"] = "Очки</th><th colspan=3>#1 (место #2 из #3)</th></tr>";
+$LOCA["ru"]["OVERVIEW_ADMIN_NOTE"] = "В режиме администратора Обзор и Админка не обновляют очередь игровых событий.";
 
 ?>
