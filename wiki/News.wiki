@@ -1,5 +1,11 @@
 #summary News archive
 
+*07.11.2013*<br>
+Some nice announcements:
+  * Game engine moving to Zend Framework 2 (hosted on Git). This is just experimental to improve my OOP skills and knowledge of ZF2.
+  * Android client is planned
+  * Starting to complete clean of old game engine to be fully compatible with PHP 5.3+  (no more call by reference and quick <? tags)
+
 *10.07.2013*<br>
 Bot engine completed:<br>
 http://ogamespec.com/imgstore/whc51dd5050c32f8.jpg
