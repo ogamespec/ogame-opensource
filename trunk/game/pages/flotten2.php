@@ -40,13 +40,13 @@ PageHeader ("flotten2");
 
 <center>
 <table width="519" border="0" cellpadding="0" cellspacing="1">
-<form action="index.php?page=flotten3&session=<?=$session;?>" method="POST">
+<form action="index.php?page=flotten3&session=<?php echo $session;?>" method="POST">
 <?php
 
     if ( key_exists ( 'target_mission', $_POST ) ) {
         $target_misson = intval ($_POST['target_mission']);
 ?>
-<input type="hidden" name="target_mission" value="<?=$target_misson;?>" />
+<input type="hidden" name="target_mission" value="<?php echo $target_misson;?>" />
 <?php
     }
 
@@ -66,14 +66,14 @@ PageHeader ("flotten2");
         }
     }
 ?>
-<input name="thisgalaxy" type="hidden" value="<?=$aktplanet['g'];?>" />
-<input name="thissystem" type="hidden" value="<?=$aktplanet['s'];?>" />
-<input name="thisplanet" type="hidden" value="<?=$aktplanet['p'];?>" />
-<input name="thisplanettype" type="hidden" value="<?=GetPlanetType($aktplanet);?>" />
-<input name="speedfactor" type="hidden" value="<?=$GlobalUni['fspeed'];?>" />
-<input name="thisresource1" type="hidden" value="<?=floor($aktplanet['m']);?>" />
-<input name="thisresource2" type="hidden" value="<?=floor($aktplanet['k']);?>" />
-<input name="thisresource3" type="hidden" value="<?=floor($aktplanet['d']);?>" />
+<input name="thisgalaxy" type="hidden" value="<?php echo $aktplanet['g'];?>" />
+<input name="thissystem" type="hidden" value="<?php echo $aktplanet['s'];?>" />
+<input name="thisplanet" type="hidden" value="<?php echo $aktplanet['p'];?>" />
+<input name="thisplanettype" type="hidden" value="<?php echo GetPlanetType($aktplanet);?>" />
+<input name="speedfactor" type="hidden" value="<?php echo $GlobalUni['fspeed'];?>" />
+<input name="thisresource1" type="hidden" value="<?php echo floor($aktplanet['m']);?>" />
+<input name="thisresource2" type="hidden" value="<?php echo floor($aktplanet['k']);?>" />
+<input name="thisresource3" type="hidden" value="<?php echo floor($aktplanet['d']);?>" />
 
 <?php
 
@@ -110,13 +110,13 @@ PageHeader ("flotten2");
  <tr height="20">
   <th width="50%">Координаты цели</th>
   <th>
-   <input name="galaxy" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?=$target_galaxy;?>" />
-   <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?=$target_system;?>" />
-   <input name="planet" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?=$target_planet;?>" />
+   <input name="galaxy" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?php echo $target_galaxy;?>" />
+   <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?php echo $target_system;?>" />
+   <input name="planet" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?php echo $target_planet;?>" />
    <select name="planettype" onChange="shortInfo()" onKeyUp="shortInfo()">
-     <option value="1" <?=planettype(1);?>><?=loca("FLEET_PLANETTYPE_1");?> </option>
-  <option value="2" <?=planettype(2);?>><?=loca("FLEET_PLANETTYPE_2");?> </option>
-  <option value="3" <?=planettype(3);?>><?=loca("FLEET_PLANETTYPE_3");?> </option>
+     <option value="1" <?php echo planettype(1);?>><?php echo loca("FLEET_PLANETTYPE_1");?> </option>
+  <option value="2" <?php echo planettype(2);?>><?php echo loca("FLEET_PLANETTYPE_2");?> </option>
+  <option value="3" <?php echo planettype(3);?>><?php echo loca("FLEET_PLANETTYPE_3");?> </option>
    </select>
  </tr>
  <tr height="20">

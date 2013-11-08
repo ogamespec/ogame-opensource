@@ -70,7 +70,7 @@ PageHeader ("flotten3");
 <center>
 <table width="519" border="0" cellpadding="0" cellspacing="1">
 
-<form action="index.php?page=flottenversand&session=<?=$session;?>" method="POST">
+<form action="index.php?page=flottenversand&session=<?php echo $session;?>" method="POST">
 
 <?php
     // Координаты цели и данные о ресурсах.
@@ -113,7 +113,7 @@ PageHeader ("flotten3");
 ?>
 
 <tr height="20" align="left">
-<td class="c" colspan="2"><?=$galaxy;?>:<?=$system;?>:<?=$planet;?> - <?=loca("FLEET_PLANETTYPE_".intval($_POST['planettype']));?></td>
+<td class="c" colspan="2"><?php echo $galaxy;?>:<?php echo $system;?>:<?php echo $planet;?> - <?php echo loca("FLEET_PLANETTYPE_".intval($_POST['planettype']));?></td>
 
 </tr>
 <tr valign="top" align="left">
@@ -200,18 +200,18 @@ PageHeader ("flotten3");
       <th>Металл</th>
       <th><a href="javascript:maxResource('1');">max</a></th>
 
-      <th><input name="resource1" type="text" alt="Металл <?=floor($aktplanet['m']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
+      <th><input name="resource1" type="text" alt="Металл <?php echo floor($aktplanet['m']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
      </tr>
        <tr height="20">
       <th>Кристалл</th>
       <th><a href="javascript:maxResource('2');">max</a></th>
-      <th><input name="resource2" type="text" alt="Кристалл <?=floor($aktplanet['k']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
+      <th><input name="resource2" type="text" alt="Кристалл <?php echo floor($aktplanet['k']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
      </tr>
        <tr height="20">
 
       <th>Дейтерий</th>
       <th><a href="javascript:maxResource('3');">max</a></th>
-      <th><input name="resource3" type="text" alt="Дейтерий <?=floor($aktplanet['d']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
+      <th><input name="resource3" type="text" alt="Дейтерий <?php echo floor($aktplanet['d']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
      </tr>
        <tr height="20">
   <th>Остаток</th>
@@ -256,7 +256,7 @@ PageHeader ("flotten3");
   <th>&nbsp; </th>
   </tr>
 
-<?
+<?php
     }
 ?>
 
@@ -285,7 +285,7 @@ PageHeader ("flotten3");
       Время в часах   </th>
   </tr>
 
-<?
+<?php
     }
 ?>
 
@@ -314,7 +314,7 @@ PageHeader ("flotten3");
   </tr>
 
 
-<?
+<?php
     }
 ?>
 

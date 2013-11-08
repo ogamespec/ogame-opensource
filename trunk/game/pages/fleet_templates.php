@@ -127,7 +127,7 @@ if ( method () === "GET" && $_GET['mode'] === "delete" ) {    // Удалить
         <center>
         <table style='cellpadding=5px;' border=0>
         <tr>
-            <td class='c' colspan=4 width=517 >Стандартные флоты (макс. <?=$MAX;?>)</td>
+            <td class='c' colspan=4 width=517 >Стандартные флоты (макс. <?php echo $MAX;?>)</td>
         </tr>
         <tr>
             <th width=60 >#</th><th  width=267 >Название<th>Обработать</th><th>Удалить</th>
@@ -142,15 +142,15 @@ if ( method () === "GET" && $_GET['mode'] === "delete" ) {    // Удалить
         $temp = dbarray ( $result );
 ?>
                 <tr>
-            <th><?=$count;?></th><th width=160 ><a href=# onclick="show_input(<?=$temp['id'];?>,'<?=$temp['name'];?>',
-            <?=$temp['ship202'];?>,<?=$temp['ship203'];?>,<?=$temp['ship204'];?>,<?=$temp['ship205'];?>,<?=$temp['ship206'];?>,
-            <?=$temp['ship207'];?>,<?=$temp['ship208'];?>,<?=$temp['ship209'];?>,<?=$temp['ship210'];?>,<?=$temp['ship211'];?>,
-            <?=$temp['ship212'];?>,<?=$temp['ship213'];?>,<?=$temp['ship214'];?>,<?=$temp['ship215'];?>);"><?=$temp['name'];?></a></th>
-            <th width=80 ><a href=# onclick="show_input(<?=$temp['id'];?>,'<?=$temp['name'];?>',
-            <?=$temp['ship202'];?>,<?=$temp['ship203'];?>,<?=$temp['ship204'];?>,<?=$temp['ship205'];?>,<?=$temp['ship206'];?>,
-            <?=$temp['ship207'];?>,<?=$temp['ship208'];?>,<?=$temp['ship209'];?>,<?=$temp['ship210'];?>,<?=$temp['ship211'];?>,
-            <?=$temp['ship212'];?>,<?=$temp['ship213'];?>,<?=$temp['ship214'];?>,<?=$temp['ship215'];?>);">O</a></th>
-            <th width=80 ><a href=index.php?page=fleet_templates&session=<?=$session;?>&mode=delete&id=<?=$temp['id'];?> >X</a></th>
+            <th><?php echo $count;?></th><th width=160 ><a href=# onclick="show_input(<?php echo $temp['id'];?>,'<?php echo $temp['name'];?>',
+            <?php echo $temp['ship202'];?>,<?php echo $temp['ship203'];?>,<?php echo $temp['ship204'];?>,<?php echo $temp['ship205'];?>,<?php echo $temp['ship206'];?>,
+            <?php echo $temp['ship207'];?>,<?php echo $temp['ship208'];?>,<?php echo $temp['ship209'];?>,<?php echo $temp['ship210'];?>,<?php echo $temp['ship211'];?>,
+            <?php echo $temp['ship212'];?>,<?php echo $temp['ship213'];?>,<?php echo $temp['ship214'];?>,<?php echo $temp['ship215'];?>);"><?php echo $temp['name'];?></a></th>
+            <th width=80 ><a href=# onclick="show_input(<?php echo $temp['id'];?>,'<?php echo $temp['name'];?>',
+            <?php echo $temp['ship202'];?>,<?php echo $temp['ship203'];?>,<?php echo $temp['ship204'];?>,<?php echo $temp['ship205'];?>,<?php echo $temp['ship206'];?>,
+            <?php echo $temp['ship207'];?>,<?php echo $temp['ship208'];?>,<?php echo $temp['ship209'];?>,<?php echo $temp['ship210'];?>,<?php echo $temp['ship211'];?>,
+            <?php echo $temp['ship212'];?>,<?php echo $temp['ship213'];?>,<?php echo $temp['ship214'];?>,<?php echo $temp['ship215'];?>);">O</a></th>
+            <th width=80 ><a href=index.php?page=fleet_templates&session=<?php echo $session;?>&mode=delete&id=<?php echo $temp['id'];?> >X</a></th>
         </tr>
 <?php
         $count++;
@@ -160,7 +160,7 @@ if ( method () === "GET" && $_GET['mode'] === "delete" ) {    // Удалить
                 </table>
         <br>
         <div id='input_field' style='visibility:hidden;'>
-        <form action='index.php?page=fleet_templates&session=<?=$session;?>' method="POST">
+        <form action='index.php?page=fleet_templates&session=<?php echo $session;?>' method="POST">
         <input type="hidden" name=mode value=save >
         <table style='cellpadding=5px;' border=0>
         <tr><td class='c' colspan=2 width=517 >Создать новый стандартный флот</td></tr>
