@@ -49,9 +49,8 @@ $unitab = LoadUniverse ();
 $unispeed = $unitab['fspeed'];
 
 // Обработать вызовы AJAX
-if ( $_GET['ajax'] == 1)
-{
-    include "flottenversand_ajax.php";
+if ( key_exists ( 'ajax', $_GET ) ) {
+    if ( $_GET['ajax'] == 1) include "flottenversand_ajax.php";
 }
 
 // Нельзя отправлять флот, если предыдущий отправлен менее секунды назад.
@@ -336,8 +335,6 @@ if ($FleetError) {
 // Все проверки прошли удачно, можно отправлять флот.
 else {
 
-    //print_r ( $_POST);
-
     // Fleet lock
     $fleetlock = "temp/fleetlock_" . $aktplanet['planet_id'];
     if ( file_exists ($fleetlock) ) MyGoto ( "flotten1" );
@@ -383,28 +380,28 @@ else {
     </td>
    </tr>
    <tr height="20">
-  <th>Задание</th><th><?=loca("FLEET_ORDER_$order");?></th>
+  <th>Задание</th><th><?php echo loca("FLEET_ORDER_$order");?></th>
    </tr>
    <tr height="20">
-     <th>Расстояние</th><th><?=nicenum($dist);?></th>
+     <th>Расстояние</th><th><?php echo nicenum($dist);?></th>
    </tr>
    <tr height="20">
-      <th>Скорость</th><th><?=nicenum($slowest_speed);?></th>
+      <th>Скорость</th><th><?php echo nicenum($slowest_speed);?></th>
    </tr>
    <tr height="20">
-      <th>Потребление</th><th><?=nicenum($cons['fleet'] + $cons['probes']);?></th>
+      <th>Потребление</th><th><?php echo nicenum($cons['fleet'] + $cons['probes']);?></th>
    </tr>
    <tr height="20">
-     <th>Отправлен с</th><th><a href="index.php?page=galaxy&galaxy=<?=intval($_POST['thisgalaxy']);?>&system=<?=intval($_POST['thissystem']);?>&position=<?=intval($_POST['thisplanet']);?>&session=<?=$session;?>" >[<?=intval($_POST['thisgalaxy']);?>:<?=intval($_POST['thissystem']);?>:<?=intval($_POST['thisplanet']);?>]</a></th>
+     <th>Отправлен с</th><th><a href="index.php?page=galaxy&galaxy=<?php echo intval($_POST['thisgalaxy']);?>&system=<?php echo intval($_POST['thissystem']);?>&position=<?php echo intval($_POST['thisplanet']);?>&session=<?php echo $session;?>" >[<?php echo intval($_POST['thisgalaxy']);?>:<?php echo intval($_POST['thissystem']);?>:<?php echo intval($_POST['thisplanet']);?>]</a></th>
    </tr>
    <tr height="20">
-     <th>Отправлен на</th><th><a href="index.php?page=galaxy&galaxy=<?=intval($_POST['galaxy']);?>&system=<?=intval($_POST['system']);?>&position=<?=intval($_POST['planet']);?>&session=<?=$session;?>" >[<?=intval($_POST['galaxy']);?>:<?=intval($_POST['system']);?>:<?=intval($_POST['planet']);?>]</a></th>
+     <th>Отправлен на</th><th><a href="index.php?page=galaxy&galaxy=<?php echo intval($_POST['galaxy']);?>&system=<?php echo intval($_POST['system']);?>&position=<?php echo intval($_POST['planet']);?>&session=<?php echo $session;?>" >[<?php echo intval($_POST['galaxy']);?>:<?php echo intval($_POST['system']);?>:<?php echo intval($_POST['planet']);?>]</a></th>
    </tr>
    <tr height="20">
-     <th>Время прибытия</th><th><?=date("D M j G:i:s", $queue['end']);?></th>
+     <th>Время прибытия</th><th><?php echo date("D M j G:i:s", $queue['end']);?></th>
    </tr>
    <tr height="20">
-     <th>Время возврата</th><th><?=date("D M j G:i:s", $queue['end'] + $flighttime + $hold_time);?></th>
+     <th>Время возврата</th><th><?php echo date("D M j G:i:s", $queue['end'] + $flighttime + $hold_time);?></th>
     </tr>
    <tr height="20">
      <td class="c" colspan="2">Корабли</td>

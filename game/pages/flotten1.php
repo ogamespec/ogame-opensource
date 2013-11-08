@@ -99,18 +99,18 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
     if ($prem['admiral'])
     {
 ?>
-    <div style="margin-top:2;margin-bottom:2;">Флоты <?=$rows;?> / <?=($maxfleet-2);?> <b><font style="color:lime;">+2</font></b> <img border="0" alt="Адмирал" src="img/admiral_ikon.gif" onmouseover='return overlib("&lt;font color=white &gt;Адмирал&lt;/font&gt;", WIDTH, 100);' onmouseout="return nd();" width="20" height="20" style="vertical-align:middle;"></div>
+    <div style="margin-top:2;margin-bottom:2;">Флоты <?php echo $rows;?> / <?php echo ($maxfleet-2);?> <b><font style="color:lime;">+2</font></b> <img border="0" alt="Адмирал" src="img/admiral_ikon.gif" onmouseover='return overlib("&lt;font color=white &gt;Адмирал&lt;/font&gt;", WIDTH, 100);' onmouseout="return nd();" width="20" height="20" style="vertical-align:middle;"></div>
 <?php
     }
     else
     {
 ?>
-    Флоты <?=$rows;?> / <?=$maxfleet;?>    </td>
+    Флоты <?php echo $rows;?> / <?php echo $maxfleet;?>    </td>
 <?php
     }
 ?>
     <td align=right style='background-color:transparent;'>
-      <?=$expnum;?>/<?=$maxexp;?> Экспедиции    
+      <?php echo $expnum;?>/<?php echo $maxexp;?> Экспедиции    
     </td>
     </tr>
     </table>
@@ -144,7 +144,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
             $target_user = LoadUser ( $target['owner_id'] );
 ?>
      <tr height="20">
-    <th><?=$row;?></th>
+    <th><?php echo $row;?></th>
 
     <th>
 <?
@@ -161,21 +161,21 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
             }
         }
 ?>
-"><?=nicenum($totalships);?></a></th>
-    <th><a href="index.php?page=galaxy&galaxy=<?=$origin['g'];?>&system=<?=$origin['s'];?>&position=<?=$origin['p'];?>&session=<?=$session;?>" >[<?=$origin['g'];?>:<?=$origin['s'];?>:<?=$origin['p'];?>]</a></th>
+"><?php echo nicenum($totalships);?></a></th>
+    <th><a href="index.php?page=galaxy&galaxy=<?php echo $origin['g'];?>&system=<?php echo $origin['s'];?>&position=<?php echo $origin['p'];?>&session=<?php echo $session;?>" >[<?php echo $origin['g'];?>:<?php echo $origin['s'];?>:<?php echo $origin['p'];?>]</a></th>
 
-    <th><?=date ( "D M j G:i:s", $queue['start']);?></th>
-    <th><a href="index.php?page=galaxy&galaxy=<?=$target['g'];?>&system=<?=$target['s'];?>&position=<?=$target['p'];?>&session=<?=$session;?>" >[<?=$target['g'];?>:<?=$target['s'];?>:<?=$target['p'];?>]</a><?php
+    <th><?php echo date ( "D M j G:i:s", $queue['start']);?></th>
+    <th><a href="index.php?page=galaxy&galaxy=<?php echo $target['g'];?>&system=<?php echo $target['s'];?>&position=<?php echo $target['p'];?>&session=<?php echo $session;?>" >[<?php echo $target['g'];?>:<?php echo $target['s'];?>:<?php echo $target['p'];?>]</a><?php
     if ( ! ($target['type'] == 10002 || $target['type'] == 20000 || $target['type'] == 10004 ) ) echo "   <br />" . $target_user['oname'];
 ?>    </th>
-    <th><?=date ( "D M j G:i:s", $queue['end']);?></th>
+    <th><?php echo date ( "D M j G:i:s", $queue['end']);?></th>
     <th>
 <?php
     if ( ($fleet['mission'] == 1 || $fleet['mission'] == 21) && $uni['acs'] > 0 )
     {
 ?>
-         <form action="index.php?page=flotten1&session=<?=$session;?>" method="POST">
-    <input type="hidden" name="order_union" value="<?=$fleet['fleet_id'];?>" />
+         <form action="index.php?page=flotten1&session=<?php echo $session;?>" method="POST">
+    <input type="hidden" name="order_union" value="<?php echo $fleet['fleet_id'];?>" />
         <input type="submit" value="Союз" />
      </form>
 <?php
@@ -185,8 +185,8 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
     if ( $fleet['mission'] < 100 || $fleet['mission'] > 200 )
     {
 ?>
-         <form action="index.php?page=flotten1&session=<?=$session;?>" method="POST">
-    <input type="hidden" name="order_return" value="<?=$fleet['fleet_id'];?>" />
+         <form action="index.php?page=flotten1&session=<?php echo $session;?>" method="POST">
+    <input type="hidden" name="order_return" value="<?php echo $fleet['fleet_id'];?>" />
         <input type="submit" value="Отзыв" />
      </form>
 <?php
@@ -233,13 +233,13 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 
 ?>
 
-<form action="index.php?page=flotten1&session=<?=$session;?>" method="POST">
-    <input type="hidden" name="flotten" value="<?=$fleet['fleet_id'];?>" />
+<form action="index.php?page=flotten1&session=<?php echo $session;?>" method="POST">
+    <input type="hidden" name="flotten" value="<?php echo $fleet['fleet_id'];?>" />
   <table width="519" border="0" cellpadding="0" cellspacing="1">
-                    <tr><td class="c" colspan=2>Союз флотов <?=$union['name'];?></td></tr>
+                    <tr><td class="c" colspan=2>Союз флотов <?php echo $union['name'];?></td></tr>
                     <tr><td class="c" colspan=2>Изменить название союза</td></tr>
                     <tr><th colspan=2>
-<input name="union_name" type="text" value="<?=$union['name'];?>" /> <br /><input type="submit" value="OK" />
+<input name="union_name" type="text" value="<?php echo $union['name'];?>" /> <br /><input type="submit" value="OK" />
                     </th></tr>
                     <tr>
                         <td class="c">Приглашённые участники</td>
@@ -270,7 +270,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 ?>
 
   
-<form action="index.php?page=flotten2&session=<?=$session;?>" method="POST">
+<form action="index.php?page=flotten2&session=<?php echo $session;?>" method="POST">
 <?php
     if ( key_exists ( 'galaxy', $_GET ) ) {
         $target_galaxy = intval ($_GET['galaxy']);
@@ -287,11 +287,11 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
         if ( key_exists ( 'target_mission', $_GET ) ) $target_mission = intval ($_GET['target_mission']);
         else  $target_mission = 0;
 ?>
-     <input type="hidden" name="target_galaxy" value="<?=$target_galaxy;?>" />
-   <input type="hidden" name="target_system" value="<?=$target_system;?>" />
-   <input type="hidden" name="target_planet" value="<?=$target_planet;?>" />
-   <input type="hidden" name="target_planettype" value="<?=$target_planettype;?>" />
-   <input type="hidden" name="target_mission" value="<?=$target_mission;?>" />
+     <input type="hidden" name="target_galaxy" value="<?php echo $target_galaxy;?>" />
+   <input type="hidden" name="target_system" value="<?php echo $target_system;?>" />
+   <input type="hidden" name="target_planet" value="<?php echo $target_planet;?>" />
+   <input type="hidden" name="target_planettype" value="<?php echo $target_planettype;?>" />
+   <input type="hidden" name="target_mission" value="<?php echo $target_mission;?>" />
 <?php
     }
 ?>
