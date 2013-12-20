@@ -166,6 +166,7 @@ $slowest_speed = FlightSpeed ( $fleet, $origin_user['r115'], $origin_user['r117'
 $flighttime = FlightTime ( $dist, $slowest_speed, $fleetspeed / 10, $unispeed );
 $cons = FlightCons ( $fleet, $dist, $flighttime, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'], $unispeed, $hold_time / 3600 );
 $cargo = $spycargo = $numships = 0;
+
 foreach ($fleet as $id=>$amount)
 {
     if ($id != 210) $cargo += FleetCargo ($id) * $amount;        // не считать зонды.
