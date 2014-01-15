@@ -46,4 +46,3 @@ function dbfree ($result) {
     @mysql_free_result ($result);
 }
 
-?>

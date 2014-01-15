@@ -21,4 +21,3 @@ if ( file_exists ("config.php")) {
     }
 }
 
-?>
