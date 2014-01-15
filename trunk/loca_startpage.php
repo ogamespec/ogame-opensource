@@ -10,6 +10,7 @@ require_once "loca.php";
         loca_add("SERVERNAME" , "OGame Open Source");
         loca_add("SERVERADDR" , "oldogame.ru");
         loca_add("BOARDADDR"  , "http://board.oldogame.ru");
+        loca_add("WIKIADDR"   , "http://wiki.oldogame.ru");
 
         loca_add("META_CHARSET" , "utf-8");
         loca_add("META_KEYWORDS" , "OGame, Browsergame, Onlinegame, Browsergames, Browsergame, Spiel, Spiele, Onlinespiel, Onlinespiele, old, old design");
@@ -36,6 +37,7 @@ require_once "loca.php";
         loca_add("MENU_PICTURES",    "Bilder");
         loca_add("MENU_REG",         "Mitspielen");
         loca_add("MENU_BOARD",       "Forum");
+        loca_add("MENU_WIKI",        "Wiki");
 
         loca_add("LOGIN_LINK" , "Link Login");
         loca_add("LOGIN_NAME" , "Spielername");
@@ -138,6 +140,7 @@ require_once "loca.php";
         loca_add("SERVERNAME" , "OGame Open Source");
         loca_add("SERVERADDR" , "oldogame.ru");
         loca_add("BOARDADDR"  , "http://board.oldogame.ru");
+        loca_add("WIKIADDR"   , "http://wiki.oldogame.ru");
 
         loca_add("META_CHARSET" , "utf-8");
         loca_add("META_KEYWORDS" , "OGame, Browsergame, Onlinegame, Browsergames, Browsergame, Spiel, Spiele, Onlinespiel, Onlinespiele, old, old deisgn");
@@ -159,11 +162,12 @@ require_once "loca.php";
         loca_add("TIP_204" , "T&C:<br /> Accept the T&C (Terms and Conditions) to be able to play OGame.");
         loca_add("TIP_205" , "Password:<br/>Your password works as a safety meassure when login in to your account. Do not give your password to anyone!");
 
-        loca_add("MENU_START",        "Start");
-        loca_add("MENU_ABOUT",        "About OGame");
+        loca_add("MENU_START",       "Start");
+        loca_add("MENU_ABOUT",       "About OGame");
         loca_add("MENU_PICTURES",    "Pictures");
-        loca_add("MENU_REG",            "Join Now!");
-        loca_add("MENU_BOARD",        "Board");
+        loca_add("MENU_REG",         "Join Now!");
+        loca_add("MENU_BOARD",       "Board");
+        loca_add("MENU_WIKI",        "Wiki");
 
         loca_add("LOGIN_LINK" , "Link Login");
         loca_add("LOGIN_NAME" , "Username");
@@ -258,6 +262,7 @@ require_once "loca.php";
         loca_add("SERVERNAME" , "OGame Open Source");
         loca_add("SERVERADDR" , "oldogame.ru");
         loca_add("BOARDADDR"  , "http://board.oldogame.ru");
+        loca_add("WIKIADDR"   , "http://wiki.oldogame.ru");
 
         loca_add("META_CHARSET" , "utf-8");
         loca_add("META_KEYWORDS" , "ogame, old, старый дизайн, онлайн игра, он-лайн игра, ММОГ, MMOG, дейтерий, стратегия, old deisgn");
@@ -284,6 +289,7 @@ require_once "loca.php";
         loca_add("MENU_PICTURES",    "Картинки");
         loca_add("MENU_REG",         "Присоединиться");
         loca_add("MENU_BOARD",       "Форум");
+        loca_add("MENU_WIKI",        "Вики");
 
         loca_add("LOGIN_LINK" , "Link Логин");
         loca_add("LOGIN_NAME" , "Имя");
@@ -514,8 +520,8 @@ Soruyorsundur kendine bunu sana niye anlattigimi. Söyle desem: Sana burada beni
 */
 
     // Язык стартовой страницы
-    if ( !isset ($_COOKIE['ogamelang']) ) $LocaLang = "en";
+    if ( !isset ($_COOKIE['ogamelang']) ) $LocaLang = "ru";
     else $LocaLang = $_COOKIE['ogamelang'];
 //    if ($LocaLang !== 'de' && $LocaLang !== 'en' && $LocaLang !== 'ru') $LocaLang = "en";        // restrict unsupported languages
 
-?>
+
