@@ -20,6 +20,7 @@ function Admin_Checksum ()
         'bbcode.php', 
         'bot.php', 
         'botapi.php', 
+        'cache.php', 
         'coupon.php', 
         'db.php', 
         'debug.php', 
