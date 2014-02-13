@@ -15,6 +15,7 @@ function Admin_Checksum ()
     $engine_files = array (
         'ainfo.php', 
         'ally.php', 
+        'api.php', 
         'battle.php', 
         'battle_engine.php', 
         'bbcode.php', 
