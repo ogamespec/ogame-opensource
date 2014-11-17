@@ -59,7 +59,7 @@ $prem = PremiumStatus ($GlobalUser);
         if ( time () >= $GlobalUser['vacation_until'] && $_POST['urlaub_aus'] === "on" && $GlobalUser['vacation'] )
         {
             $OptionsError = va ( loca("OPTIONS_MSG_VMDISABLED"), $GlobalUser['oname'] ) . "\n<br/>\n";
-            $query = "UPDATE ".$db_prefix."users SET vacation=0,vacation_until=0 WHERE player_id=".$GlobalUser['player_id'];
+            $query = "UPDATE ".$db_prefix."users SET vacation=0,vacation_until=0 WHERE player_id=".intval($GlobalUser['player_id']);
             dbquery ($query);
             $GlobalUser['vacation'] = $GlobalUser['vacation_until'] = 0;
         }
@@ -213,7 +213,7 @@ $prem = PremiumStatus ($GlobalUser);
                 if ( $OptionsError === "" )
                 {
                     $md5 = md5 ($_POST['newpass1'] . $db_secret );
-                    $query = "UPDATE ".$db_prefix."users SET password = '".$md5."' WHERE player_id = " . $GlobalUser['player_id'];
+                    $query = "UPDATE ".$db_prefix."users SET password = '".$md5."' WHERE player_id = " . intval($GlobalUser['player_id']);
                     dbquery ($query);
                     $OptionsError = loca ("OPTIONS_MSG_PASS");    // TODO: OPTIONS_MSG_UNSAFE, OPTIONS_MSG_SIMPLE
                     Logout ( $GlobalUser['session'] );
@@ -230,7 +230,7 @@ $prem = PremiumStatus ($GlobalUser);
                 {
                     $ip = $_SERVER['REMOTE_ADDR'];
                     $ack = md5(time ().$db_secret);
-                    $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . $GlobalUser['player_id'];
+                    $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . intval($GlobalUser['player_id']);
                     dbquery ($query);
                     AddChangeEmailEvent ($GlobalUser['player_id']);
                     if ( $ip !== "127.0.0.1" ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
@@ -258,7 +258,7 @@ $prem = PremiumStatus ($GlobalUser);
             if ( $_POST['db_deaktjava'] === "on" && $GlobalUser['disable'] == 0 ) {        // Поставить аккаунт на удаление
                 $disable_until = time() + (7 * 24 * 60 * 60);
 
-                $query = "UPDATE ".$db_prefix."users SET disable=1,disable_until=$disable_until WHERE player_id=".$GlobalUser['player_id'];
+                $query = "UPDATE ".$db_prefix."users SET disable=1,disable_until=$disable_until WHERE player_id=".intval($GlobalUser['player_id']);
                 dbquery ($query);
                 $GlobalUser['disable'] = 1;
                 $GlobalUser['disable_until'] = $disable_until;
@@ -283,7 +283,7 @@ $prem = PremiumStatus ($GlobalUser);
             $deactip = (int) key_exists ( 'noipcheck', $_POST );
             $maxspy = min( max (1, intval($_POST['spio_anz'])), 99);
             $maxfleetmsg = min( max (1, intval($_POST['settings_fleetactions'])), 99);
-            $query = "UPDATE ".$db_prefix."users SET redesign=$redesign, deact_ip=$deactip, sortby=$sortby, sortorder=$sortorder, maxspy=$maxspy, maxfleetmsg=$maxfleetmsg, lang='".$lang."' WHERE player_id=".$GlobalUser['player_id'];
+            $query = "UPDATE ".$db_prefix."users SET redesign=$redesign, deact_ip=$deactip, sortby=$sortby, sortorder=$sortorder, maxspy=$maxspy, maxfleetmsg=$maxfleetmsg, lang='".$lang."' WHERE player_id=".intval($GlobalUser['player_id']);
             dbquery ($query);
             $GlobalUser['sortby'] = $sortby;
             $GlobalUser['sortorder'] = $sortorder;
