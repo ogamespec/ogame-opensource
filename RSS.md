@@ -1,0 +1,1 @@
+http://php.net/manual/en/features.http-auth.php
