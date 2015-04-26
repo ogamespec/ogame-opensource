@@ -17,5 +17,6 @@ $LOCA["de"]["GALATOOL_TOTAL"] = "Total : #1";
 $LOCA["de"]["GALATOOL_NOTES"] = "Wenn ein Spieler Anstieg / Rückgang war mehr als 30.000 Punkte, dann wird in Klammern neben dem Namen angezeigt.";
 $LOCA["de"]["GALATOOL_FIND"] = "Finden Sie alle Planeten Spieler : ";
 $LOCA["de"]["GALATOOL_SEARCH"] = "Suchen";
+$LOCA["de"]["GALATOOL_NOT_UPDATED"] = "Noch nicht aktualisiert";
 
 ?>

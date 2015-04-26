@@ -11,6 +11,7 @@ function va ($subject)
 {
     $num_arg = func_num_args();
     $pattern = array ();
+    $replace = array ();
     for ($i=1; $i<$num_arg; $i++)
     {
         $pattern[$i-1] = "/#$i/";
@@ -72,6 +73,7 @@ function nicenum ($number)
 // Here is a function to sort an array by the key of his sub-array
 function sksort ($array, $subkey="id", $sort_ascending=false)
 {
+    $temp_array = array ();
     if (count($array))
         $temp_array[key($array)] = array_shift($array);
 
@@ -102,6 +104,8 @@ function PlayerDetails ($player_id)
 {
     global $galaxy, $stats, $ally;
 
+    if ( !key_exists($player_id, $stats) ) return;
+
     $planets = array ();
     $moons = array ();
     echo "<br><br><font size=+2>".$stats[$player_id]['name'].":</font>";
@@ -120,6 +124,7 @@ function PlayerDetails ($player_id)
         if ( $planet['owner_id'] == $player_id && $planet['type'] < 10000 )
         {
             $num = 1000000 * $planet['g'] + 1000 * $planet['s'] + 15 * $planet['p'];
+
             if ( $planet['type'] == 0 )
             {
                 $moons[$num] = array ();
@@ -155,14 +160,17 @@ function PlayerDetails ($player_id)
 
     echo "<td class=b><b>".loca("GALATOOL_MOONS")."</b>:";
     echo "<table>";
-    foreach ( $planets as $id=>$planet )
+    if ( key_exists($planet['num'], $moons) )
     {
-        if ( $moons[$planet['num']]['present'] == 1 ) {
-            echo "<tr><td align=center><img src=\"". GetPlanetSmallImage ( hostname () . "/evolution/", $moons[$planet['num']] ) . "\" height=30px><br>\n";
-            echo $moons[$planet['num']]['name'] . "</td></tr>";
-        }
-        else {
-            echo "<tr><td height=\"45px\"></td></tr>";
+        foreach ( $planets as $id=>$planet )
+        {
+            if ( $moons[$planet['num']]['present'] == 1 ) {
+                echo "<tr><td align=center><img src=\"". GetPlanetSmallImage ( hostname () . "/evolution/", $moons[$planet['num']] ) . "\" height=30px><br>\n";
+                echo $moons[$planet['num']]['name'] . "</td></tr>";
+            }
+            else {
+                echo "<tr><td height=\"45px\"></td></tr>";
+            }
         }
     }
     echo "</table></td>";
@@ -170,17 +178,26 @@ function PlayerDetails ($player_id)
     echo "</tr></table>";
 }
 
-$last_update = filemtime ( 'galaxy.txt' );
+if ( file_exists('galaxy.txt') ) $last_update = filemtime ( 'galaxy.txt' );
+else $last_update = 0;
 
-echo "<br>".va ( loca("GALATOOL_DATE"), date ( "d.m.Y H:i:s", $last_update )) . "<br>";
+if ( $last_update) echo "<br>".va ( loca("GALATOOL_DATE"), date ( "d.m.Y H:i:s", $last_update )) . "<br>";
+else echo "<br>".va ( loca("GALATOOL_NOT_UPDATED") ) . "<br>";
 
-$ally = unserialize ( file_get_contents ( 'ally_statistics.txt' ) );
-$old_ally = unserialize ( file_get_contents ( 'ally_statistics_old.txt' ) );
+if ( file_exists('ally_statistics.txt') ) $ally = unserialize ( file_get_contents ( 'ally_statistics.txt' ) );
+else $ally = array();
 
-$stats = unserialize ( file_get_contents ( 'statistics.txt' ) );
-$old_stats = unserialize ( file_get_contents ( 'statistics_old.txt' ) );
+if ( file_exists('ally_statistics_old.txt') ) $old_ally = unserialize ( file_get_contents ( 'ally_statistics_old.txt' ) );
+else $old_ally = array();
 
-$galaxy = unserialize ( file_get_contents ( 'galaxy.txt' ) );
+if ( file_exists('statistics.txt') ) $stats = unserialize ( file_get_contents ( 'statistics.txt' ) );
+else $stats = array ();
+
+if ( file_exists('statistics_old.txt') ) $old_stats = unserialize ( file_get_contents ( 'statistics_old.txt' ) );
+else $old_stats = array ();
+
+if ( file_exists('galaxy.txt') ) $galaxy = unserialize ( file_get_contents ( 'galaxy.txt' ) );
+else $galaxy = array ();
 
 $delta = array ();
 

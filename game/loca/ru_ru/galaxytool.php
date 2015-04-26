@@ -17,5 +17,7 @@ $LOCA["ru"]["GALATOOL_TOTAL"] = "Всего : #1";
 $LOCA["ru"]["GALATOOL_NOTES"] = "Если у игрока прирост/спад был более 30.000 очков, то он указывается в скобках рядом с именем.";
 $LOCA["ru"]["GALATOOL_FIND"] = "Найти все планеты игрока : ";
 $LOCA["ru"]["GALATOOL_SEARCH"] = "Поиск";
+$LOCA["ru"]["GALATOOL_NOT_UPDATED"] = "Обновления ещё не было";
+
 
 ?>

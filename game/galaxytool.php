@@ -38,7 +38,7 @@ function GalaxyToolUpdateStats ()
     $week3 = time() - 604800*3;
 
     $list = array ();
-    $query = "SELECT * FROM ".$db_prefix."users WHERE place1 < 1000 ORDER BY player_id ASC";    // только игроков из топ1000
+    $query = "SELECT * FROM ".$db_prefix."users WHERE place1 < 1000 AND admin = 0 ORDER BY player_id ASC";    // только игроков из топ1000 и не админов
     $result = dbquery ( $query );
     $rows = dbrows ( $result );
     while ($rows--)
@@ -85,14 +85,16 @@ function GalaxyToolUpdateAllyStats ()
 
 function GalaxyToolReplaceOldStats ()
 {
-    $current = file_get_contents( "galaxytool/statistics.txt" );
-    file_put_contents( "galaxytool/statistics_old.txt" , $current);
+    if ( file_exists('galaxytool/statistics.txt') ) $current = file_get_contents( 'galaxytool/statistics.txt' );
+    else $current = array ();
+    file_put_contents( 'galaxytool/statistics_old.txt' , $current);
 }
 
 function GalaxyToolReplaceOldAllyStats ()
 {
-    $current = file_get_contents( "galaxytool/ally_statistics.txt" );
-    file_put_contents( "galaxytool/ally_statistics_old.txt" , $current);
+    if ( file_exists('galaxytool/ally_statistics.txt')) $current = file_get_contents( 'galaxytool/ally_statistics.txt' );
+    else $current = array ();
+    file_put_contents( 'galaxytool/ally_statistics_old.txt' , $current);
 }
 
 function GalaxyToolUpdate ()
