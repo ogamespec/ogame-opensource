@@ -60,7 +60,7 @@ function gen_trivial_password ($len = 8)
 
 $tab_uni = array (        // Вселенная
     'num'=>'INT PRIMARY KEY','speed'=>'FLOAT','fspeed'=>'FLOAT','galaxies'=>'INT','systems'=>'INT','maxusers'=>'INT','acs'=>'INT','fid'=>'INT','did'=>'INT','rapid'=>'INT','moons'=>'INT','defrepair'=>'INT','defrepair_delta'=>'INT','usercount'=>'INT','freeze'=>'INT',
-    'news1'=>'TEXT', 'news2'=>'TEXT', 'news_until'=>'INT UNSIGNED', 'startdate'=>'INT UNSIGNED', 'battle_engine'=>'TEXT', 'lang'=>'CHAR(4)', 
+    'news1'=>'TEXT', 'news2'=>'TEXT', 'news_until'=>'INT UNSIGNED', 'startdate'=>'INT UNSIGNED', 'battle_engine'=>'TEXT', 'lang'=>'CHAR(4)', 'hacks'=>'INT',
 );
 
 $tab_users = array (    // Пользователи
@@ -260,7 +260,8 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "news_until = '0', ";
     $query .= "startdate = '".$now."', ";
     $query .= "battle_engine = '".$_POST["uni_battle_engine"]."', ";
-    $query .= "lang = '".$_POST["uni_lang"]."'; ";
+    $query .= "lang = '".$_POST["uni_lang"]."', ";
+    $query .= "hacks = '0'; ";
     //echo "<br>$query<br>";
     dbquery ($query);
 
@@ -406,6 +407,8 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     }
 }
 
+$info = " <img src='img/r5.png' />";
+
 ?>
 
 <html>
@@ -447,10 +450,10 @@ td.c { background-color: #334445; }
 <tr><td><?php echo loca('INSTALL_DB_USER');?></td><td><input type=text class='text' name='db_user'></td></tr>
 <tr><td><?php echo loca('INSTALL_DB_PASS');?></td><td><input type=password class='text'  name='db_pass'></td></tr>
 <tr><td><?php echo loca('INSTALL_DB_NAME');?></td><td><input type=text class='text' name='db_name'></td></tr>
-<tr><td><a title='<?php echo loca('INSTALL_TIP1');?>'><?php echo loca('INSTALL_DB_PREFIX');?></a></td><td><input type=text value='uni1_' class='text' name='db_prefix'></td></tr>
-<tr><td><a title='<?php echo loca('INSTALL_TIP2');?>'><?php echo loca('INSTALL_DB_SECRET');?></a></td><td><input type=text type=password class='text' name='db_secret'></td></tr>
+<tr><td><?php echo loca('INSTALL_DB_PREFIX');?><a title='<?php echo loca('INSTALL_TIP1');?>'><?php echo $info;?></a></td><td><input type=text value='uni1_' class='text' name='db_prefix'></td></tr>
+<tr><td><?php echo loca('INSTALL_DB_SECRET');?><a title='<?php echo loca('INSTALL_TIP2');?>'><?php echo $info;?></a></td><td><input type=text type=password class='text' name='db_secret'></td></tr>
 <tr><td>&nbsp;</td></tr>
-<tr><td colspan=2 class='c'><a title='<?php echo loca('INSTALL_MDB_TIP');?>'><?php echo loca('INSTALL_MDB');?></a></td></tr>
+<tr><td colspan=2 class='c'><?php echo loca('INSTALL_MDB');?><a title='<?php echo loca('INSTALL_MDB_TIP');?>'><?php echo $info;?></a></td></tr>
 <tr><td><?php echo loca('INSTALL_MDB_ENABLE');?></td><td><input type=checkbox class='text' name='mdb_enable'></td></tr>
 <tr><td><?php echo loca('INSTALL_MDB_HOST');?></td><td><input type=text value='localhost' class='text' name='mdb_host'></td></tr>
 <tr><td><?php echo loca('INSTALL_MDB_USER');?></td><td><input type=text class='text' name='mdb_user'></td></tr>
@@ -463,16 +466,16 @@ td.c { background-color: #334445; }
 <table class='install_form'>
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan=2 class='c'><?php echo loca('INSTALL_UNI');?></td></tr>
-<tr><td><a title='<?php echo loca('INSTALL_TIP3');?>'><?php echo loca('INSTALL_UNI_NUM');?></a></td><td><input type=text value='1' class='text' name='uni_num'></td></tr>
-<tr><td><a title='<?php echo loca('INSTALL_TIP4');?>'><?php echo loca('INSTALL_UNI_SPEED');?></a></td><td><input type=text value='1' class='text' name='uni_speed'></td></tr>
-<tr><td><a title='<?php echo loca('INSTALL_TIP5');?>'><?php echo loca('INSTALL_UNI_FLEETSPEED');?></a></td><td><input type=text value='1' class='text' name='uni_fspeed'></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_NUM');?><a title='<?php echo loca('INSTALL_TIP3');?>'><?php echo $info;?></a></td><td><input type=text value='1' class='text' name='uni_num'></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_SPEED');?><a title='<?php echo loca('INSTALL_TIP4');?>'><?php echo $info;?></a></td><td><input type=text value='1' class='text' name='uni_speed'></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_FLEETSPEED');?><a title='<?php echo loca('INSTALL_TIP5');?>'><?php echo $info;?></a></td><td><input type=text value='1' class='text' name='uni_fspeed'></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_G');?></td><td><input type=text value='9' class='text' name='uni_galaxies'></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_S');?></td><td><input type=text value='499' class='text' name='uni_systems'></td></tr>
-<tr><td><a title='<?php echo loca('INSTALL_TIP6');?>'><?php echo loca('INSTALL_UNI_USERS');?></a></td><td><input type=text value='12500' class='text' name='uni_maxusers'></td></tr>
-<tr><td><a title='<?php echo loca('INSTALL_TIP7');?>'><?php echo loca('INSTALL_UNI_ACS');?></a></td><td><input type=text value='4' class='text' name='uni_acs'></td></tr>
-<tr><td><a title='<?php echo loca('INSTALL_TIP8');?>'><?php echo loca('INSTALL_UNI_FID');?></a></td><td><input type=text value='30' class='text' name='uni_fid'></td></tr>
-<tr><td><a title='<?php echo loca('INSTALL_TIP9');?>'><?php echo loca('INSTALL_UNI_DID');?></a></td><td><input type=text value='0' class='text' name='uni_did'></td></tr>
-<tr><td><a title='<?php echo loca('INSTALL_TIP10');?>'><?php echo loca('INSTALL_UNI_RAPID');?></a></td><td><input type=checkbox class='text' name='uni_rapid' CHECKED></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_USERS');?><a title='<?php echo loca('INSTALL_TIP6');?>'><?php echo $info;?></a></td><td><input type=text value='12500' class='text' name='uni_maxusers'></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_ACS');?><a title='<?php echo loca('INSTALL_TIP7');?>'><?php echo $info;?></a></td><td><input type=text value='4' class='text' name='uni_acs'></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_FID');?><a title='<?php echo loca('INSTALL_TIP8');?>'><?php echo $info;?></a></td><td><input type=text value='30' class='text' name='uni_fid'></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_DID');?><a title='<?php echo loca('INSTALL_TIP9');?>'><?php echo $info;?></a></td><td><input type=text value='0' class='text' name='uni_did'></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_RAPID');?><a title='<?php echo loca('INSTALL_TIP10');?>'><?php echo $info;?></a></td><td><input type=checkbox class='text' name='uni_rapid' CHECKED></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_MOONS');?></td><td><input type=checkbox class='text' name='uni_moons' CHECKED></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_BATTLE');?></td><td><input type=text value='../cgi-bin/battle' class='text' name='uni_battle_engine'></td></tr>
 <tr><td>&nbsp;</td></tr>

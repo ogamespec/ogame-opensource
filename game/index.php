@@ -88,7 +88,17 @@ function va ($subject)
 // Игровые страницы.
 
 if ( key_exists ( 'session', $_GET ) ) {
+
+    //
+    // Проверка приватной сессии
+    //
+
+    //
+    // Проверка публичной сессии
+    //
+
     SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
+
     if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 }
 else
@@ -106,7 +116,35 @@ if ( $GlobalUni['freeze'] && $GlobalUser['admin'] == 0 ) {
 loca_add ( "common", $GlobalUni['lang'] );
 loca_add ( "technames", $GlobalUni['lang'] );
 
-// Classic Ogame
+//
+// Проверка параметров GET / POST на возможные SQL-инъекции
+//
+
+if ( $_GET['page'] !== "admin" )
+{
+    if ( stripos ($_SERVER['REQUEST_URI'], "select") != false ) Hacking ("HACK_SQL_INJECTION");
+    if ( stripos ($_SERVER['REQUEST_URI'], "insert") != false ) Hacking ("HACK_SQL_INJECTION");
+    if ( stripos ($_SERVER['REQUEST_URI'], "update") != false ) Hacking ("HACK_SQL_INJECTION");
+
+    foreach ( $_GET as $i=>$value )
+    {
+        if ( stripos ($value, "select") != false ) Hacking ("HACK_SQL_INJECTION");
+        if ( stripos ($value, "insert") != false ) Hacking ("HACK_SQL_INJECTION");
+        if ( stripos ($value, "update") != false ) Hacking ("HACK_SQL_INJECTION");
+    }
+
+    foreach ( $_POST as $i=>$value )
+    {
+        if ( stripos ($value, "select") != false ) Hacking ("HACK_SQL_INJECTION");
+        if ( stripos ($value, "insert") != false ) Hacking ("HACK_SQL_INJECTION");
+        if ( stripos ($value, "update") != false ) Hacking ("HACK_SQL_INJECTION");
+    }
+}
+
+//
+// Classic Ogame pages
+//
+
 if ( $_GET['page'] === "overview" ) { include "pages/overview.php"; exit(); }
 else if ( $_GET['page'] === "admin" )
 {

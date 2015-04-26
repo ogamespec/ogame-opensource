@@ -40,4 +40,18 @@ function SetUniParam ($speed, $fspeed, $acs, $fid, $did, $defrepair, $defrepair_
     $GlobalUni = LoadUniverse ();
 }
 
+function ResetHackCounter ()
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."uni SET hacks = 0";
+    dbquery ($query);  
+}
+
+function IncrementHackCounter ()
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."uni SET hacks = hacks + 1";
+    dbquery ($query);  
+}
+
 ?>

@@ -11,9 +11,9 @@ function Error ($text)
         $GlobalUser['player_id'] = 0;
     }
 
-    $text = str_replace ( '\"', "&quot;", ($text) );
-    $text = str_replace ( '\'', "&rsquo;", $text );
-    $text = str_replace ( '\`', "&lsquo;", $text );
+    $text = str_replace ( "\"", "&quot;", ($text) );
+    $text = str_replace ( "\'", "&rsquo;", $text );
+    $text = str_replace ( "\`", "&lsquo;", $text );
 
     $now = time ();
 
@@ -45,9 +45,9 @@ function Debug ($message)
     global $GlobalUser;
     if ( !$GlobalUser ) return;
 
-    $message = str_replace ( '\"', "&quot;", ($message) );
-    $message = str_replace ( '\'', "&rsquo;", $message );
-    $message = str_replace ( '\`', "&lsquo;", $message );
+    $message = str_replace ( "\"", "&quot;", ($message) );
+    $message = str_replace ( "\'", "&rsquo;", $message );
+    $message = str_replace ( "\`", "&lsquo;", $message );
 
     $now = time ();
 
@@ -124,6 +124,36 @@ function UserLog ($owner_id, $type, $text, $when=0)
     $ago = $when - 2 * 7 * 24 * 60 * 60;
     $query = "DELETE FROM ".$db_prefix."userlogs WHERE date < $ago;";
     dbquery ($query);
+}
+
+// Записывает в базу данные игрока при попытке взлома игры.
+// Админ должен периодически проверять слишком умных игроков, которые пытаются взломать игру.
+function Hacking ($code)
+{
+    global $GlobalUni;
+    loca_add ( "hackmsg", $GlobalUni['lang'] );
+
+    $get = "GET LIST:<br>";
+    foreach ( $_GET as $i=>$value)
+    {
+        $get .= "&nbsp;" . $i . " = [" . $value . "]<br>";
+    }
+    $get .= "<br>";
+
+    $post = "POST LIST:<br>";
+    foreach ( $_POST as $i=>$value)
+    {
+        $post .= "&nbsp;" . $i . " = [" . $value . "]<br>";
+    }
+    $post .= "<br>";
+
+    $method = "METHOD: " . $_SERVER['REQUEST_METHOD'] . "<br>";
+
+    Debug ( 'HACKING ATTEMPT: ' . loca($code) . "<br><br>" . $get . $post . $method );
+
+    // Увеличить счетчик попыток взлома.
+    // Счётчик автоматически сбрасывается после релогина.
+    IncrementHackCounter ();
 }
 
 ?>

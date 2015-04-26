@@ -15,7 +15,7 @@ if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 
 $now = time();
-if ($GlobalUser['admin'] == 0) UpdateQueue ( $now );
+if ($GlobalUser['admin'] == 0) UpdateQueue ( $now );    // Не обновлять Обзор для админов
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
 $aktplanet = ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 
@@ -26,7 +26,7 @@ PageHeader ("overview");
 
 // *******************************************************************
 
-if ( key_exists ('lgn', $_GET) && intval($_GET['lgn']) == 1 )
+if ( key_exists ('lgn', $_GET) )
 {
 
     UpdatePlanetActivity ( $aktplanet['planet_id'] );  // Обновить активность на Главной планете при входе в игру.

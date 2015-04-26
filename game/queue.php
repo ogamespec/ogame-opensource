@@ -1030,6 +1030,9 @@ function Queue_Relogin_End ($queue)
 
     UnloadAll ();
     RemoveQueue ( $queue['task_id'] );
+
+    // Очистить ежедневный счетчик попыток взлома игры.
+    ResetHackCounter ();
 }
 
 // Добавить задание чистки виртуальных ПО, если его ещё не существует.
