@@ -122,6 +122,3 @@ Gmail: ogamespec@gmail.com<br>
 
 Do not ask how to install it, I'm not helping with it =)<br>
 <br>
-<table><tr><td>
-<wiki:gadget url="http://www.ohloh.net/p/584862/widgets/project_languages.xml" border="1"/></td><td>
-<wiki:gadget url="http://www.ohloh.net/p/584862/widgets/project_basic_stats.xml" height="220" border="1"/></td></tr></table>
