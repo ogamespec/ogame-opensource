@@ -110,8 +110,12 @@ function Admin_Planets ()
 
     // Обработка GET-запроса.
     if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
-        $cp = intval ($_GET['cp']);
-        $action = $_GET['action'];
+        if ( key_exists('cp', $_GET) ) $cp = intval ($_GET['cp']);
+        else $cp = 0;
+        
+        if ( key_exists('action', $_GET) && $cp ) $action = $_GET['action'];
+        else $action = "";
+        
         $now = time();
 
         if ( $action === "create_moon" )    // Создать луну
@@ -198,11 +202,19 @@ function php_str_replace(search, replace, subject) {
 
 function spio ()
 {
+    global $GlobalUni;
+
+    //
+    // Перечислить все технологии для всех языков, а также ресурсы
+    //
+
     var TechNames = {
 <?php
 
-    loca_add ( "common" );
-    loca_add ( "technames" );
+    foreach ( $Languages as $lang => $langname ) {
+        loca_add ( "common", $lang );
+        loca_add ( "technames", $lang );
+    }
 
     $old_lang = $loca_lang;
     foreach ( $Languages as $lang => $langname ) {

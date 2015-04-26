@@ -37,7 +37,7 @@ function Admin_Uni ()
         $moons = ($_POST['moons'] === "on") ? 1 : 0;
         $freeze = ($_POST['freeze'] === "on") ? 1 : 0;
 
-        SetUniParam ( $_POST['speed'], $_POST['fspeed'], $_POST['acs'], $_POST['fid'], $_POST['did'], $_POST['defrepair'], $_POST['defrepair_delta'], $_POST['galaxies'], $_POST['systems'], $rapid, $moons, $freeze );
+        SetUniParam ( $_POST['speed'], $_POST['fspeed'], $_POST['acs'], $_POST['fid'], $_POST['did'], $_POST['defrepair'], $_POST['defrepair_delta'], $_POST['galaxies'], $_POST['systems'], $rapid, $moons, $freeze, $_POST['lang'] );
 
         // Включить принудительное РО активным игрокам, если вселенная ставится на паузу.
         if ( $freeze ) {
@@ -152,6 +152,16 @@ function Admin_Uni ()
     if ( $now > $unitab['news_until'] ) echo "<tr><th>Продлить новость</th><th><input type=\"text\" name=\"news_upd\" maxlength=\"3\" size=\"3\" value=\"0\" /> дн.</th></tr>\n";
     else echo "<tr><th>Показывать новость до</th><th>".date ("Y-m-d H:i:s", $unitab['news_until'])." <input type=\"checkbox\" name=\"news_off\"  /> убрать</th></tr>\n";
 ?>
+<tr><th>Язык интерфейса</th><th>
+   <select name="lang">
+<?php
+    global $Languages;
+    foreach ( $Languages as $lang_id=>$lang_name ) {
+        echo "    <option value=\"".$lang_id."\" " . UniIsSelected($unitab['lang'], $lang_id)." >$lang_name</option>\n";
+    }
+?>
+   </select>
+</th></tr>
 <tr><th>Поставить вселенную на паузу</th><th><input type="checkbox" name="freeze"  <?=UniIsChecked($unitab['freeze']);?> /></th></tr>
 <tr><th colspan=2><input type="submit" value="Сохранить" /></th></tr>
 

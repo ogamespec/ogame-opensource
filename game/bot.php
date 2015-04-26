@@ -134,7 +134,7 @@ function AddBot ($name)
     $pass = $r;
 
     if ( !IsUserExist ($name) ) {
-        $player_id = CreateUser ( $name, $pass, '', 'en', true );
+        $player_id = CreateUser ( $name, $pass, '', true );
         $query = "UPDATE ".$db_prefix."users SET validatemd = '', validated = 1 WHERE player_id = " . $player_id;
         dbquery ($query);
         StartBot ( $player_id );

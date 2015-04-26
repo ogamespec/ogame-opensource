@@ -5,7 +5,7 @@
 $TraderMessage = "";
 $TraderError = "";
 
-loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "menu", $GlobalUni['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -17,75 +17,77 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
+$not_enough = false;
+
 function CallNewTrader ()
 {
-        global $GlobalUser;
-        global $db_prefix;
+    global $GlobalUser;
+    global $db_prefix;
 
-            // Сгенерировать новые курсы.
-            $offer_id = intval ($_POST['offer_id']);
-            $rand = mt_rand (0, 99);
-            if ( $rand < 10 ) {
-                $GlobalUser['rate_m'] = 3;
-                $GlobalUser['rate_k'] = 2;
-                $GlobalUser['rate_d'] = 1;
-            }
-            else if ( $rand < 20 ) {
+    // Сгенерировать новые курсы.
+    $offer_id = intval ($_POST['offer_id']);
+    $rand = mt_rand (0, 99);
+    if ( $rand < 10 ) {
+        $GlobalUser['rate_m'] = 3;
+        $GlobalUser['rate_k'] = 2;
+        $GlobalUser['rate_d'] = 1;
+    }
+    else if ( $rand < 20 ) {
 
-                if ( $offer_id == 1) {
-                    $GlobalUser['rate_m'] = 3;
-                    $GlobalUser['rate_k'] = 1.60;
-                    $GlobalUser['rate_d'] = 0.80;
-                }
+        if ( $offer_id == 1) {
+            $GlobalUser['rate_m'] = 3;
+            $GlobalUser['rate_k'] = 1.60;
+            $GlobalUser['rate_d'] = 0.80;
+        }
 
-                else if ( $offer_id == 2) {
-                    $GlobalUser['rate_m'] = 2.40;
-                    $GlobalUser['rate_k'] = 2;
-                    $GlobalUser['rate_d'] = 0.80;
-                }
+        else if ( $offer_id == 2) {
+            $GlobalUser['rate_m'] = 2.40;
+            $GlobalUser['rate_k'] = 2;
+            $GlobalUser['rate_d'] = 0.80;
+        }
 
-                else if ( $offer_id == 3) {
-                    $GlobalUser['rate_m'] = 2.40;
-                    $GlobalUser['rate_k'] = 1.60;
-                    $GlobalUser['rate_d'] = 1;
-                }
+        else if ( $offer_id == 3) {
+            $GlobalUser['rate_m'] = 2.40;
+            $GlobalUser['rate_k'] = 1.60;
+            $GlobalUser['rate_d'] = 1;
+        }
 
-            }
-            else {
-                if ( $offer_id == 1) {
-                    $GlobalUser['rate_m'] = 3;
-                    $GlobalUser['rate_k'] = mt_rand ( 140, 200) / 100;
-                    $GlobalUser['rate_d'] = mt_rand ( 70, 100) / 100;
-                }
+    }
+    else {
+        if ( $offer_id == 1) {
+            $GlobalUser['rate_m'] = 3;
+            $GlobalUser['rate_k'] = mt_rand ( 140, 200) / 100;
+            $GlobalUser['rate_d'] = mt_rand ( 70, 100) / 100;
+        }
 
-                else if ( $offer_id == 2) {
-                    $GlobalUser['rate_m'] = mt_rand ( 210, 300) / 100;
-                    $GlobalUser['rate_k'] = 2;
-                    $GlobalUser['rate_d'] = mt_rand ( 70, 100) / 100;
-                }
+        else if ( $offer_id == 2) {
+            $GlobalUser['rate_m'] = mt_rand ( 210, 300) / 100;
+            $GlobalUser['rate_k'] = 2;
+            $GlobalUser['rate_d'] = mt_rand ( 70, 100) / 100;
+        }
 
-                else if ( $offer_id == 3) {
-                    $GlobalUser['rate_m'] = mt_rand ( 210, 300) / 100;
-                    $GlobalUser['rate_k'] = mt_rand ( 140, 200) / 100;
-                    $GlobalUser['rate_d'] = 1;
-                }
-            }
-            $GlobalUser['trader'] = $offer_id;
+        else if ( $offer_id == 3) {
+            $GlobalUser['rate_m'] = mt_rand ( 210, 300) / 100;
+            $GlobalUser['rate_k'] = mt_rand ( 140, 200) / 100;
+            $GlobalUser['rate_d'] = 1;
+        }
+    }
+    $GlobalUser['trader'] = $offer_id;
 
-            // Записать значения в базу.
-            if ( $offer_id > 0 && $offer_id <= 3 )
-            {
-                // Списать ТМ.
-                if ( $GlobalUser['dm'] >= 2500 ) $GlobalUser['dm'] -= 2500;
-                else {
-                    $GlobalUser['dmfree'] -= 2500 - $GlobalUser['dm'];
-                    $GlobalUser['dm'] = 0;
-                }
+    // Записать значения в базу.
+    if ( $offer_id > 0 && $offer_id <= 3 )
+    {
+        // Списать ТМ.
+        if ( $GlobalUser['dm'] >= 2500 ) $GlobalUser['dm'] -= 2500;
+        else {
+            $GlobalUser['dmfree'] -= 2500 - $GlobalUser['dm'];
+            $GlobalUser['dm'] = 0;
+        }
 
-                $query = "UPDATE ".$db_prefix."users SET dm = '".$GlobalUser['dm']."', dmfree = '".$GlobalUser['dmfree']."', trader=".$GlobalUser['trader'].", rate_m='".$GlobalUser['rate_m']."', rate_k = '".$GlobalUser['rate_k']."', rate_d = '".$GlobalUser['rate_d']."' WHERE player_id = " . $GlobalUser['player_id'];
-                dbquery ( $query );
-            }
-            else $GlobalUser['trader'] = 0;
+        $query = "UPDATE ".$db_prefix."users SET dm = '".$GlobalUser['dm']."', dmfree = '".$GlobalUser['dmfree']."', trader=".$GlobalUser['trader'].", rate_m='".$GlobalUser['rate_m']."', rate_k = '".$GlobalUser['rate_k']."', rate_d = '".$GlobalUser['rate_d']."' WHERE player_id = " . $GlobalUser['player_id'];
+        dbquery ( $query );
+    }
+    else $GlobalUser['trader'] = 0;
 }
 
 // Обработка POST-запросов.
@@ -220,7 +222,6 @@ if ( $GlobalUser['trader'] > 0 )
     else if ( $GlobalUser['trader'] == 2 ) $ratewhat = $GlobalUser['rate_k'];
     else if ( $GlobalUser['trader'] == 3 ) $ratewhat = $GlobalUser['rate_d'];
     else $ratewhat = 1.0;
-
 }
 
 ?>

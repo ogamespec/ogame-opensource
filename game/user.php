@@ -148,7 +148,7 @@ function IsEmailExist ( $email, $name="")
 
 // Проверок на правильность не делается! Этим занимается процедура регистрации.
 // Возвращает ID созданного пользователя.
-function CreateUser ( $name, $pass, $email, $lang, $bot=false)
+function CreateUser ( $name, $pass, $email, $bot=false)
 {
     global $db_prefix, $db_secret, $Languages;
     $origname = $name;
@@ -168,13 +168,12 @@ function CreateUser ( $name, $pass, $email, $lang, $bot=false)
     dbquery ($query);
 
     $ip = $_SERVER['REMOTE_ADDR'];
-    if ( !key_exists ( $lang, $Languages ) ) $lang = 'en';
 
     $user = array( null, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, "", $email, $email,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, $ip, 0, $ack, 0, 0, 0, 0,
-                        hostname() . "evolution/", 1, 0, 1, 3, $lang, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        hostname() . "evolution/", 1, 0, 1, 3, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
@@ -464,8 +463,12 @@ function CheckSession ( $session )
         if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
     }
 
-    $loca_lang = $GlobalUser['lang'];
-    if ( !key_exists ( $loca_lang, $Languages ) ) $GlobalUser['lang'] = $loca_lang = 'en';
+    //
+    // Установить глобальный язык для сессии.
+    //
+
+    $loca_lang = $GlobalUni['lang'];
+    if ( !key_exists ( $loca_lang, $Languages ) ) $GlobalUni['lang'] = $loca_lang = 'en';
 
     return TRUE;
 }
@@ -477,6 +480,8 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
 
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
+
+    ob_start ();
 
     if  ( $player_id = CheckPassword ($login, $pass, $passmd ) )
     {
@@ -524,8 +529,6 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
         // Задание пересчёта очков игрока.
         AddUpdateStatsEvent ();
         AddRecalcPointsEvent ($player_id);
-
-        setcookie ( 'ogamelang', $user['lang'], time()+60*60*24*9999, "/" );
 
         // Редирект на Обзор Главной планеты.
         header ( "Location: ".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1" );

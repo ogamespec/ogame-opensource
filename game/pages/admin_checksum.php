@@ -40,7 +40,6 @@ function Admin_Checksum ()
         'pranger.php', 
         'prod.php', 
         'queue.php', 
-        'redesign.php', 
         'redir.php', 
         'uni.php', 
         'unit.php', 
@@ -158,8 +157,13 @@ function Admin_Checksum ()
     foreach ( $engine_files as $i=>$filename ) {
         $md = md5_file($filename) ;
         echo "<tr><td>$filename</td><td>$md</td>";
-        if ( $engine_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
-        else echo "<td><font color=red><b>BAD</b></font></td>";
+
+        if ( key_exists($filename, $engine_md) )
+        {
+            if ( $engine_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
+            else echo "<td><font color=red><b>BAD</b></font></td>";
+        }
+        else echo "<td><font color=red><b>UNVERSIONED</b></font></td>";
         echo "</tr>";
     }
 ?>

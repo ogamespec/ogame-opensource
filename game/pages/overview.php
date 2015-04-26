@@ -2,9 +2,9 @@
 
 // Обзор.
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "fleetorder", $GlobalUser['lang'] );
-loca_add ( "overview", $GlobalUser['lang'] );
+loca_add ( "menu", $GlobalUni['lang'] );
+loca_add ( "fleetorder", $GlobalUni['lang'] );
+loca_add ( "overview", $GlobalUni['lang'] );
 
 $OverviewMessage = "";
 $OverviewError = "";

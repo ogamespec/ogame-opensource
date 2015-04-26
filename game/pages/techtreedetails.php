@@ -2,8 +2,8 @@
 
 // Технологии (детали).
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "techtree", $GlobalUser['lang'] );
+loca_add ( "menu", $GlobalUni['lang'] );
+loca_add ( "techtree", $GlobalUni['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -102,8 +102,10 @@ function walk_tree ($arr, $id)
     $reclevel++;
     if ($reclevel >= $maxreclevel) $maxreclevel = $reclevel;
     if ($arr == null) { $reclevel--; return; }
+
     foreach ($arr as $i=>$level) {
-        if ( gettype ($tree[$reclevel]) !== "array" ) $tree[$reclevel] = array ();
+        if ( !key_exists ($reclevel, $tree) ) $tree[$reclevel] = array ();
+        $tree[$reclevel][$i] = 0;
         if ($tree[$reclevel][$i] < $level) $tree[$reclevel][$i] = $level;
     }
     foreach ($arr as $i=>$level) {
@@ -137,6 +139,7 @@ for ($i=$maxreclevel-1,$n=0; $i>=0; $i--,$n++)
 
     foreach ( $tree[$i] as $v=>$level) 
     {
+        $filter[$v] = 0;
         if ($filter[$v] >= $level) continue;
         $color = "#00ff00";
         if ( !MeetRequirement ( $GlobalUser, $aktplanet, $v, $level ) ) $color = "#ff0000";

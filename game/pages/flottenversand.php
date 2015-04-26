@@ -61,9 +61,9 @@ if ( $rows ) {
     if ( abs(time () - $queue['start']) < 1 ) MyGoto ( "flotten1" );
 }
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "fleetorder", $GlobalUser['lang'] );
-loca_add ( "fleet", $GlobalUser['lang'] );
+loca_add ( "menu", $GlobalUni['lang'] );
+loca_add ( "fleetorder", $GlobalUni['lang'] );
+loca_add ( "fleet", $GlobalUni['lang'] );
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);

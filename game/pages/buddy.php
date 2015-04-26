@@ -6,8 +6,8 @@
 
 $BuddyError = "";
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "buddy", $GlobalUser['lang'] );
+loca_add ( "menu", $GlobalUni['lang'] );
+loca_add ( "buddy", $GlobalUni['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval ($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);

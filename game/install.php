@@ -9,7 +9,9 @@
 require_once "db.php";
 require_once "loca.php";
 
-$loca_lang = $_COOKIE['ogamelang'];
+if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = 'en';
+else $loca_lang = $_COOKIE['ogamelang'];
+
 if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
 loca_add ( "install", $loca_lang );
 
@@ -58,15 +60,15 @@ function gen_trivial_password ($len = 8)
 
 $tab_uni = array (        // Вселенная
     'num'=>'INT PRIMARY KEY','speed'=>'FLOAT','fspeed'=>'FLOAT','galaxies'=>'INT','systems'=>'INT','maxusers'=>'INT','acs'=>'INT','fid'=>'INT','did'=>'INT','rapid'=>'INT','moons'=>'INT','defrepair'=>'INT','defrepair_delta'=>'INT','usercount'=>'INT','freeze'=>'INT',
-    'news1'=>'TEXT', 'news2'=>'TEXT', 'news_until'=>'INT UNSIGNED', 'startdate'=>'INT UNSIGNED', 'battle_engine'=>'TEXT', 
+    'news1'=>'TEXT', 'news2'=>'TEXT', 'news_until'=>'INT UNSIGNED', 'startdate'=>'INT UNSIGNED', 'battle_engine'=>'TEXT', 'lang'=>'CHAR(4)', 
 );
 
 $tab_users = array (    // Пользователи
     'player_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'regdate'=>'INT UNSIGNED', 'ally_id'=>'INT', 'joindate'=>'INT UNSIGNED', 'allyrank'=>'INT', 'session'=>'CHAR(12)', 'private_session'=>'CHAR(32)', 'name'=>'CHAR(20)', 'oname'=>'CHAR(20)', 'name_changed'=>'INT', 'name_until'=>'INT UNSIGNED', 'password'=>'CHAR(32)', 'temp_pass'=>'CHAR(32)', 'pemail'=>'CHAR(50)', 'email'=>'CHAR(50)',
     'email_changed'=>'INT', 'email_until'=>'INT UNSIGNED', 'disable'=>'INT', 'disable_until'=>'INT UNSIGNED', 'vacation'=>'INT', 'vacation_until'=>'INT UNSIGNED', 'banned'=>'INT', 'banned_until'=>'INT UNSIGNED', 'noattack'=>'INT', 'noattack_until'=>'INT UNSIGNED',
     'lastlogin'=>'INT UNSIGNED', 'lastclick'=>'INT UNSIGNED', 'ip_addr'=>'CHAR(15)', 'validated'=>'INT', 'validatemd'=>'CHAR(32)', 'hplanetid'=>'INT', 'admin'=>'INT', 'sortby'=>'INT', 'sortorder'=>'INT',
-    'skin'=>'CHAR(80)', 'useskin'=>'INT', 'deact_ip'=>'INT', 'maxspy'=>'INT', 'maxfleetmsg'=>'INT', 'lang'=>'CHAR(4)', 'aktplanet'=>'INT',
-    'dm'=>'INT UNSIGNED', 'dmfree'=>'INT UNSIGNED', 'sniff'=>'INT', 'debug'=>'INT', 'redesign'=>'INT', 'trader'=>'INT', 'rate_m'=>'DOUBLE', 'rate_k'=>'DOUBLE', 'rate_d'=>'DOUBLE',
+    'skin'=>'CHAR(80)', 'useskin'=>'INT', 'deact_ip'=>'INT', 'maxspy'=>'INT', 'maxfleetmsg'=>'INT', 'aktplanet'=>'INT',
+    'dm'=>'INT UNSIGNED', 'dmfree'=>'INT UNSIGNED', 'sniff'=>'INT', 'debug'=>'INT', 'trader'=>'INT', 'rate_m'=>'DOUBLE', 'rate_k'=>'DOUBLE', 'rate_d'=>'DOUBLE',
     'score1'=>'BIGINT', 'score2'=>'INT', 'score3'=>'INT', 'place1'=>'INT', 'place2'=>'INT', 'place3'=>'INT',
     'oldscore1'=>'BIGINT', 'oldscore2'=>'INT', 'oldscore3'=>'INT', 'oldplace1'=>'INT', 'oldplace2'=>'INT', 'oldplace3'=>'INT', 'scoredate'=>'INT UNSIGNED',
     'r106'=>'INT', 'r108'=>'INT', 'r109'=>'INT', 'r110'=>'INT', 'r111'=>'INT', 'r113'=>'INT', 'r114'=>'INT', 'r115'=>'INT', 'r117'=>'INT', 'r118'=>'INT', 'r120'=>'INT', 'r121'=>'INT', 'r122'=>'INT', 'r123'=>'INT', 'r124'=>'INT', 'r199'=>'INT'
@@ -257,7 +259,8 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "news2 = '', ";
     $query .= "news_until = '0', ";
     $query .= "startdate = '".$now."', ";
-    $query .= "battle_engine = '".$_POST["uni_battle_engine"]."'; ";
+    $query .= "battle_engine = '".$_POST["uni_battle_engine"]."', ";
+    $query .= "lang = '".$_POST["uni_lang"]."'; ";
     //echo "<br>$query<br>";
     dbquery ($query);
 
@@ -267,8 +270,8 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $user = array( 99999, $now, 0, 0, 0, "",  "", "space", "space", 0, 0, $md, "", "", "",
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, "0.0.0.0", 1, "", 1, 2, 0, 0,
-                        hostname() . "evolution/", 1, 1, 1, 3, 'en', 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                        hostname() . "evolution/", 1, 1, 1, 3, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0, 
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
@@ -287,8 +290,8 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $user = array( 1, $now, 0, 0, 0, "",  "", "legor", "Legor", 0, 0, $md, "", $_POST['admin_email'], $_POST['admin_email'],
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, "0.0.0.0", 1, "", 1, 2, 0, 0,
-                        hostname() . "evolution/", 1, 1, 1, 3, 'en', 1,
-                        1000000, 0, 0, 0, 0, 0, 0, 0, 0, 
+                        hostname() . "evolution/", 1, 1, 1, 3, 1,
+                        1000000, 0, 0, 0, 0, 0, 0, 0, 
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
@@ -424,6 +427,7 @@ td.c { background-color: #334445; }
 <center>
 <form action='install.php' method='POST'>
 <input type=hidden name='install' value='1'>
+<input type=hidden name='uni_lang' value='<?php echo $loca_lang;?>'>
 
 <img src='img/install.png'><br>
 

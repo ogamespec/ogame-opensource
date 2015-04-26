@@ -572,6 +572,8 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
 function StartBattle ( $fleet_id, $planet_id, $when )
 {
     global $db_prefix;
+    global $GlobalUni;
+
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
 
@@ -752,8 +754,8 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     UpdatePlanetActivity ( $planet_id, $queue['end'] );
 
     // Сгенерировать боевой доклад.
-    loca_add ( "battlereport" );
-    loca_add ( "technames" );
+    loca_add ( "battlereport", $GlobalUni['lang'] );
+    loca_add ( "technames", $GlobalUni['lang'] );
     $text = BattleReport ( $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired );
 
     // Разослать сообщения
@@ -925,6 +927,8 @@ function ShortBattleReport ( $res, $now )
 function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 {
     global $db_prefix;
+    global $GlobalUni;
+
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
 
@@ -1087,8 +1091,8 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     $dloss = $loss['dloss'];
 
     // Сгенерировать боевой доклад.
-    loca_add ( "battlereport" );
-    loca_add ( "technames" );
+    loca_add ( "battlereport", $GlobalUni['lang'] );
+    loca_add ( "technames", $GlobalUni['lang'] );
     
     $text = ShortBattleReport ( $res, $when );
 

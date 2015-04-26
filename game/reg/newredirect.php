@@ -4,7 +4,6 @@
 if ( !file_exists ("../config.php"))
 {
     echo "<html><head><meta http-equiv='refresh' content='0;url=../install.php' /></head><body></body></html>";
-    ob_end_flush ();
     exit ();
 }
 
@@ -57,13 +56,10 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
     else if ( IsEmailExist ( $_POST['email'])) $RegError = 102;
     else $RegError = 0;
 
-    if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $lang = "ru";
-    else $lang = $_COOKIE['ogamelang'];
-
     // Если все параметры верные - создать нового пользователя и войти в игру.
     if ($RegError == 0 && $AGB)
     {
-        CreateUser ( $_POST['character'], $_POST['password'], $_POST['email'], $lang );
+        CreateUser ( $_POST['character'], $_POST['password'], $_POST['email'] );
         Login ( $_POST['character'], $_POST['password'] );
         exit ();
     }

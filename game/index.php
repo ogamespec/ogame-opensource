@@ -103,16 +103,20 @@ if ( $GlobalUni['freeze'] && $GlobalUser['admin'] == 0 ) {
     exit ();
 }
 
-loca_add ( "common" );
-loca_add ( "technames" );
-
-if ( $GlobalUser['redesign'] ) {
-    include "redesign.php";
-}
+loca_add ( "common", $GlobalUni['lang'] );
+loca_add ( "technames", $GlobalUni['lang'] );
 
 // Classic Ogame
 if ( $_GET['page'] === "overview" ) { include "pages/overview.php"; exit(); }
-else if ( $_GET['page'] === "admin" && $GlobalUser['admin'] > 0 ) { include "pages/admin.php"; exit (); }
+else if ( $_GET['page'] === "admin" )
+{
+    if ( $GlobalUser['admin'] > 0 )
+    {
+        include "pages/admin.php";
+        exit ();
+    }
+    else Error ( 'Попытка проникновения в админ панель.' );
+}
 else if ( $_GET['page'] === "imperium" ) { include "pages/imperium.php"; exit (); }
 else if ( $_GET['page'] === "buildings" ) { include "pages/buildings.php"; exit (); }
 else if ( $_GET['page'] === "renameplanet" ) { include "pages/renameplanet.php"; exit (); }

@@ -29,11 +29,15 @@ function DisableNews ()
 }
 
 // Установить параметры вселенной (все одновременно)
-function SetUniParam ($speed, $fspeed, $acs, $fid, $did, $defrepair, $defrepair_delta, $galaxies, $systems, $rapid, $moons, $freeze)
+function SetUniParam ($speed, $fspeed, $acs, $fid, $did, $defrepair, $defrepair_delta, $galaxies, $systems, $rapid, $moons, $freeze, $lang)
 {
     global $db_prefix;
-    $query = "UPDATE ".$db_prefix."uni SET freeze=$freeze, speed=$speed, fspeed=$fspeed, acs=$acs, fid=$fid, did=$did, defrepair=$defrepair, defrepair_delta=$defrepair_delta, galaxies=$galaxies, systems=$systems, rapid=$rapid, moons=$moons";
+    global $GlobalUni;
+    
+    $query = "UPDATE ".$db_prefix."uni SET lang='".$lang."', freeze=$freeze, speed=$speed, fspeed=$fspeed, acs=$acs, fid=$fid, did=$did, defrepair=$defrepair, defrepair_delta=$defrepair_delta, galaxies=$galaxies, systems=$systems, rapid=$rapid, moons=$moons";
     dbquery ($query);
+
+    $GlobalUni = LoadUniverse ();
 }
 
 ?>

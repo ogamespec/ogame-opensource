@@ -8,6 +8,7 @@ function Admin_BattleReport ()
     global $session;
     global $db_prefix;
     global $GlobalUser;
+    global $GlobalUni;
 
 ?>
 
@@ -21,7 +22,7 @@ function Admin_BattleReport ()
         $result = dbquery ( $query );
         $row = dbarray ($result);
         ob_clean ();
-        loca_add ( "battlereport" );
+        loca_add ( "battlereport", $GlobalUni['lang'] );
 ?>
 <html>
 <HEAD>

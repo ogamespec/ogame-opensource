@@ -2,9 +2,9 @@
 
 // Флот 2: подготавливает координаты цели
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "fleetorder", $GlobalUser['lang'] );
-loca_add ( "fleet", $GlobalUser['lang'] );
+loca_add ( "menu", $GlobalUni['lang'] );
+loca_add ( "fleetorder", $GlobalUni['lang'] );
+loca_add ( "fleet", $GlobalUni['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval ($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);

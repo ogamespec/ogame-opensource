@@ -61,6 +61,7 @@ function BackTrace ()
     $bt =  debug_backtrace () ;
 
     $trace  = "";
+    $sp = 0;
     foreach($bt as $k=>$v) 
     { 
         extract($v); 

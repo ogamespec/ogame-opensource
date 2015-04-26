@@ -3,9 +3,9 @@
 // Информация на постройки, флот, оборону и исследования. 
 // Некоторые страницы (в частности постройки) содержат дополнительные сведения или элементы управления.
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "techlong", $GlobalUser['lang'] );
-loca_add ( "jumpgate", $GlobalUser['lang'] );
+loca_add ( "menu", $GlobalUni['lang'] );
+loca_add ( "techlong", $GlobalUni['lang'] );
+loca_add ( "jumpgate", $GlobalUni['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);

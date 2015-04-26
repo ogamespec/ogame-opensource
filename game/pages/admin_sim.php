@@ -6,6 +6,7 @@
 function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, &$dloss )
 {
     global $db_prefix;
+    global $GlobalUni;
 
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
@@ -100,8 +101,8 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
     else $battle_result = 2;
 
     // Сгенерировать боевой доклад.
-    loca_add ( "battlereport" );
-    loca_add ( "technames" );
+    loca_add ( "battlereport", $GlobalUni['lang'] );
+    loca_add ( "technames", $GlobalUni['lang'] );
     return BattleReport ( $res, time(), $aloss, $dloss, 1, 2, 3, $moonchance, $mooncreated, $repaired );
 }
 

@@ -8,7 +8,7 @@ require_once "uni.php";
 if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = "ru";
 else $loca_lang = $_COOKIE['ogamelang'];
 
-if ( !key_exists ( $loca_lang, $Languages ) ) $GlobalUser['lang'] = $loca_lang = 'en';
+if ( !key_exists ( $loca_lang, $Languages ) ) $GlobalUni['lang'] = $loca_lang = 'en';
 loca_add ( "maintain", $loca_lang );
 
 // Format string, according to tokens from the text. Tokens are represented as #1, #2 and so on.

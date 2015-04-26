@@ -2,8 +2,8 @@
 
 // Сырьё.
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "resources", $GlobalUser['lang'] );
+loca_add ( "menu", $GlobalUni['lang'] );
+loca_add ( "resources", $GlobalUni['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -39,38 +39,38 @@ else
 // Обработка POST-запросов (в РО изменять настройки энергии нельзя)
 if ( method () === "POST" && !$GlobalUser['vacation'] )
 {
-    if ( key_exists ( 'last1', $_POST ) ) $exist1 = true;
-    if ( key_exists ( 'last2', $_POST ) ) $exist2 = true;
-    if ( key_exists ( 'last3', $_POST ) ) $exist3 = true;
-    if ( key_exists ( 'last4', $_POST ) ) $exist4 = true;
-    if ( key_exists ( 'last12', $_POST ) ) $exist12 = true;
-    if ( key_exists ( 'last212', $_POST ) ) $exist212 = true;
+    $exist1 = key_exists ( 'last1', $_POST ) ? true : false;
+    $exist2 = key_exists ( 'last2', $_POST ) ? true : false;
+    $exist3 = key_exists ( 'last3', $_POST ) ? true : false;
+    $exist4 = key_exists ( 'last4', $_POST ) ? true : false;
+    $exist12 = key_exists ( 'last12', $_POST ) ? true : false;
+    $exist212 = key_exists ( 'last212', $_POST ) ? true : false;
 
-    $_POST['last1'] = intval($_POST['last1']);
-    $_POST['last2'] = intval($_POST['last2']);
-    $_POST['last3'] = intval($_POST['last3']);
-    $_POST['last4'] = intval($_POST['last4']);
-    $_POST['last12'] = intval($_POST['last12']);
-    $_POST['last212'] = intval($_POST['last212']);
+    $last1 = key_exists ( 'last1', $_POST ) ? intval($_POST['last1']) : 0;
+    $last2 = key_exists ( 'last2', $_POST ) ? intval($_POST['last2']) : 0;
+    $last3 = key_exists ( 'last3', $_POST ) ? intval($_POST['last3']) : 0;
+    $last4 = key_exists ( 'last4', $_POST ) ? intval($_POST['last4']) : 0;
+    $last12 = key_exists ( 'last12', $_POST ) ? intval($_POST['last12']) : 0;
+    $last212 = key_exists ( 'last212', $_POST ) ? intval($_POST['last212']) : 0;
 
     // Проверка на неверные параметры.
-    if ( $_POST['last1'] > 100 || $_POST['last2'] > 100 || $_POST['last3'] > 100 ||
-         $_POST['last4'] > 100 || $_POST['last12'] > 100 || $_POST['last212'] > 100 ) Error ( "resources: Попытка установки производительности больше 100%" );
+    if ( $last1 > 100 || $last2 > 100 || $last3 > 100 ||
+         $last4 > 100 || $last12 > 100 || $last212 > 100 ) Error ( "resources: Попытка установки производительности больше 100%" );
 
-    if ( $_POST['last1'] < 0 ) $_POST['last1'] = 0;        // Не должно быть < 0.
-    if ( $_POST['last2'] < 0 ) $_POST['last2'] = 0;
-    if ( $_POST['last3'] < 0 ) $_POST['last3'] = 0;
-    if ( $_POST['last4'] < 0 ) $_POST['last4'] = 0;
-    if ( $_POST['last12'] < 0 ) $_POST['last12'] = 0;
-    if ( $_POST['last212'] < 0 ) $_POST['last212'] = 0;
+    if ( $last1 < 0 ) $last1 = 0;        // Не должно быть < 0.
+    if ( $last2 < 0 ) $last2 = 0;
+    if ( $last3 < 0 ) $last3 = 0;
+    if ( $last4 < 0 ) $last4 = 0;
+    if ( $last12 < 0 ) $last12 = 0;
+    if ( $last212 < 0 ) $last212 = 0;
 
     // Сделать кратно 10.
-    $last1 = round ($_POST['last1'] / 10) * 10 / 100;
-    $last2 = round ($_POST['last2'] / 10) * 10 / 100;
-    $last3 = round ($_POST['last3'] / 10) * 10 / 100;
-    $last4 = round ($_POST['last4'] / 10) * 10 / 100;
-    $last12 = round ($_POST['last12'] / 10) * 10 / 100;
-    $last212 = round ($_POST['last212'] / 10) * 10 / 100;
+    $last1 = round ($last1 / 10) * 10 / 100;
+    $last2 = round ($last2 / 10) * 10 / 100;
+    $last3 = round ($last3 / 10) * 10 / 100;
+    $last4 = round ($last4 / 10) * 10 / 100;
+    $last12 = round ($last12 / 10) * 10 / 100;
+    $last212 = round ($last212 / 10) * 10 / 100;
 
     $planet_id = $aktplanet['planet_id'];
     if ( $exist1 || $exist2 || $exist3 || $exist4 || $exist12 || $exist212 ) {

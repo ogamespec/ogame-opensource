@@ -18,15 +18,17 @@
 
 if ( $GlobalUser['admin'] == 0 ) RedirectHome ();    // обычным пользователям доступ запрещен
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "fleetorder", $GlobalUser['lang'] );
-loca_add ( "admin", $GlobalUser['lang'] );
+loca_add ( "menu", $GlobalUni['lang'] );
+loca_add ( "fleetorder", $GlobalUni['lang'] );
+loca_add ( "admin", $GlobalUni['lang'] );
 
 $AdminMessage = "";
 $AdminError = "";
 
 $session = $_GET['session'];
-$mode = $_GET['mode'];
+
+if ( key_exists ('mode', $_GET) ) $mode = $_GET['mode'];
+else $mode = "Home";
 
 // Админ-панель для быстрого перехода.
 function AdminPanel ()

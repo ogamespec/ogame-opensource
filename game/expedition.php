@@ -637,16 +637,15 @@ function ExpeditionArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     global $loca_lang;
+    global $GlobalUni;
+
     $exptab = LoadExpeditionSettings ();
 
     $hold_time = $fleet_obj['flight_time'] / 3600;
 
-    $origin_user = LoadUser ( $origin['owner_id'] );
-    loca_add ( "common", $origin_user['lang'] );
-    loca_add ( "technames", $origin_user['lang'] );
-    loca_add ( "expedition", $origin_user['lang'] );
-    $old_lang = $loca_lang;
-    $loca_lang = $origin_user['lang'];
+    loca_add ( "common", $GlobalUni['lang'] );
+    loca_add ( "technames", $GlobalUni['lang'] );
+    loca_add ( "expedition", $GlobalUni['lang'] );
 
     // Событие экспедиции.
     $chance = mt_rand ( 0, 99 );
@@ -686,7 +685,6 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
     if ( $fleet[210] > 0 ) $text .= "\n<br/>\n<br/>\n" . Logbook ( $expcount, $exptab);
 
     SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Результат экспедиции [".$target['g'].":".$target['s'].":".$target['p']."]", $text, 3, $queue['end']);
-    $loca_lang = $old_lang;
 }
 
 ?>

@@ -4,7 +4,6 @@
 if ( !file_exists ("../config.php"))
 {
     echo "<html><head><meta http-equiv='refresh' content='0;url=../install.php' /></head><body></body></html>";
-    ob_end_flush ();
     exit ();
 }
 
@@ -82,13 +81,10 @@ if ( method() === "POST" )        // Зарегистрировать игрок
     else if ( !isValidEmail ($_POST['email']) ) $error = va ( "Адрес #1 недействителен!", $_POST['email'] ) ;
     else if ( IsEmailExist ( $_POST['email'])) $error = va ( "Адрес #1 уже существует!", $_POST['email'] );
 
-    if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $lang = "ru";
-    else $lang = $_COOKIE['ogamelang'];
-
     if ( $error === "" )
     {
         $password = gen_trivial_password ();
-        CreateUser ( $_POST['character'], $password, $_POST['email'], $lang );
+        CreateUser ( $_POST['character'], $password, $_POST['email'] );
 
 ?>
 <html>

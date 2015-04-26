@@ -39,6 +39,10 @@ $Languages = array (
 #    'ua' => "Українська",
 );
 
+//
+// Глобальный язык устанавливается во время создании сессии пользователя.
+//
+
 $loca_lang = "en";        // Используемый язык. Можно менять в любое время.
 
 $LOCA = array ();        // тут содержаться все ключи.
@@ -64,11 +68,7 @@ function loca_add ( $section, $lang='en' )
     }
     if ( !$found ) return;
 
-    if ( $section === "common" ) include_once "loca/common.php";
-    else if ( $section === "technames" ) include_once "loca/technames.php";
-    else if ( $section === "battlereport" ) include_once "loca/battlereport.php";
-
-    else { include_once "loca/".$lang."_".$lang."/".$section.".php"; }
+    include_once "loca/".$lang."_".$lang."/".$section.".php";
 }
 
 ?>

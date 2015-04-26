@@ -70,8 +70,8 @@ if ( file_exists ("config.php"))
 
     $GlobalUser = LoadUser ( 99999 );        // space
 
-    loca_add ( "common" );
-    loca_add ( "technames" );
+    loca_add ( "common", $GlobalUni['lang'] );
+    loca_add ( "technames", $GlobalUni['lang'] );
 
     UpdateQueue ( time() );
 }

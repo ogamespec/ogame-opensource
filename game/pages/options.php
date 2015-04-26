@@ -7,8 +7,8 @@
 $OptionsMessage = "";
 $OptionsError = "";
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "options", $GlobalUser['lang'] );
+loca_add ( "menu", $GlobalUni['lang'] );
+loca_add ( "options", $GlobalUni['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -276,22 +276,18 @@ $prem = PremiumStatus ($GlobalUser);
             ChangeSkinPath ( $GlobalUser['player_id'], $_POST['dpath'] );
             EnableSkin ( $GlobalUser['player_id'], ($_POST['design']==="on"?1:0) );
 
-            $redesign = ( $_POST['dpath'] === "redesign" ) ? 1 : 0;
-            $lang = substr ( addslashes($_POST['lang']), 0, 2 );
             $sortby = min ( max(0, intval($_POST['settings_sort'])), 2);
             $sortorder = min ( max(0, intval($_POST['settings_order'])), 1);
             $deactip = (int) key_exists ( 'noipcheck', $_POST );
             $maxspy = min( max (1, intval($_POST['spio_anz'])), 99);
             $maxfleetmsg = min( max (1, intval($_POST['settings_fleetactions'])), 99);
-            $query = "UPDATE ".$db_prefix."users SET redesign=$redesign, deact_ip=$deactip, sortby=$sortby, sortorder=$sortorder, maxspy=$maxspy, maxfleetmsg=$maxfleetmsg, lang='".$lang."' WHERE player_id=".intval($GlobalUser['player_id']);
+            $query = "UPDATE ".$db_prefix."users SET deact_ip=$deactip, sortby=$sortby, sortorder=$sortorder, maxspy=$maxspy, maxfleetmsg=$maxfleetmsg WHERE player_id=".intval($GlobalUser['player_id']);
             dbquery ($query);
             $GlobalUser['sortby'] = $sortby;
             $GlobalUser['sortorder'] = $sortorder;
             $GlobalUser['maxspy'] = $maxspy;
             $GlobalUser['maxfleetmsg'] = $maxfleetmsg;
-            $GlobalUser['lang'] = $lang;
             $GlobalUser['deact_ip'] = $deactip;
-            $GlobalUser['redesign'] = $redesign;
             $GlobalUser['skin'] = $_POST['dpath'];
             $GlobalUser['useskin'] = ($_POST['design']==="on"?1:0);
         }
@@ -348,14 +344,6 @@ $prem = PremiumStatus ($GlobalUser);
   </tr>
   <tr>
 
-   <th><?php echo loca("OPTIONS_GENERAL_LANG");?></th>
-   <th>
-   <select name="lang">
-<?php
-    foreach ( $Languages as $lang_id=>$lang_name ) {
-        echo "    <option value=\"".$lang_id."\" " . IsSelected("lang", $lang_id)." >$lang_name</option>\n";
-    }
-?>
    </select>
    </th>
   </tr>

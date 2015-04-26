@@ -566,6 +566,8 @@ function TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
 function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
 {
+    global $GlobalUni;
+
     if ( $fleet_obj['m'] < 0 ) $fleet_obj['m'] = 0;    // Защита от отрицательных ресурсов (на всякий случай)
     if ( $fleet_obj['k'] < 0 ) $fleet_obj['k'] = 0;
     if ( $fleet_obj['d'] < 0 ) $fleet_obj['d'] = 0;
@@ -575,7 +577,7 @@ function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 
     $origin_user = LoadUser ( $origin['owner_id'] );
-    loca_add ( "technames", $origin_user['lang'] );
+    loca_add ( "technames", $GlobalUni['lang'] );
 
     $text = "Один из Ваших флотов ( ".FleetList($fleet)." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
                "достигает ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
@@ -587,13 +589,14 @@ function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
 
 function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
+    global $GlobalUni;
+
     // Также выгрузить половину топлива
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'] + floor ($fleet_obj['fuel'] / 2), $target['planet_id'], '+' );
     AdjustShips ( $fleet, $fleet_obj['target_planet'], '+' );
     UpdatePlanetActivity ( $target['planet_id'], $queue['end'] );
 
-    $origin_user = LoadUser ( $origin['owner_id'] );
-    loca_add ( "technames", $origin_user['lang'] );
+    loca_add ( "technames", $GlobalUni['lang'] );
 
     $text = "\nОдин из Ваших флотов (".FleetList($fleet).") достиг ".$target['name']."\n" .
                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
@@ -641,6 +644,7 @@ function HoldingHold ($queue, $fleet_obj, $fleet, $origin, $target)
 function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     global $UnitParam;
+    global $GlobalUni;
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
     $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
@@ -666,7 +670,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $target_tech = $target_user['r106'];
     if ($target_prem['technocrat']) $target_tech += 2;
 
-    loca_add ( "technames", $origin_user['lang'] );
+    loca_add ( "technames", $GlobalUni['lang'] );
 
 /*
     $diff = abs ( $target_tech - $origin_tech );
@@ -880,12 +884,13 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
 function ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target)
 {
+    global $GlobalUni;
+
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 
-    $origin_user = LoadUser ( $origin['owner_id'] );
-    loca_add ( "technames", $origin_user['lang'] );
+    loca_add ( "technames", $GlobalUni['lang'] );
 
     $text = "Один из Ваших флотов ( ".FleetList($fleet)." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
                "достигает ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";

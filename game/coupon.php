@@ -89,15 +89,11 @@ function LoadCoupon ($id)
 // Отправить код купона указанному пользователю
 function SendCoupon ($user, $code)
 {
-    global $loca_lang;
-    $old_lang = $loca_lang;        // Сохранить язык пользователя, который инициировал событие рассылки
+    global $GlobalUni;
 
-    loca_add ( "coupons", $user['lang'] );    // добавить языковые ключи пользователя, которому посылается сообщение и установить язык этого пользователя.
-    $loca_lang = $user['lang'];
+    loca_add ( "coupons", $GlobalUni['lang'] );    // добавить языковые ключи пользователя, которому посылается сообщение.
 
     mail_html ( $user['pemail'], loca("COUPON_SUBJ"), va ( loca("COUPON_MESSAGE"), $user['oname'], $code ), "From: coupon@" . hostname() );
-
-    $loca_lang = $old_lang;        // Восстановить язык пользователя
 }
 
 // Проверить есть ли такой купон и он не активирован. Возвращается ID купона или 0, если неверный код купона или купон погашен.
