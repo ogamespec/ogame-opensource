@@ -153,7 +153,11 @@ else if ( $_GET['page'] === "admin" )
         include "pages/admin.php";
         exit ();
     }
-    else Error ( 'Попытка проникновения в админ панель.' );
+    else
+    {
+        Hacking ("HACK_ADMIN_PAGE");
+        Error ( 'Попытка проникновения в админ панель.' );
+    }
 }
 else if ( $_GET['page'] === "imperium" ) { include "pages/imperium.php"; exit (); }
 else if ( $_GET['page'] === "buildings" ) { include "pages/buildings.php"; exit (); }
