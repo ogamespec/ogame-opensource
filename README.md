@@ -116,9 +116,3 @@ Credits go to Alexander Rösner (Legor) for such revolutionary breakthrough in b
 He was not first, but he was the one, who was successful.<br>
 To pay respect, we still have Legor's account, sitting on its own planet Arakis at [1:1:2] =)<br>
 <br>
-<h2>Contact</h2>
-Skype: ogamespec<br>
-Gmail: ogamespec@gmail.com<br>
-
-Do not ask how to install it, I'm not helping with it =)<br>
-<br>
