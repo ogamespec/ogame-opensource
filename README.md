@@ -9,52 +9,52 @@ _Thank you for the great game, but redesign is not we like_
 
 Currently only Russian, English and Deutch languages are supported. Other language packs can be submitted by volunteers. The game engine is multilingual. This mean you can play with your preffered language in any universe.
 
-<br>
-<h2>Features</h2>
-<ul><li>Original game mechanics!<br>
-</li><li>Well tested fast battle engine with fair rapidfire, written on C language<br>
-</li><li>Improved admin tool<br>
-</li><li>Integrated Galaxy-tool<br>
-</li><li>CRON-less event queue<br>
-</li><li>Multi-language support<br>
-</li><li>Redesign as custom skin (without redesign specifics)<br>
-</li><li>ACS<br>
-</li><li>Planet temperature, planet images and sizes are same as in original game<br>
-</li><li>100% match on resource costs and production timings<br>
-</li><li>Original home planet distribution algorithm and spy protection<br>
-</li><li>Fixed some original game bugs ("buggy" 10th planets, recalled ACS delay, buggy fleet return activity etc)<br>
-</li><li>Free Commander to all!<br>
-</li><li>Original expedition with triple Dark Matter chance<br>
-</li><li>Open-source! With comments on russian =)<br>
-</li><li>Hard to install :) (should be more simple soon)<br>
-</li><li>In-game bots<br>
-</li><li>And many, many more!</li></ul>
+Features:
+- Original game mechanics!
+- Well tested fast battle engine with fair rapidfire, written on C language
+- Improved admin tool
+- Integrated Galaxy-tool
+- CRON-less event queue
+- Multi-language support
+- Redesign as custom skin (without redesign specifics)
+- ACS
+- Planet temperature, planet images and sizes are same as in original game
+- 100% match on resource costs and production timings
+- Original home planet distribution algorithm and spy protection
+- Fixed some original game bugs ("buggy" 10th planets, recalled ACS delay, buggy fleet return activity etc)
+- Free Commander to all!
+- Original expedition with triple Dark Matter chance
+- Open-source! With comments on russian =)
+- Hard to install :) (should be more simple soon)
+- In-game bots
+- And many, many more!
 
-<h2>Особенности</h2>
-<ul><li>Оригинальная игровая механика!<br>
-</li><li>Проверенный временем шустрый боевой движок с правильным скорострелом, написаный на языке Си<br>
-</li><li>Мощная админка<br>
-</li><li>Встроенная галабаза<br>
-</li><li>Очередь событий не привязанная к CRON<br>
-</li><li>Перевод на несколько языков<br>
-</li><li>Редизайн, как альтернативное оформление (без особенностей редизайна)<br>
-</li><li>САБ<br>
-</li><li>Температура, картинки и размеры планет такие же, как и в оригинальной игре<br>
-</li><li>100% соответствие в формулах времени построек, их стоимости и выработке ресурсов<br>
-</li><li>Оригинальный алгоритм распределения главных планет и защиты от шпионажа<br>
-</li><li>Исправлены некоторые ошибки оригинальной игры (багнутые 10е планеты-"оверлибы", торможение отозванного САБа, багнутая активность при возврате флота и пр.)<br>
-</li><li>Бесплатный Командир!<br>
-</li><li>Оригинальный алгоритм экспедиций с увеличенным количеством ТМ<br>
-</li><li>Открытый исходный код<br>
-</li><li>Встроенные в игру боты<br>
-</li><li>И много, много чего ещё!</li></ul>
+Особенности:
+- Оригинальная игровая механика!
+- Проверенный временем шустрый боевой движок с правильным скорострелом, написаный на языке C
+- Мощная админка
+- Встроенная галабаза
+- Очередь событий не привязанная к CRON
+- Перевод на несколько языков
+- Редизайн, как альтернативное оформление (без особенностей редизайна)
+- САБ
+- Температура, картинки и размеры планет такие же, как и в оригинальной игре
+- 100% соответствие в формулах времени построек, их стоимости и выработке ресурсов
+- Оригинальный алгоритм распределения главных планет и защиты от шпионажа
+- Исправлены некоторые ошибки оригинальной игры (багнутые 10е планеты-"оверлибы", торможение отозванного САБа, багнутая активность при возврате флота и пр.)
+- Бесплатный Командир!
+- Оригинальный алгоритм экспедиций с увеличенным количеством ТМ
+- Открытый исходный код
+- Встроенные в игру боты
+- И много, много чего ещё!
 
-<a href='http://oldogame.ru/images/screen1.jpg'><img src='http://oldogame.ru/images/screen1_sm.jpg' /></a>
-<a href='http://oldogame.ru/images/screen2.jpg'><img src='http://oldogame.ru/images/screen2_sm.jpg' /></a>
-<a href='http://oldogame.ru/images/screen5.jpg'><img src='http://oldogame.ru/images/screen5_sm.jpg' /></a>
+![screen1](/imgstore/screen1.jpg)
+![screen2](/imgstore/screen2.jpg)
+![screen5](/imgstore/screen5.jpg)
 
-<b>This is non commercial project, all Premium functions of original OGame (Dark Matter, Officeers and Trader) are free.</b><br>
-All copyrighted material is proprietary Gameforge stuff. We do not make money on it! We just have fun =)<br>
+**This is non commercial project, all Premium functions of original OGame (Dark Matter, Officeers and Trader) are free.**
+
+All copyrighted material is proprietary Gameforge stuff. We do not make money on it! We just have fun =)
 
 ## Progress
 
