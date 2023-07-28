@@ -1,13 +1,14 @@
-## Introduction ##
+# Introduction
 
 This is revived OGame v 0.84 with old design.
 
-## !!! All trademarks and copyrighted materials are belongs to OGame respective owners - Gameforge GmbH !!! ##
+## !!! All trademarks and copyrighted materials are belongs to OGame respective owners - Gameforge GmbH !!!
 _Thank you for the great game, but redesign is not we like_
 
-<img src='http://ogamespec.com/imgstore/whc50b7bd1f6b2a2.jpg'>
+![whc50b7bd1f6b2a2](/imgstore/whc50b7bd1f6b2a2.jpg)
 
-Currently only Russian, English and Deutch languages are supported. Other language packs can be submitted by volunteers. The game engine is multilingual. This mean you can play with your preffered language in any universe.<br>
+Currently only Russian, English and Deutch languages are supported. Other language packs can be submitted by volunteers. The game engine is multilingual. This mean you can play with your preffered language in any universe.
+
 <br>
 <h2>Features</h2>
 <ul><li>Original game mechanics!<br>
@@ -54,65 +55,19 @@ Currently only Russian, English and Deutch languages are supported. Other langua
 
 <b>This is non commercial project, all Premium functions of original OGame (Dark Matter, Officeers and Trader) are free.</b><br>
 All copyrighted material is proprietary Gameforge stuff. We do not make money on it! We just have fun =)<br>
-<br>
-<h2>Progress</h2>
 
-The game is almost done. TODO list:<br>
-<br>
-<ul><li>Improve admin tool<br>
-</li><li>Battle engine on PHP<br>
-</li><li>Add redesign<br>
-</li><li>Improve bots AI<br>
-</li><li>Complete game localization</li></ul>
+## Progress
 
-<h3>Localization status</h3>
+The game is almost done. TODO list:
+- Improve admin tool
+- Battle engine on PHP
+- Improve bots AI
+- Complete game localization
 
-<table><thead><th> <b>Game part/page</b> </th><th> <b>Wild-strings in PHP</b> </th><th> <b>Russian</b> </th><th> <b>English</b> </th><th> <b>Deutch</b> </th></thead><tbody>
-<tr><td> Start page </td><td> <font color='red'><b>yes</b></font> </td><td> <i>partial</i> </td><td> <i>partial</i></td><td>  </td></tr>
-<tr><td> Install script </td><td> <font color='green'><b>no</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='gray'><b>gt</b></font> </td></tr>
-<tr><td> Common strings </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Admin Tool </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Overview </td><td> <font color='green'><b>no</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td></tr>
-<tr><td> Empire </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Buildings </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Resources </td><td> <font color='green'><b>no</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td></tr>
-<tr><td> Trader </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Research </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Shipyard </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Fleet </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Tech tree </td><td> <font color='green'><b>no</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td></tr>
-<tr><td> Galaxy </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Defense </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Alliance </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Officeers </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Statistics </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Search </td><td>  </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td></tr>
-<tr><td> Tutorial </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Messages </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Events/Phalanx </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Notes </td><td>  </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td></tr>
-<tr><td> Buddies </td><td> <font color='green'><b>no</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td></tr>
-<tr><td> Options </td><td> <i>partial</i> </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td> <i>partial</i> </td></tr>
-<tr><td> Changelog </td><td> <font color='green'><b>no</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td>  </td><td> <font color='green'><b>yes</b></font> </td></tr>
-<tr><td> Renameplanet menu </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Pranger </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Alliance info </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Ally Applications </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Expedition </td><td>  </td><td>  </td><td>  </td><td>  </td></tr>
-<tr><td> Battle reports </td><td>  </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td><td> <font color='green'><b>yes</b></font> </td></tr></tbody></table>
+## Credits
 
-<font color='gray'><b>gt</b></font> = Google Translate.<br>
-<br>
-Translation Guides:<br>
-<a href='LocaGame.md'>LocaGame</a>
-<a href='LocaStartPage.md'>LocaStartPage</a>
+Credits go to Alexander Rösner (Legor) for such revolutionary breakthrough in browser games.
+He was not first, but he was the one, who was successful.
+To pay respect, we still have Legor's account, sitting on its own planet Arakis at [1:1:2] =)
 
-<h2>News</h2>
-
-<a href='News.md'>News</a>
-
-<h2>Credits</h2>
-Credits go to Alexander Rösner (Legor) for such revolutionary breakthrough in browser games.<br>
-He was not first, but he was the one, who was successful.<br>
-To pay respect, we still have Legor's account, sitting on its own planet Arakis at [1:1:2] =)<br>
-<br>
+![hail](/imgstore/hail.jpg)
