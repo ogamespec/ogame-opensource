@@ -203,7 +203,7 @@ function Admin_BattleSim ()
         else $fid = intval ($_POST['fid']);
         if ( $_POST['did'] === "" ) $did = 0;
         else $did = intval ($_POST['did']);
-        $BattleReport = SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, &$dloss );
+        $BattleReport = SimBattle ( $a, $d, $rf, $fid, $did, $debug, $battle_result, $aloss, $dloss );
     }
 
     // --------------------------------------------------------------------------------------------------------------------------

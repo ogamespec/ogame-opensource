@@ -40,7 +40,7 @@ function Admin_UserLogs ()
         $result = dbquery ($query);
         while ( $user = dbarray($result) ) {
             $percent = 0;
-            similar_text ( mb_strtolower ($name), mb_strtolower ($user['oname']), &$percent );
+            similar_text ( mb_strtolower ($name), mb_strtolower ($user['oname']), $percent );
             if ( $percent > 75 ) $users[] = $user;
         }
 

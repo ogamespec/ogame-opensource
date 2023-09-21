@@ -314,7 +314,7 @@ function EventList ()
             $task[$tasknum]['fleet'][0]['ipm_amount'] = $fleet_obj['ipm_amount'];
             $task[$tasknum]['fleet'][0]['ipm_target'] = $fleet_obj['ipm_target'];
         }
-        GetDirectionAssignment ($fleet_obj, &$task[$tasknum]['fleet'][0]['dir'], &$task[$tasknum]['fleet'][0]['assign'] );
+        GetDirectionAssignment ($fleet_obj, $task[$tasknum]['fleet'][0]['dir'], $task[$tasknum]['fleet'][0]['assign'] );
 
         $tasknum++;
 
@@ -439,7 +439,7 @@ function EventList ()
                 $task[$tn]['fleet'][$f]['origin_id'] = $fleet_obj['start_planet'];
                 $task[$tn]['fleet'][$f]['target_id'] = $fleet_obj['target_planet'];
                 $task[$tn]['fleet'][$f]['mission'] = GetMission ($fleet_obj);
-                GetDirectionAssignment ($fleet_obj, &$task[$tn]['fleet'][$f]['dir'], &$task[$tn]['fleet'][$f]['assign'] );
+                GetDirectionAssignment ($fleet_obj, $task[$tn]['fleet'][$f]['dir'], $task[$tn]['fleet'][$f]['assign'] );
                 $f++;
             }
 

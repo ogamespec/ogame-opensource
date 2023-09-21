@@ -1,10 +1,12 @@
 <?php
 
-// ВЕРСИЯ 2.
-
 // Установочный файл.
 // Создает все необходимые таблицы в базе данных, а также файл конфигурации config.php, для доступа к базе.
 // Не работет, если файл config.php создан.
+
+// Добавить вывод ошибок для этой ранней стадии установки
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 require_once "db.php";
 require_once "loca.php";
@@ -370,16 +372,16 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $mdb_enable = ($_POST["mdb_enable"]==="on"?1:0);
     if ($mdb_enable)
     {
-        $mdb_connect = @mysql_connect($_POST["mdb_host"], $_POST["mdb_user"], $_POST["mdb_pass"], true);
-        $mdb_select = @mysql_select_db($_POST["mdb_name"], $mdb_connect);
+        $mdb_connect = @mysqli_connect($_POST["mdb_host"], $_POST["mdb_user"], $_POST["mdb_pass"]);
+        $mdb_select = @mysqli_select_db($mdb_connect, $_POST["mdb_name"]);
         $query = "SELECT id FROM unis";
-        $result = mysql_query ( $query, $mdb_connect );
+        $result = mysqli_query ( $mdb_connect, $query);
         if (!$result) {
             $query = 'CREATE TABLE unis ( id INT AUTO_INCREMENT PRIMARY KEY, num INT, dbhost TEXT, dbuser TEXT, dbpass TEXT, dbname TEXT, uniurl TEXT ) CHARACTER SET utf8 COLLATE utf8_general_ci';
-            mysql_query ( $query, $mdb_connect );
+            mysqli_query ( $mdb_connect, $query );
         }
         $query = "INSERT INTO unis VALUES ( NULL, ".$_POST["uni_num"].", '".$_POST["db_host"]."', '".$_POST["db_user"]."', '".$_POST["db_pass"]."', '".$_POST["db_name"]."', '".uniurl()."' );";
-        mysql_query ( $query, $mdb_connect );
+        mysqli_query ( $mdb_connect, $query );
     }
 
     // Сохранить файл конфигурации.

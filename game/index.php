@@ -1,5 +1,8 @@
 <?php
 
+//ini_set('display_errors', 1);
+//error_reporting(E_ALL);
+
 // Главный модуль, через который осуществляется доступ к другим страницам.
 ob_start ();
 

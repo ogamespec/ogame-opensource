@@ -41,9 +41,9 @@ function MDBConnect ()
 {
     global $MDB_link, $mdb_host, $mdb_user, $mdb_pass, $mdb_name, $mdb_enable;
     if (!$mdb_enable) return FALSE;
-    $MDB_link = @mysql_connect ($mdb_host, $mdb_user, $mdb_pass );
+    $MDB_link = @mysqli_connect ($mdb_host, $mdb_user, $mdb_pass );
     if (!$MDB_link) return FALSE;
-    if ( ! @mysql_select_db ($mdb_name, $MDB_link) ) return FALSE;
+    if ( ! @mysqli_select_db ($MDB_link, $mdb_name) ) return FALSE;
 
     MDBQuery ("SET NAMES 'utf8';");
     MDBQuery ("SET CHARACTER SET 'utf8';");
@@ -55,20 +55,20 @@ function MDBConnect ()
 function MDBQuery ($query)
 {
     global $MDB_link;
-    $result = @mysql_query ($query, $MDB_link);
+    $result = @mysqli_query ($MDB_link, $query);
     if (!$result) return NULL;
     else return $result;
 }
 
 function MDBRows ($result)
 {
-    $rows = @mysql_num_rows($result);
+    $rows = @mysqli_num_rows($result);
     return $rows;
 }
 
 function MDBArray ($result)
 {
-    $arr = @mysql_fetch_assoc($result);
+    $arr = @mysqli_fetch_assoc($result);
     if (!$arr) return NULL;
     else return $arr;
 }
