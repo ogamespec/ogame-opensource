@@ -16,7 +16,6 @@ Features:
 - Integrated Galaxy-tool
 - CRON-less event queue
 - Multi-language support
-- Redesign as custom skin (without redesign specifics)
 - ACS
 - Planet temperature, planet images and sizes are same as in original game
 - 100% match on resource costs and production timings
@@ -36,7 +35,6 @@ Features:
 - Встроенная галабаза
 - Очередь событий не привязанная к CRON
 - Перевод на несколько языков
-- Редизайн, как альтернативное оформление (без особенностей редизайна)
 - САБ
 - Температура, картинки и размеры планет такие же, как и в оригинальной игре
 - 100% соответствие в формулах времени построек, их стоимости и выработке ресурсов
@@ -60,9 +58,8 @@ All copyrighted material is proprietary Gameforge stuff. We do not make money on
 
 The game is almost done. TODO list:
 - Improve admin tool
-- Battle engine on PHP
 - Improve bots AI
-- Complete game localization
+- Complete game localization (De, En)
 
 ## Credits
 
