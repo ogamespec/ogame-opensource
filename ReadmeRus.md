@@ -48,5 +48,3 @@ The game is almost done. TODO list:
 Credits go to Alexander Rösner (Legor) for such revolutionary breakthrough in browser games.
 He was not first, but he was the one, who was successful.
 To pay respect, we still have Legor's account, sitting on its own planet Arakis at [1:1:2] =)
-
-![hail](/imgstore/hail.jpg)
