@@ -30,7 +30,7 @@ function hostname () {
 }
 
 function isValidEmail($email){
-	return eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$", $email);
+	return filter_var($email, FILTER_VALIDATE_EMAIL);
 }
 
 // Format string, according to tokens from the text. Tokens are represented as #1, #2 and so on.
