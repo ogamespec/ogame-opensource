@@ -2,7 +2,8 @@
 
 This is revived OGame v 0.84 with old design.
 
-## !!! All trademarks and copyrighted materials are belongs to OGame respective owners - Gameforge GmbH !!!
+**!!! All trademarks and copyrighted materials are belongs to OGame respective owners - Gameforge GmbH !!!**
+
 _Thank you for the great game, but redesign is not we like_
 
 ![whc50b7bd1f6b2a2](/imgstore/whc50b7bd1f6b2a2.jpg)
@@ -27,24 +28,6 @@ Features:
 - Hard to install :) (should be more simple soon)
 - In-game bots
 - And many, many more!
-
-Особенности:
-- Оригинальная игровая механика!
-- Проверенный временем шустрый боевой движок с правильным скорострелом, написаный на языке C
-- Мощная админка
-- Встроенная галабаза
-- Очередь событий не привязанная к CRON
-- Перевод на несколько языков
-- САБ
-- Температура, картинки и размеры планет такие же, как и в оригинальной игре
-- 100% соответствие в формулах времени построек, их стоимости и выработке ресурсов
-- Оригинальный алгоритм распределения главных планет и защиты от шпионажа
-- Исправлены некоторые ошибки оригинальной игры (багнутые 10е планеты-"оверлибы", торможение отозванного САБа, багнутая активность при возврате флота и пр.)
-- Бесплатный Командир!
-- Оригинальный алгоритм экспедиций с увеличенным количеством ТМ
-- Открытый исходный код
-- Встроенные в игру боты
-- И много, много чего ещё!
 
 ![screen1](/imgstore/screen1.jpg)
 ![screen2](/imgstore/screen2.jpg)
