@@ -724,6 +724,8 @@ function setMax(key, number){
 
 ### Сообщения (page=messages)
 
+![oldogame_messages](/imgstore/oldogame_messages.jpg)
+
 ### Заметки (page=notizen)
 
 ### Друзья (page=buddy)
