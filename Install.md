@@ -1,61 +1,61 @@
-# Установка
+# Installation
 
-Требования:
-- Приличный веб-сервер
+Requirements:
+- A decent web server
 - PHP 7
 - MySQL
 
-## Подготовка файлов
+## Preparing Files
 
-В корень вашего сервера нужно скопировать всё содержимое из папки `wwwroot`.
+In the root of your server you need to copy all the contents from the `wwwroot` folder.
 
-Папку `game` нужно копировать в инстанцию Вселенной.
+The `game` folder should be copied to the Universe instance.
 
-## Создание поддомена Вселенной
+## Creating a Universe subdomain
 
-Если вы разворачиваете в Web и не хотите иметь одну вселенную в корне с игрой, то можно создать поддомен типа `uni1.mygame.com` и положить папку `game` туда.
+If you are deploying to the Web and don't want to have one universe at the root with the game, you can create a subdomain like `uni1.mygame.com` and put the `game` folder there.
 
-Если вы хотите иметь просто одну вселенную там же, где и главная страница, просто положите папку `game` в корень вашего веб-сервера.
+If you just want to have one universe where the main page is, just put the `game` folder in the root of your web server.
 
-## Боевой движок
+## Battle Engine
 
-Нужно собрать исполняемый файл боевого движка, как написано в папке `BattleEngine` и положить исполняемый файл куда требуется.
+You need to build the battle engine executable as written in the `BattleEngine` folder and put the executable wherever you need it.
 
-## Инсталляция мастер базы
+## Installing the Master Base
 
-После первого открытия неустановленной игры вас попросят инициализировать мастер-базу:
+After opening an uninstalled game for the first time, you will be asked to initialize the master database:
 
 ![install1.png](/imgstore/install1.png)
 
-Укажите все данные (MySQL БД должна быть создана отдельно какими-то другими средствами, какими вам нравится, например с помощью Navicat MySQL).
+Specify all data (MySQL database should be created separately by some other means you like, for example with Navicat MySQL).
 
 ![install2.png](/imgstore/install2.png)
 
-## Настройка Вселенной
+## Customizing the Universe
 
-Для настройки вселенной нужно перейти по прямой ссылке на страницу установки, например: http://localhost/game/install.php
+To customize the universe, you need to follow the direct link to the setup page, for example: http://localhost/game/install.php
 
 ![install3.png](/imgstore/install3.png)
 
-Обязательно нужно отметить галочку и указать настройки master базы, чтобы вселенная стала доступна с главной страницы.
+Be sure to check the box and specify the master base settings to make the universe available from the home page.
 
-## Проверка правильности установки
+## Checking for correct installation
 
-Для проверки достаточно зайти во вселенную под ником `legor` (админ). 
+To check, just log into the universe under the nickname `legor` (admin). 
 
-В админке можно проверить боевой движок в разделе Симулятор. Если всё работает хорошо, должен быть адекватный боевой доклад.
+In the admin you can check the combat engine in the Simulator section. If everything works well, there should be an adequate combat report.
 
-Потыкать разные кнопочки в админке; Походить по страницам; Попробовать что-то построить у Легора и проверить очередь команд.
+Poke different buttons in the admin; Walk around the pages; Try to build something at Legor and check the command queue.
 
-## Внешние ссылки
+## External links
 
-Оригинальная игра содержит ряд ссылок из бокового меню на внешние ресурсы. Вы можете поменять их по своему усмотрению в файле game/page.php:
-- Форум
-- Туториал
-- Правила
-- О нас
+The original game contains a number of links from the side menu to external resources. You can change them at your preference in the game/page.php file:
+- Forum
+- Tutorial
+- Rules
+- About us
 
-## Деинсталляция
+## Uninstallation
 
-- Удалить config.php из корня сервера и config.php из папки game
-- Очистить все базы данных (master базу и базу вселенной)
+- Delete config.php from the server root and config.php from the game folder
+- Clear all databases (master database and universe database)
