@@ -1,4 +1,4 @@
-# Installation
+# Install
 
 Requirements:
 - A decent web server
@@ -55,7 +55,7 @@ The original game contains a number of links from the side menu to external reso
 - Rules
 - About us
 
-## Uninstallation
+## Uninstall
 
 - Delete config.php from the server root and config.php from the game folder
 - Clear all databases (master database and universe database)
