@@ -1,16 +1,16 @@
-# Introduction
+# Обзор
 
-This is revived OGame v 0.84 with old design.
+Данный проект является возрождённым старым добрый ОГеймов, канонической версии 0.84.
 
-Discord: https://discord.gg/xpCV3McAj2
+Дискорд: https://discord.gg/xpCV3McAj2
 
-**!!! All trademarks and copyrighted materials are belongs to OGame respective owners - Gameforge GmbH !!!**
+**!!! Все торговые марки и материалы, защищенные авторским правом, принадлежат соответствующим владельцам OGame - Gameforge 4D GmbH !!!**
 
-_Thank you for the great game, but redesign is not we like_
+_Спасибо за великую игру, но редизайн это не то что нам нравится_
 
 ![whc50b7bd1f6b2a2](/imgstore/whc50b7bd1f6b2a2.jpg)
 
-Currently only Russian, English and Deutch languages are supported. Other language packs can be submitted by volunteers. The game engine is multilingual. This mean you can play with your preffered language in any universe.
+В настоящее время поддерживаются только русский, английский и немецкий языки. Другие языковые пакеты могут быть представлены добровольцами. Движок игры многоязычный. Это значит, что вы сможете играть на выбранном вами языке в любой вселенной.
 
 Особенности:
 - Оригинальная игровая механика!
@@ -34,19 +34,19 @@ Currently only Russian, English and Deutch languages are supported. Other langua
 ![screen2](/imgstore/screen2.jpg)
 ![screen5](/imgstore/screen5.jpg)
 
-**This is non commercial project, all Premium functions of original OGame (Dark Matter, Officeers and Trader) are free.**
+**Это некоммерческий проект, все премиум-функции оригинальной OGame (Тёмная Материя, Офицеры и Скупщик) бесплатны.**
 
-All copyrighted material is proprietary Gameforge stuff. We do not make money on it! We just have fun =)
+Все материалы, защищенные авторским правом, являются собственностью Gameforge. Мы не зарабатываем на этом деньги! Мы просто развлекаемся =)
 
-## Progress
+## Прогресс
 
-The game is almost done. TODO list:
-- Improve admin tool
-- Improve bots AI
-- Complete game localization (De, En)
+Игра почти готова. Список TODO:
+- Улучшить админку
+- Улучшить ИИ ботов
+- Завершить локализацию игры (De, En)
 
-## Credits
+## Кредиты
 
-Credits go to Alexander Rösner (Legor) for such revolutionary breakthrough in browser games.
-He was not first, but he was the one, who was successful.
-To pay respect, we still have Legor's account, sitting on its own planet Arakis at [1:1:2] =)
+За такой революционный прорыв в браузерных играх стоит поблагодарить Александра Рёснера (Legor).
+Он не был первым, но он был тем, кто добился успеха.
+В знак уважения мы до сих пор храним аккаунт Легора, сидящего на своей планете Аракис на позиции \[1:1:2\] =)

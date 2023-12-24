@@ -4,7 +4,7 @@ This is revived OGame v 0.84 with old design.
 
 Discord: https://discord.gg/xpCV3McAj2
 
-**!!! All trademarks and copyrighted materials are belongs to OGame respective owners - Gameforge GmbH !!!**
+**!!! All trademarks and copyrighted materials are belongs to OGame respective owners - Gameforge 4D GmbH !!!**
 
 _Thank you for the great game, but redesign is not we like_
 
@@ -50,4 +50,4 @@ The game is almost done. TODO list:
 
 Credits go to Alexander Rösner (Legor) for such revolutionary breakthrough in browser games.
 He was not first, but he was the one, who was successful.
-To pay respect, we still have Legor's account, sitting on its own planet Arakis at [1:1:2] =)
+To pay respect, we still have Legor's account, sitting on its own planet Arakis at \[1:1:2\] =)
