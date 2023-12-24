@@ -1,5 +1,5 @@
 # OGame 0.84 Wiki
 
-Вики, посвященная сохранению культурного наследия версии игры OGame 0.84.
+A wiki dedicated to preserving the cultural heritage of the OGame 0.84 version of the game.
 
-Хранит подробные сведения по оригинальной механике игры, подкрепленные (по возможности) HTML-исходниками и реализацией на PHP.
+Preserves detailed information on the original game mechanics, supported (where possible) by HTML sources and PHP implementation.
