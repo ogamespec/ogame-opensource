@@ -178,8 +178,6 @@ errorbox.style.display='block';
 
 ![oldogame_respane](/imgstore/oldogame_respane.jpg)
 
-<img src="http://ogamespec.com/imgstore/oldogame_respane.jpg">
-
 ## Левое меню
 
 Левое меню - статичный HTML-код. У некоторых страниц его нет (`Заметки`)
