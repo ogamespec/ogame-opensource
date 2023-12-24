@@ -11,56 +11,58 @@ On output, the engine generates:
 
 ## Combat System
 
-Система боя ОГейма включается в тех случаях, когда вражеские юниты встречаются у какой-либо планеты или луны.
-Это случается в основном при нападении, но и при акции шпионажа, при которой зонд был обнаружен.
-В этом случае боевые единицы выстраиваются и начинают палить друг по другу. Это происходит 6 раз (6 раундов).
-Кто в конце остался с кораблями, тот победитель. Если в конце на обоих сторонах остались юниты, то бой заканчивается ничьёй и нападающий возвращается домой.
-В каждом раунде корабли и защитные сооружения стреляют друг по другу. При этом каждый юнит стреляет один раз (исключение: скорострел) по случайно выбранной цели.
-Огневая сила кораблей определяется оценкой атаки. Эта сила поглощается частично или полностью щитами. Если после этого ещё что-то остаётся от бойной силы, то это отнимается от брони корабля.
-Выстрелы могут прийтись даже по кораблям с полностью уничтоженной броней. В конце раунда взрываются корабли, у которых больше не осталось брони.
-Но и от 30% повреждения брони тоже имеется шанс взрыва, который растёт вместе со степенью повреждения.
+by Sanyok.
 
-### Сила выстрела
+The OGame combat system is activated when enemy units are encountered near a planet or moon.
+This happens mostly during an attack, but also during an espionage action in which a probe has been detected.
+In this case, the units line up and start firing at each other. This happens 6 times (6 rounds).
+Whoever is left with ships at the end is the winner. If there are units left on both sides at the end, the battle ends in a draw and the attacker goes home.
+In each round, ships and defenses fire at each other. Each unit fires once (exception: rapid-fire) at a randomly selected target.
+The firepower of ships is determined by the attack score. This power is absorbed partially or completely by shields. If there is still anything left of the combat power afterwards, it is subtracted from the ship's armor.
+Shots can even hit ships with completely destroyed armor. At the end of the round, ships with no more armor left explode.
+But 30% armor damage also has an explosion chance, which increases with the degree of damage.
 
-Каждый юнит имеет стартовую силу выстрела. Её можно увеличить исследованием оружейной техники на 10% за уровень.
-Например: тяжёлый истребитель имеет оценку атаки 150. Оружейная техника уровня 10 подымает это на 100% то есть до 300.
-При бое оценки атак всех юнитов прибавляются вместе.
+### The strength of the shot
 
-### Щиты
+Each unit has a starting firing power. This can be increased by researching weapon technology by 10% per level.
+For example: a heavy fighter has an attack rating of 150. Weapon tech level 10 raises this by 100%, i.e. to 300.
+During combat, the attack scores of all units are added together.
 
-Щиты первыми принимают удар на себя, предохраняя броню от повреждения. Только когда все щиты уничтожены, начинается уничтожение брони.
-Щиты могут быть улучшены исследованием щитовой технологии на 10% за уровень исследования.
-Щиты полностью восстанавливаются после каждого раунда. Внутри раунда щит уничтожается целыми ячейками по 1%, а остаток силы атаки менее 1% поглощается без каких-либо потерь.
-Например, если силы выстрела хватает на 3.7% щита, будет уничтожено лишь 3%, а 0.7% поглотится. Поэтому выстрелы с силой менее 1%, отскакивают от щитов, не уменьшая их силы и не нанося вреда броне.
-Вероятность взрыва в этом случае также не высчитывается.
-Пример: лёгкий истребитель (атака 50) стреляет по большому куполу (щит 10000). После выстрела у купола всё ещё 10000 щитов, так как выстрел слишком слаб и щит его полностью поглощает.
-Тяжёлый же истребитель имеет силу выстрела 150. Это 1.5% от щита, поэтому выстрел засчитывается и со щита снимается целая часть атаки - 1%.
-После этого у купола остаётся сила щитов только 9900, так как 0.5% = 50 атаки поглощены щитом без потерь.
+### Shields
 
-### Броня
+Shields are the first to take a hit, protecting the armor from damage. Only when all shields are destroyed does armor destruction begin.
+Shields can be improved by researching shield technology by 10% per research level.
+Shields fully regenerate after each round. Within a round, the shield is destroyed in whole cells of 1%, and the remaining attack power less than 1% is absorbed without any loss.
+For example, if the strength of a shot is enough to hit 3.7% of the shield, only 3% will be destroyed and 0.7% will be absorbed. Therefore, shots with a force of less than 1%, bounce off shields without reducing their strength or damaging armor.
+The probability of explosion in this case is also not calculated.
+Example: a light fighter (attack 50) fires at a large dome (shield 10000). After the shot, the dome still has 10000 shield, because the shot is too weak and the shield absorbs it completely.
+The heavy fighter on the other hand has a shot strength of 150. That's 1.5% of the shield, so the shot counts and takes a full 1% of the attack off the shield.
+After that, the dome only has 9900 shield strength left, since 0.5% = 50 of the attack is absorbed by the shield without loss.
 
-Броня указывает, какой ущерб корабль может поглотить, прежде чем он будет уничтожен. Баллы брони всегда составляют 10% структуры.
-Их можно посчитать уже при постройке юнита. За каждые 10 металла или кристалла (дейт здесь не считается) получается 1 пункт брони.
-Сила брони может увеличиваться исследованием брони космических кораблей на 10% за уровень. К сожалению, корабли склонны к взрыванию уже от 30% повреждения брони.
-После боя составляется боевой доклад. Единственное исключение: если юниты нападающего были уничтожены в первых 2-х раундах.
-Тогда нападающий получает только короткое сообщение. Защитник получает доклад всегда
+### Armor
 
-### Порядок выстрелов
+Armor indicates how much damage a ship can absorb before it is destroyed. Armor points are always 10% of the structure.
+They can be calculated when building a unit. For every 10 metal or crystal (deut does not count here) you get 1 armor point.
+Armor strength can be increased by researching spaceship armor by 10% per level. Unfortunately, ships tend to explode already from 30% armor damage.
+After combat, a combat report is compiled. The only exception: if the attacker's units were destroyed in the first 2 rounds.
+Then the attacker receives only a short report. The defender always receives a report
 
-Свой порядок выстрелов точно определён, а именно слева направо в боевом докладе по принципу: лёгкие корабли, тяжёлые корабли, лёгкая защита, тяжёлая защита.
+### Order of shots
 
-### Выбор цели
+The order of shots is precisely defined, namely from left to right in the combat report according to the principle: light ships, heavy ships, light defense, heavy defense.
 
-Цель выбирается абсолютно случайно. Может быть, что все юниты палят по одной цели, хотя есть и другие цели, но это маловероятно.
-Обычно должно быть так, что юниты, которых больше всего, получают больше всех выстрелов. При этом у каждого корабля и защитного сооружения есть вероятность, что в него попадут, равная 1/(кол-во всех юнитов)
+### Target selection
 
-### Восстановление защиты
+The target is chosen completely randomly. It may be that all units fire at one target, even though there are other targets, but this is unlikely.
+Normally, it should be that the units with the most units get the most shots. Each ship and defensive structure has a probability of being hit equal to 1/(number of units)
 
-Защитные сооружения имеют вероятность на восстановление после боя в 70%.
-При небольшом количестве юнитов (меньше чем 10) эта вероятность высчитывается для каждого сооружения отдельно.
-При большем количестве вероятность высчитывается для каждого ТИПА защиты. При этом восстанавливаются всегда 70% +/-10% разрушенной защиты.
-При 10 ракетных установках это минимум 6 и максимум 8 восстановленных РУ. Дробные числа нормально округляются. Для каждого типа защиты вероятность высчитывается отдельно.
-То есть, например, РУ и лазеры не прибавляются вместе.
+### Restoring defense
+
+Defensive structures have a 70% chance of recovery after combat.
+If the number of units is small (less than 10), this probability is calculated for each structure separately.
+For larger numbers, the probability is calculated for each TYPE of defense. At the same time 70% +/-10% of destroyed defenses are always restored.
+With 10 rocket launchers, this is a minimum of 6 and a maximum of 8 recovered RLs. Fractional numbers are rounded normally. For each type of defense the probability is calculated separately.
+So, for example, RLs and lasers are not added together.
 
 ## Rapidfire              
 
