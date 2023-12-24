@@ -1,36 +1,28 @@
-// Длинное целое.
-#ifndef WIN32
-#include <linux/types.h>
-typedef __u64 u64;
-#else
-#include <windows.h>
-typedef unsigned __int64 u64;
-#endif
 
 typedef struct TechParam {
     long    structure;
     long    shield;
     long    attack;
-    long    cargo;  // только для флота.
+    long    cargo;  // С‚РѕР»СЊРєРѕ РґР»СЏ С„Р»РѕС‚Р°.
 } TechParam;
 
-// Данные слота.
+// Р”Р°РЅРЅС‹Рµ СЃР»РѕС‚Р°.
 typedef struct Slot
 {
-    unsigned    long fleet[14];         // Флот
-    unsigned    long def[8];            // Оборона
-    int         weap, shld, armor;      // Технологии
-    char        name[64];               // Имя игрока
-    int         g, s, p;                // Координаты
+    unsigned    long fleet[14];         // Р¤Р»РѕС‚
+    unsigned    long def[8];            // РћР±РѕСЂРѕРЅР°
+    int         weap, shld, armor;      // РўРµС…РЅРѕР»РѕРіРёРё
+    char        name[64];               // РРјСЏ РёРіСЂРѕРєР°
+    int         g, s, p;                // РљРѕРѕСЂРґРёРЅР°С‚С‹
     int         id;                     // ID
 } Slot;
 
-// Данные юнита.
+// Р”Р°РЅРЅС‹Рµ СЋРЅРёС‚Р°.
 typedef struct Unit {
     unsigned char slot_id;
     unsigned char obj_type;
     unsigned char exploded;
-    unsigned char dummy;                // Для выравнивания структуры на 4 байта.
+    unsigned char dummy;                // Р”Р»СЏ РІС‹СЂР°РІРЅРёРІР°РЅРёСЏ СЃС‚СЂСѓРєС‚СѓСЂС‹ РЅР° 4 Р±Р°Р№С‚Р°.
     long    hull, hullmax;
     long    shield, shieldmax;
 } Unit;
