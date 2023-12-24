@@ -1,6 +1,7 @@
-// Боевой движок браузерной игры OGame.
+// Боевой движок браузерной игры OGame / The battle engine of the browser game OGame
 
 // Для того чтобы номера объектов умещались в один байт (для экономии памяти), нумерация флота начинается от 100 (вместо 202), а обороны от 200 (вместо 401).
+// To make the object numbers fit into one byte (to save memory), fleet numbering starts at 100 (instead of 202) and defense numbering starts at 200 (instead of 401).
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -61,13 +62,13 @@ Array (
 
 */
 
-char ResultBuffer[64*1024];     // Буфер выходных данных.
+char ResultBuffer[64*1024];     // Буфер выходных данных / Output data buffer
 
-// Настройки выпадения лома.
+// Настройки выпадения лома / Wreckage drop settings
 int DefenseInDebris = 0, FleetInDebris = 30;
-int Rapidfire = 1;  // 1: вкл стрельбу очередями.
+int Rapidfire = 1;  // 1: вкл стрельбу очередями / enable rapidfire
 
-// Таблица стоимости.
+// Таблица стоимости / Cost table
 typedef struct UnitPrice { long m, k, d; } UnitPrice;
 static UnitPrice FleetPrice[] = {
  { 2000, 2000, 0 }, { 6000, 6000, 0 }, { 3000, 1000, 0 }, { 6000, 4000, 0 },
@@ -80,7 +81,7 @@ static UnitPrice DefensePrice[] = {
  { 2000, 6000, 0 }, { 50000, 50000, 30000 }, { 10000, 10000, 0 }, { 50000, 50000, 0 }
 };
 
-TechParam fleetParam[14] = { // ТТХ Флота.
+TechParam fleetParam[14] = { // ТТХ Флота / Fleet parameters
  { 4000, 10, 5, 5000 },
  { 12000, 25, 5, 25000 },
  { 4000, 10, 50, 50 },
@@ -97,7 +98,7 @@ TechParam fleetParam[14] = { // ТТХ Флота.
  { 70000, 400, 700, 750 }
 };
 
-TechParam defenseParam[8] = { // ТТХ Обороны.
+TechParam defenseParam[8] = { // ТТХ Обороны / Defense parameters
  { 2000, 20, 80, 0 },
  { 2000, 25, 100, 0 },
  { 8000, 100, 250, 0 },
@@ -1006,7 +1007,7 @@ void main(int argc, char **argv)
     ParseQueryString ( argv[1] );
     //PrintParams ();
 
-    // Загрузить исходный файл и выбрать исходные данные.
+    // Загрузить исходный файл и выбрать исходные данные / Load the source file and select the source data
     {
         int battle_id = GetSimParamI("battle_id", 0);
         
@@ -1015,7 +1016,7 @@ void main(int argc, char **argv)
         sprintf ( filename, "battledata/battle_%i.txt", battle_id );
         battle_data = FileLoad ( filename, NULL, "rt" );
 
-        // Разобрать исходные данные в двоичный формат и начать битву.
+        // Разобрать исходные данные в двоичный формат и начать битву / Parse the raw data into binary format and start the battle
         MySrand ((unsigned long)time(NULL));
         StartBattle ( battle_data, battle_id );
     }
