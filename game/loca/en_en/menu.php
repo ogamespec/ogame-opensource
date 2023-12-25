@@ -29,5 +29,6 @@ $LOCA["en"]["MENU_OPTIONS"] = "Options";
 $LOCA["en"]["MENU_LOGOUT"] = "Logout";
 $LOCA["en"]["MENU_RULES"] = "Rules";
 $LOCA["en"]["MENU_IMPRESSUM"] = "Impressum";
+$LOCA["en"]["MENU_DISCORD"] = "Discord"; 		// New. The link to Discord is inserted after the link to the Board
 
 ?>

@@ -113,7 +113,8 @@ hr {
 <br /><br />
 <b><u>Разработка</u></b><br /><br />
 
-Google Code: <a href="http://code.google.com/p/ogame-opensource" target=_blank>http://code.google.com/p/ogame-opensource</a>
+- Google Code: <a href="https://github.com/ogamespec/ogame-opensource" target=_blank>https://github.com/ogamespec/ogame-opensource</a><br/>
+- Discord: https://discord.gg/xpCV3McAj2<br/>
 
 <br /><br />
 BIG MONEY MAKES YOU DEVIL.

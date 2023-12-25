@@ -29,5 +29,6 @@ $LOCA["ru"]["MENU_OPTIONS"] = "Настройки";
 $LOCA["ru"]["MENU_LOGOUT"] = "Выход";
 $LOCA["ru"]["MENU_RULES"] = "Правила";
 $LOCA["ru"]["MENU_IMPRESSUM"] = "О нас";
+$LOCA["ru"]["MENU_DISCORD"] = "Дискорд"; 		// новое. Ссылка на Дискорд вставляется после ссылки на Форум
 
 ?>

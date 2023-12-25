@@ -56,5 +56,7 @@ $LOCA["de"]["INSTALL_INSTALL"] = "Installieren";
 $LOCA["de"]["INSTALL_ERROR1"] ="Kann nicht speichern Konfigurationsdatei.";
 $LOCA["de"]["INSTALL_DONE"] ="Installieren abzuschließen. Config Datei erstellt.";
 
+$LOCA["de"]["INSTALL_EXTERNAL_LINKS"] = "Externe Links";
+$LOCA["de"]["INSTALL_EXTERNAL_LINKS_TIP"] = "Wird kein externer Link angegeben (Leerstring), ist der entsprechende Menüpunkt nicht verfügbar";
 
 ?>

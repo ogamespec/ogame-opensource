@@ -445,13 +445,27 @@ function LeftMenu ($coma)
     echo "    </font></div>\n";
     echo "  </td>\n";
     echo " </tr>\n\n";
-    echo "  <tr> \n";
-    echo "  <td> \n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\"> \n";
-    echo "    <a href=\"http://board.oldogame.ru/\" target=\"_blank\" accesskey=\"m\" >".loca("MENU_BOARD")."</a><!-- external link to board --> \n";
-    echo "   </font></div> \n";
-    echo "  </td> \n";
-    echo " </tr> \n\n";
+
+    if (!empty($unitab['ext_board'])) {
+        echo "  <tr> \n";
+        echo "  <td> \n";
+        echo "   <div align=\"center\"><font color=\"#FFFFFF\"> \n";
+        echo "    <a href=\"".$unitab['ext_board']."\" target=\"_blank\" accesskey=\"m\" >".loca("MENU_BOARD")."</a><!-- external link to board --> \n";
+        echo "   </font></div> \n";
+        echo "  </td> \n";
+        echo " </tr> \n\n";
+    }
+    
+    if (!empty($unitab['ext_discord'])) {
+        echo " <tr>\n";
+        echo "  <td>\n";
+        echo "   <div align='center'><font color='#FFFFFF'>\n";
+        echo "     <a href=\"".$unitab['ext_discord']."\" target='_blank'>".loca("MENU_DISCORD")."</a> <!-- external link to Discord -->\n";
+        echo "   </font></div>\n";
+        echo "  </td>\n";
+        echo " </tr>\n\n";
+    }    
+
     echo "    <tr>\n";
     echo "       <td align=center>\n";
     echo "       <a id='darkmatter2' style='cursor:pointer; width:110px;'\n";
@@ -473,13 +487,17 @@ function LeftMenu ($coma)
     echo "    </font></div>\n";
     echo "  </td>\n";
     echo " </tr>\n\n";
-    echo " <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
-    echo "    <a href=\"http://tutorial.oldogame.ru/\" target=\"_blank\" accesskey=\"^\" >".loca("MENU_TUTORIAL")."</a><!-- external link to ogame tutorial -->\n";
-    echo "   </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
+
+    if (!empty($unitab['ext_tutorial'])) {
+        echo " <tr>\n";
+        echo "  <td>\n";
+        echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
+        echo "    <a href=\"".$unitab['ext_tutorial']."\" target=\"_blank\" accesskey=\"^\" >".loca("MENU_TUTORIAL")."</a><!-- external link to ogame tutorial -->\n";
+        echo "   </font></div>\n";
+        echo "  </td>\n";
+        echo " </tr>\n\n";
+    }
+
     echo " <tr>\n";
     echo "  <td><img src='".UserSkin()."gfx/user-menu.jpg' width='110' height='35'></td>\n";
     echo " </tr>\n\n";
@@ -518,20 +536,27 @@ function LeftMenu ($coma)
     echo "    </font></div>\n";
     echo "  </td>\n";
     echo " </tr>\n\n";
-    echo " <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align='center'><font color='#FFFFFF'>\n";
-    echo "     <a href='http://board.oldogame.ru/thread.php?threadid=16' target='_blank'>".loca("MENU_RULES")."</a> <!-- external link to rules -->\n";
-    echo "   </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
-    echo " <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align='center'><font color='#FFFFFF'>\n";
-    echo "    <a href='http://oldogame.ru/impressum.php' target='_blank'>".loca("MENU_IMPRESSUM")."</a> <!-- external link to impressum -->\n";
-    echo "   </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
+
+    if (!empty($unitab['ext_rules'])) {
+        echo " <tr>\n";
+        echo "  <td>\n";
+        echo "   <div align='center'><font color='#FFFFFF'>\n";
+        echo "     <a href=\"".$unitab['ext_rules']."\" target='_blank'>".loca("MENU_RULES")."</a> <!-- external link to rules -->\n";
+        echo "   </font></div>\n";
+        echo "  </td>\n";
+        echo " </tr>\n\n";
+    }
+
+    if (!empty($unitab['ext_impressum'])) {    
+        echo " <tr>\n";
+        echo "  <td>\n";
+        echo "   <div align='center'><font color='#FFFFFF'>\n";
+        echo "    <a href=\"".$unitab['ext_impressum']."\" target='_blank'>".loca("MENU_IMPRESSUM")."</a> <!-- external link to impressum -->\n";
+        echo "   </font></div>\n";
+        echo "  </td>\n";
+        echo " </tr>\n\n";
+    }
+
     echo " </table>\n";
     echo " </center>\n";
     echo "    </div>\n";

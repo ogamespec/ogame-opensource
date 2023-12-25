@@ -16,6 +16,7 @@ else $loca_lang = $_COOKIE['ogamelang'];
 
 if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
 loca_add ( "install", $loca_lang );
+loca_add ( "menu", $loca_lang );
 
 $InstallError = "<font color=gold>".loca('INSTALL_TIP')."</font>";
 
@@ -63,6 +64,7 @@ function gen_trivial_password ($len = 8)
 $tab_uni = array (        // Вселенная
     'num'=>'INT PRIMARY KEY','speed'=>'FLOAT','fspeed'=>'FLOAT','galaxies'=>'INT','systems'=>'INT','maxusers'=>'INT','acs'=>'INT','fid'=>'INT','did'=>'INT','rapid'=>'INT','moons'=>'INT','defrepair'=>'INT','defrepair_delta'=>'INT','usercount'=>'INT','freeze'=>'INT',
     'news1'=>'TEXT', 'news2'=>'TEXT', 'news_until'=>'INT UNSIGNED', 'startdate'=>'INT UNSIGNED', 'battle_engine'=>'TEXT', 'lang'=>'CHAR(4)', 'hacks'=>'INT',
+    'ext_board'=>'TEXT', 'ext_discord'=>'TEXT', 'ext_tutorial'=>'TEXT', 'ext_rules'=>'TEXT', 'ext_impressum'=>'TEXT'
 );
 
 $tab_users = array (    // Пользователи
@@ -263,6 +265,11 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "startdate = '".$now."', ";
     $query .= "battle_engine = '".$_POST["uni_battle_engine"]."', ";
     $query .= "lang = '".$_POST["uni_lang"]."', ";
+    $query .= "ext_board = '".$_POST["ext_board"]."', ";
+    $query .= "ext_discord = '".$_POST["ext_discord"]."', ";
+    $query .= "ext_tutorial = '".$_POST["ext_tutorial"]."', ";
+    $query .= "ext_rules = '".$_POST["ext_rules"]."', ";
+    $query .= "ext_impressum = '".$_POST["ext_impressum"]."', ";
     $query .= "hacks = '0'; ";
     //echo "<br>$query<br>";
     dbquery ($query);
@@ -307,7 +314,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query = "INSERT INTO ".$_POST["db_prefix"]."users VALUES".$opt;
     dbquery( $query);
 
-    // Создать планету Arrakis [1:1:2] и луну Mond.
+    // Создать планету Arakis [1:1:2] и луну Mond (да, в названии планеты только одна буква `r`, это отсылка к Дюне)
     $opt = " (";
     $planet = array( 1, "Arakis", 102, 1, 1, 2, 1, 12800, 40, 0, 163, $now,
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
@@ -456,7 +463,7 @@ td.c { background-color: #334445; }
 <tr><td><?php echo loca('INSTALL_DB_SECRET');?><a title='<?php echo loca('INSTALL_TIP2');?>'><?php echo $info;?></a></td><td><input type=text type=password class='text' name='db_secret'></td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan=2 class='c'><?php echo loca('INSTALL_MDB');?><a title='<?php echo loca('INSTALL_MDB_TIP');?>'><?php echo $info;?></a></td></tr>
-<tr><td><?php echo loca('INSTALL_MDB_ENABLE');?></td><td><input type=checkbox class='text' name='mdb_enable'></td></tr>
+<tr><td><?php echo loca('INSTALL_MDB_ENABLE');?></td><td><input type=checkbox class='text' name='mdb_enable' checked></td></tr>
 <tr><td><?php echo loca('INSTALL_MDB_HOST');?></td><td><input type=text value='localhost' class='text' name='mdb_host'></td></tr>
 <tr><td><?php echo loca('INSTALL_MDB_USER');?></td><td><input type=text class='text' name='mdb_user'></td></tr>
 <tr><td><?php echo loca('INSTALL_MDB_PASS');?></td><td><input type=password class='text'  name='mdb_pass'></td></tr>
@@ -480,6 +487,13 @@ td.c { background-color: #334445; }
 <tr><td><?php echo loca('INSTALL_UNI_RAPID');?><a title='<?php echo loca('INSTALL_TIP10');?>'><?php echo $info;?></a></td><td><input type=checkbox class='text' name='uni_rapid' CHECKED></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_MOONS');?></td><td><input type=checkbox class='text' name='uni_moons' CHECKED></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_BATTLE');?></td><td><input type=text value='../cgi-bin/battle' class='text' name='uni_battle_engine'></td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td colspan=2 class='c'><?php echo loca('INSTALL_EXTERNAL_LINKS');?><a title='<?php echo loca('INSTALL_EXTERNAL_LINKS_TIP');?>'><?php echo $info;?></a></td></tr>
+<tr><td><?php echo loca('MENU_BOARD');?></td><td><input type=text class='text' name='ext_board'></td></tr>
+<tr><td><?php echo loca('MENU_DISCORD');?></td><td><input type=text class='text' name='ext_discord'></td></tr>
+<tr><td><?php echo loca('MENU_TUTORIAL');?></td><td><input type=text class='text' name='ext_tutorial'></td></tr>
+<tr><td><?php echo loca('MENU_RULES');?></td><td><input type=text class='text' name='ext_rules'></td></tr>
+<tr><td><?php echo loca('MENU_IMPRESSUM');?></td><td><input type=text class='text' name='ext_impressum'></td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan=2 class='c'><?php echo loca('INSTALL_ADMIN');?> (Legor)</td></tr>
 <tr><td><?php echo loca('INSTALL_ADMIN_EMAIL');?></td><td><input type=text class='text' name='admin_email'></td></tr>

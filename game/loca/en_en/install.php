@@ -56,5 +56,7 @@ $LOCA["en"]["INSTALL_INSTALL"] = "Install";
 $LOCA["en"]["INSTALL_ERROR1"] ="Cannot save config file.";
 $LOCA["en"]["INSTALL_DONE"] ="Install complete. Config file created.";
 
+$LOCA["en"]["INSTALL_EXTERNAL_LINKS"] = "External links";
+$LOCA["en"]["INSTALL_EXTERNAL_LINKS_TIP"] = "If no external link is specified (empty string), the corresponding item in the menu will be absent";
 
 ?>

@@ -27,5 +27,6 @@ $LOCA["de"]["MENU_OPTIONS"] = "Einstellungen";
 $LOCA["de"]["MENU_LOGOUT"] = "Logout";
 $LOCA["de"]["MENU_RULES"] = "Regeln";
 $LOCA["de"]["MENU_IMPRESSUM"] = "Impressum";
+$LOCA["de"]["MENU_DISCORD"] = "Discord"; 		// Neu. Der Link zu Discord wird nach dem Link zum Forum eingefügt
 
 ?>
