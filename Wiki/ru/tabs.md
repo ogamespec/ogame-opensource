@@ -352,29 +352,29 @@
 
 |Столбец|Тип|Описание|
 |---|---|---|
-|task_id|INT AUTO_INCREMENT PRIMARY KEY| | 
-|owner_id|INT| | 
-|type|CHAR(20)| | 
-|sub_id|INT| | 
-|obj_id|INT| | 
-|level|INT| | 
-|start|INT UNSIGNED| | 
-|end|INT UNSIGNED| | 
-|prio|INT| |
+|task_id|INT AUTO_INCREMENT PRIMARY KEY|уникальный номер задания | 
+|owner_id|INT|номер пользователя которому принадлежит задание | 
+|type|CHAR(20)|тип задания, каждый тип имеет свой обработчик| 
+|sub_id|INT|дополнительный номер, разный у каждого типа задания, например для постройки - ID планеты, для задания флота - ID флота | 
+|obj_id|INT|дополнительный номер, разный у каждого типа задания, например для постройки - ID здания | 
+|level|INT|уровень постройки / количество заказанных единиц на верфи | 
+|start|INT UNSIGNED|время начала задания | 
+|end|INT UNSIGNED|время окончания задания | 
+|prio|INT|приоритет события, используется для событий, которые заканчиваются в одно и тоже время, чем выше приоритет, тем раньше выполнится событие |
 
 ## Очередь построек (buildqueue)
 
 |Столбец|Тип|Описание|
 |---|---|---|
-|id|INT AUTO_INCREMENT PRIMARY KEY| | 
-|owner_id|INT| | 
-|planet_id|INT| | 
-|list_id|INT| | 
-|tech_id|INT| | 
-|level|INT| | 
-|destroy|INT| | 
-|start|INT UNSIGNED| | 
-|end|INT UNSIGNED| |
+|id|INT AUTO_INCREMENT PRIMARY KEY|Порядковый номер, начинается с 1 | 
+|owner_id|INT|ID пользователя | 
+|planet_id|INT|ID планеты | 
+|list_id|INT|порядковый номер внутри очереди | 
+|tech_id|INT|ID постройки | 
+|level|INT|целевой уровень | 
+|destroy|INT|1 - снести, 0 - построить | 
+|start|INT UNSIGNED|время запуска постройки | 
+|end|INT UNSIGNED|время окончания строительства |
 
 ## Флот (fleet)
 
