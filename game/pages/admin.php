@@ -21,6 +21,7 @@ if ( $GlobalUser['admin'] == 0 ) RedirectHome ();    // обычным поль�
 loca_add ( "menu", $GlobalUni['lang'] );
 loca_add ( "fleetorder", $GlobalUni['lang'] );
 loca_add ( "admin", $GlobalUni['lang'] );
+loca_add ( "install", $GlobalUni['lang'] );
 
 $AdminMessage = "";
 $AdminError = "";

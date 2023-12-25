@@ -29,17 +29,31 @@ function DisableNews ()
 }
 
 // Установить параметры вселенной (все одновременно)
-function SetUniParam ($speed, $fspeed, $acs, $fid, $did, $defrepair, $defrepair_delta, $galaxies, $systems, $rapid, $moons, $freeze, $lang)
+function SetUniParam ($speed, $fspeed, $acs, $fid, $did, $defrepair, $defrepair_delta, $galaxies, $systems, $rapid, $moons, $freeze, $lang, $battle_engine)
 {
     global $db_prefix;
     global $GlobalUni;
     
-    $query = "UPDATE ".$db_prefix."uni SET lang='".$lang."', freeze=$freeze, speed=$speed, fspeed=$fspeed, acs=$acs, fid=$fid, did=$did, defrepair=$defrepair, defrepair_delta=$defrepair_delta, galaxies=$galaxies, systems=$systems, rapid=$rapid, moons=$moons";
+    $query = "UPDATE ".$db_prefix."uni SET lang='".$lang."', battle_engine='".$battle_engine."', freeze=$freeze, speed=$speed, fspeed=$fspeed, acs=$acs, fid=$fid, did=$did, defrepair=$defrepair, defrepair_delta=$defrepair_delta, galaxies=$galaxies, systems=$systems, rapid=$rapid, moons=$moons";
     dbquery ($query);
 
     $GlobalUni = LoadUniverse ();
 }
 
+// Установить внешние ссылки для пунктов меню: Форум, Дискорд (новое, т.к. форумный формат общения становится всё менее актуальным), Туториал, Правила, О нас.
+// Пустая строка скрывает пункт меню.
+function SetExtLinks($ext_board, $ext_discord, $ext_tutorial, $ext_rules, $ext_impressum)
+{
+    global $db_prefix;
+    global $GlobalUni;
+
+    $query = "UPDATE ".$db_prefix."uni SET ext_board='".$ext_board."', ext_discord='".$ext_discord."', ext_tutorial='".$ext_tutorial."', ext_rules='".$ext_rules."', ext_impressum='".$ext_impressum."'";
+    dbquery ($query);
+
+    $GlobalUni = LoadUniverse ();
+}
+
+// Сбросить счётчик попыток взлома игры (вызывается во время релогина)
 function ResetHackCounter ()
 {
     global $db_prefix;
@@ -47,6 +61,7 @@ function ResetHackCounter ()
     dbquery ($query);  
 }
 
+// Инкрементировать счётчик попыток взлома игры.
 function IncrementHackCounter ()
 {
     global $db_prefix;

@@ -40,7 +40,30 @@ function Admin_Uni ()
         $moons = ($_POST['moons'] === "on") ? 1 : 0;
         $freeze = ($_POST['freeze'] === "on") ? 1 : 0;
 
-        SetUniParam ( $_POST['speed'], $_POST['fspeed'], $_POST['acs'], $_POST['fid'], $_POST['did'], $_POST['defrepair'], $_POST['defrepair_delta'], $_POST['galaxies'], $_POST['systems'], $rapid, $moons, $freeze, $_POST['lang'] );
+        SetUniParam ( 
+            $_POST['speed'], 
+            $_POST['fspeed'], 
+            $_POST['acs'], 
+            $_POST['fid'], 
+            $_POST['did'], 
+            $_POST['defrepair'], 
+            $_POST['defrepair_delta'], 
+            $_POST['galaxies'], 
+            $_POST['systems'], 
+            $rapid, 
+            $moons, 
+            $freeze, 
+            $_POST['lang'],
+            $_POST['battle_engine'] );
+
+        // Установить внешние ссылки. Если ссылка пустая - пункт меню будет отсутствовать.
+
+        SetExtLinks (
+            $_POST['ext_board'],
+            $_POST['ext_discord'],
+            $_POST['ext_tutorial'],
+            $_POST['ext_rules'],
+            $_POST['ext_impressum'] );
 
         // Включить принудительное РО активным игрокам, если вселенная ставится на паузу.
         if ( $freeze ) {
@@ -61,7 +84,7 @@ function Admin_Uni ()
 <form action="index.php?page=admin&session=<?php echo $session;?>&mode=Uni" method="POST" >
 <tr><td class=c colspan=2>Настройки Вселенной <?php echo $unitab['num'];?></td></tr>
 <tr><th>Дата открытия</th><th><?php echo date ("Y-m-d H:i:s", $unitab['startdate']);?></th></tr>
-<tr><th>Счётчик попыток взлома <a title="Очищается после релогина"><?php echo $info;?></a></th><th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Debug&filter=HACKING"><?php echo $unitab['hacks'];?> (Проверить)</a></th></tr>
+<tr><th>Счётчик попыток взлома <a title="Любые попытки SQL-инъекции логгируются для всех игроков и счётчик инкрементируется после каждой попытки. Очищается после релогина"><?php echo $info;?></a></th><th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Debug&filter=HACKING"><?php echo $unitab['hacks'];?> (Проверить)</a></th></tr>
 <tr><th>Количество игроков</th><th><?php echo $unitab['usercount'];?></th></tr>
 <tr><th>Максимальное количество игроков</th><th><input type="text" name="maxusers" maxlength="10" size="10" value="<?php echo $unitab['maxusers'];?>" /></th></tr>
 <tr><th>Количество галактик</th><th><input type="text" name="galaxies" maxlength="3" size="3" value="<?php echo $unitab['galaxies'];?>" /></th></tr>
@@ -166,7 +189,15 @@ function Admin_Uni ()
 ?>
    </select>
 </th></tr>
-<tr><th>Поставить вселенную на паузу <a title="При постановке вселенной на паузу не будет срабатывать ни одно событие (очередь будет остановлена). После снятия паузы все завершенные события будут выполнены в порядке очереди"><?php echo $info;?></a>
+
+<tr><th><?php echo loca("MENU_BOARD");?></th><th><input type="text" name="ext_board" maxlength="99" size="20" value="<?php echo $unitab['ext_board'];?>" /></th></tr>
+<tr><th><?php echo loca("MENU_DISCORD");?></th><th><input type="text" name="ext_discord" maxlength="99" size="20" value="<?php echo $unitab['ext_discord'];?>" /></th></tr>
+<tr><th><?php echo loca("MENU_TUTORIAL");?></th><th><input type="text" name="ext_tutorial" maxlength="99" size="20" value="<?php echo $unitab['ext_tutorial'];?>" /></th></tr>
+<tr><th><?php echo loca("MENU_RULES");?></th><th><input type="text" name="ext_rules" maxlength="99" size="20" value="<?php echo $unitab['ext_rules'];?>" /></th></tr>
+<tr><th><?php echo loca("MENU_IMPRESSUM");?></th><th><input type="text" name="ext_impressum" maxlength="99" size="20" value="<?php echo $unitab['ext_impressum'];?>" /></th></tr>
+<tr><th><?php echo loca("INSTALL_UNI_BATTLE");?></th><th><input type="text" name="battle_engine" maxlength="99" size="20" value="<?php echo $unitab['battle_engine'];?>" /></th></tr>
+
+<tr><th>Поставить вселенную на паузу <a title="При постановке вселенной на паузу не будет срабатывать ни одно событие (очередь будет остановлена). После снятия паузы все завершенные события будут выполнены в порядке очереди. Все активные игроки принудительно переводятся в режим отпуска."><?php echo $info;?></a>
 </th><th><input type="checkbox" name="freeze"  <?php echo UniIsChecked($unitab['freeze']);?> /></th></tr>
 <tr><th colspan=2><input type="submit" value="Сохранить" /></th></tr>
 
