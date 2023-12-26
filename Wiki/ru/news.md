@@ -67,7 +67,7 @@ Spy reports:<br>
 SVN updated with latest fleet management modules + overview loca added.<br>
 <br>
 <b>16.03.2011</b> : Decent progress on multiple pages. Started to implement Admin section. By security reasons Admin Tool will be differ from the original one, but will include more features.<br>
-<img src='http://ogamespec.com/imgstore/whc4d7fe533a9c61.jpg'>
+<img src='/imgstore/whc4d7fe533a9c61.jpg'>
 
 <b>14.03.2011</b> : SVNed pages: buddy, notizen, messages, writemessages, infos. Still need some work on them.<br>
 +changelog and some work on imperium.<br>
