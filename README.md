@@ -10,7 +10,7 @@ _Thank you for the great game, but redesign is not we like_
 
 ![whc50b7bd1f6b2a2](/imgstore/whc50b7bd1f6b2a2.jpg)
 
-Currently only Russian, English and Deutch languages are supported. Other language packs can be submitted by volunteers. The game engine is multilingual. This mean you can play with your preffered language in any universe.
+Currently only Russian, English and Deutch languages are supported. Other language packs can be submitted by volunteers. The game engine is multilingual.
 
 Features:
 - Original game mechanics!
