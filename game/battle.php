@@ -562,8 +562,8 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
     }
 
     // Разослать сообщения.
-    SendMessage ( $origin['owner_id'], "Командование флотом", "Лунная атака", $atext, 5);
-    SendMessage ( $target['owner_id'], "Командование флотом", "Лунные толчки", $dtext, 5);
+    SendMessage ( $origin['owner_id'], "Командование флотом", "Лунная атака", $atext, 5, $when);
+    SendMessage ( $target['owner_id'], "Командование флотом", "Лунные толчки", $dtext, 5, $when);
 
     return $result;
 }
