@@ -26,8 +26,8 @@
 
 # Строительство построек в обычном режиме #
 
-URL для постройки: http://uni20.ogame.de/game/index.php?page=b_building&session=cbfc8ad862b5&modus=add&techid=1&planet=1281073
-URL для сноса: http://uni20.ogame.de/game/index.php?page=b_building&session=cbfc8ad862b5&techid=1&modus=destroy&planet=1281073
+- URL для постройки: http://uni20.ogame.de/game/index.php?page=b_building&session=cbfc8ad862b5&modus=add&techid=1&planet=1281073
+- URL для сноса: http://uni20.ogame.de/game/index.php?page=b_building&session=cbfc8ad862b5&techid=1&modus=destroy&planet=1281073
 
 techid : ID постройки<br>
 planet : ID планеты<br>
