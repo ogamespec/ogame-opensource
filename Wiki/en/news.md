@@ -1,6 +1,6 @@
-# Старые новости
+# Old News
 
-:warning: Новости со старой итерации разработки. Больше не актуальны (особенно последняя).
+:warning: News from an older iteration of development. No longer relevant (especially the last one).
 
 
 **07.11.2013**<br>
