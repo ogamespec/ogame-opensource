@@ -168,44 +168,36 @@
 
 |Столбец|Тип|Описание|
 |---|---|---|
-|ally_id|INT AUTO_INCREMENT PRIMARY KEY| | 
-|tag|TEXT| | 
-|name|TEXT| | 
-|owner_id|INT| | 
-|homepage|TEXT| | 
-|imglogo|TEXT| | 
-|open|INT| | 
+|ally_id|INT AUTO_INCREMENT PRIMARY KEY|Порядковый номер альянса | 
+|tag|TEXT|Аббревиатура альянса, 3-8 символов | 
+|name|TEXT|Название альянса, 3-30 символов | 
+|owner_id|INT|ID основателя | 
+|homepage|TEXT|URL домашней страницы | 
+|imglogo|TEXT|URL картинки логотипа | 
+|open|INT|0 - заявки запрещены (набор в альянс закрыт), 1 - заявки разрешены. | 
 |insertapp|INT| | 
-|exttext|TEXT| | 
-|inttext|TEXT| | 
-|apptext|TEXT| | 
-|nextrank|INT| | 
+|exttext|TEXT|Внешний текст | 
+|inttext|TEXT|Внутренний текст | 
+|apptext|TEXT|Текст заявки | 
+|nextrank|INT|Порядковый номер следующего ранга | 
 |old_tag|TEXT| | 
 |old_name|TEXT| | 
 |tag_until|INT UNSIGNED| | 
 |name_until|INT UNSIGNED| |
-|score1|BIGINT UNSIGNED| | 
-|score2|INT UNSIGNED| | 
-|score3|INT UNSIGNED| | 
-|place1|INT| | 
-|place2|INT| | 
-|place3|INT| |
-|oldscore1|BIGINT UNSIGNED| | 
-|oldscore2|INT UNSIGNED| | 
-|oldscore3|INT UNSIGNED| | 
-|oldplace1|INT| | 
-|oldplace2|INT| | 
-|oldplace3|INT| | 
+|score1,2,3|BIGINT UNSIGNED,INT UNSIGNED,INT UNSIGNED| | 
+|place1,2,3|INT,INT,INT| | 
+|oldscore1,2,3|BIGINT UNSIGNED,INT UNSIGNED,INT UNSIGNED| | 
+|oldplace1,2,3|INT,INT,INT| | 
 |scoredate|INT UNSIGNED| |
 
 ## Ранги в альянсе (allyranks)
 
 |Столбец|Тип|Описание|
 |---|---|---|
-|rank_id|INT| | 
-|ally_id|INT| | 
-|name|TEXT| | 
-|rights|INT| |
+|rank_id|INT|Порядковый номер ранга | 
+|ally_id|INT|ID альянса, которому принадлжит ранг | 
+|name|TEXT|Название ранга | 
+|rights|INT|Права (OR маска) |
 
 ## Заявки в альянс (allyapps)
 
@@ -231,26 +223,26 @@
 
 |Столбец|Тип|Описание|
 |---|---|---|
-|msg_id|INT AUTO_INCREMENT PRIMARY KEY| | 
-|owner_id|INT| | 
-|pm|INT| | 
-|msgfrom|TEXT| | 
-|subj|TEXT| | 
-|text|TEXT| | 
-|shown|INT| | 
-|date|INT UNSIGNED| |
+|msg_id|INT AUTO_INCREMENT PRIMARY KEY|Порядковый номер сообщения | 
+|owner_id|INT|Порядковый номер пользователя которому принадлежит сообщение | 
+|pm|INT|Тип сообщения, 0: личное сообщение (можно пожаловаться оператору), ... | 
+|msgfrom|TEXT|От кого, HTML | 
+|subj|TEXT|Тема, HTML, может быть текст, может быть ссылка на доклад | 
+|text|TEXT|Текст сообщения, HTML | 
+|shown|INT|0 - новое сообщение, 1 - показанное. | 
+|date|INT UNSIGNED|Дата сообщения |
 
 ## Заметки (notes)
 
 |Столбец|Тип|Описание|
 |---|---|---|
-|note_id|INT AUTO_INCREMENT PRIMARY KEY| | 
-|owner_id|INT| | 
-|subj|TEXT| | 
-|text|TEXT| | 
-|textsize|INT| | 
-|prio|INT| | 
-|date|INT UNSIGNED| |
+|note_id|INT AUTO_INCREMENT PRIMARY KEY|Порядковый номер заметки | 
+|owner_id|INT|ID пользователя | 
+|subj|TEXT|Тема заметки | 
+|text|TEXT|Текст заметки | 
+|textsize|INT|Размер текста заметки | 
+|prio|INT|Приоритет (0: Неважно (зеленый), 1: Так себе (желтый), 2: Важно (красный) ) | 
+|date|INT UNSIGNED|Дата создания/редактирования заметки |
 
 ## Ошибки (errors)
 
@@ -321,44 +313,29 @@
 |Столбец|Тип|Описание|
 |---|---|---|
 
-|fleet_id|INT AUTO_INCREMENT PRIMARY KEY| | 
-|owner_id|INT| | 
-|union_id|INT| | 
-|m|DOUBLE| | 
-|k|DOUBLE| | 
-|d|DOUBLE| | 
-|fuel|INT| | 
-|mission|INT| | 
-|start_planet|INT| | 
-|target_planet|INT| | 
-|flight_time|INT| | 
-|deploy_time|INT| |
-|ipm_amount|INT| | 
-|ipm_target|INT| | 
-|ship202|INT| | 
-|ship203|INT| | 
-|ship204|INT| | 
-|ship205|INT| | 
-|ship206|INT| | 
-|ship207|INT| | 
-|ship208|INT| | 
-|ship209|INT| | 
-|ship210|INT| | 
-|ship211|INT| | 
-|ship212|INT| | 
-|ship213|INT| | 
-|ship214|INT| | 
-|ship215|INT| |
+|fleet_id|INT AUTO_INCREMENT PRIMARY KEY|Порядковый номер флота в таблице | 
+|owner_id|INT|Номер пользователя, которому принадлежит флот | 
+|union_id|INT|Номер союза, в котором летит флот | 
+|m,k,d|DOUBLE,DOUBLE,DOUBLE|Перевозимый груз (металл/кристалл/дейтерий) | 
+|fuel|INT|Загруженное топливо на полёт (дейтерий) | 
+|mission|INT|Тип задания | 
+|start_planet|INT|Старт | 
+|target_planet|INT|Финиш | 
+|flight_time|INT|Время полёта в одну сторону в секундах | 
+|deploy_time|INT|Время удержания флота в секундах |
+|ipm_amount|INT|Количество межлпланетных ракет | 
+|ipm_target|INT|id цели для межпланетных ракет, 0 - все | 
+|shipXXX|INT|количество кораблей каждого типа | 
 
 ## САБы (union)
 
 |Столбец|Тип|Описание|
 |---|---|---|
-|union_id|INT AUTO_INCREMENT PRIMARY KEY| | 
-|fleet_id|INT| | 
+|union_id|INT AUTO_INCREMENT PRIMARY KEY|ID союза | 
+|fleet_id|INT|ID головного флота САБа (исходной Атаки) | 
 |target_player|INT| | 
-|name|CHAR(20)| | 
-|players|TEXT| |
+|name|CHAR(20)|название союза. по умолчанию: "KV" + число | 
+|players|TEXT|ID приглашенных игроков, через запятую |
 
 ## Данные для боевого движка (battledata)
 
@@ -402,20 +379,7 @@
 |target_type|INT| | 
 |ipm_amount|INT| | 
 |ipm_target|INT| | 
-|ship202|INT| | 
-|ship203|INT| | 
-|ship204|INT| | 
-|ship205|INT| | 
-|ship206|INT| | 
-|ship207|INT| | 
-|ship208|INT| | 
-|ship209|INT| | 
-|ship210|INT| | 
-|ship211|INT| | 
-|ship212|INT| | 
-|ship213|INT| | 
-|ship214|INT| | 
-|ship215|INT| |
+|shipXXX|INT| | 
 
 ## Логи IP (iplogs)
 
@@ -468,20 +432,7 @@
 |owner_id|INT| | 
 |name|CHAR(30)| | 
 |date|INT UNSIGNED| |
-|ship202|INT| | 
-|ship203|INT| | 
-|ship204|INT| | 
-|ship205|INT| | 
-|ship206|INT| | 
-|ship207|INT| | 
-|ship208|INT| | 
-|ship209|INT| | 
-|ship210|INT| | 
-|ship211|INT| | 
-|ship212|INT| | 
-|ship213|INT| | 
-|ship214|INT| | 
-|ship215|INT| |
+|shipXXX|INT| | 
 
 ## Переменные бота (botvars)
 

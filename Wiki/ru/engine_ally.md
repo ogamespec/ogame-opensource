@@ -1,26 +1,35 @@
-# Introduction #
+# Introduction
 
 
-# Database #
+# Database
 
 Структура таблицы `ally`:
 
 | **столбец** | **SQL тип** | **описание** |
 |:-------------------|:---------------|:---------------------|
-| ally\_id| INT PRIMARY KEY| Порядковый номер альянса|
+| ally_id| INT PRIMARY KEY| Порядковый номер альянса|
 | tag| CHAR(8)| Аббревиатура альянса, 3-8 символов|
 | name| CHAR(30)| Название альянса, 3-30 символов|
-| owner\_id| INT| ID основателя|
+| owner_id| INT| ID основателя|
 | homepage| TEXT| URL домашней страницы|
 | imglogo| TEXT| URL картинки логотипа|
 | open| INT| 0 - заявки запрещены (набор в альянс закрыт), 1 - заявки разрешены.|
+|insertapp|INT| | 
 | exttext| TEXT| Внешний текст|
 | inttext| TEXT| Внутренний текст|
 | apptext| TEXT| Текст заявки|
 | nextrank| INT| Порядковый номер следующего ранга|
-| nextapp| INT| Порядковый номер следующей заявки.|
+|old_tag|TEXT| |
+|old_name|TEXT| |
+|tag_until|INT UNSIGNED| | 
+|name_until|INT UNSIGNED| |
+|score1,2,3|BIGINT UNSIGNED,INT UNSIGNED,INT UNSIGNED| | 
+|place1,2,3|INT,INT,INT| | 
+|oldscore1,2,3|BIGINT UNSIGNED,INT UNSIGNED,INT UNSIGNED| | 
+|oldplace1,2,3|INT,INT,INT| | 
+|scoredate|INT UNSIGNED| |
 
-# Ранги #
+# Ранги
 
   * Разрешенные символы в названии ранга: `[a-zA-Z0-9_-.]`. Макс. длина - 30 символов
   * Не более 20 рангов на альянс.
@@ -29,8 +38,8 @@
 
 | **столбец** | **SQL тип** | **описание** |
 |:-------------------|:---------------|:---------------------|
-|rank\_id|INT|Порядковый номер ранга|
-|ally\_id|INT|ID альянса, которому принадлжит ранг|
+|rank_id|INT|Порядковый номер ранга|
+|ally_id|INT|ID альянса, которому принадлжит ранг|
 |name|CHAR(30)|Название ранга|
 |rights|  |Права (OR маска)|
 
