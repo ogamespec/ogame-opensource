@@ -52,4 +52,5 @@ Add your content here.
 | sprod, fprod, ssprod| DOUBLE| Процент выработки солнечной электростанции, термояда и солнечных спутников|
 | lastpeek| INT UNSIGNED| Время последнего обновления состояния планеты time()|
 | lastakt| INT UNSIGNED| Время последней активности time()|
-| gate\_until| INT UNSIGNED| Время остывания ворот time()|
+| gate_until| INT UNSIGNED| Время остывания ворот time()|
+|remove|INT UNSIGNED|Время удаления планеты (0 - не удалять) time()|
