@@ -330,7 +330,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query = "INSERT INTO ".$_POST["db_prefix"]."planets VALUES".$opt;
     dbquery( $query);
     $opt = " (";
-    $planet = array( 2, "Mond", 0, 1, 1, 2, 1, 8944, 10, 0, 0, $now,
+    $planet = array( 2, "Mond", 0, 1, 1, 2, 1, 8944, 10, 0, 1, $now,
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
