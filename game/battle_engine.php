@@ -1,7 +1,11 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+$battle_debug = 1;
+
+if ($battle_debug) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+}
 
 require_once "unit.php";
 
@@ -18,14 +22,17 @@ require_once "unit.php";
 Все массивы хранятся в виде длинных строк. Доступ к элементу arr[i] осуществляется конструкцией ord($arr{$i}), запись $arr{$i} = chr(n).
 Сделано это для экономии памяти - строка занимает столько-же байт, сколько и символов в ней, а ассоциативные массивы в PHP достаточно прожорливые.
 
-Массивы разделены на две одинаковые группы - атакующие и обороняющиеся. Каждая группа разделена на несколько массивов, причем все слоты совмещены (для упрощения индексации случайных выстрелов, от 0 до N):
+Массивы-строки разделены на две одинаковые группы - атакующие и обороняющиеся. Каждая группа разделена на несколько массивов-строк, причем все слоты совмещены (для упрощения индексации случайных выстрелов, от 0 до N):
 $obj = { id, id, id, ... }     -- массив юнитов, для того чтобы номера объектов умещались в один байт (для экономии памяти), нумерация флота начинается от 02 (вместо 202), а обороны от 201 (вместо 401).  (n-200)
 $slot = { n, n, n, ... }       -- номер слота юнита (для САБ), это нужно для генерации боевого доклада, чтобы рассортировать потом юниты по слотам.
 $explo = { }                   -- массив взорванных юнитов, после каждого раунда взорванные юниты удаляются и формируется новый массив $obj. данные находятся в упакованном формате 8 юнитов на 1 байт
 $shld = { }                    -- щиты юнитов, 100 ... 0. перед началом каждого раунда этот массив заполняется значениями 100 (щиты заряжаются)
 
-Для брони используются запакованные 4-байтовые массивы $hull[id] (исходное количество брони для юнита типа id) и $damage[n] (повреждения), так как броня имеет значения куда больше 1 байта.
+Для брони используются запакованные 4-байтовые массивы-строки $hull[id] (исходное количество брони для юнита типа id, аналог hullmax из C-движка) и $damage[n] (повреждения), так как броня имеет значения куда больше 1 байта.
 При этом вычисления производятся по накопительной системе (изначально каждый юнит имеет 0 повреждений).
+
+Отладка: просто откройте http://localhost/game/battle_engine.php с установленной переменной $battle_debug = 1.
+
 */
 
 function RapidFire ($atyp, $dtyp)
@@ -84,6 +91,44 @@ function RapidFire ($atyp, $dtyp)
     return $rapidfire;
 }
 
+function extract_text ($str, $s, $e)
+{
+    $start  = strpos($str, $s);
+    $end    = strpos($str, $e, $start + 1);
+    $length = $end - $start;
+    $result = trim (substr($str, $start + 1, $length - 1));
+    return $result;
+}
+
+function deserialize_slot ($str, $att)
+{
+    $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    $dmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+
+    $res = array();
+    $items = explode (" ", $str);
+
+    $res['name'] = extract_text ($items[0], '<', '>');
+    $res['id'] = intval ($items[1]);
+    $res['g'] = intval ($items[2]);
+    $res['s'] = intval ($items[3]);
+    $res['p'] = intval ($items[4]);
+    $res['weap'] = intval ($items[5]);
+    $res['shld'] = intval ($items[6]);
+    $res['armr'] = intval ($items[7]);
+
+    foreach ( $amap as $n=>$gid ) {
+        $res['f'.$gid] = intval ($items[8+$n]);
+    }
+    if (!$att) {
+        foreach ( $dmap as $n=>$gid ) {
+            $res['d'.$gid] = intval ($items[22+$n]);
+        }
+    }
+
+    return $res;
+}
+
 // Распарсить входные данные
 function ParseInput ($source, &$rf, &$fid, &$did, &$attackers, &$defenders)
 {
@@ -111,6 +156,20 @@ function ParseInput ($source, &$rf, &$fid, &$did, &$attackers, &$defenders)
     $fid = intval ($kv['FID']);
     $did = intval ($kv['DID']);
 
+    $anum = intval ($kv['Attackers']);
+    $dnum = intval ($kv['Defenders']);
+
+    for ($i=0; $i<$anum; $i++) {
+
+        $slot_text = extract_text ($kv['Attacker' . $i], '(', ')');
+        $attackers[$i] = deserialize_slot ($slot_text, true);
+    }
+
+    for ($i=0; $i<$dnum; $i++) {
+
+        $slot_text = extract_text ($kv['Defender' . $i], '(', ')');
+        $defenders[$i] = deserialize_slot ($slot_text, false);
+    }
 }
 
 // На выходе массив battleresult, формат аналогичный формату боевого движка на Си.
@@ -146,6 +205,10 @@ function BattleEngine ($source)
     print_r($defenders);
 
     return $res;
+}
+
+if (!$battle_debug) {
+    die();
 }
 
 ?>
@@ -185,6 +248,8 @@ Defender0 = (<ilk> 10336 1 14 5 14 15 15 956 927 12394 657 1268 1045 3 1587 23 1
 ";
 
 $res = BattleEngine ( $source );
+
+echo "<br/>Result:<br/>";
 print_r ( $res );
 
 ?>
