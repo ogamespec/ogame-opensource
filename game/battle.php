@@ -676,7 +676,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
 
     foreach ($a as $num=>$attacker)
     {
-        $source .= "Attacker".$num." = (<".$attacker['oname']."> ";
+        $source .= "Attacker".$num." = ({".$attacker['oname']."} ";
         $source .= $attacker['id'] . " ";
         $source .= $attacker['g'] . " " . $attacker['s'] . " " . $attacker['p'] . " ";
         $source .= $attacker['r109'] . " " . $attacker['r110'] . " " . $attacker['r111'] . " ";
@@ -685,7 +685,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     }
     foreach ($d as $num=>$defender)
     {
-        $source .= "Defender".$num." = (<".$defender['oname']."> ";
+        $source .= "Defender".$num." = ({".$defender['oname']."} ";
         $source .= $defender['id'] . " ";
         $source .= $defender['g'] . " " . $defender['s'] . " " . $defender['p'] . " ";
         $source .= $defender['r109'] . " " . $defender['r110'] . " " . $defender['r111'] . " ";

@@ -831,8 +831,8 @@ FID = 30
 DID = 0
 Attackers = N
 Defenders = M
-AttackerN = (<NAME> ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
-DefenderM = (<NAME> ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
+AttackerN = ({NAME} ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
+DefenderM = ({NAME} ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
 
 */
 
@@ -902,13 +902,13 @@ void StartBattle (char *text, int battle_id)
         // Вырезать имя
         lp = line;
         tmp = a[i].name;
-        while ( *lp == '<' ) lp++;              // найти начало имени
-        while ( *lp != '>' ) *tmp++ = *lp++;    // вырезать символы до >
+        while ( *lp == '{' ) lp++;              // найти начало имени
+        while ( *lp != '}' ) *tmp++ = *lp++;    // вырезать символы до }
         *tmp++ = 0;
         lp++;
         while ( *lp <= ' ' ) lp++;              // пропустить пробелы
         
-        // (<NAME> ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
+        // ({NAME} ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
         sscanf ( lp, "%i " "%i %i %i " "%i %i %i " "%i %i %i %i %i %i %i %i %i %i %i %i %i %i", 
                        &a[i].id, 
                        &a[i].g, &a[i].s, &a[i].p,
@@ -946,13 +946,13 @@ void StartBattle (char *text, int battle_id)
         // Вырезать имя
         lp = line;
         tmp = d[i].name;
-        while ( *lp == '<' ) lp++;              // найти начало имени
-        while ( *lp != '>' ) *tmp++ = *lp++;    // вырезать символы до >
+        while ( *lp == '{' ) lp++;              // найти начало имени
+        while ( *lp != '}' ) *tmp++ = *lp++;    // вырезать символы до }
         *tmp++ = 0;
         lp++;
         while ( *lp <= ' ' ) lp++;              // пропустить пробелы
 
-        // (<NAME> ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
+        // ({NAME} ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
         sscanf ( lp, "%i " "%i %i %i " "%i %i %i " "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i", 
                        &d[i].id, 
                        &d[i].g, &d[i].s, &d[i].p,

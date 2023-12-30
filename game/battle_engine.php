@@ -108,7 +108,7 @@ function deserialize_slot ($str, $att)
     $res = array();
     $items = explode (" ", $str);
 
-    $res['name'] = extract_text ($items[0], '<', '>');
+    $res['name'] = extract_text ($items[0], '{', '}');
     $res['id'] = intval ($items[1]);
     $res['g'] = intval ($items[2]);
     $res['s'] = intval ($items[3]);
@@ -118,11 +118,11 @@ function deserialize_slot ($str, $att)
     $res['armr'] = intval ($items[7]);
 
     foreach ( $amap as $n=>$gid ) {
-        $res['f'.$gid] = intval ($items[8+$n]);
+        $res[$gid] = intval ($items[8+$n]);
     }
     if (!$att) {
         foreach ( $dmap as $n=>$gid ) {
-            $res['d'.$gid] = intval ($items[22+$n]);
+            $res[$gid] = intval ($items[22+$n]);
         }
     }
 
@@ -132,6 +132,8 @@ function deserialize_slot ($str, $att)
 // Распарсить входные данные
 function ParseInput ($source, &$rf, &$fid, &$did, &$attackers, &$defenders)
 {
+    global $battle_debug;
+
     $kv = array();
 
     // Расщепить входные данные на строки
@@ -147,9 +149,12 @@ function ParseInput ($source, &$rf, &$fid, &$did, &$attackers, &$defenders)
     }
 
     // DEBUG
-    //echo "<pre>";
-    //print_r ($kv);
-    //echo "</pre>";
+    if ($battle_debug) {
+        echo "Parsed input data as key-value:<br/>";
+        echo "<pre>";
+        print_r ($kv);
+        echo "</pre>";
+    }
 
     // Распихать параметры куда нужно
     $rf = intval ($kv['Rapidfire']);
@@ -175,6 +180,8 @@ function ParseInput ($source, &$rf, &$fid, &$did, &$attackers, &$defenders)
 // На выходе массив battleresult, формат аналогичный формату боевого движка на Си.
 function BattleEngine ($source)
 {
+    global $battle_debug;
+
     // Настройки боевого движка по умолчанию.
     $rf = 1;
     $fid = 30;
@@ -199,10 +206,14 @@ function BattleEngine ($source)
     mt_srand ($battle_seed);
 
     // Разобрать входные данные
-    ParseInput ($source, $rf, $fid, $did, $attackers, $defenders);    
-    echo "rf = $rf, fid = $fid, did = $did<br/>";
-    print_r($attackers);
-    print_r($defenders);
+    ParseInput ($source, $rf, $fid, $did, $attackers, $defenders);
+    if ($battle_debug) {
+        echo "rf = $rf, fid = $fid, did = $did<br/>";
+        echo "<br/>attackers:<br/>";
+        print_r($attackers);
+        echo "<br/><br/>defenders:<br/>";
+        print_r($defenders);
+    }
 
     return $res;
 }
@@ -230,26 +241,26 @@ FID = 70
 DID = 0
 Attackers = 14
 Defenders = 1
-Attacker0 = (<OtellO> 252298 1 2 10 13 13 13 0 0 0 0 0 0 0 0 0 0 0 0 0 4613 )
-Attacker1 = (<Voskreshaya> 252302 1 6 9 13 11 14 5490 0 16379 0 0 123 0 0 0 0 0 367 0 0 )
-Attacker2 = (<r2r> 252312 1 15 6 14 13 15 2055 0 0 0 0 0 0 0 0 0 0 0 0 0 )
-Attacker3 = (<onelife> 252310 1 4 7 14 14 15 0 0 0 0 0 0 0 0 0 0 0 0 0 3100 )
-Attacker4 = (<Voskreshaya> 252301 1 6 9 13 11 14 0 0 0 0 5020 0 0 0 0 0 0 0 0 0 )
-Attacker5 = (<r2r> 252307 1 15 6 14 13 15 0 0 0 0 778 0 0 0 0 0 0 0 0 0 )
-Attacker6 = (<onelife> 252309 1 4 7 14 14 15 0 0 0 0 2755 0 0 0 0 0 0 0 0 0 )
-Attacker7 = (<r2r> 252305 1 15 6 14 13 15 0 0 6527 0 0 0 0 0 0 0 0 1422 0 0 )
-Attacker8 = (<onelife> 252250 1 4 7 14 14 15 0 1 0 0 0 0 0 0 0 0 0 0 0 0 )
-Attacker9 = (<Voskreshaya> 252300 1 6 9 13 11 14 0 0 0 0 0 0 0 0 0 0 0 0 0 1341 )
-Attacker10 = (<onelife> 252308 1 4 7 14 14 15 0 0 7000 0 0 0 0 0 0 0 0 1400 0 0 )
-Attacker11 = (<OtellO> 252351 1 2 10 13 13 13 0 0 0 0 4342 0 0 0 0 0 0 0 0 0 )
-Attacker12 = (<onelife> 252311 1 4 7 14 14 15 2510 0 0 0 0 0 0 0 0 0 0 0 0 0 )
-Attacker13 = (<r2r> 252306 1 15 6 14 13 15 0 0 0 0 0 0 0 0 0 0 0 0 0 848 )
-Defender0 = (<ilk> 10336 1 14 5 14 15 15 956 927 12394 657 1268 1045 3 1587 23 14 0 898 1 2108 92 0 0 0 0 0 0 0 )
+Attacker0 = ({OtellO} 252298 1 2 10 13 13 13 0 0 0 0 0 0 0 0 0 0 0 0 0 4613 )
+Attacker1 = ({Voskreshaya} 252302 1 6 9 13 11 14 5490 0 16379 0 0 123 0 0 0 0 0 367 0 0 )
+Attacker2 = ({r2r} 252312 1 15 6 14 13 15 2055 0 0 0 0 0 0 0 0 0 0 0 0 0 )
+Attacker3 = ({onelife} 252310 1 4 7 14 14 15 0 0 0 0 0 0 0 0 0 0 0 0 0 3100 )
+Attacker4 = ({Voskreshaya} 252301 1 6 9 13 11 14 0 0 0 0 5020 0 0 0 0 0 0 0 0 0 )
+Attacker5 = ({r2r} 252307 1 15 6 14 13 15 0 0 0 0 778 0 0 0 0 0 0 0 0 0 )
+Attacker6 = ({onelife} 252309 1 4 7 14 14 15 0 0 0 0 2755 0 0 0 0 0 0 0 0 0 )
+Attacker7 = ({r2r} 252305 1 15 6 14 13 15 0 0 6527 0 0 0 0 0 0 0 0 1422 0 0 )
+Attacker8 = ({onelife} 252250 1 4 7 14 14 15 0 1 0 0 0 0 0 0 0 0 0 0 0 0 )
+Attacker9 = ({Voskreshaya} 252300 1 6 9 13 11 14 0 0 0 0 0 0 0 0 0 0 0 0 0 1341 )
+Attacker10 = ({onelife} 252308 1 4 7 14 14 15 0 0 7000 0 0 0 0 0 0 0 0 1400 0 0 )
+Attacker11 = ({OtellO} 252351 1 2 10 13 13 13 0 0 0 0 4342 0 0 0 0 0 0 0 0 0 )
+Attacker12 = ({onelife} 252311 1 4 7 14 14 15 2510 0 0 0 0 0 0 0 0 0 0 0 0 0 )
+Attacker13 = ({r2r} 252306 1 15 6 14 13 15 0 0 0 0 0 0 0 0 0 0 0 0 0 848 )
+Defender0 = ({ilk} 10336 1 14 5 14 15 15 956 927 12394 657 1268 1045 3 1587 23 14 0 898 1 2108 92 0 0 0 0 0 0 0 )
 ";
 
 $res = BattleEngine ( $source );
 
-echo "<br/>Result:<br/>";
+echo "<br/><br/>Result:<br/>";
 print_r ( $res );
 
 ?>
