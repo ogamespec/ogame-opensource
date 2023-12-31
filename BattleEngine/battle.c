@@ -256,57 +256,34 @@ void SetDebrisOptions (int did, int fid)
 void SetRapidfire (int enable) { Rapidfire = enable & 1; }
 
 // Выделить память для юнитов и установить начальные значения / Allocate memory for units and set initial values
-
-Unit *InitBattleAttackers (Slot *a, int anum, int objs)
+Unit *InitBattle (Slot *slot, int num, int objs, int attacker)
 {
     Unit *u;
-    int aid = 0;
+    int slot_id = 0;
     int i, n, ucnt = 0, obj;
     u = (Unit *)malloc (objs * sizeof(Unit));
     if (u == NULL) return u;
     memset (u, 0, objs * sizeof(Unit));
     
-    for (i=0; i<anum; i++, aid++) {
+    for (i=0; i<num; i++, slot_id++) {
         for (n=0; n<14; n++)
         {
-            for (obj=0; obj<a[i].fleet[n]; obj++) {
-                u[ucnt].hull = u[ucnt].hullmax = fleetParam[n].structure * 0.1 * (10+a[i].armor) / 10;
+            for (obj=0; obj<slot[i].fleet[n]; obj++) {
+                u[ucnt].hull = u[ucnt].hullmax = fleetParam[n].structure * 0.1 * (10+slot[i].armor) / 10;
                 u[ucnt].obj_type = FLEET_ID_BASE + n;
-                u[ucnt].slot_id = aid;
+                u[ucnt].slot_id = slot_id;
                 ucnt++;
             }
         }
-    }
-
-    return u;
-}
-
-Unit *InitBattleDefenders (Slot *d, int dnum, int objs)
-{
-    Unit *u;
-    int did = 0;
-    int i, n, ucnt = 0, obj;
-    u = (Unit *)malloc (objs * sizeof(Unit));
-    if (u == NULL) return u;
-    memset (u, 0, objs * sizeof(Unit));
-
-    for (i=0; i<dnum; i++, did++) {
-        for (n=0; n<14; n++)
-        {
-            for (obj=0; obj<d[i].fleet[n]; obj++) {
-                u[ucnt].hull = u[ucnt].hullmax = fleetParam[n].structure * 0.1 * (10+d[i].armor) / 10;
-                u[ucnt].obj_type = FLEET_ID_BASE + n;
-                u[ucnt].slot_id = did;
-                ucnt++;
-            }
-        }
-        for (n=0; n<8; n++)
-        {
-            for (obj=0; obj<d[i].def[n]; obj++) {
-                u[ucnt].hull = u[ucnt].hullmax = defenseParam[n].structure * 0.1 * (10+d[i].armor) / 10;
-                u[ucnt].obj_type = DEFENSE_ID_BASE + n;
-                u[ucnt].slot_id = did;
-                ucnt++;
+        if (!attacker) {
+            for (n=0; n<8; n++)
+            {
+                for (obj=0; obj<slot[i].def[n]; obj++) {
+                    u[ucnt].hull = u[ucnt].hullmax = defenseParam[n].structure * 0.1 * (10+slot[i].armor) / 10;
+                    u[ucnt].obj_type = DEFENSE_ID_BASE + n;
+                    u[ucnt].slot_id = slot_id;
+                    ucnt++;
+                }
             }
         }
     }
@@ -525,11 +502,11 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
     }
 
     // Подготовить массив боевых единиц.
-    aunits = InitBattleAttackers (a, anum, aobjs);
+    aunits = InitBattle (a, anum, aobjs, 1);
     if (aunits == NULL) {
         return 0;
     }
-    dunits = InitBattleDefenders (d, dnum, dobjs);
+    dunits = InitBattle (d, dnum, dobjs, 0);
     if (dunits == NULL) {
         return 0;
     }
