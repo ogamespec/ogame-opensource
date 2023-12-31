@@ -31,15 +31,15 @@ function Admin_Uni ()
         {
             if ( $_POST['news_upd'] > 0 ) UpdateNews ( $_POST['news1'], $_POST['news2'], $_POST['news_upd'] );
         }
-        if ( $_POST['news_off'] === "on" )    // Убрать новости
+        if ( key_exists ('news_off', $_POST) && $_POST['news_off'] === "on" )    // Убрать новости
         {
             DisableNews ();
         }
 
         $rapid = ($_POST['rapid'] === "on") ? 1 : 0;
         $moons = ($_POST['moons'] === "on") ? 1 : 0;
-        $freeze = ($_POST['freeze'] === "on") ? 1 : 0;
-        $php_battle = ($_POST['php_battle'] === "on") ? 1 : 0;
+        $freeze = (key_exists ('freeze', $_POST) && $_POST['freeze'] === "on") ? 1 : 0;
+        $php_battle = (key_exists ('php_battle', $_POST) && $_POST['php_battle'] === "on") ? 1 : 0;
 
         SetUniParam ( 
             $_POST['speed'], 
