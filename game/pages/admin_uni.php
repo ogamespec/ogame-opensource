@@ -39,6 +39,7 @@ function Admin_Uni ()
         $rapid = ($_POST['rapid'] === "on") ? 1 : 0;
         $moons = ($_POST['moons'] === "on") ? 1 : 0;
         $freeze = ($_POST['freeze'] === "on") ? 1 : 0;
+        $php_battle = ($_POST['php_battle'] === "on") ? 1 : 0;
 
         SetUniParam ( 
             $_POST['speed'], 
@@ -54,7 +55,8 @@ function Admin_Uni ()
             $moons, 
             $freeze, 
             $_POST['lang'],
-            $_POST['battle_engine'] );
+            $_POST['battle_engine'],
+            $php_battle );
 
         // Установить внешние ссылки. Если ссылка пустая - пункт меню будет отсутствовать.
 
@@ -196,6 +198,7 @@ function Admin_Uni ()
 <tr><th><?php echo loca("MENU_RULES");?></th><th><input type="text" name="ext_rules" maxlength="99" size="20" value="<?php echo $unitab['ext_rules'];?>" /></th></tr>
 <tr><th><?php echo loca("MENU_IMPRESSUM");?></th><th><input type="text" name="ext_impressum" maxlength="99" size="20" value="<?php echo $unitab['ext_impressum'];?>" /></th></tr>
 <tr><th><?php echo loca("INSTALL_UNI_BATTLE");?></th><th><input type="text" name="battle_engine" maxlength="99" size="20" value="<?php echo $unitab['battle_engine'];?>" /></th></tr>
+<tr><th><?php echo loca("INSTALL_UNI_PHP_BATTLE");?></th><th><input type="checkbox" name="php_battle"  <?php echo UniIsChecked($unitab['php_battle']);?> /></th></tr>
 
 <tr><th>Поставить вселенную на паузу <a title="При постановке вселенной на паузу не будет срабатывать ни одно событие (очередь будет остановлена). После снятия паузы все завершенные события будут выполнены в порядке очереди. Все активные игроки принудительно переводятся в режим отпуска."><?php echo $info;?></a>
 </th><th><input type="checkbox" name="freeze"  <?php echo UniIsChecked($unitab['freeze']);?> /></th></tr>

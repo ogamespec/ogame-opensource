@@ -242,7 +242,7 @@ static char *longnumber (uint64_t n)
     return p;
 }
 
-// Установить настройки выпадения лома.
+// Установить настройки выпадения лома / Set debris drop settings
 void SetDebrisOptions (int did, int fid)
 {
     if (did < 0) did = 0;
@@ -255,7 +255,8 @@ void SetDebrisOptions (int did, int fid)
 
 void SetRapidfire (int enable) { Rapidfire = enable & 1; }
 
-// Выделить память для юнитов и установить начальные значения.
+// Выделить память для юнитов и установить начальные значения / Allocate memory for units and set initial values
+
 Unit *InitBattleAttackers (Slot *a, int anum, int objs)
 {
     Unit *u;
@@ -359,6 +360,7 @@ long UnitShoot (Unit *a, int aweap, Unit *b, uint64_t *absorbed, uint64_t *dm, u
 }
 
 // Почистить взорванные корабли и оборону. Возвращает количество взорванных единиц.
+// Clean up blown up ships and defenses. Returns the number of units blown up.
 int WipeExploded (Unit **slot, int amount)
 {
     Unit *src = *slot, *tmp;
@@ -374,6 +376,7 @@ int WipeExploded (Unit **slot, int amount)
 }
 
 // Проверить бой на быструю ничью. Если ни у одного юнита броня не повреждена, то бой заканчивается ничьей досрочно.
+// Check the combat for a fast draw. If none of the units have armor damage, the combat ends in a quick draw.
 int CheckFastDraw (Unit *aunits, int aobjs, Unit *dunits, int dobjs)
 {
     int i;
@@ -396,7 +399,7 @@ static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, S
     int n, i, count = 0;
     unsigned long sum = 0;
 
-    // Собрать все юниты в слот.
+    // Собрать все юниты в слот / Collect all units in a slot
     memset (&coll, 0, sizeof(Slot));
     for (i=0; i<objnum; i++) {
         u = &units[i];
@@ -442,6 +445,8 @@ static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, S
     return ptr;
 }
 
+// Проверить возможность повторного выстрела. Для удобства используются оригинальные ID юнитов
+// Check the possibility of re-firing. Original unit IDs are used for convenience
 static int RapidFire (int atyp, int dtyp)
 {
     int rapidfire = 0;
@@ -820,8 +825,11 @@ static char *GetSimParamS (char *name, char *def)
 
 /*
 
-Формат входных данных
+Формат входных данных.
 Входные данные содержат исходные параметры битвы в текстовом формате. Для удобства разбора в Си, значения представлены в формате "переменная = значение".
+
+Input data format.
+The input data contains the initial parameters of the battle in text format. For ease of parsing in C, the values are represented in the "key = value" format.
 
 Rapidfire = 1
 FID = 30
@@ -979,14 +987,14 @@ void StartBattle (char *text, int battle_id)
                 ); 
     }
 
-    // Настройки боевого движка.
+    // Настройки боевого движка / Battle engine settings
     SetDebrisOptions ( did, fid );
     SetRapidfire ( rf );
 
     // **** НАЧАТЬ БИТВУ ****
     res = DoBattle ( a, anum, d, dnum );
 
-    // Записать результаты.
+    // Записать результаты / Write down the results
     if ( res > 0 )
     {
         sprintf ( filename, "battleresult/battle_%i.txt", battle_id );
