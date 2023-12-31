@@ -389,7 +389,7 @@ int CheckFastDraw (Unit *aunits, int aobjs, Unit *dunits, int dobjs)
     return 1;
 }
 
-// Сгенерировать HTML-код слота.
+// Сгенерировать результат слота.
 // Если techs = 1, то показать технологии (в раундах технологии показывать не надо).
 static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, Slot *d, int attacker, int techs)
 {

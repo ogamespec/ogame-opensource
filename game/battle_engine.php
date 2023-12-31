@@ -182,17 +182,18 @@ function BattleEngine ($source)
 {
     global $battle_debug;
 
-    // Настройки боевого движка по умолчанию.
+    // Настройки боевого движка по умолчанию
     $rf = 1;
     $fid = 30;
     $did = 0;
 
-    // Исходные слоты атакующих и защитников (для удобства - ассоциативные массивы)
-    $attackers = array();
-    $defenders = array();
-
     // Выходной результат
     $res = array ();
+
+    // Исходные слоты атакующих и защитников
+    $res['before'] = array();
+    $res['before']['attackers'] = array();
+    $res['before']['defenders'] = array();
 
     // DEBUG
     //$a = "xxx";
@@ -206,13 +207,9 @@ function BattleEngine ($source)
     mt_srand ($battle_seed);
 
     // Разобрать входные данные
-    ParseInput ($source, $rf, $fid, $did, $attackers, $defenders);
+    ParseInput ($source, $rf, $fid, $did, $res['before']['attackers'], $res['before']['defenders']);
     if ($battle_debug) {
         echo "rf = $rf, fid = $fid, did = $did<br/>";
-        echo "<br/>attackers:<br/>";
-        print_r($attackers);
-        echo "<br/><br/>defenders:<br/>";
-        print_r($defenders);
     }
 
     return $res;
