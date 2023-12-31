@@ -34,14 +34,14 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
 
     for ( $n=0; $n<$anum; $n++)
     {
-        $source .= "Attacker$n = (<Attacker$n> ".mt_rand(1,10000)." ".$a[$n]['g']." ".$a[$n]['s']." ".$a[$n]['p']." ";
+        $source .= "Attacker$n = ({Attacker$n} ".mt_rand(1,10000)." ".$a[$n]['g']." ".$a[$n]['s']." ".$a[$n]['p']." ";
         $source .= $a[$n]['r109'] . " " . $a[$n]['r110'] . " " . $a[$n]['r111'] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $a[$n]['fleet'][$gid] . " ";
         $source .= ")\n";
     }
     for ( $n=0; $n<$dnum; $n++)
     {
-        $source .= "Defender$n = (<Defender$n> ".mt_rand(1,10000)." ".$d[$n]['g']." ".$d[$n]['s']." ".$d[$n]['p']." ";
+        $source .= "Defender$n = ({Defender$n} ".mt_rand(1,10000)." ".$d[$n]['g']." ".$d[$n]['s']." ".$d[$n]['p']." ";
         $source .= $d[$n]['r109'] . " " . $d[$n]['r110'] . " " . $d[$n]['r111'] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $d[$n]['fleet'][$gid] . " ";
         foreach ($defmap as $i=>$gid) $source .= $d[$n]['defense'][$gid] . " ";
@@ -59,8 +59,20 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
 
     // *** Передать данные боевому движку
 
-    $arg = "\"battle_id=$battle_id\"";
-    system ( $unitab['battle_engine'] . " $arg" );
+    if ($unitab['php_battle']) {
+
+        $battle_source = file_get_contents ( "battledata/battle_".$battle_id.".txt" );
+        $res = BattleEngine ($battle_source);
+
+        $bf = fopen ( "battleresult/battle_".$battle_id.".txt", "w" );
+        fwrite ( $bf, serialize($res) );
+        fclose ( $bf );
+    }
+    else {
+
+        $arg = "\"battle_id=$battle_id\"";
+        system ( $unitab['battle_engine'] . " $arg" );
+    }
 
     // *** Обработать выходные данные
 
@@ -365,8 +377,8 @@ RecalcAttackersDefendersNum ();
 <tr><td colspan=2> 
 <table>
 <tr><td class=c colspan=2>Настройки</td></tr>
-<tr><td>Отладочная информация</td><td><input type="checkbox" name="debug" <? if($debug) echo "checked"; ?> ></td></tr>
-<tr><td>Скорострел</td><td><input type="checkbox" name="rapid" <? if($rf) echo "checked"; ?> ></td></tr>
+<tr><td>Отладочная информация</td><td><input type="checkbox" name="debug" <?php if($debug) echo "checked"; ?> ></td></tr>
+<tr><td>Скорострел</td><td><input type="checkbox" name="rapid" <?php if($rf) echo "checked"; ?> ></td></tr>
 <tr><td>Флот в обломки</td><td><input name="fid" size=3 value="<?=$fid;?>"> </td></tr>
 <tr><td>Оборона в обломки</td><td><input name="did" size=3 value="<?=$did;?>"></td></tr>
 </table>

@@ -1,6 +1,6 @@
 <?php
 
-$battle_debug = 1;
+$battle_debug = 0;
 
 if ($battle_debug) {
     error_reporting(E_ALL);
@@ -122,9 +122,20 @@ function DoBattle ($res)
     $aobjs = 0;
     $dobjs = 0;
 
-    foreach ( $amap as $n=>$gid ) {
-        $res[$gid] = intval ($items[8+$n]);
-    }    
+    for ($i=0; $i<$anum; $i++) {
+        foreach ( $amap as $n=>$gid ) {
+            $aobjs += $res['before']['attackers'][$i][$gid];
+        }
+    }
+
+    for ($i=0; $i<$dnum; $i++) {
+        foreach ( $amap as $n=>$gid ) {
+            $dobjs += $res['before']['defenders'][$i][$gid];
+        }
+        foreach ( $dmap as $n=>$gid ) {
+            $dobjs += $res['before']['defenders'][$i][$gid];
+        }
+    }
 
     // Подготовить массив боевых единиц
 }

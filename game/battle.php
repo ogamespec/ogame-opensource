@@ -1,5 +1,7 @@
 <?php
 
+require_once "battle_engine.php";
+
 // Боевой движок OGame.
 
 // Восстановление обороны.
@@ -703,8 +705,20 @@ function StartBattle ( $fleet_id, $planet_id, $when )
 
     // *** Передать данные боевому движку
 
-    $arg = "\"battle_id=$battle_id\"";
-    system ( $unitab['battle_engine'] . " $arg" );
+    if ($unitab['php_battle']) {
+
+        $battle_source = file_get_contents ( "battledata/battle_".$battle_id.".txt" );
+        $res = BattleEngine ($battle_source);
+
+        $bf = fopen ( "battleresult/battle_".$battle_id.".txt", "w" );
+        fwrite ( $bf, serialize($res) );
+        fclose ( $bf );
+    }
+    else {
+
+        $arg = "\"battle_id=$battle_id\"";
+        system ( $unitab['battle_engine'] . " $arg" );
+    }
 
     // *** Обработать выходные данные
 
@@ -1069,8 +1083,20 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 
     // *** Передать данные боевому движку
 
-    $arg = "\"battle_id=$battle_id\"";
-    system ( $unitab['battle_engine'] . " $arg" );
+    if ($unitab['php_battle']) {
+
+        $battle_source = file_get_contents ( "battledata/battle_".$battle_id.".txt" );
+        $res = BattleEngine ($battle_source);
+
+        $bf = fopen ( "battleresult/battle_".$battle_id.".txt", "w" );
+        fwrite ( $bf, serialize($res) );
+        fclose ( $bf );
+    }
+    else {
+
+        $arg = "\"battle_id=$battle_id\"";
+        system ( $unitab['battle_engine'] . " $arg" );
+    }
 
     // *** Обработать выходные данные
 
