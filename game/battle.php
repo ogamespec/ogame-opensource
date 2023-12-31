@@ -12,6 +12,7 @@ function RepairDefense ( $d, $res, $defrepair, $defrepair_delta, $premium=true )
     $exploded_total = 0;
 
     if ( $premium) $prem = PremiumStatus ($d[0]);
+    else $prem = array();
 
     $rounds = count ( $res['rounds'] );
     if ( $rounds > 0 ) 
@@ -21,7 +22,7 @@ function RepairDefense ( $d, $res, $defrepair, $defrepair_delta, $premium=true )
         foreach ( $exploded as $gid=>$amount )
         {
             $exploded[$gid] = $d[0]['defense'][$gid] - $last['defenders'][0][$gid];
-            if ( $prem['engineer'] ) $exploded[$gid] = floor ($exploded[$gid] / 2);
+            if ( key_exists ('engineer', $prem) && $prem['engineer'] ) $exploded[$gid] = floor ($exploded[$gid] / 2);
             $exploded_total += $exploded[$gid];
         }
 
@@ -90,6 +91,8 @@ function CalcLosses ( $a, $d, $res, $repaired )
     // Стоимость юнитов до боя.
     foreach ($a as $i=>$attacker)                // Атакующие
     {
+        $a[$i]['points'] = 0;
+        $a[$i]['fpoints'] = 0;
         foreach ( $fleetmap as $n=>$gid )
         {
             $amount = $attacker['fleet'][$gid];
@@ -104,6 +107,8 @@ function CalcLosses ( $a, $d, $res, $repaired )
 
     foreach ($d as $i=>$defender)            // Обороняющиеся
     {
+        $d[$i]['points'] = 0;
+        $d[$i]['fpoints'] = 0;
         foreach ( $fleetmap as $n=>$gid )
         {
             $amount = $defender['fleet'][$gid];

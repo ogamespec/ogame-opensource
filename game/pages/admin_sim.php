@@ -22,6 +22,7 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
 
     // *** Сгенерировать исходные данные
 
+    $source = "";
     $source .= "Rapidfire = $rf\n";
     $source .= "FID = $fid\n";
     $source .= "DID = $did\n";
@@ -50,7 +51,7 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
 
     if ($debug) echo $source . "<hr>";
 
-    $battle = array ( $battle_id, $source, '', '', time() );
+    $battle = array ( null, $source, '', '', time() );
     $battle_id = AddDBRow ( $battle, "battledata");
 
     $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
@@ -207,7 +208,7 @@ function Admin_BattleSim ()
 
         // Симулировать битву
         $battle_result = 0;
-        if ( $_POST['debug'] === "on" ) $debug = true;
+        if ( key_exists ('debug', $_POST) && $_POST['debug'] === "on" ) $debug = true;
         else $debug = false;
         if ( $_POST['rapid'] === "on" ) $rf = true;
         else $rf = 0;
