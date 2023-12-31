@@ -36,8 +36,30 @@ $shld = { }                    -- щиты юнитов, 100 ... 0. перед �
 
 */
 
+// Для отладки преобразовать массив-строку в читабельный формат
+function hex_array_to_text ($arr)
+{
+    return implode(unpack("H*", $arr));
+}
+
+function get_packed_word ($arr, $idx)
+{
+    return (ord($arr{$idx}) << 24) | 
+        (ord($arr{$idx+1}) << 16) | 
+        (ord($arr{$idx+2}) << 8) |
+        (ord($arr{$idx+3}) << 0);
+}
+
+function set_packed_word ($arr, $idx, $val)
+{
+    $arr{$idx} = chr(($val >> 24) & 0xff);
+    $arr{$idx+1} = chr(($val >> 16) & 0xff);
+    $arr{$idx+2} = chr(($val >> 8) & 0xff);
+    $arr{$idx+3} = chr(($val >> 0) & 0xff);
+}
+
 // Выделить память для юнитов и установить начальные значения.
-function InitBattle ($slot, $num, $objs, $attacker, &$obj_arr, &$slot_arr )
+function InitBattle ($slot, $num, $objs, $attacker, &$obj_arr, &$slot_arr, &$hull_arr )
 {
     global $UnitParam;
 
@@ -57,9 +79,28 @@ function InitBattle ($slot, $num, $objs, $attacker, &$obj_arr, &$slot_arr )
                 $obj_type = $gid - 200;
 
                 $obj_arr{$ucnt} = chr($obj_type);
-                $slot_arr{$ucnt} = $slot_id;
+                $slot_arr{$ucnt} = chr($slot_id);
+                set_packed_word ($hull_arr, $ucnt, $hull);
 
                 $ucnt++;
+            }
+        }
+
+        if (!$attacker) {
+
+            foreach ( $dmap as $n=>$gid ) {
+
+                for ($obj=0; $obj<$slot[$i][$gid]; $obj++) {
+
+                    $hull = $UnitParam[$gid][0] * 0.1 * (10+$slot[$i]['armr']) / 10;
+                    $obj_type = $gid - 400;
+
+                    $obj_arr{$ucnt} = chr($obj_type);
+                    $slot_arr{$ucnt} = chr($slot_id);
+                    set_packed_word ($hull_arr, $ucnt, $hull);
+
+                    $ucnt++;
+                }
             }
         }
 
@@ -133,11 +174,13 @@ function DoBattle ($res)
     $slot_att = "";
     $explo_att = "";
     $shld_att = "";
+    $hull_att = "";
 
     $obj_def = "";
     $slot_def = "";
     $explo_def = "";
     $shld_def = "";
+    $hull_def = "";
 
     $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $dmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
@@ -167,15 +210,21 @@ function DoBattle ($res)
 
     // Подготовить массив боевых единиц
 
-    InitBattle ($res['before']['attackers'], $anum, $aobjs, 1, $obj_att, $slot_att);
-    InitBattle ($res['before']['defenders'], $dnum, $dobjs, 0, $obj_def, $slot_def);
+    InitBattle ($res['before']['attackers'], $anum, $aobjs, 1, $obj_att, $slot_att, $hull_att);
+    InitBattle ($res['before']['defenders'], $dnum, $dobjs, 0, $obj_def, $slot_def, $hull_def);
 
-    if ($battle_debug) {
-        echo $obj_att . "<br/>";
-        echo $slot_att . "<br/>";
+    if (false) {
+        echo "<div style='word-wrap: break-word;'>";
+        echo "obj_att:<br/>";
+        echo hex_array_to_text($obj_att) . "<br/>";
+        echo "slot_att:<br/>";
+        echo hex_array_to_text($slot_att) . "<br/>";
 
-        echo $obj_def . "<br/>";
-        echo $slot_def . "<br/>";        
+        echo "obj_def:<br/>";
+        echo hex_array_to_text($obj_def) . "<br/>";
+        echo "slot_def:<br/>";
+        echo hex_array_to_text($slot_def) . "<br/>";
+        echo "</div>";
     }
 }
 
@@ -314,6 +363,8 @@ function BattleEngine ($source)
 function BattleDebug()
 {
 
+$starttime = microtime(true);
+
 ?>
 
 <html> 
@@ -361,6 +412,9 @@ echo "<pre>";
 print_r ( $res );
 echo "</pre>";
 
+$endtime = microtime(true);
+printf("Page loaded in %f seconds", $endtime - $starttime );
+
 ?>
 
 </div>
@@ -372,7 +426,6 @@ echo "</pre>";
 <?php
 
 }   // BattleDebug()
-
 
 if ($battle_debug) {
     BattleDebug();
