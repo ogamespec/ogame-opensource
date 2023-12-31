@@ -1,4 +1,9 @@
 
+// Для того чтобы номера объектов умещались в один байт (для экономии памяти), нумерация флота начинается от 100 (вместо 202), а обороны от 200 (вместо 401).
+// To make the object numbers fit into one byte (to save memory), fleet numbering starts at 100 (instead of 202) and defense numbering starts at 200 (instead of 401).
+#define FLEET_ID_BASE 100
+#define DEFENSE_ID_BASE 200
+
 typedef struct TechParam {
     long    structure;
     long    shield;

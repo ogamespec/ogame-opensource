@@ -1,8 +1,5 @@
 // Боевой движок браузерной игры OGame / The battle engine of the browser game OGame
 
-// Для того чтобы номера объектов умещались в один байт (для экономии памяти), нумерация флота начинается от 100 (вместо 202), а обороны от 200 (вместо 401).
-// To make the object numbers fit into one byte (to save memory), fleet numbering starts at 100 (instead of 202) and defense numbering starts at 200 (instead of 401).
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -273,7 +270,7 @@ Unit *InitBattleAttackers (Slot *a, int anum, int objs)
         {
             for (obj=0; obj<a[i].fleet[n]; obj++) {
                 u[ucnt].hull = u[ucnt].hullmax = fleetParam[n].structure * 0.1 * (10+a[i].armor) / 10;
-                u[ucnt].obj_type = 100 + n;
+                u[ucnt].obj_type = FLEET_ID_BASE + n;
                 u[ucnt].slot_id = aid;
                 ucnt++;
             }
@@ -297,7 +294,7 @@ Unit *InitBattleDefenders (Slot *d, int dnum, int objs)
         {
             for (obj=0; obj<d[i].fleet[n]; obj++) {
                 u[ucnt].hull = u[ucnt].hullmax = fleetParam[n].structure * 0.1 * (10+d[i].armor) / 10;
-                u[ucnt].obj_type = 100 + n;
+                u[ucnt].obj_type = FLEET_ID_BASE + n;
                 u[ucnt].slot_id = did;
                 ucnt++;
             }
@@ -306,7 +303,7 @@ Unit *InitBattleDefenders (Slot *d, int dnum, int objs)
         {
             for (obj=0; obj<d[i].def[n]; obj++) {
                 u[ucnt].hull = u[ucnt].hullmax = defenseParam[n].structure * 0.1 * (10+d[i].armor) / 10;
-                u[ucnt].obj_type = 200 + n;
+                u[ucnt].obj_type = DEFENSE_ID_BASE + n;
                 u[ucnt].slot_id = did;
                 ucnt++;
             }
@@ -322,8 +319,8 @@ long UnitShoot (Unit *a, int aweap, Unit *b, uint64_t *absorbed, uint64_t *dm, u
 {
     float prc, depleted;
     long apower, adelta = 0;
-    if (a->obj_type < 200) apower = fleetParam[a->obj_type-100].attack * (10+aweap) / 10;
-    else apower = defenseParam[a->obj_type-200].attack * (10+aweap) / 10;
+    if (a->obj_type < DEFENSE_ID_BASE) apower = fleetParam[a->obj_type-FLEET_ID_BASE].attack * (10+aweap) / 10;
+    else apower = defenseParam[a->obj_type-DEFENSE_ID_BASE].attack * (10+aweap) / 10;
 
     if (b->exploded) return apower; // Уже взорван.
     if (b->shield == 0) {  // Щитов нет.
@@ -347,13 +344,13 @@ long UnitShoot (Unit *a, int aweap, Unit *b, uint64_t *absorbed, uint64_t *dm, u
     }
     if (b->hull <= b->hullmax * 0.7 && b->shield == 0) {    // Взорвать и отвалить лома.
         if (MyRand (0, 99) >= ((b->hull * 100) / b->hullmax) || b->hull == 0) {
-            if (b->obj_type >= 200) {
-                *dm += (uint64_t)(ceil(DefensePrice[b->obj_type-200].m * ((float)DefenseInDebris/100.0f)));
-                *dk += (uint64_t)(ceil(DefensePrice[b->obj_type-200].k * ((float)DefenseInDebris/100.0f)));
+            if (b->obj_type >= DEFENSE_ID_BASE) {
+                *dm += (uint64_t)(ceil(DefensePrice[b->obj_type-DEFENSE_ID_BASE].m * ((float)DefenseInDebris/100.0f)));
+                *dk += (uint64_t)(ceil(DefensePrice[b->obj_type-DEFENSE_ID_BASE].k * ((float)DefenseInDebris/100.0f)));
             }
             else {
-                *dm += (uint64_t)(ceil(FleetPrice[b->obj_type-100].m * ((float)FleetInDebris/100.0f)));
-                *dk += (uint64_t)(ceil(FleetPrice[b->obj_type-100].k * ((float)FleetInDebris/100.0f)));
+                *dm += (uint64_t)(ceil(FleetPrice[b->obj_type-FLEET_ID_BASE].m * ((float)FleetInDebris/100.0f)));
+                *dk += (uint64_t)(ceil(FleetPrice[b->obj_type-FLEET_ID_BASE].k * ((float)FleetInDebris/100.0f)));
             }
             b->exploded = 1;
         }
@@ -404,8 +401,8 @@ static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, S
     for (i=0; i<objnum; i++) {
         u = &units[i];
         if (u->slot_id == slot) {
-            if (u->obj_type < 200) { coll.fleet[u->obj_type-100]++; sum++; }
-            else { coll.def[u->obj_type-200]++; sum++; }
+            if (u->obj_type < DEFENSE_ID_BASE) { coll.fleet[u->obj_type-FLEET_ID_BASE]++; sum++; }
+            else { coll.def[u->obj_type-DEFENSE_ID_BASE]++; sum++; }
         }
     }
 
@@ -563,13 +560,13 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
         // Зарядить щиты.
         for (i=0; i<aobjs; i++) {
             if (aunits[i].exploded) aunits[i].shield = aunits[i].shieldmax = 0;
-            else aunits[i].shield = aunits[i].shieldmax = fleetParam[aunits[i].obj_type-100].shield * (10+a[aunits[i].slot_id].shld) / 10;
+            else aunits[i].shield = aunits[i].shieldmax = fleetParam[aunits[i].obj_type-FLEET_ID_BASE].shield * (10+a[aunits[i].slot_id].shld) / 10;
         }
         for (i=0; i<dobjs; i++) {
             if (dunits[i].exploded) dunits[i].shield = dunits[i].shieldmax = 0;
             else {
-                if (dunits[i].obj_type >= 200) dunits[i].shield = dunits[i].shieldmax = defenseParam[dunits[i].obj_type-200].shield * (10+d[dunits[i].slot_id].shld) / 10;
-                else dunits[i].shield = dunits[i].shieldmax = fleetParam[dunits[i].obj_type-100].shield * (10+d[dunits[i].slot_id].shld) / 10;
+                if (dunits[i].obj_type >= DEFENSE_ID_BASE) dunits[i].shield = dunits[i].shieldmax = defenseParam[dunits[i].obj_type-DEFENSE_ID_BASE].shield * (10+d[dunits[i].slot_id].shld) / 10;
+                else dunits[i].shield = dunits[i].shieldmax = fleetParam[dunits[i].obj_type-FLEET_ID_BASE].shield * (10+d[dunits[i].slot_id].shld) / 10;
             }
         }
 
