@@ -34,7 +34,8 @@ $LOCA["de"]["INSTALL_UNI_FID"] = "Flotte in Trümmern (%)";
 $LOCA["de"]["INSTALL_UNI_DID"] = "Verteidigung in Trümmern (%)";
 $LOCA["de"]["INSTALL_UNI_RAPID"] = "Rapidfire";
 $LOCA["de"]["INSTALL_UNI_MOONS"] = "Monde und Todesstern";
-$LOCA["de"]["INSTALL_UNI_BATTLE"] = "Path to battle engine";
+$LOCA["de"]["INSTALL_UNI_BATTLE"] = "Pfad zur Kampfmaschine";
+$LOCA["de"]["INSTALL_UNI_PHP_BATTLE"] = "Verwendung einer PHP-basierten Kampfmaschine";
 
 $LOCA["de"]["INSTALL_ADMIN"] = "Admin Account";
 $LOCA["de"]["INSTALL_ADMIN_EMAIL"] = "E-Mail";
