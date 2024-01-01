@@ -66,7 +66,6 @@ int DefenseInDebris = 0, FleetInDebris = 30;
 int Rapidfire = 1;  // 1: вкл стрельбу очередями / enable rapidfire
 
 // Таблица стоимости / Cost table
-typedef struct UnitPrice { long m, k, d; } UnitPrice;
 static UnitPrice FleetPrice[] = {
  { 2000, 2000, 0 }, { 6000, 6000, 0 }, { 3000, 1000, 0 }, { 6000, 4000, 0 },
  { 20000, 7000, 2000 }, { 45000, 15000, 0 }, { 10000, 20000, 10000 }, { 10000, 6000, 2000 },
@@ -488,7 +487,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
     Unit *aunits, *dunits, *unit;
     char * ptr = ResultBuffer, * res, *round_patch;
 
-    uint64_t         shoots[2], spower[2], absorbed[2]; // Общая статистика по выстрелам.    
+    uint64_t         shoots[2] = { 0,0 }, spower[2] = { 0,0 }, absorbed[2] = { 0,0 }; // Общая статистика по выстрелам.
     uint64_t         dm = 0, dk = 0;             // Поле обломков
 
     // Посчитать количество юнитов до боя.
@@ -665,11 +664,6 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
 // ==========================================================================================
 // Инициализация боевого движка - получить данные и распределить их по массивам.
 
-typedef struct SimParam {
-    char    name[32];
-    char    string[64];
-    unsigned long value;
-} SimParam;
 static SimParam *simargv;
 static long simargc = 0;
 
@@ -723,10 +717,12 @@ static void AddSimParam (char *name, char *string)
     // Выделить место под новый параметр и записать значения.
     hexize (string);
     simargv = (SimParam *)realloc (simargv, (simargc + 1) * sizeof (SimParam) );
-    strncpy (simargv[simargc].name, name, sizeof (simargv[simargc].name) );
-    strncpy (simargv[simargc].string, string, sizeof (simargv[simargc].string) );
-    simargv[simargc].value = strtoul (simargv[simargc].string, NULL, 10);
-    simargc ++;
+    if (simargv) {
+        strncpy(simargv[simargc].name, name, sizeof(simargv[simargc].name));
+        strncpy(simargv[simargc].string, string, sizeof(simargv[simargc].string));
+        simargv[simargc].value = strtoul(simargv[simargc].string, NULL, 10);
+        simargc++;
+    }
 }
 
 static void PrintParams (void)

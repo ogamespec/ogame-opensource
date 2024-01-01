@@ -4,15 +4,19 @@
 #define FLEET_ID_BASE 100
 #define DEFENSE_ID_BASE 200
 
-typedef struct TechParam {
+typedef struct _TechParam {
     long    structure;
     long    shield;
     long    attack;
     long    cargo;  // только для флота / for the fleet only
 } TechParam;
 
+typedef struct _UnitPrice {
+    long m, k, d;
+} UnitPrice;
+
 // Данные слота / Slot data
-typedef struct Slot
+typedef struct _Slot
 {
     unsigned    long fleet[14];         // Флот / Fleet
     unsigned    long def[8];            // Оборона / Defense
@@ -23,7 +27,7 @@ typedef struct Slot
 } Slot;
 
 // Данные юнита / Unit data
-typedef struct Unit {
+typedef struct _Unit {
     unsigned char slot_id;
     unsigned char obj_type;
     unsigned char exploded;
@@ -34,3 +38,9 @@ typedef struct Unit {
 
 extern TechParam fleetParam[14];
 extern TechParam defenseParam[8];
+
+typedef struct _SimParam {
+    char    name[32];
+    char    string[64];
+    unsigned long value;
+} SimParam;
