@@ -313,7 +313,7 @@ function OnChangeSlot (attacker)
     }
 }
 
-// При изменении ячейки - внести данные из неё в массив слотов
+// При изменении ячейки флота/обороны - внести данные из неё в массив слотов
 function OnChangeValue (attacker, id)
 {
     if (attacker) {
@@ -326,6 +326,23 @@ function OnChangeValue (attacker, id)
     }
 
     RecalcAttackersDefendersNum ();
+}
+
+// При изменении ячейки технологий - внести данные из неё в массив слотов
+function OnChangeTechValue (attacker)
+{
+    if (attacker) {
+        slot = document.simForm.aslot.value - 1;
+        document.getElementById ( "a"+slot+"_weap" ).value = document.getElementById ( "a_weap" ).value;
+        document.getElementById ( "a"+slot+"_shld" ).value = document.getElementById ( "a_shld" ).value;
+        document.getElementById ( "a"+slot+"_armor" ).value = document.getElementById ( "a_armor" ).value;
+    }
+    else {
+        slot = document.simForm.dslot.value - 1;
+        document.getElementById ( "d"+slot+"_weap" ).value = document.getElementById ( "d_weap" ).value;
+        document.getElementById ( "d"+slot+"_shld" ).value = document.getElementById ( "d_shld" ).value;
+        document.getElementById ( "d"+slot+"_armor" ).value = document.getElementById ( "d_armor" ).value;
+    }
 }
 
 RecalcAttackersDefendersNum ();
@@ -354,8 +371,8 @@ RecalcAttackersDefendersNum ();
 <tr>        <td class=c>Атакующий</td>                <td class=c>Оборояющийся</td>  </tr>
 
 <tr> 
-<td> Вооружение: <input id="a_weap" size=2 > Щиты: <input id="a_shld" size=2 > Броня: <input id="a_armor" size=2 ></td>   
-<td> Вооружение: <input id="d_weap" size=2 > Щиты: <input id="d_shld" size=2 > Броня: <input id="d_armor" size=2 ></td>   
+<td> Вооружение: <input id="a_weap" size=2 > Щиты: <input id="a_shld" size=2 > Броня: <input id="a_armor" size=2  onKeyUp="OnChangeTechValue(1);"></td> 
+<td> Вооружение: <input id="d_weap" size=2 > Щиты: <input id="d_shld" size=2 > Броня: <input id="d_armor" size=2  onKeyUp="OnChangeTechValue(0);"></td> 
 </tr>
 
         <tr> <th valign=top>
