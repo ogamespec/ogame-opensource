@@ -297,6 +297,18 @@ function OnChangeSlot (attacker)
             if (value) document.getElementById ( "a_" + fleet[i] ).value = value;
             else document.getElementById ( "a_" + fleet[i] ).value = "";
         }
+
+        value = toint (document.getElementById ( "a"+slot+"_weap" ).value);
+        if (value) document.getElementById ( "a_weap" ).value = value;
+        else document.getElementById ( "a_weap" ).value = "";
+
+        value = toint (document.getElementById ( "a"+slot+"_shld" ).value);
+        if (value) document.getElementById ( "a_shld" ).value = value;
+        else document.getElementById ( "a_shld" ).value = "";
+
+        value = toint (document.getElementById ( "a"+slot+"_armor" ).value);
+        if (value) document.getElementById ( "a_armor" ).value = value;
+        else document.getElementById ( "a_armor" ).value = "";
     }
     else {
         slot = document.simForm.dslot.value - 1;
@@ -310,7 +322,21 @@ function OnChangeSlot (attacker)
             if (value) document.getElementById ( "d_" + defense[i] ).value = value;
             else document.getElementById ( "d_" + defense[i] ).value = "";
         }
+
+        value = toint (document.getElementById ( "d"+slot+"_weap" ).value);
+        if (value) document.getElementById ( "d_weap" ).value = value;
+        else document.getElementById ( "d_weap" ).value = "";
+
+        value = toint (document.getElementById ( "d"+slot+"_shld" ).value);
+        if (value) document.getElementById ( "d_shld" ).value = value;
+        else document.getElementById ( "d_shld" ).value = "";
+
+        value = toint (document.getElementById ( "d"+slot+"_armor" ).value);
+        if (value) document.getElementById ( "d_armor" ).value = value;
+        else document.getElementById ( "d_armor" ).value = "";
     }
+
+    RecalcAttackersDefendersNum ();
 }
 
 // При изменении ячейки флота/обороны - внести данные из неё в массив слотов
@@ -366,7 +392,7 @@ RecalcAttackersDefendersNum ();
 ?>
 
 <input type="hidden" id="anum" name="anum" value="1" />
-<input type="hidden" id="anum" name="dnum" value="1" />
+<input type="hidden" id="dnum" name="dnum" value="1" />
 
 <tr>        <td class=c>Атакующий</td>                <td class=c>Оборояющийся</td>  </tr>
 
