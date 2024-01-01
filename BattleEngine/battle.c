@@ -260,7 +260,8 @@ Unit *InitBattle (Slot *slot, int num, int objs, int attacker)
 {
     Unit *u;
     int slot_id = 0;
-    int i, n, ucnt = 0, obj;
+    int i, n, ucnt = 0;
+    unsigned long obj;
     u = (Unit *)malloc (objs * sizeof(Unit));
     if (u == NULL) return u;
     memset (u, 0, objs * sizeof(Unit));
@@ -395,7 +396,7 @@ static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, S
         else ptr += sprintf ( ptr, "i:%i;a:27:{", slot );
     }
 
-    ptr += sprintf (ptr, "s:4:\"name\";s:%i:\"%s\";", strlen(s[slot].name), s[slot].name );
+    ptr += sprintf (ptr, "s:4:\"name\";s:%i:\"%s\";", (int)strlen(s[slot].name), s[slot].name );
     ptr += sprintf (ptr, "s:2:\"id\";i:%i;", s[slot].id );
     ptr += sprintf (ptr, "s:1:\"g\";i:%i;", s[slot].g );
     ptr += sprintf (ptr, "s:1:\"s\";i:%i;", s[slot].s );
@@ -483,7 +484,7 @@ static int RapidFire (int atyp, int dtyp)
 int DoBattle (Slot *a, int anum, Slot *d, int dnum)
 {
     long slot, i, n, aobjs = 0, dobjs = 0, idx, rounds, sum = 0;
-    long apower, atyp, dtyp, rapid, rapidfire, rapidchance, fastdraw;
+    long apower, atyp, dtyp, rapidfire, fastdraw;
     Unit *aunits, *dunits, *unit;
     char * ptr = ResultBuffer, * res, *round_patch;
 
@@ -638,7 +639,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
         if (fastdraw) { rounds ++; break; }
     }
 
-    *round_patch = '0' + (rounds);
+    *round_patch = '0' + (char)(rounds);
     
     // Результаты боя.
     if (aobjs > 0 && dobjs == 0){ // Атакующий выиграл
@@ -975,7 +976,7 @@ void StartBattle (char *text, int battle_id)
     if ( res > 0 )
     {
         sprintf ( filename, "battleresult/battle_%i.txt", battle_id );
-        FileSave ( filename, ResultBuffer, strlen (ResultBuffer) );
+        FileSave ( filename, ResultBuffer, (unsigned long)strlen (ResultBuffer) );
     }
 }
 

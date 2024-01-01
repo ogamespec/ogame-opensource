@@ -93,7 +93,7 @@ function InitBattle ($slot, $num, $objs, $attacker, &$obj_arr, &$slot_arr, &$hul
                 for ($obj=0; $obj<$slot[$i][$gid]; $obj++) {
 
                     $hull = $UnitParam[$gid][0] * 0.1 * (10+$slot[$i]['armr']) / 10;
-                    $obj_type = $gid - 400;
+                    $obj_type = $gid - 200;
 
                     $obj_arr{$ucnt} = chr($obj_type);
                     $slot_arr{$ucnt} = chr($slot_id);
@@ -107,7 +107,6 @@ function InitBattle ($slot, $num, $objs, $attacker, &$obj_arr, &$slot_arr, &$hul
         $slot_id++;
     }
 }
-
 
 // Проверить возможность повторного выстрела. Для удобства используются оригинальные ID юнитов
 function RapidFire ($atyp, $dtyp)
