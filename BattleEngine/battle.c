@@ -365,18 +365,22 @@ long UnitShoot (Unit *a, Slot* aslot, Unit *b, Slot* bslot, uint64_t *absorbed, 
 
 // Почистить взорванные корабли и оборону. Возвращает количество взорванных единиц.
 // Clean up blown up ships and defenses. Returns the number of units blown up.
-int WipeExploded (Unit **slot, int amount)
+int WipeExploded (Unit **slot, int amount, int *exploded_count)
 {
     Unit *src = *slot, *tmp;
     int i, p = 0, exploded = 0;
     tmp = (Unit *)malloc (sizeof(Unit) * amount);
+    if (!tmp) {
+        return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
+    }
     for (i=0; i<amount; i++) {
         if (!src[i].exploded) tmp[p++] = src[i];
         else exploded++;
     }
     free (src);
     *slot = tmp;
-    return exploded;
+    *exploded_count = exploded;
+    return 0;
 }
 
 // Проверить бой на быструю ничью. Если ни у одного юнита броня не повреждена, то бой заканчивается ничьей досрочно.
@@ -520,6 +524,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
     long apower, atyp, dtyp, rapidfire, fastdraw;
     Unit *aunits, *dunits, *unit;
     char * ptr = ResultBuffer, * res, *round_patch;
+    int exploded, exploded_res;
 
     uint64_t         shoots[2] = { 0,0 }, spower[2] = { 0,0 }, absorbed[2] = { 0,0 }; // Общая статистика по выстрелам.
     uint64_t         dm = 0, dk = 0;             // Поле обломков
@@ -653,8 +658,20 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
         fastdraw = CheckFastDraw (aunits, aobjs, a, dunits, dobjs, d);
 
         // Вычистить взорванные корабли и оборону.
-        aobjs -= WipeExploded (&aunits, aobjs);
-        dobjs -= WipeExploded (&dunits, dobjs);
+        exploded_res = WipeExploded (&aunits, aobjs, &exploded);
+        if (exploded_res < 0) {
+            free(aunits);
+            free(dunits);
+            return exploded_res;
+        }
+        aobjs -= exploded;
+        exploded_res = WipeExploded (&dunits, dobjs, &exploded);
+        if (exploded_res < 0) {
+            free(aunits);
+            free(dunits);
+            return exploded_res;
+        }
+        dobjs -= exploded;
 
         // Round.
         ptr += sprintf ( ptr, "i:%i;a:8:", rounds );
