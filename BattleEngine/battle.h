@@ -24,17 +24,29 @@ typedef struct _Slot
     char        name[64];               // Имя игрока / Player Name
     int         g, s, p;                // Координаты / Coordinates
     int         id;                     // ID
+    // Заранее рассчитанные параметры брони, максимального значения щитов и силы атаки для флота и обороны каждого типа.
+    // Хранение заранее рассчитанных параметров немного ускорит расчёт в целом. Также раньше значения hullmax и shieldmax были внутри структуры Unit и создавали доп. нагрузку на память.
+    long        hullmax_fleet[14];
+    long        hullmax_def[8];
+    long        shieldmax_fleet[14];
+    long        shieldmax_def[8];
+    long        apower_fleet[14];
+    long        apower_def[8];
 } Slot;
+
+#pragma pack(push, 1)
 
 // Данные юнита / Unit data
 typedef struct _Unit {
-    unsigned char slot_id;
-    unsigned char obj_type;
-    unsigned char exploded;
+    unsigned char slot_id;              // Номер родительского слота. Для доступа к родительскому слоту также требуется указатель на массив слотов (передаётся через параметры)
+    unsigned char obj_type;             // Тип объекта. Флот начинается с FLEET_ID_BASE, оборона начинается с DEFENSE_ID_BASE.
+    unsigned char exploded;             // 1: В процессе перестрелки юнит был взорван
     unsigned char dummy;                // Для выравнивания структуры на 4 байта / To align the structure to 4 bytes
-    long    hull, hullmax;
-    long    shield, shieldmax;
+    long    hull;               // Остаток брони. Максимальное значение находится в hullmax в родительском слоте
+    long    shield;             // Текущее значение щитов. Максимальное значение находится в shieldmax в родительском слоте
 } Unit;
+
+#pragma pack(pop)
 
 extern TechParam fleetParam[14];
 extern TechParam defenseParam[8];
@@ -53,4 +65,6 @@ enum {
     BATTLE_ERROR_NOT_ENOUGH_ATTACKERS_OR_DEFENDERS = -2000,     // Нет атакующих или защитников
     BATTLE_ERROR_INVALID_BATTLE_ID = -3000,                 // Неверный ID битвы
     BATTLE_ERROR_DATA_LOAD = -4000,                         // Ошибка загрузки входных данных
+    BATTLE_ERROR_DATA_SAVE = -5000,                         // Ошибка сохранения выходных данных
+    BATTLE_ERROR_RESULT_BUFFER_OVERFLOW = -6000,            // Переполнение буфера для накопления выходных данных
 };
