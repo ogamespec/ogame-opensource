@@ -546,7 +546,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
         return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
     }
 
-    ptr += sprintf (ptr, "a:5:{");
+    ptr += sprintf (ptr, "a:6:{");
 
     // Флоты до боя
     ptr += sprintf (ptr, "s:6:\"before\";a:2:{");
