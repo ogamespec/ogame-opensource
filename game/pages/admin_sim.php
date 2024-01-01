@@ -72,7 +72,10 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
     else {
 
         $arg = "\"battle_id=$battle_id\"";
-        system ( $unitab['battle_engine'] . " $arg" );
+        system ( $unitab['battle_engine'] . " $arg", $retval );
+        if ($retval < 0) {
+            Error (va("Ошибка в работе боевого движка: #1", $retval));
+        }        
     }
 
     // *** Обработать выходные данные

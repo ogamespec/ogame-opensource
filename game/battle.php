@@ -722,7 +722,10 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     else {
 
         $arg = "\"battle_id=$battle_id\"";
-        system ( $unitab['battle_engine'] . " $arg" );
+        system ( $unitab['battle_engine'] . " $arg", $retval );
+        if ($retval < 0) {
+            Error (va("Ошибка в работе боевого движка: #1", $retval));
+        }
     }
 
     // *** Обработать выходные данные
@@ -1100,7 +1103,10 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     else {
 
         $arg = "\"battle_id=$battle_id\"";
-        system ( $unitab['battle_engine'] . " $arg" );
+        system ( $unitab['battle_engine'] . " $arg", $retval );
+        if ($retval < 0) {
+            Error (va("Ошибка в работе боевого движка: #1", $retval));
+        }        
     }
 
     // *** Обработать выходные данные
