@@ -504,11 +504,11 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
     // Подготовить массив боевых единиц.
     aunits = InitBattle (a, anum, aobjs, 1);
     if (aunits == NULL) {
-        return 0;
+        return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
     }
     dunits = InitBattle (d, dnum, dobjs, 0);
     if (dunits == NULL) {
-        return 0;
+        return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
     }
 
     ptr += sprintf (ptr, "a:5:{");
@@ -658,7 +658,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum)
     
     free (aunits);
     free (dunits);
-    return 1;
+    return 0;
 }
 
 // ==========================================================================================
@@ -815,7 +815,7 @@ DefenderM = ({NAME} ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BO
 
 */
 
-void StartBattle (char *text, int battle_id)
+int StartBattle (char *text, int battle_id)
 {
     char filename[1024];
     Slot *a, *d;
@@ -857,7 +857,7 @@ void StartBattle (char *text, int battle_id)
     }
     else dnum = 0;
 
-    if ( anum == 0 || dnum == 0) return;
+    if ( anum == 0 || dnum == 0) return BATTLE_ERROR_NOT_ENOUGH_ATTACKERS_OR_DEFENDERS;
 
     a = (Slot *)malloc ( anum * sizeof (Slot) );    // Выделить память под слоты.
     memset ( a, 0, anum * sizeof (Slot) );
@@ -969,19 +969,22 @@ void StartBattle (char *text, int battle_id)
     res = DoBattle ( a, anum, d, dnum );
 
     // Записать результаты / Write down the results
-    if ( res > 0 )
+    if ( res >= 0 )
     {
         sprintf ( filename, "battleresult/battle_%i.txt", battle_id );
         FileSave ( filename, ResultBuffer, (unsigned long)strlen (ResultBuffer) );
     }
+
+    return res;
 }
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
+    int res = 0;
     char filename[1024];
     char *battle_data;
 
-    if ( argc < 2 ) return;
+    if ( argc < 2 ) return BATTLE_ERROR_NOT_ENOUGH_CMD_LINE_PARAMS;
 
     ParseQueryString ( argv[1] );
     //PrintParams ();
@@ -997,6 +1000,8 @@ void main(int argc, char **argv)
 
         // Разобрать исходные данные в двоичный формат и начать битву / Parse the raw data into binary format and start the battle
         MySrand ((unsigned long)time(NULL));
-        StartBattle ( battle_data, battle_id );
+        res = StartBattle ( battle_data, battle_id );
     }
+
+    return res;
 }

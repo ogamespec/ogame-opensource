@@ -44,3 +44,11 @@ typedef struct _SimParam {
     char    string[64];
     unsigned long value;
 } SimParam;
+
+// Ошибки боевого движка.
+// Раньше им мало внимания уделялось, нужно накрутить проверок различных, таки это ключевая и важнейшая часть игры.
+enum {
+    BATTLE_ERROR_INSUFFICIENT_RESOURCES = -1,               // Недостаточно памяти
+    BATTLE_ERROR_NOT_ENOUGH_CMD_LINE_PARAMS = -1000,        // Не хватает параметров командной строки
+    BATTLE_ERROR_NOT_ENOUGH_ATTACKERS_OR_DEFENDERS = -2000,     // Нет атакующих или защитников
+};
