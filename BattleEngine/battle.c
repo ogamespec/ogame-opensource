@@ -919,8 +919,15 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
     if ( anum == 0 || dnum == 0) return BATTLE_ERROR_NOT_ENOUGH_ATTACKERS_OR_DEFENDERS;
 
     a = (Slot *)malloc ( anum * sizeof (Slot) );    // Выделить память под слоты.
+    if (!a) {
+        return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
+    }
     memset ( a, 0, anum * sizeof (Slot) );
     d = (Slot *)malloc ( dnum * sizeof (Slot) );
+    if (!d) {
+        free (a);
+        return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
+    }
     memset ( d, 0, dnum * sizeof (Slot) );
 
     // Атакующие.
@@ -1035,6 +1042,9 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
     
     // **** НАЧАТЬ БИТВУ ****
     res = DoBattle ( a, anum, d, dnum, battle_seed );
+
+    free (a);
+    free (d);
 
     // Записать результаты / Write down the results
     if ( res >= 0 )
