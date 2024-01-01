@@ -27,10 +27,8 @@ require_once "unit.php";
 $obj = { id, id, id, ... }     -- массив юнитов, для того чтобы номера объектов умещались в один байт (для экономии памяти), нумерация флота начинается от 02 (вместо 202), а обороны от 201 (вместо 401).  (n-200)
 $slot = { n, n, n, ... }       -- номер слота юнита (для САБ), это нужно для генерации боевого доклада, чтобы рассортировать потом юниты по слотам.
 $explo = { 1, 0, 1, ... }      -- массив взорванных юнитов, после каждого раунда взорванные юниты удаляются и формируется новый массив $obj. TODO: данные находятся в упакованном формате 8 юнитов на 1 байт
-$shld = { }                    -- щиты юнитов, 100 ... 0. перед началом каждого раунда этот массив заполняется значениями 100 (щиты заряжаются)
-
-Для брони используются массивы $hullmax[n][id] (исходное количество брони для юнита типа id из слота n) и запакованные 4-байтовые массивы-строки $hull[n] (текущее значение брони, учитывая повреждения для юнита n),
-так как броня имеет значения куда больше 1 байта.
+$shld = { }                    -- щиты юнитов. перед началом каждого раунда этот массив заполняется максимальными значениями (щиты заряжаются). запакованный 4-байтовый массив-строка
+$hull = { }                    -- текущее значение брони, учитывая повреждения для юнита n. запакованный 4-байтовый массив-строка
 
 Отладка: просто откройте http://localhost/game/battle_engine.php с установленной переменной $battle_debug = 1.
 
@@ -59,12 +57,12 @@ function set_packed_word ($arr, $idx, $val)
 }
 
 // Выделить память для юнитов и установить начальные значения.
-function InitBattle ($slot, $num, $objs, $attacker, &$obj_arr, &$slot_arr, &$hull_arr )
+function InitBattle ($slot, $num, $objs, $attacker, &$obj_arr, &$slot_arr, &$hull_arr, &$shld_arr )
 {
     global $UnitParam;
 
     $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $dmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );    
+    $dmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
 
     $ucnt = 0;
     $slot_id = 0;
@@ -81,6 +79,7 @@ function InitBattle ($slot, $num, $objs, $attacker, &$obj_arr, &$slot_arr, &$hul
                 $obj_arr{$ucnt} = chr($obj_type);
                 $slot_arr{$ucnt} = chr($slot_id);
                 set_packed_word ($hull_arr, $ucnt, $hull);
+                set_packed_word ($shld_arr, $ucnt, 0);
 
                 $ucnt++;
             }
@@ -98,6 +97,7 @@ function InitBattle ($slot, $num, $objs, $attacker, &$obj_arr, &$slot_arr, &$hul
                     $obj_arr{$ucnt} = chr($obj_type);
                     $slot_arr{$ucnt} = chr($slot_id);
                     set_packed_word ($hull_arr, $ucnt, $hull);
+                    set_packed_word ($shld_arr, $ucnt, 0);
 
                     $ucnt++;
                 }
@@ -165,9 +165,11 @@ function RapidFire ($atyp, $dtyp)
     return $rapidfire;
 }
 
-function DoBattle ($res)
+function DoBattle (&$res)
 {
     global $battle_debug;
+
+    // Набор рабочих строк-массивов для вычислений. Массивы щитов и брони используют запаковку длинных чисел
 
     $obj_att = "";
     $slot_att = "";
@@ -180,6 +182,16 @@ function DoBattle ($res)
     $explo_def = "";
     $shld_def = "";
     $hull_def = "";
+
+    // Статистика по выстрелам
+
+    $shoots = array();
+    $spower = array();
+    $absorbed = array();
+
+    // Поле обломков
+
+    $dm = $dk = 0;
 
     $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $dmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
@@ -209,22 +221,123 @@ function DoBattle ($res)
 
     // Подготовить массив боевых единиц
 
-    InitBattle ($res['before']['attackers'], $anum, $aobjs, 1, $obj_att, $slot_att, $hull_att);
-    InitBattle ($res['before']['defenders'], $dnum, $dobjs, 0, $obj_def, $slot_def, $hull_def);
+    InitBattle ($res['before']['attackers'], $anum, $aobjs, 1, $obj_att, $slot_att, $hull_att, $shld_att);
+    InitBattle ($res['before']['defenders'], $dnum, $dobjs, 0, $obj_def, $slot_def, $hull_def, $shld_def);
 
-    if (false) {
-        echo "<div style='word-wrap: break-word;'>";
-        echo "obj_att:<br/>";
-        echo hex_array_to_text($obj_att) . "<br/>";
-        echo "slot_att:<br/>";
-        echo hex_array_to_text($slot_att) . "<br/>";
+    // Раунды
 
-        echo "obj_def:<br/>";
-        echo hex_array_to_text($obj_def) . "<br/>";
-        echo "slot_def:<br/>";
-        echo hex_array_to_text($slot_def) . "<br/>";
-        echo "</div>";
+    $res['rounds'] = array();
+
+    for ($round=0; $round<6; $round++) {
+
+        if ($aobjs == 0 || $dobjs == 0) break;
+
+        // Сбросить статистику.
+        $shoots[0] = $shoots[1] = 0;
+        $spower[0] = $spower[1] = 0;
+        $absorbed[0] = $absorbed[1] = 0;
+
+        // Зарядить щиты.
+
+        // Произвести выстрелы.
+
+        // Быстрая ничья?
+
+        $fastdraw = false;
+
+        // Вычистить взорванные корабли и оборону.
+
+        // Сохранить результаты раунда
+
+        $res['rounds'][$round] = array();
+        $r = &$res['rounds'][$round];
+
+        $r['ashoot'] = $shoots[0];
+        $r['apower'] = $spower[0];
+        $r['dabsorb'] = $absorbed[1];
+        $r['dshoot'] = $shoots[1];
+        $r['dpower'] = $spower[1];
+        $r['aabsorb'] = $absorbed[0];
+
+        $r['attackers'] = array();
+
+        for ($slot=0; $slot<$anum; $slot++) {
+
+            $r['attackers'][$slot]['name'] = $res['before']['attackers'][$slot]['name'];
+            $r['attackers'][$slot]['id'] = $res['before']['attackers'][$slot]['id'];
+            $r['attackers'][$slot]['g'] = $res['before']['attackers'][$slot]['g'];
+            $r['attackers'][$slot]['s'] = $res['before']['attackers'][$slot]['s'];
+            $r['attackers'][$slot]['p'] = $res['before']['attackers'][$slot]['p'];
+
+            foreach ( $amap as $n=>$gid ) {
+                $r['attackers'][$slot][$gid] = 0;
+            }
+
+            for ($i=0; $i<$aobjs; $i++) {
+                $obj_id = ord($obj_att{$i}) + 200;
+                $r['attackers'][$slot][$obj_id]++;
+            }
+        }
+
+        $r['defenders'] = array();
+
+        for ($slot=0; $slot<$dnum; $slot++) {
+
+            $r['defenders'][$slot]['name'] = $res['before']['defenders'][$slot]['name'];
+            $r['defenders'][$slot]['id'] = $res['before']['defenders'][$slot]['id'];
+            $r['defenders'][$slot]['g'] = $res['before']['defenders'][$slot]['g'];
+            $r['defenders'][$slot]['s'] = $res['before']['defenders'][$slot]['s'];
+            $r['defenders'][$slot]['p'] = $res['before']['defenders'][$slot]['p'];
+
+            foreach ( $amap as $n=>$gid ) {
+                $r['defenders'][$slot][$gid] = 0;
+            }
+            foreach ( $dmap as $n=>$gid ) {
+                $r['defenders'][$slot][$gid] = 0;
+            }
+
+            for ($i=0; $i<$dobjs; $i++) {
+                $obj_id = ord($obj_def{$i}) + 200;
+                $r['defenders'][$slot][$obj_id]++;
+            }
+        }
+
+        if ($fastdraw) break;
     }
+
+    // Результаты боя.
+
+    if ($aobjs > 0 && $dobjs == 0){ // Атакующий выиграл
+        $res['result'] = "awon";
+    }
+    else if ($dobjs > 0 && $aobjs == 0) { // Атакующий проиграл
+        $res['result'] = "dwon";
+    }
+    else    // Ничья
+    {
+        $res['result'] = "draw";
+    }
+
+    $res['dm'] = $dm;
+    $res['dk'] = $dk;
+
+    // Сохранить статистику выделений памяти
+
+    $res['peak_allocated'] = memory_get_usage();
+
+    // Почистить память
+
+    unset($obj_att);
+    unset($slot_att);
+    unset($explo_att);
+    unset($shld_att);
+    unset($hull_att);
+
+    unset($obj_def);
+    unset($slot_def);
+    unset($explo_def);
+    unset($shld_def);
+    unset($hull_def);
 }
 
 function extract_text ($str, $s, $e)
@@ -331,21 +444,16 @@ function BattleEngine ($source)
     // Выходной результат
     $res = array ();
 
-    // Исходные слоты атакующих и защитников
-    $res['before'] = array();
-    $res['before']['attackers'] = array();
-    $res['before']['defenders'] = array();
-
-    // DEBUG
-    //$a = "xxx";
-    //$d = "xxx";
-    //$a{0} = chr(12);
-    //print_r( $a );
-
     // Инициализировать ДСЧ
     list($usec,$sec)=explode(" ",microtime());
     $battle_seed = (int)($sec * $usec) & 0xffffffff;
     mt_srand ($battle_seed);
+    $res['battle_seed'] = $battle_seed;
+
+    // Исходные слоты атакующих и защитников
+    $res['before'] = array();
+    $res['before']['attackers'] = array();
+    $res['before']['defenders'] = array();
 
     // Разобрать входные данные
     ParseInput ($source, $rf, $fid, $did, $res['before']['attackers'], $res['before']['defenders']);
@@ -363,6 +471,7 @@ function BattleDebug()
 {
 
 $starttime = microtime(true);
+$allocated_before = memory_get_usage();
 
 ?>
 
@@ -412,7 +521,13 @@ print_r ( $res );
 echo "</pre>";
 
 $endtime = microtime(true);
-printf("Page loaded in %f seconds", $endtime - $starttime );
+$allocated_after = memory_get_usage();
+
+printf("Page loaded in %f seconds. Allocated before %d bytes, allocated after %d bytes, unallocated %d bytes", 
+    $endtime - $starttime, 
+    $allocated_before, 
+    $allocated_after,
+    $allocated_after - $allocated_before );
 
 ?>
 
