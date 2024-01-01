@@ -1083,6 +1083,8 @@ int main(int argc, char **argv)
 
         // Разобрать исходные данные в двоичный формат и начать битву / Parse the raw data into binary format and start the battle
         res = StartBattle ( battle_data, battle_id, battle_seed);
+
+        free(battle_data);
     }
 
     return res;
