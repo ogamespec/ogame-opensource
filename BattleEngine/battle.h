@@ -51,4 +51,6 @@ enum {
     BATTLE_ERROR_INSUFFICIENT_RESOURCES = -1,               // Недостаточно памяти
     BATTLE_ERROR_NOT_ENOUGH_CMD_LINE_PARAMS = -1000,        // Не хватает параметров командной строки
     BATTLE_ERROR_NOT_ENOUGH_ATTACKERS_OR_DEFENDERS = -2000,     // Нет атакующих или защитников
+    BATTLE_ERROR_INVALID_BATTLE_ID = -3000,                 // Неверный ID битвы
+    BATTLE_ERROR_DATA_LOAD = -4000,                         // Ошибка загрузки входных данных
 };

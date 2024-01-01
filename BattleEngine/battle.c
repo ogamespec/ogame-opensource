@@ -993,10 +993,15 @@ int main(int argc, char **argv)
     {
         int battle_id = GetSimParamI("battle_id", 0);
         
-        if ( battle_id == 0 ) return;
+        if (battle_id <= 0) {
+            return BATTLE_ERROR_INVALID_BATTLE_ID;
+        }
 
         sprintf ( filename, "battledata/battle_%i.txt", battle_id );
         battle_data = FileLoad ( filename, NULL, "rt" );
+        if (!battle_data) {
+            return BATTLE_ERROR_DATA_LOAD;
+        }
 
         // Разобрать исходные данные в двоичный формат и начать битву / Parse the raw data into binary format and start the battle
         MySrand ((unsigned long)time(NULL));
