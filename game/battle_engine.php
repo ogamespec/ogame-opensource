@@ -110,6 +110,7 @@ function InitBattle ($slot, $num, $objs, $attacker, &$explo_arr, &$obj_arr, &$sl
     }
 }
 
+// Почистить взорванные корабли и оборону. Возвращает количество взорванных единиц.
 function WipeExploded ($count, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &$shld_arr)
 {
     $exploded = 0;
@@ -159,6 +160,27 @@ function WipeExploded ($count, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &
     // TODO: Использовать remap таблицу для взорванных юнитов? Может так будет быстрее..
 
     return $exploded;
+}
+
+// Зарядить щиты у невзорванных юнитов
+function ChargeShields ($slot, $count, &$explo_arr, &$obj_arr, &$slot_arr, &$shld_arr)
+{
+    global $UnitParam;
+
+    for ($i=0; $i<$count; $i++) {
+
+        if (ord($explo_arr{$i}) != 0 ) {
+
+            set_packed_word ($shld_arr, $i, 0);
+        }
+        else {
+
+            $slot_id = ord($slot_arr{$i});
+            $gid = ord($obj_arr{$i}) + 200;
+            $shield_max = $UnitParam[$gid][1] * (10 + $slot[$slot_id]['shld']) / 10;
+            set_packed_word ($shld_arr, $i, $shield_max);
+        }
+    }
 }
 
 // Проверить возможность повторного выстрела. Для удобства используются оригинальные ID юнитов
@@ -291,6 +313,9 @@ function DoBattle (&$res)
         $absorbed[0] = $absorbed[1] = 0;
 
         // Зарядить щиты.
+
+        ChargeShields ($res['before']['attackers'], $aobjs, $explo_att, $obj_att, $slot_att, $shld_att);
+        ChargeShields ($res['before']['defenders'], $dobjs, $explo_def, $obj_def, $slot_def, $shld_def);
 
         // Произвести выстрелы.
 
