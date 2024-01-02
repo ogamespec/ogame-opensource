@@ -40,20 +40,20 @@ function hex_array_to_text ($arr)
     return implode(unpack("H*", $arr));
 }
 
-function get_packed_word ($arr, $idx)
+function get_packed_word (&$arr, $idx)
 {
-    return (ord($arr{$idx}) << 24) | 
-        (ord($arr{$idx+1}) << 16) | 
-        (ord($arr{$idx+2}) << 8) |
-        (ord($arr{$idx+3}) << 0);
+    return (ord($arr{4*$idx}) << 24) | 
+        (ord($arr{4*$idx+1}) << 16) | 
+        (ord($arr{4*$idx+2}) << 8) |
+        (ord($arr{4*$idx+3}) << 0);
 }
 
-function set_packed_word ($arr, $idx, $val)
+function set_packed_word (&$arr, $idx, $val)
 {
-    $arr{$idx} = chr(($val >> 24) & 0xff);
-    $arr{$idx+1} = chr(($val >> 16) & 0xff);
-    $arr{$idx+2} = chr(($val >> 8) & 0xff);
-    $arr{$idx+3} = chr(($val >> 0) & 0xff);
+    $arr{4*$idx} = chr(($val >> 24) & 0xff);
+    $arr{4*$idx+1} = chr(($val >> 16) & 0xff);
+    $arr{4*$idx+2} = chr(($val >> 8) & 0xff);
+    $arr{4*$idx+3} = chr(($val >> 0) & 0xff);
 }
 
 // Выделить память для юнитов и установить начальные значения.
