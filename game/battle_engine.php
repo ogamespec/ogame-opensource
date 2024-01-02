@@ -57,7 +57,7 @@ function set_packed_word ($arr, $idx, $val)
 }
 
 // Выделить память для юнитов и установить начальные значения.
-function InitBattle ($slot, $num, $objs, $attacker, &$obj_arr, &$slot_arr, &$hull_arr, &$shld_arr )
+function InitBattle ($slot, $num, $objs, $attacker, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &$shld_arr )
 {
     global $UnitParam;
 
@@ -76,6 +76,7 @@ function InitBattle ($slot, $num, $objs, $attacker, &$obj_arr, &$slot_arr, &$hul
                 $hull = $UnitParam[$gid][0] * 0.1 * (10+$slot[$i]['armr']) / 10;
                 $obj_type = $gid - 200;
 
+                $explo_arr{$ucnt} = chr(0);
                 $obj_arr{$ucnt} = chr($obj_type);
                 $slot_arr{$ucnt} = chr($slot_id);
                 set_packed_word ($hull_arr, $ucnt, $hull);
@@ -94,6 +95,7 @@ function InitBattle ($slot, $num, $objs, $attacker, &$obj_arr, &$slot_arr, &$hul
                     $hull = $UnitParam[$gid][0] * 0.1 * (10+$slot[$i]['armr']) / 10;
                     $obj_type = $gid - 200;
 
+                    $explo_arr{$ucnt} = chr(0);
                     $obj_arr{$ucnt} = chr($obj_type);
                     $slot_arr{$ucnt} = chr($slot_id);
                     set_packed_word ($hull_arr, $ucnt, $hull);
@@ -106,6 +108,57 @@ function InitBattle ($slot, $num, $objs, $attacker, &$obj_arr, &$slot_arr, &$hul
 
         $slot_id++;
     }
+}
+
+function WipeExploded ($count, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &$shld_arr)
+{
+    $exploded = 0;
+    $dst = 0;
+
+    // Новые массивы
+    $explo_new = "";
+    $obj_new = "";
+    $slot_new = "";
+    $hull_new = "";
+    $shld_new = "";
+
+    for ($i=0; $i<$count; $i++) {
+
+        if ( ord($explo_arr{$i}) == 0 ) {
+
+            // Если не взорван перенести в новый массив
+            $explo_new{$dst} = chr(0);
+            $obj_new{$dst} = $obj_arr{$i};
+            $slot_new{$dst} = $slot_arr{$i};
+            set_packed_word ($hull_new, $dst, get_packed_word($hull_arr, $i) );
+            set_packed_word ($shld_new, $dst, get_packed_word($shld_arr, $i) );
+
+            $dst++;
+        }
+        else {
+
+            // Иначе пропустить (почистить)
+            $exploded++;
+        }
+    }
+
+    // Освободить старые массивы
+    unset ($explo_arr);
+    unset ($obj_arr);
+    unset ($slot_arr);
+    unset ($hull_arr);
+    unset ($shld_arr);
+
+    // Обновить исходные массивы
+    $explo_arr = $explo_new;
+    $obj_arr = $obj_new;
+    $slot_arr = $slot_new;
+    $hull_arr = $hull_new;
+    $shld_arr = $shld_new;
+
+    // TODO: Использовать remap таблицу для взорванных юнитов? Может так будет быстрее..
+
+    return $exploded;
 }
 
 // Проверить возможность повторного выстрела. Для удобства используются оригинальные ID юнитов
@@ -219,10 +272,10 @@ function DoBattle (&$res)
         }
     }
 
-    // Подготовить массив боевых единиц
+    // Подготовить массивы боевых единиц
 
-    InitBattle ($res['before']['attackers'], $anum, $aobjs, 1, $obj_att, $slot_att, $hull_att, $shld_att);
-    InitBattle ($res['before']['defenders'], $dnum, $dobjs, 0, $obj_def, $slot_def, $hull_def, $shld_def);
+    InitBattle ($res['before']['attackers'], $anum, $aobjs, 1, $explo_att, $obj_att, $slot_att, $hull_att, $shld_att);
+    InitBattle ($res['before']['defenders'], $dnum, $dobjs, 0, $explo_def, $obj_def, $slot_def, $hull_def, $shld_def);
 
     // Раунды
 
@@ -246,6 +299,9 @@ function DoBattle (&$res)
         $fastdraw = false;
 
         // Вычистить взорванные корабли и оборону.
+
+        $aobjs -= WipeExploded ($aobjs, $explo_att, $obj_att, $slot_att, $hull_att, $shld_att);
+        $dobjs -= WipeExploded ($dobjs, $explo_def, $obj_def, $slot_def, $hull_def, $shld_def);
 
         // Сохранить результаты раунда
 
