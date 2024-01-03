@@ -266,7 +266,7 @@ function RapidFire ($atyp, $dtyp)
     return $rapidfire;
 }
 
-function DoBattle (&$res)
+function DoBattle (&$res, $Rapidfire, $fid, $did)
 {
     global $battle_debug;
 
@@ -344,6 +344,54 @@ function DoBattle (&$res)
         ChargeShields ($res['before']['defenders'], $dobjs, $explo_def, $obj_def, $slot_def, $shld_def);
 
         // Произвести выстрелы.
+
+        for ($slot=0; $slot<$anum; $slot++) {     // Атакующие
+
+            for ($i=0; $i<$aobjs; $i++) {
+                $rapidfire = 1;
+
+                if (ord($slot_att{$i}) == $slot) {
+                    // Выстрел.
+                    while ($rapidfire) {
+                        $idx = mt_rand (0, $dobjs - 1);
+                        //apower = UnitShoot (unit, a, &dunits[idx], d, &absorbed[1], &dm, &dk );
+                        $apower = 0;
+                        $shoots[0]++;
+                        $spower[0] += $apower;
+
+                        $atyp = ord($obj_att{$i}) + 200;
+                        $dtyp = ord($obj_def{$idx}) + 200;
+                        $rapidfire = RapidFire ($atyp, $dtyp);
+
+                        if ($Rapidfire == 0) $rapidfire = 0;
+                    }
+                }
+            }
+        }
+        
+        for ($slot=0; $slot<$dnum; $slot++) {     // Обороняющиеся
+
+            for ($i=0; $i<$dobjs; $i++) {
+                $rapidfire = 1;
+
+                if (ord($slot_def{$i}) == $slot) {
+                    // Выстрел.
+                    while ($rapidfire) {
+                        $idx = mt_rand (0, $aobjs - 1);
+                        // apower = UnitShoot (unit, d, &aunits[idx], a, &absorbed[0], &dm, &dk );
+                        $apower = 0;
+                        $shoots[1]++;
+                        $spower[1] += $apower;
+
+                        $atyp = ord($obj_def{$i}) + 200;
+                        $dtyp = ord($obj_att{$idx}) + 200;
+                        $rapidfire = RapidFire ($atyp, $dtyp);
+
+                        if ($Rapidfire == 0) $rapidfire = 0;
+                    }
+                }
+            }
+        }
 
         // Быстрая ничья?
 
@@ -571,7 +619,7 @@ function BattleEngine ($source)
     }
 
     // **** НАЧАТЬ БИТВУ ****
-    DoBattle ($res);
+    DoBattle ($res, $rf, $fid, $did);
 
     return $res;
 }
