@@ -8,6 +8,7 @@ if ($battle_debug) {
 }
 
 require_once "unit.php";
+require_once "prod.php";
 
 // Запасной боевой движок на PHP.
 // Если сервер не поддерживает выполнение функции system(), то используется реализация боевого движка на PHP
@@ -108,6 +109,83 @@ function InitBattle ($slot, $num, $objs, $attacker, &$explo_arr, &$obj_arr, &$sl
 
         $slot_id++;
     }
+}
+
+// Выстрел a => b. Возвращает урон.
+// absorbed - накопитель поглощённого щитами урона (для того, кого атакуют, то есть для юнита "b").
+function UnitShoot ($a, $b, &$aunits, &$aslot, &$ahull, &$ashld, $attackers, &$dunits, &$dslot, &$dhull, &$dshld, &$dexplo, $defenders, &$absorbed, &$dm, &$dk, $fid, $did )
+{
+    global $UnitParam;
+
+    $a_slot_id = ord($aslot{$a});
+    $a_gid = ord($aunits{$a}) + 200;
+
+    $b_slot_id = ord($dslot{$b});
+    $b_gid = ord($dunits{$b}) + 200;
+
+    $apower = $UnitParam[$a_gid][2] * (10 + $attackers[$a_slot_id]['weap']) / 10;
+
+    if (ord($dexplo{$b}) !=0 ) return $apower; // Уже взорван.
+
+    if (get_packed_word($dshld, $b) == 0) {  // Щитов нет.
+
+        $b_hull = get_packed_word($dhull, $b);
+        if ($apower >= $b_hull) $b_hull = 0;
+        else $b_hull -= $apower;
+        set_packed_word ($dhull, $b, $b_hull);
+    }
+    else { // Отнимаем от щитов, и если хватает урона, то и от брони.
+
+        $b_shieldmax = $UnitParam[$b_gid][1] * (10 + $defenders[$b_slot_id]['shld']) / 10;
+        $b_shield = get_packed_word ($dshld, $b);
+
+        $prc = $b_shieldmax * 0.01;
+        $depleted = floor ($apower / $prc);
+        if ($b_shield < ($depleted * $prc)) {
+            $absorbed += $b_shield;
+            $adelta = $apower - $b_shield;
+            $b_hull = get_packed_word($dhull, $b);
+            if ($adelta >= $b_hull) {
+                $b_hull = 0;
+            }
+            else {
+                $b_hull -= $adelta;
+            }
+            set_packed_word ($dhull, $b, $b_hull);
+            set_packed_word ($dshld, $b, 0);
+        }
+        else {
+            set_packed_word ($dshld, $b, $b_shield - ($depleted * $prc));
+            $absorbed += $apower;
+        }
+    }
+
+    $b_hullmax = $UnitParam[$b_gid][0] * 0.1 * (10 + $defenders[$b_slot_id]['armr']) / 10;
+    $b_hull = get_packed_word($dhull, $b);
+    $b_shield = get_packed_word ($dshld, $b);
+
+    if ($b_hull <= $b_hullmax * 0.7 && $b_shield == 0) {    // Взорвать и отвалить лома.
+
+        if (mt_rand (0, 99) >= (($b_hull * 100) / $b_hullmax) || $b_hull == 0) {
+
+            $price = ShipyardPrice ($b_gid);
+
+            if ($b_gid >= 401) {
+
+                $dm += intval (ceil($price['m'] * ((float)$did / 100.0)));
+                $dk += intval (ceil($price['k'] * ((float)$did / 100.0)));
+            }
+            else {
+
+                $dm += intval (ceil($price['m'] * ((float)$fid / 100.0)));
+                $dk += intval (ceil($price['k'] * ((float)$fid / 100.0)));
+            }
+
+            $dexplo{$b} = chr(1);
+        }
+    }
+
+    return $apower;
 }
 
 // Почистить взорванные корабли и оборону. Возвращает количество взорванных единиц.
@@ -354,8 +432,10 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
                     // Выстрел.
                     while ($rapidfire) {
                         $idx = mt_rand (0, $dobjs - 1);
-                        //apower = UnitShoot (unit, a, &dunits[idx], d, &absorbed[1], &dm, &dk );
-                        $apower = 0;
+                        $apower = UnitShoot ($i, $idx, 
+                            $obj_att, $slot_att, $hull_att, $shld_att, $res['before']['attackers'],
+                            $obj_def, $slot_def, $hull_def, $shld_def, $explo_def, $res['before']['defenders'],
+                            $absorbed[1], $dm, $dk, $fid, $did );
                         $shoots[0]++;
                         $spower[0] += $apower;
 
@@ -368,7 +448,7 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
                 }
             }
         }
-        
+
         for ($slot=0; $slot<$dnum; $slot++) {     // Обороняющиеся
 
             for ($i=0; $i<$dobjs; $i++) {
@@ -378,8 +458,10 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
                     // Выстрел.
                     while ($rapidfire) {
                         $idx = mt_rand (0, $aobjs - 1);
-                        // apower = UnitShoot (unit, d, &aunits[idx], a, &absorbed[0], &dm, &dk );
-                        $apower = 0;
+                        $apower = UnitShoot ($i, $idx,
+                            $obj_def, $slot_def, $hull_def, $shld_def, $res['before']['defenders'],
+                            $obj_att, $slot_att, $hull_att, $shld_att, $explo_att, $res['before']['attackers'],
+                            $absorbed[0], $dm, $dk, $fid, $did );
                         $shoots[1]++;
                         $spower[1] += $apower;
 
