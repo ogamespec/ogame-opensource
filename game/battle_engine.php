@@ -183,6 +183,32 @@ function ChargeShields ($slot, $count, &$explo_arr, &$obj_arr, &$slot_arr, &$shl
     }
 }
 
+// Проверить бой на быструю ничью. Если ни у одного юнита броня не повреждена, то бой заканчивается ничьей досрочно.
+function CheckFastDraw (&$aunits, &$aslot, &$ahull, $aobjs, $attackers, &$dunits, &$dslot, &$dhull, $dobjs, $defenders)
+{
+    global $UnitParam;
+
+    for ($i=0; $i<$aobjs; $i++) {
+
+        $slot_id = ord($aslot{$i});
+        $gid = ord($aunits{$i}) + 200;
+        $hull_max = $UnitParam[$gid][0] * 0.1 * (10+$attackers[$slot_id]['armr']) / 10;
+
+        if (get_packed_word($ahull, $i) != $hull_max) return false;
+    }
+
+    for ($i=0; $i<$dobjs; $i++) {
+
+        $slot_id = ord($dslot{$i});
+        $gid = ord($dunits{$i}) + 200;
+        $hull_max = $UnitParam[$gid][0] * 0.1 * (10+$defenders[$slot_id]['armr']) / 10;
+
+        if (get_packed_word($dhull, $i) != $hull_max) return false;
+    }
+
+    return true;
+}
+
 // Проверить возможность повторного выстрела. Для удобства используются оригинальные ID юнитов
 function RapidFire ($atyp, $dtyp)
 {
@@ -321,7 +347,9 @@ function DoBattle (&$res)
 
         // Быстрая ничья?
 
-        $fastdraw = false;
+        $fastdraw = CheckFastDraw (
+            $obj_att, $slot_att, $hull_att, $aobjs, $res['before']['attackers'],
+            $obj_def, $slot_def, $hull_def, $dobjs, $res['before']['defenders'] );
 
         // Вычистить взорванные корабли и оборону.
 
