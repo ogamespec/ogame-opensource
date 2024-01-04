@@ -1,6 +1,8 @@
 <?php
 
 $battle_debug = 0;
+$exploded_counter = 0;
+$already_exploded_counter = 0;
 
 if ($battle_debug) {
     error_reporting(E_ALL);
@@ -116,6 +118,8 @@ function InitBattle ($slot, $num, $objs, $attacker, &$explo_arr, &$obj_arr, &$sl
 function UnitShoot ($a, $b, &$aunits, &$aslot, &$ahull, &$ashld, $attackers, &$dunits, &$dslot, &$dhull, &$dshld, &$dexplo, $defenders, &$absorbed, &$dm, &$dk, $fid, $did )
 {
     global $UnitParam;
+    global $exploded_counter;
+    global $already_exploded_counter;
 
     $a_slot_id = ord($aslot{$a});
     $a_gid = ord($aunits{$a}) + 200;
@@ -125,7 +129,10 @@ function UnitShoot ($a, $b, &$aunits, &$aslot, &$ahull, &$ashld, $attackers, &$d
 
     $apower = $UnitParam[$a_gid][2] * (10 + $attackers[$a_slot_id]['weap']) / 10;
 
-    if (ord($dexplo{$b}) !=0 ) return $apower; // Уже взорван.
+    if (ord($dexplo{$b}) !=0 ) {
+        $already_exploded_counter++;
+        return $apower; // Уже взорван.
+    }
 
     if (get_packed_word($dshld, $b) == 0) {  // Щитов нет.
 
@@ -171,10 +178,11 @@ function UnitShoot ($a, $b, &$aunits, &$aslot, &$ahull, &$ashld, $attackers, &$d
             $price = ShipyardPrice ($b_gid);
 
             // Если взорвана оборона, то использовать DID (Defense-in-Debris), если флот, то использовать FID (Fleet-in-Debris)
-            $dm += intval (ceil($price['m'] * ((float)( ($b_gid >= 401 ? $did : $fid) / 100.0)));
-            $dk += intval (ceil($price['k'] * ((float)( ($b_gid >= 401 ? $did : $fid) / 100.0)));
+            $dm += intval (ceil($price['m'] * ((float)( ($b_gid >= 401 ? $did : $fid) / 100.0))));
+            $dk += intval (ceil($price['k'] * ((float)( ($b_gid >= 401 ? $did : $fid) / 100.0))));
 
             $dexplo{$b} = chr(1);
+            $exploded_counter++;
         }
     }
 
@@ -186,6 +194,8 @@ function WipeExploded ($count, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &
 {
     $exploded = 0;
     $dst = 0;
+
+    $ret = array();
 
     // Новые массивы
     $explo_new = "";
@@ -222,15 +232,16 @@ function WipeExploded ($count, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &
     unset ($shld_arr);
 
     // Обновить исходные массивы
-    $explo_arr = $explo_new;
-    $obj_arr = $obj_new;
-    $slot_arr = $slot_new;
-    $hull_arr = $hull_new;
-    $shld_arr = $shld_new;
+    $ret['explo_arr'] = $explo_new;
+    $ret['obj_arr'] = $obj_new;
+    $ret['slot_arr'] = $slot_new;
+    $ret['hull_arr'] = $hull_new;
+    $ret['shld_arr'] = $shld_new;
+    $ret['exploded'] = $exploded;
 
     // TODO: Использовать remap таблицу для взорванных юнитов? Может так будет быстрее..
 
-    return $exploded;
+    return $ret;
 }
 
 // Зарядить щиты у невзорванных юнитов
@@ -340,6 +351,8 @@ function RapidFire ($atyp, $dtyp)
 function DoBattle (&$res, $Rapidfire, $fid, $did)
 {
     global $battle_debug;
+    global $already_exploded_counter;
+    global $exploded_counter;
 
     // Набор рабочих строк-массивов для вычислений. Массивы щитов и брони используют запаковку длинных чисел
 
@@ -402,6 +415,8 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
 
     for ($round=0; $round<6; $round++) {
 
+        $already_exploded_counter = 0;
+
         if ($aobjs == 0 || $dobjs == 0) break;
 
         // Сбросить статистику.
@@ -413,6 +428,10 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
 
         ChargeShields ($res['before']['attackers'], $aobjs, $explo_att, $obj_att, $slot_att, $shld_att);
         ChargeShields ($res['before']['defenders'], $dobjs, $explo_def, $obj_def, $slot_def, $shld_def);
+
+        $prev_dm = $dm;
+        $prev_dk = $dk;
+        $prev_exploded = $exploded_counter;
 
         // Произвести выстрелы.
 
@@ -476,8 +495,21 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
 
         // Вычистить взорванные корабли и оборону.
 
-        $aobjs -= WipeExploded ($aobjs, $explo_att, $obj_att, $slot_att, $hull_att, $shld_att);
-        $dobjs -= WipeExploded ($dobjs, $explo_def, $obj_def, $slot_def, $hull_def, $shld_def);
+        $ret = WipeExploded ($aobjs, $explo_att, $obj_att, $slot_att, $hull_att, $shld_att);
+        $aobjs -= $ret['exploded'];
+        $explo_att = $ret['explo_arr'];
+        $obj_att = $ret['obj_arr'];
+        $slot_att = $ret['slot_arr'];
+        $hull_att = $ret['hull_arr'];
+        $shld_att = $ret['shld_arr'];
+
+        $ret = WipeExploded ($dobjs, $explo_def, $obj_def, $slot_def, $hull_def, $shld_def);
+        $dobjs -= $ret['exploded'];
+        $explo_def = $ret['explo_arr'];
+        $obj_def = $ret['obj_arr'];
+        $slot_def = $ret['slot_arr'];
+        $hull_def = $ret['hull_arr'];
+        $shld_def = $ret['shld_arr'];
 
         // Сохранить результаты раунда
 
@@ -490,6 +522,13 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
         $r['dshoot'] = $shoots[1];
         $r['dpower'] = $spower[1];
         $r['aabsorb'] = $absorbed[0];
+
+        if ($battle_debug) {
+            $r['dm'] = $dm - $prev_dm;
+            $r['dk'] = $dk - $prev_dk;
+            $r['exploded_this_round'] = $exploded_counter - $prev_exploded;
+            $r['already_exploded_counter'] = $already_exploded_counter;
+        }
 
         $r['attackers'] = array();
 
@@ -702,8 +741,10 @@ function BattleEngine ($source)
 function BattleDebug()
 {
 
-$starttime = microtime(true);
-$allocated_before = memory_get_usage();
+    global $exploded_counter;
+
+    $starttime = microtime(true);
+    $allocated_before = memory_get_usage();
 
 ?>
 
@@ -723,6 +764,9 @@ $allocated_before = memory_get_usage();
 
 // DEBUG
 
+// Захардкодьте ваши исходные боевые данные тут.
+
+// Памятный бой.
 $source = "Rapidfire = 1
 FID = 70
 DID = 0
@@ -742,24 +786,36 @@ Attacker10 = ({onelife} 252308 1 4 7 14 14 15 0 0 7000 0 0 0 0 0 0 0 0 1400 0 0 
 Attacker11 = ({OtellO} 252351 1 2 10 13 13 13 0 0 0 0 4342 0 0 0 0 0 0 0 0 0 )
 Attacker12 = ({onelife} 252311 1 4 7 14 14 15 2510 0 0 0 0 0 0 0 0 0 0 0 0 0 )
 Attacker13 = ({r2r} 252306 1 15 6 14 13 15 0 0 0 0 0 0 0 0 0 0 0 0 0 848 )
-Defender0 = ({ilk} 10336 1 14 5 14 15 15 956 927 12394 657 1268 1045 3 1587 23 14 0 898 1 2108 92 0 0 0 0 0 0 0 )
-";
+Defender0 = ({ilk} 10336 1 14 5 14 15 15 956 927 12394 657 1268 1045 3 1587 23 14 0 898 1 2108 92 0 0 0 0 0 0 0 )";
 
-$res = BattleEngine ( $source );
+// Простой бой (крысы против пачки ЛИ)
+/*
+$source = "Rapidfire = 1
+FID = 30
+DID = 0
+Attackers = 1
+Defenders = 1
+Attacker0 = ({Attacker0} 8134 4 268 9 0 0 0 0 0 0 0 333 0 0 0 0 0 0 0 0 0 )
+Defender0 = ({Defender0} 3270 3 119 4 0 0 0 0 0 500 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0";
+*/
 
-echo "<br/><br/>Result:<br/>";
-echo "<pre>";
-print_r ( $res );
-echo "</pre>";
+    $res = BattleEngine ( $source );
 
-$endtime = microtime(true);
-$allocated_after = memory_get_usage();
+    echo "<br/><br/>Result:<br/>";
+    echo "<pre>";
+    print_r ( $res );
+    echo "</pre>";
 
-printf("Page loaded in %f seconds. Allocated before %d bytes, allocated after %d bytes, unallocated %d bytes", 
-    $endtime - $starttime, 
-    $allocated_before, 
-    $allocated_after,
-    $allocated_after - $allocated_before );
+    $endtime = microtime(true);
+    $allocated_after = memory_get_usage();
+
+    printf("Page loaded in %f seconds. Allocated before %d bytes, allocated after %d bytes, unallocated %d bytes<br/>", 
+        $endtime - $starttime, 
+        $allocated_before, 
+        $allocated_after,
+        $allocated_after - $allocated_before );
+
+    printf ("Exploded units: %d<br/>", $exploded_counter);
 
 ?>
 
