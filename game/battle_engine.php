@@ -170,16 +170,9 @@ function UnitShoot ($a, $b, &$aunits, &$aslot, &$ahull, &$ashld, $attackers, &$d
 
             $price = ShipyardPrice ($b_gid);
 
-            if ($b_gid >= 401) {
-
-                $dm += intval (ceil($price['m'] * ((float)$did / 100.0)));
-                $dk += intval (ceil($price['k'] * ((float)$did / 100.0)));
-            }
-            else {
-
-                $dm += intval (ceil($price['m'] * ((float)$fid / 100.0)));
-                $dk += intval (ceil($price['k'] * ((float)$fid / 100.0)));
-            }
+            // Если взорвана оборона, то использовать DID (Defense-in-Debris), если флот, то использовать FID (Fleet-in-Debris)
+            $dm += intval (ceil($price['m'] * ((float)( ($b_gid >= 401 ? $did : $fid) / 100.0)));
+            $dk += intval (ceil($price['k'] * ((float)( ($b_gid >= 401 ? $did : $fid) / 100.0)));
 
             $dexplo{$b} = chr(1);
         }
