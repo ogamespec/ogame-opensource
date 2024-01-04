@@ -14,10 +14,10 @@ Currently only Russian, English and Deutch languages are supported. Other langua
 
 Features:
 - Original game mechanics!
-- Well tested fast battle engine with fair rapidfire, written on C language
+- Well tested fast battle engine with fair rapidfire, written on C language (there is also a backup in PHP)
 - Improved admin tool
 - Integrated Galaxy-tool
-- CRON-less event queue
+- CRON-less event queue (but there is the option of using CRON in addition if you want to)
 - Multi-language support
 - ACS
 - Planet temperature, planet images and sizes are same as in original game
