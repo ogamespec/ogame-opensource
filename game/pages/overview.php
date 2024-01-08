@@ -2,6 +2,8 @@
 
 // Обзор.
 
+// TODO: Внимательно проверить генерируемый HTML код на аутентичность с оригиналом (в особенности на обнаруженный недавно недочёт с надписью "free" #76)
+
 loca_add ( "menu", $GlobalUni['lang'] );
 loca_add ( "fleetorder", $GlobalUni['lang'] );
 loca_add ( "overview", $GlobalUni['lang'] );
@@ -151,6 +153,9 @@ if ( $cnt > 0 )
     echo "pp=\"".$left."\"; ps=\"$session\"; t_building();\n";
     echo "</script></center><br>\n";
 }
+else {
+    echo "<br><center>".loca("OVERVIEW_FREE")."</center><br>\n";
+}
 echo "</th>\n";
 
 // Список планет.
@@ -173,7 +178,9 @@ for ($i=0; $i<$num; $i++)
             $queue = dbarray ($qresult);
             echo loca("NAME_".$queue['tech_id']) ;
         }
-        else echo "";
+        else {
+            echo loca("OVERVIEW_FREE");
+        }
         dbfree ( $qresult );
     }
     echo "</center></th>\n";
