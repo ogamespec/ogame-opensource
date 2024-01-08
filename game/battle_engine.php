@@ -545,6 +545,9 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
             }
 
             for ($i=0; $i<$aobjs; $i++) {
+                if (ord($slot_att{$i}) != $slot) {
+                    continue;
+                }
                 $obj_id = ord($obj_att{$i}) + 200;
                 $r['attackers'][$slot][$obj_id]++;
             }
@@ -568,6 +571,9 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
             }
 
             for ($i=0; $i<$dobjs; $i++) {
+                if (ord($slot_def{$i}) != $slot) {
+                    continue;
+                }                
                 $obj_id = ord($obj_def{$i}) + 200;
                 $r['defenders'][$slot][$obj_id]++;
             }
@@ -796,7 +802,7 @@ DID = 0
 Attackers = 1
 Defenders = 1
 Attacker0 = ({Attacker0} 8134 4 268 9 0 0 0 0 0 0 0 333 0 0 0 0 0 0 0 0 0 )
-Defender0 = ({Defender0} 3270 3 119 4 0 0 0 0 0 500 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0";
+Defender0 = ({Defender0} 3270 3 119 4 0 0 0 0 0 500 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 )";
 */
 
     $res = BattleEngine ( $source );
