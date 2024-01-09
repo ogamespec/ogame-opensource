@@ -17,6 +17,7 @@ else $loca_lang = $_COOKIE['ogamelang'];
 if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
 loca_add ( "install", $loca_lang );
 loca_add ( "menu", $loca_lang );
+loca_add ( "mods", $loca_lang );
 
 $InstallError = "<font color=gold>".loca('INSTALL_TIP')."</font>";
 
@@ -181,6 +182,10 @@ $tab_botstrat = array (    // Стратегии бота
     'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'name'=>'TEXT', 'source'=>'TEXT',
 );
 
+$tab_mods = array (    // Модификации
+    'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'var'=>'TEXT', 'value'=>'TEXT'
+);
+
 $tabs = array (
     'uni' => &$tab_uni,
     'users' => &$tab_users,
@@ -207,6 +212,7 @@ $tabs = array (
     'botvars' => &$tab_botvars,
     'userlogs' => &$tab_userlogs,
     'botstrat' => &$tab_botstrat,
+    'mods' => &$tab_mods,
 );
 
 // -------------------------------------------------------------------------------------------------------------------------
@@ -357,7 +363,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query = "INSERT INTO ".$_POST["db_prefix"]."exptab VALUES".$opt;
     dbquery( $query);
 
-    // Установить счетчики автоинкремента.
+    // Установить счётчики автоинкремента.
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."planets AUTO_INCREMENT = 10000;" );
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."messages AUTO_INCREMENT = 10000;" );
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."notes AUTO_INCREMENT = 1;" );
@@ -449,8 +455,9 @@ td.c { background-color: #334445; }
 <table class='install_form'>
 
 <table class='install_form'>
-<tr><td valign=top>
+<tr>
 
+<td valign=top>
 <table>
 <tr><td>&nbsp;</td></tr>
 <tr><td><?php echo loca('INSTALL_STARTPAGE');?></td><td><input type=text value='http://ogame.ru' class='text' name='startpage'></td></tr>
@@ -470,10 +477,10 @@ td.c { background-color: #334445; }
 <tr><td><?php echo loca('INSTALL_MDB_PASS');?></td><td><input type=password class='text'  name='mdb_pass'></td></tr>
 <tr><td><?php echo loca('INSTALL_MDB_NAME');?></td><td><input type=text class='text' name='mdb_name'></td></tr>
 </table>
+</td>
 
-</td><td valign=top>
-
-<table class='install_form'>
+<td valign=top>
+<table>
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan=2 class='c'><?php echo loca('INSTALL_UNI');?></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_NUM');?><a title='<?php echo loca('INSTALL_TIP3');?>'><?php echo $info;?></a></td><td><input type=text value='1' class='text' name='uni_num'></td></tr>
@@ -502,8 +509,21 @@ td.c { background-color: #334445; }
 <tr><td><?php echo loca('INSTALL_ADMIN_PASS');?></td><td><input type=password class='text' name='admin_pass'></td></tr>
 <tr><td>&nbsp;</td></tr>
 </table>
+</td>
 
-</td></tr>
+<td valign=top>
+<table>
+<tr><td>&nbsp;</td></tr>
+<tr><td colspan=2 class='c'><?php echo loca('MODS');?></td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td><?php echo loca('MODS_CARNAGE');?></td><td><input type=checkbox class='text' name='mod_carnage'></td></tr>
+<tr><td><?php echo loca('MODS_CARNAGE_FLEET_SIZE');?></td><td><input type=text value='2' class='text' name='mod_carnage_fleet_size'></td></tr>
+<tr><td><?php echo loca('MODS_ENDGAME');?></td><td><input type=checkbox class='text' name='mod_endgame'></td></tr>
+<tr><td><?php echo loca('MODS_ENDGAME_DAYS');?></td><td><input type=text value='30' class='text' name='mod_endgame_days'></td></tr>
+</table>
+</td>
+
+</tr>
 
 <tr><td colspan=2><center><input type=submit value='<?php echo loca('INSTALL_INSTALL');?>' class='button'></center></td></tr>
 
