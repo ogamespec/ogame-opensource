@@ -2,7 +2,7 @@
 
 This section contains information on modifications.
 
-Although the main game engine is based on the ideal version 0.84, nobody forbids to launch universes with peculiarities for the sake of fan.
+Although the main game engine is based on the ideal version 0.84, nobody forbids to launch universes with peculiarities just for fun.
 
 So far here is just a collection of ideas.
 
