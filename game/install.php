@@ -382,6 +382,16 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."iplogs AUTO_INCREMENT = 1;" );
     dbquery ( "INSERT INTO ".$_POST["db_prefix"]."botstrat VALUES ( 1, 'backup', '')" );
 
+    // Модификации
+    $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_carnage', value = '".($_POST["mod_carnage"]==="on"?1:0)."'; ";
+    dbquery ($query);
+    $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_carnage_fleet_size', value = '".$_POST["mod_carnage_fleet_size"]."'; ";
+    dbquery ($query);
+    $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_endgame', value = '".($_POST["mod_endgame"]==="on"?1:0)."'; ";
+    dbquery ($query);
+    $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_endgame_days', value = '".$_POST["mod_endgame_days"]."'; ";
+    dbquery ($query);
+
     // Записать вселенную в Мастер-базу.
     $mdb_enable = ($_POST["mdb_enable"]==="on"?1:0);
     if ($mdb_enable)
