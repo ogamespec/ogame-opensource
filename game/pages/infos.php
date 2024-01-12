@@ -3,6 +3,9 @@
 // Информация на постройки, флот, оборону и исследования. 
 // Некоторые страницы (в частности постройки) содержат дополнительные сведения или элементы управления.
 
+$speed = $GlobalUni['speed'];
+$drepair = $GlobalUni['defrepair'];
+
 loca_add ( "menu", $GlobalUni['lang'] );
 loca_add ( "techlong", $GlobalUni['lang'] );
 loca_add ( "jumpgate", $GlobalUni['lang'] );
@@ -20,10 +23,6 @@ $session = $_GET['session'];
 $fleetmap = array ( 215, 214, 213, 211, 210, 209, 208, 207, 206, 205, 204, 203, 202 );
 
 // ***************************************************************************************
-
-$unitab = LoadUniverse ( );
-$speed = $unitab['speed'];
-$drepair = $unitab['defrepair'];
 
 function rgnum ($num)
 {
@@ -47,10 +46,10 @@ function rapid ($gid)
 {
     global $RapidFire;
     $res = "";
-    for ($n=202; $n<=215; $n++) if ( $RapidFire[$gid][$n] > 1 ) $res .= rapidOut ( $n, $RapidFire[$gid][$n] );
-    for ($n=401; $n<=408; $n++) if ( $RapidFire[$gid][$n] > 1 ) $res .= rapidOut ( $n, $RapidFire[$gid][$n] );
-    for ($n=202; $n<=215; $n++) if ( $RapidFire[$n][$gid] > 1 ) $res .= rapidIn ( $n, $RapidFire[$n][$gid] );
-    for ($n=401; $n<=408; $n++) if ( $RapidFire[$n][$gid] > 1 ) $res .= rapidIn ( $n, $RapidFire[$n][$gid] );
+    for ($n=202; $n<=215; $n++) if ( key_exists($n, $RapidFire[$gid]) && $RapidFire[$gid][$n] > 1 ) $res .= rapidOut ( $n, $RapidFire[$gid][$n] );
+    for ($n=401; $n<=408; $n++) if ( key_exists($n, $RapidFire[$gid]) && $RapidFire[$gid][$n] > 1 ) $res .= rapidOut ( $n, $RapidFire[$gid][$n] );
+    for ($n=202; $n<=215; $n++) if ( key_exists($gid, $RapidFire[$n]) && $RapidFire[$n][$gid] > 1 ) $res .= rapidIn ( $n, $RapidFire[$n][$gid] );
+    for ($n=401; $n<=408; $n++) if ( key_exists($gid, $RapidFire[$n]) && $RapidFire[$n][$gid] > 1 ) $res .= rapidIn ( $n, $RapidFire[$n][$gid] );
     return $res;
 }
 
@@ -89,7 +88,12 @@ else if ($gid > 400 && $gid < 500)    // Оборона.
     echo "<tr><th colspan=\"2\">\n";
     echo "<table border=\"0\">\n";
     echo "<tr><td valign=\"top\"><img border=\"0\" src=\"".UserSkin()."gebaeude/$gid.gif\" width=\"120\" height=\"120\"></td>\n";
-    echo "<td>".loca("LONG_$gid")."<br/>".rapid($gid)."</td>\n";
+    echo "<td>".loca("LONG_$gid");
+    if ($gid < 407) {
+        // Для стреляющей обороны вывести процент восстановления повреждений.
+        echo " " . va(loca("LONG_REPAIR"), $drepair);
+    }
+    echo "<br/>".rapid($gid)."</td>\n";
     echo "</tr></table></th></tr>\n";
     echo "<tr><th>Структура</th><th>".nicenum($UnitParam[$gid][0])."</th></tr>\n";
     echo "<tr><th>Мощность щита</th><th>".nicenum($UnitParam[$gid][1])."</th></tr>\n";
@@ -435,7 +439,7 @@ else
     // Терраформер и лунную базу снести нельзя.
     // Ракетную шахту можно снести только если на планете нет ракет.
 
-    if ( $aktplanet['b'.$gid] && !($gid == 33 || $gid == 41 || $gid == 44) ) {
+    if ( $gid < 200 && $aktplanet['b'.$gid] && !($gid == 33 || $gid == 41 || $gid == 44) ) {
         echo "<table width=519 >\n";
         echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">Снести: ".loca("NAME_$gid")." Level ".$aktplanet['b'.$gid]." уничтожить?</a></td></tr>\n";
         $res = BuildPrice ( $gid, $aktplanet['b'.$gid]-1 );
