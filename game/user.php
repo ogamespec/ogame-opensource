@@ -62,6 +62,13 @@ Q - для обработки этого события используется
 $UserCache = array ();
 $PremiumCache = array ();
 
+// Исправленная версия date
+function fixed_date ( $fmt, $timestamp )
+{
+    $date = new DateTime ('@' . $timestamp);
+    return $date->format ($fmt);
+}
+
 function mail_utf8($to, $subject = '(No subject)', $message = '', $header = '') {
   $header_ = 'MIME-Version: 1.0' . "\n" . 'Content-type: text/plain; charset=UTF-8' . "\n";
   mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $header_ . $header);
@@ -496,7 +503,7 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
         if ($user['banned'])
         {
             UpdateLastClick ( $player_id );        // Обновить активность пользователя, чтобы можно было продлять удаление.
-            echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/reg/errorpage.php?errorcode=3&arg1=$uni&arg2=$login&arg3=".$user['banned_until']."' /></head><body></body>";
+            echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/reg/errorpage.php?errorcode=3&arg1=$uni&arg2=$login&arg3=". fixed_date( "D M j Y G:i:s", $user['banned_until'] ) ."' /></head><body></body>";
             ob_end_flush ();
             exit ();
         }
