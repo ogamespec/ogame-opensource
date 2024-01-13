@@ -459,7 +459,11 @@ function CheckSession ( $session )
     $unitab = $GlobalUni;
     $uni = $unitab['num'];
     $ip = $_SERVER['REMOTE_ADDR'];
-    $prsess = $_COOKIE ['prsess_'.$GlobalUser['player_id'].'_'.$uni];
+    $cookie_name = 'prsess_'.$GlobalUser['player_id'].'_'.$uni;
+    $prsess = "";
+    if (key_exists($cookie_name, $_COOKIE)) {
+        $prsess = $_COOKIE [$cookie_name];
+    }
     if ( $prsess !== $GlobalUser['private_session'] ) { InvalidSessionPage (); return FALSE; }
     if ( $ip !== "127.0.0.1" && !$GlobalUser['deact_ip'] ) {
         if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
