@@ -6,9 +6,13 @@
 function GetModeVarStr ($var)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."mods;";
+    $query = "SELECT * FROM ".$db_prefix."mods WHERE var = '".$var."' LIMIT 1;";
     $result = dbquery ($query);
-    return dbarray($result) [$var];
+    if ( dbrows ($result) > 0 ) {
+        $var = dbarray ( $result );
+        return $var['value'];
+    }
+    return "";
 }
 
 // Получить переменную из таблицы настроек модификаций (Int)
