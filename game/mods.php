@@ -29,6 +29,7 @@ function ModifyUserForCarnageMode ($player_id)
     $uni = LoadUniverse ();
     $user = LoadUser ($player_id);
     $hplanetid = $user['hplanetid'];
+    $hplanet = LoadPlanetById ($hplanetid);
 
     // Инициализировать ДСЧ
 
@@ -41,6 +42,14 @@ function ModifyUserForCarnageMode ($player_id)
     SetPlanetBuildings ( $hplanetid, GetCarnageModeBuildings(false) );
     AdjustResources (30000000, 20000000, 10000000, $hplanetid, '+');
     RecalcFields ($hplanetid);
+
+    // Добавить луну Главной планете
+
+    $moon_id = CreatePlanet ($hplanet['g'], $hplanet['s'], $hplanet['p'], $player_id, 0, 1, mt_rand(15,20));
+    SetPlanetBuildings ( $moon_id, GetCarnageModeBuildings(true) );
+    SetPlanetFleetDefense ( $moon_id, GetCarnageModeFleet(GetModeVarInt('mod_carnage_fleet_size') * 1000000000 ) );
+    AdjustResources (30000000, 20000000, 10000000, $moon_id, '+');
+    RecalcFields ($moon_id);
 
     // Создать ещё 8 развитых планет с лунами
 
@@ -70,9 +79,9 @@ function ModifyUserForCarnageMode ($player_id)
         // На каждой луне "нарисовать" флот и базовые постройки
 
         SetPlanetBuildings ( $moon_id, GetCarnageModeBuildings(true) );
-        SetPlanetFleetDefense ( $moon_id, GetCarnageModeFleet(GetModeVarInt('mod_carnage_fleet_size') * 1000000 ) );
+        SetPlanetFleetDefense ( $moon_id, GetCarnageModeFleet(GetModeVarInt('mod_carnage_fleet_size') * 1000000000 ) );
         AdjustResources (30000000, 20000000, 10000000, $moon_id, '+');
-        RecalcFields ($moon_id);        
+        RecalcFields ($moon_id);
     }
 
     // Модифицировать исследования
@@ -103,6 +112,8 @@ function ModifyUserForCarnageMode ($player_id)
     $query .= "sniff = 0 ";         // просто безопасное поле, чтобы избавиться от запятой выше
     $query .= " WHERE player_id=$player_id;";
     dbquery ($query);
+
+    RecalcStats ($player_id);
 }
 
 // Получить постройки на планете/луне для режима Carnage
@@ -173,20 +184,20 @@ function GetCarnageModeFleet ($points)
 
         switch ($id)
         {
-            case 202: $count = 5000; break;     // Малый транспорт
-            case 203: $count = 1000; break;     // Большой транспорт
-            case 204: $count = 10000; break;    // Лёгкий истребитель
-            case 205: $count = 3333; break;     // Тяжёлый истребитель
-            case 206: $count = 500; break;      // Крейсер
-            case 207: $count = 300; break;      // Линкор
+            case 202: $count = mt_rand(4000, 5000); break;     // Малый транспорт
+            case 203: $count = mt_rand(1000, 2000); break;     // Большой транспорт
+            case 204: $count = mt_rand(10000, 20000); break;    // Лёгкий истребитель
+            case 205: $count = mt_rand(3333, 5555); break;     // Тяжёлый истребитель
+            case 206: $count = mt_rand(500, 1500); break;      // Крейсер
+            case 207: $count = mt_rand(300, 900); break;      // Линкор
             case 208: $count = 0; break;        // Колонизатор
-            case 209: $count = 1000; break;     // Переработчик
+            case 209: $count = mt_rand(1000, 2000); break;     // Переработчик
             case 210: $count = 0; break;        // Шпионский зонд
-            case 211: $count = 300; break;      // Бомбардировщик
+            case 211: $count = mt_rand(300, 400); break;      // Бомбардировщик
             case 212: $count = 0; break;        // Солнечный спутник
-            case 213: $count = 200; break;      // Уничтожитель
+            case 213: $count = mt_rand(200, 300); break;      // Уничтожитель
             case 214: $count = 1; break;        // Звезда смерти
-            case 215: $count = 300; break;      // Линейный крейсер
+            case 215: $count = mt_rand(300, 500); break;      // Линейный крейсер
         }
 
         if ($count == 0) {

@@ -192,6 +192,17 @@ function LoadPlanet ($g, $s, $p, $type)
     else return NULL;
 }
 
+// Загрузить состояние планеты по ID
+// Вернуть массив $planet, или NULL.
+function LoadPlanetById ($planet_id)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE planet_id=$planet_id LIMIT 1;";
+    $result = dbquery ($query);
+    if ( $result ) return dbarray ($result);
+    else return NULL;
+}
+
 // Если у планеты есть луна (даже уничтоженная), возвратить её ID, иначе возвратить 0.
 function PlanetHasMoon ( $planet_id )
 {
