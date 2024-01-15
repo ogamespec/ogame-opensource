@@ -18,6 +18,7 @@ require_once "../bot.php";
 require_once "../user.php";
 require_once "../queue.php";
 require_once "../uni.php";
+require_once "../mods.php";
 require_once "../debug.php";
 require_once "../loca.php";
 

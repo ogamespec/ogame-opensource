@@ -45,6 +45,7 @@ require_once "debug.php";
 require_once "galaxytool.php";
 require_once "bot.php";
 require_once "coupon.php";
+require_once "mods.php";
 
 $GlobalUni = LoadUniverse ();
 

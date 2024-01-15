@@ -489,6 +489,20 @@ function SetPlanetDefense ( $planet_id, $objects )
     dbquery ($query);
 }
 
+// Установить постройки на планете.
+function SetPlanetBuildings ( $planet_id, $objects )
+{
+    global $db_prefix;
+    $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44' );
+    $query = "UPDATE ".$db_prefix."planets SET ";
+    foreach ( $param as $i=>$p ) {
+        if ( $i == 0 ) $query .= "$p=".$objects[$p];
+        else $query .= ", $p=".$objects[$p];
+    }
+    $query .= " WHERE planet_id=$planet_id;";
+    dbquery ($query);
+}
+
 // Вернуть название планеты со ссылкой на админку.
 function AdminPlanetName ($planet)
 {
