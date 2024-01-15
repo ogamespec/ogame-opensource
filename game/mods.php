@@ -8,7 +8,7 @@ function GetModeVarStr ($var)
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."mods;";
     $result = dbquery ($query);
-    return $result[$var];
+    return dbarray($result) [$var];
 }
 
 // Получить переменную из таблицы настроек модификаций (Int)
@@ -43,7 +43,7 @@ function ModifyUserForCarnageMode ($player_id)
     for ($i=0; $i<8; $i++) {
 
         $g = mt_rand (1, $uni['galaxies']);
-        $s = mt_rand (1, $uni['systems'])
+        $s = mt_rand (1, $uni['systems']);
         $p = mt_rand (1, 15);
 
         if (HasPlanet($g, $s, $p)) {
