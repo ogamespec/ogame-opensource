@@ -48,7 +48,7 @@ function ModifyUserForCarnageMode ($player_id)
 
         $g = mt_rand (1, $uni['galaxies']);
         $s = mt_rand (1, $uni['systems']);
-        $p = mt_rand (1, 15);
+        $p = mt_rand (4, 12);
 
         if (HasPlanet($g, $s, $p)) {
             $i--;   // повторить попытку создания колонии
