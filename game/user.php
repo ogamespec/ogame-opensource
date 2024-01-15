@@ -173,6 +173,7 @@ function CreateUser ( $name, $pass, $email, $bot=false)
     dbquery ($query);
 
     $ip = $_SERVER['REMOTE_ADDR'];
+    $localhost = $ip === "127.0.0.1" || $ip === "::1";
 
     $user = array( null, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, "", $email, $email,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -194,7 +195,7 @@ function CreateUser ( $name, $pass, $email, $bot=false)
 
     // Выслать приветственное письмо и сообщение.
     if ( !$bot ) {
-        if ( $ip !== "127.0.0.1" ) SendGreetingsMail ( $origname, $pass, $email, $ack);
+        if ( !$localhost ) SendGreetingsMail ( $origname, $pass, $email, $ack);
         SendGreetingsMessage ( $id);
     }
 
