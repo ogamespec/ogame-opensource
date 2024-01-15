@@ -383,17 +383,17 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     dbquery ( "INSERT INTO ".$_POST["db_prefix"]."botstrat VALUES ( 1, 'backup', '')" );
 
     // Модификации
-    $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_carnage', value = '".($_POST["mod_carnage"]==="on"?1:0)."'; ";
+    $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_carnage', value = '".(key_exists ('mod_carnage', $_POST) && $_POST["mod_carnage"]==="on"?1:0)."'; ";
     dbquery ($query);
     $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_carnage_fleet_size', value = '".$_POST["mod_carnage_fleet_size"]."'; ";
     dbquery ($query);
-    $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_endgame', value = '".($_POST["mod_endgame"]==="on"?1:0)."'; ";
+    $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_endgame', value = '".(key_exists ('mod_endgame', $_POST) && $_POST["mod_endgame"]==="on"?1:0)."'; ";
     dbquery ($query);
     $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_endgame_days', value = '".$_POST["mod_endgame_days"]."'; ";
     dbquery ($query);
 
     // Записать вселенную в Мастер-базу.
-    $mdb_enable = ($_POST["mdb_enable"]==="on"?1:0);
+    $mdb_enable = (key_exists ('mdb_enable', $_POST) && $_POST["mdb_enable"]==="on"?1:0);
     if ($mdb_enable)
     {
         $mdb_connect = @mysqli_connect($_POST["mdb_host"], $_POST["mdb_user"], $_POST["mdb_pass"]);
