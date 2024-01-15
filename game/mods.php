@@ -113,6 +113,7 @@ function ModifyUserForCarnageMode ($player_id)
     $query .= " WHERE player_id=$player_id;";
     dbquery ($query);
 
+    InvalidateUserCache ();
     RecalcStats ($player_id);
 }
 
