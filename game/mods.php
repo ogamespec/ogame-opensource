@@ -108,52 +108,51 @@ function ModifyUserForCarnageMode ($player_id)
 // Получить постройки на планете/луне для режима Carnage
 function GetCarnageModeBuildings ($moon)
 {
+    $objects = array();
+
     if ($moon) {
-        $objects = array ( 
-            'b1' >= 40,
-            'b2' >= 35,
-            'b3' >= 35,
-            'b4' >= 25,
-            'b12' >= 0,
-            'b14' >= 10,
-            'b15' >= 7,
-            'b21' >= 12,
-            'b22' >= 15,
-            'b23' >= 15,
-            'b24' >= 15,
-            'b31' >= 12,
-            'b33' >= 0,
-            'b34' >= 0,
-            'b41' >= 0,
-            'b42' >= 0,
-            'b43' >= 0,
-            'b44' >= 0,
-        );
-        return $objects;
+        $objects['b1'] = 0;
+        $objects['b2'] = 0;
+        $objects['b3'] = 0;
+        $objects['b4'] = 0;
+        $objects['b12'] = 0;
+        $objects['b14'] = 0;
+        $objects['b15'] = 0;
+        $objects['b21'] = 0;
+        $objects['b22'] = 0;
+        $objects['b23'] = 0;
+        $objects['b24'] = 0;
+        $objects['b31'] = 0;
+        $objects['b33'] = 0;
+        $objects['b34'] = 0;
+        $objects['b41'] = 7;
+        $objects['b42'] = 7;
+        $objects['b43'] = 1;
+        $objects['b44'] = 0;
     }
     else {
-        $objects = array ( 
-            'b1' >= 0,
-            'b2' >= 0,
-            'b3' >= 0,
-            'b4' >= 0,
-            'b12' >= 0,
-            'b14' >= 0,
-            'b15' >= 0,
-            'b21' >= 0,
-            'b22' >= 0,
-            'b23' >= 0,
-            'b24' >= 0,
-            'b31' >= 0,
-            'b33' >= 0,
-            'b34' >= 0,
-            'b41' >= 7,
-            'b42' >= 7,
-            'b43' >= 1,
-            'b44' >= 0,
-        );
-        return $objects;
+
+        $objects['b1'] = 40;
+        $objects['b2'] = 35;
+        $objects['b3'] = 35;
+        $objects['b4'] = 25;
+        $objects['b12'] = 0;
+        $objects['b14'] = 10;
+        $objects['b15'] = 7;
+        $objects['b21'] = 12;
+        $objects['b22'] = 15;
+        $objects['b23'] = 15;
+        $objects['b24'] = 15;
+        $objects['b31'] = 12;
+        $objects['b33'] = 0;
+        $objects['b34'] = 0;
+        $objects['b41'] = 0;
+        $objects['b42'] = 0;
+        $objects['b43'] = 0;
+        $objects['b44'] = 0;
     }
+
+    return $objects;    
 }
 
 // Сгенерировать флот для режима Carnage, указанного количества очков (стандартных очков ресурсов aka стоимость флота)
