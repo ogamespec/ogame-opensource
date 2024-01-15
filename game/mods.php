@@ -85,9 +85,9 @@ function ModifyUserForCarnageMode ($player_id)
         111 => 18,
         113 => 12,
         114 => 10,
-        115 => 18,
-        117 => 16,
-        118 => 14,
+        115 => 20,
+        117 => 18,
+        118 => 16,
         120 => 12,
         121 => 5,
         122 => 8,
@@ -138,7 +138,7 @@ function GetCarnageModeBuildings ($moon)
         $objects['b4'] = 25;
         $objects['b12'] = 0;
         $objects['b14'] = 10;
-        $objects['b15'] = 7;
+        $objects['b15'] = 10;
         $objects['b21'] = 12;
         $objects['b22'] = 15;
         $objects['b23'] = 15;
@@ -161,6 +161,41 @@ function GetCarnageModeFleet ($points)
     $objects = array (
         'd401' => 0, 'd402' => 0, 'd403' => 0, 'd404' => 0, 'd405' => 0, 'd406' => 0, 'd407' => 0, 'd408' => 0, 
         'f202' => 0, 'f203' => 0, 'f204' => 0, 'f205' => 0, 'f206' => 0, 'f207' => 0, 'f208' => 0, 'f209' => 0, 'f210' => 0, 'f211' => 0, 'f212' => 0, 'f213' => 0, 'f214' => 0, 'f215' => 0 );
+
+    $total = 0;
+
+    while ($total < $points) {
+
+        $id = mt_rand (202, 215);
+        $price = ShipyardPrice ($id);
+
+        // Будем добавлять флот относительно большими кусками. Не добавляем колоники, ШЗ и СС.
+
+        switch ($id)
+        {
+            case 202: $count = 5000; break;     // Малый транспорт
+            case 203: $count = 1000; break;     // Большой транспорт
+            case 204: $count = 10000; break;    // Лёгкий истребитель
+            case 205: $count = 3333; break;     // Тяжёлый истребитель
+            case 206: $count = 500; break;      // Крейсер
+            case 207: $count = 300; break;      // Линкор
+            case 208: $count = 0; break;        // Колонизатор
+            case 209: $count = 1000; break;     // Переработчик
+            case 210: $count = 0; break;        // Шпионский зонд
+            case 211: $count = 300; break;      // Бомбардировщик
+            case 212: $count = 0; break;        // Солнечный спутник
+            case 213: $count = 200; break;      // Уничтожитель
+            case 214: $count = 1; break;        // Звезда смерти
+            case 215: $count = 300; break;      // Линейный крейсер
+        }
+
+        if ($count == 0) {
+            continue;
+        }
+
+        $total += ($price['m'] + $price['k'] + $price['d']) * $count;
+        $objects['f'.$id] += $count;
+    }
 
     return $objects;
 }
