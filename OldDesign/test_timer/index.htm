@@ -67,7 +67,7 @@ Buggy t() timer from original OGame: <br/>
 
 <script language=JavaScript>
 	// pp - seconds before the timer expires
-	pp=10*60;
+	pp=5*60;
     t();
 </script>
 
@@ -78,11 +78,20 @@ Reliable timer:
 <div id="demo"></div>
 
 <script>
+var tt;
+
 // https://www.w3schools.com/howto/howto_js_countdown.asp (modified)
 function my_t()
 {
 	// Get today's date and time
 	var now = new Date().getTime();
+
+	// If the count down is finished, write some text
+	if (now >= dpp) {
+		clearInterval(tt);
+		//document.getElementById("demo").innerHTML = "EXPIRED";
+		return;
+	}
 
 	// Find the distance between now and the count down date (in milliseconds)
 	var distance = dpp - now;
@@ -98,20 +107,20 @@ function my_t()
 
 	var seconds = Math.floor(distance / 1000);
 
+    if(minutes < 10){
+    	minutes = "0" + minutes;
+    }
+    if(seconds < 10){
+    	seconds = "0" + seconds;
+    }
+
 	// Display the result in the element with id="demo"
 	document.getElementById("demo").innerHTML = hours + ":" + minutes + ":" + seconds;
-
-	// If the count down is finished, write some text
-	if (distance < 0) {
-		clearInterval(x);
-		document.getElementById("demo").innerHTML = "EXPIRED";
-	}
 }
 
 // Update the count down every 1 second
 var dpp = new Date().getTime() + (pp + 1) * 1000;
-my_t();
-setInterval (my_t, 100);
+tt = setInterval (my_t, 100);
 </script>
 
 
@@ -177,7 +186,7 @@ function t_fix() {
 <div id="bxx2"></div>
 
 <script language=JavaScript>
-	pp2=10*60;
+	pp2=5*60;
     t_fix();
 </script>
 
