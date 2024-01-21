@@ -44,7 +44,10 @@ function t() {
 	var bxx = document.getElementById('bxx');
 	var timeout = 1;
 	n=new Date();
-	ss=pp;
+	if (!('dpp' in bxx)) {
+		bxx.dpp = n.getTime() + pp * 1000;
+	}
+	ss=Math.round((bxx.dpp-n.getTime())/1000.);
 	aa=Math.round((n.getTime()-v.getTime())/1000.);
 	s=ss-aa;
 	m=0;
@@ -87,7 +90,6 @@ function t() {
     		bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=b_building&session="+ps+"&listid="+pk+"&modus="+pm+"&planet="+pl+">Отменить</a>";
     	}
 	}    
-	pp=pp-1;
 	if (timeout == 1) {
     	window.setTimeout("t();", 999);
     }
