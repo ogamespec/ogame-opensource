@@ -10,7 +10,7 @@
 
 ps = 10000;
 pl = 10000;
-seconds_left = 5*60;
+seconds_left = 10*60;
 
 <!--
 function t() {
@@ -137,12 +137,12 @@ function t_fix() {
 	var bxx = document.getElementById('bxx2');
 	var timeout = 1;
 	n=new Date();
-    if (!('dpp' in bxx)) {
-      bxx.dpp = n.getTime() + pp2 * 1000;
-    }
-    ss=bxx.dpp;
+	if (!('dpp' in bxx)) {
+		bxx.dpp = n.getTime() + pp2 * 1000;
+	}
+	ss=Math.round((bxx.dpp-n.getTime())/1000.);
 	aa=Math.round((n.getTime()-v.getTime())/1000.);
-	s=Math.round((ss-n.getTime())/1000.);
+	s=ss-aa;
 	m=0;
 	h=0;
 	

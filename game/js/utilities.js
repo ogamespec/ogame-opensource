@@ -4,7 +4,10 @@ function t(){
   o = new Date();
   for (cn = 1; cn <= anz; cn++) {
     bxx = document.getElementById('bxx' + cn);
-    ss = bxx.title;
+    if (!('dpp' in bxx)) {
+      bxx.dpp = n.getTime() + bxx.title * 1000;
+    }
+    ss = Math.round((bxx.dpp - n.getTime()) / 1000.);
     s = ss - Math.round((n.getTime() - v.getTime()) / 1000.);
     m = 0;
     h = 0;
@@ -27,7 +30,6 @@ function t(){
       }
       bxx.innerHTML = h + ":" + m + ":" + s + "";
     }
-    bxx.title = bxx.title - 1;
   }
   window.setTimeout("t();", 999);
 }
