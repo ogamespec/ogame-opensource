@@ -7,6 +7,11 @@
 <body>
 
 <script type="text/javascript">
+
+ps = 10000;
+pl = 10000;
+seconds_left = 5*60;
+
 <!--
 function t() {
 	v = new Date();
@@ -67,7 +72,7 @@ Buggy t() timer from original OGame: <br/>
 
 <script language=JavaScript>
 	// pp - seconds before the timer expires
-	pp=5*60;
+	pp=seconds_left;
     t();
 </script>
 
@@ -118,8 +123,8 @@ function my_t()
 	document.getElementById("demo").innerHTML = hours + ":" + minutes + ":" + seconds;
 }
 
-// Update the count down every 1 second
-var dpp = new Date().getTime() + (pp + 1) * 1000;
+// Update the count down
+var dpp = new Date().getTime() + (seconds_left + 1) * 1000;
 tt = setInterval (my_t, 100);
 </script>
 
@@ -132,9 +137,12 @@ function t_fix() {
 	var bxx = document.getElementById('bxx2');
 	var timeout = 1;
 	n=new Date();
-	ss=pp2;
+    if (!('dpp' in bxx)) {
+      bxx.dpp = n.getTime() + pp2 * 1000;
+    }
+    ss=bxx.dpp;
 	aa=Math.round((n.getTime()-v.getTime())/1000.);
-	s=ss-aa;
+	s=Math.round((ss-n.getTime())/1000.);
 	m=0;
 	h=0;
 	
@@ -171,9 +179,8 @@ function t_fix() {
         
        	bxx.innerHTML=h+":"+m+":"+s;
 	}    
-	pp2=pp2-1;
 	if (timeout == 1) {
-    	window.setTimeout("t_fix();", 1000);
+    	window.setTimeout("t_fix();", 100);
     }
     }
 }
@@ -181,12 +188,12 @@ function t_fix() {
 </script>
 
 <br/>
-"Fixed" t() timer from original OGame (interval = 1000 instead 999), actually doesn't fix issue: <br/>
+Fixed t() timer:<br/>
 
 <div id="bxx2"></div>
 
 <script language=JavaScript>
-	pp2=5*60;
+	pp2=seconds_left;
     t_fix();
 </script>
 

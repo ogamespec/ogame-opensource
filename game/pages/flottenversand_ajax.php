@@ -105,7 +105,7 @@ if ( $order == 6 )
     if ( IsPlayerStrong ($target_user['player_id']) ) AjaxSendError (604);    // защита сильных
     if ( $target_user['vacation'] ) AjaxSendError (605);    // игрок в режиме отпуска
     if ( $amount == 0 ) AjaxSendError (611);    // нет кораблей для отправки
-    if ( $GlobalUser['ip_addr'] !== "127.0.0.1" ) {
+    if ( !($GlobalUser['ip_addr'] === "127.0.0.1" || $GlobalUser['ip_addr'] === "::1") ) {
         if ( $target_user['ip_addr'] === $GlobalUser['ip_addr'] ) AjaxSendError (616);    // мультиалярм
     }
 
