@@ -33,3 +33,9 @@ function t(){
   }
   window.setTimeout("t();", 999);
 }
+
+document.addEventListener("visibilitychange", function() {
+    if (!document.hidden) {
+        t();
+    }
+});

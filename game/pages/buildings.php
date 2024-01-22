@@ -510,6 +510,11 @@ function xd() {
 }
 
 window.onload = t;
+document.addEventListener("visibilitychange", function() {
+    if (!document.hidden) {
+        t();
+    }
+});
 </script>
 <!-- JAVASCRIPT ENDE-->
 
