@@ -808,7 +808,7 @@ class bbcode {
         return $syntax;
     }
 
-    function insert_smiles($text) {
+    function replace_links($text) {
         $text = nl2br(htmlspecialchars($text,ENT_NOQUOTES));
         $text = str_replace('  ', '&nbsp;&nbsp;', $text);
         if ($this -> autolinks) {
@@ -816,7 +816,8 @@ class bbcode {
             $search = array(
                 "'(.)((http|https|ftp)://".$uri.")'si",
                 "'([^/])(www\.".$uri.")'si",
-                "'([^\w\d-\.])([\w\d-\.]+@[\w\d-\.]+\.[\w]+[^.,;\s<\"\'\)]+)'si"
+                // https://stackoverflow.com/questions/24764212/preg-match-compilation-failed-invalid-range-in-character-class-at-offset
+                "'([^\w\d\-.])([\w\d\-.]+@[\w\d\-.]+\.[\w]+[^.,;\s<\"\'\)]+)'si"
             );
             $replace = array(
                 '$1<a href="$2" target="_blank">$2</a>',
@@ -840,7 +841,7 @@ class bbcode {
         $rbr = 0;
         foreach ($elems as $elem) {
             if ('text' == $elem['type']) {
-                $elem['str'] = $this -> insert_smiles($elem['str']);
+                $elem['str'] = $this -> replace_links($elem['str']);
                 for ($i=0; $i < $rbr; ++$i) {
                     $elem['str'] = ltrim($elem['str']);
                     if ('<br />' == substr($elem['str'], 0, 6)) {
