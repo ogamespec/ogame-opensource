@@ -67,6 +67,7 @@ function OverFleet ($fleet, $summary, $mission)
     if ( $fleet['owner_id'] == $GlobalUser['player_id'] ) $level = 99;
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $sum = 0;
+    $res = "";
     if ( $level >= 2 )
     {
         $res = "<a href='#' onmouseover='return overlib(\"&lt;font color=white&gt;&lt;b&gt;";
@@ -97,6 +98,7 @@ function TitleFleet ($fleet, $summary)
     if ( $fleet['owner_id'] == $GlobalUser['player_id'] ) $level = 99;
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $sum = 0;
+    $res = "";
     if ( $level >= 2 )
     {
         if ( $summary ) {
@@ -259,9 +261,9 @@ function GetDirectionAssignment ( $fleet_obj, &$dir, &$assign )
 {
     global $GlobalUser;
 
-    if ($fleet_obj['mission'] < 100) $dir = 0;
-    else if ($fleet_obj['mission'] < 200) $dir = 1;
-    else $dir = 2;
+    if ($fleet_obj['mission'] < 100) $dir = 0;      // убывает
+    else if ($fleet_obj['mission'] < 200) $dir = 1;     // возвращается
+    else $dir = 2;  // удержание
 
     if ( $fleet_obj['owner_id'] == $GlobalUser['player_id'] ) $assign = 0;
     else {
@@ -458,9 +460,9 @@ function EventList ()
             $seconds = max($t['end_time']-$now, 0);
             if ( $seconds <= 0 ) continue;
             if ($t['fleets'] > 1) echo "<tr class=''>\n";
-            else if ($t['dir'] == 0) echo "<tr class='flight'>\n";
-            else if ($t['dir'] == 1) echo "<tr class='return'>\n";
-            else if ($t['dir'] == 2) echo "<tr class='holding'>\n";
+            else if ($t['fleet'][0]['dir'] == 0) echo "<tr class='flight'>\n";
+            else if ($t['fleet'][0]['dir'] == 1) echo "<tr class='return'>\n";
+            else if ($t['fleet'][0]['dir'] == 2) echo "<tr class='holding'>\n";
             echo "<th><div id='bxx".($i+1)."' title='".$seconds."'star='".$t['end_time']."'></div></th>\n";
             echo "<th colspan='3'>";
             for ($fl=0; $fl<$t['fleets']; $fl++)

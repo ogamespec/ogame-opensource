@@ -1,6 +1,7 @@
 <?php
 
 // Создание списка событий Фаланги.
+// TODO: Тут наблюдается некоторый изоморфизм с модулем событий Обзора. По возможности унифицировать код выдачи списка событий.
 
 /*
 Типы заданий:
@@ -129,35 +130,35 @@ function FleetSpan ( $fleet_entry )
     $origin = GetPlanet ( $fleet_entry['origin_id'] );
     $target = GetPlanet ( $fleet_entry['target_id'] );
     $fleet = $fleet_entry;
-    $direction = $fleet_entry['dir'];
+    $dir = $fleet_entry['dir'];
     $owner = LoadUser ( $origin['owner_id'] );
 
     if ( $mission == 1 ) {    // Атака
-        if ( $direction ) echo "<span class='flight phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с планеты ".PlanetFrom($origin, "phalanx_fleet")." отправлен на ".PlanetTo($target, "phalanx_fleet").". Задание: Атаковать</span>";
+        if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с планеты ".PlanetFrom($origin, "phalanx_fleet")." отправлен на ".PlanetTo($target, "phalanx_fleet").". Задание: Атаковать</span>";
         else echo "<span class='return phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> возвратится с ".PlanetFrom($target, "phalanx_fleet")." на ".PlanetTo($origin, "phalanx_fleet").". Задание: <span class='ownclass'>Атаковать</span></span>";
     }
     else if ( $mission == 2 ) {    // Совместная атака
-        if ( $direction ) echo "<span class='phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с планеты ".PlanetFrom($origin, "federation")." отправлен на ".PlanetTo($target, "federation").". Задание: Совместная атака</span>";
+        if ( $dir == 0 ) echo "<span class='phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с планеты ".PlanetFrom($origin, "federation")." отправлен на ".PlanetTo($target, "federation").". Задание: Совместная атака</span>";
         else echo "<span class='return phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> возвратится с ".PlanetFrom($target, "phalanx_fleet")." на ".PlanetTo($origin, "phalanx_fleet").". Задание: <span class='ownclass'>Совместная атака</span></span>";
     }
     else if ( $mission == 21 ) {    // Атака САБ
-        if ( $direction ) echo "<span class='phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с планеты ".PlanetFrom($origin, "attack")." отправлен на ".PlanetTo($target, "attack").". Задание: Атаковать</span>";
+        if ( $dir == 0 ) echo "<span class='phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с планеты ".PlanetFrom($origin, "attack")." отправлен на ".PlanetTo($target, "attack").". Задание: Атаковать</span>";
         else echo "<span class='return phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> возвратится с ".PlanetFrom($target, "phalanx_fleet")." на ".PlanetTo($origin, "phalanx_fleet").". Задание: <span class='ownclass'>Атаковать</span></span>";
     }
     else if ( $mission == 3 ) {    // Транспорт
-        if ( $direction ) echo "<span class='flight phalanx_fleet'>Мирный <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с планеты ".PlanetFrom($origin, "phalanx_fleet")." отправлен на ".PlanetTo($target, "phalanx_fleet").". Задание: Транспорт</span>";
+        if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>Мирный <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с планеты ".PlanetFrom($origin, "phalanx_fleet")." отправлен на ".PlanetTo($target, "phalanx_fleet").". Задание: Транспорт</span>";
         else echo "<span class='return phalanx_fleet'>Мирный <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> возвратится с ".PlanetFrom($target, "phalanx_fleet")." на ".PlanetTo($origin, "phalanx_fleet").". Задание: <span class='ownclass'>Транспорт</span></span>";
     }
     else if ( $mission == 4 ) {    // Оставить
         echo "<span class='flight phalanx_fleet'>Мирный <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с планеты ".PlanetFrom($origin, "phalanx_fleet")." отправлен на ".PlanetTo($target, "phalanx_fleet").". Задание: Оставить</span>";
     }
     else if ( $mission == 5 ) {    // Держаться
-        if ( $direction == 2 ) echo "<span class='holding phalanx_fleet'>".PlayerDetails($owner)." удерживает альянсовый <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> с ".PlanetFrom($origin, "phalanx_fleet")." на орбите ".PlanetOn($target, "phalanx_fleet").". Задание: <span class='ownclass'>Держаться</span></span>";
-        else if ( $direction == 1 ) echo "<span class='flight phalanx_fleet'>Мирный <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "phalanx_fleet")." отправлен на ".PlanetTo($target, "phalanx_fleet").". Задание: Держаться</span>";
+        if ( $dir == 2 ) echo "<span class='holding phalanx_fleet'>".PlayerDetails($owner)." удерживает альянсовый <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> с ".PlanetFrom($origin, "phalanx_fleet")." на орбите ".PlanetOn($target, "phalanx_fleet").". Задание: <span class='ownclass'>Держаться</span></span>";
+        else if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>Мирный <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "phalanx_fleet")." отправлен на ".PlanetTo($target, "phalanx_fleet").". Задание: Держаться</span>";
         else echo "<span class='return phalanx_fleet'>Мирный <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> возвратится с ".PlanetFrom($target, "phalanx_fleet")." на ".PlanetTo($origin, "phalanx_fleet").". Задание: <span class='ownclass'>Держаться</span></span>";
     }
     else if ( $mission == 6 ) {    // Шпионаж
-        if ( $direction ) echo "<span class='flight phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с планеты ".PlanetFrom($origin, "phalanx_fleet")." отправлен на ".PlanetTo($target, "phalanx_fleet").". Задание: Шпионаж</span>";
+        if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с планеты ".PlanetFrom($origin, "phalanx_fleet")." отправлен на ".PlanetTo($target, "phalanx_fleet").". Задание: Шпионаж</span>";
         else echo "<span class='return phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> возвратится с ".PlanetFrom($target, "phalanx_fleet")." на ".PlanetTo($origin, "phalanx_fleet").". Задание: <span class='ownclass'>Шпионаж</span></span>";
     }
     else if ( $mission == 7 ) {    // Колонизировать
@@ -167,12 +168,12 @@ function FleetSpan ( $fleet_entry )
         echo "<span class='return phalanx_fleet'>Мирный <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> возвратится с ".PlanetFrom($target, "phalanx_fleet")." на ".PlanetTo($origin, "phalanx_fleet").". Задание: <span class='ownclass'>Переработать</span></span>";
     }
     else if ( $mission == 9 ) {    // Уничтожить (хммм...)
-        if ( $direction ) echo "<span class='flight phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с планеты ".PlanetFrom($origin, "phalanx_fleet")." отправлен на ".PlanetTo($target, "phalanx_fleet").". Задание: Уничтожить</span>";
+        if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с планеты ".PlanetFrom($origin, "phalanx_fleet")." отправлен на ".PlanetTo($target, "phalanx_fleet").". Задание: Уничтожить</span>";
         else echo "<span class='return phalanx_fleet'>Боевой <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> возвратится с ".PlanetFrom($target, "phalanx_fleet")." на ".PlanetTo($origin, "phalanx_fleet").". Задание: <span class='ownclass'>Уничтожить</span></span>";
     }
     else if ( $mission == 15 ) {    // Экспедиция
-        if ( $direction == 2 ) echo "<span class='holding phalanx_fleet'>Мирный <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "phalanx_fleet")." исследует позицию ".PlanetTo($target, "phalanx_fleet").". Задание: <span class='ownclass'>Экспедиция</span></span>";
-        else if ( $direction == 1 ) echo "<span class='flight phalanx_fleet'>Мирный <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "phalanx_fleet")." отправлен на ".PlanetTo($target, "phalanx_fleet").". Задание: Экспедиция</span>";
+        if ( $dir == 2 ) echo "<span class='holding phalanx_fleet'>Мирный <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "phalanx_fleet")." исследует позицию ".PlanetTo($target, "phalanx_fleet").". Задание: <span class='ownclass'>Экспедиция</span></span>";
+        else if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>Мирный <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "phalanx_fleet")." отправлен на ".PlanetTo($target, "phalanx_fleet").". Задание: Экспедиция</span>";
         else echo "<span class='return phalanx_fleet'>Мирный <a href='#' onmouseover='return overlib(\"".OverFleet($fleet,1)."\");' onmouseout='return nd();' class='phalanx_fleet'>флот</a><a href='#' title='".TitleFleet($fleet,1)."'></a> возвратится с ".PlanetFrom($target, "phalanx_fleet")." на ".PlanetTo($origin, "phalanx_fleet").". Задание: <span class='ownclass'>Экспедиция</span></span>";
     }
     else if ($mission == 20 ) {    // Ракетная атака
@@ -228,7 +229,7 @@ function PhalanxEventList ($planet_id)
                 $task[$tasknum]['fleet'][$f]['origin_id'] = $fleet_obj['start_planet'];
                 $task[$tasknum]['fleet'][$f]['target_id'] = $fleet_obj['target_planet'];
                 $task[$tasknum]['fleet'][$f]['mission'] = GetMission ($fleet_obj);
-                $task[$tasknum]['fleet'][$f]['dir'] = 1;    // на планету
+                $task[$tasknum]['fleet'][$f]['dir'] = 0;    // на планету
                 $f++;
             }
             $unions[ $fleet_obj['union_id'] ] = 1;
@@ -263,20 +264,20 @@ function PhalanxEventList ($planet_id)
         $task[$tasknum]['fleet'][0]['mission'] = GetMission ( $fleet_obj );
         if ( GetMission($fleet_obj) == 15 )
         {
-            if ($fleet_obj['mission'] < 100) $task[$tasknum]['fleet'][0]['dir'] = 1;
-            else if ($fleet_obj['mission'] < 200) $task[$tasknum]['fleet'][0]['dir'] = 0;
+            if ($fleet_obj['mission'] < 100) $task[$tasknum]['fleet'][0]['dir'] = 0;
+            else if ($fleet_obj['mission'] < 200) $task[$tasknum]['fleet'][0]['dir'] = 1;
             else $task[$tasknum]['fleet'][0]['dir'] = 2;
         }
         else if ( GetMission($fleet_obj) == 5 )
         {
-            if ($fleet_obj['mission'] < 100) $task[$tasknum]['fleet'][0]['dir'] = 1;
-            else if ($fleet_obj['mission'] < 200) $task[$tasknum]['fleet'][0]['dir'] = 0;
+            if ($fleet_obj['mission'] < 100) $task[$tasknum]['fleet'][0]['dir'] = 0;
+            else if ($fleet_obj['mission'] < 200) $task[$tasknum]['fleet'][0]['dir'] = 1;
             else $task[$tasknum]['fleet'][0]['dir'] = 2;
         }
         else
         {
-            if ( $fleet_obj['target_planet'] == $planet_id ) $task[$tasknum]['fleet'][0]['dir'] = 1;    // на планету
-            else $task[$tasknum]['fleet'][0]['dir'] = 0;    // возврат
+            if ( $fleet_obj['target_planet'] == $planet_id ) $task[$tasknum]['fleet'][0]['dir'] = 0;    // на планету
+            else $task[$tasknum]['fleet'][0]['dir'] = 1;    // возврат
         }
         if ($fleet_obj['mission'] == 20)
         {
@@ -338,7 +339,7 @@ function PhalanxEventList ($planet_id)
             $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['target_planet'];
             $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['start_planet'];
             $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
-            $task[$tasknum]['fleet'][0]['dir'] = 0;
+            $task[$tasknum]['fleet'][0]['dir'] = 1;
             $tasknum++;
         }
 
@@ -355,9 +356,9 @@ function PhalanxEventList ($planet_id)
             $seconds = max($t['end_time']-$now, 0);
             if ( $seconds <= 0 ) continue;
             if ($t['fleets'] > 1) echo "<tr class=''>\n";
-            else if ($t['direction'] == 1) echo "<tr class='flight'>\n";
-            else if ($t['direction'] == 0) echo "<tr class='return'>\n";
-            else if ($t['direction'] == 2) echo "<tr class='holding'>\n";
+            else if ($t['fleet'][0]['dir'] == 0) echo "<tr class='flight'>\n";
+            else if ($t['fleet'][0]['dir'] == 1) echo "<tr class='return'>\n";
+            else if ($t['fleet'][0]['dir'] == 2) echo "<tr class='holding'>\n";
             echo "<th><div id='bxx".($i+1)."' title='".$seconds."'star='".$t['end_time']."'></div></th>\n";
             echo "<th colspan='3'>";
             for ($fl=0; $fl<$t['fleets']; $fl++)
