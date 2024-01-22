@@ -1,7 +1,7 @@
 # Introduction #
 
 Как это было:<br>
-<img src='http://ogamespec.com/imgstore/oldogame_messages.jpg'>
+![oldogame_messages](/imgstore/oldogame_messages.jpg)
 
 Доступ к игровым сообщениям осуществляется через меню <code>Сообщения</code>. Игровые сообщения могут быть сгенерированы игрой (шпионские и боевые доклады, сообщения о передвижении флотов и прочее) или другими игроками (например личные сообщения).<br>
 <br>
