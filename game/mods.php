@@ -26,6 +26,15 @@ function ModifyUserForCarnageMode ($player_id)
 {
     global $db_prefix;
 
+    // Случайные ресурсы на планетах и лунах (мин/макс)
+    $res_sizes = array();
+    $res_sizes['m_min'] = 29000000;
+    $res_sizes['m_max'] = 31000000;
+    $res_sizes['k_min'] = 19000000;
+    $res_sizes['k_max'] = 21000000;
+    $res_sizes['d_min'] =  9000000;
+    $res_sizes['d_max'] = 11000000;
+
     $uni = LoadUniverse ();
     $user = LoadUser ($player_id);
     $hplanetid = $user['hplanetid'];
@@ -40,15 +49,24 @@ function ModifyUserForCarnageMode ($player_id)
     // Модифицировать постройки на Главной планете
 
     SetPlanetBuildings ( $hplanetid, GetCarnageModeBuildings(false) );
-    AdjustResources (30000000, 20000000, 10000000, $hplanetid, '+');
-    RecalcFields ($hplanetid);
+    AdjustResources (
+        mt_rand($res_sizes['m_min'], $res_sizes['m_max']), 
+        mt_rand($res_sizes['k_min'], $res_sizes['k_max']), 
+        mt_rand($res_sizes['d_min'], $res_sizes['d_max']), 
+        $hplanetid, '+');
+    // Нужно делать планеты максимального размера
+    SetPlanetDiameter ($hplanetid, 18000);
 
     // Добавить луну Главной планете
 
     $moon_id = CreatePlanet ($hplanet['g'], $hplanet['s'], $hplanet['p'], $player_id, 0, 1, mt_rand(15,20));
     SetPlanetBuildings ( $moon_id, GetCarnageModeBuildings(true) );
     SetPlanetFleetDefense ( $moon_id, GetCarnageModeFleet(GetModeVarInt('mod_carnage_fleet_size') * 1000000000 ) );
-    AdjustResources (30000000, 20000000, 10000000, $moon_id, '+');
+    AdjustResources (
+        mt_rand($res_sizes['m_min'], $res_sizes['m_max']), 
+        mt_rand($res_sizes['k_min'], $res_sizes['k_max']), 
+        mt_rand($res_sizes['d_min'], $res_sizes['d_max']), 
+        $moon_id, '+');
     RecalcFields ($moon_id);
 
     // Создать ещё 8 развитых планет с лунами
@@ -69,8 +87,13 @@ function ModifyUserForCarnageMode ($player_id)
         // Нарисовать постройки
 
         SetPlanetBuildings ( $planet_id, GetCarnageModeBuildings(false) );
-        AdjustResources (30000000, 20000000, 10000000, $planet_id, '+');
-        RecalcFields ($planet_id);
+        AdjustResources (
+            mt_rand($res_sizes['m_min'], $res_sizes['m_max']), 
+            mt_rand($res_sizes['k_min'], $res_sizes['k_max']), 
+            mt_rand($res_sizes['d_min'], $res_sizes['d_max']), 
+            $planet_id, '+');
+        // Нужно делать планеты максимального размера
+        SetPlanetDiameter ($planet_id, 18000);        
 
         // Добавить луну
 
@@ -80,29 +103,33 @@ function ModifyUserForCarnageMode ($player_id)
 
         SetPlanetBuildings ( $moon_id, GetCarnageModeBuildings(true) );
         SetPlanetFleetDefense ( $moon_id, GetCarnageModeFleet(GetModeVarInt('mod_carnage_fleet_size') * 1000000000 ) );
-        AdjustResources (30000000, 20000000, 10000000, $moon_id, '+');
+        AdjustResources (
+            mt_rand($res_sizes['m_min'], $res_sizes['m_max']), 
+            mt_rand($res_sizes['k_min'], $res_sizes['k_max']), 
+            mt_rand($res_sizes['d_min'], $res_sizes['d_max']), 
+            $moon_id, '+');
         RecalcFields ($moon_id);
     }
 
     // Модифицировать исследования
 
     $carnage_resmap = array (
-        106 => 15,
-        108 => 15,
-        109 => 18,
-        110 => 18,
-        111 => 18,
-        113 => 12,
-        114 => 10,
-        115 => 20,
-        117 => 18,
-        118 => 16,
-        120 => 12,
-        121 => 5,
-        122 => 8,
-        123 => 5,
-        124 => 9,
-        199 => 1,
+        106 => 15,  // Шпионаж
+        108 => 15,  // Компьютерная технология
+        109 => 18,  // Оружейная технология
+        110 => 18,  // Щитовая технология
+        111 => 18,  // Броня космических кораблей
+        113 => 12,  // Энергетическая технология
+        114 => 10,  // Гиперпространственная технология
+        115 => 20,  // Реактивный двигатель
+        117 => 18,  // Импульсный двигатель
+        118 => 16,  // Гиперпространственный двигатель
+        120 => 12,  // Лазерная технология
+        121 => 5,   // Ионная технология
+        122 => 8,   // Плазменная технология
+        123 => 5,   // Межгалактическая исследовательская сеть
+        124 => 9,   // Экспедиционная технология
+        199 => 1,   // Гравитационная технология
     );
     $query = "UPDATE ".$db_prefix."users SET ";
     foreach ( $carnage_resmap as $gid=>$level)
@@ -137,25 +164,25 @@ function GetCarnageModeBuildings ($moon)
         $objects['b31'] = 0;
         $objects['b33'] = 0;
         $objects['b34'] = 0;
-        $objects['b41'] = 7;
-        $objects['b42'] = 7;
-        $objects['b43'] = 1;
+        $objects['b41'] = 7;    // Лунная база
+        $objects['b42'] = 7;    // Сенсорная фаланга
+        $objects['b43'] = 1;    // Ворота
         $objects['b44'] = 0;
     }
     else {
 
-        $objects['b1'] = 40;
-        $objects['b2'] = 35;
-        $objects['b3'] = 35;
-        $objects['b4'] = 25;
+        $objects['b1'] = 40;    // Рудник по добыче металла
+        $objects['b2'] = 35;    // Рудник по добыче кристалла
+        $objects['b3'] = 35;    // Синтезатор дейтерия
+        $objects['b4'] = 25;    // Солнечная электростанция
         $objects['b12'] = 0;
-        $objects['b14'] = 10;
-        $objects['b15'] = 10;
-        $objects['b21'] = 12;
-        $objects['b22'] = 15;
-        $objects['b23'] = 15;
-        $objects['b24'] = 15;
-        $objects['b31'] = 12;
+        $objects['b14'] = 10;   // Фабрика роботов
+        $objects['b15'] = 10;   // Фабрика нанитов
+        $objects['b21'] = 12;   // Верфь
+        $objects['b22'] = 15;   // Хранилище металла
+        $objects['b23'] = 15;   // Хранилище кристалла
+        $objects['b24'] = 15;   // Ёмкость для дейтерия
+        $objects['b31'] = 12;   // Исследовательская лаборатория
         $objects['b33'] = 0;
         $objects['b34'] = 0;
         $objects['b41'] = 0;

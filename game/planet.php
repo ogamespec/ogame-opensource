@@ -514,6 +514,15 @@ function SetPlanetBuildings ( $planet_id, $objects )
     dbquery ($query);
 }
 
+// Установить диаметр планеты/луны. После установки нового диаметра пересчитываются поля планеты.
+function SetPlanetDiameter ($planet_id, $diam)
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."planets SET diameter=$diam WHERE planet_id=$planet_id;";
+    dbquery ($query);
+    RecalcFields($planet_id);
+}
+
 // Вернуть название планеты со ссылкой на админку.
 function AdminPlanetName ($planet)
 {
@@ -535,7 +544,7 @@ function CreateHomePlanet ($player_id)
     $ss = 15;
     $uni = LoadUniverse ();
 
-    $ppg = $ss * $uni['systems'];        // количество планет в галактике
+    $ppg = $ss * $uni['systems'];        // количество систем в галактике
 
     $sg = 1;        // стартовая галактика для регистрации
     $planet = array ();
