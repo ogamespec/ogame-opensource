@@ -83,25 +83,25 @@ function Admin_Users ()
                 $query .= "r$gid = ".intval ($_POST["r$gid"]).", ";
             }
 
-            if ( $_POST['deaktjava'] === "on" ) {
+            if ( key_exists('deaktjava', $_POST) && $_POST['deaktjava'] === "on" ) {
                     $query .= "disable = 1, disable_until = " . ($now+7*24*60*60).", ";
             }
             else {
                 $query .= "disable = 0, ";
             }
-            if ( $_POST['vacation'] === "on" ) {
+            if ( key_exists('vacation', $_POST) && $_POST['vacation'] === "on" ) {
                 $query .= "vacation = 1, vacation_until = " . ($now+((2*24*60*60)/ $speed)) .", ";
             }
             else $query .= "vacation = 0, ";
-            if ( $_POST['banned'] !== "on" ) $query .= "banned = 0, ";
-            if ( $_POST['noattack'] !== "on" ) $query .= "noattack = 0, ";
+            if ( key_exists('banned', $_POST) && $_POST['banned'] !== "on" ) $query .= "banned = 0, ";
+            if ( key_exists('noattack', $_POST) && $_POST['noattack'] !== "on" ) $query .= "noattack = 0, ";
 
             $query .= "pemail = '".$_POST['pemail']."', ";
             $query .= "email = '".$_POST['email']."', ";
             $query .= "admin = '".$_POST['admin']."', ";
-            $query .= "validated = ".($_POST['validated']==="on"?1:0).", ";
-            $query .= "sniff = ".($_POST['sniff']==="on"?1:0).", ";
-            $query .= "debug = ".($_POST['debug']==="on"?1:0).", ";
+            $query .= "validated = ".(key_exists('validated', $_POST) && $_POST['validated']==="on"?1:0).", ";
+            $query .= "sniff = ".(key_exists('sniff', $_POST) && $_POST['sniff']==="on"?1:0).", ";
+            $query .= "debug = ".(key_exists('debug', $_POST) && $_POST['debug']==="on"?1:0).", ";
 
             $query .= "dm = '".intval ($_POST['dm'])."', ";
             $query .= "dmfree = '".intval ($_POST['dmfree'])."', ";
@@ -110,7 +110,7 @@ function Admin_Users ()
             $query .= "sortorder = '".intval ($_POST['settings_order'])."', ";
             $query .= "skin = '".$_POST['dpath']."', ";
             $query .= "useskin = ".($_POST['design']==="on"?1:0).", ";
-            $query .= "deact_ip = ".($_POST['deact_ip']==="on"?1:0).", ";
+            $query .= "deact_ip = ".(key_exists('deact_ip', $_POST) && $_POST['deact_ip']==="on"?1:0).", ";
             $query .= "maxspy = '".intval ($_POST['spio_anz'])."', ";
             $query .= "maxfleetmsg = '".intval ($_POST['settings_fleetactions'])."' ";
 
@@ -121,7 +121,7 @@ function Admin_Users ()
             foreach ( $qname as $i=>$qcmd )
             {
                 $days = intval ( $_POST[$qcmd] );
-                if ( $days > 0 ) RecruitOfficer ( $player_id, $qcmd, $days * 24 * 60 * 60 );
+                RecruitOfficer ( $player_id, $qcmd, $days * 24 * 60 * 60 );
             }
         }
 
@@ -332,7 +332,7 @@ function Admin_Users ()
 ?>
         </tr></table></th></tr>
 
-            <tr><th colspan=2><i>Чтобы продлить офицера укажите необходимое количество дней в полях ввода</i></th></tr>
+            <tr><th colspan=2><i>Чтобы продлить офицера укажите необходимое количество дней в полях ввода.<br/>Чтобы удалить укажите значение меньше нуля.</i></th></tr>
 
         </table></th>
 

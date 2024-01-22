@@ -818,22 +818,30 @@ function GetOfficerLeft ($player_id, $off)
     else return 0;
 }
 
-// Продлить офицера на указанное количество секунд.
+// Продлить офицера на указанное количество секунд. Если количество секунд < 0 - удалить офицера.
 function RecruitOfficer ( $player_id, $off, $seconds )
 {
     global $db_prefix;
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".$off."' AND owner_id = $player_id LIMIT 1";
-    $result = dbquery ($query);
-    if ( dbrows ($result) == 0 )
-    {
-        AddQueue ( $player_id, $off, 0, 0, 0, time (), $seconds, 0 );
-    }
-    else
-    {
-        $queue = dbarray ( $result );
-        $query = "UPDATE ".$db_prefix."queue SET end = end + $seconds WHERE task_id = " . $queue['task_id'];
+    if ($seconds < 0) {
+
+        $query = "DELETE FROM ".$db_prefix."queue WHERE type = '".$off."' AND owner_id = $player_id";
         dbquery ($query);
+    }
+    else {
+
+        $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".$off."' AND owner_id = $player_id LIMIT 1";
+        $result = dbquery ($query);
+        if ( dbrows ($result) == 0 )
+        {
+            AddQueue ( $player_id, $off, 0, 0, 0, time (), $seconds, 0 );
+        }
+        else
+        {
+            $queue = dbarray ( $result );
+            $query = "UPDATE ".$db_prefix."queue SET end = end + $seconds WHERE task_id = " . $queue['task_id'];
+            dbquery ($query);
+        }
     }
 }
 
