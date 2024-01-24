@@ -200,7 +200,7 @@ function CreateUser ( $name, $pass, $email, $bot=false)
     }
 
     // Активировать Командира на 9999 дней.
-    RecruitOfficer ( $id, 'CommanderOff', 9999 * 24 * 60 * 60 );
+    //RecruitOfficer ( $id, 'CommanderOff', 9999 * 24 * 60 * 60 );
 
     // Удалить неактивированного пользователя через 3 дня.
 

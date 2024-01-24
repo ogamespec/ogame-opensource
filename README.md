@@ -24,7 +24,6 @@ Features:
 - 100% match on resource costs and production timings
 - Original home planet distribution algorithm and spy protection
 - Fixed some original game bugs ("buggy" 10th planets, recalled ACS delay, buggy fleet return activity etc)
-- Free Commander to all!
 - Original expedition with triple Dark Matter chance
 - Open-source! With comments on russian =)
 - Hard to install :) (should be more simple soon)
