@@ -43,7 +43,7 @@ function GetPlanetImage ($skinpath, $planet)
 function UserSkin ()
 {
     global $GlobalUser;
-    if ($GlobalUser['useskin']) return $GlobalUser['skin'];
+    if ( key_exists('useskin', $GlobalUser) && $GlobalUser['useskin']) return $GlobalUser['skin'];
     else return hostname () . "evolution/";
 }
 
