@@ -209,6 +209,6 @@ if ( $uni['freeze'] ) $OverviewError .= "<center>\nВселенная поста
 
 if ( $GlobalUser['admin'] > 0 ) $OverviewMessage .= "<center>".loca("OVERVIEW_ADMIN_NOTE")."<br></center>\n";
 
-PageFooter ($OverviewMessage, $OverviewError, false);
+PageFooter ($OverviewMessage, $OverviewError);
 ob_end_flush ();
 ?>

@@ -562,7 +562,7 @@ function LeftMenu ($coma)
     echo "    </div>\n";
 }
 
-function PageFooter ($msg="", $error="", $popup=false, $headerH=81)
+function PageFooter ($msg="", $error="", $popup=false, $headerH=81, $nores=false)
 {
     global $pagetime;
     global $GlobalUser;
@@ -594,7 +594,7 @@ function PageFooter ($msg="", $error="", $popup=false, $headerH=81)
     echo "<div id='messagebox'><center>".$msg."</center></div>\n";
     echo "<div id='errorbox'><center>".$error."</center></div>\n";
     echo "<script>\n";
-    if ($popup) echo "messagebox.style.top='0px';\n";
+    if ($nores) echo "messagebox.style.top='0px';\n";
     echo "headerHeight = $headerH;\n";
     if ($popup)
     {

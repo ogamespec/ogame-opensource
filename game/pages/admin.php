@@ -210,7 +210,7 @@ echo "</div>\n";
 echo "<!-- END CONTENT AREA -->\n";
 
 if ( $AdminMessage || $AdminError ) PageFooter ($AdminMessage, $AdminError );
-else PageFooter ($AdminMessage, $AdminError, false, 0);
+else PageFooter ($AdminMessage, $AdminError, false, 0, true);
 
 ob_end_flush ();
 ?>

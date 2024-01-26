@@ -130,6 +130,6 @@ echo "</center>\n";
 echo "</div>\n";
 echo "<!-- END CONTENT AREA -->\n";
 
-PageFooter ("","",true,0);
+PageFooter ("","",true,0,true);
 ob_end_flush ();
 ?>

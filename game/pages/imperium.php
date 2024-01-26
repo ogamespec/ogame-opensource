@@ -517,6 +517,6 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- END CONTENT AREA -->
 
 <?php
-PageFooter ("", "", false, 0);
+PageFooter ("", "", false, 0, true);
 ob_end_flush ();
 ?>

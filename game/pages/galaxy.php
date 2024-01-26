@@ -4,6 +4,7 @@ $GalaxyMessage = "";
 $GalaxyError = "";
 
 loca_add ( "menu", $GlobalUni['lang'] );
+loca_add ( "galaxy", $GlobalUni['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -14,8 +15,6 @@ $aktplanet = ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
-
-$unitab = $GlobalUni;
 
 $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
 
@@ -35,29 +34,29 @@ if ( method () === "POST" && isset($_POST['aktion']) )
     $dist = abs ($origin['s'] - $target['s']);
     $ipm_radius = max (0, 5 * $GlobalUser['r117'] - 1);
 
-    if ( $target == NULL) $GalaxyError = "Нет цели";
+    if ( $target == NULL) $GalaxyError = loca("GALAXY_RAK_NO_TARGET");
 
     if ( !in_array ($type, $defmap ) ) $type = 0;
 
     if ( $GalaxyError === "" )    // Проверить допустимые параметры
     {
-        if ($amount == 0) $GalaxyError = "Вы не выбрали количество ракет";
-        if ($amount > $aktplanet["d503"]) $GalaxyError = "Недостаточно межпланетных ракет!";
-        if ($dist > $ipm_radius) $GalaxyError = "Радиус действия (уровень исследования импульсного двигателя) Вашей межпланетной ракеты слишком мал!";
+        if ($amount == 0) $GalaxyError = loca("GALAXY_RAK_NO_ROCKETS");
+        if ($amount > $aktplanet["d503"]) $GalaxyError = loca("GALAXY_RAK_NOT_ENOUGH");
+        if ($dist > $ipm_radius) $GalaxyError = loca("GALAXY_RAK_WEAK_DRIVE");
     }
 
     if ( $GalaxyError === "" )        // Проверить режимы игроков
     {
-        if ($GlobalUser['vacation']) $GalaxyError = "В режиме отпуска нельзя запускать ракеты!";
-        else if ($target_user['vacation']) $GalaxyError = "Этот игрок находится в режиме отпуска!";
-        else if ($target['owner_id'] == $GlobalUser['player_id']) $GalaxyError = "Невозможно напасть на собственную планету!";
-        else if ( IsPlayerNewbie($target_user['player_id']) || IsPlayerStrong($target_user['player_id']) ) $GalaxyError = "Планета находится под защитой для новичков!";
+        if ($GlobalUser['vacation']) $GalaxyError = loca("GALAXY_RAK_VACATION_SELF");
+        else if ($target_user['vacation']) $GalaxyError = loca("GALAXY_RAK_VACATION_OTHER");
+        else if ($target['owner_id'] == $GlobalUser['player_id']) $GalaxyError = loca("GALAXY_RAK_SELF");
+        else if ( IsPlayerNewbie($target_user['player_id']) || IsPlayerStrong($target_user['player_id']) ) $GalaxyError = loca("GALAXY_RAK_NOOB");
     }
 
     if ( $GalaxyError === "" )
     {
         LaunchRockets ( $origin, $target, 30 + 60 * $dist, $amount, $type );
-        $GalaxyMessage = va ( "Запущено #1 ракет!", $amount );
+        $GalaxyMessage = va ( loca("GALAXY_RAK_LAUNCHED"), $amount );
     }
 }
 
@@ -76,10 +75,10 @@ else if ( key_exists ('p3', $_GET)) $coord_p = intval($_GET['p3']);
 else $coord_p = $aktplanet['p'];
 
 if ($coord_g < 1 ) $coord_g = 1;
-if ($coord_g > $unitab['galaxies'] ) $coord_g = $unitab['galaxies'];
+if ($coord_g > $GlobalUni['galaxies'] ) $coord_g = $GlobalUni['galaxies'];
 
 if ($coord_s < 1 ) $coord_s = 1;
-if ($coord_s > $unitab['systems'] ) $coord_s = $unitab['systems'];
+if ($coord_s > $GlobalUni['systems'] ) $coord_s = $GlobalUni['systems'];
 
 if ( isset($_POST['systemLeft']) )
 {
@@ -89,7 +88,7 @@ if ( isset($_POST['systemLeft']) )
 else if ( isset($_POST['systemRight']) )
 {
     $coord_s++;
-    if ( $coord_s > $unitab['systems'] ) $coord_s = $unitab['systems'];
+    if ( $coord_s > $GlobalUni['systems'] ) $coord_s = $GlobalUni['systems'];
 }
 else if ( isset($_POST['galaxyLeft']) )
 {
@@ -99,7 +98,7 @@ else if ( isset($_POST['galaxyLeft']) )
 else if ( isset($_POST['galaxyRight']) )
 {
     $coord_g++;
-    if ( $coord_g > $unitab['galaxies'] ) $coord_g = $unitab['galaxies'];
+    if ( $coord_g > $GlobalUni['galaxies'] ) $coord_g = $GlobalUni['galaxies'];
 }
 
 $not_enough_deut = ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s) && $aktplanet['d'] < 10;
@@ -168,17 +167,17 @@ echo "<center>\n\n";
 
   function whenLoading(){
       //var e = document.getElementById('fleetstatus');
-      //e.innerHTML = "Флот отсылается...";
+      //e.innerHTML = "<?php echo loca("GALAXY_AJAX_LOADING");?>";
   }
 
   function whenLoaded(){
       //    var e = document.getElementById('fleetstatus');
-      // e.innerHTML = "Флот отослан...";
+      // e.innerHTML = "<?php echo loca("GALAXY_AJAX_LOADED");?>";
   }
 
   function whenInteractive(){
       //var e = document.getElementById('fleetstatus');
-      // e.innerHTML = "Получение данных...";
+      // e.innerHTML = "<?php echo loca("GALAXY_AJAX_INTERACT");?>";
   }
 
   /*
@@ -218,46 +217,46 @@ echo "<center>\n\n";
           setShips("missiles", retVals[4]);
                     break;
           case 601:
-          addToTable("Произошла ошибка", "error");
+          addToTable("<?php echo loca("GALAXY_ERROR_601");?>", "error");
           break;
           case 602:
-          addToTable("Ошибка, луны не существует", "error");
+          addToTable("<?php echo loca("GALAXY_ERROR_602");?>", "error");
           break;
           case 603:
-          addToTable("Ошибка! К игроку невозможно подлететь, т.к. он находится под защитой для новичков! ", "error");
+          addToTable("<?php echo loca("GALAXY_ERROR_603");?>", "error");
           break;
           case 604:
-          addToTable("Ошибка! К игроку невозможно подлететь, т.к. он находится под защитой для новичков! ", "error");
+          addToTable("<?php echo loca("GALAXY_ERROR_604");?>", "error");
           break;
           case 605:
-          addToTable("Невозможно, игрок находится в режиме отпуска", "vacation");
+          addToTable("<?php echo loca("GALAXY_ERROR_605");?>", "vacation");
           break;
           case 610:
-          addToTable("Ошибка, возможно послать только "+retVals[1]+" зондов, шлите", "notice");
+          addToTable("<?php echo va(loca("GALAXY_ERROR_610"), "\"+retVals[1]+\"");?>", "notice");
           break;
           case 611:
-          addToTable("Ошибка! Нет кораблей для отправки", "error");
+          addToTable("<?php echo loca("GALAXY_ERROR_611");?>", "error");
           break;
           case 612:
-          addToTable("Недостаточно места для флота", "error");
+          addToTable("<?php echo loca("GALAXY_ERROR_612");?>", "error");
           break;
           case 613:
-          addToTable("У Вас недостаточно дейтерия", "error");
+          addToTable("<?php echo loca("GALAXY_ERROR_613");?>", "error");
           break;
           case 614:
-          addToTable("Здесь планеты нет", "error");
+          addToTable("<?php echo loca("GALAXY_ERROR_614");?>", "error");
           break;
           case 615:
-          addToTable("Ошибка! Недостаточная грузоподъёмность!", "error");
+          addToTable("<?php echo loca("GALAXY_ERROR_615");?>", "error");
           break;
           case 616:
-          addToTable("Одинаковый ай-пи!", "error");
+          addToTable("<?php echo loca("GALAXY_ERROR_616");?>", "error");
           break;
       }
   }
 
   function doit(order, galaxy, system, planet, planettype, shipcount){
-      strInfo = "  Отправка "+shipcount+" кораблей"+(shipcount>1?"":"")+" на "+galaxy+":"+system+":"+planet+" ";
+      strInfo = <?=loca("GALAXY_DOIT_SEND");?>+shipcount+<?=loca("GALAXY_DOIT_SHIPS");?>+(shipcount>1?<?=loca("GALAXY_DOIT_MANY");?>:<?=loca("GALAXY_DOIT_ONE");?>)+<?=loca("GALAXY_DOIT_TO");?>+galaxy+":"+system+":"+planet+<?=loca("GALAXY_DOIT_END");?>;
       ajax.requestFile = "index.php?ajax=1&page=flottenversand&session=<?=$session;?>";
 
       // no longer needed, since we don't want to write the cryptic
@@ -363,11 +362,11 @@ if ( $not_enough_deut && $GlobalUser['admin'] == 0 )
 <br />
 <table width="519">
 <tr height="20">
-   <td class="c"><span class="error"> Ошибка</span></td>
+   <td class="c"><span class="error"><?php echo loca("GALAXY_DEUT_ERR");?></span></td>
 
 </tr>
   <tr height="20">
-    <th><span class="error">Недостаточно дейтерия!</span></th>
+    <th><span class="error"><?php echo loca("GALAXY_DEUT_ERR_TEXT");?></span></th>
   </tr>
 </table>
 
@@ -384,14 +383,14 @@ echo "<input type=\"hidden\" id=\"auto\" value=\"dr\">\n";
 echo "<table border=1 class='header' id='t1'>\n\n";
 echo "<tr class='header'>\n";
 echo "    <td class='header'><table class='header' id='t2'>\n";
-echo "    <tr class='header'><td class=\"c\" colspan=\"3\">Галактика</td></tr>\n";
+echo "    <tr class='header'><td class=\"c\" colspan=\"3\">".loca("GALAXY_GALAXY")."</td></tr>\n";
 echo "    <tr class='header'>\n";
 echo "    <td class=\"l\"><input type=\"button\" name=\"galaxyLeft\" value=\"<-\" onClick=\"galaxy_submit('galaxyLeft')\"></td>\n";
 echo "    <td class=\"l\"><input type=\"text\" name=\"galaxy\" value=\"".$coord_g."\" size=\"5\" maxlength=\"3\" tabindex=\"1\"></td>\n";
 echo "    <td class=\"l\"><input type=\"button\" name=\"galaxyRight\" value=\"->\" onClick=\"galaxy_submit('galaxyRight')\"></td>\n";
 echo "    </tr></table></td>\n\n";
 echo "    <td class='header'><table class='header' id='t3'>\n";
-echo "    <tr class='header'><td class=\"c\" colspan=\"3\">Солнечная система</td></tr>\n";
+echo "    <tr class='header'><td class=\"c\" colspan=\"3\">".loca("GALAXY_SYSTEM")."</td></tr>\n";
 echo "    <tr class='header'>\n";
 echo "    <td class=\"l\"><input type=\"button\" name=\"systemLeft\" value=\"<-\" onClick=\"galaxy_submit('systemLeft')\"></td>\n";
 echo "    <td class=\"l\"><input type=\"text\" name=\"system\" value=\"".$coord_s."\" size=\"5\" maxlength=\"3\" tabindex=\"2\"></td>\n";
@@ -399,7 +398,7 @@ echo "    <td class=\"l\"><input type=\"button\" name=\"systemRight\" value=\"->
 echo "    </tr></table></td>\n";
 echo "</tr>\n\n";
 echo "<tr class='header'>\n";
-echo "    <td class='header' style=\"background-color:transparent;border:0px;\" colspan=\"2\" align=\"center\"> <input type=\"submit\" value=\"Показать\"></td>\n";
+echo "    <td class='header' style=\"background-color:transparent;border:0px;\" colspan=\"2\" align=\"center\"> <input type=\"submit\" value=\"".loca("GALAXY_SHOW")."\"></td>\n";
 echo "</tr>\n";
 echo "</table>\n";
 echo "</form>\n";
@@ -420,16 +419,16 @@ echo "</form>\n";
    <table border="0">
     <tr>
      <td class="c" colspan="2">
-      Запустить ракету на <a href="index.php?page=galaxy&no_header=1&session=<?=$session;?>&p1=<?=$target['g'];?>&p2=<?=$target['s'];?>&p3=<?=$target['p'];?>" >[<?=$target['g'];?>:<?=$target['s'];?>:<?=$target['p'];?>]</a>     </td>
+      <?=loca("GALAXY_RAK_COORD");?> <a href="index.php?page=galaxy&no_header=1&session=<?=$session;?>&p1=<?=$target['g'];?>&p2=<?=$target['s'];?>&p3=<?=$target['p'];?>" >[<?=$target['g'];?>:<?=$target['s'];?>:<?=$target['p'];?>]</a>     </td>
 
     </tr>
     <tr>
      <td class="c">
-     Кол-во ракет (<?=$aktplanet["d503"];?> в наличии):     <input type="text" name="anz" size="2" maxlength="2" /></td>
+     <?=va(loca("GALAXY_RAK_AMOUNT"), $aktplanet["d503"]);?>:     <input type="text" name="anz" size="2" maxlength="2" /></td>
     <td class="c">
-    Цель:
+    <?=loca("GALAXY_RAK_TARGET");?>:
      <select name="pziel">
-      <option value="0" selected>Все</option>
+      <option value="0" selected><?=loca("GALAXY_RAK_TARGET_ALL");?></option>
 <?php
     foreach ($defmap as $i=>$gid)
     {
@@ -440,7 +439,7 @@ echo "</form>\n";
     </td>
    </tr>
    <tr>
-    <td class="c" colspan="2"><input type="submit" name="aktion" value="Атаковать"></td>
+    <td class="c" colspan="2"><input type="submit" name="aktion" value="<?=loca("GALAXY_RAK_ATTACK");?>"></td>
    </tr>
 
   </table>
@@ -452,16 +451,16 @@ echo "</form>\n";
 /***** Заголовок таблицы *****/
 
 echo "<table width=\"569\">\n";
-echo "<tr><td class=\"c\" colspan=\"8\">Солнечная система ".$coord_g.":".$coord_s."</td></tr>\n";
+echo "<tr><td class=\"c\" colspan=\"8\">".loca("GALAXY_SYSTEM")." ".$coord_g.":".$coord_s."</td></tr>\n";
 echo "<tr>\n";
-echo "<td class=\"c\">Коорд.</td>\n";
-echo "<td class=\"c\">Планета</td>\n";
-echo "<td class=\"c\">Название (активность)</td>\n";
-echo "<td class=\"c\">луна</td>\n";
-echo "<td class=\"c\">поле обломков</td>\n";
-echo "<td class=\"c\">игрок (статус)</td>\n";
-echo "<td class=\"c\">Альянс</td>\n";
-echo "<td class=\"c\">Действия</td>\n";
+echo "<td class=\"c\">".loca("GALAXY_HEAD_COORD")."</td>\n";
+echo "<td class=\"c\">".loca("GALAXY_HEAD_PLANET")."</td>\n";
+echo "<td class=\"c\">".loca("GALAXY_HEAD_NAME_ACT")."</td>\n";
+echo "<td class=\"c\">".loca("GALAXY_HEAD_MOON")."</td>\n";
+echo "<td class=\"c\">".loca("GALAXY_HEAD_DF")."</td>\n";
+echo "<td class=\"c\">".loca("GALAXY_HEAD_PLAYER_STATUS")."</td>\n";
+echo "<td class=\"c\">".loca("GALAXY_HEAD_ALLY")."</td>\n";
+echo "<td class=\"c\">".loca("GALAXY_HEAD_ACTIONS")."</td>\n";
 echo "</tr>\n";
 
 /***** Перечислить планеты *****/
@@ -494,24 +493,24 @@ while ($num--)
     if ( $planet['type'] > 0 && $planet['type'] < 10000 )
     {
         echo "<a style=\"cursor:pointer\" onmouseover='return overlib(\"<table width=240>";
-        echo "<tr><td class=c colspan=2 >Планета ".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]</td></tr>";
+        echo "<tr><td class=c colspan=2 >".loca("GALAXY_PLANET")." ".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]</td></tr>";
         echo "<tr><th width=80 ><img src=".GetPlanetSmallImage ( UserSkin(), $planet )." height=75 width=75 /></th>";
         echo "<th align=left >";
         if ($own)
         {
-            echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=4 >Оставить</a><br />";
-            echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=3 >Транспорт</a><br />";
+            echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=4 >".loca("GALAXY_FLEET_DEPLOY")."</a><br />";
+            echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=3 >".loca("GALAXY_FLEET_TRANSPORT")."</a><br />";
         }
         else
         {
-            echo "<a href=# onclick=doit(6,".$planet['g'].",".$planet['s'].",".$planet['p'].",1,".$GlobalUser['maxspy'].") >Шпионаж</a><br><br />";
-            if ($phalanx) echo "<a href=# onclick=fenster(&#039;index.php?page=phalanx&session=".$_GET['session']."&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."&#039;) >Фаланга</a><br />";
-            if ( $show_ipm_button ) echo "<a href=index.php?page=galaxy&no_header=1&session=$session&mode=1&p1=".$planet['g']."&p2=".$planet['s']."&p3=".$planet['p']."&pdd=".$planet['planet_id']."&zp=".$planet['owner_id']." >Ракетная атака</a><br />";
-            echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=1 m>Атака</a><br />";
-            echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=5 >Удерживать</a><br />";
-            echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=3 >Транспорт</a><br />";
+            echo "<a href=# onclick=doit(6,".$planet['g'].",".$planet['s'].",".$planet['p'].",1,".$GlobalUser['maxspy'].") >".loca("GALAXY_FLEET_SPY")."</a><br><br />";
+            if ($phalanx) echo "<a href=# onclick=fenster(&#039;index.php?page=phalanx&session=".$_GET['session']."&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."&#039;) >".loca("GALAXY_FLEET_PHALANX")."</a><br />";
+            if ( $show_ipm_button ) echo "<a href=index.php?page=galaxy&no_header=1&session=$session&mode=1&p1=".$planet['g']."&p2=".$planet['s']."&p3=".$planet['p']."&pdd=".$planet['planet_id']."&zp=".$planet['owner_id']." >".loca("GALAXY_FLEET_RAK")."</a><br />";
+            echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=1 m>".loca("GALAXY_FLEET_ATTACK")."</a><br />";
+            echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=5 >".loca("GALAXY_FLEET_DEFEND")."</a><br />";
+            echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=3 >".loca("GALAXY_FLEET_TRANSPORT")."</a><br />";
         }
-        if ($GlobalUser['admin'] >= 2) echo "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id'].">Управление планетой</a><br />";
+        if ($GlobalUser['admin'] >= 2) echo "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id'].">".loca("GALAXY_PLANET_ADMIN")."</a><br />";
         echo "</th></tr></table>\", STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -40 );' onmouseout=\"return nd();\">\n";
         echo "<img src=\"".GetPlanetSmallImage ( UserSkin(), $planet )."\" height=\"30\" width=\"30\"/></a>\n";
     }
@@ -533,10 +532,10 @@ while ($num--)
         if ( $activity > $ago15 ) $akt = "&nbsp;(*)";
         else if ( $activity > $ago60) $akt = "&nbsp;(".floor(($now - $activity)/60)." min)";
     }
-    if ( $planet['type'] == 10001 ) $planet_name = "Уничтоженная планета$akt";
-    else if ( $planet['type'] == 10004 ) { $planet_name = "Покинутая колония$akt"; $phalanx = false; }
+    if ( $planet['type'] == 10001 ) $planet_name = loca("GALAXY_PLANET_DESTROYED") . $akt;
+    else if ( $planet['type'] == 10004 ) { $planet_name = loca("GALAXY_PLANET_ABANDONED") . $akt; $phalanx = false; }
     else $planet_name = $planet['name'].$akt;
-    if ($phalanx) $planet_name = "<a href='#' onclick=fenster('index.php?page=phalanx&session=$session&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."',\"Bericht_Phalanx\") title=\"Фаланга\">" . $planet_name . "</a>";
+    if ($phalanx) $planet_name = "<a href='#' onclick=fenster('index.php?page=phalanx&session=$session&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."',\"Bericht_Phalanx\") title=\"".loca("GALAXY_FLEET_PHALANX")."\">" . $planet_name . "</a>";
     echo "<th width=\"130\" style='white-space: nowrap;'>$planet_name</th>\n";
 
     // луна
@@ -546,35 +545,35 @@ while ($num--)
         if ($moon['type'] == 0)
         {
             echo "<a onmouseout=\"return nd();\" onmouseover=\"return overlib('<table width=240 ><tr>";
-            echo "<td class=c colspan=2 >Луна ".$moon['name']." [".$moon['g'].":".$moon['s'].":".$moon['p']."]</td></tr>";
-            echo "<tr><th width=80 ><img src=".GetPlanetSmallImage ( UserSkin(), $moon )." height=75 width=75 alt=\'Луна (размер: ".$moon['diameter'].")\'/></th>";
-            echo "<th><table width=120 ><tr><td colspan=2 class=c >Свойства</td></tr>";
-            echo "<tr><th>размер:</td><th>".nicenum($moon['diameter'])."</td></tr>";
-            echo "<tr><th>температура:</td><th>".$moon['temp']."</td></tr>";
-            echo "<tr><td colspan=2 class=c >Действия:</td></tr>";
+            echo "<td class=c colspan=2 >".loca("GALAXY_MOON")." ".$moon['name']." [".$moon['g'].":".$moon['s'].":".$moon['p']."]</td></tr>";
+            echo "<tr><th width=80 ><img src=".GetPlanetSmallImage ( UserSkin(), $moon )." height=75 width=75 alt=\'".va(loca("GALAXY_MOON_TITLE_SIZE"), $moon['diameter'])."\'/></th>";
+            echo "<th><table width=120 ><tr><td colspan=2 class=c >".loca("GALAXY_MOON_PROPS")."</td></tr>";
+            echo "<tr><th>".loca("GALAXY_MOON_SIZE")."</td><th>".nicenum($moon['diameter'])."</td></tr>";
+            echo "<tr><th>".loca("GALAXY_MOON_TEMP")."</td><th>".$moon['temp']."</td></tr>";
+            echo "<tr><td colspan=2 class=c >".loca("GALAXY_MOON_ACTIONS")."</td></tr>";
             echo "<tr><th align=left colspan=2 >";
             if ($own)
             {
-                echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=3 >Транспорт</a><br />";
-                echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=4 >Оставить</a><br />";
+                echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=3 >".loca("GALAXY_FLEET_TRANSPORT")."</a><br />";
+                echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=4 >".loca("GALAXY_FLEET_DEPLOY")."</a><br />";
             }
             else
             {
                 //echo "<font color=#808080 >Шпионаж</font><br><br />";
-                echo "<a href=# onclick=doit(6,".$moon['g'].",".$moon['s'].",".$moon['p'].",3,".$GlobalUser['maxspy'].") >Шпионаж</a><br><br />";
-                if ( $show_ipm_button ) echo "<a href=index.php?page=galaxy&no_header=1&session=$session&mode=1&p1=".$moon['g']."&p2=".$moon['s']."&p3=".$moon['p']."&pdd=".$moon['planet_id']."&zp=".$moon['owner_id']." >Ракетная атака</a><br />";
-                echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=3 >Транспорт</a><br />";
-                echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=1 >Атака</a><br />";
-                echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=5 >Удерживать</a><br />";
-                echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=9 >Уничтожить</a><br />";
+                echo "<a href=# onclick=doit(6,".$moon['g'].",".$moon['s'].",".$moon['p'].",3,".$GlobalUser['maxspy'].") >".loca("GALAXY_FLEET_SPY")."</a><br><br />";
+                if ( $show_ipm_button ) echo "<a href=index.php?page=galaxy&no_header=1&session=$session&mode=1&p1=".$moon['g']."&p2=".$moon['s']."&p3=".$moon['p']."&pdd=".$moon['planet_id']."&zp=".$moon['owner_id']." >".loca("GALAXY_FLEET_RAK")."</a><br />";
+                echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=3 >".loca("GALAXY_FLEET_TRANSPORT")."</a><br />";
+                echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=1 >".loca("GALAXY_FLEET_ATTACK")."</a><br />";
+                echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=5 >".loca("GALAXY_FLEET_DEFEND")."</a><br />";
+                echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=9 >".loca("GALAXY_FLEET_DESTROY")."</a><br />";
             }
-            if ($GlobalUser['admin'] >= 2) echo "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$moon['planet_id'].">Управление планетой</a><br />";
+            if ($GlobalUser['admin'] >= 2) echo "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$moon['planet_id'].">".loca("GALAXY_PLANET_ADMIN")."</a><br />";
             echo "</th></tr></table></tr></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -110 );\" style=\"cursor: pointer;\" \n";
             echo " href='#' onclick='doit(6, ".$moon['g'].", ".$moon['s'].", ".$moon['p'].", 3, ".$GlobalUser['maxspy'].")' \n";
             echo ">\n";
-            echo "<img width=\"22\" height=\"22\" alt=\"Луна (размер: ".$moon['diameter'].")\" src=\"".GetPlanetSmallImage ( UserSkin(), $moon )."\"/></a>\n";
+            echo "<img width=\"22\" height=\"22\" alt=\"".va(loca("GALAXY_MOON_TITLE_SIZE"), $moon['diameter'])."\" src=\"".GetPlanetSmallImage ( UserSkin(), $moon )."\"/></a>\n";
         }
-        else echo "<div style=\"border: 2pt solid #FF0000;\"><img src=\"".GetPlanetSmallImage ( UserSkin(), $moon )."\" alt=\"Луна (размер: ".$moon['diameter'].")\" height=\"22\" width=\"22\" onmouseover=\"return overlib('<font color=white><b>Покинута</b></font>', WIDTH, 75);\" onmouseout=\"return nd();\"/></div>\n";
+        else echo "<div style=\"border: 2pt solid #FF0000;\"><img src=\"".GetPlanetSmallImage ( UserSkin(), $moon )."\" alt=\"".va(loca("GALAXY_MOON_TITLE_SIZE"), $moon['diameter'])."\" height=\"22\" width=\"22\" onmouseover=\"return overlib('<font color=white><b>".loca("GALAXY_MOON_DESTROYED")."</b></font>', WIDTH, 75);\" onmouseout=\"return nd();\"/></div>\n";
     }
     echo "</th>\n";
 
@@ -588,7 +587,7 @@ while ($num--)
         {
 ?>
     <a style="cursor:pointer"
-       onmouseover="return overlib('<table width=240 ><tr><td class=c colspan=2 ></td></tr><tr><th width=80 ><img src=<?=UserSkin();?>planeten/debris.jpg height=75 width=75 alt=T /></th><th><table><tr><td class=c colspan=2>Ресурсы:</td></tr><tr><th>металл:</th><th><?=nicenum($debris['m']);?></th></tr><tr><th>кристалл:</th><th><?=nicenum($debris['k']);?></th></tr><tr><td class=c colspan=2>Действия:</tr><tr><th colspan=2 align=left ><a href=# onclick=doit(8,<?=$coord_g;?>,<?=$coord_s;?>,<?=$p;?>,2,<?=$harvesters;?>) >Переработать</a></tr></table></th></tr></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -40 );" onmouseout="return nd();"
+       onmouseover="return overlib('<table width=240 ><tr><td class=c colspan=2 ></td></tr><tr><th width=80 ><img src=<?=UserSkin();?>planeten/debris.jpg height=75 width=75 alt=T /></th><th><table><tr><td class=c colspan=2><?=loca("GALAXY_DF_RESOURCES");?></td></tr><tr><th><?=loca("GALAXY_DF_M");?></th><th><?=nicenum($debris['m']);?></th></tr><tr><th><?=loca("GALAXY_DF_K");?></th><th><?=nicenum($debris['k']);?></th></tr><tr><td class=c colspan=2><?=loca("GALAXY_DF_ACTIONS");?></tr><tr><th colspan=2 align=left ><a href=# onclick=doit(8,<?=$coord_g;?>,<?=$coord_s;?>,<?=$p;?>,2,<?=$harvesters;?>) ><?=loca("GALAXY_FLEET_RECYCLE");?></a></tr></table></th></tr></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -40 );" onmouseout="return nd();"
 href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harvesters;?>)'
 >
 <img src="<?=UserSkin();?>planeten/debris.jpg" height="22" width="22" /></a>
@@ -605,34 +604,34 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     if ( !($planet['type'] == 10001 || $planet['type'] == 10004) )
     {
         echo "<a style=\"cursor:pointer\" onmouseover=\"return overlib('<table width=240 >";
-        echo "<tr><td class=c >Игрок ".$user['oname'].". Место в рейтинге - ".$user['place1']."</td></tr>";
+        echo "<tr><td class=c >".va(loca("GALAXY_USER_TITLE"), $user['oname'], $user['place1'])."</td></tr>";
         echo "<th><table>";
         if (!$own)
         {
-            echo "<tr><td><a href=index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$planet['owner_id']." >Написать сообщение</a></td></tr>";
-            echo "<tr><td><a href=index.php?page=buddy&session=".$_GET['session']."&action=7&buddy_id=".$planet['owner_id']." >Предложение подружиться</a></td></tr>";
+            echo "<tr><td><a href=index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$planet['owner_id']." >".loca("GALAXY_USER_MESSAGE")."</a></td></tr>";
+            echo "<tr><td><a href=index.php?page=buddy&session=".$_GET['session']."&action=7&buddy_id=".$planet['owner_id']." >".loca("GALAXY_USER_BUDDY")."</a></td></tr>";
         }
-        echo "<tr><td><a href=index.php?page=statistics&session=".$_GET['session']."&start=".(floor($user['place1']/100)*100+1)." >Статистика</a></td></tr>";
-        if ($GlobalUser['admin'] >= 2) echo "<tr><td><a href=index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id'].">Управление пользователем</a></td></tr>";
+        echo "<tr><td><a href=index.php?page=statistics&session=".$_GET['session']."&start=".(floor($user['place1']/100)*100+1)." >".loca("GALAXY_USER_STATS")."</a></td></tr>";
+        if ($GlobalUser['admin'] >= 2) echo "<tr><td><a href=index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id'].">".loca("GALAXY_USER_ADMIN")."</a></td></tr>";
         echo "</table>";
         echo "</th></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETY, -40 );\" onmouseout=\"return nd();\">\n";
         if ( IsPlayerNewbie ( $user['player_id'] ) )
         {
-            $pstat = "noob"; $stat = "<span class='noob'>н</span>";
+            $pstat = "noob"; $stat = "<span class='noob'>".loca("GALAXY_LEGEND_NOOB")."</span>";
         }
         else if ( IsPlayerStrong ( $user['player_id'] ) )
         {
-            $pstat = "strong"; $stat = "<span class='strong'>с</span>";
+            $pstat = "strong"; $stat = "<span class='strong'>".loca("GALAXY_LEGEND_STRONG")."</span>";
         }
         else
         {
             $week = time() - 604800;
             $week3 = time() - 604800*3;
             $pstat = "normal";
-            if ( $user['lastclick'] <= $week ) { $stat .= "<span class='inactive'>i</span>"; $pstat = "inactive"; }
-            if ( $user['banned'] ) { if(mb_strlen($stat, "UTF-8")) $stat .= " "; $stat .= "<a href='index.php?page=pranger&session=".$_GET['session']."'><span class='banned'>з</span></a>"; $pstat = "banned"; }
-            if ( $user['lastclick'] <= $week3 ) { if(mb_strlen($stat, "UTF-8")) $stat .= " "; $stat .= "<span class='longinactive'>I</span>";  if($pstat !== "banned") $pstat = "longinactive"; }
-            if ( $user['vacation'] ) { if(mb_strlen($stat, "UTF-8")) $stat .= " "; $stat .= "<span class='vacation'>РО</span>";  $pstat = "vacation"; }
+            if ( $user['lastclick'] <= $week ) { $stat .= "<span class='inactive'>".loca("GALAXY_LEGEND_INACTIVE7")."</span>"; $pstat = "inactive"; }
+            if ( $user['banned'] ) { if(mb_strlen($stat, "UTF-8")) $stat .= " "; $stat .= "<a href='index.php?page=pranger&session=".$_GET['session']."'><span class='banned'>".loca("GALAXY_LEGEND_BANNED")."</span></a>"; $pstat = "banned"; }
+            if ( $user['lastclick'] <= $week3 ) { if(mb_strlen($stat, "UTF-8")) $stat .= " "; $stat .= "<span class='longinactive'>".loca("GALAXY_LEGEND_INACTIVE28")."</span>";  if($pstat !== "banned") $pstat = "longinactive"; }
+            if ( $user['vacation'] ) { if(mb_strlen($stat, "UTF-8")) $stat .= " "; $stat .= "<span class='vacation'>".loca("GALAXY_LEGEND_VACATION")."</span>";  $pstat = "vacation"; }
         }
         echo "<span class=\"$pstat\">".$user['oname']."</span></a>\n";
         if ($pstat !== "normal") echo "($stat)\n";
@@ -644,7 +643,16 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     {
         $ally = LoadAlly ( $user['ally_id']);
         $allytext = "<a style=\"cursor:pointer\"\n";
-        $allytext .= "         onmouseover=\"return overlib('<table width=240 ><tr><td class=c >Альянс ".$ally['tag'].". Место в рейтинге - ".$ally['place1'].", численность - ".CountAllyMembers($user['ally_id'])." чел.</td></tr><th><table><tr><td><a href=ainfo.php?allyid=".$ally['ally_id']." target=_ally>Представление альянса</a></td></tr><tr><td><a href=index.php?page=statistics&session=$session&start=".(floor($ally['place1']/100)*100+1)."&who=ally >Статистика</a></td></tr></table></th></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETY, -50 );\" onmouseout=\"return nd();\">\n";
+        $allytext .= "         onmouseover=\"return overlib('<table width=240 ><tr><td class=c >".va(loca("GALAXY_ALLY_TITLE"), $ally['tag'], $ally['place1'], CountAllyMembers($user['ally_id']))."</td></tr><th><table>";
+        $allytext .= "<tr><td><a href=ainfo.php?allyid=".$ally['ally_id']." target=_ally>".loca("GALAXY_ALLY_PAGE")."</a></td></tr>";
+        if ($GlobalUser['ally_id'] != $user['ally_id']) {
+            $allytext .= "<tr><td><a href=index.php?page=bewerben&session=$session&allyid=".$ally['ally_id']." >".loca("GALAXY_ALLY_APPLY")."</a></td></tr>";
+        }
+        $allytext .= "<tr><td><a href=index.php?page=statistics&session=$session&start=".(floor($ally['place1']/100)*100+1)."&who=ally >".loca("GALAXY_ALLY_STATS")."</a></td></tr>";
+        if ($ally['homepage'] !== "") {
+            $allytext .= "<tr><td><a href=redir.php?url=".$ally['homepage']." target=_blank >".loca("GALAXY_ALLY_HOMEPAGE")."</td></tr>";
+        }
+        $allytext .= "</table></th></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETY, -50 );\" onmouseout=\"return nd();\">\n";
         $allytext .= "   ".$ally['tag']." </a>";
     }
     else $allytext = "";
@@ -654,12 +662,12 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     echo "<th width=\"125\" style='white-space: nowrap;'>\n";
     if ( !($planet['type'] == 10001 || $planet['type'] == 10004) && !$own)
     {
-        echo "<a style=\"cursor:pointer\" onclick=\"javascript:doit(6, ".$planet['g'].",".$planet['s'].",".$planet['p'].", 1, ".$GlobalUser['maxspy'].");\"><img src=\"".UserSkin()."img/e.gif\" border=\"0\" alt=\"Шпионаж\" title=\"Шпионаж\" /></a>\n";
-        echo "<a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"Написать сообщение\" title=\"Написать сообщение\" /></a>\n";
-        echo "<a href=\"index.php?page=buddy&session=".$_GET['session']."&action=7&buddy_id=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/b.gif\" border=\"0\" alt=\"Предложение подружиться\" title=\"Предложение подружиться\" /></a>\n";
+        echo "<a style=\"cursor:pointer\" onclick=\"javascript:doit(6, ".$planet['g'].",".$planet['s'].",".$planet['p'].", 1, ".$GlobalUser['maxspy'].");\"><img src=\"".UserSkin()."img/e.gif\" border=\"0\" alt=\"".loca("GALAXY_FLEET_SPY")."\" title=\"".loca("GALAXY_FLEET_SPY")."\" /></a>\n";
+        echo "<a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"".loca("GALAXY_USER_MESSAGE")."\" title=\"".loca("GALAXY_USER_MESSAGE")."\" /></a>\n";
+        echo "<a href=\"index.php?page=buddy&session=".$_GET['session']."&action=7&buddy_id=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/b.gif\" border=\"0\" alt=\"".loca("GALAXY_USER_BUDDY")."\" title=\"".loca("GALAXY_USER_BUDDY")."\" /></a>\n";
         if ( $show_ipm_button )
         {
-            echo "<a href=\"index.php?page=galaxy&session=$session&mode=1&p1=".$planet['g']."&p2=".$planet['s']."&p3=".$planet['p']."&pdd=".$planet['planet_id']."&zp=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/r.gif\" border=\"0\" alt=\"Ракетная атака\" title=\"Ракетная атака\" /></a>";
+            echo "<a href=\"index.php?page=galaxy&session=$session&mode=1&p1=".$planet['g']."&p2=".$planet['s']."&p3=".$planet['p']."&pdd=".$planet['planet_id']."&zp=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/r.gif\" border=\"0\" alt=\"".loca("GALAXY_FLEET_RAK")."\" title=\"".loca("GALAXY_FLEET_RAK")."\" /></a>";
         }
     }
     echo "</th>\n";
@@ -670,20 +678,27 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
 for ($p; $p<=15; $p++) empty_row ($p);
 
 /***** Низ таблицы *****/
-echo "<tr><th style='height:32px;'>16</th><th colspan='7'><a href ='index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$coord_g."&system=".$coord_s."&planet=16&planettype=1&target_mission=15'>Бесконечные дали</a></th></tr>\n\n";
+echo "<tr><th style='height:32px;'>16</th><th colspan='7'><a href ='index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$coord_g."&system=".$coord_s."&planet=16&planettype=1&target_mission=15'>".loca("GALAXY_FAR_SPACE")."</a></th></tr>\n\n";
 
-echo "<tr><td class=\"c\" colspan=\"6\">(Заселено ".$planets." планет)</td>\n";
-echo "<td class=\"c\" colspan=\"2\"><a href='#' onmouseover='return overlib(\"<table><tr><td class=c colspan=2>Легенда</td></tr><tr><td width=125>сильный игрок</td><td><span class=strong>с</span></td></tr><tr><td>нуб</td><td><span class=noob>н</span></td></tr><tr><td>режим отпуска</td><td><span class=vacation>РО</span></td></tr><tr><td>заблокирован</td><td><span class=banned>з</span></td></tr><tr><td>неактивен 7 дней</td><td><span class=inactive>i</span></td></tr><tr><td>неактивен 28 дней</td><td><span class=longinactive>I</span></td></tr></table>\", ABOVE, WIDTH, 150, STICKY, MOUSEOFF, DELAY, 500, CENTER);' onmouseout='return nd();'>Легенда</a></td>\n";
+echo "<tr><td class=\"c\" colspan=\"6\">(".va(loca("GALAXY_INFO_POPULATED"), $planets).")</td>\n";
+echo "<td class=\"c\" colspan=\"2\"><a href='#' onmouseover='return overlib(\"<table><tr><td class=c colspan=2>".loca("GALAXY_LEGEND")."</td></tr>";
+echo "<tr><td width=125>".loca("GALAXY_LEGEND_STRONG_LONG")."</td><td><span class=strong>".loca("GALAXY_LEGEND_STRONG")."</span></td></tr>";
+echo "<tr><td>".loca("GALAXY_LEGEND_NOOB_LONG")."</td><td><span class=noob>".loca("GALAXY_LEGEND_NOOB")."</span></td></tr>";
+echo "<tr><td>".loca("GALAXY_LEGEND_VACATION_LONG")."</td><td><span class=vacation>".loca("GALAXY_LEGEND_VACATION")."</span></td></tr>";
+echo "<tr><td>".loca("GALAXY_LEGEND_BANNED_LONG")."</td><td><span class=banned>".loca("GALAXY_LEGEND_BANNED")."</span></td></tr>";
+echo "<tr><td>".loca("GALAXY_LEGEND_INACTIVE7_LONG")."</td><td><span class=inactive>".loca("GALAXY_LEGEND_INACTIVE7")."</span></td></tr>";
+echo "<tr><td>".loca("GALAXY_LEGEND_INACTIVE28_LONG")."</td><td><span class=longinactive>".loca("GALAXY_LEGEND_INACTIVE28")."</span></td></tr>";
+echo "</table>\", ABOVE, WIDTH, 150, STICKY, MOUSEOFF, DELAY, 500, CENTER);' onmouseout='return nd();'>".loca("GALAXY_LEGEND")."</a></td>\n";
 echo "</tr>\n";
 
 ?>
 <tr>
 <td class="c" colspan="8">
 <?php
-    if ($aktplanet["f210"] > 0) echo "<span id=\"probes\">".nicenum($aktplanet["f210"])."</span> Шпионские зонды &nbsp;&nbsp;&nbsp;&nbsp;";
-    if ($aktplanet["f209"] > 0) echo "<span id=\"recyclers\">".nicenum($aktplanet["f209"])."</span> Переработчик  &nbsp;&nbsp;&nbsp;&nbsp;";
-    if ($aktplanet["d503"] > 0) echo "<span id=\"missiles\">".nicenum($aktplanet["d503"])."</span> Межпланетные ракеты  &nbsp;&nbsp;&nbsp;&nbsp;";
-?>Дейтерий:  <?=nicenum($aktplanet["d"]);?>&nbsp;&nbsp;&nbsp;&nbsp;<br/><span id='slots'><?=$nowfleet;?></span>&nbsp;из <?=$maxfleet;?> слотов находятся в эксплуатации</td>
+    if ($aktplanet["f210"] > 0) echo "<span id=\"probes\">".nicenum($aktplanet["f210"])."</span>".loca("GALAXY_INFO_SPY_PROBES")."&nbsp;&nbsp;&nbsp;&nbsp;";
+    if ($aktplanet["f209"] > 0) echo "<span id=\"recyclers\">".nicenum($aktplanet["f209"])."</span>".loca("GALAXY_INFO_RECYCLERS")."&nbsp;&nbsp;&nbsp;&nbsp;";
+    if ($aktplanet["d503"] > 0) echo "<span id=\"missiles\">".nicenum($aktplanet["d503"])."</span>".loca("GALAXY_INFO_IPM")."&nbsp;&nbsp;&nbsp;&nbsp;";
+?><?=loca("GALAXY_INFO_DEUTERIUM");?><?=nicenum($aktplanet["d"]);?>&nbsp;&nbsp;&nbsp;&nbsp;<br/><span id='slots'><?=$nowfleet;?></span>&nbsp;<?=va(loca("GALAXY_INFO_SLOTS"), $maxfleet);?></td>
 </tr>
 <tr style="display: none;" id="fleetstatusrow"><th colspan="8"><!--<div id="fleetstatus"></div>-->
 <table style="font-weight: bold;" width=100% id="fleetstatustable">
@@ -702,6 +717,6 @@ echo "</center>\n";
 echo "</div>\n";
 echo "<!-- END CONTENT AREA -->\n\n";
 
-PageFooter ($GalaxyMessage, $GalaxyError, false, 0);
+PageFooter ($GalaxyMessage, $GalaxyError, false, 0, true);
 ob_end_flush ();
 ?>
