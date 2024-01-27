@@ -22,5 +22,6 @@ $LOCA["ru"]["ADM_MENU_BATTLELOGS"] = "Боевые доклады";
 $LOCA["ru"]["ADM_MENU_USERLOGS"] = "История действий";
 $LOCA["ru"]["ADM_MENU_BOTEDIT"] = "Редактор ботов";
 $LOCA["ru"]["ADM_MENU_COUPONS"] = "Купоны";
+$LOCA["ru"]["ADM_MENU_RAKSIM"] = "Симулятор ракетной атаки";
 
 ?>

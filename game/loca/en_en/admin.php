@@ -22,5 +22,6 @@ $LOCA["en"]["ADM_MENU_BATTLELOGS"] = "Battle Reports";
 $LOCA["en"]["ADM_MENU_USERLOGS"] = "User Logs";
 $LOCA["en"]["ADM_MENU_BOTEDIT"] = "Bot Editor";
 $LOCA["en"]["ADM_MENU_COUPONS"] = "Coupons";
+$LOCA["en"]["ADM_MENU_RAKSIM"] = "Rocket Attack Sim";
 
 ?>

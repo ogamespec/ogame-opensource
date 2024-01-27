@@ -99,6 +99,9 @@ onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca
 <a href="index.php?page=admin&session=<?php echo $session;?>&mode=Coupons"><img src="img/admin_coupons.png" width='32' height='32'
 onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_COUPONS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=RakSim"><img src="img/admin_raksim.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_RAKSIM");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
 </td></tr></table><br/>
 
 <?php
@@ -146,6 +149,9 @@ function Admin_Home ()
     <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=BotEdit"><img src="img/admin_botedit.png"><br><?php echo loca("ADM_MENU_BOTEDIT");?></a></th>
     <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Coupons"><img src="img/admin_coupons.png"><br><?php echo loca("ADM_MENU_COUPONS");?></a></th>
     </tr>
+    <tr>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=RakSim"><img src="img/admin_raksim.png"><br><?php echo loca("ADM_MENU_RAKSIM");?></a></th>
+    </tr>
     </table>
 <?php
 }
@@ -170,6 +176,7 @@ include "admin_battle.php";
 include "admin_userlogs.php";
 include "admin_botedit.php";
 include "admin_coupons.php";
+include "admin_raksim.php";
 
 // ========================================================================================
 
@@ -201,6 +208,7 @@ else if ( $mode === "BattleReport" ) Admin_BattleReport ();
 else if ( $mode === "UserLogs" ) Admin_UserLogs ();
 else if ( $mode === "BotEdit" ) Admin_BotEdit ();
 else if ( $mode === "Coupons" ) Admin_Coupons ();
+else if ( $mode === "RakSim" ) Admin_RakSim ();
 else Admin_Home ();
 
 echo "</table>\n";

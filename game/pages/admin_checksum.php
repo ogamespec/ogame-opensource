@@ -64,6 +64,7 @@ function Admin_Checksum ()
         'pages/admin_logins.php', 
         'pages/admin_planets.php', 
         'pages/admin_queue.php', 
+        'pages/admin_raksim.php', 
         'pages/admin_reports.php', 
         'pages/admin_sim.php', 
         'pages/admin_uni.php', 
