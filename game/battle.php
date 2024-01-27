@@ -1250,8 +1250,7 @@ function RocketAttack ( $fleet_id, $planet_id, $when )
     $text .= "</table><br>\n";
 
     // Обновить активность на планете.
-    $queue = GetFleetQueue ( $fleet_id );
-    UpdatePlanetActivity ( $planet_id, $queue['end'] );
+    UpdatePlanetActivity ( $planet_id, $when );
 
     SendMessage ( $target_user['player_id'], "Командование флотом", "Ракетная атака", $text, 2, $when);
 }
