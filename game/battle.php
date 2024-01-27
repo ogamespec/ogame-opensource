@@ -1176,7 +1176,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Ракетная атака.
-function RocketAttack ( $fleet_id, $planet_id )
+function RocketAttack ( $fleet_id, $planet_id, $when )
 {
     global $UnitParam;
 
@@ -1253,7 +1253,7 @@ function RocketAttack ( $fleet_id, $planet_id )
     $queue = GetFleetQueue ( $fleet_id );
     UpdatePlanetActivity ( $planet_id, $queue['end'] );
 
-    SendMessage ( $target_user['player_id'], "Командование флотом", "Ракетная атака", $text, 2);
+    SendMessage ( $target_user['player_id'], "Командование флотом", "Ракетная атака", $text, 2, $when);
 }
 
 ?>

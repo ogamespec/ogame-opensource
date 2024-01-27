@@ -942,7 +942,7 @@ require_once "expedition.php";
 
 function RocketAttackArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    RocketAttack ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'] );
+    RocketAttack ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'], $queue['end'] );
 }
 
 function Queue_Fleet_End ($queue)
