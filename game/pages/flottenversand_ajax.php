@@ -110,7 +110,7 @@ if ( $order == 6 )
     }
 
     // Сформировать флот.
-    $fleet = array ( 0, 0, );
+    $fleet = array ();
     foreach ( $fleetmap as $i=>$gid ) {
         if ( $gid == 210 ) $fleet[$gid] = $amount;
         else $fleet[$gid] = 0;
@@ -128,7 +128,7 @@ if ( $order == 8 )
     if ( $amount == 0 ) AjaxSendError (611);    // нет кораблей для отправки
 
     // Сформировать флот.
-    $fleet = array ( 0, 0, );
+    $fleet = array ();
     foreach ( $fleetmap as $i=>$gid ) {
         if ( $gid == 209 ) $fleet[$gid] = $amount;
         else $fleet[$gid] = 0;
