@@ -256,7 +256,7 @@ echo "<center>\n\n";
   }
 
   function doit(order, galaxy, system, planet, planettype, shipcount){
-      strInfo = <?=loca("GALAXY_DOIT_SEND");?>+shipcount+<?=loca("GALAXY_DOIT_SHIPS");?>+(shipcount>1?<?=loca("GALAXY_DOIT_MANY");?>:<?=loca("GALAXY_DOIT_ONE");?>)+<?=loca("GALAXY_DOIT_TO");?>+galaxy+":"+system+":"+planet+<?=loca("GALAXY_DOIT_END");?>;
+      strInfo = "<?=loca("GALAXY_DOIT_SEND");?>"+shipcount+"<?=loca("GALAXY_DOIT_SHIPS");?>"+(shipcount>1?"<?=loca("GALAXY_DOIT_MANY");?>":"<?=loca("GALAXY_DOIT_ONE");?>")+"<?=loca("GALAXY_DOIT_TO");?>"+galaxy+":"+system+":"+planet+"<?=loca("GALAXY_DOIT_END");?>";
       ajax.requestFile = "index.php?ajax=1&page=flottenversand&session=<?=$session;?>";
 
       // no longer needed, since we don't want to write the cryptic
