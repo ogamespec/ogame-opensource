@@ -83,7 +83,7 @@ function Admin_RakSim ()
 <tr><td class=c colspan=2>Настройки</td></tr>
 
 <tr><td>
-<?=loca("NAME_502");?>:     <input type="text" name="anz" size="2" maxlength="2" value="<?=$anz;?>"/></td></tr>
+<?=loca("NAME_503");?>:     <input type="text" name="anz" size="2" maxlength="2" value="<?=$anz;?>"/></td></tr>
 
     <tr><td>
     <?=loca("GALAXY_RAK_TARGET");?>:
