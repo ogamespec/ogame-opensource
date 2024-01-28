@@ -446,7 +446,7 @@ $info = " <img src='img/r5.png' />";
 <body>
 
 <style>
-body { background:#000000 url(img/space_background.jpg) no-repeat fixed right top; color: #fff; }
+body { background:#000000 url(img/background.jpg) right top; background-repeat: no-repeat; overflow: hidden; background-color: #040e1e; color: #fff; }
 td.c { background-color: #334445; }
 .button { border: 1px solid; color: white; background-color: #334445; }
 .text { border: 1px solid; color: white; background-color: #334445; }
@@ -535,7 +535,7 @@ td.c { background-color: #334445; }
 
 </tr>
 
-<tr><td colspan=2><center><input type=submit value='<?php echo loca('INSTALL_INSTALL');?>' class='button'></center></td></tr>
+<tr><td colspan=3><center><input type=submit value='<?php echo loca('INSTALL_INSTALL');?>' class='button'></center></td></tr>
 
 </table>
 
