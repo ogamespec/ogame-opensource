@@ -143,7 +143,7 @@ function Admin_BattleSim ()
 
     // --------------------------------------------------------------------------------------------------------------------------
     // Обработка POST-запроса.
-    if ( method () === "POST" && $GlobalUser['admin'] >= 2) {
+    if ( method () === "POST" && $GlobalUser['admin'] != 0 ) {
         //print_r ( $_POST );
         //echo "<hr>";
 
@@ -394,7 +394,7 @@ RecalcAttackersDefendersNum ();
 <input type="hidden" id="anum" name="anum" value="1" />
 <input type="hidden" id="dnum" name="dnum" value="1" />
 
-<tr>        <td class=c>Атакующий</td>                <td class=c>Оборояющийся</td>  </tr>
+<tr>        <td class=c>Атакующий</td>                <td class=c>Обороняющийся</td>  </tr>
 
 <tr> 
 <td> Вооружение: <input id="a_weap" size=2 > Щиты: <input id="a_shld" size=2 > Броня: <input id="a_armor" size=2  onKeyUp="OnChangeTechValue(1);"></td> 
