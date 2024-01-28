@@ -2,7 +2,9 @@
 
 // Стандартные флоты.
 
-$MAX = 13;
+// You are able to create standard fleets. The maximum of standard fleets is your research level "Computer Technology" plus one
+// https://board.en.ogame.gameforge.com/index.php?thread/195023-version-0-74e/
+$MAX = $GlobalUser['r108'] + 1;
 
 loca_add ( "menu", $GlobalUni['lang'] );
 
@@ -35,7 +37,7 @@ function SecureText ( $text )
     return $str;
 }
 
-if ( method() === "POST" && $_POST['mode'] === "save" ) {
+if ( method() === "POST" && key_exists('mode', $_POST) && $_POST['mode'] === "save" ) {
     $id = intval ( $_POST['template_id'] );
     $name = SecureText ( $_POST['template_name'] );
     $name = mb_substr ( $name, 0, 30 );
@@ -83,7 +85,7 @@ if ( method() === "POST" && $_POST['mode'] === "save" ) {
     }
 }
 
-if ( method () === "GET" && $_GET['mode'] === "delete" ) {    // Удалить
+if ( method () === "GET" && key_exists('mode', $_GET) && $_GET['mode'] === "delete" ) {    // Удалить
     $id = intval ( $_GET['id'] );
     $query = "SELECT * FROM ".$db_prefix."template WHERE id = $id AND owner_id = " . $GlobalUser['player_id'] . " LIMIT 1";
     $result = dbquery ( $query );
