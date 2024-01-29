@@ -716,6 +716,9 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     // Флот на удержании
     $result = GetHoldingFleets ( $target['planet_id'] );
     $holding_fleet = array ();
+    foreach ( $fleetmap as $i=>$gid ) {
+        $holding_fleet[$gid] = 0;
+    }    
     while ( $fobj = dbarray ($result) )
     {
         foreach ( $fleetmap as $i=>$gid ) {
