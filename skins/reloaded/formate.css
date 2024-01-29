@@ -1,0 +1,885 @@
+
+
+
+      /*
+      :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+      ::: 
+      :::    0000000   0000000   00000000  0000     0000 000000000 0000
+      :::   000000000 000   000 0000  0000 000000 000000 0000      0000
+      :::   000   000 000       0000  0000 0000000000000 0000      0000
+      :::   000   000 000 00000 0000000000 0000 000 0000 0000000   0000
+      :::   000   000 000   000 0000  0000 0000  0  0000 0000      0000
+      :::   000000000 000   000 0000  0000 0000     0000 0000
+      :::    0000000   0000000  0000  0000 0000     0000 000000000 0000
+      :::    
+      :::   Beschreibung: Original-Skin für das Browsergame "OGame".
+      :::   Ersteller   : g3ck0 (g3ck0@cnp-online.de)
+      :::   Kontakt     : IRC-OGameNet: #o.game
+      :::   Datum       : 17.11.2004
+      :::   Version     : 0.51
+      :::   
+      :::   Revisionshistorie (Datum, Beschreibung):
+      :::   17.11.2004  : ~ Erstellung
+      :::   22.11.2004  : ~ Detailänderungen
+      :::                 ~ Erweiterung der Kommentare
+      :::                 ~ Optimierung der Grafiken
+      :::   23.11.2004  : ~ Überarbeitung der Logout-Seite
+      :::                 ~ Optimierung der Kampfberichte
+      :::                 ~ Weitere Reduzierung der KiloBytes insgesammt
+      :::   25.11.2004  : ~ Letzter Feinschliff
+      :::                 ~ BETA-Release
+      :::   07.04.2005  : ~ Transparenz aufgrund von Performance-Problemen
+      :::                   unter Mozilla FireFox entfernt
+      :::                 ~ Links unter dem Menü werden nun auch halbwegs
+      :::                   brauchbar im Mozilla Firefox dargestellt
+      :::                   (Danke an BrutosTodesschatten)
+      :::   14.04.2005  : ~ Anpassung an Version 0.68a
+      :::   15.04.2005  : ~ Menühöhe nun unter allen Browsern nahezu identisch
+      :::                 ~ Textboxen und DropDowns haben nun einen kleinen
+      :::                   Hover-Effekt unter FireFox
+      :::   19.04.2005  : ~ Anderes Hintergrundbild
+      :::                   (inkl. dem Bomber von vanDyke!)
+      :::                 ~ Transparenz beim Menü
+      :::                   
+      :::   [+] Link zur aktuellen Version direkt bei mir im IRC erfragen!
+      :::   [+] Bei Darstellungsfehlern oder ähnlichem, bitte Bescheid geben!
+      :::   [+] Ich habe nichts dagegen, dass dieser Skin als Vorlage für
+      :::       weitere Skin's dient. Sagt mir doch aber bitte Bescheid, damit
+      :::       ich eure Werke bewundern kann.
+      :::   
+      :::   [-] Planeten- und Gebäude-Kollektion mit Genehmigung von uio aus dem
+      :::       EpicBlue-Skin übernommen.
+      :::   [-] Ideen und einige Grafiken aus der neuen OGame-Startseite
+      :::       übernommen (Auftrag war den Skin so ähnlich wie möglich zu
+      :::       gestalten).
+      :::
+      :::   [~] Entwicklungszeit liegt bei ungefähr 38 Stunden.
+      :::   [~] Getestet unter Internet Explorer 6, Opera und Moz. Firefox 1.0.
+      :::
+      :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+      */
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken folgendes:
+       :::
+       :::   - Alle Texte werden "normal" (also
+       :::     nicht mehr fett oder kursiv) 
+       :::     angezeigt. Ausserdem werden unter
+       :::     Browsern die CSS 2.0 unterstützen
+       :::     auch leere Zellen vernünftig 
+       :::     dargestellt.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */                      
+                            
+      table, table tr th, td, th, p
+      { 
+        font-weight          : normal;
+        empty-cells          : show;
+      }
+      
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Hier wird die Standard Schrift-
+       :::     art und -Größe definiert.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */
+
+      ., #, td, th, textarea, body, table, 
+      table table td
+      {
+        font-family          : Verdana, Tahoma, Helvetica, sans-serif;
+        font-size            : 10px;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Da die Bilder der OGame-Commander
+       :::     Werbung viel Platz verbrauchen
+       :::     werden sie hier einfach ausgeblendet.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      table tr td p a img
+      {
+        visibility           : hidden;
+        height               : 0px;
+        width                : 0px;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Die OGame-Commander Werbung bekommt
+       :::     eine besondere Hintergrundfarbe
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      table tr td p
+      {
+        background-color     : #16274C;
+        font-family          : Verdana, Tahoma, Helvetica, sans-serif;
+        font-size            : 10px;
+      } 
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Allen Bildern und der so genannten
+       :::     Werbeunterbrechung werden vorerst die
+       :::     Rahmen entzogen. Bestimmte Objekte
+       :::     bekommen später einen bestimmten
+       :::     Rahmen.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      img, p table, table table, table.s th
+      {
+        border               : 0px;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Die Ressourcen-Namen beim Verschicken
+       :::     einer Flotte werden linksbündig
+       :::     dargestellt.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      body form table tr th table tr th
+      {
+        border               : 0px;
+        text-align           : left;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Definiert die Breite der Ressourcen-
+       :::     Eingabefelder während des Flotten-
+       :::     versands.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      body form table th table input
+      {
+        width: 60px;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Die "max."-Links werden ebenso wie
+       :::     die Menüpunkte in der Navigations-
+       :::     leiste dargestellt. (Nur bei der
+       :::     Resourcen-Auswahl)
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+      
+      body form table tr th table tr th a,
+      body form table tr th table tr th a:visited,
+      body form table tr th table tr th a:link
+      {
+        border               : 0px;
+        text-align           : left;
+        color                : #FFFFFF;
+        text-align           : left;
+        background-image     : url(img/bkd_linkoff.gif);
+        background-repeat    : no-repeat;
+        padding-left         : 15px;
+        text-decoration      : none;
+      }
+
+      body form table tr th table tr th a:hover,
+      body form table tr th table tr th a:active
+      {
+        border               : 0px;
+        text-align           : left;
+        color                : #B4C8F7;
+        text-align           : left;
+        background-image     : url(img/bkd_linkon.gif);
+        background-repeat    : no-repeat;
+        padding-left         : 15px;
+        text-decoration      : none;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Einstellungen für den Seiteninhalt
+       :::     insgesammt.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      body
+      {
+        color                : #FFFFFF;
+        margin-top           : 1px;
+        margin-left          : 1px;
+        background-color     : #000000;
+        background-image     : url(img/bkd_page.jpg);
+        background-attachment: fixed;
+        scrollbar-base-color : #161F3F;
+        scrollbar-arrow-color: #FFFFFF;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Standard-Definition für sämtliche
+       :::     TD's, INPUT's, SELECT's und 
+       :::     TEXTAREA's.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      th, td.a, td.b, td.c, td.f, input, select,
+      td.g, td.h, td.i, td.j, td.k, td.l, td.m,
+      td.n, td.o, td.q, td.r, td.v, 
+      textarea, p td, body table td p
+      {
+        border               : 1px #354C7C solid;
+        font-size            : 10px;
+        font-family          : Verdana, Tahoma, Helvetica, sans-serif;
+      }
+      
+      input 
+      {
+        margin               : 2px;
+      }
+
+      td.c input 
+      {
+        margin               : 0px;
+      }
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Standard-Definition für sämtliche
+       :::     TD's, INPUT's, SELECT's und 
+       :::     TEXTAREA's.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      th, td.a, td.b, td.c, td.f, input, select,
+      td.g, td.h, td.i, td.j, td.k, td.m, td.o, td.q, td.r,
+      td.v, td.s, .style td, p td
+      {
+        background-color     : #16274C;
+      }
+
+      select:hover, input:hover, textarea:hover
+      {
+        background-color     : #273C68;
+      }
+
+      select:focus, input:focus, textarea:focus
+      {
+        background-color     : #273C68;
+      }
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Beschreibt den kompletten linken
+       :::     Frame, welcher mit der Klasse
+       :::     "style" benannt wurde.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      body.style
+      {
+        color                : #FFFFFF;
+        margin-top           : 1px;
+        margin-left          : 1px;
+        background-color     : #000000;
+        background-image     : url(img/bkd_navigation.jpg);
+        background-repeat    : no-repeat;
+        scrollbar-base-color : #161F3F;
+        scrollbar-arrow-color: #FFFFFF; 
+        font-family          : Verdana, Tahoma, Helvetica, sans-serif;
+        font-size            : 10px; 
+        text-align           : left;  
+        width                : 172px;     
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Alle Bilder im Menü auf eine Breite
+       :::     von 120 Pixel setzen (wegen der 
+       :::     neuen Werbung)
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+      
+      body.style img
+      {
+        width                : 120px;
+      }
+      
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Platz sparen in der Navigations-
+       :::     leiste.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */
+
+      body.style p
+      {
+        margin               : 0px;
+        padding              : 0px;
+        padding-left         : 27px;
+        border               : 0px;
+        color                : #FFFFFF;
+        font-family          : Verdana, Tahoma, Helvetica, sans-serif;
+        font-size            : 9px;
+        text-align           : left;
+      }
+      
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Die Logout-Seite braucht diese 
+       :::     Angabe das sie wenigstens so halbwegs
+       :::     in Ordnung aussieht.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */  
+         
+       body.style p table
+      {
+        width                : 113px;
+        background-color     : #16274C;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Zeichnet einen weißen doppelten
+       :::     Rahmen um die Navigationsleiste und
+       :::     richtet selbige etwas aus.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      body.style table
+      {
+        border               : #FFFFFF double;
+        margin-bottom        : 2px;
+        margin-top           : 10px;
+        background-color     : #16274C;
+        filter               : alpha(opacity=80);
+        -moz-opacity         : 0.8;
+      }  
+      
+      body.style table td
+      {      
+        filter               : alpha(opacity=100);
+        -moz-opacity         : 1.0;
+      }
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Firefox benötigt die folgenden 
+       :::     Angaben, damit die Navigationslinks
+       :::     auch so aussehen, wie sie sollen.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */
+
+      body.style table tr td div
+      {
+        text-align           : left;
+        width                : 100%;
+        padding-bottom       : 2px;
+        background-color     : #16274C;
+        
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Im Folgenden werden die Navigations-
+       :::     links definiert
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */
+
+      body.style table tr td div a, body.style table tr td div a:visited, 
+      body.style table tr td div a:link, body.style table tr td div a:active
+      {
+        background-color     : #16274C;
+        width                : 105px;
+        color                : #FFFFFF;
+        font-size            : 10px;
+        font-family          : Verdana, Tahoma, Helvetica, sans-serif;
+        text-align           : left;
+        padding-left         : 15px;
+        background-image     : url(img/bkd_linkoff.gif);
+        background-repeat    : no-repeat;
+      } 
+
+      body.style table tr td div a:hover
+      {
+        background-color     : #16274C;
+        width                : 105px;
+        text-decoration      : none;
+        font-size            : 10px;
+        font-family          : Verdana, Tahoma, Helvetica, sans-serif;
+        color                : #B4C8F7;
+        text-align           : left;
+        padding-left         : 15px;
+        background-image     : url(img/bkd_linkon.gif);
+        background-repeat    : no-repeat;
+      } 
+      
+      body.style table tr td 
+      {
+        padding              : 0px;
+        margin               : 0px;
+        margin-top           : 2px;
+      }
+      
+      body.style table tr td img
+      {
+        padding-top          : 2px;
+      }
+
+      
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Alle Tabellenüberschriften werden
+       :::     zentriert. 
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+
+      th
+      {
+        text-align           : center;
+        padding-left         : 3px;
+        padding-right        : 3px;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Definition der Titelleisten.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      td.c
+      {
+        font-weight          : normal;
+        color                : #FFFFFF;
+        padding-left         : 3px;
+        line-height          : 18px;
+        height               : 22px;
+        background-image     : url(img/bkd_title.gif);
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Beschreibt alle Eingabefelder,
+       :::     Auswahl-Boxen und Button's.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      td.f, input, select, textarea
+      {
+        color                : #FFFFFF;
+        background-color     : #1B305C;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Ändert die Breite von Textfeldern
+       :::     auf 100 Prozent.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      textarea
+      {
+        width                : 100%;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Beschreibt einige Felder auf der
+       :::     "Rohstoffproduktion"-Seite.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      body form table tr td.k, body form table tr th 
+      {
+        vertical-align       : middle;
+        text-align           : center;
+        margin               : 0px;
+        padding              : 0px;
+        background-image     : none;
+      }     
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Beschreibt den "Berechnen"-Button
+       :::     auf der "Rohstoffproduktion"-Seite.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      td.k input
+      {
+        text-align           : center;
+        color                : #FFFFFF;
+        border               : 0px;
+        margin               : 0px;
+        padding              : 0px;
+        height               : 20px;
+        background-color     : transparent;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Beschreibt den rechten Block
+       :::     in der Schiffswerft.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      body form table tr td table tr td.k
+      {
+        vertical-align       : top;
+        margin               : 0px;
+        padding              : 0px;
+        background-image     : url(img/bkd_buildmenu.gif);
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Beschreibt die Boxen bei allen 
+       :::     Bau-Menüs. Leider auch die, auf 
+       :::     der "Technik"-Seite.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      td.l
+      {
+        background-color     : #2B3553;
+        color                : #B6C6E5;
+        vertical-align       : top;
+        padding              : 3px;
+        background-image     : url(img/bkd_buildmenu.gif);
+        background-repeat    : no-repeat;
+        line-height          : 14px;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Beschreibt die Größe der Kolonie-
+       :::     Planeten-Bildern.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      table.s th img
+      {
+        width                : 88px;
+        height               : 88px;
+      }
+      
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Beschreibt den Text unter
+       :::     "Aktuelle Produktion" über der 
+       :::     Bauschleife.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      div.z
+      {
+        font-weight          : normal;
+        color                : #FFFFFF;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Sonstige Links
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      a
+      {
+        color                : #FFFFFF;
+        text-decoration      : none;
+        font-weight          : normal;
+      }
+
+      a.s, a.t
+      {
+        color                : #FFFFFF;
+      }
+
+      a:hover
+      {
+        color                : #B6C6E5;
+        text-decoration      : underline;
+      }
+      
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Regelt die "Ausbau auf Stufe 00"
+       :::     Anzeige
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      body table tr td table tr td.l
+      {
+        line-height          : 15px;
+        background-color     : #16274C;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Regelt die "00:00:00 Abbrechen"
+       :::     Anzeige
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      body table tr td table tr td.k
+      {
+        vertical-align       : top;
+        background-image     : url(img/bkd_buildmenu.gif);
+        padding-top          : 2px;
+        line-height          : 16px;
+      }
+
+      body table tr td table tr td.k div.z
+      {
+        padding-top          : 2px;
+        line-height          : 16px;
+        text-align           : center;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Gewährt dem linken Navigationsframe
+       :::     etwas Abstand nach oben.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      .style
+      {
+        margin-top           : 15px;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Hier wird die Farbe für die Zwischen-
+       :::     räume zwischen den Navigations-
+       :::     links definiert.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      .style td
+      {
+        background-color     : #16274C;
+        border               : 0px;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Definiert die Navigationslinks im
+       :::     Allgemeinen.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      .style p table tr td div a
+      {
+        padding-left         : 15px;
+        border               : 0px;
+        font-size            : 10px;
+        font-family          : Verdana, Tahoma, Helvetica, sans-serif;
+        text-decoration      : none;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Definiert die Navigationslinks im
+       :::     Detail.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      .style p table tr td div a,
+      .style p table tr td div a:link,
+      .style p table tr td div a:visited
+      {
+        height               : 100%;
+        width                : 100%;
+        color                : #FFFFFF;
+        text-align           : left;
+        background-image     : url(img/bkd_linkoff.gif);
+        background-repeat    : no-repeat;
+        border               : 0px;
+      }
+
+      .style p table tr td div a:hover,
+      .style p table tr td div a:active
+      {
+        background-color     : #16274C;
+        height               : 100%;
+        width                : 100%;
+        color                : #B4C8F7;
+        text-align           : left;
+        background-image     : url(img/bkd_linkon.gif);
+        background-repeat    : no-repeat;
+        border               : 0px;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Lässt die Anzeige oben rechts
+       :::     verschwinden.
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      h1
+      {
+        font-size            : 1px;
+        font-family          : Verdana, Tahoma, Helvetica, sans-serif;
+        text-align           : right;
+        visibility           : hidden;
+      }
+
+
+      /*
+       :::::::::::::::::::::::::::::::::::::::::::::
+       ::: Folgende Angaben bewirken:
+       :::
+       :::   - Metall/Kristall/Deuterium-Anzeig.
+       :::   - Alle Texte die sich direkt im "Body"
+       :::     befinden
+       :::   - Detailseiten von Forschungen/Gebäuden
+       :::
+       :::::::::::::::::::::::::::::::::::::::::::::
+      */ 
+
+      body, body table tr td table tr td,
+      body table tr th table tr td
+      {
+        font-family          : Verdana, Tahoma, Helvetica, sans-serif;
+        font-size            : 10px;
+        vertical-align       : top;
+      }
