@@ -19,6 +19,7 @@ PageHeader ("messages");
 
 $MAXMSG = 25;        // Количество сообщений на странице.
 $uni = LoadUniverse ();
+$partial_reports = ($GlobalUser['flags'] & USER_FLAG_PARTIAL_REPORTS) != 0;
 
 DeleteExpiredMessages ( $GlobalUser['player_id'] );    // Удалить сообщения которые хранятся дольше 24 часов.
 
@@ -45,11 +46,21 @@ if ( method() === "POST" )
         {
             $msg = dbarray ($result);
             $msg_id = $msg['msg_id'];
-            if ( $_POST["sneak" . $msg_id] === "on" ) {}    // Сообщить оператору
-            if ( $_POST["delmes" . $msg_id] === "on" && $_POST['deletemessages'] === "deletemarked" ) DeleteMessage ( $player_id, $msg_id );    // Удалить выделенные
-            if ( $_POST["delmes" . $msg_id] !== "on" && $_POST['deletemessages'] === "deletenonmarked" ) DeleteMessage ( $player_id, $msg_id );    // Удалить невыделенные
+            if ( key_exists("sneak" . $msg_id, $_POST) && $_POST["sneak" . $msg_id] === "on" ) {}    // Сообщить оператору
+            if ( key_exists("delmes" . $msg_id, $_POST) && $_POST["delmes" . $msg_id] === "on" && $_POST['deletemessages'] === "deletemarked" ) DeleteMessage ( $player_id, $msg_id );    // Удалить выделенные
+            if ( key_exists("delmes" . $msg_id, $_POST) && $_POST["delmes" . $msg_id] !== "on" && $_POST['deletemessages'] === "deletenonmarked" ) DeleteMessage ( $player_id, $msg_id );    // Удалить невыделенные
             if ( $_POST['deletemessages'] === "deleteallshown" ) DeleteMessage ( $player_id, $msg_id );    // Удалить показанные
         }
+    }
+
+    // Название параметра в инверсной логике
+    $partial_reports = key_exists('fullreports', $_POST) && $_POST['fullreports'] === "on";
+
+    if ($partial_reports) {
+        SetUserFlags ( $GlobalUser['player_id'], $GlobalUser['flags'] | USER_FLAG_PARTIAL_REPORTS);
+    }
+    else {
+        SetUserFlags ( $GlobalUser['player_id'], $GlobalUser['flags'] & ~USER_FLAG_PARTIAL_REPORTS);
     }
 }
 
@@ -68,15 +79,22 @@ while ($num--)
     $msg['msgfrom'] = str_replace ( "{PUBLIC_SESSION}", $_GET['session'], $msg['msgfrom']);
     $msg['subj'] = str_replace ( "{PUBLIC_SESSION}", $_GET['session'], $msg['subj']);
     $msg['text'] = str_replace ( "{PUBLIC_SESSION}", $_GET['session'], $msg['text']);
+    if ($partial_reports && $pm == 1) {
+        // Специальная обработка для шпионских докладов, если активна галочка "показывать частично"
+        $msg['subj'] = "<a href=\"#\" onclick=\"fenster('index.php?page=bericht&session=". $_GET['session'] ."&bericht=". $msg['msg_id'] ."', 'Bericht_Spionage');\" >". $msg['subj'] ."</a>";
+        $msg['text'] = "";
+    }    
     echo "<tr><th><input type=\"checkbox\" name=\"delmes".$msg['msg_id']."\"/></th><th>".date ("m-d H:i:s", $msg['date'])."</th><th>".$msg['msgfrom']." </th><th>".$msg['subj']." </th></tr>\n";
-    echo "<tr><td class=\"b\"> </td><td class=\"b\" colspan=\"3\">".$msg['text']."</td></tr>\n";
+    if ($msg['text'] !== "") {
+        echo "<tr><td class=\"b\"> </td><td class=\"b\" colspan=\"3\">".$msg['text']."</td></tr>\n";
+    }
     if ($pm == 0) echo "<tr><th colspan=\"4\"><input type=\"checkbox\" name=\"sneak".$msg['msg_id']."\"/><input type=\"submit\" value=\"Сообщить оператору\"/></th></tr>\n";
     MarkMessage ( $msg['owner_id'], $msg['msg_id'] );
 }
 
 // Низ таблицы  
 echo "<tr><th colspan=\"4\" style='padding:0px 105px;'></th></tr>\n";
-echo "<tr><th colspan=\"4\"><input type=\"checkbox\" name=\"fullreports\"  /> Разведданные показывать частично </th></tr>\n";
+echo "<tr><th colspan=\"4\"><input type=\"checkbox\" name=\"fullreports\"  " . ($partial_reports ? "CHECKED" : "") . "/> Разведданные показывать частично </th></tr>\n";
 echo "<tr><th colspan=\"4\">\n";
 echo "<select name=\"deletemessages\">\n";
 echo "<option value=\"deletemarked\">Удалить выделенные сообщения</option> \n";
