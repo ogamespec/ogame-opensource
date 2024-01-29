@@ -1,0 +1,532 @@
+/*
+u-u vous propose une skin o-game de sa création "skin@work" v1.3
+
+"skin@work" est clairement destinée à ceux qui ont besoin de:
+
+1 - Discrétion: l'objectif est de faire ressembler l'écran d'ogame à tout sauf à un jeu...
+d'ou l'affichage sur fond blanc, l'absence d'images, et des couleurs volontairement adoucies et cohérentes.
+
+2 - Clarté:
+-affichage des flottes sur une ligne
+-lisibilité améliorée entre les flottes "aller" et les flottes "retour"
+-formulaires plus lisibles (ombrés)
+-boutons d'action à largeur variable (et sobres)
+-impressions papier sobres
+*/
+
+.header{
+	font-size            : 9px;
+}
+font{
+	color: black !important;
+	font-size            : 9px;
+}
+#WzBoDy{
+	background:#fff !important;
+	border: 0px !important;
+	padding:0px !important;
+
+}
+textarea, body, table
+{
+  font-family          : Arial,Verdana;
+  font-size            : 9px !important;
+}
+td, th, tr, textarea, body, table, a, div
+{
+ background:white;
+ border-color:#ccc;
+}
+table td
+{
+  font-family          : Arial,Verdana;
+  font-size            : 10px;
+}
+
+p
+{
+  font-family          : Arial,Verdana;
+  font-size            : 10px;
+}
+
+body
+{
+  background           : white;
+  color                : black;
+  font: 10px Arial,Verdana;
+}
+
+body p
+{
+  border:0px !important;
+  font-size:10px !important;
+  color: black !important;
+}
+body p u
+{
+  font-size:10px !important;
+  color: black !important;
+}
+body p b
+{
+  font-size:10px !important;
+  color: black !important;
+}
+
+/* améliorations "couleurs en dur" pour firefox,opéra */
+* font[color="#fffff0"],* font[color="##ff8c00"],* font[color="yellow"]{
+ color: #000000;
+}
+* font[color="#ff0000"],* font[color="red"]{
+ color: #cc3800;
+}
+* font[color="#00ff00"],* font[color="lime"]{
+ color: #b9b12b;
+}
+
+/* améliorations "images inutiles réduites" pour firefox,opéra */
+* img[width="200"],* img[width="75"],* img[width="120"],* img[width="50"],* img[width="30"],* img[width="32"]{
+ width: 18px !important;
+ height: 18px !important;
+ background-color: white;
+ padding: 2px;
+ border-top:0px;
+ border-left:0px;
+ border-bottom: 1px solid #aaaaaa;
+ border-right: 1px solid #aaaaaa;
+}
+
+/* améliorations non activées.
+* div,* th,* table{
+ width: * !important;
+}
+*/
+
+img, a img
+{
+  border               : 0px solid white;
+  vertical-align: middle;
+}
+
+p table
+{
+  border               : 0px;
+}
+
+p td
+{
+  text-align           : center;
+}
+
+* td{
+empty-cells:show;
+}
+
+table table
+{
+  border               : 0px;
+  padding              : 0px;
+  margin               : 0px;
+}
+
+th, td.a, td.b, td.c, td.f, input, select,
+td.g, td.h, td.i, td.j, td.k, td.l, td.m,
+td.n, td.o, td.q, td.r, td.v, .style td,
+textarea, p td, table.s th img
+{
+  font-size            : 10px;
+  font-family          : Arial,Verdana;
+
+}
+
+th, td.a, td.b, td.c, td.f, input, select, td.g,
+td.h, td.i, td.j, td.k, td.m, td.o, td.q, td.r,
+td.v, td.s, .style td, p td
+{
+  background-color     : white;
+  border-top:0px;
+  border-left:0px;
+  border-bottom: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+}
+
+th
+{
+  text-align           : center;
+}
+
+td.a
+{
+  text-align           : center;
+}
+
+td.b
+{
+  padding              : 0px;
+}
+
+td.c
+{
+  font-weight          : bold;
+  color                : black;
+  padding-left         : 3px;
+}
+
+td.f, input, select, textarea
+{
+  color                : black;
+  background-color     : #eeeeee;
+}
+
+textarea
+{
+  width                : 100%;
+}
+
+td.k input
+{
+  text-align           : left;
+}
+
+td.g
+{
+  font-weight          : bold;
+  text-align           : right;
+  color                : black;
+}
+
+td.h
+{
+  text-align           : center;
+  color                : black;
+}
+
+td.i
+{
+  text-align           : center;
+  color                : black;
+}
+
+td.j
+{
+  text-align           : center;
+  color                : black;
+}
+
+td.k, td.k input
+{
+  text-align           : center;
+  color                : black;
+}
+
+td.l
+{
+	vertical-align       : top;
+	padding-bottom              : 0px;
+	color: #555555 !important;
+	border:0px;
+	border-bottom:1px solid #777777;
+	background-color:#ffffff;
+
+}
+
+td.m
+{
+  font-weight          : bold;
+  text-align           : right;
+  color                : black;
+}
+
+td.n
+{
+  font-weight          : bold;
+  text-align           : right;
+  text-align           : center;
+  color                : black;
+}
+
+td.o
+{
+  text-align           : center;
+  color                : black;
+}
+
+td.q
+{
+  font-weight          : bold;
+
+
+  text-align           : center;
+  vertical-align       : middle;
+  color                : black;
+}
+
+td.r
+{
+  text-align           : right;
+  color                : black;
+}
+
+td.v
+{
+  font-weight          : bold;
+  text-align           : right;
+  color                : #f7f7f7;
+}
+
+td.s
+{
+  color                : black;
+}
+
+table.s th
+{
+  border               : 0px;
+}
+
+table.s th img
+{
+}
+
+div.z
+{
+  font-weight          : bold;
+  color                : black;
+}
+
+a
+{
+  color                : black;
+  text-decoration      : none;
+  font-weight          : bold;
+}
+
+a.s
+{
+  color                : black;
+}
+
+a.t
+{
+  color                : black;
+}
+
+a:hover
+{
+  color                : #7799ff;
+  text-decoration      : underline;
+}
+
+.style td
+{
+  color                : black;
+  border-top           : 0px;
+
+
+}
+
+.style div a
+{
+  height               : 100%;
+  width                : 100%;
+  color                : black;
+
+
+}
+
+.style div a:link
+{
+  height               : 100%;
+  width                : 100%;
+  color                : black;
+
+
+}
+
+.style div a:visited
+{
+  height               : 100%;
+  width                : 100%;
+  color                : #333333;
+
+
+}
+
+.style div a:hover
+{
+  color                : white !important;
+  background-color: black;
+  height               : 100%;
+  width                : 100%;
+  text-decoration      : none;
+}
+
+.style
+{
+  margin-top           : 15px;
+}
+
+h1
+{
+  border-bottom        : 0px white solid;
+  width                : 98%;
+  text-align           : center;
+}
+
+
+.allymember { 
+  color: black;
+}
+
+.noob { 
+  color: #777777;
+  background-color:#90ee90;
+}
+
+.strong { 
+  color: #ffa0a0;
+}
+
+.vacation { 
+  color:  #000;
+  background-color:#87CEEB;
+}
+
+.inactive { 
+  color: #999999;
+  background-color:#EEEEEE;
+}
+
+.longinactive { 
+  color: #999999;
+  background-color:#DDDDDD;
+}
+
+.banned {
+  text-decoration: line-through;
+  background-color:#FFBBBB;
+}
+
+.flight {
+ white-space:nowrap;
+ font-size:10px;
+
+}
+.flight a {
+  text-decoration:underline;
+}
+.flight th{
+ border-bottom:1px solid #cccccc;
+ border-right:1px solid #cccccc;
+}
+
+.return {
+	color: #999999 !important;
+}
+.return th{
+color:#999999 !important;
+border:0px;
+border-top:1px solid #cccccc;
+border-left:2px solid #cccccc;
+background-color:#eeeeee;
+
+}
+
+.holding {
+}
+  
+*.ownattack {
+  color: #6ca35d !important;
+}
+*.owncolony { 
+  color: black !important;
+}
+*.owndeploy { 
+  color: black !important;
+}
+*.owndestroy { 
+  color: #FFD700 !important;
+}
+*.ownespionage { 
+  color: #b9b12b !important;
+}
+*.ownfederation { 
+  color: #33CC00 !important;
+}
+*.ownharvest { 
+  color: #654141 !important;
+}
+*.ownhold { 
+  color: #80a0C0 !important;
+}
+*.ownmissile { 
+  color: white !important;
+  font-size:11px;
+  background-color: #6ca35d !important;
+}
+*.owntransport { 
+  color: #0080bc !important;
+}
+
+.flight.attack {
+  color: #a00000 !important;
+  background-color: white !important;
+}
+.attack {
+  color: white !important;
+  background-color: #a00000 !important;
+}
+
+*.colony { 
+  color: black !important;
+}
+*.deploy { 
+  color: black !important;
+}
+*.destroy { 
+  color: #FFD700 !important;
+}
+*.espionage { 
+  color: #9e101d !important;
+}
+*.federation {  
+  color: #CC0000 !important;
+}
+*.harvest {  
+  color: black !important;
+}
+*.hold { 
+  color: #80a0C0 !important;
+}
+*.missile {
+  font-size:11px;
+  color: white !important;
+  background-color: #800000 !important;
+}
+*.transport {  
+  color: #b64a94 !important;
+}
+
+.success { 
+  color: black;
+}
+
+.error { 
+  color: red;
+}
+
+.warning { 
+  color: #ff8c00;
+}
+
+.notice { 
+  color: yellow;
+}
+
+.combatreport {
+  color: red;
+}
+
+.espionagereport {
+  color: #ff8c00;
+}

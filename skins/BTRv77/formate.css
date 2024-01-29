@@ -1,0 +1,888 @@
+/********************************************************************/
+/* Skin : Born To Recycle                                           */
+/* Version : compatible 0.77x                                       */
+/* Auteur : Korosif                                                 */
+/********************************************************************/
+
+#content{overflow: visible;}
+body, html {overflow: auto !important;}
+
+
+/* FORMATTAGE GENERAL */
+
+
+html, body
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: White;
+	background-image: url(img/background.jpg);
+	background-attachment: fixed;
+	background-repeat: repeat;
+	scrollbar-arrow-color: orange;
+	scrollbar-base-color: #2A2A2A;
+	scrollbar-track-color: #2A2A2A;
+	scrollbar-face-color: #2A2A2A;
+	scrollbar-highlight-color: #2A2A2A;
+	scrollbar-3dlight-color: #565656;
+	scrollbar-darkshadow-color: #565656;
+	scrollbar-shadow-color: #565656;
+}
+
+td, th
+{
+	background-color: transparent;
+	border: none;
+}
+
+
+span, div, font, strong, b {font-size: 11px;}
+iframe{display:none;}
+#iframe{display: inline; width:100%; height:100%;}
+img {border: none;}
+
+
+/* LIENS */
+
+a, #menu #darkmatter2
+{
+	font-size: 11px !important;
+  	color: White;
+  	text-decoration: none;
+  	font-weight: bold;
+}
+
+a:hover, #menu #darkmatter2:hover
+{
+  	color: Yellow;
+}
+
+
+/* FORMATTAGE DU MENU  */
+
+
+#menu td
+{
+	background-color: transparent;
+	border: none;
+}
+
+#menu div a, #menu #darkmatter2
+{
+	background-color: transparent;
+	color: Grey;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+#menu div a:hover, #menu #darkmatter2:hover
+{
+  	text-decoration: blink;
+	color: yellow;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+#menu nobr
+{
+	font-size: 11px;
+}
+
+
+/* BARRE DES RESSOURCES / RESOURCES BAR */
+
+
+#header_top table table {border: 0px;}
+
+#header_top table table td
+{
+	font-size: 11px;
+}
+
+#header_top table table td font
+{
+	font-size: 11px;
+}
+
+/*excÃ¨s de ressources*/
+tr .header td font[color="#FF0000"] 
+{ 
+	color:#FF0000; 
+	text-decoration: blink;
+}
+
+
+/* FORMATAGE DES CELLULES  */
+
+
+#content table table td
+{
+	background-color: transparent;
+	font-size: 11px;
+}
+
+th, td.b, td.c, input, td.k, p td, select, textarea, input, td.l, table.s th img
+{
+  background-image: url("img/bkbody.png");
+  border: 1px solid #565656;
+  font-size: 11px;
+  
+}
+
+td.c, td.c td
+{
+  color: Yellow;
+  text-align: center;
+  font-weight: bold;
+  font-variant: small-caps;
+  background-image: url(img/bg1.jpg);
+}
+
+td.c a, td.c td a {color: orange;}
+
+td.c a:hover, td.c td a:hover {color: red;}
+
+#overDiv
+{
+	border: 1px solid #565656;
+}
+
+#overDiv table
+{
+   background-color: #2A2A2A;
+}
+
+table table td.k
+{
+  	vertical-align: middle;
+	text-align: center;
+  	background-image: url(img/bg2.jpg);
+}
+
+table table td.l
+{
+  	vertical-align: top;
+  	background-image: url(img/bg2.jpg);
+}
+
+table table td.l b
+{
+	font-size: 11px;
+	color: Olive;
+}
+
+table.s th
+{
+  border               : 0px;
+  padding: 20px;
+  
+  }
+
+table.s th img
+{
+  width: 89px;
+  height: 89px;
+}
+
+div.z {font-weight: bold;}
+
+th center, td center {font-size:11px;}
+
+.combatreport { 
+color: red;
+text-decoration:blink;
+}
+
+/* Tag place OccupÃ© */
+
+/* En Italien */
+th a[title~="Spazi"]:before { content: "Spazi: ";}
+th a[title~="Spazi"]:after { content: " occupati"; color: #B40000;}
+/* En FranÃ§ais */
+th a[title~="Cases"]:before { content: "Place: ";}
+th a[title~="Cases"]:after { content: " (OccupÃ©es)"; color: #B40000;}
+/* En Allemand */
+th a[title~="Bebaute"]:before { content: "Felder: ";}
+th a[title~="Bebaute"]:after { content: " bebaute"; color: #B40000;}
+/* En Anglais  */
+th a[title="Developed fields"]:before { content: "Fields: ";}
+th a[title="Developed fields"]:after { content: " developed"; color: #B40000;}
+
+/* Tag nbr max de cases */
+
+/* En Italien */
+th a[title="Numero massimo di spazi occupabili"]:after { content: " disponibili"; color: #1E8700;}
+/* En FranÃ§ais */
+th a[title="Nombre maximal de cases utilisables"]:after { content: " (Utilisables)"; color: #1E8700;}
+/* En Allemand */
+th a[title="max. bebaubare Felder"]:after { content: " max. bebaubare"; color: #1E8700;}
+/* En Anglais  */
+th a[title="max. developed fields"]:after { content: " max. developed"; color: #1E8700;}
+
+
+/*************************************************/
+/* 		 /!\ OGame Commander Box (Combox)        */
+/*************************************************/
+
+#combox
+{
+	border: 6px ridge #565656 !important;
+	background-image: url(img/commander.jpg) !important;
+	width: 503px !important;
+	height: 156px !important;
+}
+
+#combox div
+{
+	color: red;
+	font-variant: small-caps;
+	font-weight: bold;
+	background-image: none !important;
+}
+
+#anfang, #ende
+{
+	position: static !important;
+	top: auto !important;
+	right: auto !important;
+}
+
+#anfang { height: 85% !important;}
+#ende {height: 15% !important;}
+
+
+/* FORMATTAGE DES FORMULAIRES  */
+
+select, textarea
+{
+	color: White;
+  	background-color: #1C1C1C;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+input
+{
+  color: White;
+  text-align: center;
+  background-color: #1C1C1C;
+}
+
+
+/* COULEUR DES FLOTTES  */
+
+
+.flight .owntransport /*transport aller*/
+{
+color : #CC00C0;
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 11px;
+}
+
+.flight .owntransport a:link
+{
+color : #FFFFFF;
+}
+.flight .owntransport a:visited
+{
+color : #FFFFFF;
+}
+.flight .owntransport a:hover
+{
+color : #347680;
+}
+
+.return .owntransport /*transport retour*/
+{
+color: #CC00C0; 
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 9px;
+font-style:italic;
+}
+
+.return .owntransport a:link
+{
+color : #FFFFFF;
+font-weight:bold;
+
+}
+.return .owntransport a:visited
+{
+color : #FFFFFF;
+font-weight:bold;
+}
+.return .owntransport a:hover
+{
+color : #347680;
+}
+
+.transport /*transport subit*/
+{
+color: #FFFF00; 
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 11px;
+text-decoration: blink;
+text-shadow:#FF6600; 
+}
+
+.transport a:link
+{
+color : #FFFFFF;
+font-size: 11px; 
+}
+.transport a:visited
+{
+color : #FFFFFF;
+font-size: 11px; 
+}
+.transport a:hover
+{
+color : #347680;
+font-size: 11px; 
+}
+
+
+
+.flight .ownattack /*attaque aller*/
+{
+color:#F83B28;
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 11px;
+}
+
+.flight .ownattack a:link
+{
+color:#FFFFFF;
+}
+.flight .ownattack a:visited
+{
+color:#FFFFFF;
+}
+.flight .ownattack a:hover
+{
+color : #347680;
+}
+
+.return .ownattack /*attaque retour*/
+{
+color:#FFFF00;
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 9px;
+font-style:italic;
+}
+
+.return .ownattack a:link
+{
+color : #FFFFFF;
+}
+.return .ownattack a:visited
+{
+color : #FFFFFF;
+}
+.return .ownattack a:hover
+{
+color : #347680;
+}
+
+.attack /*attaque subie*/
+{
+color: #FF0000;
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 11px;
+text-decoration: blink;
+text-shadow:#FF6600;
+}
+
+.attack a:link
+{
+color:#FFFFFF;
+}
+.attack a:visited
+{
+color:#FFFFFF;
+}
+.attack a:hover
+{
+color : #347680;
+}
+
+.flight .ownespionage /*espionnage aller*/
+{
+color:#65FC65;
+font-family: T????o?Ã”?????rebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 11px;
+font-weight:bold;
+}
+
+.flight .ownespionage a:link
+{
+color : #FFFFFF;
+}
+.flight .ownespionage a:visited
+{
+color : #FFFFFF;
+}
+.flight .ownespionage a:hover
+{
+color : #347680;
+}
+
+.return .ownespionage /*espionnage retour*/
+{
+color:#3D983D;
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 9px;
+font-weight: normal;
+font-style:italic;
+}
+
+.return .ownespionage a:link
+{
+color:#FFFFFF;
+}
+.return .ownespionage a:visited
+{
+color:#FFFFFF;
+}
+.return .ownespionage a:hover
+{
+color : #347680;
+}
+
+
+.espionage /*espionnage subit*/
+{
+color: #F87676;
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 11px;
+text-decoration: bold;
+}
+
+.flight .espionage a:link
+{
+color : #FFFFFF;
+}
+.flight .espionage a:visited
+{
+color : #FFFFFF;
+}
+.flight .espionage a:hover
+{
+color : #347680;
+}
+
+
+.flight .ownharvest /*exploiter aller*/
+{
+color: #33CCFF;
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 11px;
+}
+
+.flight .ownharvest a:link
+{
+color : color: #FFFFFF;;
+}
+.flight .ownharvest a:visited
+{
+color : color: #FFFFFF;
+}
+.flight .ownharvest a:hover
+{
+color : #347680;
+}
+
+.return .ownharvest /*exploiter retour*/
+{
+color: #33CCFF;
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 9px;
+font-weight: normal;
+font-style:italic;
+}
+
+.return .ownharvest a:link
+{
+color: #FFFFFF;
+}
+.return .ownharvest a:visited
+{
+color: #FFFFFF;
+}
+.return .ownharvest a:hover
+{
+color : #347680;
+}
+
+
+.flight .owndeploy/*stationner aller*/
+{
+color: #BD10E2;
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 11px;
+text-decoration: bold;
+}
+
+.flight .owndeploy a:link
+{
+color: #FFFFFF;
+}
+.flight .owndeploy a:visited
+{
+color: #FFFFFF;
+}
+.flight .owndeploy a:hover
+{
+color : #347680;
+}
+
+
+.flight .owncolony /* colonisation aller */
+{
+color: rgb(24,177,154);
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+fon????o?Ã”?????t-size: 11px;
+}
+
+.flight .owncolony a:link
+{
+color: #FFFFFF;
+}
+.flight .owncolony a:visited
+{
+color: #FFFFFF;
+}
+.flight .owncolony a:hover
+{
+color : #347680;
+}
+
+.return .owncolony /* colonisation retour */
+{
+color: rgb(177,24,45);
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 9px;
+font-weight: normal;
+font-style:italic;
+}
+
+.return .owncolony a:link
+{
+color: #FFFFFF;
+}
+.return .owncolony a:visited
+{
+color: #FFFFFF;
+}
+.return .owncolony a:hover
+{
+color : #347680;
+}
+
+
+.flight .owndestroy /* EDLM dÃ©truire aller */
+{
+color: #0096ff;
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 11px;
+text-decoration: blink;
+}
+
+.return .owndestroy /* EDLM dÃ©truire retour */
+{
+color: #0096ff;
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 9px;
+font-style:italic;
+}
+
+.destroy /* EDLM dÃ©truire subit */
+{
+color: #ff0000;
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 11px;
+text-decoration: blink;
+}
+
+.ownmissile /* Attaque de missile*/
+{
+color: #FF0000;
+font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+font-size: 11px;
+}
+
+/* Vitesse indiquÃ©e de la flotte */
+
+/* En Italien */
+a[title~="VelocitÃ :"]:after { content: " ("attr(title)")"; color: grey; font-size: 9px;}
+/* En FranÃ§ais */
+a[title~="Vitesse:"]:after { content: " ("attr(title)")"; color: grey; font-size: 9px;}
+/* En Allemand */
+a[title~="Geschwindigkeit:"]:after { content: " ("attr(title)")"; color: grey; font-size: 9px;}
+/* En Anglais */
+a[title~="Speed:"]:after { content: " ("attr(title)")"; color: grey; font-size: 9px;}
+
+/*-----------------------------------------------------------------------*/
+/*---------------------------Extra pour firefox---------------------------*/
+/*-----------------------------------------------------------------------*/
+
+
+body center table tr.flight th span.flight a[title~="Anzahl"]:after,
+body center table tr.flight th span.owntransport a[title]:after,
+body center table tr.flight th span.ownattack a[title]:after,
+body center table tr.flight th span.ownharvest a[title]:after,
+body center table tr.flight th span.colony a[title]:after,
+body center table tr.flight th span.ownespionage a[title]:after,
+body center table tr.flight th span.owndeploy a[title]:after,
+body center table tr.flight th span.owndestroy a[title]:after,
+body center table tr.flight th span.ownhold a[title]:after
+{
+  content              : " ("attr(title)")";
+  color                : #999999;
+  font-style:italic;
+  font-size            : 10px;
+}
+
+body center table tr.return th span.ownattack a[title]:after
+
+{
+  content              : " ("attr(title)")";
+  color                : #999999;
+  font-style:italic;
+  font-size            : 10px;
+}
+
+body center table tr th span a[title~="Transport:"]:after
+{
+  content              : " ("attr(title)")";
+  color                : #999999;
+}
+
+
+body center table tr th font a[title]:after
+{
+  content              : " ("attr(title)")";
+  color                : #999999;
+}
+
+
+a[title~="Geschwindigkeit:"]:after
+{
+  content              : " ("attr(title)")";
+  color                : #999999;
+}
+
+
+a[title~="TrÃ¼mmerfeld:"]:after,
+a[title~="TrÃ¼mmerfeld"]:after
+{
+  font-style:italic;
+  font-size            : 10px;
+  font-family          : Tahoma, Trebuchet MS, Arial, Helvetica, sans-serif;
+  content              : " ("attr(title)")";
+  color                : #999999;
+}
+
+
+
+/*Selection actuelle */
+option[selected]{background:#007F00}
+
+/*Menu des planetes */
+select[name="pziel"] option[value="0"]{background:#000000}
+select[name="pziel"] option[value="401"]{background:#2F2F2F}
+select[name="pziel"] option[value="402"]{background:#000000}
+select[name="pziel"] option[value="403"]{background:#2F2F2F}
+select[name="pziel"] option[value="404"]{background:#000000}
+select[name="pziel"] option[value="405"]{background:#2F2F2F}
+select[name="pziel"] option[value="406"]{background:#000000}
+select[name="pziel"] option[value="407"]{background:#2F2F2F}
+select[name="pziel"] option[value="408"]{background:#000000}
+
+/*-----------------------Fin des extras pour firefox----------------------*/
+
+
+
+/*--------------------- Couleurs des joueurs dans le menu galaxie ------------------*/
+
+
+.inactive /* Joueur inactif de puis 7 jours */
+{ 
+color: #FDC605;
+text-decoration:blink;
+}
+
+.longinactive /* Joueur inactif depuis 28 jours*/
+{ 
+color: #FF0000;
+text-decoration:blink;
+}
+
+.banned /* Joueur banni*/
+{
+color: #000066;
+text-decoration: line-through;
+}
+
+.vacation /* Joueur en Vacance*/
+{ 
+color: skyblue;
+}
+
+.allymember /* Membre de l'alliance*/
+{ 
+color: #05FC0B;
+}
+
+.noob /* Joueur Faible*/
+{ 
+color: #a0ffa0;
+}
+
+.strong /* Joueur Fort*/
+{ 
+color: #ffa0a0;
+}
+
+
+/*------------------fin couleurs des joueurs dans galaxie ------------------*/
+
+
+
+/***********************/
+/* FIREFOX / OPERA ADS */
+/***********************/
+
+tr > td > i > b > font 
+{
+	/* Metal */
+	font-size : 11px;
+	font-style:normal;
+	color:red;
+}
+
+tr > td + td > i > b > font 
+{
+	/* Crystal */
+	font-size : 11px;
+	font-style:normal;
+	color: red;
+}
+
+tr > td + td + td > i > b > font 
+{
+	/* Deuterium */
+	font-size : 11px;
+	font-style: normal;
+	color: red;
+}
+
+tr > td + td + td + td > i > b > font 
+{
+	/* Dark Matter */
+	font-size : 11px;
+	font-style:normal;
+	color: red;
+}
+
+tr > td + td + td + td + td > i > b > font 
+{
+	/* Energy */
+	font-size : 11px;
+	font-style:normal;
+	color: yellow;
+}
+
+
+/* Coloration des listes de pourcentages menu Ressources*/
+option[value="100"]{color:#FFF261}
+option[value="90"]{color:#FFDA57}
+option[value="80"]{color:#FFC24E}
+option[value="70"]{color:#FFA944}
+option[value="60"]{color:#FF913A}
+option[value="50"]{color:#FF7930}
+option[value="40"]{color:#FF6127}
+option[value="30"]{color:#FF491D}
+option[value="20"]{color:#FF3013}
+option[value="10"]{color:#FF180A}
+option[value="0"]{color:#FF0000}
+
+/* Coloration des listes de pourcentages menu Flottes*/
+option[value="10"]{color:#FFF261}
+option[value="9"]{color:#FFDA57}
+option[value="8"]{color:#FFC24E}
+option[value="7"]{color:#FFA944}
+option[value="6"]{color:#FF913A}
+option[value="5"]{color:#FF7930}
+option[value="4"]{color:#FF6127}
+option[value="3"]{color:#FF491D}
+option[value="2"]{color:#FF3013}
+option[value="1"]{color:#FF180A}
+
+
+/* Suppression icon commandant si pas utilisé 
+div#combox_container
+{
+  display: none;
+}
+
+img[src^="/game/img/commander_ikon_un.gif"]
+{
+  display:none;
+ visibility: hidden;
+}
+
+img[src^="/game/img/admiral_ikon_un.gif"]
+{
+  display:none;
+  visibility: hidden;
+}
+
+img[src^="/game/img/ingenieur_ikon_un.gif"]
+{
+  display:none;
+  visibility: hidden;
+}
+
+img[src^="/game/img/geologe_ikon_un.gif"]
+{
+  display:none;
+  visibility: hidden;
+}
+
+img[src^="/game/img/technokrat_ikon_un.gif"]
+{
+  display:none;
+  visibility: hidden;
+}
+
+#menu a[href*="offiziere"]
+{
+  display: none;
+} */
+
+ /* Rapport d'espionnage  */
+
+ table tr td table tr td.b table tr td.c
+ {
+    padding-left         : 12px;
+    height               : 25px;
+    color                : #FFFF00;
+    vertical-align       : middle;
+    background-image     : url(img/balkenspio.gif);
+    text-align           : left;
+
+ }
+
+/* Couleur type de mission */
+select[name="planettype"] option[value="1"]{color:#00FF00}
+select[name="planettype"] option[value="2"]{color:#00FFFF}
+select[name="planettype"] option[value="3"]{color:#FF0000}
+
+/************ Rapport de combat et d'espionnage ************/
+table[width="99%"] {border:1px #556 solid;width:800;margin-right:auto;margin-left:auto;color:yellow;font-weight:bold;text-align:center;
+background-image: url("img/bkbody.png");background-repeat:repeat;}
+table[width="99%"] tr > th + th {color: yellow;}
+table[width="99%"] table[width="100%"] > tbody > tr > th > center {color:#00CC00;font-weight : bold;}
+table[width="99%"] table[width="100%"] + table[width="100%"] > tbody > tr > th > center {color: #FF0000;font-weight:bold;}
+table[width="99%"] table[width="100%"] table {margin-top:5px}
+
+
+

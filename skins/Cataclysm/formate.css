@@ -1,0 +1,853 @@
+/*
+                                 ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
+                                 ÛÛÛ±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±ÛÛÛ±
+                                 ÛÛÛ±                                                     ÛÛÛ±
+                                 ÛÛÛ±                OGAME: Skin E.o.H.                   ÛÛÛ±
+                                 ÛÛÛ±                                                     ÛÛÛ±
+                                 ÛÛÛ±                                                     ÛÛÛ±
+                                 ÛÛÛ±                                                     ÛÛÛ±
+                                 ÛÛÛ±         Skin personale dell'alleanza E.o.H.         ÛÛÛ±
+                                 ÛÛÛ±                                                     ÛÛÛ±
+                                 ÛÛÛ±                                                     ÛÛÛ±
+                                 ÛÛÛ±                                  Autore: Egrigori   ÛÛÛ±
+                                 ÛÛÛ±                                                     ÛÛÛ±
+                                 ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ±
+                                  ±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+*/
+
+
+., #, td, th, textarea, body, table
+{
+  font-family	: Tahoma,sans-serif;
+  font-size	: 11px;
+  color         : #CCFFFF;
+}
+
+img
+{
+  border               : 0px;
+}
+
+p table
+{
+  border               : 0px;
+}
+
+p td
+{
+  text-align           : center;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+  color                : #EEFFFF;
+}
+
+table table
+{
+  border               : 0px;
+
+}
+
+table table td
+{
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+  color                : #FFFFFF;
+
+}
+
+
+
+
+/* Codice per lo stile del corpo principale */
+body
+{
+	color                : #DDFFFF;                    /* Colore del testo */
+	margin-top           : 1px;                        /* Margine superiore del testo */
+	margin-left          : 1px;                        /* Margine sinistro del testo */
+	font-size            : 11px;                       /* dimensione del testo */
+	font-family          : Tahoma,sans-serif;          /* font del testo */
+	background           : #162979;                    /* Colore di sfondo... Inutile */
+	                                                   /* dato che usiamo l`immagine */
+	background-image     : url(img/background.jpg);    /* Immagine di sfondo */
+	background-attachment: fixed;                      /* Lo sfondo non si muove con lo */
+	                                                   /* scrolling della pagina */
+	background-repeat    : no-repeat;                  /* Ripetizione dello sfondo */
+	                                                   /* Con immagine grande non ce ne */
+                                                           /* preoccupiamo... */
+	background-position  : bottom left;                /* Allineamento dell`immagine di */
+	                                                   /* sfondo. da usare per allineare */
+                                                           /* sfondi del menù e della pagina */
+                                                           /* principale */
+	scrollbar-arrow-color: #E6EBFB;                    /* Colore della freccia della barra */
+	                                                   /* di scorrimento */
+	scrollbar-base-color : #222375;                    /* Colore principale della barra */
+	                                                   /* di scorrimento */
+	scrollbar-track-color: #3d3e92;                    /* Colora la parte sottostante della */
+	                                                   /* barra, dove si muove */
+	scrollbar-face-color : #222375;                    /* colore della barra vera e propria */
+	scrollbar-highlight-color: #415680;                /* separatore fra barra e parte con */
+	                                                   /* le frecce */
+	scrollbar-3dlight-color: #344566;                  /* parte tridimensionale che contiene */
+                                                           /* le frecce */
+	scrollbar-darkshadow-color: #344566;               /* colore della parte esterna in ombra */
+        scrollbar-shadow-color: #415680;                   /* ombra della barra */
+}
+	
+
+body.style
+      {
+	color                : #FFFFFF;
+        margin-top           : 1px;
+        margin-left          : 1px;
+        background-color     : #AAAAAA;
+        background-image     : url(img/menu.jpg);
+	background-position  : bottom left;
+        background-repeat    : no-repeat;
+        font-family          : Tahoma, sans-serif;
+        font-size            : 11px; 
+        text-align           : left;
+      }
+
+
+
+body form table th table input
+{
+  width: 60px;
+  color: #FFFFFF;
+}
+
+
+
+th, td.a, td.b, td.c, td.f, input,
+td.g, td.h, td.i, td.j, td.k, td.l, td.m,
+td.n, td.o, td.q, td.r, td.v, .style td,
+textarea, p td, table.s th img
+{
+  border               : 1px #888888 solid;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+  color                : #CCFFFF;
+}
+
+th, td.a, td.b, td.c, td.f, input, td.g,
+td.h, td.i, td.j, td.k, td.m, td.o, td.q, td.r,
+td.v, td.s, .style td, p td
+{
+  background-color     : transparent;
+  background-image     : url(img/bd1.png);
+  color                : #CCFFFF;
+}
+
+th
+{
+  text-align           : center;
+  padding-left         : 3px;
+  padding-right        : 3px;
+  background-color     : transparent;
+  background-image     : url(img/bd1.png);
+  background-repeat    : repeat-x;
+}
+
+td.a
+{
+  height               : 39px;
+  text-align           : center;
+}
+
+
+td.b
+{
+  padding              : 3px;
+}
+
+/* Intestazioni delle tabelle */
+td.c
+{
+  font-weight          : bold;
+  color                : #44DDDD;
+  padding-left         : 3px;
+
+  background-image     : url(img/bg1.png);
+  background-color     :transparent;
+}
+
+td.f, input, select, textarea
+{
+  color                : #000000;
+  background-color     : #CCCCCC;
+}
+
+textarea
+{
+  width                : 100%;
+}
+
+td.k input
+{
+  text-align           : left;
+}
+
+td.g
+{
+  font-weight          : bold;
+  text-align           : right;
+  color                : #000000;
+}
+
+td.h
+{
+  text-align           : center;
+  color                : #000000;
+}
+
+td.i
+{
+  text-align           : center;
+  color                : #000000;
+}
+
+td.j
+{
+  text-align           : center;
+  color                : #000000;
+}
+
+/* Colore del testo di input
+   td.k input aggiunto da Daniele Lupo */
+td.k, td.k input
+{
+  text-align           : center;
+  color                : #FFFFFF;
+}
+
+td input
+{
+  background   	       : transparent;
+  color                : #FFFFFF;
+  font-family          : 
+  vertical-align       : top;
+  padding              : 3px;
+  background-image     : url(img/bg2.png);
+  background-position  : 100% 20%;
+}
+
+/* Tabella delle infrastrutture, delle ricerche etc */
+td.l, td.l input
+{
+  background   	       : transparent;
+  color                : #FFFFFF;
+  vertical-align       : top;
+  padding              : 3px;
+  background-image     : url(img/bg2.png);
+  background-position  : 100% 20%;
+}
+
+td.m
+{
+  font-weight          : bold;
+  text-align           : right;
+  width                : 86px;
+  color                : #000000;
+}
+
+td.n
+{
+  font-weight          : bold;
+  text-align           : right;
+  width                : 89px;
+  text-align           : center;
+  color                : #EEFFFF;
+}
+
+td.o
+{
+  text-align           : center;
+  color                : #000000;
+}
+
+td.q
+{
+  font-weight          : bold;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+  text-align           : center;
+  vertical-align       : middle;
+  color                : #000000;
+}
+
+td.r
+{
+  text-align           : right;
+  color                : #000000;
+}
+
+td.v
+{
+  font-weight          : bold;
+  text-align           : right;
+  color                : #f7f7f7;
+}
+
+td.s
+{
+  color                : #000000;
+}
+
+table.s th
+{
+  border               : 0px;
+}
+
+table.s th img
+{
+  width                : 89px;
+  height               : 89px;
+}
+
+div.z
+{
+  font-weight          : bold;
+  color                : #FFFFFF;
+}
+
+a
+{
+  color                : #FFFFFF;
+  text-decoration      : none;
+  font-weight          : bold;
+}
+
+a.s
+{
+  color                : #000000;
+}
+
+a.t
+{
+  color                : #000000;
+}
+
+a:hover
+{
+  color                : #CCAAAA;
+  text-decoration      : underline;
+}
+
+.style td
+{
+  color                : #000000;
+  border-top           : 0px; 
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+}
+
+.style div a
+{
+  height               : 100%;
+  width                : 100%;
+  color                : #CCFFFF;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+}
+
+.style div a:link
+{
+  height               : 100%;
+  width                : 100%;
+  color                : #DDFFFF;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+}
+
+.style div a:visited
+{
+  height               : 100%;
+  width                : 100%;
+  color                : #DDFFFF;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+}
+
+.style div a:hover
+{
+  background-color     : #000099;
+  height               : 100%;
+  width                : 100%;
+  text-decoration      : none;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+  color                : #BBBBBB;
+}
+
+.style
+{
+  margin-top           : 15px;
+}
+
+h1
+{
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+  border-bottom        : 0px #344566; solid;
+  width                : 98%;
+  text-align           : right;
+}
+
+/*--------------------------------
+  --   Aggiunte personali       --
+  --------------------------------*/
+
+
+/* Cambia stile del titolo delle ricerche, infrastrutture etc */
+
+tbody  td  td > a:first-child { 
+	font-size  : 11px;
+	color      : #FFD400; 
+}
+
+/* Stile di input */
+
+input { color : #FFFFFF;}
+
+/* Stile menù a discesa */
+
+select
+{
+  border               : 1px #888888 solid;
+  font-family          : Tahoma,sans-serif;
+  font-size            : 11px;
+  color                : #FFFFFF;
+  background           : transparent;
+  background-image     : url(img/bd1.png);
+  background-color     : #162079;
+}
+
+
+/* Area di testo usata per scrivere messaggi */
+
+textarea
+{
+  border               : 1px #888888 solid;
+  font-family          : Tahoma,sans-serif;
+  color                : #FFFFFF;
+  background           : transparent;
+  background-image     : url(img/bd1.png);
+  background-color     : #162079;
+}
+
+
+/*-----------------------------------------------------------
+  --  Definizione degli stili dei messaggi del riepilogo   --
+  -----------------------------------------------------------*/
+
+
+
+/* Classi per la definizione del recupero dei detriti - fatto*/
+
+.ownharvest {
+	color:#AAAAFF;
+}
+.ownharvest a{
+	color:#AAAAFF;
+}
+.ownharvest a[title]
+
+/* Recupero detriti: Andata */
+
+.flight.ownharvest {
+    color:#AAAAFF;
+}
+.flight.ownharvest a{
+    color:#AAFFFF;
+}
+
+.flight.ownharvest a[title]
+
+/* Recupero detriti: Ritorno */
+
+.return .ownharvest {
+    color:#660033;
+}
+.return .ownharvest a{
+    color:#AADDDD;
+}
+.return .ownharvest a[title]
+
+
+
+/* Classi per la definizione di un proprio attacco - fatto*/
+
+.ownattack {
+	color:#99FFCC;
+}
+.ownattack a{
+	color:#99FFCC;
+}
+.ownattack a[title]:after {color:#660033;
+}
+
+/* Attacco della propria flotta verso un altro pianeta: Andata */
+
+.flight.ownattack {
+    color:#99FFCC;
+}
+.flight.ownattack a{
+    color:#AACCCC;
+}
+.flight.ownattack a[title]:after {content:" ("attr(title)")"; color:#AABBBB;
+}
+
+/* Attacco della propria flotta verso un altro pianeta: Ritorno */
+
+.return.ownattack {
+	color:#99CC66;
+}
+.return.ownattack a{
+	color:#CCCC33;
+}
+.return.ownattack a[title]
+
+
+
+/* Classi per uno spionaggio effettuato - fatto*/
+
+.ownespionage {
+    color:#FFFF66;
+}
+.ownespionage a{
+    color:#AAAAFF;
+}
+.ownespionage a[title]:after {
+	color:#AAAAFF;
+}
+
+/* Spionaggio: Andata */
+.flight.ownespionage {
+	color:#FFFF66;
+}
+.flight.ownespionage a{
+	color:#AAAAFF;
+}
+.flight.ownespionage a[title]:after {content:" ("attr(title)")"; color:#FFBBFF;
+}
+
+/* Spionaggio: Ritorno */
+.return.ownespionage {
+	color:#DDDD44;
+}
+.return.ownespionage a{
+	color:#AAAACC;
+}
+.return.ownespionage a[title]
+
+
+
+
+
+/* Definizione classi per il trasporto con le proprie flotte - fatto*/
+.owntransport {
+	color:#66FF00;
+}
+.owntransport a{
+    color:#AACCAA;
+}
+.owntransport a[title]:after {color:#6699CC;
+}
+
+/* Trasporto con proprie flotte: Andata */
+.flight.owntransport {
+	color:#66FF00;
+}
+.flight.owntransport a{
+    color:#33AAFF;
+}
+.flight.owntransport a[title]:after {content:" ("attr(title)")"; color:#33FFFF;
+}
+
+/* Traporto con proprie flotte: Ritorno */
+.return.owntransport {
+	color:#33FF33;
+}
+.return.owntransport a{
+	color:#33DDDD;
+}
+.return.owntransport a[title]
+
+/* Classi per il trasporto di una flotta di un altro giocatore - fatto */
+.transport {
+	color:#66FF66;
+}
+.transport a{
+	color:#6666DD;
+}
+.transport a[title]:after {content:" ("attr(title)")"; color:#6666DD;
+}
+
+/* Trasporto di un altro giocatore: Andata */
+.flight.transport {
+	color:#66FF66;
+}
+.flight.transport a{
+	color:#6666DD;
+}
+.flight.transport a[title]:after {content:" ("attr(title)")"; color:#6666DD;
+}
+
+/* Classi per lo schieramento della flotta - fatto */
+
+.owndeploy {
+    color:#BB44BB;
+}
+.owndeploy a{
+    color:#FF66FF;
+}
+.owndeploy a[title]:after {
+	color:#FF66FF;
+}
+
+/* Schieramento: Andata */
+.flight.owndeploy {
+    color:#CE8CE6;
+}
+.flight.owndeploy a{
+    color:#FF66FF;
+}
+.flight.owndeploy a[title]:after {content:" ("attr(title)")"; color:#FF99FF;
+}
+
+/* Schieramento: Ritorno */
+.return.owndeploy {
+    color:#AA22AA;
+}
+.return.owndeploy a{
+    color:#334444;
+}
+.return.owndeploy a[title]
+
+/* Classi per l'attacco subito da un altro giocatore - fatto */
+
+.attack {
+	color:red;
+}
+
+.attack a{
+	color:#ffe400;
+}
+
+.attack a[title]:after {content:" ("attr(title)")"; color #ffe400;
+}
+
+/* Attacco subito: Andata */
+.flight.attack {
+	color:red;
+}
+
+.flight.attack a{
+	color:#ffe400;
+}
+
+.flight.attack a[title]:after {content:" ("attr(title)")"; color:#ffe400;
+}
+
+
+
+/* Classi per il viaggio di colonizzazione - fatto */
+
+.owncolony {
+	color:#FDFF80:
+}
+.owncolony a {
+	color:#86FF80;
+}
+.owncolony a[title]:after {
+	color:#AAFF80;
+}
+
+/* Colonizzazione: Andata */
+.flight.owncolony {
+	color:#FDFF80:
+}
+.flight.owncolony a {
+	color:#AAFF80;
+}
+.flight.owncolony a[title]:after { content:" ("attr(title)")"; color:#AAFF80;
+}
+
+/* Colonizzazione: Ritorno */
+.return.owncolony {
+	color:#FFD780:
+}
+.return.owncolony a {
+	color:#AABB80;
+}
+.return.owncolony a[title]
+}
+
+/* Classi per l'attacco missilistico - fatto */
+
+.ownmissile {
+	color:#FFFFBB;
+}
+.ownmissile a {
+	color:#FFCFCE;
+}
+.ownmissile a[title]:after {
+	color:#FFCFCE;
+}
+
+/* Attacco missilistico: Andata */
+.flight.ownmissile {
+	color:#FFFFBB;
+}
+.flight.ownmissile a{
+	color:#FFCFCE;
+}
+.flight.ownmissile a[title]:after { content:" ("attr(title)")"; color:#DDCFCE;
+}
+
+/* Attacco ACS - fatto */
+tr th span.federation {
+    color:#42FFC9;
+}
+tr th span.federation a{
+    color:#white;
+}
+tr th span.attack a{
+    color:#42FFC9;
+}
+tr th span.federation a[title]:after {content:" ("attr(title)")"; color:#42FFC9;
+}
+tr th span.attack a[title]:after {content:" ("attr(title)")"; color:white;
+}
+
+/* Difesa ACS: Andata */
+tr th span.ownhold {
+    color:#42FFC9;
+}
+tr th span.ownhold a{
+    color:white;
+}
+tr.flight th span.ownhold a{
+    color:white;
+}
+tr th span.ownhold a[title]:after {content:" ("attr(title)")"; color:white;
+}
+tr.flight th span.ownhold a[title]:after {content:" ("attr(title)")"; color:white;
+}
+
+/* Proprio attacco IPM - fatto */
+tr th span.ownmissile {
+    color:#FEEFAC;
+}
+tr th span.ownmissile a[title]:after {content:" ("attr(title)")"; color:#FEEFAC;
+}
+
+/* Distruzione della propria luna - fatto */
+tr th span.owndestroy {
+    color:lime;
+}
+tr th span.owndestroy a{
+    color:yellow;
+}
+tr th span.owndestroy a[title]:after {content:" ("attr(title)")"; color:yellow;
+}
+
+
+/* Proprio attacco ACS */
+.ownfederation {
+    color:#00511B;
+}
+.ownfederation a{
+    color:#ACFEF6;
+}
+.ownfederation a[title]:after {content:" ("attr(title)")"; color:yellow;
+}
+.ownattack {
+    color:#ACFEF6;
+}
+.ownattack a{
+    color:yellow;
+}
+.ownattack a[title]
+
+/* Distruzione di una luna */
+.destroy {
+    color:red;
+}
+.destroy a{
+    color:yellow;
+}
+.destroy a[title]:after {content:" ("attr(title)")"; color:#EEEEEE;
+}
+
+/* Hold */
+.hold {
+    color:#3399FF;
+}
+.hold a{
+    color:#334455;
+}
+.flight.hold a{
+    color:#667788;
+}
+.hold a[title]:after {content:" ("attr(title)")"; color:#333333;
+}
+
+/* Own hold return flight */
+.return .ownhold {
+    color:#ACFEB7;
+}
+.return .ownhold a{
+    color:#D5CFCA;
+}
+.return .ownhold a[title]
+
+
+
+/* Messaggi di servizio */
+
+.combatreport { color: red; }
+
+
+.success { 
+color: lime;
+}
+
+.error { 
+color: red;
+}
+
+.warning { 
+color: orange;
+}
+
+.notice { 
+color: yellow;
+}
+
+.flight {
+	
+}
+
+/* Stili comuni di ritorno */
+.return {
+	
+}
+
+.holding {
+} 
+
+/* Prova per nascondere gli iframe */
+
+iframe {
+	display : none;
+	width : 0px;
+	height : 0px;
+}
+
+#ae9c585f {
+	display : none;
+	width : 0px
+	height : 0px;
+}
+/* FINE!!!!! E che ci voleva!!!! */

@@ -1,0 +1,199 @@
+/**
+*
+* Manger v.2
+*
+* Skin for Ogame (www.ogame.org / www.ogame.se)
+* By: Cordazar (cordazar (at) lyistra (dot) net)
+* At: http://www.lyistra.net
+*
+* (C) 2007
+*
+**/
+
+., #, td, th, textarea, body, table {font-family: "Lucida Grande", Verdana, Arial, Helvetica, Tahoma, sans-serif;font-size: 10px;}
+
+img{border: 0px;}
+
+p table {border: 0px;}
+
+p td {text-align: center;font-size: 10px;font-family: "Lucida Grande", Verdana, Arial, Helvetica, Tahoma, sans-serif;}
+
+table {background-color:transparent;}
+
+table table {border: 0px;background-color:transparent;}
+
+table table td {font-size: 10px;font-family: "Lucida Grande", Verdana, Arial, Helvetica, Tahoma, sans-serif;}
+
+body
+{
+ overflow : auto!important; /* line added to enable scrollbar after v077c */ 
+ color: #E6EBFB;
+ background: #000000;
+ background-image: url(img/bkd_manger.jpg);
+ background-attachment: fixed;
+ background-repeat: no-repeat;
+ background-position: top left;
+ font-size: 10px;
+ font-family: "Lucida Grande", Verdana, Arial, Helvetica, Tahoma, sans-serif;
+}
+
+body form table th table input {width: 60px;}
+
+th, td.a, td.b, td.c, td.f, input, select,
+td.g, td.h, td.i, td.j, td.k, td.l, td.m,
+td.n, td.o, td.q, td.r, td.v, #menu td,
+textarea, p td, table.s th img {border: 1px #4d0101 solid;font-size: 10px;font-family: "Lucida Grande", Verdana, Arial, Helvetica, Tahoma, sans-serif;}
+
+th, td.a, td.b, td.c, td.f, input, select, td.g,
+td.h, td.i, td.j, td.k, td.m, td.o, td.q, td.r,
+td.v, td.s, #menu td, p td {background:transparent url('img/a1.png') repeat;_background:#3b0101 url('img/bkd_manger_dark_02.jpg') fixed no-repeat top left;}
+
+th {text-align: center;padding-left: 3px;padding-right: 3px;}
+
+td.a {height: 39px;text-align: center;}
+td.b {padding: 3px;}
+td.c {font-weight: bold;color: #E6EBFB;font-size:11px;padding-left: 3px;background:transparent url('img/a1.png') repeat;_background:#3b0101 url('img/bkd_manger_dark_02.jpg') fixed no-repeat top left;}
+td.c a {font-weight:normal;}
+td.f, input, select, textarea {color: #E6EBFB;background-color: #3b0101;}
+td.k input {text-align: left;}
+td.g {font-weight: bold;text-align: right;color: #E6EBFB;}
+td.h {text-align: center;color: #E6EBFB;}
+td.i {text-align: center;color: #E6EBFB;}
+td.j {text-align: center;color: #E6EBFB;}
+td.k, td.k input {text-align: center;color: #E6EBFB;}
+td.l {background-color: #011d29;color: #E6EBFB;vertical-align: top;padding: 3px;background:transparent url('img/a1.png') repeat;_background:#3b0101 url('img/bkd_manger_dark_02.jpg') fixed no-repeat top left;}
+td.m {font-weight: bold;text-align: right;width: 86px;color: #E6EBFB;}
+td.n {font-weight: bold;text-align: right;width: 89px;text-align: center;color: #E6EBFB;}
+td.o {text-align: center;color: #E6EBFB;}
+td.q {font-weight: bold;font-size: 10px;font-family: "Lucida Grande", Verdana, Arial, Helvetica, Tahoma, sans-serif;text-align: center;vertical-align: middle;color: #E6EBFB;}
+td.r {text-align: right;color: #E6EBFB;}
+td.v {font-weight: bold;text-align: right;color: #f7f7f7;}
+td.s {color: #E6EBFB;}
+
+textarea {width: 100%;}
+
+table.s th {border: 0px;}
+table.s th img {width: 89px;height: 89px;}
+
+div.z {font-weight: bold;color: #E6EBFB;}
+
+a {color: #E6EBFB;text-decoration: none;font-weight: bold;}
+a.s {color: #E6EBFB;}
+a.t {color: #E6EBFB;}
+a:hover {color: #CDD7F8;text-decoration: underline;}
+
+#menu td {color: #E6EBFB;border-top: 0px;font-size: 10px;font-family: "Lucida Grande", Verdana, Arial, Helvetica, Tahoma, sans-serif;}
+
+#menu div a {height: 100%;width: 100%;color: #f2f2f2;font-size: 10px;font-family: "Lucida Grande", Verdana, Arial, Helvetica, Tahoma, sans-serif;}
+#menu div a:link {height: 100%;width: 100%;color: #f2f2f2;font-size: 10px;}
+#menu div a:visited {height: 100%;width: 100%;font-size: 10px;}
+#menu div a:hover {height: 100%;width: 100%;text-decoration: none;font-size: 10px;color: #ffa49d;}
+
+#menu {width:160px;}
+
+h1 {font-size: 11px;font-family: "Lucida Grande", Verdana, Arial, Helvetica, Tahoma, sans-serif;border-bottom: 0px #344566;solid;width: 98%;text-align: right;}
+
+#content {overflow:visible;margin:0 auto;_overflow:auto;}
+
+#content td, #content td.c, #content th {font-weight: bold;color: #E6EBFB;font-size:10px;padding-left: 3px;background:transparent url('img/a1.png') repeat;_background:#393939 url('img/bkd_manger_dark_02.jpg') fixed no-repeat top left;}
+
+#content td {border: 1px #370101 solid;}
+
+#content > center > table > tbody > tr > th > div {font-weight:normal;}
+
+/**
+* Tooltips
+*/
+#overDiv{
+font-weight: bold;color: #E6EBFB;font-size:11px;padding-left: 3px;background:transparent url('img/a1.png') repeat;_background:#393939 url('img/bkd_manger_dark_02.jpg') fixed no-repeat top left;  border-color		   : 0px !important;  width				   : auto !important;}#overDiv td, #galaxytool_status td{  font-weight: bold;color: #E6EBFB;font-size:11px;padding-left: 3px;background:transparent url('img/a1.png') repeat;_background:#393939 url('img/bkd_manger_dark_02.jpg') fixed no-repeat top left;border:0;}
+
+
+/***
+* Extras
+*/
+
+/* Notice above menu */div[id="leftmenu"] p {padding: 0px;margin-bottom: 3px;display: block;font-size: 1em;}div[id="leftmenu"] p:after {	content:"Manger v.2 by: Cordazar";
+	display:block;
+	margin-top:5px;
+	font-size: 11px;	color: #ffa49d;
+	width:125px;
+	text-align:left;
+}
+
+div#menu > p {width:125px;}
+table[width="500"] {width:400px;}
+table tr td div font a {color: #FF0000;}
+a[title~="Hastighet:"]:after {content: " ("attr(title)")";color: #ffffff;}a[title~="Speed:"]:after {content: " ("attr(title)")";color: #ffffff;}
+
+/*change dark matter img*/
+div#header_top table tr table#resources tr td img[src*="dm_klein_2.jpg"] {height: 0px ;width: 0px;}div#header_top table tr table#resources tr td + td + td + td:after {content:url(images/darkmatter.gif);}div#header_top table tr table#resources tr td + td + td + td + td:after,div#header_top table tr table#resources tr + tr td + td + td + td:after,div#header_top table tr table#resources tr + tr + tr td + td + td + td:after {content:"";}
+
+/*overview*/
+
+.flight .owntransport {color: #00CC00;}.flight .owntransport a:link {color: #FFFFFF;}.flight .owntransport a:hover {color: #347680;}
+.flight .owntransport a:visited {color: #FFFFFF;}.return .owntransport {color: #00CC00;font-style:italic;}.return .owntransport a:link {color: #FFFFFF;font-weight:bold;}.return .owntransport a:hover {color: #347680;}
+.return .owntransport a:visited {color: #FFFFFF;font-weight:bold;}
+
+.transport {color: #00CC00;}
+.flight .transport a:link {color:#FFFFFF;}.flight .transport a:hover {color:#009900;}
+.flight .transport a:visited {color:#FFFFFF;}.flight .ownattack, .flight .ownfederation {color:#FFCC00;}.flight .ownattack a:link, .flight .ownfederation a:link, .flight .attack a:link {color:#FFFFFF;}.flight .ownattack a:hover, .flight .ownfederation a:hover, .flight .attack a:hover {color: #347680;}
+.flight .ownattack a:visited, .flight .ownfederation a:visited, .flight .attack a:visited {color:#FFFFFF;}.return .ownattack, .return .ownfederation {color:#FFCC00;font-style:italic;}.return .ownattack a:link, .return .ownfederation a:link, .return .ownattack a:visited, .return .ownfederation a:visited, .flight .ownhold a:link, .holding .ownhold a:link, .return .ownhold a:link, .flight .ownhold a:visited, .holding .ownhold a:visited, .return .ownhold a:visited {color: #FFFFFF;font-weight: bold;}.return .ownattack a:hover, .return .ownfederation a:hover, .flight .ownhold a:hover, .holding .ownhold a:hover, .return .ownhold a:hover {color: #347680;} {color: #FFFFFF;font-weight: bold;}
+
+.return .ownfederation {color:#ff9000;}
+.flight .ownfederation {color:#ff9000;}
+.attack {color: #FF0000;text-decoration: blink;text-shadow:#FF6600;}
+.flight .ownespionage {color:#FFFF00;font-weight:bold;}.flight .ownespionage a:link {color: #FFFFFF;}.flight .ownespionage a:hover {color: #FFFF00;}
+.flight .ownespionage a:visited {color: #FFFFFF;}.return .ownespionage {color:#FFFF00;font-weight: normal;font-style:italic;}.return .ownespionage a:link {color:#FFFFFF;font-weight:bold;}.return .ownespionage a:visited {color:#FFFFFF;font-weight:bold;}
+.return .ownespionage a:hover {color:#FFFF00;font-weight:bold;}
+.espionage {color: #CC0000;text-decoration: bold;}
+.flight .ownharvest {color: #33CCFF;}.flight .ownharvest a:link {color: #FFFFFF;}.flight .ownharvest a:visited {color: #FFFFFF;}.flight .ownharvest a:hover {color: #347680;}
+.return .ownharvest {color: #33CCFF;font-weight: normal;font-style:italic;}.return .ownharvest a:link {color: #FFFFFF;font-weight: normal;font-weight:bold;}.return .ownharvest a:visited {color: #FFFFFF;font-weight: normal;font-weight:bold;}.return .ownharvest a:hover {color: #347680;}
+.flight .owndeploy {color: #6600CC;}.flight .owndeploy a:link {color: #FFFFFF;}.flight .owndeploy a:visited {color: #FFFFFF;}.flight .owndeploy a:hover {color: #6600CC;}
+.return .owndeploy {color: #6600CC;font-weight: normal;}.return .owndeploy a:link {color: #FFFFFF;font-weight: normal;font-weight:bold;}.return .owndeploy a:visited {color: #FFFFFF;font-weight: normal;font-weight:bold;}
+.flight .owncolony {color: #a7a7a7;}.flight .owncolony a:link {color:#a7a7a7;}.flight .owncolony a:visited {color: #a7a7a7;}.flight .owncolony a:hover {color: #347680;}
+
+.return .owncolony {color: #6e6e6e;font-weight: normal;}.return .owncolony a:link {color: #6e6e6e;font-weight:bold;}.return .owncolony a:visited {color: #6e6e6e;font-weight:bold;}.return .owncolony a:hover {color: #347680;}
+
+.flight .owndestroy {color: #CC6633;text-decoration: blink;}
+
+.return .owndestroy {color: #CC6633;text-decoration: bold;font-weight: normal;}
+
+.destroy {color: #CC6633;text-decoration: blink;}
+
+.ownmissile {color: #de0000;}
+
+
+/* spy- and combatreports */table[width="99%"] {border:1px #556 solid;width:620;margin-right:auto;margin-left:auto}table[width="99%"] tr > th + th {color: #FFFFFF}table[width="99%"] table[width="100%"] > tbody > tr > th > center {color:#00CC00;font-weight: bold;}table[width="99%"] table[width="100%"] + table[width="100%"] > tbody > tr > th > center {color: #FF0000;font-weight: bold;}table[width="99%"] table[width="100%"] table {margin-top:5px}/* larger table */table[width="530"] {width:580px}table[width="519"] {width:550px}table[width="569"] {width:580px}
+
+/* Resources colorized *//* Metall */td.l a + br + br + b {font-weight:bold;color: #ffeeca;}/* Crystal */td.l a + br + br + b + b {font-weight:bold;color: #a4fffe;}/* Deuterium */td.l a + br + br + b + b + b {font-weight:bold;color: #a19bff;}/* Energy */td.l a + br + br + b + b + b + b {font-weight:bold;color: #ffa49d;}table[width="100%"] tr > td + td {font-weight:bold;color:#ffeeca;}table[width="100%"] tr > td + td + td {font-weight:bold;color:#a4fffe;}table[width="100%"] tr > td + td + td + td {font-weight:bold;color:#a19bff;}table[width="100%"] tr > td + td + td + td + td {font-weight:bold;color:#ffa49d;}
+/* Galaxy colors */
+/* inactive for under 7 days */
+.inactive {color: #FE962E;}
+
+/* inactive for under 28 days */.longinactive {color: #DE5901;}
+
+/* banned */.banned {color: #0000CC;text-decoration: line-through;}
+
+/* vacation */.vacation {color: skyblue;}
+
+/* alliance-member */.allymember {color: #FCF905;}
+
+/* noob */.noob {color: #7ac27a;}
+
+/* strong */.strong {color: #ff6969;}
+
+/* hide officers-images top-side | USE AT OWN DISCRETION
+table tr td[width="35"] img {width : 0px;height : 0px;}
+/*
+
+/* fix to center message-sent string */
+html > body > center > center > font > h1 {text-align:center;}
+
+/* Combat reports */
+.combatreport {color:#ff0000;}
+
+/*
+*
+* End of Extras
+*
+***/

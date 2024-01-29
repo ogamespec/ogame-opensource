@@ -1,0 +1,685 @@
+/*
+                                 €€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€
+                                 €€€±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±€€€±
+                                 €€€±                                                  €€€±
+                                 €€€±                OGAME: ULTRAVIOLET                €€€±
+                                 €€€±               original (c) by renky              €€€±
+                                 €€€±                     ~FINAL~                      €€€±
+                                 €€€±                                                  €€€±
+                                 €€€±    Skin fuer "OGame" www.ogame.de                €€€±
+                                 €€€±                                                  €€€±
+                                 €€€±                                                  €€€±
+                                 €€€±    Have Phun                                     €€€±
+                                 €€€±                                                  €€€±
+                                 €€€±                                                   €€€±
+                                 €€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€±
+                                  ±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±
+*/
+., #, td, th, textarea, body, table
+{
+  font-family	: Tahoma,sans-serif;
+  font-size	: 11px;
+}
+
+img
+{
+  border               : 0px;
+}
+
+p table
+{
+  border               : 0px;
+  border-spacing:0px;
+  border-collapse:collapse;
+}
+
+p td
+{
+  text-align           : center;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+}
+
+table
+{
+  border               : 0px;
+  border-spacing:0px;
+  border-collapse:collapse;
+}
+
+table table
+{
+  border               : 0px;
+  border-spacing:0px;
+  border-collapse:collapse;
+}
+
+table table td
+{
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+}
+
+body
+{
+  color                : #faccff;
+  margin-top: 1px;
+  margin-left          : 1px;
+  background-color     : #000000;
+  background-image     : url(img/background.jpg);
+  background-attachment: fixed;
+  background-repeat    : no-repeat;
+  background-position  : top left;
+  scrollbar-arrow-color: #faccff;
+  scrollbar-base-color: #376735;
+  scrollbar-track-color: #376735;
+  scrollbar-face-color: #376735;
+  scrollbar-highlight-color: #376735;
+  scrollbar-3dlight-color: #b6d8b4;
+  scrollbar-darkshadow-color: #376735;
+  scrollbar-shadow-color: #1d251f;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+}
+
+body form table th table input
+{
+  width: 60px;
+}
+
+th, td.a, td.b, td.c, td.f, input, select,
+td.g, td.h, td.i, td.j, td.m, td.k, td.l,
+td.n, td.o, td.q, td.r, td.v,
+textarea, p td, table.s th img
+{
+  border           : 1px #552f55 solid;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+}
+
+input, select, textarea
+{
+  border               : 1px #552f55 solid;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+}
+
+
+th, td.a, td.b, td.c, td.f, input, select, td.g,
+td.h, td.i, td.j, td.m, td.o, td.q, td.r, td.k, td.l,
+td.v, td.s, p td
+{
+  background-color     : #3a243c;
+filter: alpha(opacity=90);
+-moz-opacity: 0.9;
+}
+
+th
+{
+  text-align           : center;
+  padding-left         : 3px;
+  padding-right        : 3px;
+}
+
+th img {
+  vertical-align       : middle;
+}
+
+td.a
+{
+  height               : 39px;
+  text-align           : center;
+}
+
+td.b
+{
+  padding              : 3px;
+}
+
+td.c
+{
+  font-weight          : bold;
+  color                : #faccff;
+  padding-left         : 3px;
+  background-image     : url(img/bg1.gif);
+filter: alpha(opacity=90);
+-moz-opacity: 0.9;
+}
+
+td.f, input, select, textarea
+{
+  color                : #faccff;
+  background-color     : #352238;
+}
+
+textarea
+{
+  width                : 100%;
+}
+
+td.k input
+{
+  text-align           : left;
+}
+
+td.g
+{
+  font-weight          : bold;
+  text-align           : right;
+  color                : #faccff;
+}
+
+td.h
+{
+  text-align           : center;
+  color                : #faccff;
+}
+
+td.i
+{
+  text-align           : center;
+  color                : #faccff;
+}
+
+td.j
+{
+  text-align           : center;
+  color                : #faccff;
+}
+
+td.m
+{
+  font-weight          : bold;
+  text-align           : right;
+  width                : 86px;
+  color                : #faccff;
+}
+
+td.n
+{
+  font-weight          : bold;
+  text-align           : right;
+  width                : 89px;
+  text-align           : center;
+  color                : #faccff;
+}
+
+td.o
+{
+  text-align           : center;
+  color                : #faccff;
+}
+
+td.q
+{
+  font-weight          : bold;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+  text-align           : center;
+  vertical-align       : middle;
+  color                : #faccff;
+}
+
+td.r
+{
+  text-align           : right;
+  color                : #faccff;
+}
+
+td.v
+{
+  font-weight          : bold;
+  text-align           : right;
+  color                : #f7f7f7;
+}
+
+td.s
+{
+  color                : #faccff;
+}
+
+table.s th
+{
+  border               : 0px;
+}
+
+table.s th img
+{
+  width                : 89px;
+  height               : 89px;
+}
+
+div.z
+{
+  font-weight          : bold;
+  color                : #faccff;
+}
+
+a
+{
+  color                : #faccff;
+  text-decoration      : none;
+  font-weight          : bold;
+}
+
+a.s
+{
+  color                : #faccff;
+}
+
+a.t
+{
+  color                : #faccff;
+}
+
+a:hover
+{
+  color                : #CDD7F8;
+  text-decoration      : underline overline;
+}
+
+/******************************************************************
+ *       Schiffswerft + Verteidigung                              *
+ ******************************************************************/
+ 
+table tr td table tr td.l,
+body form table tr td table tr td.k,
+body table tr td table tr td.k {
+  border               : none;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+  filter               : alpha(opacity=90);
+  -moz-opacity         : 0.9;
+
+  background-color     : #37223b;
+  color                : #faccff;
+  vertical-align       : top;
+  padding              : 3px;
+  background-image     : url(img/bg2.gif);
+  font-size			   : 11px;
+  line-height		   : 15px;
+}
+
+
+table tr td table tr td.l a {
+  font-size			   : 13px;
+  line-height		   : 20px;
+}
+
+body form table tr td table tr td.k {
+  text-align: center;
+  width     : 80px;
+}
+
+body form table tr td table tr td.k input {
+  text-align: center;
+  width:   100%;
+  border : none;
+  background-color     : #4a1e48;
+}
+
+table tr table tr td i b font {
+  color: #9eb39b;
+}
+
+/*Formatierung der Commander Werbung*/
+table tr td p
+{
+  font-size            : 11px;
+  border               : 1px #552f55 solid !important; /*dashed gestrichelt, solid durchgehend*/
+    background-color     : #3a243c;
+filter: alpha(opacity=80);
+-moz-opacity: 0.8;
+margin-top: 20px;
+margin-bottom: 20px;
+
+}
+
+table tr td p font
+{
+  font-size            : 11px;
+  color                : #80FFFF;
+}
+
+table tr td p a font
+{
+  font-size            : 11px;
+  color                : #80FFFF;
+}
+
+/*Formatierung der Commander Werbung -- Bilder*/
+table tr td p img
+{
+  width                : 0px;
+  height               : 0px;
+}
+
+/********************************************************************
+ *               Men¸                                               *
+ ********************************************************************/
+
+body.style{
+  background-image: none;
+  margin-top           : 15px;
+}
+
+body.style table {
+    width: 150px;
+    margin:0px;
+	background-image: url(img/menuback.jpg);
+	border: 1px;
+	padding-bottom: 15px;
+	border-spacing: none;
+	border-collapse: separate;
+}
+
+.style td,
+.style p
+{
+  border           : none;
+  color                : #ad9bb3;
+  border-top           : 0px; 
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+  width: 150px;
+  margin:0px;
+  background-image: url(img/menuback.jpg);
+}
+
+.style p {
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+
+.style table tr td:hover
+{
+  background-image     : url(img/menupointback_hover.gif);
+  background-position  : center;
+  background-repeat    : no-repeat;
+}
+
+.style table tr td {
+  padding: 0px;
+}
+
+.style table tr td img {
+  width: 150px;
+  height: 50px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.style table tr td center a img {
+  width: 120px;
+  height: 33px;
+}
+
+.style p a,
+.style div a,
+.style div a:link,
+.style div a:visited
+{
+  color                : #9eb39b;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+}
+
+.style div a:hover
+{
+  height               : 100%;
+  width                : 100%;
+  text-decoration      : none;
+  letter-spacing       : 1px;
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+  color                : #faccff;
+  background-image     : url(img/menupointback_hover.gif);
+  background-position  : center;
+  background-repeat    : no-repeat;
+}
+
+
+h1
+{
+  font-size            : 11px;
+  font-family          : Tahoma,sans-serif;
+  border-bottom        : 0px #5e425d solid;
+  width                : 98%;
+  text-align           : center;
+}
+
+/*¸berschreiben der defaults.css*/
+.allymember { 
+  color: lime;
+}
+
+.noob { 
+  color: #a0ffa0;
+}
+
+.strong { 
+  color: #ffa0a0;
+}
+
+.vacation { 
+  color: skyblue;
+}
+
+.inactive { 
+  color: CCCCCC;
+}
+
+.longinactive { 
+  color: 999999;
+}
+
+.banned {
+  text-decoration: line-through;
+}
+
+.flight {
+}
+
+.return 
+{
+	color: #7f4889;
+}
+
+.holding {
+	color: #0052cc;
+}
+  
+*.ownattack { 
+  color: #c000ff;
+}
+
+.flight .ownattack a {
+  color: #faccff;
+}
+
+*.owncolony { 
+  color: #1f7494;
+}
+
+.flight .owncolony a { 
+  color: #faccff;
+}
+
+*.owndeploy { 
+  color: lime;
+}
+
+.flight .owndeploy a { 
+  color: #faccff;
+}
+
+*.owndestroy { 
+  color: gold;
+}
+
+.flight .owndestroy a { 
+  color: #faccff;
+}
+
+*.ownespionage { 
+  color: #c600ff;
+}
+
+.flight .ownespionage a { 
+  color: #faccff;
+}
+
+*.ownfederation { 
+  color: #2c979b;
+}
+
+.flight .ownfederation a { 
+  color: #faccff;
+}
+
+*.ownharvest { 
+  color: #cc99cc;
+}
+
+.flight .ownharvest a { 
+  color: #faccff;
+}
+
+*.ownhold { 
+  color: #80a0C0;
+}
+
+.flight .ownhold a { 
+  color: #faccff;
+}
+
+*.ownmissile { 
+  color: #5d0025;
+}
+
+.flight .ownmissile a { 
+  color: #faccff;
+}
+
+*.owntransport { 
+  color: #429bff;
+}
+
+.flight .owntransport a { 
+  color: #faccff;
+}
+
+*.attack { 
+  color: red;
+}
+
+.flight .attack a { 
+  color: #faccff;
+}
+
+*.colony { 
+  color: lime;
+}
+
+.flight .colony a { 
+  color: #faccff;
+}
+
+*.deploy { 
+  color: lime;
+}
+
+.flight .deploy a { 
+  color: #faccff;
+}
+
+*.destroy { 
+  color: #ff6600;
+}
+
+.flight .destroy a { 
+  color: #faccff;
+}
+
+*.espionage { 
+  color: orange;
+}
+
+.flight .espionage a { 
+  color: #faccff;
+}
+
+*.federation {  
+  color: CC0000;
+}
+
+.flight .federation a { 
+  color: #faccff;
+}
+
+*.harvest {  
+  color: lime;
+}
+
+.flight .harvest a { 
+  color: #faccff;
+}
+
+*.hold { 
+  color: #80a0C0;
+}
+
+.flight .hold a { 
+  color: #faccff;
+}
+
+*.missile { 
+  color: red;
+}
+
+*.transport {  
+  color: lime;
+}
+
+.flight .transport a { 
+  color: #faccff;
+}
+
+.success { 
+  color: lime;
+}
+
+.error { 
+  color: red;
+}
+
+.warning { 
+  color: orange;
+}
+
+.notice { 
+  color: yellow;
+}
+
+.combatreport {
+  color: red;
+}
+
+.espionagereport {
+  color: orange;
+}
+
+/* spezielle firefox-‰nderungen */
+
+/* Schiffe der Flotten in der ‹bersicht anzeigen */
+body center table tr th span.flight a[title]:after {content:" ("attr(title)")"; color:grey;}
+
+/* Schiffe der Flotten in Phalanxscanns anzeigen */
+body center table tr th font a[title]:after {content:" ("attr(title)")"; color:grey; }
+
+/*Grˆsse der Tr¸mmerfelder anzeigen */
+a[title~="Tr¸mmerfeld:"]:after {content:" ("attr(title)")"; color:yellow; font-size:7pt; font-weight: normal;}
+
+/* Grˆsse von Monden anzeigen */
+/*a[title~="Mond"]:after {content:" ("attr(title)")"; color:yellow;}*/
+
