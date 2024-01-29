@@ -55,9 +55,21 @@ oldscore1,2,3: Старые очки за постройки, флот, иссл
 oldplace1,2,3: старое место за постройки, флот, исследования (INT)
 scoredate: Время сохранения старой статистики (INT UNSIGNED)
 rXXX: Уровень исследования XXX (INT)
+flags: Флаги пользователя. Полный список ниже (USER_FLAG). Не сразу додумался до этой идеи, некоторые переменные также можно сделать флагами (INT UNSIGNED)
 
 Q - для обработки этого события используется задание в очереди задач.
 */
+
+// Маска флагов (свойство flags)
+const USER_FLAG_SHOW_ESPIONAGE_BUTTON = 0x1;    // 1: Отображать иконку "Шпионаж"" в галактике
+const USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON = 0x2;       // 1: Отображать иконку "Написать сообщение" в галактике
+const USER_FLAG_SHOW_BUDDY_BUTTON = 0x4;        // 1: Отображать иконку "Предложение стать другом" в галактике
+const USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON = 0x8;    // 1: Отображать иконку "Ракетная атака" в галактике
+const USER_FLAG_SHOW_VIEW_REPORT_BUTTON = 0x10;     // 1: Отображать иконку "Просмотреть сообщение" в галактике
+const USER_FLAG_DONT_USE_FOLDERS = 0x20;        // 1: Не сортировать сообщения по папкам в режиме Командира
+const USER_FLAG_PARTIAL_REPORTS = 0x40;         // 1: Разведданные показывать частично
+
+const USER_FLAG_DEFAULT = USER_FLAG_SHOW_ESPIONAGE_BUTTON | USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON | USER_FLAG_SHOW_BUDDY_BUTTON | USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON | USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
 
 $UserCache = array ();
 $PremiumCache = array ();
@@ -182,7 +194,8 @@ function CreateUser ( $name, $pass, $email, $bot=false)
                         0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        USER_FLAG_DEFAULT );
     $id = AddDBRow ( $user, "users" );
 
     LogIPAddress ( $ip, $id, 1 );
@@ -822,6 +835,14 @@ function UnbanUserAttacks ($player_id)
     $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'AllowAttacks' AND owner_id = $player_id";
     dbquery ($query);
     $query = "UPDATE ".$db_prefix."users SET noattack = 0, noattack_until = 0 WHERE player_id = $player_id";
+    dbquery ($query);
+}
+
+// Установить флаги пользователя
+function SetUserFlags ($player_id, $flags)
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."users SET flags = $flags WHERE player_id = $player_id";
     dbquery ($query);
 }
 
