@@ -56,6 +56,7 @@ if ( method () === "POST" && isset($_POST['aktion']) )
     if ( $GalaxyError === "" )
     {
         LaunchRockets ( $origin, $target, 30 + 60 * $dist, $amount, $type );
+        $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // получить свежие данные планеты после запуска МПР.
         $GalaxyMessage = va ( loca("GALAXY_RAK_LAUNCHED"), $amount );
     }
 }
@@ -691,15 +692,43 @@ echo "<tr><td>".loca("GALAXY_LEGEND_INACTIVE28_LONG")."</td><td><span class=long
 echo "</table>\", ABOVE, WIDTH, 150, STICKY, MOUSEOFF, DELAY, 500, CENTER);' onmouseout='return nd();'>".loca("GALAXY_LEGEND")."</a></td>\n";
 echo "</tr>\n";
 
+// Дополнительная информация (Командир).
+// Текст набирается в переменную extra_info и если строка не пустая - выводится дополнительная строка таблицы.
+
+$extra_info = "";
+$sep = "&nbsp;&nbsp;&nbsp;&nbsp;";
+$sep_required = false;
+
+if ($prem['commander'] && $aktplanet["f210"] > 0) {
+    $extra_info .= "<span id=\"probes\">".nicenum($aktplanet["f210"])."</span>".loca("GALAXY_INFO_SPY_PROBES");
+    $sep_required = true;
+}
+if ($prem['commander'] && $aktplanet["f209"] > 0) {
+    if ($sep_required) $extra_info .= $sep;
+    $extra_info .= "<span id=\"recyclers\">".nicenum($aktplanet["f209"])."</span>".loca("GALAXY_INFO_RECYCLERS");
+    $sep_required = true;
+}
+if ($prem['commander'] && $aktplanet["d503"] > 0) {
+    if ($sep_required) $extra_info .= $sep;
+    $extra_info .= "<span id=\"missiles\">".nicenum($aktplanet["d503"])."</span>".loca("GALAXY_INFO_IPM");
+}
+// Дейтерий показывается только для лун (даже без Командира)
+if ($aktplanet['type'] == 0) {
+    $extra_info .= loca("GALAXY_INFO_DEUTERIUM") . nicenum($aktplanet["d"]);
+}
+if ($prem['commander']) {
+    $extra_info .= $sep . "<span id='slots'>".$nowfleet."</span>&nbsp;".va(loca("GALAXY_INFO_SLOTS"), $maxfleet);
+}
+
+if ($extra_info !== "") {
 ?>
 <tr>
 <td class="c" colspan="8">
-<?php
-    if ($aktplanet["f210"] > 0) echo "<span id=\"probes\">".nicenum($aktplanet["f210"])."</span>".loca("GALAXY_INFO_SPY_PROBES")."&nbsp;&nbsp;&nbsp;&nbsp;";
-    if ($aktplanet["f209"] > 0) echo "<span id=\"recyclers\">".nicenum($aktplanet["f209"])."</span>".loca("GALAXY_INFO_RECYCLERS")."&nbsp;&nbsp;&nbsp;&nbsp;";
-    if ($aktplanet["d503"] > 0) echo "<span id=\"missiles\">".nicenum($aktplanet["d503"])."</span>".loca("GALAXY_INFO_IPM")."&nbsp;&nbsp;&nbsp;&nbsp;";
-?><?=loca("GALAXY_INFO_DEUTERIUM");?><?=nicenum($aktplanet["d"]);?>&nbsp;&nbsp;&nbsp;&nbsp;<br/><span id='slots'><?=$nowfleet;?></span>&nbsp;<?=va(loca("GALAXY_INFO_SLOTS"), $maxfleet);?></td>
+<?=$extra_info;?></td>
 </tr>
+<?php
+}   // extra_info
+?>
 <tr style="display: none;" id="fleetstatusrow"><th colspan="8"><!--<div id="fleetstatus"></div>-->
 <table style="font-weight: bold;" width=100% id="fleetstatustable">
 <!-- will be filled with content later on while processing ajax replys -->

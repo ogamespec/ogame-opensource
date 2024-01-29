@@ -22,7 +22,7 @@ function AjaxSendError ($id=601)
 function AjaxSendDone ($slots, $probes, $recyclers, $missiles)
 {
     header ('Content-Type: text/html;');
-    echo "600 $slots $probes $recyclers $missiles";
+    echo "600 $slots ".nicenum($probes)." ".nicenum($recyclers)." ".nicenum($missiles);
     ob_end_flush ();
     die ();
 }
