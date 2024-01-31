@@ -1,6 +1,6 @@
 # Changelog
 
-История исправлений до версии 0.84, по архивам форума.
+Patch history to version 0.84, per the forum archives.
 
 # Reportbutton
 Cassandra Vandales
@@ -1166,8 +1166,8 @@ If you think you have some spare time to dedicate freely for the community and f
 
 You may find all available information on how to apply in the OGame.BG Board News Section :=
 
-OGame.bg Portal -> http://bg.ogame.org
-OGame.bg Boards -> http://board.bg.ogame.org
+- OGame.bg Portal -> http://bg.ogame.org
+- OGame.bg Boards -> http://board.bg.ogame.org
 
 Best regards,
 OGame.BG Administration
@@ -1178,18 +1178,14 @@ Apr 28th 2008
 
 A new version will be implemented probably in the following days or during next week, depending on how testing goes on ogame.de servers :)
 
-
-
-
-
 Here is the changelog with short explanations:
 
 conversion from PHP4 to PHP5
 
--increase of performance
--improved support of Object-oriented programming (OOP) (http://en.wikipedia.org/wiki/Object-oriented_programming)
--highscore is less memory intensive
--php5 is more secure
+- increase of performance
+- improved support of Object-oriented programming (OOP) (http://en.wikipedia.org/wiki/Object-oriented_programming)
+- highscore is less memory intensive
+- php5 is more secure
 
 link to coordinates in sensor phalanx
 - opens in normal window, not longer in phalanx window
@@ -1225,7 +1221,7 @@ Expedition changes:
 clicking on a Player name in statistic will forward you to his main planet in galaxy view
 
 activity display removed from spy reports
--probably will be set back as was in the next version (under discussion)
+- probably will be set back as was in the next version (under discussion)
 Display Less
 
 Feel free to discuss about it here: New version 0.80 official discussion thread
@@ -1236,13 +1232,13 @@ Your OGame.org Team
 Update
 
 activity display removed from spy reports
--probably will be set back as was in the next version (under discussion)
+- probably will be set back as was in the next version (under discussion)
 
 Update again:
 galaxy view activity display star behavior
 
--at login => (\*) at home planet
--clicking on ALL left menu options will generate a (\*) in galaxy view, except overview clicks and external links (board, rules etc)
+- at login => (\*) at home planet
+- clicking on ALL left menu options will generate a (\*) in galaxy view, except overview clicks and external links (board, rules etc)
 
 It's up and the final changelog is, as you can see ingame:
 - Changing to PHP5
@@ -1324,6 +1320,7 @@ The discussion thread is:
 OGame redesign? 3D animations? LOL
 
 Here they are:
+
 ![ogame_de_01](/imgstore/ogame_de_01.jpg)
 ![ogame_de_02](/imgstore/ogame_de_02.jpg)
 ![ogame_de_03](/imgstore/ogame_de_03.jpg)
