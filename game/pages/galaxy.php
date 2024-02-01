@@ -663,11 +663,19 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     echo "<th width=\"125\" style='white-space: nowrap;'>\n";
     if ( !($planet['type'] == 10001 || $planet['type'] == 10004) && !$own)
     {
-        echo "<a style=\"cursor:pointer\" onclick=\"javascript:doit(6, ".$planet['g'].",".$planet['s'].",".$planet['p'].", 1, ".$GlobalUser['maxspy'].");\"><img src=\"".UserSkin()."img/e.gif\" border=\"0\" alt=\"".loca("GALAXY_FLEET_SPY")."\" title=\"".loca("GALAXY_FLEET_SPY")."\" /></a>\n";
-        echo "<a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"".loca("GALAXY_USER_MESSAGE")."\" title=\"".loca("GALAXY_USER_MESSAGE")."\" /></a>\n";
-        echo "<a href=\"index.php?page=buddy&session=".$_GET['session']."&action=7&buddy_id=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/b.gif\" border=\"0\" alt=\"".loca("GALAXY_USER_BUDDY")."\" title=\"".loca("GALAXY_USER_BUDDY")."\" /></a>\n";
-        if ( $show_ipm_button )
-        {
+        if ($prem['commander'] && $GlobalUser['flags'] & USER_FLAG_SHOW_VIEW_REPORT_BUTTON) {
+            // TODO.
+        }
+        if ($GlobalUser['flags'] & USER_FLAG_SHOW_ESPIONAGE_BUTTON) {
+            echo "<a style=\"cursor:pointer\" onclick=\"javascript:doit(6, ".$planet['g'].",".$planet['s'].",".$planet['p'].", 1, ".$GlobalUser['maxspy'].");\"><img src=\"".UserSkin()."img/e.gif\" border=\"0\" alt=\"".loca("GALAXY_FLEET_SPY")."\" title=\"".loca("GALAXY_FLEET_SPY")."\" /></a>\n";
+        }
+        if ($GlobalUser['flags'] & USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON) {
+            echo "<a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"".loca("GALAXY_USER_MESSAGE")."\" title=\"".loca("GALAXY_USER_MESSAGE")."\" /></a>\n";
+        }
+        if ($GlobalUser['flags'] & USER_FLAG_SHOW_BUDDY_BUTTON) {
+            echo "<a href=\"index.php?page=buddy&session=".$_GET['session']."&action=7&buddy_id=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/b.gif\" border=\"0\" alt=\"".loca("GALAXY_USER_BUDDY")."\" title=\"".loca("GALAXY_USER_BUDDY")."\" /></a>\n";
+        }
+        if ( $show_ipm_button && $GlobalUser['flags'] & USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON ) {
             echo "<a href=\"index.php?page=galaxy&session=$session&mode=1&p1=".$planet['g']."&p2=".$planet['s']."&p3=".$planet['p']."&pdd=".$planet['planet_id']."&zp=".$planet['owner_id']."\"><img src=\"".UserSkin()."img/r.gif\" border=\"0\" alt=\"".loca("GALAXY_FLEET_RAK")."\" title=\"".loca("GALAXY_FLEET_RAK")."\" /></a>";
         }
     }
