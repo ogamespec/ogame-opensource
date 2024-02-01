@@ -27,6 +27,13 @@ function IsChecked ($option)
     else return "";
 }
 
+function IsCheckedFlag ($flag)
+{
+    global $GlobalUser;
+    if ( $GlobalUser['flags'] & $flag ) return "checked='checked'";
+    else return "";
+}
+
 function IsSelected ($option, $value)
 {
     global $GlobalUser;
@@ -56,7 +63,7 @@ $prem = PremiumStatus ($GlobalUser);
     // Выключить Режим Отпуска.
     if ( method () === "POST") {
 
-        if ( time () >= $GlobalUser['vacation_until'] && $_POST['urlaub_aus'] === "on" && $GlobalUser['vacation'] )
+        if ( time () >= $GlobalUser['vacation_until'] && key_exists('urlaub_aus', $_POST) && $_POST['urlaub_aus'] === "on" && $GlobalUser['vacation'] )
         {
             $OptionsError = va ( loca("OPTIONS_MSG_VMDISABLED"), $GlobalUser['oname'] ) . "\n<br/>\n";
             $query = "UPDATE ".$db_prefix."users SET vacation=0,vacation_until=0 WHERE player_id=".intval($GlobalUser['player_id']);
@@ -76,7 +83,7 @@ $prem = PremiumStatus ($GlobalUser);
             $ip = $_SERVER['REMOTE_ADDR'];
 
             if ( key_exists ( "validate", $_POST ) ) {    // Заказать активационную ссылку.
-                if ( $ip !== "127.0.0.1" ) SendChangeMail ( $GlobalUser['oname'], $GlobalUser['email'], $GlobalUser['pemail'], $GlobalUser['validatemd'] );
+                if ( !($ip === "127.0.0.1" || $ip === "::1") ) SendChangeMail ( $GlobalUser['oname'], $GlobalUser['email'], $GlobalUser['pemail'], $GlobalUser['validatemd'] );
                 $OptionsMessage = loca ("OPTIONS_MSG_VALIDATE");
             }
             else if ( $_POST['db_email'] !== $GlobalUser['email'] && $_POST['db_email'] !== "" ) {        // Сменить адрес
@@ -91,7 +98,7 @@ $prem = PremiumStatus ($GlobalUser);
                     $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . $GlobalUser['player_id'];
                     dbquery ($query);
                     AddChangeEmailEvent ($GlobalUser['player_id']);
-                    if ( $ip !== "127.0.0.1" ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
+                    if ( !($ip === "127.0.0.1" || $ip === "::1") ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
                     $GlobalUser['email'] = $email;
                     $OptionsError = loca ("OPTIONS_USER_EMAIL_TIP");
                 }
@@ -233,13 +240,13 @@ $prem = PremiumStatus ($GlobalUser);
                     $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . intval($GlobalUser['player_id']);
                     dbquery ($query);
                     AddChangeEmailEvent ($GlobalUser['player_id']);
-                    if ( $ip !== "127.0.0.1" ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
+                    if ( !($ip === "127.0.0.1" || $ip === "::1") ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
                     $GlobalUser['email'] = $email;
                     $OptionsError = loca ("OPTIONS_USER_EMAIL_TIP");
                 }
             }
 
-            if ( $_POST['urlaubs_modus'] === "on" && $GlobalUser['vacation'] == 0 ) {        // Включить режим отпуска
+            if ( key_exists('urlaubs_modus', $_POST) && $_POST['urlaubs_modus'] === "on" && $GlobalUser['vacation'] == 0 ) {        // Включить режим отпуска
                 $vacation_min = max ( 12*60*60, (2 * 24 * 60 * 60) / $speed);    // не менее 12 часов
                 $vacation_until = time() + $vacation_min;
 
@@ -255,7 +262,7 @@ $prem = PremiumStatus ($GlobalUser);
                 else $OptionsError = loca ("OPTIONS_ERR_VM");
             }
 
-            if ( $_POST['db_deaktjava'] === "on" && $GlobalUser['disable'] == 0 ) {        // Поставить аккаунт на удаление
+            if ( key_exists('db_deaktjava', $_POST) && $_POST['db_deaktjava'] === "on" && $GlobalUser['disable'] == 0 ) {        // Поставить аккаунт на удаление
                 $disable_until = time() + (7 * 24 * 60 * 60);
 
                 $query = "UPDATE ".$db_prefix."users SET disable=1,disable_until=$disable_until WHERE player_id=".intval($GlobalUser['player_id']);
@@ -290,6 +297,26 @@ $prem = PremiumStatus ($GlobalUser);
             $GlobalUser['deact_ip'] = $deactip;
             $GlobalUser['skin'] = $_POST['dpath'];
             $GlobalUser['useskin'] = ($_POST['design']==="on"?1:0);
+
+            // Флаги
+            $flags = 0;
+            $settings_esp = (key_exists('settings_esp', $_POST) && $_POST['settings_esp']==="on");
+            $settings_wri = (key_exists('settings_wri', $_POST) && $_POST['settings_wri']==="on");
+            $settings_bud = (key_exists('settings_bud', $_POST) && $_POST['settings_bud']==="on");
+            $settings_mis = (key_exists('settings_mis', $_POST) && $_POST['settings_mis']==="on");
+            $settings_rep = (key_exists('settings_rep', $_POST) && $_POST['settings_rep']==="on");
+            $settings_folders = (key_exists('settings_folders', $_POST) && $_POST['settings_folders']==="on");  // 1: не использовать папки.
+            if ($settings_esp) $flags |= USER_FLAG_SHOW_ESPIONAGE_BUTTON;
+            if ($settings_wri) $flags |= USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON;
+            if ($settings_bud) $flags |= USER_FLAG_SHOW_BUDDY_BUTTON;
+            if ($settings_mis) $flags |= USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON;
+            if ($settings_rep) $flags |= USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
+            if ($settings_folders) $flags |= USER_FLAG_DONT_USE_FOLDERS;
+            if ($flags != $GlobalUser['flags']) {
+                SetUserFlags ($GlobalUser['player_id'], $flags);
+                $GlobalUser['flags'] = $flags;
+            }
+
         }
 ?>
 
@@ -377,43 +404,43 @@ $prem = PremiumStatus ($GlobalUser);
     ?>
   <select name="dpath" size="1" >
    <option selected>  </option>
-      <option value="http://oldogame.ru/download/use/allesnurgeklaut/">allesnurgeklaut </option>
-      <option value="http://oldogame.ru/download/use/ally-cpb/">allycpb </option>
-      <option value="http://oldogame.ru/download/use/asgard/">asgard </option>
-      <option value="http://oldogame.ru/download/use/aurora/">aurora </option>
-      <option value="http://oldogame.ru/download/use/bluedream/">bluedream </option>
-      <option value="http://oldogame.ru/download/use/bluegalaxy/">bluegalaxy </option>
-      <option value="http://oldogame.ru/download/use/blueplanet/">blueplanet </option>
-      <option value="http://oldogame.ru/download/use/bluechaos/">bluechaos </option>
-      <option value="http://oldogame.ru/download/use/bluemx/">blue-mx </option>
-      <option value="http://oldogame.ru/download/use/brace/">brace </option>
-      <option value="http://oldogame.ru/download/use/brotstyle/">brotstyle </option>
-      <option value="http://oldogame.ru/download/use/dd/">dd </option>
-      <option value="http://oldogame.ru/download/use/eclipse/">eclipse </option>
-      <option value="http://oldogame.ru/download/use/empire/">empire </option>
-      <option value="http://oldogame.ru/download/use/EpicBlue/">epicblue </option>
-      <option value="http://oldogame.ru/download/use/evolution/">evolution </option>
-      <option value="http://oldogame.ru/download/use/freakyfriday/">freakyfriday </option>
-      <option value="http://oldogame.ru/download/use/g3cko/">g3cko </option>
-      <option value="http://oldogame.ru/download/use/gruen/">gruen </option>
-      <option value="http://oldogame.ru/download/use/infraos/">infraos </option>
-      <option value="http://oldogame.ru/download/use/lambda/">lambda </option>
-      <option value="http://oldogame.ru/download/use/lego/">lego </option>
-      <option value="http://oldogame.ru/download/use/militaryskin/">militaryskin </option>
-      <option value="http://oldogame.ru/download/use/okno/">okno </option>
-      <option value="http://oldogame.ru/download/use/ovisio/">ovisio </option>
-      <option value="http://oldogame.ru/download/use/ovisiofarbig/">ovisiofarbig </option>
-      <option value="http://oldogame.ru/download/use/Paint/">paint </option>
-      <option value="http://oldogame.ru/download/use/quadratorstyle/">quadratorstyle </option>
-      <option value="http://oldogame.ru/download/use/real/">real </option>
-      <option value="http://oldogame.ru/download/use/redfuturistisch/">redfuturistisch </option>
-      <option value="http://oldogame.ru/download/use/redvision/">redvision </option>
-      <option value="http://oldogame.ru/download/use/reloaded/">reloaded </option>
-      <option value="http://oldogame.ru/download/use/shadowpato/">shadowpato </option>
-      <option value="http://oldogame.ru/download/use/simpel/">simpel </option>
-      <option value="http://oldogame.ru/download/use/starwars/">starwars </option>
-      <option value="http://oldogame.ru/download/use/w4wooden4ce/">w4wooden4ce </option>
-      <option value="http://oldogame.ru/download/use/xonic/">xonic </option>
+      <option value="<?=hostname();?>download/use/allesnurgeklaut/">allesnurgeklaut </option>
+      <option value="<?=hostname();?>download/use/ally-cpb/">allycpb </option>
+      <option value="<?=hostname();?>download/use/asgard/">asgard </option>
+      <option value="<?=hostname();?>download/use/aurora/">aurora </option>
+      <option value="<?=hostname();?>download/use/bluedream/">bluedream </option>
+      <option value="<?=hostname();?>download/use/bluegalaxy/">bluegalaxy </option>
+      <option value="<?=hostname();?>download/use/blueplanet/">blueplanet </option>
+      <option value="<?=hostname();?>download/use/bluechaos/">bluechaos </option>
+      <option value="<?=hostname();?>download/use/bluemx/">blue-mx </option>
+      <option value="<?=hostname();?>download/use/brace/">brace </option>
+      <option value="<?=hostname();?>download/use/brotstyle/">brotstyle </option>
+      <option value="<?=hostname();?>download/use/dd/">dd </option>
+      <option value="<?=hostname();?>download/use/eclipse/">eclipse </option>
+      <option value="<?=hostname();?>download/use/empire/">empire </option>
+      <option value="<?=hostname();?>download/use/EpicBlue/">epicblue </option>
+      <option value="<?=hostname();?>download/use/evolution/">evolution </option>
+      <option value="<?=hostname();?>download/use/freakyfriday/">freakyfriday </option>
+      <option value="<?=hostname();?>download/use/g3cko/">g3cko </option>
+      <option value="<?=hostname();?>download/use/gruen/">gruen </option>
+      <option value="<?=hostname();?>download/use/infraos/">infraos </option>
+      <option value="<?=hostname();?>download/use/lambda/">lambda </option>
+      <option value="<?=hostname();?>download/use/lego/">lego </option>
+      <option value="<?=hostname();?>download/use/militaryskin/">militaryskin </option>
+      <option value="<?=hostname();?>download/use/okno/">okno </option>
+      <option value="<?=hostname();?>download/use/ovisio/">ovisio </option>
+      <option value="<?=hostname();?>download/use/ovisiofarbig/">ovisiofarbig </option>
+      <option value="<?=hostname();?>download/use/Paint/">paint </option>
+      <option value="<?=hostname();?>download/use/quadratorstyle/">quadratorstyle </option>
+      <option value="<?=hostname();?>download/use/real/">real </option>
+      <option value="<?=hostname();?>download/use/redfuturistisch/">redfuturistisch </option>
+      <option value="<?=hostname();?>download/use/redvision/">redvision </option>
+      <option value="<?=hostname();?>download/use/reloaded/">reloaded </option>
+      <option value="<?=hostname();?>download/use/shadowpato/">shadowpato </option>
+      <option value="<?=hostname();?>download/use/simpel/">simpel </option>
+      <option value="<?=hostname();?>download/use/starwars/">starwars </option>
+      <option value="<?=hostname();?>download/use/w4wooden4ce/">w4wooden4ce </option>
+      <option value="<?=hostname();?>download/use/xonic/">xonic </option>
     <?php
             }
   ?>
@@ -462,31 +489,31 @@ $prem = PremiumStatus ($GlobalUser);
       <tr>
    <th><img src="<?php echo UserSkin();?>img/e.gif" alt="" />   <?php echo loca("OPTIONS_GALAXY_SPY");?></th>
 
-   <th><input type="checkbox" name="settings_esp" checked='checked'/></th>
+   <th><input type="checkbox" name="settings_esp" <?=IsCheckedFlag(USER_FLAG_SHOW_ESPIONAGE_BUTTON);?>/></th>
    </tr>
       <tr>
    <th><img src="<?php echo UserSkin();?>img/m.gif" alt="" />   <?php echo loca("OPTIONS_GALAXY_MSG");?></th>
-   <th><input type="checkbox" name="settings_wri" checked='checked'/></th>
+   <th><input type="checkbox" name="settings_wri" <?=IsCheckedFlag(USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON);?>/></th>
    </tr>
       <tr>
    <th><img src="<?php echo UserSkin();?>img/b.gif" alt="" />   <?php echo loca("OPTIONS_GALAXY_BUDDY");?></th>
 
-   <th><input type="checkbox" name="settings_bud" checked='checked'/></th>
+   <th><input type="checkbox" name="settings_bud" <?=IsCheckedFlag(USER_FLAG_SHOW_BUDDY_BUTTON);?>/></th>
    </tr>
       <tr>
    <th><img src="<?php echo UserSkin();?>img/r.gif" alt="" />   <?php echo loca("OPTIONS_GALAXY_ROCKET");?></th>
-   <th><input type="checkbox" name="settings_mis" checked='checked'/></th>
+   <th><input type="checkbox" name="settings_mis" <?=IsCheckedFlag(USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON);?>/></th>
    </tr>
       <tr>
    <th><img src="<?php echo UserSkin();?>img/s.gif" alt="" />   <?php echo loca("OPTIONS_GALAXY_REPORT");?></th>
 
-   <th><input type="checkbox" name="settings_rep" checked='checked'/></th>
+   <th><input type="checkbox" name="settings_rep" <?=IsCheckedFlag(USER_FLAG_SHOW_VIEW_REPORT_BUTTON);?>/></th>
    </tr>
       <tr>
    <td class="c" colspan="2"><?php echo loca("OPTIONS_MSG");?></td>
    <tr>
    <th><?php echo loca("OPTIONS_MSG_SORT");?></th>
-  <th><input type="checkbox" name="settings_folders"  checked='checked'/></th>
+  <th><input type="checkbox" name="settings_folders"  <?=IsCheckedFlag(USER_FLAG_DONT_USE_FOLDERS);?>/></th>
 </tr>
 
 <tr>
