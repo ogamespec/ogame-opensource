@@ -627,11 +627,11 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
         else
         {
             $week = time() - 604800;
-            $week3 = time() - 604800*3;
+            $week4 = time() - 604800*4;
             $pstat = "normal";
             if ( $user['lastclick'] <= $week ) { $stat .= "<span class='inactive'>".loca("GALAXY_LEGEND_INACTIVE7")."</span>"; $pstat = "inactive"; }
             if ( $user['banned'] ) { if(mb_strlen($stat, "UTF-8")) $stat .= " "; $stat .= "<a href='index.php?page=pranger&session=".$_GET['session']."'><span class='banned'>".loca("GALAXY_LEGEND_BANNED")."</span></a>"; $pstat = "banned"; }
-            if ( $user['lastclick'] <= $week3 ) { if(mb_strlen($stat, "UTF-8")) $stat .= " "; $stat .= "<span class='longinactive'>".loca("GALAXY_LEGEND_INACTIVE28")."</span>";  if($pstat !== "banned") $pstat = "longinactive"; }
+            if ( $user['lastclick'] <= $week4 ) { if(mb_strlen($stat, "UTF-8")) $stat .= " "; $stat .= "<span class='longinactive'>".loca("GALAXY_LEGEND_INACTIVE28")."</span>";  if($pstat !== "banned") $pstat = "longinactive"; }
             if ( $user['vacation'] ) { if(mb_strlen($stat, "UTF-8")) $stat .= " "; $stat .= "<span class='vacation'>".loca("GALAXY_LEGEND_VACATION")."</span>";  $pstat = "vacation"; }
         }
         echo "<span class=\"$pstat\">".$user['oname']."</span></a>\n";

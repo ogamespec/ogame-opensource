@@ -763,11 +763,11 @@ function AdminUserName ($user)
     $name = $user['oname'];
 
     $week = time() - 604800;
-    $week3 = time() - 604800*3;
+    $week4 = time() - 604800*4;
 
     $status = "";
     if ( $user['lastclick'] <= $week ) $status .= "i";
-    if ( $user['lastclick'] <= $week3 ) $status .= "I";
+    if ( $user['lastclick'] <= $week4 ) $status .= "I";
     if ( $user['vacation'] ) $status .= "РО";
     if ( $user['banned'] ) $status .= "з";
     if ( $user['noattack'] ) $status .= "А";
@@ -778,7 +778,7 @@ function AdminUserName ($user)
     else if ( $user['banned'] ) $name = "<font color=red>$name</font>";
     else if ( $user['noattack'] ) $name = "<font color=yellow>$name</font>";
     else if ( $user['vacation'] ) $name = "<font color=skyBlue>$name</font>";
-    else if ( $user['lastclick'] <= $week3 ) $name = "<font color=#999999>$name</font>";
+    else if ( $user['lastclick'] <= $week4 ) $name = "<font color=#999999>$name</font>";
     else if ( $user['lastclick'] <= $week ) $name = "<font color=#cccccc>$name</font>";
 
     $name = "<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">$name</a>";
