@@ -108,7 +108,7 @@ $tab_buddy = array (    // Друзья
 );
 
 $tab_messages = array (    // Сообщения
-    'msg_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'pm'=>'INT', 'msgfrom'=>'TEXT', 'subj'=>'TEXT', 'text'=>'TEXT', 'shown'=>'INT', 'date'=>'INT UNSIGNED'
+    'msg_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'pm'=>'INT', 'msgfrom'=>'TEXT', 'subj'=>'TEXT', 'text'=>'TEXT', 'shown'=>'INT', 'date'=>'INT UNSIGNED', 'planet_id'=>'INT'
 );
 
 $tab_notes = array (    // Заметки

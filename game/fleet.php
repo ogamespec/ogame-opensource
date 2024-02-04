@@ -793,7 +793,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $report .= "<center> Шанс на защиту от шпионажа:".floor($counter)."%</center>\n";
     $report .= "<center><a href=\'#\' onclick=\'showFleetMenu(".$target['g'].",".$target['s'].",".$target['p'].",".GetPlanetType($target).",1);\'>Атака</a></center>\n";
 
-    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", $subj, $report, 1, $queue['end']);
+    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", $subj, $report, 1, $queue['end'], $target['planet_id']);
 
     // Отправить сообщение чужому игроку о шпионаже.
     $text = "\nЧужой флот с планеты ".$origin['name']."\n" .

@@ -67,8 +67,8 @@ function DeleteOldestMessage ($player_id)
     DeleteMessage ( $player_id, $msg['msg_id']);
 }
 
-// Послать сообщение. Возвращает id нового сообщения. (может вызываться откуда угодно)
-function SendMessage ($player_id, $from, $subj, $text, $pm, $when=0)
+// Послать сообщение. Возвращает id нового сообщения. (может вызываться откуда угодно); planet_id используется для шпионских докладов.
+function SendMessage ($player_id, $from, $subj, $text, $pm, $when=0, $planet_id=0)
 {
     global $db_prefix;
 
@@ -89,7 +89,7 @@ function SendMessage ($player_id, $from, $subj, $text, $pm, $when=0)
     }
 
     // Добавить сообщение.
-    $msg = array( null, $player_id, $pm, $from, $subj, $text, 0, $when );
+    $msg = array( null, $player_id, $pm, $from, $subj, $text, 0, $when, $planet_id );
     $id = AddDBRow ( $msg, "messages" );
 
     return $id;
