@@ -148,4 +148,23 @@ function DeleteAllMessages ($player_id)
     dbquery ($query);
 }
 
+// Получить msg_id общего шпионского доклада для указанной планеты. Если доклада нет - вернуть 0.
+function GetSharedSpyReport ($planet_id, $player_id, $ally_id)
+{
+    global $db_prefix;
+    if ($ally_id != 0) {
+        $sub_query = "SELECT player_id FROM ".$db_prefix."users WHERE ally_id = $ally_id";
+        $query = "SELECT * FROM ".$db_prefix."messages WHERE pm = 1 AND planet_id = $planet_id AND owner_id IN (".$sub_query.") ORDER BY date DESC LIMIT 1";
+    }
+    else {
+        $query = "SELECT * FROM ".$db_prefix."messages WHERE pm = 1 AND planet_id = $planet_id AND owner_id = $player_id ORDER BY date DESC LIMIT 1";
+    }
+    $result = dbquery ($query);
+    if ( $result ) {
+        $msg = dbarray ($result);
+        return $msg['msg_id'];
+    }
+    return 0;
+}
+
 ?>

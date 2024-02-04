@@ -5,6 +5,7 @@ $GalaxyError = "";
 
 loca_add ( "menu", $GlobalUni['lang'] );
 loca_add ( "galaxy", $GlobalUni['lang'] );
+loca_add ( "espionage", $GlobalUni['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -664,7 +665,23 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     if ( !($planet['type'] == 10001 || $planet['type'] == 10004) && !$own)
     {
         if ($prem['commander'] && $GlobalUser['flags'] & USER_FLAG_SHOW_VIEW_REPORT_BUTTON) {
-            // TODO.
+
+            // Если доклад есть и для планеты и для луны, то показывается 2 кнопки.
+
+            $planet_spy_report = GetSharedSpyReport ($planet['planet_id'], $GlobalUser['player_id'], $GlobalUser['ally_id']);
+            $moon_spy_report = 0;
+            if ($moon_id != 0) {
+                $moon_spy_report = GetSharedSpyReport ($moon_id, $GlobalUser['player_id'], $GlobalUser['ally_id']);
+            }
+
+            if ($planet_spy_report != 0) {
+                echo "<a href=\"#\" onclick=\"fenster('index.php?page=bericht&session=". $_GET['session'] ."&bericht=". $planet_spy_report ."', 'Bericht_Spionage');\" ><img src=\"".UserSkin()."img/s.gif\" border=\"0\" alt=\"".loca("SPY_REPORT")."\" title=\"".loca("SPY_REPORT")."\" /></a>\n";
+            }
+
+            if ($moon_spy_report != 0) {
+                echo "<a href=\"#\" onclick=\"fenster('index.php?page=bericht&session=". $_GET['session'] ."&bericht=". $moon_spy_report ."', 'Bericht_Spionage');\" ><img src=\"".UserSkin()."img/s.gif\" border=\"0\" alt=\"".loca("SPY_REPORT")."\" title=\"".loca("SPY_REPORT")."\" /></a>\n";
+            }
+
         }
         if ($GlobalUser['flags'] & USER_FLAG_SHOW_ESPIONAGE_BUTTON) {
             echo "<a style=\"cursor:pointer\" onclick=\"javascript:doit(6, ".$planet['g'].",".$planet['s'].",".$planet['p'].", 1, ".$GlobalUser['maxspy'].");\"><img src=\"".UserSkin()."img/e.gif\" border=\"0\" alt=\"".loca("GALAXY_FLEET_SPY")."\" title=\"".loca("GALAXY_FLEET_SPY")."\" /></a>\n";

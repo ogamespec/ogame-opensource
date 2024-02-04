@@ -34,7 +34,17 @@ $msg = LoadMessage ( intval($_GET['bericht']) );
     <td>
 
 <?php
-    if ( $msg['owner_id'] == $GlobalUser['player_id'] ) echo $msg['text'];
+    $allowed = false;
+    if ($msg['owner_id'] == $GlobalUser['player_id']) {
+        $allowed = true;
+    }
+    else {
+        // Из того же альянса и шпионский доклад.
+        $msg_user = LoadUser ($msg['owner_id']);
+        $allowed = $msg_user['ally_id'] == $GlobalUser['ally_id'] && $GlobalUser['ally_id'] != 0 && $msg['pm'] == 1;
+    }
+    
+    if ( $allowed ) echo $msg['text'];
 ?>
     
 </td>
