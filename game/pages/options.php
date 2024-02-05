@@ -396,7 +396,7 @@ $prem = PremiumStatus ($GlobalUser);
    </th>
  </tr>
 
-  <th><?php echo loca("OPTIONS_GENERAL_SKINPATH");?><br /> <a href="http://oldogame.ru/download/" target="_blank"><?php echo loca("OPTIONS_GENERAL_DOWNLOAD");?></a></th>
+  <th><?php echo loca("OPTIONS_GENERAL_SKINPATH");?><br /> <a href="<?=hostname();?>download/" target="_blank"><?php echo loca("OPTIONS_GENERAL_DOWNLOAD");?></a></th>
    <th><input type=text name="dpath" maxlength="80" size="40" value="<?php echo $GlobalUser['skin'];?>" /> <br />
   <?php
             // Если путь к скину пустой выдать список доступных скинов на сервере графики.

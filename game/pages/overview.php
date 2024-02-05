@@ -87,11 +87,14 @@ function t_building() {
 <?php
     if ( $now < $uni['news_until'])        // Показать новости?
     {
+        $combox_url = "";
+        if (!empty($GlobalUni['ext_board'])) $combox_url = $GlobalUni['ext_board'];
+        else if (!empty($GlobalUni['ext_discord'])) $combox_url = $GlobalUni['ext_discord'];
 ?>
 
 <!-- _________________ComBox___________________ --> 
 <div id="combox_container" > 
-<a id="combox" href="http://board.oldogame.ru/" target=_blank> 
+<a id="combox" href="<?=$combox_url;?>" target=_blank> 
 <div id="anfang"><?=$uni['news1'];?></div> 
 <div id="ende"><?=$uni['news2'];?></div> 
 </a> 
