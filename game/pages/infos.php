@@ -3,6 +3,9 @@
 // Информация на постройки, флот, оборону и исследования. 
 // Некоторые страницы (в частности постройки) содержат дополнительные сведения или элементы управления.
 
+// Малый транспорт и бомбардировщик содержат дополнительный текст (жёлтый), для индикации изменения базовой скорости и потребления после смены двигателя.
+// (в ванильной версии 0.84 базовая скорость бомбардировщика на гипердвигателе была пропущена, мы исправили это)
+
 $speed = $GlobalUni['speed'];
 $drepair = $GlobalUni['defrepair'];
 
@@ -64,6 +67,22 @@ echo "<table width=\"519\">\n";
 
 if ($gid > 200 && $gid < 300)    // Флот
 {
+    $base_speed = $UnitParam[$gid][4];
+    $base_cons = $UnitParam[$gid][5];
+    $base_speed2 = 0;
+    $base_cons2 = 0;
+
+    // Базовые значения для МТ и бомбардировщика меняются при смене двигателя
+
+    if ($gid == 202) {
+        $base_speed2 = $base_speed + 5000;
+        $base_cons2 = $base_cons * 2;
+    }
+    else if ($gid == 211) {
+        $base_speed2 = $base_speed + 1000;
+        $base_cons2 = $base_cons * 2;
+    }
+
     echo "<!-- begin fleet or defense information -->\n";
     echo "<tr><td class=\"c\" colspan=\"2\">Информация      о флоте:</td></tr>\n";
     echo "<tr><th>Название</th><th>".loca("NAME_$gid")."</th></tr>\n";
@@ -76,8 +95,16 @@ if ($gid > 200 && $gid < 300)    // Флот
     echo "<tr><th>Мощность щита</th><th>".nicenum($UnitParam[$gid][1])."</th></tr>\n";
     echo "<tr><th>Оценка атаки</th><th>".nicenum($UnitParam[$gid][2])."</th></tr>\n";
     echo "<tr><th>Грузоподъёмность</th><th>".nicenum(FleetCargo($gid))."&nbsp;ед.</th></tr>\n";
-    echo "<tr><th>Начальная скорость</th><th>".nicenum(FleetSpeed($gid, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118']))."</th></tr>\n";
-    echo "<tr><th>Потребление топлива (дейтерий)</th><th>".nicenum(FleetCons($gid, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118']))."</th></tr>\n";
+    echo "<tr><th>Начальная скорость</th><th>".nicenum($base_speed);
+    if ($base_speed2 != 0) {
+        echo "             <font color=\"yellow\">(". nicenum($base_speed2) .")</font> \n           ";
+    }
+    echo "</th></tr>\n";
+    echo "<tr><th>Потребление топлива (дейтерий)</th><th>".nicenum($base_cons);
+    if ($base_cons2 != 0) {
+        echo "             <font color=\"yellow\">(". nicenum($base_cons2) .")</font> \n           ";
+    }
+    echo "</th></tr>\n";
     echo "</table></th></tr></table>\n";
 }
 else if ($gid > 400 && $gid < 500)    // Оборона.
