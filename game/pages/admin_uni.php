@@ -67,6 +67,10 @@ function Admin_Uni ()
             $_POST['ext_rules'],
             $_POST['ext_impressum'] );
 
+        // Установить максимальное количество пользователей.
+
+        SetMaxUsers (intval($_POST['maxusers']));
+
         // Включить принудительное РО активным игрокам, если вселенная ставится на паузу.
         if ( $freeze ) {
             $days7 = $now - 7*24*60*60;

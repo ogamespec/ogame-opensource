@@ -53,6 +53,20 @@ function SetExtLinks($ext_board, $ext_discord, $ext_tutorial, $ext_rules, $ext_i
     $GlobalUni = LoadUniverse ();
 }
 
+// Установить максимальное количество пользователей (администраторы и операторы не считаются)
+function SetMaxUsers ($maxusers)
+{
+    global $db_prefix;
+    global $GlobalUni;
+
+    if ($maxusers > 0) {
+        $query = "UPDATE ".$db_prefix."uni SET maxusers=$maxusers";
+        dbquery ($query);
+
+        $GlobalUni = LoadUniverse ();
+    }
+}
+
 // Сбросить счётчик попыток взлома игры (вызывается во время релогина)
 function ResetHackCounter ()
 {
