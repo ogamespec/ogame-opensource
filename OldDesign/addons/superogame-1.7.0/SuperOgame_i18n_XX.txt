@@ -1,0 +1,75 @@
+// ==UserScript==
+// @include http://*ogame*/game*
+// @name SuperOgame - "language name" language file
+// @author Mladen Pejaković; Translator_Full_Name_or_Nickname
+// @namespace http://superogame.sourceforge.net/
+// @version 1.7.0
+// @description SuperOgame is an user javascript for Opera which improves experience of playing OGame
+// ==/UserScript==
+
+/* (C) Mladen Pejaković <operasog@gmail.com>, 2008, 2009, 2010.
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ */
+
+addLng('XX','Native_language_name');
+
+var i18n_XX = new Array(
+'',					// 0
+'Arrival time',				// 1
+'Calculate production per',		// 2
+'Cargos',				// 3
+'Circular Message',			// 4
+'Comeback time',			// 5
+'day(s)',				// 6
+'End time',				// 7
+'there is no resources.',		// 8
+'hour(s)',				// 9
+'Impossible',				// 10
+'IPM Range',				// 11
+'LC',					// 12
+'Local Time',				// 13
+'Espionage',				// 14
+'Transport Calculator',			// 15
+'Member List',				// 16
+'Missions',				// 17
+'or',					// 18
+'Outer Space',				// 19
+'Phalanx Range',			// 20
+'Banned',				// 21
+'Probes used',				// 22
+'Probes needed',			// 23
+'Plunder',				// 24
+'Reply',				// 25
+'SC',					// 26
+'Status',				// 27
+'Activated',				// 28
+'Deactivated',				// 29
+'Language',				// 30
+'Links',				// 31
+'Activate',				// 32
+'Deactivate',				// 33
+'Version',				// 34
+'Website',				// 35
+'Storage Status',			// 36
+'systems',				// 37
+'Jump Gate',				// 38
+'Total',				// 39
+'Check for updates',			// 40
+'Checking',				// 41
+'You are using the latest version!',	// 42
+'New version available',		// 43
+'Reset',				// 44
+'Research points',			// 45
+'Loadtime',				// 46
+'What\'s new',				// 47
+'Visit download page'			// 48
+'Upgrade',				// 49
+'Trade Calculator',			// 50
+'Ratio',				// 51
+'Sell',					// 52
+'Buy'					// 53
+);

@@ -1,0 +1,19 @@
+SuperOgame - 1.7.0
+*******************
+
+Tuesday, 4th May 2010
+
+ - Using Opera's localStorage feature now - added ability to change settings ingame. There are still some settings (custom menu links, custom fleet shortcuts and alliance colors) that need to be defined via "auser.js" file, so the file is still needed (for the mentioned settings)
+ - SuperOgame main setup is back in the Options page (fixed a bug here)
+ - Language: updated language files (there are fewer language strings now) + added support for Serbian OGame
+ - Bugfix: a bug in the overview menu clock
+ - Bugfix: minor bug in messages colorization
+ - Feature: colorization of player ranks by number of points (disabled by default)
+ - Feature: Jump Gate recharge time
+ - Feature: color of moons in fleet2 page
+ - Feature: color of prefered cargo in spy report
+ - Improved: Trade Calculator
+ - Improved: moving resources overview (included ACS and colony in report)
+ - Improved: galaxy highlighting function
+ - Improved: fleet2 and fleet3 functions
+ - Other minor optimizations
