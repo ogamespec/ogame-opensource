@@ -243,9 +243,10 @@ switch ( $order )
     case '5':        // Держаться
         $maxhold_fleets = $unitab['acs'] * $unitab['acs'];
         $maxhold_users = $unitab['acs'];
+        if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
         if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
-        if ( GetHoldingFleetsCount ($target['planet_id']) >= $maxhold_fleets ) FleetError ("Задерживаться могут только $maxhold_fleets Удерживать флоты!");
-        if ( ! CanStandHold ( $target['planet_id'], $origin['owner_id'] ) ) FleetError ("Задерживаться могут только $maxhold_users игроков!");
+        if ( GetHoldingFleetsCount ($target['planet_id']) >= $maxhold_fleets ) FleetError ( va("Задерживаться могут только #1 Удерживать флоты!", $maxhold_fleets));
+        if ( ! CanStandHold ( $target['planet_id'], $origin['owner_id'] ) ) FleetError ( va("Задерживаться могут только #1 игроков!", $maxhold_users));
         if ( ! ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) FleetError ("Задерживаться можно только у друзей и коллег по альянсу!");
         break;
 
