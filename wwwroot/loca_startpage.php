@@ -25,6 +25,7 @@ require_once "loca.php";
         loca_add("ERROR_106" , "E-Mail Adresse OK");
         loca_add("ERROR_107" , "Das Passwort muss mindestens 8 Zeichen lang sein!");
         loca_add("ERROR_108" , "Kann nicht von gleichen IP in den nächsten 10 Minuten registrieren!");
+        loca_add("ERROR_109" , "Die maximale Anzahl von Spielern wurde erreicht!");
 
         loca_add("TIP_201" , "Name im Spiel: <br />Der Name, den Du im Spiel als Herrscher verwenden möchtest. Er kann pro Universum nur einmal vergeben werden.");
         loca_add("TIP_202" , "E-Mail Adresse: <br />Gib eine gültige E-Mail Adresse ein, um dein Spielerkonto zu bestätigen. Du hast hierfür drei Tage Zeit, in denen Du bereits spielen kannst.");
@@ -155,6 +156,7 @@ require_once "loca.php";
         loca_add("ERROR_106" , "E-Mail-Address OK");
         loca_add("ERROR_107" , "Password must be at least 8 characters long!");
         loca_add("ERROR_108" , "Cannot register from same IP in next 10 minutes!");
+        loca_add("ERROR_109" , "The maximum number of players has been reached!");
 
         loca_add("TIP_201" , "Name in the game: <br />This is the name you use in the game. It is unique throughout the universe.");
         loca_add("TIP_202" , "E-Mail-Address: <br />Enter a valid E-Mail address to activate your account. You have 3 days to activate your account during those 3 days you are already able to play.");
@@ -277,6 +279,7 @@ require_once "loca.php";
         loca_add("ERROR_106" , "Адрес - ОК");
         loca_add("ERROR_107" , "Пароль должен содержать минимум 8 символов!");
         loca_add("ERROR_108" , "Регистрация с одного айпи не чаще одного раза за 10 минут!");
+        loca_add("ERROR_109" , "Достигнуто максимальное количество игроков!");
 
         loca_add("TIP_201" , "Игровое имя: <br />Имя, которое Вы выбираете своему персонажу. Одно имя не может повторяться в одной вселенной.");
         loca_add("TIP_202" , "Электронный адрес: <br />Для активации аккаунта введите действительный адрес. Для активации даётся три дня, во  время которых Вы тоже сможете играть.");

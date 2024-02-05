@@ -63,6 +63,10 @@ function printMessage(code, div) {
             text = "<?php echo loca("ERROR_108");?>";
             textclass = "warning"; 
             break;
+        case "109":
+            text = "<?php echo loca("ERROR_109");?>";
+            textclass = "warning"; 
+            break;
         case "201":
             text = "<?php echo loca("TIP_201");?>";
             break;

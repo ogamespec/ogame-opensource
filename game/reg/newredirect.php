@@ -40,6 +40,8 @@ function isValidEmail($email){
 	return filter_var($email, FILTER_VALIDATE_EMAIL);
 }
 
+$uni = LoadUniverse ();
+
 if ( $_SERVER['REQUEST_METHOD'] === "POST" )
 {
     if ( $_POST['agb'] !== 'on' ) $AGB = 0;
@@ -57,6 +59,7 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
     else if ( IsUserExist ( $_POST['character'])) $RegError = 101;
     else if ( !isValidEmail ($_POST['email']) ) $RegError = 104;
     else if ( IsEmailExist ( $_POST['email'])) $RegError = 102;
+    else if ( GetUsersCount() >= $uni['maxusers']) $RegError = 109;
     else $RegError = 0;
 
     // Если все параметры верные - создать нового пользователя и войти в игру.

@@ -83,6 +83,7 @@ if ( method() === "POST" )        // Зарегистрировать игрок
     else if ( IsUserExist ( $_POST['character'])) $error = va ( "Имя #1 уже существует", $_POST['character'] ) ;
     else if ( !isValidEmail ($_POST['email']) ) $error = va ( "Адрес #1 недействителен!", $_POST['email'] ) ;
     else if ( IsEmailExist ( $_POST['email'])) $error = va ( "Адрес #1 уже существует!", $_POST['email'] );
+    else if ( GetUsersCount() >= $uni['maxusers']) $error = va ("Достигнуто максимальное количество игроков (#1)!", $uni['maxusers']);
 
     if ( $error === "" )
     {
@@ -188,6 +189,10 @@ function printMessage(code, div) {
             break;
         case "108":
             text = "Регистрация с одного айпи не чаще одного раза за 10 минут!";
+            textclass = "warning";
+            break;
+        case "109":
+            text = "Достигнуто максимальное количество игроков!";
             textclass = "warning";
             break;
         case "201":

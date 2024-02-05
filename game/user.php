@@ -846,4 +846,13 @@ function SetUserFlags ($player_id, $flags)
     dbquery ($query);
 }
 
+// Получить количество игроков (администраторы и операторы не считаются)
+function GetUsersCount()
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."users WHERE admin = 0;";
+    $result = dbquery ($query);
+    return dbrows ($result);
+}
+
 ?>
