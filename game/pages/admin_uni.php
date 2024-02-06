@@ -74,7 +74,7 @@ function Admin_Uni ()
         // Включить принудительное РО активным игрокам, если вселенная ставится на паузу.
         if ( $freeze ) {
             $days7 = $now - 7*24*60*60;
-            $query = "UPDATE ".$db_prefix."users SET vacation = 1, vacation_until = ".$now." WHERE lastclick >= $days7";
+            $query = "UPDATE ".$db_prefix."users SET vacation = 1, vacation_until = ".$now." WHERE lastclick >= $days7 AND admin = 0";
             dbquery ( $query );
         }
 
