@@ -242,7 +242,13 @@ else {
             echo $user['oname'] . "</a>\n";
         }
         else {
-            echo "       <a href=\"index.php?page=galaxy&no_header=1&session=$session&p1=".$home['g']."&p2=".$home['s']."&p3=".$home['p']."\" style='color:FFFFFF' >      \n\n";
+
+            $player_color = "FFFFFF";
+            if ($user['ally_id'] != 0 && $user['ally_id'] == $GlobalUser['ally_id']) {
+                $player_color = "87CEEB";
+            }
+
+            echo "       <a href=\"index.php?page=galaxy&no_header=1&session=$session&p1=".$home['g']."&p2=".$home['s']."&p3=".$home['p']."\" style='color:".$player_color."' >      \n\n";
             echo $user['oname'] . "</a> \n";
         }
         echo "    </th> \n\n";
