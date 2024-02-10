@@ -41,10 +41,15 @@ require_once "debug.php";
 function method () { return $_SERVER['REQUEST_METHOD']; }
 function scriptname () {
     $break = explode('/', $_SERVER["SCRIPT_NAME"]);
-    return $break[count($break) - 1]; 
+    return $break[count($break) - 1];
 }
 function hostname () {
-    $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+    if (!empty($_SERVER['HTTPS']))  { //get if window is http or https
+       $encr ="https://";
+    }else{
+       $encr ="http://";
+    }
+    $host = $encr . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
     $pos = strrpos ( $host, "/game/ainfo.php" );
     return substr ( $host, 0, $pos+1 );
 }
