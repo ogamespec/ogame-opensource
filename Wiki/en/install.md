@@ -2,7 +2,7 @@
 
 Requirements:
 - A decent web server
-- PHP 7
+- PHP 7.x
 - MySQL
 
 ## Preparing Files

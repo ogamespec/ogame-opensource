@@ -26,7 +26,7 @@ Features:
 - Fixed some original game bugs ("buggy" 10th planets, recalled ACS delay, buggy fleet return activity etc)
 - Original expedition with triple Dark Matter chance
 - Open-source! With comments on russian =)
-- Hard to install :) (should be more simple soon)
+- [Install guide](/Wiki/en/install.md)
 - In-game bots
 - And many, many more!
 
