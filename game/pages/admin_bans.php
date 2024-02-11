@@ -73,10 +73,10 @@ function SetClearCheckbox (status)
 <table>
 <form id="banform" action="index.php?page=admin&session=<?php echo $session;?>&mode=Bans&action=ban" method="POST" >
 
-<tr> <td class=c> <input type="checkbox" onclick="SetClearCheckbox(this.checked);"> ID</td> <td class=c>Имя</td> <td class=c>Главная планета</td> <td class=c>Постоянный адрес</td> <td class=c>Временный адрес</td> <td class=c>IP адрес</td> <td class=c>Дата регистрации</td> </td>
+<tr> <td class=c> <input type="checkbox" onclick="SetClearCheckbox(this.checked);"> <?=loca("ADM_BANS_ID");?></td> <td class=c><?=loca("ADM_BANS_NAME");?></td> <td class=c><?=loca("ADM_BANS_HOMEPLANET");?></td> <td class=c><?=loca("ADM_BANS_PEMAIL");?></td> <td class=c><?=loca("ADM_BANS_EMAIL");?></td> <td class=c><?=loca("ADM_BANS_IP");?></td> <td class=c><?=loca("ADM_BANS_REGDATE");?></td> </td>
 <?php
 
-            if ( $rows == 0 ) echo "<tr><td colspan=7>Ничего не найдено. <a href=\"index.php?page=admin&session=$session&mode=Bans\">Назад</a></td></tr>";
+            if ( $rows == 0 ) echo "<tr><td colspan=7>".loca("ADM_BANS_NOT_FOUND")." <a href=\"index.php?page=admin&session=$session&mode=Bans\">".loca("ADM_BANS_BACK")."</a></td></tr>";
 
             while ( $rows-- ) {
                 $user = dbarray ( $result );
@@ -95,19 +95,19 @@ function SetClearCheckbox (status)
             if ( $rows0 > 0 )
             {
 ?>
-<tr><td class=c colspan=7>Действия</td></tr>
+<tr><td class=c colspan=7><?=loca("ADM_BANS_ACTIONS");?></td></tr>
 <tr> 
     <td colspan=6>
-        <input type="radio" name="banmode" value="0"> <font color=firebrick><b>Бан без РО</b></font>
-         <input type="radio" name="banmode" value="1" checked > <font color=red><b>Бан с РО</b></font> 
-         <input type="radio" name="banmode" value="2"> <font color=yellow><b>Блок атак</b></font>
-         <input type="radio" name="banmode" value="3"> <font color=lime><b>Разбанить</b></font>
-         <input type="radio" name="banmode" value="4"> <font color=lime><b>Разрешить атаки</b></font>
+        <input type="radio" name="banmode" value="0"> <font color=firebrick><b><?=loca("ADM_BANS_BAN_WITHOUT_VACATION");?></b></font>
+         <input type="radio" name="banmode" value="1" checked > <font color=red><b><?=loca("ADM_BANS_BAN_WITH_VACATION");?></b></font> 
+         <input type="radio" name="banmode" value="2"> <font color=yellow><b><?=loca("ADM_BANS_BAN_ATTACKS");?></b></font>
+         <input type="radio" name="banmode" value="3"> <font color=lime><b><?=loca("ADM_BANS_UNBAN");?></b></font>
+         <input type="radio" name="banmode" value="4"> <font color=lime><b><?=loca("ADM_BANS_UNBAN_ATTACKS");?></b></font>
     </td>
-    <td><input name="days" type="text" size="5"> дней  <input name="hours" type="text" size="3"> часов</td> 
+    <td><input name="days" type="text" size="5"> <?=loca("ADM_BANS_DAYS");?>  <input name="hours" type="text" size="3"> <?=loca("ADM_BANS_HOURS");?></td> 
 
 </tr>
-<tr><th colspan=6> Причина: <textarea cols=40 rows=4 name="reason"><?php echo "[url=mailto:".$GlobalUser['pemail']."]контакт[/url]";?></textarea></th><th><input type="submit" value="Отправить"></th></tr>
+<tr><th colspan=6> <?=loca("ADM_BANS_REASON");?> <textarea cols=40 rows=4 name="reason"><?php echo "[url=mailto:".$GlobalUser['pemail']."]".loca("ADM_BANS_CONTACT")."[/url]";?></textarea></th><th><input type="submit" value="<?=loca("ADM_BANS_SUBMIT");?>"></th></tr>
 </form>
 </table>
 <?php
@@ -156,30 +156,30 @@ function SetClearCheckbox (status)
 
 ?>
 
-<!-- Форма поиска -->
+<!-- Search form -->
 
 <?php echo AdminPanel();?>
 
 <table>
 <form action="index.php?page=admin&session=<?php echo $session;?>&mode=Bans&action=search" method="POST" >
 
-<tr><td class="c" colspan=2>Найти пользователей</td></tr>
+<tr><td class="c" colspan=2><?=loca("ADM_BANS_FIND");?></td></tr>
 <tr>
     <td>
             <select name="searchby">
-                <option value="0">Забаненных с РО</option>
-                <option value="1">Забаненных без РО</option>
-                <option value="2">Блокировка атак</option>
-                <option value="3">Зарегистрированных недавно (дней)</option>
-                <option value="4">Имя пользователя (примерное)</option>
-                <option value="5">Тег альянса</option>
-                <option value="6">Одинаковый адрес email</option>
-                <option value="7">Одинаковый IP</option>
+                <option value="0"><?=loca("ADM_BANS_FIND_0");?></option>
+                <option value="1"><?=loca("ADM_BANS_FIND_1");?></option>
+                <option value="2"><?=loca("ADM_BANS_FIND_2");?></option>
+                <option value="3"><?=loca("ADM_BANS_FIND_3");?></option>
+                <option value="4"><?=loca("ADM_BANS_FIND_4");?></option>
+                <option value="5"><?=loca("ADM_BANS_FIND_5");?></option>
+                <option value="6"><?=loca("ADM_BANS_FIND_6");?></option>
+                <option value="7"><?=loca("ADM_BANS_FIND_7");?></option>
             </select>
     </td>
     <td> <input type="text" name="text" size=20></td>
 </tr>
-<tr><td class="c" colspan=2> <input type="submit" value="Отправить" /></td></tr>
+<tr><td class="c" colspan=2> <input type="submit" value="<?=loca("ADM_BANS_SUBMIT");?>" /></td></tr>
 
 </form>
 </table>

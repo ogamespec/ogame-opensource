@@ -24,4 +24,36 @@ $LOCA["en"]["ADM_MENU_BOTEDIT"] = "Bot Editor";
 $LOCA["en"]["ADM_MENU_COUPONS"] = "Coupons";
 $LOCA["en"]["ADM_MENU_RAKSIM"] = "Rocket Attack Sim";
 
+// admin_bans
+
+$LOCA["en"]["ADM_BANS_ID"] = "ID";
+$LOCA["en"]["ADM_BANS_NAME"] = "Name";
+$LOCA["en"]["ADM_BANS_HOMEPLANET"] = "Home Planet";
+$LOCA["en"]["ADM_BANS_PEMAIL"] = "Permanent address";
+$LOCA["en"]["ADM_BANS_EMAIL"] = "Temporary address";
+$LOCA["en"]["ADM_BANS_IP"] = "IP address";
+$LOCA["en"]["ADM_BANS_REGDATE"] = "Date of registration";
+$LOCA["en"]["ADM_BANS_NOT_FOUND"] = "Nothing found.";
+$LOCA["en"]["ADM_BANS_BACK"] = "Back";
+$LOCA["en"]["ADM_BANS_ACTIONS"] = "Actions";
+$LOCA["en"]["ADM_BANS_BAN_WITHOUT_VACATION"] = "Ban without VM";
+$LOCA["en"]["ADM_BANS_BAN_WITH_VACATION"] = "Ban with VM";
+$LOCA["en"]["ADM_BANS_BAN_ATTACKS"] = "Ban attacks";
+$LOCA["en"]["ADM_BANS_UNBAN"] = "Unban";
+$LOCA["en"]["ADM_BANS_UNBAN_ATTACKS"] = "Allow attacks";
+$LOCA["en"]["ADM_BANS_DAYS"] = "days";
+$LOCA["en"]["ADM_BANS_HOURS"] = "hours";
+$LOCA["en"]["ADM_BANS_REASON"] = "Reason:";
+$LOCA["en"]["ADM_BANS_CONTACT"] = "contact";
+$LOCA["en"]["ADM_BANS_FIND"] = "Find users";
+$LOCA["en"]["ADM_BANS_FIND_0"] = "Banned with VM";
+$LOCA["en"]["ADM_BANS_FIND_1"] = "Banned without VM";
+$LOCA["en"]["ADM_BANS_FIND_2"] = "Attack bans";
+$LOCA["en"]["ADM_BANS_FIND_3"] = "Recently registered (days)";
+$LOCA["en"]["ADM_BANS_FIND_4"] = "User name (rough)";
+$LOCA["en"]["ADM_BANS_FIND_5"] = "Alliance Tag";
+$LOCA["en"]["ADM_BANS_FIND_6"] = "Same email address";
+$LOCA["en"]["ADM_BANS_FIND_7"] = "Same IP";
+$LOCA["en"]["ADM_BANS_SUBMIT"] = "Submit";
+
 ?>
