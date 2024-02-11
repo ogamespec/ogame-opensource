@@ -4,32 +4,20 @@ function changeAction(type) {
         alert('<?php echo loca("LOGIN_NOTCHOSEN");?>');
     }
     else {
+        var http ="http://";
+        if (window.location.protocol == "https:") { //check for encryption and set http or https
+            http ="https://";
         if(type == "login") {
-          if (window.location.protocol != "https:") { //check for encryption and set http or https
-          var http ="http://";
-        }else{
-          var http ="https://";
+            var url = http + document.loginForm.universe.value + "/game/reg/login2.php";
+            document.loginForm.action = url;
         }
-          var url = http + document.loginForm.universe.value + "/game/reg/login2.php";
-          document.loginForm.action = url;
-      }
-      else if (type=="getpw") {
-        if (window.location.protocol != "https:") { //check for encryption and set http or https
-          var http ="http://";
-        }else{
-          var http ="https://";
+        else if (type=="getpw") {
+            var url = http + document.loginForm.universe.value + "/game/reg/mail.php";
+            document.loginForm.action = url;
+            document.loginForm.submit();
         }
-          var url = http + document.loginForm.universe.value + "/game/reg/mail.php";
-          document.loginForm.action = url;
-          document.loginForm.submit();
-      }
-      else if(type == "register") {
-        if (window.location.protocol != "https:") { //check for encryption and set http or https
-          var http ="http://";
-        }else{
-          var http ="https://";
-        }
-          var url = http + document.registerForm.universe.value + "/game/reg/newredirect.php";
+        else if(type == "register") {
+            var url = http + document.registerForm.universe.value + "/game/reg/newredirect.php";
             document.registerForm.action = url;
         }
     }
