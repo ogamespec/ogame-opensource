@@ -5,16 +5,31 @@ function changeAction(type) {
     }
     else {
         if(type == "login") {
-            var url = "http://" + document.loginForm.universe.value + "/game/reg/login2.php";
-            document.loginForm.action = url;
+          if (window.location.protocol != "https:") { //check for encryption and set http or https
+          var http ="http://";
+        }else{
+          var http ="https://";
         }
-        else if (type=="getpw") {
-            var url = "http://" + document.loginForm.universe.value + "/game/reg/mail.php";
-            document.loginForm.action = url;
-            document.loginForm.submit();
+          var url = http + document.loginForm.universe.value + "/game/reg/login2.php";
+          document.loginForm.action = url;
+      }
+      else if (type=="getpw") {
+        if (window.location.protocol != "https:") { //check for encryption and set http or https
+          var http ="http://";
+        }else{
+          var http ="https://";
         }
-        else if(type == "register") {
-            var url = "http://" + document.registerForm.universe.value + "/game/reg/newredirect.php";
+          var url = http + document.loginForm.universe.value + "/game/reg/mail.php";
+          document.loginForm.action = url;
+          document.loginForm.submit();
+      }
+      else if(type == "register") {
+        if (window.location.protocol != "https:") { //check for encryption and set http or https
+          var http ="http://";
+        }else{
+          var http ="https://";
+        }
+          var url = http + document.registerForm.universe.value + "/game/reg/newredirect.php";
             document.registerForm.action = url;
         }
     }
@@ -22,50 +37,50 @@ function changeAction(type) {
 
 function printMessage(code, div) {
     var textclass = "";
-    
+
     if (div == null) {
         div = "statustext";
     }
     switch (code) {
         case "0":
             text = "<?php echo loca("ERROR_0");?>";
-            textclass = "fine"; 
+            textclass = "fine";
             break;
         case "101":
             text = "<?php echo loca("ERROR_101");?>";
-            textclass = "warning"; 
+            textclass = "warning";
             break;
         case "102":
             text = "<?php echo loca("ERROR_102");?>";
-            textclass = "warning"; 
+            textclass = "warning";
             break;
         case "103":
             text = "<?php echo loca("ERROR_103");?>";
-            textclass = "warning"; 
+            textclass = "warning";
             break;
         case "104":
             text = "<?php echo loca("ERROR_104");?>";
-            textclass = "warning"; 
+            textclass = "warning";
             break;
         case "105":
             text = "<?php echo loca("ERROR_105");?>";
-            textclass = "fine"; 
+            textclass = "fine";
             break;
         case "106":
             text = "<?php echo loca("ERROR_106");?>";
-            textclass = "fine"; 
+            textclass = "fine";
             break;
         case "107":
             text = "<?php echo loca("ERROR_107");?>";
-            textclass = "warning"; 
+            textclass = "warning";
             break;
         case "108":
             text = "<?php echo loca("ERROR_108");?>";
-            textclass = "warning"; 
+            textclass = "warning";
             break;
         case "109":
             text = "<?php echo loca("ERROR_109");?>";
-            textclass = "warning"; 
+            textclass = "warning";
             break;
         case "201":
             text = "<?php echo loca("TIP_201");?>";
@@ -86,7 +101,7 @@ function printMessage(code, div) {
             text = code;
             break;
     }
-    
+
     if (textclass != "") {
         text = "<span class='" + textclass + "'>" + text + "</span>";
     }

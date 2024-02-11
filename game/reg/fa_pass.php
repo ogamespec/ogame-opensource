@@ -29,7 +29,12 @@ loca_add ( "reg", $loca_lang );
 function method () { return $_SERVER['REQUEST_METHOD']; }
 
 function hostname () {
-    $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+    if (!empty($_SERVER['HTTPS']))  { //get if window is http or https
+       $encr ="https://";
+    }else{
+       $encr ="http://";
+    }
+    $host = $encr . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
     $pos = strrpos ( $host, "/game/reg/fa_pass.php" );
     return substr ( $host, 0, $pos+1 );
 }
@@ -93,12 +98,12 @@ if ( method () === "POST" ) {
             $md5 = md5 ($pass . $db_secret );
             $query = "UPDATE ".$db_prefix."users SET session = '', password = '".$md5."' WHERE player_id = " . $user['player_id'];
             dbquery ($query);
-            mail_utf8 ( $user['pemail'], loca("REG_FORGOT_SUBJ"), 
-                va ( loca("REG_FORGOT_MAIL"), 
-                    $user['oname'], 
-                    $uninum, 
+            mail_utf8 ( $user['pemail'], loca("REG_FORGOT_SUBJ"),
+                va ( loca("REG_FORGOT_MAIL"),
+                    $user['oname'],
+                    $uninum,
                     $pass,
-                    "http://" . hostname()
+                    "" . hostname()
                 ), "From: welcome@" . hostname() );
             $pass_ok = true;
         }
@@ -107,24 +112,24 @@ if ( method () === "POST" ) {
 
 ?>
 
-<html> 
- <head> 
-  <title><?=loca("REG_FORGOT_TITLE");?></title> 
-<!--  <meta http-equiv="refresh" content="5; URL=http://<?=hostname();?>"> --> 
-  <link rel="stylesheet" type="text/css" href="<?=hostname();?>evolution/formate.css"> 
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
-  </head> 
- <body> 
- <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div> 
-<center> 
-<table width="519"> 
-<tr> 
+<html>
+ <head>
+  <title><?=loca("REG_FORGOT_TITLE");?></title>
+<!--  <meta http-equiv="refresh" content="5; URL=http://<?=hostname();?>"> -->
+  <link rel="stylesheet" type="text/css" href="<?=hostname();?>evolution/formate.css">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  </head>
+ <body>
+ <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<center>
+<table width="519">
+<tr>
 <?php
     if ( $pass_ok ) echo "   <th><font color=\"lime\">".va(loca("REG_FORGOT_OK"), $user['oname'])."</font></th>\n";
     else echo " <th><font color=\"red\">".loca("REG_FORGOT_ERROR")."</font></th> \n";
 ?>
-</tr> 
-</table> 
-</center> 
- </body> 
+</tr>
+</table>
+</center>
+ </body>
 </html>

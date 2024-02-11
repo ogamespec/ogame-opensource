@@ -29,37 +29,42 @@ loca_add ( "reg", $loca_lang );
 function method () { return $_SERVER['REQUEST_METHOD']; }
 
 function hostname () {
-    $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+    if (!empty($_SERVER['HTTPS']))  { //get if window is http or https
+       $encr ="https://";
+    }else{
+       $encr ="http://";
+    }
+    $host = $encr . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
     $pos = strrpos ( $host, "/game/reg/mail.php" );
     return substr ( $host, 0, $pos+1 );
 }
 
 ?>
 
-<html> 
-<head> 
-<title><?=loca("REG_MAIL_TITLE");?></title> 
-<link rel="stylesheet" type="text/css" href="<?=hostname();?>evolution/formate.css"> 
-  <link rel='stylesheet' type='text/css' href='/game/css/default.css' /> 
-  <link rel='stylesheet' type='text/css' href='/game/css/formate.css' /> 
-<meta http-equiv="content" type="text/html; charset=UTF-8" /> 
-</head> 
-<body> 
-<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div> 
-<div class="mybody"> 
-<form action="fa_pass.php" method="post"> 
-<div align="center"> 
-  <h2><?=loca("REG_MAIL_SEND");?></h2> 
-  <?=loca("REG_MAIL_NOTE");?><table align="center"> 
-<tr> 
-        <td><?=loca("REG_MAIL_EMAIL");?></td> 
-        <td><input type="text" name="email"></td> 
-</tr> 
-<tr> 
-        <td></td> 
-        <td><input type="submit" name="send_pass" value="<?=loca("REG_MAIL_SUBMIT");?>"></td> 
-</tr> 
-</table> 
-</form> 
-</body> 
+<html>
+<head>
+<title><?=loca("REG_MAIL_TITLE");?></title>
+<link rel="stylesheet" type="text/css" href="<?=hostname();?>evolution/formate.css">
+  <link rel='stylesheet' type='text/css' href='/game/css/default.css' />
+  <link rel='stylesheet' type='text/css' href='/game/css/formate.css' />
+<meta http-equiv="content" type="text/html; charset=UTF-8" />
+</head>
+<body>
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<div class="mybody">
+<form action="fa_pass.php" method="post">
+<div align="center">
+  <h2><?=loca("REG_MAIL_SEND");?></h2>
+  <?=loca("REG_MAIL_NOTE");?><table align="center">
+<tr>
+        <td><?=loca("REG_MAIL_EMAIL");?></td>
+        <td><input type="text" name="email"></td>
+</tr>
+<tr>
+        <td></td>
+        <td><input type="submit" name="send_pass" value="<?=loca("REG_MAIL_SUBMIT");?>"></td>
+</tr>
+</table>
+</form>
+</body>
 </html>
