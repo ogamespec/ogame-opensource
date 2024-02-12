@@ -48,3 +48,4 @@ $LOCA["de"]["ADM_BANS_FIND_7"] = "Dieselbe IP";
 $LOCA["de"]["ADM_BANS_SUBMIT"] = "Senden";
 
 ?>
+

@@ -8,7 +8,12 @@ require_once "db.php";
 function method () { return $_SERVER['REQUEST_METHOD']; }
 
 function hostname () {
-    $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+    if (!empty($_SERVER['HTTPS']))  { //get if window is http or https
+       $encr ="https://";
+    }else{
+       $encr ="http://";
+    }
+    $host = $encr . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
     $pos = strrpos ( $host, "/game/validate.php" );
     return substr ( $host, 0, $pos+1 );
 }

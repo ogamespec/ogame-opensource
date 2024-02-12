@@ -21,7 +21,12 @@ function va ($subject)
 }
 
 function hostname () {
-    $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+    if (!empty($_SERVER['HTTPS']))  { //get if window is http or https
+       $encr ="https://";
+     }else{
+       $encr ="http://";
+     }
+    $host = $encr . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
     $pos = strrpos ( $host, "/game/galaxytool/index.php" );
     return substr ( $host, 0, $pos+1 );
 }
@@ -30,7 +35,7 @@ function hostname () {
 function GetPlanetSmallImage ($skinpath, $planet)
 {
     if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return $skinpath."planeten/small/s_mond.jpg";
-    else if ($planet['type'] == 10000) return $skinpath."planeten/debris.jpg";    
+    else if ($planet['type'] == 10000) return $skinpath."planeten/debris.jpg";
     else if ($planet['type'] < 10000 )
     {
         $p = $planet['p'];

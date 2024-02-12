@@ -25,7 +25,12 @@ require_once "../loca.php";
 function method () { return $_SERVER['REQUEST_METHOD']; }
 
 function hostname () {
-    $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+    if (!empty($_SERVER['HTTPS']))  { //get if window is http or https
+       $encr ="https://";
+    }else{
+       $encr ="http://";
+    }
+    $host = $encr . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
     $pos = strrpos ( $host, "/game/reg/new.php" );
     return substr ( $host, 0, $pos+1 );
 }
@@ -114,7 +119,7 @@ if ( method() === "POST" )        // Зарегистрировать игрок
             "На последующей картинке Вы увидите, как это правильно сделать.<br /><br />\n" .
             "<center><a href='#4' style='text-decoration: underline;font-size: large;'>Вперёд!</a></center><br /><br /> \n" .
             "Удачи<br /> \n" .
-            "Ваша команда ОГейм</th>", 
+            "Ваша команда ОГейм</th>",
          $_POST['character'], "Вселенная $uninum", $_POST['email'], $StartPage );
 ?>
 </tr>

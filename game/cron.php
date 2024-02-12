@@ -11,7 +11,7 @@ if ( file_exists ("config.php"))
     dbconnect ($db_host, $db_user, $db_pass, $db_name);
     dbquery("SET NAMES 'utf8';");
     dbquery("SET CHARACTER SET 'utf8';");
-    dbquery("SET SESSION collation_connection = 'utf8_general_ci';");    
+    dbquery("SET SESSION collation_connection = 'utf8_general_ci';");
 
     require_once "loca.php";
     require_once "bbcode.php";
@@ -36,10 +36,15 @@ if ( file_exists ("config.php"))
     function method () { return $_SERVER['REQUEST_METHOD']; }
     function scriptname () {
         $break = explode('/', $_SERVER["SCRIPT_NAME"]);
-        return $break[count($break) - 1]; 
+        return $break[count($break) - 1];
     }
     function hostname () {
-        $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+        if (!empty($_SERVER['HTTPS']))  { //get if window is http or https
+           $encr ="https://";
+        }else{
+           $encr ="http://";
+        }
+        $host = $encr . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
         $pos = strrpos ( $host, "/game/index.php" );
         return substr ( $host, 0, $pos+1 );
     }

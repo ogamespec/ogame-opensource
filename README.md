@@ -25,7 +25,7 @@ Features:
 - Original home planet distribution algorithm and spy protection
 - Fixed some original game bugs ("buggy" 10th planets, recalled ACS delay, buggy fleet return activity etc)
 - Original expedition with triple Dark Matter chance
-- Open-source! With comments on russian =)
+- Open-source! With comments on russian =)  (See discussion #95)
 - [Install guide](/Wiki/en/install.md)
 - In-game bots
 - And many, many more!

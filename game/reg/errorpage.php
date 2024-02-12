@@ -10,7 +10,12 @@ if ( !file_exists ("../config.php"))
 include "../config.php";
 
 function hostname () {
-    $host = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
+    if (!empty($_SERVER['HTTPS']))  { //get if window is http or https
+       $encr ="https://";
+    }else{
+       $encr ="http://";
+    }
+    $host = $encr . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
     $pos = strrpos ( $host, "/game/reg/errorpage.php" );
     return substr ( $host, 0, $pos+1 );
 }
@@ -43,15 +48,15 @@ function hostname () {
 
     switch ( $_GET['errorcode'] )
     {
-        case '2': 
+        case '2':
 ?>
-   <th class='errormessage'>Такого аккаунта не существует либо Вы неправильно ввели пароль. <br>Введите <a href='<?=$StartPage;?>'>правильный пароль</a> либо воспользуйтесь <a href='mail.php'>восстановлением пароля</a>.<br>Также Вы можете создать <a href='new.php'>новый аккаунт</a>.</th>   
+   <th class='errormessage'>Такого аккаунта не существует либо Вы неправильно ввели пароль. <br>Введите <a href='<?=$StartPage;?>'>правильный пароль</a> либо воспользуйтесь <a href='mail.php'>восстановлением пароля</a>.<br>Также Вы можете создать <a href='new.php'>новый аккаунт</a>.</th>
 <?php
         break;
 
         case '3':
 ?>
-   <th class='errormessage'>Этот аккаунт заблокирован до <?=$_GET['arg3'];?>, более подробная информация приведена <a href=../pranger.php>здесь</a>.<br> Если у Вас возникли вопросы, обратитесь к заблокировавшему Вас <a href='#'>оператору</a>.<br><br>ВНИМАНИЕ: статус командира при блоке не прекращается, прекращение делается отдельно!</th>   
+   <th class='errormessage'>Этот аккаунт заблокирован до <?=$_GET['arg3'];?>, более подробная информация приведена <a href=../pranger.php>здесь</a>.<br> Если у Вас возникли вопросы, обратитесь к заблокировавшему Вас <a href='#'>оператору</a>.<br><br>ВНИМАНИЕ: статус командира при блоке не прекращается, прекращение делается отдельно!</th>
 <?php
         break;
     }
