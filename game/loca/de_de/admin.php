@@ -24,6 +24,15 @@ $LOCA["de"]["ADM_MENU_BOTEDIT"] = "Bot Editor";
 $LOCA["de"]["ADM_MENU_COUPONS"] = "Gutscheine";
 $LOCA["de"]["ADM_MENU_RAKSIM"] = "Raketenangriffssimulation";
 
+// admin_bans
+
+$LOCA["de"]["ADM_BANS_ID"] = "ID";
+$LOCA["de"]["ADM_BANS_NAME"] = "Name";
+$LOCA["de"]["ADM_BANS_HOMEPLANET"] = "Heimatplanet";
+$LOCA["de"]["ADM_BANS_PEMAIL"] = "Permanente Adresse";
+$LOCA["de"]["ADM_BANS_EMAIL"] = "Temporäre Adresse";
+$LOCA["de"]["ADM_BANS_IP"] = "IP-Adresse";
+$LOCA["de"]["ADM_BANS_REGDATE"] = "Datum der Eintragung";
 $LOCA["de"]["ADM_BANS_NOT_FOUND"] = "Nichts gefunden.";
 $LOCA["de"]["ADM_BANS_BACK"] = "Zurück";
 $LOCA["de"]["ADM_BANS_ACTIONS"] = "Aktionen";
