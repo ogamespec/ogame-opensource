@@ -503,7 +503,7 @@ td.c { background-color: #334445; }
 <tr><td><?php echo loca('INSTALL_UNI_DID');?><a title='<?php echo loca('INSTALL_TIP9');?>'><?php echo $info;?></a></td><td><input type=text value='0' class='text' name='uni_did'></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_RAPID');?><a title='<?php echo loca('INSTALL_TIP10');?>'><?php echo $info;?></a></td><td><input type=checkbox class='text' name='uni_rapid' CHECKED></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_MOONS');?></td><td><input type=checkbox class='text' name='uni_moons' CHECKED></td></tr>
-<tr><td><?php echo loca('INSTALL_UNI_BATTLE');?></td><td><input type=text value='../cgi-bin/battle' class='text' name='uni_battle_engine'></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_BATTLE');?><a title='<?php echo loca('INSTALL_TIP11');?>'><?php echo $info;?></a></td><td><input type=text value='../cgi-bin/battle' class='text' name='uni_battle_engine'></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_PHP_BATTLE');?></td><td><input type=checkbox class='text' name='php_battle' ></td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan=2 class='c'><?php echo loca('INSTALL_EXTERNAL_LINKS');?><a title='<?php echo loca('INSTALL_EXTERNAL_LINKS_TIP');?>'><?php echo $info;?></a></td></tr>

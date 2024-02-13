@@ -51,6 +51,7 @@ $LOCA["en"]["INSTALL_TIP7"] = "Max ACS invites. Max ACS fleet slots = N * 4, whe
 $LOCA["en"]["INSTALL_TIP8"] = "Specified % of fleet structure goes in debris after battle. 0 - fleet in debris disabled.";
 $LOCA["en"]["INSTALL_TIP9"] = "Specified % of defense structure goes in debris after battle. 0 - defense in debris disabled.";
 $LOCA["en"]["INSTALL_TIP10"] = "Ships have chance to make additional shots ";
+$LOCA["en"]["INSTALL_TIP11"] = "If you are using an embedded PHP engine, there is no need to compile an external battle engine and specify the path to it.";
 
 $LOCA["en"]["INSTALL_INSTALL"] = "Install";
 

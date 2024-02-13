@@ -5,6 +5,24 @@ Requirements:
 - PHP 7.x
 - MySQL
 
+## PHP Setup
+
+An important part is to properly configure PHP.INI. The following are important parameters and values that are recommended.
+
+|PHP.INI variable|Description|
+|---|---|
+|short_open_tag = On|Allows PHP short PHP inclusions of the form `<?= .... ?>`. This option must be enabled because short inclusions are used everywhere in the game engine.|
+|max_execution_time = 200|Script execution time. 200 seconds is enough for most tasks. 20kkk loss level battles are processed in about 10-15 seconds, depending on the server.|
+|display_errors = On|Show script execution errors, if desired.|
+|variables_order = "EGPCS"|The order of processing global variables.|
+|register_globals = On|Some bullshit, I have it on normally :)|
+|magic_quotes_gpc = On|Quoted strings escaping. All game scripts assume that strings are escaped by default.|
+
+Required extensions:
+- extension=php_gd2.dll
+- extension=php_mbstring.dll
+- extension=php_mysql.dll
+
 ## Preparing Files
 
 In the root of your server you need to copy all the contents from the `wwwroot` folder.
