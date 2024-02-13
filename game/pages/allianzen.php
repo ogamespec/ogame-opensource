@@ -101,9 +101,13 @@ function AllyPage_Already ($app_id)
 // ***********************************************************
 
 // Обработать POST-запросы.
-if ( $GlobalUser['ally_id'] == 0 )
+if ( $GlobalUser['ally_id'] == 0 && key_exists('a', $_GET) )
 {
-    if ( $_GET['a'] == 1 && $_GET['weiter'] == 1 )    // Основать альянс.
+    // Назначение этого параметра неизвестно (weiter = more нем.)
+    $weiter = 0;
+    if (key_exists('weiter', $_GET) && $_GET['weiter'] == 1) $weiter = 1;
+
+    if ( $_GET['a'] == 1 && $weiter == 1 )    // Основать альянс.
     {
         $_POST['tag'] = str_replace ( "\"", "", $_POST['tag']);
         $_POST['tag'] = str_replace ( "'", "", $_POST['tag']);
@@ -169,8 +173,18 @@ if ( $GlobalUser['ally_id'] == 0 )
     }
     else
     {
-        if ( key_exists ('a', $_GET) && $_GET['a'] == 1 ) AllyPage_CreateAlly ( $_POST['tag'], $_POST['name'] );
-        else if ( key_exists ('a', $_GET) && $_GET['a'] == 2 ) AllyPage_Search ( $_POST['suchtext'], $SearchResults );
+        if ( key_exists ('a', $_GET) && $_GET['a'] == 1 ) {
+            $tag = "";
+            $name = "";
+            if (key_exists('tag', $_POST)) $tag = $_POST['tag'];
+            if (key_exists('name', $_POST)) $name = $_POST['name'];
+            AllyPage_CreateAlly ( $tag, $name );
+        }
+        else if ( key_exists ('a', $_GET) && $_GET['a'] == 2 ) {
+            $search_text = "";
+            if (key_exists('suchtext', $_POST)) $search_text = $_POST['suchtext'];
+            AllyPage_Search ( $search_text, $SearchResults );
+        }
         else AllyPage_NoAlly ();
     }
 }
