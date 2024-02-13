@@ -114,6 +114,7 @@ In other words - there is no reason to worry that the tables are organized a bit
 |deact_ip|INT|Disable IP check | 
 |maxspy|INT|Number of spy probes (1 by default, 0...99) | 
 |maxfleetmsg|INT|Maximum fleet messages to the Galaxy (3 by default, 0...99, 0=1) | 
+|lang|CHAR(4)|Game Interface language |
 |aktplanet|INT|Current selected planet |
 |dm|INT UNSIGNED|Purchased DM | 
 |dmfree|INT UNSIGNED|DM found on the expedition |

@@ -19,22 +19,22 @@
 
 ## API
 
-SendGreetingsMail<br>
-SendChangeMail<br>
-SendGreetingsMessage<br>
-IsUserExist<br>
-IsEmailExist<br>
-CreateUser<br>
-RemoveUser<br>
-ValidateUser<br>
-CheckPassword<br>
-ChangeEmail<br>
-ChangeActivationCode<br>
-SelectPlanet<br>
-LoadUser<br>
-UpdateLastClick<br>
-IsPlayerNewbie<br>
-IsPlayerStrong<br>
+- SendGreetingsMail
+- SendChangeMail
+- SendGreetingsMessage
+- IsUserExist
+- IsEmailExist
+- CreateUser
+- RemoveUser
+- ValidateUser
+- CheckPassword
+- ChangeEmail
+- ChangeActivationCode
+- SelectPlanet
+- LoadUser
+- UpdateLastClick
+- IsPlayerNewbie
+- IsPlayerStrong
 
 ## Database
 
@@ -79,6 +79,7 @@ IsPlayerStrong<br>
 <tr><td>deact_ip</td><td>INT</td><td>Выключить проверку IP</td></tr>
 <tr><td>maxspy</td><td>INT</td><td>Кол-во шпионских зондов (1 по умолчанию, 0...99)</td></tr>
 <tr><td>maxfleetmsg</td><td>INT</td><td>Максимальные сообщения о флоте в Галактику (3 по умолчанию, 0...99, 0=1)</td></tr>
+<tr><td>lang</td><td>CHAR(4)</td><td>Язык интерфейса игры</td></tr>
 <tr><td>aktplanet</td><td>INT</td><td>Текущая выбранная планета.</td></tr>
 <tr><td>dm</td><td>INT</td><td>Покупная ТМ</td></tr>
 <tr><td>dmfree</td><td>INT</td><td>ТМ найденная в экспедиции</td></tr>
@@ -88,6 +89,8 @@ IsPlayerStrong<br>
 <tr><td>oldscore1,2,3</td><td>BIGINT UNSIGNED, INT UNSIGNED, INT UNSIGNED</td><td>Старые очки за постройки, флот, исследования</td></tr>
 <tr><td>oldplace1,2,3</td><td>INT</td><td>старое место за постройки, флот, исследования</td></tr>
 <tr><td>scoredate</td><td>INT UNSIGNED</td><td>Время сохранения старой статистики time()</td></tr>
-<tr><td>rXXX</td><td>INT</td><td>Уровень исследования XXX</td></tr></tbody></table>
+<tr><td>rXXX</td><td>INT</td><td>Уровень исследования XXX</td></tr>
+<tr><td>flags</td><td>INT UNSIGNED</td><td>Флаги пользователя. Полный список ниже (USER_FLAG). Не сразу додумался до этой идеи, некоторые переменные также можно сделать флагами</td></tr>
+</tbody></table>
 
 <b>Q</b> - для обработки этого события используется задание в очереди задач.
