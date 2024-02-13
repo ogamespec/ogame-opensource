@@ -43,6 +43,7 @@ function Admin_Checksum ()
         'uni.php', 
         'unit.php', 
         'user.php', 
+        'utils.php', 
         'validate.php', 
     );
 
