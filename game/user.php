@@ -543,8 +543,6 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
         $query = "UPDATE ".$db_prefix."users SET ip_addr = '".$ip."' WHERE player_id = $player_id";
         dbquery ($query);
 
-        //echo "ID пользователя: $player_id<br>Приватная сессия: $prsess<br>Публичная сессия: $sess<br>IP-адрес: $ip";
-
         // Выбрать Главную планету текущей.
         $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$sess."'";
         $result = dbquery ($query);
