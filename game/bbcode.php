@@ -43,7 +43,11 @@ class bbcode {
     var $lbr = 0;
     var $rbr = 0;
 
-    function bbcode($code = '') {
+    function __construct($code = '') {
+        $this -> do_bbcode ($code);
+    }
+
+    function do_bbcode($code = '') {
         if (is_array($code)) {
             $is_tree = false;
             foreach ($code as $key => $val) {
@@ -147,7 +151,7 @@ class bbcode {
 
     function parse($code = '') {
         if ($code) {
-            $this -> bbcode($code);
+            $this -> do_bbcode($code);
             return;
         }
         /*
