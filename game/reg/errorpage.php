@@ -7,18 +7,9 @@ if ( !file_exists ("../config.php"))
     exit ();
 }
 
-include "../config.php";
+require_once "../config.php";
+require_once "../utils.php";
 
-function hostname () {
-    if (!empty($_SERVER['HTTPS']))  { //get if window is http or https
-       $encr ="https://";
-    }else{
-       $encr ="http://";
-    }
-    $host = $encr . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
-    $pos = strrpos ( $host, "/game/reg/errorpage.php" );
-    return substr ( $host, 0, $pos+1 );
-}
 ?>
 
 <html>

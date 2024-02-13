@@ -9,6 +9,7 @@ if ( !file_exists ("../config.php"))
 
 require_once "../config.php";
 require_once "../db.php";
+require_once "../utils.php";
 
 require_once "../bbcode.php";
 require_once "../msg.php";
@@ -25,19 +26,6 @@ if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = "ru";
 else $loca_lang = $_COOKIE['ogamelang'];
 
 loca_add ( "reg", $loca_lang );
-
-function method () { return $_SERVER['REQUEST_METHOD']; }
-
-function hostname () {
-    if (!empty($_SERVER['HTTPS']))  { //get if window is http or https
-       $encr ="https://";
-    }else{
-       $encr ="http://";
-    }
-    $host = $encr . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
-    $pos = strrpos ( $host, "/game/reg/mail.php" );
-    return substr ( $host, 0, $pos+1 );
-}
 
 ?>
 

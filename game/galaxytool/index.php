@@ -1,35 +1,11 @@
 <?php
 
 require_once "../loca.php";
+require_once "../utils.php";
 
 $loca_lang = $_COOKIE['ogamelang'];
 if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
 loca_add ( "galaxytool", $loca_lang );
-
-// Format string, according to tokens from the text. Tokens are represented as #1, #2 and so on.
-function va ($subject)
-{
-    $num_arg = func_num_args();
-    $pattern = array ();
-    $replace = array ();
-    for ($i=1; $i<$num_arg; $i++)
-    {
-        $pattern[$i-1] = "/#$i/";
-        $replace[$i-1] = func_get_arg($i);
-    }
-    return preg_replace($pattern, $replace, $subject);
-}
-
-function hostname () {
-    if (!empty($_SERVER['HTTPS']))  { //get if window is http or https
-       $encr ="https://";
-     }else{
-       $encr ="http://";
-     }
-    $host = $encr . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
-    $pos = strrpos ( $host, "/game/galaxytool/index.php" );
-    return substr ( $host, 0, $pos+1 );
-}
 
 // Получить маленькую картинку планеты.
 function GetPlanetSmallImage ($skinpath, $planet)
@@ -69,11 +45,6 @@ function GetPlanetSmallImage ($skinpath, $planet)
 <div id='content'>
 
 <?php
-
-function nicenum ($number)
-{
-    return number_format($number,0,",",".");
-}
 
 // Here is a function to sort an array by the key of his sub-array
 function sksort ($array, $subkey="id", $sort_ascending=false)

@@ -2,6 +2,7 @@
 
 require_once "config.php";
 require_once "db.php";
+require_once "utils.php";
 require_once "loca.php";
 require_once "uni.php";
 
@@ -11,24 +12,7 @@ else $loca_lang = $_COOKIE['ogamelang'];
 if ( !key_exists ( $loca_lang, $Languages ) ) $GlobalUni['lang'] = $loca_lang = 'en';
 loca_add ( "maintain", $loca_lang );
 
-// Format string, according to tokens from the text. Tokens are represented as #1, #2 and so on.
-function va ($subject)
-{
-    $num_arg = func_num_args();
-    $pattern = array ();
-    for ($i=1; $i<$num_arg; $i++)
-    {
-        $pattern[$i-1] = "/#$i/";
-        $replace[$i-1] = func_get_arg($i);
-    }
-    return preg_replace($pattern, $replace, $subject);
-}
-
-// Соединиться с базой данных
-dbconnect ($db_host, $db_user, $db_pass, $db_name);
-dbquery("SET NAMES 'utf8';");
-dbquery("SET CHARACTER SET 'utf8';");
-dbquery("SET SESSION collation_connection = 'utf8_general_ci';");
+InitDB();
 
 $GlobalUni = LoadUniverse ();
 
@@ -113,7 +97,13 @@ a:hover {
         <br/>
         <br/>
         <br/>
-        <p><?=va(loca("MAINTAIN_BOARDLINK"), "http://board.oldogame.ru");?></p>
+        <p>
+<?php
+    if (!empty($GlobalUni['ext_board'])) {
+        echo va(loca("MAINTAIN_BOARDLINK"), $GlobalUni['ext_board'] );
+    }
+?>
+        </p>
     </div>
 </body>
 </html>

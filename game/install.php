@@ -9,6 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 require_once "db.php";
+require_once "utils.php";
 require_once "loca.php";
 require_once "user.php";
 
@@ -21,17 +22,6 @@ loca_add ( "menu", $loca_lang );
 loca_add ( "mods", $loca_lang );
 
 $InstallError = "<font color=gold>".loca('INSTALL_TIP')."</font>";
-
-function hostname () {
-    if (!empty($_SERVER['HTTPS']))  { //get if window is http or https
-       $encr ="https://";
-    }else{
-       $encr ="http://";
-    }
-    $host = $encr . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
-    $pos = strrpos ( $host, "/game/install.php" );
-    return substr ( $host, 0, $pos+1 );
-}
 
 function uniurl () {
     $host = $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];

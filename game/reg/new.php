@@ -9,6 +9,7 @@ if ( !file_exists ("../config.php"))
 
 require_once "../config.php";
 require_once "../db.php";
+require_once "../utils.php";
 
 require_once "../bbcode.php";
 require_once "../msg.php";
@@ -22,34 +23,8 @@ require_once "../mods.php";
 require_once "../debug.php";
 require_once "../loca.php";
 
-function method () { return $_SERVER['REQUEST_METHOD']; }
-
-function hostname () {
-    if (!empty($_SERVER['HTTPS']))  { //get if window is http or https
-       $encr ="https://";
-    }else{
-       $encr ="http://";
-    }
-    $host = $encr . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
-    $pos = strrpos ( $host, "/game/reg/new.php" );
-    return substr ( $host, 0, $pos+1 );
-}
-
 function isValidEmail($email){
 	return filter_var($email, FILTER_VALIDATE_EMAIL);
-}
-
-// Format string, according to tokens from the text. Tokens are represented as #1, #2 and so on.
-function va ($subject)
-{
-    $num_arg = func_num_args();
-    $pattern = array ();
-    for ($i=1; $i<$num_arg; $i++)
-    {
-        $pattern[$i-1] = "/#$i/";
-        $replace[$i-1] = func_get_arg($i);
-    }
-    return preg_replace($pattern, $replace, $subject);
 }
 
 function gen_trivial_password ($len = 8)
@@ -60,11 +35,7 @@ function gen_trivial_password ($len = 8)
     return $r;
 }
 
-// Соединиться с базой данных
-dbconnect ($db_host, $db_user, $db_pass, $db_name);
-dbquery("SET NAMES 'utf8';");
-dbquery("SET CHARACTER SET 'utf8';");
-dbquery("SET SESSION collation_connection = 'utf8_general_ci';");
+InitDB();
 
 $uni = LoadUniverse ();
 $uninum = $uni['num'];
