@@ -2,7 +2,7 @@
 
 // Управление рангами пользователей.
 
-// Разрешенные символы в названии ранга: [a-zA-Z0-9_-.]
+// Разрешенные символы в названии ранга: [a-zA-Z0-9_-. ]   (+пробел)
 
 function PageAlly_Ranks ()
 {
@@ -22,7 +22,7 @@ function PageAlly_Ranks ()
     {
         if ( key_exists ('newrangname', $_POST) )       // создать ранг
         {
-            if ( !preg_match ("/^[a-zA-Z0-9\.\_\-]+$/", $_POST['newrangname'] ) ) $AllianzenError = "<center>\nРанг содержит особые символы<br></center>";
+            if ( !preg_match ("/^[a-zA-Z0-9\.\_\- ]+$/", $_POST['newrangname'] ) ) $AllianzenError = "<center>\nРанг содержит особые символы<br></center>";
             else AddRank ( $ally['ally_id'], $_POST['newrangname'] );
         }
         else                                                              // изменить ранги

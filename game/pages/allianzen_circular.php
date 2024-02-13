@@ -44,7 +44,7 @@ function AllyPage_CircularMessage ()
                 SendMessage ( $user['player_id'], 
                                        va ( "Альянс [#1]", $ally['tag'] ),
                                        va ( "Общее послание Вашему альянсу [#1]", $ally['tag'] ), 
-                                       va ( "Игрок #1 сообщает Вам следующее:<br>#2", $GlobalUser['oname'], $text ), 0 );
+                                       va ( "Игрок #1 сообщает Вам следующее:<br>#2", $GlobalUser['oname'], $text ), 4 );
                 echo $user['oname'] . "<br>\n";
             }
 ?>

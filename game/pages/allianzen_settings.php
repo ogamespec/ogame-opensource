@@ -23,7 +23,7 @@ function PageAlly_Settings ()
         return;
     }
 
-    if ( $_GET['t'] < 1 || $_GET['t'] > 3 ) $_GET['t'] = 1;
+    if ( !key_exists('t', $_GET) || $_GET['t'] < 1 || $_GET['t'] > 3 ) $_GET['t'] = 1;
 
     if ( method () === "POST" )
     {
@@ -54,7 +54,7 @@ function PageAlly_Settings ()
             dbquery ($query);
 
             if ($_POST['fname'] !== "") {    // Название ранга основателя
-                if ( !preg_match ("/^[a-zA-Z0-9\.\_\-]+$/", $_POST['fname'] ) ) $AllianzenError = "<center>\nРанг содержит особые символы<br></center>";
+                if ( !preg_match ("/^[a-zA-Z0-9\.\_\- ]+$/", $_POST['fname'] ) ) $AllianzenError = "<center>\nРанг содержит особые символы<br></center>";
                 else {
                     $query = "UPDATE ".$db_prefix."allyranks SET name = '".$_POST['fname']."' WHERE ally_id = $ally_id AND rank_id = 0";
                     dbquery ($query);

@@ -6,6 +6,7 @@ $SearchResults = "";
 $AllianzenError = "";
 
 loca_add ( "menu", $GlobalUni['lang'] );
+loca_add ( "ally", $GlobalUni['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -21,9 +22,9 @@ $session = $_GET['session'];
 function AllyPage_NoAlly ()
 {
     echo "<table width=519>\n";
-    echo "<tr><td class=c colspan=2>Альянс</td></tr>\n";
-    echo "<tr><th><a href=\"index.php?page=allianzen&session=".$_GET['session']."&a=1\">Основать собственный альянс</a></th>\n";
-    echo "<th><a href=\"index.php?page=allianzen&session=".$_GET['session']."&a=2\">Искать альянсы</a></th></tr>\n";
+    echo "<tr><td class=c colspan=2>".loca("ALLY_ALLY")."</td></tr>\n";
+    echo "<tr><th><a href=\"index.php?page=allianzen&session=".$_GET['session']."&a=1\">".loca("ALLY_FOUND_OWN")."</a></th>\n";
+    echo "<th><a href=\"index.php?page=allianzen&session=".$_GET['session']."&a=2\">".loca("ALLY_FIND_OTHER")."</a></th></tr>\n";
     echo "</table><br><br><br><br><br>\n";
 }
 
@@ -32,20 +33,20 @@ function AllyPage_CreateAlly ($tag, $name)
 {
     echo "<form action=\"index.php?page=allianzen&session=".$_GET['session']."&a=1&weiter=1\" method=POST>\n";
     echo "<table width=519>\n";
-    echo "<tr><td class=c colspan=2>Основать альянс</td></tr>\n";
-    echo "<tr><th>Аббревиатура альянса (3-8 знаков)</th><th><input type=text name=\"tag\" size=8 maxlength=8 value=\"$tag\"></th></tr>\n";
-    echo "<tr><th>Название альянса (3-30 символов)</th><th><input type=text name=\"name\" size=20 maxlength=30 value=\"$name\"></th></tr>\n";
-    echo "<tr><th colspan=2><input type=submit value=\"Основать\"></th></tr></table></form><br><br><br><br>\n";
+    echo "<tr><td class=c colspan=2>".loca("ALLY_FOUND_ALLY")."</td></tr>\n";
+    echo "<tr><th>".loca("ALLY_FOUND_TAG")."</th><th><input type=text name=\"tag\" size=8 maxlength=8 value=\"$tag\"></th></tr>\n";
+    echo "<tr><th>".loca("ALLY_FOUND_NAME")."</th><th><input type=text name=\"name\" size=20 maxlength=30 value=\"$name\"></th></tr>\n";
+    echo "<tr><th colspan=2><input type=submit value=\"".loca("ALLY_FOUND_SUBMIT")."\"></th></tr></table></form><br><br><br><br>\n";
 }
 
 // Искать альянсы.
 function AllyPage_Search ($text, $results="")
 {
     echo "<table width=519>\n";
-    echo "<tr><td class=c colspan=2>Искать альянсы</td></tr>\n";
-    echo "<tr><th>Искать</th><th>\n";
+    echo "<tr><td class=c colspan=2>".loca("ALLY_FIND_ALLY")."</td></tr>\n";
+    echo "<tr><th>".loca("ALLY_FIND_HEAD")."</th><th>\n";
     echo "<form action=\"index.php?page=allianzen&session=".$_GET['session']."&a=2\" method=POST>\n";
-    echo "<input type=text name=suchtext value=\"$text\"><input type=submit value=\"Искать\">\n";
+    echo "<input type=text name=suchtext value=\"$text\"><input type=submit value=\"".loca("ALLY_FIND_SUBMIT")."\">\n";
     echo "</th></tr></form></table><br>\n";
     echo "$results\n";
     echo "<br><br><br>\n";
@@ -59,8 +60,8 @@ function AllyPage_SearchResult ($result)
     $rows = dbrows ($result);
     if ($rows == 0) return;
     $SearchResults .= "<table width=519>\n";
-    $SearchResults .= "<tr><td class=c colspan=3>Результаты поиска альянса</th></tr>\n";
-    $SearchResults .= "<tr><th><center>Аббревиатура альянса</center></th><th><center>Название альянса</center></th><th><center>Количество членов</center></th></tr>\n";
+    $SearchResults .= "<tr><td class=c colspan=3>".loca("ALLY_FIND_RESULT")."</th></tr>\n";
+    $SearchResults .= "<tr><th><center>".loca("ALLY_FIND_TAG")."</center></th><th><center>".loca("ALLY_FIND_NAME")."</center></th><th><center>".loca("ALLY_FIND_MEMBERS")."</center></th></tr>\n";
     if ($rows > 30) $rows = 30;
     for ($i=0; $i<$rows; $i++)
     {
@@ -90,9 +91,9 @@ function AllyPage_Already ($app_id)
 ?>
 <table width=519>
 <form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
-<tr><td class=c colspan=2>Ваше заявление</td></tr>
-<tr><th colspan=2><?=va("Вы уже подали заявку в альянс [#1]. Подождите ответа либо отзовите своё заявление.", $ally['tag']);?></th></tr>
-<tr><th colspan=2><input type=submit name="bcancel" value="Отозвать заявление"></th></tr>
+<tr><td class=c colspan=2><?=loca("ALLY_APPLY");?></td></tr>
+<tr><th colspan=2><?=va(loca("ALLY_APPLY_ALREADY"), $ally['tag']);?></th></tr>
+<tr><th colspan=2><input type=submit name="bcancel" value="<?=loca("ALLY_APPLY_WITHDRAW");?>"></th></tr>
 </table></form><br><br><br><br>
 <?php
 }
@@ -110,9 +111,9 @@ if ( $GlobalUser['ally_id'] == 0 )
         $_POST['name'] = str_replace ( "\"", "", $_POST['name']);
         $_POST['name'] = str_replace ( "'", "", $_POST['name']);
 
-        if (mb_strlen ($_POST['tag'], "UTF-8")  < 3) $AllianzenError = "Аббревиатура альянса слишком коротка";
-        else if (mb_strlen ($_POST['name'], "UTF-8")  < 3) $AllianzenError = "Название альянса слишком короткое";
-        else if (IsAllyTagExist ($_POST['tag'])) $AllianzenError = "Альянс ".$_POST['tag']." к сожалению уже существует!";
+        if (mb_strlen ($_POST['tag'], "UTF-8")  < 3) $AllianzenError = loca("ALLY_FOUND_ERROR_TAG");
+        else if (mb_strlen ($_POST['name'], "UTF-8")  < 3) $AllianzenError = loca("ALLY_FOUND_ERROR_NAME");
+        else if (IsAllyTagExist ($_POST['tag'])) $AllianzenError = va(loca("ALLY_FOUND_ERROR_EXISTS"), $_POST['tag']);
         else
         {
             CreateAlly ($GlobalUser['player_id'], $_POST['tag'], $_POST['name']);
@@ -121,9 +122,9 @@ if ( $GlobalUser['ally_id'] == 0 )
                 echo "<!-- CONTENT AREA -->\n";
                 echo "<div id='content'>\n";
                 echo "<center>\n";
-                echo "<br/><p>Альянс ".$_POST['name']." [".$_POST['tag']."] успешно создан</p>\n";
+                echo "<br/><p>".va(loca("ALLY_FOUND_SUCCESS"), $_POST['name'], $_POST['tag'])."</p>\n";
                 echo "<form method=\"post\" action=\"index.php?page=allianzen&session=".$_GET['session']."\">\n";
-                echo "<input type=\"submit\" value=\"Да!\"/></form><br/><br/><br/><br/>\n";
+                echo "<input type=\"submit\" value=\"".loca("ALLY_FOUND_CONFIRM")."\"/></form><br/><br/><br/><br/>\n";
                 echo "</center>\n";
                 echo "</div>\n";
                 echo "<!-- END CONTENT AREA -->\n";
