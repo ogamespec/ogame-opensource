@@ -45,7 +45,7 @@
      
      <div id="copyright">
 
-        (C) 2007 by <a target="_blank" href="http://www.gameforge.de">Gameforge Productions GmbH</a>. <?php echo $COPYRIGHT?>&nbsp;&nbsp;
+        (C) 2007 by <a target="_blank" href="http://www.gameforge.de">Gameforge Productions GmbH</a>. <?php echo loca("COPYRIGHT");?>&nbsp;&nbsp;
      </div>
      <div id="downmenu">
         <a href="regeln.php"><?php echo loca("DOWN_RULES");?></a>&nbsp;

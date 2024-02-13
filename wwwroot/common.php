@@ -10,9 +10,13 @@ function mainmenu ($select)
     else echo "    <a href=\"screenshots.php\">" . loca("MENU_PICTURES") . "</a>\n";
     if ($select == 'reg') echo '    <div class="menupoint">' . loca("MENU_REG") . "</div>\n";
     else echo "    <a href=\"register.php\">" . loca("MENU_REG") . "</a>\n";
-    if ($select == 'board') echo '    <div class="menupoint">' . loca("MENU_BOARD") . "</div>\n";
-    else echo "    <a href=\"" . loca("BOARDADDR") . "\" target=_top>" . loca("MENU_BOARD") . "</a>\n";
-    if ($select == 'wiki') echo '    <div class="menupoint">' . loca("MENU_WIKI") . "</div>\n";
-    else echo "    <a href=\"" . loca("WIKIADDR") . "\" target=_top>" . loca("MENU_WIKI") . "</a>\n";
+    if ( !empty(loca("BOARDADDR")) ) {
+        if ($select == 'board') echo '    <div class="menupoint">' . loca("MENU_BOARD") . "</div>\n";
+        else echo "    <a href=\"" . loca("BOARDADDR") . "\" target=_top>" . loca("MENU_BOARD") . "</a>\n";
+    }
+    if ( !empty(loca("WIKIADDR")) ) {
+        if ($select == 'wiki') echo '    <div class="menupoint">' . loca("MENU_WIKI") . "</div>\n";
+        else echo "    <a href=\"" . loca("WIKIADDR") . "\" target=_top>" . loca("MENU_WIKI") . "</a>\n";
+    }
 }
 

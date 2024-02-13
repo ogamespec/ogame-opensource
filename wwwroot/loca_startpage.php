@@ -8,9 +8,8 @@ require_once "loca.php";
     $LocaLang = "de";
     {
         loca_add("SERVERNAME" , "OGame Open Source");
-        loca_add("SERVERADDR" , "oldogame.ru");
-        loca_add("BOARDADDR"  , "http://board.oldogame.ru");
-        loca_add("WIKIADDR"   , "http://wiki.oldogame.ru");
+        loca_add("BOARDADDR"  , "");
+        loca_add("WIKIADDR"   , "");
 
         loca_add("META_CHARSET" , "utf-8");
         loca_add("META_KEYWORDS" , "OGame, Browsergame, Onlinegame, Browsergames, Browsergame, Spiel, Spiele, Onlinespiel, Onlinespiele, old, old design");
@@ -139,9 +138,8 @@ require_once "loca.php";
     $LocaLang = "en";
     {
         loca_add("SERVERNAME" , "OGame Open Source");
-        loca_add("SERVERADDR" , "oldogame.ru");
-        loca_add("BOARDADDR"  , "http://board.oldogame.ru");
-        loca_add("WIKIADDR"   , "http://wiki.oldogame.ru");
+        loca_add("BOARDADDR"  , "");
+        loca_add("WIKIADDR"   , "");
 
         loca_add("META_CHARSET" , "utf-8");
         loca_add("META_KEYWORDS" , "OGame, Browsergame, Onlinegame, Browsergames, Browsergame, Spiel, Spiele, Onlinespiel, Onlinespiele, old, old deisgn");
@@ -262,9 +260,8 @@ require_once "loca.php";
     $LocaLang = "ru";
     {
         loca_add("SERVERNAME" , "OGame Open Source");
-        loca_add("SERVERADDR" , "oldogame.ru");
-        loca_add("BOARDADDR"  , "http://board.oldogame.ru");
-        loca_add("WIKIADDR"   , "http://wiki.oldogame.ru");
+        loca_add("BOARDADDR"  , "");
+        loca_add("WIKIADDR"   , "");
 
         loca_add("META_CHARSET" , "utf-8");
         loca_add("META_KEYWORDS" , "ogame, old, старый дизайн, онлайн игра, он-лайн игра, ММОГ, MMOG, дейтерий, стратегия, old deisgn");
@@ -395,8 +392,7 @@ require_once "loca.php";
     $LocaLang = "tr";
     {
         loca_add("SERVERNAME" , "OGame Open Source");
-        loca_add("SERVERADDR" , "oldogame.ru");
-        loca_add("BOARDADDR"  , "http://board.oldogame.ru");
+        loca_add("BOARDADDR"  , "");
 
         loca_add("META_CHARSET" , "utf-8");
         loca_add("META_KEYWORDS" , "OGame, Browsergame, Onlinegame, Browsergames, Browsergame, Spiel, Spiele, Onlinespiel, Onlinespiele, old, old design");

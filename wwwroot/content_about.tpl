@@ -4,9 +4,9 @@
         <div id="contentscroll"> 
             <p class="aboutParagraphHead">  <img src="img/ogame_admiral.jpg" class="imageRight"> <?php echo loca("ABOUT_TEXT1");?></p> 
     <p > 
-<?php echo $ABOUT_TEXT2?> 
+<?php echo loca("ABOUT_TEXT2");?> 
 <p> 
-<?php echo $ABOUT_TEXT3?></p> 
+<?php echo loca("ABOUT_TEXT3");?></p> 
 </p> 
 <img src="img/technik.gif" class="imageLeft"> 
 <p>
