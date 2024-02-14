@@ -48,6 +48,7 @@ function SendNotActivated ()
 $user = LoadUser ( intval($_GET['messageziel']) );
 $home = GetPlanet ( $user['hplanetid']);
 $ownhome = GetPlanet ( $GlobalUser['hplanetid']);
+$write_error = "";
 
 // Обработать POST-запрос.
 if ( key_exists ('gesendet', $_GET) )
