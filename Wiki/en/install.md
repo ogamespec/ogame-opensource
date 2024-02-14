@@ -15,7 +15,6 @@ An important part is to properly configure PHP.INI. The following are important 
 |max_execution_time = 200|Script execution time. 200 seconds is enough for most tasks. 20kkk loss level battles are processed in about 10-15 seconds, depending on the server.|
 |display_errors = On|Show script execution errors, if desired.|
 |variables_order = "EGPCS"|The order of processing global variables.|
-|register_globals = On|Some bullshit, I have it on normally :)|
 |magic_quotes_gpc = On|Quoted strings escaping. All game scripts assume that strings are escaped by default.|
 
 Required extensions:
