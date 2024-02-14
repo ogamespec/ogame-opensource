@@ -56,6 +56,15 @@ function loca ($key)
     else return $LOCA[$loca_lang][$key];
 }
 
+// Аналогично обычной loca(), но язык выбирается не из глобальной переменной, а из параметра метода.
+// Используется когда нужно работать одновременно с несколькими языками (напр. боевые доклады для игроков с разными языками)
+function loca_lang ($key, $lang)
+{
+    global $LOCA;
+    if ( !isset ( $LOCA[$lang][$key] ) ) return $key;
+    else return $LOCA[$lang][$key];
+}
+
 // Добавить набор языковых ключей.
 function loca_add ( $section, $lang='en' )
 {

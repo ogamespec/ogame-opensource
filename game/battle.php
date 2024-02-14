@@ -497,17 +497,18 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
     $moondes =  mt_rand(1, 999) < $moonchance * 10;
     $ripdes = mt_rand(1, 999) < $ripchance * 10;
 
+    $origin_user = LoadUser ($origin['owner_id']);
+    $target_user = LoadUser ($target['owner_id']);
+    loca_add ( "graviton", $origin_user['lang'] );
+    loca_add ( "graviton", $target_user['lang'] );
+
     if ( !$ripdes && !$moondes )
     {
-            $atext = va ( "Флот с #1 #2 достигает луны планеты на #3 .\n" .
-                                "Структура луны не была достаточно ослаблена, флот возвращается обратно.\n" .
-                                "<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %;", 
+            $atext = va ( loca_lang("GRAVITON_ATK_00", $origin_user['lang']), 
                                 $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
                                 floor ($moonchance), floor ($ripchance)
                             );
-            $dtext = va ( "Флот с планеты #1 #2 достигает луны Вашей планеты на #3.\n" .
-                                "Лёгкие сотрясения на твоей луне указывают на неудавшуюся атаку на лунную структуру; атакующий флот, не выполнив задания, возвращается обратно на #4 #5.\n" .
-                                "<br>Шанс на уничтожение луны: #6 %. Шанс на уничтожение звезды смерти:#7 %;", 
+            $dtext = va ( loca_lang("GRAVITON_DEF_00", $target_user['lang']), 
                                 $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
                                 $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", 
                                 floor ($moonchance), floor ($ripchance)
@@ -517,15 +518,11 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
 
     else if ( !$ripdes && $moondes )
     {
-            $atext = va ( "Флот с планеты #1 #2 достигает луны планеты на #3 .\n".
-                               "Вооружение звезды смерти отстреливают на луну череду зарядов гравитонов, которые приводят к мощному сотрясению и уничтожению спутника. Все постройки на луне уничтожаются. Полный успех. Флот возвращается на родную планету бухать по этому поводу.\n".
-                               "<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %",
+            $atext = va ( loca_lang("GRAVITON_ATK_01", $origin_user['lang']), 
                                 $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
                                 floor ($moonchance), floor ($ripchance)
                             );
-            $dtext = va ( "Флот с планеты #1 #2 достигает луны твоей планеты на #3.\n".
-                                "Всё более усиливающаяся вибрация сотрясает этот спутник. Луна начинает деформироваться и в конце концов разлетается на миллионы кусочков. Это был тяжёлый удар для Вашей империи. Флот противника возвращается обратно.\n".
-                                "<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %",
+            $dtext = va ( loca_lang("GRAVITON_DEF_01", $target_user['lang']), 
                                 $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
                                 floor ($moonchance), floor ($ripchance)
                              );
@@ -536,14 +533,11 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
 
     else if ( $ripdes && !$moondes )
     {
-            $atext = va ( "Флот с планеты #1 #2 достигает луны планеты на #3 . Звезда смерти направляет свою гравитонную пушку на спутник. Лёгкие вибрации сотрясают поверхность луны. Но что-то тут не так. Гравитонная пушка приводит звезду смерти в колебания. Начинается отдача. Звезда смерти разлетается на миллионы кусочков. Возникающая при этом ударная волна уничтожает весь Ваш флот. Доигрался...\n".
-                                "<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %",
+            $atext = va ( loca_lang("GRAVITON_ATK_10", $origin_user['lang']), 
                                 $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
                                 floor ($moonchance), floor ($ripchance)
                             );
-            $dtext = va ( "Флот с планеты #1 #2 достигает луны Вашей планеты  на #3.\n".
-                                "Лёгкие сотрясения на твоей луне указывают на неудавшуюся атаку на лунную структуру. Неожиданно они прекращаются. Гигантский взрыв сотрясает пространство. Атакующий флот исчезает с экранов радаров. Несрастуха вышла...\n".
-                                "<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %",
+            $dtext = va ( loca_lang("GRAVITON_DEF_10", $target_user['lang']), 
                                 $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
                                 floor ($moonchance), floor ($ripchance)
                              );
@@ -552,14 +546,11 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
 
     else if ( $ripdes && $moondes )
     {
-            $atext = va ( "Флот с планеты #1 #2  достигает луны на орбите планеты #3 . Ваша звезда смерти направляет свою гравитонную пушку на спутник. Толчки на поверхности луны всё нарастают. Луна начинает деформироваться и разрывается. Гигантские обломки летят на Ваш флот. Отступать уже поздно. Весь Ваш флот уничтожается градом обломков. Какой облом...\n".
-                                "<br>Шансы на уничтожение луны: #4 %. Шансы на уничтожение звезды смерти: #5%.",
+            $atext = va ( loca_lang("GRAVITON_ATK_11", $origin_user['lang']), 
                                 $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
                                 floor ($moonchance), floor ($ripchance)
                             );
-            $dtext = va ( "Флот с планеты #1 #2 достигает луны Вашей планеты на #3.\n".
-                                "Всё более усиливающиеся толчки сотрясают спутник. Луна начинает деформироваться и разрывается в конце концов на миллионы кусочков. Внезапно вражеский флот исчезает с экранов Ваших радаров. Что-то там у них не так, наверное пришибло обломками...\n".
-                                "<br>Шансы на уничтожение луны: #4 %. Шансы на уничтожение звезды смерти:#5 %.",
+            $dtext = va ( loca_lang("GRAVITON_DEF_11", $target_user['lang']), 
                                 $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
                                 floor ($moonchance), floor ($ripchance)
                              );
@@ -569,8 +560,8 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
     }
 
     // Разослать сообщения.
-    SendMessage ( $origin['owner_id'], "Командование флотом", "Лунная атака", $atext, 5, $when);
-    SendMessage ( $target['owner_id'], "Командование флотом", "Лунные толчки", $dtext, 5, $when);
+    SendMessage ( $origin['owner_id'], "Командование флотом", loca_lang("GRAVITON_ATK_SUBJ", $origin_user['lang']), $atext, 5, $when);
+    SendMessage ( $target['owner_id'], "Командование флотом", loca_lang("GRAVITON_DEF_SUBJ", $target_user['lang']), $dtext, 5, $when);
 
     return $result;
 }
