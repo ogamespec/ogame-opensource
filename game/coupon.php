@@ -91,7 +91,10 @@ function SendCoupon ($user, $code)
 {
     loca_add ( "coupons", $user['lang'] );    // добавить языковые ключи пользователя, которому посылается сообщение.
 
-    mail_html ( $user['pemail'], loca("COUPON_SUBJ"), va ( loca("COUPON_MESSAGE"), $user['oname'], $code ), "From: coupon@" . hostname() );
+    mail_html ( $user['pemail'], 
+        loca_lang("COUPON_SUBJ", $user['lang']), 
+        va ( loca_lang("COUPON_MESSAGE", $user['lang']), $user['oname'], $code ), 
+        "From: coupon@" . hostname() );
 }
 
 // Проверить есть ли такой купон и он не активирован. Возвращается ID купона или 0, если неверный код купона или купон погашен.
