@@ -185,13 +185,19 @@ function CreateUser ( $name, $pass, $email, $bot=false)
     $query = "UPDATE ".$db_prefix."uni"." SET usercount = ".$unitab['usercount'].";";
     dbquery ($query);
 
+    // Установить язык регистрируемого игрока: если в кукисах есть выбранный язык и игрок НЕ бот - использовать его при регистрации.
+    // Иначе использовать язык Вселенной по умолчанию
+    if ( !$bot && key_exists ( 'ogamelang', $_COOKIE ) ) $lang = $_COOKIE['ogamelang'];
+    else $lang = $unitab['lang'];
+    if ( !key_exists ( $lang, $Languages ) ) $lang = $unitab['lang'];
+
     $ip = $_SERVER['REMOTE_ADDR'];
     $localhost = $ip === "127.0.0.1" || $ip === "::1";
 
     $user = array( null, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, "", $email, $email,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, $ip, 0, $ack, 0, 0, 0, 0,
-                        hostname() . "evolution/", 1, 0, 1, 3, $unitab['lang'], 0,
+                        hostname() . "evolution/", 1, 0, 1, 3, $lang, 0,
                         0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0,
