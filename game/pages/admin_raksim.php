@@ -16,7 +16,7 @@ function Admin_RakSim ()
         $def[$gid] = 0;
     }
 
-    loca_add ( "galaxy", $GlobalUni['lang'] );
+    loca_add ( "galaxy", $GlobalUser['lang'] );
 
     $a_weap = 0;
     $d_armor = 0;

@@ -10,8 +10,8 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
-loca_add ( "battlereport", $GlobalUni['lang'] );
-loca_add ( "espionage", $GlobalUni['lang'] );
+loca_add ( "battlereport", $GlobalUser['lang'] );
+loca_add ( "espionage", $GlobalUser['lang'] );
 
 $msg = LoadMessage ( intval($_GET['bericht']) );
 

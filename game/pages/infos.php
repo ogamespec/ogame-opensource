@@ -9,9 +9,9 @@
 $speed = $GlobalUni['speed'];
 $drepair = $GlobalUni['defrepair'];
 
-loca_add ( "menu", $GlobalUni['lang'] );
-loca_add ( "techlong", $GlobalUni['lang'] );
-loca_add ( "jumpgate", $GlobalUni['lang'] );
+loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "techlong", $GlobalUser['lang'] );
+loca_add ( "jumpgate", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);

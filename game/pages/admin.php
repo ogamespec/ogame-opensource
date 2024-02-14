@@ -18,10 +18,10 @@
 
 if ( $GlobalUser['admin'] == 0 ) RedirectHome ();    // обычным пользователям доступ запрещен
 
-loca_add ( "menu", $GlobalUni['lang'] );
-loca_add ( "fleetorder", $GlobalUni['lang'] );
-loca_add ( "admin", $GlobalUni['lang'] );
-loca_add ( "install", $GlobalUni['lang'] );
+loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "fleetorder", $GlobalUser['lang'] );
+loca_add ( "admin", $GlobalUser['lang'] );
+loca_add ( "install", $GlobalUser['lang'] );
 
 $AdminMessage = "";
 $AdminError = "";

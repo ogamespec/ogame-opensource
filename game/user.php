@@ -104,7 +104,6 @@ function SendGreetingsMail ( $name, $pass, $email, $ack)
                 "Здесь (http://tutorial.oldogame.ru) собрана вся информация, собранная игроками и членами команды для того, чтобы помочь новичкам как можно быстрее разобраться в игре.\n\n" .
                 "Желаем успехов в построении империи и удачи в предстоящих боях!\n\n" .
                 "Ваша команда ОГейма";
-    //echo "<pre>$text</pre><br>\n";
     mail_utf8 ( $email, "Добро пожаловать в ОГейм ", $text, "From: OGame Uni ru $uni <noreply@oldogame.ru>");
 }
 
@@ -491,22 +490,22 @@ function CheckSession ( $session )
     $unitab = $GlobalUni;
     $uni = $unitab['num'];
     $ip = $_SERVER['REMOTE_ADDR'];
+    $localhost = $ip === "127.0.0.1" || $ip === "::1";
     $cookie_name = 'prsess_'.$GlobalUser['player_id'].'_'.$uni;
     $prsess = "";
     if (key_exists($cookie_name, $_COOKIE)) {
         $prsess = $_COOKIE [$cookie_name];
     }
     if ( $prsess !== $GlobalUser['private_session'] ) { InvalidSessionPage (); return FALSE; }
-    if ( $ip !== "127.0.0.1" && !$GlobalUser['deact_ip'] ) {
+    if ( !$localhost && !$GlobalUser['deact_ip'] ) {
         if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
     }
 
-    //
-    // Установить глобальный язык для сессии.
-    //
+    // Установить глобальный язык для сессии: язык пользователя -> язык вселенной(если ошибка) -> en(если ошибка)
 
-    $loca_lang = $GlobalUni['lang'];
-    if ( !key_exists ( $loca_lang, $Languages ) ) $GlobalUni['lang'] = $loca_lang = 'en';
+    $loca_lang = $GlobalUser['lang'];
+    if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $GlobalUni['lang'];
+    if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
 
     return TRUE;
 }

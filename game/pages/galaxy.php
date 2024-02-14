@@ -3,9 +3,9 @@
 $GalaxyMessage = "";
 $GalaxyError = "";
 
-loca_add ( "menu", $GlobalUni['lang'] );
-loca_add ( "galaxy", $GlobalUni['lang'] );
-loca_add ( "espionage", $GlobalUni['lang'] );
+loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "galaxy", $GlobalUser['lang'] );
+loca_add ( "espionage", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);

@@ -4,9 +4,9 @@
 
 // TODO: Внимательно проверить генерируемый HTML код на аутентичность с оригиналом (в особенности на обнаруженный недавно недочёт с надписью "free" #76)
 
-loca_add ( "menu", $GlobalUni['lang'] );
-loca_add ( "fleetorder", $GlobalUni['lang'] );
-loca_add ( "overview", $GlobalUni['lang'] );
+loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "fleetorder", $GlobalUser['lang'] );
+loca_add ( "overview", $GlobalUser['lang'] );
 
 $OverviewMessage = "";
 $OverviewError = "";

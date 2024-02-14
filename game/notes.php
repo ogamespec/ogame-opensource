@@ -21,10 +21,10 @@ function LoadNote ( $player_id, $note_id )
 
 function AddNote ( $player_id, $subj, $text, $prio )
 {
-    global $db_prefix, $GlobalUni;
+    global $db_prefix;
 
     $user = LoadUser ($player_id);
-    loca_add ( "notes", $GlobalUni['lang'] );
+    loca_add ( "notes", $user['lang'] );
 
     // Проверить параметры.
     if ($subj === "") $subj = loca ("NOTE_NO_SUBJ");
@@ -41,14 +41,14 @@ function AddNote ( $player_id, $subj, $text, $prio )
 
 function UpdateNote ( $player_id, $note_id, $subj, $text, $prio )
 {
-    global $db_prefix, $GlobalUni;
+    global $db_prefix;
 
     // Чужие заметки трогать нельзя
     $note = LoadNote ( $player_id, $note_id);
     if ( $note['owner_id'] != $player_id ) return;
 
     $user = LoadUser ($player_id);
-    loca_add ( "notes", $GlobalUni['lang'] );
+    loca_add ( "notes", $user['lang'] );
 
     // Проверить параметры.
     if ($subj === "") $subj = loca ("NOTE_NO_SUBJ");

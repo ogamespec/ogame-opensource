@@ -14,8 +14,8 @@ $changelog = array (
     "0.78", "0.78a", "0.78b", "0.78c", "0.80", "0.81", "0.82", "0.83", "0.84"
 );
 
-loca_add ( "menu", $GlobalUni['lang'] );
-loca_add ( "changelog", $GlobalUni['lang'] );
+loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "changelog", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);

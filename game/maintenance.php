@@ -6,15 +6,14 @@ require_once "utils.php";
 require_once "loca.php";
 require_once "uni.php";
 
-if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = "ru";
-else $loca_lang = $_COOKIE['ogamelang'];
-
-if ( !key_exists ( $loca_lang, $Languages ) ) $GlobalUni['lang'] = $loca_lang = 'en';
-loca_add ( "maintain", $loca_lang );
-
 InitDB();
 
 $GlobalUni = LoadUniverse ();
+
+$loca_lang = $GlobalUni['lang'];
+if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
+
+loca_add ( "maintain", $loca_lang );
 
 if ( !$GlobalUni['freeze'] ) {
     echo "<html><head><meta http-equiv='refresh' content='0;url=$StartPage' /></head><body></body>";

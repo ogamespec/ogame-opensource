@@ -2,7 +2,7 @@
 
 // Заметки.
 
-loca_add ( "notes", $GlobalUni['lang'] );
+loca_add ( "notes", $GlobalUser['lang'] );
 
 $now = time();
 UpdateQueue ( $now );

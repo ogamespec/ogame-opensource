@@ -6,7 +6,7 @@
 // https://board.en.ogame.gameforge.com/index.php?thread/195023-version-0-74e/
 $MAX = $GlobalUser['r108'] + 1;
 
-loca_add ( "menu", $GlobalUni['lang'] );
+loca_add ( "menu", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);

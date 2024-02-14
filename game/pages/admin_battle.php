@@ -22,7 +22,7 @@ function Admin_BattleReport ()
         $result = dbquery ( $query );
         $row = dbarray ($result);
         ob_clean ();
-        loca_add ( "battlereport", $GlobalUni['lang'] );
+        loca_add ( "battlereport", $GlobalUser['lang'] );
 ?>
 <html>
 <HEAD>

@@ -76,8 +76,8 @@ if ( $GlobalUni['freeze'] && $GlobalUser['admin'] == 0 ) {
     exit ();
 }
 
-loca_add ( "common", $GlobalUni['lang'] );
-loca_add ( "technames", $GlobalUni['lang'] );
+loca_add ( "common", $GlobalUser['lang'] );
+loca_add ( "technames", $GlobalUser['lang'] );
 
 //
 // Проверка параметров GET / POST на возможные SQL-инъекции

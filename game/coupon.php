@@ -89,9 +89,7 @@ function LoadCoupon ($id)
 // Отправить код купона указанному пользователю
 function SendCoupon ($user, $code)
 {
-    global $GlobalUni;
-
-    loca_add ( "coupons", $GlobalUni['lang'] );    // добавить языковые ключи пользователя, которому посылается сообщение.
+    loca_add ( "coupons", $user['lang'] );    // добавить языковые ключи пользователя, которому посылается сообщение.
 
     mail_html ( $user['pemail'], loca("COUPON_SUBJ"), va ( loca("COUPON_MESSAGE"), $user['oname'], $code ), "From: coupon@" . hostname() );
 }
