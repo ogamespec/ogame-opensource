@@ -5,11 +5,23 @@
 // Попытаться получить сессию из реферера.
 //echo $_SERVER['HTTP_REFERER'];
 
+$uni = LoadUniverse();
+
+if ( key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $_COOKIE['ogamelang'];
+else $loca_lang = $uni['lang'];
+if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
+loca_add ( "ainfo", $loca_lang );
+
 $now = time ();
 $allyid = intval($_GET['allyid']);
 $ally = LoadAlly ($allyid);
 
-$members = CountAllyMembers ( $ally['ally_id'] );
+if ($ally) {
+    $members = CountAllyMembers ( $ally['ally_id'] );
+}
+else {
+    $members = '-';
+}
 
 ?>
 
@@ -36,19 +48,19 @@ function reloadImages() {
 
 <body onload="onBodyLoad();">
 <center><table width=519>
-<tr><td class=c colspan=2>Информация об альянсе</td></tr><?php
-    if ($ally['imglogo'] !== "") 
+<tr><td class=c colspan=2><?=loca("AINFO_INFO");?></td></tr><?php
+    if ($ally && $ally['imglogo'] !== "") 
     {
         echo "<tr><th colspan=2><img src=\"/game/img/preload.gif\" class=\"reloadimage\" title=\"pic.php?url=".$ally['imglogo']."\"></td></tr>\n";
     }
-?><tr><th>Аббревиатура:</th><th><?=$ally['tag'];?><?php
-    if ( $now < $ally['tag_until'] ) echo " (бывш. ".$ally['old_tag'].")";
+?><tr><th><?=loca("AINFO_TAG");?></th><th><?=$ally['tag'];?><?php
+    if ( $now < $ally['tag_until'] ) echo " (".loca("AINFO_PREV")." ".$ally['old_tag'].")";
 ?></th></tr>
-<tr><th>Название:</th><th><?=$ally['name'];?><?php
-    if ( $now < $ally['name_until'] ) echo " (бывш. ".$ally['old_name'].")";
+<tr><th><?=loca("AINFO_NAME");?></th><th><?=$ally['name'];?><?php
+    if ( $now < $ally['name_until'] ) echo " (".loca("AINFO_PREV")." ".$ally['old_name'].")";
 ?></th></tr>
-<tr><th>Численность:</th><th><?=$members;?></th></tr>
+<tr><th><?=loca("AINFO_MEMBERS");?></th><th><?=$members;?></th></tr>
 <tr><th colspan=2 height=100><?=bb($ally['exttext']);?></th></tr>
-<tr><th>Домашняя страница</th><th>
+<tr><th><?=loca("AINFO_HOMEPAGE");?></th><th>
 <a href="redir.php?url=<?=$ally['homepage'];?>" target="_blank"><?=$ally['homepage'];?></a></th></tr>
 </table></center>
