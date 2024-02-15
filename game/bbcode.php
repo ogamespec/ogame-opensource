@@ -5,8 +5,6 @@
  *   bbcode.lib.php, v 0.24 2007/03/06 - This is part of xBB library          *
  *   Copyright (C) 2006-2007  Dmitriy Skorobogatov  dima@pc.uz                *
  *                                                                            *
- * Спасибо Дима, но GPL - гавно                                               *
- *                                                                            *
  ******************************************************************************/
 
 class bbcode {
