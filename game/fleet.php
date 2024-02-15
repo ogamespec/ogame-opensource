@@ -1087,7 +1087,6 @@ function RenameUnion ($union_id, $name)
 }
 
 // Добавить нового участника в САБ.
-// Можно добавлять только друзей и соалов (кроме уже добавленных)
 function AddUnionMember ($union_id, $name)
 {
     global $db_prefix;
@@ -1111,16 +1110,6 @@ function AddUnionMember ($union_id, $name)
     for ($i=0; $i<=$union['players']; $i++)
     {
         if ( $union["player"][$i] == $user['player_id'] ) return "Такой пользователь уже добавлен в союз";    // есть.
-    }
-
-    // Проверить является ли пользователем другом или соалом.
-    if ( ! IsBuddy  ($GlobalUser['player_id'], $user['player_id']) )
-    {
-        if ($user['ally_id']) 
-        {
-            if (  ($user['ally_id'] != $GlobalUser['ally_id']) ) return "Пользователь должен быть в списке друзей или одном альянсе";
-        }
-        else return "Пользователь должен быть в списке друзей или одном альянсе";
     }
 
     // Добавить пользователя в САБ и послать ему сообщение о приглашении.
