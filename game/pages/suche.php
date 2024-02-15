@@ -17,6 +17,8 @@ PageHeader ("suche");
 
 $SEARCH_LIMIT = 25;
 $SearchResult = "";
+$SearchMessage = "";
+$SearchError = "";
 $searchtext = "";
 
 // Вырезать из строки всякие инжекции.
@@ -36,7 +38,7 @@ function SecureText ( $text )
 
 function search_selected ( $opt )
 {
-    if ( $_POST['type'] === $opt ) return "selected";
+    if ( key_exists('type', $_POST) && $_POST['type'] === $opt ) return "selected";
     else return "";
 }
 
@@ -44,16 +46,45 @@ if ( method () === "POST" )
 {
     $searchtext = SecureText ( $_POST['searchtext'] );
 
-    $query = "";
-    if ( $_POST['type'] === "playername" ) $query = "SELECT * FROM ".$db_prefix."users WHERE oname LIKE '".$searchtext."%' LIMIT $SEARCH_LIMIT";
-    else if ( $_POST['type'] === "planetname" ) $query = "SELECT * FROM ".$db_prefix."planets WHERE name LIKE '".$searchtext."%' LIMIT $SEARCH_LIMIT";
-    else if ( $_POST['type'] === "allytag" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE tag LIKE '".$searchtext."%' LIMIT $SEARCH_LIMIT";
-    else if ( $_POST['type'] === "allyname" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE name LIKE '".$searchtext."%' LIMIT $SEARCH_LIMIT";
+    $text_len = mb_strlen ($searchtext, "UTF-8");
+    if ($text_len && $text_len < 2) {
+        $SearchError = loca ("SEARCH_ERROR_NOT_ENOUGH");
+    }
 
+    $query = "";
+    if ($text_len >= 2) {
+
+        // Специально ищем с лимитом на 1 больше, чтобы понять что результатов больше лимита.
+
+        if ( $_POST['type'] === "playername" ) $query = "SELECT * FROM ".$db_prefix."users WHERE oname LIKE '%".$searchtext."%' LIMIT " . ($SEARCH_LIMIT + 1);
+        else if ( $_POST['type'] === "planetname" ) $query = "SELECT * FROM ".$db_prefix."planets WHERE name LIKE '%".$searchtext."%' LIMIT " . ($SEARCH_LIMIT + 1);
+        else if ( $_POST['type'] === "allytag" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE tag LIKE '%".$searchtext."%' LIMIT " . ($SEARCH_LIMIT + 1);
+        else if ( $_POST['type'] === "allyname" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE name LIKE '%".$searchtext."%' LIMIT " . ($SEARCH_LIMIT + 1);
+    }
+
+    $result = null;
     if ( $query !== "" ) $result = dbquery ( $query );
     if ( $result )
     {
         $rows = dbrows ( $result );
+
+        // Вывести сообщение, если слишком много результатов
+
+        if ($rows > $SEARCH_LIMIT) {
+            $rows = $SEARCH_LIMIT;
+            if ( $_POST['type'] === "playername" || $_POST['type'] === "planetname" ) {
+                $SearchMessage = va(loca("SEARCH_MAX_USERS_PLANETS"), $SEARCH_LIMIT);
+            }
+            else if ( $_POST['type'] === "allytag" || $_POST['type'] === "allyname" ) {
+                $SearchMessage = va(loca("SEARCH_MAX_ALLY"), $SEARCH_LIMIT);
+            }
+        }
+
+        // Вывести сообщение, если ничего не найдено
+
+        if ($rows == 0) {
+            $SearchMessage = loca("SEARCH_NORESULT");
+        }
 
         $SearchResult .= " <table width=\"519\">\n";
 
@@ -177,6 +208,6 @@ if ( method () === "POST" )
 <!-- END CONTENT AREA --> 
 
 <?php
-PageFooter ();
+PageFooter ($SearchMessage, $SearchError);
 ob_end_flush ();
 ?>

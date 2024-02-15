@@ -21,5 +21,6 @@ $LOCA["ru"]["SEARCH_BUDDY"] = "Предложение подружиться";
 $LOCA["ru"]["SEARCH_NORESULT"] = "Ничего не найдено";
 $LOCA["ru"]["SEARCH_MAX_USERS_PLANETS"] = "Найдено больше, чем #1 результатов";
 $LOCA["ru"]["SEARCH_MAX_ALLY"] = "Найдено больше, чем #1 сообщений";
+$LOCA["ru"]["SEARCH_ERROR_NOT_ENOUGH"] = "Слишком мало символов! Пожалуйста, введите хотя бы 2 символа.";
 
 ?>
