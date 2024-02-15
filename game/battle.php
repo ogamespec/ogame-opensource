@@ -287,29 +287,13 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             }
         }
 
+        // Модифицировать ресурсы на атакуемой планете, если атакующий победил. Больше ничего делать не требуется, т.к. это единственный возможный вариант без раундов.
+
         foreach ( $d as $i=>$defender )        // Обороняющиеся
         {
-            if ( $i == 0 )    // Планета
+            if ( $i == 0 && $res['result'] == 'awon')    // Планета
             {
                 AdjustResources ( $cm, $ck, $cd, $defender['id'], '-' );
-                $objects = array ();
-                foreach ( $fleetmap as $ii=>$gid ) $objects["f$gid"] = $defender[$gid] ? $defender[$gid] : 0;
-                foreach ( $defmap as $ii=>$gid ) {
-                    $objects["d$gid"] = $repaired[$gid] ? $repaired[$gid] : 0;
-                    $objects["d$gid"] += $defender[$gid];
-                }
-                SetPlanetFleetDefense ( $defender['id'], $objects );
-            }
-            else        // Флоты на удержании
-            {
-                $ships = 0;
-                foreach ( $fleetmap as $ii=>$gid ) $ships += $defender[$gid];
-                if ( $ships > 0 ) SetFleet ( $defender['id'], $defender );
-                else {
-                    $queue = GetFleetQueue ($defender['id']);
-                    DeleteFleet ($defender['id']);    // удалить флот
-                    RemoveQueue ( $queue['task_id'] );    // удалить задание
-                }
             }
         }
 
@@ -665,6 +649,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $dnum++;
     }
 
+    $source = "";
     $source .= "Rapidfire = $rf\n";
     $source .= "FID = $fid\n";
     $source .= "DID = $did\n";
@@ -741,7 +726,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     $dloss = $loss['dloss'];
 
     // Захватить ресурсы
-    $cm = $ck = $cd = 0;
+    $cm = $ck = $cd = $sum_cargo = 0;
     if ( $battle_result == 0 )
     {
         $sum_cargo = CargoSummaryLastRound ( $a, $res );
@@ -771,12 +756,12 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     loca_add ( "technames", $GlobalUni['lang'] );
     $text = BattleReport ( $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired );
 
-    // Разослать сообщения
+    // Разослать сообщения, mailbox используется чтобы не слать по нескольку раз сообщения игрокам из САБ.
     $mailbox = array ();
 
     foreach ( $d as $i=>$user )        // Обороняющиеся
     {
-        if ( $mailbox[ $user['player_id'] ] == true ) continue;
+        if ( key_exists($user['player_id'], $mailbox) ) continue;
         $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6, $when );
         MarkMessage ( $user['player_id'], $bericht );
         $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$d_result[$battle_result]."\">Боевой доклад [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
@@ -794,7 +779,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
 
     foreach ( $a as $i=>$user )        // Атакующие
     {
-        if ( $mailbox[ $user['player_id'] ] == true ) continue;
+        if ( key_exists($user['player_id'], $mailbox) ) continue;
         $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6, $when );
         MarkMessage ( $user['player_id'], $bericht );
         $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
@@ -1046,6 +1031,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     $d[0]['points'] = $d[0]['fpoints'] = 0;
     $dnum++;
 
+    $source = "";
     $source .= "Rapidfire = $rf\n";
     $source .= "FID = $fid\n";
     $source .= "DID = $did\n";

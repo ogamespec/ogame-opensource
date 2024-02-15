@@ -151,6 +151,8 @@ function PlanetsDropList ($page)
     $num = dbrows ($result);
     for ($n=0; $n<$num; $n++) $plist[] = dbarray ($result);
 
+    $gid = $tid = $mode = "";
+
     if (key_exists ('gid', $_GET)) $gid = "&gid=".$_GET['gid'];
     if (key_exists ('tid', $_GET)) $tid = "&tid=".$_GET['tid'];
     if (key_exists ('mode', $_GET)) $mode = "&mode=".$_GET['mode'];
