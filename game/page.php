@@ -234,15 +234,15 @@ function calco ($now, $qcmd, $who)
     if ($end <= $now) {
         $reply['img'] = "_un";
         $reply['days'] = '';
-        $reply['action'] = 'Заказать!';
+        $reply['action'] = loca("PR_PURCHASE");
     }
     else
     {
         $d = ($end - $now) / (60*60*24);
         if ( $d  > 0 )
         {
-            $reply['days'] = "&lt;font color=lime&gt;Активен&lt;/font&gt; ещё ".ceil($d)." д.";
-            $reply['action'] = "Продлить!";
+            $reply['days'] = va(loca("PR_ACTIVE_DAYS"), ceil($d));
+            $reply['action'] = loca("PR_RENEW");
             $reply['img'] = '';
         }
     }
@@ -290,28 +290,28 @@ function OficeerList ()
     echo "<tr class='header'>\n\n";
     echo "    <td align='center' width='35' class='header'>\n";
     echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
-    echo "	<img border='0' src='img/commander_ikon".$img['commander'].".gif' width='32' height='32' alt='Командир ОГейма'\n";
-    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['commander']."<br>Командир ОГейма</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['commander']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
+    echo "	<img border='0' src='img/commander_ikon".$img['commander'].".gif' width='32' height='32' alt='".loca("PR_COMA")."'\n";
+    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['commander']."<br>".loca("PR_COMA")."</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['commander']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
     echo "    </a></td>\n\n";
     echo "    <td align='center' width='35' class='header'>\n";
     echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
-    echo "	<img border='0' src='img/admiral_ikon".$img['admiral'].".gif' width='32' height='32' alt='Адмирал'\n";
-    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['admiral']."<br>Адмирал</font><br><font size=1 color=skyblue>&amp;nbsp;Макс. кол-во флотов +2</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['admiral']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
+    echo "	<img border='0' src='img/admiral_ikon".$img['admiral'].".gif' width='32' height='32' alt='".loca("PR_ADMIRAL")."'\n";
+    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['admiral']."<br>".loca("PR_ADMIRAL")."</font><br><font size=1 color=skyblue>".loca("PR_ADMIRAL_INFO")."</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['admiral']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
     echo "    </a></td>\n\n";
     echo "    <td align='center' width='35' class='header'>\n";
     echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
-    echo "	<img border='0' src='img/ingenieur_ikon".$img['engineer'].".gif' width='32' height='32' alt='Инженер'\n";
-    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['engineer']."<br>Инженер</font><br><font size=1 color=skyblue>Сокращает вдвое потери в обороне+10% больше энергии</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['engineer']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
+    echo "	<img border='0' src='img/ingenieur_ikon".$img['engineer'].".gif' width='32' height='32' alt='".loca("PR_ENGINEER")."'\n";
+    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['engineer']."<br>".loca("PR_ENGINEER")."</font><br><font size=1 color=skyblue>".loca("PR_ENGINEER_INFO")."</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['engineer']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
     echo "    </a></td>\n\n";
     echo "    <td align='center' width='35' class='header'>\n";
     echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
-    echo "	<img border='0' src='img/geologe_ikon".$img['geologist'].".gif' width='32' height='32' alt='Геолог'\n";
-    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['geologist']."<br>Геолог</font><br><font size=1 color=skyblue>+10% доход от шахты</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['geologist']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
+    echo "	<img border='0' src='img/geologe_ikon".$img['geologist'].".gif' width='32' height='32' alt='".loca("PR_GEOLOGIST")."'\n";
+    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['geologist']."<br>".loca("PR_GEOLOGIST")."</font><br><font size=1 color=skyblue>".loca("PR_GEOLOGIST_INFO")."</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['geologist']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
     echo "    </a></td>\n\n";
     echo "    <td align='center' width='35' class='header'>\n";
     echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
-    echo "	<img border='0' src='img/technokrat_ikon".$img['technocrat'].".gif' width='32' height='32' alt='Технократ'\n";
-    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['technocrat']."<br>Технократ</font><br><font size=1 color=skyblue>+2 уровень шпионажа, 25% меньше времени на исследования</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['technocrat']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
+    echo "	<img border='0' src='img/technokrat_ikon".$img['technocrat'].".gif' width='32' height='32' alt='".loca("PR_TECHNO")."'\n";
+    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['technocrat']."<br>".loca("PR_TECHNO")."</font><br><font size=1 color=skyblue>".loca("PR_TECHNO_INFO")."</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['technocrat']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
     echo "    </a></td>\n\n";
     echo "<td align='center' class='header'></td></tr></table></td>\n\n";
 
