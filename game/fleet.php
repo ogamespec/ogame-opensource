@@ -1160,7 +1160,7 @@ function EnumUnion ($player_id, $friendly=0)
         $union = dbarray ($result);
         $union['player'] = explode (",", $union['players'] );
         $union['players'] = count ($union['player']);
-        for ($i=0; $i<=$union['players']; $i++) {
+        for ($i=0; $i<$union['players']; $i++) {
             if ( $union["player"][$i] == $player_id || ( $union['target_player'] == $player_id && !$friendly )) { $unions[$count++] = $union; break; }
         }
     }
