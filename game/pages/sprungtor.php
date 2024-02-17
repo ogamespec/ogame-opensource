@@ -40,24 +40,24 @@ foreach ( $fleetmap as $i=>$gid)
 $source = GetPlanet ( $source_id );
 $target = GetPlanet ( $target_id );
 
-if ( $source['type'] != 0 ) $GateError .= "<center>\nС какой луны?<br></center>\n";
-if ( $target['type'] != 0 ) $GateError .= "<center>\nНа какую луну?<br></center>\n";
+if ( $source['type'] != 0 ) $GateError .= "<center>\n".loca("GATE_ERR_START")."<br></center>\n";
+if ( $target['type'] != 0 ) $GateError .= "<center>\n".loca("GATE_ERR_TARGET")."<br></center>\n";
 
 if ( $GateError === "" )
 {
-    if ( $source["b43"] == 0 ) $GateError .= "<center>\nНа исходной луне нет ворот<br></center>\n";
-    if ( $target["b43"] == 0 ) $GateError .= "<center>\nНа целевой луне нет ворот<br></center>\n";
+    if ( $source["b43"] == 0 ) $GateError .= "<center>\n".loca("GATE_ERR_START_GATE")."<br></center>\n";
+    if ( $target["b43"] == 0 ) $GateError .= "<center>\n".loca("GATE_ERR_TARGET_GATE")."<br></center>\n";
 }
 
 if ( $GateError === "" )
 {
     if ( ($source['owner_id'] != $GlobalUser['player_id']) ||
-         ($target['owner_id'] != $GlobalUser['player_id'])  ) $GateError .= "<center>\nЛибо целевая либо исходная луна Вам не принадлежит<br></center>\n";
+         ($target['owner_id'] != $GlobalUser['player_id'])  ) $GateError .= "<center>\n".loca("GATE_ERR_MOON")."<br></center>\n";
 }
 
 if ( $GateError === "" )
 {
-    if ( $total == 0 ) $GateError .= "<center>\nНе выбрано ни одного корабля<br></center>\n";
+    if ( $total == 0 ) $GateError .= "<center>\n".loca("GATE_ERR_SHIPS")."<br></center>\n";
 }
 
 // Подготовить список флота для переброски.
@@ -69,7 +69,7 @@ if ( $GateError === "" )
         $amount = floor (abs(intval($_POST["c$gid"])));
         if ( $amount > $source["f$gid"] ) 
         {
-            $GateError .= "<center>\nНедостаточно кораблей в наличии.<br></center>\n";
+            $GateError .= "<center>\n".loca("GATE_ERR_NOTENOUGH")."<br></center>\n";
             break;
         }
         $fleet[$gid] = $amount;

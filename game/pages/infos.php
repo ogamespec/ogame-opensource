@@ -399,11 +399,11 @@ else
   <input type="hidden" name="qm" value="<?=$aktplanet['planet_id'];?>" />
   <table border="1">
     <tr>
-      <td>Луна-отправитель</td>
+      <td><?=loca("GATE_START");?></td>
       <td><a href="index.php?page=galaxy&galaxy=<?=$aktplanet['g'];?>&system=<?=$aktplanet['s'];?>&position=<?=$aktplanet['p'];?>&session=<?=$session;?>" >[<?=$aktplanet['g'];?>:<?=$aktplanet['s'];?>:<?=$aktplanet['p'];?>]</a></td>
     </tr>
     <tr>
-      <td>Целевая луна:</td>
+      <td><?=loca("GATE_TARGET");?></td>
 
       <td>
         <select name="zm">
@@ -426,7 +426,7 @@ else
   <table width="519">
 
     <tr>
-      <td class="c" colspan="2">Использовать ворота: выбрать корабли</td>
+      <td class="c" colspan="2"><?=loca("GATE_HEAD");?></td>
     </tr>
 <?php
     foreach ($fleetmap as $i=>$id)
@@ -435,14 +435,14 @@ else
         if ($amount != 0)
         {
             echo "    <tr>\n";
-            echo "      <th><a href=\"index.php?page=infos&session=$session&gid=$id\">".loca("NAME_$id")."</a> (".nicenum($amount)." в наличии)</th>\n";
+            echo "      <th><a href=\"index.php?page=infos&session=$session&gid=$id\">".loca("NAME_$id")."</a> (".va(loca("GATE_AVAIL"), nicenum($amount)).")</th>\n";
             echo "      <th><input tabindex=\"1\" type=\"text\" name=\"c$id\" size=\"7\" maxlength=\"7\" value=\"0\"></th>\n";
             echo "    </tr>\n";
         }
     }
 ?>
     <tr> 
-      <th colspan="2"><input type="submit" value="Выполнить прыжок" /></th>
+      <th colspan="2"><input type="submit" value="<?=loca("GATE_JUMP");?>" /></th>
     </tr> 
   </table>
 </form>
@@ -455,7 +455,7 @@ else
     </th>
    </tr>
 </table>
-<center><font color=#FF0000>Ворота не готовы!<br>Следующий прыжок можно будет провести только через <?=date ('i\m\i\n s\s\e\c', $delta);?></font></center>
+<center><font color=#FF0000><?=va(loca("GATE_NOT_READY"), date ('i\m\i\n s\s\e\c', $delta));?></font></center>
 <?php
         }
     }
