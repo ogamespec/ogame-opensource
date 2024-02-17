@@ -9,6 +9,11 @@ $LOCA["en"]["ENERGY" ] = "Energy";
 $LOCA["en"]["DM" ] = "Dark Matter";
 $LOCA["en"]["MOON" ] = "Moon";
 
+$LOCA["en"]["TIME_DAYS"] = "d";		// TODO: Not sure
+$LOCA["en"]["TIME_HOUR"] = "h";
+$LOCA["en"]["TIME_MIN"] = "m";
+$LOCA["en"]["TIME_SEC"] = "s";
+
 // Commander and officers.
 
 $LOCA["en"]["PR_COMA" ] = "OGame Commander";

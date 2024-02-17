@@ -292,13 +292,11 @@ function BuildDurationFormat ( $seconds )
     $mins = floor ($seconds  / 60 % 60);
     $secs = round ( $seconds / 1 % 60);
     if ($days) {
-        //if ($days==1) $res .= "$days"."день ";
-        //else $res .= "$days"."дн. ";
-        $res .= "$days"."дн. ";
+        $res .= "$days".loca("TIME_DAYS")." ";
     }
-    if ($hours || $days) $res .= "$hours"."ч ";
-    if ($mins || $days) $res .= "$mins"."мин ";
-    if ($secs) $res .= "$secs"."сек";
+    if ($hours || $days) $res .= "$hours".loca("TIME_HOUR")." ";
+    if ($mins || $days) $res .= "$mins".loca("TIME_MIN")." ";
+    if ($secs) $res .= "$secs".loca("TIME_SEC");
     return $res;
 }
 
