@@ -9,7 +9,7 @@ $LOCA["de"]["ENERGY"] = "Energie";
 $LOCA["de"]["DM"] = "Dunkle Materie";
 $LOCA["de"]["MOON"] = "Mond";
 
-$LOCA["de"]["TIME_DAYS"] = "t"; 	// TODO: Not sure
+$LOCA["de"]["TIME_DAYS"] = " Tag";
 $LOCA["de"]["TIME_HOUR"] = "h";
 $LOCA["de"]["TIME_MIN"] = "m";
 $LOCA["de"]["TIME_SEC"] = "s";

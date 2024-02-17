@@ -2,12 +2,12 @@
 
 // Kurzbeschreibung
 
-$LOCA["de"]["SHORT_1"] = "Hauptrohstofflieferanten fur den Bau tragender Strukturen von Bauwerken und Schiffen.";
-$LOCA["de"]["SHORT_2"] = "Hauptrohstofflieferanten fur elektronische Bauteile und Legierungen.";
+$LOCA["de"]["SHORT_1"] = "Hauptrohstofflieferanten für den Bau tragender Strukturen von Bauwerken und Schiffen.";
+$LOCA["de"]["SHORT_2"] = "Hauptrohstofflieferanten für elektronische Bauteile und Legierungen.";
 $LOCA["de"]["SHORT_3"] = "Entziehen dem Wasser eines Planeten den geringen Deuteriumanteil.";
-$LOCA["de"]["SHORT_4"] = "Solarkraftwerke gewinnen Energie aus Sonneneinstrahlung. Einige Gebaude benotigen Energie fur ihren Betrieb.";
+$LOCA["de"]["SHORT_4"] = "Solarkraftwerke gewinnen Energie aus Sonneneinstrahlung. Einige Gebäude benotigen Energie für ihren Betrieb.";
 $LOCA["de"]["SHORT_12"] = "Das Fusionskraftwerk gewinnt Energie aus der Fusion von 2 schweren Wasserstoffatomen zu einem Heliumatom.";
-$LOCA["de"]["SHORT_14"] = "Roboterfabriken stellen einfache Arbeitskrafte zur Verfugung, die beim Bau der planetaren Infrastruktur eingesetzt werden konnen. Jede Stufe erhoht damit die Geschwindigkeit des Ausbaus von Gebauden.";
+$LOCA["de"]["SHORT_14"] = "Roboterfabriken stellen einfache Arbeitskrafte zur Verfugung, die beim Bau der planetaren Infrastruktur eingesetzt werden können. Jede Stufe erhöht damit die Geschwindigkeit des Ausbaus von Gebäuden.";
 $LOCA["de"]["SHORT_15"] = "Dies ist die Krönung der Robotertechnik. Jede Stufe halbiert die Bauzeit von Gebäuden, Schiffen und Verteidigung.";
 $LOCA["de"]["SHORT_21"] = "In der planetaren Werft werden alle Arten von Schiffen und Verteidigungsanlagen gebaut.";
 $LOCA["de"]["SHORT_22"] = "Lagerstätte für rohe Metallerze, bevor sie weiter verarbeitet werden.";

@@ -4,6 +4,7 @@
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "techshort", $GlobalUser['lang'] );
+loca_add ( "build", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], intval ($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -54,7 +55,7 @@ function t() {
 	h=0;
 	
 	if ((ss + 3) < aa) {
-	  bxx.innerHTML="Окончено<br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+">Дальше</a>";
+	  bxx.innerHTML="<?=loca("BUILD_COMPLETE");?><br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+"><?=loca("BUILD_NEXT");?></a>";
 	  
 	  if ((ss + 6) >= aa) {	    
 	  	window.setTimeout('document.location.href="index.php?page=b_building&session='+ps+'&planet='+pl+'";', 3500);
@@ -62,11 +63,11 @@ function t() {
 	} else {
 	if(s < 0) {
 	    if (1) {
-			bxx.innerHTML="Окончено<br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+">Дальше</a>";
+			bxx.innerHTML="<?=loca("BUILD_COMPLETE");?><br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+"><?=loca("BUILD_NEXT");?></a>";
 			window.setTimeout('document.location.href="index.php?page=b_building&session='+ps+'&planet='+pl+'";', 2000);
 		} else {
 			timeout = 0;
-			bxx.innerHTML="Окончено<br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+">Дальше</a>";
+			bxx.innerHTML="<?=loca("BUILD_COMPLETE");?><br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+"><?=loca("BUILD_NEXT");?></a>";
 		}
 	} else {
 		if(s>59){
@@ -85,9 +86,9 @@ function t() {
         }
         
         if (1) {
-        	bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=b_building&session="+ps+"&listid="+pk+"&modus="+pm+"&planet="+pl+">Отменить</a>";
+        	bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=b_building&session="+ps+"&listid="+pk+"&modus="+pm+"&planet="+pl+"><?=loca("BUILD_CANCEL");?></a>";
     	} else {
-    		bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=b_building&session="+ps+"&listid="+pk+"&modus="+pm+"&planet="+pl+">Отменить</a>";
+    		bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=b_building&session="+ps+"&listid="+pk+"&modus="+pm+"&planet="+pl+"><?=loca("BUILD_CANCEL");?></a>";
     	}
 	}    
 	if (timeout == 1) {
@@ -129,8 +130,8 @@ for ( $i=0; $i<$cnt; $i++ )
     {
         if ( $queue['destroy'] ) $queue['level']++;
         echo "<tr><td class=\"l\" colspan=\"2\">".($i+1).".: ".loca("NAME_".$queue['tech_id']);
-        if ($queue['level'] > 0) echo " , уровень ".$queue['level'];
-        if ( $queue['destroy'] ) echo "\n Снести";
+        if ($queue['level'] > 0) echo " , " . va(loca("BUILD_LEVEL"), $queue['level']);
+        if ( $queue['destroy'] ) echo "\n " . loca("BUILD_DEMOLISH");
         if ($i==0) {
             echo "<td class=\"k\"><div id=\"bxx\" class=\"z\"></div><SCRIPT language=JavaScript>\n";
             echo "                  pp=\"".($queue['end']-$now)."\"\n";
@@ -142,7 +143,7 @@ for ( $i=0; $i<$cnt; $i++ )
             echo "                  </script></tr>\n";
         }
         else {
-            echo "<td class=\"k\"><font color=\"red\"><a href=\"index.php?page=b_building&session=$session&modus=remove&listid=".$queue['list_id']."&planet=".$aktplanet['planet_id']."\">удалить</a></font></td></td></tr>\n";
+            echo "<td class=\"k\"><font color=\"red\"><a href=\"index.php?page=b_building&session=$session&modus=remove&listid=".$queue['list_id']."&planet=".$aktplanet['planet_id']."\">".loca("BUILD_DEQUEUE")."</a></font></td></td></tr>\n";
         }
     }
 }
@@ -162,43 +163,43 @@ foreach ( $buildmap as $i => $id )
 
     echo "<td class=l>";
     echo "<a href=index.php?page=infos&session=$session&gid=".$id.">".loca("NAME_$id")."</a></a>";
-    if ( $lvl ) echo " (уровень ".$lvl.")";
+    if ( $lvl ) echo " (".va(loca("BUILD_LEVEL"), $lvl).")";
     echo "<br>". loca("SHORT_$id");
     $res = BuildPrice ( $id, $lvl+1 );
     $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
-    echo "<br>Стоимость:";
-    if ($m) echo " Металл: <b>".nicenum($m)."</b>";
-    if ($k) echo " Кристалл: <b>".nicenum($k)."</b>";
-    if ($d) echo " Дейтерий: <b>".nicenum($d)."</b>";
-    if ($e) echo " Энергия: <b>".nicenum($e)."</b>";
+    echo "<br>".loca("BUILD_PRICE").":";
+    if ($m) echo " ".loca("METAL").": <b>".nicenum($m)."</b>";
+    if ($k) echo " ".loca("CRYSTAL").": <b>".nicenum($k)."</b>";
+    if ($d) echo " ".loca("DEUTERIUM").": <b>".nicenum($d)."</b>";
+    if ($e) echo " ".loca("ENERGY").": <b>".nicenum($e)."</b>";
     $t = BuildDuration ( $id, $lvl+1, $aktplanet['b14'], $aktplanet['b15'], $speed );
-    echo "<br>Длительность: ".BuildDurationFormat ( $t )."<br>";
+    echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br>";
 
     if ( $prem['commander'] ) {
         if ( $cnt ) {
-            if ( $cnt < 5) echo "<td class=k><a href=\"index.php?page=b_building&session=$session&modus=add&techid=$id&planet=".$aktplanet['planet_id']."\">В очередь на строительство</a></td>";
+            if ( $cnt < 5) echo "<td class=k><a href=\"index.php?page=b_building&session=$session&modus=add&techid=$id&planet=".$aktplanet['planet_id']."\">".loca("BUILD_ENQUEUE")."</a></td>";
             else echo "<td class=k>";
         }
         else
         {
                   if ( $aktplanet['fields'] >= $aktplanet['maxfields'] ) {
-                        echo "<td class=l><font color=#FF0000>Нет места! </font>";
+                        echo "<td class=l><font color=#FF0000>".loca("BUILD_QUEUE_FULL")."</font>";
                   }
                   else if ( $id == 31 && $reslab_operating ) {
-				echo "<td class=l><font  color=#FF0000>В процессе</font> <br>";
+				echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
 			}
 			else if ( ($id == 15 || $id == 21 ) && $shipyard_operating ) {
-				echo "<td class=l><font  color=#FF0000>В процессе</font> <br>";
+				echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
 			}
    			else if ( $lvl == 0 )
       		{
-        		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00> строить </font></a>\n";
-          		else echo "<td class=l><font color=#FF0000> строить </font>\n";
+        		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".loca("BUILD_BUILD")."</font></a>\n";
+          		else echo "<td class=l><font color=#FF0000>".loca("BUILD_BUILD")."</font>\n";
 			}
    			else
       		{
-        		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>Совершенствовать <br> до уровня  ".($lvl+1)."</font></a>\n";
-          		else echo "<td class=l><font color=#FF0000>Совершенствовать <br> до уровня  ".($lvl+1)."</font>";
+        		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font></a>\n";
+          		else echo "<td class=l><font color=#FF0000>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font>";
 			}
         }
     }
@@ -213,23 +214,23 @@ foreach ( $buildmap as $i => $id )
         }
         else {
                   if ( $aktplanet['fields'] >= $aktplanet['maxfields'] ) {
-                        echo "<td class=l><font color=#FF0000>Нет места! </font>";
+                        echo "<td class=l><font color=#FF0000>".loca("BUILD_QUEUE_FULL")."</font>";
                   }
 			else if ( $id == 31 && $reslab_operating ) {
-				echo "<td class=l><font  color=#FF0000>В процессе</font> <br>";
+				echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
 			}
 			else if ( ($id == 15 || $id == 21 ) && $shipyard_operating ) {
-				echo "<td class=l><font  color=#FF0000>В процессе</font> <br>";
+				echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
 			}
    			else if ( $lvl == 0 )
       		{
-        		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00> строить </font></a>\n";
-          		else echo "<td class=l><font color=#FF0000> строить </font>\n";
+        		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".loca("BUILD_BUILD")."</font></a>\n";
+          		else echo "<td class=l><font color=#FF0000>".loca("BUILD_BUILD")."</font>\n";
 			}
    			else
       		{
-        		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>Совершенствовать <br> до уровня  ".($lvl+1)."</font></a>\n";
-          		else echo "<td class=l><font color=#FF0000>Совершенствовать <br> до уровня  ".($lvl+1)."</font>";
+        		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font></a>\n";
+          		else echo "<td class=l><font color=#FF0000>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font>";
 			}
 		}
     }
