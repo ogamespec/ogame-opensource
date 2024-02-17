@@ -435,41 +435,6 @@ function GetMissionNameDebug ($num)
     }
 }
 
-// Получить описание задания
-function GetMissionName ($num)
-{
-    switch ($num)
-    {
-        case 1    :      return "Атака";
-        case 101 :      return "Атака";
-        case 2    :      return "Совместная атака";
-        case 102 :     return "Совместная атака";
-        case 3    :     return "Транспорт";
-        case 103 :     return "Транспорт";
-        case 4    :     return "Оставить";
-        case 104 :     return "Оставить";
-        case 5   :      return "Держаться";
-        case 105 :     return "Держаться";
-        case 205 :    return "Держаться";
-        case 6   :      return "Шпионаж";
-        case 106 :     return "Шпионаж";
-        case 7    :     return "Колонизировать";
-        case 107 :     return "Колонизировать";
-        case 8    :     return "Переработать";
-        case 108 :    return "Переработать";
-        case 9   :      return "Уничтожить";
-        case 109:      return "Уничтожить";
-        case 15  :      return "Экспедиция";
-        case 115:      return "Экспедиция";
-        case 215:      return "Экспедиция";
-        case 20:       return "Ракетная атака";
-        case 21  :      return "Атака";
-        case 121 :      return "Атака";
-
-        default: return "Неизвестно";
-    }
-}
-
 // Запустить межпланетные ракеты
 function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
 {
@@ -1090,26 +1055,31 @@ function RenameUnion ($union_id, $name)
 function AddUnionMember ($union_id, $name)
 {
     global $db_prefix;
+    global $GlobalUni;
     global $GlobalUser;
     $union = LoadUnion ($union_id);
+
+    // Ошибка добавления игрока в САБ выдаются в языке текущего пользователя (того, кто добавляет игроков через меню Флот)
+    loca_add ("union", $GlobalUser['lang']);
 
     // Пустое имя, ничего не делаем.
     if ($name === "") return "";
 
     // Достигнуто максимальное количество пользователей
-    if ( $union['players'] >= 5 ) return "Участвовать могут максимум 5 игроков!";
+    $max_players = $GlobalUni['acs'] + 1;
+    if ( $union['players'] >= $max_players ) return va(loca("ACS_MAX_USERS"), $max_players);
 
     // Найти пользователя
     $name = mb_strtolower ($name, 'UTF-8');
     $query = "SELECT * FROM ".$db_prefix."users WHERE name = '".$name."' LIMIT 1";
     $result = dbquery ($query);
-    if (dbrows ($result) == 0) return "Пользователь не найден";
+    if (dbrows ($result) == 0) return loca("ACS_USER_NOT_FOUND");
     $user = dbarray ($result);
 
     // Проверить есть ли уже такой пользователь в САБе.
     for ($i=0; $i<=$union['players']; $i++)
     {
-        if ( $union["player"][$i] == $user['player_id'] ) return "Такой пользователь уже добавлен в союз";    // есть.
+        if ( $union["player"][$i] == $user['player_id'] ) return loca("ACS_ALREADY_ADDED");    // есть.
     }
 
     // Добавить пользователя в САБ и послать ему сообщение о приглашении.
@@ -1122,15 +1092,18 @@ function AddUnionMember ($union_id, $name)
     $target_planet = GetPlanet ( $head_fleet['target_planet'] );
     $queue = GetFleetQueue ( $union['fleet_id'] );
 
-    $text = va ("#1 приглашает Вас на миссию #2 против игрока #3 на планете <a href=\"#\" onClick=showGalaxy(#4,#5,#6)><b><u>[#7:#8:#9]</u></b></a>. ",
+    // Сообщение о приглашении в САБ отправляется на языке приглашаемого пользователя.
+    loca_add ("union", $user['lang']);
+
+    $text = va ( loca_lang("ACS_INVITE_TEXT1", $user['lang']),
                         $GlobalUser['oname'], 
                         $union['name'], 
-                        $target_player['oname'], 
+                        $target_player['oname'] ) .
+            va (" <a href=\"#\" onClick=showGalaxy(#1,#2,#3)><b><u>[#4:#5:#6]</u></b></a>. ",
                         $target_planet['g'], $target_planet['s'], $target_planet['p'], 
-                        $target_planet['g'], $target_planet['s'], $target_planet['p']
-                    ) .
-                    va ( "Прибытие флота назначено на #1. ВНИМАНИЕ: время прибытия может измениться из-за скорости других задействованных флотов!", date ( "D M Y H:i:s", $queue['end'] ) );
-    SendMessage ( $user['player_id'], $GlobalUser['oname'], "Приглашение к совместной атаке", $text, 5 );
+                        $target_planet['g'], $target_planet['s'], $target_planet['p'] ) .
+            va ( loca_lang("ACS_INVITE_TEXT2", $user['lang']), date ( "D M Y H:i:s", $queue['end'] ) );
+    SendMessage ( $user['player_id'], $GlobalUser['oname'], loca_lang("ACS_INVITE_SUBJ", $user['lang']), $text, 5 );
 
     return "";
 }
