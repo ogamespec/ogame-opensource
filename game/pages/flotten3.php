@@ -120,7 +120,7 @@ PageHeader ("flotten3");
 <th width="50%">
   <table width="259" border="0"  cellpadding="0" cellspacing="0" >
   <tr height="20">
-  <td class="c" colspan="2">Задание</td>
+  <td class="c" colspan="2"><?=loca("FLEET3_ORDER");?></td>
   </tr>
 
 <?php
@@ -157,7 +157,7 @@ PageHeader ("flotten3");
     if ( count ($missions) == 0 )
     {
         echo "<tr>\n";
-        echo "   <th><font color=\"red\">Нет подходящих заданий</font></th>\n";
+        echo "   <th><font color=\"red\">".loca("FLEET3_NO_ORDER")."</font></th>\n";
         echo "</tr>\n";
     }
     else
@@ -173,7 +173,7 @@ PageHeader ("flotten3");
                 echo "    <tr height=\"20\">\n";
                 echo "<th>\n";
                 echo "  <input type=\"radio\" name=\"order\" value=\"15\" checked='checked'>".loca("FLEET_ORDER_$id")."<br />\n";
-                echo "  <br><font color=red>ВНИМАНИЕ! Экспедиция - очень рискованная миссия, не предназначенная для сэйва.</font>   </th>\n";
+                echo "  <br><font color=red>".loca("FLEET3_EXP_WARNING")."</font>   </th>\n";
                 echo "  </tr>\n";
             }
             else
@@ -194,32 +194,32 @@ PageHeader ("flotten3");
 <th>
      <table  width="259" border="0" cellpadding="0" cellspacing="0">
      <tr height="20">
-  <td colspan="3" class="c">Сырьё</td>
+  <td colspan="3" class="c"><?=loca("FLEET3_RESOURCES");?></td>
      </tr>
        <tr height="20">
-      <th>Металл</th>
+      <th><?=loca("METAL");?></th>
       <th><a href="javascript:maxResource('1');">max</a></th>
 
-      <th><input name="resource1" type="text" alt="Металл <?php echo floor($aktplanet['m']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
+      <th><input name="resource1" type="text" alt="<?=loca("METAL");?> <?php echo floor($aktplanet['m']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
      </tr>
        <tr height="20">
-      <th>Кристалл</th>
+      <th><?=loca("CRYSTAL");?></th>
       <th><a href="javascript:maxResource('2');">max</a></th>
-      <th><input name="resource2" type="text" alt="Кристалл <?php echo floor($aktplanet['k']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
+      <th><input name="resource2" type="text" alt="<?=loca("CRYSTAL");?> <?php echo floor($aktplanet['k']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
      </tr>
        <tr height="20">
 
-      <th>Дейтерий</th>
+      <th><?=loca("DEUTERIUM");?></th>
       <th><a href="javascript:maxResource('3');">max</a></th>
-      <th><input name="resource3" type="text" alt="Дейтерий <?php echo floor($aktplanet['d']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
+      <th><input name="resource3" type="text" alt="<?=loca("DEUTERIUM");?> <?php echo floor($aktplanet['d']);?>" size="10" onChange="calculateTransportCapacity();" /></th>
      </tr>
        <tr height="20">
-  <th>Остаток</th>
+  <th><?=loca("FLEET3_RES_LEFT");?></th>
       <th colspan="2"><div id="remainingresources">-</div></th>
 
      </tr>
      <tr height="20">
-  <th colspan="3"><a href="javascript:maxResources()">Всё сырьё</a></th>
+  <th colspan="3"><a href="javascript:maxResources()"><?=loca("FLEET3_RES_ALL");?></a></th>
      </tr>
 
   <tr height="20">
@@ -238,7 +238,7 @@ PageHeader ("flotten3");
 ?>
 
     <tr height="20">
-     <td class="c" colspan="3">Боевые союзы</td>
+     <td class="c" colspan="3"><?=loca("FLEET3_ACS");?></td>
   </tr>
   <tr height="20">
    <th colspan="3">
@@ -269,7 +269,7 @@ PageHeader ("flotten3");
 ?>
 
     <tr height="20">
-     <td class="c" colspan="3">Время пребывания</td>
+     <td class="c" colspan="3"><?=loca("FLEET3_HOLD_TIME");?></td>
   </tr>
   <tr height="20">
    <th colspan="3">
@@ -282,7 +282,7 @@ PageHeader ("flotten3");
           <option value="16">16</option>
           <option value="32">32</option>
            </select> 
-      Время в часах   </th>
+      <?=loca("FLEET3_HOLD_HOURS");?>   </th>
   </tr>
 
 <?php
@@ -299,7 +299,7 @@ PageHeader ("flotten3");
 ?>
 
     <tr height="20">
-     <td class="c" colspan="3">Время пребывания</td>
+     <td class="c" colspan="3"><?=loca("FLEET3_HOLD_TIME");?></td>
   </tr>
   <tr height="20">
    <th colspan="3">
@@ -310,7 +310,7 @@ PageHeader ("flotten3");
         echo "          <option value=\"$i\">$i</option>\n";
     }
 ?>           </select> 
-      Время в часах   </th>
+      <?=loca("FLEET3_HOLD_HOURS");?>   </th>
   </tr>
 
 
@@ -323,7 +323,7 @@ PageHeader ("flotten3");
 </th>
 </tr>
 <tr height="20" >
- <th colspan="2"><input type="submit" value="Дальше" /></th>
+ <th colspan="2"><input type="submit" value="<?=loca("FLEET3_NEXT");?>" /></th>
 </tr>
  </form>
 </table><br><br><br><br>

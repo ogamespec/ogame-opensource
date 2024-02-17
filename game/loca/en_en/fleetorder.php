@@ -13,7 +13,6 @@ $LOCA["en"]["FLEET_ORDER_8"] = "Recycle";
 $LOCA["en"]["FLEET_ORDER_9"] = "Destroy";
 $LOCA["en"]["FLEET_ORDER_15"] ="Expedition";
 $LOCA["en"]["FLEET_ORDER_20"] ="Missile Attack";
-$LOCA["en"]["FLEET_ORDER_21"] ="Attack";
-
+$LOCA["en"]["FLEET_ORDER_21"] ="Attack";  			// An attack that has become the leading attack of the ACS
 
 ?>

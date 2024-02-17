@@ -82,12 +82,15 @@ PageHeader ("flotten2");
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // без солнечного спутника
 
     $total = 0;
+    $cargo = 0;
     foreach ($fleetmap as $i=>$gid) 
     {
         // Ограничить количество флотов максимальным количеством на планете.
         if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet["f$gid"] , abs (intval ($_POST["ship$gid"])) );
         else $amount = 0;
         $total += $amount;
+
+        if ($gid != 210) $cargo += FleetCargo ($gid) * $amount;        // не считать зонды.
 
         if ( $amount > 0 ) {
             if ( key_exists("ship$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"ship$gid\" value=\"".$amount."\" />\n";
@@ -104,11 +107,11 @@ PageHeader ("flotten2");
 
 
     <tr height="20">
-  <td colspan="2" class="c">Отправление флота</td>
+  <td colspan="2" class="c"><?=loca("FLEET2_SEND_FLEET");?></td>
  </tr>
 
  <tr height="20">
-  <th width="50%">Координаты цели</th>
+  <th width="50%"><?=loca("FLEET2_COORD");?></th>
   <th>
    <input name="galaxy" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?php echo $target_galaxy;?>" />
    <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?php echo $target_system;?>" />
@@ -120,7 +123,7 @@ PageHeader ("flotten2");
    </select>
  </tr>
  <tr height="20">
-  <th>Скорость</th>
+  <th><?=loca("FLEET2_SPEED");?></th>
   <th>
 
    <select name="speed" onChange="shortInfo()" onKeyUp="shortInfo()">
@@ -139,22 +142,22 @@ PageHeader ("flotten2");
 
  </tr>
  <tr height="20">
-  <th>Расстояние</th><th><div id="distance">-</div></th>
+  <th><?=loca("FLEET2_DIST");?></th><th><div id="distance">-</div></th>
  </tr>
  <tr height="20">
-  <th>Продолжительность (в одну сторону)</th><th><div id="duration">-</div></th>
+  <th><?=loca("FLEET2_DURATION");?></th><th><div id="duration">-</div></th>
  </tr>
  <tr height="20">
-  <th>Потребление топлива</th><th><div id="consumption">-</div></th>
+  <th><?=loca("FLEET2_CONS");?></th><th><div id="consumption">-</div></th>
  </tr>
  <tr height="20">
-  <th>Максимальная скорость</th><th><div id="maxspeed">-</div></th>
+  <th><?=loca("FLEET2_MAX_SPEED");?></th><th><div id="maxspeed">-</div></th>
  </tr>
  <tr height="20">
-  <th>Грузоподъёмность</th><th><div id="storage">572.500</div></th>
+  <th><?=loca("FLEET2_CARGO");?></th><th><div id="storage"><?=nicenum($cargo);?></div></th>
  </tr>
   <tr height="20">
-  <td colspan="2" class="c">Планета</td>
+  <td colspan="2" class="c"><?=loca("FLEET2_HEAD_PLANETS");?></td>
   </tr>
 
 <?php
@@ -183,7 +186,7 @@ PageHeader ("flotten2");
   </tr>
 
   <tr height="20">
-     <td colspan="2" class="c">Боевые союзы  </tr>
+     <td colspan="2" class="c"><?=loca("FLEET2_HEAD_ACS");?></tr>
 
 <?php
 
@@ -219,7 +222,7 @@ PageHeader ("flotten2");
 
 <tr height="20">
  <th colspan="2">
-  <input type="submit" value="Дальше" />
+  <input type="submit" value="<?=loca("FLEET2_NEXT");?>" />
  </th>
 </tr>
 

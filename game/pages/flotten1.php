@@ -23,15 +23,15 @@ function FleetMissionText ($num)
 {
     if ($num >= 200)
     {
-        $desc = "<a title=\"На планете\">(Д)</a>";
+        $desc = "<a title=\"".loca("FLEET1_HOLD")."\">".loca("FLEET1_HOLD_SHORT")."</a>";
         $num -= 200;
     }
     else if ($num >= 100)
     {
-        $desc = "<a title=\"Возвращение к планете\">(В)</a>";
+        $desc = "<a title=\"".loca("FLEET1_RETURN")."\">".loca("FLEET1_RETURN_SHORT")."</a>";
         $num -= 100;
     }
-    else $desc = "<a title=\"Уход на задание\">(У)</a>";
+    else $desc = "<a title=\"".loca("FLEET1_FLYING")."\">".loca("FLEET1_FLYING_SHORT")."</a>";
 
     echo "      <a title=\"\">".loca("FLEET_ORDER_$num")."</a>\n$desc\n";
 }
@@ -99,18 +99,18 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
     if ($prem['admiral'])
     {
 ?>
-    <div style="margin-top:2;margin-bottom:2;">Флоты <?php echo $rows;?> / <?php echo ($maxfleet-2);?> <b><font style="color:lime;">+2</font></b> <img border="0" alt="Адмирал" src="img/admiral_ikon.gif" onmouseover='return overlib("&lt;font color=white &gt;Адмирал&lt;/font&gt;", WIDTH, 100);' onmouseout="return nd();" width="20" height="20" style="vertical-align:middle;"></div>
+    <div style="margin-top:2;margin-bottom:2;">Флоты <?php echo $rows;?> / <?php echo ($maxfleet-2);?> <b><font style="color:lime;">+2</font></b> <img border="0" alt="<?=loca("PR_ADMIRAL");?>" src="img/admiral_ikon.gif" onmouseover='return overlib("&lt;font color=white &gt;<?=loca("PR_ADMIRAL");?>&lt;/font&gt;", WIDTH, 100);' onmouseout="return nd();" width="20" height="20" style="vertical-align:middle;"></div>
 <?php
     }
     else
     {
 ?>
-    Флоты <?php echo $rows;?> / <?php echo $maxfleet;?>    </td>
+    <?=va(loca("FLEET1_FLEETS"), $rows, $maxfleet);?>    </td>
 <?php
     }
 ?>
     <td align=right style='background-color:transparent;'>
-      <?php echo $expnum;?>/<?php echo $maxexp;?> Экспедиции    
+      <?=va(loca("FLEET1_EXPEDITIONS"), $expnum, $maxexp);?>    
     </td>
     </tr>
     </table>
@@ -118,15 +118,15 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 
    </tr>
      <tr height="20">
-    <th>Номер</th>
-    <th>Задание</th>
-    <th>Численность</th>
-    <th>Отправлен с</th>
+    <th><?=loca("FLEET1_HEAD1");?></th>
+    <th><?=loca("FLEET1_HEAD2");?></th>
+    <th><?=loca("FLEET1_HEAD3");?></th>
+    <th><?=loca("FLEET1_HEAD4");?></th>
 
-    <th>Отправлен</th>
-    <th>Отправлен на</th>
-    <th>Прибудет</th>
-    <th>Приказ</th>
+    <th><?=loca("FLEET1_HEAD5");?></th>
+    <th><?=loca("FLEET1_HEAD6");?></th>
+    <th><?=loca("FLEET1_HEAD7");?></th>
+    <th><?=loca("FLEET1_HEAD8");?></th>
    </tr>
 <?php
 
@@ -176,7 +176,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 ?>
          <form action="index.php?page=flotten1&session=<?php echo $session;?>" method="POST">
     <input type="hidden" name="order_union" value="<?php echo $fleet['fleet_id'];?>" />
-        <input type="submit" value="Союз" />
+        <input type="submit" value="<?=loca("FLEET1_BUTTON_ACS");?>" />
      </form>
 <?php
     }
@@ -187,7 +187,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 ?>
          <form action="index.php?page=flotten1&session=<?php echo $session;?>" method="POST">
     <input type="hidden" name="order_return" value="<?php echo $fleet['fleet_id'];?>" />
-        <input type="submit" value="Отзыв" />
+        <input type="submit" value="<?=loca("FLEET1_BUTTON_RECALL");?>" />
      </form>
 <?php
     }
@@ -236,14 +236,14 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 <form action="index.php?page=flotten1&session=<?php echo $session;?>" method="POST">
     <input type="hidden" name="flotten" value="<?php echo $fleet['fleet_id'];?>" />
   <table width="519" border="0" cellpadding="0" cellspacing="1">
-                    <tr><td class="c" colspan=2>Союз флотов <?php echo $union['name'];?></td></tr>
-                    <tr><td class="c" colspan=2>Изменить название союза</td></tr>
+                    <tr><td class="c" colspan=2><?=va(loca("FLEET1_ACS_NAME"), $union['name']);?></td></tr>
+                    <tr><td class="c" colspan=2><?=loca("FLEET1_ACS_TITLE");?></td></tr>
                     <tr><th colspan=2>
 <input name="union_name" type="text" value="<?php echo $union['name'];?>" /> <br /><input type="submit" value="OK" />
                     </th></tr>
                     <tr>
-                        <td class="c">Приглашённые участники</td>
-                        <td class="c">Пригласить участника</td>
+                        <td class="c"><?=loca("FLEET1_ACS_PLAYERS");?></td>
+                        <td class="c"><?=loca("FLEET1_ACS_INVITE");?></td>
                     </tr>
                     <tr>
                         <th width="50%">
@@ -301,18 +301,18 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
     {
 ?>
          <tr height="20">
-      <th colspan="4"><font color="red">Достигнута максимальная численность флота!</font></th>
+      <th colspan="4"><font color="red"><?=loca("FLEET1_ERROR_MAX");?></font></th>
    </tr>
 <?php
     }
 ?>
        <tr height="20">
-  <td colspan="4" class="c">Новое задание: выбрать корабли</td>
+  <td colspan="4" class="c"><?=loca("FLEET1_TITLE_CHOOSE");?></td>
    </tr>
    <tr height="20">
 
-  <th>Тип корабля</th>
-  <th>В наличии</th>
+  <th><?=loca("FLEET1_TYPE");?></th>
+  <th><?=loca("FLEET1_AMOUNT");?></th>
 <!--    <th>Gesch.</th> -->
     <th>-</th>
     <th>-</th>
@@ -329,7 +329,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
             $cons = FleetCons ( $gid, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118']);
 
             echo "   <tr height=\"20\">\n";
-            echo "    <th><a title=\"Скорость: $speed\">".loca("NAME_$gid")."</a></th>\n";
+            echo "    <th><a title=\"".loca("FLEET1_SPEED").": $speed\">".loca("NAME_$gid")."</a></th>\n";
             echo "    <th>$amount<input type=\"hidden\" name=\"maxship$gid\" value=\"$amount\"/></th>\n";
             echo "<!--    <th>$speed -->\n";
             echo "     <input type=\"hidden\" name=\"consumption$gid\" value=\"$cons\"/>\n";
@@ -350,8 +350,8 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 ?>
 
    <tr height="20">
-  <th colspan="2"><a href="javascript:noShips();" >Обнулить</a></th>
-  <th colspan="2"><a href="javascript:maxShips();" >Все корабли</a></th>
+  <th colspan="2"><a href="javascript:noShips();" ><?=loca("FLEET1_CLEAR");?></a></th>
+  <th colspan="2"><a href="javascript:maxShips();" ><?=loca("FLEET1_ALL_SHIPS");?></a></th>
    </tr>
 
 <?php
@@ -360,7 +360,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
         $temp_map = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // без сс
 
         echo "      <tr height=\"20\">\n";
-        echo "      <td colspan=\"4\" class=\"c\"><u><a href=\"index.php?page=fleet_templates&session=$session\">Стандартные</a></u></td>\n";
+        echo "      <td colspan=\"4\" class=\"c\"><u><a href=\"index.php?page=fleet_templates&session=$session\">".loca("FLEET1_TEMPLATE")."</a></u></td>\n";
         echo "      </tr>\n";
 
         $query = "SELECT * FROM ".$db_prefix."template WHERE owner_id = ".$GlobalUser['player_id']." ORDER BY date DESC";
@@ -392,7 +392,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 ?>
  
    <tr height="20">
-    <th colspan="4"><input type="submit" value="Дальше" /></th>
+    <th colspan="4"><input type="submit" value="<?=loca("FLEET1_NEXT");?>" /></th>
    </tr>
 <tr><th colspan=4>
 </th></tr>
