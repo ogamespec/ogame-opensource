@@ -502,37 +502,49 @@ function TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $target['planet_id'], '+' );
     UpdatePlanetActivity ( $target['planet_id'], $queue['end'] );
 
+    $origin_user = LoadUser ( $origin['owner_id'] );
+    loca_add ( "fleetmsg", $origin_user['lang'] );
+
     DispatchFleet ($fleet, $origin, $target, 103, $fleet_obj['flight_time'], 0, 0, 0, $fleet_obj['fuel'] / 2, $queue['end']);
 
-    $text = "Ваш флот достигает планеты (\n" .
-                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
-                ") и доставляет свой груз:.\n" .
-                "<br/>\n" .
-                nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия.\n" .
-                "<br/>\n";
-    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Достижение планеты", $text, 5, $queue['end']);
+    $text = va(loca_lang("FLEET_TRANSPORT_OWN", $origin_user['lang']), 
+            "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>",
+            nicenum($fleet_obj['m']),
+            nicenum($fleet_obj['k']),
+            nicenum($fleet_obj['d']) );
+    SendMessage ( $fleet_obj['owner_id'], 
+        loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
+        loca_lang("FLEET_MESSAGE_ARRIVE", $origin_user['lang']), 
+        $text, 5, $queue['end']);
 
     // Транспорт на чужую планету.
     if ( $origin['owner_id'] != $target['owner_id'] )
     {
-        $user = LoadUser ( $origin['owner_id'] );
-        $text = "Чужой флот игрока ".$user['oname']." доставляет на Вашу планету ".$target['name']."\n" .
-                    "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
-                    "<br/>\n" .
-                    nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия\n" .
-                    "<br/>\n" .
-                    "Прежде у Вас было ".nicenum($oldm)." металла, ".nicenum($oldk)." кристалла и ".nicenum($oldd)." дейтерия.\n" .
-                    "<br/>\n" .
-                    "Теперь же у Вас ".nicenum($oldm+$fleet_obj['m'])." металла, ".nicenum($oldk+$fleet_obj['k'])." кристалла и ".nicenum($oldd+$fleet_obj['d'])." дейтерия.\n" .
-                    "<br/>\n";
-        SendMessage ( $target['owner_id'], "Наблюдение", "Чужой флот доставляет сырьё", $text, 5, $queue['end']);
+        $target_user = LoadUser ( $target['owner_id'] );
+        loca_add ( "fleetmsg", $target_user['lang'] );
+
+        $text = va(loca_lang("FLEET_TRANSPORT_OTHER", $target_user['lang']),
+                $origin_user['oname'],
+                $target['name'],
+                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>",
+                nicenum($fleet_obj['m']),
+                nicenum($fleet_obj['k']),
+                nicenum($fleet_obj['d']),
+                nicenum($oldm),
+                nicenum($oldk),
+                nicenum($oldd),
+                nicenum($oldm+$fleet_obj['m']),
+                nicenum($oldk+$fleet_obj['k']),
+                nicenum($oldd+$fleet_obj['d']) );
+        SendMessage ( $target['owner_id'], 
+            loca_lang("FLEET_MESSAGE_OBSERVE", $target_user['lang']), 
+            loca_lang("FLEET_MESSAGE_TRADE", $target_user['lang']), 
+            $text, 5, $queue['end']);
     }
 }
 
 function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    global $GlobalUni;
-
     if ( $fleet_obj['m'] < 0 ) $fleet_obj['m'] = 0;    // Защита от отрицательных ресурсов (на всякий случай)
     if ( $fleet_obj['k'] < 0 ) $fleet_obj['k'] = 0;
     if ( $fleet_obj['d'] < 0 ) $fleet_obj['d'] = 0;
@@ -543,19 +555,29 @@ function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
 
     $origin_user = LoadUser ( $origin['owner_id'] );
     loca_add ( "technames", $origin_user['lang'] );
+    loca_add ( "fleetmsg", $origin_user['lang'] );
 
-    $text = "Один из Ваших флотов ( ".FleetList($fleet, $origin_user['lang'])." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
-               "достигает ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
-    if ( ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']) != 0 ) $text .= "Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия<br>";
-    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Возвращение флота", $text, 5, $queue['end']);
+    $text = va(loca_lang("FLEET_RETURN", $origin_user['lang']),
+        FleetList($fleet, $origin_user['lang']),
+        "<a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>",
+        $origin['name'],
+        "<a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>" );
+    if ( ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']) != 0 ) {
+        $text .= va(loca_lang("FLEET_RETURN_RES", $origin_user['lang']), 
+            nicenum($fleet_obj['m']),
+            nicenum($fleet_obj['k']),
+            nicenum($fleet_obj['d']) );
+    }
+    SendMessage ( $fleet_obj['owner_id'], 
+        loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
+        loca_lang("FLEET_MESSAGE_RETURN", $origin_user['lang']), 
+        $text, 5, $queue['end']);
 }
 
 // *** Оставить ***
 
 function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    global $GlobalUni;
-
     // Также выгрузить половину топлива
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'] + floor ($fleet_obj['fuel'] / 2), $target['planet_id'], '+' );
     AdjustShips ( $fleet, $fleet_obj['target_planet'], '+' );
@@ -563,12 +585,20 @@ function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
     $origin_user = LoadUser ( $origin['owner_id'] );
     loca_add ( "technames", $origin_user['lang'] );
+    loca_add ( "fleetmsg", $origin_user['lang'] );
 
-    $text = "\nОдин из Ваших флотов (".FleetList($fleet, $origin_user['lang']).") достиг ".$target['name']."\n" .
-               "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
-               ". Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'] + floor ($fleet_obj['fuel'] / 2) )." дейтерия\n" .
-               "<br/>\n";
-    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Удержание флота", $text, 5, $queue['end']);
+    $text = va(loca_lang("FLEET_DEPLOY", $origin_user['lang']),
+        FleetList($fleet, $origin_user['lang']),
+        $target['name'],
+        "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>" );
+    $text .= va(loca_lang("FLEET_DEPLOY_RES", $origin_user['lang']),
+        nicenum($fleet_obj['m']),
+        nicenum($fleet_obj['k']),
+        nicenum($fleet_obj['d'] + floor ($fleet_obj['fuel'] / 2)) );
+    SendMessage ( $fleet_obj['owner_id'], 
+        loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
+        loca_lang("FLEET_MESSAGE_HOLD", $origin_user['lang']), 
+        $text, 5, $queue['end']);
 }
 
 // *** Держаться ***
@@ -791,8 +821,11 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     global $db_prefix;
 
-    $text = "\nФлот достигает заданных координат\n" . 
-               "<a href=\"javascript:showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].")\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n";
+    $origin_user = LoadUser ( $origin['owner_id'] );
+    loca_add ( "fleetmsg", $origin_user['lang'] );
+
+    $text = va(loca_lang("FLEET_COLONIZE", $origin_user['lang']), 
+                "<a href=\"javascript:showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].")\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>" );
 
     if ( !HasPlanet($target['g'], $target['s'], $target['p']) )    // если место не занято, то значит колонизация успешна
     {
@@ -802,14 +835,14 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         $num_planets = dbrows ($result);
         if ( $num_planets >= 9 )
         {
-            $text .= ", и устанавливает, что эта планета пригодна для колонизации. Вскоре после начала освоения планеты поступает сообщение о беспорядках на главной планете, так как империя становится слишком большой и люди возвращаются обратно.\n";
+            $text .= loca_lang("FLEET_COLONIZE_MAX", $origin_user['lang']);
 
             // Добавить покинутую колонию.
             $id = CreateAbandonedColony ( $target['g'], $target['s'], $target['p'], $queue['end'] );
         }
         else
         {
-            $text .= ", находит там новую планету и сразу же начинает её освоение.\n";
+            $text .= loca_lang("FLEET_COLONIZE_SUCCESS", $origin_user['lang']);
 
             // Создать новую колонию.
             $id = CreatePlanet ( $target['g'], $target['s'], $target['p'], $fleet_obj['owner_id'], 1, 0, 0, $queue['end'] );
@@ -842,30 +875,43 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     }
     else
     {
-        $text .= ", но не находит там пригодной для колонизации планеты. В подавленном состоянии поселенцы возвращаются обратно.\n";
+        $text .= loca_lang("FLEET_COLONIZE_FAIL", $origin_user['lang']);
 
         // Вернуть флот.
         DispatchFleet ($fleet, $origin, $target, 107, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
     }
 
-    SendMessage ( $fleet_obj['owner_id'], "Поселенцы", "Доклад поселенцев", $text, 5, $queue['end']);
+    SendMessage ( $fleet_obj['owner_id'], 
+        loca_lang("FLEET_COLONIZE_FROM", $origin_user['lang']), 
+        loca_lang("FLEET_COLONIZE_SUBJ", $origin_user['lang']), 
+        $text, 5, $queue['end']);
 }
 
 function ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    global $GlobalUni;
-
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 
     $origin_user = LoadUser ( $origin['owner_id'] );
     loca_add ( "technames", $origin_user['lang'] );
+    loca_add ( "fleetmsg", $origin_user['lang'] );
 
-    $text = "Один из Ваших флотов ( ".FleetList($fleet, $origin_user['lang'])." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
-               "достигает ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
-    if ( ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']) != 0 ) $text .= "Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия<br>";
-    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Возвращение флота", $text, 5, $queue['end']);
+    $text = va(loca_lang("FLEET_RETURN", $origin_user['lang']), 
+            FleetList($fleet, $origin_user['lang']),
+            "<a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>",
+            $origin['name'],
+            "<a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>" );
+    if ( ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']) != 0 ) {
+        $text .= va(loca_lang("FLEET_RETURN_RES", $origin_user['lang']), 
+            nicenum($fleet_obj['m']),
+            nicenum($fleet_obj['k']),
+            nicenum($fleet_obj['d']) );
+    }
+    SendMessage ( $fleet_obj['owner_id'], 
+        loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
+        loca_lang("FLEET_MESSAGE_RETURN", $origin_user['lang']), 
+        $text, 5, $queue['end']);
 
     // Удалить фантом колонизации.
     if ($target['type'] == 10002) DestroyPlanet ( $target['planet_id'] );
@@ -886,15 +932,22 @@ function RecycleArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $dm = $harvest['m'];
     $dk = $harvest['k'];
 
-    $subj = "\n<span class=\"espionagereport\">Разведданные</span>\n";   
-    $report = "Переработчики в количестве ".nicenum($fleet[209])." штук обладают общей грузоподъёмностью в ".nicenum($cargo).". " .
-                   "Поле обломков содержит ".nicenum($target['m'])." металла и ".nicenum($target['k'])." кристалла. " .
-                   "Добыто ".nicenum($dm)." металла и ".nicenum($dk)." кристалла." ;
+    $origin_user = LoadUser ( $origin['owner_id'] );
+    loca_add ( "fleetmsg", $origin_user['lang'] );
+
+    $subj = "\n<span class=\"espionagereport\">".loca_lang("FLEET_MESSAGE_INTEL", $origin_user['lang'])."</span>\n";   
+    $report = va(loca_lang("FLEET_RECYCLE", $origin_user['lang']), 
+        nicenum($fleet[209]),
+        nicenum($cargo),
+        nicenum($target['m']),
+        nicenum($target['k']),
+        nicenum($dm),
+        nicenum($dk) );
 
     // Вернуть флот.
     DispatchFleet ($fleet, $origin, $target, 108, $fleet_obj['flight_time'], $fleet_obj['m'] + $dm, $fleet_obj['k'] + $dk, $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
 
-    SendMessage ( $fleet_obj['owner_id'], "Флот ", $subj, $report, 5, $queue['end']);
+    SendMessage ( $fleet_obj['owner_id'], loca_lang("FLEET_MESSAGE_FLEET", $origin_user['lang']), $subj, $report, 5, $queue['end']);
 }
 
 // *** Уничтожить ***
@@ -920,12 +973,12 @@ function Queue_Fleet_End ($queue)
     global $GlobalUser;
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $fleet_obj = LoadFleet ( $queue['sub_id'] );
+    if ( $fleet_obj == null ) return;
 
     if ( $fleet_obj['m'] < 0 ) $fleet_obj['m'] = 0;
     if ( $fleet_obj['k'] < 0 ) $fleet_obj['k'] = 0;
     if ( $fleet_obj['d'] < 0 ) $fleet_obj['d'] = 0;
 
-    if ( $fleet_obj == null ) return;
     $fleet = array ();
     foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj["ship$gid"];
 

@@ -14,9 +14,6 @@ $LOCA["ru"]["TIME_HOUR"] = "ч";
 $LOCA["ru"]["TIME_MIN"] = "мин";
 $LOCA["ru"]["TIME_SEC"] = "сек";
 
-// Сообщение для флота
-$LOCA["ru"]["FLEET_MESSAGE_FROM"] = "Командование флотом";
-
 // Командир и офицеры.
 
 $LOCA["ru"]["PR_COMA"] = "Командир ОГейма";

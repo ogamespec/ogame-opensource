@@ -645,6 +645,7 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
     loca_add ( "common", $origin_user['lang'] );
     loca_add ( "technames", $origin_user['lang'] );
     loca_add ( "expedition", $origin_user['lang'] );
+    loca_add ( "fleetmsg", $origin_user['lang'] );
 
     // Событие экспедиции.
     $chance = mt_rand ( 0, 99 );
