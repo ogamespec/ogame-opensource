@@ -473,13 +473,13 @@ function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
 // ==================================================================================
 // Обработка заданий флота.
 
-function FleetList ($fleet)
+function FleetList ($fleet, $lang)
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $res = "";
     foreach ( $fleetmap as $i=>$gid )
     {
-        if ($fleet[$gid] > 0) $res .= loca("NAME_$gid") . ": " . nicenum ($fleet[$gid]) . " ";
+        if ($fleet[$gid] > 0) $res .= loca_lang("NAME_$gid", $lang) . ": " . nicenum ($fleet[$gid]) . " ";
     }
     return $res;
 }
@@ -542,9 +542,9 @@ function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 
     $origin_user = LoadUser ( $origin['owner_id'] );
-    loca_add ( "technames", $GlobalUni['lang'] );
+    loca_add ( "technames", $origin_user['lang'] );
 
-    $text = "Один из Ваших флотов ( ".FleetList($fleet)." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
+    $text = "Один из Ваших флотов ( ".FleetList($fleet, $origin_user['lang'])." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
                "достигает ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
     if ( ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']) != 0 ) $text .= "Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия<br>";
     SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Возвращение флота", $text, 5, $queue['end']);
@@ -561,9 +561,10 @@ function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     AdjustShips ( $fleet, $fleet_obj['target_planet'], '+' );
     UpdatePlanetActivity ( $target['planet_id'], $queue['end'] );
 
-    loca_add ( "technames", $GlobalUni['lang'] );
+    $origin_user = LoadUser ( $origin['owner_id'] );
+    loca_add ( "technames", $origin_user['lang'] );
 
-    $text = "\nОдин из Ваших флотов (".FleetList($fleet).") достиг ".$target['name']."\n" .
+    $text = "\nОдин из Ваших флотов (".FleetList($fleet, $origin_user['lang']).") достиг ".$target['name']."\n" .
                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
                ". Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'] + floor ($fleet_obj['fuel'] / 2) )." дейтерия\n" .
                "<br/>\n";
@@ -858,9 +859,10 @@ function ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target)
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 
-    loca_add ( "technames", $GlobalUni['lang'] );
+    $origin_user = LoadUser ( $origin['owner_id'] );
+    loca_add ( "technames", $origin_user['lang'] );
 
-    $text = "Один из Ваших флотов ( ".FleetList($fleet)." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
+    $text = "Один из Ваших флотов ( ".FleetList($fleet, $origin_user['lang'])." ), отправленных с <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>, " .
                "достигает ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> . ";
     if ( ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']) != 0 ) $text .= "Флот доставляет ".nicenum($fleet_obj['m'])." металла, ".nicenum($fleet_obj['k'])." кристалла и ".nicenum($fleet_obj['d'])." дейтерия<br>";
     SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Возвращение флота", $text, 5, $queue['end']);
@@ -1077,7 +1079,7 @@ function AddUnionMember ($union_id, $name)
     $user = dbarray ($result);
 
     // Проверить есть ли уже такой пользователь в САБе.
-    for ($i=0; $i<=$union['players']; $i++)
+    for ($i=0; $i<$union['players']; $i++)
     {
         if ( $union["player"][$i] == $user['player_id'] ) return loca("ACS_ALREADY_ADDED");    // есть.
     }

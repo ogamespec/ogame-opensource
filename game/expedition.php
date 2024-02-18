@@ -1,6 +1,7 @@
 <?php
 
 // Экспедиции.
+// Сообщения экспедиции рассылаются на языке пользователя (используется метод loca_lang).
 
 // Посчитать количество активных экспедиций у выбранного игрока.
 function GetExpeditionsCount ($player_id)
@@ -51,21 +52,21 @@ function ExpUpperLimit ()
 }
 
 // Ничего не произошло.
-function Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target)
+function Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     $msg = array (
-        loca ("EXP_NOTHING_1"),
-        loca ("EXP_NOTHING_2"),
-        loca ("EXP_NOTHING_3"),
-        loca ("EXP_NOTHING_4"),
-        loca ("EXP_NOTHING_5"),
-        loca ("EXP_NOTHING_6"),
-        loca ("EXP_NOTHING_7"),
-        loca ("EXP_NOTHING_8"),
-        loca ("EXP_NOTHING_9"),
-        loca ("EXP_NOTHING_10"),
-        loca ("EXP_NOTHING_11"),
-        loca ("EXP_NOTHING_12"),
+        loca_lang ("EXP_NOTHING_1", $lang),
+        loca_lang ("EXP_NOTHING_2", $lang),
+        loca_lang ("EXP_NOTHING_3", $lang),
+        loca_lang ("EXP_NOTHING_4", $lang),
+        loca_lang ("EXP_NOTHING_5", $lang),
+        loca_lang ("EXP_NOTHING_6", $lang),
+        loca_lang ("EXP_NOTHING_7", $lang),
+        loca_lang ("EXP_NOTHING_8", $lang),
+        loca_lang ("EXP_NOTHING_9", $lang),
+        loca_lang ("EXP_NOTHING_10", $lang),
+        loca_lang ("EXP_NOTHING_11", $lang),
+        loca_lang ("EXP_NOTHING_12", $lang),
     );
 
     // Вернуть флот.
@@ -77,26 +78,26 @@ function Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target)
 }
 
 // Сообщение бортового инженера (счетчик посещений)
-function Logbook ($expcount, $exptab)
+function Logbook ($expcount, $exptab, $lang)
 {
     $msg_1 = array (
-        loca ("EXP_NOT_DEPLETED_1"),
-        loca ("EXP_NOT_DEPLETED_2"),
+        loca_lang ("EXP_NOT_DEPLETED_1", $lang),
+        loca_lang ("EXP_NOT_DEPLETED_2", $lang),
     );
     $msg_2 = array (
-        loca ("EXP_DEPLETED_MIN_1"),
-        loca ("EXP_DEPLETED_MIN_2"),
-        loca ("EXP_DEPLETED_MIN_3"),
+        loca_lang ("EXP_DEPLETED_MIN_1", $lang),
+        loca_lang ("EXP_DEPLETED_MIN_2", $lang),
+        loca_lang ("EXP_DEPLETED_MIN_3", $lang),
     );
     $msg_3 = array (
-        loca ("EXP_DEPLETED_MED_1"),
-        loca ("EXP_DEPLETED_MED_2"),
-        loca ("EXP_DEPLETED_MED_3"),
+        loca_lang ("EXP_DEPLETED_MED_1", $lang),
+        loca_lang ("EXP_DEPLETED_MED_2", $lang),
+        loca_lang ("EXP_DEPLETED_MED_3", $lang),
     );
     $msg_4 = array (
-        loca ("EXP_DEPLETED_MAX_1"),
-        loca ("EXP_DEPLETED_MAX_2"),
-        loca ("EXP_DEPLETED_MAX_3"),
+        loca_lang ("EXP_DEPLETED_MAX_1", $lang),
+        loca_lang ("EXP_DEPLETED_MAX_2", $lang),
+        loca_lang ("EXP_DEPLETED_MAX_3", $lang),
     );
 
     if ( $expcount <= $exptab['depleted_min'] ) {
@@ -121,22 +122,22 @@ function Logbook ($expcount, $exptab)
 // Удачные события экспедиции
 
 // Встреча с чужими
-function Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target)
+function Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     $weak = array (
-        loca ("EXP_ALIENS_WEAK_1"),
-        loca ("EXP_ALIENS_WEAK_2"),
-        loca ("EXP_ALIENS_WEAK_3"),
-        loca ("EXP_ALIENS_WEAK_4"),
+        loca_lang ("EXP_ALIENS_WEAK_1", $lang),
+        loca_lang ("EXP_ALIENS_WEAK_2", $lang),
+        loca_lang ("EXP_ALIENS_WEAK_3", $lang),
+        loca_lang ("EXP_ALIENS_WEAK_4", $lang),
     );
     $medium = array (
-        loca ("EXP_ALIENS_MED_1"),
-        loca ("EXP_ALIENS_MED_2"),
-        loca ("EXP_ALIENS_MED_3"),
+        loca_lang ("EXP_ALIENS_MED_1", $lang),
+        loca_lang ("EXP_ALIENS_MED_2", $lang),
+        loca_lang ("EXP_ALIENS_MED_3", $lang),
     );
     $strong = array (
-        loca ("EXP_ALIENS_STRONG_1"),
-        loca ("EXP_ALIENS_STRONG_2"),
+        loca_lang ("EXP_ALIENS_STRONG_1", $lang),
+        loca_lang ("EXP_ALIENS_STRONG_2", $lang),
     );
 
     // Определить уровень чужих
@@ -165,23 +166,23 @@ function Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target)
 // ---
 
 // Встреча с пиратами
-function Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target)
+function Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     $weak = array (
-        loca ("EXP_PIRATES_WEAK_1"),
-        loca ("EXP_PIRATES_WEAK_2"),
-        loca ("EXP_PIRATES_WEAK_3"),
-        loca ("EXP_PIRATES_WEAK_4"),
-        loca ("EXP_PIRATES_WEAK_5"),
+        loca_lang ("EXP_PIRATES_WEAK_1", $lang),
+        loca_lang ("EXP_PIRATES_WEAK_2", $lang),
+        loca_lang ("EXP_PIRATES_WEAK_3", $lang),
+        loca_lang ("EXP_PIRATES_WEAK_4", $lang),
+        loca_lang ("EXP_PIRATES_WEAK_5", $lang),
     );
     $medium = array (
-        loca ("EXP_PIRATES_MED_1"),
-        loca ("EXP_PIRATES_MED_2"),
-        loca ("EXP_PIRATES_MED_3"),
+        loca_lang ("EXP_PIRATES_MED_1", $lang),
+        loca_lang ("EXP_PIRATES_MED_2", $lang),
+        loca_lang ("EXP_PIRATES_MED_3", $lang),
     );
     $strong = array (
-        loca ("EXP_PIRATES_STRONG_1"),
-        loca ("EXP_PIRATES_STRONG_2"),
+        loca_lang ("EXP_PIRATES_STRONG_1", $lang),
+        loca_lang ("EXP_PIRATES_STRONG_2", $lang),
     );
 
     // Определить уровень пиратов
@@ -210,26 +211,26 @@ function Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target)
 // ---
 
 // Нахождение Тёмной материи
-function Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target)
+function Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     global $db_prefix;
     $player_id = $fleet_obj['owner_id'];
 
     $small = array (
-        loca ("EXP_DMFOUND_SMALL_1"),
-        loca ("EXP_DMFOUND_SMALL_2"),
-        loca ("EXP_DMFOUND_SMALL_3"),
-        loca ("EXP_DMFOUND_SMALL_4"),
-        loca ("EXP_DMFOUND_SMALL_5"),
+        loca_lang ("EXP_DMFOUND_SMALL_1", $lang),
+        loca_lang ("EXP_DMFOUND_SMALL_2", $lang),
+        loca_lang ("EXP_DMFOUND_SMALL_3", $lang),
+        loca_lang ("EXP_DMFOUND_SMALL_4", $lang),
+        loca_lang ("EXP_DMFOUND_SMALL_5", $lang),
     );
     $medium = array (
-        loca ("EXP_DMFOUND_MED_1"),
-        loca ("EXP_DMFOUND_MED_2"),
-        loca ("EXP_DMFOUND_MED_3"),
+        loca_lang ("EXP_DMFOUND_MED_1", $lang),
+        loca_lang ("EXP_DMFOUND_MED_2", $lang),
+        loca_lang ("EXP_DMFOUND_MED_3", $lang),
     );
     $large = array (
-        loca ("EXP_DMFOUND_LARGE_1"),
-        loca ("EXP_DMFOUND_LARGE_2"),
+        loca_lang ("EXP_DMFOUND_LARGE_1", $lang),
+        loca_lang ("EXP_DMFOUND_LARGE_2", $lang),
     );
 
     $chance = mt_rand (0, 99);
@@ -267,13 +268,13 @@ function Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target)
 // ---
 
 // Потеря всего флота
-function Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target)
+function Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     $msg = array (
-        loca ("EXP_LOST_1"),
-        loca ("EXP_LOST_2"),
-        loca ("EXP_LOST_3"),
-        loca ("EXP_LOST_4"),
+        loca_lang ("EXP_LOST_1", $lang),
+        loca_lang ("EXP_LOST_2", $lang),
+        loca_lang ("EXP_LOST_3", $lang),
+        loca_lang ("EXP_LOST_4", $lang),
     );
 
     // Списать очки.
@@ -291,15 +292,15 @@ function Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target)
 // ---
 
 // Задержка возврата экспедиции
-function Exp_DelayFleet ($queue, $fleet_obj, $fleet, $origin, $target)
+function Exp_DelayFleet ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     $msg = array (
-        loca ("EXP_DELAY_1"),
-        loca ("EXP_DELAY_2"),
-        loca ("EXP_DELAY_3"),
-        loca ("EXP_DELAY_4"),
-        loca ("EXP_DELAY_5"),
-        loca ("EXP_DELAY_6"),
+        loca_lang ("EXP_DELAY_1", $lang),
+        loca_lang ("EXP_DELAY_2", $lang),
+        loca_lang ("EXP_DELAY_3", $lang),
+        loca_lang ("EXP_DELAY_4", $lang),
+        loca_lang ("EXP_DELAY_5", $lang),
+        loca_lang ("EXP_DELAY_6", $lang),
     );
 
     $hold_time = $fleet_obj['flight_time'];
@@ -318,12 +319,12 @@ function Exp_DelayFleet ($queue, $fleet_obj, $fleet, $origin, $target)
 }
 
 // Ускорение возврата экспедиции
-function Exp_AccelFleet ($queue, $fleet_obj, $fleet, $origin, $target)
+function Exp_AccelFleet ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     $msg = array (
-        loca ("EXP_ACCEL_1"),
-        loca ("EXP_ACCEL_2"),
-        loca ("EXP_ACCEL_3"),
+        loca_lang ("EXP_ACCEL_1", $lang),
+        loca_lang ("EXP_ACCEL_2", $lang),
+        loca_lang ("EXP_ACCEL_3", $lang),
     );
 
     $chance = mt_rand (0, 99);
@@ -342,28 +343,28 @@ function Exp_AccelFleet ($queue, $fleet_obj, $fleet, $origin, $target)
 // ---
 
 // Нахождение ресурсов
-function Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target)
+function Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     $small = array (
-        loca ("EXP_RESFOUND_SMALL_1"),
-        loca ("EXP_RESFOUND_SMALL_2"),
-        loca ("EXP_RESFOUND_SMALL_3"),
-        loca ("EXP_RESFOUND_SMALL_4"),
+        loca_lang ("EXP_RESFOUND_SMALL_1", $lang),
+        loca_lang ("EXP_RESFOUND_SMALL_2", $lang),
+        loca_lang ("EXP_RESFOUND_SMALL_3", $lang),
+        loca_lang ("EXP_RESFOUND_SMALL_4", $lang),
     );
     $medium = array (
-        loca ("EXP_RESFOUND_MED_1"),
-        loca ("EXP_RESFOUND_MED_2"),
-        loca ("EXP_RESFOUND_MED_3"),
+        loca_lang ("EXP_RESFOUND_MED_1", $lang),
+        loca_lang ("EXP_RESFOUND_MED_2", $lang),
+        loca_lang ("EXP_RESFOUND_MED_3", $lang),
     );
     $large = array (
-        loca ("EXP_RESFOUND_LARGE_1"),
-        loca ("EXP_RESFOUND_LARGE_2"),
+        loca_lang ("EXP_RESFOUND_LARGE_1", $lang),
+        loca_lang ("EXP_RESFOUND_LARGE_2", $lang),
     );
     $footer = array (
-        loca ("EXP_RESFOUND_LOGBOOK_1"),
-        loca ("EXP_RESFOUND_LOGBOOK_2"),
-        loca ("EXP_RESFOUND_LOGBOOK_3"),
-        loca ("EXP_RESFOUND_LOGBOOK_4"),
+        loca_lang ("EXP_RESFOUND_LOGBOOK_1", $lang),
+        loca_lang ("EXP_RESFOUND_LOGBOOK_2", $lang),
+        loca_lang ("EXP_RESFOUND_LOGBOOK_3", $lang),
+        loca_lang ("EXP_RESFOUND_LOGBOOK_4", $lang),
     );
     $resname = array ( loca ("METAL"), loca ("CRYSTAL"), loca ("DEUTERIUM" ) );
 
@@ -424,29 +425,29 @@ function Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target)
 // ---
 
 // Нахождение кораблей
-function Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target)
+function Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     global $UnitParam;
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
 
     $small = array (
-        loca ("EXP_FLEET_SMALL_1"),
-        loca ("EXP_FLEET_SMALL_2"),
-        loca ("EXP_FLEET_SMALL_3"),
-        loca ("EXP_FLEET_SMALL_4"),
+        loca_lang ("EXP_FLEET_SMALL_1", $lang),
+        loca_lang ("EXP_FLEET_SMALL_2", $lang),
+        loca_lang ("EXP_FLEET_SMALL_3", $lang),
+        loca_lang ("EXP_FLEET_SMALL_4", $lang),
     );
     $medium = array (
-        loca ("EXP_FLEET_MED_1"),
-        loca ("EXP_FLEET_MED_2"),
+        loca_lang ("EXP_FLEET_MED_1", $lang),
+        loca_lang ("EXP_FLEET_MED_2", $lang),
     );
     $large = array (
-        loca ("EXP_FLEET_LARGE_1"),
-        loca ("EXP_FLEET_LARGE_2"),
+        loca_lang ("EXP_FLEET_LARGE_1", $lang),
+        loca_lang ("EXP_FLEET_LARGE_2", $lang),
     );
     $footer = array (
-        loca ("EXP_FLEET_LOGBOOK_1"),
-        loca ("EXP_FLEET_LOGBOOK_2"),
-        loca ("EXP_FLEET_LOGBOOK_3"),
+        loca_lang ("EXP_FLEET_LOGBOOK_1", $lang),
+        loca_lang ("EXP_FLEET_LOGBOOK_2", $lang),
+        loca_lang ("EXP_FLEET_LOGBOOK_3", $lang),
     );
 
     $points = $fpoints = 0;
@@ -548,14 +549,14 @@ function Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target)
 // ---
 
 // Нахождение Скупщика
-function Exp_TraderFound ($queue, $fleet_obj, $fleet, $origin, $target)
+function Exp_TraderFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     global $db_prefix;
     $player_id = $fleet_obj['owner_id'];
 
     $msg = array (
-        loca ( "EXP_TRADER_1" ),
-        loca ( "EXP_TRADER_2" ),
+        loca_lang ( "EXP_TRADER_1", $lang ),
+        loca_lang ( "EXP_TRADER_2", $lang ),
     );
 
     $user = LoadUser ( $player_id );
@@ -636,16 +637,14 @@ function ExpeditionArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
 function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    global $loca_lang;
-    global $GlobalUni;
-
     $exptab = LoadExpeditionSettings ();
 
     $hold_time = $fleet_obj['flight_time'] / 3600;
 
-    loca_add ( "common", $GlobalUni['lang'] );
-    loca_add ( "technames", $GlobalUni['lang'] );
-    loca_add ( "expedition", $GlobalUni['lang'] );
+    $origin_user = LoadUser ( $origin['owner_id'] );
+    loca_add ( "common", $origin_user['lang'] );
+    loca_add ( "technames", $origin_user['lang'] );
+    loca_add ( "expedition", $origin_user['lang'] );
 
     // Событие экспедиции.
     $chance = mt_rand ( 0, 99 );
@@ -660,31 +659,34 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
         $chance = mt_rand ( 0, 99 );
         if ($chance >= $chance_depleted)    // Удачная экспедиция.
         {
-            if ( $chance >= $exptab['chance_alien'] ) $text = Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_pirates'] ) $text = Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_dm'] ) $text = Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_lost'] ) $text = Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_lost'] ) $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_delay'] ) $text = Exp_DelayFleet ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_accel'] ) $text = Exp_AccelFleet ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_res'] ) $text = Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target);
-            else if ( $chance >= $exptab['chance_fleet'] ) $text = Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target);
-            else $text = Exp_TraderFound ($queue, $fleet_obj, $fleet, $origin, $target);
+            if ( $chance >= $exptab['chance_alien'] ) $text = Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            else if ( $chance >= $exptab['chance_pirates'] ) $text = Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            else if ( $chance >= $exptab['chance_dm'] ) $text = Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            else if ( $chance >= $exptab['chance_lost'] ) $text = Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            else if ( $chance >= $exptab['chance_lost'] ) $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            else if ( $chance >= $exptab['chance_delay'] ) $text = Exp_DelayFleet ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            else if ( $chance >= $exptab['chance_accel'] ) $text = Exp_AccelFleet ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            else if ( $chance >= $exptab['chance_res'] ) $text = Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            else if ( $chance >= $exptab['chance_fleet'] ) $text = Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            else $text = Exp_TraderFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
         }
-        else $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target);
+        else $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
     }
-    else $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target);
+    else $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
 
     // DEBUG
-    //$text = Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target);
+    //$text = Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
 
     // Обновляем счётчик посещений экспедиции на планете.
     AdjustResources ( 1, 0, 0, $target['planet_id'], '+' );
 
     // Бортовой журнал, дополнение связиста
-    if ( $fleet[210] > 0 ) $text .= "\n<br/>\n<br/>\n" . Logbook ( $expcount, $exptab);
+    if ( $fleet[210] > 0 ) $text .= "\n<br/>\n<br/>\n" . Logbook ( $expcount, $exptab, $origin_user['lang']);
 
-    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", "Результат экспедиции [".$target['g'].":".$target['s'].":".$target['p']."]", $text, 3, $queue['end']);
+    SendMessage ( $fleet_obj['owner_id'], 
+        loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']),
+        loca_lang(va("EXP_MESSAGE_SUBJ", $target['g'], $target['s'], $target['p']), $origin_user['lang']),
+        $text, 3, $queue['end']);
 }
 
 ?>
