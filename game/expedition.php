@@ -252,7 +252,7 @@ function Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target, $lan
 
     $dm *= 3;
 
-    $msg .= va ( loca("EXP_FOUND"), nicenum($dm), loca("DM") );
+    $msg .= va ( loca_lang("EXP_FOUND", $lang), nicenum($dm), loca_lang("DM", $lang) );
 
     // Зачислить ТМ
     $query = "UPDATE ".$db_prefix."users SET dmfree = dmfree + '".$dm."' WHERE player_id=$player_id;";
@@ -404,7 +404,7 @@ function Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang
     }
     else $no_cargo = false;
 
-    $msg .= va ( loca("EXP_FOUND"), nicenum($amount), $resname[$type]);
+    $msg .= va ( loca_lang("EXP_FOUND", $lang), nicenum($amount), $resname[$type]);
     if ( $no_cargo ) {
         $n = mt_rand ( 0, count($footer) - 1 );
         $msg .= "<br><br>" . $footer[$n];
