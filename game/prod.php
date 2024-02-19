@@ -5,67 +5,69 @@
 // Расчет стоимости, времени постройки и необходимых условий.
 
 // Стоимость первого уровня.
-// Постройки.
-$initial[14]['m'] = 400; $initial[14]['k'] = 120; $initial[14]['d'] = 200; $initial[14]['e'] = 0;
-$initial[15]['m'] = 1000000; $initial[15]['k'] = 500000; $initial[15]['d'] = 100000; $initial[15]['e'] = 0;
-$initial[21]['m'] = 400; $initial[21]['k'] = 200; $initial[21]['d'] = 100; $initial[21]['e'] = 0;
-$initial[22]['m'] = 2000; $initial[22]['k'] = 0; $initial[22]['d'] = 0; $initial[22]['e'] = 0;
-$initial[23]['m'] = 2000; $initial[23]['k'] = 1000; $initial[23]['d'] = 0; $initial[23]['e'] = 0;
-$initial[24]['m'] = 2000; $initial[24]['k'] = 2000; $initial[24]['d'] = 0; $initial[24]['e'] = 0;
-$initial[31]['m'] = 200; $initial[31]['k'] = 400; $initial[31]['d'] = 200; $initial[31]['e'] = 0;
-$initial[33]['m'] = 0; $initial[33]['k'] = 50000; $initial[33]['d'] = 100000; $initial[33]['e'] = 1000;
-$initial[34]['m'] = 20000; $initial[34]['k'] = 40000; $initial[34]['d'] = 0; $initial[34]['e'] = 0;
-$initial[44]['m'] = 20000; $initial[44]['k'] = 20000; $initial[44]['d'] = 1000; $initial[44]['e'] = 0;
-// Луна
-$initial[41]['m'] = 20000; $initial[41]['k'] = 40000; $initial[41]['d'] = 20000; $initial[41]['e'] = 0;
-$initial[42]['m'] = 20000; $initial[42]['k'] = 40000; $initial[42]['d'] = 20000; $initial[42]['e'] = 0;
-$initial[43]['m'] = 2000000; $initial[43]['k'] = 4000000; $initial[43]['d'] = 2000000; $initial[43]['e'] = 0;
+$initial = array (      // m, k, d, e
+    // Постройки.
+    14 => array (400, 120, 200, 0),
+    15 => array (1000000, 500000, 100000, 0),
+    21 => array (400, 200, 100, 0),
+    22 => array (2000, 0, 0, 0),
+    23 => array (2000, 1000, 0, 0),
+    24 => array (2000, 2000, 0, 0),
+    31 => array (200, 400, 200, 0),
+    33 => array (0, 50000, 100000, 1000),
+    34 => array (20000, 40000,  0, 0),
+    44 => array (20000, 20000, 1000, 0),
+    // Луна
+    41 => array (20000, 40000, 20000, 0),
+    42 => array (20000, 40000, 20000, 0),
+    43 => array (2000000, 4000000, 2000000, 0),
 
-// Флот
-$initial[202]['m'] = 2000; $initial[202]['k'] = 2000; $initial[202]['d'] = 0;
-$initial[203]['m'] = 6000; $initial[203]['k'] = 6000; $initial[203]['d'] = 0;
-$initial[204]['m'] = 3000; $initial[204]['k'] = 1000; $initial[204]['d'] = 0;
-$initial[205]['m'] = 6000; $initial[205]['k'] = 4000; $initial[205]['d'] = 0;
-$initial[206]['m'] = 20000; $initial[206]['k'] = 7000; $initial[206]['d'] = 2000;
-$initial[207]['m'] = 45000; $initial[207]['k'] = 15000; $initial[207]['d'] = 0;
-$initial[208]['m'] = 10000; $initial[208]['k'] = 20000; $initial[208]['d'] = 10000;
-$initial[209]['m'] = 10000; $initial[209]['k'] = 6000; $initial[209]['d'] = 2000;
-$initial[210]['m'] = 0; $initial[210]['k'] = 1000; $initial[210]['d'] = 0;
-$initial[211]['m'] = 50000; $initial[211]['k'] = 25000; $initial[211]['d'] = 15000;
-$initial[212]['m'] = 0; $initial[212]['k'] = 2000; $initial[212]['d'] = 500;
-$initial[213]['m'] = 60000; $initial[213]['k'] = 50000; $initial[213]['d'] = 15000;
-$initial[214]['m'] = 5000000; $initial[214]['k'] = 4000000; $initial[214]['d'] =1000000;
-$initial[215]['m'] = 30000; $initial[215]['k'] = 40000; $initial[215]['d'] = 15000;
+    // Флот
+    202 => array (2000, 2000, 0, 0),
+    203 => array (6000, 6000, 0, 0),
+    204 => array (3000, 1000, 0, 0),
+    205 => array (6000, 4000, 0, 0),
+    206 => array (20000, 7000, 2000, 0),
+    207 => array (45000, 15000, 0, 0),
+    208 => array (10000, 20000, 10000, 0),
+    209 => array (10000, 6000, 2000, 0),
+    210 => array (0, 1000, 0, 0),
+    211 => array (50000, 25000, 15000, 0),
+    212 => array (0, 2000, 500, 0),
+    213 => array (60000, 50000, 15000, 0),
+    214 => array (5000000, 4000000, 1000000, 0),
+    215 => array (30000, 40000, 15000, 0),
 
-// Оборона.
-$initial[401]['m'] = 2000; $initial[401]['k'] = 0; $initial[401]['d'] = 0;
-$initial[402]['m'] = 1500; $initial[402]['k'] = 500; $initial[402]['d'] = 0;
-$initial[403]['m'] = 6000; $initial[403]['k'] = 2000; $initial[403]['d'] = 0;
-$initial[404]['m'] = 20000; $initial[404]['k'] = 15000; $initial[404]['d'] = 2000;
-$initial[405]['m'] = 2000; $initial[405]['k'] = 6000; $initial[405]['d'] = 0;
-$initial[406]['m'] = 50000; $initial[406]['k'] = 50000; $initial[406]['d'] = 30000;
-$initial[407]['m'] = 10000; $initial[407]['k'] = 10000; $initial[407]['d'] = 0;
-$initial[408]['m'] = 50000; $initial[408]['k'] = 50000; $initial[408]['d'] = 0;
-$initial[502]['m'] = 8000; $initial[502]['k'] = 0; $initial[502]['d'] = 2000;
-$initial[503]['m'] = 12500; $initial[503]['k'] = 2500; $initial[503]['d'] = 10000;
+    // Оборона.
+    401 => array (2000, 0, 0, 0),
+    402 => array (1500, 500, 0, 0),
+    403 => array (6000, 2000, 0, 0),
+    404 => array (20000, 15000, 2000, 0),
+    405 => array (2000, 6000, 0, 0),
+    406 => array (50000, 50000, 30000, 0),
+    407 => array (10000, 10000, 0, 0),
+    408 => array (50000, 50000, 0, 0),
+    502 => array (8000, 0, 2000, 0),
+    503 => array (12500, 2500, 10000, 0),
 
-// Исследования.
-$initial[106]['m'] = 200; $initial[106]['k'] = 1000; $initial[106]['d'] = 200; $initial[106]['e'] = 0;
-$initial[108]['m'] = 0; $initial[108]['k'] = 400; $initial[108]['d'] = 600; $initial[108]['e'] = 0;
-$initial[109]['m'] = 800; $initial[109]['k'] = 200; $initial[109]['d'] = 0; $initial[109]['e'] = 0;
-$initial[110]['m'] = 200; $initial[110]['k'] = 600; $initial[110]['d'] = 0; $initial[110]['e'] = 0;
-$initial[111]['m'] = 1000; $initial[111]['k'] = 0; $initial[111]['d'] = 0; $initial[111]['e'] = 0;
-$initial[113]['m'] = 0; $initial[113]['k'] = 800; $initial[113]['d'] = 400; $initial[113]['e'] = 0;
-$initial[114]['m'] = 0; $initial[114]['k'] = 4000; $initial[114]['d'] = 2000; $initial[114]['e'] = 0;
-$initial[115]['m'] = 400; $initial[115]['k'] = 0; $initial[115]['d'] = 600; $initial[115]['e'] = 0;
-$initial[117]['m'] = 2000; $initial[117]['k'] = 4000; $initial[117]['d'] = 600; $initial[117]['e'] = 0;
-$initial[118]['m'] = 10000; $initial[118]['k'] = 20000; $initial[118]['d'] = 6000; $initial[118]['e'] = 0;
-$initial[120]['m'] = 200; $initial[120]['k'] = 100; $initial[120]['d'] = 0; $initial[120]['e'] = 0;
-$initial[121]['m'] = 1000; $initial[121]['k'] = 300; $initial[121]['d'] = 100; $initial[121]['e'] = 0;
-$initial[122]['m'] = 2000; $initial[122]['k'] = 4000; $initial[122]['d'] = 1000; $initial[122]['e'] = 0;
-$initial[123]['m'] = 240000; $initial[123]['k'] = 400000; $initial[123]['d'] = 160000; $initial[123]['e'] = 0;
-$initial[124]['m'] = 4000; $initial[124]['k'] = 8000; $initial[124]['d'] = 4000; $initial[124]['e'] = 0;
-$initial[199]['m'] = 0; $initial[199]['k'] = 0; $initial[199]['d'] = 0; $initial[199]['e'] = 300000;
+    // Исследования.
+    106 => array (200, 1000, 200, 0),
+    108 => array (0, 400, 600, 0),
+    109 => array (800, 200, 0, 0),
+    110 => array (200, 600, 0, 0),
+    111 => array (1000, 0, 0, 0),
+    113 => array (0, 800, 400, 0),
+    114 => array (0, 4000, 2000, 0),
+    115 => array (400, 0, 600, 0),
+    117 => array (2000, 4000, 600, 0),
+    118 => array (10000, 20000, 6000, 0),
+    120 => array (200, 100, 0, 0),
+    121 => array (1000, 300, 100, 0),
+    122 => array (2000, 4000, 1000, 0),
+    123 => array (240000, 400000, 160000, 0),
+    124 => array (4000, 8000, 4000, 0),
+    199 => array (0, 0, 0, 300000),
+);
 
 function BuildMeetRequirement ( $user, $planet, $id )
 {
@@ -128,10 +130,10 @@ function BuildPrice ( $id, $lvl )
             $e = 0;
             break;
         default:
-            $m = $initial[$id]['m'] * pow(2, $lvl-1);
-            $k = $initial[$id]['k'] * pow(2, $lvl-1);
-            $d = $initial[$id]['d'] * pow(2, $lvl-1);
-            $e = $initial[$id]['e'] * pow(2, $lvl-1);
+            $m = $initial[$id][0] * pow(2, $lvl-1);
+            $k = $initial[$id][1] * pow(2, $lvl-1);
+            $d = $initial[$id][2] * pow(2, $lvl-1);
+            $e = $initial[$id][3] * pow(2, $lvl-1);
             break;
     }
     $res = array ( 'm' => $m, 'k' => $k, 'd' => $d, 'e' => $e );
@@ -182,9 +184,9 @@ function ShipyardMeetRequirement ( $user, $planet, $id )
 function ShipyardPrice ( $id )
 {
     global $initial;
-    $m = $initial[$id]['m'];
-    $k = $initial[$id]['k'];
-    $d = $initial[$id]['d'];
+    $m = $initial[$id][0];
+    $k = $initial[$id][1];
+    $d = $initial[$id][2];
     $e = 0;
     $res = array ( 'm' => $m, 'k' => $k, 'd' => $d, 'e' => $e );
     return $res;
@@ -226,13 +228,13 @@ function ResearchPrice ( $id, $lvl )
     global $initial;
     if ($id == 199) {
         $m = $k = $d = 0;
-        $e = $initial[$id]['e'] * pow(3, $lvl-1);
+        $e = $initial[$id][3] * pow(3, $lvl-1);
     }
     else {
-        $m = $initial[$id]['m'] * pow(2, $lvl-1);
-        $k = $initial[$id]['k'] * pow(2, $lvl-1);
-        $d = $initial[$id]['d'] * pow(2, $lvl-1);
-        $e = $initial[$id]['e'] * pow(2, $lvl-1);
+        $m = $initial[$id][0] * pow(2, $lvl-1);
+        $k = $initial[$id][1] * pow(2, $lvl-1);
+        $d = $initial[$id][2] * pow(2, $lvl-1);
+        $e = $initial[$id][3] * pow(2, $lvl-1);
     }
     $res = array ( 'm' => $m, 'k' => $k, 'd' => $d, 'e' => $e );
     return $res;
