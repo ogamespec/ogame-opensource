@@ -46,36 +46,6 @@ function GetPlanetSmallImage ($skinpath, $planet)
 
 <?php
 
-// Here is a function to sort an array by the key of his sub-array
-function sksort ($array, $subkey="id", $sort_ascending=false)
-{
-    $temp_array = array ();
-    if (count($array))
-        $temp_array[key($array)] = array_shift($array);
-
-    foreach($array as $key => $val){
-        $offset = 0;
-        $found = false;
-        foreach($temp_array as $tmp_key => $tmp_val)
-        {
-            if(!$found and strtolower($val[$subkey]) > strtolower($tmp_val[$subkey]))
-            {
-                $temp_array = array_merge(    (array)array_slice($temp_array,0,$offset),
-                                            array($key => $val),
-                                            array_slice($temp_array,$offset)
-                                          );
-                $found = true;
-            }
-            $offset++;
-        }
-        if(!$found) $temp_array = array_merge($temp_array, array($key => $val));
-    }
-
-    if ($sort_ascending) $array = array_reverse($temp_array);
-    else $array = $temp_array;
-    return $array;
-}
-
 function PlayerDetails ($player_id)
 {
     global $galaxy, $stats, $ally;
