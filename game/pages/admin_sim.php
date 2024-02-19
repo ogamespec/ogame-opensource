@@ -116,10 +116,8 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
     else if ( $res['result'] === "dwon" ) $battle_result = 1;
     else $battle_result = 2;
 
-    // Сгенерировать боевой доклад.
-    loca_add ( "battlereport", $GlobalUser['lang'] );
-    loca_add ( "technames", $GlobalUser['lang'] );
-    return BattleReport ( $res, time(), $aloss, $dloss, 1, 2, 3, $moonchance, $mooncreated, $repaired );
+    // Сгенерировать боевой доклад (на языке админа)
+    return BattleReport ( $res, time(), $aloss, $dloss, 1, 2, 3, $moonchance, $mooncreated, $repaired, $GlobalUser['lang'] );
 }
 
 function Admin_BattleSim ()

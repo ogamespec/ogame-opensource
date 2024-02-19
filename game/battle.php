@@ -301,17 +301,17 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
 }
 
 // Сгенерировать HTML-код одного слота.
-function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $attack )
+function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $attack, $lang )
 {
     global $UnitParam;
 
     $text = "<th><br>";
 
     $text .= "<center>";
-    if ($attack) $text .= "Флот атакующего";
-    else $text .= "Обороняющийся";
+    if ($attack) $text .= loca_lang("BATTLE_ATTACKER", $lang);
+    else $text .= loca_lang("BATTLE_DEFENDER", $lang);
     $text .= " ".$name." (<a href=# onclick=showGalaxy($g,$s,$p); >[$g:$s:$p]</a>)";
-    if ($show_techs) $text .= "<br>Вооружение: ".($weap * 10)."% Щиты: ".($shld * 10)."% Броня: ".($armor * 10)."% ";
+    if ($show_techs) $text .= "<br>".loca_lang("BATTLE_ATTACK", $lang)." ".($weap * 10)."% ".loca_lang("BATTLE_SHIELD", $lang)." ".($shld * 10)."% ".loca_lang("BATTLE_ARMOR", $lang)." ".($armor * 10)."% ";
 
     $sum = 0;
     foreach ( $unitmap as $i=>$gid )
@@ -324,16 +324,16 @@ function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $d
     {
         $text .= "<table border=1>";
 
-        $text .= "<tr><th>Тип</th>";
+        $text .= "<tr><th>".loca_lang("BATTLE_TYPE", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
             if ( $gid > 400 ) $n = $defense[$gid];
             else $n = $fleet[$gid];
-            if ( $n > 0 ) $text .= "<th>".loca("SNAME_$gid")."</th>";
+            if ( $n > 0 ) $text .= "<th>".loca_lang("SNAME_$gid", $lang)."</th>";
         }
         $text .= "</tr>";
 
-        $text .= "<tr><th>Кол-во.</th>";
+        $text .= "<tr><th>".loca_lang("BATTLE_AMOUNT", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
             if ( $gid > 400 ) $n = $defense[$gid];
@@ -342,7 +342,7 @@ function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $d
         }
         $text .= "</tr>";
 
-        $text .= "<tr><th>Воор.:</th>";
+        $text .= "<tr><th>".loca_lang("BATTLE_WEAP", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
             if ( $gid > 400 ) $n = $defense[$gid];
@@ -351,7 +351,7 @@ function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $d
         }
         $text .= "</tr>";
 
-        $text .= "<tr><th>Щиты</th>";
+        $text .= "<tr><th>".loca_lang("BATTLE_SHLD", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
             if ( $gid > 400 ) $n = $defense[$gid];
@@ -360,7 +360,7 @@ function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $d
         }
         $text .= "</tr>";
 
-        $text .= "<tr><th>Броня</th>";
+        $text .= "<tr><th>".loca_lang("BATTLE_ARMR", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
             if ( $gid > 400 ) $n = $defense[$gid];
@@ -371,57 +371,63 @@ function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $d
 
         $text .= "</table>";
     }
-    else $text .= "<br>уничтожен";
+    else $text .= "<br>" . loca_lang("BATTLE_DESTROYED", $lang);
 
     $text .= "</center></th>";
     return $text;
 }
 
 // Сгенерировать боевой доклад.
-function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired )
+function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired, $lang )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
     $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $dmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 401, 402, 403, 404, 405, 406, 407, 408 );
 
+    loca_add ( "battlereport", $lang );
+    loca_add ( "technames", $lang );
+
     $text = "";
 
     // Заголовок доклада.
-    $text .= "Дата/Время: ".date ("m-d H:i:s", $now)." . Произошёл бой между следующими флотами:<br>";
+    $text .= loca_lang("BATTLE_ADATE", $lang) . " ".date ("m-d H:i:s", $now)." " . loca_lang("BATTLE_INFO", $lang) . ":<br>";
 
     // Флоты перед боем.
     $text .= "<table border=1 width=100%><tr>";
     foreach ( $res['before']['attackers'] as $i=>$attacker)
     {
-        $text .= GenSlot ( $attacker['weap'], $attacker['shld'], $attacker['armr'], $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 1, 1 );
+        $text .= GenSlot ( $attacker['weap'], $attacker['shld'], $attacker['armr'], $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 1, 1, $lang );
     }
     $text .= "</tr></table>";
     $text .= "<table border=1 width=100%><tr>";
     foreach ( $res['before']['defenders'] as $i=>$defender)
     {
-        $text .= GenSlot ( $defender['weap'], $defender['shld'], $defender['armr'], $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 1, 0 );
+        $text .= GenSlot ( $defender['weap'], $defender['shld'], $defender['armr'], $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 1, 0, $lang );
     }
     $text .= "</tr></table>";
 
     // Раунды.
     foreach ( $res['rounds'] as $i=>$round)
     {
-        $text .= "<br><center>Атакующий флот делает: ".nicenum($round['ashoot'])." выстрела(ов) общей мощностью ".nicenum($round['apower'])." по обороняющемуся. Щиты обороняющегося поглощают ".nicenum($round['dabsorb'])." мощности выстрелов";
-        $text .= "<br>Обороняющийся флот делает ".nicenum($round['dshoot'])." выстрела(ов) общей мощностью ".nicenum($round['dpower'])." выстрела(ов) по атакующему. Щиты атакующего поглощают ".nicenum($round['aabsorb'])." мощности выстрелов</center>";
+        $text .= "<br><center>";
+        $text .= va (loca_lang("BATTLE_ASHOT", $lang), nicenum($round['ashoot']), nicenum($round['apower']), nicenum($round['dabsorb']) );
+        $text .= "<br>";
+        $text .= va (loca_lang("BATTLE_DSHOT", $lang), nicenum($round['dshoot']), nicenum($round['dpower']), nicenum($round['aabsorb']) );
+        $text .= "</center>";
 
         $text .= "<table border=1 width=100%><tr>";        // Атакующие
         foreach ( $round['attackers'] as $n=>$attacker )
         {
-            $text .= GenSlot ( 0, 0, 0, $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 0, 1 );
+            $text .= GenSlot ( 0, 0, 0, $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 0, 1, $lang );
         }
         $text .= "</tr></table>";
 
         $text .= "<table border=1 width=100%><tr>";        // Обороняющиеся
         foreach ( $round['defenders'] as $n=>$defender )
         {
-            if ( $n == 0 ) $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 0, 0 );
-            else $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $amap, $defender, null, 0, 0 );
+            if ( $n == 0 ) $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 0, 0, $lang );
+            else $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $amap, $defender, null, 0, 0, $lang );
         }
         $text .= "</tr></table>";
     }
@@ -430,15 +436,15 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
 //<!--A:167658,W:167658-->
     if ( $res['result'] === "awon" )
     {
-        $text .= "<p> Атакующий выиграл битву!<br>Он получает<br>".nicenum($cm)." металла, ".nicenum($ck)." кристалла и ".nicenum($cd)." дейтерия.";
+        $text .= "<p> ".loca_lang("BATTLE_AWON", $lang)."<br>" . va(loca_lang("BATTLE_PLUNDER", $lang), nicenum($cm), nicenum($ck), nicenum($cd));
     }
-    else if ( $res['result'] === "dwon" ) $text .= "<p> Обороняющийся выиграл битву!";
-    else if ( $res['result'] === "draw" ) $text .= "<p> Бой оканчивается вничью, оба флота возвращаются на свои планеты";
+    else if ( $res['result'] === "dwon" ) $text .= "<p> " . loca_lang("BATTLE_DWON", $lang);
+    else if ( $res['result'] === "draw" ) $text .= "<p> " . loca_lang("BATTLE_DRAW", $lang);
     //else Error ("Неизвестный исход битвы!");
-    $text .= "<br><p><br>Атакующий потерял ".nicenum($aloss)." единиц.<br>Обороняющийся потерял ".nicenum($dloss)." единиц.";
-    $text .= "<br>Теперь на этих пространственных координатах находится ".nicenum($res['dm'])." металла и ".nicenum($res['dk'])." кристалла.";
-    if ( $moonchance ) $text .= "<br>Шанс появления луны составил $moonchance %";
-    if ( $mooncreated ) $text .= "<br>Невероятные массы свободного металла и кристалла сближаются и образуют форму некого спутника на орбите планеты. ";
+    $text .= "<br><p><br>".va(loca_lang("BATTLE_ALOSS", $lang), nicenum($aloss))."<br>" . va(loca_lang("BATTLE_DLOSS", $lang), nicenum($dloss));
+    $text .= "<br>" . va(loca_lang("BATTLE_DEBRIS", $lang), nicenum($res['dm']), nicenum($res['dk']));
+    if ( $moonchance ) $text .= "<br>" . va(loca_lang("BATTLE_MOONCHANCE", $lang), $moonchance);
+    if ( $mooncreated ) $text .= "<br>" . loca_lang("BATTLE_MOON", $lang);
 
     // Восстановление обороны.
     // При выводе оригинального боевого доклада есть ошибка: Малый щитовой купол выводится не в свою очередь, а перед Плазменным орудием.
@@ -454,11 +460,17 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
             if ($repaired[$gid])
             {
                 if ( $sum > 0 ) $text .= ", ";
-                $text .= nicenum ($repaired[$gid]) . " " . loca ("NAME_$gid");
+                $text .= nicenum ($repaired[$gid]) . " " . loca_lang ("NAME_$gid", $lang);
                 $sum += $repaired[$gid];
             }
         }
-        $text .= " были повреждены и находятся в ремонте.<br>";
+        if ($sum > 1) {
+            $text .= loca_lang("BATTLE_REPAIRED", $lang);
+        }
+        else {
+            $text .= loca_lang("BATTLE_REPAIRED1", $lang);
+        }
+        $text .= "<br>";
     }
 
     return $text;
@@ -485,6 +497,8 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
     $target_user = LoadUser ($target['owner_id']);
     loca_add ( "graviton", $origin_user['lang'] );
     loca_add ( "graviton", $target_user['lang'] );
+    loca_add ( "fleetmsg", $origin_user['lang'] );
+    loca_add ( "fleetmsg", $target_user['lang'] );
 
     if ( !$ripdes && !$moondes )
     {
@@ -544,8 +558,14 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
     }
 
     // Разослать сообщения.
-    SendMessage ( $origin['owner_id'], "Командование флотом", loca_lang("GRAVITON_ATK_SUBJ", $origin_user['lang']), $atext, 5, $when);
-    SendMessage ( $target['owner_id'], "Командование флотом", loca_lang("GRAVITON_DEF_SUBJ", $target_user['lang']), $dtext, 5, $when);
+    SendMessage ( $origin['owner_id'], 
+        loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
+        loca_lang("GRAVITON_ATK_SUBJ", $origin_user['lang']),
+        $atext, 5, $when);
+    SendMessage ( $target['owner_id'], 
+        loca_lang("FLEET_MESSAGE_FROM", $target_user['lang']),
+        loca_lang("GRAVITON_DEF_SUBJ", $target_user['lang']),
+        $dtext, 5, $when);
 
     return $result;
 }
@@ -751,39 +771,66 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     $queue = GetFleetQueue ( $fleet_id );
     UpdatePlanetActivity ( $planet_id, $queue['end'] );
 
-    // Сгенерировать боевой доклад.
-    loca_add ( "battlereport", $GlobalUni['lang'] );
-    loca_add ( "technames", $GlobalUni['lang'] );
-    $text = BattleReport ( $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired );
+    // Данный массив содержит кэш сгенерированных боевых докладов для каждого языка.
+    $battle_text = array();
+
+    // Сгенерировать боевой доклад на языке вселенной (для истории логов)
+    $text = BattleReport ( $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired, $GlobalUni['lang'] );
+    $battle_text[$GlobalUni['lang']] = $text;
 
     // Разослать сообщения, mailbox используется чтобы не слать по нескольку раз сообщения игрокам из САБ.
     $mailbox = array ();
 
     foreach ( $d as $i=>$user )        // Обороняющиеся
     {
+        // Сгенерировать боевой доклад на языке пользователя, если его нет в кэше
+        if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
+        else {
+            $text = BattleReport ( $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired, $user['lang'] );
+            $battle_text[$user['lang']] = $text;
+        }
+
+        loca_add ( "fleetmsg", $user['lang'] );
+
         if ( key_exists($user['player_id'], $mailbox) ) continue;
-        $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6, $when );
+        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, 6, $when );
         MarkMessage ( $user['player_id'], $bericht );
-        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$d_result[$battle_result]."\">Боевой доклад [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-        SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2, $when );
+        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$d_result[$battle_result]."\">" .
+            loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']) .
+            " [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
+        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", 2, $when );
         $mailbox[ $user['player_id'] ] = true;
     }
 
-    // Обновить лог боевого доклада
-    $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=admin&session={PUBLIC_SESSION}&mode=BattleReport&bericht=$battle_id\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-    $query = "UPDATE ".$db_prefix."battledata SET title = '".$subj."', report = '".$text."' WHERE battle_id = $battle_id;";
+    // Обновить лог боевого доклада (использовать боевой доклад на языке вселенной)
+    loca_add ( "fleetmsg", $GlobalUni['lang'] );
+    $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=admin&session={PUBLIC_SESSION}&mode=BattleReport&bericht=$battle_id\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
+        loca_lang("FLEET_MESSAGE_BATTLE", $GlobalUni['lang']) .
+        " [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
+    $query = "UPDATE ".$db_prefix."battledata SET title = '".$subj."', report = '".$battle_text[$GlobalUni['lang']]."' WHERE battle_id = $battle_id;";
     dbquery ( $query );
-
-    // Если флот уничтожен за 1 или 2 раунда - не показывать лог боя для атакующих.
-    if ( count($res['rounds']) <= 2 && $battle_result == 1 ) $text = "Контакт с флотом потерян. <br> Это означает, что его уничтожили первым же залпом <!--A:$aloss,W:$dloss-->";
 
     foreach ( $a as $i=>$user )        // Атакующие
     {
+        // Сгенерировать боевой доклад на языке пользователя, если его нет в кэше
+        if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
+        else {
+            $text = BattleReport ( $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired, $user['lang'] );
+            $battle_text[$user['lang']] = $text;
+        }
+
+        // Если флот уничтожен за 1 или 2 раунда - не показывать лог боя для атакующих.
+        if ( count($res['rounds']) <= 2 && $battle_result == 1 ) $text = loca_lang("BATTLE_LOST", $user['lang']) . " <!--A:$aloss,W:$dloss-->";
+
+        loca_add ( "fleetmsg", $user['lang'] );
+
         if ( key_exists($user['player_id'], $mailbox) ) continue;
-        $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6, $when );
+        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, 6, $when );
         MarkMessage ( $user['player_id'], $bericht );
-        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-        SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2, $when );
+        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
+            loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']) .
+            " [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
+        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", 2, $when );
         $mailbox[ $user['player_id'] ] = true;
     }
 
@@ -859,23 +906,26 @@ function WritebackBattleResultsExpedition ( $a, $d, $res )
 }
 
 // Сгенерировать боевой доклад.
-function ShortBattleReport ( $res, $now )
+function ShortBattleReport ( $res, $now, $lang )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
     $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $dmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 401, 402, 403, 404, 405, 406, 407, 408 );
 
+    loca_add ( "battlereport", $lang );
+    loca_add ( "technames", $lang );
+
     $text = "";
 
     // Заголовок доклада.
-    $text .= "Дата/Время: ".date ("m-d H:i:s", $now)." . Произошёл бой между следующими флотами:<br>";
+    $text .= loca_lang("BATTLE_ADATE", $lang) . " ".date ("m-d H:i:s", $now)." " . loca_lang("BATTLE_INFO", $lang) . ":<br>";
 
     // Флоты перед боем.
     $text .= "<table border=1 width=100%><tr>";
     foreach ( $res['before']['attackers'] as $i=>$attacker)
     {
-        $text .= GenSlot ( $attacker['weap'], $attacker['shld'], $attacker['armr'], $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 1, 1 );
+        $text .= GenSlot ( $attacker['weap'], $attacker['shld'], $attacker['armr'], $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 1, 1, $lang );
     }
     $text .= "</tr></table>";
     $text .= "<table border=1 width=100%><tr>";
@@ -886,36 +936,39 @@ function ShortBattleReport ( $res, $now )
         $user['defense'] = array ();
         foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $defender[$gid];
         foreach ($defmap as $g=>$gid) $user['defense'][$gid] = 0;
-        $text .= GenSlot ( $defender['weap'], $defender['shld'], $defender['armr'], $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 1, 0 );
+        $text .= GenSlot ( $defender['weap'], $defender['shld'], $defender['armr'], $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 1, 0, $lang );
     }
     $text .= "</tr></table>";
 
     // Раунды.
     foreach ( $res['rounds'] as $i=>$round)
     {
-        $text .= "<br><center>Атакующий флот делает: ".nicenum($round['ashoot'])." выстрела(ов) общей мощностью ".nicenum($round['apower'])." по обороняющемуся. Щиты обороняющегося поглощают ".nicenum($round['dabsorb'])." мощности выстрелов";
-        $text .= "<br>Обороняющийся флот делает ".nicenum($round['dshoot'])." выстрела(ов) общей мощностью ".nicenum($round['dpower'])." выстрела(ов) по атакующему. Щиты атакующего поглощают ".nicenum($round['aabsorb'])." мощности выстрелов</center>";
+        $text .= "<br><center>";
+        $text .= va (loca_lang("BATTLE_ASHOT", $lang), nicenum($round['ashoot']), nicenum($round['apower']), nicenum($round['dabsorb']) );
+        $text .= "<br>";
+        $text .= va (loca_lang("BATTLE_DSHOT", $lang), nicenum($round['dshoot']), nicenum($round['dpower']), nicenum($round['aabsorb']) );
+        $text .= "</center>";
 
         $text .= "<table border=1 width=100%><tr>";        // Атакующие
         foreach ( $round['attackers'] as $n=>$attacker )
         {
-            $text .= GenSlot ( 0, 0, 0, $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 0, 1 );
+            $text .= GenSlot ( 0, 0, 0, $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 0, 1, $lang );
         }
         $text .= "</tr></table>";
 
         $text .= "<table border=1 width=100%><tr>";        // Обороняющиеся
         foreach ( $round['defenders'] as $n=>$defender )
         {
-            $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 0, 0 );
+            $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 0, 0, $lang );
         }
         $text .= "</tr></table>";
     }
 
     // Результаты боя.
 //<!--A:167658,W:167658-->
-    if ( $res['result'] === "awon" ) $text .= "<p> Атакующий выиграл битву!";
-    else if ( $res['result'] === "dwon" ) $text .= "<p> Обороняющийся выиграл битву!";
-    else if ( $res['result'] === "draw" ) $text .= "<p> Бой оканчивается вничью, оба флота возвращаются на свои планеты";
+    if ( $res['result'] === "awon" ) $text .= "<p> " . loca_lang("BATTLE_AWON", $lang);
+    else if ( $res['result'] === "dwon" ) $text .= "<p> " . loca_lang("BATTLE_DWON", $lang);
+    else if ( $res['result'] === "draw" ) $text .= "<p> " . loca_lang("BATTLE_DRAW", $lang);
 
     return $text;
 }
@@ -1104,30 +1157,45 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     $aloss = $loss['aloss'];
     $dloss = $loss['dloss'];
 
-    // Сгенерировать боевой доклад.
-    loca_add ( "battlereport", $GlobalUni['lang'] );
-    loca_add ( "technames", $GlobalUni['lang'] );
-    
-    $text = ShortBattleReport ( $res, $when );
+    // Данный массив содержит кэш сгенерированных боевых докладов для каждого языка.
+    $battle_text = array();
+
+    // Сгенерировать боевой доклад на языке вселенной (для истории логов)
+    $text = ShortBattleReport ( $res, $when, $GlobalUni['lang'] );
+    $battle_text[$GlobalUni['lang']] = $text;
 
     // Разослать сообщения
     $mailbox = array ();
 
-    // Если флот уничтожен за 1 или 2 раунда - не показывать лог боя для атакующих.
-    if ( count($res['rounds']) <= 2 && $battle_result == 1 ) $text = "Контакт с флотом потерян. <br> Это означает, что его уничтожили первым же залпом <!--A:$aloss,W:$dloss-->";
-
     foreach ( $a as $i=>$user )        // Атакующие
     {
+        // Сгенерировать боевой доклад на языке пользователя, если его нет в кэше
+        if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
+        else {
+            $text = ShortBattleReport ( $res, $when, $user['lang'] );
+            $battle_text[$user['lang']] = $text;
+        }
+
+        // Если флот уничтожен за 1 или 2 раунда - не показывать лог боя для атакующих.
+        if ( count($res['rounds']) <= 2 && $battle_result == 1 ) $text = loca_lang("BATTLE_LOST", $user['lang']) . " <!--A:$aloss,W:$dloss-->";
+
+        loca_add ( "fleetmsg", $user['lang'] );
+
         if ( $mailbox[ $user['player_id'] ] == true ) continue;
-        $bericht = SendMessage ( $user['player_id'], "Командование флотом", "Боевой доклад", $text, 6, $when );
+        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, 6, $when );
         MarkMessage ( $user['player_id'], $bericht );
-        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$target_planet['g'].":".$target_planet['s'].":".$target_planet['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-        SendMessage ( $user['player_id'], "Командование флотом", $subj, "", 2, $when );
+        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
+            loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']) . 
+            " [".$target_planet['g'].":".$target_planet['s'].":".$target_planet['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
+        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", 2, $when );
         $mailbox[ $user['player_id'] ] = true;
     }
 
     // Обновить лог боевого доклада
-    $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=admin&session={PUBLIC_SESSION}&mode=BattleReport&bericht=$battle_id\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$target_planet['g'].":".$target_planet['s'].":".$target_planet['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
+    loca_add ( "fleetmsg", $GlobalUni['lang'] );
+    $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=admin&session={PUBLIC_SESSION}&mode=BattleReport&bericht=$battle_id\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
+        loca_lang("FLEET_MESSAGE_BATTLE", $GlobalUni['lang']) . 
+        " [".$target_planet['g'].":".$target_planet['s'].":".$target_planet['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
     $query = "UPDATE ".$db_prefix."battledata SET title = '".$subj."', report = '".$text."' WHERE battle_id = $battle_id;";
     dbquery ( $query );
 
