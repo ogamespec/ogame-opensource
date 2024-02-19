@@ -56,7 +56,7 @@ function va ($subject)
 }
 
 // Here is a function to sort an array by the key of his sub-array
-function sksort ($array, $subkey="id", $sort_ascending=false)
+function sksort (&$array, $subkey="id", $sort_ascending=false)
 {
     $temp_array = array ();
     if (count($array))
