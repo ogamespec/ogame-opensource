@@ -11,6 +11,7 @@ $LOCA["ru"]["FLEET_MESSAGE_FLEET"] = "Флот ";
 $LOCA["ru"]["FLEET_MESSAGE_OBSERVE"] = "Наблюдение";
 $LOCA["ru"]["FLEET_MESSAGE_ARRIVE"] = "Достижение планеты";
 $LOCA["ru"]["FLEET_MESSAGE_TRADE"] = "Чужой флот доставляет сырьё";
+$LOCA["ru"]["FLEET_MESSAGE_SPY"] = "Шпионаж";
 
 $LOCA["ru"]["FLEET_TRANSPORT_OWN"] = "Ваш флот достигает планеты (\n#1\n) и доставляет свой груз:.\n<br/>\n" .
 				"#2 металла, #3 кристалла и #4 дейтерия.\n<br/>\n";
@@ -35,5 +36,7 @@ $LOCA["ru"]["FLEET_COLONIZE_SUCCESS"] = ", находит там новую пл
 $LOCA["ru"]["FLEET_COLONIZE_FAIL"] = ", но не находит там пригодной для колонизации планеты. В подавленном состоянии поселенцы возвращаются обратно.\n";
 $LOCA["ru"]["FLEET_COLONIZE_FROM"] = "Поселенцы";
 $LOCA["ru"]["FLEET_COLONIZE_SUBJ"] = "Доклад поселенцев";
+
+$LOCA["ru"]["FLEET_SPY_OTHER"] = "\nЧужой флот с планеты #1\n#2\nбыл обнаружен вблизи от планеты #3\n#4\n. Шанс на защиту от шпионажа: #5 %\n";
 
 ?>

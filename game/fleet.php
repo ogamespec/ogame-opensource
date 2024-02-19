@@ -640,7 +640,6 @@ function HoldingHold ($queue, $fleet_obj, $fleet, $origin, $target)
 function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     global $UnitParam;
-    global $GlobalUni;
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
     $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
@@ -666,21 +665,12 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $target_tech = $target_user['r106'];
     if ($target_prem['technocrat']) $target_tech += 2;
 
-    loca_add ( "technames", $GlobalUni['lang'] );
+    loca_add ( "technames", $origin_user['lang'] );
+    loca_add ( "espionage", $origin_user['lang'] );
+    loca_add ( "fleetmsg", $origin_user['lang'] );
+    loca_add ( "fleetmsg", $target_user['lang'] );
 
-/*
-    $diff = abs ( $target_tech - $origin_tech );
-    if ( $target_tech > $origin_tech ) {
-        $level = $fleet_obj['ship210'] - pow ( $diff, 2 );
-        $counter_max = min (100, floor((($target_ships / 4) * $origin_ships) * pow ( 2, $diff )));
-    }
-    else {
-        $level = $fleet_obj['ship210'] + pow ( $diff, 2 );
-        $counter_max = min (100, floor((($target_ships / 4) * $origin_ships) / pow ( 2, $diff )));
-    }
-    $counter = mt_rand ( 0, $counter_max );
-*/
-
+    // Шанс на защиту от шпионажа
     $level = $origin_tech - $target_tech;
     $level = $level * abs($level) - 1 + $origin_ships;
     $cost = $origin_cost / 1000 / 400;
@@ -692,22 +682,26 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $counter = $c * 100;
 
     $subj = "\n<span class=\"espionagereport\">\n" .
-                "Разведданные с ".$target['name']."\n" .
+                va(loca_lang("SPY_SUBJ", $origin_user['lang']), $target['name']) . "\n" .
                 "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n";
 
     $report = "";
 
     // Шапка
-    $report .= "<table width=400><tr><td class=c colspan=4>Сырьё на ".$target['name']." <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> (Игрок \'".$target_user['oname']."\')<br /> на ".date ("m-d H:i:s", $now)."</td></tr>\n";
-    $report .= "</div></font></TD></TR><tr><td>металла:</td><td>".nicenum($target['m'])."</td>\n";
-    $report .= "<td>кристалла:</td><td>".nicenum($target['k'])."</td></tr>\n";
-    $report .= "<tr><td>дейтерия:</td><td>".nicenum($target['d'])."</td>\n";
-    $report .= "<td>энергии:</td><td>".nicenum($target['emax'])."</td></tr>\n";
+    $report .= "<table width=400><tr><td class=c colspan=4>" .
+            va(loca_lang("SPY_RESOURCES", $origin_user['lang']), $target['name']) .
+            " <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> " .
+            va(loca_lang("SPY_PLAYER", $origin_user['lang']), $target_user['oname'], date ("m-d H:i:s", $now)) .
+            "</td></tr>\n";
+    $report .= "</div></font></TD></TR><tr><td>".loca_lang("SPY_M", $origin_user['lang'])."</td><td>".nicenum($target['m'])."</td>\n";
+    $report .= "<td>".loca_lang("SPY_K", $origin_user['lang'])."</td><td>".nicenum($target['k'])."</td></tr>\n";
+    $report .= "<tr><td>".loca_lang("SPY_D", $origin_user['lang'])."</td><td>".nicenum($target['d'])."</td>\n";
+    $report .= "<td>".loca_lang("SPY_E", $origin_user['lang'])."</td><td>".nicenum($target['emax'])."</td></tr>\n";
     $report .= "</table>\n";
 
     // Активность
     $report .= "<table width=400><tr><td class=c colspan=4>     </td></tr>\n";
-    $report .= "<TR><TD colspan=4><div onmouseover=\'return overlib(\"&lt;font color=white&gt;Активность означает, что сканируемый игрок был активен на своей планете, либо на него был произведён вылет флота другого игрока.&lt;/font&gt;\", STICKY, MOUSEOFF, DELAY, 750, CENTER, WIDTH, 100, OFFSETX, -130, OFFSETY, -10);\' onmouseout=\'return nd();\'></TD></TR></table>\n";
+    $report .= "<TR><TD colspan=4><div onmouseover=\'return overlib(\"&lt;font color=white&gt;".loca_lang("SPY_ACTIVITY", $origin_user['lang'])."&lt;/font&gt;\", STICKY, MOUSEOFF, DELAY, 750, CENTER, WIDTH, 100, OFFSETX, -130, OFFSETY, -10);\' onmouseout=\'return nd();\'></TD></TR></table>\n";
 
     // Флот на удержании
     $result = GetHoldingFleets ( $target['planet_id'] );
@@ -724,14 +718,14 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
     // Флот
     if ( $level > 0 ) {
-        $report .= "<table width=400><tr><td class=c colspan=4>Флоты     </td></tr>\n";
+        $report .= "<table width=400><tr><td class=c colspan=4>".loca_lang("SPY_FLEET", $origin_user['lang'])."     </td></tr>\n";
         $count = 0;
         foreach ( $fleetmap as $i=>$gid )
         {
             $amount = $target["f$gid"] + $holding_fleet[$gid];
             if ( ($count % 2) == 0 ) $report .= "</tr>\n";
             if ($amount > 0) {
-                $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
+                $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
                 $count++;
             }
         }
@@ -740,14 +734,14 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
     // Оборона
     if ( $level > 1 ) {
-        $report .= "<table width=400><tr><td class=c colspan=4>Оборона     </td></tr>\n";
+        $report .= "<table width=400><tr><td class=c colspan=4>".loca_lang("SPY_DEFENSE", $origin_user['lang'])."     </td></tr>\n";
         $count = 0;
         foreach ( $defmap as $i=>$gid )
         {
             $amount = $target["d$gid"];
             if ( ($count % 2) == 0 ) $report .= "</tr>\n";
             if ($amount > 0) {
-                $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
+                $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
                 $count++;
             }
         }
@@ -756,14 +750,14 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
     // Постройки
     if ( $level > 3 ) {
-        $report .= "<table width=400><tr><td class=c colspan=4>Постройки     </td></tr>\n";
+        $report .= "<table width=400><tr><td class=c colspan=4>".loca_lang("SPY_BUILDINGS", $origin_user['lang'])."     </td></tr>\n";
         $count = 0;
         foreach ( $buildmap as $i=>$gid )
         {
             $amount = $target["b$gid"];
             if ( ($count % 2) == 0 ) $report .= "</tr>\n";
             if ($amount > 0) {
-                $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
+                $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
                 $count++;
             }
         }
@@ -772,33 +766,40 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
     // Исследования
     if ( $level > 5 ) {
-        $report .= "<table width=400><tr><td class=c colspan=4>Исследования     </td></tr>\n";
+        $report .= "<table width=400><tr><td class=c colspan=4>".loca_lang("SPY_RESEARCH", $origin_user['lang'])."     </td></tr>\n";
         $count = 0;
         foreach ( $resmap as $i=>$gid )
         {
             $amount = $target_user["r$gid"];
             if ( ($count % 2) == 0 ) $report .= "</tr>\n";
             if ($amount > 0) {
-                $report .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($amount)."</td>\n";
+                $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
                 $count++;
             }
         }
         $report .= "</table>\n";
     }
 
-    $report .= "<center> Шанс на защиту от шпионажа:".floor($counter)."%</center>\n";
-    $report .= "<center><a href=\'#\' onclick=\'showFleetMenu(".$target['g'].",".$target['s'].",".$target['p'].",".GetPlanetType($target).",1);\'>Атака</a></center>\n";
+    $report .= "<center>".va(loca_lang("SPY_COUNTER", $origin_user['lang']), floor($counter))."</center>\n";
+    $report .= "<center><a href=\'#\' onclick=\'showFleetMenu(".$target['g'].",".$target['s'].",".$target['p'].",".GetPlanetType($target).",1);\'>".loca_lang("SPY_ATTACK", $origin_user['lang'])."</a></center>\n";
 
-    SendMessage ( $fleet_obj['owner_id'], "Командование флотом", $subj, $report, 1, $queue['end'], $target['planet_id']);
+    SendMessage ( $fleet_obj['owner_id'], 
+        loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
+        $subj, 
+        $report, 1, $queue['end'], $target['planet_id']);
 
     // Отправить сообщение чужому игроку о шпионаже.
-    $text = "\nЧужой флот с планеты ".$origin['name']."\n" .
-                "<a onclick=\"showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p'].");\" href=\"#\">[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>\n" .
-                "был обнаружен вблизи от планеты ".$target['name']."\n" .
-                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n" .
-                ". Шанс на защиту от шпионажа: $counter %\n" .
-                "</td>\n";
-    SendMessage ( $target['owner_id'], "Наблюдение", "Шпионаж", $text, 5, $queue['end']);
+    $text = va(loca_lang("FLEET_SPY_OTHER", $target_user['lang']), 
+            $origin['name'],
+            "<a onclick=\"showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p'].");\" href=\"#\">[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>",
+            $target['name'],
+            "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>",
+            $counter ) . 
+            "</td>\n";      // wtf?
+    SendMessage ( $target['owner_id'],
+        loca_lang("FLEET_MESSAGE_OBSERVE", $target_user['lang']),
+        loca_lang("FLEET_MESSAGE_SPY", $target_user['lang']),
+        $text, 5, $queue['end']);
 
     // Обновить активность на чужой планете.
     UpdatePlanetActivity ( $fleet_obj['target_planet'], $queue['end'] );
