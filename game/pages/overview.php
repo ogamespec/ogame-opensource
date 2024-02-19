@@ -7,6 +7,7 @@
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "overview", $GlobalUser['lang'] );
+loca_add ( "events", $GlobalUser['lang'] );
 
 $OverviewMessage = "";
 $OverviewError = "";
