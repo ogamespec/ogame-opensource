@@ -1151,7 +1151,8 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 
     // Рассчитать общие потери (учитывать дейтерий и восстановленную оборону)
     $aloss = $dloss = 0;
-    $loss = CalcLosses ( $a, $d, $res, array() );
+    $repaired = array ( 401=>0, 402=>0, 403=>0, 404=>0, 405=>0, 406=>0, 407=>0, 408=>0 );
+    $loss = CalcLosses ( $a, $d, $res, $repaired );
     $a = $loss['a'];
     $d = $loss['d'];
     $aloss = $loss['aloss'];
@@ -1181,7 +1182,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 
         loca_add ( "fleetmsg", $user['lang'] );
 
-        if ( $mailbox[ $user['player_id'] ] == true ) continue;
+        if ( key_exists($user['player_id'], $mailbox) ) continue;
         $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, 6, $when );
         MarkMessage ( $user['player_id'], $bericht );
         $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .

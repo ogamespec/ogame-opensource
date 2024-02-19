@@ -649,9 +649,9 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
 
     // Событие экспедиции.
     $chance = mt_rand ( 0, 99 );
+    $expcount = $target['m'];    // счётчик посещений
     if ( $chance < ($exptab['chance_success'] + $hold_time) )
     {
-        $expcount = $target['m'];    // счётчик посещений
         if ( $expcount <= $exptab['depleted_min'] ) $chance_depleted = 0;
         else if ( $expcount <= $exptab['depleted_med'] ) $chance_depleted = $exptab['chance_depleted_min'];
         else if ( $expcount <= $exptab['depleted_max'] ) $chance_depleted = $exptab['chance_depleted_med'];
@@ -686,7 +686,7 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
 
     SendMessage ( $fleet_obj['owner_id'], 
         loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']),
-        loca_lang(va("EXP_MESSAGE_SUBJ", $target['g'], $target['s'], $target['p']), $origin_user['lang']),
+        va(loca_lang("EXP_MESSAGE_SUBJ", $origin_user['lang']), $target['g'], $target['s'], $target['p']),
         $text, 3, $queue['end']);
 }
 
