@@ -147,132 +147,132 @@ function FleetSpan ( $fleet_entry )
     else if ($mission == 1)            // Атака
     {
         if ($dir == 0) echo "<span class='flight ownattack'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownattack"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            " с ".PlanetFrom($origin, "ownattack")." отправлен на ".PlanetTo($target, "ownattack").
+            va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "ownattack"), PlanetTo($target, "ownattack")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownattack",loca("EVENT_M_ATTACK"))."</span>";
         else if ($dir == 1) echo "<span class='return ownattack'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownattack"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>". 
-            ", отправленный с ".PlanetFrom($origin, "ownattack").", возвращается на ".PlanetTo($target, "ownattack").
+            va(loca("EVENT_FROM_RETURN_TO"), PlanetFrom($origin, "ownattack"), PlanetTo($target, "ownattack")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownattack",loca("EVENT_M_ATTACK"))."</span>";
         else if ($dir == 0x10) echo "<span class='attack'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"attack"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-            " игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "attack")." отправлен на ".PlanetTo($target, "attack").
+            va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "attack"), PlanetTo($target, "attack")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ATTACK")."</span>";
     }
     else if ($mission == 2)            // Совместная атака
     {
         if ($dir == 0) echo "<span class='federation'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownfederation"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            " с ".PlanetFrom($origin, "ownfederation")." отправлен на ".PlanetTo($target, "ownfederation").
+            va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "ownfederation"), PlanetTo($target, "ownfederation")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownfederation",loca("EVENT_M_ACS_ATTACK"))."</span>";
         else if ($dir == 1) echo "<span class='return ownfederation'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownfederation"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            ", отправленный с ".PlanetFrom($origin, "ownfederation").", возвращается на ".PlanetTo($target, "ownfederation").
+            va(loca("EVENT_FROM_RETURN_TO"), PlanetFrom($origin, "ownfederation"), PlanetTo($target, "ownfederation")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownfederation",loca("EVENT_M_ACS_ATTACK"))."</span>";
         else if ($dir == 0x10) echo "<span class='attack'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"attack"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-            " игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "attack")." отправлен на ".PlanetTo($target, "attack").
+            va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "attack"), PlanetTo($target, "attack")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ACS_ATTACK")."</span>";
     }
     else if ($mission == 3)            // Транспорт
     {
         if ($dir == 0) echo "<span class='flight owntransport'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"owntransport"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            " с ".PlanetFrom($origin, "owntransport")." отправлен на ".PlanetTo($target, "owntransport").
+            va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "owntransport"), PlanetTo($target, "owntransport")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"owntransport",loca("EVENT_M_TRANSPORT"))."</span>";
         else if ($dir == 1) echo "<span class='return owntransport'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"owntransport"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            ", отправленный с ".PlanetFrom($origin, "owntransport").", возвращается на ".PlanetTo($target, "owntransport").
+            va(loca("EVENT_FROM_RETURN_TO"), PlanetFrom($origin, "owntransport"), PlanetTo($target, "owntransport")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"owntransport",loca("EVENT_M_TRANSPORT"))."</span>";
         else if ($dir == 0x10) echo "<span class='flight transport'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"transport"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-            " игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "transport")." отправлен на ".PlanetTo($target, "transport").
+            va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "transport"), PlanetTo($target, "transport")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_TRANSPORT")."</span>";
     }
     else if ($mission == 4)            // Оставить
     {
         if ($dir == 0) echo "<span class='flight owndeploy'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"owndeploy"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            " с ".PlanetFrom($origin, "owndeploy")." отправлен на ".PlanetTo($target, "owndeploy").
+            va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "owndeploy"), PlanetTo($target, "owndeploy")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"owndeploy",loca("EVENT_M_DEPLOY"))."</span>";
         else if ($dir == 1) echo "<span class='return owndeploy'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"owndeploy"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            " с ".PlanetFrom($origin, "owndeploy")." отправлен на ".PlanetTo($target, "owndeploy").
+            va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "owndeploy"), PlanetTo($target, "owndeploy")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"owndeploy",loca("EVENT_M_DEPLOY"))."</span>";
     }
     else if ($mission == 5)            // Держаться
     {
         if ($dir == 0) echo "<span class='flight ownhold'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownhold"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            " с ".PlanetFrom($origin, "ownhold")." отправлен на ".PlanetTo($target, "ownhold").
+            va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "ownhold"), PlanetTo($target, "ownhold")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownhold",loca("EVENT_M_HOLD"))."</span>";
         else if ($dir == 1) echo "<span class='return ownhold'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownhold"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            ", отправленный с ".PlanetFrom($origin, "ownhold").", возвращается на ".PlanetTo($target, "ownhold").
+            va(loca("EVENT_FROM_RETURN_TO"), PlanetFrom($origin, "ownhold"), PlanetTo($target, "ownhold")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownhold",loca("EVENT_M_HOLD"))."</span>";
         else if ($dir == 2) echo "<span class='holding ownhold'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownhold"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            ", отправленный с ".PlanetFrom($origin, "ownhold").", находится на орбите ".PlanetFrom($target, "ownhold").
+            va(loca("EVENT_HOLD_FROM_ONTO"), PlanetFrom($origin, "ownhold"), PlanetFrom($target, "ownhold")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownhold",loca("EVENT_M_HOLD"))."</span>";
         else if ($dir == 0x20) echo "<span class='flight hold'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"hold"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-            " игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "hold")." отправлен на ".PlanetTo($target, "hold").
+            va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "hold"), PlanetTo($target, "hold")).
             ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_HOLD")."</span></span>";
         else if ($dir == 0x22) echo "<span class='holding hold'>".va(loca("EVENT_FLEET_HOLD"),PlayerDetails($owner),OverFleet($fleet,1,"hold"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-            " с ".PlanetFrom($origin, "hold")." на орбите ".PlanetFrom($target, "hold").
+            va(loca("EVENT_FROM_TO_ORBIT"), PlanetFrom($origin, "hold"), PlanetFrom($target, "hold")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_HOLD")."</span>";
     }
     else if ($mission == 6)            // Шпионаж
     {
         if ($dir == 0) echo "<span class='flight ownespionage'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownespionage"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            " с ".PlanetFrom($origin, "ownespionage")." отправлен на ".PlanetTo($target, "ownespionage").
+            va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "ownespionage"), PlanetTo($target, "ownespionage")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownespionage",loca("EVENT_M_SPY"))."</span>";
         else if ($dir == 1) echo "<span class='return ownespionage'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownespionage"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            ", отправленный с ".PlanetFrom($origin, "ownespionage").", возвращается на ".PlanetTo($target, "ownespionage").
+            va(loca("EVENT_FROM_RETURN_TO"), PlanetFrom($origin, "ownespionage"), PlanetTo($target, "ownespionage")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownespionage",loca("EVENT_M_SPY"))."</span>";
         else if ($dir == 0x10) echo "<span class='flight espionage'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"espionage"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-            " игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "espionage")." отправлен на ".PlanetTo($target, "espionage").
+            va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "espionage"), PlanetTo($target, "espionage")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_SPY")."</span>";
     }
     else if ($mission == 7)            // Колонизировать
     {
         if ($dir == 0) echo "<span class='flight owncolony'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"owncolony"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            " с ".PlanetFrom($origin, "owncolony")." отправлен на позицию ".PlanetTo($target, "owncolony").
+            va(loca("EVENT_COLONY_FROM_TO"), PlanetFrom($origin, "owncolony"), PlanetTo($target, "owncolony")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"owncolony",loca("EVENT_M_COLONY"))."</span>";
         else if ($dir == 1) echo "<span class='return owncolony'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"owncolony"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            ", отправленный с позиции ".PlanetFrom($origin, "owncolony").", возвращается на ".PlanetTo($target, "owncolony").
+            va(loca("EVENT_COLONY_FROM_RETURN_TO"), PlanetFrom($origin, "owncolony"), PlanetTo($target, "owncolony")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"owncolony",loca("EVENT_M_COLONY"))."</span>";
     }
     else if ($mission == 8)            // Переработать
     {
         if ($dir == 0) echo "<span class='flight ownharvest'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownharvest"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            " с ".PlanetFrom($origin, "ownharvest")." отправлен на ".PlanetTo($target, "ownharvest").
+            va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "ownharvest"), PlanetTo($target, "ownharvest")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownharvest",loca("EVENT_M_RECYCLE"))."</span>";
         else if ($dir == 1) echo "<span class='return ownharvest'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownharvest"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            " с ".PlanetFrom($origin, "ownharvest")." отправлен на ".PlanetTo($target, "ownharvest").
+            va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "ownharvest"), PlanetTo($target, "ownharvest")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownharvest",loca("EVENT_M_RECYCLE"))."</span>";
     }
     else if ($mission == 9)            // Уничтожить
     {
         if ($dir == 0) echo "<span class='flight owndestroy'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"owndestroy"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            " с ".PlanetFrom($origin, "owndestroy")." отправлен на ".PlanetTo($target, "owndestroy").
+            va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "owndestroy"), PlanetTo($target, "owndestroy")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"owndestroy",loca("EVENT_M_DESTROY"))."</span>";
         else if ($dir == 1) echo "<span class='return owndestroy'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"owndestroy"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            ", отправленный с ".PlanetFrom($origin, "owndestroy").", возвращается на ".PlanetTo($target, "owndestroy").
+            va(loca("EVENT_FROM_RETURN_TO"), PlanetFrom($origin, "owndestroy"), PlanetTo($target, "owndestroy")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"owndestroy",loca("EVENT_M_DESTROY"))."</span>";
         else if ($dir == 0x10) echo "<span class='flight destroy'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"destroy"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-            " игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "destroy")." отправлен на ".PlanetTo($target, "destroy").
+            va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "destroy"), PlanetTo($target, "destroy")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_DESTROY")."</span>";
     }
     else if ($mission == 21)            // Атака (ведущий флот САБа)
     {
         if ($dir == 0) echo "<span class='attack'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownattack"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            " с ".PlanetFrom($origin, "ownattack")." отправлен на ".PlanetTo($target, "ownattack").
+            va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "ownattack"), PlanetTo($target, "ownattack")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownattack",loca("EVENT_M_ACS_ATTACK_HEAD"))."</span>";
         else if ($dir == 1) echo "<span class='return ownattack'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownattack"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            ", отправленный с ".PlanetFrom($origin, "ownattack").", возвращается на ".PlanetTo($target, "ownattack").
+            va(loca("EVENT_FROM_RETURN_TO"), PlanetFrom($origin, "ownattack"), PlanetTo($target, "ownattack")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownattack",loca("EVENT_M_ACS_ATTACK_HEAD"))."</span>";
         else if ($dir == 0x10) echo "<span class='attack'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"attack"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-            " игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "attack")." отправлен на ".PlanetTo($target, "attack").
+            va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "attack"), PlanetTo($target, "attack")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ACS_ATTACK_HEAD")."</span>";
         else if ($dir == 0x20) echo "<span class='ownattack'>".va(loca("EVENT_FLEET_ACS_HEAD"),OverFleet($fleet,1,"ownattack"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-            " игрока ".PlayerDetails($owner)." с ".PlanetFrom($origin, "ownattack")." отправлен на ".PlanetTo($target, "ownattack").
+            va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "ownattack"), PlanetTo($target, "ownattack")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ACS_ATTACK_HEAD")."</span>";
     }
     else if ($mission == 15)            // Экспедиция
     {
         if ($dir == 0) echo "<span class='flight owntransport'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownexpedition"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            " отправленный с ".PlanetFrom($origin, "ownexpedition")." достигает позиции ".PlanetTo($target, "ownexpedition").
+            va(loca("EVENT_EXPO_FROM_TO"), PlanetFrom($origin, "ownexpedition"), PlanetTo($target, "ownexpedition")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownexpedition",loca("EVENT_M_EXPO"))."</span>";
         else if ($dir == 1) echo "<span class='return owntransport'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownexpedition"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            " возвращается на ".PlanetTo($target, "ownexpedition")." после приказа ".Cargo($m,$k,$d,"ownexpedition",loca("EVENT_M_EXPO"))."</span>";
+            va(loca("EVENT_EXPO_RETURN_FROM_TO"), PlanetTo($target, "ownexpedition"), Cargo($m,$k,$d,"ownexpedition",loca("EVENT_M_EXPO")))."</span>";
         else if ($dir == 2) echo "<span class='holding owntransport'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownexpedition"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
-            ", отправленный с ".PlanetFrom($origin, "ownexpedition")." исследует позицию ".PlanetFrom($target, "ownexpedition").
+            va(loca("EVENT_EXPO_FROM_ONTO"), PlanetFrom($origin, "ownexpedition"), PlanetFrom($target, "ownexpedition")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownexpedition",loca("EVENT_M_EXPO"))."</span>";
     }
     else if ($mission == 20)          // Ракетная атака
