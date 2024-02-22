@@ -29,6 +29,7 @@ function Admin_Checksum ()
         'galaxytool.php', 
         'index.php', 
         'install.php', 
+        'install_tabs.php', 
         'loca.php', 
         'maintenance.php', 
         'mods.php', 
