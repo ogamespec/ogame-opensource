@@ -1,10 +1,8 @@
 <?php
 
-// Battle-report strings.
-// !!! THESE STRINGS MUST BE EXAST SAME AS IN ORIGINAL GAME !!! Many tools (websim, log servers, battle report converters etc.) are rely on it.
+// Kampfberichts-Strings.
 
-// ---------------------------------------------------------------------   de
-
+$LOCA["de"]["BATTLE_HUGE_WARNING"] = "DIESE ZEILEN MÜSSEN GENAU DIE GLEICHEN SEIN WIE IM ORIGINALSPIEL!!! Viele Tools (Web-Simulationen, Log-Server, Kampfberichtskonverter usw.) sind darauf angewiesen."; // Nicht im Spiel verwendet, nur eine Warnung an alle Übersetzer.
 $LOCA["de"]["BATTLE_REPORT"] = "Kampfbericht";
 $LOCA["de"]["BATTLE_ADATE"] = "Folgende Flotten stehen sich um";
 $LOCA["de"]["BATTLE_DDATE"] = "Folgende Flotten standen sich am";
@@ -59,6 +57,5 @@ $LOCA["de"]["SNAME_405"] = "Ion.W";
 $LOCA["de"]["SNAME_406"] = "Plasma";
 $LOCA["de"]["SNAME_407"] = "S.Kuppel";
 $LOCA["de"]["SNAME_408"] = "GS.Kuppel";
-
 
 ?>

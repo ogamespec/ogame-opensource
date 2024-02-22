@@ -1,10 +1,8 @@
 <?php
 
 // Battle-report strings.
-// !!! THESE STRINGS MUST BE EXAST SAME AS IN ORIGINAL GAME !!! Many tools (websim, log servers, battle report converters etc.) are rely on it.
 
-// ---------------------------------------------------------------------   en
-
+$LOCA["en"]["BATTLE_HUGE_WARNING"] = "!!! THESE STRINGS MUST BE EXAST SAME AS IN ORIGINAL GAME !!! Many tools (websim, log servers, battle report converters etc.) are rely on it."; // Not used in the game, just a warning to all translators.
 $LOCA["en"]["BATTLE_REPORT"] = "Battle Report";
 $LOCA["en"]["BATTLE_ADATE"] = "At";
 $LOCA["en"]["BATTLE_DDATE"] = "On";

@@ -1,10 +1,8 @@
 <?php
 
-// Battle-report strings.
-// !!! THESE STRINGS MUST BE EXAST SAME AS IN ORIGINAL GAME !!! Many tools (websim, log servers, battle report converters etc.) are rely on it.
+// Строки для боевого доклада.
 
-// ---------------------------------------------------------------------   ru
-
+$LOCA["ru"]["BATTLE_HUGE_WARNING"] = "ЭТИ СТРОКИ ДОЛЖНЫ БЫТЬ ТОЧНО ТАКИМИ ЖЕ, КАК В ОРИГИНАЛЬНОЙ ИГРЕ!!! Многие инструменты (веб-симы, серверы логов, конвертеры боевых отчетов и т.д.) полагаются на это."; // в игре не используется, просто предупреждение всем переводчикам.
 $LOCA["ru"]["BATTLE_REPORT"] = "Боевой доклад";
 $LOCA["ru"]["BATTLE_ADATE"] = "Дата/Время:";
 $LOCA["ru"]["BATTLE_DDATE"] = "Дата/Время:";
