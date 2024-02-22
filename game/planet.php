@@ -74,12 +74,16 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     {
         if ($colony)
         {
-            if ($p <= 3) $diam = mt_rand ( 50, 120 ) * 72;
-            else if ($p >= 4 && $p <= 6) $diam = mt_rand ( 50, 150 ) * 120;
-            else if ($p >= 7 && $p <= 9) $diam = mt_rand ( 50, 120 ) * 120;
-            else if ($p >= 10 && $p <= 12) $diam = mt_rand ( 50, 120 ) * 96;
-            else if ($p >= 13 && $p <= 15) $diam = mt_rand ( 50, 150 ) * 96;
-            else $diam = mt_rand ( 50, 150 ) * 96;
+            $coltab = LoadColonySettings();
+
+            // Планеты разделены на 5 Tier (T1-T5). Для каждого тира есть три параметра (a, b, c), для RND.
+
+            if ($p <= 3) $diam = mt_rand ( $coltab['t1_a'], $coltab['t1_b'] ) * $coltab['t1_c'];
+            else if ($p >= 4 && $p <= 6) $diam = mt_rand ( $coltab['t2_a'], $coltab['t2_b'] ) * $coltab['t2_c'];
+            else if ($p >= 7 && $p <= 9) $diam = mt_rand ( $coltab['t3_a'], $coltab['t3_b'] ) * $coltab['t3_c'];
+            else if ($p >= 10 && $p <= 12) $diam = mt_rand ( $coltab['t4_a'], $coltab['t4_b'] ) * $coltab['t4_c'];
+            else if ($p >= 13 && $p <= 15) $diam = mt_rand ( $coltab['t5_a'], $coltab['t5_b'] ) * $coltab['t5_c'];
+            else $diam = mt_rand ( $coltab['t5_a'], $coltab['t5_b'] ) * $coltab['t5_c'];
         }
         else $diam = 12800;
     }
@@ -576,6 +580,28 @@ function CreateHomePlanet ($player_id)
     }
 
     Error ( "No more planets!!!" );
+}
+
+// Загрузить настройки колонизации.
+function LoadColonySettings ()
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."coltab;";
+    $result = dbquery ($query);
+    return dbarray ($result);
+}
+
+// Сохранить настройки колонизации.
+function SaveColonySettings ($coltab)
+{
+    global $db_prefix;
+    $query = "UPDATE ".$db_prefix."coltab SET " .
+        "t1_a='".$coltab['t1_a']."', t1_b='".$coltab['t1_b']."', t1_c='".$coltab['t1_c']."', " .
+        "t2_a='".$coltab['t2_a']."', t2_b='".$coltab['t2_b']."', t2_c='".$coltab['t2_c']."', " .
+        "t3_a='".$coltab['t3_a']."', t3_b='".$coltab['t3_b']."', t3_c='".$coltab['t3_c']."', " .
+        "t4_a='".$coltab['t4_a']."', t4_b='".$coltab['t4_b']."', t4_c='".$coltab['t4_c']."', " .
+        "t5_a='".$coltab['t5_a']."', t5_b='".$coltab['t5_b']."', t5_c='".$coltab['t5_c']."'; " ;
+    dbquery ($query);
 }
 
 ?>

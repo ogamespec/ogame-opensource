@@ -59,5 +59,25 @@ $LOCA["de"]["ADM_BANS_FIND_6"] = "Dieselbe E-Mail Adresse";
 $LOCA["de"]["ADM_BANS_FIND_7"] = "Dieselbe IP";
 $LOCA["de"]["ADM_BANS_SUBMIT"] = "Senden";
 
-?>
+// admin_colony_settings
 
+$LOCA["de"]["ADM_COL_HEAD"] = "Einstellungen für die Kolonisierung";
+$LOCA["de"]["ADM_COL_T1"] = "Kolonien auf den Positionen 1-3";
+$LOCA["de"]["ADM_COL_T2"] = "Kolonien auf den Positionen 4-6";
+$LOCA["de"]["ADM_COL_T3"] = "Kolonien auf den Positionen 7-9";
+$LOCA["de"]["ADM_COL_T4"] = "Kolonien auf den Positionen 10-12";
+$LOCA["de"]["ADM_COL_T5"] = "Kolonien auf den Positionen 13-15 (weiter)";
+$LOCA["de"]["ADM_COL_SUBMIT"] = "Speichern";
+$LOCA["de"]["ADM_COL_INFO1"] = "Der Durchmesser einer neuen Kolonie wird nach folgender Formel berechnet";
+$LOCA["de"]["ADM_COL_INFO2"] = "Jeder Schießstand hat seine eigenen Parameter (a, b, c)";
+
+// admin_loca
+
+$LOCA["de"]["ADM_LOCA_LOCALE_MISSING"] = "Die Linie fehlt!";
+$LOCA["de"]["ADM_LOCA_FILE_MISSING"] = "Die Datei ist nicht lokalisiert!";
+$LOCA["de"]["ADM_LOCA_DIFF"] = "Vergleich der Lokalisierung zwischen den angegebenen Sprachen";
+$LOCA["de"]["ADM_LOCA_SOURCE"] = "Ausgangssprache:";
+$LOCA["de"]["ADM_LOCA_DEST"] = "Zielsprache:";
+$LOCA["de"]["ADM_LOCA_SUBMIT"] = "Vergleich";
+
+?>

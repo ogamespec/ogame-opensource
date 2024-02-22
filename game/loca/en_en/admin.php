@@ -59,4 +59,25 @@ $LOCA["en"]["ADM_BANS_FIND_6"] = "Same email address";
 $LOCA["en"]["ADM_BANS_FIND_7"] = "Same IP";
 $LOCA["en"]["ADM_BANS_SUBMIT"] = "Submit";
 
+// admin_colony_settings
+
+$LOCA["en"]["ADM_COL_HEAD"] = "Colonization settings";
+$LOCA["en"]["ADM_COL_T1"] = "Colonies in positions 1-3";
+$LOCA["en"]["ADM_COL_T2"] = "Colonies in positions 4-6";
+$LOCA["en"]["ADM_COL_T3"] = "Colonies in positions 7-9";
+$LOCA["en"]["ADM_COL_T4"] = "Colonies in positions 10-12";
+$LOCA["en"]["ADM_COL_T5"] = "Colonies in positions 13-15 (and beyond)";
+$LOCA["en"]["ADM_COL_SUBMIT"] = "Save";
+$LOCA["en"]["ADM_COL_INFO1"] = "The diameter of a new colony is calculated by the formula";
+$LOCA["en"]["ADM_COL_INFO2"] = "Each range has its own parameters (a, b, c)";
+
+// admin_loca
+
+$LOCA["en"]["ADM_LOCA_LOCALE_MISSING"] = "The string is missing!";
+$LOCA["en"]["ADM_LOCA_FILE_MISSING"] = "The file is not localized!";
+$LOCA["en"]["ADM_LOCA_DIFF"] = "Compare localization between the specified languages";
+$LOCA["en"]["ADM_LOCA_SOURCE"] = "Source language:";
+$LOCA["en"]["ADM_LOCA_DEST"] = "Target language:";
+$LOCA["en"]["ADM_LOCA_SUBMIT"] = "Compare";
+
 ?>

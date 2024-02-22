@@ -157,9 +157,19 @@ $tab_pranger = array (    // Столб позора
     'ban_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'admin_name'=>'CHAR(20)', 'user_name'=>'CHAR(20)', 'admin_id'=>'INT', 'user_id'=>'INT', 'ban_when'=>'INT UNSIGNED', 'ban_until'=>'INT UNSIGNED', 'reason'=>'TEXT'
 );
 
-$tab_exptab = array (    // Настройки экспедиции
+$tab_exptab = array (    // Настройки экспедиции (можно поменять в админке)
     'chance_success'=>'INT', 'depleted_min'=>'INT', 'depleted_med'=>'INT', 'depleted_max'=>'INT', 'chance_depleted_min'=>'INT', 'chance_depleted_med'=>'INT', 'chance_depleted_max'=>'INT',
     'chance_alien'=>'INT', 'chance_pirates'=>'INT', 'chance_dm'=>'INT', 'chance_lost'=>'INT', 'chance_delay'=>'INT', 'chance_accel'=>'INT', 'chance_res'=>'INT', 'chance_fleet'=>'INT'
+);
+
+// После обсуждений в Дискорд мы не пришли к консенсусу какие параметры нужно прописывать в planets.php для новых колоний.
+// А раз нет консенсуса, то программист всегда найдёт выход добавлением настройки :-)
+$tab_coltab = array (    // Настройки колонизации (можно поменять в админке)
+    't1_a'=>'INT UNSIGNED', 't1_b'=>'INT UNSIGNED', 't1_c'=>'INT UNSIGNED',
+    't2_a'=>'INT UNSIGNED', 't2_b'=>'INT UNSIGNED', 't2_c'=>'INT UNSIGNED',
+    't3_a'=>'INT UNSIGNED', 't3_b'=>'INT UNSIGNED', 't3_c'=>'INT UNSIGNED',
+    't4_a'=>'INT UNSIGNED', 't4_b'=>'INT UNSIGNED', 't4_c'=>'INT UNSIGNED',
+    't5_a'=>'INT UNSIGNED', 't5_b'=>'INT UNSIGNED', 't5_c'=>'INT UNSIGNED',
 );
 
 $tab_template = array (    // Стандартные флоты
@@ -205,6 +215,7 @@ $tabs = array (
     'iplogs' => &$tab_iplogs,
     'pranger' => &$tab_pranger,
     'exptab' => &$tab_exptab,
+    'coltab' => &$tab_coltab,
     'template' => &$tab_template,
     'botvars' => &$tab_botvars,
     'userlogs' => &$tab_userlogs,
@@ -360,6 +371,18 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     }
     $opt .= ")";
     $query = "INSERT INTO ".$_POST["db_prefix"]."exptab VALUES".$opt;
+    dbquery( $query);
+
+    // Добавить параметры колонизации.
+    $opt = " (";
+    $coltab = array ( 50, 120, 72, 50, 150, 120, 50, 120, 120, 50, 120, 96, 50, 150, 96 );
+    foreach ($coltab as $i=>$entry)
+    {
+        if ($i != 0) $opt .= ", ";
+        $opt .= "'".$coltab[$i]."'";
+    }
+    $opt .= ")";
+    $query = "INSERT INTO ".$_POST["db_prefix"]."coltab VALUES".$opt;
     dbquery( $query);
 
     // Установить счётчики автоинкремента.

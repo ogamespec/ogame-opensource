@@ -59,6 +59,18 @@ $LOCA["ru"]["ADM_BANS_FIND_6"] = "Одинаковый адрес email";
 $LOCA["ru"]["ADM_BANS_FIND_7"] = "Одинаковый IP";
 $LOCA["ru"]["ADM_BANS_SUBMIT"] = "Отправить";
 
+// admin_colony_settings
+
+$LOCA["ru"]["ADM_COL_HEAD"] = "Настройки колонизации";
+$LOCA["ru"]["ADM_COL_T1"] = "Колонии на позициях 1-3";
+$LOCA["ru"]["ADM_COL_T2"] = "Колонии на позициях 4-6";
+$LOCA["ru"]["ADM_COL_T3"] = "Колонии на позициях 7-9";
+$LOCA["ru"]["ADM_COL_T4"] = "Колонии на позициях 10-12";
+$LOCA["ru"]["ADM_COL_T5"] = "Колонии на позициях 13-15 (и далее)";
+$LOCA["ru"]["ADM_COL_SUBMIT"] = "Сохранить";
+$LOCA["ru"]["ADM_COL_INFO1"] = "Диаметр новой колонии расчитывается по формуле";
+$LOCA["ru"]["ADM_COL_INFO2"] = "Для каждого тира свои параметры (a, b, c)";
+
 // admin_loca
 
 $LOCA["ru"]["ADM_LOCA_LOCALE_MISSING"] = "Строка отсутствует!";
