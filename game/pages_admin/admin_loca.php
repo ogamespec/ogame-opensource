@@ -2,22 +2,150 @@
 
 // Админка: Проверка локализации
 
+function CompareTwoLocas ($src, $dst)
+{
+    $res = "";
+
+    $filename = basename ($src);
+
+    $res .= "<h2>$filename</h2>\n\n";
+
+    // Локальная лока :)
+    $LOCA = array();
+
+    include $src;
+    include $dst;
+
+    $src_lang = "";
+    $dst_lang = "";
+
+    foreach ($LOCA as $i=>$lang) {
+        if (strpos($src, $i)) {
+            $src_lang = $i;
+        }
+        if (strpos($dst, $i)) {
+            $dst_lang = $i;
+        }        
+    }    
+
+    // Перечислить ключи из исходного файла:
+    // - Если в целевом файле строка совпадает - подсветить жёлтым (перевода нет, но строка есть)
+    // - Если в целевом файле строки нет вообще - подсветить красным
+
+    if (!empty($src_lang)) {
+        $res .= "<table>\n";
+        foreach ($LOCA[$src_lang] as $key=>$value) {
+
+            $dst_value = "";
+            $bg_col = "style=\"background-color: green;\"";
+            if (key_exists($dst_lang, $LOCA) && key_exists($key, $LOCA[$dst_lang])) {
+                $dst_value = $LOCA[$dst_lang][$key];
+                if (!empty($value) && $value === $dst_value) {
+                    $bg_col = "style=\"background-color: orange;\"";
+                }
+            }
+            else {
+                $dst_value = "Строка отсутствует!";
+                $bg_col = "style=\"background-color: red;\"";
+            }
+
+            $res .= "<tr>";
+            $res .= "<td $bg_col>$key</td>";
+            $res .= "<td $bg_col><pre>".htmlspecialchars($value)."</pre></td>";
+            $res .= "<td $bg_col><pre>".htmlspecialchars($dst_value)."</pre></td>";
+            $res .= "</tr>";
+        }
+        $res .= "</table>\n";
+    }
+    else {
+        $res .= "<font color=red>Файл не локализован!</font><br/>\n";
+    }
+
+    return $res;
+}
+
 function Admin_Loca ()
 {
     global $session;
     global $db_prefix;
     global $GlobalUser;
 
+    $base_loca_dir = 'loca';
+    $loca_dirs = scandir ($base_loca_dir);
+    $diff_res = "";
+
     // Обработка POST-запроса.
     if ( method () === "POST" )
     {
+        $src_files = scandir ($base_loca_dir . '/' . $_POST['loca_src']);
+        $dst_files = scandir ($base_loca_dir . '/' . $_POST['loca_dst']);
+        $processed = array();
+
+        // Перебрать все файлы из исходной директории и сравнить их с файлами в целевой.
+
+        foreach ($src_files as $i=>$file) {
+            
+            if ($file == '.' || $file == '..' || is_dir($base_loca_dir . '/' . $file) || !strpos($file, ".php"))
+                continue;
+
+            $diff_res .= CompareTwoLocas (
+                $base_loca_dir . '/' . $_POST['loca_src'] . '/' . $file,
+                $base_loca_dir . '/' . $_POST['loca_dst'] . '/' . $file );
+
+            $processed[$file] = true;
+        }
     }
 ?>
 
 <?=AdminPanel();?>
 
-TODO
+<table>
+<form action="index.php?page=admin&session=<?=$session;?>&mode=Loca&action=search" method="POST" >
+
+<tr><td class="c" colspan=2>Сравнить локализацию между указанными языками</td></tr>
+<tr>
+    <td>
+            Исходный язык:</td><td> <select name="loca_src">
+<?php
+    foreach ($loca_dirs as $i=>$dir) {
+        
+        if ($dir == '.' || $dir == '..' || !is_dir($base_loca_dir . '/' . $dir))
+            continue;
+
+        $selected = (key_exists('loca_src', $_POST) && $_POST['loca_src'] == $dir) ? "selected" : "";
+
+        echo "<option value=\"$dir\" $selected>$dir</option>\n";
+    }
+?>
+            </select>
+
+<tr/><tr>
+    <td>
+            Целевой язык:</td><td> <select name="loca_dst">
+<?php
+    foreach ($loca_dirs as $i=>$dir) {
+        
+        if ($dir == '.' || $dir == '..' || !is_dir($base_loca_dir . '/' . $dir))
+            continue;
+
+        $selected = (key_exists('loca_dst', $_POST) && $_POST['loca_dst'] == $dir) ? "selected" : "";
+
+        echo "<option value=\"$dir\" $selected>$dir</option>\n";
+    }
+?>
+            </select>
+
+    </td>
+</tr>
+<tr><td class="c" colspan=2> <input type="submit" value="Сравнить" /></td></tr>
+
+</form>
+</table>
+
+<br/>
+
+<?=$diff_res;?>
 
 <?php
-}
+}   // Admin_Loca
 ?>
