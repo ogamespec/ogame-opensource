@@ -10,6 +10,7 @@ function Admin_Checksum ()
 
     $engine_md = unserialize ( file_get_contents ('temp/engine.md5') );
     $page_md = unserialize ( file_get_contents ('temp/page.md5') );
+    $page_admin_md = unserialize ( file_get_contents ('temp/page_admin.md5') );
     $reg_md = unserialize ( file_get_contents ('temp/reg.md5') );
 
     $engine_files = array (
@@ -47,29 +48,35 @@ function Admin_Checksum ()
         'validate.php', 
     );
 
+    $page_admin_files = array (
+        'pages_admin/admin.php', 
+        'pages_admin/admin_bans.php', 
+        'pages_admin/admin_battle.php', 
+        'pages_admin/admin_botedit.php', 
+        'pages_admin/admin_bots.php', 
+        'pages_admin/admin_broadcast.php', 
+        'pages_admin/admin_browse.php', 
+        'pages_admin/admin_checksum.php', 
+        'pages_admin/admin_colony_settings.php', 
+        'pages_admin/admin_coupons.php', 
+        'pages_admin/admin_db.php', 
+        'pages_admin/admin_debug.php', 
+        'pages_admin/admin_errors.php', 
+        'pages_admin/admin_expedition.php', 
+        'pages_admin/admin_fleetlogs.php', 
+        'pages_admin/admin_loca.php', 
+        'pages_admin/admin_logins.php', 
+        'pages_admin/admin_planets.php', 
+        'pages_admin/admin_queue.php', 
+        'pages_admin/admin_raksim.php', 
+        'pages_admin/admin_reports.php', 
+        'pages_admin/admin_sim.php', 
+        'pages_admin/admin_uni.php', 
+        'pages_admin/admin_userlogs.php', 
+        'pages_admin/admin_users.php', 
+    );
+
     $page_files = array (
-        'pages/admin.php', 
-        'pages/admin_bans.php', 
-        'pages/admin_battle.php', 
-        'pages/admin_botedit.php', 
-        'pages/admin_bots.php', 
-        'pages/admin_broadcast.php', 
-        'pages/admin_browse.php', 
-        'pages/admin_checksum.php', 
-        'pages/admin_coupons.php', 
-        'pages/admin_debug.php', 
-        'pages/admin_errors.php', 
-        'pages/admin_expedition.php', 
-        'pages/admin_fleetlogs.php', 
-        'pages/admin_logins.php', 
-        'pages/admin_planets.php', 
-        'pages/admin_queue.php', 
-        'pages/admin_raksim.php', 
-        'pages/admin_reports.php', 
-        'pages/admin_sim.php', 
-        'pages/admin_uni.php', 
-        'pages/admin_userlogs.php', 
-        'pages/admin_users.php', 
         'pages/ainfo.php', 
         'pages/allianzdepot.php', 
         'pages/allianzen.php', 
@@ -133,6 +140,10 @@ function Admin_Checksum ()
             $md = md5_file($filename) ;
             $engine_md[$filename] = $md;
         }
+        foreach ( $page_admin_files as $i=>$filename ) {
+            $md = md5_file($filename) ;
+            $page_admin_md[$filename] = $md;
+        }
         foreach ( $page_files as $i=>$filename ) {
             $md = md5_file($filename) ;
             $page_md[$filename] = $md;
@@ -142,6 +153,7 @@ function Admin_Checksum ()
             $reg_md[$filename] = $md;
         }
         file_put_contents ( 'temp/engine.md5', serialize ( $engine_md ) );
+        file_put_contents ( 'temp/page_admin.md5', serialize ( $page_admin_md ) );
         file_put_contents ( 'temp/page.md5', serialize ( $page_md ) );
         file_put_contents ( 'temp/reg.md5', serialize ( $reg_md ) );
     }
@@ -165,6 +177,21 @@ function Admin_Checksum ()
             else echo "<td><font color=red><b>BAD</b></font></td>";
         }
         else echo "<td><font color=red><b>UNVERSIONED</b></font></td>";
+        echo "</tr>";
+    }
+?>
+</table>
+
+<h2>Админка</h2>
+
+<table width="519">
+<tr><td class=c>Путь к файлу</td><td class=c>Контрольная сумма</td><td class=c>Статус</td></tr>
+<?php
+    foreach ( $page_admin_files as $i=>$filename ) {
+        $md = md5_file($filename) ;
+        echo "<tr><td>$filename</td><td>$md</td>";
+        if ( $page_admin_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
+        else echo "<td><font color=red><b>BAD</b></font></td>";
         echo "</tr>";
     }
 ?>
