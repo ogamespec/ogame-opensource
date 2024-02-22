@@ -71,6 +71,15 @@ $LOCA["en"]["ADM_COL_SUBMIT"] = "Save";
 $LOCA["en"]["ADM_COL_INFO1"] = "The diameter of a new colony is calculated by the formula";
 $LOCA["en"]["ADM_COL_INFO2"] = "Each range has its own parameters (a, b, c)";
 
+// admin_db
+
+$LOCA["en"]["ADM_DB_COLUMN_NOT_FOUND"] = "Column not found!";
+$LOCA["en"]["ADM_DB_INSTALL_VS_DB"] = "Comparison of tables from install and real database";
+$LOCA["en"]["ADM_DB_DB_TABLE_MISSING"] = "Table #1 is missing from the database.";
+$LOCA["en"]["ADM_DB_DB_VS_INSTALL"] = "Comparison of real database and tables from install";
+$LOCA["en"]["ADM_DB_INSTALL_TABLE_MISSING"] = "Table #1 is missing from the install.";
+$LOCA["en"]["ADM_DB_SAME"] = "No differences were found.";
+
 // admin_loca
 
 $LOCA["en"]["ADM_LOCA_LOCALE_MISSING"] = "The string is missing!";

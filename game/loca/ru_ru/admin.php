@@ -71,6 +71,15 @@ $LOCA["ru"]["ADM_COL_SUBMIT"] = "Сохранить";
 $LOCA["ru"]["ADM_COL_INFO1"] = "Диаметр новой колонии расчитывается по формуле";
 $LOCA["ru"]["ADM_COL_INFO2"] = "Для каждого тира свои параметры (a, b, c)";
 
+// admin_db
+
+$LOCA["ru"]["ADM_DB_COLUMN_NOT_FOUND"] = "Столбец не найден!";
+$LOCA["ru"]["ADM_DB_INSTALL_VS_DB"] = "Сравнение таблиц из install и реальной БД";
+$LOCA["ru"]["ADM_DB_DB_TABLE_MISSING"] = "Таблица #1 отсутствует в БД.";
+$LOCA["ru"]["ADM_DB_DB_VS_INSTALL"] = "Сравнение реальной БД и таблиц из install";
+$LOCA["ru"]["ADM_DB_INSTALL_TABLE_MISSING"] = "Таблица #1 отсутствует в install.";
+$LOCA["ru"]["ADM_DB_SAME"] = "Расхождений не обнаружено.";
+
 // admin_loca
 
 $LOCA["ru"]["ADM_LOCA_LOCALE_MISSING"] = "Строка отсутствует!";

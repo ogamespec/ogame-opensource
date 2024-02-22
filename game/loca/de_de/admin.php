@@ -71,6 +71,15 @@ $LOCA["de"]["ADM_COL_SUBMIT"] = "Speichern";
 $LOCA["de"]["ADM_COL_INFO1"] = "Der Durchmesser einer neuen Kolonie wird nach folgender Formel berechnet";
 $LOCA["de"]["ADM_COL_INFO2"] = "Jeder Schießstand hat seine eigenen Parameter (a, b, c)";
 
+// admin_db
+
+$LOCA["de"]["ADM_DB_COLUMN_NOT_FOUND"] = "Spalte nicht gefunden!";
+$LOCA["de"]["ADM_DB_INSTALL_VS_DB"] = "Vergleich der Tabellen aus der installierten und der realen Datenbank";
+$LOCA["de"]["ADM_DB_DB_TABLE_MISSING"] = "Die Tabelle #1 fehlt in der Datenbank.";
+$LOCA["de"]["ADM_DB_DB_VS_INSTALL"] = "Vergleich der realen Datenbank und der Tabellen aus der Installation";
+$LOCA["de"]["ADM_DB_INSTALL_TABLE_MISSING"] = "Tabelle #1 fehlt bei der Installation.";
+$LOCA["de"]["ADM_DB_SAME"] = "Es wurden keine Unstimmigkeiten festgestellt.";
+
 // admin_loca
 
 $LOCA["de"]["ADM_LOCA_LOCALE_MISSING"] = "Die Linie fehlt!";
