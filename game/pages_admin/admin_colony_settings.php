@@ -1,8 +1,8 @@
 <?php
 
-// Админка: жалобы пользователей на сообщения.
+// Админка: Настройки колонизации
 
-function Admin_Reports ()
+function Admin_ColonySettings ()
 {
     global $session;
     global $db_prefix;

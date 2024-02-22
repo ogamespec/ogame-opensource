@@ -23,6 +23,9 @@ $LOCA["en"]["ADM_MENU_USERLOGS"] = "User Logs";
 $LOCA["en"]["ADM_MENU_BOTEDIT"] = "Bot Editor";
 $LOCA["en"]["ADM_MENU_COUPONS"] = "Coupons";
 $LOCA["en"]["ADM_MENU_RAKSIM"] = "Rocket Attack Sim";
+$LOCA["en"]["ADM_MENU_DB"] = "DB Integrity";
+$LOCA["en"]["ADM_MENU_COLONY_SETTINGS"] = "Colonization Settings";
+$LOCA["en"]["ADM_MENU_LOCA"] = "Localization";
 
 // admin_bans
 

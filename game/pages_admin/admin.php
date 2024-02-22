@@ -102,6 +102,15 @@ onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca
 <a href="index.php?page=admin&session=<?php echo $session;?>&mode=RakSim"><img src="img/admin_raksim.png" width='32' height='32'
 onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_RAKSIM");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=DB"><img src="img/admin_db.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_DB");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=ColonySettings"><img src="img/admin_colony_settings.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_COLONY_SETTINGS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Loca"><img src="img/admin_loca.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_LOCA");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
 </td></tr></table><br/>
 
 <?php
@@ -151,6 +160,9 @@ function Admin_Home ()
     </tr>
     <tr>
     <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=RakSim"><img src="img/admin_raksim.png"><br><?php echo loca("ADM_MENU_RAKSIM");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=DB"><img src="img/admin_db.png"><br><?php echo loca("ADM_MENU_DB");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=ColonySettings"><img src="img/admin_colony_settings.png"><br><?php echo loca("ADM_MENU_COLONY_SETTINGS");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Loca"><img src="img/admin_loca.png"><br><?php echo loca("ADM_MENU_LOCA");?></a></th>
     </tr>
     </table>
 <?php
@@ -177,6 +189,9 @@ include "admin_userlogs.php";
 include "admin_botedit.php";
 include "admin_coupons.php";
 include "admin_raksim.php";
+include "admin_db.php";
+include "admin_colony_settings.php";
+include "admin_loca.php";
 
 // ========================================================================================
 
@@ -209,6 +224,9 @@ else if ( $mode === "UserLogs" ) Admin_UserLogs ();
 else if ( $mode === "BotEdit" ) Admin_BotEdit ();
 else if ( $mode === "Coupons" ) Admin_Coupons ();
 else if ( $mode === "RakSim" ) Admin_RakSim ();
+else if ( $mode === "DB" ) Admin_DB ();
+else if ( $mode === "ColonySettings" ) Admin_ColonySettings ();
+else if ( $mode === "Loca" ) Admin_Loca ();
 else Admin_Home ();
 
 echo "</table>\n";

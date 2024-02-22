@@ -1,8 +1,8 @@
 <?php
 
-// Админка: жалобы пользователей на сообщения.
+// Админка: Проверка локализации
 
-function Admin_Reports ()
+function Admin_Loca ()
 {
     global $session;
     global $db_prefix;

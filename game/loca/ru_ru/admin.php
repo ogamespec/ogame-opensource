@@ -23,6 +23,9 @@ $LOCA["ru"]["ADM_MENU_USERLOGS"] = "История действий";
 $LOCA["ru"]["ADM_MENU_BOTEDIT"] = "Редактор ботов";
 $LOCA["ru"]["ADM_MENU_COUPONS"] = "Купоны";
 $LOCA["ru"]["ADM_MENU_RAKSIM"] = "Симулятор ракетной атаки";
+$LOCA["ru"]["ADM_MENU_DB"] = "Целостность БД";
+$LOCA["ru"]["ADM_MENU_COLONY_SETTINGS"] = "Настройки колонизации";
+$LOCA["ru"]["ADM_MENU_LOCA"] = "Проверка локализации";
 
 // admin_bans
 

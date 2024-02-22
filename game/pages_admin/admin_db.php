@@ -1,8 +1,8 @@
 <?php
 
-// Админка: жалобы пользователей на сообщения.
+// Админка: Целостность базы данных (проверка и исправление таблиц)
 
-function Admin_Reports ()
+function Admin_DB ()
 {
     global $session;
     global $db_prefix;
