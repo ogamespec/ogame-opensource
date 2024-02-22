@@ -45,7 +45,7 @@ function CompareTwoLocas ($src, $dst)
                 }
             }
             else {
-                $dst_value = "Строка отсутствует!";
+                $dst_value = loca("ADM_LOCA_LOCALE_MISSING");
                 $bg_col = "style=\"background-color: red;\"";
             }
 
@@ -58,7 +58,7 @@ function CompareTwoLocas ($src, $dst)
         $res .= "</table>\n";
     }
     else {
-        $res .= "<font color=red>Файл не локализован!</font><br/>\n";
+        $res .= "<font color=red>".loca("ADM_LOCA_FILE_MISSING")."</font><br/>\n";
     }
 
     return $res;
@@ -102,10 +102,10 @@ function Admin_Loca ()
 <table>
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Loca&action=search" method="POST" >
 
-<tr><td class="c" colspan=2>Сравнить локализацию между указанными языками</td></tr>
+<tr><td class="c" colspan=2><?=loca("ADM_LOCA_DIFF");?></td></tr>
 <tr>
     <td>
-            Исходный язык:</td><td> <select name="loca_src">
+            <?=loca("ADM_LOCA_SOURCE");?></td><td> <select name="loca_src">
 <?php
     foreach ($loca_dirs as $i=>$dir) {
         
@@ -121,7 +121,7 @@ function Admin_Loca ()
 
 <tr/><tr>
     <td>
-            Целевой язык:</td><td> <select name="loca_dst">
+            <?=loca("ADM_LOCA_DEST");?></td><td> <select name="loca_dst">
 <?php
     foreach ($loca_dirs as $i=>$dir) {
         
@@ -137,7 +137,7 @@ function Admin_Loca ()
 
     </td>
 </tr>
-<tr><td class="c" colspan=2> <input type="submit" value="Сравнить" /></td></tr>
+<tr><td class="c" colspan=2> <input type="submit" value="<?=loca("ADM_LOCA_SUBMIT");?>" /></td></tr>
 
 </form>
 </table>

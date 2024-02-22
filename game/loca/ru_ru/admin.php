@@ -59,4 +59,13 @@ $LOCA["ru"]["ADM_BANS_FIND_6"] = "Одинаковый адрес email";
 $LOCA["ru"]["ADM_BANS_FIND_7"] = "Одинаковый IP";
 $LOCA["ru"]["ADM_BANS_SUBMIT"] = "Отправить";
 
+// admin_loca
+
+$LOCA["ru"]["ADM_LOCA_LOCALE_MISSING"] = "Строка отсутствует!";
+$LOCA["ru"]["ADM_LOCA_FILE_MISSING"] = "Файл не локализован!";
+$LOCA["ru"]["ADM_LOCA_DIFF"] = "Сравнить локализацию между указанными языками";
+$LOCA["ru"]["ADM_LOCA_SOURCE"] = "Исходный язык:";
+$LOCA["ru"]["ADM_LOCA_DEST"] = "Целевой язык:";
+$LOCA["ru"]["ADM_LOCA_SUBMIT"] = "Сравнить";
+
 ?>
