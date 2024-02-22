@@ -113,7 +113,7 @@ else if ( $_GET['page'] === "admin" )
 {
     if ( $GlobalUser['admin'] > 0 )
     {
-        include "pages/admin.php";
+        include "pages_admin/admin.php";
         exit ();
     }
     else
