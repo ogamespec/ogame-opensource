@@ -2,8 +2,8 @@
 
 // Coupons
 
-$LOCA["fr"]["COUPON_SUBJ"] = "Present to you";
-$LOCA["fr"]["COUPON_MESSAGE"] = "Dear #1, you have present : #2";
+$LOCA["fr"]["COUPON_SUBJ"] = "Un cadeau pour vous";
+$LOCA["fr"]["COUPON_MESSAGE"] = "Cher/Chère #1, vous avez un cadeau : #2";
 
 
 ?>

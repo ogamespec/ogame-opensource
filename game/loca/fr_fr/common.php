@@ -2,33 +2,33 @@
 
 // Chaînes de caractères courantes. Présentes sur la plupart des pages.
 
-$LOCA["fr"]["METAL" ] = "Metal";
-$LOCA["fr"]["CRYSTAL" ] = "Crystal";
-$LOCA["fr"]["DEUTERIUM" ] = "Deuterium";
-$LOCA["fr"]["ENERGY" ] = "Energy";
-$LOCA["fr"]["DM" ] = "Dark Matter";
-$LOCA["fr"]["MOON" ] = "Moon";
+$LOCA["fr"]["METAL" ] = "Métal";
+$LOCA["fr"]["CRYSTAL" ] = "Cristal";
+$LOCA["fr"]["DEUTERIUM" ] = "Deutérium";
+$LOCA["fr"]["ENERGY" ] = "Energie";
+$LOCA["fr"]["DM" ] = "Matière noire";
+$LOCA["fr"]["MOON" ] = "Lune";
 
-$LOCA["fr"]["TIME_DAYS"] = "d";		// TODO: Not sure
+$LOCA["fr"]["TIME_DAYS"] = "j";		// TODO: Not sure
 $LOCA["fr"]["TIME_HOUR"] = "h";
 $LOCA["fr"]["TIME_MIN"] = "m";
 $LOCA["fr"]["TIME_SEC"] = "s";
 
-// Commandant et officiers.
+// Commander and officers.
 
-$LOCA["fr"]["PR_COMA" ] = "OGame Commander";
-$LOCA["fr"]["PR_ADMIRAL" ] = "Fleet Admiral";
-$LOCA["fr"]["PR_ENGINEER" ] = "Engineer";
-$LOCA["fr"]["PR_GEOLOGIST" ] = "Geologist";
-$LOCA["fr"]["PR_TECHNO" ] = "Technocrat";
+$LOCA["fr"]["PR_COMA" ] = "Commandant OGame";
+$LOCA["fr"]["PR_ADMIRAL" ] = "Amiral";
+$LOCA["fr"]["PR_ENGINEER" ] = "Ingénieur";
+$LOCA["fr"]["PR_GEOLOGIST" ] = "Géologiste";
+$LOCA["fr"]["PR_TECHNO" ] = "Téchnocrate";
 
-$LOCA["fr"]["PR_ADMIRAL_INFO" ] = "&amp;nbsp;max. fleet slots +2";
-$LOCA["fr"]["PR_ENGINEER_INFO" ] = "Reduces the losses of the defense by half&lt;br&gt; +10% more energy";
-$LOCA["fr"]["PR_GEOLOGIST_INFO" ] = "+10% mine production";
-$LOCA["fr"]["PR_TECHNO_INFO" ] = "+2 espionage level for probes, 25% less research time";
+$LOCA["fr"]["PR_ADMIRAL_INFO" ] = "&amp;nbsp;max. emplacement de flotte +2";
+$LOCA["fr"]["PR_ENGINEER_INFO" ] = "Réduit de moitié les pertes de défense&lt;br&gt; +10% d'énergie";
+$LOCA["fr"]["PR_GEOLOGIST_INFO" ] = "+10% de production minière";
+$LOCA["fr"]["PR_TECHNO_INFO" ] = "+2 niveau d'espionnage pour les sondes, -25% de temps de recherche";
 
-$LOCA["fr"]["PR_PURCHASE" ] = "Order now!";
-$LOCA["fr"]["PR_RENEW" ] = "Renew!";   		// TODO: Je ne sais pas exactement de quoi il s'agit, car il n'y a pas de code HTML
-$LOCA["fr"]["PR_ACTIVE_DAYS" ] = "Still &lt;font color=lime&gt;active&lt;/font&gt; for more than #1 days";
+$LOCA["fr"]["PR_PURCHASE" ] = "Commander!";
+$LOCA["fr"]["PR_RENEW" ] = "Renouveler!";   		// TODO: I'm not sure what it was exactly, since there is no HTML
+$LOCA["fr"]["PR_ACTIVE_DAYS" ] = "Encore &lt;font color=lime&gt;actif&lt;/font&gt; pour #1 jours";
 
 ?>
