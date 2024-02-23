@@ -2,32 +2,32 @@
 
 // Buddylist
 
-$LOCA["fr"]["BUDDY_LIST"] = "Buddylist";
-$LOCA["fr"]["BUDDY_REQUESTS"] = "Request";
-$LOCA["fr"]["BUDDY_YOUR_REQUESTS"] = "Your requests";
-$LOCA["fr"]["BUDDY_NAME"] = "Name";
+$LOCA["fr"]["BUDDY_LIST"] = "Liste des amis";
+$LOCA["fr"]["BUDDY_REQUESTS"] = "Demandes";
+$LOCA["fr"]["BUDDY_YOUR_REQUESTS"] = "Vos demandes";
+$LOCA["fr"]["BUDDY_NAME"] = "Nom";
 $LOCA["fr"]["BUDDY_ALLY"] = "Alliance";
-$LOCA["fr"]["BUDDY_COORD"] = "Coords";
+$LOCA["fr"]["BUDDY_COORD"] = "Coordonnées";
 $LOCA["fr"]["BUDDY_STATUS"] = "Status";
-$LOCA["fr"]["BUDDY_NONE"] = "No buddies found";
-$LOCA["fr"]["BUDDY_DELETE"] = "delete";
-$LOCA["fr"]["BUDDY_USER"] = "User";
-$LOCA["fr"]["BUDDY_TEXT"] = "Text";
-$LOCA["fr"]["BUDDY_NO_REQUESTS"] = "no entries";
-$LOCA["fr"]["BUDDY_APPLY"] = "accept";
-$LOCA["fr"]["BUDDY_DECLINE"] = "decline";
-$LOCA["fr"]["BUDDY_BACK"] = "back";
-$LOCA["fr"]["BUDDY_RECALL"] = "withdraw request";
-$LOCA["fr"]["BUDDY_REQUEST"] = "Buddy request";
-$LOCA["fr"]["BUDDY_PLAYER"] = "Player";
-$LOCA["fr"]["BUDDY_SEND"] = "send";
-$LOCA["fr"]["BUDDY_LIMIT"] = "You have reached the limit of #1";
-$LOCA["fr"]["BUDDY_TEXTLEN"] = "Request text(#1 characters)";
-$LOCA["fr"]["BUDDY_ALREADY_SENT"] = "There is already a request or membership.";
-$LOCA["fr"]["BUDDY_MSG_ADDED"] = "Player #1 has accepted you in his or her buddylist.";
-$LOCA["fr"]["BUDDY_MSG_RECALLED"] = "Player #1 Buddy request cancelled.";
-$LOCA["fr"]["BUDDY_MSG_DECLINED"] = "Player #1 has declined your buddy request.";
-$LOCA["fr"]["BUDDY_MSG_DELETED"] = "Player #1 has deleted you from his or her buddylist.";
-$LOCA["fr"]["BUDDY_CONFIRM"] = "confirm";
+$LOCA["fr"]["BUDDY_NONE"] = "Aucun ami trouvé";
+$LOCA["fr"]["BUDDY_DELETE"] = "Suppression";
+$LOCA["fr"]["BUDDY_USER"] = "Utilisateur";
+$LOCA["fr"]["BUDDY_TEXT"] = "Texte";
+$LOCA["fr"]["BUDDY_NO_REQUESTS"] = "Aucune demande";
+$LOCA["fr"]["BUDDY_APPLY"] = "Accepter";
+$LOCA["fr"]["BUDDY_DECLINE"] = "Refuser";
+$LOCA["fr"]["BUDDY_BACK"] = "Retour";
+$LOCA["fr"]["BUDDY_RECALL"] = "Annuler la demande";
+$LOCA["fr"]["BUDDY_REQUEST"] = "Demande d'amis";
+$LOCA["fr"]["BUDDY_PLAYER"] = "Joueur";
+$LOCA["fr"]["BUDDY_SEND"] = "Envoyer";
+$LOCA["fr"]["BUDDY_LIMIT"] = "Vous avez atteint la limite de #1";
+$LOCA["fr"]["BUDDY_TEXTLEN"] = "Texte de la demande(#1 charactères)";
+$LOCA["fr"]["BUDDY_ALREADY_SENT"] = "Il existe déjà une demande d'adhésion.";
+$LOCA["fr"]["BUDDY_MSG_ADDED"] = "Le joueur #1 a accepté votre demande d'ami.";
+$LOCA["fr"]["BUDDY_MSG_RECALLED"] = "Demande d'ami du joueur #1 annulée.";
+$LOCA["fr"]["BUDDY_MSG_DECLINED"] = "Le joueur #1 a refusé votre demande d'ami.";
+$LOCA["fr"]["BUDDY_MSG_DELETED"] = "Le joueur #1 vous a supprimé de sa liste d'ami.";
+$LOCA["fr"]["BUDDY_CONFIRM"] = "Confirmer";
 
 ?>

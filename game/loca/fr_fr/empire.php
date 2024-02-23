@@ -2,23 +2,23 @@
 
 // L'Empire.
 
-$LOCA["fr"]["EMPIRE_OVERVIEW"] = "Empire Overview";
-$LOCA["fr"]["EMPIRE_PLANETS"] = "Planets";
-$LOCA["fr"]["EMPIRE_MOONS"] = "Moons";
-$LOCA["fr"]["EMPIRE_RES"] = "Resources";
-$LOCA["fr"]["EMPIRE_M"] = "Metal";
-$LOCA["fr"]["EMPIRE_K"] = "Crystal";
-$LOCA["fr"]["EMPIRE_D"] = "Deuterium";
-$LOCA["fr"]["EMPIRE_E"] = "Energy";
-$LOCA["fr"]["EMPIRE_BUILDINGS"] = "Buildings";
-$LOCA["fr"]["EMPIRE_RESEARCH"] = "Research";
-$LOCA["fr"]["EMPIRE_FLEET"] = "Ships";
-$LOCA["fr"]["EMPIRE_DEFENSE"] = "Defense";
-$LOCA["fr"]["EMPIRE_NAME"] = "Name";
-$LOCA["fr"]["EMPIRE_COORD"] = "Coordinates";
-$LOCA["fr"]["EMPIRE_FIELDS"] = "Fields";
-$LOCA["fr"]["EMPIRE_ACTION"] = "click 1x for construction menu, 2x to start construction";
-$LOCA["fr"]["EMPIRE_AVG"] = "Average per planet";
-$LOCA["fr"]["EMPIRE_SUM"] = "Sum";
+$LOCA["fr"]["EMPIRE_OVERVIEW"] = "Aperçu de l'Empire";
+$LOCA["fr"]["EMPIRE_PLANETS"] = "Planètes";
+$LOCA["fr"]["EMPIRE_MOONS"] = "Lunes";
+$LOCA["fr"]["EMPIRE_RES"] = "Ressources";
+$LOCA["fr"]["EMPIRE_M"] = "Métal";
+$LOCA["fr"]["EMPIRE_K"] = "Cristal";
+$LOCA["fr"]["EMPIRE_D"] = "Deutérium";
+$LOCA["fr"]["EMPIRE_E"] = "Energie";
+$LOCA["fr"]["EMPIRE_BUILDINGS"] = "Bâtiments";
+$LOCA["fr"]["EMPIRE_RESEARCH"] = "Recherche";
+$LOCA["fr"]["EMPIRE_FLEET"] = "Flotte";
+$LOCA["fr"]["EMPIRE_DEFENSE"] = "Défense";
+$LOCA["fr"]["EMPIRE_NAME"] = "Nom";
+$LOCA["fr"]["EMPIRE_COORD"] = "Coordonnées";
+$LOCA["fr"]["EMPIRE_FIELDS"] = "Champs";
+$LOCA["fr"]["EMPIRE_ACTION"] = "1 clic pour le menu de construction, 2 clics pour démarrer la construction";
+$LOCA["fr"]["EMPIRE_AVG"] = "Moyen par planète";
+$LOCA["fr"]["EMPIRE_SUM"] = "Somme";
 
 ?>
