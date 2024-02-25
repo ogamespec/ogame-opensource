@@ -11,13 +11,22 @@ function BotIdle ()
 {
 }
 
+// Проверить что есть стратегия с указанным именем.
+function BotStrategyExists ($name)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."botstrat WHERE name = '".$name."' LIMIT 1";
+    $result = dbquery ($query);
+    return ($result && dbrows($result) != 0);
+}
+
 // Параллельно запустить новую стратегию бота. Вернуть 1, если ОК или 0, если не удалось запустить стратегию.
 function BotExec ($name)
 {
     global $db_prefix, $BotID, $BotNow;
     $query = "SELECT * FROM ".$db_prefix."botstrat WHERE name = '".$name."' LIMIT 1";
     $result = dbquery ($query);
-    if ($result) {
+    if ($result && dbrows($result) != 0) {
         $row = dbarray ($result);
         $strat = json_decode ( $row['source'], true );
         $strat_id = $row['id'];

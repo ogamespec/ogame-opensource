@@ -59,6 +59,32 @@ $LOCA["de"]["ADM_BANS_FIND_6"] = "Dieselbe E-Mail Adresse";
 $LOCA["de"]["ADM_BANS_FIND_7"] = "Dieselbe IP";
 $LOCA["de"]["ADM_BANS_SUBMIT"] = "Senden";
 
+// admin_botedit
+
+$LOCA["de"]["ADM_BOTEDIT_CHOOSE"] = "-- Wählen Sie eine Strategie --";
+$LOCA["de"]["ADM_BOTEDIT_NEW"] = "Neu";
+$LOCA["de"]["ADM_BOTEDIT_RENAME"] = "Umbenennen";
+$LOCA["de"]["ADM_BOTEDIT_SHOW"] = "Anzeigen";
+$LOCA["de"]["ADM_BOTEDIT_SAVE"] = "Speichern";
+$LOCA["de"]["ADM_BOTEDIT_LOAD"] = "Herunterladen";
+$LOCA["de"]["ADM_BOTEDIT_FORBIDDEN"] = "Zugang verweigert.";
+
+// admin_bots
+
+$LOCA["de"]["ADM_BOTS_ADDED"] = "Bot erfolgreich hinzugefügt.";
+$LOCA["de"]["ADM_BOTS_USER_NOT_FOUND"] = "Ein Spieler mit diesem Namen existiert bereits.";
+$LOCA["de"]["ADM_BOTS_STOPPED"] = "Der Bot wurde gestoppt.";
+$LOCA["de"]["ADM_BOTS_LIST"] = "Bot-Liste:";
+$LOCA["de"]["ADM_BOTS_NOT_FOUND"] = "Keine Bots entdeckt";
+$LOCA["de"]["ADM_BOTS_NAME"] = "Name";
+$LOCA["de"]["ADM_BOTS_HOMEPLANET"] = "Heimatplanet";
+$LOCA["de"]["ADM_BOTS_ACTION"] = "Aktion";
+$LOCA["de"]["ADM_BOTS_STOP"] = "Stopp";
+$LOCA["de"]["ADM_BOTS_ADD"] = "Einen Bot hinzufügen:";
+$LOCA["de"]["ADM_BOTS_SUBMIT"] = "Senden";
+$LOCA["de"]["ADM_BOTS_FORBIDDEN"] = "Zugang verweigert.";
+$LOCA["de"]["ADM_BOTS_NO_START"] = "Es wurde keine Startstrategie für Bots gefunden.";
+
 // admin_colony_settings
 
 $LOCA["de"]["ADM_COL_HEAD"] = "Einstellungen für die Kolonisierung";

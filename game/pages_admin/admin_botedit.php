@@ -9,7 +9,7 @@ function Admin_Botedit ()
     global $GlobalUser, $GlobalUni;
 
     // Обработка GET-запроса.
-    if ( method () === "GET" )
+    if ( method () === "GET" && key_exists('action', $_GET) && $GlobalUser['admin'] >= 2 )
     {
         if ( $_GET['action'] === "preview" ) {      // Предпросмотр
             $id = intval ( $_GET['strat'] );
@@ -77,7 +77,7 @@ function Admin_Botedit ()
     }
 
     // Обработка POST-запроса.
-    if ( method () === "POST" )
+    if ( method () === "POST" && key_exists('action', $_POST) && $GlobalUser['admin'] >= 2 )
     {
         if ( $_POST['action'] === "load" ) {        // Загрузить
             $id = intval ( $_POST['strat'] );
@@ -127,7 +127,7 @@ function Admin_Botedit ()
             ob_clean ();
             $query = "SELECT * FROM ".$db_prefix."botstrat ORDER BY id ASC";
             $result = dbquery ($query);
-            echo "<option value=\"0\">-- Выберите стратегию --</option>\n";
+            echo "<option value=\"0\">".loca("ADM_BOTEDIT_CHOOSE")."</option>\n";
             while ($row = dbarray ($result) ) {
                 echo "<option value=\"".$row['id']."\"  ";
                 if ( $row['id'] == $id ) echo "selected";
@@ -149,6 +149,14 @@ function Admin_Botedit ()
 
 <?=AdminPanel();?>
 
+<?php
+    if ( $GlobalUser['admin'] < 2) {
+
+        echo "<font color=red>".loca("ADM_BOTEDIT_FORBIDDEN")."</font>";
+        return;
+    }
+?>
+
 <div id="sample">
   <div style="width:100%; white-space:nowrap;">
     <span style="display: inline-block; vertical-align: top; padding: 5px; width:100px">
@@ -161,15 +169,15 @@ function Admin_Botedit ()
 
 <span style="float:left;">
  <input type="text" size="50" id="strategyName">
- <button onclick="newstrat()">Новая</button>
- <button onclick="rename()">Переименовать</button>
- <button onclick="showimg()">Показать</button>
+ <button onclick="newstrat()"><?=loca("ADM_BOTEDIT_NEW");?></button>
+ <button onclick="rename()"><?=loca("ADM_BOTEDIT_RENAME");?></button>
+ <button onclick="showimg()"><?=loca("ADM_BOTEDIT_SHOW");?></button>
 </span>
 
 <span style="float:right;">
-  <button onclick="save()">Сохранить</button>
+  <button onclick="save()"><?=loca("ADM_BOTEDIT_SAVE");?></button>
 <select id="strategyId">
-<option value="0">-- Выберите стратегию --</option>
+<option value="0"><?=loca("ADM_BOTEDIT_CHOOSE");?></option>
 <?php
     $query = "SELECT * FROM ".$db_prefix."botstrat ORDER BY id ASC";
     $result = dbquery ($query);
@@ -178,7 +186,7 @@ function Admin_Botedit ()
     }
 ?>
 </select>
-  <button onclick="load()">Загрузить</button>
+  <button onclick="load()"><?=loca("ADM_BOTEDIT_LOAD");?></button>
 </span>
   <textarea id="mySavedModel" style="width:100%;height:300px; display:none;">
 { "class": "go.GraphLinksModel",

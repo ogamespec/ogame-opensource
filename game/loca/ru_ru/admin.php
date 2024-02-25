@@ -59,6 +59,32 @@ $LOCA["ru"]["ADM_BANS_FIND_6"] = "Одинаковый адрес email";
 $LOCA["ru"]["ADM_BANS_FIND_7"] = "Одинаковый IP";
 $LOCA["ru"]["ADM_BANS_SUBMIT"] = "Отправить";
 
+// admin_botedit
+
+$LOCA["ru"]["ADM_BOTEDIT_CHOOSE"] = "-- Выберите стратегию --";
+$LOCA["ru"]["ADM_BOTEDIT_NEW"] = "Новая";
+$LOCA["ru"]["ADM_BOTEDIT_RENAME"] = "Переименовать";
+$LOCA["ru"]["ADM_BOTEDIT_SHOW"] = "Показать";
+$LOCA["ru"]["ADM_BOTEDIT_SAVE"] = "Сохранить";
+$LOCA["ru"]["ADM_BOTEDIT_LOAD"] = "Загрузить";
+$LOCA["ru"]["ADM_BOTEDIT_FORBIDDEN"] = "Доступ запрещён.";
+
+// admin_bots
+
+$LOCA["ru"]["ADM_BOTS_ADDED"] = "Бот успешно добавлен.";
+$LOCA["ru"]["ADM_BOTS_USER_NOT_FOUND"] = "Игрок с таким именем уже существует.";
+$LOCA["ru"]["ADM_BOTS_STOPPED"] = "Бот остановлен.";
+$LOCA["ru"]["ADM_BOTS_LIST"] = "Список ботов:";
+$LOCA["ru"]["ADM_BOTS_NOT_FOUND"] = "Ботов не обнаружено";
+$LOCA["ru"]["ADM_BOTS_NAME"] = "Имя";
+$LOCA["ru"]["ADM_BOTS_HOMEPLANET"] = "Главная планета";
+$LOCA["ru"]["ADM_BOTS_ACTION"] = "Действие";
+$LOCA["ru"]["ADM_BOTS_STOP"] = "Остановить";
+$LOCA["ru"]["ADM_BOTS_ADD"] = "Добавить бота:";
+$LOCA["ru"]["ADM_BOTS_SUBMIT"] = "Отправить";
+$LOCA["ru"]["ADM_BOTS_FORBIDDEN"] = "Доступ запрещён.";
+$LOCA["ru"]["ADM_BOTS_NO_START"] = "Стартовая стратегия ботов не найдена.";
+
 // admin_colony_settings
 
 $LOCA["ru"]["ADM_COL_HEAD"] = "Настройки колонизации";

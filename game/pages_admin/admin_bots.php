@@ -1,6 +1,5 @@
 <?php
 
-
 // Управление ботами
 
 function Admin_Bots ()
@@ -12,36 +11,49 @@ function Admin_Bots ()
     $result = "";
 
     // Обработка POST-запроса.
-    if ( method () === "POST" )
+    if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
     {
-        if ( AddBot ( $_POST['name'] ) ) $result = "<font color=lime>Бот успешно добавлен.</font>";
-        else $result = "<font color=red>Игрок с таким именем уже существует.</font>";
+        if (BotStrategyExists("_start")) {
+            if ( AddBot ( $_POST['name'] ) ) $result = "<font color=lime>".loca("ADM_BOTS_ADDED")."</font>";
+            else $result = "<font color=red>".loca("ADM_BOTS_USER_NOT_FOUND")."</font>";
+        }
+        else {
+            $result = "<font color=red>".loca("ADM_BOTS_NO_START")."</font>";
+        }
     }
 
     // Обработка GET-запроса.
-    if ( method () === "GET" )
+    if ( method () === "GET" && key_exists('id', $_GET) && $GlobalUser['admin'] >= 2 )
     {
         StopBot ( intval ($_GET['id']) );
-        $result = "<font color=lime>Бот остановлен.</font>";
+        $result = "<font color=lime>".loca("ADM_BOTS_STOPPED")."</font>";
     }
 
 ?>
 
 <?=AdminPanel();?>
 
+<?php
+    if ( $GlobalUser['admin'] < 2) {
+
+        echo "<font color=red>".loca("ADM_BOTS_FORBIDDEN")."</font>";
+        return;
+    }
+?>
+
 <center><?=$result;?></center>
 
-<h2>Список ботов:</h2>
+<h2><?=loca("ADM_BOTS_LIST");?></h2>
 
 <?php
 
     $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'AI' GROUP BY owner_id";
     $result = dbquery ( $query );
     $rowss = $rows = dbrows ($result);
-    if ( $rows == 0 ) echo "Ботов не обнаружено<br>";
+    if ( $rows == 0 ) echo loca("ADM_BOTS_NOT_FOUND") . "<br>";
     else {
         echo "<table>\n";
-        echo "<tr><td class=c>ID</td><td class=c>Имя</td><td class=c>Главная планета</td><td class=c>Действие</td></tr>\n";
+        echo "<tr><td class=c>ID</td><td class=c>".loca("ADM_BOTS_NAME")."</td><td class=c>".loca("ADM_BOTS_HOMEPLANET")."</td><td class=c>".loca("ADM_BOTS_ACTION")."</td></tr>\n";
     }
     while ($rows--) {
         $queue = dbarray ($result);
@@ -51,17 +63,17 @@ function Admin_Bots ()
         echo "<td>".$user['player_id']."</td>";
         echo "<td>".AdminUserName ($user)."</td>";
         echo "<td>". AdminPlanetName ($planet). " " . AdminPlanetCoord($planet) . "</td>";
-        echo "<td><a href=\"index.php?page=admin&session=$session&mode=Bots&action=stop&id=".$user['player_id']."\">Остановить</a></td>";
+        echo "<td><a href=\"index.php?page=admin&session=$session&mode=Bots&action=stop&id=".$user['player_id']."\">".loca("ADM_BOTS_STOP")."</a></td>";
         echo "</tr>\n";
     }
     if ( $rowss ) echo "</table>";
 ?>
 
-<h2>Добавить бота:</h2>
+<h2><?=loca("ADM_BOTS_ADD");?></h2>
 
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Bots" method="POST">
 <table>
-<tr><td>Имя <input type=text size=10 name="name" /> <input type=submit value="Отправить" /></td></tr>
+<tr><td>Имя <input type=text size=10 name="name" /> <input type=submit value="<?=loca("ADM_BOTS_SUBMIT");?>" /></td></tr>
 </table>
 </form>
 
