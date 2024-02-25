@@ -6,9 +6,8 @@
 
 BrowseHistory ();
 
-$uni = LoadUniverse ();
-if ( $uni['freeze'] ) AjaxSendError ();    // Вселенная на паузе.
-$unispeed = $uni['fspeed'];
+if ( $GlobalUni['freeze'] ) AjaxSendError ();    // Вселенная на паузе.
+$unispeed = $GlobalUni['fspeed'];
 $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
 
 function AjaxSendError ($id=601)
@@ -59,8 +58,8 @@ if ( $planettype < 1 || $planettype > 3 ) AjaxSendError ();    // неверна
 if ( ! ( $order == 6 || $order == 8 ) ) AjaxSendError ();    // можно отправлять только шпионаж или переработать
 if ( $order == 8 && $planettype != 2 ) AjaxSendError ();    // рабов можно отправлять только на ПО
 if ( $order == 6 && ! ($planettype == 1 || $planettype == 3) )  AjaxSendError ();     // шпионить можно только планеты или луны
-if ( $galaxy < 1 || $galaxy > $uni['galaxies'] ) AjaxSendError ();    // неправильные координаты (Галактика)
-if ( $system < 1 || $system > $uni['systems'] ) AjaxSendError ();    // неправильные координаты (Система)
+if ( $galaxy < 1 || $galaxy > $GlobalUni['galaxies'] ) AjaxSendError ();    // неправильные координаты (Галактика)
+if ( $system < 1 || $system > $GlobalUni['systems'] ) AjaxSendError ();    // неправильные координаты (Система)
 if ( $planet < 1 || $planet > 15 ) AjaxSendError ();    // неправильные координаты (Позиция)
 if ( $GlobalUser['vacation'] ) AjaxSendError (605);    // игрок в режиме отпуска
 

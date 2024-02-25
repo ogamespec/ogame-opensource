@@ -45,8 +45,7 @@ if ( method () === "GET" )
 $session = $_GET['session'];
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
 
-$unitab = LoadUniverse ();
-$unispeed = $unitab['fspeed'];
+$unispeed = $GlobalUni['fspeed'];
 
 // Обработать вызовы AJAX
 if ( key_exists ( 'ajax', $_GET ) ) {
@@ -108,7 +107,7 @@ $fleet[212] = 0;        // солнечные спутники не летают
 $origin = LoadPlanet ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['thisplanettype']) );
 $target = LoadPlanet ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), intval($_POST['planettype']) );
 
-if ( $unitab['freeze'] ) FleetError ("Невозможно отправить флот, Вселенная поставлена на паузу." );
+if ( $GlobalUni['freeze'] ) FleetError ("Невозможно отправить флот, Вселенная поставлена на паузу." );
 
 if (  ( $_POST['thisgalaxy'] == $_POST['galaxy'] ) &&
         ( $_POST['thissystem'] == $_POST['system'] ) &&
@@ -117,8 +116,8 @@ if (  ( $_POST['thisgalaxy'] == $_POST['galaxy'] ) &&
   ) FleetError ( "И как ты это себе представляешь?" );
 
 if (
-     (intval($_POST['galaxy']) < 1 || intval($_POST['galaxy']) > $unitab['galaxies'])  ||
-     (intval($_POST['system']) < 1 || intval($_POST['system']) > $unitab['systems'])  ||
+     (intval($_POST['galaxy']) < 1 || intval($_POST['galaxy']) > $GlobalUni['galaxies'])  ||
+     (intval($_POST['system']) < 1 || intval($_POST['system']) > $GlobalUni['systems'])  ||
      (intval($_POST['planet']) < 1 || intval($_POST['planet']) > 16)
  ) {
     $PageError = "Cheater!";
@@ -217,7 +216,7 @@ switch ( $order )
 
         if ( key_exists ('union2', $_POST) ) $union_id = floor (intval($_POST['union2']));
         else $union_id = 0;
-        if ( $unitab['acs'] == 0 ) $union_id = 0;
+        if ( $GlobalUni['acs'] == 0 ) $union_id = 0;
         $union = LoadUnion ($union_id);
         $head_queue = GetFleetQueue ( $union['fleet_id'] );
         $acs_flighttime = $head_queue['end'] - time();
@@ -229,7 +228,7 @@ switch ( $order )
         else if ( $flighttime > $acs_flighttime * 1.3 ) FleetError ( "Вы слишком медленны, чтобы присоединиться к этому флоту" );
         else if ($BlockAttack) FleetError ( "Запрет на атаки" );
         else if ($GlobalUser['noattack']) FleetError ( va ( "Запрет на атаки до #1", date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
-        else if ($acs_fleets >= $unitab['acs'] * $unitab['acs']) FleetError ( va ("Атаковать флоты (>#1 флотов нельзя)", $unitab['acs'] * $unitab['acs']) );
+        else if ($acs_fleets >= $GlobalUni['acs'] * $GlobalUni['acs']) FleetError ( va ("Атаковать флоты (>#1 флотов нельзя)", $GlobalUni['acs'] * $GlobalUni['acs']) );
         break;
 
     case '3':        // Транспорт
@@ -241,8 +240,8 @@ switch ( $order )
         break;
 
     case '5':        // Держаться
-        $maxhold_fleets = $unitab['acs'] * $unitab['acs'];
-        $maxhold_users = $unitab['acs'];
+        $maxhold_fleets = $GlobalUni['acs'] * $GlobalUni['acs'];
+        $maxhold_users = $GlobalUni['acs'];
         if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
         if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
         if ( GetHoldingFleetsCount ($target['planet_id']) >= $maxhold_fleets ) FleetError ( va("Задерживаться могут только #1 Удерживать флоты!", $maxhold_fleets));
