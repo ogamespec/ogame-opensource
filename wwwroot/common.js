@@ -5,8 +5,10 @@ function changeAction(type) {
     }
     else {
         var http ="http://";
-        if (window.location.protocol == "https:") { //check for encryption and set http or https
+        if (window.location.protocol == "https:") {
+            //check for encryption and set http or https
             http ="https://";
+        }
         if(type == "login") {
             var url = http + document.loginForm.universe.value + "/game/reg/login2.php";
             document.loginForm.action = url;
