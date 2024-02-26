@@ -23,6 +23,7 @@ function setlang(lang)
 
 <a href="#" onclick="javascript:setlang('de');"><img src="img/flags/de.gif" alt="Deutschland" title="Deutschland"></a>
 <a href="#" onclick="javascript:setlang('en');"><img src="img/flags/gb.gif" alt="English" title="English"></a>
+<a href="#" onclick="javascript:setlang('fr');"><img src="img/flags/fr.gif" alt="France" title="France"></a>
 <a href="#" onclick="javascript:setlang('ru');"><img src="img/flags/ru.gif" alt="Russia" title="Russia"></a>
 
 <!--
