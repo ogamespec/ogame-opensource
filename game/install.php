@@ -102,8 +102,8 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "acs = '".$_POST["uni_acs"]."', ";
     $query .= "fid = '".$_POST["uni_fid"]."', ";
     $query .= "did = '".$_POST["uni_did"]."', ";
-    $query .= "rapid = '".($_POST["uni_rapid"]==="on"?1:0)."', ";
-    $query .= "moons = '".($_POST["uni_moons"]==="on"?1:0)."', ";
+    $query .= "rapid = '".(key_exists("uni_rapid", $_POST) && $_POST["uni_rapid"]==="on"?1:0)."', ";
+    $query .= "moons = '".(key_exists("uni_moons", $_POST) && $_POST["uni_moons"]==="on"?1:0)."', ";
     $query .= "defrepair = '70', ";
     $query .= "defrepair_delta = '10', ";
     $query .= "usercount = '1', ";
@@ -119,7 +119,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "ext_tutorial = '".$_POST["ext_tutorial"]."', ";
     $query .= "ext_rules = '".$_POST["ext_rules"]."', ";
     $query .= "ext_impressum = '".$_POST["ext_impressum"]."', ";
-    $query .= "php_battle = '".($_POST["php_battle"]==="on"?1:0)."', ";
+    $query .= "php_battle = '".(key_exists("php_battle", $_POST) && $_POST["php_battle"]==="on"?1:0)."', ";
     $query .= "hacks = '0'; ";
     //echo "<br>$query<br>";
     dbquery ($query);
