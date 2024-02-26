@@ -91,6 +91,10 @@ if ( $_GET['page'] !== "admin" )
 
     foreach ( $_GET as $i=>$value )
     {
+        if (!is_string($value)) {
+            continue;
+        }
+        
         if ( stripos ($value, "select") != false ) Hacking ("HACK_SQL_INJECTION");
         if ( stripos ($value, "insert") != false ) Hacking ("HACK_SQL_INJECTION");
         if ( stripos ($value, "update") != false ) Hacking ("HACK_SQL_INJECTION");
@@ -98,6 +102,10 @@ if ( $_GET['page'] !== "admin" )
 
     foreach ( $_POST as $i=>$value )
     {
+        if (!is_string($value)) {
+            continue;
+        }
+
         if ( stripos ($value, "select") != false ) Hacking ("HACK_SQL_INJECTION");
         if ( stripos ($value, "insert") != false ) Hacking ("HACK_SQL_INJECTION");
         if ( stripos ($value, "update") != false ) Hacking ("HACK_SQL_INJECTION");
