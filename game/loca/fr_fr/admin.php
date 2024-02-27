@@ -1,6 +1,6 @@
 <?php
 
-// Admin tool.
+// Admen tool.
 
 $LOCA["fr"]["ADM_MENU_FLEETLOGS"] = "Logs de Flotte";
 $LOCA["fr"]["ADM_MENU_BROWSE"] = "Parcourir l'historique";
@@ -15,15 +15,15 @@ $LOCA["fr"]["ADM_MENU_DEBUG"] = "Débug";
 $LOCA["fr"]["ADM_MENU_BATTLESIM"] = "Simulation de Bataille";
 $LOCA["fr"]["ADM_MENU_BROADCAST"] = "Broadcast";
 $LOCA["fr"]["ADM_MENU_EXPEDITION"] = "Paramètres d'Expédition";
-$LOCA["fr"]["ADM_MENU_LOGINS"] = "Logins";
-$LOCA["fr"]["ADM_MENU_CHECKSUM"] = "Source Check";
+$LOCA["fr"]["ADM_MENU_LOGINS"] = "Connexions";
+$LOCA["fr"]["ADM_MENU_CHECKSUM"] = "Checksum";
 $LOCA["fr"]["ADM_MENU_BOTS"] = "Administration des Bots";
 $LOCA["fr"]["ADM_MENU_BATTLELOGS"] = "Logs de Bataille";
 $LOCA["fr"]["ADM_MENU_USERLOGS"] = "Logs Utilisateur";
 $LOCA["fr"]["ADM_MENU_BOTEDIT"] = "Editeur de Bot";
 $LOCA["fr"]["ADM_MENU_COUPONS"] = "Coupons";
 $LOCA["fr"]["ADM_MENU_RAKSIM"] = "Simulation d'attaque de Missile";
-$LOCA["fr"]["ADM_MENU_DB"] = "DB Integrity";
+$LOCA["fr"]["ADM_MENU_DB"] = "Intégrité de base de données";
 $LOCA["fr"]["ADM_MENU_COLONY_SETTINGS"] = "Paramètres de la colonie";
 $LOCA["fr"]["ADM_MENU_LOCA"] = "Localisation";
 
@@ -87,32 +87,32 @@ $LOCA["fr"]["ADM_BOTS_NO_START"] = "Aucune stratégie de départ pour les bots n
 
 // admin_colony_settings
 
-$LOCA["fr"]["ADM_COL_HEAD"] = "Colonization settings";
-$LOCA["fr"]["ADM_COL_T1"] = "Colonies in positions 1-3";
-$LOCA["fr"]["ADM_COL_T2"] = "Colonies in positions 4-6";
-$LOCA["fr"]["ADM_COL_T3"] = "Colonies in positions 7-9";
-$LOCA["fr"]["ADM_COL_T4"] = "Colonies in positions 10-12";
-$LOCA["fr"]["ADM_COL_T5"] = "Colonies in positions 13-15 (and beyond)";
-$LOCA["fr"]["ADM_COL_SUBMIT"] = "Save";
-$LOCA["fr"]["ADM_COL_INFO1"] = "The diameter of a new colony is calculated by the formula";
-$LOCA["fr"]["ADM_COL_INFO2"] = "Each range has its own parameters (a, b, c)";
+$LOCA["fr"]["ADM_COL_HEAD"] = "Paramètres de colonisation";
+$LOCA["fr"]["ADM_COL_T1"] = "Colonies en positions 1-3";
+$LOCA["fr"]["ADM_COL_T2"] = "Colonies en positions 4-6";
+$LOCA["fr"]["ADM_COL_T3"] = "Colonies en positions 7-9";
+$LOCA["fr"]["ADM_COL_T4"] = "Colonies en positions 10-12";
+$LOCA["fr"]["ADM_COL_T5"] = "Colonies en positions 13-15 (et suivantes)";
+$LOCA["fr"]["ADM_COL_SUBMIT"] = "Enregistrer";
+$LOCA["fr"]["ADM_COL_INFO1"] = "Le diamètre d’une nouvelle colonie est calculé par la formule";
+$LOCA["fr"]["ADM_COL_INFO2"] = "Chaque plage a ses propres paramètres (a, b, c)";
 
 // admin_db
 
-$LOCA["fr"]["ADM_DB_COLUMN_NOT_FOUND"] = "Column not found!";
-$LOCA["fr"]["ADM_DB_INSTALL_VS_DB"] = "Comparison of tables from install and real database";
-$LOCA["fr"]["ADM_DB_DB_TABLE_MISSING"] = "Table #1 is missing from the database.";
-$LOCA["fr"]["ADM_DB_DB_VS_INSTALL"] = "Comparison of real database and tables from install";
-$LOCA["fr"]["ADM_DB_INSTALL_TABLE_MISSING"] = "Table #1 is missing from the install.";
-$LOCA["fr"]["ADM_DB_SAME"] = "No differences were found.";
+$LOCA["fr"]["ADM_DB_COLUMN_NOT_FOUND"] = "Colonne introuvable !";
+$LOCA["fr"]["ADM_DB_INSTALL_VS_DB"] = "Comparaison des tables de la base de données d’installation et de la base de données réelle.";
+$LOCA["fr"]["ADM_DB_DB_TABLE_MISSING"] = "La table #1 est manquante dans la base de données.";
+$LOCA["fr"]["ADM_DB_DB_VS_INSTALL"] = "Comparaison de la base de données réelle et des tables de l’installation.";
+$LOCA["fr"]["ADM_DB_INSTALL_TABLE_MISSING"] = "La table #1 est manquante dans l’installation.";
+$LOCA["fr"]["ADM_DB_SAME"] = "Aucune différence n’a été constatée.";
 
 // admin_loca
 
-$LOCA["fr"]["ADM_LOCA_LOCALE_MISSING"] = "The string is missing!";
-$LOCA["fr"]["ADM_LOCA_FILE_MISSING"] = "The file is not localized!";
-$LOCA["fr"]["ADM_LOCA_DIFF"] = "Compare localization between the specified languages";
-$LOCA["fr"]["ADM_LOCA_SOURCE"] = "Source language:";
-$LOCA["fr"]["ADM_LOCA_DEST"] = "Target language:";
-$LOCA["fr"]["ADM_LOCA_SUBMIT"] = "Compare";
+$LOCA["fr"]["ADM_LOCA_LOCALE_MISSING"] = "La chaîne est manquante!";
+$LOCA["fr"]["ADM_LOCA_FILE_MISSING"] = "Le fichier n’est pas localisé!";
+$LOCA["fr"]["ADM_LOCA_DIFF"] = "Comparer la localisation entre les langues spécifiées";
+$LOCA["fr"]["ADM_LOCA_SOURCE"] = "Langue source:";
+$LOCA["fr"]["ADM_LOCA_DEST"] = "Langue cible:";
+$LOCA["fr"]["ADM_LOCA_SUBMIT"] = "Comparer";
 
 ?>

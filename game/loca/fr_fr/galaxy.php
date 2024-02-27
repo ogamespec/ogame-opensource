@@ -3,132 +3,132 @@
 // Galactica.
 
 // Erreurs et messages du IPM
-$LOCA["fr"]["GALAXY_RAK_NO_TARGET"] = "There is no target";
-$LOCA["fr"]["GALAXY_RAK_NO_ROCKETS"] = "You didn't select the number of missiles";
-$LOCA["fr"]["GALAXY_RAK_NOT_ENOUGH"] = "Not enough interplanetary rockets!";
-$LOCA["fr"]["GALAXY_RAK_WEAK_DRIVE"] = "The range (impulse engine research level) of your interplanetary rocket is too short!";
-$LOCA["fr"]["GALAXY_RAK_VACATION_SELF"] = "You can't launch rockets while in vacation mode!";
-$LOCA["fr"]["GALAXY_RAK_VACATION_OTHER"] = "This player is in vacation mode!";
-$LOCA["fr"]["GALAXY_RAK_SELF"] = "It's impossible to attack your own planet!";
-$LOCA["fr"]["GALAXY_RAK_NOOB"] = "The planet is under noob protection!";
-$LOCA["fr"]["GALAXY_RAK_LAUNCHED"] = "Start of rocket #1!";
+$LOCA["fr"]["GALAXY_RAK_NO_TARGET"] = "Il n'y a aucune cible";
+$LOCA["fr"]["GALAXY_RAK_NO_ROCKETS"] = "Vous n'avez pas sélectionné le nombre de missiles";
+$LOCA["fr"]["GALAXY_RAK_NOT_ENOUGH"] = "Pas assez de roquettes interplanétaires!";
+$LOCA["fr"]["GALAXY_RAK_WEAK_DRIVE"] = "La portée (niveau de recherche du moteur d'impulsion) de vos roquettes interplanétaires est trop faible!";
+$LOCA["fr"]["GALAXY_RAK_VACATION_SELF"] = "Vous ne pouvez pas lancer de roquettes en mode vacance!";
+$LOCA["fr"]["GALAXY_RAK_VACATION_OTHER"] = "Ce joueur est en mode vacance!";
+$LOCA["fr"]["GALAXY_RAK_SELF"] = "Impossible d'attaquer sa propre planète!";
+$LOCA["fr"]["GALAXY_RAK_NOOB"] = "La planète est protégée par le bouclier du débutant!";
+$LOCA["fr"]["GALAXY_RAK_LAUNCHED"] = "Départ de la roquette #1!";
 
 // Formulaire d'envoi du IPM
-$LOCA["fr"]["GALAXY_RAK_COORD"] = "Launch a rocket to";
-$LOCA["fr"]["GALAXY_RAK_AMOUNT"] = "Number of missiles (#1 available)";
-$LOCA["fr"]["GALAXY_RAK_TARGET"] = "Target";
-$LOCA["fr"]["GALAXY_RAK_TARGET_ALL"] = "Target all";
-$LOCA["fr"]["GALAXY_RAK_ATTACK"] = "Attack";
+$LOCA["fr"]["GALAXY_RAK_COORD"] = "Lancer une roquette vers";
+$LOCA["fr"]["GALAXY_RAK_AMOUNT"] = "Nombre de missiles (#1 disponibles)";
+$LOCA["fr"]["GALAXY_RAK_TARGET"] = "Cible";
+$LOCA["fr"]["GALAXY_RAK_TARGET_ALL"] = "Tout cibler";
+$LOCA["fr"]["GALAXY_RAK_ATTACK"] = "Attaquer";
 
 // Chaînes pour JS intégré
-$LOCA["fr"]["GALAXY_AJAX_LOADING"] = "The fleet is being sent away...";
-$LOCA["fr"]["GALAXY_AJAX_LOADED"] = "The fleet has been sent away...";
-$LOCA["fr"]["GALAXY_AJAX_INTERACT"] = "Obtaining Data ...";
+$LOCA["fr"]["GALAXY_AJAX_LOADING"] = "La flotte est en train d’être renvoyée...";
+$LOCA["fr"]["GALAXY_AJAX_LOADED"] = "La flotte a été renvoyée...";
+$LOCA["fr"]["GALAXY_AJAX_INTERACT"] = "Obtention des données ...";
 
-$LOCA["fr"]["GALAXY_ERROR_601"] = "There was an error";  	// il n'y a pas de planète là-bas
-$LOCA["fr"]["GALAXY_ERROR_602"] = "Error, the moon doesn't exist";
-$LOCA["fr"]["GALAXY_ERROR_603"] = "Error! It is impossible to fly to the player, because he is under noob protection! ";
-$LOCA["fr"]["GALAXY_ERROR_604"] = "Error! It is impossible to fly to the player, because he is under noob protection! ";
-$LOCA["fr"]["GALAXY_ERROR_605"] = "Impossible, the player is in vacation mode";
-$LOCA["fr"]["GALAXY_ERROR_610"] = "Error, it is possible to send only #1 probes, please send";
-$LOCA["fr"]["GALAXY_ERROR_611"] = "Error! No ships to send";
-$LOCA["fr"]["GALAXY_ERROR_612"] = "Not enough room for a fleet";
-$LOCA["fr"]["GALAXY_ERROR_613"] = "You don't have enough deuterium";
-$LOCA["fr"]["GALAXY_ERROR_614"] = "There's no planet here";
-$LOCA["fr"]["GALAXY_ERROR_615"] = "Error! Insufficient carrying capacity!";
-$LOCA["fr"]["GALAXY_ERROR_616"] = "Same I.P.!";
+$LOCA["fr"]["GALAXY_ERROR_601"] = "Il y a une erreur, aucune planète là-bas.";  	// il n'y a pas de planète là-bas
+$LOCA["fr"]["GALAXY_ERROR_602"] = "Erreur, la lune n'existe pas";
+$LOCA["fr"]["GALAXY_ERROR_603"] = "Erreur! Impossible d'atteindre le joueur, car il est protégé par le bouclier du débutant! ";
+$LOCA["fr"]["GALAXY_ERROR_604"] = "Error! Impossible d'atteindre le joueur, car il est protégé par le bouclier du débutant! ";
+$LOCA["fr"]["GALAXY_ERROR_605"] = "Impossible, le joueur est en mode vacance.";
+$LOCA["fr"]["GALAXY_ERROR_610"] = "Erreur, il est possible de n’envoyer que des sondes #1.";
+$LOCA["fr"]["GALAXY_ERROR_611"] = "Erreur! Aucun vaisseau à envoyer";
+$LOCA["fr"]["GALAXY_ERROR_612"] = "Plus assez de place pour une flotte";
+$LOCA["fr"]["GALAXY_ERROR_613"] = "Vous n'avez pas suffisamment de deutérium";
+$LOCA["fr"]["GALAXY_ERROR_614"] = "Il n'y a aucune planète ici.";
+$LOCA["fr"]["GALAXY_ERROR_615"] = "Erreur! Capacité de transport insuffisante!";
+$LOCA["fr"]["GALAXY_ERROR_616"] = "Même I.P.!";
 
 $LOCA["fr"]["GALAXY_DOIT_SEND"] = "  Dispatch ";
-$LOCA["fr"]["GALAXY_DOIT_SHIPS"] = " ships";
+$LOCA["fr"]["GALAXY_DOIT_SHIPS"] = " Vaisseaux";
 $LOCA["fr"]["GALAXY_DOIT_MANY"] = "";
 $LOCA["fr"]["GALAXY_DOIT_ONE"] = "";
-$LOCA["fr"]["GALAXY_DOIT_TO"] = " to ";
+$LOCA["fr"]["GALAXY_DOIT_TO"] = " vers ";
 $LOCA["fr"]["GALAXY_DOIT_END"] = " ";
 
-$LOCA["fr"]["GALAXY_DEUT_ERR"] = " Error";
-$LOCA["fr"]["GALAXY_DEUT_ERR_TEXT"] = "Not enough deuterium!";
+$LOCA["fr"]["GALAXY_DEUT_ERR"] = " Erreur";
+$LOCA["fr"]["GALAXY_DEUT_ERR_TEXT"] = "Pas assez de deutérium!";
 
-$LOCA["fr"]["GALAXY_GALAXY"] = "Galaxy";
-$LOCA["fr"]["GALAXY_SYSTEM"] = "Solar system";
-$LOCA["fr"]["GALAXY_SHOW"] = "Show";
+$LOCA["fr"]["GALAXY_GALAXY"] = "Galaxie";
+$LOCA["fr"]["GALAXY_SYSTEM"] = "Système Solaire";
+$LOCA["fr"]["GALAXY_SHOW"] = "Montrer";
 
 // Légende
 $LOCA["fr"]["GALAXY_HEAD_COORD"] = "Coord.";
-$LOCA["fr"]["GALAXY_HEAD_PLANET"] = "Planet";
-$LOCA["fr"]["GALAXY_HEAD_NAME_ACT"] = "Title (activity)";
-$LOCA["fr"]["GALAXY_HEAD_MOON"] = "Moon";
-$LOCA["fr"]["GALAXY_HEAD_DF"] = "Debris";
-$LOCA["fr"]["GALAXY_HEAD_PLAYER_STATUS"] = "Player";
+$LOCA["fr"]["GALAXY_HEAD_PLANET"] = "Planète";
+$LOCA["fr"]["GALAXY_HEAD_NAME_ACT"] = "Titre (activité)";
+$LOCA["fr"]["GALAXY_HEAD_MOON"] = "Lune";
+$LOCA["fr"]["GALAXY_HEAD_DF"] = "Débris";
+$LOCA["fr"]["GALAXY_HEAD_PLAYER_STATUS"] = "Joueur";
 $LOCA["fr"]["GALAXY_HEAD_ALLY"] = "Alliance";
 $LOCA["fr"]["GALAXY_HEAD_ACTIONS"] = "Actions";
 
 // Planète
-$LOCA["fr"]["GALAXY_PLANET"] = "Planet";
-$LOCA["fr"]["GALAXY_PLANET_ADMIN"] = "Planet management";
-$LOCA["fr"]["GALAXY_PLANET_DESTROYED"] = "Planet destroyed";
-$LOCA["fr"]["GALAXY_PLANET_ABANDONED"] = "Planet abandoned";
+$LOCA["fr"]["GALAXY_PLANET"] = "Planète";
+$LOCA["fr"]["GALAXY_PLANET_ADMIN"] = "Gestion de la Planète";
+$LOCA["fr"]["GALAXY_PLANET_DESTROYED"] = "Planète détruite";
+$LOCA["fr"]["GALAXY_PLANET_ABANDONED"] = "Planète abandonnée";
 
 // Lune
-$LOCA["fr"]["GALAXY_MOON"] = "Moon";
-$LOCA["fr"]["GALAXY_MOON_TITLE_SIZE"] = "Moon (size: #1)";
-$LOCA["fr"]["GALAXY_MOON_PROPS"] = "Properties";
-$LOCA["fr"]["GALAXY_MOON_SIZE"] = "Size:";
-$LOCA["fr"]["GALAXY_MOON_TEMP"] = "Temperatur:";
+$LOCA["fr"]["GALAXY_MOON"] = "Lune";
+$LOCA["fr"]["GALAXY_MOON_TITLE_SIZE"] = "Lune (taille: #1)";
+$LOCA["fr"]["GALAXY_MOON_PROPS"] = "Propriétés";
+$LOCA["fr"]["GALAXY_MOON_SIZE"] = "Taille:";
+$LOCA["fr"]["GALAXY_MOON_TEMP"] = "Température:";
 $LOCA["fr"]["GALAXY_MOON_ACTIONS"] = "Actions:";
-$LOCA["fr"]["GALAXY_MOON_DESTROYED"] = "Abandoned";
+$LOCA["fr"]["GALAXY_MOON_DESTROYED"] = "Déruite";
 
 // DF
-$LOCA["fr"]["GALAXY_DF_RESOURCES"] = "Resources:";
-$LOCA["fr"]["GALAXY_DF_M"] = "Metal:";
-$LOCA["fr"]["GALAXY_DF_K"] = "Crystal:";
+$LOCA["fr"]["GALAXY_DF_RESOURCES"] = "Ressources:";
+$LOCA["fr"]["GALAXY_DF_M"] = "Métal:";
+$LOCA["fr"]["GALAXY_DF_K"] = "Cristal:";
 $LOCA["fr"]["GALAXY_DF_ACTIONS"] = "Actions:";
 
 // Joueur
-$LOCA["fr"]["GALAXY_USER_TITLE"] = "Player #1. Place in the rating - #2";
-$LOCA["fr"]["GALAXY_USER_MESSAGE"] = "Write a message";
-$LOCA["fr"]["GALAXY_USER_BUDDY"] = "Invite to become friends";
-$LOCA["fr"]["GALAXY_USER_STATS"] = "Statistics";
-$LOCA["fr"]["GALAXY_USER_ADMIN"] = "User management";
+$LOCA["fr"]["GALAXY_USER_TITLE"] = "Joueur #1. Position dans le classement - #2";
+$LOCA["fr"]["GALAXY_USER_MESSAGE"] = "Ecrire un message";
+$LOCA["fr"]["GALAXY_USER_BUDDY"] = "Invitation à devenir amis";
+$LOCA["fr"]["GALAXY_USER_STATS"] = "Statistiques";
+$LOCA["fr"]["GALAXY_USER_ADMIN"] = "Gestion Utilisateur";
 
 // Alliance
-$LOCA["fr"]["GALAXY_ALLY_TITLE"] = "Alliance #1. Place in the rating - #2, number of people - #3.";
-$LOCA["fr"]["GALAXY_ALLY_PAGE"] = "Alliance introduction";
-$LOCA["fr"]["GALAXY_ALLY_APPLY"] = "Apply";
-$LOCA["fr"]["GALAXY_ALLY_STATS"] = "Statistics";
-$LOCA["fr"]["GALAXY_ALLY_HOMEPAGE"] = "Homepage of the Alliance";
+$LOCA["fr"]["GALAXY_ALLY_TITLE"] = "Alliance #1. Position dans le classement - #2, nombre de personnes - #3.";
+$LOCA["fr"]["GALAXY_ALLY_PAGE"] = "Introduction de l'Alliance";
+$LOCA["fr"]["GALAXY_ALLY_APPLY"] = "Appliquer";
+$LOCA["fr"]["GALAXY_ALLY_STATS"] = "Statistiques";
+$LOCA["fr"]["GALAXY_ALLY_HOMEPAGE"] = "Page d'accueil de l'Alliance";
 
 // Tâches
-$LOCA["fr"]["GALAXY_FLEET_DEPLOY"] = "Deploy";
+$LOCA["fr"]["GALAXY_FLEET_DEPLOY"] = "Déployer";
 $LOCA["fr"]["GALAXY_FLEET_TRANSPORT"] = "Transport";
-$LOCA["fr"]["GALAXY_FLEET_SPY"] = "Espionage";
+$LOCA["fr"]["GALAXY_FLEET_SPY"] = "Espionnage";
 $LOCA["fr"]["GALAXY_FLEET_PHALANX"] = "Phalanx";
-$LOCA["fr"]["GALAXY_FLEET_RAK"] = "Rocket attack";
-$LOCA["fr"]["GALAXY_FLEET_ATTACK"] = "Attack";
-$LOCA["fr"]["GALAXY_FLEET_DEFEND"] = "Defend";
-$LOCA["fr"]["GALAXY_FLEET_DESTROY"] = "Destroy";
-$LOCA["fr"]["GALAXY_FLEET_RECYCLE"] = "Recycle";
+$LOCA["fr"]["GALAXY_FLEET_RAK"] = "Attaque de Roquette";
+$LOCA["fr"]["GALAXY_FLEET_ATTACK"] = "Attaque";
+$LOCA["fr"]["GALAXY_FLEET_DEFEND"] = "Défendre";
+$LOCA["fr"]["GALAXY_FLEET_DESTROY"] = "Détruire";
+$LOCA["fr"]["GALAXY_FLEET_RECYCLE"] = "Recycler";
 
 // Sous-sol
-$LOCA["fr"]["GALAXY_FAR_SPACE"] = "Far space";
-$LOCA["fr"]["GALAXY_INFO_POPULATED"] = "Populated #1 planets";
-$LOCA["fr"]["GALAXY_INFO_SPY_PROBES"] = " Spy probes ";
-$LOCA["fr"]["GALAXY_INFO_RECYCLERS"] = " Recyclers  ";
-$LOCA["fr"]["GALAXY_INFO_IPM"] = " Interplanetary rockets  ";
-$LOCA["fr"]["GALAXY_INFO_DEUTERIUM"] = "Deuterium:  ";
-$LOCA["fr"]["GALAXY_INFO_SLOTS"] = "of the #1 slots are in service";
+$LOCA["fr"]["GALAXY_FAR_SPACE"] = "Espace Lointain";
+$LOCA["fr"]["GALAXY_INFO_POPULATED"] = "#1 planètes peuplées";
+$LOCA["fr"]["GALAXY_INFO_SPY_PROBES"] = " Sondes espionnes ";
+$LOCA["fr"]["GALAXY_INFO_RECYCLERS"] = " Recycleurs  ";
+$LOCA["fr"]["GALAXY_INFO_IPM"] = " Roquettes Interplanétaires ";
+$LOCA["fr"]["GALAXY_INFO_DEUTERIUM"] = "Deutérium:  ";
+$LOCA["fr"]["GALAXY_INFO_SLOTS"] = "des #1 emplacements sont en service";
 
-$LOCA["fr"]["GALAXY_LEGEND"] = "Legend";
-$LOCA["fr"]["GALAXY_LEGEND_STRONG_LONG"] = "Strong Player";
-$LOCA["fr"]["GALAXY_LEGEND_STRONG"] = "s";
-$LOCA["fr"]["GALAXY_LEGEND_NOOB_LONG"] = "Noob";
-$LOCA["fr"]["GALAXY_LEGEND_NOOB"] = "n";
-$LOCA["fr"]["GALAXY_LEGEND_VACATION_LONG"] = "Vacation mode";
+$LOCA["fr"]["GALAXY_LEGEND"] = "Légende";
+$LOCA["fr"]["GALAXY_LEGEND_STRONG_LONG"] = "Joueur Puissant";
+$LOCA["fr"]["GALAXY_LEGEND_STRONG"] = "p";
+$LOCA["fr"]["GALAXY_LEGEND_NOOB_LONG"] = "Débutant";
+$LOCA["fr"]["GALAXY_LEGEND_NOOB"] = "d";
+$LOCA["fr"]["GALAXY_LEGEND_VACATION_LONG"] = "Mode Vacance";
 $LOCA["fr"]["GALAXY_LEGEND_VACATION"] = "V";
-$LOCA["fr"]["GALAXY_LEGEND_BANNED_LONG"] = "Banned";
+$LOCA["fr"]["GALAXY_LEGEND_BANNED_LONG"] = "Banni";
 $LOCA["fr"]["GALAXY_LEGEND_BANNED"] = "b";
-$LOCA["fr"]["GALAXY_LEGEND_INACTIVE7_LONG"] = "inactive for 7 days";
+$LOCA["fr"]["GALAXY_LEGEND_INACTIVE7_LONG"] = "inactif depuis 7 jours";
 $LOCA["fr"]["GALAXY_LEGEND_INACTIVE7"] = "i";
-$LOCA["fr"]["GALAXY_LEGEND_INACTIVE28_LONG"] = "inactive for 28 days";
+$LOCA["fr"]["GALAXY_LEGEND_INACTIVE28_LONG"] = "inactif depuis 28 jours";
 $LOCA["fr"]["GALAXY_LEGEND_INACTIVE28"] = "I";
 
 ?>
