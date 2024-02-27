@@ -2,16 +2,16 @@
 
 // Ressources
 
-$LOCA["fr"]["RES_FACTOR"] = "Production Factor: #1";
-$LOCA["fr"]["RES_CALCULATE"] = "calculate";
-$LOCA["fr"]["RES_INFO"] = "There is unrest on the planet because the empire is too large.";
-$LOCA["fr"]["RES_PROD"] = "Resource production on planet";
-$LOCA["fr"]["RES_BASIC"] = "Basic Income";
-$LOCA["fr"]["RES_LEVEL"] = "level #1";
-$LOCA["fr"]["RES_AMOUNT"] = "#1 available";
-$LOCA["fr"]["RES_CAPACITY"] = "Storage Capacity";
+$LOCA["fr"]["RES_FACTOR"] = "Facteur de production: #1";
+$LOCA["fr"]["RES_CALCULATE"] = "Calculer";
+$LOCA["fr"]["RES_INFO"] = "Il y a des troubles sur la planète parce que l’empire est trop grand.";
+$LOCA["fr"]["RES_PROD"] = "Production de ressources sur la planète";
+$LOCA["fr"]["RES_BASIC"] = "Revenu de base";
+$LOCA["fr"]["RES_LEVEL"] = "Niveau #1";
+$LOCA["fr"]["RES_AMOUNT"] = "#1 disponible";
+$LOCA["fr"]["RES_CAPACITY"] = "Capacité de stockage";
 $LOCA["fr"]["RES_PER_HOUR"] = "Total:";
-$LOCA["fr"]["RES_PER_DAY"] = "Res per day:";
-$LOCA["fr"]["RES_PER_WEEK"] = "Res per week:";
+$LOCA["fr"]["RES_PER_DAY"] = "Par jour:";
+$LOCA["fr"]["RES_PER_WEEK"] = "Par semaine:";
 
 ?>

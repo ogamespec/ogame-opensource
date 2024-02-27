@@ -2,19 +2,19 @@
 
 // Porte de saut
 
-$LOCA["fr"]["GATE_START"] = "Start moon";
-$LOCA["fr"]["GATE_TARGET"] = "Target moon";
-$LOCA["fr"]["GATE_HEAD"] = "Use jump gate: Select spaceships";
-$LOCA["fr"]["GATE_AVAIL"] = "available";
-$LOCA["fr"]["GATE_JUMP"] = "Execute Jump!";
-$LOCA["fr"]["GATE_NOT_READY"] = "The Jump Gate is in recharge mode!";
-$LOCA["fr"]["GATE_TIMEOUT"] = "The Gate will be fully recharged for the next jump in #1.";
-$LOCA["fr"]["GATE_ERR_START"] = "no source moon selected";
-$LOCA["fr"]["GATE_ERR_TARGET"] = "no target moon selected";
-$LOCA["fr"]["GATE_ERR_START_GATE"] = "no jump gate found at source moon";
-$LOCA["fr"]["GATE_ERR_TARGET_GATE"] = "no jump gate found at the target moon";
-$LOCA["fr"]["GATE_ERR_MOON"] = "either the source moon or target moon doesn't belong to you";
-$LOCA["fr"]["GATE_ERR_SHIPS"] = "no ships selected";
-$LOCA["fr"]["GATE_ERR_NOTENOUGH"] = "not enough ships available";
+$LOCA["fr"]["GATE_START"] = "Lune de départ";
+$LOCA["fr"]["GATE_TARGET"] = "Lune cible";
+$LOCA["fr"]["GATE_HEAD"] = "Utiliser la porte de saut : sélectionnez les vaisseaux spatiaux";
+$LOCA["fr"]["GATE_AVAIL"] = "Disponible";
+$LOCA["fr"]["GATE_JUMP"] = "Sauter!";
+$LOCA["fr"]["GATE_NOT_READY"] = "La porte est en mode recharge!";
+$LOCA["fr"]["GATE_TIMEOUT"] = "La porte sera entièrement rechargée pour le prochain saut dans #1.";
+$LOCA["fr"]["GATE_ERR_START"] = "Aucune lune source sélectionnée.";
+$LOCA["fr"]["GATE_ERR_TARGET"] = "Aucune lune cible sélectionnée.";
+$LOCA["fr"]["GATE_ERR_START_GATE"] = "Aucune porte de saut n’a été trouvée à la lune source.";
+$LOCA["fr"]["GATE_ERR_TARGET_GATE"] = "Aucune porte de saut n’a été trouvée à la lune cible.";
+$LOCA["fr"]["GATE_ERR_MOON"] = "La lune source ou la lune cible ne vous appartient pas.";
+$LOCA["fr"]["GATE_ERR_SHIPS"] = "Aucun vaisseau sélectionné.";
+$LOCA["fr"]["GATE_ERR_NOTENOUGH"] = "Pas suffisamment de vaisseaux disponibles.";
 
 ?>

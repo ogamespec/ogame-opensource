@@ -2,22 +2,22 @@
 
 // Inscription, connexion, envoi d'un courriel oublié
 
-$LOCA["fr"]["REG_MAIL_TITLE"] = "Overview";
-$LOCA["fr"]["REG_MAIL_SEND"] = "Send Password";
-$LOCA["fr"]["REG_MAIL_NOTE"] = "Please enter your email-address";
-$LOCA["fr"]["REG_MAIL_EMAIL"] = "E-Mail:";
-$LOCA["fr"]["REG_MAIL_SUBMIT"] = "send login data";
+$LOCA["fr"]["REG_MAIL_TITLE"] = "Aperçu";
+$LOCA["fr"]["REG_MAIL_SEND"] = "Envoyer mot de passe";
+$LOCA["fr"]["REG_MAIL_NOTE"] = "Entrez votre adresse email";
+$LOCA["fr"]["REG_MAIL_EMAIL"] = "Email:";
+$LOCA["fr"]["REG_MAIL_SUBMIT"] = "Envoyer les données de connexion";
 
-$LOCA["fr"]["REG_FORGOT_TITLE"] = "Send OGame Password";
-$LOCA["fr"]["REG_FORGOT_ERROR"] = "This email-address doesn't exist as a permanent or variable address";
-$LOCA["fr"]["REG_FORGOT_OK"] = "Your password has been sent to #1.";
-$LOCA["fr"]["REG_FORGOT_SUBJ"] = "OGame password";
-$LOCA["fr"]["REG_FORGOT_MAIL"] = "Hi #1,\n\n" .
-"your password for OGame Universe #2 is:\n\n" .
+$LOCA["fr"]["REG_FORGOT_TITLE"] = "Envoyer le mot de passe OGame";
+$LOCA["fr"]["REG_FORGOT_ERROR"] = "Cette adresse e-mail n’existe pas en tant qu’adresse permanente ou variable";
+$LOCA["fr"]["REG_FORGOT_OK"] = "Votre mot de passe a été envoyé à #1.";
+$LOCA["fr"]["REG_FORGOT_SUBJ"] = "Mot de passe OGame";
+$LOCA["fr"]["REG_FORGOT_MAIL"] = "Bonjour #1,\n\n" .
+"votre mot de passe pour l'Univers #2 de OGame est:\n\n" .
 "#3\n\n" .
-"You may log in at #4 with this login data.\n\n" .
-"We only send passwords to the E-Mail address entered in your account. Please ignore this email if you didn't request it.\n\n" .
-"We wish you good success while playing OGame!\n\n" .
-"Your OGame-Team";
+"Vous pouvez vous connecter à #4 avec ces données de connexion.\n\n" .
+"Nous n’envoyons les mots de passe qu’à l’adresse e-mail indiquée dans votre compte. Veuillez ignorer cet e-mail si vous ne l’avez pas demandé.\n\n" .
+"Nous vous souhaitons beaucoup de réussite en jouant à OGame!\n\n" .
+"Equipe OGame";
 
 ?>
