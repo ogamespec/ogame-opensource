@@ -20,7 +20,9 @@ $CouponError = "";
 if ( method() === "POST" ) 
 {
     $code = $_POST['couponcode'];
-    SecurityCheck ( '/[\-0-9A-Z]{24}/', $code, "Манипулирование кодом купона" );
+    if (!empty($code)) {
+        SecurityCheck ( '/[\-0-9A-Z]{24}/', $code, "Манипулирование кодом купона" );
+    }
 
     if ( $_POST['action'] === "check" )
     {

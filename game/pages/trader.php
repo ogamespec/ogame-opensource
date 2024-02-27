@@ -2,10 +2,13 @@
 
 // Скупщик.
 
+$trader_dm = 2500;
+
 $TraderMessage = "";
 $TraderError = "";
 
 loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "trader", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -23,6 +26,7 @@ function CallNewTrader ()
 {
     global $GlobalUser;
     global $db_prefix;
+    global $trader_dm;
 
     // Сгенерировать новые курсы.
     $offer_id = intval ($_POST['offer_id']);
@@ -78,9 +82,9 @@ function CallNewTrader ()
     if ( $offer_id > 0 && $offer_id <= 3 )
     {
         // Списать ТМ.
-        if ( $GlobalUser['dm'] >= 2500 ) $GlobalUser['dm'] -= 2500;
+        if ( $GlobalUser['dm'] >= $trader_dm ) $GlobalUser['dm'] -= $trader_dm;
         else {
-            $GlobalUser['dmfree'] -= 2500 - $GlobalUser['dm'];
+            $GlobalUser['dmfree'] -= $trader_dm - $GlobalUser['dm'];
             $GlobalUser['dm'] = 0;
         }
 
@@ -99,10 +103,10 @@ if ( method () === "POST" )
     {
         if ( key_exists ( 'call_trader', $_POST) )
         {
-            if ( $dm < 2500 )
+            if ( $dm < $trader_dm )
             {
                 $not_enough = true;
-                $TraderError = "Недостаточно тёмной материи!<br>";
+                $TraderError = loca("TRADER_ERROR_DM") . "<br>";
             }
             else
             {
@@ -114,9 +118,19 @@ if ( method () === "POST" )
         {
             $TraderError = '';
 
-            $value_1 = abs (str_replace ( ".", "", $_POST['1_value'] ));
-            $value_2 = abs (str_replace ( ".", "", $_POST['2_value'] ));
-            $value_3 = abs (str_replace ( ".", "", $_POST['3_value'] ));
+            $value_1 = 0;
+            $value_2 = 0;
+            $value_3 = 0;
+
+            if (key_exists('1_value', $_POST)) {
+                $value_1 = abs (str_replace ( ".", "", $_POST['1_value'] ));
+            }
+            if (key_exists('2_value', $_POST)) {
+                $value_2 = abs (str_replace ( ".", "", $_POST['2_value'] ));
+            }
+            if (key_exists('3_value', $_POST)) {
+                $value_3 = abs (str_replace ( ".", "", $_POST['3_value'] ));
+            }
 
             if ( $GlobalUser['trader'] == 1)
             {
@@ -125,8 +139,8 @@ if ( method () === "POST" )
                 $met = floor ( $value_2 * $GlobalUser['rate_m'] / $GlobalUser['rate_k'] ) + 
                        floor ( $value_3 * $GlobalUser['rate_m'] / $GlobalUser['rate_d'] );
 
-                if ( $met > $aktplanet['m']) $TraderError = "Недостаточно материала для торговли!<br>";
-                else if ( $crys > $aktplanet['kmax'] || $deut > $aktplanet['dmax'] ) $TraderError = "Недостаточно места в хранилищах!<br>";
+                if ( $met > $aktplanet['m']) $TraderError = loca("TRADER_ERROR_RES") . "<br>";
+                else if ( $crys > $aktplanet['kmax'] || $deut > $aktplanet['dmax'] ) $TraderError = loca("TRADER_ERROR_STORAGE") . "<br>";
 
                 if ( $TraderError === '' && $met > 0 ) {
                     $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
@@ -145,8 +159,8 @@ if ( method () === "POST" )
                 $crys = floor ( $value_1 * $GlobalUser['rate_k'] / $GlobalUser['rate_m'] ) + 
                         floor ( $value_3 * $GlobalUser['rate_k'] / $GlobalUser['rate_d'] );
 
-                if ( $crys > $aktplanet['k']) $TraderError = "Недостаточно материала для торговли!<br>";
-                else if ( $met > $aktplanet['mmax'] || $deut > $aktplanet['dmax'] ) $TraderError = "Недостаточно места в хранилищах!<br>";
+                if ( $crys > $aktplanet['k']) $TraderError = loca("TRADER_ERROR_RES") . "<br>";
+                else if ( $met > $aktplanet['mmax'] || $deut > $aktplanet['dmax'] ) $TraderError = loca("TRADER_ERROR_STORAGE") . "<br>";
 
                 if ( $TraderError === '' && $crys > 0 ) {
                     $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
@@ -165,8 +179,8 @@ if ( method () === "POST" )
                 $deut = floor ( $value_1 * $GlobalUser['rate_d'] / $GlobalUser['rate_m'] ) + 
                         floor ( $value_2 * $GlobalUser['rate_d'] / $GlobalUser['rate_k'] );
 
-                if ( $deut > $aktplanet['d']) $TraderError .= "Недостаточно материала для торговли!<br>";
-                else if ( $met > $aktplanet['mmax'] || $crys > $aktplanet['kmax'] ) $TraderError .= "Недостаточно места в хранилищах!<br>";
+                if ( $deut > $aktplanet['d']) $TraderError .= loca("TRADER_ERROR_RES") . "<br>";
+                else if ( $met > $aktplanet['mmax'] || $crys > $aktplanet['kmax'] ) $TraderError .= loca("TRADER_ERROR_STORAGE") . "<br>";
 
                 if ( $TraderError === '' && $deut > 0 ) {
                     $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
@@ -182,10 +196,10 @@ if ( method () === "POST" )
     }
     else        // Вызвать (нового) скупщика
     {
-        if ( $dm < 2500 )
+        if ( $dm < $trader_dm )
         {
             $not_enough = true;
-            $TraderError = "Недостаточно тёмной материи!<br>";
+            $TraderError = loca("TRADER_ERROR_DM") . "<br>";
         }
         else
         {
@@ -216,7 +230,7 @@ if ( $GlobalUser['trader'] > 0 )
     $storage = "0, " . $mmax . ", " . $kmax . ", " . $dmax;
     $factor = "0, " . $GlobalUser['rate_m'] . ", " . $GlobalUser['rate_k'] . ", " . $GlobalUser['rate_d'];
 
-    $resname = array ( "", "Металл", "Кристалл", "Дейтерий" );
+    $resname = array ( "", loca("METAL"), loca("CRYSTAL"), loca("DEUTERIUM") );
 
     if ( $GlobalUser['trader'] == 1 ) $ratewhat = $GlobalUser['rate_m'];
     else if ( $GlobalUser['trader'] == 2 ) $ratewhat = $GlobalUser['rate_k'];
@@ -338,36 +352,36 @@ function setMaxValue(id) {
 <?php
     if ( $GlobalUser['trader'] > 0 ) {
 
-        echo "			<td class=\"c\"align='center' >".va ("Есть скупщик, которому Вы может продать #1.", $resname[$GlobalUser['trader']] ) ."</td>\n";
+        echo "			<td class=\"c\"align='center' >".va (loca("TRADER_AVAILABLE"), $resname[$GlobalUser['trader']] ) ."</td>\n";
     }
-    else echo "			<td class=\"c\"align='center' >Скупщик не найден!</td>\n";
+    else echo "			<td class=\"c\"align='center' >".loca("TRADER_NOT_FOUND")."</td>\n";
 ?>	
 	
 			</tr>
 		<tr>
 			<th class="c" align='center'><br>
-				Вы хотите продать				<select name="offer_id" style="color: lime;">
+				<?=loca("TRADER_SELL_RES");?>				<select name="offer_id" style="color: lime;">
 
-				  <option value="1" <?=is_selected($GlobalUser['trader'], 1);?>>Металл</option>
-				  <option value="2" <?=is_selected($GlobalUser['trader'], 2);?>>Кристалл</option>
-				  <option value="3" <?=is_selected($GlobalUser['trader'], 3);?>>Дейтерий</option>
+				  <option value="1" <?=is_selected($GlobalUser['trader'], 1);?>><?=loca("METAL");?></option>
+				  <option value="2" <?=is_selected($GlobalUser['trader'], 2);?>><?=loca("CRYSTAL");?></option>
+				  <option value="3" <?=is_selected($GlobalUser['trader'], 3);?>><?=loca("DEUTERIUM");?></option>
 				</select>		
 				!				<br>
-				<div id='darkmatter2'>Вызвать скупщика стоит 2500 тёмной материи.</div><br><br>
+				<div id='darkmatter2'><?=va(loca("TRADER_DM_COST"), $trader_dm);?></div><br><br>
 
 <?php
     if ( $not_enough )
     {
 ?>
 	<a id='darkmatter2' href='index.php?page=payment&session=<?=$session;?>' style='cursor:pointer; text-align:center;width:100px;height:60px;'>
-	<b><div id='darkmatter2'><img border="0" src="img/DMaterie.jpg" width="60" height="60"><br>Достать тёмную материю</a></b><br><br><br>
+	<b><div id='darkmatter2'><img border="0" src="img/DMaterie.jpg" width="60" height="60"><br><?=loca("TRADER_GET_DM");?></a></b><br><br><br>
 <?php
     }
 ?>
 
 <?php
-    if ( $GlobalUser['trader'] > 0 ) echo "				<input type='submit' name='call_trader' value='Вызвать другого скупщика'>\n";
-    else echo "				<input type='submit' name='call_trader' value='Вызвать скупщика'>\n";
+    if ( $GlobalUser['trader'] > 0 ) echo "				<input type='submit' name='call_trader' value='".loca("TRADER_CALL_ANOTHER")."'>\n";
+    else echo "				<input type='submit' name='call_trader' value='".loca("TRADER_CALL")."'>\n";
 ?>
 			</th>
 		</tr>
@@ -382,19 +396,19 @@ function setMaxValue(id) {
 <form action="index.php?page=trader&session=<?=$session;?>" name="TraderForm" method="POST">
     <TABLE width='520px'>
         <TR>
-            <TD colspan=4 class="c" align='center'>Обменять</TD>
+            <TD colspan=4 class="c" align='center'><?=loca("TRADER_EXCHANGE");?></TD>
         </TR>
         
         <TR>
             <th></th>
             <th></th>
-            <th>Свободное место хранилище</th>
-            <th>Курс обмена</th>
+            <th><?=loca("TRADER_FREE_STORAGE");?></th>
+            <th><?=loca("TRADER_RATE");?></th>
         </TR>
         
         
         <TR>
-            <th class="c" align="center" width=25% >Металл</th>
+            <th class="c" align="center" width=25% ><?=loca("METAL");?></th>
 <?php
     if ( $GlobalUser['trader'] == 1 ) echo "                          <th class=\"c\" align='center' width=25% ><span id=\"1_value\">0</span></th>\n";
     else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"1_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(1);'> <a href=\"#\" onClick=\"setMaxValue(1);\">max</a></th>\n";
@@ -411,7 +425,7 @@ function setMaxValue(id) {
     if ( $GlobalUser['trader'] != 1 )
     {
 ?>
-                          <a href=# onmouseover="return overlib('<font color=white><?=va("Один #1 даёт #2 #3", $resname[$GlobalUser['trader']], round($GlobalUser['rate_m'] / $ratewhat, 2), $resname[1] );?></font>');" onmouseout="return nd();">
+                          <a href=# onmouseover="return overlib('<font color=white><?=va(loca("TRADER_EXCHANGE_INFO"), $resname[$GlobalUser['trader']], round($GlobalUser['rate_m'] / $ratewhat, 2), $resname[1] );?></font>');" onmouseout="return nd();">
 <?php
     }
 ?>
@@ -428,7 +442,7 @@ function setMaxValue(id) {
         </TR>
         
         <TR>
-            <th class="c" align="center" width=25% >Кристалл</th>
+            <th class="c" align="center" width=25% ><?=loca("CRYSTAL");?></th>
 <?php
     if ( $GlobalUser['trader'] == 2 ) echo "                          <th class=\"c\" align='center' width=25% ><span id=\"2_value\">0</span></th>\n";
     else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"2_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(2);'> <a href=\"#\" onClick=\"setMaxValue(2);\">max</a></th>\n";
@@ -445,7 +459,7 @@ function setMaxValue(id) {
     if ( $GlobalUser['trader'] != 2 )
     {
 ?>
-                          <a href=# onmouseover="return overlib('<font color=white><?=va("Один #1 даёт #2 #3", $resname[$GlobalUser['trader']], round($GlobalUser['rate_k'] / $ratewhat, 2), $resname[2] );?></font>');" onmouseout="return nd();">
+                          <a href=# onmouseover="return overlib('<font color=white><?=va(loca("TRADER_EXCHANGE_INFO"), $resname[$GlobalUser['trader']], round($GlobalUser['rate_k'] / $ratewhat, 2), $resname[2] );?></font>');" onmouseout="return nd();">
 <?php
     }
 ?>
@@ -462,7 +476,7 @@ function setMaxValue(id) {
         </TR>
         
         <TR>
-            <th class="c" align="center" width=25% >Дейтерий</th>
+            <th class="c" align="center" width=25% ><?=loca("DEUTERIUM");?></th>
 <?php
     if ( $GlobalUser['trader'] == 3 ) echo "                          <th class=\"c\" align='center' width=25% ><span id=\"3_value\">0</span></th>\n";
     else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"3_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(3);'> <a href=\"#\" onClick=\"setMaxValue(3);\">max</a></th>\n";
@@ -479,7 +493,7 @@ function setMaxValue(id) {
     if ( $GlobalUser['trader'] != 3 )
     {
 ?>
-                          <a href=# onmouseover="return overlib('<font color=white><?=va("Один #1 даёт #2 #3", $resname[$GlobalUser['trader']], round($GlobalUser['rate_d'] / $ratewhat, 2), $resname[3] );?></font>');" onmouseout="return nd();">
+                          <a href=# onmouseover="return overlib('<font color=white><?=va(loca("TRADER_EXCHANGE_INFO"), $resname[$GlobalUser['trader']], round($GlobalUser['rate_d'] / $ratewhat, 2), $resname[3] );?></font>');" onmouseout="return nd();">
 <?php
     }
 ?>
@@ -496,7 +510,7 @@ function setMaxValue(id) {
         </TR>
         
         <tr>
-        <th class="c" align="center" colspan=4 ><br>Скупщик поставляет столько, сколько могут вместить ваши хранилища.       <br><br><input type=submit name='trade' value='Обменять!'>
+        <th class="c" align="center" colspan=4 ><br><?=loca("TRADER_STORAGE_INFO");?>       <br><br><input type=submit name='trade' value='<?=loca("TRADER_EXCHANGE2");?>'>
         </th>
         </tr>
     </TABLE>
