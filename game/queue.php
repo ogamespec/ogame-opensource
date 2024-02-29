@@ -24,7 +24,7 @@
 
 Запись старых очков: 8:05, 16:05, 20:05 по серверу
 
-Статичный пересчёт очков игрока : 0:10 по серверу
+Статичный пересчёт очков игрока: 0:10 по серверу
 
 Виртуальное ПО исчезает в понедельник в 1:10 по серверу, если на/от него не летит ни одного флота и если там 0 ресурсов.
 
@@ -202,39 +202,41 @@ function CanBuild ($user, $planet, $id, $lvl, $destroy)
         $shipqueue = dbarray ($result);
         $shipyard_operating = ($shipqueue != null);
 
-        if ( $GlobalUni['freeze'] ) return "Вселенная на паузе!";
+        loca_add ("build", $user['lang']);
+
+        if ( $GlobalUni['freeze'] ) return loca_lang("BUILD_ERROR_UNI_FREEZE", $user['lang']);
 
         // Не постройка
-        if ( ! in_array ( $id, $buildmap ) ) $text = "Неверный ID!";
+        if ( ! in_array ( $id, $buildmap ) ) $text = loca_lang("BUILD_ERROR_INVALID_ID", $user['lang']);
 
         // В режиме отпуска нельзя строить
-        else if ( $user['vacation'] ) $text = "В режиме отпуска (РО) строительство невозможно.";
+        else if ( $user['vacation'] ) $text = loca_lang("BUILD_ERROR_VACATION_MODE", $user['lang']);
 
         // На чужой планете строить нельзя
-        else if ( $planet['owner_id'] != $user['player_id'] ) $text = "Неправильная планета!";
+        else if ( $planet['owner_id'] != $user['player_id'] ) $text = loca_lang("BUILD_ERROR_INVALID_PLANET", $user['lang']);
 
         // Лунные постройки нельзя строить на планете, а планетарные на луне
-        else if ( $planet['type'] != 0 && ($id == 41 || $id == 42 || $id == 43) ) $text = "Неверный тип планеты.";
-        else if ( $planet['type'] == 0 && ( $id == 1 || $id == 2 || $id == 3 || $id == 4 || $id == 12 || $id == 15 || $id == 22 || $id == 23 || $id == 24 || $id == 31 || $id == 33 || $id == 44 ) ) $text = "Неверный тип планеты.";
+        else if ( $planet['type'] != 0 && ($id == 41 || $id == 42 || $id == 43) ) $text = loca_lang("BUILD_ERROR_INVALID_PTYPE", $user['lang']);
+        else if ( $planet['type'] == 0 && ( $id == 1 || $id == 2 || $id == 3 || $id == 4 || $id == 12 || $id == 15 || $id == 22 || $id == 23 || $id == 24 || $id == 31 || $id == 33 || $id == 44 ) ) $text = loca_lang("BUILD_ERROR_INVALID_PTYPE", $user['lang']);
 
         // Проверить количество полей
-        else if ( $planet['fields'] >= $planet['maxfields'] && !$destroy ) $text = "На планете нет места для строительства.";
+        else if ( $planet['fields'] >= $planet['maxfields'] && !$destroy ) $text = loca_lang("BUILD_ERROR_NO_SPACE", $user['lang']);
 
         // Идет исследование или строительство на верфи
-        else if ( $id == 31 && $reslab_operating ) $text = "Идёт исследование!";
-        else if ( ($id == 15 || $id == 21) && $shipyard_operating ) $text = "Корабельная верфь ещё занята.";
+        else if ( $id == 31 && $reslab_operating ) $text = loca_lang("BUILD_ERROR_RESEARCH_ACTIVE", $user['lang']);
+        else if ( ($id == 15 || $id == 21) && $shipyard_operating ) $text = loca_lang("BUILD_ERROR_SHIPYARD_ACTIVE", $user['lang']);
 
         // Проверить доступное количество ресурсов на планете
-        else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) ) $text = "У Вас недостаточно ресурсов!";
+        else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) ) $text = loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
 
         // Проверить доступные технологии.
-        else if ( !BuildMeetRequirement ( $user, $planet, $id ) ) $text = "Необходимые требования не выполнены!";
+        else if ( !BuildMeetRequirement ( $user, $planet, $id ) ) $text = loca_lang("BUILD_ERROR_REQUIREMENTS", $user['lang']);
     }
 
     if ( $destroy )
     {
-        if ( $id == 33 || $id == 41 ) $text = "Лунную базу и терраформер нельзя снести.";
-        else if ( $planet["b".$id] <= 0 ) $text = "У Вас нет построек этого типа.";
+        if ( $id == 33 || $id == 41 ) $text = loca_lang("BUILD_ERROR_CANT_DEMOLISH", $user['lang']);
+        else if ( $planet["b".$id] <= 0 ) $text = loca_lang("BUILD_ERROR_NO_SUCH_BUILDING", $user['lang']);
     }
 
     return $text;
@@ -654,34 +656,36 @@ function CanResearch ($user, $planet, $id, $lvl)
     {
         $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
 
-        if ( $GlobalUni['freeze'] ) return "Вселенная на паузе!";
+        loca_add ("build", $user['lang']);
+
+        if ( $GlobalUni['freeze'] ) return loca_lang("BUILD_ERROR_UNI_FREEZE", $user['lang']);
 
         // Исследование уже ведется?
         $result = GetResearchQueue ( $user['player_id'] );
         $resq = dbarray ($result);
-        if ($resq) return "Исследование уже ведется!";
+        if ($resq) return loca_lang("BUILD_ERROR_RESEARCH_ALREADY", $user['lang']);
 
         // Исследовательская лаборатория усовершенствуется хоть на одной планете ?
         $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = 31 AND (type = 'Build' OR type = 'Demolish') AND owner_id = " . $user['player_id'];
         $result = dbquery ( $query );
         $busy = ( dbrows ($result) > 0 );
-        if ( $busy ) return "Исследовательская лаборатория усовершенствуется!";
+        if ( $busy ) return loca_lang("BUILD_ERROR_RESEARCH_LAB_BUILDING", $user['lang']);
 
         $res = ResearchPrice ( $id, $lvl );
         $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
 
         // Не исследование
-        if ( ! in_array ( $id, $resmap ) ) return "Неверный ID!";
+        if ( ! in_array ( $id, $resmap ) ) return loca_lang("BUILD_ERROR_INVALID_ID", $user['lang']);
 
         // В режиме отпуска нельзя строить
-        else if ( $user['vacation'] ) return "В режиме отпуска (РО) исследование невозможно.";
+        else if ( $user['vacation'] ) return loca_lang("BUILD_ERROR_RESEARCH_VACATION", $user['lang']);
 
         // На чужой планете исследовать нельзя
-        else if ( $planet['owner_id'] != $user['player_id'] ) return "Неправильная планета!";
+        else if ( $planet['owner_id'] != $user['player_id'] ) return loca_lang("BUILD_ERROR_INVALID_PLANET", $user['lang']);
 
-        else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) ) return "У Вас недостаточно ресурсов!";
+        else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) ) return loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
 
-        else if ( !ResearchMeetRequirement ( $user, $planet, $id ) ) return "Необходимые требования не выполнены!";
+        else if ( !ResearchMeetRequirement ( $user, $planet, $id ) ) return loca_lang("BUILD_ERROR_REQUIREMENTS", $user['lang']);
     }
     return "";
 }
@@ -717,7 +721,6 @@ function StartResearch ($player_id, $planet_id, $id, $now)
         $res = ResearchPrice ( $id, $level );
         AdjustResources ( $res['m'], $res['k'], $res['d'], $planet_id, '-' );
 
-        //echo "--------------------- Запустить исследование $id на планете $planet_id игрока $player_id, уровень $level, продолжительность $seconds" ;
         AddQueue ($player_id, "Research", $planet_id, $id, $level, $now, $seconds);
     }
 }

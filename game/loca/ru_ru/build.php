@@ -1,6 +1,6 @@
 <?php
 
-// Локали для страниц b_building (Постройки) и buildings (Верфь)
+// Локали для страниц b_building (Постройки) и buildings (Верфь/Оборона/Исследования)
 
 $LOCA["ru"]["BUILD_COMPLETE"] = "Окончено";
 $LOCA["ru"]["BUILD_NEXT"] = "Дальше";
@@ -15,5 +15,23 @@ $LOCA["ru"]["BUILD_QUEUE_FULL"] = "Нет места! ";
 $LOCA["ru"]["BUILD_BUSY"] = "В процессе";
 $LOCA["ru"]["BUILD_BUILD"] = " строить ";
 $LOCA["ru"]["BUILD_BUILD_LEVEL"] = "Совершенствовать <br> до уровня  #1";
+
+// Тексты ошибок для метода CanBuild, CanResearch (queue.php)
+
+$LOCA["ru"]["BUILD_ERROR_UNI_FREEZE"] = "Вселенная на паузе!";
+$LOCA["ru"]["BUILD_ERROR_INVALID_ID"] = "Неверный ID!";
+$LOCA["ru"]["BUILD_ERROR_VACATION_MODE"] = "В режиме отпуска (РО) строительство невозможно.";
+$LOCA["ru"]["BUILD_ERROR_INVALID_PLANET"] = "Неправильная планета!";
+$LOCA["ru"]["BUILD_ERROR_INVALID_PTYPE"] = "Неверный тип планеты.";
+$LOCA["ru"]["BUILD_ERROR_NO_SPACE"] = "На планете нет места для строительства.";
+$LOCA["ru"]["BUILD_ERROR_RESEARCH_ACTIVE"] = "Идёт исследование!";
+$LOCA["ru"]["BUILD_ERROR_SHIPYARD_ACTIVE"] = "Корабельная верфь ещё занята.";
+$LOCA["ru"]["BUILD_ERROR_NO_RES"] = "У Вас недостаточно ресурсов!";
+$LOCA["ru"]["BUILD_ERROR_REQUIREMENTS"] = "Необходимые требования не выполнены!";
+$LOCA["ru"]["BUILD_ERROR_CANT_DEMOLISH"] = "Лунную базу и терраформер нельзя снести.";
+$LOCA["ru"]["BUILD_ERROR_NO_SUCH_BUILDING"] = "У Вас нет построек этого типа.";
+$LOCA["ru"]["BUILD_ERROR_RESEARCH_ALREADY"] = "Исследование уже ведется!";
+$LOCA["ru"]["BUILD_ERROR_RESEARCH_LAB_BUILDING"] = "Исследовательская лаборатория усовершенствуется!";
+$LOCA["ru"]["BUILD_ERROR_RESEARCH_VACATION"] = "В режиме отпуска (РО) исследование невозможно.";
 
 ?>
