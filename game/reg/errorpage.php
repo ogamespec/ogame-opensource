@@ -9,6 +9,12 @@ if ( !file_exists ("../config.php"))
 
 require_once "../config.php";
 require_once "../utils.php";
+require_once "../loca.php";
+
+if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = "en";
+else $loca_lang = $_COOKIE['ogamelang'];
+
+loca_add ( "reg", $loca_lang );
 
 ?>
 
@@ -21,7 +27,7 @@ require_once "../utils.php";
   <link rel='stylesheet' type='text/css' href='css/default.css' />
   <link rel='stylesheet' type='text/css' href='css/formate.css' />
  <link rel="stylesheet" type="text/css" href="<?=hostname();?>evolution/formate.css" />
- <title>Ошибка</title>
+ <title><?=loca("REG_ERROR");?></title>
 </head>
 <body class='style' topmargin='0' leftmargin='0' marginwidth='0' marginheight='0' >
 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
@@ -29,10 +35,10 @@ require_once "../utils.php";
  <br><br>
  <table width="519">
  <tr>
-   <td class="c" align="center" ><font color="red">Ошибка</font></td>
+   <td class="c" align="center" ><font color="red"><?=loca("REG_ERROR");?></font></td>
   </tr>
   <tr>
-  <th class="errormessage">Вы пытались войти во вселенную <?=$_GET['arg1'];?> под ником <?=$_GET['arg2'];?>.</th>
+  <th class="errormessage"><?=va(loca("REG_ERROR_21"), $_GET['arg1'], $_GET['arg2']);?></th>
   </tr>
   <tr>
 <?php
@@ -41,13 +47,13 @@ require_once "../utils.php";
     {
         case '2':
 ?>
-   <th class='errormessage'>Такого аккаунта не существует либо Вы неправильно ввели пароль. <br>Введите <a href='<?=$StartPage;?>'>правильный пароль</a> либо воспользуйтесь <a href='mail.php'>восстановлением пароля</a>.<br>Также Вы можете создать <a href='new.php'>новый аккаунт</a>.</th>
+   <th class='errormessage'><?=loca("REG_ERROR_22");?><br><?=va(loca("REG_ERROR_23"), $StartPage);?><br><?=loca("REG_ERROR_24");?></th>
 <?php
         break;
 
         case '3':
 ?>
-   <th class='errormessage'>Этот аккаунт заблокирован до <?=$_GET['arg3'];?>, более подробная информация приведена <a href=../pranger.php>здесь</a>.<br> Если у Вас возникли вопросы, обратитесь к заблокировавшему Вас <a href='#'>оператору</a>.<br><br>ВНИМАНИЕ: статус командира при блоке не прекращается, прекращение делается отдельно!</th>
+   <th class='errormessage'><?=va(loca("REG_ERROR_31"), $_GET['arg3']);?></th>
 <?php
         break;
     }
