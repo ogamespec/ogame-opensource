@@ -1,8 +1,8 @@
 <?php
 
-// Галактика.
+// Galaxy.
 
-// Ошибки и сообщения МПР
+// Errors and messages from the IPM
 $LOCA["en"]["GALAXY_RAK_NO_TARGET"] = "There is no target";
 $LOCA["en"]["GALAXY_RAK_NO_ROCKETS"] = "You didn't select the number of missiles";
 $LOCA["en"]["GALAXY_RAK_NOT_ENOUGH"] = "Not enough interplanetary rockets!";
@@ -13,14 +13,14 @@ $LOCA["en"]["GALAXY_RAK_SELF"] = "It's impossible to attack your own planet!";
 $LOCA["en"]["GALAXY_RAK_NOOB"] = "The planet is under noob protection!";
 $LOCA["en"]["GALAXY_RAK_LAUNCHED"] = "Start of rocket #1!";
 
-// Форма отправки МПР
+// IPM submission form
 $LOCA["en"]["GALAXY_RAK_COORD"] = "Launch a rocket to";
 $LOCA["en"]["GALAXY_RAK_AMOUNT"] = "Number of missiles (#1 available)";
 $LOCA["en"]["GALAXY_RAK_TARGET"] = "Target";
 $LOCA["en"]["GALAXY_RAK_TARGET_ALL"] = "Target all";
 $LOCA["en"]["GALAXY_RAK_ATTACK"] = "Attack";
 
-// Строки для интегрированного JS
+// Strings for integrated JS
 $LOCA["en"]["GALAXY_AJAX_LOADING"] = "The fleet is being sent away...";
 $LOCA["en"]["GALAXY_AJAX_LOADED"] = "The fleet has been sent away...";
 $LOCA["en"]["GALAXY_AJAX_INTERACT"] = "Obtaining Data ...";
@@ -52,7 +52,7 @@ $LOCA["en"]["GALAXY_GALAXY"] = "Galaxy";
 $LOCA["en"]["GALAXY_SYSTEM"] = "Solar system";
 $LOCA["en"]["GALAXY_SHOW"] = "Show";
 
-// Заголовок
+// Heading
 $LOCA["en"]["GALAXY_HEAD_COORD"] = "Coord.";
 $LOCA["en"]["GALAXY_HEAD_PLANET"] = "Planet";
 $LOCA["en"]["GALAXY_HEAD_NAME_ACT"] = "Title (activity)";
@@ -62,13 +62,13 @@ $LOCA["en"]["GALAXY_HEAD_PLAYER_STATUS"] = "Player";
 $LOCA["en"]["GALAXY_HEAD_ALLY"] = "Alliance";
 $LOCA["en"]["GALAXY_HEAD_ACTIONS"] = "Actions";
 
-// Планета
+// Planet
 $LOCA["en"]["GALAXY_PLANET"] = "Planet";
 $LOCA["en"]["GALAXY_PLANET_ADMIN"] = "Planet management";
 $LOCA["en"]["GALAXY_PLANET_DESTROYED"] = "Planet destroyed";
 $LOCA["en"]["GALAXY_PLANET_ABANDONED"] = "Planet abandoned";
 
-// Луна
+// Moon
 $LOCA["en"]["GALAXY_MOON"] = "Moon";
 $LOCA["en"]["GALAXY_MOON_TITLE_SIZE"] = "Moon (size: #1)";
 $LOCA["en"]["GALAXY_MOON_PROPS"] = "Properties";
@@ -77,27 +77,27 @@ $LOCA["en"]["GALAXY_MOON_TEMP"] = "Temperatur:";
 $LOCA["en"]["GALAXY_MOON_ACTIONS"] = "Actions:";
 $LOCA["en"]["GALAXY_MOON_DESTROYED"] = "Abandoned";
 
-// ПО
+// DF
 $LOCA["en"]["GALAXY_DF_RESOURCES"] = "Resources:";
 $LOCA["en"]["GALAXY_DF_M"] = "Metal:";
 $LOCA["en"]["GALAXY_DF_K"] = "Crystal:";
 $LOCA["en"]["GALAXY_DF_ACTIONS"] = "Actions:";
 
-// Игрок
+// Player
 $LOCA["en"]["GALAXY_USER_TITLE"] = "Player #1. Place in the rating - #2";
 $LOCA["en"]["GALAXY_USER_MESSAGE"] = "Write a message";
 $LOCA["en"]["GALAXY_USER_BUDDY"] = "Invite to become friends";
 $LOCA["en"]["GALAXY_USER_STATS"] = "Statistics";
 $LOCA["en"]["GALAXY_USER_ADMIN"] = "User management";
 
-// Альянс
+// Alliance
 $LOCA["en"]["GALAXY_ALLY_TITLE"] = "Alliance #1. Place in the rating - #2, number of people - #3.";
 $LOCA["en"]["GALAXY_ALLY_PAGE"] = "Alliance introduction";
 $LOCA["en"]["GALAXY_ALLY_APPLY"] = "Apply";
 $LOCA["en"]["GALAXY_ALLY_STATS"] = "Statistics";
 $LOCA["en"]["GALAXY_ALLY_HOMEPAGE"] = "Homepage of the Alliance";
 
-// Задания
+// Actions
 $LOCA["en"]["GALAXY_FLEET_DEPLOY"] = "Deploy";
 $LOCA["en"]["GALAXY_FLEET_TRANSPORT"] = "Transport";
 $LOCA["en"]["GALAXY_FLEET_SPY"] = "Espionage";
@@ -108,7 +108,7 @@ $LOCA["en"]["GALAXY_FLEET_DEFEND"] = "Defend";
 $LOCA["en"]["GALAXY_FLEET_DESTROY"] = "Destroy";
 $LOCA["en"]["GALAXY_FLEET_RECYCLE"] = "Recycle";
 
-// Подвал
+// Footer
 $LOCA["en"]["GALAXY_FAR_SPACE"] = "Far space";
 $LOCA["en"]["GALAXY_INFO_POPULATED"] = "Populated #1 planets";
 $LOCA["en"]["GALAXY_INFO_SPY_PROBES"] = " Spy probes ";
