@@ -280,10 +280,16 @@ function PropagateBuildQueue ($planet_id, $from)
                 break;
             }
             else {
-                if ( $destroy ) $pre = 'Заказ на снос';
-                else $pre = 'Заказ на строительство';
-                $pre = va ( "#1 для Вашей постройки #2 #3-го уровня на #4 выполнить не удалось.", $pre, loca ("NAME_$id"), $lvl, $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" >[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>" );
-                SendMessage ( $user['player_id'], 'Системное сообщение', 'Производство отменено', $pre . "<br><br>" . $text, 5, $from );
+                loca_add ("build", $user['lang']);
+                loca_add ("technames", $user['lang']);
+
+                if ( $destroy ) $pre = loca_lang("BUILD_MSG_DEMOLISH", $user['lang']);
+                else $pre = loca_lang("BUILD_MSG_BUILD", $user['lang']);
+                $pre = va ( loca_lang("BUILD_MSG_BODY", $user['lang']), $pre, loca_lang ("NAME_$id", $user['lang']), $lvl, $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" >[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>" );
+                SendMessage ( $user['player_id'], 
+                    loca_lang("BUILD_MSG_FROM", $user['lang']), 
+                    loca_lang("BUILD_MSG_SUBJ", $user['lang']), 
+                    $pre . "<br><br>" . $text, 5, $from );
 
                 // удалить постройку, которую нельзя построить из очереди
                 dbquery ( "DELETE FROM ".$db_prefix."buildqueue WHERE id = " . $row['id'] );

@@ -34,4 +34,12 @@ $LOCA["it"]["BUILD_ERROR_RESEARCH_ALREADY"] = "La ricerca è già in corso!";
 $LOCA["it"]["BUILD_ERROR_RESEARCH_LAB_BUILDING"] = "Il laboratorio di ricerca è stato potenziato!";
 $LOCA["it"]["BUILD_ERROR_RESEARCH_VACATION"] = "In modalità Vacanza (VM), lo studio non è possibile.";
 
+// Messaggio di cancellazione della coda per il comandante.
+
+$LOCA["it"]["BUILD_MSG_DEMOLISH"] = "Ordine di smantellamento";
+$LOCA["it"]["BUILD_MSG_BUILD"] = "Ordine di costruzione";
+$LOCA["it"]["BUILD_MSG_BODY"] = "#1 per la struttura #2 livello #3 non andato a buon fine sul pianeta #4.";
+$LOCA["it"]["BUILD_MSG_FROM"] = "Sistema";
+$LOCA["it"]["BUILD_MSG_SUBJ"] = "Ordine di costruzione";
+
 ?>
