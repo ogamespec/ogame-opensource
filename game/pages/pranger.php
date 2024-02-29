@@ -2,6 +2,9 @@
 
 // Столб позора.
 
+$limit = 50;    // Записей на одну страницу.
+
+$uni = LoadUniverse();
 $internal = key_exists ( 'session', $_GET );
 
 // Исправленная версия date
@@ -14,6 +17,7 @@ function MyDate ( $fmt, $timestamp )
 if ($internal)
 {
     loca_add ( "menu", $GlobalUser['lang'] );
+    loca_add ( "pranger", $GlobalUser['lang'] );
 
     if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
     $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -31,8 +35,17 @@ if ($internal)
     echo "<div id='content'>\n";
     echo "<center>\n";
 }
+else {
 
-$uni = LoadUniverse ();
+    // Для внешнего обращения к Столбу Позора попробовать взять язык из кукисов. Если в кукисах нет - попробовать взять язык Вселенной.
+    // Иначе использовать язык по умолчанию.
+
+    if ( key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $_COOKIE['ogamelang'];
+    else $loca_lang = $uni['lang'];
+    if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
+    
+    loca_add ( "pranger", $loca_lang );
+}
 
 // ************************************************************************************
 ?>
@@ -49,23 +62,21 @@ $uni = LoadUniverse ();
    <body>
    <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
   <center>
-   <h1>Позорный столб <?=$uni['num'];?></h1>
-   <p>Здесь написано кто, почему и на сколько заблокирован. 
-<br />Блокировка со стороны Совета Админов и системы НЕ обсуждается. 
-<br />Внимание! С автоматической темой сообщения Ваше сообщение будет обработано быстрее.</p>
+   <h1><?=va(loca("PRANGER_TITLE"), $uni['num']);?></h1>
+   <p><?=loca("PRANGER_INFO");?></p>
 
    <table border="0" cellpadding="2" cellspacing="1">
     <tr height="20">
-     <td class="c">Когда</td>
-     <td class="c">Кто заблокировал</td>
-     <td class="c">Имя игрока</td>
-     <td class="c">Заблокирован до</td>
-     <td class="c">Причина</td>
+     <td class="c"><?=loca("PRANGER_WHEN");?></td>
+     <td class="c"><?=loca("PRANGER_OPER");?></td>
+     <td class="c"><?=loca("PRANGER_USER");?></td>
+     <td class="c"><?=loca("PRANGER_UNTIL");?></td>
+     <td class="c"><?=loca("PRANGER_REASON");?></td>
     </tr>
 
 <?php
-    $from = intval ( $_GET['from'] );
-    $query = "SELECT * FROM ".$db_prefix."pranger ORDER BY ban_when DESC LIMIT $from, 50";
+    $from = key_exists('from', $_GET) ? intval ( $_GET['from'] ) : 0;
+    $query = "SELECT * FROM ".$db_prefix."pranger ORDER BY ban_when DESC LIMIT $from, $limit";
     $result = dbquery ($query);
     $total = $rows = dbrows ( $result );
     while ( $rows-- )
@@ -87,8 +98,8 @@ $uni = LoadUniverse ();
 <?php
     if ($internal) $pranger_url = "index.php?page=pranger&session=$session&from";
     else $pranger_url = "pranger.php?from";
-    if ($from >= 50) echo "     <a href=\"".$pranger_url."=".($from-50)."\"><< Предыдущие 50</a>&nbsp;&nbsp;&nbsp;&nbsp;\n";
-    if ($total >= 50) echo "        <a href=\"".$pranger_url."=".($from+50)."\">Следующие 50 >></a>\n";
+    if ($from >= $limit) echo "     <a href=\"".$pranger_url."=".($from-$limit)."\"><< ".va(loca("PRANGER_PREV"), $limit)."</a>&nbsp;&nbsp;&nbsp;&nbsp;\n";
+    if ($total >= $limit) echo "        <a href=\"".$pranger_url."=".($from+$limit)."\">".va(loca("PRANGER_NEXT"), $limit)." >></a>\n";
 ?>
       </th>
    </tr>
