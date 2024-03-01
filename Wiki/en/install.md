@@ -40,6 +40,8 @@ If you just want to have one universe where the main page is, just put the `game
 
 You need to build the battle engine executable as written in the `BattleEngine` folder and put the executable wherever you need it.
 
+As of recently, the game also has a backup PHP battle engine. If you don't have the opportunity to use your CGI-hosted applications, you can check the "Use PHP battle engine" box during installation.
+
 ## Installing the Master Base
 
 After opening an uninstalled game for the first time, you will be asked to initialize the master database:
