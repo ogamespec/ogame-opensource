@@ -32,6 +32,8 @@ The `game` folder should be copied to the Universe instance.
 
 If you are deploying to the Web and don't want to have one universe at the root with the game, you can create a subdomain like `uni1.mygame.com` and put the `game` folder there.
 
+:warning: The `game` folder in the root of the universe instance should be put in its entirety, i.e. just as a folder, not its contents. Game scripts rely on this.
+
 If you just want to have one universe where the main page is, just put the `game` folder in the root of your web server.
 
 ## Battle Engine
