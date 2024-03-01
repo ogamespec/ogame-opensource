@@ -80,9 +80,7 @@ function SendMessage ($player_id, $from, $subj, $text, $pm, $when=0, $planet_id=
         //$text = bb ($text);
     }
 
-    $text = str_replace ( "\"", "&quot;", $text );
-    $text = str_replace ( "'", "&rsquo;", $text );
-    $text = str_replace ( "`", "&lsquo;", $text );
+    $text = addslashes($text);
 
     // Получить количество сообщений для пользователя.
     $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id";
