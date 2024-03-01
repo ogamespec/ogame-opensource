@@ -74,7 +74,7 @@ function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", 
     }
     echo "<link rel='stylesheet' type='text/css' href='css/combox.css'>\n";
     echo "<link rel='stylesheet' type='text/css' href='".UserSkin()."formate.css' />\n";
-    echo "<title>Вселенная $uni ОГейм</title>\n";
+    echo "<title>".va(loca("PAGE_TITLE"), $uni)."</title>\n";
     echo "  <script src='js/utilities.js' type='text/javascript'></script>\n";
     echo "  <script language='JavaScript'>\n";
     echo "  </script>\n";
@@ -570,18 +570,21 @@ function PageFooter ($msg="", $error="", $popup=false, $headerH=81, $nores=false
     global $GlobalUser;
     global $query_counter, $query_log;
 
+    loca_add ("reg", $GlobalUser['lang']);
+
     if ( $GlobalUser['debug'] )
     {
         $mtime = microtime(); 
         $mtime = explode(" ",$mtime); 
         $mtime = $mtime[1] + $mtime[0];
         $endtime = $mtime;
-        $msg = sprintf ( "Страница сгенерирована за %f секунд<br>Количество SQL запросов: %d<br>", $endtime-$pagetime, $query_counter) . $msg;
+        // Debug strings do not need to be localized.
+        $msg = sprintf ( "Page generated in %f seconds<br>Number of SQL queries: %d<br>", $endtime-$pagetime, $query_counter) . $msg;
         echo $query_log;
     }
 
-    if ( !$GlobalUser['validated']) $error = "<center> \nВаш игровой аккаунт ещё не активирован. Зайдите в <a href=index.php?page=options&session=".$GlobalUser['session'].">Настройки</a>, введите электронный адрес и получите на него активационную ссылку.<br></center>\n" . $error;
-    else if ( $GlobalUser['disable']) $error = "<center>\nВаш аккаунт был поставлен на удаление. Дата удаления: ".date ("Y-m-d H:i:s", $GlobalUser['disable_until'])."<br></center>\n" . $error;
+    if ( !$GlobalUser['validated']) $error = "<center> \n".va(loca("REG_NOT_ACTIVATED"), $GlobalUser['session'])."<br></center>\n" . $error;
+    else if ( $GlobalUser['disable']) $error = "<center>\n".va(loca("REG_PENDING_DELETE"), date ("Y-m-d H:i:s", $GlobalUser['disable_until']))."<br></center>\n" . $error;
 
     $msgdisplay = "";
     if ($msg !== "") $msgdisplay = "messagebox.style.display='block';\n";
@@ -643,24 +646,21 @@ function InvalidSessionPage ()
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
 
-    $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], 'Сессия недействительна.', time() );
+    loca_add ("reg", $GlobalUser['lang']);
+
+    $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], loca("REG_SESSION_INVALID"), time() );
     $id = AddDBRow ( $error, 'errors' );
 
     echo "<html> <head>\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/default.css' />\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/formate.css' />\n";
     echo "  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n";
-    echo "  <title>Вселенная $uni ОГейм</title>\n";
+    echo "  <title>".va(loca("PAGE_TITLE"), $uni)."</title>\n";
     echo " </head>\n";
     echo " <body>\n";
     echo "  <center><font size='3'><b>    <br /><br />\n";
-    echo "    <font color='#FF0000'>Произошла ошибка</font>\n";
-    echo "    <br /><br />\n";
-    echo "    Сессия недействительна.<br/><br/>Это может быть вызвано несколькими причинами: \n";
-    echo "<br>- Вы несколько раз зашли в один и тот же аккаунт; \n";
-    echo "<br>- Ваш ай-пи адрес изменился с момента последнего входа; \n";
-    echo "<br>- Вы пользуетесь интернетом через AOL или прокси. Отключите проверку ай-пи в меню \"Настройки\" в Вашем аккаунте.    \n";
-    echo "    <br /><br />\n";
+    echo "    <font color='#FF0000'>".loca("REG_SESSION_ERROR")."</font>\n";
+    echo loca("REG_SESSION_ERROR_BODY");
     echo "    Error-ID: ".$id."  </b></font></center> </body></html>\n";
 }
 
