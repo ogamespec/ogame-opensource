@@ -1,12 +1,12 @@
 <?php
 
-// Fleet.
+// Flotta.
 
 // TODO
 
-$LOCA["it"]["FLEET_PLANETTYPE_1"] = "planet";
-$LOCA["it"]["FLEET_PLANETTYPE_2"] = "debris field";
-$LOCA["it"]["FLEET_PLANETTYPE_3"] = "moon";
+$LOCA["it"]["FLEET_PLANETTYPE_1"] = "Pianeta";
+$LOCA["it"]["FLEET_PLANETTYPE_2"] = "Detriti";
+$LOCA["it"]["FLEET_PLANETTYPE_3"] = "Luna";
 
 // flotten1
 
