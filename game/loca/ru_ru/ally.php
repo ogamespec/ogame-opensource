@@ -35,6 +35,10 @@ $LOCA["ru"]["ALLY_APPLY"] = "Ваше заявление";
 $LOCA["ru"]["ALLY_APPLY_ALREADY"] = "Вы уже подали заявку в альянс [#1]. Подождите ответа либо отзовите своё заявление.";
 $LOCA["ru"]["ALLY_APPLY_WITHDRAW"] = "Отозвать заявление";
 
+$LOCA["ru"]["ALLY_NEW_DEFAULT_TEXT"] = "Добро пожаловать на страничку альянса";
+$LOCA["ru"]["ALLY_NEW_RANK_FOUNDER"] = "Основатель";
+$LOCA["ru"]["ALLY_NEW_RANK_NEWCOMER"] = "Новичок";
+
 // Ранги
 
 $LOCA["ru"]["ALLY_RANK_ERROR_SPECIAL_CHARS"] = "Ранг содержит особые символы";

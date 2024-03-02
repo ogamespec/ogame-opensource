@@ -34,15 +34,19 @@ function CreateAlly ($owner_id, $tag, $name)
     $tag = mb_substr ($tag, 0, 8, "UTF-8");    // Огранчить длину строк
     $name = mb_substr ($name, 0, 30, "UTF-8");
 
+    // Тексты и названия рангов по умолчанию используются на языке игрока, который создаёт альянс
+    $user = LoadUser ($owner_id);
+    loca_add ( "ally", $user['lang'] );
+
     // Добавить альянс.
-    $ally = array( null, $tag, $name, $owner_id, "", "", 1, 0, "Добро пожаловать на страничку альянса", "", "", 0, "", "", 0, 0,
+    $ally = array( null, $tag, $name, $owner_id, "", "", 1, 0, loca_lang("ALLY_NEW_DEFAULT_TEXT", $user['lang']), "", "", 0, "", "", 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0 );
     $id = AddDBRow ( $ally, "ally" );
 
     // Добавить ранги "Основатель" (0) и "Новичок" (1) .
-    SetRank ( $id, AddRank ( $id, "Основатель" ), 0x1FF );
-    SetRank ( $id, AddRank ( $id, "Новичок" ), 0 );
+    SetRank ( $id, AddRank ( $id, loca_lang("ALLY_NEW_RANK_FOUNDER", $user['lang']) ), 0x1FF );
+    SetRank ( $id, AddRank ( $id, loca_lang("ALLY_NEW_RANK_NEWCOMER", $user['lang']) ), 0 );
 
     // Обновить информацию пользователя-основателя.
     $joindate = time ();
