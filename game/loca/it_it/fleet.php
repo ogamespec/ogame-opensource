@@ -2,76 +2,74 @@
 
 // Flotta.
 
-// TODO
-
 $LOCA["it"]["FLEET_PLANETTYPE_1"] = "Pianeta";
 $LOCA["it"]["FLEET_PLANETTYPE_2"] = "Detriti";
 $LOCA["it"]["FLEET_PLANETTYPE_3"] = "Luna";
 
 // flotten1
 
-$LOCA["it"]["FLEET1_HOLD"] = "На планете";
-$LOCA["it"]["FLEET1_HOLD_SHORT"] = "(Д)";
-$LOCA["it"]["FLEET1_RETURN"] = "Fleet Returns home";
-$LOCA["it"]["FLEET1_RETURN_SHORT"] = "(F)";
-$LOCA["it"]["FLEET1_FLYING"] = "Уход на задание";
-$LOCA["it"]["FLEET1_FLYING_SHORT"] = "(У)";
+$LOCA["it"]["FLEET1_HOLD"] = "Sul pianeta";
+$LOCA["it"]["FLEET1_HOLD_SHORT"] = "(H)";
+$LOCA["it"]["FLEET1_RETURN"] = "La flotta torna a casa";
+$LOCA["it"]["FLEET1_RETURN_SHORT"] = "(R)";
+$LOCA["it"]["FLEET1_FLYING"] = "Andare in missione";
+$LOCA["it"]["FLEET1_FLYING_SHORT"] = "(A)";
 
-$LOCA["it"]["FLEET1_FLEETS"] = "Fleets #1 / #2";
-$LOCA["it"]["FLEET1_EXPEDITIONS"] = "#1/#2 Expeditions";
+$LOCA["it"]["FLEET1_FLEETS"] = "Flotte #1 / #2";
+$LOCA["it"]["FLEET1_EXPEDITIONS"] = "#1/#2 spedizioni";
 
-$LOCA["it"]["FLEET1_HEAD1"] = "ID";
-$LOCA["it"]["FLEET1_HEAD2"] = "Mission";
-$LOCA["it"]["FLEET1_HEAD3"] = "Ships (total)";
-$LOCA["it"]["FLEET1_HEAD4"] = "Origin";
-$LOCA["it"]["FLEET1_HEAD5"] = "Departure Time";
-$LOCA["it"]["FLEET1_HEAD6"] = "Target";
-$LOCA["it"]["FLEET1_HEAD7"] = "Arrival Time";
-$LOCA["it"]["FLEET1_HEAD8"] = "Commands";
+$LOCA["it"]["FLEET1_HEAD1"] = "N°";
+$LOCA["it"]["FLEET1_HEAD2"] = "Missione";
+$LOCA["it"]["FLEET1_HEAD3"] = "Flotta";
+$LOCA["it"]["FLEET1_HEAD4"] = "Inizio";
+$LOCA["it"]["FLEET1_HEAD5"] = "Tempo d'invio";
+$LOCA["it"]["FLEET1_HEAD6"] = "Obiettivo";
+$LOCA["it"]["FLEET1_HEAD7"] = "ETA";
+$LOCA["it"]["FLEET1_HEAD8"] = "Azioni";
 
-$LOCA["it"]["FLEET1_BUTTON_ACS"] = "Союз";
-$LOCA["it"]["FLEET1_BUTTON_RECALL"] = "Отзыв";
+$LOCA["it"]["FLEET1_BUTTON_ACS"] = "Federazione";
+$LOCA["it"]["FLEET1_BUTTON_RECALL"] = "Richiama";
 
-$LOCA["it"]["FLEET1_ACS_NAME"] = "Союз флотов #1";
-$LOCA["it"]["FLEET1_ACS_TITLE"] = "Изменить название союза";
-$LOCA["it"]["FLEET1_ACS_PLAYERS"] = "Приглашённые участники";
-$LOCA["it"]["FLEET1_ACS_INVITE"] = "Пригласить участника";
+$LOCA["it"]["FLEET1_ACS_NAME"] = "Nome missione #1";
+$LOCA["it"]["FLEET1_ACS_TITLE"] = "Modifica nome missione ACS";
+$LOCA["it"]["FLEET1_ACS_PLAYERS"] = "Partecipanti";
+$LOCA["it"]["FLEET1_ACS_INVITE"] = "Aggiungi partecipante";
 
-$LOCA["it"]["FLEET1_ERROR_MAX"] = "Достигнута максимальная численность флота!";
-$LOCA["it"]["FLEET1_TITLE_CHOOSE"] = "Please select your ships for this mission:";
-$LOCA["it"]["FLEET1_TYPE"] = "Ship Type";
-$LOCA["it"]["FLEET1_AMOUNT"] = "Available";
-$LOCA["it"]["FLEET1_SPEED"] = "Speed";
-$LOCA["it"]["FLEET1_CLEAR"] = "no ships";
-$LOCA["it"]["FLEET1_ALL_SHIPS"] = "all ships";
-$LOCA["it"]["FLEET1_TEMPLATE"] = "Standard fleets";
-$LOCA["it"]["FLEET1_NEXT"] = "continue";
+$LOCA["it"]["FLEET1_ERROR_MAX"] = "Tutti gli slot flotta sono occupati!";
+$LOCA["it"]["FLEET1_TITLE_CHOOSE"] = "Nuova missione: seleziona le navi";
+$LOCA["it"]["FLEET1_TYPE"] = "Tipo di nave";
+$LOCA["it"]["FLEET1_AMOUNT"] = "Quantit&agrave;";
+$LOCA["it"]["FLEET1_SPEED"] = "Velocit&agrave;";
+$LOCA["it"]["FLEET1_CLEAR"] = "Nessuna nave";
+$LOCA["it"]["FLEET1_ALL_SHIPS"] = "Tutte le navi";
+$LOCA["it"]["FLEET1_TEMPLATE"] = "Scorciatoie";
+$LOCA["it"]["FLEET1_NEXT"] = "procedi";
 
-// TODO: flotten2
+// flotten2
 
-$LOCA["it"]["FLEET2_SEND_FLEET"] = "Отправление флота";
-$LOCA["it"]["FLEET2_COORD"] = "Координаты цели";
-$LOCA["it"]["FLEET2_SPEED"] = "Скорость";
-$LOCA["it"]["FLEET2_DIST"] = "Расстояние";
-$LOCA["it"]["FLEET2_DURATION"] = "Продолжительность (в одну сторону)";
-$LOCA["it"]["FLEET2_CONS"] = "Потребление топлива";
-$LOCA["it"]["FLEET2_MAX_SPEED"] = "Максимальная скорость";
-$LOCA["it"]["FLEET2_CARGO"] = "Грузоподъёмность";
-$LOCA["it"]["FLEET2_HEAD_PLANETS"] = "Планета";
-$LOCA["it"]["FLEET2_HEAD_ACS"] = "Боевые союзы  ";
-$LOCA["it"]["FLEET2_NEXT"] = "Дальше";
+$LOCA["it"]["FLEET2_SEND_FLEET"] = "invia flotta";
+$LOCA["it"]["FLEET2_COORD"] = "Coordinate";
+$LOCA["it"]["FLEET2_SPEED"] = "Velocit&agrave;";
+$LOCA["it"]["FLEET2_DIST"] = "Distanza";
+$LOCA["it"]["FLEET2_DURATION"] = "Durata (andata)";
+$LOCA["it"]["FLEET2_CONS"] = "Consumo carburante";
+$LOCA["it"]["FLEET2_MAX_SPEED"] = "Velocit&agrave; massima";
+$LOCA["it"]["FLEET2_CARGO"] = "Capacit&agrave; stiva";
+$LOCA["it"]["FLEET2_HEAD_PLANETS"] = "Scorciatoie";
+$LOCA["it"]["FLEET2_HEAD_ACS"] = "Scorciatoie Utente  ";
+$LOCA["it"]["FLEET2_NEXT"] = "procedi";
 
-// TODO: flotten3
+// flotten3
 
-$LOCA["it"]["FLEET3_ORDER"] = "Задание";
-$LOCA["it"]["FLEET3_NO_ORDER"] = "Нет подходящих заданий";
-$LOCA["it"]["FLEET3_EXP_WARNING"] = "ВНИМАНИЕ! Экспедиция - очень рискованная миссия, не предназначенная для сэйва.";
-$LOCA["it"]["FLEET3_RESOURCES"] = "Сырьё";
-$LOCA["it"]["FLEET3_RES_LEFT"] = "Остаток";
-$LOCA["it"]["FLEET3_RES_ALL"] = "Всё сырьё";
-$LOCA["it"]["FLEET3_ACS"] = "Боевые союзы";
-$LOCA["it"]["FLEET3_HOLD_TIME"] = "Время пребывания";
-$LOCA["it"]["FLEET3_HOLD_HOURS"] = "Время в часах";
-$LOCA["it"]["FLEET3_NEXT"] = "Дальше";
+$LOCA["it"]["FLEET3_ORDER"] = "Seleziona Missione";
+$LOCA["it"]["FLEET3_NO_ORDER"] = "Nessuna missione disponibile per le navi selezionate";
+$LOCA["it"]["FLEET3_EXP_WARNING"] = "ATTENZIONE! Le missioni spedizione non sono consigliate per il fleetsave!";
+$LOCA["it"]["FLEET3_RESOURCES"] = "Risorse";
+$LOCA["it"]["FLEET3_RES_LEFT"] = "Rimanenti";
+$LOCA["it"]["FLEET3_RES_ALL"] = "Tutte le risorse";
+$LOCA["it"]["FLEET3_ACS"] = "Nome missione";
+$LOCA["it"]["FLEET3_HOLD_TIME"] = "Tempo di stazionamento";
+$LOCA["it"]["FLEET3_HOLD_HOURS"] = "Ora/e";
+$LOCA["it"]["FLEET3_NEXT"] = "procedi";
 
 ?>

@@ -99,7 +99,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
     if ($prem['admiral'])
     {
 ?>
-    <div style="margin-top:2;margin-bottom:2;">Флоты <?php echo $rows;?> / <?php echo ($maxfleet-2);?> <b><font style="color:lime;">+2</font></b> <img border="0" alt="<?=loca("PR_ADMIRAL");?>" src="img/admiral_ikon.gif" onmouseover='return overlib("&lt;font color=white &gt;<?=loca("PR_ADMIRAL");?>&lt;/font&gt;", WIDTH, 100);' onmouseout="return nd();" width="20" height="20" style="vertical-align:middle;"></div>
+    <div style="margin-top:2;margin-bottom:2;"><?=va(loca("FLEET1_FLEETS"), $rows, $maxfleet-2);?> <b><font style="color:lime;">+2</font></b> <img border="0" alt="<?=loca("PR_ADMIRAL");?>" src="img/admiral_ikon.gif" onmouseover='return overlib("&lt;font color=white &gt;<?=loca("PR_ADMIRAL");?>&lt;/font&gt;", WIDTH, 100);' onmouseout="return nd();" width="20" height="20" style="vertical-align:middle;"></div>
 <?php
     }
     else

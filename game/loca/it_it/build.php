@@ -2,19 +2,19 @@
 
 // Località per le pagine b_building e shipyard
 
-$LOCA["it"]["BUILD_COMPLETE"] = "Done";
-$LOCA["it"]["BUILD_NEXT"] = "Next";
-$LOCA["it"]["BUILD_CANCEL"] = "Cancel";
-$LOCA["it"]["BUILD_DEMOLISH"] = "Demolish";
-$LOCA["it"]["BUILD_DEQUEUE"] = "delete";
-$LOCA["it"]["BUILD_LEVEL"] = "level #1";
-$LOCA["it"]["BUILD_PRICE"] = "Cost";
-$LOCA["it"]["BUILD_DURATION"] = "Duration";
-$LOCA["it"]["BUILD_ENQUEUE"] = "In the queue for construction";
-$LOCA["it"]["BUILD_QUEUE_FULL"] = "There's no space! ";
-$LOCA["it"]["BUILD_BUSY"] = "In the process";
-$LOCA["it"]["BUILD_BUILD"] = " build ";
-$LOCA["it"]["BUILD_BUILD_LEVEL"] = "Build <br> level #1";
+$LOCA["it"]["BUILD_COMPLETE"] = "Finito";
+$LOCA["it"]["BUILD_NEXT"] = "continua";
+$LOCA["it"]["BUILD_CANCEL"] = "annulla";
+$LOCA["it"]["BUILD_DEMOLISH"] = "Smantella";
+$LOCA["it"]["BUILD_DEQUEUE"] = "annulla";
+$LOCA["it"]["BUILD_LEVEL"] = "livello #1";
+$LOCA["it"]["BUILD_PRICE"] = "Richiede";
+$LOCA["it"]["BUILD_DURATION"] = "Tempo di produzione";
+$LOCA["it"]["BUILD_ENQUEUE"] = "aggiungi alla coda di costruzione";
+$LOCA["it"]["BUILD_QUEUE_FULL"] = "Pianeta totalmente occupato! ";
+$LOCA["it"]["BUILD_BUSY"] = "In ricerca";
+$LOCA["it"]["BUILD_BUILD"] = " costruisci ";
+$LOCA["it"]["BUILD_BUILD_LEVEL"] = "Sviluppa <br>il livello  #1";
 
 // Testi di errore per il metodo CanBuild, CanResearch (queue.php)
 
