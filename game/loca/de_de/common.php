@@ -31,4 +31,6 @@ $LOCA["de"]["PR_PURCHASE"] = "Jetzt bestellen!";
 $LOCA["de"]["PR_RENEW"] = "Jetzt verlangern!";
 $LOCA["de"]["PR_ACTIVE_DAYS"] = "Noch #1 Tage &lt;font color=lime&gt;aktiv&lt;/font&gt;";
 
+$LOCA["de"]["GLOBAL_ERROR"] = "Fehler";
+
 ?>

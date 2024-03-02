@@ -31,4 +31,6 @@ $LOCA["en"]["PR_PURCHASE" ] = "Order now!";
 $LOCA["en"]["PR_RENEW" ] = "Renew!";   		// TODO: I'm not sure what it was exactly, since there is no HTML
 $LOCA["en"]["PR_ACTIVE_DAYS" ] = "Still &lt;font color=lime&gt;active&lt;/font&gt; for more than #1 days";
 
+$LOCA["en"]["GLOBAL_ERROR"] = "Error";
+
 ?>

@@ -26,6 +26,14 @@ function SendNotActivated ()
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
 
+    loca_add ("reg", $GlobalUser['lang']);
+
+    // Частично повторяет метод Error из debug.php, но без отгрузки игрока.
+    $text = loca("REG_NOT_ACTIVATED_MESSAGE");
+    $now = time ();
+    $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], $text, $now );
+    $id = AddDBRow ( $error, 'errors' );
+
     echo "<html>\n";
     echo " <head>\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/default.css' />\n";
@@ -33,16 +41,16 @@ function SendNotActivated ()
     echo "  <link rel=\"stylesheet\" type=\"text/css\" href=\"formate.css\" />\n";
     echo "  <link rel=\"stylesheet\" type=\"text/css\" href=\"css/combox.css\">\n";
     echo "  <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\n";
-    echo "  <title>Вселенная $uni ОГейм</title>\n";
+    echo "  <title>".va(loca("PAGE_TITLE"), $uni)."</title>\n";
     echo " </head>\n\n";
     echo " <body>\n";
     echo "  <center><font size=\"3\"><b>\n";
     echo "    <br /><br />\n";
-    echo "    <font color=\"#FF0000\">Произошла ошбка</font>\n";
+    echo "    <font color=\"#FF0000\">".loca("GLOBAL_ERROR")."</font>\n";
     echo "    <br /><br />\n";
-    echo "    Эта функция доступна только после активации аккаунта.    \n";
+    echo "    $text    \n";
     echo "    <br /><br />\n";
-    echo "    Error-ID: 123456  </b></font></center>\n\n";
+    echo "    Error-ID: $id  </b></font></center>\n\n";
     echo " </body>\n";
     echo "</html>\n\n";
 }

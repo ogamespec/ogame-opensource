@@ -33,4 +33,6 @@ $LOCA["ru"]["PR_PURCHASE"] = "Заказать!";
 $LOCA["ru"]["PR_RENEW"] = "Продлить!";
 $LOCA["ru"]["PR_ACTIVE_DAYS"] = "&lt;font color=lime&gt;Активен&lt;/font&gt; ещё #1 д.";
 
+$LOCA["ru"]["GLOBAL_ERROR"] = "Произошла ошбка";
+
 ?>

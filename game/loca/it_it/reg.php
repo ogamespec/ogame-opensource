@@ -37,6 +37,9 @@ $LOCA["it"]["REG_SESSION_ERROR_BODY"] = "    <br /><br />
 $LOCA["it"]["REG_NOT_ACTIVATED"] = "Il tuo account non &egrave; stato ancora convalidato. Vai nelle <a href=index.php?page=options&session=#1>opzioni</a> per richiedere una nuova email di convalida.";
 $LOCA["it"]["REG_PENDING_DELETE"] = "Il tuo account verr&agrave; cancellato il: #1";
 
+// Il giocatore tenta di scrivere senza attivare l'account
+$LOCA["it"]["REG_NOT_ACTIVATED_MESSAGE"] = "Funzione disponibile solo dopo aver attivato l\'account";
+
 // errorpage
 
 $LOCA["it"]["REG_ERROR"] = "Errore";

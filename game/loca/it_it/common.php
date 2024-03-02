@@ -33,4 +33,6 @@ $LOCA["it"]["PR_PURCHASE" ] = "Recluta ora!";
 $LOCA["it"]["PR_RENEW" ] = "";
 $LOCA["it"]["PR_ACTIVE_DAYS" ] = "&lt;font color=white&gt;Attivo per altri&lt;/font&gt; #1 giorni <br>-";
 
+$LOCA["it"]["GLOBAL_ERROR"] = "Errore";
+
 ?>
