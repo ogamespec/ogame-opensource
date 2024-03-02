@@ -4,9 +4,9 @@
 
 $LOCA["fr"]["BATTLE_HUGE_WARNING"] = "!!! CES CHAÎNES DOIVENT ÊTRE EXACTEMENT LES MÊMES QUE DANS LE JEU ORIGINAL !!! De nombreux outils (websim, serveurs de logs, convertisseurs de rapports de bataille, etc."; // Non utilisé dans le jeu, juste un avertissement à tous les traducteurs.
 $LOCA["fr"]["BATTLE_REPORT"] = "Rapport de Bataille";
-$LOCA["fr"]["BATTLE_ADATE"] = "A";
-$LOCA["fr"]["BATTLE_DDATE"] = "Le";
-$LOCA["fr"]["BATTLE_INFO"] = "les flottes suivantes étaient présentes:";
+// Nous n'utilisons que ADATE_INFO
+$LOCA["fr"]["BATTLE_ADATE_INFO"] = "A #1 les flottes suivantes étaient présentes:";
+$LOCA["fr"]["BATTLE_DDATE_INFO"] = "Le #1 les flottes suivantes étaient présentes:";
 $LOCA["fr"]["BATTLE_ATTACKER"] = "Attaquant";
 $LOCA["fr"]["BATTLE_DEFENDER"] = "Défenseur";
 $LOCA["fr"]["BATTLE_ATTACK"] = "Armement:";

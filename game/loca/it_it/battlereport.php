@@ -5,9 +5,9 @@
 $LOCA["it"]["BATTLE_HUGE_WARNING"] = "!!! QUESTE STRINGHE DEVONO ESSERE ALMENO UGUALI A QUELLE DEL GIOCO ORIGINALE!!! Molti strumenti (websim, log server, convertitori di report di battaglia ecc.) si basano su di esse."; // Non utilizzato nel gioco, solo un avvertimento per tutti i traduttori.
 $LOCA["it"]["BATTLE_REPORT"] = "Battle Report";
 // Nella versione inglese, la riga per l'attaccante con il tempo inizia con "At" e per il difensore con "On". Ecco perché sono ADATE e DDATE
-$LOCA["it"]["BATTLE_ADATE"] = "Le seguenti flotte sono una di fronte all`altra il: ";  		// TODO: Allinea date+info. Sembra che possano andare in sequenze diverse in lingue diverse
-$LOCA["it"]["BATTLE_DDATE"] = "Le seguenti flotte sono una di fronte all`altra il: ";
-$LOCA["it"]["BATTLE_INFO"] = "";
+// Si utilizza solo ADATE_INFO
+$LOCA["it"]["BATTLE_ADATE_INFO"] = "Le seguenti flotte sono una di fronte all`altra il: #1";
+$LOCA["it"]["BATTLE_DDATE_INFO"] = "Le seguenti flotte sono una di fronte all`altra il: #1";
 $LOCA["it"]["BATTLE_ATTACKER"] = "Attaccante";
 $LOCA["it"]["BATTLE_DEFENDER"] = "Difensore";
 $LOCA["it"]["BATTLE_ATTACK"] = "Armi:";

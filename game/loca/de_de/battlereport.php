@@ -4,9 +4,9 @@
 
 $LOCA["de"]["BATTLE_HUGE_WARNING"] = "DIESE ZEILEN MÜSSEN GENAU DIE GLEICHEN SEIN WIE IM ORIGINALSPIEL!!! Viele Tools (Web-Simulationen, Log-Server, Kampfberichtskonverter usw.) sind darauf angewiesen."; // Nicht im Spiel verwendet, nur eine Warnung an alle Übersetzer.
 $LOCA["de"]["BATTLE_REPORT"] = "Kampfbericht";
-$LOCA["de"]["BATTLE_ADATE"] = "Folgende Flotten stehen sich um";
-$LOCA["de"]["BATTLE_DDATE"] = "Folgende Flotten standen sich am";
-$LOCA["de"]["BATTLE_INFO"] = "gegenüber";
+// Wir verwenden nur ADATE_INFO
+$LOCA["de"]["BATTLE_ADATE_INFO"] = "Folgende Flotten stehen sich um #1 gegenüber";  		// um :)
+$LOCA["de"]["BATTLE_DDATE_INFO"] = "Folgende Flotten standen sich am #1 gegenüber"; 		// am :)
 $LOCA["de"]["BATTLE_ATTACKER"] = "Angreifer";
 $LOCA["de"]["BATTLE_DEFENDER"] = "Verteidiger";
 $LOCA["de"]["BATTLE_ATTACK"] = "Waffen:";

@@ -391,7 +391,9 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
     $text = "";
 
     // Заголовок доклада.
-    $text .= loca_lang("BATTLE_ADATE", $lang) . " ".date ("m-d H:i:s", $now)." " . loca_lang("BATTLE_INFO", $lang) . ":<br>";
+    // В ванильной 0.84 заголовок боевого доклада незначительно отличался. Например в en для атакующего написано "At", а для защитника "On".
+    // Мы такими извращениями заниматься не будем. Считаем что все боевые доклады от атакующего.
+    $text .= va(loca_lang("BATTLE_ADATE_INFO", $lang), date ("m-d H:i:s", $now)) . ":<br>";
 
     // Флоты перед боем.
     $text .= "<table border=1 width=100%><tr>";
@@ -919,7 +921,9 @@ function ShortBattleReport ( $res, $now, $lang )
     $text = "";
 
     // Заголовок доклада.
-    $text .= loca_lang("BATTLE_ADATE", $lang) . " ".date ("m-d H:i:s", $now)." " . loca_lang("BATTLE_INFO", $lang) . ":<br>";
+    // В ванильной 0.84 заголовок боевого доклада незначительно отличался. Например в en для атакующего написано "At", а для защитника "On".
+    // Мы такими извращениями заниматься не будем. Считаем что все боевые доклады от атакующего.    
+    $text .= va(loca_lang("BATTLE_ADATE_INFO", $lang), date ("m-d H:i:s", $now)) . ":<br>";
 
     // Флоты перед боем.
     $text .= "<table border=1 width=100%><tr>";

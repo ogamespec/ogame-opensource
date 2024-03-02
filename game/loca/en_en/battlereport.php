@@ -4,9 +4,9 @@
 
 $LOCA["en"]["BATTLE_HUGE_WARNING"] = "!!! THESE STRINGS MUST BE EXAST SAME AS IN ORIGINAL GAME !!! Many tools (websim, log servers, battle report converters etc.) are rely on it."; // Not used in the game, just a warning to all translators.
 $LOCA["en"]["BATTLE_REPORT"] = "Battle Report";
-$LOCA["en"]["BATTLE_ADATE"] = "At";
-$LOCA["en"]["BATTLE_DDATE"] = "On";
-$LOCA["en"]["BATTLE_INFO"] = "the following fleets met in battle:";
+// We use only ADATE_INFO
+$LOCA["en"]["BATTLE_ADATE_INFO"] = "At #1 the following fleets met in battle:";  		// At :)
+$LOCA["en"]["BATTLE_DDATE_INFO"] = "On #1 the following fleets met in battle:"; 		// On :)
 $LOCA["en"]["BATTLE_ATTACKER"] = "Attacker";
 $LOCA["en"]["BATTLE_DEFENDER"] = "Defender";
 $LOCA["en"]["BATTLE_ATTACK"] = "Weapons:";
