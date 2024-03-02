@@ -3,41 +3,41 @@
 // Attacco gravitazionale (distruzione della luna)
 // TODO: Prendete i messaggi dall'attuale gioco ufficiale.
 
-$LOCA["it"]["GRAVITON_ATK_SUBJ"] = "Лунная атака";
-$LOCA["it"]["GRAVITON_DEF_SUBJ"] = "Лунные толчки";
+$LOCA["it"]["GRAVITON_ATK_SUBJ"] = "Rapporto distruzione luna";
+$LOCA["it"]["GRAVITON_DEF_SUBJ"] = "Rapporto distruzione luna";
 
 // Per l'attaccante.
 
-$LOCA["it"]["GRAVITON_ATK_00"] = "Флот с #1 #2 достигает луны планеты на #3 .\n" .
-"Структура луны не была достаточно ослаблена, флот возвращается обратно.\n" .
-"<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %;";
+$LOCA["it"]["GRAVITON_ATK_00"] = "La tua flotta partita da #1 #2 raggiunge le coordinate #3 .\n" .
+                                "La struttura della luna non &egrave; stata sufficientemente indebolita. Le flotte tornano indietro.\n" .
+                                "<br>Probabilit&agrave; di distruzione morte nera: #4 %. Probabilit&agrave; di distruzione luna:#5 %;";
 
-$LOCA["it"]["GRAVITON_ATK_01"] = "Флот с планеты #1 #2 достигает луны планеты на #3 .\n".
-"Вооружение звезды смерти отстреливают на луну череду зарядов гравитонов, которые приводят к мощному сотрясению и уничтожению спутника. Все постройки на луне уничтожаются. Полный успех. Флот возвращается на родную планету бухать по этому поводу.\n".
-"<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %";
+$LOCA["it"]["GRAVITON_ATK_01"] = "La tua flotta partita da #1 #2 arriva alle coordinate #3 .\n".
+                               "La flotta spara una serie di colpi, che provocano la distruzione del satellite. Tutti gli edifici sulla luna vengono distrutti. La flotta torna sana e salva al pianeta di origine.\n".
+                               "<br>Probabilit&agrave; di distruzione morte nera: #4 %. Probabilit&agrave; di distruzione luna:#5 %";
 
-$LOCA["it"]["GRAVITON_ATK_10"] = "Флот с планеты #1 #2 достигает луны планеты на #3 . Звезда смерти направляет свою гравитонную пушку на спутник. Лёгкие вибрации сотрясают поверхность луны. Но что-то тут не так. Гравитонная пушка приводит звезду смерти в колебания. Начинается отдача. Звезда смерти разлетается на миллионы кусочков. Возникающая при этом ударная волна уничтожает весь Ваш флот. Доигрался...\n".
-"<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %";
+$LOCA["it"]["GRAVITON_ATK_10"] = " La tua flotta partita da #1 #2 arriva alle coordinate  #3 . Il cannone gravitonico della morte nera non &egrave; sufficiente per distruggere il satellite. La flotta viene completamente distrutta dalle onde urto.  \n".
+                                "<br>Probabilit&agrave; di distruzione morte nera: #4 %. Probabilit&agrave; di distruzione luna:#5 %";
 
-$LOCA["it"]["GRAVITON_ATK_11"] = "Флот с планеты #1 #2  достигает луны на орбите планеты #3 . Ваша звезда смерти направляет свою гравитонную пушку на спутник. Толчки на поверхности луны всё нарастают. Луна начинает деформироваться и разрывается. Гигантские обломки летят на Ваш флот. Отступать уже поздно. Весь Ваш флот уничтожается градом обломков. Какой облом...\n".
-"<br>Шансы на уничтожение луны: #4 %. Шансы на уничтожение звезды смерти: #5%.";
+$LOCA["it"]["GRAVITON_ATK_11"] = "Una tua flotta partita dal pianeta #1 #2  arriva alle coordinate #3 . Le tue morti nere puntano il cannone gravitonico verso il satellite. La luna comincia a deformarsi e va in frantumi. Enormi detriti volano verso la tua flotta, che viene distrutta.\n".
+                                "<br>Probabilit&agrave; di distruzione morte nera: #4 %. Probabilit&agrave; di distruzione luna: #5%.";
 
 // Per il difensore.
 
-$LOCA["it"]["GRAVITON_DEF_00"] = "Флот с планеты #1 #2 достигает луны Вашей планеты на #3.\n" .
-"Лёгкие сотрясения на твоей луне указывают на неудавшуюся атаку на лунную структуру; атакующий флот, не выполнив задания, возвращается обратно на #4 #5.\n" .
-"<br>Шанс на уничтожение луны: #6 %. Шанс на уничтожение звезды смерти:#7 %;";
+$LOCA["it"]["GRAVITON_DEF_00"] = "Una flotta nemica partita da #1 #2 raggiunge il tuo pianeta #3.\n" .
+                                "La struttura della luna non &egrave; stata sufficientemente indebolita. Le flotte attaccanti ritornano al pianeta #4 #5.\n" .
+                                "<br>Probabilit&agrave; di distruzione flotta: #6 %. Probabilit&agrave; distruzione luna:#7 %;";
 
-$LOCA["it"]["GRAVITON_DEF_01"] = "Флот с планеты #1 #2 достигает луны твоей планеты на #3.\n".
-"Всё более усиливающаяся вибрация сотрясает этот спутник. Луна начинает деформироваться и в конце концов разлетается на миллионы кусочков. Это был тяжёлый удар для Вашей империи. Флот противника возвращается обратно.\n".
-"<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %";
+$LOCA["it"]["GRAVITON_DEF_01"] = "Una flotta nemica partita da #1 #2 raggiunge il tuo pianeta #3.\n".
+                                "La flotta attaccante spara una serie di colpi, che provocano la distruzione del satellite. Tutti gli edifici sulla luna sono andati distrutti. La flotta torna sana e salva al pianeta di origine.\n".
+                                "<br>Probabilit&agrave; di distruzione flotta: #4 %. Probabilit&agrave; di distruzione luna:#5 %";
 
-$LOCA["it"]["GRAVITON_DEF_10"] = "Флот с планеты #1 #2 достигает луны Вашей планеты  на #3.\n".
-"Лёгкие сотрясения на твоей луне указывают на неудавшуюся атаку на лунную структуру. Неожиданно они прекращаются. Гигантский взрыв сотрясает пространство. Атакующий флот исчезает с экранов радаров. Несрастуха вышла...\n".
-"<br>Шанс на уничтожение луны: #4 %. Шанс на уничтожение звезды смерти:#5 %";
+$LOCA["it"]["GRAVITON_DEF_10"] = "Una flotta nemica partita da #1 #2 raggiunge il tuo pianeta #3.\n".
+                                "Il cannone gravitonico della flotta attaccante non &egrave; sufficiente per distruggere il satellite. La flotta attaccante viene completamente distrutta dalle onde urto.\n".
+                                "<br>Probabilit&agrave; di distruzione flotta: #4 %. Probabilit&agrave; di distruzione luna:#5 %";
 
-$LOCA["it"]["GRAVITON_DEF_11"] = "Флот с планеты #1 #2 достигает луны Вашей планеты на #3.\n".
-"Всё более усиливающиеся толчки сотрясают спутник. Луна начинает деформироваться и разрывается в конце концов на миллионы кусочков. Внезапно вражеский флот исчезает с экранов Ваших радаров. Что-то там у них не так, наверное пришибло обломками...\n".
-"<br>Шансы на уничтожение луны: #4 %. Шансы на уничтожение звезды смерти:#5 %.";
+$LOCA["it"]["GRAVITON_DEF_11"] = "Una flotta nemica partita da #1 #2 raggiunge il tuo pianeta #3.\n".
+                                "I cannoni gravitonici delle morti nere mandano in frantumi il satellite, facendo volare in orbita milioni di detriti che distruggono la flotta attaccante. \n".
+                                "<br>Probabilit&agrave; di distruzione flotta: #4 %. Probabilit&agrave; di distruzione luna:#5 %.";
 
 ?>

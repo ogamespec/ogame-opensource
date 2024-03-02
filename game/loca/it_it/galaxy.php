@@ -85,8 +85,8 @@ $LOCA["it"]["GALAXY_DF_ACTIONS"] = "Actions:";
 
 // Giocatore
 $LOCA["it"]["GALAXY_USER_TITLE"] = "Player #1. Place in the rating - #2";
-$LOCA["it"]["GALAXY_USER_MESSAGE"] = "Write a message";
-$LOCA["it"]["GALAXY_USER_BUDDY"] = "Invite to become friends";
+$LOCA["it"]["GALAXY_USER_MESSAGE"] = "Scrivi messaggio";
+$LOCA["it"]["GALAXY_USER_BUDDY"] = "Richiesta di amicizia";
 $LOCA["it"]["GALAXY_USER_STATS"] = "Statistics";
 $LOCA["it"]["GALAXY_USER_ADMIN"] = "User management";
 
@@ -100,7 +100,7 @@ $LOCA["it"]["GALAXY_ALLY_HOMEPAGE"] = "Homepage of the Alliance";
 // Compiti
 $LOCA["it"]["GALAXY_FLEET_DEPLOY"] = "Deploy";
 $LOCA["it"]["GALAXY_FLEET_TRANSPORT"] = "Transport";
-$LOCA["it"]["GALAXY_FLEET_SPY"] = "Espionage";
+$LOCA["it"]["GALAXY_FLEET_SPY"] = "Spia";
 $LOCA["it"]["GALAXY_FLEET_PHALANX"] = "Phalanx";
 $LOCA["it"]["GALAXY_FLEET_RAK"] = "Rocket attack";
 $LOCA["it"]["GALAXY_FLEET_ATTACK"] = "Attack";

@@ -13,6 +13,7 @@ $LOCA["it"]["FLEET_MESSAGE_OBSERVE"] = "Comando della flotta";
 $LOCA["it"]["FLEET_MESSAGE_ARRIVE"] = "Trasporto risorse";
 $LOCA["it"]["FLEET_MESSAGE_TRADE"] = "Trasporto risorse";
 $LOCA["it"]["FLEET_MESSAGE_SPY"] = "Rapporto Spionaggio";
+$LOCA["it"]["FLEET_MESSAGE_BATTLE"] = "Rapporto di Combattimento";
 
 $LOCA["it"]["FLEET_TRANSPORT_OWN"] = "Una delle tue flotte arriva alle coordinate (\n#1\n) e trasporta le seguenti risorse:\n<br/>\n" .
                 "#2 Metallo, #3 Cristallo e #4 Deuterio.\n<br/>\n";

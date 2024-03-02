@@ -12,6 +12,7 @@ $LOCA["de"]["FLEET_MESSAGE_OBSERVE"] = "Наблюдение";
 $LOCA["de"]["FLEET_MESSAGE_ARRIVE"] = "Достижение планеты";
 $LOCA["de"]["FLEET_MESSAGE_TRADE"] = "Чужой флот доставляет сырьё";
 $LOCA["de"]["FLEET_MESSAGE_SPY"] = "Шпионаж";
+$LOCA["de"]["FLEET_MESSAGE_BATTLE"] = "Боевой доклад";
 
 $LOCA["de"]["FLEET_TRANSPORT_OWN"] = "Ваш флот достигает планеты (\n#1\n) и доставляет свой груз:.\n<br/>\n" .
 				"#2 металла, #3 кристалла и #4 дейтерия.\n<br/>\n";
