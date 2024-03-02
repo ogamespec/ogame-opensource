@@ -1,0 +1,3 @@
+# Prohibit automatic line ending controls so that there are no problems between Windows/Linux/Mac users.
+
+* text=false
