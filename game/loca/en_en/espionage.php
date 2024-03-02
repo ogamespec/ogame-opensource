@@ -6,7 +6,7 @@ $LOCA["en"]["SPY_REPORT"] = "Шпионский доклад";
 
 $LOCA["en"]["SPY_SUBJ"] = "Разведданные с #1";
 $LOCA["en"]["SPY_RESOURCES"] = "Сырьё на #1";
-$LOCA["en"]["SPY_PLAYER"] = "(Игрок \'#1\')<br /> на #2";
+$LOCA["en"]["SPY_PLAYER"] = "(Игрок '#1')<br /> на #2";
 $LOCA["en"]["SPY_M"] = "металла:";
 $LOCA["en"]["SPY_K"] = "кристалла:";
 $LOCA["en"]["SPY_D"] = "дейтерия:";

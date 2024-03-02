@@ -6,11 +6,12 @@ $LOCA["ru"]["SPY_REPORT"] = "Шпионский доклад";
 
 $LOCA["ru"]["SPY_SUBJ"] = "Разведданные с #1";
 $LOCA["ru"]["SPY_RESOURCES"] = "Сырьё на #1";
-$LOCA["ru"]["SPY_PLAYER"] = "(Игрок \'#1\')<br /> на #2";
+$LOCA["ru"]["SPY_PLAYER"] = "(Игрок '#1')<br /> на #2";
 $LOCA["ru"]["SPY_M"] = "металла:";
 $LOCA["ru"]["SPY_K"] = "кристалла:";
 $LOCA["ru"]["SPY_D"] = "дейтерия:";
 $LOCA["ru"]["SPY_E"] = "энергии:";
+// Активность была сломана в 0.84, но мы это исправим  (https://www.owiki.de/index.php/Spionagebericht)
 $LOCA["ru"]["SPY_ACTIVITY"] = "Активность означает, что сканируемый игрок был активен на своей планете, либо на него был произведён вылет флота другого игрока.";
 $LOCA["ru"]["SPY_FLEET"] = "Флоты";
 $LOCA["ru"]["SPY_DEFENSE"] = "Оборона";

@@ -6,7 +6,7 @@ $LOCA["fr"]["SPY_REPORT"] = "Rapport d’espionnage";
 
 $LOCA["fr"]["SPY_SUBJ"] = "Informations provenant de #1";
 $LOCA["fr"]["SPY_RESOURCES"] = "Matières premières de #1";
-$LOCA["fr"]["SPY_PLAYER"] = "(Joueur \'#1\')<br /> sur #2";
+$LOCA["fr"]["SPY_PLAYER"] = "(Joueur '#1')<br /> sur #2";
 $LOCA["fr"]["SPY_M"] = "Métal:";
 $LOCA["fr"]["SPY_K"] = "Cristal:";
 $LOCA["fr"]["SPY_D"] = "Deutérium:";
