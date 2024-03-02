@@ -3,6 +3,10 @@
 // Написать сообщение игроку.
 
 loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "messages", $GlobalUser['lang'] );
+
+// Ограничение на количество символов.
+$MAXCHARS = 2000;
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -66,8 +70,8 @@ if ( key_exists ('gesendet', $_GET) )
 
         $subj = $_POST['betreff'];
         $text = $_POST['text'];
-        if ($subj === "") $write_error = "<center><font color=#FF0000>Не хватает темы</font><br/><br/></center>\n";
-        else if ($text === "") $write_error .= "<center><font color=#FF0000>А где же сообщение?</font><br/><br/></center>\n";
+        if ($subj === "") $write_error = "<center><font color=#FF0000>".loca("WRITE_MSG_ERROR_NO_SUBJ")."</font><br/><br/></center>\n";
+        else if ($text === "") $write_error .= "<center><font color=#FF0000>".loca("WRITE_MSG_ERROR_NO_BODY")."</font><br/><br/></center>\n";
         else
         {
             if ( $user['useskin'] ) $skin = $user['skin'];
@@ -81,7 +85,7 @@ if ( key_exists ('gesendet', $_GET) )
             $subj = $subj . " <a href=\"index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=".$GlobalUser['player_id']."&re=1&betreff=Re:".$subj."\">\n"
                        . "<img border=\"0\" alt=\"Ответить\" src=\"".$skin."img/m.gif\" /></a>\n";            
             SendMessage ( $user['player_id'], $from, $subj, $text, 0);
-            $write_error = "<center><font color=#00FF00>Сообщение отправлено</font><br/></center>\n";
+            $write_error = "<center><font color=#00FF00>".loca("WRITE_MSG_SUCCESS")."</font><br/></center>\n";
         }
     }
 }
@@ -97,14 +101,14 @@ echo "<table width=\"519\">\n\n";
 //echo "GET: "; print_r ($_GET); echo "<br>";
 //echo "POST: "; print_r ($_POST); echo "<br>";
 
-echo "<tr><td class=\"c\" colspan=\"2\">Написать сообщение</td></tr>\n";
-echo "<tr><th>Получатель</th><th><input type=\"text\" name=\"to\" size=\"40\" value=\"".$user['oname']." [".$home['g'].":".$home['s'].":".$home['p']."]\" /></th></tr>\n";
-echo "<tr><th>Тема</th><th><input type=\"text\" name=\"betreff\" size=\"40\" maxlength=\"40\" value=\"Без темы\" /></th></tr>\n";
+echo "<tr><td class=\"c\" colspan=\"2\">".loca("WRITE_MSG_WRITE")."</td></tr>\n";
+echo "<tr><th>".loca("WRITE_MSG_USER")."</th><th><input type=\"text\" name=\"to\" size=\"40\" value=\"".$user['oname']." [".$home['g'].":".$home['s'].":".$home['p']."]\" /></th></tr>\n";
+echo "<tr><th>".loca("WRITE_MSG_SUBJ")."</th><th><input type=\"text\" name=\"betreff\" size=\"40\" maxlength=\"40\" value=\"".loca("WRITE_MSG_DEFAULT_SUBJ")."\" /></th></tr>\n";
 echo "<tr>\n";
-echo "<th> Сообщение(<span id=\"cntChars\">0</span> / 2000 символов) </th>\n";
-echo "<th><textarea name=\"text\" cols=\"40\" rows=\"10\" size=\"100\" onkeyup=\"javascript:cntchar(2000)\"></textarea></th>\n";
+echo "<th>".va(loca("WRITE_MSG_CHAR_COUNT"), "<span id=\"cntChars\">0</span>", $MAXCHARS)."</th>\n";
+echo "<th><textarea name=\"text\" cols=\"40\" rows=\"10\" size=\"100\" onkeyup=\"javascript:cntchar($MAXCHARS)\"></textarea></th>\n";
 echo "</tr>\n";
-echo "<tr><th colspan=\"2\"><input type=\"submit\" value=\"Отправить\" /></th></tr> \n\n";
+echo "<tr><th colspan=\"2\"><input type=\"submit\" value=\"".loca("WRITE_MSG_SUBMIT")."\" /></th></tr> \n\n";
 
 echo "</table></form>\n";
 echo "<br><br><br><br>\n";
