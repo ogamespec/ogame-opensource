@@ -27,12 +27,12 @@ $use_folders = ($GlobalUser['flags'] & USER_FLAG_DONT_USE_FOLDERS) == 0;    // �
 
 // Управление папками
 $folders = array (
-    "espioopen" => array ( 'pm'=>1, 'flag'=>USER_FLAG_FOLDER_ESPIONAGE, 'title'=>'Шпионские доклады' ),
-    "combatopen" => array ( 'pm'=>2, 'flag'=>USER_FLAG_FOLDER_COMBAT, 'title'=>'Боевые доклады' ),
-    "expopen" => array ( 'pm'=>3, 'flag'=>USER_FLAG_FOLDER_EXPEDITION, 'title'=>'Сообщения экспедции' ),
-    "allyopen" => array ( 'pm'=>4, 'flag'=>USER_FLAG_FOLDER_ALLIANCE, 'title'=>'Сообщения альянса' ),
-    "useropen" => array ( 'pm'=>0, 'flag'=>USER_FLAG_FOLDER_PLAYER, 'title'=>'Личные сообщения' ),
-    "generalopen" => array ( 'pm'=>5, 'flag'=>USER_FLAG_FOLDER_OTHER, 'title'=>'Прочее' ),
+    "espioopen" => array ( 'pm'=>1, 'flag'=>USER_FLAG_FOLDER_ESPIONAGE, 'title'=>loca("MSG_FOLDER1") ),
+    "combatopen" => array ( 'pm'=>2, 'flag'=>USER_FLAG_FOLDER_COMBAT, 'title'=>loca("MSG_FOLDER2") ),
+    "expopen" => array ( 'pm'=>3, 'flag'=>USER_FLAG_FOLDER_EXPEDITION, 'title'=>loca("MSG_FOLDER3") ),
+    "allyopen" => array ( 'pm'=>4, 'flag'=>USER_FLAG_FOLDER_ALLIANCE, 'title'=>loca("MSG_FOLDER4") ),
+    "useropen" => array ( 'pm'=>0, 'flag'=>USER_FLAG_FOLDER_PLAYER, 'title'=>loca("MSG_FOLDER5") ),
+    "generalopen" => array ( 'pm'=>5, 'flag'=>USER_FLAG_FOLDER_OTHER, 'title'=>loca("MSG_FOLDER6") ),
 );
 
 $days = $prem['commander'] ? 7 : 1;
@@ -100,20 +100,20 @@ if ($prem['commander'] && $use_folders) {
 
     echo "<tr><th colspan=\"4\">\n";
     echo "<select name=\"deletemessages\">\n";
-    echo "<option value=\"deletemarked\">Удалить выделенные сообщения</option> \n";
-    echo "<option value=\"deletenonmarked\">Удалить все невыделенные сообщения</option>\n";
-    echo "<option value=\"deleteallshown\">Удалить все показанные сообщения </option>\n";
-    echo "<option value=\"deleteall\">Удалить все сообщения</option> \n";
-    echo "</select><input type=\"submit\" value=\"ok\" /></th></tr>\n";
+    echo "<option value=\"deletemarked\">".loca("MSG_DELETE_MARKED")."</option> \n";
+    echo "<option value=\"deletenonmarked\">".loca("MSG_DELETE_UNMARKED")."</option>\n";
+    echo "<option value=\"deleteallshown\">".loca("MSG_DELETE_SHOWN")."</option>\n";
+    echo "<option value=\"deleteall\">".loca("MSG_DELETE_ALL")."</option> \n";
+    echo "</select><input type=\"submit\" value=\"".loca("MSG_SUBMIT")."\" /></th></tr>\n";
 }
 
-echo "<tr><td colspan=\"4\" class=\"c\">Сообщения</td></tr>\n";
+echo "<tr><td colspan=\"4\" class=\"c\">".loca("MSG_MESSAGES")."</td></tr>\n";
 
 if ($prem['commander'] && $use_folders) {
 
     // Показать папки и количество сообщений для каждого типа (Всего / Непрочитанных)
 
-    echo "<tr><th>Показать</th><th colspan=\"2\">Тип</th><th>Всего / Новые</th></tr>\n";
+    echo "<tr><th>".loca("MSG_FOLDER_SHOW")."</th><th colspan=\"2\">".loca("MSG_FOLDER_TYPE")."</th><th>".loca("MSG_FOLDER_STAT")."</th></tr>\n";
     foreach ($folders as $i=>$folder) {
 
         $total = TotalMessages ($GlobalUser['player_id'], $folder['pm']);
@@ -127,15 +127,15 @@ if ($prem['commander'] && $use_folders) {
         echo "</tr> \n";
     }    
 
-    echo "<tr><th colspan=\"4\"><input type=\"checkbox\" name=\"fullreports\"  " . ($partial_reports ? "CHECKED" : "") . "/> Разведданные показывать частично </th></tr>\n";
+    echo "<tr><th colspan=\"4\"><input type=\"checkbox\" name=\"fullreports\"  " . ($partial_reports ? "CHECKED" : "") . "/>".loca("MSG_PARTIAL_ESPIONAGE")."</th></tr>\n";
 }
 
 if ($prem['commander'] && $use_folders) {
     // У командира с папками заголовок сообщений становится td class=c, чтобы его было лучше видно. Это подтверждено на видео в YouTube (https://www.youtube.com/watch?v=PXRKO16y8Q8)
-    echo "<tr><td class=\"c\">Действие</td><td class=\"c\">Дата</td><td class=\"c\">От</td><td class=\"c\">Тема</td></tr>\n";
+    echo "<tr><td class=\"c\">".loca("MSG_ACTION")."</td><td class=\"c\">".loca("MSG_DATE")."</td><td class=\"c\">".loca("MSG_FROM")."</td><td class=\"c\">".loca("MSG_SUBJ")."</td></tr>\n";
 }
 else {
-    echo "<tr><th>Действие</th><th>Дата</th><th>От</th><th>Тема</th></tr>\n";
+    echo "<tr><th>".loca("MSG_ACTION")."</th><th>".loca("MSG_DATE")."</th><th>".loca("MSG_FROM")."</th><th>".loca("MSG_SUBJ")."</th></tr>\n";
 }
 
 $result = EnumMessages ( $GlobalUser['player_id'], $MAXMSG);
@@ -170,7 +170,7 @@ while ($num--)
     if ($msg['text'] !== "") {
         echo "<tr><td class=\"b\"> </td><td class=\"b\" colspan=\"3\">".$msg['text']."</td></tr>\n";
     }
-    if ($pm == 0) echo "<tr><th colspan=\"4\"><input type=\"checkbox\" name=\"sneak".$msg['msg_id']."\"/><input type=\"submit\" value=\"Сообщить оператору\"/></th></tr>\n";
+    if ($pm == 0) echo "<tr><th colspan=\"4\"><input type=\"checkbox\" name=\"sneak".$msg['msg_id']."\"/><input type=\"submit\" value=\"".loca("MSG_REPORT")."\"/></th></tr>\n";
     MarkMessage ( $msg['owner_id'], $msg['msg_id'] );
 }
 
@@ -179,21 +179,23 @@ echo "<tr><th colspan=\"4\" style='padding:0px 105px;'></th></tr>\n";
 
 // У командира с папками эти контролы показываются в самом начале
 if (! ($prem['commander'] && $use_folders)) {
-    echo "<tr><th colspan=\"4\"><input type=\"checkbox\" name=\"fullreports\"  " . ($partial_reports ? "CHECKED" : "") . "/> Разведданные показывать частично </th></tr>\n";
+    echo "<tr><th colspan=\"4\"><input type=\"checkbox\" name=\"fullreports\"  " . ($partial_reports ? "CHECKED" : "") . "/>".loca("MSG_PARTIAL_ESPIONAGE")."</th></tr>\n";
     echo "<tr><th colspan=\"4\">\n";
     echo "<select name=\"deletemessages\">\n";
-    echo "<option value=\"deletemarked\">Удалить выделенные сообщения</option> \n";
-    echo "<option value=\"deletenonmarked\">Удалить все невыделенные сообщения</option>\n";
-    echo "<option value=\"deleteallshown\">Удалить все показанные сообщения </option>\n";
-    echo "<option value=\"deleteall\">Удалить все сообщения</option> \n";
-    echo "</select><input type=\"submit\" value=\"ok\" /></th></tr>\n";
+    echo "<option value=\"deletemarked\">".loca("MSG_DELETE_MARKED")."</option> \n";
+    echo "<option value=\"deletenonmarked\">".loca("MSG_DELETE_UNMARKED")."</option>\n";
+    echo "<option value=\"deleteallshown\">".loca("MSG_DELETE_SHOWN")."</option>\n";
+    echo "<option value=\"deleteall\">".loca("MSG_DELETE_ALL")."</option> \n";
+    echo "</select><input type=\"submit\" value=\"".loca("MSG_SUBMIT")."\" /></th></tr>\n";
 }
 
 echo "<tr><td colspan=\"4\"><center>     </center></td></tr>\n";
 echo "<input type=\"hidden\" name=\"messages\" value=\"1\" />\n";
 echo "</form>\n";
-echo "<tr><td class=\"c\" colspan=\"4\">Операторы</td></tr>\n";
+echo "<tr><td class=\"c\" colspan=\"4\">".loca("MSG_OPER")."</td></tr>\n";
 
+    // Общение с операторами предполагало использование обычной почты (mailto).
+    // TODO: Сделать настройку варианта отправления обычного игрового сообщения, если оператор не хочет светить свой почтовый адрес
     $result = EnumOperators ();
     $rows = dbrows ($result);
     while ($rows--)
@@ -202,7 +204,7 @@ echo "<tr><td class=\"c\" colspan=\"4\">Операторы</td></tr>\n";
 ?>
                 <tr>
             <th colspan="4" valign="left">
-            <?=$oper['oname'];?>            <a href="mailto:<?=$oper['email'];?>?subject=<?=va("Вопрос от #1 из #2-й вселенной", $GlobalUser['oname'], $uni['num']);?>" ><img src="<?=UserSkin();?>img/m.gif" border="0" alt="Написать сообщение"></a>          </th>
+            <?=$oper['oname'];?>            <a href="mailto:<?=$oper['email'];?>?subject=<?=va(loca("MSG_OPER_TEXT"), $GlobalUser['oname'], $uni['num']);?>" ><img src="<?=UserSkin();?>img/m.gif" border="0" alt="<?=loca("MSG_OPER_PM");?>"></a>          </th>
         </tr>
 <?php
     }
