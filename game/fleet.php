@@ -723,8 +723,8 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         foreach ( $fleetmap as $i=>$gid )
         {
             $amount = $target["f$gid"] + $holding_fleet[$gid];
-            if ( ($count % 2) == 0 ) $report .= "</tr>\n";
             if ($amount > 0) {
+                if ( ($count % 2) == 0 ) $report .= "</tr>\n";
                 $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
                 $count++;
             }
@@ -739,8 +739,8 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         foreach ( $defmap as $i=>$gid )
         {
             $amount = $target["d$gid"];
-            if ( ($count % 2) == 0 ) $report .= "</tr>\n";
             if ($amount > 0) {
+                if ( ($count % 2) == 0 ) $report .= "</tr>\n";
                 $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
                 $count++;
             }
@@ -755,8 +755,8 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         foreach ( $buildmap as $i=>$gid )
         {
             $amount = $target["b$gid"];
-            if ( ($count % 2) == 0 ) $report .= "</tr>\n";
             if ($amount > 0) {
+                if ( ($count % 2) == 0 ) $report .= "</tr>\n";
                 $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
                 $count++;
             }
@@ -771,8 +771,8 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         foreach ( $resmap as $i=>$gid )
         {
             $amount = $target_user["r$gid"];
-            if ( ($count % 2) == 0 ) $report .= "</tr>\n";
             if ($amount > 0) {
+                if ( ($count % 2) == 0 ) $report .= "</tr>\n";
                 $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
                 $count++;
             }
