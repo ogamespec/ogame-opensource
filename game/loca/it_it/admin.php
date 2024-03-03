@@ -97,6 +97,30 @@ $LOCA["it"]["ADM_COL_SUBMIT"] = "Risparmiare";
 $LOCA["it"]["ADM_COL_INFO1"] = "Il diametro di una nuova colonia è calcolato con la formula";
 $LOCA["it"]["ADM_COL_INFO2"] = "Ogni intervallo ha i propri parametri (a, b, c)";
 
+// admin_coupons
+
+$LOCA["it"]["ADM_COUPON_ERROR"] = "Error adding a coupon!";
+$LOCA["it"]["ADM_COUPON_SUCCESS"] = "Coupon added: #1";
+$LOCA["it"]["ADM_COUPON_CODE"] = "Code";
+$LOCA["it"]["ADM_COUPON_ACTIVATED"] = "Activated";
+$LOCA["it"]["ADM_COUPON_UNI"] = "Universe";
+$LOCA["it"]["ADM_COUPON_NAME"] = "Player";
+$LOCA["it"]["ADM_COUPON_ACTION"] = "Action";
+$LOCA["it"]["ADM_COUPON_YES"] = "Yes";
+$LOCA["it"]["ADM_COUPON_NO"] = "No";
+$LOCA["it"]["ADM_COUPON_DELETE"] = "Delete";
+$LOCA["it"]["ADM_COUPON_PREV"] = "Prev #1";
+$LOCA["it"]["ADM_COUPON_NEXT"] = "Next #1";
+$LOCA["it"]["ADM_COUPON_ADD_SINGLE"] = "Add a single coupon";
+$LOCA["it"]["ADM_COUPON_ADD_PERIODIC"] = "Holiday coupons";
+$LOCA["it"]["ADM_COUPON_DAY"] = "Day in the format DD.MM";
+$LOCA["it"]["ADM_COUPON_TIME"] = "Time in HH:MM format";
+$LOCA["it"]["ADM_COUPON_DM_AMOUNT"] = "Dark matter per coupon";
+$LOCA["it"]["ADM_COUPON_INACTIVE_DAYS"] = "Send players who are inactive at least";
+$LOCA["it"]["ADM_COUPON_INGAME_DAYS"] = "Players must play at least";
+$LOCA["it"]["ADM_COUPON_DAYS"] = "days";
+$LOCA["it"]["ADM_COUPON_PERIOD"] = "Periodicity of days (0-no periodicity)";
+
 // admin_db
 
 $LOCA["it"]["ADM_DB_COLUMN_NOT_FOUND"] = "Colonna non trovata!";

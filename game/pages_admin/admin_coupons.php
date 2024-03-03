@@ -1,6 +1,6 @@
 <?php
 
-// Админка : купоны
+// Админка: купоны
 
 function Admin_Coupons ()
 {
@@ -17,8 +17,8 @@ function Admin_Coupons ()
         if ( $action === "add_one" )
         {
             $code = AddCoupon ( intval ( $_POST['dm'] ) );
-            if ( $code == NULL) $AdminError = "<font color=red>Ошибка добавления купона!</font>";
-            else $AdminMessage = "<font color=lime>Купон добавлен : $code</font>";
+            if ( $code == NULL) $AdminError = "<font color=red>".loca("ADM_COUPON_ERROR")."</font>";
+            else $AdminMessage = "<font color=lime>".va(loca("ADM_COUPON_SUCCESS"), $code)."</font>";
         }
 
         if ( $action === "add_date" )
@@ -40,7 +40,7 @@ function Admin_Coupons ()
     }
 
     // Обработка GET-запроса.
-    if ( method () === "GET" && $GlobalUser['admin'] >= 2 )
+    if ( method () === "GET" && key_exists('action', $_GET) && $GlobalUser['admin'] >= 2 )
     {
         $action = $_GET['action'];
 
@@ -59,7 +59,8 @@ function Admin_Coupons ()
 // Вывести список купонов.
 
 $count = 15;        // количество купонов на страницу
-$from = intval ( $_GET['from'] );
+$from = 0;
+if (key_exists('from', $_GET)) $from = intval ( $_GET['from'] );
 $total = TotalCoupons ();
 
 $result = EnumCoupons ($from, $count);
@@ -68,12 +69,12 @@ $rows = MDBRows ( $result );
 ?>
    <table border="0" cellpadding="2" cellspacing="1">
     <tr height="20">
-     <td class="c">Код</td>
-     <td class="c">Тёмная материя</td>
-     <td class="c">Активирован</td>
-     <td class="c">Вселенная</td>
-     <td class="c">Имя игрока</td>
-     <td class="c">Действие</td>
+     <td class="c"><?=loca("ADM_COUPON_CODE");?></td>
+     <td class="c"><?=loca("DM");?></td>
+     <td class="c"><?=loca("ADM_COUPON_ACTIVATED");?></td>
+     <td class="c"><?=loca("ADM_COUPON_UNI");?></td>
+     <td class="c"><?=loca("ADM_COUPON_NAME");?></td>
+     <td class="c"><?=loca("ADM_COUPON_ACTION");?></td>
     </tr>
 <?php
 
@@ -83,10 +84,10 @@ $rows = MDBRows ( $result );
         echo "        <tr height=\"20\">\n";
         echo "     <th>".$entry['code']."</th>\n";
         echo "     <th>".nicenum($entry['amount'])."</th>\n";
-        echo "     <th>". ($entry['used'] ? "<font color=red>Да</font>" : "<font color=lime>Нет</font>") ."</th>\n";
+        echo "     <th>". ($entry['used'] ? "<font color=red>".loca("ADM_COUPON_YES")."</font>" : "<font color=lime>".loca("ADM_COUPON_NO")."</font>") ."</th>\n";
         echo "     <th>". ($entry['used'] ? $entry['user_uni'] : '-' ) ."</th>\n";
         echo "     <th>".$entry['user_name']."</th>\n";
-        echo "     <th><a href=\"index.php?page=admin&session=$session&mode=Coupons&action=remove_one&item_id=".$entry['id']."\">Удалить</a></th>\n";
+        echo "     <th><a href=\"index.php?page=admin&session=$session&mode=Coupons&action=remove_one&item_id=".$entry['id']."\">".loca("ADM_COUPON_DELETE")."</a></th>\n";
         echo "    </tr>\n";
     }
 
@@ -95,8 +96,8 @@ $rows = MDBRows ( $result );
    <th colspan="6">
 <?php
     $url = "index.php?page=admin&session=$session&mode=Coupons&from";
-    if ($from >= $count) echo "     <a href=\"".$url."=".($from-$count)."\"><< Предыдущие $count</a>&nbsp;&nbsp;&nbsp;&nbsp;\n";
-    if ($from < $total && ($from+$count < $total) ) echo "        <a href=\"".$url."=".($from+$count)."\">Следующие $count >></a>\n";
+    if ($from >= $count) echo "     <a href=\"".$url."=".($from-$count)."\"><< ".va(loca("ADM_COUPON_PREV"), $count)."</a>&nbsp;&nbsp;&nbsp;&nbsp;\n";
+    if ($from < $total && ($from+$count < $total) ) echo "        <a href=\"".$url."=".($from+$count)."\">".va(loca("ADM_COUPON_NEXT"), $count)." >></a>\n";
 ?>
       </th>
    </tr>
@@ -104,10 +105,10 @@ $rows = MDBRows ( $result );
 
 
 <table>
-<tr><td class="c">Добавить один купон</td></tr>
+<tr><td class="c"><?=loca("ADM_COUPON_ADD_SINGLE");?></td></tr>
 <tr><td>
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Coupons&action=add_one" method="POST">
-Темная материя <input type="text" size="10" name="dm"> <input type="submit">
+<?=loca("DM");?> <input type="text" size="10" name="dm"> <input type="submit">
 </form>
 </td></tr>
 </table>
@@ -128,16 +129,15 @@ $rows = MDBRows ( $result );
 
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Coupons&action=add_date" method="POST">
 <table>
-<tr><td class="c"colspan=2>Купоны по праздникам</td></tr>
-<tr><td>День в формате ДД.ММ <input type="text" size="10" name="ddmm"></td><td>Время в формате ЧЧ:ММ <input type="text" size="10" name="hhmm" value="10:00"></td></tr>
-<tr><td>Темной материи на купон</td><td><input type="text" size="10" name="darkmatter" value="100000"> </td></tr>
-<tr><td>Отправлять игрокам неактивным не менее</td><td><input type="text" size="10" name="inactive_days" value="7"> дней</td></tr>
-<tr><td>Игроки должны играть не менее</td><td><input type="text" size="10" name="ingame_days" value="365"> дней</td></tr>
-<tr><td>Периодичность дней (0-без периодичности)</td><td><input type="text" size="10" name="periodic" value="365"> </td></tr>
+<tr><td class="c"colspan=2><?=loca("ADM_COUPON_ADD_PERIODIC");?></td></tr>
+<tr><td><?=loca("ADM_COUPON_DAY");?> <input type="text" size="10" name="ddmm"></td><td><?=loca("ADM_COUPON_TIME");?> <input type="text" size="10" name="hhmm" value="10:00"></td></tr>
+<tr><td><?=loca("ADM_COUPON_DM_AMOUNT");?></td><td><input type="text" size="10" name="darkmatter" value="100000"> </td></tr>
+<tr><td><?=loca("ADM_COUPON_INACTIVE_DAYS");?></td><td><input type="text" size="10" name="inactive_days" value="7"> <?=loca("ADM_COUPON_DAYS");?></td></tr>
+<tr><td><?=loca("ADM_COUPON_INGAME_DAYS");?></td><td><input type="text" size="10" name="ingame_days" value="365"> <?=loca("ADM_COUPON_DAYS");?></td></tr>
+<tr><td><?=loca("ADM_COUPON_PERIOD");?></td><td><input type="text" size="10" name="periodic" value="365"> </td></tr>
 <tr><td colspan=2><input type="submit"></td></tr>
 </table>
 </form>
-
 
 <?php
 }

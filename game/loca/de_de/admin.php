@@ -97,6 +97,30 @@ $LOCA["de"]["ADM_COL_SUBMIT"] = "Speichern";
 $LOCA["de"]["ADM_COL_INFO1"] = "Der Durchmesser einer neuen Kolonie wird nach folgender Formel berechnet";
 $LOCA["de"]["ADM_COL_INFO2"] = "Jeder Schießstand hat seine eigenen Parameter (a, b, c)";
 
+// admin_coupons
+
+$LOCA["de"]["ADM_COUPON_ERROR"] = "Fehler beim Hinzufügen eines Coupons!";
+$LOCA["de"]["ADM_COUPON_SUCCESS"] = "Coupon hinzugefügt: #1";
+$LOCA["de"]["ADM_COUPON_CODE"] = "Code";
+$LOCA["de"]["ADM_COUPON_ACTIVATED"] = "Aktiviert";
+$LOCA["de"]["ADM_COUPON_UNI"] = "Universum";
+$LOCA["de"]["ADM_COUPON_NAME"] = "Name des Spielers";
+$LOCA["de"]["ADM_COUPON_ACTION"] = "Aktion";
+$LOCA["de"]["ADM_COUPON_YES"] = "Ja";
+$LOCA["de"]["ADM_COUPON_NO"] = "Nein";
+$LOCA["de"]["ADM_COUPON_DELETE"] = "Löschen";
+$LOCA["de"]["ADM_COUPON_PREV"] = "Vorherige #1";
+$LOCA["de"]["ADM_COUPON_NEXT"] = "Die folgenden #1";
+$LOCA["de"]["ADM_COUPON_ADD_SINGLE"] = "Einen Kupon hinzufügen";
+$LOCA["de"]["ADM_COUPON_ADD_PERIODIC"] = "Urlaubsgutscheine";
+$LOCA["de"]["ADM_COUPON_DAY"] = "Ein Tag im Format DD.MM";
+$LOCA["de"]["ADM_COUPON_TIME"] = "Uhrzeit im Format HH:MM";
+$LOCA["de"]["ADM_COUPON_DM_AMOUNT"] = "Dunkle Materie für einen Coupon";
+$LOCA["de"]["ADM_COUPON_INACTIVE_DAYS"] = "Schicken Sie mindestens so viele inaktive Spieler";
+$LOCA["de"]["ADM_COUPON_INGAME_DAYS"] = "Die Spieler müssen mindestens spielen";
+$LOCA["de"]["ADM_COUPON_DAYS"] = "Tage";
+$LOCA["de"]["ADM_COUPON_PERIOD"] = "Periodizität der Tage (0 - keine Periodizität)";
+
 // admin_db
 
 $LOCA["de"]["ADM_DB_COLUMN_NOT_FOUND"] = "Spalte nicht gefunden!";

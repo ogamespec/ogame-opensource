@@ -97,6 +97,30 @@ $LOCA["ru"]["ADM_COL_SUBMIT"] = "Сохранить";
 $LOCA["ru"]["ADM_COL_INFO1"] = "Диаметр новой колонии расчитывается по формуле";
 $LOCA["ru"]["ADM_COL_INFO2"] = "Для каждого тира свои параметры (a, b, c)";
 
+// admin_coupons
+
+$LOCA["ru"]["ADM_COUPON_ERROR"] = "Ошибка добавления купона!";
+$LOCA["ru"]["ADM_COUPON_SUCCESS"] = "Купон добавлен: #1";
+$LOCA["ru"]["ADM_COUPON_CODE"] = "Код";
+$LOCA["ru"]["ADM_COUPON_ACTIVATED"] = "Активирован";
+$LOCA["ru"]["ADM_COUPON_UNI"] = "Вселенная";
+$LOCA["ru"]["ADM_COUPON_NAME"] = "Имя игрока";
+$LOCA["ru"]["ADM_COUPON_ACTION"] = "Действие";
+$LOCA["ru"]["ADM_COUPON_YES"] = "Да";
+$LOCA["ru"]["ADM_COUPON_NO"] = "Нет";
+$LOCA["ru"]["ADM_COUPON_DELETE"] = "Удалить";
+$LOCA["ru"]["ADM_COUPON_PREV"] = "Предыдущие #1";
+$LOCA["ru"]["ADM_COUPON_NEXT"] = "Следующие #1";
+$LOCA["ru"]["ADM_COUPON_ADD_SINGLE"] = "Добавить один купон";
+$LOCA["ru"]["ADM_COUPON_ADD_PERIODIC"] = "Купоны по праздникам";
+$LOCA["ru"]["ADM_COUPON_DAY"] = "День в формате ДД.ММ";
+$LOCA["ru"]["ADM_COUPON_TIME"] = "Время в формате ЧЧ:ММ";
+$LOCA["ru"]["ADM_COUPON_DM_AMOUNT"] = "Тёмной материи на купон";
+$LOCA["ru"]["ADM_COUPON_INACTIVE_DAYS"] = "Отправлять игрокам неактивным не менее";
+$LOCA["ru"]["ADM_COUPON_INGAME_DAYS"] = "Игроки должны играть не менее";
+$LOCA["ru"]["ADM_COUPON_DAYS"] = "дней";
+$LOCA["ru"]["ADM_COUPON_PERIOD"] = "Периодичность дней (0-без периодичности)";
+
 // admin_db
 
 $LOCA["ru"]["ADM_DB_COLUMN_NOT_FOUND"] = "Столбец не найден!";
