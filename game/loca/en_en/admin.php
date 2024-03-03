@@ -182,6 +182,7 @@ $LOCA["en"]["ADM_PLANET_NAME"] = "Planet name";
 $LOCA["en"]["ADM_PLANET_ALLY_TAG"] = "Ally tag";
 $LOCA["en"]["ADM_PLANET_SEARCH"] = "Search";
 $LOCA["en"]["ADM_PLANET_SEARCH_RESULT"] = "Search results:";
+$LOCA["en"]["ADM_PLANET_ERROR_LOAD"] = "Failed to load planet ID: #1";
 
 // admin_uni
 

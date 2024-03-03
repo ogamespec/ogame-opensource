@@ -182,6 +182,7 @@ $LOCA["ru"]["ADM_PLANET_NAME"] = "Имя планеты";
 $LOCA["ru"]["ADM_PLANET_ALLY_TAG"] = "Аббревиатура альянса";
 $LOCA["ru"]["ADM_PLANET_SEARCH"] = "Искать";
 $LOCA["ru"]["ADM_PLANET_SEARCH_RESULT"] = "Результаты поиска:";
+$LOCA["ru"]["ADM_PLANET_ERROR_LOAD"] = "Не удалось загрузить планету ID: #1";
 
 // admin_uni
 
