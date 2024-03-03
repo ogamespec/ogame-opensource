@@ -303,7 +303,7 @@ $prem = PremiumStatus ($GlobalUser);
             // Флаги -- обрабатывать только с включенным Командиром
             if ( $prem['commander'] ) {
                 
-                $flags = 0;
+                $flags = $GlobalUser['flags'];
                 $settings_esp = (key_exists('settings_esp', $_POST) && $_POST['settings_esp']==="on");
                 $settings_wri = (key_exists('settings_wri', $_POST) && $_POST['settings_wri']==="on");
                 $settings_bud = (key_exists('settings_bud', $_POST) && $_POST['settings_bud']==="on");
@@ -311,11 +311,17 @@ $prem = PremiumStatus ($GlobalUser);
                 $settings_rep = (key_exists('settings_rep', $_POST) && $_POST['settings_rep']==="on");
                 $settings_folders = (key_exists('settings_folders', $_POST) && $_POST['settings_folders']==="on");  // 1: не использовать папки.
                 if ($settings_esp) $flags |= USER_FLAG_SHOW_ESPIONAGE_BUTTON;
+                else $flags &= ~USER_FLAG_SHOW_ESPIONAGE_BUTTON;
                 if ($settings_wri) $flags |= USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON;
+                else $flags &= ~USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON;
                 if ($settings_bud) $flags |= USER_FLAG_SHOW_BUDDY_BUTTON;
+                else $flags &= ~USER_FLAG_SHOW_BUDDY_BUTTON;
                 if ($settings_mis) $flags |= USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON;
+                else $flags &= ~USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON;
                 if ($settings_rep) $flags |= USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
+                else $flags &= ~USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
                 if ($settings_folders) $flags |= USER_FLAG_DONT_USE_FOLDERS;
+                else $flags &= ~USER_FLAG_DONT_USE_FOLDERS;
                 if ($flags != $GlobalUser['flags']) {
                     SetUserFlags ($GlobalUser['player_id'], $flags);
                     $GlobalUser['flags'] = $flags;

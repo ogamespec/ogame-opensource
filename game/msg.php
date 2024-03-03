@@ -37,11 +37,11 @@
 // У каждого пользователя есть лимит сообщений в сутки. Выводится ошибка "Вы сегодня написали слишком много".
 
 // Удалить все старые сообщения (вызывается из меню Сообщения)
-function DeleteExpiredMessages ($player_id)
+function DeleteExpiredMessages ($player_id, $days)
 {
     global $db_prefix;
     $now = time ();
-    $hours24 = 60 * 60 * 24;
+    $hours = 60 * 60 * 24 * $days;
 
     // Не удалять сообщения администрации.
     $user = LoadUser ($player_id);
@@ -53,7 +53,7 @@ function DeleteExpiredMessages ($player_id)
     while ($num--)
     {
         $msg = dbarray ($result);
-        if ( ($msg['date'] + $hours24) <= $now ) DeleteMessage ($player_id, $msg['msg_id']);
+        if ( ($msg['date'] + $hours) <= $now ) DeleteMessage ($player_id, $msg['msg_id']);
     }
 }
 
@@ -116,10 +116,17 @@ function EnumMessages ($player_id, $max)
 }
 
 // Получить количество непрочитанных сообщений (вызывается из Обзора)
-function UnreadMessages ($player_id)
+function UnreadMessages ($player_id, $filter=false, $pm=0)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id AND shown = 0";
+
+    // Добавить условие для фильтрации (используется для показа количества непрочитанных сообщений в папке)
+    $filter_str = "";
+    if ($filter) {
+        $filter_str = "AND pm = $pm";
+    }
+
+    $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id AND shown = 0 $filter_str";
     $result = dbquery ($query);
     return dbrows ($result);
 }
@@ -167,6 +174,15 @@ function GetSharedSpyReport ($planet_id, $player_id, $ally_id)
         return $msg['msg_id'];
     }
     return 0;
+}
+
+// Вернуть количество сообщений определенного типа (используется для показа общего количества сообщений в папке)
+function TotalMessages ($player_id, $pm)
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id AND pm = $pm";
+    $result = dbquery ($query);
+    return dbrows ($result);
 }
 
 ?>

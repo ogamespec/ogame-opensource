@@ -69,6 +69,13 @@ const USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON = 0x8;    // 1: Отображать �
 const USER_FLAG_SHOW_VIEW_REPORT_BUTTON = 0x10;     // 1: Отображать иконку "Просмотреть сообщение" в галактике
 const USER_FLAG_DONT_USE_FOLDERS = 0x20;        // 1: Не сортировать сообщения по папкам в режиме Командира
 const USER_FLAG_PARTIAL_REPORTS = 0x40;         // 1: Разведданные показывать частично
+const USER_FLAG_FOLDER_ESPIONAGE = 0x100;           // 1: Показывать шпионские доклады (pm=1)
+const USER_FLAG_FOLDER_COMBAT = 0x200;              // 1: Показывать боевые доклады (pm=2)
+const USER_FLAG_FOLDER_EXPEDITION = 0x400;          // 1: Показывать результаты экспедиций (pm=3)
+const USER_FLAG_FOLDER_ALLIANCE = 0x800;            // 1: Показывать сообщения альянса (pm=4)
+const USER_FLAG_FOLDER_PLAYER = 0x1000;             // 1: Показывать личные сообщения (pm=0)
+const USER_FLAG_FOLDER_OTHER = 0x2000;              // 1: Показывать прочие сообщения (pm=5)
+
 
 const USER_FLAG_DEFAULT = USER_FLAG_SHOW_ESPIONAGE_BUTTON | USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON | USER_FLAG_SHOW_BUDDY_BUTTON | USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON | USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
 
