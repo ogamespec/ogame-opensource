@@ -183,4 +183,35 @@ $LOCA["en"]["ADM_PLANET_ALLY_TAG"] = "Ally tag";
 $LOCA["en"]["ADM_PLANET_SEARCH"] = "Search";
 $LOCA["en"]["ADM_PLANET_SEARCH_RESULT"] = "Search results:";
 
+// admin_uni
+
+$LOCA["en"]["ADM_UNI_SETTINGS"] = "Universe #1 Settings";
+$LOCA["en"]["ADM_UNI_DATE"] = "Date of opening";
+$LOCA["en"]["ADM_UNI_HACK_COUNTER"] = "Hack attempt counter";
+$LOCA["en"]["ADM_UNI_HACK_COUNTER_INFO"] = "Any SQL injection attempts are logged for all players and the counter is incremented after each attempt. Cleared after relogin";
+$LOCA["en"]["ADM_UNI_HACK_CHECK"] = "Check";
+$LOCA["en"]["ADM_UNI_USERS"] = "Number of players";
+$LOCA["en"]["ADM_UNI_MAX_USERS"] = "Maximum number of players";
+$LOCA["en"]["ADM_UNI_GALAXIES"] = "Number of galaxies";
+$LOCA["en"]["ADM_UNI_SYSTEMS"] = "Number of systems in the galaxy";
+$LOCA["en"]["ADM_UNI_SPEED"] = "Game speed";
+$LOCA["en"]["ADM_UNI_FSPEED"] = "Fleet speed";
+$LOCA["en"]["ADM_UNI_FID"] = "Fleet into the debris";
+$LOCA["en"]["ADM_UNI_DID"] = "Defense into the debris";
+$LOCA["en"]["ADM_UNI_DEF_REPAIR"] = "Restoring Defense";
+$LOCA["en"]["ADM_UNI_ACS_PLAYERS"] = "Invited players to the ACS";
+$LOCA["en"]["ADM_UNI_ACS_FLEETS"] = "max #1 fleets";
+$LOCA["en"]["ADM_UNI_RAPIDFIRE"] = "Rapidfire";
+$LOCA["en"]["ADM_UNI_MOONS"] = "Moons and Death Stars";
+$LOCA["en"]["ADM_UNI_NEWS1"] = "News 1";
+$LOCA["en"]["ADM_UNI_NEWS2"] = "News 2";
+$LOCA["en"]["ADM_UNI_NEWS_PROLONG"] = "Prolong the news";
+$LOCA["en"]["ADM_UNI_DAYS"] = "days";
+$LOCA["en"]["ADM_UNI_NEWS_SHOW_UNTIL"] = "Show the news until";
+$LOCA["en"]["ADM_UNI_NEWS_REMOVE"] = "remove";
+$LOCA["en"]["ADM_UNI_LANG"] = "Interface language";
+$LOCA["en"]["ADM_UNI_FREEZE"] = "Pause the universe";
+$LOCA["en"]["ADM_UNI_FREEZE_INFO"] = "When the universe is paused, no events will be triggered (the queue will be stopped). After the pause is removed, all completed events will be executed in the queue order. All active players are forced into vacation mode.";
+$LOCA["en"]["ADM_UNI_SAVE"] = "Save";
+
 ?>

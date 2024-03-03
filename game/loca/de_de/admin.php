@@ -183,4 +183,35 @@ $LOCA["de"]["ADM_PLANET_ALLY_TAG"] = "Ally-Tag";
 $LOCA["de"]["ADM_PLANET_SEARCH"] = "Suche";
 $LOCA["de"]["ADM_PLANET_SEARCH_RESULT"] = "Suchergebnisse:";
 
+// admin_uni
+
+$LOCA["de"]["ADM_UNI_SETTINGS"] = "Universum #1 Einstellungen";
+$LOCA["de"]["ADM_UNI_DATE"] = "Datum der Eröffnung";
+$LOCA["de"]["ADM_UNI_HACK_COUNTER"] = "Hackversuchszähler";
+$LOCA["de"]["ADM_UNI_HACK_COUNTER_INFO"] = "Alle SQL-Injection-Versuche werden für alle Spieler protokolliert und der Zähler wird nach jedem Versuch erhöht. Nach Neuanmeldung gelöscht";
+$LOCA["de"]["ADM_UNI_HACK_CHECK"] = "Siehe";
+$LOCA["de"]["ADM_UNI_USERS"] = "Anzahl der Spieler";
+$LOCA["de"]["ADM_UNI_MAX_USERS"] = "Maximale Anzahl von Spielern";
+$LOCA["de"]["ADM_UNI_GALAXIES"] = "Anzahl der Galaxien";
+$LOCA["de"]["ADM_UNI_SYSTEMS"] = "Anzahl der Systeme in der Galaxie";
+$LOCA["de"]["ADM_UNI_SPEED"] = "Spielgeschwindigkeit";
+$LOCA["de"]["ADM_UNI_FSPEED"] = "Geschwindigkeit der Flotte";
+$LOCA["de"]["ADM_UNI_FID"] = "Flotte in die Trümmer";
+$LOCA["de"]["ADM_UNI_DID"] = "Verteidigung in den Trümmern";
+$LOCA["de"]["ADM_UNI_DEF_REPAIR"] = "Wiederherstellung der Verteidigung";
+$LOCA["de"]["ADM_UNI_ACS_PLAYERS"] = "Eingeladene Spieler zur ACS";
+$LOCA["de"]["ADM_UNI_ACS_FLEETS"] = "max #1 Flotten";
+$LOCA["de"]["ADM_UNI_RAPIDFIRE"] = "Schnellfeuer";
+$LOCA["de"]["ADM_UNI_MOONS"] = "Monde und Todessterne";
+$LOCA["de"]["ADM_UNI_NEWS1"] = "News 1";
+$LOCA["de"]["ADM_UNI_NEWS2"] = "News 2";
+$LOCA["de"]["ADM_UNI_NEWS_PROLONG"] = "Verlängern Sie die Nachrichten";
+$LOCA["de"]["ADM_UNI_DAYS"] = "Tage";
+$LOCA["de"]["ADM_UNI_NEWS_SHOW_UNTIL"] = "Zeigen Sie die Nachrichten bis";
+$LOCA["de"]["ADM_UNI_NEWS_REMOVE"] = "entfernen";
+$LOCA["de"]["ADM_UNI_LANG"] = "Sprache der Schnittstelle";
+$LOCA["de"]["ADM_UNI_FREEZE"] = "Das Universum anhalten";
+$LOCA["de"]["ADM_UNI_FREEZE_INFO"] = "Wenn das Universum pausiert ist, werden keine Ereignisse ausgelöst (die Warteschlange wird angehalten). Nachdem die Pause aufgehoben wurde, werden alle abgeschlossenen Ereignisse in der Reihenfolge der Warteschlange ausgeführt. Alle aktiven Spieler werden in den Urlaubsmodus gezwungen.";
+$LOCA["de"]["ADM_UNI_SAVE"] = "Speichern";
+
 ?>

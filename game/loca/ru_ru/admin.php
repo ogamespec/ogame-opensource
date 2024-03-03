@@ -183,4 +183,35 @@ $LOCA["ru"]["ADM_PLANET_ALLY_TAG"] = "Аббревиатура альянса";
 $LOCA["ru"]["ADM_PLANET_SEARCH"] = "Искать";
 $LOCA["ru"]["ADM_PLANET_SEARCH_RESULT"] = "Результаты поиска:";
 
+// admin_uni
+
+$LOCA["ru"]["ADM_UNI_SETTINGS"] = "Настройки Вселенной #1";
+$LOCA["ru"]["ADM_UNI_DATE"] = "Дата открытия";
+$LOCA["ru"]["ADM_UNI_HACK_COUNTER"] = "Счётчик попыток взлома";
+$LOCA["ru"]["ADM_UNI_HACK_COUNTER_INFO"] = "Любые попытки SQL-инъекции логгируются для всех игроков и счётчик инкрементируется после каждой попытки. Очищается после релогина";
+$LOCA["ru"]["ADM_UNI_HACK_CHECK"] = "Проверить";
+$LOCA["ru"]["ADM_UNI_USERS"] = "Количество игроков";
+$LOCA["ru"]["ADM_UNI_MAX_USERS"] = "Максимальное количество игроков";
+$LOCA["ru"]["ADM_UNI_GALAXIES"] = "Количество галактик";
+$LOCA["ru"]["ADM_UNI_SYSTEMS"] = "Количество систем в галактике";
+$LOCA["ru"]["ADM_UNI_SPEED"] = "Ускорение игры";
+$LOCA["ru"]["ADM_UNI_FSPEED"] = "Ускорение флота";
+$LOCA["ru"]["ADM_UNI_FID"] = "Флот в обломки";
+$LOCA["ru"]["ADM_UNI_DID"] = "Оборона в обломки";
+$LOCA["ru"]["ADM_UNI_DEF_REPAIR"] = "Восстановление обороны";
+$LOCA["ru"]["ADM_UNI_ACS_PLAYERS"] = "Приглашенных игроков в САБ";
+$LOCA["ru"]["ADM_UNI_ACS_FLEETS"] = "макс. #1 флотов";
+$LOCA["ru"]["ADM_UNI_RAPIDFIRE"] = "Скорострел";
+$LOCA["ru"]["ADM_UNI_MOONS"] = "Луны и Звёзды Смерти";
+$LOCA["ru"]["ADM_UNI_NEWS1"] = "Новость 1";
+$LOCA["ru"]["ADM_UNI_NEWS2"] = "Новость 2";
+$LOCA["ru"]["ADM_UNI_NEWS_PROLONG"] = "Продлить новость";
+$LOCA["ru"]["ADM_UNI_DAYS"] = "дн.";
+$LOCA["ru"]["ADM_UNI_NEWS_SHOW_UNTIL"] = "Показывать новость до";
+$LOCA["ru"]["ADM_UNI_NEWS_REMOVE"] = "убрать";
+$LOCA["ru"]["ADM_UNI_LANG"] = "Язык интерфейса";
+$LOCA["ru"]["ADM_UNI_FREEZE"] = "Поставить вселенную на паузу";
+$LOCA["ru"]["ADM_UNI_FREEZE_INFO"] = "При постановке вселенной на паузу не будет срабатывать ни одно событие (очередь будет остановлена). После снятия паузы все завершенные события будут выполнены в порядке очереди. Все активные игроки принудительно переводятся в режим отпуска.";
+$LOCA["ru"]["ADM_UNI_SAVE"] = "Сохранить";
+
 ?>
