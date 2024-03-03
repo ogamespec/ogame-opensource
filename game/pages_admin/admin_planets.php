@@ -175,6 +175,9 @@ function Admin_Planets ()
 
     if ( key_exists("cp", $_GET) ) {     // Информация о планете.
         $planet = GetPlanet ( intval ($_GET['cp']) );
+        if (!$planet) {
+            Error ( va(loca("ADM_PLANET_ERROR_LOAD"), intval ($_GET['cp'])) );
+        }
         $user = LoadUser ( $planet['owner_id'] );
         $moon_id = PlanetHasMoon ( $planet['planet_id'] );
         $debris_id = HasDebris ( $planet['g'], $planet['s'], $planet['p'] );
