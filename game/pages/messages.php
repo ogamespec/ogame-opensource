@@ -2,6 +2,12 @@
 
 // Сообщения.
 
+// Про галочки напротив папок.
+// Исходников HTML не сохранилось, поэтому никто толком не помнит как оно работало. Делаю так:
+// - Кнопка "ок" запоминает выбранные галки, если их тыкали руками (метод POST)
+// - Ссылка на категорию инвертирует значение галки и одновременно перезагружает сообщения с новыми настройками (метод GET)
+// Если вдруг вам что-то не нравится или у вас есть исходники HTML - мы открыты к обсуждению :-)
+
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "messages", $GlobalUser['lang'] );
 
@@ -56,9 +62,9 @@ if ( method() === "POST" )
         {
             $msg = dbarray ($result);
             $msg_id = $msg['msg_id'];
-            if ( key_exists("sneak" . $msg_id, $_POST) && $_POST["sneak" . $msg_id] === "on" ) {}    // Сообщить оператору
+            if ( key_exists("sneak" . $msg_id, $_POST) && $_POST["sneak" . $msg_id] === "on" ) {}    // TODO: Сообщить оператору
             if ( key_exists("delmes" . $msg_id, $_POST) && $_POST["delmes" . $msg_id] === "on" && $_POST['deletemessages'] === "deletemarked" ) DeleteMessage ( $player_id, $msg_id );    // Удалить выделенные
-            if ( key_exists("delmes" . $msg_id, $_POST) && $_POST["delmes" . $msg_id] !== "on" && $_POST['deletemessages'] === "deletenonmarked" ) DeleteMessage ( $player_id, $msg_id );    // Удалить невыделенные
+            if ( !key_exists("delmes" . $msg_id, $_POST) && $_POST['deletemessages'] === "deletenonmarked" ) DeleteMessage ( $player_id, $msg_id );    // Удалить невыделенные
             if ( $_POST['deletemessages'] === "deleteallshown" ) DeleteMessage ( $player_id, $msg_id );    // Удалить показанные
         }
     }
@@ -80,15 +86,29 @@ if ( method() === "POST" )
         $flags = $GlobalUser['flags'];
         foreach ($folders as $i=>$folder) {
             if (key_exists($i, $_POST) && $_POST[$i] === "on") {
-                $flags |= $folder['flag'];
+                $flags |= $folder['flag'];      // установить флаг
             }
             else {
-                $flags &= ~$folder['flag'];
+                $flags &= ~$folder['flag'];     // сбросить флаг
             }
         }
         if ($flags != $GlobalUser['flags']) {
             SetUserFlags ($GlobalUser['player_id'], $flags);
             $GlobalUser['flags'] = $flags;
+        }
+    }
+}
+
+// Обработка нажатия на ссылку типа сообщений для управления галочками напротив папок (Командир)
+if ( method() === "GET" && $prem['commander'] && $use_folders && key_exists('pm', $_GET) )
+{
+    $pm = intval ($_GET['pm']);
+    foreach ($folders as $i=>$folder) {
+        if ($folder['pm'] == $pm) {
+            $flags = $GlobalUser['flags'] ^ $folder['flag'];    // инвертировать флаг (XOR)
+            SetUserFlags ($GlobalUser['player_id'], $flags);
+            $GlobalUser['flags'] = $flags;
+            break;
         }
     }
 }
@@ -122,7 +142,7 @@ if ($prem['commander'] && $use_folders) {
 
         echo "<tr> \n";
         echo "   <th><input type=\"checkbox\" name=\"".$i."\"  $checked /></th> \n";
-        echo "   <th colspan=\"2\"><a href=\"index.php?page=messages&dsp=1&session=".$_GET['session']."\">".$folder['title']."</a></th> \n";
+        echo "   <th colspan=\"2\"><a href=\"index.php?page=messages&dsp=1&pm=".$folder['pm']."&session=".$_GET['session']."\">".$folder['title']."</a></th> \n";
         echo "   <th>$total / $unread</th> \n";
         echo "</tr> \n";
     }    
