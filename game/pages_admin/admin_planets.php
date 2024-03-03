@@ -1,7 +1,6 @@
 <?php
 
-// ========================================================================================
-// Планеты.
+// Админка: Планеты.
 
 function Admin_Planets ()
 {
@@ -21,8 +20,6 @@ function Admin_Planets ()
         $cp = intval ($_GET['cp']);
         $action = $_GET['action'];
         $now = time();
-
-        //print_r ( $_POST);
 
         if ($action === "update")        // Обновить данные планеты.
         {
@@ -74,7 +71,7 @@ function Admin_Planets ()
         {
             $searchtype = $_POST['type'];
             if ( $_POST['searchtext'] === "" ) {
-                $SearchResult .= "Укажите строку для поиска<br>\n";
+                $SearchResult .= loca("ADM_PLANET_SPECIFY_TEXT") . "<br>\n";
                 $searchtype = "none";
             }
             if ( $searchtype === "playername") {
@@ -103,7 +100,7 @@ function Admin_Planets ()
                     $SearchResult .= "<th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a></th></tr>\n";
                 }
             }
-            else $SearchResult .= "Ничего не найдено<br>\n";
+            else $SearchResult .= loca("ADM_PLANET_NOT_FOUND") . "<br>\n";
             $SearchResult .= "</table>\n";
         }
     }
@@ -162,11 +159,12 @@ function Admin_Planets ()
             if ( GetPlanetType ($planet) == 1 )
             {
                 $p = $planet['p'];
-                if ($p <= 3) $diam = mt_rand ( 50, 120 ) * 72;
-                else if ($p >= 4 && $p <= 6) $diam = mt_rand ( 50, 150 ) * 120;
-                else if ($p >= 7 && $p <= 9) $diam = mt_rand ( 50, 120 ) * 120;
-                else if ($p >= 10 && $p <= 12) $diam = mt_rand ( 50, 120 ) * 96;
-                else if ($p >= 13 && $p <= 15) $diam = mt_rand ( 50, 150 ) * 96;
+                $coltab = LoadColonySettings();
+                if ($p <= 3) $diam = mt_rand ( $coltab['t1_a'], $coltab['t1_b'] ) * $coltab['t1_c'];
+                else if ($p >= 4 && $p <= 6) $diam = mt_rand ( $coltab['t2_a'], $coltab['t2_b'] ) * $coltab['t2_c'];
+                else if ($p >= 7 && $p <= 9) $diam = mt_rand ( $coltab['t3_a'], $coltab['t3_b'] ) * $coltab['t3_c'];
+                else if ($p >= 10 && $p <= 12) $diam = mt_rand ( $coltab['t4_a'], $coltab['t4_b'] ) * $coltab['t4_c'];
+                else if ($p >= 13 && $p <= 15) $diam = mt_rand ( $coltab['t5_a'], $coltab['t5_b'] ) * $coltab['t5_c'];
                 $query = "UPDATE ".$db_prefix."planets SET diameter=$diam WHERE planet_id=" . $planet['planet_id'];
                 dbquery ($query);
             }
@@ -287,14 +285,14 @@ function reset ()
 
         echo "<table>\n";
         echo "<form action=\"index.php?page=admin&session=$session&mode=Planets&action=update&cp=".$planet['planet_id']."\" method=\"POST\" >\n";
-        echo "<tr><td class=c colspan=2>Планета \"".$planet['name']."\" (<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>)</td>\n";
-        echo "       <td class=c >Постройки</td> <td class=c >Флот</td> <td class=c >Оборона</td> </tr>\n";
-        echo "<tr><th><img src=\"".GetPlanetImage (UserSkin(), $planet)."\"> <br>Тип: " . $planet['type'];
+        echo "<tr><td class=c colspan=2>".loca("ADM_PLANET_PLANET")." \"".$planet['name']."\" (<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>)</td>\n";
+        echo "       <td class=c >".loca("ADM_PLANET_BUILDINGS")."</td> <td class=c >".loca("ADM_PLANET_FLEET")."</td> <td class=c >".loca("ADM_PLANET_DEFENSE")."</td> </tr>\n";
+        echo "<tr><th><img src=\"".GetPlanetImage (UserSkin(), $planet)."\"> <br>".loca("ADM_PLANET_TYPE").": " . $planet['type'];
         $pp = PlanetPrice ( $planet );
-        echo "<br>Стоимость : " . nicenum($pp['points'] / 1000) ;
-        echo "<br>Постройки : " . nicenum( ($pp['points'] - ($pp['fleet_pts']+$pp['defense_pts']) ) / 1000) ;
-        echo "<br>Флот : " . nicenum($pp['fleet_pts'] / 1000) ;
-        echo "<br>Оборона : " . nicenum($pp['defense_pts'] / 1000) ;
+        echo "<br>".loca("ADM_PLANET_POINTS").": " . nicenum($pp['points'] / 1000) ;
+        echo "<br>".loca("ADM_PLANET_BUILDINGS").": " . nicenum( ($pp['points'] - ($pp['fleet_pts']+$pp['defense_pts']) ) / 1000) ;
+        echo "<br>".loca("ADM_PLANET_FLEET").": " . nicenum($pp['fleet_pts'] / 1000) ;
+        echo "<br>".loca("ADM_PLANET_DEFENSE").": " . nicenum($pp['defense_pts'] / 1000) ;
         if ($planet['type'] == 10000 ) echo "<br>М: ".nicenum($planet['m'])."<br>К: ".nicenum($planet['k'])."<br>";
         echo "</th><th>";
         if ( $planet['type'] > 0 && $planet['type'] < 10000 )
@@ -305,7 +303,7 @@ function reset ()
                 echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$moon['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $moon)."\"><br>\n";
                 echo $moon['name'] . "</a>";
             }
-            else echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=create_moon&cp=".$planet['planet_id']."\" >Создать луну</a>\n";
+            else echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=create_moon&cp=".$planet['planet_id']."\" >".loca("ADM_PLANET_ADD_MOON")."</a>\n";
             echo "<br/><br/>\n";
             if ($debris_id)
             {
@@ -314,7 +312,7 @@ function reset ()
                 echo $debris['name'] . "</a>";
                 echo "<br>М: ".nicenum($debris['m'])."<br>К: ".nicenum($debris['k'])."<br>";
             }
-            else echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=create_debris&cp=".$planet['planet_id']."\" >Создать поле обломков</a>\n";
+            else echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=create_debris&cp=".$planet['planet_id']."\" >".loca("ADM_PLANET_ADD_DF")."</a>\n";
         }
         else
         {
@@ -324,8 +322,8 @@ function reset ()
         }
 ?>
         <br><br><textarea rows=10 cols=10 id="spiotext"></textarea>
-        <a href="#" onclick="javascript:spio();">Разобрать данные доклада</a> <br>
-        <a href="#" onclick="javascript:reset();">Сбросить</a>
+        <a href="#" onclick="javascript:spio();"><?=loca("ADM_PLANET_PARSE_SPY_REPORT");?></a> <br>
+        <a href="#" onclick="javascript:reset();"><?=loca("ADM_PLANET_RESET_PARSER");?></a>
 <?php
         echo "</th>";
 
@@ -334,11 +332,11 @@ function reset ()
             echo "<tr><th>".loca("NAME_$gid");
             if ( $gid == 43 && $planet['type'] == 0 ) {    // управление воротами.
                 if ( $now >= $planet["gate_until"] ) {    // ворота готовы
-                    echo " <a href=\"index.php?page=admin&session=$session&mode=Planets&action=warmup_gates&cp=".$planet['planet_id']."\" >нагреть</a>";
+                    echo " <a href=\"index.php?page=admin&session=$session&mode=Planets&action=warmup_gates&cp=".$planet['planet_id']."\" >".loca("ADM_PLANET_GATE_WARMUP")."</a>";
                 }
                 else {    // ворота НЕ готовы
                     $delta = $planet["gate_until"] - $now;
-                    echo " " . date ('i\m s\s', $delta) . " <a href=\"index.php?page=admin&session=$session&mode=Planets&action=cooldown_gates&cp=".$planet['planet_id']."\">остудить</a>";
+                    echo " " . date ('i\m s\s', $delta) . " <a href=\"index.php?page=admin&session=$session&mode=Planets&action=cooldown_gates&cp=".$planet['planet_id']."\">".loca("ADM_PLANET_GATE_COOLDOWN")."</a>";
                 }
             }
             echo "</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=3 name=\"b$gid\" value=\"".$planet["b$gid"]."\" />";
@@ -418,8 +416,8 @@ function reset ()
 
         echo "</tr>\n";
 
-        echo "<tr><th>Дата создания</th><th>".date ("Y-m-d H:i:s", $planet['date'])."</th> <td colspan=10 class=c>Очередь построек</td></tr>";
-        echo "<tr><th>Дата удаления</th><th>".date ("Y-m-d H:i:s", $planet['remove'])."</th> <th colspan=3 rowspan=12 valign=top style='text-align: left;'> ";
+        echo "<tr><th>".loca("ADM_PLANET_DATE_CREATE")."</th><th>".date ("Y-m-d H:i:s", $planet['date'])."</th> <td colspan=10 class=c>".loca("ADM_PLANET_QUEUE")."</td></tr>";
+        echo "<tr><th>".loca("ADM_PLANET_DATE_REMOVE")."</th><th>".date ("Y-m-d H:i:s", $planet['remove'])."</th> <th colspan=3 rowspan=12 valign=top style='text-align: left;'> ";
 
         $query = "SELECT * FROM ".$db_prefix."buildqueue WHERE planet_id = ".$planet['planet_id']." ORDER BY list_id ASC";
         $result = dbquery ($query);
@@ -430,7 +428,7 @@ function reset ()
             echo "<tr><td> <table><tr><th><div id='bxx".$bxx."' title='".($row['end'] - $row['start'] - ($now-($row['start'] + $duration)))."' star='".$duration."'></th>";
             echo "<tr><th>".date ("d.m.Y H:i:s", $row['end'] + $duration)."</th></tr></table></td>";
             echo "<td><img width='32px' src='".UserSkin () . "gebaeude/".$row['tech_id'].".gif'></td>";
-            echo "<td><b>".loca("NAME_".$row['tech_id'])."</b><br>уровень ".$row['level']."</td></tr>";
+            echo "<td><b>".loca("NAME_".$row['tech_id'])."</b><br>".va(loca("ADM_PLANET_LEVEL"), $row['level'])."</td></tr>";
             $bxx++;
             $duration += $row['end'] - $row['start'];
         }
@@ -440,24 +438,24 @@ function reset ()
 
 <?php
         echo "</th> </tr>";
-        echo "<tr><th>Последняя активность</th><th>".date ("Y-m-d H:i:s", $planet['lastakt'])."</th>  \n";
+        echo "<tr><th>".loca("ADM_PLANET_LASTAKT")."</th><th>".date ("Y-m-d H:i:s", $planet['lastakt'])."</th>  \n";
         echo "<input type=\"hidden\" name=\"type\" value=\"".$planet['type']."\" >\n";
         echo "</th> </tr>\n";
-        echo "<tr><th>Последнее обновление</th><th>".date ("Y-m-d H:i:s", $planet['lastpeek'])."</th></tr>\n";
-        echo "<tr><th>Диаметр <br><a href=\"index.php?page=admin&session=$session&mode=Planets&action=random_diam&cp=".$planet['planet_id']."\" >новый диаметр</a>  </th><th><input size=5 type=\"text\" name=\"diameter\" value=\"".$planet['diameter']."\" /> км (".$planet['fields']." из ".$planet['maxfields']." полей) ";
-        echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=recalc_fields&cp=".$planet['planet_id']."\" >пересчитать поля</a> ";
+        echo "<tr><th>".loca("ADM_PLANET_LASTUPD")."</th><th>".date ("Y-m-d H:i:s", $planet['lastpeek'])."</th></tr>\n";
+        echo "<tr><th>".loca("ADM_PLANET_DIAM")." <br><a href=\"index.php?page=admin&session=$session&mode=Planets&action=random_diam&cp=".$planet['planet_id']."\" >".loca("ADM_PLANET_NEW_DIAM")."</a>  </th><th><input size=5 type=\"text\" name=\"diameter\" value=\"".$planet['diameter']."\" /> ".loca("ADM_PLANET_KM")." (".$planet['fields']." ".loca("ADM_PLANET_FIELDS_FROM")." ".$planet['maxfields']." ".loca("ADM_PLANET_FIELDS").") ";
+        echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=recalc_fields&cp=".$planet['planet_id']."\" >".loca("ADM_PLANET_RECALC_FIELDS")."</a> ";
         echo "</th></tr>\n";
-        echo "<tr><th>Температура</th><th>от <input size=5 type=\"text\" name=\"temp\" value=\"".$planet['temp']."\" />°C до ".($planet['temp']+40)."°C</th></tr>\n";
-        echo "<tr><th>Координаты</th><th>[<input type=\"text\" name=\"g\" value=\"".$planet['g']."\" size=1 />:<input type=\"text\" name=\"s\" value=\"".$planet['s']."\" size=2 />:<input type=\"text\" name=\"p\" value=\"".$planet['p']."\" size=1 />]</th></tr>\n";
+        echo "<tr><th>".loca("ADM_PLANET_TEMP")."</th><th>".loca("ADM_PLANET_TEMP_FROM")." <input size=5 type=\"text\" name=\"temp\" value=\"".$planet['temp']."\" />°C ".loca("ADM_PLANET_TEMP_TO")." ".($planet['temp']+40)."°C</th></tr>\n";
+        echo "<tr><th>".loca("ADM_PLANET_COORD")."</th><th>[<input type=\"text\" name=\"g\" value=\"".$planet['g']."\" size=1 />:<input type=\"text\" name=\"s\" value=\"".$planet['s']."\" size=2 />:<input type=\"text\" name=\"p\" value=\"".$planet['p']."\" size=1 />]</th></tr>\n";
 
-        echo "<tr><td class=c colspan=2>Ресурсы</td></tr>\n";
-        echo "<tr><th>Металл</th><th><input id=\"objm\" type=\"text\" name=\"m\" value=\"".ceil($planet['m'])."\" /></th></tr>\n";
-        echo "<tr><th>Кристалл</th><th><input id=\"objk\" type=\"text\" name=\"k\" value=\"".ceil($planet['k'])."\" /></th></tr>\n";
-        echo "<tr><th>Дейтерий</th><th><input id=\"objd\" type=\"text\" name=\"d\" value=\"".ceil($planet['d'])."\" /></th></tr>\n";
-        echo "<tr><th>Энергия</th><th>".$planet['e']." / ".$planet['emax']."</th></tr>\n";
-        echo "<tr><th>Коэффициент производства</th><th>".$planet['factor']."</th></tr>\n";
+        echo "<tr><td class=c colspan=2>".loca("ADM_PLANET_RESOURCES")."</td></tr>\n";
+        echo "<tr><th>".loca("METAL")."</th><th><input id=\"objm\" type=\"text\" name=\"m\" value=\"".ceil($planet['m'])."\" /></th></tr>\n";
+        echo "<tr><th>".loca("CRYSTAL")."</th><th><input id=\"objk\" type=\"text\" name=\"k\" value=\"".ceil($planet['k'])."\" /></th></tr>\n";
+        echo "<tr><th>".loca("DEUTERIUM")."</th><th><input id=\"objd\" type=\"text\" name=\"d\" value=\"".ceil($planet['d'])."\" /></th></tr>\n";
+        echo "<tr><th>".loca("ENERGY")."</th><th>".$planet['e']." / ".$planet['emax']."</th></tr>\n";
+        echo "<tr><th>".loca("ADM_PLANET_FACTOR")."</th><th>".$planet['factor']."</th></tr>\n";
 
-        echo "<tr><th colspan=8><input type=\"submit\" value=\"Сохранить\" />  <input type=\"submit\" name=\"delete_planet\" value=\"Удалить\" /> </th></tr>\n";
+        echo "<tr><th colspan=8><input type=\"submit\" value=\"".loca("ADM_PLANET_SAVE")."\" />  <input type=\"submit\" name=\"delete_planet\" value=\"".loca("ADM_PLANET_REMOVE")."\" /> </th></tr>\n";
         echo "</form>\n";
         echo "</table>\n";
     }
@@ -470,9 +468,9 @@ function reset ()
         echo "    </th> \n";
         echo "   </tr> \n";
         echo "</table> \n";
-        echo "Новые планеты:<br>\n";
+        echo loca("ADM_PLANET_NEW_PLANETS") . "<br>\n";
         echo "<table>\n";
-        echo "<tr><td class=c>Дата создания</td><td class=c>Координаты</td><td class=c>Планета</td><td class=c>Игрок</td></tr>\n";
+        echo "<tr><td class=c>".loca("ADM_PLANET_DATE_CREATE")."</td><td class=c>".loca("ADM_PLANET_COORD")."</td><td class=c>".loca("ADM_PLANET_PLANET")."</td><td class=c>".loca("ADM_PLANET_PLAYER")."</td></tr>\n";
         $rows = dbrows ($result);
         while ($rows--) 
         {
@@ -489,20 +487,20 @@ function reset ()
        </th> 
        </tr> 
     </table>
-    Искать:<br>
+    <?=loca("ADM_PLANET_SEARCH");?>:<br>
  <form action="index.php?page=admin&session=<?php echo $session;?>&mode=Planets&action=search" method="post">
  <table>
   <tr>
    <th>
     <select name="type">
-     <option value="playername">Имя игрока</option>
-     <option value="planetname" >Имя планеты</option>
-     <option value="allytag" >Аббревиатура альянса</option>
+     <option value="playername"><?=loca("ADM_PLANET_PLAYER_NAME");?></option>
+     <option value="planetname" ><?=loca("ADM_PLANET_NAME");?></option>
+     <option value="allytag" ><?=loca("ADM_PLANET_ALLY_TAG");?></option>
     </select>
     &nbsp;&nbsp;
     <input type="text" name="searchtext" value=""/>
     &nbsp;&nbsp;
-    <input type="submit" value="Искать" />
+    <input type="submit" value="<?=loca("ADM_PLANET_SEARCH");?>" />
    </th>
   </tr>
  </table>
@@ -515,7 +513,7 @@ function reset ()
        </th> 
        </tr> 
     </table>
-    Результаты поиска:<br>
+    <?=loca("ADM_PLANET_SEARCH_RESULT");?><br>
     <?php echo $SearchResult;?>
 <?php
         }

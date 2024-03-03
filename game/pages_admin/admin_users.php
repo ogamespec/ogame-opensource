@@ -342,6 +342,7 @@ function Admin_Users ()
             echo "<tr><th>".loca("NAME_$gid")."</th><th><input type=\"text\" size=3 name=\"r$gid\" value=\"".$user["r$gid"]."\" /></th></tr>\n";
         }
 ?>
+        <tr><td colspan=2>&nbsp;</td></tr>
         <tr><th>Найденная Тёмная Материя</th><th><input type="text" size=5 name="dmfree" value="<?php echo $user['dmfree'];?>" /></th></tr>
         <tr><th>Покупная Тёмная Материя</th><th><input type="text" size=5 name="dm" value="<?php echo $user['dm'];?>" /></th></tr>
         </table></th>

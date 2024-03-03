@@ -2,6 +2,8 @@
 
 // Chaînes de caractères courantes. Présentes sur la plupart des pages.
 
+$LOCA["fr"]["PAGE_TITLE"] = "Univers #1 OGame";
+
 $LOCA["fr"]["METAL" ] = "Métal";
 $LOCA["fr"]["CRYSTAL" ] = "Cristal";
 $LOCA["fr"]["DEUTERIUM" ] = "Deutérium";

@@ -139,4 +139,48 @@ $LOCA["ru"]["ADM_LOCA_SOURCE"] = "Исходный язык:";
 $LOCA["ru"]["ADM_LOCA_DEST"] = "Целевой язык:";
 $LOCA["ru"]["ADM_LOCA_SUBMIT"] = "Сравнить";
 
+// admin_planets
+
+$LOCA["ru"]["ADM_PLANET_SPECIFY_TEXT"] = "Укажите строку для поиска";
+$LOCA["ru"]["ADM_PLANET_NOT_FOUND"] = "Ничего не найдено";
+$LOCA["ru"]["ADM_PLANET_PLANET"] = "Планета";
+$LOCA["ru"]["ADM_PLANET_BUILDINGS"] = "Постройки";
+$LOCA["ru"]["ADM_PLANET_FLEET"] = "Флот";
+$LOCA["ru"]["ADM_PLANET_DEFENSE"] = "Оборона";
+$LOCA["ru"]["ADM_PLANET_TYPE"] = "Тип";
+$LOCA["ru"]["ADM_PLANET_POINTS"] = "Стоимость";
+$LOCA["ru"]["ADM_PLANET_ADD_MOON"] = "Создать луну";
+$LOCA["ru"]["ADM_PLANET_ADD_DF"] = "Создать поле обломков";
+$LOCA["ru"]["ADM_PLANET_PARSE_SPY_REPORT"] = "Разобрать данные доклада";
+$LOCA["ru"]["ADM_PLANET_RESET_PARSER"] = "Сбросить";
+$LOCA["ru"]["ADM_PLANET_GATE_WARMUP"] = "нагреть";
+$LOCA["ru"]["ADM_PLANET_GATE_COOLDOWN"] = "остудить";
+$LOCA["ru"]["ADM_PLANET_DATE_CREATE"] = "Дата создания";
+$LOCA["ru"]["ADM_PLANET_DATE_REMOVE"] = "Дата удаления";
+$LOCA["ru"]["ADM_PLANET_QUEUE"] = "Очередь построек";
+$LOCA["ru"]["ADM_PLANET_LEVEL"] = "уровень #1";
+$LOCA["ru"]["ADM_PLANET_LASTAKT"] = "Последняя активность";
+$LOCA["ru"]["ADM_PLANET_LASTUPD"] = "Последнее обновление";
+$LOCA["ru"]["ADM_PLANET_DIAM"] = "Диаметр";
+$LOCA["ru"]["ADM_PLANET_KM"] = "км";
+$LOCA["ru"]["ADM_PLANET_FIELDS_FROM"] = "из";
+$LOCA["ru"]["ADM_PLANET_FIELDS"] = "полей";
+$LOCA["ru"]["ADM_PLANET_NEW_DIAM"] = "новый диаметр";
+$LOCA["ru"]["ADM_PLANET_RECALC_FIELDS"] = "пересчитать поля";
+$LOCA["ru"]["ADM_PLANET_TEMP"] = "Температура";
+$LOCA["ru"]["ADM_PLANET_TEMP_FROM"] = "от";
+$LOCA["ru"]["ADM_PLANET_TEMP_TO"] = "до";
+$LOCA["ru"]["ADM_PLANET_COORD"] = "Координаты";
+$LOCA["ru"]["ADM_PLANET_RESOURCES"] = "Ресурсы";
+$LOCA["ru"]["ADM_PLANET_FACTOR"] = "Коэффициент производства";
+$LOCA["ru"]["ADM_PLANET_SAVE"] = "Сохранить";
+$LOCA["ru"]["ADM_PLANET_REMOVE"] = "Удалить";
+$LOCA["ru"]["ADM_PLANET_NEW_PLANETS"] = "Новые планеты:";
+$LOCA["ru"]["ADM_PLANET_PLAYER"] = "Игрок";
+$LOCA["ru"]["ADM_PLANET_PLAYER_NAME"] = "Имя игрока";
+$LOCA["ru"]["ADM_PLANET_NAME"] = "Имя планеты";
+$LOCA["ru"]["ADM_PLANET_ALLY_TAG"] = "Аббревиатура альянса";
+$LOCA["ru"]["ADM_PLANET_SEARCH"] = "Искать";
+$LOCA["ru"]["ADM_PLANET_SEARCH_RESULT"] = "Результаты поиска:";
+
 ?>

@@ -2,6 +2,8 @@
 
 // Gemeinsame Zeilen. Kommen auf den meisten Seiten vor.
 
+$LOCA["de"]["PAGE_TITLE"] = "Uni#1 OGame";
+
 $LOCA["de"]["METAL"] = "Metall";
 $LOCA["de"]["CRYSTAL"] = "Kristall";
 $LOCA["de"]["DEUTERIUM"] = "Deuterium";

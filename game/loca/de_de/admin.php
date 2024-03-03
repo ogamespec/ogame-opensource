@@ -139,4 +139,48 @@ $LOCA["de"]["ADM_LOCA_SOURCE"] = "Ausgangssprache:";
 $LOCA["de"]["ADM_LOCA_DEST"] = "Zielsprache:";
 $LOCA["de"]["ADM_LOCA_SUBMIT"] = "Vergleich";
 
+// admin_planets
+
+$LOCA["de"]["ADM_PLANET_SPECIFY_TEXT"] = "Geben Sie einen Suchbegriff an";
+$LOCA["de"]["ADM_PLANET_NOT_FOUND"] = "Nichts gefunden";
+$LOCA["de"]["ADM_PLANET_PLANET"] = "Planet";
+$LOCA["de"]["ADM_PLANET_BUILDINGS"] = "Gebäude";
+$LOCA["de"]["ADM_PLANET_FLEET"] = "Flotte";
+$LOCA["de"]["ADM_PLANET_DEFENSE"] = "Verteidigung";
+$LOCA["de"]["ADM_PLANET_TYPE"] = "Typ";
+$LOCA["de"]["ADM_PLANET_POINTS"] = "Punkte";
+$LOCA["de"]["ADM_PLANET_ADD_MOON"] = "Den Mond erschaffen";
+$LOCA["de"]["ADM_PLANET_ADD_DF"] = "Erstellen Sie das Trümmerfeld";
+$LOCA["de"]["ADM_PLANET_PARSE_SPY_REPORT"] = "Spionagebericht auswerten";
+$LOCA["de"]["ADM_PLANET_RESET_PARSER"] = "Zurücksetzen";
+$LOCA["de"]["ADM_PLANET_GATE_WARMUP"] = "sich aufwärmen";
+$LOCA["de"]["ADM_PLANET_GATE_COOLDOWN"] = "abkühlen";
+$LOCA["de"]["ADM_PLANET_DATE_CREATE"] = "Datum der Erstellung";
+$LOCA["de"]["ADM_PLANET_DATE_REMOVE"] = "Datum des Umzugs";
+$LOCA["de"]["ADM_PLANET_QUEUE"] = "Warteschlange bauen";
+$LOCA["de"]["ADM_PLANET_LEVEL"] = "Stufe #1";
+$LOCA["de"]["ADM_PLANET_LASTAKT"] = "Letzte Aktivität";
+$LOCA["de"]["ADM_PLANET_LASTUPD"] = "Letzte Statusaktualisierung";
+$LOCA["de"]["ADM_PLANET_DIAM"] = "Durchmesser";
+$LOCA["de"]["ADM_PLANET_KM"] = "km";
+$LOCA["de"]["ADM_PLANET_FIELDS_FROM"] = "/";
+$LOCA["de"]["ADM_PLANET_FIELDS"] = "Felder";
+$LOCA["de"]["ADM_PLANET_NEW_DIAM"] = "neuer Durchmesser";
+$LOCA["de"]["ADM_PLANET_RECALC_FIELDS"] = "Felder umrechnen";
+$LOCA["de"]["ADM_PLANET_TEMP"] = "Temperatur";
+$LOCA["de"]["ADM_PLANET_TEMP_FROM"] = "";
+$LOCA["de"]["ADM_PLANET_TEMP_TO"] = " - ";
+$LOCA["de"]["ADM_PLANET_COORD"] = "Koordinaten";
+$LOCA["de"]["ADM_PLANET_RESOURCES"] = "Ressourcen";
+$LOCA["de"]["ADM_PLANET_FACTOR"] = "Produktionsfaktor";
+$LOCA["de"]["ADM_PLANET_SAVE"] = "Speichern";
+$LOCA["de"]["ADM_PLANET_REMOVE"] = "Löschen";
+$LOCA["de"]["ADM_PLANET_NEW_PLANETS"] = "Neue Planeten:";
+$LOCA["de"]["ADM_PLANET_PLAYER"] = "Spieler";
+$LOCA["de"]["ADM_PLANET_PLAYER_NAME"] = "Name des Spielers";
+$LOCA["de"]["ADM_PLANET_NAME"] = "Name des Planeten";
+$LOCA["de"]["ADM_PLANET_ALLY_TAG"] = "Ally-Tag";
+$LOCA["de"]["ADM_PLANET_SEARCH"] = "Suche";
+$LOCA["de"]["ADM_PLANET_SEARCH_RESULT"] = "Suchergebnisse:";
+
 ?>

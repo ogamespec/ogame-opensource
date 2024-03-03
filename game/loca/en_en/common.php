@@ -2,6 +2,8 @@
 
 // Common strings. Occur on most pages.
 
+$LOCA["en"]["PAGE_TITLE"] = "Uni#1 OGame";
+
 $LOCA["en"]["METAL" ] = "Metal";
 $LOCA["en"]["CRYSTAL" ] = "Crystal";
 $LOCA["en"]["DEUTERIUM" ] = "Deuterium";
