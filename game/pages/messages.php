@@ -20,7 +20,7 @@ PageHeader ("messages");
 
 // *******************************************************************
 
-$MAXMSG = 25;        // Количество сообщений на странице.
+$MAXMSG = $prem['commander'] ? 50 : 25;        // Количество сообщений на странице.
 $uni = LoadUniverse ();
 $partial_reports = ($GlobalUser['flags'] & USER_FLAG_PARTIAL_REPORTS) != 0;
 $use_folders = ($GlobalUser['flags'] & USER_FLAG_DONT_USE_FOLDERS) == 0;    // инверсный смысл
