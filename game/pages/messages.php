@@ -5,8 +5,12 @@
 // Про галочки напротив папок.
 // Исходников HTML не сохранилось, поэтому никто толком не помнит как оно работало. Делаю так:
 // - Кнопка "ок" запоминает выбранные галки, если их тыкали руками (метод POST)
-// - Ссылка на категорию инвертирует значение галки и одновременно перезагружает сообщения с новыми настройками (метод GET)
+// - Метод 1: Ссылка на категорию инвертирует значение галки и одновременно перезагружает сообщения с новыми настройками (метод GET)
+// - Метод 2: Ссылка показывает только сообщения из выбранной категории вне зависимости от значений галочек (метод GET)
 // Если вдруг вам что-то не нравится или у вас есть исходники HTML - мы открыты к обсуждению :-)
+
+// Так как мы не знаем точного способа, выбираем метод этой переменной
+$method = 2;
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "messages", $GlobalUser['lang'] );
@@ -99,8 +103,9 @@ if ( method() === "POST" )
     }
 }
 
+// Метод 1
 // Обработка нажатия на ссылку типа сообщений для управления галочками напротив папок (Командир)
-if ( method() === "GET" && $prem['commander'] && $use_folders && key_exists('pm', $_GET) )
+if ( method() === "GET" && $prem['commander'] && $use_folders && key_exists('pm', $_GET) && $method == 1 )
 {
     $pm = intval ($_GET['pm']);
     foreach ($folders as $i=>$folder) {
@@ -140,6 +145,10 @@ if ($prem['commander'] && $use_folders) {
         $unread = UnreadMessages ($GlobalUser['player_id'], true, $folder['pm']);
         $checked = ($GlobalUser['flags'] & $folder['flag']) != 0 ? "CHECKED" : "";
 
+        if (method() === "GET" && key_exists('pm', $_GET) && $method == 2) {
+            $checked = $folder['pm'] == intval ($_GET['pm']) ? "CHECKED" : "";
+        }
+
         echo "<tr> \n";
         echo "   <th><input type=\"checkbox\" name=\"".$i."\"  $checked /></th> \n";
         echo "   <th colspan=\"2\"><a href=\"index.php?page=messages&dsp=1&pm=".$folder['pm']."&session=".$_GET['session']."\">".$folder['title']."</a></th> \n";
@@ -168,13 +177,23 @@ while ($num--)
     
     // Фильтровать сообщения по типу, если активен Командир И включено использование папок в настройках.
     if ($prem['commander'] && $use_folders) {
+
         $skip = false;
-        foreach ($folders as $i=>$folder) {
-            if ($folder['pm'] == $pm && ($GlobalUser['flags'] & $folder['flag']) == 0) {
-                $skip = true;
-                break;
+        
+        // Метод 2
+        // Ссылка показывает только сообщения из выбранной категории вне зависимости от значений галочек
+        if (method() === "GET" && key_exists('pm', $_GET) && $method == 2) {
+            $skip = $pm != intval ($_GET['pm']);
+        }
+        else {
+            foreach ($folders as $i=>$folder) {
+                if ($folder['pm'] == $pm && ($GlobalUser['flags'] & $folder['flag']) == 0) {
+                    $skip = true;
+                    break;
+                }
             }
         }
+
         if ($skip) continue;
     }
 
