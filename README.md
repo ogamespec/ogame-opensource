@@ -38,13 +38,6 @@ Features:
 
 All copyrighted material is proprietary Gameforge stuff. We do not make money on it! We just have fun =)
 
-## Progress
-
-The game is almost done. TODO list:
-- Improve admin tool
-- Improve bots AI
-- Complete game localization (De, En)
-
 ## Credits
 
 Credits go to Alexander Rösner (Legor) for such revolutionary breakthrough in browser games.
