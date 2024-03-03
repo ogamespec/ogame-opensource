@@ -265,6 +265,7 @@ function RenamePlanet ($planet_id, $name)
 function DestroyPlanet ($planet_id)
 {
     global $db_prefix;
+    FlushQueue ($planet_id);
     $query = "DELETE FROM ".$db_prefix."planets WHERE planet_id = $planet_id";
     dbquery ($query);
 }
@@ -427,6 +428,11 @@ function DestroyMoon ($moon_id, $when, $fleet_id)
     // Перенаправить возвращающиеся и улетающие флоты на планету.
     $query = "UPDATE ".$db_prefix."fleet SET start_planet = ".$planet['planet_id']." WHERE start_planet = $moon_id;";
     dbquery ( $query );
+
+    // Модифицировать статистику игрока
+    $pp = PlanetPrice ($moon);
+    AdjustStats ( $moon['owner_id'], $pp['points'], $pp['fpoints'], 0, '-' );
+    RecalcRanks ();
 
     // Всё остальное уничтожается безвозвратно
     DestroyPlanet ( $moon_id );

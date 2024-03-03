@@ -171,6 +171,23 @@ function UpdateQueue ($until)
     while ( $queue = dbarray ($result) ) Queue_Coupon_End ($queue);
 }
 
+// Отменить все строительные задачи на планете/луне. Вызывается перед её удалением.
+function FlushQueue ($planet_id)
+{
+    global $db_prefix;
+    // Удалить очередь на верфи
+    $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'Shipyard' AND sub_id = " . $planet_id;
+    dbquery ( $query );
+    // Удалить очередь построек
+    $result = GetBuildQueue ($planet_id);
+    while ( $row = dbarray ($result) ) {
+        $query = "DELETE FROM ".$db_prefix."queue WHERE (type = 'Build' OR type = 'Demolish') AND sub_id = " . $row['id'];
+        dbquery ( $query );
+    }
+    $query = "DELETE FROM ".$db_prefix."buildqueue WHERE planet_id = " . $planet_id;
+    dbquery ( $query );
+}
+
 // ===============================================================================================================
 // Постройки
 
