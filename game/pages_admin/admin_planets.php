@@ -31,7 +31,9 @@ function Admin_Planets ()
 
             $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
             foreach ( $param as $i=>$p ) {
-                if ( strpos ( $p, "prod") ) $query .= ", $p='".$_POST[$p]."'";
+                if ( strpos ( $p, "prod") ) {
+                    if (key_exists($p, $_POST)) $query .= ", $p='".$_POST[$p]."'";
+                }
                 else {
                     if ( $i == 0 ) $query .= "$p=".intval($_POST[$p]);
                     else $query .= ", $p=".intval($_POST[$p]);
