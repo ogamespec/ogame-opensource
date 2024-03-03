@@ -370,7 +370,18 @@ function ChangeActivationCode ( $name)
 function SelectPlanet ($player_id, $cp)
 {
     global $db_prefix;
-    $planet = GetPlanet ($cp);    // Нельзя выбирать чужие планеты.
+    $planet = GetPlanet ($cp);
+    // Если планету не удалось загрузить (такое бывает например когда открыта страница с уничтоженной луной), 
+    // попробовать загрузить главную планету игрока.
+    if (!$planet) {
+        $user = LoadUser ($player_id);
+        $cp = $user['hplanetid'];
+        $planet = GetPlanet ($cp);
+        if (!$planet) {
+            Error ("Error loading the current planet.");
+        }
+    }
+    // Нельзя выбирать чужие планеты.
     if ($planet['owner_id'] != $player_id || $planet['type'] >= 10000 )
     {
         Hacking ( "HACK_SELECT_PLANET" );
