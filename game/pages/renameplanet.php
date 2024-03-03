@@ -5,6 +5,7 @@
 $RenameError = "";
 
 loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "renameplanet", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -25,16 +26,16 @@ function PlanetDestroyMenu ()
     echo "<!-- CONTENT AREA -->\n";
     echo "<div id='content'>\n";
     echo "<center>\n\n";
-    echo "<h1>Переименовать/покинуть планету</h1>\n";
+    echo "<h1>".loca("REN_TITLE")."</h1>\n";
     echo "<form action=\"index.php?page=renameplanet&session=".$_GET['session']."&pl=".$aktplanet['planet_id']."\" method=\"POST\">\n";
     echo "<input type='hidden' name='page' value='renameplanet'>\n";
     echo "<center>\n\n";
     echo "<table width=\"519\">\n";
-    echo "<tr><td class=\"c\" colspan=\"3\">Вопросы на всякий случай</td></tr>\n";
-    echo "<tr><th colspan=\"3\">Уничтожение планеты [".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."] подтвердить паролем</th></tr>\n";
+    echo "<tr><td class=\"c\" colspan=\"3\">".loca("REN_WARNING")."</td></tr>\n";
+    echo "<tr><th colspan=\"3\">".va(loca("REN_DELETE_INFO"), "[".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."]")."</th></tr>\n";
     echo "<tr><input type=\"hidden\" name=\"deleteid\" value =\"".$aktplanet['planet_id']."\">\n";
-    echo "<th>Пароль</th><th><input type=\"password\" name=\"pw\"></th>\n";
-    echo "<th><input type=\"submit\" name=\"aktion\" value=\"Удалить планету!\" alt=\"Покинуть колонию\"></th></tr>\n";
+    echo "<th>".loca("REN_PASSWORD")."</th><th><input type=\"password\" name=\"pw\"></th>\n";
+    echo "<th><input type=\"submit\" name=\"aktion\" value=\"".loca("REN_DELETE_PLANET")."\" alt=\"".loca("REN_ABANDON_COLONY")."\"></th></tr>\n";
     echo "</table>\n</form>\n</center>\n\n";
     echo "<br><br><br><br>\n";
     echo "</center>\n";
@@ -49,23 +50,23 @@ function PlanetDestroyMenu ()
 // Обработка POST-запросов.
 if ( method() === "POST" )
 {
-    if ( $_POST['aktion'] === "Переименовать" )
+    if ( $_POST['aktion'] === loca("REN_RENAME") )
     {
         RenamePlanet ( $GlobalUser['aktplanet'], $_POST['newname'] );
         $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
     }
-    else if ( $_POST['aktion'] === "Покинуть колонию" )
+    else if ( $_POST['aktion'] === loca("REN_ABANDON_COLONY") )
     {
         PlanetDestroyMenu ();
     }
-    else if ( $_POST['aktion'] === "Удалить планету!" )
+    else if ( $_POST['aktion'] === loca("REN_DELETE_PLANET") )
     {
         // Проверить пароль.
         if ( CheckPassword ( $GlobalUser['name'], $_POST['pw']) == 0 )
         {
             $RenameError = "<center>\n" . 
-                                   "Пароль неверный.<BR><BR>  Если Вы забыли пароль, нажмите <A HREF=reg/mail.php>сюда</A> <BR><BR>  или  попробуйте <a\n" .
-                                   "href=".hostname()." target='_top'> ещё раз</a> .<br></center>\n\n" ;
+                        va (loca("REN_ERROR_PASSWORD"), "<A HREF=reg/mail.php>", "</A>", "<a\nhref=".hostname()." target='_top'>", "</a>") .
+                        "<br></center>\n\n" ;
         }
         else
         {
@@ -74,18 +75,18 @@ if ( method() === "POST" )
             if ( $planet['owner_id'] == $GlobalUser['player_id'] )
             {
                 // Главную планету нельзя удалить.
-                if ( intval($_POST['deleteid']) == $GlobalUser['hplanetid'] ) $RenameError = "<center>\nНельзя покинуть главную планету!<br></center>\n";
+                if ( intval($_POST['deleteid']) == $GlobalUser['hplanetid'] ) $RenameError = "<center>\n".loca("REN_ERROR_HOME_PLANET")."<br></center>\n";
                 else
                 {
                     $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = " . intval($_POST['deleteid']) . " AND owner_id = " . $GlobalUser['player_id'];
                     $result = dbquery ( $query );
-                    if ( dbrows ($result) > 0 ) $RenameError = "<center>\nВаши флоты ещё на пути к этой планете!<br></center>\n";
+                    if ( dbrows ($result) > 0 ) $RenameError = "<center>\n".loca("REN_ERROR_FLEET_INCOME")."<br></center>\n";
 
                     if ( $RenameError === "" )
                     {
                         $query = "SELECT * FROM ".$db_prefix."fleet WHERE start_planet = " . intval($_POST['deleteid']);
                         $result = dbquery ( $query );
-                        if ( dbrows ($result) > 0 ) $RenameError = "<center>\nФлоты с этой планеты ещё не вернулись!<br></center>\n";
+                        if ( dbrows ($result) > 0 ) $RenameError = "<center>\n".loca("REN_ERROR_FLEET_OUTCOME")."<br></center>\n";
                     }
 
                     if ( $RenameError === "" )
@@ -139,19 +140,19 @@ PageHeader ("renameplanet");
 echo "<!-- CONTENT AREA -->\n";
 echo "<div id='content'>\n";
 echo "<center>\n";
-echo "<h1>Переименовать/покинуть планету</h1>\n";
+echo "<h1>".loca("REN_TITLE")."</h1>\n";
 echo "<form action=\"index.php?page=renameplanet&session=".$_GET['session']."&pl=".$aktplanet['planet_id']."\" method=\"POST\">\n";
 echo "<input type='hidden' name='page' value='renameplanet'>\n";
 echo "<center>\n";
 echo "<table width=519>\n";
-echo "  <tr>\n    <td class=\"c\" colspan=\"3\">Информация о планете</td>\n  </tr>\n";
-echo "  <tr>\n    <th>Координаты</th><th>Название</th><th>Функции</th>\n  </tr>\n";
+echo "  <tr>\n    <td class=\"c\" colspan=\"3\">".loca("REN_PLANET_INFO")."</td>\n  </tr>\n";
+echo "  <tr>\n    <th>".loca("REN_COORD")."</th><th>".loca("REN_NAME")."</th><th>".loca("REN_ACTIONS")."</th>\n  </tr>\n";
 echo "  <tr>\n    <th>".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."</th>\n";
 echo "    <th>".$name."</th>\n";
-echo "    <th><input type=\"submit\" name=\"aktion\" value=\"Покинуть колонию\" alt=\"Покинуть колонию\"></th>\n  </tr>\n";
-echo "  <tr>\n    <th>Переименовать</th>\n";
+echo "    <th><input type=\"submit\" name=\"aktion\" value=\"".loca("REN_ABANDON_COLONY")."\" alt=\"".loca("REN_ABANDON_COLONY")."\"></th>\n  </tr>\n";
+echo "  <tr>\n    <th>".loca("REN_RENAME")."</th>\n";
 echo "  	<th><input type=\"text\" name=\"newname\" size=\"25\" maxlength=\"".$maxlen."\"><br/></th>\n";
-echo "  <th><input type=\"submit\" name=\"aktion\" value=\"Переименовать\"></th>\n</tr>\n";
+echo "  <th><input type=\"submit\" name=\"aktion\" value=\"".loca("REN_RENAME")."\"></th>\n</tr>\n";
 echo "</table>\n</form>\n";
 echo "</center>\n\n";
 echo "<br><br><br><br>\n</center>\n</div>\n";
