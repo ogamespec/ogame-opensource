@@ -147,7 +147,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
     <th><?php echo $row;?></th>
 
     <th>
-<?
+<?php
     echo FleetMissionText ($fleet['mission']);
 ?>
     </th>
