@@ -89,64 +89,60 @@ function fixed_date ( $fmt, $timestamp )
     return $date->format ($fmt);
 }
 
-function mail_utf8($to, $subject = '(No subject)', $message = '', $header = '') {
-  $header_ = 'MIME-Version: 1.0' . "\n" . 'Content-type: text/plain; charset=UTF-8' . "\n";
-  mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $header_ . $header);
-}
-
-// Выслать приветственное письмо с ссылкой для активации аккаунта.
+// Выслать приветственное письмо с ссылкой для активации аккаунта (на языке вселенной).
 function SendGreetingsMail ( $name, $pass, $email, $ack)
 {
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
-    $text = "Приветствуем $name,\n\n" .
-                "Вы решили создать свою империю в $uni-й вселенной ОГейма!\n\n" .
-                "Нажмите на эту ссылку для активации Вашего аккаунта:\n" .
-                hostname()."game/validate.php?ack=$ack\n\n" .
-                "Ваши игровые данные:\n" .
-                "Игровое имя: $name\n" .
-                "Пароль: $pass\n" .
-                "Вселенная: $uni\n\n\n" .
-                "Если Вам понадобится помощь или совет других императоров, то всё это Вы сможете найти на нашем форуме (http://board.oldogame.ru).\n\n" .
-                "Здесь (http://tutorial.oldogame.ru) собрана вся информация, собранная игроками и членами команды для того, чтобы помочь новичкам как можно быстрее разобраться в игре.\n\n" .
-                "Желаем успехов в построении империи и удачи в предстоящих боях!\n\n" .
-                "Ваша команда ОГейма";
-    mail_utf8 ( $email, "Добро пожаловать в ОГейм ", $text, "From: OGame Uni ru $uni <noreply@oldogame.ru>");
+    loca_add ("reg", $unitab['lang']);
+
+    $text = va ( loca_lang("REG_GREET_MAIL_BODY", $unitab['lang']), 
+        $name,
+        $uni,
+        hostname()."game/validate.php?ack=$ack",
+        $name,
+        $pass,
+        $uni );
+    if (!empty($unitab['ext_board'])) {
+        $text .= va (loca_lang("REG_GREET_MAIL_BOARD", $unitab['lang']), $unitab['ext_board']);
+    }
+    if (!empty($unitab['ext_tutorial'])) {
+        $text .= va (loca_lang("REG_GREET_MAIL_TUTORIAL", $unitab['lang']), $unitab['ext_tutorial']);
+    }
+    $text .= loca_lang ("REG_GREET_MAIL_FOOTER", $unitab['lang']);
+
+    $domain = "";   // ru, org..
+    mail_utf8 ( $email, loca_lang ("REG_GREET_MAIL_SUBJ", $unitab['lang']), $text, "From: OGame Uni $domain $uni <noreply@".hostname().">");
 }
 
-// Выслать письмо, подтверждающее смену адреса.
+// Выслать письмо, подтверждающее смену адреса (на языке вселенной).
 function SendChangeMail ( $name, $email, $pemail, $ack)
 {
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
-    $text = "Приветствуем $name,\n\n" .
-               "временный адрес e-mail Вашего аккаунта в $uni-й вселенной был изменён в настройках на $email.\n" .
-               "Если Вы его не измените в течение недели, то он станет постоянным.\n\n" .
-               "Чтобы беспрепятственно продолжить игру, подтвердите ваш новый адрес e-mail по следующей ссылке:\n\n" .
-               hostname()."game/validate.php?ack=$ack\n\n" .
-               "Ваша команда OGame";
-    mail_utf8 ( $pemail, "Ваш игровой электронный адрес изменён ", $text, "From: OGame Uni ru $uni <noreply@oldogame.ru>");
+    loca_add ("reg", $unitab['lang']);
+    
+    $text = va (loca_lang("REG_CHANGE_MAIL_BODY", $unitab['lang']), 
+        $name,
+        $uni,
+        $email,
+        hostname()."game/validate.php?ack=$ack" );
+
+    $domain = "";   // ru, org..
+    mail_utf8 ( $pemail, loca_lang ("REG_CHANGE_MAIL_SUBJ", $unitab['lang']), $text, "From: OGame Uni $domain $uni <noreply@".hostname().">");
 }
 
-// Выслать приветственное сообщение.
+// Выслать приветственное сообщение (на языке пользователя)
 function SendGreetingsMessage ( $player_id)
 {
-    SendMessage ( $player_id, "Командование флотом", "Добро пожаловать в ОГейм!", 
-        bb ( "Добро пожаловать в [b]OGame[/b] !\n"
-        . "\n"
-        . "Для начала Вам необходимо развить рудники.\n"
-        . "Это можно сделать в меню \"постройки\".\n"
-        . "Выберите рудник по добыче металла и нажмите на \"строить\".\n"
-        . "Теперь у Вас есть немного времени для ознакомления с игрой.\n"
-        . "Помощь по игре Вы можете найти по этим ссылкам: \n"
-        . "[url=http://tutorial.oldogame.ru/]Туториал[/url]\n"
-        . "[url=http://board.oldogame.ru]Форум[/url]\n"
-        . "\n"
-        . "Тем временем Ваш рудник уже должен построиться.\n"
-        . "Для работы рудников необходима энергия, для её получения постройте солнечную электростанцию.\n"
-        . "Для этого снова зайдите в меню \"постройки\" и кликните на электростанции.\n"
-        . "Для того, чтобы посмотреть, насколько далеко Вы зашли в развитии, зайдите в меню \"Технологии\".\n"
-        . "Итак, Ваш победный поход по вселенной начался... Удачи!\n" ), 5 );
+    $unitab = LoadUniverse ();
+    $user = LoadUser ($player_id);
+    loca_add ("reg", $user['lang']);
+    loca_add ("fleetmsg", $user['lang']);
+    SendMessage ( $player_id, 
+        loca_lang ("FLEET_MESSAGE_FROM", $user['lang']), 
+        loca_lang ("REG_GREET_MSG_SUBJ", $user['lang']), 
+        bb ( va(loca_lang("REG_GREET_MSG_TEXT", $user['lang']), $unitab['ext_board'], $unitab['ext_tutorial']) ), 5 );
 }
 
 function IsUserExist ( $name)
@@ -455,7 +451,7 @@ function IsPlayerStrong ( $player_id)
     return true;
 }
 
-// Получить статус командиров на аккаунте.
+// Получить статус командира и остальных офицеров на аккаунте.
 function PremiumStatus ($user)
 {
     global $PremiumCache;
