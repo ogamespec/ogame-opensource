@@ -645,6 +645,7 @@ function InvalidSessionPage ()
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
 
+    loca_add ("common", $GlobalUser['lang']);
     loca_add ("reg", $GlobalUser['lang']);
 
     $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], loca("REG_SESSION_INVALID"), time() );
@@ -654,12 +655,12 @@ function InvalidSessionPage ()
     echo "  <link rel='stylesheet' type='text/css' href='css/default.css' />\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/formate.css' />\n";
     echo "  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n";
-    echo "  <title>".va(loca("PAGE_TITLE"), $uni)."</title>\n";
+    echo "  <title>".va(loca_lang("PAGE_TITLE", $GlobalUser['lang']), $uni)."</title>\n";
     echo " </head>\n";
     echo " <body>\n";
     echo "  <center><font size='3'><b>    <br /><br />\n";
-    echo "    <font color='#FF0000'>".loca("REG_SESSION_ERROR")."</font>\n";
-    echo loca("REG_SESSION_ERROR_BODY");
+    echo "    <font color='#FF0000'>".loca_lang("REG_SESSION_ERROR", $GlobalUser['lang'])."</font>\n";
+    echo loca_lang("REG_SESSION_ERROR_BODY", $GlobalUser['lang']);
     echo "    Error-ID: ".$id."  </b></font></center> </body></html>\n";
 }
 
