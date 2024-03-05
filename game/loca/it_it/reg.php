@@ -49,4 +49,48 @@ $LOCA["it"]["REG_ERROR_23"] = "Premi qui per ritornare alla homepage: <a href='#
 $LOCA["it"]["REG_ERROR_24"] = "In alternativa puoi creare un nuovo account: <a href='new.php'>Crea</a>.";
 $LOCA["it"]["REG_ERROR_31"] = "Questo account &egrave; bannato fino al #1<br><br> Per ulteriori informazioni puoi visualizzare la lista bannati <a href=../pranger.php>QUI</a>.";
 
+// user.php
+
+$LOCA["it"]["REG_GREET_MAIL_SUBJ"] = "Registrazione a OGame ";
+$LOCA["it"]["REG_GREET_MAIL_BODY"] = "Ciao #1,\n\n" .
+                "Grazie per esserti iscritto a OGame  #2!\n\n" .
+                "Per convalidare il tuo account clicca sul seguente link:\n" .
+                "#3\n\n" .
+                "Di seguito i tuoi dati di accesso:\n" .
+                "Username: #4\n" .
+                "Password: #5\n" .
+                "Universo: #6\n\n\n";
+$LOCA["it"]["REG_GREET_MAIL_BOARD"] = "Se hai bisogno di aiuto o di consigli da parte di altri imperatori, puoi trovare tutto nel nostro forum (#1).\n\n";
+$LOCA["it"]["REG_GREET_MAIL_TUTORIAL"] = "Qui (#1) ci sono tutte le informazioni raccolte dai giocatori e dai membri della squadra per aiutare i nuovi arrivati a capire il gioco il più rapidamente possibile.\n\n";
+$LOCA["it"]["REG_GREET_MAIL_FOOTER"] = "Vi auguriamo successo nella costruzione del vostro impero e buona fortuna nelle prossime battaglie! Lo staff di OGame.\n\n\n\n\n\n";
+
+$LOCA["it"]["REG_CHANGE_MAIL_SUBJ"] = "Attivazione account OGame ";
+$LOCA["it"]["REG_CHANGE_MAIL_BODY"] = "Ciao #1,\n\n" .
+               "Hai richiesto la convalida dell'account di OGame Universo #2 inserendo l'indirizzo email #3.\n" .
+               "\n\n" .
+               "Per convalidare il tuo account clicca sul seguente link:\n\n" .
+               "#4\n\n" .
+               "Il team di OGame";
+
+$LOCA["it"]["REG_GREET_MSG_SUBJ"] = "Benvenuto su OGame!";
+$LOCA["it"]["REG_GREET_MSG_TEXT"] = "Ciao, benvenuto su [b]OGame[/b] !\n" .
+        "\n" .
+        "Per farlo clicca su \"Costruzioni\" nel menù a sinistra, seleziona la Miniera di metallo e clicca su Costruisci.\n" .
+        "Ora hai un pò di tempo per conoscere il gioco.\n" .
+        "\n" .
+        "\n" .
+        "Puoi trovare aiuto: Nel [url=#1/]Tutorial[/url] \n" .
+        "Nel [url=#2/]Forum[/url]\n" .
+        "\n" .
+        "\n" .
+        "Ormai la tua miniera dovrebbe essere terminata.\n" .
+        "La miniera non produce niente se non ha energia, devi quindi costruire una Centrale Solare. Torna quindi su \"Costruzioni\", seleziona la Centrale Solare e costruiscila.\n" .
+        "Per avere una panoramica delle navi, delle strutture di difesa, delle costruzioni e dei centri di ricerca che puoi costruire, clicca su Albero Tecnologico nel men&ugrave; a sinistra.\n" .
+        "\n" .
+        "Ora sei pronto per partire alla conquista della galassia...Buon inizio!\n";
+
+// logout
+
+$LOCA["it"]["REG_LOGOUT"] = "Alla prossima!!";
+
 ?>
