@@ -186,7 +186,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     foreach ( $plist as $i=>$planet )
     {
         $res_hourly = prod_metal ($planet['b1'], $planet['mprod']) * $planet['factor'] * $speed + 20*$speed;
-        $res = ceil ( $planet['m'] );
+        $res = floor ( $planet['m'] );
         $total += $res;
         $avg_prod += $res_hourly;
         echo "             <th width=\"75\" >\n";
@@ -212,7 +212,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     foreach ( $plist as $i=>$planet )
     {
         $res_hourly = prod_crys ($planet['b2'], $planet['kprod']) * $planet['factor'] * $speed + 10*$speed;
-        $res = ceil ( $planet['k'] );
+        $res = floor ( $planet['k'] );
         $total += $res;
         $avg_prod += $res_hourly;
         echo "             <th width=\"75\" >\n";
@@ -238,7 +238,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     foreach ( $plist as $i=>$planet )
     {
         $res_hourly = prod_deut ($planet['b3'], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed - cons_fusion ( $planet['b12'], $planet['fprod'] ) * $speed;
-        $res = ceil ( $planet['d'] );
+        $res = floor ( $planet['d'] );
         $total += $res;
         $avg_prod += $res_hourly;
         echo "             <th width=\"75\" >\n";
