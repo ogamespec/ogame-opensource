@@ -299,7 +299,7 @@ require_once "loca.php";
         loca_add("LOGIN_CONFIRM" , "En me loggant, j'accepte les ");
         loca_add("LOGIN_IMPRESSUM" , "conditions générales");
         loca_add("LOGIN_REMIND" , "Vous avez oublié votre mot de passe ?");
-        loca_add("LOGIN_NOTCHOSEN" , "You haven\'t chosen a universe.");
+        loca_add("LOGIN_NOTCHOSEN" , "Vous n\'avez pas choisi d\'univers.");
 
         loca_add("CHOOSELANG" , "Choisissez votre langue");
         loca_add("COPYRIGHT" , "Tous droits réservés.");
@@ -384,6 +384,130 @@ require_once "loca.php";
         loca_add("INSTALL_INSTALL", "Install");
         loca_add("INSTALL_ERROR1", "Impossible d'enregistrer le fichier de configuration.");
         loca_add("INSTALL_DONE", "Installation terminée. Fichier de configuration créé.");
+    }
+
+    // "it"
+    $LocaLang = "it";
+    {
+        loca_add("SERVERNAME" , "OGame Open Source");
+        loca_add("BOARDADDR"  , "");
+        loca_add("WIKIADDR"   , "");
+
+        loca_add("META_CHARSET" , "utf-8");
+        loca_add("META_KEYWORDS" , "OGame, Browsergame, Onlinegame, Browsergames, Browsergame, Spiel, Spiele, Onlinespiel, Onlinespiele, old, old deisgn");
+        loca_add("META_DESCRIPTION" , "OGame - Top Browsergame im Weltraum. Kommandiere deine Flotten.");
+
+        loca_add("ERROR_0" , "Ok");
+        loca_add("ERROR_101" , "Il nome del giocatore è già usato!");
+        loca_add("ERROR_102" , "L\'indirizzo E-mail è già in uso!");
+        loca_add("ERROR_103" , "Il nome deve contenere minimo 3 e massimo 20 caratteri!");
+        loca_add("ERROR_104" , "Inserisci un indirizzo mail valido!");
+        loca_add("ERROR_105" , "Nome del giocatore OK");
+        loca_add("ERROR_106" , "Indirizzo mail OK");
+        loca_add("ERROR_107" , "Devi inserire un indirizzo mail valido!");
+        loca_add("ERROR_108" , "Non è possibile registrarsi dallo stesso IP nei prossimi 10 minuti!");
+        loca_add("ERROR_109" , "Il numero massimo di giocatori è stato raggiunto!");
+
+        loca_add("TIP_201" , "Nome nel gioco: <br />Questo è il nome che userai in gioco. Esso è unico in tutto l\'universo.");
+        loca_add("TIP_202" , "Indirizzo mail: <br />Inserisci un indirizzo mail valido per attivare il tuo account. Hai 3 giorni per attivare il tuo account, durante questi 3 giorni potete iniziare a giocare.");
+        loca_add("TIP_203" , "");
+        loca_add("TIP_204" , "T&C: <br />Accetta i T&C (Termini e Condizioni) per giocare ad OGame.");
+        loca_add("TIP_205" , "Password:<br/>La password protegge il vostro account da accessi estranei. Non dare la tua password a nessuno!.");
+
+        loca_add("MENU_START",       "Pagina Iniziale");
+        loca_add("MENU_ABOUT",       "A proposito di OGame");
+        loca_add("MENU_PICTURES",    "Immagini");
+        loca_add("MENU_REG",         "Registrati ora!");
+        loca_add("MENU_BOARD",       "Forum");
+        loca_add("MENU_WIKI",        "Wiki");
+
+        loca_add("LOGIN_LINK" , "Link Login");
+        loca_add("LOGIN_NAME" , "Nick di gioco");
+        loca_add("LOGIN_PASS" , "Password");
+        loca_add("LOGIN_CHOOSE_UNI" , "Scegli un universo...");
+        loca_add("LOGIN_UNI" , "Universo");
+        loca_add("LOGIN_CONFIRM" , "Entrando, accetti i");
+        loca_add("LOGIN_IMPRESSUM" , "T&C;");
+        loca_add("LOGIN_REMIND" , "Hai dimenticato la tua password?");
+        loca_add("LOGIN_NOTCHOSEN" , "Non hai scelto nessun universo.");
+
+        loca_add("CHOOSELANG" , "Scegliere la lingua");
+        loca_add("COPYRIGHT" , "Tutti i diritti riservati.");
+        loca_add("DOWN_RULES" , "Regole");
+        loca_add("DOWN_IMPRINT" , "Contatti");
+        loca_add("DOWN_TAC" , "T&C;");
+
+        loca_add("HOME_TITLE",  "Benvenuti a OGame");
+        loca_add("HOME_TEXT1",  "<strong>OGame</strong> è un <strong>gioco strategico di simulazione spaziale</strong> con <strong>migliaia di giocatori</strong> impegnati <strong>contemporaneamente</strong>, all'interno del medesimo universo, a competere fra di loro.. Tutto ciò che vi serve è uno standard browser web.");
+        loca_add("HOME_TEXT2",  "Registrati ora ed entra nel fantastico mondo di OGame!");
+        loca_add("HOME_BIGBUTTON",  "Gioca ora, gratis!");
+
+        loca_add("ABOUT_TITLE",  "Cosa è OGame?");
+        loca_add("ABOUT_TEXT1",  " OGame è un gioco di conquista intergalattica. ");
+        loca_add("ABOUT_TEXT2",  "Inizi con un solo mondo, non ancora sviluppato e il tuo compito è renderlo un <strong>grande impero</strong> in grado di difendere le tue colonie faticosamente guadagnate.");
+        loca_add("ABOUT_TEXT3",  "Crea <strong>infrastrutture economiche e militari</strong> per supportare lo sviluppo tecnologico.");
+        loca_add("ABOUT_TEXT4",  "<strong>Porta la Guerra</strong> contro gli altri imperi, lotta contro gli altri giocatori per ottenere le loro risorse. ");
+        loca_add("ABOUT_TEXT5",  "<strong>Negozia</strong> con gli altri imperatori e crea un'alleanza o commercia per ottenere le risorse di cui hai bisogno. ");
+        loca_add("ABOUT_TEXT6",  "<strong>Costruisci una flotta</strong> per estendere il tuo dominio su tutto l'universo.");
+        loca_add("ABOUT_TEXT7",  "<strong>Proteggi le tue risorse</strong> dietro un impenetrabile muro di difese planetarie.");
+        loca_add("ABOUT_TEXT8",  "Qualunque cosa desideri fare, <strong>OGame ti permette di farla.</strong>");
+        loca_add("ABOUT_TEXT9",  "Terrorizzerai l'area intorno a te? Oppure incuterai timore a quelli che attaccheranno i più deboli?");
+        loca_add("ABOUT_STORY",  "Leggi la storia di Ogame");
+
+        loca_add("STORY_TITLE", "Storia");
+        loca_add("STORY_HEAD", "La storia di OGame");
+        loca_add("STORY_TEXT", "
+<p><img src=\"img/ogame_technokrat.jpg\" class=\"imageRight\"> Questa è la storia di una specie, una razza - la nostra razza, quella umana.</p> <p>La cosa più strana è che ciò che racconta questa storia non è ancora successo, ma dev'essere raccontata comunque. Una volta tanto scoprirai che il tempo scorre in parallelo, che tutto ciò che accadde in passato forma il presente, così come il presente fonda le basi per il futuro. È stato scoperto un modo di visitare il passato senza alterare il futuro, infatti si può solo alterare il futuro se lo si vive per se stessi. Può essere difficile da capire ma è vero. Solo sapendo che qualcosa è accaduto lo si può cambiare, perchè diventa parte del proprio passato. Semplicemente si scompare, da lì in avanti, non ci sono cambiamenti, perchè questo è già il passato... il tuo passato.</p>
+      <p>
+       <img src=\"img/fight.gif\" class=\"imageRight\">
+      Iniziò tutto nell'anno 2250 - l'anno 'alpha' - quando il primo uomo corse il rischio di un viaggio interstellare di più di tre minuti arrivando così più lontano di quanto siano arrivate le precedenti sonde o missioni. </p>
+      <img src=\"img/ogame_ingenieur.jpg\" class=\"imageLeft\">
+      <p>Si trattava di un nuovo tipo di motore, chiamato Propulsore a impulso, che permise all'umanità di viaggiare alla velocità della luce. Sì, certo, ci sono stati viaggi spaziali anche in precedenza, ma quelli erano limitati, una mera occhiata allo spazio, se confrontati con i risultati successivi. Ma l'impulso naturale dell'umanità verso nuove avventure continuò a spingere lo sviluppo avanti e aumentando sempre più i voli spaziali nel corso degli anni. Certamente la competizione delle compagnie aerospaziali coinvolte ha aiutato l'avanzamento tecnologico e lo sbocciare di nuove invenzioni; mentre le Boing Industries continuavano a fare affidamento ai propri vecchi propulsori a combustione che furono banditi dall'atmosfera terrestre, la rivale ErBus cercò di superare i numerosi problemi che incontrarono con i loro propulsori ad impulso. Gli inconvenienti e le esplosioni avevano in un primo tempo oscurato la visione della nuova tecnologia, ma nel processo di sviluppo le particelle Y furono rimpiazzate da un composto chimico, più sicuro, grazie al contributo teorico del ben noto fisico particellare Al Ainstonec.Solo leggermente in secondo piano, anche le compagnie minori e i gruppi privati sentirono il bisogno dell'esplorazione spaziale e la richiesta di motori migliori, più efficienti e veloci era nell'aria. </p>
+      <img src=\"img/ogame_geologe.jpg\" class=\"imageRight\">
+       <p>I motori moderni usavano carburante a base di deuterio altamente energetico, capaci di viaggi intergalattici relativamente brevi. Sfortunatamente questo deuterio era molto raro, sulla terra solo lo 0.015% di tutta l'acqua conteneva questo isotopo pesante. Successivamente anche il miglior deuterio non era più sufficiente e nacque un nuovo dibattito scientifico riguardante i modi per creare un carburante migliore dello stesso deuterio. Basandosi su una teoria ben nota, si credeva possibile combinare il deuterio con un gas misterioso, emesso dall'esplosione dei quasar. La reazione chimico-quantistica con questa miscela avrebbe liberato enormi quantità d'energia, così tanta che le navi avrebbero potuto viaggiare sempre più velocemente. Lo scienziato Fred Terrane si rimboccò le maniche e iniziò ad elaborare un motore basato su quella teoria. Nonostante le critiche da quasi tutti gli ambienti scientifici, il nuovo sistema di propulsione dimostrò che la teoria funzionava - anche se basandosi sull'attuale livello di conoscenza scientifica, non avrebbe dovuto. Nelle applicazioni la nuova tecnologia provò di essere all'altezza delle sue promesse e la civiltà poterono espandersi sempre più con una velocità e facilità mai immaginate prima.</p>
+       <img src=\"img/light.gif\" class=\"imageRight\">
+       <p> C'era spazio più che sufficiente per colonizzare e così la pace e la prosperità si diffusero velocemente nell'universo e tutto rimase così per molte decadi. Furono scoperte molte nuove culture e ne furono anche create di nuove e la vita si espanse in ogni angolo dell'universo
+L'Universo era luminoso e in pace. Ma era la quiete prima della tempesta... </p><p>Anche dopo questo periodo prospero furono cercate nuove tecnologie di propulsione. Basandosi sulle vecchie teorie e, alla fine, combinandole con la brama di un giovane studente, fu creata una tecnologia di propulsione che superò tutte quelle conosciute fino ad allora... </p><p><img src=\"img/hyper.gif\" class=\"imageLeft\">La tecnologia del motore Iperspaziale. In pratica un bolla iper dimensionale appartenente alla quarta e quinta dimensione, ma capace di isolare il proprio interno da queste influenze e obbedendo alle leggi dello spazio quadridimensionale. C'è una sottile linea di visione della galassia in direzione del movimento. Usando tecnologie di propulsione incredibili, gli esploratori poterono andare sempre oltre nello spazio profondo e la colonizzazione si velocizzò notevolmente grazie alla diminuzione dei tempi di viaggio. Ancora una volta, era iniziata una nuova era, la velocità dello sviluppo aumentò e molti nuovi mondi furono scoperti. La diplomazia era massiccia in quei tempi e non c'erano grandi conflitti razziali. Fino a quando non venne scoperto su una colonia un nuovo elemento chimico, chiamato Xenotronio. La guerra era alle porte... </p><p>Questo elemento chimico era estremamente raro da trovare e, durante i primi anni dopo la sua scoperta, ne furono trovati solo 1.5 microgrammi. Siccome fu trovato su suolo terrestre, solo i laboratori dei terrestri poterono studiare questo nuovo elemento. Si credeva che lo Xenotronio avesse la potenza di 10000 soli terrestri!!! Una volta che questa conoscenza si diffuse nel'universo, suscitò l'invidia e causò conflitti tra nazioni che finirono tristemente in guerra. Subito vennero stabiliti due partiti: quelli della fazione terrestre e quelli contro i terrestri. </p>
+      <img src=\"img/omega.gif\" class=\"imageRight\">
+       <p>Nostradamus disse una volta che la guerra sarebbe durata 150 anni, ma fu smentito dato che essa ne durò ben più di 300. Migliaia e migliaia di nazioni furono straziate, caddero o vennero annientate.
+I nemici della federazione terrestri cominciarono ad utilizzare delle armi sconosciute, chiamate \"bombe omega\". Come suggerisce il nome, l'uso di queste armi spazza via intere parti di galassie, liberandole da ogni tipo di civilizzazione. Centinaia d'anni dopo l'anno alpha, l'universo affrontava l'arma più pericolosa e mortale mai creata; la galassia veniva distrutta un sistema solare dopo l'altro. I calcoli prevedevano che dopo solo 24 anni dallo sgancio della prima bomba omega,l'universo sarebbe stato spazzato via lasciando solo spazio senza vita dietro di sé...</p><p> Solo pochi riuscirono a sopravvivere e ancora di meno riuscirono a scappare attraverso i wormhole e stabilirsi in nuove aree dell'universo - ma per loro fu un viaggio di sola andata. Una nuova vita...</p><p> Con grande sollievo la gente si trovò in un universo completamente alieno, dove non erano mai stati prima... piuttosto curiosamente, trovarono solo un pianeta in tutta la zona...</p>
+       <img src=\"img/legorians.jpg\" class=\"bigImage\">
+       <p>Osarono stabilirsi in questa pace e incontrarono una strana forma di vita, una nazione chiamata \"legoria\". I visitatori furono trattati bene e i legoriani condivisero la loro conoscenza tecnica, simile a quella dell'altro universo. Alla fine i legoriani lasciarono che gli stranieri si stabilissero nell'ambiente vicino al mondo legoriano abitato. Però a 2 condizioni: ogni nazione e razza avrebbe colonizzato solo 9 pianeti, in modo che anche gli altri potessero sviluppare nuove civiltà dopo quei lunghi conflitti e le loro fughe. La seconda condizione fu di creare un senato sul pianeta natale di ogni impero permettendo alla gente di dibattere e parlare. Naturalmente le nazioni e i loro rappresentanti furono riconoscentemente d'accordo e stabilirono, addirittura un accordo commerciale e crearono un esercito comune di guardia per garantire la pace. Nacque una nuova civiltà... </p>
+      <img src=\"img/ogame_admiral_left.jpg\" class=\"imageLeft\">
+       <p>Ora potreste chiedervi perchè ho deciso di raccontarvi questa storia. La risposta è molto semplice, tu devi venire con noi a costruire il futuro! Seguici e vediamo quello che TU riesci a fare con una nazione che aspetta un imperatore, disperatamente pronta a crescere e ad avere successo! Magari dovrai lavorare molto in questo compito e i tempi non saranno sempre pacifici, ma tocca a te, devi prendere parte in questo spicchio di universo e conquistare per la tua nazione un posto di rispetto tra tutti gli imperi.
+Seguici attraverso questo portale temporale e goditi questo mondo pieno di novità e con un gran futuro. Può essere difficile a volte, facile in altre occasioni, ma la tua volontà e il tuo potere possono creare una nazione potente e prospera. </p><p>Ora ti lascio.. spero ti unisca a noi.. comunque è una tua scelta... OSA! </p>
+" );
+        loca_add("STORY_JOIN", "Iscriviti Ora!");
+
+        loca_add("PICS_TITLE", "Immagini");
+        loca_add("PICS_SCREENSHOTS", "Screenshots");
+        loca_add("PICS_WALLPAPERS", "Sfondi");
+        loca_add("PICS_WALL1", "Riepilogo");
+        loca_add("PICS_WALL2", "Costruzioni");
+        loca_add("PICS_WALL3", "Navi");
+        loca_add("PICS_WALL4", "Impero");
+
+        loca_add("JOIN_TITLE", "Registrazione");
+        loca_add("JOIN_HEAD", "Per giocare dovete completare i dati inserendo il vostro <strong>nick di gioco</strong> e l' <strong>indirizzo mail</strong> e cliccare nel box per accettare i <strong>termini e condizioni</strong>. L'universo suggerito per giocare è quello preselezionato.");
+        loca_add("JOIN_NAME", "Nick di gioco");
+        loca_add("JOIN_EMAIL", "Indirizzo mail");
+        loca_add("JOIN_PASS", "Password");
+        loca_add("JOIN_ADVICE", "Universo");
+        loca_add("JOIN_TIP", "consigliato");
+        loca_add("JOIN_UNIS", "Speciali degli universi");
+        loca_add("JOIN_IACCEPT", "Accetto i");
+        loca_add("JOIN_TAC", "T&C;");
+        loca_add("JOIN_REGISTER", "Registrati ora!");
+
+        loca_add("INSTALL_MDB", "Impostazioni del database master");
+        loca_add("INSTALL_MDB_TIP", "Il database centrale può trovarsi su un altro server (di solito nello stesso luogo in cui si trova la pagina iniziale) e memorizza le informazioni su tutti gli universi, i coupon e altre informazioni generali.");
+        loca_add("INSTALL_MDB_HOST", "Host");
+        loca_add("INSTALL_MDB_USER", "User");
+        loca_add("INSTALL_MDB_PASS", "Password");
+        loca_add("INSTALL_MDB_NAME", "DB name");
+        loca_add("INSTALL_INSTALL", "Installare");
+        loca_add("INSTALL_ERROR1", "Impossibile salvare il file di configurazione.");
+        loca_add("INSTALL_DONE", "Installazione completata. File di configurazione creato.");
     }
 
     // "ru"
@@ -660,7 +784,6 @@ Soruyorsundur kendine bunu sana niye anlattigimi. Söyle desem: Sana burada beni
 // <a href="#" onclick="javascript:setlang('es');"><img src="img/flags/es.gif" alt="Spain" title="Spain"></a>                          -- TODO
 // <a href="#" onclick="javascript:setlang('gr');"><img src="img/flags/gr.gif" alt="Greece" title="Greece"></a>                 -- TODO
 // <a href="#" onclick="javascript:setlang('hu');"><img src="img/flags/hu.gif" alt="Hungary" title="Hungary"></a>               -- TODO
-// <a href="#" onclick="javascript:setlang('it');"><img src="img/flags/it.gif" alt="Italy" title="Italy"></a>                   -- TODO
 // <a href="#" onclick="javascript:setlang('jp');"><img src="img/flags/jp.gif" alt="Japan" title="Japan"></a>                   -- TODO
 // <a href="#" onclick="javascript:setlang('kr');"><img src="img/flags/kr.gif" alt="Korea" title="Korea"></a>                   -- TODO
 // <a href="#" onclick="javascript:setlang('nl');"><img src="img/flags/nl.gif" alt="Netherlands" title="Netherlands"></a>       -- TODO
