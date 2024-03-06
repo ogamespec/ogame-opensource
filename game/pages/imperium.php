@@ -178,7 +178,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## -->
  
         <tr height="20">
-            <th width="75"><?php echo loca("EMPIRE_M");?></th>
+            <th width="75"><?php echo loca("METAL");?></th>
 
 <?php
     $total = 0;
@@ -204,7 +204,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
  
         <tr height="20">
-            <th width="75"><?php echo loca("EMPIRE_K");?></th>
+            <th width="75"><?php echo loca("CRYSTAL");?></th>
  
 <?php 
     $total = 0;
@@ -230,7 +230,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
         </tr>
  
         <tr height="20">
-            <th width="75"><?php echo loca("EMPIRE_D");?></th>
+            <th width="75"><?php echo loca("DEUTERIUM");?></th>
 
 <?php 
     $total = 0;
@@ -260,7 +260,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 <!-- ## Resources-Energy
 <!-- ## -->
         <tr height="20">
-            <th width="75"><?php echo loca("EMPIRE_E");?></th>
+            <th width="75"><?php echo loca("ENERGY");?></th>
 
 <?php
     $sum_e = 0;
@@ -324,7 +324,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
                     echo "                <a style=\"cursor:pointer\" \n";
                     echo "                   onClick=\"if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=$session&planet=".$planet['planet_id']."&cp=".$planet['planet_id']."\';t=0;',500);}\" \n";
                     echo "                   onDblClick=\"clearTimeout(t);document.location.href='index.php?page=imperium&session=$session&planettype=$planettype&no_header=1&modus=add&planet=".$planet['planet_id']."&techid=$gid';t=0;\"\n";
-                    echo "                   title=\"Щёлкнуть 1 раз: обзор, постройки, 2 раза: строить\">       \n";
+                    echo "                   title=\"".loca("EMPIRE_ACTION")."\">       \n";
 
                     if ( CanBuild ($GlobalUser, $planet, $gid, $planet["b$gid"]+1, 0) === "" ) {
                         echo "                    <font color=\"lime\">\n";
