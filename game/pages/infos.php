@@ -12,6 +12,7 @@ $drepair = $GlobalUni['defrepair'];
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "techlong", $GlobalUser['lang'] );
 loca_add ( "jumpgate", $GlobalUser['lang'] );
+loca_add ( "infos", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -36,12 +37,12 @@ function rgnum ($num)
 
 function rapidIn ($gid, $n)
 {
-    return "<br/><a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$gid\">".loca("NAME_$gid")."</a> одним залпом поражает <font color=\"red\">$n</font> единиц данного типа\n";
+    return "<br/>".loca("INFO_RAPID_IN1")."<a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$gid\">".loca("NAME_$gid")."</a>".va(loca("INFO_RAPID_IN2"), "<font color=\"red\">$n</font>")."\n";
 }
 
 function rapidOut ($gid, $n)
 {
-    return "<br/>Одним залпом поражает: <a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$gid\">".loca("NAME_$gid")."</a> - <font color=\"lime\">$n</font> единиц\n";
+    return "<br/>".loca("INFO_RAPID_OUT1")."<a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$gid\">".loca("NAME_$gid")."</a>".va(loca("INFO_RAPID_OUT2"), "<font color=\"lime\">$n</font>")."\n";
 }
 
 // Информация по скорострелу.
@@ -84,23 +85,23 @@ if ($gid > 200 && $gid < 300)    // Флот
     }
 
     echo "<!-- begin fleet or defense information -->\n";
-    echo "<tr><td class=\"c\" colspan=\"2\">Информация      о флоте:</td></tr>\n";
-    echo "<tr><th>Название</th><th>".loca("NAME_$gid")."</th></tr>\n";
+    echo "<tr><td class=\"c\" colspan=\"2\">".loca("INFO_FLEET")."</td></tr>\n";
+    echo "<tr><th>".loca("INFO_NAME")."</th><th>".loca("NAME_$gid")."</th></tr>\n";
     echo "<tr><th colspan=\"2\">\n";
     echo "<table border=\"0\">\n";
     echo "<tr><td valign=\"top\"><img border=\"0\" src=\"".UserSkin()."gebaeude/$gid.gif\" width=\"120\" height=\"120\"></td>\n";
     echo "<td>".loca("LONG_$gid")."<br/>".rapid($gid)."</td>\n";
     echo "</tr></table></th></tr>\n";
-    echo "<tr><th>Структура</th><th>".nicenum($UnitParam[$gid][0])."</th></tr>\n";
-    echo "<tr><th>Мощность щита</th><th>".nicenum($UnitParam[$gid][1])."</th></tr>\n";
-    echo "<tr><th>Оценка атаки</th><th>".nicenum($UnitParam[$gid][2])."</th></tr>\n";
-    echo "<tr><th>Грузоподъёмность</th><th>".nicenum(FleetCargo($gid))."&nbsp;ед.</th></tr>\n";
-    echo "<tr><th>Начальная скорость</th><th>".nicenum($base_speed);
+    echo "<tr><th>".loca("INFO_STRUCTURE")."</th><th>".nicenum($UnitParam[$gid][0])."</th></tr>\n";
+    echo "<tr><th>".loca("INFO_SHIELD")."</th><th>".nicenum($UnitParam[$gid][1])."</th></tr>\n";
+    echo "<tr><th>".loca("INFO_ATTACK")."</th><th>".nicenum($UnitParam[$gid][2])."</th></tr>\n";
+    echo "<tr><th>".loca("INFO_CARGO")."</th><th>".nicenum(FleetCargo($gid)).loca("INFO_UNITS")."</th></tr>\n";
+    echo "<tr><th>".loca("INFO_BASE_SPEED")."</th><th>".nicenum($base_speed);
     if ($base_speed2 != 0) {
         echo "             <font color=\"yellow\">(". nicenum($base_speed2) .")</font> \n           ";
     }
     echo "</th></tr>\n";
-    echo "<tr><th>Потребление топлива (дейтерий)</th><th>".nicenum($base_cons);
+    echo "<tr><th>".loca("INFO_BASE_CONS")."</th><th>".nicenum($base_cons);
     if ($base_cons2 != 0) {
         echo "             <font color=\"yellow\">(". nicenum($base_cons2) .")</font> \n           ";
     }
@@ -110,21 +111,21 @@ if ($gid > 200 && $gid < 300)    // Флот
 else if ($gid > 400 && $gid < 500)    // Оборона.
 {
     echo "<!-- begin fleet or defense information -->\n";
-    echo "<tr><td class=\"c\" colspan=\"2\">Информация      об оборонительных сооружениях:</td></tr>\n";
-    echo "<tr><th>Название</th><th>".loca("NAME_$gid")."</th></tr>\n";
+    echo "<tr><td class=\"c\" colspan=\"2\">".loca("INFO_DEFENSE")."</td></tr>\n";
+    echo "<tr><th>".loca("INFO_NAME")."</th><th>".loca("NAME_$gid")."</th></tr>\n";
     echo "<tr><th colspan=\"2\">\n";
     echo "<table border=\"0\">\n";
     echo "<tr><td valign=\"top\"><img border=\"0\" src=\"".UserSkin()."gebaeude/$gid.gif\" width=\"120\" height=\"120\"></td>\n";
     echo "<td>".loca("LONG_$gid");
     if ($gid < 407) {
         // Для стреляющей обороны вывести процент восстановления повреждений.
-        echo " " . va(loca("LONG_REPAIR"), $drepair);
+        echo " " . va(loca("INFO_REPAIR"), $drepair);
     }
     echo "<br/>".rapid($gid)."</td>\n";
     echo "</tr></table></th></tr>\n";
-    echo "<tr><th>Структура</th><th>".nicenum($UnitParam[$gid][0])."</th></tr>\n";
-    echo "<tr><th>Мощность щита</th><th>".nicenum($UnitParam[$gid][1])."</th></tr>\n";
-    echo "<tr><th>Оценка атаки</th><th>".nicenum($UnitParam[$gid][2])."</th></tr>\n";
+    echo "<tr><th>".loca("INFO_STRUCTURE")."</th><th>".nicenum($UnitParam[$gid][0])."</th></tr>\n";
+    echo "<tr><th>".loca("INFO_SHIELD")."</th><th>".nicenum($UnitParam[$gid][1])."</th></tr>\n";
+    echo "<tr><th>".loca("INFO_ATTACK")."</th><th>".nicenum($UnitParam[$gid][2])."</th></tr>\n";
     echo "</th></tr></table>\n";
 }
 else if ($gid > 100 && $gid < 200)    // Исследования.
@@ -148,7 +149,7 @@ else
 
     if ($gid == 1)    // Шахта металла
     {
-        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>Производство в час</td><td class='c'>Разница</td><td class='c'>Энергетический баланс</td><td class='c'>Разница</td> \n";
+        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
         $level = $aktplanet['b'.$gid]-2;
         if ($level <= 0) $level = 1;
         $prod_now = prod_metal ($aktplanet['b'.$gid], 1 );
@@ -168,7 +169,7 @@ else
     }
     else if ($gid == 2)    // Шахта кристалла
     {
-        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>Производство в час</td><td class='c'>Разница</td><td class='c'>Энергетический баланс</td><td class='c'>Разница</td> \n";
+        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
         $level = $aktplanet['b'.$gid]-2;
         if ($level <= 0) $level = 1;
         $prod_now = prod_crys ($aktplanet['b'.$gid], 1 );
@@ -188,7 +189,7 @@ else
     }
     else if ($gid == 3)    // Шахта дейтерия
     {
-        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>Производство в час</td><td class='c'>Разница</td><td class='c'>Энергетический баланс</td><td class='c'>Разница</td> \n";
+        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
         $level = $aktplanet['b'.$gid]-2;
         if ($level <= 0) $level = 1;
         $prod_now = prod_deut ($aktplanet['b'.$gid], $aktplanet['temp']+40, 1 );
@@ -208,7 +209,7 @@ else
     }
     else if ($gid == 4)    // Солнечная электростанция
     {
-        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>Энергетический баланс</td><td class='c'>Разница</td>\n";
+        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td>\n";
         $level = $aktplanet['b'.$gid]-2;
         if ($level <= 0) $level = 1;
         $prod_now = prod_solar ($aktplanet['b'.$gid], 1 );
@@ -224,7 +225,7 @@ else
     }
     else if ($gid == 12)    // Термоядерная электростанция
     {
-        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>Энергетический баланс</td><td class='c'>Разница</td><td class='c'>Потребление дейтерия</td><td class='c'>Разница</td>\n";
+        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_CONS_DEUT")."</td><td class='c'>".loca("INFO_DIFF")."</td>\n";
         $level = $aktplanet['b'.$gid]-2;
         if ($level <= 0) $level = 1;
         $prod_now = prod_fusion ($aktplanet['b'.$gid], $GlobalUser['r113'], 1 );
@@ -244,7 +245,7 @@ else
     }
     else if ($gid == 22 || $gid == 23 || $gid == 24 )     // Хранилища
     {
-        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>Вместимость</td><td class='c'>Разница</td></tr>\n";
+        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_STORAGE")."</td><td class='c'>".loca("INFO_DIFF")."</td></tr>\n";
         $level = $aktplanet['b'.$gid];
         $cap_now = store_capacity ( $aktplanet['b'.$gid] ) / 1000;
         for ($i=$level; $i<$level+15; $i++) {
@@ -257,6 +258,7 @@ else
     else if ( $gid == 34 )                                    // Склад альянса
     {
         $depot_cap = 10000 * pow ( 2, $aktplanet['b34'] );
+        $deut_avail = 0;
         if ($aktplanet['b34']) $deut_avail = min(floor($aktplanet['d']), $depot_cap);
 ?>
     </th>
@@ -265,7 +267,7 @@ else
 <form action="index.php?page=allianzdepot&session=<?=$session;?>" method=post>
 
 <table width='519'>
-<td class='c' colspan='2'>Вместимость: <?=$deut_avail;?>/<?=$depot_cap;?></td>
+<td class='c' colspan='2'><?=va(loca("INFO_DEPOT_CAPACITY"), $deut_avail, $depot_cap);?></td>
 <?php
 
     $fmap = array_reverse ($fleetmap);
@@ -282,7 +284,7 @@ else
         $load = $queue['end'] - $now;
 
         echo "  <tr>\n";
-        echo "    <th>Флот ".$user['oname'].":<br>";
+        echo "    <th>".va(loca("INFO_DEPOT_FLEET"), $user['oname'])."<br>";
         $cons = 0;
         foreach ($fmap as $i=>$id) {
             $amount = $fleet_obj["ship".$id];
@@ -293,15 +295,15 @@ else
         }
         echo "</th>\n";
         echo "    <th>\n";
-        echo "      зарядка<br>$load сек<br>\n";
-        echo "      <input tabindex='".$c."' type='text' name='c".$c."' size='5' maxlength='2' value='0' />ч<br>\n\n";
-        echo "         Стоимость ".ceil($cons)." / ч    </th>\n";
+        echo "      ".loca("INFO_DEPOT_SUPPLY")."<br>".va(loca("INFO_DEPOT_SECONDS"), $load)."<br>\n";
+        echo "      <input tabindex='".$c."' type='text' name='c".$c."' size='5' maxlength='2' value='0' />".loca("INFO_DEPOT_HOUR")."<br>\n\n";
+        echo "         ".va(loca("INFO_DEPOT_PER_HOUR"), ceil($cons))."    </th>\n";
         echo "  </tr>\n";
         $c ++;
     }
 
 ?>
-  <tr><th colspan='2'><input type='submit' value='Запустить ракету со снабжением'></th>
+  <tr><th colspan='2'><input type='submit' value='<?=loca("INFO_DEPOT_SUBMIT");?>'></th>
 </table>
 
 </form>
@@ -340,7 +342,7 @@ else
     </th> 
    </tr> 
 </table> 
-Ваше хранилище может вмещать <?=$rak_space/2;?> межпланетных ракет или <?=$rak_space;?> ракет-перехватчиков.<br><table border=0> 
+<?=va(loca("INFO_SILO_INFO"), $rak_space/2, $rak_space);?><br><table border=0> 
 
 <?php
     if ( ($aktplanet['d502'] + $aktplanet['d503']) > 0 )  
@@ -348,7 +350,7 @@ else
 ?>
 <form action="index.php?page=infos&session=<?=$session;?>&gid=44"  method=post> 
 <tr> 
- <td class=c>Тип</td><td class=c>Кол-во</td><td class=c>Снести</td> 
+ <td class=c><?=loca("INFO_SILO_TYPE");?></td><td class=c><?=loca("INFO_SILO_AMOUNT");?></td><td class=c><?=loca("INFO_SILO_DEMOLISH");?></td> 
  <td class=c></td></tr> 
 <?php
             if ($aktplanet['d502'] > 0) 
@@ -366,14 +368,14 @@ else
 <?php
             }
 ?>
-<tr><td class=c colspan=4><input type=submit name=aktion value="Выполнить"></table><p></form>
+<tr><td class=c colspan=4><input type=submit name=aktion value="<?=loca("INFO_SILO_SUBMIT");?>"></table><p></form>
 <?php
         }
     }
     else if ( $gid == 42 )        // Сенсорная фаланга
     {
 ?>
-<tr><th><p><center><table border=1 ><tr><td class='c'>Уровень</td><td class='c'>радиус действия</td></tr>
+<tr><th><p><center><table border=1 ><tr><td class='c'><?=loca("INFO_PHALANX_LEVEL");?></td><td class='c'><?=loca("INFO_PHALANX_RADIUS");?></td></tr>
 <?php
         $level = $aktplanet['b'.$gid]-3;
         if ($level <= 0) $level = 1;
@@ -468,31 +470,31 @@ else
 
     if ( $gid < 200 && $aktplanet['b'.$gid] && !($gid == 33 || $gid == 41 || $gid == 44) ) {
         echo "<table width=519 >\n";
-        echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">Снести: ".loca("NAME_$gid")." Level ".$aktplanet['b'.$gid]." уничтожить?</a></td></tr>\n";
+        echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">".va(loca("INFO_DEMOLISH_TITLE"), loca("NAME_$gid"), $aktplanet['b'.$gid])."</a></td></tr>\n";
         $res = BuildPrice ( $gid, $aktplanet['b'.$gid]-1 );
         $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
-        echo "<br><tr><th>Необходимо ";
-        if ($m) echo "металла:<b>".nicenum($m)."</b> ";
-        if ($k) echo "кристалла:<b>".nicenum($k)."</b> ";
-        if ($d) echo "дейтерия:<b>".nicenum($d)."</b> ";
+        echo "<br><tr><th>" . loca("INFO_DEMOLISH_RES");
+        if ($m) echo loca("INFO_DEMOLISH_M") . "<b>".nicenum($m)."</b> ";
+        if ($k) echo loca("INFO_DEMOLISH_K") . "<b>".nicenum($k)."</b> ";
+        if ($d) echo loca("INFO_DEMOLISH_D") . "<b>".nicenum($d)."</b> ";
         $t = BuildDuration ( $gid, $aktplanet['b'.$gid]-1, $aktplanet['b14'], $aktplanet['b15'], $speed );
-        echo "<tr><th><br>Продолжительность сноса:  ".BuildDurationFormat ( $t )."<br></th></tr></table>\n";
+        echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".BuildDurationFormat ( $t )."<br></th></tr></table>\n";
     }
 
     if ( $gid == 44 && $aktplanet['b'.$gid])    // Ракетная шахта
     {
         $raknum = $aktplanet['d502'] + $aktplanet['d503'];
         echo "<table width=519 >\n";
-        if ( $raknum == 0 ) echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">Снести: ".loca("NAME_$gid")." Level ".$aktplanet['b'.$gid]." уничтожить?</a></td></tr>\n";
-        else echo "<tr><td class=c align=center>об оборонительных сооружениях</a></td></tr>";
+        if ( $raknum == 0 ) echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">".va(loca("INFO_DEMOLISH_TITLE"), loca("NAME_$gid"), $aktplanet['b'.$gid])."</a></td></tr>\n";
+        else echo "<tr><td class=c align=center>".loca("INFO_DEMOLISH_DEFENSE")."</a></td></tr>";
         $res = BuildPrice ( $gid, $aktplanet['b'.$gid]-1 );
         $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
-        echo "<br><tr><th>Необходимо ";
-        if ($m) echo "металла:<b>".nicenum($m)."</b> ";
-        if ($k) echo "кристалла:<b>".nicenum($k)."</b> ";
-        if ($d) echo "дейтерия:<b>".nicenum($d)."</b> ";
+        echo "<br><tr><th>" . loca("INFO_DEMOLISH_RES");
+        if ($m) echo loca("INFO_DEMOLISH_M") . "<b>".nicenum($m)."</b> ";
+        if ($k) echo loca("INFO_DEMOLISH_K") . "<b>".nicenum($k)."</b> ";
+        if ($d) echo loca("INFO_DEMOLISH_D") . "<b>".nicenum($d)."</b> ";
         $t = BuildDuration ( $gid, $aktplanet['b'.$gid]-1, $aktplanet['b14'], $aktplanet['b15'], $speed );
-        echo "<tr><th><br>Продолжительность сноса:  ".BuildDurationFormat ( $t )."<br></th></tr></table>\n";
+        echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".BuildDurationFormat ( $t )."<br></th></tr></table>\n";
     }
 
 }
