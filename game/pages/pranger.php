@@ -42,7 +42,7 @@ else {
 
     if ( key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $_COOKIE['ogamelang'];
     else $loca_lang = $uni['lang'];
-    if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
+    if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
     
     loca_add ( "pranger", $loca_lang );
 }

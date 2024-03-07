@@ -13,10 +13,10 @@ require_once "utils.php";
 require_once "loca.php";
 require_once "user.php";
 
-if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = 'en';
+if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
 else $loca_lang = $_COOKIE['ogamelang'];
+if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
 
-if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
 loca_add ( "install", $loca_lang );
 loca_add ( "menu", $loca_lang );
 loca_add ( "mods", $loca_lang );

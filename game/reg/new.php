@@ -23,6 +23,11 @@ require_once "../mods.php";
 require_once "../debug.php";
 require_once "../loca.php";
 
+if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
+else $loca_lang = $_COOKIE['ogamelang'];
+
+loca_add ( "reg", $loca_lang );
+
 function isValidEmail($email){
 	return filter_var($email, FILTER_VALIDATE_EMAIL);
 }
