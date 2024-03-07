@@ -61,7 +61,7 @@ function PageAlly_ChangeTag ()
 
         $now = time ();
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
-        if ( ! ($myrank['rights'] & 0x020) ) $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
+        if ( ! ($myrank['rights'] & 0x020) ) $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
         else if ( $now < $ally['tag_until'] ) $AllianzenError = "<center>\nПодождите до ".date ("Y-m-d H:i:s", $ally['tag_until'])."<br></center>";
         else if (mb_strlen ($_POST['newtag'], "UTF-8")  < 3) $AllianzenError = "<center>\nАббревиатура альянса слишком коротка<br></center>";
         else if (IsAllyTagExist ($_POST['newtag'])) $AllianzenError = "<center>\nАльянс ".$_POST['newtag']." к сожалению уже существует!<br></center>";
@@ -105,7 +105,7 @@ function PageAlly_ChangeName ()
 
         $now = time ();
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
-        if ( ! ($myrank['rights'] & 0x020) ) $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
+        if ( ! ($myrank['rights'] & 0x020) ) $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
         else if ( $now < $ally['name_until'] ) $AllianzenError = "<center>\nПодождите до ".date ("Y-m-d H:i:s", $ally['name_until'])."<br></center>";
         else if (mb_strlen ($_POST['newname'], "UTF-8")  < 3) $AllianzenError = "<center>\nНазвание альянса слишком короткое<br></center>";
         else
@@ -145,7 +145,7 @@ function PageAlly_Dismiss ()
     {
         $now = time ();
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
-        if ( ! ($myrank['rights'] & 0x001) ) $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
+        if ( ! ($myrank['rights'] & 0x001) ) $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
         else
         {
             // Послать всем игрокам сообщение о роспуске альянса.
@@ -201,7 +201,7 @@ function AllyPage_Takeover ()
     {
         $now = time ();
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
-        if ( ! ($myrank['rights'] & 0x100) ) $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
+        if ( ! ($myrank['rights'] & 0x100) ) $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
         else
         {
             // Выслать всем участникам сообщение что власть поменялась (кроме самого главы).
@@ -221,7 +221,7 @@ function AllyPage_Takeover ()
             $newhead = LoadUser ( intval($_REQUEST['uid']) );
             $newhead_rank = LoadRank ( $ally['ally_id'], $newhead['allyrank'] );
             if ( $newhead['ally_id'] != $ally['ally_id'] || ($newhead_rank['rights'] & 0x100) == 0 ) {
-                $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
+                $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
                 return;
             }
             SetUserRank ( $newhead['player_id'], $GlobalUser['allyrank'] );
