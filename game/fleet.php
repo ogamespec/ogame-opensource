@@ -271,8 +271,8 @@ function FleetCargoSummary ( $fleet )
 function FleetCons ($id, $combustion, $impulse, $hyper )
 {
     global $UnitParam;
+    // У МТ при смене двигателя увеличивается потребление в 2 раза. У бомбардировщика НЕ увеличивается.
     if ($id == 202 && $impulse >= 5) return $UnitParam[$id][5] * 2;
-    else if ($id == 211 && $hyper >= 8) return $UnitParam[$id][5] * 2;
     else return $UnitParam[$id][5];
 }
 
