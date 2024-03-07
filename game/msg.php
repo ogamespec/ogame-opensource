@@ -11,20 +11,20 @@
 // text: Текст сообщения (TEXT)
 // shown: 0 - новое сообщение, 1 - показанное.
 // date: Дата сообщения (INT UNSIGNED)
+// planet_id: Порядковый номер планеты/луны. Используется для сообщений шпионажа, чтобы отобразить общие шпионские доклады в галактике
 
-/*
-Типы сообщений (pm):
-0 - личное сообщение
-1 - шпионский доклад
-2 - ссылка на боевой доклад
-3 - сообщение из экспедиции
-4 - альянс
-5 - прочие
-6 - текст боевого доклада
-*/
+// Типы сообщений (pm)
+// Так получилось, что на ранних стадиях разработки pm=1 означал что сообщение - личное. Когда пришла пора делать фильтры для Командира было решено не заводить новую колонку type в таблице, а использовать pm.
+const MTYP_PM = 0;              // личное сообщение
+const MTYP_SPY_REPORT = 1;              // шпионский доклад
+const MTYP_BATTLE_REPORT_LINK = 2;      // ссылка на боевой доклад
+const MTYP_EXP = 3;             // сообщение из экспедиции
+const MTYP_ALLY = 4;            // альянс
+const MTYP_MISC = 5;            // прочие
+const MTYP_BATTLE_REPORT_TEXT = 6;      // текст боевого доклада
 
 // Всего у пользователя может быть не более 127 сообщений. Если происходит переполнение, то самое старое сообщение удаляется и добавляется новое.
-// Сообщение хранится 24 часа.
+// Сообщение хранится 24 часа (7 дней с Командиром)
 
 // В личных сообщениях можно использовать BB-коды:
 // Простые: b u i s sub sup hr
@@ -110,7 +110,7 @@ function DeleteMessage ($player_id, $msg_id)
 function EnumMessages ($player_id, $max)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id AND pm <> 6 ORDER BY date DESC, msg_id DESC LIMIT $max";
+    $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id AND pm <> ".MTYP_BATTLE_REPORT_TEXT." ORDER BY date DESC, msg_id DESC LIMIT $max";
     $result = dbquery ($query);
     return $result;
 }
