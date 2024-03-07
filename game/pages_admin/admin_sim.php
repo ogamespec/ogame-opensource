@@ -469,7 +469,7 @@ RecalcAttackersDefendersNum ();
 <?php
     if ( $BattleReport !== "" ) {
         $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
-        $bericht = SendMessage ( $GlobalUser['player_id'], "Командование флотом", "Боевой доклад", $BattleReport, 6 );
+        $bericht = SendMessage ( $GlobalUser['player_id'], "Командование флотом", "Боевой доклад", $BattleReport, MTYP_BATTLE_REPORT_TEXT );
         MarkMessage ( $GlobalUser['player_id'], $bericht );
         $subj = "<a href=\"#\" onclick=\"fenster('index.php?page=bericht&session=$session&bericht=$bericht', 'Bericht_Kampf');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$d[0]['g'].":".$d[0]['s'].":".$d[0]['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
         echo "$subj<br>";

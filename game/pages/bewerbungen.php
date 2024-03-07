@@ -37,9 +37,9 @@ if ( method () === "POST" )
         while ($rows--)
         {
             $user = dbarray ($result);
-            SendMessage ( $user['player_id'], va("Альянс [#1]", $ally['tag']), "Общее сообщение", va("Игрок #1 был принят в наш альянс.", $newcomer['oname']), 0);
+            SendMessage ( $user['player_id'], va("Альянс [#1]", $ally['tag']), "Общее сообщение", va("Игрок #1 был принят в наш альянс.", $newcomer['oname']), MTYP_ALLY);
         }
-        SendMessage ( $player_id, va("Альянс [#1]", $ally['tag']), va("Регистрация [#1] принята", $ally['tag']), va("Сердечно поздравляем, Вы теперь член альянса [#1]", $ally['tag']), 0 );
+        SendMessage ( $player_id, va("Альянс [#1]", $ally['tag']), va("Регистрация [#1] принята", $ally['tag']), va("Сердечно поздравляем, Вы теперь член альянса [#1]", $ally['tag']), MTYP_ALLY );
 
         $query = "UPDATE ".$db_prefix."users SET ally_id = $ally_id, allyrank = 1, joindate = $now WHERE player_id = $player_id";
         dbquery ($query);
@@ -54,7 +54,7 @@ if ( method () === "POST" )
         // Выслать сообщение об отказе.
         $reason = "-причина не указана-";
         if ( $_POST['text'] !== "" ) $reason = $_POST['text'];
-        SendMessage ( $app['player_id'], va("Альянс [#1]", $ally['tag']), va("Регистрация [#1] отклонена", $ally['tag']), $reason, 0 );
+        SendMessage ( $app['player_id'], va("Альянс [#1]", $ally['tag']), va("Регистрация [#1] отклонена", $ally['tag']), $reason, MTYP_ALLY );
     }
 }
 

@@ -563,11 +563,11 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
     SendMessage ( $origin['owner_id'], 
         loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
         loca_lang("GRAVITON_ATK_SUBJ", $origin_user['lang']),
-        $atext, 5, $when);
+        $atext, MTYP_MISC, $when);
     SendMessage ( $target['owner_id'], 
         loca_lang("FLEET_MESSAGE_FROM", $target_user['lang']),
         loca_lang("GRAVITON_DEF_SUBJ", $target_user['lang']),
-        $dtext, 5, $when);
+        $dtext, MTYP_MISC, $when);
 
     return $result;
 }
@@ -795,12 +795,12 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         loca_add ( "fleetmsg", $user['lang'] );
 
         if ( key_exists($user['player_id'], $mailbox) ) continue;
-        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, 6, $when );
+        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, MTYP_BATTLE_REPORT_TEXT, $when );
         MarkMessage ( $user['player_id'], $bericht );
         $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$d_result[$battle_result]."\">" .
             loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']) .
             " [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", 2, $when );
+        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", MTYP_BATTLE_REPORT_LINK, $when );
         $mailbox[ $user['player_id'] ] = true;
     }
 
@@ -827,12 +827,12 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         loca_add ( "fleetmsg", $user['lang'] );
 
         if ( key_exists($user['player_id'], $mailbox) ) continue;
-        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, 6, $when );
+        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, MTYP_BATTLE_REPORT_TEXT, $when );
         MarkMessage ( $user['player_id'], $bericht );
         $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
             loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']) .
             " [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", 2, $when );
+        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", MTYP_BATTLE_REPORT_LINK, $when );
         $mailbox[ $user['player_id'] ] = true;
     }
 
@@ -1187,12 +1187,12 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
         loca_add ( "fleetmsg", $user['lang'] );
 
         if ( key_exists($user['player_id'], $mailbox) ) continue;
-        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, 6, $when );
+        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, MTYP_BATTLE_REPORT_TEXT, $when );
         MarkMessage ( $user['player_id'], $bericht );
         $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
             loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']) . 
             " [".$target_planet['g'].":".$target_planet['s'].":".$target_planet['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", 2, $when );
+        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", MTYP_BATTLE_REPORT_LINK, $when );
         $mailbox[ $user['player_id'] ] = true;
     }
 
@@ -1338,14 +1338,14 @@ function RocketAttack ( $fleet_id, $planet_id, $when )
     $text .= "удалось попасть на Вашу планету ".$target['name']." <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> !<br>";
     if ($ipm_destroyed) $text .= "$ipm_destroyed ракет(-ы) было уничтожено Вашими ракетами-перехватчиками<br>:<br>";
     $text .= $deftext;
-    SendMessage ( $target_user['player_id'], "Командование флотом", "Ракетная атака", $text, 2, $when);
+    SendMessage ( $target_user['player_id'], "Командование флотом", "Ракетная атака", $text, MTYP_BATTLE_REPORT_LINK, $when);
 
     // Сформировать сообщение для атакующего: https://github.com/ogamespec/ogame-opensource/issues/61
     // Оригинальная версия 0.84 не создавала сообщения для атакующего.
     $text = "$amount ракет(ы) с Вашей планеты ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> ";
     $text .= "ударили по планете ".$target['name']." <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> !<br>";    
     $text .= $deftext;
-    SendMessage ( $origin_user['player_id'], "Командование флотом", "Ракетная атака", $text, 2, $when);
+    SendMessage ( $origin_user['player_id'], "Командование флотом", "Ракетная атака", $text, MTYP_BATTLE_REPORT_LINK, $when);
 }
 
 ?>

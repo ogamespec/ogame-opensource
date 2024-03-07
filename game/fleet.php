@@ -515,7 +515,7 @@ function TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     SendMessage ( $fleet_obj['owner_id'], 
         loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
         loca_lang("FLEET_MESSAGE_ARRIVE", $origin_user['lang']), 
-        $text, 5, $queue['end']);
+        $text, MTYP_MISC, $queue['end']);
 
     // Транспорт на чужую планету.
     if ( $origin['owner_id'] != $target['owner_id'] )
@@ -539,7 +539,7 @@ function TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         SendMessage ( $target['owner_id'], 
             loca_lang("FLEET_MESSAGE_OBSERVE", $target_user['lang']), 
             loca_lang("FLEET_MESSAGE_TRADE", $target_user['lang']), 
-            $text, 5, $queue['end']);
+            $text, MTYP_MISC, $queue['end']);
     }
 }
 
@@ -571,7 +571,7 @@ function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
     SendMessage ( $fleet_obj['owner_id'], 
         loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
         loca_lang("FLEET_MESSAGE_RETURN", $origin_user['lang']), 
-        $text, 5, $queue['end']);
+        $text, MTYP_MISC, $queue['end']);
 }
 
 // *** Оставить ***
@@ -598,7 +598,7 @@ function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     SendMessage ( $fleet_obj['owner_id'], 
         loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
         loca_lang("FLEET_MESSAGE_HOLD", $origin_user['lang']), 
-        $text, 5, $queue['end']);
+        $text, MTYP_MISC, $queue['end']);
 }
 
 // *** Держаться ***
@@ -786,7 +786,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     SendMessage ( $fleet_obj['owner_id'], 
         loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
         $subj, 
-        $report, 1, $queue['end'], $target['planet_id']);
+        $report, MTYP_SPY_REPORT, $queue['end'], $target['planet_id']);
 
     // Отправить сообщение чужому игроку о шпионаже.
     $text = va(loca_lang("FLEET_SPY_OTHER", $target_user['lang']), 
@@ -799,7 +799,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     SendMessage ( $target['owner_id'],
         loca_lang("FLEET_MESSAGE_OBSERVE", $target_user['lang']),
         loca_lang("FLEET_MESSAGE_SPY", $target_user['lang']),
-        $text, 5, $queue['end']);
+        $text, MTYP_MISC, $queue['end']);
 
     // Обновить активность на чужой планете.
     UpdatePlanetActivity ( $fleet_obj['target_planet'], $queue['end'] );
@@ -885,7 +885,7 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     SendMessage ( $fleet_obj['owner_id'], 
         loca_lang("FLEET_COLONIZE_FROM", $origin_user['lang']), 
         loca_lang("FLEET_COLONIZE_SUBJ", $origin_user['lang']), 
-        $text, 5, $queue['end']);
+        $text, MTYP_MISC, $queue['end']);
 }
 
 function ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target)
@@ -912,7 +912,7 @@ function ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target)
     SendMessage ( $fleet_obj['owner_id'], 
         loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
         loca_lang("FLEET_MESSAGE_RETURN", $origin_user['lang']), 
-        $text, 5, $queue['end']);
+        $text, MTYP_MISC, $queue['end']);
 
     // Удалить фантом колонизации.
     if ($target['type'] == 10002) DestroyPlanet ( $target['planet_id'] );
@@ -948,7 +948,7 @@ function RecycleArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     // Вернуть флот.
     DispatchFleet ($fleet, $origin, $target, 108, $fleet_obj['flight_time'], $fleet_obj['m'] + $dm, $fleet_obj['k'] + $dk, $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
 
-    SendMessage ( $fleet_obj['owner_id'], loca_lang("FLEET_MESSAGE_FLEET", $origin_user['lang']), $subj, $report, 5, $queue['end']);
+    SendMessage ( $fleet_obj['owner_id'], loca_lang("FLEET_MESSAGE_FLEET", $origin_user['lang']), $subj, $report, MTYP_MISC, $queue['end']);
 }
 
 // *** Уничтожить ***
@@ -1159,7 +1159,7 @@ function AddUnionMember ($union_id, $name)
                         $target_planet['g'], $target_planet['s'], $target_planet['p'], 
                         $target_planet['g'], $target_planet['s'], $target_planet['p'] ) .
             va ( loca_lang("ACS_INVITE_TEXT2", $user['lang']), date ( "D M Y H:i:s", $queue['end'] ) );
-    SendMessage ( $user['player_id'], $GlobalUser['oname'], loca_lang("ACS_INVITE_SUBJ", $user['lang']), $text, 5 );
+    SendMessage ( $user['player_id'], $GlobalUser['oname'], loca_lang("ACS_INVITE_SUBJ", $user['lang']), $text, MTYP_MISC );
 
     return "";
 }

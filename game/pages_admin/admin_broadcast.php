@@ -42,7 +42,7 @@ function Admin_Broadcast ()
             while ($rows--)
             {
                 $user = dbarray ($result);
-                SendMessage ( $user['player_id'], $from, $subj, $text, 5);
+                SendMessage ( $user['player_id'], $from, $subj, $text, MTYP_MISC);
             }
             if ($usernum > 0) $write_error = "<center><font color=#00FF00>Сообщение отправлено $usernum пользователям.</font><br/></center>\n";
             else $write_error = "<center><font color=#00FF00>Адресаты не найдены.</font><br/></center>\n";

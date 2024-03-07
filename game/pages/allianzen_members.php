@@ -93,14 +93,14 @@ function PageAlly_MemberSettings ()
         while ($rows--)
         {
             $user = dbarray ($result);
-            SendMessage ( $user['player_id'], va("Альянс [#1]", $ally['tag']), "Общее сообщение", va("Игрок #1 исключён из альянса.", $leaver['oname']), 0);
+            SendMessage ( $user['player_id'], va("Альянс [#1]", $ally['tag']), "Общее сообщение", va("Игрок #1 исключён из альянса.", $leaver['oname']), MTYP_ALLY);
         }
 
         // Сообщение игроку об исключении.
         SendMessage ( $leaver['player_id'], 
                                va("Альянс [#1]", $ally['tag']), 
                                va("Членство в альянсе [#1] окончено", $ally['tag']), 
-                               va("Игрок #1 исключает Вас из альянса [#2] .<br>Теперь Вы можете зарегистрироваться снова", $GlobalUser['oname'], $ally['tag']), 0);
+                               va("Игрок #1 исключает Вас из альянса [#2] .<br>Теперь Вы можете зарегистрироваться снова", $GlobalUser['oname'], $ally['tag']), MTYP_ALLY);
     }
 
     if ( method() === "POST" && $_GET['a'] == 16 && $selected_user)        // Назначить ранг игроку

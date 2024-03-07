@@ -232,7 +232,7 @@ if ( key_exists ('action', $_GET) && $_GET['action'] == 1 && $_GET['buddy_id']) 
     {
         $buddy_id = AddBuddy ( $from, $to, $_POST['text']);
         if ($buddy_id == 0) $BuddyError = loca("BUDDY_ALREADY_SENT");
-        else SendMessage ( $to, $GlobalUser['oname'], loca("BUDDY_REQUEST"), $_POST['text'], 0 );
+        else SendMessage ( $to, $GlobalUser['oname'], loca("BUDDY_REQUEST"), $_POST['text'], MTYP_PM );
     }
     Buddy_Home ();
 }
@@ -241,7 +241,7 @@ else if ( key_exists ('action', $_GET) && $_GET['action'] == 2 && $_GET['buddy_i
     $buddy_id = intval ($_GET['buddy_id']);
     $buddy = LoadBuddy ($buddy_id);
     AcceptBuddy ($buddy_id);
-    SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va(loca("BUDDY_MSG_ADDED"), $GlobalUser['oname']), 0);
+    SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va(loca("BUDDY_MSG_ADDED"), $GlobalUser['oname']), MTYP_PM);
     Buddy_Income ();
 }
 else if ( key_exists ('action', $_GET) && $_GET['action'] == 3 && $_GET['buddy_id'])    // Отклонить запрос
@@ -249,7 +249,7 @@ else if ( key_exists ('action', $_GET) && $_GET['action'] == 3 && $_GET['buddy_i
     $buddy_id = intval ($_GET['buddy_id']);
     $buddy = LoadBuddy ($buddy_id);
     RemoveBuddy ($buddy_id);
-    SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va(loca("BUDDY_MSG_DECLINED"), $GlobalUser['oname']), 0);
+    SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va(loca("BUDDY_MSG_DECLINED"), $GlobalUser['oname']), MTYP_PM);
     Buddy_Income ();
 }
 else if ( key_exists ('action', $_GET) && $_GET['action'] == 4 && $_GET['buddy_id'])    // Отозвать свой запрос.
@@ -259,7 +259,7 @@ else if ( key_exists ('action', $_GET) && $_GET['action'] == 4 && $_GET['buddy_i
     if ( $buddy['request_from'] == $GlobalUser['player_id'] )    // только свои
     {
         RemoveBuddy ($buddy_id);
-        SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va (loca("BUDDY_MSG_RECALLED"), $GlobalUser['oname']), 0 );
+        SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va (loca("BUDDY_MSG_RECALLED"), $GlobalUser['oname']), MTYP_PM );
     }
     Buddy_Outcome ();
 }
@@ -273,12 +273,12 @@ else if ( key_exists ('action', $_GET) && $_GET['action'] == 8 && $_GET['buddy_i
     if ($buddy['request_from'] == $GlobalUser['player_id'] )    // только свои
     {
         RemoveBuddy ($buddy_id);
-        SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va (loca("BUDDY_MSG_DELETED"), $GlobalUser['oname']), 0 );
+        SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va (loca("BUDDY_MSG_DELETED"), $GlobalUser['oname']), MTYP_PM );
     }
     if ($buddy['request_to'] == $GlobalUser['player_id'] )
     {
         RemoveBuddy ($buddy_id);
-        SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va (loca("BUDDY_MSG_DELETED"), $GlobalUser['oname']), 0 );
+        SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va (loca("BUDDY_MSG_DELETED"), $GlobalUser['oname']), MTYP_PM );
     }
     Buddy_Home ();
 }

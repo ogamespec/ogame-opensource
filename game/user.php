@@ -142,7 +142,7 @@ function SendGreetingsMessage ( $player_id)
     SendMessage ( $player_id, 
         loca_lang ("FLEET_MESSAGE_FROM", $user['lang']), 
         loca_lang ("REG_GREET_MSG_SUBJ", $user['lang']), 
-        bb ( va(loca_lang("REG_GREET_MSG_TEXT", $user['lang']), $unitab['ext_board'], $unitab['ext_tutorial']) ), 5 );
+        bb ( va(loca_lang("REG_GREET_MSG_TEXT", $user['lang']), $unitab['ext_board'], $unitab['ext_tutorial']) ), MTYP_MISC );
 }
 
 function IsUserExist ( $name)

@@ -687,7 +687,7 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
     SendMessage ( $fleet_obj['owner_id'], 
         loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']),
         va(loca_lang("EXP_MESSAGE_SUBJ", $origin_user['lang']), $target['g'], $target['s'], $target['p']),
-        $text, 3, $queue['end']);
+        $text, MTYP_EXP, $queue['end']);
 }
 
 ?>

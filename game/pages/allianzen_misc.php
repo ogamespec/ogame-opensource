@@ -26,7 +26,7 @@ function PageAlly_Leave ()
             while ($rows--)
             {
                 $user = dbarray ($result);
-                SendMessage ( $user['player_id'], va("Альянс [#1]", $ally['tag']), "Общее сообщение", va("Игрок #1 покинул альянс.", $leaver['oname']), 0);
+                SendMessage ( $user['player_id'], va("Альянс [#1]", $ally['tag']), "Общее сообщение", va("Игрок #1 покинул альянс.", $leaver['oname']), MTYP_ALLY);
             }
 
             // Сделать редирект на страницу Мой альянс.
@@ -158,7 +158,7 @@ function PageAlly_Dismiss ()
             while ($rows--)
             {
                 $user = dbarray ($result);
-                SendMessage ( $user['player_id'], $from, $subj, $text, 0);
+                SendMessage ( $user['player_id'], $from, $subj, $text, MTYP_ALLY);
             }
 
             // Распустить альянс
@@ -214,7 +214,7 @@ function AllyPage_Takeover ()
             while ($rows--)
             {
                 $user = dbarray ($result);
-                if ( $user['player_id'] != $ally['owner_id'] ) SendMessage ( $user['player_id'], $from, $subj, $text, 0);
+                if ( $user['player_id'] != $ally['owner_id'] ) SendMessage ( $user['player_id'], $from, $subj, $text, MTYP_ALLY);
             }
 
             // Поменять звания
