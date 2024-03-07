@@ -145,6 +145,38 @@ $LOCA["ru"]["ALLY_MEMBERS_SAVE"] = "Сохранить";
 
 // misc
 
+$LOCA["ru"]["ALLY_MISC_LEAVE_CONFIRM"] = "Вы действительно хотите покинуть альянс \"#1\"?";
+$LOCA["ru"]["ALLY_MISC_CHANGE_WAIT"] = "Подождите до #1";
+$LOCA["ru"]["ALLY_MISC_CHANGE_TAG_SHORT"] = "Аббревиатура альянса слишком коротка";
+$LOCA["ru"]["ALLY_MISC_CHANGE_TAG_EXISTS"] = "Альянс #1 к сожалению уже существует!";
+$LOCA["ru"]["ALLY_MISC_CONFIRM"] = "Подтвердить";
+$LOCA["ru"]["ALLY_MISC_CHANGE_TAG_SUCCESS"] = "Альянс с аббревиатурой \"#1\" имеет теперь аббревиатуру \"#2\"";
+$LOCA["ru"]["ALLY_MISC_CHANGE_OK"] = "Ok";
+$LOCA["ru"]["ALLY_MISC_CHANGE_TAG_HEAD"] = "Как следует переименовать альянс \"#1\"?";
+$LOCA["ru"]["ALLY_MISC_CHANGE_TAG_NEW"] = "Новая аббревиатура: #1";
+$LOCA["ru"]["ALLY_MISC_CHANGE_RENAME"] = "Переименовать";
+$LOCA["ru"]["ALLY_MISC_CHANGE_NAME_SHORT"] = "Название альянса слишком короткое";
+$LOCA["ru"]["ALLY_MISC_CHANGE_NAME_SUCCESS"] = "Альянс \"#1\" переименован в \"#2\"";
+$LOCA["ru"]["ALLY_MISC_CHANGE_NAME_HEAD"] = "Как следует переименовать альянс \"#1\"?";
+$LOCA["ru"]["ALLY_MISC_CHANGE_NAME_NEW"] = "Новое название:";
+
+$LOCA["ru"]["ALLY_MISC_DISMISS_SUCCESS"] = "Альянс был распущен.";
+$LOCA["ru"]["ALLY_MISC_DISMISS_OK"] = "Ok";
+$LOCA["ru"]["ALLY_MISC_DISMISS_CONFIRM"] = "Вы действительно хотите распустить \"#1\" альянс?";
+$LOCA["ru"]["ALLY_MISC_DISMISS_WARNING1"] = "Внимание!";
+$LOCA["ru"]["ALLY_MISC_DISMISS_WARNING2"] = "Восстановление альянса будет невозможно<br>\nи все его члены покинут его!";
+$LOCA["ru"]["ALLY_MISC_YES_FOR_SURE"] = "Да, хочу!";
+
+$LOCA["ru"]["ALLY_MISC_TAKEOVER_SUCCESS"] = "Вы утратили свой статус";
+$LOCA["ru"]["ALLY_MISC_TAKEOVER_TAKEN"] = "Звание передано";
+$LOCA["ru"]["ALLY_MISC_TAKEOVER_STILL_ACTIVE"] = "Глава ещё активен";
+$LOCA["ru"]["ALLY_MISC_TAKEOVER_BACK"] = "Назад";
+$LOCA["ru"]["ALLY_MISC_TAKEOVER_OK"] = "OK";
+$LOCA["ru"]["ALLY_MISC_TAKEOVER_HEAD"] = "Перенять руководство над \"#1\"";
+$LOCA["ru"]["ALLY_MISC_TAKEOVER_WHO"] = "Передача звания";
+$LOCA["ru"]["ALLY_MISC_TAKEOVER_RANK"] = "Ранг: #1";
+$LOCA["ru"]["ALLY_MISC_TAKEOVER_SUBMIT"] = "Передать";
+
 // Сообщения альянса
 
 $LOCA["ru"]["ALLY_MSG_FROM"] = "Альянс [#1]";
@@ -154,5 +186,10 @@ $LOCA["ru"]["ALLY_MSG_COMMON"] = "Общее сообщение";
 $LOCA["ru"]["ALLY_MSG_KICK_TEXT"] = "Игрок #1 исключён из альянса.";
 $LOCA["ru"]["ALLY_MSG_KICK_SUBJ"] = "Членство в альянсе [#1] окончено";
 $LOCA["ru"]["ALLY_MSG_YOU_KICKED"] = "Игрок #1 исключает Вас из альянса [#2] .<br>Теперь Вы можете зарегистрироваться снова";
+$LOCA["ru"]["ALLY_MSG_LEAVE"] = "Игрок #1 покинул альянс.";
+$LOCA["ru"]["ALLY_MSG_DISMISS_SUBJ"] = "Членство в альянсе[#1]окончено";
+$LOCA["ru"]["ALLY_MSG_DISMISS"] = "Игрок #1 распустил альянс [#2].<br>Теперь Вы можете вступить в другой альянс или создать свой собственный";
+$LOCA["ru"]["ALLY_MSG_TAKEOVER_SUBJ"] = "Смена власти в альянсе [#1]";
+$LOCA["ru"]["ALLY_MSG_TAKEOVER"] = "Игрок #1, обладающий титулом основателя альянса, покинул его";
 
 ?>

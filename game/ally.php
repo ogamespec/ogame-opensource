@@ -100,7 +100,7 @@ function EnumerateAlly ($ally_id, $sort_by=0, $order=0, $use_sort=false)
         if ( $order ) $sort .= " DESC";
     }
 
-    $query = "SELECT u.oname, u.ally_id, u.allyrank, u.score1, u.player_id, u.hplanetid, u.joindate, u.lastclick, r.name, p.g, p.s, p.p " .
+    $query = "SELECT u.oname, u.ally_id, u.allyrank, u.score1, u.player_id, u.hplanetid, u.joindate, u.lastclick, u.lang, r.name, p.g, p.s, p.p " .
 			 "	FROM ".$db_prefix."users u " .
 			 "	LEFT  JOIN ".$db_prefix."allyranks r ON u.ally_id = r.ally_id AND u.allyrank = r.rank_id " .
 			 "  LEFT  JOIN ".$db_prefix."planets p ON u.hplanetid = p.planet_id " .
