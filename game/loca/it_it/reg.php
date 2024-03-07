@@ -49,6 +49,52 @@ $LOCA["it"]["REG_ERROR_23"] = "Premi qui per ritornare alla homepage: <a href='#
 $LOCA["it"]["REG_ERROR_24"] = "In alternativa puoi creare un nuovo account: <a href='new.php'>Crea</a>.";
 $LOCA["it"]["REG_ERROR_31"] = "Questo account &egrave; bannato fino al #1<br><br> Per ulteriori informazioni puoi visualizzare la lista bannati <a href=../pranger.php>QUI</a>.";
 
+// new.php
+
+$LOCA["it"]["REG_NEW_ERROR_AGB"] = "Per registrarti devi accettare i Termini e Condizioni!";
+$LOCA["it"]["REG_NEW_ERROR_IP"] = "Attendere 10 minuti per poter registrare un nuovo account dallo stesso indirizzo IP!";
+$LOCA["it"]["REG_NEW_ERROR_CHARS"] = "Il nome #1 contiene caratteri non validi o troppo pochi/molti caratteri!";
+$LOCA["it"]["REG_NEW_ERROR_EXISTS"] = "Username #1 gi&agrave; esistente";
+$LOCA["it"]["REG_NEW_ERROR_EMAIL"] = "Email #1 non valida !";
+$LOCA["it"]["REG_NEW_ERROR_EMAIL_EXISTS"] = "Email #1 gi&agrave; esistente!";
+$LOCA["it"]["REG_NEW_ERROR_MAX_PLAYERS"] = "Il numero massimo di giocatori (#1) è stato raggiunto!";
+$LOCA["it"]["REG_NEW_TITLE"] = "Registrazione Universo #1";
+$LOCA["it"]["REG_NEW_SUCCESS"] = "Registrazione completata con successo!";
+$LOCA["it"]["REG_NEW_TEXT"] = "Congratulazioni, <span class='fine'>#1</span>!<br /><br />ti sei registrato con successo a OGame (<span class='fine'>#2</span>). <br /><br/>\n".
+            "L'email utilizzata per la registrazione &egrave;: <span class='fine'>#3</span>. Clicca sul seguente link per richiedere l'invio dell'email contenente la tua password: <center><a href='mail.php' style='text-decoration: underline;font-size: large;'><br/><br/>CLICCA QUI</a></center><br />\n".
+            "<br/><br />\n".
+            "" .
+            " \n" .
+            "\n" .
+            "\n";
+$LOCA["it"]["REG_NEW_UNI"] = "Universo #1";
+$LOCA["it"]["REG_NEW_CHOOSE_UNI"] = "Scegliere un universo";
+$LOCA["it"]["REG_NEW_NAME"] = "Inserire un nome";
+$LOCA["it"]["REG_NEW_PASSWORD"] = "E la password è stata inviata!";
+$LOCA["it"]["REG_NEW_ERROR"] = "Errore";
+$LOCA["it"]["REG_NEW_PLAYER_INFO"] = "Registrazione";
+$LOCA["it"]["REG_NEW_PLAYER_NAME"] = "Username";
+$LOCA["it"]["REG_NEW_PLAYER_EMAIL"] = "Indirizzo Email";
+$LOCA["it"]["REG_NEW_ACCEPT"] = "Accetto";
+$LOCA["it"]["REG_NEW_AGB"] = "Termini e Condizioni";
+$LOCA["it"]["REG_NEW_SUBMIT"] = "Registrati";
+$LOCA["it"]["REG_NEW_INFO"] = "Descrizione";
+
+$LOCA["it"]["REG_NEW_MESSAGE_0"] = "OK";
+$LOCA["it"]["REG_NEW_MESSAGE_101"] = "Username gi&agrave; esistente!";
+$LOCA["it"]["REG_NEW_MESSAGE_102"] = "Questo indirizzo è già in uso!";
+$LOCA["it"]["REG_NEW_MESSAGE_103"] = "Compreso fra i 3 e i 20 caratteri!";
+$LOCA["it"]["REG_NEW_MESSAGE_104"] = "Indirizzo inserito non valido!";
+$LOCA["it"]["REG_NEW_MESSAGE_105"] = "Il nome del giocatore va bene";
+$LOCA["it"]["REG_NEW_MESSAGE_106"] = "Un indirizzo è d'obbligo";
+$LOCA["it"]["REG_NEW_MESSAGE_107"] = "Ti servir&agrave; per ricevere la password e convalidare l'account!";
+$LOCA["it"]["REG_NEW_MESSAGE_108"] = "Registrazione da un ipi non più di una volta ogni 10 minuti!";
+$LOCA["it"]["REG_NEW_MESSAGE_109"] = "Il numero massimo di giocatori è stato raggiunto!";
+$LOCA["it"]["REG_NEW_MESSAGE_201"] = "Inserisci un username valido.";
+$LOCA["it"]["REG_NEW_MESSAGE_202"] = "Inserisci un indirizzo email valido.";
+$LOCA["it"]["REG_NEW_MESSAGE_203"] = "";
+$LOCA["it"]["REG_NEW_MESSAGE_204"] = "Per proseguire devi accettare i termini e condizioni.";
+
 // user.php
 
 $LOCA["it"]["REG_GREET_MAIL_SUBJ"] = "Registrazione a OGame ";
