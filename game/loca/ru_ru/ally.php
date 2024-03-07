@@ -82,9 +82,6 @@ $LOCA["ru"]["ALLY_MAIN_LEAVE_SUBMIT"] = "Да!";
 // circular
 
 $LOCA["ru"]["ALLY_CIRC_USERLIST"] = "Следующие игроки получили Ваше общее послание";
-$LOCA["ru"]["ALLY_CIRC_FROM"] = "Альянс [#1]";
-$LOCA["ru"]["ALLY_CIRC_SUBJ"] = "Общее послание Вашему альянсу [#1]";
-$LOCA["ru"]["ALLY_CIRC_TEXT"] = "Игрок #1 сообщает Вам следующее:<br>#2";
 $LOCA["ru"]["ALLY_CIRC_SUBMIT"] = "Ok";
 $LOCA["ru"]["ALLY_CIRC_ERROR"] = "Ошибка";
 $LOCA["ru"]["ALLY_CIRC_ERROR_TEXT"] = "К сожалению, получатели не найдены";
@@ -128,6 +125,34 @@ $LOCA["ru"]["ALLY_SETTINGS_LEAVE"] = "Покинуть/перенять этот
 
 // members
 
+$LOCA["ru"]["ALLY_MEMBERS_DENIED"] = "Просмотр невозможен";
+$LOCA["ru"]["ALLY_MEMBERS_COUNT"] = "Cписок членов (кол-во: #1)";
+$LOCA["ru"]["ALLY_MEMBERS_NAME"] = "Имя";
+$LOCA["ru"]["ALLY_MEMBERS_STATUS"] = "Статус";
+$LOCA["ru"]["ALLY_MEMBERS_POINTS"] = "Очки";
+$LOCA["ru"]["ALLY_MEMBERS_COORD"] = "Координаты";
+$LOCA["ru"]["ALLY_MEMBERS_JOINDATE"] = "Вступление";
+$LOCA["ru"]["ALLY_MEMBERS_WRITE_MESSAGE"] = "Написать сообщение";
+$LOCA["ru"]["ALLY_MEMBERS_YES"] = "Да";
+$LOCA["ru"]["ALLY_MEMBERS_NO"] = "Нет";
+$LOCA["ru"]["ALLY_MEMBERS_INACTIVE"] = "Неактивный";
+$LOCA["ru"]["ALLY_MEMBERS_ACTION"] = "Функция";
+$LOCA["ru"]["ALLY_MEMBERS_KICK"] = "Выгнать игрока";
+$LOCA["ru"]["ALLY_MEMBERS_KICK_CONFIRM"] = "Вы уверены, что игрок #1 должен покинуть альянс?";
+$LOCA["ru"]["ALLY_MEMBERS_SET_RANK"] = "Назначить ранг";
+$LOCA["ru"]["ALLY_MEMBERS_RANK_TO"] = "Ранг для #1:";
+$LOCA["ru"]["ALLY_MEMBERS_SAVE"] = "Сохранить";
+
 // misc
+
+// Сообщения альянса
+
+$LOCA["ru"]["ALLY_MSG_FROM"] = "Альянс [#1]";
+$LOCA["ru"]["ALLY_MSG_CIRC_SUBJ"] = "Общее послание Вашему альянсу [#1]";
+$LOCA["ru"]["ALLY_MSG_CIRC_TEXT"] = "Игрок #1 сообщает Вам следующее:<br>#2";
+$LOCA["ru"]["ALLY_MSG_COMMON"] = "Общее сообщение";
+$LOCA["ru"]["ALLY_MSG_KICK_TEXT"] = "Игрок #1 исключён из альянса.";
+$LOCA["ru"]["ALLY_MSG_KICK_SUBJ"] = "Членство в альянсе [#1] окончено";
+$LOCA["ru"]["ALLY_MSG_YOU_KICKED"] = "Игрок #1 исключает Вас из альянса [#2] .<br>Теперь Вы можете зарегистрироваться снова";
 
 ?>
