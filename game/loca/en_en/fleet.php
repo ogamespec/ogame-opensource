@@ -74,4 +74,15 @@ $LOCA["en"]["FLEET3_HOLD_TIME"] = "Время пребывания";
 $LOCA["en"]["FLEET3_HOLD_HOURS"] = "Время в часах";
 $LOCA["en"]["FLEET3_NEXT"] = "Дальше";
 
+// fleet_template
+
+$LOCA["en"]["FLEET_TEMP_TITLE_MAX"] = "Стандартные флоты (макс. #1)";
+$LOCA["en"]["FLEET_TEMP_NAME"] = "Название";
+$LOCA["en"]["FLEET_TEMP_UPDATE"] = "Обработать";
+$LOCA["en"]["FLEET_TEMP_DELETE"] = "Удалить";
+$LOCA["en"]["FLEET_TEMP_CREATE"] = "Создать новый стандартный флот";
+$LOCA["en"]["FLEET_TEMP_SAVE"] = "Сохранить";
+
+// flottenversand
+
 ?>

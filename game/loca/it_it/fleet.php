@@ -72,4 +72,15 @@ $LOCA["it"]["FLEET3_HOLD_TIME"] = "Tempo di stazionamento";
 $LOCA["it"]["FLEET3_HOLD_HOURS"] = "Ora/e";
 $LOCA["it"]["FLEET3_NEXT"] = "procedi";
 
+// fleet_template
+
+$LOCA["it"]["FLEET_TEMP_TITLE_MAX"] = "Slot flotte (max #1)";
+$LOCA["it"]["FLEET_TEMP_NAME"] = "Nome scorciatoia";
+$LOCA["it"]["FLEET_TEMP_UPDATE"] = "Visualizza";
+$LOCA["it"]["FLEET_TEMP_DELETE"] = "Azione";
+$LOCA["it"]["FLEET_TEMP_CREATE"] = "Crea scorciatoia";
+$LOCA["it"]["FLEET_TEMP_SAVE"] = "Crea";
+
+// flottenversand
+
 ?>
