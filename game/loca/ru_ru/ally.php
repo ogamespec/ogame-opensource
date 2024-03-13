@@ -191,5 +191,39 @@ $LOCA["ru"]["ALLY_MSG_DISMISS_SUBJ"] = "Членство в альянсе[#1]о
 $LOCA["ru"]["ALLY_MSG_DISMISS"] = "Игрок #1 распустил альянс [#2].<br>Теперь Вы можете вступить в другой альянс или создать свой собственный";
 $LOCA["ru"]["ALLY_MSG_TAKEOVER_SUBJ"] = "Смена власти в альянсе [#1]";
 $LOCA["ru"]["ALLY_MSG_TAKEOVER"] = "Игрок #1, обладающий титулом основателя альянса, покинул его";
+$LOCA["ru"]["ALLY_MSG_APPLY_ALLY"] = "Игрок #1 был принят в наш альянс.";
+$LOCA["ru"]["ALLY_MSG_APPLY_YES"] = "Регистрация [#1] принята";
+$LOCA["ru"]["ALLY_MSG_APPLY_PLAYER"] = "Сердечно поздравляем, Вы теперь член альянса [#1]";
+$LOCA["ru"]["ALLY_MSG_APPLY_NO"] = "Регистрация [#1] отклонена";
+$LOCA["ru"]["ALLY_MSG_APPLY_NO_REASON"] = "-причина не указана-";
+
+// bewerben (App for User)
+
+$LOCA["ru"]["ALLY_APPU_NOT_ACTIVATED"] = "Эта функция возможна только после активации учетной записи игрока.";
+$LOCA["ru"]["ALLY_APPU_TEMPLATE_MISSING"] = "Управление альянса не предоставило образца";
+$LOCA["ru"]["ALLY_APPU_TEMPLATE"] = "Образец";
+$LOCA["ru"]["ALLY_APPU_SUBMIT"] = "Отправить";
+$LOCA["ru"]["ALLY_APPU_REG"] = "Регистрироваться";
+$LOCA["ru"]["ALLY_APPU_SUBMITTED"] = "Ваше заявление сохранено. Вы получите ответ в случае принятия или отклонения.";
+$LOCA["ru"]["ALLY_APPU_TITLE"] = "Заявка в альянс [#1] написать";
+$LOCA["ru"]["ALLY_APPU_TEXT"] = "Сообщение (#1 / #2 символов)";
+$LOCA["ru"]["ALLY_APPU_HINT"] = "Маленькая помощь";
+$LOCA["ru"]["ALLY_APPU_FORBIDDEN"] = "Подать заявку в альянс [#1] невозможно";
+$LOCA["ru"]["ALLY_APPU_CLOSED"] = "Этот альянс сейчас не принимает новых членов";
+$LOCA["ru"]["ALLY_APPU_BACK"] = "Назад";
+$LOCA["ru"]["ALLY_APPU_OK"] = "OK";
+
+// bewebungen (App for Ally)
+
+$LOCA["ru"]["ALLY_APPA_ACCEPT"] = "Принять";
+$LOCA["ru"]["ALLY_APPA_REJECT"] = "Отклонить";
+$LOCA["ru"]["ALLY_APPA_FROM"] = "Заявление от #1";
+$LOCA["ru"]["ALLY_APPA_ACTION"] = "Реакция на это заявление";
+$LOCA["ru"]["ALLY_APPA_REASON"] = "Причина (по желанию) #1 / #2 символов";
+$LOCA["ru"]["ALLY_APPA_AVAILABLE"] = "В наличии #1 заявлений. Нажмите на имя желаемого игрока, чтобы просмотреть его сообщение";
+$LOCA["ru"]["ALLY_APPA_USER"] = "Заявитель";
+$LOCA["ru"]["ALLY_APPA_DATE"] = "Дата заявления";
+$LOCA["ru"]["ALLY_APPA_OVERVIEW"] = "Обзор регистрации в этом альянсе [#1]";
+$LOCA["ru"]["ALLY_APPA_NONE"] = "Больше заявлений нет";
 
 ?>
