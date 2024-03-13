@@ -2,7 +2,8 @@
 
 // Быстрая отправка флотов из Галактики посредством AJAX.
 
-// Переменные снаружи : aktplanet - текущая планета.
+// Переменные снаружи: aktplanet - текущая планета.
+// Ошибки передаются кодами, которые обрабатываются JavaScript на странице Галактики.
 
 BrowseHistory ();
 
@@ -106,7 +107,7 @@ if ( $order == FTYP_SPY )
     if ( $amount == 0 ) AjaxSendError (611);    // нет кораблей для отправки
     // НЕ проверять отправку флота между игроками с одинаковым IP только если у ОБОИХ отключена проверка IP в настройках.
     // ИЛИ если отправляемый находится на localhost (локальный веб-сервер для отладки)    
-    if ( ! ($GlobalUser['deact_ip'] && $target_user['deact_ip']) && !(localhost($GlobalUser['ip_addr']) ) {
+    if ( ! ($GlobalUser['deact_ip'] && $target_user['deact_ip']) && !localhost($GlobalUser['ip_addr']) ) {
         if ( $target_user['ip_addr'] === $GlobalUser['ip_addr'] ) AjaxSendError (616);    // мультиалярм
     }
 

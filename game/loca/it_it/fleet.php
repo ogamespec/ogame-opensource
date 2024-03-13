@@ -83,4 +83,52 @@ $LOCA["it"]["FLEET_TEMP_SAVE"] = "Crea";
 
 // flottenversand
 
+$LOCA["it"]["FLEET_ERR_FREEZE"] = "Невозможно отправить флот, Вселенная поставлена на паузу.";
+$LOCA["it"]["FLEET_ERR_SAME_PLANET"] = "Coordinate di destinazione devono essere diverse da quelle di partenza";
+$LOCA["it"]["FLEET_ERR_INVALID"] = "Coordinate di destinazione non corrette!";
+$LOCA["it"]["FLEET_ERR_VACATION_SELF"] = "Non puoi inviare flotte in modalit&agrave; vacanza!";
+$LOCA["it"]["FLEET_ERR_VACATION_OTHER"] = "Giocatore in modalit&agrave; vacanza!";
+$LOCA["it"]["FLEET_ERR_MAX_FLEET"] = "Tutti gli slot flotta sono occupati!";
+$LOCA["it"]["FLEET_ERR_IP"] = "Stesso indirizzo IP!";
+$LOCA["it"]["FLEET_ERR_FUEL"] = "Non hai abbastanza deuterio!";
+$LOCA["it"]["FLEET_ERR_CARGO"] = "Stiva insufficiente!";
+$LOCA["it"]["FLEET_ERR_NO_SHIPS"] = "Navi non selezionate!";
+$LOCA["it"]["FLEET_ERR_NOOB"] = "Non puoi attaccare questo giocatore!";
+$LOCA["it"]["FLEET_ERR_OWN_PLANET"] = "Non puoi attaccare te stesso!";
+$LOCA["it"]["FLEET_ERR_ATTACK_BAN_UNI"] = "Blocco attacchi attivo";
+$LOCA["it"]["FLEET_ERR_ATTACK_BAN_PLAYER"] = "Blocco attacchi attivo fino #1";
+$LOCA["it"]["FLEET_ERR_ACS_OTHER"] = "Impossibile unirsi a questa missione";
+$LOCA["it"]["FLEET_ERR_ACS_SLOW"] = "Fuori tempo massimo per unirti a questa flotta";
+$LOCA["it"]["FLEET_ERR_ACS_LIMIT"] = "Limite flotte raggiunto (>#1 flotte non consentite)";
+$LOCA["it"]["FLEET_ERR_DEPLOY_OTHER"] = "Missione schieramento permessa solo sui propri pianeti!";
+$LOCA["it"]["FLEET_ERR_HOLD_FLEET_LIMIT"] = "Limite flotte permesse in stazionamento: #1!";
+$LOCA["it"]["FLEET_ERR_HOLD_PLAYER_LIMIT"] = "Limite giocatori permessi in stazionamento: #1!";
+$LOCA["it"]["FLEET_ERR_HOLD_ALLY"] = "Puoi stazionare solo su alleati o membri presenti in lista amici!";
+$LOCA["it"]["FLEET_ERR_SPY_OWN"] = "Non puoi spiare i tuoi pianeti!";
+$LOCA["it"]["FLEET_ERR_SPY_NOOB"] = "Giocatore troppo forte/debole!";
+$LOCA["it"]["FLEET_ERR_SPY_REQUIRED"] = "Necessarie le sonde spia per la missione spionaggio.";
+$LOCA["it"]["FLEET_ERR_COLONY_REQUIRED"] = "Inviare almeno una nave colonizzatrice per la missione colonizzazione!";
+$LOCA["it"]["FLEET_ERR_COLONY_EXISTS"] = "Posizione gi&agrave; occupata!";
+$LOCA["it"]["FLEET_ERR_RECYCLE_REQUIRED"] = "Inviare almeno una nave riciclatrice per la missione raccolta!";
+$LOCA["it"]["FLEET_ERR_RECYCLE_DF"] = "Nessun campo detriti!";
+$LOCA["it"]["FLEET_ERR_DESTROY_REQUIRED"] = "Selezionare almeno una morte nera per la missione distruzione.";
+$LOCA["it"]["FLEET_ERR_DESTROY_MOON"] = "Puoi inviare le morti nere per la distruzione delle sole lune!";
+$LOCA["it"]["FLEET_ERR_EXP_LIMIT"] = "Devi effettuare la ricerca della tecnologia di spedizione o hai superato il limite di spedizioni consentite.";
+$LOCA["it"]["FLEET_ERR_EXP_REQUIRED"] = "Non puoi inviare satelliti solari in spedizione!";
+$LOCA["it"]["FLEET_ERR_EXP_INVALID"] = "Spedizioni possibili solo in posizione 16!";
+$LOCA["it"]["FLEET_ERR_ORDER"] = "Selezionare almeno una missione!";
+
+$LOCA["it"]["FLEET_SEND_ERROR"] = " Errore!";
+
+$LOCA["it"]["FLEET_SEND_DONE"] = "Flotta inviata:";
+$LOCA["it"]["FLEET_SEND_MISSION"] = "Missione";
+$LOCA["it"]["FLEET_SEND_DIST"] = "Distanza";
+$LOCA["it"]["FLEET_SEND_SPEED"] = "Velocit&agrave;";
+$LOCA["it"]["FLEET_SEND_CONS"] = "Consumo carburante";
+$LOCA["it"]["FLEET_SEND_ORIGIN"] = "Coordinate partenza";
+$LOCA["it"]["FLEET_SEND_TARGET"] = "Coordinate destinazione";
+$LOCA["it"]["FLEET_SEND_ARRIVE"] = "Orario di arrivo";
+$LOCA["it"]["FLEET_SEND_RETURN"] = "Orario di ritorno";
+$LOCA["it"]["FLEET_SEND_SHIPS"] = "Flotta inviata";
+
 ?>

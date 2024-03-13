@@ -92,13 +92,13 @@ $fleet[212] = 0;        // солнечные спутники не летают
 $origin = LoadPlanet ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['thisplanettype']) );
 $target = LoadPlanet ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), intval($_POST['planettype']) );
 
-if ( $GlobalUni['freeze'] ) FleetError ("Невозможно отправить флот, Вселенная поставлена на паузу." );
+if ( $GlobalUni['freeze'] ) FleetError (loca("FLEET_ERR_FREEZE") );
 
 if (  ( $_POST['thisgalaxy'] == $_POST['galaxy'] ) &&
         ( $_POST['thissystem'] == $_POST['system'] ) &&
         ( $_POST['thisplanet'] ==  $_POST['planet'] ) &&
         ( $_POST['thisplanettype'] == $_POST['planettype'] ) 
-  ) FleetError ( "И как ты это себе представляешь?" );
+  ) FleetError ( loca("FLEET_ERR_SAME_PLANET") );
 
 if (
      (intval($_POST['galaxy']) < 1 || intval($_POST['galaxy']) > $GlobalUni['galaxies'])  ||
@@ -106,22 +106,22 @@ if (
      (intval($_POST['planet']) < 1 || intval($_POST['planet']) > 16)
  ) {
     $PageError = "Cheater!";
-    FleetError ( "Планета необитаема либо должна быть колонизирована!" );
+    FleetError ( loca("FLEET_ERR_INVALID") );
     FleetError ( "Cheater!" );
 }
 
 $origin_user = LoadUser ( $origin['owner_id'] );
 $target_user = LoadUser ( $target['owner_id'] );
 
-if ( $origin_user['vacation'] ) FleetError ( "Находясь в режиме отпуска нельзя отправлять флот!" );
-if ( $target_user['vacation'] && $order != 8 ) FleetError ( "Этот игрок находится в режиме отпуска!" );
-if ( $nowfleet >= $maxfleet ) FleetError ( "Достигнута максимальная численность флотов" );
+if ( $origin_user['vacation'] ) FleetError ( loca("FLEET_ERR_VACATION_SELF") );
+if ( $target_user['vacation'] && $order != FTYP_RECYCLE ) FleetError ( loca("FLEET_ERR_VACATION_OTHER") );
+if ( $nowfleet >= $maxfleet ) FleetError ( loca("FLEET_ERR_MAX_FLEET") );
 
 // НЕ проверять отправку флота между игроками с одинаковым IP только если у ОБОИХ отключена проверка IP в настройках.
 // ИЛИ если отправляемый находится на localhost (локальный веб-сервер для отладки)
 if ( ! ($origin_user['deact_ip'] && $target_user['deact_ip']) && !localhost($origin_user['ip_addr']) )
 {
-    if ( $origin_user['ip_addr'] === $target_user['ip_addr'] && $origin_user['player_id'] != $target_user['player_id'] ) FleetError ( "Невозможно приблизиться к игроку!" );
+    if ( $origin_user['ip_addr'] === $target_user['ip_addr'] && $origin_user['player_id'] != $target_user['player_id'] ) FleetError ( loca("FLEET_ERR_IP") );
 }
 
 // Время удержания
@@ -161,8 +161,8 @@ foreach ($fleet as $id=>$amount)
 
 $space = ( ($cargo + $spycargo) - ($cons['fleet'] + $cons['probes']) ) - ($spycargo - $cons['probes']);
 
-if ( $origin['d'] < ($cons['fleet'] + $cons['probes']) ) FleetError ( "Недостаточно топлива!" );
-else if ( $space < 0 ) FleetError ( "Недостаточно места в грузовом отсеке!" );
+if ( $origin['d'] < ($cons['fleet'] + $cons['probes']) ) FleetError ( loca("FLEET_ERR_FUEL") );
+else if ( $space < 0 ) FleetError ( loca("FLEET_ERR_CARGO") );
 
 // Ограничить перевозимые ресурсы грузоподъемностью флота и затратами на полёт.
 $cargo_m = $cargo_k = $cargo_d = 0;
@@ -179,20 +179,20 @@ if ( $space > 0 ) {
     $space -= $cargo_d;
 }
 
-if ($numships <= 0) FleetError ( "Вы не выбрали корабли либо выбрали, но слишком мало!" );
+if ($numships <= 0) FleetError ( loca("FLEET_ERR_NO_SHIPS") );
 
 switch ( $order )
 {
     case '1':        // Атака
-        if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
+        if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
         else if ( ( 
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
              IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
 
-        if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
-        else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Невозможно напасть на собственную планету!" );
-        else if ($BlockAttack) FleetError ( "Запрет на атаки" );
-        else if ($GlobalUser['noattack']) FleetError ( va ( "Запрет на атаки до #1", date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
+        if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( loca("FLEET_ERR_NOOB") );
+        else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( loca("FLEET_ERR_OWN_PLANET") );
+        else if ($BlockAttack) FleetError ( loca("FLEET_ERR_ATTACK_BAN_UNI") );
+        else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
         break;
 
     case '2':        // Совместная атака
@@ -208,49 +208,49 @@ switch ( $order )
         $acs_flighttime = $head_queue['end'] - time();
         $enum_result = EnumUnionFleets ($union_id);
         $acs_fleets = dbrows ($enum_result);
-        if ( ! IsPlayerInUnion ( $GlobalUser['player_id'], $union) || $union == null ) FleetError ( "Вы не приглашены в этот альянс" );
-        else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Невозможно напасть на собственную планету!" );
-        else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
-        else if ( $flighttime > $acs_flighttime * 1.3 ) FleetError ( "Вы слишком медленны, чтобы присоединиться к этому флоту" );
-        else if ($BlockAttack) FleetError ( "Запрет на атаки" );
-        else if ($GlobalUser['noattack']) FleetError ( va ( "Запрет на атаки до #1", date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
-        else if ($acs_fleets >= $GlobalUni['acs'] * $GlobalUni['acs']) FleetError ( va ("Атаковать флоты (>#1 флотов нельзя)", $GlobalUni['acs'] * $GlobalUni['acs']) );
+        if ( ! IsPlayerInUnion ( $GlobalUser['player_id'], $union) || $union == null ) FleetError ( loca("FLEET_ERR_ACS_OTHER") );
+        else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( loca("FLEET_ERR_OWN_PLANET") );
+        else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( loca("FLEET_ERR_NOOB") );
+        else if ( $flighttime > $acs_flighttime * 1.3 ) FleetError ( loca("FLEET_ERR_ACS_SLOW") );
+        else if ($BlockAttack) FleetError ( loca("FLEET_ERR_ATTACK_BAN_UNI") );
+        else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
+        else if ($acs_fleets >= $GlobalUni['acs'] * $GlobalUni['acs']) FleetError ( va (loca("FLEET_ERR_ACS_LIMIT"), $GlobalUni['acs'] * $GlobalUni['acs']) );
         break;
 
     case '3':        // Транспорт
-        if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
+        if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
         break;
 
     case '4':        // Оставить
-        if ( $target['owner_id'] !== $GlobalUser['player_id'] ) FleetError ( "Флоты можно располагать только на собственной планете!" );
+        if ( $target['owner_id'] !== $GlobalUser['player_id'] ) FleetError ( loca("FLEET_ERR_DEPLOY_OTHER") );
         break;
 
     case '5':        // Держаться
         $maxhold_fleets = $GlobalUni['acs'] * $GlobalUni['acs'];
         $maxhold_users = $GlobalUni['acs'];
-        if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "Планета находится под защитой для новичков!" );
-        if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
-        if ( GetHoldingFleetsCount ($target['planet_id']) >= $maxhold_fleets ) FleetError ( va("Задерживаться могут только #1 Удерживать флоты!", $maxhold_fleets));
-        if ( ! CanStandHold ( $target['planet_id'], $origin['owner_id'] ) ) FleetError ( va("Задерживаться могут только #1 игроков!", $maxhold_users));
-        if ( ! ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) FleetError ("Задерживаться можно только у друзей и коллег по альянсу!");
+        if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( loca("FLEET_ERR_NOOB") );
+        if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
+        if ( GetHoldingFleetsCount ($target['planet_id']) >= $maxhold_fleets ) FleetError ( va(loca("FLEET_ERR_HOLD_FLEET_LIMIT"), $maxhold_fleets));
+        if ( ! CanStandHold ( $target['planet_id'], $origin['owner_id'] ) ) FleetError ( va(loca("FLEET_ERR_HOLD_PLAYER_LIMIT"), $maxhold_users));
+        if ( ! ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) FleetError (loca("FLEET_ERR_HOLD_ALLY"));
         break;
 
     case '6':        // Шпионаж
-        if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
+        if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
         else if ( ( 
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
              IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
 
-        if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( "Нельзя шпионить на собственной планете!" );
-        else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( "На этой планете нельзя шпионить из-за защиты для новичков!" );
-        else if ( $fleet[210] == 0 ) FleetError ( "Для шпионажа необходимы шпионские зонды." );
-        else if ($BlockAttack) FleetError ( "Запрет на атаки" );
-        else if ($GlobalUser['noattack']) FleetError ( va ( "Запрет на атаки до #1", date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
+        if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( loca("FLEET_ERR_SPY_OWN") );
+        else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( loca("FLEET_ERR_SPY_NOOB") );
+        else if ( $fleet[210] == 0 ) FleetError ( loca("FLEET_ERR_SPY_REQUIRED") );
+        else if ($BlockAttack) FleetError ( loca("FLEET_ERR_ATTACK_BAN_UNI") );
+        else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
         break;
 
     case '7':        // Колонизировать
-        if ( $fleet[208] == 0 ) FleetError ( "Для колонизации надо послать колонизаторы!" );
-        else if (HasPlanet (intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet'])) ) FleetError ( "Планета уже заселена!" );
+        if ( $fleet[208] == 0 ) FleetError ( loca("FLEET_ERR_COLONY_REQUIRED") );
+        else if (HasPlanet (intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet'])) ) FleetError ( loca("FLEET_ERR_COLONY_EXISTS") );
         else {
             // Если отправлен колонизатор - добавить фантом колонизации.
             $id = CreateColonyPhantom ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), 99999 );
@@ -259,20 +259,20 @@ switch ( $order )
         break;
 
     case '8':        // Переработать
-        if ( $fleet[209] == 0 ) FleetError ( "Для переработки надо послать переработчик!" );
-        else if ($target['type'] != 10000 ) FleetError ( "При переработке можно приближаться только к полям обломков!" );
+        if ( $fleet[209] == 0 ) FleetError ( loca("FLEET_ERR_RECYCLE_REQUIRED") );
+        else if ($target['type'] != PTYP_DF ) FleetError ( loca("FLEET_ERR_RECYCLE_DF") );
         break;
 
     case '9':        // Уничтожить
-        if ( $target == NULL ) FleetError ( "Планета необитаема либо должна быть колонизирована!" );
+        if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
         else if ( ( 
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
              IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
 
-        if ( $fleet[214] == 0 ) FleetError ( "Для уничтожения луны необходима звезда смерти." );
-        else if ($target['type'] != 0 ) FleetError ( "Уничтожать можно только луны!" );
-        else if ($BlockAttack) FleetError ( "Запрет на атаки" );
-        else if ($GlobalUser['noattack']) FleetError ( va ( "Запрет на атаки до #1", date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
+        if ( $fleet[214] == 0 ) FleetError ( loca("FLEET_ERR_DESTROY_REQUIRED") );
+        else if ($target['type'] != PTYP_MOON ) FleetError ( loca("FLEET_ERR_DESTROY_MOON") );
+        else if ($BlockAttack) FleetError ( loca("FLEET_ERR_ATTACK_BAN_UNI") );
+        else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
         break;
 
     case '15':       // Экспедиция
@@ -283,9 +283,9 @@ switch ( $order )
         }
         $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Количество экспедиций
         $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
-        if ( $expnum >= $maxexp ) FleetError ( "Слишком много одновременных экспедиций" );
-        else if ( $manned == 0 ) FleetError ( "Экспедиция должна состоять как минимум из одного управляемого людьми корабля." );
-        else if ( intval($_POST['planet']) != 16 ) FleetError ( "Цель экспедиции недействительна!" );
+        if ( $expnum >= $maxexp ) FleetError ( loca("FLEET_ERR_EXP_LIMIT") );
+        else if ( $manned == 0 ) FleetError ( loca("FLEET_ERR_EXP_REQUIRED") );
+        else if ( intval($_POST['planet']) != 16 ) FleetError ( loca("FLEET_ERR_EXP_INVALID") );
         else {
             $id = CreateOuterSpace ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']) );
             $target = GetPlanet ($id);
@@ -293,7 +293,7 @@ switch ( $order )
         break;
 
     default:
-        FleetError ( "Необходимо выбрать задание!" );
+        FleetError ( loca("FLEET_ERR_ORDER") );
         break;
 }
 
@@ -311,7 +311,7 @@ if ($FleetError) {
 <?php
 
     echo "  <tr height=\"20\">\n";
-    echo "     <td class=\"c\"><span class=\"error\"> Флот не удалось отправить!</span></td>\n";
+    echo "     <td class=\"c\"><span class=\"error\">".loca("FLEET_SEND_ERROR")."</span></td>\n";
     echo "  </tr>\n";
     echo "$FleetErrorText\n";
 }
@@ -354,35 +354,35 @@ else {
 
    <tr height="20">
     <td class="c" colspan="2">
-      <span class="success">Флот отправлен:</span>
+      <span class="success"><?=loca("FLEET_SEND_DONE");?></span>
     </td>
    </tr>
    <tr height="20">
-  <th>Задание</th><th><?php echo loca("FLEET_ORDER_$order");?></th>
+  <th><?=loca("FLEET_SEND_MISSION");?></th><th><?php echo loca("FLEET_ORDER_$order");?></th>
    </tr>
    <tr height="20">
-     <th>Расстояние</th><th><?php echo nicenum($dist);?></th>
+     <th><?=loca("FLEET_SEND_DIST");?></th><th><?php echo nicenum($dist);?></th>
    </tr>
    <tr height="20">
-      <th>Скорость</th><th><?php echo nicenum($slowest_speed);?></th>
+      <th><?=loca("FLEET_SEND_SPEED");?></th><th><?php echo nicenum($slowest_speed);?></th>
    </tr>
    <tr height="20">
-      <th>Потребление</th><th><?php echo nicenum($cons['fleet'] + $cons['probes']);?></th>
+      <th><?=loca("FLEET_SEND_CONS");?></th><th><?php echo nicenum($cons['fleet'] + $cons['probes']);?></th>
    </tr>
    <tr height="20">
-     <th>Отправлен с</th><th><a href="index.php?page=galaxy&galaxy=<?php echo intval($_POST['thisgalaxy']);?>&system=<?php echo intval($_POST['thissystem']);?>&position=<?php echo intval($_POST['thisplanet']);?>&session=<?php echo $session;?>" >[<?php echo intval($_POST['thisgalaxy']);?>:<?php echo intval($_POST['thissystem']);?>:<?php echo intval($_POST['thisplanet']);?>]</a></th>
+     <th><?=loca("FLEET_SEND_ORIGIN");?></th><th><a href="index.php?page=galaxy&galaxy=<?php echo intval($_POST['thisgalaxy']);?>&system=<?php echo intval($_POST['thissystem']);?>&position=<?php echo intval($_POST['thisplanet']);?>&session=<?php echo $session;?>" >[<?php echo intval($_POST['thisgalaxy']);?>:<?php echo intval($_POST['thissystem']);?>:<?php echo intval($_POST['thisplanet']);?>]</a></th>
    </tr>
    <tr height="20">
-     <th>Отправлен на</th><th><a href="index.php?page=galaxy&galaxy=<?php echo intval($_POST['galaxy']);?>&system=<?php echo intval($_POST['system']);?>&position=<?php echo intval($_POST['planet']);?>&session=<?php echo $session;?>" >[<?php echo intval($_POST['galaxy']);?>:<?php echo intval($_POST['system']);?>:<?php echo intval($_POST['planet']);?>]</a></th>
+     <th><?=loca("FLEET_SEND_TARGET");?></th><th><a href="index.php?page=galaxy&galaxy=<?php echo intval($_POST['galaxy']);?>&system=<?php echo intval($_POST['system']);?>&position=<?php echo intval($_POST['planet']);?>&session=<?php echo $session;?>" >[<?php echo intval($_POST['galaxy']);?>:<?php echo intval($_POST['system']);?>:<?php echo intval($_POST['planet']);?>]</a></th>
    </tr>
    <tr height="20">
-     <th>Время прибытия</th><th><?php echo date("D M j G:i:s", $queue['end']);?></th>
+     <th><?=loca("FLEET_SEND_ARRIVE");?></th><th><?php echo date("D M j G:i:s", $queue['end']);?></th>
    </tr>
    <tr height="20">
-     <th>Время возврата</th><th><?php echo date("D M j G:i:s", $queue['end'] + $flighttime + $hold_time);?></th>
+     <th><?=loca("FLEET_SEND_RETURN");?></th><th><?php echo date("D M j G:i:s", $queue['end'] + $flighttime + $hold_time);?></th>
     </tr>
    <tr height="20">
-     <td class="c" colspan="2">Корабли</td>
+     <td class="c" colspan="2"><?=loca("FLEET_SEND_SHIPS");?></td>
    </tr>
 
 <?php
