@@ -19,6 +19,11 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
+$prem = PremiumStatus ($GlobalUser);
+if (!$prem['commander']) {
+    MyGoto ("overview");
+}
+
 PageHeader ("fleet_templates");
 
 $temp_map = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // без сс

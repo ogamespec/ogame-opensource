@@ -24,6 +24,11 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
+$prem = PremiumStatus ($GlobalUser);
+if (!$prem['commander']) {
+    MyGoto ("overview");
+}
+
 PageHeader ("imperium", true);
 
 $planettype = intval($_GET['planettype']);
