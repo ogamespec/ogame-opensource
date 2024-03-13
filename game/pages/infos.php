@@ -61,9 +61,8 @@ $gid = intval($_GET['gid']);
 
 PageHeader ("infos");
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent ();
+
 echo "<table width=\"519\">\n";
 
 if ($gid > 200 && $gid < 300)    // Флот
@@ -500,9 +499,7 @@ else
 }
 
 echo "<br><br><br><br>\n";
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n";
+EndContent ();
 
 PageFooter ();
 ob_end_flush ();

@@ -25,11 +25,9 @@ if ( key_exists ( "type", $_REQUEST ) ) $type = $_REQUEST['type'];
 
 $who = "player";
 if ( key_exists ( "who", $_REQUEST ) ) $who = $_REQUEST['who'];
-?>
 
-<!-- CONTENT AREA --> 
-<div id='content'> 
-<center> 
+BeginContent ();
+?>
 <!-- begin header form --> 
 <form method="post" action='index.php?page=statistics&session=<?php echo $session;?>' > 
   
@@ -296,11 +294,8 @@ else {
 ?>
 
 <!-- end statistic data --><br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent ();
 PageFooter ();
 ob_end_flush ();
 ?>

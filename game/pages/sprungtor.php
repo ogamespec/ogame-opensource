@@ -19,9 +19,7 @@ $session = $_GET['session'];
 
 PageHeader ("sprungtor");
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent ();
 
 $fleetmap = array ( 215, 214, 213, 211, 210, 209, 208, 207, 206, 205, 204, 203, 202 );
 
@@ -98,9 +96,7 @@ if ( $GateError === "" )
     MyGoto ( "infos", "&cp=$target_id&gid=43" );
 }
 
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n\n";
+EndContent ();
 
 PageFooter ("", $GateError);
 ob_end_flush ();

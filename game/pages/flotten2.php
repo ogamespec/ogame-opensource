@@ -19,11 +19,8 @@ $session = $_GET['session'];
 if ( method() !== "POST" ) MyGoto ( "flotten1" );
 
 PageHeader ("flotten2");
+BeginContent();
 ?>
-
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 
 
   <script language="JavaScript" src="js/flotten.js"></script>
@@ -232,11 +229,8 @@ PageHeader ("flotten2");
 <script>
 window.onload=shortInfo;
 </script><br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent ();
 PageFooter ();
 ob_end_flush ();
 ?>

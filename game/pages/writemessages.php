@@ -98,17 +98,12 @@ if ( key_exists ('gesendet', $_GET) )
     }
 }
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent ();
+
 echo $write_error;
 echo "<center>\n";
 echo "<form action=\"index.php?page=writemessages&session=".$_GET['session']."&gesendet=1&messageziel=".intval($_GET['messageziel'])."\" method=\"post\">\n";
 echo "<table width=\"519\">\n\n";
-
-//echo "GET: "; print_r ($_GET); echo "<br>";
-//echo "POST: "; print_r ($_POST); echo "<br>";
-
 echo "<tr><td class=\"c\" colspan=\"2\">".loca("WRITE_MSG_WRITE")."</td></tr>\n";
 echo "<tr><th>".loca("WRITE_MSG_USER")."</th><th><input type=\"text\" name=\"to\" size=\"40\" value=\"".$user['oname']." [".$home['g'].":".$home['s'].":".$home['p']."]\" /></th></tr>\n";
 echo "<tr><th>".loca("WRITE_MSG_SUBJ")."</th><th><input type=\"text\" name=\"betreff\" size=\"40\" maxlength=\"40\" value=\"".loca("WRITE_MSG_DEFAULT_SUBJ")."\" /></th></tr>\n";
@@ -120,9 +115,8 @@ echo "<tr><th colspan=\"2\"><input type=\"submit\" value=\"".loca("WRITE_MSG_SUB
 
 echo "</table></form>\n";
 echo "<br><br><br><br>\n";
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n";
+
+EndContent ();
 
 PageFooter ();
 ob_end_flush ();

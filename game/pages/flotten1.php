@@ -76,11 +76,9 @@ if ( $prem['admiral'] ) $maxfleet += 2;
 $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Количество экспедиций
 $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 
+BeginContent();
 ?>
 
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 <script src="js/flotten.js"></script>
 <!--
 <body>
@@ -399,11 +397,8 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 </form>
 </table>
 <br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent ();
 PageFooter ($FleetMessage, $FleetError);
 ob_end_flush ();
 ?>

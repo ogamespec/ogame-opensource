@@ -51,11 +51,10 @@ $unitab = LoadUniverse ();
 $speed = $unitab['speed'];
 
 $prem = PremiumStatus ($GlobalUser);
+
+BeginContent ();
 ?>
 
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
  <table width="519">
 
 <?php
@@ -578,11 +577,8 @@ $prem = PremiumStatus ($GlobalUser);
 ?>
 
 <br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent ();
 PageFooter ($OptionsMessage, $OptionsError);
 ob_end_flush ();
 ?>

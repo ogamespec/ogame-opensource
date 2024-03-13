@@ -63,17 +63,15 @@ $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 
 $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
 $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
 
+BeginContent ();
 ?>
 
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 <script>t=0;</script>  
 
 <table width="750" border="0" cellpadding="0" cellspacing="1">
 
-<!-- ## 
-<!-- ## Tablehead 
+<!-- ## -->
+<!-- ## Tablehead -->
 <!-- ## -->
         <tr height="20" valign="left">
             <td class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_OVERVIEW");?></td>
@@ -91,8 +89,8 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     }
 ?>
 
-<!-- ## 
-<!-- ## Planetimages 
+<!-- ## -->
+<!-- ## Planetimages -->
 <!-- ## -->
         <tr height="75">        
             <th width="75"></th>            
@@ -112,8 +110,8 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
         </tr>
 
-<!-- ## 
-<!-- ## Name 
+<!-- ## -->
+<!-- ## Name -->
 <!-- ## -->
         <tr height="20">
             <th width="75"><?php echo loca("EMPIRE_NAME");?></th>
@@ -128,8 +126,8 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
         </tr>
 
-<!-- ## 
-<!-- ## Coordinates 
+<!-- ## -->
+<!-- ## Coordinates -->
 <!-- ## -->
         <tr height="20">
             <th width="75"><?php echo loca("EMPIRE_COORD");?></th>
@@ -145,8 +143,8 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
         </tr>
 
-<!-- ## 
-<!-- ## Fields 
+<!-- ## -->
+<!-- ## Fields -->
 <!-- ## -->
         <tr height="20">
             <th width="75"><?php echo loca("EMPIRE_FIELDS");?></th>
@@ -166,15 +164,15 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
         </tr>
 
-<!-- ## 
-<!-- ## Resources-Head
+<!-- ## -->
+<!-- ## Resources-Head -->
 <!-- ## -->
         <tr height="20">
             <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_RES");?></td>
         </tr>
 
-<!-- ## 
-<!-- ## Resources (without Energy)
+<!-- ## -->
+<!-- ## Resources (without Energy) -->
 <!-- ## -->
  
         <tr height="20">
@@ -256,8 +254,8 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
         </tr>
         
 
-<!-- ## 
-<!-- ## Resources-Energy
+<!-- ## -->
+<!-- ## Resources-Energy -->
 <!-- ## -->
         <tr height="20">
             <th width="75"><?php echo loca("ENERGY");?></th>
@@ -281,16 +279,16 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
             <th width="75"><?php echo nicenum($sum_e);?> / <?php echo nicenum($sum_emax);?> </th>
         </tr>
 
-<!-- ## 
-<!-- ## Buildings-Head
+<!-- ## -->
+<!-- ## Buildings-Head -->
 <!-- ## -->
 
         <tr height="20">
             <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_BUILDINGS");?></td>
         </tr>
         
-<!-- ## 
-<!-- ## Buildings
+<!-- ## -->
+<!-- ## Buildings -->
 <!-- ## -->     
 <?php
     foreach ($buildmap as $i=>$gid)
@@ -361,16 +359,16 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     }
 ?>
 
-<!-- ## 
-<!-- ## Research-Head
+<!-- ## -->
+<!-- ## Research-Head -->
 <!-- ## -->
         <tr height="20">
             <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_RESEARCH");?></td>
         </tr>
 
         
-<!-- ## 
-<!-- ## Researches
+<!-- ## -->
+<!-- ## Researches -->
 <!-- ## -->     
 <?php
     foreach ($resmap as $i=>$res)
@@ -400,15 +398,15 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
 ?>
 
-<!-- ## 
-<!-- ## Ships-Head
+<!-- ## -->
+<!-- ## Ships-Head -->
 <!-- ## --> 
         <tr height="20">
             <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_FLEET");?></td>
         </tr>
         
-<!-- ## 
-<!-- ## Ships
+<!-- ## -->
+<!-- ## Ships -->
 <!-- ## -->         
 <?php
     foreach ($fleetmap as $i=>$fleet)
@@ -452,16 +450,16 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
 ?>
 
-<!-- ## 
-<!-- ## Defense-Head
+<!-- ## -->
+<!-- ## Defense-Head -->
 <!-- ## -->     
         <tr height="20">
 
             <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_DEFENSE");?></td>
         </tr>
         
-<!-- ## 
-<!-- ## Defense
+<!-- ## -->
+<!-- ## Defense -->
 <!-- ## -->             
 <?php
     foreach ($defmap as $i=>$def)
@@ -506,17 +504,14 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
 ?>
 
-<!-- ## 
-<!-- ## Footer
+<!-- ## -->
+<!-- ## Footer -->
 <!-- ## -->     
 
 </table>
 <br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent();
 PageFooter ("", "", false, 0, true);
 ob_end_flush ();
 ?>

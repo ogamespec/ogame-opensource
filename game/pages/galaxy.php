@@ -124,9 +124,7 @@ if ( $prem['admiral'] ) $maxfleet += 2;
 
 PageHeader ("galaxy", true);
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n\n";
+BeginContent ();
 
 /***** Скрипты. *****/
 
@@ -767,9 +765,7 @@ echo "</table>\n\n";
 }    // Недостаточно дейтерия
 
 echo "<br><br><br><br>\n";
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n\n";
+EndContent ();
 
 PageFooter ($GalaxyMessage, $GalaxyError, false, 0, true);
 ob_end_flush ();

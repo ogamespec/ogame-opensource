@@ -95,10 +95,8 @@ if ( method () === "GET" && key_exists('mode', $_GET) && $_GET['mode'] === "dele
     }
 }
 
+BeginContent();
 ?>
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 
     <script type="text/javascript">
 
@@ -186,11 +184,8 @@ if ( method () === "GET" && key_exists('mode', $_GET) && $_GET['mode'] === "dele
         </table>
         </div>
 <br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent ();
 PageFooter ();
 ob_end_flush ();
 ?>

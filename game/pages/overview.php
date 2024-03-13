@@ -37,11 +37,9 @@ if ( key_exists ('lgn', $_GET) )
 
 $uni = $GlobalUni;
 
+BeginContent ();
 ?>
 
-<!-- CONTENT AREA --> 
-<div id='content'> 
-<center> 
 <script type="text/javascript"> 
 <!--
 function t_building() {
@@ -204,9 +202,7 @@ echo "<tr><th> ".va ( loca("OVERVIEW_COORD"), "<a href=\"index.php?page=galaxy&g
 echo "<tr><th> ".va( loca("OVERVIEW_RANK"),  $score,  "<a href='index.php?page=statistics&session=$session&start=".(floor($GlobalUser['place1']/100)*100+1)."'>".nicenum($GlobalUser['place1'])."</a>", nicenum($uni['usercount']) )."     \n";
 
 echo "</table>\n<br><br><br><br><br>\n";
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n\n";
+EndContent ();
 
 if ( $GlobalUser['vacation']) $OverviewError = "<center>\nрежим отпуска<br></center>\n";
 if ( $uni['freeze'] ) $OverviewError .= "<center>\nВселенная поставлена на паузу.<br></center>\n";

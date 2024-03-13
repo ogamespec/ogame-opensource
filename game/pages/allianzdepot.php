@@ -23,9 +23,7 @@ $session = $_GET['session'];
 
 PageHeader ("allianzdepot");
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent();
 
 $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
 
@@ -76,9 +74,7 @@ if ( $spent > 0 ) AdjustResources ( 0, 0, $spent, $aktplanet['planet_id'], '-' )
 // Сделать редирект на склад альянса
 MyGoto ( "infos", "&gid=34" );
 
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n\n";
+EndContent ();
 
 PageFooter ("", $DepotError);
 ob_end_flush ();

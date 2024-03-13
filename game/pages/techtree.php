@@ -17,9 +17,7 @@ UpdateLastClick ( $GlobalUser['player_id'] );
 
 PageHeader ("techtree");
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent ();
 
 // **************************************************************************************
 // Список объектов что-чему требуется по категориям.
@@ -142,9 +140,7 @@ foreach ($reqs as $i => $req )
 echo "</table> \n";
 
 echo "<br><br><br><br>\n";
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n";
+EndContent ();
 
 PageFooter ();
 ob_end_flush ();

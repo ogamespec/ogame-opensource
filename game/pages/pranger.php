@@ -31,9 +31,7 @@ if ($internal)
 
     PageHeader ("pranger");
 
-    echo "<!-- CONTENT AREA -->\n";
-    echo "<div id='content'>\n";
-    echo "<center>\n";
+    BeginContent ();
 }
 else {
 
@@ -116,9 +114,7 @@ else {
 if ($internal)
 {
     echo "<br><br><br><br>\n";
-    echo "</center>\n";
-    echo "</div>\n";
-    echo "<!-- END CONTENT AREA -->\n";
+    EndContent ();
 
     PageFooter ("", "");
 }

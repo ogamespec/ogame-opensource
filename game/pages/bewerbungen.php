@@ -63,11 +63,8 @@ $apps = dbrows ( $result );
 
 if ($apps > 0 )
 {
+    BeginContent ();
 ?>
-
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 <table width=519>
 <tr><td class=c colspan=2>Обзор регистрации в этом альянсе [<?=$ally['tag'];?>]</td></tr>
 <?php
@@ -103,25 +100,16 @@ if ($apps > 0 )
     }
 ?>
 </table><br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+    EndContent ();
 }
 else
 {
+    BeginContent ();
 ?>
-
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 <table width=519><tr><td class=c colspan=2>Обзор регистрации в этом альянсе [<?=$ally['tag'];?>]</td></tr><tr><th colspan=2>Больше заявлений нет</th></tr></table><br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+    EndContent ();
 }
 
 PageFooter ();

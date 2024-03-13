@@ -33,9 +33,7 @@ PageHeader ("b_building");
 
 $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent();
 
 ?>
 <script type="text/javascript">
@@ -240,9 +238,7 @@ foreach ( $buildmap as $i => $id )
 echo "  </table>\n</tr>\n</table>\n";
 
 echo "<br><br><br><br>\n";
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n";
+EndContent();
 
 PageFooter ();
 ob_end_flush ();

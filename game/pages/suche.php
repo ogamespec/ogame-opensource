@@ -169,11 +169,8 @@ if ( method () === "POST" )
     }
 }
 
+BeginContent ();
 ?>
-
-<!-- CONTENT AREA --> 
-<div id='content'> 
-<center> 
  <!-- begin search header --> 
  <form action="index.php?page=suche&session=<?php echo $session;?>" method="post"> 
  <table width="519"> 
@@ -203,11 +200,8 @@ if ( method () === "POST" )
 ?>
  <!-- end search results --> 
 <br><br><br><br> 
-</center> 
-</div> 
-<!-- END CONTENT AREA --> 
-
 <?php
+EndContent ();
 PageFooter ($SearchMessage, $SearchError);
 ob_end_flush ();
 ?>

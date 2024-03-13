@@ -238,10 +238,8 @@ if ( $GlobalUser['trader'] > 0 )
     else $ratewhat = 1.0;
 }
 
+BeginContent ();
 ?>
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 <script>
 storage      = new Array(<?=$storage;?>);
 factor       = new Array(<?=$factor;?>);
@@ -519,11 +517,8 @@ function setMaxValue(id) {
     }
 ?>
 	<br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent ();
 PageFooter ($TraderMessage, $TraderError);
 ob_end_flush ();
 ?>

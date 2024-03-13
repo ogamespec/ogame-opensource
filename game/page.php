@@ -673,4 +673,18 @@ function MyGoto ($page, $param="")
     die ( "<html><head><meta http-equiv='refresh' content='0;url=$url' /></head><body></body></html>" );
 }
 
+function BeginContent ()
+{
+    echo "<!-- CONTENT AREA -->\n";
+    echo "<div id='content'>\n";
+    echo "<center>\n";
+}
+
+function EndContent ()
+{
+    echo "</center>\n";
+    echo "</div>\n";
+    echo "<!-- END CONTENT AREA -->\n\n";
+}
+
 ?>

@@ -48,11 +48,8 @@ if ( $planet < 0 ) $planet = 0;
 if ( $planet > 16 ) $planet = 16;
 
 PageHeader ("flotten3");
+BeginContent ();
 ?>
-
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 
   <script language="JavaScript" src="js/flotten.js"></script>
   <script type="text/javascript">
@@ -327,11 +324,8 @@ PageHeader ("flotten3");
 </tr>
  </form>
 </table><br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent ();
 PageFooter ();
 ob_end_flush ();
 ?>

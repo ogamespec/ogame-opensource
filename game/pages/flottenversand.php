@@ -317,11 +317,8 @@ if ($FleetError) {
 
     PageHeader ("flottenversand", false, true, "flotten1", 1);
 
+    BeginContent ();
 ?>
-
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
   <script language="JavaScript" src="js/flotten.js"></script>
   <table width="519" border="0" cellpadding="0" cellspacing="1">
 
@@ -362,16 +359,10 @@ else {
 
     unlink ( $fleetlock );
 
-//    echo "<br>";
-//    print_r ( $queue);
-
     PageHeader ("flottenversand", false, true, "flotten1", 1);
 
+    BeginContent ();
 ?>
-
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
   <script language="JavaScript" src="js/flotten.js"></script>
   <table width="519" border="0" cellpadding="0" cellspacing="1">
 
@@ -424,11 +415,8 @@ else {
 
    </table>
 <br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent ();
 PageFooter ("", $PageError);
 ob_end_flush ();
 ?>

@@ -220,9 +220,7 @@ function Buddy_Request ()
 
 PageHeader ("buddy");
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent();
 
 if ( key_exists ('action', $_GET) && $_GET['action'] == 1 && $_GET['buddy_id'])    // Добавить свою заявку.
 {
@@ -284,9 +282,7 @@ else if ( key_exists ('action', $_GET) && $_GET['action'] == 8 && $_GET['buddy_i
 }
 else Buddy_Home ();
 
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n";
+EndContent();
 
 PageFooter ("", $BuddyError);
 ob_end_flush ();

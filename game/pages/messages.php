@@ -49,9 +49,7 @@ $days = $prem['commander'] ? 7 : 1;
 DeleteExpiredMessages ( $GlobalUser['player_id'], $days );    // Удалить сообщения которые хранятся дольше 24 часов (7 дней с Командиром)
 
 // Заголовок таблицы
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent ();
 
 if ( method() === "POST" )
 {
@@ -250,9 +248,7 @@ echo "<tr><td class=\"c\" colspan=\"4\">".loca("MSG_OPER")."</td></tr>\n";
 
 echo "</table></td></tr></table>\n";
 echo "<br><br><br><br>\n";
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n";
+EndContent ();
 
 PageFooter ();
 ob_end_flush ();
