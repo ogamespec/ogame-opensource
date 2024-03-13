@@ -20,7 +20,7 @@ function PageAlly_Settings ()
     $MAXTEXT = 5000;
 
     $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
-    if ( ! ($myrank['rights'] & 0x020) )
+    if ( ! ($myrank['rights'] & ARANK_W_MEMBERS) )
     {
         $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
         return;

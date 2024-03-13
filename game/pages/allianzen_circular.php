@@ -17,7 +17,7 @@ function AllyPage_CircularMessage ()
     {
         $ally_id = $ally['ally_id'];
         $myrank = LoadRank ( $ally_id, $GlobalUser['allyrank'] );
-        if ( ! ($myrank['rights'] & 0x080) )
+        if ( ! ($myrank['rights'] & ARANK_CIRCULAR) )
         {
             $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
             return;

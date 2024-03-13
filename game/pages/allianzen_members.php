@@ -10,7 +10,7 @@ function PageAlly_MemberList ()
     global $AllianzenError;
 
     $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
-    if ( ! ($myrank['rights'] & 0x008) )
+    if ( ! ($myrank['rights'] & ARANK_R_MEMBERS) )
     {
         $AllianzenError = "<center>\n".loca("ALLY_MEMBERS_DENIED")."<br></center>";
         return;
@@ -36,8 +36,8 @@ function PageAlly_MemberList ()
     <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=0&sort2=<?=$sort2^1;?>"><?=loca("ALLY_MEMBERS_COORD");?></a></th>
     <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=4&sort2=<?=$sort2^1;?>"><?=loca("ALLY_MEMBERS_JOINDATE");?></a></th>
 <?php
-    if ( $myrank['rights'] & 0x040 ) echo "    <th><a href=\"index.php?page=allianzen&session=$session&a=4&sort1=5&sort2=".($sort2^1)."\">Online</a></th></tr>\n";
-    if ( ($myrank['rights'] & 0x040) == 0 && $sort1 == 5 ) $sort1 = 0;
+    if ( $myrank['rights'] & ARANK_ONLINE ) echo "    <th><a href=\"index.php?page=allianzen&session=$session&a=4&sort1=5&sort2=".($sort2^1)."\">Online</a></th></tr>\n";
+    if ( ($myrank['rights'] & ARANK_ONLINE) == 0 && $sort1 == 5 ) $sort1 = 0;
 ?>
 <?php
     $result = EnumerateAlly ($ally['ally_id'], $sort1, $sort2, $use_sort);
@@ -57,7 +57,7 @@ function PageAlly_MemberList ()
         echo "    <th>".nicenum($user['score1'] / 1000)."</th>\n";
         echo "    <th><a href=\"index.php?page=galaxy&galaxy=".$hplanet['g']."&system=".$hplanet['s']."&position=".$hplanet['p']."&session=$session\" >[".$hplanet['g'].":".$hplanet['s'].":".$hplanet['p']."]</a></th>\n";
         echo "    <th>".date ("Y-m-d H:i:s", $user['joindate'])."</th>\n";
-        if ( $myrank['rights'] & 0x040 )
+        if ( $myrank['rights'] & ARANK_ONLINE )
         {
             $min = floor ( ($now - $user['lastclick']) / 60 );
             if ( $min < 15 ) echo "    <th><font color=lime>".loca("ALLY_MEMBERS_YES")."</font></th>";
