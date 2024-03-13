@@ -233,9 +233,9 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             if ( $sum_cargo == 0) $cargo = 0;
             else $cargo = ( FleetCargoSummary ( $attacker ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) {
-                if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker, $queue['end'] );
+                if ( $fleet_obj['mission'] == FTYP_DESTROY && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker, $queue['end'] );
                 else $result = 0;
-                if ( $result < 2 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $fleet_obj['m']+$cm * $cargo, $fleet_obj['k']+$ck * $cargo, $fleet_obj['d']+$cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
+                if ( $result < 2 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj['m']+$cm * $cargo, $fleet_obj['k']+$ck * $cargo, $fleet_obj['d']+$cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
             }
         }
 
@@ -281,9 +281,9 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             if ( $sum_cargo == 0) $cargo = 0;
             else $cargo = ( FleetCargoSummary ( $attacker['fleet'] ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) {
-                if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['fleet'], $queue['end'] );
+                if ( $fleet_obj['mission'] == FTYP_DESTROY && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['fleet'], $queue['end'] );
                 else $result = 0;
-                if ( $result < 2 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $fleet_obj['m']+$cm * $cargo, $fleet_obj['k']+$ck * $cargo, $fleet_obj['d']+$cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
+                if ( $result < 2 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj['m']+$cm * $cargo, $fleet_obj['k']+$ck * $cargo, $fleet_obj['d']+$cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
             }
         }
 
@@ -485,7 +485,7 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
     $target = GetPlanet ( $fleet_obj['target_planet'] );
 
     if ( $fleet[214] == 0 ) return;
-    if ( ! ($target['type'] == 0 || $target['type'] == 10003) ) Error ( "Уничтожать можно только луны!" );
+    if ( ! ($target['type'] == PTYP_MOON || $target['type'] == PTYP_DEST_MOON) ) Error ( "Уничтожать можно только луны!" );
 
     $diam = $target['diameter'];
     $rips = $fleet[214];
@@ -881,7 +881,7 @@ function WritebackBattleResultsExpedition ( $a, $d, $res )
 
             // Вернуть флот, если что-то осталось.
             // В качестве времени полёта используется время удержания.
-            if ($ships > 0) DispatchFleet ($attacker, $origin, $target, 115, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
+            if ($ships > 0) DispatchFleet ($attacker, $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
         }
 
     }
@@ -901,7 +901,7 @@ function WritebackBattleResultsExpedition ( $a, $d, $res )
 
             // Вернуть флот, если что-то осталось.
             // В качестве времени полёта используется время удержания.
-            if ($ships > 0)  DispatchFleet ($attacker['fleet'], $origin, $target, 115, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
+            if ($ships > 0)  DispatchFleet ($attacker['fleet'], $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
         }
 
     }

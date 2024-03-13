@@ -55,9 +55,9 @@ if ( $rows ) {
 // Проверить параметры.
 
 if ( $planettype < 1 || $planettype > 3 ) AjaxSendError ();    // неверная цель
-if ( ! ( $order == 6 || $order == 8 ) ) AjaxSendError ();    // можно отправлять только шпионаж или переработать
-if ( $order == 8 && $planettype != 2 ) AjaxSendError ();    // рабов можно отправлять только на ПО
-if ( $order == 6 && ! ($planettype == 1 || $planettype == 3) )  AjaxSendError ();     // шпионить можно только планеты или луны
+if ( ! ( $order == FTYP_SPY || $order == FTYP_RECYCLE ) ) AjaxSendError ();    // можно отправлять только шпионаж или переработать
+if ( $order == FTYP_RECYCLE && $planettype != 2 ) AjaxSendError ();    // рабов можно отправлять только на ПО
+if ( $order == FTYP_SPY && ! ($planettype == 1 || $planettype == 3) )  AjaxSendError ();     // шпионить можно только планеты или луны
 if ( $galaxy < 1 || $galaxy > $GlobalUni['galaxies'] ) AjaxSendError ();    // неправильные координаты (Галактика)
 if ( $system < 1 || $system > $GlobalUni['systems'] ) AjaxSendError ();    // неправильные координаты (Система)
 if ( $planet < 1 || $planet > 15 ) AjaxSendError ();    // неправильные координаты (Позиция)
@@ -93,7 +93,7 @@ if ( (
 
 /* ************ ШПИОНАЖ ************  */
 
-if ( $order == 6 )
+if ( $order == FTYP_SPY )
 {
     $amount = min ($aktplanet["f210"], $shipcount);
 
@@ -104,7 +104,9 @@ if ( $order == 6 )
     if ( IsPlayerStrong ($target_user['player_id']) ) AjaxSendError (604);    // защита сильных
     if ( $target_user['vacation'] ) AjaxSendError (605);    // игрок в режиме отпуска
     if ( $amount == 0 ) AjaxSendError (611);    // нет кораблей для отправки
-    if ( !($GlobalUser['ip_addr'] === "127.0.0.1" || $GlobalUser['ip_addr'] === "::1") ) {
+    // НЕ проверять отправку флота между игроками с одинаковым IP только если у ОБОИХ отключена проверка IP в настройках.
+    // ИЛИ если отправляемый находится на localhost (локальный веб-сервер для отладки)    
+    if ( ! ($GlobalUser['deact_ip'] && $target_user['deact_ip']) && !(localhost($GlobalUser['ip_addr']) ) {
         if ( $target_user['ip_addr'] === $GlobalUser['ip_addr'] ) AjaxSendError (616);    // мультиалярм
     }
 
@@ -120,7 +122,7 @@ if ( $order == 6 )
 
 /* ************ ПЕРЕРАБОТАТЬ ************  */
 
-if ( $order == 8 )
+if ( $order == FTYP_RECYCLE )
 {
     $amount = min ($aktplanet["f209"], $shipcount);
 

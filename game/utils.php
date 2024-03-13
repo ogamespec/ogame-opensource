@@ -91,4 +91,9 @@ function mail_utf8($to, $subject = '(No subject)', $message = '', $header = '')
     mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $header_ . $header);
 }
 
+function localhost ($ip)
+{
+    return $ip === "127.0.0.1" || $ip === "::1";
+}
+
 ?>

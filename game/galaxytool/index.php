@@ -4,7 +4,7 @@ require_once "../loca.php";
 require_once "../utils.php";
 
 $loca_lang = $_COOKIE['ogamelang'];
-if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
+if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
 loca_add ( "galaxytool", $loca_lang );
 
 // Получить маленькую картинку планеты.

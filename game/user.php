@@ -194,7 +194,6 @@ function CreateUser ( $name, $pass, $email, $bot=false)
     if ( !key_exists ( $lang, $Languages ) ) $lang = $unitab['lang'];
 
     $ip = $_SERVER['REMOTE_ADDR'];
-    $localhost = $ip === "127.0.0.1" || $ip === "::1";
 
     $user = array( null, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, "", $email, $email,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -217,7 +216,7 @@ function CreateUser ( $name, $pass, $email, $bot=false)
 
     // Выслать приветственное письмо и сообщение.
     if ( !$bot ) {
-        if ( !$localhost ) SendGreetingsMail ( $origname, $pass, $email, $ack);
+        if ( !localhost($ip) ) SendGreetingsMail ( $origname, $pass, $email, $ack);
         SendGreetingsMessage ( $id);
     }
 
@@ -495,7 +494,7 @@ function Logout ( $session )
 // Вызывается при загрузке каждой игровой страницы.
 function CheckSession ( $session )
 {
-    global $db_prefix, $GlobalUser, $loca_lang, $Languages, $GlobalUni;
+    global $db_prefix, $GlobalUser, $loca_lang, $Languages, $GlobalUni, $DefaultLanguage;
     // Получить ID-пользователя и номер вселенной из публичной сессии.
     $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$session."'";
     $result = dbquery ($query);
@@ -504,22 +503,21 @@ function CheckSession ( $session )
     $unitab = $GlobalUni;
     $uni = $unitab['num'];
     $ip = $_SERVER['REMOTE_ADDR'];
-    $localhost = $ip === "127.0.0.1" || $ip === "::1";
     $cookie_name = 'prsess_'.$GlobalUser['player_id'].'_'.$uni;
     $prsess = "";
     if (key_exists($cookie_name, $_COOKIE)) {
         $prsess = $_COOKIE [$cookie_name];
     }
     if ( $prsess !== $GlobalUser['private_session'] ) { InvalidSessionPage (); return FALSE; }
-    if ( !$localhost && !$GlobalUser['deact_ip'] ) {
+    if ( !localhost($ip) && !$GlobalUser['deact_ip'] ) {
         if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
     }
 
-    // Установить глобальный язык для сессии: язык пользователя -> язык вселенной(если ошибка) -> en(если ошибка)
+    // Установить глобальный язык для сессии: язык пользователя -> язык вселенной(если ошибка) -> язык по умолчанию(если ошибка)
 
     $loca_lang = $GlobalUser['lang'];
     if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $GlobalUni['lang'];
-    if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
+    if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
 
     return TRUE;
 }
@@ -763,7 +761,7 @@ function ReactivateUser ($player_id)
 
     $query = "UPDATE ".$db_prefix."users SET validatemd = '".$ack."', validated = 0, password = '".$md."' WHERE player_id = $player_id";
     dbquery ($query);
-    if ( $_SERVER['REMOTE_ADDR'] !== "127.0.0.1" ) SendGreetingsMail ( $name, $pass, $email, $ack);
+    if ( !localhost($_SERVER['REMOTE_ADDR']) ) SendGreetingsMail ( $name, $pass, $email, $ack);
 }
 
 // Очистить кеш игроков.
