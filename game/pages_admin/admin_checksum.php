@@ -41,6 +41,7 @@ function Admin_Checksum ()
         'pranger.php', 
         'prod.php', 
         'queue.php', 
+        'raketen.php', 
         'redir.php', 
         'uni.php', 
         'unit.php', 
