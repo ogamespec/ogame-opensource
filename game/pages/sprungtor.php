@@ -38,8 +38,8 @@ foreach ( $fleetmap as $i=>$gid)
 $source = GetPlanet ( $source_id );
 $target = GetPlanet ( $target_id );
 
-if ( $source['type'] != 0 ) $GateError .= "<center>\n".loca("GATE_ERR_START")."<br></center>\n";
-if ( $target['type'] != 0 ) $GateError .= "<center>\n".loca("GATE_ERR_TARGET")."<br></center>\n";
+if ( $source['type'] != PTYP_MOON ) $GateError .= "<center>\n".loca("GATE_ERR_START")."<br></center>\n";
+if ( $target['type'] != PTYP_MOON ) $GateError .= "<center>\n".loca("GATE_ERR_TARGET")."<br></center>\n";
 
 if ( $GateError === "" )
 {

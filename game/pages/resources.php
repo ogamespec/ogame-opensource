@@ -170,7 +170,7 @@ $rows = dbrows ($result);
 while ($rows--)
 {
     $pl = dbarray ($result);
-    if ( $pl['type'] != 0 ) $count++;
+    if ( $pl['type'] != PTYP_MOON ) $count++;
 }
 if ( $count > 9 ) echo "<br><font color=#ff000>".loca("RES_INFO")."</font>";
 

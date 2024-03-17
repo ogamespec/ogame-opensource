@@ -51,9 +51,9 @@ if ( $planettype == 1 || $planettype == 3)
     while ($rows--)
     {
         $planet = dbarray ($result);
-        if ($planet['type'] == 0 ) $moons++;
-        if ( $planettype == 1 && $planet['type'] == 0 ) continue;
-        if ( $planettype == 3 && $planet['type'] != 0 ) continue;
+        if ($planet['type'] == PTYP_MOON ) $moons++;
+        if ( $planettype == 1 && $planet['type'] == PTYP_MOON ) continue;
+        if ( $planettype == 3 && $planet['type'] != PTYP_MOON ) continue;
         $plist[$num] = GetPlanet ($planet['planet_id']);
         $plist[$num] = ProdResources ( $plist[$num], $plist[$num]['lastpeek'], $now );
         $num ++;

@@ -480,7 +480,7 @@ while ($num--)
     for ($p; $p<$planet['p']; $p++) empty_row ($p);
 
     $phalanx = ($system_radius <= $phalanx_radius) && 
-               ($aktplanet['type'] == 0) && 
+               ($aktplanet['type'] == PTYP_MOON) && 
                ($planet['owner_id'] != $GlobalUser['player_id']) &&
                ($planet['g'] == $aktplanet['g']);
 
@@ -490,7 +490,7 @@ while ($num--)
 
     // Планета
     echo "<th width=\"30\">\n";
-    if ( $planet['type'] > 0 && $planet['type'] < 10000 )
+    if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
     {
         echo "<a style=\"cursor:pointer\" onmouseover='return overlib(\"<table width=240>";
         echo "<tr><td class=c colspan=2 >".loca("GALAXY_PLANET")." ".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]</td></tr>";
@@ -532,8 +532,8 @@ while ($num--)
         if ( $activity > $ago15 ) $akt = "&nbsp;(*)";
         else if ( $activity > $ago60) $akt = "&nbsp;(".floor(($now - $activity)/60)." min)";
     }
-    if ( $planet['type'] == 10001 ) $planet_name = loca("GALAXY_PLANET_DESTROYED") . $akt;
-    else if ( $planet['type'] == 10004 ) { $planet_name = loca("GALAXY_PLANET_ABANDONED") . $akt; $phalanx = false; }
+    if ( $planet['type'] == PTYP_DEST_PLANET ) $planet_name = loca("GALAXY_PLANET_DESTROYED") . $akt;
+    else if ( $planet['type'] == PTYP_ABANDONED ) { $planet_name = loca("GALAXY_PLANET_ABANDONED") . $akt; $phalanx = false; }
     else $planet_name = $planet['name'].$akt;
     if ($phalanx) $planet_name = "<a href='#' onclick=fenster('index.php?page=phalanx&session=$session&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."',\"Bericht_Phalanx\") title=\"".loca("GALAXY_FLEET_PHALANX")."\">" . $planet_name . "</a>";
     echo "<th width=\"130\" style='white-space: nowrap;'>$planet_name</th>\n";
@@ -542,7 +542,7 @@ while ($num--)
     echo "<th width=\"30\" style='white-space: nowrap;'>\n";
     if ($moon_id)
     {
-        if ($moon['type'] == 0)
+        if ($moon['type'] == PTYP_MOON)
         {
             echo "<a onmouseout=\"return nd();\" onmouseover=\"return overlib('<table width=240 ><tr>";
             echo "<td class=c colspan=2 >".loca("GALAXY_MOON")." ".$moon['name']." [".$moon['g'].":".$moon['s'].":".$moon['p']."]</td></tr>";
@@ -601,7 +601,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     // Приоритеты Обычного: Режим отпуска -> Заблокирован -> Давно неактивен -> Неактивен -> Без статуса
     $stat = "";
     echo "<th width=\"150\">\n";
-    if ( !($planet['type'] == 10001 || $planet['type'] == 10004) )
+    if ( !($planet['type'] == PTYP_DEST_PLANET || $planet['type'] == PTYP_ABANDONED) )
     {
         echo "<a style=\"cursor:pointer\" onmouseover=\"return overlib('<table width=240 >";
         echo "<tr><td class=c >".va(loca("GALAXY_USER_TITLE"), $user['oname'], $user['place1'])."</td></tr>";
@@ -639,7 +639,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     echo "</th>\n";
 
     // Альянс
-    if ($user['ally_id'] && !($planet['type'] == 10001 || $planet['type'] == 10004) )
+    if ($user['ally_id'] && !($planet['type'] == PTYP_DEST_PLANET || $planet['type'] == PTYP_ABANDONED) )
     {
         $ally = LoadAlly ( $user['ally_id']);
         $allytext = "<a style=\"cursor:pointer\"\n";
@@ -660,7 +660,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
 
     // Действия
     echo "<th width=\"125\" style='white-space: nowrap;'>\n";
-    if ( !($planet['type'] == 10001 || $planet['type'] == 10004) && !$own)
+    if ( !($planet['type'] == PTYP_DEST_PLANET || $planet['type'] == PTYP_ABANDONED) && !$own)
     {
         if ($prem['commander'] && $GlobalUser['flags'] & USER_FLAG_SHOW_VIEW_REPORT_BUTTON) {
 
@@ -736,7 +736,7 @@ if ($prem['commander'] && $aktplanet["d503"] > 0) {
     $extra_info .= "<span id=\"missiles\">".nicenum($aktplanet["d503"])."</span>".loca("GALAXY_INFO_IPM");
 }
 // Дейтерий показывается только для лун (даже без Командира)
-if ($aktplanet['type'] == 0) {
+if ($aktplanet['type'] == PTYP_MOON) {
     $extra_info .= loca("GALAXY_INFO_DEUTERIUM") . nicenum($aktplanet["d"]);
 }
 if ($prem['commander']) {
