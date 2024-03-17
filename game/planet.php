@@ -382,7 +382,7 @@ function CreateAbandonedColony ($g, $s, $p, $when)
     // Если на заданных координатах нет планеты, то добавить Покинутую колонию.
     if ( !HasPlanet ( $g, $s, $p ) )
     {
-        $planet = array( null, "Покинутая колония", PTYP_ABANDONED, $g, $s, $p, 99999, 0, 0, 0, 0, $when,
+        $planet = array( null, "Покинутая колония", PTYP_ABANDONED, $g, $s, $p, USER_SPACE, 0, 0, 0, 0, $when,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -474,7 +474,7 @@ function CreateOuterSpace ($g, $s, $p)
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 ) 
     {
-        $planet = array( null, "Бесконечные дали", PTYP_FARSPACE, $g, $s, $p, 99999, 0, 0, 0, 0, time(),
+        $planet = array( null, "Бесконечные дали", PTYP_FARSPACE, $g, $s, $p, USER_SPACE, 0, 0, 0, 0, time(),
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

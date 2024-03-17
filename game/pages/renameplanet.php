@@ -96,7 +96,7 @@ if ( method() === "POST" )
                             $moon = GetPlanet ( $moon_id );        // Удалять только целые луны.
                             if ( $moon['type'] == 0 )
                             {
-                                $query = "UPDATE ".$db_prefix."planets SET type = 10003, owner_id = 99999, date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $moon_id . ";";
+                                $query = "UPDATE ".$db_prefix."planets SET type = ".PTYP_DEST_MOON.", owner_id = ".USER_SPACE.", date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $moon_id . ";";
                                 dbquery ( $query );
 
                                 // Удалить очередь на луне
@@ -108,8 +108,8 @@ if ( method() === "POST" )
                                 RecalcRanks ();
                             }
                         }
-                        if ($planet['type'] == 0) $query = "UPDATE ".$db_prefix."planets SET type = 10003, owner_id = 99999, date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
-                        else $query = "UPDATE ".$db_prefix."planets SET type = 10001, owner_id = 99999, date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
+                        if ($planet['type'] == 0) $query = "UPDATE ".$db_prefix."planets SET type = ".PTYP_DEST_MOON.", owner_id = ".USER_SPACE.", date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
+                        else $query = "UPDATE ".$db_prefix."planets SET type = ".PTYP_DEST_PLANET.", owner_id = ".USER_SPACE.", date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
                         dbquery ( $query );
 
                         // Удалить очередь на планете

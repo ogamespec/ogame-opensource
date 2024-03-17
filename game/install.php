@@ -127,7 +127,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     // Создать технический аккаунт "space"
     $md = md5 ( gen_trivial_password() . $_POST['db_secret'] );
     $opt = " (";
-    $user = array( 99999, $now, 0, 0, 0, "",  "", "space", "space", 0, 0, $md, "", "", "",
+    $user = array( USER_SPACE, $now, 0, 0, 0, "",  "", "space", "space", 0, 0, $md, "", "", "",
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, "0.0.0.0", 1, "", 1, 2, 0, 0,
                         hostname() . "evolution/", 1, 1, 1, 3, $_POST["uni_lang"], 0,
@@ -148,7 +148,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     // Создать администраторский аккаунт (Legor).
     $md = md5 ($_POST['admin_pass'] . $_POST['db_secret']);
     $opt = " (";
-    $user = array( 1, $now, 0, 0, 0, "",  "", "legor", "Legor", 0, 0, $md, "", $_POST['admin_email'], $_POST['admin_email'],
+    $user = array( USER_LEGOR, $now, 0, 0, 0, "",  "", "legor", "Legor", 0, 0, $md, "", $_POST['admin_email'], $_POST['admin_email'],
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, "0.0.0.0", 1, "", 1, 2, 0, 0,
                         hostname() . "evolution/", 1, 1, 1, 3, $_POST["uni_lang"], 1,
@@ -168,7 +168,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
 
     // Создать планету Arakis [1:1:2] и луну Mond (да, в названии планеты только одна буква `r`, это отсылка к Дюне)
     $opt = " (";
-    $planet = array( 1, "Arakis", 102, 1, 1, 2, 1, 12800, 40, 0, 163, $now,
+    $planet = array( 1, "Arakis", PTYP_PLANET, 1, 1, 2, USER_LEGOR, 12800, 40, 0, 163, $now,
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -182,7 +182,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query = "INSERT INTO ".$_POST["db_prefix"]."planets VALUES".$opt;
     dbquery( $query);
     $opt = " (";
-    $planet = array( 2, "Mond", 0, 1, 1, 2, 1, 8944, 10, 0, 1, $now,
+    $planet = array( 2, "Mond", PTYP_MOON, 1, 1, 2, USER_LEGOR, 8944, 10, 0, 1, $now,
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

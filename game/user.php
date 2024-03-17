@@ -76,8 +76,11 @@ const USER_FLAG_FOLDER_ALLIANCE = 0x800;            // 1: Показывать �
 const USER_FLAG_FOLDER_PLAYER = 0x1000;             // 1: Показывать личные сообщения (pm=0)
 const USER_FLAG_FOLDER_OTHER = 0x2000;              // 1: Показывать прочие сообщения (pm=5)
 
-
+// Флаги по умолчанию после создания игрока
 const USER_FLAG_DEFAULT = USER_FLAG_SHOW_ESPIONAGE_BUTTON | USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON | USER_FLAG_SHOW_BUDDY_BUTTON | USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON | USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
+
+const USER_LEGOR = 1;
+const USER_SPACE = 99999;
 
 $UserCache = array ();
 $PremiumCache = array ();
@@ -236,14 +239,14 @@ function CreateUser ( $name, $pass, $email, $bot=false)
     return $id;
 }
 
-// Полность удалить игрока, все его планеты и флоты.
+// Полностью удалить игрока, все его планеты и флоты.
 // Развернуть флоты летящие на игрока.
 function RemoveUser ( $player_id, $when)
 {
     global $db_prefix;
 
     // Аккаунты администратора и space нельзя удалить.
-    if ($player_id == 1 || $player_id == 99999) return;
+    if ($player_id == USER_LEGOR || $player_id == USER_SPACE) return;
 
     // Развернуть все флоты, летящие на игрока.
     $result = EnumFleetQueue ($player_id);
@@ -251,7 +254,7 @@ function RemoveUser ( $player_id, $when)
     while ($rows--) {
         $queue = dbarray ($result);
         $fleet_obj = LoadFleet ( $queue['sub_id'] );
-        if ($fleet_obj['owner_id'] != $player_id && $fleet_obj['mission'] < 100 ) RecallFleet ( $fleet_obj['fleet_id'], $when );
+        if ($fleet_obj['owner_id'] != $player_id && $fleet_obj['mission'] < FTYP_RETURN ) RecallFleet ( $fleet_obj['fleet_id'], $when );
     }
 
     // Удалить все флоты игрока
@@ -263,9 +266,9 @@ function RemoveUser ( $player_id, $when)
     dbquery ($query);
 
     // Удалить все планеты, кроме ПО, которые переходят во владения space.
-    $query = "DELETE FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type <> 10000";
+    $query = "DELETE FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type <> " . PTYP_DF;
     dbquery ($query);
-    $query = "UPDATE ".$db_prefix."planets SET owner_id = 99999 WHERE owner_id = $player_id AND type = 10000";
+    $query = "UPDATE ".$db_prefix."planets SET owner_id = ".USER_SPACE." WHERE owner_id = $player_id AND type = " . PTYP_DF;
     dbquery ($query);
 
     // Удалить игрока.

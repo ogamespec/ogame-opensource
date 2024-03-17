@@ -5,9 +5,9 @@ $pagetime = 0;
 // Получить маленькую картинку планеты.
 function GetPlanetSmallImage ($skinpath, $planet)
 {
-    if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return $skinpath."planeten/small/s_mond.jpg";
-    else if ($planet['type'] == 10000) return $skinpath."planeten/debris.jpg";    
-    else if ($planet['type'] < 10000 )
+    if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return $skinpath."planeten/small/s_mond.jpg";
+    else if ($planet['type'] == PTYP_DF) return $skinpath."planeten/debris.jpg";    
+    else if ($planet['type'] < PTYP_DF )
     {
         $p = $planet['p'];
         $id = $planet['planet_id'] % 7 + 1;
@@ -24,9 +24,9 @@ function GetPlanetSmallImage ($skinpath, $planet)
 // Получить большую картинку планеты.
 function GetPlanetImage ($skinpath, $planet)
 {
-    if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return $skinpath."planeten/mond.jpg";
-    else if ($planet['type'] == 10000) return $skinpath."planeten/debris.jpg";
-    else if ($planet['type'] < 10000 )
+    if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return $skinpath."planeten/mond.jpg";
+    else if ($planet['type'] == PTYP_DF) return $skinpath."planeten/debris.jpg";
+    else if ($planet['type'] < PTYP_DF )
     {
         $p = $planet['p'];
         $id = $planet['planet_id'] % 7 + 1;
@@ -125,7 +125,7 @@ function DropListHasMoon ($plist, $planet)
 {
     foreach ( $plist as $i=>$p )
     {
-        if ( $p['type'] == 0 ) {
+        if ( $p['type'] == PTYP_MOON ) {
             if ( $p['g'] == $planet['g'] && $p['s'] == $planet['s'] && $p['p'] == $planet['p'] ) return $p;
         }
     }
@@ -160,7 +160,7 @@ function PlanetsDropList ($page)
     for ($n=0; $n<$num; $n++)
     {
         $planet = $plist[$n];
-        if ($planet['type'] == 0) continue;
+        if ($planet['type'] == PTYP_MOON) continue;
         $cp = $planet['planet_id'];
         $sel = "";
         if ($cp == $GlobalUser['aktplanet']) $sel = "selected";

@@ -30,7 +30,7 @@ if ( file_exists ("config.php"))
 
     $GlobalUni = LoadUniverse ();
 
-    $GlobalUser = LoadUser ( 99999 );        // space
+    $GlobalUser = LoadUser ( USER_SPACE );
 
     loca_add ( "common", $GlobalUni['lang'] );
     loca_add ( "technames", $GlobalUni['lang'] );

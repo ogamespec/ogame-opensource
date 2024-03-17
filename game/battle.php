@@ -1019,7 +1019,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 
     // Список обороняющихся
     $dnum = 0;
-    $d[0] = LoadUser ( 99999 );
+    $d[0] = LoadUser ( USER_SPACE );
     if ( $pirates ) {
         $d[0]['oname'] = "Piraten";
         $d[0]['r109'] = max (0, $a[0]['r109'] - 3);
