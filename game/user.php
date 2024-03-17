@@ -82,6 +82,8 @@ const USER_FLAG_DEFAULT = USER_FLAG_SHOW_ESPIONAGE_BUTTON | USER_FLAG_SHOW_WRITE
 const USER_LEGOR = 1;
 const USER_SPACE = 99999;
 
+const USER_NOOB_LIMIT = 5000;           // Количество очков для новичка
+
 $UserCache = array ();
 $PremiumCache = array ();
 
@@ -433,7 +435,7 @@ function IsPlayerNewbie ( $player_id)
     $p1 = $GlobalUser['score1'];
     $p2 = $user['score1'];
 
-    if ($p2 >= $p1 || $p2 >= 5000) return false;
+    if ($p2 >= $p1 || $p2 >= USER_NOOB_LIMIT) return false;
     if ($p1 <= $p2*5) return false;
     return true;
 }
@@ -448,7 +450,7 @@ function IsPlayerStrong ( $player_id)
     $p1 = $GlobalUser['score1'];
     $p2 = $user['score1'];
 
-    if ($p1 >= $p2 || $p1 >= 5000) return false;
+    if ($p1 >= $p2 || $p1 >= USER_NOOB_LIMIT) return false;
     if ($p2 <= $p1*5) return false;
     return true;
 }

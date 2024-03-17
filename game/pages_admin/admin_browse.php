@@ -1,7 +1,6 @@
 <?php
 
-// ========================================================================================
-// История переходов (только за игроками, у которых включен флаг sniff).
+// Админка: История переходов (только за игроками, у которых включен флаг sniff).
 
 function Admin_Browse ()
 {
@@ -9,13 +8,14 @@ function Admin_Browse ()
     global $db_prefix;
     global $GlobalUser;
 
-    $query = "SELECT * FROM ".$db_prefix."browse ORDER BY date DESC LIMIT 50";
+    $max_records = 50;
+    $query = "SELECT * FROM ".$db_prefix."browse ORDER BY date DESC LIMIT $max_records";
     $result = dbquery ($query);
 
     AdminPanel();
 
     $rows = dbrows ($result);
-    echo "Последняя история переходов (50 записей):<br>";
+    echo va(loca("ADM_BROWSE_TITLE"), $max_records) . "<br>";
     echo "<table>\n";
     while ($rows--) 
     {

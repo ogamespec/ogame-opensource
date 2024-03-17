@@ -164,10 +164,10 @@ function Admin_Checksum ()
 
 <?=AdminPanel();?>
 
-<h2>Движок</h2>
+<h2><?=loca("ADM_CSUM_ENGINE");?></h2>
 
 <table width="519">
-<tr><td class=c>Путь к файлу</td><td class=c>Контрольная сумма</td><td class=c>Статус</td></tr>
+<tr><td class=c><?=loca("ADM_CSUM_PATH");?></td><td class=c><?=loca("ADM_CSUM_DIGEST");?></td><td class=c><?=loca("ADM_CSUM_STATUS");?></td></tr>
 <?php
     foreach ( $engine_files as $i=>$filename ) {
         $md = md5_file($filename) ;
@@ -184,10 +184,10 @@ function Admin_Checksum ()
 ?>
 </table>
 
-<h2>Админка</h2>
+<h2><?=loca("ADM_CSUM_ADMIN");?></h2>
 
 <table width="519">
-<tr><td class=c>Путь к файлу</td><td class=c>Контрольная сумма</td><td class=c>Статус</td></tr>
+<tr><td class=c><?=loca("ADM_CSUM_PATH");?></td><td class=c><?=loca("ADM_CSUM_DIGEST");?></td><td class=c><?=loca("ADM_CSUM_STATUS");?></td></tr>
 <?php
     foreach ( $page_admin_files as $i=>$filename ) {
         $md = md5_file($filename) ;
@@ -199,10 +199,10 @@ function Admin_Checksum ()
 ?>
 </table>
 
-<h2>Игровые страницы</h2>
+<h2><?=loca("ADM_CSUM_PAGES");?></h2>
 
 <table width="519">
-<tr><td class=c>Путь к файлу</td><td class=c>Контрольная сумма</td><td class=c>Статус</td></tr>
+<tr><td class=c><?=loca("ADM_CSUM_PATH");?></td><td class=c><?=loca("ADM_CSUM_DIGEST");?></td><td class=c><?=loca("ADM_CSUM_STATUS");?></td></tr>
 <?php
     foreach ( $page_files as $i=>$filename ) {
         $md = md5_file($filename) ;
@@ -214,10 +214,10 @@ function Admin_Checksum ()
 ?>
 </table>
 
-<h2>Система регистрации</h2>
+<h2><?=loca("ADM_CSUM_REG");?></h2>
 
 <table width="519">
-<tr><td class=c>Путь к файлу</td><td class=c>Контрольная сумма</td><td class=c>Статус</td></tr>
+<tr><td class=c><?=loca("ADM_CSUM_PATH");?></td><td class=c><?=loca("ADM_CSUM_DIGEST");?></td><td class=c><?=loca("ADM_CSUM_STATUS");?></td></tr>
 <?php
     foreach ( $reg_files as $i=>$filename ) {
         $md = md5_file($filename) ;
@@ -232,7 +232,7 @@ function Admin_Checksum ()
 <br/>
 
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Checksum" method="POST">
-<input type=submit value="Зафиксировать контрольные суммы">
+<input type=submit value="<?=loca("ADM_CSUM_FIX");?>">
 </form>
 
 <?php    
