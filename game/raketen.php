@@ -98,9 +98,9 @@ function RocketAttack ( $fleet_id, $planet_id, $when )
     if ($ipm_destroyed) $text .= va(loca_lang("RAK_DEF_TEXT3", $target_user['lang']), $ipm_destroyed) . "<br>:<br>";
     $text .= GetDestroyedDefenseText ($target_user['lang'], $target, $moon_planet, $moon_attack);
     SendMessage ( $target_user['player_id'], 
-    	loca_lang ("FLEET_MESSAGE_FROM", $target_user['lang']), 
-    	loca_lang ("RAK_MSG_SUBJ", $target_user['lang']), 
-    	$text, MTYP_BATTLE_REPORT_LINK, $when);
+        loca_lang ("FLEET_MESSAGE_FROM", $target_user['lang']), 
+        loca_lang ("RAK_MSG_SUBJ", $target_user['lang']), 
+        $text, MTYP_BATTLE_REPORT_LINK, $when);
 
     $message_for_attacker = true;
 
@@ -108,25 +108,25 @@ function RocketAttack ( $fleet_id, $planet_id, $when )
     // Оригинальная версия 0.84 не создавала сообщения для атакующего.
     if ($message_for_attacker) {
 
-	    loca_add ( "raketen", $origin_user['lang'] );
-	    loca_add ( "fleetmsg", $origin_user['lang'] );
-	    $text = va(loca_lang("RAK_ATT_TEXT1", $origin_user['lang']), $amount) . " " . $origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> ";
-	    $text .= loca_lang("RAK_ATT_TEXT2", $origin_user['lang']) . " " . $target['name']." <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> !<br>";    
-	    $text .= GetDestroyedDefenseText ($origin_user['lang'], $target, $moon_planet, $moon_attack);
-	    SendMessage ( $origin_user['player_id'], 
-	    	loca_lang ("FLEET_MESSAGE_FROM", $origin_user['lang']), 
-	    	loca_lang ("RAK_MSG_SUBJ", $origin_user['lang']), 
-	    	$text, MTYP_BATTLE_REPORT_LINK, $when);
-	}
+        loca_add ( "raketen", $origin_user['lang'] );
+        loca_add ( "fleetmsg", $origin_user['lang'] );
+        $text = va(loca_lang("RAK_ATT_TEXT1", $origin_user['lang']), $amount) . " " . $origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> ";
+        $text .= loca_lang("RAK_ATT_TEXT2", $origin_user['lang']) . " " . $target['name']." <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> !<br>";    
+        $text .= GetDestroyedDefenseText ($origin_user['lang'], $target, $moon_planet, $moon_attack);
+        SendMessage ( $origin_user['player_id'], 
+            loca_lang ("FLEET_MESSAGE_FROM", $origin_user['lang']), 
+            loca_lang ("RAK_MSG_SUBJ", $origin_user['lang']), 
+            $text, MTYP_BATTLE_REPORT_LINK, $when);
+    }
 }
 
 // Получить текст для уничтоженной обороны
 function GetDestroyedDefenseText ($lang, &$target, &$moon_planet, $moon_attack)
 {
-	loca_add ( "raketen", $lang );
-	loca_add ( "technames", $lang );
+    loca_add ( "raketen", $lang );
+    loca_add ( "technames", $lang );
 
-    $defmap = array ( 503, 502, 408, 407, 406, 405, 404, 403, 402, 401 ); 		// оборона выводится задом-наперёд по неизвестной причине.
+    $defmap = array ( 503, 502, 408, 407, 406, 405, 404, 403, 402, 401 );       // оборона выводится задом-наперёд по неизвестной причине.
     $deftext = "<table width=400><tr><td class=c colspan=4>".loca_lang("RAK_TITLE", $lang)."</td></tr>";
     $n = 0;
     foreach ( $defmap as $i=>$gid )
