@@ -436,7 +436,7 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
     }
 
     // Результаты боя.
-//<!--A:167658,W:167658-->
+    // TODO: Добавить метку потерь, которая есть в HTML: <!--A:167658,W:167658-->
     if ( $res['result'] === "awon" )
     {
         $text .= "<p> ".loca_lang("BATTLE_AWON", $lang)."<br>" . va(loca_lang("BATTLE_PLUNDER", $lang), nicenum($cm), nicenum($ck), nicenum($cd));
@@ -480,6 +480,7 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
 }
 
 // Лунная атака.
+// Возвращает результат, закодированный в 2 бита: бит0 - луна уничтожена, бит1 - ЗС взорвались вместе со всем флотом
 function GravitonAttack ($fleet_obj, $fleet, $when)
 {
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
@@ -558,6 +559,14 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
 
             DestroyMoon ( $target['planet_id'], $when, $fleet_obj['fleet_id'] );
             $result  = 3;
+    }
+
+    // Пересчитать статистику, если флот был взорван в результате неудачной гравитонной атаки
+    if ($result >= 2) {
+
+        $price = FleetPrice ( $fleet_obj );
+        AdjustStats ( $fleet_obj['owner_id'], $price['points'], $price['fpoints'], 0, '-' );
+        RecalcRanks ();
     }
 
     // Разослать сообщения.
@@ -970,7 +979,7 @@ function ShortBattleReport ( $res, $now, $lang )
     }
 
     // Результаты боя.
-//<!--A:167658,W:167658-->
+    // TODO: Добавить метку потерь, которая есть в HTML: <!--A:167658,W:167658-->
     if ( $res['result'] === "awon" ) $text .= "<p> " . loca_lang("BATTLE_AWON", $lang);
     else if ( $res['result'] === "dwon" ) $text .= "<p> " . loca_lang("BATTLE_DWON", $lang);
     else if ( $res['result'] === "draw" ) $text .= "<p> " . loca_lang("BATTLE_DRAW", $lang);

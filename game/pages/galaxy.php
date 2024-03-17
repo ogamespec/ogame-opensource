@@ -490,7 +490,7 @@ while ($num--)
 
     // Планета
     echo "<th width=\"30\">\n";
-    if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
+    if ( $planet['type'] == PTYP_PLANET )
     {
         echo "<a style=\"cursor:pointer\" onmouseover='return overlib(\"<table width=240>";
         echo "<tr><td class=c colspan=2 >".loca("GALAXY_PLANET")." ".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]</td></tr>";
