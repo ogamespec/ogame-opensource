@@ -821,7 +821,7 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     if ( !HasPlanet($target['g'], $target['s'], $target['p']) )    // если место не занято, то значит колонизация успешна
     {
         // если количество планет империи больше максимума, то не основывать новую колонию.
-        $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$fleet_obj['owner_id']."' AND (type > ".PTYP_MOON." AND type < ".PTYP_DF.");";
+        $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$fleet_obj['owner_id']."' AND (type = ".PTYP_PLANET.");";
         $result = dbquery ($query);
         $num_planets = dbrows ($result);
         if ( $num_planets >= 9 )

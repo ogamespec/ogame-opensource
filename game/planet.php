@@ -42,7 +42,7 @@ R - случайные параметры
 
 // Типы объектов галактики (планеты, луны и пр.)
 const PTYP_MOON = 0;        // луна
-const PTYP_PLANET = 1;      // планета
+const PTYP_PLANET = 1;      // планета; На ранних стадиях разработки для планет были зарезервированы типы для каждой картинки (ледяная, пустыня и проч.). Но после того как был кракнут алгоритм получения картинки из ID необходимость в этом отпала.
 const PTYP_DF = 10000;          // поле обломков
 const PTYP_DEST_PLANET = 10001;         // уничтоженная планета (удалена игроком)
 const PTYP_COLONY_PHANTOM = 10002;      // фантом для колонизации (существует на время полёта миссии Колонизировать)
@@ -60,7 +60,7 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
 
     // Проверить не занято-ли место?
     if ($moon) $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( type = ".PTYP_MOON." OR type = ".PTYP_DEST_MOON." )";
-    else $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( ( type > ".PTYP_MOON." AND type < ".PTYP_DF.") OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED." )";
+    else $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED." )";
     $result = dbquery ($query);
     if ( dbrows ($result) != 0 ) return 0;
 
@@ -154,7 +154,7 @@ function EnumPlanets ()
 function EnumPlanetsGalaxy ($g, $s)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND ((type > ".PTYP_MOON." AND type < ".PTYP_DF.") OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED.") ORDER BY p ASC";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND (type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED.") ORDER BY p ASC";
     $result = dbquery ($query);
     return $result;
 }
@@ -195,7 +195,7 @@ function GetPlanet ( $planet_id)
 function LoadPlanet ($g, $s, $p, $type)
 {
     global $db_prefix;
-    if ($type == 1) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ((type > ".PTYP_MOON." AND type < ".PTYP_DF.") OR type = ".PTYP_DEST_PLANET.") LIMIT 1;";
+    if ($type == 1) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET.") LIMIT 1;";
     else if ($type == 2) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=".PTYP_DF." LIMIT 1;";
     else if ($type == 3) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type=".PTYP_MOON." OR type=".PTYP_DEST_MOON.") LIMIT 1;";
     else return NULL;
@@ -398,7 +398,7 @@ function CreateAbandonedColony ($g, $s, $p, $when)
 function HasPlanet ($g, $s, $p)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( ( type > ".PTYP_MOON." AND type < ".PTYP_DF.") OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED." );";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED." );";
     $result = dbquery ($query);
     if ( dbrows ($result) ) return 1;
     else return 0;
