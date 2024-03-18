@@ -23,9 +23,8 @@ function PlanetDestroyMenu ()
     $aktplanet = GetPlanet ( $GlobalUser['aktplanet']);
     PageHeader ("renameplanet");
 
-    echo "<!-- CONTENT AREA -->\n";
-    echo "<div id='content'>\n";
-    echo "<center>\n\n";
+    BeginContent ();
+
     echo "<h1>".loca("REN_TITLE")."</h1>\n";
     echo "<form action=\"index.php?page=renameplanet&session=".$_GET['session']."&pl=".$aktplanet['planet_id']."\" method=\"POST\">\n";
     echo "<input type='hidden' name='page' value='renameplanet'>\n";
@@ -38,9 +37,8 @@ function PlanetDestroyMenu ()
     echo "<th><input type=\"submit\" name=\"aktion\" value=\"".loca("REN_DELETE_PLANET")."\" alt=\"".loca("REN_ABANDON_COLONY")."\"></th></tr>\n";
     echo "</table>\n</form>\n</center>\n\n";
     echo "<br><br><br><br>\n";
-    echo "</center>\n";
-    echo "</div>\n";
-    echo "<!-- END CONTENT AREA -->\n";
+
+    EndContent ();
 
     PageFooter ();
     ob_end_flush ();
@@ -98,7 +96,7 @@ if ( method() === "POST" )
                             $moon = GetPlanet ( $moon_id );        // Удалять только целые луны.
                             if ( $moon['type'] == 0 )
                             {
-                                $query = "UPDATE ".$db_prefix."planets SET type = 10003, owner_id = 99999, date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $moon_id . ";";
+                                $query = "UPDATE ".$db_prefix."planets SET type = ".PTYP_DEST_MOON.", owner_id = ".USER_SPACE.", date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $moon_id . ";";
                                 dbquery ( $query );
 
                                 // Удалить очередь на луне
@@ -110,8 +108,8 @@ if ( method() === "POST" )
                                 RecalcRanks ();
                             }
                         }
-                        if ($planet['type'] == 0) $query = "UPDATE ".$db_prefix."planets SET type = 10003, owner_id = 99999, date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
-                        else $query = "UPDATE ".$db_prefix."planets SET type = 10001, owner_id = 99999, date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
+                        if ($planet['type'] == 0) $query = "UPDATE ".$db_prefix."planets SET type = ".PTYP_DEST_MOON.", owner_id = ".USER_SPACE.", date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
+                        else $query = "UPDATE ".$db_prefix."planets SET type = ".PTYP_DEST_PLANET.", owner_id = ".USER_SPACE.", date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
                         dbquery ( $query );
 
                         // Удалить очередь на планете
@@ -137,9 +135,8 @@ $maxlen = 20;
 
 PageHeader ("renameplanet");
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent ();
+
 echo "<h1>".loca("REN_TITLE")."</h1>\n";
 echo "<form action=\"index.php?page=renameplanet&session=".$_GET['session']."&pl=".$aktplanet['planet_id']."\" method=\"POST\">\n";
 echo "<input type='hidden' name='page' value='renameplanet'>\n";
@@ -155,8 +152,9 @@ echo "  	<th><input type=\"text\" name=\"newname\" size=\"25\" maxlength=\"".$ma
 echo "  <th><input type=\"submit\" name=\"aktion\" value=\"".loca("REN_RENAME")."\"></th>\n</tr>\n";
 echo "</table>\n</form>\n";
 echo "</center>\n\n";
-echo "<br><br><br><br>\n</center>\n</div>\n";
-echo "<!-- END CONTENT AREA -->\n";
+echo "<br><br><br><br>\n";
+
+EndContent ();
 
 PageFooter ("", $RenameError);
 ob_end_flush ();

@@ -19,9 +19,7 @@ $session = $_GET['session'];
 
 PageHeader ("sprungtor");
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent ();
 
 $fleetmap = array ( 215, 214, 213, 211, 210, 209, 208, 207, 206, 205, 204, 203, 202 );
 
@@ -40,8 +38,8 @@ foreach ( $fleetmap as $i=>$gid)
 $source = GetPlanet ( $source_id );
 $target = GetPlanet ( $target_id );
 
-if ( $source['type'] != 0 ) $GateError .= "<center>\n".loca("GATE_ERR_START")."<br></center>\n";
-if ( $target['type'] != 0 ) $GateError .= "<center>\n".loca("GATE_ERR_TARGET")."<br></center>\n";
+if ( $source['type'] != PTYP_MOON ) $GateError .= "<center>\n".loca("GATE_ERR_START")."<br></center>\n";
+if ( $target['type'] != PTYP_MOON ) $GateError .= "<center>\n".loca("GATE_ERR_TARGET")."<br></center>\n";
 
 if ( $GateError === "" )
 {
@@ -98,9 +96,7 @@ if ( $GateError === "" )
     MyGoto ( "infos", "&cp=$target_id&gid=43" );
 }
 
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n\n";
+EndContent ();
 
 PageFooter ("", $GateError);
 ob_end_flush ();

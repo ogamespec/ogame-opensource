@@ -51,11 +51,10 @@ $unitab = LoadUniverse ();
 $speed = $unitab['speed'];
 
 $prem = PremiumStatus ($GlobalUser);
+
+BeginContent ();
 ?>
 
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
  <table width="519">
 
 <?php
@@ -83,7 +82,7 @@ $prem = PremiumStatus ($GlobalUser);
             $ip = $_SERVER['REMOTE_ADDR'];
 
             if ( key_exists ( "validate", $_POST ) ) {    // Заказать активационную ссылку.
-                if ( !($ip === "127.0.0.1" || $ip === "::1") ) SendChangeMail ( $GlobalUser['oname'], $GlobalUser['email'], $GlobalUser['pemail'], $GlobalUser['validatemd'] );
+                if ( !localhost($ip) ) SendChangeMail ( $GlobalUser['oname'], $GlobalUser['email'], $GlobalUser['pemail'], $GlobalUser['validatemd'] );
                 $OptionsMessage = loca ("OPTIONS_MSG_VALIDATE");
             }
             else if ( $_POST['db_email'] !== $GlobalUser['email'] && $_POST['db_email'] !== "" ) {        // Сменить адрес
@@ -98,7 +97,7 @@ $prem = PremiumStatus ($GlobalUser);
                     $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . $GlobalUser['player_id'];
                     dbquery ($query);
                     AddChangeEmailEvent ($GlobalUser['player_id']);
-                    if ( !($ip === "127.0.0.1" || $ip === "::1") ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
+                    if ( !localhost($ip) ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
                     $GlobalUser['email'] = $email;
                     $OptionsError = loca ("OPTIONS_USER_EMAIL_TIP");
                 }
@@ -240,7 +239,7 @@ $prem = PremiumStatus ($GlobalUser);
                     $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . intval($GlobalUser['player_id']);
                     dbquery ($query);
                     AddChangeEmailEvent ($GlobalUser['player_id']);
-                    if ( !($ip === "127.0.0.1" || $ip === "::1") ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
+                    if ( !localhost($ip) ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
                     $GlobalUser['email'] = $email;
                     $OptionsError = loca ("OPTIONS_USER_EMAIL_TIP");
                 }
@@ -578,11 +577,8 @@ $prem = PremiumStatus ($GlobalUser);
 ?>
 
 <br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent ();
 PageFooter ($OptionsMessage, $OptionsError);
 ob_end_flush ();
 ?>

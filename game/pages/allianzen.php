@@ -123,15 +123,11 @@ if ( $GlobalUser['ally_id'] == 0 && key_exists('a', $_GET) )
             CreateAlly ($GlobalUser['player_id'], $_POST['tag'], $_POST['name']);
             {
                 PageHeader ("allianzen");
-                echo "<!-- CONTENT AREA -->\n";
-                echo "<div id='content'>\n";
-                echo "<center>\n";
+                BeginContent ();
                 echo "<br/><p>".va(loca("ALLY_FOUND_SUCCESS"), $_POST['name'], $_POST['tag'])."</p>\n";
                 echo "<form method=\"post\" action=\"index.php?page=allianzen&session=".$_GET['session']."\">\n";
                 echo "<input type=\"submit\" value=\"".loca("ALLY_FOUND_CONFIRM")."\"/></form><br/><br/><br/><br/>\n";
-                echo "</center>\n";
-                echo "</div>\n";
-                echo "<!-- END CONTENT AREA -->\n";
+                EndContent ();
                 PageFooter ();
                 ob_end_flush ();
                 exit ();
@@ -159,9 +155,7 @@ include "allianzen_misc.php";
 
 PageHeader ("allianzen");
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent ();
 echo "<script src=\"js/cntchar.js\" type=\"text/javascript\"></script><script src=\"js/win.js\" type=\"text/javascript\"></script>\n";
 
 if ( $GlobalUser['ally_id'] == 0 )
@@ -213,9 +207,7 @@ else
     else AllyPage_Home ();
 }
 
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n";
+EndContent ();
 
 PageFooter ("", $AllianzenError);
 ob_end_flush ();

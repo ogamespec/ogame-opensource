@@ -7,6 +7,7 @@
 $MAX = $GlobalUser['r108'] + 1;
 
 loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "fleet", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -18,24 +19,14 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
+$prem = PremiumStatus ($GlobalUser);
+if (!$prem['commander']) {
+    MyGoto ("overview");
+}
+
 PageHeader ("fleet_templates");
 
 $temp_map = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // без сс
-
-// Вырезать из строки всякие инжекции.
-function SecureText ( $text )
-{
-    $search = array ( "'<script[^>]*?>.*?</script>'si",  // Вырезает javaScript
-                      "'<[\/\!]*?[^<>]*?>'si",           // Вырезает HTML-теги
-                      "'([\r\n])[\s]+'" );             // Вырезает пробельные символы
-    $replace = array ("", "", "\\1", "\\1" );
-    $str = preg_replace($search, $replace, $text);
-    $str = str_replace ("`", "", $str);
-    $str = str_replace ("'", "", $str);
-    $str = str_replace ("\"", "", $str);
-    $str = str_replace ("%0", "", $str);
-    return $str;
-}
 
 if ( method() === "POST" && key_exists('mode', $_POST) && $_POST['mode'] === "save" ) {
     $id = intval ( $_POST['template_id'] );
@@ -95,10 +86,8 @@ if ( method () === "GET" && key_exists('mode', $_GET) && $_GET['mode'] === "dele
     }
 }
 
+BeginContent();
 ?>
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 
     <script type="text/javascript">
 
@@ -129,10 +118,10 @@ if ( method () === "GET" && key_exists('mode', $_GET) && $_GET['mode'] === "dele
         <center>
         <table style='cellpadding=5px;' border=0>
         <tr>
-            <td class='c' colspan=4 width=517 >Стандартные флоты (макс. <?php echo $MAX;?>)</td>
+            <td class='c' colspan=4 width=517 ><?=va(loca("FLEET_TEMP_TITLE_MAX"), $MAX);?></td>
         </tr>
         <tr>
-            <th width=60 >#</th><th  width=267 >Название<th>Обработать</th><th>Удалить</th>
+            <th width=60 >#</th><th  width=267 ><?=loca("FLEET_TEMP_NAME");?><th><?=loca("FLEET_TEMP_UPDATE");?></th><th><?=loca("FLEET_TEMP_DELETE");?></th>
         </tr>
 <?php
     $query = "SELECT * FROM ".$db_prefix."template WHERE owner_id = ".$GlobalUser['player_id']." ORDER BY date DESC LIMIT $MAX";
@@ -158,16 +147,16 @@ if ( method () === "GET" && key_exists('mode', $_GET) && $_GET['mode'] === "dele
         $count++;
     }
 ?>
-                <th colspan=4 align=center ><input type=button name=send value='Создать новый стандартный флот' onclick="show_input(0,'',0,0,0,0,0,0,0,0,0,0,0,0,0,0)"></th>
+                <th colspan=4 align=center ><input type=button name=send value='<?=loca("FLEET_TEMP_CREATE");?>' onclick="show_input(0,'',0,0,0,0,0,0,0,0,0,0,0,0,0,0)"></th>
                 </table>
         <br>
         <div id='input_field' style='visibility:hidden;'>
         <form action='index.php?page=fleet_templates&session=<?php echo $session;?>' method="POST">
         <input type="hidden" name=mode value=save >
         <table style='cellpadding=5px;' border=0>
-        <tr><td class='c' colspan=2 width=517 >Создать новый стандартный флот</td></tr>
+        <tr><td class='c' colspan=2 width=517 ><?=loca("FLEET_TEMP_CREATE");?></td></tr>
         <tr>
-        <th>Название</th>
+        <th><?=loca("FLEET_TEMP_NAME");?></th>
         <th><input name='template_name' size=20 >
         <input type=hidden name='template_id' size=6></th>
         </tr>
@@ -179,18 +168,15 @@ if ( method () === "GET" && key_exists('mode', $_GET) && $_GET['mode'] === "dele
         echo "        </tr>\n";
     }
 ?>
-                        <th colspan=4 align=center ><input type=submit name=send value='Сохранить'></th>
+                        <th colspan=4 align=center ><input type=submit name=send value='<?=loca("FLEET_TEMP_SAVE");?>'></th>
         </tr>
         </form>
 
         </table>
         </div>
 <br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent ();
 PageFooter ();
 ob_end_flush ();
 ?>

@@ -3,6 +3,7 @@
 // Статистика
 
 loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "statistics", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -24,40 +25,38 @@ if ( key_exists ( "type", $_REQUEST ) ) $type = $_REQUEST['type'];
 
 $who = "player";
 if ( key_exists ( "who", $_REQUEST ) ) $who = $_REQUEST['who'];
-?>
 
-<!-- CONTENT AREA --> 
-<div id='content'> 
-<center> 
+BeginContent ();
+?>
 <!-- begin header form --> 
 <form method="post" action='index.php?page=statistics&session=<?php echo $session;?>' > 
   
   <!-- begin head table --> 
   <table width="525"> 
     <tr> 
-      <td class="c">Статистика (по состоянию на: <?php echo date ("Y-m-d, H:i:s", $now);?>)</td> 
+      <td class="c"><?=va(loca("STAT_HEAD"), date ("Y-m-d, H:i:s", $now));?></td> 
     </tr> 
     <tr> 
       <th> 
         
  
-        Какой&nbsp;
+        <?=loca("STAT_WHO");?>&nbsp;
           
         <select name="who"> 
-          <option value="player" <?php if( $who === 'player' ) echo "selected";?>>Игрок</option> 
-          <option value="ally" <?php if( $who === 'ally' ) echo "selected";?>>Альянс</option> 
+          <option value="player" <?php if( $who === 'player' ) echo "selected";?>><?=loca("STAT_PLAYER");?></option> 
+          <option value="ally" <?php if( $who === 'ally' ) echo "selected";?>><?=loca("STAT_ALLY");?></option> 
         </select> 
           
-        &nbsp;по&nbsp;
+        &nbsp;<?=loca("STAT_TYPE");?>&nbsp;
               
         <select name="type"> 
-          <option value="ressources" <?php if ($type==="ressources") echo "selected"; ?>>Очкам</option> 
-          <option value="fleet" <?php if ($type==="fleet") echo "selected"; ?>>Флотам</option> 
-          <option value="research" <?php if ($type==="research") echo "selected"; ?>>Исследованиям</option> 
+          <option value="ressources" <?php if ($type==="ressources") echo "selected"; ?>><?=loca("STAT_BY_POINTS");?></option> 
+          <option value="fleet" <?php if ($type==="fleet") echo "selected"; ?>><?=loca("STAT_BY_FLEETS");?></option> 
+          <option value="research" <?php if ($type==="research") echo "selected"; ?>><?=loca("STAT_BY_RESEARCH");?></option> 
         </select> 
           
-        &nbsp;на месте        <select name="start"> 
-          <option value="-1" <?php if ( $start == -1 ) echo "selected";?>>[Собственная позиция]</option> 
+        &nbsp;<?=loca("STAT_ON_PLACE");?>        <select name="start"> 
+          <option value="-1" <?php if ( $start == -1 ) echo "selected";?>><?=loca("STAT_OWN_POSITION");?></option> 
 <?php
     // Выпадающий список игроков/альянсов
 
@@ -82,7 +81,7 @@ if ( key_exists ( "who", $_REQUEST ) ) $who = $_REQUEST['who'];
         </select> 
           
         <input type="hidden" id="sort_per_member" name="sort_per_member" value="<?php echo intval($_REQUEST['sort_per_member']);?>" /> 
-        <input type=submit value="Показать"> 
+        <input type=submit value="<?=loca("STAT_SUBMIT");?>"> 
       </th> 
     </tr> 
   </table> 
@@ -96,22 +95,22 @@ if ( key_exists ( "who", $_REQUEST ) ) $who = $_REQUEST['who'];
 <!-- begin ally -->
 <table width="519">
   <tr>
-    <td class ="c" width="30">Место</td>
-    <td class ="c">Альянс</td>
+    <td class ="c" width="30"><?=loca("STAT_PLACE");?></td>
+    <td class ="c"><?=loca("STAT_ALLY");?></td>
     <td class="c">&nbsp;</td>
-    <td class ="c">Числ.</td>
-    <td class ="c"><a href="#" onClick="document.getElementById('sort_per_member').value=0; javascript:document.forms[0].submit();">Тыс. очков</a></td>
-    <td class ="c"><a href="#" onClick="document.getElementById('sort_per_member').value=1; javascript:document.forms[0].submit();">На человека</a></td>
+    <td class ="c"><?=loca("STAT_MEMBERS");?></td>
+    <td class ="c"><a href="#" onClick="document.getElementById('sort_per_member').value=0; javascript:document.forms[0].submit();"><?=loca("STAT_1K_POINTS");?></a></td>
+    <td class ="c"><a href="#" onClick="document.getElementById('sort_per_member').value=1; javascript:document.forms[0].submit();"><?=loca("STAT_PER_PLAYER");?></a></td>
   </tr>
 <?php } else { ?>
 <!-- begin user --> 
 <table width="525"> 
   <tr> 
-    <td class="c" width="30">Место</td> 
-    <td class="c">Игрок</td> 
+    <td class="c" width="30"><?=loca("STAT_PLACE");?></td> 
+    <td class="c"><?=loca("STAT_PLAYER");?></td> 
     <td class="c">&nbsp;</td> 
-    <td class="c">Альянс</td> 
-    <td class="c">Очки</td> 
+    <td class="c"><?=loca("STAT_ALLY");?></td> 
+    <td class="c"><?=loca("STAT_POINTS");?></td> 
   </tr>
 
 <?php
@@ -145,9 +144,10 @@ if ( $who === 'ally' ) {
       <?php echo $place;?>&nbsp;&nbsp;
 
 <?php
-        if ( $diff < 0 ) echo "      <a href='#' onmouseover='return overlib(\"<font color=lime>+".abs($diff)."</font><br/><font color=white>С ".date ("Y-m-d H:i:s", $ally['scoredate'])."\");' onmouseout='return nd();'><font color='lime'>+</font></a> \n";
-        else if ( $diff > 0 ) echo "      <a href='#' onmouseover='return overlib(\"<font color=red>-".abs($diff)."</font><br/><font color=white>С ".date ("Y-m-d H:i:s", $ally['scoredate'])."\");' onmouseout='return nd();'><font color='red'>-</font></a> \n";
-        else echo "      <a href='#' onmouseover='return overlib(\"<font color=87CEEB>*</font><br/><font color=white>С ".date ("Y-m-d H:i:s", $ally['scoredate'])."\");' onmouseout='return nd();'><font color='87CEEB'>*</font></a> \n";            
+        $date_change = va(loca("STAT_DATE_CHANGE"), date ("Y-m-d H:i:s", $ally['scoredate']));
+        if ( $diff < 0 ) echo "      <a href='#' onmouseover='return overlib(\"<font color=lime>+".abs($diff)."</font><br/><font color=white>".$date_change."\");' onmouseout='return nd();'><font color='lime'>+</font></a> \n";
+        else if ( $diff > 0 ) echo "      <a href='#' onmouseover='return overlib(\"<font color=red>-".abs($diff)."</font><br/><font color=white>".$date_change."\");' onmouseout='return nd();'><font color='red'>-</font></a> \n";
+        else echo "      <a href='#' onmouseover='return overlib(\"<font color=87CEEB>*</font><br/><font color=white>".$date_change."\");' onmouseout='return nd();'><font color='87CEEB'>*</font></a> \n";            
 ?>    </th>
     
     <!--  name -->
@@ -166,7 +166,7 @@ if ( $who === 'ally' ) {
 <?php
     if ( $GlobalUser['ally_id'] == 0 ) {
         echo "      <a href=\"index.php?page=bewerben&session=".$session."&allyid=".$ally['ally_id']."\">\n";
-        echo "        <img src=\"".UserSkin()."/img/m.gif\" border=\"0\" alt=\"Написать сообщение\" />\n";
+        echo "        <img src=\"".UserSkin()."/img/m.gif\" border=\"0\" alt=\"".loca("STAT_WRITE_MESSAGE")."\" />\n";
         echo "      </a>\n";
     }
 ?>      &nbsp;
@@ -229,9 +229,10 @@ else {
         echo "    <!-- rank --> \n";
         echo "    <th> \n";
         echo "      $place&nbsp;&nbsp;\n\n";
-        if ( $diff < 0 ) echo "      <a href='#' onmouseover='return overlib(\"<font color=lime>+".abs($diff)."</font><br/><font color=white>С ".date ("Y-m-d H:i:s", $user['scoredate'])."\");' onmouseout='return nd();'><font color='lime'>+</font></a> \n";
-        else if ( $diff > 0 ) echo "      <a href='#' onmouseover='return overlib(\"<font color=red>-".abs($diff)."</font><br/><font color=white>С ".date ("Y-m-d H:i:s", $user['scoredate'])."\");' onmouseout='return nd();'><font color='red'>-</font></a> \n";
-        else echo "      <a href='#' onmouseover='return overlib(\"<font color=87CEEB>*</font><br/><font color=white>С ".date ("Y-m-d H:i:s", $user['scoredate'])."\");' onmouseout='return nd();'><font color='87CEEB'>*</font></a> \n";
+        $date_change = va(loca("STAT_DATE_CHANGE"), date ("Y-m-d H:i:s", $user['scoredate']));
+        if ( $diff < 0 ) echo "      <a href='#' onmouseover='return overlib(\"<font color=lime>+".abs($diff)."</font><br/><font color=white>".$date_change."\");' onmouseout='return nd();'><font color='lime'>+</font></a> \n";
+        else if ( $diff > 0 ) echo "      <a href='#' onmouseover='return overlib(\"<font color=red>-".abs($diff)."</font><br/><font color=white>".$date_change."\");' onmouseout='return nd();'><font color='red'>-</font></a> \n";
+        else echo "      <a href='#' onmouseover='return overlib(\"<font color=87CEEB>*</font><br/><font color=white>".$date_change."\");' onmouseout='return nd();'><font color='87CEEB'>*</font></a> \n";
         echo "    </th> \n\n";
 
         $home = GetPlanet ( $user['hplanetid'] );
@@ -257,7 +258,7 @@ else {
         echo "    <th> \n";
         if ( $user['player_id'] != $GlobalUser['player_id'] ) {
             echo "      <a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\"> \n";
-            echo "        <img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"Написать сообщение\" /> \n";
+            echo "        <img src=\"".UserSkin()."img/m.gif\" border=\"0\" alt=\"".loca("STAT_WRITE_MESSAGE")."\" /> \n";
             echo "      </a> \n";
         }
         echo "    &nbsp;\n";
@@ -293,11 +294,8 @@ else {
 ?>
 
 <!-- end statistic data --><br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent ();
 PageFooter ();
 ob_end_flush ();
 ?>

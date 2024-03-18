@@ -2,7 +2,10 @@
 
 // Подача заявки в альянс.
 
+$maxchars = 6000;
+
 loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "ally", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -16,40 +19,36 @@ $session = $_GET['session'];
 
 PageHeader ("bewerben");
 
-if ( ! $GlobalUser['validated'] ) Error ( "Эта функция возможна только после активации учетной записи игрока." );
+if ( ! $GlobalUser['validated'] ) Error ( loca("ALLY_APPU_NOT_ACTIVATED") );
 
 $ally_id = intval($_GET['allyid']);
 $ally = LoadAlly ($ally_id);
 
 // Загрузить образец заявки.
 $template = "";
-if ( $_POST['weiter'] === "Образец" || $ally['insertapp'])
+if ( key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_TEMPLATE") || $ally['insertapp'])
 {
     $template = $ally['apptext'];
-    if ($template === "") $template = "Управление альянса не предоставило образца";
+    if ($template === "") $template = loca("ALLY_APPU_TEMPLATE_MISSING");
 }
 
 // Отправить заявление
-if ( $_POST['weiter'] === "Отправить" && $ally['open'] )
+if ( key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_SUBMIT") && $ally['open'] )
 {
     $text = $_POST['text'];
     $text = addslashes ( $text );
     AddApplication ( $ally['ally_id'], $GlobalUser['player_id'], $text );
 
+    BeginContent ();
 ?>
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 <h1>Регистрироваться</h1>
 <table width=519>
 <form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
-<tr><th colspan=2>Ваше заявление сохранено. Вы получите ответ в случае принятия или отклонения.</th></tr>
-<tr><th colspan=2><input type=submit value="OK"></th></tr>
+<tr><th colspan=2><?=loca("ALLY_APPU_SUBMITTED");?></th></tr>
+<tr><th colspan=2><input type=submit value="<?=loca("ALLY_APPU_OK");?>"></th></tr>
 </table></form></center><br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
 <?php
+    EndContent ();
     PageFooter ();
     ob_end_flush ();
     die();
@@ -57,43 +56,31 @@ if ( $_POST['weiter'] === "Отправить" && $ally['open'] )
 
 if ( $ally['open'] )        // Подать заявление
 {
+    BeginContent ();
 ?>
-
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
-<h1>Регистрироваться</h1>
+<h1><?=loca("ALLY_APPU_REG");?></h1>
 <table width=519>
 <form action="index.php?page=bewerben&session=<?=$session;?>&allyid=<?=$ally_id;?>" method=POST>
-<tr><td class=c colspan=2>Заявка в альянс [<?=$ally['tag'];?>] написать</td></tr>
-<tr><th>Сообщение (<span id="cntChars">0</span> / 6000 символов)</th><th><textarea name="text" cols=40 rows=10 onkeyup="javascript:cntchar(6000)"><?=$template;?></textarea></th></tr>
-<tr><th>Маленькая помощь</th><th><input type=submit name="weiter" value="Образец"></th></tr>
-<tr><th colspan=2><input type=submit name="weiter" value="Отправить"></th></tr>
+<tr><td class=c colspan=2><?=va(loca("ALLY_APPU_TITLE"), $ally['tag']);?></td></tr>
+<tr><th><?=va(loca("ALLY_APPU_TEXT"), "<span id=\"cntChars\">0</span>", $maxchars);?></th><th><textarea name="text" cols=40 rows=10 onkeyup="javascript:cntchar(<?=$maxchars;?>)"><?=$template;?></textarea></th></tr>
+<tr><th><?=loca("ALLY_APPU_HINT");?></th><th><input type=submit name="weiter" value="<?=loca("ALLY_APPU_TEMPLATE");?>"></th></tr>
+<tr><th colspan=2><input type=submit name="weiter" value="<?=loca("ALLY_APPU_SUBMIT");?>"></th></tr>
 </table></form></center><br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+    EndContent ();
 }
 else            // Заявление подать невозможно, альянс закрыт
 {
+    BeginContent ();
 ?>
-
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
-<h1>Регистрироваться</h1>
+<h1><?=loca("ALLY_APPU_REG");?></h1>
 <table width=519>
 <form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
-<tr><td class=c>Подать заявку в альянс [<?=$ally['tag'];?>] невозможно</td></tr>
-<tr><th>Этот альянс сейчас не принимает новых членов</th></th></tr>
-<tr><th><input type=submit value="Назад"></th></tr></table></form></center><br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
+<tr><td class=c><?=va(loca("ALLY_APPU_FORBIDDEN"), $ally['tag']);?></td></tr>
+<tr><th><?=loca("ALLY_APPU_CLOSED");?></th></th></tr>
+<tr><th><input type=submit value="<?=loca("ALLY_APPU_BACK");?>"></th></tr></table></form></center><br><br><br><br>
 <?php
+    EndContent ();
 }
 
 PageFooter ();

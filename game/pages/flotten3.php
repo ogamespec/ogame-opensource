@@ -2,20 +2,6 @@
 
 // Флот 3: вывод списка заданий, загрузка ресурсов.
 
-/*
-Список типов заданий:
-1 - Атака
-2 - Совместная атака
-3 - Транспорт
-4 - Оставить
-5 - Держаться
-6 - Шпионаж
-7 - Колонизировать
-8 - Переработать
-9 - Уничтожить
-15 - Экспедиция
-*/
-
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "fleet", $GlobalUser['lang'] );
@@ -48,11 +34,8 @@ if ( $planet < 0 ) $planet = 0;
 if ( $planet > 16 ) $planet = 16;
 
 PageHeader ("flotten3");
+BeginContent ();
 ?>
-
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 
   <script language="JavaScript" src="js/flotten.js"></script>
   <script type="text/javascript">
@@ -327,11 +310,8 @@ PageHeader ("flotten3");
 </tr>
  </form>
 </table><br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent ();
 PageFooter ();
 ob_end_flush ();
 ?>

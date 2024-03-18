@@ -14,7 +14,7 @@ FIELDS = FLOOR ( (DIAM / 1000) ^ 2 )
 /*
 planet_id: Порядковый номер (INT AUTO_INCREMENT PRIMARY KEY)
 name: Название планеты CHAR(20)
-type: тип планеты, если 0 - то это луна, 1 - планета, если 10000 - это поле обломков, 10001 - уничтоженная планета, 10002 - фантом для колонизации, 10003 - уничтоженная луна, 10004 - покинутая колония, 20000 - бесконечные дали
+type: тип планеты (см. определение PTYP)
 g,s,p: координаты где расположена планета
 owner_id: Порядковый номер пользователя-владельца
 R diameter: Диаметр планеты
@@ -38,9 +38,17 @@ R - случайные параметры
 чистка систем от "уничтоженных планет" происходит каждые сутки в 01-10 по серверу.
 существует "уничтоженная планета" 1 сутки (24 часа) + остаток времени до 01-10 серверного следующего за этими сутками дня.
 
-поля обломков - это специальный тип планеты. (type: 10000)
-
 */
+
+// Типы объектов галактики (планеты, луны и пр.)
+const PTYP_MOON = 0;        // луна
+const PTYP_PLANET = 1;      // планета; На ранних стадиях разработки для планет были зарезервированы типы для каждой картинки (ледяная, пустыня и проч.). Но после того как был кракнут алгоритм получения картинки из ID необходимость в этом отпала.
+const PTYP_DF = 10000;          // поле обломков
+const PTYP_DEST_PLANET = 10001;         // уничтоженная планета (удалена игроком)
+const PTYP_COLONY_PHANTOM = 10002;      // фантом для колонизации (существует на время полёта миссии Колонизировать)
+const PTYP_DEST_MOON = 10003;           // уничтоженная луна (удалена игроком)
+const PTYP_ABANDONED = 10004;           // покинутая колония (вместо багнутого "overlib", который был в ванильной версии)
+const PTYP_FARSPACE = 20000;        // бесконечные дали
 
 // Создать планету. Возвращает planet_id, или 0 если позиция занята.
 // colony: 1 - создать колонию, 0 - Главная планета
@@ -51,13 +59,13 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     global $db_prefix;
 
     // Проверить не занято-ли место?
-    if ($moon) $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( type = 0 OR type = 10003 )";
-    else $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( ( type > 0 AND type < 10000) OR type = 10001 OR type = 10004 )";
+    if ($moon) $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( type = ".PTYP_MOON." OR type = ".PTYP_DEST_MOON." )";
+    else $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED." )";
     $result = dbquery ($query);
     if ( dbrows ($result) != 0 ) return 0;
 
     // Название планеты.
-    if ($moon) $name = "Луна";
+    if ($moon) $name = loca("MOON");
     else
     {
         if ($colony) $name = "Колония";
@@ -65,8 +73,8 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     }
 
     // Тип планеты.
-    if ($moon) $type = 0;
-    else $type = 1;
+    if ($moon) $type = PTYP_MOON;
+    else $type = PTYP_PLANET;
 
     // Диаметр.
     if ($moon) $diam = floor ( 1000 * sqrt (mt_rand (10, 20) + 3*$moonchance)  );
@@ -137,7 +145,7 @@ function EnumPlanets ()
     else if ($GlobalUser['sortby'] == 2) $order = " ORDER BY name $asc, type DESC";
     else $order = "";
 
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$player_id."' AND type < 10000".$order;
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$player_id."' AND type < ".PTYP_DF.$order;
     $result = dbquery ($query);
     return $result;
 }
@@ -146,7 +154,7 @@ function EnumPlanets ()
 function EnumPlanetsGalaxy ($g, $s)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND ((type > 0 AND type < 10000) OR type = 10001 OR type = 10004) ORDER BY p ASC";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND (type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED.") ORDER BY p ASC";
     $result = dbquery ($query);
     return $result;
 }
@@ -187,9 +195,9 @@ function GetPlanet ( $planet_id)
 function LoadPlanet ($g, $s, $p, $type)
 {
     global $db_prefix;
-    if ($type == 1) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ((type > 0 AND type < 10000) OR type = 10001) LIMIT 1;";
-    else if ($type == 2) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=10000 LIMIT 1;";
-    else if ($type == 3) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type=0 OR type=10003) LIMIT 1;";
+    if ($type == 1) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET.") LIMIT 1;";
+    else if ($type == 2) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=".PTYP_DF." LIMIT 1;";
+    else if ($type == 3) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type=".PTYP_MOON." OR type=".PTYP_DEST_MOON.") LIMIT 1;";
     else return NULL;
     $result = dbquery ($query);
     if ( $result ) return dbarray ($result);
@@ -215,8 +223,8 @@ function PlanetHasMoon ( $planet_id )
     $result = dbquery ($query);
     if ( dbrows ($result) == 0) return 0;    // Планета не найдена
     $planet = dbarray ($result);
-    if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return 0;        // Планета сама является луной
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$planet['g']."' AND s = '".$planet['s']."' AND p = '".$planet['p']."' AND (type = 0 OR type = 10003)";
+    if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return 0;        // Планета сама является луной
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$planet['g']."' AND s = '".$planet['s']."' AND p = '".$planet['p']."' AND (type = ".PTYP_MOON." OR type = ".PTYP_DEST_MOON.")";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0) return 0;    // Луна у планеты не найдена.
     $planet = dbarray ($result);
@@ -238,7 +246,7 @@ function RenamePlanet ($planet_id, $name)
     $planet = dbarray ($result);
 
     // Проверить название.
-    if ( $planet['type'] == 0) $name = mb_substr ($name, 0, 20-mb_strlen(" (Луна)", "UTF-8"), "UTF-8");    // Ограничить длину имени.
+    if ( $planet['type'] == PTYP_MOON) $name = mb_substr ($name, 0, 20-mb_strlen(" (Луна)", "UTF-8"), "UTF-8");    // Ограничить длину имени.
     else $name = mb_substr ($name, 0, 20, "UTF-8");
     $pattern = '/[;,<>\`]/';
     if (preg_match ($pattern, $name)) return;    // Запрещенные символы.
@@ -246,14 +254,14 @@ function RenamePlanet ($planet_id, $name)
     $name = preg_replace ($pattern, '', $name);
     $name = trim ($name);
     if (strlen ($name) == 0) {
-        if ( $planet['type'] == 0 ) $name = "Луна";
+        if ( $planet['type'] == PTYP_MOON ) $name = loca("MOON");
         else $name = "планета";
     }
     else
     {
         $name = preg_replace ('/\s\s+/', ' ', $name);    // Вырезать лишние пробелы.
         // Если планета -- луна, то добавить приставку.
-        if ( $planet['type'] == 0 ) $name .= " (".loca("MOON").")";
+        if ( $planet['type'] == PTYP_MOON ) $name .= " (".loca("MOON").")";
     }
 
     // Если всё нормально - сменить имя планеты.
@@ -287,7 +295,7 @@ function UpdatePlanetActivity ( $planet_id, $t=0)
 function HasDebris ($g, $s, $p)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = $g AND s = $s AND p = $p AND type = 10000";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = $g AND s = $s AND p = $p AND type = ".PTYP_DF.";";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 ) return 0;
     $debris = dbarray ($result);
@@ -301,7 +309,7 @@ function CreateDebris ($g, $s, $p, $owner_id)
     $debris_id = HasDebris ($g, $s, $p);
     if ($debris_id > 0 ) return $debris_id;
     $now = time();
-    $planet = array ( null, "Поле обломков", 10000, $g, $s, $p, $owner_id, 0, 0, 0, 0, $now,
+    $planet = array ( null, "Поле обломков", PTYP_DF, $g, $s, $p, $owner_id, 0, 0, 0, 0, $now,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -351,15 +359,15 @@ function AddDebris ($id, $m, $k)
 // Получить игровой тип планеты.
 function GetPlanetType ($planet)
 {
-    if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return 3;
-    else if ( $planet['type'] == 10000) return 2;
+    if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return 3;
+    else if ( $planet['type'] == PTYP_DF) return 2;
     else return 1;
 }
 
 // Создать фантом колонизации. Вернуть ID.
 function CreateColonyPhantom ($g, $s, $p, $owner_id)
 {
-    $planet = array( null, "Planet", 10002, $g, $s, $p, $owner_id, 0, 0, 0, 0, time(),
+    $planet = array( null, "Planet", PTYP_COLONY_PHANTOM, $g, $s, $p, $owner_id, 0, 0, 0, 0, time(),
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -374,7 +382,7 @@ function CreateAbandonedColony ($g, $s, $p, $when)
     // Если на заданных координатах нет планеты, то добавить Покинутую колонию.
     if ( !HasPlanet ( $g, $s, $p ) )
     {
-        $planet = array( null, "Покинутая колония", 10004, $g, $s, $p, 99999, 0, 0, 0, 0, $when,
+        $planet = array( null, "Покинутая колония", PTYP_ABANDONED, $g, $s, $p, USER_SPACE, 0, 0, 0, 0, $when,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -390,7 +398,7 @@ function CreateAbandonedColony ($g, $s, $p, $when)
 function HasPlanet ($g, $s, $p)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( ( type > 0 AND type < 10000) OR type = 10001 OR type = 10004 );";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED." );";
     $result = dbquery ($query);
     if ( dbrows ($result) ) return 1;
     else return 0;
@@ -448,7 +456,7 @@ function RecalcFields ($planet_id)
     $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
     $planet = GetPlanet ($planet_id);
     $fields = 0;
-    if ( $planet['type'] == 0 || $planet['type'] == 10003 ) $maxfields = 1;    // луна
+    if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) $maxfields = 1;    // луна
     else $maxfields = floor (pow (($planet['diameter'] / 1000), 2));    // планета
     foreach ( $buildmap as $i=>$gid ) $fields += $planet["b$gid"];
     $maxfields += 5 * $planet["b33"] + 3 * $planet["b41"];    // терраформер и ЛБ
@@ -462,11 +470,11 @@ function CreateOuterSpace ($g, $s, $p)
     global $db_prefix;
 
     // Если там уже есть объект, вернуть его ID.
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type = 20000;";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type = ".PTYP_FARSPACE.";";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 ) 
     {
-        $planet = array( null, "Бесконечные дали", 20000, $g, $s, $p, 99999, 0, 0, 0, 0, time(),
+        $planet = array( null, "Бесконечные дали", PTYP_FARSPACE, $g, $s, $p, USER_SPACE, 0, 0, 0, 0, time(),
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -561,7 +569,7 @@ function CreateHomePlanet ($player_id)
     for ( $i=0; $i<($sg-1)*$ppg; $i++) $planet[$i] = 1;
     for ( $i; $i<$uni['galaxies']*$ppg; $i++) $planet[$i] = 0;
 
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g >= $sg AND p <= $ss AND type <> 10002 ORDER BY g, s, p";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g >= $sg AND p <= $ss AND type <> ".PTYP_COLONY_PHANTOM." ORDER BY g, s, p";
     $result = dbquery ($query);
     $rows = dbrows ( $result );
     while ($rows--)

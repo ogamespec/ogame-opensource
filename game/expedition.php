@@ -366,7 +366,7 @@ function Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang
         loca_lang ("EXP_RESFOUND_LOGBOOK_3", $lang),
         loca_lang ("EXP_RESFOUND_LOGBOOK_4", $lang),
     );
-    $resname = array ( loca ("METAL"), loca ("CRYSTAL"), loca ("DEUTERIUM" ) );
+    $resname = array ( loca_lang ("METAL", $lang), loca_lang ("CRYSTAL", $lang), loca_lang ("DEUTERIUM", $lang) );
 
     // Рассчитать тип найденного ресурса
     $type = mt_rand (0, 2);
@@ -516,14 +516,14 @@ function Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
     // Вывести список найденного флота и посчитать его стоимость.
     if ( count($found_fleet) > 0 )
     {
-        $msg .= loca ("EXP_FLEET_FOUND");
+        $msg .= loca_lang ("EXP_FLEET_FOUND", $lang);
         foreach ( $found_fleet as $id=>$amount)
         {
             $res = ShipyardPrice ( $id );
             $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             $points += ($m + $k + $d) * $amount;
             $fpoints += $amount;
-            $msg .= "<br>" . loca ("NAME_$id") . " " . nicenum ($amount);
+            $msg .= "<br>" . loca_lang ("NAME_$id", $lang) . " " . nicenum ($amount);
             $fleet[$id] += $amount;    // Добавить корабли к экспедиционному флоту
         }
     }
@@ -687,7 +687,7 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
     SendMessage ( $fleet_obj['owner_id'], 
         loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']),
         va(loca_lang("EXP_MESSAGE_SUBJ", $origin_user['lang']), $target['g'], $target['s'], $target['p']),
-        $text, 3, $queue['end']);
+        $text, MTYP_EXP, $queue['end']);
 }
 
 ?>

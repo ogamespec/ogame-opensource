@@ -39,13 +39,23 @@ $Languages = array (
 #    'ua' => "Українська",
 );
 
+// Язык по умолчанию, если приходится делать выбор. Т.к. проект уже достаточно хорошо интернационализирован - языком по умолчанию сделан English.
+$DefaultLanguage = "en";
+
 //
 // Глобальный язык устанавливается во время создании сессии пользователя.
 //
 
-$loca_lang = "en";        // Используемый язык. Можно менять в любое время.
+$loca_lang = $DefaultLanguage;        // Используемый язык. Можно менять в любое время.
 
 $LOCA = array ();        // тут содержаться все ключи.
+
+// Этот метод можно использовать чтобы массово заменить оригинальное название проекта (OGame) на название вашего проекта (напр. SpaceWars)
+function loca_subst_ogame ($text)
+{
+    //return str_replace ("OGame", "SpaceWars", $text);
+    return $text;
+}
 
 // Вернуть значение ключа. Возвращается последняя версия.
 // Если соединение с LOCA отсутствует или такого ключа не существует, вернуть название ключа.
@@ -53,7 +63,7 @@ function loca ($key)
 {
     global $LOCA, $loca_lang;
     if ( !isset ( $LOCA[$loca_lang][$key] ) ) return $key;
-    else return $LOCA[$loca_lang][$key];
+    else return loca_subst_ogame ($LOCA[$loca_lang][$key]);
 }
 
 // Аналогично обычной loca(), но язык выбирается не из глобальной переменной, а из параметра метода.
@@ -62,7 +72,7 @@ function loca_lang ($key, $lang)
 {
     global $LOCA;
     if ( !isset ( $LOCA[$lang][$key] ) ) return $key;
-    else return $LOCA[$lang][$key];
+    else return loca_subst_ogame ($LOCA[$lang][$key]);
 }
 
 // Добавить набор языковых ключей.

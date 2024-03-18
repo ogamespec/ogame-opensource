@@ -85,6 +85,35 @@ $LOCA["de"]["ADM_BOTS_SUBMIT"] = "Senden";
 $LOCA["de"]["ADM_BOTS_FORBIDDEN"] = "Zugang verweigert.";
 $LOCA["de"]["ADM_BOTS_NO_START"] = "Es wurde keine Startstrategie für Bots gefunden.";
 
+// admin_broadcast
+
+$LOCA["de"]["ADM_BCAST_ERROR_SUBJ"] = "Füllen Sie den Betreff aus";
+$LOCA["de"]["ADM_BCAST_ERROR_TEXT"] = "Geben Sie den Text der Nachricht ein";
+$LOCA["de"]["ADM_BCAST_ERROR_USERS"] = "Keine Adressaten gefunden.";
+$LOCA["de"]["ADM_BCAST_SUCCESS"] = "Nachricht an #1 Benutzer gesendet.";
+$LOCA["de"]["ADM_BCAST_WHO"] = "An:";
+$LOCA["de"]["ADM_BCAST_0"] = "Alle";
+$LOCA["de"]["ADM_BCAST_1"] = "Anfänger (weniger als #1 Punkte)";
+$LOCA["de"]["ADM_BCAST_2"] = "Spieler in den Top 100";
+$LOCA["de"]["ADM_BCAST_3"] = "Operatoren";
+$LOCA["de"]["ADM_BCAST_SUBJ"] = "Thema:";
+$LOCA["de"]["ADM_BCAST_SUBMIT"] = "Senden";
+
+// admin_browse
+
+$LOCA["de"]["ADM_BROWSE_TITLE"] = "Jüngste Geschichte der Übergänge (#1 Einträge):";
+
+// admin_checksum
+
+$LOCA["de"]["ADM_CSUM_PATH"] = "Dateipfad";
+$LOCA["de"]["ADM_CSUM_DIGEST"] = "Prüfsumme";
+$LOCA["de"]["ADM_CSUM_STATUS"] = "Status";
+$LOCA["de"]["ADM_CSUM_ENGINE"] = "Triebwerk";
+$LOCA["de"]["ADM_CSUM_ADMIN"] = "Admin";
+$LOCA["de"]["ADM_CSUM_PAGES"] = "Spiel-Seiten";
+$LOCA["de"]["ADM_CSUM_REG"] = "Registrierungssystem";
+$LOCA["de"]["ADM_CSUM_FIX"] = "Prüfsummen korrigieren";
+
 // admin_colony_settings
 
 $LOCA["de"]["ADM_COL_HEAD"] = "Einstellungen für die Kolonisierung";

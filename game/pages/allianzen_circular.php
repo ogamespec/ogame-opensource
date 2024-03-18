@@ -10,13 +10,16 @@ function AllyPage_CircularMessage ()
     global $ally;
     global $AllianzenError;
 
+    // Ограничение на количество символов.
+    $MAXCHARS = 2000;
+
     if ( method () === "POST" && key_exists ('r', $_POST) )
     {
         $ally_id = $ally['ally_id'];
         $myrank = LoadRank ( $ally_id, $GlobalUser['allyrank'] );
-        if ( ! ($myrank['rights'] & 0x080) )
+        if ( ! ($myrank['rights'] & ARANK_CIRCULAR) )
         {
-            $AllianzenError = "<center>\nНедостаточно прав для проведения операции<br></center>";
+            $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
             return;
         }
         $rank_id = intval($_POST['r']);
@@ -30,26 +33,27 @@ function AllyPage_CircularMessage ()
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
 <table width=519>
 <form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
-<tr><td class=c>Следующие игроки получили Ваше общее послание</td></tr>
+<tr><td class=c><?=loca("ALLY_CIRC_USERLIST");?></td></tr>
 <tr><th>
 <?php
 
-            $text = str_replace ( '\"', "&quot;", bb($_POST['text']) );
-            $text = str_replace ( '\'', "&rsquo;", $text );
-            $text = str_replace ( '\`', "&lsquo;", $text );
+            $text = str_replace ( "\"", "&quot;", bb($_POST['text']) );
+            $text = str_replace ( "'", "&rsquo;", $text );
+            $text = str_replace ( "`", "&lsquo;", $text );
 
             while ($rows--)
             {
                 $user = dbarray ($result);
+                loca_add ("ally", $user['lang']);
                 SendMessage ( $user['player_id'], 
-                                       va ( "Альянс [#1]", $ally['tag'] ),
-                                       va ( "Общее послание Вашему альянсу [#1]", $ally['tag'] ), 
-                                       va ( "Игрок #1 сообщает Вам следующее:<br>#2", $GlobalUser['oname'], $text ), 4 );
+                                       va ( loca_lang("ALLY_MSG_FROM", $user['lang']), $ally['tag'] ),
+                                       va ( loca_lang("ALLY_MSG_CIRC_SUBJ", $user['lang']), $ally['tag'] ), 
+                                       va ( loca_lang("ALLY_MSG_CIRC_TEXT", $user['lang']), $GlobalUser['oname'], $text ), MTYP_ALLY );
                 echo $user['oname'] . "<br>\n";
             }
 ?>
 </th></tr>
-<tr><th><input type=submit value="Ok"></th></tr>
+<tr><th><input type=submit value="<?=loca("ALLY_CIRC_SUBMIT");?>"></th></tr>
 </table></center></form>
 <?php
         }
@@ -59,9 +63,9 @@ function AllyPage_CircularMessage ()
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
 <table width=519>
 <form action="index.php?page=allianzen&session=<?=$session;?>&a=17" method=POST>
-<tr><td class=c>Ошибка</td></tr>
-<tr><th>К сожалению, получатели не найдены</th></tr>
-<tr><th><input type=submit value="Назад"></th></tr>
+<tr><td class=c><?=loca("ALLY_CIRC_ERROR");?></td></tr>
+<tr><th><?=loca("ALLY_CIRC_ERROR_TEXT");?></th></tr>
+<tr><th><input type=submit value="<?=loca("ALLY_CIRC_BACK");?>"></th></tr>
 </table></center></form>
 <?php
         }
@@ -72,10 +76,10 @@ function AllyPage_CircularMessage ()
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
 <table width=519>
 <form action="index.php?page=allianzen&session=<?=$session;?>&a=17&sendmail=1" method=POST>
-<tr><td class=c colspan=2>Отправить общее сообщение</td></tr>
-<tr><th>Получатель</th><th>
+<tr><td class=c colspan=2><?=loca("ALLY_CIRC_HEAD");?></td></tr>
+<tr><th><?=loca("ALLY_CIRC_TO");?></th><th>
 <select name=r>
-    <option value=0>Все игроки</option>
+    <option value=0><?=loca("ALLY_CIRC_ALL");?></option>
 <?php
     $result = EnumRanks ( $ally['ally_id'] );
     $rows = dbrows ($result);
@@ -83,11 +87,11 @@ function AllyPage_CircularMessage ()
     {
         $rank = dbarray ($result);
         if ( $rank['rank_id'] == 0 || $rank['rank_id'] == 1 ) continue;    // Основателя и новичка не показываем
-        echo "    <option value=".$rank['rank_id'].">Только определённому рангу: ".$rank['name']."</option>\n";
+        echo "    <option value=".$rank['rank_id'].">".va(loca("ALLY_CIRC_RANK"), $rank['name'])."</option>\n";
     }
 ?>
 </select></th></tr>
-<tr><th>Текст сообщения (<span id="cntChars">0</span> / 2000 Симв.)</th><th><textarea name=text cols=60 rows=10 onkeyup="javascript:cntchar(2000)"></textarea></th></tr>
+<tr><th><?=va(loca("ALLY_CIRC_MESSAGE"), "<span id=\"cntChars\">0</span>", $MAXCHARS);?></th><th><textarea name=text cols=60 rows=10 onkeyup="javascript:cntchar(<?=loca($MAXCHARS);?>)"></textarea></th></tr>
 <tr><th colspan=2><input type=submit value="Отправить"></th></tr></table></center></form>
 <?php
 }

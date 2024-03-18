@@ -31,9 +31,7 @@ if ($internal)
 
     PageHeader ("pranger");
 
-    echo "<!-- CONTENT AREA -->\n";
-    echo "<div id='content'>\n";
-    echo "<center>\n";
+    BeginContent ();
 }
 else {
 
@@ -42,7 +40,7 @@ else {
 
     if ( key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $_COOKIE['ogamelang'];
     else $loca_lang = $uni['lang'];
-    if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
+    if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
     
     loca_add ( "pranger", $loca_lang );
 }
@@ -116,9 +114,7 @@ else {
 if ($internal)
 {
     echo "<br><br><br><br>\n";
-    echo "</center>\n";
-    echo "</div>\n";
-    echo "<!-- END CONTENT AREA -->\n";
+    EndContent ();
 
     PageFooter ("", "");
 }

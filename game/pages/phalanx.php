@@ -3,6 +3,7 @@
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "events", $GlobalUser['lang'] );
+loca_add ( "phalanx", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -13,9 +14,6 @@ $aktplanet = ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
-
-$unitab = LoadUniverse ();
-$uni = $unitab['num'];
 
 require_once "phalanx_events.php";
 
@@ -30,7 +28,7 @@ require_once "phalanx_events.php";
 
 <link rel="stylesheet" type="text/css" href="css/combox.css">
 
-<title>Вселенная <?=$uni;?> ОГейм</title>
+<title><?=va(loca("PAGE_TITLE"), $GlobalUni['num']);?></title>
 
   <script src="js/utilities.js" type="text/javascript"></script>
   <script language="JavaScript">
@@ -55,11 +53,11 @@ require_once "phalanx_events.php";
 <table width="519">
  <tr>
   <td class="c" colspan="4">
-Доклад сенсора с луны на координатах <a href="javascript:showGalaxy(<?=$aktplanet['g'];?>,<?=$aktplanet['s'];?>,<?=$aktplanet['p'];?>)" >[<?=$aktplanet['g'];?>:<?=$aktplanet['s'];?>:<?=$aktplanet['p'];?>]</a> (<?=$GlobalUser['oname'];?>)  </td>
+<?=loca("PHALANX_REPORT");?> <a href="javascript:showGalaxy(<?=$aktplanet['g'];?>,<?=$aktplanet['s'];?>,<?=$aktplanet['p'];?>)" >[<?=$aktplanet['g'];?>:<?=$aktplanet['s'];?>:<?=$aktplanet['p'];?>]</a> (<?=$GlobalUser['oname'];?>)  </td>
 
  </tr>
  <tr>
-  <td colspan="4" class="c">Передвижения флота</td>
+  <td colspan="4" class="c"><?=loca("PHALANX_EVENTS");?></td>
  </tr>
 
 <?php
@@ -83,22 +81,22 @@ require_once "phalanx_events.php";
 
     if ( $aktplanet["b42"] <= 0 )        // Попытка скана фаланги с планеты или с другой луны без фаланги
     {
-        echo "<font color=#FF0000>Не мухлевать!</font>";
+        echo "<font color=#FF0000>".loca("PHALANX_ERR_MISSING")."</font>";
     }
     else if ( $aktplanet["d"] < 5000 )        // Недостаточно дейтерия
     {
-        echo "<font color=#FF0000>Недостаточно дейтерия!</font>";
+        echo "<font color=#FF0000>".loca("PHALANX_ERR_DEUT")."</font>";
     }
     else if (                                        // Попытка читерства
         $target['owner_id'] == $GlobalUser['player_id']         ||          // скан своих планет
         $aktplanet['owner_id'] != $GlobalUser['player_id']      ||         // скан с чужой луны/планеты
-        !( ( $target['type'] > 0 && $target['type'] < 10000 ) || $target['type'] == 10001 )   ||           // скан НЕ (планеты или уничтоженной планеты)
+        !( ( $target['type'] > PTYP_MOON && $target['type'] < PTYP_DF ) || $target['type'] == PTYP_DEST_PLANET )   ||           // скан НЕ (планеты или уничтоженной планеты)
         $outofrange                                                                        // скан за пределом радиуса фаланги.
     )        
     {
         // Выписать автоматический бан без РО на час.
 
-        echo "<font color=#FF0000>Поздравляем! Вы выиграли целый час отдыха без РО за попытку манипулирования фалангой!</font>";
+        echo "<font color=#FF0000>".loca("PHALANX_ERR_CHEATER")."</font>";
     }
     else
     {

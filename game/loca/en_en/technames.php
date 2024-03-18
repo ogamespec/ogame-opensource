@@ -2,8 +2,6 @@
 
 // In-game objects
 
-// en
-
 $LOCA["en"]["NAME_1"] = "Metal Mine";
 $LOCA["en"]["NAME_2"] = "Crystal Mine";
 $LOCA["en"]["NAME_3"] = "Deuterium Synthesizer";

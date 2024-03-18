@@ -37,11 +37,9 @@ if ( key_exists ('lgn', $_GET) )
 
 $uni = $GlobalUni;
 
+BeginContent ();
 ?>
 
-<!-- CONTENT AREA --> 
-<div id='content'> 
-<center> 
 <script type="text/javascript"> 
 <!--
 function t_building() {
@@ -108,7 +106,7 @@ function t_building() {
 // Меню планеты
 echo "<table width='519'>\n\n";
 echo "<tr><td class='c' colspan='4'>\n";
-if ($aktplanet['type'] == 0) $name = va ( loca ("OVERVIEW_MOON"), $aktplanet['name'], $aktplanet['g'], $aktplanet['s'], $aktplanet['p'] );
+if ($aktplanet['type'] == PTYP_MOON) $name = va ( loca ("OVERVIEW_MOON"), $aktplanet['name'], $aktplanet['g'], $aktplanet['s'], $aktplanet['p'] );
 else $name = va ( loca("OVERVIEW_PLANET"), $aktplanet['name'] );
 
 echo "<a href='index.php?page=renameplanet&session=$session&pl=".$aktplanet['planet_id']."' title='".loca("OVERVIEW_PLANET_MENU")."'>".$name."</a>     (".$GlobalUser['oname'].")\n";
@@ -170,7 +168,7 @@ $num = dbrows ($result);
 for ($i=0; $i<$num; $i++)
 {
     $planet = dbarray ($result);
-    if ($planet['type'] == 0 || $planet['planet_id'] == $aktplanet['planet_id']) { $num--; $i--; continue; }
+    if ($planet['type'] == PTYP_MOON || $planet['planet_id'] == $aktplanet['planet_id']) { $num--; $i--; continue; }
     if (($i%2) == 0) echo "<tr>\n";
     echo "<th> ".$planet['name']."<br> <a href=\"index.php?page=overview&session=$session&cp=".$planet['planet_id']."\" title=\"".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]\">";
     echo "<img src=\"".GetPlanetImage ( UserSkin (), $planet )."\" width=\"50\" height=\"50\" title=\"".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]\" ></a>\n";
@@ -204,9 +202,7 @@ echo "<tr><th> ".va ( loca("OVERVIEW_COORD"), "<a href=\"index.php?page=galaxy&g
 echo "<tr><th> ".va( loca("OVERVIEW_RANK"),  $score,  "<a href='index.php?page=statistics&session=$session&start=".(floor($GlobalUser['place1']/100)*100+1)."'>".nicenum($GlobalUser['place1'])."</a>", nicenum($uni['usercount']) )."     \n";
 
 echo "</table>\n<br><br><br><br><br>\n";
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n\n";
+EndContent ();
 
 if ( $GlobalUser['vacation']) $OverviewError = "<center>\nрежим отпуска<br></center>\n";
 if ( $uni['freeze'] ) $OverviewError .= "<center>\nВселенная поставлена на паузу.<br></center>\n";

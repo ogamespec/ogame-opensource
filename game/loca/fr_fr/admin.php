@@ -85,6 +85,35 @@ $LOCA["fr"]["ADM_BOTS_SUBMIT"] = "Envoyer";
 $LOCA["fr"]["ADM_BOTS_FORBIDDEN"] = "Accès refusé.";
 $LOCA["fr"]["ADM_BOTS_NO_START"] = "Aucune stratégie de départ pour les bots n'a été trouvée.";
 
+// admin_broadcast
+
+$LOCA["fr"]["ADM_BCAST_ERROR_SUBJ"] = "Заполните тему";
+$LOCA["fr"]["ADM_BCAST_ERROR_TEXT"] = "Введите текст сообщения";
+$LOCA["fr"]["ADM_BCAST_ERROR_USERS"] = "Адресаты не найдены.";
+$LOCA["fr"]["ADM_BCAST_SUCCESS"] = "Сообщение отправлено #1 пользователям.";
+$LOCA["fr"]["ADM_BCAST_WHO"] = "Кому:";
+$LOCA["fr"]["ADM_BCAST_0"] = "Всем";
+$LOCA["fr"]["ADM_BCAST_1"] = "Новичкам (менее #1 очков)";
+$LOCA["fr"]["ADM_BCAST_2"] = "Игрокам из топ100";
+$LOCA["fr"]["ADM_BCAST_3"] = "Операторам";
+$LOCA["fr"]["ADM_BCAST_SUBJ"] = "Тема:";
+$LOCA["fr"]["ADM_BCAST_SUBMIT"] = "Отправить";
+
+// admin_browse
+
+$LOCA["fr"]["ADM_BROWSE_TITLE"] = "Последняя история переходов (#1 записей):";
+
+// admin_checksum
+
+$LOCA["fr"]["ADM_CSUM_PATH"] = "Путь к файлу";
+$LOCA["fr"]["ADM_CSUM_DIGEST"] = "Контрольная сумма";
+$LOCA["fr"]["ADM_CSUM_STATUS"] = "Статус";
+$LOCA["fr"]["ADM_CSUM_ENGINE"] = "Движок";
+$LOCA["fr"]["ADM_CSUM_ADMIN"] = "Админка";
+$LOCA["fr"]["ADM_CSUM_PAGES"] = "Игровые страницы";
+$LOCA["fr"]["ADM_CSUM_REG"] = "Система регистрации";
+$LOCA["fr"]["ADM_CSUM_FIX"] = "Зафиксировать контрольные суммы";
+
 // admin_colony_settings
 
 $LOCA["fr"]["ADM_COL_HEAD"] = "Paramètres de colonisation";

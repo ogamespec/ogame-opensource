@@ -156,4 +156,71 @@ function Hacking ($code)
     IncrementHackCounter ();
 }
 
+// Вернуть лог SQL запросов, если у пользователя включен показ отладочной информации.
+function GetSQLQueryLogText ()
+{
+    global $query_log;
+
+    $res = "";
+
+    $res .= "<style>\n";
+    $res .= ".sql_overlay {\n";
+    $res .= "  position: fixed;\n";
+    $res .= "  top: 0;\n";
+    $res .= "  bottom: 0;\n";
+    $res .= "  left: 0;\n";
+    $res .= "  right: 0;\n";
+    $res .= "  background: rgba(0, 0, 0, 0.7);\n";
+    $res .= "  transition: opacity 500ms;\n";
+    $res .= "  visibility: hidden;\n";
+    $res .= "  opacity: 0;\n";
+    $res .= "}\n";
+    $res .= ".sql_overlay:target {\n";
+    $res .= "  visibility: visible;\n";
+    $res .= "  opacity: 1;\n";
+    $res .= "}\n";
+    $res .= ".sql_popup {\n";
+    $res .= "  margin: 70px auto;\n";
+    $res .= "  padding: 20px;\n";
+    $res .= "  background: #fff;\n";
+    $res .= "  border-radius: 5px;\n";
+    $res .= "  width: 30%;\n";
+    $res .= "  position: relative;\n";
+    $res .= "  transition: all 5s ease-in-out;\n";
+    $res .= "  color: black;\n";    
+    $res .= "}\n";
+    $res .= ".sql_popup .sql_close {\n";
+    $res .= "  position: absolute;\n";
+    $res .= "  top: 20px;\n";
+    $res .= "  right: 30px;\n";
+    $res .= "  transition: all 200ms;\n";
+    $res .= "  font-size: 30px;\n";
+    $res .= "  font-weight: bold;\n";
+    $res .= "  text-decoration: none;\n";
+    $res .= "  color: #333;\n";
+    $res .= "}\n";
+    $res .= ".sql_popup .sql_close:hover {\n";
+    $res .= "  color: #06D85F;\n";
+    $res .= "}\n";
+    $res .= ".sql_popup .sql_content {\n";
+    $res .= "  max-height: 60%;\n";
+    $res .= "  overflow: auto;\n";
+    $res .= "  text-align: left;\n";
+    $res .= "}\n";
+    $res .= "</style>\n";
+
+    $res .= "<a href=\"#popup1\">Show SQL query log</a>\n";
+    $res .= "<div id=\"popup1\" class=\"sql_overlay\">\n";
+    $res .= "    <div class=\"sql_popup\">\n";
+    $res .= "        <h2>SQL Query Log</h2>\n";
+    $res .= "        <a class=\"sql_close\" href=\"#\">&times;</a>\n";
+    $res .= "        <div class=\"sql_content\">\n";
+    $res .= $query_log;
+    $res .= "        </div>\n";
+    $res .= "    </div>\n";
+    $res .= "</div>\n";
+
+    return $res;
+}
+
 ?>
