@@ -20,8 +20,7 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 if ($GlobalUser['admin'] == 0) UpdateQueue ( $now );    // Не обновлять Обзор для админов
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-$aktplanet = ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-
+ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 

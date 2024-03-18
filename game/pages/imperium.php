@@ -19,7 +19,7 @@ if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] )
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-$aktplanet = ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
+ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
@@ -55,7 +55,7 @@ if ( $planettype == 1 || $planettype == 3)
         if ( $planettype == 1 && $planet['type'] == PTYP_MOON ) continue;
         if ( $planettype == 3 && $planet['type'] != PTYP_MOON ) continue;
         $plist[$num] = GetPlanet ($planet['planet_id']);
-        $plist[$num] = ProdResources ( $plist[$num], $plist[$num]['lastpeek'], $now );
+        ProdResources ( $plist[$num], $plist[$num]['lastpeek'], $now );
         $num ++;
     }
 }
