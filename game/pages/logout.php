@@ -2,6 +2,8 @@
 
 // Выход
 
+loca_add ( "reg", $GlobalUser['lang'] );
+
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet']);
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
@@ -20,7 +22,7 @@ Logout ( $_GET['session'] );
 
 <body topmargin='0' leftmargin='0' marginwidth='0' marginheight='0' >
 <center>
-До скорого!!<br />
+<?=loca("REG_LOGOUT");?><br />
 <p>
              </p>
 </center>

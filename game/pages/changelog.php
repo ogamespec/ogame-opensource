@@ -28,11 +28,9 @@ UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
 PageHeader ("changelog");
+BeginContent ();
 ?>
 
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 <center>
   <table width="668">
    <tr>
@@ -56,11 +54,9 @@ PageHeader ("changelog");
 ?>
 
 </table><br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
 
 <?php
+EndContent ();
 PageFooter ();
 ob_end_flush ();
 ?>

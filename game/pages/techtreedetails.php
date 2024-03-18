@@ -18,9 +18,7 @@ $session = $_GET['session'];
 
 PageHeader ("techtreedetails");
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent ();
 
 // **************************************************************************************
 // Список объектов что-чему требуется.
@@ -163,9 +161,7 @@ echo "</table> \n";
 echo "</center>";
 
 echo "<br><br><br><br>\n";
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n";
+EndContent ();
 
 PageFooter ();
 ob_end_flush ();

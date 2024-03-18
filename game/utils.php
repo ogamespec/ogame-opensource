@@ -55,7 +55,7 @@ function va ($subject)
     return preg_replace($pattern, $replace, $subject);
 }
 
-// Here is a function to sort an array by the key of his sub-array
+// Here is a function to sort an array by the key of its sub-array
 function sksort (&$array, $subkey="id", $sort_ascending=false)
 {
     $temp_array = array ();
@@ -83,6 +83,32 @@ function sksort (&$array, $subkey="id", $sort_ascending=false)
     if ($sort_ascending) $array = array_reverse($temp_array);
     else $array = $temp_array;
     return $array;
+}
+
+function mail_utf8($to, $subject = '(No subject)', $message = '', $header = '')
+{
+    $header_ = 'MIME-Version: 1.0' . "\n" . 'Content-type: text/plain; charset=UTF-8' . "\n";
+    mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $header_ . $header);
+}
+
+function localhost ($ip)
+{
+    return $ip === "127.0.0.1" || $ip === "::1";
+}
+
+// Вырезать из строки всякие инжекции.
+function SecureText ( $text )
+{
+    $search = array ( "'<script[^>]*?>.*?</script>'si",  // Вырезает javaScript
+                      "'<[\/\!]*?[^<>]*?>'si",           // Вырезает HTML-теги
+                      "'([\r\n])[\s]+'" );             // Вырезает пробельные символы
+    $replace = array ("", "", "\\1", "\\1" );
+    $str = preg_replace($search, $replace, $text);
+    $str = str_replace ("`", "", $str);
+    $str = str_replace ("'", "", $str);
+    $str = str_replace ("\"", "", $str);
+    $str = str_replace ("%0", "", $str);
+    return $str;
 }
 
 ?>

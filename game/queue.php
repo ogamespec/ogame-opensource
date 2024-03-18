@@ -306,7 +306,7 @@ function PropagateBuildQueue ($planet_id, $from)
                 SendMessage ( $user['player_id'], 
                     loca_lang("BUILD_MSG_FROM", $user['lang']), 
                     loca_lang("BUILD_MSG_SUBJ", $user['lang']), 
-                    $pre . "<br><br>" . $text, 5, $from );
+                    $pre . "<br><br>" . $text, MTYP_MISC, $from );
 
                 // удалить постройку, которую нельзя построить из очереди
                 dbquery ( "DELETE FROM ".$db_prefix."buildqueue WHERE id = " . $row['id'] );

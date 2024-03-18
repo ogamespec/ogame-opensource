@@ -11,7 +11,7 @@ InitDB();
 $GlobalUni = LoadUniverse ();
 
 $loca_lang = $GlobalUni['lang'];
-if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
+if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
 
 loca_add ( "maintain", $loca_lang );
 

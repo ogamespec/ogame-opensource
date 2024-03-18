@@ -120,7 +120,7 @@ function Admin_Planets ()
         if ( $action === "create_moon" )    // Создать луну
         {
             $planet = GetPlanet ($cp);
-            if ( $planet['type'] > 0 && $planet['type'] < 10000 )
+            if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
             {
                 if ( PlanetHasMoon ($cp) == 0 ) CreatePlanet ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id'], 0, 1, 20);
             }
@@ -128,7 +128,7 @@ function Admin_Planets ()
         else if ( $action === "create_debris" )    // Создать ПО
         {
             $planet = GetPlanet ($cp);
-            if ( $planet['type'] > 0 && $planet['type'] < 10000 )
+            if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
             {
                 if ( HasDebris ($planet['g'], $planet['s'], $planet['p']) == 0 ) CreateDebris ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id']);
             }
@@ -136,7 +136,7 @@ function Admin_Planets ()
         else if ( $action === "cooldown_gates" )    // Остудить ворота
         {
             $planet = GetPlanet ($cp);
-            if ( $planet['type'] == 0 )
+            if ( $planet['type'] == PTYP_MOON )
             {
                 $query = "UPDATE ".$db_prefix."planets SET gate_until=0 WHERE planet_id=" . $planet['planet_id'];
                 dbquery ($query);
@@ -145,7 +145,7 @@ function Admin_Planets ()
         else if ( $action === "warmup_gates" )    // Нагреть ворота
         {
             $planet = GetPlanet ($cp);
-            if ( $planet['type'] == 0 )
+            if ( $planet['type'] == PTYP_MOON )
             {
                 $query = "UPDATE ".$db_prefix."planets SET gate_until=".($now+59*60+59)." WHERE planet_id=" . $planet['planet_id'];
                 dbquery ($query);
@@ -298,9 +298,9 @@ function reset ()
         echo "<br>".loca("ADM_PLANET_BUILDINGS").": " . nicenum( ($pp['points'] - ($pp['fleet_pts']+$pp['defense_pts']) ) / 1000) ;
         echo "<br>".loca("ADM_PLANET_FLEET").": " . nicenum($pp['fleet_pts'] / 1000) ;
         echo "<br>".loca("ADM_PLANET_DEFENSE").": " . nicenum($pp['defense_pts'] / 1000) ;
-        if ($planet['type'] == 10000 ) echo "<br>М: ".nicenum($planet['m'])."<br>К: ".nicenum($planet['k'])."<br>";
+        if ($planet['type'] == PTYP_DF ) echo "<br>М: ".nicenum($planet['m'])."<br>К: ".nicenum($planet['k'])."<br>";
         echo "</th><th>";
-        if ( $planet['type'] > 0 && $planet['type'] < 10000 )
+        if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
         {
             if ($moon_id)
             {
@@ -335,7 +335,7 @@ function reset ()
         echo "<th valign=top><table>\n";
         foreach ( $buildmap as $i=>$gid) {
             echo "<tr><th>".loca("NAME_$gid");
-            if ( $gid == 43 && $planet['type'] == 0 ) {    // управление воротами.
+            if ( $gid == 43 && $planet['type'] == PTYP_MOON ) {    // управление воротами.
                 if ( $now >= $planet["gate_until"] ) {    // ворота готовы
                     echo " <a href=\"index.php?page=admin&session=$session&mode=Planets&action=warmup_gates&cp=".$planet['planet_id']."\" >".loca("ADM_PLANET_GATE_WARMUP")."</a>";
                 }
@@ -347,7 +347,7 @@ function reset ()
             echo "</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=3 name=\"b$gid\" value=\"".$planet["b$gid"]."\" />";
 
             // управление шахтами и выработкой энергии.
-            if ( $gid == 1 && $planet['type'] != 0 ) {
+            if ( $gid == 1 && $planet['type'] != PTYP_MOON ) {
                 echo "<select name='mprod'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
@@ -356,7 +356,7 @@ function reset ()
                 }
                 echo "</select>\n";
             }
-            if ( $gid == 2 && $planet['type'] != 0 ) {
+            if ( $gid == 2 && $planet['type'] != PTYP_MOON ) {
                 echo "<select name='kprod'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
@@ -365,7 +365,7 @@ function reset ()
                 }
                 echo "</select>\n";
             }
-            if ( $gid == 3 && $planet['type'] != 0 ) {
+            if ( $gid == 3 && $planet['type'] != PTYP_MOON ) {
                 echo "<select name='dprod'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
@@ -374,7 +374,7 @@ function reset ()
                 }
                 echo "</select>\n";
             }
-            if ( $gid == 4 && $planet['type'] != 0 ) {
+            if ( $gid == 4 && $planet['type'] != PTYP_MOON ) {
                 echo "<select name='sprod'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
@@ -383,7 +383,7 @@ function reset ()
                 }
                 echo "</select>\n";
             }
-            if ( $gid == 12 && $planet['type'] != 0 ) {
+            if ( $gid == 12 && $planet['type'] != PTYP_MOON ) {
                 echo "<select name='fprod'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
@@ -400,7 +400,7 @@ function reset ()
         echo "<th valign=top><table>\n";
         foreach ( $fleetmap as $i=>$gid) {
             echo "<tr><th>".loca("NAME_$gid")."</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=6 name=\"f$gid\" value=\"".$planet["f$gid"]."\" />";
-            if ( $gid == 212 && $planet['type'] != 0 ) {
+            if ( $gid == 212 && $planet['type'] != PTYP_MOON ) {
                 echo "<select name='ssprod'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";

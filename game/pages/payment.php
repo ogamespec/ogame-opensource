@@ -47,11 +47,8 @@ if ( method() === "POST" )
 
 PageHeader ("payment");
 
+BeginContent ();
 ?>
-
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 
 <?php
 
@@ -107,11 +104,8 @@ PageHeader ("payment");
     }
 ?>
 
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent ();
 PageFooter ();
 ob_end_flush ();
 ?>

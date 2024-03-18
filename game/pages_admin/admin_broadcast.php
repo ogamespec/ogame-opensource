@@ -1,7 +1,6 @@
 <?php
 
-// ========================================================================================
-// Общее сообщение пользователям.
+// Админка: Общее сообщение пользователям.
 
 function Admin_Broadcast ()
 {
@@ -16,13 +15,13 @@ function Admin_Broadcast ()
     {
         $cat = $_POST['cat'];
         $subj = $_POST['subj'];
-        if ( $subj === "" ) $write_error = "<center><font color=#FF0000>Заполните тему</font><br/></center>\n";
+        if ( $subj === "" ) $write_error = "<center><font color=#FF0000>".loca("ADM_BCAST_ERROR_SUBJ")."</font><br/></center>\n";
         $text = $_POST['text'];
-        if ( $text === "" ) $write_error = "<center><font color=#FF0000>Введите текст сообщения</font><br/></center>\n";
+        if ( $text === "" ) $write_error = "<center><font color=#FF0000>".loca("ADM_BCAST_ERROR_TEXT")."</font><br/></center>\n";
 
         if ( $write_error === "" )
         {
-            if ( $cat == 1 ) $query = "SELECT * FROM ".$db_prefix."users WHERE score1 < 5000;";        // Новичкам (менее 5.000 очков)
+            if ( $cat == 1 ) $query = "SELECT * FROM ".$db_prefix."users WHERE score1 < ".USER_NOOB_LIMIT.";";        // Новичкам (обычно менее 5.000 очков)
             else if ( $cat == 2 ) $query = "SELECT * FROM ".$db_prefix."users WHERE place1 < 100;";        // Игрокам из топ100
             else if ( $cat == 3 ) $query = "SELECT * FROM ".$db_prefix."users WHERE admin = 1;";        // Операторам
             else $query = "SELECT * FROM ".$db_prefix."users;";                // Всем
@@ -42,10 +41,10 @@ function Admin_Broadcast ()
             while ($rows--)
             {
                 $user = dbarray ($result);
-                SendMessage ( $user['player_id'], $from, $subj, $text, 5);
+                SendMessage ( $user['player_id'], $from, $subj, $text, MTYP_MISC);
             }
-            if ($usernum > 0) $write_error = "<center><font color=#00FF00>Сообщение отправлено $usernum пользователям.</font><br/></center>\n";
-            else $write_error = "<center><font color=#00FF00>Адресаты не найдены.</font><br/></center>\n";
+            if ($usernum > 0) $write_error = "<center><font color=#00FF00>".va(loca("ADM_BCAST_SUCCESS"), $usernum)."</font><br/></center>\n";
+            else $write_error = "<center><font color=#00FF00>".loca("ADM_BCAST_ERROR_USERS")."</font><br/></center>\n";
         }
     }
 
@@ -59,16 +58,16 @@ function Admin_Broadcast ()
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Broadcast" method="POST">
 
 <tr><td>
-Кому: <select name="cat">
-<option value="0">Всем</option>
-<option value="1">Новичкам (менее 5.000 очков)</option>
-<option value="2">Игрокам из топ100</option>
-<option value="3">Операторам</option>
+<?=loca("ADM_BCAST_WHO");?> <select name="cat">
+<option value="0"><?=loca("ADM_BCAST_0");?></option>
+<option value="1"><?=va(loca("ADM_BCAST_1"), nicenum(USER_NOOB_LIMIT));?></option>
+<option value="2"><?=loca("ADM_BCAST_2");?></option>
+<option value="3"><?=loca("ADM_BCAST_3");?></option>
 </select>
 </td></tr>
 
 <tr><td>
-Тема : <input name="subj" size=80>
+<?=loca("ADM_BCAST_SUBJ");?> <input name="subj" size=80>
 </td></tr>
 
 <tr><td>
@@ -76,7 +75,7 @@ function Admin_Broadcast ()
 </td></tr>
 
 <tr><td>
-<center><input type="submit" value="Отправить"></center>
+<center><input type="submit" value="<?=loca("ADM_BCAST_SUBMIT");?>"></center>
 </td></tr>
 
 </form>

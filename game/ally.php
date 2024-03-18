@@ -79,25 +79,28 @@ function DismissAlly ($ally_id)
 }
 
 // Перечислить всех игроков альянса.
-// Сортировка : 0 - Координаты, 1 - Имя, 2 - Статус, 3 - Очки, 4 - Вступление, 5 - Онлайн
-// Порядок : 0 - по возрастанию, 1 - по убыванию
-function EnumerateAlly ($ally_id, $sort_by=0, $order=0)
+// Сортировка: 0 - Координаты, 1 - Имя, 2 - Статус, 3 - Очки, 4 - Вступление, 5 - Онлайн
+// Порядок: 0 - по возрастанию, 1 - по убыванию
+function EnumerateAlly ($ally_id, $sort_by=0, $order=0, $use_sort=false)
 {
     global $db_prefix;
     if ($ally_id <= 0) return NULL;
 
-    switch ( $sort_by ) 
-    {
-        case 1 : $sort = " ORDER BY oname "; break;
-        case 2 : $sort = " ORDER BY allyrank "; break;
-        case 3 : $sort = " ORDER BY score1 "; break;
-        case 4 : $sort = " ORDER BY joindate "; break;
-        case 5 : $sort = " ORDER BY lastclick "; break;
-        default : $sort = " ORDER BY player_id "; break;
+    $sort = "";
+    if ($use_sort) {
+        switch ( $sort_by ) 
+        {
+            case 1 : $sort = " ORDER BY oname "; break;
+            case 2 : $sort = " ORDER BY allyrank "; break;
+            case 3 : $sort = " ORDER BY score1 "; break;
+            case 4 : $sort = " ORDER BY joindate "; break;
+            case 5 : $sort = " ORDER BY lastclick "; break;
+            default : $sort = " ORDER BY player_id "; break;
+        }
+        if ( $order ) $sort .= " DESC";
     }
-    if ( $order ) $sort .= " DESC";
 
-    $query = "SELECT u.oname, u.ally_id, u.allyrank, u.score1, u.player_id, u.hplanetid, u.joindate, u.lastclick, r.name, p.g, p.s, p.p " .
+    $query = "SELECT u.oname, u.ally_id, u.allyrank, u.score1, u.player_id, u.hplanetid, u.joindate, u.lastclick, u.lang, r.name, p.g, p.s, p.p " .
 			 "	FROM ".$db_prefix."users u " .
 			 "	LEFT  JOIN ".$db_prefix."allyranks r ON u.ally_id = r.ally_id AND u.allyrank = r.rank_id " .
 			 "  LEFT  JOIN ".$db_prefix."planets p ON u.hplanetid = p.planet_id " .
@@ -235,15 +238,16 @@ function RecalcAllyRanks ()
 // Названия могут совпадать.
 // Не более 25 рангов на альянс.
 
-// 0x001: Распустить альянс
-// 0x002: Выгнать игрока
-// 0x004: Посмотреть заявления
-// 0x008: Посмотреть список членов
-// 0x010: Редактировать заявления
-// 0x020: Управление альянсом
-// 0x040: Посмотреть статус "он-лайн" в списке членов
-// 0x080: Составить общее сообщение
-// 0x100: 'Правая рука' (необходимо для передачи статуса основателя)
+// Маска рангов.
+const ARANK_DISMISS = 0x001;    // Распустить альянс
+const ARANK_KICK = 0x002;       // Выгнать игрока
+const ARANK_R_APPLY = 0x004;    // Посмотреть заявления
+const ARANK_R_MEMBERS = 0x008;  // Посмотреть список членов
+const ARANK_W_APPLY = 0x010;    // Редактировать заявления
+const ARANK_W_MEMBERS = 0x020;  // Управление альянсом
+const ARANK_ONLINE = 0x040;     // Посмотреть статус "он-лайн" в списке членов
+const ARANK_CIRCULAR = 0x080;   // Составить общее сообщение
+const ARANK_RIGHT_HAND = 0x100; // 'Правая рука' (необходимо для передачи статуса основателя)
 
 // Записи рангов в БД (allyranks).
 // rank_id: Порядковый номер ранга (INT)

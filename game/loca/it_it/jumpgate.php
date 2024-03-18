@@ -1,20 +1,19 @@
 <?php
 
-// Cancello di salto
+// Portale iperspaziale
 
-$LOCA["it"]["GATE_START"] = "Start moon";
-$LOCA["it"]["GATE_TARGET"] = "Target moon";
-$LOCA["it"]["GATE_HEAD"] = "Use jump gate: Select spaceships";
-$LOCA["it"]["GATE_AVAIL"] = "available";
-$LOCA["it"]["GATE_JUMP"] = "Execute Jump!";
-$LOCA["it"]["GATE_NOT_READY"] = "The Jump Gate is in recharge mode!";
-$LOCA["it"]["GATE_TIMEOUT"] = "The Gate will be fully recharged for the next jump in #1.";
-$LOCA["it"]["GATE_ERR_START"] = "no source moon selected";
-$LOCA["it"]["GATE_ERR_TARGET"] = "no target moon selected";
-$LOCA["it"]["GATE_ERR_START_GATE"] = "no jump gate found at source moon";
-$LOCA["it"]["GATE_ERR_TARGET_GATE"] = "no jump gate found at the target moon";
-$LOCA["it"]["GATE_ERR_MOON"] = "either the source moon or target moon doesn't belong to you";
-$LOCA["it"]["GATE_ERR_SHIPS"] = "no ships selected";
-$LOCA["it"]["GATE_ERR_NOTENOUGH"] = "not enough ships available";
+$LOCA["it"]["GATE_START"] = "Luna attuale";
+$LOCA["it"]["GATE_TARGET"] = "Luna bersaglio:";
+$LOCA["it"]["GATE_HEAD"] = "Nuovo salto: seleziona le navi";
+$LOCA["it"]["GATE_AVAIL"] = "#1 disponibile/i";
+$LOCA["it"]["GATE_JUMP"] = "Esegui salto";
+$LOCA["it"]["GATE_NOT_READY"] = "Portale iperspaziale in ricarica!<br>Il prossimo salto potr&agrave; essere eseguito tra: #1";
+$LOCA["it"]["GATE_ERR_START"] = "nessuna luna sorgente selezionata";
+$LOCA["it"]["GATE_ERR_TARGET"] = "non è stata selezionata alcuna luna target";
+$LOCA["it"]["GATE_ERR_START_GATE"] = "nessun cancello di salto trovato sulla luna sorgente";
+$LOCA["it"]["GATE_ERR_TARGET_GATE"] = "non è stato trovato alcun cancello di salto sulla luna di destinazione";
+$LOCA["it"]["GATE_ERR_MOON"] = "la luna di partenza o quella di arrivo non vi appartengono";
+$LOCA["it"]["GATE_ERR_SHIPS"] = "nessuna nave selezionata";
+$LOCA["it"]["GATE_ERR_NOTENOUGH"] = "non ci sono abbastanza navi disponibili";
 
 ?>

@@ -21,21 +21,6 @@ $SearchMessage = "";
 $SearchError = "";
 $searchtext = "";
 
-// Вырезать из строки всякие инжекции.
-function SecureText ( $text )
-{
-    $search = array ( "'<script[^>]*?>.*?</script>'si",  // Вырезает javaScript
-                      "'<[\/\!]*?[^<>]*?>'si",           // Вырезает HTML-теги
-                      "'([\r\n])[\s]+'" );             // Вырезает пробельные символы
-    $replace = array ("", "", "\\1", "\\1" );
-    $str = preg_replace($search, $replace, $text);
-    $str = str_replace ("`", "", $str);
-    $str = str_replace ("'", "", $str);
-    $str = str_replace ("\"", "", $str);
-    $str = str_replace ("%0", "", $str);
-    return $str;
-}
-
 function search_selected ( $opt )
 {
     if ( key_exists('type', $_POST) && $_POST['type'] === $opt ) return "selected";
@@ -169,11 +154,8 @@ if ( method () === "POST" )
     }
 }
 
+BeginContent ();
 ?>
-
-<!-- CONTENT AREA --> 
-<div id='content'> 
-<center> 
  <!-- begin search header --> 
  <form action="index.php?page=suche&session=<?php echo $session;?>" method="post"> 
  <table width="519"> 
@@ -203,11 +185,8 @@ if ( method () === "POST" )
 ?>
  <!-- end search results --> 
 <br><br><br><br> 
-</center> 
-</div> 
-<!-- END CONTENT AREA --> 
-
 <?php
+EndContent ();
 PageFooter ($SearchMessage, $SearchError);
 ob_end_flush ();
 ?>

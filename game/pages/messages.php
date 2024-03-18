@@ -37,21 +37,19 @@ $use_folders = ($GlobalUser['flags'] & USER_FLAG_DONT_USE_FOLDERS) == 0;    // �
 
 // Управление папками
 $folders = array (
-    "espioopen" => array ( 'pm'=>1, 'flag'=>USER_FLAG_FOLDER_ESPIONAGE, 'title'=>loca("MSG_FOLDER1") ),
-    "combatopen" => array ( 'pm'=>2, 'flag'=>USER_FLAG_FOLDER_COMBAT, 'title'=>loca("MSG_FOLDER2") ),
-    "expopen" => array ( 'pm'=>3, 'flag'=>USER_FLAG_FOLDER_EXPEDITION, 'title'=>loca("MSG_FOLDER3") ),
-    "allyopen" => array ( 'pm'=>4, 'flag'=>USER_FLAG_FOLDER_ALLIANCE, 'title'=>loca("MSG_FOLDER4") ),
-    "useropen" => array ( 'pm'=>0, 'flag'=>USER_FLAG_FOLDER_PLAYER, 'title'=>loca("MSG_FOLDER5") ),
-    "generalopen" => array ( 'pm'=>5, 'flag'=>USER_FLAG_FOLDER_OTHER, 'title'=>loca("MSG_FOLDER6") ),
+    "espioopen" => array ( 'pm'=>MTYP_SPY_REPORT, 'flag'=>USER_FLAG_FOLDER_ESPIONAGE, 'title'=>loca("MSG_FOLDER1") ),
+    "combatopen" => array ( 'pm'=>MTYP_BATTLE_REPORT_LINK, 'flag'=>USER_FLAG_FOLDER_COMBAT, 'title'=>loca("MSG_FOLDER2") ),
+    "expopen" => array ( 'pm'=>MTYP_EXP, 'flag'=>USER_FLAG_FOLDER_EXPEDITION, 'title'=>loca("MSG_FOLDER3") ),
+    "allyopen" => array ( 'pm'=>MTYP_ALLY, 'flag'=>USER_FLAG_FOLDER_ALLIANCE, 'title'=>loca("MSG_FOLDER4") ),
+    "useropen" => array ( 'pm'=>MTYP_PM, 'flag'=>USER_FLAG_FOLDER_PLAYER, 'title'=>loca("MSG_FOLDER5") ),
+    "generalopen" => array ( 'pm'=>MTYP_MISC, 'flag'=>USER_FLAG_FOLDER_OTHER, 'title'=>loca("MSG_FOLDER6") ),
 );
 
 $days = $prem['commander'] ? 7 : 1;
 DeleteExpiredMessages ( $GlobalUser['player_id'], $days );    // Удалить сообщения которые хранятся дольше 24 часов (7 дней с Командиром)
 
 // Заголовок таблицы
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent ();
 
 if ( method() === "POST" )
 {
@@ -173,7 +171,7 @@ while ($num--)
 {
     $msg = dbarray ($result);
     $pm = $msg['pm'];
-    if ($pm == 6) continue;    // Пропускать тексты боевых докладов.
+    if ($pm == MTYP_BATTLE_REPORT_TEXT) continue;    // Пропускать тексты боевых докладов.
     
     // Фильтровать сообщения по типу, если активен Командир И включено использование папок в настройках.
     if ($prem['commander'] && $use_folders) {
@@ -200,7 +198,7 @@ while ($num--)
     $msg['msgfrom'] = str_replace ( "{PUBLIC_SESSION}", $_GET['session'], $msg['msgfrom']);
     $msg['subj'] = str_replace ( "{PUBLIC_SESSION}", $_GET['session'], $msg['subj']);
     $msg['text'] = str_replace ( "{PUBLIC_SESSION}", $_GET['session'], $msg['text']);
-    if ($partial_reports && $pm == 1) {
+    if ($partial_reports && $pm == MTYP_SPY_REPORT) {
         // Специальная обработка для шпионских докладов, если активна галочка "показывать частично"
         $msg['subj'] = "<a href=\"#\" onclick=\"fenster('index.php?page=bericht&session=". $_GET['session'] ."&bericht=". $msg['msg_id'] ."', 'Bericht_Spionage');\" >". $msg['subj'] ."</a>";
         $msg['text'] = "";
@@ -209,7 +207,7 @@ while ($num--)
     if ($msg['text'] !== "") {
         echo "<tr><td class=\"b\"> </td><td class=\"b\" colspan=\"3\">".$msg['text']."</td></tr>\n";
     }
-    if ($pm == 0) echo "<tr><th colspan=\"4\"><input type=\"checkbox\" name=\"sneak".$msg['msg_id']."\"/><input type=\"submit\" value=\"".loca("MSG_REPORT")."\"/></th></tr>\n";
+    if ($pm == MTYP_PM) echo "<tr><th colspan=\"4\"><input type=\"checkbox\" name=\"sneak".$msg['msg_id']."\"/><input type=\"submit\" value=\"".loca("MSG_REPORT")."\"/></th></tr>\n";
     MarkMessage ( $msg['owner_id'], $msg['msg_id'] );
 }
 
@@ -250,9 +248,7 @@ echo "<tr><td class=\"c\" colspan=\"4\">".loca("MSG_OPER")."</td></tr>\n";
 
 echo "</table></td></tr></table>\n";
 echo "<br><br><br><br>\n";
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n";
+EndContent ();
 
 PageFooter ();
 ob_end_flush ();

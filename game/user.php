@@ -76,8 +76,13 @@ const USER_FLAG_FOLDER_ALLIANCE = 0x800;            // 1: Показывать �
 const USER_FLAG_FOLDER_PLAYER = 0x1000;             // 1: Показывать личные сообщения (pm=0)
 const USER_FLAG_FOLDER_OTHER = 0x2000;              // 1: Показывать прочие сообщения (pm=5)
 
-
+// Флаги по умолчанию после создания игрока
 const USER_FLAG_DEFAULT = USER_FLAG_SHOW_ESPIONAGE_BUTTON | USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON | USER_FLAG_SHOW_BUDDY_BUTTON | USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON | USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
+
+const USER_LEGOR = 1;
+const USER_SPACE = 99999;
+
+const USER_NOOB_LIMIT = 5000;           // Количество очков для новичка
 
 $UserCache = array ();
 $PremiumCache = array ();
@@ -89,64 +94,60 @@ function fixed_date ( $fmt, $timestamp )
     return $date->format ($fmt);
 }
 
-function mail_utf8($to, $subject = '(No subject)', $message = '', $header = '') {
-  $header_ = 'MIME-Version: 1.0' . "\n" . 'Content-type: text/plain; charset=UTF-8' . "\n";
-  mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $header_ . $header);
-}
-
-// Выслать приветственное письмо с ссылкой для активации аккаунта.
+// Выслать приветственное письмо с ссылкой для активации аккаунта (на языке вселенной).
 function SendGreetingsMail ( $name, $pass, $email, $ack)
 {
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
-    $text = "Приветствуем $name,\n\n" .
-                "Вы решили создать свою империю в $uni-й вселенной ОГейма!\n\n" .
-                "Нажмите на эту ссылку для активации Вашего аккаунта:\n" .
-                hostname()."game/validate.php?ack=$ack\n\n" .
-                "Ваши игровые данные:\n" .
-                "Игровое имя: $name\n" .
-                "Пароль: $pass\n" .
-                "Вселенная: $uni\n\n\n" .
-                "Если Вам понадобится помощь или совет других императоров, то всё это Вы сможете найти на нашем форуме (http://board.oldogame.ru).\n\n" .
-                "Здесь (http://tutorial.oldogame.ru) собрана вся информация, собранная игроками и членами команды для того, чтобы помочь новичкам как можно быстрее разобраться в игре.\n\n" .
-                "Желаем успехов в построении империи и удачи в предстоящих боях!\n\n" .
-                "Ваша команда ОГейма";
-    mail_utf8 ( $email, "Добро пожаловать в ОГейм ", $text, "From: OGame Uni ru $uni <noreply@oldogame.ru>");
+    loca_add ("reg", $unitab['lang']);
+
+    $text = va ( loca_lang("REG_GREET_MAIL_BODY", $unitab['lang']), 
+        $name,
+        $uni,
+        hostname()."game/validate.php?ack=$ack",
+        $name,
+        $pass,
+        $uni );
+    if (!empty($unitab['ext_board'])) {
+        $text .= va (loca_lang("REG_GREET_MAIL_BOARD", $unitab['lang']), $unitab['ext_board']);
+    }
+    if (!empty($unitab['ext_tutorial'])) {
+        $text .= va (loca_lang("REG_GREET_MAIL_TUTORIAL", $unitab['lang']), $unitab['ext_tutorial']);
+    }
+    $text .= loca_lang ("REG_GREET_MAIL_FOOTER", $unitab['lang']);
+
+    $domain = "";   // ru, org..
+    mail_utf8 ( $email, loca_lang ("REG_GREET_MAIL_SUBJ", $unitab['lang']), $text, "From: OGame Uni $domain $uni <noreply@".hostname().">");
 }
 
-// Выслать письмо, подтверждающее смену адреса.
+// Выслать письмо, подтверждающее смену адреса (на языке вселенной).
 function SendChangeMail ( $name, $email, $pemail, $ack)
 {
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
-    $text = "Приветствуем $name,\n\n" .
-               "временный адрес e-mail Вашего аккаунта в $uni-й вселенной был изменён в настройках на $email.\n" .
-               "Если Вы его не измените в течение недели, то он станет постоянным.\n\n" .
-               "Чтобы беспрепятственно продолжить игру, подтвердите ваш новый адрес e-mail по следующей ссылке:\n\n" .
-               hostname()."game/validate.php?ack=$ack\n\n" .
-               "Ваша команда OGame";
-    mail_utf8 ( $pemail, "Ваш игровой электронный адрес изменён ", $text, "From: OGame Uni ru $uni <noreply@oldogame.ru>");
+    loca_add ("reg", $unitab['lang']);
+    
+    $text = va (loca_lang("REG_CHANGE_MAIL_BODY", $unitab['lang']), 
+        $name,
+        $uni,
+        $email,
+        hostname()."game/validate.php?ack=$ack" );
+
+    $domain = "";   // ru, org..
+    mail_utf8 ( $pemail, loca_lang ("REG_CHANGE_MAIL_SUBJ", $unitab['lang']), $text, "From: OGame Uni $domain $uni <noreply@".hostname().">");
 }
 
-// Выслать приветственное сообщение.
+// Выслать приветственное сообщение (на языке пользователя)
 function SendGreetingsMessage ( $player_id)
 {
-    SendMessage ( $player_id, "Командование флотом", "Добро пожаловать в ОГейм!", 
-        bb ( "Добро пожаловать в [b]OGame[/b] !\n"
-        . "\n"
-        . "Для начала Вам необходимо развить рудники.\n"
-        . "Это можно сделать в меню \"постройки\".\n"
-        . "Выберите рудник по добыче металла и нажмите на \"строить\".\n"
-        . "Теперь у Вас есть немного времени для ознакомления с игрой.\n"
-        . "Помощь по игре Вы можете найти по этим ссылкам: \n"
-        . "[url=http://tutorial.oldogame.ru/]Туториал[/url]\n"
-        . "[url=http://board.oldogame.ru]Форум[/url]\n"
-        . "\n"
-        . "Тем временем Ваш рудник уже должен построиться.\n"
-        . "Для работы рудников необходима энергия, для её получения постройте солнечную электростанцию.\n"
-        . "Для этого снова зайдите в меню \"постройки\" и кликните на электростанции.\n"
-        . "Для того, чтобы посмотреть, насколько далеко Вы зашли в развитии, зайдите в меню \"Технологии\".\n"
-        . "Итак, Ваш победный поход по вселенной начался... Удачи!\n" ), 5 );
+    $unitab = LoadUniverse ();
+    $user = LoadUser ($player_id);
+    loca_add ("reg", $user['lang']);
+    loca_add ("fleetmsg", $user['lang']);
+    SendMessage ( $player_id, 
+        loca_lang ("FLEET_MESSAGE_FROM", $user['lang']), 
+        loca_lang ("REG_GREET_MSG_SUBJ", $user['lang']), 
+        bb ( va(loca_lang("REG_GREET_MSG_TEXT", $user['lang']), $unitab['ext_board'], $unitab['ext_tutorial']) ), MTYP_MISC );
 }
 
 function IsUserExist ( $name)
@@ -198,7 +199,6 @@ function CreateUser ( $name, $pass, $email, $bot=false)
     if ( !key_exists ( $lang, $Languages ) ) $lang = $unitab['lang'];
 
     $ip = $_SERVER['REMOTE_ADDR'];
-    $localhost = $ip === "127.0.0.1" || $ip === "::1";
 
     $user = array( null, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, "", $email, $email,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -221,7 +221,7 @@ function CreateUser ( $name, $pass, $email, $bot=false)
 
     // Выслать приветственное письмо и сообщение.
     if ( !$bot ) {
-        if ( !$localhost ) SendGreetingsMail ( $origname, $pass, $email, $ack);
+        if ( !localhost($ip) ) SendGreetingsMail ( $origname, $pass, $email, $ack);
         SendGreetingsMessage ( $id);
     }
 
@@ -241,14 +241,14 @@ function CreateUser ( $name, $pass, $email, $bot=false)
     return $id;
 }
 
-// Полность удалить игрока, все его планеты и флоты.
+// Полностью удалить игрока, все его планеты и флоты.
 // Развернуть флоты летящие на игрока.
 function RemoveUser ( $player_id, $when)
 {
     global $db_prefix;
 
     // Аккаунты администратора и space нельзя удалить.
-    if ($player_id == 1 || $player_id == 99999) return;
+    if ($player_id == USER_LEGOR || $player_id == USER_SPACE) return;
 
     // Развернуть все флоты, летящие на игрока.
     $result = EnumFleetQueue ($player_id);
@@ -256,7 +256,7 @@ function RemoveUser ( $player_id, $when)
     while ($rows--) {
         $queue = dbarray ($result);
         $fleet_obj = LoadFleet ( $queue['sub_id'] );
-        if ($fleet_obj['owner_id'] != $player_id && $fleet_obj['mission'] < 100 ) RecallFleet ( $fleet_obj['fleet_id'], $when );
+        if ($fleet_obj['owner_id'] != $player_id && $fleet_obj['mission'] < FTYP_RETURN ) RecallFleet ( $fleet_obj['fleet_id'], $when );
     }
 
     // Удалить все флоты игрока
@@ -268,9 +268,9 @@ function RemoveUser ( $player_id, $when)
     dbquery ($query);
 
     // Удалить все планеты, кроме ПО, которые переходят во владения space.
-    $query = "DELETE FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type <> 10000";
+    $query = "DELETE FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type <> " . PTYP_DF;
     dbquery ($query);
-    $query = "UPDATE ".$db_prefix."planets SET owner_id = 99999 WHERE owner_id = $player_id AND type = 10000";
+    $query = "UPDATE ".$db_prefix."planets SET owner_id = ".USER_SPACE." WHERE owner_id = $player_id AND type = " . PTYP_DF;
     dbquery ($query);
 
     // Удалить игрока.
@@ -435,7 +435,7 @@ function IsPlayerNewbie ( $player_id)
     $p1 = $GlobalUser['score1'];
     $p2 = $user['score1'];
 
-    if ($p2 >= $p1 || $p2 >= 5000) return false;
+    if ($p2 >= $p1 || $p2 >= USER_NOOB_LIMIT) return false;
     if ($p1 <= $p2*5) return false;
     return true;
 }
@@ -450,12 +450,12 @@ function IsPlayerStrong ( $player_id)
     $p1 = $GlobalUser['score1'];
     $p2 = $user['score1'];
 
-    if ($p1 >= $p2 || $p1 >= 5000) return false;
+    if ($p1 >= $p2 || $p1 >= USER_NOOB_LIMIT) return false;
     if ($p2 <= $p1*5) return false;
     return true;
 }
 
-// Получить статус командиров на аккаунте.
+// Получить статус командира и остальных офицеров на аккаунте.
 function PremiumStatus ($user)
 {
     global $PremiumCache;
@@ -499,7 +499,7 @@ function Logout ( $session )
 // Вызывается при загрузке каждой игровой страницы.
 function CheckSession ( $session )
 {
-    global $db_prefix, $GlobalUser, $loca_lang, $Languages, $GlobalUni;
+    global $db_prefix, $GlobalUser, $loca_lang, $Languages, $GlobalUni, $DefaultLanguage;
     // Получить ID-пользователя и номер вселенной из публичной сессии.
     $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$session."'";
     $result = dbquery ($query);
@@ -508,22 +508,21 @@ function CheckSession ( $session )
     $unitab = $GlobalUni;
     $uni = $unitab['num'];
     $ip = $_SERVER['REMOTE_ADDR'];
-    $localhost = $ip === "127.0.0.1" || $ip === "::1";
     $cookie_name = 'prsess_'.$GlobalUser['player_id'].'_'.$uni;
     $prsess = "";
     if (key_exists($cookie_name, $_COOKIE)) {
         $prsess = $_COOKIE [$cookie_name];
     }
     if ( $prsess !== $GlobalUser['private_session'] ) { InvalidSessionPage (); return FALSE; }
-    if ( !$localhost && !$GlobalUser['deact_ip'] ) {
+    if ( !localhost($ip) && !$GlobalUser['deact_ip'] ) {
         if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
     }
 
-    // Установить глобальный язык для сессии: язык пользователя -> язык вселенной(если ошибка) -> en(если ошибка)
+    // Установить глобальный язык для сессии: язык пользователя -> язык вселенной(если ошибка) -> язык по умолчанию(если ошибка)
 
     $loca_lang = $GlobalUser['lang'];
     if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $GlobalUni['lang'];
-    if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = 'en';
+    if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
 
     return TRUE;
 }
@@ -673,7 +672,6 @@ function AdjustStats ( $player_id, $points, $fpoints, $rpoints, $sign )
     $query = "UPDATE ".$db_prefix."users SET ";
     $query .= "score1=score1 $sign '".$points."', score2=score2 $sign '".$fpoints."', score3=score3 $sign '".$rpoints."' WHERE player_id = $player_id AND banned = 0 AND admin = 0;";
     dbquery ($query);
-    //Debug ( "Adjust $player_id POINT=$sign$points FLEET=$sign$fpoints RESEARCH=$sign$rpoints" );
 }
 
 // Пересчитать места всех игроков.
@@ -767,7 +765,7 @@ function ReactivateUser ($player_id)
 
     $query = "UPDATE ".$db_prefix."users SET validatemd = '".$ack."', validated = 0, password = '".$md."' WHERE player_id = $player_id";
     dbquery ($query);
-    if ( $_SERVER['REMOTE_ADDR'] !== "127.0.0.1" ) SendGreetingsMail ( $name, $pass, $email, $ack);
+    if ( !localhost($_SERVER['REMOTE_ADDR']) ) SendGreetingsMail ( $name, $pass, $email, $ack);
 }
 
 // Очистить кеш игроков.

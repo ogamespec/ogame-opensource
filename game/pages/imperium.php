@@ -24,6 +24,11 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
+$prem = PremiumStatus ($GlobalUser);
+if (!$prem['commander']) {
+    MyGoto ("overview");
+}
+
 PageHeader ("imperium", true);
 
 $planettype = intval($_GET['planettype']);
@@ -46,9 +51,9 @@ if ( $planettype == 1 || $planettype == 3)
     while ($rows--)
     {
         $planet = dbarray ($result);
-        if ($planet['type'] == 0 ) $moons++;
-        if ( $planettype == 1 && $planet['type'] == 0 ) continue;
-        if ( $planettype == 3 && $planet['type'] != 0 ) continue;
+        if ($planet['type'] == PTYP_MOON ) $moons++;
+        if ( $planettype == 1 && $planet['type'] == PTYP_MOON ) continue;
+        if ( $planettype == 3 && $planet['type'] != PTYP_MOON ) continue;
         $plist[$num] = GetPlanet ($planet['planet_id']);
         $plist[$num] = ProdResources ( $plist[$num], $plist[$num]['lastpeek'], $now );
         $num ++;
@@ -63,17 +68,15 @@ $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 
 $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
 $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
 
+BeginContent ();
 ?>
 
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 <script>t=0;</script>  
 
 <table width="750" border="0" cellpadding="0" cellspacing="1">
 
-<!-- ## 
-<!-- ## Tablehead 
+<!-- ## -->
+<!-- ## Tablehead -->
 <!-- ## -->
         <tr height="20" valign="left">
             <td class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_OVERVIEW");?></td>
@@ -91,8 +94,8 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     }
 ?>
 
-<!-- ## 
-<!-- ## Planetimages 
+<!-- ## -->
+<!-- ## Planetimages -->
 <!-- ## -->
         <tr height="75">        
             <th width="75"></th>            
@@ -112,8 +115,8 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
         </tr>
 
-<!-- ## 
-<!-- ## Name 
+<!-- ## -->
+<!-- ## Name -->
 <!-- ## -->
         <tr height="20">
             <th width="75"><?php echo loca("EMPIRE_NAME");?></th>
@@ -128,8 +131,8 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
         </tr>
 
-<!-- ## 
-<!-- ## Coordinates 
+<!-- ## -->
+<!-- ## Coordinates -->
 <!-- ## -->
         <tr height="20">
             <th width="75"><?php echo loca("EMPIRE_COORD");?></th>
@@ -145,8 +148,8 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
         </tr>
 
-<!-- ## 
-<!-- ## Fields 
+<!-- ## -->
+<!-- ## Fields -->
 <!-- ## -->
         <tr height="20">
             <th width="75"><?php echo loca("EMPIRE_FIELDS");?></th>
@@ -166,19 +169,19 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
         </tr>
 
-<!-- ## 
-<!-- ## Resources-Head
+<!-- ## -->
+<!-- ## Resources-Head -->
 <!-- ## -->
         <tr height="20">
             <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_RES");?></td>
         </tr>
 
-<!-- ## 
-<!-- ## Resources (without Energy)
+<!-- ## -->
+<!-- ## Resources (without Energy) -->
 <!-- ## -->
  
         <tr height="20">
-            <th width="75"><?php echo loca("EMPIRE_M");?></th>
+            <th width="75"><?php echo loca("METAL");?></th>
 
 <?php
     $total = 0;
@@ -186,7 +189,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     foreach ( $plist as $i=>$planet )
     {
         $res_hourly = prod_metal ($planet['b1'], $planet['mprod']) * $planet['factor'] * $speed + 20*$speed;
-        $res = ceil ( $planet['m'] );
+        $res = floor ( $planet['m'] );
         $total += $res;
         $avg_prod += $res_hourly;
         echo "             <th width=\"75\" >\n";
@@ -204,7 +207,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
  
         <tr height="20">
-            <th width="75"><?php echo loca("EMPIRE_K");?></th>
+            <th width="75"><?php echo loca("CRYSTAL");?></th>
  
 <?php 
     $total = 0;
@@ -212,7 +215,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     foreach ( $plist as $i=>$planet )
     {
         $res_hourly = prod_crys ($planet['b2'], $planet['kprod']) * $planet['factor'] * $speed + 10*$speed;
-        $res = ceil ( $planet['k'] );
+        $res = floor ( $planet['k'] );
         $total += $res;
         $avg_prod += $res_hourly;
         echo "             <th width=\"75\" >\n";
@@ -230,7 +233,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
         </tr>
  
         <tr height="20">
-            <th width="75"><?php echo loca("EMPIRE_D");?></th>
+            <th width="75"><?php echo loca("DEUTERIUM");?></th>
 
 <?php 
     $total = 0;
@@ -238,7 +241,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     foreach ( $plist as $i=>$planet )
     {
         $res_hourly = prod_deut ($planet['b3'], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed - cons_fusion ( $planet['b12'], $planet['fprod'] ) * $speed;
-        $res = ceil ( $planet['d'] );
+        $res = floor ( $planet['d'] );
         $total += $res;
         $avg_prod += $res_hourly;
         echo "             <th width=\"75\" >\n";
@@ -256,11 +259,11 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
         </tr>
         
 
-<!-- ## 
-<!-- ## Resources-Energy
+<!-- ## -->
+<!-- ## Resources-Energy -->
 <!-- ## -->
         <tr height="20">
-            <th width="75"><?php echo loca("EMPIRE_E");?></th>
+            <th width="75"><?php echo loca("ENERGY");?></th>
 
 <?php
     $sum_e = 0;
@@ -281,16 +284,16 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
             <th width="75"><?php echo nicenum($sum_e);?> / <?php echo nicenum($sum_emax);?> </th>
         </tr>
 
-<!-- ## 
-<!-- ## Buildings-Head
+<!-- ## -->
+<!-- ## Buildings-Head -->
 <!-- ## -->
 
         <tr height="20">
             <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_BUILDINGS");?></td>
         </tr>
         
-<!-- ## 
-<!-- ## Buildings
+<!-- ## -->
+<!-- ## Buildings -->
 <!-- ## -->     
 <?php
     foreach ($buildmap as $i=>$gid)
@@ -324,7 +327,7 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
                     echo "                <a style=\"cursor:pointer\" \n";
                     echo "                   onClick=\"if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=$session&planet=".$planet['planet_id']."&cp=".$planet['planet_id']."\';t=0;',500);}\" \n";
                     echo "                   onDblClick=\"clearTimeout(t);document.location.href='index.php?page=imperium&session=$session&planettype=$planettype&no_header=1&modus=add&planet=".$planet['planet_id']."&techid=$gid';t=0;\"\n";
-                    echo "                   title=\"Щёлкнуть 1 раз: обзор, постройки, 2 раза: строить\">       \n";
+                    echo "                   title=\"".loca("EMPIRE_ACTION")."\">       \n";
 
                     if ( CanBuild ($GlobalUser, $planet, $gid, $planet["b$gid"]+1, 0) === "" ) {
                         echo "                    <font color=\"lime\">\n";
@@ -361,16 +364,16 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
     }
 ?>
 
-<!-- ## 
-<!-- ## Research-Head
+<!-- ## -->
+<!-- ## Research-Head -->
 <!-- ## -->
         <tr height="20">
             <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_RESEARCH");?></td>
         </tr>
 
         
-<!-- ## 
-<!-- ## Researches
+<!-- ## -->
+<!-- ## Researches -->
 <!-- ## -->     
 <?php
     foreach ($resmap as $i=>$res)
@@ -400,15 +403,15 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
 ?>
 
-<!-- ## 
-<!-- ## Ships-Head
+<!-- ## -->
+<!-- ## Ships-Head -->
 <!-- ## --> 
         <tr height="20">
             <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_FLEET");?></td>
         </tr>
         
-<!-- ## 
-<!-- ## Ships
+<!-- ## -->
+<!-- ## Ships -->
 <!-- ## -->         
 <?php
     foreach ($fleetmap as $i=>$fleet)
@@ -452,16 +455,16 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
 ?>
 
-<!-- ## 
-<!-- ## Defense-Head
+<!-- ## -->
+<!-- ## Defense-Head -->
 <!-- ## -->     
         <tr height="20">
 
             <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_DEFENSE");?></td>
         </tr>
         
-<!-- ## 
-<!-- ## Defense
+<!-- ## -->
+<!-- ## Defense -->
 <!-- ## -->             
 <?php
     foreach ($defmap as $i=>$def)
@@ -506,17 +509,14 @@ $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 12
 
 ?>
 
-<!-- ## 
-<!-- ## Footer
+<!-- ## -->
+<!-- ## Footer -->
 <!-- ## -->     
 
 </table>
 <br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent();
 PageFooter ("", "", false, 0, true);
 ob_end_flush ();
 ?>

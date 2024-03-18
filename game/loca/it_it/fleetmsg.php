@@ -39,6 +39,6 @@ $LOCA["it"]["FLEET_COLONIZE_FAIL"] = ", ma non &egrave; stato possibile completa
 $LOCA["it"]["FLEET_COLONIZE_FROM"] = "Comando della flotta";
 $LOCA["it"]["FLEET_COLONIZE_SUBJ"] = "Rapporto colonizzazione";
 
-$LOCA["ru"]["FLEET_SPY_OTHER"] = "\nUna flotta nemica partita da #1\n#2\n&egrave; stata intravista nelle vicinanze del tuo pianeta #3\n#4\n. Probabilit&agrave; di controspionaggio: #5 %\n";
+$LOCA["it"]["FLEET_SPY_OTHER"] = "\nUna flotta nemica partita da #1\n#2\n&egrave; stata intravista nelle vicinanze del tuo pianeta #3\n#4\n. Probabilit&agrave; di controspionaggio: #5 %\n";
 
 ?>

@@ -11,7 +11,7 @@ require_once "../config.php";
 require_once "../utils.php";
 require_once "../loca.php";
 
-if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = "en";
+if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
 else $loca_lang = $_COOKIE['ogamelang'];
 
 loca_add ( "reg", $loca_lang );

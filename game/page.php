@@ -5,9 +5,9 @@ $pagetime = 0;
 // Получить маленькую картинку планеты.
 function GetPlanetSmallImage ($skinpath, $planet)
 {
-    if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return $skinpath."planeten/small/s_mond.jpg";
-    else if ($planet['type'] == 10000) return $skinpath."planeten/debris.jpg";    
-    else if ($planet['type'] < 10000 )
+    if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return $skinpath."planeten/small/s_mond.jpg";
+    else if ($planet['type'] == PTYP_DF) return $skinpath."planeten/debris.jpg";    
+    else if ($planet['type'] < PTYP_DF )
     {
         $p = $planet['p'];
         $id = $planet['planet_id'] % 7 + 1;
@@ -24,9 +24,9 @@ function GetPlanetSmallImage ($skinpath, $planet)
 // Получить большую картинку планеты.
 function GetPlanetImage ($skinpath, $planet)
 {
-    if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return $skinpath."planeten/mond.jpg";
-    else if ($planet['type'] == 10000) return $skinpath."planeten/debris.jpg";
-    else if ($planet['type'] < 10000 )
+    if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return $skinpath."planeten/mond.jpg";
+    else if ($planet['type'] == PTYP_DF) return $skinpath."planeten/debris.jpg";
+    else if ($planet['type'] < PTYP_DF )
     {
         $p = $planet['p'];
         $id = $planet['planet_id'] % 7 + 1;
@@ -125,7 +125,7 @@ function DropListHasMoon ($plist, $planet)
 {
     foreach ( $plist as $i=>$p )
     {
-        if ( $p['type'] == 0 ) {
+        if ( $p['type'] == PTYP_MOON ) {
             if ( $p['g'] == $planet['g'] && $p['s'] == $planet['s'] && $p['p'] == $planet['p'] ) return $p;
         }
     }
@@ -160,7 +160,7 @@ function PlanetsDropList ($page)
     for ($n=0; $n<$num; $n++)
     {
         $planet = $plist[$n];
-        if ($planet['type'] == 0) continue;
+        if ($planet['type'] == PTYP_MOON) continue;
         $cp = $planet['planet_id'];
         $sel = "";
         if ($cp == $GlobalUser['aktplanet']) $sel = "selected";
@@ -568,7 +568,7 @@ function PageFooter ($msg="", $error="", $popup=false, $headerH=81, $nores=false
 {
     global $pagetime;
     global $GlobalUser;
-    global $query_counter, $query_log;
+    global $query_counter;
 
     loca_add ("reg", $GlobalUser['lang']);
 
@@ -579,8 +579,7 @@ function PageFooter ($msg="", $error="", $popup=false, $headerH=81, $nores=false
         $mtime = $mtime[1] + $mtime[0];
         $endtime = $mtime;
         // Debug strings do not need to be localized.
-        $msg = sprintf ( "Page generated in %f seconds<br>Number of SQL queries: %d<br>", $endtime-$pagetime, $query_counter) . $msg;
-        echo $query_log;
+        $msg = sprintf ( "Page generated in %f seconds. Number of SQL queries: %d.", $endtime-$pagetime, $query_counter) . GetSQLQueryLogText() . $msg;
     }
 
     if ( !$GlobalUser['validated']) $error = "<center> \n".va(loca("REG_NOT_ACTIVATED"), $GlobalUser['session'])."<br></center>\n" . $error;
@@ -646,6 +645,7 @@ function InvalidSessionPage ()
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
 
+    loca_add ("common", $GlobalUser['lang']);
     loca_add ("reg", $GlobalUser['lang']);
 
     $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], loca("REG_SESSION_INVALID"), time() );
@@ -655,12 +655,12 @@ function InvalidSessionPage ()
     echo "  <link rel='stylesheet' type='text/css' href='css/default.css' />\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/formate.css' />\n";
     echo "  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n";
-    echo "  <title>".va(loca("PAGE_TITLE"), $uni)."</title>\n";
+    echo "  <title>".va(loca_lang("PAGE_TITLE", $GlobalUser['lang']), $uni)."</title>\n";
     echo " </head>\n";
     echo " <body>\n";
     echo "  <center><font size='3'><b>    <br /><br />\n";
-    echo "    <font color='#FF0000'>".loca("REG_SESSION_ERROR")."</font>\n";
-    echo loca("REG_SESSION_ERROR_BODY");
+    echo "    <font color='#FF0000'>".loca_lang("REG_SESSION_ERROR", $GlobalUser['lang'])."</font>\n";
+    echo loca_lang("REG_SESSION_ERROR_BODY", $GlobalUser['lang']);
     echo "    Error-ID: ".$id."  </b></font></center> </body></html>\n";
 }
 
@@ -671,6 +671,20 @@ function MyGoto ($page, $param="")
     $url = "index.php?page=$page&session=".$GlobalUser['session'].$param;
     @header( 'Location: ' . $url);
     die ( "<html><head><meta http-equiv='refresh' content='0;url=$url' /></head><body></body></html>" );
+}
+
+function BeginContent ()
+{
+    echo "<!-- CONTENT AREA -->\n";
+    echo "<div id='content'>\n";
+    echo "<center>\n";
+}
+
+function EndContent ()
+{
+    echo "</center>\n";
+    echo "</div>\n";
+    echo "<!-- END CONTENT AREA -->\n\n";
 }
 
 ?>

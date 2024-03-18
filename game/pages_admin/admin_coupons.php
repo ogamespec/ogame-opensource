@@ -34,7 +34,7 @@ function Admin_Coupons ()
             $darkmatter = intval ( $_POST['darkmatter'] );
             $periodic = intval ( $_POST['periodic'] );
 
-            $queue = array ( null, 99999, "Coupon", $darkmatter, ($inactive_days << 16) | $ingame_days, $periodic, $now, $end, 520 );
+            $queue = array ( null, USER_SPACE, "Coupon", $darkmatter, ($inactive_days << 16) | $ingame_days, $periodic, $now, $end, 520 );
             AddDBRow ( $queue, "queue" );
         }
     }

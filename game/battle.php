@@ -1,6 +1,7 @@
 <?php
 
 require_once "battle_engine.php";
+require_once "raketen.php";
 
 // Боевой движок OGame.
 
@@ -233,9 +234,9 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             if ( $sum_cargo == 0) $cargo = 0;
             else $cargo = ( FleetCargoSummary ( $attacker ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) {
-                if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker, $queue['end'] );
+                if ( $fleet_obj['mission'] == FTYP_DESTROY && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker, $queue['end'] );
                 else $result = 0;
-                if ( $result < 2 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $fleet_obj['m']+$cm * $cargo, $fleet_obj['k']+$ck * $cargo, $fleet_obj['d']+$cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
+                if ( $result < 2 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj['m']+$cm * $cargo, $fleet_obj['k']+$ck * $cargo, $fleet_obj['d']+$cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
             }
         }
 
@@ -281,9 +282,9 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             if ( $sum_cargo == 0) $cargo = 0;
             else $cargo = ( FleetCargoSummary ( $attacker['fleet'] ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) {
-                if ( $fleet_obj['mission'] == 9 && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['fleet'], $queue['end'] );
+                if ( $fleet_obj['mission'] == FTYP_DESTROY && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['fleet'], $queue['end'] );
                 else $result = 0;
-                if ( $result < 2 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+100, $fleet_obj['flight_time'], $fleet_obj['m']+$cm * $cargo, $fleet_obj['k']+$ck * $cargo, $fleet_obj['d']+$cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
+                if ( $result < 2 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj['m']+$cm * $cargo, $fleet_obj['k']+$ck * $cargo, $fleet_obj['d']+$cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
             }
         }
 
@@ -435,7 +436,7 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
     }
 
     // Результаты боя.
-//<!--A:167658,W:167658-->
+    // TODO: Добавить метку потерь, которая есть в HTML: <!--A:167658,W:167658-->
     if ( $res['result'] === "awon" )
     {
         $text .= "<p> ".loca_lang("BATTLE_AWON", $lang)."<br>" . va(loca_lang("BATTLE_PLUNDER", $lang), nicenum($cm), nicenum($ck), nicenum($cd));
@@ -479,13 +480,14 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
 }
 
 // Лунная атака.
+// Возвращает результат, закодированный в 2 бита: бит0 - луна уничтожена, бит1 - ЗС взорвались вместе со всем флотом
 function GravitonAttack ($fleet_obj, $fleet, $when)
 {
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
     $target = GetPlanet ( $fleet_obj['target_planet'] );
 
     if ( $fleet[214] == 0 ) return;
-    if ( ! ($target['type'] == 0 || $target['type'] == 10003) ) Error ( "Уничтожать можно только луны!" );
+    if ( ! ($target['type'] == PTYP_MOON || $target['type'] == PTYP_DEST_MOON) ) Error ( "Уничтожать можно только луны!" );
 
     $diam = $target['diameter'];
     $rips = $fleet[214];
@@ -559,15 +561,23 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
             $result  = 3;
     }
 
+    // Пересчитать статистику, если флот был взорван в результате неудачной гравитонной атаки
+    if ($result >= 2) {
+
+        $price = FleetPrice ( $fleet_obj );
+        AdjustStats ( $fleet_obj['owner_id'], $price['points'], $price['fpoints'], 0, '-' );
+        RecalcRanks ();
+    }
+
     // Разослать сообщения.
     SendMessage ( $origin['owner_id'], 
         loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
         loca_lang("GRAVITON_ATK_SUBJ", $origin_user['lang']),
-        $atext, 5, $when);
+        $atext, MTYP_MISC, $when);
     SendMessage ( $target['owner_id'], 
         loca_lang("FLEET_MESSAGE_FROM", $target_user['lang']),
         loca_lang("GRAVITON_DEF_SUBJ", $target_user['lang']),
-        $dtext, 5, $when);
+        $dtext, MTYP_MISC, $when);
 
     return $result;
 }
@@ -795,12 +805,12 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         loca_add ( "fleetmsg", $user['lang'] );
 
         if ( key_exists($user['player_id'], $mailbox) ) continue;
-        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, 6, $when );
+        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, MTYP_BATTLE_REPORT_TEXT, $when );
         MarkMessage ( $user['player_id'], $bericht );
         $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$d_result[$battle_result]."\">" .
             loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']) .
             " [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", 2, $when );
+        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", MTYP_BATTLE_REPORT_LINK, $when );
         $mailbox[ $user['player_id'] ] = true;
     }
 
@@ -827,12 +837,12 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         loca_add ( "fleetmsg", $user['lang'] );
 
         if ( key_exists($user['player_id'], $mailbox) ) continue;
-        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, 6, $when );
+        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, MTYP_BATTLE_REPORT_TEXT, $when );
         MarkMessage ( $user['player_id'], $bericht );
         $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
             loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']) .
             " [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", 2, $when );
+        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", MTYP_BATTLE_REPORT_LINK, $when );
         $mailbox[ $user['player_id'] ] = true;
     }
 
@@ -881,7 +891,7 @@ function WritebackBattleResultsExpedition ( $a, $d, $res )
 
             // Вернуть флот, если что-то осталось.
             // В качестве времени полёта используется время удержания.
-            if ($ships > 0) DispatchFleet ($attacker, $origin, $target, 115, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
+            if ($ships > 0) DispatchFleet ($attacker, $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
         }
 
     }
@@ -901,7 +911,7 @@ function WritebackBattleResultsExpedition ( $a, $d, $res )
 
             // Вернуть флот, если что-то осталось.
             // В качестве времени полёта используется время удержания.
-            if ($ships > 0)  DispatchFleet ($attacker['fleet'], $origin, $target, 115, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
+            if ($ships > 0)  DispatchFleet ($attacker['fleet'], $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
         }
 
     }
@@ -969,7 +979,7 @@ function ShortBattleReport ( $res, $now, $lang )
     }
 
     // Результаты боя.
-//<!--A:167658,W:167658-->
+    // TODO: Добавить метку потерь, которая есть в HTML: <!--A:167658,W:167658-->
     if ( $res['result'] === "awon" ) $text .= "<p> " . loca_lang("BATTLE_AWON", $lang);
     else if ( $res['result'] === "dwon" ) $text .= "<p> " . loca_lang("BATTLE_DWON", $lang);
     else if ( $res['result'] === "draw" ) $text .= "<p> " . loca_lang("BATTLE_DRAW", $lang);
@@ -1018,7 +1028,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 
     // Список обороняющихся
     $dnum = 0;
-    $d[0] = LoadUser ( 99999 );
+    $d[0] = LoadUser ( USER_SPACE );
     if ( $pirates ) {
         $d[0]['oname'] = "Piraten";
         $d[0]['r109'] = max (0, $a[0]['r109'] - 3);
@@ -1187,12 +1197,12 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
         loca_add ( "fleetmsg", $user['lang'] );
 
         if ( key_exists($user['player_id'], $mailbox) ) continue;
-        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, 6, $when );
+        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, MTYP_BATTLE_REPORT_TEXT, $when );
         MarkMessage ( $user['player_id'], $bericht );
         $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
             loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']) . 
             " [".$target_planet['g'].":".$target_planet['s'].":".$target_planet['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", 2, $when );
+        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", MTYP_BATTLE_REPORT_LINK, $when );
         $mailbox[ $user['player_id'] ] = true;
     }
 
@@ -1221,131 +1231,6 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     unlink ( "battleresult/battle_".$battle_id.".txt" );
 
     return $battle_result;
-}
-
-// -----------------------------------------------------------------------------------------------------------------------------------------------------------
-
-// Алгоритмическая часть ракетной атаки (без работы с БД).
-function RocketAttackMain ( $amount, $primary, $moon_attack, &$target, &$moon_planet, $origin_user_attack, $target_user_armor )
-{
-    global $UnitParam;
-
-    // Отбить атаку МПР перехватчиками
-    $ipm = $amount;
-    $abm = $moon_attack ? $moon_planet['d502'] : $target['d502'];
-    $ipm = max (0, $ipm - $abm);
-    $ipm_destroyed = $amount - $ipm;
-    if ($moon_attack) $moon_planet['d502'] -= $ipm_destroyed;
-    else $target['d502'] -= $ipm_destroyed;
-
-    $maxdamage = $ipm * $UnitParam[503][2] * (1 + $origin_user_attack / 10);
-
-    // Произвести атаку первичной цели
-    if ( $primary > 0 && $ipm > 0 )
-    {
-        $armor = $UnitParam[$primary][0] * (1 + 0.1 * $target_user_armor) / 10;
-        $count = $target["d$primary"];
-        if ($count != 0) {
-            $destroyed = min ( floor ( $maxdamage / $armor ), $count );
-            $target["d$primary"] -= $destroyed;
-            $maxdamage -= $destroyed * $armor;
-            $maxdamage -= $destroyed;
-        }
-    }
-
-    // Расчитать потери обороны, если еще остались МПР -- всё то же самое, но в ID не учитывать ID первичной цели. Чужие ракеты также можно бомбить.
-    if ($maxdamage > 0)
-    {
-        $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
-        foreach ($defmap as $i=>$id)
-        {
-            if ($id == $primary) continue;
-            $armor = $UnitParam[$id][0] * (1 + 0.1 * $target_user_armor) / 10;
-            $count = $target["d$id"];
-            if ($count != 0) {
-                $destroyed = min ( floor ( $maxdamage / $armor ), $count );
-                $target["d$id"] -= $destroyed;
-                $maxdamage -= $destroyed * $armor;
-                $maxdamage -= $destroyed;
-            }
-            if ($maxdamage <= 0) break;
-        }
-    }
-
-    return $ipm_destroyed;
-}
-
-// Ракетная атака.
-function RocketAttack ( $fleet_id, $planet_id, $when )
-{
-    $fleet = LoadFleet ($fleet_id);
-    $amount = $fleet['ipm_amount'];
-    $primary = $fleet['ipm_target'];
-    $origin = GetPlanet ($fleet['start_planet']);
-    $target = GetPlanet ($planet_id);
-    $moon_attack = $target['type'] == 0;
-    if ($moon_attack) {
-        // Если ракетная атака производится на Луну, то перехватчики с планеты участвуют в защите
-        $moon_planet = LoadPlanet ($target['g'], $target['s'], $target['p'], 1);
-    }
-    $origin_user = LoadUser ($origin['owner_id']);
-    $target_user = LoadUser ($target['owner_id']);
-
-    $ipm_destroyed = RocketAttackMain (
-        $amount, 
-        $primary, 
-        $moon_attack, 
-        $target, 
-        $moon_planet, 
-        $origin_user['r109'], 
-        $target_user['r111'] );
-
-    // Записать назад потери обороны.
-    SetPlanetDefense ( $planet_id, $target );
-    if ($moon_attack) {
-        SetPlanetDefense ( $moon_planet['planet_id'], $moon_planet );
-    }
-
-    // Изменить статистику игроков
-    RecalcRanks ();
-
-    // Обновить активность на планете.
-    UpdatePlanetActivity ( $planet_id, $when );
-
-    // Часть сообщения с повреждениями обороны
-    $defmap = array ( 503, 502, 408, 407, 406, 405, 404, 403, 402, 401 );
-    $deftext = "<table width=400><tr><td class=c colspan=4>Поражённая оборона</td></tr>";
-    $n = 0;
-    foreach ( $defmap as $i=>$gid )
-    {
-        if ( ($n % 2) == 0 ) $deftext .= "</tr>";
-        if ( $target["d$gid"] ) {
-
-            $count = $target["d$gid"];
-            // Учесть оборону луны перехватчиками с планеты
-            if ($moon_attack && $gid == 502 ) {
-                $count = $moon_planet["d502"];
-            }
-
-            $deftext .= "<td>".loca("NAME_$gid")."</td><td>".nicenum($count)."</td>";
-            $n++;
-        }
-    }
-    $deftext .= "</table><br>\n";
-
-    // Сформировать сообщение для защитника
-    $text = "$amount ракетам из общего числа выпущенных ракет с планеты ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>  ";
-    $text .= "удалось попасть на Вашу планету ".$target['name']." <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> !<br>";
-    if ($ipm_destroyed) $text .= "$ipm_destroyed ракет(-ы) было уничтожено Вашими ракетами-перехватчиками<br>:<br>";
-    $text .= $deftext;
-    SendMessage ( $target_user['player_id'], "Командование флотом", "Ракетная атака", $text, 2, $when);
-
-    // Сформировать сообщение для атакующего: https://github.com/ogamespec/ogame-opensource/issues/61
-    // Оригинальная версия 0.84 не создавала сообщения для атакующего.
-    $text = "$amount ракет(ы) с Вашей планеты ".$origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a> ";
-    $text .= "ударили по планете ".$target['name']." <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> !<br>";    
-    $text .= $deftext;
-    SendMessage ( $origin_user['player_id'], "Командование флотом", "Ракетная атака", $text, 2, $when);
 }
 
 ?>

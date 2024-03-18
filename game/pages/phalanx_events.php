@@ -3,36 +3,6 @@
 // Создание списка событий Фаланги.
 // TODO: Тут наблюдается некоторый изоморфизм с модулем событий Обзора. По возможности унифицировать код выдачи списка событий.
 
-/*
-Типы заданий:
-
-1          Атака убывает
-101       Атака возвращается
-2          Совместная атака убывает
-102      Совместная атака возвращается
-3         Транспорт убывает
-103      Транспорт возвращается
-4         Оставить убывает
-104     Оставить возвращается
-5         Держаться убывает
-105      Держаться возвращается
-205     Держаться на орбите
-6         Шпионаж убывает
-106      Шпионаж возвращается
-7         Колонизировать убывает
-107      Колонизировать возвращается
-8         Переработать убывает
-108     Переработать возвращается
-9         Уничтожить убывает
-109      Уничтожить возвращается
-15        Экспедиция убывает
-115      Экспедиция возвращается
-215      Экспедиция на орбите
-20        Ракетная атака
-21          Атака убывает (паровоз САБ)
-121       Атака возвращается (паровоз САБ)
-*/
-
 function OverFleet ($fleet, $summary, $mission)
 {
     $res = "<a href='#' onmouseover='return overlib(\"&lt;font color=white&gt;&lt;b&gt;";
@@ -74,7 +44,7 @@ function PlanetFrom ($planet, $mission)
 {
     $res = "";
     if ( GetPlanetType ($planet) == 1 ) $res .= loca("EVENT_FROM_PLANET");
-    if ( $planet['type'] == 10002 || $planet['type'] == 20000 ) $res = " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
+    if ( $planet['type'] == PTYP_COLONY_PHANTOM || $planet['type'] == PTYP_FARSPACE ) $res = " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     else $res .= " " . $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     return $res;
 }
@@ -83,7 +53,7 @@ function PlanetTo ($planet, $mission)
 {
     $res = "";
     if ( GetPlanetType ($planet) == 1 ) $res .= loca("EVENT_TO_PLANET");
-    if ( $planet['type'] == 10002 || $planet['type'] == 20000 ) $res = " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
+    if ( $planet['type'] == PTYP_COLONY_PHANTOM || $planet['type'] == PTYP_FARSPACE ) $res = " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     else $res .= " " . $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     return $res;
 }
@@ -91,7 +61,7 @@ function PlanetTo ($planet, $mission)
 function PlanetOn ($planet, $mission)
 {
     $res = "";
-    if ( $planet['type'] == 10002 || $planet['type'] == 20000 ) $res = " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
+    if ( $planet['type'] == PTYP_COLONY_PHANTOM || $planet['type'] == PTYP_FARSPACE ) $res = " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     else $res .= " " . $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     return $res;
 }
@@ -105,7 +75,7 @@ function FleetSpan ( $fleet_entry )
     $dir = $fleet_entry['dir'];
     $owner = LoadUser ( $origin['owner_id'] );
 
-    if ( $mission == 1 ) {    // Атака
+    if ( $mission == FTYP_ATTACK ) {    // Атака
         if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
             va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ATTACK")."</span>";
@@ -113,7 +83,7 @@ function FleetSpan ( $fleet_entry )
             va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_ATTACK")."</span></span>";
     }
-    else if ( $mission == 2 ) {    // Совместная атака
+    else if ( $mission == FTYP_ACS_ATTACK ) {    // Совместная атака
         if ( $dir == 0 ) echo "<span class='phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
             va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner), PlanetFrom($origin, "federation"), PlanetTo($target, "federation")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ACS_ATTACK")."</span>";
@@ -121,7 +91,7 @@ function FleetSpan ( $fleet_entry )
             va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_ACS_ATTACK")."</span></span>";
     }
-    else if ( $mission == 21 ) {    // Атака САБ
+    else if ( $mission == FTYP_ACS_ATTACK_HEAD ) {    // Атака САБ
         if ( $dir == 0 ) echo "<span class='phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
             va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner), PlanetFrom($origin, "attack"), PlanetTo($target, "attack")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ACS_ATTACK_HEAD")."</span>";
@@ -129,7 +99,7 @@ function FleetSpan ( $fleet_entry )
             va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_ACS_ATTACK_HEAD")."</span></span>";
     }
-    else if ( $mission == 3 ) {    // Транспорт
+    else if ( $mission == FTYP_TRANSPORT ) {    // Транспорт
         if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
             va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_TRANSPORT")."</span>";
@@ -137,12 +107,12 @@ function FleetSpan ( $fleet_entry )
             va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_TRANSPORT")."</span></span>";
     }
-    else if ( $mission == 4 ) {    // Оставить
+    else if ( $mission == FTYP_DEPLOY ) {    // Оставить
         echo "<span class='flight phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
             va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_DEPLOY")."</span>";
     }
-    else if ( $mission == 5 ) {    // Держаться
+    else if ( $mission == FTYP_ACS_HOLD ) {    // Держаться
         if ( $dir == 2 ) echo "<span class='holding phalanx_fleet'>".va(loca("EVENT_FLEET_HOLD"),PlayerDetails($owner),OverFleet($fleet,1,"phalanx_fleet"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
             va(loca("EVENT_FROM_TO_ORBIT"), PlanetFrom($origin, "phalanx_fleet"), PlanetOn($target, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_HOLD")."</span></span>";
@@ -153,7 +123,7 @@ function FleetSpan ( $fleet_entry )
             va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_HOLD")."</span></span>";
     }
-    else if ( $mission == 6 ) {    // Шпионаж
+    else if ( $mission == FTYP_SPY ) {    // Шпионаж
         if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
             va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_SPY")."</span>";
@@ -161,17 +131,17 @@ function FleetSpan ( $fleet_entry )
             va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_SPY")."</span></span>";
     }
-    else if ( $mission == 7 ) {    // Колонизировать
+    else if ( $mission == FTYP_COLONIZE ) {    // Колонизировать
         echo "<span class='return phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
             va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_COLONY")."</span></span>";
     }
-    else if ( $mission == 8 ) {    // Переработать
+    else if ( $mission == FTYP_RECYCLE ) {    // Переработать
         echo "<span class='return phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
             va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_RECYCLE")."</span></span>";
     }
-    else if ( $mission == 9 ) {    // Уничтожить (хммм...)
+    else if ( $mission == FTYP_DESTROY ) {    // Уничтожить (хммм... как это увидеть на фаланге не понятно, но для унификации оставим код.)
         if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
             va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_DESTROY")."</span>";
@@ -179,7 +149,7 @@ function FleetSpan ( $fleet_entry )
             va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_DESTROY")."</span></span>";
     }
-    else if ( $mission == 15 ) {    // Экспедиция
+    else if ( $mission == FTYP_EXPEDITION ) {    // Экспедиция
         if ( $dir == 2 ) echo "<span class='holding phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
             va(loca("EVENT_EXPO_FROM_ONTO_PHALANX"), PlayerDetails($owner), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_EXPO")."</span></span>";
@@ -190,7 +160,7 @@ function FleetSpan ( $fleet_entry )
             va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
             ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_EXPO")."</span></span>";
     }
-    else if ($mission == 20 ) {    // Ракетная атака
+    else if ($mission == FTYP_MISSILE ) {    // Ракетная атака
         echo "<span class='missile'>" .va(loca("EVENT_RAK"), $fleet_entry['ipm_amount'], PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")) . " ";
         if ( $fleet_entry['ipm_target'] > 0 ) echo loca("EVENT_RAK_TARGET") . " " . loca ("NAME_".$fleet_entry['ipm_target']);
         echo "</span>";
@@ -201,9 +171,9 @@ function FleetSpan ( $fleet_entry )
 
 function GetMission ( $fleet_obj )
 {
-    if ( $fleet_obj['mission'] < 100 ) return $fleet_obj['mission'];
-    else if ( $fleet_obj['mission'] < 200 ) return $fleet_obj['mission'] - 100;
-    else return $fleet_obj['mission'] - 200;
+    if ( $fleet_obj['mission'] < FTYP_RETURN ) return $fleet_obj['mission'];
+    else if ( $fleet_obj['mission'] < FTYP_ORBITING ) return $fleet_obj['mission'] - FTYP_RETURN;
+    else return $fleet_obj['mission'] - FTYP_ORBITING;
 }
 
 function PhalanxEventList ($planet_id)
@@ -255,15 +225,15 @@ function PhalanxEventList ($planet_id)
         if ( $fleet_obj['union_id'] > 0 && $fleet_obj['target_planet'] == $planet_id && $fleet_obj['mission'] != 21 ) continue;
 
         // Не показывать отправление и возврат Оставить.
-        if ( $fleet_obj['mission'] == 104 ) continue;
-        if ( $fleet_obj['mission'] == 4 && $fleet_obj['start_planet'] == $planet_id ) continue;
+        if ( $fleet_obj['mission'] == (FTYP_RETURN+FTYP_DEPLOY) ) continue;
+        if ( $fleet_obj['mission'] == FTYP_DEPLOY && $fleet_obj['start_planet'] == $planet_id ) continue;
 
         // Не показывать возвращающиеся с целевой планеты флоты.
-        if ( ($fleet_obj['mission'] > 100 && $fleet_obj['mission'] < 200) && $fleet_obj['target_planet'] == $planet_id ) continue;
+        if ( ($fleet_obj['mission'] > FTYP_RETURN && $fleet_obj['mission'] < FTYP_ORBITING) && $fleet_obj['target_planet'] == $planet_id ) continue;
 
         // Время прибытия
-        if ( $fleet_obj['mission'] < 100 && $fleet_obj['start_planet'] == $planet_id ) {
-            if ($fleet_obj['mission'] != 15) $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['flight_time'];
+        if ( $fleet_obj['mission'] < FTYP_RETURN && $fleet_obj['start_planet'] == $planet_id ) {
+            if ($fleet_obj['mission'] != FTYP_EXPEDITION) $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['flight_time'];
             else $task[$tasknum]['end_time'] = $queue['end'];
         }
         else $task[$tasknum]['end_time'] = $queue['end'];
@@ -276,16 +246,16 @@ function PhalanxEventList ($planet_id)
         $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
         $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
         $task[$tasknum]['fleet'][0]['mission'] = GetMission ( $fleet_obj );
-        if ( GetMission($fleet_obj) == 15 )
+        if ( GetMission($fleet_obj) == FTYP_EXPEDITION )
         {
-            if ($fleet_obj['mission'] < 100) $task[$tasknum]['fleet'][0]['dir'] = 0;
-            else if ($fleet_obj['mission'] < 200) $task[$tasknum]['fleet'][0]['dir'] = 1;
+            if ($fleet_obj['mission'] < FTYP_RETURN) $task[$tasknum]['fleet'][0]['dir'] = 0;
+            else if ($fleet_obj['mission'] < FTYP_ORBITING) $task[$tasknum]['fleet'][0]['dir'] = 1;
             else $task[$tasknum]['fleet'][0]['dir'] = 2;
         }
-        else if ( GetMission($fleet_obj) == 5 )
+        else if ( GetMission($fleet_obj) == FTYP_ACS_HOLD )
         {
-            if ($fleet_obj['mission'] < 100) $task[$tasknum]['fleet'][0]['dir'] = 0;
-            else if ($fleet_obj['mission'] < 200) $task[$tasknum]['fleet'][0]['dir'] = 1;
+            if ($fleet_obj['mission'] < FTYP_RETURN) $task[$tasknum]['fleet'][0]['dir'] = 0;
+            else if ($fleet_obj['mission'] < FTYP_ORBITING) $task[$tasknum]['fleet'][0]['dir'] = 1;
             else $task[$tasknum]['fleet'][0]['dir'] = 2;
         }
         else
@@ -293,7 +263,7 @@ function PhalanxEventList ($planet_id)
             if ( $fleet_obj['target_planet'] == $planet_id ) $task[$tasknum]['fleet'][0]['dir'] = 0;    // на планету
             else $task[$tasknum]['fleet'][0]['dir'] = 1;    // возврат
         }
-        if ($fleet_obj['mission'] == 20)
+        if ($fleet_obj['mission'] == FTYP_MISSILE)
         {
             $task[$tasknum]['fleet'][0]['ipm_amount'] = $fleet_obj['ipm_amount'];
             $task[$tasknum]['fleet'][0]['ipm_target'] = $fleet_obj['ipm_target'];
@@ -303,7 +273,7 @@ function PhalanxEventList ($planet_id)
 
         // Для убывающей экспедиции добавить псевдозадание удерживания.
         // Не показывать чужие флоты.
-        if ( $fleet_obj['mission'] == 15 && $fleet_obj['owner_id'] == $user['player_id'] )
+        if ( $fleet_obj['mission'] == FTYP_EXPEDITION && $fleet_obj['owner_id'] == $user['player_id'] )
         {
             // Время отправления и прибытия
             $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['deploy_time'];
@@ -321,7 +291,7 @@ function PhalanxEventList ($planet_id)
         }
 
         // Для прибывающего задания Держаться добавить псевдозадание удерживания.
-        if ( $fleet_obj['mission'] == 5 && $fleet_obj['owner_id'] != $user['player_id'] )
+        if ( $fleet_obj['mission'] == FTYP_ACS_HOLD && $fleet_obj['owner_id'] != $user['player_id'] )
         {
             // Время отправления и прибытия
             $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['deploy_time'];
@@ -339,10 +309,10 @@ function PhalanxEventList ($planet_id)
         }
 
         // Для убывающих или удерживаемых экспедиций добавить псевдозадание возврата.
-        if ( ($fleet_obj['mission'] == 15 || $fleet_obj['mission'] == 215) && $fleet_obj['owner_id'] == $user['player_id'] )
+        if ( ($fleet_obj['mission'] == FTYP_EXPEDITION || $fleet_obj['mission'] == (FTYP_ORBITING+FTYP_EXPEDITION) ) && $fleet_obj['owner_id'] == $user['player_id'] )
         {
             // Время отправления и прибытия
-            if ( $fleet_obj['mission'] > 200) $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['deploy_time'];
+            if ( $fleet_obj['mission'] > FTYP_ORBITING) $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['deploy_time'];
             else $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['deploy_time'] + $fleet_obj['flight_time'];
 
             // Флот

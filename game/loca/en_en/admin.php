@@ -85,6 +85,35 @@ $LOCA["en"]["ADM_BOTS_SUBMIT"] = "Submit";
 $LOCA["en"]["ADM_BOTS_FORBIDDEN"] = "Access denied.";
 $LOCA["en"]["ADM_BOTS_NO_START"] = "No starting bot strategy was found.";
 
+// admin_broadcast
+
+$LOCA["en"]["ADM_BCAST_ERROR_SUBJ"] = "Fill in the subject";
+$LOCA["en"]["ADM_BCAST_ERROR_TEXT"] = "Enter the text of the message";
+$LOCA["en"]["ADM_BCAST_ERROR_USERS"] = "No addressee found.";
+$LOCA["en"]["ADM_BCAST_SUCCESS"] = "Message sent to #1 users.";
+$LOCA["en"]["ADM_BCAST_WHO"] = "To:";
+$LOCA["en"]["ADM_BCAST_0"] = "All";
+$LOCA["en"]["ADM_BCAST_1"] = "Beginners (less than #1 points)";
+$LOCA["en"]["ADM_BCAST_2"] = "Players in the top 100";
+$LOCA["en"]["ADM_BCAST_3"] = "Operators";
+$LOCA["en"]["ADM_BCAST_SUBJ"] = "Subject:";
+$LOCA["en"]["ADM_BCAST_SUBMIT"] = "Send";
+
+// admin_browse
+
+$LOCA["en"]["ADM_BROWSE_TITLE"] = "Recent history of transitions (#1 entries):";
+
+// admin_checksum
+
+$LOCA["en"]["ADM_CSUM_PATH"] = "File path";
+$LOCA["en"]["ADM_CSUM_DIGEST"] = "Checksum";
+$LOCA["en"]["ADM_CSUM_STATUS"] = "Status";
+$LOCA["en"]["ADM_CSUM_ENGINE"] = "Engine";
+$LOCA["en"]["ADM_CSUM_ADMIN"] = "Admin Area";
+$LOCA["en"]["ADM_CSUM_PAGES"] = "Game Pages";
+$LOCA["en"]["ADM_CSUM_REG"] = "Registration System";
+$LOCA["en"]["ADM_CSUM_FIX"] = "Fix Checksums";
+
 // admin_colony_settings
 
 $LOCA["en"]["ADM_COL_HEAD"] = "Colonization settings";

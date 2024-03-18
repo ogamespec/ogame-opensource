@@ -76,11 +76,9 @@ if ( $prem['admiral'] ) $maxfleet += 2;
 $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Количество экспедиций
 $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 
+BeginContent();
 ?>
 
-<!-- CONTENT AREA -->
-<div id='content'>
-<center>
 <script src="js/flotten.js"></script>
 <!--
 <body>
@@ -166,7 +164,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 
     <th><?php echo date ( "D M j G:i:s", $queue['start']);?></th>
     <th><a href="index.php?page=galaxy&galaxy=<?php echo $target['g'];?>&system=<?php echo $target['s'];?>&position=<?php echo $target['p'];?>&session=<?php echo $session;?>" >[<?php echo $target['g'];?>:<?php echo $target['s'];?>:<?php echo $target['p'];?>]</a><?php
-    if ( ! ($target['type'] == 10002 || $target['type'] == 20000 || $target['type'] == 10004 ) ) echo "   <br />" . $target_user['oname'];
+    if ( ! ($target['type'] == PTYP_COLONY_PHANTOM || $target['type'] == PTYP_FARSPACE || $target['type'] == PTYP_ABANDONED ) ) echo "   <br />" . $target_user['oname'];
 ?>    </th>
     <th><?php echo date ( "D M j G:i:s", $queue['end']);?></th>
     <th>
@@ -399,11 +397,8 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 </form>
 </table>
 <br><br><br><br>
-</center>
-</div>
-<!-- END CONTENT AREA -->
-
 <?php
+EndContent ();
 PageFooter ($FleetMessage, $FleetError);
 ob_end_flush ();
 ?>

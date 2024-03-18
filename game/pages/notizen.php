@@ -76,9 +76,7 @@ if ( key_exists ('a', $_GET) )
 
 PageHeader ("notizen", true, false);
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent ();
 echo "<script src=\"js/cntchar.js\" type=\"text/javascript\"></script>\n";
 echo "<script src=\"js/win.js\" type=\"text/javascript\"></script>\n";
 
@@ -126,9 +124,7 @@ else
     echo "</form><br><br><br><br>\n";
 }
 
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n";
+EndContent ();
 
 PageFooter ("","",true,0,true);
 ob_end_flush ();

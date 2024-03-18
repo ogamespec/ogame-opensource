@@ -90,9 +90,7 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
 
 PageHeader ("resources");
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent ();
 
 // ***********************************************************************
 
@@ -172,7 +170,7 @@ $rows = dbrows ($result);
 while ($rows--)
 {
     $pl = dbarray ($result);
-    if ( $pl['type'] != 0 ) $count++;
+    if ( $pl['type'] != PTYP_MOON ) $count++;
 }
 if ( $count > 9 ) echo "<br><font color=#ff000>".loca("RES_INFO")."</font>";
 
@@ -320,9 +318,7 @@ echo "  </table> \n";
 // ***********************************************************************
 
 echo "<br><br><br><br>\n";
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n";
+EndContent ();
 
 PageFooter ();
 ob_end_flush ();

@@ -73,9 +73,7 @@ if ( key_exists ( 'buynow', $_GET ) )
 
 PageHeader ("micropayment");
 
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
+BeginContent ();
 
 // ************************************************************************************
 ?>
@@ -285,9 +283,7 @@ echo "<center>\n";
 // ************************************************************************************
 
 echo "<br><br><br><br>\n";
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n";
+EndContent ();
 
 PageFooter ($MicropaymentMessage, $MicropaymentError);
 ob_end_flush ();
