@@ -65,7 +65,7 @@ function BotCanBuild ($obj_id)
     global $BotID, $BotNow;
     $user = LoadUser ($BotID);
     $aktplanet = GetPlanet ( $user['aktplanet'] );
-    $aktplanet = ProdResources ( $aktplanet, $aktplanet['lastpeek'], $BotNow );
+    ProdResources ( $aktplanet, $aktplanet['lastpeek'], $BotNow );
     $level = $aktplanet['b'.$obj_id] + 1;
     $text = CanBuild ( $user, $aktplanet, $obj_id, $level, 0 );
     return ( $text === '' );
@@ -181,7 +181,7 @@ function BotCanResearch ($obj_id)
     global $BotID, $BotNow;
     $user = LoadUser ($BotID);
     $aktplanet = GetPlanet ( $user['aktplanet'] );
-    $aktplanet = ProdResources ( $aktplanet, $aktplanet['lastpeek'], $BotNow );
+    ProdResources ( $aktplanet, $aktplanet['lastpeek'], $BotNow );
     $level = $aktplanet['r'.$obj_id] + 1;
     $text = CanResearch ($user, $aktplanet, $obj_id, $level);
     return ($text === '' );

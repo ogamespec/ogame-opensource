@@ -463,7 +463,7 @@ function Queue_Build_End ($queue)
     // Рассчитать производство планеты с момента последнего обновления.
     $planet = GetPlanet ( $planet_id );
     $player_id = $planet['owner_id'];
-    $planet = ProdResources ( $planet, $planet['lastpeek'], $queue['end'] );
+    ProdResources ( $planet, $planet['lastpeek'], $queue['end'] );
 
     // Защита от дурака
     if ( ($queue['type'] === "Build" && $planet["b".$id] >= $lvl) ||
@@ -804,7 +804,7 @@ function Queue_Research_End ($queue)
 
     // Рассчитать производство планеты с момента последнего обновления.
     $planet = GetPlanet ( $planet_id );
-    $planet = ProdResources ( $planet, $planet['lastpeek'], $queue['end'] );
+    ProdResources ( $planet, $planet['lastpeek'], $queue['end'] );
 
     // Обновить уровень исследования в базе данных.
     $query = "UPDATE ".$db_prefix."users SET ".('r'.$id)." = $lvl WHERE player_id = $player_id";

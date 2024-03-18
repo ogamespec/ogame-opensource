@@ -348,16 +348,15 @@ function cons_fusion ($lvl, $pr) { return ceil (10 * $lvl * pow (1.1, $lvl) * $p
 
 // Расчитать прирост ресурсов. Ограничить емкостью хранилищ.
 // ВНИМАНИЕ: Из расчета исключаются внешние события, типа окончания действия офицеров, атаки другого игрока, завершение постройки здания итп.
-function ProdResources ( $planet, $time_from, $time_to )
+function ProdResources ( &$planet, $time_from, $time_to )
 {
     global $db_prefix, $GlobalUni;
-    if ( ! ( $planet['type'] > 0 && $planet['type'] < 10000) ) return $planet;        // НЕ планета
+    if ( $planet['type'] != PTYP_PLANET ) return;        // НЕ планета
     $user = LoadUser ($planet['owner_id']);
-    if ( $user['player_id'] == 99999 ) return $planet;    // технический аккаунт space
+    if ( $user['player_id'] == USER_SPACE ) return;    // технический аккаунт space
     $diff = $time_to - $time_from;
 
-    $unitab = $GlobalUni;
-    $speed = $unitab['speed'];
+    $speed = $GlobalUni['speed'];
 
     $prem = PremiumStatus ($user);
     if ( $prem['geologist'] ) $g_factor = 1.1;
@@ -386,7 +385,6 @@ function ProdResources ( $planet, $time_from, $time_to )
     $query = "UPDATE ".$db_prefix."planets SET m = '".$planet['m']."', k = '".$planet['k']."', d = '".$planet['d']."', lastpeek = '".$time_to."' WHERE planet_id = $planet_id";
     dbquery ($query);
     $planet['lastpeek'] = $time_to;
-    return $planet;
 }
 
 // Стоимость планеты в очках.
