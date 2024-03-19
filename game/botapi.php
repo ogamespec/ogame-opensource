@@ -56,6 +56,21 @@ function BotSetVar ( $var, $value )
     SetVar ( $BotID, $var, $value );
 }
 
+//check if energy is at or above value
+function BotEnergyAbove ($energy)
+{
+    global $BotID, $BotNow;
+    $user = LoadUser ($BotID);
+    $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $currentenergy = $aktplanet['e'];
+    if ($currentenergy >= $energy){
+      return true;
+    } else {
+      return false;
+    }
+}
+
+
 //------------------------------------------------------------------------------------
 // Строительство/снос построек, управление Сырьём
 

@@ -1,6 +1,6 @@
 <?php
 
-// List of events (Overview and Phalanx)
+// Liste der Ereignisse (Übersicht und Phalanx)
 
 $LOCA["en"]["EVENT_FLEET_COUNT"] = "Численность кораблей";
 $LOCA["en"]["EVENT_WRITE"] = "Написать сообщение";
@@ -37,7 +37,7 @@ $LOCA["en"]["EVENT_EXPO_FROM_ONTO_PHALANX"] = " игрока #1 с #2 иссле
 $LOCA["en"]["EVENT_RAK"] = "Ракетная атака (#1) с #2 на #3";
 $LOCA["en"]["EVENT_RAK_TARGET"] = "Основная цель";
 
-// Missions
+// Aufgaben
 
 $LOCA["en"]["EVENT_M_ATTACK"] = "Атаковать";
 $LOCA["en"]["EVENT_M_ACS_ATTACK"] = "Совместная атака";

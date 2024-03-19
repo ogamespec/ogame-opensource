@@ -5,7 +5,7 @@
 $LOCA["de"]["FLEET_ORDER_1"] = "Angreifen";
 $LOCA["de"]["FLEET_ORDER_2"] = "Geimeinsamer Angriff";
 $LOCA["de"]["FLEET_ORDER_3"] = "Transport";
-$LOCA["de"]["FLEET_ORDER_4"] = "Aufgeben";
+$LOCA["de"]["FLEET_ORDER_4"] = "Stationieren";
 $LOCA["de"]["FLEET_ORDER_5"] = "Verteidigen";
 $LOCA["de"]["FLEET_ORDER_6"] = "Spionieren";
 $LOCA["de"]["FLEET_ORDER_7"] = "Kolonisieren";
