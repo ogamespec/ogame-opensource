@@ -632,23 +632,28 @@ function deserialize_slot ($str, $att)
     $dmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
 
     $res = array();
-    $items = explode (" ", $str);
 
-    $res['name'] = extract_text ($items[0], '{', '}');
-    $res['id'] = intval ($items[1]);
-    $res['g'] = intval ($items[2]);
-    $res['s'] = intval ($items[3]);
-    $res['p'] = intval ($items[4]);
-    $res['weap'] = intval ($items[5]);
-    $res['shld'] = intval ($items[6]);
-    $res['armr'] = intval ($items[7]);
+    // Нужно вырезать подстроку с именем, т.к. имя может содержать пробелы  (#119)
+    $bracket_end = strpos ($str, '}');
+    $name_str = substr ($str, 0, $bracket_end + 1);
+    $param_str = trim (substr ($str, $bracket_end + 1));
+    $items = explode (" ", $param_str);    
+
+    $res['name'] = extract_text ($name_str, '{', '}');
+    $res['id'] = intval ($items[0]);
+    $res['g'] = intval ($items[1]);
+    $res['s'] = intval ($items[2]);
+    $res['p'] = intval ($items[3]);
+    $res['weap'] = intval ($items[4]);
+    $res['shld'] = intval ($items[5]);
+    $res['armr'] = intval ($items[6]);
 
     foreach ( $amap as $n=>$gid ) {
-        $res[$gid] = intval ($items[8+$n]);
+        $res[$gid] = intval ($items[7+$n]);
     }
     if (!$att) {
         foreach ( $dmap as $n=>$gid ) {
-            $res[$gid] = intval ($items[22+$n]);
+            $res[$gid] = intval ($items[21+$n]);
         }
     }
 
