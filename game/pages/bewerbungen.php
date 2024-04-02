@@ -55,6 +55,7 @@ if ( method () === "POST" )
         $query = "UPDATE ".$db_prefix."users SET ally_id = $ally_id, allyrank = 1, joindate = $now WHERE player_id = $player_id";
         dbquery ($query);
         RemoveApplication ( $show );
+        MyGoto ("bewerbungen");
     }
 
     if ( $_POST['aktion'] === loca("ALLY_APPA_REJECT") && $show > 0 )
@@ -72,6 +73,7 @@ if ( method () === "POST" )
             va(loca_lang("ALLY_MSG_FROM", $newcomer['lang']), $ally['tag']), 
             va(loca_lang("ALLY_MSG_APPLY_NO", $newcomer['lang']), $ally['tag']),
             $reason, MTYP_ALLY );
+        MyGoto ("bewerbungen");
     }
 }
 
