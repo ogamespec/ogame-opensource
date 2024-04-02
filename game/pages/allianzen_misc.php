@@ -45,7 +45,7 @@ function PageAlly_Leave ()
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
 <table width=519>
 <form action="index.php?page=allianzen&session=<?=$session;?>&a=3&weiter=1" method=POST>
-<tr><td class=c colspan=2><?=va("ALLY_MISC_LEAVE_CONFIRM", $ally['tag']);?></td></tr>
+<tr><td class=c colspan=2><?=va(loca("ALLY_MISC_LEAVE_CONFIRM"), $ally['tag']);?></td></tr>
 <tr><th colspan=2><br><input type=submit value="<?=loca("ALLY_MISC_YES_FOR_SURE");?>"></th></tr></table></center></form>
 <?php
 }
