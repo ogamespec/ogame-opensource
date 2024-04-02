@@ -12,6 +12,7 @@ require_once "db.php";
 require_once "utils.php";
 require_once "loca.php";
 require_once "user.php";
+require_once "planet.php";
 
 if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
 else $loca_lang = $_COOKIE['ogamelang'];
