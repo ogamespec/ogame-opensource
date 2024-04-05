@@ -9,7 +9,16 @@ $LOCA["de"]["CRYSTAL"] = "Kristall";
 $LOCA["de"]["DEUTERIUM"] = "Deuterium";
 $LOCA["de"]["ENERGY"] = "Energie";
 $LOCA["de"]["DM"] = "Dunkle Materie";
+
+$LOCA["de"]["PLANET_HOME"] = "Heimatplanet";
+$LOCA["de"]["PLANET_COLONY"] = "Kolonie";
+$LOCA["de"]["PLANET_PHANTOM"] = "Planet";
+$LOCA["de"]["PLANET_ABANDONED"] = "Planet aufgegeben";
+$LOCA["de"]["PLANET_DESTROYED"] = "Planet zerstört";
 $LOCA["de"]["MOON"] = "Mond";
+$LOCA["de"]["MOON_DESTROYED"] = "Aufgegeben";
+$LOCA["de"]["DEBRIS"] = "Trümmerfeld";
+$LOCA["de"]["FAR_SPACE"] = "Endlose Weiten";
 
 $LOCA["de"]["TIME_DAYS"] = " Tag";
 $LOCA["de"]["TIME_HOUR"] = "h";

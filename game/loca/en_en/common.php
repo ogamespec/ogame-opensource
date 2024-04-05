@@ -9,7 +9,16 @@ $LOCA["en"]["CRYSTAL" ] = "Crystal";
 $LOCA["en"]["DEUTERIUM" ] = "Deuterium";
 $LOCA["en"]["ENERGY" ] = "Energy";
 $LOCA["en"]["DM" ] = "Dark Matter";
-$LOCA["en"]["MOON" ] = "Moon";
+
+$LOCA["en"]["PLANET_HOME"] = "Homeplanet";
+$LOCA["en"]["PLANET_COLONY"] = "Colony";
+$LOCA["en"]["PLANET_PHANTOM"] = "Planet";
+$LOCA["en"]["PLANET_ABANDONED"] = "Planet abandoned";
+$LOCA["en"]["PLANET_DESTROYED"] = "Planet destroyed";
+$LOCA["en"]["MOON"] = "Moon";
+$LOCA["en"]["MOON_DESTROYED"] = "Abandoned";
+$LOCA["en"]["DEBRIS"] = "Debris Field";
+$LOCA["en"]["FAR_SPACE"] = "Far space";
 
 $LOCA["en"]["TIME_DAYS"] = "d";		// TODO: Not sure
 $LOCA["en"]["TIME_HOUR"] = "h";

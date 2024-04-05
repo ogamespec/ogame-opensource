@@ -9,7 +9,16 @@ $LOCA["it"]["CRYSTAL" ] = "Cristallo";
 $LOCA["it"]["DEUTERIUM" ] = "Deuterio";
 $LOCA["it"]["ENERGY" ] = "Energia";
 $LOCA["it"]["DM" ] = "Materia Oscura";
-$LOCA["it"]["MOON" ] = "Luna";
+
+$LOCA["it"]["PLANET_HOME"] = "Pianeta Madre";
+$LOCA["it"]["PLANET_COLONY"] = "Colonia";
+$LOCA["it"]["PLANET_PHANTOM"] = "Planet";
+$LOCA["it"]["PLANET_ABANDONED"] = "Pianeta abbandonato";   	// fixed 10th planet colony phantom ("overlib" bug)
+$LOCA["it"]["PLANET_DESTROYED"] = "Pianeta distrutto";
+$LOCA["it"]["MOON"] = "Luna";
+$LOCA["it"]["MOON_DESTROYED"] = "Abbandonato";
+$LOCA["it"]["DEBRIS"] = "Campo detriti";
+$LOCA["it"]["FAR_SPACE"] = "Spazio esterno";
 
 $LOCA["it"]["TIME_DAYS"] = "d";
 $LOCA["it"]["TIME_HOUR"] = "h";

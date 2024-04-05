@@ -65,8 +65,6 @@ $LOCA["en"]["GALAXY_HEAD_ACTIONS"] = "Actions";
 // Planet
 $LOCA["en"]["GALAXY_PLANET"] = "Planet";
 $LOCA["en"]["GALAXY_PLANET_ADMIN"] = "Planet management";
-$LOCA["en"]["GALAXY_PLANET_DESTROYED"] = "Planet destroyed";
-$LOCA["en"]["GALAXY_PLANET_ABANDONED"] = "Planet abandoned";
 
 // Moon
 $LOCA["en"]["GALAXY_MOON"] = "Moon";
@@ -75,7 +73,6 @@ $LOCA["en"]["GALAXY_MOON_PROPS"] = "Properties";
 $LOCA["en"]["GALAXY_MOON_SIZE"] = "Size:";
 $LOCA["en"]["GALAXY_MOON_TEMP"] = "Temperatur:";
 $LOCA["en"]["GALAXY_MOON_ACTIONS"] = "Actions:";
-$LOCA["en"]["GALAXY_MOON_DESTROYED"] = "Abandoned";
 
 // DF
 $LOCA["en"]["GALAXY_DF_RESOURCES"] = "Resources:";
@@ -109,7 +106,6 @@ $LOCA["en"]["GALAXY_FLEET_DESTROY"] = "Destroy";
 $LOCA["en"]["GALAXY_FLEET_RECYCLE"] = "Recycle";
 
 // Footer
-$LOCA["en"]["GALAXY_FAR_SPACE"] = "Far space";
 $LOCA["en"]["GALAXY_INFO_POPULATED"] = "Populated #1 planets";
 $LOCA["en"]["GALAXY_INFO_SPY_PROBES"] = " Spy probes ";
 $LOCA["en"]["GALAXY_INFO_RECYCLERS"] = " Recyclers  ";

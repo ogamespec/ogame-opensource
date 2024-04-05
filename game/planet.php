@@ -68,8 +68,8 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     if ($moon) $name = loca("MOON");
     else
     {
-        if ($colony) $name = "Колония";
-        else $name = "Главная планета";
+        if ($colony) $name = loca("PLANET_COLONY");
+        else $name = loca("PLANET_HOME");
     }
 
     // Тип планеты.
@@ -309,7 +309,7 @@ function CreateDebris ($g, $s, $p, $owner_id)
     $debris_id = HasDebris ($g, $s, $p);
     if ($debris_id > 0 ) return $debris_id;
     $now = time();
-    $planet = array ( null, "Поле обломков", PTYP_DF, $g, $s, $p, $owner_id, 0, 0, 0, 0, $now,
+    $planet = array ( null, loca("DEBRIS"), PTYP_DF, $g, $s, $p, $owner_id, 0, 0, 0, 0, $now,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -367,7 +367,7 @@ function GetPlanetType ($planet)
 // Создать фантом колонизации. Вернуть ID.
 function CreateColonyPhantom ($g, $s, $p, $owner_id)
 {
-    $planet = array( null, "Planet", PTYP_COLONY_PHANTOM, $g, $s, $p, $owner_id, 0, 0, 0, 0, time(),
+    $planet = array( null, loca("PLANET_PHANTOM"), PTYP_COLONY_PHANTOM, $g, $s, $p, $owner_id, 0, 0, 0, 0, time(),
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -382,7 +382,7 @@ function CreateAbandonedColony ($g, $s, $p, $when)
     // Если на заданных координатах нет планеты, то добавить Покинутую колонию.
     if ( !HasPlanet ( $g, $s, $p ) )
     {
-        $planet = array( null, "Покинутая колония", PTYP_ABANDONED, $g, $s, $p, USER_SPACE, 0, 0, 0, 0, $when,
+        $planet = array( null, loca("PLANET_ABANDONED"), PTYP_ABANDONED, $g, $s, $p, USER_SPACE, 0, 0, 0, 0, $when,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -474,7 +474,7 @@ function CreateOuterSpace ($g, $s, $p)
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 ) 
     {
-        $planet = array( null, "Бесконечные дали", PTYP_FARSPACE, $g, $s, $p, USER_SPACE, 0, 0, 0, 0, time(),
+        $planet = array( null, loca("FAR_SPACE"), PTYP_FARSPACE, $g, $s, $p, USER_SPACE, 0, 0, 0, 0, time(),
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

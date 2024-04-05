@@ -65,8 +65,6 @@ $LOCA["fr"]["GALAXY_HEAD_ACTIONS"] = "Actions";
 // Planète
 $LOCA["fr"]["GALAXY_PLANET"] = "Planète";
 $LOCA["fr"]["GALAXY_PLANET_ADMIN"] = "Gestion de la Planète";
-$LOCA["fr"]["GALAXY_PLANET_DESTROYED"] = "Planète détruite";
-$LOCA["fr"]["GALAXY_PLANET_ABANDONED"] = "Planète abandonnée";
 
 // Lune
 $LOCA["fr"]["GALAXY_MOON"] = "Lune";
@@ -75,7 +73,6 @@ $LOCA["fr"]["GALAXY_MOON_PROPS"] = "Propriétés";
 $LOCA["fr"]["GALAXY_MOON_SIZE"] = "Taille:";
 $LOCA["fr"]["GALAXY_MOON_TEMP"] = "Température:";
 $LOCA["fr"]["GALAXY_MOON_ACTIONS"] = "Actions:";
-$LOCA["fr"]["GALAXY_MOON_DESTROYED"] = "Déruite";
 
 // DF
 $LOCA["fr"]["GALAXY_DF_RESOURCES"] = "Ressources:";
@@ -109,7 +106,6 @@ $LOCA["fr"]["GALAXY_FLEET_DESTROY"] = "Détruire";
 $LOCA["fr"]["GALAXY_FLEET_RECYCLE"] = "Recycler";
 
 // Sous-sol
-$LOCA["fr"]["GALAXY_FAR_SPACE"] = "Espace Lointain";
 $LOCA["fr"]["GALAXY_INFO_POPULATED"] = "#1 planètes peuplées";
 $LOCA["fr"]["GALAXY_INFO_SPY_PROBES"] = " Sondes espionnes ";
 $LOCA["fr"]["GALAXY_INFO_RECYCLERS"] = " Recycleurs  ";

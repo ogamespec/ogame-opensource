@@ -9,7 +9,16 @@ $LOCA["ru"]["CRYSTAL"] = "Кристалл";
 $LOCA["ru"]["DEUTERIUM"] = "Дейтерий";
 $LOCA["ru"]["ENERGY"] = "Энергия";
 $LOCA["ru"]["DM"] = "Тёмная материя";
+
+$LOCA["ru"]["PLANET_HOME"] = "Главная планета";
+$LOCA["ru"]["PLANET_COLONY"] = "Колония";
+$LOCA["ru"]["PLANET_PHANTOM"] = "Planet";
+$LOCA["ru"]["PLANET_ABANDONED"] = "Покинутая колония";
+$LOCA["ru"]["PLANET_DESTROYED"] = "Уничтоженная планета";
 $LOCA["ru"]["MOON"] = "Луна";
+$LOCA["ru"]["MOON_DESTROYED"] = "Покинута";
+$LOCA["ru"]["DEBRIS"] = "Поле обломков";
+$LOCA["ru"]["FAR_SPACE"] = "Бесконечные дали";
 
 $LOCA["ru"]["TIME_DAYS"] = "дн.";
 $LOCA["ru"]["TIME_HOUR"] = "ч";

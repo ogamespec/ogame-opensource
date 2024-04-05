@@ -65,8 +65,6 @@ $LOCA["it"]["GALAXY_HEAD_ACTIONS"] = "Azioni";
 // Pianeta
 $LOCA["it"]["GALAXY_PLANET"] = "Pianeta";
 $LOCA["it"]["GALAXY_PLANET_ADMIN"] = "Pannello admin";
-$LOCA["it"]["GALAXY_PLANET_DESTROYED"] = "Pianeta distrutto";
-$LOCA["it"]["GALAXY_PLANET_ABANDONED"] = "Pianeta abbandonato"; 		// fixed 10th planet colony phantom ("overlib" bug)
 
 // Luna
 $LOCA["it"]["GALAXY_MOON"] = "Luna";
@@ -75,7 +73,6 @@ $LOCA["it"]["GALAXY_MOON_PROPS"] = "Informazioni";
 $LOCA["it"]["GALAXY_MOON_SIZE"] = "Diametro:";
 $LOCA["it"]["GALAXY_MOON_TEMP"] = "Temperatura:";
 $LOCA["it"]["GALAXY_MOON_ACTIONS"] = "Azioni:";
-$LOCA["it"]["GALAXY_MOON_DESTROYED"] = "Abbandonato";
 
 // DF
 $LOCA["it"]["GALAXY_DF_RESOURCES"] = "Detriti:";
@@ -109,7 +106,6 @@ $LOCA["it"]["GALAXY_FLEET_DESTROY"] = "Distruzione";
 $LOCA["it"]["GALAXY_FLEET_RECYCLE"] = "Raccolta";
 
 // Seminterrato
-$LOCA["it"]["GALAXY_FAR_SPACE"] = "Spazio esterno";
 $LOCA["it"]["GALAXY_INFO_POPULATED"] = "#1 pianeti occupati";
 $LOCA["it"]["GALAXY_INFO_SPY_PROBES"] = " Sonde spia ";
 $LOCA["it"]["GALAXY_INFO_RECYCLERS"] = " Riciclatrici  ";

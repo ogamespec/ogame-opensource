@@ -183,7 +183,7 @@ if ($numships <= 0) FleetError ( loca("FLEET_ERR_NO_SHIPS") );
 
 switch ( $order )
 {
-    case '1':        // Атака
+    case FTYP_ATTACK:        // Атака
         if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
         else if ( ( 
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
@@ -195,7 +195,7 @@ switch ( $order )
         else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
         break;
 
-    case '2':        // Совместная атака
+    case FTYP_ACS_ATTACK:        // Совместная атака
         if ( ( 
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
              IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
@@ -217,15 +217,15 @@ switch ( $order )
         else if ($acs_fleets >= $GlobalUni['acs'] * $GlobalUni['acs']) FleetError ( va (loca("FLEET_ERR_ACS_LIMIT"), $GlobalUni['acs'] * $GlobalUni['acs']) );
         break;
 
-    case '3':        // Транспорт
+    case FTYP_TRANSPORT:        // Транспорт
         if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
         break;
 
-    case '4':        // Оставить
+    case FTYP_DEPLOY:        // Оставить
         if ( $target['owner_id'] !== $GlobalUser['player_id'] ) FleetError ( loca("FLEET_ERR_DEPLOY_OTHER") );
         break;
 
-    case '5':        // Держаться
+    case FTYP_ACS_HOLD:        // Держаться
         $maxhold_fleets = $GlobalUni['acs'] * $GlobalUni['acs'];
         $maxhold_users = $GlobalUni['acs'];
         if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( loca("FLEET_ERR_NOOB") );
@@ -235,7 +235,7 @@ switch ( $order )
         if ( ! ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) FleetError (loca("FLEET_ERR_HOLD_ALLY"));
         break;
 
-    case '6':        // Шпионаж
+    case FTYP_SPY:        // Шпионаж
         if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
         else if ( ( 
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
@@ -248,7 +248,7 @@ switch ( $order )
         else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
         break;
 
-    case '7':        // Колонизировать
+    case FTYP_COLONIZE:        // Колонизировать
         if ( $fleet[208] == 0 ) FleetError ( loca("FLEET_ERR_COLONY_REQUIRED") );
         else if (HasPlanet (intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet'])) ) FleetError ( loca("FLEET_ERR_COLONY_EXISTS") );
         else {
@@ -258,12 +258,12 @@ switch ( $order )
         }
         break;
 
-    case '8':        // Переработать
+    case FTYP_RECYCLE:        // Переработать
         if ( $fleet[209] == 0 ) FleetError ( loca("FLEET_ERR_RECYCLE_REQUIRED") );
         else if ($target['type'] != PTYP_DF ) FleetError ( loca("FLEET_ERR_RECYCLE_DF") );
         break;
 
-    case '9':        // Уничтожить
+    case FTYP_DESTROY:        // Уничтожить
         if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
         else if ( ( 
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
@@ -275,7 +275,7 @@ switch ( $order )
         else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
         break;
 
-    case '15':       // Экспедиция
+    case FTYP_EXPEDITION:       // Экспедиция
         $manned = 0;
         foreach ($fleet as $id=>$amount)
         {

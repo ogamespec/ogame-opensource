@@ -532,8 +532,8 @@ while ($num--)
         if ( $activity > $ago15 ) $akt = "&nbsp;(*)";
         else if ( $activity > $ago60) $akt = "&nbsp;(".floor(($now - $activity)/60)." min)";
     }
-    if ( $planet['type'] == PTYP_DEST_PLANET ) $planet_name = loca("GALAXY_PLANET_DESTROYED") . $akt;
-    else if ( $planet['type'] == PTYP_ABANDONED ) { $planet_name = loca("GALAXY_PLANET_ABANDONED") . $akt; $phalanx = false; }
+    if ( $planet['type'] == PTYP_DEST_PLANET ) $planet_name = loca("PLANET_DESTROYED") . $akt;
+    else if ( $planet['type'] == PTYP_ABANDONED ) { $planet_name = loca("PLANET_ABANDONED") . $akt; $phalanx = false; }
     else $planet_name = $planet['name'].$akt;
     if ($phalanx) $planet_name = "<a href='#' onclick=fenster('index.php?page=phalanx&session=$session&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."',\"Bericht_Phalanx\") title=\"".loca("GALAXY_FLEET_PHALANX")."\">" . $planet_name . "</a>";
     echo "<th width=\"130\" style='white-space: nowrap;'>$planet_name</th>\n";
@@ -573,7 +573,7 @@ while ($num--)
             echo ">\n";
             echo "<img width=\"22\" height=\"22\" alt=\"".va(loca("GALAXY_MOON_TITLE_SIZE"), $moon['diameter'])."\" src=\"".GetPlanetSmallImage ( UserSkin(), $moon )."\"/></a>\n";
         }
-        else echo "<div style=\"border: 2pt solid #FF0000;\"><img src=\"".GetPlanetSmallImage ( UserSkin(), $moon )."\" alt=\"".va(loca("GALAXY_MOON_TITLE_SIZE"), $moon['diameter'])."\" height=\"22\" width=\"22\" onmouseover=\"return overlib('<font color=white><b>".loca("GALAXY_MOON_DESTROYED")."</b></font>', WIDTH, 75);\" onmouseout=\"return nd();\"/></div>\n";
+        else echo "<div style=\"border: 2pt solid #FF0000;\"><img src=\"".GetPlanetSmallImage ( UserSkin(), $moon )."\" alt=\"".va(loca("GALAXY_MOON_TITLE_SIZE"), $moon['diameter'])."\" height=\"22\" width=\"22\" onmouseover=\"return overlib('<font color=white><b>".loca("MOON_DESTROYED")."</b></font>', WIDTH, 75);\" onmouseout=\"return nd();\"/></div>\n";
     }
     echo "</th>\n";
 
@@ -702,7 +702,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
 for ($p; $p<=15; $p++) empty_row ($p);
 
 /***** Низ таблицы *****/
-echo "<tr><th style='height:32px;'>16</th><th colspan='7'><a href ='index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$coord_g."&system=".$coord_s."&planet=16&planettype=1&target_mission=15'>".loca("GALAXY_FAR_SPACE")."</a></th></tr>\n\n";
+echo "<tr><th style='height:32px;'>16</th><th colspan='7'><a href ='index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$coord_g."&system=".$coord_s."&planet=16&planettype=1&target_mission=15'>".loca("FAR_SPACE")."</a></th></tr>\n\n";
 
 echo "<tr><td class=\"c\" colspan=\"6\">(".va(loca("GALAXY_INFO_POPULATED"), $planets).")</td>\n";
 echo "<td class=\"c\" colspan=\"2\"><a href='#' onmouseover='return overlib(\"<table><tr><td class=c colspan=2>".loca("GALAXY_LEGEND")."</td></tr>";

@@ -65,8 +65,6 @@ $LOCA["ru"]["GALAXY_HEAD_ACTIONS"] = "Действия";
 // Планета
 $LOCA["ru"]["GALAXY_PLANET"] = "Планета";
 $LOCA["ru"]["GALAXY_PLANET_ADMIN"] = "Управление планетой";
-$LOCA["ru"]["GALAXY_PLANET_DESTROYED"] = "Уничтоженная планета";
-$LOCA["ru"]["GALAXY_PLANET_ABANDONED"] = "Покинутая колония";
 
 // Луна
 $LOCA["ru"]["GALAXY_MOON"] = "Луна";
@@ -75,7 +73,6 @@ $LOCA["ru"]["GALAXY_MOON_PROPS"] = "Свойства";
 $LOCA["ru"]["GALAXY_MOON_SIZE"] = "размер:";
 $LOCA["ru"]["GALAXY_MOON_TEMP"] = "температура:";
 $LOCA["ru"]["GALAXY_MOON_ACTIONS"] = "Действия:";
-$LOCA["ru"]["GALAXY_MOON_DESTROYED"] = "Покинута";
 
 // ПО
 $LOCA["ru"]["GALAXY_DF_RESOURCES"] = "Ресурсы:";
@@ -109,7 +106,6 @@ $LOCA["ru"]["GALAXY_FLEET_DESTROY"] = "Уничтожить";
 $LOCA["ru"]["GALAXY_FLEET_RECYCLE"] = "Переработать";
 
 // Подвал
-$LOCA["ru"]["GALAXY_FAR_SPACE"] = "Бесконечные дали";
 $LOCA["ru"]["GALAXY_INFO_POPULATED"] = "Заселено #1 планет";
 $LOCA["ru"]["GALAXY_INFO_SPY_PROBES"] = " Шпионские зонды ";
 $LOCA["ru"]["GALAXY_INFO_RECYCLERS"] = " Переработчик  ";
