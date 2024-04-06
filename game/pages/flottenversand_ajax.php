@@ -53,6 +53,8 @@ if ( $rows ) {
     if ( abs(time () - $queue['start']) < 1 ) AjaxSendError ();
 }
 
+loca_add ( "debug", $GlobalUni['lang'] );
+
 // Проверить параметры.
 
 if ( $planettype < 1 || $planettype > 3 ) AjaxSendError ();    // неверная цель
@@ -159,10 +161,10 @@ fclose ($f);
 $fleet_id = DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, 0, 0, 0, $cons, time(), 0 );
 
 UserLog ( $aktplanet['owner_id'], "FLEET", 
- "Отправка флота $fleet_id (AJAX): " . GetMissionNameDebug ($order) . " " .
+ va(loca_lang("DEBUG_LOG_FLEET_SEND_AJAX1", $GlobalUni['lang']), $fleet_id) . GetMissionNameDebug ($order) . " " .
  $aktplanet['name'] ." [".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."] -&gt; ".$target['name']." [".$target['g'].":".$target['s'].":".$target['p']."]<br>" .
  DumpFleet ($fleet) . "<br>" .
- "Время полёта: " . BuildDurationFormat ($flighttime) . ", затраты дейтерия: " . nicenum ($cons) );
+ va(loca_lang("DEBUG_LOG_FLEET_SEND_AJAX2", $GlobalUni['lang']), BuildDurationFormat ($flighttime), nicenum ($cons)) );
 
 // Поднять флот с планеты.
 AdjustResources ( 0, 0, $cons, $aktplanet['planet_id'], '-' );

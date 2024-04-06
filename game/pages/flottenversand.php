@@ -48,6 +48,7 @@ if ( $rows ) {
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "fleet", $GlobalUser['lang'] );
+loca_add ( "debug", $GlobalUni['lang'] );
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
@@ -329,10 +330,10 @@ else {
     $queue = GetFleetQueue ($fleet_id);
 
     UserLog ( $aktplanet['owner_id'], "FLEET", 
-     "Отправка флота $fleet_id: " . GetMissionNameDebug ($order) . " " .
+     va(loca_lang("DEBUG_LOG_FLEET_SEND1", $GlobalUni['lang']), $fleet_id) . GetMissionNameDebug ($order) . " " .
      $origin['name'] ." [".$origin['g'].":".$origin['s'].":".$origin['p']."] -&gt; ".$target['name']." [".$target['g'].":".$target['s'].":".$target['p']."]<br>" .
      DumpFleet ($fleet) . "<br>" .
-     "Время полёта: " . BuildDurationFormat ($flighttime) . ", удержание: " . BuildDurationFormat ($hold_time) . ", затраты дейтерия: " . nicenum ($cons['fleet'] + $cons['probes']) . ", союз: " . $union_id );
+     va(loca_lang("DEBUG_LOG_FLEET_SEND2", $GlobalUni['lang']), BuildDurationFormat ($flighttime), BuildDurationFormat ($hold_time), nicenum ($cons['fleet'] + $cons['probes']), $union_id) );
 
     if ( $union_id ) {
         $union_time = UpdateUnionTime ( $union_id, $queue['end'], $fleet_id );
