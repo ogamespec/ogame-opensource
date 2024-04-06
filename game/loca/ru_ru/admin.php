@@ -159,6 +159,32 @@ $LOCA["ru"]["ADM_DB_DB_VS_INSTALL"] = "Сравнение реальной БД 
 $LOCA["ru"]["ADM_DB_INSTALL_TABLE_MISSING"] = "Таблица #1 отсутствует в install.";
 $LOCA["ru"]["ADM_DB_SAME"] = "Расхождений не обнаружено.";
 
+// admin_debug / admin_errors
+
+$LOCA["ru"]["ADM_MSG_TITLE"] = "Сообщения";
+$LOCA["ru"]["ADM_MSG_ACTION"] = "Действие";
+$LOCA["ru"]["ADM_MSG_DATE"] = "Дата";
+$LOCA["ru"]["ADM_MSG_FROM"] = "От";
+$LOCA["ru"]["ADM_MSG_BROWSER"] = "Браузер";
+$LOCA["ru"]["ADM_MSG_FILTER"] = "Фильтр отладочных сообщений: ";
+$LOCA["ru"]["ADM_MSG_SHOW"] = "Показать";
+$LOCA["ru"]["ADM_MSG_SUBMIT"] = "ok";
+
+// admin_fleetlogs
+
+$LOCA["ru"]["ADM_FLOGS_TIMER"] = "Таймер";
+$LOCA["ru"]["ADM_FLOGS_ORDER"] = "Задание";
+$LOCA["ru"]["ADM_FLOGS_SEND_TIME"] = "Отправлен";
+$LOCA["ru"]["ADM_FLOGS_ARRIVE_TIME"] = "Прибывает";
+$LOCA["ru"]["ADM_FLOGS_FLIGHT_TIME"] = "Время полёта";
+$LOCA["ru"]["ADM_FLOGS_START"] = "Старт";
+$LOCA["ru"]["ADM_FLOGS_TARGET"] = "Цель";
+$LOCA["ru"]["ADM_FLOGS_FLEET"] = "Флот";
+$LOCA["ru"]["ADM_FLOGS_CARGO"] = "Груз";
+$LOCA["ru"]["ADM_FLOGS_FUEL"] = "Топливо";
+$LOCA["ru"]["ADM_FLOGS_ACS"] = "САБ";
+$LOCA["ru"]["ADM_FLOGS_ACTION"] = "Приказ";
+
 // admin_loca
 
 $LOCA["ru"]["ADM_LOCA_LOCALE_MISSING"] = "Строка отсутствует!";

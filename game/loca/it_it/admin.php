@@ -159,6 +159,32 @@ $LOCA["it"]["ADM_DB_DB_VS_INSTALL"] = "Confronto tra il database reale e le tabe
 $LOCA["it"]["ADM_DB_INSTALL_TABLE_MISSING"] = "La tabella #1 non è presente nell'installazione.";
 $LOCA["it"]["ADM_DB_SAME"] = "Non sono state riscontrate differenze.";
 
+// admin_debug / admin_errors
+
+$LOCA["it"]["ADM_MSG_TITLE"] = "Messaggi";
+$LOCA["it"]["ADM_MSG_ACTION"] = "Azione";
+$LOCA["it"]["ADM_MSG_DATE"] = "Data";
+$LOCA["it"]["ADM_MSG_FROM"] = "Da";
+$LOCA["it"]["ADM_MSG_BROWSER"] = "Browser";
+$LOCA["it"]["ADM_MSG_FILTER"] = "Filtro dei messaggi di debug: ";
+$LOCA["it"]["ADM_MSG_SHOW"] = "Mostrare";
+$LOCA["it"]["ADM_MSG_SUBMIT"] = "ok";
+
+// admin_fleetlogs
+
+$LOCA["it"]["ADM_FLOGS_TIMER"] = "Timer";
+$LOCA["it"]["ADM_FLOGS_ORDER"] = "Assegnazione";
+$LOCA["it"]["ADM_FLOGS_SEND_TIME"] = "Inviato";
+$LOCA["it"]["ADM_FLOGS_ARRIVE_TIME"] = "Sta arrivando";
+$LOCA["it"]["ADM_FLOGS_FLIGHT_TIME"] = "Tempo di volo";
+$LOCA["it"]["ADM_FLOGS_START"] = "Inizio";
+$LOCA["it"]["ADM_FLOGS_TARGET"] = "Scopo";
+$LOCA["it"]["ADM_FLOGS_FLEET"] = "Flotta";
+$LOCA["it"]["ADM_FLOGS_CARGO"] = "Carico";
+$LOCA["it"]["ADM_FLOGS_FUEL"] = "Carburante";
+$LOCA["it"]["ADM_FLOGS_ACS"] = "SAB";
+$LOCA["it"]["ADM_FLOGS_ACTION"] = "Ordine";
+
 // admin_loca
 
 $LOCA["it"]["ADM_LOCA_LOCALE_MISSING"] = "Manca la corda!";

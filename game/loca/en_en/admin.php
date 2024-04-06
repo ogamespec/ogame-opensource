@@ -159,6 +159,32 @@ $LOCA["en"]["ADM_DB_DB_VS_INSTALL"] = "Comparison of real database and tables fr
 $LOCA["en"]["ADM_DB_INSTALL_TABLE_MISSING"] = "Table #1 is missing from the install.";
 $LOCA["en"]["ADM_DB_SAME"] = "No differences were found.";
 
+// admin_debug / admin_errors
+
+$LOCA["en"]["ADM_MSG_TITLE"] = "Messages";
+$LOCA["en"]["ADM_MSG_ACTION"] = "Action";
+$LOCA["en"]["ADM_MSG_DATE"] = "Date";
+$LOCA["en"]["ADM_MSG_FROM"] = "From";
+$LOCA["en"]["ADM_MSG_BROWSER"] = "Browser";
+$LOCA["en"]["ADM_MSG_FILTER"] = "Debug message filter: ";
+$LOCA["en"]["ADM_MSG_SHOW"] = "Show";
+$LOCA["en"]["ADM_MSG_SUBMIT"] = "ok";
+
+// admin_fleetlogs
+
+$LOCA["en"]["ADM_FLOGS_TIMER"] = "Timer";
+$LOCA["en"]["ADM_FLOGS_ORDER"] = "Order";
+$LOCA["en"]["ADM_FLOGS_SEND_TIME"] = "Sent";
+$LOCA["en"]["ADM_FLOGS_ARRIVE_TIME"] = "Arriving";
+$LOCA["en"]["ADM_FLOGS_FLIGHT_TIME"] = "Flight time";
+$LOCA["en"]["ADM_FLOGS_START"] = "Start";
+$LOCA["en"]["ADM_FLOGS_TARGET"] = "Target";
+$LOCA["en"]["ADM_FLOGS_FLEET"] = "Fleet";
+$LOCA["en"]["ADM_FLOGS_CARGO"] = "Cargo";
+$LOCA["en"]["ADM_FLOGS_FUEL"] = "Fuel";
+$LOCA["en"]["ADM_FLOGS_ACS"] = "ACS";
+$LOCA["en"]["ADM_FLOGS_ACTION"] = "Command";
+
 // admin_loca
 
 $LOCA["en"]["ADM_LOCA_LOCALE_MISSING"] = "The string is missing!";

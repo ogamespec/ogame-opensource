@@ -1,13 +1,14 @@
 <?php
 
-// ========================================================================================
-// Ошибки.
+// Админка: Ошибки.
 
 function Admin_Errors ()
 {
     global $session;
     global $db_prefix;
     global $GlobalUser;
+
+    loca_add ( "messages", $GlobalUser['lang'] );
 
     if ( method () === "POST" )
     {
@@ -34,8 +35,8 @@ function Admin_Errors ()
 
 <table class='header'><tr class='header'><td><table width="519">
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Errors" method="POST">
-<tr><td colspan="4" class="c">Сообщения</td></tr>
-<tr><th>Действие</th><th>Дата</th><th>От</th><th>Браузер</th></tr>
+<tr><td colspan="4" class="c"><?=loca("ADM_MSG_TITLE");?></td></tr>
+<tr><th><?=loca("ADM_MSG_ACTION");?></th><th><?=loca("ADM_MSG_DATE");?></th><th><?=loca("ADM_MSG_FROM");?></th><th><?=loca("ADM_MSG_BROWSER");?></th></tr>
 
 <?php
     $rows = dbrows ($result);
@@ -54,9 +55,9 @@ function Admin_Errors ()
 <tr><th colspan="4" style='padding:0px 105px;'></th></tr>
 <tr><th colspan="4">
 <select name="deletemessages">
-<option value="deletemarked">Удалить выделенные сообщения</option> 
-<option value="deleteall">Удалить все сообщения</option> 
-</select><input type="submit" value="ok" /></th></tr>
+<option value="deletemarked"><?=loca("MSG_DELETE_MARKED");?></option> 
+<option value="deleteall"><?=loca("MSG_DELETE_ALL");?></option> 
+</select><input type="submit" value="<?=loca("ADM_MSG_SUBMIT");?>" /></th></tr>
 <tr><td colspan="4"><center>     </center></td></tr>
 </form>
 </table>

@@ -1,13 +1,14 @@
 <?php
 
-// ========================================================================================
-// Текущие полёты игроков, а также логи полётов
+// Админка: Текущие полёты игроков, а также логи полётов
 
 function Admin_Fleetlogs ()
 {
     global $session;
     global $db_prefix;
     global $GlobalUser;
+
+    $big_fleet_points = 100000000;      // Если флот больше указанного количества очков, то он подсвечивается особым образом ("большой").
 
     $now = time ();
 
@@ -55,7 +56,7 @@ function Admin_Fleetlogs ()
     AdminPanel();
 
     echo "<table>\n";
-    echo "<tr><td class=c>N</td> <td class=c>Таймер</td> <td class=c>Задание</td> <td class=c>Отправлен</td> <td class=c>Прибывает</td><td class=c>Время полёта</td> <td class=c>Старт</td> <td class=c>Цель</td> <td class=c>Флот</td> <td class=c>Груз</td> <td class=c>Топливо</td> <td class=c>САБ</td> <td class=c colspan=3>Приказ</td> </tr>\n";
+    echo "<tr><td class=c>N</td> <td class=c>".loca("ADM_FLOGS_TIMER")."</td> <td class=c>".loca("ADM_FLOGS_ORDER")."</td> <td class=c>".loca("ADM_FLOGS_SEND_TIME")."</td> <td class=c>".loca("ADM_FLOGS_ARRIVE_TIME")."</td><td class=c>".loca("ADM_FLOGS_FLIGHT_TIME")."</td> <td class=c>".loca("ADM_FLOGS_START")."</td> <td class=c>".loca("ADM_FLOGS_TARGET")."</td> <td class=c>".loca("ADM_FLOGS_FLEET")."</td> <td class=c>".loca("ADM_FLOGS_CARGO")."</td> <td class=c>".loca("ADM_FLOGS_FUEL")."</td> <td class=c>".loca("ADM_FLOGS_ACS")."</td> <td class=c colspan=3>".loca("ADM_FLOGS_ACTION")."</td> </tr>\n";
 
     while ($rows--)
     {
@@ -66,7 +67,7 @@ function Admin_Fleetlogs ()
         $points = $fleet_price['points'];
         $fpoints = $fleet_price['fpoints'];
         $style = "";
-        if ( $points >= 100000000 ) {
+        if ( $points >= $big_fleet_points ) {
             if ( $fleet_obj['mission'] <= 2 ) $style = " style=\"background-color: FireBrick;\" ";
             else $style = " style=\"background-color: DarkGreen;\" ";
         }
@@ -125,9 +126,9 @@ function Admin_Fleetlogs ()
 <?php
     $total = $fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d'];
     if ( $total > 0 ) {
-        echo "М: " . nicenum ($fleet_obj['m']) . "<br>" ;
-        echo "К: " . nicenum ($fleet_obj['k']) . "<br>" ;
-        echo "Д: " . nicenum ($fleet_obj['d']) ;
+        echo loca("METAL") . ": " . nicenum ($fleet_obj['m']) . "<br>" ;
+        echo loca("CRYSTAL") . ": " . nicenum ($fleet_obj['k']) . "<br>" ;
+        echo loca("DEUTERIUM") . ": " . nicenum ($fleet_obj['d']) ;
     }
     else echo "-";
 ?>
