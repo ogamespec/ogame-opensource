@@ -231,6 +231,43 @@ function PhalanxEventList ($planet_id)
         // Не показывать возвращающиеся с целевой планеты флоты.
         if ( ($fleet_obj['mission'] > FTYP_RETURN && $fleet_obj['mission'] < FTYP_ORBITING) && $fleet_obj['target_planet'] == $planet_id ) continue;
 
+        // Для убывающей экспедиции добавить псевдозадание удерживания.
+        // Не показывать чужие флоты.
+        if ( $fleet_obj['mission'] == FTYP_EXPEDITION && $fleet_obj['owner_id'] == $user['player_id'] )
+        {
+            // Время отправления и прибытия
+            $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['deploy_time'];
+
+            // Флот
+            $task[$tasknum]['fleets'] = 1;
+            $task[$tasknum]['fleet'][0] = array ();
+            foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj["ship$gid"];
+            $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
+            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
+            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
+            $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
+            $task[$tasknum]['fleet'][0]['dir'] = 2;
+            $tasknum++;
+        }
+
+        // Для прибывающего задания Держаться добавить псевдозадание удерживания.
+        if ( $fleet_obj['mission'] == FTYP_ACS_HOLD && $fleet_obj['owner_id'] != $user['player_id'] )
+        {
+            // Время отправления и прибытия
+            $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['deploy_time'];
+
+            // Флот
+            $task[$tasknum]['fleets'] = 1;
+            $task[$tasknum]['fleet'][0] = array ();
+            foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj["ship$gid"];
+            $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
+            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
+            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
+            $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
+            $task[$tasknum]['fleet'][0]['dir'] = 2;
+            $tasknum++;
+        }
+
         // Время прибытия
         if ( $fleet_obj['mission'] < FTYP_RETURN && $fleet_obj['start_planet'] == $planet_id ) {
             if ($fleet_obj['mission'] != FTYP_EXPEDITION) $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['flight_time'];
@@ -270,43 +307,6 @@ function PhalanxEventList ($planet_id)
         }
 
         $tasknum++;
-
-        // Для убывающей экспедиции добавить псевдозадание удерживания.
-        // Не показывать чужие флоты.
-        if ( $fleet_obj['mission'] == FTYP_EXPEDITION && $fleet_obj['owner_id'] == $user['player_id'] )
-        {
-            // Время отправления и прибытия
-            $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['deploy_time'];
-
-            // Флот
-            $task[$tasknum]['fleets'] = 1;
-            $task[$tasknum]['fleet'][0] = array ();
-            foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj["ship$gid"];
-            $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
-            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
-            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
-            $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
-            $task[$tasknum]['fleet'][0]['dir'] = 2;
-            $tasknum++;
-        }
-
-        // Для прибывающего задания Держаться добавить псевдозадание удерживания.
-        if ( $fleet_obj['mission'] == FTYP_ACS_HOLD && $fleet_obj['owner_id'] != $user['player_id'] )
-        {
-            // Время отправления и прибытия
-            $task[$tasknum]['end_time'] = $queue['end'] + $fleet_obj['deploy_time'];
-
-            // Флот
-            $task[$tasknum]['fleets'] = 1;
-            $task[$tasknum]['fleet'][0] = array ();
-            foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj["ship$gid"];
-            $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
-            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
-            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
-            $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
-            $task[$tasknum]['fleet'][0]['dir'] = 2;
-            $tasknum++;
-        }
 
         // Для убывающих или удерживаемых экспедиций добавить псевдозадание возврата.
         if ( ($fleet_obj['mission'] == FTYP_EXPEDITION || $fleet_obj['mission'] == (FTYP_ORBITING+FTYP_EXPEDITION) ) && $fleet_obj['owner_id'] == $user['player_id'] )

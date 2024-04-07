@@ -2,11 +2,11 @@
 
 // Создание списка событий Обзора.
 
-function OverFleet ($fleet, $summary, $mission)
+function OverFleet ($fleet, $summary, $mission, $acs=false)
 {
     global $GlobalUser;
     $level = $GlobalUser['r106'];
-    if ( $fleet['owner_id'] == $GlobalUser['player_id'] ) $level = 99;
+    if ( $fleet['owner_id'] == $GlobalUser['player_id'] || $acs ) $level = 99;
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $sum = 0;
     $res = "";
@@ -33,11 +33,11 @@ function OverFleet ($fleet, $summary, $mission)
     return $res;
 }
 
-function TitleFleet ($fleet, $summary)
+function TitleFleet ($fleet, $summary, $acs=false)
 {
     global $GlobalUser;
     $level = $GlobalUser['r106'];
-    if ( $fleet['owner_id'] == $GlobalUser['player_id'] ) $level = 99;
+    if ( $fleet['owner_id'] == $GlobalUser['player_id'] || $acs ) $level = 99;
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $sum = 0;
     $res = "";
@@ -170,10 +170,10 @@ function FleetSpan ( $fleet_entry )
         else if ($dir == 2) echo "<span class='holding ownhold'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownhold"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
             va(loca("EVENT_HOLD_FROM_ONTO"), PlanetFrom($origin, "ownhold"), PlanetFrom($target, "ownhold")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownhold",loca("EVENT_M_HOLD"))."</span>";
-        else if ($dir == 0x20) echo "<span class='flight hold'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"hold"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
+        else if ($dir == 0x20) echo "<span class='flight hold'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"hold",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
             va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "hold"), PlanetTo($target, "hold")).
             ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_HOLD")."</span></span>";
-        else if ($dir == 0x22) echo "<span class='holding hold'>".va(loca("EVENT_FLEET_HOLD"),PlayerDetails($owner),OverFleet($fleet,1,"hold"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
+        else if ($dir == 0x22) echo "<span class='holding hold'>".va(loca("EVENT_FLEET_HOLD"),PlayerDetails($owner),OverFleet($fleet,1,"hold",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
             va(loca("EVENT_FROM_TO_ORBIT"), PlanetFrom($origin, "hold"), PlanetFrom($target, "hold")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_HOLD")."</span>";
     }
@@ -297,39 +297,8 @@ function EventList ()
     {
         $queue = dbarray ($tasklist);
 
-        // Время отправления и прибытия
-        $task[$tasknum]['start_time'] = $queue['start'];
-        $task[$tasknum]['end_time'] = $queue['end'];
-
         $fleet_obj = LoadFleet ( $queue['sub_id'] );
         if ( $fleet_obj['union_id'] > 0 ) continue;        // Союзные флоты собираются отдельно
-
-        // Флот
-        $task[$tasknum]['fleets'] = 1;
-        $task[$tasknum]['fleet'][0] = array ();
-        foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj["ship$gid"];
-        $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
-        $task[$tasknum]['fleet'][0]['m'] = $fleet_obj['m'];
-        $task[$tasknum]['fleet'][0]['k'] = $fleet_obj['k'];
-        $task[$tasknum]['fleet'][0]['d'] = $fleet_obj['d'];
-        if ( $fleet_obj['mission'] < FTYP_RETURN || $fleet_obj['mission'] > FTYP_ORBITING ) {
-            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
-            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
-        }
-        else
-        {
-            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['target_planet'];
-            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['start_planet'];
-        }
-        $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
-        if ($fleet_obj['mission'] == FTYP_MISSILE)
-        {
-            $task[$tasknum]['fleet'][0]['ipm_amount'] = $fleet_obj['ipm_amount'];
-            $task[$tasknum]['fleet'][0]['ipm_target'] = $fleet_obj['ipm_target'];
-        }
-        GetDirectionAssignment ($fleet_obj, $task[$tasknum]['fleet'][0]['dir'], $task[$tasknum]['fleet'][0]['assign'] );
-
-        $tasknum++;
 
         // Для убывающей экспедиции или держаться добавить псевдозадание удерживания.
         // Не показывать чужие флоты.
@@ -373,6 +342,37 @@ function EventList ()
             $task[$tasknum]['fleet'][0]['assign'] = 2;
             $tasknum++;
         }
+
+        // Время отправления и прибытия
+        $task[$tasknum]['start_time'] = $queue['start'];
+        $task[$tasknum]['end_time'] = $queue['end'];
+
+        // Флот
+        $task[$tasknum]['fleets'] = 1;
+        $task[$tasknum]['fleet'][0] = array ();
+        foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj["ship$gid"];
+        $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
+        $task[$tasknum]['fleet'][0]['m'] = $fleet_obj['m'];
+        $task[$tasknum]['fleet'][0]['k'] = $fleet_obj['k'];
+        $task[$tasknum]['fleet'][0]['d'] = $fleet_obj['d'];
+        if ( $fleet_obj['mission'] < FTYP_RETURN || $fleet_obj['mission'] > FTYP_ORBITING ) {
+            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
+            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
+        }
+        else
+        {
+            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['target_planet'];
+            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['start_planet'];
+        }
+        $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
+        if ($fleet_obj['mission'] == FTYP_MISSILE)
+        {
+            $task[$tasknum]['fleet'][0]['ipm_amount'] = $fleet_obj['ipm_amount'];
+            $task[$tasknum]['fleet'][0]['ipm_target'] = $fleet_obj['ipm_target'];
+        }
+        GetDirectionAssignment ($fleet_obj, $task[$tasknum]['fleet'][0]['dir'], $task[$tasknum]['fleet'][0]['assign'] );
+
+        $tasknum++;
 
         // Для убывающих или удерживаемых флотов добавить псевдозадание возврата.
         // Не показывать возвраты чужих флотов, задание Оставить и Ракетную атаку.
