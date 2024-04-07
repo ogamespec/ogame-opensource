@@ -182,8 +182,6 @@ function CreateUser ( $name, $pass, $email, $bot=false)
     $md = md5 ($pass . $db_secret);
     $ack = md5(time ().$db_secret);
 
-    error_reporting ( E_ALL );
-
     // Увеличить счетчик пользователей во вселенной.
     $query = "SELECT * FROM ".$db_prefix."uni".";";
     $result = dbquery ($query);
@@ -224,9 +222,6 @@ function CreateUser ( $name, $pass, $email, $bot=false)
         if ( !localhost($ip) ) SendGreetingsMail ( $origname, $pass, $email, $ack);
         SendGreetingsMessage ( $id);
     }
-
-    // Активировать Командира на 9999 дней.
-    //RecruitOfficer ( $id, 'CommanderOff', 9999 * 24 * 60 * 60 );
 
     // Удалить неактивированного пользователя через 3 дня.
 
