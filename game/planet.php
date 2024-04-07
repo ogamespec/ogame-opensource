@@ -64,12 +64,15 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     $result = dbquery ($query);
     if ( dbrows ($result) != 0 ) return 0;
 
+    $user = LoadUser ($owner_id);
+    loca_add ("common", $user['lang']);
+
     // Название планеты.
-    if ($moon) $name = loca("MOON");
+    if ($moon) $name = loca_lang ("MOON", $user['lang']);
     else
     {
-        if ($colony) $name = loca("PLANET_COLONY");
-        else $name = loca("PLANET_HOME");
+        if ($colony) $name = loca_lang ("PLANET_COLONY", $user['lang']);
+        else $name = loca_lang ("PLANET_HOME", $user['lang']);
     }
 
     // Тип планеты.
