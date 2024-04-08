@@ -602,10 +602,13 @@ function GetHoldingFleetsCount ($planet_id)
     return dbrows ($result);
 }
 
-// Проверить можно ли отправить флот игроку на удержание на планету (одновременно на планете могут удерживать свои флоты не более XX игроков)
-function CanStandHold ( $planet_id, $player_id )
+// Проверить можно ли отправить флот игроку на удержание на планету (одновременно на планете могут удерживать свои флоты не более `maxhold_users` игроков)
+function CanStandHold ( $planet_id, $player_id, $maxhold_users )
 {
-    return true;
+    global $db_prefix;
+    $query = "SELECT owner_id FROM ".$db_prefix."fleet WHERE (mission = ".FTYP_ACS_HOLD." OR mission = ".(FTYP_ACS_HOLD+FTYP_ORBITING).") AND target_planet = $planet_id;";
+    $result = dbquery ($query);
+    return dbrows ($result) < $maxhold_users;
 }
 
 function HoldingArrive ($queue, $fleet_obj, $fleet, $origin, $target)

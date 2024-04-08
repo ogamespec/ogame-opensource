@@ -232,7 +232,7 @@ switch ( $order )
         if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( loca("FLEET_ERR_NOOB") );
         if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
         if ( GetHoldingFleetsCount ($target['planet_id']) >= $maxhold_fleets ) FleetError ( va(loca("FLEET_ERR_HOLD_FLEET_LIMIT"), $maxhold_fleets));
-        if ( ! CanStandHold ( $target['planet_id'], $origin['owner_id'] ) ) FleetError ( va(loca("FLEET_ERR_HOLD_PLAYER_LIMIT"), $maxhold_users));
+        if ( ! CanStandHold ( $target['planet_id'], $origin['owner_id'], $maxhold_users ) ) FleetError ( va(loca("FLEET_ERR_HOLD_PLAYER_LIMIT"), $maxhold_users));
         if ( ! ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) FleetError (loca("FLEET_ERR_HOLD_ALLY"));
         break;
 
