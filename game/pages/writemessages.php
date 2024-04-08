@@ -1,11 +1,11 @@
 <?php
 
-// Написать сообщение игроку.
+// Write private message to a player.
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "messages", $GlobalUser['lang'] );
 
-// Ограничение на количество символов.
+// Character limit.
 $MAXCHARS = 2000;
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], intval($_GET['cp']));
@@ -28,7 +28,7 @@ function SendNotActivated ()
 
     loca_add ("reg", $GlobalUser['lang']);
 
-    // Частично повторяет метод Error из debug.php, но без отгрузки игрока.
+    // Partially replicates the Error method from debug.php, but without unloading the player.
     $text = loca("REG_NOT_ACTIVATED_MESSAGE");
     $now = time ();
     $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], $text, $now );
@@ -62,12 +62,22 @@ $home = GetPlanet ( $user['hplanetid']);
 $ownhome = GetPlanet ( $GlobalUser['hplanetid']);
 $write_error = "";
 
-// Обработать POST-запрос.
+$betreff = null;
+if (key_exists('betreff', $_REQUEST)) {
+    $betreff = $_REQUEST['betreff'];
+    // Slam the repeating Re's
+    $betreff = str_replace ("Re:", "", $betreff);
+    $betreff = "Re:" . $betreff;
+}
+
+if (empty($betreff)) $betreff = loca("WRITE_MSG_DEFAULT_SUBJ");
+
+// Process POST request.
 if ( key_exists ('gesendet', $_GET) )
 {
     if ( $_GET['gesendet'] == 1)
     {
-        // Проверить активацию аккаунта.
+        // Verify account activation.
         if ( !$GlobalUser['validated'])
         {
             ob_clean ();
@@ -76,7 +86,7 @@ if ( key_exists ('gesendet', $_GET) )
             exit ();
         }
 
-        $subj = $_POST['betreff'];
+        $subj = $betreff;
         $text = $_POST['text'];
         if ($subj === "") $write_error = "<center><font color=#FF0000>".loca("WRITE_MSG_ERROR_NO_SUBJ")."</font><br/><br/></center>\n";
         else if ($text === "") $write_error .= "<center><font color=#FF0000>".loca("WRITE_MSG_ERROR_NO_BODY")."</font><br/><br/></center>\n";
@@ -90,8 +100,8 @@ if ( key_exists ('gesendet', $_GET) )
             $text = str_replace ( '\`', "&lsquo;", $text );
 
             $from = $GlobalUser['oname'] . " <a href=\"index.php?page=galaxy&galaxy=".$ownhome['g']."&system=".$ownhome['s']."&position=".$ownhome['p']."&session={PUBLIC_SESSION}\">[".$ownhome['g'].":".$ownhome['s'].":".$ownhome['p']."]</a>\n";
-            $subj = $subj . " <a href=\"index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=".$GlobalUser['player_id']."&re=1&betreff=Re:".$subj."\">\n"
-                       . "<img border=\"0\" alt=\"Ответить\" src=\"".$skin."img/m.gif\" /></a>\n";            
+            $subj = $subj . " <a href=\"index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=".$GlobalUser['player_id']."&re=1&betreff=".$subj."\">\n"
+                       . "<img border=\"0\" alt=\"".loca("WRITE_MSG_ALT_REPLY")."\" src=\"".$skin."img/m.gif\" /></a>\n";
             SendMessage ( $user['player_id'], $from, $subj, $text, MTYP_PM);
             $write_error = "<center><font color=#00FF00>".loca("WRITE_MSG_SUCCESS")."</font><br/></center>\n";
         }
@@ -106,7 +116,7 @@ echo "<form action=\"index.php?page=writemessages&session=".$_GET['session']."&g
 echo "<table width=\"519\">\n\n";
 echo "<tr><td class=\"c\" colspan=\"2\">".loca("WRITE_MSG_WRITE")."</td></tr>\n";
 echo "<tr><th>".loca("WRITE_MSG_USER")."</th><th><input type=\"text\" name=\"to\" size=\"40\" value=\"".$user['oname']." [".$home['g'].":".$home['s'].":".$home['p']."]\" /></th></tr>\n";
-echo "<tr><th>".loca("WRITE_MSG_SUBJ")."</th><th><input type=\"text\" name=\"betreff\" size=\"40\" maxlength=\"40\" value=\"".loca("WRITE_MSG_DEFAULT_SUBJ")."\" /></th></tr>\n";
+echo "<tr><th>".loca("WRITE_MSG_SUBJ")."</th><th><input type=\"text\" name=\"betreff\" size=\"40\" maxlength=\"40\" value=\"".$betreff."\" /></th></tr>\n";
 echo "<tr>\n";
 echo "<th>".va(loca("WRITE_MSG_CHAR_COUNT"), "<span id=\"cntChars\">0</span>", $MAXCHARS)."</th>\n";
 echo "<th><textarea name=\"text\" cols=\"40\" rows=\"10\" size=\"100\" onkeyup=\"javascript:cntchar($MAXCHARS)\"></textarea></th>\n";

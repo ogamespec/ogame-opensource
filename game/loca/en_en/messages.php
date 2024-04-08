@@ -45,5 +45,6 @@ $LOCA["en"]["WRITE_MSG_SUBJ"] = "Subject";
 $LOCA["en"]["WRITE_MSG_DEFAULT_SUBJ"] = "No Subject";
 $LOCA["en"]["WRITE_MSG_CHAR_COUNT"] = " Message(#1 / #2 characters) ";
 $LOCA["en"]["WRITE_MSG_SUBMIT"] = "Send";
+$LOCA["en"]["WRITE_MSG_ALT_REPLY"] = "Reply";
 
 ?>

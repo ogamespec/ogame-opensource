@@ -45,5 +45,6 @@ $LOCA["fr"]["WRITE_MSG_SUBJ"] = "Тема";
 $LOCA["fr"]["WRITE_MSG_DEFAULT_SUBJ"] = "Без темы";
 $LOCA["fr"]["WRITE_MSG_CHAR_COUNT"] = " Сообщение(#1 / #2 символов) ";
 $LOCA["fr"]["WRITE_MSG_SUBMIT"] = "Отправить";
+$LOCA["fr"]["WRITE_MSG_ALT_REPLY"] = "Réponse";
 
 ?>

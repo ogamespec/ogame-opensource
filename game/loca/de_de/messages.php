@@ -45,5 +45,6 @@ $LOCA["de"]["WRITE_MSG_SUBJ"] = "Betreff";
 $LOCA["de"]["WRITE_MSG_DEFAULT_SUBJ"] = "Kein Betreff";
 $LOCA["de"]["WRITE_MSG_CHAR_COUNT"] = "Nachricht (#1 / #2 Zeichen)";
 $LOCA["de"]["WRITE_MSG_SUBMIT"] = "Senden";
+$LOCA["de"]["WRITE_MSG_ALT_REPLY"] = "Antwort";
 
 ?>
