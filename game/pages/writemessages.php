@@ -62,15 +62,7 @@ $home = GetPlanet ( $user['hplanetid']);
 $ownhome = GetPlanet ( $GlobalUser['hplanetid']);
 $write_error = "";
 
-$betreff = null;
-if (key_exists('betreff', $_REQUEST)) {
-    $betreff = $_REQUEST['betreff'];
-    // Slam the repeating Re's
-    $betreff = str_replace ("Re:", "", $betreff);
-    $betreff = "Re:" . $betreff;
-}
-
-if (empty($betreff)) $betreff = loca("WRITE_MSG_DEFAULT_SUBJ");
+$betreff = key_exists('betreff', $_REQUEST) ? $_REQUEST['betreff'] : loca("WRITE_MSG_DEFAULT_SUBJ");
 
 // Process POST request.
 if ( key_exists ('gesendet', $_GET) )
@@ -86,8 +78,9 @@ if ( key_exists ('gesendet', $_GET) )
             exit ();
         }
 
-        $subj = $betreff;
+        $subj = $_POST['betreff'];
         $text = $_POST['text'];
+        $betreff = $subj;
         if ($subj === "") $write_error = "<center><font color=#FF0000>".loca("WRITE_MSG_ERROR_NO_SUBJ")."</font><br/><br/></center>\n";
         else if ($text === "") $write_error .= "<center><font color=#FF0000>".loca("WRITE_MSG_ERROR_NO_BODY")."</font><br/><br/></center>\n";
         else
@@ -100,7 +93,7 @@ if ( key_exists ('gesendet', $_GET) )
             $text = str_replace ( '\`', "&lsquo;", $text );
 
             $from = $GlobalUser['oname'] . " <a href=\"index.php?page=galaxy&galaxy=".$ownhome['g']."&system=".$ownhome['s']."&position=".$ownhome['p']."&session={PUBLIC_SESSION}\">[".$ownhome['g'].":".$ownhome['s'].":".$ownhome['p']."]</a>\n";
-            $subj = $subj . " <a href=\"index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=".$GlobalUser['player_id']."&re=1&betreff=".$subj."\">\n"
+            $subj = $subj . " <a href=\"index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=".$GlobalUser['player_id']."&re=1&betreff=Re:".$subj."\">\n"
                        . "<img border=\"0\" alt=\"".loca("WRITE_MSG_ALT_REPLY")."\" src=\"".$skin."img/m.gif\" /></a>\n";
             SendMessage ( $user['player_id'], $from, $subj, $text, MTYP_PM);
             $write_error = "<center><font color=#00FF00>".loca("WRITE_MSG_SUCCESS")."</font><br/></center>\n";
