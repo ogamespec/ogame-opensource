@@ -1,0 +1,972 @@
+
+<html>
+ <head>
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+
+  <script language="JavaScript">var session="c0530a2e76bc";</script>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" href="css/combox.css">
+<link rel="stylesheet" type="text/css" href="evolution/formate.css" />
+
+<title>Uni20 OGame</title>
+
+  <script src="js/utilities.js" type="text/javascript"></script>
+  <script language="JavaScript">
+  </script>
+<script type="text/javascript" src="js/overLib/overlib.js"></script>
+<!-- HEADER -->
+
+<script language="JavaScript">
+function onBodyLoad() {
+    window.setTimeout("reloadImages()", 100);
+}
+
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != "")) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script>
+
+</head>
+<body style="overflow: hidden;" onload="onBodyLoad();" onunload="" >
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<div id='header_top'><center>
+<table class='header'>
+<tr class='header' >
+<td class='header' style='width:5;' >
+      <table class='header'>
+    <tr class='header'>
+     <td class='header'><img src="evolution/planeten/small/s_wasserplanet06.jpg" width="50" height="50"></td>
+     <td class='header'>
+      <table class='header'>
+          <select size="1" onchange="haha(this)">
+                                                  <option value="/game/index.php?page=pranger&session=c0530a2e76bc&cp=1159037&mode=&gid=&messageziel=&re=0" >Kolonie                  <a href="index.php?page=galaxy&galaxy=1&system=140&position=14&session=c0530a2e76bc" >[1:140:14]</a></option>
+                                                      <option value="/game/index.php?page=pranger&session=c0530a2e76bc&cp=1146205&mode=&gid=&messageziel=&re=0" >Kolonie [B]                  <a href="index.php?page=galaxy&galaxy=1&system=240&position=10&session=c0530a2e76bc" >[1:240:10]</a></option>
+                                                      <option value="/game/index.php?page=pranger&session=c0530a2e76bc&cp=1135279&mode=&gid=&messageziel=&re=0" selected>Erato                <a href="index.php?page=galaxy&galaxy=1&system=240&position=11&session=c0530a2e76bc" >[1:240:11]</a></option>
+                                                      <option value="/game/index.php?page=pranger&session=c0530a2e76bc&cp=1164909&mode=&gid=&messageziel=&re=0" >Kolonie                  <a href="index.php?page=galaxy&galaxy=1&system=350&position=7&session=c0530a2e76bc" >[1:350:7]</a></option>
+                                                      <option value="/game/index.php?page=pranger&session=c0530a2e76bc&cp=1158360&mode=&gid=&messageziel=&re=0" >Kolonie                  <a href="index.php?page=galaxy&galaxy=2&system=150&position=4&session=c0530a2e76bc" >[2:150:4]</a></option>
+                                                      <option value="/game/index.php?page=pranger&session=c0530a2e76bc&cp=1143901&mode=&gid=&messageziel=&re=0" >Kolonie                  <a href="index.php?page=galaxy&galaxy=2&system=240&position=6&session=c0530a2e76bc" >[2:240:6]</a></option>
+                                                      <option value="/game/index.php?page=pranger&session=c0530a2e76bc&cp=1146574&mode=&gid=&messageziel=&re=0" >Kolonie [B]                  <a href="index.php?page=galaxy&galaxy=2&system=240&position=7&session=c0530a2e76bc" >[2:240:7]</a></option>
+                                                      <option value="/game/index.php?page=pranger&session=c0530a2e76bc&cp=1147456&mode=&gid=&messageziel=&re=0" >Kolonie                  <a href="index.php?page=galaxy&galaxy=3&system=256&position=5&session=c0530a2e76bc" >[3:256:5]</a></option>
+                                                      <option value="/game/index.php?page=pranger&session=c0530a2e76bc&cp=1148597&mode=&gid=&messageziel=&re=0" >Kolonie                  <a href="index.php?page=galaxy&galaxy=3&system=256&position=6&session=c0530a2e76bc" >[3:256:6]</a></option>
+                      </select>
+      </table>
+     </td>
+    </tr>
+  </table></td>
+<td class='header'>   <table class='header' id='resources' border="0" cellspacing="0" cellpadding="0" padding-right='30' >
+        <tr class='header'>
+        
+             <td align="center" width="85" class='header'>
+              <img border="0" src="evolution/images/metall.gif" width="42" height="22">
+             </td>
+             
+             <td align="center" width="85" class='header'>
+              <img border="0" src="evolution/images/kristall.gif" width="42" height="22">
+             </td>
+             
+             <td align="center" width="85" class='header'>
+              <img border="0" src="evolution/images/deuterium.gif" width="42" height="22">
+             </td>
+                     
+             <td align="center" width="85" class='header'>
+             <a href=index.php?page=micropayment&session=c0530a2e76bc>
+              <img border="0" src="img/dm_klein_2.jpg" width="42" height="22" title="Dunkle Materie"></a>
+             </td>       
+                         
+             <td align="center" width="85" class='header'>
+              <img border="0" src="evolution/images/energie.gif" width="42" height="22">
+             </td>
+        </tr>
+
+        <tr class='header'>
+         <td align="center" class='header' width="85"><i><b><font color="#ffffff">Metall</font></b></i></td>
+         <td align="center" class='header' width="85"><i><b><font color="#ffffff">Kristall</font></b></i></td>
+         <td align="center" class='header' width="85"><i><b><font color="#ffffff">Deuterium</font></b></i></td>
+                    <td align="center" class='header' width="85"><i><b><font color="#ffffff">Dunkle Materie</font></b></i></td> 
+              
+         <td align="center" class='header' width="85"><i><b><font color="#ffffff">Energie</font></b></i></td>
+        </tr>
+        <tr class='header'>
+         <td align="center" class='header' width="90"><font >759.216</font></td>
+         <td align="center" class='header' width="90"><font >461.357</font></td>
+         <td align="center" class='header' width="90"><font >214.684</font></td>
+                     <td align="center" class='header' width="90"><font color="#FFFFFF">0</font></DIV></td>
+            
+         <td align="center" class='header' width="90"><font >168</font>/168</td>
+        </tr>
+   </table></td>
+    <td class='header'>
+<table class='header' align=left>
+     <tr class='header'>
+
+
+     <td align="center" width="35" class='header'>
+         <a href='index.php?page=micropayment&session=c0530a2e76bc&session=c0530a2e76bc' accesskey="o">
+      <img border="0" src="img/commander_ikon_un.gif" width="32" height="32" alt="OGame Commander"
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>OGame Commander</font><br><br><a href=index.php?page=micropayment&session=c0530a2e76bc&session=c0530a2e76bc><font size=1 color=lime>Jetzt bestellen!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+      </a>
+     </td>
+     <td align="center" width="35" class='header'>
+      <a href='index.php?page=micropayment&session=c0530a2e76bc&session=c0530a2e76bc' accesskey="o">
+      <img border="0" src="img/admiral_ikon_un.gif" width="32" height="32" alt="Flottenadmiral"
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>Flottenadmiral</font><br><font size=1 color=skyblue>&amp;nbsp;Max. Flottenanzahl +2</font><br><br><a href=index.php?page=micropayment&session=c0530a2e76bc&session=c0530a2e76bc><font size=1 color=lime>Jetzt bestellen!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+
+      </a>
+     </td>
+     <td align="center" width="35" class='header'>
+      <a href='index.php?page=micropayment&session=c0530a2e76bc&session=c0530a2e76bc' accesskey="o">
+      <img border="0" src="img/ingenieur_ikon_un.gif" width="32" height="32" alt="Ingenieur"
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>Ingenieur</font><br><font size=1 color=skyblue>Halbiert Verluste an Verteidigungsanlagen,&lt;br&gt;&amp;nbsp;+10% Energieproduktion</font><br><br><a href=index.php?page=micropayment&session=c0530a2e76bc&session=c0530a2e76bc><font size=1 color=lime>Jetzt bestellen!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+      </a>
+     </td>
+     <td align="center" width="35" class='header'>
+      <a href='index.php?page=micropayment&session=c0530a2e76bc&session=c0530a2e76bc' accesskey="o">
+      <img border="0" src="img/geologe_ikon_un.gif" width="32" height="32" alt="Geologe"
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>Geologe</font><br><font size=1 color=skyblue>+10% Minenertrag</font><br><br><a href=index.php?page=micropayment&session=c0530a2e76bc&session=c0530a2e76bc><font size=1 color=lime>Jetzt bestellen!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+      </a>
+     </td>
+     <td align="center" width="35" class='header'>
+      <a href='index.php?page=micropayment&session=c0530a2e76bc&session=c0530a2e76bc' accesskey="o">
+      <img border="0" src="img/technokrat_ikon_un.gif" width="32" height="32" alt="Technokrat" 
+        onmouseover="return overlib('<center><font size=1 color=white><b><br>Technokrat</font><br><font size=1 color=skyblue>+2 Spionagestufen,&lt;br&gt;25% weniger Forschungszeit</font><br><br><a href=index.php?page=micropayment&session=c0530a2e76bc&session=c0530a2e76bc><font size=1 color=lime>Jetzt bestellen!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout="return nd();">
+      </a>
+     </td>
+     <td align="center" class='header'></td>
+    </tr>
+</table></td>
+</tr>
+</table>
+</div><!-- END HEADER -->
+
+<!-- LEFTMENU -->
+
+    <div id='leftmenu'>
+    
+<script language="JavaScript">
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+
+<script language="JavaScript">
+function popUp(URL) {
+  day = new Date();
+  id = day.getTime();
+  eval("page" + id + " = window.open(URL, '" + id + "', 'toolbar=1,scrollbars=1,location=1,statusbar=1,menubar=0,resizable=1,width=120,height=60,alwaysLowered=Yes');");
+}
+
+</script>
+
+
+<center>
+
+<div id='menu'>
+<a href="mailto:barrierefrei@ogame.de" title="Blindenspezifische Probleme bitte an barrierefrei@ogame.de." style="width:1px;"></a>
+<p style="width:110px;"><NOBR>Universum 20 (<a href="index.php?page=changelog&session=c0530a2e76bc">v 0.84</a>)</NOBR></p>
+<table width="110" cellspacing="0" cellpadding="0">
+ <tr>
+  <td><img src="evolution/gfx/ogame-produktion.jpg" width="110" height="40" /></td>
+ </tr>
+
+    
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=c0530a2e76bc' accesskey="u">Ubersicht</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=b_building&session=c0530a2e76bc' accesskey="g">Gebaude</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=c0530a2e76bc' accesskey="r">Rohstoffe</a>
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+  <td>
+   <div align="center" ><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=c0530a2e76bc' accesskey=""><font color='FF8900'>Handler</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+ </tr>
+ 
+  
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=c0530a2e76bc&mode=Forschung' accesskey="f">Forschung</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=c0530a2e76bc&mode=Flotte' accesskey="w">Schiffswerft</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=c0530a2e76bc&mode=Flotte' accesskey="l">Flotte</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=c0530a2e76bc' accesskey="t">Technik</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=c0530a2e76bc&no_header=1' accesskey="x">Galaxie</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=c0530a2e76bc&mode=Verteidigung' accesskey="v">Verteidigung</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src="evolution/gfx/info-help.jpg" width="110" height="19"></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=c0530a2e76bc' accesskey="a">Allianzen</a>
+    </font></div>
+  </td>
+ </tr>
+
+  <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://board.ogame.de" target="_blank" accesskey="1" >Forum</a><!-- external link to board -->
+   </font></div>
+  </td>
+ </tr>
+ 
+
+    <tr>
+       <td align=center>
+       <a id='darkmatter2' style='cursor:pointer; width:110px;'
+         href='index.php?page=micropayment&session=c0530a2e76bc' accesskey="o"><b>Offizierskasino</a></b>
+       </div>
+      </td>
+     </tr>
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+  <a href='index.php?page=statistics&session=c0530a2e76bc' accesskey="k">Statistiken</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=c0530a2e76bc' accesskey="s">Suche</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://tutorial.ogame.de" target="_blank" accesskey="h" >Hilfe</a><!-- external link to ogame tutorial -->
+   </font></div>
+  </td>
+ </tr>
+ 
+ <tr>
+  <td><img src="evolution/gfx/user-menu.jpg" width="110" height="35"></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=messages&dsp=1&session=c0530a2e76bc' accesskey="n">Nachrichten</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=c0530a2e76bc&no_header=1", "Notizen");' accesskey="z">Notizen</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=c0530a2e76bc' accesskey="b">Buddylist</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=c0530a2e76bc' accesskey="e">Einstellungen</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=c0530a2e76bc' accesskey="q">Logout</a>
+    </font></div>
+  </td>
+ </tr>
+
+ 
+ 
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href="http://board.ogame.de/thread.php?threadid=435281" target="_blank">Regeln</a> <!-- external link to rules -->
+   </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+    <a href="http://agb.gameforge.de/index.php?lang=de&art=impress&special=&&f_text=b1daf2&f_text_hover=ffffff&f_text_h=061229&f_text_hr=061229&f_text_hrbg=061229&f_text_hrborder=9EBDE4&f_text_font=arial%2C+arial%2C+arial%2C+sans-serif&f_bg=000000" target="_blank">Impressum</a> <!-- external link to impressum -->
+   </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+
+    </div>
+
+<!-- END LEFTMENU -->
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+  <link rel="stylesheet" type="text/css" href="evolution/formate.css">
+  <link rel="stylesheet" type="text/css" href="http://graphics.ogame-cluster.net/download/use/evolution/formate.css">
+
+
+ </head>
+   <body>
+   <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+  <center>
+   <h1>Ogame Pranger Universum 20</h1>
+   <p>Hier ist aufgelistet, welcher Spieler aus welchem Grund bis wann gesperrt wurde.<br />
+Bitte kontaktiere den sperrenden GameOperator nicht via Email, sondern uber das <a href="http://support.ogame.de/">Ticket System</a> oder direkt im <a href="http://www.onlinegamesnet.net/javaChat.php?game=ogame&cc=de">IRC</a>.</p>
+
+   <table border="0" cellpadding="2" cellspacing="1">
+    <tr height="20">
+     <td class="c">Wann</td>
+     <td class="c">Adminname</td>
+     <td class="c">Spielername</td>
+     <td class="c">Gesperrt bis</td>
+     <td class="c">Grund</td>
+    </tr>
+        <tr height="20">
+     <th>Tue Mar 8 2011 8:34:16 </th>
+
+          <th>
+       diggar     </th>
+     
+     <th>Igelmitgasmaske</th>
+     <th>Fri Jul 23 2038 8:34:16</th>
+     <th>Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Wed Feb 23 2011 17:17:33 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>tomtom</th>
+     <th>Sat Jul 10 2038 17:17:33</th>
+     <th>Gepuschter</th>
+    </tr>
+        <tr height="20">
+     <th>Wed Feb 23 2011 17:17:18 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>jimbob</th>
+     <th>Sat Jul 10 2038 17:17:18</th>
+     <th>Puschen</th>
+    </tr>
+        <tr height="20">
+     <th>Sun Feb 20 2011 13:07:53 </th>
+
+          <th>
+       SuperGameOperator     </th>
+     
+     <th>drmengele</th>
+     <th>Wed Jul 7 2038 13:07:53</th>
+     <th>Nazi</th>
+    </tr>
+        <tr height="20">
+     <th>Sat Feb 12 2011 18:07:50 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Nexus</th>
+     <th>Tue Jun 29 2038 18:07:50</th>
+     <th>Puschen</th>
+    </tr>
+        <tr height="20">
+     <th>Sat Feb 12 2011 18:07:29 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Rasmus</th>
+     <th>Tue Jun 29 2038 18:07:29</th>
+     <th>Puschen</th>
+    </tr>
+        <tr height="20">
+     <th>Sat Feb 12 2011 18:07:12 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Roxy</th>
+     <th>Tue Jun 29 2038 18:07:12</th>
+     <th>Puschen</th>
+    </tr>
+        <tr height="20">
+     <th>Sat Jan 29 2011 8:24:06 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>fickdichduhurensohn</th>
+     <th>Tue Jun 15 2038 8:24:06</th>
+     <th>Nick - Bei mir melden</th>
+    </tr>
+        <tr height="20">
+     <th>Fri Jan 14 2011 18:15:28 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>EOD</th>
+     <th>Sat Jan 15 2011 18:15:28</th>
+     <th>Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Fri Jan 14 2011 18:15:11 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Raiden</th>
+     <th>Sat Jan 15 2011 18:15:11</th>
+     <th>Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Wed Jan 12 2011 18:53:55 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>EOD</th>
+     <th>Thu Jan 13 2011 18:53:55</th>
+     <th>Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Wed Jan 12 2011 11:01:08 </th>
+
+          <th>SYSTEM</th>
+     
+     <th>Redskin</th>
+     <th>Thu Jan 1 1970 1:00:00</th>
+     <th>PAYMENT_OK</th>
+    </tr>
+        <tr height="20">
+     <th>Thu Dec 30 2010 18:01:03 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Xerrik</th>
+     <th>Fri Dec 31 2010 18:01:03</th>
+     <th>Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Tue Dec 21 2010 11:00:34 </th>
+
+          <th>SYSTEM</th>
+     
+     <th>Redskin</th>
+     <th>Sun Dec 20 2015 11:00:34</th>
+     <th>PAYMENT</th>
+    </tr>
+        <tr height="20">
+     <th>Wed Nov 24 2010 18:25:44 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Faulo</th>
+     <th>Thu Nov 25 2010 18:25:44</th>
+     <th>Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Sun Nov 21 2010 9:15:21 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>DoByDaDon</th>
+     <th>Wed Apr 7 2038 9:15:21</th>
+     <th>Multi 2|2</th>
+    </tr>
+        <tr height="20">
+     <th>Sun Nov 21 2010 9:15:00 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>DoBy</th>
+     <th>Wed Apr 7 2038 9:15:00</th>
+     <th>Multi 1|2</th>
+    </tr>
+        <tr height="20">
+     <th>Sun Nov 14 2010 8:34:28 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>BlackShep</th>
+     <th>Wed Mar 31 2038 8:34:28</th>
+     <th>Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Sun Nov 14 2010 8:33:25 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Chriis</th>
+     <th>Mon Nov 15 2010 8:33:25</th>
+     <th>Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Tue Oct 26 2010 18:03:04 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Lockerzzz</th>
+     <th>Wed Oct 27 2010 18:03:04</th>
+     <th>Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Tue Sep 28 2010 16:09:55 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>D.A.N.I</th>
+     <th>Wed Sep 29 2010 16:09:55</th>
+     <th>Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Thu Sep 23 2010 19:04:56 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Sturm_VIP</th>
+     <th>Fri Sep 24 2010 19:04:56</th>
+     <th>Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Tue Sep 21 2010 18:56:51 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Dominic</th>
+     <th>Wed Sep 22 2010 18:56:51</th>
+     <th>Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Mon Sep 20 2010 16:56:49 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Stallratte</th>
+     <th>Mon Sep 20 2010 16:56:49</th>
+     <th>geklart</th>
+    </tr>
+        <tr height="20">
+     <th>Mon Sep 20 2010 16:56:35 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Die Fliege</th>
+     <th>Mon Sep 20 2010 16:56:35</th>
+     <th>geklart</th>
+    </tr>
+        <tr height="20">
+     <th>Mon Sep 20 2010 16:56:26 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Die Fliege</th>
+     <th>Mon Sep 20 2010 16:56:26</th>
+     <th>geklart</th>
+    </tr>
+        <tr height="20">
+     <th>Sat Sep 18 2010 9:38:29 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Die Fliege</th>
+     <th>Tue Feb 2 2038 8:38:29</th>
+     <th>Multi 2/2</th>
+    </tr>
+        <tr height="20">
+     <th>Sat Sep 18 2010 9:38:07 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Stallratte</th>
+     <th>Tue Feb 2 2038 8:38:07</th>
+     <th>Multi 1/2</th>
+    </tr>
+        <tr height="20">
+     <th>Sun Sep 12 2010 20:05:38 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Superboy</th>
+     <th>Mon Sep 13 2010 20:05:38</th>
+     <th>Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Sun Sep 12 2010 20:05:03 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>DuHaMuT</th>
+     <th>Mon Sep 13 2010 20:05:03</th>
+     <th>Fremdsprachige ingames</th>
+    </tr>
+        <tr height="20">
+     <th>Thu Sep 9 2010 20:43:05 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Strohut</th>
+     <th>Thu Sep 9 2010 20:43:05</th>
+     <th>geklart</th>
+    </tr>
+        <tr height="20">
+     <th>Thu Sep 9 2010 8:12:47 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>fick euch nigger</th>
+     <th>Sun Jan 24 2038 7:12:47</th>
+     <th>Bei mir melden</th>
+    </tr>
+        <tr height="20">
+     <th>Wed Sep 8 2010 18:49:31 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>pepe007isteinhuso</th>
+     <th>Sat Jan 23 2038 17:49:31</th>
+     <th>Bei mir melden</th>
+    </tr>
+        <tr height="20">
+     <th>Wed Aug 4 2010 17:18:58 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Silverback</th>
+     <th>Sat Dec 19 2037 16:18:58</th>
+     <th>Multi 2/2</th>
+    </tr>
+        <tr height="20">
+     <th>Wed Aug 4 2010 17:18:44 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>baruch</th>
+     <th>Sat Dec 19 2037 16:18:44</th>
+     <th>Multi 1/2</th>
+    </tr>
+        <tr height="20">
+     <th>Mon Aug 2 2010 11:02:53 </th>
+
+          <th>SYSTEM</th>
+     
+     <th>Darkman</th>
+     <th>Sat Aug 1 2015 11:02:53</th>
+     <th>PAYMENT</th>
+    </tr>
+        <tr height="20">
+     <th>Thu Jul 29 2010 18:38:01 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>adolfhitler</th>
+     <th>Sun Dec 13 2037 17:38:01</th>
+     <th>Nazis unerwunscht</th>
+    </tr>
+        <tr height="20">
+     <th>Fri Jul 23 2010 19:01:50 </th>
+
+          <th>
+       Gameoperator     </th>
+     
+     <th>vaneice</th>
+     <th>Mon Dec 7 2037 18:01:50</th>
+     <th>Pusher</th>
+    </tr>
+        <tr height="20">
+     <th>Fri Jul 23 2010 15:11:55 </th>
+
+          <th>
+       SuperGameOperator     </th>
+     
+     <th>otello</th>
+     <th>Sat Jul 24 2010 15:11:55</th>
+     <th>Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Tue Jul 20 2010 1:00:59 </th>
+
+          <th>
+       SuperGameOperator     </th>
+     
+     <th>Storm vs RD</th>
+     <th>Fri Dec 4 2037 0:00:59</th>
+     <th>Bei mir melden</th>
+    </tr>
+        <tr height="20">
+     <th>Mon Jul 19 2010 15:38:43 </th>
+
+          <th>
+       SuperGameOperator     </th>
+     
+     <th>Don</th>
+     <th>Mon Jul 26 2010 15:38:43</th>
+     <th>Sittingversto?</th>
+    </tr>
+        <tr height="20">
+     <th>Sat Jul 10 2010 22:53:05 </th>
+
+          <th>
+       Gameoperator     </th>
+     
+     <th>Jihad</th>
+     <th>Tue Nov 24 2037 21:53:05</th>
+     <th>Bei mir melden!</th>
+    </tr>
+        <tr height="20">
+     <th>Sat Jul 3 2010 11:27:45 </th>
+
+          <th>
+       Gameoperator     </th>
+     
+     <th>Ocrea</th>
+     <th>Tue Nov 17 2037 10:27:45</th>
+     <th>Multi 4/4</th>
+    </tr>
+        <tr height="20">
+     <th>Sat Jul 3 2010 11:27:21 </th>
+
+          <th>
+       Gameoperator     </th>
+     
+     <th>Leonberger</th>
+     <th>Tue Nov 17 2037 10:27:21</th>
+     <th>Multi 3/4</th>
+    </tr>
+        <tr height="20">
+     <th>Sat Jul 3 2010 11:27:01 </th>
+
+          <th>
+       Gameoperator     </th>
+     
+     <th>UIUAA</th>
+     <th>Tue Nov 17 2037 10:27:01</th>
+     <th>Multi 2/4</th>
+    </tr>
+        <tr height="20">
+     <th>Sat Jul 3 2010 11:25:50 </th>
+
+          <th>
+       Gameoperator     </th>
+     
+     <th>Nukular</th>
+     <th>Tue Nov 17 2037 10:25:50</th>
+     <th>Multi 1/4</th>
+    </tr>
+        <tr height="20">
+     <th>Sun Jun 27 2010 23:42:52 </th>
+
+          <th>
+       Gameoperator     </th>
+     
+     <th>Skywolf</th>
+     <th>Wed Jun 30 2010 23:42:52</th>
+     <th>2.  Beleidigung</th>
+    </tr>
+        <tr height="20">
+     <th>Sat Jun 26 2010 19:16:04 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>burak1</th>
+     <th>Tue Nov 10 2037 18:16:04</th>
+     <th>Multi 2/2</th>
+    </tr>
+        <tr height="20">
+     <th>Sat Jun 26 2010 19:15:49 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>burak</th>
+     <th>Tue Nov 10 2037 18:15:49</th>
+     <th>Multi 1/2</th>
+    </tr>
+        <tr height="20">
+     <th>Fri Jun 25 2010 19:51:40 </th>
+
+          <th>
+       Oceolot     </th>
+     
+     <th>Skywolf</th>
+     <th>Sat Jun 26 2010 19:51:40</th>
+     <th>Beleidigung</th>
+    </tr>
+       <tr>
+   <th colspan="5">
+        <a href="pranger.php?from=50">Nachste 50 >></a>
+      </th>
+   </tr>
+   </table>
+  </center>
+
+ </body>
+</html><br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+
+<div id='messagebox'>
+<center>
+</center>
+</div>
+<div id='errorbox'>
+<center>
+</center>
+</div>
+
+<script>
+headerHeight = 81;
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = "_blank";
+  }
+}
+
+</script>
+<style>
+.layer {
+    z-index:999999999;
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 757px; 
+    height: 475px; 
+    background-color: #040e1e;
+    border: 3px double orange;
+    padding: 0;
+    opacity: .90;
+}
+</style>
+ </body>
+</html>
