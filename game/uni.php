@@ -1,8 +1,8 @@
 <?php
 
-// Управление параметрами вселенной.
+// Managing the parameters of the universe.
 
-// Загрузить Вселенную.
+// Load the Universe.
 function LoadUniverse ()
 {
     global $db_prefix;
@@ -11,7 +11,7 @@ function LoadUniverse ()
     return dbarray ($result);
 }
 
-// Обновить новости.
+// Update News.
 function UpdateNews ($news1, $news2, $days)
 {
     global $db_prefix;
@@ -20,7 +20,7 @@ function UpdateNews ($news1, $news2, $days)
     dbquery ($query);
 }
 
-// Убрать новости.
+// Take out the news.
 function DisableNews ()
 {
     global $db_prefix;
@@ -28,7 +28,7 @@ function DisableNews ()
     dbquery ($query);
 }
 
-// Установить параметры вселенной (все одновременно)
+// Set the parameters of the universe (all at the same time)
 function SetUniParam ($speed, $fspeed, $acs, $fid, $did, $defrepair, $defrepair_delta, $galaxies, $systems, $rapid, $moons, $freeze, $lang, $battle_engine, $php_battle)
 {
     global $db_prefix;
@@ -40,8 +40,8 @@ function SetUniParam ($speed, $fspeed, $acs, $fid, $did, $defrepair, $defrepair_
     $GlobalUni = LoadUniverse ();
 }
 
-// Установить внешние ссылки для пунктов меню: Форум, Дискорд (новое, т.к. форумный формат общения становится всё менее актуальным), Туториал, Правила, О нас.
-// Пустая строка скрывает пункт меню.
+// Set external links for the following menu items: Forum, Discord (new, since the forum format of communication is becoming less and less relevant), Tutorial, Rules, About Us.
+// An empty string hides the menu item.
 function SetExtLinks($ext_board, $ext_discord, $ext_tutorial, $ext_rules, $ext_impressum)
 {
     global $db_prefix;
@@ -53,7 +53,7 @@ function SetExtLinks($ext_board, $ext_discord, $ext_tutorial, $ext_rules, $ext_i
     $GlobalUni = LoadUniverse ();
 }
 
-// Установить максимальное количество пользователей (администраторы и операторы не считаются)
+// Set the maximum number of users (administrators and operators do not count)
 function SetMaxUsers ($maxusers)
 {
     global $db_prefix;
@@ -67,7 +67,7 @@ function SetMaxUsers ($maxusers)
     }
 }
 
-// Сбросить счётчик попыток взлома игры (вызывается во время релогина)
+// Reset game hack attempts counter (called during relogin)
 function ResetHackCounter ()
 {
     global $db_prefix;
@@ -75,7 +75,7 @@ function ResetHackCounter ()
     dbquery ($query);  
 }
 
-// Инкрементировать счётчик попыток взлома игры.
+// Increment the game's hack attempt counter.
 function IncrementHackCounter ()
 {
     global $db_prefix;

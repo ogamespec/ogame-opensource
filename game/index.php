@@ -3,10 +3,10 @@
 //ini_set('display_errors', 1);
 //error_reporting(E_ALL);
 
-// Главный модуль, через который осуществляется доступ к другим страницам.
+// The main module through which other pages are accessed.
 ob_start ();
 
-// Проверить, если файл конфигурации отсутствует - редирект на страницу установки игры.
+// Check if the configuration file is missing - redirect to the game installation page.
 if ( !file_exists ("config.php"))
 {
     echo "<html><head><meta http-equiv='refresh' content='0;url=install.php' /></head><body></body></html>";
@@ -48,16 +48,16 @@ $GlobalUni = LoadUniverse ();
 
 // *****************************************************************************
 
-// Игровые страницы.
+// Game Pages.
 
 if ( key_exists ( 'session', $_GET ) ) {
 
     //
-    // Проверка приватной сессии
+    // Private session check
     //
 
     //
-    // Проверка публичной сессии
+    // Public session check
     //
 
     SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
@@ -80,7 +80,7 @@ loca_add ( "common", $GlobalUser['lang'] );
 loca_add ( "technames", $GlobalUser['lang'] );
 
 //
-// Проверка параметров GET / POST на возможные SQL-инъекции
+// Checking GET / POST parameters for possible SQL injection
 //
 
 if ( $_GET['page'] !== "admin" )
@@ -113,7 +113,7 @@ if ( $_GET['page'] !== "admin" )
 }
 
 //
-// Classic OGame pages
+// Vanilla OGame 0.84 pages
 //
 
 if ( $_GET['page'] === "overview" ) { include "pages/overview.php"; exit(); }

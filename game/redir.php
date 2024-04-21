@@ -1,6 +1,6 @@
 <?php
 
-// Проверить, если файл конфигурации отсутствует - редирект на страницу установки игры.
+// Check if the configuration file is missing - redirect to the game installation page.
 if ( !file_exists ("config.php"))
 {
     echo "<html><head><meta http-equiv='refresh' content='0;url=install.php' /></head><body></body></html>";
@@ -8,8 +8,8 @@ if ( !file_exists ("config.php"))
     exit ();
 }
 
-// Все ссылки из игры наружу проходят через это скрипт.
-// По идее тут могут быть фильтры нежелательных сайтов.
+// All links from the game to the outside go through this script.
+// Supposedly there could be filters for undesirable websites here.
 
 $url = $_REQUEST['url'];
 

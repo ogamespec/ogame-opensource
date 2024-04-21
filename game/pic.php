@@ -3,7 +3,7 @@
 header('Location: '.$_REQUEST['url']);
 die ();
 
-// Скрипт для отображения картинок и проверки их на вредоносное ПО.
+// Script to display pictures and scan them for malware.
 
 if ( !key_exists ('url', $_GET)) die ();
 

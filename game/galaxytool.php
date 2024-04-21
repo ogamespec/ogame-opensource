@@ -1,20 +1,20 @@
 <?php
 
-// Обновление встроенной галабазы.
-// Обновление происходит каждую неделю, после чистки фантомных ПО.
+// Updating the embedded galaxytool.
+// It is updated every week, after the phantom debris cleanup.
 
 function GalaxyToolUpdateGalaxy ()
 {
     global $db_prefix;
 
     $list = array ();
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE type < 20000 AND type <> 10002 ORDER BY planet_id ASC";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE type < ".PTYP_FARSPACE." AND type <> ".PTYP_COLONY_PHANTOM." ORDER BY planet_id ASC";
     $result = dbquery ( $query );
     $rows = dbrows ( $result );
     while ($rows--)
     {
         $planet = dbarray ( $result );
-        if ( $planet['type'] == 10000 && (($planet['m'] + $planet['k']) < 300) ) continue;
+        if ( $planet['type'] == PTYP_DF && (($planet['m'] + $planet['k']) < 300) ) continue;
         $list[ $planet['planet_id'] ] = array ();
         $list[ $planet['planet_id'] ]['g'] = $planet['g'];
         $list[ $planet['planet_id'] ]['s'] = $planet['s'];

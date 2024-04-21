@@ -1,6 +1,6 @@
 <?php
 
-// Работа с базой данных MySQL.
+// Working with MySQL database.
 
 $query_counter = 0;
 $query_log = "";
@@ -77,7 +77,7 @@ function AddDBRow ( $row, $tabname )
 function LockTables ()
 {
     global $db_prefix;
-    $tabs = array ('users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','buildqueue','fleet','union','battledata','fleetlogs','iplogs','pranger','exptab','template','botvars','userlogs','botstrat');
+    $tabs = array ('users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','browse','queue','buildqueue','fleet','union','battledata','fleetlogs','iplogs','pranger','exptab','template','botvars','userlogs','botstrat','mods');
     $query = "LOCK TABLES ".$db_prefix."uni WRITE";
     foreach ( $tabs as $i=>$name ) 
     {
