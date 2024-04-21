@@ -1,85 +1,85 @@
 <?php
 
-// Управление флотами.
+// Fleet Management.
 
 /*
-fleet_id: Порядковый номер флота в таблице (INT AUTO_INCREMENT PRIMARY KEY)
-owner_id: Номер пользователя, которому принадлежит флот (INT)
-union_id: Номер союза, в котором летит флот (INT)
-m, k, d: Перевозимый груз (металл/кристалл/дейтерий) (DOUBLE)
-fuel: Загруженное топливо на полёт (дейтерий) (DOUBLE)
-mission: Тип задания (INT)
-start_planet: Старт (INT)
-target_planet: Финиш (INT)
-flight_time: Время полёта в одну сторону в секундах (INT)
-deploy_time: Время удержания флота в секундах (INT)
-ipm_amount: Количество межлпланетных ракет (INT)
-ipm_target: id цели для межпланетных ракет, 0 - все (INT)
-shipXX: количество кораблей каждого типа (INT)
+fleet_id: Ordinal number of the fleet in the table (INT AUTO_INCREMENT PRIMARY KEY)
+owner_id: User number to which the fleet belongs (INT)
+union_id: The number of the union in which the fleet is flying (INT)
+m, k, d: Cargo transported (metal/crystal/deuterium) (DOUBLE)
+fuel: Loaded fuel for flight (deuterium) (DOUBLE)
+mission: Type of mission (INT)
+start_planet: Start (INT)
+target_planet: Target (INT)
+flight_time: One-way flight time in seconds (INT)
+deploy_time: Fleet holding time in seconds (INT)
+ipm_amount: Number of interplanetary missiles (INT)
+ipm_target: target id for interplanetary rockets, 0 - all (INT)
+shipXX: number of ships of each type (INT)
 
-Задания флота оформляются в виде события для глобальной очереди.
+Fleet missions are issued as an events for the global queue.
 
-Отправление флота заключается в отнимании у планеты следующих полей: fXX (флот), m/k/d - ресурсы
-Прибытие флота: добавляет эти поля (или опять отнимает, при атаке), а также генерирует сообщения.
+Sending a fleet consists of taking away the following fields from the planet: fXX (fleet), m/k/d - resources.
+Fleet arrival: adds these fields (or takes them away again, when attacking), and generates messages.
 
-Первые три страницы flottenX подготавливают параметры для страницы flottenversand, которая либо отправляет флот, либо возвращает ошибку.
+The first three pages of flottenX prepare the parameters for the flottenversand page, which either sends the fleet or returns an error.
 
-Одно задание флота может по завершении порождать другое задание, например после достижения Транспорта, создается новое задание - возврат Транспорта.
+One fleet task can spawn another task upon completion, e.g. after reaching Transport, a new task is created - return Transport.
 
-В Обзоре все последующие задания "предсказываются", их нет на самом деле. В меню Флот показано описание заданий приближенное к данным базы данных.
+In Overview, all subsequent missions are "predicted", they are not really there. The Fleet menu shows the description of the missions close to the database data.
 
-Структура таблицы САБов:
-union_id: ID союза (INT PRIMARY KEY)
-fleet_id: ID головного флота САБа (исходной Атаки) (INT)
-name: название союза. по умолчанию: "KV" + число (CHAR(20))
-players: ID приглашенных игроков, через запятую (TEXT)
+The structure of the ACS table:
+union_id: Union ID (INT PRIMARY KEY)
+fleet_id: ID of the ACS's lead fleet (initial Attack = slot 0) (INT)
+name: union name. default: "KV" + number (CHAR(20))
+players: IDs of invited players, separated by commas (TEXT)
 
 */
 
-// Список типов заданий флота
-const FTYP_ATTACK = 1;      // Атака
-const FTYP_ACS_ATTACK = 2;  // Совместная атака
-const FTYP_TRANSPORT = 3;   // Транспорт
-const FTYP_DEPLOY = 4;      // Оставить
-const FTYP_ACS_HOLD = 5;    // Держаться
-const FTYP_SPY = 6;         // Шпионаж
-const FTYP_COLONIZE = 7;    // Колонизировать
-const FTYP_RECYCLE = 8;     // Переработать
-const FTYP_DESTROY = 9;     // Уничтожить
-const FTYP_EXPEDITION = 15; // Экспедиция
-const FTYP_MISSILE = 20;        // Ракетная атака
-const FTYP_ACS_ATTACK_HEAD = 21;    // Атака САБ (паровоз)
-const FTYP_RETURN = 100;            // Флот возвращается (добавить это значение к любой миссии)
-const FTYP_ORBITING = 200;          // Флот находится на орбите (добавить это значение к любой миссии)
+// List of fleet mission types
+const FTYP_ATTACK = 1;      // Attack
+const FTYP_ACS_ATTACK = 2;  // ACS Attack (slot > 0)
+const FTYP_TRANSPORT = 3;   // Transport
+const FTYP_DEPLOY = 4;      // Deploy
+const FTYP_ACS_HOLD = 5;    // ACS Hold
+const FTYP_SPY = 6;         // Spy
+const FTYP_COLONIZE = 7;    // Colonize
+const FTYP_RECYCLE = 8;     // Recycle
+const FTYP_DESTROY = 9;     // Destroy (moon)
+const FTYP_EXPEDITION = 15; // Expedition
+const FTYP_MISSILE = 20;        // Missile attack (IPMs)
+const FTYP_ACS_ATTACK_HEAD = 21;    // ACS Attack head (slot = 0)
+const FTYP_RETURN = 100;            // Fleet returns (add this value to any mission)
+const FTYP_ORBITING = 200;          // Fleet is in orbit (add this value to any mission)
 
 // ==================================================================================
-// Получить список доступных заданий для флота.
+// Get a list of available missions for the fleet.
 
 /*
-Возможные задания:
+Possible assignments:
 
 X:0
->= X:16 (позиция становится 16, любой тип планет)          Экспедиция
-пустое место X:1 ... X:15 без колона       Транспорт, Атака
-пустое место X:1 ... X:15 с колоном       Транспорт, Атака, Колонизировать
+>= X:16 (position becomes 16, any type of planet)          Expedition
+empty space X:1 ... X:15 without colon       Transport, Attack
+empty space X:1 ... X:15 with colon       Transport, Attack, Colonize
 
-своя планета                         Транспорт, Оставить
-своя луна                               Транспорт, Оставить
+own planet                         Transport, Deploy
+own moon                               Transport, Deploy
 
-поле обломков с рабом            Переработать
-поле обломков без раба        Нет подходящих заданий
+debris field with recycler            Recycle
+debris field without recycler        No suitable missions (Нет подходящих заданий)
 
-планета друга/соала              Транспорт, Атака, Держаться, Совместная атака
-луна друга/соала с ЗС            Транспорт, Атака, Держаться, Совместная атака, Уничтожить
-луна друга/соала без ЗС        Транспорт, Атака, Держаться, Совместная атака
-(если есть спай добавить Шпионаж)
-если во флоте только спай     Шпионаж
+buddy/ally planet              Transport, Attack, Hold, ACS Attack
+buddy/ally moon with Deathstar            Transport, Attack, Hold, ACS Attack, Destroy
+buddy/ally moon without Deathstar        Transport, Attack, Hold, ACS Attack
+(if there's a Spy probe add Espionage)
+if there's only a spy in the fleet     Espionage
 
-чужая планета                     Транспорт, Атака, Совместная атака
-чужая луна с ЗС                     Транспорт, Атака, Совместная атака, Уничтожить
-чужая луна без ЗС                Транспорт, Атака, Совместная атака
-(если есть спай добавить Шпионаж)
-если во флоте только спай     Шпионаж
+foreign planet                     Transport, Attack, ACS Attack
+foreign moon with Deathstar                     Transport, Attack, ACS Attack, Destroy
+foreign moon without Deathstar                Transport, Attack, ACS Attack
+(if there's a Spy probe add Espionage)
+if there's only a spy in the fleet     Espionage
 */
 
 function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thisplanettype, $galaxy, $system, $planet, $planettype, $fleet )
@@ -96,21 +96,21 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
         return $missions;
     }
 
-    if ( $planettype == 2)        // поле обломков.
+    if ( $planettype == 2)        // debris field.
     {
-        if ( $fleet[209] > 0 ) $missions[0] = FTYP_RECYCLE;    // если во флоте есть рабы
+        if ( $fleet[209] > 0 ) $missions[0] = FTYP_RECYCLE;    // if there are recyclers in the fleet
         return $missions;
     }
 
-    if ( $target == NULL )        // пустое место
+    if ( $target == NULL )        // empty space
     {
         $missions[0] = FTYP_TRANSPORT;
         $missions[1] = FTYP_ATTACK;
-        if ( $fleet[208] > 0 ) $missions[2] = FTYP_COLONIZE;    // если во флоте есть колонизатор
+        if ( $fleet[208] > 0 ) $missions[2] = FTYP_COLONIZE;    // if there's a colonizer in the fleet
         return $missions;
     }
 
-    if ( $origin['owner_id'] == $target['owner_id'] )        // свои луны/планеты
+    if ( $origin['owner_id'] == $target['owner_id'] )        // own moons/planets
     {
         $missions[0] = FTYP_TRANSPORT;
         $missions[1] = FTYP_DEPLOY;
@@ -122,7 +122,7 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
         $origin_user = LoadUser ($origin['owner_id']);
         $target_user = LoadUser ($target['owner_id']);
 
-        if ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) )      // соалы или друзья
+        if ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) )      // allies or buddies
         {
             $missions[$i++] = FTYP_TRANSPORT;
             $missions[$i++] = FTYP_ATTACK;
@@ -130,7 +130,7 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
             if ( $fleet[214] > 0 && GetPlanetType($target) == 3 ) $missions[$i++] = FTYP_DESTROY;
             if ( $fleet[210] > 0  ) $missions[$i++] = FTYP_SPY;
         }
-        else        // все остальные
+        else        // all others
         {
             $missions[$i++] = FTYP_TRANSPORT;
             $missions[$i++] = FTYP_ATTACK;
@@ -138,7 +138,7 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
             if ( $fleet[210] > 0  ) $missions[$i++] = FTYP_SPY;
         }
 
-        // Если целевая планета есть в списке совместных атак, добавить задание
+        // If the target planet is on the ACS attack list, add the task
         $unions = EnumUnion ( $origin_user['player_id'] );
         foreach ( $unions as $u=>$union ) {
             $fleet_obj = LoadFleet ( $union['fleet_id'] );
@@ -153,9 +153,9 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
 }
 
 // ==================================================================================
-// Расчёт полётов.
+// Flight Calculation.
 
-// Расстояние.
+// Distance.
 function FlightDistance ( $thisgalaxy, $thissystem, $thisplanet, $galaxy, $system, $planet )
 {
     if ($thisgalaxy == $galaxy) {
@@ -169,10 +169,10 @@ function FlightDistance ( $thisgalaxy, $thissystem, $thisplanet, $galaxy, $syste
     return $dist;
 }
 
-// Групповая скорость флота.
+// Group fleet speed.
 function FlightSpeed ($fleet, $combustion, $impulse, $hyper)
 {
-    $minspeed = FleetSpeed ( 210, $combustion, $impulse, $hyper );        // самый быстрый кораблик - ШЗ
+    $minspeed = FleetSpeed ( 210, $combustion, $impulse, $hyper );        // the fastest ship is the Spy Probe.
     foreach ($fleet as $id=>$amount)
     {
         $speed = FleetSpeed ( $id, $combustion, $impulse, $hyper);
@@ -182,7 +182,7 @@ function FlightSpeed ($fleet, $combustion, $impulse, $hyper)
     return $minspeed;
 }
 
-// Потребление дейтерия на полёт всем флотом.
+// Deuterium consumption per flight by the entire fleet.
 function FlightCons ($fleet, $dist, $flighttime, $combustion, $impulse, $hyper, $speedfactor, $hours=0)
 {
     $cons = array ( 'fleet' => 0, 'probes' => 0 );
@@ -192,7 +192,7 @@ function FlightCons ($fleet, $dist, $flighttime, $combustion, $impulse, $hyper, 
             $spd = 35000 / ( $flighttime * $speedfactor - 10) * sqrt($dist * 10 / FleetSpeed($id, $combustion, $impulse, $hyper ) );
             $basecons = $amount * FleetCons ($id, $combustion, $impulse, $hyper );
             $consumption = $basecons * $dist / 35000 * (($spd / 10) + 1) * (($spd / 10) + 1);
-            $consumption += $hours * $amount * FleetCons ($id, $combustion, $impulse, $hyper ) / 10;    // затраты на удержание
+            $consumption += $hours * $amount * FleetCons ($id, $combustion, $impulse, $hyper ) / 10;    // holding costs
             if ( $id == 210 ) $cons['probes'] += $consumption;
             else $cons['fleet'] += $consumption;
         }
@@ -200,14 +200,14 @@ function FlightCons ($fleet, $dist, $flighttime, $combustion, $impulse, $hyper, 
     return $cons;
 }
 
-// Время полёта в секундах, при заданном проценте.
+// Flight time in seconds, at a given percentage.
 function FlightTime ($dist, $slowest_speed, $prc, $xspeed)
 {
     return round ( (35000 / ($prc*10) * sqrt ($dist * 10 / $slowest_speed ) + 10) / $xspeed );
 }
 
-// Скорость кораблика
-// 202-Р/И, 203-Р, 204-Р, 205-И, 206-И, 207-Г, 208-И, 209-Р, 210-Р, 211-И/Г, 212-Р, 213-Г, 214-Г, 215-Г
+// The speed of the ship
+// 202-C/I, 203-C, 204-C, 205-I, 206-I, 207-H, 208-I, 209-C, 210-C, 211-I/H, 212-C, 213-H, 214-H, 215-H
 function FleetSpeed ( $id, $combustion, $impulse, $hyper)
 {
     global $UnitParam;
@@ -246,7 +246,7 @@ function FleetCargo ( $id )
     return $UnitParam[$id][3];
 }
 
-// Суммарная грузоподъемность флотa
+// Total carrying capacity of the fleet
 function FleetCargoSummary ( $fleet )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
@@ -254,7 +254,7 @@ function FleetCargoSummary ( $fleet )
     foreach ( $fleetmap as $n=>$gid )
     {
         $amount = $fleet[$gid];
-        if ($gid != 210) $cargo += FleetCargo ($gid) * $amount;        // не считать зонды.
+        if ($gid != 210) $cargo += FleetCargo ($gid) * $amount;        // not counting probes.
     }
     return $cargo;
 }
@@ -262,14 +262,14 @@ function FleetCargoSummary ( $fleet )
 function FleetCons ($id, $combustion, $impulse, $hyper )
 {
     global $UnitParam;
-    // У МТ при смене двигателя увеличивается потребление в 2 раза. У бомбардировщика НЕ увеличивается.
+    // The Small Cargo has a 2X increase in consumption when changing engines. In a bomber, it does NOT increase.
     if ($id == 202 && $impulse >= 5) return $UnitParam[$id][5] * 2;
     else return $UnitParam[$id][5];
 }
 
 // ==================================================================================
 
-// Изменить количество кораблей на планете.
+// Alter the number of ships on a planet.
 function AdjustShips ($fleet, $planet_id, $sign)
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
@@ -285,7 +285,7 @@ function AdjustShips ($fleet, $planet_id, $sign)
     dbquery ($query);
 }
 
-// Отправить флот. Никаких проверок не производится. Возвращает ID флота.
+// Dispatch the fleet. No checks are performed. Returns the ID of the fleet.
 function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, $cons, $when, $union_id=0, $deploy_time=0)
 {
     global $db_prefix;
@@ -296,12 +296,12 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
     $prio = 200 + $order;
     $flight_time = $seconds;
 
-    // Добавить флот.
+    // Add the fleet.
     $fleet_obj = array ( null, $origin['owner_id'], $union_id, $m, $k, $d, $cons, $order, $origin['planet_id'], $target['planet_id'], $flight_time, $deploy_time,
                          0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
     $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
-    // Запись в лог
+    // Log entry
     $weeks = $now - 4 * (7 * 24 * 60 * 60);
     $query = "DELETE FROM ".$db_prefix."fleetlogs WHERE start < $weeks;";
     dbquery ($query);
@@ -310,12 +310,12 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
                         0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
     AddDBRow ($fleetlog, 'fleetlogs');
 
-    // Добавить задание в глобальную очередь событий.
+    // Add the task to the global event queue.
     AddQueue ( $origin['owner_id'], "Fleet", $fleet_id, 0, 0, $now, $seconds, $prio );
     return $fleet_id;
 }
 
-// Отозвать флот (если это возможно)
+// Recall the fleet (if possible)
 function RecallFleet ($fleet_id, $now=0)
 {
     $uni = LoadUniverse ( );
@@ -327,7 +327,7 @@ function RecallFleet ($fleet_id, $now=0)
     $fleet = array ();
     foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj["ship$gid"];
 
-    // Если флот уже развернут, ничего не делать
+    // If the fleet is already returning, do nothing.
     if ( $fleet_obj['mission'] >= FTYP_RETURN && $fleet_obj['mission'] < FTYP_ORBITING ) return;
 
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
@@ -341,23 +341,23 @@ function RecallFleet ($fleet_id, $now=0)
      $origin['name'] ." [".$origin['g'].":".$origin['s'].":".$origin['p']."] &lt;- ".$target['name']." [".$target['g'].":".$target['s'].":".$target['p']."]<br>" .
      DumpFleet ($fleet) );
 
-    // Для отзыва миссий с удержанием в качестве времени обратного полёта используется время удержания.
+    // For recall missions with a hold, the hold time is used as the return flight time.
     if ($fleet_obj['mission'] < FTYP_RETURN) DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] + FTYP_RETURN, $now-$queue['start'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $now);
     else DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] - FTYP_RETURN, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $now);
 
-    DeleteFleet ($fleet_obj['fleet_id']);            // удалить флот
-    RemoveQueue ( $queue['task_id'] );    // удалить задание
+    DeleteFleet ($fleet_obj['fleet_id']);            // delete fleet
+    RemoveQueue ( $queue['task_id'] );    // delete the task
 
-    // Если отозван последний флот союза, то удалить союз.
+    // If the last union fleet is recalled, delete the entire union.
     $union_id = $fleet_obj['union_id'];
     if ( $union_id && ( $fleet_obj['mission'] == FTYP_ACS_ATTACK || $fleet_obj['mission'] == FTYP_ACS_ATTACK_HEAD ) ) 
     {
         $result = EnumUnionFleets ($union_id);
-        if ( dbrows ( $result ) == 0 ) RemoveUnion ( $union_id );    // удалить союз
+        if ( dbrows ( $result ) == 0 ) RemoveUnion ( $union_id );    // delete union
     }
 }
 
-// Загрузить флот
+// Load the fleet
 function LoadFleet ($fleet_id)
 {
     global $db_prefix;
@@ -366,7 +366,7 @@ function LoadFleet ($fleet_id)
     return dbarray ($result);
 }
 
-// Удалить флот
+// Delete the fleet
 function DeleteFleet ($fleet_id)
 {
     global $db_prefix;
@@ -374,7 +374,7 @@ function DeleteFleet ($fleet_id)
     dbquery ($query);
 }
 
-// Изменить флот.
+// Modify the fleet.
 function SetFleet ($fleet_id, $fleet)
 {
     global $db_prefix;
@@ -388,7 +388,7 @@ function SetFleet ($fleet_id, $fleet)
     dbquery ($query);
 }
 
-// Получить описание задания (для отладки)
+// Get mission description (for debugging)
 function GetMissionNameDebug ($num)
 {
     switch ($num)
@@ -425,28 +425,28 @@ function GetMissionNameDebug ($num)
     }
 }
 
-// Запустить межпланетные ракеты
+// Launch interplanetary rockets
 function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
 {
     global $db_prefix;
     $uni = LoadUniverse ( );
     if ( $uni['freeze'] ) return;
 
-    if ( $amount > $origin['d503'] ) return;    // Нельзя запустить ракет больше чем имеется на планете
+    if ( $amount > $origin['d503'] ) return;    // You can't launch more missiles than there are rockets on the planet.
 
     $now = time ();
     $prio = 200 + FTYP_MISSILE;
 
-    // Списать МПР с планеты.
+    // Write the IPM off the planet.
     $origin['d503'] -= $amount;
     SetPlanetDefense ( $origin['planet_id'], $origin );
 
-    // Добавить ракетную атаку.
+    // Add a missile attack.
     $fleet_obj = array ( null, $origin['owner_id'], 0, 0, 0, 0, 0, FTYP_MISSILE, $origin['planet_id'], $target['planet_id'], $seconds, 0,
                          $amount, $type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
-    // Запись в лог
+    // Log entry
     $weeks = $now - 4 * (7 * 24 * 60 * 60);
     $query = "DELETE FROM ".$db_prefix."fleetlogs WHERE start < $weeks;";
     dbquery ($query);
@@ -455,13 +455,13 @@ function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
                         $amount, $type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     AddDBRow ($fleetlog, 'fleetlogs');
 
-    // Добавить задание в глобальную очередь событий.
+    // Add the task to the global event queue.
     AddQueue ( $origin['owner_id'], "Fleet", $fleet_id, 0, 0, $now, $seconds, $prio );
     return $fleet_id;
 }
 
 // ==================================================================================
-// Обработка заданий флота.
+// Fleet Task Processing.
 
 function FleetList ($fleet, $lang)
 {
@@ -474,14 +474,14 @@ function FleetList ($fleet, $lang)
     return $res;
 }
 
-// *** Атака ***
+// *** Attack ***
 
 function AttackArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'], $queue['end'] );
 }
 
-// *** Транспорт ***
+// *** Transport ***
 
 function TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
@@ -507,7 +507,7 @@ function TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         loca_lang("FLEET_MESSAGE_ARRIVE", $origin_user['lang']), 
         $text, MTYP_MISC, $queue['end']);
 
-    // Транспорт на чужую планету.
+    // Transport to foreign planet.
     if ( $origin['owner_id'] != $target['owner_id'] )
     {
         $target_user = LoadUser ( $target['owner_id'] );
@@ -535,7 +535,7 @@ function TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
 function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    if ( $fleet_obj['m'] < 0 ) $fleet_obj['m'] = 0;    // Защита от отрицательных ресурсов (на всякий случай)
+    if ( $fleet_obj['m'] < 0 ) $fleet_obj['m'] = 0;    // Protection against negative resources (just in case)
     if ( $fleet_obj['k'] < 0 ) $fleet_obj['k'] = 0;
     if ( $fleet_obj['d'] < 0 ) $fleet_obj['d'] = 0;
 
@@ -564,11 +564,11 @@ function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
         $text, MTYP_MISC, $queue['end']);
 }
 
-// *** Оставить ***
+// *** Deploy ***
 
 function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    // Также выгрузить половину топлива
+    // Also unload half the fuel
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'] + floor ($fleet_obj['fuel'] / 2), $target['planet_id'], '+' );
     AdjustShips ( $fleet, $fleet_obj['target_planet'], '+' );
     UpdatePlanetActivity ( $target['planet_id'], $queue['end'] );
@@ -591,9 +591,9 @@ function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         $text, MTYP_MISC, $queue['end']);
 }
 
-// *** Держаться ***
+// *** ACS Hold ***
 
-// Посчитать количество флотов, отправленных на удержание на указанной планете (летящих и находящихся на орбите)
+// Count the number of fleets sent to hold on the specified planet (flying and in orbit)
 function GetHoldingFleetsCount ($planet_id)
 {
     global $db_prefix;
@@ -602,7 +602,7 @@ function GetHoldingFleetsCount ($planet_id)
     return dbrows ($result);
 }
 
-// Проверить можно ли отправить флот игроку на удержание на планету (одновременно на планете могут удерживать свои флоты не более `maxhold_users` игроков)
+// Check if it is possible to send a fleet to a player to hold on a planet (no more than `maxhold_users` players can hold their fleets on a planet at the same time)
 function CanStandHold ( $planet_id, $player_id, $maxhold_users )
 {
     global $db_prefix;
@@ -613,11 +613,11 @@ function CanStandHold ( $planet_id, $player_id, $maxhold_users )
 
 function HoldingArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    // Обновить активность на планете.
+    // Update the activity on the planet.
     UpdatePlanetActivity ( $fleet_obj['target_planet'], $queue['end'] );
 
-    // Запустить задание удержания на орбите.
-    // Время удержания сделать временем полёта (чтобы потом его можно было использовать при возврате флота)
+    // Start an orbit hold task.
+    // Make the hold time a flight time (so that it can be used when returning the fleet)
     DispatchFleet ($fleet, $origin, $target, FTYP_ACS_HOLD+FTYP_ORBITING, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end'], 0, $fleet_obj['flight_time']);
 }
 
@@ -628,7 +628,7 @@ function HoldingHold ($queue, $fleet_obj, $fleet, $origin, $target)
     DispatchFleet ($fleet, $origin, $target, FTYP_ACS_HOLD+FTYP_RETURN, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end']);
 }
 
-// *** Шпионаж ***
+// *** Espionage ***
 
 function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
@@ -663,7 +663,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     loca_add ( "fleetmsg", $origin_user['lang'] );
     loca_add ( "fleetmsg", $target_user['lang'] );
 
-    // Шанс на защиту от шпионажа
+    // A chance at espionage protection
     $level = $origin_tech - $target_tech;
     $level = $level * abs($level) - 1 + $origin_ships;
     $cost = $origin_cost / 1000 / 400;
@@ -680,7 +680,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
     $report = "";
 
-    // Шапка
+    // Head
     $report .= "<table width=400><tr><td class=c colspan=4>" .
             va(loca_lang("SPY_RESOURCES", $origin_user['lang']), $target['name']) .
             " <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> " .
@@ -692,11 +692,11 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $report .= "<td>".loca_lang("SPY_E", $origin_user['lang'])."</td><td>".nicenum($target['emax'])."</td></tr>\n";
     $report .= "</table>\n";
 
-    // Активность
+    // Activity
     $report .= "<table width=400><tr><td class=c colspan=4>     </td></tr>\n";
     $report .= "<TR><TD colspan=4><div onmouseover='return overlib(\"&lt;font color=white&gt;".loca_lang("SPY_ACTIVITY", $origin_user['lang'])."&lt;/font&gt;\", STICKY, MOUSEOFF, DELAY, 750, CENTER, WIDTH, 100, OFFSETX, -130, OFFSETY, -10);' onmouseout='return nd();'></TD></TR></table>\n";
 
-    // Флот на удержании
+    // Fleet on hold
     $result = GetHoldingFleets ( $target['planet_id'] );
     $holding_fleet = array ();
     foreach ( $fleetmap as $i=>$gid ) {
@@ -709,7 +709,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         }
     }
 
-    // Флот
+    // Fleet
     if ( $level > 0 ) {
         $report .= "<table width=400><tr><td class=c colspan=4>".loca_lang("SPY_FLEET", $origin_user['lang'])."     </td></tr>\n";
         $count = 0;
@@ -725,7 +725,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         $report .= "</table>\n";
     }
 
-    // Оборона
+    // Defense
     if ( $level > 1 ) {
         $report .= "<table width=400><tr><td class=c colspan=4>".loca_lang("SPY_DEFENSE", $origin_user['lang'])."     </td></tr>\n";
         $count = 0;
@@ -741,7 +741,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         $report .= "</table>\n";
     }
 
-    // Постройки
+    // Buildings
     if ( $level > 3 ) {
         $report .= "<table width=400><tr><td class=c colspan=4>".loca_lang("SPY_BUILDINGS", $origin_user['lang'])."     </td></tr>\n";
         $count = 0;
@@ -757,7 +757,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         $report .= "</table>\n";
     }
 
-    // Исследования
+    // Research
     if ( $level > 5 ) {
         $report .= "<table width=400><tr><td class=c colspan=4>".loca_lang("SPY_RESEARCH", $origin_user['lang'])."     </td></tr>\n";
         $count = 0;
@@ -781,7 +781,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         $subj, 
         $report, MTYP_SPY_REPORT, $queue['end'], $target['planet_id']);
 
-    // Отправить сообщение чужому игроку о шпионаже.
+    // Send a message to other player about spying.
     $text = va(loca_lang("FLEET_SPY_OTHER", $target_user['lang']), 
             $origin['name'],
             "<a onclick=\"showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p'].");\" href=\"#\">[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>",
@@ -794,10 +794,10 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         loca_lang("FLEET_MESSAGE_SPY", $target_user['lang']),
         $text, MTYP_MISC, $queue['end']);
 
-    // Обновить активность на чужой планете.
+    // Update activity on the foreign planet.
     UpdatePlanetActivity ( $fleet_obj['target_planet'], $queue['end'] );
 
-    // Вернуть флот.
+    // Return the fleet.
     if ( mt_rand (0, 100) < $counter ) StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'], $queue['end'] );
     else DispatchFleet ($fleet, $origin, $target, FTYP_SPY+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
 }
@@ -809,7 +809,7 @@ function SpyReturn ($queue, $fleet_obj, $fleet)
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 }
 
-// *** Колонизировать ***
+// *** Colonize ***
 
 function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
@@ -821,9 +821,9 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     $text = va(loca_lang("FLEET_COLONIZE", $origin_user['lang']), 
                 "<a href=\"javascript:showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].")\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>" );
 
-    if ( !HasPlanet($target['g'], $target['s'], $target['p']) )    // если место не занято, то значит колонизация успешна
+    if ( !HasPlanet($target['g'], $target['s'], $target['p']) )    // If the place is unoccupied, then colonization is successful.
     {
-        // если количество планет империи больше максимума, то не основывать новую колонию.
+        // If the number of planets in the empire is greater than the maximum, then don't establish a new colony.
         $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$fleet_obj['owner_id']."' AND (type = ".PTYP_PLANET.");";
         $result = dbquery ($query);
         $num_planets = dbrows ($result);
@@ -831,18 +831,18 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         {
             $text .= loca_lang("FLEET_COLONIZE_MAX", $origin_user['lang']);
 
-            // Добавить покинутую колонию.
+            // Add an abandoned colony.
             $id = CreateAbandonedColony ( $target['g'], $target['s'], $target['p'], $queue['end'] );
         }
         else
         {
             $text .= loca_lang("FLEET_COLONIZE_SUCCESS", $origin_user['lang']);
 
-            // Создать новую колонию.
+            // Create a new colony.
             $id = CreatePlanet ( $target['g'], $target['s'], $target['p'], $fleet_obj['owner_id'], 1, 0, 0, $queue['end'] );
             Debug ( "Игроком ".$origin['owner_id']." колонизирована планета $id [".$target['g'].":".$target['s'].":".$target['p']."]");
 
-            // Отнять от флота 1 колонизатор
+            // Take 1 colony ship away from the fleet
             if ( $fleet[208] > 0 ) {
                 $fleet[208]--;
                 $met = $kris = $deut = $energy = 0;
@@ -852,7 +852,7 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
             }
         }
 
-        // Вернуть флот, если что-то осталось.
+        // Return the fleet, if there's anything left.
         $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
         $num_ships = 0;
         foreach ($fleetmap as $i=>$gid) {
@@ -871,7 +871,7 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     {
         $text .= loca_lang("FLEET_COLONIZE_FAIL", $origin_user['lang']);
 
-        // Вернуть флот.
+        // Return the fleet.
         DispatchFleet ($fleet, $origin, $target, FTYP_COLONIZE+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
     }
 
@@ -907,11 +907,11 @@ function ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target)
         loca_lang("FLEET_MESSAGE_RETURN", $origin_user['lang']), 
         $text, MTYP_MISC, $queue['end']);
 
-    // Удалить фантом колонизации.
+    // Delete the colonization phantom.
     if ($target['type'] == PTYP_COLONY_PHANTOM) DestroyPlanet ( $target['planet_id'] );
 }
 
-// *** Переработать ***
+// *** Recycle ***
 
 function RecycleArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
@@ -938,24 +938,24 @@ function RecycleArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         nicenum($dm),
         nicenum($dk) );
 
-    // Вернуть флот.
+    // Return the fleet.
     DispatchFleet ($fleet, $origin, $target, FTYP_RECYCLE+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj['m'] + $dm, $fleet_obj['k'] + $dk, $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
 
     SendMessage ( $fleet_obj['owner_id'], loca_lang("FLEET_MESSAGE_FLEET", $origin_user['lang']), $subj, $report, MTYP_MISC, $queue['end']);
 }
 
-// *** Уничтожить ***
+// *** Destroy ***
 
 function DestroyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'], $queue['end'] );
 }
 
-// *** Экспедиция ***
+// *** Expedition ***
 
 require_once "expedition.php";
 
-// *** Ракетная атака ***
+// *** Missile attack ***
 
 function RocketAttackArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
@@ -976,7 +976,7 @@ function Queue_Fleet_End ($queue)
     $fleet = array ();
     foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj["ship$gid"];
 
-    // Обновить выработку ресурсов на планетах
+    // Update resource production on planets
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
     $target = GetPlanet ( $fleet_obj['target_planet'] );
     ProdResources ( $target, $target['lastpeek'], $queue['end'] );
@@ -1012,7 +1012,7 @@ function Queue_Fleet_End ($queue)
         //default: Error ( "Неизвестное задание для флота: " . $fleet_obj['mission'] ); break;
     }
 
-    if ( $fleet_obj['union_id'] && $fleet_obj['mission'] < FTYP_RETURN )    // удалить все флоты и задания союза, чтобы совместная атака больше не срабатывала
+    if ( $fleet_obj['union_id'] && $fleet_obj['mission'] < FTYP_RETURN )    // remove all fleets and union missions so that ACS attack will no longer trigger
     {
         $union_id = $fleet_obj['union_id'];
         $result = EnumUnionFleets ( $union_id );
@@ -1021,57 +1021,58 @@ function Queue_Fleet_End ($queue)
         {
             $fleet_obj = dbarray ($result);
             $queue = GetFleetQueue ( $fleet_obj['fleet_id'] );
-            DeleteFleet ($fleet_obj['fleet_id']);    // удалить флот
-            RemoveQueue ( $queue['task_id'] );    // удалить задание
+            DeleteFleet ($fleet_obj['fleet_id']);    // delete fleet
+            RemoveQueue ( $queue['task_id'] );    // delete task
         }
-        RemoveUnion ( $union_id );    // удалить союз
+        RemoveUnion ( $union_id );    // delete union
     }
     else
     {
-        DeleteFleet ($fleet_obj['fleet_id']);    // удалить флот
-        RemoveQueue ( $queue['task_id'] );    // удалить задание
+        DeleteFleet ($fleet_obj['fleet_id']);    // delete fleet
+        RemoveQueue ( $queue['task_id'] );    // delete task
     }
 
     $player_id = $fleet_obj['owner_id'];
     if ( $GlobalUser['player_id'] == $player_id) { 
         InvalidateUserCache ();
-        $GlobalUser = LoadUser ( $player_id );    // обновить данные текущего пользователя
+        $GlobalUser = LoadUser ( $player_id );    // update the current user's data
     }
 }
 
 // ==================================================================================
 
-// Управление САБами.
+// ACS Management.
 
-// Создать САБ. $fleet_id - паровоз. $name - название союза.
+// Create ACS union. $fleet_id - head fleet. $name - union name.
 function CreateUnion ($fleet_id, $name)
 {
     global $db_prefix;
 
     $fleet_obj = LoadFleet ($fleet_id);
 
-    // Проверить есть ли уже союз?
+    // Check to see if there's already an union?
     if ( $fleet_obj['union_id'] != 0 ) return $fleet_obj['union_id'];
 
-    // Союзы можно создавать только для убывающих атак.
+    // Unions can only be created for departing attacks.
     if ($fleet_obj['mission'] != 1) return 0;
 
     $target_planet = GetPlanet ( $fleet_obj['target_planet'] );
     $target_player = $target_planet['owner_id'];
 
-    // Нельзя создать союз против себя самого
+    // You can't create an union against yourself
     if ( $target_player == $fleet_obj['owner_id'] ) return 0;
 
-    // Добавить союз.
+    // Add union
     $union = array ( null, $fleet_id, $target_player, $name, $fleet_obj['owner_id'] );
     $union_id = AddDBRow ($union, 'union');
 
-    // Добавить флот в союз и изменить тип Атаки (лидер САБа показывается особым образом в списке событий)
+    // Add a fleet to the union and change the Attack type (the ACS head is shown in a special way in the event list)
     $query = "UPDATE ".$db_prefix."fleet SET union_id = $union_id, mission = ".FTYP_ACS_ATTACK_HEAD." WHERE fleet_id = $fleet_id";
     dbquery ($query);
     return $union_id;
 }
 
+// Load ACS union
 function LoadUnion ($union_id)
 {
     global $db_prefix;
@@ -1084,15 +1085,15 @@ function LoadUnion ($union_id)
     return $union;
 }
 
-// Союз удаляется при отзыве последнего флота союза, или достижении цели
+// An union is removed when the last union fleet is recalled, or the objective is reached
 function RemoveUnion ($union_id)
 {
     global $db_prefix;
-    $query = "DELETE FROM ".$db_prefix."union WHERE union_id = $union_id";        // удалить запись союза
+    $query = "DELETE FROM ".$db_prefix."union WHERE union_id = $union_id";        // delete the union record
     dbquery ($query);
 }
 
-// Переименовать САБ.
+// Rename the ACS union.
 function RenameUnion ($union_id, $name)
 {
     global $db_prefix;
@@ -1100,7 +1101,7 @@ function RenameUnion ($union_id, $name)
     dbquery ($query);
 }
 
-// Добавить нового участника в САБ.
+// Add a new member to the union.
 function AddUnionMember ($union_id, $name)
 {
     global $db_prefix;
@@ -1108,30 +1109,30 @@ function AddUnionMember ($union_id, $name)
     global $GlobalUser;
     $union = LoadUnion ($union_id);
 
-    // Ошибка добавления игрока в САБ выдаётся на языке текущего пользователя (того, кто добавляет игроков через меню Флот)
+    // The error of adding a player to ACS union is given in the language of the current user (the one who adds players via the Fleet menu)
     loca_add ("union", $GlobalUser['lang']);
 
-    // Пустое имя, ничего не делаем.
+    // Empty name, do nothing.
     if ($name === "") return "";
 
-    // Достигнуто максимальное количество пользователей
+    // Maximum number of users reached
     $max_players = $GlobalUni['acs'] + 1;
     if ( $union['players'] >= $max_players ) return va(loca("ACS_MAX_USERS"), $max_players);
 
-    // Найти пользователя
+    // Find a user
     $name = mb_strtolower ($name, 'UTF-8');
     $query = "SELECT * FROM ".$db_prefix."users WHERE name = '".$name."' LIMIT 1";
     $result = dbquery ($query);
     if (dbrows ($result) == 0) return loca("ACS_USER_NOT_FOUND");
     $user = dbarray ($result);
 
-    // Проверить есть ли уже такой пользователь в САБе.
+    // Check if there is already such a user in ACS union.
     for ($i=0; $i<$union['players']; $i++)
     {
-        if ( $union["player"][$i] == $user['player_id'] ) return loca("ACS_ALREADY_ADDED");    // есть.
+        if ( $union["player"][$i] == $user['player_id'] ) return loca("ACS_ALREADY_ADDED");    // there is.
     }
 
-    // Добавить пользователя в САБ и послать ему сообщение о приглашении.
+    // Add the user to the ACS union and send them an invitation message.
     $union['player'][$union['players']] = $user['player_id'];
     $query = "UPDATE ".$db_prefix."union SET players = '".implode(",", $union['player'])."' WHERE union_id = $union_id";
     dbquery ($query);
@@ -1141,7 +1142,7 @@ function AddUnionMember ($union_id, $name)
     $target_planet = GetPlanet ( $head_fleet['target_planet'] );
     $queue = GetFleetQueue ( $union['fleet_id'] );
 
-    // Сообщение о приглашении в САБ отправляется на языке приглашаемого пользователя.
+    // The ACS invitation message is sent in the language of the invited user.
     loca_add ("union", $user['lang']);
 
     $text = va ( loca_lang("ACS_INVITE_TEXT1", $user['lang']),
@@ -1157,7 +1158,7 @@ function AddUnionMember ($union_id, $name)
     return "";
 }
 
-// Перечислить союзы в которых состоит игрок, а также союзы, целью которых он является (если не установлен флаг friendly).
+// List the unions the player is in, as well as the union that the player is targeting (unless the friendly flag is set).
 function EnumUnion ($player_id, $friendly=0)
 {
     global $db_prefix;
@@ -1178,7 +1179,7 @@ function EnumUnion ($player_id, $friendly=0)
     return $unions;
 }
 
-// Перечислить флоты союза
+// List the Union fleets
 function EnumUnionFleets ($union_id)
 {
     global $db_prefix;
@@ -1186,7 +1187,7 @@ function EnumUnionFleets ($union_id)
     return dbquery ( $query );
 }
 
-// Обновить время прибытия всех флотов союза, за исключением fleet_id. Вернуть новое время прибытия союза.
+// Update the arrival time of all union fleets except fleet_id. Return the new arrival time of the union.
 function UpdateUnionTime ($union_id, $end, $fleet_id, $force_set=false)
 {
     global $db_prefix;
@@ -1209,7 +1210,7 @@ function UpdateUnionTime ($union_id, $end, $fleet_id, $force_set=false)
     return $union_time;
 }
 
-// Обновить время прибытия флота
+// Update fleet arrival time
 function UpdateFleetTime ($fleet_id, $when)
 {
     global $db_prefix;
@@ -1219,11 +1220,11 @@ function UpdateFleetTime ($fleet_id, $when)
     dbquery ($query);
 }
 
-// Перечислить флоты на удержании
+// List the fleets on hold
 function GetHoldingFleets ($planet_id)
 {
     global $db_prefix;
-    $uni = LoadUniverse ();    // ограничить количество флотов настройками вселенной
+    $uni = LoadUniverse ();    // limit the number of fleets to the universe settings
     $max = max (0, $uni['acs'] * $uni['acs'] - 1);
     $query = "SELECT * FROM ".$db_prefix."fleet WHERE mission = ".(FTYP_ORBITING+FTYP_ACS_HOLD)." AND target_planet = $planet_id LIMIT $max";
     $result = dbquery ($query);
@@ -1240,7 +1241,7 @@ function IsPlayerInUnion ($player_id, $union)
     return false;
 }
 
-// Логи полётов.
+// Flight logs.
 
 function FleetlogsMissionText ($num)
 {
