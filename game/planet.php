@@ -1,64 +1,67 @@
 <?php
 
-// Управление планетами и лунами: создание/колонизация, уничтожение, загрузка планет из БД, переименование.
+// Planets and moons management: creation/colonization, destruction, loading planets from the database, renaming.
+// All other special objects in the Galaxy are also considered planets (but of a different type).
 
 /*
 
-Формулы для расчета размера луны:
-Минимальный = floor (1000*(10 + 3 * Шанс)^0,5) km
-Максимальный = floor (1000*(20 + 3 * Шанс)^0,5) km 
+Formulas for calculating the size of the moon:
+Minimal = floor (1000*(10 + 3 * Chance)^0,5) km
+Maximum = floor (1000*(20 + 3 * Chance)^0,5) km 
 
 FIELDS = FLOOR ( (DIAM / 1000) ^ 2 )
 */
 
 /*
-planet_id: Порядковый номер (INT AUTO_INCREMENT PRIMARY KEY)
-name: Название планеты CHAR(20)
-type: тип планеты (см. определение PTYP)
-g,s,p: координаты где расположена планета
-owner_id: Порядковый номер пользователя-владельца
-R diameter: Диаметр планеты
-R temp: Минимальная температура
-fields: Количество застроенных полей
-R maxfields: Максимальное количество полей
-date: Дата создания
-bXX: Уровень постройки
-dXX: Количество оборонительных сооружений
-fXX: Количество флота каждого типа
-m, k, d: Металла, кристалла, дейтерия
-mprod, kprod, dprod: Процент выработки шахт металла, кристалла, дейтерия ( 0...1 FLOAT)
-sprod, fprod, ssprod: Процент выработки солнечной электростанции, термояда и солнечных спутников ( 0...1 FLOAT)
-lastpeek: Время последнего обновления состояния планеты (INT UNSIGNED time)
-lastakt: Время последней активности (INT UNSIGNED time)
-gate_until: Время остывания  ворот. (INT UNSIGNED time)
-remove: Время удаления планеты (0 - не удалять). (INT UNSIGNED time)
+planet_id: Ordinal number (INT AUTO_INCREMENT PRIMARY KEY)
+name: Planet name CHAR(20)
+type: planet type (see PTYP definition)
+g,s,p: coordinates where the planet is located
+owner_id: Owner user ordinal number
+R diameter: The diameter of the planet
+R temp: Minimum temperature
+fields: Number of developed fields
+R maxfields: Maximum number of fields
+date: Creation date
+bXX: Building level of each type
+dXX: Number of defenses of each type
+fXX: Number of fleet of each type
+m, k, d: Metal, crystal, deuterium
+mprod, kprod, dprod: Percentage of mine production of metal, crystal, deuterium ( 0...1 FLOAT)
+sprod, fprod, ssprod: Percentage of output of solar power plant, fusion and solar satellites ( 0...1 FLOAT)
+lastpeek: Time of last planet state update (INT UNSIGNED time)
+lastakt: Last activity time (INT UNSIGNED time)
+gate_until: JumpGate cooling time (INT UNSIGNED time)
+remove: Planet deletion time (0 - do not delete). (INT UNSIGNED time)
 
-R - случайные параметры
+R - random parameters
 
-чистка систем от "уничтоженных планет" происходит каждые сутки в 01-10 по серверу.
-существует "уничтоженная планета" 1 сутки (24 часа) + остаток времени до 01-10 серверного следующего за этими сутками дня.
+Cleaning of systems from "destroyed planets" takes place every 24 hours at 01-10 on the server.
+"destroyed planet" exists for 1 day (24 hours) + the rest of the time until 01-10 server next day.
 
 */
 
-// Типы объектов галактики (планеты, луны и пр.)
-const PTYP_MOON = 0;        // луна
-const PTYP_PLANET = 1;      // планета; На ранних стадиях разработки для планет были зарезервированы типы для каждой картинки (ледяная, пустыня и проч.). Но после того как был кракнут алгоритм получения картинки из ID необходимость в этом отпала.
-const PTYP_DF = 10000;          // поле обломков
-const PTYP_DEST_PLANET = 10001;         // уничтоженная планета (удалена игроком)
-const PTYP_COLONY_PHANTOM = 10002;      // фантом для колонизации (существует на время полёта миссии Колонизировать)
-const PTYP_DEST_MOON = 10003;           // уничтоженная луна (удалена игроком)
-const PTYP_ABANDONED = 10004;           // покинутая колония (вместо багнутого "overlib", который был в ванильной версии)
-const PTYP_FARSPACE = 20000;        // бесконечные дали
+// Types of galactic objects (planets, moons, etc.)
+const PTYP_MOON = 0;        // moon
+const PTYP_PLANET = 1;      // planet; In the early stages of development for planets were reserved types for each picture (ice, desert, etc.). But after the algorithm of getting a picture from ID was cracked, there was no need in this.
+const PTYP_DF = 10000;          // debris field
+const PTYP_DEST_PLANET = 10001;         // destroyed planet (deleted by the player)
+const PTYP_COLONY_PHANTOM = 10002;      // colonization phantom (exists for the duration of the Colonize mission)
+const PTYP_DEST_MOON = 10003;           // destroyed moon (deleted by the player)
+const PTYP_ABANDONED = 10004;           // abandoned colony (instead of the buggy "overlib" that was in the vanilla version)
+const PTYP_FARSPACE = 20000;        // infinite distances (for expeditions)
 
-// Создать планету. Возвращает planet_id, или 0 если позиция занята.
-// colony: 1 - создать колонию, 0 - Главная планета
-// moon: 1 - создать луну
-// moonchance: шанс возникновения луны (для размера луны)
+// In addition to planet types for the database, there are also so-called "game planet types", such as those used for the Empire page (see GetPlanetType method).
+
+// Create planet. Returns planet_id, or 0 if the position is occupied.
+// colony: 1 - create colony, 0 - Home planet
+// moon: 1 - create the moon
+// moonchance: chance of the moon appearing (for the size of the moon)
 function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0, $when=0)
 {
     global $db_prefix;
 
-    // Проверить не занято-ли место?
+    // Check to see if the place is occupied?
     if ($moon) $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( type = ".PTYP_MOON." OR type = ".PTYP_DEST_MOON." )";
     else $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND p = '".$p."' AND ( type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED." )";
     $result = dbquery ($query);
@@ -67,7 +70,7 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     $user = LoadUser ($owner_id);
     loca_add ("common", $user['lang']);
 
-    // Название планеты.
+    // Name of the planet.
     if ($moon) $name = loca_lang ("MOON", $user['lang']);
     else
     {
@@ -75,11 +78,11 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
         else $name = loca_lang ("PLANET_HOME", $user['lang']);
     }
 
-    // Тип планеты.
+    // Planet Type.
     if ($moon) $type = PTYP_MOON;
     else $type = PTYP_PLANET;
 
-    // Диаметр.
+    // Diameter.
     if ($moon) $diam = floor ( 1000 * sqrt (mt_rand (10, 20) + 3*$moonchance)  );
     else
     {
@@ -87,7 +90,7 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
         {
             $coltab = LoadColonySettings();
 
-            // Планеты разделены на 5 Tier (T1-T5). Для каждого тира есть три параметра (a, b, c), для RND.
+            // Planets are divided into 5 Tier (T1-T5). For each Tier there are three parameters (a, b, c), for RND.
 
             if ($p <= 3) $diam = mt_rand ( $coltab['t1_a'], $coltab['t1_b'] ) * $coltab['t1_c'];
             else if ($p >= 4 && $p <= 6) $diam = mt_rand ( $coltab['t2_a'], $coltab['t2_b'] ) * $coltab['t2_c'];
@@ -99,10 +102,10 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
         else $diam = 12800;
     }
     
-    // Максимальное количество полей.
+    // Maximum number of fields.
     $fields = floor (pow (($diam / 1000), 2));
 
-    // Температура
+    // Temperature
     if ($p <= 3) $temp = 80 + (rand() % 10) - 2*$p;
     else if ($p >= 4 && $p <= 6) $temp = 30 + (rand() % 10) - 2*$p;
     else if ($p >= 7 && $p <= 9) $temp = 10 + (rand() % 10) - 2*$p;
@@ -115,7 +118,7 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
         else $temp -= mt_rand (20, 30);
     }
 
-    // Добавить планету
+    // Add planet
     if ( $when == 0 ) $now = time();
     else $now = $when;
     if ($moon) $planet = array( null, $name, $type, $g, $s, $p, $owner_id, $diam, $temp, 0, 1, $now,
@@ -133,15 +136,15 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     return $id;
 }
 
-// Перечислить все планеты пользователя. Возвратить результат SQL-запроса.
+// List all planets of the user. Return the result of the SQL query.
 function EnumPlanets ()
 {
     global $db_prefix, $GlobalUser;
     $player_id = $GlobalUser['player_id'];
 
-    // Получить тип сортировки.
-    // sortby: Порядок сортировки планет: 0 - порядку колонизации (planet_id), 1 - координатам, 2 - алфавиту
-    // sortorder: Порядок: 0 - по возрастанию, 1 - по убыванию
+    // Get sort type.
+    // sortby: Sort order of planets: 0 - colonization order (planet_id), 1 - coordinates, 2 - alphabetical order
+    // sortorder: Order: 0 - ascending, 1 - descending
     $asc = $GlobalUser['sortorder'] == 0 ? "ASC" : "DESC";
     if ($GlobalUser['sortby'] == 0) $order = " ORDER BY planet_id $asc, type DESC";
     else if ($GlobalUser['sortby'] == 1) $order = " ORDER BY g $asc, s $asc, p $asc, type DESC";
@@ -153,7 +156,7 @@ function EnumPlanets ()
     return $result;
 }
 
-// Перечислить все планеты в Галактике.
+// List all the planets in the Galaxy.
 function EnumPlanetsGalaxy ($g, $s)
 {
     global $db_prefix;
@@ -162,7 +165,7 @@ function EnumPlanetsGalaxy ($g, $s)
     return $result;
 }
 
-// Получить состояние планеты (массив).
+// Get the state of the planet (array).
 function GetPlanet ( $planet_id)
 {
     global $db_prefix;
@@ -193,8 +196,8 @@ function GetPlanet ( $planet_id)
     return $planet;
 }
 
-// Загрузить состояние планеты по указанным координатам (без предварительной обработки)
-// Вернуть массив $planet, или NULL.
+// Load planet state by specified coordinates (without pre-processing)
+// Return the $planet array, or NULL.
 function LoadPlanet ($g, $s, $p, $type)
 {
     global $db_prefix;
@@ -207,8 +210,8 @@ function LoadPlanet ($g, $s, $p, $type)
     else return NULL;
 }
 
-// Загрузить состояние планеты по ID
-// Вернуть массив $planet, или NULL.
+// Load planet state by ID
+// Return the $planet array, or NULL.
 function LoadPlanetById ($planet_id)
 {
     global $db_prefix;
@@ -218,41 +221,41 @@ function LoadPlanetById ($planet_id)
     else return NULL;
 }
 
-// Если у планеты есть луна (даже уничтоженная), возвратить её ID, иначе возвратить 0.
+// If the planet has a moon (even destroyed), return its ID, otherwise return 0.
 function PlanetHasMoon ( $planet_id )
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."planets WHERE planet_id = '".$planet_id."'";
     $result = dbquery ($query);
-    if ( dbrows ($result) == 0) return 0;    // Планета не найдена
+    if ( dbrows ($result) == 0) return 0;    // Planet not found
     $planet = dbarray ($result);
-    if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return 0;        // Планета сама является луной
+    if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return 0;        // The planet itself is the moon
     $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$planet['g']."' AND s = '".$planet['s']."' AND p = '".$planet['p']."' AND (type = ".PTYP_MOON." OR type = ".PTYP_DEST_MOON.")";
     $result = dbquery ($query);
-    if ( dbrows ($result) == 0) return 0;    // Луна у планеты не найдена.
+    if ( dbrows ($result) == 0) return 0;    // No moon has been found for the planet.
     $planet = dbarray ($result);
     return $planet['planet_id'];
 }
 
-// Длина имени планеты не более 20 символов (слово (Луна) тоже учитывается)
-// Из имени вырезаются следующие символы: / ' " * ( )
-// Если в имени пристутствуют символы ; , < > \ ` то имя не изменяется.
-// Если имя планеты пустое, она называется "планета"
-// Больше одного пробела вырезается.
+// The length of the planet name is max. 20 characters (the word (Moon) is also taken into account)
+// The following characters are cut out of the name: / ' " * ( )
+// If there are characters in the name ; , < > \ ` then the name doesn't change.
+// If the name of a planet is blank, it is called "планета"
+// More than one space is cut out.
 function RenamePlanet ($planet_id, $name)
 {
-    // Найти планету.
+    // Find the planet.
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."planets WHERE planet_id = '".$planet_id."'";
     $result = dbquery ($query);
-    if ( dbrows ($result) == 0) return;    // Планета не найдена
+    if ( dbrows ($result) == 0) return;    // Planet not found
     $planet = dbarray ($result);
 
-    // Проверить название.
-    if ( $planet['type'] == PTYP_MOON) $name = mb_substr ($name, 0, 20-mb_strlen(" (Луна)", "UTF-8"), "UTF-8");    // Ограничить длину имени.
+    // Check the name.
+    if ( $planet['type'] == PTYP_MOON) $name = mb_substr ($name, 0, 20-mb_strlen(" (".loca("MOON").")", "UTF-8"), "UTF-8");    // Limit the length of the name.
     else $name = mb_substr ($name, 0, 20, "UTF-8");
     $pattern = '/[;,<>\`]/';
-    if (preg_match ($pattern, $name)) return;    // Запрещенные символы.
+    if (preg_match ($pattern, $name)) return;    // Forbidden characters.
     $pattern = '/[\\\\()*\"\']/';
     $name = preg_replace ($pattern, '', $name);
     $name = trim ($name);
@@ -262,17 +265,17 @@ function RenamePlanet ($planet_id, $name)
     }
     else
     {
-        $name = preg_replace ('/\s\s+/', ' ', $name);    // Вырезать лишние пробелы.
-        // Если планета -- луна, то добавить приставку.
+        $name = preg_replace ('/\s\s+/', ' ', $name);    // Cut out the extra spaces.
+        // If the planet is the moon, add a prefix.
         if ( $planet['type'] == PTYP_MOON ) $name .= " (".loca("MOON").")";
     }
 
-    // Если всё нормально - сменить имя планеты.
+    // If all is well, change the name of the planet.
     $query = "UPDATE ".$db_prefix."planets SET name = '".$name."' WHERE planet_id = $planet_id";
     dbquery ($query);
 }
 
-// НИКАКИХ ПРОВЕРОК НЕ ПРОИЗВОДИТСЯ!!
+// NO CHECKS ARE MADE!!!
 function DestroyPlanet ($planet_id)
 {
     global $db_prefix;
@@ -281,7 +284,7 @@ function DestroyPlanet ($planet_id)
     dbquery ($query);
 }
 
-// Обновить активность на планете
+// Update the activity on the planet
 function UpdatePlanetActivity ( $planet_id, $t=0)
 {
     global $db_prefix;
@@ -291,10 +294,10 @@ function UpdatePlanetActivity ( $planet_id, $t=0)
     dbquery ($query);
 }
 
-// Управление полями обломков.
-// Загрузка ПО осуществляется вызовом GetPlanet. Удаление ПО осуществляется вызовом DestroyPlanet.
+// Management of debris fields.
+// DF loading is performed by calling GetPlanet. DF is deleted by calling DestroyPlanet.
 
-// Проверяет, есть ли на данных координатах ПО. Возвращает id ПО, или 0.
+// Checks if there is a DF at the given coordinates. Returns DF id, or 0.
 function HasDebris ($g, $s, $p)
 {
     global $db_prefix;
@@ -305,7 +308,7 @@ function HasDebris ($g, $s, $p)
     return $debris['planet_id'];
 }
 
-// Создаёт новое ПО по указанным координатам
+// Creates a new DF at the specified coordinates
 function CreateDebris ($g, $s, $p, $owner_id)
 {
     global $db_prefix;
@@ -321,7 +324,7 @@ function CreateDebris ($g, $s, $p, $owner_id)
     return $id;
 }
 
-// Собрать ПО указанной грузоподъёмностью. В переменные $harvest m/k попадает собранное ПО.
+// Collect DF with the specified capacity. The variables $harvest m/k contains the harvested DF.
 function HarvestDebris ($planet_id, $cargo, $when)
 {
     global $db_prefix;
@@ -350,7 +353,7 @@ function HarvestDebris ($planet_id, $cargo, $when)
     return $harvest;
 }
 
-// Насыпать лома в указанное ПО
+// Pour scrap into the specified DF
 function AddDebris ($id, $m, $k)
 {
     global $db_prefix;
@@ -359,7 +362,7 @@ function AddDebris ($id, $m, $k)
     dbquery ($query);
 }
 
-// Получить игровой тип планеты.
+// Get a game type of planet.
 function GetPlanetType ($planet)
 {
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return 3;
@@ -367,7 +370,7 @@ function GetPlanetType ($planet)
     else return 1;
 }
 
-// Создать фантом колонизации. Вернуть ID.
+// Create a colonization phantom. Return ID.
 function CreateColonyPhantom ($g, $s, $p, $owner_id)
 {
     $planet = array( null, loca("PLANET_PHANTOM"), PTYP_COLONY_PHANTOM, $g, $s, $p, $owner_id, 0, 0, 0, 0, time(),
@@ -379,10 +382,10 @@ function CreateColonyPhantom ($g, $s, $p, $owner_id)
     return $id;
 }
 
-// Добавить покинутую колонию.
+// Add an abandoned colony.
 function CreateAbandonedColony ($g, $s, $p, $when)
 {
-    // Если на заданных координатах нет планеты, то добавить Покинутую колонию.
+    // If there is no planet at the given coordinates, add Abandoned Colony.
     if ( !HasPlanet ( $g, $s, $p ) )
     {
         $planet = array( null, loca("PLANET_ABANDONED"), PTYP_ABANDONED, $g, $s, $p, USER_SPACE, 0, 0, 0, 0, $when,
@@ -396,8 +399,8 @@ function CreateAbandonedColony ($g, $s, $p, $when)
     return $id;
 }
 
-// Проверить есть ли уже планета на заданных координатах (для Колонизации). Учитываются также уничтоженные планеты и покинутые колонии.
-// Фантомы колонизации не учитываются (кто первый долетит)
+// Check if there is already a planet at the given coordinates (for Colonization). Destroyed planets and abandoned colonies are also taken into account.
+// Colonization phantoms don't count (whoever flies first)
 function HasPlanet ($g, $s, $p)
 {
     global $db_prefix;
@@ -407,7 +410,7 @@ function HasPlanet ($g, $s, $p)
     else return 0;
 }
 
-// Изменить количество ресурсов на планете.
+// Change the amount of resources on the planet.
 function AdjustResources ($m, $k, $d, $planet_id, $sign)
 {
     global $db_prefix;
@@ -416,8 +419,8 @@ function AdjustResources ($m, $k, $d, $planet_id, $sign)
     dbquery ($query);
 }
 
-// Уничтожить луну, развернуть флоты, модифицировать статистику игрока.
-// fleet_id - ID флота уничтожившего луну. Разворот этого флота контролируется боевым движком.
+// Destroy the moon, return fleets, modify player stats.
+// fleet_id - ID of the fleet that destroyed the moon. The return of this fleet is controlled by the battle engine.
 function DestroyMoon ($moon_id, $when, $fleet_id)
 {
     global $db_prefix;
@@ -426,7 +429,7 @@ function DestroyMoon ($moon_id, $when, $fleet_id)
     $planet = LoadPlanet ( $moon['g'], $moon['s'], $moon['p'], 1 );
     if ( $moon == NULL || $planet == NULL ) return;
 
-    // Развернуть флоты летящие на луну
+    // Return the fleets flying to the moon.
     $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = $moon_id AND mission < 100 AND fleet_id <> $fleet_id;";
     $result = dbquery ( $query );
     $rows = dbrows ($result);
@@ -436,43 +439,43 @@ function DestroyMoon ($moon_id, $when, $fleet_id)
         RecallFleet ( $fleet_obj['fleet_id'], $when );
     }
 
-    // Перенаправить возвращающиеся и улетающие флоты на планету.
+    // Redirect returning and departing fleets to the planet.
     $query = "UPDATE ".$db_prefix."fleet SET start_planet = ".$planet['planet_id']." WHERE start_planet = $moon_id;";
     dbquery ( $query );
 
-    // Модифицировать статистику игрока
+    // Modify player statistics
     $pp = PlanetPrice ($moon);
     AdjustStats ( $moon['owner_id'], $pp['points'], $pp['fpoints'], 0, '-' );
     RecalcRanks ();
 
-    // Всё остальное уничтожается безвозвратно
+    // Everything else is destroyed forever
     DestroyPlanet ( $moon_id );
 
-    // Сделать текущей планетой - планету под уничтоженной луной
+    // Make the current planet the planet under the destroyed moon.
     SelectPlanet ( $planet['owner_id'], $planet['planet_id'] );
 }
 
-// Пересчитать поля.
+// Recalculate fields.
 function RecalcFields ($planet_id)
 {
     global $db_prefix;
     $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
     $planet = GetPlanet ($planet_id);
     $fields = 0;
-    if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) $maxfields = 1;    // луна
-    else $maxfields = floor (pow (($planet['diameter'] / 1000), 2));    // планета
+    if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) $maxfields = 1;    // moon
+    else $maxfields = floor (pow (($planet['diameter'] / 1000), 2));    // planet
     foreach ( $buildmap as $i=>$gid ) $fields += $planet["b$gid"];
-    $maxfields += 5 * $planet["b33"] + 3 * $planet["b41"];    // терраформер и ЛБ
+    $maxfields += 5 * $planet["b33"] + 3 * $planet["b41"];    // terraformer and moonbase
     $query = "UPDATE ".$db_prefix."planets SET fields=$fields, maxfields=$maxfields WHERE planet_id=$planet_id;";
     dbquery ($query);
 }
 
-// Бесконечные дали.
+// Endless distances.
 function CreateOuterSpace ($g, $s, $p)
 {
     global $db_prefix;
 
-    // Если там уже есть объект, вернуть его ID.
+    // If there is already an object there, return its ID.
     $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type = ".PTYP_FARSPACE.";";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 ) 
@@ -492,7 +495,7 @@ function CreateOuterSpace ($g, $s, $p)
     return $id;
 }
 
-// Установить флот и оборону на планете.
+// Set up a fleet and defenses on the planet.
 function SetPlanetFleetDefense ( $planet_id, $objects )
 {
     global $db_prefix;
@@ -507,7 +510,7 @@ function SetPlanetFleetDefense ( $planet_id, $objects )
     dbquery ($query);
 }
 
-// Установить оборону на планете.
+// Set up defenses on the planet.
 function SetPlanetDefense ( $planet_id, $objects )
 {
     global $db_prefix;
@@ -521,7 +524,7 @@ function SetPlanetDefense ( $planet_id, $objects )
     dbquery ($query);
 }
 
-// Установить постройки на планете.
+// Set up buildings on the planet.
 function SetPlanetBuildings ( $planet_id, $objects )
 {
     global $db_prefix;
@@ -535,7 +538,7 @@ function SetPlanetBuildings ( $planet_id, $objects )
     dbquery ($query);
 }
 
-// Установить диаметр планеты/луны. После установки нового диаметра пересчитываются поля планеты.
+// Set the diameter of the planet/moon. After setting the new diameter, the planet fields are recalculated.
 function SetPlanetDiameter ($planet_id, $diam)
 {
     global $db_prefix;
@@ -544,30 +547,30 @@ function SetPlanetDiameter ($planet_id, $diam)
     RecalcFields($planet_id);
 }
 
-// Вернуть название планеты со ссылкой на админку.
+// Return the name of the planet with a link to the admin area.
 function AdminPlanetName ($planet)
 {
     global $session;
     return "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\">".$planet['name']."</a>";
 }
 
-// Вернуть строку координат планеты со ссылкой на галактику
+// Return planet coordinate string with a link to the galaxy
 function AdminPlanetCoord ($p)
 {
     global $session;
     return "[<a href=\"index.php?page=galaxy&session=$session&galaxy=".$p['g']."&system=".$p['s']."\">".$p['g'].":".$p['s'].":".$p['p']."</a>]";
 }
 
-// Создать главную планету, вернуть ID созданной планеты
+// Create a home planet, return the ID of the created planet
 function CreateHomePlanet ($player_id)
 {
     global $db_prefix;
     $ss = 15;
     $uni = LoadUniverse ();
 
-    $ppg = $ss * $uni['systems'];        // количество систем в галактике
+    $ppg = $ss * $uni['systems'];        // number of systems in the galaxy
 
-    $sg = 1;        // стартовая галактика для регистрации
+    $sg = 1;        // starting galaxy for registration
     $planet = array ();
     for ( $i=0; $i<($sg-1)*$ppg; $i++) $planet[$i] = 1;
     for ( $i; $i<$uni['galaxies']*$ppg; $i++) $planet[$i] = 0;
@@ -599,7 +602,7 @@ function CreateHomePlanet ($player_id)
     Error ( "No more planets!!!" );
 }
 
-// Загрузить настройки колонизации.
+// Load colonization settings.
 function LoadColonySettings ()
 {
     global $db_prefix;
@@ -608,7 +611,7 @@ function LoadColonySettings ()
     return dbarray ($result);
 }
 
-// Сохранить настройки колонизации.
+// Save the colonization settings.
 function SaveColonySettings ($coltab)
 {
     global $db_prefix;

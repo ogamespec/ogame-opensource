@@ -292,7 +292,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
 
         foreach ( $d as $i=>$defender )        // Defenders
         {
-            if ( $i == 0 && $res['result'] == 'awon')    // Планета
+            if ( $i == 0 && $res['result'] == 'awon')    // Planet
             {
                 AdjustResources ( $cm, $ck, $cd, $defender['id'], '-' );
             }
@@ -889,8 +889,8 @@ function WritebackBattleResultsExpedition ( $a, $d, $res )
             $ships = 0;
             foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker[$gid];
 
-            // Вернуть флот, если что-то осталось.
-            // В качестве времени полёта используется время удержания.
+            // Return the fleet, if there's anything left.
+            // The hold time is used as the flight time.
             if ($ships > 0) DispatchFleet ($attacker, $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
         }
 
@@ -909,8 +909,8 @@ function WritebackBattleResultsExpedition ( $a, $d, $res )
             $ships = 0;
             foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['fleet'][$gid];
 
-            // Вернуть флот, если что-то осталось.
-            // В качестве времени полёта используется время удержания.
+            // Return the fleet, if there's anything left.
+            // The hold time is used as the flight time.
             if ($ships > 0)  DispatchFleet ($attacker['fleet'], $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
         }
 
