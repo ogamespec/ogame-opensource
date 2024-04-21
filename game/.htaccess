@@ -8,3 +8,8 @@ php_value date.timezone 'Europe/Moscow'
 order allow,deny
 deny from all
 </Files>
+
+<Files cron.php>
+order allow,deny
+deny from all
+</Files>

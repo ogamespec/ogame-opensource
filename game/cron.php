@@ -1,6 +1,9 @@
 <?php
 
 // Optionally you can set up CRON on this file, for periodic queue updates.
+// https://www.cloudways.com/blog/schedule-cron-jobs-in-php/  (Google: how to run php script via cron)
+
+// This script must not be called from the browser (see .htaccess)
 
 if ( file_exists ("config.php"))
 {
