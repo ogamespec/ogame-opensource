@@ -1,88 +1,88 @@
 <?php
 
-// Управление пользователями.
+// User Management.
 
 /*
-player_id: Порядковый номер пользователя (INT AUTO_INCREMENT PRIMARY KEY)
-regdate: Дата регистрации аккаунта (INT UNSIGNED)
-ally_id: Номер альянса в котором состоит игрок (0 - без альянса) (INT)
-joindate: Дата вступления в альянс (INT UNSIGNED)
-allyrank: Ранг игрока в альянсе (INT)
-session: Сессия для ссылок (CHAR (12))
-private_session: Приватная сессия для кукисов (CHAR(32))
-name: Имя пользователя lower-case для сравнения (CHAR(20))
-oname: Имя пользователя оригинальное (CHAR(20))
-name_changed: Имя пользователя изменено? (1 или 0) (INT)
-Q name_until: Когда можно поменять имя пользователя в следующий раз (INT UNSIGNED)
-password: MD5-хеш пароля и секретного слова (CHAR(32))
-temp_pass: MD5-хеш пароля для восстановления и секретного слова (CHAR(32))
-pemail: Постоянный почтовый адрес (CHAR(50))
-email: Временный почтовый адрес (CHAR(50))
-email_changed: Временный почтовый адрес изменен (INT)
-Q email_until: Когда заменить постоянный email на временный (INT UNSIGNED)
-disable: Аккаунт поставлен на удаление (INT)
-Q disable_until: Когда можно удалить аккаунт (INT UNSIGNED)
-vacation: Аккаунт в режиме отпуска (INT)
-vacation_until: Когда можно выключить режим отпуска (INT UNSIGNED)
-banned: Аккаунт заблокирован (INT)
-Q banned_until: Время окончания блокировки (INT UNSIGNED)
-noattack: Запрет на атаки (INT)
-Q noattack_until: Когда заканчивается запрет на атаки (INT UNSIGNED)
-lastlogin: Последняя дата входа в игру (INT UNSIGNED)
-lastclick: Последний щелчок мышкой, для определения активности игрока (INT UNSIGNED)
-ip_addr: IP адрес пользователя
-validated: Пользователь активирован. Если пользователь не активирован, то ему запрещено посылать игровые сообщения и заявки в альянсы. (INT)
-validatemd: Код активации (CHAR(32))
-hplanetid: Порядковый номер Главной планеты (INT)
-admin: 0 - обычный игрок, 1 - оператор, 2 - администратор (INT)
-sortby: Порядок сортировки планет: 0 - порядку колонизации, 1 - координатам, 2 - алфавиту (INT)
-sortorder: Порядок: 0 - по возрастанию, 1 - по убыванию (INT)
-skin: Путь для скина (CHAR(80)). Получается путем слепления пути к хосту и названием скина, но длина строки не более 80 символов.
-useskin: Показывать скин, если 0 - то показывать скин по умолчанию (INT)
-deact_ip: Выключить проверку IP (INT)
-maxspy: Кол-во шпионских зондов (1 по умолчанию, 0...99) (INT)
-maxfleetmsg: Максимальные сообщения о флоте в Галактику (3 по умолчанию, 0...99, 0=1) (INT)
-lang: Язык интерфейса игры (CHAR(4))
-aktplanet: Текущая выбранная планета. (INT)
-dm: Покупная ТМ (INT)
-dmfree: ТМ найденная в экспедиции (INT)
-sniff: Включить слежение за историей переходов (Админка) (INT)
-debug: Включить отображение отладочной информации (INT)
-trader: 0 - скупщик не найден, 1 - скупщик покупает металл, 2 - скупщик покупает кристалл, 3 - скупщик покупает дейтерий (INT)
-rate_m, rate_k, rate_d: курсы обмена скупщика ( например 3.0 : 1.8 : 0.6 ) (DOUBLE)
-score1,2,3: Очки за постройки, флот, исследования (BIGINT UNSIGNED, INT UNSIGNED, INT UNSIGNED )
-place1,2,3: Место за постройки, флот, исследования (INT)
-oldscore1,2,3: Старые очки за постройки, флот, исследования (BIGINT UNSIGNED, INT UNSIGNED, INT UNSIGNED )
-oldplace1,2,3: старое место за постройки, флот, исследования (INT)
-scoredate: Время сохранения старой статистики (INT UNSIGNED)
-rXXX: Уровень исследования XXX (INT)
-flags: Флаги пользователя. Полный список ниже (USER_FLAG). Не сразу додумался до этой идеи, некоторые переменные также можно сделать флагами (INT UNSIGNED)
+player_id: User ordinal number (INT AUTO_INCREMENT PRIMARY KEY)
+regdate: Date of account registration (INT UNSIGNED)
+ally_id: ID of the alliance in which the player is a member (0 - no alliance) (INT)
+joindate: Date of joining the alliance (INT UNSIGNED)
+allyrank: Rank of player in the alliance (INT)
+session: Public session for the links (CHAR (12))
+private_session: Private session for cookies (CHAR(32))
+name: Lower-case user name for comparison (CHAR(20))
+oname: Username original (CHAR(20))
+name_changed: Is the username changed? (1 or 0) (INT)
+Q name_until: When you can change the username next time (INT UNSIGNED)
+password: MD5 hash of password and secret word (CHAR(32))
+temp_pass: MD5 hash of the recovery password and secret word (CHAR(32))
+pemail: Permanent mailing address (CHAR(50))
+email: Temporary mailing address (CHAR(50))
+email_changed: Temporary mailing address has been changed (INT)
+Q email_until: When to replace a permanent email with a temporary one (INT UNSIGNED)
+disable: The account has been put up for deletion (INT)
+Q disable_until: When you can delete an account (INT UNSIGNED)
+vacation: An account in vacation mode (INT)
+vacation_until: When you can turn off vacation mode (INT UNSIGNED)
+banned: Account blocked (INT)
+Q banned_until: Blocking end time (INT UNSIGNED)
+noattack: Ban on attacks (INT)
+Q noattack_until: When the ban on attacks ends (INT UNSIGNED)
+lastlogin: Last date logged in (INT UNSIGNED)
+lastclick: Last click, to determine the player's activity (INT UNSIGNED)
+ip_addr: user IP address
+validated: User is activated. If the user is not activated, they are not allowed to send game messages and applications to alliances. (INT)
+validatemd: Activation code (CHAR(32))
+hplanetid: Home Planet ID (INT)
+admin: 0 - regular player, 1 - operator, 2 - administrator (INT)
+sortby: Planets sorting order: 0 - colonization order, 1 - coordinates, 2 - alphabetical order (INT)
+sortorder: Order: 0 - ascending, 1 - descending (INT)
+skin: Skin path (CHAR(80)). It is obtained by concatenating the path to the host and the skin name, but the length of the string is not more than 80 characters.
+useskin: Show skin, if 0 - then show default skin (INT)
+deact_ip: Disable IP verification (INT)
+maxspy: Number of spy probes (1 by default, 0...99) (INT)
+maxfleetmsg: Maximum fleet messages to the Galaxy (3 by default, 0...99, 0=1) (INT)
+lang: Game interface language (CHAR(4))
+aktplanet: Current selected planet. (INT)
+dm: Purchased DM (INT)
+dmfree: DM found on the expedition (INT)
+sniff: Enable tracking of browsing history (Admin Area) (INT)
+debug: Enable display of debugging information (INT)
+trader: 0 - no merchant found, 1 - merchant buys metal, 2 - merchant buys crystal, 3 - merchant buys deuterium (INT)
+rate_m, rate_k, rate_d: merchant exchange rates ( e.g. 3.0 : 1.8 : 0.6 ) (DOUBLE)
+score1,2,3: Points for buildings, fleets, and research (BIGINT UNSIGNED, INT UNSIGNED, INT UNSIGNED )
+place1,2,3: Place for buildings, fleet, research (INT)
+oldscore1,2,3: Old points for buildings, fleets, and research (BIGINT UNSIGNED, INT UNSIGNED, INT UNSIGNED )
+oldplace1,2,3: old place for buildings, fleet, research (INT)
+scoredate: Time of saving old statistics (INT UNSIGNED)
+rXXX: Research XXX level (INT)
+flags: User flags. The full list is below (USER_FLAG). I didn't think of this idea right away, some variables can also be made into flags (INT UNSIGNED)
 
-Q - для обработки этого события используется задание в очереди задач.
+Q - task in the task queue is used to process this event.
 */
 
-// Маска флагов (свойство flags)
-const USER_FLAG_SHOW_ESPIONAGE_BUTTON = 0x1;    // 1: Отображать иконку "Шпионаж"" в галактике
-const USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON = 0x2;       // 1: Отображать иконку "Написать сообщение" в галактике
-const USER_FLAG_SHOW_BUDDY_BUTTON = 0x4;        // 1: Отображать иконку "Предложение стать другом" в галактике
-const USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON = 0x8;    // 1: Отображать иконку "Ракетная атака" в галактике
-const USER_FLAG_SHOW_VIEW_REPORT_BUTTON = 0x10;     // 1: Отображать иконку "Просмотреть сообщение" в галактике
-const USER_FLAG_DONT_USE_FOLDERS = 0x20;        // 1: Не сортировать сообщения по папкам в режиме Командира
-const USER_FLAG_PARTIAL_REPORTS = 0x40;         // 1: Разведданные показывать частично
-const USER_FLAG_FOLDER_ESPIONAGE = 0x100;           // 1: Показывать шпионские доклады (pm=1)
-const USER_FLAG_FOLDER_COMBAT = 0x200;              // 1: Показывать боевые доклады (pm=2)
-const USER_FLAG_FOLDER_EXPEDITION = 0x400;          // 1: Показывать результаты экспедиций (pm=3)
-const USER_FLAG_FOLDER_ALLIANCE = 0x800;            // 1: Показывать сообщения альянса (pm=4)
-const USER_FLAG_FOLDER_PLAYER = 0x1000;             // 1: Показывать личные сообщения (pm=0)
-const USER_FLAG_FOLDER_OTHER = 0x2000;              // 1: Показывать прочие сообщения (pm=5)
+// Flag mask (flags property)
+const USER_FLAG_SHOW_ESPIONAGE_BUTTON = 0x1;    // 1: Display the "Espionage" icon" in the galaxy
+const USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON = 0x2;       // 1: Display the "Write message" icon in the galaxy
+const USER_FLAG_SHOW_BUDDY_BUTTON = 0x4;        // 1: Display the "Buddy request" icon in the galaxy
+const USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON = 0x8;    // 1: Display the "Missile Attack" icon in the galaxy
+const USER_FLAG_SHOW_VIEW_REPORT_BUTTON = 0x10;     // 1: Display the "View Message" icon in the galaxy
+const USER_FLAG_DONT_USE_FOLDERS = 0x20;        // 1: Do not sort messages into folders in Commander mode
+const USER_FLAG_PARTIAL_REPORTS = 0x40;         // 1: Show partial spy report
+const USER_FLAG_FOLDER_ESPIONAGE = 0x100;           // Message Filter. 1: Show spy reports (pm=1)
+const USER_FLAG_FOLDER_COMBAT = 0x200;              // Message Filter. 1: Show battle reports & missile attacks (pm=2)
+const USER_FLAG_FOLDER_EXPEDITION = 0x400;          // Message Filter. 1: Show expedition results (pm=3)
+const USER_FLAG_FOLDER_ALLIANCE = 0x800;            // Message Filter. 1: Show alliance messages (pm=4)
+const USER_FLAG_FOLDER_PLAYER = 0x1000;             // Message Filter. 1: Show private messages (pm=0)
+const USER_FLAG_FOLDER_OTHER = 0x2000;              // Message Filter. 1: Show all other messages (pm=5)
 
-// Флаги по умолчанию после создания игрока
+// Default flags after creating a player
 const USER_FLAG_DEFAULT = USER_FLAG_SHOW_ESPIONAGE_BUTTON | USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON | USER_FLAG_SHOW_BUDDY_BUTTON | USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON | USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
 
 const USER_LEGOR = 1;
 const USER_SPACE = 99999;
 
-const USER_NOOB_LIMIT = 5000;           // Количество очков для новичка
+const USER_NOOB_LIMIT = 5000;           // Number of points for a newbie
 
 $UserCache = array ();
 $PremiumCache = array ();
@@ -94,7 +94,7 @@ function fixed_date ( $fmt, $timestamp )
     return $date->format ($fmt);
 }
 
-// Выслать приветственное письмо с ссылкой для активации аккаунта (на языке вселенной).
+// Send a welcome email with a link to activate your account (in the language of the universe).
 function SendGreetingsMail ( $name, $pass, $email, $ack)
 {
     $unitab = LoadUniverse ();
@@ -120,7 +120,7 @@ function SendGreetingsMail ( $name, $pass, $email, $ack)
     mail_utf8 ( $email, loca_lang ("REG_GREET_MAIL_SUBJ", $unitab['lang']), $text, "From: OGame Uni $domain $uni <noreply@".hostname().">");
 }
 
-// Выслать письмо, подтверждающее смену адреса (на языке вселенной).
+// Send a letter confirming the change of address (in the language of the universe).
 function SendChangeMail ( $name, $email, $pemail, $ack)
 {
     $unitab = LoadUniverse ();
@@ -137,7 +137,7 @@ function SendChangeMail ( $name, $email, $pemail, $ack)
     mail_utf8 ( $pemail, loca_lang ("REG_CHANGE_MAIL_SUBJ", $unitab['lang']), $text, "From: OGame Uni $domain $uni <noreply@".hostname().">");
 }
 
-// Выслать приветственное сообщение (на языке пользователя)
+// Send a welcome message (in the user's language)
 function SendGreetingsMessage ( $player_id)
 {
     $unitab = LoadUniverse ();
@@ -159,7 +159,7 @@ function IsUserExist ( $name)
     return dbrows ($result);
 }
 
-// Исключить из поиска имя name.
+// Exclude the name $name from the search.
 function IsEmailExist ( $email, $name="")
 {
     global $db_prefix;
@@ -171,8 +171,8 @@ function IsEmailExist ( $email, $name="")
     return dbrows ($result);
 }
 
-// Проверок на правильность не делается! Этим занимается процедура регистрации.
-// Возвращает ID созданного пользователя.
+// There are no checks for correctness! This is handled by the registration procedure.
+// Returns the ID of the created user.
 function CreateUser ( $name, $pass, $email, $bot=false)
 {
     global $db_prefix, $db_secret, $Languages;
@@ -182,7 +182,7 @@ function CreateUser ( $name, $pass, $email, $bot=false)
     $md = md5 ($pass . $db_secret);
     $ack = md5(time ().$db_secret);
 
-    // Увеличить счетчик пользователей во вселенной.
+    // Increase the user count in the universe.
     $query = "SELECT * FROM ".$db_prefix."uni".";";
     $result = dbquery ($query);
     $unitab = dbarray ($result);
@@ -190,8 +190,8 @@ function CreateUser ( $name, $pass, $email, $bot=false)
     $query = "UPDATE ".$db_prefix."uni"." SET usercount = ".$unitab['usercount'].";";
     dbquery ($query);
 
-    // Установить язык регистрируемого игрока: если в кукисах есть выбранный язык и игрок НЕ бот - использовать его при регистрации.
-    // Иначе использовать язык Вселенной по умолчанию
+    // Set the language of the registered player: if there is a selected language in cookies and the player is NOT a bot - use it when registering.
+    // Otherwise, use the default language of the universe
     if ( !$bot && key_exists ( 'ogamelang', $_COOKIE ) ) $lang = $_COOKIE['ogamelang'];
     else $lang = $unitab['lang'];
     if ( !key_exists ( $lang, $Languages ) ) $lang = $unitab['lang'];
@@ -211,19 +211,19 @@ function CreateUser ( $name, $pass, $email, $bot=false)
 
     LogIPAddress ( $ip, $id, 1 );
 
-    // Создать Главную планету.
+    // Create a Home Planet.
     $homeplanet = CreateHomePlanet ($id);
 
     $query = "UPDATE ".$db_prefix."users SET hplanetid = $homeplanet, aktplanet = $homeplanet WHERE player_id = $id;";
     dbquery ( $query );
 
-    // Выслать приветственное письмо и сообщение.
+    // Send a welcome email and message.
     if ( !$bot ) {
         if ( !localhost($ip) ) SendGreetingsMail ( $origname, $pass, $email, $ack);
         SendGreetingsMessage ( $id);
     }
 
-    // Удалить неактивированного пользователя через 3 дня.
+    // Delete an inactivated user after 3 days.
 
     SetVar ( $id, "TimeLimit", 3*365*24*60*60 );
 
@@ -236,16 +236,16 @@ function CreateUser ( $name, $pass, $email, $bot=false)
     return $id;
 }
 
-// Полностью удалить игрока, все его планеты и флоты.
-// Развернуть флоты летящие на игрока.
+// Completely delete the player, all his planets and fleets.
+// Turn back fleets flying at the player.
 function RemoveUser ( $player_id, $when)
 {
     global $db_prefix;
 
-    // Аккаунты администратора и space нельзя удалить.
+    // Administrator and space accounts cannot be deleted.
     if ($player_id == USER_LEGOR || $player_id == USER_SPACE) return;
 
-    // Развернуть все флоты, летящие на игрока.
+    // Turn back all fleets flying at the player.
     $result = EnumFleetQueue ($player_id);
     $rows = dbrows ( $result );
     while ($rows--) {
@@ -254,40 +254,40 @@ function RemoveUser ( $player_id, $when)
         if ($fleet_obj['owner_id'] != $player_id && $fleet_obj['mission'] < FTYP_RETURN ) RecallFleet ( $fleet_obj['fleet_id'], $when );
     }
 
-    // Удалить все флоты игрока
+    // Delete all of the player's fleets
     $query = "DELETE FROM ".$db_prefix."fleet WHERE owner_id = $player_id";
     dbquery ($query);
 
-    // Удалить все задания из очереди
+    // Delete all tasks from the queue
     $query = "DELETE FROM ".$db_prefix."queue WHERE owner_id = $player_id";
     dbquery ($query);
 
-    // Удалить все планеты, кроме ПО, которые переходят во владения space.
+    // Delete all planets other than the DF that go into space possession.
     $query = "DELETE FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type <> " . PTYP_DF;
     dbquery ($query);
     $query = "UPDATE ".$db_prefix."planets SET owner_id = ".USER_SPACE." WHERE owner_id = $player_id AND type = " . PTYP_DF;
     dbquery ($query);
 
-    // Удалить игрока.
+    // Delete a player.
     $query = "DELETE FROM ".$db_prefix."users WHERE player_id = $player_id";
     dbquery ($query);
 
-    // Уменьшить количество пользователей.
+    // Decrement the number of users.
     $query = "UPDATE ".$db_prefix."uni SET usercount = usercount - 1;";
     dbquery ($query);
 
-    // Удалить заявки в альянс
+    // Delete alliance applications
     $apply_id = GetUserApplication ( $player_id );
     if ( $apply_id ) RemoveApplication ($apply_id);
 
-    // Удалить из списка друзей
+    // Remove from the buddy list
     $query = "DELETE FROM ".$db_prefix."buddy WHERE request_from = $player_id OR request_to = $player_id";
     dbquery ($query);
 
     RecalcRanks ();
 }
 
-// Произвести активацию пользователя.
+// Activate the user.
 function ValidateUser ($code)
 {
     global $db_prefix;
@@ -300,7 +300,7 @@ function ValidateUser ($code)
     }
     $user = dbarray ($result);
     if (!$user['validated'])
-    {    // Заменить постоянный адрес временным после активации.
+    {    // Replace the permanent address with a temporary one after activation.
         $query = "UPDATE ".$db_prefix."users SET pemail = '".$user['email']."' WHERE player_id = ".$user['player_id'];
         dbquery ($query);
     }
@@ -309,7 +309,7 @@ function ValidateUser ($code)
     Login ( $user['oname'], "", $user['password'], 1 );
 }
 
-// Проверить пароль. Возвращает 0, или ID пользователя.
+// Verify password. Returns 0, or the user ID.
 function CheckPassword ( $name, $pass, $passmd="")
 {
     global $db_prefix, $db_secret;
@@ -323,7 +323,7 @@ function CheckPassword ( $name, $pass, $passmd="")
     return $user['player_id'];
 }
 
-// Сменить временный почтовый адрес. Возвращает 1, если адрес успешно изменен, или 0, если адрес уже используется.
+// Change the temporary mail address. Returns 1 if the address was successfully changed, or 0 if the address is already in use.
 function ChangeEmail ( $name, $email)
 {
     global $db_prefix, $db_secret;
@@ -340,7 +340,7 @@ function ChangeEmail ( $name, $email)
     return 1;
 }
 
-// Сменить имя пользователя.
+// Change username.
 function ChangeName ( $player_id, $name )
 {
     global $db_prefix;
@@ -350,7 +350,7 @@ function ChangeName ( $player_id, $name )
     AddAllowNameEvent ($player_id);
 }
 
-// Сменить код активации. Возвращает новый код.
+// Change activation code. Returns the new code.
 function ChangeActivationCode ( $name)
 {
     global $db_prefix, $db_secret;
@@ -361,13 +361,13 @@ function ChangeActivationCode ( $name)
     return $ack;
 }
 
-// Выбрать текущую планету.
+// Select the current planet.
 function SelectPlanet ($player_id, $cp)
 {
     global $db_prefix;
     $planet = GetPlanet ($cp);
-    // Если планету не удалось загрузить (такое бывает например когда открыта страница с уничтоженной луной), 
-    // попробовать загрузить главную планету игрока.
+    // If the planet could not be loaded (this happens, for example, when the page with the destroyed moon is open),
+    // try to load the player's home planet.
     if (!$planet) {
         $user = LoadUser ($player_id);
         $cp = $user['hplanetid'];
@@ -376,7 +376,7 @@ function SelectPlanet ($player_id, $cp)
             Error ("Error loading the current planet.");
         }
     }
-    // Нельзя выбирать чужие планеты.
+    // You can't select other player's planets.
     if ($planet['owner_id'] != $player_id || $planet['type'] >= 10000 )
     {
         Hacking ( "HACK_SELECT_PLANET" );
@@ -387,14 +387,14 @@ function SelectPlanet ($player_id, $cp)
     InvalidateUserCache ();
 }
 
-// Получить ID текущей планеты
+// Get the ID of the current selected planet
 function GetSelectedPlanet ( $player_id )
 {
     $user = LoadUser ( $player_id );
     return $user['aktplanet'];
 }
 
-// Загрузить пользователя.
+// Load User.
 function LoadUser ( $player_id)
 {
     global $db_prefix, $UserCache;
@@ -406,7 +406,7 @@ function LoadUser ( $player_id)
     return $user;
 }
 
-// Обновить активность пользователя (НЕ ПЛАНЕТЫ).
+// Update user activity (NOT PLANET activity).
 function UpdateLastClick ( $player_id)
 {
     global $db_prefix;
@@ -415,12 +415,12 @@ function UpdateLastClick ( $player_id)
     dbquery ($query);
 }
 
-// Защита для новичков.
-// Новичками называют игроков, имеющих менее 5000 очков.
-// На новичка могут нападать лишь те игроки, у которых не более чем в пять раз больше, и не менее чем в пять раз меньше очков.
-// Новичок может напасть на более сильного игрока (как новичка, так и не новичка), если у него не более чем в пять раз больше очков.
+// Newbie Protection.
+// Newbies are players with less than USER_NOOB_LIMIT points.
+// A newbie can only be attacked by players who have no more than five times as many, and no less than five times as many points.
+// A Newbie can attack a stronger player (both Newbie and Non-Newbie) as long as the player has no more than five times as many points.
 
-// Защита для новичков. Проверить, является ли игрок для текущего игрока новичком.
+// Newbie protection. Check if the player is a newbie for the current player.
 function IsPlayerNewbie ( $player_id)
 {
     global $GlobalUser;
@@ -435,7 +435,7 @@ function IsPlayerNewbie ( $player_id)
     return true;
 }
 
-// Защита для новичков. Проверить, является ли игрок для текущего игрока сильным.
+// Newbie protection. Check if the player for the current player is a strong player.
 function IsPlayerStrong ( $player_id)
 {
     global $GlobalUser;
@@ -450,7 +450,7 @@ function IsPlayerStrong ( $player_id)
     return true;
 }
 
-// Получить статус командира и остальных офицеров на аккаунте.
+// Get the status of the commander and the rest of the officers on the account.
 function PremiumStatus ($user)
 {
     global $PremiumCache;
@@ -475,7 +475,7 @@ function PremiumStatus ($user)
     return $prem;
 }
 
-// Вызывается при нажатии на "Выход" в меню.
+// Called when you click on "Exit" in the menu.
 function Logout ( $session )
 {
     global $db_prefix;
@@ -491,11 +491,11 @@ function Logout ( $session )
     setcookie ( "prsess_".$player_id."_".$uni, '');
 }
 
-// Вызывается при загрузке каждой игровой страницы.
+// Called on every game page is loaded.
 function CheckSession ( $session )
 {
     global $db_prefix, $GlobalUser, $loca_lang, $Languages, $GlobalUni, $DefaultLanguage;
-    // Получить ID-пользователя и номер вселенной из публичной сессии.
+    // Get the user ID and universe number from a public session.
     $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$session."'";
     $result = dbquery ($query);
     if (dbrows ($result) == 0) { RedirectHome(); return FALSE; }
@@ -513,7 +513,7 @@ function CheckSession ( $session )
         if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
     }
 
-    // Установить глобальный язык для сессии: язык пользователя -> язык вселенной(если ошибка) -> язык по умолчанию(если ошибка)
+    // Set global language for session: user language -> universe language(if error) -> default language(if error)
 
     $loca_lang = $GlobalUser['lang'];
     if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $GlobalUni['lang'];
@@ -522,7 +522,7 @@ function CheckSession ( $session )
     return TRUE;
 }
 
-// Login - Вызывается с главной страницы, после регистрации или активации нового пользователя.
+// Login - Called from the home page, after registering or activating a new user.
 function Login ( $login, $pass, $passmd="", $from_validate=0 )
 {
     global $db_prefix, $db_secret;
@@ -534,50 +534,50 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
 
     if  ( $player_id = CheckPassword ($login, $pass, $passmd ) )
     {
-        // Пользователь заблокирован?
+        // Is the user blocked?
         $user = LoadUser ( $player_id );
         if ($user['banned'])
         {
-            UpdateLastClick ( $player_id );        // Обновить активность пользователя, чтобы можно было продлять удаление.
+            UpdateLastClick ( $player_id );        // Update the user's activity so that you can extend the deletion.
             echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/reg/errorpage.php?errorcode=3&arg1=$uni&arg2=$login&arg3=". fixed_date( "D M j Y G:i:s", $user['banned_until'] ) ."' /></head><body></body>";
             ob_end_flush ();
             exit ();
         }
 
         $lastlogin = time ();
-        // Создать приватную сессию.
+        // Create a private session.
         $prsess = md5 ( $login . $lastlogin . $db_secret);
-        // Создать публичную сессию
+        // Create a public session
         $sess = substr (md5 ( $prsess . sha1 ($pass) . $db_secret . $lastlogin), 0, 12);
 
-        // Записать приватную сессию в кукисы и обновить БД.
+        // Write the private session to cookies and update the database.
         setcookie ( "prsess_".$player_id."_".$uni, $prsess, time()+24*60*60, "/" );
         $query = "UPDATE ".$db_prefix."users SET lastlogin = $lastlogin, session = '".$sess."', private_session = '".$prsess."' WHERE player_id = $player_id";
         dbquery ($query);
 
-        // Записать IP-адрес.
+        // Write down the IP address.
         $ip = $_SERVER['REMOTE_ADDR'];
         $query = "UPDATE ".$db_prefix."users SET ip_addr = '".$ip."' WHERE player_id = $player_id";
         dbquery ($query);
 
-        // Выбрать Главную планету текущей.
+        // Select the Home Planet as the current planet.
         $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$sess."'";
         $result = dbquery ($query);
         $user = dbarray ($result);
         SelectPlanet ($player_id, $user['hplanetid']);
 
-        // Задание глобальной отгрузки игроков, чистки виртуальных ПО, чистки уничтоженных планет, пересчёт статистики альянсов и прочие глобальные события
+        // Setting events for player unload, virtual DF cleanup, cleanup of destroyed planets, recalculation of alliance stats, and other global events
         AddReloginEvent ();
         AddCleanDebrisEvent ();
         AddCleanPlanetsEvent ();
         AddCleanPlayersEvent ();
         AddRecalcAllyPointsEvent ();
 
-        // Задание пересчёта очков игрока.
+        // Player score recalculation task.
         AddUpdateStatsEvent ();
         AddRecalcPointsEvent ($player_id);
 
-        // Редирект на Обзор Главной планеты.
+        // Redirect to Home Planet Overview.
         header ( "Location: ".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1" );
         echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
 
@@ -592,26 +592,26 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
     exit ();
 }
 
-// Пересчёт статистики.
+// Recalculation of stats.
 function RecalcStats ($player_id)
 {
     global $db_prefix;
     $m = $k = $d = $e = 0;
     $points = $fpoints = $rpoints = 0;
 
-    // Планеты/луны + стоящие флоты
+    // Planets/moons + standing fleets
     $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$player_id."'";
     $result = dbquery ($query);
     $rows = dbrows ($result);
     while ($rows--) {
         $planet = dbarray ($result);
-        if ( $planet['type'] >= 10000 ) continue;        // считать только планеты и луны.
+        if ( $planet['type'] >= 10000 ) continue;        // only count planets and moons.
         $pp = PlanetPrice ($planet);
         $points += $pp['points'];
         $fpoints += $pp['fpoints'];
     }
 
-    // Исследования
+    // Research
     $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
     $user = LoadUser ($player_id);
     if ( $user != null )
@@ -630,7 +630,7 @@ function RecalcStats ($player_id)
         }
     }
 
-    // Летящие флоты
+    // Flying fleets
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $result = EnumOwnFleetQueue ( $player_id, 1 );
     $rows = dbrows ($result);
@@ -639,7 +639,7 @@ function RecalcStats ($player_id)
         $queue = dbarray ( $result );
         $fleet = LoadFleet ( $queue['sub_id'] );
 
-        foreach ( $fleetmap as $i=>$gid ) {        // Флот
+        foreach ( $fleetmap as $i=>$gid ) {        // Fleet
             $level = $fleet["ship$gid"];
             if ($level > 0){
                 $res = ShipyardPrice ( $gid );
@@ -649,7 +649,7 @@ function RecalcStats ($player_id)
             }
         }
     
-        if ( $fleet['ipm_amount'] > 0 ) {        // МПР
+        if ( $fleet['ipm_amount'] > 0 ) {        // IPM
             $res = ShipyardPrice ( 503 );
             $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             $points += ($m + $k + $d) * $fleet['ipm_amount'];
@@ -669,42 +669,42 @@ function AdjustStats ( $player_id, $points, $fpoints, $rpoints, $sign )
     dbquery ($query);
 }
 
-// Пересчитать места всех игроков.
+// Recalculate the places of all players.
 function RecalcRanks ()
 {
     global $db_prefix;
 
-    // Специальная обработка для админов
+    // Special processing for admins
     $query = "UPDATE ".$db_prefix."users SET score1 = -1, score2 = -1, score3 = -1 WHERE admin > 0";
     dbquery ($query);
 
-    // Очки
+    // Points
     dbquery ("SET @pos := 0;");
     $query = "UPDATE ".$db_prefix."users
               SET place1 = (SELECT @pos := @pos+1)
               ORDER BY score1 DESC";
     dbquery ($query);
 
-    // Флот
+    // Fleet
     dbquery ("SET @pos := 0;");
     $query = "UPDATE ".$db_prefix."users
               SET place2 = (SELECT @pos := @pos+1)
               ORDER BY score2 DESC";
     dbquery ($query);
 
-    // Исследования
+    // Research
     dbquery ("SET @pos := 0;");
     $query = "UPDATE ".$db_prefix."users
               SET place3 = (SELECT @pos := @pos+1)
               ORDER BY score3 DESC";
     dbquery ($query);
 
-    // Специальная обработка для админов
+    // Special processing for admins
     $query = "UPDATE ".$db_prefix."users SET place1 = 0, place2 = 0, place3 = 0 WHERE admin > 0";
     dbquery ($query);
 }
 
-// Отгрузить всех игроков
+// Log out all the players
 function UnloadAll ()
 {
     global $db_prefix, $StartPage;
@@ -716,7 +716,7 @@ function UnloadAll ()
     ob_end_flush ();
 }
 
-// Сменить путь к скину
+// Change skin path
 function ChangeSkinPath ($player_id, $dpath)
 {
     global $db_prefix;
@@ -724,7 +724,7 @@ function ChangeSkinPath ($player_id, $dpath)
     dbquery ($query);
 }
 
-// Включить/выключить отображение скина. При выключенном скине отображается скин по умолчанию.
+// Enable/disable skin display. When the skin is disabled, the default skin is displayed.
 function EnableSkin ($player_id, $enable)
 {
     global $db_prefix;
@@ -732,7 +732,7 @@ function EnableSkin ($player_id, $enable)
     dbquery ($query);
 }
 
-// Выдать список операторов вселенной
+// Get a list of operators in the universe
 function EnumOperators ()
 {
     global $db_prefix;
@@ -740,7 +740,7 @@ function EnumOperators ()
     return dbquery ($query);
 }
 
-// Повторно выслать пароль и ссылку для активации.
+// Resend the password and activation link.
 function ReactivateUser ($player_id)
 {
     global $db_prefix, $db_secret;
@@ -763,14 +763,14 @@ function ReactivateUser ($player_id)
     if ( !localhost($_SERVER['REMOTE_ADDR']) ) SendGreetingsMail ( $name, $pass, $email, $ack);
 }
 
-// Очистить кеш игроков.
+// Clear the player cache.
 function InvalidateUserCache ()
 {
     global $UserCache;
     $UserCache = array ();
 }
 
-// Вернуть имя игрока со ссылкой на страницу редактирования и статусом (ишка, РО и пр.)
+// Return player's name with a link to the edit page and status (inactive, VM, etc).
 function AdminUserName ($user)
 {
     global $session;
@@ -800,7 +800,7 @@ function AdminUserName ($user)
     return $name;
 }
 
-// Забанить игрока.
+// Ban the player.
 function BanUser ($player_id, $seconds, $vmode)
 {
     global $db_prefix;
@@ -817,7 +817,7 @@ function BanUser ($player_id, $seconds, $vmode)
     RecalcRanks ();
 }
 
-// Запретить атаки.
+// Ban attacks.
 function BanUserAttacks ($player_id, $seconds)
 {
     global $db_prefix;
@@ -831,7 +831,7 @@ function BanUserAttacks ($player_id, $seconds)
     dbquery ($query);
 }
 
-// Разбанить игрока
+// Unban a player
 function UnbanUser ($player_id)
 {
     global $db_prefix;
@@ -843,7 +843,7 @@ function UnbanUser ($player_id)
     RecalcRanks ();
 }
 
-// Разрешить атаки
+// Allow attacks
 function UnbanUserAttacks ($player_id)
 {
     global $db_prefix;
@@ -853,7 +853,7 @@ function UnbanUserAttacks ($player_id)
     dbquery ($query);
 }
 
-// Установить флаги пользователя
+// Set user flags
 function SetUserFlags ($player_id, $flags)
 {
     global $db_prefix;
@@ -861,7 +861,7 @@ function SetUserFlags ($player_id, $flags)
     dbquery ($query);
 }
 
-// Получить количество игроков (администраторы и операторы не считаются)
+// Get the number of players (administrators and operators do not count)
 function GetUsersCount()
 {
     global $db_prefix;
