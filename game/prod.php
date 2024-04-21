@@ -1,12 +1,12 @@
 <?php
 
-// Вспомогательные функции для экономической части OGame.
+// Auxiliary functions for the economic part of OGame.
 
-// Расчет стоимости, времени постройки и необходимых условий.
+// Calculation of cost, build time and required conditions.
 
-// Стоимость первого уровня.
+// Level 1 cost.
 $initial = array (      // m, k, d, e
-    // Постройки.
+    // Buildings
     14 => array (400, 120, 200, 0),
     15 => array (1000000, 500000, 100000, 0),
     21 => array (400, 200, 100, 0),
@@ -17,12 +17,12 @@ $initial = array (      // m, k, d, e
     33 => array (0, 50000, 100000, 1000),
     34 => array (20000, 40000,  0, 0),
     44 => array (20000, 20000, 1000, 0),
-    // Луна
+    // Moon
     41 => array (20000, 40000, 20000, 0),
     42 => array (20000, 40000, 20000, 0),
     43 => array (2000000, 4000000, 2000000, 0),
 
-    // Флот
+    // Fleet
     202 => array (2000, 2000, 0, 0),
     203 => array (6000, 6000, 0, 0),
     204 => array (3000, 1000, 0, 0),
@@ -38,7 +38,7 @@ $initial = array (      // m, k, d, e
     214 => array (5000000, 4000000, 1000000, 0),
     215 => array (30000, 40000, 15000, 0),
 
-    // Оборона.
+    // Defense
     401 => array (2000, 0, 0, 0),
     402 => array (1500, 500, 0, 0),
     403 => array (6000, 2000, 0, 0),
@@ -50,7 +50,7 @@ $initial = array (      // m, k, d, e
     502 => array (8000, 0, 2000, 0),
     503 => array (12500, 2500, 10000, 0),
 
-    // Исследования.
+    // Research
     106 => array (200, 1000, 200, 0),
     108 => array (0, 400, 600, 0),
     109 => array (800, 200, 0, 0),
@@ -80,13 +80,13 @@ function BuildMeetRequirement ( $user, $planet, $id )
         if ( $id == 41 || $id == 42 || $id == 43 ) return false;
     }
 
-    // Термоядерная электростанция => Синтезатор дейтерия (уровень 5), Энергетическая технология (уровень 3)
-    // Фабрика нанитов => Фабрика роботов (уровень 10), Компьютерная технология (уровень 10)
-    // Верфь => Фабрика роботов (уровень 2)
-    // Терраформер => Фабрика нанитов (уровень 1), Энергетическая технология (уровень 12)
-    // Ракетная шахта => Верфь (уровень 1)
-    // Сенсорная фаланга => Лунная база (уровень 1)
-    // Ворота => Лунная база (уровень 1), Гиперпространственная технология (уровень 7)
+    // Fusion Reactor => Deuterium Synthesizer (level 5), Energy Technology (level 3)
+    // Nanite Factory => Robot Factory (level 10), Computer Technology (level 10)
+    // Shipyard => Robot Factory (level 2)
+    // Terraformer => Nanite Factory (level 1), Energy Technology (level 12)
+    // Rocket silo => Shipyard (level 1)
+    // Sensor phalanx => Lunar base (level 1)
+    // JumpGate => Moonbase (level 1), Hyperspace Technology (level 7)
     if ( $id == 12 && ( $planet['b3'] < 5 || $user['r113'] < 3 ) ) return false;
     if ( $id == 15 && ( $planet['b14'] < 10 || $user['r108'] < 10 ) ) return false;
     if ( $id == 21 && ( $planet['b14'] < 2 ) ) return false;
@@ -103,27 +103,27 @@ function BuildPrice ( $id, $lvl )
     global $initial;
     switch ($id)
     {
-        case 1:   // Шахта металла
+        case 1:   // Metal Mine
             $m = floor (60 * pow(1.5, $lvl-1));
             $k = floor (15 * pow(1.5, $lvl-1));
             $d = $e = 0;
             break;
-        case 2:   // Шахта кристалла
+        case 2:   // Crystal Mine
             $m = floor (48 * pow(1.6, $lvl-1));
             $k = floor (24 * pow(1.6, $lvl-1));
             $d = $e = 0;
             break;
-        case 3:   // Шахта дейта
+        case 3:   // Deuterium Synthesizer
             $m = floor (225 * pow(1.5, $lvl-1));
             $k = floor (75 * pow(1.5, $lvl-1));
             $d = $e = 0;
             break;
-        case 4:   // СЭС
+        case 4:   // Solar Plant
             $m = floor (75 * pow(1.5, $lvl-1));
             $k = floor (30 * pow(1.5, $lvl-1));
             $d = $e = 0;
             break;
-        case 12:   // Терма
+        case 12:   // Fusion Reactor
             $m = floor (900 * pow(1.8, $lvl-1));
             $k = floor (360 * pow(1.8, $lvl-1));
             $d = floor (180 * pow(1.8, $lvl-1));
@@ -140,7 +140,7 @@ function BuildPrice ( $id, $lvl )
     return $res;
 }
 
-// Время строительства постройки $id уровня $lvl в секундах.
+// Time to build a $id level $lvl building in seconds.
 function BuildDuration ( $id, $lvl, $robots, $nanits, $speed )
 {
     $res = BuildPrice ( $id, $lvl );
@@ -250,9 +250,9 @@ function ResearchDuration ( $id, $lvl, $reslab, $speed )
     return $secs;
 }
 
-// Расчёт МИС.
-// Присоединить к текущей лаборатории +МИС лабораторий максимального уровня.
-// На выходе общий уровень "виртуальной" лаборатории.
+// IGN Calculation.
+// Attach +IGN laboratories of maximum level to the current laboratory.
+// The output is the overall level of the "virtual" lab.
 function ResearchNetwork ( $planetid, $id )
 {
     global $db_prefix;
@@ -264,28 +264,26 @@ function ResearchNetwork ( $planetid, $id )
     $labs = array ();
     $labnum = 0;
 
-    // Перечислить планеты игрока (луны и прочие спец-объекты не перечислять). Также пропускать планеты у которых нет ИЛ.
+    // List the player's planets (do not list moons and other special objects). Also skip planets that do not have lab.
     $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type < 10000 AND type > 0 AND b31 > 0";
     $result = dbquery ($query);
     $pnum = dbrows ( $result );
 
-    // Получить все доступные лабы, отсортированные по убыванию.
+    // Get all available labs sorted in descending order.
     while ($pnum--)
     {
         $p = dbarray ($result);
-        if ( $p['planet_id'] == $planetid) continue;    // Пропустить текущую планету.
+        if ( $p['planet_id'] == $planetid) continue;    // Skip the current planet.
         if ( ResearchMeetRequirement ( $user, $p, $id ) ) $labs[$labnum++] = $p["b31"];
     }
     rsort ( $labs );
-    //print_r ($labs ); echo "";
 
-    // Присоединить +МИС доступных лабораторий.
+    // Attach +IGN of available laboratories.
     for ($i=0; $i<$ign && $i<$labnum; $i++) $reslab += $labs[$i];
-    //echo "$reslab <br>";
     return $reslab;
 }
 
-// Возвратить строку длительности по дням, часам, минутам, секундам.
+// Return a string of durations by days, hours, minutes, seconds.
 function BuildDurationFormat ( $seconds )
 {
     $res = "";
@@ -311,12 +309,12 @@ function IsEnoughResources ($planet, $m, $k, $d, $e)
     return true;
 }
 
-// Всё что связано с добычей и подсчетом ресурсов.
+// Anything related to resource production and calculation.
 
-// Получить размер хранилищ.
+// Get the size of the storages.
 function store_capacity ($lvl) { return 100000 + 50000 * (ceil (pow (1.6, $lvl) - 1)); }
 
-// Выработка энергии
+// Energy production
 function prod_solar ($lvl, $pr)
 {
     $prod = floor (20 * $lvl * pow (1.1, $lvl) * $pr);
@@ -333,27 +331,27 @@ function prod_sat ($maxtemp)
     return max (1, $prod);
 }
 
-// Выработка шахт
+// Mines production
 function prod_metal ($lvl, $pr) { return floor (30 * $lvl * pow (1.1, $lvl) * $pr); }
 function prod_crys ($lvl, $pr) { return floor (20 * $lvl * pow (1.1, $lvl) * $pr); }
 function prod_deut ($lvl, $maxtemp, $pr) { return floor ( 10 * $lvl * pow (1.1, $lvl) * $pr) * (1.28 - 0.002 * ($maxtemp)); }
 
-// Потребление энергии
+// Energy consumption
 function cons_metal ($lvl) { return ceil (10 * $lvl * pow (1.1, $lvl)); }
 function cons_crys ($lvl) { return ceil (10 * $lvl * pow (1.1, $lvl)); }
 function cons_deut ($lvl) { return ceil (20 * $lvl * pow (1.1, $lvl)); }
 
-// Потребление дейта термоядом
+// Consumption of deuterium by the fusion reactor
 function cons_fusion ($lvl, $pr) { return ceil (10 * $lvl * pow (1.1, $lvl) * $pr) ; }
 
-// Расчитать прирост ресурсов. Ограничить емкостью хранилищ.
-// ВНИМАНИЕ: Из расчета исключаются внешние события, типа окончания действия офицеров, атаки другого игрока, завершение постройки здания итп.
+// Calculate resource production increase. Limit storage capacity.
+// NOTE: The calculation excludes external events, such as the end of officers' actions, attack of another player, completion of building construction, etc.
 function ProdResources ( &$planet, $time_from, $time_to )
 {
     global $db_prefix, $GlobalUni;
-    if ( $planet['type'] != PTYP_PLANET ) return;        // НЕ планета
+    if ( $planet['type'] != PTYP_PLANET ) return;        // NOT a planet
     $user = LoadUser ($planet['owner_id']);
-    if ( $user['player_id'] == USER_SPACE ) return;    // технический аккаунт space
+    if ( $user['player_id'] == USER_SPACE ) return;    // technical account space
     $diff = $time_to - $time_from;
 
     $speed = $GlobalUni['speed'];
@@ -362,19 +360,19 @@ function ProdResources ( &$planet, $time_from, $time_to )
     if ( $prem['geologist'] ) $g_factor = 1.1;
     else $g_factor = 1.0;
 
-    $hourly = prod_metal ($planet['b1'], $planet['mprod']) * $planet['factor'] * $speed * $g_factor + 20 * $speed;        // Металл
+    $hourly = prod_metal ($planet['b1'], $planet['mprod']) * $planet['factor'] * $speed * $g_factor + 20 * $speed;        // Metal
     if ( $planet['m'] < $planet['mmax'] ) {
         $planet['m'] += ($hourly * $diff) / 3600;
         if ( $planet['m'] >= $planet['mmax'] ) $planet['m'] = $planet['mmax'];
     }
 
-    $hourly = prod_crys ($planet['b2'], $planet['kprod']) * $planet['factor'] * $speed * $g_factor + 10 * $speed;        // Кристалл
+    $hourly = prod_crys ($planet['b2'], $planet['kprod']) * $planet['factor'] * $speed * $g_factor + 10 * $speed;        // Crystal
     if ( $planet['k'] < $planet['kmax'] ) {
         $planet['k'] += ($hourly * $diff) / 3600;
         if ( $planet['k'] >= $planet['kmax'] ) $planet['k'] = $planet['kmax'];
     }
 
-    $hourly = prod_deut ($planet['b3'], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed * $g_factor;    // Дейтерий
+    $hourly = prod_deut ($planet['b3'], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed * $g_factor;    // Deuterium
     $hourly -= cons_fusion ( $planet['b12'], $planet['fprod'] ) * $speed;	// термояд
     if ( $planet['d'] < $planet['dmax'] ) {
         $planet['d'] += ($hourly * $diff) / 3600;
@@ -387,7 +385,7 @@ function ProdResources ( &$planet, $time_from, $time_to )
     $planet['lastpeek'] = $time_to;
 }
 
-// Стоимость планеты в очках.
+// The cost of the planet in points.
 function PlanetPrice ($planet)
 {
     $pp = array ();
@@ -398,7 +396,7 @@ function PlanetPrice ($planet)
     $m = $k = $d = $e = 0;
     $pp['points'] = $pp['fpoints'] = $pp['fleet_pts'] = $pp['defense_pts'] = 0;
 
-    foreach ( $buildmap as $i=>$gid ) {        // Постройки
+    foreach ( $buildmap as $i=>$gid ) {        // Buildings
         $level = $planet["b$gid"];
         if ($level > 0){
             for ( $lv = 1; $lv<=$level; $lv ++ )
@@ -410,7 +408,7 @@ function PlanetPrice ($planet)
         }
     }
 
-    foreach ( $fleetmap as $i=>$gid ) {        // Флот
+    foreach ( $fleetmap as $i=>$gid ) {        // Fleet
         $level = $planet["f$gid"];
         if ($level > 0){
             $res = ShipyardPrice ( $gid);
@@ -421,7 +419,7 @@ function PlanetPrice ($planet)
         }
     }
 
-    foreach ( $defmap as $i=>$gid ) {        // Оборона
+    foreach ( $defmap as $i=>$gid ) {        // Defense
         $level = $planet["d$gid"];
         if ($level > 0){
             $res = ShipyardPrice ( $gid );
@@ -434,7 +432,7 @@ function PlanetPrice ($planet)
     return $pp;
 }
 
-// Стоимость флота
+// Fleet cost
 function FleetPrice ( $fleet_obj )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
@@ -442,7 +440,7 @@ function FleetPrice ( $fleet_obj )
     $points = $fpoints = 0;
     $price = array ();
 
-    foreach ( $fleetmap as $i=>$gid ) {        // Флот
+    foreach ( $fleetmap as $i=>$gid ) {        // Fleet
         $level = $fleet_obj["ship$gid"];
         if ($level > 0){
             $res = ShipyardPrice ( $gid );

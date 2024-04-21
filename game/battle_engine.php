@@ -441,7 +441,7 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
                 $rapidfire = 1;
 
                 if (ord($slot_att{$i}) == $slot) {
-                    // Выстрел.
+                    // The shot.
                     while ($rapidfire) {
                         $idx = mt_rand (0, $dobjs - 1);
                         $apower = UnitShoot ($i, $idx, 
@@ -467,7 +467,7 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
                 $rapidfire = 1;
 
                 if (ord($slot_def{$i}) == $slot) {
-                    // Выстрел.
+                    // The shot.
                     while ($rapidfire) {
                         $idx = mt_rand (0, $aobjs - 1);
                         $apower = UnitShoot ($i, $idx,
