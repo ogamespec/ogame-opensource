@@ -772,7 +772,7 @@ Soruyorsundur kendine bunu sana niye anlattigimi. Söyle desem: Sana burada beni
     }
 */
 
-// TODO: Залезть на archive.org и перетащить тексты для остальных языков.
+// TODO: Go to archive.org and pull up the texts for the other languages.
 
 // <a href="#" onclick="javascript:setlang('br');"><img src="img/flags/br.gif" alt="Brazil" title="Brazil"></a>                      -- TODO
 // <a href="#" onclick="javascript:setlang('bg');"><img src="img/flags/bg.gif" alt="Bulgaria" title="Bulgaria"></a>             -- TODO
@@ -797,7 +797,7 @@ Soruyorsundur kendine bunu sana niye anlattigimi. Söyle desem: Sana burada beni
 // <a href="#" onclick="javascript:setlang('tr');"><img src="img/flags/tr.gif" alt="Turkey" title="Turkey"></a>                 -- TODO
 // <a href="#" onclick="javascript:setlang('tw');"><img src="img/flags/tw.gif" alt="Taiwan" title="Taiwan"></a>                 -- TODO
 
-    // Язык стартовой страницы
+    // Start page language
     if ( !isset ($_COOKIE['ogamelang']) ) $LocaLang = "en";
     else $LocaLang = $_COOKIE['ogamelang'];
 //    if ($LocaLang !== 'de' && $LocaLang !== 'en' && $LocaLang !== 'ru') $LocaLang = "en";        // restrict unsupported languages

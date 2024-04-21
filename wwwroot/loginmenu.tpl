@@ -17,7 +17,7 @@
 
     require_once "uni.php";
 
-    // Загрузить список вселенных.
+    // Load a list of universes.
     foreach ( $UniList as $i=>$val) {
         if ( is_int($i) ) echo "<option value=\"".$val['uniurl']."\" > $i. ".loca("LOGIN_UNI")."</option>\n";
         else echo "<option value=\"".$val['uniurl']."\" >$i</option>\n";

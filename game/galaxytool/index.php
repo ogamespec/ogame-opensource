@@ -7,7 +7,7 @@ $loca_lang = $_COOKIE['ogamelang'];
 if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
 loca_add ( "galaxytool", $loca_lang );
 
-// Получить маленькую картинку планеты.
+// Get a small picture of the planet.
 function GetPlanetSmallImage ($skinpath, $planet)
 {
     if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return $skinpath."planeten/small/s_mond.jpg";
@@ -23,7 +23,7 @@ function GetPlanetSmallImage ($skinpath, $planet)
         else if ($p >= 13 && $p <= 15) return sprintf ( "%splaneten/small/s_eisplanet%02d.jpg", $skinpath, $id);
         else return sprintf ( "%splaneten/small/s_eisplanet%02d.jpg", $skinpath, $id);
     }
-    else return "img/admin_planets.png";        // Специальные объекты галактики (уничтоженные планеты и пр.)
+    else return "img/admin_planets.png";        // Special objects of the galaxy (destroyed planets, etc.)
 }
 
 ?>

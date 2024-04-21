@@ -5,7 +5,7 @@
 
 <?php
 
-// Добавить вывод ошибок для этой ранней стадии установки
+// Add error output for this early stage of the installation
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -13,14 +13,14 @@ require_once "db.php";
 
 $InstallError = "";
 
-// Структура таблиц.
+// Table Structure.
 // -------------------------------------------------------------------------------------------------------------------------
 
-$tab_unis = array (          // Вселенные
+$tab_unis = array (          // Universes
     'id' => 'INT AUTO_INCREMENT PRIMARY KEY', 'num' => 'INT', 'dbhost' => 'TEXT', 'dbuser' => 'TEXT', 'dbpass' => 'TEXT', 'dbname' => 'TEXT', 'uniurl' => 'TEXT',
 );
 
-$tab_coupons = array (       // Купоны
+$tab_coupons = array (       // Coupons
     'id' => 'INT AUTO_INCREMENT PRIMARY KEY', 'code' => 'TEXT', 'amount' => 'INT UNSIGNED', 'used' => 'INT', 'user_uni' => 'INT', 'user_id' => 'INT', 'user_name' => 'TEXT', 
 );
 
@@ -31,7 +31,7 @@ $tabs = array (
 
 if ( $_SERVER['REQUEST_METHOD'] === "POST" ) {
 
-    // Удалить все таблицы и создать новые пустые.
+    // Delete all tables and create new empty tables.
     dbconnect ($_POST["mdb_host"], $_POST["mdb_user"], $_POST["mdb_pass"], $_POST["mdb_name"]);
     dbquery ("SET NAMES 'utf8';");
     dbquery ("SET CHARACTER SET 'utf8';");
@@ -55,7 +55,7 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" ) {
         dbquery ($query, TRUE);
     }
 
-    // Сохранить файл конфигурации.
+    // Save the configuration file.
     $file = fopen ("config.php", "wb");
     if ($file == FALSE) $InstallError = loca('INSTALL_ERROR1');
     else

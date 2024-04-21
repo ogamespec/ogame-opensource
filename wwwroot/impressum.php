@@ -71,49 +71,49 @@ hr {
 	<tr>
 		<td>
 		<br/><br/>	<br /><br />
-<b><u>Причины создания проекта</u></b><br /><br />
+<b><u>Reasons for creating the project</u></b><br /><br />
 
-Список причин, по которым Редизайн не пригоден для нормальной игры: 
+A list of reasons why the Redesign is not suitable for normal play:
 <ul>
-<li>Страницы весят в два-три раза больше. Чрезмерная нагрузка на трафик. </li>
-<li>Отрисовка страниц происходит очень медленно из-за обилия картинок, стилей и перегруженного javascript. </li>
-<li>Невозможно нормально играть с мобильных устройств. </li>
-<li>Обилие неисправляемых багов. Постоянное появление новых багов. </li>
-<li>Изменение баланса игры (новая активность планет в Обзоре (к тому же багнутая), Астрофизика, перенос планет и прочее). </li>
+<li>Pages weigh two or three times as much. Excessive load on traffic.</li>
+<li>Page rendering is very slow due to the abundance of images, styles and overloaded javascript.</li>
+<li>It's impossible to play smoothly from mobile devices.</li>
+<li>Abundance of unfixable bugs. Constant appearance of new bugs.</li>
+<li>Game balance changes (new planet activity in Overview (also buggy), Astrophysics, planet transfers, and more).</li>
 </ul>
 
-Как следствие теряется: 
+As a consequence, it is lost:
 <ul>
-<li>Возможность адекватного управления флотами. Теперь поднять флот за 3-4 секунды или одновременно тормозить 3-4 САБа является практически нереальной задачей. </li>
-<li>С исправленной активностью пропал целый пласт игры - так называемые "Ninja", когда игрок обновляет Обзор и внезапно ловит атакующего Воротами. </li>
-<li>Банальный своз ресурсов со всех планет или сейв дейта на лунах занимает в 2-3 раза больше времени, чем раньше </li>
-<li>Шанс увести флот в экстренных случаях с мобильника сводится к нулю.</li>
-</ul>
-
-<br /><br />
-<b><u>Отличия от оригинала</u></b><br /><br />
-
-Чего не будет в этом проекте: 
-<ul>
-<li>Не будет Редизайна и всех его особенностей. Игра будет соответствовать версии 0.84 </li>
-<li>Не будет платной Тёмной Материи, однако функций за найденную в экспедициях ТМ будут доступны (Офицеры и Скупщик) </li>
-</ul>
-
-Будут исправлены ошибки оригинальной версии 0.84: 
-<ul>
-<li>Багнутая планета при попытке колонизации 10й планеты. На её месте будет Покинутая колония. </li>
-<li>Наведение активности на целевой планете, после возврата своего флота на исходную планету </li>
-<li>Клонирование флота (подъём флота после атаки) </li>
-<li>Отрицательные ресурсы (заказ постройки в момент атаки) </li>
-<li>Торможение возвращающегося флота, отозванного из САБа</li>
-<li>Ускорение возврата из экспедиции</li>
-<li>и другие...</li>
+<li>Ability to adequately manage fleets. Now to lift a fleet in 3-4 seconds or to simultaneously slow down 3-4 ACS attacks is an almost unrealistic task.</li>
+<li>With the patched activity, a whole layer of the game is gone - the so-called "Ninja" attacks, where a player updates the Overview and suddenly catches an attacker with a Gate.</li>
+<li>It takes 2-3 times longer than it used to take to save resources from all the planets or to save the deut on the moons</li>
+<li>The chance of taking a fleet away in an emergency from a cell phone is reduced to zero.</li>
 </ul>
 
 <br /><br />
-<b><u>Разработка</u></b><br /><br />
+<b><u>Differences to the original</u></b><br /><br />
 
-- Google Code: <a href="https://github.com/ogamespec/ogame-opensource" target=_blank>https://github.com/ogamespec/ogame-opensource</a><br/>
+Which is not going to happen in this project:
+<ul>
+<li>There will not be a Redesign and all of its features. The game will correspond to version 0.84</li>
+<li>There will be no paid Dark Matter, however features for DM found on expeditions will be available (Officers and Merchant)</li>
+</ul>
+
+Fixed bugs of the original version 0.84: 
+<ul>
+<li>A buggy planet when attempting to colonize the 10th planet. It will be replaced by an Abandoned Colony.</li>
+<li>Setting up an activity on the target planet, after returning your fleet to the source planet</li>
+<li>Fleet cloning (lifting a fleet after an attack)</li>
+<li>Negative resources (building order at the time of attack)</li>
+<li>Slowing down the returning fleet recalled from the ACS Attack</li>
+<li>Accelerating the return from an expedition</li>
+<li>And others...</li>
+</ul>
+
+<br /><br />
+<b><u>Development</u></b><br /><br />
+
+- GitHub: <a href="https://github.com/ogamespec/ogame-opensource" target=_blank>https://github.com/ogamespec/ogame-opensource</a><br/>
 - Discord: https://discord.gg/xpCV3McAj2<br/>
 
 <br /><br />
@@ -121,5 +121,5 @@ BIG MONEY MAKES YOU DEVIL.
 
 		</table>
 		<br/>
-		<!-- lang: ru | content: impress --></body>
+		<!-- lang: en | content: impress --></body>
 </html>

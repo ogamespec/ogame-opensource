@@ -8,7 +8,7 @@ if ( file_exists ("config.php")) {
 
     require_once "config.php";
 
-    // Соединиться с базой данных
+    // Connect to the database
     dbconnect ($mdb_host, $mdb_user, $mdb_pass, $mdb_name);
     dbquery("SET NAMES 'utf8';");
     dbquery("SET CHARACTER SET 'utf8';");
