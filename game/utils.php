@@ -10,7 +10,7 @@ function scriptname () {
 }
 
 function hostname () {
-    if (!empty($_SERVER['HTTPS']))  { //get if request is http or https
+    if (!empty($_SERVER['HTTPS']))  { // get if request is http or https
        $encr ="https://";
     }else{
        $encr ="http://";
@@ -96,12 +96,12 @@ function localhost ($ip)
     return $ip === "127.0.0.1" || $ip === "::1";
 }
 
-// Вырезать из строки всякие инжекции.
+// Cut all sorts of injections out of the string.
 function SecureText ( $text )
 {
-    $search = array ( "'<script[^>]*?>.*?</script>'si",  // Вырезает javaScript
-                      "'<[\/\!]*?[^<>]*?>'si",           // Вырезает HTML-теги
-                      "'([\r\n])[\s]+'" );             // Вырезает пробельные символы
+    $search = array ( "'<script[^>]*?>.*?</script>'si",  // Cuts out javaScript
+                      "'<[\/\!]*?[^<>]*?>'si",           // Cuts HTML tags
+                      "'([\r\n])[\s]+'" );             // Cuts out whitespace characters
     $replace = array ("", "", "\\1", "\\1" );
     $str = preg_replace($search, $replace, $text);
     $str = str_replace ("`", "", $str);

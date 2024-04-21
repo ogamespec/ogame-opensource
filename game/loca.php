@@ -1,10 +1,10 @@
 <?php
 
-// Новый движок LOCA, не использующий базу данных.
+// A new LOCA engine that does not use a database.
 // Original game load all loca's at every page access (they had 'english.php', 'deutch.php' and so on)
 // But actually you don't need it all at same time, only some of them (except very important ones)
 
-// Список языков
+// Supported language list
 $Languages = array ( 
 #    'ae' => "اللغة العربية", 
 #    'ar' => "Español", 
@@ -39,26 +39,26 @@ $Languages = array (
 #    'ua' => "Українська",
 );
 
-// Язык по умолчанию, если приходится делать выбор. Т.к. проект уже достаточно хорошо интернационализирован - языком по умолчанию сделан English.
+// Default language if you have to make a choice. Since the project is already quite well internationalized - the default language is English.
 $DefaultLanguage = "en";
 
 //
-// Глобальный язык устанавливается во время создании сессии пользователя.
+// The global language is set during the creation of a user session.
 //
 
-$loca_lang = $DefaultLanguage;        // Используемый язык. Можно менять в любое время.
+$loca_lang = $DefaultLanguage;        // Language used. Can be changed at any time.
 
-$LOCA = array ();        // тут содержаться все ключи.
+$LOCA = array ();        // all the keys are in here.
 
-// Этот метод можно использовать чтобы массово заменить оригинальное название проекта (OGame) на название вашего проекта (напр. SpaceWars)
+// This method can be used to bulk replace the original project name (OGame) with your project name (e.g. SpaceWars).
 function loca_subst_ogame ($text)
 {
     //return str_replace ("OGame", "SpaceWars", $text);
     return $text;
 }
 
-// Вернуть значение ключа. Возвращается последняя версия.
-// Если соединение с LOCA отсутствует или такого ключа не существует, вернуть название ключа.
+// Return the value of the key. The latest version is returned.
+// If there is no connection to the LOCA or no such key exists, return the key name.
 function loca ($key)
 {
     global $LOCA, $loca_lang;
@@ -66,8 +66,8 @@ function loca ($key)
     else return loca_subst_ogame ($LOCA[$loca_lang][$key]);
 }
 
-// Аналогично обычной loca(), но язык выбирается не из глобальной переменной, а из параметра метода.
-// Используется когда нужно работать одновременно с несколькими языками (напр. боевые доклады для игроков с разными языками)
+// Similar to regular loca(), but the language is selected from a method parameter rather than a global variable.
+// It is used when it is necessary to work simultaneously with several languages (e.g. battle reports for players with different languages).
 function loca_lang ($key, $lang)
 {
     global $LOCA;
@@ -75,12 +75,12 @@ function loca_lang ($key, $lang)
     else return loca_subst_ogame ($LOCA[$lang][$key]);
 }
 
-// Добавить набор языковых ключей.
+// Add a set of language keys.
 function loca_add ( $section, $lang='en' )
 {
     global $LOCA, $Languages;
 
-    // Проверить есть ли язык в списке (для исключения инъекций)
+    // Check if the language is on the list (to exclude injections)
     $found = false;
     foreach ($Languages as $i=>$name ) {
         if ( $i === $lang) { $found = true; break; }

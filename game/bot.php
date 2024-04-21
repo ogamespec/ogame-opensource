@@ -1,21 +1,21 @@
 <?php
 
-// Управление ботами.
+// Bot Management.
 
 require_once "botapi.php";        // API
 
-// Глобальные переменные бота.
-$BotID = 0;        // номер текущего бота
-$BotNow = 0;       // время начала выполнения задания бота
+// Global bot variables.
+$BotID = 0;        // ordinal number of the current bot
+$BotNow = 0;       // start time of bot task execution
 
-// Добавить блок в очередь
+// Add a block to the queue
 function AddBotQueue ($player_id, $strat_id, $block_id, $when, $seconds)
 {
     $queue = array ( '', $player_id, 'AI', $strat_id, $block_id, 0, $when, $when+$seconds, 1000 );
     return AddDBRow ( $queue, 'queue' );
 }
 
-// Интерпретатор блоков
+// Block Interpreter
 function ExecuteBlock ($queue, $block, $childs )
 {
     global $db_prefix, $BotID, $BotNow;
@@ -24,7 +24,12 @@ function ExecuteBlock ($queue, $block, $childs )
     $BotID = $queue['owner_id'];
     $strat_id = $queue['sub_id'];
 
-#    Debug ( "Bot trace : " . $block['category'] . "(".$block['key']."): " . $block['text'] );
+    // Trace block execution
+    $bot_trace = false;
+
+    if ($bot_trace) {
+        Debug ( "Bot trace : " . $block['category'] . "(".$block['key']."): " . $block['text'] );
+    }
 
     switch ( $block['category'] )
     {
@@ -35,11 +40,11 @@ function ExecuteBlock ($queue, $block, $childs )
             break;
 
         case "End":
-            RemoveQueue ( $queue['task_id'] );    // Просто удалить блок, тем самым в очереди не остается ни одного задания AI исполняемой стратегии
+            RemoveQueue ( $queue['task_id'] );    // Simply remove the block, thus no AI executable strategy AI tasks are left in the queue
             break;
 
-        case "Label":     // Начать выполнение новой цепочки
-            // Выбрать из всех потомков тот, который выходит снизу блока (fromPort="B")
+        case "Label":     // Start execution of a new block chain
+            // Select from all descendants the one that comes from the bottom of the block (fromPort="B")
             $block_id = $childs[0]['to'];
             foreach ( $childs as $i=>$child ) {
                 if ( $child['fromPort'] === "B" ) {
@@ -51,7 +56,7 @@ function ExecuteBlock ($queue, $block, $childs )
             RemoveQueue ( $queue['task_id'] );
             break;
 
-        case "Branch":    // Переход на другую метку с указанным текстом.
+        case "Branch":    // Jumps to another label with the specified text.
             $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $strat_id LIMIT 1";
             $result = dbquery ($query);
             if ($result) {
@@ -71,27 +76,32 @@ function ExecuteBlock ($queue, $block, $childs )
             RemoveQueue ( $queue['task_id'] );
             break;
 
-        case "Cond":        // Проверка условия
+        case "Cond":        // Condition check
             $result = eval ( "return ( " . $block['text'] . " );" );
             $block_id = $block_no = 0xdeadbeef;
             $prefix = "";
             foreach ( $childs as $i=>$child ) {
                 if ( strtolower ($child['text']) === "no" ) {
                     if ( $result == false ) {
-#                        Debug ($block['text'] . " : ".$prefix."NO");
+                        if ($bot_trace) {
+                            Debug ($block['text'] . " : ".$prefix."NO");
+                        }
                         $block_id = $child['to']; break;
                     }
                     else $block_no = $child['to'];
                 }
                 if ( strtolower ($child['text']) === "yes" && $result == true ) {
-#                    Debug ($block['text'] . " : YES");
+                    if ($bot_trace)
+                        Debug ($block['text'] . " : YES");
                     $block_id = $child['to']; break;
                 }
-                if ( preg_match('/([0-9]{1,2}|100)%/', $child['text'], $matches) && $result == true ) {    // случайный переход
+                if ( preg_match('/([0-9]{1,2}|100)%/', $child['text'], $matches) && $result == true ) {    // random jump
                     $prc = str_replace ( "%", "", $matches[0]);
                     $roll = mt_rand (1, 100);
                     if ( $roll <= $prc ) {
-#                        Debug ($block['text'] . " : PROBABLY($roll/$prc) YES");
+                        if ($bot_trace) {
+                            Debug ($block['text'] . " : PROBABLY($roll/$prc) YES");
+                        }
                         $block_id = $child['to']; break;
                     }
                     else {
@@ -100,18 +110,20 @@ function ExecuteBlock ($queue, $block, $childs )
                             $result = false;
                         }
                         else {
-#                            Debug ($block['text'] . " : PROBABLY($roll/$prc) NO");
+                            if ($bot_trace) {
+                                Debug ($block['text'] . " : PROBABLY($roll/$prc) NO");
+                            }
                             $block_id = $block_no; break;
                         }
                     }
-                }    // случайный переход
+                }    // random jump
             }
             if ( $block_id != 0xdeadbeef ) AddBotQueue ( $BotID, $strat_id, $block_id, $BotNow, 0 );
             else Debug ( "Не удалось выбрать условный переход." );
             RemoveQueue ( $queue['task_id'] );
             break;
 
-        default:    // Обычный блок (квадрат), выход один.
+        default:    // Regular block, single output.
             $sleep = eval ( $block['text'] . ";" );
             if ( $sleep == NULL ) $sleep = 0;
             $block_id = $childs[0]['to'];
@@ -121,7 +133,7 @@ function ExecuteBlock ($queue, $block, $childs )
     }
 }
 
-// Добавить бота.
+// Add bot.
 function AddBot ($name)
 {
     global $db_prefix;
@@ -144,7 +156,7 @@ function AddBot ($name)
     else return false;
 }
 
-// Запустить бота (выполнить блок Start для стратегии _start)
+// Start the bot (execute the Start block for the _start strategy)
 function StartBot ($player_id)
 {
     global $BotID, $BotNow;
@@ -155,7 +167,7 @@ function StartBot ($player_id)
     if ( BotExec("_start") == 0 ) Debug ( "Стартовая стратегия не найдена." );
 }
 
-// Остановить бота (просто удалить все задания AI)
+// Stop the bot (just remove all AI tasks)
 function StopBot ($player_id)
 {
     global $db_prefix;
@@ -166,7 +178,7 @@ function StopBot ($player_id)
     }
 }
 
-// Проверить является ли игрок ботом.
+// Check if the player is a bot.
 function IsBot ($player_id)
 {
     global $db_prefix;
@@ -175,8 +187,8 @@ function IsBot ($player_id)
     return ( dbrows ($result) > 0 ) ;
 }
 
-// Событие завершения заданий для бота. Вызывается из queue.php
-// Активировать парсер заданий бота.
+// Task completion event for the bot. Called from queue.php
+// Activate the bot's task parser.
 function Queue_Bot_End ($queue)
 {
     global $db_prefix;
@@ -206,7 +218,7 @@ function Queue_Bot_End ($queue)
     else Debug ( "Не удалось загрузить программу " . $queue['sub_id'] );
 }
 
-// Переменные бота​.
+// Bot Variables.
 
 function GetVar ( $owner_id, $var, $def_value=null )
 {

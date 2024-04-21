@@ -1,8 +1,10 @@
 <?php
 
+// Common elements of game pages (left menu, resource bar, etc.)
+
 $pagetime = 0;
 
-// Получить маленькую картинку планеты.
+// Get a small picture of the planet.
 function GetPlanetSmallImage ($skinpath, $planet)
 {
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return $skinpath."planeten/small/s_mond.jpg";
@@ -18,10 +20,10 @@ function GetPlanetSmallImage ($skinpath, $planet)
         else if ($p >= 13 && $p <= 15) return sprintf ( "%splaneten/small/s_eisplanet%02d.jpg", $skinpath, $id);
         else return sprintf ( "%splaneten/small/s_eisplanet%02d.jpg", $skinpath, $id);
     }
-    else return "img/admin_planets.png";        // Специальные объекты галактики (уничтоженные планеты и пр.)
+    else return "img/admin_planets.png";        // Special objects of the galaxy (destroyed planets, etc.)
 }
 
-// Получить большую картинку планеты.
+// Get a big picture of the planet.
 function GetPlanetImage ($skinpath, $planet)
 {
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return $skinpath."planeten/mond.jpg";
@@ -37,7 +39,7 @@ function GetPlanetImage ($skinpath, $planet)
         else if ($p >= 13 && $p <= 15) return sprintf ( "%splaneten/eisplanet%02d.jpg", $skinpath, $id);
         else return sprintf ( "%splaneten/eisplanet%02d.jpg", $skinpath, $id);
     }
-    else return "img/admin_planets.png";        // Специальные объекты галактики (уничтоженные планеты и пр.)
+    else return "img/admin_planets.png";        // Special objects of the galaxy (destroyed planets, etc.)
 }
 
 function UserSkin ()

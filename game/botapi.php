@@ -1,17 +1,17 @@
 <?php
 
-// Интерфейс взаимодействия ботов с движком.
-// Тут находятся все встроенные функции.
+// Interface between bots and the engine.
+// This is where all the built-in functions are located.
 
 //------------------------------------------------------------------------------------
-// Вспомогательные функции
+// Auxiliary functions
 
-// Ничего не делать
+// Do nothing
 function BotIdle ()
 {
 }
 
-// Проверить что есть стратегия с указанным именем.
+// Check that there is a strategy with the specified name.
 function BotStrategyExists ($name)
 {
     global $db_prefix;
@@ -20,7 +20,7 @@ function BotStrategyExists ($name)
     return ($result && dbrows($result) != 0);
 }
 
-// Параллельно запустить новую стратегию бота. Вернуть 1, если ОК или 0, если не удалось запустить стратегию.
+// In parallel, start a new bot strategy. Return 1 if OK or 0 if the strategy could not be started.
 function BotExec ($name)
 {
     global $db_prefix, $BotID, $BotNow;
@@ -42,7 +42,7 @@ function BotExec ($name)
     else return 0;
 }
 
-// Переменные бота​.
+// Bot variables.
 
 function BotGetVar ( $var, $def_value=null )
 {
@@ -56,25 +56,10 @@ function BotSetVar ( $var, $value )
     SetVar ( $BotID, $var, $value );
 }
 
-//check if energy is at or above value
-function BotEnergyAbove ($energy)
-{
-    global $BotID, $BotNow;
-    $user = LoadUser ($BotID);
-    $aktplanet = GetPlanet ( $user['aktplanet'] );
-    $currentenergy = $aktplanet['e'];
-    if ($currentenergy >= $energy){
-      return true;
-    } else {
-      return false;
-    }
-}
-
-
 //------------------------------------------------------------------------------------
-// Строительство/снос построек, управление Сырьём
+// Construction/demolition of buildings, management of Resouce settings
 
-// Проверить - можем ли мы строить указанную постройку на активной планете (1-да, 0-нет)
+// Check if we can build the specified building on the active planet (1-yes, 0-no).
 function BotCanBuild ($obj_id)
 {
     global $BotID, $BotNow;
@@ -86,8 +71,8 @@ function BotCanBuild ($obj_id)
     return ( $text === '' );
 }
 
-// Начать постройку на активной планете.
-// Вернуть 0, если недостаточно условий или ресурсов для начала постройки. Вернуть количество секунд, которые нужно подождать пока завершится строительство.
+// Start building on an active planet.
+// Return 0 if there are not enough conditions or resources to start building. Return the number of seconds to wait until the construction is completed.
 function BotBuild ($obj_id)
 {
     global $BotID, $BotNow, $GlobalUni;
@@ -105,7 +90,7 @@ function BotBuild ($obj_id)
     else return 0;
 }
 
-// Получить уровень постройки
+// Get a building level
 function BotGetBuild ($n)
 {
     global $BotID, $BotNow;
@@ -114,28 +99,28 @@ function BotGetBuild ($n)
     return $aktplanet['b'.$n];
 }
 
-// Установить выработку сырья на активной планете (числа в процентах 0-100)
+// Set the resource settings of the active planet (numbers in percentages 0-100)
 function BotResourceSettings ( $last1=100, $last2=100, $last3=100, $last4=100, $last12=100, $last212=100 )
 {
     global $db_prefix, $BotID, $BotNow;
     $user = LoadUser ($BotID);
     $aktplanet = GetPlanet ( $user['aktplanet'] );
 
-    if ( $last1 < 0 ) $last1 = 0;        // Не должно быть < 0.
+    if ( $last1 < 0 ) $last1 = 0;        // Should not be < 0.
     if ( $last2 < 0 ) $last2 = 0;
     if ( $last3 < 0 ) $last3 = 0;
     if ( $last4 < 0 ) $last4 = 0;
     if ( $last12 < 0 ) $last12 = 0;
     if ( $last212 < 0 ) $last212 = 0;
 
-    if ( $last1 > 100 ) $last1 = 100;        // Не должно быть > 100.
+    if ( $last1 > 100 ) $last1 = 100;        // Should not be > 100.
     if ( $last2 > 100 ) $last2 = 100;
     if ( $last3 > 100 ) $last3 = 100;
     if ( $last4 > 100 ) $last4 = 100;
     if ( $last12 > 100 ) $last12 = 100;
     if ( $last212 > 100 ) $last212 = 100;
 
-    // Сделать кратно 10.
+    // Make multiples of 10.
     $last1 = round ($last1 / 10) * 10 / 100;
     $last2 = round ($last2 / 10) * 10 / 100;
     $last3 = round ($last3 / 10) * 10 / 100;
@@ -157,8 +142,22 @@ function BotResourceSettings ( $last1=100, $last2=100, $last3=100, $last4=100, $
     UpdatePlanetActivity ( $planet_id, $BotNow );
 }
 
+// Check if energy is at or above value
+function BotEnergyAbove ($energy)
+{
+    global $BotID, $BotNow;
+    $user = LoadUser ($BotID);
+    $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $currentenergy = $aktplanet['e'];
+    if ($currentenergy >= $energy){
+      return true;
+    } else {
+      return false;
+    }
+}
+
 //------------------------------------------------------------------------------------
-// Строительство флота/обороны (Верфь)
+// Fleet/defense construction (Shipyard)
 
 function BotBuildFleet ($obj_id, $n)
 {
@@ -180,9 +179,9 @@ function BotBuildFleet ($obj_id, $n)
 }
 
 //------------------------------------------------------------------------------------
-// Исследования
+// Research
 
-// Получить уровень исследования
+// Get the research level
 function BotGetResearch ($n)
 {
     global $BotID, $BotNow;
@@ -190,7 +189,7 @@ function BotGetResearch ($n)
     return $bot['r'.$n];
 }
 
-// Проверить - можем ли мы начать исследование на главной планете (1-да, 0-нет)
+// Check - can we start research on the active planet (1-yes, 0-no)
 function BotCanResearch ($obj_id)
 {
     global $BotID, $BotNow;
@@ -202,8 +201,8 @@ function BotCanResearch ($obj_id)
     return ($text === '' );
 }
 
-// Начать исследование на главной планете.
-// Вернуть 0, если недостаточно условий или ресурсов для начала исследования. Вернуть количество секунд, которые нужно подождать пока завершится исследование.
+// Begin research on the active planet.
+// Return 0 if there are not enough conditions or resources to start the research. Return the number of seconds to wait until the research is completed.
 function BotResearch ($obj_id)
 {
     global $BotID, $BotNow, $GlobalUni;

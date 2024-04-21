@@ -1,10 +1,10 @@
 <?php
 
-// Установочный файл.
-// Создает все необходимые таблицы в базе данных, а также файл конфигурации config.php, для доступа к базе.
-// Не работет, если файл config.php создан.
+// Installation script.
+// Creates all the necessary tables in the database, as well as the config.php configuration file, to access the database.
+// Doesn't work if config.php file is created.
 
-// Добавить вывод ошибок для этой ранней стадии установки
+// Add error output for this early stage of the installation
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -32,7 +32,7 @@ function uniurl () {
 
 ob_start ();
 
-// Проверить настройки вселенной.
+// Check the settings of the universe.
 function CheckParameters ()
 {
     global $InstallError;
@@ -40,7 +40,7 @@ function CheckParameters ()
     return TRUE;
 }
 
-// Проверить, если файл конфигурации уже создан - редирект на главную страницу.
+// Check if the configuration file has already been created - redirect to the main page.
 if (file_exists ("config.php"))
 {
     echo "<html><head><meta http-equiv='refresh' content='0;url=index.php' /></head><body></body></html>";
@@ -56,19 +56,19 @@ function gen_trivial_password ($len = 8)
     return $r;
 }
 
-// Таблицы БД
+// Database tables
 include "install_tabs.php";
 
 // -------------------------------------------------------------------------------------------------------------------------
 
-// Сохранить настройки.
+// Save the settings.
 if ( key_exists("install", $_POST) && CheckParameters() )
 {
     $now = time();
 
     //print_r ($_POST);
 
-    // Удалить все таблицы и создать новые пустые.
+    // Delete all tables and create new empty tables.
     dbconnect ($_POST["db_host"], $_POST["db_user"], $_POST["db_pass"], $_POST["db_name"]);
     dbquery("SET NAMES 'utf8';");
     dbquery("SET CHARACTER SET 'utf8';");
@@ -92,7 +92,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
         dbquery ($query, TRUE);
     }
 
-    // Создать вселенную.
+    // Create the universe.
     $query = "INSERT INTO ".$_POST["db_prefix"]."uni SET ";
     $query .= "num = '".$_POST["uni_num"]."', ";
     $query .= "speed = '".$_POST["uni_speed"]."', ";
@@ -125,7 +125,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     //echo "<br>$query<br>";
     dbquery ($query);
 
-    // Создать технический аккаунт "space"
+    // Create technical account "space"
     $md = md5 ( gen_trivial_password() . $_POST['db_secret'] );
     $opt = " (";
     $user = array( USER_SPACE, $now, 0, 0, 0, "",  "", "space", "space", 0, 0, $md, "", "", "",
@@ -146,7 +146,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query = "INSERT INTO ".$_POST["db_prefix"]."users VALUES".$opt;
     dbquery( $query);
 
-    // Создать администраторский аккаунт (Legor).
+    // Create administrator account (Legor).
     $md = md5 ($_POST['admin_pass'] . $_POST['db_secret']);
     $opt = " (";
     $user = array( USER_LEGOR, $now, 0, 0, 0, "",  "", "legor", "Legor", 0, 0, $md, "", $_POST['admin_email'], $_POST['admin_email'],
@@ -167,7 +167,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query = "INSERT INTO ".$_POST["db_prefix"]."users VALUES".$opt;
     dbquery( $query);
 
-    // Создать планету Arakis [1:1:2] и луну Mond (да, в названии планеты только одна буква `r`, это отсылка к Дюне)
+    // Create the planet Arakis [1:1:2] and the moon Mond (yes, there's only one letter `r` in the planet name, it's a reference to Dune)
     $opt = " (";
     $planet = array( 1, "Arakis", PTYP_PLANET, 1, 1, 2, USER_LEGOR, 12800, 40, 0, 163, $now,
                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -197,7 +197,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query = "INSERT INTO ".$_POST["db_prefix"]."planets VALUES".$opt;
     dbquery( $query);
 
-    // Добавить параметры экспедиции.
+    // Add Expedition Parameters.
     $opt = " (";
     $exptab = array ( 70, 25, 50, 75, 25, 50, 75, 95, 85, 70, 69, 63, 60, 25, 1 );
     foreach ($exptab as $i=>$entry)
@@ -209,7 +209,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query = "INSERT INTO ".$_POST["db_prefix"]."exptab VALUES".$opt;
     dbquery( $query);
 
-    // Добавить параметры колонизации.
+    // Add colonization parameters.
     $opt = " (";
     $coltab = array ( 50, 120, 72, 50, 150, 120, 50, 120, 120, 50, 120, 96, 50, 150, 96 );
     foreach ($coltab as $i=>$entry)
@@ -221,7 +221,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query = "INSERT INTO ".$_POST["db_prefix"]."coltab VALUES".$opt;
     dbquery( $query);
 
-    // Установить счётчики автоинкремента.
+    // Set up autoincrement counters.
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."planets AUTO_INCREMENT = 10000;" );
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."messages AUTO_INCREMENT = 10000;" );
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."notes AUTO_INCREMENT = 1;" );
@@ -240,7 +240,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."iplogs AUTO_INCREMENT = 1;" );
     dbquery ( "INSERT INTO ".$_POST["db_prefix"]."botstrat VALUES ( 1, 'backup', '')" );
 
-    // Модификации
+    // Modifications
     $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_carnage', value = '".(key_exists ('mod_carnage', $_POST) && $_POST["mod_carnage"]==="on"?1:0)."'; ";
     dbquery ($query);
     $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_carnage_fleet_size', value = '".$_POST["mod_carnage_fleet_size"]."'; ";
@@ -250,7 +250,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_endgame_days', value = '".$_POST["mod_endgame_days"]."'; ";
     dbquery ($query);
 
-    // Записать вселенную в Мастер-базу.
+    // Put the universe into the Master Base.
     $mdb_enable = (key_exists ('mdb_enable', $_POST) && $_POST["mdb_enable"]==="on"?1:0);
     if ($mdb_enable)
     {
@@ -266,7 +266,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
         mysqli_query ( $mdb_connect, $query );
     }
 
-    // Сохранить файл конфигурации.
+    // Save the configuration file.
     $file = fopen ("config.php", "wb");
     if ($file == FALSE) $InstallError = loca('INSTALL_ERROR1');
     else
