@@ -1,4 +1,4 @@
-// Боевой движок браузерной игры OGame / The battle engine of the browser game OGame
+// The battle engine of the browser game OGame
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,64 +9,64 @@
 #include "battle.h"
 
 /*
-Формат выходных данных
-Выходные данные представлены в формате для PHP-функции unserialize().
+Output data format
+The output is in the format for the PHP function unserialize().
 
-Формат (после преобразования unserialize()):
+Format (after unserialize() transformation):
 
 Array (
-   'battle_seed' => Начальное зерно для ДСЧ
-   'result' => 'awon' (Атакующий выиграл), 'dwon' (Обороняющийся выиграл), 'draw' (Ничья)
-   'dm' => количество металла в Поле обломков
-   'dk' => количество кристалла в Поле обломков
+   'battle_seed' => Initial seed for RNG
+   'result' => 'awon' (The attacker won), 'dwon' (The defender won), 'draw' (Draw)
+   'dm' => the amount of metal in the debris field
+   'dk' => the amount of crystal in the Debris Field
 
-   'before' => Array (  // Флоты перед боем
-            'attackers' => Array (    // слоты атакующих
-                  [0] => Array ( 'name' => имя игрока, 'id'=>100002, 'g' => 1, 's' => 2 'p' => 3, 'weap' => 10, 'shld' => 11, 'armr' => 12, 202=>5, 203=>6, ... ),   // флоты
+   'before' => Array (  // The fleets before the battle
+            'attackers' => Array (    // attacker slots
+                  [0] => Array ( 'name' => player name, 'id'=>100002, 'g' => 1, 's' => 2 'p' => 3, 'weap' => 10, 'shld' => 11, 'armr' => 12, 202=>5, 203=>6, ... ),   // fleets
                   [1] => Array ( )
             )
 
-            'defenders' => Array (    // слоты обороняющихся
-                  [0] => Array ( 'name' => имя игрока, 'id'=>100006, 'g' => 1, 's' => 2 'p' => 3, 'weap' => 10, 'shld' => 11, 'armr' => 12, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // флоты и оборона
+            'defenders' => Array (    // defenders' slots
+                  [0] => Array ( 'name' => player name, 'id'=>100006, 'g' => 1, 's' => 2 'p' => 3, 'weap' => 10, 'shld' => 11, 'armr' => 12, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // fleets and defenses
                   [1] => Array ( )
             )
 
        ),
    )
 
-   'rounds' => Array (  // Раунды
+   'rounds' => Array (  // Rounds
        [0] => Array (
-            'ashoot' => Атакующий флот делает: 988 выстрела(ов)
-            'apower' => общей мощностью 512.720.100
-            'dabsorb' => Щиты обороняющегося поглощают 43.724
-            'dshoot' => Обороняющийся флот делает 1.651 выстрела(ов)
-            'dpower' => общей мощностью 428.728
-            'aabsorb' => Щиты атакующего поглощают 355.453
+            'ashoot' => Attack fleet fires: 988 round(s)
+            'apower' => total power of 512.720.100
+            'dabsorb' => The defender's shields absorb 43.724
+            'dshoot' => The defending fleet fires 1.651 shot(s)
+            'dpower' => total power of 428.728
+            'aabsorb' => The attacker's shields absorb 355.453
 
-            'attackers' => Array (    // слоты атакующих
-                  [0] => Array ( 'name' => имя игрока, 'id'=>100002, 'g' => 1, 's' => 2 'p' => 3, 202=>5, 203=>6, ... ),   // флоты
+            'attackers' => Array (    // attacker slots
+                  [0] => Array ( 'name' => player name, 'id'=>100002, 'g' => 1, 's' => 2 'p' => 3, 202=>5, 203=>6, ... ),   // fleets
                   [1] => Array ( )
             )
 
-            'defenders' => Array (    // слоты обороняющихся
-                  [0] => Array ( 'name' => имя игрока, 'id'=>100006, 'g' => 1, 's' => 2 'p' => 3, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // флоты и оборона
+            'defenders' => Array (    // defenders' slots
+                  [0] => Array ( 'name' => player name, 'id'=>100006, 'g' => 1, 's' => 2 'p' => 3, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // fleets and defenses
                   [1] => Array ( )
             )
 
        ),
-       [1] => Array ( ... )   // следующий раунд
+       [1] => Array ( ... )   // next round
    )
 )
 
 */
 
-char ResultBuffer[64*1024];     // Буфер выходных данных / Output data buffer
+char ResultBuffer[64*1024];     // Output data buffer
 
-// Настройки выпадения лома / Wreckage drop settings
+// Wreckage drop settings
 int DefenseInDebris = 0, FleetInDebris = 30;
-int Rapidfire = 1;  // 1: вкл стрельбу очередями / enable rapidfire
+int Rapidfire = 1;  // 1: enable rapidfire
 
-// Таблица стоимости / Cost table
+// Cost table
 static UnitPrice FleetPrice[] = {
  { 2000, 2000, 0 }, { 6000, 6000, 0 }, { 3000, 1000, 0 }, { 6000, 4000, 0 },
  { 20000, 7000, 2000 }, { 45000, 15000, 0 }, { 10000, 20000, 10000 }, { 10000, 6000, 2000 },
@@ -78,7 +78,7 @@ static UnitPrice DefensePrice[] = {
  { 2000, 6000, 0 }, { 50000, 50000, 30000 }, { 10000, 10000, 0 }, { 50000, 50000, 0 }
 };
 
-TechParam fleetParam[14] = { // ТТХ Флота / Fleet parameters
+TechParam fleetParam[14] = { // Fleet parameters
  { 4000, 10, 5, 5000 },
  { 12000, 25, 5, 25000 },
  { 4000, 10, 50, 50 },
@@ -95,7 +95,7 @@ TechParam fleetParam[14] = { // ТТХ Флота / Fleet parameters
  { 70000, 400, 700, 750 }
 };
 
-TechParam defenseParam[8] = { // ТТХ Обороны / Defense parameters
+TechParam defenseParam[8] = { // Defense parameters
  { 2000, 20, 80, 0 },
  { 2000, 25, 100, 0 },
  { 8000, 100, 250, 0 },
@@ -150,7 +150,7 @@ int FileSave(char *filename, void *data, unsigned long size)
 }
 
 // ==========================================================================================
-// Генератор случайных чисел.
+// Random number generator.
 // Mersenne Twister.
 
 #define N 624
@@ -210,14 +210,14 @@ unsigned long genrand_int32(void)
 double genrand_real1(void) { return genrand_int32()*(1.0/4294967295.0); }
 double genrand_real2(void) { return genrand_int32()*(1.0/4294967296.0); }
 
-// Инициировать псевдослучайную последовательность.
+// Initiate pseudorandom sequence.
 void MySrand (unsigned long seed)
 {
     init_genrand (seed);
     //srand (seed);
 }
 
-// Возвратить случайное число в интервале от a до b (включая a и b)
+// Return a random number between a and b (including a and b)
 unsigned long MyRand (unsigned long a, unsigned long b)
 {
     return a + (unsigned long)(genrand_real1 () * (b - a + 1));
@@ -242,7 +242,7 @@ static char *longnumber (uint64_t n)
     return p;
 }
 
-// Установить настройки выпадения лома / Set debris drop settings
+// Set debris drop settings
 void SetDebrisOptions (int did, int fid)
 {
     if (did < 0) did = 0;
@@ -255,7 +255,7 @@ void SetDebrisOptions (int did, int fid)
 
 void SetRapidfire (int enable) { Rapidfire = enable & 1; }
 
-// Расчитать боевые характеристики слота / Calculate the combat characteristics of a slot
+// Calculate the combat characteristics of a slot
 void CalcSlotParam(Slot* slot)
 {
     int n;
@@ -273,7 +273,7 @@ void CalcSlotParam(Slot* slot)
     }
 }
 
-// Выделить память для юнитов и установить начальные значения / Allocate memory for units and set initial values
+// Allocate memory for units and set initial values
 Unit *InitBattle (Slot *slot, int num, int objs, int attacker)
 {
     Unit *u;
@@ -310,8 +310,8 @@ Unit *InitBattle (Slot *slot, int num, int objs, int attacker)
     return u;
 }
 
-// Выстрел a => b. Возвращает урон.
-// absorbed - накопитель поглощённого щитами урона (для того, кого атакуют, то есть для юнита "b").
+// Shot a => b. Returns damage.
+// absorbed - the accumulator of damage absorbed by shields (for the one who is attacked, i.e. for unit "b").
 long UnitShoot (Unit *a, Slot* aslot, Unit *b, Slot* bslot, uint64_t *absorbed, uint64_t *dm, uint64_t *dk )
 {
     float prc, depleted;
@@ -324,7 +324,7 @@ long UnitShoot (Unit *a, Slot* aslot, Unit *b, Slot* bslot, uint64_t *absorbed, 
         if (apower >= b->hull) b->hull = 0;
         else b->hull -= apower;
     }
-    else { // Отнимаем от щитов, и если хватает урона, то и от брони.
+    else { // We take away from shields, and if there is enough damage, from armor as well.
 
         if (b->obj_type < DEFENSE_ID_BASE) b_shieldmax = bslot[b->slot_id].shieldmax_fleet[b->obj_type - FLEET_ID_BASE];
         else b_shieldmax = bslot[b->slot_id].shieldmax_def[b->obj_type - DEFENSE_ID_BASE];
@@ -363,7 +363,6 @@ long UnitShoot (Unit *a, Slot* aslot, Unit *b, Slot* bslot, uint64_t *absorbed, 
     return apower;
 }
 
-// Почистить взорванные корабли и оборону. Возвращает количество взорванных единиц.
 // Clean up blown up ships and defenses. Returns the number of units blown up.
 int WipeExploded (Unit **slot, int amount, int *exploded_count)
 {
@@ -383,7 +382,6 @@ int WipeExploded (Unit **slot, int amount, int *exploded_count)
     return 0;
 }
 
-// Проверить бой на быструю ничью. Если ни у одного юнита броня не повреждена, то бой заканчивается ничьей досрочно.
 // Check the combat for a fast draw. If none of the units have armor damage, the combat ends in a quick draw.
 int CheckFastDraw (Unit *aunits, int aobjs, Slot* aslot, Unit *dunits, int dobjs, Slot* dslot)
 {
@@ -404,8 +402,8 @@ int CheckFastDraw (Unit *aunits, int aobjs, Slot* aslot, Unit *dunits, int dobjs
     return 1;
 }
 
-// Сгенерировать результат слота.
-// Если techs = 1, то показать технологии (в раундах технологии показывать не надо).
+// Generate a slot result.
+// If techs = 1, show techs (no need to show techs in rounds).
 static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, Slot *d, int attacker, int techs)
 {
     Slot *s = attacker ? a : d;
@@ -414,7 +412,7 @@ static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, S
     int n, i, count = 0;
     unsigned long sum = 0;
 
-    // Собрать все юниты в слот / Collect all units in a slot
+    // Collect all units in a slot
     memset (&coll, 0, sizeof(Slot));
     for (i=0; i<objnum; i++) {
         u = &units[i];
@@ -445,11 +443,11 @@ static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, S
         ptr += sprintf (ptr, "s:4:\"armr\";i:%i;", s[slot].armor );
     }
 
-    for (n=0; n<14; n++) {      // Флоты
+    for (n=0; n<14; n++) {      // Fleets
         ptr += sprintf ( ptr, "i:%i;i:%i;", 202+n, coll.fleet[n]);
     }
 
-    if ( !attacker)             // Оборона
+    if ( !attacker)             // Defense
     {
         for (n=0; n<8; n++) {
             ptr += sprintf ( ptr, "i:%i;i:%i;", 401+n, coll.def[n]);
@@ -460,7 +458,6 @@ static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, S
     return ptr;
 }
 
-// Проверить возможность повторного выстрела. Для удобства используются оригинальные ID юнитов
 // Check the possibility of re-firing. Original unit IDs are used for convenience
 static int RapidFire (int atyp, int dtyp)
 {
@@ -468,51 +465,51 @@ static int RapidFire (int atyp, int dtyp)
 
     if ( atyp > 400 ) return 0;
 
-    // ЗСка против ШЗ/ламп
+    // Deathstar vs Espionage Probe/Solar Satellite
     if (atyp==214 && (dtyp==210 || dtyp==212) && MyRand(1,10000)>8) rapidfire = 1;
-    // остальной флот против ШЗ/ламп
+    // Other units vs Espionage Probe/Solar Satellite
     else if (atyp!=210 && (dtyp==210 || dtyp==212) && MyRand(1,100)>20) rapidfire = 1;
-    // ТИ против МТ
+    // Heavy Fighter vs Small Cargo
     else if (atyp==205 && dtyp==202 && MyRand(1,100)>33) rapidfire = 1;
-    // крейсер против ЛИ
+    // Cruiser vs Light Fighter
     else if (atyp==206 && dtyp==204 && MyRand(1,1000)>166) rapidfire = 1;
-    // крейсер против РУ
+    // Cruiser vs Rocket Launcher
     else if (atyp==206 && dtyp==401 && MyRand(1,100)>10) rapidfire = 1;
-    // бомбер против легкой обороны
+    // Bomber vs light defense
     else if (atyp==211 && (dtyp==401 || dtyp==402) && MyRand(1,100)>20) rapidfire = 1;
-    // бомбер против средней обороны
+    // Bomber vs medium defense
     else if (atyp==211 && (dtyp==403 || dtyp==405) && MyRand(1,100)>10) rapidfire = 1;
-    // уник против ЛК
+    // Destroyer vs Battlecruiser
     else if (atyp==213 && dtyp==215 && MyRand(1,100)>50) rapidfire = 1;
-    // уник против ЛЛ
+    // Destroyer vs Light Laser
     else if (atyp==213 && dtyp==402 && MyRand(1,100)>10) rapidfire = 1;
-    // ЛК против транспорта
+    // Battlecruiser vs transport
     else if (atyp==215 && (dtyp==202 || dtyp==203) && MyRand(1,100)>20) rapidfire = 1;
-    // ЛК против среднего флота
+    // Battlecruiser vs medium fleet
     else if (atyp==215 && (dtyp==205 || dtyp==206) && MyRand(1,100)>25) rapidfire = 1;
-    // ЛК против линкоров
+    // Battlecruiser vs Battleship
     else if (atyp==215 && dtyp==207 && MyRand(1,1000)>143) rapidfire = 1;
-    // ЗС против гражданского флота
+    // Deathstar vs civilian fleet
     else if (atyp==214 && (dtyp==202 || dtyp==203 || dtyp==208 || dtyp==209) && MyRand(1,1000)>4) rapidfire = 1;
-    // ЗС против ЛИ
+    // Deathstar vs Light Fighter
     else if (atyp==214 && dtyp==204 && MyRand(1,1000)>5) rapidfire = 1;
-    // ЗС против ТИ
+    // Deathstar vs Heavy Fighter
     else if (atyp==214 && dtyp==205 && MyRand(1,1000)>10) rapidfire = 1;
-    // ЗС против крейсеров
+    // Deathstar vs Cruiser
     else if (atyp==214 && dtyp==206 && MyRand(1,1000)>30) rapidfire = 1;
-    // ЗС против линкоров
+    // Deathstar vs Battleship
     else if (atyp==214 && dtyp==207 && MyRand(1,1000)>33) rapidfire = 1;
-    // ЗС против бомберов
+    // Deathstar vs Bomber
     else if (atyp==214 && dtyp==211 && MyRand(1,1000)>40) rapidfire = 1;
-    // ЗС против уников
+    // Deathstar vs Destroyer
     else if (atyp==214 && dtyp==213 && MyRand(1,1000)>200) rapidfire = 1;
-    // ЗС против линеек
+    // Deathstar vs Battlecruiser
     else if (atyp==214 && dtyp==215 && MyRand(1,1000)>66) rapidfire = 1;
-    // ЗС против легкой обороны
+    // Deathstar vs light defense
     else if (atyp==214 && (dtyp==401 || dtyp==402) && MyRand(1,1000)>5) rapidfire = 1;
-    // ЗС против средней обороны
+    // Deathstar vs medium defense
     else if (atyp==214 && (dtyp==403 || dtyp==405) && MyRand(1,1000)>10) rapidfire = 1;
-    // ЗС против тяжелой обороны
+    // Deathstar vs heavy defense
     else if (atyp==214 && dtyp==404 && MyRand(1,1000)>20) rapidfire = 1;
 
     return rapidfire;
@@ -526,10 +523,10 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
     char * ptr = ResultBuffer, * res, *round_patch;
     int exploded, exploded_res;
 
-    uint64_t         shoots[2] = { 0,0 }, spower[2] = { 0,0 }, absorbed[2] = { 0,0 }; // Общая статистика по выстрелам.
-    uint64_t         dm = 0, dk = 0;             // Поле обломков
+    uint64_t         shoots[2] = { 0,0 }, spower[2] = { 0,0 }, absorbed[2] = { 0,0 }; // Total shot statistics.
+    uint64_t         dm = 0, dk = 0;             // The debris field
 
-    // Посчитать количество юнитов до боя.
+    // Count the number of units before battle.
     for (i=0; i<anum; i++) {
         for (n=0; n<14; n++) aobjs += a[i].fleet[n];
     }
@@ -540,7 +537,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
         }
     }
 
-    // Подготовить массив боевых единиц.
+    // Prepare an array of units to be used.
     aunits = InitBattle (a, anum, aobjs, 1);
     if (aunits == NULL) {
         return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
@@ -553,7 +550,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
 
     ptr += sprintf (ptr, "a:6:{");
 
-    // Флоты до боя
+    // Fleets before the battle
     ptr += sprintf (ptr, "s:6:\"before\";a:2:{");
     ptr += sprintf ( ptr, "s:9:\"attackers\";a:%i:{", anum );
     for (slot=0; slot<anum; slot++) {
@@ -580,12 +577,12 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
     {
         if (aobjs == 0 || dobjs == 0) break;
 
-        // Сбросить статистику.
+        // Reset stats.
         shoots[0] = shoots[1] = 0;
         spower[0] = spower[1] = 0;
         absorbed[0] = absorbed[1] = 0;
 
-        // Зарядить щиты.
+        // Charge shields.
         for (i=0; i<aobjs; i++) {
             if (aunits[i].exploded) aunits[i].shield = 0;
             else aunits[i].shield = a[aunits[i].slot_id].shieldmax_fleet[aunits[i].obj_type - FLEET_ID_BASE];
@@ -598,21 +595,21 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
             }
         }
 
-        // Произвести выстрелы.
-        for (slot=0; slot<anum; slot++)     // Атакующие
+        // Fire shots.
+        for (slot=0; slot<anum; slot++)     // Attackers
         {
             for (i=0; i<aobjs; i++) {
                 rapidfire = 1;
                 unit = &aunits[i];
                 if (unit->slot_id == slot) {
-                    // Выстрел.
+                    // Shot.
                     while (rapidfire) {
                         idx = MyRand (0, dobjs-1);
                         apower = UnitShoot (unit, a, &dunits[idx], d, &absorbed[1], &dm, &dk );
                         shoots[0]++;
                         spower[0] += apower;
 
-                        // Перевести ID в обычный формат, чтобы было понятней.
+                        // Translate the ID into regular format to make it easier to understand.
                         atyp = unit->obj_type;
                         if ( atyp < 200 ) atyp += 102;
                         else atyp += 201;
@@ -626,20 +623,20 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
                 }
             }
         }
-        for (slot=0; slot<dnum; slot++)     // Обороняющиеся
+        for (slot=0; slot<dnum; slot++)     // Defenders
         {
             for (i=0; i<dobjs; i++) {
                 rapidfire = 1;
                 unit = &dunits[i];
                 if (unit->slot_id == slot) {
-                    // Выстрел.
+                    // Shot.
                     while (rapidfire) {
                         idx = MyRand (0, aobjs-1);
                         apower = UnitShoot (unit, d, &aunits[idx], a, &absorbed[0], &dm, &dk );
                         shoots[1]++;
                         spower[1] += apower;
 
-                        // Перевести ID в обычный формат, чтобы было понятней.
+                        // Translate the ID into regular format to make it easier to understand.
                         atyp = unit->obj_type;      
                         if ( atyp < 200 ) atyp += 102;
                         else atyp += 201;
@@ -654,10 +651,10 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
             }
         }
 
-        // Быстрая ничья?
+        // Quick draw?
         fastdraw = CheckFastDraw (aunits, aobjs, a, dunits, dobjs, d);
 
-        // Вычистить взорванные корабли и оборону.
+        // Clean out the blown ships and defenses.
         exploded_res = WipeExploded (&aunits, aobjs, &exploded);
         if (exploded_res < 0) {
             free(aunits);
@@ -710,14 +707,14 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
 
     *round_patch = '0' + (char)(rounds);
     
-    // Результаты боя.
-    if (aobjs > 0 && dobjs == 0){ // Атакующий выиграл
+    // Battle Results.
+    if (aobjs > 0 && dobjs == 0){ // The attacker won
         res = "awon";
     }
-    else if (dobjs > 0 && aobjs == 0) { // Атакующий проиграл
+    else if (dobjs > 0 && aobjs == 0) { // The attacker lost
         res = "dwon";
     }
-    else    // Ничья
+    else    // Draw
     {
         res = "draw";
     }
@@ -738,12 +735,12 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
 }
 
 // ==========================================================================================
-// Инициализация боевого движка - получить данные и распределить их по массивам.
+// Battle engine initialization - get data and allocate it to arrays.
 
 static SimParam *simargv;
 static long simargc = 0;
 
-// Преобразовать строку вида %EF%F0%E8%E2%E5%F2 в байтовую строку.
+// Convert a string of the form %EF%F0%E8%E2%E5%F2 to a byte string.
 static void hexize (char *string)
 {
     int hexnum;
@@ -781,7 +778,7 @@ static void AddSimParam (char *name, char *string)
 {
     long i;
 
-    // Проверить, если такой параметр уже существует, просто обновить его значение.
+    // Check if such a parameter already exists, just update its value.
     for (i=0; i<simargc; i++) {
         if (!strcmp (name, simargv[i].name)) {
             strncpy (simargv[i].string, string, sizeof(simargv[i].string));
@@ -790,7 +787,7 @@ static void AddSimParam (char *name, char *string)
         }
     }
 
-    // Выделить место под новый параметр и записать значения.
+    // Allocate space for the new parameter and write the values.
     hexize (string);
     simargv = (SimParam *)realloc (simargv, (simargc + 1) * sizeof (SimParam) );
     if (simargv) {
@@ -812,7 +809,7 @@ static void PrintParams (void)
     printf ("<hr/>");
 }
 
-// Разобрать параметры.
+// Parse the parameters.
 static void ParseQueryString (char *str)
 {
     int collectname = 1;
@@ -827,7 +824,7 @@ static void ParseQueryString (char *str)
         if ( c == '=' ) {
             collectname = 0;
         }
-        else if (c == '&') { // Добавить параметр.
+        else if (c == '&') { // Add a parameter.
             collectname = 1;
             if (namelen >0 && stringlen > 0) {
                 AddSimParam (namebuffer, stringbuffer);
@@ -845,7 +842,7 @@ static void ParseQueryString (char *str)
             }
         }
     }
-    // Добавить последний параметр.
+    // Add the last parameter.
     if (namelen > 0 && stringlen > 0) AddSimParam (namebuffer, stringbuffer);
 }
 
@@ -875,9 +872,6 @@ static char *GetSimParamS (char *name, char *def)
 
 /*
 
-Формат входных данных.
-Входные данные содержат исходные параметры битвы в текстовом формате. Для удобства разбора в Си, значения представлены в формате "переменная = значение".
-
 Input data format.
 The input data contains the initial parameters of the battle in text format. For ease of parsing in C, the values are represented in the "key = value" format.
 
@@ -899,34 +893,34 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
     int anum = 0, dnum = 0;
     char *ptr, line[3000], buf[64], *lp, *tmp;
 
-    ptr = strstr (text, "Rapidfire");       // Скорострел
+    ptr = strstr (text, "Rapidfire");       // Rapid-fire
     if ( ptr ) {
         ptr = strstr ( ptr, "=" ) + 1;
         rf = atoi (ptr);
     }
     else rf = 1;
 
-    ptr = strstr (text, "FID");             // Флот в обломки
+    ptr = strstr (text, "FID");             // Fleet into the debris
     if ( ptr ) {
         ptr = strstr ( ptr, "=" ) + 1;
         fid = atoi (ptr);
     }
     else fid = 30;
 
-    ptr = strstr (text, "DID");             // Оборона в обломки
+    ptr = strstr (text, "DID");             // Defense to debris
     if ( ptr ) {
         ptr = strstr ( ptr, "=" ) + 1;
         did = atoi (ptr);
     }
     else did = 0;
 
-    ptr = strstr (text, "Attackers");        // Количество атакующих
+    ptr = strstr (text, "Attackers");        // Number of attackers
     if ( ptr ) {
         ptr = strstr ( ptr, "=" ) + 1;
         anum = atoi (ptr);
     }
     else anum = 0;
-    ptr = strstr (text, "Defenders");        // Количество обороняющиъся
+    ptr = strstr (text, "Defenders");        // Number of defenders
     if ( ptr ) {
         ptr = strstr ( ptr, "=" ) + 1;
         dnum = atoi (ptr);
@@ -935,7 +929,7 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
 
     if ( anum == 0 || dnum == 0) return BATTLE_ERROR_NOT_ENOUGH_ATTACKERS_OR_DEFENDERS;
 
-    a = (Slot *)malloc ( anum * sizeof (Slot) );    // Выделить память под слоты.
+    a = (Slot *)malloc ( anum * sizeof (Slot) );    // Allocate memory to the slots.
     if (!a) {
         return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
     }
@@ -947,7 +941,7 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
     }
     memset ( d, 0, dnum * sizeof (Slot) );
 
-    // Атакующие.
+    // Attackers.
     for (i=0; i<anum; i++)
     {
         sprintf ( buf, "Attacker%i", i );
@@ -961,14 +955,14 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
             *lp++ = 0;
         }
 
-        // Вырезать имя
+        // Cut the name
         lp = line;
         tmp = a[i].name;
-        while ( *lp == '{' ) lp++;              // найти начало имени
-        while ( *lp != '}' ) *tmp++ = *lp++;    // вырезать символы до }
+        while ( *lp == '{' ) lp++;              // search the beginning of the name
+        while ( *lp != '}' ) *tmp++ = *lp++;    // cut characters up to }
         *tmp++ = 0;
         lp++;
-        while ( *lp <= ' ' ) lp++;              // пропустить пробелы
+        while ( *lp <= ' ' ) lp++;              // skip spaces
         
         // ({NAME} ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
         sscanf ( lp, "%i " "%i %i %i " "%i %i %i " "%i %i %i %i %i %i %i %i %i %i %i %i %i %i", 
@@ -991,7 +985,7 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
                        &a[i].fleet[13] ); // BC
     }
 
-    // Обороняющиеся.
+    // Defenders.
     for (i=0; i<dnum; i++)
     {
         sprintf ( buf, "Defender%i", i );
@@ -1005,14 +999,14 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
             *lp++ = 0;
         }
 
-        // Вырезать имя
+        // Cut the name
         lp = line;
         tmp = d[i].name;
-        while ( *lp == '{' ) lp++;              // найти начало имени
-        while ( *lp != '}' ) *tmp++ = *lp++;    // вырезать символы до }
+        while ( *lp == '{' ) lp++;              // search the beginning of the name
+        while ( *lp != '}' ) *tmp++ = *lp++;    // cut characters up to }
         *tmp++ = 0;
         lp++;
-        while ( *lp <= ' ' ) lp++;              // пропустить пробелы
+        while ( *lp <= ' ' ) lp++;              // skip spaces
 
         // ({NAME} ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
         sscanf ( lp, "%i " "%i %i %i " "%i %i %i " "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i", 
@@ -1044,11 +1038,11 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
                 ); 
     }
 
-    // Настройки боевого движка / Battle engine settings
+    // Battle engine settings
     SetDebrisOptions ( did, fid );
     SetRapidfire ( rf );
 
-    // Заранее расчитать параметры брони, щитов и атаки юнитов каждого слота
+    // Calculate in advance the armor, shields and attack parameters of the units of each slot
 
     for (i = 0; i < anum; i++) {
         CalcSlotParam(&a[i]);
@@ -1057,13 +1051,13 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
         CalcSlotParam(&d[i]);
     }
     
-    // **** НАЧАТЬ БИТВУ ****
+    // **** START BATTLE ****
     res = DoBattle ( a, anum, d, dnum, battle_seed );
 
     free (a);
     free (d);
 
-    // Записать результаты / Write down the results
+    // Write down the results
     if ( res >= 0 )
     {
         sprintf ( filename, "battleresult/battle_%i.txt", battle_id );
@@ -1087,7 +1081,7 @@ int main(int argc, char **argv)
     ParseQueryString ( argv[1] );
     //PrintParams ();
 
-    // Загрузить исходный файл и выбрать исходные данные / Load the source file and select the source data
+    // Load the source file and select the source data
     {
         int battle_id = GetSimParamI("battle_id", 0);
 
@@ -1095,7 +1089,7 @@ int main(int argc, char **argv)
             return BATTLE_ERROR_INVALID_BATTLE_ID;
         }
 
-        // Инициализировать ДСЧ
+        // Initialize RNG
         battle_seed = GetSimParamI("battle_seed", 0);
         if (battle_seed == 0) {
             battle_seed = (unsigned long)time(NULL);
@@ -1108,7 +1102,7 @@ int main(int argc, char **argv)
             return BATTLE_ERROR_DATA_LOAD;
         }
 
-        // Разобрать исходные данные в двоичный формат и начать битву / Parse the raw data into binary format and start the battle
+        // Parse the raw data into binary format and start the battle
         res = StartBattle ( battle_data, battle_id, battle_seed);
 
         free(battle_data);
