@@ -46,7 +46,6 @@ Task Types:
 - "Research": research (sub_id - number of planet where research was started, obj_id - type of research)
 - "Shipyard": Shipyard job (sub_id - planet number, obj_id - construction type)
 - "Fleet": Fleet Assignment / IPM Attack (sub_id - entry number in the fleet table)
-- "DecRes": Write off resources on the planet (sub_id - number of the construction task to determine the amount of resources)
 - "Debug": debug event
 - "AI": tasks for bot (sub_id - strategy number, obj_id - current block number)
 - "Coupon": crediting coupons (handler is located in coupon.php)

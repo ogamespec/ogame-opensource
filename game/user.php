@@ -80,7 +80,7 @@ const USER_FLAG_FOLDER_OTHER = 0x2000;              // Message Filter. 1: Show a
 const USER_FLAG_DEFAULT = USER_FLAG_SHOW_ESPIONAGE_BUTTON | USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON | USER_FLAG_SHOW_BUDDY_BUTTON | USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON | USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
 
 const USER_LEGOR = 1;
-const USER_SPACE = 99999;
+const USER_SPACE = 99999;           // A technical account that owns global events as well as "nobody's" galaxy objects
 
 const USER_NOOB_LIMIT = 5000;           // Number of points for a newbie
 

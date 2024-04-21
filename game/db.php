@@ -57,7 +57,7 @@ function dbfree ($result) {
     @mysqli_free_result ($result);
 }
 
-// Добавить строку в таблицу.
+// Add a row to the table.
 function AddDBRow ( $row, $tabname )
 {
     global $db_connect, $db_prefix;
