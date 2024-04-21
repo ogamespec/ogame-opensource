@@ -12,32 +12,32 @@ if ($battle_debug) {
 require_once "unit.php";
 require_once "prod.php";
 
-// Запасной боевой движок на PHP.
-// Если сервер не поддерживает выполнение функции system(), то используется реализация боевого движка на PHP
+// Spare Battle Engine in PHP.
+// If the server does not support the execution of system(), then a PHP implementation of the battle engine is used
 
-// Как происходит запуск и интеграция боевого движка на PHP:
-// - Движок получает на вход и выдаёт на выход данные, аналогичные боевому движку на C; Только получает и выдаёт он их в виде строк.
-// - Дальше всё тривиально: парсим входные данные, производим расчёты, возвращаем результат
-// - Выбор между внешним боевым движком и внутренним (на PHP) выбирается настройкой вселенной uni['php_battle']: если она равна 1, то использовать движок на PHP
-// - Вызыватель (battle.php) по честному притворяется и генерит файлы, аналогично при работе с внешним движком. Это может оказаться полезным для "разбора полётов" (история логов)
+// How the battle engine is run and integrated in PHP:
+// - The engine receives as input and outputs as output data similar to a C battle engine; only it receives and outputs them as strings.
+// - Then everything is trivial: we parse the input data, perform calculations, return the result
+// - The choice between an external battle engine and an internal (PHP-based) one is selected by the uni['php_battle'] universe setting: if it is 1, use the PHP-based engine
+// - The caller (battle.php) honestly pretends and generates files, similar to the external engine. This can be useful for "flight debugging" (log history)
 
 /*
-Работа PHP движка с технической точки зрения.
-Все массивы хранятся в виде длинных строк. Доступ к элементу arr[i] осуществляется конструкцией ord($arr{$i}), запись $arr{$i} = chr(n).
-Сделано это для экономии памяти - строка занимает столько-же байт, сколько и символов в ней, а ассоциативные массивы в PHP достаточно прожорливые.
+PHP engine operation from a technical point of view.
+All arrays are stored as long strings. The arr[i] element is accessed by the ord($arr{$i}) construct, writing $arr{$i} = chr(n).
+This is done to save memory - a string takes as many bytes as there are characters in it, while associative arrays in PHP are quite expensive.
 
-Массивы-строки разделены на две одинаковые группы - атакующие и обороняющиеся. Каждая группа разделена на несколько массивов-строк, причем все слоты совмещены (для упрощения индексации случайных выстрелов, от 0 до N):
-$obj = { id, id, id, ... }     -- массив юнитов, для того чтобы номера объектов умещались в один байт (для экономии памяти), нумерация флота начинается от 02 (вместо 202), а обороны от 201 (вместо 401).  (n-200)
-$slot = { n, n, n, ... }       -- номер слота юнита (для САБ), это нужно для генерации боевого доклада, чтобы рассортировать потом юниты по слотам.
-$explo = { 1, 0, 1, ... }      -- массив взорванных юнитов, после каждого раунда взорванные юниты удаляются и формируется новый массив $obj. TODO: данные находятся в упакованном формате 8 юнитов на 1 байт
-$shld = { }                    -- щиты юнитов. перед началом каждого раунда этот массив заполняется максимальными значениями (щиты заряжаются). запакованный 4-байтовый массив-строка
-$hull = { }                    -- текущее значение брони, учитывая повреждения для юнита n. запакованный 4-байтовый массив-строка
+The array-strings are divided into two identical groups - attackers and defenders. Each group is divided into several array-strings, with all slots combined (to simplify indexing of random shots, from 0 to N):
+$obj = { id, id, id, ... }     -- array of units, in order to make the object numbers fit into one byte (to save memory), fleet numbering starts from 02 (instead of 202) and defense from 201 (instead of 401). (n-200)
+$slot = { n, n, n, ... }       -- unit slot number (for ACS), this is needed to generate a battle report to sort units into slots.
+$explo = { 1, 0, 1, ... }      -- array of exploded units, after each round the exploded units are deleted and a new array $obj is formed. TODO: the data is in packed format 8 units per 1 byte
+$shld = { }                    -- unit shields. before the start of each round this array is filled with maximum values (shields are charged). packed 4-byte array-string
+$hull = { }                    -- current armor value given the damage for unit n. packed 4-byte array-string
 
-Отладка: просто откройте http://localhost/game/battle_engine.php с установленной переменной $battle_debug = 1.
+To debug: just open http://localhost/game/battle_engine.php with $battle_debug = 1 set.
 
 */
 
-// Для отладки преобразовать массив-строку в читабельный формат
+// For debugging, convert the array-string into a readable format
 function hex_array_to_text ($arr)
 {
     return implode(unpack("H*", $arr));
@@ -59,7 +59,7 @@ function set_packed_word (&$arr, $idx, $val)
     $arr{4*$idx+3} = chr(($val >> 0) & 0xff);
 }
 
-// Выделить память для юнитов и установить начальные значения.
+// Allocate memory for units and set initial values.
 function InitBattle ($slot, $num, $objs, $attacker, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &$shld_arr )
 {
     global $UnitParam;
@@ -113,8 +113,8 @@ function InitBattle ($slot, $num, $objs, $attacker, &$explo_arr, &$obj_arr, &$sl
     }
 }
 
-// Выстрел a => b. Возвращает урон.
-// absorbed - накопитель поглощённого щитами урона (для того, кого атакуют, то есть для юнита "b").
+// Shot a => b. Returns damage.
+// absorbed - the accumulator of damage absorbed by shields (for the one who is attacked, i.e. for unit "b").
 function UnitShoot ($a, $b, &$aunits, &$aslot, &$ahull, &$ashld, $attackers, &$dunits, &$dslot, &$dhull, &$dshld, &$dexplo, $defenders, &$absorbed, &$dm, &$dk, $fid, $did )
 {
     global $UnitParam;
@@ -131,17 +131,17 @@ function UnitShoot ($a, $b, &$aunits, &$aslot, &$ahull, &$ashld, $attackers, &$d
 
     if (ord($dexplo{$b}) !=0 ) {
         $already_exploded_counter++;
-        return $apower; // Уже взорван.
+        return $apower; // Already blown up.
     }
 
-    if (get_packed_word($dshld, $b) == 0) {  // Щитов нет.
+    if (get_packed_word($dshld, $b) == 0) {  // No shields.
 
         $b_hull = get_packed_word($dhull, $b);
         if ($apower >= $b_hull) $b_hull = 0;
         else $b_hull -= $apower;
         set_packed_word ($dhull, $b, $b_hull);
     }
-    else { // Отнимаем от щитов, и если хватает урона, то и от брони.
+    else { // We take away from shields, and if there is enough damage, from armor as well.
 
         $b_shieldmax = $UnitParam[$b_gid][1] * (10 + $defenders[$b_slot_id]['shld']) / 10;
         $b_shield = get_packed_word ($dshld, $b);
@@ -171,13 +171,13 @@ function UnitShoot ($a, $b, &$aunits, &$aslot, &$ahull, &$ashld, $attackers, &$d
     $b_hull = get_packed_word($dhull, $b);
     $b_shield = get_packed_word ($dshld, $b);
 
-    if ($b_hull <= $b_hullmax * 0.7 && $b_shield == 0) {    // Взорвать и отвалить лома.
+    if ($b_hull <= $b_hullmax * 0.7 && $b_shield == 0) {    // Blow it up and scrap it.
 
         if (mt_rand (0, 99) >= (($b_hull * 100) / $b_hullmax) || $b_hull == 0) {
 
             $price = ShipyardPrice ($b_gid);
 
-            // Если взорвана оборона, то использовать DID (Defense-in-Debris), если флот, то использовать FID (Fleet-in-Debris)
+            // If a defense is blown, use DID (Defense-in-Debris), if a fleet is blown, use FID (Fleet-in-Debris)
             $dm += intval (ceil($price['m'] * ((float)( ($b_gid >= 401 ? $did : $fid) / 100.0))));
             $dk += intval (ceil($price['k'] * ((float)( ($b_gid >= 401 ? $did : $fid) / 100.0))));
 
@@ -189,7 +189,7 @@ function UnitShoot ($a, $b, &$aunits, &$aslot, &$ahull, &$ashld, $attackers, &$d
     return $apower;
 }
 
-// Почистить взорванные корабли и оборону. Возвращает количество взорванных единиц.
+// Clean up blown up ships and defenses. Returns the number of units blown up.
 function WipeExploded ($count, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &$shld_arr)
 {
     $exploded = 0;
@@ -197,7 +197,7 @@ function WipeExploded ($count, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &
 
     $ret = array();
 
-    // Новые массивы
+    // New arrays
     $explo_new = "";
     $obj_new = "";
     $slot_new = "";
@@ -208,7 +208,7 @@ function WipeExploded ($count, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &
 
         if ( ord($explo_arr{$i}) == 0 ) {
 
-            // Если не взорван перенести в новый массив
+            // If not exploded move to a new array
             $explo_new{$dst} = chr(0);
             $obj_new{$dst} = $obj_arr{$i};
             $slot_new{$dst} = $slot_arr{$i};
@@ -219,19 +219,19 @@ function WipeExploded ($count, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &
         }
         else {
 
-            // Иначе пропустить (почистить)
+            // Otherwise skip (clean)
             $exploded++;
         }
     }
 
-    // Освободить старые массивы
+    // Release old arrays
     unset ($explo_arr);
     unset ($obj_arr);
     unset ($slot_arr);
     unset ($hull_arr);
     unset ($shld_arr);
 
-    // Обновить исходные массивы
+    // Update source arrays
     $ret['explo_arr'] = $explo_new;
     $ret['obj_arr'] = $obj_new;
     $ret['slot_arr'] = $slot_new;
@@ -239,12 +239,12 @@ function WipeExploded ($count, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &
     $ret['shld_arr'] = $shld_new;
     $ret['exploded'] = $exploded;
 
-    // TODO: Использовать remap таблицу для взорванных юнитов? Может так будет быстрее..
+    // TODO: Use a remap table for blown units? Maybe that would be faster..
 
     return $ret;
 }
 
-// Зарядить щиты у невзорванных юнитов
+// Charge shields on unexploded units
 function ChargeShields ($slot, $count, &$explo_arr, &$obj_arr, &$slot_arr, &$shld_arr)
 {
     global $UnitParam;
@@ -265,7 +265,7 @@ function ChargeShields ($slot, $count, &$explo_arr, &$obj_arr, &$slot_arr, &$shl
     }
 }
 
-// Проверить бой на быструю ничью. Если ни у одного юнита броня не повреждена, то бой заканчивается ничьей досрочно.
+// Check the combat for a quick draw. If none of the units have armor damage, the combat ends in a quick draw.
 function CheckFastDraw (&$aunits, &$aslot, &$ahull, $aobjs, $attackers, &$dunits, &$dslot, &$dhull, $dobjs, $defenders)
 {
     global $UnitParam;
@@ -291,58 +291,58 @@ function CheckFastDraw (&$aunits, &$aslot, &$ahull, $aobjs, $attackers, &$dunits
     return true;
 }
 
-// Проверить возможность повторного выстрела. Для удобства используются оригинальные ID юнитов
+// Check the possibility of re-firing. Original unit IDs are used for convenience
 function RapidFire ($atyp, $dtyp)
 {
     $rapidfire = 0;
 
     if ( $atyp > 400 ) return 0;
 
-    // ЗСка против ШЗ/ламп
+    // Deathstar vs Espionage Probe/Solar Satellite
     if ($atyp==214 && ($dtyp==210 || $dtyp==212) && mt_rand(1,10000)>8) $rapidfire = 1;
-    // остальной флот против ШЗ/ламп
+    // Other units vs Espionage Probe/Solar Satellite
     else if ($atyp!=210 && ($dtyp==210 || $dtyp==212) && mt_rand(1,100)>20) $rapidfire = 1;
-    // ТИ против МТ
+    // Heavy Fighter vs Small Cargo
     else if ($atyp==205 && $dtyp==202 && mt_rand(1,100)>33) $rapidfire = 1;
-    // крейсер против ЛИ
+    // Cruiser vs Light Fighter
     else if ($atyp==206 && $dtyp==204 && mt_rand(1,1000)>166) $rapidfire = 1;
-    // крейсер против РУ
+    // Cruiser vs Rocket Launcher
     else if ($atyp==206 && $dtyp==401 && mt_rand(1,100)>10) $rapidfire = 1;
-    // бомбер против легкой обороны
+    // Bomber vs light defense
     else if ($atyp==211 && ($dtyp==401 || $dtyp==402) && mt_rand(1,100)>20) $rapidfire = 1;
-    // бомбер против средней обороны
+    // Bomber vs medium defense
     else if ($atyp==211 && ($dtyp==403 || $dtyp==405) && mt_rand(1,100)>10) $rapidfire = 1;
-    // уник против ЛК
+    // Destroyer vs Battlecruiser
     else if ($atyp==213 && $dtyp==215 && mt_rand(1,100)>50) $rapidfire = 1;
-    // уник против ЛЛ
+    // Destroyer vs Light Laser
     else if ($atyp==213 && $dtyp==402 && mt_rand(1,100)>10) $rapidfire = 1;
-    // ЛК против транспорта
+    // Battlecruiser vs transport
     else if ($atyp==215 && ($dtyp==202 || $dtyp==203) && mt_rand(1,100)>20) $rapidfire = 1;
-    // ЛК против среднего флота
+    // Battlecruiser vs medium fleet
     else if ($atyp==215 && ($dtyp==205 || $dtyp==206) && mt_rand(1,100)>25) $rapidfire = 1;
-    // ЛК против линкоров
+    // Battlecruiser vs Battleship
     else if ($atyp==215 && $dtyp==207 && mt_rand(1,1000)>143) $rapidfire = 1;
-    // ЗС против гражданского флота
+    // Deathstar vs civilian fleet
     else if ($atyp==214 && ($dtyp==202 || $dtyp==203 || $dtyp==208 || $dtyp==209) && mt_rand(1,1000)>4) $rapidfire = 1;
-    // ЗС против ЛИ
+    // Deathstar vs Light Fighter
     else if ($atyp==214 && $dtyp==204 && mt_rand(1,1000)>5) $rapidfire = 1;
-    // ЗС против ТИ
+    // Deathstar vs Heavy Fighter
     else if ($atyp==214 && $dtyp==205 && mt_rand(1,1000)>10) $rapidfire = 1;
-    // ЗС против крейсеров
+    // Deathstar vs Cruiser
     else if ($atyp==214 && $dtyp==206 && mt_rand(1,1000)>30) $rapidfire = 1;
-    // ЗС против линкоров
+    // Deathstar vs Battleship
     else if ($atyp==214 && $dtyp==207 && mt_rand(1,1000)>33) $rapidfire = 1;
-    // ЗС против бомберов
+    // Deathstar vs Bomber
     else if ($atyp==214 && $dtyp==211 && mt_rand(1,1000)>40) $rapidfire = 1;
-    // ЗС против уников
+    // Deathstar vs Destroyer
     else if ($atyp==214 && $dtyp==213 && mt_rand(1,1000)>200) $rapidfire = 1;
-    // ЗС против линеек
+    // Deathstar vs Battlecruiser
     else if ($atyp==214 && $dtyp==215 && mt_rand(1,1000)>66) $rapidfire = 1;
-    // ЗС против легкой обороны
+    // Deathstar vs light defense
     else if ($atyp==214 && ($dtyp==401 || $dtyp==402) && mt_rand(1,1000)>5) $rapidfire = 1;
-    // ЗС против средней обороны
+    // Deathstar vs medium defense
     else if ($atyp==214 && ($dtyp==403 || $dtyp==405) && mt_rand(1,1000)>10) $rapidfire = 1;
-    // ЗС против тяжелой обороны
+    // Deathstar vs heavy defense
     else if ($atyp==214 && $dtyp==404 && mt_rand(1,1000)>20) $rapidfire = 1;
 
     return $rapidfire;
@@ -354,7 +354,7 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
     global $already_exploded_counter;
     global $exploded_counter;
 
-    // Набор рабочих строк-массивов для вычислений. Массивы щитов и брони используют запаковку длинных чисел
+    // A set of working array strings for calculations. Arrays of shields and armor use packing of long numbers
 
     $obj_att = "";
     $slot_att = "";
@@ -368,13 +368,13 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
     $shld_def = "";
     $hull_def = "";
 
-    // Статистика по выстрелам
+    // Shot statistics
 
     $shoots = array();
     $spower = array();
     $absorbed = array();
 
-    // Поле обломков
+    // Debris field
 
     $dm = $dk = 0;
 
@@ -384,7 +384,7 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
     $anum = count ($res['before']['attackers']);
     $dnum = count ($res['before']['defenders']);
 
-    // Посчитать количество юнитов до боя
+    // Count the number of units before the battle
 
     $aobjs = 0;
     $dobjs = 0;
@@ -404,12 +404,12 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
         }
     }
 
-    // Подготовить массивы боевых единиц
+    // Prepare arrays of units
 
     InitBattle ($res['before']['attackers'], $anum, $aobjs, 1, $explo_att, $obj_att, $slot_att, $hull_att, $shld_att);
     InitBattle ($res['before']['defenders'], $dnum, $dobjs, 0, $explo_def, $obj_def, $slot_def, $hull_def, $shld_def);
 
-    // Раунды
+    // Rounds
 
     $res['rounds'] = array();
 
@@ -419,12 +419,12 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
 
         if ($aobjs == 0 || $dobjs == 0) break;
 
-        // Сбросить статистику.
+        // Reset stats.
         $shoots[0] = $shoots[1] = 0;
         $spower[0] = $spower[1] = 0;
         $absorbed[0] = $absorbed[1] = 0;
 
-        // Зарядить щиты.
+        // Charge shields.
 
         ChargeShields ($res['before']['attackers'], $aobjs, $explo_att, $obj_att, $slot_att, $shld_att);
         ChargeShields ($res['before']['defenders'], $dobjs, $explo_def, $obj_def, $slot_def, $shld_def);
@@ -433,9 +433,9 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
         $prev_dk = $dk;
         $prev_exploded = $exploded_counter;
 
-        // Произвести выстрелы.
+        // Fire shots.
 
-        for ($slot=0; $slot<$anum; $slot++) {     // Атакующие
+        for ($slot=0; $slot<$anum; $slot++) {     // Attackers
 
             for ($i=0; $i<$aobjs; $i++) {
                 $rapidfire = 1;
@@ -461,7 +461,7 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
             }
         }
 
-        for ($slot=0; $slot<$dnum; $slot++) {     // Обороняющиеся
+        for ($slot=0; $slot<$dnum; $slot++) {     // Defenders
 
             for ($i=0; $i<$dobjs; $i++) {
                 $rapidfire = 1;
@@ -487,13 +487,13 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
             }
         }
 
-        // Быстрая ничья?
+        // Quick draw?
 
         $fastdraw = CheckFastDraw (
             $obj_att, $slot_att, $hull_att, $aobjs, $res['before']['attackers'],
             $obj_def, $slot_def, $hull_def, $dobjs, $res['before']['defenders'] );
 
-        // Вычистить взорванные корабли и оборону.
+        // Clean out the blown ships and defenses.
 
         $ret = WipeExploded ($aobjs, $explo_att, $obj_att, $slot_att, $hull_att, $shld_att);
         $aobjs -= $ret['exploded'];
@@ -511,7 +511,7 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
         $hull_def = $ret['hull_arr'];
         $shld_def = $ret['shld_arr'];
 
-        // Сохранить результаты раунда
+        // Save round results
 
         $res['rounds'][$round] = array();
         $r = &$res['rounds'][$round];
@@ -582,15 +582,15 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
         if ($fastdraw) break;
     }
 
-    // Результаты боя.
+    // Battle Results.
 
-    if ($aobjs > 0 && $dobjs == 0){ // Атакующий выиграл
+    if ($aobjs > 0 && $dobjs == 0){ // The attacker won
         $res['result'] = "awon";
     }
-    else if ($dobjs > 0 && $aobjs == 0) { // Атакующий проиграл
+    else if ($dobjs > 0 && $aobjs == 0) { // The attacker lost
         $res['result'] = "dwon";
     }
-    else    // Ничья
+    else    // Draw
     {
         $res['result'] = "draw";
     }
@@ -598,11 +598,11 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
     $res['dm'] = $dm;
     $res['dk'] = $dk;
 
-    // Сохранить статистику выделений памяти
+    // Save memory allocation statistics
 
     $res['peak_allocated'] = memory_get_usage();
 
-    // Почистить память
+    // Clear memory
 
     unset($obj_att);
     unset($slot_att);
@@ -633,7 +633,7 @@ function deserialize_slot ($str, $att)
 
     $res = array();
 
-    // Нужно вырезать подстроку с именем, т.к. имя может содержать пробелы  (#119)
+    // We need to cut the substring with the name, because the name may contain spaces (#119)
     $bracket_end = strpos ($str, '}');
     $name_str = substr ($str, 0, $bracket_end + 1);
     $param_str = trim (substr ($str, $bracket_end + 1));
@@ -660,17 +660,17 @@ function deserialize_slot ($str, $att)
     return $res;
 }
 
-// Распарсить входные данные
+// Parse the input data
 function ParseInput ($source, &$rf, &$fid, &$did, &$attackers, &$defenders)
 {
     global $battle_debug;
 
     $kv = array();
 
-    // Расщепить входные данные на строки
+    // Split input data into strings
     $arr = explode("\n", $source);
 
-    // Расщепить строки на пары ключ/значение
+    // Split strings into key/value pairs
     foreach ($arr as $line) {
         if (empty($line)) {
             continue;
@@ -687,7 +687,7 @@ function ParseInput ($source, &$rf, &$fid, &$did, &$attackers, &$defenders)
         echo "</pre>";
     }
 
-    // Распихать параметры куда нужно
+    // Spread the parameters where they need to go
     $rf = intval ($kv['Rapidfire']);
     $fid = intval ($kv['FID']);
     $did = intval ($kv['DID']);
@@ -713,37 +713,37 @@ function ParseInput ($source, &$rf, &$fid, &$did, &$attackers, &$defenders)
     }
 }
 
-// На выходе массив battleresult, формат аналогичный формату боевого движка на Си.
+// The output is an array of battleresult, the format is similar to that of the C battle engine.
 function BattleEngine ($source)
 {
     global $battle_debug;
 
-    // Настройки боевого движка по умолчанию
+    // Default battle engine settings
     $rf = 1;
     $fid = 30;
     $did = 0;
 
-    // Выходной результат
+    // Output result
     $res = array ();
 
-    // Инициализировать ДСЧ
+    // Initialize RNG
     list($usec,$sec)=explode(" ",microtime());
     $battle_seed = (int)($sec * $usec) & 0xffffffff;
     mt_srand ($battle_seed);
     $res['battle_seed'] = $battle_seed;
 
-    // Исходные слоты атакующих и защитников
+    // Initial slots of attackers and defenders
     $res['before'] = array();
     $res['before']['attackers'] = array();
     $res['before']['defenders'] = array();
 
-    // Разобрать входные данные
+    // Parse the input data
     ParseInput ($source, $rf, $fid, $did, $res['before']['attackers'], $res['before']['defenders']);
     if ($battle_debug) {
         echo "rf = $rf, fid = $fid, did = $did<br/>";
     }
 
-    // **** НАЧАТЬ БИТВУ ****
+    // **** START BATTLE ****
     DoBattle ($res, $rf, $fid, $did);
 
     return $res;
@@ -775,9 +775,9 @@ function BattleDebug()
 
 // DEBUG
 
-// Захардкодьте ваши исходные боевые данные тут.
+// Hardcode your raw battle data here.
 
-// Памятный бой.
+// Memorable fight.
 $source = "Rapidfire = 1
 FID = 70
 DID = 0
@@ -799,7 +799,7 @@ Attacker12 = ({onelife} 252311 1 4 7 14 14 15 2510 0 0 0 0 0 0 0 0 0 0 0 0 0 )
 Attacker13 = ({r2r} 252306 1 15 6 14 13 15 0 0 0 0 0 0 0 0 0 0 0 0 0 848 )
 Defender0 = ({ilk} 10336 1 14 5 14 15 15 956 927 12394 657 1268 1045 3 1587 23 14 0 898 1 2108 92 0 0 0 0 0 0 0 )";
 
-// Простой бой (крысы против пачки ЛИ)
+// Simple combat (cruisers vs. a bunch of light fighters)
 /*
 $source = "Rapidfire = 1
 FID = 30

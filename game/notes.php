@@ -1,15 +1,18 @@
 <?php
 
-// Заметки.
+// Notes.
 
-// Записи в таблице БД:
-// note_id: Порядковый номер заметки (INT AUTO_INCREMENT PRIMARY KEY)
-// owner_id: ID пользователя (INT)
-// subj: Тема заметки (CHAR(30))
-// text: Текст заметки (TEXT)
-// textsize: Размер текста заметки (INT)
-// prio: Приоритет (0: Неважно (зеленый), 1: Так себе (желтый), 2: Важно (красный) ) (INT)
-// date: Дата создания/редактирования заметки ('INT UNSIGNED')
+// Important! This game feature involves a rich interaction with input from the user.
+// You need to pay a lot of attention to the security of the input data (size and content checks).
+
+// Database table entries:
+// note_id: Note ordinal number (INT AUTO_INCREMENT PRIMARY KEY)
+// owner_id: user ID (INT)
+// subj: Subject of the note (CHAR(30))
+// text: Text of the note (TEXT)
+// textsize: Note text size (INT)
+// prio: Priority (0: Not important (green), 1: So-so (yellow), 2: Important (red) ) (INT)
+// date: Date the note was created/edited ('INT UNSIGNED')
 
 function LoadNote ( $player_id, $note_id )
 {
@@ -26,7 +29,7 @@ function AddNote ( $player_id, $subj, $text, $prio )
     $user = LoadUser ($player_id);
     loca_add ( "notes", $user['lang'] );
 
-    // Проверить параметры.
+    // Check the parameters.
     if ($subj === "") $subj = loca ("NOTE_NO_SUBJ");
     if ($text === "") $text = loca ("NOTE_NO_TEXT");
     $text = mb_substr ($text, 0, 5000, "UTF-8");
@@ -34,7 +37,7 @@ function AddNote ( $player_id, $subj, $text, $prio )
     if ($prio < 0) $prio = 0;
     if ($prio > 2) $prio = 2;
 
-    // Записать заметку в БД.
+    // Write a note to the database.
     $note = array( null, $player_id, $subj, $text, mb_strlen ($text, "UTF-8"), $prio, time() );
     AddDBRow ( $note, "notes" );
 }
@@ -43,14 +46,14 @@ function UpdateNote ( $player_id, $note_id, $subj, $text, $prio )
 {
     global $db_prefix;
 
-    // Чужие заметки трогать нельзя
+    // You can't touch someone else's notes
     $note = LoadNote ( $player_id, $note_id);
     if ( $note['owner_id'] != $player_id ) return;
 
     $user = LoadUser ($player_id);
     loca_add ( "notes", $user['lang'] );
 
-    // Проверить параметры.
+    // Check the parameters.
     if ($subj === "") $subj = loca ("NOTE_NO_SUBJ");
     if ($text === "") $text = loca ("NOTE_NO_TEXT");
     $text = mb_substr ($text, 0, 5000, "UTF-8");
@@ -66,7 +69,7 @@ function DelNote ( $player_id, $note_id )
 {
     global $db_prefix;
 
-    // Чужие заметки трогать нельзя
+    // You can't touch someone else's notes
     $note = LoadNote ( $player_id, $note_id);
     if ( $note['owner_id'] != $player_id ) return;
 

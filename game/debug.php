@@ -1,8 +1,8 @@
 <?php
 
-// Функции для отладки и ошибок.
+// Functions for debugging and errors.
 
-// Ошибка, аварийное завершение программы.
+// Error, emergency program termination.
 function Error ($text)
 {
     global $GlobalUser;
@@ -20,9 +20,9 @@ function Error ($text)
     $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], $text, $now );
     $id = AddDBRow ( $error, 'errors' );
 
-    Logout ( $_GET['session'] );    // Завершить сессию.
+    Logout ( $_GET['session'] );    // End the session.
 
-    ob_clean ();    // Отменить предыдущий HTML.
+    ob_clean ();    // Undo Previous HTML.
     PageHeader ("error", true, false);
 
     echo "<center><font size=\"3\"><b>\n";
@@ -39,7 +39,7 @@ function Error ($text)
     exit ();
 }
 
-// Добавить отладочное сообщение.
+// Add debug message.
 function Debug ($message)
 {
     global $GlobalUser;
@@ -55,7 +55,7 @@ function Debug ($message)
     $id = AddDBRow ( $error, 'debug' );
 }
 
-// Трассировка вызовов.
+// Call Trace.
 function BackTrace ()
 {
     $bt =  debug_backtrace () ;
@@ -73,7 +73,7 @@ function BackTrace ()
     return $trace;
 }
 
-// Сохранить историю переходов
+// Save the browse history
 function BrowseHistory ()
 {
     global $GlobalUser;
@@ -87,20 +87,20 @@ function BrowseHistory ()
     }
 }
 
-// Проверка безопасности.
+// Security check.
 function SecurityCheck ( $match, $text, $notes )
 {
     if ( !preg_match ( $match, $text ) ) Error ( "Нарушение безопасности: " . $notes );
 }
 
-// Добавить IP адрес в таблицу.
+// Add the IP address to the table.
 function LogIPAddress ( $ip, $user_id, $reg=0)
 {
     $log = array ( null, $ip, $user_id, $reg, time () );
     AddDBRow ( $log, 'iplogs' );
 }
 
-// Получить последнию регистрацию с указанного IP адреса.
+// Get the last registration from the specified IP address.
 function GetLastRegistrationByIP ( $ip )
 {
     global $db_prefix;
@@ -114,7 +114,7 @@ function GetLastRegistrationByIP ( $ip )
     }
 }
 
-// Логи действия пользователей.
+// User action logs.
 function UserLog ($owner_id, $type, $text, $when=0)
 {
     global $db_prefix;
@@ -126,8 +126,8 @@ function UserLog ($owner_id, $type, $text, $when=0)
     dbquery ($query);
 }
 
-// Записывает в базу данные игрока при попытке взлома игры.
-// Админ должен периодически проверять слишком умных игроков, которые пытаются взломать игру.
+// Writes player data to the database when attempting to hack the game.
+// The admin should periodically check for too smart players who try to hack the game.
 function Hacking ($code)
 {
     global $GlobalUni;
@@ -151,12 +151,12 @@ function Hacking ($code)
 
     Debug ( 'HACKING ATTEMPT: ' . loca($code) . "<br><br>" . $get . $post . $method );
 
-    // Увеличить счетчик попыток взлома.
-    // Счётчик автоматически сбрасывается после релогина.
+    // Increase the tamper attempt counter.
+    // The counter is automatically reset after a relogin.
     IncrementHackCounter ();
 }
 
-// Вернуть лог SQL запросов, если у пользователя включен показ отладочной информации.
+// Return the SQL query log if the user has debugging information enabled.
 function GetSQLQueryLogText ()
 {
     global $query_log;

@@ -1,14 +1,17 @@
 <?php
 
-// Ракетная атака. Раньше находилась в battle.php, но для удобства отделена в свой модуль.
-// TODO: Нужно уделить больше внимания этой фиче игры, т.к. есть сомнения в корректности работы алгоритма. Для проверки можно использовать раздел админки для симуляции ракетной атаки.
+// Missile attack. It used to be in battle.php, but for convenience it was separated into its own module.
+// TODO: It is necessary to pay more attention to this feature of the game, because there are doubts about the correctness of the algorithm. To test it, you can use the admin section to simulate a missile attack.
 
-// Алгоритмическая часть ракетной атаки (без работы с БД).
+// IPM - interplanetary missile, attacks
+// ABM - anti-ballistic missile, defends
+
+// Algorithmic part of the missile attack (without working with DB).
 function RocketAttackMain ( $amount, $primary, $moon_attack, &$target, &$moon_planet, $origin_user_attack, $target_user_armor )
 {
     global $UnitParam;
 
-    // Отбить атаку МПР перехватчиками
+    // Repel IPM attack by interceptors (ABMs)
     $ipm = $amount;
     $abm = $moon_attack ? $moon_planet['d502'] : $target['d502'];
     $ipm = max (0, $ipm - $abm);
@@ -18,7 +21,7 @@ function RocketAttackMain ( $amount, $primary, $moon_attack, &$target, &$moon_pl
 
     $maxdamage = $ipm * $UnitParam[503][2] * (1 + $origin_user_attack / 10);
 
-    // Произвести атаку первичной цели
+    // Launch an attack on the primary target
     if ( $primary > 0 && $ipm > 0 )
     {
         $armor = $UnitParam[$primary][0] * (1 + 0.1 * $target_user_armor) / 10;
@@ -31,7 +34,7 @@ function RocketAttackMain ( $amount, $primary, $moon_attack, &$target, &$moon_pl
         }
     }
 
-    // Расчитать потери обороны, если еще остались МПР -- всё то же самое, но в ID не учитывать ID первичной цели. Чужие ракеты также можно бомбить.
+    // Calculate defense losses, if there are still IPMs left -- all the same, but ignore the ID of the primary target in the ID. Foreign missiles can also be bombed.
     if ($maxdamage > 0)
     {
         $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
@@ -53,7 +56,7 @@ function RocketAttackMain ( $amount, $primary, $moon_attack, &$target, &$moon_pl
     return $ipm_destroyed;
 }
 
-// Ракетная атака.
+// Missile attack.
 function RocketAttack ( $fleet_id, $planet_id, $when )
 {
     $fleet = LoadFleet ($fleet_id);
@@ -63,7 +66,7 @@ function RocketAttack ( $fleet_id, $planet_id, $when )
     $target = GetPlanet ($planet_id);
     $moon_attack = $target['type'] == 0;
     if ($moon_attack) {
-        // Если ракетная атака производится на Луну, то перехватчики с планеты участвуют в защите
+        // If a missile attack is made on the Moon, interceptors from the planet are involved in defense
         $moon_planet = LoadPlanet ($target['g'], $target['s'], $target['p'], 1);
     }
     $origin_user = LoadUser ($origin['owner_id']);
@@ -78,19 +81,19 @@ function RocketAttack ( $fleet_id, $planet_id, $when )
         $origin_user['r109'], 
         $target_user['r111'] );
 
-    // Записать назад потери обороны.
+    // Write back the defense's losses.
     SetPlanetDefense ( $planet_id, $target );
     if ($moon_attack) {
         SetPlanetDefense ( $moon_planet['planet_id'], $moon_planet );
     }
 
-    // Изменить статистику игроков
+    // Modify player statistics
     RecalcRanks ();
 
-    // Обновить активность на планете.
+    // Update the activity on the planet.
     UpdatePlanetActivity ( $planet_id, $when );
 
-    // Сформировать сообщение для защитника
+    // Generate a message for the defender
     loca_add ( "raketen", $target_user['lang'] );
     loca_add ( "fleetmsg", $target_user['lang'] );
     $text = va(loca_lang("RAK_DEF_TEXT1", $target_user['lang']), $amount) . " ". $origin['name']." <a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>  ";
@@ -104,8 +107,8 @@ function RocketAttack ( $fleet_id, $planet_id, $when )
 
     $message_for_attacker = true;
 
-    // Сформировать сообщение для атакующего: https://github.com/ogamespec/ogame-opensource/issues/61
-    // Оригинальная версия 0.84 не создавала сообщения для атакующего.
+    // Generate a message for the attacker: https://github.com/ogamespec/ogame-opensource/issues/61
+    // The original 0.84 version did not create a message for the attacker.
     if ($message_for_attacker) {
 
         loca_add ( "raketen", $origin_user['lang'] );
@@ -120,13 +123,13 @@ function RocketAttack ( $fleet_id, $planet_id, $when )
     }
 }
 
-// Получить текст для уничтоженной обороны
+// Get the text for the destroyed defense
 function GetDestroyedDefenseText ($lang, &$target, &$moon_planet, $moon_attack)
 {
     loca_add ( "raketen", $lang );
     loca_add ( "technames", $lang );
 
-    $defmap = array ( 503, 502, 408, 407, 406, 405, 404, 403, 402, 401 );       // оборона выводится задом-наперёд по неизвестной причине.
+    $defmap = array ( 503, 502, 408, 407, 406, 405, 404, 403, 402, 401 );       // the defenses are being pulled backwards for some unknown reason.
     $deftext = "<table width=400><tr><td class=c colspan=4>".loca_lang("RAK_TITLE", $lang)."</td></tr>";
     $n = 0;
     foreach ( $defmap as $i=>$gid )
@@ -135,7 +138,7 @@ function GetDestroyedDefenseText ($lang, &$target, &$moon_planet, $moon_attack)
         if ( $target["d$gid"] ) {
 
             $count = $target["d$gid"];
-            // Учесть оборону луны перехватчиками с планеты
+            // Consider the defense of the moon by interceptors from the planet.
             if ($moon_attack && $gid == 502 ) {
                 $count = $moon_planet["d502"];
             }
