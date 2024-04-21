@@ -1,27 +1,27 @@
 <?php
 
-// API для управления купонами.
+// API for coupon management.
 
 /*
-Немного о самой системе.
+A little bit about the system itself.
 
-Купоны хранятся в "мастер-базе" - на том же сервере, что и главная страница игры (Start Page).
-Мастер-база имеет доступ ко всем вселенным через таблицу unis, а также все вселенные имеют доступ к мастер-базе через /game/config.php
-(если доступ к мастер-базе разрешен через переменную mdb_enable)
+Coupons are stored in the "master database" - on the same server as the main game page (Start Page).
+The master database has access to all universes through the unis table, and all universes have access to the master database through /game/config.php
+(if access to the master database is enabled via the mdb_enable variable)
 
-Сделано это по причине того, что купоны могут быть использованы в любой вселенной.
+The reasoning behind this is that coupons can be used in any universe.
 
-Код купона выглядит примерно так: 2B2D-FE3D-7D74-37C4-D26M (комбинация цифр и больших латинских букв)
+The coupon code looks something like this: 2B2D-FE3D-7D74-37C4-D26M (a combination of numbers and capital Latin letters)
 
-Купоны рассылаются автоматически всем активным игрокам (активны в игре более 7 дней).
-Даты рассылки задает администратор вселенной (обычно на Новый Год и другие национальные праздники)
-Задание рассылке купонов добавляется в Queue, обработчик этого задания находится в этом модуле.
+Coupons are sent out automatically to all active players (active in the game for more than 7 days).
+Distribution dates are set by the universe administrator (usually on New Year's Eve and other national holidays)
+Coupon distribution task is added to Queue, the handler of this task is located in this module.
 
-Вся ТМ, начисляемая через купоны является платной.
+All DM accrued through coupons is considered paid.
 
 */
 
-// Функция для отправки письма с кодом купона (UTF-8, HTML).
+// Function to send an email with a coupon code (UTF-8, HTML).
 function mail_html ($to, $subject = '(No subject)', $message = '', $header = '') {
     $ip = $_SERVER['REMOTE_ADDR'];
     if ( !localhost($ip) ) {
@@ -29,13 +29,13 @@ function mail_html ($to, $subject = '(No subject)', $message = '', $header = '')
         mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $header_ . $header);
     }
 
-    // Добавить лог в temp.
+    // Add the log to temp.
     $f = fopen ( "temp/mailto.log", "a" );
     fprintf ( $f, "To: %s\r\nSubj: %s\r\n\r\n%s\r\n", $to, $subject, $message );
     fclose ($f);
 }
 
-// Link для соединения с мастер базой
+// Link to connect to the master database
 $MDB_link = 0;
 
 function MDBConnect ()
@@ -76,7 +76,7 @@ function MDBArray ($result)
 
 // ------------------------------------------------------------------
 
-// Загрузить объект купона по ID. Вернуть NULL, если купон не найден.
+// Load coupon object by ID. Return NULL if the coupon is not found.
 function LoadCoupon ($id)
 {
     if ( MDBConnect() == FALSE) return NULL;
@@ -87,10 +87,10 @@ function LoadCoupon ($id)
     else return NULL;
 }
 
-// Отправить код купона указанному пользователю
+// Send the coupon code to the specified user
 function SendCoupon ($user, $code)
 {
-    loca_add ( "coupons", $user['lang'] );    // добавить языковые ключи пользователя, которому посылается сообщение.
+    loca_add ( "coupons", $user['lang'] );    // add the language keys of the user to whom the message is sent.
 
     mail_html ( $user['pemail'], 
         loca_lang("COUPON_SUBJ", $user['lang']), 
@@ -98,7 +98,7 @@ function SendCoupon ($user, $code)
         "From: coupon@" . hostname() );
 }
 
-// Проверить есть ли такой купон и он не активирован. Возвращается ID купона или 0, если неверный код купона или купон погашен.
+// Check if there is such a coupon and it is not activated. Returns the coupon ID or 0 if the coupon code is incorrect or the coupon is redeemed.
 function CheckCoupon ($code)
 {
     if ( MDBConnect() )
@@ -115,7 +115,7 @@ function CheckCoupon ($code)
     else return 0;
 }
 
-// Перечислить все купоны. Вернуть result SQL-запроса. Параметры вызова для пагинатора (start, count)
+// List all coupons. Return the result of the SQL query. Call parameters for paginator (start, count)
 function EnumCoupons ($start, $count)
 {
     if ( MDBConnect() )
@@ -126,7 +126,7 @@ function EnumCoupons ($start, $count)
     else return NULL;
 }
 
-// Количество купонов в базе
+// Number of coupons in the database
 function TotalCoupons ()
 {
     if ( MDBConnect() )
@@ -141,7 +141,7 @@ function TotalCoupons ()
     else return 0;
 }
 
-// Добавить купон (количество DM). Вернуть код купона, или NULL если неудача.
+// Add a coupon (DM quantity). Return the coupon code, or NULL if failure.
 function AddCoupon ($dm)
 {
     global $db_secret;
@@ -161,7 +161,7 @@ function AddCoupon ($dm)
     else return NULL;
 }
 
-// Активировать купон. Вернуть TRUE, если всё хорошо или FALSE, если какая-то фигня.
+// Activate the coupon. Return TRUE if everything is fine or FALSE if it's a mess.
 function ActivateCoupon ($user, $code)
 {
     global $GlobalUni, $db_prefix;
@@ -171,9 +171,9 @@ function ActivateCoupon ($user, $code)
         $id = CheckCoupon ($code);
         if ( $id ) {
             $coupon = LoadCoupon ($id);
-            $query = "UPDATE coupons SET used=1, user_uni='".$GlobalUni['num']."', user_id='".$user['player_id']."', user_name='".$user['oname']."' WHERE id = $id";    // погасить купон
+            $query = "UPDATE coupons SET used=1, user_uni='".$GlobalUni['num']."', user_id='".$user['player_id']."', user_name='".$user['oname']."' WHERE id = $id";    // redeem coupon
             MDBQuery ($query);
-            $query = "UPDATE ".$db_prefix."users SET dm = dm + ".$coupon['amount']." WHERE player_id = " . $user['player_id'];    // добавить пользователю платной ТМ.
+            $query = "UPDATE ".$db_prefix."users SET dm = dm + ".$coupon['amount']." WHERE player_id = " . $user['player_id'];    // add a paid DM user.
             dbquery ($query);
             return TRUE;
         }
@@ -182,7 +182,7 @@ function ActivateCoupon ($user, $code)
     else return FALSE;
 }
 
-// Удалить купон
+// Delete coupon
 function DeleteCoupon ($id)
 {
     if ( MDBConnect() )
@@ -192,10 +192,10 @@ function DeleteCoupon ($id)
     }
 }
 
-// Обработчик задания начисления купонов.
-// sub_id: Количество ТМ
-// obj_id: (Неактивен не менее ... дней << 16) | (Находится в игре более ... дней)
-// level: Периодичность ... дней
+// Coupon charging task handler.
+// sub_id: Number of DM
+// obj_id: (Inactive for at least ... days << 16) | (Been in the game for over ... days)
+// level: Periodicity ... days
 function Queue_Coupon_End ($queue)
 {
     global $db_prefix;
@@ -203,19 +203,19 @@ function Queue_Coupon_End ($queue)
     $now = $queue['end'];
     $ip = $_SERVER['REMOTE_ADDR'];
 
-    // Выбрать пользователей согласно критериям.
+    // Choose users according to the criteria.
     $inactive_days = ($queue['obj_id'] >> 16) & 0xffff;
     $ingame_days = $queue['obj_id'] & 0xffff;
     $query = "SELECT * FROM ".$db_prefix."users WHERE regdate < ".($now - $ingame_days * 24*60*60)." AND lastclick >= " . ($now - $inactive_days * 24*60*60);
     $result = dbquery ($query);
 
-    while ( $user = dbarray ($result) )    // Разослать сообщения с купонами
+    while ( $user = dbarray ($result) )    // Send out messages with coupons
     {
         $code = AddCoupon ( $queue['sub_id'] );
         SendCoupon ( $user, $code );
     }
 
-    // Продлить или завершить задание.
+    // Extend or end a task.
     $seconds = $queue['level'] * 24 * 60 * 60;
     if ( $seconds > 0 ) ProlongQueue ( $queue['task_id'], $seconds );
     else RemoveQueue ( $queue['task_id'] );
