@@ -3,9 +3,9 @@
 require_once "battle_engine.php";
 require_once "raketen.php";
 
-// Боевой движок OGame.
+// OGame Battle Engine.
 
-// Восстановление обороны.
+// Repairing the defense.
 function RepairDefense ( $d, $res, $defrepair, $defrepair_delta, $premium=true )
 {
     $repaired = array ( 401=>0, 402=>0, 403=>0, 404=>0, 405=>0, 406=>0, 407=>0, 408=>0 );
@@ -18,7 +18,7 @@ function RepairDefense ( $d, $res, $defrepair, $defrepair_delta, $premium=true )
     $rounds = count ( $res['rounds'] );
     if ( $rounds > 0 ) 
     {
-        // Посчитать взорванную оборону.
+        // Count the blown defenses.
         $last = $res['rounds'][$rounds - 1];
         foreach ( $exploded as $gid=>$amount )
         {
@@ -27,7 +27,7 @@ function RepairDefense ( $d, $res, $defrepair, $defrepair_delta, $premium=true )
             $exploded_total += $exploded[$gid];
         }
 
-        // Восстановить оборону
+        // Restore the defense
         if ($exploded_total)
         {
             foreach ( $exploded as $gid=>$amount )
@@ -47,7 +47,7 @@ function RepairDefense ( $d, $res, $defrepair, $defrepair_delta, $premium=true )
     return $repaired;
 }
 
-// Захватить ресурсы.
+// Capture resources.
 function Plunder ( $cargo, $m, $k, $d )
 {
     $m /=2; $k /=2; $d /= 2;
@@ -79,7 +79,7 @@ function Plunder ( $cargo, $m, $k, $d )
     return $res;
 }
 
-// Рассчитать общие потери (учитывая восстановленную оборону).
+// Calculate total losses (taking into account repaired defenses).
 function CalcLosses ( $a, $d, $res, $repaired )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
@@ -89,8 +89,8 @@ function CalcLosses ( $a, $d, $res, $repaired )
 
     $aprice = $dprice = 0;
 
-    // Стоимость юнитов до боя.
-    foreach ($a as $i=>$attacker)                // Атакующие
+    // The cost of units before combat.
+    foreach ($a as $i=>$attacker)                // Attackers
     {
         $a[$i]['points'] = 0;
         $a[$i]['fpoints'] = 0;
@@ -106,7 +106,7 @@ function CalcLosses ( $a, $d, $res, $repaired )
         }
     }
 
-    foreach ($d as $i=>$defender)            // Обороняющиеся
+    foreach ($d as $i=>$defender)            // Defenders
     {
         $d[$i]['points'] = 0;
         $d[$i]['fpoints'] = 0;
@@ -131,14 +131,14 @@ function CalcLosses ( $a, $d, $res, $repaired )
         }
     }
 
-    // Стоимость юнитов в последнем раунде.
+    // The cost of units in the last round.
     $rounds = count ( $res['rounds'] );
     if ( $rounds > 0 ) 
     {
         $last = $res['rounds'][$rounds - 1];
         $alast = $dlast = 0;
 
-        foreach ( $last['attackers'] as $i=>$attacker )        // Атакующие
+        foreach ( $last['attackers'] as $i=>$attacker )        // Attackers
         {
             foreach ( $amap as $n=>$gid )
             {
@@ -152,7 +152,7 @@ function CalcLosses ( $a, $d, $res, $repaired )
             }
         }
 
-        foreach ( $last['defenders'] as $i=>$defender )        // Обороняющиеся
+        foreach ( $last['defenders'] as $i=>$defender )        // Defenders
         {
             foreach ( $dmap as $n=>$gid )
             {
@@ -183,7 +183,7 @@ function CalcLosses ( $a, $d, $res, $repaired )
     return array ( 'a' => $a, 'd' => $d, 'aloss' => $aloss, 'dloss' => $dloss );
 }
 
-// Суммарная грузоподъемность флотов в последнем раунде.
+// Total cargo capacity of fleets in the last round.
 function CargoSummaryLastRound ( $a, $res )
 {
     $cargo = 0;
@@ -192,7 +192,7 @@ function CargoSummaryLastRound ( $a, $res )
     {
         $last = $res['rounds'][$rounds - 1];
 
-        foreach ( $last['attackers'] as $i=>$attacker )        // Атакующие
+        foreach ( $last['attackers'] as $i=>$attacker )        // Attackers
         {
             $f = LoadFleet ( $attacker['id'] );
             $cargo += FleetCargoSummary ( $attacker ) - ($f['m'] + $f['k'] + $f['d']) - $f['fuel'];
@@ -200,7 +200,7 @@ function CargoSummaryLastRound ( $a, $res )
     }
     else
     {
-        foreach ($a as $i=>$attacker)                // Атакующие
+        foreach ($a as $i=>$attacker)                // Attackers
         {
             $f = LoadFleet ( $attacker['id'] );
             $cargo += FleetCargoSummary ( $attacker['fleet'] ) - ($f['m'] + $f['k'] + $f['d']) - $f['fuel'];
@@ -209,21 +209,21 @@ function CargoSummaryLastRound ( $a, $res )
     return max ( 0, $cargo );
 }
 
-// Модифицировать флоты и планету (добавить/отнять ресурсы, развернуть атакующие флоты, если остались корабли)
+// Modify fleets and planet (add/remove resources, return attack fleets if ships remain)
 function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_cargo )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
     global $db_prefix;
 
-    // Бой с раундами.
+    // Combat with rounds.
 
     $rounds = count ( $res['rounds'] );
     if ( $rounds > 0 ) 
     {
         $last = $res['rounds'][$rounds - 1];        
 
-        foreach ( $last['attackers'] as $i=>$attacker )        // Атакующие
+        foreach ( $last['attackers'] as $i=>$attacker )        // Attackers
         {
             $fleet_obj = LoadFleet ( $attacker['id'] );
             $queue = GetFleetQueue ($fleet_obj['fleet_id']);
@@ -240,7 +240,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             }
         }
 
-        foreach ( $last['defenders'] as $i=>$defender )        // Обороняющиеся
+        foreach ( $last['defenders'] as $i=>$defender )        // Defenders
         {
             if ( $i == 0 )    // Планета
             {
@@ -260,18 +260,18 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
                 if ( $ships > 0 ) SetFleet ( $defender['id'], $defender );
                 else {
                     $queue = GetFleetQueue ($defender['id']);
-                    DeleteFleet ($defender['id']);    // удалить флот
-                    RemoveQueue ( $queue['task_id'] );    // удалить задание
+                    DeleteFleet ($defender['id']);    // delete fleet
+                    RemoveQueue ( $queue['task_id'] );    // delete task
                 }
             }
         }
     }
 
-    // Бой без раундов.
+    // Combat with no rounds.
 
     else 
     {
-        foreach ( $a as $i=>$attacker )            // Атакующие
+        foreach ( $a as $i=>$attacker )            // Attackers
         {
             $fleet_obj = LoadFleet ( $attacker['id'] );
             $queue = GetFleetQueue ($fleet_obj['fleet_id']);
@@ -288,9 +288,9 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
             }
         }
 
-        // Модифицировать ресурсы на атакуемой планете, если атакующий победил. Больше ничего делать не требуется, т.к. это единственный возможный вариант без раундов.
+        // Modify resources on the attacked planet if the attacker wins. Nothing else needs to be done, as this is the only possible option without rounds.
 
-        foreach ( $d as $i=>$defender )        // Обороняющиеся
+        foreach ( $d as $i=>$defender )        // Defenders
         {
             if ( $i == 0 && $res['result'] == 'awon')    // Планета
             {
@@ -301,7 +301,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
     }
 }
 
-// Сгенерировать HTML-код одного слота.
+// Generate the HTML code of a single slot.
 function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $attack, $lang )
 {
     global $UnitParam;
@@ -378,7 +378,7 @@ function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $d
     return $text;
 }
 
-// Сгенерировать боевой доклад.
+// Generate a battle report.
 function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired, $lang )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
@@ -391,12 +391,12 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
 
     $text = "";
 
-    // Заголовок доклада.
-    // В ванильной 0.84 заголовок боевого доклада незначительно отличался. Например в en для атакующего написано "At", а для защитника "On".
-    // Мы такими извращениями заниматься не будем. Считаем что все боевые доклады от атакующего.
+    // Title of the report.
+    // In vanilla 0.84 the header of the battle report was slightly different. For example, in en it says "At" for the attacker and "On" for the defender.
+    // We will not engage in such perversions. We consider all battle reports to be from the attacker.
     $text .= va(loca_lang("BATTLE_ADATE_INFO", $lang), date ("m-d H:i:s", $now)) . ":<br>";
 
-    // Флоты перед боем.
+    // Fleets before the battle.
     $text .= "<table border=1 width=100%><tr>";
     foreach ( $res['before']['attackers'] as $i=>$attacker)
     {
@@ -410,7 +410,7 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
     }
     $text .= "</tr></table>";
 
-    // Раунды.
+    // Rounds.
     foreach ( $res['rounds'] as $i=>$round)
     {
         $text .= "<br><center>";
@@ -419,14 +419,14 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
         $text .= va (loca_lang("BATTLE_DSHOT", $lang), nicenum($round['dshoot']), nicenum($round['dpower']), nicenum($round['aabsorb']) );
         $text .= "</center>";
 
-        $text .= "<table border=1 width=100%><tr>";        // Атакующие
+        $text .= "<table border=1 width=100%><tr>";        // Attackers
         foreach ( $round['attackers'] as $n=>$attacker )
         {
             $text .= GenSlot ( 0, 0, 0, $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 0, 1, $lang );
         }
         $text .= "</tr></table>";
 
-        $text .= "<table border=1 width=100%><tr>";        // Обороняющиеся
+        $text .= "<table border=1 width=100%><tr>";        // Defenders
         foreach ( $round['defenders'] as $n=>$defender )
         {
             if ( $n == 0 ) $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 0, 0, $lang );
@@ -435,8 +435,8 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
         $text .= "</tr></table>";
     }
 
-    // Результаты боя.
-    // TODO: Добавить метку потерь, которая есть в HTML: <!--A:167658,W:167658-->
+    // Battle Results.
+    // TODO: Add a loss label that is in the HTML: <!--A:167658,W:167658-->
     if ( $res['result'] === "awon" )
     {
         $text .= "<p> ".loca_lang("BATTLE_AWON", $lang)."<br>" . va(loca_lang("BATTLE_PLUNDER", $lang), nicenum($cm), nicenum($ck), nicenum($cd));
@@ -449,9 +449,9 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
     if ( $moonchance ) $text .= "<br>" . va(loca_lang("BATTLE_MOONCHANCE", $lang), $moonchance);
     if ( $mooncreated ) $text .= "<br>" . loca_lang("BATTLE_MOON", $lang);
 
-    // Восстановление обороны.
-    // При выводе оригинального боевого доклада есть ошибка: Малый щитовой купол выводится не в свою очередь, а перед Плазменным орудием.
-    // Чтобы быть максимально похожим на оригинальный доклад, при выводе восстановленной обороны используется таблица перестановки RepairMap.
+    // Repairing the Defense.
+    // There is an error in the output of the original battle report: the Small Shield Dome is not output in its turn, but before the Plasma Cannon.
+    // To be as similar as possible to the original report, the RepairMap permutation table is used in the output of the repaired defense.
     $repairmap = array ( 401, 402, 403, 404, 405, 407, 406, 408 );
     $repaired_num = $sum = 0;
     foreach ($repaired as $gid=>$amount) $repaired_num += $amount;
@@ -479,8 +479,8 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
     return $text;
 }
 
-// Лунная атака.
-// Возвращает результат, закодированный в 2 бита: бит0 - луна уничтожена, бит1 - ЗС взорвались вместе со всем флотом
+// Moon attack.
+// Returns the result encoded in 2 bits: bit0 - the moon is destroyed, bit1 - Deathstar exploded with the whole fleet
 function GravitonAttack ($fleet_obj, $fleet, $when)
 {
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
@@ -561,7 +561,7 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
             $result  = 3;
     }
 
-    // Пересчитать статистику, если флот был взорван в результате неудачной гравитонной атаки
+    // Recalculate stats if a fleet was blown up by a failed graviton attack
     if ($result >= 2) {
 
         $price = FleetPrice ( $fleet_obj );
@@ -569,7 +569,7 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
         RecalcRanks ();
     }
 
-    // Разослать сообщения.
+    // Send out messages.
     SendMessage ( $origin['owner_id'], 
         loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
         loca_lang("GRAVITON_ATK_SUBJ", $origin_user['lang']),
@@ -582,7 +582,7 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
     return $result;
 }
 
-// Начать битву между атакующим fleet_id и обороняющимся planet_id.
+// Start a battle between attacking fleet_id and defending planet_id.
 function StartBattle ( $fleet_id, $planet_id, $when )
 {
     global $db_prefix;
@@ -605,11 +605,11 @@ function StartBattle ( $fleet_id, $planet_id, $when )
 
     $f = LoadFleet ( $fleet_id );
 
-    // *** Сгенерировать исходные данные
+    // *** Generate source data
 
-    // Список атакующих
+    // List of attackers
     $anum = 0;
-    if ( $f['union_id'] == 0 )    // Одиночная атака
+    if ( $f['union_id'] == 0 )    // Single attack
     {
         $a[0] = LoadUser ( $f['owner_id'] );
         $a[0]['fleet'] = array ();
@@ -622,7 +622,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $a[0]['points'] = $a[0]['fpoints'] = 0;
         $anum++;
     }
-    else        // Совместная атака
+    else        // Cooperative attack (ACS)
     {
         $result = EnumUnionFleets ( $f['union_id'] );
         $rows = dbrows ($result);
@@ -644,7 +644,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         }
     }
 
-    // Список обороняющихся
+    // List of defenders
     $dnum = 0;
     $p = GetPlanet ( $planet_id );
     $d[0] = LoadUser ( $p['owner_id'] );
@@ -659,7 +659,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     $d[0]['points'] = $d[0]['fpoints'] = 0;
     $dnum++;
 
-    // Флоты на удержании
+    // Fleets on hold (ACS)
     $result = GetHoldingFleets ($planet_id);
     $rows = dbrows ($result);
     while ($rows--)
@@ -716,7 +716,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     fwrite ( $bf, $source );
     fclose ( $bf );
 
-    // *** Передать данные боевому движку
+    // *** Transfer data to the battle engine
 
     if ($unitab['php_battle']) {
 
@@ -736,20 +736,20 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         }
     }
 
-    // *** Обработать выходные данные
+    // *** Process output data
 
     $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
     $res = unserialize($battleres);
 
-    // Определить исход битвы.
+    // Determine the outcome of the battle.
     if ( $res['result'] === "awon" ) $battle_result = 0;
     else if ( $res['result'] === "dwon" ) $battle_result = 1;
     else $battle_result = 2;
 
-    // Восстановить оборону
+    // Restore the defense
     $repaired = RepairDefense ( $d, $res, $unitab['defrepair'], $unitab['defrepair_delta'] );
 
-    // Рассчитать общие потери (учитывать дейтерий и восстановленную оборону)
+    // Calculate total losses (account for deuterium and repaired defenses)
     $aloss = $dloss = 0;
     $loss = CalcLosses ( $a, $d, $res, $repaired );
     $a = $loss['a'];
@@ -757,7 +757,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     $aloss = $loss['aloss'];
     $dloss = $loss['dloss'];
 
-    // Захватить ресурсы
+    // Capture resources
     $cm = $ck = $cd = $sum_cargo = 0;
     if ( $battle_result == 0 )
     {
@@ -766,11 +766,11 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $cm = $captured['cm']; $ck = $captured['ck']; $cd = $captured['cd'];
     }
 
-    // Создать поле обломков.
+    // Create a debris field.
     $debris_id = CreateDebris ( $p['g'], $p['s'], $p['p'], $p['owner_id'] );
     AddDebris ( $debris_id, $res['dm'], $res['dk'] );
 
-    // Создать луну
+    // Create the moon
     $mooncreated = false;
     $moonchance = min ( floor ( ($res['dm'] + $res['dk']) / 100000), 20 );
     if ( PlanetHasMoon ( $planet_id ) || $p['type'] == 0 || $p['type'] == 10003 ) $moonchance = 0;
@@ -779,23 +779,23 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $mooncreated = true;
     }
 
-    // Обновить активность на планете.
+    // Update the activity on the planet.
     $queue = GetFleetQueue ( $fleet_id );
     UpdatePlanetActivity ( $planet_id, $queue['end'] );
 
-    // Данный массив содержит кэш сгенерированных боевых докладов для каждого языка.
+    // This array contains a cache of generated battle reports for each language.
     $battle_text = array();
 
-    // Сгенерировать боевой доклад на языке вселенной (для истории логов)
+    // Generate a battle report in the universe language (for log history)
     $text = BattleReport ( $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired, $GlobalUni['lang'] );
     $battle_text[$GlobalUni['lang']] = $text;
 
-    // Разослать сообщения, mailbox используется чтобы не слать по нескольку раз сообщения игрокам из САБ.
+    // Send out messages, mailbox is used to avoid sending multiple messages to ACS players.
     $mailbox = array ();
 
-    foreach ( $d as $i=>$user )        // Обороняющиеся
+    foreach ( $d as $i=>$user )        // Defenders
     {
-        // Сгенерировать боевой доклад на языке пользователя, если его нет в кэше
+        // Generate a battle report in the user's language if it is not in the cache
         if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
         else {
             $text = BattleReport ( $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired, $user['lang'] );
@@ -814,7 +814,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $mailbox[ $user['player_id'] ] = true;
     }
 
-    // Обновить лог боевого доклада (использовать боевой доклад на языке вселенной)
+    // Update the battle report log (use the universe language battle report)
     loca_add ( "fleetmsg", $GlobalUni['lang'] );
     $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=admin&session={PUBLIC_SESSION}&mode=BattleReport&bericht=$battle_id\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
         loca_lang("FLEET_MESSAGE_BATTLE", $GlobalUni['lang']) .
@@ -822,16 +822,16 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     $query = "UPDATE ".$db_prefix."battledata SET title = '".$subj."', report = '".$battle_text[$GlobalUni['lang']]."' WHERE battle_id = $battle_id;";
     dbquery ( $query );
 
-    foreach ( $a as $i=>$user )        // Атакующие
+    foreach ( $a as $i=>$user )        // Attackers
     {
-        // Сгенерировать боевой доклад на языке пользователя, если его нет в кэше
+        // Generate a battle report in the user's language if it is not in the cache
         if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
         else {
             $text = BattleReport ( $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired, $user['lang'] );
             $battle_text[$user['lang']] = $text;
         }
 
-        // Если флот уничтожен за 1 или 2 раунда - не показывать лог боя для атакующих.
+        // If fleet is destroyed in 1 or 2 rounds - do not show battle log for attackers.
         if ( count($res['rounds']) <= 2 && $battle_result == 1 ) $text = loca_lang("BATTLE_LOST", $user['lang']) . " <!--A:$aloss,W:$dloss-->";
 
         loca_add ( "fleetmsg", $user['lang'] );
@@ -846,20 +846,20 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $mailbox[ $user['player_id'] ] = true;
     }
 
-    // Почистить старые боевые доклады
+    // Clean up old battle reports
     $ago = $when - 2 * 7 * 24 * 60 * 60;
     $query = "DELETE FROM ".$db_prefix."battledata WHERE date < $ago;";
     dbquery ($query);
 
-    // Модифицировать флоты и планету в соответствии с потерями и захваченными ресурсами
+    // Modify fleets and planet according to losses and captured resources
     WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_cargo );
 
-    // Изменить статистику игроков
+    // Change player statistics
     foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
     foreach ( $d as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
     RecalcRanks ();
 
-    // Чистим промежуточные данные боевого движка
+    // Cleaning up the battle engine's intermediate data
     unlink ( "battledata/battle_".$battle_id.".txt" );
     unlink ( "battleresult/battle_".$battle_id.".txt" );
 
@@ -868,19 +868,19 @@ function StartBattle ( $fleet_id, $planet_id, $when )
 
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Модифицировать флот (после битвы с чужими/пиратами)
+// Modify the fleet (after a battle with aliens/pirates)
 function WritebackBattleResultsExpedition ( $a, $d, $res )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
 
-    // Бой с раундами.
+    // Combat with rounds.
 
     $rounds = count ( $res['rounds'] );
     if ( $rounds > 0 ) 
     {
         $last = $res['rounds'][$rounds - 1];        
 
-        foreach ( $last['attackers'] as $i=>$attacker )        // Атакующие
+        foreach ( $last['attackers'] as $i=>$attacker )        // Attackers
         {
             $fleet_obj = LoadFleet ( $attacker['id'] );
             $queue = GetFleetQueue ($fleet_obj['fleet_id']);
@@ -896,11 +896,11 @@ function WritebackBattleResultsExpedition ( $a, $d, $res )
 
     }
 
-    // Бой без раундов.
+    // Combat with no rounds.
 
     else 
     {
-        foreach ( $a as $i=>$attacker )            // Атакующие
+        foreach ( $a as $i=>$attacker )            // Attackers
         {
             $fleet_obj = LoadFleet ( $attacker['id'] );
             $queue = GetFleetQueue ($fleet_obj['fleet_id']);
@@ -917,7 +917,7 @@ function WritebackBattleResultsExpedition ( $a, $d, $res )
     }
 }
 
-// Сгенерировать боевой доклад.
+// Generate short battle report.
 function ShortBattleReport ( $res, $now, $lang )
 {
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
@@ -930,12 +930,12 @@ function ShortBattleReport ( $res, $now, $lang )
 
     $text = "";
 
-    // Заголовок доклада.
-    // В ванильной 0.84 заголовок боевого доклада незначительно отличался. Например в en для атакующего написано "At", а для защитника "On".
-    // Мы такими извращениями заниматься не будем. Считаем что все боевые доклады от атакующего.    
+    // Title of the report.
+    // In vanilla 0.84 the header of the battle report was slightly different. For example, in en it says "At" for the attacker and "On" for the defender.
+    // We will not engage in such perversions. We consider all battle reports to be from the attacker.  
     $text .= va(loca_lang("BATTLE_ADATE_INFO", $lang), date ("m-d H:i:s", $now)) . ":<br>";
 
-    // Флоты перед боем.
+    // Fleets before the battle.
     $text .= "<table border=1 width=100%><tr>";
     foreach ( $res['before']['attackers'] as $i=>$attacker)
     {
@@ -963,14 +963,14 @@ function ShortBattleReport ( $res, $now, $lang )
         $text .= va (loca_lang("BATTLE_DSHOT", $lang), nicenum($round['dshoot']), nicenum($round['dpower']), nicenum($round['aabsorb']) );
         $text .= "</center>";
 
-        $text .= "<table border=1 width=100%><tr>";        // Атакующие
+        $text .= "<table border=1 width=100%><tr>";        // Attackers
         foreach ( $round['attackers'] as $n=>$attacker )
         {
             $text .= GenSlot ( 0, 0, 0, $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 0, 1, $lang );
         }
         $text .= "</tr></table>";
 
-        $text .= "<table border=1 width=100%><tr>";        // Обороняющиеся
+        $text .= "<table border=1 width=100%><tr>";        // Defenders
         foreach ( $round['defenders'] as $n=>$defender )
         {
             $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 0, 0, $lang );
@@ -978,8 +978,8 @@ function ShortBattleReport ( $res, $now, $lang )
         $text .= "</tr></table>";
     }
 
-    // Результаты боя.
-    // TODO: Добавить метку потерь, которая есть в HTML: <!--A:167658,W:167658-->
+    // Battle Results.
+    // TODO: Add a loss label that is in the HTML: <!--A:167658,W:167658-->
     if ( $res['result'] === "awon" ) $text .= "<p> " . loca_lang("BATTLE_AWON", $lang);
     else if ( $res['result'] === "dwon" ) $text .= "<p> " . loca_lang("BATTLE_DWON", $lang);
     else if ( $res['result'] === "draw" ) $text .= "<p> " . loca_lang("BATTLE_DRAW", $lang);
@@ -987,8 +987,8 @@ function ShortBattleReport ( $res, $now, $lang )
     return $text;
 }
 
-// Битва с чужими / пиратами.
-// Состав флота чужих/пиратов определяется параметром level ( 0: слабые, 1: средние, 2: сильные )
+// Battle with Aliens/Pirates.
+// The composition of the Alien/Pirate fleet is determined by the level parameter ( 0: weak, 1: medium, 2: strong )
 function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 {
     global $db_prefix;
@@ -1008,12 +1008,12 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     $did = $unitab['did'];
     $rf = $unitab['rapid'];
 
-    // *** Союзные атаки не должны вступать битву. Игнорировать их.
+    // *** Union attacks should not enter the battle. Ignore them.
     $f = LoadFleet ( $fleet_id );
 
-    // *** Сгенерировать исходные данные
+    // *** Generate source data
 
-    // Список атакующих
+    // List of attackers
     $anum = 0;
     $a[0] = LoadUser ( $f['owner_id'] );
     $a[0]['fleet'] = array ();
@@ -1026,7 +1026,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     $a[0]['points'] = $a[0]['fpoints'] = 0;
     $anum++;
 
-    // Список обороняющихся
+    // List of defenders
     $dnum = 0;
     $d[0] = LoadUser ( USER_SPACE );
     if ( $pirates ) {
@@ -1043,13 +1043,13 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     }
     $d[0]['fleet'] = array ();
     $d[0]['defense'] = array ();
-    foreach ($fleetmap as $i=>$gid) {        // Определить состав флота пиратов / чужих
+    foreach ($fleetmap as $i=>$gid) {        // Determine the composition of the pirate / alien fleet
 
         if ( $pirates ) {
-            // Пиратский флот, Округление состава флота вниз.
-            // Нормальный - 30% +/- 3% от количества кораблей вашего флота + 5 ЛИ
-            // Сильный - 50% +/- 5% от количества кораблей вашего флота + 3 Крейсера
-            // Оч. Сильный - 80% +/- 8% от количества кораблей вашего флота + 2 Линка
+            // Pirate Fleet, rounding down the fleet composition.
+            // Normal - 30% +/- 3% of the number of ships in your fleet + 5 LFs
+            // Strong - 50% +/- 5% of the number of ships in your fleet + 3 Cruisers
+            // Very Strong - 80% +/- 8% of the number of ships in your fleet + 2 Battleships
 
             if ( $a[0]['fleet'][$gid] > 0 )
             {
@@ -1061,10 +1061,10 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
             else $d[0]['fleet'][$gid] = 0;
         }
         else {
-            // Флот Чужих, Округление состава флота вверх.
-            // Нормальный - 40% +/- 4% от количества кораблей вашего флота + 5 ТИ
-            // Сильный - 60% +/- 6% от количества кораблей вашего флота + 3 Линейки
-            // Оч. Сильный - 90% +/- 9% от количества кораблей вашего флота + 2 Уника
+            // Alien fleet, rounding fleet composition up.
+            // Normal - 40% +/- 4% of the number of ships in your fleet + 5 Heavy Fighters
+            // Strong - 60% +/- 6% of the number of ships in your fleet + 3 Battlecruisers
+            // Very Strong - 90% +/- 9% of the number of ships in your fleet + 2 Destros
 
             if ( $a[0]['fleet'][$gid] > 0 )
             {
@@ -1133,7 +1133,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     fwrite ( $bf, $source );
     fclose ( $bf );
 
-    // *** Передать данные боевому движку
+    // *** Transfer data to the battle engine
 
     if ($unitab['php_battle']) {
 
@@ -1150,20 +1150,20 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
         system ( $unitab['battle_engine'] . " $arg", $retval );
         if ($retval < 0) {
             Error (va("Ошибка в работе боевого движка: #1 #2", $retval, $battle_id));
-        }        
+        }
     }
 
-    // *** Обработать выходные данные
+    // *** Process output data
 
     $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
     $res = unserialize($battleres);
 
-    // Определить исход битвы.
+    // Determine the outcome of the battle.
     if ( $res['result'] === "awon" ) $battle_result = 0;
     else if ( $res['result'] === "dwon" ) $battle_result = 1;
     else $battle_result = 2;
 
-    // Рассчитать общие потери (учитывать дейтерий и восстановленную оборону)
+    // Calculate total losses (account for deuterium and repaired defenses)
     $aloss = $dloss = 0;
     $repaired = array ( 401=>0, 402=>0, 403=>0, 404=>0, 405=>0, 406=>0, 407=>0, 408=>0 );
     $loss = CalcLosses ( $a, $d, $res, $repaired );
@@ -1172,26 +1172,26 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     $aloss = $loss['aloss'];
     $dloss = $loss['dloss'];
 
-    // Данный массив содержит кэш сгенерированных боевых докладов для каждого языка.
+    // This array contains a cache of generated battle reports for each language.
     $battle_text = array();
 
-    // Сгенерировать боевой доклад на языке вселенной (для истории логов)
+    // Generate a battle report in the universe language (for log history)
     $text = ShortBattleReport ( $res, $when, $GlobalUni['lang'] );
     $battle_text[$GlobalUni['lang']] = $text;
 
-    // Разослать сообщения
+    // Send out messages
     $mailbox = array ();
 
-    foreach ( $a as $i=>$user )        // Атакующие
+    foreach ( $a as $i=>$user )        // Attackers
     {
-        // Сгенерировать боевой доклад на языке пользователя, если его нет в кэше
+        // Generate a battle report in the user's language if it is not in the cache
         if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
         else {
             $text = ShortBattleReport ( $res, $when, $user['lang'] );
             $battle_text[$user['lang']] = $text;
         }
 
-        // Если флот уничтожен за 1 или 2 раунда - не показывать лог боя для атакующих.
+        // If fleet is destroyed in 1 or 2 rounds - do not show battle log for attackers.
         if ( count($res['rounds']) <= 2 && $battle_result == 1 ) $text = loca_lang("BATTLE_LOST", $user['lang']) . " <!--A:$aloss,W:$dloss-->";
 
         loca_add ( "fleetmsg", $user['lang'] );
@@ -1206,7 +1206,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
         $mailbox[ $user['player_id'] ] = true;
     }
 
-    // Обновить лог боевого доклада
+    // Update the battle report log
     loca_add ( "fleetmsg", $GlobalUni['lang'] );
     $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=admin&session={PUBLIC_SESSION}&mode=BattleReport&bericht=$battle_id\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
         loca_lang("FLEET_MESSAGE_BATTLE", $GlobalUni['lang']) . 
@@ -1214,19 +1214,19 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     $query = "UPDATE ".$db_prefix."battledata SET title = '".$subj."', report = '".$text."' WHERE battle_id = $battle_id;";
     dbquery ( $query );
 
-    // Почистить старые боевые доклады
+    // Clean up old battle reports
     $ago = $when - 2 * 7 * 24 * 60 * 60;
     $query = "DELETE FROM ".$db_prefix."battledata WHERE date < $ago;";
     dbquery ($query);
 
-    // Модифицировать флот
+    // Modify the fleet
     WritebackBattleResultsExpedition ( $a, $d, $res );
 
-    // Изменить статистику игроков
+    // Modify player statistics
     foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
     RecalcRanks ();
 
-    // Чистим промежуточные данные боевого движка
+    // Cleaning up the battle engine's intermediate data
     unlink ( "battledata/battle_".$battle_id.".txt" );
     unlink ( "battleresult/battle_".$battle_id.".txt" );
 
