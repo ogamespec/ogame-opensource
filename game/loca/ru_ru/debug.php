@@ -1,12 +1,12 @@
 <?php
 
-// Varie linee di debug. A volte è bello vederle nella lingua madre.
+// Различные отладочные строки. Иногда их приятно видеть на родном языке.
 
 // flottenversand
 
-$LOCA["it"]["DEBUG_LOG_FLEET_SEND1"] = "Spedizione della flotta #1: ";
-$LOCA["it"]["DEBUG_LOG_FLEET_SEND2"] = "Tempo di volo: #1, ritenzione: #2, spesa per il deuterio: #3, ACS: #4";
-$LOCA["it"]["DEBUG_LOG_FLEET_SEND_AJAX1"] = "Spedizione della flotta #1 (AJAX): ";
-$LOCA["it"]["DEBUG_LOG_FLEET_SEND_AJAX2"] = "Tempo di volo: #1, spesa per il deuterio: #2";
+$LOCA["ru"]["DEBUG_LOG_FLEET_SEND1"] = "Отправка флота #1: ";
+$LOCA["ru"]["DEBUG_LOG_FLEET_SEND2"] = "Время полёта: #1, удержание: #2, затраты дейтерия: #3, союз: #4";
+$LOCA["ru"]["DEBUG_LOG_FLEET_SEND_AJAX1"] = "Отправка флота #1 (AJAX): ";
+$LOCA["ru"]["DEBUG_LOG_FLEET_SEND_AJAX2"] = "Время полёта: #1, затраты дейтерия: #2";
 
 ?>
