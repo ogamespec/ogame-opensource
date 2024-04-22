@@ -83,7 +83,7 @@ function BotBuild ($obj_id)
     if ( $text === '' ) {
         $speed = $GlobalUni['speed'];
         $duration = floor (BuildDuration ( $obj_id, $level, $aktplanet['b14'], $aktplanet['b15'], $speed ));
-        BuildEnque ( $user['aktplanet'], $obj_id, 0, $BotNow);
+        BuildEnque ( $user, $user['aktplanet'], $obj_id, 0, $BotNow);
         UpdatePlanetActivity ( $user['aktplanet'], $BotNow );
         return $duration;
     }

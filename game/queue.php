@@ -319,16 +319,15 @@ function PropagateBuildQueue ($planet_id, $from)
 
 }
 
-// Add a new construction/demolition to the queue
-function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
+// Add a new construction/demolition to the queue. $user - is the user who starts the construction process.
+function BuildEnque ( $user, $planet_id, $id, $destroy, $now=0 )
 {
-    global $db_prefix, $GlobalUni;
+    global $GlobalUni;
 
     $speed = $GlobalUni['speed'];
-    if ( $GlobalUni['freeze'] ) return;
+    if ( $GlobalUni['freeze'] ) return "";
 
     $planet = GetPlanet ( $planet_id );
-    $user = LoadUser ( $planet['owner_id'] );
 
     $prem = PremiumStatus ($user);
     if ($prem['commander']) $maxcnt = 5;
@@ -342,7 +341,7 @@ function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
 
     $result = GetBuildQueue ( $planet_id );
     $cnt = dbrows ( $result );
-    if ( $cnt >= $maxcnt ) return;    // The queue of buildings is full
+    if ( $cnt >= $maxcnt ) return "";    // The queue of buildings is full
 
     // Load queue. Sorted by order list_id
     $queue = array ();
@@ -354,7 +353,7 @@ function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
     // You can't add multiple builds to the queue in the same second.
     for ($i=0; $i<$cnt; $i++)
     {
-        if ( $queue[$i]['start'] == $now ) return;
+        if ( $queue[$i]['start'] == $now ) return "";
     }    
 
     // Define the level to be added and the order of construction (list_id).
@@ -369,7 +368,7 @@ function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
 
     if ($destroy) $lvl = $nowlevel - 1;
     else $lvl = $nowlevel + 1;
-    if ($lvl < 0) return;     // Unable to build/demolish a negative level
+    if ($lvl < 0) return "";     // Unable to build/demolish a negative level
 
     $text = CanBuild ($user, $planet, $id, $lvl, $destroy, $list_id != 1);
 
@@ -390,14 +389,16 @@ function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
         $sub_id = AddDBRow ( $row, "buildqueue" );
         if ($list_id == 1) AddQueue ( $user['player_id'], $BuildEvent, $sub_id, $id, $lvl, $now, $duration, 20 );
     }
+
+    return $text;
 }
 
-// Cancel construction/demolition
-function BuildDeque ( $planet_id, $listid )
+// Cancel construction/demolition; $user - is the user who removes build slot from the queue.
+function BuildDeque ( $user, $planet_id, $listid )
 {
     global $db_prefix, $GlobalUni;
 
-    if ( $GlobalUni['freeze'] ) return;
+    if ( $GlobalUni['freeze'] ) return "";
 
     $query = "SELECT * FROM ".$db_prefix."buildqueue WHERE planet_id = $planet_id AND list_id = $listid LIMIT 1;";
     $result = dbquery ($query);
@@ -411,7 +412,7 @@ function BuildDeque ( $planet_id, $listid )
         // Do we cancel the current one or the next one?
         $query = "SELECT * FROM ".$db_prefix."queue WHERE (type = 'Build' OR type = 'Demolish') AND sub_id = " . $row['id'] . " LIMIT 1";
         $result = dbquery ($query);
-        if ( dbrows ($result) ) {    // Отменяем текущую
+        if ( dbrows ($result) ) {       // Cancel the current one
             $queue = dbarray ($result);
             $queue_id = $queue['task_id'];
 
@@ -436,6 +437,8 @@ function BuildDeque ( $planet_id, $listid )
         // Start the next construction
         if ( $queue_id ) PropagateBuildQueue ($planet_id, time());
     }
+
+    return "";
 }
 
 // Completion of construction/demolition

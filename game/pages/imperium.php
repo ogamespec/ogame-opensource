@@ -11,9 +11,9 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 // Обработка параметров.
 if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] )
 {
-    if ( $_GET['modus'] === 'add' ) BuildEnque ( intval ($_GET['planet']), intval ($_GET['techid']), 0 );
-    else if ( $_GET['modus'] === 'destroy' ) BuildEnque ( intval ($_GET['planet']), intval ($_GET['techid']), 1 );
-    else if ( $_GET['modus'] === 'remove' ) BuildDeque ( intval ($_GET['planet']), intval ($_GET['listid']) );
+    if ( $_GET['modus'] === 'add' ) BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 0 );
+    else if ( $_GET['modus'] === 'destroy' ) BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 1 );
+    else if ( $_GET['modus'] === 'remove' ) BuildDeque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['listid']) );
 }
 
 $now = time();

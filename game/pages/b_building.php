@@ -2,6 +2,8 @@
 
 // Строительство построек.
 
+$BuildError = "";
+
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "techshort", $GlobalUser['lang'] );
 loca_add ( "build", $GlobalUser['lang'] );
@@ -12,9 +14,9 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 // Обработка параметров.
 if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] )
 {
-    if ( $_GET['modus'] === 'add' ) BuildEnque ( intval ($_GET['planet']), intval ($_GET['techid']), 0 );
-    else if ( $_GET['modus'] === 'destroy' ) BuildEnque ( intval ($_GET['planet']), intval ($_GET['techid']), 1 );
-    else if ( $_GET['modus'] === 'remove' ) BuildDeque ( intval ($_GET['planet']), intval ($_GET['listid']) );
+    if ( $_GET['modus'] === 'add' ) $BuildError = BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 0 );
+    else if ( $_GET['modus'] === 'destroy' ) $BuildError = BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 1 );
+    else if ( $_GET['modus'] === 'remove' ) $BuildError = BuildDeque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['listid']) );
 }
 
 $now = time();
@@ -240,6 +242,6 @@ echo "  </table>\n</tr>\n</table>\n";
 echo "<br><br><br><br>\n";
 EndContent();
 
-PageFooter ();
+PageFooter ("", $BuildError);
 ob_end_flush ();
 ?>
