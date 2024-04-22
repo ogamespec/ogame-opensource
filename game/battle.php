@@ -242,7 +242,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
 
         foreach ( $last['defenders'] as $i=>$defender )        // Defenders
         {
-            if ( $i == 0 )    // Планета
+            if ( $i == 0 )    // Planet
             {
                 AdjustResources ( $cm, $ck, $cd, $defender['id'], '-' );
                 $objects = array ();
@@ -253,7 +253,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
                 }
                 SetPlanetFleetDefense ( $defender['id'], $objects );
             }
-            else        // Флоты на удержании
+            else        // Fleets on hold
             {
                 $ships = 0;
                 foreach ( $fleetmap as $ii=>$gid ) $ships += $defender[$gid];
