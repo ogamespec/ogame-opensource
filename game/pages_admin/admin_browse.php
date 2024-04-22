@@ -1,6 +1,6 @@
 <?php
 
-// Админка: История переходов (только за игроками, у которых включен флаг sniff).
+// Admin Area: Browser history (only for players with the `sniff` flag enabled).
 
 function Admin_Browse ()
 {

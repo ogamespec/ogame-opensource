@@ -1,7 +1,6 @@
 <?php
 
-// ========================================================================================
-// Боевой симулятор.
+// Admin Area: Battle Simulator.
 
 function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, &$dloss )
 {
@@ -20,7 +19,7 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
         echo "<br><hr>";
     }
 
-    // *** Сгенерировать исходные данные
+    // *** Generate source data
 
     $source = "";
     $source .= "Rapidfire = $rf\n";
@@ -58,7 +57,7 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
     fwrite ( $bf, $source );
     fclose ( $bf );
 
-    // *** Передать данные боевому движку
+    // *** Transfer data to the battle engine
 
     if ($unitab['php_battle']) {
 
@@ -78,7 +77,7 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
         }        
     }
 
-    // *** Обработать выходные данные
+    // *** Process output data
 
     $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
     $res = unserialize($battleres);
@@ -90,14 +89,14 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
         echo "<hr>";
     }
 
-    // Удалить уже ненужные боевые данные.
+    // Delete already unneeded battle data.
     $query = "DELETE FROM ".$db_prefix."battledata WHERE battle_id = $battle_id";
     dbquery ($query);
 
-    // Восстановить оборону
+    // Repair the defenses
     $repaired = RepairDefense ( $d, $res, $unitab['defrepair'], $unitab['defrepair_delta'], false );
 
-    // Рассчитать общие потери
+    // Calculate total losses
     $aloss = $dloss = 0;
     $loss = CalcLosses ( $a, $d, $res, $repaired );
     $a = $loss['a'];
@@ -105,7 +104,7 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
     $aloss = $loss['aloss'];
     $dloss = $loss['dloss'];
 
-    // Создать луну
+    // Create the moon
     $mooncreated = false;
     $moonchance = min ( floor ( ($res['dm'] + $res['dk']) / 100000), 20 );
     if ( mt_rand (1, 100) <= $moonchance ) {
@@ -116,7 +115,7 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
     else if ( $res['result'] === "dwon" ) $battle_result = 1;
     else $battle_result = 2;
 
-    // Сгенерировать боевой доклад (на языке админа)
+    // Generate battle report (in admin language)
     return BattleReport ( $res, time(), $aloss, $dloss, 1, 2, 3, $moonchance, $mooncreated, $repaired, $GlobalUser['lang'] );
 }
 
@@ -140,19 +139,19 @@ function Admin_BattleSim ()
     $aloss = $dloss = 0;
 
     // --------------------------------------------------------------------------------------------------------------------------
-    // Обработка POST-запроса.
+    // POST request processing.
     if ( method () === "POST" && $GlobalUser['admin'] != 0 ) {
         //print_r ( $_POST );
         //echo "<hr>";
 
-        // Сформировать список атакующих и обороняющихся
+        // Generate a list of attackers and defenders
         $a = array ();
         $d = array ();
 
         $anum = intval ($_POST['anum']);
         $dnum = intval ($_POST['dnum']);
 
-        // Атакующие 
+        // Attackers 
         for ($i=0; $i<$anum; $i++)
         {
             if ( $_POST["a".$i."_weap"] === "" ) $_POST["a".$i."_weap"] = 0;
@@ -176,7 +175,7 @@ function Admin_BattleSim ()
             }
         }
 
-        // Обороняющиеся
+        // Defenders
         for ($i=0; $i<$dnum; $i++)
         {
             if ( $_POST["d".$i."_weap"] === "" ) $_POST["d".$i."_weap"] = 0;
@@ -207,7 +206,7 @@ function Admin_BattleSim ()
             }
         }
 
-        // Симулировать битву
+        // Simulate the battle
         $battle_result = 0;
         if ( key_exists ('debug', $_POST) && $_POST['debug'] === "on" ) $debug = true;
         else $debug = false;
@@ -221,7 +220,7 @@ function Admin_BattleSim ()
     }
 
     // --------------------------------------------------------------------------------------------------------------------------
-    // Таблица ввода параметров симуляции.
+    // Simulation parameter input table.
 
     function getval($name)
     {
@@ -246,14 +245,14 @@ function toint (num)
     return parseInt (num);
 }
 
-// Пересчитать количество атакующих и обороняющихся.
+// Recalculate the number of attackers and defenders.
 function RecalcAttackersDefendersNum ()
 {
     var anum = dnum = 1;
     var fleet = [ 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 ];
     var defense = [ 401, 402, 403, 404, 405, 406, 407, 408 ];
 
-    for ( n=0; n<maxslot; n++ )        // Атакующие
+    for ( n=0; n<maxslot; n++ )        // Attackers
     {
         sum = 0;
         for (var i in fleet) {
@@ -263,7 +262,7 @@ function RecalcAttackersDefendersNum ()
         if ( sum > 0 ) anum = n + 1;
     }
 
-    for ( n=0; n<maxslot; n++ )        // Обороняющиеся
+    for ( n=0; n<maxslot; n++ )        // Defenders
     {
         sum = 0;
         for (var i in fleet) {
@@ -282,7 +281,7 @@ function RecalcAttackersDefendersNum ()
     //alert ( "Атакующих : " + anum + ", Обороняющихся : " + dnum );
 }
 
-// При смене слота - занести данные из массива слотов в ячейки ввода
+// When changing a slot - enter data from the slot array into the input cells
 function OnChangeSlot (attacker)
 {
     var fleet = [ 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 ];
@@ -337,7 +336,7 @@ function OnChangeSlot (attacker)
     RecalcAttackersDefendersNum ();
 }
 
-// При изменении ячейки флота/обороны - внести данные из неё в массив слотов
+// When changing a fleet/defense cell - enter data from it into the array of slots
 function OnChangeValue (attacker, id)
 {
     if (attacker) {
@@ -352,7 +351,7 @@ function OnChangeValue (attacker, id)
     RecalcAttackersDefendersNum ();
 }
 
-// При изменении ячейки технологий - внести данные из неё в массив слотов
+// When a technology cell is changed - enter data from it into the array of slots
 function OnChangeTechValue (attacker)
 {
     if (attacker) {

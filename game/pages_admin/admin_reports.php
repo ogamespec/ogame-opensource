@@ -1,6 +1,6 @@
 <?php
 
-// Админка: жалобы пользователей на сообщения.
+// Admin Area: user complains about abusive messages. Although Legor commands to dominate the universe, it must be done with respect.
 
 function Admin_Reports ()
 {

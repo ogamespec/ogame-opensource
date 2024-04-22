@@ -1,6 +1,6 @@
 <?php
 
-// Админка: Настройки колонизации
+// Admin Area: Colonization Settings
 
 function Admin_ColonySettings ()
 {
@@ -10,7 +10,7 @@ function Admin_ColonySettings ()
 
     $coltab = LoadColonySettings();
 
-    // Обработка POST-запроса.
+    // POST request processing.
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
     {
         $coltab = $_POST;

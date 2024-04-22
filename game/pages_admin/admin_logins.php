@@ -1,6 +1,6 @@
 <?php
 
-// Админка : логины
+// Admin Area: logins
 
 function Admin_Logins ()
 {
@@ -10,11 +10,11 @@ function Admin_Logins ()
 
     AdminPanel();
 
-    // Обработка POST-запроса.
+    // POST request processing.
     if ( method () === "POST" )
     {
 
-        if ( $_POST['name'] !== '' )        // По имени пользователя
+        if ( $_POST['name'] !== '' )        // By user name
         {
             $searchtext = $_POST['name'];
             $query = "SELECT * FROM ".$db_prefix."users WHERE oname LIKE '".$searchtext."%' LIMIT 25";
@@ -42,7 +42,7 @@ function Admin_Logins ()
             echo "</table>";
         }
 
-        if ( $_POST['id'] !== '' )        // По ID пользователя
+        if ( $_POST['id'] !== '' )        // By user ID
         {
             $query = "SELECT * FROM ".$db_prefix."iplogs WHERE user_id = '".intval($_POST['id'])."' AND reg = 0";
             $result = dbquery ( $query );
@@ -61,7 +61,7 @@ function Admin_Logins ()
             echo "</table>";
         }
 
-        if ( $_POST['ip'] !== '' )        // По IP адресу
+        if ( $_POST['ip'] !== '' )        // By IP address
         {
             $query = "SELECT * FROM ".$db_prefix."iplogs WHERE ip = '".$_POST['ip']."' AND reg = 0";
             $result = dbquery ( $query );

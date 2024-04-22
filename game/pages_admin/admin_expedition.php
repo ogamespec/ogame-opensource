@@ -1,6 +1,6 @@
 <?php
 
-// Админка: настройки экспедиции.
+// Admin Area: expedition settings.
 
 function Admin_Expedition ()
 {

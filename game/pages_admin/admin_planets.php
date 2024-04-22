@@ -1,6 +1,6 @@
 <?php
 
-// Админка: Планеты.
+// Admin Area: Planets.
 
 function Admin_Planets ()
 {
@@ -15,13 +15,13 @@ function Admin_Planets ()
     $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
 
-    // Обработка POST-запроса.
+    // POST request processing.
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 ) {
         $cp = intval ($_GET['cp']);
         $action = $_GET['action'];
         $now = time();
 
-        if ($action === "update")        // Обновить данные планеты.
+        if ($action === "update")        // Update the planet's data.
         {
             $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
                                        'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
@@ -41,19 +41,19 @@ function Admin_Planets ()
             }
             $query .= " WHERE planet_id=$cp;";
 
-            if ( key_exists ( "delete_planet", $_POST ) )        // Удалить планету. Главную планету удалить нельзя.
+            if ( key_exists ( "delete_planet", $_POST ) )        // Delete a planet. The home planet cannot be deleted.
             {
                 $planet = GetPlanet ($cp);
                 $user = LoadUser ($planet['owner_id']);
                 if ( $user['hplanetid'] != $cp)
                 {
                     DestroyPlanet ($cp);
-                    $_GET['cp'] = $user['hplanetid'];        // перенаправить на главную планету.
+                    $_GET['cp'] = $user['hplanetid'];        // redirect to the home planet.
                 }
             }
-            else {                                        // Обновить данные планеты
+            else {                                        // Update planet data
 
-                $moon_id = PlanetHasMoon ( $cp );        // Переместить луну за планетой.
+                $moon_id = PlanetHasMoon ( $cp );        // Move the moon beyond the planet.
                 if ( $moon_id )
                 {
                     $mquery = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
@@ -69,7 +69,7 @@ function Admin_Planets ()
                 RecalcFields ($cp);
             }
         }
-        else if ( $action === "search" )        // Поиск
+        else if ( $action === "search" )        // Search
         {
             $searchtype = $_POST['type'];
             if ( $_POST['searchtext'] === "" ) {
@@ -117,7 +117,7 @@ function Admin_Planets ()
         
         $now = time();
 
-        if ( $action === "create_moon" )    // Создать луну
+        if ( $action === "create_moon" )    // Create the moon
         {
             $planet = GetPlanet ($cp);
             if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
@@ -125,7 +125,7 @@ function Admin_Planets ()
                 if ( PlanetHasMoon ($cp) == 0 ) CreatePlanet ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id'], 0, 1, 20);
             }
         }
-        else if ( $action === "create_debris" )    // Создать ПО
+        else if ( $action === "create_debris" )    // Create debris field
         {
             $planet = GetPlanet ($cp);
             if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
@@ -133,7 +133,7 @@ function Admin_Planets ()
                 if ( HasDebris ($planet['g'], $planet['s'], $planet['p']) == 0 ) CreateDebris ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id']);
             }
         }
-        else if ( $action === "cooldown_gates" )    // Остудить ворота
+        else if ( $action === "cooldown_gates" )    // Cool down the gate
         {
             $planet = GetPlanet ($cp);
             if ( $planet['type'] == PTYP_MOON )
@@ -142,7 +142,7 @@ function Admin_Planets ()
                 dbquery ($query);
             }
         }
-        else if ( $action === "warmup_gates" )    // Нагреть ворота
+        else if ( $action === "warmup_gates" )    // Warm up the gate
         {
             $planet = GetPlanet ($cp);
             if ( $planet['type'] == PTYP_MOON )
@@ -151,11 +151,11 @@ function Admin_Planets ()
                 dbquery ($query);
             }
         }
-        else if ( $action === "recalc_fields" )    // Пересчитать поля
+        else if ( $action === "recalc_fields" )    // Recalculate fields
         {
             RecalcFields ($cp);
         }
-        else if ( $action === "random_diam" )    // Случайный диаметр (только для планет)
+        else if ( $action === "random_diam" )    // Random diameter (planets only)
         {
             $planet = GetPlanet ($cp);
             if ( GetPlanetType ($planet) == 1 )
@@ -173,7 +173,7 @@ function Admin_Planets ()
         }
     }
 
-    if ( key_exists("cp", $_GET) ) {     // Информация о планете.
+    if ( key_exists("cp", $_GET) ) {     // Planet Information.
         $planet = GetPlanet ( intval ($_GET['cp']) );
         if (!$planet) {
             Error ( va(loca("ADM_PLANET_ERROR_LOAD"), intval ($_GET['cp'])) );
@@ -183,7 +183,7 @@ function Admin_Planets ()
         $debris_id = HasDebris ( $planet['g'], $planet['s'], $planet['p'] );
         $now = time ();
 
-        // Парсер шпионских докладов.
+        // Spy Report Parser.
 ?>
 <script>
 
@@ -208,7 +208,7 @@ function spio ()
     global $GlobalUni;
 
     //
-    // Перечислить все технологии для всех языков, а также ресурсы
+    // List all technologies for all languages, as well as resources
     //
 
     var TechNames = {
@@ -335,18 +335,18 @@ function reset ()
         echo "<th valign=top><table>\n";
         foreach ( $buildmap as $i=>$gid) {
             echo "<tr><th>".loca("NAME_$gid");
-            if ( $gid == 43 && $planet['type'] == PTYP_MOON ) {    // управление воротами.
-                if ( $now >= $planet["gate_until"] ) {    // ворота готовы
+            if ( $gid == 43 && $planet['type'] == PTYP_MOON ) {    // jump gate control.
+                if ( $now >= $planet["gate_until"] ) {    // jump gate is ready
                     echo " <a href=\"index.php?page=admin&session=$session&mode=Planets&action=warmup_gates&cp=".$planet['planet_id']."\" >".loca("ADM_PLANET_GATE_WARMUP")."</a>";
                 }
-                else {    // ворота НЕ готовы
+                else {    // jump gate is NOT ready
                     $delta = $planet["gate_until"] - $now;
                     echo " " . date ('i\m s\s', $delta) . " <a href=\"index.php?page=admin&session=$session&mode=Planets&action=cooldown_gates&cp=".$planet['planet_id']."\">".loca("ADM_PLANET_GATE_COOLDOWN")."</a>";
                 }
             }
             echo "</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=3 name=\"b$gid\" value=\"".$planet["b$gid"]."\" />";
 
-            // управление шахтами и выработкой энергии.
+            // mine management and power generation.
             if ( $gid == 1 && $planet['type'] != PTYP_MOON ) {
                 echo "<select name='mprod'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {

@@ -1,6 +1,6 @@
 <?php
 
-// Админка: контрольная сумма исходников.
+// Admin Area: source code checksum.
 
 function Admin_Checksum ()
 {

@@ -1,6 +1,6 @@
 <?php
 
-// Админка: Общее сообщение пользователям.
+// Admin Area: Broadcast message to users.
 
 function Admin_Broadcast ()
 {
@@ -10,7 +10,7 @@ function Admin_Broadcast ()
 
     $write_error = "";
 
-    // Обработка POST-запроса.
+    // POST request processing.
     if ( method () === "POST" )
     {
         $cat = $_POST['cat'];
@@ -21,10 +21,10 @@ function Admin_Broadcast ()
 
         if ( $write_error === "" )
         {
-            if ( $cat == 1 ) $query = "SELECT * FROM ".$db_prefix."users WHERE score1 < ".USER_NOOB_LIMIT.";";        // Новичкам (обычно менее 5.000 очков)
-            else if ( $cat == 2 ) $query = "SELECT * FROM ".$db_prefix."users WHERE place1 < 100;";        // Игрокам из топ100
-            else if ( $cat == 3 ) $query = "SELECT * FROM ".$db_prefix."users WHERE admin = 1;";        // Операторам
-            else $query = "SELECT * FROM ".$db_prefix."users;";                // Всем
+            if ( $cat == 1 ) $query = "SELECT * FROM ".$db_prefix."users WHERE score1 < ".USER_NOOB_LIMIT.";";        // Newbies (usually less than 5.000 points)
+            else if ( $cat == 2 ) $query = "SELECT * FROM ".$db_prefix."users WHERE place1 < 100;";        // Players from the top 100
+            else if ( $cat == 3 ) $query = "SELECT * FROM ".$db_prefix."users WHERE admin = 1;";        // Operators
+            else $query = "SELECT * FROM ".$db_prefix."users;";                // Everyone
 
             $ownhome = GetPlanet ( $GlobalUser['hplanetid'] );
 

@@ -1,6 +1,6 @@
 <?php
 
-// Админка: купоны
+// Admin Area: DM coupons
 
 function Admin_Coupons ()
 {
@@ -9,7 +9,7 @@ function Admin_Coupons ()
     global $GlobalUser;
     global $AdminMessage, $AdminError;
 
-    // Обработка POST-запроса.
+    // POST request processing.
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
     {
         $action = $_GET['action'];
@@ -56,9 +56,9 @@ function Admin_Coupons ()
 
 <?php
 
-// Вывести список купонов.
+// Display a list of coupons.
 
-$count = 15;        // количество купонов на страницу
+$count = 15;        // number of coupons per page
 $from = 0;
 if (key_exists('from', $_GET)) $from = intval ( $_GET['from'] );
 $total = TotalCoupons ();
@@ -115,7 +115,7 @@ $rows = MDBRows ( $result );
 
 <?php
 
-    // Вывести активные задания начисления купонов.
+    // Display active coupon accrual tasks.
 
     $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Coupon' ORDER BY end ASC";
     $result = dbquery ( $query );

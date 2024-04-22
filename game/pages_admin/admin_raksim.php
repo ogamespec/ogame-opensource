@@ -1,6 +1,6 @@
 <?php
 
-// Админка: симулятор ракетной атаки. Используется для верификации и отладки алгоритмической части ракетной атаки.
+// Admin Area: missile attack simulator. Used for verification and debugging of the algorithmic part of the missile attack.
 
 function Admin_RakSim ()
 {
@@ -24,7 +24,7 @@ function Admin_RakSim ()
     $anz = 0;
     $pziel = 0;
 
-    // Обработка POST-запроса.
+    // POST request processing.
     if ( method () === "POST" && $GlobalUser['admin'] != 0 ) {
         //print_r ( $_POST );
         //echo "<hr>";
@@ -93,7 +93,7 @@ function Admin_RakSim ()
     foreach ($defmap as $i=>$gid)
     {
         if ($gid > 500) {
-            // Не нужно учитывать ракетную оборону.
+            // No need to consider missile defenses.
             break;
         }
         echo "       <option value=\"$gid\" ";

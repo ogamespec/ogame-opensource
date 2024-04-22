@@ -1,6 +1,6 @@
 <?php
 
-// Админка : история действий игроков и операторов
+// Admin Area: history of player and operator actions
 
 function My_date_parse_from_format($format, $date) {
   $dMask = array(
@@ -25,7 +25,7 @@ function Admin_UserLogs ()
     global $db_prefix;
     global $GlobalUser;
 
-    // Обработка POST-запроса.
+    // POST request processing.
     if ( method () === "POST" && $GlobalUser['admin'] >= 1 )
     {
         $name = $_POST['name'];
@@ -34,7 +34,7 @@ function Admin_UserLogs ()
         $arr = My_date_parse_from_format ( "dd.mm.yyyy", $_POST['since']);
         $since = mktime ( 0, 0, 0, $arr['month'], $arr['day'], $arr['year'] );
 
-        // Шаг 1 : найти всех пользователей неточным сравнением
+        // Step 1: find all users by imprecise comparison
         $users = array ();
         $query = "SELECT * FROM ".$db_prefix."users WHERE player_id > 0";
         $result = dbquery ($query);
@@ -44,7 +44,7 @@ function Admin_UserLogs ()
             if ( $percent > 75 ) $users[] = $user;
         }
 
-        // Шаг 2 : выбрать события указанной категории за промежуток времени
+        // Step 2: select the events of the specified category for the time interval
         $results = "";
         foreach ( $users as $i=>$user ) {
             if ( $type !== "ALL" ) $tstr = "AND type = '".$type."'";

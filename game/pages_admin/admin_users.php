@@ -1,8 +1,8 @@
 <?php
 
-// Админка: Пользователи.
+// Admin Area: Users.
 
-$big_fleet_points = 100000000;      // Большие флоты отмечать специальным цветом.
+$big_fleet_points = 100000000;      // Mark large fleets with a special color.
 
 $FleetMissionList = array (
     0 => array ( 1, 101, 2, 102, 3, 103, 4, 104, 5, 105, 205, 6, 106, 7, 107, 8, 108, 9, 109, 15, 115, 215, 20, 21, 121 ),
@@ -67,7 +67,7 @@ function Admin_Users ()
     $unitab = LoadUniverse ();
     $speed = $unitab['speed'];
 
-    // Обработка POST-запроса.
+    // Processing a POST request.
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 ) {
         
         if ( key_exists('player_id', $_GET) ) $player_id = intval ($_GET['player_id']);
@@ -76,7 +76,7 @@ function Admin_Users ()
         if (key_exists('action', $_GET) && $player_id) $action = $_GET['action'];
         else $action = "";
 
-        if ($action === "update")        // Обновить данные пользователя.
+        if ($action === "update")        // Update user data.
         {
             $query = "UPDATE ".$db_prefix."users SET ";
 
@@ -127,7 +127,7 @@ function Admin_Users ()
             }
         }
 
-        if ($action === "create_planet")        // Создать планету, остановить выработку шахт
+        if ($action === "create_planet")        // Create a planet, stop the mines production.
         {
             $g = $_POST['g'];    if ($g === "" ) $g = 1;
             $s = $_POST['s'];    if ($s === "" ) $s = 1;
@@ -140,7 +140,7 @@ function Admin_Users ()
         }
     }
 
-    // Обработка GET-запроса.
+    // GET request processing.
     if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
         
         if ( key_exists ('player_id', $_GET) ) $player_id = intval ($_GET['player_id']);
@@ -151,29 +151,29 @@ function Admin_Users ()
         
         $now = time();
 
-        if ( $action === "recalc_stats" )    // Пересчитать статистику
+        if ( $action === "recalc_stats" )    // Recalculate stats
         {
             RecalcStats ($player_id);
             RecalcRanks ();
         }
 
-        if ( $action === "reactivate" )     // Выслать новый пароль
+        if ( $action === "reactivate" )     // Send new password
         {
             ReactivateUser ( $player_id );
         }
 
-        if ( $action === "bot_start" )    // Запустить бота
+        if ( $action === "bot_start" )    // Start the bot
         {
             StartBot ($player_id);
         }
 
-        if ( $action === "bot_stop" )    // Остановить бота
+        if ( $action === "bot_stop" )    // Stop the bot
         {
             StopBot ($player_id);
         }
     }
 
-    if ( key_exists("player_id", $_GET) ) {        // Информация об игроке
+    if ( key_exists("player_id", $_GET) ) {        // Player Information
         InvalidateUserCache ();
         $user = LoadUser ( intval ($_GET['player_id']) );
 ?>
@@ -582,7 +582,7 @@ function Admin_Users ()
 
     }
 
-    // Поиск пользователей
+    // User Search
 }
 
 ?>

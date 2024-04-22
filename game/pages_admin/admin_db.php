@@ -1,12 +1,12 @@
 <?php
 
-// Админка: Целостность базы данных (проверка и исправление таблиц)
+// Admin Area: Database integrity (check and fix tables)
 
-// Назначение этого модуля админки - хоть немного уменьшить попа-боль, когда в формат таблиц БД вносятся изменения и нужно править серверную БД "наживую" (без чистой переустановки).
-// Вначале производится сравнение таблиц из install.php с тем что есть в реальной БД на данный момент.
-// Затем производится обратное сравнение - что сейчас в БД, с тем что есть в таблицах install.php
+// The purpose of this admin module is to at least slightly reduce the pain when changes are made to the format of database tables and the server database needs to be corrected "live" (without a clean reinstallation).
+// First we compare the tables from install.php with what is in the real database at the moment.
+// Then the reverse comparison is made - what is in the database now, with what is in the tables of install.php
 
-// TODO: Лечить таблицы пока не умеем. Админ должен ручками лечить таблицы самостоятельно, используя phpMyAdmin или подобный инструмент.
+// TODO: We don't know how to fix tables yet. An admin must manually fix tables by himself using phpMyAdmin or similar tool.
 
 function DiffTab ($tabname, $src, $dst)
 {
@@ -46,17 +46,17 @@ function Admin_DB ()
 
     $text_out = "";
 
-    // DEBUG: Сдампить таблицы игры из install
+    // DEBUG: dump the game tables from install
     //print_r ($tabs);
     //echo "<br/><br/>";
 
-    // Обработка POST-запроса.
+    // POST request processing.
     if ( method () === "POST" )
     {
-        // TODO: Пока ничего не делаем.
+        // TODO: We don't do anything yet.
     }
 
-    // Получить список таблиц
+    // Get list of tables
 
     $query = "SHOW TABLES;";
     $result = dbquery ($query);
@@ -71,7 +71,7 @@ function Admin_DB ()
     }
     dbfree ($result);
 
-    // Получить список столбцов для каждой таблицы
+    // Get a list of columns for each table
 
     foreach ($db_tabs as $i=>$tab) {
         
@@ -83,7 +83,7 @@ function Admin_DB ()
 
             $row = dbarray ($result);
             
-            // Привести описание типа столбца по аналогии с таблицей из install
+            // Provide a description of the column type by analogy with the table from install
             $column = $row['Type'];
             $column = str_replace ("int(10)", "int", $column);
             $column = str_replace ("int(11)", "int", $column);
@@ -97,10 +97,10 @@ function Admin_DB ()
         dbfree ($result);
     }
 
-    // DEBUG: Сдампить актуальные таблицы БД
+    // DEBUG: dump actual database tables
     //print_r ($db_tabs);
 
-    // Вывести таблицы игры из install, сравнивая их формат с форматом, полученным из БД
+    // Output the game tables from install, comparing their format with the format obtained from the database
 
     $text_out .= "<h2>".loca("ADM_DB_INSTALL_VS_DB")."</h2>";
 
@@ -119,7 +119,7 @@ function Admin_DB ()
     }
     else $text_out .= $res;
 
-    // Вывести таблицы из БД, сравнивая их формат с таблицами из install
+    // Output tables from the database, comparing their format with tables from install
 
     $text_out .= "<h2>".loca("ADM_DB_DB_VS_INSTALL")."</h2>";
 

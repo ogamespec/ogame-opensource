@@ -1,6 +1,6 @@
 <?php
 
-// Админка: Отладочные сообщения.
+// Admin Area: Debug messages.
 
 function Admin_Debug ()
 {

@@ -1,22 +1,22 @@
 <?php
 
-// Панель администратора.
-// Главная панель представляет собой типичную админскую панель с категориями.
+// Admin Panel.
+// The main panel is a typical admin panel with categories.
 
-// К админке имеют доступ только специальные пользователи: операторы и админы.
+// Only special users have access to the admin area: operators and admins.
 
-// Категории админки (GET параметр mode). К некоторым категориям операторы не могут получить доступ.
-// - Контроль полётов (все)
-// - История переходов (только админ)
-// - Жалобы (все)
-// - Баны (все)
-// - Пользователи (операторы могут только смотреть и часть изменять (например отключать проверку IP), админ может изменять)
-// - Планеты (операторы могут только смотреть и часть изменять (например названия планет), админ может изменять)
-// - Задания (только админ)
-// - Настройки Вселенной (только админ)
-// - Ошибки (только админ)
+// Admin categories (GET parameter `mode`). Some categories cannot be accessed by operators.
+// - Flight controls (all)
+// - Browse history (admin only)
+// - Reports (all)
+// - Bans (all)
+// - Users (operators can only view and modify part of it (e.g. disable IP check), admin can modify)
+// - Planets (operators can only view and modify parts (e.g. names of planets), admin can modify)
+// - Queue Tasks (admin only)
+// - Universe settings (admin only)
+// - Errors (admin only)
 
-if ( $GlobalUser['admin'] == 0 ) RedirectHome ();    // обычным пользователям доступ запрещен
+if ( $GlobalUser['admin'] == 0 ) RedirectHome ();    // regular users are not allowed
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
@@ -31,7 +31,7 @@ $session = $_GET['session'];
 if ( key_exists ('mode', $_GET) ) $mode = $_GET['mode'];
 else $mode = "Home";
 
-// Админ-панель для быстрого перехода.
+// Admin panel for a quick navigation.
 function AdminPanel ()
 {
     global $session;
@@ -117,7 +117,7 @@ onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca
 }
 
 // ========================================================================================
-// Главная страница.
+// Home Page.
 
 function Admin_Home ()
 {

@@ -1,7 +1,7 @@
 <?php
 
-// Админка - боевые доклады.
-// Боевые доклады хранятся 2 недели.
+// Admin Area: battle reports.
+// Battle reports are kept for 2 weeks.
 
 function Admin_BattleReport ()
 {
@@ -16,7 +16,7 @@ function Admin_BattleReport ()
 
 <?php
 
-    // Показать боевой доклад
+    // Show battle report
     if ( key_exists ( 'bericht', $_GET ) ) {
         $query = "SELECT * FROM ".$db_prefix."battledata WHERE battle_id = " . intval ($_GET['bericht']);
         $result = dbquery ( $query );
@@ -52,7 +52,7 @@ function Admin_BattleReport ()
         die ();
     }
 
-    // Вывести список всех докладов
+    // Display a list of all reports
     $query = "SELECT * FROM ".$db_prefix."battledata ORDER BY date DESC";
     $result = dbquery ( $query );
 

@@ -1,7 +1,6 @@
 <?php
 
-// ========================================================================================
-// Баны.
+// Admin Area: Bans
 
 function Admin_Bans ()
 {
@@ -9,38 +8,38 @@ function Admin_Bans ()
     global $db_prefix;
     global $GlobalUser;
 
-    // Обработка POST-запроса.
+    // POST request processing.
     if ( method () === "POST" && $GlobalUser['admin'] >= 1 )
     {
 
-        if ( $_GET['action'] === 'search' )    {        // Результаты поиска
+        if ( $_GET['action'] === 'search' )    {        // Search results
 
             switch ( intval ( $_POST['searchby'] ) )
             {
-                case 0 :        // Забаненных с РО
+                case 0 :        // Banned with VM
                     $query = "SELECT * FROM ".$db_prefix."users WHERE banned = 1 AND vacation = 1";
                     break;
-                case 1 :        // Забаненных без РО
+                case 1 :        // Banned without VM
                     $query = "SELECT * FROM ".$db_prefix."users WHERE banned = 1 AND vacation = 0";
                     break;
-                case 2 :        // Блокировка атак
+                case 2 :        // Attack ban
                     $query = "SELECT * FROM ".$db_prefix."users WHERE noattack = 1";
                     break;
-                case 3 :        // Зарегистрированных недавно (дней)
+                case 3 :        // Recently registered (days)
                     $when = time () - intval($_POST['text']) * 24 * 60 * 60;
                     $query = "SELECT * FROM ".$db_prefix."users WHERE regdate >= $when";
                     break;
-                case 4 :        // Имя пользователя (примерное)
+                case 4 :        // User name (approximate)
                     $query = "SELECT * FROM ".$db_prefix."users WHERE oname LIKE '".$_POST['text']."%' ";
                     break;
-                case 5 :        // Тег альянса
+                case 5 :        // Alliance Tag
                     $query = "SELECT ally_id FROM ".$db_prefix."ally WHERE tag LIKE '%".$_POST['text']."%' ";
                     $query = "SELECT * FROM ".$db_prefix."users WHERE ally_id = ANY ($query) ";
                     break;
-                case 6 :        // Одинаковый адрес email
+                case 6 :        // Same email address
                     $query = "SELECT * FROM ".$db_prefix."users WHERE email = LIKE '%".$_POST['text']."%' OR pemail = LIKE '%".$_POST['text']."%' ";
                     break;
-                case 7 :        // Одинаковый IP
+                case 7 :        // Same IP
                     $query = "SELECT * FROM ".$db_prefix."users AS t1 INNER JOIN ( 
 SELECT ip_addr,COUNT(*) FROM ".$db_prefix."users GROUP BY ip_addr HAVING COUNT(*)>1) as t2 
 ON t1.ip_addr = t2.ip_addr ORDER BY t1.ip_addr ASC, t1.name ASC";
@@ -69,7 +68,7 @@ function SetClearCheckbox (status)
 
 </script>
 
-<!-- Результаты поиска -->
+<!-- Search results -->
 <table>
 <form id="banform" action="index.php?page=admin&session=<?php echo $session;?>&mode=Bans&action=ban" method="POST" >
 
@@ -117,7 +116,7 @@ function SetClearCheckbox (status)
             die ();
         }
 
-        if ( $_GET['action'] === 'ban' )    {        // Забанить / разбанить
+        if ( $_GET['action'] === 'ban' )    {        // Ban / unban
 
             $now = time();
 
@@ -132,17 +131,17 @@ function SetClearCheckbox (status)
                 switch ( intval ( $_POST['banmode'] ) )
                 {
                     case 0 :
-                        // Добавить пользователя на столб позора
+                        // Add a user to the Pillar of Shame
                         $entry = array( null, $GlobalUser['oname'], $user['oname'], $GlobalUser['player_id'], $user['player_id'], $now, $now + $seconds, $reason );
                         AddDBRow ( $entry, "pranger" );
                         BanUser ( $player_id, $seconds, 0 ); break;
                     case 1 :
-                        // Добавить пользователя на столб позора
+                        // Add a user to the Pillar of Shame
                         $entry = array( null, $GlobalUser['oname'], $user['oname'], $GlobalUser['player_id'], $user['player_id'], $now, $now + $seconds, $reason );
                         AddDBRow ( $entry, "pranger" );
                         BanUser ( $player_id, $seconds, 1 ); break;
                     case 2 :
-                        // Добавить пользователя на столб позора
+                        // Add a user to the Pillar of Shame
                         $entry = array( null, $GlobalUser['oname'], $user['oname'], $GlobalUser['player_id'], $user['player_id'], $now, $now + $seconds, $reason );
                         AddDBRow ( $entry, "pranger" );
                         BanUserAttacks ( $player_id, $seconds ); break;

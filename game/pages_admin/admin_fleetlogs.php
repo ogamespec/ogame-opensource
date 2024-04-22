@@ -1,6 +1,6 @@
 <?php
 
-// Админка: Текущие полёты игроков, а также логи полётов
+// Admin Area: Current flights of players, as well as flight logs
 
 function Admin_Fleetlogs ()
 {
@@ -8,7 +8,7 @@ function Admin_Fleetlogs ()
     global $db_prefix;
     global $GlobalUser;
 
-    $big_fleet_points = 100000000;      // Если флот больше указанного количества очков, то он подсвечивается особым образом ("большой").
+    $big_fleet_points = 100000000;      // If a fleet is larger than the specified number of points, it is highlighted in a special way ("large").
 
     $now = time ();
 
@@ -16,7 +16,7 @@ function Admin_Fleetlogs ()
     $player_id = 0;
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
     {
-        if ( key_exists ( "order_2min", $_POST ) ) {        // -2 минуты до оконачания задания
+        if ( key_exists ( "order_2min", $_POST ) ) {        // -2 minutes before the task commences
             $id = intval ($_POST['order_2min']);
             $queue = LoadQueue ( $id );
             $fleet_obj = LoadFleet ( $queue['sub_id'] );
@@ -29,7 +29,7 @@ function Admin_Fleetlogs ()
             }
         }
 
-        if ( key_exists ( "order_end", $_POST ) ) {        // Завершить задание
+        if ( key_exists ( "order_end", $_POST ) ) {        // Complete the task
             $id = intval ($_POST['order_end']);
             $queue = LoadQueue ( $id );
             $fleet_obj = LoadFleet ( $queue['sub_id'] );
@@ -42,7 +42,7 @@ function Admin_Fleetlogs ()
             }
         }
 
-        if ( key_exists ( "order_return", $_POST ) ) {        // Развернуть флот
+        if ( key_exists ( "order_return", $_POST ) ) {        // Return the fleet
             $queue = LoadQueue ( intval ($_POST['order_return']) );
             RecallFleet ( $queue['sub_id'] );
         }

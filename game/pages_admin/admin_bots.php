@@ -1,6 +1,6 @@
 <?php
 
-// Управление ботами
+// Admin Area: Bot control
 
 function Admin_Bots ()
 {
@@ -10,7 +10,7 @@ function Admin_Bots ()
 
     $result = "";
 
-    // Обработка POST-запроса.
+    // POST request processing.
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
     {
         if (BotStrategyExists("_start")) {
@@ -22,7 +22,7 @@ function Admin_Bots ()
         }
     }
 
-    // Обработка GET-запроса.
+    // GET request processing.
     if ( method () === "GET" && key_exists('id', $_GET) && $GlobalUser['admin'] >= 2 )
     {
         StopBot ( intval ($_GET['id']) );

@@ -1,7 +1,6 @@
 <?php
 
-// ========================================================================================
-// Глобальная очередь событий.
+// Admin Area: Global Event Queue.
 
 function QueueDesc ( $queue )
 {
@@ -76,7 +75,7 @@ function Admin_Queue ()
     global $db_prefix;
     global $GlobalUser;
 
-    // Обработка POST-запросов.
+    // POST request processing.
     $player_id = 0;
     if ( method () === "POST" )
     {
@@ -90,14 +89,14 @@ function Admin_Queue ()
             }
         }
 
-        if ( key_exists ( "order_end", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Завершить задание
+        if ( key_exists ( "order_end", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Complete the task
             $id = intval ($_POST['order_end']);
             $now = time ();
             $query = "UPDATE ".$db_prefix."queue SET end=$now WHERE task_id=$id";
             dbquery ( $query );
         }
 
-        if ( key_exists ( "order_remove", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Удалить задание
+        if ( key_exists ( "order_remove", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Delete task
             RemoveQueue ( intval ($_POST['order_remove']) );
         }
     }
@@ -150,7 +149,7 @@ function Admin_Queue ()
 
     <br/>
     <form action="index.php?page=admin&session=<?=$session;?>&mode=Queue" method="POST">
-    Показать задания игрока : <input size=15 name="player" value="<?=$playername;?>">
+    Показать задания игрока: <input size=15 name="player" value="<?=$playername;?>">
     <input type="submit" value="Отправить">
     </form>
 

@@ -1,6 +1,6 @@
 <?php
 
-// Админка: Настройки Вселенной.
+// Admin Area: Universe Settings.
 
 function UniIsSelected ($option, $value)
 {
@@ -57,7 +57,7 @@ function Admin_Uni ()
             $_POST['battle_engine'],
             $php_battle );
 
-        // Установить внешние ссылки. Если ссылка пустая - пункт меню будет отсутствовать.
+        // Set external links. If the link is empty - the menu item will be missing.
 
         SetExtLinks (
             $_POST['ext_board'],
@@ -66,11 +66,11 @@ function Admin_Uni ()
             $_POST['ext_rules'],
             $_POST['ext_impressum'] );
 
-        // Установить максимальное количество пользователей.
+        // Set the maximum number of users.
 
         SetMaxUsers (intval($_POST['maxusers']));
 
-        // Включить принудительное РО активным игрокам, если вселенная ставится на паузу.
+        // Enable forced VM to active players if the universe is paused.
         if ( $freeze ) {
             $days7 = $now - 7*24*60*60;
             $query = "UPDATE ".$db_prefix."users SET vacation = 1, vacation_until = ".$now." WHERE lastclick >= $days7 AND admin = 0";

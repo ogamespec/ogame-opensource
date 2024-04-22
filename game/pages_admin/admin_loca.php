@@ -1,6 +1,6 @@
 <?php
 
-// Админка: Проверка локализации
+// Admin Area: Check localization
 
 function CompareTwoLocas ($src, $dst)
 {
@@ -10,7 +10,7 @@ function CompareTwoLocas ($src, $dst)
 
     $res .= "<h2>$filename</h2>\n\n";
 
-    // Локальная лока :)
+    // Local loca :)
     $LOCA = array();
 
     include $src;
@@ -28,9 +28,9 @@ function CompareTwoLocas ($src, $dst)
         }        
     }    
 
-    // Перечислить ключи из исходного файла:
-    // - Если в целевом файле строка совпадает - подсветить жёлтым (перевода нет, но строка есть)
-    // - Если в целевом файле строки нет вообще - подсветить красным
+    // List the keys from the source file:
+    // - If the string matches in the target file - highlight yellow (no translation, but the string is there)
+    // - If there is no string in the target file at all - highlight in red
 
     if (!empty($src_lang)) {
         $res .= "<table>\n";
@@ -81,7 +81,7 @@ function Admin_Loca ()
         $dst_files = scandir ($base_loca_dir . '/' . $_POST['loca_dst']);
         $processed = array();
 
-        // Перебрать все файлы из исходной директории и сравнить их с файлами в целевой.
+        // Go through all the files in the source directory and compare them to the files in the target directory.
 
         foreach ($src_files as $i=>$file) {
             

@@ -1,6 +1,6 @@
 <?php
 
-// Графический редактор интеллекта ботов.
+// Admin Area: Bot intelligence graphical editor.
 
 function Admin_Botedit ()
 {
@@ -8,10 +8,10 @@ function Admin_Botedit ()
     global $db_prefix;
     global $GlobalUser, $GlobalUni;
 
-    // Обработка GET-запроса.
+    // GET request processing.
     if ( method () === "GET" && key_exists('action', $_GET) && $GlobalUser['admin'] >= 2 )
     {
-        if ( $_GET['action'] === "preview" ) {      // Предпросмотр
+        if ( $_GET['action'] === "preview" ) {      // Preview
             $id = intval ( $_GET['strat'] );
             $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
             $result = dbquery ($query);
@@ -76,10 +76,10 @@ function Admin_Botedit ()
         }
     }
 
-    // Обработка POST-запроса.
+    // POST request processing.
     if ( method () === "POST" && key_exists('action', $_POST) && $GlobalUser['admin'] >= 2 )
     {
-        if ( $_POST['action'] === "load" ) {        // Загрузить
+        if ( $_POST['action'] === "load" ) {        // Load
             $id = intval ( $_POST['strat'] );
             $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
             $result = dbquery ($query);
@@ -88,10 +88,10 @@ function Admin_Botedit ()
             setcookie ( "uni".$GlobalUni['num']."_".$GlobalUser['name']."_strategy", $id, 9999 );
             die ($row['source']);
         }
-        else if ( $_POST['action'] === "save" ) {    // Сохранить
+        else if ( $_POST['action'] === "save" ) {    // Save
             $id = intval ( $_POST['strat'] );
 
-            // Сохранить текущий исходник в бекап
+            // Save the current source to a backup
             $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
             $result = dbquery ($query);
             $row = dbarray ($result);
@@ -105,7 +105,7 @@ function Admin_Botedit ()
             ob_clean ();
             die ();
         }
-        else if ( $_POST['action'] === "new" ) {    // Новая стратегия
+        else if ( $_POST['action'] === "new" ) {    // New strategy
             $name = $_POST['name'];
             $name = addslashes ( $name );
             $source = "{ \"class\": \"go.GraphLinksModel\",
@@ -118,7 +118,7 @@ function Admin_Botedit ()
             ob_clean ();
             die ( );
         }
-        else if ( $_POST['action'] === "rename" ) {    // Переименовать
+        else if ( $_POST['action'] === "rename" ) {    // Rename
             $id = intval ( $_POST['strat'] );
             $name = $_POST['name'];
             $name = addslashes ( $name );
