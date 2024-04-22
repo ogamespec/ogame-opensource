@@ -198,7 +198,8 @@ function GetBuildQueue ( $planet_id )
 }
 
 // Verify all conditions of build/demolition possibility
-function CanBuild ($user, $planet, $id, $lvl, $destroy)
+// The $enqueue parameter is used to check if the build can be added to the queue.
+function CanBuild ($user, $planet, $id, $lvl, $destroy, $enqueue=false)
 {
     global $GlobalUni;
 
@@ -242,7 +243,7 @@ function CanBuild ($user, $planet, $id, $lvl, $destroy)
         else if ( ($id == 15 || $id == 21) && $shipyard_operating ) $text = loca_lang("BUILD_ERROR_SHIPYARD_ACTIVE", $user['lang']);
 
         // Check the available amount of resources on the planet
-        else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) ) $text = loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
+        else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) && !$enqueue ) $text = loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
 
         // Check available technologies.
         else if ( !BuildMeetRequirement ( $user, $planet, $id ) ) $text = loca_lang("BUILD_ERROR_REQUIREMENTS", $user['lang']);
@@ -373,8 +374,7 @@ function BuildEnque ( $planet_id, $id, $destroy, $now=0 )
     else $lvl = $nowlevel + 1;
     if ($lvl < 0) return;     // Unable to build/demolish a negative level
 
-    if ($list_id == 1) $text = CanBuild ($user, $planet, $id, $lvl, $destroy);
-    else $text = '';
+    $text = CanBuild ($user, $planet, $id, $lvl, $destroy, $list_id != 1);
 
     if ( $text === '' ) {
 
