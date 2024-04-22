@@ -1,6 +1,6 @@
 <?php
 
-// Проверить, если файл конфигурации отсутствует - редирект на страницу установки игры.
+// Check if the configuration file is missing - redirect to the game installation page.
 if ( !file_exists ("../config.php"))
 {
     echo "<html><head><meta http-equiv='refresh' content='0;url=../install.php' /></head><body></body></html>";
@@ -25,7 +25,7 @@ require_once "../loca.php";
 
 InitDB();
 
-// Проверить регистрационные данные.
+// Verify registration information.
 
 function isValidEmail($email){
 	return filter_var($email, FILTER_VALIDATE_EMAIL);
@@ -53,7 +53,7 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
     else if ( GetUsersCount() >= $uni['maxusers']) $RegError = 109;
     else $RegError = 0;
 
-    // Если все параметры верные - создать нового пользователя и войти в игру.
+    // If all parameters are correct - create a new user and log in to the game.
     if ($RegError == 0 && $AGB)
     {
         CreateUser ( $_POST['character'], $_POST['password'], $_POST['email'] );
@@ -65,7 +65,7 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
     exit ();
 }
 
-// Открыть new.php
+// Open new.php
 echo "<html><head><meta http-equiv='refresh' content='0;url=new.php' /></head><body></body></html>";
 
 ?>

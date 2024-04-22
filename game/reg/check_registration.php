@@ -1,6 +1,6 @@
 <?php
 
-// Проверить регистрационные данные по AJAX.
+// Verify registration data via AJAX.
 
 if ( key_exists ( "action", $_GET) )
 {
