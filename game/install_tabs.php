@@ -9,7 +9,7 @@
 $tab_uni = array (        // Universe
     'num'=>'INT PRIMARY KEY','speed'=>'FLOAT','fspeed'=>'FLOAT','galaxies'=>'INT','systems'=>'INT','maxusers'=>'INT','acs'=>'INT','fid'=>'INT','did'=>'INT','rapid'=>'INT','moons'=>'INT','defrepair'=>'INT','defrepair_delta'=>'INT','usercount'=>'INT','freeze'=>'INT',
     'news1'=>'TEXT', 'news2'=>'TEXT', 'news_until'=>'INT UNSIGNED', 'startdate'=>'INT UNSIGNED', 'battle_engine'=>'TEXT', 'lang'=>'CHAR(4)', 'hacks'=>'INT',
-    'ext_board'=>'TEXT', 'ext_discord'=>'TEXT', 'ext_tutorial'=>'TEXT', 'ext_rules'=>'TEXT', 'ext_impressum'=>'TEXT', 'php_battle'=>'INT'
+    'ext_board'=>'TEXT', 'ext_discord'=>'TEXT', 'ext_tutorial'=>'TEXT', 'ext_rules'=>'TEXT', 'ext_impressum'=>'TEXT', 'php_battle'=>'INT', 'force_lang'=>'INT'
 );
 
 $tab_users = array (    // Users

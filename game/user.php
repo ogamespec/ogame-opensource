@@ -194,7 +194,7 @@ function CreateUser ( $name, $pass, $email, $bot=false)
 
     // Set the language of the registered player: if there is a selected language in cookies and the player is NOT a bot - use it when registering.
     // Otherwise, use the default language of the universe
-    if ( !$bot && key_exists ( 'ogamelang', $_COOKIE ) ) $lang = $_COOKIE['ogamelang'];
+    if ( !$bot && key_exists ( 'ogamelang', $_COOKIE ) && !$unitab['force_lang'] ) $lang = $_COOKIE['ogamelang'];
     else $lang = $unitab['lang'];
     if ( !key_exists ( $lang, $Languages ) ) $lang = $unitab['lang'];
 
@@ -238,7 +238,7 @@ function CreateUser ( $name, $pass, $email, $bot=false)
     return $id;
 }
 
-// Completely delete the player, all his planets and fleets.
+// Completely delete the player, all their planets and fleets.
 // Turn back fleets flying at the player.
 function RemoveUser ( $player_id, $when)
 {
@@ -513,6 +513,11 @@ function CheckSession ( $session )
     if ( $prsess !== $GlobalUser['private_session'] ) { InvalidSessionPage (); return FALSE; }
     if ( !localhost($ip) && !$GlobalUser['deact_ip'] ) {
         if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
+    }
+
+    // If admin forbid users to choose language in Settings, force to use Universe language
+    if ($GlobalUni['force_lang']) {
+        $GlobalUser['lang'] = $GlobalUni['lang'];
     }
 
     // Set global language for session: user language -> universe language(if error) -> default language(if error)

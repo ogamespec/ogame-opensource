@@ -77,4 +77,11 @@ $LOCA["ru"]["OPTIONS_ERR_EMAIL_64"] = "Адрес не может превыша
 $LOCA["ru"]["OPTIONS_ERR_NAME_3_20"] = "Имя должно содержать от 3-х до 20-ти символов.";
 $LOCA["ru"]["OPTIONS_ERR_EXISTNAME"] = "Это имя уже существует.";
 
+$LOCA["ru"]["OPTIONS_ACTIVATE_EMAIL"] = "Используйте введённый адрес";
+$LOCA["ru"]["OPTIONS_ACTIVATE_INFO"] = "Ваш игровой акаунт ещё не активирован. Тут Вы можете заказать письмо с активационной ссылкой.";
+$LOCA["ru"]["OPTIONS_ACTIVATE_SUBMIT"] = "Заказать активационную ссылку";
+
+$LOCA["ru"]["OPTIONS_FEED"] = "Newsfeed";
+$LOCA["ru"]["OPTIONS_FEED_ACTIVATE"] = "Активировать";
+
 ?>

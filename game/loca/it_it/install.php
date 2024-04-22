@@ -36,6 +36,7 @@ $LOCA["it"]["INSTALL_UNI_RAPID"] = "Fuoco rapido";
 $LOCA["it"]["INSTALL_UNI_MOONS"] = "Lune e stelle della morte";
 $LOCA["it"]["INSTALL_UNI_BATTLE"] = "Motore di battaglia";
 $LOCA["it"]["INSTALL_UNI_PHP_BATTLE"] = "Utilizzare un motore di battaglia basato su PHP";
+$LOCA["it"]["INSTALL_UNI_FORCE_LANG"] = "Obligé d'utiliser le langage de l'univers";
 
 $LOCA["it"]["INSTALL_ADMIN"] = "Account amministratore";
 $LOCA["it"]["INSTALL_ADMIN_EMAIL"] = "E-Mail";

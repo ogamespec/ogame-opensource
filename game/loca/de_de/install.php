@@ -36,6 +36,7 @@ $LOCA["de"]["INSTALL_UNI_RAPID"] = "Rapidfire";
 $LOCA["de"]["INSTALL_UNI_MOONS"] = "Monde und Todesstern";
 $LOCA["de"]["INSTALL_UNI_BATTLE"] = "Pfad zur Kampfmaschine";
 $LOCA["de"]["INSTALL_UNI_PHP_BATTLE"] = "Verwendung einer PHP-basierten Kampfmaschine";
+$LOCA["de"]["INSTALL_UNI_FORCE_LANG"] = "Gezwungen, die Sprache des Universums zu verwenden";
 
 $LOCA["de"]["INSTALL_ADMIN"] = "Admin Account";
 $LOCA["de"]["INSTALL_ADMIN_EMAIL"] = "E-Mail";

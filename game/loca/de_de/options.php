@@ -77,4 +77,11 @@ $LOCA["de"]["OPTIONS_ERR_EMAIL_64"] = "Die Mailadresse darf maximal 64 Zeichen l
 $LOCA["de"]["OPTIONS_ERR_NAME_3_20"] = "Unzulässiger Username!";
 $LOCA["de"]["OPTIONS_ERR_EXISTNAME"] = "Dieser Username existiert bereits.";
 
+$LOCA["de"]["OPTIONS_ACTIVATE_EMAIL"] = "Verwenden Sie die von Ihnen eingegebene Adresse";
+$LOCA["de"]["OPTIONS_ACTIVATE_INFO"] = "Ihr Spielkonto ist noch nicht aktiviert. Hier können Sie eine E-Mail mit einem Aktivierungslink bestellen.";
+$LOCA["de"]["OPTIONS_ACTIVATE_SUBMIT"] = "Aktivierungslink bestellen";
+
+$LOCA["de"]["OPTIONS_FEED"] = "Newsfeed";
+$LOCA["de"]["OPTIONS_FEED_ACTIVATE"] = "Aktivieren Sie";
+
 ?>

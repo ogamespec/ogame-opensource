@@ -77,4 +77,11 @@ $LOCA["en"]["OPTIONS_ERR_EMAIL_64"] = "The email address can have a maximum of 6
 $LOCA["en"]["OPTIONS_ERR_NAME_3_20"] = "Player's name must be between 3 and 20 characters.";
 $LOCA["en"]["OPTIONS_ERR_EXISTNAME"] = "This user name is already taken.";
 
+$LOCA["en"]["OPTIONS_ACTIVATE_EMAIL"] = "Use the address you entered";
+$LOCA["en"]["OPTIONS_ACTIVATE_INFO"] = "Your game account is not activated yet. Here you can order an e-mail with an activation link.";
+$LOCA["en"]["OPTIONS_ACTIVATE_SUBMIT"] = "Request an activation link";
+
+$LOCA["en"]["OPTIONS_FEED"] = "Newsfeed";
+$LOCA["en"]["OPTIONS_FEED_ACTIVATE"] = "Activate";
+
 ?>

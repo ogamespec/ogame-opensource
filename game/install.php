@@ -121,6 +121,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "ext_rules = '".$_POST["ext_rules"]."', ";
     $query .= "ext_impressum = '".$_POST["ext_impressum"]."', ";
     $query .= "php_battle = '".(key_exists("php_battle", $_POST) && $_POST["php_battle"]==="on"?1:0)."', ";
+    $query .= "force_lang = '".(key_exists("force_lang", $_POST) && $_POST["force_lang"]==="on"?1:0)."', ";
     $query .= "hacks = '0'; ";
     //echo "<br>$query<br>";
     dbquery ($query);
@@ -364,6 +365,7 @@ td.c { background-color: #334445; }
 <tr><td><?php echo loca('INSTALL_UNI_MOONS');?></td><td><input type=checkbox class='text' name='uni_moons' CHECKED></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_BATTLE');?><a title='<?php echo loca('INSTALL_TIP11');?>'><?php echo $info;?></a></td><td><input type=text value='../cgi-bin/battle' class='text' name='uni_battle_engine'></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_PHP_BATTLE');?></td><td><input type=checkbox class='text' name='php_battle' ></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_FORCE_LANG');?></td><td><input type=checkbox class='text' name='force_lang' ></td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan=2 class='c'><?php echo loca('INSTALL_EXTERNAL_LINKS');?><a title='<?php echo loca('INSTALL_EXTERNAL_LINKS_TIP');?>'><?php echo $info;?></a></td></tr>
 <tr><td><?php echo loca('MENU_BOARD');?></td><td><input type=text class='text' name='ext_board'></td></tr>

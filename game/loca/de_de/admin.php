@@ -266,6 +266,7 @@ $LOCA["de"]["ADM_UNI_DAYS"] = "Tage";
 $LOCA["de"]["ADM_UNI_NEWS_SHOW_UNTIL"] = "Zeigen Sie die Nachrichten bis";
 $LOCA["de"]["ADM_UNI_NEWS_REMOVE"] = "entfernen";
 $LOCA["de"]["ADM_UNI_LANG"] = "Sprache der Schnittstelle";
+$LOCA["de"]["ADM_UNI_FORCE_LANG"] = "Gezwungen, die Sprache des Universums zu verwenden";
 $LOCA["de"]["ADM_UNI_FREEZE"] = "Das Universum anhalten";
 $LOCA["de"]["ADM_UNI_FREEZE_INFO"] = "Wenn das Universum pausiert ist, werden keine Ereignisse ausgelöst (die Warteschlange wird angehalten). Nachdem die Pause aufgehoben wurde, werden alle abgeschlossenen Ereignisse in der Reihenfolge der Warteschlange ausgeführt. Alle aktiven Spieler werden in den Urlaubsmodus gezwungen.";
 $LOCA["de"]["ADM_UNI_SAVE"] = "Speichern";

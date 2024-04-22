@@ -266,6 +266,7 @@ $LOCA["en"]["ADM_UNI_DAYS"] = "days";
 $LOCA["en"]["ADM_UNI_NEWS_SHOW_UNTIL"] = "Show the news until";
 $LOCA["en"]["ADM_UNI_NEWS_REMOVE"] = "remove";
 $LOCA["en"]["ADM_UNI_LANG"] = "Interface language";
+$LOCA["en"]["ADM_UNI_FORCE_LANG"] = "Forced to use the language of the universe";
 $LOCA["en"]["ADM_UNI_FREEZE"] = "Pause the universe";
 $LOCA["en"]["ADM_UNI_FREEZE_INFO"] = "When the universe is paused, no events will be triggered (the queue will be stopped). After the pause is removed, all completed events will be executed in the queue order. All active players are forced into vacation mode.";
 $LOCA["en"]["ADM_UNI_SAVE"] = "Save";

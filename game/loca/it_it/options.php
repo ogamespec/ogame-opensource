@@ -77,4 +77,11 @@ $LOCA["it"]["OPTIONS_ERR_EMAIL_64"] = "Massimo 64 caratteri per indirizzo email.
 $LOCA["it"]["OPTIONS_ERR_NAME_3_20"] = "Il nome giocatore deve contenere dai 3 ai 20 caratteri.";
 $LOCA["it"]["OPTIONS_ERR_EXISTNAME"] = "Nome utente gi&agrave; in uso.";
 
+$LOCA["it"]["OPTIONS_ACTIVATE_EMAIL"] = "Utilizzare l'indirizzo inserito";
+$LOCA["it"]["OPTIONS_ACTIVATE_INFO"] = "Il tuo account di gioco non è ancora stato attivato. Qui puoi ordinare un'e-mail con un link di attivazione.";
+$LOCA["it"]["OPTIONS_ACTIVATE_SUBMIT"] = "Link di attivazione dell'ordine";
+
+$LOCA["it"]["OPTIONS_FEED"] = "Newsfeed";
+$LOCA["it"]["OPTIONS_FEED_ACTIVATE"] = "Attivare";
+
 ?>

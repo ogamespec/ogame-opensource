@@ -1,6 +1,6 @@
 <?php
 
-// Настройки.
+// Settings.
 
 // Es wurden bereits 2 E-Mails an Dich geschickt. Heute ist kein weiterer E-Mail-Versand möglich, bitte versuch es morgen nochmal.
 
@@ -47,9 +47,7 @@ function isValidEmail($email){
 
 PageHeader ("options");
 
-$unitab = LoadUniverse ();
-$speed = $unitab['speed'];
-
+$speed = $GlobalUni['speed'];
 $prem = PremiumStatus ($GlobalUser);
 
 BeginContent ();
@@ -59,7 +57,7 @@ BeginContent ();
 
 <?php
 
-    // Выключить Режим Отпуска.
+    // Disable Vacation Mode.
     if ( method () === "POST") {
 
         if ( time () >= $GlobalUser['vacation_until'] && key_exists('urlaub_aus', $_POST) && $_POST['urlaub_aus'] === "on" && $GlobalUser['vacation'] )
@@ -72,16 +70,16 @@ BeginContent ();
     }
 
     // ======================================================================================
-    // Аккаунт неактивирован.
+    // The account is not activated.
 
     if ( $GlobalUser['validated'] == 0 ) {
 
-        // Обработать POST-запрос.
+        // Process POST request.
         if ( method () === "POST") {
 
             $ip = $_SERVER['REMOTE_ADDR'];
 
-            if ( key_exists ( "validate", $_POST ) ) {    // Заказать активационную ссылку.
+            if ( key_exists ( "validate", $_POST ) ) {    // Request an activation link.
                 if ( !localhost($ip) ) SendChangeMail ( $GlobalUser['oname'], $GlobalUser['email'], $GlobalUser['pemail'], $GlobalUser['validatemd'] );
                 $OptionsMessage = loca ("OPTIONS_MSG_VALIDATE");
             }
@@ -110,7 +108,7 @@ BeginContent ();
         <input type="hidden" name="design"     value='on' /> 
     <tr><td class="c" colspan ="2"><?php echo loca("OPTIONS_USER");?></td></tr> 
     <tr> 
-        <th><a title="<?php echo loca("Этот адрес можно в любое время изменить. Через 7 дней без изменений он станет постоянным.");?>"><?php echo loca("OPTIONS_USER_EMAIL");?></a></th> 
+        <th><a title="<?php echo loca("OPTIONS_USER_EMAIL_TIP");?>"><?php echo loca("OPTIONS_USER_EMAIL");?></a></th> 
         <th><input type="text" name="db_email" maxlength="100" size="20" value="<?php echo $GlobalUser['email'];?>" /></th> 
     </tr> 
     <tr> 
@@ -118,15 +116,15 @@ BeginContent ();
         <th><input type="password" name="db_password" size ="20" value="" /></th> 
     </tr> 
     <tr> 
-        <th colspan=2><input type="submit" value="Используйте введённый адрес" /></th> 
+        <th colspan=2><input type="submit" value="<?=loca("OPTIONS_ACTIVATE_EMAIL");?>" /></th> 
     </tr> 
     </form> 
     <form action="index.php?page=options&session=<?php echo $session;?>" method="POST" > 
     <input type=hidden name="validate" value="1"> 
     <tr> 
         <th colspan=2> 
-                    <p style="color:#ff0000;padding-top:10px;padding-bottom:5px;">Ваш игровой акаунт ещё не активирован. Тут Вы можете заказать письмо с активационной ссылкой.</p> 
-            <input type="submit" value="Заказать активационную ссылку" /> 
+                    <p style="color:#ff0000;padding-top:10px;padding-bottom:5px;"><?=loca("OPTIONS_ACTIVATE_INFO");?></p> 
+            <input type="submit" value="<?=loca("OPTIONS_ACTIVATE_SUBMIT");?>" /> 
         </th> 
     </tr> 
    </form> 
@@ -134,7 +132,7 @@ BeginContent ();
 
 <?php
     // ======================================================================================
-    // Режим отпуска включен.
+    // Vacation mode is enabled.
 
     }
     else if ( $GlobalUser['vacation'] )
@@ -179,16 +177,16 @@ BeginContent ();
 
 <?php
     // ======================================================================================
-    // Обычное меню.
+    // Regular menu.
 
     }
     else
     {
 
-        // Обработать POST-запрос.
+        // Process POST request.
         if ( method () === "POST" && !key_exists ( 'urlaub_aus', $_POST) ) {
 
-            if ( $GlobalUser['name_changed'] == 0 && $_POST['db_character'] !== $GlobalUser['oname'] ) {        // Сменить имя.
+            if ( $GlobalUser['name_changed'] == 0 && $_POST['db_character'] !== $GlobalUser['oname'] ) {        // Change the name.
                 $forbidden = explode ( ",", "hitler, fick, adolf, legor, aleena, ogame, mainman, fishware, osama, bin laden, stalin, goebbels, drecksjude, saddam, space, ringkeeper, administration" );
                 if ( IsUserExist ( $_POST['db_character'] )) $OptionsError = loca ("OPTIONS_ERR_EXISTNAME");
                 else if ( !CanChangeName ($GlobalUser['player_id']) ) $OptionsError = loca ("OPTIONS_ERR_NAME_WEEK");
@@ -209,7 +207,7 @@ BeginContent ();
                 }
             }
 
-            else if ( $_POST['newpass1'] !== "" ) {        // Сменить пароль
+            else if ( $_POST['newpass1'] !== "" ) {        // Change password
 
                 if ( $_POST['newpass1'] !== $_POST['newpass2'] ) $OptionsError = loca ("OPTIONS_ERR_NEWPASS");
                 else if ( !preg_match ( "/^[_a-zA-Z0-9]+$/", $_POST['newpass1'] ) ) $OptionsError = loca ("OPTIONS_ERR_PASS_SPECIAL");
@@ -226,7 +224,7 @@ BeginContent ();
                 }
             }
 
-            else if ( $_POST['db_email'] !== $GlobalUser['pemail'] && $_POST['db_email'] !== "" ) {        // Сменить адрес
+            else if ( $_POST['db_email'] !== $GlobalUser['pemail'] && $_POST['db_email'] !== "" ) {        // Change email address
                 $email = $_POST['db_email'];
                 if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $OptionsError = loca ("OPTIONS_ERR_NEEDPASS");
                 else if ( !isValidEmail ($email) ) $OptionsError = loca ("OPTIONS_ERR_EMAIL");
@@ -245,7 +243,7 @@ BeginContent ();
                 }
             }
 
-            if ( key_exists('urlaubs_modus', $_POST) && $_POST['urlaubs_modus'] === "on" && $GlobalUser['vacation'] == 0 ) {        // Включить режим отпуска
+            if ( key_exists('urlaubs_modus', $_POST) && $_POST['urlaubs_modus'] === "on" && $GlobalUser['vacation'] == 0 ) {        // Activate vacation mode
                 $vacation_min = max ( 12*60*60, (2 * 24 * 60 * 60) / $speed);    // не менее 12 часов
                 $vacation_until = time() + $vacation_min;
 
@@ -261,7 +259,7 @@ BeginContent ();
                 else $OptionsError = loca ("OPTIONS_ERR_VM");
             }
 
-            if ( key_exists('db_deaktjava', $_POST) && $_POST['db_deaktjava'] === "on" && $GlobalUser['disable'] == 0 ) {        // Поставить аккаунт на удаление
+            if ( key_exists('db_deaktjava', $_POST) && $_POST['db_deaktjava'] === "on" && $GlobalUser['disable'] == 0 ) {        // Set the account for deletion
                 $disable_until = time() + (7 * 24 * 60 * 60);
 
                 $query = "UPDATE ".$db_prefix."users SET disable=1,disable_until=$disable_until WHERE player_id=".intval($GlobalUser['player_id']);
@@ -277,12 +275,16 @@ BeginContent ();
                 $GlobalUser['disable_until'] = 0;
             }
 
-            // Сохранить путь к скину + галочка показывать/выключить скин.
+            // Save skin path + checkbox show/disable skin.
             // TODO : OPTIONS_MSG_SKIN
             ChangeSkinPath ( $GlobalUser['player_id'], $_POST['dpath'] );
             EnableSkin ( $GlobalUser['player_id'], ($_POST['design']==="on"?1:0) );
 
             $lang = substr ( addslashes($_POST['lang']), 0, 2 );
+            // If the admin has forbidden users to choose a language, then force set them to the Universe language.
+            if ($GlobalUni['force_lang']) {
+                $lang = $GlobalUni['lang'];
+            }
             $sortby = min ( max(0, intval($_POST['settings_sort'])), 2);
             $sortorder = min ( max(0, intval($_POST['settings_order'])), 1);
             $deactip = (int) key_exists ( 'noipcheck', $_POST );
@@ -299,7 +301,7 @@ BeginContent ();
             $GlobalUser['skin'] = $_POST['dpath'];
             $GlobalUser['useskin'] = ($_POST['design']==="on"?1:0);
 
-            // Флаги -- обрабатывать только с включенным Командиром
+            // Flags -- process only with Commander enabled
             if ( $prem['commander'] ) {
                 
                 $flags = $GlobalUser['flags'];
@@ -308,7 +310,7 @@ BeginContent ();
                 $settings_bud = (key_exists('settings_bud', $_POST) && $_POST['settings_bud']==="on");
                 $settings_mis = (key_exists('settings_mis', $_POST) && $_POST['settings_mis']==="on");
                 $settings_rep = (key_exists('settings_rep', $_POST) && $_POST['settings_rep']==="on");
-                $settings_folders = (key_exists('settings_folders', $_POST) && $_POST['settings_folders']==="on");  // 1: не использовать папки.
+                $settings_folders = (key_exists('settings_folders', $_POST) && $_POST['settings_folders']==="on");  // 1: don't use folders.
                 if ($settings_esp) $flags |= USER_FLAG_SHOW_ESPIONAGE_BUTTON;
                 else $flags &= ~USER_FLAG_SHOW_ESPIONAGE_BUTTON;
                 if ($settings_wri) $flags |= USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON;
@@ -331,7 +333,7 @@ BeginContent ();
 ?>
 
  <form action="index.php?page=options&session=<?php echo $session;?>&mode=change" method="POST" >
-     <tr><td class="c" colspan ="2">Данные пользователя</td></tr>
+     <tr><td class="c" colspan ="2"><?=loca("OPTIONS_USER");?></td></tr>
 <tr>
 <?php
     if ( $GlobalUser['name_changed'] )
@@ -381,6 +383,10 @@ BeginContent ();
   </tr>
   <tr>
 
+<?php
+    // Language selection is only activated if the admin has allowed it in the Universe settings.
+    if (!$GlobalUni['force_lang']) {
+?>
    <th><?php echo loca("OPTIONS_GENERAL_LANG");?></th>
    <th>
    <select name="lang">
@@ -392,6 +398,9 @@ BeginContent ();
    </select>
    </th>
   </tr>
+<?php
+    }
+?>
 
    <th><?php echo loca("OPTIONS_GENERAL_ORDER");?></th>
    <th>
@@ -417,7 +426,7 @@ BeginContent ();
   <th><?php echo loca("OPTIONS_GENERAL_SKINPATH");?><br /> <a href="<?=hostname();?>download/" target="_blank"><?php echo loca("OPTIONS_GENERAL_DOWNLOAD");?></a></th>
    <th><input type=text name="dpath" maxlength="80" size="40" value="<?php echo $GlobalUser['skin'];?>" /> <br />
   <?php
-            // Если путь к скину пустой выдать список доступных скинов на сервере графики.
+            // If the skin path is empty, output a list of available skins on the graphics server.
             if ( $GlobalUser['skin'] === "" ) {
     ?>
   <select name="dpath" size="1" >
@@ -496,7 +505,7 @@ BeginContent ();
   </tr>
 
 <?php
-    if ( $prem['commander'] )    // Дополнительные настройки Командира
+    if ( $prem['commander'] )    // Additional Commander settings
     {
 ?>
   </tr>
@@ -535,10 +544,10 @@ BeginContent ();
 </tr>
 
 <tr>
-    <td class="c" colspan="2"><font color='FF8900'>Newsfeed</font></td>
+    <td class="c" colspan="2"><font color='FF8900'><?=loca("OPTIONS_FEED");?></font></td>
 </tr>
 <tr>
-    <th>Активировать<input type=hidden name="feed_submit" value="1"></th>
+    <th><?=loca("OPTIONS_FEED_ACTIVATE");?><input type=hidden name="feed_submit" value="1"></th>
     <th><input type="checkbox" name="feed_activated"  /></th>
 </tr>
 <?php

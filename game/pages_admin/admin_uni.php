@@ -39,6 +39,7 @@ function Admin_Uni ()
         $moons = ($_POST['moons'] === "on") ? 1 : 0;
         $freeze = (key_exists ('freeze', $_POST) && $_POST['freeze'] === "on") ? 1 : 0;
         $php_battle = (key_exists ('php_battle', $_POST) && $_POST['php_battle'] === "on") ? 1 : 0;
+        $force_lang = (key_exists ('force_lang', $_POST) && $_POST['force_lang'] === "on") ? 1 : 0;
 
         SetUniParam ( 
             $_POST['speed'], 
@@ -55,7 +56,8 @@ function Admin_Uni ()
             $freeze, 
             $_POST['lang'],
             $_POST['battle_engine'],
-            $php_battle );
+            $php_battle,
+            $force_lang );
 
         // Set external links. If the link is empty - the menu item will be missing.
 
@@ -194,6 +196,7 @@ function Admin_Uni ()
 ?>
    </select>
 </th></tr>
+<tr><th><?php echo loca("ADM_UNI_FORCE_LANG");?></th><th><input type="checkbox" name="force_lang"  <?php echo UniIsChecked($unitab['force_lang']);?> /></th></tr>
 
 <tr><th><?php echo loca("MENU_BOARD");?></th><th><input type="text" name="ext_board" maxlength="99" size="20" value="<?php echo $unitab['ext_board'];?>" /></th></tr>
 <tr><th><?php echo loca("MENU_DISCORD");?></th><th><input type="text" name="ext_discord" maxlength="99" size="20" value="<?php echo $unitab['ext_discord'];?>" /></th></tr>
