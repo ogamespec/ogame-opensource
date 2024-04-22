@@ -84,10 +84,12 @@ const USER_SPACE = 99999;           // A technical account that owns global even
 
 const USER_NOOB_LIMIT = 5000;           // Number of points for a newbie
 
+// Very limited cache implementation: The cache is only kept for the lifetime of the script.
+// Attention! Using caches in the game introduces a significant probability of obscure errors ("Heisenbugs"), so it is NOT recommended to use persistent cache (which is kept between HTTP requests)
 $UserCache = array ();
 $PremiumCache = array ();
 
-// Исправленная версия date
+// Corrected version of date
 function fixed_date ( $fmt, $timestamp )
 {
     $date = new DateTime ('@' . $timestamp);
