@@ -207,55 +207,52 @@ function CanBuild ($user, $planet, $id, $lvl, $destroy, $enqueue=false)
     $res = BuildPrice ( $id, $lvl );
     $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
 
-    $text = '';
-    {
-        $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
+    $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
 
-        $result = GetResearchQueue ( $user['player_id'] );
-        $resqueue = dbarray ($result);
-        $reslab_operating = ($resqueue != null);
-        $result = GetShipyardQueue ( $planet['planet_id'] );
-        $shipqueue = dbarray ($result);
-        $shipyard_operating = ($shipqueue != null);
+    $result = GetResearchQueue ( $user['player_id'] );
+    $resqueue = dbarray ($result);
+    $reslab_operating = ($resqueue != null);
+    $result = GetShipyardQueue ( $planet['planet_id'] );
+    $shipqueue = dbarray ($result);
+    $shipyard_operating = ($shipqueue != null);
 
-        loca_add ("build", $user['lang']);
+    loca_add ("build", $user['lang']);
 
-        if ( $GlobalUni['freeze'] ) return loca_lang("BUILD_ERROR_UNI_FREEZE", $user['lang']);
+    if ( $GlobalUni['freeze'] ) return loca_lang("BUILD_ERROR_UNI_FREEZE", $user['lang']);
 
-        // Not a building
-        if ( ! in_array ( $id, $buildmap ) ) $text = loca_lang("BUILD_ERROR_INVALID_ID", $user['lang']);
+    // Not a building
+    if ( ! in_array ( $id, $buildmap ) ) return loca_lang("BUILD_ERROR_INVALID_ID", $user['lang']);
 
-        // You can't build in vacation mode
-        else if ( $user['vacation'] ) $text = loca_lang("BUILD_ERROR_VACATION_MODE", $user['lang']);
+    // You can't build in vacation mode
+    else if ( $user['vacation'] ) return loca_lang("BUILD_ERROR_VACATION_MODE", $user['lang']);
 
-        // You can't build on a foreign planet
-        else if ( $planet['owner_id'] != $user['player_id'] ) $text = loca_lang("BUILD_ERROR_INVALID_PLANET", $user['lang']);
+    // You can't build on a foreign planet
+    else if ( $planet['owner_id'] != $user['player_id'] ) return loca_lang("BUILD_ERROR_INVALID_PLANET", $user['lang']);
 
-        // Lunar buildings can't be built on a planet, whereas planetary buildings can't be built on a moon
-        else if ( $planet['type'] != 0 && ($id == 41 || $id == 42 || $id == 43) ) $text = loca_lang("BUILD_ERROR_INVALID_PTYPE", $user['lang']);
-        else if ( $planet['type'] == 0 && ( $id == 1 || $id == 2 || $id == 3 || $id == 4 || $id == 12 || $id == 15 || $id == 22 || $id == 23 || $id == 24 || $id == 31 || $id == 33 || $id == 44 ) ) $text = loca_lang("BUILD_ERROR_INVALID_PTYPE", $user['lang']);
+    // Lunar buildings can't be built on a planet, whereas planetary buildings can't be built on a moon
+    else if ( $planet['type'] != 0 && ($id == 41 || $id == 42 || $id == 43) ) return loca_lang("BUILD_ERROR_INVALID_PTYPE", $user['lang']);
+    else if ( $planet['type'] == 0 && ( $id == 1 || $id == 2 || $id == 3 || $id == 4 || $id == 12 || $id == 15 || $id == 22 || $id == 23 || $id == 24 || $id == 31 || $id == 33 || $id == 44 ) ) return loca_lang("BUILD_ERROR_INVALID_PTYPE", $user['lang']);
 
-        // Check the number of fields
-        else if ( $planet['fields'] >= $planet['maxfields'] && !$destroy ) $text = loca_lang("BUILD_ERROR_NO_SPACE", $user['lang']);
+    // Check the number of fields
+    else if ( $planet['fields'] >= $planet['maxfields'] && !$destroy ) return loca_lang("BUILD_ERROR_NO_SPACE", $user['lang']);
 
-        // Research or construction at the shipyard is underway
-        else if ( $id == 31 && $reslab_operating ) $text = loca_lang("BUILD_ERROR_RESEARCH_ACTIVE", $user['lang']);
-        else if ( ($id == 15 || $id == 21) && $shipyard_operating ) $text = loca_lang("BUILD_ERROR_SHIPYARD_ACTIVE", $user['lang']);
+    // Research or construction at the shipyard is underway
+    else if ( $id == 31 && $reslab_operating ) return loca_lang("BUILD_ERROR_RESEARCH_ACTIVE", $user['lang']);
+    else if ( ($id == 15 || $id == 21) && $shipyard_operating ) return loca_lang("BUILD_ERROR_SHIPYARD_ACTIVE", $user['lang']);
 
-        // Check the available amount of resources on the planet
-        else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) && !$enqueue ) $text = loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
+    // Check the available amount of resources on the planet
+    else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) && !$enqueue ) return loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
 
-        // Check available technologies.
-        else if ( !BuildMeetRequirement ( $user, $planet, $id ) ) $text = loca_lang("BUILD_ERROR_REQUIREMENTS", $user['lang']);
-    }
+    // Check available technologies.
+    else if ( !BuildMeetRequirement ( $user, $planet, $id ) ) return loca_lang("BUILD_ERROR_REQUIREMENTS", $user['lang']);
 
     if ( $destroy )
     {
-        if ( $id == 33 || $id == 41 ) $text = loca_lang("BUILD_ERROR_CANT_DEMOLISH", $user['lang']);
-        else if ( $planet["b".$id] <= 0 ) $text = loca_lang("BUILD_ERROR_NO_SUCH_BUILDING", $user['lang']);
+        if ( $id == 33 || $id == 41 ) return loca_lang("BUILD_ERROR_CANT_DEMOLISH", $user['lang']);
+        else if ( $planet["b".$id] <= 0 ) return loca_lang("BUILD_ERROR_NO_SUCH_BUILDING", $user['lang']);
     }
 
-    return $text;
+    return "";
 }
 
 // Start the next construction
