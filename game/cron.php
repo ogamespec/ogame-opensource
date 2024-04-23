@@ -13,6 +13,7 @@ if ( file_exists ("config.php"))
 
     InitDB();
 
+    require_once "id.php";
     require_once "loca.php";
     require_once "bbcode.php";
     require_once "uni.php";

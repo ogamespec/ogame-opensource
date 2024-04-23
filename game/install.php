@@ -11,6 +11,7 @@ error_reporting(E_ALL);
 require_once "db.php";
 require_once "utils.php";
 require_once "loca.php";
+require_once "id.php";
 require_once "user.php";
 require_once "planet.php";
 

@@ -27,6 +27,7 @@ function Admin_Checksum ()
         'expedition.php', 
         'fleet.php', 
         'galaxytool.php', 
+        'id.php', 
         'index.php', 
         'install.php', 
         'install_tabs.php', 
