@@ -1,6 +1,6 @@
 <?php
 
-// Управление альянсом.
+// Alliance Management.
 
 function as_sel ($option, $value)
 {
@@ -16,7 +16,7 @@ function PageAlly_Settings ()
     global $GlobalUser;
     global $AllianzenError;
 
-    // Ограничение на количество символов текстов.
+    // Limit the number of characters of texts.
     $MAXTEXT = 5000;
 
     $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
@@ -30,7 +30,7 @@ function PageAlly_Settings ()
 
     if ( method () === "POST" )
     {
-        if ( $_GET['a'] == 11 && $_GET['d'] == 1 )        // Изменить тексты
+        if ( $_GET['a'] == 11 && $_GET['d'] == 1 )        // Change texts
         {
             $ally_id = $ally['ally_id'];
 
@@ -49,7 +49,7 @@ function PageAlly_Settings ()
             $ally = LoadAlly ($ally['ally_id']);
         }
 
-        if ( $_GET['a'] == 11 && $_GET['d'] == 2 )        // Изменить установки
+        if ( $_GET['a'] == 11 && $_GET['d'] == 2 )        // Change settings
         {
             $ally_id = $ally['ally_id'];
             $query = "UPDATE ".$db_prefix."ally SET open = " . (intval($_POST['bew']) == 0 ? 1 : 0);
@@ -58,7 +58,7 @@ function PageAlly_Settings ()
             $query .= " WHERE ally_id = $ally_id";
             dbquery ($query);
 
-            if ($_POST['fname'] !== "") {    // Название ранга основателя
+            if ($_POST['fname'] !== "") {    // Name of the founder's rank
                 if ( !preg_match ("/^[a-zA-Z0-9\.\_\- ]+$/", $_POST['fname'] ) ) $AllianzenError = "<center>\n".loca("ALLY_RANK_ERROR_SPECIAL_CHARS")."<br></center>";
                 else {
                     $query = "UPDATE ".$db_prefix."allyranks SET name = '".$_POST['fname']."' WHERE ally_id = $ally_id AND rank_id = 0";

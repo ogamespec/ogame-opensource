@@ -1,8 +1,10 @@
 <?php
 
-// Управление рангами пользователей.
+// User Rank Management.
 
-// Разрешенные символы в названии ранга: [a-zA-Z0-9_-. ]   (+пробел)
+// Allowed characters in the rank name: [a-zA-Z0-9_-. ] (+space).
+
+// Each alliance has 2 predetermined ranks that you cannot do anything with: Founder (all rights) and Newbie (no rights)
 
 function PageAlly_Ranks ()
 {
@@ -20,19 +22,19 @@ function PageAlly_Ranks ()
 
     if ( method() === "POST" && $_GET['a'] == 15 ) 
     {
-        if ( key_exists ('newrangname', $_POST) )       // создать ранг
+        if ( key_exists ('newrangname', $_POST) )       // create a rank
         {
             if ( !preg_match ("/^[a-zA-Z0-9\.\_\- ]+$/", $_POST['newrangname'] ) ) $AllianzenError = "<center>\n".loca("ALLY_RANK_ERROR_SPECIAL_CHARS")."<br></center>";
             else AddRank ( $ally['ally_id'], $_POST['newrangname'] );
         }
-        else                                                              // изменить ранги
+        else                                                              // change ranks
         {
             $result = EnumRanks ( $ally['ally_id'] );
             $rows = dbrows ($result);
             while ($rows--)
             {
                 $rank = dbarray ($result);
-                if ( $rank['rank_id'] == 0 || $rank['rank_id'] == 1 ) continue;    // Основателя и Новичка не меняем.
+                if ( $rank['rank_id'] == 0 || $rank['rank_id'] == 1 ) continue;    // We're not changing the Founder or the Newbie ranks.
                 $mask = $rank['rights'];
                 for ($i=0; $i<9; $i++)
                 {
@@ -45,10 +47,10 @@ function PageAlly_Ranks ()
         }
     }
 
-    if ( method () === "GET" && $_GET['a'] == 15 )    // удалить ранг
+    if ( method () === "GET" && $_GET['a'] == 15 )    // delete rank
     {
         $rank_id = intval($_GET['d']);
-        if ( ! ($rank_id == 0 || $rank_id == 1)  )        // Основателя и Новичка не удаляем.
+        if ( ! ($rank_id == 0 || $rank_id == 1)  )        // Founder and Newbie ranks will not be deleted.
         {
             RemoveRank ( $ally['ally_id'], $rank_id );
         }
@@ -100,7 +102,7 @@ function PageAlly_Ranks ()
     while ($rows--)
     {
         $rank = dbarray ($result);
-        if ( $rank['rank_id'] == 0 || $rank['rank_id'] == 1 ) continue;    // Основателя и Новичка не показываем.
+        if ( $rank['rank_id'] == 0 || $rank['rank_id'] == 1 ) continue;    // We don't show the Founder and the Newbie ranks.
         echo " <tr>\n";
         echo "  <th><a href=\"index.php?page=allianzen&session=$session&a=15&d=".$rank['rank_id']."\"><img src=\"".UserSkin()."pic/abort.gif\" alt=\"".loca("ALLY_RANK_DELETE")."\" border=\"0\"></a></th>\n";
         echo "  <th>&nbsp;".$rank['name']."&nbsp;</th>\n";

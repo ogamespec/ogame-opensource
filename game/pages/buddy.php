@@ -1,6 +1,6 @@
 <?php
 
-// Меню `Друзья`
+// Menu `Buddies`
 
 // TODO: BUDDY_LIMIT
 
@@ -20,9 +20,9 @@ UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
 // ***********************************************************
-// Страницы меню.
+// Menu pages.
 
-// Главная страница
+// Main page
 function Buddy_Home ()
 {
     global $GlobalUser;
@@ -84,7 +84,7 @@ function Buddy_Home ()
     echo "<br><br><br><br>\n";
 }
 
-// Запросы (5)
+// Requests (5)
 function Buddy_Income ()
 {
     global $GlobalUser;
@@ -148,7 +148,7 @@ function Buddy_Income ()
 <?php
 }
 
-// Ваши запросы (6)
+// Your requests (6)
 function Buddy_Outcome ()
 {
     global $GlobalUser;
@@ -199,7 +199,7 @@ function Buddy_Outcome ()
     echo "</table><br><br><br><br>\n";
 }
 
-// Отправить запрос (7)
+// Send request (7)
 function Buddy_Request ()
 {
     global $GlobalUser;
@@ -222,7 +222,7 @@ PageHeader ("buddy");
 
 BeginContent();
 
-if ( key_exists ('action', $_GET) && $_GET['action'] == 1 && $_GET['buddy_id'])    // Добавить свою заявку.
+if ( key_exists ('action', $_GET) && $_GET['action'] == 1 && $_GET['buddy_id'])    // Add your application.
 {
     $from = $GlobalUser['player_id'];
     $to = intval ($_GET['buddy_id']);
@@ -234,7 +234,7 @@ if ( key_exists ('action', $_GET) && $_GET['action'] == 1 && $_GET['buddy_id']) 
     }
     Buddy_Home ();
 }
-else if ( key_exists ('action', $_GET) && $_GET['action'] == 2 && $_GET['buddy_id'])    // Принять запрос
+else if ( key_exists ('action', $_GET) && $_GET['action'] == 2 && $_GET['buddy_id'])    // Accept the request
 {
     $buddy_id = intval ($_GET['buddy_id']);
     $buddy = LoadBuddy ($buddy_id);
@@ -242,7 +242,7 @@ else if ( key_exists ('action', $_GET) && $_GET['action'] == 2 && $_GET['buddy_i
     SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va(loca("BUDDY_MSG_ADDED"), $GlobalUser['oname']), MTYP_PM);
     Buddy_Income ();
 }
-else if ( key_exists ('action', $_GET) && $_GET['action'] == 3 && $_GET['buddy_id'])    // Отклонить запрос
+else if ( key_exists ('action', $_GET) && $_GET['action'] == 3 && $_GET['buddy_id'])    // Reject the request
 {
     $buddy_id = intval ($_GET['buddy_id']);
     $buddy = LoadBuddy ($buddy_id);
@@ -250,25 +250,25 @@ else if ( key_exists ('action', $_GET) && $_GET['action'] == 3 && $_GET['buddy_i
     SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va(loca("BUDDY_MSG_DECLINED"), $GlobalUser['oname']), MTYP_PM);
     Buddy_Income ();
 }
-else if ( key_exists ('action', $_GET) && $_GET['action'] == 4 && $_GET['buddy_id'])    // Отозвать свой запрос.
+else if ( key_exists ('action', $_GET) && $_GET['action'] == 4 && $_GET['buddy_id'])    // Withdraw your request.
 {
     $buddy_id = intval ($_GET['buddy_id']);
     $buddy = LoadBuddy ($buddy_id);
-    if ( $buddy['request_from'] == $GlobalUser['player_id'] )    // только свои
+    if ( $buddy['request_from'] == $GlobalUser['player_id'] )    // only your own
     {
         RemoveBuddy ($buddy_id);
         SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va (loca("BUDDY_MSG_RECALLED"), $GlobalUser['oname']), MTYP_PM );
     }
     Buddy_Outcome ();
 }
-else if ( key_exists ('action', $_GET) && $_GET['action'] == 5 ) Buddy_Income ();    // Чужие запросы
-else if ( key_exists ('action', $_GET) && $_GET['action'] == 6 ) Buddy_Outcome ();    // Свои запросы
-else if ( key_exists ('action', $_GET) && $_GET['action'] == 7 ) Buddy_Request ();    // Окно отправки заявки.
-else if ( key_exists ('action', $_GET) && $_GET['action'] == 8 && $_GET['buddy_id'])    // Удалить из списка
+else if ( key_exists ('action', $_GET) && $_GET['action'] == 5 ) Buddy_Income ();    // Other people's requests
+else if ( key_exists ('action', $_GET) && $_GET['action'] == 6 ) Buddy_Outcome ();    // Your requests
+else if ( key_exists ('action', $_GET) && $_GET['action'] == 7 ) Buddy_Request ();    // Application submission window.
+else if ( key_exists ('action', $_GET) && $_GET['action'] == 8 && $_GET['buddy_id'])    // Remove from the list
 {
     $buddy_id = intval ($_GET['buddy_id']);
     $buddy = LoadBuddy ($buddy_id);
-    if ($buddy['request_from'] == $GlobalUser['player_id'] )    // только свои
+    if ($buddy['request_from'] == $GlobalUser['player_id'] )    // only your own
     {
         RemoveBuddy ($buddy_id);
         SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va (loca("BUDDY_MSG_DELETED"), $GlobalUser['oname']), MTYP_PM );

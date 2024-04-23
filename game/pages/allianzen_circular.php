@@ -1,6 +1,6 @@
 <?php
 
-// Общее сообщение.
+// Circular Message.
 
 function AllyPage_CircularMessage ()
 {
@@ -10,7 +10,7 @@ function AllyPage_CircularMessage ()
     global $ally;
     global $AllianzenError;
 
-    // Ограничение на количество символов.
+    // Character limit.
     $MAXCHARS = 2000;
 
     if ( method () === "POST" && key_exists ('r', $_POST) )

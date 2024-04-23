@@ -1,6 +1,6 @@
 <?php
 
-// Главная страница.
+// Home Page.
 
 function AllyPage_Home ()
 {
@@ -68,7 +68,7 @@ function AllyPage_Home ()
 <tr><td class=c colspan=2><?=loca("ALLY_MAIN_INTTEXT");?></th></tr><tr><th colspan=2 height=100><?=bb($ally['inttext']);?></th></tr>
 </table><br>
 <?php
-    if ( $GlobalUser['allyrank'] != 0 )    // Не показывать Основателю диалог выхода из альянса.
+    if ( $GlobalUser['allyrank'] != 0 )    // Do not show the Founder the dialog of leaving the alliance.
     {
 ?>
 <table width=519>

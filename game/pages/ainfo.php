@@ -1,8 +1,8 @@
 <?php
 
-// Описание альянса.
+// Alliance Info.
 
-// Попытаться получить сессию из реферера.
+// Attempt to get a session from the referrer.
 //echo $_SERVER['HTTP_REFERER'];
 
 $uni = LoadUniverse();

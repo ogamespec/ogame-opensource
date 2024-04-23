@@ -1,6 +1,6 @@
 <?php
 
-// Подача заявки в альянс.
+// Applying for an alliance.
 
 $maxchars = 6000;
 
@@ -24,7 +24,7 @@ if ( ! $GlobalUser['validated'] ) Error ( loca("ALLY_APPU_NOT_ACTIVATED") );
 $ally_id = intval($_GET['allyid']);
 $ally = LoadAlly ($ally_id);
 
-// Загрузить образец заявки.
+// Load a sample of the application form.
 $template = "";
 if ( key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_TEMPLATE") || $ally['insertapp'])
 {
@@ -32,7 +32,7 @@ if ( key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_TEMPLA
     if ($template === "") $template = loca("ALLY_APPU_TEMPLATE_MISSING");
 }
 
-// Отправить заявление
+// Send an application
 if ( key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_SUBMIT") && $ally['open'] )
 {
     $text = $_POST['text'];
@@ -41,7 +41,7 @@ if ( key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_SUBMIT
 
     BeginContent ();
 ?>
-<h1>Регистрироваться</h1>
+<h1><?=loca("ALLY_APPU_REG");?></h1>
 <table width=519>
 <form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
 <tr><th colspan=2><?=loca("ALLY_APPU_SUBMITTED");?></th></tr>
@@ -54,7 +54,7 @@ if ( key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_SUBMIT
     die();
 }
 
-if ( $ally['open'] )        // Подать заявление
+if ( $ally['open'] )        // Submit an application
 {
     BeginContent ();
 ?>
@@ -69,7 +69,7 @@ if ( $ally['open'] )        // Подать заявление
 <?php
     EndContent ();
 }
-else            // Заявление подать невозможно, альянс закрыт
+else            // It's impossible to apply, the alliance is closed.
 {
     BeginContent ();
 ?>

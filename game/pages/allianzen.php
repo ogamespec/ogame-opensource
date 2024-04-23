@@ -1,6 +1,6 @@
 <?php
 
-// Меню `Мой альянс`
+// My Alliance Menu
 
 $SearchResults = "";
 $AllianzenError = "";
@@ -18,7 +18,7 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
-// Пользователь не состоит ни в каком альнсе, вывести меню для создания/поиска альянсов.
+// User is not a member of any alliance, display a menu to create/search for alliances.
 function AllyPage_NoAlly ()
 {
     echo "<table width=519>\n";
@@ -28,7 +28,7 @@ function AllyPage_NoAlly ()
     echo "</table><br><br><br><br><br>\n";
 }
 
-// Основать свой альянс.
+// Found your own alliance.
 function AllyPage_CreateAlly ($tag, $name)
 {
     echo "<form action=\"index.php?page=allianzen&session=".$_GET['session']."&a=1&weiter=1\" method=POST>\n";
@@ -39,7 +39,7 @@ function AllyPage_CreateAlly ($tag, $name)
     echo "<tr><th colspan=2><input type=submit value=\"".loca("ALLY_FOUND_SUBMIT")."\"></th></tr></table></form><br><br><br><br>\n";
 }
 
-// Искать альянсы.
+// Searching for alliances.
 function AllyPage_Search ($text, $results="")
 {
     echo "<table width=519>\n";
@@ -52,7 +52,7 @@ function AllyPage_Search ($text, $results="")
     echo "<br><br><br>\n";
 }
 
-// Вывести таблицу результатов.
+// Display a table of results.
 function AllyPage_SearchResult ($result)
 {
     global $SearchResults;
@@ -75,7 +75,7 @@ function AllyPage_SearchResult ($result)
     $SearchResults .= "</table><br>\n";
 }
 
-// Пользователь уже подал заявку в альянс.
+// The user has already applied to the alliance.
 function AllyPage_Already ($app_id)
 {
     global $session;
@@ -83,7 +83,7 @@ function AllyPage_Already ($app_id)
     $app = LoadApplication ($app_id);
     $ally = LoadAlly ( $app['ally_id'] );
 
-    if ( method () === "POST" )    // Отозвать заявление.
+    if ( method () === "POST" )    // Withdraw the application.
     {
         if ( key_exists ( 'bcancel', $_POST ) ) RemoveApplication ( $app['app_id'] );
     }
@@ -100,14 +100,14 @@ function AllyPage_Already ($app_id)
 
 // ***********************************************************
 
-// Обработать POST-запросы.
+// Handle POST requests.
 if ( $GlobalUser['ally_id'] == 0 && key_exists('a', $_GET) )
 {
-    // Назначение этого параметра неизвестно (weiter = more нем.)
+    // The purpose of this parameter is unknown (weiter = more German).
     $weiter = 0;
     if (key_exists('weiter', $_GET) && $_GET['weiter'] == 1) $weiter = 1;
 
-    if ( $_GET['a'] == 1 && $weiter == 1 )    // Основать альянс.
+    if ( $_GET['a'] == 1 && $weiter == 1 )    // Found an alliance.
     {
         $_POST['tag'] = str_replace ( "\"", "", $_POST['tag']);
         $_POST['tag'] = str_replace ( "'", "", $_POST['tag']);
@@ -134,7 +134,7 @@ if ( $GlobalUser['ally_id'] == 0 && key_exists('a', $_GET) )
             }
         }
     }
-    else if ( $_GET['a'] == 2 )        // Поиск альянса (не более 30 результатов)
+    else if ( $_GET['a'] == 2 )        // Search for an alliance (max 30 results)
     {
         if ( key_exists ('suchtext', $_POST) && $_POST['suchtext'] !== "" )
         {
@@ -197,9 +197,9 @@ else
         else if ( $_GET['a'] == 10 ) PageAlly_ChangeName ();
         else if ( $_GET['a'] == 11 ) PageAlly_Settings ();
         else if ( $_GET['a'] == 12 ) PageAlly_Dismiss ();
-        else if ( $_GET['a'] == 13 ) PageAlly_MemberSettings ();    // выгнать игрока
+        else if ( $_GET['a'] == 13 ) PageAlly_MemberSettings ();    // kick member
         else if ( $_GET['a'] == 15 ) PageAlly_Ranks ();
-        else if ( $_GET['a'] == 16 ) PageAlly_MemberSettings ();    // назначить ранг игроку
+        else if ( $_GET['a'] == 16 ) PageAlly_MemberSettings ();    // assign member rank
         else if ( $_GET['a'] == 17 ) AllyPage_CircularMessage ();
         else if ( $_GET['a'] == 18 ) AllyPage_Takeover ();
         else AllyPage_Home ();

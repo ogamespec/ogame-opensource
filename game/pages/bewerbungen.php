@@ -1,6 +1,6 @@
 <?php
 
-// Список заявок на вступление в альянс.
+// List of applications to join the alliance.
 
 $maxchars = 2000;
 
@@ -35,7 +35,7 @@ if ( method () === "POST" )
         $player_id = $app['player_id'];
         $newcomer = LoadUser ($player_id);
 
-        $result = EnumerateAlly ($ally_id);        // Разослать сообщения членам альянса и игроку о принятии.
+        $result = EnumerateAlly ($ally_id);        // Send out messages to alliance members and the player about the acceptance.
         $rows = dbrows ($result);
         while ($rows--)
         {
@@ -65,7 +65,7 @@ if ( method () === "POST" )
         $newcomer = LoadUser ($player_id);
         RemoveApplication ( $show );
 
-        // Выслать сообщение об отказе.
+        // Send a rejection message.
         loca_add ("ally", $newcomer['lang']);
         $reason = loca_lang("ALLY_MSG_APPLY_NO_REASON", $newcomer['lang']);
         if ( $_POST['text'] !== "" ) $reason = $_POST['text'];

@@ -1,6 +1,6 @@
 <?php
 
-// Верфь, Оборона и Исследования.
+// Shipyard, Defense, and Research.
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "techshort", $GlobalUser['lang'] );
@@ -15,28 +15,28 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
-// Обработка POST-запросов.
+// POST request processing.
 if ( method () === "POST" && !$GlobalUser['vacation'] )
 {
     foreach ( $_POST['fmenge'] as $gid=>$value )
     {
-        $result = GetShipyardQueue ( $aktplanet['planet_id'] );    // Ограничить количество заказов на верфи.
+        $result = GetShipyardQueue ( $aktplanet['planet_id'] );    // Limit the number of shipyard orders.
         if ( dbrows ($result)  >= 99 ) $value = 0;
 
         if ( $value < 0 ) $value = 0;
         if ( $value > 0 ) {
-            // Рассчитать количество (не больше, чем ресурсов на планете и не больше 999)
+            // Calculate amount (no more than the resources on the planet and no more than 999)
             if ( $value > 999 ) $value = 999;
 
             $res = ShipyardPrice ( $gid );
             $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
 
-            if ( $aktplanet['m'] < $m || $aktplanet['k'] < $k || $aktplanet['d'] < $d ) continue;    // недостаточно ресурсов для одной единицы
+            if ( $aktplanet['m'] < $m || $aktplanet['k'] < $k || $aktplanet['d'] < $d ) continue;    // insufficient resources for one unit
 
-            // Купола.
+            // Shield Domes.
             if ( $gid == 407 || $gid == 408 ) $value = 1;
 
-            // Ограничить количество ракет вместимостью шахты.
+            // Limit the number of missiles to the capacity of the silo.
             $free_space = $aktplanet['b44'] * 10 - ($aktplanet['d502'] + 2 * $aktplanet['d503']);
             if ( $gid == 502 ) $value = min ( $free_space, $value );
             if ( $gid == 503 ) $value = min ( floor ($free_space / 2), $value );
@@ -51,26 +51,26 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             if ( $value > $v ) $value = $v;
 
             AddShipyard ( $GlobalUser['player_id'], $aktplanet['planet_id'], intval ($gid), intval ($value) );
-            $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // обновить состояние планеты.
+            $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // update the planet's state.
         }
     }
 }
 
-// Обработка GET-запросов.
+// GET request processing.
 if ( method () === "GET"  && !$GlobalUser['vacation'] )
 {
 	if ( $_GET['mode'] === "Forschung" ) {
 		$result = GetResearchQueue ( $GlobalUser['player_id'] );
 		$resqueue = dbarray ($result);
-		if ( $resqueue == null )		// Исследование не ведется (запустить)
+		if ( $resqueue == null )		// The research is not in progress (run)
 		{
 			if ( key_exists ( 'bau', $_GET ) ) StartResearch ( $GlobalUser['player_id'], $aktplanet['planet_id'], intval ($_GET['bau']), $now );
-                  $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // обновить состояние планеты.
+                  $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // update the planet's state.
 		}
-		else	// Ведется исследования (отменить)
+		else	// Research in progress (cancel)
 		{
 			if ( key_exists ( 'unbau', $_GET ) ) StopResearch ( $GlobalUser['player_id'] );
-                  $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // обновить состояние планеты.
+                  $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // update the planet's state.
 		}
 	}
 }
@@ -91,7 +91,7 @@ echo "</script> \n";
 $unitab = LoadUniverse ( );
 $speed = $unitab['speed'];
 
-// ************************************************ Верфь ************************************************ 
+// ************************************************ Shipyard ************************************************ 
 
 $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
 
@@ -99,7 +99,7 @@ if ( $_GET['mode'] === "Flotte" )
 {
     $prem = PremiumStatus ($GlobalUser);
 
-    // Проверить не строится ли Верфь или Фабрика нанитов.
+    // Check to see if a Shipyard or Nanite Factory is under construction.
     $result = GetBuildQueue ( $aktplanet['planet_id'] );
     $queue = dbarray ( $result );
     $busy = ( $queue['tech_id'] == 21 || $queue['tech_id'] == 15 ) ;
@@ -119,9 +119,9 @@ if ( $_GET['mode'] === "Flotte" )
     echo "          <td class=l><b>Кол-во</b></td> \n";
     echo "          </tr> \n\n";
 
-    // Проверить есть ли Верфь на планете.
+    // See if there's a shipyard on the planet.
     if ( $aktplanet['b21'] ) {
-        // Вывести объекты, которые можно построить на Верфи.
+        // Output the objects that can be built in the Shipyard.
         foreach ( $fleetmap as $i => $id ) {
             if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) )
             {
@@ -164,7 +164,7 @@ if ( $_GET['mode'] === "Flotte" )
             echo "</td></tr>";
         }
 
-        // Кнопка строительства.
+        // Build Button.
         echo "<td class=c colspan=2 align=center><input type=submit value=\"Строить\"></td></tr>";
     }
     else {
@@ -173,7 +173,7 @@ if ( $_GET['mode'] === "Flotte" )
 }
 
 
-// ************************************************ Оборона ************************************************ 
+// ************************************************ Defense ************************************************ 
 
 $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
 
@@ -181,7 +181,7 @@ if ( $_GET['mode'] === "Verteidigung" )
 {
     $prem = PremiumStatus ($GlobalUser);
 
-    // Проверить не строится ли Верфь или Фабрика нанитов.
+    // Check to see if a Shipyard or Nanite Factory is under construction.
     $result = GetBuildQueue ( $aktplanet['planet_id'] );
     $queue = dbarray ( $result );
     $busy = ( $queue['tech_id'] == 21 || $queue['tech_id'] == 15 ) ;
@@ -201,9 +201,9 @@ if ( $_GET['mode'] === "Verteidigung" )
     echo "          <td class=l><b>Кол-во</b></td> \n";
     echo "          </tr> \n\n";
 
-    // Проверить есть ли Верфь на планете.
+    // See if there's a shipyard on the planet.
     if ( $aktplanet['b21'] ) {
-        // Вывести объекты, которые можно построить на Верфи.
+        // Output the objects that can be built in the Shipyard.
         foreach ( $defmap as $i => $id ) {
             if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) )
             {
@@ -251,7 +251,7 @@ if ( $_GET['mode'] === "Verteidigung" )
             echo "</td></tr>";
         }
     
-        // Кнопка строительства.
+        // Build Button.
         echo "<td class=c colspan=2 align=center><input type=submit value=\"Строить\"></td></tr>";
     }
     else {
@@ -259,7 +259,7 @@ if ( $_GET['mode'] === "Verteidigung" )
     }
 }
 
-// ************************************************ Исследования ************************************************ 
+// ************************************************ Research ************************************************ 
 
 $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
 
@@ -269,12 +269,12 @@ if ( $_GET['mode'] === "Forschung" )
     if ( $prem['technocrat'] ) $r_factor = 1.1;
     else $r_factor = 1.0;
 
-    // Исследовательская лаборатория усовершенствуется хоть на одной планете ?
+    // Is the research lab being upgraded on any planet?
     $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = 31 AND (type = 'Build' OR type = 'Demolish') AND start < $now AND owner_id = " . $GlobalUser['player_id'];
     $result = dbquery ( $query );
     $busy = ( dbrows ($result) > 0 );
 
-    // Проверить ведется ли исследование.
+    // Check to see if the research is in progress.
     $res = GetResearchQueue ( $GlobalUser['player_id'] );
     $resq = dbarray ($res);
     $operating =  ( $resq != null );
@@ -293,9 +293,9 @@ if ( $_GET['mode'] === "Forschung" )
     echo "          <td class=l><b>Кол-во</b></td> \n";
     echo "          </tr> \n\n";
 
-    // Проверить есть ли лаборатория на планете.
+    // See if there's a lab on the planet.
     if ( $aktplanet['b31'] ) {
-        // Вывести список доступных исследований.
+        // Display a list of available research
         foreach ( $resmap as $i => $id ) {
             if ( ! ResearchMeetRequirement ($GlobalUser, $aktplanet, $id) ) continue;
 
@@ -328,7 +328,7 @@ if ( $_GET['mode'] === "Forschung" )
             $t = ResearchDuration ( $id, $level, $reslab, $speed * $r_factor );
             echo "<br>Длительность: ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k>";
-            if ( $operating )        // Исследование проводится
+            if ( $operating )        // The research is in progress
             {
                 if ( $id == $resq['obj_id'] )
                 {
@@ -372,7 +372,7 @@ if ( $_GET['mode'] === "Forschung" )
                 }
                 else echo " - ";
             }
-            else        // Исследование не проводится.
+            else        // The research is not in progress.
             {
                 if ($GlobalUser['r'.$id]) {
                     if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>Исследовать<br> уровень  $level</font></a>";

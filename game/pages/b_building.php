@@ -1,6 +1,6 @@
 <?php
 
-// Строительство построек.
+// Building structures.
 
 $BuildError = "";
 
@@ -11,7 +11,7 @@ loca_add ( "build", $GlobalUser['lang'] );
 if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], intval ($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 
-// Обработка параметров.
+// Processing parameters.
 if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] )
 {
     if ( $_GET['modus'] === 'add' ) $BuildError = BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 0 );
@@ -109,17 +109,17 @@ echo "<table align=top ><tr><td style='background-color:transparent;'>\n";
 if ( $GlobalUser['useskin'] ) echo "<table width=\"530\">\n";
 else echo "<table width=\"468\">\n";
 
-// Проверить ведется ли исследование или нет.
+// Check whether the research is in progress or not.
 $result = GetResearchQueue ( $GlobalUser['player_id'] );
 $resqueue = dbarray ($result);
 $reslab_operating = ($resqueue != null);
 
-// Проверить ведется ли постройка на верфи.
+// Check to see if construction is underway at the shipyard.
 $result = GetShipyardQueue ( $aktplanet['planet_id'] );
 $shipqueue = dbarray ($result);
 $shipyard_operating = ($shipqueue != null);
 
-// Вывести очередь построек (если активен Командир)
+// Display the build queue (if Commander is active)
 $result = GetBuildQueue ( $aktplanet['planet_id'] );
 $cnt = dbrows ( $result );
 for ( $i=0; $i<$cnt; $i++ )

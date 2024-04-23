@@ -1,6 +1,6 @@
 <?php
 
-// Список пользователей и управление пользователями.
+// User list and user management.
 
 function PageAlly_MemberList ()
 {
@@ -22,7 +22,7 @@ function PageAlly_MemberList ()
     $use_sort = key_exists ('sort1', $_GET) && key_exists ('sort2', $_GET);
     $sort1 = key_exists ('sort1', $_GET) ? intval ($_GET['sort1']) : 0;
     $sort2 = key_exists ('sort2', $_GET) ? intval ($_GET['sort2']) : 1;
-    // Чтобы сортировать в обратном порядке используется операция ^1 (XOR) при выводе таблицы (т.е. из значения 1 сделать 0 и наоборот).
+    // To sort in reverse order, the ^1 (XOR) operation is used when outputting the table (i.e. from a value of 1 make 0 and vice versa).
 
 ?>
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
@@ -82,14 +82,14 @@ function PageAlly_MemberSettings ()
     $selected_user = 0;
     if ( key_exists ('u', $_GET) ) $selected_user = intval($_GET['u']);
 
-    if ( method() === "GET" && $_GET['a'] == 13 && $selected_user)        // Выгнать игрока
+    if ( method() === "GET" && $_GET['a'] == 13 && $selected_user)        // Kick member
     {
         $leaver = LoadUser ($selected_user);
 
         $query = "UPDATE ".$db_prefix."users SET ally_id = 0 WHERE player_id = $selected_user";
         dbquery ($query);
 
-        // Разослать сообщения членам альянса об исключении игрока
+        // Send out messages to alliance members about the exclusion of a member
         $result = EnumerateAlly ($ally['ally_id']);
         $rows = dbrows ($result);
         while ($rows--)
@@ -102,7 +102,7 @@ function PageAlly_MemberSettings ()
                 va(loca_lang("ALLY_MSG_KICK_TEXT", $user['lang']), $leaver['oname']), MTYP_ALLY);
         }
 
-        // Сообщение игроку об исключении.
+        // A message to the player about the exclusion.
         loca_add ("ally", $leaver['lang']);
         SendMessage ( $leaver['player_id'], 
                 va(loca_lang("ALLY_MSG_FROM", $leaver['lang']), $ally['tag']), 
@@ -110,7 +110,7 @@ function PageAlly_MemberSettings ()
                 va(loca_lang("ALLY_MSG_YOU_KICKED", $leaver['lang']), $GlobalUser['oname'], $ally['tag']), MTYP_ALLY);
     }
 
-    if ( method() === "POST" && $_GET['a'] == 16 && $selected_user)        // Назначить ранг игроку
+    if ( method() === "POST" && $_GET['a'] == 16 && $selected_user)        // Assign a rank to a player
     {
         $newrank = intval($_POST['newrang']);
         $query = "UPDATE ".$db_prefix."users SET allyrank = $newrank WHERE player_id = $selected_user";
@@ -123,7 +123,7 @@ function PageAlly_MemberSettings ()
     $use_sort = key_exists ('sort1', $_GET) && key_exists ('sort2', $_GET);
     $sort1 = key_exists ('sort1', $_GET) ? intval ($_GET['sort1']) : 0;
     $sort2 = key_exists ('sort2', $_GET) ? intval ($_GET['sort2']) : 1;
-    // Чтобы сортировать в обратном порядке используется операция ^1 (XOR) при выводе таблицы (т.е. из значения 1 сделать 0 и наоборот).
+    // To sort in reverse order, the ^1 (XOR) operation is used when outputting the table (i.e. from a value of 1 make 0 and vice versa).
 
 ?>
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script><br>
@@ -170,7 +170,7 @@ function PageAlly_MemberSettings ()
             echo "</th>";
             echo "</tr>\n";
 
-            if ( $user['player_id'] == $selected_user )        // Вывести форму для задания ранга.
+            if ( $user['player_id'] == $selected_user )        // Output a form for assigning a rank.
             {
                 $rank_result = EnumRanks ( $ally['ally_id'] );
                 $rows = dbrows ($rank_result);

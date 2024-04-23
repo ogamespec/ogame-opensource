@@ -1,8 +1,8 @@
 <?php
 
-// Всякие мелочи.
+// Little things.
 
-// Покинуть альянс.
+// Leave the alliance.
 function PageAlly_Leave ()
 {
     global $db_prefix;
@@ -20,7 +20,7 @@ function PageAlly_Leave ()
             $query = "UPDATE ".$db_prefix."users SET ally_id = 0 WHERE player_id = $player_id";
             dbquery ($query);
 
-            // Разослать сообщения членам альянса о том что игрок покинул альянс.
+            // Send out messages to alliance members that a player has left the alliance.
             $result = EnumerateAlly ($ally['ally_id']);
             $rows = dbrows ($result);
             while ($rows--)
@@ -33,7 +33,7 @@ function PageAlly_Leave ()
                     va(loca_lang ("ALLY_MSG_LEAVE", $user['lang']), $leaver['oname']), MTYP_ALLY);
             }
 
-            // Сделать редирект на страницу Мой альянс.
+            // Make a redirect to the My Alliance page.
             ob_end_clean ();
             $url = "index.php?page=allianzen&session=$session";
             echo "<html><head><meta http-equiv='refresh' content='0;url=$url' /></head><body></body>";
@@ -50,7 +50,7 @@ function PageAlly_Leave ()
 <?php
 }
 
-// Изменить аббревиатуру альянса.
+// Change the abbreviation of the alliance (Tag)
 function PageAlly_ChangeTag ()
 {
     global $GlobalUser;
@@ -94,7 +94,7 @@ function PageAlly_ChangeTag ()
 <?php
 }
 
-// Изменить название альянса.
+// Change the name of the alliance.
 function PageAlly_ChangeName ()
 {
     global $GlobalUser;
@@ -137,7 +137,7 @@ function PageAlly_ChangeName ()
 <?php
 }
 
-// Распустить альянс.
+// Dismiss the alliance.
 function PageAlly_Dismiss ()
 {
     global $GlobalUser;
@@ -152,7 +152,7 @@ function PageAlly_Dismiss ()
         if ( ! ($myrank['rights'] & ARANK_DISMISS) ) $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
         else
         {
-            // Послать всем игрокам сообщение о роспуске альянса.
+            // Send a message to all players to dismiss the alliance.
 
             $result = EnumerateAlly ($ally['ally_id']);
             $rows = dbrows ($result);
@@ -166,7 +166,7 @@ function PageAlly_Dismiss ()
                 SendMessage ( $user['player_id'], $from, $subj, $text, MTYP_ALLY);
             }
 
-            // Распустить альянс
+            // Dismiss the alliance
             DismissAlly ( $ally['ally_id'] );
 
 ?>
@@ -191,8 +191,8 @@ function PageAlly_Dismiss ()
 <?php
 }
 
-// Передать права главый "правой руке"
-// Передавать права может только глава альянса.
+// Transfer the rights of the head to the "right hand"
+// Only the head of the alliance can transfer rights.
 function AllyPage_Takeover ()
 {
     global $GlobalUser;
@@ -200,7 +200,7 @@ function AllyPage_Takeover ()
     global $ally;
     global $AllianzenError;
 
-    // Обменять званиями главу и "правую руку".
+    // Exchange the titles of head and "right hand man".
     if ( $_GET['a'] == 18 && key_exists('s', $_REQUEST) && $_REQUEST['s'] == 1)
     {
         $now = time ();
@@ -208,7 +208,7 @@ function AllyPage_Takeover ()
         if ( ! ($myrank['rights'] & ARANK_RIGHT_HAND) ) $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
         else
         {
-            // Выслать всем участникам сообщение что власть поменялась (кроме самого главы).
+            // Send a message to all participants that the power has changed (except for the head himself).
 
             $result = EnumerateAlly ($ally['ally_id']);
             $rows = dbrows ($result);
@@ -224,7 +224,7 @@ function AllyPage_Takeover ()
                 }
             }
 
-            // Поменять звания
+            // Change ranks
             $newhead = LoadUser ( intval($_REQUEST['uid']) );
             $newhead_rank = LoadRank ( $ally['ally_id'], $newhead['allyrank'] );
             if ( $newhead['ally_id'] != $ally['ally_id'] || ($newhead_rank['rights'] & ARANK_RIGHT_HAND) == 0 ) {
@@ -234,7 +234,7 @@ function AllyPage_Takeover ()
             SetUserRank ( $newhead['player_id'], $GlobalUser['allyrank'] );
             SetUserRank ( $GlobalUser['player_id'], $newhead['allyrank'] );
 
-            // Установить нового хозяина альянса
+            // Establish a new alliance owner
             AllyChangeOwner ( $ally['ally_id'], $newhead['player_id'] );
 
 ?>
@@ -246,7 +246,7 @@ function AllyPage_Takeover ()
         return;
     }
 
-    // Ололош, любой игрок по этому параметру может взять на себя права главы, без всяких проверок.....
+    // Ololosh, any player on this parameter can take over the rights of the head, without any checks.....
     if ( $_GET['a'] == 18 && key_exists('s', $_REQUEST) && $_REQUEST['s'] == 2)
     {
 ?>
@@ -257,7 +257,7 @@ function AllyPage_Takeover ()
         return;
     }
 
-    // Если открыть у НЕ главы страничку:
+    // If you open a page from a non-founder:
     if ( $ally['owner_id'] != $GlobalUser['player_id'] ) {
 ?>
 <table width=519>
@@ -267,7 +267,7 @@ function AllyPage_Takeover ()
         return;
     }
 
-    // Перечислить всех игроков альянса с правами "правая рука". Если никого нет, то просто вывести кнопку "назад".
+    // List all players in the alliance with "right hand" privileges. If there is no one, just display the "back" button.
     $users = array ();
     $rank_result = EnumRanks ( $ally['ally_id'] );
     while ( $rank = dbarray ($rank_result) )
@@ -275,21 +275,21 @@ function AllyPage_Takeover ()
         if ( $rank['rights'] & ARANK_RIGHT_HAND ) {
             $result = LoadUsersWithRank ( $ally['ally_id'], $rank['rank_id'] );
             while ( $user = dbarray ($result) ) {
-                if ( $user['player_id'] == $ally['owner_id'] ) continue;    // не показывать главу
+                if ( $user['player_id'] == $ally['owner_id'] ) continue;    // don't show the head of the alliance
                 $user['rankname'] = $rank['name'];
                 $users[] = $user;
             }
         }
     }
     
-    if ( count($users) == 0 ) {    // Никто не найден, вывести кнопку "назад"
+    if ( count($users) == 0 ) {    // No one found, bring up the "back" button.
 ?>
 <table width=519>
 <form action="index.php?page=allianzen&session=<?=$session;?>&a=5" method=POST>
 <tr><td class=c></th></tr><tr><th><input type=submit value="<?=loca("ALLY_MISC_TAKEOVER_BACK");?>"></th></tr></form></table><br><br><br><br>
 <?php
     }
-    else {    // Перечислить найденных пользователей с рангом "правая рука"
+    else {    // List the users found with the rank of "right hand"
 ?>
 <table width=519>
 <form action="index.php?page=allianzen&session=<?=$session;?>&a=18" method=POST>

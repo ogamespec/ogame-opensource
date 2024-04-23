@@ -1,10 +1,10 @@
 <?php
 
-// Продление флота на удержании складом альянса
+// Fleet Hold extension by alliance depot
 
-// Запущенная ракета снабжения по очереди заправляет флоты,
-// при этом заправка дискретна потреблению флота в час.
-// Ракета не может выгрузить во флот топлива меньше, чем он потребляет в указанное количество часов.
+// A launched supply missile refuels fleets in turn,
+// with refueling discrete to fleet consumption per hour.
+// A missile cannot unload less fuel into the fleet than it consumes in a specified number of hours.
 
 $DepotError = "";
 
@@ -27,7 +27,7 @@ BeginContent();
 
 $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
 
-// Запустить ракету со снабжением
+// Launch a rocket with supplies
 
 $depot_cap = 10000 * pow ( 2, $aktplanet['b34'] );
 if ($aktplanet['b34']) $deut_avail = min(floor($aktplanet['d']), $depot_cap);
@@ -35,7 +35,7 @@ else $deut_avail = 0;
 
 $loaded = $deut_avail;
 
-// Отправить ракету поочередности к каждому флоту
+// Send a missile to each fleet in turn
 $result = GetHoldingFleets ($aktplanet['planet_id']);
 $rows = dbrows ($result);
 $c = 1;
@@ -47,7 +47,7 @@ while ($rows--)
     $queue = GetFleetQueue ( $fleet_obj['fleet_id'] );
     $user = LoadUser ($fleet_obj['owner_id']);
 
-    // Посчитать потребление флота в час.
+    // Calculate fleet consumption per hour.
     $cons = 0;
     foreach ($fleetmap as $i=>$id) {
         $amount = $fleet_obj["ship".$id];
@@ -56,7 +56,7 @@ while ($rows--)
         }
     }
 
-    // Заправить флот
+    // Refuel the fleet
     if ( key_exists ( "c".$c, $_POST ) ) $hours = abs (intval ( $_POST["c".$c] ));
     else $hours = 0;
     if ( $deut_avail > 0 && $deut_avail >= ($cons*$hours) ) {
@@ -67,11 +67,11 @@ while ($rows--)
     $c ++;
 }
 
-// Модифицировать ресурсы на планете
+// Modify the resources on the planet
 $spent = $loaded - $deut_avail;
 if ( $spent > 0 ) AdjustResources ( 0, 0, $spent, $aktplanet['planet_id'], '-' );
 
-// Сделать редирект на склад альянса
+// Redirect to the alliance depot
 MyGoto ( "infos", "&gid=34" );
 
 EndContent ();

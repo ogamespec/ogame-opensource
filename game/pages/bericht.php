@@ -39,7 +39,7 @@ $msg = LoadMessage ( intval($_GET['bericht']) );
         $allowed = true;
     }
     else {
-        // Из того же альянса и шпионский доклад.
+        // From the same alliance as the spy report.
         $msg_user = LoadUser ($msg['owner_id']);
         $allowed = $msg_user['ally_id'] == $GlobalUser['ally_id'] && $GlobalUser['ally_id'] != 0 && $msg['pm'] == 1;
     }
