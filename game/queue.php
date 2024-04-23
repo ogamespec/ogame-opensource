@@ -1089,8 +1089,8 @@ function AddCleanDebrisEvent ()
 function Queue_CleanDebris_End ($queue)
 {
     global $db_prefix;
-    $query = "SELECT target_planet FROM ".$db_prefix."fleet WHERE mission = 8 OR mission = 108";
-    $query = "DELETE FROM ".$db_prefix."planets WHERE (type=10000 AND m=0 AND k=0) AND planet_id <> ALL ($query)";
+    $query = "SELECT target_planet FROM ".$db_prefix."fleet WHERE mission = ".FTYP_RECYCLE." OR mission = ".(FTYP_RECYCLE+FTYP_RETURN);
+    $query = "DELETE FROM ".$db_prefix."planets WHERE (type=".PTYP_DF." AND m=0 AND k=0) AND planet_id <> ALL ($query)";
     dbquery ( $query );
     RemoveQueue ( $queue['task_id'] );
     AddCleanDebrisEvent ();
@@ -1129,8 +1129,8 @@ function Queue_CleanPlanets_End ($queue)
         $planet = dbarray ( $result );
         $planet_id = $planet['planet_id'];
 
-        // Развернуть флоты, летящие на удаляемую планету.
-        $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = $planet_id AND mission < 100;";
+        // Return fleets flying to the planet being removed.
+        $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = $planet_id AND mission < ".FTYP_RETURN.";";
         $fleet_result = dbquery ( $query );
         $fleets = dbrows ($fleet_result);
         while ( $fleets-- )
@@ -1250,8 +1250,8 @@ function GetFleetQueue ($fleet_id)
 function EnumFleetQueue ($player_id)
 {
     global $db_prefix;
-    $query = "SELECT planet_id FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type < 10000";
-    $query = "SELECT fleet_id FROM ".$db_prefix."fleet WHERE target_planet = ANY ($query) AND (mission < 100 OR mission = 205)";
+    $query = "SELECT planet_id FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type < ".PTYP_DF;
+    $query = "SELECT fleet_id FROM ".$db_prefix."fleet WHERE target_planet = ANY ($query) AND (mission < ".FTYP_RETURN." OR mission = ".(FTYP_ACS_HOLD+FTYP_ORBITING).")";
     $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND (sub_id = ANY ($query) OR owner_id = $player_id)";
     $result = dbquery ($query);
     return $result;
@@ -1265,7 +1265,7 @@ function EnumOwnFleetQueue ($player_id, $ipm=0)
     if ($ipm) $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND owner_id = $player_id ORDER BY end ASC, prio DESC";
     else
     {
-        $query = "SELECT fleet_id FROM ".$db_prefix."fleet WHERE mission <> 20 AND owner_id = $player_id";
+        $query = "SELECT fleet_id FROM ".$db_prefix."fleet WHERE mission <> ".FTYP_MISSILE." AND owner_id = $player_id";
         $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND sub_id = ANY ($query) ORDER BY end ASC, prio DESC";
     }
     $result = dbquery ($query);
@@ -1276,7 +1276,7 @@ function EnumOwnFleetQueue ($player_id, $ipm=0)
 function EnumOwnFleetQueueSpecial ($player_id)
 {
     global $db_prefix;
-    $query = "SELECT fleet_id FROM ".$db_prefix."fleet WHERE mission < 20 AND owner_id = $player_id";
+    $query = "SELECT fleet_id FROM ".$db_prefix."fleet WHERE mission < ".FTYP_MISSILE." AND owner_id = $player_id";
     $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND sub_id = ANY ($query) ORDER BY start DESC";
     $result = dbquery ($query);
     return $result;
