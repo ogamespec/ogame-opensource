@@ -17,6 +17,6 @@ $LOCA["it"]["GALATOOL_TOTAL"] = "Totale : #1";
 $LOCA["it"]["GALATOOL_NOTES"] = "If a player grow / fall was more than 30,000 points, then it is indicated in parentheses next to the name.";
 $LOCA["it"]["GALATOOL_FIND"] = "Cerca tutti i pianeti di un giocatore : ";
 $LOCA["it"]["GALATOOL_SEARCH"] = "Cerca";
-$LOCA["it"]["GALATOOL_NOT_UPDATED"] = "Not yet updated";
+$LOCA["it"]["GALATOOL_NOT_UPDATED"] = "Non ancora aggiornato";
 
 ?>

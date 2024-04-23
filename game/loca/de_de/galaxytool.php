@@ -2,7 +2,7 @@
 
 // Gebaut Galaxytool
 
-$LOCA["de"]["GALATOOL_TITLE"] = "Ogame Information Center";
+$LOCA["de"]["GALATOOL_TITLE"] = "OGame Information Center";
 $LOCA["de"]["GALATOOL_POINTS"] = "Punkte : #1";
 $LOCA["de"]["GALATOOL_FLEET"] = "Flotte : #1";
 $LOCA["de"]["GALATOOL_RESEARCH"] = "Forschung : #1";
