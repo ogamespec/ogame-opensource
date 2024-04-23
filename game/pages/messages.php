@@ -1,15 +1,15 @@
 <?php
 
-// Сообщения.
+// Messages.
 
-// Про галочки напротив папок.
-// Исходников HTML не сохранилось, поэтому никто толком не помнит как оно работало. Делаю так:
-// - Кнопка "ок" запоминает выбранные галки, если их тыкали руками (метод POST)
-// - Метод 1: Ссылка на категорию инвертирует значение галки и одновременно перезагружает сообщения с новыми настройками (метод GET)
-// - Метод 2: Ссылка показывает только сообщения из выбранной категории вне зависимости от значений галочек (метод GET)
-// Если вдруг вам что-то не нравится или у вас есть исходники HTML - мы открыты к обсуждению :-)
+// About the check marks against the folders.
+// No HTML source code has been saved, so no one really remembers how it worked. Here's what I'm doing:
+// - The "ok" button remembers the selected checkboxes if they were poked by hand (POST method).
+// - Method 1: The category link inverts the checkmark value and simultaneously reloads the messages with the new settings (GET method)
+// - Method 2: The link shows only posts from the selected category regardless of checkbox values (GET method)
+// If you suddenly don't like something or have HTML sources - we are open to discussion :-)
 
-// Так как мы не знаем точного способа, выбираем метод этой переменной
+// Since we don't know the exact method, we choose the method of this variable
 $method = 2;
 
 loca_add ( "menu", $GlobalUser['lang'] );
@@ -30,12 +30,12 @@ PageHeader ("messages");
 
 // *******************************************************************
 
-$MAXMSG = $prem['commander'] ? 50 : 25;        // Количество сообщений на странице.
+$MAXMSG = $prem['commander'] ? 50 : 25;        // Number of messages per page.
 $uni = LoadUniverse ();
 $partial_reports = ($GlobalUser['flags'] & USER_FLAG_PARTIAL_REPORTS) != 0;
-$use_folders = ($GlobalUser['flags'] & USER_FLAG_DONT_USE_FOLDERS) == 0;    // инверсный смысл
+$use_folders = ($GlobalUser['flags'] & USER_FLAG_DONT_USE_FOLDERS) == 0;    // inverse sense
 
-// Управление папками
+// Folder control
 $folders = array (
     "espioopen" => array ( 'pm'=>MTYP_SPY_REPORT, 'flag'=>USER_FLAG_FOLDER_ESPIONAGE, 'title'=>loca("MSG_FOLDER1") ),
     "combatopen" => array ( 'pm'=>MTYP_BATTLE_REPORT_LINK, 'flag'=>USER_FLAG_FOLDER_COMBAT, 'title'=>loca("MSG_FOLDER2") ),
@@ -46,16 +46,16 @@ $folders = array (
 );
 
 $days = $prem['commander'] ? 7 : 1;
-DeleteExpiredMessages ( $GlobalUser['player_id'], $days );    // Удалить сообщения которые хранятся дольше 24 часов (7 дней с Командиром)
+DeleteExpiredMessages ( $GlobalUser['player_id'], $days );    // Delete messages that have been stored for longer than 24 hours (7 days with Commander)
 
-// Заголовок таблицы
+// Table header
 BeginContent ();
 
 if ( method() === "POST" )
 {
     $player_id = $GlobalUser['player_id'];
 
-    if ( $_POST['deletemessages'] === "deleteall" ) DeleteAllMessages ( $player_id );    // Удалить все сообщения
+    if ( $_POST['deletemessages'] === "deleteall" ) DeleteAllMessages ( $player_id );    // Delete all messages
     else
     {
         $result = EnumMessages ( $GlobalUser['player_id'], $MAXMSG);
@@ -64,14 +64,14 @@ if ( method() === "POST" )
         {
             $msg = dbarray ($result);
             $msg_id = $msg['msg_id'];
-            if ( key_exists("sneak" . $msg_id, $_POST) && $_POST["sneak" . $msg_id] === "on" ) {}    // TODO: Сообщить оператору
-            if ( key_exists("delmes" . $msg_id, $_POST) && $_POST["delmes" . $msg_id] === "on" && $_POST['deletemessages'] === "deletemarked" ) DeleteMessage ( $player_id, $msg_id );    // Удалить выделенные
-            if ( !key_exists("delmes" . $msg_id, $_POST) && $_POST['deletemessages'] === "deletenonmarked" ) DeleteMessage ( $player_id, $msg_id );    // Удалить невыделенные
-            if ( $_POST['deletemessages'] === "deleteallshown" ) DeleteMessage ( $player_id, $msg_id );    // Удалить показанные
+            if ( key_exists("sneak" . $msg_id, $_POST) && $_POST["sneak" . $msg_id] === "on" ) {}    // TODO: Report to the operator
+            if ( key_exists("delmes" . $msg_id, $_POST) && $_POST["delmes" . $msg_id] === "on" && $_POST['deletemessages'] === "deletemarked" ) DeleteMessage ( $player_id, $msg_id );    // Delete selected
+            if ( !key_exists("delmes" . $msg_id, $_POST) && $_POST['deletemessages'] === "deletenonmarked" ) DeleteMessage ( $player_id, $msg_id );    // Delete unselected
+            if ( $_POST['deletemessages'] === "deleteallshown" ) DeleteMessage ( $player_id, $msg_id );    // Delete shown
         }
     }
 
-    // Название параметра в инверсной логике
+    // Parameter name in inverse logic
     $partial_reports = key_exists('fullreports', $_POST) && $_POST['fullreports'] === "on";
 
     if ($partial_reports) {
@@ -83,15 +83,15 @@ if ( method() === "POST" )
         $GlobalUser['flags'] &= ~USER_FLAG_PARTIAL_REPORTS;
     }
 
-    // Фильтр папок -- обрабатывать только с включенным Командиром и включенными папками
+    // Folder filter -- process only with Commander enabled and folders enabled
     if ( $prem['commander'] && $use_folders ) {
         $flags = $GlobalUser['flags'];
         foreach ($folders as $i=>$folder) {
             if (key_exists($i, $_POST) && $_POST[$i] === "on") {
-                $flags |= $folder['flag'];      // установить флаг
+                $flags |= $folder['flag'];      // set the flag
             }
             else {
-                $flags &= ~$folder['flag'];     // сбросить флаг
+                $flags &= ~$folder['flag'];     // reset the flag
             }
         }
         if ($flags != $GlobalUser['flags']) {
@@ -101,14 +101,14 @@ if ( method() === "POST" )
     }
 }
 
-// Метод 1
-// Обработка нажатия на ссылку типа сообщений для управления галочками напротив папок (Командир)
+// Method 1
+// Handling clicking on a message type link to manage checkmarks against folders (Commander)
 if ( method() === "GET" && $prem['commander'] && $use_folders && key_exists('pm', $_GET) && $method == 1 )
 {
     $pm = intval ($_GET['pm']);
     foreach ($folders as $i=>$folder) {
         if ($folder['pm'] == $pm) {
-            $flags = $GlobalUser['flags'] ^ $folder['flag'];    // инвертировать флаг (XOR)
+            $flags = $GlobalUser['flags'] ^ $folder['flag'];    // invert the flag (XOR)
             SetUserFlags ($GlobalUser['player_id'], $flags);
             $GlobalUser['flags'] = $flags;
             break;
@@ -134,7 +134,7 @@ echo "<tr><td colspan=\"4\" class=\"c\">".loca("MSG_MESSAGES")."</td></tr>\n";
 
 if ($prem['commander'] && $use_folders) {
 
-    // Показать папки и количество сообщений для каждого типа (Всего / Непрочитанных)
+    // Show folders and number of messages for each type (Total / Unread)
 
     echo "<tr><th>".loca("MSG_FOLDER_SHOW")."</th><th colspan=\"2\">".loca("MSG_FOLDER_TYPE")."</th><th>".loca("MSG_FOLDER_STAT")."</th></tr>\n";
     foreach ($folders as $i=>$folder) {
@@ -158,7 +158,7 @@ if ($prem['commander'] && $use_folders) {
 }
 
 if ($prem['commander'] && $use_folders) {
-    // У командира с папками заголовок сообщений становится td class=c, чтобы его было лучше видно. Это подтверждено на видео в YouTube (https://www.youtube.com/watch?v=PXRKO16y8Q8)
+    // In a commander with folders, the message header becomes td class=c so it can be seen better. This is confirmed in the YouTube video (https://www.youtube.com/watch?v=PXRKO16y8Q8)
     echo "<tr><td class=\"c\">".loca("MSG_ACTION")."</td><td class=\"c\">".loca("MSG_DATE")."</td><td class=\"c\">".loca("MSG_FROM")."</td><td class=\"c\">".loca("MSG_SUBJ")."</td></tr>\n";
 }
 else {
@@ -171,15 +171,15 @@ while ($num--)
 {
     $msg = dbarray ($result);
     $pm = $msg['pm'];
-    if ($pm == MTYP_BATTLE_REPORT_TEXT) continue;    // Пропускать тексты боевых докладов.
+    if ($pm == MTYP_BATTLE_REPORT_TEXT) continue;    // Skip the texts of battle reports.
     
-    // Фильтровать сообщения по типу, если активен Командир И включено использование папок в настройках.
+    // Filter messages by type if Commander is active AND folder usage is enabled in settings.
     if ($prem['commander'] && $use_folders) {
 
         $skip = false;
         
-        // Метод 2
-        // Ссылка показывает только сообщения из выбранной категории вне зависимости от значений галочек
+        // Method 2
+        // The link shows only posts from the selected category regardless of the checkbox values
         if (method() === "GET" && key_exists('pm', $_GET) && $method == 2) {
             $skip = $pm != intval ($_GET['pm']);
         }
@@ -199,7 +199,7 @@ while ($num--)
     $msg['subj'] = str_replace ( "{PUBLIC_SESSION}", $_GET['session'], $msg['subj']);
     $msg['text'] = str_replace ( "{PUBLIC_SESSION}", $_GET['session'], $msg['text']);
     if ($partial_reports && $pm == MTYP_SPY_REPORT) {
-        // Специальная обработка для шпионских докладов, если активна галочка "показывать частично"
+        // Special handling for spy reports if the "show partially" checkbox is active
         $msg['subj'] = "<a href=\"#\" onclick=\"fenster('index.php?page=bericht&session=". $_GET['session'] ."&bericht=". $msg['msg_id'] ."', 'Bericht_Spionage');\" >". $msg['subj'] ."</a>";
         $msg['text'] = "";
     }    
@@ -211,10 +211,10 @@ while ($num--)
     MarkMessage ( $msg['owner_id'], $msg['msg_id'] );
 }
 
-// Низ таблицы  
+// Bottom of table
 echo "<tr><th colspan=\"4\" style='padding:0px 105px;'></th></tr>\n";
 
-// У командира с папками эти контролы показываются в самом начале
+// The commander with folders has these controls shown at the very beginning
 if (! ($prem['commander'] && $use_folders)) {
     echo "<tr><th colspan=\"4\"><input type=\"checkbox\" name=\"fullreports\"  " . ($partial_reports ? "CHECKED" : "") . "/>".loca("MSG_PARTIAL_ESPIONAGE")."</th></tr>\n";
     echo "<tr><th colspan=\"4\">\n";
@@ -231,8 +231,8 @@ echo "<input type=\"hidden\" name=\"messages\" value=\"1\" />\n";
 echo "</form>\n";
 echo "<tr><td class=\"c\" colspan=\"4\">".loca("MSG_OPER")."</td></tr>\n";
 
-    // Общение с операторами предполагало использование обычной почты (mailto).
-    // TODO: Сделать настройку варианта отправления обычного игрового сообщения, если оператор не хочет светить свой почтовый адрес
+    // Communication with operators involved the use of regular mail (mailto).
+    // TODO: Customize the option to send a regular game message if the operator does not want to reveal his mailing address
     $result = EnumOperators ();
     $rows = dbrows ($result);
     while ($rows--)

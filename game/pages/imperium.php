@@ -1,6 +1,6 @@
 <?php
 
-// Империя.
+// Empire.
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "empire", $GlobalUser['lang'] );
@@ -8,7 +8,7 @@ loca_add ( "empire", $GlobalUser['lang'] );
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 
-// Обработка параметров.
+// Processing parameters.
 if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] )
 {
     if ( $_GET['modus'] === 'add' ) BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 0 );
@@ -40,7 +40,7 @@ else {
     if ( $planettype != 1 ) $planettype = 1;
 }
 
-// Загрузить список планет/лун.
+// Load a list of planets/moons.
 $plist = array ();
 $moons = $num = 0;
 
@@ -314,7 +314,7 @@ BeginContent ();
             foreach ( $plist as $j=>$planet )
             {
 
-                // Загрузить очередь построек планеты.
+                // Load the planet's build queue.
                 $bqueue = array ();
                 $result = GetBuildQueue ( $planet['planet_id'] );
                 while ( $row = dbarray ($result) ) {

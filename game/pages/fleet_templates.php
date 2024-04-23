@@ -1,6 +1,6 @@
 <?php
 
-// Стандартные флоты.
+// Fleet templates.
 
 // You are able to create standard fleets. The maximum of standard fleets is your research level "Computer Technology" plus one
 // https://board.en.ogame.gameforge.com/index.php?thread/195023-version-0-74e/
@@ -35,7 +35,7 @@ if ( method() === "POST" && key_exists('mode', $_POST) && $_POST['mode'] === "sa
 
     $now = time ();
 
-    if ( $id ) {    // Изменить
+    if ( $id ) {    // Change
         $query = "SELECT * FROM ".$db_prefix."template WHERE id = $id AND owner_id = " . $GlobalUser['player_id'] . " LIMIT 1";
         $result = dbquery ( $query );
         if ( dbrows ($result) > 0 ) {
@@ -47,8 +47,8 @@ if ( method() === "POST" && key_exists('mode', $_POST) && $_POST['mode'] === "sa
             dbquery ( $query );
         }
     }
-    else {    // Добавить
-        // Ограничить количество.
+    else {    // Add
+        // Limit the amount.
         $query = "SELECT * FROM ".$db_prefix."template WHERE owner_id = " . $GlobalUser['player_id'] ;
         $result = dbquery ( $query );
         $rows = dbrows ( $result );
@@ -76,7 +76,7 @@ if ( method() === "POST" && key_exists('mode', $_POST) && $_POST['mode'] === "sa
     }
 }
 
-if ( method () === "GET" && key_exists('mode', $_GET) && $_GET['mode'] === "delete" ) {    // Удалить
+if ( method () === "GET" && key_exists('mode', $_GET) && $_GET['mode'] === "delete" ) {    // Delete
     $id = intval ( $_GET['id'] );
     $query = "SELECT * FROM ".$db_prefix."template WHERE id = $id AND owner_id = " . $GlobalUser['player_id'] . " LIMIT 1";
     $result = dbquery ( $query );

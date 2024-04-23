@@ -1,6 +1,6 @@
 <?php
 
-// Выход
+// Logout
 
 loca_add ( "reg", $GlobalUser['lang'] );
 

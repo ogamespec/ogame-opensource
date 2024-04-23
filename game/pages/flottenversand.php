@@ -1,8 +1,8 @@
 <?php
 
-// Отправка флота с проверкой всех параметров.
-// Если флот отправлен успешно - вывести краткую информацию, иначе вывести ошибку.
-// Через 3 секунды делается редирект на первую страницу отправки флота.
+// Sending fleet with all parameters checked.
+// If the fleet was sent successfully - output brief information, otherwise output an error.
+// After 3 seconds, a redirect is made to the first page of fleet dispatch.
 
 $BlockAttack = 0;
 
@@ -10,7 +10,7 @@ $PageError = "";
 $FleetError = false;
 $FleetErrorText = "";
 
-// Вывести текст ошибки отправки флота.
+// Output the text of the fleet dispatch error.
 function FleetError ($text)
 {
     global $FleetError, $FleetErrorText;
@@ -20,7 +20,7 @@ function FleetError ($text)
     $FleetError = true;
 }
 
-// Если страница открыта через браузер, то сделать редирект на главную.
+// If the page is opened through a browser, make a redirect to the main page.
 if ( method () === "GET" )
 {
     RedirectHome ();
@@ -32,12 +32,12 @@ $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
 
 $unispeed = $GlobalUni['fspeed'];
 
-// Обработать вызовы AJAX
+// Handle AJAX requests
 if ( key_exists ( 'ajax', $_GET ) ) {
     if ( $_GET['ajax'] == 1) include "flottenversand_ajax.php";
 }
 
-// Нельзя отправлять флот, если предыдущий отправлен менее секунды назад.
+// You cannot send a fleet if the previous one was sent less than a second ago.
 $result = EnumOwnFleetQueueSpecial ( $GlobalUser['player_id'] );
 $rows = dbrows ($result);
 if ( $rows ) {
@@ -59,11 +59,11 @@ if ( $prem['admiral'] ) $maxfleet += 2;
 
 $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
 
-// Ограничить скорость и сделать её кратной 10.
+// Limit the speed and make it a multiple of 10.
 $fleetspeed = round ( abs(intval($_POST['speed']) * 10) / 10) * 10;
 $fleetspeed = min ( max (10, $fleetspeed), 100 ) / 10;
 
-// Превратить все пустые параметры в нули.
+// Turn all empty parameters into zeros.
 
 if ( !key_exists('resource1', $_POST) ) $_POST['resource1'] = 0;
 if ( !key_exists('resource2', $_POST) ) $_POST['resource2'] = 0;
@@ -81,14 +81,14 @@ foreach ($fleetmap as $i=>$gid)
 $order = intval($_POST['order']);
 $union_id = 0;
 
-// Список флотов.
+// Fleet List.
 $fleet = array ();
 foreach ($fleetmap as $i=>$gid) 
 {
     if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = min ( $aktplanet["f$gid"], intval($_POST["ship$gid"]) );
     else $fleet[$gid] = 0;
 }
-$fleet[212] = 0;        // солнечные спутники не летают.
+$fleet[212] = 0;        // solar satellites don't fly.
 
 $origin = LoadPlanet ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['thisplanettype']) );
 $target = LoadPlanet ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), intval($_POST['planettype']) );
@@ -118,14 +118,14 @@ if ( $origin_user['vacation'] ) FleetError ( loca("FLEET_ERR_VACATION_SELF") );
 if ( $target_user['vacation'] && $order != FTYP_RECYCLE ) FleetError ( loca("FLEET_ERR_VACATION_OTHER") );
 if ( $nowfleet >= $maxfleet ) FleetError ( loca("FLEET_ERR_MAX_FLEET") );
 
-// НЕ проверять отправку флота между игроками с одинаковым IP только если у ОБОИХ отключена проверка IP в настройках.
-// ИЛИ если отправляемый находится на localhost (локальный веб-сервер для отладки)
+// DO NOT check fleet dispatch between players with the same IP only if BOTH have IP checking disabled in the settings.
+// OR if the sent is on localhost (local web server for debugging)
 if ( ! ($origin_user['deact_ip'] && $target_user['deact_ip']) && !localhost($origin_user['ip_addr']) )
 {
     if ( $origin_user['ip_addr'] === $target_user['ip_addr'] && $origin_user['player_id'] != $target_user['player_id'] ) FleetError ( loca("FLEET_ERR_IP") );
 }
 
-// Время удержания
+// Hold time
 $hold_time = 0;
 if ( $order == FTYP_EXPEDITION ) {
     if ( key_exists ('expeditiontime', $_POST) ) {
@@ -134,7 +134,7 @@ if ( $order == FTYP_EXPEDITION ) {
         if ( $hold_time < 1 ) $hold_time = 1;
     }
     else $hold_time = 1;
-    $hold_time *= 60*60;        // перевести в секунды
+    $hold_time *= 60*60;        // convert to seconds
 }
 else if ( $order == FTYP_ACS_HOLD ) {
     if ( key_exists ('holdingtime', $_POST) ) {
@@ -143,10 +143,10 @@ else if ( $order == FTYP_ACS_HOLD ) {
         if ( $hold_time < 0 ) $hold_time = 0;
     }
     else $hold_time = 0;
-    $hold_time *= 60*60;        // перевести в секунды
+    $hold_time *= 60*60;        // convert to seconds
 }
 
-// Рассчитать расстояние, время полёта и затраты дейтерия.
+// Calculate distance, flight time, and deuterium costs.
 $dist = FlightDistance ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']) );
 $slowest_speed = FlightSpeed ( $fleet, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] );
 $flighttime = FlightTime ( $dist, $slowest_speed, $fleetspeed / 10, $unispeed );
@@ -155,7 +155,7 @@ $cargo = $spycargo = $numships = 0;
 
 foreach ($fleet as $id=>$amount)
 {
-    if ($id != 210) $cargo += FleetCargo ($id) * $amount;        // не считать зонды.
+    if ($id != 210) $cargo += FleetCargo ($id) * $amount;        // not counting probes.
     else $spycargo = FleetCargo ($id) * $amount;
     $numships += $amount;
 }
@@ -165,7 +165,7 @@ $space = ( ($cargo + $spycargo) - ($cons['fleet'] + $cons['probes']) ) - ($spyca
 if ( $origin['d'] < ($cons['fleet'] + $cons['probes']) ) FleetError ( loca("FLEET_ERR_FUEL") );
 else if ( $space < 0 ) FleetError ( loca("FLEET_ERR_CARGO") );
 
-// Ограничить перевозимые ресурсы грузоподъемностью флота и затратами на полёт.
+// Limit transported resources to fleet payload capacity and flight costs.
 $cargo_m = $cargo_k = $cargo_d = 0;
 if ( $space > 0 ) {
     $cargo_m = min ( $space, $resource1 );
@@ -184,7 +184,7 @@ if ($numships <= 0) FleetError ( loca("FLEET_ERR_NO_SHIPS") );
 
 switch ( $order )
 {
-    case FTYP_ATTACK:        // Атака
+    case FTYP_ATTACK:        // Attack
         if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
         else if ( ( 
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
@@ -196,7 +196,7 @@ switch ( $order )
         else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
         break;
 
-    case FTYP_ACS_ATTACK:        // Совместная атака
+    case FTYP_ACS_ATTACK:        // ACS Attack
         if ( ( 
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
              IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
@@ -218,15 +218,15 @@ switch ( $order )
         else if ($acs_fleets >= $GlobalUni['acs'] * $GlobalUni['acs']) FleetError ( va (loca("FLEET_ERR_ACS_LIMIT"), $GlobalUni['acs'] * $GlobalUni['acs']) );
         break;
 
-    case FTYP_TRANSPORT:        // Транспорт
+    case FTYP_TRANSPORT:        // Transport
         if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
         break;
 
-    case FTYP_DEPLOY:        // Оставить
+    case FTYP_DEPLOY:        // Deploy
         if ( $target['owner_id'] !== $GlobalUser['player_id'] ) FleetError ( loca("FLEET_ERR_DEPLOY_OTHER") );
         break;
 
-    case FTYP_ACS_HOLD:        // Держаться
+    case FTYP_ACS_HOLD:        // ACS Hold
         $maxhold_fleets = $GlobalUni['acs'] * $GlobalUni['acs'];
         $maxhold_users = $GlobalUni['acs'];
         if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( loca("FLEET_ERR_NOOB") );
@@ -236,7 +236,7 @@ switch ( $order )
         if ( ! ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) FleetError (loca("FLEET_ERR_HOLD_ALLY"));
         break;
 
-    case FTYP_SPY:        // Шпионаж
+    case FTYP_SPY:        // Espionage
         if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
         else if ( ( 
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
@@ -249,22 +249,22 @@ switch ( $order )
         else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
         break;
 
-    case FTYP_COLONIZE:        // Колонизировать
+    case FTYP_COLONIZE:        // Colonize
         if ( $fleet[208] == 0 ) FleetError ( loca("FLEET_ERR_COLONY_REQUIRED") );
         else if (HasPlanet (intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet'])) ) FleetError ( loca("FLEET_ERR_COLONY_EXISTS") );
         else {
-            // Если отправлен колонизатор - добавить фантом колонизации.
+            // If a colonizer is sent - add a colonization phantom.
             $id = CreateColonyPhantom ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), USER_SPACE );
             $target = GetPlanet ($id);
         }
         break;
 
-    case FTYP_RECYCLE:        // Переработать
+    case FTYP_RECYCLE:        // Recycle
         if ( $fleet[209] == 0 ) FleetError ( loca("FLEET_ERR_RECYCLE_REQUIRED") );
         else if ($target['type'] != PTYP_DF ) FleetError ( loca("FLEET_ERR_RECYCLE_DF") );
         break;
 
-    case FTYP_DESTROY:        // Уничтожить
+    case FTYP_DESTROY:        // Destroy (moon)
         if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
         else if ( ( 
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
@@ -276,13 +276,13 @@ switch ( $order )
         else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
         break;
 
-    case FTYP_EXPEDITION:       // Экспедиция
+    case FTYP_EXPEDITION:       // Expedition
         $manned = 0;
         foreach ($fleet as $id=>$amount)
         {
-            if ($id != 210) $manned += $amount;        // не считать зонды.
+            if ($id != 210) $manned += $amount;        // not counting probes.
         }
-        $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Количество экспедиций
+        $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Number of expeditions
         $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
         if ( $expnum >= $maxexp ) FleetError ( loca("FLEET_ERR_EXP_LIMIT") );
         else if ( $manned == 0 ) FleetError ( loca("FLEET_ERR_EXP_REQUIRED") );
@@ -298,7 +298,7 @@ switch ( $order )
         break;
 }
 
-//Ваши флоты ввязались в бой.
+//Your fleets are engaged in battle. ("Ваши флоты ввязались в бой.")
 
 if ($FleetError) {
 
@@ -317,7 +317,7 @@ if ($FleetError) {
     echo "$FleetErrorText\n";
 }
 
-// Все проверки прошли удачно, можно отправлять флот.
+// All checks have been successful, we can send the fleet out.
 else {
 
     // Fleet lock
@@ -340,7 +340,7 @@ else {
         UpdateFleetTime ( $fleet_id, $union_time );
     }
 
-    // Поднять флот с планеты.
+    // Get the fleet off the planet.
     AdjustResources ( $cargo_m, $cargo_k, $cargo_d + $cons['fleet'] + $cons['probes'], $origin['planet_id'], '-' );
     AdjustShips ( $fleet, $origin['planet_id'], '-' );
 
@@ -387,7 +387,7 @@ else {
    </tr>
 
 <?php
-    // Список кораблей.
+    // Ship List.
     foreach ($fleet as $id=>$amount)
     {
         if ( $amount > 0 ) {

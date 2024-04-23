@@ -1,6 +1,10 @@
 <?php
 
-// Заказ офицеров.
+// Ordering officers.
+
+// In the original, the Commander appeared first, then the other Officers. But for the sake of simplicity, we consider the Commander to be an officer as well.
+
+// Also in our project there is no billing system (communism). Instead of payment, coupons are used, which are distributed by the administrator.
 
 $MicropaymentMessage = "";
 $MicropaymentError = "";
@@ -18,7 +22,7 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
-// Стоимость офицеров.
+// Cost of Officers.
 $price = array ( 1 => 10000, 2 => 10000, 3 => 10000, 4 => 10000, 5 => 10000 );
 
 function OfficerLeft ( $qcmd )
@@ -34,7 +38,7 @@ function OfficerLeft ( $qcmd )
     }
 }
 
-// Обработать GET-запрос.
+// Process GET request.
 if ( key_exists ( 'buynow', $_GET ) )
 {
     $qcmd = array ( 1 => "CommanderOff", 2 => "AdmiralOff", 3 => "EngineerOff", 4 => "GeologeOff", 5 => "TechnocrateOff" );
@@ -75,7 +79,6 @@ PageHeader ("micropayment");
 
 BeginContent ();
 
-// ************************************************************************************
 ?>
 
 <center>
@@ -279,8 +282,6 @@ BeginContent ();
           <br>
 
 <?php
-
-// ************************************************************************************
 
 echo "<br><br><br><br>\n";
 EndContent ();

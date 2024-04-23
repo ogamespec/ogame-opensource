@@ -1,6 +1,6 @@
 <?php
 
-// Заметки.
+// Notes.
 
 loca_add ( "notes", $GlobalUser['lang'] );
 
@@ -49,8 +49,8 @@ function EditNote ($note_id)
     echo "</table></form><br><br><br><br>\n";
 }
 
-// Обработать POST запросы.
-if ( key_exists ('s', $_POST) )    // Добавить/редактировать
+// Process POST requests.
+if ( key_exists ('s', $_POST) )    // Add/Edit
 {
     $title = htmlspecialchars($_POST['betreff']);
     $text = $_POST['text'];
@@ -61,12 +61,12 @@ if ( key_exists ('s', $_POST) )    // Добавить/редактироват�
     if ( intval($_POST['s']) == 1 ) AddNote ( $GlobalUser['player_id'], $title, $text, intval($_POST['u']) );
     else if ( intval($_POST['s']) == 2 ) UpdateNote ( $GlobalUser['player_id'], intval($_POST['n']), $title, $text, intval($_POST['u']) );
 }
-if ( key_exists ('delmes', $_POST) )    // Удалить
+if ( key_exists ('delmes', $_POST) )    // Delete
 {
     foreach ($_POST['delmes'] as $i => $entry) DelNote ( $GlobalUser['player_id'], intval($i) );
 }
 
-// Проверить неверные параметры.
+// Check for incorrect parameters.
 if ( key_exists ('a', $_GET) )
 {
     if ( intval($_GET['a']) < 1 || intval($_GET['a']) > 2 ) die ();

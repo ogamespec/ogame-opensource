@@ -24,11 +24,11 @@ function empty_row ($p)
     echo "<tr><th width=\"30\"><a href=\"#\" >".$p."</a></th><th width=\"30\"></th><th width=\"130\" style='white-space: nowrap;'></th><th width=\"30\" style='white-space: nowrap;'></th><th width=\"30\"></th><th width=\"150\"></th><th width=\"80\"></th><th width=\"125\" style='white-space: nowrap;'></th></tr>\n\n";
 }
 
-// Ракетная атака.
+// Missile attack.
 if ( method () === "POST" && isset($_POST['aktion']) )
 {
-    $amount = abs(intval($_POST['anz']));        // Количество ракет
-    $type = abs(intval($_POST['pziel']));        // Основная цель (0-все)
+    $amount = abs(intval($_POST['anz']));        // Number of missiles
+    $type = abs(intval($_POST['pziel']));        // Primary target (0-all)
     $origin = $aktplanet;
     $target = GetPlanet (intval($_GET['pdd']));
     $target_user = LoadUser ($target['owner_id']);
@@ -39,14 +39,14 @@ if ( method () === "POST" && isset($_POST['aktion']) )
 
     if ( !in_array ($type, $defmap ) ) $type = 0;
 
-    if ( $GalaxyError === "" )    // Проверить допустимые параметры
+    if ( $GalaxyError === "" )    // Check the permitted parameters
     {
         if ($amount == 0) $GalaxyError = loca("GALAXY_RAK_NO_ROCKETS");
         if ($amount > $aktplanet["d503"]) $GalaxyError = loca("GALAXY_RAK_NOT_ENOUGH");
         if ($dist > $ipm_radius) $GalaxyError = loca("GALAXY_RAK_WEAK_DRIVE");
     }
 
-    if ( $GalaxyError === "" )        // Проверить режимы игроков
+    if ( $GalaxyError === "" )        // Check player modes
     {
         if ($GlobalUser['vacation']) $GalaxyError = loca("GALAXY_RAK_VACATION_SELF");
         else if ($target_user['vacation']) $GalaxyError = loca("GALAXY_RAK_VACATION_OTHER");
@@ -57,12 +57,12 @@ if ( method () === "POST" && isset($_POST['aktion']) )
     if ( $GalaxyError === "" )
     {
         LaunchRockets ( $origin, $target, 30 + 60 * $dist, $amount, $type );
-        $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // получить свежие данные планеты после запуска МПР.
+        $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // get the latest planetary data after the IPM is launched.
         $GalaxyMessage = va ( loca("GALAXY_RAK_LAUNCHED"), $amount );
     }
 }
 
-// Выбрать солнечную систему.
+// Choose a solar system.
 if ( key_exists ('session', $_POST)) $coord_g = intval($_POST['galaxy']);
 else if ( key_exists ('galaxy', $_GET)) $coord_g = intval($_GET['galaxy']);
 else if ( key_exists ('p1', $_GET)) $coord_g = intval($_GET['p1']);
@@ -105,7 +105,7 @@ else if ( isset($_POST['galaxyRight']) )
 
 $not_enough_deut = ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s) && $aktplanet['d'] < 10;
 
-// Списать 10 дейтерия за просмотр не домашней системы (только для обычных пользователей)
+// Charge 10 deuterium for viewing a non-home system (regular users only)
 if ( !$not_enough_deut && $GlobalUser['admin'] == 0 )
 {
     if ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s )
@@ -126,7 +126,7 @@ PageHeader ("galaxy", true);
 
 BeginContent ();
 
-/***** Скрипты. *****/
+/***** Scripts. *****/
 
 ?>
 
@@ -351,8 +351,8 @@ BeginContent ();
 
 <?php
 
-// Недостаточно дейтерия?
-// Операторы и администраторы могут просматривать Галактику без затрат дейтерия.
+// Not enough deuterium?
+// Operators and administrators can view the Galaxy without the cost of deuterium.
 if ( $not_enough_deut && $GlobalUser['admin'] == 0 )
 {
 ?>
@@ -375,7 +375,7 @@ if ( $not_enough_deut && $GlobalUser['admin'] == 0 )
 else
 {
 
-/***** Меню выбора солнечной системы. *****/
+/***** Solar system selection menu. *****/
 
 echo "  <center>\n<form action=\"index.php?page=galaxy&no_header=1&session=".$_GET['session']."\" method=\"post\" id=\"galaxy_form\">\n";
 echo "<input type=\"hidden\" name=\"session\" value=\"".$_GET['session']."\">\n";
@@ -403,7 +403,7 @@ echo "</tr>\n";
 echo "</table>\n";
 echo "</form>\n";
 
-/***** Форма запуска межпланетных ракет *****/
+/***** A form of interplanetary rocket launch *****/
 
     $system_radius = abs ($aktplanet['s'] - $coord_s);
     $ipm_radius = max (0, 5 * $GlobalUser['r117'] - 1);
@@ -448,7 +448,7 @@ echo "</form>\n";
 <?php
     }
 
-/***** Заголовок таблицы *****/
+/***** Table header *****/
 
 echo "<table width=\"569\">\n";
 echo "<tr><td class=\"c\" colspan=\"8\">".loca("GALAXY_SYSTEM")." ".$coord_g.":".$coord_s."</td></tr>\n";
@@ -463,7 +463,7 @@ echo "<td class=\"c\">".loca("GALAXY_HEAD_ALLY")."</td>\n";
 echo "<td class=\"c\">".loca("GALAXY_HEAD_ACTIONS")."</td>\n";
 echo "</tr>\n";
 
-/***** Перечислить планеты *****/
+/***** Enumerate the planets *****/
 
 $p = 1;
 $tabindex = 3;
@@ -484,11 +484,11 @@ while ($num--)
                ($planet['owner_id'] != $GlobalUser['player_id']) &&
                ($planet['g'] == $aktplanet['g']);
 
-    // Коорд.
+    // Coord.
     echo "<tr>\n";
     echo "<th width=\"30\"><a href=\"#\"  tabindex=\"".($tabindex++)."\" >".$p."</a></th>\n";
 
-    // Планета
+    // Planet
     echo "<th width=\"30\">\n";
     if ( $planet['type'] == PTYP_PLANET )
     {
@@ -520,7 +520,7 @@ while ($num--)
     if ( $moon ) $moon_id = $moon['planet_id'];
     else $moon_id = 0;
 
-    // Название (активность)
+    // Name (activity)
     $now = time ();
     $ago15 = $now - 15 * 60;
     $ago60 = $now - 60 * 60;
@@ -538,7 +538,7 @@ while ($num--)
     if ($phalanx) $planet_name = "<a href='#' onclick=fenster('index.php?page=phalanx&session=$session&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."',\"Bericht_Phalanx\") title=\"".loca("GALAXY_FLEET_PHALANX")."\">" . $planet_name . "</a>";
     echo "<th width=\"130\" style='white-space: nowrap;'>$planet_name</th>\n";
 
-    // луна
+    // moon
     echo "<th width=\"30\" style='white-space: nowrap;'>\n";
     if ($moon_id)
     {
@@ -577,7 +577,7 @@ while ($num--)
     }
     echo "</th>\n";
 
-    // поле обломков (не показывать ПО < 300 единиц)
+    // debris field (do not show DF < 300 units)
     echo "<th width=\"30\">";
     $debris = LoadPlanet ( $coord_g, $coord_s, $p, 2 );
     if ( $debris )
@@ -596,9 +596,9 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     }
     echo "</th>\n";
 
-    // игрок (статус)
-    // Новичек или Сильный или Обычный
-    // Приоритеты Обычного: Режим отпуска -> Заблокирован -> Давно неактивен -> Неактивен -> Без статуса
+    // player (status)
+    // Newbie or Strong or Regular
+    // Priorities of Regular: Vacation Mode -> Blocked -> Long inactive -> Inactive -> No Status
     $stat = "";
     echo "<th width=\"150\">\n";
     if ( !($planet['type'] == PTYP_DEST_PLANET || $planet['type'] == PTYP_ABANDONED) )
@@ -638,7 +638,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     }
     echo "</th>\n";
 
-    // Альянс
+    // Alliance
     if ($user['ally_id'] && !($planet['type'] == PTYP_DEST_PLANET || $planet['type'] == PTYP_ABANDONED) )
     {
         $ally = LoadAlly ( $user['ally_id']);
@@ -658,13 +658,13 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     else $allytext = "";
     echo "<th width=\"80\">$allytext</th>\n";
 
-    // Действия
+    // Actions
     echo "<th width=\"125\" style='white-space: nowrap;'>\n";
     if ( !($planet['type'] == PTYP_DEST_PLANET || $planet['type'] == PTYP_ABANDONED) && !$own)
     {
         if ($prem['commander'] && $GlobalUser['flags'] & USER_FLAG_SHOW_VIEW_REPORT_BUTTON) {
 
-            // Если доклад есть и для планеты и для луны, то показывается 2 кнопки.
+            // If there is a report for both planet and moon, 2 buttons are shown.
 
             $planet_spy_report = GetSharedSpyReport ($planet['planet_id'], $GlobalUser['player_id'], $GlobalUser['ally_id']);
             $moon_spy_report = 0;
@@ -701,7 +701,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
 }
 for ($p; $p<=15; $p++) empty_row ($p);
 
-/***** Низ таблицы *****/
+/***** Bottom of table *****/
 echo "<tr><th style='height:32px;'>16</th><th colspan='7'><a href ='index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$coord_g."&system=".$coord_s."&planet=16&planettype=1&target_mission=15'>".loca("FAR_SPACE")."</a></th></tr>\n\n";
 
 echo "<tr><td class=\"c\" colspan=\"6\">(".va(loca("GALAXY_INFO_POPULATED"), $planets).")</td>\n";
@@ -715,8 +715,8 @@ echo "<tr><td>".loca("GALAXY_LEGEND_INACTIVE28_LONG")."</td><td><span class=long
 echo "</table>\", ABOVE, WIDTH, 150, STICKY, MOUSEOFF, DELAY, 500, CENTER);' onmouseout='return nd();'>".loca("GALAXY_LEGEND")."</a></td>\n";
 echo "</tr>\n";
 
-// Дополнительная информация (Командир).
-// Текст набирается в переменную extra_info и если строка не пустая - выводится дополнительная строка таблицы.
+// Additional information (Commander).
+// The text is typed into the extra_info variable and if the string is not empty - an additional row of the table is printed.
 
 $extra_info = "";
 $sep = "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -735,7 +735,7 @@ if ($prem['commander'] && $aktplanet["d503"] > 0) {
     if ($sep_required) $extra_info .= $sep;
     $extra_info .= "<span id=\"missiles\">".nicenum($aktplanet["d503"])."</span>".loca("GALAXY_INFO_IPM");
 }
-// Дейтерий показывается только для лун (даже без Командира)
+// Deuterium is only shown for moons (even without Commander)
 if ($aktplanet['type'] == PTYP_MOON) {
     $extra_info .= loca("GALAXY_INFO_DEUTERIUM") . nicenum($aktplanet["d"]);
 }
@@ -762,7 +762,7 @@ if ($extra_info !== "") {
 <?php
 echo "</table>\n\n";
 
-}    // Недостаточно дейтерия
+}    // Not enough deuterium
 
 echo "<br><br><br><br>\n";
 EndContent ();

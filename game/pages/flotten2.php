@@ -1,6 +1,6 @@
 <?php
 
-// Флот 2: подготавливает координаты цели
+// Fleet 2: Prepare target coordinates
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
@@ -74,20 +74,20 @@ BeginContent();
 
 <?php
 
-    // Список флотов.
+    // Fleet List.
 
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // без солнечного спутника
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // without a solar satellite
 
     $total = 0;
     $cargo = 0;
     foreach ($fleetmap as $i=>$gid) 
     {
-        // Ограничить количество флотов максимальным количеством на планете.
+        // Limit the number of fleets to the maximum number on a planet.
         if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet["f$gid"] , abs (intval ($_POST["ship$gid"])) );
         else $amount = 0;
         $total += $amount;
 
-        if ($gid != 210) $cargo += FleetCargo ($gid) * $amount;        // не считать зонды.
+        if ($gid != 210) $cargo += FleetCargo ($gid) * $amount;        // not counting probes.
 
         if ( $amount > 0 ) {
             if ( key_exists("ship$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"ship$gid\" value=\"".$amount."\" />\n";
@@ -97,7 +97,7 @@ BeginContent();
         }
     }
 
-    // Флот не выбран.
+    // The fleet is not selected.
     if ( $total == 0 ) MyGoto ( "flotten1" );
 
 ?>
@@ -159,7 +159,7 @@ BeginContent();
 
 <?php
 
-    // Список планет.
+    // List of planets.
     $result = EnumPlanets ();
     $rows = dbrows ($result);
     $leftcol = true;
@@ -187,7 +187,7 @@ BeginContent();
 
 <?php
 
-    // Список боевых союзов.
+    // List of battle unions (ACS)
     $unions = EnumUnion ( $GlobalUser['player_id'], 1);
 
     $union_count = 0;

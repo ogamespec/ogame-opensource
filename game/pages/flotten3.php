@@ -1,6 +1,6 @@
 <?php
 
-// Флот 3: вывод списка заданий, загрузка ресурсов.
+// Fleet 3: mission list output, resource loading.
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
@@ -70,13 +70,13 @@ BeginContent ();
     echo "<input name=\"planet\" type=\"hidden\" value=\"".$planet."\" />\n";
     echo "<input name=\"planettype\" type=\"hidden\" value=\"".intval($_POST['planettype'])."\" />\n\n";
 
-    // Список флотов.
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // без солнечного спутника
+    // Fleet List.
+    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // without a solar satellite
 
     $total = 0;
     foreach ($fleetmap as $i=>$gid) 
     {
-        // Ограничить количество флотов максимальным количеством на планете.
+        // Limit the number of fleets to the maximum number on a planet.
         if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet["f$gid"] , abs ( intval($_POST["ship$gid"]) ) );
         else $amount = 0;
         $total += $amount;
@@ -89,7 +89,7 @@ BeginContent ();
         }
     }
 
-    // Флот не выбран.
+    // The fleet has not been selected.
     if ( $total == 0 ) MyGoto ( "flotten1" );
 
     echo "<input type=\"hidden\" name=\"speed\" value=\"".intval($_POST['speed'])."\" />\n";
@@ -107,7 +107,7 @@ BeginContent ();
   </tr>
 
 <?php
-    // Отобразить список доступных заданий.
+    // Display a list of available missions.
 
     function is_checked ($mission)
     {
@@ -212,7 +212,7 @@ BeginContent ();
 
 <?php
     // ----------------------------------------------------------------------------------------------------
-    // Список боевых союзов
+    // List of battle unions (ACS)
 
     $unions = EnumUnion ( $GlobalUser['player_id'] );
 
@@ -245,7 +245,7 @@ BeginContent ();
 
 <?php
     // ----------------------------------------------------------------------------------------------------
-    // Время удержания
+    // Hold time
 
     if ( $mission_hold )
     {
@@ -275,7 +275,7 @@ BeginContent ();
 
 <?php
     // ----------------------------------------------------------------------------------------------------
-    // Время пребывания в экспедиции
+    // Expedition duration time
 
     if ( $mission_exp && $GlobalUser['r124'] > 0 )
     {

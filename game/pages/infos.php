@@ -1,10 +1,10 @@
 <?php
 
-// Информация на постройки, флот, оборону и исследования. 
-// Некоторые страницы (в частности постройки) содержат дополнительные сведения или элементы управления.
+// Information on buildings, fleets, defense and research.
+// Some pages (particularly buildings) contain additional information or controls.
 
-// Малый транспорт содержит дополнительный текст (жёлтый), для индикации изменения базовой скорости и потребления после смены двигателя.
-// У бомбардировщика НЕ меняется потребление после смены двигателя.
+// Small transport contains additional text (yellow), to indicate the change in base speed and consumption after a engine change.
+// A bomber does NOT have a change in consumption after an engine change.
 
 $speed = $GlobalUni['speed'];
 $drepair = $GlobalUni['defrepair'];
@@ -45,7 +45,7 @@ function rapidOut ($gid, $n)
     return "<br/>".loca("INFO_RAPID_OUT1")."<a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$gid\">".loca("NAME_$gid")."</a>".va(loca("INFO_RAPID_OUT2"), "<font color=\"lime\">$n</font>")."\n";
 }
 
-// Информация по скорострелу.
+// Rapid-fire information.
 function rapid ($gid)
 {
     global $RapidFire;
@@ -72,7 +72,7 @@ if ($gid > 200 && $gid < 300)    // Флот
     $base_speed2 = 0;
     $base_cons2 = 0;
 
-    // Базовые значения для МТ и бомбардировщика меняются при смене двигателя
+    // The base values for Small Cargo and Bomber change when you change engines
 
     if ($gid == 202) {
         $base_speed2 = $base_speed + 5000;
@@ -80,7 +80,7 @@ if ($gid > 200 && $gid < 300)    // Флот
     }
     else if ($gid == 211) {
         $base_speed2 = $base_speed + 1000;
-        // Потребление не меняется.
+        // Consumption doesn't change.
     }
 
     echo "<!-- begin fleet or defense information -->\n";
@@ -107,7 +107,7 @@ if ($gid > 200 && $gid < 300)    // Флот
     echo "</th></tr>\n";
     echo "</table></th></tr></table>\n";
 }
-else if ($gid > 400 && $gid < 500)    // Оборона.
+else if ($gid > 400 && $gid < 500)    // Defense.
 {
     echo "<!-- begin fleet or defense information -->\n";
     echo "<tr><td class=\"c\" colspan=\"2\">".loca("INFO_DEFENSE")."</td></tr>\n";
@@ -117,7 +117,7 @@ else if ($gid > 400 && $gid < 500)    // Оборона.
     echo "<tr><td valign=\"top\"><img border=\"0\" src=\"".UserSkin()."gebaeude/$gid.gif\" width=\"120\" height=\"120\"></td>\n";
     echo "<td>".loca("LONG_$gid");
     if ($gid < 407) {
-        // Для стреляющей обороны вывести процент восстановления повреждений.
+        // For shooting defenses, output the damage repair percentage.
         echo " " . va(loca("INFO_REPAIR"), $drepair);
     }
     echo "<br/>".rapid($gid)."</td>\n";
@@ -127,7 +127,7 @@ else if ($gid > 400 && $gid < 500)    // Оборона.
     echo "<tr><th>".loca("INFO_ATTACK")."</th><th>".nicenum($UnitParam[$gid][2])."</th></tr>\n";
     echo "</th></tr></table>\n";
 }
-else if ($gid > 100 && $gid < 200)    // Исследования.
+else if ($gid > 100 && $gid < 200)    // Research.
 {
     echo "<tr><td class=\"c\">".loca("NAME_$gid")."</td></tr>\n";
     echo "<tr><th><table>\n";
@@ -144,9 +144,9 @@ else
     echo "<td>".loca("LONG_$gid")."</td></tr>\n";
     echo "</table></th></tr>\n";
 
-    // Дополнительная информация и кнопки.
+    // Additional information and buttons.
 
-    if ($gid == 1)    // Шахта металла
+    if ($gid == 1)    // Metal mine
     {
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
         $level = $aktplanet['b'.$gid]-2;
@@ -166,7 +166,7 @@ else
         }
         echo "</table></center></tr></th>";
     }
-    else if ($gid == 2)    // Шахта кристалла
+    else if ($gid == 2)    // Crystal mine
     {
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
         $level = $aktplanet['b'.$gid]-2;
@@ -186,7 +186,7 @@ else
         }
         echo "</table></center></tr></th>";
     }
-    else if ($gid == 3)    // Шахта дейтерия
+    else if ($gid == 3)    // Deuterium synthesizer
     {
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
         $level = $aktplanet['b'.$gid]-2;
@@ -206,7 +206,7 @@ else
         }
         echo "</table></center></tr></th>";
     }
-    else if ($gid == 4)    // Солнечная электростанция
+    else if ($gid == 4)    // Solar Plant
     {
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td>\n";
         $level = $aktplanet['b'.$gid]-2;
@@ -222,7 +222,7 @@ else
         }
         echo "</table></center></tr></th>";
     }
-    else if ($gid == 12)    // Термоядерная электростанция
+    else if ($gid == 12)    // Fusion Reactor
     {
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_CONS_DEUT")."</td><td class='c'>".loca("INFO_DIFF")."</td>\n";
         $level = $aktplanet['b'.$gid]-2;
@@ -242,7 +242,7 @@ else
         }
         echo "</table></center></tr></th>";
     }
-    else if ($gid == 22 || $gid == 23 || $gid == 24 )     // Хранилища
+    else if ($gid == 22 || $gid == 23 || $gid == 24 )     // Storages
     {
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_STORAGE")."</td><td class='c'>".loca("INFO_DIFF")."</td></tr>\n";
         $level = $aktplanet['b'.$gid];
@@ -254,7 +254,7 @@ else
         }
         echo "</table>";
     }
-    else if ( $gid == 34 )                                    // Склад альянса
+    else if ( $gid == 34 )                                    // Alliance Depot
     {
         $depot_cap = 10000 * pow ( 2, $aktplanet['b34'] );
         $deut_avail = 0;
@@ -308,7 +308,7 @@ else
 </form>
 <?php
     }
-    else if ( $gid == 44 && $aktplanet["b44"] > 0)        // Ракетная шахта
+    else if ( $gid == 44 && $aktplanet["b44"] > 0)        // Missile Silo
     {
         $rak_space = $aktplanet["b44"] * 10;
         if ( key_exists ( 'aktion', $_POST) )
@@ -371,7 +371,7 @@ else
 <?php
         }
     }
-    else if ( $gid == 42 )        // Сенсорная фаланга
+    else if ( $gid == 42 )        // Sensor Phalanx
     {
 ?>
 <tr><th><p><center><table border=1 ><tr><td class='c'><?=loca("INFO_PHALANX_LEVEL");?></td><td class='c'><?=loca("INFO_PHALANX_RADIUS");?></td></tr>
@@ -387,7 +387,7 @@ else
 </center></table></tr></th></table> 
 <?php
     }
-    else if ( $gid == 43 && $aktplanet["b43"] > 0)        // Ворота
+    else if ( $gid == 43 && $aktplanet["b43"] > 0)        // Jump Gate
     {
         if ( $now >= $aktplanet["gate_until"] ) 
         {
@@ -414,8 +414,8 @@ else
     while ($rows--)
     {
         $planet = dbarray ($result);
-        if ( $planet['planet_id'] == $aktplanet['planet_id'] ) continue;    // текущая луна
-        if ( $planet["b43"] == 0 ) continue;    // нет ворот
+        if ( $planet['planet_id'] == $aktplanet['planet_id'] ) continue;    // current moon
+        if ( $planet["b43"] == 0 ) continue;    // no jump gate
         if ( $planet['type'] != PTYP_MOON || $now < $planet['gate_until'] ) continue;
         echo "             <option value=\"".$planet['planet_id']."\">".$planet['name']." <a href=\"index.php?page=galaxy&galaxy=".$planet['g']."&system=".$planet['s']."&position=".$planet['p']."&session=$session\" >[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a></option>\n";
     }
@@ -449,7 +449,7 @@ else
 </form>
 <?php
         }
-        else        // Ворота не готовы.
+        else        // The gate is not ready.
         {
             $delta = $aktplanet["gate_until"] - $now;
 ?>
@@ -463,9 +463,9 @@ else
 
     echo "</table>\n";
 
-    // Снос постройки.
-    // Терраформер и лунную базу снести нельзя.
-    // Ракетную шахту можно снести только если на планете нет ракет.
+    // Building Demolition.
+    // The terraformer and moonbase cannot be demolished.
+    // A missile silo can only be demolished if there are no missiles on the planet.
 
     if ( $gid < 200 && $aktplanet['b'.$gid] && !($gid == 33 || $gid == 41 || $gid == 44) ) {
         echo "<table width=519 >\n";
@@ -480,7 +480,7 @@ else
         echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".BuildDurationFormat ( $t )."<br></th></tr></table>\n";
     }
 
-    if ( $gid == 44 && $aktplanet['b'.$gid])    // Ракетная шахта
+    if ( $gid == 44 && $aktplanet['b'.$gid])    // Missile Silo
     {
         $raknum = $aktplanet['d502'] + $aktplanet['d503'];
         echo "<table width=519 >\n";

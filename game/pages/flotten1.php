@@ -1,6 +1,8 @@
 <?php
 
-// Флот 1: подготавливает состав флота
+// Fleet 1: prepares the composition of the fleet
+
+// Parameter passing between Fleet 1,2,3 pages is done via hidden POST parameters.
 
 $FleetMessage = "";
 $FleetError = "";
@@ -39,10 +41,10 @@ function FleetMissionText ($num)
 $union_id = 0;
 $uni = LoadUniverse ();
 
-// Обработка POST-запросов
+// POST requests processing
 if ( method () === "POST" )
 {
-    if ( key_exists ( 'order_return', $_POST) )         // Отзыв флота.
+    if ( key_exists ( 'order_return', $_POST) )         // Fleet recall.
     {
         $fleet_id = intval ($_POST['order_return']);
         $fleet_obj = LoadFleet ( $fleet_id );
@@ -54,26 +56,26 @@ if ( method () === "POST" )
     if ( key_exists ( 'union_name', $_POST) && $uni['acs'] > 0 ) {
         $fleet_id = intval ($_POST['flotten']);
         $union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
-        RenameUnion ( $union_id, $_POST['union_name'] );    // переименовать
+        RenameUnion ( $union_id, $_POST['union_name'] );    // rename
     }
 
     if ( key_exists ( 'user_name', $_POST) && $uni['acs'] > 0 ) { 
         $fleet_id = intval ($_POST['flotten']);
         $union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
-        $FleetError = AddUnionMember ( $union_id, $_POST['user_name'] );    // добавить игрока
+        $FleetError = AddUnionMember ( $union_id, $_POST['user_name'] );    // add player
     }
 }
 
 PageHeader ("flotten1");
 
-$result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );    // Количество флотов
+$result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );    // Number of fleets
 $nowfleet = $rows = dbrows ($result);
 $maxfleet = $GlobalUser['r108'] + 1;
 
 $prem = PremiumStatus ($GlobalUser);
 if ( $prem['admiral'] ) $maxfleet += 2;
 
-$expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Количество экспедиций
+$expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Number of expeditions
 $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 
 BeginContent();
@@ -217,7 +219,7 @@ BeginContent();
   </table>
 
 <?php
-// ************************ Форма создания САБ атаки ************************
+// ************************ ACS attack creation form ************************
 
     if ( key_exists ( 'order_union', $_POST) && $uni['acs'] > 0 )
     {
@@ -250,7 +252,7 @@ BeginContent();
     for ($i=0; $i<=$union['players']; $i++)
     {
         $player_id = $union["player"][$i];
-        //if ($player_id == $GlobalUser['player_id']) continue;    // не показывать себя в списке приглашенных
+        //if ($player_id == $GlobalUser['player_id']) continue;    // keep yourself off the invitation list
         $user = LoadUser ($player_id);
         echo "<option>".$user['oname']."</option>\n";
     }
@@ -353,9 +355,9 @@ BeginContent();
    </tr>
 
 <?php
-    if ( $prem['commander'] )        // Стандартные флоты
+    if ( $prem['commander'] )        // Standard fleets (templates)
     {
-        $temp_map = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // без сс
+        $temp_map = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // without solar sat
 
         echo "      <tr height=\"20\">\n";
         echo "      <td colspan=\"4\" class=\"c\"><u><a href=\"index.php?page=fleet_templates&session=$session\">".loca("FLEET1_TEMPLATE")."</a></u></td>\n";
