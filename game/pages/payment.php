@@ -1,6 +1,6 @@
 <?php
 
-// Оплата.
+// Payment.
 
 loca_add ( "menu", $GlobalUser['lang'] );
 

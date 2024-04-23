@@ -1,13 +1,13 @@
 <?php
 
-// Столб позора.
+// Pillar of Shame.
 
-$limit = 50;    // Записей на одну страницу.
+$limit = 50;    // Entries per page.
 
 $uni = LoadUniverse();
 $internal = key_exists ( 'session', $_GET );
 
-// Исправленная версия date
+// Fixed version of the date
 function MyDate ( $fmt, $timestamp )
 {
     $date = new DateTime ('@' . $timestamp);
@@ -35,8 +35,8 @@ if ($internal)
 }
 else {
 
-    // Для внешнего обращения к Столбу Позора попробовать взять язык из кукисов. Если в кукисах нет - попробовать взять язык Вселенной.
-    // Иначе использовать язык по умолчанию.
+    // For external reference to the Pillar of Shame, try to take the language from the cookies. If there is no language in cookies, try to take the language of the Universe.
+    // Otherwise, use the default language.
 
     if ( key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $_COOKIE['ogamelang'];
     else $loca_lang = $uni['lang'];

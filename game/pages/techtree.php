@@ -1,6 +1,6 @@
 <?php
 
-// Технологии.
+// Technologies.
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "techtree", $GlobalUser['lang'] );
@@ -20,7 +20,7 @@ PageHeader ("techtree");
 BeginContent ();
 
 // **************************************************************************************
-// Список объектов что-чему требуется по категориям.
+// A list of what-what-it-requires objects by category.
 
 $req_building = array (
     "name" => loca("TECHTREE_BUILDINGS"),

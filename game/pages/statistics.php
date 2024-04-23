@@ -1,6 +1,11 @@
 <?php
 
-// Статистика
+// Statistics
+
+// The stats in the original were made simple and nice: 3 times per day player and alliance scores were saved and the difference (+/-) was shown relative to the old scores.
+// New points were updated instantly after building, research, or battle (and other events that could change the scores)
+
+// No cache or other nonsense is used for statistics.
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "statistics", $GlobalUser['lang'] );
@@ -58,7 +63,7 @@ BeginContent ();
         &nbsp;<?=loca("STAT_ON_PLACE");?>        <select name="start"> 
           <option value="-1" <?php if ( $start == -1 ) echo "selected";?>><?=loca("STAT_OWN_POSITION");?></option> 
 <?php
-    // Выпадающий список игроков/альянсов
+    // Drop-down list of players/alliances
 
     if ( $who === 'ally' ) {
         $query = "SELECT * FROM ".$db_prefix."ally";

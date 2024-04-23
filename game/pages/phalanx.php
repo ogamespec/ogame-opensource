@@ -64,7 +64,7 @@ require_once "phalanx_events.php";
 
     $target = GetPlanet ( intval($_GET['spid']) );
 
-    $outofrange = false;                    // Проверить радиус фаланги
+    $outofrange = false;                    // Check the radius of the phalanx
     if ( $aktplanet['g'] != $target['g'] || $aktplanet["b42"] <= 0 )  $outofrange = true;
     else {
         $range = $aktplanet["b42"] * $aktplanet["b42"] - 1;
@@ -72,29 +72,29 @@ require_once "phalanx_events.php";
     }
 
 /*
-    if ( $GlobalUser['vacation'] )            // Игрок в режиме отпуска.
+    if ( $GlobalUser['vacation'] )            // The player is in vacation mode.
     {
         echo "<font color=#FF0000><center>Режим отпуска минимум до  ".date ("Y-m-d H:i:s", $GlobalUser['vacation_until'])."</center></font>";
     }
     else
 */
 
-    if ( $aktplanet["b42"] <= 0 )        // Попытка скана фаланги с планеты или с другой луны без фаланги
+    if ( $aktplanet["b42"] <= 0 )        // Attempting a phalanx scan from a planet or another moon without a phalanx
     {
         echo "<font color=#FF0000>".loca("PHALANX_ERR_MISSING")."</font>";
     }
-    else if ( $aktplanet["d"] < 5000 )        // Недостаточно дейтерия
+    else if ( $aktplanet["d"] < 5000 )        // Not enough deuterium
     {
         echo "<font color=#FF0000>".loca("PHALANX_ERR_DEUT")."</font>";
     }
-    else if (                                        // Попытка читерства
-        $target['owner_id'] == $GlobalUser['player_id']         ||          // скан своих планет
-        $aktplanet['owner_id'] != $GlobalUser['player_id']      ||         // скан с чужой луны/планеты
-        !( ( $target['type'] > PTYP_MOON && $target['type'] < PTYP_DF ) || $target['type'] == PTYP_DEST_PLANET )   ||           // скан НЕ (планеты или уничтоженной планеты)
-        $outofrange                                                                        // скан за пределом радиуса фаланги.
+    else if (                                        // Cheating attempt
+        $target['owner_id'] == $GlobalUser['player_id']         ||          // scan of your planets
+        $aktplanet['owner_id'] != $GlobalUser['player_id']      ||         // scan from foreign moon/planet
+        !( ( $target['type'] > PTYP_MOON && $target['type'] < PTYP_DF ) || $target['type'] == PTYP_DEST_PLANET )   ||           // scan NOT (of a planet or a destroyed planet)
+        $outofrange                                                                        // scan beyond the radius of the phalanx.
     )        
     {
-        // Выписать автоматический бан без РО на час.
+        // Issue an automatic ban without an VM for an hour.
 
         echo "<font color=#FF0000>".loca("PHALANX_ERR_CHEATER")."</font>";
     }
@@ -102,7 +102,7 @@ require_once "phalanx_events.php";
     {
         PhalanxEventList ($target['planet_id']);
 
-        // Списать 5000 дейтерия.
+        // Write off 5000 deuterium.
         $aktplanet['d'] -= 5000;
         $query = "UPDATE ".$db_prefix."planets SET d = '".$aktplanet['d']."', lastpeek = '".$now."' WHERE planet_id = " . $aktplanet['planet_id'];
         dbquery ($query);

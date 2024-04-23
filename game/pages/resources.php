@@ -1,6 +1,6 @@
 <?php
 
-// Сырьё.
+// Resource Settings.
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "resources", $GlobalUser['lang'] );
@@ -36,7 +36,7 @@ else
     $e_factor = 1.0;
 }
 
-// Обработка POST-запросов (в РО изменять настройки энергии нельзя)
+// POST requests processing (you cannot change energy settings in VM)
 if ( method () === "POST" && !$GlobalUser['vacation'] )
 {
     $exist1 = key_exists ( 'last1', $_POST ) ? true : false;
@@ -53,18 +53,18 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
     $last12 = key_exists ( 'last12', $_POST ) ? intval($_POST['last12']) : 0;
     $last212 = key_exists ( 'last212', $_POST ) ? intval($_POST['last212']) : 0;
 
-    // Проверка на неверные параметры.
+    // Checking for incorrect parameters.
     if ( $last1 > 100 || $last2 > 100 || $last3 > 100 ||
          $last4 > 100 || $last12 > 100 || $last212 > 100 ) Error ( "resources: Попытка установки производительности больше 100%" );
 
-    if ( $last1 < 0 ) $last1 = 0;        // Не должно быть < 0.
+    if ( $last1 < 0 ) $last1 = 0;        // It should not be < 0.
     if ( $last2 < 0 ) $last2 = 0;
     if ( $last3 < 0 ) $last3 = 0;
     if ( $last4 < 0 ) $last4 = 0;
     if ( $last12 < 0 ) $last12 = 0;
     if ( $last212 < 0 ) $last212 = 0;
 
-    // Сделать кратно 10.
+    // Make multiples of 10.
     $last1 = round ($last1 / 10) * 10 / 100;
     $last2 = round ($last2 / 10) * 10 / 100;
     $last3 = round ($last3 / 10) * 10 / 100;
@@ -85,7 +85,7 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
         dbquery ($query);
     }
 
-    $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // перегрузить планету.
+    $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // reload the planet.
 }
 
 PageHeader ("resources");
@@ -121,7 +121,7 @@ function prod_select ($id, $planet)
 	echo"   </th>\n";
 }
 
-function nicenum2 ($num)    // для отладки. немцы намудрили с округлением, хрен поймешь где они вызывают floor, ceil и round.
+function nicenum2 ($num)    // for debugging. the Germans messed up with rounding, I don't know where they call floor, ceil and round.
 {
     return nicenum(round($num));
     //return $num;
@@ -137,7 +137,7 @@ $unitab = LoadUniverse ( );
 $speed = $unitab['speed'];
 $planet = $aktplanet;
 
-// Производство.
+// Production.
 $m_hourly = prod_metal ($planet['b1'], $planet['mprod']) * $planet['factor'] * $speed * $g_factor;
 $k_hourly = prod_crys ($planet['b2'], $planet['kprod']) * $planet['factor'] * $speed * $g_factor;
 $d_hourly = prod_deut ($planet['b3'], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed * $g_factor;
@@ -145,7 +145,7 @@ $s_prod = prod_solar($planet['b4'], $planet['sprod']) * $e_factor;
 $f_prod = prod_fusion($planet['b12'], $GlobalUser['r113'], $planet['fprod']) * $e_factor;
 $ss_prod = prod_sat($planet['temp']+40) * $planet['f212'] * $planet['ssprod'] * $e_factor;
 
-// Потребление.
+// Consumption.
 $m_cons = cons_metal ($planet['b1']) * $planet['mprod'];
 $m_cons0 = round ($m_cons * $planet['factor']);
 $k_cons = cons_crys ($planet['b2']) * $planet['kprod'];
@@ -163,7 +163,7 @@ echo "<br> \n";
 echo "<br> \n";
 echo va(loca("RES_FACTOR")." ", round($aktplanet['factor'],2))."\n";
 
-// Не известно для чего, но это есть в оригинальной игре.
+// Not known for what, but it's in the original game.
 $count = 0;
 $result = EnumPlanets ();
 $rows = dbrows ($result);
@@ -188,13 +188,13 @@ echo "  <tr> \n";
 echo "   <th colspan=\"2\"></th>    <th>".loca("METAL")."</th>    <th>".loca("CRYSTAL")."</th>    <th>".loca("DEUTERIUM")."</th>    <th>".loca("ENERGY")."</th> \n";
 echo "  </tr>\n";
 
-// Естественное производство
+// Natural production
 echo "  <tr> \n";
 echo "   <th colspan=\"2\">".loca("RES_BASIC")."</th> \n";
 echo "   <td class=\"k\">".(20*$speed)."</td>    <td class=\"k\">".(10*$speed)."</td>    <td class=\"k\">0</td>    <td class=\"k\">0</td> \n";
 echo "  </tr>\n";
 
-// Шахта металла
+// Metal mine
 if ($aktplanet['b1']) {
     $color1 = $m_hourly ? "<font color='00FF00'>" : "";
     $color2 = $m_cons ? "<font color='FF0000'>" : "";
@@ -208,7 +208,7 @@ if ($aktplanet['b1']) {
 	echo "  </tr>\n";
 }
 
-// Шахта кристалла
+// Crystal mine
 if ($aktplanet['b2']) {
     $color1 = $k_hourly ? "<font color='00FF00'>" : "";
     $color2 = $k_cons ? "<font color='FF0000'>" : "";
@@ -222,7 +222,7 @@ if ($aktplanet['b2']) {
 	echo "  </tr>\n";
 }
 
-// Шахта дейтерия
+// Deuterium synthesizer
 if ($aktplanet['b3']) {
     $color1 = $d_hourly ? "<font color='00FF00'>" : "";
     $color2 = $d_cons ? "<font color='FF0000'>" : "";
@@ -236,7 +236,7 @@ if ($aktplanet['b3']) {
 	echo "  </tr>\n";
 }
 
-// Солнечная электростанция
+// Solar Plant
 if ($aktplanet['b4']) {
     $color = $s_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
@@ -249,7 +249,7 @@ if ($aktplanet['b4']) {
 	echo "  </tr>\n";
 }
 
-// Термояд
+// Fusion Reactor
 if ($aktplanet['b12']) {
     $color1 = $f_cons ? "<font color='FF0000'>" : "";
     $color2 = $f_prod ? "<font color='00FF00'>" : "";
@@ -263,7 +263,7 @@ if ($aktplanet['b12']) {
 	echo "  </tr>\n";
 }
 
-// Солнечные спутники
+// Solar satellites
 if ($aktplanet['f212']) {
     $color = $ss_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
@@ -276,7 +276,7 @@ if ($aktplanet['f212']) {
 	echo "  </tr>\n";
 }
 
-// Хранилища
+// Storages
 echo "    <tr>   <tr> \n";
 echo "    <th colspan=\"2\">".loca("RES_CAPACITY")."</th> \n";
 echo "    <td class=\"k\"><font color=\"#00ff00\">".nicenum2($planet['mmax']/1000)."k</font></td> \n";
@@ -288,7 +288,7 @@ echo "    <input type=\"submit\" name=\"action\" value=\"".loca("RES_CALCULATE")
 echo "  </tr> \n";
 echo "  <tr>     <th colspan=\"6\" height=\"4\"></th>   </tr> \n";
 
-// Общая выработка
+// Total production
 echo "  <tr> \n";
 echo "    <th colspan=\"2\">".loca("RES_PER_HOUR")."</th> \n";
 echo "    <td class=\"k\">".rgnum($m_total)."</td> \n";

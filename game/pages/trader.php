@@ -1,6 +1,6 @@
 <?php
 
-// Скупщик.
+// Merchant.
 
 $trader_dm = 2500;
 
@@ -28,7 +28,7 @@ function CallNewTrader ()
     global $db_prefix;
     global $trader_dm;
 
-    // Сгенерировать новые курсы.
+    // Generate new rates.
     $offer_id = intval ($_POST['offer_id']);
     $rand = mt_rand (0, 99);
     if ( $rand < 10 ) {
@@ -78,7 +78,7 @@ function CallNewTrader ()
     }
     $GlobalUser['trader'] = $offer_id;
 
-    // Записать значения в базу.
+    // Write the values to the database.
     if ( $offer_id > 0 && $offer_id <= 3 )
     {
         // Списать ТМ.
@@ -94,12 +94,12 @@ function CallNewTrader ()
     else $GlobalUser['trader'] = 0;
 }
 
-// Обработка POST-запросов.
+// POST request processing.
 if ( method () === "POST" )
 {
     $dm = $GlobalUser['dm'] + $GlobalUser['dmfree'];
 
-    if ( $GlobalUser['trader'] > 0 )        // Обменять ресурсы.
+    if ( $GlobalUser['trader'] > 0 )        // Exchange resources.
     {
         if ( key_exists ( 'call_trader', $_POST) )
         {
@@ -194,7 +194,7 @@ if ( method () === "POST" )
 
         }
     }
-    else        // Вызвать (нового) скупщика
+    else        // Call a (new) merchant
     {
         if ( $dm < $trader_dm )
         {

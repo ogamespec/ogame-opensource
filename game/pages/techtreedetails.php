@@ -1,6 +1,6 @@
 <?php
 
-// Технологии (детали).
+// Technologies (details).
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "techtree", $GlobalUser['lang'] );
@@ -21,7 +21,7 @@ PageHeader ("techtreedetails");
 BeginContent ();
 
 // **************************************************************************************
-// Список объектов что-чему требуется.
+// A list of what-what-it-requires objects.
 
 $reqs = array (
 

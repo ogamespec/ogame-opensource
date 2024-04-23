@@ -1,6 +1,6 @@
 <?php
 
-// Переброс флота воротами
+// Fleet jump by jump gate
 
 $GateError = "";
 
@@ -58,7 +58,7 @@ if ( $GateError === "" )
     if ( $total == 0 ) $GateError .= "<center>\n".loca("GATE_ERR_SHIPS")."<br></center>\n";
 }
 
-// Подготовить список флота для переброски.
+// Prepare a fleet list for jump.
 if ( $GateError === "" )
 {
     $fleet = array ();
@@ -72,27 +72,27 @@ if ( $GateError === "" )
         }
         $fleet[$gid] = $amount;
     }
-    $fleet[212] = 0;    // лампы.
+    $fleet[212] = 0;    // solar sats.
 }
 
-// Сделать переход
+// Jump
 if ( $GateError === "" )
 {
-    // Перебросить флот
+    // Jump the fleet
     AdjustShips ( $fleet, $source_id, '-' );
     AdjustShips ( $fleet, $target_id, '+' );
 
     $cooldown_time = (60*60) / $GlobalUni['fspeed'] - 1;
     $cooldown = $now + $cooldown_time;
 
-    // Нагреть ворота
+    // Warm up the gate
     $now = time ();
     $query = "UPDATE ".$db_prefix."planets SET gate_until=".$cooldown." WHERE planet_id=$source_id";
     dbquery ($query);
     $query = "UPDATE ".$db_prefix."planets SET gate_until=".$cooldown." WHERE planet_id=$target_id";
     dbquery ($query);
 
-    // Сделать редирект на ворота целевой луны
+    // Do a redirect to the target moon gate
     MyGoto ( "infos", "&cp=$target_id&gid=43" );
 }
 

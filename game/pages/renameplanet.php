@@ -1,6 +1,8 @@
 <?php
 
-// Меню планеты.
+// Planet Menu.
+
+// Sneakily hidden in the Overview - you have to click on the name of the planet.
 
 $RenameError = "";
 
@@ -45,7 +47,7 @@ function PlanetDestroyMenu ()
     exit ();
 }
 
-// Обработка POST-запросов.
+// POST request processing.
 if ( method() === "POST" )
 {
     if ( $_POST['aktion'] === loca("REN_RENAME") )
@@ -59,7 +61,7 @@ if ( method() === "POST" )
     }
     else if ( $_POST['aktion'] === loca("REN_DELETE_PLANET") )
     {
-        // Проверить пароль.
+        // Check the password.
         if ( CheckPassword ( $GlobalUser['name'], $_POST['pw']) == 0 )
         {
             $RenameError = "<center>\n" . 
@@ -68,11 +70,11 @@ if ( method() === "POST" )
         }
         else
         {
-            // Проверить принадлежит планета этому пользователю.
+            // Check if the planet belongs to this user.
             $planet = GetPlanet ( intval($_POST['deleteid']) );
             if ( $planet['owner_id'] == $GlobalUser['player_id'] )
             {
-                // Главную планету нельзя удалить.
+                // The home planet cannot be deleted.
                 if ( intval($_POST['deleteid']) == $GlobalUser['hplanetid'] ) $RenameError = "<center>\n".loca("REN_ERROR_HOME_PLANET")."<br></center>\n";
                 else
                 {
@@ -93,16 +95,16 @@ if ( method() === "POST" )
                         $moon_id = PlanetHasMoon ($planet['planet_id']);
                         if ( $moon_id )
                         {
-                            $moon = GetPlanet ( $moon_id );        // Удалять только целые луны.
+                            $moon = GetPlanet ( $moon_id );        // Delete only not yet destroyed moons
                             if ( $moon['type'] == 0 )
                             {
                                 $query = "UPDATE ".$db_prefix."planets SET type = ".PTYP_DEST_MOON.", owner_id = ".USER_SPACE.", date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $moon_id . ";";
                                 dbquery ( $query );
 
-                                // Удалить очередь на луне
+                                // Delete the queue on the moon
                                 FlushQueue ($moon_id);
 
-                                // Модифицировать статистику игрока (после удаления луны)
+                                // Modify player stats (after moon deletion)
                                 $pp = PlanetPrice ($moon);
                                 AdjustStats ( $moon['owner_id'], $pp['points'], $pp['fpoints'], 0, '-' );
                                 RecalcRanks ();
@@ -112,15 +114,15 @@ if ( method() === "POST" )
                         else $query = "UPDATE ".$db_prefix."planets SET type = ".PTYP_DEST_PLANET.", owner_id = ".USER_SPACE.", date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
                         dbquery ( $query );
 
-                        // Удалить очередь на планете
+                        // Delete the queue on the planet
                         FlushQueue ($planet['planet_id']);
 
-                        // Модифицировать статистику игрока (после удаления планеты)
+                        // Modify player stats (after planet removal)
                         $pp = PlanetPrice ($planet);
                         AdjustStats ( $planet['owner_id'], $pp['points'], $pp['fpoints'], 0, '-' );
                         RecalcRanks ();
 
-                        // Редирект на Главную планету.
+                        // Redirect to Home Planet.
                         SelectPlanet ($GlobalUser['player_id'], $GlobalUser['hplanetid']);
                         MyGoto ( "renameplanet" );
                     }

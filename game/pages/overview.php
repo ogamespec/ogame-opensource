@@ -1,8 +1,8 @@
 <?php
 
-// Обзор.
+// Overview.
 
-// TODO: Внимательно проверить генерируемый HTML код на аутентичность с оригиналом (в особенности на обнаруженный недавно недочёт с надписью "free" #76)
+// TODO: Carefully check the generated HTML code for authenticity with the original (especially the recently discovered flaw with "free" #76).
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
@@ -18,7 +18,7 @@ if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 
 $now = time();
-if ($GlobalUser['admin'] == 0) UpdateQueue ( $now );    // Не обновлять Обзор для админов
+if ($GlobalUser['admin'] == 0) UpdateQueue ( $now );    // Do not update Overview for admins
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
 ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdateLastClick ( $GlobalUser['player_id'] );
@@ -31,7 +31,7 @@ PageHeader ("overview");
 if ( key_exists ('lgn', $_GET) )
 {
 
-    UpdatePlanetActivity ( $aktplanet['planet_id'] );  // Обновить активность на Главной планете при входе в игру.
+    UpdatePlanetActivity ( $aktplanet['planet_id'] );  // Update the activity on the Home Planet when you log into the game.
 }
 
 $uni = $GlobalUni;
@@ -83,7 +83,7 @@ function t_building() {
 </script> 
 
 <?php
-    if ( $now < $uni['news_until'])        // Показать новости?
+    if ( $now < $uni['news_until'])        // Show the news?
     {
         $combox_url = "";
         if (!empty($GlobalUni['ext_board'])) $combox_url = $GlobalUni['ext_board'];
@@ -102,7 +102,7 @@ function t_building() {
 <?php
     }
 
-// Меню планеты
+// Planet menu
 echo "<table width='519'>\n\n";
 echo "<tr><td class='c' colspan='4'>\n";
 if ($aktplanet['type'] == PTYP_MOON) $name = va ( loca ("OVERVIEW_MOON"), $aktplanet['name'], $aktplanet['g'], $aktplanet['s'], $aktplanet['p'] );
@@ -111,7 +111,7 @@ else $name = va ( loca("OVERVIEW_PLANET"), $aktplanet['name'] );
 echo "<a href='index.php?page=renameplanet&session=$session&pl=".$aktplanet['planet_id']."' title='".loca("OVERVIEW_PLANET_MENU")."'>".$name."</a>     (".$GlobalUser['oname'].")\n";
 echo "</td></tr>\n";
 
-// Новые сообщения.
+// New Messages.
 $num = UnreadMessages ( $GlobalUser['player_id'] );
 if ($num) {
     if ($num > 1) $msgs = loca("OVERVIEW_MSGS");
@@ -119,13 +119,13 @@ if ($num) {
     echo "<tr><th colspan=\"4\"><a href=\"index.php?page=messages&dsp=1&session=$session\">  ".va ( loca("OVERVIEW_NEWMSG"), $num, $msgs )."   </th></tr>\n";
 }
 
-// Время сервера и список событий.
+// Server time and list of events.
 echo "<tr><th>    ".loca("OVERVIEW_TIME")."   </th> <th colspan=3>".date ( "D M j G:i:s", $now)."</th></tr>\n";
 echo "<tr><td colspan='4' class='c'>  ".loca("OVERVIEW_EVENTS")."   </td> </tr>\n\n";
 
 EventList ();
 
-// Показать, если у планеты есть луна.
+// Show if a planet has a moon.
 $moonid = PlanetHasMoon ( $aktplanet['planet_id'] );
 if ($moonid)
 {
@@ -136,7 +136,7 @@ if ($moonid)
 }
 else echo "<th>\n</th>\n";
 
-// Показать картинку планеты.
+// Show a picture of the planet.
 echo "<th colspan=\"2\">\n<img src=\"".GetPlanetImage ( UserSkin (), $aktplanet )."\" width=\"200\" height=\"200\">\n";
 
 $result = GetBuildQueue ( $aktplanet['planet_id'] );
@@ -159,7 +159,7 @@ else {
 }
 echo "</th>\n";
 
-// Список планет.
+// List of planets.
 echo "<th class='s'>\n";
 echo "<table border='0' align='top' class='s'>\n";
 $result = EnumPlanets ( $GlobalUser['player_id']);
@@ -172,7 +172,7 @@ for ($i=0; $i<$num; $i++)
     echo "<th> ".$planet['name']."<br> <a href=\"index.php?page=overview&session=$session&cp=".$planet['planet_id']."\" title=\"".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]\">";
     echo "<img src=\"".GetPlanetImage ( UserSkin (), $planet )."\" width=\"50\" height=\"50\" title=\"".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]\" ></a>\n";
     echo "<br><center>";
-    {    // Вывести текущее строительство
+    {    // Display current building
         $qresult = GetBuildQueue ( $planet['planet_id'] );
         $cnt = dbrows ( $qresult );
         if ( $cnt > 0 ) {
@@ -194,7 +194,7 @@ echo "<tr></tr>\n</table>\n</th>\n\n";
 if ( $GlobalUser['score1'] < 0 ) $score = 0;
 else $score = nicenum(floor($GlobalUser['score1']/1000));
 
-// Параметры планеты
+// Planet parameters
 echo "<tr><th> ".va(loca("OVERVIEW_DIAM"), nicenum($aktplanet['diameter']))."     ".va(loca("OVERVIEW_FIELDS"), $aktplanet['fields'], $aktplanet['maxfields'])."   </th></tr>\n";
 echo "<tr><th> ".va ( loca("OVERVIEW_TEMP"), $aktplanet['temp'], $aktplanet['temp']+40 )."   \n";
 echo "<tr><th> ".va ( loca("OVERVIEW_COORD"), "<a href=\"index.php?page=galaxy&galaxy=".$aktplanet['g']."&system=".$aktplanet['s']."&position=".$aktplanet['p']."&session=$session\" >[".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."]</a>")."\n";

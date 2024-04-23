@@ -1,5 +1,7 @@
 <?php
 
+// Built in game search.
+
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "search", $GlobalUser['lang'] );
 
@@ -39,7 +41,7 @@ if ( method () === "POST" )
     $query = "";
     if ($text_len >= 2) {
 
-        // Специально ищем с лимитом на 1 больше, чтобы понять что результатов больше лимита.
+        // Purposely looking with a limit of 1 more to realize that the results are over the limit.
 
         if ( $_POST['type'] === "playername" ) $query = "SELECT * FROM ".$db_prefix."users WHERE oname LIKE '%".$searchtext."%' LIMIT " . ($SEARCH_LIMIT + 1);
         else if ( $_POST['type'] === "planetname" ) $query = "SELECT * FROM ".$db_prefix."planets WHERE name LIKE '%".$searchtext."%' LIMIT " . ($SEARCH_LIMIT + 1);
@@ -53,7 +55,7 @@ if ( method () === "POST" )
     {
         $rows = dbrows ( $result );
 
-        // Вывести сообщение, если слишком много результатов
+        // Display a message if there are too many results
 
         if ($rows > $SEARCH_LIMIT) {
             $rows = $SEARCH_LIMIT;
@@ -65,7 +67,7 @@ if ( method () === "POST" )
             }
         }
 
-        // Вывести сообщение, если ничего не найдено
+        // Display a message if nothing is found
 
         if ($rows == 0) {
             $SearchMessage = loca("SEARCH_NORESULT");
