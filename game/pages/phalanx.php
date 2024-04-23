@@ -1,5 +1,7 @@
 <?php
 
+$PhalanxCost = 5000;    // Amount of deuterium per phalanx scan
+
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
 loca_add ( "events", $GlobalUser['lang'] );
@@ -65,9 +67,9 @@ require_once "phalanx_events.php";
     $target = GetPlanet ( intval($_GET['spid']) );
 
     $outofrange = false;                    // Check the radius of the phalanx
-    if ( $aktplanet['g'] != $target['g'] || $aktplanet["b42"] <= 0 )  $outofrange = true;
+    if ( $aktplanet['g'] != $target['g'] || $aktplanet["b".GID_B_PHALANX] <= 0 )  $outofrange = true;
     else {
-        $range = $aktplanet["b42"] * $aktplanet["b42"] - 1;
+        $range = $aktplanet["b".GID_B_PHALANX] * $aktplanet["b".GID_B_PHALANX] - 1;
         if ( abs($aktplanet['s'] - $target['s']) > $range) $outofrange = true;
     }
 
@@ -83,7 +85,7 @@ require_once "phalanx_events.php";
     {
         echo "<font color=#FF0000>".loca("PHALANX_ERR_MISSING")."</font>";
     }
-    else if ( $aktplanet["d"] < 5000 )        // Not enough deuterium
+    else if ( $aktplanet["d"] < $PhalanxCost )        // Not enough deuterium
     {
         echo "<font color=#FF0000>".loca("PHALANX_ERR_DEUT")."</font>";
     }
@@ -102,8 +104,8 @@ require_once "phalanx_events.php";
     {
         PhalanxEventList ($target['planet_id']);
 
-        // Write off 5000 deuterium.
-        $aktplanet['d'] -= 5000;
+        // Write off phalanx cost deuterium.
+        $aktplanet['d'] -= $PhalanxCost;
         $query = "UPDATE ".$db_prefix."planets SET d = '".$aktplanet['d']."', lastpeek = '".$now."' WHERE planet_id = " . $aktplanet['planet_id'];
         dbquery ($query);
     }

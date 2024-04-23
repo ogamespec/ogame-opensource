@@ -43,8 +43,8 @@ if ( $target['type'] != PTYP_MOON ) $GateError .= "<center>\n".loca("GATE_ERR_TA
 
 if ( $GateError === "" )
 {
-    if ( $source["b43"] == 0 ) $GateError .= "<center>\n".loca("GATE_ERR_START_GATE")."<br></center>\n";
-    if ( $target["b43"] == 0 ) $GateError .= "<center>\n".loca("GATE_ERR_TARGET_GATE")."<br></center>\n";
+    if ( $source["b".GID_B_JUMP_GATE] == 0 ) $GateError .= "<center>\n".loca("GATE_ERR_START_GATE")."<br></center>\n";
+    if ( $target["b".GID_B_JUMP_GATE] == 0 ) $GateError .= "<center>\n".loca("GATE_ERR_TARGET_GATE")."<br></center>\n";
 }
 
 if ( $GateError === "" )
@@ -72,7 +72,7 @@ if ( $GateError === "" )
         }
         $fleet[$gid] = $amount;
     }
-    $fleet[212] = 0;    // solar sats.
+    $fleet[GID_F_SAT] = 0;    // solar sats.
 }
 
 // Jump

@@ -4,7 +4,7 @@
 
 // You are able to create standard fleets. The maximum of standard fleets is your research level "Computer Technology" plus one
 // https://board.en.ogame.gameforge.com/index.php?thread/195023-version-0-74e/
-$MAX = $GlobalUser['r108'] + 1;
+$MAX = $GlobalUser['r'.GID_R_COMPUTER] + 1;
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleet", $GlobalUser['lang'] );

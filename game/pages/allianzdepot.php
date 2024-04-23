@@ -29,8 +29,8 @@ $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 
 
 // Launch a rocket with supplies
 
-$depot_cap = 10000 * pow ( 2, $aktplanet['b34'] );
-if ($aktplanet['b34']) $deut_avail = min(floor($aktplanet['d']), $depot_cap);
+$depot_cap = 10000 * pow ( 2, $aktplanet['b'.GID_B_ALLY_DEPOT] );
+if ($aktplanet['b'.GID_B_ALLY_DEPOT]) $deut_avail = min(floor($aktplanet['d']), $depot_cap);
 else $deut_avail = 0;
 
 $loaded = $deut_avail;
@@ -52,7 +52,7 @@ while ($rows--)
     foreach ($fleetmap as $i=>$id) {
         $amount = $fleet_obj["ship".$id];
         if ($amount > 0) { 
-            $cons += $amount * FleetCons ($id, $user['r115'], $user['r117'], $user['r118']) / 10;
+            $cons += $amount * FleetCons ($id, $user['r'.GID_R_COMBUST_DRIVE], $user['r'.GID_R_IMPULSE_DRIVE], $user['r'.GID_R_HYPER_DRIVE]) / 10;
         }
     }
 
@@ -72,7 +72,7 @@ $spent = $loaded - $deut_avail;
 if ( $spent > 0 ) AdjustResources ( 0, 0, $spent, $aktplanet['planet_id'], '-' );
 
 // Redirect to the alliance depot
-MyGoto ( "infos", "&gid=34" );
+MyGoto ( "infos", "&gid=".GID_B_ALLY_DEPOT );
 
 EndContent ();
 

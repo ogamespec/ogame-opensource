@@ -688,7 +688,7 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
     AdjustResources ( 1, 0, 0, $target['planet_id'], '+' );
 
     // Captain's logbook
-    if ( $fleet[210] > 0 ) $text .= "\n<br/>\n<br/>\n" . Logbook ( $expcount, $exptab, $origin_user['lang']);
+    if ( $fleet[GID_F_PROBE] > 0 ) $text .= "\n<br/>\n<br/>\n" . Logbook ( $expcount, $exptab, $origin_user['lang']);
 
     SendMessage ( $fleet_obj['owner_id'], 
         loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']),

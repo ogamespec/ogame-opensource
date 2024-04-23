@@ -88,7 +88,7 @@ foreach ($fleetmap as $i=>$gid)
     if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = min ( $aktplanet["f$gid"], intval($_POST["ship$gid"]) );
     else $fleet[$gid] = 0;
 }
-$fleet[212] = 0;        // solar satellites don't fly.
+$fleet[GID_F_SAT] = 0;        // solar satellites don't fly.
 
 $origin = LoadPlanet ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['thisplanettype']) );
 $target = LoadPlanet ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), intval($_POST['planettype']) );
@@ -155,7 +155,7 @@ $cargo = $spycargo = $numships = 0;
 
 foreach ($fleet as $id=>$amount)
 {
-    if ($id != 210) $cargo += FleetCargo ($id) * $amount;        // not counting probes.
+    if ($id != GID_F_PROBE) $cargo += FleetCargo ($id) * $amount;        // not counting probes.
     else $spycargo = FleetCargo ($id) * $amount;
     $numships += $amount;
 }
@@ -244,13 +244,13 @@ switch ( $order )
 
         if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( loca("FLEET_ERR_SPY_OWN") );
         else if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( loca("FLEET_ERR_SPY_NOOB") );
-        else if ( $fleet[210] == 0 ) FleetError ( loca("FLEET_ERR_SPY_REQUIRED") );
+        else if ( $fleet[GID_F_PROBE] == 0 ) FleetError ( loca("FLEET_ERR_SPY_REQUIRED") );
         else if ($BlockAttack) FleetError ( loca("FLEET_ERR_ATTACK_BAN_UNI") );
         else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
         break;
 
     case FTYP_COLONIZE:        // Colonize
-        if ( $fleet[208] == 0 ) FleetError ( loca("FLEET_ERR_COLONY_REQUIRED") );
+        if ( $fleet[GID_F_COLON] == 0 ) FleetError ( loca("FLEET_ERR_COLONY_REQUIRED") );
         else if (HasPlanet (intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet'])) ) FleetError ( loca("FLEET_ERR_COLONY_EXISTS") );
         else {
             // If a colonizer is sent - add a colonization phantom.
@@ -260,7 +260,7 @@ switch ( $order )
         break;
 
     case FTYP_RECYCLE:        // Recycle
-        if ( $fleet[209] == 0 ) FleetError ( loca("FLEET_ERR_RECYCLE_REQUIRED") );
+        if ( $fleet[GID_F_RECYCLER] == 0 ) FleetError ( loca("FLEET_ERR_RECYCLE_REQUIRED") );
         else if ($target['type'] != PTYP_DF ) FleetError ( loca("FLEET_ERR_RECYCLE_DF") );
         break;
 
@@ -270,7 +270,7 @@ switch ( $order )
             ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || 
              IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
 
-        if ( $fleet[214] == 0 ) FleetError ( loca("FLEET_ERR_DESTROY_REQUIRED") );
+        if ( $fleet[GID_F_DEATHSTAR] == 0 ) FleetError ( loca("FLEET_ERR_DESTROY_REQUIRED") );
         else if ($target['type'] != PTYP_MOON ) FleetError ( loca("FLEET_ERR_DESTROY_MOON") );
         else if ($BlockAttack) FleetError ( loca("FLEET_ERR_ATTACK_BAN_UNI") );
         else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
@@ -280,7 +280,7 @@ switch ( $order )
         $manned = 0;
         foreach ($fleet as $id=>$amount)
         {
-            if ($id != 210) $manned += $amount;        // not counting probes.
+            if ($id != GID_F_PROBE) $manned += $amount;        // not counting probes.
         }
         $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Number of expeditions
         $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );

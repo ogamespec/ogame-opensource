@@ -2,7 +2,7 @@
 
 // Notes.
 
-// Important! This game feature involves a rich interaction with input from the user.
+// ⚠️Important! This game feature involves a rich interaction with input from the user.
 // You need to pay a lot of attention to the security of the input data (size and content checks).
 
 // Database table entries:

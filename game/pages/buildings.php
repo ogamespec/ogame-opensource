@@ -4,6 +4,7 @@
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "techshort", $GlobalUser['lang'] );
+loca_add ( "build", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval ($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -142,13 +143,13 @@ if ( $_GET['mode'] === "Flotte" )
             if ($aktplanet['f'.$id]) echo "</a> (в наличии ".$aktplanet['f'.$id].")";
             $res = ShipyardPrice ( $id );
             $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
-            echo "<br>".loca("SHORT_$id")."<br>Стоимость:";
-            if ($m) echo " Металл: <b>".nicenum($m)."</b>";
-            if ($k) echo " Кристалл: <b>".nicenum($k)."</b>";
-            if ($d) echo " Дейтерий: <b>".nicenum($d)."</b>";
-            if ($e) echo " Энергия: <b>".nicenum($e)."</b>";
+            echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
+            if ($m) echo " ".loca("METAL").": <b>".nicenum($m)."</b>";
+            if ($k) echo " ".loca("CRYSTAL").": <b>".nicenum($k)."</b>";
+            if ($d) echo " ".loca("DEUTERIUM").": <b>".nicenum($d)."</b>";
+            if ($e) echo " ".loca("ENERGY").": <b>".nicenum($e)."</b>";
             $t = ShipyardDuration ( $id, $aktplanet['b21'], $aktplanet['b15'], $speed );
-            echo "<br>Длительность: ".BuildDurationFormat ( $t )."<br></th>";
+            echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>невозможно</font>";
             else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) && !$busy) {
@@ -224,13 +225,13 @@ if ( $_GET['mode'] === "Verteidigung" )
             if ($aktplanet['d'.$id]) echo "</a> (в наличии ".$aktplanet['d'.$id].")";
             $res = ShipyardPrice ( $id );
             $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
-            echo "<br>".loca("SHORT_$id")."<br>Стоимость:";
-            if ($m) echo " Металл: <b>".nicenum($m)."</b>";
-            if ($k) echo " Кристалл: <b>".nicenum($k)."</b>";
-            if ($d) echo " Дейтерий: <b>".nicenum($d)."</b>";
-            if ($e) echo " Энергия: <b>".nicenum($e)."</b>";
+            echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
+            if ($m) echo " ".loca("METAL").": <b>".nicenum($m)."</b>";
+            if ($k) echo " ".loca("CRYSTAL").": <b>".nicenum($k)."</b>";
+            if ($d) echo " ".loca("DEUTERIUM").": <b>".nicenum($d)."</b>";
+            if ($e) echo " ".loca("ENERGY").": <b>".nicenum($e)."</b>";
             $t = ShipyardDuration ( $id, $aktplanet['b21'], $aktplanet['b15'], $speed );
-            echo "<br>Длительность: ".BuildDurationFormat ( $t )."<br></th>";
+            echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !$busy ) {
                 if ( ($id == GID_D_SDOME || $id == GID_D_LDOME) && $aktplanet['d'.$id] > 0 ) echo "<font color=#FF0000>Щитовой купол можно строить только 1 раз.</font>";
@@ -320,13 +321,13 @@ if ( $_GET['mode'] === "Forschung" )
             if ($GlobalUser['r'.$id]) echo ")";
             $res = ResearchPrice ( $id, $level );
             $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
-            echo "<br>".loca("SHORT_$id")."<br>Стоимость:";
-            if ($m) echo " Металл: <b>".nicenum($m)."</b>";
-            if ($k) echo " Кристалл: <b>".nicenum($k)."</b>";
-            if ($d) echo " Дейтерий: <b>".nicenum($d)."</b>";
-            if ($e) echo " Энергия: <b>".nicenum($e)."</b>";
+            echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
+            if ($m) echo " ".loca("METAL").": <b>".nicenum($m)."</b>";
+            if ($k) echo " ".loca("CRYSTAL").": <b>".nicenum($k)."</b>";
+            if ($d) echo " ".loca("DEUTERIUM").": <b>".nicenum($d)."</b>";
+            if ($e) echo " ".loca("ENERGY").": <b>".nicenum($e)."</b>";
             $t = ResearchDuration ( $id, $level, $reslab, $speed * $r_factor );
-            echo "<br>Длительность: ".BuildDurationFormat ( $t )."<br></th>";
+            echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k>";
             if ( $operating )        // The research is in progress
             {
@@ -344,7 +345,7 @@ if ( $_GET['mode'] === "Forschung" )
                     m=0;h=0;
                     if(s<0){
     
-                        bxx.innerHTML='Окончено<br><a href=index.php?page=buildings&session=<?=$session;?>&mode=Forschung&cp=<?=$aktplanet['planet_id'];?> >дальше</a>';
+                        bxx.innerHTML='<?=loca("BUILD_COMPLETE");?><br><a href=index.php?page=buildings&session=<?=$session;?>&mode=Forschung&cp=<?=$aktplanet['planet_id'];?> >дальше</a>';
                     }else{
                         if(s>59){
                             m=Math.floor(s/60);
@@ -362,7 +363,7 @@ if ( $_GET['mode'] === "Forschung" )
                         }
                         bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=buildings&session=<?=$session;?>&unbau=<?=$id;?>&mode=Forschung&cp=<?=$resq['sub_id'];?>"+
                         <?php
-                    if ( $aktplanet['planet_id'] == $resq['sub_id'] )  echo "\">Отменить</a>\"";   ?>                }
+                    if ( $aktplanet['planet_id'] == $resq['sub_id'] )  echo "\">".loca("BUILD_CANCEL")."</a>\"";   ?>                }
                     ;
                     window.setTimeout("t();",999);
                 }

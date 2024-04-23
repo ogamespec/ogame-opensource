@@ -213,7 +213,7 @@ function PhalanxEventList ($planet_id)
                 $task[$tasknum]['fleet'][$f]['origin_id'] = $fleet_obj['start_planet'];
                 $task[$tasknum]['fleet'][$f]['target_id'] = $fleet_obj['target_planet'];
                 $task[$tasknum]['fleet'][$f]['mission'] = GetMission ($fleet_obj);
-                $task[$tasknum]['fleet'][$f]['dir'] = 0;    // на планету
+                $task[$tasknum]['fleet'][$f]['dir'] = 0;    // to the planet
                 $f++;
             }
             $unions[ $fleet_obj['union_id'] ] = 1;
@@ -298,7 +298,7 @@ function PhalanxEventList ($planet_id)
         else
         {
             if ( $fleet_obj['target_planet'] == $planet_id ) $task[$tasknum]['fleet'][0]['dir'] = 0;    // to the planet
-            else $task[$tasknum]['fleet'][0]['dir'] = 1;    // возврат
+            else $task[$tasknum]['fleet'][0]['dir'] = 1;    // return
         }
         if ($fleet_obj['mission'] == FTYP_MISSILE)
         {

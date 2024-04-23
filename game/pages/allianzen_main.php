@@ -39,12 +39,12 @@ function AllyPage_Home ()
 </th></tr>
 <tr><th><?=loca("ALLY_MAIN_MEMBERS");?></th><th><?=$members;?>
 <?php
-    if ( $rank['rights'] & 0x008 ) echo " (<a href=\"index.php?page=allianzen&session=$session&a=4\">".loca("ALLY_MAIN_MEMBERS_LINK")."</a>)";
+    if ( $rank['rights'] & ARANK_R_MEMBERS ) echo " (<a href=\"index.php?page=allianzen&session=$session&a=4\">".loca("ALLY_MAIN_MEMBERS_LINK")."</a>)";
 ?>
 </th></tr>
 <tr><th><?=loca("ALLY_MAIN_RANK");?></th><th><?=$rank['name'];?>
 <?php
-    if ( $rank['rights'] & 0x020 ) echo " (<a href=\"index.php?page=allianzen&session=$session&a=5\">".loca("ALLY_MAIN_SETTINGS_LINK")."</a>)";
+    if ( $rank['rights'] & ARANK_W_MEMBERS ) echo " (<a href=\"index.php?page=allianzen&session=$session&a=5\">".loca("ALLY_MAIN_SETTINGS_LINK")."</a>)";
 ?>
 </th></tr>
 <?php
@@ -56,7 +56,7 @@ function AllyPage_Home ()
     }
 ?>
 <?php
-    if ( $rank['rights'] & 0x080 )
+    if ( $rank['rights'] & ARANK_CIRCULAR )
     {
 ?>
 <tr><th><?=loca("ALLY_MAIN_CIRCULAR");?></th><th><a href="index.php?page=allianzen&session=<?=$session;?>&a=17"><?=loca("ALLY_MAIN_CIRCULAR_LINK");?></a></th></tr>

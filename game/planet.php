@@ -430,7 +430,7 @@ function DestroyMoon ($moon_id, $when, $fleet_id)
     if ( $moon == NULL || $planet == NULL ) return;
 
     // Return the fleets flying to the moon.
-    $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = $moon_id AND mission < 100 AND fleet_id <> $fleet_id;";
+    $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = $moon_id AND mission < ".FTYP_RETURN." AND fleet_id <> $fleet_id;";
     $result = dbquery ( $query );
     $rows = dbrows ($result);
     while ( $rows-- )
@@ -465,7 +465,7 @@ function RecalcFields ($planet_id)
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) $maxfields = 1;    // moon
     else $maxfields = floor (pow (($planet['diameter'] / 1000), 2));    // planet
     foreach ( $buildmap as $i=>$gid ) $fields += $planet["b$gid"];
-    $maxfields += 5 * $planet["b".GID_B_TERRAFORMER] + 3 * $planet["b41"];    // terraformer and moonbase
+    $maxfields += 5 * $planet["b".GID_B_TERRAFORMER] + 3 * $planet["b".GID_B_LUNAR_BASE];    // terraformer and moonbase
     $query = "UPDATE ".$db_prefix."planets SET fields=$fields, maxfields=$maxfields WHERE planet_id=$planet_id;";
     dbquery ($query);
 }

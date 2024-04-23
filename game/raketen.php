@@ -13,11 +13,11 @@ function RocketAttackMain ( $amount, $primary, $moon_attack, &$target, &$moon_pl
 
     // Repel IPM attack by interceptors (ABMs)
     $ipm = $amount;
-    $abm = $moon_attack ? $moon_planet['d502'] : $target['d502'];
+    $abm = $moon_attack ? $moon_planet['d'.GID_D_ABM] : $target['d'.GID_D_ABM];
     $ipm = max (0, $ipm - $abm);
     $ipm_destroyed = $amount - $ipm;
-    if ($moon_attack) $moon_planet['d502'] -= $ipm_destroyed;
-    else $target['d502'] -= $ipm_destroyed;
+    if ($moon_attack) $moon_planet['d'.GID_D_ABM] -= $ipm_destroyed;
+    else $target['d'.GID_D_ABM] -= $ipm_destroyed;
 
     $maxdamage = $ipm * $UnitParam[503][2] * (1 + $origin_user_attack / 10);
 
@@ -78,8 +78,8 @@ function RocketAttack ( $fleet_id, $planet_id, $when )
         $moon_attack, 
         $target, 
         $moon_planet, 
-        $origin_user['r109'], 
-        $target_user['r111'] );
+        $origin_user['r'.GID_R_WEAPON], 
+        $target_user['r'.GID_R_ARMOUR] );
 
     // Write back the defense's losses.
     SetPlanetDefense ( $planet_id, $target );
@@ -139,8 +139,8 @@ function GetDestroyedDefenseText ($lang, &$target, &$moon_planet, $moon_attack)
 
             $count = $target["d$gid"];
             // Consider the defense of the moon by interceptors from the planet.
-            if ($moon_attack && $gid == 502 ) {
-                $count = $moon_planet["d502"];
+            if ($moon_attack && $gid == GID_D_ABM ) {
+                $count = $moon_planet["d".GID_D_ABM];
             }
 
             $deftext .= "<td>".loca_lang("NAME_$gid", $lang)."</td><td>".nicenum($count)."</td>";

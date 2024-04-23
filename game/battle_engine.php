@@ -296,54 +296,54 @@ function RapidFire ($atyp, $dtyp)
 {
     $rapidfire = 0;
 
-    if ( $atyp > 400 ) return 0;
+    if ( IsDefense($atyp) ) return 0;
 
     // Deathstar vs Espionage Probe/Solar Satellite
-    if ($atyp==214 && ($dtyp==210 || $dtyp==212) && mt_rand(1,10000)>8) $rapidfire = 1;
+    if ($atyp==GID_F_DEATHSTAR && ($dtyp==GID_F_PROBE || $dtyp==GID_F_SAT) && mt_rand(1,10000)>8) $rapidfire = 1;
     // Other units vs Espionage Probe/Solar Satellite
-    else if ($atyp!=210 && ($dtyp==210 || $dtyp==212) && mt_rand(1,100)>20) $rapidfire = 1;
+    else if ($atyp!=GID_F_PROBE && ($dtyp==GID_F_PROBE || $dtyp==GID_F_SAT) && mt_rand(1,100)>20) $rapidfire = 1;
     // Heavy Fighter vs Small Cargo
-    else if ($atyp==205 && $dtyp==202 && mt_rand(1,100)>33) $rapidfire = 1;
+    else if ($atyp==GID_F_HF && $dtyp==GID_F_SC && mt_rand(1,100)>33) $rapidfire = 1;
     // Cruiser vs Light Fighter
-    else if ($atyp==206 && $dtyp==204 && mt_rand(1,1000)>166) $rapidfire = 1;
+    else if ($atyp==GID_F_CRUISER && $dtyp==GID_F_LF && mt_rand(1,1000)>166) $rapidfire = 1;
     // Cruiser vs Rocket Launcher
-    else if ($atyp==206 && $dtyp==401 && mt_rand(1,100)>10) $rapidfire = 1;
+    else if ($atyp==GID_F_CRUISER && $dtyp==GID_D_RL && mt_rand(1,100)>10) $rapidfire = 1;
     // Bomber vs light defense
-    else if ($atyp==211 && ($dtyp==401 || $dtyp==402) && mt_rand(1,100)>20) $rapidfire = 1;
+    else if ($atyp==GID_F_BOMBER && ($dtyp==GID_D_RL || $dtyp==GID_D_LL) && mt_rand(1,100)>20) $rapidfire = 1;
     // Bomber vs medium defense
-    else if ($atyp==211 && ($dtyp==403 || $dtyp==405) && mt_rand(1,100)>10) $rapidfire = 1;
+    else if ($atyp==GID_F_BOMBER && ($dtyp==GID_D_HL || $dtyp==GID_D_ION) && mt_rand(1,100)>10) $rapidfire = 1;
     // Destroyer vs Battlecruiser
-    else if ($atyp==213 && $dtyp==215 && mt_rand(1,100)>50) $rapidfire = 1;
+    else if ($atyp==GID_F_DESTRO && $dtyp==GID_F_BATTLECRUISER && mt_rand(1,100)>50) $rapidfire = 1;
     // Destroyer vs Light Laser
-    else if ($atyp==213 && $dtyp==402 && mt_rand(1,100)>10) $rapidfire = 1;
+    else if ($atyp==GID_F_DESTRO && $dtyp==GID_D_LL && mt_rand(1,100)>10) $rapidfire = 1;
     // Battlecruiser vs transport
-    else if ($atyp==215 && ($dtyp==202 || $dtyp==203) && mt_rand(1,100)>20) $rapidfire = 1;
+    else if ($atyp==GID_F_BATTLECRUISER && ($dtyp==GID_F_SC || $dtyp==GID_F_LC) && mt_rand(1,100)>20) $rapidfire = 1;
     // Battlecruiser vs medium fleet
-    else if ($atyp==215 && ($dtyp==205 || $dtyp==206) && mt_rand(1,100)>25) $rapidfire = 1;
+    else if ($atyp==GID_F_BATTLECRUISER && ($dtyp==GID_F_HF || $dtyp==GID_F_CRUISER) && mt_rand(1,100)>25) $rapidfire = 1;
     // Battlecruiser vs Battleship
-    else if ($atyp==215 && $dtyp==207 && mt_rand(1,1000)>143) $rapidfire = 1;
+    else if ($atyp==GID_F_BATTLECRUISER && $dtyp==GID_F_BATTLESHIP && mt_rand(1,1000)>143) $rapidfire = 1;
     // Deathstar vs civilian fleet
-    else if ($atyp==214 && ($dtyp==202 || $dtyp==203 || $dtyp==208 || $dtyp==209) && mt_rand(1,1000)>4) $rapidfire = 1;
+    else if ($atyp==GID_F_DEATHSTAR && ($dtyp==GID_F_SC || $dtyp==GID_F_LC || $dtyp==GID_F_COLON || $dtyp==GID_F_RECYCLER) && mt_rand(1,1000)>4) $rapidfire = 1;
     // Deathstar vs Light Fighter
-    else if ($atyp==214 && $dtyp==204 && mt_rand(1,1000)>5) $rapidfire = 1;
+    else if ($atyp==GID_F_DEATHSTAR && $dtyp==GID_F_LF && mt_rand(1,1000)>5) $rapidfire = 1;
     // Deathstar vs Heavy Fighter
-    else if ($atyp==214 && $dtyp==205 && mt_rand(1,1000)>10) $rapidfire = 1;
+    else if ($atyp==GID_F_DEATHSTAR && $dtyp==GID_F_HF && mt_rand(1,1000)>10) $rapidfire = 1;
     // Deathstar vs Cruiser
-    else if ($atyp==214 && $dtyp==206 && mt_rand(1,1000)>30) $rapidfire = 1;
+    else if ($atyp==GID_F_DEATHSTAR && $dtyp==GID_F_CRUISER && mt_rand(1,1000)>30) $rapidfire = 1;
     // Deathstar vs Battleship
-    else if ($atyp==214 && $dtyp==207 && mt_rand(1,1000)>33) $rapidfire = 1;
+    else if ($atyp==GID_F_DEATHSTAR && $dtyp==GID_F_BATTLESHIP && mt_rand(1,1000)>33) $rapidfire = 1;
     // Deathstar vs Bomber
-    else if ($atyp==214 && $dtyp==211 && mt_rand(1,1000)>40) $rapidfire = 1;
+    else if ($atyp==GID_F_DEATHSTAR && $dtyp==GID_F_BOMBER && mt_rand(1,1000)>40) $rapidfire = 1;
     // Deathstar vs Destroyer
-    else if ($atyp==214 && $dtyp==213 && mt_rand(1,1000)>200) $rapidfire = 1;
+    else if ($atyp==GID_F_DEATHSTAR && $dtyp==GID_F_DESTRO && mt_rand(1,1000)>200) $rapidfire = 1;
     // Deathstar vs Battlecruiser
-    else if ($atyp==214 && $dtyp==215 && mt_rand(1,1000)>66) $rapidfire = 1;
+    else if ($atyp==GID_F_DEATHSTAR && $dtyp==GID_F_BATTLECRUISER && mt_rand(1,1000)>66) $rapidfire = 1;
     // Deathstar vs light defense
-    else if ($atyp==214 && ($dtyp==401 || $dtyp==402) && mt_rand(1,1000)>5) $rapidfire = 1;
+    else if ($atyp==GID_F_DEATHSTAR && ($dtyp==GID_D_RL || $dtyp==GID_D_LL) && mt_rand(1,1000)>5) $rapidfire = 1;
     // Deathstar vs medium defense
-    else if ($atyp==214 && ($dtyp==403 || $dtyp==405) && mt_rand(1,1000)>10) $rapidfire = 1;
+    else if ($atyp==GID_F_DEATHSTAR && ($dtyp==GID_D_HL || $dtyp==GID_D_ION) && mt_rand(1,1000)>10) $rapidfire = 1;
     // Deathstar vs heavy defense
-    else if ($atyp==214 && $dtyp==404 && mt_rand(1,1000)>20) $rapidfire = 1;
+    else if ($atyp==GID_F_DEATHSTAR && $dtyp==GID_D_GAUSS && mt_rand(1,1000)>20) $rapidfire = 1;
 
     return $rapidfire;
 }

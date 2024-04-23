@@ -98,7 +98,7 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
 
     if ( $planettype == 2)        // debris field.
     {
-        if ( $fleet[209] > 0 ) $missions[0] = FTYP_RECYCLE;    // if there are recyclers in the fleet
+        if ( $fleet[GID_F_RECYCLER] > 0 ) $missions[0] = FTYP_RECYCLE;    // if there are recyclers in the fleet
         return $missions;
     }
 
@@ -106,7 +106,7 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
     {
         $missions[0] = FTYP_TRANSPORT;
         $missions[1] = FTYP_ATTACK;
-        if ( $fleet[208] > 0 ) $missions[2] = FTYP_COLONIZE;    // if there's a colonizer in the fleet
+        if ( $fleet[GID_F_COLON] > 0 ) $missions[2] = FTYP_COLONIZE;    // if there's a colonizer in the fleet
         return $missions;
     }
 
@@ -127,15 +127,15 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
             $missions[$i++] = FTYP_TRANSPORT;
             $missions[$i++] = FTYP_ATTACK;
             if ( $uni['acs'] > 0 ) $missions[$i++] = FTYP_ACS_HOLD;
-            if ( $fleet[214] > 0 && GetPlanetType($target) == 3 ) $missions[$i++] = FTYP_DESTROY;
-            if ( $fleet[210] > 0  ) $missions[$i++] = FTYP_SPY;
+            if ( $fleet[GID_F_DEATHSTAR] > 0 && GetPlanetType($target) == 3 ) $missions[$i++] = FTYP_DESTROY;
+            if ( $fleet[GID_F_PROBE] > 0  ) $missions[$i++] = FTYP_SPY;
         }
         else        // all others
         {
             $missions[$i++] = FTYP_TRANSPORT;
             $missions[$i++] = FTYP_ATTACK;
-            if ( $fleet[214] > 0 && GetPlanetType($target) == 3 ) $missions[$i++] = FTYP_DESTROY;
-            if ( $fleet[210] > 0  ) $missions[$i++] = FTYP_SPY;
+            if ( $fleet[GID_F_DEATHSTAR] > 0 && GetPlanetType($target) == 3 ) $missions[$i++] = FTYP_DESTROY;
+            if ( $fleet[GID_F_PROBE] > 0  ) $missions[$i++] = FTYP_SPY;
         }
 
         // If the target planet is on the ACS attack list, add the task
@@ -193,7 +193,7 @@ function FlightCons ($fleet, $dist, $flighttime, $combustion, $impulse, $hyper, 
             $basecons = $amount * FleetCons ($id, $combustion, $impulse, $hyper );
             $consumption = $basecons * $dist / 35000 * (($spd / 10) + 1) * (($spd / 10) + 1);
             $consumption += $hours * $amount * FleetCons ($id, $combustion, $impulse, $hyper ) / 10;    // holding costs
-            if ( $id == 210 ) $cons['probes'] += $consumption;
+            if ( $id == GID_F_PROBE ) $cons['probes'] += $consumption;
             else $cons['fleet'] += $consumption;
         }
     }
@@ -653,9 +653,9 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
     $origin_prem = PremiumStatus ($origin_user);
     $target_prem = PremiumStatus ($target_user);
-    $origin_tech = $origin_user['r106'];
+    $origin_tech = $origin_user['r'.GID_R_ESPIONAGE];
     if ($origin_prem['technocrat']) $origin_tech += 2;
-    $target_tech = $target_user['r106'];
+    $target_tech = $target_user['r'.GID_R_ESPIONAGE];
     if ($target_prem['technocrat']) $target_tech += 2;
 
     loca_add ( "technames", $origin_user['lang'] );

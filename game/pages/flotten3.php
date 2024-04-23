@@ -147,15 +147,15 @@ BeginContent ();
     {
         foreach ($missions as $i=>$id) 
         {
-            if ( $id == 2 ) $mission_acs = true;
-            if ( $id == 5 ) $mission_hold = true;
-            if ( $id == 15 ) $mission_exp = true;
+            if ( $id == FTYP_ACS_ATTACK ) $mission_acs = true;
+            if ( $id == FTYP_ACS_HOLD ) $mission_hold = true;
+            if ( $id == FTYP_EXPEDITION ) $mission_exp = true;
 
-            if ($id == 15)        // Экспедиция.
+            if ($id == FTYP_EXPEDITION)        // Экспедиция.
             {
                 echo "    <tr height=\"20\">\n";
                 echo "<th>\n";
-                echo "  <input type=\"radio\" name=\"order\" value=\"15\" checked='checked'>".loca("FLEET_ORDER_$id")."<br />\n";
+                echo "  <input type=\"radio\" name=\"order\" value=\"".FTYP_EXPEDITION."\" checked='checked'>".loca("FLEET_ORDER_$id")."<br />\n";
                 echo "  <br><font color=red>".loca("FLEET3_EXP_WARNING")."</font>   </th>\n";
                 echo "  </tr>\n";
             }

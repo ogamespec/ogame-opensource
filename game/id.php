@@ -85,4 +85,16 @@ function IsDefense ($gid)
 	return $gid >= GID_D_RL && $gid <= GID_D_IPM;
 }
 
+// Defense, but no missiles
+function IsDefenseNoRak ($gid)
+{
+	return $gid >= GID_D_RL && $gid <= GID_D_LDOME;
+}
+
+// Shooting defenses
+function IsDefenseShoot ($gid)
+{
+	return $gid >= GID_D_RL && $gid <= GID_D_PLASMA;
+}
+
 ?>

@@ -612,7 +612,7 @@ function RecalcStats ($player_id)
     $rows = dbrows ($result);
     while ($rows--) {
         $planet = dbarray ($result);
-        if ( $planet['type'] >= 10000 ) continue;        // only count planets and moons.
+        if ( $planet['type'] >= PTYP_DF ) continue;        // only count planets and moons.
         $pp = PlanetPrice ($planet);
         $points += $pp['points'];
         $fpoints += $pp['fpoints'];
@@ -657,7 +657,7 @@ function RecalcStats ($player_id)
         }
     
         if ( $fleet['ipm_amount'] > 0 ) {        // IPM
-            $res = ShipyardPrice ( 503 );
+            $res = ShipyardPrice ( GID_D_IPM );
             $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             $points += ($m + $k + $d) * $fleet['ipm_amount'];
         }
@@ -790,8 +790,8 @@ function AdminUserName ($user)
     $status = "";
     if ( $user['lastclick'] <= $week ) $status .= "i";
     if ( $user['lastclick'] <= $week4 ) $status .= "I";
-    if ( $user['vacation'] ) $status .= "РО";
-    if ( $user['banned'] ) $status .= "з";
+    if ( $user['vacation'] ) $status .= "v";
+    if ( $user['banned'] ) $status .= "b";
     if ( $user['noattack'] ) $status .= "А";
     if ( $user['disable'] ) $status .= "g";
     if ( $status !== "" ) $name .= " ($status)";

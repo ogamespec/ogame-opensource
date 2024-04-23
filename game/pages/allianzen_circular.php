@@ -86,7 +86,7 @@ function AllyPage_CircularMessage ()
     while ($rows--)
     {
         $rank = dbarray ($result);
-        if ( $rank['rank_id'] == 0 || $rank['rank_id'] == 1 ) continue;    // Основателя и новичка не показываем
+        if ( $rank['rank_id'] == 0 || $rank['rank_id'] == 1 ) continue;    // We don't show the founder or the rookie
         echo "    <option value=".$rank['rank_id'].">".va(loca("ALLY_CIRC_RANK"), $rank['name'])."</option>\n";
     }
 ?>

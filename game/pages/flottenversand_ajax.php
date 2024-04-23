@@ -86,9 +86,9 @@ if ( $target == NULL )
 
 $target_user = LoadUser ( $target['owner_id'] );
 
-$probes = $aktplanet['f210'];
-$recyclers = $aktplanet['f209'];
-$missiles = $aktplanet['d503'];
+$probes = $aktplanet['f'.GID_F_PROBE];
+$recyclers = $aktplanet['f'.GID_F_RECYCLER];
+$missiles = $aktplanet['d'.GID_D_IPM];
 
 if ( ( 
 ( $GlobalUser['ally_id'] == $target_user['ally_id'] && $GlobalUser['ally_id'] > 0 )   || 
@@ -116,10 +116,10 @@ if ( $order == FTYP_SPY )
     // Form a fleet.
     $fleet = array ();
     foreach ( $fleetmap as $i=>$gid ) {
-        if ( $gid == 210 ) $fleet[$gid] = $amount;
+        if ( $gid == GID_F_PROBE ) $fleet[$gid] = $amount;
         else $fleet[$gid] = 0;
     }
-    $cargo = FleetCargo (210) * $amount;
+    $cargo = FleetCargo (GID_F_PROBE) * $amount;
     $probes -= $amount;
 }
 
@@ -134,10 +134,10 @@ if ( $order == FTYP_RECYCLE )
     // Form a fleet.
     $fleet = array ();
     foreach ( $fleetmap as $i=>$gid ) {
-        if ( $gid == 209 ) $fleet[$gid] = $amount;
+        if ( $gid == GID_F_RECYCLER ) $fleet[$gid] = $amount;
         else $fleet[$gid] = 0;
     }
-    $cargo = FleetCargo (209) * $amount;
+    $cargo = FleetCargo (GID_F_RECYCLER) * $amount;
     $recyclers -= $amount;
 }
 

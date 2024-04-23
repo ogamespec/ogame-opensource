@@ -4,6 +4,7 @@
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "resources", $GlobalUser['lang'] );
+loca_add ( "premium", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -17,7 +18,7 @@ UpdateLastClick ( $GlobalUser['player_id'] );
 $prem = PremiumStatus ($GlobalUser);
 if ( $prem['geologist'] )
 {
-    $geologe_text = "<img border=\"0\" src=\"img/geologe_ikon.gif\" alt=\"Геолог\" onmouseover='return overlib(\"<font color=#ffffff>Геолог</font>\", WIDTH, 80);' onmouseout='return nd();' width=\"20\" height=\"20\">";
+    $geologe_text = "<img border=\"0\" src=\"img/geologe_ikon.gif\" alt=\"".loca("PREM_GEOLOGE")."\" onmouseover='return overlib(\"<font color=#ffffff>".loca("PREM_GEOLOGE")."</font>\", WIDTH, 80);' onmouseout='return nd();' width=\"20\" height=\"20\">";
     $g_factor = 1.1;
 }
 else
@@ -27,7 +28,7 @@ else
 }
 if ( $prem['engineer'] )
 {
-    $engineer_text = "<img border=\"0\" src=\"img/ingenieur_ikon.gif\" alt=\"Инженер\" onmouseover='return overlib(\"<font color=#ffffff>Инженер</font>\", WIDTH, 80);' onmouseout='return nd();' width=\"20\" height=\"20\">";
+    $engineer_text = "<img border=\"0\" src=\"img/ingenieur_ikon.gif\" alt=\"".loca("PREM_ENGINEER")."\" onmouseover='return overlib(\"<font color=#ffffff>".loca("PREM_ENGINEER")."</font>\", WIDTH, 80);' onmouseout='return nd();' width=\"20\" height=\"20\">";
     $e_factor = 1.1;
 }
 else
@@ -98,12 +99,12 @@ function get_prod ($id, $planet)
 {
     switch ($id)
     {
-        case 1: return 100 * $planet['mprod'];
-        case 2: return 100 * $planet['kprod'];
-        case 3: return 100 * $planet['dprod'];
-        case 4: return 100 * $planet['sprod'];
-        case 12: return 100 * $planet['fprod'];
-        case 212: return 100 * $planet['ssprod'];
+        case GID_B_METAL_MINE: return 100 * $planet['mprod'];
+        case GID_B_CRYS_MINE: return 100 * $planet['kprod'];
+        case GID_B_DEUT_SYNTH: return 100 * $planet['dprod'];
+        case GID_B_SOLAR: return 100 * $planet['sprod'];
+        case GID_B_FUSION: return 100 * $planet['fprod'];
+        case GID_F_SAT: return 100 * $planet['ssprod'];
     }
 }
 
@@ -138,21 +139,21 @@ $speed = $unitab['speed'];
 $planet = $aktplanet;
 
 // Production.
-$m_hourly = prod_metal ($planet['b1'], $planet['mprod']) * $planet['factor'] * $speed * $g_factor;
-$k_hourly = prod_crys ($planet['b2'], $planet['kprod']) * $planet['factor'] * $speed * $g_factor;
-$d_hourly = prod_deut ($planet['b3'], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed * $g_factor;
-$s_prod = prod_solar($planet['b4'], $planet['sprod']) * $e_factor;
-$f_prod = prod_fusion($planet['b12'], $GlobalUser['r113'], $planet['fprod']) * $e_factor;
-$ss_prod = prod_sat($planet['temp']+40) * $planet['f212'] * $planet['ssprod'] * $e_factor;
+$m_hourly = prod_metal ($planet['b'.GID_B_METAL_MINE], $planet['mprod']) * $planet['factor'] * $speed * $g_factor;
+$k_hourly = prod_crys ($planet['b'.GID_B_CRYS_MINE], $planet['kprod']) * $planet['factor'] * $speed * $g_factor;
+$d_hourly = prod_deut ($planet['b'.GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed * $g_factor;
+$s_prod = prod_solar($planet['b'.GID_B_SOLAR], $planet['sprod']) * $e_factor;
+$f_prod = prod_fusion($planet['b'.GID_B_FUSION], $GlobalUser['r113'], $planet['fprod']) * $e_factor;
+$ss_prod = prod_sat($planet['temp']+40) * $planet['f'.GID_F_SAT] * $planet['ssprod'] * $e_factor;
 
 // Consumption.
-$m_cons = cons_metal ($planet['b1']) * $planet['mprod'];
+$m_cons = cons_metal ($planet['b'.GID_B_METAL_MINE]) * $planet['mprod'];
 $m_cons0 = round ($m_cons * $planet['factor']);
-$k_cons = cons_crys ($planet['b2']) * $planet['kprod'];
+$k_cons = cons_crys ($planet['b'.GID_B_CRYS_MINE]) * $planet['kprod'];
 $k_cons0 = round ($k_cons * $planet['factor']);
-$d_cons = cons_deut ($planet['b3']) * $planet['dprod'];
+$d_cons = cons_deut ($planet['b'.GID_B_DEUT_SYNTH]) * $planet['dprod'];
 $d_cons0 = round ($d_cons * $planet['factor']);
-$f_cons = - cons_fusion ( $planet['b12'], $planet['fprod'] ) * $speed;
+$f_cons = - cons_fusion ( $planet['b'.GID_B_FUSION], $planet['fprod'] ) * $speed;
 
 $m_total = $m_hourly + (20*$speed);
 $k_total = $k_hourly + (10*$speed);
@@ -204,7 +205,7 @@ if ($aktplanet['b1']) {
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        $color2".nicenum2($m_cons0)."/".nicenum2($m_cons)."</th> \n";
-	prod_select (1, $planet);
+	prod_select (GID_B_METAL_MINE, $planet);
 	echo "  </tr>\n";
 }
 
@@ -218,7 +219,7 @@ if ($aktplanet['b2']) {
 	echo "    <font color=\"#FFFFFF\">        $color1".nicenum2($k_hourly)."</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        $color2".nicenum2($k_cons0)."/".nicenum2($k_cons)."</th> \n";
-	prod_select (2, $planet);
+	prod_select (GID_B_CRYS_MINE, $planet);
 	echo "  </tr>\n";
 }
 
@@ -232,7 +233,7 @@ if ($aktplanet['b3']) {
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       $color1".nicenum2($d_hourly)."</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       $color2".nicenum2($d_cons0)."/".nicenum2($d_cons)."</th>\n";
-	prod_select (3, $planet);
+	prod_select (GID_B_DEUT_SYNTH, $planet);
 	echo "  </tr>\n";
 }
 
@@ -245,7 +246,7 @@ if ($aktplanet['b4']) {
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       $color".nicenum2($s_prod)."</th>\n";
-	prod_select (4, $planet);
+	prod_select (GID_B_SOLAR, $planet);
 	echo "  </tr>\n";
 }
 
@@ -259,7 +260,7 @@ if ($aktplanet['b12']) {
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       $color1".nicenum2($f_cons)."</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       $color2".nicenum2($f_prod)."</th>\n";
-	prod_select (12, $planet);
+	prod_select (GID_B_FUSION, $planet);
 	echo "  </tr>\n";
 }
 
@@ -272,7 +273,7 @@ if ($aktplanet['f212']) {
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       $color".nicenum2($ss_prod)."</th>\n";
-	prod_select (212, $planet);
+	prod_select (GID_F_SAT, $planet);
 	echo "  </tr>\n";
 }
 

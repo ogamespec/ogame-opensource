@@ -65,7 +65,7 @@ BeginContent ();
 
 echo "<table width=\"519\">\n";
 
-if ($gid > 200 && $gid < 300)    // Флот
+if (IsFleet($gid))    // Fleet
 {
     $base_speed = $UnitParam[$gid][4];
     $base_cons = $UnitParam[$gid][5];
@@ -107,7 +107,7 @@ if ($gid > 200 && $gid < 300)    // Флот
     echo "</th></tr>\n";
     echo "</table></th></tr></table>\n";
 }
-else if ($gid > 400 && $gid < 500)    // Defense.
+else if (IsDefenseNoRak($gid))    // Defense.
 {
     echo "<!-- begin fleet or defense information -->\n";
     echo "<tr><td class=\"c\" colspan=\"2\">".loca("INFO_DEFENSE")."</td></tr>\n";
@@ -116,7 +116,7 @@ else if ($gid > 400 && $gid < 500)    // Defense.
     echo "<table border=\"0\">\n";
     echo "<tr><td valign=\"top\"><img border=\"0\" src=\"".UserSkin()."gebaeude/$gid.gif\" width=\"120\" height=\"120\"></td>\n";
     echo "<td>".loca("LONG_$gid");
-    if ($gid < 407) {
+    if (IsDefenseShoot($gid)) {
         // For shooting defenses, output the damage repair percentage.
         echo " " . va(loca("INFO_REPAIR"), $drepair);
     }
@@ -127,7 +127,7 @@ else if ($gid > 400 && $gid < 500)    // Defense.
     echo "<tr><th>".loca("INFO_ATTACK")."</th><th>".nicenum($UnitParam[$gid][2])."</th></tr>\n";
     echo "</th></tr></table>\n";
 }
-else if ($gid > 100 && $gid < 200)    // Research.
+else if (IsResearch($gid))    // Research.
 {
     echo "<tr><td class=\"c\">".loca("NAME_$gid")."</td></tr>\n";
     echo "<tr><th><table>\n";
@@ -146,7 +146,7 @@ else
 
     // Additional information and buttons.
 
-    if ($gid == 1)    // Metal mine
+    if ($gid == GID_B_METAL_MINE)    // Metal mine
     {
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
         $level = $aktplanet['b'.$gid]-2;
@@ -166,7 +166,7 @@ else
         }
         echo "</table></center></tr></th>";
     }
-    else if ($gid == 2)    // Crystal mine
+    else if ($gid == GID_B_CRYS_MINE)    // Crystal mine
     {
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
         $level = $aktplanet['b'.$gid]-2;
@@ -186,7 +186,7 @@ else
         }
         echo "</table></center></tr></th>";
     }
-    else if ($gid == 3)    // Deuterium synthesizer
+    else if ($gid == GID_B_DEUT_SYNTH)    // Deuterium synthesizer
     {
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
         $level = $aktplanet['b'.$gid]-2;
@@ -206,7 +206,7 @@ else
         }
         echo "</table></center></tr></th>";
     }
-    else if ($gid == 4)    // Solar Plant
+    else if ($gid == GID_B_SOLAR)    // Solar Plant
     {
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td>\n";
         $level = $aktplanet['b'.$gid]-2;
@@ -222,7 +222,7 @@ else
         }
         echo "</table></center></tr></th>";
     }
-    else if ($gid == 12)    // Fusion Reactor
+    else if ($gid == GID_B_FUSION)    // Fusion Reactor
     {
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_CONS_DEUT")."</td><td class='c'>".loca("INFO_DIFF")."</td>\n";
         $level = $aktplanet['b'.$gid]-2;
@@ -242,7 +242,7 @@ else
         }
         echo "</table></center></tr></th>";
     }
-    else if ($gid == 22 || $gid == 23 || $gid == 24 )     // Storages
+    else if ($gid == GID_B_METAL_STOR || $gid == GID_B_CRYS_STOR || $gid == GID_B_DEUT_STOR )     // Storages
     {
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_STORAGE")."</td><td class='c'>".loca("INFO_DIFF")."</td></tr>\n";
         $level = $aktplanet['b'.$gid];
@@ -254,9 +254,9 @@ else
         }
         echo "</table>";
     }
-    else if ( $gid == 34 )                                    // Alliance Depot
+    else if ( $gid == GID_B_ALLY_DEPOT )                                    // Alliance Depot
     {
-        $depot_cap = 10000 * pow ( 2, $aktplanet['b34'] );
+        $depot_cap = 10000 * pow ( 2, $aktplanet['b'.GID_B_ALLY_DEPOT] );
         $deut_avail = 0;
         if ($aktplanet['b34']) $deut_avail = min(floor($aktplanet['d']), $depot_cap);
 ?>
@@ -308,24 +308,24 @@ else
 </form>
 <?php
     }
-    else if ( $gid == 44 && $aktplanet["b44"] > 0)        // Missile Silo
+    else if ( $gid == GID_B_MISS_SILO && $aktplanet["b".GID_B_MISS_SILO] > 0)        // Missile Silo
     {
-        $rak_space = $aktplanet["b44"] * 10;
+        $rak_space = $aktplanet["b".GID_B_MISS_SILO] * 10;
         if ( key_exists ( 'aktion', $_POST) )
         {
-            $amount1 = min ( $aktplanet['d502'], intval ( $_POST['ab502'] ) );
+            $amount1 = min ( $aktplanet['d'.GID_D_ABM], intval ( $_POST['ab502'] ) );
             if ( $amount1 > 0) {
-                $aktplanet['d502'] -= $amount1;
-                $res = ShipyardPrice ( 502 );
+                $aktplanet['d'.GID_D_ABM] -= $amount1;
+                $res = ShipyardPrice ( GID_D_ABM );
                 $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
                 $points  = ( $m + $k + $d ) * $amount1;
                 AdjustStats ( $aktplanet['owner_id'], $points, 0, 0, '-');
             }
 
-            $amount2 = min ($aktplanet['d503'], intval ( $_POST['ab503'] ) );
+            $amount2 = min ($aktplanet['d'.GID_D_ABM], intval ( $_POST['ab503'] ) );
             if ( $amount2 > 0) {
-                $aktplanet['d503'] -= $amount2;
-                $res = ShipyardPrice ( 503 );
+                $aktplanet['d'.GID_D_IPM] -= $amount2;
+                $res = ShipyardPrice ( GID_D_IPM );
                 $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
                 $points  = ( $m + $k + $d ) * $amount2;
                 AdjustStats ( $aktplanet['owner_id'], $points, 0, 0, '-');
@@ -344,7 +344,7 @@ else
 <?=va(loca("INFO_SILO_INFO"), $rak_space/2, $rak_space);?><br><table border=0> 
 
 <?php
-    if ( ($aktplanet['d502'] + $aktplanet['d503']) > 0 )  
+    if ( ($aktplanet['d'.GID_D_ABM] + $aktplanet['d'.GID_D_IPM]) > 0 )  
     {
 ?>
 <form action="index.php?page=infos&session=<?=$session;?>&gid=44"  method=post> 
@@ -352,18 +352,18 @@ else
  <td class=c><?=loca("INFO_SILO_TYPE");?></td><td class=c><?=loca("INFO_SILO_AMOUNT");?></td><td class=c><?=loca("INFO_SILO_DEMOLISH");?></td> 
  <td class=c></td></tr> 
 <?php
-            if ($aktplanet['d502'] > 0) 
+            if ($aktplanet['d'.GID_D_ABM] > 0) 
             {
 ?>
-<tr><td class=c><?=loca("NAME_502");?></td><td class=c><?=$aktplanet['d502'];?></td><td class=c><input type=text name="ab502" size=2 value=""></td><td class=c></td></tr>
+<tr><td class=c><?=loca("NAME_502");?></td><td class=c><?=$aktplanet['d'.GID_D_ABM];?></td><td class=c><input type=text name="ab502" size=2 value=""></td><td class=c></td></tr>
 <?php
             }
 ?>
 <?php
-            if ($aktplanet['d503'] > 0) 
+            if ($aktplanet['d'.GID_D_IPM] > 0) 
             {
 ?>
-<tr><td class=c><?=loca("NAME_503");?></td><td class=c><?=$aktplanet['d503'];?></td><td class=c><input type=text name="ab503" size=2 value=""></td><td class=c></td></tr>
+<tr><td class=c><?=loca("NAME_503");?></td><td class=c><?=$aktplanet['d'.GID_D_IPM];?></td><td class=c><input type=text name="ab503" size=2 value=""></td><td class=c></td></tr>
 <?php
             }
 ?>
@@ -371,7 +371,7 @@ else
 <?php
         }
     }
-    else if ( $gid == 42 )        // Sensor Phalanx
+    else if ( $gid == GID_B_PHALANX )        // Sensor Phalanx
     {
 ?>
 <tr><th><p><center><table border=1 ><tr><td class='c'><?=loca("INFO_PHALANX_LEVEL");?></td><td class='c'><?=loca("INFO_PHALANX_RADIUS");?></td></tr>
@@ -387,7 +387,7 @@ else
 </center></table></tr></th></table> 
 <?php
     }
-    else if ( $gid == 43 && $aktplanet["b43"] > 0)        // Jump Gate
+    else if ( $gid == GID_B_JUMP_GATE && $aktplanet["b".GID_B_JUMP_GATE] > 0)        // Jump Gate
     {
         if ( $now >= $aktplanet["gate_until"] ) 
         {
@@ -467,7 +467,7 @@ else
     // The terraformer and moonbase cannot be demolished.
     // A missile silo can only be demolished if there are no missiles on the planet.
 
-    if ( $gid < 200 && $aktplanet['b'.$gid] && !($gid == 33 || $gid == 41 || $gid == 44) ) {
+    if ( $gid < 200 && $aktplanet['b'.$gid] && !($gid == GID_B_TERRAFORMER || $gid == GID_B_LUNAR_BASE || $gid == GID_B_MISS_SILO) ) {
         echo "<table width=519 >\n";
         echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">".va(loca("INFO_DEMOLISH_TITLE"), loca("NAME_$gid"), $aktplanet['b'.$gid])."</a></td></tr>\n";
         $res = BuildPrice ( $gid, $aktplanet['b'.$gid]-1 );
@@ -476,11 +476,11 @@ else
         if ($m) echo loca("INFO_DEMOLISH_M") . "<b>".nicenum($m)."</b> ";
         if ($k) echo loca("INFO_DEMOLISH_K") . "<b>".nicenum($k)."</b> ";
         if ($d) echo loca("INFO_DEMOLISH_D") . "<b>".nicenum($d)."</b> ";
-        $t = BuildDuration ( $gid, $aktplanet['b'.$gid]-1, $aktplanet['b14'], $aktplanet['b15'], $speed );
+        $t = BuildDuration ( $gid, $aktplanet['b'.$gid]-1, $aktplanet['b'.GID_B_ROBOTS], $aktplanet['b'.GID_B_NANITES], $speed );
         echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".BuildDurationFormat ( $t )."<br></th></tr></table>\n";
     }
 
-    if ( $gid == 44 && $aktplanet['b'.$gid])    // Missile Silo
+    if ( $gid == GID_B_MISS_SILO && $aktplanet['b'.$gid])    // Missile Silo
     {
         $raknum = $aktplanet['d502'] + $aktplanet['d503'];
         echo "<table width=519 >\n";
@@ -492,7 +492,7 @@ else
         if ($m) echo loca("INFO_DEMOLISH_M") . "<b>".nicenum($m)."</b> ";
         if ($k) echo loca("INFO_DEMOLISH_K") . "<b>".nicenum($k)."</b> ";
         if ($d) echo loca("INFO_DEMOLISH_D") . "<b>".nicenum($d)."</b> ";
-        $t = BuildDuration ( $gid, $aktplanet['b'.$gid]-1, $aktplanet['b14'], $aktplanet['b15'], $speed );
+        $t = BuildDuration ( $gid, $aktplanet['b'.$gid]-1, $aktplanet['b'.GID_B_ROBOTS], $aktplanet['b'.GID_B_NANITES], $speed );
         echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".BuildDurationFormat ( $t )."<br></th></tr></table>\n";
     }
 

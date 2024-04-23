@@ -694,7 +694,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $source .= "Attacker".$num." = ({".$attacker['oname']."} ";
         $source .= $attacker['id'] . " ";
         $source .= $attacker['g'] . " " . $attacker['s'] . " " . $attacker['p'] . " ";
-        $source .= $attacker['r109'] . " " . $attacker['r110'] . " " . $attacker['r111'] . " ";
+        $source .= $attacker['r'.GID_R_WEAPON] . " " . $attacker['r'.GID_R_SHIELD] . " " . $attacker['r'.GID_R_ARMOUR] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $attacker['fleet'][$gid] . " ";
         $source .= ")\n";
     }
@@ -703,7 +703,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $source .= "Defender".$num." = ({".$defender['oname']."} ";
         $source .= $defender['id'] . " ";
         $source .= $defender['g'] . " " . $defender['s'] . " " . $defender['p'] . " ";
-        $source .= $defender['r109'] . " " . $defender['r110'] . " " . $defender['r111'] . " ";
+        $source .= $defender['r'.GID_R_WEAPON] . " " . $defender['r'.GID_R_SHIELD] . " " . $defender['r'.GID_R_ARMOUR] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $defender['fleet'][$gid] . " ";
         foreach ($defmap as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
         $source .= ")\n";
@@ -1111,7 +1111,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
         $source .= "Attacker".$num." = ({".$attacker['oname']."} ";
         $source .= $attacker['id'] . " ";
         $source .= $attacker['g'] . " " . $attacker['s'] . " " . $attacker['p'] . " ";
-        $source .= $attacker['r109'] . " " . $attacker['r110'] . " " . $attacker['r111'] . " ";
+        $source .= $attacker['r'.GID_R_WEAPON] . " " . $attacker['r'.GID_R_SHIELD] . " " . $attacker['r'.GID_R_ARMOUR] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $attacker['fleet'][$gid] . " ";
         $source .= ")\n";
     }
@@ -1120,7 +1120,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
         $source .= "Defender".$num." = ({".$defender['oname']."} ";
         $source .= $defender['id'] . " ";
         $source .= $defender['g'] . " " . $defender['s'] . " " . $defender['p'] . " ";
-        $source .= $defender['r109'] . " " . $defender['r110'] . " " . $defender['r111'] . " ";
+        $source .= $defender['r'.GID_R_WEAPON] . " " . $defender['r'.GID_R_SHIELD] . " " . $defender['r'.GID_R_ARMOUR] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $defender['fleet'][$gid] . " ";
         foreach ($defmap as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
         $source .= ")\n";

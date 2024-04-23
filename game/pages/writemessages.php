@@ -2,6 +2,9 @@
 
 // Write private message to a player.
 
+// ⚠️Important! This game feature involves a rich interaction with input from the user.
+// You need to pay a lot of attention to the security of the input data (size and content checks).
+
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "messages", $GlobalUser['lang'] );
 

@@ -407,7 +407,7 @@ echo "</form>\n";
 
     $system_radius = abs ($aktplanet['s'] - $coord_s);
     $ipm_radius = max (0, 5 * $GlobalUser['r'.GID_R_IMPULSE_DRIVE] - 1);
-    $show_ipm_button = ($system_radius <= $ipm_radius) && ($aktplanet["d503"] > 0) && ($aktplanet['g'] == $coord_g);
+    $show_ipm_button = ($system_radius <= $ipm_radius) && ($aktplanet["d".GID_D_IPM] > 0) && ($aktplanet['g'] == $coord_g);
 
     if ( isset($_GET['mode']) ) {
 

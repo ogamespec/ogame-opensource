@@ -237,8 +237,8 @@ function CanBuild ($user, $planet, $id, $lvl, $destroy, $enqueue=false)
     else if ( $planet['fields'] >= $planet['maxfields'] && !$destroy ) return loca_lang("BUILD_ERROR_NO_SPACE", $user['lang']);
 
     // Research or construction at the shipyard is underway
-    else if ( $id == 31 && $reslab_operating ) return loca_lang("BUILD_ERROR_RESEARCH_ACTIVE", $user['lang']);
-    else if ( ($id == 15 || $id == 21) && $shipyard_operating ) return loca_lang("BUILD_ERROR_SHIPYARD_ACTIVE", $user['lang']);
+    else if ( $id == GID_B_RES_LAB && $reslab_operating ) return loca_lang("BUILD_ERROR_RESEARCH_ACTIVE", $user['lang']);
+    else if ( ($id == GID_B_NANITES || $id == GID_B_SHIPYARD) && $shipyard_operating ) return loca_lang("BUILD_ERROR_SHIPYARD_ACTIVE", $user['lang']);
 
     // Check the available amount of resources on the planet
     else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) && !$enqueue ) return loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
@@ -248,7 +248,7 @@ function CanBuild ($user, $planet, $id, $lvl, $destroy, $enqueue=false)
 
     if ( $destroy )
     {
-        if ( $id == 33 || $id == 41 ) return loca_lang("BUILD_ERROR_CANT_DEMOLISH", $user['lang']);
+        if ( $id == GID_B_TERRAFORMER || $id == GID_B_LUNAR_BASE ) return loca_lang("BUILD_ERROR_CANT_DEMOLISH", $user['lang']);
         else if ( $planet["b".$id] <= 0 ) return loca_lang("BUILD_ERROR_NO_SUCH_BUILDING", $user['lang']);
     }
 
@@ -477,8 +477,8 @@ function Queue_Build_End ($queue)
     {
         $fields = "fields = fields + 1";
         // Special handling for building a Terraformer or Moonbase -- add the maximum number of fields.
-        if ( $id == 33 ) $fields .= ", maxfields = maxfields + 5";
-        if ( $id == 41 ) $fields .= ", maxfields = maxfields + 3";
+        if ( $id == GID_B_TERRAFORMER ) $fields .= ", maxfields = maxfields + 5";
+        if ( $id == GID_B_LUNAR_BASE ) $fields .= ", maxfields = maxfields + 3";
     }
     else $fields = "fields = fields - 1";
 
@@ -558,34 +558,34 @@ function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
     if ( $uni['freeze'] ) return;
 
     // Shield domes can be built up to a maximum of 1 unit.
-    if ( ($gid == 407 || $gid == 408) && $value > 1 ) $value = 1;
+    if ( ($gid == GID_D_SDOME || $gid == GID_D_LDOME) && $value > 1 ) $value = 1;
 
     $planet = GetPlanet ( $planet_id );
 
     // If the planet already has a shield dome, we don't build it.
-    if ( ($gid == 407 || $gid == 408) && $planet["d".$gid] > 0 ) return;
+    if ( ($gid == GID_D_SDOME || $gid == GID_D_LDOME) && $planet["d".$gid] > 0 ) return;
 
     // If a dome of the same type is already being built in the queue, then do not add another dome to the queue.
     // Limit the number of missiles ordered to those already under construction
     $result = GetShipyardQueue ($planet_id);
     $tasknum = dbrows ($result);
-    $rak_space = $planet['b44'] * 10 - ($planet['d502'] + 2 * $planet['d503']);
+    $rak_space = $planet['b'.GID_B_MISS_SILO] * 10 - ($planet['d'.GID_D_ABM] + 2 * $planet['d'.GID_D_IPM]);
     while ($tasknum--)
     {
         $queue = dbarray ( $result );
-        if ( $queue['obj_id'] == 407 || $queue['obj_id'] == 408 )
+        if ( $queue['obj_id'] == GID_D_SDOME || $queue['obj_id'] == GID_D_LDOME )
         {
             if ( $queue['obj_id'] == $gid ) return;    // is in line to build a dome of the same type.
         }
-        if ( $queue['obj_id'] == 502 || $queue['obj_id'] == 503 )
+        if ( $queue['obj_id'] == GID_D_ABM || $queue['obj_id'] == GID_D_IPM )
         {
-            if ( $queue['obj_id'] == 502 ) $rak_space -= $queue['level'];
+            if ( $queue['obj_id'] == GID_D_ABM ) $rak_space -= $queue['level'];
             else $rak_space -= 2 * $queue['level'];
         }
     }
 
-    if ( $gid == 502 ) $value = min ( $rak_space, $value );
-    if ( $gid == 503 ) $value = min ( floor ($rak_space / 2), $value );
+    if ( $gid == GID_D_ABM ) $value = min ( $rak_space, $value );
+    if ( $gid == GID_D_IPM ) $value = min ( floor ($rak_space / 2), $value );
     if ( $value <= 0 ) return;
 
     $user = LoadUser ( $player_id );
@@ -687,7 +687,7 @@ function CanResearch ($user, $planet, $id, $lvl)
         if ($resq) return loca_lang("BUILD_ERROR_RESEARCH_ALREADY", $user['lang']);
 
         // Is the research lab being upgraded on any planet?
-        $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = 31 AND (type = 'Build' OR type = 'Demolish') AND owner_id = " . $user['player_id'];
+        $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = ".GID_B_RES_LAB." AND (type = 'Build' OR type = 'Demolish') AND owner_id = " . $user['player_id'];
         $result = dbquery ( $query );
         $busy = ( dbrows ($result) > 0 );
         if ( $busy ) return loca_lang("BUILD_ERROR_RESEARCH_LAB_BUILDING", $user['lang']);

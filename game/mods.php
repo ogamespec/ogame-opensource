@@ -118,22 +118,22 @@ function ModifyUserForCarnageMode ($player_id)
     // Modify the research
 
     $carnage_resmap = array (
-        106 => 15,  // Espionage Technology
-        108 => 15,  // Computer Technology
-        109 => 18,  // Weapons Technology
-        110 => 18,  // Shielding Technology
-        111 => 18,  // Armour Technology
-        113 => 12,  // Energy Technology
-        114 => 10,  // Hyperspace Technology
-        115 => 20,  // Combustion Drive
-        117 => 18,  // Impulse Drive
-        118 => 16,  // Hyperspace Drive
-        120 => 12,  // Laser Technology
-        121 => 5,   // Ion Technology
-        122 => 8,   // Plasma Technology
-        123 => 5,   // Intergalactic Research Network
-        124 => 9,   // Expedition Technology
-        199 => 1,   // Graviton Technology
+        GID_R_ESPIONAGE => 15,  // Espionage Technology
+        GID_R_COMPUTER => 15,  // Computer Technology
+        GID_R_WEAPON => 18,  // Weapons Technology
+        GID_R_SHIELD => 18,  // Shielding Technology
+        GID_R_ARMOUR => 18,  // Armour Technology
+        GID_R_ENERGY => 12,  // Energy Technology
+        GID_R_HYPERSPACE => 10,  // Hyperspace Technology
+        GID_R_COMBUST_DRIVE => 20,  // Combustion Drive
+        GID_R_IMPULSE_DRIVE => 18,  // Impulse Drive
+        GID_R_HYPER_DRIVE => 16,  // Hyperspace Drive
+        GID_R_LASER_TECH => 12,  // Laser Technology
+        GID_R_ION_TECH => 5,   // Ion Technology
+        GID_R_PLASMA_TECH => 8,   // Plasma Technology
+        GID_R_IGN => 5,   // Intergalactic Research Network
+        GID_R_EXPEDITION => 9,   // Expedition Technology
+        GID_R_GRAVITON => 1,   // Graviton Technology
     );
     $query = "UPDATE ".$db_prefix."users SET ";
     foreach ( $carnage_resmap as $gid=>$level)
@@ -154,45 +154,45 @@ function GetCarnageModeBuildings ($moon)
     $objects = array();
 
     if ($moon) {
-        $objects['b1'] = 0;
-        $objects['b2'] = 0;
-        $objects['b3'] = 0;
-        $objects['b4'] = 0;
-        $objects['b12'] = 0;
-        $objects['b14'] = 0;
-        $objects['b15'] = 0;
-        $objects['b21'] = 0;
-        $objects['b22'] = 0;
-        $objects['b23'] = 0;
-        $objects['b24'] = 0;
-        $objects['b31'] = 0;
-        $objects['b33'] = 0;
-        $objects['b34'] = 0;
-        $objects['b41'] = 7;    // Lunar Base
-        $objects['b42'] = 7;    // Sensor Phalanx
-        $objects['b43'] = 1;    // Jump Gate
-        $objects['b44'] = 0;
+        $objects['b'.GID_B_METAL_MINE] = 0;
+        $objects['b'.GID_B_CRYS_MINE] = 0;
+        $objects['b'.GID_B_DEUT_SYNTH] = 0;
+        $objects['b'.GID_B_SOLAR] = 0;
+        $objects['b'.GID_B_FUSION] = 0;
+        $objects['b'.GID_B_ROBOTS] = 0;
+        $objects['b'.GID_B_NANITES] = 0;
+        $objects['b'.GID_B_SHIPYARD] = 0;
+        $objects['b'.GID_B_METAL_STOR] = 0;
+        $objects['b'.GID_B_CRYS_STOR] = 0;
+        $objects['b'.GID_B_DEUT_STOR] = 0;
+        $objects['b'.GID_B_RES_LAB] = 0;
+        $objects['b'.GID_B_TERRAFORMER] = 0;
+        $objects['b'.GID_B_ALLY_DEPOT] = 0;
+        $objects['b'.GID_B_LUNAR_BASE] = 7;    // Lunar Base
+        $objects['b'.GID_B_PHALANX] = 7;    // Sensor Phalanx
+        $objects['b'.GID_B_JUMP_GATE] = 1;    // Jump Gate
+        $objects['b'.GID_B_MISS_SILO] = 0;
     }
     else {
 
-        $objects['b1'] = 40;    // Metal Mine
-        $objects['b2'] = 35;    // Crystal Mine
-        $objects['b3'] = 35;    // Deuterium Synthesizer
-        $objects['b4'] = 25;    // Solar Plant
-        $objects['b12'] = 0;
-        $objects['b14'] = 10;   // Robotics Factory
-        $objects['b15'] = 10;   // Nanite Factory
-        $objects['b21'] = 12;   // Shipyard
-        $objects['b22'] = 15;   // Metal Storage
-        $objects['b23'] = 15;   // Crystal Storage
-        $objects['b24'] = 15;   // Deuterium Tank
-        $objects['b31'] = 12;   // Research Lab
-        $objects['b33'] = 0;
-        $objects['b34'] = 0;
-        $objects['b41'] = 0;
-        $objects['b42'] = 0;
-        $objects['b43'] = 0;
-        $objects['b44'] = 0;
+        $objects['b'.GID_B_METAL_MINE] = 40;    // Metal Mine
+        $objects['b'.GID_B_CRYS_MINE] = 35;    // Crystal Mine
+        $objects['b'.GID_B_DEUT_SYNTH] = 35;    // Deuterium Synthesizer
+        $objects['b'.GID_B_SOLAR] = 25;    // Solar Plant
+        $objects['b'.GID_B_FUSION] = 0;
+        $objects['b'.GID_B_ROBOTS] = 10;   // Robotics Factory
+        $objects['b'.GID_B_NANITES] = 10;   // Nanite Factory
+        $objects['b'.GID_B_SHIPYARD] = 12;   // Shipyard
+        $objects['b'.GID_B_METAL_STOR] = 15;   // Metal Storage
+        $objects['b'.GID_B_CRYS_STOR] = 15;   // Crystal Storage
+        $objects['b'.GID_B_DEUT_STOR] = 15;   // Deuterium Tank
+        $objects['b'.GID_B_RES_LAB] = 12;   // Research Lab
+        $objects['b'.GID_B_TERRAFORMER] = 0;
+        $objects['b'.GID_B_ALLY_DEPOT] = 0;
+        $objects['b'.GID_B_LUNAR_BASE] = 0;
+        $objects['b'.GID_B_PHALANX] = 0;
+        $objects['b'.GID_B_JUMP_GATE] = 0;
+        $objects['b'.GID_B_MISS_SILO] = 0;
     }
 
     return $objects;    
@@ -209,27 +209,27 @@ function GetCarnageModeFleet ($points)
 
     while ($total < $points) {
 
-        $id = mt_rand (202, 215);
+        $id = mt_rand (GID_F_SC, GID_F_BATTLECRUISER);
         $price = ShipyardPrice ($id);
 
         // We will add fleets in relatively large chunks. Do not add colons, spy probes and sats.
 
         switch ($id)
         {
-            case 202: $count = mt_rand(4000, 5000); break;     // Small Cargo
-            case 203: $count = mt_rand(1000, 2000); break;     // Large Cargo
-            case 204: $count = mt_rand(10000, 20000); break;    // Light Fighter
-            case 205: $count = mt_rand(3333, 5555); break;     // Heavy Fighter
-            case 206: $count = mt_rand(500, 1500); break;      // Cruiser
-            case 207: $count = mt_rand(300, 900); break;      // Battleship
-            case 208: $count = 0; break;        // Colony Ship
-            case 209: $count = mt_rand(1000, 2000); break;     // Recycler
-            case 210: $count = 0; break;        // Espionage Probe
-            case 211: $count = mt_rand(300, 400); break;      // Bomber
-            case 212: $count = 0; break;        // Solar Satellite
-            case 213: $count = mt_rand(200, 300); break;      // Destroyer
-            case 214: $count = 1; break;        // Deathstar
-            case 215: $count = mt_rand(300, 500); break;      // Battlecruiser
+            case GID_F_SC: $count = mt_rand(4000, 5000); break;     // Small Cargo
+            case GID_F_LC: $count = mt_rand(1000, 2000); break;     // Large Cargo
+            case GID_F_LF: $count = mt_rand(10000, 20000); break;    // Light Fighter
+            case GID_F_HF: $count = mt_rand(3333, 5555); break;     // Heavy Fighter
+            case GID_F_CRUISER: $count = mt_rand(500, 1500); break;      // Cruiser
+            case GID_F_BATTLESHIP: $count = mt_rand(300, 900); break;      // Battleship
+            case GID_F_COLON: $count = 0; break;        // Colony Ship
+            case GID_F_RECYCLER: $count = mt_rand(1000, 2000); break;     // Recycler
+            case GID_F_PROBE: $count = 0; break;        // Espionage Probe
+            case GID_F_BOMBER: $count = mt_rand(300, 400); break;      // Bomber
+            case GID_F_SAT: $count = 0; break;        // Solar Satellite
+            case GID_F_DESTRO: $count = mt_rand(200, 300); break;      // Destroyer
+            case GID_F_DEATHSTAR: $count = 1; break;        // Deathstar
+            case GID_F_BATTLECRUISER: $count = mt_rand(300, 500); break;      // Battlecruiser
         }
 
         if ($count == 0) {
