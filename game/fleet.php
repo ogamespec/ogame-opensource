@@ -172,7 +172,7 @@ function FlightDistance ( $thisgalaxy, $thissystem, $thisplanet, $galaxy, $syste
 // Group fleet speed.
 function FlightSpeed ($fleet, $combustion, $impulse, $hyper)
 {
-    $minspeed = FleetSpeed ( 210, $combustion, $impulse, $hyper );        // the fastest ship is the Spy Probe.
+    $minspeed = FleetSpeed ( GID_F_PROBE, $combustion, $impulse, $hyper );        // the fastest ship is the Spy Probe.
     foreach ($fleet as $id=>$amount)
     {
         $speed = FleetSpeed ( $id, $combustion, $impulse, $hyper);
@@ -215,26 +215,26 @@ function FleetSpeed ( $id, $combustion, $impulse, $hyper)
     $baseSpeed = $UnitParam[$id][4];
 
     switch ($id) {
-        case 202:
+        case GID_F_SC:
             if ($impulse >= 5) return ($baseSpeed + 5000) * (1 + 0.2 * $impulse);
             else return $baseSpeed * (1 + 0.1 * $combustion);
-        case 211:
+        case GID_F_BOMBER:
             if ($hyper >= 8) return ($baseSpeed + 1000) * (1 + 0.3 * $hyper);
             else return $baseSpeed * (1 + 0.2 * $impulse);            
-        case 203:
-        case 204:
-        case 209:
-        case 210:
-        case 212:
+        case GID_F_LC:
+        case GID_F_LF:
+        case GID_F_RECYCLER:
+        case GID_F_PROBE:
+        case GID_F_SAT:
             return $baseSpeed * (1 + 0.1 * $combustion);
-        case 205:
-        case 206:
-        case 208:
+        case GID_F_HF:
+        case GID_F_CRUISER:
+        case GID_F_COLON:
             return $baseSpeed * (1 + 0.2 * $impulse);
-        case 207:
-        case 213:
-        case 214:
-        case 215:
+        case GID_F_BATTLESHIP:
+        case GID_F_DESTRO:
+        case GID_F_DEATHSTAR:
+        case GID_F_BATTLECRUISER:
             return $baseSpeed * (1 + 0.3 * $hyper);
         default: return $baseSpeed;
     }
@@ -254,7 +254,7 @@ function FleetCargoSummary ( $fleet )
     foreach ( $fleetmap as $n=>$gid )
     {
         $amount = $fleet[$gid];
-        if ($gid != 210) $cargo += FleetCargo ($gid) * $amount;        // not counting probes.
+        if ($gid != GID_F_PROBE) $cargo += FleetCargo ($gid) * $amount;        // not counting probes.
     }
     return $cargo;
 }
@@ -263,7 +263,7 @@ function FleetCons ($id, $combustion, $impulse, $hyper )
 {
     global $UnitParam;
     // The Small Cargo has a 2X increase in consumption when changing engines. In a bomber, it does NOT increase.
-    if ($id == 202 && $impulse >= 5) return $UnitParam[$id][5] * 2;
+    if ($id == GID_F_SC && $impulse >= 5) return $UnitParam[$id][5] * 2;
     else return $UnitParam[$id][5];
 }
 
@@ -843,10 +843,10 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
             Debug ( "Игроком ".$origin['owner_id']." колонизирована планета $id [".$target['g'].":".$target['s'].":".$target['p']."]");
 
             // Take 1 colony ship away from the fleet
-            if ( $fleet[208] > 0 ) {
-                $fleet[208]--;
+            if ( $fleet[GID_F_COLON] > 0 ) {
+                $fleet[GID_F_COLON]--;
                 $met = $kris = $deut = $energy = 0;
-                $cost = ShipyardPrice ( 208 );
+                $cost = ShipyardPrice ( GID_F_COLON );
                 AdjustStats ( $origin['owner_id'], ($cost['m'] + $cost['k'] + $cost['d']), 1, 0, '-' );
                 RecalcRanks ();
             }
@@ -915,11 +915,11 @@ function ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target)
 
 function RecycleArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    if ( $fleet[209] == 0 ) Error ( "Попытка сбора ПО без переработчиков" );
+    if ( $fleet[GID_F_RECYCLER] == 0 ) Error ( "Попытка сбора ПО без переработчиков" );
     if ( $target['type'] != PTYP_DF ) Error ( "Перерабатывать можно только поля обломков!" );
 
     $sum_cargo = FleetCargoSummary ( $fleet ) - ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']);
-    $recycler_cargo = FleetCargo (209) * $fleet[209];
+    $recycler_cargo = FleetCargo (GID_F_RECYCLER) * $fleet[GID_F_RECYCLER];
     $cargo = min ($recycler_cargo, $sum_cargo);
 
     $harvest = HarvestDebris ( $target['planet_id'], $cargo, $queue['end'] );
@@ -931,7 +931,7 @@ function RecycleArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
     $subj = "\n<span class=\"espionagereport\">".loca_lang("FLEET_MESSAGE_INTEL", $origin_user['lang'])."</span>\n";   
     $report = va(loca_lang("FLEET_RECYCLE", $origin_user['lang']), 
-        nicenum($fleet[209]),
+        nicenum($fleet[GID_F_RECYCLER]),
         nicenum($cargo),
         nicenum($target['m']),
         nicenum($target['k']),

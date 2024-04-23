@@ -172,7 +172,7 @@ foreach ( $buildmap as $i => $id )
     if ($k) echo " ".loca("CRYSTAL").": <b>".nicenum($k)."</b>";
     if ($d) echo " ".loca("DEUTERIUM").": <b>".nicenum($d)."</b>";
     if ($e) echo " ".loca("ENERGY").": <b>".nicenum($e)."</b>";
-    $t = BuildDuration ( $id, $lvl+1, $aktplanet['b14'], $aktplanet['b15'], $speed );
+    $t = BuildDuration ( $id, $lvl+1, $aktplanet['b'.GID_B_ROBOTS], $aktplanet['b'.GID_B_NANITES], $speed );
     echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br>";
 
     if ( $prem['commander'] ) {
@@ -185,10 +185,10 @@ foreach ( $buildmap as $i => $id )
                   if ( $aktplanet['fields'] >= $aktplanet['maxfields'] ) {
                         echo "<td class=l><font color=#FF0000>".loca("BUILD_QUEUE_FULL")."</font>";
                   }
-                  else if ( $id == 31 && $reslab_operating ) {
+                  else if ( $id == GID_B_RES_LAB && $reslab_operating ) {
 				echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
 			}
-			else if ( ($id == 15 || $id == 21 ) && $shipyard_operating ) {
+			else if ( ($id == GID_B_NANITES || $id == GID_B_SHIPYARD ) && $shipyard_operating ) {
 				echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
 			}
    			else if ( $lvl == 0 )
@@ -216,10 +216,10 @@ foreach ( $buildmap as $i => $id )
                   if ( $aktplanet['fields'] >= $aktplanet['maxfields'] ) {
                         echo "<td class=l><font color=#FF0000>".loca("BUILD_QUEUE_FULL")."</font>";
                   }
-			else if ( $id == 31 && $reslab_operating ) {
+			else if ( $id == GID_B_RES_LAB && $reslab_operating ) {
 				echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
 			}
-			else if ( ($id == 15 || $id == 21 ) && $shipyard_operating ) {
+			else if ( ($id == GID_B_NANITES || $id == GID_B_SHIPYARD ) && $shipyard_operating ) {
 				echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
 			}
    			else if ( $lvl == 0 )

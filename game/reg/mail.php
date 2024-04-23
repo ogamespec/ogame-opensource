@@ -11,6 +11,7 @@ require_once "../config.php";
 require_once "../db.php";
 require_once "../utils.php";
 
+require_once "../id.php";
 require_once "../bbcode.php";
 require_once "../msg.php";
 require_once "../prod.php";

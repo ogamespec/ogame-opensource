@@ -7,77 +7,85 @@
 // Level 1 cost.
 $initial = array (      // m, k, d, e
     // Buildings
-    14 => array (400, 120, 200, 0),
-    15 => array (1000000, 500000, 100000, 0),
-    21 => array (400, 200, 100, 0),
-    22 => array (2000, 0, 0, 0),
-    23 => array (2000, 1000, 0, 0),
-    24 => array (2000, 2000, 0, 0),
-    31 => array (200, 400, 200, 0),
-    33 => array (0, 50000, 100000, 1000),
-    34 => array (20000, 40000,  0, 0),
-    44 => array (20000, 20000, 1000, 0),
+    GID_B_ROBOTS => array (400, 120, 200, 0),
+    GID_B_NANITES => array (1000000, 500000, 100000, 0),
+    GID_B_SHIPYARD => array (400, 200, 100, 0),
+    GID_B_METAL_STOR => array (2000, 0, 0, 0),
+    GID_B_CRYS_STOR => array (2000, 1000, 0, 0),
+    GID_B_DEUT_STOR => array (2000, 2000, 0, 0),
+    GID_B_RES_LAB => array (200, 400, 200, 0),
+    GID_B_TERRAFORMER => array (0, 50000, 100000, 1000),
+    GID_B_ALLY_DEPOT => array (20000, 40000,  0, 0),
+    GID_B_MISS_SILO => array (20000, 20000, 1000, 0),
     // Moon
-    41 => array (20000, 40000, 20000, 0),
-    42 => array (20000, 40000, 20000, 0),
-    43 => array (2000000, 4000000, 2000000, 0),
+    GID_B_LUNAR_BASE => array (20000, 40000, 20000, 0),
+    GID_B_PHALANX => array (20000, 40000, 20000, 0),
+    GID_B_JUMP_GATE => array (2000000, 4000000, 2000000, 0),
 
     // Fleet
-    202 => array (2000, 2000, 0, 0),
-    203 => array (6000, 6000, 0, 0),
-    204 => array (3000, 1000, 0, 0),
-    205 => array (6000, 4000, 0, 0),
-    206 => array (20000, 7000, 2000, 0),
-    207 => array (45000, 15000, 0, 0),
-    208 => array (10000, 20000, 10000, 0),
-    209 => array (10000, 6000, 2000, 0),
-    210 => array (0, 1000, 0, 0),
-    211 => array (50000, 25000, 15000, 0),
-    212 => array (0, 2000, 500, 0),
-    213 => array (60000, 50000, 15000, 0),
-    214 => array (5000000, 4000000, 1000000, 0),
-    215 => array (30000, 40000, 15000, 0),
+    GID_F_SC => array (2000, 2000, 0, 0),
+    GID_F_LC => array (6000, 6000, 0, 0),
+    GID_F_LF => array (3000, 1000, 0, 0),
+    GID_F_HF => array (6000, 4000, 0, 0),
+    GID_F_CRUISER => array (20000, 7000, 2000, 0),
+    GID_F_BATTLESHIP => array (45000, 15000, 0, 0),
+    GID_F_COLON => array (10000, 20000, 10000, 0),
+    GID_F_RECYCLER => array (10000, 6000, 2000, 0),
+    GID_F_PROBE => array (0, 1000, 0, 0),
+    GID_F_BOMBER => array (50000, 25000, 15000, 0),
+    GID_F_SAT => array (0, 2000, 500, 0),
+    GID_F_DESTRO => array (60000, 50000, 15000, 0),
+    GID_F_DEATHSTAR => array (5000000, 4000000, 1000000, 0),
+    GID_F_BATTLECRUISER => array (30000, 40000, 15000, 0),
 
     // Defense
-    401 => array (2000, 0, 0, 0),
-    402 => array (1500, 500, 0, 0),
-    403 => array (6000, 2000, 0, 0),
-    404 => array (20000, 15000, 2000, 0),
-    405 => array (2000, 6000, 0, 0),
-    406 => array (50000, 50000, 30000, 0),
-    407 => array (10000, 10000, 0, 0),
-    408 => array (50000, 50000, 0, 0),
-    502 => array (8000, 0, 2000, 0),
-    503 => array (12500, 2500, 10000, 0),
+    GID_D_RL => array (2000, 0, 0, 0),
+    GID_D_LL => array (1500, 500, 0, 0),
+    GID_D_HL => array (6000, 2000, 0, 0),
+    GID_D_GAUSS => array (20000, 15000, 2000, 0),
+    GID_D_ION => array (2000, 6000, 0, 0),
+    GID_D_PLASMA => array (50000, 50000, 30000, 0),
+    GID_D_SDOME => array (10000, 10000, 0, 0),
+    GID_D_LDOME => array (50000, 50000, 0, 0),
+    GID_D_ABM => array (8000, 0, 2000, 0),
+    GID_D_IPM => array (12500, 2500, 10000, 0),
 
     // Research
-    106 => array (200, 1000, 200, 0),
-    108 => array (0, 400, 600, 0),
-    109 => array (800, 200, 0, 0),
-    110 => array (200, 600, 0, 0),
-    111 => array (1000, 0, 0, 0),
-    113 => array (0, 800, 400, 0),
-    114 => array (0, 4000, 2000, 0),
-    115 => array (400, 0, 600, 0),
-    117 => array (2000, 4000, 600, 0),
-    118 => array (10000, 20000, 6000, 0),
-    120 => array (200, 100, 0, 0),
-    121 => array (1000, 300, 100, 0),
-    122 => array (2000, 4000, 1000, 0),
-    123 => array (240000, 400000, 160000, 0),
-    124 => array (4000, 8000, 4000, 0),
-    199 => array (0, 0, 0, 300000),
+    GID_R_ESPIONAGE => array (200, 1000, 200, 0),
+    GID_R_COMPUTER => array (0, 400, 600, 0),
+    GID_R_WEAPON => array (800, 200, 0, 0),
+    GID_R_SHIELD => array (200, 600, 0, 0),
+    GID_R_ARMOUR => array (1000, 0, 0, 0),
+    GID_R_ENERGY => array (0, 800, 400, 0),
+    GID_R_HYPERSPACE => array (0, 4000, 2000, 0),
+    GID_R_COMBUST_DRIVE => array (400, 0, 600, 0),
+    GID_R_IMPULSE_DRIVE => array (2000, 4000, 600, 0),
+    GID_R_HYPER_DRIVE => array (10000, 20000, 6000, 0),
+    GID_R_LASER_TECH => array (200, 100, 0, 0),
+    GID_R_ION_TECH => array (1000, 300, 100, 0),
+    GID_R_PLASMA_TECH => array (2000, 4000, 1000, 0),
+    GID_R_IGN => array (240000, 400000, 160000, 0),
+    GID_R_EXPEDITION => array (4000, 8000, 4000, 0),
+    GID_R_GRAVITON => array (0, 0, 0, 300000),
 );
 
 function BuildMeetRequirement ( $user, $planet, $id )
 {
-    if ( $planet['type'] == 0 )
+    if ( $planet['type'] == PTYP_MOON )
     {
-        if ( $id == 1 || $id == 2 || $id == 3 || $id == 4 || $id == 12 || $id == 15 || $id == 31 || $id == 33 || $id == 44 ) return false;
+        if ( $id == GID_B_METAL_MINE || 
+            $id == GID_B_CRYS_MINE || 
+            $id == GID_B_DEUT_SYNTH || 
+            $id == GID_B_SOLAR || 
+            $id == GID_B_FUSION || 
+            $id == GID_B_NANITES || 
+            $id == GID_B_RES_LAB || 
+            $id == GID_B_TERRAFORMER || 
+            $id == GID_B_MISS_SILO ) return false;
     }
     else
     {
-        if ( $id == 41 || $id == 42 || $id == 43 ) return false;
+        if ( $id == GID_B_LUNAR_BASE || $id == GID_B_PHALANX || $id == GID_B_JUMP_GATE ) return false;
     }
 
     // Fusion Reactor => Deuterium Synthesizer (level 5), Energy Technology (level 3)
@@ -87,13 +95,13 @@ function BuildMeetRequirement ( $user, $planet, $id )
     // Rocket silo => Shipyard (level 1)
     // Sensor phalanx => Lunar base (level 1)
     // JumpGate => Moonbase (level 1), Hyperspace Technology (level 7)
-    if ( $id == 12 && ( $planet['b3'] < 5 || $user['r113'] < 3 ) ) return false;
-    if ( $id == 15 && ( $planet['b14'] < 10 || $user['r108'] < 10 ) ) return false;
-    if ( $id == 21 && ( $planet['b14'] < 2 ) ) return false;
-    if ( $id == 33 && ( $planet['b15'] < 1 || $user['r113'] < 12 ) ) return false;
-    if ( $id == 44 && ( $planet['b21'] < 1 ) ) return false;
-    if ( $id == 42 && ( $planet['b41'] < 1 ) ) return false;
-    if ( $id == 43 && ( $planet['b41'] < 1 || $user['r114'] < 7 ) ) return false;
+    if ( $id == GID_B_FUSION && ( $planet['b3'] < 5 || $user['r113'] < 3 ) ) return false;
+    if ( $id == GID_B_NANITES && ( $planet['b14'] < 10 || $user['r108'] < 10 ) ) return false;
+    if ( $id == GID_B_SHIPYARD && ( $planet['b14'] < 2 ) ) return false;
+    if ( $id == GID_B_TERRAFORMER && ( $planet['b15'] < 1 || $user['r113'] < 12 ) ) return false;
+    if ( $id == GID_B_MISS_SILO && ( $planet['b21'] < 1 ) ) return false;
+    if ( $id == GID_B_PHALANX && ( $planet['b41'] < 1 ) ) return false;
+    if ( $id == GID_B_JUMP_GATE && ( $planet['b41'] < 1 || $user['r114'] < 7 ) ) return false;
 
     return true;
 }
@@ -103,27 +111,27 @@ function BuildPrice ( $id, $lvl )
     global $initial;
     switch ($id)
     {
-        case 1:   // Metal Mine
+        case GID_B_METAL_MINE:   // Metal Mine
             $m = floor (60 * pow(1.5, $lvl-1));
             $k = floor (15 * pow(1.5, $lvl-1));
             $d = $e = 0;
             break;
-        case 2:   // Crystal Mine
+        case GID_B_CRYS_MINE:   // Crystal Mine
             $m = floor (48 * pow(1.6, $lvl-1));
             $k = floor (24 * pow(1.6, $lvl-1));
             $d = $e = 0;
             break;
-        case 3:   // Deuterium Synthesizer
+        case GID_B_DEUT_SYNTH:   // Deuterium Synthesizer
             $m = floor (225 * pow(1.5, $lvl-1));
             $k = floor (75 * pow(1.5, $lvl-1));
             $d = $e = 0;
             break;
-        case 4:   // Solar Plant
+        case GID_B_SOLAR:   // Solar Plant
             $m = floor (75 * pow(1.5, $lvl-1));
             $k = floor (30 * pow(1.5, $lvl-1));
             $d = $e = 0;
             break;
-        case 12:   // Fusion Reactor
+        case GID_B_FUSION:   // Fusion Reactor
             $m = floor (900 * pow(1.8, $lvl-1));
             $k = floor (360 * pow(1.8, $lvl-1));
             $d = floor (180 * pow(1.8, $lvl-1));
@@ -152,31 +160,31 @@ function BuildDuration ( $id, $lvl, $robots, $nanits, $speed )
 
 function ShipyardMeetRequirement ( $user, $planet, $id )
 {
-    if ( $id == 202 && ( $planet['b21'] < 2  || $user['r115'] < 2 ) ) return false;
-    else if ( $id == 203 && ( $planet['b21'] < 4  || $user['r115'] < 6 ) ) return false;
-    else if ( $id == 204 && ( $planet['b21'] < 1  || $user['r115'] < 1 ) ) return false;
-    else if ( $id == 205 && ( $planet['b21'] < 3  || $user['r111'] < 2 || $user['r117'] < 2 ) ) return false;
-    else if ( $id == 206 && ( $planet['b21'] < 5  || $user['r117'] < 4 || $user['r121'] < 2 ) ) return false;
-    else if ( $id == 207 && ( $planet['b21'] < 7  || $user['r118'] < 4 ) ) return false;
-    else if ( $id == 208 && ( $planet['b21'] < 4  || $user['r117'] < 3 ) ) return false;
-    else if ( $id == 209 && ( $planet['b21'] < 4  || $user['r115'] < 6 || $user['r110'] < 2 ) ) return false;
-    else if ( $id == 210 && ( $planet['b21'] < 3  || $user['r115'] < 3 || $user['r106'] < 2 ) ) return false;
-    else if ( $id == 211 && ( $planet['b21'] < 8  || $user['r117'] < 6 || $user['r122'] < 5 ) ) return false;
-    else if ( $id == 212 && ( $planet['b21'] < 1  ) ) return false;
-    else if ( $id == 213 && ( $planet['b21'] < 9  || $user['r118'] < 6 || $user['r114'] < 5 ) ) return false;
-    else if ( $id == 214 && ( $planet['b21'] < 12 || $user['r118'] < 7 || $user['r114'] < 6 || $user['r199'] < 1 ) ) return false;
-    else if ( $id == 215 && ( $planet['b21'] < 8  || $user['r114'] < 5 || $user['r120'] < 12 || $user['r118'] < 5 ) ) return false;
+    if ( $id == GID_F_SC && ( $planet['b21'] < 2  || $user['r115'] < 2 ) ) return false;
+    else if ( $id == GID_F_LC && ( $planet['b21'] < 4  || $user['r115'] < 6 ) ) return false;
+    else if ( $id == GID_F_LF && ( $planet['b21'] < 1  || $user['r115'] < 1 ) ) return false;
+    else if ( $id == GID_F_HF && ( $planet['b21'] < 3  || $user['r111'] < 2 || $user['r117'] < 2 ) ) return false;
+    else if ( $id == GID_F_CRUISER && ( $planet['b21'] < 5  || $user['r117'] < 4 || $user['r121'] < 2 ) ) return false;
+    else if ( $id == GID_F_BATTLESHIP && ( $planet['b21'] < 7  || $user['r118'] < 4 ) ) return false;
+    else if ( $id == GID_F_COLON && ( $planet['b21'] < 4  || $user['r117'] < 3 ) ) return false;
+    else if ( $id == GID_F_RECYCLER && ( $planet['b21'] < 4  || $user['r115'] < 6 || $user['r110'] < 2 ) ) return false;
+    else if ( $id == GID_F_PROBE && ( $planet['b21'] < 3  || $user['r115'] < 3 || $user['r106'] < 2 ) ) return false;
+    else if ( $id == GID_F_BOMBER && ( $planet['b21'] < 8  || $user['r117'] < 6 || $user['r122'] < 5 ) ) return false;
+    else if ( $id == GID_F_SAT && ( $planet['b21'] < 1  ) ) return false;
+    else if ( $id == GID_F_DESTRO && ( $planet['b21'] < 9  || $user['r118'] < 6 || $user['r114'] < 5 ) ) return false;
+    else if ( $id == GID_F_DEATHSTAR && ( $planet['b21'] < 12 || $user['r118'] < 7 || $user['r114'] < 6 || $user['r199'] < 1 ) ) return false;
+    else if ( $id == GID_F_BATTLECRUISER && ( $planet['b21'] < 8  || $user['r114'] < 5 || $user['r120'] < 12 || $user['r118'] < 5 ) ) return false;
 
-    else if ( $id == 401 && ( $planet['b21'] < 1 ) ) return false;
-    else if ( $id == 402 && ( $planet['b21'] < 2 || $user['r113'] < 1 || $user['r120'] < 3 ) ) return false;
-    else if ( $id == 403 && ( $planet['b21'] < 4 || $user['r113'] < 3 || $user['r120'] < 6 ) ) return false;
-    else if ( $id == 404 && ( $planet['b21'] < 6 || $user['r113'] < 6 || $user['r109'] < 3 || $user['r110'] < 1 ) ) return false;
-    else if ( $id == 405 && ( $planet['b21'] < 4 || $user['r121'] < 4 ) ) return false;
-    else if ( $id == 406 && ( $planet['b21'] < 8 || $user['r122'] < 7 ) ) return false;
-    else if ( $id == 407 && ( $planet['b21'] < 1 || $user['r110'] < 2 ) ) return false;
-    else if ( $id == 408 && ( $planet['b21'] < 6 || $user['r110'] < 6 ) ) return false;
-    else if ( $id == 502 && ( $planet['b21'] < 1 || $planet['b44'] < 2 ) ) return false;
-    else if ( $id == 503 && ( $planet['b21'] < 1 || $planet['b44'] < 4 || $user['r117'] < 1 ) ) return false;
+    else if ( $id == GID_D_RL && ( $planet['b21'] < 1 ) ) return false;
+    else if ( $id == GID_D_LL && ( $planet['b21'] < 2 || $user['r113'] < 1 || $user['r120'] < 3 ) ) return false;
+    else if ( $id == GID_D_HL && ( $planet['b21'] < 4 || $user['r113'] < 3 || $user['r120'] < 6 ) ) return false;
+    else if ( $id == GID_D_GAUSS && ( $planet['b21'] < 6 || $user['r113'] < 6 || $user['r109'] < 3 || $user['r110'] < 1 ) ) return false;
+    else if ( $id == GID_D_ION && ( $planet['b21'] < 4 || $user['r121'] < 4 ) ) return false;
+    else if ( $id == GID_D_PLASMA && ( $planet['b21'] < 8 || $user['r122'] < 7 ) ) return false;
+    else if ( $id == GID_D_SDOME && ( $planet['b21'] < 1 || $user['r110'] < 2 ) ) return false;
+    else if ( $id == GID_D_LDOME && ( $planet['b21'] < 6 || $user['r110'] < 6 ) ) return false;
+    else if ( $id == GID_D_ABM && ( $planet['b21'] < 1 || $planet['b44'] < 2 ) ) return false;
+    else if ( $id == GID_D_IPM && ( $planet['b21'] < 1 || $planet['b44'] < 4 || $user['r117'] < 1 ) ) return false;
 
     return true;
 }
@@ -203,22 +211,22 @@ function ShipyardDuration ( $id, $shipyard, $nanits, $speed )
 
 function ResearchMeetRequirement ( $user, $planet, $id )
 {
-    if ( $id == 106 && ( $planet['b31'] < 3 ) ) return false;
-    else if ( $id == 108 && ( $planet['b31'] < 1 ) ) return false;
-    else if ( $id == 109 && ( $planet['b31'] < 4 ) ) return false;
-    else if ( $id == 110 && ( $user['r113'] < 3 || $planet['b31'] < 6 ) ) return false;
-    else if ( $id == 111 && ( $planet['b31'] < 2 ) ) return false;
-    else if ( $id == 113 && ( $planet['b31'] < 1 ) ) return false;
-    else if ( $id == 114 && ( $user['r113'] < 5 || $user['r110'] < 5 || $planet['b31'] < 7  ) ) return false;
-    else if ( $id == 115 && ( $user['r113'] < 1 || $planet['b31'] < 1 ) ) return false;
-    else if ( $id == 117 && ( $user['r113'] < 1 || $planet['b31'] < 2  ) ) return false;
-    else if ( $id == 118 && ( $user['r114'] < 3 || $planet['b31'] < 7  ) ) return false;
-    else if ( $id == 120 && ( $user['r113'] < 2 || $planet['b31'] < 1  ) ) return false;
-    else if ( $id == 121 && ( $user['r120'] < 5 || $user['r113'] < 4 || $planet['b31'] < 4  ) ) return false;
-    else if ( $id == 122 && ( $user['r113'] < 8 || $user['r120'] < 10 || $user['r121'] < 5 || $planet['b31'] < 4 ) ) return false;
-    else if ( $id == 123 && ( $user['r108'] < 8 || $user['r114'] < 8 || $planet['b31'] < 10  ) ) return false;
-    else if ( $id == 124 && ( $user['r106'] < 4 || $user['r117'] < 3 || $planet['b31'] < 3 ) ) return false;
-    else if ( $id == 199 && ( $planet['b31'] < 12 ) ) return false;
+    if ( $id == GID_R_ESPIONAGE && ( $planet['b31'] < 3 ) ) return false;
+    else if ( $id == GID_R_COMPUTER && ( $planet['b31'] < 1 ) ) return false;
+    else if ( $id == GID_R_WEAPON && ( $planet['b31'] < 4 ) ) return false;
+    else if ( $id == GID_R_SHIELD && ( $user['r113'] < 3 || $planet['b31'] < 6 ) ) return false;
+    else if ( $id == GID_R_ARMOUR && ( $planet['b31'] < 2 ) ) return false;
+    else if ( $id == GID_R_ENERGY && ( $planet['b31'] < 1 ) ) return false;
+    else if ( $id == GID_R_HYPERSPACE && ( $user['r113'] < 5 || $user['r110'] < 5 || $planet['b31'] < 7  ) ) return false;
+    else if ( $id == GID_R_COMBUST_DRIVE && ( $user['r113'] < 1 || $planet['b31'] < 1 ) ) return false;
+    else if ( $id == GID_R_IMPULSE_DRIVE && ( $user['r113'] < 1 || $planet['b31'] < 2  ) ) return false;
+    else if ( $id == GID_R_HYPER_DRIVE && ( $user['r114'] < 3 || $planet['b31'] < 7  ) ) return false;
+    else if ( $id == GID_R_LASER_TECH && ( $user['r113'] < 2 || $planet['b31'] < 1  ) ) return false;
+    else if ( $id == GID_R_ION_TECH && ( $user['r120'] < 5 || $user['r113'] < 4 || $planet['b31'] < 4  ) ) return false;
+    else if ( $id == GID_R_PLASMA_TECH && ( $user['r113'] < 8 || $user['r120'] < 10 || $user['r121'] < 5 || $planet['b31'] < 4 ) ) return false;
+    else if ( $id == GID_R_IGN && ( $user['r108'] < 8 || $user['r114'] < 8 || $planet['b31'] < 10  ) ) return false;
+    else if ( $id == GID_R_EXPEDITION && ( $user['r106'] < 4 || $user['r117'] < 3 || $planet['b31'] < 3 ) ) return false;
+    else if ( $id == GID_R_GRAVITON && ( $planet['b31'] < 12 ) ) return false;
 
     return true;
 }
@@ -226,7 +234,7 @@ function ResearchMeetRequirement ( $user, $planet, $id )
 function ResearchPrice ( $id, $lvl )
 {
     global $initial;
-    if ($id == 199) {
+    if ($id == GID_R_GRAVITON) {
         $m = $k = $d = 0;
         $e = $initial[$id][3] * pow(3, $lvl-1);
     }
@@ -242,7 +250,7 @@ function ResearchPrice ( $id, $lvl )
 
 function ResearchDuration ( $id, $lvl, $reslab, $speed )
 {
-    if ( $id == 199 ) return 1;
+    if ( $id == GID_R_GRAVITON ) return 1;
     $res= ResearchPrice ($id, $lvl );
     $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
     $secs = floor ( ( ($m + $k) / (1000 * (1 + $reslab)) * 60*60 ) / $speed );
@@ -259,13 +267,13 @@ function ResearchNetwork ( $planetid, $id )
     $planet = GetPlanet ($planetid);
     $player_id = $planet['owner_id'];
     $user = LoadUser ($player_id);
-    $ign = $user ["r123"];
-    $reslab = $planet["b31"];
+    $ign = $user ["r".GID_R_IGN];
+    $reslab = $planet["b".GID_B_RES_LAB];
     $labs = array ();
     $labnum = 0;
 
     // List the player's planets (do not list moons and other special objects). Also skip planets that do not have lab.
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type < 10000 AND type > 0 AND b31 > 0";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type = ".PTYP_PLANET." AND b".GID_B_RES_LAB." > 0";
     $result = dbquery ($query);
     $pnum = dbrows ( $result );
 
@@ -274,7 +282,7 @@ function ResearchNetwork ( $planetid, $id )
     {
         $p = dbarray ($result);
         if ( $p['planet_id'] == $planetid) continue;    // Skip the current planet.
-        if ( ResearchMeetRequirement ( $user, $p, $id ) ) $labs[$labnum++] = $p["b31"];
+        if ( ResearchMeetRequirement ( $user, $p, $id ) ) $labs[$labnum++] = $p["b".GID_B_RES_LAB];
     }
     rsort ( $labs );
 

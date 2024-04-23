@@ -33,7 +33,7 @@ if ( method () === "POST" && isset($_POST['aktion']) )
     $target = GetPlanet (intval($_GET['pdd']));
     $target_user = LoadUser ($target['owner_id']);
     $dist = abs ($origin['s'] - $target['s']);
-    $ipm_radius = max (0, 5 * $GlobalUser['r117'] - 1);
+    $ipm_radius = max (0, 5 * $GlobalUser['r'.GID_R_IMPULSE_DRIVE] - 1);
 
     if ( $target == NULL) $GalaxyError = loca("GALAXY_RAK_NO_TARGET");
 
@@ -42,7 +42,7 @@ if ( method () === "POST" && isset($_POST['aktion']) )
     if ( $GalaxyError === "" )    // Check the permitted parameters
     {
         if ($amount == 0) $GalaxyError = loca("GALAXY_RAK_NO_ROCKETS");
-        if ($amount > $aktplanet["d503"]) $GalaxyError = loca("GALAXY_RAK_NOT_ENOUGH");
+        if ($amount > $aktplanet["d".GID_D_IPM]) $GalaxyError = loca("GALAXY_RAK_NOT_ENOUGH");
         if ($dist > $ipm_radius) $GalaxyError = loca("GALAXY_RAK_WEAK_DRIVE");
     }
 
@@ -117,7 +117,7 @@ if ( !$not_enough_deut && $GlobalUser['admin'] == 0 )
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
-$maxfleet = $GlobalUser['r108'] + 1;
+$maxfleet = $GlobalUser['r'.GID_R_COMPUTER] + 1;
 
 $prem = PremiumStatus ($GlobalUser);
 if ( $prem['admiral'] ) $maxfleet += 2;
@@ -406,7 +406,7 @@ echo "</form>\n";
 /***** A form of interplanetary rocket launch *****/
 
     $system_radius = abs ($aktplanet['s'] - $coord_s);
-    $ipm_radius = max (0, 5 * $GlobalUser['r117'] - 1);
+    $ipm_radius = max (0, 5 * $GlobalUser['r'.GID_R_IMPULSE_DRIVE] - 1);
     $show_ipm_button = ($system_radius <= $ipm_radius) && ($aktplanet["d503"] > 0) && ($aktplanet['g'] == $coord_g);
 
     if ( isset($_GET['mode']) ) {
@@ -424,7 +424,7 @@ echo "</form>\n";
     </tr>
     <tr>
      <td class="c">
-     <?=va(loca("GALAXY_RAK_AMOUNT"), $aktplanet["d503"]);?>:     <input type="text" name="anz" size="2" maxlength="2" /></td>
+     <?=va(loca("GALAXY_RAK_AMOUNT"), $aktplanet["d".GID_D_IPM]);?>:     <input type="text" name="anz" size="2" maxlength="2" /></td>
     <td class="c">
     <?=loca("GALAXY_RAK_TARGET");?>:
      <select name="pziel">
@@ -582,7 +582,7 @@ while ($num--)
     $debris = LoadPlanet ( $coord_g, $coord_s, $p, 2 );
     if ( $debris )
     {
-        $harvesters = ceil ( ($debris['m'] + $debris['k']) / $UnitParam[209][3]);
+        $harvesters = ceil ( ($debris['m'] + $debris['k']) / $UnitParam[GID_F_RECYCLER][3]);
         if ( ($debris['m'] + $debris['k']) >= 300 )
         {
 ?>
@@ -722,18 +722,18 @@ $extra_info = "";
 $sep = "&nbsp;&nbsp;&nbsp;&nbsp;";
 $sep_required = false;
 
-if ($prem['commander'] && $aktplanet["f210"] > 0) {
-    $extra_info .= "<span id=\"probes\">".nicenum($aktplanet["f210"])."</span>".loca("GALAXY_INFO_SPY_PROBES");
+if ($prem['commander'] && $aktplanet["f".GID_F_PROBE] > 0) {
+    $extra_info .= "<span id=\"probes\">".nicenum($aktplanet["f".GID_F_PROBE])."</span>".loca("GALAXY_INFO_SPY_PROBES");
     $sep_required = true;
 }
-if ($prem['commander'] && $aktplanet["f209"] > 0) {
+if ($prem['commander'] && $aktplanet["f".GID_F_RECYCLER] > 0) {
     if ($sep_required) $extra_info .= $sep;
-    $extra_info .= "<span id=\"recyclers\">".nicenum($aktplanet["f209"])."</span>".loca("GALAXY_INFO_RECYCLERS");
+    $extra_info .= "<span id=\"recyclers\">".nicenum($aktplanet["f".GID_F_RECYCLER])."</span>".loca("GALAXY_INFO_RECYCLERS");
     $sep_required = true;
 }
-if ($prem['commander'] && $aktplanet["d503"] > 0) {
+if ($prem['commander'] && $aktplanet["d".GID_D_IPM] > 0) {
     if ($sep_required) $extra_info .= $sep;
-    $extra_info .= "<span id=\"missiles\">".nicenum($aktplanet["d503"])."</span>".loca("GALAXY_INFO_IPM");
+    $extra_info .= "<span id=\"missiles\">".nicenum($aktplanet["d".GID_D_IPM])."</span>".loca("GALAXY_INFO_IPM");
 }
 // Deuterium is only shown for moons (even without Commander)
 if ($aktplanet['type'] == PTYP_MOON) {

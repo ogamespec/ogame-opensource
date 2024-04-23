@@ -23,15 +23,15 @@ $session = $_GET['session'];
 
 function FleetMissionText ($num)
 {
-    if ($num >= 200)
+    if ($num >= FTYP_ORBITING)
     {
         $desc = "<a title=\"".loca("FLEET1_HOLD")."\">".loca("FLEET1_HOLD_SHORT")."</a>";
-        $num -= 200;
+        $num -= FTYP_ORBITING;
     }
-    else if ($num >= 100)
+    else if ($num >= FTYP_RETURN)
     {
         $desc = "<a title=\"".loca("FLEET1_RETURN")."\">".loca("FLEET1_RETURN_SHORT")."</a>";
-        $num -= 100;
+        $num -= FTYP_RETURN;
     }
     else $desc = "<a title=\"".loca("FLEET1_FLYING")."\">".loca("FLEET1_FLYING_SHORT")."</a>";
 
@@ -49,7 +49,7 @@ if ( method () === "POST" )
         $fleet_id = intval ($_POST['order_return']);
         $fleet_obj = LoadFleet ( $fleet_id );
         if (  ($fleet_obj['owner_id'] == $GlobalUser['player_id']) &&
-              ($fleet_obj['mission'] < 100 || $fleet_obj['mission'] > 200 )  ) 
+              ($fleet_obj['mission'] < FTYP_RETURN || $fleet_obj['mission'] > FTYP_ORBITING )  ) 
             RecallFleet ( $fleet_id );
     }
 
@@ -70,7 +70,7 @@ PageHeader ("flotten1");
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );    // Number of fleets
 $nowfleet = $rows = dbrows ($result);
-$maxfleet = $GlobalUser['r108'] + 1;
+$maxfleet = $GlobalUser['r'.GID_R_COMPUTER] + 1;
 
 $prem = PremiumStatus ($GlobalUser);
 if ( $prem['admiral'] ) $maxfleet += 2;
@@ -171,7 +171,7 @@ BeginContent();
     <th><?php echo date ( "D M j G:i:s", $queue['end']);?></th>
     <th>
 <?php
-    if ( ($fleet['mission'] == 1 || $fleet['mission'] == 21) && $uni['acs'] > 0 )
+    if ( ($fleet['mission'] == FTYP_ATTACK || $fleet['mission'] == FTYP_ACS_ATTACK_HEAD) && $uni['acs'] > 0 )
     {
 ?>
          <form action="index.php?page=flotten1&session=<?php echo $session;?>" method="POST">
@@ -182,7 +182,7 @@ BeginContent();
     }
 ?>
 <?php
-    if ( $fleet['mission'] < 100 || $fleet['mission'] > 200 )
+    if ( $fleet['mission'] < FTYP_RETURN || $fleet['mission'] > FTYP_ORBITING )
     {
 ?>
          <form action="index.php?page=flotten1&session=<?php echo $session;?>" method="POST">
@@ -324,9 +324,9 @@ BeginContent();
         
         $amount = $aktplanet["f$gid"];
         if ($amount > 0) {
-            $speed = FleetSpeed ($gid, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118']);
+            $speed = FleetSpeed ($gid, $GlobalUser['r'.GID_R_COMBUST_DRIVE], $GlobalUser['r'.GID_R_IMPULSE_DRIVE], $GlobalUser['r'.GID_R_HYPER_DRIVE]);
             $cargo = FleetCargo ($gid );
-            $cons = FleetCons ( $gid, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118']);
+            $cons = FleetCons ( $gid, $GlobalUser['r'.GID_R_COMBUST_DRIVE], $GlobalUser['r'.GID_R_IMPULSE_DRIVE], $GlobalUser['r'.GID_R_HYPER_DRIVE]);
 
             echo "   <tr height=\"20\">\n";
             echo "    <th><a title=\"".loca("FLEET1_SPEED").": $speed\">".loca("NAME_$gid")."</a></th>\n";

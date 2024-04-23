@@ -317,7 +317,7 @@ function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $d
     $sum = 0;
     foreach ( $unitmap as $i=>$gid )
     {
-            if ( $gid > 400 ) $sum += $defense[$gid];
+            if ( IsDefense($gid) ) $sum += $defense[$gid];
             else $sum += $fleet[$gid];
     }
 
@@ -328,7 +328,7 @@ function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $d
         $text .= "<tr><th>".loca_lang("BATTLE_TYPE", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
-            if ( $gid > 400 ) $n = $defense[$gid];
+            if ( IsDefense($gid) ) $n = $defense[$gid];
             else $n = $fleet[$gid];
             if ( $n > 0 ) $text .= "<th>".loca_lang("SNAME_$gid", $lang)."</th>";
         }
@@ -337,7 +337,7 @@ function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $d
         $text .= "<tr><th>".loca_lang("BATTLE_AMOUNT", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
-            if ( $gid > 400 ) $n = $defense[$gid];
+            if ( IsDefense($gid) ) $n = $defense[$gid];
             else $n = $fleet[$gid];
             if ( $n > 0 ) $text .= "<th>".nicenum($n)."</th>";
         }
@@ -346,7 +346,7 @@ function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $d
         $text .= "<tr><th>".loca_lang("BATTLE_WEAP", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
-            if ( $gid > 400 ) $n = $defense[$gid];
+            if ( IsDefense($gid) ) $n = $defense[$gid];
             else $n = $fleet[$gid];
             if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][2] * (10 + $weap ) / 10 )."</th>";
         }
@@ -355,7 +355,7 @@ function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $d
         $text .= "<tr><th>".loca_lang("BATTLE_SHLD", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
-            if ( $gid > 400 ) $n = $defense[$gid];
+            if ( IsDefense($gid) ) $n = $defense[$gid];
             else $n = $fleet[$gid];
             if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][1] * (10 + $shld ) / 10 )."</th>";
         }
@@ -364,7 +364,7 @@ function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $d
         $text .= "<tr><th>".loca_lang("BATTLE_ARMR", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
-            if ( $gid > 400 ) $n = $defense[$gid];
+            if ( IsDefense($gid) ) $n = $defense[$gid];
             else $n = $fleet[$gid];
             if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][0] * (10 + $armor ) / 100 )."</th>";
         }
@@ -486,11 +486,11 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
     $target = GetPlanet ( $fleet_obj['target_planet'] );
 
-    if ( $fleet[214] == 0 ) return;
+    if ( $fleet[GID_F_DEATHSTAR] == 0 ) return;
     if ( ! ($target['type'] == PTYP_MOON || $target['type'] == PTYP_DEST_MOON) ) Error ( "Уничтожать можно только луны!" );
 
     $diam = $target['diameter'];
-    $rips = $fleet[214];
+    $rips = $fleet[GID_F_DEATHSTAR];
     $moonchance = (100 - sqrt($diam)) * sqrt($rips);
     if ($moonchance >= 100) $moonchance = 99.9;
     $ripchance = sqrt ($diam) / 2;
@@ -773,7 +773,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     // Create the moon
     $mooncreated = false;
     $moonchance = min ( floor ( ($res['dm'] + $res['dk']) / 100000), 20 );
-    if ( PlanetHasMoon ( $planet_id ) || $p['type'] == 0 || $p['type'] == 10003 ) $moonchance = 0;
+    if ( PlanetHasMoon ( $planet_id ) || $p['type'] == PTYP_MOON || $p['type'] == PTYP_DEST_MOON ) $moonchance = 0;
     if ( mt_rand (1, 100) <= $moonchance ) {
         CreatePlanet ( $p['g'], $p['s'], $p['p'], $p['owner_id'], 0, 1, $moonchance );
         $mooncreated = true;
@@ -1031,15 +1031,15 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     $d[0] = LoadUser ( USER_SPACE );
     if ( $pirates ) {
         $d[0]['oname'] = "Piraten";
-        $d[0]['r109'] = max (0, $a[0]['r109'] - 3);
-        $d[0]['r110'] = max (0, $a[0]['r110'] - 3);
-        $d[0]['r111'] = max (0, $a[0]['r111'] - 3);
+        $d[0]['r'.GID_R_WEAPON] = max (0, $a[0]['r'.GID_R_WEAPON] - 3);
+        $d[0]['r'.GID_R_SHIELD] = max (0, $a[0]['r'.GID_R_SHIELD] - 3);
+        $d[0]['r'.GID_R_ARMOUR] = max (0, $a[0]['r'.GID_R_ARMOUR] - 3);
     }
     else {
         $d[0]['oname'] = "Aliens";
-        $d[0]['r109'] = $a[0]['r109'] + 3;
-        $d[0]['r110'] = $a[0]['r110'] + 3;
-        $d[0]['r111'] = $a[0]['r111'] + 3;
+        $d[0]['r'.GID_R_WEAPON] = $a[0]['r'.GID_R_WEAPON] + 3;
+        $d[0]['r'.GID_R_SHIELD] = $a[0]['r'.GID_R_SHIELD] + 3;
+        $d[0]['r'.GID_R_ARMOUR] = $a[0]['r'.GID_R_ARMOUR] + 3;
     }
     $d[0]['fleet'] = array ();
     $d[0]['defense'] = array ();
@@ -1079,14 +1079,14 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     }
 
     if ( $pirates ) {
-        if ( $level == 0 ) $d[0]['fleet'][204] += 5;
-        else if ( $level == 1 ) $d[0]['fleet'][206] += 3;
-        else if ( $level == 2 ) $d[0]['fleet'][207] += 2;
+        if ( $level == 0 ) $d[0]['fleet'][GID_F_LF] += 5;
+        else if ( $level == 1 ) $d[0]['fleet'][GID_F_CRUISER] += 3;
+        else if ( $level == 2 ) $d[0]['fleet'][GID_F_BATTLESHIP] += 2;
     }
     else {
-        if ( $level == 0 ) $d[0]['fleet'][205] += 5;
-        else if ( $level == 1 ) $d[0]['fleet'][215] += 3;
-        else if ( $level == 2 ) $d[0]['fleet'][213] += 2;
+        if ( $level == 0 ) $d[0]['fleet'][GID_F_HF] += 5;
+        else if ( $level == 1 ) $d[0]['fleet'][GID_F_BATTLECRUISER] += 3;
+        else if ( $level == 2 ) $d[0]['fleet'][GID_F_DESTRO] += 2;
     }
 
     foreach ($defmap as $i=>$gid) $d[0]['defense'][$gid] = 0;
@@ -1165,7 +1165,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 
     // Calculate total losses (account for deuterium and repaired defenses)
     $aloss = $dloss = 0;
-    $repaired = array ( 401=>0, 402=>0, 403=>0, 404=>0, 405=>0, 406=>0, 407=>0, 408=>0 );
+    $repaired = array ( GID_D_RL=>0, GID_D_LL=>0, GID_D_HL=>0, GID_D_GAUSS=>0, GID_D_ION=>0, GID_D_PLASMA=>0, GID_D_SDOME=>0, GID_D_LDOME=>0 );
     $loss = CalcLosses ( $a, $d, $res, $repaired );
     $a = $loss['a'];
     $d = $loss['d'];

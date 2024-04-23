@@ -277,7 +277,7 @@ BeginContent ();
     // ----------------------------------------------------------------------------------------------------
     // Expedition duration time
 
-    if ( $mission_exp && $GlobalUser['r124'] > 0 )
+    if ( $mission_exp && $GlobalUser['r'.GID_R_EXPEDITION] > 0 )
     {
 ?>
 
@@ -288,7 +288,7 @@ BeginContent ();
    <th colspan="3">
     <select name="expeditiontime" >
 <?php
-    for ($i=1; $i<=$GlobalUser['r124']; $i++)
+    for ($i=1; $i<=$GlobalUser['r'.GID_R_EXPEDITION]; $i++)
     {
         echo "          <option value=\"$i\">$i</option>\n";
     }

@@ -465,7 +465,7 @@ function RecalcFields ($planet_id)
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) $maxfields = 1;    // moon
     else $maxfields = floor (pow (($planet['diameter'] / 1000), 2));    // planet
     foreach ( $buildmap as $i=>$gid ) $fields += $planet["b$gid"];
-    $maxfields += 5 * $planet["b33"] + 3 * $planet["b41"];    // terraformer and moonbase
+    $maxfields += 5 * $planet["b".GID_B_TERRAFORMER] + 3 * $planet["b41"];    // terraformer and moonbase
     $query = "UPDATE ".$db_prefix."planets SET fields=$fields, maxfields=$maxfields WHERE planet_id=$planet_id;";
     dbquery ($query);
 }

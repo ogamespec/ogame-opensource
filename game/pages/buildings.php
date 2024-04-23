@@ -34,12 +34,12 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             if ( $aktplanet['m'] < $m || $aktplanet['k'] < $k || $aktplanet['d'] < $d ) continue;    // insufficient resources for one unit
 
             // Shield Domes.
-            if ( $gid == 407 || $gid == 408 ) $value = 1;
+            if ( $gid == GID_D_SDOME || $gid == GID_D_LDOME ) $value = 1;
 
             // Limit the number of missiles to the capacity of the silo.
             $free_space = $aktplanet['b44'] * 10 - ($aktplanet['d502'] + 2 * $aktplanet['d503']);
-            if ( $gid == 502 ) $value = min ( $free_space, $value );
-            if ( $gid == 503 ) $value = min ( floor ($free_space / 2), $value );
+            if ( $gid == GID_D_ABM ) $value = min ( $free_space, $value );
+            if ( $gid == GID_D_IPM ) $value = min ( floor ($free_space / 2), $value );
             
             if ($m) $cm = floor ($aktplanet['m'] / $m);
             else $cm = 1000;
@@ -102,7 +102,7 @@ if ( $_GET['mode'] === "Flotte" )
     // Check to see if a Shipyard or Nanite Factory is under construction.
     $result = GetBuildQueue ( $aktplanet['planet_id'] );
     $queue = dbarray ( $result );
-    $busy = ( $queue['tech_id'] == 21 || $queue['tech_id'] == 15 ) ;
+    $busy = ( $queue['tech_id'] == GID_B_SHIPYARD || $queue['tech_id'] == GID_B_NANITES ) ;
 
     if ( $busy ) {
         echo "<br><br><font color=#FF0000>Невозможно строить ни корабли ни оборонительные сооружения, так как верфь либо фабрика нанитов усовершенствуются</font><br><br>";
@@ -184,7 +184,7 @@ if ( $_GET['mode'] === "Verteidigung" )
     // Check to see if a Shipyard or Nanite Factory is under construction.
     $result = GetBuildQueue ( $aktplanet['planet_id'] );
     $queue = dbarray ( $result );
-    $busy = ( $queue['tech_id'] == 21 || $queue['tech_id'] == 15 ) ;
+    $busy = ( $queue['tech_id'] == GID_B_SHIPYARD || $queue['tech_id'] == GID_B_NANITES ) ;
 
     if ( $busy ) {
         echo "<br><br><font color=#FF0000>Невозможно строить ни корабли ни оборонительные сооружения, так как верфь либо фабрика нанитов усовершенствуются</font><br><br>";
@@ -233,13 +233,13 @@ if ( $_GET['mode'] === "Verteidigung" )
             echo "<br>Длительность: ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !$busy ) {
-                if ( ($id == 407 || $id == 408) && $aktplanet['d'.$id] > 0 ) echo "<font color=#FF0000>Щитовой купол можно строить только 1 раз.</font>";
+                if ( ($id == GID_D_SDOME || $id == GID_D_LDOME) && $aktplanet['d'.$id] > 0 ) echo "<font color=#FF0000>Щитовой купол можно строить только 1 раз.</font>";
                 else if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>невозможно</font>";
                 else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) {
                     echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
-                    if ( $prem['commander'] && !( $id == 407 || $id == 408 ) ) {
-                        if ( $id == 502 ) $max = $aktplanet['b44'] * 10 - (2*$aktplanet['d503'] + $aktplanet['d502']);
-                        else if ( $id == 503 ) $max = ($aktplanet['b44'] * 10 - (2*$aktplanet['d503'] + $aktplanet['d502'])) / 2;
+                    if ( $prem['commander'] && !( $id == GID_D_SDOME || $id == GID_D_LDOME ) ) {
+                        if ( $id == GID_D_ABM ) $max = $aktplanet['b44'] * 10 - (2*$aktplanet['d503'] + $aktplanet['d502']);
+                        else if ( $id == GID_D_IPM ) $max = ($aktplanet['b44'] * 10 - (2*$aktplanet['d503'] + $aktplanet['d502'])) / 2;
                         else $max = 999;
                         if ( $m ) $max = floor (min ($max, $aktplanet['m'] / $m));
                         if ( $k ) $max = floor (min ($max, $aktplanet['k'] / $k));
@@ -270,7 +270,7 @@ if ( $_GET['mode'] === "Forschung" )
     else $r_factor = 1.0;
 
     // Is the research lab being upgraded on any planet?
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = 31 AND (type = 'Build' OR type = 'Demolish') AND start < $now AND owner_id = " . $GlobalUser['player_id'];
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = ".GID_B_RES_LAB." AND (type = 'Build' OR type = 'Demolish') AND start < $now AND owner_id = " . $GlobalUser['player_id'];
     $result = dbquery ( $query );
     $busy = ( dbrows ($result) > 0 );
 
@@ -314,7 +314,7 @@ if ( $_GET['mode'] === "Forschung" )
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($GlobalUser['r'.$id]) echo "</a> (уровень ".$GlobalUser['r'.$id];
-            if ( $id == 106 && $prem['technocrat'] ) { 
+            if ( $id == GID_R_ESPIONAGE && $prem['technocrat'] ) { 
                 echo " <b><font style=\"color:lime;\">+2</font></b> <img border=\"0\" src=\"img/technokrat_ikon.gif\" alt=\"Технократ\" onmouseover=\"return overlib('<font color=white>Технократ</font>', WIDTH, 100);\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
             }
             if ($GlobalUser['r'.$id]) echo ")";

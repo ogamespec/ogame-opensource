@@ -87,7 +87,7 @@ BeginContent();
         else $amount = 0;
         $total += $amount;
 
-        if ($gid != 210) $cargo += FleetCargo ($gid) * $amount;        // not counting probes.
+        if ($gid != GID_F_PROBE) $cargo += FleetCargo ($gid) * $amount;        // not counting probes.
 
         if ( $amount > 0 ) {
             if ( key_exists("ship$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"ship$gid\" value=\"".$amount."\" />\n";

@@ -634,7 +634,7 @@ function Queue_Shipyard_End ($queue, $when=0)
     $newe = $e + $done * $one;
 
     // Add a fleet to the planet
-    if ($gid > 400) $query = "UPDATE ".$db_prefix."planets SET d$gid = d$gid + $done WHERE planet_id = $planet_id";
+    if (IsDefense($gid)) $query = "UPDATE ".$db_prefix."planets SET d$gid = d$gid + $done WHERE planet_id = $planet_id";
     else $query = "UPDATE ".$db_prefix."planets SET f$gid = f$gid + $done WHERE planet_id = $planet_id";
     dbquery ($query);
 
@@ -642,7 +642,7 @@ function Queue_Shipyard_End ($queue, $when=0)
     $res = ShipyardPrice ( $gid );
     $m = $res['m']; $k = $res['k']; $d = $res['d']; $enrg = $res['e'];
     $points = ($m + $k + $d) * $done;
-    if ($gid < 400) $fpoints = $done;
+    if (IsFleet($gid)) $fpoints = $done;
     else $fpoints = 0;
     AdjustStats ( $queue['owner_id'], $points, $fpoints, 0, '+');
 
