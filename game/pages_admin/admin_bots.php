@@ -62,7 +62,7 @@ function Admin_Bots ()
         echo "<tr>";
         echo "<td>".$user['player_id']."</td>";
         echo "<td>".AdminUserName ($user)."</td>";
-        echo "<td>". AdminPlanetName ($planet). " " . AdminPlanetCoord($planet) . "</td>";
+        echo "<td>". AdminPlanetName ($planet['planet_id']). " " . AdminPlanetCoord($planet) . "</td>";
         echo "<td><a href=\"index.php?page=admin&session=$session&mode=Bots&action=stop&id=".$user['player_id']."\">".loca("ADM_BOTS_STOP")."</a></td>";
         echo "</tr>\n";
     }

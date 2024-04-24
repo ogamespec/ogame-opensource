@@ -246,6 +246,40 @@ $LOCA["ru"]["ADM_PLANET_SEARCH"] = "Искать";
 $LOCA["ru"]["ADM_PLANET_SEARCH_RESULT"] = "Результаты поиска:";
 $LOCA["ru"]["ADM_PLANET_ERROR_LOAD"] = "Не удалось загрузить планету ID: #1";
 
+// admin_queue
+
+$LOCA["ru"]["ADM_QUEUE_TYPE_BUILD"] = "Постройка '#1' (#2) на планете #3";
+$LOCA["ru"]["ADM_QUEUE_TYPE_DEMOLISH"] = "Снос '#1' (#2) на планете #3";
+$LOCA["ru"]["ADM_QUEUE_TYPE_SHIPYARD"] = "Задание на верфи: '#1' (#2) на планете #3";
+$LOCA["ru"]["ADM_QUEUE_TYPE_RESEARCH"] = "Ведется исследование '#1' (#2) с планеты #3";
+$LOCA["ru"]["ADM_QUEUE_TYPE_UPDATE_STATS"] = "Сохранить старую статистику";
+$LOCA["ru"]["ADM_QUEUE_TYPE_RECALC_POINTS"] = "Пересчитать статистику";
+$LOCA["ru"]["ADM_QUEUE_TYPE_RECALC_ALLY_POINTS"] = "Пересчитать статистику альянсов";
+$LOCA["ru"]["ADM_QUEUE_TYPE_ALLOW_NAME"] = "Разрешить сменить имя";
+$LOCA["ru"]["ADM_QUEUE_TYPE_CHANGE_EMAIL"] = "Обновить постоянный адрес почты";
+$LOCA["ru"]["ADM_QUEUE_TYPE_UNLOAD_ALL"] = "Отгрузить всех игроков";
+$LOCA["ru"]["ADM_QUEUE_TYPE_CLEAN_DEBRIS"] = "Чистка виртуальных ПО";
+$LOCA["ru"]["ADM_QUEUE_TYPE_CLEAN_PLANETS"] = "Чистка уничтоженных планет";
+$LOCA["ru"]["ADM_QUEUE_TYPE_CLEAN_PLAYERS"] = "Удаление неактивных игроков и поставленных на удаление";
+$LOCA["ru"]["ADM_QUEUE_TYPE_UNBAN_PLAYER"] = "Разбанить игрока";
+$LOCA["ru"]["ADM_QUEUE_TYPE_ALLOW_ATTACKS"] = "Разрешить атаки";
+$LOCA["ru"]["ADM_QUEUE_TYPE_AI"] = "Задание бота (стратегия #1)";
+$LOCA["ru"]["ADM_QUEUE_TYPE_COMMANDER_OFF"] = "Заканчивается Командир";
+$LOCA["ru"]["ADM_QUEUE_TYPE_ADMIRAL_OFF"] = "Заканчивается офицер: Адмирал";
+$LOCA["ru"]["ADM_QUEUE_TYPE_ENGINEER_OFF"] = "Заканчивается офицер: Инженер";
+$LOCA["ru"]["ADM_QUEUE_TYPE_GEOLOGE_OFF"] = "Заканчивается офицер: Геолог";
+$LOCA["ru"]["ADM_QUEUE_TYPE_TECHNOCRATE_OFF"] = "Заканчивается офицер: Технократ";
+$LOCA["ru"]["ADM_QUEUE_TYPE_UNKNOWN"] = "Неизвестный тип задания";
+$LOCA["ru"]["ADM_QUEUE_END"] = "Время окончания";
+$LOCA["ru"]["ADM_QUEUE_PLAYER"] = "Игрок";
+$LOCA["ru"]["ADM_QUEUE_TYPE"] = "Тип задания";
+$LOCA["ru"]["ADM_QUEUE_DESCR"] = "Описание";
+$LOCA["ru"]["ADM_QUEUE_PRIO"] = "Приоритет";
+$LOCA["ru"]["ADM_QUEUE_CONTROL"] = "Управление";
+$LOCA["ru"]["ADM_QUEUE_COMPLETE"] = "Завершить";
+$LOCA["ru"]["ADM_QUEUE_DELETE"] = "Удалить";
+$LOCA["ru"]["ADM_QUEUE_SUBMIT"] = "Отправить";
+
 // admin_raksim
 
 $LOCA["ru"]["ADM_RAKSIM_ATTACKER"] = "Атакующий";

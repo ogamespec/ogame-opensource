@@ -18,31 +18,31 @@ function QueueDesc ( $queue )
             $bqueue = dbarray ($result);
             $planet_id = $bqueue['planet_id'];
             $planet = GetPlanet ($planet_id);
-            return "Постройка '".loca("NAME_$obj_id")."' ($level) на планете " . AdminPlanetName ($planet);
+            return va(loca("ADM_QUEUE_TYPE_BUILD"), loca("NAME_$obj_id"), $level, AdminPlanetName ($planet['planet_id']));
         case "Demolish":
             $query = "SELECT * FROM ".$db_prefix."buildqueue WHERE id = " . $queue['sub_id'] . " LIMIT 1";
             $result = dbquery ($query);
             $bqueue = dbarray ($result);
             $planet_id = $bqueue['planet_id'];
             $planet = GetPlanet ($planet_id);
-            return "Снос '".loca("NAME_$obj_id")."' ($level) на планете " . AdminPlanetName ($planet);
+            return va(loca("ADM_QUEUE_TYPE_DEMOLISH"), loca("NAME_$obj_id"), $level, AdminPlanetName ($planet['planet_id']));
         case "Shipyard":
             $planet = GetPlanet ($sub_id);
-            return "Задание на верфи: '".loca("NAME_$obj_id") . "' ($level) на планете <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
+            return va(loca("ADM_QUEUE_TYPE_SHIPYARD"), loca("NAME_$obj_id"), $level, AdminPlanetName ($sub_id));
         case "Research":
             $planet = GetPlanet ($sub_id);
-            return "Ведется исследование '".loca("NAME_$obj_id") . "' ($level) с планеты <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=$sub_id\">" . $planet['name'] . "</a>" ;
-        case "UpdateStats": return "Сохранить старую статистику";
-        case "RecalcPoints": return "Пересчитать статистику";
-        case "RecalcAllyPoints": return "Пересчитать статистику альянсов";
-        case "AllowName": return "Разрешить сменить имя";
-        case "ChangeEmail": return "Обновить постоянный адрес почты";
-        case "UnloadAll": return "Отгрузить всех игроков";
-        case "CleanDebris": return "Чистка виртуальных ПО";
-        case "CleanPlanets": return "Чистка уничтоженных планет";
-        case "CleanPlayers": return "Удаление неактивных игроков и поставленных на удаление";
-        case "UnbanPlayer": return "Разбанить игрока";
-        case "AllowAttacks": return "Разрешить атаки";
+            return va(loca("ADM_QUEUE_TYPE_RESEARCH"), loca("NAME_$obj_id"), $level, AdminPlanetName ($sub_id));
+        case "UpdateStats": return loca("ADM_QUEUE_TYPE_UPDATE_STATS");
+        case "RecalcPoints": return loca("ADM_QUEUE_TYPE_RECALC_POINTS");
+        case "RecalcAllyPoints": return loca("ADM_QUEUE_TYPE_RECALC_ALLY_POINTS");
+        case "AllowName": return loca("ADM_QUEUE_TYPE_ALLOW_NAME");
+        case "ChangeEmail": return loca("ADM_QUEUE_TYPE_CHANGE_EMAIL");
+        case "UnloadAll": return loca("ADM_QUEUE_TYPE_UNLOAD_ALL");
+        case "CleanDebris": return loca("ADM_QUEUE_TYPE_CLEAN_DEBRIS");
+        case "CleanPlanets": return loca("ADM_QUEUE_TYPE_CLEAN_PLANETS");
+        case "CleanPlayers": return loca("ADM_QUEUE_TYPE_CLEAN_PLAYERS");
+        case "UnbanPlayer": return loca("ADM_QUEUE_TYPE_UNBAN_PLAYER");
+        case "AllowAttacks": return loca("ADM_QUEUE_TYPE_ALLOW_ATTACKS");
         case "AI":
             $strat_id = $queue['sub_id'];
             $block_id = $queue['obj_id'];
@@ -56,17 +56,17 @@ function QueueDesc ( $queue )
                     break;
                 }
             }
-            return "Задание бота (стратегия ".$strat['name'].") : <br>$block_text";
+            return va(loca("ADM_QUEUE_TYPE_AI"), $strat['name']) . " : <br>$block_text";
 
-        case "CommanderOff": return "Заканчивается офицер: Командир";
-        case "AdmiralOff": return "Заканчивается офицер: Адмирал";
-        case "EngineerOff": return "Заканчивается офицер: Инженер";
-        case "GeologeOff": return "Заканчивается офицер: Геолог";
-        case "TechnocrateOff": return "Заканчивается офицер: Технократ";
+        case "CommanderOff": return loca("ADM_QUEUE_TYPE_COMMANDER_OFF");
+        case "AdmiralOff": return loca("ADM_QUEUE_TYPE_ADMIRAL_OFF");
+        case "EngineerOff": return loca("ADM_QUEUE_TYPE_ENGINEER_OFF");
+        case "GeologeOff": return loca("ADM_QUEUE_TYPE_GEOLOGE_OFF");
+        case "TechnocrateOff": return loca("ADM_QUEUE_TYPE_TECHNOCRATE_OFF");
 
     }
 
-    return "Неизвестный тип задания (type=$type, sub_id=$sub_id, obj_id=$obj_id, level=$level)";
+    return loca("ADM_QUEUE_TYPE_UNKNOWN") . " (type=$type, sub_id=$sub_id, obj_id=$obj_id, level=$level)";
 }
 
 function Admin_Queue ()
@@ -80,7 +80,7 @@ function Admin_Queue ()
     if ( method () === "POST" )
     {
 
-        if ( key_exists ( "player", $_POST ) ) {        // Фильтр по имени игрока
+        if ( key_exists ( "player", $_POST ) ) {        // Filter by player name
             $query = "SELECT * FROM ".$db_prefix."users WHERE oname LIKE '".$_POST['player']."%'";
             $result = dbquery ( $query );
             if ( dbrows ($result) > 0 ) {
@@ -109,7 +109,7 @@ function Admin_Queue ()
     AdminPanel();
 
     echo "<table>\n";
-    echo "<tr><td class=c>Время окончания</td><td class=c>Игрок</td><td class=c>Тип задания</td><td class=c>Описание</td><td class=c>Приоритет</td><td class=c>ID</td><td class=c>Управление</td></tr>\n";
+    echo "<tr><td class=c>".loca("ADM_QUEUE_END")."</td><td class=c>".loca("ADM_QUEUE_PLAYER")."</td><td class=c>".loca("ADM_QUEUE_TYPE")."</td><td class=c>".loca("ADM_QUEUE_DESCR")."</td><td class=c>".loca("ADM_QUEUE_PRIO")."</td><td class=c>ID</td><td class=c>".loca("ADM_QUEUE_CONTROL")."</td></tr>\n";
 
     $anz = $rows = dbrows ($result);
     $bxx = 1;
@@ -124,11 +124,11 @@ function Admin_Queue ()
     <th> 
          <form action="index.php?page=admin&session=<?=$session;?>&mode=Queue" method="POST">
     <input type="hidden" name="order_end" value="<?=$queue['task_id'];?>" />
-        <input type="submit" value="Завершить" />
+        <input type="submit" value="<?=loca("ADM_QUEUE_COMPLETE");?>" />
      </form>
          <form action="index.php?page=admin&session=<?=$session;?>&mode=Queue" method="POST" style="border: 1px solid red">
     <input type="hidden" name="order_remove" value="<?=$queue['task_id'];?>" />
-        <input type="submit" value="Удалить" />
+        <input type="submit" value="<?=loca("ADM_QUEUE_DELETE");?>" />
      </form>
     </th>
 </tr>
@@ -150,7 +150,7 @@ function Admin_Queue ()
     <br/>
     <form action="index.php?page=admin&session=<?=$session;?>&mode=Queue" method="POST">
     Показать задания игрока: <input size=15 name="player" value="<?=$playername;?>">
-    <input type="submit" value="Отправить">
+    <input type="submit" value="<?=loca("ADM_QUEUE_SUBMIT");?>">
     </form>
 
 <?php

@@ -548,10 +548,10 @@ function SetPlanetDiameter ($planet_id, $diam)
 }
 
 // Return the name of the planet with a link to the admin area.
-function AdminPlanetName ($planet)
+function AdminPlanetName ($planet_id)
 {
     global $session;
-    return "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\">".$planet['name']."</a>";
+    return "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet_id."\">".$planet['name']."</a>";
 }
 
 // Return planet coordinate string with a link to the galaxy
