@@ -86,18 +86,18 @@ function Admin_Logins ()
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Logins" method="POST">
 <table>
 <tr>
-    <td class=d>По имени пользователя:</td> <td> <input type=text size=20 name=name></td>
+    <td class=d><?=loca("ADM_LOGINS_BY_NAME");?></td> <td> <input type=text size=20 name=name></td>
 </tr>
 
 <tr>
-    <td class=d>По ID пользователя:</td> <td><input type=text size=20 name=id></td>
+    <td class=d><?=loca("ADM_LOGINS_BY_ID");?></td> <td><input type=text size=20 name=id></td>
 </tr>
 
 <tr>
-    <td class=d>По IP адресу:</td> <td> <input type=text size=20 name=ip></td>
+    <td class=d><?=loca("ADM_LOGINS_BY_IP");?></td> <td> <input type=text size=20 name=ip></td>
 </tr>
 
-<tr>   <td colspan=2 class=d><center><input type=submit value=Искать></center></td></tr>
+<tr>   <td colspan=2 class=d><center><input type="submit" value="<?=loca("ADM_LOGINS_SUBMIT");?>"></center></td></tr>
 
 </table>
 </form>

@@ -36,7 +36,7 @@ function Admin_RakSim ()
         if ( key_exists ( 'pziel', $_POST) ) $pziel = intval ($_POST['pziel']);
 
         $target = array();
-        $moon_planet = array();     // не используется
+        $moon_planet = array();     // not used
 
         foreach ($defmap as $i=>$gid) {
             if ( key_exists ( 'd_'.$gid, $_POST) ) {
@@ -65,13 +65,13 @@ function Admin_RakSim ()
 <table cellpadding=0 cellspacing=0>
 <form name="simForm" action="index.php?page=admin&session=<?=$session;?>&mode=RakSim" method="POST" >
 
-<tr>        <td class=c>Атакующий</td>                <td class=c>Обороняющийся</td>  </tr>
+<tr>        <td class=c><?=loca("ADM_RAKSIM_ATTACKER");?></td>                <td class=c><?=loca("ADM_RAKSIM_DEFENDER");?></td>  </tr>
 
 <tr> 
 <td> 
-    Вооружение: <input type="text" name="a_weap" size=2 value="<?=$a_weap;?>"> 
+    <?=loca("ADM_RAKSIM_WEAP");?> <input type="text" name="a_weap" size=2 value="<?=$a_weap;?>"> 
 <td> 
-    Броня: <input type="text" name="d_armor" size=2 value="<?=$d_armor;?>"></td> 
+    <?=loca("ADM_RAKSIM_ARMOUR");?> <input type="text" name="d_armor" size=2 value="<?=$d_armor;?>"></td> 
 </tr>
 
 
@@ -80,7 +80,7 @@ function Admin_RakSim ()
 
 <tr><td colspan=2> 
 <table>
-<tr><td class=c colspan=2>Настройки</td></tr>
+<tr><td class=c colspan=2><?=loca("ADM_RAKSIM_SETTINGS");?></td></tr>
 
 <tr><td>
 <?=loca("NAME_503");?>:     <input type="text" name="anz" size="2" maxlength="2" value="<?=$anz;?>"/></td></tr>
@@ -92,7 +92,7 @@ function Admin_RakSim ()
 <?php
     foreach ($defmap as $i=>$gid)
     {
-        if ($gid > 500) {
+        if (!IsDefenseNoRak($gid)) {
             // No need to consider missile defenses.
             break;
         }
@@ -117,7 +117,7 @@ function Admin_RakSim ()
 
 <?php
 
-    echo "<tr><td class=c colspan=2><b>Оборона</b></td></tr>\n";
+    echo "<tr><td class=c colspan=2><b>".loca("ADM_RAKSIM_DEFENSE")."</b></td></tr>\n";
     $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
     foreach ($defmap as $i=>$gid)
     {
@@ -130,7 +130,7 @@ function Admin_RakSim ()
         </th></tr>            
 
 
-<tr><td colspan=2><center><input type="submit" value="Ракетная атака"></center></td></tr>
+<tr><td colspan=2><center><input type="submit" value="<?=loca("ADM_RAKSIM_SUBMIT");?>"></center></td></tr>
 </form>
 </table>
 

@@ -194,6 +194,13 @@ $LOCA["ru"]["ADM_LOCA_SOURCE"] = "Исходный язык:";
 $LOCA["ru"]["ADM_LOCA_DEST"] = "Целевой язык:";
 $LOCA["ru"]["ADM_LOCA_SUBMIT"] = "Сравнить";
 
+// admin_logins
+
+$LOCA["ru"]["ADM_LOGINS_BY_NAME"] = "По имени пользователя:";
+$LOCA["ru"]["ADM_LOGINS_BY_ID"] = "По ID пользователя:";
+$LOCA["ru"]["ADM_LOGINS_BY_IP"] = "По IP адресу:";
+$LOCA["ru"]["ADM_LOGINS_SUBMIT"] = "Искать";
+
 // admin_planets
 
 $LOCA["ru"]["ADM_PLANET_SPECIFY_TEXT"] = "Укажите строку для поиска";
@@ -239,6 +246,16 @@ $LOCA["ru"]["ADM_PLANET_SEARCH"] = "Искать";
 $LOCA["ru"]["ADM_PLANET_SEARCH_RESULT"] = "Результаты поиска:";
 $LOCA["ru"]["ADM_PLANET_ERROR_LOAD"] = "Не удалось загрузить планету ID: #1";
 
+// admin_raksim
+
+$LOCA["ru"]["ADM_RAKSIM_ATTACKER"] = "Атакующий";
+$LOCA["ru"]["ADM_RAKSIM_DEFENDER"] = "Обороняющийся";
+$LOCA["ru"]["ADM_RAKSIM_WEAP"] = "Вооружение:";
+$LOCA["ru"]["ADM_RAKSIM_ARMOUR"] = "Броня:";
+$LOCA["ru"]["ADM_RAKSIM_SETTINGS"] = "Настройки";
+$LOCA["ru"]["ADM_RAKSIM_DEFENSE"] = "Оборона";
+$LOCA["ru"]["ADM_RAKSIM_SUBMIT"] = "Ракетная атака";
+
 // admin_uni
 
 $LOCA["ru"]["ADM_UNI_SETTINGS"] = "Настройки Вселенной #1";
@@ -270,6 +287,34 @@ $LOCA["ru"]["ADM_UNI_FORCE_LANG"] = "Принудительно использо
 $LOCA["ru"]["ADM_UNI_FREEZE"] = "Поставить вселенную на паузу";
 $LOCA["ru"]["ADM_UNI_FREEZE_INFO"] = "При постановке вселенной на паузу не будет срабатывать ни одно событие (очередь будет остановлена). После снятия паузы все завершенные события будут выполнены в порядке очереди. Все активные игроки принудительно переводятся в режим отпуска.";
 $LOCA["ru"]["ADM_UNI_SAVE"] = "Сохранить";
+
+// admin_userlogs
+
+$LOCA["ru"]["ADM_USERLOG_USER_HISTORY"] = "История #1 игрока";
+$LOCA["ru"]["ADM_USERLOG_DATE"] = "Дата";
+$LOCA["ru"]["ADM_USERLOG_TYPE"] = "Тип";
+$LOCA["ru"]["ADM_USERLOG_ACTION"] = "Действие";
+$LOCA["ru"]["ADM_USERLOG_LAST_ACTIONS"] = "Последние действия игроков";
+$LOCA["ru"]["ADM_USERLOG_USER"] = "Игрок";
+$LOCA["ru"]["ADM_USERLOG_CATEGORY"] = "Категория";
+$LOCA["ru"]["ADM_USERLOG_HISTORY"] = "История действий";
+$LOCA["ru"]["ADM_USERLOG_USERNAME"] = "Имя пользователя";
+$LOCA["ru"]["ADM_USERLOG_APPROX"] = "(можно примерно)";
+$LOCA["ru"]["ADM_USERLOG_CAT_ALL"] = "Все";
+$LOCA["ru"]["ADM_USERLOG_CAT_BUILD"] = "Постройки / Снос";
+$LOCA["ru"]["ADM_USERLOG_CAT_RESEARCH"] = "Исследования";
+$LOCA["ru"]["ADM_USERLOG_CAT_SHIPYARD"] = "Постройка флота";
+$LOCA["ru"]["ADM_USERLOG_CAT_DEFENSE"] = "Постройка обороны";
+$LOCA["ru"]["ADM_USERLOG_CAT_FLEET"] = "Отправка флота";
+$LOCA["ru"]["ADM_USERLOG_CAT_PLANET"] = "Настройки планеты";
+$LOCA["ru"]["ADM_USERLOG_CAT_SETTINGS"] = "Изменение настроек аккаунта / РО";
+$LOCA["ru"]["ADM_USERLOG_CAT_OPER"] = "Действия оператора";
+$LOCA["ru"]["ADM_USERLOG_PERIOD"] = "За период";
+$LOCA["ru"]["ADM_USERLOG_DAYS"] = "дн.";
+$LOCA["ru"]["ADM_USERLOG_HR"] = "ч.";
+$LOCA["ru"]["ADM_USERLOG_FROM"] = "Начиная с";
+$LOCA["ru"]["ADM_USERLOG_DMY"] = "ДД.ММ.ГГГГ";
+$LOCA["ru"]["ADM_USERLOG_SUBMIT"] = "Отправить";
 
 // admin_users
 
