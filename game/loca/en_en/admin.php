@@ -158,6 +158,17 @@ $LOCA["en"]["ADM_DB_DB_TABLE_MISSING"] = "Table #1 is missing from the database.
 $LOCA["en"]["ADM_DB_DB_VS_INSTALL"] = "Comparison of real database and tables from install";
 $LOCA["en"]["ADM_DB_INSTALL_TABLE_MISSING"] = "Table #1 is missing from the install.";
 $LOCA["en"]["ADM_DB_SAME"] = "No differences were found.";
+$LOCA["en"]["ADM_DB_BACKUP_TITLE"] = "Database Backup";
+$LOCA["en"]["ADM_DB_BACKUP_NOTE"] = "⚠️ Know what you're doing. Mindlessly pressing buttons can lead to unfortunate consequences!";
+$LOCA["en"]["ADM_DB_BACKUP_FNAME"] = "File name";
+$LOCA["en"]["ADM_DB_BACKUP_ACTION"] = "Operation";
+$LOCA["en"]["ADM_DB_BACKUP_RESTORE"] = "Restore";
+$LOCA["en"]["ADM_DB_BACKUP_DELETE"] = "Delete";
+$LOCA["en"]["ADM_DB_BACKUP_CREATE"] = "Create a database backup";
+$LOCA["en"]["ADM_DB_BACKUP_SAVED"] = "The backup is saved to file #1";
+$LOCA["en"]["ADM_DB_BACKUP_DELETED"] = "Backup deleted #1";
+$LOCA["en"]["ADM_DB_BACKUP_NOT_FOUND"] = "File not found #1";
+$LOCA["en"]["ADM_DB_BACKUP_RESTORED"] = "Backup restored from file #1";
 
 // admin_debug / admin_errors
 

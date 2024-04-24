@@ -158,6 +158,17 @@ $LOCA["fr"]["ADM_DB_DB_TABLE_MISSING"] = "La table #1 est manquante dans la base
 $LOCA["fr"]["ADM_DB_DB_VS_INSTALL"] = "Comparaison de la base de données réelle et des tables de l’installation.";
 $LOCA["fr"]["ADM_DB_INSTALL_TABLE_MISSING"] = "La table #1 est manquante dans l’installation.";
 $LOCA["fr"]["ADM_DB_SAME"] = "Aucune différence n’a été constatée.";
+$LOCA["fr"]["ADM_DB_BACKUP_TITLE"] = "Gestion de la sauvegarde des bases de données";
+$LOCA["fr"]["ADM_DB_BACKUP_NOTE"] = "⚠️ Sachez ce que vous faites. Appuyer inconsidérément sur des boutons peut avoir des conséquences fâcheuses !";
+$LOCA["fr"]["ADM_DB_BACKUP_FNAME"] = "Nom du fichier";
+$LOCA["fr"]["ADM_DB_BACKUP_ACTION"] = "Opération";
+$LOCA["fr"]["ADM_DB_BACKUP_RESTORE"] = "Restaurer";
+$LOCA["fr"]["ADM_DB_BACKUP_DELETE"] = "Supprimer";
+$LOCA["fr"]["ADM_DB_BACKUP_CREATE"] = "Créer une sauvegarde de la base de données";
+$LOCA["fr"]["ADM_DB_BACKUP_SAVED"] = "La sauvegarde est enregistrée dans le fichier #1";
+$LOCA["fr"]["ADM_DB_BACKUP_DELETED"] = "Sauvegarde supprimée #1";
+$LOCA["fr"]["ADM_DB_BACKUP_NOT_FOUND"] = "Fichier non trouvé #1";
+$LOCA["fr"]["ADM_DB_BACKUP_RESTORED"] = "Sauvegarde restaurée à partir du fichier #1";
 
 // admin_debug / admin_errors
 

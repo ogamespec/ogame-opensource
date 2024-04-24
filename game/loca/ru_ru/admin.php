@@ -158,6 +158,17 @@ $LOCA["ru"]["ADM_DB_DB_TABLE_MISSING"] = "Таблица #1 отсутствуе
 $LOCA["ru"]["ADM_DB_DB_VS_INSTALL"] = "Сравнение реальной БД и таблиц из install";
 $LOCA["ru"]["ADM_DB_INSTALL_TABLE_MISSING"] = "Таблица #1 отсутствует в install.";
 $LOCA["ru"]["ADM_DB_SAME"] = "Расхождений не обнаружено.";
+$LOCA["ru"]["ADM_DB_BACKUP_TITLE"] = "Управление бекапами базы данных";
+$LOCA["ru"]["ADM_DB_BACKUP_NOTE"] = "⚠️ Знай что ты делаешь. Бездумное нажатие на кнопки может привести к печальным последствиям!";
+$LOCA["ru"]["ADM_DB_BACKUP_FNAME"] = "Имя файла";
+$LOCA["ru"]["ADM_DB_BACKUP_ACTION"] = "Операция";
+$LOCA["ru"]["ADM_DB_BACKUP_RESTORE"] = "Восстановить";
+$LOCA["ru"]["ADM_DB_BACKUP_DELETE"] = "Удалить";
+$LOCA["ru"]["ADM_DB_BACKUP_CREATE"] = "Создать бекап базы данных";
+$LOCA["ru"]["ADM_DB_BACKUP_SAVED"] = "Бекап сохранён в файл #1";
+$LOCA["ru"]["ADM_DB_BACKUP_DELETED"] = "Бекап удалён #1";
+$LOCA["ru"]["ADM_DB_BACKUP_NOT_FOUND"] = "Файл не найден #1";
+$LOCA["ru"]["ADM_DB_BACKUP_RESTORED"] = "Бекап восстановлен из файла #1";
 
 // admin_debug / admin_errors
 

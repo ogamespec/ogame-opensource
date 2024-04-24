@@ -94,4 +94,15 @@ function UnlockTables ()
     dbquery ( "UNLOCK TABLES" );
 }
 
+function SerializeDB ()
+{
+    $text = "xxx";
+    return $text;
+}
+
+function DeserializeDB ($text)
+{
+
+}
+
 ?>

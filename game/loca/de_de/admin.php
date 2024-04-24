@@ -158,6 +158,17 @@ $LOCA["de"]["ADM_DB_DB_TABLE_MISSING"] = "Die Tabelle #1 fehlt in der Datenbank.
 $LOCA["de"]["ADM_DB_DB_VS_INSTALL"] = "Vergleich der realen Datenbank und der Tabellen aus der Installation";
 $LOCA["de"]["ADM_DB_INSTALL_TABLE_MISSING"] = "Tabelle #1 fehlt bei der Installation.";
 $LOCA["de"]["ADM_DB_SAME"] = "Es wurden keine Unstimmigkeiten festgestellt.";
+$LOCA["de"]["ADM_DB_BACKUP_TITLE"] = "Verwaltung von Datenbanksicherungen";
+$LOCA["de"]["ADM_DB_BACKUP_NOTE"] = "⚠️ Wissen, was man tut. Unbedachtes Drücken von Tasten kann unangenehme Folgen haben!";
+$LOCA["de"]["ADM_DB_BACKUP_FNAME"] = "Dateiname";
+$LOCA["de"]["ADM_DB_BACKUP_ACTION"] = "Operation";
+$LOCA["de"]["ADM_DB_BACKUP_RESTORE"] = "Wiederherstellen";
+$LOCA["de"]["ADM_DB_BACKUP_DELETE"] = "Löschen";
+$LOCA["de"]["ADM_DB_BACKUP_CREATE"] = "Erstellen Sie eine Datenbanksicherung";
+$LOCA["de"]["ADM_DB_BACKUP_SAVED"] = "Die Sicherung wird in Datei #1 gespeichert";
+$LOCA["de"]["ADM_DB_BACKUP_DELETED"] = "Sicherung gelöscht #1";
+$LOCA["de"]["ADM_DB_BACKUP_NOT_FOUND"] = "Datei nicht gefunden #1";
+$LOCA["de"]["ADM_DB_BACKUP_RESTORED"] = "Sicherung aus Datei #1 wiederhergestellt";
 
 // admin_debug / admin_errors
 

@@ -158,6 +158,17 @@ $LOCA["it"]["ADM_DB_DB_TABLE_MISSING"] = "La tabella #1 non è presente nel data
 $LOCA["it"]["ADM_DB_DB_VS_INSTALL"] = "Confronto tra il database reale e le tabelle dell'installazione";
 $LOCA["it"]["ADM_DB_INSTALL_TABLE_MISSING"] = "La tabella #1 non è presente nell'installazione.";
 $LOCA["it"]["ADM_DB_SAME"] = "Non sono state riscontrate differenze.";
+$LOCA["it"]["ADM_DB_BACKUP_TITLE"] = "Gestione del backup del database";
+$LOCA["it"]["ADM_DB_BACKUP_NOTE"] = "⚠️ Sapere cosa si sta facendo. La pressione sconsiderata dei pulsanti può portare a spiacevoli conseguenze!";
+$LOCA["it"]["ADM_DB_BACKUP_FNAME"] = "Nome del file";
+$LOCA["it"]["ADM_DB_BACKUP_ACTION"] = "Operazione";
+$LOCA["it"]["ADM_DB_BACKUP_RESTORE"] = "Ripristino";
+$LOCA["it"]["ADM_DB_BACKUP_DELETE"] = "Eliminare";
+$LOCA["it"]["ADM_DB_BACKUP_CREATE"] = "Creare un backup del database";
+$LOCA["it"]["ADM_DB_BACKUP_SAVED"] = "Il backup viene salvato nel file #1";
+$LOCA["it"]["ADM_DB_BACKUP_DELETED"] = "Backup eliminato #1";
+$LOCA["it"]["ADM_DB_BACKUP_NOT_FOUND"] = "File non trovato #1";
+$LOCA["it"]["ADM_DB_BACKUP_RESTORED"] = "Backup ripristinato dal file #1";
 
 // admin_debug / admin_errors
 

@@ -35,6 +35,68 @@ function DiffTab ($tabname, $src, $dst)
     return $error ? $res : "";
 }
 
+// List the database backups from the temp folder.
+function ListDatabaseBackups()
+{
+    global $session;
+
+    echo "<h2>".loca("ADM_DB_BACKUP_TITLE")."</h2>\n";
+
+    echo loca ("ADM_DB_BACKUP_NOTE") . "<br/>";
+
+    echo "<table>\n";
+    echo "<tr><td class=c>".loca("ADM_DB_BACKUP_FNAME")."</td><td class=c>".loca("ADM_DB_BACKUP_ACTION")."</td></tr>\n";
+
+    $backup_dir = 'temp';
+    $files = scandir ($backup_dir);
+    foreach ($files as $i=>$filename) {
+        if (strstr ($filename, "backup")) {
+            echo "<tr><td>";
+            echo $filename . "<br/>";
+            echo "</td><td><a href=\"index.php?page=admin&session=$session&mode=DB&action=restore&fname=".$filename."\">".loca("ADM_DB_BACKUP_RESTORE")."</a> ";
+            echo "<a href=\"index.php?page=admin&session=$session&mode=DB&action=delete&fname=".$filename."\">".loca("ADM_DB_BACKUP_DELETE")."</a></td></tr>\n";
+        }
+    }
+
+    echo "</table>\n";
+
+    echo "<br/>\n";
+    echo "<form action=\"index.php?page=admin&session=$session&mode=DB&action=create\" method=\"POST\"><input type=submit value=\"".loca("ADM_DB_BACKUP_CREATE")."\" /></form>";
+}
+
+function CreateBackup ()
+{
+    global $AdminMessage;
+    $fname = "temp/backup_" . date_format(new DateTime(), "dmY_His") . ".json";
+    $source = SerializeDB ();
+    file_put_contents ($fname, $source);
+    $AdminMessage .= va(loca("ADM_DB_BACKUP_SAVED"), $fname);
+}
+
+function DeleteBackup ($fname)
+{
+    global $AdminMessage, $AdminError;
+    $fname = "temp/" . $fname;
+    if (strstr ($fname, "backup") && file_exists($fname)) {
+        unlink ($fname);
+        $AdminMessage .= va(loca("ADM_DB_BACKUP_DELETED"), $fname);
+    }
+    else {
+        $AdminError .= va(loca("ADM_DB_BACKUP_NOT_FOUND"), $fname);
+    }
+}
+
+function RestoreBackup ($fname)
+{
+    global $AdminMessage;
+    LockTables ();
+    $fname = "temp/" . $fname;
+    $source = file_get_contents ($fname);
+    DeserializeDB ($source);
+    UnlockTables ();
+    $AdminMessage .= va(loca("ADM_DB_BACKUP_RESTORED"), $fname);
+}
+
 function Admin_DB ()
 {
     global $session;
@@ -53,7 +115,20 @@ function Admin_DB ()
     // POST request processing.
     if ( method () === "POST" )
     {
-        // TODO: We don't do anything yet.
+        if (key_exists('action', $_GET) && $_GET['action'] === "create") {
+            CreateBackup ();
+        }
+    }
+
+    // GET request processing.
+    if ( method() === "GET" )
+    {
+        if (key_exists('action', $_GET) && $_GET['action'] === "restore") {
+            RestoreBackup ($_GET['fname']);
+        }
+        if (key_exists('action', $_GET) && $_GET['action'] === "delete") {
+            DeleteBackup ($_GET['fname']);
+        }        
     }
 
     // Get list of tables
@@ -142,8 +217,12 @@ function Admin_DB ()
 
 <?=AdminPanel();?>
 
+<?php
+ListDatabaseBackups();
+?>
+
 <?=$text_out;?>
 
 <?php
-}
+}       // Admin_DB
 ?>
