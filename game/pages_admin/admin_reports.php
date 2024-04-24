@@ -8,7 +8,7 @@ function Admin_Reports ()
     global $db_prefix;
     global $GlobalUser;
 
-    // Обработка POST-запроса.
+    // POST request processing.
     if ( method () === "POST" )
     {
     }

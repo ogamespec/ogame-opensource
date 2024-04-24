@@ -256,6 +256,23 @@ $LOCA["ru"]["ADM_RAKSIM_SETTINGS"] = "Настройки";
 $LOCA["ru"]["ADM_RAKSIM_DEFENSE"] = "Оборона";
 $LOCA["ru"]["ADM_RAKSIM_SUBMIT"] = "Ракетная атака";
 
+// admin_sim
+
+$LOCA["ru"]["ADM_SIM_ATTACKER"] = "Атакующий";
+$LOCA["ru"]["ADM_SIM_DEFENDER"] = "Обороняющийся";
+$LOCA["ru"]["ADM_SIM_WEAP"] = "Вооружение:";
+$LOCA["ru"]["ADM_SIM_SHIELD"] = "Щиты:";
+$LOCA["ru"]["ADM_SIM_ARMOUR"] = "Броня:";
+$LOCA["ru"]["ADM_SIM_FLEET"] = "Флот";
+$LOCA["ru"]["ADM_SIM_SLOT"] = "Слот:";
+$LOCA["ru"]["ADM_SIM_SETTINGS"] = "Настройки";
+$LOCA["ru"]["ADM_SIM_DEBUG"] = "Отладочная информация";
+$LOCA["ru"]["ADM_SIM_RAPIDFIRE"] = "Скорострел";
+$LOCA["ru"]["ADM_SIM_FID"] = "Флот в обломки";
+$LOCA["ru"]["ADM_SIM_DID"] = "Оборона в обломки";
+$LOCA["ru"]["ADM_SIM_DEFENSE"] = "Оборона";
+$LOCA["ru"]["ADM_SIM_SUBMIT"] = "Начать бой";
+
 // admin_uni
 
 $LOCA["ru"]["ADM_UNI_SETTINGS"] = "Настройки Вселенной #1";

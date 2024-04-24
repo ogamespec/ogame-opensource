@@ -278,7 +278,7 @@ function RecalcAttackersDefendersNum ()
 
     document.getElementById ( "anum" ).value = anum;
     document.getElementById ( "dnum" ).value = dnum;
-    //alert ( "Атакующих : " + anum + ", Обороняющихся : " + dnum );
+    //alert ( "Attackers: " + anum + ", Defenders: " + dnum );
 }
 
 // When changing a slot - enter data from the slot array into the input cells
@@ -391,20 +391,20 @@ RecalcAttackersDefendersNum ();
 <input type="hidden" id="anum" name="anum" value="1" />
 <input type="hidden" id="dnum" name="dnum" value="1" />
 
-<tr>        <td class=c>Атакующий</td>                <td class=c>Обороняющийся</td>  </tr>
+<tr>        <td class=c><?=loca("ADM_SIM_ATTACKER");?></td>                <td class=c><?=loca("ADM_SIM_DEFENDER");?></td>  </tr>
 
 <tr> 
-<td> Вооружение: <input id="a_weap" size=2 > Щиты: <input id="a_shld" size=2 > Броня: <input id="a_armor" size=2  onKeyUp="OnChangeTechValue(1);"></td> 
-<td> Вооружение: <input id="d_weap" size=2 > Щиты: <input id="d_shld" size=2 > Броня: <input id="d_armor" size=2  onKeyUp="OnChangeTechValue(0);"></td> 
+<td> <?=loca("ADM_SIM_WEAP");?> <input id="a_weap" size=2 > <?=loca("ADM_SIM_SHIELD");?> <input id="a_shld" size=2 > <?=loca("ADM_SIM_ARMOUR");?> <input id="a_armor" size=2  onKeyUp="OnChangeTechValue(1);"></td> 
+<td> <?=loca("ADM_SIM_WEAP");?> <input id="d_weap" size=2 > <?=loca("ADM_SIM_SHIELD");?> <input id="d_shld" size=2 > <?=loca("ADM_SIM_ARMOUR");?> <input id="d_armor" size=2  onKeyUp="OnChangeTechValue(0);"></td> 
 </tr>
 
         <tr> <th valign=top>
         <table>
 <?php
 
-    echo "<tr><td class=c><b>Флот</b></td> ";
+    echo "<tr><td class=c><b>".loca("ADM_SIM_FLEET")."</b></td> ";
     if ( $maxslot > 0) {
-        echo "<td>Слот: <select name=\"aslot\" onchange=\"OnChangeSlot(1);\">\n";
+        echo "<td>".loca("ADM_SIM_SLOT")." <select name=\"aslot\" onchange=\"OnChangeSlot(1);\">\n";
         for ( $n=1; $n<=$maxslot; $n++) echo "<option value=\"$n\">$n</option>\n";
         echo "</select> </td> ";
     }
@@ -420,11 +420,11 @@ RecalcAttackersDefendersNum ();
 
 <tr><td colspan=2> 
 <table>
-<tr><td class=c colspan=2>Настройки</td></tr>
-<tr><td>Отладочная информация</td><td><input type="checkbox" name="debug" <?php if($debug) echo "checked"; ?> ></td></tr>
-<tr><td>Скорострел</td><td><input type="checkbox" name="rapid" <?php if($rf) echo "checked"; ?> ></td></tr>
-<tr><td>Флот в обломки</td><td><input name="fid" size=3 value="<?=$fid;?>"> </td></tr>
-<tr><td>Оборона в обломки</td><td><input name="did" size=3 value="<?=$did;?>"></td></tr>
+<tr><td class=c colspan=2><?=loca("ADM_SIM_SETTINGS");?></td></tr>
+<tr><td><?=loca("ADM_SIM_DEBUG");?></td><td><input type="checkbox" name="debug" <?php if($debug) echo "checked"; ?> ></td></tr>
+<tr><td><?=loca("ADM_SIM_RAPIDFIRE");?></td><td><input type="checkbox" name="rapid" <?php if($rf) echo "checked"; ?> ></td></tr>
+<tr><td><?=loca("ADM_SIM_FID");?></td><td><input name="fid" size=3 value="<?=$fid;?>"> </td></tr>
+<tr><td><?=loca("ADM_SIM_DID");?></td><td><input name="did" size=3 value="<?=$did;?>"></td></tr>
 </table>
 </td></tr>
 
@@ -435,9 +435,9 @@ RecalcAttackersDefendersNum ();
         <table>
 <?php
 
-    echo "<tr><td class=c><b>Флот</b></td>";
+    echo "<tr><td class=c><b>".loca("ADM_SIM_FLEET")."</b></td>";
     if ( $maxslot > 0) {
-        echo "<td>Слот: <select name=\"dslot\" onchange=\"OnChangeSlot(0);\">\n";
+        echo "<td>".loca("ADM_SIM_SLOT")." <select name=\"dslot\" onchange=\"OnChangeSlot(0);\">\n";
         for ( $n=1; $n<=$maxslot; $n++) echo "<option value=\"$n\">$n</option>\n";
         echo "</select> </td> ";
     }
@@ -450,7 +450,7 @@ RecalcAttackersDefendersNum ();
     }
 
 
-    echo "<tr><td class=c><b>Оборона</b></td></tr>\n";
+    echo "<tr><td class=c><b>".loca("ADM_SIM_DEFENSE")."</b></td></tr>\n";
     foreach ($defmap as $i=>$gid)
     {
 ?>
@@ -461,16 +461,22 @@ RecalcAttackersDefendersNum ();
         </table>
         </th></tr>
 
-<tr><td colspan=2><center><input type="submit" value="Начать бой"></center></td></tr>
+<tr><td colspan=2><center><input type="submit" value="<?=loca("ADM_SIM_SUBMIT");?>"></center></td></tr>
 </form>
 </table>
 
 <?php
     if ( $BattleReport !== "" ) {
+        loca_add ("fleetmsg", $GlobalUser['lang']);
         $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
-        $bericht = SendMessage ( $GlobalUser['player_id'], "Командование флотом", "Боевой доклад", $BattleReport, MTYP_BATTLE_REPORT_TEXT );
+        $bericht = SendMessage ( $GlobalUser['player_id'], 
+            loca_lang("FLEET_MESSAGE_FROM", $GlobalUser['lang']),
+            loca_lang("FLEET_MESSAGE_BATTLE", $GlobalUser['lang']),
+            $BattleReport, MTYP_BATTLE_REPORT_TEXT );
         MarkMessage ( $GlobalUser['player_id'], $bericht );
-        $subj = "<a href=\"#\" onclick=\"fenster('index.php?page=bericht&session=$session&bericht=$bericht', 'Bericht_Kampf');\" ><span class=\"".$a_result[$battle_result]."\">Боевой доклад [".$d[0]['g'].":".$d[0]['s'].":".$d[0]['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
+        $subj = "<a href=\"#\" onclick=\"fenster('index.php?page=bericht&session=$session&bericht=$bericht', 'Bericht_Kampf');\" ><span class=\"".$a_result[$battle_result]."\">" .
+            loca_lang("FLEET_MESSAGE_BATTLE", $GlobalUser['lang']) .
+            " [".$d[0]['g'].":".$d[0]['s'].":".$d[0]['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
         echo "$subj<br>";
     }
 ?>
