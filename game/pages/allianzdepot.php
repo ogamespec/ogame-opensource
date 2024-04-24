@@ -25,8 +25,6 @@ PageHeader ("allianzdepot");
 
 BeginContent();
 
-$fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-
 // Launch a rocket with supplies
 
 $depot_cap = 10000 * pow ( 2, $aktplanet['b'.GID_B_ALLY_DEPOT] );

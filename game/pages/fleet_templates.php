@@ -26,8 +26,6 @@ if (!$prem['commander']) {
 
 PageHeader ("fleet_templates");
 
-$temp_map = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // без сс
-
 if ( method() === "POST" && key_exists('mode', $_POST) && $_POST['mode'] === "save" ) {
     $id = intval ( $_POST['template_id'] );
     $name = SecureText ( $_POST['template_name'] );
@@ -40,7 +38,7 @@ if ( method() === "POST" && key_exists('mode', $_POST) && $_POST['mode'] === "sa
         $result = dbquery ( $query );
         if ( dbrows ($result) > 0 ) {
             $query = "UPDATE ".$db_prefix."template SET name='".$name."', date=$now";
-            foreach ( $temp_map as $i=>$gid ) {
+            foreach ( $fleetmap_nosat as $i=>$gid ) {
                 $query .= ", ship$gid ='" . intval ( $_POST['ship'][$gid] ) . "' ";
             }
             $query .= " WHERE id = $id";
@@ -161,7 +159,7 @@ BeginContent();
         <input type=hidden name='template_id' size=6></th>
         </tr>
 <?php
-    foreach ( $temp_map as $i=>$gid ) {
+    foreach ( $fleetmap_nosat as $i=>$gid ) {
         echo "                <tr>\n";
         echo "        <th>".loca("NAME_$gid")."</th>\n";
         echo "        <th><input name='ship[$gid]' size=3></th>\n";

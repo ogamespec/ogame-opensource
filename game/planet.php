@@ -459,7 +459,7 @@ function DestroyMoon ($moon_id, $when, $fleet_id)
 function RecalcFields ($planet_id)
 {
     global $db_prefix;
-    $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
+    global $buildmap;
     $planet = GetPlanet ($planet_id);
     $fields = 0;
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) $maxfields = 1;    // moon

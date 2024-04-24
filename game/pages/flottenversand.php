@@ -57,8 +57,6 @@ $maxfleet = $GlobalUser['r108'] + 1;
 $prem = PremiumStatus ($GlobalUser);
 if ( $prem['admiral'] ) $maxfleet += 2;
 
-$fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-
 // Limit the speed and make it a multiple of 10.
 $fleetspeed = round ( abs(intval($_POST['speed']) * 10) / 10) * 10;
 $fleetspeed = min ( max (10, $fleetspeed), 100 ) / 10;

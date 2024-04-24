@@ -82,10 +82,10 @@ function Plunder ( $cargo, $m, $k, $d )
 // Calculate total losses (taking into account repaired defenses).
 function CalcLosses ( $a, $d, $res, $repaired )
 {
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
-    $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $dmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 401, 402, 403, 404, 405, 406, 407, 408 );
+    global $fleetmap;
+    global $defmap_norak;
+    $amap = $fleetmap;
+    $dmap = array_merge($fleetmap, $defmap_norak);
 
     $aprice = $dprice = 0;
 
@@ -120,7 +120,7 @@ function CalcLosses ( $a, $d, $res, $repaired )
                 $d[$i]['fpoints'] += $amount;
             }
         }
-        foreach ( $defmap as $n=>$gid )
+        foreach ( $defmap_norak as $n=>$gid )
         {
             $amount = $defender['defense'][$gid];
             if ( $amount > 0 ) {
@@ -212,8 +212,8 @@ function CargoSummaryLastRound ( $a, $res )
 // Modify fleets and planet (add/remove resources, return attack fleets if ships remain)
 function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_cargo )
 {
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+    global $fleetmap;
+    global $defmap_norak;
     global $db_prefix;
 
     // Combat with rounds.
@@ -247,7 +247,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
                 AdjustResources ( $cm, $ck, $cd, $defender['id'], '-' );
                 $objects = array ();
                 foreach ( $fleetmap as $ii=>$gid ) $objects["f$gid"] = $defender[$gid] ? $defender[$gid] : 0;
-                foreach ( $defmap as $ii=>$gid ) {
+                foreach ( $defmap_norak as $ii=>$gid ) {
                     $objects["d$gid"] = $repaired[$gid] ? $repaired[$gid] : 0;
                     $objects["d$gid"] += $defender[$gid];
                 }
@@ -381,10 +381,10 @@ function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $d
 // Generate a battle report.
 function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired, $lang )
 {
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
-    $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $dmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 401, 402, 403, 404, 405, 406, 407, 408 );
+    global $fleetmap;
+    global $defmap_norak;
+    $amap = $fleetmap;
+    $dmap = array_merge ($fleetmap, $defmap_norak);
 
     loca_add ( "battlereport", $lang );
     loca_add ( "technames", $lang );
@@ -452,7 +452,7 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
     // Repairing the Defense.
     // There is an error in the output of the original battle report: the Small Shield Dome is not output in its turn, but before the Plasma Cannon.
     // To be as similar as possible to the original report, the RepairMap permutation table is used in the output of the repaired defense.
-    $repairmap = array ( 401, 402, 403, 404, 405, 407, 406, 408 );
+    $repairmap = array ( GID_D_RL, GID_D_LL, GID_D_HL, GID_D_GAUSS, GID_D_ION, GID_D_SDOME, GID_D_PLASMA, GID_D_LDOME );
     $repaired_num = $sum = 0;
     foreach ($repaired as $gid=>$amount) $repaired_num += $amount;
     if ( $repaired_num > 0)
@@ -587,9 +587,8 @@ function StartBattle ( $fleet_id, $planet_id, $when )
 {
     global $db_prefix;
     global $GlobalUni;
-
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+    global $fleetmap;
+    global $defmap_norak;
 
     $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
     $d_result = array ( 1=>"combatreport_igotattacked_iwon", 0=>"combatreport_igotattacked_ilost", 2=>"combatreport_igotattacked_draw" );
@@ -651,7 +650,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
     $d[0]['fleet'] = array ();
     $d[0]['defense'] = array ();
     foreach ($fleetmap as $i=>$gid) $d[0]['fleet'][$gid] = abs($p["f$gid"]);
-    foreach ($defmap as $i=>$gid) $d[0]['defense'][$gid] = abs($p["d$gid"]);
+    foreach ($defmap_norak as $i=>$gid) $d[0]['defense'][$gid] = abs($p["d$gid"]);
     $d[0]['g'] = $p['g'];
     $d[0]['s'] = $p['s'];
     $d[0]['p'] = $p['p'];
@@ -670,7 +669,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $d[$dnum]['fleet'] = array ();
         $d[$dnum]['defense'] = array ();
         foreach ($fleetmap as $i=>$gid) $d[$dnum]['fleet'][$gid] = abs($fleet_obj["ship$gid"]);
-        foreach ($defmap as $i=>$gid) $d[$dnum]['defense'][$gid] = 0;
+        foreach ($defmap_norak as $i=>$gid) $d[$dnum]['defense'][$gid] = 0;
         $start_planet = GetPlanet ( $fleet_obj['start_planet'] );
         $d[$dnum]['g'] = $start_planet['g'];
         $d[$dnum]['s'] = $start_planet['s'];
@@ -705,7 +704,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $source .= $defender['g'] . " " . $defender['s'] . " " . $defender['p'] . " ";
         $source .= $defender['r'.GID_R_WEAPON] . " " . $defender['r'.GID_R_SHIELD] . " " . $defender['r'.GID_R_ARMOUR] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $defender['fleet'][$gid] . " ";
-        foreach ($defmap as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
+        foreach ($defmap_norak as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
         $source .= ")\n";
     }
 
@@ -871,7 +870,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
 // Modify the fleet (after a battle with aliens/pirates)
 function WritebackBattleResultsExpedition ( $a, $d, $res )
 {
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
 
     // Combat with rounds.
 
@@ -920,10 +919,10 @@ function WritebackBattleResultsExpedition ( $a, $d, $res )
 // Generate short battle report.
 function ShortBattleReport ( $res, $now, $lang )
 {
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
-    $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $dmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 401, 402, 403, 404, 405, 406, 407, 408 );
+    global $fleetmap;
+    global $defmap_norak;
+    $amap = $fleetmap;
+    $dmap = array_merge($fleetmap, $defmap_norak);
 
     loca_add ( "battlereport", $lang );
     loca_add ( "technames", $lang );
@@ -993,9 +992,8 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 {
     global $db_prefix;
     global $GlobalUni;
-
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+    global $fleetmap;
+    global $defmap_norak;
 
     $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
 
@@ -1089,7 +1087,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
         else if ( $level == 2 ) $d[0]['fleet'][GID_F_DESTRO] += 2;
     }
 
-    foreach ($defmap as $i=>$gid) $d[0]['defense'][$gid] = 0;
+    foreach ($defmap_norak as $i=>$gid) $d[0]['defense'][$gid] = 0;
     $target_planet = GetPlanet ( $f['target_planet'] );
     $d[0]['g'] = $target_planet['g'];
     $d[0]['s'] = $target_planet['s'];
@@ -1122,7 +1120,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
         $source .= $defender['g'] . " " . $defender['s'] . " " . $defender['p'] . " ";
         $source .= $defender['r'.GID_R_WEAPON] . " " . $defender['r'.GID_R_SHIELD] . " " . $defender['r'.GID_R_ARMOUR] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $defender['fleet'][$gid] . " ";
-        foreach ($defmap as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
+        foreach ($defmap_norak as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
         $source .= ")\n";
     }
 

@@ -397,9 +397,9 @@ function ProdResources ( &$planet, $time_from, $time_to )
 function PlanetPrice ($planet)
 {
     $pp = array ();
-    $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
+    global $buildmap;
+    global $fleetmap;
+    global $defmap;
 
     $m = $k = $d = $e = 0;
     $pp['points'] = $pp['fpoints'] = $pp['fleet_pts'] = $pp['defense_pts'] = 0;
@@ -443,7 +443,7 @@ function PlanetPrice ($planet)
 // Fleet cost
 function FleetPrice ( $fleet_obj )
 {
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     $m = $k = $d = $e = 0;
     $points = $fpoints = 0;
     $price = array ();

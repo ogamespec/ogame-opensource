@@ -21,15 +21,13 @@ PageHeader ("sprungtor");
 
 BeginContent ();
 
-$fleetmap = array ( 215, 214, 213, 211, 210, 209, 208, 207, 206, 205, 204, 203, 202 );
-
 if ( key_exists ( 'qm', $_POST) ) $source_id = intval($_POST['qm']);
 else $source_id = 0;
 if ( key_exists ( 'zm', $_POST) ) $target_id = intval($_POST['zm']);
 else $target_id = 0;
 
 $total = 0;
-foreach ( $fleetmap as $i=>$gid)
+foreach ( $fleetmap_revnosat as $i=>$gid)
 {
     if ( !key_exists ( "c$gid", $_POST) )  $_POST["c$gid"] = 0;
     $total += floor (abs (intval($_POST["c$gid"])));
@@ -62,7 +60,7 @@ if ( $GateError === "" )
 if ( $GateError === "" )
 {
     $fleet = array ();
-    foreach ( $fleetmap as $i=>$gid)
+    foreach ( $fleetmap_revnosat as $i=>$gid)
     {
         $amount = floor (abs(intval($_POST["c$gid"])));
         if ( $amount > $source["f$gid"] ) 

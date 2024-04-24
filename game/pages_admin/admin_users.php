@@ -59,10 +59,10 @@ function Admin_Users ()
     global $GlobalUser;
     global $FleetMissionList;
     global $big_fleet_points;
+    global $resmap;
+    global $fleetmap;
 
     $now = time();
-
-    $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
     
     $unitab = LoadUniverse ();
     $speed = $unitab['speed'];
@@ -458,7 +458,6 @@ function Admin_Users ()
         </th>
         <th <?php echo $style;?> >
 <?php
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     foreach ($fleetmap as $i=>$gid) {
         $amount = $fleet_obj["ship".$gid];
         if ( $amount > 0 ) echo loca ("NAME_$gid") . ":" . nicenum($amount) . " ";

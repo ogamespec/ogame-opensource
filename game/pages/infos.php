@@ -24,8 +24,6 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
-$fleetmap = array ( 215, 214, 213, 211, 210, 209, 208, 207, 206, 205, 204, 203, 202 );
-
 // ***************************************************************************************
 
 function rgnum ($num)
@@ -269,8 +267,6 @@ else
 <td class='c' colspan='2'><?=va(loca("INFO_DEPOT_CAPACITY"), $deut_avail, $depot_cap);?></td>
 <?php
 
-    $fmap = array_reverse ($fleetmap);
-
     $result = GetHoldingFleets ($aktplanet['planet_id']);
     $rows = dbrows ($result);
     $c = 1;
@@ -285,7 +281,7 @@ else
         echo "  <tr>\n";
         echo "    <th>".va(loca("INFO_DEPOT_FLEET"), $user['oname'])."<br>";
         $cons = 0;
-        foreach ($fmap as $i=>$id) {
+        foreach ($fleetmap_nosat as $i=>$id) {
             $amount = $fleet_obj["ship".$id];
             if ($amount > 0) { 
                 echo loca ("NAME_".$id).":".$amount."<br>";
@@ -430,7 +426,7 @@ else
       <td class="c" colspan="2"><?=loca("GATE_HEAD");?></td>
     </tr>
 <?php
-    foreach ($fleetmap as $i=>$id)
+    foreach ($fleetmap_revnosat as $i=>$id)
     {
         $amount = $aktplanet["f$id"];
         if ($amount != 0)

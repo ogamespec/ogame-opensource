@@ -74,6 +74,9 @@ function AddDBRow ( $row, $tabname )
     return mysqli_insert_id ($db_connect);
 }
 
+// Table locking is critical in a multi-user environment. It is protection against simultaneous work with the database from several users.
+// Think of it as analogous to multitasking lock (mutex).
+
 function LockTables ()
 {
     global $db_prefix;

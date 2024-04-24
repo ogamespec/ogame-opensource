@@ -37,7 +37,7 @@ function RocketAttackMain ( $amount, $primary, $moon_attack, &$target, &$moon_pl
     // Calculate defense losses, if there are still IPMs left -- all the same, but ignore the ID of the primary target in the ID. Foreign missiles can also be bombed.
     if ($maxdamage > 0)
     {
-        $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
+        global $defmap;
         foreach ($defmap as $i=>$id)
         {
             if ($id == $primary) continue;
@@ -129,10 +129,11 @@ function GetDestroyedDefenseText ($lang, &$target, &$moon_planet, $moon_attack)
     loca_add ( "raketen", $lang );
     loca_add ( "technames", $lang );
 
-    $defmap = array ( 503, 502, 408, 407, 406, 405, 404, 403, 402, 401 );       // the defenses are being pulled backwards for some unknown reason.
+    global $defmap;
+    $defmap_rev = array_reverse ($defmap);         // the defenses are being pulled backwards for some unknown reason.
     $deftext = "<table width=400><tr><td class=c colspan=4>".loca_lang("RAK_TITLE", $lang)."</td></tr>";
     $n = 0;
-    foreach ( $defmap as $i=>$gid )
+    foreach ( $defmap_rev as $i=>$gid )
     {
         if ( ($n % 2) == 0 ) $deftext .= "</tr>";
         if ( $target["d$gid"] ) {

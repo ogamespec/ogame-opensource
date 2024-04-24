@@ -56,7 +56,7 @@ BeginContent ();
 <form action="index.php?page=flottenversand&session=<?php echo $session;?>" method="POST">
 
 <?php
-    // Координаты цели и данные о ресурсах.
+    // Target coordinates and resource data.
     echo "<input name=\"thisgalaxy\" type=\"hidden\" value=\"".intval($_POST['thisgalaxy'])."\" />\n";
     echo "<input name=\"thissystem\" type=\"hidden\" value=\"".intval($_POST['thissystem'])."\" />\n";
     echo "<input name=\"thisplanet\" type=\"hidden\" value=\"".intval($_POST['thisplanet'])."\" />\n";
@@ -71,10 +71,9 @@ BeginContent ();
     echo "<input name=\"planettype\" type=\"hidden\" value=\"".intval($_POST['planettype'])."\" />\n\n";
 
     // Fleet List.
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // without a solar satellite
 
     $total = 0;
-    foreach ($fleetmap as $i=>$gid) 
+    foreach ($fleetmap_nosat as $i=>$gid) 
     {
         // Limit the number of fleets to the maximum number on a planet.
         if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet["f$gid"] , abs ( intval($_POST["ship$gid"]) ) );
@@ -127,7 +126,7 @@ BeginContent ();
 
     $fleet = array ();
 
-    foreach ($fleetmap as $i=>$gid) 
+    foreach ($fleetmap_nosat as $i=>$gid) 
     {
         if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = intval($_POST["ship$gid"]);
         else $fleet[$gid] = 0;

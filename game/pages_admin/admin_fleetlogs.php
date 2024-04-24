@@ -7,6 +7,7 @@ function Admin_Fleetlogs ()
     global $session;
     global $db_prefix;
     global $GlobalUser;
+    global $fleetmap;
 
     $big_fleet_points = 100000000;      // If a fleet is larger than the specified number of points, it is highlighted in a special way ("large").
 
@@ -115,7 +116,6 @@ function Admin_Fleetlogs ()
         </th>
         <th <?=$style;?> >
 <?php
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
     foreach ($fleetmap as $i=>$gid) {
         $amount = $fleet_obj["ship".$gid];
         if ( $amount > 0 ) echo loca ("NAME_$gid") . ":" . nicenum($amount) . " ";

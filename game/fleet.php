@@ -249,7 +249,7 @@ function FleetCargo ( $id )
 // Total carrying capacity of the fleet
 function FleetCargoSummary ( $fleet )
 {
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     $cargo = 0;
     foreach ( $fleetmap as $n=>$gid )
     {
@@ -272,7 +272,7 @@ function FleetCons ($id, $combustion, $impulse, $hyper )
 // Alter the number of ships on a planet.
 function AdjustShips ($fleet, $planet_id, $sign)
 {
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     global $db_prefix;
 
     $query = "UPDATE ".$db_prefix."planets SET ";
@@ -323,7 +323,7 @@ function RecallFleet ($fleet_id, $now=0)
 
     if ($now == 0) $now = time ();
     $fleet_obj = LoadFleet ($fleet_id);
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     $fleet = array ();
     foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj["ship$gid"];
 
@@ -378,7 +378,7 @@ function DeleteFleet ($fleet_id)
 function SetFleet ($fleet_id, $fleet)
 {
     global $db_prefix;
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     $query = "UPDATE ".$db_prefix."fleet SET ";
     foreach ( $fleetmap as $i=>$gid ) {
         if ( $i == 0 ) $query .= "ship".$gid."=".$fleet[$gid];
@@ -465,7 +465,7 @@ function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
 
 function FleetList ($fleet, $lang)
 {
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     $res = "";
     foreach ( $fleetmap as $i=>$gid )
     {
@@ -633,10 +633,10 @@ function HoldingHold ($queue, $fleet_obj, $fleet, $origin, $target)
 function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     global $UnitParam;
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
-    $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
-    $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
+    global $fleetmap;
+    global $defmap;
+    global $buildmap;
+    global $resmap;
 
     $now = $queue['end'];
 
@@ -853,7 +853,7 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         }
 
         // Return the fleet, if there's anything left.
-        $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+        global $fleetmap;
         $num_ships = 0;
         foreach ($fleetmap as $i=>$gid) {
             $num_ships += $fleet[$gid];
@@ -965,7 +965,7 @@ function RocketAttackArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 function Queue_Fleet_End ($queue)
 {
     global $GlobalUser;
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     $fleet_obj = LoadFleet ( $queue['sub_id'] );
     if ( $fleet_obj == null ) return;
 
@@ -1294,7 +1294,7 @@ function FleetlogsToPlayer ($player_id, $missions)
 
 function DumpFleet ($fleet)
 {
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     $result = "";
     foreach ($fleetmap as $i=>$gid) {
         $amount = $fleet[$gid];

@@ -63,9 +63,11 @@ function set_packed_word (&$arr, $idx, $val)
 function InitBattle ($slot, $num, $objs, $attacker, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &$shld_arr )
 {
     global $UnitParam;
+    global $fleetmap;
+    global $defmap_norak;
 
-    $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $dmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+    $amap = $fleetmap;
+    $dmap = $defmap_norak;
 
     $ucnt = 0;
     $slot_id = 0;
@@ -353,6 +355,8 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
     global $battle_debug;
     global $already_exploded_counter;
     global $exploded_counter;
+    global $fleetmap;
+    global $defmap_norak;
 
     // A set of working array strings for calculations. Arrays of shields and armor use packing of long numbers
 
@@ -378,8 +382,8 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
 
     $dm = $dk = 0;
 
-    $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $dmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+    $amap = $fleetmap;
+    $dmap = $defmap_norak;
 
     $anum = count ($res['before']['attackers']);
     $dnum = count ($res['before']['defenders']);
@@ -628,8 +632,11 @@ function extract_text ($str, $s, $e)
 
 function deserialize_slot ($str, $att)
 {
-    $amap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $dmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+    global $fleetmap;
+    global $defmap_norak;
+    
+    $amap = $fleetmap;
+    $dmap = $defmap_norak;
 
     $res = array();
 

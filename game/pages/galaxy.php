@@ -17,8 +17,6 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
-$defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
-
 function empty_row ($p)
 {
     echo "<tr><th width=\"30\"><a href=\"#\" >".$p."</a></th><th width=\"30\"></th><th width=\"130\" style='white-space: nowrap;'></th><th width=\"30\" style='white-space: nowrap;'></th><th width=\"30\"></th><th width=\"150\"></th><th width=\"80\"></th><th width=\"125\" style='white-space: nowrap;'></th></tr>\n\n";
@@ -37,7 +35,7 @@ if ( method () === "POST" && isset($_POST['aktion']) )
 
     if ( $target == NULL) $GalaxyError = loca("GALAXY_RAK_NO_TARGET");
 
-    if ( !in_array ($type, $defmap ) ) $type = 0;
+    if ( !in_array ($type, $defmap_norak ) ) $type = 0;
 
     if ( $GalaxyError === "" )    // Check the permitted parameters
     {
@@ -430,7 +428,7 @@ echo "</form>\n";
      <select name="pziel">
       <option value="0" selected><?=loca("GALAXY_RAK_TARGET_ALL");?></option>
 <?php
-    foreach ($defmap as $i=>$gid)
+    foreach ($defmap_norak as $i=>$gid)
     {
         echo "       <option value=\"$gid\">".loca("NAME_$gid")."</option>\n";
     }

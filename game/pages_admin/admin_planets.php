@@ -8,12 +8,11 @@ function Admin_Planets ()
     global $session;
     global $db_prefix;
     global $GlobalUser;
+    global $buildmap;
+    global $fleetmap;
+    global $defmap;
 
     $SearchResult = "";
-
-    $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
 
     // POST request processing.
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 ) {
@@ -107,7 +106,7 @@ function Admin_Planets ()
         }
     }
 
-    // Обработка GET-запроса.
+    // GET request processing.
     if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
         if ( key_exists('cp', $_GET) ) $cp = intval ($_GET['cp']);
         else $cp = 0;

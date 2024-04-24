@@ -6,9 +6,8 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
 {
     global $db_prefix;
     global $GlobalUser;
-
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+    global $fleetmap;
+    global $defmap_norak;
 
     $unitab = LoadUniverse ();
 
@@ -44,7 +43,7 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
         $source .= "Defender$n = ({Defender$n} ".mt_rand(1,10000)." ".$d[$n]['g']." ".$d[$n]['s']." ".$d[$n]['p']." ";
         $source .= $d[$n]['r109'] . " " . $d[$n]['r110'] . " " . $d[$n]['r111'] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $d[$n]['fleet'][$gid] . " ";
-        foreach ($defmap as $i=>$gid) $source .= $d[$n]['defense'][$gid] . " ";
+        foreach ($defmap_norak as $i=>$gid) $source .= $d[$n]['defense'][$gid] . " ";
         $source .= ")\n";
     }
 
@@ -124,9 +123,8 @@ function Admin_BattleSim ()
     global $session;
     global $db_prefix;
     global $GlobalUser;
-
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408 );
+    global $fleetmap;
+    global $defmap_norak;
 
     $unitab = LoadUniverse ();
     $rf = $unitab['rapid'];
@@ -199,7 +197,7 @@ function Admin_BattleSim ()
             }
 
             $d[$i]['defense'] = array ();
-            foreach ( $defmap as $n=>$gid)
+            foreach ( $defmap_norak as $n=>$gid)
             {
                 if ( $_POST["d".$i."_$gid"] === "" ) $_POST["d".$i."_$gid"] = 0;
                 $d[$i]['defense'][$gid] = intval ($_POST["d".$i."_$gid"]);
@@ -382,7 +380,7 @@ RecalcAttackersDefendersNum ();
     {
         foreach ($fleetmap as $i=>$gid) echo "<input type=\"hidden\" id=\"a".$n."_$gid\" name=\"a".$n."_$gid\" value=\"0\"> \n";
         foreach ($fleetmap as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"0\"> \n";
-        foreach ($defmap as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"0\"> \n";
+        foreach ($defmap_norak as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"0\"> \n";
         echo "<input type=\"hidden\" id=\"a".$n."_weap\" name=\"a".$n."_weap\" size=2 > <input type=\"hidden\" id=\"a".$n."_shld\" name=\"a".$n."_shld\" size=2 > <input type=\"hidden\" id=\"a".$n."_armor\" name=\"a".$n."_armor\" size=2 > \n";
         echo "<input type=\"hidden\" id=\"d".$n."_weap\" name=\"d".$n."_weap\" size=2 > <input type=\"hidden\" id=\"d".$n."_shld\" name=\"d".$n."_shld\" size=2 > <input type=\"hidden\" id=\"d".$n."_armor\" name=\"d".$n."_armor\" size=2 > \n";
     }
@@ -451,7 +449,7 @@ RecalcAttackersDefendersNum ();
 
 
     echo "<tr><td class=c><b>".loca("ADM_SIM_DEFENSE")."</b></td></tr>\n";
-    foreach ($defmap as $i=>$gid)
+    foreach ($defmap_norak as $i=>$gid)
     {
 ?>
            <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input id="d_<?=$gid;?>" size=5 onKeyUp="OnChangeValue(0, <?=$gid;?>);"> </td> </tr>

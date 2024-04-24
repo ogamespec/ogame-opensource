@@ -7,7 +7,7 @@ function OverFleet ($fleet, $summary, $mission, $acs=false)
     global $GlobalUser;
     $level = $GlobalUser['r106'];
     if ( $fleet['owner_id'] == $GlobalUser['player_id'] || $acs ) $level = 99;
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     $sum = 0;
     $res = "";
     if ( $level >= 2 )
@@ -38,7 +38,7 @@ function TitleFleet ($fleet, $summary, $acs=false)
     global $GlobalUser;
     $level = $GlobalUser['r106'];
     if ( $fleet['owner_id'] == $GlobalUser['player_id'] || $acs ) $level = 99;
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     $sum = 0;
     $res = "";
     if ( $level >= 2 )
@@ -286,7 +286,7 @@ function GetDirectionAssignment ( $fleet_obj, &$dir, &$assign )
 function EventList ()
 {
     global $GlobalUser;
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
 
     // Single fleets
     $tasklist = EnumFleetQueue ( $GlobalUser['player_id'] );

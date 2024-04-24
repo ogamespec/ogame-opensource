@@ -29,7 +29,7 @@ function LoadExpeditionSettings ()
 // Count the points of the expeditionary fleet.
 function ExpPoints ( $fleet )
 {
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     $structure = 0;
 
     foreach ( $fleetmap as $i=>$gid )
@@ -434,7 +434,7 @@ function Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang
 function Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     global $UnitParam;
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
 
     $small = array (
         loca_lang ("EXP_FLEET_SMALL_1", $lang),
@@ -483,16 +483,16 @@ function Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
     $no_structure = false;
 
     // Possible types of ships found
-    if ( $fleet[210] > 0 ) $found = array ( 210, 202 );    // Espionage Probe
-    if ( $fleet[202] > 0 ) $found = array ( 210, 202, 203 );    // Small Cargo
-    if ( $fleet[204] > 0 ) $found = array ( 210, 202, 204, 203 );    // Light Fighter
-    if ( $fleet[203] > 0 ) $found = array ( 210, 202, 204, 203, 205 );    // Large Cargo
-    if ( $fleet[205] > 0 ) $found = array ( 210, 202, 204, 203, 205, 206 );    // Heavy Fighter
-    if ( $fleet[206] > 0 ) $found = array ( 210, 202, 204, 203, 205, 206, 207 );    // Cruiser
-    if ( $fleet[207] > 0 ) $found = array ( 210, 202, 204, 203, 205, 206, 207, 215 );     // Battleship
-    if ( $fleet[215] > 0 ) $found = array ( 210, 202, 204, 203, 205, 206, 207, 215, 211 );    // Battlecruiser
-    if ( $fleet[211] > 0 ) $found = array ( 210, 202, 204, 203, 205, 206, 207, 215, 211, 213 );    // Bomber
-    if ( $fleet[213] > 0 ) $found = array ( 210, 202, 204, 203, 205, 206, 207, 215, 211, 213 );    // Destroyer
+    if ( $fleet[GID_F_PROBE] > 0 ) $found = array ( GID_F_PROBE, GID_F_SC );    // Espionage Probe
+    if ( $fleet[GID_F_SC] > 0 ) $found = array ( GID_F_PROBE, GID_F_SC, GID_F_LC );    // Small Cargo
+    if ( $fleet[GID_F_LF] > 0 ) $found = array ( GID_F_PROBE, GID_F_SC, GID_F_LF, GID_F_LC );    // Light Fighter
+    if ( $fleet[GID_F_LC] > 0 ) $found = array ( GID_F_PROBE, GID_F_SC, GID_F_LF, GID_F_LC, GID_F_HF );    // Large Cargo
+    if ( $fleet[GID_F_HF] > 0 ) $found = array ( GID_F_PROBE, GID_F_SC, GID_F_LF, GID_F_LC, GID_F_HF, GID_F_CRUISER );    // Heavy Fighter
+    if ( $fleet[GID_F_CRUISER] > 0 ) $found = array ( GID_F_PROBE, GID_F_SC, GID_F_LF, GID_F_LC, GID_F_HF, GID_F_CRUISER, GID_F_BATTLESHIP );    // Cruiser
+    if ( $fleet[GID_F_BATTLESHIP] > 0 ) $found = array ( GID_F_PROBE, GID_F_SC, GID_F_LF, GID_F_LC, GID_F_HF, GID_F_CRUISER, GID_F_BATTLESHIP, GID_F_BATTLECRUISER );     // Battleship
+    if ( $fleet[GID_F_BATTLECRUISER] > 0 ) $found = array ( GID_F_PROBE, GID_F_SC, GID_F_LF, GID_F_LC, GID_F_HF, GID_F_CRUISER, GID_F_BATTLESHIP, GID_F_BATTLECRUISER, GID_F_BOMBER );    // Battlecruiser
+    if ( $fleet[GID_F_BOMBER] > 0 ) $found = array ( GID_F_PROBE, GID_F_SC, GID_F_LF, GID_F_LC, GID_F_HF, GID_F_CRUISER, GID_F_BATTLESHIP, GID_F_BATTLECRUISER, GID_F_BOMBER, GID_F_DESTRO );    // Bomber
+    if ( $fleet[GID_F_DESTRO] > 0 ) $found = array ( GID_F_PROBE, GID_F_SC, GID_F_LF, GID_F_LC, GID_F_HF, GID_F_CRUISER, GID_F_BATTLESHIP, GID_F_BATTLECRUISER, GID_F_BOMBER, GID_F_DESTRO );    // Destroyer
 
     // Make a list of ship types found, each ship type can be found with equal probability.
     $found_ids = array ();

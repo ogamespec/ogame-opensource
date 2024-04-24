@@ -202,12 +202,11 @@ function GetBuildQueue ( $planet_id )
 function CanBuild ($user, $planet, $id, $lvl, $destroy, $enqueue=false)
 {
     global $GlobalUni;
+    global $buildmap;
 
     // Cost of building
     $res = BuildPrice ( $id, $lvl );
     $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
-
-    $buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
 
     $result = GetResearchQueue ( $user['player_id'] );
     $resqueue = dbarray ($result);
@@ -545,13 +544,13 @@ function ShipyardLatestTime ($planet_id, $now)
 function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
 {
     global $db_prefix, $GlobalUni;
-
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
+    global $fleetmap;
+    global $defmap;
 
     if ( in_array ( $gid, $defmap ) ) UserLog ( $player_id, "DEFENSE", "Запустить постройку ".loca("NAME_$gid")." ($value) на планете $planet_id");
     else UserLog ( $player_id, "SHIPYARD", "Запустить постройку ".loca("NAME_$gid")." ($value) на планете $planet_id");
 
-    $techmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
+    $techmap = array_merge ($fleetmap, $defmap);
     if ( ! in_array ( $gid, $techmap ) ) return;
 
     $uni = $GlobalUni;
@@ -673,10 +672,9 @@ function Queue_Shipyard_End ($queue, $when=0)
 function CanResearch ($user, $planet, $id, $lvl)
 {
     global $db_prefix, $GlobalUni;
+    global $resmap;
 
     {
-        $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
-
         loca_add ("build", $user['lang']);
 
         if ( $GlobalUni['freeze'] ) return loca_lang("BUILD_ERROR_UNI_FREEZE", $user['lang']);

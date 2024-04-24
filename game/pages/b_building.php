@@ -33,8 +33,6 @@ $speed = $unitab['speed'];
 
 PageHeader ("b_building");
 
-$buildmap = array ( 1, 2, 3, 4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 41, 42, 43, 44 );
-
 BeginContent();
 
 ?>

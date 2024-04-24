@@ -6,7 +6,7 @@
 function OverFleet ($fleet, $summary, $mission)
 {
     $res = "<a href='#' onmouseover='return overlib(\"&lt;font color=white&gt;&lt;b&gt;";
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     $sum = 0;
     if ( $summary ) {
         foreach ($fleetmap as $i=>$gid) $sum += $fleet[$gid];
@@ -22,7 +22,7 @@ function OverFleet ($fleet, $summary, $mission)
 
 function TitleFleet ($fleet, $summary)
 {
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     $sum = 0;
     if ( $summary ) {
         foreach ($fleetmap as $i=>$gid) $sum += $fleet[$gid];
@@ -180,7 +180,7 @@ function PhalanxEventList ($planet_id)
 {
     $planet = GetPlanet ($planet_id);
     $user = LoadUser ($planet['owner_id']);
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     $result = EnumPlanetFleets ( $planet_id );
     $rows = dbrows ( $result );
 

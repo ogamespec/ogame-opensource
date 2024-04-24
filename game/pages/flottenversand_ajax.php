@@ -9,7 +9,6 @@ BrowseHistory ();
 
 if ( $GlobalUni['freeze'] ) AjaxSendError ();    // The universe is on pause.
 $unispeed = $GlobalUni['fspeed'];
-$fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
 
 function AjaxSendError ($id=601)
 {

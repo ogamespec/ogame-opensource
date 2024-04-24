@@ -619,7 +619,7 @@ function RecalcStats ($player_id)
     }
 
     // Research
-    $resmap = array ( 106, 108, 109, 110, 111, 113, 114, 115, 117, 118, 120, 121, 122, 123, 124, 199 );
+    global $resmap;
     $user = LoadUser ($player_id);
     if ( $user != null )
     {
@@ -638,7 +638,7 @@ function RecalcStats ($player_id)
     }
 
     // Flying fleets
-    $fleetmap = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215 );
+    global $fleetmap;
     $result = EnumOwnFleetQueue ( $player_id, 1 );
     $rows = dbrows ($result);
     while ($rows--)
