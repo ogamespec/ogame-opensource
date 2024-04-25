@@ -33,7 +33,7 @@ function dbquery ($query, $mute=FALSE)
         Debug ( mysqli_error($db_connect) . "<br>" . $query . "<br>" . BackTrace () ) ;
         return false;
     }
-    else  return $result;
+    else return $result;
 }
 
 function dbrows ($query)
@@ -151,15 +151,63 @@ function SerializeDB ()
     return json_encode ($db_tabs, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
 }
 
+function DeserExecQuery ($query)
+{
+    //echo $query . "\n";
+    dbquery ($query);
+}
+
+function DeserializeTable ($name, $tab)
+{
+    global $db_prefix;
+    global $db_connect;
+
+    // Clean up the old rows
+    $query = "TRUNCATE TABLE `".$db_prefix.$name."`;";
+    DeserExecQuery ($query);
+
+    if (count($tab['values']) != 0) {
+
+        $query = "INSERT INTO `".$db_prefix.$name."` (";
+        $first = true;
+        foreach ($tab['cols'] as $col) {
+            if (!$first) $query .= ", ";
+            $query .= "`".$col."`";
+            if ($first) $first = false;
+        }
+        $query .= ") VALUES\n";
+
+        $first = true;
+        foreach ($tab['values'] as $row) {
+            if (!$first) $query .= ",\n";
+            $query .= "(";
+            $first_val = true;
+            foreach ($row as $value) {
+                if (!$first_val) $query .= ", ";
+                $query .= "\"".mysqli_escape_string($db_connect, $value)."\"";
+                if ($first_val) $first_val = false;
+            }
+            $query .= ")";
+            if ($first) $first = false;
+        }
+        $query .= ";";
+        DeserExecQuery ($query);
+    }
+
+    // Actualize autoincrement. The column for autoincrement in the game tables is always the first one.
+    if ($tab['auto_increment'] != null) {
+        $query = "ALTER TABLE `".$db_prefix.$name."` MODIFY `".$tab['cols'][0]."` INT AUTO_INCREMENT, AUTO_INCREMENT=".$tab['auto_increment'].";";
+        DeserExecQuery ($query);
+    }
+}
+
 function DeserializeDB ($text)
 {
-    // TRUNCATE TABLE `uni1_battledata`;
+    $tabs = json_decode ($text, true);
 
-    // INSERT INTO `uni1_battledata` (`battle_id`, `source`, `title`, `report`, `date`) VALUES
-    // (1, 'Строка\nв формате utf-8', 1710690768),
-    // (2, 'Строка\nв формате utf-8', 1710690769);
-
-    // ALTER TABLE `uni1_botstrat` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+    foreach ($tabs as $i=>$tab) {
+        DeserializeTable ($i, $tab);
+    }
 }
 
 ?>
