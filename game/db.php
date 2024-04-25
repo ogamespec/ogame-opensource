@@ -94,15 +94,55 @@ function UnlockTables ()
     dbquery ( "UNLOCK TABLES" );
 }
 
+function SerializeTable ($name)
+{
+    global $db_name;
+    global $db_prefix;
+
+    $tab = array();
+
+    $query = "SELECT `AUTO_INCREMENT` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '".$db_name."' AND TABLE_NAME = '".$db_prefix.$name."';";
+    $res = dbquery ($query);
+    $arr = dbarray($res);
+    $auto_incr = empty($arr['AUTO_INCREMENT']) ? null : intval($arr['AUTO_INCREMENT']);
+
+    $tab['auto_increment'] = $auto_incr;
+    $tab['cols'] = array();
+    $tab['values'] = array();
+
+    $query = "SELECT * FROM ".$db_prefix.$name;
+    $res = dbquery ($query);
+    $rows = dbrows($res);
+    $i = 0;
+    while ($rows--) {
+        $tab['values'][$i++] = dbarray($res);
+    }
+
+    return $tab;
+}
+
 function SerializeDB ()
 {
-    $text = "xxx";
-    return $text;
+    include "install_tabs.php";
+
+    $db_tabs = array();
+
+    foreach ($tabs as $i=>$cols) {
+        $db_tabs[$i] = SerializeTable ($i);
+    }
+
+    return json_encode ($db_tabs);
 }
 
 function DeserializeDB ($text)
 {
+    // TRUNCATE TABLE `uni1_battledata`;
 
+    // INSERT INTO `uni1_battledata` (`battle_id`, `source`, `title`, `report`, `date`) VALUES
+    // (1, 'Строка\nв формате utf-8', 1710690768),
+    // (2, 'Строка\nв формате utf-8', 1710690769);
+
+    // ALTER TABLE `uni1_botstrat` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 }
 
 ?>
