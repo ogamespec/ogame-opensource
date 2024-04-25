@@ -101,21 +101,38 @@ function SerializeTable ($name)
 
     $tab = array();
 
+    // Get table autoincrement value (or null, if the table has no autoincrement)
     $query = "SELECT `AUTO_INCREMENT` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '".$db_name."' AND TABLE_NAME = '".$db_prefix.$name."';";
     $res = dbquery ($query);
     $arr = dbarray($res);
     $auto_incr = empty($arr['AUTO_INCREMENT']) ? null : intval($arr['AUTO_INCREMENT']);
-
     $tab['auto_increment'] = $auto_incr;
-    $tab['cols'] = array();
-    $tab['values'] = array();
 
+    // Get the list of table columns
+    $query = "SHOW COLUMNS FROM $db_prefix$name;";
+    $res = dbquery($query);
+    $rows = dbrows ($res);
+    $tab['cols'] = array();
+    $i = 0;
+    while ($rows--) {
+        $arr = dbarray($res);
+        $tab['cols'][$i++] = $arr['Field'];
+    }
+
+    // Get table rows
+    $tab['values'] = array();
     $query = "SELECT * FROM ".$db_prefix.$name;
     $res = dbquery ($query);
     $rows = dbrows($res);
     $i = 0;
     while ($rows--) {
-        $tab['values'][$i++] = dbarray($res);
+        $arr = dbarray($res);
+        $tab['values'][$i] = array();
+        $n = 0;
+        foreach ($arr as $j=>$value) {
+            $tab['values'][$i][$n++] = $value;
+        }
+        $i++;
     }
 
     return $tab;
@@ -131,7 +148,7 @@ function SerializeDB ()
         $db_tabs[$i] = SerializeTable ($i);
     }
 
-    return json_encode ($db_tabs);
+    return json_encode ($db_tabs, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
 }
 
 function DeserializeDB ($text)
