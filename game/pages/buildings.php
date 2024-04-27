@@ -5,6 +5,7 @@
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "techshort", $GlobalUser['lang'] );
 loca_add ( "build", $GlobalUser['lang'] );
+loca_add ( "premium", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval ($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -81,7 +82,7 @@ PageHeader ("buildings");
 BeginContent ();
 
 echo "<title> \n";
-echo "Постройки#Gebaeude\n";
+echo loca("BUILD_BUILDINGS_HEAD") . "\n";
 echo "</title> \n";
 echo "<script type=\"text/javascript\"> \n\n";
 echo "function setMax(key, number){\n";
@@ -104,18 +105,18 @@ if ( $_GET['mode'] === "Flotte" )
     $busy = ( $queue['tech_id'] == GID_B_SHIPYARD || $queue['tech_id'] == GID_B_NANITES ) ;
 
     if ( $busy ) {
-        echo "<br><br><font color=#FF0000>Невозможно строить ни корабли ни оборонительные сооружения, так как верфь либо фабрика нанитов усовершенствуются</font><br><br>";
+        echo "<br><br><font color=#FF0000>".loca("BUILD_ERROR_SHIPYARD_BUSY")."</font><br><br>";
     }
     if ( $GlobalUser['vacation'] ) {
-        echo "<font color=#FF0000><center>Режим отпуска минимум до  ".date ("Y-m-d H:i:s", $GlobalUser['vacation_until'])."</center></font>";
+        echo "<font color=#FF0000><center>".va(loca("BUILD_ERROR_VACATION"), date ("Y-m-d H:i:s", $GlobalUser['vacation_until']))."</center></font>";
     }
     echo "<form action=index.php?page=buildings&session=$session&mode=".$_GET['mode']." method=post>";
     echo "<table align=top><tr><td style='background-color:transparent;'>  ";
     if ( $GlobalUser['useskin'] ) echo "<table width=\"530\">\n";
     else echo "<table width=\"468\">\n";
     echo "         <tr> \n";
-    echo "          <td class=l colspan=\"2\">Описание</td> \n";
-    echo "          <td class=l><b>Кол-во</b></td> \n";
+    echo "          <td class=l colspan=\"2\">".loca("BUILD_DESC")."</td> \n";
+    echo "          <td class=l><b>".loca("BUILD_AMOUNT")."</b></td> \n";
     echo "          </tr> \n\n";
 
     // See if there's a shipyard on the planet.
@@ -138,7 +139,7 @@ if ( $_GET['mode'] === "Flotte" )
             }
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
-            if ($aktplanet['f'.$id]) echo "</a> (в наличии ".$aktplanet['f'.$id].")";
+            if ($aktplanet['f'.$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet['f'.$id]).")";
             $res = ShipyardPrice ( $id );
             $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
@@ -149,7 +150,7 @@ if ( $_GET['mode'] === "Flotte" )
             $t = ShipyardDuration ( $id, $aktplanet['b21'], $aktplanet['b15'], $speed );
             echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
-            if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>невозможно</font>";
+            if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>".loca("BUILD_SHIPYARD_CANT")."</font>";
             else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) && !$busy) {
                 echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
                 if ( $prem['commander'] ) {
@@ -164,10 +165,10 @@ if ( $_GET['mode'] === "Flotte" )
         }
 
         // Build Button.
-        echo "<td class=c colspan=2 align=center><input type=submit value=\"Строить\"></td></tr>";
+        echo "<td class=c colspan=2 align=center><input type=submit value=\"".loca("BUILD_SHIPYARD_SUBMIT")."\"></td></tr>";
     }
     else {
-        if (!$busy) echo "<table><tr><td class=c>Для этого необходимо построить верфь!</td></tr></table>";
+        if (!$busy) echo "<table><tr><td class=c>".loca("BUILD_ERROR_SHIPYARD_REQUIRED")."</td></tr></table>";
     }
 }
 
@@ -184,18 +185,18 @@ if ( $_GET['mode'] === "Verteidigung" )
     $busy = ( $queue['tech_id'] == GID_B_SHIPYARD || $queue['tech_id'] == GID_B_NANITES ) ;
 
     if ( $busy ) {
-        echo "<br><br><font color=#FF0000>Невозможно строить ни корабли ни оборонительные сооружения, так как верфь либо фабрика нанитов усовершенствуются</font><br><br>";
+        echo "<br><br><font color=#FF0000>".loca("BUILD_ERROR_SHIPYARD_BUSY")."</font><br><br>";
     }
     if ( $GlobalUser['vacation'] ) {
-        echo "<font color=#FF0000><center>Режим отпуска минимум до  ".date ("Y-m-d H:i:s", $GlobalUser['vacation_until'])."</center></font>";
+        echo "<font color=#FF0000><center>".va(loca("BUILD_ERROR_VACATION"), date ("Y-m-d H:i:s", $GlobalUser['vacation_until']))."</center></font>";
     }
     echo "<form action=index.php?page=buildings&session=$session&mode=".$_GET['mode']." method=post>";
     echo "<table align=top><tr><td style='background-color:transparent;'>  ";
     if ( $GlobalUser['useskin'] ) echo "<table width=\"530\">\n";
     else echo "<table width=\"468\">\n";
     echo "          <tr> \n";
-    echo "          <td class=l colspan=\"2\">Описание</td> \n";
-    echo "          <td class=l><b>Кол-во</b></td> \n";
+    echo "          <td class=l colspan=\"2\">".loca("BUILD_DESC")."</td> \n";
+    echo "          <td class=l><b>".loca("BUILD_AMOUNT")."</b></td> \n";
     echo "          </tr> \n\n";
 
     // See if there's a shipyard on the planet.
@@ -218,7 +219,7 @@ if ( $_GET['mode'] === "Verteidigung" )
             }
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
-            if ($aktplanet['d'.$id]) echo "</a> (в наличии ".$aktplanet['d'.$id].")";
+            if ($aktplanet['d'.$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet['d'.$id]).")";
             $res = ShipyardPrice ( $id );
             $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
@@ -230,8 +231,8 @@ if ( $_GET['mode'] === "Verteidigung" )
             echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !$busy ) {
-                if ( ($id == GID_D_SDOME || $id == GID_D_LDOME) && $aktplanet['d'.$id] > 0 ) echo "<font color=#FF0000>Щитовой купол можно строить только 1 раз.</font>";
-                else if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>невозможно</font>";
+                if ( ($id == GID_D_SDOME || $id == GID_D_LDOME) && $aktplanet['d'.$id] > 0 ) echo "<font color=#FF0000>".loca("BUILD_ERROR_DOME")."</font>";
+                else if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>".loca("BUILD_SHIPYARD_CANT")."</font>";
                 else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) {
                     echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
                     if ( $prem['commander'] && !( $id == GID_D_SDOME || $id == GID_D_LDOME ) ) {
@@ -249,10 +250,10 @@ if ( $_GET['mode'] === "Verteidigung" )
         }
     
         // Build Button.
-        echo "<td class=c colspan=2 align=center><input type=submit value=\"Строить\"></td></tr>";
+        echo "<td class=c colspan=2 align=center><input type=submit value=\"".loca("BUILD_SHIPYARD_SUBMIT")."\"></td></tr>";
     }
     else {
-        if (!$busy) echo "<table><tr><td class=c>Для этого необходимо построить верфь!</td></tr></table>";
+        if (!$busy) echo "<table><tr><td class=c>".loca("BUILD_ERROR_SHIPYARD_REQUIRED")."</td></tr></table>";
     }
 }
 
@@ -275,17 +276,17 @@ if ( $_GET['mode'] === "Forschung" )
     $operating =  ( $resq != null );
 
     if ( $busy ) {
-        echo "<br><br><font color=#FF0000>Проведение исследований невозможно, так как исследовательская лаборатория усовершенствуется.</font><br /><br />";
+        echo "<br><br><font color=#FF0000>".loca("BUILD_ERROR_RESLAB_BUSY")."</font><br /><br />";
     }
     if ( $GlobalUser['vacation'] ) {
-        echo "<font color=#FF0000><center>Режим отпуска минимум до  ".date ("Y-m-d H:i:s", $GlobalUser['vacation_until'])."</center></font>";
+        echo "<font color=#FF0000><center>".va(loca("BUILD_ERROR_VACATION"), date ("Y-m-d H:i:s", $GlobalUser['vacation_until']))."</center></font>";
     }
     echo "<table align=top><tr><td style='background-color:transparent;'>  ";
     if ( $GlobalUser['useskin'] ) echo "<table width=\"530\">\n";
     else echo "<table width=\"468\">\n";
     echo "          <tr> \n";
-    echo "          <td class=l colspan=\"2\">Описание</td> \n";
-    echo "          <td class=l><b>Кол-во</b></td> \n";
+    echo "          <td class=l colspan=\"2\">".loca("BUILD_DESC")."</td> \n";
+    echo "          <td class=l><b>".loca("BUILD_AMOUNT")."</b></td> \n";
     echo "          </tr> \n\n";
 
     // See if there's a lab on the planet.
@@ -308,9 +309,9 @@ if ( $_GET['mode'] === "Forschung" )
             }
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
-            if ($GlobalUser['r'.$id]) echo "</a> (уровень ".$GlobalUser['r'.$id];
+            if ($GlobalUser['r'.$id]) echo "</a> (" . va(loca("BUILD_LEVEL"), $GlobalUser['r'.$id]);
             if ( $id == GID_R_ESPIONAGE && $prem['technocrat'] ) { 
-                echo " <b><font style=\"color:lime;\">+2</font></b> <img border=\"0\" src=\"img/technokrat_ikon.gif\" alt=\"Технократ\" onmouseover=\"return overlib('<font color=white>Технократ</font>', WIDTH, 100);\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
+                echo " <b><font style=\"color:lime;\">+2</font></b> <img border=\"0\" src=\"img/technokrat_ikon.gif\" alt=\"".loca("PREM_TECHNOCRATE")."\" onmouseover=\"return overlib('<font color=white>".loca("PREM_TECHNOCRATE")."</font>', WIDTH, 100);\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
             }
             if ($GlobalUser['r'.$id]) echo ")";
             $res = ResearchPrice ( $id, $level );
@@ -339,7 +340,7 @@ if ( $_GET['mode'] === "Forschung" )
                     m=0;h=0;
                     if(s<0){
     
-                        bxx.innerHTML='<?=loca("BUILD_COMPLETE");?><br><a href=index.php?page=buildings&session=<?=$session;?>&mode=Forschung&cp=<?=$aktplanet['planet_id'];?> >дальше</a>';
+                        bxx.innerHTML='<?=loca("BUILD_COMPLETE");?><br><a href=index.php?page=buildings&session=<?=$session;?>&mode=Forschung&cp=<?=$aktplanet['planet_id'];?> ><?=loca("BUILD_RESEARCH_NEXT");?></a>';
                     }else{
                         if(s>59){
                             m=Math.floor(s/60);
@@ -370,19 +371,19 @@ if ( $_GET['mode'] === "Forschung" )
             else        // The research is not in progress.
             {
                 if ($GlobalUser['r'.$id]) {
-                    if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>Исследовать<br> уровень  $level</font></a>";
-                    else echo "<font color=#FF0000>Исследовать<br> уровень  $level</font>";
+                    if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".va(loca("BUILD_RESEARCH_LEVEL"), $level)."</font></a>";
+                    else echo "<font color=#FF0000>".va(loca("BUILD_RESEARCH_LEVEL"), $level)."</font>";
                 }
                 else {
-                    if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00> исследовать </font></a>";
-                    else echo "<font color=#FF0000> исследовать </font></a>";
+                    if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".loca("BUILD_RESEARCH")."</font></a>";
+                    else echo "<font color=#FF0000>".loca("BUILD_RESEARCH")."</font></a>";
                 }
             }
             echo "</td></tr>";
         }
     }
     else {
-        if (!$busy) echo "<table><tr><td class=c>Для этого необходимо построить исследовательскую лабораторию!</td></tr></table>";
+        if (!$busy) echo "<table><tr><td class=c>".loca("BUILD_ERROR_RESLAB_REQUIRED")."</td></tr></table>";
     }
 }
 
@@ -431,7 +432,7 @@ of = 1;
 c = new Array(<?=$c;?>"");
 b = new Array(<?=$b;?>"");
 a = new Array(<?=$a;?>"");
-aa = "Задания выполнены";
+aa = "<?=loca("BUILD_SHIPYARD_COMPLETE");?>";
 
 
 function t() {
@@ -494,7 +495,7 @@ function xd() {
             ae=" ";
         }
         if (iv == p) {
-            act = " (производится)";
+            act = "<?=loca("BUILD_SHIPYARD_CURRENT");?>";
         }else{
             act = "";
         }
@@ -519,7 +520,7 @@ document.addEventListener("visibilitychange", function() {
 <table width="530">
 
  <tr>
-    <td class="c" >Ожидаемые поручения</td>
+    <td class="c" ><?=loca("BUILD_SHIPYARD_QUEUE");?></td>
  </tr>
  <tr>
   <th ><select name="auftr" size="10"></select></th>
@@ -530,7 +531,7 @@ document.addEventListener("visibilitychange", function() {
  </tr>
 </table>
 </form>
-Всё производство займёт
+<?=loca("BUILD_SHIPYARD_TIME");?>
 
   <?=BuildDurationFormat ($total_time); ?><br>
 <?php

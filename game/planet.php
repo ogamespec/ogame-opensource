@@ -551,6 +551,7 @@ function SetPlanetDiameter ($planet_id, $diam)
 function AdminPlanetName ($planet_id)
 {
     global $session;
+    $planet = GetPlanet ($planet_id);
     return "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet_id."\">".$planet['name']."</a>";
 }
 
