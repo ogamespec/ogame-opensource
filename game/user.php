@@ -507,17 +507,18 @@ function CheckSession ( $session )
     $ip = $_SERVER['REMOTE_ADDR'];
     $cookie_name = 'prsess_'.$GlobalUser['player_id'].'_'.$uni;
     $prsess = "";
+
+    // If admin forbid users to choose language in Settings, force to use Universe language
+    if ($GlobalUni['force_lang']) {
+        $GlobalUser['lang'] = $GlobalUni['lang'];
+    }
+
     if (key_exists($cookie_name, $_COOKIE)) {
         $prsess = $_COOKIE [$cookie_name];
     }
     if ( $prsess !== $GlobalUser['private_session'] ) { InvalidSessionPage (); return FALSE; }
     if ( !localhost($ip) && !$GlobalUser['deact_ip'] ) {
         if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
-    }
-
-    // If admin forbid users to choose language in Settings, force to use Universe language
-    if ($GlobalUni['force_lang']) {
-        $GlobalUser['lang'] = $GlobalUni['lang'];
     }
 
     // Set global language for session: user language -> universe language(if error) -> default language(if error)
