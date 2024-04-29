@@ -52,7 +52,7 @@ $LOCA["de"]["INSTALL_TIP7"] = "Max AKS einlädt. Max AKS Flottenslots = N * 4, w
 $LOCA["de"]["INSTALL_TIP8"] = "Angegeben% der Flotte Struktur geht in Schutt nach der Schlacht. 0 - Flotte in Trümmern deaktiviert.";
 $LOCA["de"]["INSTALL_TIP9"] = "Angegeben% der Verteidigung Struktur geht in Schutt nach der Schlacht. 0 - Verteidigung in Trümmern deaktiviert.";
 $LOCA["de"]["INSTALL_TIP10"] = "Schiffe haben die chance, zusätzliche Aufnahmen zu machen ";
-$LOCA["en"]["INSTALL_TIP11"] = "Wenn Sie eine integrierte PHP-Engine verwenden, müssen Sie keine externe Kampf-Engine kompilieren und den Pfad zu ihr angeben.";
+$LOCA["de"]["INSTALL_TIP11"] = "Wenn Sie eine integrierte PHP-Engine verwenden, müssen Sie keine externe Kampf-Engine kompilieren und den Pfad zu ihr angeben.";
 
 $LOCA["de"]["INSTALL_INSTALL"] = "Installieren";
 
