@@ -1,11 +1,11 @@
 <?php
 
-// Сенсорная фаланга.
+// Sensor Phalanx.
 
-$LOCA["en"]["PHALANX_REPORT"] = "Доклад сенсора с луны на координатах";
-$LOCA["en"]["PHALANX_EVENTS"] = "Передвижения флота";
-$LOCA["en"]["PHALANX_ERR_MISSING"] = "Не мухлевать!";
-$LOCA["en"]["PHALANX_ERR_DEUT"] = "Недостаточно дейтерия!";
-$LOCA["en"]["PHALANX_ERR_CHEATER"] = "Поздравляем! Вы выиграли целый час отдыха без РО за попытку манипулирования фалангой!";
+$LOCA["en"]["PHALANX_REPORT"] = "Sensor report from the moon on the coordinates";
+$LOCA["en"]["PHALANX_EVENTS"] = "Fleet movements";
+$LOCA["en"]["PHALANX_ERR_MISSING"] = "No cheating!";
+$LOCA["en"]["PHALANX_ERR_DEUT"] = "Not enough deuterium!";
+$LOCA["en"]["PHALANX_ERR_CHEATER"] = "Congratulations! You have won a full hour of rest without VM for attempting to manipulate a phalanx!";
 
 ?>
