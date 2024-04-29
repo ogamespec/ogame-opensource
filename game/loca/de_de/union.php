@@ -2,12 +2,12 @@
 
 // Alles über die AKS.
 
-$LOCA["de"]["ACS_MAX_USERS"] = "Участвовать могут максимум #1 игроков!";
-$LOCA["de"]["ACS_USER_NOT_FOUND"] = "Пользователь не найден";
-$LOCA["de"]["ACS_ALREADY_ADDED"] = "Такой пользователь уже добавлен в союз";
+$LOCA["de"]["ACS_MAX_USERS"] = "Es können maximal #1 Spieler teilnehmen!";
+$LOCA["de"]["ACS_USER_NOT_FOUND"] = "Benutzer nicht gefunden";
+$LOCA["de"]["ACS_ALREADY_ADDED"] = "Ein solcher Benutzer wurde bereits zur Allianz hinzugefügt";
 
-$LOCA["de"]["ACS_INVITE_SUBJ"] = "Приглашение к совместной атаке";
-$LOCA["de"]["ACS_INVITE_TEXT1"] = "#1 приглашает Вас на миссию #2 против игрока #3 на планете";
-$LOCA["de"]["ACS_INVITE_TEXT2"] = "Прибытие флота назначено на #1. ВНИМАНИЕ: время прибытия может измениться из-за скорости других задействованных флотов!";
+$LOCA["de"]["ACS_INVITE_SUBJ"] = "Einladung zum gemeinsamen Angriff";
+$LOCA["de"]["ACS_INVITE_TEXT1"] = "#1 lädt dich zu Mission #2 gegen Spieler #3 auf dem Planeten ein";
+$LOCA["de"]["ACS_INVITE_TEXT2"] = "Die Ankunft der Flotte ist für #1 geplant. WARNUNG: Die Ankunftszeit kann sich aufgrund der Geschwindigkeit der anderen beteiligten Flotten ändern!";
 
 ?>
