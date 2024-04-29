@@ -320,8 +320,8 @@ function PhalanxEventList ($planet_id)
             $task[$tasknum]['fleet'][0] = array ();
             foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj["ship$gid"];
             $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
-            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['target_planet'];
-            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['start_planet'];
+            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
+            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
             $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
             $task[$tasknum]['fleet'][0]['dir'] = 1;
             $tasknum++;
