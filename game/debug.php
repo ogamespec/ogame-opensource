@@ -6,6 +6,7 @@
 function Error ($text)
 {
     global $GlobalUser;
+    global $GlobalUni;
     if ( !$GlobalUser ) {
         $GlobalUser = array ();
         $GlobalUser['player_id'] = 0;
@@ -27,10 +28,10 @@ function Error ($text)
 
     echo "<center><font size=\"3\"><b>\n";
     echo "<br /><br />\n";
-    echo "<font color=\"#FF0000\">Произошла ошибка</font> - $text\n";
+    echo "<font color=\"#FF0000\">".loca_lang("DEBUG_ERROR", $GlobalUni['lang'])."</font> - $text\n";
     echo "<br /><br />\n";
     echo BackTrace() . "<br /><br />\n";
-    echo "Аварийное завершение программы.<br/><br/>Обратитесь в Службу поддержки или на форум, в раздел \"Ошибки\".\n";
+    echo loca_lang("DEBUG_ERROR_INFO1", $GlobalUni['lang']) . "<br/><br/>" . loca_lang("DEBUG_ERROR_INFO2", $GlobalUni['lang']) . "\n";
     echo "<br /><br />\n";
     echo "Error-ID: $id</b></font></center>\n";
 
@@ -90,7 +91,8 @@ function BrowseHistory ()
 // Security check.
 function SecurityCheck ( $match, $text, $notes )
 {
-    if ( !preg_match ( $match, $text ) ) Error ( "Нарушение безопасности: " . $notes );
+    global $GlobalUni;
+    if ( !preg_match ( $match, $text ) ) Error ( loca_lang("DEBUG_SECURITY_BREACH", $GlobalUni['lang']) . $notes );
 }
 
 // Add the IP address to the table.
@@ -131,7 +133,6 @@ function UserLog ($owner_id, $type, $text, $when=0)
 function Hacking ($code)
 {
     global $GlobalUni;
-    loca_add ( "hackmsg", $GlobalUni['lang'] );
 
     $get = "GET LIST:<br>";
     foreach ( $_GET as $i=>$value)
@@ -149,7 +150,7 @@ function Hacking ($code)
 
     $method = "METHOD: " . $_SERVER['REQUEST_METHOD'] . "<br>";
 
-    Debug ( 'HACKING ATTEMPT: ' . loca($code) . "<br><br>" . $get . $post . $method );
+    Debug ( 'HACKING ATTEMPT: ' . loca_lang($code, $GlobalUni['lang']) . "<br><br>" . $get . $post . $method );
 
     // Increase the tamper attempt counter.
     // The counter is automatically reset after a relogin.

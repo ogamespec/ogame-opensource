@@ -52,8 +52,6 @@ if ( $rows ) {
     if ( abs(time () - $queue['start']) < 1 ) AjaxSendError ();
 }
 
-loca_add ( "debug", $GlobalUni['lang'] );
-
 // Check the parameters.
 
 if ( $planettype < 1 || $planettype > 3 ) AjaxSendError ();    // wrong target

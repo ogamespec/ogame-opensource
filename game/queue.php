@@ -79,8 +79,23 @@ end: construction completion time (INT UNSIGNED)
 
 */
 
+const QUEUE_BATCH = 16;         // The event queue is not executed in its entirety, but in small portions specified in this constant (so as not to overload the server)
+
+// Queue task priorities
+const QUEUE_PRIO_LOWEST = 0;            // Consider it no priority
+const QUEUE_PRIO_DEBUG = 9999;          // Debug event priority (AddDebugEvent)
+const QUEUE_PRIO_BUILD = 20;            // Priority for buildings and construction queue
+const QUEUE_PRIO_FLEET = 200;       // Priority of fleet missions. The mission type is added to this value (see FTYP_)
+const QUEUE_PRIO_RECALC_ALLY_POINTS = 400;
+const QUEUE_PRIO_RECALC_POINTS = 500;
+const QUEUE_PRIO_UPDATE_STATS = 510;
+const QUEUE_PRIO_CLEAN_DEBRIS = 600;
+const QUEUE_PRIO_CLEAN_PLANETS = 700;
+const QUEUE_PRIO_RELOGIN = 777;
+const QUEUE_PRIO_CLEAN_PLAYERS = 900;
+
 // Add a task to the queue. Returns the ID of the added task.
-function AddQueue ($owner_id, $type, $sub_id, $obj_id, $level, $now, $seconds, $prio=0)
+function AddQueue ($owner_id, $type, $sub_id, $obj_id, $level, $now, $seconds, $prio=QUEUE_PRIO_LOWEST)
 {
     $queue = array ( null, $owner_id, $type, $sub_id, $obj_id, $level, $now, $now+$seconds, $prio );
     $id = AddDBRow ( $queue, "queue" );
@@ -124,7 +139,7 @@ function UpdateQueue ($until)
 
     LockTables ();
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE end <= $until ORDER BY end ASC, prio DESC LIMIT 16";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE end <= $until ORDER BY end ASC, prio DESC LIMIT " . QUEUE_BATCH;
     $result = dbquery ($query);
 
     $rows = dbrows ($result);
@@ -157,7 +172,7 @@ function UpdateQueue ($until)
         else if ( $queue['type'] === "GeologeOff" ) Queue_Officer_End ($queue);
         else if ( $queue['type'] === "TechnocrateOff" ) Queue_Officer_End ($queue);
 
-        else Error ( "queue: Неизвестный тип задания для глобальной очереди: " . $queue['type']);
+        else Error ( loca_lang("DEBUG_QUEUE_UNKNOWN", $GlobalUni['lang']) . $queue['type']);
     }
 
     UnlockTables ();
@@ -229,8 +244,20 @@ function CanBuild ($user, $planet, $id, $lvl, $destroy, $enqueue=false)
     else if ( $planet['owner_id'] != $user['player_id'] ) return loca_lang("BUILD_ERROR_INVALID_PLANET", $user['lang']);
 
     // Lunar buildings can't be built on a planet, whereas planetary buildings can't be built on a moon
-    else if ( $planet['type'] != 0 && ($id == 41 || $id == 42 || $id == 43) ) return loca_lang("BUILD_ERROR_INVALID_PTYPE", $user['lang']);
-    else if ( $planet['type'] == 0 && ( $id == 1 || $id == 2 || $id == 3 || $id == 4 || $id == 12 || $id == 15 || $id == 22 || $id == 23 || $id == 24 || $id == 31 || $id == 33 || $id == 44 ) ) return loca_lang("BUILD_ERROR_INVALID_PTYPE", $user['lang']);
+    else if ( $planet['type'] != PTYP_MOON && ($id == GID_B_LUNAR_BASE || $id == GID_B_PHALANX || $id == GID_B_JUMP_GATE) ) return loca_lang("BUILD_ERROR_INVALID_PTYPE", $user['lang']);
+    else if ( $planet['type'] == PTYP_MOON && ( 
+        $id == GID_B_METAL_MINE || 
+        $id == GID_B_CRYS_MINE || 
+        $id == GID_B_DEUT_SYNTH || 
+        $id == GID_B_SOLAR || 
+        $id == GID_B_FUSION || 
+        $id == GID_B_NANITES || 
+        $id == GID_B_METAL_STOR || 
+        $id == GID_B_CRYS_STOR || 
+        $id == GID_B_DEUT_STOR || 
+        $id == GID_B_RES_LAB || 
+        $id == GID_B_TERRAFORMER || 
+        $id == GID_B_MISS_SILO ) ) return loca_lang("BUILD_ERROR_INVALID_PTYPE", $user['lang']);
 
     // Check the number of fields
     else if ( $planet['fields'] >= $planet['maxfields'] && !$destroy ) return loca_lang("BUILD_ERROR_NO_SPACE", $user['lang']);
@@ -283,8 +310,8 @@ function PropagateBuildQueue ($planet_id, $from)
                 if ( $destroy ) $BuildEvent = "Demolish";
                 else $BuildEvent = "Build";
 
-                $duration = floor (BuildDuration ( $id, $lvl, $planet['b14'], $planet['b15'], $speed ));
-                AddQueue ( $user['player_id'], $BuildEvent, $row['id'], $id, $lvl, $from, $duration, 20 );
+                $duration = floor (BuildDuration ( $id, $lvl, $planet['b'.GID_B_ROBOTS], $planet['b'.GID_B_NANITES], $speed ));
+                AddQueue ( $user['player_id'], $BuildEvent, $row['id'], $id, $lvl, $from, $duration, QUEUE_PRIO_BUILD );
 
                 // Update the start and end time of construction
                 $query = "UPDATE ".$db_prefix."buildqueue SET start = $from, end = ".($from+$duration)." WHERE id = " . $row['id'];
@@ -335,8 +362,8 @@ function BuildEnque ( $user, $planet_id, $id, $destroy, $now=0 )
     if ($now == 0) $now = time ();
 
     // Write down the user's action, even if the user does something wrong
-    if ($destroy) UserLog ( $planet['owner_id'], "BUILD", "Снос ".loca("NAME_$id")." ".($planet['b'.$id]-1)." на планете $planet_id");
-    else UserLog ( $planet['owner_id'], "BUILD", "Постройка ".loca("NAME_$id")." ".($planet['b'.$id]+1)." на планете $planet_id");
+    if ($destroy) UserLog ( $planet['owner_id'], "BUILD", va(loca_lang("DEBUG_LOG_DEMOLISH", $GlobalUni['lang']), loca("NAME_$id"), $planet['b'.$id]-1, $planet_id)  );
+    else UserLog ( $planet['owner_id'], "BUILD", va(loca_lang("DEBUG_LOG_BUILD", $GlobalUni['lang']), loca("NAME_$id"), $planet['b'.$id]+1, $planet_id)  );
 
     $result = GetBuildQueue ( $planet_id );
     $cnt = dbrows ( $result );
@@ -386,7 +413,7 @@ function BuildEnque ( $user, $planet_id, $id, $destroy, $now=0 )
         $duration = floor (BuildDuration ( $id, $lvl, $planet['b14'], $planet['b15'], $speed ));
         $row = array ( '', $user['player_id'], $planet_id, $list_id, $id, $lvl, $destroy, $now, $now+$duration );
         $sub_id = AddDBRow ( $row, "buildqueue" );
-        if ($list_id == 1) AddQueue ( $user['player_id'], $BuildEvent, $sub_id, $id, $lvl, $now, $duration, 20 );
+        if ($list_id == 1) AddQueue ( $user['player_id'], $BuildEvent, $sub_id, $id, $lvl, $now, $duration, QUEUE_PRIO_BUILD );
     }
 
     return $text;
@@ -427,7 +454,7 @@ function BuildDeque ( $user, $planet_id, $listid )
         dbquery ($query);
 
         $planet = GetPlanet ( $planet_id );
-        UserLog ( $planet['owner_id'], "BUILD", "Отмена строительства ".loca("NAME_".$id)." ".$lvl.", слот ($listid) на планете $planet_id");
+        UserLog ( $planet['owner_id'], "BUILD", va(loca_lang("DEBUG_LOG_BUILD_CANCEL", $GlobalUni['lang']), loca("NAME_".$id), $lvl, $listid, $planet_id)  );
 
         // Remove event handler and construction from the queue
         RemoveQueue ( $queue_id );
@@ -547,8 +574,8 @@ function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
     global $fleetmap;
     global $defmap;
 
-    if ( in_array ( $gid, $defmap ) ) UserLog ( $player_id, "DEFENSE", "Запустить постройку ".loca("NAME_$gid")." ($value) на планете $planet_id");
-    else UserLog ( $player_id, "SHIPYARD", "Запустить постройку ".loca("NAME_$gid")." ($value) на планете $planet_id");
+    if ( in_array ( $gid, $defmap ) ) UserLog ( $player_id, "DEFENSE", va(loca_lang("DEBUG_LOG_DEFENSE", $GlobalUni['lang']), loca("NAME_$gid"), $value, $planet_id)  );
+    else UserLog ( $player_id, "SHIPYARD", va(loca_lang("DEBUG_LOG_SHIPYARD", $GlobalUni['lang']), loca("NAME_$gid"), $value, $planet_id)  );
 
     $techmap = array_merge ($fleetmap, $defmap);
     if ( ! in_array ( $gid, $techmap ) ) return;
@@ -598,8 +625,8 @@ function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
     if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && ShipyardMeetRequirement ($user, $planet, $gid) ) {
         $speed = $uni['speed'];
         $now = ShipyardLatestTime ($planet_id, $now);
-        $shipyard = $planet["b21"];
-        $nanits = $planet["b15"];
+        $shipyard = $planet["b".GID_B_SHIPYARD];
+        $nanits = $planet["b".GID_B_NANITES];
         $seconds = ShipyardDuration ( $gid, $shipyard, $nanits, $speed );
 
         // Списать ресурсы.
@@ -717,7 +744,7 @@ function StartResearch ($player_id, $planet_id, $id, $now)
 
     $planet = GetPlanet ( $planet_id );
 
-    UserLog ( $player_id, "RESEARCH", "Запустить исследование ".loca("NAME_$id")." на планете $planet_id");
+    UserLog ( $player_id, "RESEARCH", va(loca_lang("DEBUG_LOG_RESEARCH", $GlobalUni['lang']), loca("NAME_$id"), $planet_id)  );
 
     // Get a level of research.
     $user = LoadUser ( $player_id );
@@ -766,7 +793,11 @@ function StopResearch ($player_id)
     $planet = GetPlanet ( $planet_id );
     if ($planet['owner_id'] != $player_id )
     {
-        Error ( "Невозможно отменить исследование -".loca("NAME_$id")."-, игрока ".$user['oname'].", запущенное на чужой планете [".$planet['g'].":".$planet['s'].":".$planet['p']."] " . $planet['name'] );
+        Error ( va(loca_lang("DEBUG_QUEUE_CANCEL_RESEARCH_FOREIGN", $GlobalUni['lang']), 
+            loca("NAME_$id"), 
+            $user['oname'], 
+            "[".$planet['g'].":".$planet['s'].":".$planet['p']."] " . $planet['name'] )
+        );
         return;
     }
     $res = ResearchPrice ( $id, $level );
@@ -777,7 +808,7 @@ function StopResearch ($player_id)
 
     RemoveQueue ( $resq['task_id'] );
 
-    UserLog ( $player_id, "RESEARCH", "Отменить исследование ".loca("NAME_$id"));
+    UserLog ( $player_id, "RESEARCH", va(loca_lang("DEBUG_LOG_RESEARCH_CANCEL", $GlobalUni['lang']), loca("NAME_$id"), $planet_id) );
 }
 
 // Get the current research for the account.
@@ -791,7 +822,7 @@ function GetResearchQueue ($player_id)
 // Complete the research.
 function Queue_Research_End ($queue)
 {
-    global $db_prefix, $GlobalUser;
+    global $db_prefix, $GlobalUser, $GlobalUni;
 
     $id = $queue['obj_id'];
     $lvl = $queue['level'];
@@ -815,7 +846,7 @@ function Queue_Research_End ($queue)
     AdjustStats ( $queue['owner_id'], $points, 0, 1, '+');
     RecalcRanks ();
 
-    Debug ( "Исследование ".loca("NAME_$id")." уровня $lvl для пользователя $player_id завершено." );
+    Debug ( va(loca_lang("DEBUG_QUEUE_RESEARCH_COMPLETE", $GlobalUni['lang']), loca("NAME_$id"), $lvl, $player_id)  );
 
     if ( $GlobalUser['player_id'] == $player_id) {
         InvalidateUserCache ();
@@ -885,7 +916,7 @@ function AddRecalcPointsEvent ($player_id)
     {
         $now = time ();
         $when = mktime(0, 10, 0, date("m"), date("d")+1, date("y"));
-        $queue = array ( null, $player_id, "RecalcPoints", 0, 0, 0, $now, $when, 500 );
+        $queue = array ( null, $player_id, "RecalcPoints", 0, 0, 0, $now, $when, QUEUE_PRIO_RECALC_POINTS );
         AddDBRow ( $queue, "queue" );
     }
 }
@@ -1011,7 +1042,7 @@ function AddUpdateStatsEvent ($now=0)
         else if ( $hours >= 16 && $hours < 20 ) $when = mktime ( 20, 5, 0 );
         else $when = mktime ( 8, 5, 0, $today['mon'], $today['mday'] + 1 );
 
-        $queue = array ( null, USER_SPACE, "UpdateStats", 0, 0, 0, $now, $when, 510 );
+        $queue = array ( null, USER_SPACE, "UpdateStats", 0, 0, 0, $now, $when, QUEUE_PRIO_UPDATE_STATS );
         AddDBRow ( $queue, "queue" );
     }
 }
@@ -1019,7 +1050,7 @@ function AddUpdateStatsEvent ($now=0)
 // Save the "old" player and alliance points.
 function Queue_UpdateStats_End ($queue)
 {
-    global $db_prefix;
+    global $db_prefix, $GlobalUni;
 
     $when = $queue['end'];
     $query = "UPDATE ".$db_prefix."users SET oldscore1 = score1, oldscore2 = score2, oldscore3 = score3, oldplace1 = place1, oldplace2 = place2, oldplace3 = place3, scoredate = $when;";
@@ -1029,7 +1060,7 @@ function Queue_UpdateStats_End ($queue)
 
     RemoveQueue ( $queue['task_id'] );
     AddUpdateStatsEvent ($when);
-    Debug ( date ("H:i", $when) . " - Old scores saved" );
+    Debug ( va(loca_lang("DEBUG_QUEUE_OLD_SCORE_SAVED", $GlobalUni['lang']), date ("H:i", $when))  );
 }
 
 // Add a player unload task if it doesn't already exist.
@@ -1044,7 +1075,7 @@ function AddReloginEvent ()
     {
         $now = time ();
         $when = mktime(3, 0, 0, date("m"), date("d")+1, date("y"));;
-        $queue = array ( null, USER_SPACE, "UnloadAll", 0, 0, 0, $now, $when, 777 );
+        $queue = array ( null, USER_SPACE, "UnloadAll", 0, 0, 0, $now, $when, QUEUE_PRIO_RELOGIN );
         $id = AddDBRow ( $queue, "queue" );
     }
 }
@@ -1078,7 +1109,7 @@ function AddCleanDebrisEvent ()
         $now = time ();
         $week = mktime(0, 0, 0, date('m'), date('d')-date('w'), date('Y')) + 24 * 60 * 60;
         $when = $week + 7 * 24 * 60 * 60 + 10 * 60;
-        $queue = array ( null, USER_SPACE, "CleanDebris", 0, 0, 0, $now, $when, 600 );
+        $queue = array ( null, USER_SPACE, "CleanDebris", 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_DEBRIS );
         $id = AddDBRow ( $queue, "queue" );
     }
 }
@@ -1107,7 +1138,7 @@ function AddCleanPlanetsEvent ()
     {
         $now = time ();
         $when = mktime(1, 10, 0, date("m"), date("d")+1, date("y"));
-        $queue = array ( null, USER_SPACE, "CleanPlanets", 0, 0, 0, $now, $when, 700 );
+        $queue = array ( null, USER_SPACE, "CleanPlanets", 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_PLANETS );
         $id = AddDBRow ( $queue, "queue" );
     }
 }
@@ -1115,7 +1146,7 @@ function AddCleanPlanetsEvent ()
 // Cleaning up destroyed planets.
 function Queue_CleanPlanets_End ($queue)
 {
-    global $db_prefix;
+    global $db_prefix, $GlobalUni;
 
     $when = $queue['end'];
     $query = "SELECT * FROM ".$db_prefix."planets WHERE remove <= $when AND remove <> 0";
@@ -1141,7 +1172,7 @@ function Queue_CleanPlanets_End ($queue)
         $count++;
     }
 
-    Debug ( "Чистка уничтоженных планет ($count)" );
+    Debug ( va(loca_lang("DEBUG_QUEUE_CLEAN_PLANETS", $GlobalUni['lang']), $count)  );
     RemoveQueue ( $queue['task_id'] );
     AddCleanPlanetsEvent ();
 }
@@ -1158,7 +1189,7 @@ function AddCleanPlayersEvent ()
     {
         $now = time ();
         $when = mktime(1, 10, 0, date("m"), date("d")+1, date("y"));
-        $queue = array ( null, USER_SPACE, "CleanPlayers", 0, 0, 0, $now, $when, 900 );
+        $queue = array ( null, USER_SPACE, "CleanPlayers", 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_PLAYERS );
         $id = AddDBRow ( $queue, "queue" );
     }
 }
@@ -1206,7 +1237,7 @@ function AddRecalcAllyPointsEvent ()
     {
         $now = time ();
         $when = mktime(0, 10, 0, date("m"), date("d")+1, date("y"));
-        $queue = array ( null, USER_SPACE, "RecalcAllyPoints", 0, 0, 0, $now, $when, 400 );
+        $queue = array ( null, USER_SPACE, "RecalcAllyPoints", 0, 0, 0, $now, $when, QUEUE_PRIO_RECALC_ALLY_POINTS );
         AddDBRow ( $queue, "queue" );
     }
 }
@@ -1223,7 +1254,7 @@ function Queue_RecalcAllyPoints_End ($queue)
 function AddDebugEvent ($when)
 {
     $now = time ();
-    $queue = array ( null, USER_SPACE, "Debug", 0, 0, 0, $now, $when, 9999 );
+    $queue = array ( null, USER_SPACE, "Debug", 0, 0, 0, $now, $when, QUEUE_PRIO_DEBUG );
     $id = AddDBRow ( $queue, "queue" );
 }
 // Debug Event.

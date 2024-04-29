@@ -293,7 +293,7 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
     if ( $uni['freeze'] ) return;
 
     $now = $when;
-    $prio = 200 + $order;
+    $prio = QUEUE_PRIO_FLEET + $order;
     $flight_time = $seconds;
 
     // Add the fleet.
@@ -435,7 +435,7 @@ function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
     if ( $amount > $origin['d503'] ) return;    // You can't launch more missiles than there are rockets on the planet.
 
     $now = time ();
-    $prio = 200 + FTYP_MISSILE;
+    $prio = QUEUE_PRIO_FLEET + FTYP_MISSILE;
 
     // Write the IPM off the planet.
     $origin['d503'] -= $amount;

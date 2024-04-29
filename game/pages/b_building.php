@@ -100,7 +100,7 @@ function t() {
 <?php
 
 if ( $GlobalUser['vacation'] ) {
-    echo "<font color=#FF0000><center>Режим отпуска минимум до  ".date ("Y-m-d H:i:s", $GlobalUser['vacation_until'])."</center></font>\n\n";
+    echo "<font color=#FF0000><center>".va(loca("BUILD_ERROR_VACATION"), date ("Y-m-d H:i:s", $GlobalUser['vacation_until']))."</center></font>\n\n";
 }
 
 echo "<table align=top ><tr><td style='background-color:transparent;'>\n";

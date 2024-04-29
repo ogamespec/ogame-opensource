@@ -570,6 +570,7 @@ function PageFooter ($msg="", $error="", $popup=false, $headerH=81, $nores=false
 {
     global $pagetime;
     global $GlobalUser;
+    global $GlobalUni;
     global $query_counter;
 
     loca_add ("reg", $GlobalUser['lang']);
@@ -580,8 +581,7 @@ function PageFooter ($msg="", $error="", $popup=false, $headerH=81, $nores=false
         $mtime = explode(" ",$mtime); 
         $mtime = $mtime[1] + $mtime[0];
         $endtime = $mtime;
-        // Debug strings do not need to be localized.
-        $msg = sprintf ( "Page generated in %f seconds. Number of SQL queries: %d.", $endtime-$pagetime, $query_counter) . GetSQLQueryLogText() . $msg;
+        $msg = sprintf ( loca_lang("DEBUG_PAGE_INFO", $GlobalUni['lang']), $endtime-$pagetime, $query_counter) . GetSQLQueryLogText() . $msg;
     }
 
     if ( !$GlobalUser['validated']) $error = "<center> \n".va(loca("REG_NOT_ACTIVATED"), $GlobalUser['session'])."<br></center>\n" . $error;
