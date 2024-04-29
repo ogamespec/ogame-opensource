@@ -3,6 +3,7 @@
 // Payment.
 
 loca_add ( "menu", $GlobalUser['lang'] );
+loca_add ( "premium", $GlobalUser['lang'] );
 
 if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
 $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
@@ -21,7 +22,7 @@ if ( method() === "POST" )
 {
     $code = $_POST['couponcode'];
     if (!empty($code)) {
-        SecurityCheck ( '/[\-0-9A-Z]{24}/', $code, "Манипулирование кодом купона" );
+        SecurityCheck ( '/[\-0-9A-Z]{24}/', $code, loca_lang ("DEBUG_PAYMENT_MANI_COUPON", $GlobalUni['lang']) );
     }
 
     if ( $_POST['action'] === "check" )
@@ -31,7 +32,7 @@ if ( method() === "POST" )
             $ShowActivateDlg = true;
             $coupon = LoadCoupon ($id);
         }
-        else $CouponError = "Неверный код или купон уже погашен";
+        else $CouponError = loca("PAY_INVALID_CODE");
 
         //Код более не действителен.
         //Неверный код
@@ -63,10 +64,10 @@ BeginContent ();
 <tbody>
 <tr><td class="c" colspan="2">
 <big>
-Тёмная материя <?=nicenum($coupon['amount']);?> !
+<?=loca("DM");?> <?=nicenum($coupon['amount']);?> !
 </big>
 </td></tr>
-<tr><td colspan="2"><center><input type="submit" value="Зачислить!"></center></td></tr>
+<tr><td colspan="2"><center><input type="submit" value="<?=loca("PAY_CREDIT");?>"></center></td></tr>
 </tbody></table>
 </form>
 
@@ -80,23 +81,23 @@ BeginContent ();
 <input type="hidden" name="action" value="check">
 <table class="ordertable">
 <tbody>
-<tr><td class="c" colspan="2">Использовать купон.</td></tr>
-<tr><td class="left" colspan="2">Введите ваш код купона здесь.</td></tr>
+<tr><td class="c" colspan="2"><?=loca("PAY_USE");?></td></tr>
+<tr><td class="left" colspan="2"><?=loca("PAY_ENTER");?></td></tr>
 <tr>
-<td class="left">Код купона:</td>
+<td class="left"><?=loca("PAY_COUPON_CODE");?></td>
 <td class="right"><input name="couponcode" size="30" type="text" value=""></td>
 </tr>
 <?php
     if ( $CouponError !== "" ) {
 ?>
 <tr>
-<td class="left">Ошибка купона:</td>
+<td class="left"><?=loca("PAY_ERROR");?></td>
 <td class="right"><?=$CouponError;?></td>
 </tr>
 <?php
     }
 ?>
-<tr><td colspan="2"><center><input type="submit" value="Проверить купон."></center></td></tr>
+<tr><td colspan="2"><center><input type="submit" value="<?=loca("PAY_CHECK");?>"></center></td></tr>
 </tbody></table>
 </form>
 

@@ -49,6 +49,10 @@ $GlobalUni = LoadUniverse ();
 
 // *****************************************************************************
 
+// Debug strings are used in the language of the universe so the admin doesn't screw around.
+// Also, all debug strings are included globally so that you don't have to bother with adding them inplace in the source code.
+loca_add ( "debug", $GlobalUni['lang'] );
+
 // Game Pages.
 
 if ( key_exists ( 'session', $_GET ) ) {
@@ -61,7 +65,7 @@ if ( key_exists ( 'session', $_GET ) ) {
     // Public session check
     //
 
-    SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], "Манипулирование публичной сессией" );
+    SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], loca_lang("DEBUG_MANI_SESSION", $GlobalUni['lang']) );
 
     if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 }
