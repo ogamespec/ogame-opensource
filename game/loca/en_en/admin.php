@@ -205,6 +205,13 @@ $LOCA["en"]["ADM_LOCA_SOURCE"] = "Source language:";
 $LOCA["en"]["ADM_LOCA_DEST"] = "Target language:";
 $LOCA["en"]["ADM_LOCA_SUBMIT"] = "Compare";
 
+// admin_logins
+
+$LOCA["en"]["ADM_LOGINS_BY_NAME"] = "By user name:";
+$LOCA["en"]["ADM_LOGINS_BY_ID"] = "By User ID:";
+$LOCA["en"]["ADM_LOGINS_BY_IP"] = "By IP address:";
+$LOCA["en"]["ADM_LOGINS_SUBMIT"] = "Search";
+
 // admin_planets
 
 $LOCA["en"]["ADM_PLANET_SPECIFY_TEXT"] = "Specify search string";
@@ -250,6 +257,67 @@ $LOCA["en"]["ADM_PLANET_SEARCH"] = "Search";
 $LOCA["en"]["ADM_PLANET_SEARCH_RESULT"] = "Search results:";
 $LOCA["en"]["ADM_PLANET_ERROR_LOAD"] = "Failed to load planet ID: #1";
 
+// admin_queue
+
+$LOCA["en"]["ADM_QUEUE_TYPE_BUILD"] = "Building '#1' (#2) on planet #3";
+$LOCA["en"]["ADM_QUEUE_TYPE_DEMOLISH"] = "Demolition of '#1' (#2) on planet #3";
+$LOCA["en"]["ADM_QUEUE_TYPE_SHIPYARD"] = "Shipyard assignment: '#1' (#2) on planet #3";
+$LOCA["en"]["ADM_QUEUE_TYPE_RESEARCH"] = "Research is underway '#1' (#2) from planet #3";
+$LOCA["en"]["ADM_QUEUE_TYPE_UPDATE_STATS"] = "Save old statistics";
+$LOCA["en"]["ADM_QUEUE_TYPE_RECALC_POINTS"] = "Recalculate statistics";
+$LOCA["en"]["ADM_QUEUE_TYPE_RECALC_ALLY_POINTS"] = "Recalculate alliance statistics";
+$LOCA["en"]["ADM_QUEUE_TYPE_ALLOW_NAME"] = "Allow name change";
+$LOCA["en"]["ADM_QUEUE_TYPE_CHANGE_EMAIL"] = "Update permanent mail address";
+$LOCA["en"]["ADM_QUEUE_TYPE_UNLOAD_ALL"] = "Unload all the players";
+$LOCA["en"]["ADM_QUEUE_TYPE_CLEAN_DEBRIS"] = "Cleaning virtual debris";
+$LOCA["en"]["ADM_QUEUE_TYPE_CLEAN_PLANETS"] = "Cleanup of destroyed planets";
+$LOCA["en"]["ADM_QUEUE_TYPE_CLEAN_PLAYERS"] = "Deleting inactive players and players put up for deletion";
+$LOCA["en"]["ADM_QUEUE_TYPE_UNBAN_PLAYER"] = "Unban a player";
+$LOCA["en"]["ADM_QUEUE_TYPE_ALLOW_ATTACKS"] = "Allow attacks";
+$LOCA["en"]["ADM_QUEUE_TYPE_AI"] = "Bot Task (Strategy #1)";
+$LOCA["en"]["ADM_QUEUE_TYPE_COMMANDER_OFF"] = "Ends with the Commander";
+$LOCA["en"]["ADM_QUEUE_TYPE_ADMIRAL_OFF"] = "Officer Finished: Admiral";
+$LOCA["en"]["ADM_QUEUE_TYPE_ENGINEER_OFF"] = "Officer Finished: Engineer";
+$LOCA["en"]["ADM_QUEUE_TYPE_GEOLOGE_OFF"] = "Officer Finished: Geologist";
+$LOCA["en"]["ADM_QUEUE_TYPE_TECHNOCRATE_OFF"] = "Officer Finished: Technocrat";
+$LOCA["en"]["ADM_QUEUE_TYPE_UNKNOWN"] = "Unknown task type";
+$LOCA["en"]["ADM_QUEUE_END"] = "End time";
+$LOCA["en"]["ADM_QUEUE_PLAYER"] = "Player";
+$LOCA["en"]["ADM_QUEUE_TYPE"] = "Task type";
+$LOCA["en"]["ADM_QUEUE_DESCR"] = "Description";
+$LOCA["en"]["ADM_QUEUE_PRIO"] = "Priority";
+$LOCA["en"]["ADM_QUEUE_CONTROL"] = "Control";
+$LOCA["en"]["ADM_QUEUE_COMPLETE"] = "End";
+$LOCA["en"]["ADM_QUEUE_DELETE"] = "Delete";
+$LOCA["en"]["ADM_QUEUE_SUBMIT"] = "Send";
+
+// admin_raksim
+
+$LOCA["en"]["ADM_RAKSIM_ATTACKER"] = "Attacker";
+$LOCA["en"]["ADM_RAKSIM_DEFENDER"] = "Defender";
+$LOCA["en"]["ADM_RAKSIM_WEAP"] = "Weapons:";
+$LOCA["en"]["ADM_RAKSIM_ARMOUR"] = "Armor:";
+$LOCA["en"]["ADM_RAKSIM_SETTINGS"] = "Settings";
+$LOCA["en"]["ADM_RAKSIM_DEFENSE"] = "Defense";
+$LOCA["en"]["ADM_RAKSIM_SUBMIT"] = "Missile attack";
+
+// admin_sim
+
+$LOCA["en"]["ADM_SIM_ATTACKER"] = "Attacker";
+$LOCA["en"]["ADM_SIM_DEFENDER"] = "Defender";
+$LOCA["en"]["ADM_SIM_WEAP"] = "Weapons:";
+$LOCA["en"]["ADM_SIM_SHIELD"] = "Shields:";
+$LOCA["en"]["ADM_SIM_ARMOUR"] = "Armor:";
+$LOCA["en"]["ADM_SIM_FLEET"] = "Fleet";
+$LOCA["en"]["ADM_SIM_SLOT"] = "Slot:";
+$LOCA["en"]["ADM_SIM_SETTINGS"] = "Settings";
+$LOCA["en"]["ADM_SIM_DEBUG"] = "Debug information";
+$LOCA["en"]["ADM_SIM_RAPIDFIRE"] = "Rapidfire";
+$LOCA["en"]["ADM_SIM_FID"] = "Fleet in debris";
+$LOCA["en"]["ADM_SIM_DID"] = "Defense in debris";
+$LOCA["en"]["ADM_SIM_DEFENSE"] = "Defense";
+$LOCA["en"]["ADM_SIM_SUBMIT"] = "Start the Battle";
+
 // admin_uni
 
 $LOCA["en"]["ADM_UNI_SETTINGS"] = "Universe #1 Settings";
@@ -281,6 +349,34 @@ $LOCA["en"]["ADM_UNI_FORCE_LANG"] = "Forced to use the language of the universe"
 $LOCA["en"]["ADM_UNI_FREEZE"] = "Pause the universe";
 $LOCA["en"]["ADM_UNI_FREEZE_INFO"] = "When the universe is paused, no events will be triggered (the queue will be stopped). After the pause is removed, all completed events will be executed in the queue order. All active players are forced into vacation mode.";
 $LOCA["en"]["ADM_UNI_SAVE"] = "Save";
+
+// admin_userlogs
+
+$LOCA["en"]["ADM_USERLOG_USER_HISTORY"] = "The #1 player story";
+$LOCA["en"]["ADM_USERLOG_DATE"] = "Date";
+$LOCA["en"]["ADM_USERLOG_TYPE"] = "Type";
+$LOCA["en"]["ADM_USERLOG_ACTION"] = "Action";
+$LOCA["en"]["ADM_USERLOG_LAST_ACTIONS"] = "Recent actions of the players";
+$LOCA["en"]["ADM_USERLOG_USER"] = "Player";
+$LOCA["en"]["ADM_USERLOG_CATEGORY"] = "Category";
+$LOCA["en"]["ADM_USERLOG_HISTORY"] = "History of actions";
+$LOCA["en"]["ADM_USERLOG_USERNAME"] = "User Name";
+$LOCA["en"]["ADM_USERLOG_APPROX"] = "(you can roughly)";
+$LOCA["en"]["ADM_USERLOG_CAT_ALL"] = "All of them";
+$LOCA["en"]["ADM_USERLOG_CAT_BUILD"] = "Buildings / Demolition";
+$LOCA["en"]["ADM_USERLOG_CAT_RESEARCH"] = "Research";
+$LOCA["en"]["ADM_USERLOG_CAT_SHIPYARD"] = "Fleet construction";
+$LOCA["en"]["ADM_USERLOG_CAT_DEFENSE"] = "Defense construction";
+$LOCA["en"]["ADM_USERLOG_CAT_FLEET"] = "Fleet dispatch";
+$LOCA["en"]["ADM_USERLOG_CAT_PLANET"] = "Planet settings";
+$LOCA["en"]["ADM_USERLOG_CAT_SETTINGS"] = "Changing account settings / VM";
+$LOCA["en"]["ADM_USERLOG_CAT_OPER"] = "Operator actions";
+$LOCA["en"]["ADM_USERLOG_PERIOD"] = "For the period";
+$LOCA["en"]["ADM_USERLOG_DAYS"] = "days";
+$LOCA["en"]["ADM_USERLOG_HR"] = "hr.";
+$LOCA["en"]["ADM_USERLOG_FROM"] = "Beginning with";
+$LOCA["en"]["ADM_USERLOG_DMY"] = "DD.MM.YYYY";
+$LOCA["en"]["ADM_USERLOG_SUBMIT"] = "Send";
 
 // admin_users
 
