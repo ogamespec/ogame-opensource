@@ -41,4 +41,14 @@ $LOCA["de"]["PREM_ACTIVE"] = "<strong>Noch #1 Tage <font color=lime>aktiv</font>
 $LOCA["de"]["PREM_NOTENOUGH"] = "Zu wenig Dunkle Materie vorhanden.";
 $LOCA["de"]["PREM_OK"] = "Verlängerung erfolgreich!";
 
+// payment
+
+$LOCA["de"]["PAY_INVALID_CODE"] = "Falscher Code oder bereits eingelöster Coupon";
+$LOCA["de"]["PAY_CREDIT"] = "Einschreibung!";
+$LOCA["de"]["PAY_USE"] = "Verwenden Sie den Coupon.";
+$LOCA["de"]["PAY_ENTER"] = "Geben Sie hier Ihren Gutscheincode ein.";
+$LOCA["de"]["PAY_COUPON_CODE"] = "Gutschein-Code:";
+$LOCA["de"]["PAY_ERROR"] = "Coupon-Fehler:";
+$LOCA["de"]["PAY_CHECK"] = "Kupon prüfen";
+
 ?>

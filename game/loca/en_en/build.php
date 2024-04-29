@@ -1,8 +1,8 @@
 <?php
 
-// Locales for the b_building and shipyard pages
-
 // TODO: No HTML pages of the English version of the Buildings page were saved, so everything is translated via DeepL.
+
+// Locales for the b_building page
 
 $LOCA["en"]["BUILD_COMPLETE"] = "Done";
 $LOCA["en"]["BUILD_NEXT"] = "Next";
@@ -18,6 +18,22 @@ $LOCA["en"]["BUILD_BUSY"] = "In the process";
 $LOCA["en"]["BUILD_BUILD"] = " build ";
 $LOCA["en"]["BUILD_BUILD_LEVEL"] = "Build <br> level #1";
 
+// Locales for the building page (Shipyard/Defense/Research)
+
+$LOCA["en"]["BUILD_BUILDINGS_HEAD"] = "Buildings#Gebaeude";
+$LOCA["en"]["BUILD_DESC"] = "Description";
+$LOCA["en"]["BUILD_AMOUNT"] = "Qty.";
+$LOCA["en"]["BUILD_SHIPYARD_UNITS"] = "in stock #1";
+$LOCA["en"]["BUILD_SHIPYARD_CANT"] = "impossibly";
+$LOCA["en"]["BUILD_SHIPYARD_SUBMIT"] = "Build";
+$LOCA["en"]["BUILD_RESEARCH_NEXT"] = "next";
+$LOCA["en"]["BUILD_RESEARCH_LEVEL"] = "Research<br> level #1";
+$LOCA["en"]["BUILD_RESEARCH"] = " research ";
+$LOCA["en"]["BUILD_SHIPYARD_PROCESSING"] = "Now being produced";
+$LOCA["en"]["BUILD_SHIPYARD_COMPLETE"] = "Tasks completed";
+$LOCA["en"]["BUILD_SHIPYARD_CURRENT"] = " (produced)";
+$LOCA["en"]["BUILD_SHIPYARD_QUEUE"] = "Expected tasks";
+$LOCA["en"]["BUILD_SHIPYARD_TIME"] = "The entire production will take";
 
 // Error texts for CanBuild, CanResearch method (queue.php)
 
@@ -38,6 +54,13 @@ $LOCA["en"]["BUILD_ERROR_RESEARCH_ALREADY"] = "Research is already underway!";
 $LOCA["en"]["BUILD_ERROR_RESEARCH_LAB_BUILDING"] = "The research lab is being improved!";
 $LOCA["en"]["BUILD_ERROR_RESEARCH_LAB_BUILDING"] = "The research lab is being improved!";
 $LOCA["en"]["BUILD_ERROR_RESEARCH_VACATION"] = "Research is not possible in vacation mode (RO).";
+
+$LOCA["en"]["BUILD_ERROR_SHIPYARD_BUSY"] = "Neither ships nor defenses can be built as the shipyard or nanite factory is upgraded";
+$LOCA["en"]["BUILD_ERROR_VACATION"] = "Vacation mode minimum to #1";
+$LOCA["en"]["BUILD_ERROR_SHIPYARD_REQUIRED"] = "In order to do that, you need to build a shipyard!";
+$LOCA["en"]["BUILD_ERROR_DOME"] = "A shield dome can only be built 1 time.";
+$LOCA["en"]["BUILD_ERROR_RESLAB_BUSY"] = "Conducting research is not possible as the research lab is being upgraded.";
+$LOCA["en"]["BUILD_ERROR_RESLAB_REQUIRED"] = "In order to do this, you need to build a research lab!";
 
 // Message about canceling the queue for the Commander.
 
