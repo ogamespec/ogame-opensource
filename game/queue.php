@@ -863,7 +863,7 @@ function GetOfficerLeft ($player_id, $off)
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".$off."' AND owner_id = $player_id ORDER BY end ASC";
     $result = dbquery ($query);
-    if ( $result )
+    if ( dbrows($result) != 0 )
     {
         $queue = dbarray ($result);
         return $queue['end'];
