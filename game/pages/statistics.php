@@ -271,7 +271,7 @@ else {
 
         echo "    <!--  ally --> \n";
         echo "    <th> \n";
-        if ( $user['ally_id'] == $GlobalUser['ally_id'] ) {
+        if ( $user['ally_id'] != 0 && $user['ally_id'] == $GlobalUser['ally_id'] ) {
             $ally = LoadAlly ( $user['ally_id'] );
             echo " 	  <a href=\"index.php?page=allianzen&session=$session\">\n";
             echo "        ".$ally['tag']."      </a>\n";
