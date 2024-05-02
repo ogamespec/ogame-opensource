@@ -429,8 +429,8 @@ function DestroyMoon ($moon_id, $when, $fleet_id)
     $planet = LoadPlanet ( $moon['g'], $moon['s'], $moon['p'], 1 );
     if ( $moon == NULL || $planet == NULL ) return;
 
-    // Return the fleets flying to the moon.
-    $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = $moon_id AND mission < ".FTYP_RETURN." AND fleet_id <> $fleet_id;";
+    // Recall foreign fleets flying to the destroyed moon (except for the fleet flying to destroy the moon - its return is controlled by the caller)
+    $query = "SELECT * FROM ".$db_prefix."fleet WHERE owner_id <> ".$planet['owner_id']." AND target_planet = $moon_id AND mission < ".FTYP_RETURN." AND fleet_id <> $fleet_id;";
     $result = dbquery ( $query );
     $rows = dbrows ($result);
     while ( $rows-- )
@@ -439,9 +439,11 @@ function DestroyMoon ($moon_id, $when, $fleet_id)
         RecallFleet ( $fleet_obj['fleet_id'], $when );
     }
 
-    // Redirect returning and departing fleets to the planet.
+    // Redirect own returning and departing fleets to the planet.
     $query = "UPDATE ".$db_prefix."fleet SET start_planet = ".$planet['planet_id']." WHERE start_planet = $moon_id;";
     dbquery ( $query );
+    $query = "UPDATE ".$db_prefix."fleet SET target_planet = ".$planet['planet_id']." WHERE owner_id = ".$planet['owner_id']." AND target_planet = $moon_id;";
+    dbquery ( $query );    
 
     // Modify player statistics
     $pp = PlanetPrice ($moon);
