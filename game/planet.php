@@ -430,7 +430,7 @@ function DestroyMoon ($moon_id, $when, $fleet_id)
     if ( $moon == NULL || $planet == NULL ) return;
 
     // Recall foreign fleets flying to the destroyed moon (except for the fleet flying to destroy the moon - its return is controlled by the caller)
-    $query = "SELECT * FROM ".$db_prefix."fleet WHERE owner_id <> ".$planet['owner_id']." AND target_planet = $moon_id AND mission < ".FTYP_RETURN." AND fleet_id <> $fleet_id;";
+    $query = "SELECT * FROM ".$db_prefix."fleet WHERE owner_id <> ".$planet['owner_id']." AND target_planet = $moon_id AND fleet_id <> $fleet_id;";
     $result = dbquery ( $query );
     $rows = dbrows ($result);
     while ( $rows-- )
