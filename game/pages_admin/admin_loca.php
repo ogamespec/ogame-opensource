@@ -20,10 +20,10 @@ function CompareTwoLocas ($src, $dst)
     $dst_lang = "";
 
     foreach ($LOCA as $i=>$lang) {
-        if (strpos($src, $i)) {
+        if (strpos($src, $i.'_'.$i)) {
             $src_lang = $i;
         }
-        if (strpos($dst, $i)) {
+        if (strpos($dst, $i.'_'.$i)) {
             $dst_lang = $i;
         }        
     }    
