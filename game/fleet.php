@@ -623,8 +623,8 @@ function HoldingArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
 function HoldingHold ($queue, $fleet_obj, $fleet, $origin, $target)
 {
-    // Вернуть флот.
-    // В качестве времени полёта используется время удержания.
+    // Return the fleet.
+    // The hold time is used as the flight time.
     DispatchFleet ($fleet, $origin, $target, FTYP_ACS_HOLD+FTYP_RETURN, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end']);
 }
 
@@ -787,8 +787,7 @@ function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
             "<a onclick=\"showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p'].");\" href=\"#\">[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>",
             $target['name'],
             "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>",
-            $counter ) . 
-            "</td>\n";      // wtf?
+            $counter ) ;
     SendMessage ( $target['owner_id'],
         loca_lang("FLEET_MESSAGE_OBSERVE", $target_user['lang']),
         loca_lang("FLEET_MESSAGE_SPY", $target_user['lang']),
