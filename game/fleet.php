@@ -337,9 +337,9 @@ function RecallFleet ($fleet_id, $now=0)
     if ($fleet_obj['mission'] < FTYP_RETURN) $new_mission = $fleet_obj['mission'] + FTYP_RETURN;
     else $new_mission = $fleet_obj['mission'] - FTYP_RETURN;
     UserLog ( $fleet_obj['owner_id'], "FLEET", 
-     "Отзыв флота ".$fleet_obj['fleet_id'].": " . GetMissionNameDebug ($new_mission) . " " .
-     $origin['name'] ." [".$origin['g'].":".$origin['s'].":".$origin['p']."] &lt;- ".$target['name']." [".$target['g'].":".$target['s'].":".$target['p']."]<br>" .
-     DumpFleet ($fleet) );
+        va(loca_lang("DEBUG_LOG_FLEET_RECALL", $uni['lang']), $fleet_obj['fleet_id']) . GetMissionNameDebug ($new_mission) . " " .
+        $origin['name'] ." [".$origin['g'].":".$origin['s'].":".$origin['p']."] &lt;- ".$target['name']." [".$target['g'].":".$target['s'].":".$target['p']."]<br>" .
+        DumpFleet ($fleet) );
 
     // For recall missions with a hold, the hold time is used as the return flight time.
     if ($fleet_obj['mission'] < FTYP_RETURN) DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] + FTYP_RETURN, $now-$queue['start'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $now);
