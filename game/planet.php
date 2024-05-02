@@ -103,7 +103,18 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     }
     
     // Maximum number of fields.
-    $fields = floor (pow (($diam / 1000), 2));
+    if ($moon) $fields = 1;
+    else $fields = floor (pow (($diam / 1000), 2));
+
+    // Initial resources
+    if ($moon) {
+        $initial_met = 0;
+        $initial_crys = 0;
+    }
+    else {
+        $initial_met = 500;
+        $initial_crys = 500;
+    }
 
     // Temperature
     if ($p <= 3) $temp = 80 + (rand() % 10) - 2*$p;
@@ -121,16 +132,11 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     // Add planet
     if ( $when == 0 ) $now = time();
     else $now = $when;
-    if ($moon) $planet = array( null, $name, $type, $g, $s, $p, $owner_id, $diam, $temp, 0, 1, $now,
-                                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                          0, 0, 0, 1, 1, 1, 1, 1, 1, $now, $now, 0, 0 );
-    else $planet = array( null, $name, $type, $g, $s, $p, $owner_id, $diam, $temp, 0, $fields, $now,
-                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                 500, 500, 0, 1, 1, 1, 1, 1, 1, $now, $now, 0, 0 );
+    $planet = array( null, $name, $type, $g, $s, $p, $owner_id, $diam, $temp, 0, $fields, $now,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,       // Building level of each type
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,               // Number of defenses of each type
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,       // Number of fleet of each type
+                        $initial_met, $initial_crys, 0, 1, 1, 1, 1, 1, 1, $now, $now, 0, 0 );
     $id = AddDBRow ( $planet, "planets" );
 
     return $id;
@@ -183,12 +189,12 @@ function GetPlanet ( $planet_id)
     $planet['kmax'] = store_capacity ( $planet['b23'] );
     $planet['dmax'] = store_capacity ( $planet['b24'] );
     $planet['emax'] = prod_solar($planet['b4'], $planet['sprod']) * $e_factor  + 
-				       prod_fusion($planet['b12'], $user['r113'], $planet['fprod']) * $e_factor  + 
-					 prod_sat($planet['temp']+40) * $planet['f212'] * $planet['ssprod'] * $e_factor ;
+                    prod_fusion($planet['b12'], $user['r113'], $planet['fprod']) * $e_factor  + 
+                    prod_sat($planet['temp']+40) * $planet['f212'] * $planet['ssprod'] * $e_factor ;
 
     $planet['econs'] = ( cons_metal ($planet['b1']) * $planet['mprod'] + 
-                                 cons_crys ($planet['b2']) * $planet['kprod'] + 
-                                 cons_deut ($planet['b3']) * $planet['dprod'] );
+                        cons_crys ($planet['b2']) * $planet['kprod'] + 
+                        cons_deut ($planet['b3']) * $planet['dprod'] );
 
     $planet['e'] = floor ( $planet['emax'] - $planet['econs'] );
     $planet['factor'] = 1;
