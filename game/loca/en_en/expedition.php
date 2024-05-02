@@ -1,6 +1,6 @@
 <?php
 
-$LOCA["en"]["EXP_MESSAGE_SUBJ"] = "Результат экспедиции [#1:#2:#3]";
+$LOCA["en"]["EXP_MESSAGE_SUBJ"] = "Expedition result [#1:#2:#3]";
 
 // Messages from expeditions.
 

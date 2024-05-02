@@ -21,5 +21,6 @@ $LOCA["en"]["SEARCH_BUDDY"] = "Buddy request";
 $LOCA["en"]["SEARCH_NORESULT"] = "no entries found";
 $LOCA["en"]["SEARCH_MAX_USERS_PLANETS"] = "More than #1 entries were found.";
 $LOCA["en"]["SEARCH_MAX_ALLY"] = "more than #1 entries found";
+$LOCA["en"]["SEARCH_ERROR_NOT_ENOUGH"] = "Too few characters! Please enter at least 2 characters.";
 
 ?>

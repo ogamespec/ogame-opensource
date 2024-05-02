@@ -51,13 +51,13 @@ $LOCA["de"]["OPTIONS_ACCOUNT_DEL_TIP"] = "Wenn du hier ein Häkchen setzt, wird 
 $LOCA["de"]["OPTIONS_APPLY"] = "Änderungen speichern";
 
 $LOCA["de"]["OPTIONS_MSG_SKIN"] = "Dies ist ein externer Skinpfad. Deine Session-ID kann auf dem verwendeten Server ausgelesen werden!";
-//$LOCA["de"]["OPTIONS_MSG_UNSAFE"] = "Вы хотите использовать небезопасный пароль, измените его на более безопасный.";
-//$LOCA["de"]["OPTIONS_MSG_SIMPLE"] = "Вы используете слишком простой пароль, смените его на более сложный.";
+$LOCA["de"]["OPTIONS_MSG_UNSAFE"] = "Wenn Sie ein unsicheres Passwort verwenden möchten, ändern Sie es in ein sichereres Passwort.";
+$LOCA["de"]["OPTIONS_MSG_SIMPLE"] = "Sie verwenden ein zu einfaches Passwort, ändern Sie es in ein komplexeres.";
 $LOCA["de"]["OPTIONS_MSG_NAME"] = "Username geändert. Dies ist einmal pro Woche möglich. Logge Dich bitte neu ein.";
 $LOCA["de"]["OPTIONS_MSG_EMAIL"] = "Deine Emailadresse wurde geändert. Nach 7 Tagen ohne Änderung wird diese Adresse permanent.";
 $LOCA["de"]["OPTIONS_MSG_PASS"] = "Das Passwort wurde geändert.";
 $LOCA["de"]["OPTIONS_MSG_VMENABLED"] = "Der Urlaubsmodus wurde eingeschaltet.<br>\n<b><font color=\"#FF0000\">ACHTUNG: Der Account wird auch im Urlaubsmodus nach 35 Tagen ohne Login gelöscht</font></b><br>\nUrlaub mindestens bis:";
-//$LOCA["de"]["OPTIONS_MSG_VMDISABLED"] = "Ну что, #1, как был отдых?. Не забудьте восстановить производство сырья и удачи в дальнейшей игре.";
+$LOCA["de"]["OPTIONS_MSG_VMDISABLED"] = "Also, #1, wie war dein Urlaub? Vergessen Sie nicht, Ihre Rohstoffproduktion wiederherzustellen und viel Glück im zukünftigen Spiel.";
 $LOCA["de"]["OPTIONS_MSG_DEL"] = "Dein Account wurde auf löschen gestellt. Löschdatum:";
 $LOCA["de"]["OPTIONS_MSG_DEACTIP"] = "Du hast Einstellungen am IP-Check vorgenommen. Logge Dich bitte neu ein.";
 $LOCA["de"]["OPTIONS_MSG_VALIDATE"] = "Eine E-Mail zur Bestätigung Deines Spielerkontos wurde versandt. Klicke auf den Link in dieser Mail um Dein Konto freizuschalten.";

@@ -36,6 +36,9 @@ $LOCA["de"]["CHANGELOG_0.312apl9"] =
     "- Fehler bei Gebauedebau behoben, sprunghafter Wechsel<br />\n" .
     "- Anfliegen von Koordinaten <0 nicht mehr möglich";
 
+$LOCA["de"]["CHANGELOG_0.312apl10"] =
+    "- Erlaubte Leerzeichen in der Allianzabkürzung";
+
 $LOCA["de"]["CHANGELOG_0.321a"] =
     "- Allianzsystem wurde eingefuehrt";
 

@@ -41,7 +41,7 @@ $LOCA["en"]["EVENT_RAK_TARGET"] = "Main target";
 
 $LOCA["en"]["EVENT_M_ATTACK"] = "Attack";
 $LOCA["en"]["EVENT_M_ACS_ATTACK"] = "ACS Attack";
-$LOCA["en"]["EVENT_M_TRANSPORT"] = "Транспорт";
+$LOCA["en"]["EVENT_M_TRANSPORT"] = "Transport";
 $LOCA["en"]["EVENT_M_DEPLOY"] = "Deploy";
 $LOCA["en"]["EVENT_M_HOLD"] = "ACS Hold";
 $LOCA["en"]["EVENT_M_SPY"] = "Espionage";

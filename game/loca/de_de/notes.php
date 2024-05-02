@@ -30,7 +30,7 @@ $LOCA["de"]["NOTE_NO_SUBJ"] = "kein Betreff";
 $LOCA["de"]["NOTE_NO_TEXT"] = "kein Text";
 $LOCA["de"]["NOTE_CHARS"] = "Zeichen";
 
-$LOCA["de"]["NOTE_NO_RIGHTS"] = "Недостаточно прав для проведения операции!";
-$LOCA["de"]["NOTE_CANT_DO"] = "Невозможно";
+$LOCA["de"]["NOTE_NO_RIGHTS"] = "Nicht genug Rechte, um die Operation durchzuführen!";
+$LOCA["de"]["NOTE_CANT_DO"] = "Unmöglich";
 
 ?>
