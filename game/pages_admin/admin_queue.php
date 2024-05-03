@@ -12,38 +12,38 @@ function QueueDesc ( $queue )
 
     switch ( $type )
     {
-        case "Build":
+        case QTYP_BUILD:
             $query = "SELECT * FROM ".$db_prefix."buildqueue WHERE id = " . $queue['sub_id'] . " LIMIT 1";
             $result = dbquery ($query);
             $bqueue = dbarray ($result);
             $planet_id = $bqueue['planet_id'];
             $planet = GetPlanet ($planet_id);
             return va(loca("ADM_QUEUE_TYPE_BUILD"), loca("NAME_$obj_id"), $level, AdminPlanetName ($planet['planet_id']));
-        case "Demolish":
+        case QTYP_DEMOLISH:
             $query = "SELECT * FROM ".$db_prefix."buildqueue WHERE id = " . $queue['sub_id'] . " LIMIT 1";
             $result = dbquery ($query);
             $bqueue = dbarray ($result);
             $planet_id = $bqueue['planet_id'];
             $planet = GetPlanet ($planet_id);
             return va(loca("ADM_QUEUE_TYPE_DEMOLISH"), loca("NAME_$obj_id"), $level, AdminPlanetName ($planet['planet_id']));
-        case "Shipyard":
+        case QTYP_SHIPYARD:
             $planet = GetPlanet ($sub_id);
             return va(loca("ADM_QUEUE_TYPE_SHIPYARD"), loca("NAME_$obj_id"), $level, AdminPlanetName ($sub_id));
-        case "Research":
+        case QTYP_RESEARCH:
             $planet = GetPlanet ($sub_id);
             return va(loca("ADM_QUEUE_TYPE_RESEARCH"), loca("NAME_$obj_id"), $level, AdminPlanetName ($sub_id));
-        case "UpdateStats": return loca("ADM_QUEUE_TYPE_UPDATE_STATS");
-        case "RecalcPoints": return loca("ADM_QUEUE_TYPE_RECALC_POINTS");
-        case "RecalcAllyPoints": return loca("ADM_QUEUE_TYPE_RECALC_ALLY_POINTS");
-        case "AllowName": return loca("ADM_QUEUE_TYPE_ALLOW_NAME");
-        case "ChangeEmail": return loca("ADM_QUEUE_TYPE_CHANGE_EMAIL");
-        case "UnloadAll": return loca("ADM_QUEUE_TYPE_UNLOAD_ALL");
-        case "CleanDebris": return loca("ADM_QUEUE_TYPE_CLEAN_DEBRIS");
-        case "CleanPlanets": return loca("ADM_QUEUE_TYPE_CLEAN_PLANETS");
-        case "CleanPlayers": return loca("ADM_QUEUE_TYPE_CLEAN_PLAYERS");
-        case "UnbanPlayer": return loca("ADM_QUEUE_TYPE_UNBAN_PLAYER");
-        case "AllowAttacks": return loca("ADM_QUEUE_TYPE_ALLOW_ATTACKS");
-        case "AI":
+        case QTYP_UPDATE_STATS: return loca("ADM_QUEUE_TYPE_UPDATE_STATS");
+        case QTYP_RECALC_POINTS: return loca("ADM_QUEUE_TYPE_RECALC_POINTS");
+        case QTYP_RECALC_ALLY_POINTS: return loca("ADM_QUEUE_TYPE_RECALC_ALLY_POINTS");
+        case QTYP_ALLOW_NAME: return loca("ADM_QUEUE_TYPE_ALLOW_NAME");
+        case QTYP_CHANGE_EMAIL: return loca("ADM_QUEUE_TYPE_CHANGE_EMAIL");
+        case QTYP_UNLOAD_ALL: return loca("ADM_QUEUE_TYPE_UNLOAD_ALL");
+        case QTYP_CLEAN_DEBRIS: return loca("ADM_QUEUE_TYPE_CLEAN_DEBRIS");
+        case QTYP_CLEAN_PLANETS: return loca("ADM_QUEUE_TYPE_CLEAN_PLANETS");
+        case QTYP_CLEAN_PLAYERS: return loca("ADM_QUEUE_TYPE_CLEAN_PLAYERS");
+        case QTYP_UNBAN: return loca("ADM_QUEUE_TYPE_UNBAN_PLAYER");
+        case QTYP_ALLOW_ATTACKS: return loca("ADM_QUEUE_TYPE_ALLOW_ATTACKS");
+        case QTYP_AI:
             $strat_id = $queue['sub_id'];
             $block_id = $queue['obj_id'];
             $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $strat_id LIMIT 1;";
@@ -58,11 +58,11 @@ function QueueDesc ( $queue )
             }
             return va(loca("ADM_QUEUE_TYPE_AI"), $strat['name']) . " : <br>$block_text";
 
-        case "CommanderOff": return loca("ADM_QUEUE_TYPE_COMMANDER_OFF");
-        case "AdmiralOff": return loca("ADM_QUEUE_TYPE_ADMIRAL_OFF");
-        case "EngineerOff": return loca("ADM_QUEUE_TYPE_ENGINEER_OFF");
-        case "GeologeOff": return loca("ADM_QUEUE_TYPE_GEOLOGE_OFF");
-        case "TechnocrateOff": return loca("ADM_QUEUE_TYPE_TECHNOCRATE_OFF");
+        case QTYP_COMMANDER_OFF: return loca("ADM_QUEUE_TYPE_COMMANDER_OFF");
+        case QTYP_ADMIRAL_OFF: return loca("ADM_QUEUE_TYPE_ADMIRAL_OFF");
+        case QTYP_ENGINEER_OFF: return loca("ADM_QUEUE_TYPE_ENGINEER_OFF");
+        case QTYP_GEOLOGE_OFF: return loca("ADM_QUEUE_TYPE_GEOLOGE_OFF");
+        case QTYP_TECHNOCRATE_OFF: return loca("ADM_QUEUE_TYPE_TECHNOCRATE_OFF");
 
     }
 
@@ -101,8 +101,8 @@ function Admin_Queue ()
         }
     }
 
-    if ( $player_id > 0 ) $query = "SELECT * FROM ".$db_prefix."queue WHERE (type <> 'Fleet' AND type <> 'CommanderOff') AND owner_id=$player_id ORDER BY end ASC, prio DESC";
-    else $query = "SELECT * FROM ".$db_prefix."queue WHERE (type <> 'Fleet' AND type <> 'CommanderOff') ORDER BY end ASC, prio DESC LIMIT 50";
+    if ( $player_id > 0 ) $query = "SELECT * FROM ".$db_prefix."queue WHERE (type <> '".QTYP_FLEET."' AND type <> '".QTYP_COMMANDER_OFF."') AND owner_id=$player_id ORDER BY end ASC, prio DESC";
+    else $query = "SELECT * FROM ".$db_prefix."queue WHERE (type <> '".QTYP_FLEET."' AND type <> '".QTYP_COMMANDER_OFF."') ORDER BY end ASC, prio DESC LIMIT 50";
     $result = dbquery ($query);
     $now = time ();
 

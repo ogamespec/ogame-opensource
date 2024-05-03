@@ -459,7 +459,7 @@ function PremiumStatus ($user)
     if ( isset ( $PremiumCache [ $user['player_id'] ] ) ) return  $PremiumCache [ $user['player_id'] ];
 
     $prem = array ();
-    $qcmd = array ( 'commander' => 'CommanderOff', 'admiral' => 'AdmiralOff', 'engineer' => 'EngineerOff', 'geologist' => 'GeologeOff', 'technocrat' => 'TechnocrateOff');
+    $qcmd = array ( 'commander' => QTYP_COMMANDER_OFF, 'admiral' => QTYP_ADMIRAL_OFF, 'engineer' => QTYP_ENGINEER_OFF, 'geologist' => QTYP_GEOLOGE_OFF, 'technocrat' => QTYP_TECHNOCRATE_OFF);
 
     $now = time ();
 

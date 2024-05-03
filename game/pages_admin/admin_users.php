@@ -119,7 +119,7 @@ function Admin_Users ()
             $query .= " WHERE player_id=$player_id;";
             dbquery ($query);
 
-            $qname = array ( 'CommanderOff', 'AdmiralOff', 'EngineerOff', 'GeologeOff', 'TechnocrateOff' );
+            $qname = array ( QTYP_COMMANDER_OFF, QTYP_ADMIRAL_OFF, QTYP_ENGINEER_OFF, QTYP_GEOLOGE_OFF, QTYP_TECHNOCRATE_OFF );
             foreach ( $qname as $i=>$qcmd )
             {
                 $days = intval ( $_POST[$qcmd] );
@@ -307,7 +307,7 @@ function Admin_Users ()
                              '<font size=1 color=skyblue>'.loca("PR_ENGINEER_INFO").'</font>',
                              '<font size=1 color=skyblue>'.loca("PR_GEOLOGIST_INFO").'</font>',
                              '<font size=1 color=skyblue>'.loca("PR_TECHNO_INFO").'</font>' );
-    $qname = array ( 'CommanderOff', 'AdmiralOff', 'EngineerOff', 'GeologeOff', 'TechnocrateOff' );
+    $qname = array ( QTYP_COMMANDER_OFF, QTYP_ADMIRAL_OFF, QTYP_ENGINEER_OFF, QTYP_GEOLOGE_OFF, QTYP_TECHNOCRATE_OFF );
     $imgname = array ( 'commander', 'admiral', 'ingenieur', 'geologe', 'technokrat');
 
     $now = time ();
@@ -439,7 +439,7 @@ function Admin_Users ()
         <th <?php echo $style;?> >
 <?php
     echo "<nobr>".BuildDurationFormat ($fleet_obj['flight_time']) . "</nobr><br>";
-    echo "<nobr>".$fleet_obj['flight_time'] . " сек.</nobr>";
+    echo "<nobr>".$fleet_obj['flight_time'] . " ".loca("TIME_SEC")."</nobr>";
 ?>
         </th>
         <th <?php echo $style;?> >

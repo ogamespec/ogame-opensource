@@ -114,7 +114,7 @@ function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", 
     }
     else 
     {
-        $end = GetOfficerLeft ( $GlobalUser['player_id'], 'CommanderOff' );
+        $end = GetOfficerLeft ( $GlobalUser['player_id'], QTYP_COMMANDER_OFF );
         $coma = $end > time ();
     }
 
@@ -258,7 +258,7 @@ function OficeerList ()
     $img = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '' );
     $days = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '' );
     $action = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '' );
-    $qcmd = array ( 'commander' => 'CommanderOff', 'admiral' => 'AdmiralOff', 'engineer' => 'EngineerOff', 'geologist' => 'GeologeOff', 'technocrat' => 'TechnocrateOff');
+    $qcmd = array ( 'commander' => QTYP_COMMANDER_OFF, 'admiral' => QTYP_ADMIRAL_OFF, 'engineer' => QTYP_ENGINEER_OFF, 'geologist' => QTYP_GEOLOGE_OFF, 'technocrat' => QTYP_TECHNOCRATE_OFF);
 
     $now = time ();
 

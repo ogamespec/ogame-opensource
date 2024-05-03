@@ -31,31 +31,7 @@ Virtual DF disappears on Monday at 1:10 server time if no fleets are flying to/f
 Entry of the task in the database table:
 task_id: unique task number (INT AUTO_INCREMENT PRIMARY KEY)
 owner_id: user number to which the task belongs  (INT)
-type: task type, each type has its own handler: (CHAR(20))
-    "CommanderOff"   -- ends contract: Commander
-    "AdmiralOff"     -- ends officer: Admiral
-    "EngineerOff"    -- ends officer: Engineer
-    "GeologeOff"     -- ends officer: Geologist
-    "TechnocrateOff" -- ends officer: Technocrat
-    "UnbanPlayer"    -- unban player
-    "ChangeEmail"    -- write down a permanent mailing address
-    "AllowName"    -- allow player name changes
-    "AllowAttacks"    -- unban player's attack ban
-    "UnloadAll"      -- re-login all players
-    "CleanDebris"    -- virtual debris field cleanup
-    "CleanPlanets"   -- removal of destroyed planets / abandoned moons
-    "CleanPlayers"   -- deleting inactive players and players put up for deletion (1:10 server time)
-    "UpdateStats"    -- saving old stat points
-    "RecalcPoints"    -- recalculation of player statistics
-    "RecalcAllyPoints" -- recalculation of alliance statistics
-    "Build"          -- completion of building on the planet (sub_id - task ID in the build queue, obj_id - type of building)
-    "Demolish"       -- completion of demolition on the planet (sub_id - task ID in the build queue, obj_id - type of building)
-    "Research"       -- research (sub_id - number of the planet where the research was launched, obj_id - type of research)
-    "Shipyard"       -- shipyard task (sub_id - planet number, obj_id - construction type)
-    "Fleet"            -- Fleet task / IPM attack (sub_id - number of record in the fleet table)
-    "Debug"          -- debug event
-    "AI"              -- tasks for bot (sub_id - strategy number, obj_id - current block number)
-    "Coupon"         -- Coupon crediting (the handler is located in coupon.php)
+type: task type, each type has its own handler: (CHAR(20))  (see QTYP_ macro)
 sub_id: additional number, different for each type of task, e.g. for construction - planet ID, for fleet task - fleet ID (INT)
 obj_id: additional number, different for each type of task, e.g. for building - building ID (INT)
 level: Building level / number of units ordered at the shipyard (INT)
@@ -80,6 +56,33 @@ end: construction completion time (INT UNSIGNED)
 */
 
 const QUEUE_BATCH = 16;         // The event queue is not executed in its entirety, but in small portions specified in this constant (so as not to overload the server)
+
+// Queue task type
+// For some reason during the development phase, the identifiers were made strings. TODO: Change them to INT type (but this would require a clean reinstall of the Universe)
+const QTYP_COMMANDER_OFF = "CommanderOff";      // ends contract: Commander
+const QTYP_ADMIRAL_OFF = "AdmiralOff";          // ends officer: Admiral
+const QTYP_ENGINEER_OFF = "EngineerOff";        // ends officer: Engineer
+const QTYP_GEOLOGE_OFF = "GeologeOff";          // ends officer: Geologist
+const QTYP_TECHNOCRATE_OFF = "TechnocrateOff";  // ends officer: Technocrat
+const QTYP_UNBAN = "UnbanPlayer";               // unban player
+const QTYP_CHANGE_EMAIL = "ChangeEmail";        // write down a permanent mailing address
+const QTYP_ALLOW_NAME = "AllowName";            // allow player name changes
+const QTYP_ALLOW_ATTACKS = "AllowAttacks";      // unban player's attack ban
+const QTYP_UNLOAD_ALL = "UnloadAll";            // re-login all players
+const QTYP_CLEAN_DEBRIS = "CleanDebris";        // virtual debris field cleanup
+const QTYP_CLEAN_PLANETS = "CleanPlanets";      // removal of destroyed planets / abandoned moons
+const QTYP_CLEAN_PLAYERS = "CleanPlayers";      // deleting inactive players and players put up for deletion (1:10 server time)
+const QTYP_UPDATE_STATS = "UpdateStats";        // saving old stat points
+const QTYP_RECALC_POINTS = "RecalcPoints";      // recalculation of player statistics
+const QTYP_RECALC_ALLY_POINTS = "RecalcAllyPoints";  // recalculation of alliance statistics
+const QTYP_BUILD = "Build";                     // completion of building on the planet (sub_id - task ID in the build queue, obj_id - type of building)
+const QTYP_DEMOLISH = "Demolish";               // completion of demolition on the planet (sub_id - task ID in the build queue, obj_id - type of building)
+const QTYP_RESEARCH = "Research";               // research (sub_id - number of the planet where the research was launched, obj_id - type of research)
+const QTYP_SHIPYARD = "Shipyard";               // shipyard task (sub_id - planet number, obj_id - construction type)
+const QTYP_FLEET = "Fleet";                     // Fleet task / IPM attack (sub_id - number of record in the fleet table)
+const QTYP_DEBUG = "Debug";                     // debug event
+const QTYP_AI = "AI";                           // tasks for bot (sub_id - strategy number, obj_id - current block number)
+const QTYP_COUPON = "Coupon";                   // Coupon crediting (the handler is located in coupon.php)
 
 // Queue task priorities
 const QUEUE_PRIO_LOWEST = 0;            // Consider it no priority
@@ -146,31 +149,31 @@ function UpdateQueue ($until)
     while ($rows--) {
         $queue = dbarray ($result);
 
-        if ( $queue['type'] === "Build" ) Queue_Build_End ($queue);
-        else if ( $queue['type'] === "Demolish" ) Queue_Build_End ($queue);
-        else if ( $queue['type'] === "Research" ) Queue_Research_End ($queue);
-        else if ( $queue['type'] === "Shipyard" ) Queue_Shipyard_End ($queue);
-        else if ( $queue['type'] === "Fleet" ) Queue_Fleet_End ($queue);
-        else if ( $queue['type'] === "UnloadAll" ) Queue_Relogin_End ($queue);
-        else if ( $queue['type'] === "CleanDebris" ) Queue_CleanDebris_End ($queue);
-        else if ( $queue['type'] === "CleanPlanets" ) Queue_CleanPlanets_End ($queue);
-        else if ( $queue['type'] === "CleanPlayers" ) Queue_CleanPlayers_End ($queue);
-        else if ( $queue['type'] === "UpdateStats" ) Queue_UpdateStats_End ($queue);
-        else if ( $queue['type'] === "RecalcPoints" ) Queue_RecalcPoints_End ($queue);
-        else if ( $queue['type'] === "RecalcAllyPoints" ) Queue_RecalcAllyPoints_End ($queue);
-        else if ( $queue['type'] === "AllowName" ) Queue_AllowName_End ($queue);
-        else if ( $queue['type'] === "ChangeEmail" ) Queue_ChangeEmail_End ($queue);
-        else if ( $queue['type'] === "UnbanPlayer" ) Queue_UnbanPlayer_End ($queue);
-        else if ( $queue['type'] === "AllowAttacks" ) Queue_AllowAttacks_End ($queue);
-        else if ( $queue['type'] === "Debug" ) Queue_Debug_End ($queue);
-        else if ( $queue['type'] === "AI" ) Queue_Bot_End ($queue);
-        else if ( $queue['type'] === "Coupon" ) continue;
+        if ( $queue['type'] === QTYP_BUILD ) Queue_Build_End ($queue);
+        else if ( $queue['type'] === QTYP_DEMOLISH ) Queue_Build_End ($queue);
+        else if ( $queue['type'] === QTYP_RESEARCH ) Queue_Research_End ($queue);
+        else if ( $queue['type'] === QTYP_SHIPYARD ) Queue_Shipyard_End ($queue);
+        else if ( $queue['type'] === QTYP_FLEET ) Queue_Fleet_End ($queue);
+        else if ( $queue['type'] === QTYP_UNLOAD_ALL ) Queue_Relogin_End ($queue);
+        else if ( $queue['type'] === QTYP_CLEAN_DEBRIS ) Queue_CleanDebris_End ($queue);
+        else if ( $queue['type'] === QTYP_CLEAN_PLANETS ) Queue_CleanPlanets_End ($queue);
+        else if ( $queue['type'] === QTYP_CLEAN_PLAYERS ) Queue_CleanPlayers_End ($queue);
+        else if ( $queue['type'] === QTYP_UPDATE_STATS ) Queue_UpdateStats_End ($queue);
+        else if ( $queue['type'] === QTYP_RECALC_POINTS ) Queue_RecalcPoints_End ($queue);
+        else if ( $queue['type'] === QTYP_RECALC_ALLY_POINTS ) Queue_RecalcAllyPoints_End ($queue);
+        else if ( $queue['type'] === QTYP_ALLOW_NAME ) Queue_AllowName_End ($queue);
+        else if ( $queue['type'] === QTYP_CHANGE_EMAIL ) Queue_ChangeEmail_End ($queue);
+        else if ( $queue['type'] === QTYP_UNBAN ) Queue_UnbanPlayer_End ($queue);
+        else if ( $queue['type'] === QTYP_ALLOW_ATTACKS ) Queue_AllowAttacks_End ($queue);
+        else if ( $queue['type'] === QTYP_DEBUG ) Queue_Debug_End ($queue);
+        else if ( $queue['type'] === QTYP_AI ) Queue_Bot_End ($queue);
+        else if ( $queue['type'] === QTYP_COUPON ) continue;
 
-        else if ( $queue['type'] === "CommanderOff" ) Queue_Officer_End ($queue);
-        else if ( $queue['type'] === "AdmiralOff" ) Queue_Officer_End ($queue);
-        else if ( $queue['type'] === "EngineerOff" ) Queue_Officer_End ($queue);
-        else if ( $queue['type'] === "GeologeOff" ) Queue_Officer_End ($queue);
-        else if ( $queue['type'] === "TechnocrateOff" ) Queue_Officer_End ($queue);
+        else if ( $queue['type'] === QTYP_COMMANDER_OFF ) Queue_Officer_End ($queue);
+        else if ( $queue['type'] === QTYP_ADMIRAL_OFF ) Queue_Officer_End ($queue);
+        else if ( $queue['type'] === QTYP_ENGINEER_OFF ) Queue_Officer_End ($queue);
+        else if ( $queue['type'] === QTYP_GEOLOGE_OFF ) Queue_Officer_End ($queue);
+        else if ( $queue['type'] === QTYP_TECHNOCRATE_OFF ) Queue_Officer_End ($queue);
 
         else Error ( loca_lang("DEBUG_QUEUE_UNKNOWN", $GlobalUni['lang']) . $queue['type']);
     }
@@ -179,7 +182,7 @@ function UpdateQueue ($until)
 
     // To send and add coupons we don't need to lock the database, otherwise a strange error "Table not locked by LOCK TABLES" occurs.
     
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE end <= $until AND type = 'Coupon' ORDER BY end ASC, prio DESC";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE end <= $until AND type = '".QTYP_COUPON."' ORDER BY end ASC, prio DESC";
     $result = dbquery ($query);
     while ( $queue = dbarray ($result) ) Queue_Coupon_End ($queue);
 }
@@ -189,12 +192,12 @@ function FlushQueue ($planet_id)
 {
     global $db_prefix;
     // Remove the queue at the shipyard
-    $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'Shipyard' AND sub_id = " . $planet_id;
+    $query = "DELETE FROM ".$db_prefix."queue WHERE type = '".QTYP_SHIPYARD."' AND sub_id = " . $planet_id;
     dbquery ( $query );
     // Delete the queue of buildings
     $result = GetBuildQueue ($planet_id);
     while ( $row = dbarray ($result) ) {
-        $query = "DELETE FROM ".$db_prefix."queue WHERE (type = 'Build' OR type = 'Demolish') AND sub_id = " . $row['id'];
+        $query = "DELETE FROM ".$db_prefix."queue WHERE (type = '".QTYP_BUILD."' OR type = '".QTYP_DEMOLISH."') AND sub_id = " . $row['id'];
         dbquery ( $query );
     }
     $query = "DELETE FROM ".$db_prefix."buildqueue WHERE planet_id = " . $planet_id;
@@ -307,8 +310,8 @@ function PropagateBuildQueue ($planet_id, $from)
                 $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
                 AdjustResources ( $m, $k, $d, $planet_id, '-' );
 
-                if ( $destroy ) $BuildEvent = "Demolish";
-                else $BuildEvent = "Build";
+                if ( $destroy ) $BuildEvent = QTYP_DEMOLISH;
+                else $BuildEvent = QTYP_BUILD;
 
                 $duration = floor (BuildDuration ( $id, $lvl, $planet['b'.GID_B_ROBOTS], $planet['b'.GID_B_NANITES], $speed ));
                 AddQueue ( $user['player_id'], $BuildEvent, $row['id'], $id, $lvl, $from, $duration, QUEUE_PRIO_BUILD );
@@ -407,8 +410,8 @@ function BuildEnque ( $user, $planet_id, $id, $destroy, $now=0 )
             AdjustResources ( $m, $k, $d, $planet_id, '-' );
         }
 
-        if ( $destroy ) $BuildEvent = "Demolish";
-        else $BuildEvent = "Build";
+        if ( $destroy ) $BuildEvent = QTYP_DEMOLISH;
+        else $BuildEvent = QTYP_BUILD;
 
         $duration = floor (BuildDuration ( $id, $lvl, $planet['b14'], $planet['b15'], $speed ));
         $row = array ( '', $user['player_id'], $planet_id, $list_id, $id, $lvl, $destroy, $now, $now+$duration );
@@ -436,7 +439,7 @@ function BuildDeque ( $user, $planet_id, $listid )
         $planet_id = $row['planet_id'];
 
         // Do we cancel the current one or the next one?
-        $query = "SELECT * FROM ".$db_prefix."queue WHERE (type = 'Build' OR type = 'Demolish') AND sub_id = " . $row['id'] . " LIMIT 1";
+        $query = "SELECT * FROM ".$db_prefix."queue WHERE (type = '".QTYP_BUILD."' OR type = '".QTYP_DEMOLISH."') AND sub_id = " . $row['id'] . " LIMIT 1";
         $result = dbquery ($query);
         if ( dbrows ($result) ) {       // Cancel the current one
             $queue = dbarray ($result);
@@ -490,8 +493,8 @@ function Queue_Build_End ($queue)
     ProdResources ( $planet, $planet['lastpeek'], $queue['end'] );
 
     // Foolproofing
-    if ( ($queue['type'] === "Build" && $planet["b".$id] >= $lvl) ||
-         ($queue['type'] === "Demolish" && $planet["b".$id] <= $lvl) )
+    if ( ($queue['type'] === QTYP_BUILD && $planet["b".$id] >= $lvl) ||
+         ($queue['type'] === QTYP_DEMOLISH && $planet["b".$id] <= $lvl) )
     {
         RemoveQueue ( $queue['task_id'] );
         dbquery ( "DELETE FROM ".$db_prefix."buildqueue WHERE id = " . $queue['sub_id'] );
@@ -499,7 +502,7 @@ function Queue_Build_End ($queue)
     }
 
     // Number of fields on the planet.
-    if ($queue['type'] === "Build" )
+    if ($queue['type'] === QTYP_BUILD )
     {
         $fields = "fields = fields + 1";
         // Special handling for building a Terraformer or Moonbase -- add the maximum number of fields.
@@ -546,7 +549,7 @@ function Queue_Build_End ($queue)
 function GetShipyardQueue ($planet_id)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Shipyard' AND sub_id = $planet_id ORDER BY start ASC";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_SHIPYARD."' AND sub_id = $planet_id ORDER BY start ASC";
     return dbquery ($query);
 }
 
@@ -555,7 +558,7 @@ function ShipyardLatestTime ($planet_id, $now)
 {
     global $db_prefix;
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Shipyard' AND sub_id = $planet_id ORDER BY end DESC";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_SHIPYARD."' AND sub_id = $planet_id ORDER BY end DESC";
     $result = dbquery ($query);
     if (dbrows($result) > 0) {
         $queue = dbarray ($result);
@@ -632,7 +635,7 @@ function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
         // Списать ресурсы.
         AdjustResources ( $m, $k, $d, $planet_id, '-' );
 
-        AddQueue ($player_id, "Shipyard", $planet_id, $gid, $value, $now, $seconds);
+        AddQueue ($player_id, QTYP_SHIPYARD, $planet_id, $gid, $value, $now, $seconds);
     }
 }
 
@@ -712,7 +715,7 @@ function CanResearch ($user, $planet, $id, $lvl)
         if ($resq) return loca_lang("BUILD_ERROR_RESEARCH_ALREADY", $user['lang']);
 
         // Is the research lab being upgraded on any planet?
-        $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = ".GID_B_RES_LAB." AND (type = 'Build' OR type = 'Demolish') AND owner_id = " . $user['player_id'];
+        $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = ".GID_B_RES_LAB." AND (type = '".QTYP_BUILD."' OR type = '".QTYP_DEMOLISH."') AND owner_id = " . $user['player_id'];
         $result = dbquery ( $query );
         $busy = ( dbrows ($result) > 0 );
         if ( $busy ) return loca_lang("BUILD_ERROR_RESEARCH_LAB_BUILDING", $user['lang']);
@@ -767,7 +770,7 @@ function StartResearch ($player_id, $planet_id, $id, $now)
         $res = ResearchPrice ( $id, $level );
         AdjustResources ( $res['m'], $res['k'], $res['d'], $planet_id, '-' );
 
-        AddQueue ($player_id, "Research", $planet_id, $id, $level, $now, $seconds);
+        AddQueue ($player_id, QTYP_RESEARCH, $planet_id, $id, $level, $now, $seconds);
     }
 }
 
@@ -815,7 +818,7 @@ function StopResearch ($player_id)
 function GetResearchQueue ($player_id)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Research' AND owner_id = $player_id ORDER BY start ASC";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_RESEARCH."' AND owner_id = $player_id ORDER BY start ASC";
     return dbquery ($query);
 }
 
@@ -910,13 +913,13 @@ function AddRecalcPointsEvent ($player_id)
 {
     global $db_prefix;
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'RecalcPoints' AND owner_id = $player_id";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_RECALC_POINTS."' AND owner_id = $player_id";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
         $when = mktime(0, 10, 0, date("m"), date("d")+1, date("y"));
-        $queue = array ( null, $player_id, "RecalcPoints", 0, 0, 0, $now, $when, QUEUE_PRIO_RECALC_POINTS );
+        $queue = array ( null, $player_id, QTYP_RECALC_POINTS, 0, 0, 0, $now, $when, QUEUE_PRIO_RECALC_POINTS );
         AddDBRow ( $queue, "queue" );
     }
 }
@@ -933,7 +936,7 @@ function Queue_RecalcPoints_End ($queue)
 function CanEnableVacation ($player_id)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE (type = 'Build' OR type = 'Demolish' OR type = 'Research' OR type = 'Shipyard' OR type = 'Fleet') AND owner_id = $player_id";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE (type = '".QTYP_BUILD."' OR type = '".QTYP_DEMOLISH."' OR type = '".QTYP_RESEARCH."' OR type = '".QTYP_SHIPYARD."' OR type = '".QTYP_FLEET."') AND owner_id = $player_id";
     $result = dbquery ( $query );
     if ( dbrows ($result) > 0 ) return false;
     else return true;
@@ -944,13 +947,13 @@ function AddAllowNameEvent ($player_id)
 {
     global $db_prefix;
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'AllowName' AND owner_id = $player_id";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_ALLOW_NAME."' AND owner_id = $player_id";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
         $when = $now + 7 * 24 * 60 * 60;
-        $queue = array ( null, $player_id, "AllowName", 0, 0, 0, $now, $when, 0 );
+        $queue = array ( null, $player_id, QTYP_ALLOW_NAME, 0, 0, 0, $now, $when, 0 );
         $id = AddDBRow ( $queue, "queue" );
         $query = "UPDATE ".$db_prefix."users SET name_changed = 1, name_until = $when WHERE player_id = $player_id";
         dbquery ($query);
@@ -961,7 +964,7 @@ function AddAllowNameEvent ($player_id)
 function CanChangeName ($player_id)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'AllowName' AND owner_id = $player_id";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_ALLOW_NAME."' AND owner_id = $player_id";
     $result = dbquery ( $query );
     if ( dbrows ($result) > 0 ) return false;
     else return true;
@@ -1002,12 +1005,12 @@ function AddChangeEmailEvent ($player_id)
 {
     global $db_prefix;
 
-    $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'ChangeEmail' AND owner_id = $player_id";
+    $query = "DELETE FROM ".$db_prefix."queue WHERE type = '".QTYP_CHANGE_EMAIL."' AND owner_id = $player_id";
     dbquery ($query);
 
     $now = time ();
     $when = $now + 7 * 24 * 60 * 60;
-    $queue = array ( null, $player_id, "ChangeEmail", 0, 0, 0, $now, $when, 0 );
+    $queue = array ( null, $player_id, QTYP_CHANGE_EMAIL, 0, 0, 0, $now, $when, 0 );
     $id = AddDBRow ( $queue, "queue" );
 }
 
@@ -1032,7 +1035,7 @@ function AddUpdateStatsEvent ($now=0)
 
     if ($now == 0) $now = time ();
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'UpdateStats'";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_UPDATE_STATS."'";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 )
     {
@@ -1042,7 +1045,7 @@ function AddUpdateStatsEvent ($now=0)
         else if ( $hours >= 16 && $hours < 20 ) $when = mktime ( 20, 5, 0 );
         else $when = mktime ( 8, 5, 0, $today['mon'], $today['mday'] + 1 );
 
-        $queue = array ( null, USER_SPACE, "UpdateStats", 0, 0, 0, $now, $when, QUEUE_PRIO_UPDATE_STATS );
+        $queue = array ( null, USER_SPACE, QTYP_UPDATE_STATS, 0, 0, 0, $now, $when, QUEUE_PRIO_UPDATE_STATS );
         AddDBRow ( $queue, "queue" );
     }
 }
@@ -1069,13 +1072,13 @@ function AddReloginEvent ()
 {
     global $db_prefix;
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'UnloadAll'";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_UNLOAD_ALL."'";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
         $when = mktime(3, 0, 0, date("m"), date("d")+1, date("y"));;
-        $queue = array ( null, USER_SPACE, "UnloadAll", 0, 0, 0, $now, $when, QUEUE_PRIO_RELOGIN );
+        $queue = array ( null, USER_SPACE, QTYP_UNLOAD_ALL, 0, 0, 0, $now, $when, QUEUE_PRIO_RELOGIN );
         $id = AddDBRow ( $queue, "queue" );
     }
 }
@@ -1102,14 +1105,14 @@ function AddCleanDebrisEvent ()
 {
     global $db_prefix;
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'CleanDebris'";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_CLEAN_DEBRIS."'";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
         $week = mktime(0, 0, 0, date('m'), date('d')-date('w'), date('Y')) + 24 * 60 * 60;
         $when = $week + 7 * 24 * 60 * 60 + 10 * 60;
-        $queue = array ( null, USER_SPACE, "CleanDebris", 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_DEBRIS );
+        $queue = array ( null, USER_SPACE, QTYP_CLEAN_DEBRIS, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_DEBRIS );
         $id = AddDBRow ( $queue, "queue" );
     }
 }
@@ -1132,13 +1135,13 @@ function AddCleanPlanetsEvent ()
 {
     global $db_prefix;
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'CleanPlanets'";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_CLEAN_PLANETS."'";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
         $when = mktime(1, 10, 0, date("m"), date("d")+1, date("y"));
-        $queue = array ( null, USER_SPACE, "CleanPlanets", 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_PLANETS );
+        $queue = array ( null, USER_SPACE, QTYP_CLEAN_PLANETS, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_PLANETS );
         $id = AddDBRow ( $queue, "queue" );
     }
 }
@@ -1183,13 +1186,13 @@ function AddCleanPlayersEvent ()
 {
     global $db_prefix;
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'CleanPlayers'";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_CLEAN_PLAYERS."'";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
         $when = mktime(1, 10, 0, date("m"), date("d")+1, date("y"));
-        $queue = array ( null, USER_SPACE, "CleanPlayers", 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_PLAYERS );
+        $queue = array ( null, USER_SPACE, QTYP_CLEAN_PLAYERS, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_PLAYERS );
         $id = AddDBRow ( $queue, "queue" );
     }
 }
@@ -1231,13 +1234,13 @@ function AddRecalcAllyPointsEvent ()
 {
     global $db_prefix;
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'RecalcAllyPoints' ";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_RECALC_ALLY_POINTS."' ";
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
         $when = mktime(0, 10, 0, date("m"), date("d")+1, date("y"));
-        $queue = array ( null, USER_SPACE, "RecalcAllyPoints", 0, 0, 0, $now, $when, QUEUE_PRIO_RECALC_ALLY_POINTS );
+        $queue = array ( null, USER_SPACE, QTYP_RECALC_ALLY_POINTS, 0, 0, 0, $now, $when, QUEUE_PRIO_RECALC_ALLY_POINTS );
         AddDBRow ( $queue, "queue" );
     }
 }
@@ -1254,7 +1257,7 @@ function Queue_RecalcAllyPoints_End ($queue)
 function AddDebugEvent ($when)
 {
     $now = time ();
-    $queue = array ( null, USER_SPACE, "Debug", 0, 0, 0, $now, $when, QUEUE_PRIO_DEBUG );
+    $queue = array ( null, USER_SPACE, QTYP_DEBUG, 0, 0, 0, $now, $when, QUEUE_PRIO_DEBUG );
     $id = AddDBRow ( $queue, "queue" );
 }
 // Debug Event.
@@ -1269,7 +1272,7 @@ function Queue_Debug_End ($queue)
 function GetFleetQueue ($fleet_id)
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND sub_id = $fleet_id";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_FLEET."' AND sub_id = $fleet_id";
     $result = dbquery ($query);
     if ($result) return dbarray ($result);
     else return NULL;
@@ -1281,7 +1284,7 @@ function EnumFleetQueue ($player_id)
     global $db_prefix;
     $query = "SELECT planet_id FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type < ".PTYP_DF;
     $query = "SELECT fleet_id FROM ".$db_prefix."fleet WHERE target_planet = ANY ($query) AND (mission < ".FTYP_RETURN." OR mission = ".(FTYP_ACS_HOLD+FTYP_ORBITING).")";
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND (sub_id = ANY ($query) OR owner_id = $player_id)";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_FLEET."' AND (sub_id = ANY ($query) OR owner_id = $player_id)";
     $result = dbquery ($query);
     return $result;
 }
@@ -1291,11 +1294,11 @@ function EnumFleetQueue ($player_id)
 function EnumOwnFleetQueue ($player_id, $ipm=0)
 {
     global $db_prefix;
-    if ($ipm) $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND owner_id = $player_id ORDER BY end ASC, prio DESC";
+    if ($ipm) $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_FLEET."' AND owner_id = $player_id ORDER BY end ASC, prio DESC";
     else
     {
         $query = "SELECT fleet_id FROM ".$db_prefix."fleet WHERE mission <> ".FTYP_MISSILE." AND owner_id = $player_id";
-        $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND sub_id = ANY ($query) ORDER BY end ASC, prio DESC";
+        $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_FLEET."' AND sub_id = ANY ($query) ORDER BY end ASC, prio DESC";
     }
     $result = dbquery ($query);
     return $result;
@@ -1306,7 +1309,7 @@ function EnumOwnFleetQueueSpecial ($player_id)
 {
     global $db_prefix;
     $query = "SELECT fleet_id FROM ".$db_prefix."fleet WHERE mission < ".FTYP_MISSILE." AND owner_id = $player_id";
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Fleet' AND sub_id = ANY ($query) ORDER BY start DESC";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_FLEET."' AND sub_id = ANY ($query) ORDER BY start DESC";
     $result = dbquery ($query);
     return $result;
 }
