@@ -5,68 +5,74 @@
 // Calculation of cost, build time and required conditions.
 
 // Level 1 cost.
-$initial = array (      // m, k, d, e
+// Factor in the exponential growth of technology. OGame is a game of exponential.
+$initial = array (      // m, k, d, e, factor
     // Buildings
-    GID_B_ROBOTS => array (400, 120, 200, 0),
-    GID_B_NANITES => array (1000000, 500000, 100000, 0),
-    GID_B_SHIPYARD => array (400, 200, 100, 0),
-    GID_B_METAL_STOR => array (2000, 0, 0, 0),
-    GID_B_CRYS_STOR => array (2000, 1000, 0, 0),
-    GID_B_DEUT_STOR => array (2000, 2000, 0, 0),
-    GID_B_RES_LAB => array (200, 400, 200, 0),
-    GID_B_TERRAFORMER => array (0, 50000, 100000, 1000),
-    GID_B_ALLY_DEPOT => array (20000, 40000,  0, 0),
-    GID_B_MISS_SILO => array (20000, 20000, 1000, 0),
+    GID_B_METAL_MINE => array (60, 15, 0, 0, 1.5),
+    GID_B_CRYS_MINE => array (48, 24, 0, 0, 1.6),
+    GID_B_DEUT_SYNTH => array (225, 75, 0, 0, 1.5),
+    GID_B_SOLAR => array (75, 30, 0, 0, 1.5),
+    GID_B_FUSION => array (900, 360, 180, 0, 1.8),
+    GID_B_ROBOTS => array (400, 120, 200, 0, 2),
+    GID_B_NANITES => array (1000000, 500000, 100000, 0, 2),
+    GID_B_SHIPYARD => array (400, 200, 100, 0, 2),
+    GID_B_METAL_STOR => array (2000, 0, 0, 0, 2),
+    GID_B_CRYS_STOR => array (2000, 1000, 0, 0, 2),
+    GID_B_DEUT_STOR => array (2000, 2000, 0, 0, 2),
+    GID_B_RES_LAB => array (200, 400, 200, 0, 2),
+    GID_B_TERRAFORMER => array (0, 50000, 100000, 1000, 2),
+    GID_B_ALLY_DEPOT => array (20000, 40000,  0, 0, 2),
+    GID_B_MISS_SILO => array (20000, 20000, 1000, 0, 2),
     // Moon
-    GID_B_LUNAR_BASE => array (20000, 40000, 20000, 0),
-    GID_B_PHALANX => array (20000, 40000, 20000, 0),
-    GID_B_JUMP_GATE => array (2000000, 4000000, 2000000, 0),
+    GID_B_LUNAR_BASE => array (20000, 40000, 20000, 0, 2),
+    GID_B_PHALANX => array (20000, 40000, 20000, 0, 2),
+    GID_B_JUMP_GATE => array (2000000, 4000000, 2000000, 0, 2),
 
     // Fleet
-    GID_F_SC => array (2000, 2000, 0, 0),
-    GID_F_LC => array (6000, 6000, 0, 0),
-    GID_F_LF => array (3000, 1000, 0, 0),
-    GID_F_HF => array (6000, 4000, 0, 0),
-    GID_F_CRUISER => array (20000, 7000, 2000, 0),
-    GID_F_BATTLESHIP => array (45000, 15000, 0, 0),
-    GID_F_COLON => array (10000, 20000, 10000, 0),
-    GID_F_RECYCLER => array (10000, 6000, 2000, 0),
-    GID_F_PROBE => array (0, 1000, 0, 0),
-    GID_F_BOMBER => array (50000, 25000, 15000, 0),
-    GID_F_SAT => array (0, 2000, 500, 0),
-    GID_F_DESTRO => array (60000, 50000, 15000, 0),
-    GID_F_DEATHSTAR => array (5000000, 4000000, 1000000, 0),
-    GID_F_BATTLECRUISER => array (30000, 40000, 15000, 0),
+    GID_F_SC => array (2000, 2000, 0, 0, 0),
+    GID_F_LC => array (6000, 6000, 0, 0, 0),
+    GID_F_LF => array (3000, 1000, 0, 0, 0),
+    GID_F_HF => array (6000, 4000, 0, 0, 0),
+    GID_F_CRUISER => array (20000, 7000, 2000, 0, 0),
+    GID_F_BATTLESHIP => array (45000, 15000, 0, 0, 0),
+    GID_F_COLON => array (10000, 20000, 10000, 0, 0),
+    GID_F_RECYCLER => array (10000, 6000, 2000, 0, 0),
+    GID_F_PROBE => array (0, 1000, 0, 0, 0),
+    GID_F_BOMBER => array (50000, 25000, 15000, 0, 0),
+    GID_F_SAT => array (0, 2000, 500, 0, 0),
+    GID_F_DESTRO => array (60000, 50000, 15000, 0, 0),
+    GID_F_DEATHSTAR => array (5000000, 4000000, 1000000, 0, 0),
+    GID_F_BATTLECRUISER => array (30000, 40000, 15000, 0, 0),
 
     // Defense
-    GID_D_RL => array (2000, 0, 0, 0),
-    GID_D_LL => array (1500, 500, 0, 0),
-    GID_D_HL => array (6000, 2000, 0, 0),
-    GID_D_GAUSS => array (20000, 15000, 2000, 0),
-    GID_D_ION => array (2000, 6000, 0, 0),
-    GID_D_PLASMA => array (50000, 50000, 30000, 0),
-    GID_D_SDOME => array (10000, 10000, 0, 0),
-    GID_D_LDOME => array (50000, 50000, 0, 0),
-    GID_D_ABM => array (8000, 0, 2000, 0),
-    GID_D_IPM => array (12500, 2500, 10000, 0),
+    GID_D_RL => array (2000, 0, 0, 0, 0),
+    GID_D_LL => array (1500, 500, 0, 0, 0),
+    GID_D_HL => array (6000, 2000, 0, 0, 0),
+    GID_D_GAUSS => array (20000, 15000, 2000, 0, 0),
+    GID_D_ION => array (2000, 6000, 0, 0, 0),
+    GID_D_PLASMA => array (50000, 50000, 30000, 0, 0),
+    GID_D_SDOME => array (10000, 10000, 0, 0, 0),
+    GID_D_LDOME => array (50000, 50000, 0, 0, 0),
+    GID_D_ABM => array (8000, 0, 2000, 0, 0),
+    GID_D_IPM => array (12500, 2500, 10000, 0, 0),
 
     // Research
-    GID_R_ESPIONAGE => array (200, 1000, 200, 0),
-    GID_R_COMPUTER => array (0, 400, 600, 0),
-    GID_R_WEAPON => array (800, 200, 0, 0),
-    GID_R_SHIELD => array (200, 600, 0, 0),
-    GID_R_ARMOUR => array (1000, 0, 0, 0),
-    GID_R_ENERGY => array (0, 800, 400, 0),
-    GID_R_HYPERSPACE => array (0, 4000, 2000, 0),
-    GID_R_COMBUST_DRIVE => array (400, 0, 600, 0),
-    GID_R_IMPULSE_DRIVE => array (2000, 4000, 600, 0),
-    GID_R_HYPER_DRIVE => array (10000, 20000, 6000, 0),
-    GID_R_LASER_TECH => array (200, 100, 0, 0),
-    GID_R_ION_TECH => array (1000, 300, 100, 0),
-    GID_R_PLASMA_TECH => array (2000, 4000, 1000, 0),
-    GID_R_IGN => array (240000, 400000, 160000, 0),
-    GID_R_EXPEDITION => array (4000, 8000, 4000, 0),
-    GID_R_GRAVITON => array (0, 0, 0, 300000),
+    GID_R_ESPIONAGE => array (200, 1000, 200, 0, 2),
+    GID_R_COMPUTER => array (0, 400, 600, 0, 2),
+    GID_R_WEAPON => array (800, 200, 0, 0, 2),
+    GID_R_SHIELD => array (200, 600, 0, 0, 2),
+    GID_R_ARMOUR => array (1000, 0, 0, 0, 2),
+    GID_R_ENERGY => array (0, 800, 400, 0, 2),
+    GID_R_HYPERSPACE => array (0, 4000, 2000, 0, 2),
+    GID_R_COMBUST_DRIVE => array (400, 0, 600, 0, 2),
+    GID_R_IMPULSE_DRIVE => array (2000, 4000, 600, 0, 2),
+    GID_R_HYPER_DRIVE => array (10000, 20000, 6000, 0, 2),
+    GID_R_LASER_TECH => array (200, 100, 0, 0, 2),
+    GID_R_ION_TECH => array (1000, 300, 100, 0, 2),
+    GID_R_PLASMA_TECH => array (2000, 4000, 1000, 0, 2),
+    GID_R_IGN => array (240000, 400000, 160000, 0, 2),
+    GID_R_EXPEDITION => array (4000, 8000, 4000, 0, 2),
+    GID_R_GRAVITON => array (0, 0, 0, 300000, 3),
 );
 
 function BuildMeetRequirement ( $user, $planet, $id )
@@ -109,41 +115,13 @@ function BuildMeetRequirement ( $user, $planet, $id )
 function BuildPrice ( $id, $lvl )
 {
     global $initial;
-    switch ($id)
-    {
-        case GID_B_METAL_MINE:   // Metal Mine
-            $m = floor (60 * pow(1.5, $lvl-1));
-            $k = floor (15 * pow(1.5, $lvl-1));
-            $d = $e = 0;
-            break;
-        case GID_B_CRYS_MINE:   // Crystal Mine
-            $m = floor (48 * pow(1.6, $lvl-1));
-            $k = floor (24 * pow(1.6, $lvl-1));
-            $d = $e = 0;
-            break;
-        case GID_B_DEUT_SYNTH:   // Deuterium Synthesizer
-            $m = floor (225 * pow(1.5, $lvl-1));
-            $k = floor (75 * pow(1.5, $lvl-1));
-            $d = $e = 0;
-            break;
-        case GID_B_SOLAR:   // Solar Plant
-            $m = floor (75 * pow(1.5, $lvl-1));
-            $k = floor (30 * pow(1.5, $lvl-1));
-            $d = $e = 0;
-            break;
-        case GID_B_FUSION:   // Fusion Reactor
-            $m = floor (900 * pow(1.8, $lvl-1));
-            $k = floor (360 * pow(1.8, $lvl-1));
-            $d = floor (180 * pow(1.8, $lvl-1));
-            $e = 0;
-            break;
-        default:
-            $m = $initial[$id][0] * pow(2, $lvl-1);
-            $k = $initial[$id][1] * pow(2, $lvl-1);
-            $d = $initial[$id][2] * pow(2, $lvl-1);
-            $e = $initial[$id][3] * pow(2, $lvl-1);
-            break;
-    }
+
+    $factor = $initial[$id][4];
+    $m = $initial[$id][0] * pow($factor, $lvl-1);
+    $k = $initial[$id][1] * pow($factor, $lvl-1);
+    $d = $initial[$id][2] * pow($factor, $lvl-1);
+    $e = $initial[$id][3] * pow($factor, $lvl-1);
+
     $res = array ( 'm' => $m, 'k' => $k, 'd' => $d, 'e' => $e );
     return $res;
 }
@@ -234,16 +212,13 @@ function ResearchMeetRequirement ( $user, $planet, $id )
 function ResearchPrice ( $id, $lvl )
 {
     global $initial;
-    if ($id == GID_R_GRAVITON) {
-        $m = $k = $d = 0;
-        $e = $initial[$id][3] * pow(3, $lvl-1);
-    }
-    else {
-        $m = $initial[$id][0] * pow(2, $lvl-1);
-        $k = $initial[$id][1] * pow(2, $lvl-1);
-        $d = $initial[$id][2] * pow(2, $lvl-1);
-        $e = $initial[$id][3] * pow(2, $lvl-1);
-    }
+
+    $factor = $initial[$id][4];
+    $m = $initial[$id][0] * pow($factor, $lvl-1);
+    $k = $initial[$id][1] * pow($factor, $lvl-1);
+    $d = $initial[$id][2] * pow($factor, $lvl-1);
+    $e = $initial[$id][3] * pow($factor, $lvl-1);
+
     $res = array ( 'm' => $m, 'k' => $k, 'd' => $d, 'e' => $e );
     return $res;
 }
