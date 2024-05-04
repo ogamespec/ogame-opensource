@@ -149,33 +149,37 @@ function UpdateQueue ($until)
     while ($rows--) {
         $queue = dbarray ($result);
 
-        if ( $queue['type'] === QTYP_BUILD ) Queue_Build_End ($queue);
-        else if ( $queue['type'] === QTYP_DEMOLISH ) Queue_Build_End ($queue);
-        else if ( $queue['type'] === QTYP_RESEARCH ) Queue_Research_End ($queue);
-        else if ( $queue['type'] === QTYP_SHIPYARD ) Queue_Shipyard_End ($queue);
-        else if ( $queue['type'] === QTYP_FLEET ) Queue_Fleet_End ($queue);
-        else if ( $queue['type'] === QTYP_UNLOAD_ALL ) Queue_Relogin_End ($queue);
-        else if ( $queue['type'] === QTYP_CLEAN_DEBRIS ) Queue_CleanDebris_End ($queue);
-        else if ( $queue['type'] === QTYP_CLEAN_PLANETS ) Queue_CleanPlanets_End ($queue);
-        else if ( $queue['type'] === QTYP_CLEAN_PLAYERS ) Queue_CleanPlayers_End ($queue);
-        else if ( $queue['type'] === QTYP_UPDATE_STATS ) Queue_UpdateStats_End ($queue);
-        else if ( $queue['type'] === QTYP_RECALC_POINTS ) Queue_RecalcPoints_End ($queue);
-        else if ( $queue['type'] === QTYP_RECALC_ALLY_POINTS ) Queue_RecalcAllyPoints_End ($queue);
-        else if ( $queue['type'] === QTYP_ALLOW_NAME ) Queue_AllowName_End ($queue);
-        else if ( $queue['type'] === QTYP_CHANGE_EMAIL ) Queue_ChangeEmail_End ($queue);
-        else if ( $queue['type'] === QTYP_UNBAN ) Queue_UnbanPlayer_End ($queue);
-        else if ( $queue['type'] === QTYP_ALLOW_ATTACKS ) Queue_AllowAttacks_End ($queue);
-        else if ( $queue['type'] === QTYP_DEBUG ) Queue_Debug_End ($queue);
-        else if ( $queue['type'] === QTYP_AI ) Queue_Bot_End ($queue);
-        else if ( $queue['type'] === QTYP_COUPON ) continue;
+        switch ($queue['type']) {
+            case QTYP_BUILD: Queue_Build_End ($queue); break;
+            case QTYP_DEMOLISH: Queue_Build_End ($queue); break;
+            case QTYP_RESEARCH: Queue_Research_End ($queue); break;
+            case QTYP_SHIPYARD: Queue_Shipyard_End ($queue); break;
+            case QTYP_FLEET: Queue_Fleet_End ($queue); break;
+            case QTYP_UNLOAD_ALL: Queue_Relogin_End ($queue); break;
+            case QTYP_CLEAN_DEBRIS: Queue_CleanDebris_End ($queue); break;
+            case QTYP_CLEAN_PLANETS: Queue_CleanPlanets_End ($queue); break;
+            case QTYP_CLEAN_PLAYERS: Queue_CleanPlayers_End ($queue); break;
+            case QTYP_UPDATE_STATS: Queue_UpdateStats_End ($queue); break;
+            case QTYP_RECALC_POINTS: Queue_RecalcPoints_End ($queue); break;
+            case QTYP_RECALC_ALLY_POINTS: Queue_RecalcAllyPoints_End ($queue); break;
+            case QTYP_ALLOW_NAME: Queue_AllowName_End ($queue); break;
+            case QTYP_CHANGE_EMAIL: Queue_ChangeEmail_End ($queue); break;
+            case QTYP_UNBAN: Queue_UnbanPlayer_End ($queue); break;
+            case QTYP_ALLOW_ATTACKS: Queue_AllowAttacks_End ($queue); break;
+            case QTYP_DEBUG: Queue_Debug_End ($queue); break;
+            case QTYP_AI: Queue_Bot_End ($queue); break;
+            case QTYP_COUPON: break;
 
-        else if ( $queue['type'] === QTYP_COMMANDER_OFF ) Queue_Officer_End ($queue);
-        else if ( $queue['type'] === QTYP_ADMIRAL_OFF ) Queue_Officer_End ($queue);
-        else if ( $queue['type'] === QTYP_ENGINEER_OFF ) Queue_Officer_End ($queue);
-        else if ( $queue['type'] === QTYP_GEOLOGE_OFF ) Queue_Officer_End ($queue);
-        else if ( $queue['type'] === QTYP_TECHNOCRATE_OFF ) Queue_Officer_End ($queue);
+            case QTYP_COMMANDER_OFF: Queue_Officer_End ($queue); break;
+            case QTYP_ADMIRAL_OFF: Queue_Officer_End ($queue); break;
+            case QTYP_ENGINEER_OFF: Queue_Officer_End ($queue); break;
+            case QTYP_GEOLOGE_OFF: Queue_Officer_End ($queue); break;
+            case QTYP_TECHNOCRATE_OFF: Queue_Officer_End ($queue); break;
 
-        else Error ( loca_lang("DEBUG_QUEUE_UNKNOWN", $GlobalUni['lang']) . $queue['type']);
+            default:
+                Error ( loca_lang("DEBUG_QUEUE_UNKNOWN", $GlobalUni['lang']) . $queue['type']);
+                break;
+        }
     }
 
     UnlockTables ();
@@ -413,7 +417,7 @@ function BuildEnque ( $user, $planet_id, $id, $destroy, $now=0 )
         if ( $destroy ) $BuildEvent = QTYP_DEMOLISH;
         else $BuildEvent = QTYP_BUILD;
 
-        $duration = floor (BuildDuration ( $id, $lvl, $planet['b14'], $planet['b15'], $speed ));
+        $duration = floor (BuildDuration ( $id, $lvl, $planet['b'.GID_B_ROBOTS], $planet['b'.GID_B_NANITES], $speed ));
         $row = array ( '', $user['player_id'], $planet_id, $list_id, $id, $lvl, $destroy, $now, $now+$duration );
         $sub_id = AddDBRow ( $row, "buildqueue" );
         if ($list_id == 1) AddQueue ( $user['player_id'], $BuildEvent, $sub_id, $id, $lvl, $now, $duration, QUEUE_PRIO_BUILD );
