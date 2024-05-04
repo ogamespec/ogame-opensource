@@ -878,4 +878,16 @@ function GetUsersCount()
     return dbrows ($result);
 }
 
+// Get a top1 player for expedition calculations.
+function GetTop1 ()
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."users ORDER BY score1 DESC LIMIT 1";
+    $result = dbquery ($query);
+    if ( dbrows($result) ) {
+        return dbarray ($result);
+    }
+    return null;
+}
+
 ?>

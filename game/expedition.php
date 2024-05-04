@@ -3,10 +3,9 @@
 // Expeditions.
 // Expedition messages are sent out in the user's language (the loca_lang method is used).
 
-// Important! This part of the game may not be accurately implemented, because there were no gane source code.
-// It is necessary to work well on this game feature, in particular, to add customization of exptab table, through Admin Area.
+// Important! This part of the game may not be accurately implemented, because there is no source code.
 
-// Expedition visit count is stored as the metal value on the far space planet object.
+// Expedition visit counter is stored as the metal value on the far space planet object.
 
 // Expedition result
 const EXP_NOTHING = 0;
@@ -38,6 +37,53 @@ function LoadExpeditionSettings ()
     return dbarray ($result);
 }
 
+function SaveExpeditionSettings ($exptab)
+{
+    global $db_prefix;
+
+    $query = "UPDATE ".$db_prefix."exptab SET ".
+        "chance_success='".$exptab['chance_success']."', ".
+
+        "depleted_min='".$exptab['depleted_min']."', ".
+        "depleted_med='".$exptab['depleted_med']."', ".
+        "depleted_max='".$exptab['depleted_max']."', ".
+
+        "chance_depleted_min='".$exptab['chance_depleted_min']."', ".
+        "chance_depleted_med='".$exptab['chance_depleted_med']."', ".
+        "chance_depleted_max='".$exptab['chance_depleted_max']."', ".
+
+        "chance_alien='".$exptab['chance_alien']."', ".
+        "chance_pirates='".$exptab['chance_pirates']."', ".
+        "chance_dm='".$exptab['chance_dm']."', ".
+        "chance_lost='".$exptab['chance_lost']."', ".
+        "chance_delay='".$exptab['chance_delay']."', ".
+        "chance_accel='".$exptab['chance_accel']."', ".
+        "chance_res='".$exptab['chance_res']."', ".
+        "chance_fleet='".$exptab['chance_fleet']."', ".
+
+        "dm_factor='".$exptab['dm_factor']."', ".
+
+        "score_cap1='".$exptab['score_cap1']."', ".
+        "score_cap2='".$exptab['score_cap2']."', ".
+        "score_cap3='".$exptab['score_cap3']."', ".
+        "score_cap4='".$exptab['score_cap4']."', ".
+        "score_cap5='".$exptab['score_cap5']."', ".
+        "score_cap6='".$exptab['score_cap6']."', ".
+        "score_cap7='".$exptab['score_cap7']."', ".
+        "score_cap8='".$exptab['score_cap8']."', ".
+        "limit_cap1='".$exptab['limit_cap1']."', ".
+        "limit_cap2='".$exptab['limit_cap2']."', ".
+        "limit_cap3='".$exptab['limit_cap3']."', ".
+        "limit_cap4='".$exptab['limit_cap4']."', ".
+        "limit_cap5='".$exptab['limit_cap5']."', ".
+        "limit_cap6='".$exptab['limit_cap6']."', ".
+        "limit_cap7='".$exptab['limit_cap7']."', ".
+        "limit_cap8='".$exptab['limit_cap8']."', ".
+        "limit_max='".$exptab['limit_max']."';" ;
+
+    dbquery ($query);
+}
+
 // Count the points of the expeditionary fleet.
 function ExpPoints ( $fleet )
 {
@@ -56,20 +102,29 @@ function ExpPoints ( $fleet )
 }
 
 // The upper limit of expedition points.
-function ExpUpperLimit ()
+function ExpUpperLimit ($exptab)
 {
-    global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."users ORDER BY score1 DESC LIMIT 1";
-    $result = dbquery ($query);
-    if ( $result ) {
-        $user = dbarray ($result);
-        if ( $user['score1'] >= 5000000000 ) return 12000;
+    $user = GetTop1 ();
+    if ($user) {
+
+        $score = $user['score1'] / 1000;
+
+        if ($score < $exptab['score_cap1']) return $exptab['limit_cap1'];
+        if ($score < $exptab['score_cap2']) return $exptab['limit_cap2'];
+        if ($score < $exptab['score_cap3']) return $exptab['limit_cap3'];
+        if ($score < $exptab['score_cap4']) return $exptab['limit_cap4'];
+        if ($score < $exptab['score_cap5']) return $exptab['limit_cap5'];
+        if ($score < $exptab['score_cap6']) return $exptab['limit_cap6'];
+        if ($score < $exptab['score_cap7']) return $exptab['limit_cap7'];
+        if ($score < $exptab['score_cap8']) return $exptab['limit_cap8'];
+
+        return $exptab['limit_max'];
     }
-    return 9000;
+    return $exptab['limit_cap1'];
 }
 
 // Nothing happened.
-function Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_NothingHappens ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     $msg = array (
         loca_lang ("EXP_NOTHING_1", $lang),
@@ -139,7 +194,7 @@ function Logbook ($expcount, $exptab, $lang)
 // Successful events of the expedition
 
 // Encountering aliens
-function Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_BattleAliens ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     $weak = array (
         loca_lang ("EXP_ALIENS_WEAK_1", $lang),
@@ -183,7 +238,7 @@ function Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 // ---
 
 // Meet the pirates
-function Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_BattlePirates ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     $weak = array (
         loca_lang ("EXP_PIRATES_WEAK_1", $lang),
@@ -228,7 +283,7 @@ function Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 // ---
 
 // Finding Dark Matter
-function Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_DarkMatterFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     global $db_prefix;
     $player_id = $fleet_obj['owner_id'];
@@ -267,8 +322,9 @@ function Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target, $lan
         $msg = $small[$n];
     }
 
-    // TODO: This is a tuning specifically for the OpenSource project. We need to add this multiplier to the expedition settings table, instead of hardcode
-    $dm *= 3;
+    $dm_factor = $exptab['dm_factor'];
+    if ($dm_factor == 0) $dm_factor = 1;
+    $dm *= $dm_factor;
 
     $msg .= va ( loca_lang("EXP_FOUND", $lang), nicenum($dm), loca_lang("DM", $lang) );
 
@@ -286,7 +342,7 @@ function Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target, $lan
 // ---
 
 // The loss of the entire fleet
-function Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_LostFleet ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     $msg = array (
         loca_lang ("EXP_LOST_1", $lang),
@@ -310,7 +366,7 @@ function Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 // ---
 
 // Delayed return of the expedition
-function Exp_DelayFleet ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_DelayFleet ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     $msg = array (
         loca_lang ("EXP_DELAY_1", $lang),
@@ -337,7 +393,7 @@ function Exp_DelayFleet ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 }
 
 // Accelerating the return of the expedition
-function Exp_AccelFleet ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_AccelFleet ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     $msg = array (
         loca_lang ("EXP_ACCEL_1", $lang),
@@ -361,7 +417,7 @@ function Exp_AccelFleet ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 // ---
 
 // Finding resources
-function Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_ResourcesFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     $small = array (
         loca_lang ("EXP_RESFOUND_SMALL_1", $lang),
@@ -411,7 +467,7 @@ function Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang
     else if ( $type == 2) $roll /= 3;
 
     // Calculate the quantity of the resource found
-    $points = min ( max ( 200, ExpPoints ($fleet)), ExpUpperLimit() );
+    $points = min ( max ( 200, ExpPoints ($fleet)), ExpUpperLimit($exptab) );
     $cargo = max (0, FleetCargoSummary ($fleet) - ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']));
     $amount = $roll * $points;
 
@@ -443,7 +499,7 @@ function Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang
 // ---
 
 // Finding ships
-function Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_FleetFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     global $UnitParam;
     global $fleetmap;
@@ -490,7 +546,7 @@ function Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
     }
 
     // Calculate the structure of the found fleet.
-    $epoints = min ( ExpPoints ($fleet), ExpUpperLimit() );
+    $epoints = min ( ExpPoints ($fleet), ExpUpperLimit($exptab) );
     $structure = max ( 7000, floor ($roll * $epoints / 2) );
     $no_structure = false;
 
@@ -567,7 +623,7 @@ function Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
 // ---
 
 // Finding the Merchant
-function Exp_TraderFound ($queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_TraderFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
 {
     global $db_prefix;
     $player_id = $fleet_obj['owner_id'];
@@ -701,34 +757,34 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
     switch ($exp_res)
     {
         case EXP_NOTHING:
-            $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            $text = Exp_NothingHappens ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
             break;
         case EXP_ALIENS:
-            $text = Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            $text = Exp_BattleAliens ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
             break;
         case EXP_PIRATES:
-            $text = Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            $text = Exp_BattlePirates ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
             break;
         case EXP_DARK_MATTER:
-            $text = Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            $text = Exp_DarkMatterFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
             break;
         case EXP_BLACK_HOLE:
-            $text = Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            $text = Exp_LostFleet ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
             break;
         case EXP_DELAY:
-            $text = Exp_DelayFleet ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            $text = Exp_DelayFleet ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
             break;
         case EXP_ACCEL:
-            $text = Exp_AccelFleet ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            $text = Exp_AccelFleet ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
             break;
         case EXP_RESOURCES:
-            $text = Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            $text = Exp_ResourcesFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
             break;
         case EXP_FLEET:
-            $text = Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            $text = Exp_FleetFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
             break;
         case EXP_TRADER:
-            $text = Exp_TraderFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            $text = Exp_TraderFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
             break;
         default:
             $text = "";

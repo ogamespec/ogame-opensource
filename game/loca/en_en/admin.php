@@ -198,6 +198,39 @@ $LOCA["en"]["ADM_EXP_SIM_RESULT"] = "Expedition simulation result";
 $LOCA["en"]["ADM_EXP_SIM_EXPCOUNT"] = "Number of expeditions";
 $LOCA["en"]["ADM_EXP_SIM_SUBMIT"] = "Simulate";
 
+$LOCA["en"]["ADM_EXP_SETTINGS"] = "Expedition Settings";
+$LOCA["en"]["ADM_EXP_SETTINGS_DM_FACTOR"] = "The multiplier of Dark Matter found";
+$LOCA["en"]["ADM_EXP_SETTINGS_SUCCESS"] = "Chance of successful expedition (if >= then success); Successful expedition if something happened.";
+$LOCA["en"]["ADM_EXP_SETTINGS_DEPLETION"] = "Expedition depletion settings";
+$LOCA["en"]["ADM_EXP_SETTINGS_DEPLETED_MIN"] = "Visit count without depletion (if <= there is no depletion)";
+$LOCA["en"]["ADM_EXP_SETTINGS_DEPLETED_MED"] = "Visit count for moderate depletion (if <= then moderate depletion)";
+$LOCA["en"]["ADM_EXP_SETTINGS_DEPLETED_MAX"] = "Visit count for significant depletion (if <= then significantly depleted. A value higher is severe depletion)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_DEPLETED_MIN"] = "Chance of failure for moderate attrition (>= expedition failure)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_DEPLETED_MED"] = "Chance of failure for significant depletion (>= expedition failure)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_DEPLETED_MAX"] = "Chance of failure for severe depletion (>= expedition failure)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE"] = "The following checks are performed sequentially (type of successful expedition)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_ALIEN"] = "Meeting aliens (if the die value >=)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_PIRATES"] = "Meet the pirates (otherwise if the die value is >=)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_DM"] = "Finding Dark Matter (otherwise if the die value is >=)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_LOST"] = "The loss of a fleet in a black hole (otherwise if the die value is >=)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_DELAY"] = "Delayed return (otherwise if the die value is >=)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_ACCEL"] = "Faster return (otherwise if the die value is >=)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_RES"] = "Finding resources (otherwise if the die value is >=)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_FLEET"] = "Finding the fleet (otherwise if the die value is >=)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_TRADER"] = "Otherwise, the Merchant will be found";
+$LOCA["en"]["ADM_EXP_SETTINGS_CAP_INFO"] = "Settings for determining the upper limit of expedition points (affects the size of the find)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CAP1"] = "If top1 has less than (1) points, the expedition limit will be (1)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CAP2"] = "If top1 has less than (2) points, the expedition limit will be (2)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CAP3"] = "If top1 has less than (3) points, the expedition limit will be (3)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CAP4"] = "If top1 has less than (4) points, the expedition limit will be (4)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CAP5"] = "If top1 has less than (5) points, the expedition limit will be (5)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CAP6"] = "If top1 has less than (6) points, the expedition limit will be (6)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CAP7"] = "If top1 has less than (7) points, the expedition limit will be (7)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CAP8"] = "If top1 has less than (8) points, the expedition limit will be (8)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CAP_MAX"] = "Otherwise, the limit of the expedition will be maxed out";
+$LOCA["en"]["ADM_EXP_SETTINGS_SUBMIT"] = "Save";
+$LOCA["en"]["ADM_EXP_SETTINGS_TIP"] = "For all expedition rolls a 100-sided die [0, 99] is thrown (including 0 and 99). If some parameters seem unclear to you, you will have to examine the source code.";
+
 // admin_fleetlogs
 
 $LOCA["en"]["ADM_FLOGS_TIMER"] = "Timer";

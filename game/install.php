@@ -199,9 +199,30 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query = "INSERT INTO ".$_POST["db_prefix"]."planets VALUES".$opt;
     dbquery( $query);
 
-    // Add Expedition Parameters.
+    // Add default Expedition Parameters.
     $opt = " (";
-    $exptab = array ( 70, 25, 50, 75, 25, 50, 75, 95, 85, 70, 69, 63, 60, 25, 1 );
+    $exptab = array ( 
+        70,         // Success chance, else Nothing
+        25, 50, 75,         // Depletion counter: <=not depleted, <=small, <=medium, else strong
+        25, 50, 75,         // Change of failure on depletion: 0% explicit if not depleted, 25% for small, 50% for medium, 75% for strong
+        95,         // If roll >=: Aliens
+        85,         // else If roll >=: Pirates
+        70,         // else If roll >=: DM
+        69,         // else If roll >=: BH
+        63,         // else If roll >=: Delay
+        60,         // else If roll >=: Accel
+        25,         // else If roll >=: Resources
+        1,          // else If roll >=: Fleet
+                    // else Trader
+        3,      // DM factor
+        // The old expedition was pretty dull: If top1 has < 5000000 points, then 9000, otherwise 12000. Crumbs.
+        10000, 100000, 1000000, 5000000, 25000000, 50000000, 75000000, 100000000,  // >=100kk
+        9000,  9000,   9000,    9000,    12000,    12000,    12000,    12000,      12000
+        // Redesign settings (7.0+):
+        //10000, 100000,  1000000, 5000000, 25000000, 50000000, 75000000, 100000000,  // >=100kk
+        //84000, 1050000, 2520000, 3780000, 5040000,  6300000,  7560000,  8820000,    10500000 
+    );
+
     foreach ($exptab as $i=>$entry)
     {
         if ($i != 0) $opt .= ", ";
@@ -211,7 +232,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query = "INSERT INTO ".$_POST["db_prefix"]."exptab VALUES".$opt;
     dbquery( $query);
 
-    // Add colonization parameters.
+    // Add default colonization parameters.
     $opt = " (";
     $coltab = array ( 50, 120, 72, 50, 150, 120, 50, 120, 120, 50, 120, 96, 50, 150, 96 );
     foreach ($coltab as $i=>$entry)

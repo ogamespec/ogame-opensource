@@ -107,7 +107,11 @@ $tab_pranger = array (    // Pillar of Shame
 
 $tab_exptab = array (    // Expedition settings (can be changed in admin)
     'chance_success'=>'INT', 'depleted_min'=>'INT', 'depleted_med'=>'INT', 'depleted_max'=>'INT', 'chance_depleted_min'=>'INT', 'chance_depleted_med'=>'INT', 'chance_depleted_max'=>'INT',
-    'chance_alien'=>'INT', 'chance_pirates'=>'INT', 'chance_dm'=>'INT', 'chance_lost'=>'INT', 'chance_delay'=>'INT', 'chance_accel'=>'INT', 'chance_res'=>'INT', 'chance_fleet'=>'INT'
+    'chance_alien'=>'INT', 'chance_pirates'=>'INT', 'chance_dm'=>'INT', 'chance_lost'=>'INT', 'chance_delay'=>'INT', 'chance_accel'=>'INT', 'chance_res'=>'INT', 'chance_fleet'=>'INT',
+    'dm_factor'=>'INT',
+    // The rule is formed roughly as follows: if (top1_score < score_cap1) exp_limit = limit_cap1;   ....  else if (top1_score < score_cap8) exp_limit = limit_cap8;  else exp_limit = limit_max;
+    'score_cap1'=>'INT', 'score_cap2'=>'INT', 'score_cap3'=>'INT', 'score_cap4'=>'INT', 'score_cap5'=>'INT', 'score_cap6'=>'INT', 'score_cap7'=>'INT', 'score_cap8'=>'INT', 
+    'limit_cap1'=>'INT', 'limit_cap2'=>'INT', 'limit_cap3'=>'INT', 'limit_cap4'=>'INT', 'limit_cap5'=>'INT', 'limit_cap6'=>'INT', 'limit_cap7'=>'INT', 'limit_cap8'=>'INT', 'limit_max'=>'INT'
 );
 
 // After discussions in Discord we haven't come to a consensus on what parameters should be written in planets.php for new colonies.

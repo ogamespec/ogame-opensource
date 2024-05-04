@@ -198,6 +198,39 @@ $LOCA["de"]["ADM_EXP_SIM_RESULT"] = "Ergebnis der Expeditionssimulation";
 $LOCA["de"]["ADM_EXP_SIM_EXPCOUNT"] = "Anzahl der Expeditionen";
 $LOCA["de"]["ADM_EXP_SIM_SUBMIT"] = "Simulieren Sie";
 
+$LOCA["de"]["ADM_EXP_SETTINGS"] = "Expeditionseinstellungen";
+$LOCA["de"]["ADM_EXP_SETTINGS_DM_FACTOR"] = "Der gefundene Multiplikator der Dunklen Materie";
+$LOCA["de"]["ADM_EXP_SETTINGS_SUCCESS"] = "Chance auf erfolgreiche Expedition (wenn >= dann Erfolg); Erfolgreiche Expedition, wenn etwas passiert ist.";
+$LOCA["de"]["ADM_EXP_SETTINGS_DEPLETION"] = "Einstellungen für Expeditionen zur Erschöpfung";
+$LOCA["de"]["ADM_EXP_SETTINGS_DEPLETED_MIN"] = "Anzahl der Besuche ohne Erschöpfung (wenn <= keine Erschöpfung vorliegt)";
+$LOCA["de"]["ADM_EXP_SETTINGS_DEPLETED_MED"] = "Anzahl der Besuche bei mäßiger Abwanderung (wenn <= dann mäßige Abwanderung)";
+$LOCA["de"]["ADM_EXP_SETTINGS_DEPLETED_MAX"] = "Anzahl der Besuche für eine signifikante Erschöpfung (wenn <= dann signifikant erschöpft. Ein höherer Wert bedeutet eine starke Erschöpfung)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CHANCE_DEPLETED_MIN"] = "Wahrscheinlichkeit des Scheiterns bei mäßiger Zermürbung (>= Ausfall der Expedition)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CHANCE_DEPLETED_MED"] = "Wahrscheinlichkeit des Scheiterns bei erheblicher Zermürbung (>= Scheitern der Expedition)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CHANCE_DEPLETED_MAX"] = "Wahrscheinlichkeit des Scheiterns bei schwerer Zermürbung (>= Expeditionsversagen)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CHANCE"] = "Die folgenden Kontrollen werden nacheinander durchgeführt (Art der erfolgreichen Expedition)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CHANCE_ALIEN"] = "Alien Encounter (wenn Würfelwert >=)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CHANCE_PIRATES"] = "Piratenbegegnung (sonst wenn Würfelwert >=)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CHANCE_DM"] = "Suche nach Dunkler Materie (sonst wenn Würfelwert >=)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CHANCE_LOST"] = "Verlust der Flotte in einem schwarzen Loch (sonst wenn Würfelwert >=)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CHANCE_DELAY"] = "Verzögerte Rückkehr (andernfalls, wenn der Wert >= ist)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CHANCE_ACCEL"] = "Rückgabe der Beschleunigung (andernfalls, wenn Würfelwert >= gewürfelt wird)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CHANCE_RES"] = "Suche nach Ressourcen (andernfalls, wenn der Würfelwert >=)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CHANCE_FLEET"] = "Auffinden der Flotte (ansonsten, wenn der Würfelwert >=)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CHANCE_TRADER"] = "Andernfalls wird der Käufer als";
+$LOCA["de"]["ADM_EXP_SETTINGS_CAP_INFO"] = "Einstellungen zur Bestimmung der Obergrenze der Expeditionspunkte (beeinflusst die Größe des Fundes)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CAP1"] = "Wenn top1 weniger als (1) Punkte hat, ist das Expeditionslimit (1)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CAP2"] = "Wenn top1 weniger als (2) Punkte hat, ist das Expeditionslimit (2)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CAP3"] = "Wenn top1 weniger als (3) Punkte hat, ist das Expeditionslimit (3)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CAP4"] = "Wenn top1 weniger als (4) Punkte hat, ist das Expeditionslimit (4)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CAP5"] = "Wenn top1 weniger als (5) Punkte hat, ist das Expeditionslimit (5)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CAP6"] = "Wenn top1 weniger als (6) Punkte hat, ist das Expeditionslimit (6)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CAP7"] = "Wenn top1 weniger als (7) Punkte hat, ist das Expeditionslimit (7)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CAP8"] = "Wenn top1 weniger als (8) Punkte hat, ist das Expeditionslimit (8)";
+$LOCA["de"]["ADM_EXP_SETTINGS_CAP_MAX"] = "Andernfalls wird das Limit der Expedition ausgeschöpft.";
+$LOCA["de"]["ADM_EXP_SETTINGS_SUBMIT"] = "Speichern";
+$LOCA["de"]["ADM_EXP_SETTINGS_TIP"] = "Für alle Expeditionswürfe wird ein 100-seitiger Würfel [0, 99] geworfen (einschließlich 0 und 99). Wenn Ihnen einige Parameter unklar erscheinen, müssen Sie den Quellcode studieren.";
+
 // admin_fleetlogs
 
 $LOCA["de"]["ADM_FLOGS_TIMER"] = "Zeitschaltuhr";
