@@ -205,7 +205,7 @@ $LOCA["en"]["ADM_EXP_SETTINGS_DEPLETION"] = "Expedition depletion settings";
 $LOCA["en"]["ADM_EXP_SETTINGS_DEPLETED_MIN"] = "Visit count without depletion (if <= there is no depletion)";
 $LOCA["en"]["ADM_EXP_SETTINGS_DEPLETED_MED"] = "Visit count for moderate depletion (if <= then moderate depletion)";
 $LOCA["en"]["ADM_EXP_SETTINGS_DEPLETED_MAX"] = "Visit count for significant depletion (if <= then significantly depleted. A value higher is severe depletion)";
-$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_DEPLETED_MIN"] = "Chance of failure for moderate attrition (>= expedition failure)";
+$LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_DEPLETED_MIN"] = "Chance of failure for moderate depletion (>= expedition failure)";
 $LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_DEPLETED_MED"] = "Chance of failure for significant depletion (>= expedition failure)";
 $LOCA["en"]["ADM_EXP_SETTINGS_CHANCE_DEPLETED_MAX"] = "Chance of failure for severe depletion (>= expedition failure)";
 $LOCA["en"]["ADM_EXP_SETTINGS_CHANCE"] = "The following checks are performed sequentially (type of successful expedition)";
