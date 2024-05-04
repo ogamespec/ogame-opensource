@@ -181,6 +181,23 @@ $LOCA["en"]["ADM_MSG_FILTER"] = "Debug message filter: ";
 $LOCA["en"]["ADM_MSG_SHOW"] = "Show";
 $LOCA["en"]["ADM_MSG_SUBMIT"] = "ok";
 
+// admin_expedition
+
+$LOCA["en"]["ADM_EXP_NOTHING"] = "Nothing";
+$LOCA["en"]["ADM_EXP_ALIENS"] = "Aliens";
+$LOCA["en"]["ADM_EXP_PIRATES"] = "Pirates";
+$LOCA["en"]["ADM_EXP_DARK_MATTER"] = "Dark Matter";
+$LOCA["en"]["ADM_EXP_BLACK_HOLE"] = "Loss of fleet";
+$LOCA["en"]["ADM_EXP_DELAY"] = "Delay";
+$LOCA["en"]["ADM_EXP_ACCEL"] = "Acceleration";
+$LOCA["en"]["ADM_EXP_RESOURCES"] = "Resources";
+$LOCA["en"]["ADM_EXP_FLEET"] = "Fleet";
+$LOCA["en"]["ADM_EXP_TRADER"] = "Merchant";
+$LOCA["en"]["ADM_EXP_SIM"] = "Expedition Simulator";
+$LOCA["en"]["ADM_EXP_SIM_RESULT"] = "Expedition simulation result";
+$LOCA["en"]["ADM_EXP_SIM_EXPCOUNT"] = "Number of expeditions";
+$LOCA["en"]["ADM_EXP_SIM_SUBMIT"] = "Simulate";
+
 // admin_fleetlogs
 
 $LOCA["en"]["ADM_FLOGS_TIMER"] = "Timer";

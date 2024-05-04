@@ -8,6 +8,18 @@
 
 // Expedition visit count is stored as the metal value on the far space planet object.
 
+// Expedition result
+const EXP_NOTHING = 0;
+const EXP_ALIENS = 1;
+const EXP_PIRATES = 2;
+const EXP_DARK_MATTER = 3;
+const EXP_BLACK_HOLE = 4;
+const EXP_DELAY = 5;
+const EXP_ACCEL = 6;
+const EXP_RESOURCES = 7;
+const EXP_FLEET = 8;
+const EXP_TRADER = 9;
+
 // Count the number of active expeditions of the specified player.
 function GetExpeditionsCount ($player_id)
 {
@@ -641,6 +653,35 @@ function ExpeditionArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     DispatchFleet ($fleet, $origin, $target, (FTYP_ORBITING+FTYP_EXPEDITION), $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end'], 0, $fleet_obj['flight_time']);
 }
 
+// Algorithmic part of the expedition
+function Expedition ($expcount, $exptab, $hold_time)
+{
+    $res = EXP_NOTHING;
+    $chance = mt_rand ( 0, 99 );
+    if ( $chance < ($exptab['chance_success'] + $hold_time) )
+    {
+        if ( $expcount <= $exptab['depleted_min'] ) $chance_depleted = 0;
+        else if ( $expcount <= $exptab['depleted_med'] ) $chance_depleted = $exptab['chance_depleted_min'];
+        else if ( $expcount <= $exptab['depleted_max'] ) $chance_depleted = $exptab['chance_depleted_med'];
+        else $chance_depleted = $exptab['chance_depleted_max'];
+        
+        $chance = mt_rand ( 0, 99 );
+        if ($chance >= $chance_depleted)    // Successful expedition.
+        {
+            if ( $chance >= $exptab['chance_alien'] ) $res = EXP_ALIENS;
+            else if ( $chance >= $exptab['chance_pirates'] ) $res = EXP_PIRATES;
+            else if ( $chance >= $exptab['chance_dm'] ) $res = EXP_DARK_MATTER;
+            else if ( $chance >= $exptab['chance_lost'] ) $res = EXP_BLACK_HOLE;
+            else if ( $chance >= $exptab['chance_delay'] ) $res = EXP_DELAY;
+            else if ( $chance >= $exptab['chance_accel'] ) $res = EXP_ACCEL;
+            else if ( $chance >= $exptab['chance_res'] ) $res = EXP_RESOURCES;
+            else if ( $chance >= $exptab['chance_fleet'] ) $res = EXP_FLEET;
+            else $res = EXP_TRADER;
+        }
+    }
+    return $res;
+}
+
 function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
 {
     $exptab = LoadExpeditionSettings ();
@@ -654,35 +695,45 @@ function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
     loca_add ( "fleetmsg", $origin_user['lang'] );
 
     // Expedition Event.
-    $chance = mt_rand ( 0, 99 );
     $expcount = $target['m'];    // visit counter
-    if ( $chance < ($exptab['chance_success'] + $hold_time) )
-    {
-        if ( $expcount <= $exptab['depleted_min'] ) $chance_depleted = 0;
-        else if ( $expcount <= $exptab['depleted_med'] ) $chance_depleted = $exptab['chance_depleted_min'];
-        else if ( $expcount <= $exptab['depleted_max'] ) $chance_depleted = $exptab['chance_depleted_med'];
-        else $chance_depleted = $exptab['chance_depleted_max'];
-        
-        $chance = mt_rand ( 0, 99 );
-        if ($chance >= $chance_depleted)    // Successful expedition.
-        {
-            if ( $chance >= $exptab['chance_alien'] ) $text = Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
-            else if ( $chance >= $exptab['chance_pirates'] ) $text = Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
-            else if ( $chance >= $exptab['chance_dm'] ) $text = Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
-            else if ( $chance >= $exptab['chance_lost'] ) $text = Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
-            else if ( $chance >= $exptab['chance_lost'] ) $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
-            else if ( $chance >= $exptab['chance_delay'] ) $text = Exp_DelayFleet ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
-            else if ( $chance >= $exptab['chance_accel'] ) $text = Exp_AccelFleet ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
-            else if ( $chance >= $exptab['chance_res'] ) $text = Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
-            else if ( $chance >= $exptab['chance_fleet'] ) $text = Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
-            else $text = Exp_TraderFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
-        }
-        else $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
-    }
-    else $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+    $exp_res = Expedition ($expcount, $exptab, $hold_time);
 
-    // DEBUG
-    //$text = Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+    switch ($exp_res)
+    {
+        case EXP_NOTHING:
+            $text = Exp_NothingHappens ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            break;
+        case EXP_ALIENS:
+            $text = Exp_BattleAliens ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            break;
+        case EXP_PIRATES:
+            $text = Exp_BattlePirates ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            break;
+        case EXP_DARK_MATTER:
+            $text = Exp_DarkMatterFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            break;
+        case EXP_BLACK_HOLE:
+            $text = Exp_LostFleet ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            break;
+        case EXP_DELAY:
+            $text = Exp_DelayFleet ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            break;
+        case EXP_ACCEL:
+            $text = Exp_AccelFleet ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            break;
+        case EXP_RESOURCES:
+            $text = Exp_ResourcesFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            break;
+        case EXP_FLEET:
+            $text = Exp_FleetFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            break;
+        case EXP_TRADER:
+            $text = Exp_TraderFound ($queue, $fleet_obj, $fleet, $origin, $target, $origin_user['lang']);
+            break;
+        default:
+            $text = "";
+            break;
+    }
 
     // Updating the expedition's visit counter on the planet.
     AdjustResources ( 1, 0, 0, $target['planet_id'], '+' );

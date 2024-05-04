@@ -181,6 +181,23 @@ $LOCA["de"]["ADM_MSG_FILTER"] = "Filter für Fehlermeldungen: ";
 $LOCA["de"]["ADM_MSG_SHOW"] = "Anzeige";
 $LOCA["de"]["ADM_MSG_SUBMIT"] = "ok";
 
+// admin_expedition
+
+$LOCA["de"]["ADM_EXP_NOTHING"] = "Nichts";
+$LOCA["de"]["ADM_EXP_ALIENS"] = "Außerirdische";
+$LOCA["de"]["ADM_EXP_PIRATES"] = "Piraten";
+$LOCA["de"]["ADM_EXP_DARK_MATTER"] = "Dunkle Materie";
+$LOCA["de"]["ADM_EXP_BLACK_HOLE"] = "Verlust der Flotte";
+$LOCA["de"]["ADM_EXP_DELAY"] = "Verzögerung";
+$LOCA["de"]["ADM_EXP_ACCEL"] = "Beschleunigung";
+$LOCA["de"]["ADM_EXP_RESOURCES"] = "Ressourcen";
+$LOCA["de"]["ADM_EXP_FLEET"] = "Flotte";
+$LOCA["de"]["ADM_EXP_TRADER"] = "Händler";
+$LOCA["de"]["ADM_EXP_SIM"] = "Expeditionssimulator";
+$LOCA["de"]["ADM_EXP_SIM_RESULT"] = "Ergebnis der Expeditionssimulation";
+$LOCA["de"]["ADM_EXP_SIM_EXPCOUNT"] = "Anzahl der Expeditionen";
+$LOCA["de"]["ADM_EXP_SIM_SUBMIT"] = "Simulieren Sie";
+
 // admin_fleetlogs
 
 $LOCA["de"]["ADM_FLOGS_TIMER"] = "Zeitschaltuhr";

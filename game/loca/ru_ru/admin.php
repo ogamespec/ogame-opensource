@@ -181,6 +181,23 @@ $LOCA["ru"]["ADM_MSG_FILTER"] = "Фильтр отладочных сообще�
 $LOCA["ru"]["ADM_MSG_SHOW"] = "Показать";
 $LOCA["ru"]["ADM_MSG_SUBMIT"] = "ok";
 
+// admin_expedition
+
+$LOCA["ru"]["ADM_EXP_NOTHING"] = "Ничего";
+$LOCA["ru"]["ADM_EXP_ALIENS"] = "Чужие";
+$LOCA["ru"]["ADM_EXP_PIRATES"] = "Пираты";
+$LOCA["ru"]["ADM_EXP_DARK_MATTER"] = "Тёмная Материя";
+$LOCA["ru"]["ADM_EXP_BLACK_HOLE"] = "Потеря флота";
+$LOCA["ru"]["ADM_EXP_DELAY"] = "Задержка";
+$LOCA["ru"]["ADM_EXP_ACCEL"] = "Ускорение";
+$LOCA["ru"]["ADM_EXP_RESOURCES"] = "Ресурсы";
+$LOCA["ru"]["ADM_EXP_FLEET"] = "Флот";
+$LOCA["ru"]["ADM_EXP_TRADER"] = "Скупщик";
+$LOCA["ru"]["ADM_EXP_SIM"] = "Симулятор экспедиции";
+$LOCA["ru"]["ADM_EXP_SIM_RESULT"] = "Результат симуляции экспедиции";
+$LOCA["ru"]["ADM_EXP_SIM_EXPCOUNT"] = "Количество экспедиций";
+$LOCA["ru"]["ADM_EXP_SIM_SUBMIT"] = "Симулировать";
+
 // admin_fleetlogs
 
 $LOCA["ru"]["ADM_FLOGS_TIMER"] = "Таймер";
