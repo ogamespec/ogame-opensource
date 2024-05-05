@@ -74,6 +74,50 @@ function AddDBRow ( $row, $tabname )
     return mysqli_insert_id ($db_connect);
 }
 
+// ---
+// Working with the master database, where information common to all universes (e.g. coupons) is stored.
+// The master database can be accessed from any universe
+
+// Link to connect to the master database
+$MDB_link = 0;
+
+function MDBConnect ()
+{
+    global $MDB_link, $mdb_host, $mdb_user, $mdb_pass, $mdb_name, $mdb_enable;
+    if (!$mdb_enable) return FALSE;
+    $MDB_link = @mysqli_connect ($mdb_host, $mdb_user, $mdb_pass );
+    if (!$MDB_link) return FALSE;
+    if ( ! @mysqli_select_db ($MDB_link, $mdb_name) ) return FALSE;
+
+    MDBQuery ("SET NAMES 'utf8';");
+    MDBQuery ("SET CHARACTER SET 'utf8';");
+    MDBQuery ("SET SESSION collation_connection = 'utf8_general_ci';");
+
+    return TRUE;
+}
+
+function MDBQuery ($query)
+{
+    global $MDB_link;
+    $result = @mysqli_query ($MDB_link, $query);
+    if (!$result) return NULL;
+    else return $result;
+}
+
+function MDBRows ($result)
+{
+    $rows = @mysqli_num_rows($result);
+    return $rows;
+}
+
+function MDBArray ($result)
+{
+    $arr = @mysqli_fetch_assoc($result);
+    if (!$arr) return NULL;
+    else return $arr;
+}
+
+
 // Table locking is critical in a multi-user environment. It is protection against simultaneous work with the database from several users.
 // Think of it as analogous to multitasking lock (mutex).
 

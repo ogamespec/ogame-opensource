@@ -34,7 +34,7 @@ function Admin_Coupons ()
             $darkmatter = intval ( $_POST['darkmatter'] );
             $periodic = intval ( $_POST['periodic'] );
 
-            $queue = array ( null, USER_SPACE, "Coupon", $darkmatter, ($inactive_days << 16) | $ingame_days, $periodic, $now, $end, 520 );
+            $queue = array ( null, USER_SPACE, QTYP_COUPON, $darkmatter, ($inactive_days << 16) | $ingame_days, $periodic, $now, $end, QUEUE_PRIO_COUPON );
             AddDBRow ( $queue, "queue" );
         }
     }
@@ -117,7 +117,7 @@ $rows = MDBRows ( $result );
 
     // Display active coupon accrual tasks.
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'Coupon' ORDER BY end ASC";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_COUPON."' ORDER BY end ASC";
     $result = dbquery ( $query );
     while ( $queue = dbarray ($result) ) 
     {

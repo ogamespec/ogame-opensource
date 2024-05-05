@@ -35,45 +35,6 @@ function mail_html ($to, $subject = '(No subject)', $message = '', $header = '')
     fclose ($f);
 }
 
-// Link to connect to the master database
-$MDB_link = 0;
-
-function MDBConnect ()
-{
-    global $MDB_link, $mdb_host, $mdb_user, $mdb_pass, $mdb_name, $mdb_enable;
-    if (!$mdb_enable) return FALSE;
-    $MDB_link = @mysqli_connect ($mdb_host, $mdb_user, $mdb_pass );
-    if (!$MDB_link) return FALSE;
-    if ( ! @mysqli_select_db ($MDB_link, $mdb_name) ) return FALSE;
-
-    MDBQuery ("SET NAMES 'utf8';");
-    MDBQuery ("SET CHARACTER SET 'utf8';");
-    MDBQuery ("SET SESSION collation_connection = 'utf8_general_ci';");
-
-    return TRUE;
-}
-
-function MDBQuery ($query)
-{
-    global $MDB_link;
-    $result = @mysqli_query ($MDB_link, $query);
-    if (!$result) return NULL;
-    else return $result;
-}
-
-function MDBRows ($result)
-{
-    $rows = @mysqli_num_rows($result);
-    return $rows;
-}
-
-function MDBArray ($result)
-{
-    $arr = @mysqli_fetch_assoc($result);
-    if (!$arr) return NULL;
-    else return $arr;
-}
-
 // ------------------------------------------------------------------
 
 // Load coupon object by ID. Return NULL if the coupon is not found.
