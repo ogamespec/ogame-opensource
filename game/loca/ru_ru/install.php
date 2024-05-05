@@ -29,6 +29,7 @@ $LOCA["ru"]["INSTALL_UNI_FLEETSPEED"] = "Ускорение флота";
 $LOCA["ru"]["INSTALL_UNI_G"] = "Количество галактик";
 $LOCA["ru"]["INSTALL_UNI_S"] = "Количество систем";
 $LOCA["ru"]["INSTALL_UNI_USERS"] = "Максимум игроков";
+$LOCA["ru"]["INSTALL_UNI_START_DM"] = "Количество стартовой Тёмной Материи";
 $LOCA["ru"]["INSTALL_UNI_ACS"] = "Участников САБ";
 $LOCA["ru"]["INSTALL_UNI_FID"] = "Обломки флота";
 $LOCA["ru"]["INSTALL_UNI_DID"] = "Обломки обороны";

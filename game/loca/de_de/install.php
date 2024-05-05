@@ -29,6 +29,7 @@ $LOCA["de"]["INSTALL_UNI_FLEETSPEED"] = "Flottenspeed";
 $LOCA["de"]["INSTALL_UNI_G"] = "Anzahl der Galaxien";
 $LOCA["de"]["INSTALL_UNI_S"] = "Anzahl der Systeme";
 $LOCA["de"]["INSTALL_UNI_USERS"] = "Max Benutzer";
+$LOCA["de"]["INSTALL_UNI_START_DM"] = "Die Menge der anfänglichen Dunklen Materie";
 $LOCA["de"]["INSTALL_UNI_ACS"] = "AKS";
 $LOCA["de"]["INSTALL_UNI_FID"] = "Flotte in Trümmern (%)";
 $LOCA["de"]["INSTALL_UNI_DID"] = "Verteidigung in Trümmern (%)";

@@ -29,6 +29,7 @@ $LOCA["en"]["INSTALL_UNI_FLEETSPEED"] = "Fleet speed";
 $LOCA["en"]["INSTALL_UNI_G"] = "Number of galaxies";
 $LOCA["en"]["INSTALL_UNI_S"] = "Number of systems";
 $LOCA["en"]["INSTALL_UNI_USERS"] = "Max users";
+$LOCA["en"]["INSTALL_UNI_START_DM"] = "The amount of starting Dark Matter";
 $LOCA["en"]["INSTALL_UNI_ACS"] = "ACS";
 $LOCA["en"]["INSTALL_UNI_FID"] = "Fleet in debris (%)";
 $LOCA["en"]["INSTALL_UNI_DID"] = "Defense in debris (%)";

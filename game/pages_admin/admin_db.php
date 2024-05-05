@@ -3,7 +3,7 @@
 // Admin Area: Database integrity (check and fix tables)
 
 // The purpose of this admin module is to at least slightly reduce the pain when changes are made to the format of database tables and the server database needs to be corrected "live" (without a clean reinstallation).
-// First we compare the tables from install.php with what is in the real database at the moment.
+// First we compare the tables from install_tabs.php with what is in the real database at the moment.
 // Then the reverse comparison is made - what is in the database now, with what is in the tables of install.php
 
 // TODO: We don't know how to fix tables yet. An admin must manually fix tables by himself using phpMyAdmin or similar tool.

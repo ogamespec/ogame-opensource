@@ -57,7 +57,8 @@ function Admin_Uni ()
             $_POST['lang'],
             $_POST['battle_engine'],
             $php_battle,
-            $force_lang );
+            $force_lang,
+            $_POST['start_dm'] );
 
         // Set external links. If the link is empty - the menu item will be missing.
 
@@ -94,6 +95,7 @@ function Admin_Uni ()
 <tr><th><?=loca("ADM_UNI_HACK_COUNTER");?> <a title="<?=loca("ADM_UNI_HACK_COUNTER_INFO");?>"><?php echo $info;?></a></th><th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Debug&filter=HACKING"><?php echo $unitab['hacks'];?> (<?=loca("ADM_UNI_HACK_CHECK");?>)</a></th></tr>
 <tr><th><?=loca("ADM_UNI_USERS");?></th><th><?php echo $unitab['usercount'];?></th></tr>
 <tr><th><?=loca("ADM_UNI_MAX_USERS");?></th><th><input type="text" name="maxusers" maxlength="10" size="10" value="<?php echo $unitab['maxusers'];?>" /></th></tr>
+<tr><th><?=loca("ADM_UNI_START_DM");?></th><th><input type="text" name="start_dm" maxlength="10" size="10" value="<?php echo $unitab['start_dm'];?>" /></th></tr>
 <tr><th><?=loca("ADM_UNI_GALAXIES");?></th><th><input type="text" name="galaxies" maxlength="3" size="3" value="<?php echo $unitab['galaxies'];?>" /></th></tr>
 <tr><th><?=loca("ADM_UNI_SYSTEMS");?></th><th><input type="text" name="systems" maxlength="3" size="3" value="<?php echo $unitab['systems'];?>" /></th></tr>
 

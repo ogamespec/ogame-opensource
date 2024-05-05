@@ -29,6 +29,7 @@ $LOCA["fr"]["INSTALL_UNI_FLEETSPEED"] = "Vitesse de flotte";
 $LOCA["fr"]["INSTALL_UNI_G"] = "Nombre de galaxies";
 $LOCA["fr"]["INSTALL_UNI_S"] = "Nombre de systèmes";
 $LOCA["fr"]["INSTALL_UNI_USERS"] = "Utilisateurs max";
+$LOCA["fr"]["INSTALL_UNI_START_DM"] = "La quantité de Matière Noire de départ";
 $LOCA["fr"]["INSTALL_UNI_ACS"] = "ACS";
 $LOCA["fr"]["INSTALL_UNI_FID"] = "Flotte en débris (%)";
 $LOCA["fr"]["INSTALL_UNI_DID"] = "Défense in debris (%)";

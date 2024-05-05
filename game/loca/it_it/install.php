@@ -29,6 +29,7 @@ $LOCA["it"]["INSTALL_UNI_FLEETSPEED"] = "Velocità della flotta";
 $LOCA["it"]["INSTALL_UNI_G"] = "Numero di galassie";
 $LOCA["it"]["INSTALL_UNI_S"] = "Numero di sistemi";
 $LOCA["it"]["INSTALL_UNI_USERS"] = "Utenti massimi";
+$LOCA["it"]["INSTALL_UNI_START_DM"] = "La quantità di Materia Oscura iniziale";
 $LOCA["it"]["INSTALL_UNI_ACS"] = "ACS";
 $LOCA["it"]["INSTALL_UNI_FID"] = "Flotta in detriti (%)";
 $LOCA["it"]["INSTALL_UNI_DID"] = "Difesa dai detriti (%)";

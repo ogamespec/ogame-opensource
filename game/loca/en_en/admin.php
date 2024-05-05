@@ -376,6 +376,7 @@ $LOCA["en"]["ADM_UNI_HACK_COUNTER"] = "Hack attempt counter";
 $LOCA["en"]["ADM_UNI_HACK_COUNTER_INFO"] = "Any SQL injection attempts are logged for all players and the counter is incremented after each attempt. Cleared after relogin";
 $LOCA["en"]["ADM_UNI_HACK_CHECK"] = "Check";
 $LOCA["en"]["ADM_UNI_USERS"] = "Number of players";
+$LOCA["en"]["ADM_UNI_START_DM"] = "The amount of starting Dark Matter";
 $LOCA["en"]["ADM_UNI_MAX_USERS"] = "Maximum number of players";
 $LOCA["en"]["ADM_UNI_GALAXIES"] = "Number of galaxies";
 $LOCA["en"]["ADM_UNI_SYSTEMS"] = "Number of systems in the galaxy";

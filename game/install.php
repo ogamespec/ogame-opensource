@@ -101,6 +101,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "galaxies = '".$_POST["uni_galaxies"]."', ";
     $query .= "systems = '".$_POST["uni_systems"]."', ";
     $query .= "maxusers = '".$_POST["uni_maxusers"]."', ";
+    $query .= "start_dm = '".$_POST["start_dm"]."', ";
     $query .= "acs = '".$_POST["uni_acs"]."', ";
     $query .= "fid = '".$_POST["uni_fid"]."', ";
     $query .= "did = '".$_POST["uni_did"]."', ";
@@ -380,6 +381,7 @@ td.c { background-color: #334445; }
 <tr><td><?php echo loca('INSTALL_UNI_G');?></td><td><input type=text value='9' class='text' name='uni_galaxies'></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_S');?></td><td><input type=text value='499' class='text' name='uni_systems'></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_USERS');?><a title='<?php echo loca('INSTALL_TIP6');?>'><?php echo $info;?></a></td><td><input type=text value='12500' class='text' name='uni_maxusers'></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_START_DM');?></td><td><input type=text value='0' class='text' name='start_dm'></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_ACS');?><a title='<?php echo loca('INSTALL_TIP7');?>'><?php echo $info;?></a></td><td><input type=text value='4' class='text' name='uni_acs'></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_FID');?><a title='<?php echo loca('INSTALL_TIP8');?>'><?php echo $info;?></a></td><td><input type=text value='30' class='text' name='uni_fid'></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_DID');?><a title='<?php echo loca('INSTALL_TIP9');?>'><?php echo $info;?></a></td><td><input type=text value='0' class='text' name='uni_did'></td></tr>

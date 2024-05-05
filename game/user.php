@@ -75,6 +75,7 @@ const USER_FLAG_FOLDER_EXPEDITION = 0x400;          // Message Filter. 1: Show e
 const USER_FLAG_FOLDER_ALLIANCE = 0x800;            // Message Filter. 1: Show alliance messages (pm=4)
 const USER_FLAG_FOLDER_PLAYER = 0x1000;             // Message Filter. 1: Show private messages (pm=0)
 const USER_FLAG_FOLDER_OTHER = 0x2000;              // Message Filter. 1: Show all other messages (pm=5)
+const USER_FLAG_HIDE_GO_EMAIL = 0x4000;                 // Show an in-game message icon instead of the operator's email (not all operators may like to publish their email)
 
 // Default flags after creating a player
 const USER_FLAG_DEFAULT = USER_FLAG_SHOW_ESPIONAGE_BUTTON | USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON | USER_FLAG_SHOW_BUDDY_BUTTON | USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON | USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
@@ -204,7 +205,7 @@ function CreateUser ( $name, $pass, $email, $bot=false)
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, $ip, 0, $ack, 0, 0, 0, 0,
                         hostname() . "evolution/", 1, 0, 1, 3, $lang, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, $unitab['start_dm'], 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

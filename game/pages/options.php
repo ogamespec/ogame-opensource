@@ -329,6 +329,19 @@ BeginContent ();
                 }
             }
 
+            // Flags for the operator
+            if ( $GlobalUser['admin'] == 1 ) {
+
+                $flags = $GlobalUser['flags'];
+                $hide_go_email = (key_exists('hide_go_email', $_POST) && $_POST['hide_go_email']==="on");
+                if ($hide_go_email) $flags |= USER_FLAG_HIDE_GO_EMAIL;
+                else $flags &= ~USER_FLAG_HIDE_GO_EMAIL;                
+                if ($flags != $GlobalUser['flags']) {
+                    SetUserFlags ($GlobalUser['player_id'], $flags);
+                    $GlobalUser['flags'] = $flags;
+                }
+            }
+
         }
 ?>
 
@@ -554,6 +567,20 @@ BeginContent ();
     }
 ?>
 
+<?php
+    if ( $GlobalUser['admin'] == 1 )    // Additional settings visible only to operators
+    {
+?>
+<tr>
+    <td class="c" colspan="2"><?=loca("OPTIONS_OPER");?></td>
+</tr>
+<tr>
+    <th><?=loca("OPTIONS_OPER_HIDE_EMAIL");?></th>
+    <th><input type="checkbox" name="hide_go_email" <?=IsCheckedFlag(USER_FLAG_HIDE_GO_EMAIL);?>/></th>
+</tr>
+<?php
+    }
+?>
       
   <tr>
      <td class="c" colspan="2"><?php echo loca("OPTIONS_ACCOUNT");?></td>

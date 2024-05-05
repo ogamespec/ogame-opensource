@@ -376,6 +376,7 @@ $LOCA["de"]["ADM_UNI_HACK_COUNTER"] = "Hackversuchszähler";
 $LOCA["de"]["ADM_UNI_HACK_COUNTER_INFO"] = "Alle SQL-Injection-Versuche werden für alle Spieler protokolliert und der Zähler wird nach jedem Versuch erhöht. Nach Neuanmeldung gelöscht";
 $LOCA["de"]["ADM_UNI_HACK_CHECK"] = "Siehe";
 $LOCA["de"]["ADM_UNI_USERS"] = "Anzahl der Spieler";
+$LOCA["de"]["ADM_UNI_START_DM"] = "Die Menge der anfänglichen Dunklen Materie";
 $LOCA["de"]["ADM_UNI_MAX_USERS"] = "Maximale Anzahl von Spielern";
 $LOCA["de"]["ADM_UNI_GALAXIES"] = "Anzahl der Galaxien";
 $LOCA["de"]["ADM_UNI_SYSTEMS"] = "Anzahl der Systeme in der Galaxie";

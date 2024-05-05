@@ -232,16 +232,20 @@ echo "</form>\n";
 echo "<tr><td class=\"c\" colspan=\"4\">".loca("MSG_OPER")."</td></tr>\n";
 
     // Communication with operators involved the use of regular mail (mailto).
-    // TODO: Customize the option to send a regular game message if the operator does not want to reveal his mailing address
     $result = EnumOperators ();
     $rows = dbrows ($result);
     while ($rows--)
     {
         $oper = dbarray ($result);
+        // Customize the option to send a regular game message if the operator does not want to reveal their mailing address
+        $subj = va(loca("MSG_OPER_TEXT"), $GlobalUser['oname'], $uni['num']);
+        if ($oper['flags'] & USER_FLAG_HIDE_GO_EMAIL) $href = "index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$oper['player_id']."&betreff=".$subj;
+        else $href = "mailto:".$oper['email']."?subject=".$subj;
+
 ?>
                 <tr>
             <th colspan="4" valign="left">
-            <?=$oper['oname'];?>            <a href="mailto:<?=$oper['email'];?>?subject=<?=va(loca("MSG_OPER_TEXT"), $GlobalUser['oname'], $uni['num']);?>" ><img src="<?=UserSkin();?>img/m.gif" border="0" alt="<?=loca("MSG_OPER_PM");?>"></a>          </th>
+            <?=$oper['oname'];?>            <a href="<?=$href;?>" ><img src="<?=UserSkin();?>img/m.gif" border="0" alt="<?=loca("MSG_OPER_PM");?>"></a>          </th>
         </tr>
 <?php
     }

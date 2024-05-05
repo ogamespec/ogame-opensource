@@ -84,4 +84,7 @@ $LOCA["de"]["OPTIONS_ACTIVATE_SUBMIT"] = "Aktivierungslink bestellen";
 $LOCA["de"]["OPTIONS_FEED"] = "Newsfeed";
 $LOCA["de"]["OPTIONS_FEED_ACTIVATE"] = "Aktivieren Sie";
 
+$LOCA["de"]["OPTIONS_OPER"] = "Operator-Einstellungen";
+$LOCA["de"]["OPTIONS_OPER_HIDE_EMAIL"] = "E-Mail auf der Nachrichtenseite für Spieler ausblenden";
+
 ?>

@@ -84,4 +84,7 @@ $LOCA["ru"]["OPTIONS_ACTIVATE_SUBMIT"] = "Заказать активацион�
 $LOCA["ru"]["OPTIONS_FEED"] = "Newsfeed";
 $LOCA["ru"]["OPTIONS_FEED_ACTIVATE"] = "Активировать";
 
+$LOCA["ru"]["OPTIONS_OPER"] = "Настройки оператора";
+$LOCA["ru"]["OPTIONS_OPER_HIDE_EMAIL"] = "Скрывать для игроков Email на странице сообщений";
+
 ?>
