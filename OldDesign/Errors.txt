@@ -1,1 +1,0 @@
-Fatal error: Class 'Zend_Registry' not found in /home/www/ogame_ru_106.4.1.6/include/base.inc.php on line 63

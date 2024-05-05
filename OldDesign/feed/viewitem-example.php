@@ -1,1 +1,0 @@
-<html><head><title>Spionageaktion</title></head><body><h1>Spionageaktion</h1><p>Eine fremde Flotte von Planet Kolonie [1:36:6]  wurde in der Nähe deines Planeten Planet [1:40:9] gesichtet. Chance auf Spionageabwehr: 0 %</p><body></html>
