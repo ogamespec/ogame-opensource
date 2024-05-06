@@ -389,26 +389,26 @@ $LOCA["en"]["CHANGELOG_0.68a"] =
     "- Fixed deuterium consumption in mixed allied fleets <br />\n" .
     "- Adding deuterium to positioned fleets <br />\n" .
     "- Key combinations for menus <br />\n" .
-    "  -alt+х = Overview<br />\n" .
-    "  -alt+ш = Empire<br />\n" .
-    "  -alt+п = Buildings<br />\n" .
-    "  -alt+к = Resources<br />\n" .
-    "  -alt+а = Research<br />\n" .
-    "  -alt+ц = Shipyard<br />\n" .
-    "  -alt+д = Fleet<br />\n" .
-    "  -alt+е = Technology<br />\n" .
-    "  -alt+ч = Galaxy<br />\n" .
-    "  -alt+м = Defense <br />\n" .
-    "  -alt+ф = My alliance<br />\n" .
+    "  -alt+o = Overview<br />\n" .
+    "  -alt+e = Empire<br />\n" .
+    "  -alt+b = Buildings<br />\n" .
+    "  -alt+r = Resources<br />\n" .
+    "  -alt+c = Research<br />\n" .
+    "  -alt+s = Shipyard<br />\n" .
+    "  -alt+f = Fleet<br />\n" .
+    "  -alt+t = Technology<br />\n" .
+    "  -alt+g = Galaxy<br />\n" .
+    "  -alt+d = Defense <br />\n" .
+    "  -alt+a = My alliance<br />\n" .
     "  -alt+1 = Forum<br />\n" .
-    "  -alt+л = Statistics<br />\n" .
-    "  -alt+ы = Search<br />\n" .
-    "  -alt+Р = Help<br />\n" .
-    "  -alt+т = Messages<br />\n" .
-    "  -alt+н = Notes<br />\n" .
-    "  -alt+и = Buddies<br />\n" .
-    "  -alt+у = Settings<br />\n" .
-    "  -alt+й = Logout<br /><br />\n\n" .
+    "  -alt+k = Statistics<br />\n" .
+    "  -alt+h = Search<br />\n" .
+    "  -alt+2 = Help<br />\n" .
+    "  -alt+m = Messages<br />\n" .
+    "  -alt+n = Notes<br />\n" .
+    "  -alt+u = Buddies<br />\n" .
+    "  -alt+p = Settings<br />\n" .
+    "  -alt+q = Logout<br /><br />\n\n" .
     "  Windows and Internet Explorer: \"Alt\" + Access key + \"Enter\"<br />\n" .
     "  Windows and Mozilla/Netscape: \"Alt\" + Access key <br />\n" .
     "  Windows and Opera: \"Shift\" + \"Esc\" + Access key<br />\n" .

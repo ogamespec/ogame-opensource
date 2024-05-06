@@ -31,4 +31,28 @@ $LOCA["ru"]["MENU_RULES"] = "Правила";
 $LOCA["ru"]["MENU_IMPRESSUM"] = "О нас";
 $LOCA["ru"]["MENU_DISCORD"] = "Дискорд"; 		// новое. Ссылка на Дискорд вставляется после ссылки на Форум
 
+// Хоткеи (появились в версии 0.68a)
+
+$LOCA["ru"]["HK_OVERVIEW"] = "o";
+$LOCA["ru"]["HK_EMPIRE"] = "r";
+$LOCA["ru"]["HK_BUILDING"] = "z";
+$LOCA["ru"]["HK_RESOURCES"] = "s";
+$LOCA["ru"]["HK_RESEARCH"] = "i";
+$LOCA["ru"]["HK_SHIPYARD"] = "v";
+$LOCA["ru"]["HK_FLEET"] = "f";
+$LOCA["ru"]["HK_TECHTREE"] = "t";
+$LOCA["ru"]["HK_GALAXY"] = "g";
+$LOCA["ru"]["HK_DEFENSE"] = "x";
+$LOCA["ru"]["HK_ALLY"] = "a";
+$LOCA["ru"]["HK_BOARD"] = "m";
+$LOCA["ru"]["HK_PAYMENT"] = "y"; 		// В оригинальном RU переводе 0.84 было "o" и конфликтовало с Обзором (#77)
+$LOCA["ru"]["HK_STAT"] = "k";
+$LOCA["ru"]["HK_SEARCH"] = "p";
+$LOCA["ru"]["HK_TUTORIAL"] = "^";
+$LOCA["ru"]["HK_MESSAGES"] = "b";
+$LOCA["ru"]["HK_NOTES"] = "e";
+$LOCA["ru"]["HK_BUDDY"] = "d";
+$LOCA["ru"]["HK_OPTIONS"] = "n";
+$LOCA["ru"]["HK_LOGOUT"] = "q";
+
 ?>

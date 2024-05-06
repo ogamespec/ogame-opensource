@@ -29,4 +29,28 @@ $LOCA["de"]["MENU_RULES"] = "Regeln";
 $LOCA["de"]["MENU_IMPRESSUM"] = "Impressum";
 $LOCA["de"]["MENU_DISCORD"] = "Discord"; 		// Neu. Der Link zu Discord wird nach dem Link zum Forum eingefügt
 
+// Hotkeys (eingeführt in Version 0.68a)
+
+$LOCA["de"]["HK_OVERVIEW"] = "u";
+$LOCA["de"]["HK_EMPIRE"] = "i";
+$LOCA["de"]["HK_BUILDING"] = "g";
+$LOCA["de"]["HK_RESOURCES"] = "r";
+$LOCA["de"]["HK_RESEARCH"] = "f";
+$LOCA["de"]["HK_SHIPYARD"] = "w";
+$LOCA["de"]["HK_FLEET"] = "l";
+$LOCA["de"]["HK_TECHTREE"] = "t";
+$LOCA["de"]["HK_GALAXY"] = "x";
+$LOCA["de"]["HK_DEFENSE"] = "v";
+$LOCA["de"]["HK_ALLY"] = "a";
+$LOCA["de"]["HK_BOARD"] = "1";
+$LOCA["de"]["HK_PAYMENT"] = "o";   // Als diese Tastenkombination erschien, wurde sie in die RU-Übersetzung verschoben und geriet in Konflikt mit Overview (#77)
+$LOCA["de"]["HK_STAT"] = "k";
+$LOCA["de"]["HK_SEARCH"] = "s";
+$LOCA["de"]["HK_TUTORIAL"] = "h";
+$LOCA["de"]["HK_MESSAGES"] = "n";
+$LOCA["de"]["HK_NOTES"] = "z";
+$LOCA["de"]["HK_BUDDY"] = "b";
+$LOCA["de"]["HK_OPTIONS"] = "e";
+$LOCA["de"]["HK_LOGOUT"] = "q";
+
 ?>
