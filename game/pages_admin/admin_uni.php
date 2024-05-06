@@ -26,11 +26,11 @@ function Admin_Uni ()
 
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
     {
-        if ( key_exists ('news_upd', $_POST) )        // Обновить новости
+        if ( key_exists ('news_upd', $_POST) )        // Update the news
         {
             if ( $_POST['news_upd'] > 0 ) UpdateNews ( $_POST['news1'], $_POST['news2'], $_POST['news_upd'] );
         }
-        if ( key_exists ('news_off', $_POST) && $_POST['news_off'] === "on" )    // Убрать новости
+        if ( key_exists ('news_off', $_POST) && $_POST['news_off'] === "on" )    // Remove the news
         {
             DisableNews ();
         }
