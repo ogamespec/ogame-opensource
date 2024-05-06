@@ -20,7 +20,7 @@
 
 ## Pages
 
-|Страница|Параметры GET|Параметры POST|
+|Страница (`$_GET['page']`)|Параметры GET|Параметры POST|
 |--------|-------------|--------------|
 |ainfo|allyid | - |
 |allianzdepot|cp, session |cXXX (stationed fleet index) |
