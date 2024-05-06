@@ -16,5 +16,7 @@ $LOCA["jp"]["OVERVIEW_COORD"] = "座標</th><th colspan=3>#1</th></tr>";
 $LOCA["jp"]["OVERVIEW_RANK"] = "メガネ</th><th colspan=3>#1 (場所 #2 の #3)</th></tr>";
 $LOCA["jp"]["OVERVIEW_ADMIN_NOTE"] = "管理者モードでは、概要と管理者はゲームイベントキューを更新しません。";
 $LOCA["jp"]["OVERVIEW_FREE"] = "";
+$LOCA["jp"]["OVERVIEW_VM"] = "ホリデーモード";
+$LOCA["jp"]["OVERVIEW_UNI_FREEZE"] = "宇宙は一時停止している。";
 
 ?>

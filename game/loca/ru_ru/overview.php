@@ -16,5 +16,7 @@ $LOCA["ru"]["OVERVIEW_COORD"] = "Координаты</th><th colspan=3>#1</th><
 $LOCA["ru"]["OVERVIEW_RANK"] = "Очки</th><th colspan=3>#1 (место #2 из #3)</th></tr>";
 $LOCA["ru"]["OVERVIEW_ADMIN_NOTE"] = "В режиме администратора Обзор и Админка не обновляют очередь игровых событий.";
 $LOCA["ru"]["OVERVIEW_FREE"] = "";
+$LOCA["ru"]["OVERVIEW_VM"] = "режим отпуска";
+$LOCA["ru"]["OVERVIEW_UNI_FREEZE"] = "Вселенная поставлена на паузу.";
 
 ?>

@@ -16,5 +16,7 @@ $LOCA["de"]["OVERVIEW_COORD"] = "Position</th><th colspan=3>#1</th></tr>";
 $LOCA["de"]["OVERVIEW_RANK"] = "Punkte</th><th colspan=3>#1 (Platz #2 von #3)</th></tr>";
 $LOCA["de"]["OVERVIEW_ADMIN_NOTE"] = "Im Administrator-Modus Übersicht und Admin nicht aktualisieren Event-Queue.";
 $LOCA["de"]["OVERVIEW_FREE"] = "frei";
+$LOCA["de"]["OVERVIEW_VM"] = "Urlaubsmodus";
+$LOCA["de"]["OVERVIEW_UNI_FREEZE"] = "Das Universum ist in eine Pause versetzt worden.";
 
 ?>

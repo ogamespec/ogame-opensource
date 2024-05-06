@@ -2,7 +2,7 @@
 
 // Overview.
 
-// TODO: Carefully check the generated HTML code for authenticity with the original (especially the recently discovered flaw with "free" #76).
+// TODO: Carefully check the generated HTML code for authenticity with the original (especially the recently discovered issue with "free" #76).
 
 loca_add ( "menu", $GlobalUser['lang'] );
 loca_add ( "fleetorder", $GlobalUser['lang'] );
@@ -203,8 +203,8 @@ echo "<tr><th> ".va( loca("OVERVIEW_RANK"),  $score,  "<a href='index.php?page=s
 echo "</table>\n<br><br><br><br><br>\n";
 EndContent ();
 
-if ( $GlobalUser['vacation']) $OverviewError = "<center>\nрежим отпуска<br></center>\n";
-if ( $uni['freeze'] ) $OverviewError .= "<center>\nВселенная поставлена на паузу.<br></center>\n";
+if ( $GlobalUser['vacation']) $OverviewError = "<center>\n".loca("OVERVIEW_VM")."<br></center>\n";
+if ( $uni['freeze'] ) $OverviewError .= "<center>\n".loca("OVERVIEW_UNI_FREEZE")."<br></center>\n";
 
 if ( $GlobalUser['admin'] > 0 ) $OverviewMessage .= "<center>".loca("OVERVIEW_ADMIN_NOTE")."<br></center>\n";
 

@@ -16,5 +16,7 @@ $LOCA["it"]["OVERVIEW_COORD"] = "Posizione</th><th colspan=3>#1</th></tr>";
 $LOCA["it"]["OVERVIEW_RANK"] = "Punteggio</th><th colspan=3>#1 (posizione #2 su #3)</th></tr>";
 $LOCA["it"]["OVERVIEW_ADMIN_NOTE"] = "In modalità amministratore, Panoramica e Amministrazione non aggiornano la coda degli eventi.";
 $LOCA["it"]["OVERVIEW_FREE"] = "libero"; 		// controllo
+$LOCA["it"]["OVERVIEW_VM"] = "modalità vacanza";
+$LOCA["it"]["OVERVIEW_UNI_FREEZE"] = "L'universo è stato messo in pausa.";
 
 ?>
