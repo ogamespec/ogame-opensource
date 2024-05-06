@@ -113,6 +113,14 @@ function FleetSpan ( $fleet_entry )
     $k = $fleet_entry['k'];
     $d = $fleet_entry['d'];
 
+// $dir mask:
+// 0x0 - own fleet departs 
+// 0x1 - own fleet returns
+// 0x2 - own fleet holds
+// 0x10 - enemy fleet departs
+// 0x20 - allied fleet departs
+// 0x22 - allied fleet holds
+
     if (0) {}
     else if ($mission == FTYP_ATTACK)            // Attack
     {
@@ -134,8 +142,11 @@ function FleetSpan ( $fleet_entry )
         else if ($dir == 1) echo "<span class='return ownfederation'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownfederation"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
             va(loca("EVENT_FROM_RETURN_TO"), PlanetFrom($origin, "ownfederation"), PlanetTo($target, "ownfederation")).
             ". ".loca("EVENT_MISSION").": ".Cargo($m,$k,$d,"ownfederation",loca("EVENT_M_ACS_ATTACK"))."</span>";
-        else if ($dir == 0x10) echo "<span class='attack'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"attack"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-            va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "attack"), PlanetTo($target, "attack")).
+        else if ($dir == 0x10) echo "<span class='federation'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"federation"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
+            va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "federation"), PlanetTo($target, "federation")).
+            ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ACS_ATTACK")."</span>";
+        else if ($dir == 0x20) echo "<span class='ownfederation'>".va(loca("EVENT_FLEET_ACS_HEAD"),OverFleet($fleet,1,"ownfederation"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
+            va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "ownfederation"), PlanetTo($target, "ownfederation")).
             ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ACS_ATTACK")."</span>";
     }
     else if ($mission == FTYP_TRANSPORT)            // Transport
@@ -268,7 +279,7 @@ function GetMission ( $fleet_obj )
     else return $fleet_obj['mission'] - FTYP_ORBITING;
 }
 
-function GetDirectionAssignment ( $fleet_obj, &$dir, &$assign )
+function GetDirectionAssignment ( $friendly, $fleet_obj, &$dir, &$assign )
 {
     global $GlobalUser;
 
@@ -278,7 +289,7 @@ function GetDirectionAssignment ( $fleet_obj, &$dir, &$assign )
 
     if ( $fleet_obj['owner_id'] == $GlobalUser['player_id'] ) $assign = 0;
     else {
-        if (GetMission ($fleet_obj) == FTYP_ACS_HOLD ) $assign = 2;
+        if ($friendly && (GetMission ($fleet_obj) == FTYP_ACS_HOLD || GetMission ($fleet_obj) == FTYP_ACS_ATTACK_HEAD || GetMission ($fleet_obj) == FTYP_ACS_ATTACK) ) $assign = 2;
         else $assign = 1;
     }
 }
@@ -300,7 +311,7 @@ function EventList ()
         $fleet_obj = LoadFleet ( $queue['sub_id'] );
         if ( $fleet_obj['union_id'] > 0 ) continue;        // Union fleets are assembled separately
 
-        // For a departing expedition or ACS hold, add a hold pseudo-task.
+        // For a departing expedition or ACS Hold, add a hold pseudo-task.
         // Don't show foreign fleets.
         if ( ($fleet_obj['mission'] == FTYP_ACS_HOLD || $fleet_obj['mission'] == FTYP_EXPEDITION) && $fleet_obj['owner_id'] == $GlobalUser['player_id'] )
         {
@@ -370,7 +381,7 @@ function EventList ()
             $task[$tasknum]['fleet'][0]['ipm_amount'] = $fleet_obj['ipm_amount'];
             $task[$tasknum]['fleet'][0]['ipm_target'] = $fleet_obj['ipm_target'];
         }
-        GetDirectionAssignment ($fleet_obj, $task[$tasknum]['fleet'][0]['dir'], $task[$tasknum]['fleet'][0]['assign'] );
+        GetDirectionAssignment (true, $fleet_obj, $task[$tasknum]['fleet'][0]['dir'], $task[$tasknum]['fleet'][0]['assign'] );
 
         $tasknum++;
 
@@ -408,6 +419,7 @@ function EventList ()
         // Fleets
         $result = EnumUnionFleets ( $union['union_id'] );
         $rows = dbrows ( $result );
+        $friendly = $union['target_player'] != $GlobalUser['player_id'];        // If the union is flying NOT at the player, then it is a friendly ACS attack
 
         if ( $rows > 0 )    // Do not show empty unions.
         {
@@ -452,7 +464,7 @@ function EventList ()
                 $task[$tn]['fleet'][$f]['origin_id'] = $fleet_obj['start_planet'];
                 $task[$tn]['fleet'][$f]['target_id'] = $fleet_obj['target_planet'];
                 $task[$tn]['fleet'][$f]['mission'] = GetMission ($fleet_obj);
-                GetDirectionAssignment ($fleet_obj, $task[$tn]['fleet'][$f]['dir'], $task[$tn]['fleet'][$f]['assign'] );
+                GetDirectionAssignment ($friendly, $fleet_obj, $task[$tn]['fleet'][$f]['dir'], $task[$tn]['fleet'][$f]['assign'] );
                 $f++;
             }
 

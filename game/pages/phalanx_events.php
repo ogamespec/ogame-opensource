@@ -166,7 +166,7 @@ function FleetSpan ( $fleet_entry )
         echo "</span>";
     }
 
-    else echo "Unknown mission LOL $mission";
+    else echo "Unknown mission: $mission";
 }
 
 function GetMission ( $fleet_obj )
@@ -195,7 +195,7 @@ function PhalanxEventList ($planet_id)
         $queue = GetFleetQueue ($fleet_obj['fleet_id']);
 
         // Union fleets are assembled separately
-        if ( $fleet_obj['union_id'] > 0 && $fleet_obj['target_planet'] == $planet_id && !$unions[ $fleet_obj['union_id'] ])
+        if ( $fleet_obj['union_id'] > 0 && $fleet_obj['target_planet'] == $planet_id && !key_exists($fleet_obj['union_id'], $unions) )
         {
             $task[$tasknum]['end_time'] = $queue['end'];
 
@@ -216,6 +216,7 @@ function PhalanxEventList ($planet_id)
                 $task[$tasknum]['fleet'][$f]['dir'] = 0;    // to the planet
                 $f++;
             }
+            // Mark that this ACS union has been processed and ignore the rest of the fleets on further enumeration
             $unions[ $fleet_obj['union_id'] ] = 1;
 
             $tasknum++;
