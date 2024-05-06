@@ -243,7 +243,7 @@ function CreateUser ( $name, $pass, $email, $bot=false)
 // Turn back fleets flying at the player.
 function RemoveUser ( $player_id, $when)
 {
-    global $db_prefix;
+    global $GlobalUser, $db_prefix;
 
     // Administrator and space accounts cannot be deleted.
     if ($player_id == USER_LEGOR || $player_id == USER_SPACE) return;
@@ -257,6 +257,8 @@ function RemoveUser ( $player_id, $when)
         if ($fleet_obj['owner_id'] != $player_id && $fleet_obj['mission'] < FTYP_RETURN ) RecallFleet ( $fleet_obj['fleet_id'], $when );
     }
 
+    LockTables();
+
     // Delete all of the player's fleets
     $query = "DELETE FROM ".$db_prefix."fleet WHERE owner_id = $player_id";
     dbquery ($query);
@@ -264,6 +266,8 @@ function RemoveUser ( $player_id, $when)
     // Delete all tasks from the queue
     $query = "DELETE FROM ".$db_prefix."queue WHERE owner_id = $player_id";
     dbquery ($query);
+    $query = "DELETE FROM ".$db_prefix."buildqueue WHERE owner_id = $player_id";
+    dbquery ($query);    
 
     // Delete all planets other than the DF that go into space possession.
     $query = "DELETE FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type <> " . PTYP_DF;
@@ -287,7 +291,16 @@ function RemoveUser ( $player_id, $when)
     $query = "DELETE FROM ".$db_prefix."buddy WHERE request_from = $player_id OR request_to = $player_id";
     dbquery ($query);
 
+    UnlockTables ();
+
     RecalcRanks ();
+
+    // If the user is deleted from the user itself - redirect to the home page so the user doesn't see the mess.
+    if ($player_id == $GlobalUser['player_id']) {
+        ob_clean ();
+        RedirectHome ();
+        exit ();
+    }
 }
 
 // Activate the user.
