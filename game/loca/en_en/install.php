@@ -38,6 +38,7 @@ $LOCA["en"]["INSTALL_UNI_MOONS"] = "Moons and deathstars";
 $LOCA["en"]["INSTALL_UNI_BATTLE"] = "Path to battle engine";
 $LOCA["en"]["INSTALL_UNI_PHP_BATTLE"] = "Use a PHP-based battle engine";
 $LOCA["en"]["INSTALL_UNI_FORCE_LANG"] = "Forced to use the language of the universe";
+$LOCA["en"]["INSTALL_MAX_WERF"] = "Maximum number of units in a shipyard order";
 
 $LOCA["en"]["INSTALL_ADMIN"] = "Admin Account";
 $LOCA["en"]["INSTALL_ADMIN_EMAIL"] = "E-Mail";

@@ -38,6 +38,7 @@ $LOCA["de"]["INSTALL_UNI_MOONS"] = "Monde und Todesstern";
 $LOCA["de"]["INSTALL_UNI_BATTLE"] = "Pfad zur Kampfmaschine";
 $LOCA["de"]["INSTALL_UNI_PHP_BATTLE"] = "Verwendung einer PHP-basierten Kampfmaschine";
 $LOCA["de"]["INSTALL_UNI_FORCE_LANG"] = "Gezwungen, die Sprache des Universums zu verwenden";
+$LOCA["de"]["INSTALL_MAX_WERF"] = "Maximale Anzahl von Einheiten in der Werft";
 
 $LOCA["de"]["INSTALL_ADMIN"] = "Admin Account";
 $LOCA["de"]["INSTALL_ADMIN_EMAIL"] = "E-Mail";

@@ -49,8 +49,8 @@ function Admin_Uni ()
             $_POST['did'], 
             $_POST['defrepair'], 
             $_POST['defrepair_delta'], 
-            $_POST['galaxies'], 
-            $_POST['systems'], 
+            intval($_POST['galaxies']), 
+            intval($_POST['systems']), 
             $rapid, 
             $moons, 
             $freeze, 
@@ -58,7 +58,8 @@ function Admin_Uni ()
             $_POST['battle_engine'],
             $php_battle,
             $force_lang,
-            $_POST['start_dm'] );
+            intval($_POST['start_dm']),
+            intval($_POST['max_werf']) );
 
         // Set external links. If the link is empty - the menu item will be missing.
 
@@ -98,6 +99,7 @@ function Admin_Uni ()
 <tr><th><?=loca("ADM_UNI_START_DM");?></th><th><input type="text" name="start_dm" maxlength="10" size="10" value="<?php echo $unitab['start_dm'];?>" /></th></tr>
 <tr><th><?=loca("ADM_UNI_GALAXIES");?></th><th><input type="text" name="galaxies" maxlength="3" size="3" value="<?php echo $unitab['galaxies'];?>" /></th></tr>
 <tr><th><?=loca("ADM_UNI_SYSTEMS");?></th><th><input type="text" name="systems" maxlength="3" size="3" value="<?php echo $unitab['systems'];?>" /></th></tr>
+<tr><th><?=loca("INSTALL_MAX_WERF");?></th><th><input type="text" name="max_werf" maxlength="9" size="9" value="<?php echo $unitab['max_werf'];?>" /></th></tr>
 
   <tr>
    <th><?=loca("ADM_UNI_SPEED");?></th>

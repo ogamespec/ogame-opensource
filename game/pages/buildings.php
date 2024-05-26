@@ -27,8 +27,8 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
 
         if ( $value < 0 ) $value = 0;
         if ( $value > 0 ) {
-            // Calculate amount (no more than the resources on the planet and no more than 999)
-            if ( $value > 999 ) $value = 999;
+            // Calculate amount (no more than the resources on the planet and no more than `max_werf`)
+            if ( $value > $GlobalUni['max_werf'] ) $value = $GlobalUni['max_werf'];
 
             $res = ShipyardPrice ( $gid );
             $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
@@ -154,7 +154,7 @@ if ( $_GET['mode'] === "Flotte" )
             else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) && !$busy) {
                 echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
                 if ( $prem['commander'] ) {
-                    $max = 999;
+                    $max = $GlobalUni['max_werf'];
                     if ( $m ) $max = floor (min ($max, $aktplanet['m'] / $m));
                     if ( $k ) $max = floor (min ($max, $aktplanet['k'] / $k));
                     if ( $d ) $max = floor (min ($max, $aktplanet['d'] / $d));
@@ -238,7 +238,7 @@ if ( $_GET['mode'] === "Verteidigung" )
                     if ( $prem['commander'] && !( $id == GID_D_SDOME || $id == GID_D_LDOME ) ) {
                         if ( $id == GID_D_ABM ) $max = $aktplanet['b44'] * 10 - (2*$aktplanet['d503'] + $aktplanet['d502']);
                         else if ( $id == GID_D_IPM ) $max = ($aktplanet['b44'] * 10 - (2*$aktplanet['d503'] + $aktplanet['d502'])) / 2;
-                        else $max = 999;
+                        else $max = $GlobalUni['max_werf'];
                         if ( $m ) $max = floor (min ($max, $aktplanet['m'] / $m));
                         if ( $k ) $max = floor (min ($max, $aktplanet['k'] / $k));
                         if ( $d ) $max = floor (min ($max, $aktplanet['d'] / $d));
