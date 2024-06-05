@@ -58,16 +58,46 @@ if ( method() === "POST" )
     if ( $_POST['deletemessages'] === "deleteall" ) DeleteAllMessages ( $player_id );    // Delete all messages
     else
     {
-        $result = EnumMessages ( $GlobalUser['player_id'], $MAXMSG);
+        $result = EnumMessages ( $GlobalUser['player_id'], 999999);
         $num = dbrows ($result);
+        $processed = 0;
         while ($num--)
         {
             $msg = dbarray ($result);
+            $pm = $msg['pm'];
+            if ($pm == MTYP_BATTLE_REPORT_TEXT) continue;    // Skip the texts of battle reports.
+            
+            // Filter messages by type if Commander is active AND folder usage is enabled in settings.
+            if ($prem['commander'] && $use_folders) {
+
+                $skip = false;
+                
+                // Method 2
+                // The link shows only posts from the selected category regardless of the checkbox values
+                if (method() === "GET" && key_exists('pm', $_GET) && $method == 2) {
+                    $skip = $pm != intval ($_GET['pm']);
+                }
+                else {
+                    foreach ($folders as $i=>$folder) {
+                        if ($folder['pm'] == $pm && ($GlobalUser['flags'] & $folder['flag']) == 0) {
+                            $skip = true;
+                            break;
+                        }
+                    }
+                }
+
+                if ($skip) continue;
+            }
+
             $msg_id = $msg['msg_id'];
             if ( key_exists("sneak" . $msg_id, $_POST) && $_POST["sneak" . $msg_id] === "on" ) {}    // TODO: Report to the operator
             if ( key_exists("delmes" . $msg_id, $_POST) && $_POST["delmes" . $msg_id] === "on" && $_POST['deletemessages'] === "deletemarked" ) DeleteMessage ( $player_id, $msg_id );    // Delete selected
             if ( !key_exists("delmes" . $msg_id, $_POST) && $_POST['deletemessages'] === "deletenonmarked" ) DeleteMessage ( $player_id, $msg_id );    // Delete unselected
             if ( $_POST['deletemessages'] === "deleteallshown" ) DeleteMessage ( $player_id, $msg_id );    // Delete shown
+
+            $processed++;
+            if ($processed >= $MAXMSG)
+                break;
         }
     }
 
@@ -165,8 +195,9 @@ else {
     echo "<tr><th>".loca("MSG_ACTION")."</th><th>".loca("MSG_DATE")."</th><th>".loca("MSG_FROM")."</th><th>".loca("MSG_SUBJ")."</th></tr>\n";
 }
 
-$result = EnumMessages ( $GlobalUser['player_id'], $MAXMSG);
+$result = EnumMessages ( $GlobalUser['player_id'], 999999);
 $num = dbrows ($result);
+$processed = 0;
 while ($num--)
 {
     $msg = dbarray ($result);
@@ -209,6 +240,10 @@ while ($num--)
     }
     if ($pm == MTYP_PM) echo "<tr><th colspan=\"4\"><input type=\"checkbox\" name=\"sneak".$msg['msg_id']."\"/><input type=\"submit\" value=\"".loca("MSG_REPORT")."\"/></th></tr>\n";
     MarkMessage ( $msg['owner_id'], $msg['msg_id'] );
+
+    $processed++;
+    if ($processed >= $MAXMSG)
+        break;
 }
 
 // Bottom of table
