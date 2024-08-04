@@ -77,7 +77,7 @@ class bbcode {
         $type_of_char = null;
         for ($i=0; $i < $length; ++$i) {
             $previous_type = $type_of_char;
-            switch ($this -> text{$i}) {
+            switch ($this -> text[$i]) {
                 case '[':
                     $type_of_char = 0;
                     break;
@@ -126,21 +126,21 @@ class bbcode {
             switch ($type_of_char) {
                 case 6:
                     if (6 == $previous_type) {
-                        $tokens[$token_key][1] .= $this -> text{$i};
+                        $tokens[$token_key][1] .= $this -> text[$i];
                     } else {
-                    	$tokens[++$token_key] = array(6, $this -> text{$i});
+                    	$tokens[++$token_key] = array(6, $this -> text[$i]);
                     }
                     break;
                 case 7:
                     if (7 == $previous_type) {
-                        $tokens[$token_key][1] .= $this -> text{$i};
+                        $tokens[$token_key][1] .= $this -> text[$i];
                     } else {
-                    	$tokens[++$token_key] = array(7, $this -> text{$i});
+                    	$tokens[++$token_key] = array(7, $this -> text[$i]);
                     }
                     break;
                 default:
                     $tokens[++$token_key] = array(
-                        $type_of_char, $this -> text{$i}
+                        $type_of_char, $this -> text[$i]
                     );
             }
         }
@@ -938,7 +938,7 @@ class bb_a extends bbcode {
             if (! $id) { $id = $text; }
         }
         if ($id) {
-        	if ($id{0} < 'A' || $id{0} > 'z') { $id = 'bb'.$id; }
+        	if ($id[0] < 'A' || $id[0] > 'z') { $id = 'bb'.$id; }
         	$attr .= ' id="'.htmlspecialchars($id).'"';
         }
         if (isset($this -> attrib['target'])) {
@@ -1129,7 +1129,7 @@ class bb_img extends bbcode {
         $src = str_replace('(', '&#'.ord('(').';', $src);
         $src = str_replace(')', '&#'.ord(')').';', $src);
 
-        return "<img class=\"reloadimage\" alt=\"BBCode included image\" title=\"pic.php?url=".$src."\" src=\"pic.php?url=".$src."\" />";
+        return "<img class=reloadimage title=$src src=pic.php?url=".$src." />";
 //      return '<img src="'.$src.'" '.$attr.' />';
     }
 }
