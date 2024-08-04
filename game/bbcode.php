@@ -1161,7 +1161,7 @@ class bb_size extends bbcode {
     function get_html($elems = false) {
         $sign = '';
         if (strlen($this -> attrib['size'])) {
-            $sign = $this -> attrib['size']{0};
+            $sign = $this -> attrib['size'][0];
         }
         if ('+' != $sign) { $sign = ''; }
         $size = (int) $this -> attrib['size'];
