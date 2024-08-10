@@ -201,6 +201,10 @@ function RecalcAllyStats ()
         $res = dbquery ($query);
         if ( dbrows ($res) > 0 ) {
             $score = dbarray ( $res );
+            // There should be no negative points. This can happen if someone created an alliance for an admin.
+            if ($score['sum1'] < 0) $score['sum1'] = 0;
+            if ($score['sum2'] < 0) $score['sum2'] = 0;
+            if ($score['sum3'] < 0) $score['sum3'] = 0;
             $query = "UPDATE ".$db_prefix."ally SET score1 = '".$score['sum1']."', score2 = '".$score['sum2']."', score3 = '".$score['sum3']."' WHERE ally_id = " . $ally['ally_id'];
             dbquery ( $query );
         }
