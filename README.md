@@ -2,6 +2,7 @@
 
 This is revived OGame v 0.84 with old design.
 
+Need help with installation? Ask the community for help.
 Discord: https://discord.gg/xpCV3McAj2
 
 **!!! All trademarks and copyrighted materials are belongs to OGame respective owners - Gameforge 4D GmbH !!!**
@@ -27,7 +28,6 @@ Features:
 - Original expedition with triple Dark Matter chance
 - Open-source!
 - [Install guide](/Wiki/en/install.md)
-- In-game bots
 - And many, many more!
 
 ![screen1](/imgstore/screen1.jpg)
