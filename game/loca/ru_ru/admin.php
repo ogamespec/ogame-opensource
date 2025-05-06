@@ -339,6 +339,7 @@ $LOCA["ru"]["ADM_QUEUE_PRIO"] = "Приоритет";
 $LOCA["ru"]["ADM_QUEUE_CONTROL"] = "Управление";
 $LOCA["ru"]["ADM_QUEUE_COMPLETE"] = "Завершить";
 $LOCA["ru"]["ADM_QUEUE_DELETE"] = "Удалить";
+$LOCA["ru"]["ADM_QUEUE_LOOKUP"] = "Показать задания игрока:";
 $LOCA["ru"]["ADM_QUEUE_SUBMIT"] = "Отправить";
 
 // admin_raksim
