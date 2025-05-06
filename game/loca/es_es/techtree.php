@@ -2,14 +2,14 @@
 
 // Techtree
 
-$LOCA["en"]["TECHTREE_LEVEL"] = "(level #1)";
-$LOCA["en"]["TECHTREE_REQUIRED"] = "Requirements";
-$LOCA["en"]["TECHTREE_BUILDINGS"] = "Buildings";
-$LOCA["en"]["TECHTREE_RESEARCH"] = "Research";
-$LOCA["en"]["TECHTREE_FLEET"] = "Ships";
-$LOCA["en"]["TECHTREE_DEFENSE"] = "Defense";
-$LOCA["en"]["TECHTREE_SPECIAL"] = "Lunar Buildings";
-$LOCA["en"]["TECHTREE_COND_FOR"] = "Building conditions for #1";
-$LOCA["en"]["TECHTREE_COND_NO"] = "No conditions";
+$LOCA["es"]["TECHTREE_LEVEL"] = "(level #1)";
+$LOCA["es"]["TECHTREE_REQUIRED"] = "Requirements";
+$LOCA["es"]["TECHTREE_BUILDINGS"] = "Buildings";
+$LOCA["es"]["TECHTREE_RESEARCH"] = "Research";
+$LOCA["es"]["TECHTREE_FLEET"] = "Ships";
+$LOCA["es"]["TECHTREE_DEFENSE"] = "Defense";
+$LOCA["es"]["TECHTREE_SPECIAL"] = "Lunar Buildings";
+$LOCA["es"]["TECHTREE_COND_FOR"] = "Building conditions for #1";
+$LOCA["es"]["TECHTREE_COND_NO"] = "No conditions";
 
 ?>

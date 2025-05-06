@@ -2,10 +2,10 @@
 
 // Modifications
 
-$LOCA["en"]["MODS"] = "Modifications";
-$LOCA["en"]["MODS_CARNAGE"] = "Carnage mode";
-$LOCA["en"]["MODS_CARNAGE_FLEET_SIZE"] = "Fleet size for Carnage mode on each planet (Bn)";
-$LOCA["en"]["MODS_ENDGAME"] = "Endgame mode";
-$LOCA["en"]["MODS_ENDGAME_DAYS"] = "Game duration for Endgame mode (days)";
+$LOCA["es"]["MODS"] = "Modifications";
+$LOCA["es"]["MODS_CARNAGE"] = "Carnage mode";
+$LOCA["es"]["MODS_CARNAGE_FLEET_SIZE"] = "Fleet size for Carnage mode on each planet (Bn)";
+$LOCA["es"]["MODS_ENDGAME"] = "Endgame mode";
+$LOCA["es"]["MODS_ENDGAME_DAYS"] = "Game duration for Endgame mode (days)";
 
 ?>

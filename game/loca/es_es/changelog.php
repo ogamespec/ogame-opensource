@@ -2,129 +2,129 @@
 
 // Version History.
 
-$LOCA["en"]["CHANGELOG_VERSION"] = "Version";
-$LOCA["en"]["CHANGELOG_DESC"] = "Description";
+$LOCA["es"]["CHANGELOG_VERSION"] = "Version";
+$LOCA["es"]["CHANGELOG_DESC"] = "Description";
 
-$LOCA["en"]["CHANGELOG_0.312apl2"] =
+$LOCA["es"]["CHANGELOG_0.312apl2"] =
     "- Fixing special characters"
 ;
-$LOCA["en"]["CHANGELOG_0.312apl3"] =
+$LOCA["es"]["CHANGELOG_0.312apl3"] =
     "- Corrects a shipyard bug where negative time was shown<br />\n" .
     "- Adding a link to the home page on exit.<br />\n" .
     "- Fixed the shield dome bug. Now they can only be built once."
 ;
-$LOCA["en"]["CHANGELOG_0.312apl4"] =
+$LOCA["es"]["CHANGELOG_0.312apl4"] =
     "- Link to CHANGELOG<br />\n" .
     "- Clearing the cache when building structures<br />\n" .
     "- Building a nanite factory is not possible when building ships"
 ;
-$LOCA["en"]["CHANGELOG_0.312apl5"] =
+$LOCA["es"]["CHANGELOG_0.312apl5"] =
     "- Deleted text about the cost of fleet maintenance"
 ;
-$LOCA["en"]["CHANGELOG_0.312apl6"] =
+$LOCA["es"]["CHANGELOG_0.312apl6"] =
     "- Works return after sending spies<br />\n" .
     "- Thanks to dragoscan in the galaxy works return"
 ;
-$LOCA["en"]["CHANGELOG_0.312apl7"] =
+$LOCA["es"]["CHANGELOG_0.312apl7"] =
     "- Fixing a bug in the shipyard<br />\n" .
     "- Fixes bug when calculating free fields after construction is finished"
 ;
-$LOCA["en"]["CHANGELOG_0.312apl8"] =
+$LOCA["es"]["CHANGELOG_0.312apl8"] =
     "- Correcting an error in production display"
 ;
-$LOCA["en"]["CHANGELOG_0.312apl9"] =
+$LOCA["es"]["CHANGELOG_0.312apl9"] =
     "- Partially fixed a bug that incorrectly displayed the level of construction and research.<br />\n" .
     "- Cannot send to coordinate <0"
 ;
-$LOCA["en"]["CHANGELOG_0.312apl10"] =
+$LOCA["es"]["CHANGELOG_0.312apl10"] =
     "- Allowed space in alliance abbreviation"
 ;
 
-$LOCA["en"]["CHANGELOG_0.321a"] =
+$LOCA["es"]["CHANGELOG_0.321a"] =
     "- Small Alliance System"
 ;
-$LOCA["en"]["CHANGELOG_0.321apl1"] =
+$LOCA["es"]["CHANGELOG_0.321apl1"] =
     "- Fixed several bugs in ACS"
 ;
-$LOCA["en"]["CHANGELOG_0.321apl3"] =
+$LOCA["es"]["CHANGELOG_0.321apl3"] =
     "- Alliance search has been eliminated from the search function<br />\n" .
     "- The search function is tailored to alliances<br />\n" .
     "- The head of an alliance has only the rights given to him by his rank."
 ;
-$LOCA["en"]["CHANGELOG_0.322a"] =
+$LOCA["es"]["CHANGELOG_0.322a"] =
     "- Messages to individual alliance members can be sent from the alliance menu"
 ;
-$LOCA["en"]["CHANGELOG_0.323a"] =
+$LOCA["es"]["CHANGELOG_0.323a"] =
     "- Fixed display of zero level of storages<br />\n" .
     "- Expanded database for ship types<br />\n" .
     "- Fixed an error in the display of ship construction"
 ;
-$LOCA["en"]["CHANGELOG_0.324a"] =
+$LOCA["es"]["CHANGELOG_0.324a"] =
     "- Fixed a bug with planet jumping (failed)"
 ;
-$LOCA["en"]["CHANGELOG_0.325a"] =
+$LOCA["es"]["CHANGELOG_0.325a"] =
     "- Implemented script detectors"
 ;
-$LOCA["en"]["CHANGELOG_0.325apl1"] =
+$LOCA["es"]["CHANGELOG_0.325apl1"] =
     "- Fixed an error with displaying 1000<br />\n" .
     "- Message with empty name<br />\n" .
     "- Recycler bug (it is now possible to transport more than 8M resources)<br />\n" .
     "- New error message when changing alliance name"
 ;
-$LOCA["en"]["CHANGELOG_0.326a"] =
+$LOCA["es"]["CHANGELOG_0.326a"] =
     "- Canceling vacation mode"
 ;
-$LOCA["en"]["CHANGELOG_0.327a"] =
+$LOCA["es"]["CHANGELOG_0.327a"] =
     "- Defense debris no longer falls into debris fields<br />\n" .
     "- Spy probes no longer have weapons or defenses (1% of old values)<br />\n" .
     "- Ability to save recyclers"
 ;
 
-$LOCA["en"]["CHANGELOG_0.330a"] =
+$LOCA["es"]["CHANGELOG_0.330a"] =
     "- The death star can fly<br />\n" .
     "- Vacation mode can be deactivated"
 ;
-$LOCA["en"]["CHANGELOG_0.330apl1"] =
+$LOCA["es"]["CHANGELOG_0.330apl1"] =
     "- Security hole fixed"
 ;
-$LOCA["en"]["CHANGELOG_0.330apl2"] =
+$LOCA["es"]["CHANGELOG_0.330apl2"] =
     "- Security hole fixed"
 ;
-$LOCA["en"]["CHANGELOG_0.330apl3"] =
+$LOCA["es"]["CHANGELOG_0.330apl3"] =
     "- Deathstar was too weak on offense"
 ;
-$LOCA["en"]["CHANGELOG_0.330apl4"] =
+$LOCA["es"]["CHANGELOG_0.330apl4"] =
     "- Deathstar has become more effective against the defense <br/>\n" .
     "- Fixed some flaws in the security <br/>\n" .
     "- First preparations for the accelerated version"
 ;
-$LOCA["en"]["CHANGELOG_0.331a"] =
+$LOCA["es"]["CHANGELOG_0.331a"] =
     "- Ban is possible with a long session"
 ;
-$LOCA["en"]["CHANGELOG_0.331apl1"] =
+$LOCA["es"]["CHANGELOG_0.331apl1"] =
     "- Fixed construction bug"
 ;
-$LOCA["en"]["CHANGELOG_0.331apl2"] =
+$LOCA["es"]["CHANGELOG_0.331apl2"] =
     "- Removed email alert <br/>\n" .
     "- Password recovery simplified <br/>\n" .
     "- Recyclers are no longer disappearing"
 ;
 
-$LOCA["en"]["CHANGELOG_0.34a"] =
+$LOCA["es"]["CHANGELOG_0.34a"] =
     "- Vacation mode is activated by Mouseover<br />\n" .
     "- Research becomes valid when the research is completed"
 ;
-$LOCA["en"]["CHANGELOG_0.35a"] =
+$LOCA["es"]["CHANGELOG_0.35a"] =
     "- Fixed bug in ban lists 1,2,4,5"
 ;
-$LOCA["en"]["CHANGELOG_0.36a"] =
+$LOCA["es"]["CHANGELOG_0.36a"] =
     "- Fixed bugs 6,7,9?,10,13,18,19,22"
 ;
-$LOCA["en"]["CHANGELOG_0.371a"] =
+$LOCA["es"]["CHANGELOG_0.371a"] =
     "- You can search for alliances in the search menu<br />\n" .
     "- Reactivation of moons (test)"
 ;
-$LOCA["en"]["CHANGELOG_0.372a"] =
+$LOCA["es"]["CHANGELOG_0.372a"] =
     "- After big fights, moons may appear<br />\n" .
     "- Moonbase<br />\n" .
     "- Possibility to demolish buildings (for resources)<br />\n" .
@@ -132,25 +132,25 @@ $LOCA["en"]["CHANGELOG_0.372a"] =
     "- Fixed a minor bug in vacation mode<br />\n" .
     "- Sensor phalanx"
 ;
-$LOCA["en"]["CHANGELOG_0.373a"] =
+$LOCA["es"]["CHANGELOG_0.373a"] =
     "- Increased chance of a moon"
 ;
-$LOCA["en"]["CHANGELOG_0.374a"] =
+$LOCA["es"]["CHANGELOG_0.374a"] =
     "- Transportation between different players' planets is now called trade"
 ;
-$LOCA["en"]["CHANGELOG_0.375a"] =
+$LOCA["es"]["CHANGELOG_0.375a"] =
     "- Players who have registered on the page \"Helft OGame\" for a sufficient number of programs have ads disabled."
 ;
-$LOCA["en"]["CHANGELOG_0.376a"] =
+$LOCA["es"]["CHANGELOG_0.376a"] =
     "- Statistics calculation has been improved, the place in the ranking is shown immediately after recalculation."
 ;
-$LOCA["en"]["CHANGELOG_0.377a"] =
+$LOCA["es"]["CHANGELOG_0.377a"] =
     "- In the galaxy, weaker players are indicated in green and stronger players in red (if the opponent is not in VM)"
 ;
-$LOCA["en"]["CHANGELOG_0.3771a"] =
+$LOCA["es"]["CHANGELOG_0.3771a"] =
     "- Password request when deleting a planet"
 ;
-$LOCA["en"]["CHANGELOG_0.3778a"] =
+$LOCA["es"]["CHANGELOG_0.3778a"] =
     "- Activation of protection for newbies\n" .
     "<br />\n" .
     "<br />\n" .
@@ -165,7 +165,7 @@ $LOCA["en"]["CHANGELOG_0.3778a"] =
     "Player A - (200k), Player B (> 10k) - both can attack each other <br />\n" .
     "Player A - (50k), Player B (8k) - both can attack each other"
 ;
-$LOCA["en"]["CHANGELOG_0.3779a"] =
+$LOCA["es"]["CHANGELOG_0.3779a"] =
     "- Newcomer protection is reduced to 5k points and is effective up to 20%<br />\n" .
     "- Accounts inactive for more than 48 days are deleted once a day<br />\n" .
     "- Fixed display bug in research<br />\n" .
@@ -175,41 +175,41 @@ $LOCA["en"]["CHANGELOG_0.3779a"] =
     "- Colonies can only be removed if there is no fleet on them"
 ;
 
-$LOCA["en"]["CHANGELOG_0.38"] =
+$LOCA["es"]["CHANGELOG_0.38"] =
     "- Ships can fly from moon to planet"
 ;
-$LOCA["en"]["CHANGELOG_0.39"] =
+$LOCA["es"]["CHANGELOG_0.39"] =
     "- Graphics can be enabled optionally<br>\n" .
     "- Development of missile silos<br>\n" .
     "- Fixed phalanx bug<br>\n" .
     "- Small fields of debris are decaying<br>\n" .
     "- One less bug in the combat script thanks to Dragosan...."
 ;
-$LOCA["en"]["CHANGELOG_0.40"] =
+$LOCA["es"]["CHANGELOG_0.40"] =
     "- Resources can be sent to the moon"
 ;
-$LOCA["en"]["CHANGELOG_0.41"] =
+$LOCA["es"]["CHANGELOG_0.41"] =
     "- Skins can be installed. Download at ogame.de/ogame.zip<br>\n" .
     " install, specify the path in the settings and activate."
 ;
-$LOCA["en"]["CHANGELOG_0.43"] =
+$LOCA["es"]["CHANGELOG_0.43"] =
     "- Automatic deletion of accounts set for deletion<br>\n" .
     "- When a planet is removed, the adjacent moon is also removed<br>\n" .
     "- The VM can only be deactivated after 2 days"
 ;
-$LOCA["en"]["CHANGELOG_0.44"] =
+$LOCA["es"]["CHANGELOG_0.44"] =
     "- In the path to the skins, the end of the line should always be \"/\"<br>\n" .
     "- Once a day at 3:00 on the server there is a forced unload<br>\n" .
     "- Fixed VM bug"
 ;
-$LOCA["en"]["CHANGELOG_0.45"] =
+$LOCA["es"]["CHANGELOG_0.45"] =
     "- Just one message if a player sends himself resources<br>\n" .
     "- Code optimization<br>\n" .
     "- Using a sensory phalanx costs 5,000 deuterium<br>\n" .
     "- Fixed a bug when renaming planets<br>\n" .
     "- New graphics in the settings menu"
 ;
-$LOCA["en"]["CHANGELOG_0.46"] =
+$LOCA["es"]["CHANGELOG_0.46"] =
     "The cruiser now has a rapid-fire against rocket launchers. The average cruiser <br>\n" .
     "fires at rocket launchers 5 times per round.<br>\n" .
     "- The attacker also has a rapid-fire, the Deathstar makes several volleys when attacking as well<br>\n" .
@@ -218,19 +218,19 @@ $LOCA["en"]["CHANGELOG_0.46"] =
     "- Fixed a bug in the shield<br>\n" .
     "- Viewing the universe costs 10 deuterium to spite the scripters<br>"
 ;
-$LOCA["en"]["CHANGELOG_0.47a"] =
+$LOCA["es"]["CHANGELOG_0.47a"] =
     "- New ship: Bomber<br>\n" .
     "- Deuterium production is now higher and depends on the temperature of the planet<br>\n" .
     "  Hot planets have at least 1% more production, while cold planets have up to 20% more production<br>\n" .
     "- Solar satellites have disabled rapid-fire against spy probes"
 ;
-$LOCA["en"]["CHANGELOG_0.47b"] =
+$LOCA["es"]["CHANGELOG_0.47b"] =
     "- The bomber's new stats"
 ;
-$LOCA["en"]["CHANGELOG_0.48"] =
+$LOCA["es"]["CHANGELOG_0.48"] =
     "- Improved page construction"
 ;
-$LOCA["en"]["CHANGELOG_0.49a"] =
+$LOCA["es"]["CHANGELOG_0.49a"] =
     "- Introduction of interplanetary rockets and interceptor missiles<br>\n" .
     "- Fleets cannot be dispatched during VM<br>\n" .
     "- Bombers have a cargo capacity of 5,000<br>\n" .
@@ -239,7 +239,7 @@ $LOCA["en"]["CHANGELOG_0.49a"] =
     "- Minor improvements to the admin section<br>\n" .
     "- Fixed a minor bug in the Deathstar rapid-fire<br>"
 ;
-$LOCA["en"]["CHANGELOG_0.49b"] =
+$LOCA["es"]["CHANGELOG_0.49b"] =
     "- Unselected messages can be deleted<br>\n" .
     "- Removed the back button in the fleet menu<br>\n" .
     "- The pillar of shame shows the years<br>\n" .
@@ -250,24 +250,24 @@ $LOCA["en"]["CHANGELOG_0.49b"] =
     "- Newbis and VM accounts can't be attacked with missiles<br>"
 ;
 
-$LOCA["en"]["CHANGELOG_0.50"] =
+$LOCA["es"]["CHANGELOG_0.50"] =
     "- Improved battle system (large battles are possible again)"
 ;
-$LOCA["en"]["CHANGELOG_0.51"] =
+$LOCA["es"]["CHANGELOG_0.51"] =
     "- Positive effect of cold planets on deuterium production doubled"
 ;
-$LOCA["en"]["CHANGELOG_0.52"] =
+$LOCA["es"]["CHANGELOG_0.52"] =
     "- Fixed several bugs in the combat system"
 ;
-$LOCA["en"]["CHANGELOG_0.53"] =
+$LOCA["es"]["CHANGELOG_0.53"] =
     "- Fusion power plants use deuterium. They need enough deuterium at all times to function properly<br>\n" .
     "- During combat, the attacked can no longer send additional fleets"
 ;
-$LOCA["en"]["CHANGELOG_0.55a"] =
+$LOCA["es"]["CHANGELOG_0.55a"] =
     "- Before each moon is destroyed, a normal attack takes place. The moon is destroyed only if the attacker wins the battle and has at least one Deathstar remaining<br>\n" .
     "- There's a new menu item called \"notes\""
 ;
-$LOCA["en"]["CHANGELOG_0.56a"] =
+$LOCA["es"]["CHANGELOG_0.56a"] =
     "- Combat reports show only total combat power, not effective combat power<br>\n" .
     "- Through the sensor phalanx, you can again view the planet being scanned<br>\n" .
     "- Players with a blank password must create a password for themselves<br>\n" .
@@ -307,13 +307,13 @@ $LOCA["en"]["CHANGELOG_0.56a"] =
     "[fs] - size - [fs]6[/fs]Hallo[/f]<br>\n" .
     "- Fixing minor bugs"
 ;
-$LOCA["en"]["CHANGELOG_0.56b"] =
+$LOCA["es"]["CHANGELOG_0.56b"] =
     "- Gates are available in all universes"
 ;
-$LOCA["en"]["CHANGELOG_0.57a"] =
+$LOCA["es"]["CHANGELOG_0.57a"] =
     "- The number of spy probes sent out of the galaxy is set in the settings"
 ;
-$LOCA["en"]["CHANGELOG_0.58a"] =
+$LOCA["es"]["CHANGELOG_0.58a"] =
     "- Time gap before planet removal (after 24 hours only)<br>\n" .
     "  Prior to removal, the planet is labeled as an asteroid field (in the galaxy is referred to as \"A\")<br>\n" .
     "- Fixed moon bug<br>\n" .
@@ -323,21 +323,21 @@ $LOCA["en"]["CHANGELOG_0.58a"] =
     "- Weapon technology now affects the power of interplanetary rockets<br>\n" .
     "  One missile used to destroy 33 missiles, with level 10 weapon technology it destroys 66"
 ;
-$LOCA["en"]["CHANGELOG_0.58b"] =
+$LOCA["es"]["CHANGELOG_0.58b"] =
     "- The asteroid fields are being removed"
 ;
-$LOCA["en"]["CHANGELOG_0.59a"] =
+$LOCA["es"]["CHANGELOG_0.59a"] =
     "- Deathstar now has more problems with destroyers and a weaker rapid fire rate<br>\n" .
     "- Group messaging in alliances works again<br>\n" .
     "- The BB code is now visible to guests<br>\n" .
     "- Fixed minor bugs"
 ;
 
-$LOCA["en"]["CHANGELOG_0.60a"] =
+$LOCA["es"]["CHANGELOG_0.60a"] =
     "- advanced settings menu<br/>\n" .
     "- A link to the operator's e-mail address has been added to the Pranger"
 ;
-$LOCA["en"]["CHANGELOG_0.61a"] =
+$LOCA["es"]["CHANGELOG_0.61a"] =
     "- For all players<br />\n" .
     "  - display of the remaining carrying capacity when dispatching a fleet<br />\n" .
     "  - When sending a fleet, you can select all ships of the same type or all ships of all types<br />\n" .
@@ -350,16 +350,16 @@ $LOCA["en"]["CHANGELOG_0.61a"] =
     "  - an address book of alliance members, friends and operators<br />\n" .
     "   - notes can be viewed through messages and are sorted automatically by priority and time."
 ;
-$LOCA["en"]["CHANGELOG_0.62a"] =
+$LOCA["es"]["CHANGELOG_0.62a"] =
     "- Preparing the ACS<br />\n" .
     "- When sending a fleet, you can select maximum resources"
 ;
-$LOCA["en"]["CHANGELOG_0.63a"] =
+$LOCA["es"]["CHANGELOG_0.63a"] =
     "- Additional skins that have been given names<br />\n" .
     "- Minor changes to the fleets menu<br />\n" .
     "- Fixes for various bugs"
 ;
-$LOCA["en"]["CHANGELOG_0.64a"] =
+$LOCA["es"]["CHANGELOG_0.64a"] =
     "- The galaxy is also displayed in the skins<br />\n" .
     "- Buttons in the fleets menu are made as links again<br />\n" .
     "- Deuterium consumption is highlighted in color (green for sufficient payload, otherwise red)<br />\n" .
@@ -371,21 +371,21 @@ $LOCA["en"]["CHANGELOG_0.64a"] =
     "- The icon to send a message has reappeared below the list of alliance members<br />\n" .
     "- The fleet return time is shown on the last page of the fleet menu"
 ;
-$LOCA["en"]["CHANGELOG_0.65a1"] =
+$LOCA["es"]["CHANGELOG_0.65a1"] =
     "- Accelerated combat system<br />\n" .
     "- New commander features: building queue and empire overview"
 ;
-$LOCA["en"]["CHANGELOG_0.66a1"] =
+$LOCA["es"]["CHANGELOG_0.66a1"] =
     "- Fixed bugs in ACS<br />\n" .
     "- Internal correction of possible errors during planet removal<br />\n" .
     "- Fixed a bug in the skin when showing the galaxy<br />\n" .
     "- When changing a name, the name is checked against the list of forbidden names, spaces at the beginning and at the end are automatically removed, the limit is 20 characters.<br />\n" .
     "- Alliance abbreviations should contain only two characters, spaces at the beginning and end are removed<br />"
 ;
-$LOCA["en"]["CHANGELOG_0.67a"] =
+$LOCA["es"]["CHANGELOG_0.67a"] =
     "- Some improvements"
 ;
-$LOCA["en"]["CHANGELOG_0.68a"] =
+$LOCA["es"]["CHANGELOG_0.68a"] =
     "- Fixed deuterium consumption in mixed allied fleets <br />\n" .
     "- Adding deuterium to positioned fleets <br />\n" .
     "- Key combinations for menus <br />\n" .
@@ -426,7 +426,7 @@ $LOCA["en"]["CHANGELOG_0.68a"] =
     "  - Flight Blocking<br />\n" .
     "  - Partial fleet recall"
 ;
-$LOCA["en"]["CHANGELOG_0.69a"] =
+$LOCA["es"]["CHANGELOG_0.69a"] =
     "- A new galaxy view for the commander:<br />\n" .
     "- Sending probes from the moons<br />\n" .
     "- The ability to recycle the debris field right out of the galaxy.<br />\n" .
@@ -438,12 +438,12 @@ $LOCA["en"]["CHANGELOG_0.69a"] =
     "- Colonies are removed without PW<br />\n" .
     "- Inactive players have resources mined continuously<br />"
 ;
-$LOCA["en"]["CHANGELOG_0.69b"] =
+$LOCA["es"]["CHANGELOG_0.69b"] =
     "- Interplanetary missiles cost half as much (12.5, 2.5, and 10k).<br>\n" .
     "- Each level of missile silo development increases its capacity by 10 interceptor missiles (either 3 interplanetary missiles and 4 interceptor missiles, or 1 IPM and 8 ABMs, etc.)<br>\n" .
     "- Fixed minor bugs"
 ;
-$LOCA["en"]["CHANGELOG_0.69c"] =
+$LOCA["es"]["CHANGELOG_0.69c"] =
     "- Engine Improvements: <br />\n" .
     "&nbsp;&nbsp;  - A small cargo is equipped with a impulse drive if it is developed to 5th level and its initial speed is increased<br />\n" .
     "&nbsp;&nbsp;  - A bomber is equipped with a hyperspace drive if it is developed to 8th level and its initial speed is increased <br />\n" .
@@ -452,19 +452,19 @@ $LOCA["en"]["CHANGELOG_0.69c"] =
     "- The defender can see the order to the attacker's fleet<br />"
 ;
 
-$LOCA["en"]["CHANGELOG_0.70a"] =
+$LOCA["es"]["CHANGELOG_0.70a"] =
     "- New construction: terraformer<br />\n" .
     "  Terraformer increases the buildable area of a planet.<br /><br />\n" .
     "- New research: an intergalactic research network<br />\n" .
     "  Scientists from different planets share data through this network<br /><br />\n" .
     "- The terraformer and moonbase can't be demolished."
 ;
-$LOCA["en"]["CHANGELOG_0.70b"] =
+$LOCA["es"]["CHANGELOG_0.70b"] =
     "- In Stats: <br />\n" .
     "  Added research and fleet statistics to the alliance statistics.<br />  \n" .
     "  The overall stats have been redone."
 ;
-$LOCA["en"]["CHANGELOG_0.70c"] =
+$LOCA["es"]["CHANGELOG_0.70c"] =
     "- In Stats:<br> \n" .
     "  - Your name is shown in green color<br>\n" .
     "  - Alliance members are displayed in blue color<br>\n" .
@@ -483,7 +483,7 @@ $LOCA["en"]["CHANGELOG_0.70c"] =
     "- the ranking in the Overview menu is related to statistics<br><br>\n" .
     "- in the standard skin appeared pictures for terraformer and intergalactic research network (thanks da woife)"
 ;
-$LOCA["en"]["CHANGELOG_0.70d"] =
+$LOCA["es"]["CHANGELOG_0.70d"] =
     "- 3 first days without ads after registration <br> \n" .
     "- After four days with cut-rate advertising <br><br> \n\n" .
     "Bug Fixes:<br> \n" .
@@ -495,7 +495,7 @@ $LOCA["en"]["CHANGELOG_0.70d"] =
     "- Pressing the sensor phalanx does not lead to a galaxy view <br> \n" .
     "- In the empire overview, it is possible to start construction with a double click"
 ;
-$LOCA["en"]["CHANGELOG_0.71"] =
+$LOCA["es"]["CHANGELOG_0.71"] =
     "Updated fleet dispatch/arrival messages:<br /> \n" .
     "- Syntactic and stylistic errors have been eliminated<br /> \n" .
     "- The resource load of your own fleets is now displayed in alternate text<br> \n" .
@@ -505,11 +505,11 @@ $LOCA["en"]["CHANGELOG_0.71"] =
     "&nbsp;&nbsp - names in messages can take on a color that matches the color of the fleet message<br><br> \n" .
     "- The moons became known as moons"
 ;
-$LOCA["en"]["CHANGELOG_0.71b"] =
+$LOCA["es"]["CHANGELOG_0.71b"] =
     "- When the temporary e-mail address is changed, a message is sent to the permanent address<br> \n" .
     "- New translations added"
 ;
-$LOCA["en"]["CHANGELOG_0.72"] =
+$LOCA["es"]["CHANGELOG_0.72"] =
     "New overview:<br>\n" .
     "- improved design<br>\n" .
     "- graphical representation of planets, moons and debris fields<br>\n" .
@@ -522,12 +522,12 @@ $LOCA["en"]["CHANGELOG_0.72"] =
     "- status bar for recyclers, spies, interplanetary missiles and fleet slots in use<br>\n" .
     "- ability to configure icons in the settings"
 ;
-$LOCA["en"]["CHANGELOG_0.72b"] =
+$LOCA["es"]["CHANGELOG_0.72b"] =
     "- Planets can be viewed again by clicking on its name in the phalanx <br>\n" .
     "- It is impossible to change the name of the moons <br>\n" .
     "- Fixed message displayed when ships have insufficient cargo capacity"
 ;
-$LOCA["en"]["CHANGELOG_0.72c"] =
+$LOCA["es"]["CHANGELOG_0.72c"] =
     "Changes to the galaxy view:<br>\n" .
     "- In the coordinates, the distance is increased to two spaces <br>\n" .
     "- The moon size is displayed again <br>\n" .
@@ -536,30 +536,30 @@ $LOCA["en"]["CHANGELOG_0.72c"] =
     "- When an e-mail address is changed, a check is made to ensure that it is registered as the primary e-mail address <br>\n" .
     "- Fixing minor bugs"
 ;
-$LOCA["en"]["CHANGELOG_0.73"] =
+$LOCA["es"]["CHANGELOG_0.73"] =
     "- Major bug fixed"
 ;
-$LOCA["en"]["CHANGELOG_0.73a"] =
+$LOCA["es"]["CHANGELOG_0.73a"] =
     "- Improvement of the request processing system"
 ;
-$LOCA["en"]["CHANGELOG_0.73b"] =
+$LOCA["es"]["CHANGELOG_0.73b"] =
     "Improving the galaxy view:<br>\n" .
     "- it is possible to move between galaxies and solar systems using the arrows <br><br>\n" .
     "For commanders:<br>\n" .
     "- in the settings you can specify whether to sort messages into folders or not <br>\n" .
     "- Display the time remaining until the start of building or ship construction or research"
 ;
-$LOCA["en"]["CHANGELOG_0.73c"] =
+$LOCA["es"]["CHANGELOG_0.73c"] =
     "For commanders:<br>\n" .
     "- you can see how many ships/defenses can be built on a planet with the available resources.<br>\n" .
     "- if there are not enough resources for construction, they are highlighted in red. The exact number is given in the alternative text"
 ;
-$LOCA["en"]["CHANGELOG_0.73d"] =
+$LOCA["es"]["CHANGELOG_0.73d"] =
     "- Fixed flaws in the build, notes and alliance menus<br>\n" .
     "- Automatic deletion of empty alliances<br>\n" .
     "- Alliances stats are shown correctly"
 ;
-$LOCA["en"]["CHANGELOG_0.73e"] =
+$LOCA["es"]["CHANGELOG_0.73e"] =
     "- Go to the alliance page without a session<br>\n" .
     "- Repetitions in the alliance text have been eliminated<br>\n" .
     "- Removing planets has been made possible in the Opera<br>\n" .
@@ -567,23 +567,23 @@ $LOCA["en"]["CHANGELOG_0.73e"] =
     "- The pictures in the alliance text refer to the same thing"
 ;
 
-$LOCA["en"]["CHANGELOG_0.74"] =
+$LOCA["es"]["CHANGELOG_0.74"] =
     "- New registration <br />\n" .
     "- Fixed a bug in the resource menu when setting percentages <br />\n" .
     "- Fixed a minor bug during construction."
 ;
-$LOCA["en"]["CHANGELOG_0.74a"] =
+$LOCA["es"]["CHANGELOG_0.74a"] =
     "- The cargo capacity of spy probes has been reduced to 0 <br>\n" .
     "- The \"ACS Hold\" mission checks if the owner of the target planet is under beginner protection. <br>\n" .
     "- bug in the \"settings\" menu has been fixed"
 ;
-$LOCA["en"]["CHANGELOG_0.74b"] =
+$LOCA["es"]["CHANGELOG_0.74b"] =
     "- When registering and renaming, the possibility of using several spaces in a row has been canceled <br>\n" .
     "- When renaming, the same special characters are filtered as during registration <br>\n" .
     "- Fixed a bug with alliance text <br>\n" .
     "- The storage capacity in the empire overview is shown correctly"
 ;
-$LOCA["en"]["CHANGELOG_0.74c"] =
+$LOCA["es"]["CHANGELOG_0.74c"] =
     "- Sorting alliance members by coordinates in the alliance list is now working<br />\n" .
     "- Session ID is no longer displayed in the friends list<br />\n" .
     "- Buildings are displayed even if there are not enough resources to build them. The link is inactive and highlighted in red color<br>\n" .
@@ -591,30 +591,30 @@ $LOCA["en"]["CHANGELOG_0.74c"] =
     "- Players with disabled IP verification have their session terminated after 60 min for security reasons<br />\n" .
     "- Gates now only take time to recharge if at least 1 ship has passed through them"
 ;
-$LOCA["en"]["CHANGELOG_0.74d"] =
+$LOCA["es"]["CHANGELOG_0.74d"] =
     "- The alliance page can be accessed from the statistics menu<br>\n" .
     "- Offers to befriend can be sent from the search menu<br>\n" .
     "- For commanders: when you click on the maximum number of ships/defenses that can be built, the entire number is entered into the build field"
 ;
-$LOCA["en"]["CHANGELOG_0.74e"] =
+$LOCA["es"]["CHANGELOG_0.74e"] =
     "- For commanders: in the \"Fleets\" menu, you can create standard fleets whose number corresponds to the level of computer technology plus 1<br>\n" .
     "- The order of the planets in the menu can be changed<br>\n" .
     "- The description of the sensor phalanx specifies the range of action<br>\n" .
     "- The statistics indicate the time of the last recalculation"
 ;
-$LOCA["en"]["CHANGELOG_0.75"] =
+$LOCA["es"]["CHANGELOG_0.75"] =
     "- A new ship: an interceptor<br>\n" .
     "- Changes to the rapid-fire <br>\n" .
     "- Reduced battleship cost (45k metal and 15k crystal)<br>\n" .
     "- Ability to rename moons"
 ;
-$LOCA["en"]["CHANGELOG_0.75a"] =
+$LOCA["es"]["CHANGELOG_0.75a"] =
     "- In the overview below the planet image, the current construction is shown<br>\n" .
     "- When a player is removed from an alliance, a control question appears<br>\n" .
     "- Operator addresses are visible to all players in the message menu<br>\n" .
     "- Sorting planets now works in the empire overview and in the gate menu"
 ;
-$LOCA["en"]["CHANGELOG_0.76"] =
+$LOCA["es"]["CHANGELOG_0.76"] =
     "- Officers:<br />You can now hire an admiral, a geologist, an engineer and a technocrat<br /><br />\n" .
     "- Alliances:<br /> Automatic message to the whole alliance when you leave / join or exclude from the alliance. <br />Small changes to the menu.<br /><br />\n" .
     "- Rockets:<br /> When building missiles, it shows how many missiles can still be built.<br /> When sending interplanetary missiles, the number of available missiles in the galaxy is displayed.<br /><br />\n" .
@@ -622,26 +622,26 @@ $LOCA["en"]["CHANGELOG_0.76"] =
     "10000000 => 10.000.000<br /><br />\n" .
     "- Coordinates are linked to the galaxy from all menus"
 ;
-$LOCA["en"]["CHANGELOG_0.76a"] =
+$LOCA["es"]["CHANGELOG_0.76a"] =
     "- Statistics expanded on all players<br />\n" .
     "- New players receive a welcome letter"
 ;
-$LOCA["en"]["CHANGELOG_0.76b"] =
+$LOCA["es"]["CHANGELOG_0.76b"] =
     "- Updated and simplified registration.<br />\n" .
     "- Fixed a bug in resource display."
 ;
-$LOCA["en"]["CHANGELOG_0.76c"] =
+$LOCA["es"]["CHANGELOG_0.76c"] =
     "- When changing the temporary address, the password is asked for. <br />\n" .
     "- Fixed the activity indicator in the galaxy view."
 ;
-$LOCA["en"]["CHANGELOG_0.77"] =
+$LOCA["es"]["CHANGELOG_0.77"] =
     "- Frames removed<br/>\n" .
     "- Debris fields utilize the full payload of recyclers when processing fields <br/>\n" .
     "- New format for error messages <br/>\n" .
     "- The activity indicator has been moved from the Galaxy menu to the Intelligence<br/>\n" .
     "- Fixed some bugs<br/>"
 ;
-$LOCA["en"]["CHANGELOG_0.77a"] =
+$LOCA["es"]["CHANGELOG_0.77a"] =
     "In the game:<br />\n" .
     "- A level 1 shipyard is required to build interplanetary rockets and interceptor missiles. <br />\n" .
     "<br />\n" .
@@ -653,7 +653,7 @@ $LOCA["en"]["CHANGELOG_0.77a"] =
     "- When viewing statistics, automatic transition to the required page<br />\n" .
     "- You can't invite yourself to the ACS anymore<br />"
 ;
-$LOCA["en"]["CHANGELOG_0.77b"] =
+$LOCA["es"]["CHANGELOG_0.77b"] =
     "- Fixed canceling of construction<br>\n" .
     "- In a missile attack, the primary target is again taken into account<br>\n" .
     "- Fixed display of research status<br>\n" .
@@ -670,7 +670,7 @@ $LOCA["en"]["CHANGELOG_0.77b"] =
     "- Added error message when deleting a planet\n" .
     "- Fixed activity indicator"
 ;
-$LOCA["en"]["CHANGELOG_0.77c"] =
+$LOCA["es"]["CHANGELOG_0.77c"] =
     "- New class of alternative text<br>\n" .
     "- Fixed a bug in the construction queue<br />\n" .
     "Alliance:<br />\n" .
@@ -685,12 +685,12 @@ $LOCA["en"]["CHANGELOG_0.77c"] =
     "- You can't send a fleet to position 0<br />\n" .
     "- Fixed minor bugs"
 ;
-$LOCA["en"]["CHANGELOG_0.77d"] =
+$LOCA["es"]["CHANGELOG_0.77d"] =
     "- Fixed alliance pages<br />\n" .
     "- A new construction queue"
 ;
 
-$LOCA["en"]["CHANGELOG_0.78"] =
+$LOCA["es"]["CHANGELOG_0.78"] =
     "- New feature: expeditions <br />\n" .
     "- New feature: the merchant <br />\n" .
     "- Color text of combat reports <br />\n" .
@@ -698,7 +698,7 @@ $LOCA["en"]["CHANGELOG_0.78"] =
     "- Expanded display of power plants, mines and storage facilities <br />\n" .
     "- Fixed minor bugs"
 ;
-$LOCA["en"]["CHANGELOG_0.78a"] =
+$LOCA["es"]["CHANGELOG_0.78a"] =
     "New:\n" .
     "- Fusion power plant: new formula for energy generation: 30 * Fusion level* (1.05 + energy tech level * 0.01) ^ Fusion level<br />\n" .
     "- Moons can be attacked by interplanetary missiles. Interceptor missiles from a planet can defend the moon<br />\n" .
@@ -717,14 +717,14 @@ $LOCA["en"]["CHANGELOG_0.78a"] =
     "- Own fleets flying to the moon are flying to the planet<br />\n" .
     "- All other fleets flying to the moon return to the start planet"
 ;
-$LOCA["en"]["CHANGELOG_0.78b"] =
+$LOCA["es"]["CHANGELOG_0.78b"] =
     "- Improved security system<br/ >\n" .
     "- Barrier-free play has been restored<br/ >\n" .
     "- Changes in enforced VM<br/ >\n" .
     "- RSS bug fixes<br/ >\n" .
     "- Improvements to the database"
 ;
-$LOCA["en"]["CHANGELOG_0.78c"] =
+$LOCA["es"]["CHANGELOG_0.78c"] =
     "- Constant updating of statistics<br />\n" .
     "- The range of interplanetary rockets has been increased<br />\n" .
     "- Detailed technology view<br />\n" .
@@ -738,7 +738,7 @@ $LOCA["en"]["CHANGELOG_0.78c"] =
     "- Fixed various errors in the text<br />\n" .
     "- Additional measure against cheaters"
 ;
-$LOCA["en"]["CHANGELOG_0.80"] =
+$LOCA["es"]["CHANGELOG_0.80"] =
     "- Rearrangement in PHP5<br>\n" .
     "- Stopping resource production after the storage facility is full <br>\n" .
     "- Coordinates with a link in the phalanx<br>\n" .
@@ -750,7 +750,7 @@ $LOCA["en"]["CHANGELOG_0.80"] =
     "- Disabled [IMG] tag in messages<BR>\n" .
     "- Links to coordinates and player names have been improved<br>"
 ;
-$LOCA["en"]["CHANGELOG_0.81"] =
+$LOCA["es"]["CHANGELOG_0.81"] =
     "- Fixed research statistics<BR>\n" .
     "- Rapid fire is accounted for in combat reports<BR>\n" .
     "- Alliance applications from deleted players are deleted <BR>\n" .
@@ -759,15 +759,15 @@ $LOCA["en"]["CHANGELOG_0.81"] =
     "- Alliance names up to 30 characters<BR>\n" .
     "- Fixed some bugs in research"
 ;
-$LOCA["en"]["CHANGELOG_0.82"] =
+$LOCA["es"]["CHANGELOG_0.82"] =
     "- Some technical improvements for account registration, activation and e-mail change</br>\n" .
     "- Fixed a serious bug with shipyard and fleet movement."
 ;
-$LOCA["en"]["CHANGELOG_0.83"] =
+$LOCA["es"]["CHANGELOG_0.83"] =
     "- Fixed a vulnerability that allows you to get resources from nothing<br>\n" .
     "- Fixed a vulnerability that allows you to unban yourself<br>"
 ;
-$LOCA["en"]["CHANGELOG_0.84"] =
+$LOCA["es"]["CHANGELOG_0.84"] =
     "- Problem with special characters fixed<br>\n" .
     "- Several security holes are closed (XSS)<br>\n" .
     "- Fixed a bug that prevents you from going to VM when there are no buildings under construction<br>\n" .

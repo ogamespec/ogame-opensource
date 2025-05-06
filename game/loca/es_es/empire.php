@@ -2,19 +2,19 @@
 
 // Empire.
 
-$LOCA["en"]["EMPIRE_OVERVIEW"] = "Empire Overview";
-$LOCA["en"]["EMPIRE_PLANETS"] = "Planets";
-$LOCA["en"]["EMPIRE_MOONS"] = "Moons";
-$LOCA["en"]["EMPIRE_RES"] = "Resources";
-$LOCA["en"]["EMPIRE_BUILDINGS"] = "Buildings";
-$LOCA["en"]["EMPIRE_RESEARCH"] = "Research";
-$LOCA["en"]["EMPIRE_FLEET"] = "Ships";
-$LOCA["en"]["EMPIRE_DEFENSE"] = "Defense";
-$LOCA["en"]["EMPIRE_NAME"] = "Name";
-$LOCA["en"]["EMPIRE_COORD"] = "Coordinates";
-$LOCA["en"]["EMPIRE_FIELDS"] = "Fields";
-$LOCA["en"]["EMPIRE_ACTION"] = "click 1x for construction menu, 2x to start construction";
-$LOCA["en"]["EMPIRE_AVG"] = "Average per planet";
-$LOCA["en"]["EMPIRE_SUM"] = "Sum";
+$LOCA["es"]["EMPIRE_OVERVIEW"] = "Empire Overview";
+$LOCA["es"]["EMPIRE_PLANETS"] = "Planets";
+$LOCA["es"]["EMPIRE_MOONS"] = "Moons";
+$LOCA["es"]["EMPIRE_RES"] = "Resources";
+$LOCA["es"]["EMPIRE_BUILDINGS"] = "Buildings";
+$LOCA["es"]["EMPIRE_RESEARCH"] = "Research";
+$LOCA["es"]["EMPIRE_FLEET"] = "Ships";
+$LOCA["es"]["EMPIRE_DEFENSE"] = "Defense";
+$LOCA["es"]["EMPIRE_NAME"] = "Name";
+$LOCA["es"]["EMPIRE_COORD"] = "Coordinates";
+$LOCA["es"]["EMPIRE_FIELDS"] = "Fields";
+$LOCA["es"]["EMPIRE_ACTION"] = "click 1x for construction menu, 2x to start construction";
+$LOCA["es"]["EMPIRE_AVG"] = "Average per planet";
+$LOCA["es"]["EMPIRE_SUM"] = "Sum";
 
 ?>
