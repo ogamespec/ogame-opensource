@@ -12,8 +12,8 @@ $LOCA["ru"]["DM"] = "Тёмная материя";
 
 $LOCA["ru"]["PLANET_HOME"] = "Главная планета";
 $LOCA["ru"]["PLANET_COLONY"] = "Колония";
-$LOCA["ru"]["PLANET_PHANTOM"] = "Planet";
-$LOCA["ru"]["PLANET_ABANDONED"] = "Покинутая колония";
+$LOCA["ru"]["PLANET_PHANTOM"] = "планета";
+$LOCA["ru"]["PLANET_ABANDONED"] = "Покинутая планета";
 $LOCA["ru"]["PLANET_DESTROYED"] = "Уничтоженная планета";
 $LOCA["ru"]["MOON"] = "Луна";
 $LOCA["ru"]["MOON_DESTROYED"] = "Покинута";
