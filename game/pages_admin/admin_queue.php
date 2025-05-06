@@ -149,7 +149,7 @@ function Admin_Queue ()
 
     <br/>
     <form action="index.php?page=admin&session=<?=$session;?>&mode=Queue" method="POST">
-    Показать задания игрока: <input size=15 name="player" value="<?=$playername;?>">
+    <?=loca("ADM_QUEUE_LOOKUP");?> <input size=15 name="player" value="<?=$playername;?>">
     <input type="submit" value="<?=loca("ADM_QUEUE_SUBMIT");?>">
     </form>
 
