@@ -6,22 +6,22 @@
 
 $LOCA["es"]["BUILD_COMPLETE"] = "Done";
 $LOCA["es"]["BUILD_NEXT"] = "Next";
-$LOCA["es"]["BUILD_CANCEL"] = "Cancel";
-$LOCA["es"]["BUILD_DEMOLISH"] = "Demolish";
+$LOCA["es"]["BUILD_CANCEL"] = "Cancelar";
+$LOCA["es"]["BUILD_DEMOLISH"] = "Destruir";
 $LOCA["es"]["BUILD_DEQUEUE"] = "delete";
-$LOCA["es"]["BUILD_LEVEL"] = "level #1";
+$LOCA["es"]["BUILD_LEVEL"] = "nivel #1";
 $LOCA["es"]["BUILD_PRICE"] = "Cost";
-$LOCA["es"]["BUILD_DURATION"] = "Duration";
+$LOCA["es"]["BUILD_DURATION"] = "Tiempo";
 $LOCA["es"]["BUILD_ENQUEUE"] = "In the queue for construction";
 $LOCA["es"]["BUILD_QUEUE_FULL"] = "There's no space! ";
 $LOCA["es"]["BUILD_BUSY"] = "In the process";
 $LOCA["es"]["BUILD_BUILD"] = " build ";
-$LOCA["es"]["BUILD_BUILD_LEVEL"] = "Build <br> level #1";
+$LOCA["es"]["BUILD_BUILD_LEVEL"] = "Ampliar <br> nivel #1";
 
 // Locales for the building page (Shipyard/Defense/Research)
 
-$LOCA["es"]["BUILD_BUILDINGS_HEAD"] = "Buildings#Gebaeude";
-$LOCA["es"]["BUILD_DESC"] = "Description";
+$LOCA["es"]["BUILD_BUILDINGS_HEAD"] = "Buildings#Gebaeude"; // Shipyard?~~???? What even does this go to? buildings.php L85 (echo loca("BUILD_BUILDINGS_HEAD") . "\n";) doesn't appear to do anything?~~
+$LOCA["es"]["BUILD_DESC"] = "Descripción";
 $LOCA["es"]["BUILD_AMOUNT"] = "Qty.";
 $LOCA["es"]["BUILD_SHIPYARD_UNITS"] = "in stock #1";
 $LOCA["es"]["BUILD_SHIPYARD_CANT"] = "impossibly";
@@ -57,7 +57,7 @@ $LOCA["es"]["BUILD_ERROR_RESEARCH_VACATION"] = "Research is not possible in vaca
 
 $LOCA["es"]["BUILD_ERROR_SHIPYARD_BUSY"] = "Neither ships nor defenses can be built as the shipyard or nanite factory is upgraded";
 $LOCA["es"]["BUILD_ERROR_VACATION"] = "Vacation mode minimum to #1";
-$LOCA["es"]["BUILD_ERROR_SHIPYARD_REQUIRED"] = "In order to do that, you need to build a shipyard!";
+$LOCA["es"]["BUILD_ERROR_SHIPYARD_REQUIRED"] = "¡Debes construir un hangar en este planeta para continuar!";
 $LOCA["es"]["BUILD_ERROR_DOME"] = "A shield dome can only be built 1 time.";
 $LOCA["es"]["BUILD_ERROR_RESLAB_BUSY"] = "Conducting research is not possible as the research lab is being upgraded.";
 $LOCA["es"]["BUILD_ERROR_RESLAB_REQUIRED"] = "In order to do this, you need to build a research lab!";
