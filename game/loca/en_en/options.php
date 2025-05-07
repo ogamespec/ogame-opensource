@@ -4,6 +4,7 @@
 
 $LOCA["en"]["OPTIONS_USER"] = "User Data";
 $LOCA["en"]["OPTIONS_USER_NAME"] = "Username";
+$LOCA["en"]["OPTIONS_USER_PASS"] = "Password";
 $LOCA["en"]["OPTIONS_USER_OLDPASS"] = "Old password";
 $LOCA["en"]["OPTIONS_USER_NEWPASS1"] = "New password (min. 8 characters)";
 $LOCA["en"]["OPTIONS_USER_NEWPASS2"] = "New password (repeat)";
