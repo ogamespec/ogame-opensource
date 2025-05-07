@@ -4,6 +4,7 @@
 
 $LOCA["es"]["OPTIONS_USER"] = "User Data";
 $LOCA["es"]["OPTIONS_USER_NAME"] = "Username";
+$LOCA["es"]["OPTIONS_USER_PASS"] = "Contraseña";
 $LOCA["es"]["OPTIONS_USER_OLDPASS"] = "Old password";
 $LOCA["es"]["OPTIONS_USER_NEWPASS1"] = "New password (min. 8 characters)";
 $LOCA["es"]["OPTIONS_USER_NEWPASS2"] = "New password (repeat)";
@@ -60,7 +61,7 @@ $LOCA["es"]["OPTIONS_MSG_VMENABLED"] = "Vacation mode has been turned on. Vacati
 $LOCA["es"]["OPTIONS_MSG_VMDISABLED"] = "Welcome back from vacation #1. Don't forget to increase your resource production again. Have fun with OGame.";
 $LOCA["es"]["OPTIONS_MSG_DEL"] = "Your account was set for deletion. Deletion date:";
 $LOCA["es"]["OPTIONS_MSG_DEACTIP"] = "You have changed the setting for the IP Check. Please log in again.";
-$LOCA["es"]["OPTIONS_MSG_VALIDATE"] = "Eine E-Mail zur Bestätigung Deines Spielerkontos wurde versandt. Klicke auf den Link in dieser Mail um Dein Konto freizuschalten.";
+$LOCA["es"]["OPTIONS_MSG_VALIDATE"] = "An email confirming your player account has been sent. Click the link in this email to activate your account.";
 
 $LOCA["es"]["OPTIONS_ERR_NEEDPASS"] = "You need to enter your password to change the accounts E-Mail address.";
 $LOCA["es"]["OPTIONS_ERR_OLDPASS"] = "Incorrect old password";
