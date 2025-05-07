@@ -17,11 +17,11 @@ $LOCA["es"]["ALLY_FOUND_ALLY"] = "Fundar una alianza";
 $LOCA["es"]["ALLY_FOUND_TAG"] = "Etiqueta de la alianza (De 3-8 caracteres)";
 $LOCA["es"]["ALLY_FOUND_NAME"] = "Nombre de la alianza (Máx. 35 caracteres)";
 $LOCA["es"]["ALLY_FOUND_SUBMIT"] = "Fundar";
-$LOCA["es"]["ALLY_FOUND_ERROR_TAG"] = "Alliance abbreviation is too short";
-$LOCA["es"]["ALLY_FOUND_ERROR_NAME"] = "Alliance name is too short";
-$LOCA["es"]["ALLY_FOUND_ERROR_EXISTS"] = "Alliance #1 unfortunately already exists!";
+$LOCA["es"]["ALLY_FOUND_ERROR_TAG"] = "La etiqueta de la alianza es demasiado corta";
+$LOCA["es"]["ALLY_FOUND_ERROR_NAME"] = "El nombre de la alianza es demasiado corto";
+$LOCA["es"]["ALLY_FOUND_ERROR_EXISTS"] = "¡La alianza #1 ya existe!";
 $LOCA["es"]["ALLY_FOUND_SUCCESS"] = "La alianza #1 [#2] ha sido creada";
-$LOCA["es"]["ALLY_FOUND_CONFIRM"] = "Yes!";
+$LOCA["es"]["ALLY_FOUND_CONFIRM"] = "Sí";
 
 $LOCA["es"]["ALLY_FIND_ALLY"] = "Buscar alianzas";
 $LOCA["es"]["ALLY_FIND_HEAD"] = "Buscar"; // Head
@@ -34,9 +34,9 @@ $LOCA["es"]["ALLY_APPLY"] = "Tu solicitud";
 $LOCA["es"]["ALLY_APPLY_ALREADY"] = "Ya has enviado una solicitud a la alianza [#1]. Por favor, espera hasta que recibas una respuesta o borra la solicitud.";
 $LOCA["es"]["ALLY_APPLY_WITHDRAW"] = "Borrar solicitud";
 
-$LOCA["es"]["ALLY_NEW_DEFAULT_TEXT"] = "Welcome to the alliance page";
+$LOCA["es"]["ALLY_NEW_DEFAULT_TEXT"] = "Bienvenid@ a la página de la alianza";
 $LOCA["es"]["ALLY_NEW_RANK_FOUNDER"] = "Líder";
-$LOCA["es"]["ALLY_NEW_RANK_NEWCOMER"] = "Novato";
+$LOCA["es"]["ALLY_NEW_RANK_NEWCOMER"] = "Nuevo miembro";
 
 // ranks
 
@@ -75,8 +75,8 @@ $LOCA["es"]["ALLY_MAIN_CIRCULAR"] = "Correo circular";
 $LOCA["es"]["ALLY_MAIN_CIRCULAR_LINK"] = "Enviar correo circular";
 $LOCA["es"]["ALLY_MAIN_HOMEPAGE"] = "Sitio web";
 $LOCA["es"]["ALLY_MAIN_INTTEXT"] = "Sección interna ";
-$LOCA["es"]["ALLY_MAIN_LEAVE"] = "Leave this alliance";
-$LOCA["es"]["ALLY_MAIN_LEAVE_SUBMIT"] = "Yes!";
+$LOCA["es"]["ALLY_MAIN_LEAVE"] = "Abandonar la alianza";
+$LOCA["es"]["ALLY_MAIN_LEAVE_SUBMIT"] = "Sí";
 
 // circular
 
@@ -146,33 +146,33 @@ $LOCA["es"]["ALLY_MEMBERS_ONLINE"] = "ALLY_MEMBERS_ONLINE";
 
 // misc
 
-$LOCA["es"]["ALLY_MISC_LEAVE_CONFIRM"] = "Do you really want to leave the alliance\"#1\"?";
+$LOCA["es"]["ALLY_MISC_LEAVE_CONFIRM"] = "¿Realmente deseas salir de la alianza \"#1\"?";
 $LOCA["es"]["ALLY_MISC_CHANGE_WAIT"] = "Wait until #1";
-$LOCA["es"]["ALLY_MISC_CHANGE_TAG_SHORT"] = "Alliance abbreviation is too short";
-$LOCA["es"]["ALLY_MISC_CHANGE_TAG_EXISTS"] = "Alliance #1 unfortunately already exists!";
-$LOCA["es"]["ALLY_MISC_CONFIRM"] = "Confirm";
-$LOCA["es"]["ALLY_MISC_CHANGE_TAG_SUCCESS"] = "The alliance with the abbreviation \"#1\" now has the abbreviation \"#2\"";
+$LOCA["es"]["ALLY_MISC_CHANGE_TAG_SHORT"] = "La etiqueta de la alianza es demasiado corta";
+$LOCA["es"]["ALLY_MISC_CHANGE_TAG_EXISTS"] = "¡La alianza #1 ya existe!";
+$LOCA["es"]["ALLY_MISC_CONFIRM"] = "Continuar";
+$LOCA["es"]["ALLY_MISC_CHANGE_TAG_SUCCESS"] = "La etiqueta de la alianza \"#1\" ha sido cambiada a \"#2\"";
 $LOCA["es"]["ALLY_MISC_CHANGE_OK"] = "Ok";
-$LOCA["es"]["ALLY_MISC_CHANGE_TAG_HEAD"] = "How should the alliance \"#1\" be renamed?".
-$LOCA["es"]["ALLY_MISC_CHANGE_TAG_NEW"] = "New abbreviation: #1.";
-$LOCA["es"]["ALLY_MISC_CHANGE_RENAME"] = "Rename";
-$LOCA["es"]["ALLY_MISC_CHANGE_NAME_SHORT"] = "Alliance name is too short";
-$LOCA["es"]["ALLY_MISC_CHANGE_NAME_SUCCESS"] = "Alliance \"#1\" has been renamed to \"#2\"";
-$LOCA["es"]["ALLY_MISC_CHANGE_NAME_HEAD"] = "How should alliance \"#1\" be renamed?".
-$LOCA["es"]["ALLY_MISC_CHANGE_NAME_NEW"] = "New name:";
+$LOCA["es"]["ALLY_MISC_CHANGE_TAG_HEAD"] = "¿Como deseas renombrar la etiqueta de alianza \"#1\"?".
+$LOCA["es"]["ALLY_MISC_CHANGE_TAG_NEW"] = "Nueva etiqueta: #1.";
+$LOCA["es"]["ALLY_MISC_CHANGE_RENAME"] = "Renombrar";
+$LOCA["es"]["ALLY_MISC_CHANGE_NAME_SHORT"] = "El nombre de la alianza es demasiado corto";
+$LOCA["es"]["ALLY_MISC_CHANGE_NAME_SUCCESS"] = "La alianza \"#1\" ha sido renombrada a \"#2\"";
+$LOCA["es"]["ALLY_MISC_CHANGE_NAME_HEAD"] = "¿Como deseas renombrar de alianza \"#1\"?".
+$LOCA["es"]["ALLY_MISC_CHANGE_NAME_NEW"] = "Nuevo nombre:";
 
 
-$LOCA["es"]["ALLY_MISC_DISMISS_SUCCESS"] = " Alliance has been dissolved.";
+$LOCA["es"]["ALLY_MISC_DISMISS_SUCCESS"] = " La alianza ha sido disuelta.";
 $LOCA["es"]["ALLY_MISC_DISMISS_OK"] = "Ok";
-$LOCA["es"]["ALLY_MISC_DISMISS_CONFIRM"] = " Do you really want to dissolve the \"#1\" alliance?";
-$LOCA["es"]["ALLY_MISC_DISMISS_WARNING1"] = "Warning!";
-$LOCA["es"]["ALLY_MISC_DISMISS_WARNING2"] = "Alliance recovery will be impossible<br>\when all members leave the alliance!";
-$LOCA["es"]["ALLY_MISC_YES_FOR_SURE"] = " Yes, I do!";
+$LOCA["es"]["ALLY_MISC_DISMISS_CONFIRM"] = " ¿Realmente deseas disolver la alianza \"#1\"?";
+$LOCA["es"]["ALLY_MISC_DISMISS_WARNING1"] = "¡Atención!";
+$LOCA["es"]["ALLY_MISC_DISMISS_WARNING2"] = "¡Recuperar la alianza será imposible<br>cuando todos los miembros la abandonen!";
+$LOCA["es"]["ALLY_MISC_YES_FOR_SURE"] = " ¡Sí, quiero!";
 
 $LOCA["es"]["ALLY_MISC_TAKEOVER_SUCCESS"] = "You have forfeited your status.";
 $LOCA["es"]["ALLY_MISC_TAKEOVER_TAKEN"] = "Rank transferred";
-$LOCA["es"]["ALLY_MISC_TAKEOVER_STILL_ACTIVE"] = "Chapter still active";
-$LOCA["es"]["ALLY_MISC_TAKEOVER_BACK"] = " Back";
+$LOCA["es"]["ALLY_MISC_TAKEOVER_STILL_ACTIVE"] = "El fundador aún está activo";
+$LOCA["es"]["ALLY_MISC_TAKEOVER_BACK"] = " Volver";
 $LOCA["es"]["ALLY_MISC_TAKEOVER_OK"] = "OK";
 $LOCA["es"]["ALLY_MISC_TAKEOVER_HEAD"] = " Transfer manual over \"#1\"";
 $LOCA["es"]["ALLY_MISC_TAKEOVER_WHO"] = " Transfer rank";
@@ -182,22 +182,22 @@ $LOCA["es"]["ALLY_MISC_TAKEOVER_SUBMIT"] = " Transfer";
 // Alliance messages
 
 $LOCA["es"]["ALLY_MSG_FROM"] = " Alliance [#1]";
-$LOCA["es"]["ALLY_MSG_CIRC_SUBJ"] = "General message to your alliance [#1]";
-$LOCA["es"]["ALLY_MSG_CIRC_TEXT"] = " Player #1 informs you of the following:<br>#2";
-$LOCA["es"]["ALLY_MSG_COMMON"] = " General Message";
-$LOCA["es"]["ALLY_MSG_KICK_TEXT"] = " Player #1 has been expelled from the alliance.";
-$LOCA["es"]["ALLY_MSG_KICK_SUBJ"] = "[#1] alliance membership is terminated.";
-$LOCA["es"]["ALLY_MSG_YOU_KICKED"] = " Player #1 has expelled you from alliance [#2] .<br>You may now register again.";
-$LOCA["es"]["ALLY_MSG_LEAVE"] = " Player #1 has left the alliance.";
- $LOCA["es"]["ALLY_MSG_DISMISS_SUBJ"] = "Alliance membership[#1]has ended.";
-$LOCA["es"]["ALLY_MSG_DISMISS"] = "[Player #1] has dissolved alliance[#2].<br>You may now join another alliance or create your own";
-$LOCA["es"]["ALLY_MSG_TAKEOVER_SUBJ"] = "A change of power in alliance [#1].";
-$LOCA["es"]["ALLY_MSG_TAKEOVER"] = "Player #1, who holds the title of alliance founder, has left the alliance";
-$LOCA["es"]["ALLY_MSG_APPLY_ALLY"] = "Player #1 has been accepted into our alliance.";
-$LOCA["es"]["ALLY_MSG_APPLY_YES"] = "Registration [#1] has been accepted.";
-$LOCA["es"]["ALLY_MSG_APPLY_PLAYER"] = "Congratulations, you are now a member of alliance [#1].";
-$LOCA["es"]["ALLY_MSG_APPLY_NO"] = "Registration [#1] rejected.";
-$LOCA["es"]["ALLY_MSG_APPLY_NO_REASON"] = "-reason not specified-";
+$LOCA["es"]["ALLY_MSG_CIRC_SUBJ"] = "Enviar correo circular a tu alianza [#1]";
+$LOCA["es"]["ALLY_MSG_CIRC_TEXT"] = "El jugador #1 te informa de lo siguiente:<br>#2";
+$LOCA["es"]["ALLY_MSG_COMMON"] = "Correo circular";
+$LOCA["es"]["ALLY_MSG_KICK_TEXT"] = "El jugador #1 ha sido expulsado de la alianza.";
+$LOCA["es"]["ALLY_MSG_KICK_SUBJ"] = "La membresía de la alianza [#1] ha sido rescindida.";
+$LOCA["es"]["ALLY_MSG_YOU_KICKED"] = "El jugador #1 te ha expulsado de la alianza [#2].<br>Puedes inscribirte de nuevo.";
+$LOCA["es"]["ALLY_MSG_LEAVE"] = "El jugador #1 ha abandonado la alianza.";
+$LOCA["es"]["ALLY_MSG_DISMISS_SUBJ"] = "La membresía de la alianza [#1] ha terminado.";
+$LOCA["es"]["ALLY_MSG_DISMISS"] = "[Player #1] ha disuelto la alianza [#2].<br>Puedes buscar una alianza nueva o crear la tuya propia";
+$LOCA["es"]["ALLY_MSG_TAKEOVER_SUBJ"] = "Cambio de mando en la alianza [#1].";
+$LOCA["es"]["ALLY_MSG_TAKEOVER"] = "El jugador #1, que ostenta el título de fundadora de la alianza, ha abandonado la alianza";
+$LOCA["es"]["ALLY_MSG_APPLY_ALLY"] = "El jugador #1 ha sido aceptado en la alianza.";
+$LOCA["es"]["ALLY_MSG_APPLY_YES"] = "Fuiste aceptado en [#1]";
+$LOCA["es"]["ALLY_MSG_APPLY_PLAYER"] = "La alianza [#1] ha aceptado tu solicitud.";
+$LOCA["es"]["ALLY_MSG_APPLY_NO"] = "La alianza [#1] ha rechazado tu solicitud.";
+$LOCA["es"]["ALLY_MSG_APPLY_NO_REASON"] = "-motivo no indicado-";
 
 // bewerben (App for User)
 
