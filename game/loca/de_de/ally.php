@@ -93,6 +93,7 @@ $LOCA["de"]["ALLY_CIRC_TO"] = "Empfänger";
 $LOCA["de"]["ALLY_CIRC_ALL"] = "Alle Spieler";
 $LOCA["de"]["ALLY_CIRC_RANK"] = "Nur bis zu einem bestimmten Rang: #1";
 $LOCA["de"]["ALLY_CIRC_MESSAGE"] = "Text der Nachricht (#1 / #2 Sym.)";
+$LOCA["de"]["ALLY_CIRC_SEND"] = "Submit";
 
 // settings
 
@@ -144,6 +145,7 @@ $LOCA["de"]["ALLY_MEMBERS_KICK_CONFIRM"] = "Sind Sie sicher, dass Spieler #1 die
 $LOCA["de"]["ALLY_MEMBERS_SET_RANK"] = "Rang zuweisen";
 $LOCA["de"]["ALLY_MEMBERS_RANK_TO"] = "Rang für #1:";
 $LOCA["de"]["ALLY_MEMBERS_SAVE"] = "Speichern";
+$LOCA["de"]["ALLY_MEMBERS_ID"] = "N";
 
 // misc
 

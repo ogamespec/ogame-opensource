@@ -4,6 +4,7 @@
 
 $LOCA["ru"]["OPTIONS_USER"] = "Данные пользователя";
 $LOCA["ru"]["OPTIONS_USER_NAME"] = "Имя";
+$LOCA["ru"]["OPTIONS_USER_PASS"] = "Пароль";
 $LOCA["ru"]["OPTIONS_USER_OLDPASS"] = "Старый пароль";
 $LOCA["ru"]["OPTIONS_USER_NEWPASS1"] = "Новый пароль (мин. 8 символов)";
 $LOCA["ru"]["OPTIONS_USER_NEWPASS2"] = "Новый пароль (подтверждение)";

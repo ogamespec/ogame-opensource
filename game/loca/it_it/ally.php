@@ -92,6 +92,7 @@ $LOCA["it"]["ALLY_CIRC_TO"] = "Получатель";
 $LOCA["it"]["ALLY_CIRC_ALL"] = "Все игроки";
 $LOCA["it"]["ALLY_CIRC_RANK"] = "Только определённому рангу: #1";
 $LOCA["it"]["ALLY_CIRC_MESSAGE"] = "Текст сообщения (#1 / #2 Симв.)";
+$LOCA["it"]["ALLY_CIRC_SEND"] = "Submit";
 
 // settings
 
@@ -143,6 +144,7 @@ $LOCA["it"]["ALLY_MEMBERS_KICK_CONFIRM"] = "Вы уверены, что игро
 $LOCA["it"]["ALLY_MEMBERS_SET_RANK"] = "Назначить ранг";
 $LOCA["it"]["ALLY_MEMBERS_RANK_TO"] = "Ранг для #1:";
 $LOCA["it"]["ALLY_MEMBERS_SAVE"] = "Сохранить";
+$LOCA["it"]["ALLY_MEMBERS_ID"] = "N";
 
 // misc
 
