@@ -29,7 +29,7 @@ function PageAlly_MemberList ()
 <table width=519>
 <tr><td class='c' colspan='10'><?=va(loca("ALLY_MEMBERS_COUNT"), $members);?></td></tr>
 <tr>
-    <th>N</th>
+    <th>#</th>
     <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=1&sort2=<?=$sort2^1;?>"><?=loca("ALLY_MEMBERS_NAME");?></a></th>
     <th> </th><th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=2&sort2=<?=$sort2^1;?>"><?=loca("ALLY_MEMBERS_STATUS");?></a></th>
     <th><a href="index.php?page=allianzen&session=<?=$session;?>&a=4&sort1=3&sort2=<?=$sort2^1;?>"><?=loca("ALLY_MEMBERS_POINTS");?></a></th>

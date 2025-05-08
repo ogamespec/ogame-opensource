@@ -112,7 +112,7 @@ BeginContent ();
         <th><input type="text" name="db_email" maxlength="100" size="20" value="<?php echo $GlobalUser['email'];?>" /></th> 
     </tr> 
     <tr> 
-        <th>Пароль</th> 
+        <th><?=loca("OPTIONS_USER_PASS");?></th> 
         <th><input type="password" name="db_password" size ="20" value="" /></th> 
     </tr> 
     <tr> 
