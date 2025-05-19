@@ -90,6 +90,7 @@ $LOCA["es"]["ALLY_CIRC_TO"] = "Destinatario";
 $LOCA["es"]["ALLY_CIRC_ALL"] = "Todos los jugadores";
 $LOCA["es"]["ALLY_CIRC_RANK"] = "#1";
 $LOCA["es"]["ALLY_CIRC_MESSAGE"] = "Mensaje (#1 / #2 caracteres)";
+$LOCA["es"]["ALLY_CIRC_SEND"] = "Submit";
 
 
 // settings
@@ -142,6 +143,7 @@ $LOCA["es"]["ALLY_MEMBERS_KICK_CONFIRM"] = "¿Estás seguro de que quieres expul
 $LOCA["es"]["ALLY_MEMBERS_SET_RANK"] = "Asignar rango";
 $LOCA["es"]["ALLY_MEMBERS_RANK_TO"] = "Rango para #1:";
 $LOCA["es"]["ALLY_MEMBERS_SAVE"] = "Guardar";
+$LOCA["es"]["ALLY_MEMBERS_ID"] = "#";
 $LOCA["es"]["ALLY_MEMBERS_ONLINE"] = "ALLY_MEMBERS_ONLINE";
 
 // misc
