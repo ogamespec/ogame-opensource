@@ -339,6 +339,7 @@ $LOCA["es"]["ADM_QUEUE_PRIO"] = "Priority";
 $LOCA["es"]["ADM_QUEUE_CONTROL"] = "Control";
 $LOCA["es"]["ADM_QUEUE_COMPLETE"] = "End";
 $LOCA["es"]["ADM_QUEUE_DELETE"] = "Delete";
+$LOCA["es"]["ADM_QUEUE_LOOKUP"] = "Show player's tasks:";
 $LOCA["es"]["ADM_QUEUE_SUBMIT"] = "Send";
 
 // admin_raksim
