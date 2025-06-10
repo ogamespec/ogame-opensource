@@ -18,7 +18,9 @@ html, body
 	color: White;
 	background-image: url(img/background.jpg);
 	background-attachment: fixed;
-	background-repeat: repeat;
+	background-position  : top left;
+	background-repeat: no-repeat;
+	background-color     : #140500;
 	scrollbar-arrow-color: orange;
 	scrollbar-base-color: #2A2A2A;
 	scrollbar-track-color: #2A2A2A;
