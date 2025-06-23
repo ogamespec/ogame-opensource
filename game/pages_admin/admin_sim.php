@@ -231,6 +231,16 @@ function Admin_BattleSim ()
         else return "";
     }
 
+    function get_intval($id)
+    {
+        if (isset($_POST[$id])) {
+            return intval($_POST[$id]);
+        }
+        else {
+            return 0;
+        }
+    }
+
 ?>
 
 <script language="JavaScript">
@@ -378,11 +388,15 @@ RecalcAttackersDefendersNum ();
 <?php
     for ( $n=0; $n<$maxslot; $n++ )
     {
-        foreach ($fleetmap as $i=>$gid) echo "<input type=\"hidden\" id=\"a".$n."_$gid\" name=\"a".$n."_$gid\" value=\"0\"> \n";
-        foreach ($fleetmap as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"0\"> \n";
-        foreach ($defmap_norak as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"0\"> \n";
-        echo "<input type=\"hidden\" id=\"a".$n."_weap\" name=\"a".$n."_weap\" size=2 > <input type=\"hidden\" id=\"a".$n."_shld\" name=\"a".$n."_shld\" size=2 > <input type=\"hidden\" id=\"a".$n."_armor\" name=\"a".$n."_armor\" size=2 > \n";
-        echo "<input type=\"hidden\" id=\"d".$n."_weap\" name=\"d".$n."_weap\" size=2 > <input type=\"hidden\" id=\"d".$n."_shld\" name=\"d".$n."_shld\" size=2 > <input type=\"hidden\" id=\"d".$n."_armor\" name=\"d".$n."_armor\" size=2 > \n";
+        foreach ($fleetmap as $i=>$gid) echo "<input type=\"hidden\" id=\"a".$n."_$gid\" name=\"a".$n."_$gid\" value=\"" . get_intval("a".$n."_$gid") . "\"  > \n";
+        foreach ($fleetmap as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"" . get_intval("d".$n."_$gid") . "\"  > \n";
+        foreach ($defmap_norak as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"" . get_intval("d".$n."_$gid") . "\"  > \n";
+        echo "<input type=\"hidden\" id=\"a".$n."_weap\" name=\"a".$n."_weap\" size=2 value=\""   . get_intval ("a".$n."_weap")  . "\"  > ";
+        echo "<input type=\"hidden\" id=\"a".$n."_shld\" name=\"a".$n."_shld\" size=2 value=\""   . get_intval ("a".$n."_shld")  . "\"  > ";
+        echo "<input type=\"hidden\" id=\"a".$n."_armor\" name=\"a".$n."_armor\" size=2 value=\"" . get_intval ("a".$n."_armor") . "\"  > \n";
+        echo "<input type=\"hidden\" id=\"d".$n."_weap\" name=\"d".$n."_weap\" size=2 value=\""   . get_intval ("d".$n."_weap")  . "\"  > ";
+        echo "<input type=\"hidden\" id=\"d".$n."_shld\" name=\"d".$n."_shld\" size=2 value=\""   . get_intval ("d".$n."_shld")  . "\"  > ";
+        echo "<input type=\"hidden\" id=\"d".$n."_armor\" name=\"d".$n."_armor\" size=2 value=\"" . get_intval ("d".$n."_armor") . "\"  > \n";
     }
 ?>
 
@@ -392,8 +406,14 @@ RecalcAttackersDefendersNum ();
 <tr>        <td class=c><?=loca("ADM_SIM_ATTACKER");?></td>                <td class=c><?=loca("ADM_SIM_DEFENDER");?></td>  </tr>
 
 <tr> 
-<td> <?=loca("ADM_SIM_WEAP");?> <input id="a_weap" size=2 > <?=loca("ADM_SIM_SHIELD");?> <input id="a_shld" size=2 > <?=loca("ADM_SIM_ARMOUR");?> <input id="a_armor" size=2  onKeyUp="OnChangeTechValue(1);"></td> 
-<td> <?=loca("ADM_SIM_WEAP");?> <input id="d_weap" size=2 > <?=loca("ADM_SIM_SHIELD");?> <input id="d_shld" size=2 > <?=loca("ADM_SIM_ARMOUR");?> <input id="d_armor" size=2  onKeyUp="OnChangeTechValue(0);"></td> 
+<td> 
+    <?=loca("ADM_SIM_WEAP");?> <input id="a_weap" size=2  onKeyUp="OnChangeTechValue(1);"  value="<?=get_intval("a0_weap");?>" > 
+    <?=loca("ADM_SIM_SHIELD");?> <input id="a_shld" size=2  onKeyUp="OnChangeTechValue(1);"  value="<?=get_intval("a0_shld");?>" > 
+    <?=loca("ADM_SIM_ARMOUR");?> <input id="a_armor" size=2  onKeyUp="OnChangeTechValue(1);"  value="<?=get_intval("a0_armor");?>" ></td> 
+<td> 
+    <?=loca("ADM_SIM_WEAP");?> <input id="d_weap" size=2  onKeyUp="OnChangeTechValue(0);"  value="<?=get_intval("d0_weap");?>" > 
+    <?=loca("ADM_SIM_SHIELD");?> <input id="d_shld" size=2  onKeyUp="OnChangeTechValue(0);"  value="<?=get_intval("d0_shld");?>" > 
+    <?=loca("ADM_SIM_ARMOUR");?> <input id="d_armor" size=2  onKeyUp="OnChangeTechValue(0);"  value="<?=get_intval("d0_armor");?>" ></td> 
 </tr>
 
         <tr> <th valign=top>
@@ -410,7 +430,7 @@ RecalcAttackersDefendersNum ();
     foreach ($fleetmap as $i=>$gid)
     {
 ?>
-           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input id="a_<?=$gid;?>" size=5  onKeyUp="OnChangeValue(1, <?=$gid;?>);"> </td> </tr>
+           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input id="a_<?=$gid;?>" size=5  onKeyUp="OnChangeValue(1, <?=$gid;?>);" value="<?=get_intval("a0_$gid");?>" > </td> </tr>
 <?php
     }
 
@@ -443,7 +463,7 @@ RecalcAttackersDefendersNum ();
     foreach ($fleetmap as $i=>$gid)
     {
 ?>
-           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input id="d_<?=$gid;?>" size=5 onKeyUp="OnChangeValue(0, <?=$gid;?>);"> </td> </tr>
+           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input id="d_<?=$gid;?>" size=5 onKeyUp="OnChangeValue(0, <?=$gid;?>);" value="<?=get_intval("d0_$gid");?>" > </td> </tr>
 <?php
     }
 
@@ -452,7 +472,7 @@ RecalcAttackersDefendersNum ();
     foreach ($defmap_norak as $i=>$gid)
     {
 ?>
-           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input id="d_<?=$gid;?>" size=5 onKeyUp="OnChangeValue(0, <?=$gid;?>);"> </td> </tr>
+           <tr><td> <?=loca("NAME_$gid");?> </td> <td> <input id="d_<?=$gid;?>" size=5 onKeyUp="OnChangeValue(0, <?=$gid;?>);" value="<?=get_intval("d0_$gid");?>" > </td> </tr>
 <?php
     }
 ?>
