@@ -388,15 +388,15 @@ RecalcAttackersDefendersNum ();
 <?php
     for ( $n=0; $n<$maxslot; $n++ )
     {
-        foreach ($fleetmap as $i=>$gid) echo "<input type=\"hidden\" id=\"a".$n."_$gid\" name=\"a".$n."_$gid\" value=\"" . get_intval("a".$n."_$gid") . "\"  > \n";
-        foreach ($fleetmap as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"" . get_intval("d".$n."_$gid") . "\"  > \n";
-        foreach ($defmap_norak as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"" . get_intval("d".$n."_$gid") . "\"  > \n";
-        echo "<input type=\"hidden\" id=\"a".$n."_weap\" name=\"a".$n."_weap\" size=2 value=\""   . get_intval ("a".$n."_weap")  . "\"  > ";
-        echo "<input type=\"hidden\" id=\"a".$n."_shld\" name=\"a".$n."_shld\" size=2 value=\""   . get_intval ("a".$n."_shld")  . "\"  > ";
-        echo "<input type=\"hidden\" id=\"a".$n."_armor\" name=\"a".$n."_armor\" size=2 value=\"" . get_intval ("a".$n."_armor") . "\"  > \n";
-        echo "<input type=\"hidden\" id=\"d".$n."_weap\" name=\"d".$n."_weap\" size=2 value=\""   . get_intval ("d".$n."_weap")  . "\"  > ";
-        echo "<input type=\"hidden\" id=\"d".$n."_shld\" name=\"d".$n."_shld\" size=2 value=\""   . get_intval ("d".$n."_shld")  . "\"  > ";
-        echo "<input type=\"hidden\" id=\"d".$n."_armor\" name=\"d".$n."_armor\" size=2 value=\"" . get_intval ("d".$n."_armor") . "\"  > \n";
+        foreach ($fleetmap as $i=>$gid) echo "<input type=\"hidden\" id=\"a".$n."_$gid\" name=\"a".$n."_$gid\" value=\"" . get_intval("a".$n."_$gid") . "\"  /> \n";
+        foreach ($fleetmap as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"" . get_intval("d".$n."_$gid") . "\"  /> \n";
+        foreach ($defmap_norak as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"" . get_intval("d".$n."_$gid") . "\"  /> \n";
+        echo "<input type=\"hidden\" id=\"a".$n."_weap\" name=\"a".$n."_weap\" size=2 value=\""   . get_intval ("a".$n."_weap")  . "\"  /> ";
+        echo "<input type=\"hidden\" id=\"a".$n."_shld\" name=\"a".$n."_shld\" size=2 value=\""   . get_intval ("a".$n."_shld")  . "\"  /> ";
+        echo "<input type=\"hidden\" id=\"a".$n."_armor\" name=\"a".$n."_armor\" size=2 value=\"" . get_intval ("a".$n."_armor") . "\"  /> \n";
+        echo "<input type=\"hidden\" id=\"d".$n."_weap\" name=\"d".$n."_weap\" size=2 value=\""   . get_intval ("d".$n."_weap")  . "\"  /> ";
+        echo "<input type=\"hidden\" id=\"d".$n."_shld\" name=\"d".$n."_shld\" size=2 value=\""   . get_intval ("d".$n."_shld")  . "\"  /> ";
+        echo "<input type=\"hidden\" id=\"d".$n."_armor\" name=\"d".$n."_armor\" size=2 value=\"" . get_intval ("d".$n."_armor") . "\"  /> \n";
     }
 ?>
 
