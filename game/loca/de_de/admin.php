@@ -368,6 +368,7 @@ $LOCA["de"]["ADM_SIM_FID"] = "Flotte ins Wrack";
 $LOCA["de"]["ADM_SIM_DID"] = "Verteidigung in Trümmern";
 $LOCA["de"]["ADM_SIM_DEFENSE"] = "Verteidigung";
 $LOCA["de"]["ADM_SIM_SUBMIT"] = "Einen Kampf beginnen";
+$LOCA["de"]["ADM_SIM_MAX_INPUT_VARS"] = "Die Anzahl der zulässigen POST-Parameter reicht nicht aus, um alle Parameter der Kampfsimulation darzustellen. Erhöhen Sie den Wert von max_input_vars in der php.ini oder reduzieren Sie die Anzahl der eingeladenen AKS-Spieler.";
 
 // admin_uni
 

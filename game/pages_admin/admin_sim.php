@@ -125,6 +125,7 @@ function Admin_BattleSim ()
     global $GlobalUser;
     global $fleetmap;
     global $defmap_norak;
+    global $AdminError;
 
     $unitab = LoadUniverse ();
     $rf = $unitab['rapid'];
@@ -141,6 +142,11 @@ function Admin_BattleSim ()
     if ( method () === "POST" && $GlobalUser['admin'] != 0 ) {
         //print_r ( $_POST );
         //echo "<hr>";
+
+        $max_post_params = $maxslot * (3 + count($fleetmap)) + $maxslot * (3 + count($fleetmap) + count($defmap_norak)) + 6;
+        if ($max_post_params > ini_get("max_input_vars")) {
+            $AdminError = loca("ADM_SIM_MAX_INPUT_VARS");
+        }
 
         // Generate a list of attackers and defenders
         $a = array ();
@@ -168,7 +174,7 @@ function Admin_BattleSim ()
             $a[$i]['fleet'] = array ();
             foreach ( $fleetmap as $n=>$gid)
             {
-                if ( $_POST["a".$i."_$gid"] === "" ) $_POST["a".$i."_$gid"] = 0;
+                if ( !isset($_POST["a".$i."_$gid"]) ) $_POST["a".$i."_$gid"] = 0;
                 $a[$i]['fleet'][$gid] = intval ($_POST["a".$i."_$gid"]);
             }
         }
@@ -192,14 +198,14 @@ function Admin_BattleSim ()
             $d[$i]['fleet'] = array ();
             foreach ( $fleetmap as $n=>$gid)
             {
-                if ( $_POST["d".$i."_$gid"] === "" ) $_POST["d".$i."_$gid"] = 0;
+                if ( !isset($_POST["d".$i."_$gid"]) ) $_POST["d".$i."_$gid"] = 0;
                 $d[$i]['fleet'][$gid] = intval ($_POST["d".$i."_$gid"]);
             }
 
             $d[$i]['defense'] = array ();
             foreach ( $defmap_norak as $n=>$gid)
             {
-                if ( $_POST["d".$i."_$gid"] === "" ) $_POST["d".$i."_$gid"] = 0;
+                if ( !isset($_POST["d".$i."_$gid"]) ) $_POST["d".$i."_$gid"] = 0;
                 $d[$i]['defense'][$gid] = intval ($_POST["d".$i."_$gid"]);
             }
         }
@@ -385,21 +391,6 @@ RecalcAttackersDefendersNum ();
 <table cellpadding=0 cellspacing=0>
 <form name="simForm" action="index.php?page=admin&session=<?=$session;?>&mode=BattleSim" method="POST" >
 
-<?php
-    for ( $n=0; $n<$maxslot; $n++ )
-    {
-        foreach ($fleetmap as $i=>$gid) echo "<input type=\"hidden\" id=\"a".$n."_$gid\" name=\"a".$n."_$gid\" value=\"" . get_intval("a".$n."_$gid") . "\"  /> \n";
-        foreach ($fleetmap as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"" . get_intval("d".$n."_$gid") . "\"  /> \n";
-        foreach ($defmap_norak as $i=>$gid) echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"" . get_intval("d".$n."_$gid") . "\"  /> \n";
-        echo "<input type=\"hidden\" id=\"a".$n."_weap\" name=\"a".$n."_weap\" size=2 value=\""   . get_intval ("a".$n."_weap")  . "\"  /> ";
-        echo "<input type=\"hidden\" id=\"a".$n."_shld\" name=\"a".$n."_shld\" size=2 value=\""   . get_intval ("a".$n."_shld")  . "\"  /> ";
-        echo "<input type=\"hidden\" id=\"a".$n."_armor\" name=\"a".$n."_armor\" size=2 value=\"" . get_intval ("a".$n."_armor") . "\"  /> \n";
-        echo "<input type=\"hidden\" id=\"d".$n."_weap\" name=\"d".$n."_weap\" size=2 value=\""   . get_intval ("d".$n."_weap")  . "\"  /> ";
-        echo "<input type=\"hidden\" id=\"d".$n."_shld\" name=\"d".$n."_shld\" size=2 value=\""   . get_intval ("d".$n."_shld")  . "\"  /> ";
-        echo "<input type=\"hidden\" id=\"d".$n."_armor\" name=\"d".$n."_armor\" size=2 value=\"" . get_intval ("d".$n."_armor") . "\"  /> \n";
-    }
-?>
-
 <input type="hidden" id="anum" name="anum" value="1" />
 <input type="hidden" id="dnum" name="dnum" value="1" />
 
@@ -480,6 +471,31 @@ RecalcAttackersDefendersNum ();
         </th></tr>
 
 <tr><td colspan=2><center><input type="submit" value="<?=loca("ADM_SIM_SUBMIT");?>"></center></td></tr>
+
+<?php
+    for ( $n=0; $n<$maxslot; $n++ )
+    {
+        foreach ($fleetmap as $i=>$gid) { 
+            $num = get_intval("a".$n."_$gid");
+            echo "<input type=\"hidden\" id=\"a".$n."_$gid\" name=\"a".$n."_$gid\" value=\"" . $num . "\"  /> \n";
+        }
+        foreach ($fleetmap as $i=>$gid) {
+            $num = get_intval("d".$n."_$gid");
+            echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"" . $num . "\"  /> \n";
+        }
+        foreach ($defmap_norak as $i=>$gid) {
+            $num = get_intval("d".$n."_$gid");
+            echo "<input type=\"hidden\" id=\"d".$n."_$gid\" name=\"d".$n."_$gid\" value=\"" . $num . "\"  /> \n";
+        }
+        echo "<input type=\"hidden\" id=\"a".$n."_weap\" name=\"a".$n."_weap\" size=2 value=\""   . get_intval ("a".$n."_weap")  . "\"  /> ";
+        echo "<input type=\"hidden\" id=\"a".$n."_shld\" name=\"a".$n."_shld\" size=2 value=\""   . get_intval ("a".$n."_shld")  . "\"  /> ";
+        echo "<input type=\"hidden\" id=\"a".$n."_armor\" name=\"a".$n."_armor\" size=2 value=\"" . get_intval ("a".$n."_armor") . "\"  /> \n";
+        echo "<input type=\"hidden\" id=\"d".$n."_weap\" name=\"d".$n."_weap\" size=2 value=\""   . get_intval ("d".$n."_weap")  . "\"  /> ";
+        echo "<input type=\"hidden\" id=\"d".$n."_shld\" name=\"d".$n."_shld\" size=2 value=\""   . get_intval ("d".$n."_shld")  . "\"  /> ";
+        echo "<input type=\"hidden\" id=\"d".$n."_armor\" name=\"d".$n."_armor\" size=2 value=\"" . get_intval ("d".$n."_armor") . "\"  /> \n";
+    }
+?>
+
 </form>
 </table>
 

@@ -368,6 +368,7 @@ $LOCA["es"]["ADM_SIM_FID"] = "Fleet in debris";
 $LOCA["es"]["ADM_SIM_DID"] = "Defense in debris";
 $LOCA["es"]["ADM_SIM_DEFENSE"] = "Defense";
 $LOCA["es"]["ADM_SIM_SUBMIT"] = "Start the Battle";
+$LOCA["es"]["ADM_SIM_MAX_INPUT_VARS"] = "El número de parámetros POST permitidos no es suficiente para representar todos los parámetros de la simulación de combate. Aumente el valor de max_input_vars en php.ini o reduzca el número de jugadores ACS invitados.";
 
 // admin_uni
 
