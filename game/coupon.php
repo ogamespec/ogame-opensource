@@ -56,7 +56,7 @@ function SendCoupon ($user, $code)
     mail_html ( $user['pemail'], 
         loca_lang("COUPON_SUBJ", $user['lang']), 
         va ( loca_lang("COUPON_MESSAGE", $user['lang']), $user['oname'], $code ), 
-        "From: coupon@" . hostname() );
+        "From: coupon@" . $_SERVER['SERVER_NAME'] );
 }
 
 // Check if there is such a coupon and it is not activated. Returns the coupon ID or 0 if the coupon code is incorrect or the coupon is redeemed.

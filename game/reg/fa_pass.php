@@ -76,7 +76,7 @@ if ( method () === "POST" ) {
                     $uninum,
                     $pass,
                     "" . hostname()
-                ), "From: welcome@" . hostname() );
+                ), "From: welcome@" . $_SERVER['SERVER_NAME'] );
             $pass_ok = true;
         }
     }
