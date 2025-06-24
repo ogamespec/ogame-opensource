@@ -80,7 +80,7 @@ BeginContent ();
             $ip = $_SERVER['REMOTE_ADDR'];
 
             if ( key_exists ( "validate", $_POST ) ) {    // Request an activation link.
-                if ( !localhost($ip) ) SendChangeMail ( $GlobalUser['oname'], $GlobalUser['email'], $GlobalUser['pemail'], $GlobalUser['validatemd'] );
+                SendChangeMail ( $GlobalUser['oname'], $GlobalUser['email'], $GlobalUser['pemail'], $GlobalUser['validatemd'] );
                 $OptionsMessage = loca ("OPTIONS_MSG_VALIDATE");
             }
             else if ( $_POST['db_email'] !== $GlobalUser['email'] && $_POST['db_email'] !== "" ) {        // Сменить адрес
@@ -95,7 +95,7 @@ BeginContent ();
                     $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . $GlobalUser['player_id'];
                     dbquery ($query);
                     AddChangeEmailEvent ($GlobalUser['player_id']);
-                    if ( !localhost($ip) ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
+                    SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
                     $GlobalUser['email'] = $email;
                     $OptionsError = loca ("OPTIONS_USER_EMAIL_TIP");
                 }
@@ -237,7 +237,7 @@ BeginContent ();
                     $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . intval($GlobalUser['player_id']);
                     dbquery ($query);
                     AddChangeEmailEvent ($GlobalUser['player_id']);
-                    if ( !localhost($ip) ) SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
+                    SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
                     $GlobalUser['email'] = $email;
                     $OptionsError = loca ("OPTIONS_USER_EMAIL_TIP");
                 }
