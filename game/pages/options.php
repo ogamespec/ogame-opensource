@@ -83,7 +83,7 @@ BeginContent ();
                 SendChangeMail ( $GlobalUser['oname'], $GlobalUser['email'], $GlobalUser['pemail'], $GlobalUser['validatemd'] );
                 $OptionsMessage = loca ("OPTIONS_MSG_VALIDATE");
             }
-            else if ( $_POST['db_email'] !== $GlobalUser['email'] && $_POST['db_email'] !== "" ) {        // Сменить адрес
+            else if ( $_POST['db_email'] !== $GlobalUser['email'] && $_POST['db_email'] !== "" ) {        // Change email address
                 $email = $_POST['db_email'];
                 if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $OptionsError = loca ("OPTIONS_ERR_NEEDPASS");
                 else if ( !isValidEmail ($email) ) $OptionsError = loca ("OPTIONS_ERR_EMAIL");
