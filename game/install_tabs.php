@@ -66,6 +66,10 @@ $tab_debug = array (    // Debug messages
     'error_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'ip'=>'TEXT', 'agent'=>'TEXT', 'url'=>'TEXT', 'text'=>'TEXT', 'date'=>'INT UNSIGNED'
 );
 
+$tab_reports = array (    // User reports
+    'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'msgfrom'=>'TEXT', 'subj'=>'TEXT', 'text'=>'TEXT', 'date'=>'INT UNSIGNED'
+);
+
 $tab_browse = array (    // Browser history
     'log_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'url'=>'TEXT', 'method'=>'TEXT', 'getdata'=>'TEXT', 'postdata'=>'TEXT', 'date'=>'INT UNSIGNED'
 );
@@ -157,6 +161,7 @@ $tabs = array (
     'notes' => &$tab_notes,
     'errors' => &$tab_errors,
     'debug' => &$tab_debug,
+    'reports' => &$tab_reports,
     'browse' => &$tab_browse,
     'queue' => &$tab_queue,
     'buildqueue' => &$tab_buildqueue,

@@ -21,7 +21,9 @@ A prefix is added to all tables from the config.php configuration file - $db_pre
 All web developers know that changing database tables is a pain in the ass. In general, it is quite painful to cut "alive", especially for such a developed project.
 
 Procedure:
-- Make all necessary modifications of columns and types in the install.php script
+- Make all necessary modifications to columns and types in the install_tabs.php script
+- Add the initial setting of autoincrements in install.php
+- Add LOCK tables in db.php (LockTables)
 - If it is not supposed to be a clean reinstallation of the Universe, then you need to tweak the columns on the live database (ALTER TABLE + ADD COLUMN) using phpMyAdmin or another similar tool. It is highly recommended to pause the Universe (freeze=1).
 
 ## How often do the tables change?
@@ -279,6 +281,17 @@ Message types (pm):
 |url|TEXT| | 
 |text|TEXT| | 
 |date|INT UNSIGNED| |
+
+## User reports on swearing (reports)
+
+|Column|Type|Description|
+|---|---|---|
+|id|INT AUTO_INCREMENT PRIMARY KEY| | 
+|owner_id|INT|Message owner (the one who reports)| 
+|msgfrom|TEXT|From, HTML -- copied from original message |
+|subj|TEXT|Subject, HTML, may be text, may be a link to the report -- copied from the original message |
+|text|TEXT|Message text, HTML -- copied from the original message |
+|date|INT UNSIGNED|Message date -- copied from original message |
 
 ## Debug messages (debug)
 
