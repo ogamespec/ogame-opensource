@@ -57,6 +57,8 @@ oldplace1,2,3: old place for buildings, fleet, research (INT)
 scoredate: Time of saving old statistics (INT UNSIGNED)
 rXXX: Research XXX level (INT)
 flags: User flags. The full list is below (USER_FLAG). I didn't think of this idea right away, some variables can also be made into flags (INT UNSIGNED)
+feedid: feed id (eg 5aa28084f43ad54d9c8f7dd92f774d03)  (CHAR(32))
+lastfeed: last Feed update timestamp (INT UNSIGNED)
 
 Q - task in the task queue is used to process this event.
 */
@@ -76,6 +78,8 @@ const USER_FLAG_FOLDER_ALLIANCE = 0x800;            // Message Filter. 1: Show a
 const USER_FLAG_FOLDER_PLAYER = 0x1000;             // Message Filter. 1: Show private messages (pm=0)
 const USER_FLAG_FOLDER_OTHER = 0x2000;              // Message Filter. 1: Show all other messages (pm=5)
 const USER_FLAG_HIDE_GO_EMAIL = 0x4000;                 // Show an in-game message icon instead of the operator's email (not all operators may like to publish their email)
+const USER_FLAG_FEED_ENABLE = 0x8000;               // 1: feed enabled
+const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - use Atom format
 
 // Default flags after creating a player
 const USER_FLAG_DEFAULT = USER_FLAG_SHOW_ESPIONAGE_BUTTON | USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON | USER_FLAG_SHOW_BUDDY_BUTTON | USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON | USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
@@ -209,7 +213,7 @@ function CreateUser ( $name, $pass, $email, $bot=false)
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        USER_FLAG_DEFAULT );
+                        USER_FLAG_DEFAULT, "", 0 );
     $id = AddDBRow ( $user, "users" );
 
     LogIPAddress ( $ip, $id, 1 );

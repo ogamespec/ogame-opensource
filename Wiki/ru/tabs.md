@@ -72,6 +72,7 @@
 |ext_rules|TEXT|Внешняя ссылка на Правила. Если строка пустая, то пункт в меню не показывается.|
 |ext_impressum|TEXT|Внешняя ссылка на Импрессум ("О нас"). Если строка пустая, то пункт в меню не показывается.|
 |php_battle|INT|1: Использовать запасной боевой движок на PHP (battle_engine.php) вместо реализации на C.|
+|feedage|INT|период обновления RSS(Atom) в минутах, по умолчанию 60|
 
 ## Пользователи (users)
 
@@ -133,6 +134,8 @@
 |scoredate|INT UNSIGNED|Время сохранения старой статистики time()|
 |rXXX|INT|Уровень исследования XXX |
 |flags|INT UNSIGNED|Флаги пользователя. Полный список ниже (USER_FLAG). Не сразу додумался до этой идеи, некоторые переменные также можно сделать флагами|
+|feedid|CHAR(32)| feed id (eg 5aa28084f43ad54d9c8f7dd92f774d03) |
+|lastfeed|INT UNSIGNED | last Feed update timestamp ()|
 
 **Q** - для обработки этого события используется задание в очереди задач.
 
@@ -145,6 +148,15 @@ const USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON = 0x8;    // 1: Отображать �
 const USER_FLAG_SHOW_VIEW_REPORT_BUTTON = 0x10;     // 1: Отображать иконку "Просмотреть сообщение" в галактике
 const USER_FLAG_DONT_USE_FOLDERS = 0x20;        // 1: Не сортировать сообщения по папкам в режиме Командира
 const USER_FLAG_PARTIAL_REPORTS = 0x40;         // 1: Разведданные показывать частично
+const USER_FLAG_FOLDER_ESPIONAGE = 0x100;           // Message Filter. 1: Show spy reports (pm=1)
+const USER_FLAG_FOLDER_COMBAT = 0x200;              // Message Filter. 1: Show battle reports & missile attacks (pm=2)
+const USER_FLAG_FOLDER_EXPEDITION = 0x400;          // Message Filter. 1: Show expedition results (pm=3)
+const USER_FLAG_FOLDER_ALLIANCE = 0x800;            // Message Filter. 1: Show alliance messages (pm=4)
+const USER_FLAG_FOLDER_PLAYER = 0x1000;             // Message Filter. 1: Show private messages (pm=0)
+const USER_FLAG_FOLDER_OTHER = 0x2000;              // Message Filter. 1: Show all other messages (pm=5)
+const USER_FLAG_HIDE_GO_EMAIL = 0x4000;                 // Show an in-game message icon instead of the operator's email (not all operators may like to publish their email)
+const USER_FLAG_FEED_ENABLE = 0x8000;               // 1: feed enabled
+const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - use Atom format
 ```
 
 ## Планеты (planets)

@@ -9,7 +9,7 @@
 $tab_uni = array (        // Universe
     'num'=>'INT PRIMARY KEY','speed'=>'FLOAT','fspeed'=>'FLOAT','galaxies'=>'INT','systems'=>'INT','maxusers'=>'INT','acs'=>'INT','fid'=>'INT','did'=>'INT','rapid'=>'INT','moons'=>'INT','defrepair'=>'INT','defrepair_delta'=>'INT','usercount'=>'INT','freeze'=>'INT',
     'news1'=>'TEXT', 'news2'=>'TEXT', 'news_until'=>'INT UNSIGNED', 'startdate'=>'INT UNSIGNED', 'battle_engine'=>'TEXT', 'lang'=>'CHAR(4)', 'hacks'=>'INT',
-    'ext_board'=>'TEXT', 'ext_discord'=>'TEXT', 'ext_tutorial'=>'TEXT', 'ext_rules'=>'TEXT', 'ext_impressum'=>'TEXT', 'php_battle'=>'INT', 'force_lang'=>'INT', 'start_dm'=>'INT', 'max_werf'=>'INT'
+    'ext_board'=>'TEXT', 'ext_discord'=>'TEXT', 'ext_tutorial'=>'TEXT', 'ext_rules'=>'TEXT', 'ext_impressum'=>'TEXT', 'php_battle'=>'INT', 'force_lang'=>'INT', 'start_dm'=>'INT', 'max_werf'=>'INT', 'feedage'=>'INT'
 );
 
 $tab_users = array (    // Users
@@ -21,7 +21,7 @@ $tab_users = array (    // Users
     'score1'=>'BIGINT', 'score2'=>'INT', 'score3'=>'INT', 'place1'=>'INT', 'place2'=>'INT', 'place3'=>'INT',
     'oldscore1'=>'BIGINT', 'oldscore2'=>'INT', 'oldscore3'=>'INT', 'oldplace1'=>'INT', 'oldplace2'=>'INT', 'oldplace3'=>'INT', 'scoredate'=>'INT UNSIGNED',
     'r106'=>'INT', 'r108'=>'INT', 'r109'=>'INT', 'r110'=>'INT', 'r111'=>'INT', 'r113'=>'INT', 'r114'=>'INT', 'r115'=>'INT', 'r117'=>'INT', 'r118'=>'INT', 'r120'=>'INT', 'r121'=>'INT', 'r122'=>'INT', 'r123'=>'INT', 'r124'=>'INT', 'r199'=>'INT',
-    'flags' => 'INT UNSIGNED'
+    'flags'=>'INT UNSIGNED', 'feedid'=>'CHAR(32)', 'lastfeed'=>'INT UNSIGNED'
 );
 
 $tab_planets = array (    // Planets

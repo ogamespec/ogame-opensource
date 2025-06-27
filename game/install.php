@@ -125,6 +125,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "php_battle = '".(key_exists("php_battle", $_POST) && $_POST["php_battle"]==="on"?1:0)."', ";
     $query .= "force_lang = '".(key_exists("force_lang", $_POST) && $_POST["force_lang"]==="on"?1:0)."', ";
     $query .= "max_werf = '".intval($_POST["max_werf"])."', ";
+    $query .= "feedage = '".intval($_POST["feedage"])."', ";
     $query .= "hacks = '0'; ";
     //echo "<br>$query<br>";
     dbquery ($query);
@@ -140,7 +141,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        USER_FLAG_DEFAULT );
+                        USER_FLAG_DEFAULT, "", 0 );
     foreach ($user as $i=>$entry)
     {
         if ($i != 0) $opt .= ", ";
@@ -161,7 +162,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        USER_FLAG_DEFAULT );
+                        USER_FLAG_DEFAULT, "", 0 );
     foreach ($user as $i=>$entry)
     {
         if ($i != 0) $opt .= ", ";
@@ -393,6 +394,7 @@ td.c { background-color: #334445; }
 <tr><td><?php echo loca('INSTALL_UNI_PHP_BATTLE');?></td><td><input type=checkbox class='text' name='php_battle' ></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_FORCE_LANG');?></td><td><input type=checkbox class='text' name='force_lang' ></td></tr>
 <tr><td><?php echo loca('INSTALL_MAX_WERF');?></td><td><input type=text value='999' class='text' name='max_werf'></td></tr>
+<tr><td><?php echo loca('INSTALL_FEED_AGE');?></td><td><input type=text value='60' class='text' name='feedage'></td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan=2 class='c'><?php echo loca('INSTALL_EXTERNAL_LINKS');?><a title='<?php echo loca('INSTALL_EXTERNAL_LINKS_TIP');?>'><?php echo $info;?></a></td></tr>
 <tr><td><?php echo loca('MENU_BOARD');?></td><td><input type=text class='text' name='ext_board'></td></tr>

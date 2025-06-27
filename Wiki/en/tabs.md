@@ -72,6 +72,7 @@ In other words - there is no reason to worry that the tables are organized a bit
 |ext_rules|TEXT|External link to Rules. If the line is empty, the item is not shown in the menu.|
 |ext_impressum|TEXT|External link to Impressum ("About Us"). If the string is empty, the item is not shown in the menu.|
 |php_battle|INT|1: Use a spare PHP battle engine (battle_engine.php) instead of a C implementation.|
+|feedage|INT|the RSS(Atom) update period in minutes, 60 by default|
 
 ## Users (users)
 
@@ -133,6 +134,8 @@ In other words - there is no reason to worry that the tables are organized a bit
 |scoredate|INT UNSIGNED|Time of saving old statistics, time()|
 |rXXX|INT|Research level XXX |
 |flags|INT UNSIGNED|User flags. The full list is below (USER_FLAG). I didn't think of this idea right away, some variables can also be made into flags|
+|feedid|CHAR(32)| feed id (eg 5aa28084f43ad54d9c8f7dd92f774d03) |
+|lastfeed|INT UNSIGNED | last Feed update timestamp ()|
 
 **Q** - task in the task queue is used to process this event.
 
@@ -145,6 +148,15 @@ const USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON = 0x8;    // 1: Display the "Missile A
 const USER_FLAG_SHOW_VIEW_REPORT_BUTTON = 0x10;     // 1: Display the "View Message" icon in the galaxy
 const USER_FLAG_DONT_USE_FOLDERS = 0x20;        // 1: Do not sort messages into folders in Commander mode
 const USER_FLAG_PARTIAL_REPORTS = 0x40;         // 1: Show spy reports partially
+const USER_FLAG_FOLDER_ESPIONAGE = 0x100;           // Message Filter. 1: Show spy reports (pm=1)
+const USER_FLAG_FOLDER_COMBAT = 0x200;              // Message Filter. 1: Show battle reports & missile attacks (pm=2)
+const USER_FLAG_FOLDER_EXPEDITION = 0x400;          // Message Filter. 1: Show expedition results (pm=3)
+const USER_FLAG_FOLDER_ALLIANCE = 0x800;            // Message Filter. 1: Show alliance messages (pm=4)
+const USER_FLAG_FOLDER_PLAYER = 0x1000;             // Message Filter. 1: Show private messages (pm=0)
+const USER_FLAG_FOLDER_OTHER = 0x2000;              // Message Filter. 1: Show all other messages (pm=5)
+const USER_FLAG_HIDE_GO_EMAIL = 0x4000;                 // Show an in-game message icon instead of the operator's email (not all operators may like to publish their email)
+const USER_FLAG_FEED_ENABLE = 0x8000;               // 1: feed enabled
+const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - use Atom format
 ```
 
 ## Planets (planets)

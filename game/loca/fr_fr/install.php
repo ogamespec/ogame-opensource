@@ -38,6 +38,8 @@ $LOCA["fr"]["INSTALL_UNI_MOONS"] = "Lunes et Etoiles de la Mort";
 $LOCA["fr"]["INSTALL_UNI_BATTLE"] = "Chemin vers le moteur de bataille";
 $LOCA["fr"]["INSTALL_UNI_PHP_BATTLE"] = "Utiliser le moteur de bataille à base PHP";
 $LOCA["fr"]["INSTALL_UNI_FORCE_LANG"] = "Obligé d'utiliser le langage de l'univers";
+$LOCA["fr"]["INSTALL_MAX_WERF"] = "Maximum number of units in a shipyard order";
+$LOCA["fr"]["INSTALL_FEED_AGE"] = "RSS/Atom refresh period in minutes for Commander";
 
 $LOCA["fr"]["INSTALL_ADMIN"] = "Compte Admin";
 $LOCA["fr"]["INSTALL_ADMIN_EMAIL"] = "E-Mail";
