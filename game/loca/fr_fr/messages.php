@@ -30,6 +30,9 @@ $LOCA["fr"]["MSG_SUBMIT"] = "ok";
 $LOCA["fr"]["MSG_PARTIAL_ESPIONAGE"] = " Разведданные показывать частично ";
 
 $LOCA["fr"]["MSG_REPORT"] = "Сообщить оператору";
+$LOCA["fr"]["MSG_REPORT_DB_ERROR"] = "Database error!";
+$LOCA["fr"]["MSG_REPORT_SUCCESS"] = "Report sent!";
+$LOCA["fr"]["MSG_REPORT_EXISTS"] = "The report has already been sent earlier!";
 $LOCA["fr"]["MSG_OPER"] = "Операторы";
 $LOCA["fr"]["MSG_OPER_TEXT"] = "Вопрос от #1 из #2-й вселенной";
 $LOCA["fr"]["MSG_OPER_PM"] = "Написать сообщение";

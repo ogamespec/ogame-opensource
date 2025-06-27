@@ -30,6 +30,9 @@ $LOCA["it"]["MSG_SUBMIT"] = "ok";
 $LOCA["it"]["MSG_PARTIAL_ESPIONAGE"] = " Mostra solo parti dei rapporti di spionaggio ";
 
 $LOCA["it"]["MSG_REPORT"] = "Segnala";
+$LOCA["it"]["MSG_REPORT_DB_ERROR"] = "Database error!";
+$LOCA["it"]["MSG_REPORT_SUCCESS"] = "Report sent!";
+$LOCA["it"]["MSG_REPORT_EXISTS"] = "The report has already been sent earlier!";
 $LOCA["it"]["MSG_OPER"] = "Operatori di gioco";
 $LOCA["it"]["MSG_OPER_TEXT"] = "Domanda dal #1 dell'universo #2";
 $LOCA["it"]["MSG_OPER_PM"] = "Scrivi un messaggio";

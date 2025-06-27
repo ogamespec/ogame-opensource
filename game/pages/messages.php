@@ -9,6 +9,9 @@
 // - Method 2: The link shows only posts from the selected category regardless of checkbox values (GET method)
 // If you suddenly don't like something or have HTML sources - we are open to discussion :-)
 
+$MessagesMessage = "";
+$MessagesError = "";
+
 // Since we don't know the exact method, we choose the method of this variable
 $method = 2;
 
@@ -90,7 +93,7 @@ if ( method() === "POST" )
             }
 
             $msg_id = $msg['msg_id'];
-            if ( key_exists("sneak" . $msg_id, $_POST) && $_POST["sneak" . $msg_id] === "on" ) {}    // TODO: Report to the operator
+            if ( key_exists("sneak" . $msg_id, $_POST) && $_POST["sneak" . $msg_id] === "on" ) ReportMessage ($player_id, $msg_id, $MessagesMessage, $MessagesError);         // report swearing
             if ( key_exists("delmes" . $msg_id, $_POST) && $_POST["delmes" . $msg_id] === "on" && $_POST['deletemessages'] === "deletemarked" ) DeleteMessage ( $player_id, $msg_id );    // Delete selected
             if ( !key_exists("delmes" . $msg_id, $_POST) && $_POST['deletemessages'] === "deletenonmarked" ) DeleteMessage ( $player_id, $msg_id );    // Delete unselected
             if ( $_POST['deletemessages'] === "deleteallshown" ) DeleteMessage ( $player_id, $msg_id );    // Delete shown
@@ -289,6 +292,6 @@ echo "</table></td></tr></table>\n";
 echo "<br><br><br><br>\n";
 EndContent ();
 
-PageFooter ();
+PageFooter ($MessagesMessage, $MessagesError);
 ob_end_flush ();
 ?>

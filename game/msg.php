@@ -188,4 +188,40 @@ function TotalMessages ($player_id, $pm)
     return dbrows ($result);
 }
 
+function ReportMessage ($player_id, $msg_id, &$ResultMessage="", &$ResultError="")
+{
+    global $db_prefix;
+    $id = 0;
+    $msg = LoadMessage ($msg_id);
+    if ($msg) {
+        if ($msg['pm'] != MTYP_PM) {
+            Error ("User $player_id is attempting to report a non-private message. Admin check this smart guy.");
+            return 0;
+        }
+        if ($msg['owner_id'] != $player_id) {
+            Error ("User $player_id is trying to report someone else's message. Admin check this smart guy.");
+            return 0;
+        }
+
+        // Check that such a message is not yet in the report history
+        $query = "SELECT * FROM ".$db_prefix."reports WHERE msg_id = $msg_id";
+        $result = dbquery ($query);
+        if (!$result) {
+            $ResultError = loca("MSG_REPORT_DB_ERROR");
+            return 0;
+        }
+        if (dbrows ($result) == 0) {
+
+            // Add
+            $report = array( null, $player_id, $msg_id, $msg['msgfrom'], $msg['subj'], $msg['text'], $msg['date'] );
+            $id = AddDBRow ( $report, "reports" );
+            $ResultMessage = loca("MSG_REPORT_SUCCESS");
+        }
+        else {
+            $ResultError = loca("MSG_REPORT_EXISTS");
+        }
+    }
+    return $id;
+}
+
 ?>

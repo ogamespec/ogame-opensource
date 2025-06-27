@@ -30,6 +30,9 @@ $LOCA["en"]["MSG_SUBMIT"] = "ok";
 $LOCA["en"]["MSG_PARTIAL_ESPIONAGE"] = " Show intelligence data partially ";
 
 $LOCA["en"]["MSG_REPORT"] = "Report to operator";
+$LOCA["en"]["MSG_REPORT_DB_ERROR"] = "Database error!";
+$LOCA["en"]["MSG_REPORT_SUCCESS"] = "Report sent!";
+$LOCA["en"]["MSG_REPORT_EXISTS"] = "The report has already been sent earlier!";
 $LOCA["en"]["MSG_OPER"] = "Operators";
 $LOCA["en"]["MSG_OPER_TEXT"] = "Question from #1 of the #2 universe";
 $LOCA["en"]["MSG_OPER_PM"] = "Write message";

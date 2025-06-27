@@ -30,6 +30,9 @@ $LOCA["de"]["MSG_SUBMIT"] = "ok";
 $LOCA["de"]["MSG_PARTIAL_ESPIONAGE"] = "Intelligenzdaten teilweise anzeigen";
 
 $LOCA["de"]["MSG_REPORT"] = "Bericht an Betreiber";
+$LOCA["de"]["MSG_REPORT_DB_ERROR"] = "Database error!";
+$LOCA["de"]["MSG_REPORT_SUCCESS"] = "Report sent!";
+$LOCA["de"]["MSG_REPORT_EXISTS"] = "The report has already been sent earlier!";
 $LOCA["de"]["MSG_OPER"] = "Spiel Operatoren";
 $LOCA["de"]["MSG_OPER_TEXT"] = "Frage von #1 aus dem Universum #2";
 $LOCA["de"]["MSG_OPER_PM"] = "Nachricht schreiben";
