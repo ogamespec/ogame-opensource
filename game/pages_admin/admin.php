@@ -3,7 +3,7 @@
 // Admin Panel.
 // The main panel is a typical admin panel with categories.
 
-// Only special users have access to the admin area: operators and admins.
+// Only special users have access to the admin area: operators (admin=1) and admins (admin=2).
 
 // Admin categories (GET parameter `mode`). Some categories cannot be accessed by operators.
 // - Flight controls (all)

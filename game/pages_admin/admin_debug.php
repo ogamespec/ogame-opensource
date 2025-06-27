@@ -15,7 +15,7 @@ function Admin_Debug ()
     if ( key_exists ('filter', $_REQUEST) ) $filter = $_REQUEST['filter'];
     else $filter = "";
 
-    if ( method () === "POST" && $filter === "" )
+    if ( method () === "POST" && $filter === "" && $GlobalUser['admin'] >= 2 )
     {
         if ( $_POST['deletemessages'] === "deleteall" )
         {
