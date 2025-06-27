@@ -288,6 +288,7 @@ Message types (pm):
 |---|---|---|
 |id|INT AUTO_INCREMENT PRIMARY KEY| | 
 |owner_id|INT|Message owner (the one who reports)| 
+|msg_id|INT|Original message ID |
 |msgfrom|TEXT|From, HTML -- copied from original message |
 |subj|TEXT|Subject, HTML, may be text, may be a link to the report -- copied from the original message |
 |text|TEXT|Message text, HTML -- copied from the original message |

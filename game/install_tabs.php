@@ -67,7 +67,7 @@ $tab_debug = array (    // Debug messages
 );
 
 $tab_reports = array (    // User reports
-    'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'msgfrom'=>'TEXT', 'subj'=>'TEXT', 'text'=>'TEXT', 'date'=>'INT UNSIGNED'
+    'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'msg_id'=>'INT', 'msgfrom'=>'TEXT', 'subj'=>'TEXT', 'text'=>'TEXT', 'date'=>'INT UNSIGNED'
 );
 
 $tab_browse = array (    // Browser history
