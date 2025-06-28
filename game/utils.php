@@ -9,14 +9,14 @@ function scriptname () {
     return $break[count($break) - 1];
 }
 
-function hostname () {
+function hostname ($dir = "game") {
     if (!empty($_SERVER['HTTPS']))  { // get if request is http or https
        $encr ="https://";
     }else{
        $encr ="http://";
     }
     $host = $encr . $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
-    $pos = strrpos ( $host, "/game/" );
+    $pos = strrpos ( $host, "/$dir/" );
     return substr ( $host, 0, $pos+1 );
 }
 
