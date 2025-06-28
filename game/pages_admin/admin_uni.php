@@ -59,7 +59,8 @@ function Admin_Uni ()
             $php_battle,
             $force_lang,
             intval($_POST['start_dm']),
-            intval($_POST['max_werf']) );
+            intval($_POST['max_werf']),
+            intval($_POST['feedage']) );
 
         // Set external links. If the link is empty - the menu item will be missing.
 
@@ -100,6 +101,7 @@ function Admin_Uni ()
 <tr><th><?=loca("ADM_UNI_GALAXIES");?></th><th><input type="text" name="galaxies" maxlength="3" size="3" value="<?php echo $unitab['galaxies'];?>" /></th></tr>
 <tr><th><?=loca("ADM_UNI_SYSTEMS");?></th><th><input type="text" name="systems" maxlength="3" size="3" value="<?php echo $unitab['systems'];?>" /></th></tr>
 <tr><th><?=loca("INSTALL_MAX_WERF");?></th><th><input type="text" name="max_werf" maxlength="9" size="9" value="<?php echo $unitab['max_werf'];?>" /></th></tr>
+<tr><th><?=loca("INSTALL_FEED_AGE");?></th><th><input type="text" name="feedage" maxlength="3" size="3" value="<?php echo $unitab['feedage'];?>" /></th></tr>
 
   <tr>
    <th><?=loca("ADM_UNI_SPEED");?></th>
