@@ -38,6 +38,9 @@ if (dbrows($result) == 0) {
 }
 $user = dbarray ($result);
 //print_r ($user);
+if (($user['flags'] & USER_FLAG_FEED_ENABLE) == 0) {
+	exit("Authentifizierung fehlgeschlagen");
+}
 $player_id = $user['player_id'];
 
 // If it's time to update - update the user's timestamp
