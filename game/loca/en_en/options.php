@@ -84,6 +84,10 @@ $LOCA["en"]["OPTIONS_ACTIVATE_SUBMIT"] = "Request an activation link";
 
 $LOCA["en"]["OPTIONS_FEED"] = "Newsfeed";
 $LOCA["en"]["OPTIONS_FEED_ACTIVATE"] = "Activate";
+$LOCA["en"]["OPTIONS_FEED_ACTIVATED"] = "Activated";
+$LOCA["en"]["OPTIONS_FEED_FORMAT"] = "Format";
+$LOCA["en"]["OPTIONS_FEED_LINK"] = "Link to Feed";
+$LOCA["en"]["OPTIONS_FEED_SHOW"] = "show";
 
 $LOCA["en"]["OPTIONS_OPER"] = "Operator settings";
 $LOCA["en"]["OPTIONS_OPER_HIDE_EMAIL"] = "Hide Email on message page for players";

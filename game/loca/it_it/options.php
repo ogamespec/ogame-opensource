@@ -84,5 +84,9 @@ $LOCA["it"]["OPTIONS_ACTIVATE_SUBMIT"] = "Link di attivazione dell'ordine";
 
 $LOCA["it"]["OPTIONS_FEED"] = "Newsfeed";
 $LOCA["it"]["OPTIONS_FEED_ACTIVATE"] = "Attivare";
+$LOCA["it"]["OPTIONS_FEED_ACTIVATED"] = "Activated";
+$LOCA["it"]["OPTIONS_FEED_FORMAT"] = "Format";
+$LOCA["it"]["OPTIONS_FEED_LINK"] = "Link to Feed";
+$LOCA["it"]["OPTIONS_FEED_SHOW"] = "show";
 
 ?>
