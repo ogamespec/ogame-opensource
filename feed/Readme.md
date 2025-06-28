@@ -14,7 +14,7 @@ The original implementation was perceived very negatively, because apparently it
 
 In our project, a parameter is added to the Universe settings - the RSS(Atom) update period, which works as follows:
 - The Universe settings contain the variable `feedage` (in minutes, 60 by default)
-- Each player has a timestamp of when he last updated the Feed (`lastfeed`)
+- Each player has a timestamp of when he/she last updated the Feed (`lastfeed`)
 - If the current time is less than lastfeed + feedage (the period has not ended), then no more than $MAXMSG pieces are taken from messages (50 for the commander)
 - If the current time is greater than lastfeed + feedage, then lastfeed is updated with the current time (with the collection of new messages after that)
 
