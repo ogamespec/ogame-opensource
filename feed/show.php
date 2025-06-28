@@ -3,7 +3,7 @@
 // Check if the configuration file is missing - exit
 if ( !file_exists ("../game/config.php"))
 {
-    exit ();
+	exit ();
 }
 
 require_once "../game/config.php";
@@ -42,8 +42,8 @@ $player_id = $user['player_id'];
 $now = time ();
 if ($now >= $user['lastfeed'] + $uni['feedage'] * 60) {
 	$user['lastfeed'] = $now;
-    $query = "UPDATE ".$db_prefix."users SET lastfeed = $now WHERE player_id = $player_id";
-    dbquery ($query);	
+	$query = "UPDATE ".$db_prefix."users SET lastfeed = $now WHERE player_id = $player_id";
+	dbquery ($query);	
 }
 $lastfeed = $user['lastfeed'];
 
