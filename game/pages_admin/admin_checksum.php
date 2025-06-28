@@ -49,6 +49,8 @@ function Admin_Checksum ()
         'user.php', 
         'utils.php', 
         'validate.php', 
+        '../feed/show.php', 
+        '../feed/viewitem.php', 
     );
 
     $page_admin_files = array (
