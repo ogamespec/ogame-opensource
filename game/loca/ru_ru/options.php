@@ -88,6 +88,7 @@ $LOCA["ru"]["OPTIONS_FEED_ACTIVATED"] = "Активно";
 $LOCA["ru"]["OPTIONS_FEED_FORMAT"] = "Формат";
 $LOCA["ru"]["OPTIONS_FEED_LINK"] = "Ссылка на Feed";
 $LOCA["ru"]["OPTIONS_FEED_SHOW"] = "показать";
+$LOCA["ru"]["OPTIONS_FEED_PROHIBITED"] = "Feed запрещён настройками Вселенной!";
 
 $LOCA["ru"]["OPTIONS_OPER"] = "Настройки оператора";
 $LOCA["ru"]["OPTIONS_OPER_HIDE_EMAIL"] = "Скрывать для игроков Email на странице сообщений";

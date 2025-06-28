@@ -323,10 +323,19 @@ BeginContent ();
                 else $flags &= ~USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
                 if ($settings_folders) $flags |= USER_FLAG_DONT_USE_FOLDERS;
                 else $flags &= ~USER_FLAG_DONT_USE_FOLDERS;
+                if ($flags & USER_FLAG_FEED_ENABLE && key_exists('feed_type', $_POST)) {
+                    if ($_POST['feed_type'] === "atom") $flags |= USER_FLAG_FEED_ATOM;
+                    else $flags &= ~USER_FLAG_FEED_ATOM;
+                }
                 if ($flags != $GlobalUser['flags']) {
                     SetUserFlags ($GlobalUser['player_id'], $flags);
                     $GlobalUser['flags'] = $flags;
                 }
+                $feed_enable = (key_exists('feed_activated', $_POST) && $_POST['feed_activated']==="on");
+                if ($GlobalUni['feedage'] < 0 && $feed_enable && ($flags & USER_FLAG_FEED_ENABLE) == 0) {
+                    $OptionsError = loca("OPTIONS_FEED_PROHIBITED");
+                }
+                else FeedActivate ($feed_enable);
             }
 
             // Flags for the operator
@@ -560,9 +569,34 @@ BeginContent ();
     <td class="c" colspan="2"><font color='FF8900'><?=loca("OPTIONS_FEED");?></font></td>
 </tr>
 <tr>
-    <th><?=loca("OPTIONS_FEED_ACTIVATE");?><input type=hidden name="feed_submit" value="1"></th>
-    <th><input type="checkbox" name="feed_activated"  /></th>
+    <th><?=loca($GlobalUser['flags'] & USER_FLAG_FEED_ENABLE ? "OPTIONS_FEED_ACTIVATED" : "OPTIONS_FEED_ACTIVATE");?><input type=hidden name="feed_submit" value="1"></th>
+    <th><input type="checkbox" name="feed_activated" <?=IsCheckedFlag(USER_FLAG_FEED_ENABLE);?> /></th>
 </tr>
+
+<?php
+    if ( $GlobalUser['flags'] & USER_FLAG_FEED_ENABLE )
+    {
+?>
+<tr>
+    <th><?=loca("OPTIONS_FEED_FORMAT");?></th>
+    <th>
+    <select name="feed_type">
+        <option value="rss" <?php echo ($GlobalUser['flags'] & USER_FLAG_FEED_ATOM) == 0 ? "selected" : "" ?> >RSS</option>
+        <option value="atom" <?php echo ($GlobalUser['flags'] & USER_FLAG_FEED_ATOM) != 0 ? "selected" : "" ?> >Atom</option>
+    </select>
+    </th>
+</tr>
+<tr>
+    <th><?=loca("OPTIONS_FEED_LINK");?></th>
+    <th>
+    <input readonly="1" size="40" type="text" name="feed_link" value="<?=hostname();?>feed/show.php?feedid=<?=$GlobalUser['feedid'];?>" /><br />
+    <a href="<?=hostname();?>feed/show.php?feedid=<?=$GlobalUser['feedid'];?>" target="_blank"><?=loca("OPTIONS_FEED_SHOW");?></a>
+    </th>
+</tr>
+<?php
+    }
+?>
+
 <?php
     }
 ?>

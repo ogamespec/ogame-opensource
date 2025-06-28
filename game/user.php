@@ -908,4 +908,33 @@ function GetTop1 ()
     return null;
 }
 
+function FeedActivate ($enable)
+{
+    global $GlobalUser, $db_prefix, $GlobalUni;
+    $player_id = $GlobalUser['player_id'];
+    $feedid = "";
+
+    if ($GlobalUni['feedage'] < 0 && $enable) {
+        return;             // Feed is prohibited by universe settings
+    }
+    if (($GlobalUser['flags'] & USER_FLAG_FEED_ENABLE) != 0 && $enable) {
+        return;
+    }
+    if (($GlobalUser['flags'] & USER_FLAG_FEED_ENABLE) == 0 && !$enable) {
+        return;
+    }
+
+    if ($enable) {
+        $GlobalUser['flags'] |= USER_FLAG_FEED_ENABLE;
+        $feedid = bin2hex(random_bytes(16));
+    }
+    else {
+        $GlobalUser['flags'] &= ~USER_FLAG_FEED_ENABLE;
+    }
+
+    $query = "UPDATE ".$db_prefix."users SET flags = ".$GlobalUser['flags'].", lastfeed = 0, feedid = '".$feedid."' WHERE player_id = $player_id";
+    dbquery ($query);
+    $GlobalUser['feedid'] = $feedid;
+}
+
 ?>

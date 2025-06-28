@@ -88,6 +88,7 @@ $LOCA["es"]["OPTIONS_FEED_ACTIVATED"] = "Activated";
 $LOCA["es"]["OPTIONS_FEED_FORMAT"] = "Format";
 $LOCA["es"]["OPTIONS_FEED_LINK"] = "Link to Feed";
 $LOCA["es"]["OPTIONS_FEED_SHOW"] = "show";
+$LOCA["es"]["OPTIONS_FEED_PROHIBITED"] = "Feed is prohibited by Universe settings!";
 
 $LOCA["es"]["OPTIONS_OPER"] = "Operator settings";
 $LOCA["es"]["OPTIONS_OPER_HIDE_EMAIL"] = "Hide Email on message page for players";

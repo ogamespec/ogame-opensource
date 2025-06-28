@@ -88,5 +88,6 @@ $LOCA["fr"]["OPTIONS_FEED_ACTIVATED"] = "Activated";
 $LOCA["fr"]["OPTIONS_FEED_FORMAT"] = "Format";
 $LOCA["fr"]["OPTIONS_FEED_LINK"] = "Link to Feed";
 $LOCA["fr"]["OPTIONS_FEED_SHOW"] = "show";
+$LOCA["fr"]["OPTIONS_FEED_PROHIBITED"] = "Feed is prohibited by Universe settings!";
 
 ?>
