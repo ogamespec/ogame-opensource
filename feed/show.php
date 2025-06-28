@@ -3,7 +3,7 @@
 // Check if the configuration file is missing - exit
 if ( !file_exists ("../game/config.php"))
 {
-	exit ();
+	exit ("Game not installed");
 }
 
 require_once "../game/config.php";
@@ -18,7 +18,7 @@ InitDB();
 //print_r ($_REQUEST);
 
 if (!key_exists('feedid', $_REQUEST)) {
-	exit();
+	exit("No feed specified");
 }
 $feedid = $_REQUEST['feedid'];
 
@@ -33,6 +33,9 @@ if ($uni['feedage'] < 0) {
 
 $query = "SELECT * FROM ".$db_prefix."users WHERE feedid = '".$feedid."' LIMIT 1";
 $result = dbquery ($query);
+if (dbrows($result) == 0) {
+	exit("Authentifizierung fehlgeschlagen");
+}
 $user = dbarray ($result);
 //print_r ($user);
 $player_id = $user['player_id'];
