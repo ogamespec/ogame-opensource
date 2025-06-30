@@ -119,17 +119,14 @@ function SecureText ( $text )
  * Use 'null' for no length/regex checks.
  */
 $paramRules = [
-    #'user_id' => ['integer', null, '/^\d+$/'],       // Only digits
-    #'token'   => ['string',  32,   '/^[a-f0-9]+$/i'], // Hex chars (a-f, 0-9)
-    #'page'    => ['integer', null, '/^\d+$/'],       // Page number (integer)
-    #'action'  => ['string',  20,   '/^[a-z_]+$/i'],  // Letters + underscores
-
-    'session' => ['string', 12, '/^[a-f0-9]+$/i'],
-    'feedid' => ['string', 32, '/^[a-f0-9]+$/i'],
-    'mid' => ['integer', null, '/^\d+$/'],
-    'page' => ['string', 20, '/^[a-z0-9_]+$/i'],
+    'session' => ['string', 12, '/^[a-f0-9]+$/i'],      // Hex chars (a-f, 0-9)
+    'feedid' => ['string', 32, '/^[a-f0-9]+$/i'],       // Hex chars (a-f, 0-9)
+    'mid' => ['integer', null, '/^\d+$/'],          // Only digits
+    'page' => ['string', 20, '/^[a-z0-9_]+$/i'],    // Letters + digits + underscores
+    'cp' => ['integer', null, '/^\d+$/'],          // Only digits
 
     // Add more parameters here...
+    // https://github.com/ogamespec/ogame-opensource/blob/master/Wiki/ru/pages.md
 ];
 
 /**
