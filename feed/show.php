@@ -22,6 +22,11 @@ if (!key_exists('feedid', $_REQUEST)) {
 }
 $feedid = $_REQUEST['feedid'];
 
+$result = CheckParams ($_REQUEST);
+if (!$result['success']) {
+    exit ("Error validating request parameters. Too smart users will be sent to the admin for a proctological examination.");
+}
+
 // Check Universe settings
 
 $uni = LoadUniverse();

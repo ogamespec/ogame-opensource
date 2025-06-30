@@ -111,4 +111,78 @@ function SecureText ( $text )
     return $str;
 }
 
+/**
+ * Validation rules for parameters.
+ * Format: 'parameter_name' => ['type', 'max_length', 'regex_pattern']
+ * 
+ * Supported types: 'integer', 'string'
+ * Use 'null' for no length/regex checks.
+ */
+$paramRules = [
+    #'user_id' => ['integer', null, '/^\d+$/'],       // Only digits
+    #'token'   => ['string',  32,   '/^[a-f0-9]+$/i'], // Hex chars (a-f, 0-9)
+    #'page'    => ['integer', null, '/^\d+$/'],       // Page number (integer)
+    #'action'  => ['string',  20,   '/^[a-z_]+$/i'],  // Letters + underscores
+
+    'session' => ['string', 12, '/^[a-f0-9]+$/i'],
+    'feedid' => ['string', 32, '/^[a-f0-9]+$/i'],
+    'mid' => ['integer', null, '/^\d+$/'],
+    'page' => ['string', 20, '/^[a-z0-9_]+$/i'],
+
+    // Add more parameters here...
+];
+
+/**
+ * Validates input parameters against defined rules.
+ * 
+ * @param array $inputParams - Input data ($_GET, $_POST, etc.)
+ * @return array - ['success' => bool, 'errors' => string[]]
+ */
+function CheckParams (array $inputParams): array {
+    global $paramRules;
+    $errors = [];
+
+    foreach ($paramRules as $param => $rule) {
+        // Check if parameter exists
+        if (!isset($inputParams[$param])) {
+            //$errors[] = "Parameter '$param' is missing";
+            continue;
+        }
+
+        $value = $inputParams[$param];
+        [$type, $maxLength, $regex] = $rule;
+
+        // Type validation (using switch instead of match)
+        $isValid = false;
+        switch ($type) {
+            case 'integer':
+                $isValid = is_numeric($value) && (string)(int)$value === (string)$value;
+                break;
+            case 'string':
+                $isValid = is_string($value);
+                break;
+        }
+
+        if (!$isValid) {
+            $errors[] = "Parameter '$param' must be of type $type";
+            continue;
+        }
+
+        // Length check (for strings)
+        if ($type === 'string' && $maxLength !== null && mb_strlen($value) > $maxLength) {
+            $errors[] = "Parameter '$param' exceeds max length ($maxLength)";
+        }
+
+        // Regex validation
+        if ($regex !== null && !preg_match($regex, $value)) {
+            $errors[] = "Parameter '$param' has invalid format";
+        }
+    }
+
+    return [
+        'success' => empty($errors),
+        'errors' => $errors,
+    ];
+}
+
 ?>

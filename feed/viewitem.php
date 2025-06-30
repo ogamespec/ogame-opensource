@@ -26,6 +26,11 @@ if (!key_exists('mid', $_REQUEST)) {
 }
 $msg_id = $_REQUEST['mid'];
 
+$result = CheckParams ($_REQUEST);
+if (!$result['success']) {
+    exit ("Error validating request parameters. Too smart users will be sent to the admin for a proctological examination.");
+}
+
 // Check Universe settings
 
 $uni = LoadUniverse();

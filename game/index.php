@@ -53,6 +53,11 @@ $GlobalUni = LoadUniverse ();
 // Also, all debug strings are included globally so that you don't have to bother with adding them inplace in the source code.
 loca_add ( "debug", $GlobalUni['lang'] );
 
+$result = CheckParams ($_REQUEST);
+if (!$result['success']) {
+    Error ("Error validating request parameters. Too smart users will be sent to the admin for a proctological examination.");
+}
+
 // Game Pages.
 
 if ( key_exists ( 'session', $_GET ) ) {
@@ -64,8 +69,6 @@ if ( key_exists ( 'session', $_GET ) ) {
     //
     // Public session check
     //
-
-    SecurityCheck ( '/[0-9a-f]{12}/', $_GET['session'], loca_lang("DEBUG_MANI_SESSION", $GlobalUni['lang']) );
 
     if (CheckSession ( $_GET['session'] ) == FALSE) die ();
 }
@@ -132,7 +135,7 @@ else if ( $_GET['page'] === "admin" )
     else
     {
         Hacking ("HACK_ADMIN_PAGE");
-        Error ( 'Попытка проникновения в админ панель.' );
+        Error ( "Attempting to access the admin panel." );
     }
 }
 else if ( $_GET['page'] === "imperium" ) { include "pages/imperium.php"; exit (); }
