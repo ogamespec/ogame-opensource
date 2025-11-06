@@ -234,10 +234,6 @@ function CreateUser ( $name, $pass, $email, $bot=false)
 
     SetVar ( $id, "TimeLimit", 3*365*24*60*60 );
 
-    if (!$bot && GetModeVarInt('mod_carnage') != 0) {
-        ModifyUserForCarnageMode ($id);
-    }
-
     RecalcRanks ();
 
     return $id;

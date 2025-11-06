@@ -21,7 +21,6 @@ if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
 
 loca_add ( "install", $loca_lang );
 loca_add ( "menu", $loca_lang );
-loca_add ( "mods", $loca_lang );
 
 $InstallError = "<font color=gold>".loca('INSTALL_TIP')."</font>";
 
@@ -267,16 +266,6 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     dbquery ( "ALTER TABLE ".$_POST["db_prefix"]."iplogs AUTO_INCREMENT = 1;" );
     dbquery ( "INSERT INTO ".$_POST["db_prefix"]."botstrat VALUES ( 1, 'backup', '')" );
 
-    // Modifications
-    $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_carnage', value = '".(key_exists ('mod_carnage', $_POST) && $_POST["mod_carnage"]==="on"?1:0)."'; ";
-    dbquery ($query);
-    $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_carnage_fleet_size', value = '".$_POST["mod_carnage_fleet_size"]."'; ";
-    dbquery ($query);
-    $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_endgame', value = '".(key_exists ('mod_endgame', $_POST) && $_POST["mod_endgame"]==="on"?1:0)."'; ";
-    dbquery ($query);
-    $query = "INSERT INTO ".$_POST["db_prefix"]."mods SET var = 'mod_endgame_days', value = '".$_POST["mod_endgame_days"]."'; ";
-    dbquery ($query);
-
     // Put the universe into the Master Base.
     $mdb_enable = (key_exists ('mdb_enable', $_POST) && $_POST["mdb_enable"]==="on"?1:0);
     if ($mdb_enable)
@@ -407,18 +396,6 @@ td.c { background-color: #334445; }
 <tr><td><?php echo loca('INSTALL_ADMIN_EMAIL');?></td><td><input type=text class='text' name='admin_email'></td></tr>
 <tr><td><?php echo loca('INSTALL_ADMIN_PASS');?></td><td><input type=password class='text' name='admin_pass'></td></tr>
 <tr><td>&nbsp;</td></tr>
-</table>
-</td>
-
-<td valign=top>
-<table>
-<tr><td>&nbsp;</td></tr>
-<tr><td colspan=2 class='c'><?php echo loca('MODS');?></td></tr>
-<tr><td>&nbsp;</td></tr>
-<tr><td><?php echo loca('MODS_CARNAGE');?></td><td><input type=checkbox class='text' name='mod_carnage'></td></tr>
-<tr><td><?php echo loca('MODS_CARNAGE_FLEET_SIZE');?></td><td><input type=text value='2' class='text' name='mod_carnage_fleet_size'></td></tr>
-<tr><td><?php echo loca('MODS_ENDGAME');?></td><td><input type=checkbox class='text' name='mod_endgame'></td></tr>
-<tr><td><?php echo loca('MODS_ENDGAME_DAYS');?></td><td><input type=text value='30' class='text' name='mod_endgame_days'></td></tr>
 </table>
 </td>
 

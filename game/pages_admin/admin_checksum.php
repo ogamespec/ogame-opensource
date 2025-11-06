@@ -33,7 +33,6 @@ function Admin_Checksum ()
         'install_tabs.php', 
         'loca.php', 
         'maintenance.php', 
-        'mods.php', 
         'msg.php', 
         'notes.php', 
         'page.php', 
