@@ -1,6 +1,8 @@
-# Global event queue
+# Global Event Queue
 
-The main module for managing the time line of the game.
+In short, it's a large table inside the game that tells what players should complete and when.
+
+The main module for managing the time line of the game. The program module is located in the file `game/queue.php`
 The time line consists of time intervals between two events that affect the state of player accounts.
 The events of all players are queued in a common queue. The queue is discrete - each event is synchronized on a second-by-second basis.
 Checking for event completion (queue movement) is performed when players perform any actions (navigate through pages).
@@ -25,30 +27,31 @@ Static recalculation of player points: 0:10 on the server
 Virtual DF disappears on Monday at 1:10 server time if no fleets fly to/from it and if it has 0 resources.
 
 Task Types:
-- "CommanderOff": Officer expires: Commander
-- "AdmiralOff": Officer expires: Admiral.
-- "EngineerOff": Officer expires: Engineer
-- "GeologeOff": Officer expires: Geologist.
-- "TechnocrateOff": Officer expires: Technocrat.
-- "UnbanPlayer": unban a player.
-- "ChangeEmail": record a permanent e-mail address.
-- "AllowName": allow to change player's name.
-- "AllowAttacks": unban a player's attacks
-- "UnloadAll": re-login all players
-- "CleanDebris": clean virtual debris fields
-- "CleanPlanets": remove destroyed planets / abandoned moons
-- "CleanPlayers": deleting inactive players and players set for deletion (1:10)
-- "UpdateStats": save old stat points
-- "RecalcPoints": recalculate player statistics
-- "RecalcAllyPoints": recalculation of alliance statistics
-- "Build": completion of construction on the planet (sub_id - ID of the task in the build queue, obj_id - type of construction)
-- "Demolish": completion of demolition on a planet (sub_id - task ID in the build queue, obj_id - type of construction)
-- "Research": research (sub_id - number of planet where research was started, obj_id - type of research)
-- "Shipyard": Shipyard job (sub_id - planet number, obj_id - construction type)
-- "Fleet": Fleet Assignment / IPM Attack (sub_id - entry number in the fleet table)
-- "Debug": debug event
-- "AI": tasks for bot (sub_id - strategy number, obj_id - current block number)
-- "Coupon": crediting coupons (handler is located in coupon.php)
+- CommanderOff: Officer expires: Commander
+- AdmiralOff: Officer expires: Admiral.
+- EngineerOff: Officer expires: Engineer
+- GeologeOff: Officer expires: Geologist.
+- TechnocrateOff: Officer expires: Technocrat.
+- DeleteAccount: delete account
+- UnbanPlayer: unban a player.
+- ChangeEmail: record a permanent e-mail address.
+- AllowName: allow to change player's name.
+- AllowAttacks: unban a player's attacks
+- UnloadAll: re-login all players
+- CleanDebris: clean virtual debris fields
+- CleanPlanets: remove destroyed planets / abandoned moons
+- CleanPlayers: deleting inactive players and players set for deletion (1:10)
+- UpdateStats: save old stat points
+- RecalcPoints: recalculate player statistics
+- RecalcAllyPoints: recalculation of alliance statistics
+- Build: completion of construction on the planet (sub_id - ID of the task in the build queue, obj_id - type of construction)
+- Demolish: completion of demolition on a planet (sub_id - task ID in the build queue, obj_id - type of construction)
+- Research: research (sub_id - number of planet where research was started, obj_id - type of research)
+- Shipyard: Shipyard job (sub_id - planet number, obj_id - construction type) :warning: This is a special event that requires special handling (#148)
+- Fleet: Fleet Assignment / IPM Attack (sub_id - entry number in the fleet table)
+- Debug: debug event
+- AI: tasks for bot (sub_id - strategy number, obj_id - current block number)
+- Coupon: crediting coupons (handler is located in coupon.php)
 
 How the queue is updated:
 After another click by one of the users, each queue job is checked for completion. If the task is completed, its handler is called and the task is removed from the queue.
