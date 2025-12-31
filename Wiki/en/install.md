@@ -12,7 +12,8 @@ An important part is to properly configure PHP.INI. The following are important 
 |PHP.INI variable|Description|
 |---|---|
 |short_open_tag = On|Allows PHP short PHP inclusions of the form `<?= .... ?>`. This option must be enabled because short inclusions are used everywhere in the game engine.|
-|max_execution_time = 200|Script execution time. 200 seconds is enough for most tasks. 20kkk loss level battles are processed in about 10-15 seconds, depending on the server.|
+|max_execution_time = 300|Script execution time. 300 seconds is enough for most tasks. 20kkk loss level battles are processed in about 10-15 seconds, depending on the server.|
+|memory_limit = 1024M|Here you need to choose experimentally, depending on the battle engine being used (the PHP engine can consume more memory than the C engine). A large battle can eat up 2GB of memory (#140)|
 |display_errors = On|Show script execution errors, if desired.|
 |variables_order = "EGPCS"|The order of processing global variables.|
 |magic_quotes_gpc = On|Quoted strings escaping. All game scripts assume that strings are escaped by default.|

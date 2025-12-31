@@ -106,6 +106,9 @@ TechParam defenseParam[8] = { // Defense parameters
  { 100000, 10000, 1, 0 },
 };
 
+uint64_t peak_allocated_round;
+uint64_t peak_allocated_all_rounds;
+
 // ==========================================================================================
 
 // load data from file
@@ -282,6 +285,7 @@ Unit *InitBattle (Slot *slot, int num, int objs, int attacker)
     unsigned long obj;
     u = (Unit *)malloc (objs * sizeof(Unit));
     if (u == NULL) return u;
+    peak_allocated_round += objs * sizeof(Unit);
     memset (u, 0, objs * sizeof(Unit));
     
     for (i=0; i<num; i++, slot_id++) {
@@ -372,6 +376,7 @@ int WipeExploded (Unit **slot, int amount, int *exploded_count)
     if (!tmp) {
         return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
     }
+    peak_allocated_round += sizeof(Unit) * amount;
     for (i=0; i<amount; i++) {
         if (!src[i].exploded) tmp[p++] = src[i];
         else exploded++;
@@ -538,6 +543,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
     }
 
     // Prepare an array of units to be used.
+    peak_allocated_round = 0;
     aunits = InitBattle (a, anum, aobjs, 1);
     if (aunits == NULL) {
         return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
@@ -547,6 +553,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
         free(aunits);
         return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
     }
+    peak_allocated_all_rounds = peak_allocated_round;
 
     ptr += sprintf (ptr, "a:6:{");
 
@@ -655,6 +662,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
         fastdraw = CheckFastDraw (aunits, aobjs, a, dunits, dobjs, d);
 
         // Clean out the blown ships and defenses.
+        peak_allocated_round = 0;
         exploded_res = WipeExploded (&aunits, aobjs, &exploded);
         if (exploded_res < 0) {
             free(aunits);
@@ -669,6 +677,9 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
             return exploded_res;
         }
         dobjs -= exploded;
+        if (peak_allocated_round > peak_allocated_all_rounds) {
+            peak_allocated_all_rounds = peak_allocated_round;
+        }
 
         // Round.
         ptr += sprintf ( ptr, "i:%i;a:8:", rounds );
@@ -721,6 +732,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
 
     ptr += sprintf (ptr, "}s:6:\"result\";s:4:\"%s\";", res);
     ptr += sprintf (ptr, "s:11:\"battle_seed\";d:%s;", longnumber (battle_seed));
+    ptr += sprintf (ptr, "s:14:\"peak_allocated\";d:%s;", longnumber (peak_allocated_all_rounds));
     ptr += sprintf (ptr, "s:2:\"dm\";d:%s;", longnumber (dm));
     ptr += sprintf (ptr, "s:2:\"dk\";d:%s;}", longnumber (dk));
     
@@ -1052,6 +1064,8 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
     }
     
     // **** START BATTLE ****
+    peak_allocated_round = 0;
+    peak_allocated_all_rounds = 0;
     res = DoBattle ( a, anum, d, dnum, battle_seed );
 
     free (a);
