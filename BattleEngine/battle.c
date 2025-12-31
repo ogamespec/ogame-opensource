@@ -347,7 +347,7 @@ long UnitShoot (Unit *a, Slot* aslot, Unit *b, Slot* bslot, uint64_t *absorbed, 
     if (b->obj_type < DEFENSE_ID_BASE) b_hullmax = bslot[b->slot_id].hullmax_fleet[b->obj_type - FLEET_ID_BASE];
     else b_hullmax = bslot[b->slot_id].hullmax_def[b->obj_type - DEFENSE_ID_BASE];
 
-    if (b->hull <= b_hullmax * 0.7 && b->shield == 0) {    // Взорвать и отвалить лома.
+    if (b->hull <= b_hullmax * 0.7 && b->shield == 0) {    // Blow it up and dump the debris.
         if (MyRand (0, 99) >= ((b->hull * 100) / b_hullmax) || b->hull == 0) {
             if (b->obj_type >= DEFENSE_ID_BASE) {
                 *dm += (uint64_t)(ceil(DefensePrice[b->obj_type-DEFENSE_ID_BASE].m * ((float)DefenseInDebris/100.0f)));
