@@ -2,23 +2,10 @@
 
 // Admin Area: Battle Simulator.
 
-function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, &$dloss )
+function GenBattleSourceData ($a, $d, $rf, $fid, $did)
 {
-    global $db_prefix;
-    global $GlobalUser;
     global $fleetmap;
     global $defmap_norak;
-
-    $unitab = LoadUniverse ();
-
-    if ( $debug ) {
-        print_r ( $a );
-        echo "<br>";
-        print_r ( $d );
-        echo "<br><hr>";
-    }
-
-    // *** Generate source data
 
     $source = "";
     $source .= "Rapidfire = $rf\n";
@@ -33,21 +20,165 @@ function SimBattle ( $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, 
 
     for ( $n=0; $n<$anum; $n++)
     {
-        $source .= "Attacker$n = ({Attacker$n} ".mt_rand(1,10000)." ".$a[$n]['g']." ".$a[$n]['s']." ".$a[$n]['p']." ";
-        $source .= $a[$n]['r109'] . " " . $a[$n]['r110'] . " " . $a[$n]['r111'] . " ";
+        $source .= "Attacker$n = ({".$a[$n]['oname']."} ".$a[$n]['id']." ".$a[$n]['g']." ".$a[$n]['s']." ".$a[$n]['p']." ";
+        $source .= $a[$n]['r'.GID_R_WEAPON] . " " . $a[$n]['r'.GID_R_SHIELD] . " " . $a[$n]['r'.GID_R_ARMOUR] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $a[$n]['fleet'][$gid] . " ";
         $source .= ")\n";
     }
     for ( $n=0; $n<$dnum; $n++)
     {
-        $source .= "Defender$n = ({Defender$n} ".mt_rand(1,10000)." ".$d[$n]['g']." ".$d[$n]['s']." ".$d[$n]['p']." ";
-        $source .= $d[$n]['r109'] . " " . $d[$n]['r110'] . " " . $d[$n]['r111'] . " ";
+        $source .= "Defender$n = ({".$d[$n]['oname']."} ".$d[$n]['id']." ".$d[$n]['g']." ".$d[$n]['s']." ".$d[$n]['p']." ";
+        $source .= $d[$n]['r'.GID_R_WEAPON] . " " . $d[$n]['r'.GID_R_SHIELD] . " " . $d[$n]['r'.GID_R_ARMOUR] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $d[$n]['fleet'][$gid] . " ";
         foreach ($defmap_norak as $i=>$gid) $source .= $d[$n]['defense'][$gid] . " ";
         $source .= ")\n";
     }
 
-    if ($debug) echo $source . "<hr>";
+    return $source;
+}
+
+function ParseBattleDataSource ($source, &$a, &$d)
+{
+    $lines = explode("\n", $source);
+
+    foreach ($lines as $line) {
+        $line = trim($line);
+        
+        if (empty($line) || strpos($line, 'Attackers = ') === 0 || strpos($line, 'Defenders = ') === 0) {
+            continue;
+        }
+        
+        if (strpos($line, 'Attacker') === 0) {
+            // Extracting the attacker's number
+            $parts = explode(' = ', $line);
+            $prefix = $parts[0]; // "AttackerX"
+            
+            // We get the number after "Attacker"
+            $index = (int)substr($prefix, 8);
+            
+            // Processing data
+            $data = $parts[1]; // "({NAME} ... )"
+            $data = trim($data, '() ');
+            
+            // Extracting the name
+            $nameEnd = strpos($data, '}');
+            $name = substr($data, 1, $nameEnd - 1);
+            
+            // Other values
+            $values = substr($data, $nameEnd + 2);
+            $values = preg_split('/\s+/', trim($values));
+            
+            $a[$index] = [
+                'oname' => $name,
+                'id' => (int)$values[0],
+                'g' => (int)$values[1],
+                's' => (int)$values[2],
+                'p' => (int)$values[3],
+                'r'.GID_R_WEAPON => (int)$values[4],
+                'r'.GID_R_SHIELD => (int)$values[5],
+                'r'.GID_R_ARMOUR => (int)$values[6],
+                'fleet' => array (
+                    GID_F_SC => (int)$values[7],
+                    GID_F_LC => (int)$values[8],
+                    GID_F_LF => (int)$values[9],
+                    GID_F_HF => (int)$values[10],
+                    GID_F_CRUISER => (int)$values[11],
+                    GID_F_BATTLESHIP => (int)$values[12],
+                    GID_F_COLON => (int)$values[13],
+                    GID_F_RECYCLER => (int)$values[14],
+                    GID_F_PROBE => (int)$values[15],
+                    GID_F_BOMBER => (int)$values[16],
+                    GID_F_SAT => (int)$values[17],
+                    GID_F_DESTRO => (int)$values[18],
+                    GID_F_DEATHSTAR => (int)$values[19],
+                    GID_F_BATTLECRUISER => (int)$values[20]
+                )
+            ];
+        } elseif (strpos($line, 'Defender') === 0) {
+            // Extracting the defender's number
+            $parts = explode(' = ', $line);
+            $prefix = $parts[0]; // "DefenderX"
+            
+            // We get the number after "Defender"
+            $index = (int)substr($prefix, 8);
+            
+            // Processing data
+            $data = $parts[1]; // "({NAME} ... )"
+            $data = trim($data, '() ');
+            
+            // Extracting the name
+            $nameEnd = strpos($data, '}');
+            $name = substr($data, 1, $nameEnd - 1);
+            
+            // Other values
+            $values = substr($data, $nameEnd + 2);
+            $values = preg_split('/\s+/', trim($values));
+            
+            $d[$index] = [
+                'oname' => $name,
+                'id' => (int)$values[0],
+                'g' => (int)$values[1],
+                's' => (int)$values[2],
+                'p' => (int)$values[3],
+                'r'.GID_R_WEAPON => (int)$values[4],
+                'r'.GID_R_SHIELD => (int)$values[5],
+                'r'.GID_R_ARMOUR => (int)$values[6],
+                'fleet' => array (
+                    GID_F_SC => (int)$values[7],
+                    GID_F_LC => (int)$values[8],
+                    GID_F_LF => (int)$values[9],
+                    GID_F_HF => (int)$values[10],
+                    GID_F_CRUISER => (int)$values[11],
+                    GID_F_BATTLESHIP => (int)$values[12],
+                    GID_F_COLON => (int)$values[13],
+                    GID_F_RECYCLER => (int)$values[14],
+                    GID_F_PROBE => (int)$values[15],
+                    GID_F_BOMBER => (int)$values[16],
+                    GID_F_SAT => (int)$values[17],
+                    GID_F_DESTRO => (int)$values[18],
+                    GID_F_DEATHSTAR => (int)$values[19],
+                    GID_F_BATTLECRUISER => (int)$values[20]
+                ),
+                'defense' => array (
+                    GID_D_RL => (int)$values[21],
+                    GID_D_LL => (int)$values[22],
+                    GID_D_HL => (int)$values[23],
+                    GID_D_GAUSS => (int)$values[24],
+                    GID_D_ION => (int)$values[25],
+                    GID_D_PLASMA => (int)$values[26],
+                    GID_D_SDOME => (int)$values[27],
+                    GID_D_LDOME => (int)$values[28]
+                )
+            ];
+        }
+    }
+}
+
+function SimBattle ( $battle_source, $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, &$dloss )
+{
+    global $db_prefix;
+    global $GlobalUser;
+
+    $unitab = LoadUniverse ();
+
+    if (!is_null($battle_source)) {
+        $a = array ();
+        $d = array ();
+        ParseBattleDataSource ($battle_source, $a, $d);
+    }
+
+    if ( $debug ) {
+        print_r ( $a );
+        echo "<br>";
+        print_r ( $d );
+        echo "<br><hr>";
+    }
+
+    // *** Generate source data
+
+    $source = GenBattleSourceData ($a, $d, $rf, $fid, $did);
+
+    if ($debug) echo "<pre>" . $source . "</pre><hr>";
 
     $battle = array ( null, $source, '', '', time() );
     $battle_id = AddDBRow ( $battle, "battledata");
@@ -162,10 +293,11 @@ function Admin_BattleSim ()
             if ( $_POST["a".$i."_shld"] === "" ) $_POST["a".$i."_shld"] = 0;
             if ( $_POST["a".$i."_armor"] === "" ) $_POST["a".$i."_armor"] = 0;
 
-            $a[$i]['r109'] = intval ($_POST["a".$i."_weap"]);
-            $a[$i]['r110'] = intval ($_POST["a".$i."_shld"]);
-            $a[$i]['r111'] = intval ($_POST["a".$i."_armor"]);
+            $a[$i]['r'.GID_R_WEAPON] = intval ($_POST["a".$i."_weap"]);
+            $a[$i]['r'.GID_R_SHIELD] = intval ($_POST["a".$i."_shld"]);
+            $a[$i]['r'.GID_R_ARMOUR] = intval ($_POST["a".$i."_armor"]);
             $a[$i]['oname'] = "Attacker$i";
+            $a[$i]['id'] = mt_rand(1,10000);
     
             $a[$i]['g'] = mt_rand (1, 9);
             $a[$i]['s'] = mt_rand (1, 499);
@@ -186,10 +318,11 @@ function Admin_BattleSim ()
             if ( $_POST["d".$i."_shld"] === "" ) $_POST["d".$i."_shld"] = 0;
             if ( $_POST["d".$i."_armor"] === "" ) $_POST["d".$i."_armor"] = 0;
 
-            $d[$i]['r109'] = intval ($_POST["d".$i."_weap"]);
-            $d[$i]['r110'] = intval ($_POST["d".$i."_shld"]);
-            $d[$i]['r111'] = intval ($_POST["d".$i."_armor"]);
+            $d[$i]['r'.GID_R_WEAPON] = intval ($_POST["d".$i."_weap"]);
+            $d[$i]['r'.GID_R_SHIELD] = intval ($_POST["d".$i."_shld"]);
+            $d[$i]['r'.GID_R_ARMOUR] = intval ($_POST["d".$i."_armor"]);
             $d[$i]['oname'] = "Defender$i";
+            $d[$i]['id'] = mt_rand(1,10000);
     
             $d[$i]['g'] = mt_rand (1, 9);
             $d[$i]['s'] = mt_rand (1, 499);
@@ -220,7 +353,11 @@ function Admin_BattleSim ()
         else $fid = intval ($_POST['fid']);
         if ( $_POST['did'] === "" ) $did = 0;
         else $did = intval ($_POST['did']);
-        $BattleReport = SimBattle ( $a, $d, $rf, $fid, $did, $debug, $battle_result, $aloss, $dloss );
+        $battle_source = $_POST['battle_source'] ?? null;
+        if ($battle_source === "") {
+            $battle_source = null;
+        }
+        $BattleReport = SimBattle ( $battle_source, $a, $d, $rf, $fid, $did, $debug, $battle_result, $aloss, $dloss );
     }
 
     // --------------------------------------------------------------------------------------------------------------------------
@@ -469,6 +606,13 @@ RecalcAttackersDefendersNum ();
 ?>
         </table>
         </th></tr>
+
+<tr><td colspan=2> 
+<table>
+<tr><td class=c colspan=2><?=loca("ADM_SIM_BATTLE_SOURCE");?></td></tr>
+<tr><td><textarea id="battle_source" name="battle_source"></textarea></td></tr>
+</table>
+</td></tr>
 
 <tr><td colspan=2><center><input type="submit" value="<?=loca("ADM_SIM_SUBMIT");?>"></center></td></tr>
 
