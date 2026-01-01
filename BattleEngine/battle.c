@@ -555,7 +555,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
     }
     peak_allocated_all_rounds = peak_allocated_round;
 
-    ptr += sprintf (ptr, "a:6:{");
+    ptr += sprintf (ptr, "a:7:{");
 
     // Fleets before the battle
     ptr += sprintf (ptr, "s:6:\"before\";a:2:{");
