@@ -54,10 +54,11 @@ function get_packed_word (&$arr, $idx)
 
 function set_packed_word (&$arr, $idx, $val)
 {
-    $arr[4*$idx] = chr(($val >> 24) & 0xff);
-    $arr[4*$idx+1] = chr(($val >> 16) & 0xff);
-    $arr[4*$idx+2] = chr(($val >> 8) & 0xff);
-    $arr[4*$idx+3] = chr(($val >> 0) & 0xff);
+    $ival = (int)$val;
+    $arr[4*$idx] = chr(($ival >> 24) & 0xff);
+    $arr[4*$idx+1] = chr(($ival >> 16) & 0xff);
+    $arr[4*$idx+2] = chr(($ival >> 8) & 0xff);
+    $arr[4*$idx+3] = chr(($ival >> 0) & 0xff);
 }
 
 // Allocate memory for units and set initial values.
