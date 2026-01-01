@@ -22,3 +22,8 @@ RUN docker-php-ext-install mbstring mysqli pdo pdo_mysql
 
 RUN chown -R www-data:www-data /var/www/html
 RUN chown -R www-data:www-data /var/www/html/game
+
+COPY ./BattleEngine /var/www/BattleEngine
+RUN gcc /var/www/BattleEngine/battle.c -lm -o /usr/lib/cgi-bin/battle
+RUN chmod 755 /usr/lib/cgi-bin/battle
+RUN rm -rf /var/www/BattleEngine
