@@ -2,7 +2,7 @@
 
 Requirements:
 - A decent web server
-- PHP 7.x
+- PHP 7.x (8.x is also suitable in principle)
 - MySQL
 
 ## PHP Setup
