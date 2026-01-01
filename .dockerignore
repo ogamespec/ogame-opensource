@@ -1,0 +1,10 @@
+.dockerignore
+BattleEngine
+Wiki
+imgstore
+.git
+.env
+.gitattributes
+LICENSE
+README.md
+ReadmeRus.md
