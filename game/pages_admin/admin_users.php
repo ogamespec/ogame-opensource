@@ -127,8 +127,10 @@ function Admin_Users ()
                 USER_OFFICER_TECHNOCRATE => "pr_".USER_OFFICER_TECHNOCRATE );
             foreach ( $qname as $i=>$qcmd )
             {
-                $days = intval ( $_POST[$qcmd] );
-                RecruitOfficer ( $player_id, $i, $days * 24 * 60 * 60 );
+                if ($_POST[$qcmd] !== "") {
+                    $days = intval ( $_POST[$qcmd] );
+                    RecruitOfficer ( $player_id, $i, $days * 24 * 60 * 60 );
+                }
             }
         }
 
