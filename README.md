@@ -3,8 +3,8 @@
 This is revived OGame v 0.84 with old design.
 
 Need help with installation? You have the following options:
-- Use the millennial guide: [install](/Wiki/ru/install.md)
-- Use the zoomer guide: [install_docker](/Wiki/ru/install_docker.md)
+- Use the millennial guide: [install](/Wiki/en/install.md)
+- Use the zoomer guide: [install_docker](/Wiki/en/install_docker.md)
 - Ask the community for help. Discord: https://discord.gg/xpCV3McAj2
 
 **!!! All trademarks and copyrighted materials are belongs to OGame respective owners - Gameforge 4D GmbH !!!**
