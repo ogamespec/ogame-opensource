@@ -103,6 +103,10 @@ if ( method () === "POST" )
                 $user = dbarray ( $result );
                 $homeplanet = GetPlanet ( intval($user['hplanetid']) );
                 $ally = LoadAlly ( intval($user['ally_id']) );
+                $ally_tag = "";
+                if ($ally) {
+                    $ally_tag = $ally['tag'];
+                }
                 $name = $user['oname'];
                 $buttons = "<a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\" alt=\"".loca("SEARCH_MESSAGE")."\" ><img src=\"".UserSkin()."/img/m.gif\" alt=\"".loca("SEARCH_MESSAGE")."\" title=\"".loca("SEARCH_MESSAGE")."\" /></a><a href='index.php?page=buddy&session=$session&action=7&buddy_id=".$user['player_id']."' alt='".loca("SEARCH_BUDDY")."'><img src='".UserSkin()."/img/b.gif' border=0 alt='".loca("SEARCH_BUDDY")."' title='".loca("SEARCH_BUDDY")."'></a>";
                 $allyurl = "ainfo.php?allyid=".$user['ally_id'];
@@ -116,13 +120,17 @@ if ( method () === "POST" )
                     $allyurl = "index.php?page=allianzen&session=$session";
                 }
                 $SearchResult .= "<tr>\n";
-                $SearchResult .= "<th>$name</th><th>$buttons</th><th> <a href='".$allyurl."' target='_ally'>".$ally['tag']."</a></th><th>".$homeplanet['name']."</th><th><a href=\"index.php?page=galaxy&no_header=1&session=$session&p1=".$homeplanet['g']."&p2=".$homeplanet['s']."&p3=".$homeplanet['p']."\">".$homeplanet['g'].":".$homeplanet['s'].":".$homeplanet['p']."</a></th><th><a href=\"index.php?page=statistics&session=$session&start=".(floor($user['place1']/100)*100+1)."\">".$user['place1']."</a></th></tr>\n";
+                $SearchResult .= "<th>$name</th><th>$buttons</th><th> <a href='".$allyurl."' target='_ally'>".$ally_tag."</a></th><th>".$homeplanet['name']."</th><th><a href=\"index.php?page=galaxy&no_header=1&session=$session&p1=".$homeplanet['g']."&p2=".$homeplanet['s']."&p3=".$homeplanet['p']."\">".$homeplanet['g'].":".$homeplanet['s'].":".$homeplanet['p']."</a></th><th><a href=\"index.php?page=statistics&session=$session&start=".(floor($user['place1']/100)*100+1)."\">".$user['place1']."</a></th></tr>\n";
             }
             else if ( $_POST['type'] === "planetname" )
             {
                 $planet = dbarray ( $result );
                 $user = LoadUser ( intval($planet['owner_id']) );
                 $ally = LoadAlly ( intval($user['ally_id']) );
+                $ally_tag = "";
+                if ($ally) {
+                    $ally_tag = $ally['tag'];
+                }
                 $name = $user['oname'];
                 $buttons = "<a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\" alt=\"".loca("SEARCH_MESSAGE")."\"><img src=\"".UserSkin()."/img/m.gif\" alt=\"".loca("SEARCH_MESSAGE")."\" title=\"".loca("SEARCH_MESSAGE")."\" /></a><a href='index.php?page=buddy&session=$session&action=7&buddy_id=".$user['player_id']."' alt='".loca("SEARCH_BUDDY")."'><img src='".UserSkin()."/img/b.gif' border=0 alt='".loca("SEARCH_BUDDY")."' title='".loca("SEARCH_BUDDY")."'></a>";
                 $allyurl = "ainfo.php?allyid=".$user['ally_id'];
@@ -136,7 +144,7 @@ if ( method () === "POST" )
                     $allyurl = "index.php?page=allianzen&session=$session";
                 }
                 $SearchResult .= "<tr>\n";
-                $SearchResult .= "<th>$name</th><th>$buttons</th><th> <a href='".$allyurl."' target='_ally'>".$ally['tag']."</a></th><th>".$planet['name']."</th><th><a href=\"index.php?page=galaxy&no_header=1&session=$session&p1=".$planet['g']."&p2=".$planet['s']."&p3=".$planet['p']."\">".$planet['g'].":".$planet['s'].":".$planet['p']."</a></th><th><a href=\"index.php?page=statistics&session=$session&start=".(floor($user['place1']/100)*100+1)."\">".$user['place1']."</a></th></tr>\n";
+                $SearchResult .= "<th>$name</th><th>$buttons</th><th> <a href='".$allyurl."' target='_ally'>".$ally_tag."</a></th><th>".$planet['name']."</th><th><a href=\"index.php?page=galaxy&no_header=1&session=$session&p1=".$planet['g']."&p2=".$planet['s']."&p3=".$planet['p']."\">".$planet['g'].":".$planet['s'].":".$planet['p']."</a></th><th><a href=\"index.php?page=statistics&session=$session&start=".(floor($user['place1']/100)*100+1)."\">".$user['place1']."</a></th></tr>\n";
             }
             else if ( $_POST['type'] === "allytag" || $_POST['type'] === "allyname" )
             {
