@@ -13,7 +13,7 @@ Each event has a beginning (start time) and an end (end time of the event). Some
 other events (e.g. canceling a fleet task generates a new fleet return task).
 
 Main types of account events:
- - Time counters on a player's account (officers exiration, account deletion, etc).
+ - Time counters on a player's account (account deletion, etc).
  - Construction on a planet/moon
  - Research
  - Shipyard construction
@@ -27,11 +27,6 @@ Static recalculation of player points: 0:10 on the server
 Virtual DF disappears on Monday at 1:10 server time if no fleets fly to/from it and if it has 0 resources.
 
 Task Types:
-- CommanderOff: Officer expires: Commander
-- AdmiralOff: Officer expires: Admiral.
-- EngineerOff: Officer expires: Engineer
-- GeologeOff: Officer expires: Geologist.
-- TechnocrateOff: Officer expires: Technocrat.
 - DeleteAccount: delete account
 - UnbanPlayer: unban a player.
 - ChangeEmail: record a permanent e-mail address.

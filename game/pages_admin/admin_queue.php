@@ -57,13 +57,6 @@ function QueueDesc ( $queue )
                 }
             }
             return va(loca("ADM_QUEUE_TYPE_AI"), $strat['name']) . " : <br>$block_text";
-
-        case QTYP_COMMANDER_OFF: return loca("ADM_QUEUE_TYPE_COMMANDER_OFF");
-        case QTYP_ADMIRAL_OFF: return loca("ADM_QUEUE_TYPE_ADMIRAL_OFF");
-        case QTYP_ENGINEER_OFF: return loca("ADM_QUEUE_TYPE_ENGINEER_OFF");
-        case QTYP_GEOLOGE_OFF: return loca("ADM_QUEUE_TYPE_GEOLOGE_OFF");
-        case QTYP_TECHNOCRATE_OFF: return loca("ADM_QUEUE_TYPE_TECHNOCRATE_OFF");
-
     }
 
     return loca("ADM_QUEUE_TYPE_UNKNOWN") . " (type=$type, sub_id=$sub_id, obj_id=$obj_id, level=$level)";

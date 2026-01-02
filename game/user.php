@@ -59,6 +59,11 @@ rXXX: Research XXX level (INT)
 flags: User flags. The full list is below (USER_FLAG). I didn't think of this idea right away, some variables can also be made into flags (INT UNSIGNED)
 feedid: feed id (eg 5aa28084f43ad54d9c8f7dd92f774d03)  (CHAR(32))
 lastfeed: last Feed update timestamp (INT UNSIGNED)
+com_until: Officer expires: Commander (INT UNSIGNED)
+adm_until: Officer expires: Admiral (INT UNSIGNED)
+eng_until: Officer expires: Engineer (INT UNSIGNED)
+geo_until: Officer expires: Geologist (INT UNSIGNED)
+tec_until: Officer expires: Technocrat (INT UNSIGNED)
 
 Q - task in the task queue is used to process this event.
 */
@@ -81,6 +86,12 @@ const USER_FLAG_HIDE_GO_EMAIL = 0x4000;                 // Show an in-game messa
 const USER_FLAG_FEED_ENABLE = 0x8000;               // 1: feed enabled
 const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - use Atom format
 
+const USER_OFFICER_COMMANDER = 1;
+const USER_OFFICER_ADMIRAL = 2;
+const USER_OFFICER_ENGINEER = 3;
+const USER_OFFICER_GEOLOGE = 4;
+const USER_OFFICER_TECHNOCRATE = 5;
+
 // Default flags after creating a player
 const USER_FLAG_DEFAULT = USER_FLAG_SHOW_ESPIONAGE_BUTTON | USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON | USER_FLAG_SHOW_BUDDY_BUTTON | USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON | USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
 
@@ -92,7 +103,6 @@ const USER_NOOB_LIMIT = 5000;           // Number of points for a newbie
 // Very limited cache implementation: The cache is only kept for the lifetime of the script.
 // Attention! Using caches in the game introduces a significant probability of obscure errors ("Heisenbugs"), so it is NOT recommended to use persistent cache (which is kept between HTTP requests)
 $UserCache = array ();
-$PremiumCache = array ();
 
 // Corrected version of date
 function fixed_date ( $fmt, $timestamp )
@@ -213,7 +223,7 @@ function CreateUser ( $name, $pass, $email, $bot=false)
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        USER_FLAG_DEFAULT, "", 0 );
+                        USER_FLAG_DEFAULT, "", 0, 0, 0, 0, 0, 0 );
     $id = AddDBRow ( $user, "users" );
 
     LogIPAddress ( $ip, $id, 1 );
@@ -469,26 +479,49 @@ function IsPlayerStrong ( $player_id)
 // Get the status of the commander and the rest of the officers on the account.
 function PremiumStatus ($user)
 {
-    global $PremiumCache;
-    if ( isset ( $PremiumCache [ $user['player_id'] ] ) ) return  $PremiumCache [ $user['player_id'] ];
-
     $prem = array ();
-    $qcmd = array ( 'commander' => QTYP_COMMANDER_OFF, 'admiral' => QTYP_ADMIRAL_OFF, 'engineer' => QTYP_ENGINEER_OFF, 'geologist' => QTYP_GEOLOGE_OFF, 'technocrat' => QTYP_TECHNOCRATE_OFF);
+    $qcmd = array ( USER_OFFICER_COMMANDER => 'commander', USER_OFFICER_ADMIRAL => 'admiral', USER_OFFICER_ENGINEER => 'engineer', USER_OFFICER_GEOLOGE => 'geologist', USER_OFFICER_TECHNOCRATE => 'technocrat');
 
     $now = time ();
 
     foreach ($qcmd as $i=>$cmd)
     {
-        $end = GetOfficerLeft ( $user['player_id'], $cmd );
+        $end = GetOfficerLeft ( $user, $i );
         if ($end <= $now) $d = 0;
         else $d = ($end - $now) / (60*60*24);
         $enabled = ( $d  > 0 );
 
-        $prem[$i] = $enabled;
-        $prem[$i.'_days'] = $d;
+        $prem[$cmd] = $enabled;
+        $prem[$cmd.'_days'] = $d;
     }
-    $PremiumCache[ $user['player_id'] ]  = $prem;
     return $prem;
+}
+
+// Get the officer's end time. $off_type - see USER_OFFICER_xxx.
+function GetOfficerLeft ($user, $off_type)
+{
+    $qtimers = array ( USER_OFFICER_COMMANDER => 'com_until', USER_OFFICER_ADMIRAL => 'adm_until', USER_OFFICER_ENGINEER => 'eng_until', USER_OFFICER_GEOLOGE => 'geo_until', USER_OFFICER_TECHNOCRATE => 'tec_until');
+    if (key_exists($qtimers[$off_type], $user)) {
+        return $user[$qtimers[$off_type]];
+    }
+    else return 0;
+}
+
+// Extend an officer for the specified number of seconds. If the number of seconds < 0 - remove the officer.
+function RecruitOfficer ( $player_id, $off_type, $seconds )
+{
+    global $db_prefix;
+    $qtimers = array ( USER_OFFICER_COMMANDER => 'com_until', USER_OFFICER_ADMIRAL => 'adm_until', USER_OFFICER_ENGINEER => 'eng_until', USER_OFFICER_GEOLOGE => 'geo_until', USER_OFFICER_TECHNOCRATE => 'tec_until');
+
+    $until = 0;
+    if ($seconds < 0) {
+        $until = 0;
+    }
+    else {
+        $until = time() + $seconds;
+    }
+    $query = "UPDATE ".$db_prefix."users SET ".$qtimers[$off_type]." = ".$until." WHERE player_id = $player_id";
+    dbquery ($query);
 }
 
 // Called when you click on "Exit" in the menu.

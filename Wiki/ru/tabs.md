@@ -135,7 +135,12 @@
 |rXXX|INT|Уровень исследования XXX |
 |flags|INT UNSIGNED|Флаги пользователя. Полный список ниже (USER_FLAG). Не сразу додумался до этой идеи, некоторые переменные также можно сделать флагами|
 |feedid|CHAR(32)| feed id (eg 5aa28084f43ad54d9c8f7dd92f774d03) |
-|lastfeed|INT UNSIGNED | last Feed update timestamp ()|
+|lastfeed|INT UNSIGNED | Время последнего обновления Feed timestamp ()|
+|com_until|INT UNSIGNED | заканчивается офицер: Командир timestamp ()|
+|adm_until|INT UNSIGNED | заканчивается офицер: Адмирал timestamp ()|
+|eng_until|INT UNSIGNED | заканчивается офицер: Инженер timestamp ()|
+|geo_until|INT UNSIGNED | заканчивается офицер: Геолог timestamp ()|
+|tec_until|INT UNSIGNED | заканчивается офицер: Технократ timestamp ()|
 
 **Q** - для обработки этого события используется задание в очереди задач.
 

@@ -15,7 +15,7 @@ Each event has a beginning (start time) and an end (end time of the event). Some
 other events (e.g. canceling a fleet task generates a new fleet return task).
 
 Main types of account events:
- - Time counters on a player's account (officer action, account deletion, etc).
+ - Time counters on a player's account (account deletion, etc).
  - Construction on a planet/moon
  - Research
  - Shipyard construction
@@ -59,11 +59,6 @@ const QUEUE_BATCH = 16;         // The event queue is not executed in its entire
 
 // Queue task type
 // For some reason during the development phase, the identifiers were made strings. TODO: Change them to INT type (but this would require a clean reinstall of the Universe)
-const QTYP_COMMANDER_OFF = "CommanderOff";      // ends contract: Commander
-const QTYP_ADMIRAL_OFF = "AdmiralOff";          // ends officer: Admiral
-const QTYP_ENGINEER_OFF = "EngineerOff";        // ends officer: Engineer
-const QTYP_GEOLOGE_OFF = "GeologeOff";          // ends officer: Geologist
-const QTYP_TECHNOCRATE_OFF = "TechnocrateOff";  // ends officer: Technocrat
 const QTYP_UNBAN = "UnbanPlayer";               // unban player
 const QTYP_CHANGE_EMAIL = "ChangeEmail";        // write down a permanent mailing address
 const QTYP_ALLOW_NAME = "AllowName";            // allow player name changes
@@ -170,12 +165,6 @@ function UpdateQueue ($until)
             case QTYP_DEBUG: Queue_Debug_End ($queue); break;
             case QTYP_AI: Queue_Bot_End ($queue); break;
             case QTYP_COUPON: break;
-
-            case QTYP_COMMANDER_OFF: Queue_Officer_End ($queue); break;
-            case QTYP_ADMIRAL_OFF: Queue_Officer_End ($queue); break;
-            case QTYP_ENGINEER_OFF: Queue_Officer_End ($queue); break;
-            case QTYP_GEOLOGE_OFF: Queue_Officer_End ($queue); break;
-            case QTYP_TECHNOCRATE_OFF: Queue_Officer_End ($queue); break;
 
             default:
                 Error ( loca_lang("DEBUG_QUEUE_UNKNOWN", $GlobalUni['lang']) . $queue['type']);
@@ -864,53 +853,6 @@ function Queue_Research_End ($queue)
 
 // ===============================================================================================================
 // Player
-
-// Get the officer's end time. $off - symbolic designation of the queue task associated with officers.
-function GetOfficerLeft ($player_id, $off)
-{
-    global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".$off."' AND owner_id = $player_id ORDER BY end ASC";
-    $result = dbquery ($query);
-    if ( dbrows($result) != 0 )
-    {
-        $queue = dbarray ($result);
-        return $queue['end'];
-    }
-    else return 0;
-}
-
-// Extend an officer for the specified number of seconds. If the number of seconds < 0 - remove the officer.
-function RecruitOfficer ( $player_id, $off, $seconds )
-{
-    global $db_prefix;
-
-    if ($seconds < 0) {
-
-        $query = "DELETE FROM ".$db_prefix."queue WHERE type = '".$off."' AND owner_id = $player_id";
-        dbquery ($query);
-    }
-    else {
-
-        $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".$off."' AND owner_id = $player_id LIMIT 1";
-        $result = dbquery ($query);
-        if ( dbrows ($result) == 0 )
-        {
-            AddQueue ( $player_id, $off, 0, 0, 0, time (), $seconds, 0 );
-        }
-        else
-        {
-            $queue = dbarray ( $result );
-            $query = "UPDATE ".$db_prefix."queue SET end = end + $seconds WHERE task_id = " . $queue['task_id'];
-            dbquery ($query);
-        }
-    }
-}
-
-// The officer's action is over.
-function Queue_Officer_End ($queue)
-{
-    RemoveQueue ( $queue['task_id'] );
-}
 
 // Add the task of recalculating a player's score if it doesn't already exist.
 // Called when any player logs in.

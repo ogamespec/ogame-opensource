@@ -136,6 +136,11 @@ In other words - there is no reason to worry that the tables are organized a bit
 |flags|INT UNSIGNED|User flags. The full list is below (USER_FLAG). I didn't think of this idea right away, some variables can also be made into flags|
 |feedid|CHAR(32)| feed id (eg 5aa28084f43ad54d9c8f7dd92f774d03) |
 |lastfeed|INT UNSIGNED | last Feed update timestamp ()|
+|com_until|INT UNSIGNED | Officer expires: Commander timestamp ()|
+|adm_until|INT UNSIGNED | Officer expires: Admiral timestamp ()|
+|eng_until|INT UNSIGNED | Officer expires: Engineer timestamp ()|
+|geo_until|INT UNSIGNED | Officer expires: Geologist timestamp ()|
+|tec_until|INT UNSIGNED | Officer expires: Technocrat timestamp ()|
 
 **Q** - task in the task queue is used to process this event.
 

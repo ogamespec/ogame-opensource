@@ -23,13 +23,13 @@ UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
 // Cost of Officers.
-$price = array ( 1 => 10000, 2 => 10000, 3 => 10000, 4 => 10000, 5 => 10000 );
+$price = array ( USER_OFFICER_COMMANDER => 10000, USER_OFFICER_ADMIRAL => 10000, USER_OFFICER_ENGINEER => 10000, USER_OFFICER_GEOLOGE => 10000, USER_OFFICER_TECHNOCRATE => 10000 );
 
-function OfficerLeft ( $qcmd )
+function OfficerLeft ( $type )
 {
     global $GlobalUser;
     $now = time ();
-    $end = GetOfficerLeft ( $GlobalUser['player_id'], $qcmd );
+    $end = GetOfficerLeft ( $GlobalUser, $type );
     if ( $end <= $now ) return loca("PREM_INACTIVE");
     else
     {
@@ -41,7 +41,6 @@ function OfficerLeft ( $qcmd )
 // Process GET request.
 if ( key_exists ( 'buynow', $_GET ) )
 {
-    $qcmd = array ( 1 => QTYP_COMMANDER_OFF, 2 => QTYP_ADMIRAL_OFF, 3 => QTYP_ENGINEER_OFF, 4 => QTYP_GEOLOGE_OFF, 5 => QTYP_TECHNOCRATE_OFF );
     $type = intval ( $_GET['type'] );
     $days = intval ( $_GET['days'] );
     if ( $days == 7 || $days == 90 )
@@ -55,7 +54,7 @@ if ( key_exists ( 'buynow', $_GET ) )
         }
         else
         {
-            if ( $type >= 1 && $type <= 5 )
+            if ( $type >= USER_OFFICER_COMMANDER && $type <= USER_OFFICER_TECHNOCRATE )
             {
                 // Списать ТМ.
                 if ( $GlobalUser['dm'] >= $required ) $GlobalUser['dm'] -= $required;
@@ -67,7 +66,7 @@ if ( key_exists ( 'buynow', $_GET ) )
                 $query = "UPDATE ".$db_prefix."users SET dm = '".$GlobalUser['dm']."', dmfree = '".$GlobalUser['dmfree']."' WHERE player_id = " . $GlobalUser['player_id'];
                 dbquery ( $query );
 
-                RecruitOfficer ( $GlobalUser['player_id'], $qcmd[$type], $days * 24 * 60 * 60 );
+                RecruitOfficer ( $GlobalUser['player_id'], $type, $days * 24 * 60 * 60 );
                 
                 $MicropaymentMessage = loca ("PREM_OK") . "<br>";
             }
@@ -119,7 +118,7 @@ BeginContent ();
                                                 <td class=l rowspan="2"><img border='0' src="img/commander_stern_gross.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b><?php echo loca("PREM_COMMANDER");?></b>(<b>
-                        <?php echo OfficerLeft("CommanderOff");?></b>)<br>
+                        <?php echo OfficerLeft(USER_OFFICER_COMMANDER);?></b>)<br>
                             <?php echo loca("PREM_COMMANDER_INFO");?>                         <div style="margin:4px 4px;">
                             <table>
                                 <tr>
@@ -161,7 +160,7 @@ BeginContent ();
                                                 <td class=l rowspan="2"><img border='0' src="img/ogame_admiral.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b><?php echo loca("PREM_ADMIRAL");?></b>(<b>
-                        <?php echo OfficerLeft("AdmiralOff");?>)<br>
+                        <?php echo OfficerLeft(USER_OFFICER_ADMIRAL);?>)<br>
                             <?php echo loca("PREM_ADMIRAL_INFO");?><br>
                             <div style="margin:4px 4px;">
                             <table><tr><td><img src="img/admiral_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="<?php echo loca("PREM_ADMIRAL");?>"></td>
@@ -192,7 +191,7 @@ BeginContent ();
                                                 <td class=l rowspan="2"><img border='0' src="img/ogame_ingenieur.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b><?php echo loca("PREM_ENGINEER");?></b>(<b>
-                        <?php echo OfficerLeft("EngineerOff");?></b>)<br>
+                        <?php echo OfficerLeft(USER_OFFICER_ENGINEER);?></b>)<br>
                             <?php echo loca("PREM_ENGINEER_INFO");?><br>
                             <div style="margin:4px 4px;">
                             <table><tr><td><img src="img/ingenieur_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="<?php echo loca("PREM_ENGINEER");?>"></td>
@@ -222,7 +221,7 @@ BeginContent ();
                                                 <td class=l rowspan="2"><img border='0' src="img/ogame_geologe.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b><?php echo loca("PREM_GEOLOGE");?></b>(<b>
-                        <?php echo OfficerLeft("GeologeOff");?></b>)<br>
+                        <?php echo OfficerLeft(USER_OFFICER_GEOLOGE);?></b>)<br>
                             <?php echo loca("PREM_GEOLOGE_INFO");?><br>
                             <div style="margin:4px 4px;">
                             <table><tr><td><img src="img/geologe_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="<?php echo loca("PREM_GEOLOGE");?>"></td>
@@ -254,7 +253,7 @@ BeginContent ();
                                                 <td class=l rowspan="2"><img border='0' src="img/ogame_technokrat.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b><?php echo loca("PREM_TECHNOCRATE");?></b>(<b>
-                        <?php echo OfficerLeft("TechnocrateOff");?></b>)<br>
+                        <?php echo OfficerLeft(USER_OFFICER_TECHNOCRATE);?></b>)<br>
                             <?php echo loca("PREM_TECHNOCRATE_INFO");?><br>
                             <div style="margin:4px 4px;">
                             <table><tr><td><img src="img/technokrat_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="<?php echo loca("PREM_TECHNOCRATE");?>"></td>

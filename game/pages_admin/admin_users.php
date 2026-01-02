@@ -119,11 +119,16 @@ function Admin_Users ()
             $query .= " WHERE player_id=$player_id;";
             dbquery ($query);
 
-            $qname = array ( QTYP_COMMANDER_OFF, QTYP_ADMIRAL_OFF, QTYP_ENGINEER_OFF, QTYP_GEOLOGE_OFF, QTYP_TECHNOCRATE_OFF );
+            $qname = array ( 
+                USER_OFFICER_COMMANDER => "pr_".USER_OFFICER_COMMANDER, 
+                USER_OFFICER_ADMIRAL => "pr_".USER_OFFICER_ADMIRAL, 
+                USER_OFFICER_ENGINEER => "pr_".USER_OFFICER_ENGINEER, 
+                USER_OFFICER_GEOLOGE => "pr_".USER_OFFICER_GEOLOGE, 
+                USER_OFFICER_TECHNOCRATE => "pr_".USER_OFFICER_TECHNOCRATE );
             foreach ( $qname as $i=>$qcmd )
             {
                 $days = intval ( $_POST[$qcmd] );
-                RecruitOfficer ( $player_id, $qcmd, $days * 24 * 60 * 60 );
+                RecruitOfficer ( $player_id, $i, $days * 24 * 60 * 60 );
             }
         }
 
@@ -307,14 +312,14 @@ function Admin_Users ()
                              '<font size=1 color=skyblue>'.loca("PR_ENGINEER_INFO").'</font>',
                              '<font size=1 color=skyblue>'.loca("PR_GEOLOGIST_INFO").'</font>',
                              '<font size=1 color=skyblue>'.loca("PR_TECHNO_INFO").'</font>' );
-    $qname = array ( QTYP_COMMANDER_OFF, QTYP_ADMIRAL_OFF, QTYP_ENGINEER_OFF, QTYP_GEOLOGE_OFF, QTYP_TECHNOCRATE_OFF );
+    $officeers = array ( USER_OFFICER_COMMANDER, USER_OFFICER_ADMIRAL, USER_OFFICER_ENGINEER, USER_OFFICER_GEOLOGE, USER_OFFICER_TECHNOCRATE );
     $imgname = array ( 'commander', 'admiral', 'ingenieur', 'geologe', 'technokrat');
 
     $now = time ();
 
-    foreach ( $qname as $i=>$qcmd )
+    foreach ( $officeers as $i=>$qtype )
     {
-        $end = GetOfficerLeft ( $user['player_id'], $qname[$i] );
+        $end = GetOfficerLeft ( $user, $qtype );
 
         $img = "";
         if ($end <= $now) {
@@ -329,7 +334,7 @@ function Admin_Users ()
         echo "    <td align='center' width='35' class='header'>\n";
         echo "	<img border='0' src='img/".$imgname[$i]."_ikon".$img.".gif' width='32' height='32' alt='".$oname[$i]."'\n";
         echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days."<br>".$oname[$i]."</font><br>".$odesc[$i]."<br></b></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
-        echo "    </td> <td><input type=\"text\" name=\"".$qname[$i]."\" size=\"3\" /></td>\n\n";
+        echo "    </td> <td><input type=\"text\" name=\"pr_".$qtype."\" size=\"3\" /></td>\n\n";
     }
 ?>
         </tr></table></th></tr>

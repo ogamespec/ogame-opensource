@@ -140,7 +140,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        USER_FLAG_DEFAULT, "", 0 );
+                        USER_FLAG_DEFAULT, "", 0, 0, 0, 0, 0, 0 );
     foreach ($user as $i=>$entry)
     {
         if ($i != 0) $opt .= ", ";
@@ -161,7 +161,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        USER_FLAG_DEFAULT, "", 0 );
+                        USER_FLAG_DEFAULT, "", 0, 0, 0, 0, 0, 0 );
     foreach ($user as $i=>$entry)
     {
         if ($i != 0) $opt .= ", ";

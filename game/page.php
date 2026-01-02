@@ -114,7 +114,7 @@ function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", 
     }
     else 
     {
-        $end = GetOfficerLeft ( $GlobalUser['player_id'], QTYP_COMMANDER_OFF );
+        $end = GetOfficerLeft ( $GlobalUser, USER_OFFICER_COMMANDER );
         $coma = $end > time ();
     }
 
@@ -228,11 +228,11 @@ function ResourceList ($m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
     echo "</table></td>\n";
 }
 
-function calco ($now, $qcmd, $who)
+function calco ($now, $who)
 {
     global $GlobalUser;
     $reply = array ();
-    $end = GetOfficerLeft ( $GlobalUser['player_id'], $qcmd[$who] );
+    $end = GetOfficerLeft ( $GlobalUser, $who );
     if ($end <= $now) {
         $reply['img'] = "_un";
         $reply['days'] = '';
@@ -258,31 +258,30 @@ function OficeerList ()
     $img = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '' );
     $days = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '' );
     $action = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '' );
-    $qcmd = array ( 'commander' => QTYP_COMMANDER_OFF, 'admiral' => QTYP_ADMIRAL_OFF, 'engineer' => QTYP_ENGINEER_OFF, 'geologist' => QTYP_GEOLOGE_OFF, 'technocrat' => QTYP_TECHNOCRATE_OFF);
 
     $now = time ();
 
-    $reply = calco ($now, $qcmd, 'commander');
+    $reply = calco ($now, USER_OFFICER_COMMANDER);
     $img['commander'] = $reply['img'];
     $days['commander'] = $reply['days'];
     $action['commander'] = $reply['action'];
 
-    $reply = calco ($now, $qcmd, 'admiral');
+    $reply = calco ($now, USER_OFFICER_ADMIRAL);
     $img['admiral'] = $reply['img'];
     $days['admiral'] = $reply['days'];
     $action['admiral'] = $reply['action'];
 
-    $reply = calco ($now, $qcmd, 'engineer');
+    $reply = calco ($now, USER_OFFICER_ENGINEER);
     $img['engineer'] = $reply['img'];
     $days['engineer'] = $reply['days'];
     $action['engineer'] = $reply['action'];
 
-    $reply = calco ($now, $qcmd, 'geologist');
+    $reply = calco ($now, USER_OFFICER_GEOLOGE);
     $img['geologist'] = $reply['img'];
     $days['geologist'] = $reply['days'];
     $action['geologist'] = $reply['action'];
 
-    $reply = calco ($now, $qcmd, 'technocrat');
+    $reply = calco ($now, USER_OFFICER_TECHNOCRATE);
     $img['technocrat'] = $reply['img'];
     $days['technocrat'] = $reply['days'];
     $action['technocrat'] = $reply['action'];
