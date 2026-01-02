@@ -271,9 +271,9 @@ function BuildDurationFormat ( $seconds )
 {
     $res = "";
     $days = floor ($seconds / (24*3600));
-    $hours = floor ($seconds / 3600 % 24);
-    $mins = floor ($seconds  / 60 % 60);
-    $secs = round ( $seconds / 1 % 60);
+    $hours = floor (intdiv($seconds, 3600) % 24);
+    $mins = floor (intdiv($seconds, 60) % 60);
+    $secs = round ($seconds % 60);
     if ($days) {
         $res .= "$days".loca("TIME_DAYS")." ";
     }
