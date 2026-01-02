@@ -18,7 +18,7 @@
 
 ## Настройка Лобби и установка Master базы
 
-Открываем `localhost` и вводим кредентиалы для подулючения к MySQL root:
+Открываем `localhost` и вводим кредентиалы для подключения к MySQL root:
 
 <img width="931" height="525" alt="image" src="/imgstore/531413062-eea522b1-7e2c-4c96-b14e-f18ef7c31904.png" />
 
