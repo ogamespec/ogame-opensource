@@ -94,8 +94,8 @@ function Admin_Queue ()
         }
     }
 
-    if ( $player_id > 0 ) $query = "SELECT * FROM ".$db_prefix."queue WHERE (type <> '".QTYP_FLEET."' AND type <> '".QTYP_COMMANDER_OFF."') AND owner_id=$player_id ORDER BY end ASC, prio DESC";
-    else $query = "SELECT * FROM ".$db_prefix."queue WHERE (type <> '".QTYP_FLEET."' AND type <> '".QTYP_COMMANDER_OFF."') ORDER BY end ASC, prio DESC LIMIT 50";
+    if ( $player_id > 0 ) $query = "SELECT * FROM ".$db_prefix."queue WHERE (type <> '".QTYP_FLEET."') AND owner_id=$player_id ORDER BY end ASC, prio DESC";
+    else $query = "SELECT * FROM ".$db_prefix."queue WHERE (type <> '".QTYP_FLEET."') ORDER BY end ASC, prio DESC LIMIT 50";
     $result = dbquery ($query);
     $now = time ();
 
