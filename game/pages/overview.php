@@ -187,8 +187,8 @@ for ($i=0; $i<$num; $i++)
     echo "</center></th>\n";
     if ($i == $num-1) echo "</tr>\n\n";
     else if (($i%2) != 0) echo "</tr>\n\n";
-    dbfree ( $planet );
 }
+dbfree ( $result );
 echo "<tr></tr>\n</table>\n</th>\n\n";
 
 if ( $GlobalUser['score1'] < 0 ) $score = 0;
