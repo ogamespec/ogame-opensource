@@ -7,11 +7,11 @@ services:
 
   mysql:
     image: mysql:8.0
+    env_file:
+      - .env
     environment:
-      - MYSQL_ROOT_PASSWORD=123
-      - MYSQL_DATABASE=master
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD=123
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-123}
+      MYSQL_DATABASE: master
     ports:
       - "3306:3306"
     volumes:
