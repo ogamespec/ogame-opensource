@@ -510,7 +510,7 @@ function GetOfficerLeft ($user, $off_type)
 // Extend an officer for the specified number of seconds. If the number of seconds < 0 - remove the officer.
 function RecruitOfficer ( $player_id, $off_type, $seconds )
 {
-    global $db_prefix;
+    global $db_prefix, $GlobalUser;
     $qtimers = array ( USER_OFFICER_COMMANDER => 'com_until', USER_OFFICER_ADMIRAL => 'adm_until', USER_OFFICER_ENGINEER => 'eng_until', USER_OFFICER_GEOLOGE => 'geo_until', USER_OFFICER_TECHNOCRATE => 'tec_until');
 
     $until = 0;
@@ -530,6 +530,9 @@ function RecruitOfficer ( $player_id, $off_type, $seconds )
     }
     $query = "UPDATE ".$db_prefix."users SET ".$qtimers[$off_type]." = ".$until." WHERE player_id = $player_id";
     dbquery ($query);
+    if ($player_id == $GlobalUser['player_id']) {
+        $GlobalUser[$qtimers[$off_type]] = $until;
+    }
 }
 
 // Called when you click on "Exit" in the menu.
