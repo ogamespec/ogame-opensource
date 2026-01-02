@@ -10,7 +10,7 @@ Go to the local Git repository of the project and run the command `docker compos
 
 <img width="711" height="210" alt="image" src="/imgstore/531411110-3a85a86e-013b-4fe6-acd3-5d275626e07f.png" />
 
-(:warning: You can first copy the `.env.example` file to `.env` and change the MySQL root password there. If you don't do this, the root password will be `123`.)
+:warning: You can first copy the `.env.example` file to `.env` and change the MySQL root password there. If you don't do this, the root password will be `123`.
 
 Well, that's basically it. Docker will deploy all the necessary containers and launch a local web server:
 
