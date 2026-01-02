@@ -518,7 +518,15 @@ function RecruitOfficer ( $player_id, $off_type, $seconds )
         $until = 0;
     }
     else {
-        $until = time() + $seconds;
+        $user = LoadUser ( $player_id );
+        $now = time();
+        $old_until = $user[$qtimers[$off_type]];
+        if ($now >= $old_until) {
+            $until = $now + $seconds;
+        }
+        else {
+            $until = $old_until + $seconds;
+        }
     }
     $query = "UPDATE ".$db_prefix."users SET ".$qtimers[$off_type]." = ".$until." WHERE player_id = $player_id";
     dbquery ($query);
