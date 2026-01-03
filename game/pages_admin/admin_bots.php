@@ -47,7 +47,7 @@ function Admin_Bots ()
 
 <?php
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'AI' GROUP BY owner_id";
+    $query = "SELECT owner_id FROM ".$db_prefix."queue WHERE type = '".QTYP_AI."' GROUP BY owner_id";
     $result = dbquery ( $query );
     $rowss = $rows = dbrows ($result);
     if ( $rows == 0 ) echo loca("ADM_BOTS_NOT_FOUND") . "<br>";
