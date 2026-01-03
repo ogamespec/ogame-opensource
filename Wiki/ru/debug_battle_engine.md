@@ -14,8 +14,8 @@ FID = 30
 DID = 0
 Attackers = 1
 Defenders = 1
-Attacker0 = (<Attacker0> 5093 7 29 6 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 )
-Defender0 = (<Defender0> 7183 9 89 8 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 )
+Attacker0 = ({Attacker0} 5093 7 29 6 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 )
+Defender0 = ({Defender0} 7183 9 89 8 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 )
 ```
 
 ## Процесс отладки
