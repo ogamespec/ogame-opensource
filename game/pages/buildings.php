@@ -102,7 +102,10 @@ if ( $_GET['mode'] === "Flotte" )
     // Check to see if a Shipyard or Nanite Factory is under construction.
     $result = GetBuildQueue ( $aktplanet['planet_id'] );
     $queue = dbarray ( $result );
-    $busy = ( $queue['tech_id'] == GID_B_SHIPYARD || $queue['tech_id'] == GID_B_NANITES ) ;
+    $busy = false;
+    if ($queue) {
+        $busy = ( $queue['tech_id'] == GID_B_SHIPYARD || $queue['tech_id'] == GID_B_NANITES ) ;
+    }
 
     if ( $busy ) {
         echo "<br><br><font color=#FF0000>".loca("BUILD_ERROR_SHIPYARD_BUSY")."</font><br><br>";
