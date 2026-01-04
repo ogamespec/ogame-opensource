@@ -156,13 +156,13 @@ function CalcLosses ( $a, $d, $res, $repaired )
         {
             foreach ( $dmap as $n=>$gid )
             {
-                if ( $gid > 400 && $i == 0 ) $amount = $defender[$gid] + $repaired[$gid];
+                if ( IsDefense($gid) && $i == 0 ) $amount = $defender[$gid] + $repaired[$gid];
                 else $amount = $defender[$gid];
                 if ( $amount > 0 ) {
                     $cost = ShipyardPrice ( $gid );
                     $dlast += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
                     $d[$i]['points'] -= ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
-                    if ( $gid < 400 ) $d[$i]['fpoints'] -= $amount;
+                    if ( IsFleet($gid) ) $d[$i]['fpoints'] -= $amount;
                 }
             }
         }
