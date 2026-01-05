@@ -26,6 +26,7 @@ $LOCA["de"]["ADM_MENU_RAKSIM"] = "Raketenangriffssimulation";
 $LOCA["de"]["ADM_MENU_DB"] = "Datenbank-Integrität";
 $LOCA["de"]["ADM_MENU_COLONY_SETTINGS"] = "Einstellungen für die Kolonisierung";
 $LOCA["de"]["ADM_MENU_LOCA"] = "Lokalisierungsprüfung";
+$LOCA["de"]["ADM_MENU_MODS"] = "Änderungen";
 
 // admin_bans
 

@@ -26,6 +26,7 @@ $LOCA["ru"]["ADM_MENU_RAKSIM"] = "Симулятор ракетной атаки
 $LOCA["ru"]["ADM_MENU_DB"] = "Целостность БД";
 $LOCA["ru"]["ADM_MENU_COLONY_SETTINGS"] = "Настройки колонизации";
 $LOCA["ru"]["ADM_MENU_LOCA"] = "Проверка локализации";
+$LOCA["ru"]["ADM_MENU_MODS"] = "Модификации";
 
 // admin_bans
 

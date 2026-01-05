@@ -70,6 +70,7 @@ function Admin_Checksum ()
         'pages_admin/admin_fleetlogs.php', 
         'pages_admin/admin_loca.php', 
         'pages_admin/admin_logins.php', 
+        'pages_admin/admin_mods.php', 
         'pages_admin/admin_planets.php', 
         'pages_admin/admin_queue.php', 
         'pages_admin/admin_raksim.php', 

@@ -15,6 +15,7 @@
 // - Queue Tasks (admin only)
 // - Universe settings (admin only)
 // - Errors (admin only)
+// - Mods (admin only)
 
 if ( $GlobalUser['admin'] == 0 ) RedirectHome ();    // regular users are not allowed
 
@@ -111,6 +112,9 @@ onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca
 <a href="index.php?page=admin&session=<?php echo $session;?>&mode=Loca"><img src="img/admin_loca.png" width='32' height='32'
 onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_LOCA");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
 
+<a href="index.php?page=admin&session=<?php echo $session;?>&mode=Mods"><img src="img/admin_mods.png" width='32' height='32'
+onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca("ADM_MENU_MODS");?></b></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'></a>
+
 </td></tr></table><br/>
 
 <?php
@@ -163,6 +167,7 @@ function Admin_Home ()
     <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=DB"><img src="img/admin_db.png"><br><?php echo loca("ADM_MENU_DB");?></a></th>
     <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=ColonySettings"><img src="img/admin_colony_settings.png"><br><?php echo loca("ADM_MENU_COLONY_SETTINGS");?></a></th>
     <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Loca"><img src="img/admin_loca.png"><br><?php echo loca("ADM_MENU_LOCA");?></a></th>
+    <th><a href="index.php?page=admin&session=<?php echo $session;?>&mode=Mods"><img src="img/admin_mods.png"><br><?php echo loca("ADM_MENU_MODS");?></a></th>
     </tr>
     </table>
 <?php
@@ -192,6 +197,7 @@ include "admin_raksim.php";
 include "admin_db.php";
 include "admin_colony_settings.php";
 include "admin_loca.php";
+include "admin_mods.php";
 
 // ========================================================================================
 
@@ -227,6 +233,7 @@ else if ( $mode === "RakSim" ) Admin_RakSim ();
 else if ( $mode === "DB" ) Admin_DB ();
 else if ( $mode === "ColonySettings" ) Admin_ColonySettings ();
 else if ( $mode === "Loca" ) Admin_Loca ();
+else if ( $mode === "Mods" ) Admin_Mods ();
 else Admin_Home ();
 
 echo "</table>\n";

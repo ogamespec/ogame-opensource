@@ -26,6 +26,7 @@ $LOCA["es"]["ADM_MENU_RAKSIM"] = "Rocket Attack Sim";
 $LOCA["es"]["ADM_MENU_DB"] = "DB Integrity";
 $LOCA["es"]["ADM_MENU_COLONY_SETTINGS"] = "Colonization Settings";
 $LOCA["es"]["ADM_MENU_LOCA"] = "Localization";
+$LOCA["es"]["ADM_MENU_MODS"] = "Modificaciones";
 
 // admin_bans
 
