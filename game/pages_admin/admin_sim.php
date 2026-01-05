@@ -2,41 +2,6 @@
 
 // Admin Area: Battle Simulator.
 
-function GenBattleSourceData ($a, $d, $rf, $fid, $did)
-{
-    global $fleetmap;
-    global $defmap_norak;
-
-    $source = "";
-    $source .= "Rapidfire = $rf\n";
-    $source .= "FID = $fid\n";
-    $source .= "DID = $did\n";
-
-    $anum = count ($a);
-    $dnum = count ($d);
-
-    $source .= "Attackers = $anum\n";
-    $source .= "Defenders = $dnum\n";
-
-    for ( $n=0; $n<$anum; $n++)
-    {
-        $source .= "Attacker$n = ({".$a[$n]['oname']."} ".$a[$n]['id']." ".$a[$n]['g']." ".$a[$n]['s']." ".$a[$n]['p']." ";
-        $source .= $a[$n]['r'.GID_R_WEAPON] . " " . $a[$n]['r'.GID_R_SHIELD] . " " . $a[$n]['r'.GID_R_ARMOUR] . " ";
-        foreach ($fleetmap as $i=>$gid) $source .= $a[$n]['fleet'][$gid] . " ";
-        $source .= ")\n";
-    }
-    for ( $n=0; $n<$dnum; $n++)
-    {
-        $source .= "Defender$n = ({".$d[$n]['oname']."} ".$d[$n]['id']." ".$d[$n]['g']." ".$d[$n]['s']." ".$d[$n]['p']." ";
-        $source .= $d[$n]['r'.GID_R_WEAPON] . " " . $d[$n]['r'.GID_R_SHIELD] . " " . $d[$n]['r'.GID_R_ARMOUR] . " ";
-        foreach ($fleetmap as $i=>$gid) $source .= $d[$n]['fleet'][$gid] . " ";
-        foreach ($defmap_norak as $i=>$gid) $source .= $d[$n]['defense'][$gid] . " ";
-        $source .= ")\n";
-    }
-
-    return $source;
-}
-
 function ParseBattleDataSource ($source, &$a, &$d)
 {
     $lines = explode("\n", $source);

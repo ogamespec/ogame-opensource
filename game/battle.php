@@ -582,6 +582,45 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
     return $result;
 }
 
+function GenBattleSourceData ($a, $d, $rf, $fid, $did)
+{
+    global $fleetmap;
+    global $defmap_norak;
+
+    $source = "";
+    $source .= "Rapidfire = $rf\n";
+    $source .= "FID = $fid\n";
+    $source .= "DID = $did\n";
+
+    $anum = count ($a);
+    $dnum = count ($d);
+
+    $source .= "Attackers = $anum\n";
+    $source .= "Defenders = $dnum\n";
+
+    foreach ($a as $num=>$attacker)
+    {
+        $source .= "Attacker".$num." = ({".$attacker['oname']."} ";
+        $source .= $attacker['id'] . " ";
+        $source .= $attacker['g'] . " " . $attacker['s'] . " " . $attacker['p'] . " ";
+        $source .= $attacker['r'.GID_R_WEAPON] . " " . $attacker['r'.GID_R_SHIELD] . " " . $attacker['r'.GID_R_ARMOUR] . " ";
+        foreach ($fleetmap as $i=>$gid) $source .= $attacker['fleet'][$gid] . " ";
+        $source .= ")\n";
+    }
+    foreach ($d as $num=>$defender)
+    {
+        $source .= "Defender".$num." = ({".$defender['oname']."} ";
+        $source .= $defender['id'] . " ";
+        $source .= $defender['g'] . " " . $defender['s'] . " " . $defender['p'] . " ";
+        $source .= $defender['r'.GID_R_WEAPON] . " " . $defender['r'.GID_R_SHIELD] . " " . $defender['r'.GID_R_ARMOUR] . " ";
+        foreach ($fleetmap as $i=>$gid) $source .= $defender['fleet'][$gid] . " ";
+        foreach ($defmap_norak as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
+        $source .= ")\n";
+    }
+
+    return $source;
+}
+
 // Start a battle between attacking fleet_id and defending planet_id.
 function StartBattle ( $fleet_id, $planet_id, $when )
 {
@@ -680,33 +719,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
         $dnum++;
     }
 
-    $source = "";
-    $source .= "Rapidfire = $rf\n";
-    $source .= "FID = $fid\n";
-    $source .= "DID = $did\n";
-
-    $source .= "Attackers = ".$anum."\n";
-    $source .= "Defenders = ".$dnum."\n";
-
-    foreach ($a as $num=>$attacker)
-    {
-        $source .= "Attacker".$num." = ({".$attacker['oname']."} ";
-        $source .= $attacker['id'] . " ";
-        $source .= $attacker['g'] . " " . $attacker['s'] . " " . $attacker['p'] . " ";
-        $source .= $attacker['r'.GID_R_WEAPON] . " " . $attacker['r'.GID_R_SHIELD] . " " . $attacker['r'.GID_R_ARMOUR] . " ";
-        foreach ($fleetmap as $i=>$gid) $source .= $attacker['fleet'][$gid] . " ";
-        $source .= ")\n";
-    }
-    foreach ($d as $num=>$defender)
-    {
-        $source .= "Defender".$num." = ({".$defender['oname']."} ";
-        $source .= $defender['id'] . " ";
-        $source .= $defender['g'] . " " . $defender['s'] . " " . $defender['p'] . " ";
-        $source .= $defender['r'.GID_R_WEAPON] . " " . $defender['r'.GID_R_SHIELD] . " " . $defender['r'.GID_R_ARMOUR] . " ";
-        foreach ($fleetmap as $i=>$gid) $source .= $defender['fleet'][$gid] . " ";
-        foreach ($defmap_norak as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
-        $source .= ")\n";
-    }
+    $source = GenBattleSourceData ($a, $d, $rf, $fid, $did);
 
     $battle = array ( null, $source, "", "", $when );
     $battle_id = AddDBRow ( $battle, "battledata" );
@@ -1096,33 +1109,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
     $d[0]['points'] = $d[0]['fpoints'] = 0;
     $dnum++;
 
-    $source = "";
-    $source .= "Rapidfire = $rf\n";
-    $source .= "FID = $fid\n";
-    $source .= "DID = $did\n";
-
-    $source .= "Attackers = ".$anum."\n";
-    $source .= "Defenders = ".$dnum."\n";
-
-    foreach ($a as $num=>$attacker)
-    {
-        $source .= "Attacker".$num." = ({".$attacker['oname']."} ";
-        $source .= $attacker['id'] . " ";
-        $source .= $attacker['g'] . " " . $attacker['s'] . " " . $attacker['p'] . " ";
-        $source .= $attacker['r'.GID_R_WEAPON] . " " . $attacker['r'.GID_R_SHIELD] . " " . $attacker['r'.GID_R_ARMOUR] . " ";
-        foreach ($fleetmap as $i=>$gid) $source .= $attacker['fleet'][$gid] . " ";
-        $source .= ")\n";
-    }
-    foreach ($d as $num=>$defender)
-    {
-        $source .= "Defender".$num." = ({".$defender['oname']."} ";
-        $source .= $defender['id'] . " ";
-        $source .= $defender['g'] . " " . $defender['s'] . " " . $defender['p'] . " ";
-        $source .= $defender['r'.GID_R_WEAPON] . " " . $defender['r'.GID_R_SHIELD] . " " . $defender['r'.GID_R_ARMOUR] . " ";
-        foreach ($fleetmap as $i=>$gid) $source .= $defender['fleet'][$gid] . " ";
-        foreach ($defmap_norak as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
-        $source .= ")\n";
-    }
+    $source = GenBattleSourceData ($a, $d, $rf, $fid, $did);
 
     $battle = array ( null, $source, "", "", $when );
     $battle_id = AddDBRow ( $battle, "battledata" );
