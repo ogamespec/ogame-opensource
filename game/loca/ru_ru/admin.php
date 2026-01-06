@@ -263,6 +263,26 @@ $LOCA["ru"]["ADM_LOGINS_BY_ID"] = "По ID пользователя:";
 $LOCA["ru"]["ADM_LOGINS_BY_IP"] = "По IP адресу:";
 $LOCA["ru"]["ADM_LOGINS_SUBMIT"] = "Искать";
 
+// admin_mods
+
+$LOCA["ru"]["ADM_MODS_STATE_ACTIVE"] = "АКТИВЕН";
+$LOCA["ru"]["ADM_MODS_STATE_AVAILABLE"] = "ДОСТУПЕН";
+$LOCA["ru"]["ADM_MODS_STATE_INSTALLED"] = "УСТАНОВЛЕН";
+$LOCA["ru"]["ADM_MODS_INFO_VERSION"] = "Версия";
+$LOCA["ru"]["ADM_MODS_INFO_AUTHOR"] = "Автор";
+$LOCA["ru"]["ADM_MODS_INFO_WEBSITE"] = "Вебсайт";
+$LOCA["ru"]["ADM_MODS_OP_MOVEUP"] = "Выше";
+$LOCA["ru"]["ADM_MODS_OP_MOVEDOWN"] = "Ниже";
+$LOCA["ru"]["ADM_MODS_OP_REMOVE"] = "Удалить";
+$LOCA["ru"]["ADM_MODS_OP_INSTALL"] = "Установить";
+$LOCA["ru"]["ADM_MODS_HEAD"] = "Панель управления модами";
+$LOCA["ru"]["ADM_MODS_HEAD_ACITVE"] = "Активные моды";
+$LOCA["ru"]["ADM_MODS_NO_ACTIVE"] = "Нет активных модов";
+$LOCA["ru"]["ADM_MODS_HEAD_AVAILABLE"] = "Доступные моды";
+$LOCA["ru"]["ADM_MODS_NO_AVAILABLE"] = "Нет доступных модов";
+$LOCA["ru"]["ADM_MODS_TOT_ACTIVE"] = "Всего активных модов";
+$LOCA["ru"]["ADM_MODS_TOT_AVAILABLE"] = "Всего доступных модов";
+
 // admin_planets
 
 $LOCA["ru"]["ADM_PLANET_SPECIFY_TEXT"] = "Укажите строку для поиска";
