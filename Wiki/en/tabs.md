@@ -73,6 +73,7 @@ In other words - there is no reason to worry that the tables are organized a bit
 |ext_impressum|TEXT|External link to Impressum ("About Us"). If the string is empty, the item is not shown in the menu.|
 |php_battle|INT|1: Use a spare PHP battle engine (battle_engine.php) instead of a C implementation.|
 |feedage|INT|the RSS(Atom) update period in minutes, 60 by default|
+|modlist|TEXT|List of active modifications separated by `;` in order of activation|
 
 ## Users (users)
 
