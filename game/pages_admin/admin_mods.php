@@ -2,11 +2,11 @@
 
 // Admin Area: Modifications.
 
-function GenModPanelSource($acitive, $can_be_installed, $mod)
+function GenModPanelSource($session, $acitive, $can_be_installed, $mod)
 {
     echo "        <div class=\"mod-item\">\n";
     echo "            <span class=\"status-indicator ". ($acitive ? "" : ($can_be_installed ? "status-inactive" : "status-installed") ) ." \">" . ($acitive ? loca("ADM_MODS_STATE_ACTIVE") : ($can_be_installed ? loca("ADM_MODS_STATE_AVAILABLE") : loca("ADM_MODS_STATE_INSTALLED")) ) . "</span>\n";
-    echo "            <img src=\"".$mod['bg_url']."\" alt=\"".$mod['name']."\" class=\"mod-background\">\n";
+    echo "            <img src=\"".$mod['bg_image']."\" alt=\"".$mod['name']."\" class=\"mod-background\">\n";
     echo "            <div class=\"mod-content\">\n";
     echo "                <div class=\"mod-title\">".$mod['name']."</div>\n";
     echo "                <div class=\"mod-description\">".$mod['description']."</div>\n";
@@ -14,17 +14,17 @@ function GenModPanelSource($acitive, $can_be_installed, $mod)
     echo "                <div class=\"mod-info\">\n";
     echo "                    ".loca("ADM_MODS_INFO_VERSION").": ".$mod['version']."<br>\n";
     echo "                    ".loca("ADM_MODS_INFO_AUTHOR").": ".$mod['author']."<br>\n";
-    echo "                    ".loca("ADM_MODS_INFO_WEBSITE").": <a href=\"".$mod['website']."\" style=\"color:#E6EBFB;\">".$mod['website']."</a>\n";
+    echo "                    ".loca("ADM_MODS_INFO_WEBSITE").": <a href=\"".$mod['website']."\" style=\"color:#E6EBFB;\" target=_blank>".$mod['website']."</a>\n";
     echo "                </div>\n";
     }
     echo "                <div class=\"mod-actions\">\n";
     if ($acitive) {
-    echo "                    <a href=\"?action=move_up&mod=demo\" class=\"mod-action-link\">".loca("ADM_MODS_OP_MOVEUP")."</a>\n";
-    echo "                    <a href=\"?action=move_down&mod=demo\" class=\"mod-action-link\">".loca("ADM_MODS_OP_MOVEDOWN")."</a>\n";
-    echo "                    <a href=\"?action=remove&mod=demo\" class=\"mod-action-link\">".loca("ADM_MODS_OP_REMOVE")."</a>\n";
+    echo "                    <a href=\"index.php?page=admin&session=$session&mode=Mods&action=move_up&modname=".$mod['folder']."\" class=\"mod-action-link\">".loca("ADM_MODS_OP_MOVEUP")."</a>\n";
+    echo "                    <a href=\"index.php?page=admin&session=$session&mode=Mods&action=move_down&modname=".$mod['folder']."\" class=\"mod-action-link\">".loca("ADM_MODS_OP_MOVEDOWN")."</a>\n";
+    echo "                    <a href=\"index.php?page=admin&session=$session&mode=Mods&action=remove&modname=".$mod['folder']."\" class=\"mod-action-link\">".loca("ADM_MODS_OP_REMOVE")."</a>\n";
     }
     if ($can_be_installed) {
-    echo "                    <a href=\"?action=install&mod=battle_calc\" class=\"mod-action-link\">".loca("ADM_MODS_OP_INSTALL")."</a>\n";
+    echo "                    <a href=\"index.php?page=admin&session=$session&mode=Mods&action=install&modname=".$mod['folder']."\" class=\"mod-action-link\">".loca("ADM_MODS_OP_INSTALL")."</a>\n";
     }
     echo "                </div>\n";
     echo "            </div>\n";
@@ -36,6 +36,32 @@ function Admin_Mods ()
     global $session;
     global $db_prefix;
     global $GlobalUser;
+
+    // GET request processing.
+    if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
+
+        if ( key_exists ('modname', $_GET) ) $modname = $_GET['modname'];
+        else $modname = null;
+        
+        if ( key_exists ('action', $_GET) && $modname ) $action = $_GET['action'];
+        else $action = "";
+
+        if ($action === "install" && $modname) {
+            ModsInstall ($modname);
+        }
+
+        if ($action === "remove" && $modname) {
+            ModsRemove ($modname);
+        }
+
+        if ($action === "move_up" && $modname) {
+            ModsMoveUp ($modname);
+        }
+
+        if ($action === "move_down" && $modname) {
+            ModsMoveDown ($modname);
+        }
+    }
 
     AdminPanel();
 
@@ -102,17 +128,20 @@ function Admin_Mods ()
         font-weight: bold;
         color: lime;
         margin-bottom: 10px;
+        text-align: left;
     }
     
     .mod-description {
         margin-bottom: 10px;
         line-height: 1.4;
+        text-align: left;
     }
     
     .mod-info {
         font-size: 12px;
         color: #a0a0a0;
         line-height: 1.6;
+        text-align: left;
     }
     
     .mod-actions {
@@ -191,7 +220,7 @@ function Admin_Mods ()
         foreach ($mods['installed'] as $modname) {
             $mod = ModsGetInfo($modname);
             if ($mod) {
-                GenModPanelSource (true, false, $mod);
+                GenModPanelSource ($session, true, false, $mod);
             }
         }
     }
@@ -212,7 +241,7 @@ function Admin_Mods ()
             $mod = ModsGetInfo($modname);
             if ($mod) {
                 $can_be_installed = !in_array($modname, $mods['installed']);
-                GenModPanelSource (false, $can_be_installed, $mod);
+                GenModPanelSource ($session, false, $can_be_installed, $mod);
             }
         }
     }

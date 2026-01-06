@@ -68,7 +68,12 @@ function ModsList()
             $res['available'][] = $folder;
         }
     }
-    $res['installed'] = explode (";", $GlobalUni['modlist']);
+    if (key_exists('modlist', $GlobalUni)) {
+        $res['installed'] = $GlobalUni['modlist'] !== "" ? explode (";", $GlobalUni['modlist']) : [];
+    }
+    else {
+        $res['installed'] = [];
+    }
     return $res;
 }
 
@@ -113,12 +118,79 @@ function ModsGetInfo ($modname, $modspath = 'mods/')
         'version' => $manifestData['version'],
         'author' => $manifestData['author'],
         'description' => $manifestData['description'],
-        'website' => $manifestData['website']
+        'website' => $manifestData['website'],
+        'folder' => $modname
     ];
     $modInfo['bg_image'] = $modPath . '/img/bg.png';
-    $modInfo['bg_url'] = str_replace($_SERVER['DOCUMENT_ROOT'], '', $modInfo['bg_image']);
     
     return $modInfo;
+}
+
+function ModInstallOne($modname)
+{
+    $modPath = "mods/{$modname}/";
+    $mainFile = $modPath . "main.php";
+
+    // Include the mod's main file
+    if (file_exists($mainFile)) {
+        require_once $mainFile;
+        
+        $className = ucfirst($modname);
+        if (class_exists($className)) {
+            $instance = new $className();
+            $instance->install();
+        }
+    }
+}
+
+function ModsInstall ($modname)
+{
+    global $GlobalUni;
+    global $db_prefix;
+
+    if (key_exists('modlist', $GlobalUni)) {
+        $arr = $GlobalUni['modlist'] !== "" ? explode (";", $GlobalUni['modlist']) : [];
+        if (!in_array($modname, $arr)) {
+            $arr[] = $modname;
+            $GlobalUni['modlist'] = implode(';', $arr);
+            $query = "UPDATE ".$db_prefix."uni SET modlist = '".$GlobalUni['modlist']."'";
+            dbquery ($query);
+            ModInstallOne($modname);
+        }
+    }
+}
+
+function ModsRemove ($modname)
+{
+    global $GlobalUni;
+    global $db_prefix;
+    global $modlist;
+
+    if (key_exists('modlist', $GlobalUni)) {
+        $arr = $GlobalUni['modlist'] !== "" ? explode (";", $GlobalUni['modlist']) : [];
+        $key = array_search($modname, $arr);
+        if ($key !== false) {
+            unset($arr[$key]);
+            $arr = array_values($arr);
+            $GlobalUni['modlist'] = count($arr) ? implode(';', $arr) : "";
+            $query = "UPDATE ".$db_prefix."uni SET modlist = '".$GlobalUni['modlist']."'";
+            dbquery ($query);
+            if (key_exists($modname, $modlist)) {
+                $modlist[$modname]->uninstall();
+                unset($modlist[$modname]);
+            }
+        }
+    }
+}
+
+function ModsMoveUp ($modname)
+{
+
+}
+
+function ModsMoveDown ($modname)
+{
+
 }
 
 ?>

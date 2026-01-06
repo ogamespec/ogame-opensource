@@ -3,11 +3,11 @@
 class BogusMod implements GameMod
 {
     public function install() {
-
+        Debug ("BogusMod install.");
     }
 
     public function uninstall() {
-        
+        Debug ("BogusMod uninstall.");
     }
 
     public function init() {
