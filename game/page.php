@@ -106,7 +106,7 @@ function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", 
         echo "<tr class='header' >\n";
         $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
         PlanetsDropList ($page);
-        ResourceList (floor($aktplanet['m']), floor($aktplanet['k']), floor($aktplanet['d']), $aktplanet['e'], $aktplanet['emax'], $GlobalUser['dm']+$GlobalUser['dmfree'], $aktplanet['mmax'], $aktplanet['kmax'], $aktplanet['dmax']);
+        ResourceList ($aktplanet, floor($aktplanet['m']), floor($aktplanet['k']), floor($aktplanet['d']), $aktplanet['e'], $aktplanet['emax'], $GlobalUser['dm']+$GlobalUser['dmfree'], $aktplanet['mmax'], $aktplanet['kmax'], $aktplanet['dmax']);
         $coma = OficeerList ();
         echo "</tr>\n";
         echo "</table>\n";
@@ -196,7 +196,7 @@ function LoadResourcesJson ()
     return $json;
 }
 
-function ResourceList ($m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
+function ResourceList ($aktplanet, $m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
 {
     global $GlobalUser;
     $sess = $GlobalUser['session'];
@@ -220,7 +220,7 @@ function ResourceList ($m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
     $json['energie']['val2'] = $emax;
     $json['energie']['color'] = $ecol;
 
-    ModsExecRef ('add_resources', $json);
+    ModsExecRefArr ('add_resources', $json, $aktplanet);
 
     //print_r ($json);
 

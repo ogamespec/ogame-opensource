@@ -66,14 +66,16 @@ class BogusMod implements GameMod
         }
     }
 
-    public function add_resources(&$json) {
+    public function add_resources(&$json, $aktplanet) {
+
+        global $GlobalUser;
 
         array_insert_after_key ($json, "dm", "tritium", 
             array (
                 'skin' => false,
                 'img' => "mods/BogusMod/img/tritium.png",
                 'loca' => "BOGUS_MOD_TRITIUM",
-                'val' => 0,
+                'val' => $GlobalUser['tritium'],
                 'color' => '') );
 
         // Let other mods add their resources
