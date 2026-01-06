@@ -12,6 +12,7 @@ interface GameMod {
     public function route();
     public function update_queue($queue);
     public function add_resources(&$json, $aktplanet);
+    public function add_menuitems(&$json);
 }
 
 function ModInitOne($modname)

@@ -185,13 +185,12 @@ function PlanetsDropList ($page)
     echo "</select></table></td></tr></table></td>\n\n";
 }
 
-function LoadResourcesJson ()
+function LoadJsonFirst ($path)
 {
-    $resources_json_path = "pages/resources.json";
-    $json_contents = file_get_contents($resources_json_path);
+    $json_contents = file_get_contents($path);
     $json = json_decode($json_contents, true);
     if ($json === null) {
-        Error ("Error loading resource schema (JSON)");
+        Error ("Error loading JSON-first schema");
     }
     return $json;
 }
@@ -207,7 +206,7 @@ function ResourceList ($aktplanet, $m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, 
     if ($d >= $dmax) $dcol = "#ff0000";
     if ($enow < 0) $ecol = "#ff0000";
 
-    $json = LoadResourcesJson ();
+    $json = LoadJsonFirst ("pages/resources.json");
 
     $json['metall']['val'] = $m;
     $json['metall']['color'] = $mcol;
@@ -385,6 +384,130 @@ function LeftMenu ($coma)
     echo "<a href='mailto:barrierefrei@ogame.de' title='".loca("MENU_DIS")."' style='width:1px;'></a>\n";
     echo "<p style='width:110px;'><NOBR>".loca("MENU_UNIVERSE")." ".$uni." (<a href='index.php?page=changelog&session=".$sess."'>v 0.84</a>)</NOBR></p>\n";
     echo "<table width='110' cellspacing='0' cellpadding='0'>\n";
+
+    $json = LoadJsonFirst ("pages/leftmenu.json");
+
+    // Admin Area
+    if ($GlobalUser['admin'] == 0) {
+        $key = array_search ("admin", $json);
+        if ($key !== false) {
+            unset ($json[$key]);
+        }
+    }
+
+    // Empire
+    if (!$coma) {
+        $key = array_search ("imperium", $json);
+        if ($key !== false) {
+            unset ($json[$key]);
+        }
+    }
+
+    // External links
+    $ext_links = array ( 'ext_board', 'ext_discord', 'ext_tutorial', 'ext_rules', 'ext_impressum');
+    foreach ($ext_links as $ext_link) {
+        $key = array_search ($ext_link, $json);
+        if ($key !== false) {
+            if (empty($unitab[$ext_link])) {
+                unset ($json[$key]);
+            }
+            else {
+                $json[$key]['url'] = $unitab[$ext_link];
+            }
+        }
+    }
+
+    ModsExecRef ('add_menuitems', $json);
+
+    //print_r ($json);
+
+    foreach ($json as $item) {
+
+        switch ($item['type']) {
+
+            case "img":
+                echo " <tr>\n";
+                echo "  <td><img src='";
+                if ($item['skin']) {
+                    echo UserSkin();
+                }
+                echo $item['url'] . "' width='".$item['width']."' height='".$item['height']."' /></td>\n";
+                echo " </tr>\n\n";
+                break;
+
+            case "internal":
+                echo " <tr>\n";
+                echo "  <td>\n";
+                echo "   <div align='center'><font color='#FFFFFF'>\n";
+                echo "     <a ";
+                if (key_exists('additional_style', $item)) {
+                    echo $item['additional_style'] . "\n         ";
+                }
+                echo "href='index.php?page=".$item['page']."&session=".$sess;
+                if (key_exists('param', $item)) {
+                    echo $item['param'];
+                }
+                echo "'";
+                if (key_exists('accesskey', $item)) {
+                    echo " accesskey='".loca($item['accesskey'])."'";
+                }
+                echo ">";
+                if (key_exists('color', $item)) {
+                    echo "<font color='".$item['color']."'>";
+                }
+                echo loca($item['loca']);
+                if (key_exists('color', $item)) {
+                    echo "</font>";
+                }
+                echo "</a>";
+                if (key_exists('notes', $item)) {
+                    echo " <!-- ".$item['notes']." -->";
+                }
+                echo "\n";
+                echo "    </font></div>\n";
+                echo "  </td>\n";
+                echo " </tr>\n\n";
+                break;
+
+            case "popup":
+                echo " <tr>\n";
+                echo "  <td>\n";
+                echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
+                echo "     <a href='#' onclick='fenster(\"index.php?page=".$item['page']."&session=".$sess;
+                if (key_exists('param', $item)) {
+                    echo $item['param'];
+                }
+                echo "\", \"".$item['title']."\");'";
+                if (key_exists('accesskey', $item)) {
+                    echo " accesskey=\"".loca($item['accesskey'])."\"";
+                }
+                echo ">".loca($item['loca'])."</a>\n";
+                echo "    </font></div>\n";
+                echo "  </td>\n";
+                echo " </tr>\n\n";
+                break;
+
+            case "external":
+                echo "  <tr> \n";
+                echo "  <td> \n";
+                echo "   <div align=\"center\"><font color=\"#FFFFFF\"> \n";
+                echo "    <a href=\"".$item['url']."\" target=\"_blank\"";
+                if (key_exists('accesskey', $item)) {
+                    echo " accesskey=\"".loca($item['accesskey'])."\" ";
+                }
+                echo ">".loca($item['loca'])."</a>";
+                if (key_exists('notes', $item)) {
+                    echo " <!-- ".$item['notes']." -->";
+                }
+                echo "\n";
+                echo "   </font></div> \n";
+                echo "  </td> \n";
+                echo " </tr> \n\n";
+                break;
+        }
+    }
+
+/*
     echo " <tr>\n";
     echo "  <td><img src='".UserSkin()."gfx/ogame-produktion.jpg' width='110' height='40' /></td>\n";
     echo " </tr>\n\n";
@@ -604,6 +727,7 @@ function LeftMenu ($coma)
         echo "  </td>\n";
         echo " </tr>\n\n";
     }
+*/
 
     echo " </table>\n";
     echo " </center>\n";

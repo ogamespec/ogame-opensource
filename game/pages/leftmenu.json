@@ -1,0 +1,193 @@
+{
+    "ogame-produktion": {
+        "type": "img",
+        "skin": true,
+        "url": "gfx/ogame-produktion.jpg",
+        "width": 110,
+        "height": 40
+    },
+    "overview": {
+        "type": "internal",
+        "page": "overview",
+        "accesskey": "HK_OVERVIEW",
+        "loca": "MENU_OVERVIEW"
+    },
+    "admin": {
+        "type": "internal",
+        "page": "admin",
+        "loca": "MENU_ADMIN"
+    },
+    "imperium": {
+        "type": "internal",
+        "page": "imperium",
+        "param": "planettype=1&no_header=1",
+        "accesskey": "HK_EMPIRE",
+        "loca": "MENU_EMPIRE"
+    },
+    "b_building": {
+        "type": "internal",
+        "page": "b_building",
+        "accesskey": "HK_BUILDING",
+        "loca": "MENU_BUILDING"
+    },
+    "resources": {
+        "type": "internal",
+        "page": "resources",
+        "accesskey": "HK_RESOURCES",
+        "loca": "MENU_RESOURCES"
+    },
+    "trader": {
+        "type": "internal",
+        "page": "trader",
+        "accesskey": "",
+        "color": "FF8900",
+        "loca": "MENU_TRADER",
+        "notes": "TODO Loca Keys"
+    },
+    "buildings1": {
+        "type": "internal",
+        "page": "buildings",
+        "param": "&mode=Forschung",
+        "accesskey": "HK_RESEARCH",
+        "loca": "MENU_RESEARCH"
+    },
+    "buildings2": {
+        "type": "internal",
+        "page": "buildings",
+        "param": "&mode=Flotte",
+        "accesskey": "HK_SHIPYARD",
+        "loca": "MENU_SHIPYARD"
+    },
+    "flotten1": {
+        "type": "internal",
+        "page": "flotten1",
+        "param": "&mode=Flotte",
+        "accesskey": "HK_FLEET",
+        "loca": "MENU_FLEET"
+    },
+    "techtree": {
+        "type": "internal",
+        "page": "techtree",
+        "accesskey": "HK_TECHTREE",
+        "loca": "MENU_TECHTREE"
+    },
+    "galaxy": {
+        "type": "internal",
+        "page": "galaxy",
+        "param": "&no_header=1",
+        "accesskey": "HK_GALAXY",
+        "loca": "MENU_GALAXY"
+    },
+    "buildings3": {
+        "type": "internal",
+        "page": "buildings",
+        "mode": "&mode=Verteidigung",
+        "accesskey": "HK_DEFENSE",
+        "loca": "MENU_DEFENSE"
+    },
+
+    "info-help": {
+        "type": "img",
+        "skin": true,
+        "url": "gfx/info-help.jpg",
+        "width": 110,
+        "height": 19
+    },
+    "allianzen": {
+        "type": "internal",
+        "page": "allianzen",
+        "accesskey": "HK_ALLY",
+        "loca": "MENU_ALLY"
+    },
+    "ext_board": {
+        "type": "external",
+        "url": "",
+        "accesskey": "HK_BOARD",
+        "loca": "MENU_BOARD",
+        "notes": "external link to board"
+    },
+    "ext_discord": {
+        "type": "external",
+        "url": "",
+        "loca": "MENU_DISCORD",
+        "notes": "external link to Discord"
+    },
+    "micropayment": {
+        "type": "internal",
+        "page": "micropayment",
+        "additional_style": "id='darkmatter2' style='cursor:pointer; width:110px;'",
+        "accesskey": "HK_PAYMENT",
+        "loca": "MENU_PAYMENT"
+    },
+    "statistics": {
+        "type": "internal",
+        "page": "statistics",
+        "accesskey": "HK_STAT",
+        "loca": "MENU_STAT"
+    },
+    "suche": {
+        "type": "internal",
+        "page": "suche",
+        "accesskey": "HK_SEARCH",
+        "loca": "MENU_SEARCH"
+    },
+    "ext_tutorial": {
+        "type": "external",
+        "url": "",
+        "accesskey": "HK_TUTORIAL",
+        "loca": "MENU_TUTORIAL",
+        "notes": "external link to ogame tutorial"
+    },
+
+    "user-menu": {
+        "type": "img",
+        "skin": true,
+        "url": "gfx/user-menu.jpg",
+        "width": 110,
+        "height": 35
+    },
+    "messages": {
+        "type": "internal",
+        "page": "messages",
+        "accesskey": "HK_MESSAGES",
+        "loca": "MENU_MESSAGES"
+    },
+    "notizen": {
+        "type": "popup",
+        "page": "notizen",
+        "param": "&no_header=1",
+        "title": "Notizen",
+        "accesskey": "HK_NOTES",
+        "loca": "MENU_NOTES"
+    },
+    "buddy": {
+        "type": "internal",
+        "page": "buddy",
+        "accesskey": "HK_BUDDY",
+        "loca": "MENU_BUDDY"
+    },
+    "options": {
+        "type": "internal",
+        "page": "options",
+        "accesskey": "HK_OPTIONS",
+        "loca": "MENU_OPTIONS"
+    },
+    "logout": {
+        "type": "internal",
+        "page": "logout",
+        "accesskey": "HK_LOGOUT",
+        "loca": "MENU_LOGOUT"
+    },
+    "ext_rules": {
+        "type": "external",
+        "url": "",
+        "loca": "MENU_RULES",
+        "notes": "external link to rules"
+    },
+    "ext_impressum": {
+        "type": "external",
+        "url": "",
+        "loca": "MENU_IMPRESSUM",
+        "notes": "external link to impressum"
+    }
+}

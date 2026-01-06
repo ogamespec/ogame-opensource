@@ -81,6 +81,18 @@ class BogusMod implements GameMod
         // Let other mods add their resources
         return false;
     }
+
+    public function add_menuitems(&$json) {
+
+        array_insert_after_key ($json, "options", "tipoftheday", 
+            array (
+                'type' => 'internal',
+                'page' => 'tipoftheday',
+                'loca' => 'BOGUS_MOD_MENU_ITEM') );
+
+        // Let other mods add their menu items
+        return false;
+    }
 }
 
 ?>
