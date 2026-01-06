@@ -266,9 +266,10 @@ function ResourceList ($aktplanet, $m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, 
         if (key_exists('val2', $res)) {
             echo "/".nicenum($res['val2']);
         }
-        echo "</td>\n\n";
+        echo "</td>\n";
     }
-    echo "</tr>\n";
+    echo "</tr>\n";    
+
     echo "</table></td>\n";
 }
 
