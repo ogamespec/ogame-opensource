@@ -174,7 +174,7 @@ function GetSharedSpyReport ($planet_id, $player_id, $ally_id)
     $result = dbquery ($query);
     if ( $result ) {
         $msg = dbarray ($result);
-        return $msg['msg_id'];
+        return $msg ? $msg['msg_id'] : 0;
     }
     return 0;
 }
