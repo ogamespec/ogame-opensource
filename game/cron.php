@@ -31,6 +31,7 @@ if ( file_exists ("config.php"))
     require_once "debug.php";
     require_once "galaxytool.php";
     require_once "bot.php";
+    require_once "mods.php";
 
     $GlobalUni = LoadUniverse ();
 

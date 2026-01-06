@@ -32,6 +32,7 @@ require_once "page.php";
 require_once "ally.php";
 require_once "battle.php";
 require_once "debug.php";
+require_once "mods.php";
 
 include "pages/pranger.php";
 ?>
