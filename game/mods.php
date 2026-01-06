@@ -150,7 +150,8 @@ function ModsInstall ($modname)
 
     if (key_exists('modlist', $GlobalUni)) {
         $arr = $GlobalUni['modlist'] !== "" ? explode (";", $GlobalUni['modlist']) : [];
-        if (!in_array($modname, $arr)) {
+        $key = array_search($modname, $arr);
+        if ($key === false) {
             $arr[] = $modname;
             $GlobalUni['modlist'] = implode(';', $arr);
             $query = "UPDATE ".$db_prefix."uni SET modlist = '".$GlobalUni['modlist']."'";
@@ -185,12 +186,44 @@ function ModsRemove ($modname)
 
 function ModsMoveUp ($modname)
 {
+    global $GlobalUni;
+    global $db_prefix;
 
+    if (key_exists('modlist', $GlobalUni)) {
+        $arr = $GlobalUni['modlist'] !== "" ? explode (";", $GlobalUni['modlist']) : [];
+        $key = array_search($modname, $arr);
+        if ($key !== false && $key > 0) {
+
+            $temp = $arr[$key - 1];
+            $arr[$key - 1] = $arr[$key];
+            $arr[$key] = $temp;
+
+            $GlobalUni['modlist'] = implode(';', $arr);
+            $query = "UPDATE ".$db_prefix."uni SET modlist = '".$GlobalUni['modlist']."'";
+            dbquery ($query);
+        }
+    }
 }
 
 function ModsMoveDown ($modname)
 {
+    global $GlobalUni;
+    global $db_prefix;
 
+    if (key_exists('modlist', $GlobalUni)) {
+        $arr = $GlobalUni['modlist'] !== "" ? explode (";", $GlobalUni['modlist']) : [];
+        $key = array_search($modname, $arr);
+        if ($key !== false && $key < count($arr) - 1) {
+
+            $temp = $arr[$key + 1];
+            $arr[$key + 1] = $arr[$key];
+            $arr[$key] = $temp;
+
+            $GlobalUni['modlist'] = implode(';', $arr);
+            $query = "UPDATE ".$db_prefix."uni SET modlist = '".$GlobalUni['modlist']."'";
+            dbquery ($query);
+        }
+    }
 }
 
 ?>
