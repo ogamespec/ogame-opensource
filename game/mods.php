@@ -10,6 +10,7 @@ interface GameMod {
     public function uninstall();
     public function init();
     public function route();
+    public function update_queue($queue);
 }
 
 function ModInitOne($modname)
@@ -46,12 +47,17 @@ function ModsInit()
     }
 }
 
-function ModsExec($method)
+function ModsExec($method, $args = null)
 {
     global $modlist;
     foreach ($modlist as $instance) {
         if(method_exists($instance, $method)) {
-            $res = $instance->$method();
+            if ($args !== null) {
+                $res = $instance->$method(...(array)$args);
+            }
+            else {
+                $res = $instance->$method();
+            }
             if ($res) {
                 return true;
             }

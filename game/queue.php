@@ -167,7 +167,11 @@ function UpdateQueue ($until)
             case QTYP_COUPON: break;
 
             default:
-                Error ( loca_lang("DEBUG_QUEUE_UNKNOWN", $GlobalUni['lang']) . $queue['type']);
+                $res = ModsExec ('update_queue', [$queue]);
+                if (!$res) {
+                    RemoveQueue ( $queue['task_id'] );
+                    Debug ( loca_lang("DEBUG_QUEUE_UNKNOWN", $GlobalUni['lang']) . $queue['type']);
+                }
                 break;
         }
     }
