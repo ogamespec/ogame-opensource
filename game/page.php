@@ -389,30 +389,27 @@ function LeftMenu ($coma)
 
     // Admin Area
     if ($GlobalUser['admin'] == 0) {
-        $key = array_search ("admin", $json);
-        if ($key !== false) {
-            unset ($json[$key]);
+        if (isset($json["admin"])) {
+            unset ($json["admin"]);
         }
     }
 
     // Empire
     if (!$coma) {
-        $key = array_search ("imperium", $json);
-        if ($key !== false) {
-            unset ($json[$key]);
+        if (isset($json["imperium"])) {
+            unset ($json["imperium"]);
         }
     }
 
     // External links
     $ext_links = array ( 'ext_board', 'ext_discord', 'ext_tutorial', 'ext_rules', 'ext_impressum');
     foreach ($ext_links as $ext_link) {
-        $key = array_search ($ext_link, $json);
-        if ($key !== false) {
+        if (isset($json[$ext_link])) {
             if (empty($unitab[$ext_link])) {
-                unset ($json[$key]);
+                unset ($json[$ext_link]);
             }
             else {
-                $json[$key]['url'] = $unitab[$ext_link];
+                $json[$ext_link]['url'] = $unitab[$ext_link];
             }
         }
     }
@@ -438,18 +435,16 @@ function LeftMenu ($coma)
             case "internal":
                 echo " <tr>\n";
                 echo "  <td>\n";
-                echo "   <div align='center'><font color='#FFFFFF'>\n";
-                echo "     <a ";
-                if (key_exists('additional_style', $item)) {
-                    echo $item['additional_style'] . "\n         ";
-                }
-                echo "href='index.php?page=".$item['page']."&session=".$sess;
+                echo "   <div align=\"center\">";
+                echo "<font color=\"#FFFFFF\">";
+                echo "\n";
+                echo "     <a href='index.php?page=".$item['page']."&session=".$sess;
                 if (key_exists('param', $item)) {
                     echo $item['param'];
                 }
                 echo "'";
                 if (key_exists('accesskey', $item)) {
-                    echo " accesskey='".loca($item['accesskey'])."'";
+                    echo " accesskey=\"".loca($item['accesskey'])."\"";
                 }
                 echo ">";
                 if (key_exists('color', $item)) {
@@ -464,7 +459,43 @@ function LeftMenu ($coma)
                     echo " <!-- ".$item['notes']." -->";
                 }
                 echo "\n";
-                echo "    </font></div>\n";
+                echo "    ";
+                echo "</font>";
+                echo "</div>\n";
+                echo "  </td>\n";
+                echo " </tr>\n\n";
+                break;
+
+            // Special Case for Officers (buggy menu item)
+            case "internal_buggy":
+                echo " <tr>\n";
+                echo "    <td align=center>";
+                echo "\n";
+                echo "     <a ";
+                echo $item['additional_style'] . "\n         ";
+                echo "href='index.php?page=".$item['page']."&session=".$sess;
+                if (key_exists('param', $item)) {
+                    echo $item['param'];
+                }
+                echo "'";
+                if (key_exists('accesskey', $item)) {
+                    echo " accesskey=\"".loca($item['accesskey'])."\"";
+                }
+                echo ">";
+                if (key_exists('color', $item)) {
+                    echo "<font color='".$item['color']."'>";
+                }
+                echo "<b>" . loca($item['loca']);
+                if (key_exists('color', $item)) {
+                    echo "</font>";
+                }
+                echo "</a></b>";
+                if (key_exists('notes', $item)) {
+                    echo " <!-- ".$item['notes']." -->";
+                }
+                echo "\n";
+                echo "    ";
+                echo "</div>\n";
                 echo "  </td>\n";
                 echo " </tr>\n\n";
                 break;
@@ -506,228 +537,6 @@ function LeftMenu ($coma)
                 break;
         }
     }
-
-/*
-    echo " <tr>\n";
-    echo "  <td><img src='".UserSkin()."gfx/ogame-produktion.jpg' width='110' height='40' /></td>\n";
-    echo " </tr>\n\n";
-    echo " <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align='center'><font color='#FFFFFF'>\n";
-    echo "     <a href='index.php?page=overview&session=".$sess."' accesskey='".loca("HK_OVERVIEW")."'>".loca("MENU_OVERVIEW")."</a>\n";
-    echo "    </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
-    if ( $GlobalUser['admin'] > 0 ) {
-        echo " <tr>\n";
-        echo "  <td>\n";
-        echo "   <div align='center'><font color='#FFFFFF'>\n";
-        echo "     <a href='index.php?page=admin&session=".$sess."' >".loca("MENU_ADMIN")."</a>\n";
-        echo "    </font></div>\n";
-        echo "  </td>\n";
-        echo " </tr>\n\n";
-    }
-
-    if ( $coma )
-    {
-        echo "  <tr>\n";
-        echo "  <td>\n";
-        echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
-        echo "     <a href='index.php?page=imperium&session=$sess&planettype=1&no_header=1' accesskey=\"".loca("HK_EMPIRE")."\">".loca("MENU_EMPIRE")."</a>\n";
-        echo "    </font></div>\n";
-        echo "  </td>\n";
-        echo " </tr>\n\n";
-    }
-
-    echo " <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align='center'><font color='#FFFFFF'>\n";
-    echo "     <a href='index.php?page=b_building&session=".$sess."' accesskey='".loca("HK_BUILDING")."'>".loca("MENU_BUILDING")."</a>\n";
-    echo "    </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
-    echo " <tr> \n";
-    echo "  <td> \n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\"> \n";
-    echo "     <a href='index.php?page=resources&session=".$sess."' accesskey=\"".loca("HK_RESOURCES")."\">".loca("MENU_RESOURCES")."</a> \n";
-    echo "    </font></div> \n";
-    echo "  </td> \n";
-    echo " </tr> \n\n";
-
-?>
-  <tr>
-  <td>
-   <div align="center" ><font color="#FFFFFF">
-     <a href='index.php?page=trader&session=<?=$sess;?>' accesskey=""><font color='FF8900'><?=loca("MENU_TRADER");?></font></a> <!-- TODO Loca Keys -->
-    </font></div>
-  </td>
- </tr>
-<?php
-
-    echo " <tr> \n";
-    echo "  <td> \n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\"> \n";
-    echo "     <a href='index.php?page=buildings&session=".$sess."&mode=Forschung' accesskey=\"".loca("HK_RESEARCH")."\">".loca("MENU_RESEARCH")."</a> \n";
-    echo "    </font></div> \n";
-    echo "  </td> \n";
-    echo " </tr> \n\n";
-    echo " <tr> \n";
-    echo "  <td> \n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\"> \n";
-    echo "     <a href='index.php?page=buildings&session=".$sess."&mode=Flotte' accesskey=\"".loca("HK_SHIPYARD")."\">".loca("MENU_SHIPYARD")."</a> \n";
-    echo "    </font></div> \n";
-    echo "  </td> \n";
-    echo " </tr> \n\n";
-    echo " <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
-    echo "     <a href='index.php?page=flotten1&session=$sess&mode=Flotte' accesskey=\"".loca("HK_FLEET")."\">".loca("MENU_FLEET")."</a>\n";
-    echo "    </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
-    echo " <tr> \n";
-    echo "  <td> \n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\"> \n";
-    echo "     <a href='index.php?page=techtree&session=".$sess."' accesskey=\"".loca("HK_TECHTREE")."\">".loca("MENU_TECHTREE")."</a> \n";
-    echo "    </font></div> \n";
-    echo "  </td> \n";
-    echo " </tr>\n\n";
-    echo " <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
-    echo "     <a href='index.php?page=galaxy&session=".$sess."&no_header=1' accesskey=\"".loca("HK_GALAXY")."\">".loca("MENU_GALAXY")."</a>\n";
-    echo "    </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
-    echo " <tr> \n";
-    echo "  <td> \n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\"> \n";
-    echo "     <a href='index.php?page=buildings&session=".$sess."&mode=Verteidigung' accesskey=\"".loca("HK_DEFENSE")."\">".loca("MENU_DEFENSE")."</a> \n";
-    echo "    </font></div> \n";
-    echo "  </td> \n";
-    echo " </tr>\n\n";
-    echo " <tr>\n";
-    echo "  <td><img src=\"".UserSkin()."gfx/info-help.jpg\" width=\"110\" height=\"19\"></td>\n";
-    echo " </tr>\n\n";
-    echo " <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
-    echo "     <a href='index.php?page=allianzen&session=".$sess."' accesskey=\"".loca("HK_ALLY")."\">".loca("MENU_ALLY")."</a>\n";
-    echo "    </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
-
-    if (!empty($unitab['ext_board'])) {
-        echo "  <tr> \n";
-        echo "  <td> \n";
-        echo "   <div align=\"center\"><font color=\"#FFFFFF\"> \n";
-        echo "    <a href=\"".$unitab['ext_board']."\" target=\"_blank\" accesskey=\"".loca("HK_BOARD")."\" >".loca("MENU_BOARD")."</a><!-- external link to board --> \n";
-        echo "   </font></div> \n";
-        echo "  </td> \n";
-        echo " </tr> \n\n";
-    }
-    
-    if (!empty($unitab['ext_discord'])) {
-        echo " <tr>\n";
-        echo "  <td>\n";
-        echo "   <div align='center'><font color='#FFFFFF'>\n";
-        echo "     <a href=\"".$unitab['ext_discord']."\" target='_blank'>".loca("MENU_DISCORD")."</a> <!-- external link to Discord -->\n";
-        echo "   </font></div>\n";
-        echo "  </td>\n";
-        echo " </tr>\n\n";
-    }    
-
-    echo "    <tr>\n";
-    echo "       <td align=center>\n";
-    echo "       <a id='darkmatter2' style='cursor:pointer; width:110px;'\n";
-    echo "         href='index.php?page=micropayment&session=".$sess."' accesskey=\"".loca("HK_PAYMENT")."\"><b>".loca("MENU_PAYMENT")."</a></b>\n";
-    echo "       </div>\n";
-    echo "      </td>\n";
-    echo "     </tr>\n\n";
-    echo " <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
-    echo "  <a href='index.php?page=statistics&session=$sess' accesskey=\"".loca("HK_STAT")."\">".loca("MENU_STAT")."</a>\n";
-    echo "    </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
-    echo " <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
-    echo "     <a href='index.php?page=suche&session=$sess' accesskey=\"".loca("HK_SEARCH")."\">".loca("MENU_SEARCH")."</a>\n";
-    echo "    </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
-
-    if (!empty($unitab['ext_tutorial'])) {
-        echo " <tr>\n";
-        echo "  <td>\n";
-        echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
-        echo "    <a href=\"".$unitab['ext_tutorial']."\" target=\"_blank\" accesskey=\"".loca("HK_TUTORIAL")."\" >".loca("MENU_TUTORIAL")."</a><!-- external link to ogame tutorial -->\n";
-        echo "   </font></div>\n";
-        echo "  </td>\n";
-        echo " </tr>\n\n";
-    }
-
-    echo " <tr>\n";
-    echo "  <td><img src='".UserSkin()."gfx/user-menu.jpg' width='110' height='35'></td>\n";
-    echo " </tr>\n\n";
-    echo " <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
-    echo "     <a href='index.php?page=messages&dsp=1&session=".$sess."' accesskey=\"".loca("HK_MESSAGES")."\">".loca("MENU_MESSAGES")."</a>\n";
-    echo "    </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
-    echo " <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
-    echo "     <a href='#' onclick='fenster(\"index.php?page=notizen&session=".$sess."&no_header=1\", \"Notizen\");' accesskey=\"".loca("HK_NOTES")."\">".loca("MENU_NOTES")."</a>\n";
-    echo "    </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
-    echo " <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align=\"center\"><font color=\"#FFFFFF\">\n";
-    echo "     <a href='index.php?page=buddy&session=".$sess."' accesskey=\"".loca("HK_BUDDY")."\">".loca("MENU_BUDDY")."</a>\n";
-    echo "    </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
-    echo "  <tr>\n";
-    echo "   <td>\n";
-    echo "    <div align='center'><font color='#FFFFFF'>\n";
-    echo "      <a href='index.php?page=options&session=".$sess."' accesskey='".loca("HK_OPTIONS")."'>".loca("MENU_OPTIONS")."</a>\n";
-    echo "     </font></div>\n";
-    echo "   </td>\n";
-    echo "  </tr>\n\n";
-    echo " <tr>\n";
-    echo "  <td>\n";
-    echo "   <div align='center'><font color='#FFFFFF'>\n";
-    echo "     <a href='index.php?page=logout&session=".$sess."' accesskey='".loca("HK_LOGOUT")."'>".loca("MENU_LOGOUT")."</a>\n";
-    echo "    </font></div>\n";
-    echo "  </td>\n";
-    echo " </tr>\n\n";
-
-    if (!empty($unitab['ext_rules'])) {
-        echo " <tr>\n";
-        echo "  <td>\n";
-        echo "   <div align='center'><font color='#FFFFFF'>\n";
-        echo "     <a href=\"".$unitab['ext_rules']."\" target='_blank'>".loca("MENU_RULES")."</a> <!-- external link to rules -->\n";
-        echo "   </font></div>\n";
-        echo "  </td>\n";
-        echo " </tr>\n\n";
-    }
-
-    if (!empty($unitab['ext_impressum'])) {    
-        echo " <tr>\n";
-        echo "  <td>\n";
-        echo "   <div align='center'><font color='#FFFFFF'>\n";
-        echo "    <a href=\"".$unitab['ext_impressum']."\" target='_blank'>".loca("MENU_IMPRESSUM")."</a> <!-- external link to impressum -->\n";
-        echo "   </font></div>\n";
-        echo "  </td>\n";
-        echo " </tr>\n\n";
-    }
-*/
 
     echo " </table>\n";
     echo " </center>\n";

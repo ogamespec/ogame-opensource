@@ -81,7 +81,7 @@
     "buildings3": {
         "type": "internal",
         "page": "buildings",
-        "mode": "&mode=Verteidigung",
+        "param": "&mode=Verteidigung",
         "accesskey": "HK_DEFENSE",
         "loca": "MENU_DEFENSE"
     },
@@ -113,7 +113,7 @@
         "notes": "external link to Discord"
     },
     "micropayment": {
-        "type": "internal",
+        "type": "internal_buggy",
         "page": "micropayment",
         "additional_style": "id='darkmatter2' style='cursor:pointer; width:110px;'",
         "accesskey": "HK_PAYMENT",
@@ -149,6 +149,7 @@
     "messages": {
         "type": "internal",
         "page": "messages",
+        "param": "&dsp=1",
         "accesskey": "HK_MESSAGES",
         "loca": "MENU_MESSAGES"
     },
