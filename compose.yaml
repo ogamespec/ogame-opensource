@@ -4,6 +4,11 @@ services:
       context: .
     ports:
       - "80:80"
+    volumes:
+      - web_configs:/var/www/html/persistent_configs
+    depends_on:
+      - mysql
+      - mailhog # Add dependency on mailhog
 
   mysql:
     image: mysql:8.0
@@ -16,6 +21,14 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      # This is the web UI where you will view the emails
+      - "8025:8025"
+      # This is the SMTP port PHP will connect to
+      - "1025:1025"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -33,3 +46,4 @@ services:
 
 volumes:
   mysql_data:
+  web_configs:
