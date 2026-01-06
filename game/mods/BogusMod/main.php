@@ -65,6 +65,20 @@ class BogusMod implements GameMod
             return false;
         }
     }
+
+    public function add_resources(&$json) {
+
+        array_insert_after_key ($json, "dm", "tritium", 
+            array (
+                'skin' => false,
+                'img' => "mods/BogusMod/img/tritium.png",
+                'loca' => "BOGUS_MOD_TRITIUM",
+                'val' => 0,
+                'color' => '') );
+
+        // Let other mods add their resources
+        return false;
+    }
 }
 
 ?>

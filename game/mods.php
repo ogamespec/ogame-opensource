@@ -11,6 +11,7 @@ interface GameMod {
     public function init();
     public function route();
     public function update_queue($queue);
+    public function add_resources(&$json);
 }
 
 function ModInitOne($modname)
@@ -58,6 +59,20 @@ function ModsExec($method, $args = null)
             else {
                 $res = $instance->$method();
             }
+            if ($res) {
+                return true;
+            }
+        }
+    }
+    return false;    
+}
+
+function ModsExecRef($method, &$args)
+{
+    global $modlist;
+    foreach ($modlist as $instance) {
+        if(method_exists($instance, $method)) {
+            $res = $instance->$method($args);
             if ($res) {
                 return true;
             }

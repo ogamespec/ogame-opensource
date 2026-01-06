@@ -182,4 +182,26 @@ function CheckParams (array $inputParams): array {
     ];
 }
 
+function array_insert_after_key(&$array, $after_key, $new_key, $new_value) {
+    $keys = array_keys($array);
+    $index = array_search($after_key, $keys);
+
+    if ($index === false) {
+        // Key not found, append to the end
+        $array[$new_key] = $new_value;
+        return $array;
+    }
+
+    // Split the array into two parts
+    $part1 = array_slice($array, 0, $index + 1, true);
+    $part2 = array_slice($array, $index + 1, null, true);
+
+    // Insert the new element between the two parts using the union operator (+)
+    $part1[$new_key] = $new_value;
+    $new_array = $part1 + $part2;
+    $array = $new_array;
+
+    return $array;
+}
+
 ?>

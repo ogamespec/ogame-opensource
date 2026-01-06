@@ -185,45 +185,90 @@ function PlanetsDropList ($page)
     echo "</select></table></td></tr></table></td>\n\n";
 }
 
+function LoadResourcesJson ()
+{
+    $resources_json_path = "pages/resources.json";
+    $json_contents = file_get_contents($resources_json_path);
+    $json = json_decode($json_contents, true);
+    if ($json === null) {
+        Error ("Error loading resource schema (JSON)");
+    }
+    return $json;
+}
+
 function ResourceList ($m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
 {
     global $GlobalUser;
     $sess = $GlobalUser['session'];
 
     $mcol = $kcol = $dcol = $ecol = "";
-    if ($m >= $mmax) $mcol = "color='#ff0000'";
-    if ($k >= $kmax) $kcol = "color='#ff0000'";
-    if ($d >= $dmax) $dcol = "color='#ff0000'";
-    if ($enow < 0) $ecol = "color='#ff0000'";
+    if ($m >= $mmax) $mcol = "#ff0000";
+    if ($k >= $kmax) $kcol = "#ff0000";
+    if ($d >= $dmax) $dcol = "#ff0000";
+    if ($enow < 0) $ecol = "#ff0000";
 
+    $json = LoadResourcesJson ();
+
+    $json['metall']['val'] = $m;
+    $json['metall']['color'] = $mcol;
+    $json['kristall']['val'] = $k;
+    $json['kristall']['color'] = $kcol;
+    $json['deuterium']['val'] = $d;
+    $json['deuterium']['color'] = $dcol;
+    $json['dm']['val'] = $dm;
+    $json['energie']['val'] = $enow;
+    $json['energie']['val2'] = $emax;
+    $json['energie']['color'] = $ecol;
+
+    ModsExecRef ('add_resources', $json);
+
+    //print_r ($json);
+
+    // Row 1 (Icons)
     echo "<td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >\n";
     echo "<tr class='header'>\n";
-    echo "<td align='center' width='85' class='header'>\n";
-    echo "<img border='0' src='".UserSkin()."images/metall.gif' width='42' height='22'>\n</td>\n";
-    echo "<td align='center' width='85' class='header'>\n";
-    echo "<img border='0' src='".UserSkin()."images/kristall.gif' width='42' height='22'>\n</td>\n";
-    echo "<td align='center' width='85' class='header'>\n";
-    echo "<img border='0' src='".UserSkin()."images/deuterium.gif' width='42' height='22'>\n</td>\n";
-    echo "<td align='center' width='85' class='header'>\n";
-    echo "<a href=index.php?page=micropayment&session=$sess>\n";
-    echo "<img border='0' src='img/dm_klein_2.jpg' width='42' height='22' title='".loca("DM")."'></a>\n</td>\n";
-    echo "<td align='center' width='85' class='header'>\n";
-    echo "<img border='0' src='".UserSkin()."images/energie.gif' width='42' height='22'>\n</td>\n</tr>\n";
+    foreach ($json as $res) {
 
-    echo "<tr class='header'>\n";
-    echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>".loca("METAL")."</font></b></i></td>\n";
-    echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>".loca("CRYSTAL")."</font></b></i></td>\n";
-    echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>".loca("DEUTERIUM")."</font></b></i></td>\n";
-    echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>".loca("DM")."</font></b></i></td>\n";
-    echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>".loca("ENERGY")."</font></b></i></td>\n";
+        echo "<td align='center' width='85' class='header'>\n";
+        if (key_exists('href', $res)) {
+            echo "<a href=index.php?page=".$res['href']."&session=$sess>\n";
+        }
+        echo "<img border='0' src='";
+        if ($res['skin']) {
+            echo UserSkin();
+        }
+        echo $res['img'] . "' width='42' height='22'";
+        if (key_exists('title', $res)) {
+            echo " title='".loca($res['title'])."'";
+        }
+        echo ">";
+        if (key_exists('href', $res)) {
+            echo "</a>";
+        }
+        echo "\n</td>\n";
+    }
     echo "</tr>\n";
 
+    // Row 2 (Names)
     echo "<tr class='header'>\n";
-    echo "    <td align='center' class='header' width='90'><font $mcol>".nicenum($m)."</font></td>\n";
-    echo "    <td align='center' class='header' width='90'><font $kcol>".nicenum($k)."</font></td>\n";
-    echo "    <td align='center' class='header' width='90'><font $dcol>".nicenum($d)."</font></td>\n";
-    echo "    <td align='center' class='header' width='90'><font color='#FFFFFF'>".nicenum($dm)."</font></td>\n";
-    echo "    <td align='center' class='header' width='90'><font $ecol>".nicenum($enow)."</font>/".nicenum($emax)."</td>\n\n";
+    foreach ($json as $res) {
+        echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>".loca($res['loca'])."</font></b></i></td>\n";
+    }
+    echo "</tr>\n";
+
+    // Row 3 (Values)
+    echo "<tr class='header'>\n";
+    foreach ($json as $res) {
+        $col = "";
+        if ($res['color'] !== "") {
+            $col = "color='".$res['color']."'";
+        }
+        echo "    <td align='center' class='header' width='90'><font $col>".nicenum($res['val'])."</font>";
+        if (key_exists('val2', $res)) {
+            echo "/".nicenum($res['val2']);
+        }
+        echo "</td>\n\n";
+    }
     echo "</tr>\n";
     echo "</table></td>\n";
 }
