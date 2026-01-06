@@ -120,6 +120,8 @@ if ( $_GET['page'] !== "admin" )
     }
 }
 
+ModsInit();
+
 //
 // Vanilla OGame 0.84 pages
 //
@@ -173,6 +175,11 @@ else if ( $_GET['page'] === "sprungtor" ) { include "pages/sprungtor.php"; exit 
 else if ( $_GET['page'] === "micropayment" ) { include "pages/micropayment.php"; exit (); }
 else if ( $_GET['page'] === "payment" ) { include "pages/payment.php"; exit (); }
 else if ( $_GET['page'] === "trader" ) { include "pages/trader.php"; exit (); }
+
+$res = ModsExec('route');
+if ($res) {
+    exit();
+}
 
 RedirectHome ();
 

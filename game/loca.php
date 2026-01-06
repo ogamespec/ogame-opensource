@@ -76,7 +76,7 @@ function loca_lang ($key, $lang)
 }
 
 // Add a set of language keys.
-function loca_add ( $section, $lang='en' )
+function loca_add ( $section, $lang='en', $dir='' )
 {
     global $LOCA, $Languages;
 
@@ -87,7 +87,12 @@ function loca_add ( $section, $lang='en' )
     }
     if ( !$found ) return;
 
-    include_once "loca/".$lang."_".$lang."/".$section.".php";
+    $path = str_replace('\\', '/', $dir);
+    if ($dir !== "" && !str_ends_with($path, '/')) {
+        $path .= '/';
+    }
+
+    include_once $path."loca/".$lang."_".$lang."/".$section.".php";
 }
 
 ?>
