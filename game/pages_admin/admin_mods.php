@@ -222,6 +222,9 @@ function Admin_Mods ()
             if ($mod) {
                 GenModPanelSource ($session, true, false, $mod);
             }
+            else {
+                ModsRemove ($modname);  // Heal DB
+            }
         }
     }
     else {

@@ -18,6 +18,10 @@ function ModInitOne($modname)
     $modPath = "mods/{$modname}/";
     $mainFile = $modPath . "main.php";
 
+    if (!is_dir($modPath)) {
+        return;
+    }
+
     // Include the mod's main file
     if (file_exists($mainFile)) {
         require_once $mainFile;
