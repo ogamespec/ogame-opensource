@@ -20,15 +20,15 @@ $tab_users = array (    // Users
     'dm'=>'INT UNSIGNED', 'dmfree'=>'INT UNSIGNED', 'sniff'=>'INT', 'debug'=>'INT', 'trader'=>'INT', 'rate_m'=>'DOUBLE', 'rate_k'=>'DOUBLE', 'rate_d'=>'DOUBLE',
     'score1'=>'BIGINT', 'score2'=>'INT', 'score3'=>'INT', 'place1'=>'INT', 'place2'=>'INT', 'place3'=>'INT',
     'oldscore1'=>'BIGINT', 'oldscore2'=>'INT', 'oldscore3'=>'INT', 'oldplace1'=>'INT', 'oldplace2'=>'INT', 'oldplace3'=>'INT', 'scoredate'=>'INT UNSIGNED',
-    'r106'=>'INT', 'r108'=>'INT', 'r109'=>'INT', 'r110'=>'INT', 'r111'=>'INT', 'r113'=>'INT', 'r114'=>'INT', 'r115'=>'INT', 'r117'=>'INT', 'r118'=>'INT', 'r120'=>'INT', 'r121'=>'INT', 'r122'=>'INT', 'r123'=>'INT', 'r124'=>'INT', 'r199'=>'INT',
+    'r106'=>'INT DEFAULT 0', 'r108'=>'INT DEFAULT 0', 'r109'=>'INT DEFAULT 0', 'r110'=>'INT DEFAULT 0', 'r111'=>'INT DEFAULT 0', 'r113'=>'INT DEFAULT 0', 'r114'=>'INT DEFAULT 0', 'r115'=>'INT DEFAULT 0', 'r117'=>'INT DEFAULT 0', 'r118'=>'INT DEFAULT 0', 'r120'=>'INT DEFAULT 0', 'r121'=>'INT DEFAULT 0', 'r122'=>'INT DEFAULT 0', 'r123'=>'INT DEFAULT 0', 'r124'=>'INT DEFAULT 0', 'r199'=>'INT DEFAULT 0',
     'flags'=>'INT UNSIGNED', 'feedid'=>'CHAR(32)', 'lastfeed'=>'INT UNSIGNED', 'com_until'=>'INT UNSIGNED', 'adm_until'=>'INT UNSIGNED', 'eng_until'=>'INT UNSIGNED', 'geo_until'=>'INT UNSIGNED', 'tec_until'=>'INT UNSIGNED'
 );
 
 $tab_planets = array (    // Planets
     'planet_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'name'=>'CHAR(20)', 'type'=>'INT', 'g'=>'INT', 's'=>'INT', 'p'=>'INT', 'owner_id'=>'INT', 'diameter'=>'INT', 'temp'=>'INT', 'fields'=>'INT', 'maxfields'=>'INT', 'date'=>'INT UNSIGNED',
-    'b1'=>'INT', 'b2'=>'INT', 'b3'=>'INT', 'b4'=>'INT', 'b12'=>'INT', 'b14'=>'INT', 'b15'=>'INT', 'b21'=>'INT', 'b22'=>'INT', 'b23'=>'INT', 'b24'=>'INT', 'b31'=>'INT', 'b33'=>'INT', 'b34'=>'INT', 'b41'=>'INT', 'b42'=>'INT', 'b43'=>'INT', 'b44'=>'INT',
-    'd401'=>'INT', 'd402'=>'INT', 'd403'=>'INT', 'd404'=>'INT', 'd405'=>'INT', 'd406'=>'INT', 'd407'=>'INT', 'd408'=>'INT', 'd502'=>'INT', 'd503'=>'INT',
-    'f202'=>'INT', 'f203'=>'INT', 'f204'=>'INT', 'f205'=>'INT', 'f206'=>'INT', 'f207'=>'INT', 'f208'=>'INT', 'f209'=>'INT', 'f210'=>'INT', 'f211'=>'INT', 'f212'=>'INT', 'f213'=>'INT', 'f214'=>'INT', 'f215'=>'INT',
+    'b1'=>'INT DEFAULT 0', 'b2'=>'INT DEFAULT 0', 'b3'=>'INT DEFAULT 0', 'b4'=>'INT DEFAULT 0', 'b12'=>'INT DEFAULT 0', 'b14'=>'INT DEFAULT 0', 'b15'=>'INT DEFAULT 0', 'b21'=>'INT DEFAULT 0', 'b22'=>'INT DEFAULT 0', 'b23'=>'INT DEFAULT 0', 'b24'=>'INT DEFAULT 0', 'b31'=>'INT DEFAULT 0', 'b33'=>'INT DEFAULT 0', 'b34'=>'INT DEFAULT 0', 'b41'=>'INT DEFAULT 0', 'b42'=>'INT DEFAULT 0', 'b43'=>'INT DEFAULT 0', 'b44'=>'INT DEFAULT 0',
+    'd401'=>'INT DEFAULT 0', 'd402'=>'INT DEFAULT 0', 'd403'=>'INT DEFAULT 0', 'd404'=>'INT DEFAULT 0', 'd405'=>'INT DEFAULT 0', 'd406'=>'INT DEFAULT 0', 'd407'=>'INT DEFAULT 0', 'd408'=>'INT DEFAULT 0', 'd502'=>'INT DEFAULT 0', 'd503'=>'INT DEFAULT 0',
+    'f202'=>'INT DEFAULT 0', 'f203'=>'INT DEFAULT 0', 'f204'=>'INT DEFAULT 0', 'f205'=>'INT DEFAULT 0', 'f206'=>'INT DEFAULT 0', 'f207'=>'INT DEFAULT 0', 'f208'=>'INT DEFAULT 0', 'f209'=>'INT DEFAULT 0', 'f210'=>'INT DEFAULT 0', 'f211'=>'INT DEFAULT 0', 'f212'=>'INT DEFAULT 0', 'f213'=>'INT DEFAULT 0', 'f214'=>'INT DEFAULT 0', 'f215'=>'INT DEFAULT 0',
     'm'=>'DOUBLE', 'k'=>'DOUBLE', 'd'=>'DOUBLE', 'mprod'=>'DOUBLE', 'kprod'=>'DOUBLE', 'dprod'=>'DOUBLE', 'sprod'=>'DOUBLE', 'fprod'=>'DOUBLE', 'ssprod'=>'DOUBLE', 'lastpeek'=>'INT UNSIGNED', 'lastakt'=>'INT UNSIGNED', 'gate_until'=>'INT UNSIGNED', 'remove'=>'INT UNSIGNED'
 );
 

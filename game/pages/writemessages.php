@@ -34,7 +34,7 @@ function SendNotActivated ()
     // Partially replicates the Error method from debug.php, but without unloading the player.
     $text = loca("REG_NOT_ACTIVATED_MESSAGE");
     $now = time ();
-    $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], $text, $now );
+    $error = array ( 'owner_id' => $GlobalUser['player_id'], 'ip' => $_SERVER['REMOTE_ADDR'], 'agent' => $_SERVER['HTTP_USER_AGENT'], 'url' => $_SERVER['REQUEST_URI'], 'text' => $text, 'date' => $now );
     $id = AddDBRow ( $error, 'errors' );
 
     echo "<html>\n";

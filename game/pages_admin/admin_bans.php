@@ -132,17 +132,17 @@ function SetClearCheckbox (status)
                 {
                     case 0 :
                         // Add a user to the Pillar of Shame
-                        $entry = array( null, $GlobalUser['oname'], $user['oname'], $GlobalUser['player_id'], $user['player_id'], $now, $now + $seconds, $reason );
+                        $entry = array( 'admin_name' => $GlobalUser['oname'], 'user_name' => $user['oname'], 'admin_id' => $GlobalUser['player_id'], 'user_id' => $user['player_id'], 'ban_when' => $now, 'ban_until' => $now + $seconds, 'reason' => $reason );
                         AddDBRow ( $entry, "pranger" );
                         BanUser ( $player_id, $seconds, 0 ); break;
                     case 1 :
                         // Add a user to the Pillar of Shame
-                        $entry = array( null, $GlobalUser['oname'], $user['oname'], $GlobalUser['player_id'], $user['player_id'], $now, $now + $seconds, $reason );
+                        $entry = array( 'admin_name' => $GlobalUser['oname'], 'user_name' => $user['oname'], 'admin_id' => $GlobalUser['player_id'], 'user_id' => $user['player_id'], 'ban_when' => $now, 'ban_until' => $now + $seconds, 'reason' => $reason );
                         AddDBRow ( $entry, "pranger" );
                         BanUser ( $player_id, $seconds, 1 ); break;
                     case 2 :
                         // Add a user to the Pillar of Shame
-                        $entry = array( null, $GlobalUser['oname'], $user['oname'], $GlobalUser['player_id'], $user['player_id'], $now, $now + $seconds, $reason );
+                        $entry = array( 'admin_name' => $GlobalUser['oname'], 'user_name' => $user['oname'], 'admin_id' => $GlobalUser['player_id'], 'user_id' => $user['player_id'], 'ban_when' => $now, 'ban_until' => $now + $seconds, 'reason' => $reason );
                         AddDBRow ( $entry, "pranger" );
                         BanUserAttacks ( $player_id, $seconds ); break;
                     case 3 : UnbanUser ( $player_id ); break;

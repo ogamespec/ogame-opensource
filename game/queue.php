@@ -92,11 +92,12 @@ const QUEUE_PRIO_CLEAN_DEBRIS = 600;
 const QUEUE_PRIO_CLEAN_PLANETS = 700;
 const QUEUE_PRIO_RELOGIN = 777;
 const QUEUE_PRIO_CLEAN_PLAYERS = 900;
+const QUEUE_PRIO_BOT = 1000;
 
 // Add a task to the queue. Returns the ID of the added task.
 function AddQueue ($owner_id, $type, $sub_id, $obj_id, $level, $now, $seconds, $prio=QUEUE_PRIO_LOWEST)
 {
-    $queue = array ( null, $owner_id, $type, $sub_id, $obj_id, $level, $now, $now+$seconds, $prio );
+    $queue = array ( 'owner_id' => $owner_id, 'type' => $type, 'sub_id' => $sub_id, 'obj_id' => $obj_id, 'level' => $level, 'start' => $now, 'end' => $now+$seconds, 'prio' => $prio );
     $id = AddDBRow ( $queue, "queue" );
     return $id;
 }
@@ -412,7 +413,7 @@ function BuildEnque ( $user, $planet_id, $id, $destroy, $now=0 )
         else $BuildEvent = QTYP_BUILD;
 
         $duration = floor (BuildDuration ( $id, $lvl, $planet['b'.GID_B_ROBOTS], $planet['b'.GID_B_NANITES], $speed ));
-        $row = array ( '', $user['player_id'], $planet_id, $list_id, $id, $lvl, $destroy, $now, $now+$duration );
+        $row = array ( 'owner_id' => $user['player_id'], 'planet_id' => $planet_id, 'list_id' => $list_id, 'tech_id' => $id, 'level' => $lvl, 'destroy' => $destroy, 'start' => $now, 'end' => $now+$duration );
         $sub_id = AddDBRow ( $row, "buildqueue" );
         if ($list_id == 1) AddQueue ( $user['player_id'], $BuildEvent, $sub_id, $id, $lvl, $now, $duration, QUEUE_PRIO_BUILD );
     }
@@ -870,8 +871,7 @@ function AddRecalcPointsEvent ($player_id)
     {
         $now = time ();
         $when = mktime(0, 10, 0, date("m"), date("d")+1, date("y"));
-        $queue = array ( null, $player_id, QTYP_RECALC_POINTS, 0, 0, 0, $now, $when, QUEUE_PRIO_RECALC_POINTS );
-        AddDBRow ( $queue, "queue" );
+        AddQueue ($player_id, QTYP_RECALC_POINTS, 0, 0, 0, $now, $when, QUEUE_PRIO_RECALC_POINTS);
     }
 }
 
@@ -904,8 +904,7 @@ function AddAllowNameEvent ($player_id)
     {
         $now = time ();
         $when = $now + 7 * 24 * 60 * 60;
-        $queue = array ( null, $player_id, QTYP_ALLOW_NAME, 0, 0, 0, $now, $when, 0 );
-        $id = AddDBRow ( $queue, "queue" );
+        $id = AddQueue ($player_id, QTYP_ALLOW_NAME, 0, 0, 0, $now, $when, QUEUE_PRIO_LOWEST);
         $query = "UPDATE ".$db_prefix."users SET name_changed = 1, name_until = $when WHERE player_id = $player_id";
         dbquery ($query);
     }
@@ -961,8 +960,7 @@ function AddChangeEmailEvent ($player_id)
 
     $now = time ();
     $when = $now + 7 * 24 * 60 * 60;
-    $queue = array ( null, $player_id, QTYP_CHANGE_EMAIL, 0, 0, 0, $now, $when, 0 );
-    $id = AddDBRow ( $queue, "queue" );
+    $id = AddQueue ($player_id, QTYP_CHANGE_EMAIL, 0, 0, 0, $now, $when, QUEUE_PRIO_LOWEST);
 }
 
 // Update permanent mail address
@@ -996,8 +994,7 @@ function AddUpdateStatsEvent ($now=0)
         else if ( $hours >= 16 && $hours < 20 ) $when = mktime ( 20, 5, 0 );
         else $when = mktime ( 8, 5, 0, $today['mon'], $today['mday'] + 1 );
 
-        $queue = array ( null, USER_SPACE, QTYP_UPDATE_STATS, 0, 0, 0, $now, $when, QUEUE_PRIO_UPDATE_STATS );
-        AddDBRow ( $queue, "queue" );
+        AddQueue (USER_SPACE, QTYP_UPDATE_STATS, 0, 0, 0, $now, $when, QUEUE_PRIO_UPDATE_STATS);
     }
 }
 
@@ -1029,8 +1026,7 @@ function AddReloginEvent ()
     {
         $now = time ();
         $when = mktime(3, 0, 0, date("m"), date("d")+1, date("y"));;
-        $queue = array ( null, USER_SPACE, QTYP_UNLOAD_ALL, 0, 0, 0, $now, $when, QUEUE_PRIO_RELOGIN );
-        $id = AddDBRow ( $queue, "queue" );
+        $id = AddQueue (USER_SPACE, QTYP_UNLOAD_ALL, 0, 0, 0, $now, $when, QUEUE_PRIO_RELOGIN);
     }
 }
 
@@ -1063,8 +1059,7 @@ function AddCleanDebrisEvent ()
         $now = time ();
         $week = mktime(0, 0, 0, date('m'), date('d')-date('w'), date('Y')) + 24 * 60 * 60;
         $when = $week + 7 * 24 * 60 * 60 + 10 * 60;
-        $queue = array ( null, USER_SPACE, QTYP_CLEAN_DEBRIS, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_DEBRIS );
-        $id = AddDBRow ( $queue, "queue" );
+        $id = AddQueue (USER_SPACE, QTYP_CLEAN_DEBRIS, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_DEBRIS);
     }
 }
 
@@ -1092,8 +1087,7 @@ function AddCleanPlanetsEvent ()
     {
         $now = time ();
         $when = mktime(1, 10, 0, date("m"), date("d")+1, date("y"));
-        $queue = array ( null, USER_SPACE, QTYP_CLEAN_PLANETS, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_PLANETS );
-        $id = AddDBRow ( $queue, "queue" );
+        $id = AddQueue (USER_SPACE, QTYP_CLEAN_PLANETS, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_PLANETS);
     }
 }
 
@@ -1143,8 +1137,7 @@ function AddCleanPlayersEvent ()
     {
         $now = time ();
         $when = mktime(1, 10, 0, date("m"), date("d")+1, date("y"));
-        $queue = array ( null, USER_SPACE, QTYP_CLEAN_PLAYERS, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_PLAYERS );
-        $id = AddDBRow ( $queue, "queue" );
+        $id = AddQueue (USER_SPACE, QTYP_CLEAN_PLAYERS, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_PLAYERS);
     }
 }
 
@@ -1191,8 +1184,7 @@ function AddRecalcAllyPointsEvent ()
     {
         $now = time ();
         $when = mktime(0, 10, 0, date("m"), date("d")+1, date("y"));
-        $queue = array ( null, USER_SPACE, QTYP_RECALC_ALLY_POINTS, 0, 0, 0, $now, $when, QUEUE_PRIO_RECALC_ALLY_POINTS );
-        AddDBRow ( $queue, "queue" );
+        AddQueue (USER_SPACE, QTYP_RECALC_ALLY_POINTS, 0, 0, 0, $now, $when, QUEUE_PRIO_RECALC_ALLY_POINTS);
     }
 }
 
@@ -1208,9 +1200,9 @@ function Queue_RecalcAllyPoints_End ($queue)
 function AddDebugEvent ($when)
 {
     $now = time ();
-    $queue = array ( null, USER_SPACE, QTYP_DEBUG, 0, 0, 0, $now, $when, QUEUE_PRIO_DEBUG );
-    $id = AddDBRow ( $queue, "queue" );
+    $id = AddQueue (USER_SPACE, QTYP_DEBUG, 0, 0, 0, $now, $when, QUEUE_PRIO_DEBUG);
 }
+
 // Debug Event.
 function Queue_Debug_End ($queue)
 {

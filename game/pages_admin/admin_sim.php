@@ -145,7 +145,7 @@ function SimBattle ( $battle_source, $a, $d, $rf, $fid, $did, $debug, &$battle_r
 
     if ($debug) echo "<pre>" . $source . "</pre><hr>";
 
-    $battle = array ( null, $source, '', '', time() );
+    $battle = array ( 'source' => $source, 'title' => '', 'report' => '', 'date' => time() );
     $battle_id = AddDBRow ( $battle, "battledata");
 
     $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );

@@ -94,7 +94,7 @@ function SendMessage ($player_id, $from, $subj, $text, $pm, $when=0, $planet_id=
     }
 
     // Add message.
-    $msg = array( null, $player_id, $pm, $from, $subj, $text, 0, $when, $planet_id );
+    $msg = array( 'owner_id' => $player_id, 'pm' => $pm, 'msgfrom' => $from, 'subj' => $subj, 'text' => $text, 'shown' => 0, 'date' => $when, 'planet_id' => $planet_id );
     $id = AddDBRow ( $msg, "messages" );
 
     return $id;
@@ -213,7 +213,7 @@ function ReportMessage ($player_id, $msg_id, &$ResultMessage="", &$ResultError="
         if (dbrows ($result) == 0) {
 
             // Add
-            $report = array( null, $player_id, $msg_id, $msg['msgfrom'], $msg['subj'], $msg['text'], $msg['date'] );
+            $report = array( 'owner_id' => $player_id, 'msg_id' => $msg_id, 'msgfrom' => $msg['msgfrom'], 'subj' => $msg['subj'], 'text' => $msg['text'], 'date' => $msg['date'] );
             $id = AddDBRow ( $report, "reports" );
             $ResultMessage = loca("MSG_REPORT_SUCCESS");
         }

@@ -42,9 +42,9 @@ function CreateAlly ($owner_id, $tag, $name)
     loca_add ( "ally", $user['lang'] );
 
     // Add alliance.
-    $ally = array( null, $tag, $name, $owner_id, "", "", 1, 0, loca_lang("ALLY_NEW_DEFAULT_TEXT", $user['lang']), "", "", 0, "", "", 0, 0,
-                        0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0 );
+    $ally = array( 'tag' => $tag, 'name' => $name, 'owner_id' => $owner_id, 'homepage' => "", 'imglogo' => "", 'open' => 1, 'insertapp' => 0, 'exttext' => loca_lang("ALLY_NEW_DEFAULT_TEXT", $user['lang']), 'inttext' => "", 'apptext' => "", 'nextrank' => 0, 'old_tag' => "", 'old_name' => "", 'tag_until' => 0, 'name_until' => 0,
+                    'score1' => 0, 'score2' => 0, 'score3' => 0, 'place1' => 0, 'place2' => 0, 'place3' => 0,
+                    'oldscore1' => 0, 'oldscore2' => 0, 'oldscore3' => 0, 'oldplace1' => 0, 'oldplace2' => 0, 'oldplace3' => 0, 'scoredate' => 0 );
     $id = AddDBRow ( $ally, "ally" );
 
     // Add Founder (0) and Newcomer (1) ranks .
@@ -346,7 +346,7 @@ function LoadUsersWithRank ($ally_id, $rank_id )
 // Add an application to the alliance. Returns the ordinal number of the application.
 function AddApplication ($ally_id, $player_id, $text)
 {
-    $app = array ( null, $ally_id, $player_id, $text, time() );
+    $app = array ( 'ally_id' => $ally_id, 'player_id' => $player_id, 'text' => $text, 'date' => time() );
     $id = AddDBRow ( $app, "allyapps" );
     return $id;
 }
@@ -417,7 +417,7 @@ function AddBuddy ($from, $to, $text)
     if ( IsBuddy ($from, $to) ) return 0;
 
     // Add a request.
-    $buddy = array( null, $from, $to, $text, 0 );
+    $buddy = array( 'request_from' => $from, 'request_to' => $to, 'text' => $text, 'accepted' => 0 );
     $id = AddDBRow ( $buddy, "buddy" );
     return $id;
 }

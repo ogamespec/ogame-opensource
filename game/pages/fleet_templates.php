@@ -53,21 +53,21 @@ if ( method() === "POST" && key_exists('mode', $_POST) && $_POST['mode'] === "sa
 
         if ( $rows < $MAX )
         {
-            $temp = array ( null, $GlobalUser['player_id'], $name, $now,
-                intval ( $_POST['ship'][202] ), 
-                intval ( $_POST['ship'][203] ), 
-                intval ( $_POST['ship'][204] ), 
-                intval ( $_POST['ship'][205] ), 
-                intval ( $_POST['ship'][206] ), 
-                intval ( $_POST['ship'][207] ), 
-                intval ( $_POST['ship'][208] ), 
-                intval ( $_POST['ship'][209] ), 
-                intval ( $_POST['ship'][210] ), 
-                intval ( $_POST['ship'][211] ), 
-                0, 
-                intval ( $_POST['ship'][213] ), 
-                intval ( $_POST['ship'][214] ), 
-                intval ( $_POST['ship'][215] ), 
+            $temp = array ( 'owner_id' => $GlobalUser['player_id'], 'name' => $name, 'date' => $now,
+                'ship202' => intval ( $_POST['ship'][202] ), 
+                'ship203' => intval ( $_POST['ship'][203] ), 
+                'ship204' => intval ( $_POST['ship'][204] ), 
+                'ship205' => intval ( $_POST['ship'][205] ), 
+                'ship206' => intval ( $_POST['ship'][206] ), 
+                'ship207' => intval ( $_POST['ship'][207] ), 
+                'ship208' => intval ( $_POST['ship'][208] ), 
+                'ship209' => intval ( $_POST['ship'][209] ), 
+                'ship210' => intval ( $_POST['ship'][210] ), 
+                'ship211' => intval ( $_POST['ship'][211] ), 
+                'ship212' => 0, 
+                'ship213' => intval ( $_POST['ship'][213] ), 
+                'ship214' => intval ( $_POST['ship'][214] ), 
+                'ship215' => intval ( $_POST['ship'][215] ), 
             );
             AddDBRow ( $temp, 'template' );
         }

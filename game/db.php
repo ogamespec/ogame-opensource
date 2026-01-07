@@ -58,18 +58,26 @@ function dbfree ($result) {
 }
 
 // Add a row to the table.
+// This method now takes into account that the table may have additional columns added by the mod that do not need to be touched.
 function AddDBRow ( $row, $tabname )
 {
     global $db_connect, $db_prefix;
-    $opt = " (";
-    foreach ($row as $i=>$entry)
+    $values = "(";
+    $columns = "(";
+    $first = true;
+    foreach ($row as $col=>$value)
     {
-        if ($i != 0) $opt .= ", ";
-        if ( $row[$i] == null && $i == 0 ) $opt .= 'NULL';
-        else $opt .= "'".$row[$i]."'";
+        if (!$first) {
+            $values .= ", ";
+            $columns .= ", ";
+        }
+        $values .= "'".$value."'";
+        $columns .= $col;
+        $first = false;
     }
-    $opt .= ")";
-    $query = "INSERT INTO ".$db_prefix."$tabname VALUES".$opt;
+    $values .= ");";
+    $columns .= ")";
+    $query = "INSERT INTO ".$db_prefix."$tabname $columns VALUES ".$values;
     dbquery( $query);
     return mysqli_insert_id ($db_connect);
 }

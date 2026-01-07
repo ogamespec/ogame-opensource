@@ -113,7 +113,7 @@ function Admin_Botedit ()
                          \"linkToPortIdProperty\": \"toPort\",
                          \"nodeDataArray\": [ ],
                          \"linkDataArray\": [ ]}";
-            $strat = array ( '', $name, $source );
+            $strat = array ( 'name' => $name, 'source' => $source );
             AddDBRow ($strat, 'botstrat');
             ob_clean ();
             die ( );

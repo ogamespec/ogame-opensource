@@ -34,12 +34,11 @@ function Admin_Coupons ()
             $darkmatter = intval ( $_POST['darkmatter'] );
             $periodic = intval ( $_POST['periodic'] );
 
-            $queue = array ( null, USER_SPACE, QTYP_COUPON, $darkmatter, ($inactive_days << 16) | $ingame_days, $periodic, $now, $end, QUEUE_PRIO_COUPON );
-            AddDBRow ( $queue, "queue" );
+            AddQueue (USER_SPACE, QTYP_COUPON, $darkmatter, ($inactive_days << 16) | $ingame_days, $periodic, $now, $end, QUEUE_PRIO_COUPON);
         }
     }
 
-    // Обработка GET-запроса.
+    // GET request processing.
     if ( method () === "GET" && key_exists('action', $_GET) && $GlobalUser['admin'] >= 2 )
     {
         $action = $_GET['action'];

@@ -215,15 +215,14 @@ function CreateUser ( $name, $pass, $email, $bot=false)
 
     $ip = $_SERVER['REMOTE_ADDR'];
 
-    $user = array( null, time(), 0, 0, 0, "",  "", $name, $origname, 0, 0, $md, "", $email, $email,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, $ip, 0, $ack, 0, 0, 0, 0,
-                        hostname() . "evolution/", 1, 0, 1, 3, $lang, 0,
-                        0, $unitab['start_dm'], 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        USER_FLAG_DEFAULT, "", 0, 0, 0, 0, 0, 0 );
+    $user = array( 'regdate' => time(), 'ally_id' => 0, 'joindate' => 0, 'allyrank' => 0, 'session' => "",  'private_session' => "", 'name' => $name, 'oname' => $origname, 'name_changed' => 0, 'name_until' => 0, 'password' => $md, 'temp_pass' => "", 'pemail' => $email, 'email' => $email,
+                    'email_changed' => 0, 'email_until' => 0, 'disable' => 0, 'disable_until' => 0, 'vacation' => 0, 'vacation_until' => 0, 'banned' => 0, 'banned_until' => 0, 'noattack' => 0, 'noattack_until' => 0,
+                    'lastlogin' => 0, 'lastclick' => 0, 'ip_addr' => $ip, 'validated' => 0, 'validatemd' => $ack, 'hplanetid' => 0, 'admin' => 0, 'sortby' => 0, 'sortorder' => 0,
+                    'skin' => hostname() . "evolution/", 'useskin' => 1, 'deact_ip' => 0, 'maxspy' => 1, 'maxfleetmsg' => 3, 'lang' => $lang, 'aktplanet' => 0,
+                    'dm' => 0, 'dmfree' => $unitab['start_dm'], 'sniff' => 0, 'debug' => 0, 'trader' => 0, 'rate_m' => 0, 'rate_k' => 0, 'rate_d' => 0,
+                    'score1' => 0, 'score2' => 0, 'score3' => 0, 'place1' => 0, 'place2' => 0, 'place3' => 0,
+                    'oldscore1' => 0, 'oldscore2' => 0, 'oldscore3' => 0, 'oldplace1' => 0, 'oldplace2' => 0, 'oldplace3' => 0, 'scoredate' => 0,
+                    'flags' => USER_FLAG_DEFAULT, 'feedid' => "", 'lastfeed' => 0, 'com_until' => 0, 'adm_until' => 0, 'eng_until' => 0, 'geo_until' => 0, 'tec_until' => 0 );
     $id = AddDBRow ( $user, "users" );
 
     LogIPAddress ( $ip, $id, 1 );
@@ -870,12 +869,11 @@ function AdminUserName ($user)
 function BanUser ($player_id, $seconds, $vmode)
 {
     global $db_prefix;
-    $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'UnbanPlayer' AND owner_id = $player_id";
+    $query = "DELETE FROM ".$db_prefix."queue WHERE type = '".QTYP_UNBAN."' AND owner_id = $player_id";
     dbquery ($query);
     $now = time ();
     $when = $now + $seconds;
-    $queue = array ( null, $player_id, "UnbanPlayer", 0, 0, 0, $now, $when, 0 );
-    $id = AddDBRow ( $queue, "queue" );
+    $id = AddQueue ($player_id, QTYP_UNBAN, 0, 0, 0, $now, $when, QUEUE_PRIO_LOWEST);
     $query = "UPDATE ".$db_prefix."users SET score1 = 0, score2 = 0, score3 = 0, banned = 1, banned_until = $when";
     if ( $vmode ) $query .= ", vacation = 1, vacation_until = $when";
     $query .= " WHERE player_id = $player_id";
@@ -887,12 +885,11 @@ function BanUser ($player_id, $seconds, $vmode)
 function BanUserAttacks ($player_id, $seconds)
 {
     global $db_prefix;
-    $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'AllowAttacks' AND owner_id = $player_id";
+    $query = "DELETE FROM ".$db_prefix."queue WHERE type = '".QTYP_ALLOW_ATTACKS."' AND owner_id = $player_id";
     dbquery ($query);
     $now = time ();
     $when = $now + $seconds;
-    $queue = array ( null, $player_id, "AllowAttacks", 0, 0, 0, $now, $when, 0 );
-    $id = AddDBRow ( $queue, "queue" );
+    $id = AddQueue ($player_id, QTYP_ALLOW_ATTACKS, 0, 0, 0, $now, $when, QUEUE_PRIO_LOWEST);
     $query = "UPDATE ".$db_prefix."users SET noattack = 1, noattack_until = $when WHERE player_id = $player_id";
     dbquery ($query);
 }

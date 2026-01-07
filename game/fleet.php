@@ -297,17 +297,21 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
     $flight_time = $seconds;
 
     // Add the fleet.
-    $fleet_obj = array ( null, $origin['owner_id'], $union_id, $m, $k, $d, $cons, $order, $origin['planet_id'], $target['planet_id'], $flight_time, $deploy_time,
-                         0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
+    $fleet_obj = array ( 'owner_id' => $origin['owner_id'], 'union_id' => $union_id, 'm' => $m, 'k' => $k, 'd' => $d, 'fuel' => $cons, 'mission' => $order, 'start_planet' => $origin['planet_id'], 'target_planet' => $target['planet_id'], 'flight_time' => $flight_time, 'deploy_time' => $deploy_time,
+                         'ipm_amount' => 0, 'ipm_target' => 0,
+                         'ship202' => $fleet[202], 'ship203' => $fleet[203], 'ship204' => $fleet[204], 'ship205' => $fleet[205], 'ship206' => $fleet[206], 'ship207' => $fleet[207], 'ship208' => $fleet[208], 'ship209' => $fleet[209], 'ship210' => $fleet[210],
+                         'ship211' => $fleet[211], 'ship212' => $fleet[212], 'ship213' => $fleet[213], 'ship214' => $fleet[214], 'ship215' => $fleet[215] );
     $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
     // Log entry
     $weeks = $now - 4 * (7 * 24 * 60 * 60);
     $query = "DELETE FROM ".$db_prefix."fleetlogs WHERE start < $weeks;";
     dbquery ($query);
-    $fleetlog = array ( null, $origin['owner_id'], $target['owner_id'], $union_id, $origin['m'], $origin['k'], $origin['d'], $m, $k, $d, $cons, $order, $flight_time, $deploy_time, $now, $now+$seconds, 
-                        $origin['g'], $origin['s'], $origin['p'], $origin['type'], $target['g'], $target['s'], $target['p'], $target['type'], 
-                        0, 0, $fleet[202], $fleet[203], $fleet[204], $fleet[205], $fleet[206], $fleet[207], $fleet[208], $fleet[209], $fleet[210], $fleet[211], $fleet[212], $fleet[213], $fleet[214], $fleet[215] );
+    $fleetlog = array ( 'owner_id' => $origin['owner_id'], 'target_id' => $target['owner_id'], 'union_id' => $union_id, 'pm' => $origin['m'], 'pk' => $origin['k'], 'pd' => $origin['d'], 'm' => $m, 'k' => $k, 'd' => $d, 'fuel' => $cons, 'mission' => $order, 'flight_time' => $flight_time, 'deploy_time' => $deploy_time, 'start' => $now, 'end' => $now+$seconds, 
+                        'origin_g' => $origin['g'], 'origin_s' => $origin['s'], 'origin_p' => $origin['p'], 'origin_type' => $origin['type'], 'target_g' => $target['g'], 'target_s' => $target['s'], 'target_p' => $target['p'], 'target_type' => $target['type'], 
+                         'ipm_amount' => 0, 'ipm_target' => 0,
+                         'ship202' => $fleet[202], 'ship203' => $fleet[203], 'ship204' => $fleet[204], 'ship205' => $fleet[205], 'ship206' => $fleet[206], 'ship207' => $fleet[207], 'ship208' => $fleet[208], 'ship209' => $fleet[209], 'ship210' => $fleet[210],
+                         'ship211' => $fleet[211], 'ship212' => $fleet[212], 'ship213' => $fleet[213], 'ship214' => $fleet[214], 'ship215' => $fleet[215] );
     AddDBRow ($fleetlog, 'fleetlogs');
 
     // Add the task to the global event queue.
@@ -442,17 +446,19 @@ function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
     SetPlanetDefense ( $origin['planet_id'], $origin );
 
     // Add a missile attack.
-    $fleet_obj = array ( null, $origin['owner_id'], 0, 0, 0, 0, 0, FTYP_MISSILE, $origin['planet_id'], $target['planet_id'], $seconds, 0,
-                         $amount, $type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+    $fleet_obj = array ( 'owner_id' => $origin['owner_id'], 'union_id' => 0, 'm' => 0, 'k' => 0, 'd' => 0, 'fuel' => 0, 'mission' => FTYP_MISSILE, 'start_planet' => $origin['planet_id'], 'target_planet' => $target['planet_id'], 'flight_time' => $seconds, 'deploy_time' => 0,
+                         'ipm_amount' => $amount, 'ipm_target' => $type,
+                         'ship202' => 0, 'ship203' => 0, 'ship204' => 0, 'ship205' => 0, 'ship206' => 0, 'ship207' => 0, 'ship208' => 0, 'ship209' => 0, 'ship210' => 0, 'ship211' => 0, 'ship212' => 0, 'ship213' => 0, 'ship214' => 0, 'ship215' => 0 );
     $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
     // Log entry
     $weeks = $now - 4 * (7 * 24 * 60 * 60);
     $query = "DELETE FROM ".$db_prefix."fleetlogs WHERE start < $weeks;";
     dbquery ($query);
-    $fleetlog = array ( null, $origin['owner_id'], $target['owner_id'], 0, 0, 0, 0, 0, 0, 0, 0, FTYP_MISSILE, $seconds, 0, $now, $now+$seconds, 
-                        $origin['g'], $origin['s'], $origin['p'], $origin['type'], $target['g'], $target['s'], $target['p'], $target['type'], 
-                        $amount, $type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+    $fleetlog = array ( 'owner_id' => $origin['owner_id'], 'target_id' => $target['owner_id'], 'union_id' => 0, 'pm' => 0, 'pk' => 0, 'pd' => 0, 'm' => 0, 'k' => 0, 'd' => 0, 'fuel' => 0, 'mission' => FTYP_MISSILE, 'flight_time' => $seconds, 'deploy_time' => 0, 'start' => $now, 'end' => $now+$seconds, 
+                        'origin_g' => $origin['g'], 'origin_s' => $origin['s'], 'origin_p' => $origin['p'], 'origin_type' => $origin['type'], 'target_g' => $target['g'], 'target_s' => $target['s'], 'target_p' => $target['p'], 'target_type' => $target['type'], 
+                        'ipm_amount' => $amount, 'ipm_target' => $type,
+                        'ship202' => 0, 'ship203' => 0, 'ship204' => 0, 'ship205' => 0, 'ship206' => 0, 'ship207' => 0, 'ship208' => 0, 'ship209' => 0, 'ship210' => 0, 'ship211' => 0, 'ship212' => 0, 'ship213' => 0, 'ship214' => 0, 'ship215' => 0 );
     AddDBRow ($fleetlog, 'fleetlogs');
 
     // Add the task to the global event queue.
@@ -1062,7 +1068,7 @@ function CreateUnion ($fleet_id, $name)
     if ( $target_player == $fleet_obj['owner_id'] ) return 0;
 
     // Add union
-    $union = array ( null, $fleet_id, $target_player, $name, $fleet_obj['owner_id'] );
+    $union = array ( 'fleet_id' => $fleet_id, 'target_player' => $target_player, 'name' => $name, 'players' => $fleet_obj['owner_id'] );
     $union_id = AddDBRow ($union, 'union');
 
     // Add a fleet to the union and change the Attack type (the ACS head is shown in a special way in the event list)

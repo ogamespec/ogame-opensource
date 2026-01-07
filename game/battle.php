@@ -721,7 +721,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
 
     $source = GenBattleSourceData ($a, $d, $rf, $fid, $did);
 
-    $battle = array ( null, $source, "", "", $when );
+    $battle = array ( 'source' => $source, 'title' => "", 'report' => "", 'date' => $when );
     $battle_id = AddDBRow ( $battle, "battledata" );
 
     $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
@@ -1111,7 +1111,7 @@ function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
 
     $source = GenBattleSourceData ($a, $d, $rf, $fid, $did);
 
-    $battle = array ( null, $source, "", "", $when );
+    $battle = array ( 'source' => $source, 'title' => "", 'report' => "", 'date' => $when );
     $battle_id = AddDBRow ( $battle, "battledata" );
 
     $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );

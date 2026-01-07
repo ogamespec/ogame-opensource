@@ -132,11 +132,8 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     // Add planet
     if ( $when == 0 ) $now = time();
     else $now = $when;
-    $planet = array( null, $name, $type, $g, $s, $p, $owner_id, $diam, $temp, 0, $fields, $now,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,       // Building level of each type
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,               // Number of defenses of each type
-                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,       // Number of fleet of each type
-                        $initial_met, $initial_crys, 0, 1, 1, 1, 1, 1, 1, $now, $now, 0, 0 );
+    $planet = array( 'name' => $name, 'type' => $type, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => $owner_id, 'diameter' => $diam, 'temp' => $temp, 'fields' => 0, 'maxfields' => $fields, 'date' => $now,
+                     'm' => $initial_met, 'k' => $initial_crys, 'd' => 0, 'mprod' => 1, 'kprod' => 1, 'dprod' => 1, 'sprod' => 1, 'fprod' => 1, 'ssprod' => 1, 'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
     $id = AddDBRow ( $planet, "planets" );
 
     return $id;
@@ -321,11 +318,8 @@ function CreateDebris ($g, $s, $p, $owner_id)
     $debris_id = HasDebris ($g, $s, $p);
     if ($debris_id > 0 ) return $debris_id;
     $now = time();
-    $planet = array ( null, loca("DEBRIS"), PTYP_DF, $g, $s, $p, $owner_id, 0, 0, 0, 0, $now,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, $now, $now, 0, 0 );
+    $planet = array ( 'name' => loca("DEBRIS"), 'type' => PTYP_DF, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => $owner_id, 'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => $now,
+                      'm' => 0, 'k' => 0, 'd' => 0, 'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
     $id = AddDBRow ( $planet, 'planets' );
     return $id;
 }
@@ -379,11 +373,8 @@ function GetPlanetType ($planet)
 // Create a colonization phantom. Return ID.
 function CreateColonyPhantom ($g, $s, $p, $owner_id)
 {
-    $planet = array( null, loca("PLANET_PHANTOM"), PTYP_COLONY_PHANTOM, $g, $s, $p, $owner_id, 0, 0, 0, 0, time(),
-                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+    $planet = array( 'name' => loca("PLANET_PHANTOM"), 'type' => PTYP_COLONY_PHANTOM, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => $owner_id, 'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => time(),
+                     'm' => 0, 'k' => 0, 'd' => 0, 'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 'lastpeek' => 0, 'lastakt' => 0, 'gate_until' => 0, 'remove' => 0 );
     $id = AddDBRow ( $planet, 'planets' );
     return $id;
 }
@@ -394,11 +385,8 @@ function CreateAbandonedColony ($g, $s, $p, $when)
     // If there is no planet at the given coordinates, add Abandoned Colony.
     if ( !HasPlanet ( $g, $s, $p ) )
     {
-        $planet = array( null, loca("PLANET_ABANDONED"), PTYP_ABANDONED, $g, $s, $p, USER_SPACE, 0, 0, 0, 0, $when,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, $when, $when, 0, $when + 24*3600 );
+        $planet = array( 'name' => loca("PLANET_ABANDONED"), 'type' => PTYP_ABANDONED, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => USER_SPACE, 'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => $when,
+                         'm' => 0, 'k' => 0, 'd' => 0, 'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 'lastpeek' => $when, 'lastakt' => $when, 'gate_until' => 0, 'remove' => $when + 24*3600 );
         $id = AddDBRow ( $planet, 'planets' );
     }
     else $id = 0;
@@ -488,11 +476,8 @@ function CreateOuterSpace ($g, $s, $p)
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 ) 
     {
-        $planet = array( null, loca("FAR_SPACE"), PTYP_FARSPACE, $g, $s, $p, USER_SPACE, 0, 0, 0, 0, time(),
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+        $planet = array( 'name' => loca("FAR_SPACE"), 'type' => PTYP_FARSPACE, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => USER_SPACE, 'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => time(),
+                         'm' => 0, 'k' => 0, 'd' => 0, 'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 'lastpeek' => 0, 'lastakt' => 0, 'gate_until' => 0, 'remove' => 0 );
         $id = AddDBRow ( $planet, 'planets' );
     }
     else

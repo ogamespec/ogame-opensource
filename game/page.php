@@ -628,7 +628,7 @@ function InvalidSessionPage ()
     loca_add ("common", $GlobalUser['lang']);
     loca_add ("reg", $GlobalUser['lang']);
 
-    $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], loca("REG_SESSION_INVALID"), time() );
+    $error = array ( 'owner_id' => $GlobalUser['player_id'], 'ip' => $_SERVER['REMOTE_ADDR'], 'agent' => $_SERVER['HTTP_USER_AGENT'], 'url' => $_SERVER['REQUEST_URI'], 'text' => loca("REG_SESSION_INVALID"), 'date' => time() );
     $id = AddDBRow ( $error, 'errors' );
 
     echo "<html> <head>\n";

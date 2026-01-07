@@ -18,7 +18,7 @@ function Error ($text)
 
     $now = time ();
 
-    $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], $text, $now );
+    $error = array ( 'owner_id' => $GlobalUser['player_id'], 'ip' => $_SERVER['REMOTE_ADDR'], 'agent' => $_SERVER['HTTP_USER_AGENT'], 'url' => $_SERVER['REQUEST_URI'], 'text' => $text, 'date' => $now );
     $id = AddDBRow ( $error, 'errors' );
 
     Logout ( $_GET['session'] );    // End the session.
@@ -52,7 +52,7 @@ function Debug ($message)
 
     $now = time ();
 
-    $error = array ( null, $GlobalUser['player_id'], $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], $_SERVER['REQUEST_URI'], $message, $now );
+    $error = array ( 'owner_id' => $GlobalUser['player_id'], 'ip' => $_SERVER['REMOTE_ADDR'], 'agent' => $_SERVER['HTTP_USER_AGENT'], 'url' => $_SERVER['REQUEST_URI'], 'text' => $message, 'date' => $now );
     $id = AddDBRow ( $error, 'debug' );
 }
 
@@ -83,7 +83,7 @@ function BrowseHistory ()
     {
         $getdata = serialize ( $_GET );
         $postdata = serialize ( $_POST );
-        $log = array ( null, $GlobalUser['player_id'], $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'], $getdata, $postdata, time() );
+        $log = array ( 'owner_id' => $GlobalUser['player_id'], 'url' => $_SERVER['REQUEST_URI'], 'method' => $_SERVER['REQUEST_METHOD'], 'getdata' => $getdata, 'postdata' => $postdata, 'date' => time() );
         AddDBRow ( $log, 'browse' );
     }
 }
@@ -98,7 +98,7 @@ function SecurityCheck ( $match, $text, $notes )
 // Add the IP address to the table.
 function LogIPAddress ( $ip, $user_id, $reg=0)
 {
-    $log = array ( null, $ip, $user_id, $reg, time () );
+    $log = array ( 'ip' => $ip, 'user_id' => $user_id, 'reg' => $reg, 'date' => time () );
     AddDBRow ( $log, 'iplogs' );
 }
 
@@ -121,7 +121,7 @@ function UserLog ($owner_id, $type, $text, $when=0)
 {
     global $db_prefix;
     if ($when == 0) $when = time ();
-    $log = array ( null, $owner_id, $when, $type, $text );
+    $log = array ( 'owner_id' => $owner_id, 'date' => $when, 'type' => $type, 'text' => $text );
     AddDBRow ( $log, 'userlogs' );
     $ago = $when - 2 * 7 * 24 * 60 * 60;
     $query = "DELETE FROM ".$db_prefix."userlogs WHERE date < $ago;";

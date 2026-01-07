@@ -38,7 +38,7 @@ function AddNote ( $player_id, $subj, $text, $prio )
     if ($prio > 2) $prio = 2;
 
     // Write a note to the database.
-    $note = array( null, $player_id, $subj, $text, mb_strlen ($text, "UTF-8"), $prio, time() );
+    $note = array( 'owner_id' => $player_id, 'subj' => $subj, 'text' => $text, 'textsize' => mb_strlen ($text, "UTF-8"), 'prio' => $prio, 'date' => time() );
     AddDBRow ( $note, "notes" );
 }
 

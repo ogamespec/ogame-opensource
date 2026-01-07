@@ -11,8 +11,7 @@ $BotNow = 0;       // start time of bot task execution
 // Add a block to the queue
 function AddBotQueue ($player_id, $strat_id, $block_id, $when, $seconds)
 {
-    $queue = array ( '', $player_id, 'AI', $strat_id, $block_id, 0, $when, $when+$seconds, 1000 );
-    return AddDBRow ( $queue, 'queue' );
+    return AddQueue ($player_id, QTYP_AI, $strat_id, $block_id, 0, $when, $when+$seconds, QUEUE_PRIO_BOT);
 }
 
 // Block Interpreter
@@ -231,7 +230,7 @@ function GetVar ( $owner_id, $var, $def_value=null )
     }
     else
     {
-        $var = array ( '', $owner_id, $var, $def_value );
+        $var = array ( 'owner_id' => $owner_id, 'var' => $var, 'value' => $def_value );
         AddDBRow ( $var, 'botvars' );
         return $def_value;
     }
@@ -248,7 +247,7 @@ function SetVar ( $owner_id, $var, $value )
     }
     else
     {
-        $var = array ( '', $owner_id, $var, $value );
+        $var = array ( 'owner_id' => $owner_id, 'var' => $var, 'value' => $value );
         AddDBRow ( $var, 'botvars' );
     }
 }
