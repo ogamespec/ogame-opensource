@@ -93,6 +93,10 @@ class BogusMod implements GameMod
         // Let other mods add their menu items
         return false;
     }
+
+    public function lock_tables(&$tabs) {
+        return false;
+    }
 }
 
 ?>

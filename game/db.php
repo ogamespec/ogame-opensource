@@ -133,6 +133,7 @@ function LockTables ()
 {
     global $db_prefix;
     $tabs = array ('users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','reports','browse','queue','buildqueue','fleet','union','battledata','fleetlogs','iplogs','pranger','exptab','coltab','template','botvars','userlogs','botstrat');
+    ModsExecRef ('lock_tables', $tabs);
     $query = "LOCK TABLES ".$db_prefix."uni WRITE";
     foreach ( $tabs as $i=>$name ) 
     {

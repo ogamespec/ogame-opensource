@@ -13,6 +13,7 @@ interface GameMod {
     public function update_queue($queue);
     public function add_resources(&$json, $aktplanet);
     public function add_menuitems(&$json);
+    public function lock_tables(&$tabs);
 }
 
 function ModInitOne($modname)
