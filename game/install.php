@@ -125,6 +125,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $query .= "force_lang = '".(key_exists("force_lang", $_POST) && $_POST["force_lang"]==="on"?1:0)."', ";
     $query .= "max_werf = '".intval($_POST["max_werf"])."', ";
     $query .= "feedage = '".intval($_POST["feedage"])."', ";
+    $query .= "modlist = '', ";
     $query .= "hacks = '0'; ";
     //echo "<br>$query<br>";
     dbquery ($query);
