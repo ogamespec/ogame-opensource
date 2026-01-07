@@ -21,13 +21,13 @@ function dbconnect ($db_host, $db_user, $db_pass, $db_name)
     $query_log = "";
 }
 
-function dbquery ($query, $mute=FALSE)
+function dbquery ($query, $mute=false)
 {
     global  $query_counter, $query_log, $db_connect;
     $query_counter ++;
     $query_log .= $query . "<br>\n";
     $result = @mysqli_query($db_connect, $query);
-    if (!$result && $mute==FALSE) {
+    if (!$result && $mute==false) {
         echo "$query <br>";
         echo mysqli_error ($db_connect);
         Debug ( mysqli_error($db_connect) . "<br>" . $query . "<br>" . BackTrace () ) ;
@@ -71,7 +71,7 @@ function AddDBRow ( $row, $tabname )
             $values .= ", ";
             $columns .= ", ";
         }
-        $values .= "'".$value."'";
+        $values .= "'".mysqli_real_escape_string($db_connect, (string)$value)."'";
         $columns .= $col;
         $first = false;
     }
@@ -92,23 +92,23 @@ $MDB_link = 0;
 function MDBConnect ()
 {
     global $MDB_link, $mdb_host, $mdb_user, $mdb_pass, $mdb_name, $mdb_enable;
-    if (!$mdb_enable) return FALSE;
+    if (!$mdb_enable) return false;
     $MDB_link = @mysqli_connect ($mdb_host, $mdb_user, $mdb_pass );
-    if (!$MDB_link) return FALSE;
-    if ( ! @mysqli_select_db ($MDB_link, $mdb_name) ) return FALSE;
+    if (!$MDB_link) return false;
+    if ( ! @mysqli_select_db ($MDB_link, $mdb_name) ) return false;
 
     MDBQuery ("SET NAMES 'utf8';");
     MDBQuery ("SET CHARACTER SET 'utf8';");
     MDBQuery ("SET SESSION collation_connection = 'utf8_general_ci';");
 
-    return TRUE;
+    return true;
 }
 
 function MDBQuery ($query)
 {
     global $MDB_link;
     $result = @mysqli_query ($MDB_link, $query);
-    if (!$result) return NULL;
+    if (!$result) return null;
     else return $result;
 }
 
@@ -121,7 +121,7 @@ function MDBRows ($result)
 function MDBArray ($result)
 {
     $arr = @mysqli_fetch_assoc($result);
-    if (!$arr) return NULL;
+    if (!$arr) return null;
     else return $arr;
 }
 
