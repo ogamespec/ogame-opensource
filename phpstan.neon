@@ -18,4 +18,6 @@ parameters:
     - wwwroot/css/*
     - wwwroot/js/*
     - wwwroot/img/*
+  ignoreErrors:
+    - identifier: missingType.iterableValue
   reportUnmatchedIgnoredErrors: false

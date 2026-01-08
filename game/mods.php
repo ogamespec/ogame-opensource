@@ -98,7 +98,7 @@ function ModsExecRefArr(string $method, array &$args, array $arr) : bool
     return false;    
 }
 
-function ModsExecRefStr(string $method, array &$args, string $str)
+function ModsExecRefStr(string $method, array &$args, string $str) : bool
 {
     global $modlist;
     foreach ($modlist as $instance) {
