@@ -14,6 +14,7 @@ interface GameMod {
     public function add_resources(&$json, $aktplanet);
     public function add_menuitems(&$json);
     public function lock_tables(&$tabs);
+    public function install_tabs_included (&$tabs);
 }
 
 function ModInitOne($modname)

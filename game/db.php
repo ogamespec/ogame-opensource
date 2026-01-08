@@ -194,6 +194,7 @@ function SerializeTable ($name)
 function SerializeDB ()
 {
     include "install_tabs.php";
+    ModsExecRef ('install_tabs_included', $tabs);
 
     $db_tabs = array();
 

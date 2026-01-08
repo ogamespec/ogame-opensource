@@ -97,6 +97,11 @@ class BogusMod implements GameMod
     public function lock_tables(&$tabs) {
         return false;
     }
+
+    public function install_tabs_included (&$tabs) {
+        $tabs['users']['tritium'] = 'INT DEFAULT 0';
+        return false;
+    }
 }
 
 ?>
