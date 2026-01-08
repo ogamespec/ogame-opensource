@@ -9,5 +9,13 @@ parameters:
     - download/*
     - imgstore/*
     - Wiki/*
+    - game/css/*
+    - game/js/*
+    - game/img/*
+    - game/loca/*
+    - game/temp/*
+    - wwwroot/evolution/*
+    - wwwroot/css/*
+    - wwwroot/js/*
+    - wwwroot/img/*
   reportUnmatchedIgnoredErrors: false
-  checkMissingIterableValueType: false
