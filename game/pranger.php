@@ -34,5 +34,7 @@ require_once "battle.php";
 require_once "debug.php";
 require_once "mods.php";
 
+ModsInit();
+
 include "pages/pranger.php";
 ?>
