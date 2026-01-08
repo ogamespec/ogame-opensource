@@ -16,19 +16,19 @@ FIELDS = FLOOR ( (DIAM / 1000) ^ 2 )
 planet_id: Ordinal number (INT AUTO_INCREMENT PRIMARY KEY)
 name: Planet name CHAR(20)
 type: planet type (see PTYP definition)
-g,s,p: coordinates where the planet is located
-owner_id: Owner user ordinal number
-R diameter: The diameter of the planet
-R temp: Minimum temperature
-fields: Number of developed fields
-R maxfields: Maximum number of fields
-date: Creation date
-bXX: Building level of each type
-dXX: Number of defenses of each type
-fXX: Number of fleet of each type
-m, k, d: Metal, crystal, deuterium
-mprod, kprod, dprod: Percentage of mine production of metal, crystal, deuterium ( 0...1 FLOAT)
-sprod, fprod, ssprod: Percentage of output of solar power plant, fusion and solar satellites ( 0...1 FLOAT)
+g,s,p: coordinates where the planet is located (INT)
+owner_id: Owner user ordinal number (INT)
+R diameter: The diameter of the planet (INT)
+R temp: Minimum temperature (INT)
+fields: Number of developed fields (INT)
+R maxfields: Maximum number of fields (INT)
+date: Creation date (INT UNSIGNED time)
+bXX: Building level of each type (INT DEFAULT 0)
+dXX: Number of defenses of each type (INT DEFAULT 0)
+fXX: Number of fleet of each type (INT DEFAULT 0)
+m, k, d: Metal, crystal, deuterium (DOUBLE)
+mprod, kprod, dprod: Percentage of mine production of metal, crystal, deuterium ( 0...1 DOUBLE)
+sprod, fprod, ssprod: Percentage of output of solar power plant, fusion and solar satellites ( 0...1 DOUBLE)
 lastpeek: Time of last planet state update (INT UNSIGNED time)
 lastakt: Last activity time (INT UNSIGNED time)
 gate_until: JumpGate cooling time (INT UNSIGNED time)
