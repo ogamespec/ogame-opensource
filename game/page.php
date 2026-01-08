@@ -7,6 +7,10 @@ $pagetime = 0;
 // Get a small picture of the planet.
 function GetPlanetSmallImage ($skinpath, $planet)
 {
+    $img = array();
+    if (ModsExecRefArr('get_planet_small_image', $planet, $img)) {
+        return $img['path'];
+    }
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return $skinpath."planeten/small/s_mond.jpg";
     else if ($planet['type'] == PTYP_DF) return $skinpath."planeten/debris.jpg";    
     else if ($planet['type'] < PTYP_DF )
@@ -26,6 +30,10 @@ function GetPlanetSmallImage ($skinpath, $planet)
 // Get a big picture of the planet.
 function GetPlanetImage ($skinpath, $planet)
 {
+    $img = array();
+    if (ModsExecRefArr('get_planet_image', $planet, $img)) {
+        return $img['path'];
+    }
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return $skinpath."planeten/mond.jpg";
     else if ($planet['type'] == PTYP_DF) return $skinpath."planeten/debris.jpg";
     else if ($planet['type'] < PTYP_DF )
@@ -658,10 +666,12 @@ function BeginContent ()
     echo "<!-- CONTENT AREA -->\n";
     echo "<div id='content'>\n";
     echo "<center>\n";
+    ModsExec ('begin_content');
 }
 
 function EndContent ()
 {
+    ModsExec ('end_content');
     echo "</center>\n";
     echo "</div>\n";
     echo "<!-- END CONTENT AREA -->\n\n";

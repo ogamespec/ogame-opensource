@@ -14,7 +14,11 @@ interface GameMod {
     public function add_resources(&$json, $aktplanet);
     public function add_menuitems(&$json);
     public function lock_tables(&$tabs);
-    public function install_tabs_included (&$tabs);
+    public function install_tabs_included(&$tabs);
+    public function get_planet_small_image(&$planet, $img);
+    public function get_planet_image(&$planet, $img);
+    public function begin_content();
+    public function end_content();
 }
 
 function ModInitOne($modname)

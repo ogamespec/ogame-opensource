@@ -102,6 +102,22 @@ class BogusMod implements GameMod
         $tabs['users']['tritium'] = 'INT DEFAULT 0';
         return false;
     }
+
+    public function get_planet_small_image(&$planet, $img) {
+        return false;
+    }
+
+    public function get_planet_image(&$planet, $img) {
+        return false;
+    }
+
+    public function begin_content() {
+        return false;
+    }
+
+    public function end_content() {
+        return false;
+    }
 }
 
 ?>
