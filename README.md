@@ -8,6 +8,8 @@ Need help with installation? You have the following options:
 - There is also another deployment option with Docker from Noli: https://gitlab.com/nolialsea/ogame-opensource-docker
 - Ask the community for help. Discord: https://discord.gg/xpCV3McAj2
 
+:warning: Fellow developers! Don't be confused if you see a lot of crap in the root of the repository. You probably don't need all of this; it's just spare parts for Docker, PHPStan, and PHPUnit. The main source files are in the `game` folder.
+
 **!!! All trademarks and copyrighted materials are belongs to OGame respective owners - Gameforge 4D GmbH !!!**
 
 _Thank you for the great game, but redesign is not we like_
