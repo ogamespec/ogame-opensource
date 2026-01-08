@@ -1,0 +1,13 @@
+parameters:
+  level: 8
+  paths:
+    - feed
+    - game
+    - wwwroot
+  excludePaths:
+    - BattleEngine/*
+    - download/*
+    - imgstore/*
+    - Wiki/*
+  reportUnmatchedIgnoredErrors: false
+  checkMissingIterableValueType: false
