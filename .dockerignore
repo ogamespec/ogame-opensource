@@ -37,3 +37,5 @@ ReadmeRus.md
 Wiki
 imgstore
 .gitattributes
+testing
+.phpunit.result.cache
