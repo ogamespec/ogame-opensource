@@ -162,7 +162,7 @@ echo "</th>\n";
 // List of planets.
 echo "<th class='s'>\n";
 echo "<table border='0' align='top' class='s'>\n";
-$result = EnumPlanets ( $GlobalUser['player_id']);
+$result = EnumPlanets ();
 $num = dbrows ($result);
 for ($i=0; $i<$num; $i++)
 {

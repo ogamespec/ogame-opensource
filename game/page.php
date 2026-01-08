@@ -139,7 +139,7 @@ function PlanetsDropList ($page)
     global $GlobalUser;
     $sess = $GlobalUser['session'];
     $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-    $result = EnumPlanets ( $GlobalUser['player_id'] );
+    $result = EnumPlanets ();
 
     echo "<td class='header' style='width:5;' >\n";
     echo "<table class='header'>\n";

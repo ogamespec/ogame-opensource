@@ -139,7 +139,7 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     return $id;
 }
 
-// List all planets of the user. Return the result of the SQL query.
+// List all planets of the current user. Return the result of the SQL query.
 function EnumPlanets ()
 {
     global $db_prefix, $GlobalUser;
