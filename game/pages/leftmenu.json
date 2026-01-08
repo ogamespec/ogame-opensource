@@ -20,7 +20,7 @@
     "imperium": {
         "type": "internal",
         "page": "imperium",
-        "param": "planettype=1&no_header=1",
+        "param": "&planettype=1&no_header=1",
         "accesskey": "HK_EMPIRE",
         "loca": "MENU_EMPIRE"
     },

@@ -176,8 +176,7 @@ else if ( $_GET['page'] === "micropayment" ) { include "pages/micropayment.php";
 else if ( $_GET['page'] === "payment" ) { include "pages/payment.php"; exit (); }
 else if ( $_GET['page'] === "trader" ) { include "pages/trader.php"; exit (); }
 
-$res = ModsExec('route');
-if ($res) {
+if (ModsExec('route')) {
     exit();
 }
 

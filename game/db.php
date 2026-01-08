@@ -62,6 +62,7 @@ function dbfree ($result) {
 function AddDBRow ( $row, $tabname )
 {
     global $db_connect, $db_prefix;
+    ModsExecRefStr ( 'add_db_row', $row, $tabname );
     $values = "(";
     $columns = "(";
     $first = true;

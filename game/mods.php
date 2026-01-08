@@ -6,22 +6,23 @@
 $modlist = [];
 
 interface GameMod {
-    public function install();
-    public function uninstall();
-    public function init();
-    public function route();
-    public function update_queue($queue);
-    public function add_resources(&$json, $aktplanet);
-    public function add_menuitems(&$json);
-    public function lock_tables(&$tabs);
-    public function install_tabs_included(&$tabs);
-    public function get_planet_small_image(&$planet, $img);
-    public function get_planet_image(&$planet, $img);
-    public function begin_content();
-    public function end_content();
+    public function install() : void;
+    public function uninstall() : void;
+    public function init() : void;
+    public function route() : bool;
+    public function update_queue(array &$queue) : bool;
+    public function add_resources(array &$json, array $aktplanet) : bool;
+    public function add_menuitems(array &$json) : bool;
+    public function lock_tables(array &$tabs) : bool;
+    public function install_tabs_included(array &$tabs) : bool;
+    public function get_planet_small_image(array &$planet, array $img) : bool;
+    public function get_planet_image(array &$planet, array $img) : bool;
+    public function begin_content() : bool;
+    public function end_content() : bool;
+    public function add_db_row(array &$row, string $tabname) : bool;
 }
 
-function ModInitOne($modname)
+function ModInitOne(string $modname) : void
 {
     global $modlist;
     $modPath = "mods/{$modname}/";
@@ -44,7 +45,7 @@ function ModInitOne($modname)
     }
 }
 
-function ModsInit()
+function ModsInit() : void
 {
     global $GlobalUni;
     if (key_exists('modlist', $GlobalUni)) {
@@ -55,17 +56,12 @@ function ModsInit()
     }
 }
 
-function ModsExec($method, $args = null)
+function ModsExec(string $method) : bool
 {
     global $modlist;
     foreach ($modlist as $instance) {
         if(method_exists($instance, $method)) {
-            if ($args !== null) {
-                $res = $instance->$method(...(array)$args);
-            }
-            else {
-                $res = $instance->$method();
-            }
+            $res = $instance->$method();
             if ($res) {
                 return true;
             }
@@ -74,7 +70,7 @@ function ModsExec($method, $args = null)
     return false;    
 }
 
-function ModsExecRef($method, &$args)
+function ModsExecRef(string $method, array &$args) : bool
 {
     global $modlist;
     foreach ($modlist as $instance) {
@@ -88,7 +84,7 @@ function ModsExecRef($method, &$args)
     return false;    
 }
 
-function ModsExecRefArr($method, &$args, $arr)
+function ModsExecRefArr(string $method, array &$args, array $arr) : bool
 {
     global $modlist;
     foreach ($modlist as $instance) {
@@ -102,7 +98,21 @@ function ModsExecRefArr($method, &$args, $arr)
     return false;    
 }
 
-function ModsList()
+function ModsExecRefStr(string $method, array &$args, string $str)
+{
+    global $modlist;
+    foreach ($modlist as $instance) {
+        if(method_exists($instance, $method)) {
+            $res = $instance->$method($args, $str);
+            if ($res) {
+                return true;
+            }
+        }
+    }
+    return false;    
+}
+
+function ModsList() : array
 {
     global $GlobalUni;
     $res = array ();
@@ -130,7 +140,7 @@ function ModsList()
  * @param string $modspath Path to the mods folder
  * @return array|null An array with mod information or null if the mod is not found.
  */
-function ModsGetInfo ($modname, $modspath = 'mods/')
+function ModsGetInfo (string $modname, string $modspath = 'mods/') : array
 {
     $modPath = $modspath . $modname;
     
@@ -172,7 +182,7 @@ function ModsGetInfo ($modname, $modspath = 'mods/')
     return $modInfo;
 }
 
-function ModInstallOne($modname)
+function ModInstallOne(string $modname) : void
 {
     $modPath = "mods/{$modname}/";
     $mainFile = $modPath . "main.php";
@@ -189,7 +199,7 @@ function ModInstallOne($modname)
     }
 }
 
-function ModsInstall ($modname)
+function ModsInstall (string $modname) : void
 {
     global $GlobalUni;
     global $db_prefix;
@@ -207,7 +217,7 @@ function ModsInstall ($modname)
     }
 }
 
-function ModsRemove ($modname)
+function ModsRemove (string $modname) : void
 {
     global $GlobalUni;
     global $db_prefix;
@@ -230,7 +240,7 @@ function ModsRemove ($modname)
     }
 }
 
-function ModsMoveUp ($modname)
+function ModsMoveUp (string $modname) : void
 {
     global $GlobalUni;
     global $db_prefix;
@@ -251,7 +261,7 @@ function ModsMoveUp ($modname)
     }
 }
 
-function ModsMoveDown ($modname)
+function ModsMoveDown (string $modname) : void
 {
     global $GlobalUni;
     global $db_prefix;

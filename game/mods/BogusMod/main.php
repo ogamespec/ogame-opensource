@@ -6,7 +6,7 @@ const BOGUS_MOD_TRITIUM_CREDIT_PERIOD_SECONDS = 60*60;
 
 class BogusMod implements GameMod
 {
-    public function install() {
+    public function install() : void {
         global $db_prefix;
 
         // Add a column for storing Tritium reserves
@@ -23,7 +23,7 @@ class BogusMod implements GameMod
         Debug ("BogusMod install success.");
     }
 
-    public function uninstall() {
+    public function uninstall() : void {
         global $db_prefix;
 
         // Remove Tritium сolumn from users table
@@ -37,12 +37,12 @@ class BogusMod implements GameMod
         Debug ("BogusMod uninstall success.");
     }
 
-    public function init() {
+    public function init() : void {
         global $GlobalUni;
         loca_add ("bogusmod", $GlobalUni['lang'], __DIR__);
     }
 
-    public function route() {
+    public function route() : bool {
         if ( $_GET['page'] === "tipoftheday" ) {
             include __DIR__ . "/pages/tipoftheday.php";
             return true;
@@ -50,7 +50,7 @@ class BogusMod implements GameMod
         return false;
     }
 
-    public function update_queue($queue) {
+    public function update_queue(array &$queue) : bool {
         global $db_prefix;
         if ($queue['type'] === QTYP_ADD_TRITIUM) {
 
@@ -66,7 +66,7 @@ class BogusMod implements GameMod
         }
     }
 
-    public function add_resources(&$json, $aktplanet) {
+    public function add_resources(array &$json, array $aktplanet) : bool {
 
         global $GlobalUser;
 
@@ -82,7 +82,7 @@ class BogusMod implements GameMod
         return false;
     }
 
-    public function add_menuitems(&$json) {
+    public function add_menuitems(array &$json) : bool {
 
         array_insert_after_key ($json, "options", "tipoftheday", 
             array (
@@ -94,28 +94,32 @@ class BogusMod implements GameMod
         return false;
     }
 
-    public function lock_tables(&$tabs) {
+    public function lock_tables(array &$tabs) : bool {
         return false;
     }
 
-    public function install_tabs_included (&$tabs) {
+    public function install_tabs_included (array &$tabs) : bool {
         $tabs['users']['tritium'] = 'INT DEFAULT 0';
         return false;
     }
 
-    public function get_planet_small_image(&$planet, $img) {
+    public function get_planet_small_image(array &$planet, array $img) : bool {
         return false;
     }
 
-    public function get_planet_image(&$planet, $img) {
+    public function get_planet_image(array &$planet, array $img) : bool {
         return false;
     }
 
-    public function begin_content() {
+    public function begin_content() : bool {
         return false;
     }
 
-    public function end_content() {
+    public function end_content() : bool {
+        return false;
+    }
+
+    public function add_db_row(array &$row, string $tabname) : bool {
         return false;
     }
 }

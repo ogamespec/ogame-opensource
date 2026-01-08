@@ -268,16 +268,8 @@ function AddRank ($ally_id, $name)
     global $db_prefix;
     if ($ally_id <= 0) return 0;
     $ally = LoadAlly ($ally_id);
-    $rank = array ( $ally['nextrank'], $ally_id, $name, 0 );
-    $opt = " (";
-    foreach ($rank as $i=>$entry)
-    {
-        if ($i != 0) $opt .= ", ";
-        $opt .= "'".$rank[$i]."'";
-    }
-    $opt .= ")";
-    $query = "INSERT INTO ".$db_prefix."allyranks VALUES".$opt;
-    dbquery ($query);
+    $rank = array ( 'rank_id' => $ally['nextrank'], 'ally_id' => $ally_id, 'name' => $name, 'rights' => 0 );
+    AddDBRow ($rank, "allyranks");
     $query = "UPDATE ".$db_prefix."ally SET nextrank = nextrank + 1 WHERE ally_id = $ally_id";
     dbquery ($query);
     return $ally['nextrank'];
