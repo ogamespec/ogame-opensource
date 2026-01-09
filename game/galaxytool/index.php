@@ -1,30 +1,24 @@
 <?php
 
-require_once "../loca.php";
-require_once "../utils.php";
+// Check if the configuration file is missing - redirect to the game installation page.
+if ( !file_exists ("../config.php"))
+{
+    echo "<html><head><meta http-equiv='refresh' content='0;url=../install.php' /></head><body></body></html>";
+    exit ();
+}
+else {
+    require_once "../config.php";
+}
+
+require_once "../core/core.php";
+
+$GlobalUni = array ();
+
+ModsInit();
 
 $loca_lang = $_COOKIE['ogamelang'];
 if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
-loca_add ( "galaxytool", $loca_lang );
-
-// Get a small picture of the planet.
-function GetPlanetSmallImage ($skinpath, $planet)
-{
-    if ( $planet['type'] == 0 || $planet['type'] == 10003 ) return $skinpath."planeten/small/s_mond.jpg";
-    else if ($planet['type'] == 10000) return $skinpath."planeten/debris.jpg";
-    else if ($planet['type'] < 10000 )
-    {
-        $p = $planet['p'];
-        $id = $planet['planet_id'] % 7 + 1;
-        if ($p <= 3) return sprintf ( "%splaneten/small/s_trockenplanet%02d.jpg", $skinpath, $id);
-        else if ($p >= 4 && $p <= 6) return sprintf ( "%splaneten/small/s_dschjungelplanet%02d.jpg", $skinpath, $id);
-        else if ($p >= 7 && $p <= 9) return sprintf ( "%splaneten/small/s_normaltempplanet%02d.jpg", $skinpath, $id);
-        else if ($p >= 10 && $p <= 12) return sprintf ( "%splaneten/small/s_wasserplanet%02d.jpg", $skinpath, $id);
-        else if ($p >= 13 && $p <= 15) return sprintf ( "%splaneten/small/s_eisplanet%02d.jpg", $skinpath, $id);
-        else return sprintf ( "%splaneten/small/s_eisplanet%02d.jpg", $skinpath, $id);
-    }
-    else return "img/admin_planets.png";        // Special objects of the galaxy (destroyed planets, etc.)
-}
+loca_add ( "galaxytool", $loca_lang, "../" );
 
 ?>
 <html>

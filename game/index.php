@@ -13,6 +13,9 @@ if ( !file_exists ("config.php"))
     ob_end_flush ();
     exit ();
 }
+else {
+    require_once "config.php";
+}
 
 header('Pragma:no-cache');
 

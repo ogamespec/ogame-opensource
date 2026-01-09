@@ -6,41 +6,16 @@ if ( !file_exists ("../config.php"))
     echo "<html><head><meta http-equiv='refresh' content='0;url=../install.php' /></head><body></body></html>";
     exit ();
 }
+else {
+    require_once "../config.php";
+}
 
-require_once "../config.php";
-require_once "../db.php";
-require_once "../utils.php";
-
-require_once "../id.php";
-require_once "../bbcode.php";
-require_once "../msg.php";
-require_once "../prod.php";
-require_once "../planet.php";
-require_once "../bot.php";
-require_once "../user.php";
-require_once "../queue.php";
-require_once "../uni.php";
-require_once "../debug.php";
-require_once "../loca.php";
+require_once "../core/core.php";
 
 if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
 else $loca_lang = $_COOKIE['ogamelang'];
 
 loca_add ( "reg", $loca_lang );
-
-function gen_trivial_password ()
-{
-    $pass = "";
-    $syllables = "er,in,tia,wol,fe,pre,vet,jo,nes,al,len,son,cha,ir,ler,bo,ok,tio,nar,sim,ple,bla,ten,toe,cho,co,lat,spe,ak,er,po,co,lor,pen,cil,li,ght,wh,at,the,he,ck,is,mam,bo,no,fi,ve,any,way,pol,iti,cs,ra,dio,sou,rce,sea,rch,pa,per,com,bo,sp,eak,st,fi,rst,gr,oup,boy,ea,gle,tr,ail,bi,ble,brb,pri,dee,kay,en,be,se";
-
-    $syllable_array = explode (",", $syllables);
-    srand ((double)microtime()*1000000);
-    for ($count=1; $count<=4; $count++) {
-        if (rand()%10 == 1) $pass .= sprintf ("%0.0f", (rand()%50)+1);
-        else $pass .= sprintf ("%s", $syllable_array[rand()%62]);
-    }
-    return $pass;
-}
 
 function isValidEmail($email){
 	return filter_var($email, FILTER_VALIDATE_EMAIL);

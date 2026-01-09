@@ -6,10 +6,11 @@ if ( !file_exists ("../config.php"))
     echo "<html><head><meta http-equiv='refresh' content='0;url=../install.php' /></head><body></body></html>";
     exit ();
 }
+else {
+    require_once "../config.php";
+}
 
-require_once "../config.php";
-require_once "../utils.php";
-require_once "../loca.php";
+require_once "../core/core.php";
 
 if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
 else $loca_lang = $_COOKIE['ogamelang'];

@@ -25,8 +25,6 @@ function uniurl () {
     return substr ( $host, 0, $pos );
 }
 
-ob_start ();
-
 // Check the settings of the universe.
 function CheckParameters ()
 {
@@ -39,16 +37,7 @@ function CheckParameters ()
 if (file_exists ("config.php"))
 {
     echo "<html><head><meta http-equiv='refresh' content='0;url=index.php' /></head><body></body></html>";
-    ob_end_flush ();
     exit ();
-}
-
-function gen_trivial_password ($len = 8)
-{
-    $r = '';
-    for($i=0; $i<$len; $i++)
-        $r .= chr(rand(0, 25) + ord('a'));
-    return $r;
 }
 
 // Database tables
