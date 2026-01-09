@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Overview.
 
 // TODO: Carefully check the generated HTML code for authenticity with the original (especially the recently discovered issue with "free" #76).

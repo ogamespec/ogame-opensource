@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Ordering officers.
 
 // In the original, the Commander appeared first, then the other Officers. But for the sake of simplicity, we consider the Commander to be an officer as well.

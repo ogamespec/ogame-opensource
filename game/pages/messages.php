@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Messages.
 
 // About the check marks against the folders.

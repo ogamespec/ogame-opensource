@@ -6,7 +6,7 @@
 
 // Each alliance has 2 predetermined ranks that you cannot do anything with: Founder (all rights) and Newbie (no rights)
 
-function PageAlly_Ranks ()
+function PageAlly_Ranks () : void
 {
     global $GlobalUser;
     global $session;

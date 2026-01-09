@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Admin Panel.
 // The main panel is a typical admin panel with categories.
 
@@ -33,7 +35,7 @@ if ( key_exists ('mode', $_GET) ) $mode = $_GET['mode'];
 else $mode = "Home";
 
 // Admin panel for a quick navigation.
-function AdminPanel ()
+function AdminPanel () : void
 {
     global $session;
 ?>
@@ -123,7 +125,7 @@ onmouseover="return overlib('<center><font size=1 color=white><b><?php echo loca
 // ========================================================================================
 // Home Page.
 
-function Admin_Home ()
+function Admin_Home () : void
 {
     global $session;
 ?>

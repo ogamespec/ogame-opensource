@@ -1,4 +1,8 @@
+
 <?php
+
+/** @var array $GlobalUser */
+/** @var array $GlobalUni */
 
 // Fast dispatch of fleets from the Galaxy via AJAX.
 

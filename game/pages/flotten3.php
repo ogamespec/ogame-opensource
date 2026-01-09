@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Fleet 3: mission list output, resource loading.
 
 loca_add ( "menu", $GlobalUser['lang'] );

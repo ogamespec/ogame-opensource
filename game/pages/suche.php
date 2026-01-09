@@ -1,5 +1,8 @@
 <?php
 
+/** @var array $GlobalUser */
+/** @var string $db_prefix */
+
 // Built in game search.
 
 loca_add ( "menu", $GlobalUser['lang'] );

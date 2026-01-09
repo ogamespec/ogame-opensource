@@ -159,6 +159,9 @@ function ModsGetInfo (string $modname, string $modspath = 'mods/') : array
     
     // Reading the contents of the file
     $manifestContent = file_get_contents($manifestPath);
+    if (!$manifestContent) {
+        return null;
+    }
     
     // Parsing JSON
     $manifestData = json_decode($manifestContent, true);

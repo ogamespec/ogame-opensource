@@ -1,5 +1,8 @@
 <?php
 
+/** @var array $GlobalUser */
+/** @var string $db_prefix */
+
 // Merchant.
 
 $trader_dm = 2500;

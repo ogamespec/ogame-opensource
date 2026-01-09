@@ -1,5 +1,8 @@
 <?php
 
+/** @var array $GlobalUser */
+/** @var string $db_prefix */
+
 // Statistics
 
 // The stats in the original were made simple and nice: 3 times per day player and alliance scores were saved and the difference (+/-) was shown relative to the old scores.

@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Version History.
 $changelog = array ( 
     "0.312apl2", "0.312apl3", "0.312apl4", "0.312apl5", "0.312apl6", "0.312apl7", "0.312apl8", "0.312apl9", "0.312apl10", 

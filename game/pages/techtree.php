@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Technologies.
 
 loca_add ( "menu", $GlobalUser['lang'] );

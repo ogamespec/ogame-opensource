@@ -7,12 +7,14 @@ if ( !file_exists ("config.php"))
     ob_end_flush ();
     exit ();
 }
+else {
+    require_once "config.php";
+}
 
 header('Pragma:no-cache');
 
 $GlobalUser = array ();
 
-require_once "config.php";
 require_once "db.php";
 require_once "utils.php";
 

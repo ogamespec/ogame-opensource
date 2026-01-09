@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Applying for an alliance.
 
 $maxchars = 6000;

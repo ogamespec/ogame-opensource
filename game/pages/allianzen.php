@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // My Alliance Menu
 
 // ⚠️Important! This game feature involves a rich interaction with input from the user.

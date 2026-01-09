@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Empire.
 
 loca_add ( "menu", $GlobalUser['lang'] );

@@ -51,7 +51,7 @@ $loca_lang = $DefaultLanguage;        // Language used. Can be changed at any ti
 $LOCA = array ();        // all the keys are in here.
 
 // This method can be used to bulk replace the original project name (OGame) with your project name (e.g. SpaceWars).
-function loca_subst_ogame ($text)
+function loca_subst_ogame (string $text) : string
 {
     //return str_replace ("OGame", "SpaceWars", $text);
     return $text;
@@ -59,7 +59,7 @@ function loca_subst_ogame ($text)
 
 // Return the value of the key. The latest version is returned.
 // If there is no connection to the LOCA or no such key exists, return the key name.
-function loca ($key)
+function loca (string $key) : string
 {
     global $LOCA, $loca_lang;
     if ( !isset ( $LOCA[$loca_lang][$key] ) ) return $key;
@@ -68,7 +68,7 @@ function loca ($key)
 
 // Similar to regular loca(), but the language is selected from a method parameter rather than a global variable.
 // It is used when it is necessary to work simultaneously with several languages (e.g. battle reports for players with different languages).
-function loca_lang ($key, $lang)
+function loca_lang (string $key, string $lang) : string
 {
     global $LOCA;
     if ( !isset ( $LOCA[$lang][$key] ) ) return $key;
@@ -76,7 +76,7 @@ function loca_lang ($key, $lang)
 }
 
 // Add a set of language keys.
-function loca_add ( $section, $lang='en', $dir='' )
+function loca_add ( string $section, string $lang='en', string $dir='' ) : void
 {
     global $LOCA, $Languages;
 

@@ -1,5 +1,8 @@
 <?php
 
+/** @var array $GlobalUser */
+/** @var array $GlobalUni */
+
 $PhalanxCost = 5000;    // Amount of deuterium per phalanx scan
 
 loca_add ( "menu", $GlobalUser['lang'] );

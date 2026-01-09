@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Logout
 
 loca_add ( "reg", $GlobalUser['lang'] );

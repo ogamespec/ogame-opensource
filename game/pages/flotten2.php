@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Fleet 2: Prepare target coordinates
 
 loca_add ( "menu", $GlobalUser['lang'] );

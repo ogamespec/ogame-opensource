@@ -1,5 +1,8 @@
 <?php
 
+/** @var array $GlobalUser */
+/** @var array $GlobalUni */
+
 // Payment.
 
 loca_add ( "menu", $GlobalUser['lang'] );

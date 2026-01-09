@@ -1,5 +1,8 @@
 <?php
 
+/** @var array $GlobalUser */
+/** @var string $db_prefix */
+
 // Settings.
 
 // Es wurden bereits 2 E-Mails an Dich geschickt. Heute ist kein weiterer E-Mail-Versand möglich, bitte versuch es morgen nochmal.

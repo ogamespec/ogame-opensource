@@ -1,12 +1,16 @@
 <?php
 
+/** @var string $db_prefix */
+
 // Check if the configuration file is missing - exit
 if ( !file_exists ("../game/config.php"))
 {
 	exit ("Game not installed");
 }
+else {
+	require_once "../game/config.php";
+}
 
-require_once "../game/config.php";
 require_once "../game/db.php";
 require_once "../game/utils.php";
 require_once "../game/uni.php";

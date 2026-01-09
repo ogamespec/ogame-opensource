@@ -1,5 +1,8 @@
 <?php
 
+/** @var array $GlobalUser */
+/** @var array $GlobalUni */
+
 $GalaxyMessage = "";
 $GalaxyError = "";
 

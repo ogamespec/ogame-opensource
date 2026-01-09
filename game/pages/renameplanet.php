@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Planet Menu.
 
 // Sneakily hidden in the Overview - you have to click on the name of the planet.

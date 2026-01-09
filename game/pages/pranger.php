@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Pillar of Shame.
 
 $limit = 50;    // Entries per page.

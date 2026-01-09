@@ -1,5 +1,8 @@
 <?php
 
+/** @var array $GlobalUser */
+/** @var array $GlobalUni */
+
 // Information on buildings, fleets, defense and research.
 // Some pages (particularly buildings) contain additional information or controls.
 

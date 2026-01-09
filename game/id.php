@@ -65,34 +65,34 @@ const GID_D_LDOME = 408;    // Large Shield Dome
 const GID_D_ABM = 502;      // Anti-Ballistic Missiles
 const GID_D_IPM = 503;      // Interplanetary Missiles
 
-function IsBuilding ($gid)
+function IsBuilding (int $gid) : bool
 {
     return $gid >= GID_B_METAL_MINE && $gid <= GID_B_MISS_SILO;
 }
 
-function IsResearch ($gid)
+function IsResearch (int $gid) : bool
 {
     return $gid >= GID_R_ESPIONAGE && $gid <= GID_R_GRAVITON;
 }
 
-function IsFleet ($gid)
+function IsFleet (int $gid) : bool
 {
     return $gid >= GID_F_SC && $gid <= GID_F_BATTLECRUISER;
 }
 
-function IsDefense ($gid)
+function IsDefense (int $gid) : bool
 {
     return $gid >= GID_D_RL && $gid <= GID_D_IPM;
 }
 
 // Defense, but no missiles
-function IsDefenseNoRak ($gid)
+function IsDefenseNoRak (int $gid) : bool
 {
     return $gid >= GID_D_RL && $gid <= GID_D_LDOME;
 }
 
 // Shooting defenses
-function IsDefenseShoot ($gid)
+function IsDefenseShoot (int $gid) : bool
 {
     return $gid >= GID_D_RL && $gid <= GID_D_PLASMA;
 }

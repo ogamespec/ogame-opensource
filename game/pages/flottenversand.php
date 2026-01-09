@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Sending fleet with all parameters checked.
 // If the fleet was sent successfully - output brief information, otherwise output an error.
 // After 3 seconds, a redirect is made to the first page of fleet dispatch.

@@ -1,5 +1,8 @@
 <?php
 
+/** @var array $GlobalUser */
+/** @var array $GlobalUni */
+
 // Shipyard, Defense, and Research.
 
 loca_add ( "menu", $GlobalUser['lang'] );

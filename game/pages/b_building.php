@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Building structures.
 
 $BuildError = "";

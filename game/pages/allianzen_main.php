@@ -2,7 +2,7 @@
 
 // Home Page.
 
-function AllyPage_Home ()
+function AllyPage_Home () : void
 {
     global $GlobalUser;
     global $session;

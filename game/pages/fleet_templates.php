@@ -1,5 +1,8 @@
 <?php
 
+/** @var array $GlobalUser */
+/** @var string $db_prefix */
+
 // Fleet templates.
 
 // You are able to create standard fleets. The maximum of standard fleets is your research level "Computer Technology" plus one

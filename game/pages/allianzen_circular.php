@@ -2,7 +2,7 @@
 
 // Circular Message.
 
-function AllyPage_CircularMessage ()
+function AllyPage_CircularMessage () : void
 {
     global $db_prefix;
     global $GlobalUser;

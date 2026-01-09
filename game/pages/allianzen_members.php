@@ -2,7 +2,7 @@
 
 // User list and user management.
 
-function PageAlly_MemberList ()
+function PageAlly_MemberList () : void
 {
     global $session;
     global $ally;
@@ -71,7 +71,7 @@ function PageAlly_MemberList ()
 <?php
 }
 
-function PageAlly_MemberSettings ()
+function PageAlly_MemberSettings () : void
 {
     global $db_prefix;
     global $session;

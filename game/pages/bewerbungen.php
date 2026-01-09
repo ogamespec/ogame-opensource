@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // List of applications to join the alliance.
 
 $maxchars = 2000;

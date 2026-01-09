@@ -1,5 +1,9 @@
 <?php
 
+/** @var array $GlobalUser */
+/** @var array $fleetmap */
+/** @var string $db_prefix */
+
 // Fleet 1: prepares the composition of the fleet
 
 // Parameter passing between Fleet 1,2,3 pages is done via hidden POST parameters.
@@ -21,7 +25,7 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
-function FleetMissionText ($num)
+function FleetMissionText (int $num) : void
 {
     if ($num >= FTYP_ORBITING)
     {

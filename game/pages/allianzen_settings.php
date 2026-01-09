@@ -2,13 +2,13 @@
 
 // Alliance Management.
 
-function as_sel ($option, $value)
+function as_sel (int $option, int $value) : string
 {
     if ( $option == $value) return "selected";
     else return "";
 }
 
-function PageAlly_Settings ()
+function PageAlly_Settings () : void
 {
     global $db_prefix;
     global $session;

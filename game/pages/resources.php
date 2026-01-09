@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Resource Settings.
 
 loca_add ( "menu", $GlobalUser['lang'] );

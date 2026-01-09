@@ -1,5 +1,8 @@
 <?php
 
+/** @var array $GlobalUser */
+/** @var array $fleetmap */
+
 // Fleet Hold extension by alliance depot
 
 // A launched supply missile refuels fleets in turn,

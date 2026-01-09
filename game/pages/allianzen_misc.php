@@ -3,7 +3,7 @@
 // Little things.
 
 // Leave the alliance.
-function PageAlly_Leave ()
+function PageAlly_Leave () : void
 {
     global $db_prefix;
     global $GlobalUser;
@@ -51,7 +51,7 @@ function PageAlly_Leave ()
 }
 
 // Change the abbreviation of the alliance (Tag)
-function PageAlly_ChangeTag ()
+function PageAlly_ChangeTag () : void
 {
     global $GlobalUser;
     global $session;
@@ -95,7 +95,7 @@ function PageAlly_ChangeTag ()
 }
 
 // Change the name of the alliance.
-function PageAlly_ChangeName ()
+function PageAlly_ChangeName () : void
 {
     global $GlobalUser;
     global $session;
@@ -138,7 +138,7 @@ function PageAlly_ChangeName ()
 }
 
 // Dismiss the alliance.
-function PageAlly_Dismiss ()
+function PageAlly_Dismiss () : void
 {
     global $GlobalUser;
     global $session;
@@ -193,7 +193,7 @@ function PageAlly_Dismiss ()
 
 // Transfer the rights of the head to the "right hand"
 // Only the head of the alliance can transfer rights.
-function AllyPage_Takeover ()
+function AllyPage_Takeover () : void
 {
     global $GlobalUser;
     global $session;
