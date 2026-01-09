@@ -16,7 +16,7 @@
 
 function LoadNote ( $player_id, $note_id )
 {
-    global $db_prefix;    
+    global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."notes WHERE owner_id = $player_id AND note_id = $note_id LIMIT 1";
     $result = dbquery ($query);
     return dbarray ($result);
