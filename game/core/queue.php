@@ -631,7 +631,7 @@ function AddShipyard ($player_id, $planet_id, $gid, $value, $now=0 )
         $nanits = $planet["b".GID_B_NANITES];
         $seconds = ShipyardDuration ( $gid, $shipyard, $nanits, $speed );
 
-        // Списать ресурсы.
+        // Write off resources.
         AdjustResources ( $m, $k, $d, $planet_id, '-' );
 
         AddQueue ($player_id, QTYP_SHIPYARD, $planet_id, $gid, $value, $now, $seconds);
