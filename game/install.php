@@ -8,12 +8,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-require_once "db.php";
-require_once "utils.php";
-require_once "loca.php";
-require_once "id.php";
-require_once "user.php";
-require_once "planet.php";
+require_once "core/core.php";
 
 if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
 else $loca_lang = $_COOKIE['ogamelang'];
@@ -57,7 +52,7 @@ function gen_trivial_password ($len = 8)
 }
 
 // Database tables
-include "install_tabs.php";
+include "core/install_tabs.php";
 
 // -------------------------------------------------------------------------------------------------------------------------
 

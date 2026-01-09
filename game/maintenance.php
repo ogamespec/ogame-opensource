@@ -10,10 +10,7 @@ else {
     require_once "config.php";
 }
 
-require_once "db.php";
-require_once "utils.php";
-require_once "loca.php";
-require_once "uni.php";
+require_once "core/core.php";
 
 InitDB();
 

@@ -104,7 +104,7 @@ function Admin_DB () : void
     global $db_name;
     global $GlobalUser;
 
-    include "install_tabs.php";
+    include "core/install_tabs.php";
     ModsExecRef ('install_tabs_included', $tabs);
 
     $text_out = "";

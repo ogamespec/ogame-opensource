@@ -12,28 +12,9 @@ else {
 
 header('Pragma:no-cache');
 
-$GlobalUser = array ();
-
-require_once "db.php";
-require_once "utils.php";
+require_once "core/core.php";
 
 InitDB();
-
-require_once "id.php";
-require_once "loca.php";
-require_once "bbcode.php";
-require_once "uni.php";
-require_once "prod.php";
-require_once "planet.php";
-require_once "user.php";
-require_once "msg.php";
-require_once "notes.php";
-require_once "queue.php";
-require_once "page.php";
-require_once "ally.php";
-require_once "battle.php";
-require_once "debug.php";
-require_once "mods.php";
 
 $GlobalUni = LoadUniverse ();
 
