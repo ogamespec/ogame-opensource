@@ -120,7 +120,6 @@ if ($internal)
     EndContent ();
 
     PageFooter ("", "");
+    ob_end_flush ();
 }
-
-ob_end_flush ();
 ?>

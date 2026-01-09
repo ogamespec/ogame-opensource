@@ -1,6 +1,15 @@
 <?php
 
-require_once "config.php";
+// Check if the configuration file is missing - redirect to the game installation page.
+if ( !file_exists ("config.php"))
+{
+    echo "<html><head><meta http-equiv='refresh' content='0;url=install.php' /></head><body></body></html>";
+    exit ();
+}
+else {
+    require_once "config.php";
+}
+
 require_once "db.php";
 require_once "utils.php";
 require_once "loca.php";
@@ -17,7 +26,6 @@ loca_add ( "maintain", $loca_lang );
 
 if ( !$GlobalUni['freeze'] ) {
     echo "<html><head><meta http-equiv='refresh' content='0;url=$StartPage' /></head><body></body>";
-    ob_end_flush ();
     die ();
 }
 

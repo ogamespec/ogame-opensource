@@ -4,7 +4,6 @@
 if ( !file_exists ("config.php"))
 {
     echo "<html><head><meta http-equiv='refresh' content='0;url=install.php' /></head><body></body></html>";
-    ob_end_flush ();
     exit ();
 }
 else {
@@ -35,6 +34,8 @@ require_once "ally.php";
 require_once "battle.php";
 require_once "debug.php";
 require_once "mods.php";
+
+$GlobalUni = LoadUniverse ();
 
 ModsInit();
 
