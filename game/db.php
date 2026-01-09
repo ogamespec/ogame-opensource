@@ -30,7 +30,7 @@ function dbquery ($query, $mute=false)
     if (!$result && $mute==false) {
         echo "$query <br>";
         echo mysqli_error ($db_connect);
-        Debug ( mysqli_error($db_connect) . "<br>" . $query . "<br>" . BackTrace () ) ;
+        //Debug ( mysqli_error($db_connect) . "<br>" . $query . "<br>" . BackTrace () ) ;
         return false;
     }
     else return $result;
