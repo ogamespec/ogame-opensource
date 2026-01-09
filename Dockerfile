@@ -45,10 +45,6 @@ RUN ln -s /var/www/html/persistent_configs/game_config.php /var/www/html/game/co
 
 RUN chown -R www-data:www-data /var/www/html
 
-RUN sudo chmod -R 777 /var/www/html/game/battledata
-RUN sudo chmod -R 777 /var/www/html/game/temp
-RUN sudo chmod -R 777 /var/www/html/game/galaxytool
-
 # C battle engine
 COPY ./BattleEngine /var/www/BattleEngine
 RUN gcc /var/www/BattleEngine/battle.c -lm -o /usr/lib/cgi-bin/battle
