@@ -1,6 +1,7 @@
 <?php
 
 /** @var array $GlobalUser */
+/** @var array $GlobalUni */
 /** @var string $db_prefix */
 
 // Statistics

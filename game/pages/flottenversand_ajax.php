@@ -3,6 +3,7 @@
 
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
+/** @var array $aktplanet */
 
 // Fast dispatch of fleets from the Galaxy via AJAX.
 
@@ -14,7 +15,7 @@ BrowseHistory ();
 if ( $GlobalUni['freeze'] ) AjaxSendError ();    // The universe is on pause.
 $unispeed = $GlobalUni['fspeed'];
 
-function AjaxSendError ($id=601)
+function AjaxSendError (int $id=601) : void
 {
     header ('Content-Type: text/html;');
     echo "$id 0 0 0 0";
@@ -22,7 +23,7 @@ function AjaxSendError ($id=601)
     die ();
 }
 
-function AjaxSendDone ($slots, $probes, $recyclers, $missiles)
+function AjaxSendDone (int $slots, int $probes, int $recyclers, int $missiles) : void
 {
     header ('Content-Type: text/html;');
     echo "600 $slots ".nicenum($probes)." ".nicenum($recyclers)." ".nicenum($missiles);

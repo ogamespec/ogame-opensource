@@ -5,10 +5,10 @@
 $pagetime = 0;
 
 // Get a small picture of the planet.
-function GetPlanetSmallImage ($skinpath, $planet)
+function GetPlanetSmallImage (string $skinpath, array $planet) : string
 {
     $img = array();
-    if (ModsExecRefArr('get_planet_small_image', $planet, $img)) {
+    if (ModsExecRefRef('get_planet_small_image', $planet, $img)) {
         return $img['path'];
     }
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return $skinpath."planeten/small/s_mond.jpg";
@@ -28,10 +28,10 @@ function GetPlanetSmallImage ($skinpath, $planet)
 }
 
 // Get a big picture of the planet.
-function GetPlanetImage ($skinpath, $planet)
+function GetPlanetImage (string $skinpath, array $planet) : string
 {
     $img = array();
-    if (ModsExecRefArr('get_planet_image', $planet, $img)) {
+    if (ModsExecRefRef('get_planet_image', $planet, $img)) {
         return $img['path'];
     }
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return $skinpath."planeten/mond.jpg";
@@ -50,14 +50,14 @@ function GetPlanetImage ($skinpath, $planet)
     else return "img/admin_planets.png";        // Special objects of the galaxy (destroyed planets, etc.)
 }
 
-function UserSkin ()
+function UserSkin () : string
 {
     global $GlobalUser;
     if ( key_exists('useskin', $GlobalUser) && $GlobalUser['useskin']) return $GlobalUser['skin'];
     else return hostname () . "evolution/";
 }
 
-function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", $redirect_sec=0)
+function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, string $redirect_page="", int $redirect_sec=0) : void
 {
     global $pagetime;
     global $GlobalUser;
@@ -67,7 +67,7 @@ function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", 
 
     $mtime = microtime(); 
     $mtime = explode(" ",$mtime); 
-    $mtime = $mtime[1] + $mtime[0]; 
+    $mtime = (float)$mtime[1] + (float)$mtime[0]; 
     $pagetime = $mtime;
 
     $unitab = $GlobalUni;
@@ -114,7 +114,10 @@ function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", 
         echo "<tr class='header' >\n";
         $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
         PlanetsDropList ($page);
-        ResourceList ($aktplanet, floor($aktplanet['m']), floor($aktplanet['k']), floor($aktplanet['d']), $aktplanet['e'], $aktplanet['emax'], $GlobalUser['dm']+$GlobalUser['dmfree'], $aktplanet['mmax'], $aktplanet['kmax'], $aktplanet['dmax']);
+        ResourceList ($aktplanet, 
+            (int)floor($aktplanet['m']), (int)floor($aktplanet['k']), (int)floor($aktplanet['d']), 
+            $aktplanet['e'], $aktplanet['emax'], 
+            $GlobalUser['dm']+$GlobalUser['dmfree'], $aktplanet['mmax'], $aktplanet['kmax'], $aktplanet['dmax']);
         $coma = OficeerList ();
         echo "</tr>\n";
         echo "</table>\n";
@@ -131,7 +134,7 @@ function PageHeader ($page, $noheader=false, $leftmenu=true, $redirect_page="", 
     echo "<!-- END LEFTMENU -->\n\n";
 }
 
-function DropListHasMoon ($plist, $planet)
+function DropListHasMoon (array $plist, array $planet) : mixed
 {
     foreach ( $plist as $i=>$p )
     {
@@ -139,10 +142,10 @@ function DropListHasMoon ($plist, $planet)
             if ( $p['g'] == $planet['g'] && $p['s'] == $planet['s'] && $p['p'] == $planet['p'] ) return $p;
         }
     }
-    return NULL;
+    return null;
 }
 
-function PlanetsDropList ($page)
+function PlanetsDropList (string $page) : void
 {
     global $GlobalUser;
     $sess = $GlobalUser['session'];
@@ -193,17 +196,20 @@ function PlanetsDropList ($page)
     echo "</select></table></td></tr></table></td>\n\n";
 }
 
-function LoadJsonFirst ($path)
+function LoadJsonFirst (string $path) : array
 {
     $json_contents = file_get_contents($path);
+    if (!$json_contents) {
+        Error ("Error loading JSON-first schema");
+    }
     $json = json_decode($json_contents, true);
     if ($json === null) {
-        Error ("Error loading JSON-first schema");
+        Error ("Error decoding JSON-first schema");
     }
     return $json;
 }
 
-function ResourceList ($aktplanet, $m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, $dmax)
+function ResourceList (array $aktplanet, int $m, int $k, int $d, int $enow, int $emax, int $dm, int $mmax, int $kmax, int $dmax) : void
 {
     global $GlobalUser;
     $sess = $GlobalUser['session'];
@@ -281,7 +287,7 @@ function ResourceList ($aktplanet, $m, $k, $d, $enow, $emax, $dm, $mmax, $kmax, 
     echo "</table></td>\n";
 }
 
-function calco ($now, $who)
+function calco (int $now, int $who) : array
 {
     global $GlobalUser;
     $reply = array ();
@@ -304,7 +310,7 @@ function calco ($now, $who)
     return $reply;
 }
 
-function OficeerList ()
+function OficeerList () : bool
 {
     global $GlobalUser;
     $sess = $GlobalUser['session'];
@@ -372,7 +378,7 @@ function OficeerList ()
     return $days['commander'] !== '';
 }
 
-function LeftMenu ($coma)
+function LeftMenu (bool $coma) : void
 {
     global $GlobalUser;
     global $GlobalUni;
@@ -552,7 +558,7 @@ function LeftMenu ($coma)
     echo "    </div>\n";
 }
 
-function PageFooter ($msg="", $error="", $popup=false, $headerH=81, $nores=false)
+function PageFooter (string $msg="", string $error="", bool $popup=false, int $headerH=81, bool $nores=false) : void
 {
     global $pagetime;
     global $GlobalUser;
@@ -565,7 +571,7 @@ function PageFooter ($msg="", $error="", $popup=false, $headerH=81, $nores=false
     {
         $mtime = microtime(); 
         $mtime = explode(" ",$mtime); 
-        $mtime = $mtime[1] + $mtime[0];
+        $mtime = (float)$mtime[1] + (float)$mtime[0];
         $endtime = $mtime;
         $msg = sprintf ( loca_lang("DEBUG_PAGE_INFO", $GlobalUni['lang']), $endtime-$pagetime, $query_counter) . GetSQLQueryLogText() . $msg;
     }
@@ -626,7 +632,7 @@ function PageFooter ($msg="", $error="", $popup=false, $headerH=81, $nores=false
     echo "</body></html>\n";
 }
 
-function InvalidSessionPage ()
+function InvalidSessionPage () : void
 {
     global $GlobalUser;
 
@@ -652,7 +658,7 @@ function InvalidSessionPage ()
     echo "    Error-ID: ".$id."  </b></font></center> </body></html>\n";
 }
 
-function MyGoto ($page, $param="")
+function MyGoto (string $page, string $param="") : void
 {
     global $GlobalUser;
     ob_end_clean ();
@@ -661,7 +667,7 @@ function MyGoto ($page, $param="")
     die ( "<html><head><meta http-equiv='refresh' content='0;url=$url' /></head><body></body></html>" );
 }
 
-function BeginContent ()
+function BeginContent () : void
 {
     echo "<!-- CONTENT AREA -->\n";
     echo "<div id='content'>\n";
@@ -669,7 +675,7 @@ function BeginContent ()
     ModsExec ('begin_content');
 }
 
-function EndContent ()
+function EndContent () : void
 {
     ModsExec ('end_content');
     echo "</center>\n";

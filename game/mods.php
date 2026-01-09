@@ -15,8 +15,8 @@ interface GameMod {
     public function add_menuitems(array &$json) : bool;
     public function lock_tables(array &$tabs) : bool;
     public function install_tabs_included(array &$tabs) : bool;
-    public function get_planet_small_image(array &$planet, array $img) : bool;
-    public function get_planet_image(array &$planet, array $img) : bool;
+    public function get_planet_small_image(array &$planet, array &$img) : bool;
+    public function get_planet_image(array &$planet, array &$img) : bool;
     public function begin_content() : bool;
     public function end_content() : bool;
     public function add_db_row(array &$row, string $tabname) : bool;
@@ -85,6 +85,20 @@ function ModsExecRef(string $method, array &$args) : bool
 }
 
 function ModsExecRefArr(string $method, array &$args, array $arr) : bool
+{
+    global $modlist;
+    foreach ($modlist as $instance) {
+        if(method_exists($instance, $method)) {
+            $res = $instance->$method($args, $arr);
+            if ($res) {
+                return true;
+            }
+        }
+    }
+    return false;    
+}
+
+function ModsExecRefRef(string $method, array &$args, array &$arr) : bool
 {
     global $modlist;
     foreach ($modlist as $instance) {

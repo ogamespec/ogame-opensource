@@ -2,7 +2,7 @@
 
 // Admin Area: expedition settings & simulator.
 
-function Admin_Expedition ()
+function Admin_Expedition () : void
 {
     global $session;
     global $db_prefix;
@@ -102,7 +102,7 @@ function Admin_Expedition ()
 
 ?>
 
-<?=AdminPanel();?>
+<?php AdminPanel();?>
 
 
 

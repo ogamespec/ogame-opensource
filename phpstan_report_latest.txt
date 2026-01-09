@@ -2068,17 +2068,17 @@
  ------ ------------------------------------------------------------------------------ 
   42     Call to an undefined method object::init().                                   
          🪪  method.notFound                                                           
-  143    PHPDoc tag @return with type array|null is not subtype of native type array.  
+  157    PHPDoc tag @return with type array|null is not subtype of native type array.  
          🪪  return.phpDocType                                                         
-  149    Function ModsGetInfo() should return array but returns null.                  
-         🪪  return.type                                                               
-  157    Function ModsGetInfo() should return array but returns null.                  
-         🪪  return.type                                                               
   163    Function ModsGetInfo() should return array but returns null.                  
          🪪  return.type                                                               
   171    Function ModsGetInfo() should return array but returns null.                  
          🪪  return.type                                                               
-  200    Call to an undefined method object::install().                                
+  177    Function ModsGetInfo() should return array but returns null.                  
+         🪪  return.type                                                               
+  185    Function ModsGetInfo() should return array but returns null.                  
+         🪪  return.type                                                               
+  214    Call to an undefined method object::install().                                
          🪪  method.notFound                                                           
  ------ ------------------------------------------------------------------------------ 
 
@@ -2217,114 +2217,8 @@
  ------ -------------------------------------------------------------------------------- 
   Line   game/page.php                                                                   
  ------ -------------------------------------------------------------------------------- 
-  8      Function GetPlanetSmallImage() has no return type specified.                    
-         🪪  missingType.return                                                          
-  8      Function GetPlanetSmallImage() has parameter $planet with no type specified.    
-         🪪  missingType.parameter                                                       
-  8      Function GetPlanetSmallImage() has parameter $skinpath with no type specified.  
-         🪪  missingType.parameter                                                       
-  12     Offset 'path' does not exist on array{}.                                        
-         🪪  offsetAccess.notFound                                                       
-  31     Function GetPlanetImage() has no return type specified.                         
-         🪪  missingType.return                                                          
-  31     Function GetPlanetImage() has parameter $planet with no type specified.         
-         🪪  missingType.parameter                                                       
-  31     Function GetPlanetImage() has parameter $skinpath with no type specified.       
-         🪪  missingType.parameter                                                       
-  35     Offset 'path' does not exist on array{}.                                        
-         🪪  offsetAccess.notFound                                                       
-  53     Function UserSkin() has no return type specified.                               
-         🪪  missingType.return                                                          
-  60     Function PageHeader() has no return type specified.                             
-         🪪  missingType.return                                                          
-  60     Function PageHeader() has parameter $leftmenu with no type specified.           
-         🪪  missingType.parameter                                                       
-  60     Function PageHeader() has parameter $noheader with no type specified.           
-         🪪  missingType.parameter                                                       
-  60     Function PageHeader() has parameter $page with no type specified.               
-         🪪  missingType.parameter                                                       
-  60     Function PageHeader() has parameter $redirect_page with no type specified.      
-         🪪  missingType.parameter                                                       
-  60     Function PageHeader() has parameter $redirect_sec with no type specified.       
-         🪪  missingType.parameter                                                       
-  70     Binary operation "+" between string and string results in an error.             
-         🪪  binaryOp.invalid                                                            
-  134    Function DropListHasMoon() has no return type specified.                        
-         🪪  missingType.return                                                          
-  134    Function DropListHasMoon() has parameter $planet with no type specified.        
-         🪪  missingType.parameter                                                       
-  134    Function DropListHasMoon() has parameter $plist with no type specified.         
-         🪪  missingType.parameter                                                       
-  145    Function PlanetsDropList() has no return type specified.                        
-         🪪  missingType.return                                                          
-  145    Function PlanetsDropList() has parameter $page with no type specified.          
-         🪪  missingType.parameter                                                       
-  196    Function LoadJsonFirst() has no return type specified.                          
-         🪪  missingType.return                                                          
-  196    Function LoadJsonFirst() has parameter $path with no type specified.            
-         🪪  missingType.parameter                                                       
-  199    Parameter #1 $json of function json_decode expects string, string|false given.  
+  205    Parameter #1 $json of function json_decode expects string, string|false given.  
          🪪  argument.type                                                               
-  206    Function ResourceList() has no return type specified.                           
-         🪪  missingType.return                                                          
-  206    Function ResourceList() has parameter $aktplanet with no type specified.        
-         🪪  missingType.parameter                                                       
-  206    Function ResourceList() has parameter $d with no type specified.                
-         🪪  missingType.parameter                                                       
-  206    Function ResourceList() has parameter $dm with no type specified.               
-         🪪  missingType.parameter                                                       
-  206    Function ResourceList() has parameter $dmax with no type specified.             
-         🪪  missingType.parameter                                                       
-  206    Function ResourceList() has parameter $emax with no type specified.             
-         🪪  missingType.parameter                                                       
-  206    Function ResourceList() has parameter $enow with no type specified.             
-         🪪  missingType.parameter                                                       
-  206    Function ResourceList() has parameter $k with no type specified.                
-         🪪  missingType.parameter                                                       
-  206    Function ResourceList() has parameter $kmax with no type specified.             
-         🪪  missingType.parameter                                                       
-  206    Function ResourceList() has parameter $m with no type specified.                
-         🪪  missingType.parameter                                                       
-  206    Function ResourceList() has parameter $mmax with no type specified.             
-         🪪  missingType.parameter                                                       
-  284    Function calco() has no return type specified.                                  
-         🪪  missingType.return                                                          
-  284    Function calco() has parameter $now with no type specified.                     
-         🪪  missingType.parameter                                                       
-  284    Function calco() has parameter $who with no type specified.                     
-         🪪  missingType.parameter                                                       
-  307    Function OficeerList() has no return type specified.                            
-         🪪  missingType.return                                                          
-  375    Function LeftMenu() has no return type specified.                               
-         🪪  missingType.return                                                          
-  375    Function LeftMenu() has parameter $coma with no type specified.                 
-         🪪  missingType.parameter                                                       
-  555    Function PageFooter() has no return type specified.                             
-         🪪  missingType.return                                                          
-  555    Function PageFooter() has parameter $error with no type specified.              
-         🪪  missingType.parameter                                                       
-  555    Function PageFooter() has parameter $headerH with no type specified.            
-         🪪  missingType.parameter                                                       
-  555    Function PageFooter() has parameter $msg with no type specified.                
-         🪪  missingType.parameter                                                       
-  555    Function PageFooter() has parameter $nores with no type specified.              
-         🪪  missingType.parameter                                                       
-  555    Function PageFooter() has parameter $popup with no type specified.              
-         🪪  missingType.parameter                                                       
-  568    Binary operation "+" between string and string results in an error.             
-         🪪  binaryOp.invalid                                                            
-  629    Function InvalidSessionPage() has no return type specified.                     
-         🪪  missingType.return                                                          
-  655    Function MyGoto() has no return type specified.                                 
-         🪪  missingType.return                                                          
-  655    Function MyGoto() has parameter $page with no type specified.                   
-         🪪  missingType.parameter                                                       
-  655    Function MyGoto() has parameter $param with no type specified.                  
-         🪪  missingType.parameter                                                       
-  664    Function BeginContent() has no return type specified.                           
-         🪪  missingType.return                                                          
-  672    Function EndContent() has no return type specified.                             
-         🪪  missingType.return                                                          
  ------ -------------------------------------------------------------------------------- 
 
  ------ ------------------------------------------------- 
@@ -2339,28 +2233,6 @@
  ------ ---------------------------------------------------------------------------------------- 
   Line   game/pages/allianzen.php                                                                
  ------ ---------------------------------------------------------------------------------------- 
-  27     Function AllyPage_NoAlly() has no return type specified.                                
-         🪪  missingType.return                                                                  
-  37     Function AllyPage_CreateAlly() has no return type specified.                            
-         🪪  missingType.return                                                                  
-  37     Function AllyPage_CreateAlly() has parameter $name with no type specified.              
-         🪪  missingType.parameter                                                               
-  37     Function AllyPage_CreateAlly() has parameter $tag with no type specified.               
-         🪪  missingType.parameter                                                               
-  48     Function AllyPage_Search() has no return type specified.                                
-         🪪  missingType.return                                                                  
-  48     Function AllyPage_Search() has parameter $results with no type specified.               
-         🪪  missingType.parameter                                                               
-  48     Function AllyPage_Search() has parameter $text with no type specified.                  
-         🪪  missingType.parameter                                                               
-  61     Function AllyPage_SearchResult() has no return type specified.                          
-         🪪  missingType.return                                                                  
-  61     Function AllyPage_SearchResult() has parameter $result with no type specified.          
-         🪪  missingType.parameter                                                               
-  84     Function AllyPage_Already() has no return type specified.                               
-         🪪  missingType.return                                                                  
-  84     Function AllyPage_Already() has parameter $app_id with no type specified.               
-         🪪  missingType.parameter                                                               
   123    Parameter #1 $string of function mb_strlen expects string, array<string>|string given.  
          🪪  argument.type                                                                       
   124    Parameter #1 $string of function mb_strlen expects string, array<string>|string given.  
@@ -2408,32 +2280,16 @@
  ------ ------------------------------------------- 
   Line   game/pages/bewerbungen.php                 
  ------ ------------------------------------------- 
-  57     Variable $db_prefix might not be defined.  
+  58     Variable $db_prefix might not be defined.  
          🪪  variable.undefined                     
  ------ ------------------------------------------- 
 
- ------ -------------------------------------------------------- 
-  Line   game/pages/buddy.php                                    
- ------ -------------------------------------------------------- 
-  12     Variable $GlobalUser might not be defined.              
-         🪪  variable.undefined                                  
-  13     Variable $GlobalUser might not be defined.              
-         🪪  variable.undefined                                  
-  15     Variable $GlobalUser might not be defined.              
-         🪪  variable.undefined                                  
-  16     Variable $GlobalUser might not be defined.              
-         🪪  variable.undefined                                  
-  29     Function Buddy_Home() has no return type specified.     
-         🪪  missingType.return                                  
-  91     Function Buddy_Income() has no return type specified.   
-         🪪  missingType.return                                  
-  129    Undefined variable: $userto                             
-         🪪  variable.undefined                                  
-  155    Function Buddy_Outcome() has no return type specified.  
-         🪪  missingType.return                                  
-  206    Function Buddy_Request() has no return type specified.  
-         🪪  missingType.return                                  
- ------ -------------------------------------------------------- 
+ ------ ----------------------------- 
+  Line   game/pages/buddy.php         
+ ------ ----------------------------- 
+  131    Undefined variable: $userto  
+         🪪  variable.undefined       
+ ------ ----------------------------- 
 
  ------ ------------------------------------------- 
   Line   game/pages/buildings.php                   
@@ -2461,25 +2317,18 @@
          🪪  variable.undefined                          
  ------ ------------------------------------------------ 
 
- ------ ----------------------------------------------------- 
-  Line   game/pages/flotten1.php                              
- ------ ----------------------------------------------------- 
-  153    Result of function FleetMissionText (void) is used.  
-         🪪  function.void                                    
- ------ ----------------------------------------------------- 
-
- ------ ---------------------------------------------------------------- 
-  Line   game/pages/flotten2.php                                         
- ------ ---------------------------------------------------------------- 
-  61     Function planettype() has no return type specified.             
-         🪪  missingType.return                                          
-  61     Function planettype() has parameter $n with no type specified.  
-         🪪  missingType.parameter                                       
-  72     Variable $GlobalUni might not be defined.                       
-         🪪  variable.undefined                                          
-  83     Variable $fleetmap_nosat might not be defined.                  
-         🪪  variable.undefined                                          
- ------ ---------------------------------------------------------------- 
+ ------ ------------------------------------------------ 
+  Line   game/pages/flotten2.php                         
+ ------ ------------------------------------------------ 
+  84     Variable $fleetmap_nosat might not be defined.  
+         🪪  variable.undefined                          
+  118    Result of function planettype (void) is used.   
+         🪪  function.void                               
+  119    Result of function planettype (void) is used.   
+         🪪  function.void                               
+  120    Result of function planettype (void) is used.   
+         🪪  function.void                               
+ ------ ------------------------------------------------ 
 
  ------ ------------------------------------------------------------------------ 
   Line   game/pages/flotten3.php                                                 
@@ -2501,128 +2350,48 @@
  ------ --------------------------------------------------------------------------------- 
   Line   game/pages/flottenversand.php                                                    
  ------ --------------------------------------------------------------------------------- 
-  16     Function FleetError() has no return type specified.                              
+  17     Function FleetError() has no return type specified.                              
          🪪  missingType.return                                                           
-  16     Function FleetError() has parameter $text with no type specified.                
+  17     Function FleetError() has parameter $text with no type specified.                
          🪪  missingType.parameter                                                        
-  35     Variable $GlobalUni might not be defined.                                        
+  76     Variable $fleetmap might not be defined.                                         
          🪪  variable.undefined                                                           
-  75     Variable $fleetmap might not be defined.                                         
-         🪪  variable.undefined                                                           
-  95     Variable $GlobalUni might not be defined.                                        
-         🪪  variable.undefined                                                           
-  104    Variable $GlobalUni might not be defined.                                        
-         🪪  variable.undefined                                                           
-  105    Variable $GlobalUni might not be defined.                                        
-         🪪  variable.undefined                                                           
-  194    If condition is always false.                                                    
+  195    If condition is always false.                                                    
          🪪  if.alwaysFalse                                                               
-  205    Variable $GlobalUni might not be defined.                                        
-         🪪  variable.undefined                                                           
-  215    If condition is always false.                                                    
+  216    If condition is always false.                                                    
          🪪  if.alwaysFalse                                                               
-  217    Variable $GlobalUni might not be defined.                                        
-         🪪  variable.undefined                                                           
-  217    Variable $GlobalUni might not be defined.                                        
-         🪪  variable.undefined                                                           
-  217    Variable $GlobalUni might not be defined.                                        
-         🪪  variable.undefined                                                           
-  217    Variable $GlobalUni might not be defined.                                        
-         🪪  variable.undefined                                                           
-  229    Variable $GlobalUni might not be defined.                                        
-         🪪  variable.undefined                                                           
-  229    Variable $GlobalUni might not be defined.                                        
-         🪪  variable.undefined                                                           
-  230    Variable $GlobalUni might not be defined.                                        
-         🪪  variable.undefined                                                           
-  247    If condition is always false.                                                    
+  248    If condition is always false.                                                    
          🪪  if.alwaysFalse                                                               
-  274    If condition is always false.                                                    
+  275    If condition is always false.                                                    
          🪪  if.alwaysFalse                                                               
-  302    If condition is always false.                                                    
+  303    If condition is always false.                                                    
          🪪  if.alwaysFalse                                                               
-  326    Parameter #1 $stream of function fclose expects resource, resource|false given.  
+  327    Parameter #1 $stream of function fclose expects resource, resource|false given.  
          🪪  argument.type                                                                
-  332    Variable $GlobalUni might not be defined.                                        
-         🪪  variable.undefined                                                           
-  335    Variable $GlobalUni might not be defined.                                        
-         🪪  variable.undefined                                                           
  ------ --------------------------------------------------------------------------------- 
 
  ------ --------------------------------------------------------------------------------- 
   Line   game/pages/flottenversand_ajax.php                                               
  ------ --------------------------------------------------------------------------------- 
-  17     Function AjaxSendError() has no return type specified.                           
-         🪪  missingType.return                                                           
-  17     Function AjaxSendError() has parameter $id with no type specified.               
-         🪪  missingType.parameter                                                        
-  25     Function AjaxSendDone() has no return type specified.                            
-         🪪  missingType.return                                                           
-  25     Function AjaxSendDone() has parameter $missiles with no type specified.          
-         🪪  missingType.parameter                                                        
-  25     Function AjaxSendDone() has parameter $probes with no type specified.            
-         🪪  missingType.parameter                                                        
-  25     Function AjaxSendDone() has parameter $recyclers with no type specified.         
-         🪪  missingType.parameter                                                        
-  25     Function AjaxSendDone() has parameter $slots with no type specified.             
-         🪪  missingType.parameter                                                        
-  90     Variable $aktplanet might not be defined.                                        
+  106    Variable $BlockAttack might not be defined.                                      
          🪪  variable.undefined                                                           
-  91     Variable $aktplanet might not be defined.                                        
+  120    Variable $fleetmap might not be defined.                                         
          🪪  variable.undefined                                                           
-  92     Variable $aktplanet might not be defined.                                        
+  138    Variable $fleetmap might not be defined.                                         
          🪪  variable.undefined                                                           
-  102    Variable $aktplanet might not be defined.                                        
+  148    Variable $fleet might not be defined.                                            
          🪪  variable.undefined                                                           
-  105    Variable $BlockAttack might not be defined.                                      
+  150    Variable $fleet might not be defined.                                            
          🪪  variable.undefined                                                           
-  119    Variable $fleetmap might not be defined.                                         
+  154    Variable $cargo might not be defined.                                            
          🪪  variable.undefined                                                           
-  131    Variable $aktplanet might not be defined.                                        
-         🪪  variable.undefined                                                           
-  137    Variable $fleetmap might not be defined.                                         
-         🪪  variable.undefined                                                           
-  146    Variable $aktplanet might not be defined.                                        
-         🪪  variable.undefined                                                           
-  146    Variable $aktplanet might not be defined.                                        
-         🪪  variable.undefined                                                           
-  146    Variable $aktplanet might not be defined.                                        
-         🪪  variable.undefined                                                           
-  147    Variable $fleet might not be defined.                                            
-         🪪  variable.undefined                                                           
-  149    Variable $fleet might not be defined.                                            
-         🪪  variable.undefined                                                           
-  152    Variable $aktplanet might not be defined.                                        
-         🪪  variable.undefined                                                           
-  153    Variable $cargo might not be defined.                                            
-         🪪  variable.undefined                                                           
-  156    Variable $aktplanet might not be defined.                                        
-         🪪  variable.undefined                                                           
-  159    Parameter #1 $stream of function fclose expects resource, resource|false given.  
+  160    Parameter #1 $stream of function fclose expects resource, resource|false given.  
          🪪  argument.type                                                                
-  162    Variable $aktplanet might not be defined.                                        
+  163    Variable $fleet might not be defined.                                            
          🪪  variable.undefined                                                           
-  162    Variable $fleet might not be defined.                                            
+  168    Variable $fleet might not be defined.                                            
          🪪  variable.undefined                                                           
-  164    Variable $aktplanet might not be defined.                                        
-         🪪  variable.undefined                                                           
-  166    Variable $aktplanet might not be defined.                                        
-         🪪  variable.undefined                                                           
-  166    Variable $aktplanet might not be defined.                                        
-         🪪  variable.undefined                                                           
-  166    Variable $aktplanet might not be defined.                                        
-         🪪  variable.undefined                                                           
-  166    Variable $aktplanet might not be defined.                                        
-         🪪  variable.undefined                                                           
-  167    Variable $fleet might not be defined.                                            
-         🪪  variable.undefined                                                           
-  171    Variable $aktplanet might not be defined.                                        
-         🪪  variable.undefined                                                           
-  172    Variable $aktplanet might not be defined.                                        
-         🪪  variable.undefined                                                           
-  172    Variable $fleet might not be defined.                                            
-         🪪  variable.undefined                                                           
-  173    Variable $aktplanet might not be defined.                                        
+  173    Variable $fleet might not be defined.                                            
          🪪  variable.undefined                                                           
  ------ --------------------------------------------------------------------------------- 
 
@@ -2644,68 +2413,46 @@
  ------ ------------------------------------------------------------------------- 
   Line   game/pages/imperium.php                                                  
  ------ ------------------------------------------------------------------------- 
-  38     Variable $GlobalUni might not be defined.                                
-         🪪  variable.undefined                                                   
-  49     Loose comparison using == between 3 and 3 will always evaluate to true.  
+  50     Loose comparison using == between 3 and 3 will always evaluate to true.  
          🪪  equal.alwaysTrue                                                     
-  49     Result of || is always true.                                             
+  50     Result of || is always true.                                             
          🪪  booleanOr.alwaysTrue                                                 
-  65     Variable $GlobalUni might not be defined.                                
+  297    Variable $buildmap might not be defined.                                 
          🪪  variable.undefined                                                   
-  83     Variable $GlobalUni might not be defined.                                
+  377    Variable $resmap might not be defined.                                   
          🪪  variable.undefined                                                   
-  296    Variable $buildmap might not be defined.                                 
+  415    Variable $fleetmap might not be defined.                                 
          🪪  variable.undefined                                                   
-  376    Variable $resmap might not be defined.                                   
-         🪪  variable.undefined                                                   
-  414    Variable $fleetmap might not be defined.                                 
-         🪪  variable.undefined                                                   
-  467    Variable $defmap might not be defined.                                   
+  468    Variable $defmap might not be defined.                                   
          🪪  variable.undefined                                                   
  ------ ------------------------------------------------------------------------- 
 
  ------ ---------------------------------------------------------------- 
   Line   game/pages/infos.php                                            
  ------ ---------------------------------------------------------------- 
-  32     Function rgnum() has no return type specified.                  
+  33     Function rgnum() has no return type specified.                  
          🪪  missingType.return                                          
-  32     Function rgnum() has parameter $num with no type specified.     
+  33     Function rgnum() has parameter $num with no type specified.     
          🪪  missingType.parameter                                       
-  39     Function rapidIn() has no return type specified.                
+  40     Function rapidIn() has no return type specified.                
          🪪  missingType.return                                          
-  39     Function rapidIn() has parameter $gid with no type specified.   
+  40     Function rapidIn() has parameter $gid with no type specified.   
          🪪  missingType.parameter                                       
-  39     Function rapidIn() has parameter $n with no type specified.     
+  40     Function rapidIn() has parameter $n with no type specified.     
          🪪  missingType.parameter                                       
-  44     Function rapidOut() has no return type specified.               
+  45     Function rapidOut() has no return type specified.               
          🪪  missingType.return                                          
-  44     Function rapidOut() has parameter $gid with no type specified.  
+  45     Function rapidOut() has parameter $gid with no type specified.  
          🪪  missingType.parameter                                       
-  44     Function rapidOut() has parameter $n with no type specified.    
+  45     Function rapidOut() has parameter $n with no type specified.    
          🪪  missingType.parameter                                       
-  50     Function rapid() has no return type specified.                  
+  51     Function rapid() has no return type specified.                  
          🪪  missingType.return                                          
-  50     Function rapid() has parameter $gid with no type specified.     
+  51     Function rapid() has parameter $gid with no type specified.     
          🪪  missingType.parameter                                       
-  71     Variable $UnitParam might not be defined.                       
+  288    Variable $fleetmap_nosat might not be defined.                  
          🪪  variable.undefined                                          
-  72     Variable $UnitParam might not be defined.                       
-         🪪  variable.undefined                                          
-  95     Variable $UnitParam might not be defined.                       
-         🪪  variable.undefined                                          
-  96     Variable $UnitParam might not be defined.                       
-         🪪  variable.undefined                                          
-  97     Variable $UnitParam might not be defined.                       
-         🪪  variable.undefined                                          
-  126    Variable $UnitParam might not be defined.                       
-         🪪  variable.undefined                                          
-  127    Variable $UnitParam might not be defined.                       
-         🪪  variable.undefined                                          
-  128    Variable $UnitParam might not be defined.                       
-         🪪  variable.undefined                                          
-  287    Variable $fleetmap_nosat might not be defined.                  
-         🪪  variable.undefined                                          
-  432    Variable $fleetmap_revnosat might not be defined.               
+  433    Variable $fleetmap_revnosat might not be defined.               
          🪪  variable.undefined                                          
  ------ ---------------------------------------------------------------- 
 
@@ -2733,10 +2480,6 @@
  ------ --------------------------------------------------------------------------- 
   Line   game/pages/micropayment.php                                                
  ------ --------------------------------------------------------------------------- 
-  30     Function OfficerLeft() has no return type specified.                       
-         🪪  missingType.return                                                     
-  30     Function OfficerLeft() has parameter $type with no type specified.         
-         🪪  missingType.parameter                                                  
   52     Loose comparison using == between 90 and 90 will always evaluate to true.  
          🪪  equal.alwaysTrue                                                       
   68     Variable $db_prefix might not be defined.                                  
@@ -2746,12 +2489,6 @@
  ------ --------------------------------------------------------------------------------------------------------------- 
   Line   game/pages/notizen.php                                                                                         
  ------ --------------------------------------------------------------------------------------------------------------- 
-  19     Function CreateNewNote() has no return type specified.                                                         
-         🪪  missingType.return                                                                                         
-  32     Function EditNote() has no return type specified.                                                              
-         🪪  missingType.return                                                                                         
-  32     Function EditNote() has parameter $note_id with no type specified.                                             
-         🪪  missingType.parameter                                                                                      
   91     Loose comparison using == between 2 and 2 will always evaluate to true.                                        
          🪪  equal.alwaysTrue                                                                                           
          💡  Because the type is coming from a PHPDoc, you can turn off this check by setting treatPhpDocTypesAsCertain  
@@ -2760,79 +2497,62 @@
          🪪  variable.undefined                                                                                         
  ------ --------------------------------------------------------------------------------------------------------------- 
 
- ------ ---------------------------------------------------------------------- 
-  Line   game/pages/options.php                                                
- ------ ---------------------------------------------------------------------- 
-  26     Function IsChecked() has no return type specified.                    
-         🪪  missingType.return                                                
-  26     Function IsChecked() has parameter $option with no type specified.    
-         🪪  missingType.parameter                                             
-  33     Function IsCheckedFlag() has no return type specified.                
-         🪪  missingType.return                                                
-  33     Function IsCheckedFlag() has parameter $flag with no type specified.  
-         🪪  missingType.parameter                                             
-  40     Function IsSelected() has no return type specified.                   
-         🪪  missingType.return                                                
-  40     Function IsSelected() has parameter $option with no type specified.   
-         🪪  missingType.parameter                                             
-  40     Function IsSelected() has parameter $value with no type specified.    
-         🪪  missingType.parameter                                             
-  47     Function isValidEmail() has no return type specified.                 
-         🪪  missingType.return                                                
-  47     Function isValidEmail() has parameter $email with no type specified.  
-         🪪  missingType.parameter                                             
-  53     Variable $GlobalUni might not be defined.                             
-         🪪  variable.undefined                                                
-  91     Variable $db_secret might not be defined.                             
-         🪪  variable.undefined                                                
-  97     Variable $db_secret might not be defined.                             
-         🪪  variable.undefined                                                
-  168    Function IsChecked invoked with 1 parameter, 2 required.              
-         🪪  arguments.count                                                   
-  218    Variable $db_secret might not be defined.                             
-         🪪  variable.undefined                                                
-  222    Variable $db_secret might not be defined.                             
-         🪪  variable.undefined                                                
-  232    Variable $db_secret might not be defined.                             
-         🪪  variable.undefined                                                
-  239    Variable $db_secret might not be defined.                             
-         🪪  variable.undefined                                                
-  288    Variable $GlobalUni might not be defined.                             
-         🪪  variable.undefined                                                
-  289    Variable $GlobalUni might not be defined.                             
-         🪪  variable.undefined                                                
-  338    Variable $GlobalUni might not be defined.                             
-         🪪  variable.undefined                                                
-  413    Variable $GlobalUni might not be defined.                             
-         🪪  variable.undefined                                                
-  419    Variable $Languages might not be defined.                             
-         🪪  variable.undefined                                                
-  420    Function IsSelected invoked with 2 parameters, 3 required.            
-         🪪  arguments.count                                                   
-  433    Function IsSelected invoked with 2 parameters, 3 required.            
-         🪪  arguments.count                                                   
-  434    Function IsSelected invoked with 2 parameters, 3 required.            
-         🪪  arguments.count                                                   
-  435    Function IsSelected invoked with 2 parameters, 3 required.            
-         🪪  arguments.count                                                   
-  444    Function IsSelected invoked with 2 parameters, 3 required.            
-         🪪  arguments.count                                                   
-  445    Function IsSelected invoked with 2 parameters, 3 required.            
-         🪪  arguments.count                                                   
-  507    Function IsChecked invoked with 1 parameter, 2 required.              
-         🪪  arguments.count                                                   
-  513    Function IsChecked invoked with 1 parameter, 2 required.              
-         🪪  arguments.count                                                   
-  635    Function IsChecked invoked with 1 parameter, 2 required.              
-         🪪  arguments.count                                                   
- ------ ---------------------------------------------------------------------- 
-
- ------ ------------------------------------------- 
-  Line   game/pages/overview.php                    
- ------ ------------------------------------------- 
-  39     Variable $GlobalUni might not be defined.  
-         🪪  variable.undefined                     
- ------ ------------------------------------------- 
+ ------ ------------------------------------------------------------------------ 
+  Line   game/pages/options.php                                                  
+ ------ ------------------------------------------------------------------------ 
+  170    Function IsChecked invoked with 1 parameter, 2 required.                
+         🪪  arguments.count                                                     
+  170    Parameter #1 $user of function IsChecked expects array, string given.   
+         🪪  argument.type                                                       
+  421    Variable $Languages might not be defined.                               
+         🪪  variable.undefined                                                  
+  422    Function IsSelected invoked with 2 parameters, 3 required.              
+         🪪  arguments.count                                                     
+  422    Parameter #1 $user of function IsSelected expects array, string given.  
+         🪪  argument.type                                                       
+  435    Function IsSelected invoked with 2 parameters, 3 required.              
+         🪪  arguments.count                                                     
+  435    Parameter #1 $user of function IsSelected expects array, string given.  
+         🪪  argument.type                                                       
+  435    Parameter #2 $option of function IsSelected expects string, int given.  
+         🪪  argument.type                                                       
+  436    Function IsSelected invoked with 2 parameters, 3 required.              
+         🪪  arguments.count                                                     
+  436    Parameter #1 $user of function IsSelected expects array, string given.  
+         🪪  argument.type                                                       
+  436    Parameter #2 $option of function IsSelected expects string, int given.  
+         🪪  argument.type                                                       
+  437    Function IsSelected invoked with 2 parameters, 3 required.              
+         🪪  arguments.count                                                     
+  437    Parameter #1 $user of function IsSelected expects array, string given.  
+         🪪  argument.type                                                       
+  437    Parameter #2 $option of function IsSelected expects string, int given.  
+         🪪  argument.type                                                       
+  446    Function IsSelected invoked with 2 parameters, 3 required.              
+         🪪  arguments.count                                                     
+  446    Parameter #1 $user of function IsSelected expects array, string given.  
+         🪪  argument.type                                                       
+  446    Parameter #2 $option of function IsSelected expects string, int given.  
+         🪪  argument.type                                                       
+  447    Function IsSelected invoked with 2 parameters, 3 required.              
+         🪪  arguments.count                                                     
+  447    Parameter #1 $user of function IsSelected expects array, string given.  
+         🪪  argument.type                                                       
+  447    Parameter #2 $option of function IsSelected expects string, int given.  
+         🪪  argument.type                                                       
+  509    Function IsChecked invoked with 1 parameter, 2 required.                
+         🪪  arguments.count                                                     
+  509    Parameter #1 $user of function IsChecked expects array, string given.   
+         🪪  argument.type                                                       
+  515    Function IsChecked invoked with 1 parameter, 2 required.                
+         🪪  arguments.count                                                     
+  515    Parameter #1 $user of function IsChecked expects array, string given.   
+         🪪  argument.type                                                       
+  637    Function IsChecked invoked with 1 parameter, 2 required.                
+         🪪  arguments.count                                                     
+  637    Parameter #1 $user of function IsChecked expects array, string given.   
+         🪪  argument.type                                                       
+ ------ ------------------------------------------------------------------------ 
 
  ------ ------------------------------------------------------------------------------------ 
   Line   game/pages/overview_events.php                                                      
@@ -2924,13 +2644,6 @@
          🪪  variable.undefined                  
  ------ ---------------------------------------- 
 
- ------ ------------------------------------------- 
-  Line   game/pages/phalanx.php                     
- ------ ------------------------------------------- 
-  112    Variable $db_prefix might not be defined.  
-         🪪  variable.undefined                     
- ------ ------------------------------------------- 
-
  ------ ------------------------------------------------------------------------------ 
   Line   game/pages/phalanx_events.php                                                 
  ------ ------------------------------------------------------------------------------ 
@@ -2991,35 +2704,23 @@
  ------ -------------------------------------------------------------------- 
   Line   game/pages/pranger.php                                              
  ------ -------------------------------------------------------------------- 
-  13     Function MyDate() has no return type specified.                     
+  14     Function MyDate() has no return type specified.                     
          🪪  missingType.return                                              
-  13     Function MyDate() has parameter $fmt with no type specified.        
+  14     Function MyDate() has parameter $fmt with no type specified.        
          🪪  missingType.parameter                                           
-  13     Function MyDate() has parameter $timestamp with no type specified.  
+  14     Function MyDate() has parameter $timestamp with no type specified.  
          🪪  missingType.parameter                                           
-  45     Variable $DefaultLanguage might not be defined.                     
+  46     Variable $DefaultLanguage might not be defined.                     
          🪪  variable.undefined                                              
-  45     Variable $Languages might not be defined.                           
-         🪪  variable.undefined                                              
-  79     Variable $db_prefix might not be defined.                           
+  46     Variable $Languages might not be defined.                           
          🪪  variable.undefined                                              
  ------ -------------------------------------------------------------------- 
 
  ------ ------------------------------------------------------------ 
   Line   game/pages/renameplanet.php                                 
  ------ ------------------------------------------------------------ 
-  23     Function PlanetDestroyMenu() has no return type specified.  
+  24     Function PlanetDestroyMenu() has no return type specified.  
          🪪  missingType.return                                      
-  83     Variable $db_prefix might not be defined.                   
-         🪪  variable.undefined                                      
-  89     Variable $db_prefix might not be defined.                   
-         🪪  variable.undefined                                      
-  103    Variable $db_prefix might not be defined.                   
-         🪪  variable.undefined                                      
-  115    Variable $db_prefix might not be defined.                   
-         🪪  variable.undefined                                      
-  116    Variable $db_prefix might not be defined.                   
-         🪪  variable.undefined                                      
  ------ ------------------------------------------------------------ 
 
  ------ ---------------------------------------------------------------------- 
@@ -3052,24 +2753,13 @@
  ------ --------------------------------------------------- 
   Line   game/pages/sprungtor.php                           
  ------ --------------------------------------------------- 
-  33     Variable $fleetmap_revnosat might not be defined.  
-         🪪  variable.undefined                             
-  83     Variable $fleet might not be defined.              
+  34     Variable $fleetmap_revnosat might not be defined.  
          🪪  variable.undefined                             
   84     Variable $fleet might not be defined.              
          🪪  variable.undefined                             
-  91     Variable $db_prefix might not be defined.          
-         🪪  variable.undefined                             
-  93     Variable $db_prefix might not be defined.          
+  85     Variable $fleet might not be defined.              
          🪪  variable.undefined                             
  ------ --------------------------------------------------- 
-
- ------ ------------------------------------------- 
-  Line   game/pages/statistics.php                  
- ------ ------------------------------------------- 
-  77     Variable $GlobalUni might not be defined.  
-         🪪  variable.undefined                     
- ------ ------------------------------------------- 
 
  ------ ----------------------------------------------------------------------- 
   Line   game/pages/suche.php                                                   
@@ -3162,89 +2852,16 @@
          🪪  variable.undefined                                                              
  ------ ------------------------------------------------------------------------------------ 
 
- ------ ----------------------------------------------------------- 
-  Line   game/pages/writemessages.php                               
- ------ ----------------------------------------------------------- 
-  27     Function SendNotActivated() has no return type specified.  
-         🪪  missingType.return                                     
- ------ ----------------------------------------------------------- 
-
- ------ ----------------------------------- 
-  Line   game/pages_admin/admin.php         
- ------ ----------------------------------- 
-  247    Left side of || is always false.   
-         🪪  booleanOr.leftAlwaysFalse      
-  247    Right side of || is always false.  
-         🪪  booleanOr.rightAlwaysFalse     
- ------ ----------------------------------- 
-
- ------ ----------------------------------------------------- 
-  Line   game/pages_admin/admin_bans.php                      
- ------ ----------------------------------------------------- 
-  5      Function Admin_Bans() has no return type specified.  
-         🪪  missingType.return                               
-  54     Result of function AdminPanel (void) is used.        
-         🪪  function.void                                    
-  160    Result of function AdminPanel (void) is used.        
-         🪪  function.void                                    
- ------ ----------------------------------------------------- 
-
- ------ ------------------------------------------------------------- 
-  Line   game/pages_admin/admin_battle.php                            
- ------ ------------------------------------------------------------- 
-  6      Function Admin_BattleReport() has no return type specified.  
-         🪪  missingType.return                                       
-  15     Result of function AdminPanel (void) is used.                
-         🪪  function.void                                            
- ------ ------------------------------------------------------------- 
-
  ------ ---------------------------------------------------------------------- 
   Line   game/pages_admin/admin_botedit.php                                    
  ------ ---------------------------------------------------------------------- 
-  5      Function Admin_Botedit() has no return type specified.                
-         🪪  missingType.return                                                
   88     Parameter #2 $value of function setcookie expects string, int given.  
          🪪  argument.type                                                     
-  150    Result of function AdminPanel (void) is used.                         
-         🪪  function.void                                                     
  ------ ---------------------------------------------------------------------- 
-
- ------ ----------------------------------------------------- 
-  Line   game/pages_admin/admin_bots.php                      
- ------ ----------------------------------------------------- 
-  5      Function Admin_Bots() has no return type specified.  
-         🪪  missingType.return                               
-  34     Result of function AdminPanel (void) is used.        
-         🪪  function.void                                    
- ------ ----------------------------------------------------- 
-
- ------ ---------------------------------------------------------- 
-  Line   game/pages_admin/admin_broadcast.php                      
- ------ ---------------------------------------------------------- 
-  5      Function Admin_Broadcast() has no return type specified.  
-         🪪  missingType.return                                    
-  53     Result of function AdminPanel (void) is used.             
-         🪪  function.void                                         
- ------ ---------------------------------------------------------- 
-
- ------ ------------------------------------------------------------------------------------------------------------- 
-  Line   game/pages_admin/admin_browse.php                                                                            
- ------ ------------------------------------------------------------------------------------------------------------- 
-  5      Function Admin_Browse() has no return type specified.                                                        
-         🪪  missingType.return                                                                                       
-  31     Return value of function print_r() is always true and the result is printed instead of being returned. Pass  
-         in true as parameter #2 $return to return the output instead.                                                
-         🪪  function.uselessReturnValue                                                                              
-  32     Return value of function print_r() is always true and the result is printed instead of being returned. Pass  
-         in true as parameter #2 $return to return the output instead.                                                
-         🪪  function.uselessReturnValue                                                                              
- ------ ------------------------------------------------------------------------------------------------------------- 
 
  ------ -------------------------------------------------------------------------------- 
   Line   game/pages_admin/admin_checksum.php                                             
  ------ -------------------------------------------------------------------------------- 
-  5      Function Admin_Checksum() has no return type specified.                         
-         🪪  missingType.return                                                          
   11     Parameter #1 $data of function unserialize expects string, string|false given.  
          🪪  argument.type                                                               
   12     Parameter #1 $data of function unserialize expects string, string|false given.  
@@ -3253,24 +2870,11 @@
          🪪  argument.type                                                               
   14     Parameter #1 $data of function unserialize expects string, string|false given.  
          🪪  argument.type                                                               
-  169    Result of function AdminPanel (void) is used.                                   
-         🪪  function.void                                                               
  ------ -------------------------------------------------------------------------------- 
-
- ------ --------------------------------------------------------------- 
-  Line   game/pages_admin/admin_colony_settings.php                     
- ------ --------------------------------------------------------------- 
-  5      Function Admin_ColonySettings() has no return type specified.  
-         🪪  missingType.return                                         
-  21     Result of function AdminPanel (void) is used.                  
-         🪪  function.void                                              
- ------ --------------------------------------------------------------- 
 
  ------ ------------------------------------------------------------------------- 
   Line   game/pages_admin/admin_coupons.php                                       
  ------ ------------------------------------------------------------------------- 
-  5      Function Admin_Coupons() has no return type specified.                   
-         🪪  missingType.return                                                   
   30     Parameter #1 $hour of function mktime expects int, string given.         
          🪪  argument.type                                                        
   30     Parameter #2 $minute of function mktime expects int|null, string given.  
@@ -3279,88 +2883,22 @@
          🪪  argument.type                                                        
   30     Parameter #5 $day of function mktime expects int|null, string given.     
          🪪  argument.type                                                        
-  54     Result of function AdminPanel (void) is used.                            
-         🪪  function.void                                                        
  ------ ------------------------------------------------------------------------- 
 
  ------ ----------------------------------------------------------------------------------------------- 
   Line   game/pages_admin/admin_db.php                                                                  
  ------ ----------------------------------------------------------------------------------------------- 
-  11     Function DiffTab() has no return type specified.                                               
-         🪪  missingType.return                                                                         
-  11     Function DiffTab() has parameter $dst with no type specified.                                  
-         🪪  missingType.parameter                                                                      
-  11     Function DiffTab() has parameter $src with no type specified.                                  
-         🪪  missingType.parameter                                                                      
-  11     Function DiffTab() has parameter $tabname with no type specified.                              
-         🪪  missingType.parameter                                                                      
-  39     Function ListDatabaseBackups() has no return type specified.                                   
-         🪪  missingType.return                                                                         
-  67     Function CreateBackup() has no return type specified.                                          
-         🪪  missingType.return                                                                         
-  76     Function DeleteBackup() has no return type specified.                                          
-         🪪  missingType.return                                                                         
-  76     Function DeleteBackup() has parameter $fname with no type specified.                           
-         🪪  missingType.parameter                                                                      
-  89     Function RestoreBackup() has no return type specified.                                         
-         🪪  missingType.return                                                                         
-  89     Function RestoreBackup() has parameter $fname with no type specified.                          
-         🪪  missingType.parameter                                                                      
-  100    Function Admin_DB() has no return type specified.                                              
-         🪪  missingType.return                                                                         
   107    Path in include() "install_tabs.php" is not a file or it does not exist.                       
          🪪  include.fileNotFound                                                                       
   108    Variable $tabs might not be defined.                                                           
          🪪  variable.undefined                                                                         
   167    Binary operation ".=" between array<string>|string and ' AUTO_INCREMENT' results in an error.  
          🪪  assignOp.invalid                                                                           
-  219    Result of function AdminPanel (void) is used.                                                  
-         🪪  function.void                                                                              
  ------ ----------------------------------------------------------------------------------------------- 
-
- ------ ------------------------------------------------------ 
-  Line   game/pages_admin/admin_debug.php                      
- ------ ------------------------------------------------------ 
-  5      Function Admin_Debug() has no return type specified.  
-         🪪  missingType.return                                
-  54     Result of function AdminPanel (void) is used.         
-         🪪  function.void                                     
- ------ ------------------------------------------------------ 
-
- ------ ------------------------------------------------------- 
-  Line   game/pages_admin/admin_errors.php                      
- ------ ------------------------------------------------------- 
-  6      Function Admin_Errors() has no return type specified.  
-         🪪  missingType.return                                 
-  35     Result of function AdminPanel (void) is used.          
-         🪪  function.void                                      
- ------ ------------------------------------------------------- 
-
- ------ ----------------------------------------------------------- 
-  Line   game/pages_admin/admin_expedition.php                      
- ------ ----------------------------------------------------------- 
-  5      Function Admin_Expedition() has no return type specified.  
-         🪪  missingType.return                                     
-  105    Result of function AdminPanel (void) is used.              
-         🪪  function.void                                          
- ------ ----------------------------------------------------------- 
-
- ------ ---------------------------------------------------------- 
-  Line   game/pages_admin/admin_fleetlogs.php                      
- ------ ---------------------------------------------------------- 
-  5      Function Admin_Fleetlogs() has no return type specified.  
-         🪪  missingType.return                                    
- ------ ---------------------------------------------------------- 
 
  ------ --------------------------------------------------------------------------------------------------------------- 
   Line   game/pages_admin/admin_loca.php                                                                                
  ------ --------------------------------------------------------------------------------------------------------------- 
-  5      Function CompareTwoLocas() has no return type specified.                                                       
-         🪪  missingType.return                                                                                         
-  5      Function CompareTwoLocas() has parameter $dst with no type specified.                                          
-         🪪  missingType.parameter                                                                                      
-  5      Function CompareTwoLocas() has parameter $src with no type specified.                                          
-         🪪  missingType.parameter                                                                                      
   22     Empty array passed to foreach.                                                                                 
          🪪  foreach.emptyArray                                                                                         
   35     Variable $src_lang in empty() always exists and is always falsy.                                               
@@ -3371,93 +2909,38 @@
          🪪  booleanAnd.alwaysFalse                                                                                     
          💡  Because the type is coming from a PHPDoc, you can turn off this check by setting treatPhpDocTypesAsCertain  
          : false in your phpstan.neon.                                                                                  
-  67     Function Admin_Loca() has no return type specified.                                                            
-         🪪  missingType.return                                                                                         
-  100    Result of function AdminPanel (void) is used.                                                                  
-         🪪  function.void                                                                                              
   126    Argument of an invalid type list<string>|false supplied for foreach, only iterables are supported.             
          🪪  foreach.nonIterable                                                                                        
  ------ --------------------------------------------------------------------------------------------------------------- 
 
- ------ ------------------------------------------------------- 
-  Line   game/pages_admin/admin_logins.php                      
- ------ ------------------------------------------------------- 
-  5      Function Admin_Logins() has no return type specified.  
-         🪪  missingType.return                                 
- ------ ------------------------------------------------------- 
+ ------ ----------------------------------------------------- 
+  Line   game/pages_admin/admin_mods.php                      
+ ------ ----------------------------------------------------- 
+  34     Function Admin_Mods() has no return type specified.  
+         🪪  missingType.return                               
+ ------ ----------------------------------------------------- 
 
- ------ -------------------------------------------------------------------------------------- 
-  Line   game/pages_admin/admin_mods.php                                                       
- ------ -------------------------------------------------------------------------------------- 
-  5      Function GenModPanelSource() has no return type specified.                            
-         🪪  missingType.return                                                                
-  5      Function GenModPanelSource() has parameter $acitive with no type specified.           
-         🪪  missingType.parameter                                                             
-  5      Function GenModPanelSource() has parameter $can_be_installed with no type specified.  
-         🪪  missingType.parameter                                                             
-  5      Function GenModPanelSource() has parameter $mod with no type specified.               
-         🪪  missingType.parameter                                                             
-  5      Function GenModPanelSource() has parameter $session with no type specified.           
-         🪪  missingType.parameter                                                             
-  34     Function Admin_Mods() has no return type specified.                                   
-         🪪  missingType.return                                                                
- ------ -------------------------------------------------------------------------------------- 
+ ------ --------------------------------------- 
+  Line   game/pages_admin/admin_planets.php     
+ ------ --------------------------------------- 
+  90     If condition is always true.           
+         🪪  if.alwaysTrue                      
+  90     Variable $query might not be defined.  
+         🪪  variable.undefined                 
+  169    Variable $diam might not be defined.   
+         🪪  variable.undefined                 
+ ------ --------------------------------------- 
 
- ------ -------------------------------------------------------- 
-  Line   game/pages_admin/admin_planets.php                      
- ------ -------------------------------------------------------- 
-  5      Function Admin_Planets() has no return type specified.  
-         🪪  missingType.return                                  
-  90     If condition is always true.                            
-         🪪  if.alwaysTrue                                       
-  90     Variable $query might not be defined.                   
-         🪪  variable.undefined                                  
-  169    Variable $diam might not be defined.                    
-         🪪  variable.undefined                                  
- ------ -------------------------------------------------------- 
-
- ------ ------------------------------------------------------------------- 
-  Line   game/pages_admin/admin_queue.php                                   
- ------ ------------------------------------------------------------------- 
-  5      Function QueueDesc() has no return type specified.                 
-         🪪  missingType.return                                             
-  5      Function QueueDesc() has parameter $queue with no type specified.  
-         🪪  missingType.parameter                                          
-  59     Variable $block_text might not be defined.                         
-         🪪  variable.undefined                                             
-  65     Function Admin_Queue() has no return type specified.               
-         🪪  missingType.return                                             
- ------ ------------------------------------------------------------------- 
-
- ------ ------------------------------------------------------- 
-  Line   game/pages_admin/admin_raksim.php                      
- ------ ------------------------------------------------------- 
-  5      Function Admin_RakSim() has no return type specified.  
-         🪪  missingType.return                                 
-  63     Result of function AdminPanel (void) is used.          
-         🪪  function.void                                      
- ------ ------------------------------------------------------- 
-
- ------ -------------------------------------------------------- 
-  Line   game/pages_admin/admin_reports.php                      
- ------ -------------------------------------------------------- 
-  5      Function Admin_Reports() has no return type specified.  
-         🪪  missingType.return                                  
-  34     Result of function AdminPanel (void) is used.           
-         🪪  function.void                                       
- ------ -------------------------------------------------------- 
+ ------ -------------------------------------------- 
+  Line   game/pages_admin/admin_queue.php            
+ ------ -------------------------------------------- 
+  59     Variable $block_text might not be defined.  
+         🪪  variable.undefined                      
+ ------ -------------------------------------------- 
 
  ------ ------------------------------------------------------------------------------------------------------------- 
   Line   game/pages_admin/admin_sim.php                                                                               
  ------ ------------------------------------------------------------------------------------------------------------- 
-  5      Function ParseBattleDataSource() has no return type specified.                                               
-         🪪  missingType.return                                                                                       
-  5      Function ParseBattleDataSource() has parameter $a with no type specified.                                    
-         🪪  missingType.parameter                                                                                    
-  5      Function ParseBattleDataSource() has parameter $d with no type specified.                                    
-         🪪  missingType.parameter                                                                                    
-  5      Function ParseBattleDataSource() has parameter $source with no type specified.                               
-         🪪  missingType.parameter                                                                                    
   38     Cannot access offset 0 on list<string>|false.                                                                
          🪪  offsetAccess.nonOffsetAccessible                                                                         
   39     Cannot access offset 1 on list<string>|false.                                                                
@@ -3560,26 +3043,6 @@
          🪪  offsetAccess.nonOffsetAccessible                                                                         
   122    Function SimBattle() has no return type specified.                                                           
          🪪  missingType.return                                                                                       
-  122    Function SimBattle() has parameter $a with no type specified.                                                
-         🪪  missingType.parameter                                                                                    
-  122    Function SimBattle() has parameter $aloss with no type specified.                                            
-         🪪  missingType.parameter                                                                                    
-  122    Function SimBattle() has parameter $battle_result with no type specified.                                    
-         🪪  missingType.parameter                                                                                    
-  122    Function SimBattle() has parameter $battle_source with no type specified.                                    
-         🪪  missingType.parameter                                                                                    
-  122    Function SimBattle() has parameter $d with no type specified.                                                
-         🪪  missingType.parameter                                                                                    
-  122    Function SimBattle() has parameter $debug with no type specified.                                            
-         🪪  missingType.parameter                                                                                    
-  122    Function SimBattle() has parameter $did with no type specified.                                              
-         🪪  missingType.parameter                                                                                    
-  122    Function SimBattle() has parameter $dloss with no type specified.                                            
-         🪪  missingType.parameter                                                                                    
-  122    Function SimBattle() has parameter $fid with no type specified.                                              
-         🪪  missingType.parameter                                                                                    
-  122    Function SimBattle() has parameter $rf with no type specified.                                               
-         🪪  missingType.parameter                                                                                    
   152    Parameter #1 $stream of function fwrite expects resource, resource|false given.                              
          🪪  argument.type                                                                                            
   153    Parameter #1 $stream of function fclose expects resource, resource|false given.                              
@@ -3590,30 +3053,17 @@
          🪪  argument.type                                                                                            
   178    Parameter #1 $data of function unserialize expects string, string|false given.                               
          🪪  argument.type                                                                                            
-  217    Function Admin_BattleSim() has no return type specified.                                                     
-         🪪  missingType.return                                                                                       
-  331    Function getval() has no return type specified.                                                              
-         🪪  missingType.return                                                                                       
-  331    Function getval() has parameter $name with no type specified.                                                
-         🪪  missingType.parameter                                                                                    
+  325    Parameter #4 $rf of function SimBattle expects int, int|true given.                                          
+         🪪  argument.type                                                                                            
   331    Inner named functions are not supported by PHPStan. Consider refactoring to an anonymous function, class     
          method, or a top-level-defined function. See issue #165 (https://github.com/phpstan/phpstan/issues/165) for  
          more details.                                                                                                
          🪪  function.inner                                                                                           
-  336    Function getval2() has no return type specified.                                                             
-         🪪  missingType.return                                                                                       
-  336    Function getval2() has parameter $arr with no type specified.                                                
-         🪪  missingType.parameter                                                                                    
-  336    Function getval2() has parameter $id with no type specified.                                                 
-         🪪  missingType.parameter                                                                                    
+  333    Function getval() should return string but return statement is missing.                                      
   336    Inner named functions are not supported by PHPStan. Consider refactoring to an anonymous function, class     
          method, or a top-level-defined function. See issue #165 (https://github.com/phpstan/phpstan/issues/165) for  
          more details.                                                                                                
          🪪  function.inner                                                                                           
-  342    Function get_intval() has no return type specified.                                                          
-         🪪  missingType.return                                                                                       
-  342    Function get_intval() has parameter $id with no type specified.                                              
-         🪪  missingType.parameter                                                                                    
   342    Inner named functions are not supported by PHPStan. Consider refactoring to an anonymous function, class     
          method, or a top-level-defined function. See issue #165 (https://github.com/phpstan/phpstan/issues/165) for  
          more details.                                                                                                
@@ -3684,38 +3134,15 @@
          🪪  variable.undefined                                                                                       
  ------ ------------------------------------------------------------------------------------------------------------- 
 
- ------ ------------------------------------------------------------------------ 
-  Line   game/pages_admin/admin_uni.php                                          
- ------ ------------------------------------------------------------------------ 
-  5      Function UniIsSelected() has no return type specified.                  
-         🪪  missingType.return                                                  
-  5      Function UniIsSelected() has parameter $option with no type specified.  
-         🪪  missingType.parameter                                               
-  5      Function UniIsSelected() has parameter $value with no type specified.   
-         🪪  missingType.parameter                                               
-  11     Function UniIsChecked() has no return type specified.                   
-         🪪  missingType.return                                                  
-  11     Function UniIsChecked() has parameter $option with no type specified.   
-         🪪  missingType.parameter                                               
-  17     Function Admin_Uni() has no return type specified.                      
-         🪪  missingType.return                                                  
-  91     Result of function AdminPanel (void) is used.                           
-         🪪  function.void                                                       
- ------ ------------------------------------------------------------------------ 
-
  ------ --------------------------------------------------------------------------- 
   Line   game/pages_admin/admin_userlogs.php                                        
  ------ --------------------------------------------------------------------------- 
-  5      Function Admin_UserLogs() has no return type specified.                    
-         🪪  missingType.return                                                     
   20     Parameter #4 $month of function mktime expects int|null, int|false given.  
          🪪  argument.type                                                          
   20     Parameter #5 $day of function mktime expects int|null, int|false given.    
          🪪  argument.type                                                          
   20     Parameter #6 $year of function mktime expects int|null, int|false given.   
          🪪  argument.type                                                          
-  50     Result of function AdminPanel (void) is used.                              
-         🪪  function.void                                                          
  ------ --------------------------------------------------------------------------- 
 
  ------ -------------------------------------------------------------------------- 
@@ -3733,24 +3160,6 @@
          🪪  missingType.parameter                                                 
   33     Function LinkFleetsTo() has parameter $user with no type specified.       
          🪪  missingType.parameter                                                 
-  43     Function IsChecked() has no return type specified.                        
-         🪪  missingType.return                                                    
-  43     Function IsChecked() has parameter $option with no type specified.        
-         🪪  missingType.parameter                                                 
-  43     Function IsChecked() has parameter $user with no type specified.          
-         🪪  missingType.parameter                                                 
-  49     Function IsSelected() has no return type specified.                       
-         🪪  missingType.return                                                    
-  49     Function IsSelected() has parameter $option with no type specified.       
-         🪪  missingType.parameter                                                 
-  49     Function IsSelected() has parameter $user with no type specified.         
-         🪪  missingType.parameter                                                 
-  49     Function IsSelected() has parameter $value with no type specified.        
-         🪪  missingType.parameter                                                 
-  55     Function Admin_Users() has no return type specified.                      
-         🪪  missingType.return                                                    
-  188    Result of function AdminPanel (void) is used.                             
-         🪪  function.void                                                         
   338    Variable $days might not be defined.                                      
          🪪  variable.undefined                                                    
  ------ -------------------------------------------------------------------------- 
@@ -4765,133 +4174,133 @@
          🪪  missingType.return                                                            
   423    Function LoadUser() has parameter $player_id with no type specified.              
          🪪  missingType.parameter                                                         
-  435    Function UpdateLastClick() has no return type specified.                          
+  438    Function UpdateLastClick() has no return type specified.                          
          🪪  missingType.return                                                            
-  435    Function UpdateLastClick() has parameter $player_id with no type specified.       
+  438    Function UpdateLastClick() has parameter $player_id with no type specified.       
          🪪  missingType.parameter                                                         
-  449    Function IsPlayerNewbie() has no return type specified.                           
+  452    Function IsPlayerNewbie() has no return type specified.                           
          🪪  missingType.return                                                            
-  449    Function IsPlayerNewbie() has parameter $player_id with no type specified.        
+  452    Function IsPlayerNewbie() has parameter $player_id with no type specified.        
          🪪  missingType.parameter                                                         
-  464    Function IsPlayerStrong() has no return type specified.                           
+  467    Function IsPlayerStrong() has no return type specified.                           
          🪪  missingType.return                                                            
-  464    Function IsPlayerStrong() has parameter $player_id with no type specified.        
+  467    Function IsPlayerStrong() has parameter $player_id with no type specified.        
          🪪  missingType.parameter                                                         
-  479    Function PremiumStatus() has no return type specified.                            
+  482    Function PremiumStatus() has no return type specified.                            
          🪪  missingType.return                                                            
-  479    Function PremiumStatus() has parameter $user with no type specified.              
+  482    Function PremiumStatus() has parameter $user with no type specified.              
          🪪  missingType.parameter                                                         
-  500    Function GetOfficerLeft() has no return type specified.                           
+  503    Function GetOfficerLeft() has no return type specified.                           
          🪪  missingType.return                                                            
-  500    Function GetOfficerLeft() has parameter $off_type with no type specified.         
+  503    Function GetOfficerLeft() has parameter $off_type with no type specified.         
          🪪  missingType.parameter                                                         
-  500    Function GetOfficerLeft() has parameter $user with no type specified.             
+  503    Function GetOfficerLeft() has parameter $user with no type specified.             
          🪪  missingType.parameter                                                         
-  510    Function RecruitOfficer() has no return type specified.                           
+  513    Function RecruitOfficer() has no return type specified.                           
          🪪  missingType.return                                                            
-  510    Function RecruitOfficer() has parameter $off_type with no type specified.         
+  513    Function RecruitOfficer() has parameter $off_type with no type specified.         
          🪪  missingType.parameter                                                         
-  510    Function RecruitOfficer() has parameter $player_id with no type specified.        
+  513    Function RecruitOfficer() has parameter $player_id with no type specified.        
          🪪  missingType.parameter                                                         
-  510    Function RecruitOfficer() has parameter $seconds with no type specified.          
+  513    Function RecruitOfficer() has parameter $seconds with no type specified.          
          🪪  missingType.parameter                                                         
-  538    Function Logout() has no return type specified.                                   
+  541    Function Logout() has no return type specified.                                   
          🪪  missingType.return                                                            
-  538    Function Logout() has parameter $session with no type specified.                  
+  541    Function Logout() has parameter $session with no type specified.                  
          🪪  missingType.parameter                                                         
-  554    Function CheckSession() has no return type specified.                             
+  557    Function CheckSession() has no return type specified.                             
          🪪  missingType.return                                                            
-  554    Function CheckSession() has parameter $session with no type specified.            
+  557    Function CheckSession() has parameter $session with no type specified.            
          🪪  missingType.parameter                                                         
-  591    Function Login() has no return type specified.                                    
+  594    Function Login() has no return type specified.                                    
          🪪  missingType.return                                                            
-  591    Function Login() has parameter $from_validate with no type specified.             
+  594    Function Login() has parameter $from_validate with no type specified.             
          🪪  missingType.parameter                                                         
-  591    Function Login() has parameter $login with no type specified.                     
+  594    Function Login() has parameter $login with no type specified.                     
          🪪  missingType.parameter                                                         
-  591    Function Login() has parameter $pass with no type specified.                      
+  594    Function Login() has parameter $pass with no type specified.                      
          🪪  missingType.parameter                                                         
-  591    Function Login() has parameter $passmd with no type specified.                    
+  594    Function Login() has parameter $passmd with no type specified.                    
          🪪  missingType.parameter                                                         
-  661    Function RecalcStats() has no return type specified.                              
+  664    Function RecalcStats() has no return type specified.                              
          🪪  missingType.return                                                            
-  661    Function RecalcStats() has parameter $player_id with no type specified.           
+  664    Function RecalcStats() has parameter $player_id with no type specified.           
          🪪  missingType.parameter                                                         
-  729    Function AdjustStats() has no return type specified.                              
+  732    Function AdjustStats() has no return type specified.                              
          🪪  missingType.return                                                            
-  729    Function AdjustStats() has parameter $fpoints with no type specified.             
+  732    Function AdjustStats() has parameter $fpoints with no type specified.             
          🪪  missingType.parameter                                                         
-  729    Function AdjustStats() has parameter $player_id with no type specified.           
+  732    Function AdjustStats() has parameter $player_id with no type specified.           
          🪪  missingType.parameter                                                         
-  729    Function AdjustStats() has parameter $points with no type specified.              
+  732    Function AdjustStats() has parameter $points with no type specified.              
          🪪  missingType.parameter                                                         
-  729    Function AdjustStats() has parameter $rpoints with no type specified.             
+  732    Function AdjustStats() has parameter $rpoints with no type specified.             
          🪪  missingType.parameter                                                         
-  729    Function AdjustStats() has parameter $sign with no type specified.                
+  732    Function AdjustStats() has parameter $sign with no type specified.                
          🪪  missingType.parameter                                                         
-  738    Function RecalcRanks() has no return type specified.                              
+  741    Function RecalcRanks() has no return type specified.                              
          🪪  missingType.return                                                            
-  773    Function UnloadAll() has no return type specified.                                
+  776    Function UnloadAll() has no return type specified.                                
          🪪  missingType.return                                                            
-  785    Function ChangeSkinPath() has no return type specified.                           
+  788    Function ChangeSkinPath() has no return type specified.                           
          🪪  missingType.return                                                            
-  785    Function ChangeSkinPath() has parameter $dpath with no type specified.            
+  788    Function ChangeSkinPath() has parameter $dpath with no type specified.            
          🪪  missingType.parameter                                                         
-  785    Function ChangeSkinPath() has parameter $player_id with no type specified.        
+  788    Function ChangeSkinPath() has parameter $player_id with no type specified.        
          🪪  missingType.parameter                                                         
-  793    Function EnableSkin() has no return type specified.                               
+  796    Function EnableSkin() has no return type specified.                               
          🪪  missingType.return                                                            
-  793    Function EnableSkin() has parameter $enable with no type specified.               
+  796    Function EnableSkin() has parameter $enable with no type specified.               
          🪪  missingType.parameter                                                         
-  793    Function EnableSkin() has parameter $player_id with no type specified.            
+  796    Function EnableSkin() has parameter $player_id with no type specified.            
          🪪  missingType.parameter                                                         
-  801    Function EnumOperators() has no return type specified.                            
+  804    Function EnumOperators() has no return type specified.                            
          🪪  missingType.return                                                            
-  809    Function ReactivateUser() has no return type specified.                           
+  812    Function ReactivateUser() has no return type specified.                           
          🪪  missingType.return                                                            
-  809    Function ReactivateUser() has parameter $player_id with no type specified.        
+  812    Function ReactivateUser() has parameter $player_id with no type specified.        
          🪪  missingType.parameter                                                         
-  832    Function InvalidateUserCache() has no return type specified.                      
+  835    Function InvalidateUserCache() has no return type specified.                      
          🪪  missingType.return                                                            
-  839    Function AdminUserName() has no return type specified.                            
+  842    Function AdminUserName() has no return type specified.                            
          🪪  missingType.return                                                            
-  839    Function AdminUserName() has parameter $user with no type specified.              
+  842    Function AdminUserName() has parameter $user with no type specified.              
          🪪  missingType.parameter                                                         
-  869    Function BanUser() has no return type specified.                                  
+  872    Function BanUser() has no return type specified.                                  
          🪪  missingType.return                                                            
-  869    Function BanUser() has parameter $player_id with no type specified.               
+  872    Function BanUser() has parameter $player_id with no type specified.               
          🪪  missingType.parameter                                                         
-  869    Function BanUser() has parameter $seconds with no type specified.                 
+  872    Function BanUser() has parameter $seconds with no type specified.                 
          🪪  missingType.parameter                                                         
-  869    Function BanUser() has parameter $vmode with no type specified.                   
+  872    Function BanUser() has parameter $vmode with no type specified.                   
          🪪  missingType.parameter                                                         
-  885    Function BanUserAttacks() has no return type specified.                           
+  888    Function BanUserAttacks() has no return type specified.                           
          🪪  missingType.return                                                            
-  885    Function BanUserAttacks() has parameter $player_id with no type specified.        
+  888    Function BanUserAttacks() has parameter $player_id with no type specified.        
          🪪  missingType.parameter                                                         
-  885    Function BanUserAttacks() has parameter $seconds with no type specified.          
+  888    Function BanUserAttacks() has parameter $seconds with no type specified.          
          🪪  missingType.parameter                                                         
-  898    Function UnbanUser() has no return type specified.                                
+  901    Function UnbanUser() has no return type specified.                                
          🪪  missingType.return                                                            
-  898    Function UnbanUser() has parameter $player_id with no type specified.             
+  901    Function UnbanUser() has parameter $player_id with no type specified.             
          🪪  missingType.parameter                                                         
-  910    Function UnbanUserAttacks() has no return type specified.                         
+  913    Function UnbanUserAttacks() has no return type specified.                         
          🪪  missingType.return                                                            
-  910    Function UnbanUserAttacks() has parameter $player_id with no type specified.      
+  913    Function UnbanUserAttacks() has parameter $player_id with no type specified.      
          🪪  missingType.parameter                                                         
-  920    Function SetUserFlags() has no return type specified.                             
+  923    Function SetUserFlags() has no return type specified.                             
          🪪  missingType.return                                                            
-  920    Function SetUserFlags() has parameter $flags with no type specified.              
+  923    Function SetUserFlags() has parameter $flags with no type specified.              
          🪪  missingType.parameter                                                         
-  920    Function SetUserFlags() has parameter $player_id with no type specified.          
+  923    Function SetUserFlags() has parameter $player_id with no type specified.          
          🪪  missingType.parameter                                                         
-  928    Function GetUsersCount() has no return type specified.                            
+  931    Function GetUsersCount() has no return type specified.                            
          🪪  missingType.return                                                            
-  937    Function GetTop1() has no return type specified.                                  
+  940    Function GetTop1() has no return type specified.                                  
          🪪  missingType.return                                                            
-  948    Function FeedActivate() has no return type specified.                             
+  951    Function FeedActivate() has no return type specified.                             
          🪪  missingType.return                                                            
-  948    Function FeedActivate() has parameter $enable with no type specified.             
+  951    Function FeedActivate() has parameter $enable with no type specified.             
          🪪  missingType.parameter                                                         
  ------ ---------------------------------------------------------------------------------- 
 
@@ -5059,5 +4468,5 @@
          🪪  variable.undefined                                                   
  ------ ------------------------------------------------------------------------- 
 
- [ERROR] Found 2217 errors                                                                                              
+ [ERROR] Found 1973 errors                                                                                              
 

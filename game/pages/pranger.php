@@ -1,6 +1,7 @@
 <?php
 
 /** @var array $GlobalUser */
+/** @var string $db_prefix */
 
 // Pillar of Shame.
 

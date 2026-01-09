@@ -2,7 +2,7 @@
 
 // Admin Area: missile attack simulator. Used for verification and debugging of the algorithmic part of the missile attack.
 
-function Admin_RakSim ()
+function Admin_RakSim () : void
 {
     global $session;
     global $db_prefix;
@@ -60,7 +60,7 @@ function Admin_RakSim ()
     }
 ?>
 
-<?=AdminPanel();?>
+<?php AdminPanel();?>
 
 <table cellpadding=0 cellspacing=0>
 <form name="simForm" action="index.php?page=admin&session=<?=$session;?>&mode=RakSim" method="POST" >

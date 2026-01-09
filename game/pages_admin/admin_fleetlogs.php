@@ -2,7 +2,7 @@
 
 // Admin Area: Current flights of players, as well as flight logs
 
-function Admin_Fleetlogs ()
+function Admin_Fleetlogs () : void
 {
     global $session;
     global $db_prefix;

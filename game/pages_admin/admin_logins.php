@@ -2,7 +2,7 @@
 
 // Admin Area: logins
 
-function Admin_Logins ()
+function Admin_Logins () : void
 {
     global $session;
     global $db_prefix;

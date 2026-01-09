@@ -2,7 +2,7 @@
 
 // Admin Area: Planets.
 
-function Admin_Planets ()
+function Admin_Planets () : void
 {
     global $loca_lang, $Languages;
     global $session;

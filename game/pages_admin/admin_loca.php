@@ -2,7 +2,7 @@
 
 // Admin Area: Check localization
 
-function CompareTwoLocas ($src, $dst)
+function CompareTwoLocas (string $src, string $dst) : string
 {
     $res = "";
 
@@ -64,7 +64,7 @@ function CompareTwoLocas ($src, $dst)
     return $res;
 }
 
-function Admin_Loca ()
+function Admin_Loca () : void
 {
     global $session;
     global $db_prefix;
@@ -97,7 +97,7 @@ function Admin_Loca ()
     }
 ?>
 
-<?=AdminPanel();?>
+<?php AdminPanel();?>
 
 <table>
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Loca&action=search" method="POST" >

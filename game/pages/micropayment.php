@@ -27,7 +27,7 @@ $session = $_GET['session'];
 // Cost of Officers.
 $price = array ( USER_OFFICER_COMMANDER => 10000, USER_OFFICER_ADMIRAL => 10000, USER_OFFICER_ENGINEER => 10000, USER_OFFICER_GEOLOGE => 10000, USER_OFFICER_TECHNOCRATE => 10000 );
 
-function OfficerLeft ( $type )
+function OfficerLeft ( int $type ) : string
 {
     global $GlobalUser;
     $now = time ();

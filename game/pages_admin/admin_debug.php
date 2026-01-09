@@ -2,7 +2,7 @@
 
 // Admin Area: Debug messages.
 
-function Admin_Debug ()
+function Admin_Debug () : void
 {
     global $session;
     global $db_prefix;
@@ -51,7 +51,7 @@ function Admin_Debug ()
 
 ?>
 
-<?=AdminPanel();?>
+<?php AdminPanel();?>
 
 <table class='header'><tr class='header'><td><table width="519">
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Debug" method="POST">

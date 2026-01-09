@@ -1,7 +1,9 @@
 <?php
 
 /** @var array $GlobalUser */
+/** @var array $GlobalUni */
 /** @var string $db_prefix */
+/** @var string $db_secret */
 
 // Settings.
 
@@ -23,28 +25,28 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
-function IsChecked ($option)
+function IsChecked (string $option) : string
 {
     global $GlobalUser;
     if ( $GlobalUser[$option] ) return "checked=checked";
     else return "";
 }
 
-function IsCheckedFlag ($flag)
+function IsCheckedFlag (int $flag) : string
 {
     global $GlobalUser;
     if ( $GlobalUser['flags'] & $flag ) return "checked='checked'";
     else return "";
 }
 
-function IsSelected ($option, $value)
+function IsSelected (string $option, mixed $value) : string
 {
     global $GlobalUser;
     if ( $GlobalUser[$option] == $value ) return "selected";
     else return "";
 }
 
-function isValidEmail($email){
+function isValidEmail(string $email) : mixed {
     return filter_var($email, FILTER_VALIDATE_EMAIL);
 }
 

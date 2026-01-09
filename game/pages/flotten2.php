@@ -1,6 +1,7 @@
 <?php
 
 /** @var array $GlobalUser */
+/** @var array $GlobalUni */
 
 // Fleet 2: Prepare target coordinates
 
@@ -58,7 +59,7 @@ BeginContent();
     if ( key_exists ( 'target_planet', $_POST ) ) $target_planet = intval ($_POST['target_planet']);
     else $target_planet = $aktplanet['p'];
 
-    function planettype ($n)
+    function planettype (int $n) : void
     {
         if ( key_exists ( 'target_planettype', $_POST ) ) {
             if ( intval ($_POST['target_planettype']) == $n ) echo "selected";

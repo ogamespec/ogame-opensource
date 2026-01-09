@@ -2,19 +2,19 @@
 
 // Admin Area: Universe Settings.
 
-function UniIsSelected ($option, $value)
+function UniIsSelected (mixed $option, mixed $value) : string
 {
     if ( $option == $value ) return "selected";
     else return "";
 }
 
-function UniIsChecked ($option)
+function UniIsChecked (int $option) : string
 {
     if ( $option ) return "checked";
     else return "";
 }
 
-function Admin_Uni ()
+function Admin_Uni () : void
 {
     global $db_prefix;
     global $GlobalUser;
@@ -88,7 +88,7 @@ function Admin_Uni ()
     $unitab = LoadUniverse ();
 ?>
 
-<?php echo AdminPanel();?>
+<?php AdminPanel();?>
 
 <table >
 <form action="index.php?page=admin&session=<?php echo $session;?>&mode=Uni" method="POST" >

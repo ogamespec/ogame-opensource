@@ -2,7 +2,7 @@
 
 // Admin Area: Modifications.
 
-function GenModPanelSource($session, $acitive, $can_be_installed, $mod)
+function GenModPanelSource(string $session, bool $acitive, bool $can_be_installed, array $mod) : void
 {
     echo "        <div class=\"mod-item\">\n";
     echo "            <span class=\"status-indicator ". ($acitive ? "" : ($can_be_installed ? "status-inactive" : "status-installed") ) ." \">" . ($acitive ? loca("ADM_MODS_STATE_ACTIVE") : ($can_be_installed ? loca("ADM_MODS_STATE_AVAILABLE") : loca("ADM_MODS_STATE_INSTALLED")) ) . "</span>\n";

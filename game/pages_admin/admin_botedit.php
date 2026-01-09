@@ -2,7 +2,7 @@
 
 // Admin Area: Bot intelligence graphical editor.
 
-function Admin_Botedit ()
+function Admin_Botedit () : void
 {
     global $session;
     global $db_prefix;
@@ -147,7 +147,7 @@ function Admin_Botedit ()
 <script type="text/javascript" src="js/go.js"></script>
 <script type="text/javascript" src="js/go-game.js"></script>
 
-<?=AdminPanel();?>
+<?php AdminPanel();?>
 
 <?php
     if ( $GlobalUser['admin'] < 2) {

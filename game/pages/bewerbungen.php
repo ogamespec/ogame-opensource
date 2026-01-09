@@ -1,6 +1,7 @@
 <?php
 
 /** @var array $GlobalUser */
+/** @var string $db_array */
 
 // List of applications to join the alliance.
 

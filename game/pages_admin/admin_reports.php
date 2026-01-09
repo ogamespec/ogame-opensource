@@ -2,7 +2,7 @@
 
 // Admin Area: user complains about abusive messages. Although Legor commands to dominate the universe, it must be done with respect.
 
-function Admin_Reports ()
+function Admin_Reports () : void
 {
     global $session;
     global $db_prefix;
@@ -31,7 +31,7 @@ function Admin_Reports ()
 
 ?>
 
-<?=AdminPanel();?>
+<?php AdminPanel();?>
 
 <table class='header'><tr class='header'><td><table width="519">
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Reports" method="POST">

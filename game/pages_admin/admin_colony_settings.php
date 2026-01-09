@@ -2,7 +2,7 @@
 
 // Admin Area: Colonization Settings
 
-function Admin_ColonySettings ()
+function Admin_ColonySettings () : void
 {
     global $session;
     global $db_prefix;
@@ -18,7 +18,7 @@ function Admin_ColonySettings ()
     }
 ?>
 
-<?=AdminPanel();?>
+<?php AdminPanel();?>
 
 <table >
 <form action="index.php?page=admin&session=<?php echo $session;?>&mode=ColonySettings" method="POST" >

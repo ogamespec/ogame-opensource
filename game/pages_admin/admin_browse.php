@@ -2,7 +2,7 @@
 
 // Admin Area: Browser history (only for players with the `sniff` flag enabled).
 
-function Admin_Browse ()
+function Admin_Browse () : void
 {
     global $session;
     global $db_prefix;
@@ -28,8 +28,8 @@ function Admin_Browse ()
         <?=$log['method'];?><br>
         <?=date ("d M Y", $log['date']);?><br>
         <?=date ("H:i:s", $log['date']);?>
-        </th> <th> <?=print_r( unserialize($log['getdata']) );?> </th> </tr>
-        <tr> <th> <?=print_r( unserialize($log['postdata']) );?> </th> </tr>
+        </th> <th> <?php print_r( unserialize($log['getdata']) );?> </th> </tr>
+        <tr> <th> <?php print_r( unserialize($log['postdata']) );?> </th> </tr>
         </table></td></tr>
 
 <?php

@@ -24,7 +24,7 @@ UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
 // User is not a member of any alliance, display a menu to create/search for alliances.
-function AllyPage_NoAlly ()
+function AllyPage_NoAlly () : void
 {
     echo "<table width=519>\n";
     echo "<tr><td class=c colspan=2>".loca("ALLY_ALLY")."</td></tr>\n";
@@ -34,7 +34,7 @@ function AllyPage_NoAlly ()
 }
 
 // Found your own alliance.
-function AllyPage_CreateAlly ($tag, $name)
+function AllyPage_CreateAlly (string $tag, string $name) : void
 {
     echo "<form action=\"index.php?page=allianzen&session=".$_GET['session']."&a=1&weiter=1\" method=POST>\n";
     echo "<table width=519>\n";
@@ -45,7 +45,7 @@ function AllyPage_CreateAlly ($tag, $name)
 }
 
 // Searching for alliances.
-function AllyPage_Search ($text, $results="")
+function AllyPage_Search (string $text, string $results="") : void
 {
     echo "<table width=519>\n";
     echo "<tr><td class=c colspan=2>".loca("ALLY_FIND_ALLY")."</td></tr>\n";
@@ -58,7 +58,7 @@ function AllyPage_Search ($text, $results="")
 }
 
 // Display a table of results.
-function AllyPage_SearchResult ($result)
+function AllyPage_SearchResult (mixed $result) : void
 {
     global $SearchResults;
     $SearchResults = "";
@@ -81,7 +81,7 @@ function AllyPage_SearchResult ($result)
 }
 
 // The user has already applied to the alliance.
-function AllyPage_Already ($app_id)
+function AllyPage_Already (int $app_id) : void
 {
     global $session;
 

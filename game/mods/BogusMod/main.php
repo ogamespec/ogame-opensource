@@ -103,11 +103,11 @@ class BogusMod implements GameMod
         return false;
     }
 
-    public function get_planet_small_image(array &$planet, array $img) : bool {
+    public function get_planet_small_image(array &$planet, array &$img) : bool {
         return false;
     }
 
-    public function get_planet_image(array &$planet, array $img) : bool {
+    public function get_planet_image(array &$planet, array &$img) : bool {
         return false;
     }
 

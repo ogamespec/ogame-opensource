@@ -2,7 +2,7 @@
 
 // Admin Area: history of player and operator actions
 
-function Admin_UserLogs ()
+function Admin_UserLogs () : void
 {
     global $session;
     global $db_prefix;
@@ -47,7 +47,7 @@ function Admin_UserLogs ()
 
 ?>
 
-<?=AdminPanel();?>
+<?php AdminPanel();?>
 
 <?php
 

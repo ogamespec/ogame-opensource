@@ -40,19 +40,19 @@ function LinkFleetsTo ($user, $mission)
     else return "0";
 }
 
-function IsChecked ($user, $option)
+function IsChecked (array $user, string $option) : string
 {
     if ( $user[$option] ) return "checked=checked";
     else return "";
 }
 
-function IsSelected ($user, $option, $value)
+function IsSelected (array $user, string $option, int $value) : string
 {
     if ( $user[$option] == $value ) return "selected";
     else return "";
 }
 
-function Admin_Users ()
+function Admin_Users () : void
 {
     global $session;
     global $db_prefix;
@@ -185,7 +185,7 @@ function Admin_Users ()
         $user = LoadUser ( intval ($_GET['player_id']) );
 ?>
 
-    <?php echo AdminPanel();?>
+    <?php AdminPanel();?>
 
     <table>
     <form action="index.php?page=admin&session=<?php echo $session;?>&mode=Users&action=update&player_id=<?php echo $user['player_id'];?>" method="POST" >

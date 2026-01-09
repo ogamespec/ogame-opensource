@@ -2,7 +2,7 @@
 
 // Admin Area: Global Event Queue.
 
-function QueueDesc ( $queue )
+function QueueDesc ( array $queue ) : string
 {
     global $session, $db_prefix;
     $type = $queue['type'];
@@ -62,7 +62,7 @@ function QueueDesc ( $queue )
     return loca("ADM_QUEUE_TYPE_UNKNOWN") . " (type=$type, sub_id=$sub_id, obj_id=$obj_id, level=$level)";
 }
 
-function Admin_Queue ()
+function Admin_Queue () : void
 {
     global $session;
     global $db_prefix;

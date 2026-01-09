@@ -2,7 +2,7 @@
 
 // Admin Area: Broadcast message to users.
 
-function Admin_Broadcast ()
+function Admin_Broadcast () : void
 {
     global $session;
     global $db_prefix;
@@ -50,7 +50,7 @@ function Admin_Broadcast ()
 
 ?>
 
-<?=AdminPanel();?>
+<?php AdminPanel();?>
 
 <?=$write_error;?>
 

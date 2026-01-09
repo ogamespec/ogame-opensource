@@ -427,6 +427,9 @@ function LoadUser ( $player_id)
     $query = "SELECT * FROM ".$db_prefix."users WHERE player_id = '".$player_id."' LIMIT 1";
     $result = dbquery ($query);
     $user = dbarray ($result);
+    if (!$user) {
+        return null;
+    }
     $UserCache [ $player_id ] = $user;
     return $user;
 }

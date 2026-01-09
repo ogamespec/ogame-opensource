@@ -8,7 +8,7 @@
 
 // TODO: We don't know how to fix tables yet. An admin must manually fix tables by himself using phpMyAdmin or similar tool.
 
-function DiffTab ($tabname, $src, $dst)
+function DiffTab (string $tabname, array $src, array $dst) : string
 {
     $error = false;
     $res = "";
@@ -36,7 +36,7 @@ function DiffTab ($tabname, $src, $dst)
 }
 
 // List the database backups from the temp folder.
-function ListDatabaseBackups()
+function ListDatabaseBackups() : void
 {
     global $session;
 
@@ -64,7 +64,7 @@ function ListDatabaseBackups()
     echo "<form action=\"index.php?page=admin&session=$session&mode=DB&action=create\" method=\"POST\"><input type=submit value=\"".loca("ADM_DB_BACKUP_CREATE")."\" /></form>";
 }
 
-function CreateBackup ()
+function CreateBackup () : void
 {
     global $AdminMessage;
     $fname = "temp/backup_" . date_format(new DateTime(), "dmY_His") . ".json";
@@ -73,7 +73,7 @@ function CreateBackup ()
     $AdminMessage .= va(loca("ADM_DB_BACKUP_SAVED"), $fname);
 }
 
-function DeleteBackup ($fname)
+function DeleteBackup (string $fname) : void
 {
     global $AdminMessage, $AdminError;
     $fname = "temp/" . $fname;
@@ -86,7 +86,7 @@ function DeleteBackup ($fname)
     }
 }
 
-function RestoreBackup ($fname)
+function RestoreBackup (string $fname) : void
 {
     global $AdminMessage;
     LockTables ();
@@ -97,7 +97,7 @@ function RestoreBackup ($fname)
     $AdminMessage .= va(loca("ADM_DB_BACKUP_RESTORED"), $fname);
 }
 
-function Admin_DB ()
+function Admin_DB () : void
 {
     global $session;
     global $db_prefix;
@@ -216,7 +216,7 @@ function Admin_DB ()
 
 ?>
 
-<?=AdminPanel();?>
+<?php AdminPanel();?>
 
 <?php
 ListDatabaseBackups();

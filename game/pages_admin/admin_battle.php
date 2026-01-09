@@ -3,7 +3,7 @@
 // Admin Area: battle reports.
 // Battle reports are kept for 2 weeks.
 
-function Admin_BattleReport ()
+function Admin_BattleReport () : void
 {
     global $session;
     global $db_prefix;
@@ -12,7 +12,7 @@ function Admin_BattleReport ()
 
 ?>
 
-<?=AdminPanel();?>
+<?php AdminPanel();?>
 
 <?php
 

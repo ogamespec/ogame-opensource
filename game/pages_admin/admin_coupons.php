@@ -2,7 +2,7 @@
 
 // Admin Area: DM coupons
 
-function Admin_Coupons ()
+function Admin_Coupons () : void
 {
     global $session;
     global $db_prefix;
@@ -51,7 +51,7 @@ function Admin_Coupons ()
 
 ?>
 
-<?=AdminPanel();?>
+<?php AdminPanel();?>
 
 <?php
 

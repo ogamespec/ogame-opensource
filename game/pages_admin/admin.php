@@ -244,8 +244,7 @@ echo "</center>\n";
 echo "</div>\n";
 echo "<!-- END CONTENT AREA -->\n";
 
-if ( $AdminMessage || $AdminError ) PageFooter ($AdminMessage, $AdminError );
-else PageFooter ($AdminMessage, $AdminError, false, 0, true);
+PageFooter ($AdminMessage, $AdminError, false, 0, true);
 
 ob_end_flush ();
 ?>

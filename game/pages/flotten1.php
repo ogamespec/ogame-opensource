@@ -150,7 +150,7 @@ BeginContent();
 
     <th>
 <?php
-    echo FleetMissionText ($fleet['mission']);
+    FleetMissionText ($fleet['mission']);
 ?>
     </th>
     <th> <a title="<?php

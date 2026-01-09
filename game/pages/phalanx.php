@@ -2,6 +2,7 @@
 
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
+/** @var string $db_prefix */
 
 $PhalanxCost = 5000;    // Amount of deuterium per phalanx scan
 

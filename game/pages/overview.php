@@ -1,6 +1,7 @@
 <?php
 
 /** @var array $GlobalUser */
+/** @var array $GlobalUni */
 
 // Overview.
 

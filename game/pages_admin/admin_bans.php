@@ -2,7 +2,7 @@
 
 // Admin Area: Bans
 
-function Admin_Bans ()
+function Admin_Bans () : void
 {
     global $session;
     global $db_prefix;
@@ -51,7 +51,7 @@ ON t1.ip_addr = t2.ip_addr ORDER BY t1.ip_addr ASC, t1.name ASC";
             $rows0 = $rows = dbrows ($result );
 
 ?>
-<?php echo AdminPanel();?>
+<?php AdminPanel();?>
 
 <script>
 
@@ -157,7 +157,7 @@ function SetClearCheckbox (status)
 
 <!-- Search form -->
 
-<?php echo AdminPanel();?>
+<?php AdminPanel();?>
 
 <table>
 <form action="index.php?page=admin&session=<?php echo $session;?>&mode=Bans&action=search" method="POST" >

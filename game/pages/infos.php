@@ -2,6 +2,7 @@
 
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
+/** @var array $UnitParam */
 
 // Information on buildings, fleets, defense and research.
 // Some pages (particularly buildings) contain additional information or controls.

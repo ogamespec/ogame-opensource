@@ -1,6 +1,7 @@
 <?php
 
 /** @var array $GlobalUser */
+/** @var array $GlobalUni */
 
 // Sending fleet with all parameters checked.
 // If the fleet was sent successfully - output brief information, otherwise output an error.

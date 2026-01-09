@@ -2,7 +2,7 @@
 
 // Admin Area: source code checksum.
 
-function Admin_Checksum ()
+function Admin_Checksum () : void
 {
     global $session;
     global $db_prefix;
@@ -166,7 +166,7 @@ function Admin_Checksum ()
 
 ?>
 
-<?=AdminPanel();?>
+<?php AdminPanel();?>
 
 <h2><?=loca("ADM_CSUM_ENGINE");?></h2>
 

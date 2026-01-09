@@ -2,7 +2,7 @@
 
 // Admin Area: Battle Simulator.
 
-function ParseBattleDataSource ($source, &$a, &$d)
+function ParseBattleDataSource (string $source, array &$a, array &$d) : void
 {
     $lines = explode("\n", $source);
 
@@ -119,7 +119,7 @@ function ParseBattleDataSource ($source, &$a, &$d)
     }
 }
 
-function SimBattle ( $battle_source, $a, $d, $rf, $fid, $did, $debug, &$battle_result, &$aloss, &$dloss )
+function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid, int $did, bool $debug, int &$battle_result, int &$aloss, int &$dloss )
 {
     global $db_prefix;
     global $GlobalUser;
@@ -214,7 +214,7 @@ function SimBattle ( $battle_source, $a, $d, $rf, $fid, $did, $debug, &$battle_r
     return BattleReport ( $res, time(), $aloss, $dloss, 1, 2, 3, $moonchance, $mooncreated, $repaired, $GlobalUser['lang'] );
 }
 
-function Admin_BattleSim ()
+function Admin_BattleSim () : void
 {
     global $session;
     global $db_prefix;
@@ -328,18 +328,18 @@ function Admin_BattleSim ()
     // --------------------------------------------------------------------------------------------------------------------------
     // Simulation parameter input table.
 
-    function getval($name)
+    function getval(string $name) : string
     {
         if ( $_POST[$name] != "" ) return "value=\"".$_POST[$name]."\" ";
     }
 
-    function getval2($arr, $id)
+    function getval2(string $arr, string $id) : string
     {
         if ( $_POST[$arr][$id] != 0 ) return "value=\"".$_POST[$arr][$id]."\" ";
         else return "";
     }
 
-    function get_intval($id)
+    function get_intval(string $id) : int
     {
         if (isset($_POST[$id])) {
             return intval($_POST[$id]);

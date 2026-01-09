@@ -24,7 +24,7 @@ UpdateLastClick ( $GlobalUser['player_id'] );
 
 PageHeader ("writemessages");
 
-function SendNotActivated ()
+function SendNotActivated () : void
 {
     global $GlobalUser;
 

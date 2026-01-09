@@ -16,7 +16,7 @@ ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 
-function CreateNewNote ()
+function CreateNewNote () : void
 {
     echo "<form action=\"?page=notizen&session=".$_GET['session']."\" method=post>\n";
     echo "<input type=hidden name=s value=1>\n";
@@ -29,7 +29,7 @@ function CreateNewNote ()
     echo "</table></form><br><br><br><br>\n";
 }
 
-function EditNote ($note_id)
+function EditNote (int $note_id) : void
 {
     global $GlobalUser;
     $note = LoadNote ( $GlobalUser['player_id'], $note_id );

@@ -2,7 +2,7 @@
 
 // Admin Area: Bot control
 
-function Admin_Bots ()
+function Admin_Bots () : void
 {
     global $session;
     global $db_prefix;
@@ -31,7 +31,7 @@ function Admin_Bots ()
 
 ?>
 
-<?=AdminPanel();?>
+<?php AdminPanel();?>
 
 <?php
     if ( $GlobalUser['admin'] < 2) {

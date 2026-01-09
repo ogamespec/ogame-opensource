@@ -1,5 +1,7 @@
 <?php
 
+/** @var array $GlobalUser */
+
 // Buddies Menu ("small alliance system").
 
 // ⚠️Important! This game feature involves a rich interaction with input from the user.
@@ -26,7 +28,7 @@ $session = $_GET['session'];
 // Menu pages.
 
 // Main page
-function Buddy_Home ()
+function Buddy_Home () : void
 {
     global $GlobalUser;
     global $session;
@@ -88,7 +90,7 @@ function Buddy_Home ()
 }
 
 // Requests (5)
-function Buddy_Income ()
+function Buddy_Income () : void
 {
     global $GlobalUser;
     global $session;
@@ -152,7 +154,7 @@ function Buddy_Income ()
 }
 
 // Your requests (6)
-function Buddy_Outcome ()
+function Buddy_Outcome () : void
 {
     global $GlobalUser;
 
@@ -203,7 +205,7 @@ function Buddy_Outcome ()
 }
 
 // Send request (7)
-function Buddy_Request ()
+function Buddy_Request () : void
 {
     global $GlobalUser;
     $user = LoadUser ( intval ($_GET['buddy_id']) );
