@@ -44,9 +44,6 @@ RUN ln -s /var/www/html/persistent_configs/root_config.php /var/www/html/config.
 RUN ln -s /var/www/html/persistent_configs/game_config.php /var/www/html/game/config.php
 
 RUN chown -R www-data:www-data /var/www/html
-RUN chown -R www-data:www-data /var/www/html/game/galaxytool
-RUN chown -R www-data:www-data /var/www/html/game/battledata
-RUN chown -R www-data:www-data /var/www/html/game/temp
 
 # C battle engine
 COPY ./BattleEngine /var/www/BattleEngine

@@ -194,4 +194,18 @@ function array_insert_after_key(&$array, $after_key, $new_key, $new_value) {
     return $array;
 }
 
+function gen_trivial_password () : string
+{
+    $pass = "";
+    $syllables = "er,in,tia,wol,fe,pre,vet,jo,nes,al,len,son,cha,ir,ler,bo,ok,tio,nar,sim,ple,bla,ten,toe,cho,co,lat,spe,ak,er,po,co,lor,pen,cil,li,ght,wh,at,the,he,ck,is,mam,bo,no,fi,ve,any,way,pol,iti,cs,ra,dio,sou,rce,sea,rch,pa,per,com,bo,sp,eak,st,fi,rst,gr,oup,boy,ea,gle,tr,ail,bi,ble,brb,pri,dee,kay,en,be,se";
+
+    $syllable_array = explode (",", $syllables);
+    srand ((double)microtime()*1000000);
+    for ($count=1; $count<=4; $count++) {
+        if (rand()%10 == 1) $pass .= sprintf ("%0.0f", (rand()%50)+1);
+        else $pass .= sprintf ("%s", $syllable_array[rand()%62]);
+    }
+    return $pass;
+}
+
 ?>

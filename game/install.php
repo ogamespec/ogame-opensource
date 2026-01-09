@@ -8,12 +8,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-require_once "db.php";
-require_once "utils.php";
-require_once "loca.php";
-require_once "id.php";
-require_once "user.php";
-require_once "planet.php";
+require_once "core/core.php";
 
 if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
 else $loca_lang = $_COOKIE['ogamelang'];
@@ -30,8 +25,6 @@ function uniurl () {
     return substr ( $host, 0, $pos );
 }
 
-ob_start ();
-
 // Check the settings of the universe.
 function CheckParameters ()
 {
@@ -44,20 +37,11 @@ function CheckParameters ()
 if (file_exists ("config.php"))
 {
     echo "<html><head><meta http-equiv='refresh' content='0;url=index.php' /></head><body></body></html>";
-    ob_end_flush ();
     exit ();
 }
 
-function gen_trivial_password ($len = 8)
-{
-    $r = '';
-    for($i=0; $i<$len; $i++)
-        $r .= chr(rand(0, 25) + ord('a'));
-    return $r;
-}
-
 // Database tables
-include "install_tabs.php";
+include "core/install_tabs.php";
 
 // -------------------------------------------------------------------------------------------------------------------------
 

@@ -6,20 +6,11 @@ if ( !file_exists ("../config.php"))
     echo "<html><head><meta http-equiv='refresh' content='0;url=../install.php' /></head><body></body></html>";
     exit ();
 }
+else {
+    require_once "../config.php";
+}
 
-require_once "../config.php";
-require_once "../db.php";
-require_once "../utils.php";
-
-require_once "../id.php";
-require_once "../uni.php";
-require_once "../prod.php";
-require_once "../planet.php";
-require_once "../bot.php";
-require_once "../user.php";
-require_once "../queue.php";
-require_once "../mods.php";
-require_once "../debug.php";
+require_once "../core/core.php";
 
 InitDB();
 

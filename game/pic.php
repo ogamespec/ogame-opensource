@@ -26,5 +26,4 @@ else
     header ('Content-type: text/html');
     echo "<font color=red><b>Графика недоступна</b></font>";
 }
-ob_end_flush ();
 ?>
