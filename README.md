@@ -1,5 +1,8 @@
 # Introduction
 
+> [!WARNING]
+> We're currently undergoing a massive refactoring based on PHPStan analysis results, and a [modification engine](/Wiki/en/mods.md) is being added. Therefore, some bugs and syntax errors may be present, but they will be fixed as we go.
+
 This is revived OGame v 0.84 with old design.
 
 Need help with installation? You have the following options:
