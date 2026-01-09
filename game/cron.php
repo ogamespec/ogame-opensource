@@ -35,6 +35,8 @@ if ( file_exists ("config.php"))
 
     $GlobalUni = LoadUniverse ();
 
+    ModsInit();
+
     $GlobalUser = LoadUser ( USER_SPACE );
 
     loca_add ( "common", $GlobalUni['lang'] );

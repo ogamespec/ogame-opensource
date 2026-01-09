@@ -57,6 +57,16 @@ function dbfree ($result) {
     @mysqli_free_result ($result);
 }
 
+// Connect to the database
+function InitDB ()
+{
+    global $db_host, $db_user, $db_pass, $db_name;
+    dbconnect ($db_host, $db_user, $db_pass, $db_name);
+    dbquery("SET NAMES 'utf8';");
+    dbquery("SET CHARACTER SET 'utf8';");
+    dbquery("SET SESSION collation_connection = 'utf8_general_ci';");
+}
+
 // Add a row to the table.
 // This method now takes into account that the table may have additional columns added by the mod that do not need to be touched.
 function AddDBRow ( $row, $tabname )

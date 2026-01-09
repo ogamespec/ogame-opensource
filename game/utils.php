@@ -32,16 +32,6 @@ function RedirectHome ()
     echo "<html><head><meta http-equiv='refresh' content='0;url=$StartPage' /></head><body></body>";
 }
 
-// Connect to the database
-function InitDB ()
-{
-    global $db_host, $db_user, $db_pass, $db_name;
-    dbconnect ($db_host, $db_user, $db_pass, $db_name);
-    dbquery("SET NAMES 'utf8';");
-    dbquery("SET CHARACTER SET 'utf8';");
-    dbquery("SET SESSION collation_connection = 'utf8_general_ci';");
-}
-
 // Format string, according to tokens from the text. Tokens are represented as #1, #2 and so on.
 function va ($subject)
 {
