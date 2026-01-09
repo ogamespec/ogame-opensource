@@ -9,7 +9,7 @@ function scriptname () {
     return $break[count($break) - 1];
 }
 
-function hostname ($dir = "game") {
+function hostname ($dir = "game/core") {
     if (!empty($_SERVER['HTTPS']))  { // get if request is http or https
        $encr ="https://";
     }else{
