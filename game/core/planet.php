@@ -405,7 +405,7 @@ function HasPlanet (int $g, int $s, int $p) : bool
 }
 
 // Change the amount of resources on the planet.
-function AdjustResources (int $m, int $k, int $d, int $planet_id, string $sign) : void
+function AdjustResources (float|int $m, float|int $k, float|int $d, int $planet_id, string $sign) : void
 {
     global $db_prefix;
     $now = time ();

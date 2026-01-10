@@ -20,7 +20,7 @@ const EXP_FLEET = 8;
 const EXP_TRADER = 9;
 
 // Count the number of active expeditions of the specified player.
-function GetExpeditionsCount ($player_id)
+function GetExpeditionsCount (int $player_id) : int
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."fleet WHERE (mission = ".FTYP_EXPEDITION." OR mission = ".(FTYP_EXPEDITION+FTYP_RETURN)." OR mission = ".(FTYP_EXPEDITION+FTYP_ORBITING).") AND owner_id = $player_id;";
@@ -29,7 +29,7 @@ function GetExpeditionsCount ($player_id)
 }
 
 // Load Expedition Settings.
-function LoadExpeditionSettings ()
+function LoadExpeditionSettings () : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."exptab;";
@@ -37,7 +37,7 @@ function LoadExpeditionSettings ()
     return dbarray ($result);
 }
 
-function SaveExpeditionSettings ($exptab)
+function SaveExpeditionSettings (array $exptab) : void
 {
     global $db_prefix;
 
@@ -85,7 +85,7 @@ function SaveExpeditionSettings ($exptab)
 }
 
 // Count the points of the expeditionary fleet.
-function ExpPoints ( $fleet )
+function ExpPoints ( array $fleet ) : int
 {
     global $fleetmap;
     $structure = 0;
@@ -102,7 +102,7 @@ function ExpPoints ( $fleet )
 }
 
 // The upper limit of expedition points.
-function ExpUpperLimit ($exptab)
+function ExpUpperLimit (array $exptab) : int
 {
     $user = GetTop1 ();
     if ($user) {
@@ -124,7 +124,7 @@ function ExpUpperLimit ($exptab)
 }
 
 // Nothing happened.
-function Exp_NothingHappens ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_NothingHappens (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     $msg = array (
         loca_lang ("EXP_NOTHING_1", $lang),
@@ -150,7 +150,7 @@ function Exp_NothingHappens ($exptab, $queue, $fleet_obj, $fleet, $origin, $targ
 }
 
 // Message from on-board engineer (visit counter)
-function Logbook ($expcount, $exptab, $lang)
+function Logbook (int $expcount, array $exptab, string $lang) : string
 {
     $msg_1 = array (
         loca_lang ("EXP_NOT_DEPLETED_1", $lang),
@@ -194,7 +194,7 @@ function Logbook ($expcount, $exptab, $lang)
 // Successful events of the expedition
 
 // Encountering aliens
-function Exp_BattleAliens ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_BattleAliens (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     $weak = array (
         loca_lang ("EXP_ALIENS_WEAK_1", $lang),
@@ -238,7 +238,7 @@ function Exp_BattleAliens ($exptab, $queue, $fleet_obj, $fleet, $origin, $target
 // ---
 
 // Meet the pirates
-function Exp_BattlePirates ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_BattlePirates (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     $weak = array (
         loca_lang ("EXP_PIRATES_WEAK_1", $lang),
@@ -283,7 +283,7 @@ function Exp_BattlePirates ($exptab, $queue, $fleet_obj, $fleet, $origin, $targe
 // ---
 
 // Finding Dark Matter
-function Exp_DarkMatterFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_DarkMatterFound (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     global $db_prefix;
     $player_id = $fleet_obj['owner_id'];
@@ -342,7 +342,7 @@ function Exp_DarkMatterFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $tar
 // ---
 
 // The loss of the entire fleet
-function Exp_LostFleet ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_LostFleet (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     $msg = array (
         loca_lang ("EXP_LOST_1", $lang),
@@ -366,7 +366,7 @@ function Exp_LostFleet ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $
 // ---
 
 // Delayed return of the expedition
-function Exp_DelayFleet ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_DelayFleet (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     $msg = array (
         loca_lang ("EXP_DELAY_1", $lang),
@@ -393,7 +393,7 @@ function Exp_DelayFleet ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, 
 }
 
 // Accelerating the return of the expedition
-function Exp_AccelFleet ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_AccelFleet (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     $msg = array (
         loca_lang ("EXP_ACCEL_1", $lang),
@@ -417,7 +417,7 @@ function Exp_AccelFleet ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, 
 // ---
 
 // Finding resources
-function Exp_ResourcesFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_ResourcesFound (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     $small = array (
         loca_lang ("EXP_RESFOUND_SMALL_1", $lang),
@@ -499,7 +499,7 @@ function Exp_ResourcesFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $targ
 // ---
 
 // Finding ships
-function Exp_FleetFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_FleetFound (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     global $UnitParam;
     global $fleetmap;
@@ -623,7 +623,7 @@ function Exp_FleetFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, 
 // ---
 
 // Finding the Merchant
-function Exp_TraderFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $target, $lang)
+function Exp_TraderFound (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     global $db_prefix;
     $player_id = $fleet_obj['owner_id'];
@@ -702,7 +702,7 @@ function Exp_TraderFound ($exptab, $queue, $fleet_obj, $fleet, $origin, $target,
 
 // -------------
 
-function ExpeditionArrive ($queue, $fleet_obj, $fleet, $origin, $target)
+function ExpeditionArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     // Start an orbit hold task.
     // Make the hold time a flight time (so that it can be used when returning the fleet)
@@ -710,7 +710,7 @@ function ExpeditionArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 }
 
 // Algorithmic part of the expedition
-function Expedition ($expcount, $exptab, $hold_time)
+function Expedition (int $expcount, array $exptab, int $hold_time) : int
 {
     $res = EXP_NOTHING;
     $chance = mt_rand ( 0, 99 );
@@ -738,7 +738,7 @@ function Expedition ($expcount, $exptab, $hold_time)
     return $res;
 }
 
-function ExpeditionHold ($queue, $fleet_obj, $fleet, $origin, $target)
+function ExpeditionHold (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     $exptab = LoadExpeditionSettings ();
 
