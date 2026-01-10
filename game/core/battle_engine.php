@@ -9,8 +9,7 @@ if ($battle_debug) {
     ini_set('display_errors', 1);
 }
 
-require_once "id.php";
-require_once "unit.php";
+require_once "techs.php";
 require_once "prod.php";
 
 // Spare Battle Engine in PHP.
