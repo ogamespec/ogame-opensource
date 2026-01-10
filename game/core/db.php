@@ -6,7 +6,7 @@ $query_counter = 0;
 $query_log = "";
 $db_connect = 0;
 
-function dbconnect ($db_host, $db_user, $db_pass, $db_name)
+function dbconnect (string $db_host, string $db_user, string $db_pass, string $db_name) : void
 {
     global  $query_counter, $query_log, $db_connect;
     $db_connect = @mysqli_connect($db_host, $db_user, $db_pass);
@@ -21,7 +21,7 @@ function dbconnect ($db_host, $db_user, $db_pass, $db_name)
     $query_log = "";
 }
 
-function dbquery ($query, $mute=false)
+function dbquery (string $query, bool $mute=false) : mixed
 {
     global  $query_counter, $query_log, $db_connect;
     $query_counter ++;
@@ -36,29 +36,29 @@ function dbquery ($query, $mute=false)
     else return $result;
 }
 
-function dbrows ($query)
+function dbrows (mixed $result) : int
 {
-    $result = @mysqli_num_rows($query);
-    return $result;
+    $rows = @mysqli_num_rows($result);
+    return $rows;
 }
 
-function dbarray ($query)
+function dbarray (mixed $result) : mixed
 {
     global $db_connect;
-    $result = @mysqli_fetch_assoc($query);
-    if (!$result) {
+    $arr = @mysqli_fetch_assoc($result);
+    if (!$arr) {
         echo mysqli_error($db_connect);
         return false;
     }
-    else return $result;
+    else return $arr;
 }
 
-function dbfree ($result) {
+function dbfree (mixed $result) : void {
     @mysqli_free_result ($result);
 }
 
 // Connect to the database
-function InitDB ()
+function InitDB () : void
 {
     global $db_host, $db_user, $db_pass, $db_name;
     dbconnect ($db_host, $db_user, $db_pass, $db_name);
@@ -69,7 +69,7 @@ function InitDB ()
 
 // Add a row to the table.
 // This method now takes into account that the table may have additional columns added by the mod that do not need to be touched.
-function AddDBRow ( $row, $tabname )
+function AddDBRow ( array $row, string $tabname ) : int
 {
     global $db_connect, $db_prefix;
     ModsExecRefStr ( 'add_db_row', $row, $tabname );
@@ -100,7 +100,7 @@ function AddDBRow ( $row, $tabname )
 // Link to connect to the master database
 $MDB_link = 0;
 
-function MDBConnect ()
+function MDBConnect () : bool
 {
     global $MDB_link, $mdb_host, $mdb_user, $mdb_pass, $mdb_name, $mdb_enable;
     if (!$mdb_enable) return false;
@@ -115,7 +115,7 @@ function MDBConnect ()
     return true;
 }
 
-function MDBQuery ($query)
+function MDBQuery (string $query) : mixed
 {
     global $MDB_link;
     $result = @mysqli_query ($MDB_link, $query);
@@ -123,13 +123,13 @@ function MDBQuery ($query)
     else return $result;
 }
 
-function MDBRows ($result)
+function MDBRows (mixed $result) : int
 {
     $rows = @mysqli_num_rows($result);
     return $rows;
 }
 
-function MDBArray ($result)
+function MDBArray (mixed $result) : mixed
 {
     $arr = @mysqli_fetch_assoc($result);
     if (!$arr) return null;
@@ -140,7 +140,7 @@ function MDBArray ($result)
 // Table locking is critical in a multi-user environment. It is protection against simultaneous work with the database from several users.
 // Think of it as analogous to multitasking lock (mutex).
 
-function LockTables ()
+function LockTables () : void
 {
     global $db_prefix;
     $tabs = array ('users','planets','ally','allyranks','allyapps','buddy','messages','notes','errors','debug','reports','browse','queue','buildqueue','fleet','union','battledata','fleetlogs','iplogs','pranger','exptab','coltab','template','botvars','userlogs','botstrat');
@@ -153,12 +153,12 @@ function LockTables ()
     dbquery ($query);
 }
 
-function UnlockTables ()
+function UnlockTables () : void
 {
     dbquery ( "UNLOCK TABLES" );
 }
 
-function SerializeTable ($name)
+function SerializeTable (string $name) : array
 {
     global $db_name;
     global $db_prefix;
@@ -202,7 +202,7 @@ function SerializeTable ($name)
     return $tab;
 }
 
-function SerializeDB ()
+function SerializeDB () : string
 {
     include "install_tabs.php";
     ModsExecRef ('install_tabs_included', $tabs);
@@ -216,13 +216,13 @@ function SerializeDB ()
     return json_encode ($db_tabs, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
 }
 
-function DeserExecQuery ($query)
+function DeserExecQuery (string $query) : void
 {
     //echo $query . "\n";
     dbquery ($query);
 }
 
-function DeserializeTable ($name, $tab)
+function DeserializeTable (string $name, array $tab) : void
 {
     global $db_prefix;
     global $db_connect;
@@ -266,7 +266,7 @@ function DeserializeTable ($name, $tab)
     }
 }
 
-function DeserializeDB ($text)
+function DeserializeDB (string $text) : void
 {
     $tabs = json_decode ($text, true);
 

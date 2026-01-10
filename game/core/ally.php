@@ -31,7 +31,7 @@
 // scoredate: Time of saving old statistics (INT UNSIGNED)
 
 // Create alliance. Returns the ID of the alliance.
-function CreateAlly ($owner_id, $tag, $name)
+function CreateAlly (int $owner_id, string $tag, string $name) : int
 {
     global $db_prefix;
     $tag = mb_substr ($tag, 0, 8, "UTF-8");    // Limit the length of strings
@@ -60,7 +60,7 @@ function CreateAlly ($owner_id, $tag, $name)
 }
 
 // Dismiss the alliance.
-function DismissAlly ($ally_id)
+function DismissAlly (int $ally_id) : void
 {
     global $db_prefix;
 
@@ -84,7 +84,7 @@ function DismissAlly ($ally_id)
 // List all players in the alliance.
 // Sorting: 0 - Coordinates, 1 - Name, 2 - Status, 3 - Points, 4 - Date Entry, 5 - Online
 // Order: 0 - ascending, 1 - descending
-function EnumerateAlly ($ally_id, $sort_by=0, $order=0, $use_sort=false)
+function EnumerateAlly (int $ally_id, int $sort_by=0, int $order=0, bool $use_sort=false) : mixed
 {
     global $db_prefix;
     if ($ally_id <= 0) return NULL;
@@ -114,7 +114,7 @@ function EnumerateAlly ($ally_id, $sort_by=0, $order=0, $use_sort=false)
 }
 
 // Find out if there is an alliance with the specified tag.
-function IsAllyTagExist ($tag)
+function IsAllyTagExist (string $tag) : bool
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."ally WHERE tag = '".$tag."'";
@@ -124,7 +124,7 @@ function IsAllyTagExist ($tag)
 }
 
 // Load alliance.
-function LoadAlly ($ally_id)
+function LoadAlly (int $ally_id) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."ally WHERE ally_id = $ally_id";
@@ -133,7 +133,7 @@ function LoadAlly ($ally_id)
 }
 
 // Search for alliances by tag. Returns the result of the SQL query.
-function SearchAllyTag ($tag)
+function SearchAllyTag (string $tag) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."ally WHERE tag LIKE '%".$tag."%' LIMIT 30";
@@ -142,7 +142,7 @@ function SearchAllyTag ($tag)
 }
 
 // Count the number of users in the alliance.
-function CountAllyMembers ($ally_id)
+function CountAllyMembers (int $ally_id) : int
 {
     global $db_prefix;
     if ( $ally_id <= 0 ) return 0;
@@ -151,7 +151,7 @@ function CountAllyMembers ($ally_id)
 }
 
 // Change the alliance tag. Can be done once every 7 days.
-function AllyChangeTag ($ally_id, $tag)
+function AllyChangeTag (int $ally_id, string $tag) : bool
 {
     global $db_prefix;
     $now = time ();
@@ -165,7 +165,7 @@ function AllyChangeTag ($ally_id, $tag)
 }
 
 // Change the name of the alliance. Can be done once every 7 days.
-function AllyChangeName ($ally_id, $name)
+function AllyChangeName (int $ally_id, string $name) : bool
 {
     global $db_prefix;
     $now = time ();
@@ -179,7 +179,7 @@ function AllyChangeName ($ally_id, $name)
 }
 
 // Change the founder of the alliance
-function AllyChangeOwner ($ally_id, $owner_id)
+function AllyChangeOwner (int $ally_id, int $owner_id) : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."ally SET owner_id = " . intval($owner_id);
@@ -187,7 +187,7 @@ function AllyChangeOwner ($ally_id, $owner_id)
 }
 
 // Alliance points recalculation (based on player points)
-function RecalcAllyStats ()
+function RecalcAllyStats () : void
 {
     global $db_prefix;
 
@@ -212,7 +212,7 @@ function RecalcAllyStats ()
 }
 
 // Recalculate the places of all alliances.
-function RecalcAllyRanks ()
+function RecalcAllyRanks () : void
 {
     global $db_prefix;
 
@@ -263,7 +263,7 @@ const ARANK_RIGHT_HAND = 0x100; // 'Right Hand' (required to transfer founder st
 // rights: Rights (OR mask)
 
 // Add a rank with zero rights to an alliance. Returns the rank's ordinal number.
-function AddRank ($ally_id, $name)
+function AddRank (int $ally_id, string $name) : int
 {
     global $db_prefix;
     if ($ally_id <= 0) return 0;
@@ -276,7 +276,7 @@ function AddRank ($ally_id, $name)
 }
 
 // Save rights for rank.
-function SetRank ($ally_id, $rank_id, $rights)
+function SetRank (int $ally_id, int $rank_id, int $rights) : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."allyranks SET rights = $rights WHERE ally_id = $ally_id AND rank_id = $rank_id";
@@ -284,7 +284,7 @@ function SetRank ($ally_id, $rank_id, $rights)
 }
 
 // Delete a rank from an alliance.
-function RemoveRank ($ally_id, $rank_id)
+function RemoveRank (int $ally_id, int $rank_id) : void
 {
     global $db_prefix;
     $query = "DELETE FROM ".$db_prefix."allyranks WHERE ally_id = $ally_id AND rank_id = $rank_id";
@@ -292,7 +292,7 @@ function RemoveRank ($ally_id, $rank_id)
 }
 
 // List all ranks in the alliance.
-function EnumRanks ($ally_id)
+function EnumRanks (int $ally_id) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."allyranks WHERE ally_id = $ally_id";
@@ -300,7 +300,7 @@ function EnumRanks ($ally_id)
 }
 
 // Assign a rank to a specific player.
-function SetUserRank ($player_id, $rank)
+function SetUserRank (int $player_id, int $rank) : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."users SET allyrank = $rank WHERE player_id = $player_id";
@@ -308,7 +308,7 @@ function SetUserRank ($player_id, $rank)
 }
 
 // Load Rank.
-function LoadRank ($ally_id, $rank_id)
+function LoadRank (int $ally_id, int $rank_id) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."allyranks WHERE ally_id = $ally_id AND rank_id = $rank_id";
@@ -317,7 +317,7 @@ function LoadRank ($ally_id, $rank_id)
 }
 
 // Load all alliance players with the specified rank
-function LoadUsersWithRank ($ally_id, $rank_id )
+function LoadUsersWithRank (int $ally_id, int $rank_id ) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."users WHERE ally_id = $ally_id AND allyrank = $rank_id ";
@@ -336,7 +336,7 @@ function LoadUsersWithRank ($ally_id, $rank_id )
 // date: Application date time() (INT UNSIGNED)
 
 // Add an application to the alliance. Returns the ordinal number of the application.
-function AddApplication ($ally_id, $player_id, $text)
+function AddApplication (int $ally_id, int $player_id, string $text) : int
 {
     $app = array ( 'ally_id' => $ally_id, 'player_id' => $player_id, 'text' => $text, 'date' => time() );
     $id = AddDBRow ( $app, "allyapps" );
@@ -344,7 +344,7 @@ function AddApplication ($ally_id, $player_id, $text)
 }
 
 // Delete the application.
-function RemoveApplication ($app_id)
+function RemoveApplication (int $app_id) : void
 {
     global $db_prefix;
     $query = "DELETE FROM ".$db_prefix."allyapps WHERE app_id = $app_id";
@@ -352,7 +352,7 @@ function RemoveApplication ($app_id)
 }
 
 // List all applications in the alliance.
-function EnumApplications ($ally_id)
+function EnumApplications (int $ally_id) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."allyapps WHERE ally_id = $ally_id";
@@ -360,7 +360,7 @@ function EnumApplications ($ally_id)
 }
 
 // Has the user already applied to the alliance? If yes - return the application ID, otherwise return 0.
-function GetUserApplication ($player_id)
+function GetUserApplication (int $player_id) : int
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."allyapps WHERE player_id = $player_id";
@@ -374,7 +374,7 @@ function GetUserApplication ($player_id)
 }
 
 // Load the application.
-function LoadApplication ($app_id)
+function LoadApplication (int $app_id) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."allyapps WHERE app_id = $app_id";
@@ -394,7 +394,7 @@ function LoadApplication ($app_id)
 // accepted: Request verified. Users are buddies.
 
 // Returns the request ID if a request has been sent, or 0 if a buddy request has already been submitted.
-function AddBuddy ($from, $to, $text)
+function AddBuddy (int $from, int $to, string $text) : int
 {
     global $db_prefix;
     $text = mb_substr ($text, 0, 5000, "UTF-8");    // Limit the length of the strings
@@ -415,7 +415,7 @@ function AddBuddy ($from, $to, $text)
 }
 
 // Delete buddy request.
-function RemoveBuddy ($buddy_id)
+function RemoveBuddy (int $buddy_id) : void
 {
     global $db_prefix;
     $query = "DELETE FROM ".$db_prefix."buddy WHERE buddy_id = $buddy_id";
@@ -423,7 +423,7 @@ function RemoveBuddy ($buddy_id)
 }
 
 // Accept buddy request.
-function AcceptBuddy ($buddy_id)
+function AcceptBuddy (int $buddy_id) : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."buddy SET accepted = 1 WHERE buddy_id = $buddy_id";
@@ -431,7 +431,7 @@ function AcceptBuddy ($buddy_id)
 }
 
 // Load request.
-function LoadBuddy ($buddy_id)
+function LoadBuddy (int $buddy_id) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."buddy WHERE buddy_id = $buddy_id";
@@ -440,7 +440,7 @@ function LoadBuddy ($buddy_id)
 }
 
 // List all sent player requests (your own).
-function EnumOutcomeBuddy ($player_id)
+function EnumOutcomeBuddy (int $player_id) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."buddy WHERE request_from = $player_id AND accepted = 0";
@@ -448,7 +448,7 @@ function EnumOutcomeBuddy ($player_id)
 }
 
 // List all incoming requests (other people's requests).
-function EnumIncomeBuddy ($player_id)
+function EnumIncomeBuddy (int $player_id) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."buddy WHERE request_to = $player_id AND accepted = 0";
@@ -456,7 +456,7 @@ function EnumIncomeBuddy ($player_id)
 }
 
 // List all of the player's buddies.
-function EnumBuddy ($player_id)
+function EnumBuddy (int $player_id) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."buddy WHERE (request_from = $player_id OR request_to = $player_id) AND accepted = 1";
@@ -464,7 +464,7 @@ function EnumBuddy ($player_id)
 }
 
 // Check if the players are buddies.
-function IsBuddy ($player1, $player2)
+function IsBuddy (int $player1, int $player2) : bool
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."buddy WHERE ((request_from = $player1 AND request_to = $player2) OR (request_from = $player2 AND request_to = $player1)) AND accepted = 1";

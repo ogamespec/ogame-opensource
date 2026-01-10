@@ -154,7 +154,7 @@ function ModsList() : array
  * @param string $modspath Path to the mods folder
  * @return array|null An array with mod information or null if the mod is not found.
  */
-function ModsGetInfo (string $modname, string $modspath = 'mods/') : array
+function ModsGetInfo (string $modname, string $modspath = 'mods/') : array|null
 {
     $modPath = $modspath . $modname;
     

@@ -128,7 +128,7 @@ function Buddy_Income () : void
             if ($user['ally_id'] > 0)
             {
                 $ally = LoadAlly ($user['ally_id']);
-                echo "    <th><a href=index.php?page=ainfo&session=".$_GET['session']."&allyid=".$userto['ally_id']." target='_ally'> ";
+                echo "    <th><a href=index.php?page=ainfo&session=".$_GET['session']."&allyid=".$user['ally_id']." target='_ally'> ";
                 echo $ally['tag'];
                 if ($user['allyrank'] == 0) echo "  (G)";
                 echo "</a></th>\n";
