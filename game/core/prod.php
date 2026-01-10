@@ -45,6 +45,10 @@ function BuildPrice ( $id, $lvl )
 {
     global $initial;
 
+    // This formula does not have a single, generally accepted name, but it is most often referred to as:
+    // - Exponential growth formula with a linear factor
+    // - In the context of video games, it's called the "experience formula" or "level curve"
+
     $factor = $initial[$id][4];
     $m = $initial[$id][0] * pow($factor, $lvl-1);
     $k = $initial[$id][1] * pow($factor, $lvl-1);
