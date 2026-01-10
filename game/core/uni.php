@@ -29,7 +29,7 @@ function DisableNews () : void
 }
 
 // Set the parameters of the universe (all at the same time)
-function SetUniParam (int $speed, int $fspeed, int $acs, int $fid, int $did, int $defrepair, int $defrepair_delta, int $galaxies, int $systems, int $rapid, int $moons, int $freeze, string $lang, int $battle_engine, int $php_battle, int $force_lang, int $start_dm, int $max_werf, int $feedage) : void
+function SetUniParam (int $speed, int $fspeed, int $acs, int $fid, int $did, int $defrepair, int $defrepair_delta, int $galaxies, int $systems, int $rapid, int $moons, int $freeze, string $lang, string $battle_engine, int $php_battle, int $force_lang, int $start_dm, int $max_werf, int $feedage) : void
 {
     global $db_prefix;
     global $GlobalUni;

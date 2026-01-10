@@ -3,7 +3,7 @@
 // Functions for debugging and errors.
 
 // Error, emergency program termination.
-function Error ($text)
+function Error (string $text) : void
 {
     global $GlobalUser;
     global $GlobalUni;
@@ -41,7 +41,7 @@ function Error ($text)
 }
 
 // Add debug message.
-function Debug ($message)
+function Debug (string $message) : void
 {
     global $GlobalUser;
     if ( !$GlobalUser ) return;
@@ -57,7 +57,7 @@ function Debug ($message)
 }
 
 // Call Trace.
-function BackTrace ()
+function BackTrace () : string
 {
     $bt =  debug_backtrace () ;
 
@@ -75,7 +75,7 @@ function BackTrace ()
 }
 
 // Save the browse history
-function BrowseHistory ()
+function BrowseHistory () : void
 {
     global $GlobalUser;
 
@@ -89,21 +89,21 @@ function BrowseHistory ()
 }
 
 // Security check.
-function SecurityCheck ( $match, $text, $notes )
+function SecurityCheck ( array $match, string $text, string $notes ) : void
 {
     global $GlobalUni;
     if ( !preg_match ( $match, $text ) ) Error ( loca_lang("DEBUG_SECURITY_BREACH", $GlobalUni['lang']) . $notes );
 }
 
 // Add the IP address to the table.
-function LogIPAddress ( $ip, $user_id, $reg=0)
+function LogIPAddress ( string $ip, int $user_id, int $reg=0) : void
 {
     $log = array ( 'ip' => $ip, 'user_id' => $user_id, 'reg' => $reg, 'date' => time () );
     AddDBRow ( $log, 'iplogs' );
 }
 
 // Get the last registration from the specified IP address.
-function GetLastRegistrationByIP ( $ip )
+function GetLastRegistrationByIP ( string $ip ) : int
 {
     global $db_prefix;
 
@@ -117,7 +117,7 @@ function GetLastRegistrationByIP ( $ip )
 }
 
 // User action logs.
-function UserLog ($owner_id, $type, $text, $when=0)
+function UserLog (int $owner_id, string $type, string $text, int $when=0) : void
 {
     global $db_prefix;
     if ($when == 0) $when = time ();
@@ -130,7 +130,7 @@ function UserLog ($owner_id, $type, $text, $when=0)
 
 // Writes player data to the database when attempting to hack the game.
 // The admin should periodically check for too smart players who try to hack the game.
-function Hacking ($code)
+function Hacking (string $code) : void
 {
     global $GlobalUni;
 
@@ -158,7 +158,7 @@ function Hacking ($code)
 }
 
 // Return the SQL query log if the user has debugging information enabled.
-function GetSQLQueryLogText ()
+function GetSQLQueryLogText () : string
 {
     global $query_log;
 

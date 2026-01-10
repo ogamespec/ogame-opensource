@@ -135,7 +135,7 @@ function UnreadMessages (int $player_id, bool $filter=false, int $pm=0) : int
 }
 
 // Mark a message as read (called from the Messages menu).
-function MarkMessage (int $player_id, int $msg_id) : mixed
+function MarkMessage (int $player_id, int $msg_id) : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."messages SET shown = 1 WHERE owner_id = $player_id AND msg_id = $msg_id";
