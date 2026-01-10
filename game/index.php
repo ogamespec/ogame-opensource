@@ -48,7 +48,7 @@ if ( key_exists ( 'session', $_GET ) ) {
     // Public session check
     //
 
-    if (CheckSession ( $_GET['session'] ) == FALSE) die ();
+    if (AuthUser ( $_GET['session'] ) == FALSE) die ();
 }
 else
 {

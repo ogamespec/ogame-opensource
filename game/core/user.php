@@ -553,14 +553,14 @@ function Logout ( $session )
     setcookie ( "prsess_".$player_id."_".$uni, '');
 }
 
-// Called on every game page is loaded.
-function CheckSession ( $session )
+// Authenticate user. Called on every game page is loaded.
+function AuthUser ( $session )
 {
     global $db_prefix, $GlobalUser, $loca_lang, $Languages, $GlobalUni, $DefaultLanguage;
     // Get the user ID and universe number from a public session.
     $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$session."'";
     $result = dbquery ($query);
-    if (dbrows ($result) == 0) { RedirectHome(); return FALSE; }
+    if (dbrows ($result) == 0) { RedirectHome(); return false; }
     $GlobalUser = dbarray ($result);
     $unitab = $GlobalUni;
     $uni = $unitab['num'];
@@ -576,9 +576,9 @@ function CheckSession ( $session )
     if (key_exists($cookie_name, $_COOKIE)) {
         $prsess = $_COOKIE [$cookie_name];
     }
-    if ( $prsess !== $GlobalUser['private_session'] ) { InvalidSessionPage (); return FALSE; }
+    if ( $prsess !== $GlobalUser['private_session'] ) { InvalidSessionPage (); return false; }
     if ( !localhost($ip) && !$GlobalUser['deact_ip'] ) {
-        if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return FALSE; }
+        if ( $ip !== $GlobalUser['ip_addr']) { InvalidSessionPage (); return false; }
     }
 
     // Set global language for session: user language -> universe language(if error) -> default language(if error)
@@ -587,7 +587,7 @@ function CheckSession ( $session )
     if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $GlobalUni['lang'];
     if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
 
-    return TRUE;
+    return true;
 }
 
 // Login - Called from the home page, after registering or activating a new user.
