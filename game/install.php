@@ -1,5 +1,8 @@
 <?php
 
+/** @var string $DefaultLanguage */
+/** @var array $Languages */
+
 // Installation script.
 // Creates all the necessary tables in the database, as well as the config.php configuration file, to access the database.
 // Doesn't work if config.php file is created.

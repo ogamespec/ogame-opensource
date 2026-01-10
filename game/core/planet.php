@@ -68,6 +68,7 @@ function CreatePlanet ( int $g, int $s, int $p, int $owner_id, int $colony=1, in
     if ( dbrows ($result) != 0 ) return 0;
 
     $user = LoadUser ($owner_id);
+    if ($user == null) return 0;
     loca_add ("common", $user['lang']);
 
     // Name of the planet.
@@ -93,10 +94,10 @@ function CreatePlanet ( int $g, int $s, int $p, int $owner_id, int $colony=1, in
             // Planets are divided into 5 Tier (T1-T5). For each Tier there are three parameters (a, b, c), for RND.
 
             if ($p <= 3) $diam = mt_rand ( $coltab['t1_a'], $coltab['t1_b'] ) * $coltab['t1_c'];
-            else if ($p >= 4 && $p <= 6) $diam = mt_rand ( $coltab['t2_a'], $coltab['t2_b'] ) * $coltab['t2_c'];
-            else if ($p >= 7 && $p <= 9) $diam = mt_rand ( $coltab['t3_a'], $coltab['t3_b'] ) * $coltab['t3_c'];
-            else if ($p >= 10 && $p <= 12) $diam = mt_rand ( $coltab['t4_a'], $coltab['t4_b'] ) * $coltab['t4_c'];
-            else if ($p >= 13 && $p <= 15) $diam = mt_rand ( $coltab['t5_a'], $coltab['t5_b'] ) * $coltab['t5_c'];
+            else if (4 <= $p && $p <= 6) $diam = mt_rand ( $coltab['t2_a'], $coltab['t2_b'] ) * $coltab['t2_c'];
+            else if (7 <= $p && $p <= 9) $diam = mt_rand ( $coltab['t3_a'], $coltab['t3_b'] ) * $coltab['t3_c'];
+            else if (10 <= $p && $p <= 12) $diam = mt_rand ( $coltab['t4_a'], $coltab['t4_b'] ) * $coltab['t4_c'];
+            else if (13 <= $p && $p <= 15) $diam = mt_rand ( $coltab['t5_a'], $coltab['t5_b'] ) * $coltab['t5_c'];
             else $diam = mt_rand ( $coltab['t5_a'], $coltab['t5_b'] ) * $coltab['t5_c'];
         }
         else $diam = 12800;

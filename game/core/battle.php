@@ -207,7 +207,7 @@ function CargoSummaryLastRound ( array $a, array $res ) : int
             $cargo += FleetCargoSummary ( $attacker['fleet'] ) - ($f['m'] + $f['k'] + $f['d']) - $f['fuel'];
         }
     }
-    return max ( 0, $cargo );
+    return (int)max ( 0, $cargo );
 }
 
 // Modify fleets and planet (add/remove resources, return attack fleets if ships remain)
@@ -230,7 +230,13 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
             $fleet_obj = LoadFleet ( $attacker['id'] );
             $queue = GetFleetQueue ($fleet_obj['fleet_id']);
             $origin = GetPlanet ( $fleet_obj['start_planet'] );
+            if ($origin == null) {
+                Error ("WritebackBattleResults origin null");
+            }
             $target = GetPlanet ( $fleet_obj['target_planet'] );
+            if ($target == null) {
+                Error ("WritebackBattleResults target null");
+            }
             $ships = 0;
             foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker[$gid];
             if ( $sum_cargo == 0) $cargo = 0;
@@ -278,7 +284,13 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
             $fleet_obj = LoadFleet ( $attacker['id'] );
             $queue = GetFleetQueue ($fleet_obj['fleet_id']);
             $origin = GetPlanet ( $fleet_obj['start_planet'] );
+            if ($origin == null) {
+                Error ("WritebackBattleResults origin null");
+            }
             $target = GetPlanet ( $fleet_obj['target_planet'] );
+            if ($target == null) {
+                Error ("WritebackBattleResults target null");
+            }
             $ships = 0;
             foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['fleet'][$gid];
             if ( $sum_cargo == 0) $cargo = 0;

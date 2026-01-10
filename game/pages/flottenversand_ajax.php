@@ -15,7 +15,7 @@ BrowseHistory ();
 if ( $GlobalUni['freeze'] ) AjaxSendError ();    // The universe is on pause.
 $unispeed = $GlobalUni['fspeed'];
 
-function AjaxSendError (int $id=601) : void
+function AjaxSendError (int $id=601) : never
 {
     header ('Content-Type: text/html;');
     echo "$id 0 0 0 0";

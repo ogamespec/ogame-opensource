@@ -3,7 +3,7 @@
 // Functions for debugging and errors.
 
 // Error, emergency program termination.
-function Error (string $text) : void
+function Error (string $text) : never
 {
     global $GlobalUser;
     global $GlobalUni;
@@ -59,7 +59,7 @@ function Debug (string $message) : void
 // Call Trace.
 function BackTrace () : string
 {
-    $bt =  debug_backtrace () ;
+    $bt = debug_backtrace ();
 
     $trace  = "";
     $sp = 0;
@@ -89,7 +89,7 @@ function BrowseHistory () : void
 }
 
 // Security check.
-function SecurityCheck ( array $match, string $text, string $notes ) : void
+function SecurityCheck ( string $match, string $text, string $notes ) : void
 {
     global $GlobalUni;
     if ( !preg_match ( $match, $text ) ) Error ( loca_lang("DEBUG_SECURITY_BREACH", $GlobalUni['lang']) . $notes );

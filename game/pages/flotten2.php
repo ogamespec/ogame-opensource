@@ -2,6 +2,7 @@
 
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
+/** @var array $fleetmap */
 
 // Fleet 2: Prepare target coordinates
 
@@ -14,6 +15,9 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+if ($aktplanet == null) {
+    Error ("Can't get aktplanet");
+}
 ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
@@ -116,9 +120,9 @@ BeginContent();
    <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?php echo $target_system;?>" />
    <input name="planet" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?php echo $target_planet;?>" />
    <select name="planettype" onChange="shortInfo()" onKeyUp="shortInfo()">
-     <option value="1" <?php echo planettype(1);?>><?php echo loca("FLEET_PLANETTYPE_1");?> </option>
-  <option value="2" <?php echo planettype(2);?>><?php echo loca("FLEET_PLANETTYPE_2");?> </option>
-  <option value="3" <?php echo planettype(3);?>><?php echo loca("FLEET_PLANETTYPE_3");?> </option>
+     <option value="1" <?php planettype(1);?>><?php echo loca("FLEET_PLANETTYPE_1");?> </option>
+  <option value="2" <?php planettype(2);?>><?php echo loca("FLEET_PLANETTYPE_2");?> </option>
+  <option value="3" <?php planettype(3);?>><?php echo loca("FLEET_PLANETTYPE_3");?> </option>
    </select>
  </tr>
  <tr height="20">

@@ -2,6 +2,7 @@
 
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
+/** @var array $fleetmap */
 
 // Sending fleet with all parameters checked.
 // If the fleet was sent successfully - output brief information, otherwise output an error.
@@ -32,6 +33,9 @@ if ( method () === "GET" )
 
 $session = $_GET['session'];
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+if ($aktplanet == null) {
+    Error ("Can't get aktplanet");
+}
 
 $unispeed = $GlobalUni['fspeed'];
 

@@ -12,6 +12,9 @@ loca_add ( "notes", $GlobalUser['lang'] );
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+if ($aktplanet == null) {
+    Error ("Can't get aktplanet");
+}
 ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );

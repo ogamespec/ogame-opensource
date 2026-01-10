@@ -102,7 +102,7 @@ function FleetAvailableMissions ( int $thisgalaxy, int $thissystem, int $thispla
         return $missions;
     }
 
-    if ( $target == NULL )        // empty space
+    if ( $target == null )        // empty space
     {
         $missions[0] = FTYP_TRANSPORT;
         $missions[1] = FTYP_ATTACK;
@@ -120,7 +120,13 @@ function FleetAvailableMissions ( int $thisgalaxy, int $thissystem, int $thispla
     {
         $i = 0;
         $origin_user = LoadUser ($origin['owner_id']);
+        if ($origin_user == null) {
+            return array();
+        }
         $target_user = LoadUser ($target['owner_id']);
+        if ($target_user == null) {
+            return array();
+        }
 
         if ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) )      // allies or buddies
         {
@@ -179,7 +185,7 @@ function FlightSpeed (array $fleet, int $combustion, int $impulse, int $hyper) :
         if ( $amount == 0 || $speed == 0 ) continue;
         if ($speed < $minspeed) $minspeed = $speed;
     }
-    return $minspeed;
+    return (int)$minspeed;
 }
 
 // Deuterium consumption per flight by the entire fleet.
@@ -203,7 +209,7 @@ function FlightCons (array $fleet, int $dist, int $flighttime, int $combustion, 
 // Flight time in seconds, at a given percentage.
 function FlightTime (int $dist, int $slowest_speed, float $prc, int $xspeed) : int
 {
-    return round ( (35000 / ($prc*10) * sqrt ($dist * 10 / $slowest_speed ) + 10) / $xspeed );
+    return (int)round ( (35000 / ($prc*10) * sqrt ($dist * 10 / $slowest_speed ) + 10) / $xspeed );
 }
 
 // The speed of the ship
@@ -335,7 +341,9 @@ function RecallFleet (int $fleet_id, int $now=0) : void
     if ( $fleet_obj['mission'] >= FTYP_RETURN && $fleet_obj['mission'] < FTYP_ORBITING ) return;
 
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    if ($origin == null) return;
     $target = GetPlanet ( $fleet_obj['target_planet'] );
+    if ($target == null) return;
     $queue = GetFleetQueue ($fleet_obj['fleet_id']);
 
     if ($fleet_obj['mission'] < FTYP_RETURN) $new_mission = $fleet_obj['mission'] + FTYP_RETURN;
@@ -497,6 +505,9 @@ function TransportArrive (array $queue, array $fleet_obj, array $fleet, array $o
     UpdatePlanetActivity ( $target['planet_id'], $queue['end'] );
 
     $origin_user = LoadUser ( $origin['owner_id'] );
+    if ($origin_user == null) {
+        return;
+    }
     loca_add ( "fleetmsg", $origin_user['lang'] );
 
     DispatchFleet ($fleet, $origin, $target, FTYP_TRANSPORT+FTYP_RETURN, $fleet_obj['flight_time'], 0, 0, 0, $fleet_obj['fuel'] / 2, $queue['end']);
@@ -548,6 +559,9 @@ function CommonReturn (array $queue, array $fleet_obj, array $fleet, array $orig
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 
     $origin_user = LoadUser ( $origin['owner_id'] );
+    if ($origin_user == null) {
+        return;
+    }
     loca_add ( "technames", $origin_user['lang'] );
     loca_add ( "fleetmsg", $origin_user['lang'] );
 
@@ -578,6 +592,9 @@ function DeployArrive (array $queue, array $fleet_obj, array $fleet, array $orig
     UpdatePlanetActivity ( $target['planet_id'], $queue['end'] );
 
     $origin_user = LoadUser ( $origin['owner_id'] );
+    if ($origin_user == null) {
+        return;
+    }
     loca_add ( "technames", $origin_user['lang'] );
     loca_add ( "fleetmsg", $origin_user['lang'] );
 
@@ -645,7 +662,9 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
     $now = $queue['end'];
 
     $origin_user = LoadUser ( $origin['owner_id'] );
+    if ($origin_user == null) return;
     $target_user = LoadUser ( $target['owner_id'] );
+    if ($target_user == null) return;
 
     $origin_ships = $target_ships = $origin_cost = 0;
     foreach ( $fleetmap as $i=>$gid )
@@ -805,7 +824,7 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
     else DispatchFleet ($fleet, $origin, $target, FTYP_SPY+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
 }
 
-function SpyReturn ($queue, $fleet_obj, $fleet)
+function SpyReturn (array $queue, array $fleet_obj, array $fleet) : void
 {
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
@@ -819,6 +838,7 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
     global $db_prefix;
 
     $origin_user = LoadUser ( $origin['owner_id'] );
+    if ($origin_user == null) return;
     loca_add ( "fleetmsg", $origin_user['lang'] );
 
     $text = va(loca_lang("FLEET_COLONIZE", $origin_user['lang']), 
@@ -891,6 +911,7 @@ function ColonizationReturn (array $queue, array $fleet_obj, array $fleet, array
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 
     $origin_user = LoadUser ( $origin['owner_id'] );
+    if ($origin_user == null) return;
     loca_add ( "technames", $origin_user['lang'] );
     loca_add ( "fleetmsg", $origin_user['lang'] );
 
@@ -930,6 +951,7 @@ function RecycleArrive (array $queue, array $fleet_obj, array $fleet, array $ori
     $dk = $harvest['k'];
 
     $origin_user = LoadUser ( $origin['owner_id'] );
+    if ($origin_user == null) return;
     loca_add ( "fleetmsg", $origin_user['lang'] );
 
     $subj = "\n<span class=\"espionagereport\">".loca_lang("FLEET_MESSAGE_INTEL", $origin_user['lang'])."</span>\n";   
@@ -981,7 +1003,9 @@ function Queue_Fleet_End (array $queue) : void
 
     // Update resource production on planets
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    if ($origin == null) return;
     $target = GetPlanet ( $fleet_obj['target_planet'] );
+    if ($target == null) return;
     ProdResources ( $target, $target['lastpeek'], $queue['end'] );
     ProdResources ( $origin, $origin['lastpeek'], $queue['end'] );
 
@@ -1060,6 +1084,7 @@ function CreateUnion (int $fleet_id, string $name) : int
     if ($fleet_obj['mission'] != 1) return 0;
 
     $target_planet = GetPlanet ( $fleet_obj['target_planet'] );
+    if ($target_planet == null) return 0;
     $target_player = $target_planet['owner_id'];
 
     // You can't create an union against yourself
@@ -1076,7 +1101,7 @@ function CreateUnion (int $fleet_id, string $name) : int
 }
 
 // Load ACS union
-function LoadUnion (int $union_id) : array
+function LoadUnion (int $union_id) : array|null
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."union WHERE union_id = $union_id";

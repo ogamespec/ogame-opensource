@@ -159,6 +159,7 @@ function SendGreetingsMessage ( int $player_id) : void
 {
     $unitab = LoadUniverse ();
     $user = LoadUser ($player_id);
+    if ($user == null) return;
     loca_add ("reg", $user['lang']);
     loca_add ("fleetmsg", $user['lang']);
     SendMessage ( $player_id, 
@@ -393,11 +394,14 @@ function SelectPlanet (int $player_id, int $cp) : void
     $planet = GetPlanet ($cp);
     // If the planet could not be loaded (this happens, for example, when the page with the destroyed moon is open),
     // try to load the player's home planet.
-    if (!$planet) {
+    if ($planet == null) {
         $user = LoadUser ($player_id);
+        if ($user == null) {
+            Error ("Error loading user.");
+        }
         $cp = $user['hplanetid'];
         $planet = GetPlanet ($cp);
-        if (!$planet) {
+        if ($planet == null) {
             Error ("Error loading the current planet.");
         }
     }
@@ -416,6 +420,7 @@ function SelectPlanet (int $player_id, int $cp) : void
 function GetSelectedPlanet ( int $player_id ) : int
 {
     $user = LoadUser ( $player_id );
+    if ($user == null) return 0;
     return $user['aktplanet'];
 }
 
@@ -453,6 +458,7 @@ function IsPlayerNewbie ( int $player_id) : bool
 {
     global $GlobalUser;
     $user = LoadUser ( $player_id);
+    if ($user == null) return false;
     $week = time() - 604800;
     if ( $user['lastclick'] <= $week || $user['vacation'] || $user['banned']) return false;
     $p1 = $GlobalUser['score1'];
@@ -468,6 +474,7 @@ function IsPlayerStrong ( int $player_id) : bool
 {
     global $GlobalUser;
     $user = LoadUser ( $player_id);
+    if ($user == null) return false;
     $week = time() - 604800;
     if ( $user['lastclick'] <= $week || $user['vacation'] || $user['banned']) return false;
     $p1 = $GlobalUser['score1'];
@@ -521,6 +528,7 @@ function RecruitOfficer ( int $player_id, int $off_type, int $seconds ) : void
     }
     else {
         $user = LoadUser ( $player_id );
+        if ($user == null) return;
         $now = time();
         $old_until = $user[$qtimers[$off_type]];
         if ($now >= $old_until) {
@@ -591,7 +599,7 @@ function AuthUser ( string $session ) : bool
 }
 
 // Login - Called from the home page, after registering or activating a new user.
-function Login ( string $login, string $pass, string $passmd="" ) : void
+function Login ( string $login, string $pass, string $passmd="" ) : never
 {
     global $db_prefix, $db_secret;
 
@@ -839,7 +847,7 @@ function InvalidateUserCache () : void
 }
 
 // Return player's name with a link to the edit page and status (inactive, VM, etc).
-function AdminUserName (string $user) : string
+function AdminUserName (array $user) : string
 {
     global $session;
 

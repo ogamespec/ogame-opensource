@@ -19,6 +19,9 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+if ($aktplanet == null) {
+    Error ("Can't get aktplanet");
+}
 ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
@@ -47,6 +50,9 @@ while ($rows--)
     $fleet_obj = dbarray ( $result );
     $queue = GetFleetQueue ( $fleet_obj['fleet_id'] );
     $user = LoadUser ($fleet_obj['owner_id']);
+    if ($user == null) {
+        $user = array ('r'.GID_R_COMBUST_DRIVE => 0, 'r'.GID_R_IMPULSE_DRIVE => 0, 'r'.GID_R_HYPER_DRIVE => 0);
+    }
 
     // Calculate fleet consumption per hour.
     $cons = 0;

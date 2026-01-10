@@ -1,6 +1,7 @@
 <?php
 
 /** @var array $GlobalUser */
+/** @var array $fleetmap */
 
 // Fleet 3: mission list output, resource loading.
 
@@ -13,6 +14,9 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+if ($aktplanet == null) {
+    Error ("Can't get aktplanet");
+}
 ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
@@ -112,18 +116,20 @@ BeginContent ();
 <?php
     // Display a list of available missions.
 
-    function is_checked ($mission)
+    function is_checked (int $mission) : string
     {
         if ( key_exists ( 'target_mission', $_POST ) ) {
             if ( intval($_POST['target_mission']) == $mission ) return "checked";
         }
+        return "";
     }
 
-    function is_selected ($union_id)
+    function is_selected (int $union_id) : string
     {
         if ( key_exists ( 'union2', $_POST ) ) {
             if ( intval($_POST['union2']) == $union_id ) return "selected";
         }
+        return "";
     }
 
     $mission_acs = $mission_exp = $mission_hold = false;

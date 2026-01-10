@@ -7,6 +7,9 @@
 loca_add ( "reg", $GlobalUser['lang'] );
 
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet']);
+if ($aktplanet == null) {
+    Error ("Can't get aktplanet");
+}
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 

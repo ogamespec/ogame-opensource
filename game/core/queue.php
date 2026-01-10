@@ -521,13 +521,13 @@ function Queue_Build_End (array $queue) : void
     if ( $queue['type'] === "Build" ) {
         $res = BuildPrice ( $id, $lvl );
         $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
-        $points = $m + $k + $d;
+        $points = (int)$m + (int)$k + (int)$d;
         AdjustStats ( $queue['owner_id'], $points, 0, 0, '+');
     }
     else {
         $res = BuildPrice ( $id, $lvl+1 );
         $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
-        $points = $m + $k + $d;
+        $points = (int)$m + (int)$k + (int)$d;
         AdjustStats ( $queue['owner_id'], $points, 0, 0, '-');
     }
     if ( $lvl > 10 ) RecalcRanks ();
@@ -669,7 +669,7 @@ function Queue_Shipyard_End (array $queue, int $when=0) : void
     // Add points.
     $res = ShipyardPrice ( $gid );
     $m = $res['m']; $k = $res['k']; $d = $res['d']; $enrg = $res['e'];
-    $points = ($m + $k + $d) * $done;
+    $points = ((int)$m + (int)$k + (int)$d) * $done;
     if (IsFleet($gid)) $fpoints = $done;
     else $fpoints = 0;
     AdjustStats ( $queue['owner_id'], $points, $fpoints, 0, '+');
@@ -844,7 +844,7 @@ function Queue_Research_End (array $queue) : void
     // Добавить очки.
     $res = ResearchPrice ( $id, $lvl );
     $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
-    $points = $m + $k + $d;
+    $points = (int)$m + (int)$k + (int)$d;
     AdjustStats ( $queue['owner_id'], $points, 0, 1, '+');
     RecalcRanks ();
 
@@ -870,7 +870,7 @@ function AddRecalcPointsEvent (int $player_id) : void
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime(0, 10, 0, date("m"), date("d")+1, date("y"));
+        $when = mktime(0, 10, 0, date("m"), date("d")+1, date("y")) - $now;
         AddQueue ($player_id, QTYP_RECALC_POINTS, 0, 0, 0, $now, $when, QUEUE_PRIO_RECALC_POINTS);
     }
 }
@@ -990,9 +990,9 @@ function AddUpdateStatsEvent (int $now=0) : void
     {
         $today = getdate ( $now );
         $hours = $today['hours'];
-        if ( $hours >= 8 && $hours < 16 ) $when = mktime ( 16, 5, 0 );
-        else if ( $hours >= 16 && $hours < 20 ) $when = mktime ( 20, 5, 0 );
-        else $when = mktime ( 8, 5, 0, $today['mon'], $today['mday'] + 1 );
+        if ( $hours >= 8 && $hours < 16 ) $when = mktime ( 16, 5, 0 ) - $now;
+        else if ( $hours >= 16 && $hours < 20 ) $when = mktime ( 20, 5, 0 ) - $now;
+        else $when = mktime ( 8, 5, 0, $today['mon'], $today['mday'] + 1 ) - $now;
 
         AddQueue (USER_SPACE, QTYP_UPDATE_STATS, 0, 0, 0, $now, $when, QUEUE_PRIO_UPDATE_STATS);
     }
@@ -1025,7 +1025,7 @@ function AddReloginEvent () : void
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime(3, 0, 0, date("m"), date("d")+1, date("y"));;
+        $when = mktime(3, 0, 0, date("m"), date("d")+1, date("y")) - $now;
         $id = AddQueue (USER_SPACE, QTYP_UNLOAD_ALL, 0, 0, 0, $now, $when, QUEUE_PRIO_RELOGIN);
     }
 }
@@ -1056,9 +1056,8 @@ function AddCleanDebrisEvent () : void
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 )
     {
-        $now = time ();
-        $week = mktime(0, 0, 0, date('m'), date('d')-date('w'), date('Y')) + 24 * 60 * 60;
-        $when = $week + 7 * 24 * 60 * 60 + 10 * 60;
+        $now = time();
+        $when = strtotime('next monday 01:10') - $now;
         $id = AddQueue (USER_SPACE, QTYP_CLEAN_DEBRIS, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_DEBRIS);
     }
 }
@@ -1086,7 +1085,7 @@ function AddCleanPlanetsEvent () : void
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime(1, 10, 0, date("m"), date("d")+1, date("y"));
+        $when = mktime(1, 10, 0, date("m"), date("d")+1, date("y")) - $now;
         $id = AddQueue (USER_SPACE, QTYP_CLEAN_PLANETS, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_PLANETS);
     }
 }
@@ -1136,7 +1135,7 @@ function AddCleanPlayersEvent () : void
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime(1, 10, 0, date("m"), date("d")+1, date("y"));
+        $when = mktime(1, 10, 0, date("m"), date("d")+1, date("y")) - $now;
         $id = AddQueue (USER_SPACE, QTYP_CLEAN_PLAYERS, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_PLAYERS);
     }
 }
@@ -1183,7 +1182,7 @@ function AddRecalcAllyPointsEvent () : void
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime(0, 10, 0, date("m"), date("d")+1, date("y"));
+        $when = mktime(0, 10, 0, date("m"), date("d")+1, date("y")) - $now;
         AddQueue (USER_SPACE, QTYP_RECALC_ALLY_POINTS, 0, 0, 0, $now, $when, QUEUE_PRIO_RECALC_ALLY_POINTS);
     }
 }

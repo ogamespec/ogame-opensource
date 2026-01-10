@@ -230,7 +230,7 @@ function Exp_BattleAliens (array $exptab, array $queue, array $fleet_obj, array 
         $msg = $weak[$n];
     }
 
-    ExpeditionBattle ( $fleet_obj['fleet_id'], 0, $level, $queue['end'] );
+    ExpeditionBattle ( $fleet_obj['fleet_id'], false, $level, $queue['end'] );
 
     return $msg;
 }
@@ -275,7 +275,7 @@ function Exp_BattlePirates (array $exptab, array $queue, array $fleet_obj, array
         $msg = $weak[$n];
     }
 
-    ExpeditionBattle ( $fleet_obj['fleet_id'], 1, $level, $queue['end'] );
+    ExpeditionBattle ( $fleet_obj['fleet_id'], true, $level, $queue['end'] );
 
     return $msg;
 }

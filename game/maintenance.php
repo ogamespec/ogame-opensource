@@ -1,5 +1,9 @@
 <?php
 
+/** @var string $StartPage */
+/** @var string $DefaultLanguage */
+/** @var array $Languages */
+
 // Check if the configuration file is missing - redirect to the game installation page.
 if ( !file_exists ("config.php"))
 {

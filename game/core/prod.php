@@ -66,7 +66,7 @@ function BuildDuration ( int $id, int $lvl, int $robots, int $nanits, int $speed
     $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
     $secs = floor ( ( ( ($m + $k) / (2500 * (1 + $robots)) ) * pow (0.5, $nanits) * 60*60 ) / $speed );
     if ($secs < 1) $secs = 1;
-    return $secs;
+    return (int)$secs;
 }
 
 function ShipyardMeetRequirement ( array $user, array $planet, int $id ) : bool
@@ -117,7 +117,7 @@ function ShipyardDuration ( int $id, int $shipyard, int $nanits, int $speed ) : 
     $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
     $secs = floor ( ( ( ($m + $k) / (2500 * (1 + $shipyard)) ) * pow (0.5, $nanits) * 60*60 ) / $speed );
     if ($secs < 1) $secs = 1;
-    return $secs;
+    return (int)$secs;
 }
 
 function ResearchMeetRequirement ( array $user, array $planet, int $id ) : bool
@@ -163,7 +163,7 @@ function ResearchDuration ( int $id, int $lvl, int $reslab, int $speed ) : int
     $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
     $secs = floor ( ( ($m + $k) / (1000 * (1 + $reslab)) * 60*60 ) / $speed );
     if ($secs < 1) $secs = 1;
-    return $secs;
+    return (int)$secs;
 }
 
 // IGN Calculation.
@@ -173,8 +173,10 @@ function ResearchNetwork ( int $planetid, int $id ) : int
 {
     global $db_prefix;
     $planet = GetPlanet ($planetid);
+    if ($planet == null) return 0;
     $player_id = $planet['owner_id'];
     $user = LoadUser ($player_id);
+    if ($user == null) return 0;
     $ign = $user ["r".GID_R_IGN];
     $reslab = $planet["b".GID_B_RES_LAB];
     $labs = array ();
@@ -228,7 +230,7 @@ function IsEnoughResources (array $planet, float $m, float $k, float $d, int $e)
 // Anything related to resource production and calculation.
 
 // Get the size of the storages.
-function store_capacity (int $lvl) : int { return 100000 + 50000 * (ceil (pow (1.6, $lvl) - 1)); }
+function store_capacity (int $lvl) : int { return 100000 + 50000 * (int)(ceil (pow (1.6, $lvl) - 1)); }
 
 // Energy production
 function prod_solar (int $lvl, float $pr) : float
@@ -267,6 +269,7 @@ function ProdResources ( array &$planet, int $time_from, int $time_to ) : void
     global $db_prefix, $GlobalUni;
     if ( $planet['type'] != PTYP_PLANET ) return;        // NOT a planet
     $user = LoadUser ($planet['owner_id']);
+    if ($user == null) return;
     if ( $user['player_id'] == USER_SPACE ) return;    // technical account space
     $diff = $time_to - $time_from;
 
