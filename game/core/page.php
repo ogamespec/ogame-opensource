@@ -118,7 +118,7 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
             (int)floor($aktplanet['m']), (int)floor($aktplanet['k']), (int)floor($aktplanet['d']), 
             $aktplanet['e'], $aktplanet['emax'], 
             $GlobalUser['dm']+$GlobalUser['dmfree'], $aktplanet['mmax'], $aktplanet['kmax'], $aktplanet['dmax']);
-        $coma = OficeerList ();
+        $coma = BonusList ();
         echo "</tr>\n";
         echo "</table>\n";
         echo "</div><!-- END HEADER -->\n\n";
@@ -220,7 +220,7 @@ function ResourceList (array $aktplanet, int $m, int $k, int $d, int $enow, int 
     if ($d >= $dmax) $dcol = "#ff0000";
     if ($enow < 0) $ecol = "#ff0000";
 
-    $json = LoadJsonFirst ("pages/resources.json");
+    $json = LoadJsonFirst ("pages/res_panel.json");
 
     $json['metall']['val'] = $m;
     $json['metall']['color'] = $mcol;
@@ -310,7 +310,8 @@ function calco (int $now, int $who) : array
     return $reply;
 }
 
-function OficeerList () : bool
+// Previously, this panel was used only for officers; after the addition of the modding engine, it is now called the "Bonus Panel" and displays various account "bonuses" (officers are a special case).
+function BonusList () : bool
 {
     global $GlobalUser;
     $sess = $GlobalUser['session'];
