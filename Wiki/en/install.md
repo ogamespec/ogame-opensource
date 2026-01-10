@@ -16,7 +16,6 @@ An important part is to properly configure PHP.INI. The following are important 
 |memory_limit = 1024M|Here you need to choose experimentally, depending on the battle engine being used (the PHP engine can consume more memory than the C engine). A large battle can eat up 2GB of memory (#140)|
 |display_errors = On|Show script execution errors, if desired.|
 |variables_order = "EGPCS"|The order of processing global variables.|
-|magic_quotes_gpc = On|Quoted strings escaping. All game scripts assume that strings are escaped by default.|
 
 Required extensions:
 - extension=php_gd2.dll
@@ -27,15 +26,15 @@ Required extensions:
 
 In the root of your server you need to copy all the contents from the `wwwroot` folder.
 
-The `game` folder should be copied to the Universe instance.
+The `game` and `feed` folder should be copied to the Universe instance.
 
 ## Creating a Universe subdomain
 
-If you are deploying to the Web and don't want to have one universe at the root with the game, you can create a subdomain like `uni1.mygame.com` and put the `game` folder there.
+If you are deploying to the Web and don't want to have one universe at the root with the game, you can create a subdomain like `uni1.mygame.com` and put the `game` and `feed` folder there.
 
-:warning: The `game` folder in the root of the universe instance should be put in its entirety, i.e. just as a folder, not its contents. Game scripts rely on this.
+:warning: The `game` and `feed` folder in the root of the universe instance should be put in its entirety, i.e. just as a folder, not its contents. Game scripts rely on this.
 
-If you just want to have one universe where the main page is, just put the `game` folder in the root of your web server.
+If you just want to have one universe where the main page is, just put the `game` and `feed` folder in the root of your web server.
 
 ## Battle Engine
 
@@ -71,7 +70,7 @@ Poke different buttons in the admin; Walk around the pages; Try to build somethi
 
 ## External links
 
-The original game contains a number of links from the side menu to external resources. You can change them at your preference in the game/page.php file:
+The original game contains a number of links from the side menu to external resources. You can change them at your preference in install script:
 - Forum
 - Tutorial
 - Rules
