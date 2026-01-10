@@ -51,3 +51,19 @@ Now you can test the battle engine. To do this, log into the admin panel and lau
 <img width="597" height="698" alt="image" src="/imgstore/531416637-5537d55c-bfc5-49e7-9d36-eb621cd33dcf.png" />
 
 If you see a green log, then everything is OK.
+
+## Updating files
+
+During development, you need to constantly update files in the container from the local repository. This can be done with the command:
+
+```
+docker cp .\game\ ogame-opensource-server-1:/var/www/html/
+```
+
+You also need to chown www-data again, as ownership will be lost and the game will no longer be able to create new files in the battledata and temp directories. This is done by running the chown command from within the container:
+
+```
+chown -R www-data:www-data /var/www/html/game
+```
+
+![docker_cp_chown](/imgstore/docker_cp_chown.png)

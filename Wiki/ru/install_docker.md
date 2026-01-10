@@ -51,3 +51,19 @@
 <img width="597" height="698" alt="image" src="/imgstore/531416637-5537d55c-bfc5-49e7-9d36-eb621cd33dcf.png" />
 
 Если видно зелёный лог, значит всё Ок.
+
+## Обновление файлов
+
+Во время разработки требуется постоянно обновлять файлы в контейнере из локального репозитория. Это можно делать командой:
+
+```
+docker cp .\game\ ogame-opensource-server-1:/var/www/html/
+```
+
+Также нужно снова делать chown для www-data, т.к. теряются права владения и игра больше не сможет создавать новые файлы в директориях battledata и temp. Делается это выполнением команды chown изнутри контейнера:
+
+```
+chown -R www-data:www-data /var/www/html/game
+```
+
+![docker_cp_chown](/imgstore/docker_cp_chown.png)
