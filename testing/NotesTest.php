@@ -238,8 +238,8 @@ class NotesTest extends TestCase
         UpdateNote($this->testPlayerId, $this->testNoteId, $newSubj, $newText, $newPrio);
         
         // Assert
-        $this->assertNotEmpty($GLOBALS['dbQueryCalls'] ?? []);
-        $this->assertStringContainsString('UPDATE', $GLOBALS['dbQueryCalls'][0] ?? '');
+        $this->assertEquals(2, count ($GLOBALS['dbQueryCalls'] ?? []));
+        $this->assertStringContainsString('UPDATE', $GLOBALS['dbQueryCalls'][1] ?? '');
     }
     
     /**
@@ -272,7 +272,8 @@ class NotesTest extends TestCase
         UpdateNote($this->testPlayerId, $this->testNoteId, 'New Subject', 'New Text', 2);
         
         // Assert - не должно быть вызовов UPDATE
-        $this->assertEmpty($GLOBALS['dbQueryCalls'] ?? []);
+        $this->assertEquals(1, count($GLOBALS['dbQueryCalls'] ?? []));
+        $this->assertStringNotContainsString('UPDATE', $GLOBALS['dbQueryCalls'][0] ?? '');
     }
     
     /**
@@ -304,8 +305,8 @@ class NotesTest extends TestCase
         DelNote($this->testPlayerId, $this->testNoteId);
         
         // Assert
-        $this->assertNotEmpty($GLOBALS['dbQueryCalls'] ?? []);
-        $this->assertStringContainsString('DELETE', $GLOBALS['dbQueryCalls'][0] ?? '');
+        $this->assertEquals(2, count ($GLOBALS['dbQueryCalls'] ?? []));
+        $this->assertStringContainsString('DELETE', $GLOBALS['dbQueryCalls'][1] ?? '');
     }
     
     /**
@@ -338,7 +339,8 @@ class NotesTest extends TestCase
         DelNote($this->testPlayerId, $this->testNoteId);
         
         // Assert
-        $this->assertEmpty($GLOBALS['dbQueryCalls'] ?? []);
+        $this->assertEquals(1, count($GLOBALS['dbQueryCalls'] ?? []));
+        $this->assertStringNotContainsString('DELETE', $GLOBALS['dbQueryCalls'][0] ?? '');
     }
     
     /**
