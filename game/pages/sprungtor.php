@@ -21,6 +21,9 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
+$fleetmap_rev = array_reverse ($fleetmap);
+$fleetmap_revnosat = array_diff ($fleetmap_rev, [GID_F_SAT]);
+
 PageHeader ("sprungtor");
 
 BeginContent ();

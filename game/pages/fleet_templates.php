@@ -27,6 +27,8 @@ if (!$prem['commander']) {
     MyGoto ("overview");
 }
 
+$fleetmap_nosat = array_diff($fleetmap, [GID_F_SAT]);
+
 PageHeader ("fleet_templates");
 
 if ( method() === "POST" && key_exists('mode', $_POST) && $_POST['mode'] === "save" ) {

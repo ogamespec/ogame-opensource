@@ -285,6 +285,7 @@ else
         echo "  <tr>\n";
         echo "    <th>".va(loca("INFO_DEPOT_FLEET"), $user['oname'])."<br>";
         $cons = 0;
+        $fleetmap_nosat = array_diff($fleetmap, [GID_F_SAT]);
         foreach ($fleetmap_nosat as $i=>$id) {
             $amount = $fleet_obj["ship".$id];
             if ($amount > 0) { 
@@ -430,6 +431,8 @@ else
       <td class="c" colspan="2"><?=loca("GATE_HEAD");?></td>
     </tr>
 <?php
+    $fleetmap_rev = array_reverse ($fleetmap);
+    $fleetmap_revnosat = array_diff ($fleetmap_rev, [GID_F_SAT]);
     foreach ($fleetmap_revnosat as $i=>$id)
     {
         $amount = $aktplanet["f$id"];

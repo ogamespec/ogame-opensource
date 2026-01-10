@@ -220,7 +220,8 @@ function Admin_BattleSim () : void
     global $db_prefix;
     global $GlobalUser;
     global $fleetmap;
-    global $defmap_norak;
+    global $defmap;
+    $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
     global $AdminError;
 
     $unitab = LoadUniverse ();

@@ -18,6 +18,8 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 
+$fleetmap_nosat = array_diff($fleetmap, [GID_F_SAT]);
+
 if ( method() !== "POST" ) MyGoto ( "flotten1" );
 
 $uni = LoadUniverse ();

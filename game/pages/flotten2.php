@@ -81,6 +81,7 @@ BeginContent();
 
     $total = 0;
     $cargo = 0;
+    $fleetmap_nosat = array_diff($fleetmap, [GID_F_SAT]);
     foreach ($fleetmap_nosat as $i=>$gid) 
     {
         // Limit the number of fleets to the maximum number on a planet.
