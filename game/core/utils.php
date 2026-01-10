@@ -20,7 +20,7 @@ function hostname (string $dir = "game") : string {
     return substr ( $host, 0, $pos+1 );
 }
 
-function nicenum (int $number) : string
+function nicenum (float|int $number) : string
 {
     return number_format($number,0,",",".");
 }

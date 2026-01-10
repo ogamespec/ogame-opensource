@@ -216,7 +216,7 @@ function BuildDurationFormat ( int $seconds ) : string
     return $res;
 }
 
-function IsEnoughResources (array $planet, int $m, int $k, int $d, int $e) : bool
+function IsEnoughResources (array $planet, float $m, float $k, float $d, int $e) : bool
 {
     if ( $m && $planet['m'] < $m ) return false;
     if ( $k && $planet['k'] < $k ) return false;
