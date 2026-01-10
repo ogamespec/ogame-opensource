@@ -134,12 +134,12 @@ function SetClearCheckbox (status)
                         // Add a user to the Pillar of Shame
                         $entry = array( 'admin_name' => $GlobalUser['oname'], 'user_name' => $user['oname'], 'admin_id' => $GlobalUser['player_id'], 'user_id' => $user['player_id'], 'ban_when' => $now, 'ban_until' => $now + $seconds, 'reason' => $reason );
                         AddDBRow ( $entry, "pranger" );
-                        BanUser ( $player_id, $seconds, 0 ); break;
+                        BanUser ( $player_id, $seconds, false ); break;
                     case 1 :
                         // Add a user to the Pillar of Shame
                         $entry = array( 'admin_name' => $GlobalUser['oname'], 'user_name' => $user['oname'], 'admin_id' => $GlobalUser['player_id'], 'user_id' => $user['player_id'], 'ban_when' => $now, 'ban_until' => $now + $seconds, 'reason' => $reason );
                         AddDBRow ( $entry, "pranger" );
-                        BanUser ( $player_id, $seconds, 1 ); break;
+                        BanUser ( $player_id, $seconds, true ); break;
                     case 2 :
                         // Add a user to the Pillar of Shame
                         $entry = array( 'admin_name' => $GlobalUser['oname'], 'user_name' => $user['oname'], 'admin_id' => $GlobalUser['player_id'], 'user_id' => $user['player_id'], 'ban_when' => $now, 'ban_until' => $now + $seconds, 'reason' => $reason );

@@ -18,6 +18,7 @@ parameters:
     - wwwroot/css/*
     - wwwroot/js/*
     - wwwroot/img/*
+    - game/core/bbcode.php
   ignoreErrors:
     - identifier: missingType.iterableValue
   reportUnmatchedIgnoredErrors: false

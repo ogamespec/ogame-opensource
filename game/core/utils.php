@@ -2,14 +2,14 @@
 
 // Various auxiliary utilities that used to be scattered all over the place.
 
-function method () { return $_SERVER['REQUEST_METHOD']; }
+function method () : string { return $_SERVER['REQUEST_METHOD']; }
 
-function scriptname () {
+function scriptname () : string {
     $break = explode('/', $_SERVER["SCRIPT_NAME"]);
     return $break[count($break) - 1];
 }
 
-function hostname ($dir = "game") {
+function hostname (string $dir = "game") : string {
     if (!empty($_SERVER['HTTPS']))  { // get if request is http or https
        $encr ="https://";
     }else{
@@ -20,12 +20,12 @@ function hostname ($dir = "game") {
     return substr ( $host, 0, $pos+1 );
 }
 
-function nicenum ($number)
+function nicenum (int $number) : string
 {
     return number_format($number,0,",",".");
 }
 
-function RedirectHome ()
+function RedirectHome () : void
 {
     // The start page address can be found in config.php
     global $StartPage;
@@ -33,7 +33,7 @@ function RedirectHome ()
 }
 
 // Format string, according to tokens from the text. Tokens are represented as #1, #2 and so on.
-function va ($subject)
+function va (string $subject) : string
 {
     $num_arg = func_num_args();
     $pattern = array ();
@@ -46,7 +46,7 @@ function va ($subject)
 }
 
 // Here is a function to sort an array by the key of its sub-array
-function sksort (&$array, $subkey="id", $sort_ascending=false)
+function sksort (array &$array, string $subkey="id", bool $sort_ascending=false) : array
 {
     $temp_array = array ();
     if (count($array))
@@ -75,19 +75,19 @@ function sksort (&$array, $subkey="id", $sort_ascending=false)
     return $array;
 }
 
-function mail_utf8($to, $subject = '(No subject)', $message = '', $header = '')
+function mail_utf8(string $to, string $subject = '(No subject)', string $message = '', string $header = '') : void
 {
     $header_ = 'MIME-Version: 1.0' . "\n" . 'Content-type: text/plain; charset=UTF-8' . "\n";
     mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $header_ . $header);
 }
 
-function localhost ($ip)
+function localhost (string $ip) : bool
 {
     return $ip === "127.0.0.1" || $ip === "::1";
 }
 
 // Cut all sorts of injections out of the string.
-function SecureText ( $text )
+function SecureText ( string $text ) : string
 {
     $search = array ( "'<script[^>]*?>.*?</script>'si",  // Cuts out javaScript
                       "'<[\/\!]*?[^<>]*?>'si",           // Cuts HTML tags
@@ -172,7 +172,7 @@ function CheckParams (array $inputParams): array {
     ];
 }
 
-function array_insert_after_key(&$array, $after_key, $new_key, $new_value) {
+function array_insert_after_key(array &$array, string $after_key, string $new_key, mixed $new_value) : array {
     $keys = array_keys($array);
     $index = array_search($after_key, $keys);
 
