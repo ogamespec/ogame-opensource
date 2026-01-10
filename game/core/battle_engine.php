@@ -12,7 +12,7 @@ if ($battle_debug) {
 require_once "techs.php";
 require_once "prod.php";
 
-// Spare Battle Engine in PHP.
+// Spare Battle Engine backend in PHP.
 // If the server does not support the execution of system(), then a PHP implementation of the battle engine is used
 
 // How the battle engine is run and integrated in PHP:

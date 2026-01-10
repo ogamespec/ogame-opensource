@@ -3,7 +3,7 @@
 require_once "battle_engine.php";
 require_once "raketen.php";
 
-// OGame Battle Engine.
+// OGame Battle Engine frontend.
 
 // Repairing the defense.
 function RepairDefense ( $d, $res, $defrepair, $defrepair_delta, $premium=true )
