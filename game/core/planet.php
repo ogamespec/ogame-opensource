@@ -57,7 +57,7 @@ const PTYP_FARSPACE = 20000;        // infinite distances (for expeditions)
 // colony: 1 - create colony, 0 - Home planet
 // moon: 1 - create the moon
 // moonchance: chance of the moon appearing (for the size of the moon)
-function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0, $when=0)
+function CreatePlanet ( int $g, int $s, int $p, int $owner_id, int $colony=1, int $moon=0, int $moonchance=0, int $when=0) : int
 {
     global $db_prefix;
 
@@ -68,6 +68,7 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
     if ( dbrows ($result) != 0 ) return 0;
 
     $user = LoadUser ($owner_id);
+    if ($user == null) return 0;
     loca_add ("common", $user['lang']);
 
     // Name of the planet.
@@ -140,7 +141,7 @@ function CreatePlanet ( $g, $s, $p, $owner_id, $colony=1, $moon=0, $moonchance=0
 }
 
 // List all planets of the current user. Return the result of the SQL query.
-function EnumPlanets ()
+function EnumPlanets () : mixed
 {
     global $db_prefix, $GlobalUser;
     $player_id = $GlobalUser['player_id'];
@@ -160,7 +161,7 @@ function EnumPlanets ()
 }
 
 // List all the planets in the Galaxy.
-function EnumPlanetsGalaxy ($g, $s)
+function EnumPlanetsGalaxy (int $g, int $s) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND (type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED.") ORDER BY p ASC";
@@ -169,14 +170,16 @@ function EnumPlanetsGalaxy ($g, $s)
 }
 
 // Get the state of the planet (array).
-function GetPlanet ( $planet_id)
+function GetPlanet ( int $planet_id) : array|null
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."planets WHERE planet_id = '".$planet_id."' LIMIT 1";
     $result = dbquery ($query);
-    if ( dbrows($result) == 0 ) return NULL;
+    if ( dbrows($result) == 0 ) return null;
     $planet = dbarray ($result);
+    if ($planet == null) return null;
     $user = LoadUser ( $planet['owner_id'] );
+    if ($user == null) return null;
 
     $prem = PremiumStatus ($user);
     if ( $prem['engineer'] ) $e_factor = 1.1;
@@ -200,32 +203,32 @@ function GetPlanet ( $planet_id)
 }
 
 // Load planet state by specified coordinates (without pre-processing)
-// Return the $planet array, or NULL.
-function LoadPlanet ($g, $s, $p, $type)
+// Return the $planet array, or null.
+function LoadPlanet (int $g, int $s, int $p, int $type) : mixed
 {
     global $db_prefix;
     if ($type == 1) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET.") LIMIT 1;";
     else if ($type == 2) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=".PTYP_DF." LIMIT 1;";
     else if ($type == 3) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type=".PTYP_MOON." OR type=".PTYP_DEST_MOON.") LIMIT 1;";
-    else return NULL;
+    else return null;
     $result = dbquery ($query);
     if ( $result ) return dbarray ($result);
-    else return NULL;
+    else return null;
 }
 
 // Load planet state by ID
-// Return the $planet array, or NULL.
-function LoadPlanetById ($planet_id)
+// Return the $planet array, or null.
+function LoadPlanetById (int $planet_id) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."planets WHERE planet_id=$planet_id LIMIT 1;";
     $result = dbquery ($query);
     if ( $result ) return dbarray ($result);
-    else return NULL;
+    else return null;
 }
 
 // If the planet has a moon (even destroyed), return its ID, otherwise return 0.
-function PlanetHasMoon ( $planet_id )
+function PlanetHasMoon ( int $planet_id ) : int
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."planets WHERE planet_id = '".$planet_id."'";
@@ -245,7 +248,7 @@ function PlanetHasMoon ( $planet_id )
 // If there are characters in the name ; , < > \ ` then the name doesn't change.
 // If the name of a planet is blank, it is called "планета"
 // More than one space is cut out.
-function RenamePlanet ($planet_id, $name)
+function RenamePlanet (int $planet_id, string $name) : void
 {
     // Find the planet.
     global $db_prefix;
@@ -279,7 +282,7 @@ function RenamePlanet ($planet_id, $name)
 }
 
 // NO CHECKS ARE MADE!!!
-function DestroyPlanet ($planet_id)
+function DestroyPlanet (int $planet_id) : void
 {
     global $db_prefix;
     FlushQueue ($planet_id);
@@ -288,7 +291,7 @@ function DestroyPlanet ($planet_id)
 }
 
 // Update the activity on the planet
-function UpdatePlanetActivity ( $planet_id, $t=0)
+function UpdatePlanetActivity ( int $planet_id, int $t=0) : void
 {
     global $db_prefix;
     if ($t == 0) $now = time ();
@@ -301,7 +304,7 @@ function UpdatePlanetActivity ( $planet_id, $t=0)
 // DF loading is performed by calling GetPlanet. DF is deleted by calling DestroyPlanet.
 
 // Checks if there is a DF at the given coordinates. Returns DF id, or 0.
-function HasDebris ($g, $s, $p)
+function HasDebris (int $g, int $s, int $p) : int
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."planets WHERE g = $g AND s = $s AND p = $p AND type = ".PTYP_DF.";";
@@ -312,7 +315,7 @@ function HasDebris ($g, $s, $p)
 }
 
 // Creates a new DF at the specified coordinates
-function CreateDebris ($g, $s, $p, $owner_id)
+function CreateDebris (int $g, int $s, int $p, int $owner_id) : int
 {
     global $db_prefix;
     $debris_id = HasDebris ($g, $s, $p);
@@ -325,7 +328,7 @@ function CreateDebris ($g, $s, $p, $owner_id)
 }
 
 // Collect DF with the specified capacity. The variables $harvest m/k contains the harvested DF.
-function HarvestDebris ($planet_id, $cargo, $when)
+function HarvestDebris (int $planet_id, int $cargo, int $when) : array
 {
     global $db_prefix;
     $harvest = array ();
@@ -354,7 +357,7 @@ function HarvestDebris ($planet_id, $cargo, $when)
 }
 
 // Pour scrap into the specified DF
-function AddDebris ($id, $m, $k)
+function AddDebris (int $id, int $m, int $k) : void
 {
     global $db_prefix;
     $now = time ();
@@ -363,7 +366,7 @@ function AddDebris ($id, $m, $k)
 }
 
 // Get a game type of planet.
-function GetPlanetType ($planet)
+function GetPlanetType (array $planet) : int
 {
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return 3;
     else if ( $planet['type'] == PTYP_DF) return 2;
@@ -371,7 +374,7 @@ function GetPlanetType ($planet)
 }
 
 // Create a colonization phantom. Return ID.
-function CreateColonyPhantom ($g, $s, $p, $owner_id)
+function CreateColonyPhantom (int $g, int $s, int $p, int $owner_id) : int
 {
     $planet = array( 'name' => loca("PLANET_PHANTOM"), 'type' => PTYP_COLONY_PHANTOM, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => $owner_id, 'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => time(),
                      'm' => 0, 'k' => 0, 'd' => 0, 'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 'lastpeek' => 0, 'lastakt' => 0, 'gate_until' => 0, 'remove' => 0 );
@@ -380,7 +383,7 @@ function CreateColonyPhantom ($g, $s, $p, $owner_id)
 }
 
 // Add an abandoned colony.
-function CreateAbandonedColony ($g, $s, $p, $when)
+function CreateAbandonedColony (int $g, int $s, int $p, int $when) : int
 {
     // If there is no planet at the given coordinates, add Abandoned Colony.
     if ( !HasPlanet ( $g, $s, $p ) )
@@ -395,17 +398,17 @@ function CreateAbandonedColony ($g, $s, $p, $when)
 
 // Check if there is already a planet at the given coordinates (for Colonization). Destroyed planets and abandoned colonies are also taken into account.
 // Colonization phantoms don't count (whoever flies first)
-function HasPlanet ($g, $s, $p)
+function HasPlanet (int $g, int $s, int $p) : bool
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED." );";
     $result = dbquery ($query);
-    if ( dbrows ($result) ) return 1;
-    else return 0;
+    if ( dbrows ($result) ) return true;
+    else return false;
 }
 
 // Change the amount of resources on the planet.
-function AdjustResources ($m, $k, $d, $planet_id, $sign)
+function AdjustResources (float|int $m, float|int $k, float|int $d, int $planet_id, string $sign) : void
 {
     global $db_prefix;
     $now = time ();
@@ -415,13 +418,13 @@ function AdjustResources ($m, $k, $d, $planet_id, $sign)
 
 // Destroy the moon, return fleets, modify player stats.
 // fleet_id - ID of the fleet that destroyed the moon. The return of this fleet is controlled by the battle engine.
-function DestroyMoon ($moon_id, $when, $fleet_id)
+function DestroyMoon (int $moon_id, int $when, int $fleet_id) : void
 {
     global $db_prefix;
 
     $moon = GetPlanet ( $moon_id );
     $planet = LoadPlanet ( $moon['g'], $moon['s'], $moon['p'], 1 );
-    if ( $moon == NULL || $planet == NULL ) return;
+    if ( $moon == null || $planet == null ) return;
 
     // Recall foreign fleets flying to the destroyed moon (except for the fleet flying to destroy the moon - its return is controlled by the caller)
     $query = "SELECT * FROM ".$db_prefix."fleet WHERE owner_id <> ".$planet['owner_id']." AND target_planet = $moon_id AND fleet_id <> $fleet_id;";
@@ -452,7 +455,7 @@ function DestroyMoon ($moon_id, $when, $fleet_id)
 }
 
 // Recalculate fields.
-function RecalcFields ($planet_id)
+function RecalcFields (int $planet_id) : void
 {
     global $db_prefix;
     global $buildmap;
@@ -467,7 +470,7 @@ function RecalcFields ($planet_id)
 }
 
 // Endless distances.
-function CreateOuterSpace ($g, $s, $p)
+function CreateOuterSpace (int $g, int $s, int $p) : int
 {
     global $db_prefix;
 
@@ -489,7 +492,7 @@ function CreateOuterSpace ($g, $s, $p)
 }
 
 // Set up a fleet and defenses on the planet.
-function SetPlanetFleetDefense ( $planet_id, $objects )
+function SetPlanetFleetDefense ( int $planet_id, array $objects ) : void
 {
     global $db_prefix;
     $param = array (  'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 
@@ -504,7 +507,7 @@ function SetPlanetFleetDefense ( $planet_id, $objects )
 }
 
 // Set up defenses on the planet.
-function SetPlanetDefense ( $planet_id, $objects )
+function SetPlanetDefense ( int $planet_id, array $objects ) : void
 {
     global $db_prefix;
     $param = array (  'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503' );
@@ -518,7 +521,7 @@ function SetPlanetDefense ( $planet_id, $objects )
 }
 
 // Set up buildings on the planet.
-function SetPlanetBuildings ( $planet_id, $objects )
+function SetPlanetBuildings ( int $planet_id, array $objects ) : void
 {
     global $db_prefix;
     $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44' );
@@ -532,7 +535,7 @@ function SetPlanetBuildings ( $planet_id, $objects )
 }
 
 // Set the diameter of the planet/moon. After setting the new diameter, the planet fields are recalculated.
-function SetPlanetDiameter ($planet_id, $diam)
+function SetPlanetDiameter (int $planet_id, int $diam) : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."planets SET diameter=$diam WHERE planet_id=$planet_id;";
@@ -541,7 +544,7 @@ function SetPlanetDiameter ($planet_id, $diam)
 }
 
 // Return the name of the planet with a link to the admin area.
-function AdminPlanetName ($planet_id)
+function AdminPlanetName (int $planet_id) : string
 {
     global $session;
     $planet = GetPlanet ($planet_id);
@@ -549,14 +552,14 @@ function AdminPlanetName ($planet_id)
 }
 
 // Return planet coordinate string with a link to the galaxy
-function AdminPlanetCoord ($p)
+function AdminPlanetCoord (array $p) : string
 {
     global $session;
     return "[<a href=\"index.php?page=galaxy&session=$session&galaxy=".$p['g']."&system=".$p['s']."\">".$p['g'].":".$p['s'].":".$p['p']."</a>]";
 }
 
 // Create a home planet, return the ID of the created planet
-function CreateHomePlanet ($player_id)
+function CreateHomePlanet (int $player_id) : int
 {
     global $db_prefix;
     $ss = 15;
@@ -594,10 +597,11 @@ function CreateHomePlanet ($player_id)
     }
 
     Error ( "No more planets!!!" );
+    return 0;
 }
 
 // Load colonization settings.
-function LoadColonySettings ()
+function LoadColonySettings () : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."coltab;";
@@ -606,7 +610,7 @@ function LoadColonySettings ()
 }
 
 // Save the colonization settings.
-function SaveColonySettings ($coltab)
+function SaveColonySettings (array $coltab) : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."coltab SET " .

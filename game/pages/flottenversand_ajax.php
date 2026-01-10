@@ -15,7 +15,7 @@ BrowseHistory ();
 if ( $GlobalUni['freeze'] ) AjaxSendError ();    // The universe is on pause.
 $unispeed = $GlobalUni['fspeed'];
 
-function AjaxSendError (int $id=601) : void
+function AjaxSendError (int $id=601) : never
 {
     header ('Content-Type: text/html;');
     echo "$id 0 0 0 0";
@@ -161,6 +161,9 @@ fclose ($f);
 
 // Send in the fleet.
 $fleet_id = DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, 0, 0, 0, $cons, time(), 0 );
+if ($fleet_id == 0) {
+    AjaxSendError (611);    // no ships to send
+}
 
 UserLog ( $aktplanet['owner_id'], "FLEET", 
     va(loca_lang("DEBUG_LOG_FLEET_SEND_AJAX1", $GlobalUni['lang']), $fleet_id) . GetMissionNameDebug ($order) . " " .

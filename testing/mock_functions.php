@@ -12,7 +12,7 @@ $locaAddCalls = [];
 /**
  * Мок функции dbquery для тестов
  */
-function dbquery($query) {
+function dbquery(string $query) : mixed {
     global $dbQueryCalls, $mockDbResult;
     $dbQueryCalls[] = $query;
     return $mockDbResult;
@@ -21,7 +21,7 @@ function dbquery($query) {
 /**
  * Мок функции dbarray для тестов
  */
-function dbarray($result) {
+function dbarray(mixed $result) : mixed {
     if ($result && is_object($result) && isset($result->data)) {
         if (!$result->fetched) {
             $result->fetched = true;
@@ -34,7 +34,7 @@ function dbarray($result) {
 /**
  * Мок функции LoadUser для тестов
  */
-function LoadUser($player_id) {
+function LoadUser(int $player_id) : array {
     global $mockUserData;
     return $mockUserData;
 }
@@ -42,7 +42,7 @@ function LoadUser($player_id) {
 /**
  * Мок функции loca_add для тестов
  */
-function loca_add($module, $lang) {
+function loca_add(string $module, string $lang) : void {
     global $locaAddCalls;
     $locaAddCalls[] = $module;
 }
@@ -50,7 +50,7 @@ function loca_add($module, $lang) {
 /**
  * Мок функции loca для тестов
  */
-function loca($key) {
+function loca(string $key) : string {
     $translations = [
         'NOTE_NO_SUBJ' => 'No subject',
         'NOTE_NO_TEXT' => 'No text'
@@ -61,9 +61,9 @@ function loca($key) {
 /**
  * Мок функции AddDBRow для тестов
  */
-function AddDBRow($data, $table) {
+function AddDBRow(array $data, string $table) : int {
     global $addDBRowCalls, $lastAddDBRowData;
     $addDBRowCalls++;
     $lastAddDBRowData = $data;
-    return true;
+    return $addDBRowCalls;
 }

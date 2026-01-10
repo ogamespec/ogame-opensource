@@ -38,12 +38,12 @@ To debug: just open http://localhost/game/battle_engine.php with $battle_debug =
 */
 
 // For debugging, convert the array-string into a readable format
-function hex_array_to_text ($arr)
+function hex_array_to_text (string $arr) : string
 {
     return implode(unpack("H*", $arr));
 }
 
-function get_packed_word (&$arr, $idx)
+function get_packed_word (string &$arr, int $idx) : int
 {
     return (ord($arr[4*$idx]) << 24) | 
         (ord($arr[4*$idx+1]) << 16) | 
@@ -51,7 +51,7 @@ function get_packed_word (&$arr, $idx)
         (ord($arr[4*$idx+3]) << 0);
 }
 
-function set_packed_word (&$arr, $idx, $val)
+function set_packed_word (string &$arr, int $idx, int $val) : void
 {
     $ival = (int)$val;
     $arr[4*$idx] = chr(($ival >> 24) & 0xff);
@@ -61,7 +61,7 @@ function set_packed_word (&$arr, $idx, $val)
 }
 
 // Allocate memory for units and set initial values.
-function InitBattle ($slot, $num, $objs, $attacker, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &$shld_arr )
+function InitBattle (array $slot, int $num, int $objs, bool $attacker, string &$explo_arr, string &$obj_arr, string &$slot_arr, string &$hull_arr, string &$shld_arr ) : void
 {
     global $UnitParam;
     global $fleetmap;
@@ -119,7 +119,11 @@ function InitBattle ($slot, $num, $objs, $attacker, &$explo_arr, &$obj_arr, &$sl
 
 // Shot a => b. Returns damage.
 // absorbed - the accumulator of damage absorbed by shields (for the one who is attacked, i.e. for unit "b").
-function UnitShoot ($a, $b, &$aunits, &$aslot, &$ahull, &$ashld, $attackers, &$dunits, &$dslot, &$dhull, &$dshld, &$dexplo, $defenders, &$absorbed, &$dm, &$dk, $fid, $did )
+function UnitShoot (
+    int $a, int $b, 
+    string &$aunits, string &$aslot, string &$ahull, string &$ashld, array $attackers, 
+    string &$dunits, string &$dslot, string &$dhull, string &$dshld, string &$dexplo, array $defenders, 
+    int &$absorbed, int &$dm, int &$dk, int $fid, int $did ) : int
 {
     global $UnitParam;
     global $exploded_counter;
@@ -194,7 +198,7 @@ function UnitShoot ($a, $b, &$aunits, &$aslot, &$ahull, &$ashld, $attackers, &$d
 }
 
 // Clean up blown up ships and defenses. Returns the number of units blown up.
-function WipeExploded ($count, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &$shld_arr)
+function WipeExploded (int $count, string &$explo_arr, string &$obj_arr, string &$slot_arr, string &$hull_arr, string &$shld_arr) : array
 {
     $exploded = 0;
     $dst = 0;
@@ -249,7 +253,7 @@ function WipeExploded ($count, &$explo_arr, &$obj_arr, &$slot_arr, &$hull_arr, &
 }
 
 // Charge shields on unexploded units
-function ChargeShields ($slot, $count, &$explo_arr, &$obj_arr, &$slot_arr, &$shld_arr)
+function ChargeShields (array $slot, int $count, string &$explo_arr, string &$obj_arr, string &$slot_arr, string &$shld_arr) : void
 {
     global $UnitParam;
 
@@ -270,7 +274,9 @@ function ChargeShields ($slot, $count, &$explo_arr, &$obj_arr, &$slot_arr, &$shl
 }
 
 // Check the combat for a quick draw. If none of the units have armor damage, the combat ends in a quick draw.
-function CheckFastDraw (&$aunits, &$aslot, &$ahull, $aobjs, $attackers, &$dunits, &$dslot, &$dhull, $dobjs, $defenders)
+function CheckFastDraw (
+    string &$aunits, string &$aslot, string &$ahull, int $aobjs, array $attackers, 
+    string &$dunits, string &$dslot, string &$dhull, int $dobjs, array $defenders) : bool
 {
     global $UnitParam;
 
@@ -296,7 +302,7 @@ function CheckFastDraw (&$aunits, &$aslot, &$ahull, $aobjs, $attackers, &$dunits
 }
 
 // Check the possibility of re-firing. Original unit IDs are used for convenience
-function RapidFire ($atyp, $dtyp)
+function RapidFire (int $atyp, int $dtyp) : int
 {
     $rapidfire = 0;
 
@@ -352,7 +358,7 @@ function RapidFire ($atyp, $dtyp)
     return $rapidfire;
 }
 
-function DoBattle (&$res, $Rapidfire, $fid, $did)
+function DoBattle (array &$res, int $Rapidfire, int $fid, int $did) : void
 {
     global $battle_debug;
     global $already_exploded_counter;
@@ -624,7 +630,7 @@ function DoBattle (&$res, $Rapidfire, $fid, $did)
     unset($hull_def);
 }
 
-function extract_text ($str, $s, $e)
+function extract_text (string $str, string $s, string $e) : string
 {
     $start  = strpos($str, $s);
     $end    = strpos($str, $e, $start + 1);
@@ -633,7 +639,7 @@ function extract_text ($str, $s, $e)
     return $result;
 }
 
-function deserialize_slot ($str, $att)
+function deserialize_slot (string $str, bool $att) : array
 {
     global $fleetmap;
     global $defmap;
@@ -672,7 +678,7 @@ function deserialize_slot ($str, $att)
 }
 
 // Parse the input data
-function ParseInput ($source, &$rf, &$fid, &$did, &$attackers, &$defenders)
+function ParseInput (string $source, int &$rf, int &$fid, int &$did, array &$attackers, array &$defenders) : void
 {
     global $battle_debug;
 
@@ -725,7 +731,7 @@ function ParseInput ($source, &$rf, &$fid, &$did, &$attackers, &$defenders)
 }
 
 // The output is an array of battleresult, the format is similar to that of the C battle engine.
-function BattleEngine ($source)
+function BattleEngine (string $source) : array
 {
     global $battle_debug;
 
@@ -760,7 +766,7 @@ function BattleEngine ($source)
     return $res;
 }
 
-function BattleDebug()
+function BattleDebug() : void
 {
 
     global $exploded_counter;

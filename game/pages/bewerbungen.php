@@ -1,7 +1,7 @@
 <?php
 
 /** @var array $GlobalUser */
-/** @var string $db_array */
+/** @var string $db_prefix */
 
 // List of applications to join the alliance.
 
@@ -15,6 +15,9 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+if ($aktplanet == null) {
+    Error ("Can't get aktplanet");
+}
 ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
@@ -37,6 +40,9 @@ if ( method () === "POST" )
         $ally_id = $ally['ally_id'];
         $player_id = $app['player_id'];
         $newcomer = LoadUser ($player_id);
+        if ($newcomer == null) {
+            MyGoto ("bewerbungen");
+        }
 
         $result = EnumerateAlly ($ally_id);        // Send out messages to alliance members and the player about the acceptance.
         $rows = dbrows ($result);
@@ -69,13 +75,15 @@ if ( method () === "POST" )
         RemoveApplication ( $show );
 
         // Send a rejection message.
-        loca_add ("ally", $newcomer['lang']);
-        $reason = loca_lang("ALLY_MSG_APPLY_NO_REASON", $newcomer['lang']);
-        if ( $_POST['text'] !== "" ) $reason = $_POST['text'];
-        SendMessage ( $app['player_id'], 
-            va(loca_lang("ALLY_MSG_FROM", $newcomer['lang']), $ally['tag']), 
-            va(loca_lang("ALLY_MSG_APPLY_NO", $newcomer['lang']), $ally['tag']),
-            $reason, MTYP_ALLY );
+        if ($newcomer != null) {
+            loca_add ("ally", $newcomer['lang']);
+            $reason = loca_lang("ALLY_MSG_APPLY_NO_REASON", $newcomer['lang']);
+            if ( $_POST['text'] !== "" ) $reason = $_POST['text'];
+            SendMessage ( $app['player_id'], 
+                va(loca_lang("ALLY_MSG_FROM", $newcomer['lang']), $ally['tag']), 
+                va(loca_lang("ALLY_MSG_APPLY_NO", $newcomer['lang']), $ally['tag']),
+                $reason, MTYP_ALLY );
+        }
         MyGoto ("bewerbungen");
     }
 }

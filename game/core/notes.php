@@ -14,7 +14,7 @@
 // prio: Priority (0: Not important (green), 1: So-so (yellow), 2: Important (red) ) (INT)
 // date: Date the note was created/edited ('INT UNSIGNED')
 
-function LoadNote ( $player_id, $note_id )
+function LoadNote ( int $player_id, int $note_id ) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."notes WHERE owner_id = $player_id AND note_id = $note_id LIMIT 1";
@@ -22,7 +22,7 @@ function LoadNote ( $player_id, $note_id )
     return dbarray ($result);
 }
 
-function AddNote ( $player_id, $subj, $text, $prio )
+function AddNote ( int $player_id, string $subj, string $text, int $prio ) : void
 {
     global $db_prefix;
 
@@ -42,7 +42,7 @@ function AddNote ( $player_id, $subj, $text, $prio )
     AddDBRow ( $note, "notes" );
 }
 
-function UpdateNote ( $player_id, $note_id, $subj, $text, $prio )
+function UpdateNote ( int $player_id, int $note_id, string $subj, string $text, int $prio ) : void
 {
     global $db_prefix;
 
@@ -65,7 +65,7 @@ function UpdateNote ( $player_id, $note_id, $subj, $text, $prio )
     dbquery ($query);
 }
 
-function DelNote ( $player_id, $note_id )
+function DelNote ( int $player_id, int $note_id ) : void
 {
     global $db_prefix;
 
@@ -77,7 +77,7 @@ function DelNote ( $player_id, $note_id )
     dbquery ($query);
 }
 
-function EnumNotes ($player_id)
+function EnumNotes (int $player_id) : mixed
 {
     global $db_prefix;
 

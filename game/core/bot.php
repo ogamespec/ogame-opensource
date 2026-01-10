@@ -9,13 +9,13 @@ $BotID = 0;        // ordinal number of the current bot
 $BotNow = 0;       // start time of bot task execution
 
 // Add a block to the queue
-function AddBotQueue ($player_id, $strat_id, $block_id, $when, $seconds)
+function AddBotQueue (int $player_id, int $strat_id, int $block_id, int $when, int $seconds) : int
 {
     return AddQueue ($player_id, QTYP_AI, $strat_id, $block_id, 0, $when, $when+$seconds, QUEUE_PRIO_BOT);
 }
 
 // Block Interpreter
-function ExecuteBlock ($queue, $block, $childs )
+function ExecuteBlock (array $queue, array $block, array $childs ) : void
 {
     global $db_prefix, $BotID, $BotNow;
 
@@ -133,16 +133,11 @@ function ExecuteBlock ($queue, $block, $childs )
 }
 
 // Add bot.
-function AddBot ($name)
+function AddBot (string $name) : bool
 {
     global $db_prefix;
 
-    // Сгенерировать пароль.
-    $len = 8;
-    $r = '';
-    for($i=0; $i<$len; $i++)
-        $r .= chr(rand(0, 25) + ord('a'));
-    $pass = $r;
+    $pass = gen_trivial_password();
 
     if ( !IsUserExist ($name) ) {
         $player_id = CreateUser ( $name, $pass, '', true );
@@ -156,7 +151,7 @@ function AddBot ($name)
 }
 
 // Start the bot (execute the Start block for the _start strategy)
-function StartBot ($player_id)
+function StartBot (int $player_id) : void
 {
     global $BotID, $BotNow;
 
@@ -167,7 +162,7 @@ function StartBot ($player_id)
 }
 
 // Stop the bot (just remove all AI tasks)
-function StopBot ($player_id)
+function StopBot (int $player_id) : void
 {
     global $db_prefix;
     if ( IsBot ($player_id) ) 
@@ -178,7 +173,7 @@ function StopBot ($player_id)
 }
 
 // Check if the player is a bot.
-function IsBot ($player_id)
+function IsBot (int $player_id) : bool
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."queue WHERE type = 'AI' AND owner_id = $player_id";
@@ -188,7 +183,7 @@ function IsBot ($player_id)
 
 // Task completion event for the bot. Called from queue.php
 // Activate the bot's task parser.
-function Queue_Bot_End ($queue)
+function Queue_Bot_End (array $queue) : void
 {
     global $db_prefix;
 
@@ -219,7 +214,7 @@ function Queue_Bot_End ($queue)
 
 // Bot Variables.
 
-function GetVar ( $owner_id, $var, $def_value=null )
+function GetVar ( int $owner_id, string $var, string|null $def_value=null ) : string|null
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."botvars WHERE var = '".$var."' AND owner_id = $owner_id LIMIT 1;";
@@ -236,7 +231,7 @@ function GetVar ( $owner_id, $var, $def_value=null )
     }
 }
 
-function SetVar ( $owner_id, $var, $value )
+function SetVar ( int $owner_id, string $var, string $value ) : void
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."botvars WHERE var = '".$var."' AND owner_id = $owner_id LIMIT 1;";

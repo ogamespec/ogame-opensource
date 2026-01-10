@@ -105,14 +105,14 @@ const USER_NOOB_LIMIT = 5000;           // Number of points for a newbie
 $UserCache = array ();
 
 // Corrected version of date
-function fixed_date ( $fmt, $timestamp )
+function fixed_date ( string $fmt, int $timestamp ) : string
 {
     $date = new DateTime ('@' . $timestamp);
     return $date->format ($fmt);
 }
 
 // Send a welcome email with a link to activate your account (in the language of the universe).
-function SendGreetingsMail ( $name, $pass, $email, $ack)
+function SendGreetingsMail ( string $name, string $pass, string $email, string $ack) : void
 {
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
@@ -138,7 +138,7 @@ function SendGreetingsMail ( $name, $pass, $email, $ack)
 }
 
 // Send a letter confirming the change of address (in the language of the universe).
-function SendChangeMail ( $name, $email, $pemail, $ack)
+function SendChangeMail ( string $name, string $email, string $pemail, string $ack) : void
 {
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
@@ -155,10 +155,11 @@ function SendChangeMail ( $name, $email, $pemail, $ack)
 }
 
 // Send a welcome message (in the user's language)
-function SendGreetingsMessage ( $player_id)
+function SendGreetingsMessage ( int $player_id) : void
 {
     $unitab = LoadUniverse ();
     $user = LoadUser ($player_id);
+    if ($user == null) return;
     loca_add ("reg", $user['lang']);
     loca_add ("fleetmsg", $user['lang']);
     SendMessage ( $player_id, 
@@ -167,17 +168,17 @@ function SendGreetingsMessage ( $player_id)
         bb ( va(loca_lang("REG_GREET_MSG_TEXT", $user['lang']), $unitab['ext_board'], $unitab['ext_tutorial']) ), MTYP_MISC );
 }
 
-function IsUserExist ( $name)
+function IsUserExist ( string $name) : bool
 {
     global $db_prefix;
     $name = mb_strtolower ($name, 'UTF-8');
     $query = "SELECT * FROM ".$db_prefix."users WHERE name = '".$name."'";
     $result = dbquery ($query);
-    return dbrows ($result);
+    return dbrows ($result) != 0;
 }
 
 // Exclude the name $name from the search.
-function IsEmailExist ( $email, $name="")
+function IsEmailExist ( string $email, string $name="") : bool
 {
     global $db_prefix;
     $name = mb_strtolower ($name, 'UTF-8');
@@ -185,12 +186,12 @@ function IsEmailExist ( $email, $name="")
     $query = "SELECT * FROM ".$db_prefix."users WHERE (email = '".$email."' OR pemail = '".$email."')";
     if ($name !== "") $query .= " AND name <> '".$name."'";
     $result = dbquery ($query);
-    return dbrows ($result);
+    return dbrows ($result) != 0;
 }
 
 // There are no checks for correctness! This is handled by the registration procedure.
 // Returns the ID of the created user.
-function CreateUser ( $name, $pass, $email, $bot=false)
+function CreateUser ( string $name, string $pass, string $email, bool $bot=false) : int
 {
     global $db_prefix, $db_secret, $Languages;
     $origname = $name;
@@ -250,7 +251,7 @@ function CreateUser ( $name, $pass, $email, $bot=false)
 
 // Completely delete the player, all their planets and fleets.
 // Turn back fleets flying at the player.
-function RemoveUser ( $player_id, $when)
+function RemoveUser ( int $player_id, int $when) : void
 {
     global $GlobalUser, $db_prefix;
 
@@ -313,7 +314,7 @@ function RemoveUser ( $player_id, $when)
 }
 
 // Activate the user.
-function ValidateUser ($code)
+function ValidateUser (string $code) : void
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."users WHERE validatemd = '".$code."'";
@@ -335,7 +336,7 @@ function ValidateUser ($code)
 }
 
 // Verify password. Returns 0, or the user ID.
-function CheckPassword ( $name, $pass, $passmd="")
+function CheckPassword ( string $name, string $pass, string $passmd="") : int
 {
     global $db_prefix, $db_secret;
     $name = mb_strtolower ($name, 'UTF-8');
@@ -348,13 +349,13 @@ function CheckPassword ( $name, $pass, $passmd="")
     return $user['player_id'];
 }
 
-// Change the temporary mail address. Returns 1 if the address was successfully changed, or 0 if the address is already in use.
-function ChangeEmail ( $name, $email)
+// Change the temporary mail address. Returns true if the address was successfully changed, or false if the address is already in use.
+function ChangeEmail ( string $name, string $email) : bool
 {
     global $db_prefix, $db_secret;
     $name = mb_strtolower ($name, 'UTF-8');
     $email = mb_strtolower ($email, 'UTF-8');
-    if (IsEmailExist ($uni, $email, $name)) return 0;
+    if (IsEmailExist ($uni, $email, $name)) return false;
     $query = "UPDATE ".$db_prefix."users SET email = '".$email."' WHERE name = '".$name."'";
     dbquery ($query);
     $ack = ChangeActivationCode ( $name);
@@ -362,11 +363,11 @@ function ChangeEmail ( $name, $email)
     $result = dbquery ($query);
     $user = dbarray ($result);
     SendChangeMail ( $user['oname'], $email, $user['pemail'], $ack);
-    return 1;
+    return true;
 }
 
 // Change username.
-function ChangeName ( $player_id, $name )
+function ChangeName ( int $player_id, string $name ) : void
 {
     global $db_prefix;
     $lower = mb_strtolower ($name, 'UTF-8');
@@ -376,7 +377,7 @@ function ChangeName ( $player_id, $name )
 }
 
 // Change activation code. Returns the new code.
-function ChangeActivationCode ( $name)
+function ChangeActivationCode ( string $name) : string
 {
     global $db_prefix, $db_secret;
     $name = mb_strtolower ($name, 'UTF-8');
@@ -387,17 +388,20 @@ function ChangeActivationCode ( $name)
 }
 
 // Select the current planet.
-function SelectPlanet ($player_id, $cp)
+function SelectPlanet (int $player_id, int $cp) : void
 {
     global $db_prefix;
     $planet = GetPlanet ($cp);
     // If the planet could not be loaded (this happens, for example, when the page with the destroyed moon is open),
     // try to load the player's home planet.
-    if (!$planet) {
+    if ($planet == null) {
         $user = LoadUser ($player_id);
+        if ($user == null) {
+            Error ("Error loading user.");
+        }
         $cp = $user['hplanetid'];
         $planet = GetPlanet ($cp);
-        if (!$planet) {
+        if ($planet == null) {
             Error ("Error loading the current planet.");
         }
     }
@@ -413,14 +417,15 @@ function SelectPlanet ($player_id, $cp)
 }
 
 // Get the ID of the current selected planet
-function GetSelectedPlanet ( $player_id )
+function GetSelectedPlanet ( int $player_id ) : int
 {
     $user = LoadUser ( $player_id );
+    if ($user == null) return 0;
     return $user['aktplanet'];
 }
 
 // Load User.
-function LoadUser ( $player_id)
+function LoadUser ( int $player_id) : array|null
 {
     global $db_prefix, $UserCache;
     if ( isset ( $UserCache [ $player_id ] ) ) return  $UserCache [ $player_id ];
@@ -435,7 +440,7 @@ function LoadUser ( $player_id)
 }
 
 // Update user activity (NOT PLANET activity).
-function UpdateLastClick ( $player_id)
+function UpdateLastClick ( int $player_id) : void
 {
     global $db_prefix;
     $now = time ();
@@ -449,10 +454,11 @@ function UpdateLastClick ( $player_id)
 // A Newbie can attack a stronger player (both Newbie and Non-Newbie) as long as the player has no more than five times as many points.
 
 // Newbie protection. Check if the player is a newbie for the current player.
-function IsPlayerNewbie ( $player_id)
+function IsPlayerNewbie ( int $player_id) : bool
 {
     global $GlobalUser;
     $user = LoadUser ( $player_id);
+    if ($user == null) return false;
     $week = time() - 604800;
     if ( $user['lastclick'] <= $week || $user['vacation'] || $user['banned']) return false;
     $p1 = $GlobalUser['score1'];
@@ -464,10 +470,11 @@ function IsPlayerNewbie ( $player_id)
 }
 
 // Newbie protection. Check if the player for the current player is a strong player.
-function IsPlayerStrong ( $player_id)
+function IsPlayerStrong ( int $player_id) : bool
 {
     global $GlobalUser;
     $user = LoadUser ( $player_id);
+    if ($user == null) return false;
     $week = time() - 604800;
     if ( $user['lastclick'] <= $week || $user['vacation'] || $user['banned']) return false;
     $p1 = $GlobalUser['score1'];
@@ -479,7 +486,7 @@ function IsPlayerStrong ( $player_id)
 }
 
 // Get the status of the commander and the rest of the officers on the account.
-function PremiumStatus ($user)
+function PremiumStatus (array $user) : array
 {
     $prem = array ();
     $qcmd = array ( USER_OFFICER_COMMANDER => 'commander', USER_OFFICER_ADMIRAL => 'admiral', USER_OFFICER_ENGINEER => 'engineer', USER_OFFICER_GEOLOGE => 'geologist', USER_OFFICER_TECHNOCRATE => 'technocrat');
@@ -500,7 +507,7 @@ function PremiumStatus ($user)
 }
 
 // Get the officer's end time. $off_type - see USER_OFFICER_xxx.
-function GetOfficerLeft ($user, $off_type)
+function GetOfficerLeft (array $user, int $off_type) : int
 {
     $qtimers = array ( USER_OFFICER_COMMANDER => 'com_until', USER_OFFICER_ADMIRAL => 'adm_until', USER_OFFICER_ENGINEER => 'eng_until', USER_OFFICER_GEOLOGE => 'geo_until', USER_OFFICER_TECHNOCRATE => 'tec_until');
     if (key_exists($qtimers[$off_type], $user)) {
@@ -510,7 +517,7 @@ function GetOfficerLeft ($user, $off_type)
 }
 
 // Extend an officer for the specified number of seconds. If the number of seconds < 0 - remove the officer.
-function RecruitOfficer ( $player_id, $off_type, $seconds )
+function RecruitOfficer ( int $player_id, int $off_type, int $seconds ) : void
 {
     global $db_prefix, $GlobalUser;
     $qtimers = array ( USER_OFFICER_COMMANDER => 'com_until', USER_OFFICER_ADMIRAL => 'adm_until', USER_OFFICER_ENGINEER => 'eng_until', USER_OFFICER_GEOLOGE => 'geo_until', USER_OFFICER_TECHNOCRATE => 'tec_until');
@@ -521,6 +528,7 @@ function RecruitOfficer ( $player_id, $off_type, $seconds )
     }
     else {
         $user = LoadUser ( $player_id );
+        if ($user == null) return;
         $now = time();
         $old_until = $user[$qtimers[$off_type]];
         if ($now >= $old_until) {
@@ -538,7 +546,7 @@ function RecruitOfficer ( $player_id, $off_type, $seconds )
 }
 
 // Called when you click on "Exit" in the menu.
-function Logout ( $session )
+function Logout ( string $session ) : void
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$session."'";
@@ -554,7 +562,7 @@ function Logout ( $session )
 }
 
 // Authenticate user. Called on every game page is loaded.
-function AuthUser ( $session )
+function AuthUser ( string $session ) : bool
 {
     global $db_prefix, $GlobalUser, $loca_lang, $Languages, $GlobalUni, $DefaultLanguage;
     // Get the user ID and universe number from a public session.
@@ -591,7 +599,7 @@ function AuthUser ( $session )
 }
 
 // Login - Called from the home page, after registering or activating a new user.
-function Login ( $login, $pass, $passmd="", $from_validate=0 )
+function Login ( string $login, string $pass, string $passmd="" ) : never
 {
     global $db_prefix, $db_secret;
 
@@ -661,7 +669,7 @@ function Login ( $login, $pass, $passmd="", $from_validate=0 )
 }
 
 // Recalculation of stats.
-function RecalcStats ($player_id)
+function RecalcStats (int $player_id) : void
 {
     global $db_prefix;
     $m = $k = $d = $e = 0;
@@ -729,7 +737,7 @@ function RecalcStats ($player_id)
     dbquery ($query);
 }
 
-function AdjustStats ( $player_id, $points, $fpoints, $rpoints, $sign )
+function AdjustStats ( int $player_id, int $points, int $fpoints, int $rpoints, string $sign ) : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."users SET ";
@@ -738,7 +746,7 @@ function AdjustStats ( $player_id, $points, $fpoints, $rpoints, $sign )
 }
 
 // Recalculate the places of all players.
-function RecalcRanks ()
+function RecalcRanks () : void
 {
     global $db_prefix;
 
@@ -773,7 +781,7 @@ function RecalcRanks ()
 }
 
 // Log out all the players
-function UnloadAll ()
+function UnloadAll () : void
 {
     global $db_prefix, $StartPage;
     $query = "UPDATE ".$db_prefix."users SET session = ''";
@@ -785,7 +793,7 @@ function UnloadAll ()
 }
 
 // Change skin path
-function ChangeSkinPath ($player_id, $dpath)
+function ChangeSkinPath (int $player_id, string $dpath) : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."users SET skin = '".$dpath."' WHERE player_id = $player_id";
@@ -793,7 +801,7 @@ function ChangeSkinPath ($player_id, $dpath)
 }
 
 // Enable/disable skin display. When the skin is disabled, the default skin is displayed.
-function EnableSkin ($player_id, $enable)
+function EnableSkin (int $player_id, int $enable) : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."users SET useskin = $enable WHERE player_id = $player_id";
@@ -801,7 +809,7 @@ function EnableSkin ($player_id, $enable)
 }
 
 // Get a list of operators in the universe
-function EnumOperators ()
+function EnumOperators () : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."users WHERE admin = 1 ORDER BY player_id ASC;";
@@ -809,7 +817,7 @@ function EnumOperators ()
 }
 
 // Resend the password and activation link.
-function ReactivateUser ($player_id)
+function ReactivateUser (int $player_id) : void
 {
     global $db_prefix, $db_secret;
     $user = LoadUser ($player_id);
@@ -832,14 +840,14 @@ function ReactivateUser ($player_id)
 }
 
 // Clear the player cache.
-function InvalidateUserCache ()
+function InvalidateUserCache () : void
 {
     global $UserCache;
     $UserCache = array ();
 }
 
 // Return player's name with a link to the edit page and status (inactive, VM, etc).
-function AdminUserName ($user)
+function AdminUserName (array $user) : string
 {
     global $session;
 
@@ -869,7 +877,7 @@ function AdminUserName ($user)
 }
 
 // Ban the player.
-function BanUser ($player_id, $seconds, $vmode)
+function BanUser (int $player_id, int $seconds, bool $vmode) : void
 {
     global $db_prefix;
     $query = "DELETE FROM ".$db_prefix."queue WHERE type = '".QTYP_UNBAN."' AND owner_id = $player_id";
@@ -885,7 +893,7 @@ function BanUser ($player_id, $seconds, $vmode)
 }
 
 // Ban attacks.
-function BanUserAttacks ($player_id, $seconds)
+function BanUserAttacks (int $player_id, int $seconds) : void
 {
     global $db_prefix;
     $query = "DELETE FROM ".$db_prefix."queue WHERE type = '".QTYP_ALLOW_ATTACKS."' AND owner_id = $player_id";
@@ -898,7 +906,7 @@ function BanUserAttacks ($player_id, $seconds)
 }
 
 // Unban a player
-function UnbanUser ($player_id)
+function UnbanUser (int $player_id) : void
 {
     global $db_prefix;
     $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'UnbanPlayer' AND owner_id = $player_id";
@@ -910,7 +918,7 @@ function UnbanUser ($player_id)
 }
 
 // Allow attacks
-function UnbanUserAttacks ($player_id)
+function UnbanUserAttacks (int $player_id) : void
 {
     global $db_prefix;
     $query = "DELETE FROM ".$db_prefix."queue WHERE type = 'AllowAttacks' AND owner_id = $player_id";
@@ -920,7 +928,7 @@ function UnbanUserAttacks ($player_id)
 }
 
 // Set user flags
-function SetUserFlags ($player_id, $flags)
+function SetUserFlags (int $player_id, int $flags) : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."users SET flags = $flags WHERE player_id = $player_id";
@@ -928,7 +936,7 @@ function SetUserFlags ($player_id, $flags)
 }
 
 // Get the number of players (administrators and operators do not count)
-function GetUsersCount()
+function GetUsersCount() : int
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."users WHERE admin = 0;";
@@ -937,7 +945,7 @@ function GetUsersCount()
 }
 
 // Get a top1 player for expedition calculations.
-function GetTop1 ()
+function GetTop1 () : array|null
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."users ORDER BY score1 DESC LIMIT 1";
@@ -948,7 +956,7 @@ function GetTop1 ()
     return null;
 }
 
-function FeedActivate ($enable)
+function FeedActivate (bool $enable) : void
 {
     global $GlobalUser, $db_prefix, $GlobalUni;
     $player_id = $GlobalUser['player_id'];

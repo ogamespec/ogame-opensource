@@ -1,5 +1,6 @@
 <?php
 
+/** @var array $GlobalUni */
 /** @var array $GlobalUser */
 /** @var array $fleetmap */
 /** @var string $db_prefix */
@@ -20,6 +21,9 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+if ($aktplanet == null) {
+    Error ("Can't get aktplanet");
+}
 ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
@@ -43,7 +47,6 @@ function FleetMissionText (int $num) : void
 }
 
 $union_id = 0;
-$uni = LoadUniverse ();
 
 // POST requests processing
 if ( method () === "POST" )
@@ -57,13 +60,13 @@ if ( method () === "POST" )
             RecallFleet ( $fleet_id );
     }
 
-    if ( key_exists ( 'union_name', $_POST) && $uni['acs'] > 0 ) {
+    if ( key_exists ( 'union_name', $_POST) && $GlobalUni['acs'] > 0 ) {
         $fleet_id = intval ($_POST['flotten']);
         $union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
         RenameUnion ( $union_id, $_POST['union_name'] );    // rename
     }
 
-    if ( key_exists ( 'user_name', $_POST) && $uni['acs'] > 0 ) { 
+    if ( key_exists ( 'user_name', $_POST) && $GlobalUni['acs'] > 0 ) { 
         $fleet_id = intval ($_POST['flotten']);
         $union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
         $FleetError = AddUnionMember ( $union_id, $_POST['user_name'] );    // add player
@@ -142,8 +145,15 @@ BeginContent();
             $queue = dbarray ($result);
             $fleet = LoadFleet ($queue['sub_id']);
             $origin = GetPlanet ($fleet['start_planet']);
+            if ($origin == null) $origin = array ('g' => 0, 's' => 0, 'p' => 0);
             $target = GetPlanet ($fleet['target_planet']);
-            $target_user = LoadUser ( $target['owner_id'] );
+            if ($target == null) { 
+                $target = array ('g' => 0, 's' => 0, 'p' => 0, 'type' => PTYP_ABANDONED);
+                $target_user = array ( 'oname' => 'space' );
+            }
+            else {
+                $target_user = LoadUser ( $target['owner_id'] );
+            }
 ?>
      <tr height="20">
     <th><?php echo $row;?></th>
@@ -173,7 +183,7 @@ BeginContent();
     <th><?php echo date ( "D M j G:i:s", $queue['end']);?></th>
     <th>
 <?php
-    if ( ($fleet['mission'] == FTYP_ATTACK || $fleet['mission'] == FTYP_ACS_ATTACK_HEAD) && $uni['acs'] > 0 )
+    if ( ($fleet['mission'] == FTYP_ATTACK || $fleet['mission'] == FTYP_ACS_ATTACK_HEAD) && $GlobalUni['acs'] > 0 )
     {
 ?>
          <form action="index.php?page=flotten1&session=<?php echo $session;?>" method="POST">
@@ -223,7 +233,7 @@ BeginContent();
 <?php
 // ************************ ACS attack creation form ************************
 
-    if ( key_exists ( 'order_union', $_POST) && $uni['acs'] > 0 )
+    if ( key_exists ( 'order_union', $_POST) && $GlobalUni['acs'] > 0 )
     {
         $fleet = LoadFleet ( intval ($_POST['order_union']) );
         if ( $fleet['union_id'] ) $union = LoadUnion ( $fleet['union_id'] ); 

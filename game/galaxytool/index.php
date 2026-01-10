@@ -1,5 +1,8 @@
 <?php
 
+/** @var string $DefaultLanguage */
+/** @var array $Languages */
+
 // Check if the configuration file is missing - redirect to the game installation page.
 if ( !file_exists ("../config.php"))
 {
@@ -40,7 +43,7 @@ loca_add ( "galaxytool", $loca_lang, "../" );
 
 <?php
 
-function PlayerDetails ($player_id)
+function PlayerDetails (int $player_id) : void
 {
     global $galaxy, $stats, $ally;
 
@@ -61,15 +64,15 @@ function PlayerDetails ($player_id)
 
     foreach ( $galaxy as $planet_id=>$planet )
     {
-        if ( $planet['owner_id'] == $player_id && $planet['type'] < 10000 )
+        if ( $planet['owner_id'] == $player_id && $planet['type'] < PTYP_DF )
         {
             $num = 1000000 * $planet['g'] + 1000 * $planet['s'] + 15 * $planet['p'];
 
-            if ( $planet['type'] == 0 )
+            if ( $planet['type'] == PTYP_MOON )
             {
                 $moons[$num] = array ();
                 $moons[$num]['name'] = $planet['name'];
-                $moons[$num]['type'] = 0;
+                $moons[$num]['type'] = PTYP_MOON;
                 $moons[$num]['present'] = 1;
             }
             else
@@ -81,7 +84,7 @@ function PlayerDetails ($player_id)
                 $planets[$planet_id]['s'] = $planet['s'];
                 $planets[$planet_id]['p'] = $planet['p'];
                 $planets[$planet_id]['planet_id'] = $planet_id;
-                $planets[$planet_id]['type'] = 1;
+                $planets[$planet_id]['type'] = PTYP_PLANET;
             }
         }
     }
@@ -234,7 +237,7 @@ if ( $_SERVER['REQUEST_METHOD'] === "GET" && key_exists ( 'user', $_GET ) )
 
 if ( $_SERVER['REQUEST_METHOD'] === "POST" )
 {
-    // Найти игрока.
+    // Find a player.
     foreach ( $stats as $id=>$user)
     {
         similar_text ( mb_strtolower ($_POST['login']), mb_strtolower ($user['name']), $percent );

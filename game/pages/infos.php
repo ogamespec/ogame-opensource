@@ -23,6 +23,9 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet']);
+if ($aktplanet == null) {
+    Error ("Can't get aktplanet");
+}
 ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
@@ -30,25 +33,25 @@ $session = $_GET['session'];
 
 // ***************************************************************************************
 
-function rgnum ($num)
+function rgnum (float|int $num) : string
 {
     if ($num < 0) return "<font color=\"#FF0000\">".nicenum($num)."</font>";
     else if ($num > 0) return "<font color=\"#00FF00\">".nicenum($num)."</font>";
     else return nicenum($num);
 }
 
-function rapidIn ($gid, $n)
+function rapidIn (int $gid, int $n) : string
 {
     return "<br/>".loca("INFO_RAPID_IN1")."<a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$gid\">".loca("NAME_$gid")."</a>".va(loca("INFO_RAPID_IN2"), "<font color=\"red\">$n</font>")."\n";
 }
 
-function rapidOut ($gid, $n)
+function rapidOut (int $gid, int $n) : string
 {
     return "<br/>".loca("INFO_RAPID_OUT1")."<a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$gid\">".loca("NAME_$gid")."</a>".va(loca("INFO_RAPID_OUT2"), "<font color=\"lime\">$n</font>")."\n";
 }
 
 // Rapid-fire information.
-function rapid ($gid)
+function rapid (int $gid) : string
 {
     global $RapidFire;
     $res = "";

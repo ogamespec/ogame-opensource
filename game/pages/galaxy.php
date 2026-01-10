@@ -2,6 +2,7 @@
 
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
+/** @var array $UnitParam */
 
 $GalaxyMessage = "";
 $GalaxyError = "";
@@ -15,6 +16,9 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+if ($aktplanet == null) {
+    Error ("Can't get aktplanet");
+}
 ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
@@ -34,35 +38,39 @@ if ( method () === "POST" && isset($_POST['aktion']) )
     $type = abs(intval($_POST['pziel']));        // Primary target (0-all)
     $origin = $aktplanet;
     $target = GetPlanet (intval($_GET['pdd']));
-    $target_user = LoadUser ($target['owner_id']);
-    $dist = abs ($origin['s'] - $target['s']);
-    $ipm_radius = max (0, 5 * $GlobalUser['r'.GID_R_IMPULSE_DRIVE] - 1);
+    if ($target != null) {
+        $target_user = LoadUser ($target['owner_id']);
+        $dist = abs ($origin['s'] - $target['s']);
+        $ipm_radius = max (0, 5 * $GlobalUser['r'.GID_R_IMPULSE_DRIVE] - 1);
 
-    if ( $target == NULL) $GalaxyError = loca("GALAXY_RAK_NO_TARGET");
+        if ( !in_array ($type, $defmap_norak ) ) $type = 0;
 
-    if ( !in_array ($type, $defmap_norak ) ) $type = 0;
+        if ( $GalaxyError === "" )    // Check the permitted parameters
+        {
+            if ($amount == 0) $GalaxyError = loca("GALAXY_RAK_NO_ROCKETS");
+            if ($amount > $aktplanet["d".GID_D_IPM]) $GalaxyError = loca("GALAXY_RAK_NOT_ENOUGH");
+            if ($dist > $ipm_radius) $GalaxyError = loca("GALAXY_RAK_WEAK_DRIVE");
+        }
 
-    if ( $GalaxyError === "" )    // Check the permitted parameters
-    {
-        if ($amount == 0) $GalaxyError = loca("GALAXY_RAK_NO_ROCKETS");
-        if ($amount > $aktplanet["d".GID_D_IPM]) $GalaxyError = loca("GALAXY_RAK_NOT_ENOUGH");
-        if ($dist > $ipm_radius) $GalaxyError = loca("GALAXY_RAK_WEAK_DRIVE");
+        if ( $GalaxyError === "" )        // Check player modes
+        {
+            if ($GlobalUser['vacation']) $GalaxyError = loca("GALAXY_RAK_VACATION_SELF");
+            else if ($target_user['vacation']) $GalaxyError = loca("GALAXY_RAK_VACATION_OTHER");
+            else if ($target['owner_id'] == $GlobalUser['player_id']) $GalaxyError = loca("GALAXY_RAK_SELF");
+            else if ( IsPlayerNewbie($target_user['player_id']) || IsPlayerStrong($target_user['player_id']) ) $GalaxyError = loca("GALAXY_RAK_NOOB");
+        }
+
+        if ( $GalaxyError === "" )
+        {
+            LaunchRockets ( $origin, $target, 30 + 60 * $dist, $amount, $type );
+            $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // get the latest planetary data after the IPM is launched.
+            if ($aktplanet == null) {
+                Error ("Can't get aktplanet");
+            }
+            $GalaxyMessage = va ( loca("GALAXY_RAK_LAUNCHED"), $amount );
+        }
     }
-
-    if ( $GalaxyError === "" )        // Check player modes
-    {
-        if ($GlobalUser['vacation']) $GalaxyError = loca("GALAXY_RAK_VACATION_SELF");
-        else if ($target_user['vacation']) $GalaxyError = loca("GALAXY_RAK_VACATION_OTHER");
-        else if ($target['owner_id'] == $GlobalUser['player_id']) $GalaxyError = loca("GALAXY_RAK_SELF");
-        else if ( IsPlayerNewbie($target_user['player_id']) || IsPlayerStrong($target_user['player_id']) ) $GalaxyError = loca("GALAXY_RAK_NOOB");
-    }
-
-    if ( $GalaxyError === "" )
-    {
-        LaunchRockets ( $origin, $target, 30 + 60 * $dist, $amount, $type );
-        $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // get the latest planetary data after the IPM is launched.
-        $GalaxyMessage = va ( loca("GALAXY_RAK_LAUNCHED"), $amount );
-    }
+    else $GalaxyError = loca("GALAXY_RAK_NO_TARGET");
 }
 
 // Choose a solar system.
@@ -115,6 +123,9 @@ if ( !$not_enough_deut && $GlobalUser['admin'] == 0 )
     {
         AdjustResources (0, 0, 10, $aktplanet['planet_id'], '-');
         $aktplanet = GetPlanet ( $aktplanet['planet_id'] );
+        if ($aktplanet == null) {
+            Error ("Can't get aktplanet");
+        }
     }
 }
 

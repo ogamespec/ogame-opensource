@@ -22,7 +22,7 @@ All DM accrued through coupons is considered paid.
 */
 
 // Function to send an email with a coupon code (UTF-8, HTML).
-function mail_html ($to, $subject = '(No subject)', $message = '', $header = '') {
+function mail_html (string $to, string $subject = '(No subject)', string $message = '', string $header = '') : void {
     $ip = $_SERVER['REMOTE_ADDR'];
     if ( !localhost($ip) ) {
         $header_ = 'MIME-Version: 1.0' . "\n" . 'Content-type: text/html; charset=UTF-8' . "\n";
@@ -38,18 +38,18 @@ function mail_html ($to, $subject = '(No subject)', $message = '', $header = '')
 // ------------------------------------------------------------------
 
 // Load coupon object by ID. Return NULL if the coupon is not found.
-function LoadCoupon ($id)
+function LoadCoupon (int $id) : mixed
 {
-    if ( MDBConnect() == FALSE) return NULL;
+    if ( MDBConnect() == false) return null;
 
     $query = "SELECT * FROM coupons WHERE id = " . intval ($id) . " LIMIT 1";
     $result = MDBQuery ( $query );
     if ( $result ) return MDBArray ( $result );
-    else return NULL;
+    else return null;
 }
 
 // Send the coupon code to the specified user
-function SendCoupon ($user, $code)
+function SendCoupon (array $user, string $code) : void
 {
     loca_add ( "coupons", $user['lang'] );    // add the language keys of the user to whom the message is sent.
 
@@ -60,7 +60,7 @@ function SendCoupon ($user, $code)
 }
 
 // Check if there is such a coupon and it is not activated. Returns the coupon ID or 0 if the coupon code is incorrect or the coupon is redeemed.
-function CheckCoupon ($code)
+function CheckCoupon (string $code) : int
 {
     if ( MDBConnect() )
     {
@@ -77,18 +77,18 @@ function CheckCoupon ($code)
 }
 
 // List all coupons. Return the result of the SQL query. Call parameters for paginator (start, count)
-function EnumCoupons ($start, $count)
+function EnumCoupons (int $start, int $count) : mixed
 {
     if ( MDBConnect() )
     {
         $query = "SELECT * FROM coupons ORDER BY id DESC LIMIT $start, $count";
         return MDBQuery ($query);
     }
-    else return NULL;
+    else return null;
 }
 
 // Number of coupons in the database
-function TotalCoupons ()
+function TotalCoupons () : int
 {
     if ( MDBConnect() )
     {
@@ -103,7 +103,7 @@ function TotalCoupons ()
 }
 
 // Add a coupon (DM quantity). Return the coupon code, or NULL if failure.
-function AddCoupon ($dm)
+function AddCoupon (int $dm) : string|null
 {
     global $db_secret;
     $timeout = 10;
@@ -114,16 +114,16 @@ function AddCoupon ($dm)
             $code = substr( chunk_split ( strtoupper( substr(base_convert(sha1(uniqid(mt_rand()) . $db_secret), 16, 36), 0, 20) ), 4, '-' ) , 0, -1);
             if ( CheckCoupon ($code) == 0 ) break;
         }
-        if ( $timeout == 0 ) return NULL;
+        if ( $timeout == 0 ) return null;
         $query = "INSERT INTO coupons VALUES (NULL, '".$code."', ".intval($dm).", 0, 0, 0, '' )";
         MDBQuery ($query);
         return $code;
     }
-    else return NULL;
+    else return null;
 }
 
-// Activate the coupon. Return TRUE if everything is fine or FALSE if it's a mess.
-function ActivateCoupon ($user, $code)
+// Activate the coupon. Return true if everything is fine or false if it's a mess.
+function ActivateCoupon (array $user, string $code) : bool
 {
     global $GlobalUni, $db_prefix;
 
@@ -136,15 +136,15 @@ function ActivateCoupon ($user, $code)
             MDBQuery ($query);
             $query = "UPDATE ".$db_prefix."users SET dm = dm + ".$coupon['amount']." WHERE player_id = " . $user['player_id'];    // add a paid DM user.
             dbquery ($query);
-            return TRUE;
+            return true;
         }
-        else return FALSE;
+        else return false;
     }
-    else return FALSE;
+    else return false;
 }
 
 // Delete coupon
-function DeleteCoupon ($id)
+function DeleteCoupon (int $id) : void
 {
     if ( MDBConnect() )
     {
@@ -157,7 +157,7 @@ function DeleteCoupon ($id)
 // sub_id: Number of DM
 // obj_id: (Inactive for at least ... days << 16) | (Been in the game for over ... days)
 // level: Periodicity ... days
-function Queue_Coupon_End ($queue)
+function Queue_Coupon_End (array $queue) : void
 {
     global $db_prefix;
 

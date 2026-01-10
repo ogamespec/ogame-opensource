@@ -23,6 +23,9 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 if ($GlobalUser['admin'] == 0) UpdateQueue ( $now );    // Do not update Overview for admins
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+if ($aktplanet == null) {
+    Error ("Can't get aktplanet");
+}
 ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];

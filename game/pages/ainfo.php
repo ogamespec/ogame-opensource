@@ -1,5 +1,8 @@
 <?php
 
+/** @var string $DefaultLanguage */
+/** @var array $Languages */
+
 // Alliance Info.
 
 // Attempt to get a session from the referrer.

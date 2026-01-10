@@ -1,6 +1,7 @@
 <?php
 
 /** @var array $GlobalUser */
+/** @var string $db_prefix */
 
 // Resource Settings.
 
@@ -13,6 +14,9 @@ $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 $now = time();
 UpdateQueue ( $now );
 $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+if ($aktplanet == null) {
+    Error ("Can't get aktplanet");
+}
 ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
 UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
@@ -89,6 +93,9 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
     }
 
     $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // reload the planet.
+    if ($aktplanet == null) {
+        Error ("Can't get aktplanet");
+    }
 }
 
 PageHeader ("resources");
@@ -97,8 +104,9 @@ BeginContent ();
 
 // ***********************************************************************
 
-function get_prod ($id, $planet)
+function get_prod (int $id, array|null $planet) : float
 {
+    if ($planet == null) return 0;
     switch ($id)
     {
         case GID_B_METAL_MINE: return 100 * $planet['mprod'];
@@ -110,8 +118,9 @@ function get_prod ($id, $planet)
     }
 }
 
-function prod_select ($id, $planet)
+function prod_select (int $id, array|null $planet) : void
 {
+    if ($planet == null) return;
 	echo"  <th> <select name=\"last$id\" size=\"1\">\n";
     $prod = get_prod ( $id, $planet );
     for ($i=10; $i>=0; $i--)
@@ -124,13 +133,13 @@ function prod_select ($id, $planet)
 	echo"   </th>\n";
 }
 
-function nicenum2 ($num)    // for debugging. the Germans messed up with rounding, I don't know where they call floor, ceil and round.
+function nicenum2 (float|int $num) : string    // for debugging. the Germans messed up with rounding, I don't know where they call floor, ceil and round.
 {
     return nicenum(round($num));
     //return $num;
 }
 
-function rgnum ($num)
+function rgnum (float|int $num) : string
 {
     if ( $num > 0 ) return "<font color=\"#00ff00\">".nicenum2($num)."</font>";
     else return "<font color=\"#ff0000\">".nicenum2($num)."</font>";
