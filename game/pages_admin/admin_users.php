@@ -244,6 +244,7 @@ function Admin_Users () : void
             <tr><th><?=loca("ADM_USER_ACTPLANET");?></th><th>
 <?php
     $planet = GetPlanet ($user['aktplanet']);
+    if ($planet == null) $planet = array ('g' => 0, 's' => 0, 'p' => 0, 'planet_id' => 0, 'name' => '' );
     echo "[".$planet['g'].":".$planet['s'].":".$planet['p']."] <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\">".$planet['name']."</a>";
 ?>
 </th></tr>
