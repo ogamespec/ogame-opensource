@@ -1,6 +1,7 @@
 <?php
 
 /** @var array $GlobalUser */
+/** @var array $requrements */
 
 // Technologies (details).
 
@@ -30,7 +31,7 @@ $filter = array ();
 $reclevel = -1;
 $maxreclevel = -1;
 
-function walk_tree ($arr, $id)
+function walk_tree (array $arr, int $id) : void
 {
     global $requrements, $reclevel, $maxreclevel, $tree;
     $reclevel++;
@@ -48,7 +49,7 @@ function walk_tree ($arr, $id)
     $reclevel--;
 }
 
-function MeetRequirement ( $user, $planet, $id, $level )
+function MeetRequirement ( array $user, array $planet, int $id, int $level ) : bool
 {
     if (IsResearch($id)) return $user['r'.$id] >= $level;
     else return $planet['b'.$id] >= $level;

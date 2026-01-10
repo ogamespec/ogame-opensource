@@ -4,7 +4,7 @@
 
 // Calculation of cost, build time and required conditions.
 
-function BuildMeetRequirement ( $user, $planet, $id )
+function BuildMeetRequirement ( array $user, array $planet, int $id ) : bool
 {
     if ( $planet['type'] == PTYP_MOON )
     {
@@ -41,7 +41,7 @@ function BuildMeetRequirement ( $user, $planet, $id )
     return true;
 }
 
-function BuildPrice ( $id, $lvl )
+function BuildPrice ( int $id, int $lvl ) : array
 {
     global $initial;
 
@@ -60,7 +60,7 @@ function BuildPrice ( $id, $lvl )
 }
 
 // Time to build a $id level $lvl building in seconds.
-function BuildDuration ( $id, $lvl, $robots, $nanits, $speed )
+function BuildDuration ( int $id, int $lvl, int $robots, int $nanits, int $speed ) : int
 {
     $res = BuildPrice ( $id, $lvl );
     $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
@@ -69,7 +69,7 @@ function BuildDuration ( $id, $lvl, $robots, $nanits, $speed )
     return $secs;
 }
 
-function ShipyardMeetRequirement ( $user, $planet, $id )
+function ShipyardMeetRequirement ( array $user, array $planet, int $id ) : bool
 {
     if ( $id == GID_F_SC && ( $planet['b21'] < 2  || $user['r115'] < 2 ) ) return false;
     else if ( $id == GID_F_LC && ( $planet['b21'] < 4  || $user['r115'] < 6 ) ) return false;
@@ -100,7 +100,7 @@ function ShipyardMeetRequirement ( $user, $planet, $id )
     return true;
 }
 
-function ShipyardPrice ( $id )
+function ShipyardPrice ( int $id ) : array
 {
     global $initial;
     $m = $initial[$id][0];
@@ -111,7 +111,7 @@ function ShipyardPrice ( $id )
     return $res;
 }
 
-function ShipyardDuration ( $id, $shipyard, $nanits, $speed )
+function ShipyardDuration ( int $id, int $shipyard, int $nanits, int $speed ) : int
 {
     $res = ShipyardPrice ($id);
     $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
@@ -120,7 +120,7 @@ function ShipyardDuration ( $id, $shipyard, $nanits, $speed )
     return $secs;
 }
 
-function ResearchMeetRequirement ( $user, $planet, $id )
+function ResearchMeetRequirement ( array $user, array $planet, int $id ) : bool
 {
     if ( $id == GID_R_ESPIONAGE && ( $planet['b31'] < 3 ) ) return false;
     else if ( $id == GID_R_COMPUTER && ( $planet['b31'] < 1 ) ) return false;
@@ -142,7 +142,7 @@ function ResearchMeetRequirement ( $user, $planet, $id )
     return true;
 }
 
-function ResearchPrice ( $id, $lvl )
+function ResearchPrice ( int $id, int $lvl ) : array
 {
     global $initial;
 
@@ -156,7 +156,7 @@ function ResearchPrice ( $id, $lvl )
     return $res;
 }
 
-function ResearchDuration ( $id, $lvl, $reslab, $speed )
+function ResearchDuration ( int $id, int $lvl, int $reslab, int $speed ) : int
 {
     if ( $id == GID_R_GRAVITON ) return 1;
     $res= ResearchPrice ($id, $lvl );
@@ -169,7 +169,7 @@ function ResearchDuration ( $id, $lvl, $reslab, $speed )
 // IGN Calculation.
 // Attach +IGN laboratories of maximum level to the current laboratory.
 // The output is the overall level of the "virtual" lab.
-function ResearchNetwork ( $planetid, $id )
+function ResearchNetwork ( int $planetid, int $id ) : int
 {
     global $db_prefix;
     $planet = GetPlanet ($planetid);
@@ -200,7 +200,7 @@ function ResearchNetwork ( $planetid, $id )
 }
 
 // Return a string of durations by days, hours, minutes, seconds.
-function BuildDurationFormat ( $seconds )
+function BuildDurationFormat ( int $seconds ) : string
 {
     $res = "";
     $days = floor ($seconds / (24*3600));
@@ -216,7 +216,7 @@ function BuildDurationFormat ( $seconds )
     return $res;
 }
 
-function IsEnoughResources ($planet, $m, $k, $d, $e)
+function IsEnoughResources (array $planet, int $m, int $k, int $d, int $e) : bool
 {
     if ( $m && $planet['m'] < $m ) return false;
     if ( $k && $planet['k'] < $k ) return false;
@@ -228,41 +228,41 @@ function IsEnoughResources ($planet, $m, $k, $d, $e)
 // Anything related to resource production and calculation.
 
 // Get the size of the storages.
-function store_capacity ($lvl) { return 100000 + 50000 * (ceil (pow (1.6, $lvl) - 1)); }
+function store_capacity (int $lvl) : int { return 100000 + 50000 * (ceil (pow (1.6, $lvl) - 1)); }
 
 // Energy production
-function prod_solar ($lvl, $pr)
+function prod_solar (int $lvl, float $pr) : float
 {
     $prod = floor (20 * $lvl * pow (1.1, $lvl) * $pr);
     return $prod;
 }
-function prod_fusion ($lvl, $energo, $pr)
+function prod_fusion (int $lvl, int $energo, float $pr) : float
 {
     $prod = floor (30 * $lvl * pow (1.05 + $energo*0.01, $lvl) * $pr);
     return $prod;
 }
-function prod_sat ($maxtemp)
+function prod_sat (int $maxtemp) : float
 {
     $prod = floor (($maxtemp / 4) + 20);
     return max (1, $prod);
 }
 
 // Mines production
-function prod_metal ($lvl, $pr) { return floor (30 * $lvl * pow (1.1, $lvl) * $pr); }
-function prod_crys ($lvl, $pr) { return floor (20 * $lvl * pow (1.1, $lvl) * $pr); }
-function prod_deut ($lvl, $maxtemp, $pr) { return floor ( 10 * $lvl * pow (1.1, $lvl) * $pr) * (1.28 - 0.002 * ($maxtemp)); }
+function prod_metal (int $lvl, float $pr) : float { return floor (30 * $lvl * pow (1.1, $lvl) * $pr); }
+function prod_crys (int $lvl, float $pr) : float { return floor (20 * $lvl * pow (1.1, $lvl) * $pr); }
+function prod_deut (int $lvl, int $maxtemp, float $pr) : float { return floor ( 10 * $lvl * pow (1.1, $lvl) * $pr) * (1.28 - 0.002 * ($maxtemp)); }
 
 // Energy consumption
-function cons_metal ($lvl) { return ceil (10 * $lvl * pow (1.1, $lvl)); }
-function cons_crys ($lvl) { return ceil (10 * $lvl * pow (1.1, $lvl)); }
-function cons_deut ($lvl) { return ceil (20 * $lvl * pow (1.1, $lvl)); }
+function cons_metal (int $lvl) : float { return ceil (10 * $lvl * pow (1.1, $lvl)); }
+function cons_crys (int $lvl) : float { return ceil (10 * $lvl * pow (1.1, $lvl)); }
+function cons_deut (int $lvl) : float { return ceil (20 * $lvl * pow (1.1, $lvl)); }
 
 // Consumption of deuterium by the fusion reactor
-function cons_fusion ($lvl, $pr) { return ceil (10 * $lvl * pow (1.1, $lvl) * $pr) ; }
+function cons_fusion (int $lvl, float $pr) : float { return ceil (10 * $lvl * pow (1.1, $lvl) * $pr) ; }
 
 // Calculate resource production increase. Limit storage capacity.
 // NOTE: The calculation excludes external events, such as the end of officers' actions, attack of another player, completion of building construction, etc.
-function ProdResources ( &$planet, $time_from, $time_to )
+function ProdResources ( array &$planet, int $time_from, int $time_to ) : void
 {
     global $db_prefix, $GlobalUni;
     if ( $planet['type'] != PTYP_PLANET ) return;        // NOT a planet
@@ -302,7 +302,7 @@ function ProdResources ( &$planet, $time_from, $time_to )
 }
 
 // The cost of the planet in points.
-function PlanetPrice ($planet)
+function PlanetPrice (array $planet) : array
 {
     $pp = array ();
     global $buildmap;
@@ -349,7 +349,7 @@ function PlanetPrice ($planet)
 }
 
 // Fleet cost
-function FleetPrice ( $fleet_obj )
+function FleetPrice ( array $fleet_obj ) : array
 {
     global $fleetmap;
     $m = $k = $d = $e = 0;

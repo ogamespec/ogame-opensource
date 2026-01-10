@@ -104,7 +104,7 @@ $req_special = array (
 
 $reqs = array ( $req_building, $req_research, $req_fleet, $req_defense, $req_special );
 
-function MeetRequirement ( $user, $planet, $id, $level )
+function MeetRequirement ( array $user, array $planet, int $id, int $level ) : bool
 {
     if (IsResearch($id)) return $user['r'.$id] >= $level;
     else return $planet['b'.$id] >= $level;
