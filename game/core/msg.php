@@ -40,7 +40,7 @@ const MTYP_BATTLE_REPORT_TEXT = 6;      // battle report text
 // Each user has a post limit per day. The error "You have written too much today" is displayed.
 
 // Delete all old messages (called from the Messages menu)
-function DeleteExpiredMessages ($player_id, $days)
+function DeleteExpiredMessages (int $player_id, int $days) : void
 {
     global $db_prefix;
     $now = time ();
@@ -61,7 +61,7 @@ function DeleteExpiredMessages ($player_id, $days)
 }
 
 // Delete the oldest message (called from SendMessage)
-function DeleteOldestMessage ($player_id)
+function DeleteOldestMessage (int $player_id) : void
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id ORDER BY date ASC";
@@ -71,7 +71,7 @@ function DeleteOldestMessage ($player_id)
 }
 
 // Send Message. Returns the id of a new message. (can be called from anywhere); planet_id is used for spy reports.
-function SendMessage ($player_id, $from, $subj, $text, $pm, $when=0, $planet_id=0)
+function SendMessage (int $player_id, string $from, string $subj, string $text, int $pm, int $when=0, int $planet_id=0) : int
 {
     global $db_prefix;
 
@@ -101,7 +101,7 @@ function SendMessage ($player_id, $from, $subj, $text, $pm, $when=0, $planet_id=
 }
 
 // Delete message (called from the Messages menu)
-function DeleteMessage ($player_id, $msg_id)
+function DeleteMessage (int $player_id, int $msg_id) : void
 {
     global $db_prefix;
     $query = "DELETE FROM ".$db_prefix."messages WHERE owner_id = $player_id AND msg_id = $msg_id";
@@ -110,7 +110,7 @@ function DeleteMessage ($player_id, $msg_id)
 
 // Load the last N messages (called from the Messages menu).
 // Do not load the text of battle reports
-function EnumMessages ($player_id, $max)
+function EnumMessages (int $player_id, int $max) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id AND pm <> ".MTYP_BATTLE_REPORT_TEXT." ORDER BY date DESC, msg_id DESC LIMIT $max";
@@ -119,7 +119,7 @@ function EnumMessages ($player_id, $max)
 }
 
 // Get the number of unread messages (called from Overview)
-function UnreadMessages ($player_id, $filter=false, $pm=0)
+function UnreadMessages (int $player_id, bool $filter=false, int $pm=0) : int
 {
     global $db_prefix;
 
@@ -135,7 +135,7 @@ function UnreadMessages ($player_id, $filter=false, $pm=0)
 }
 
 // Mark a message as read (called from the Messages menu).
-function MarkMessage ($player_id, $msg_id)
+function MarkMessage (int $player_id, int $msg_id) : mixed
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."messages SET shown = 1 WHERE owner_id = $player_id AND msg_id = $msg_id";
@@ -143,17 +143,17 @@ function MarkMessage ($player_id, $msg_id)
 }
 
 // Load the message.
-function LoadMessage ( $msg_id )
+function LoadMessage ( int $msg_id ) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."messages WHERE msg_id = $msg_id";
     $result = dbquery ($query);
     if ( $result ) return dbarray ($result);
-    else return NULL;
+    else return null;
 }
 
 // Delete all messages
-function DeleteAllMessages ($player_id)
+function DeleteAllMessages (int $player_id) : void
 {
     global $db_prefix;
     $query = "DELETE FROM ".$db_prefix."messages WHERE owner_id = $player_id";
@@ -161,7 +161,7 @@ function DeleteAllMessages ($player_id)
 }
 
 // Get msg_id of the shared spy report for the specified planet. If there is no report, return 0.
-function GetSharedSpyReport ($planet_id, $player_id, $ally_id)
+function GetSharedSpyReport (int $planet_id, int $player_id, int $ally_id) : int
 {
     global $db_prefix;
     if ($ally_id != 0) {
@@ -180,7 +180,7 @@ function GetSharedSpyReport ($planet_id, $player_id, $ally_id)
 }
 
 // Return the number of messages of a certain type (used to show the total number of messages in a folder)
-function TotalMessages ($player_id, $pm)
+function TotalMessages (int $player_id, int $pm) : int
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id AND pm = $pm";
@@ -188,7 +188,7 @@ function TotalMessages ($player_id, $pm)
     return dbrows ($result);
 }
 
-function ReportMessage ($player_id, $msg_id, &$ResultMessage="", &$ResultError="")
+function ReportMessage (int $player_id, int $msg_id, string &$ResultMessage="", string &$ResultError="") : int
 {
     global $db_prefix;
     $id = 0;

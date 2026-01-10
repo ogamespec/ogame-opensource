@@ -6,7 +6,7 @@ require_once "raketen.php";
 // OGame Battle Engine frontend.
 
 // Repairing the defense.
-function RepairDefense ( $d, $res, $defrepair, $defrepair_delta, $premium=true )
+function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_delta, bool $premium=true ) : array
 {
     $repaired = array ( 401=>0, 402=>0, 403=>0, 404=>0, 405=>0, 406=>0, 407=>0, 408=>0 );
     $exploded = array ( 401=>0, 402=>0, 403=>0, 404=>0, 405=>0, 406=>0, 407=>0, 408=>0 );
@@ -48,7 +48,7 @@ function RepairDefense ( $d, $res, $defrepair, $defrepair_delta, $premium=true )
 }
 
 // Capture resources.
-function Plunder ( $cargo, $m, $k, $d )
+function Plunder ( int $cargo, int $m, int $k, int $d ) : array
 {
     $m /=2; $k /=2; $d /= 2;
     $total = $m+$k+$d;
@@ -80,7 +80,7 @@ function Plunder ( $cargo, $m, $k, $d )
 }
 
 // Calculate total losses (taking into account repaired defenses).
-function CalcLosses ( $a, $d, $res, $repaired )
+function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
 {
     global $fleetmap;
     global $defmap;
@@ -185,7 +185,7 @@ function CalcLosses ( $a, $d, $res, $repaired )
 }
 
 // Total cargo capacity of fleets in the last round.
-function CargoSummaryLastRound ( $a, $res )
+function CargoSummaryLastRound ( array $a, array $res ) : int
 {
     $cargo = 0;
     $rounds = count ( $res['rounds'] );
@@ -211,7 +211,7 @@ function CargoSummaryLastRound ( $a, $res )
 }
 
 // Modify fleets and planet (add/remove resources, return attack fleets if ships remain)
-function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_cargo )
+function WritebackBattleResults ( array $a, array $d, array $res, array $repaired, int $cm, int $ck, int $cd, int $sum_cargo ) : void
 {
     global $fleetmap;
     global $defmap;
@@ -304,7 +304,7 @@ function WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_c
 }
 
 // Generate the HTML code of a single slot.
-function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $defense, $show_techs, $attack, $lang )
+function GenSlot ( int $weap, int $shld, int $armor, string $name, int $g, int $s, int $p, array $unitmap, array $fleet, array|null $defense, bool $show_techs, bool $attack, string $lang ) : string
 {
     global $UnitParam;
 
@@ -381,7 +381,7 @@ function GenSlot ( $weap, $shld, $armor, $name, $g, $s, $p, $unitmap, $fleet, $d
 }
 
 // Generate a battle report.
-function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired, $lang )
+function BattleReport ( array $res, int $now, int $aloss, int $dloss, int $cm, int $ck, int $cd, int $moonchance, bool $mooncreated, array $repaired, string $lang ) : string
 {
     global $fleetmap;
     global $defmap;
@@ -484,12 +484,12 @@ function BattleReport ( $res, $now, $aloss, $dloss, $cm, $ck, $cd, $moonchance, 
 
 // Moon attack.
 // Returns the result encoded in 2 bits: bit0 - the moon is destroyed, bit1 - Deathstar exploded with the whole fleet
-function GravitonAttack ($fleet_obj, $fleet, $when)
+function GravitonAttack (array $fleet_obj, array $fleet, int $when) : int
 {
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
     $target = GetPlanet ( $fleet_obj['target_planet'] );
 
-    if ( $fleet[GID_F_DEATHSTAR] == 0 ) return;
+    if ( $fleet[GID_F_DEATHSTAR] == 0 ) return 0;
     if ( ! ($target['type'] == PTYP_MOON || $target['type'] == PTYP_DEST_MOON) ) Error ( "Уничтожать можно только луны!" );
 
     $diam = $target['diameter'];
@@ -585,7 +585,7 @@ function GravitonAttack ($fleet_obj, $fleet, $when)
     return $result;
 }
 
-function GenBattleSourceData ($a, $d, $rf, $fid, $did)
+function GenBattleSourceData (array $a, array $d, int $rf, int $fid, int $did) : string
 {
     global $fleetmap;
     global $defmap;
@@ -626,7 +626,7 @@ function GenBattleSourceData ($a, $d, $rf, $fid, $did)
 }
 
 // Start a battle between attacking fleet_id and defending planet_id.
-function StartBattle ( $fleet_id, $planet_id, $when )
+function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
 {
     global $db_prefix;
     global $GlobalUni;
@@ -886,7 +886,7 @@ function StartBattle ( $fleet_id, $planet_id, $when )
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Modify the fleet (after a battle with aliens/pirates)
-function WritebackBattleResultsExpedition ( $a, $d, $res )
+function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : void
 {
     global $fleetmap;
 
@@ -935,7 +935,7 @@ function WritebackBattleResultsExpedition ( $a, $d, $res )
 }
 
 // Generate short battle report.
-function ShortBattleReport ( $res, $now, $lang )
+function ShortBattleReport ( array $res, int $now, string $lang ) : string
 {
     global $fleetmap;
     global $defmap;
@@ -1007,7 +1007,7 @@ function ShortBattleReport ( $res, $now, $lang )
 
 // Battle with Aliens/Pirates.
 // The composition of the Alien/Pirate fleet is determined by the level parameter ( 0: weak, 1: medium, 2: strong )
-function ExpeditionBattle ( $fleet_id, $pirates, $level, $when )
+function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when ) : int
 {
     global $db_prefix;
     global $GlobalUni;

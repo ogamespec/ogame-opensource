@@ -7,7 +7,7 @@
 // ABM - anti-ballistic missile, defends
 
 // Algorithmic part of the missile attack (without working with DB).
-function RocketAttackMain ( $amount, $primary, $moon_attack, &$target, &$moon_planet, $origin_user_attack, $target_user_armor )
+function RocketAttackMain ( int $amount, int $primary, bool $moon_attack, array &$target, array &$moon_planet, int $origin_user_attack, int $target_user_armor ) : int
 {
     global $UnitParam;
 
@@ -57,7 +57,7 @@ function RocketAttackMain ( $amount, $primary, $moon_attack, &$target, &$moon_pl
 }
 
 // Missile attack.
-function RocketAttack ( $fleet_id, $planet_id, $when )
+function RocketAttack ( int $fleet_id, int $planet_id, int $when ) : void
 {
     $fleet = LoadFleet ($fleet_id);
     $amount = $fleet['ipm_amount'];
@@ -124,7 +124,7 @@ function RocketAttack ( $fleet_id, $planet_id, $when )
 }
 
 // Get the text for the destroyed defense
-function GetDestroyedDefenseText ($lang, &$target, &$moon_planet, $moon_attack)
+function GetDestroyedDefenseText (string $lang, array &$target, array &$moon_planet, bool $moon_attack) : string
 {
     loca_add ( "raketen", $lang );
     loca_add ( "technames", $lang );

@@ -82,7 +82,7 @@ foreign moon without Deathstar                Transport, Attack, ACS Attack
 if there's only a spy in the fleet     Espionage
 */
 
-function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thisplanettype, $galaxy, $system, $planet, $planettype, $fleet )
+function FleetAvailableMissions ( int $thisgalaxy, int $thissystem, int $thisplanet, int $thisplanettype, int $galaxy, int $system, int $planet, int $planettype, array $fleet ) : array
 {
     $missions = array ( );
 
@@ -156,7 +156,7 @@ function FleetAvailableMissions ( $thisgalaxy, $thissystem, $thisplanet, $thispl
 // Flight Calculation.
 
 // Distance.
-function FlightDistance ( $thisgalaxy, $thissystem, $thisplanet, $galaxy, $system, $planet )
+function FlightDistance ( int $thisgalaxy, int $thissystem, int $thisplanet, int $galaxy, int $system, int $planet ) : int
 {
     if ($thisgalaxy == $galaxy) {
         if ($thissystem == $system) {
@@ -170,7 +170,7 @@ function FlightDistance ( $thisgalaxy, $thissystem, $thisplanet, $galaxy, $syste
 }
 
 // Group fleet speed.
-function FlightSpeed ($fleet, $combustion, $impulse, $hyper)
+function FlightSpeed (array $fleet, int $combustion, int $impulse, int $hyper) : int
 {
     $minspeed = FleetSpeed ( GID_F_PROBE, $combustion, $impulse, $hyper );        // the fastest ship is the Spy Probe.
     foreach ($fleet as $id=>$amount)
@@ -183,7 +183,7 @@ function FlightSpeed ($fleet, $combustion, $impulse, $hyper)
 }
 
 // Deuterium consumption per flight by the entire fleet.
-function FlightCons ($fleet, $dist, $flighttime, $combustion, $impulse, $hyper, $speedfactor, $hours=0)
+function FlightCons (array $fleet, int $dist, int $flighttime, int $combustion, int $impulse, int $hyper, int $speedfactor, int $hours=0) : array
 {
     $cons = array ( 'fleet' => 0, 'probes' => 0 );
     foreach ($fleet as $id=>$amount)
@@ -201,14 +201,14 @@ function FlightCons ($fleet, $dist, $flighttime, $combustion, $impulse, $hyper, 
 }
 
 // Flight time in seconds, at a given percentage.
-function FlightTime ($dist, $slowest_speed, $prc, $xspeed)
+function FlightTime (int $dist, int $slowest_speed, float $prc, int $xspeed) : int
 {
     return round ( (35000 / ($prc*10) * sqrt ($dist * 10 / $slowest_speed ) + 10) / $xspeed );
 }
 
 // The speed of the ship
 // 202-C/I, 203-C, 204-C, 205-I, 206-I, 207-H, 208-I, 209-C, 210-C, 211-I/H, 212-C, 213-H, 214-H, 215-H
-function FleetSpeed ( $id, $combustion, $impulse, $hyper)
+function FleetSpeed ( int $id, int $combustion, int $impulse, int $hyper) : float
 {
     global $UnitParam;
 
@@ -240,14 +240,14 @@ function FleetSpeed ( $id, $combustion, $impulse, $hyper)
     }
 }
 
-function FleetCargo ( $id )
+function FleetCargo ( int $id ) : int
 {
     global $UnitParam;
     return $UnitParam[$id][3];
 }
 
 // Total carrying capacity of the fleet
-function FleetCargoSummary ( $fleet )
+function FleetCargoSummary ( array $fleet ) : int
 {
     global $fleetmap;
     $cargo = 0;
@@ -259,7 +259,7 @@ function FleetCargoSummary ( $fleet )
     return $cargo;
 }
 
-function FleetCons ($id, $combustion, $impulse, $hyper )
+function FleetCons (int $id, int $combustion, int $impulse, int $hyper ) : int
 {
     global $UnitParam;
     // The Small Cargo has a 2X increase in consumption when changing engines. In a bomber, it does NOT increase.
@@ -270,7 +270,7 @@ function FleetCons ($id, $combustion, $impulse, $hyper )
 // ==================================================================================
 
 // Alter the number of ships on a planet.
-function AdjustShips ($fleet, $planet_id, $sign)
+function AdjustShips (array $fleet, int $planet_id, string $sign) : void
 {
     global $fleetmap;
     global $db_prefix;
@@ -286,11 +286,11 @@ function AdjustShips ($fleet, $planet_id, $sign)
 }
 
 // Dispatch the fleet. No checks are performed. Returns the ID of the fleet.
-function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, $cons, $when, $union_id=0, $deploy_time=0)
+function DispatchFleet (array $fleet, array $origin, array $target, int $order, int $seconds, int $m, int $k, int $d, int $cons, int $when, int $union_id=0, int $deploy_time=0) : int
 {
     global $db_prefix;
-    $uni = LoadUniverse ( );
-    if ( $uni['freeze'] ) return;
+    $uni = LoadUniverse ();
+    if ( $uni['freeze'] ) return 0;
 
     $now = $when;
     $prio = QUEUE_PRIO_FLEET + $order;
@@ -320,7 +320,7 @@ function DispatchFleet ($fleet, $origin, $target, $order, $seconds, $m, $k ,$d, 
 }
 
 // Recall the fleet (if possible)
-function RecallFleet ($fleet_id, $now=0)
+function RecallFleet (int $fleet_id, int $now=0) : void
 {
     $uni = LoadUniverse ( );
     if ( $uni['freeze'] ) return;
@@ -362,7 +362,7 @@ function RecallFleet ($fleet_id, $now=0)
 }
 
 // Load the fleet
-function LoadFleet ($fleet_id)
+function LoadFleet (int $fleet_id) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."fleet WHERE fleet_id = '".$fleet_id."'";
@@ -371,7 +371,7 @@ function LoadFleet ($fleet_id)
 }
 
 // Delete the fleet
-function DeleteFleet ($fleet_id)
+function DeleteFleet (int $fleet_id) : void
 {
     global $db_prefix;
     $query = "DELETE FROM ".$db_prefix."fleet WHERE fleet_id = $fleet_id;";
@@ -379,7 +379,7 @@ function DeleteFleet ($fleet_id)
 }
 
 // Modify the fleet.
-function SetFleet ($fleet_id, $fleet)
+function SetFleet (int $fleet_id, array $fleet) : void
 {
     global $db_prefix;
     global $fleetmap;
@@ -393,7 +393,7 @@ function SetFleet ($fleet_id, $fleet)
 }
 
 // Get mission description (for debugging)
-function GetMissionNameDebug ($num)
+function GetMissionNameDebug (int $num) : string
 {
     switch ($num)
     {
@@ -416,8 +416,6 @@ function GetMissionNameDebug ($num)
         case (FTYP_RECYCLE+FTYP_RETURN) :    return "Переработать возвращается";
         case FTYP_DESTROY   :      return "Уничтожить убывает";
         case (FTYP_DESTROY+FTYP_RETURN):      return "Уничтожить возвращается";
-        case 14  :      return "Испытание убывает";             // wtf ???
-        case (14+FTYP_RETURN):      return "Испытание возвращается";           // wtf ???
         case FTYP_EXPEDITION  :      return "Экспедиция убывает";
         case (FTYP_EXPEDITION+FTYP_RETURN):      return "Экспедиция возвращается";
         case (FTYP_EXPEDITION+FTYP_ORBITING):      return "Экспедиция на орбите";
@@ -430,13 +428,13 @@ function GetMissionNameDebug ($num)
 }
 
 // Launch interplanetary rockets
-function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
+function LaunchRockets ( array $origin, array $target, int $seconds, int $amount, int $type ) : int
 {
     global $db_prefix;
     $uni = LoadUniverse ( );
-    if ( $uni['freeze'] ) return;
+    if ( $uni['freeze'] ) return 0;
 
-    if ( $amount > $origin['d503'] ) return;    // You can't launch more missiles than there are rockets on the planet.
+    if ( $amount > $origin['d503'] ) return 0;    // You can't launch more missiles than there are rockets on the planet.
 
     $now = time ();
     $prio = QUEUE_PRIO_FLEET + FTYP_MISSILE;
@@ -469,7 +467,7 @@ function LaunchRockets ( $origin, $target, $seconds, $amount, $type )
 // ==================================================================================
 // Fleet Task Processing.
 
-function FleetList ($fleet, $lang)
+function FleetList (array $fleet, string $lang) : string
 {
     global $fleetmap;
     $res = "";
@@ -482,14 +480,14 @@ function FleetList ($fleet, $lang)
 
 // *** Attack ***
 
-function AttackArrive ($queue, $fleet_obj, $fleet, $origin, $target)
+function AttackArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'], $queue['end'] );
 }
 
 // *** Transport ***
 
-function TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target)
+function TransportArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     $oldm = $target['m'];
     $oldk = $target['k'];
@@ -539,7 +537,7 @@ function TransportArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     }
 }
 
-function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
+function CommonReturn (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     if ( $fleet_obj['m'] < 0 ) $fleet_obj['m'] = 0;    // Protection against negative resources (just in case)
     if ( $fleet_obj['k'] < 0 ) $fleet_obj['k'] = 0;
@@ -572,7 +570,7 @@ function CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target)
 
 // *** Deploy ***
 
-function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
+function DeployArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     // Also unload half the fuel
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'] + floor ($fleet_obj['fuel'] / 2), $target['planet_id'], '+' );
@@ -600,7 +598,7 @@ function DeployArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 // *** ACS Hold ***
 
 // Count the number of fleets sent to hold on the specified planet (flying and in orbit)
-function GetHoldingFleetsCount ($planet_id)
+function GetHoldingFleetsCount (int $planet_id) : int
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."fleet WHERE (mission = ".FTYP_ACS_HOLD." OR mission = ".(FTYP_ACS_HOLD+FTYP_ORBITING).") AND target_planet = $planet_id;";
@@ -609,7 +607,7 @@ function GetHoldingFleetsCount ($planet_id)
 }
 
 // Check if it is possible to send a fleet to a player to hold on a planet (no more than `maxhold_users` players can hold their fleets on a planet at the same time)
-function CanStandHold ( $planet_id, $player_id, $maxhold_users )
+function CanStandHold ( int $planet_id, int $player_id, int $maxhold_users ) : bool
 {
     global $db_prefix;
     $query = "SELECT owner_id FROM ".$db_prefix."fleet WHERE (mission = ".FTYP_ACS_HOLD." OR mission = ".(FTYP_ACS_HOLD+FTYP_ORBITING).") AND target_planet = $planet_id;";
@@ -617,7 +615,7 @@ function CanStandHold ( $planet_id, $player_id, $maxhold_users )
     return dbrows ($result) < $maxhold_users;
 }
 
-function HoldingArrive ($queue, $fleet_obj, $fleet, $origin, $target)
+function HoldingArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     // Update the activity on the planet.
     UpdatePlanetActivity ( $fleet_obj['target_planet'], $queue['end'] );
@@ -627,7 +625,7 @@ function HoldingArrive ($queue, $fleet_obj, $fleet, $origin, $target)
     DispatchFleet ($fleet, $origin, $target, FTYP_ACS_HOLD+FTYP_ORBITING, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end'], 0, $fleet_obj['flight_time']);
 }
 
-function HoldingHold ($queue, $fleet_obj, $fleet, $origin, $target)
+function HoldingHold (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     // Return the fleet.
     // The hold time is used as the flight time.
@@ -636,7 +634,7 @@ function HoldingHold ($queue, $fleet_obj, $fleet, $origin, $target)
 
 // *** Espionage ***
 
-function SpyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
+function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     global $UnitParam;
     global $fleetmap;
@@ -816,7 +814,7 @@ function SpyReturn ($queue, $fleet_obj, $fleet)
 
 // *** Colonize ***
 
-function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
+function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     global $db_prefix;
 
@@ -886,7 +884,7 @@ function ColonizationArrive ($queue, $fleet_obj, $fleet, $origin, $target)
         $text, MTYP_MISC, $queue['end']);
 }
 
-function ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target)
+function ColonizationReturn (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     AdjustResources ( $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
@@ -918,7 +916,7 @@ function ColonizationReturn ($queue, $fleet_obj, $fleet, $origin, $target)
 
 // *** Recycle ***
 
-function RecycleArrive ($queue, $fleet_obj, $fleet, $origin, $target)
+function RecycleArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     if ( $fleet[GID_F_RECYCLER] == 0 ) Error ( "Попытка сбора ПО без переработчиков" );
     if ( $target['type'] != PTYP_DF ) Error ( "Перерабатывать можно только поля обломков!" );
@@ -951,7 +949,7 @@ function RecycleArrive ($queue, $fleet_obj, $fleet, $origin, $target)
 
 // *** Destroy ***
 
-function DestroyArrive ($queue, $fleet_obj, $fleet, $origin, $target)
+function DestroyArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'], $queue['end'] );
 }
@@ -962,12 +960,12 @@ require_once "expedition.php";
 
 // *** Missile attack ***
 
-function RocketAttackArrive ($queue, $fleet_obj, $fleet, $origin, $target)
+function RocketAttackArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     RocketAttack ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'], $queue['end'] );
 }
 
-function Queue_Fleet_End ($queue)
+function Queue_Fleet_End (array $queue) : void
 {
     global $GlobalUser;
     global $fleetmap;
@@ -1049,7 +1047,7 @@ function Queue_Fleet_End ($queue)
 // ACS Management.
 
 // Create ACS union. $fleet_id - head fleet. $name - union name.
-function CreateUnion ($fleet_id, $name)
+function CreateUnion (int $fleet_id, string $name) : int
 {
     global $db_prefix;
 
@@ -1078,7 +1076,7 @@ function CreateUnion ($fleet_id, $name)
 }
 
 // Load ACS union
-function LoadUnion ($union_id)
+function LoadUnion (int $union_id) : array
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."union WHERE union_id = $union_id";
@@ -1091,7 +1089,7 @@ function LoadUnion ($union_id)
 }
 
 // An union is removed when the last union fleet is recalled, or the objective is reached
-function RemoveUnion ($union_id)
+function RemoveUnion (int $union_id) : void
 {
     global $db_prefix;
     $query = "DELETE FROM ".$db_prefix."union WHERE union_id = $union_id";        // delete the union record
@@ -1099,7 +1097,7 @@ function RemoveUnion ($union_id)
 }
 
 // Rename the ACS union.
-function RenameUnion ($union_id, $name)
+function RenameUnion (int $union_id, string $name) : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."union SET name = '".$name."' WHERE union_id = " . intval ($union_id);
@@ -1107,7 +1105,7 @@ function RenameUnion ($union_id, $name)
 }
 
 // Add a new member to the union.
-function AddUnionMember ($union_id, $name)
+function AddUnionMember (int $union_id, string $name) : string
 {
     global $db_prefix;
     global $GlobalUni;
@@ -1164,7 +1162,7 @@ function AddUnionMember ($union_id, $name)
 }
 
 // List the unions the player is in, as well as the union that the player is targeting (unless the friendly flag is set).
-function EnumUnion ($player_id, $friendly=0)
+function EnumUnion (int $player_id, int $friendly=0) : array
 {
     global $db_prefix;
     $count = 0;
@@ -1185,7 +1183,7 @@ function EnumUnion ($player_id, $friendly=0)
 }
 
 // List the Union fleets
-function EnumUnionFleets ($union_id)
+function EnumUnionFleets (int $union_id) : mixed
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."fleet WHERE union_id = $union_id";
@@ -1193,7 +1191,7 @@ function EnumUnionFleets ($union_id)
 }
 
 // Update the arrival time of all union fleets except fleet_id. Return the new arrival time of the union.
-function UpdateUnionTime ($union_id, $end, $fleet_id, $force_set=false)
+function UpdateUnionTime (int $union_id, int $end, int $fleet_id, bool $force_set=false) : int
 {
     global $db_prefix;
     $result = EnumUnionFleets ($union_id);
@@ -1216,7 +1214,7 @@ function UpdateUnionTime ($union_id, $end, $fleet_id, $force_set=false)
 }
 
 // Update fleet arrival time
-function UpdateFleetTime ($fleet_id, $when)
+function UpdateFleetTime (int $fleet_id, int $when) : void
 {
     global $db_prefix;
     $queue = GetFleetQueue ($fleet_id);
@@ -1226,7 +1224,7 @@ function UpdateFleetTime ($fleet_id, $when)
 }
 
 // List the fleets on hold
-function GetHoldingFleets ($planet_id)
+function GetHoldingFleets (int $planet_id) : mixed
 {
     global $db_prefix;
     $uni = LoadUniverse ();    // limit the number of fleets to the universe settings
@@ -1236,7 +1234,7 @@ function GetHoldingFleets ($planet_id)
     return $result;
 }
 
-function IsPlayerInUnion ($player_id, $union)
+function IsPlayerInUnion (int $player_id, array $union) : bool
 {
     if ( $union == null ) return false;
     foreach ( $union['player'] as $i=>$pid )
@@ -1248,7 +1246,7 @@ function IsPlayerInUnion ($player_id, $union)
 
 // Flight logs.
 
-function FleetlogsMissionText ($num)
+function FleetlogsMissionText (int $num) : void
 {
     if ($num >= FTYP_ORBITING)
     {
@@ -1265,7 +1263,7 @@ function FleetlogsMissionText ($num)
     echo "      <a title=\"\">".loca("FLEET_ORDER_$num")."</a>\n$desc\n";
 }
 
-function FleetlogsFromPlayer ($player_id, $missions)
+function FleetlogsFromPlayer (int $player_id, array $missions) : mixed
 {
     global $db_prefix;
 
@@ -1281,7 +1279,7 @@ function FleetlogsFromPlayer ($player_id, $missions)
     return dbquery ( $query );
 }
 
-function FleetlogsToPlayer ($player_id, $missions)
+function FleetlogsToPlayer (int $player_id, array $missions) : mixed
 {
     global $db_prefix;
 
@@ -1297,7 +1295,7 @@ function FleetlogsToPlayer ($player_id, $missions)
     return dbquery ( $query );
 }
 
-function DumpFleet ($fleet)
+function DumpFleet (array $fleet) : string
 {
     global $fleetmap;
     $result = "";

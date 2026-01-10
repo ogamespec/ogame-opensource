@@ -7,12 +7,12 @@
 // Auxiliary functions
 
 // Do nothing
-function BotIdle ()
+function BotIdle () : void
 {
 }
 
 // Check that there is a strategy with the specified name.
-function BotStrategyExists ($name)
+function BotStrategyExists (string $name) : bool
 {
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."botstrat WHERE name = '".$name."' LIMIT 1";
@@ -20,8 +20,8 @@ function BotStrategyExists ($name)
     return ($result && dbrows($result) != 0);
 }
 
-// In parallel, start a new bot strategy. Return 1 if OK or 0 if the strategy could not be started.
-function BotExec ($name)
+// In parallel, start a new bot strategy. Return true if OK or false if the strategy could not be started.
+function BotExec (string $name) : bool
 {
     global $db_prefix, $BotID, $BotNow;
     $query = "SELECT * FROM ".$db_prefix."botstrat WHERE name = '".$name."' LIMIT 1";
@@ -34,23 +34,23 @@ function BotExec ($name)
         foreach ( $strat['nodeDataArray'] as $i=>$arr ) {
             if ( $arr['category'] === "Start" ) {
                 AddBotQueue ( $BotID, $strat_id, $arr['key'], $BotNow, 0 );
-                return 1;
+                return true;
             }
         }
-        return 0;
+        return false;
     }
-    else return 0;
+    else return false;
 }
 
 // Bot variables.
 
-function BotGetVar ( $var, $def_value=null )
+function BotGetVar ( string $var, string|null $def_value=null ) : string|null
 {
     global $BotID, $BotNow;
     return GetVar ( $BotID, $var, $def_value);
 }
 
-function BotSetVar ( $var, $value )
+function BotSetVar ( string $var, string $value ) : void
 {
     global $BotID, $BotNow;
     SetVar ( $BotID, $var, $value );
@@ -60,7 +60,7 @@ function BotSetVar ( $var, $value )
 // Construction/demolition of buildings, management of Resouce settings
 
 // Check if we can build the specified building on the active planet (1-yes, 0-no).
-function BotCanBuild ($obj_id)
+function BotCanBuild (int $obj_id) : bool
 {
     global $BotID, $BotNow;
     $user = LoadUser ($BotID);
@@ -73,7 +73,7 @@ function BotCanBuild ($obj_id)
 
 // Start building on an active planet.
 // Return 0 if there are not enough conditions or resources to start building. Return the number of seconds to wait until the construction is completed.
-function BotBuild ($obj_id)
+function BotBuild (int $obj_id) : int
 {
     global $BotID, $BotNow, $GlobalUni;
     $user = LoadUser ($BotID);
@@ -91,7 +91,7 @@ function BotBuild ($obj_id)
 }
 
 // Get a building level
-function BotGetBuild ($n)
+function BotGetBuild (int $n) : int
 {
     global $BotID, $BotNow;
     $bot = LoadUser ($BotID);
@@ -100,7 +100,7 @@ function BotGetBuild ($n)
 }
 
 // Set the resource settings of the active planet (numbers in percentages 0-100)
-function BotResourceSettings ( $last1=100, $last2=100, $last3=100, $last4=100, $last12=100, $last212=100 )
+function BotResourceSettings ( int $last1=100, int $last2=100, int $last3=100, int $last4=100, int $last12=100, int $last212=100 ) : void
 {
     global $db_prefix, $BotID, $BotNow;
     $user = LoadUser ($BotID);
@@ -143,7 +143,7 @@ function BotResourceSettings ( $last1=100, $last2=100, $last3=100, $last4=100, $
 }
 
 // Check if energy is at or above value
-function BotEnergyAbove ($energy)
+function BotEnergyAbove (int $energy) : bool
 {
     global $BotID, $BotNow;
     $user = LoadUser ($BotID);
@@ -159,7 +159,7 @@ function BotEnergyAbove ($energy)
 //------------------------------------------------------------------------------------
 // Fleet/defense construction (Shipyard)
 
-function BotBuildFleet ($obj_id, $n)
+function BotBuildFleet (int $obj_id, int $n) : int
 {
     global $db_prefix, $BotID, $BotNow, $GlobalUni;
     $user = LoadUser ($BotID);
@@ -182,7 +182,7 @@ function BotBuildFleet ($obj_id, $n)
 // Research
 
 // Get the research level
-function BotGetResearch ($n)
+function BotGetResearch (int $n) : int
 {
     global $BotID, $BotNow;
     $bot = LoadUser ($BotID);
@@ -190,7 +190,7 @@ function BotGetResearch ($n)
 }
 
 // Check - can we start research on the active planet (1-yes, 0-no)
-function BotCanResearch ($obj_id)
+function BotCanResearch (int $obj_id) : bool
 {
     global $BotID, $BotNow;
     $user = LoadUser ($BotID);
@@ -203,7 +203,7 @@ function BotCanResearch ($obj_id)
 
 // Begin research on the active planet.
 // Return 0 if there are not enough conditions or resources to start the research. Return the number of seconds to wait until the research is completed.
-function BotResearch ($obj_id)
+function BotResearch (int $obj_id) : int
 {
     global $BotID, $BotNow, $GlobalUni;
     $user = LoadUser ($BotID);

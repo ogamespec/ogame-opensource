@@ -14,7 +14,7 @@ $FleetError = false;
 $FleetErrorText = "";
 
 // Output the text of the fleet dispatch error.
-function FleetError ($text)
+function FleetError (string $text) : void
 {
     global $FleetError, $FleetErrorText;
     $FleetErrorText .= "   <tr height=\"20\">\n";

@@ -3,7 +3,7 @@
 // Updating the embedded galaxytool.
 // It is updated every week, after the phantom debris cleanup.
 
-function GalaxyToolUpdateGalaxy ()
+function GalaxyToolUpdateGalaxy () : void
 {
     global $db_prefix;
 
@@ -30,7 +30,7 @@ function GalaxyToolUpdateGalaxy ()
     fclose ( $f );
 }
 
-function GalaxyToolUpdateStats ()
+function GalaxyToolUpdateStats () : void
 {
     global $db_prefix;
 
@@ -62,7 +62,7 @@ function GalaxyToolUpdateStats ()
     fclose ( $f );
 }
 
-function GalaxyToolUpdateAllyStats ()
+function GalaxyToolUpdateAllyStats () : void
 {
     global $db_prefix;
 
@@ -83,21 +83,21 @@ function GalaxyToolUpdateAllyStats ()
     fclose ( $f );
 }
 
-function GalaxyToolReplaceOldStats ()
+function GalaxyToolReplaceOldStats () : void
 {
     if ( file_exists('galaxytool/statistics.txt') ) $current = file_get_contents( 'galaxytool/statistics.txt' );
     else $current = array ();
     file_put_contents( 'galaxytool/statistics_old.txt' , $current);
 }
 
-function GalaxyToolReplaceOldAllyStats ()
+function GalaxyToolReplaceOldAllyStats () : void
 {
     if ( file_exists('galaxytool/ally_statistics.txt')) $current = file_get_contents( 'galaxytool/ally_statistics.txt' );
     else $current = array ();
     file_put_contents( 'galaxytool/ally_statistics_old.txt' , $current);
 }
 
-function GalaxyToolUpdate ()
+function GalaxyToolUpdate () : void
 {
     GalaxyToolUpdateGalaxy ();
     GalaxyToolReplaceOldStats ();
