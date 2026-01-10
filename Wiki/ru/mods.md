@@ -114,6 +114,7 @@
 - initial
 - UnitParam
 - RapidFire
+- requrements
 
 ## Какие игровые страницы может менять мод
 
