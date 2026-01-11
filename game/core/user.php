@@ -406,7 +406,7 @@ function SelectPlanet (int $player_id, int $cp) : void
         }
     }
     // You can't select other player's planets.
-    if ($planet['owner_id'] != $player_id || $planet['type'] >= 10000 )
+    if ($planet['owner_id'] != $player_id || $planet['type'] >= PTYP_DF )
     {
         Hacking ( "HACK_SELECT_PLANET" );
         return;

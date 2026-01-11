@@ -99,9 +99,6 @@ echo "    document.getElementsByName('fmenge['+key+']')[0].value=number;\n";
 echo "}\n";
 echo "</script> \n";
 
-$unitab = LoadUniverse ( );
-$speed = $unitab['speed'];
-
 // ************************************************ Shipyard ************************************************ 
 
 if ( $_GET['mode'] === "Flotte" )
@@ -159,7 +156,7 @@ if ( $_GET['mode'] === "Flotte" )
             if ($k) echo " ".loca("CRYSTAL").": <b>".nicenum($k)."</b>";
             if ($d) echo " ".loca("DEUTERIUM").": <b>".nicenum($d)."</b>";
             if ($e) echo " ".loca("ENERGY").": <b>".nicenum($e)."</b>";
-            $t = ShipyardDuration ( $id, $aktplanet['b21'], $aktplanet['b15'], $speed );
+            $t = ShipyardDuration ( $id, $aktplanet['b21'], $aktplanet['b15'], $GlobalUni['speed'] );
             echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>".loca("BUILD_SHIPYARD_CANT")."</font>";
@@ -242,7 +239,7 @@ if ( $_GET['mode'] === "Verteidigung" )
             if ($k) echo " ".loca("CRYSTAL").": <b>".nicenum($k)."</b>";
             if ($d) echo " ".loca("DEUTERIUM").": <b>".nicenum($d)."</b>";
             if ($e) echo " ".loca("ENERGY").": <b>".nicenum($e)."</b>";
-            $t = ShipyardDuration ( $id, $aktplanet['b21'], $aktplanet['b15'], $speed );
+            $t = ShipyardDuration ( $id, $aktplanet['b21'], $aktplanet['b15'], $GlobalUni['speed'] );
             echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !$busy ) {
@@ -336,7 +333,7 @@ if ( $_GET['mode'] === "Forschung" )
             if ($k) echo " ".loca("CRYSTAL").": <b>".nicenum($k)."</b>";
             if ($d) echo " ".loca("DEUTERIUM").": <b>".nicenum($d)."</b>";
             if ($e) echo " ".loca("ENERGY").": <b>".nicenum($e)."</b>";
-            $t = ResearchDuration ( $id, $level, $reslab, $speed * $r_factor );
+            $t = ResearchDuration ( $id, $level, $reslab, $GlobalUni['speed'] * $r_factor );
             echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k>";
             if ( $operating )        // The research is in progress

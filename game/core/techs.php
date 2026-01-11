@@ -3,6 +3,8 @@
 // This module is a unification of what was previously scattered throughout all parts of the game (id.php, unit.php, prod.php, techtree)
 // Here you will find various definitions of game object properties that can be changed by modifications.
 
+// TODO: Fleet engine "patches" (small cargo, bomber, etc.)
+
 // Game object identifiers used commonly in code.
 
 const GID_B_METAL_MINE = 1;     // Metal Mine

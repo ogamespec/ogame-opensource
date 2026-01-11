@@ -1,5 +1,6 @@
 <?php
 
+/** @var array $GlobalUni */
 /** @var array $GlobalUser */
 /** @var array $buildmap */
 
@@ -33,9 +34,6 @@ UpdatePlanetActivity ( $aktplanet['planet_id'] );
 UpdateLastClick ( $GlobalUser['player_id'] );
 $session = $_GET['session'];
 $prem = PremiumStatus ($GlobalUser);
-
-$unitab = LoadUniverse ( );
-$speed = $unitab['speed'];
 
 PageHeader ("b_building");
 
@@ -176,7 +174,7 @@ foreach ( $buildmap as $i => $id )
     if ($k) echo " ".loca("CRYSTAL").": <b>".nicenum($k)."</b>";
     if ($d) echo " ".loca("DEUTERIUM").": <b>".nicenum($d)."</b>";
     if ($e) echo " ".loca("ENERGY").": <b>".nicenum($e)."</b>";
-    $t = BuildDuration ( $id, $lvl+1, $aktplanet['b'.GID_B_ROBOTS], $aktplanet['b'.GID_B_NANITES], $speed );
+    $t = BuildDuration ( $id, $lvl+1, $aktplanet['b'.GID_B_ROBOTS], $aktplanet['b'.GID_B_NANITES], $GlobalUni['speed'] );
     echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br>";
 
     if ( $prem['commander'] ) {
