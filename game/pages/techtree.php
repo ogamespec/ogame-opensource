@@ -33,7 +33,7 @@ BeginContent ();
 // A list of what-what-it-requires objects by category.
 
 $req_building = array (
-    "loca" => loca("TECHTREE_BUILDINGS"),
+    "loca" => "TECHTREE_BUILDINGS",
     "techs" => array_diff($buildmap, [GID_B_LUNAR_BASE, GID_B_PHALANX, GID_B_JUMP_GATE])
 );
 
