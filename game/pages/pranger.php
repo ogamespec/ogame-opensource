@@ -4,6 +4,8 @@
 
 // Pillar of Shame.
 
+// TODO: HTML may differ slightly after adding the universal router (#171); we need to check how critical this is and compare it with saved copies of the original pages.
+
 $limit = 50;    // Entries per page.
 $internal = key_exists ( 'session', $_GET );
 

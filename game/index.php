@@ -90,8 +90,10 @@ $PageMessage = "";
 $PageError = "";
 
 $pk = false;
-if (key_exists($_GET['page'], $router)) {
-    $pk = $_GET['page'];
+if (key_exists('page', $_GET)) {
+    if (key_exists($_GET['page'], $router)) {
+        $pk = $_GET['page'];
+    }
 }
 if ($pk != false) {
 
@@ -100,17 +102,18 @@ if ($pk != false) {
         loca_add ( $loca, $GlobalUser['lang']);
     }
 
+    $now = time();
+
     $external = false;
-    if (key_exists('external', $router[$pk])) {
+    if (key_exists('external', $router[$pk]) && !key_exists ( 'session', $_GET )) {
         $external = $router[$pk]['external'];
-    }    
+    }
 
     if (!$external && key_exists ( 'session', $_GET )) {
 
         if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
         $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
 
-        $now = time();
         $update_queue = true;
         if ( $GlobalUser['admin'] != 0 && key_exists('admin_update_queue', $router[$pk]) ) {
             // Do not update Overview for admins

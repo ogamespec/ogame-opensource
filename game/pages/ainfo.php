@@ -5,6 +5,8 @@
 
 // Alliance Info.
 
+// TODO: HTML may differ slightly after adding the universal router (#171); we need to check how critical this is and compare it with saved copies of the original pages.
+
 // Attempt to get a session from the referrer.
 //echo $_SERVER['HTTP_REFERER'];
 
