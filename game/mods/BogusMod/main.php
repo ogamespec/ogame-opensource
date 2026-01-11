@@ -4,7 +4,7 @@ const QTYP_ADD_TRITIUM = "AddTritium";
 
 const BOGUS_MOD_TRITIUM_CREDIT_PERIOD_SECONDS = 60*60;
 
-class BogusMod implements GameMod
+class BogusMod extends GameMod
 {
     public function install() : void {
         global $db_prefix;
@@ -94,32 +94,8 @@ class BogusMod implements GameMod
         return false;
     }
 
-    public function lock_tables(array &$tabs) : bool {
-        return false;
-    }
-
     public function install_tabs_included (array &$tabs) : bool {
         $tabs['users']['tritium'] = 'INT DEFAULT 0';
-        return false;
-    }
-
-    public function get_planet_small_image(array &$planet, array &$img) : bool {
-        return false;
-    }
-
-    public function get_planet_image(array &$planet, array &$img) : bool {
-        return false;
-    }
-
-    public function begin_content() : bool {
-        return false;
-    }
-
-    public function end_content() : bool {
-        return false;
-    }
-
-    public function add_db_row(array &$row, string $tabname) : bool {
         return false;
     }
 }

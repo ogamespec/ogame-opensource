@@ -24,4 +24,7 @@ require_once "bot.php";
 require_once "coupon.php";
 require_once "mods.php";
 
+// Used to check compatibility of modifications
+$CoreVersion = "1.0.0.0";
+
 ?>

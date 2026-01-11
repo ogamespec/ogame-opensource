@@ -5,21 +5,54 @@
 
 $modlist = [];
 
-interface GameMod {
-    public function install() : void;
-    public function uninstall() : void;
-    public function init() : void;
-    public function route() : bool;
-    public function update_queue(array &$queue) : bool;
-    public function add_resources(array &$json, array $aktplanet) : bool;
-    public function add_menuitems(array &$json) : bool;
-    public function lock_tables(array &$tabs) : bool;
-    public function install_tabs_included(array &$tabs) : bool;
-    public function get_planet_small_image(array &$planet, array &$img) : bool;
-    public function get_planet_image(array &$planet, array &$img) : bool;
-    public function begin_content() : bool;
-    public function end_content() : bool;
-    public function add_db_row(array &$row, string $tabname) : bool;
+abstract class GameMod {
+    abstract public function install() : void;
+    abstract public function uninstall() : void;
+    abstract public function init() : void;
+
+    public function route() : bool {
+        return false;
+    }
+
+    public function update_queue(array &$queue) : bool {
+        return false;
+    }
+
+    public function add_resources(array &$json, array $aktplanet) : bool {
+        return false;
+    }
+
+    public function add_menuitems(array &$json) : bool {
+        return false;
+    }
+
+    public function lock_tables(array &$tabs) : bool {
+        return false;
+    }
+
+    public function install_tabs_included(array &$tabs) : bool {
+        return false;
+    }
+
+    public function get_planet_small_image(array &$planet, array &$img) : bool {
+        return false;
+    }
+
+    public function get_planet_image(array &$planet, array &$img) : bool {
+        return false;
+    }
+
+    public function begin_content() : bool {
+        return false;
+    }
+
+    public function end_content() : bool {
+        return false;
+    }
+
+    public function add_db_row(array &$row, string $tabname) : bool {
+        return false;
+    }
 }
 
 function ModInitOne(string $modname) : void
