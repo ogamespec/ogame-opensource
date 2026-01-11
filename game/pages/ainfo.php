@@ -5,17 +5,11 @@
 
 // Alliance Info.
 
+// TODO: HTML may differ slightly after adding the universal router (#171); we need to check how critical this is and compare it with saved copies of the original pages.
+
 // Attempt to get a session from the referrer.
 //echo $_SERVER['HTTP_REFERER'];
 
-$uni = LoadUniverse();
-
-if ( key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $_COOKIE['ogamelang'];
-else $loca_lang = $uni['lang'];
-if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
-loca_add ( "ainfo", $loca_lang );
-
-$now = time ();
 $allyid = intval($_GET['allyid']);
 $ally = LoadAlly ($allyid);
 
@@ -28,29 +22,7 @@ else {
 
 ?>
 
-<html> 
- <head> 
-  <link rel='stylesheet' type='text/css' href='css/default.css' />
-  <link rel="stylesheet" type="text/css" href="<?=UserSkin();?>formate.css" />
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <link rel="stylesheet" type="text/css" href="css/combox.css">
-  
-  <script language="JavaScript">
-function onBodyLoad() {
-    window.setTimeout("reloadImages()", 100);
-}
-
-function reloadImages() {
-    for (var i = 0; i < document.images.length; ++i) {
-      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != "")) {
-        document.images[i].src = document.images[i].title;
-      }
-    }
-}
-</script>
-
-<body onload="onBodyLoad();">
-<center><table width=519>
+<table width=519>
 <tr><td class=c colspan=2><?=loca("AINFO_INFO");?></td></tr><?php
     if ($ally && $ally['imglogo'] !== "") 
     {
@@ -66,4 +38,4 @@ function reloadImages() {
 <tr><th colspan=2 height=100><?=bb($ally['exttext']);?></th></tr>
 <tr><th><?=loca("AINFO_HOMEPAGE");?></th><th>
 <a href="redir.php?url=<?=$ally['homepage'];?>" target="_blank"><?=$ally['homepage'];?></a></th></tr>
-</table></center>
+</table>

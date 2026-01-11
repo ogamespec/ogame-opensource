@@ -222,7 +222,7 @@ function Admin_BattleSim () : void
     global $fleetmap;
     global $defmap;
     $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
-    global $AdminError;
+    global $PageError;
 
     $unitab = LoadUniverse ();
     $rf = $unitab['rapid'];
@@ -242,7 +242,7 @@ function Admin_BattleSim () : void
 
         $max_post_params = $maxslot * (3 + count($fleetmap)) + $maxslot * (3 + count($fleetmap) + count($defmap_norak)) + 6;
         if ($max_post_params > ini_get("max_input_vars")) {
-            $AdminError = loca("ADM_SIM_MAX_INPUT_VARS");
+            $PageError = loca("ADM_SIM_MAX_INPUT_VARS");
         }
 
         // Generate a list of attackers and defenders

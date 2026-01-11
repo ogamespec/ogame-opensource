@@ -12,7 +12,7 @@ abstract class GameMod {
 
     // Hooks
 
-    public function route() : bool {
+    public function route(array &$router) : bool {
         return false;
     }
 

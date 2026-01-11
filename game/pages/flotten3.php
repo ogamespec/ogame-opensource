@@ -5,23 +5,6 @@
 
 // Fleet 3: mission list output, resource loading.
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "fleetorder", $GlobalUser['lang'] );
-loca_add ( "fleet", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval ($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 $fleetmap_nosat = array_diff($fleetmap, [GID_F_SAT]);
 
 if ( method() !== "POST" ) MyGoto ( "flotten1" );
@@ -41,8 +24,6 @@ if ( $system > $uni['systems'] ) $system = $uni['systems'];
 if ( $planet < 0 ) $planet = 0;
 if ( $planet > 16 ) $planet = 16;
 
-PageHeader ("flotten3");
-BeginContent ();
 ?>
 
   <script language="JavaScript" src="js/flotten.js"></script>
@@ -319,8 +300,3 @@ BeginContent ();
 </tr>
  </form>
 </table><br><br><br><br>
-<?php
-EndContent ();
-PageFooter ();
-ob_end_flush ();
-?>

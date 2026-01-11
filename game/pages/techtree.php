@@ -9,26 +9,6 @@
 
 // Technologies.
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "techtree", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-
-PageHeader ("techtree");
-
-BeginContent ();
-
 // **************************************************************************************
 // A list of what-what-it-requires objects by category.
 
@@ -97,8 +77,4 @@ foreach ($techtree as $i => $req )
 echo "</table> \n";
 
 echo "<br><br><br><br>\n";
-EndContent ();
-
-PageFooter ();
-ob_end_flush ();
 ?>

@@ -11,30 +11,10 @@
 // - Method 2: The link shows only posts from the selected category regardless of checkbox values (GET method)
 // If you suddenly don't like something or have HTML sources - we are open to discussion :-)
 
-$MessagesMessage = "";
-$MessagesError = "";
-
 // Since we don't know the exact method, we choose the method of this variable
 $method = 2;
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "messages", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-
 $prem = PremiumStatus ($GlobalUser);
-
-PageHeader ("messages");
 
 // *******************************************************************
 
@@ -57,7 +37,6 @@ $days = $prem['commander'] ? 7 : 1;
 DeleteExpiredMessages ( $GlobalUser['player_id'], $days );    // Delete messages that have been stored for longer than 24 hours (7 days with Commander)
 
 // Table header
-BeginContent ();
 
 if ( method() === "POST" )
 {
@@ -98,7 +77,7 @@ if ( method() === "POST" )
             }
 
             $msg_id = $msg['msg_id'];
-            if ( key_exists("sneak" . $msg_id, $_POST) && $_POST["sneak" . $msg_id] === "on" ) ReportMessage ($player_id, $msg_id, $MessagesMessage, $MessagesError);         // report swearing
+            if ( key_exists("sneak" . $msg_id, $_POST) && $_POST["sneak" . $msg_id] === "on" ) ReportMessage ($player_id, $msg_id, $PageMessage, $PageError);         // report swearing
             if ( key_exists("delmes" . $msg_id, $_POST) && $_POST["delmes" . $msg_id] === "on" && $_POST['deletemessages'] === "deletemarked" ) DeleteMessage ( $player_id, $msg_id );    // Delete selected
             if ( !key_exists("delmes" . $msg_id, $_POST) && $_POST['deletemessages'] === "deletenonmarked" ) DeleteMessage ( $player_id, $msg_id );    // Delete unselected
             if ( $_POST['deletemessages'] === "deleteallshown" ) DeleteMessage ( $player_id, $msg_id );    // Delete shown
@@ -295,8 +274,4 @@ echo "<tr><td class=\"c\" colspan=\"4\">".loca("MSG_OPER")."</td></tr>\n";
 
 echo "</table></td></tr></table>\n";
 echo "<br><br><br><br>\n";
-EndContent ();
-
-PageFooter ($MessagesMessage, $MessagesError);
-ob_end_flush ();
 ?>

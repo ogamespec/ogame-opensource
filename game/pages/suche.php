@@ -5,31 +5,11 @@
 
 // Built in game search.
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "search", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
-PageHeader ("suche");
-
 $SEARCH_LIMIT = 25;
 $SearchResult = "";
-$SearchMessage = "";
-$SearchError = "";
 $searchtext = "";
 
-function search_selected ( $opt )
+function search_selected ( string $opt ) : string
 {
     if ( key_exists('type', $_POST) && $_POST['type'] === $opt ) return "selected";
     else return "";
@@ -41,7 +21,7 @@ if ( method () === "POST" )
 
     $text_len = mb_strlen ($searchtext, "UTF-8");
     if ($text_len && $text_len < 2) {
-        $SearchError = loca ("SEARCH_ERROR_NOT_ENOUGH");
+        $PageError = loca ("SEARCH_ERROR_NOT_ENOUGH");
     }
 
     $query = "";
@@ -66,17 +46,17 @@ if ( method () === "POST" )
         if ($rows > $SEARCH_LIMIT) {
             $rows = $SEARCH_LIMIT;
             if ( $_POST['type'] === "playername" || $_POST['type'] === "planetname" ) {
-                $SearchMessage = va(loca("SEARCH_MAX_USERS_PLANETS"), $SEARCH_LIMIT);
+                $PageMessage = va(loca("SEARCH_MAX_USERS_PLANETS"), $SEARCH_LIMIT);
             }
             else if ( $_POST['type'] === "allytag" || $_POST['type'] === "allyname" ) {
-                $SearchMessage = va(loca("SEARCH_MAX_ALLY"), $SEARCH_LIMIT);
+                $PageMessage = va(loca("SEARCH_MAX_ALLY"), $SEARCH_LIMIT);
             }
         }
 
         // Display a message if nothing is found
 
         if ($rows == 0) {
-            $SearchMessage = loca("SEARCH_NORESULT");
+            $PageMessage = loca("SEARCH_NORESULT");
         }
 
         $SearchResult .= " <table width=\"519\">\n";
@@ -170,7 +150,6 @@ if ( method () === "POST" )
     }
 }
 
-BeginContent ();
 ?>
  <!-- begin search header --> 
  <form action="index.php?page=suche&session=<?php echo $session;?>" method="post"> 
@@ -201,8 +180,3 @@ BeginContent ();
 ?>
  <!-- end search results --> 
 <br><br><br><br> 
-<?php
-EndContent ();
-PageFooter ($SearchMessage, $SearchError);
-ob_end_flush ();
-?>

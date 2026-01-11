@@ -7,7 +7,7 @@ function Admin_Coupons () : void
     global $session;
     global $db_prefix;
     global $GlobalUser;
-    global $AdminMessage, $AdminError;
+    global $PageMessage, $PageError;
 
     // POST request processing.
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
@@ -17,8 +17,8 @@ function Admin_Coupons () : void
         if ( $action === "add_one" )
         {
             $code = AddCoupon ( intval ( $_POST['dm'] ) );
-            if ( $code == NULL) $AdminError = "<font color=red>".loca("ADM_COUPON_ERROR")."</font>";
-            else $AdminMessage = "<font color=lime>".va(loca("ADM_COUPON_SUCCESS"), $code)."</font>";
+            if ( $code == NULL) $PageError = "<font color=red>".loca("ADM_COUPON_ERROR")."</font>";
+            else $PageMessage = "<font color=lime>".va(loca("ADM_COUPON_SUCCESS"), $code)."</font>";
         }
 
         if ( $action === "add_date" )

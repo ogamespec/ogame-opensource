@@ -6,24 +6,6 @@
 
 $PhalanxCost = 5000;    // Amount of deuterium per phalanx scan
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "fleetorder", $GlobalUser['lang'] );
-loca_add ( "events", $GlobalUser['lang'] );
-loca_add ( "phalanx", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 require_once "phalanx_events.php";
 
 ?>
@@ -123,6 +105,3 @@ require_once "phalanx_events.php";
 
  </body>
 </html>
-<?php
-ob_end_flush ();
-?>

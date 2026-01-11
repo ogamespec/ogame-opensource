@@ -9,25 +9,6 @@
 
 // Es wurden bereits 2 E-Mails an Dich geschickt. Heute ist kein weiterer E-Mail-Versand möglich, bitte versuch es morgen nochmal.
 
-$OptionsMessage = "";
-$OptionsError = "";
-
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "options", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 function IsChecked (string $option) : string
 {
     global $GlobalUser;
@@ -53,12 +34,9 @@ function isValidEmail(string $email) : mixed {
     return filter_var($email, FILTER_VALIDATE_EMAIL);
 }
 
-PageHeader ("options");
-
 $speed = $GlobalUni['speed'];
 $prem = PremiumStatus ($GlobalUser);
 
-BeginContent ();
 ?>
 
  <table width="519">
@@ -70,7 +48,7 @@ BeginContent ();
 
         if ( time () >= $GlobalUser['vacation_until'] && key_exists('urlaub_aus', $_POST) && $_POST['urlaub_aus'] === "on" && $GlobalUser['vacation'] )
         {
-            $OptionsError = va ( loca("OPTIONS_MSG_VMDISABLED"), $GlobalUser['oname'] ) . "\n<br/>\n";
+            $PageError = va ( loca("OPTIONS_MSG_VMDISABLED"), $GlobalUser['oname'] ) . "\n<br/>\n";
             $query = "UPDATE ".$db_prefix."users SET vacation=0,vacation_until=0 WHERE player_id=".intval($GlobalUser['player_id']);
             dbquery ($query);
             $GlobalUser['vacation'] = $GlobalUser['vacation_until'] = 0;
@@ -89,15 +67,15 @@ BeginContent ();
 
             if ( key_exists ( "validate", $_POST ) ) {    // Request an activation link.
                 SendChangeMail ( $GlobalUser['oname'], $GlobalUser['email'], $GlobalUser['pemail'], $GlobalUser['validatemd'] );
-                $OptionsMessage = loca ("OPTIONS_MSG_VALIDATE");
+                $PageMessage = loca ("OPTIONS_MSG_VALIDATE");
             }
             else if ( $_POST['db_email'] !== $GlobalUser['email'] && $_POST['db_email'] !== "" ) {        // Change email address
                 $email = $_POST['db_email'];
-                if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $OptionsError = loca ("OPTIONS_ERR_NEEDPASS");
-                else if ( !isValidEmail ($email) ) $OptionsError = loca ("OPTIONS_ERR_EMAIL");
-                else if ( IsEmailExist ($email)) $OptionsError = loca ("OPTIONS_ERR_EMAILUSED");
+                if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $PageError = loca ("OPTIONS_ERR_NEEDPASS");
+                else if ( !isValidEmail ($email) ) $PageError = loca ("OPTIONS_ERR_EMAIL");
+                else if ( IsEmailExist ($email)) $PageError = loca ("OPTIONS_ERR_EMAILUSED");
 
-                if ( $OptionsError === "" )
+                if ( $PageError === "" )
                 {
                     $ack = md5(time ().$db_secret);
                     $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . $GlobalUser['player_id'];
@@ -105,7 +83,7 @@ BeginContent ();
                     AddChangeEmailEvent ($GlobalUser['player_id']);
                     SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
                     $GlobalUser['email'] = $email;
-                    $OptionsError = loca ("OPTIONS_USER_EMAIL_TIP");
+                    $PageError = loca ("OPTIONS_USER_EMAIL_TIP");
                 }
             }
         }
@@ -196,19 +174,19 @@ BeginContent ();
 
             if ( $GlobalUser['name_changed'] == 0 && $_POST['db_character'] !== $GlobalUser['oname'] ) {        // Change the name.
                 $forbidden = explode ( ",", "hitler, fick, adolf, legor, aleena, ogame, mainman, fishware, osama, bin laden, stalin, goebbels, drecksjude, saddam, space, ringkeeper, administration" );
-                if ( IsUserExist ( $_POST['db_character'] )) $OptionsError = loca ("OPTIONS_ERR_EXISTNAME");
-                else if ( !CanChangeName ($GlobalUser['player_id']) ) $OptionsError = loca ("OPTIONS_ERR_NAME_WEEK");
-                else if ( mb_strlen ($_POST['db_character']) < 3 || mb_strlen ($_POST['db_character']) > 20 ) $OptionsError = loca ("OPTIONS_ERR_NAME_3_20");
-                else if ( preg_match ( '/[<>()\[\]{}\\\\\/\`\"\'.,:;*+]/', $_POST['db_character'] )) $OptionsError = loca ("OPTIONS_ERR_NAME_SPECIAL");
+                if ( IsUserExist ( $_POST['db_character'] )) $PageError = loca ("OPTIONS_ERR_EXISTNAME");
+                else if ( !CanChangeName ($GlobalUser['player_id']) ) $PageError = loca ("OPTIONS_ERR_NAME_WEEK");
+                else if ( mb_strlen ($_POST['db_character']) < 3 || mb_strlen ($_POST['db_character']) > 20 ) $PageError = loca ("OPTIONS_ERR_NAME_3_20");
+                else if ( preg_match ( '/[<>()\[\]{}\\\\\/\`\"\'.,:;*+]/', $_POST['db_character'] )) $PageError = loca ("OPTIONS_ERR_NAME_SPECIAL");
                 $lower = mb_strtolower ($_POST['db_character'], 'UTF-8');
                 foreach ( $forbidden as $i=>$name) {
-                    if ( $lower === $name ) $OptionsError = loca ("OPTIONS_ERR_NAME");
+                    if ( $lower === $name ) $PageError = loca ("OPTIONS_ERR_NAME");
                 }
 
-                if ( $OptionsError === "" )
+                if ( $PageError === "" )
                 {
                     ChangeName ( $GlobalUser['player_id'], $_POST['db_character'] );
-                    $OptionsError = loca ("OPTIONS_MSG_NAME");
+                    $PageError = loca ("OPTIONS_MSG_NAME");
                     $GlobalUser['name_changed'] = 1;
                     $GlobalUser['oname'] = $_POST['db_character'] ;
                     Logout ( $GlobalUser['session'] );
@@ -217,28 +195,28 @@ BeginContent ();
 
             else if ( $_POST['newpass1'] !== "" ) {        // Change password
 
-                if ( $_POST['newpass1'] !== $_POST['newpass2'] ) $OptionsError = loca ("OPTIONS_ERR_NEWPASS");
-                else if ( !preg_match ( "/^[_a-zA-Z0-9]+$/", $_POST['newpass1'] ) ) $OptionsError = loca ("OPTIONS_ERR_PASS_SPECIAL");
-                else if ( strlen ( $_POST['newpass1'] ) < 8 ) $OptionsError = loca ("OPTIONS_ERR_PASS_8");
-                else if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $OptionsError = loca ("OPTIONS_ERR_OLDPASS");
+                if ( $_POST['newpass1'] !== $_POST['newpass2'] ) $PageError = loca ("OPTIONS_ERR_NEWPASS");
+                else if ( !preg_match ( "/^[_a-zA-Z0-9]+$/", $_POST['newpass1'] ) ) $PageError = loca ("OPTIONS_ERR_PASS_SPECIAL");
+                else if ( strlen ( $_POST['newpass1'] ) < 8 ) $PageError = loca ("OPTIONS_ERR_PASS_8");
+                else if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $PageError = loca ("OPTIONS_ERR_OLDPASS");
 
-                if ( $OptionsError === "" )
+                if ( $PageError === "" )
                 {
                     $md5 = md5 ($_POST['newpass1'] . $db_secret );
                     $query = "UPDATE ".$db_prefix."users SET password = '".$md5."' WHERE player_id = " . intval($GlobalUser['player_id']);
                     dbquery ($query);
-                    $OptionsError = loca ("OPTIONS_MSG_PASS");    // TODO: OPTIONS_MSG_UNSAFE, OPTIONS_MSG_SIMPLE
+                    $PageError = loca ("OPTIONS_MSG_PASS");    // TODO: OPTIONS_MSG_UNSAFE, OPTIONS_MSG_SIMPLE
                     Logout ( $GlobalUser['session'] );
                 }
             }
 
             else if ( $_POST['db_email'] !== $GlobalUser['pemail'] && $_POST['db_email'] !== "" ) {        // Change email address
                 $email = $_POST['db_email'];
-                if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $OptionsError = loca ("OPTIONS_ERR_NEEDPASS");
-                else if ( !isValidEmail ($email) ) $OptionsError = loca ("OPTIONS_ERR_EMAIL");
-                else if ( IsEmailExist ($email)) $OptionsError = loca ("OPTIONS_ERR_EMAILUSED");
+                if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $PageError = loca ("OPTIONS_ERR_NEEDPASS");
+                else if ( !isValidEmail ($email) ) $PageError = loca ("OPTIONS_ERR_EMAIL");
+                else if ( IsEmailExist ($email)) $PageError = loca ("OPTIONS_ERR_EMAILUSED");
 
-                if ( $OptionsError === "" )
+                if ( $PageError === "" )
                 {
                     $ip = $_SERVER['REMOTE_ADDR'];
                     $ack = md5(time ().$db_secret);
@@ -247,7 +225,7 @@ BeginContent ();
                     AddChangeEmailEvent ($GlobalUser['player_id']);
                     SendChangeMail ( $GlobalUser['oname'], $email, $GlobalUser['pemail'], $ack );
                     $GlobalUser['email'] = $email;
-                    $OptionsError = loca ("OPTIONS_USER_EMAIL_TIP");
+                    $PageError = loca ("OPTIONS_USER_EMAIL_TIP");
                 }
             }
 
@@ -264,7 +242,7 @@ BeginContent ();
                     dbquery ($query);
                     MyGoto ( "options" );
                 }
-                else $OptionsError = loca ("OPTIONS_ERR_VM");
+                else $PageError = loca ("OPTIONS_ERR_VM");
             }
 
             if ( key_exists('db_deaktjava', $_POST) && $_POST['db_deaktjava'] === "on" && $GlobalUser['disable'] == 0 ) {        // Set the account for deletion
@@ -341,7 +319,7 @@ BeginContent ();
                 }
                 $feed_enable = (key_exists('feed_activated', $_POST) && $_POST['feed_activated']==="on");
                 if ($GlobalUni['feedage'] < 0 && $feed_enable && ($flags & USER_FLAG_FEED_ENABLE) == 0) {
-                    $OptionsError = loca("OPTIONS_FEED_PROHIBITED");
+                    $PageError = loca("OPTIONS_FEED_PROHIBITED");
                 }
                 else FeedActivate ($feed_enable);
             }
@@ -655,8 +633,3 @@ BeginContent ();
 ?>
 
 <br><br><br><br>
-<?php
-EndContent ();
-PageFooter ($OptionsMessage, $OptionsError);
-ob_end_flush ();
-?>

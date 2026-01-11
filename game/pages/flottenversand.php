@@ -10,7 +10,6 @@
 
 $BlockAttack = 0;
 
-$PageError = "";
 $FleetError = false;
 $FleetErrorText = "";
 
@@ -31,12 +30,6 @@ if ( method () === "GET" )
     die ();
 }
 
-$session = $_GET['session'];
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-
 $unispeed = $GlobalUni['fspeed'];
 
 // Handle AJAX requests
@@ -51,10 +44,6 @@ if ( $rows ) {
     $queue = dbarray ($result);
     if ( abs(time () - $queue['start']) < 1 ) MyGoto ( "flotten1" );
 }
-
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "fleetorder", $GlobalUser['lang'] );
-loca_add ( "fleet", $GlobalUser['lang'] );
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
@@ -306,9 +295,6 @@ switch ( $order )
 
 if ($FleetError) {
 
-    PageHeader ("flottenversand", false, true, "flotten1", 1);
-
-    BeginContent ();
 ?>
   <script language="JavaScript" src="js/flotten.js"></script>
   <table width="519" border="0" cellpadding="0" cellspacing="1">
@@ -350,9 +336,6 @@ else {
 
     unlink ( $fleetlock );
 
-    PageHeader ("flottenversand", false, true, "flotten1", 1);
-
-    BeginContent ();
 ?>
   <script language="JavaScript" src="js/flotten.js"></script>
   <table width="519" border="0" cellpadding="0" cellspacing="1">
@@ -406,8 +389,3 @@ else {
 
    </table>
 <br><br><br><br>
-<?php
-EndContent ();
-PageFooter ("", $PageError);
-ob_end_flush ();
-?>

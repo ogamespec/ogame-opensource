@@ -8,23 +8,6 @@
 // You need to pay a lot of attention to the security of the input data (size and content checks).
 
 $SearchResults = "";
-$AllianzenError = "";
-
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "ally", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
 
 // User is not a member of any alliance, display a menu to create/search for alliances.
 function AllyPage_NoAlly () : void
@@ -123,9 +106,9 @@ if ( $GlobalUser['ally_id'] == 0 && key_exists('a', $_GET) )
         $_POST['name'] = str_replace ( "\"", "", $_POST['name']);
         $_POST['name'] = str_replace ( "'", "", $_POST['name']);
 
-        if (mb_strlen ($_POST['tag'], "UTF-8")  < 3) $AllianzenError = loca("ALLY_FOUND_ERROR_TAG");
-        else if (mb_strlen ($_POST['name'], "UTF-8")  < 3) $AllianzenError = loca("ALLY_FOUND_ERROR_NAME");
-        else if (IsAllyTagExist ($_POST['tag'])) $AllianzenError = va(loca("ALLY_FOUND_ERROR_EXISTS"), $_POST['tag']);
+        if (mb_strlen ($_POST['tag'], "UTF-8")  < 3) $PageError = loca("ALLY_FOUND_ERROR_TAG");
+        else if (mb_strlen ($_POST['name'], "UTF-8")  < 3) $PageError = loca("ALLY_FOUND_ERROR_NAME");
+        else if (IsAllyTagExist ($_POST['tag'])) $PageError = va(loca("ALLY_FOUND_ERROR_EXISTS"), $_POST['tag']);
         else
         {
             CreateAlly ($GlobalUser['player_id'], $_POST['tag'], $_POST['name']);
@@ -161,9 +144,6 @@ include "allianzen_settings.php";
 include "allianzen_circular.php";
 include "allianzen_misc.php";
 
-PageHeader ("allianzen");
-
-BeginContent ();
 echo "<script src=\"js/cntchar.js\" type=\"text/javascript\"></script><script src=\"js/win.js\" type=\"text/javascript\"></script>\n";
 
 if ( $GlobalUser['ally_id'] == 0 )
@@ -215,8 +195,4 @@ else
     else AllyPage_Home ();
 }
 
-EndContent ();
-
-PageFooter ("", $AllianzenError);
-ob_end_flush ();
 ?>

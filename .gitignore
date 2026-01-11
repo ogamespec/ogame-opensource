@@ -1,3 +1,5 @@
 .env
 /vendor
 .phpunit.result.cache
+/html
+/latex

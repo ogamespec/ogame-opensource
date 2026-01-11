@@ -9,24 +9,6 @@
 
 // TODO: BUDDY_LIMIT
 
-$BuddyError = "";
-
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "buddy", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval ($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 // ***********************************************************
 // Menu pages.
 
@@ -226,10 +208,6 @@ function Buddy_Request () : void
 
 // ***********************************************************
 
-PageHeader ("buddy");
-
-BeginContent();
-
 if ( key_exists ('action', $_GET) && $_GET['action'] == 1 && $_GET['buddy_id'])    // Add your application.
 {
     $from = $GlobalUser['player_id'];
@@ -237,7 +215,7 @@ if ( key_exists ('action', $_GET) && $_GET['action'] == 1 && $_GET['buddy_id']) 
     if ($from != $to)
     {
         $buddy_id = AddBuddy ( $from, $to, $_POST['text']);
-        if ($buddy_id == 0) $BuddyError = loca("BUDDY_ALREADY_SENT");
+        if ($buddy_id == 0) $PageError = loca("BUDDY_ALREADY_SENT");
         else SendMessage ( $to, $GlobalUser['oname'], loca("BUDDY_REQUEST"), $_POST['text'], MTYP_PM );
     }
     Buddy_Home ();
@@ -290,8 +268,4 @@ else if ( key_exists ('action', $_GET) && $_GET['action'] == 8 && $_GET['buddy_i
 }
 else Buddy_Home ();
 
-EndContent();
-
-PageFooter ("", $BuddyError);
-ob_end_flush ();
 ?>

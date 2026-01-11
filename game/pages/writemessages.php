@@ -7,25 +7,8 @@
 // ⚠️Important! This game feature involves a rich interaction with input from the user.
 // You need to pay a lot of attention to the security of the input data (size and content checks).
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "messages", $GlobalUser['lang'] );
-
 // Character limit.
 $MAXCHARS = 2000;
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-
-PageHeader ("writemessages");
 
 function SendNotActivated () : void
 {
@@ -109,8 +92,6 @@ if ( key_exists ('gesendet', $_GET) )
     }
 }
 
-BeginContent ();
-
 echo $write_error;
 echo "<center>\n";
 echo "<form action=\"index.php?page=writemessages&session=".$_GET['session']."&gesendet=1&messageziel=".intval($_GET['messageziel'])."\" method=\"post\">\n";
@@ -126,9 +107,4 @@ echo "<tr><th colspan=\"2\"><input type=\"submit\" value=\"".loca("WRITE_MSG_SUB
 
 echo "</table></form>\n";
 echo "<br><br><br><br>\n";
-
-EndContent ();
-
-PageFooter ();
-ob_end_flush ();
 ?>

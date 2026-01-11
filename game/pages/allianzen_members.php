@@ -7,12 +7,12 @@ function PageAlly_MemberList () : void
     global $session;
     global $ally;
     global $GlobalUser;
-    global $AllianzenError;
+    global $PageError;
 
     $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
     if ( ! ($myrank['rights'] & ARANK_R_MEMBERS) )
     {
-        $AllianzenError = "<center>\n".loca("ALLY_MEMBERS_DENIED")."<br></center>";
+        $PageError = "<center>\n".loca("ALLY_MEMBERS_DENIED")."<br></center>";
         return;
     }
 
@@ -77,7 +77,7 @@ function PageAlly_MemberSettings () : void
     global $session;
     global $ally;
     global $GlobalUser;
-    global $AllianzenError;
+    global $PageError;
 
     $selected_user = 0;
     if ( key_exists ('u', $_GET) ) $selected_user = intval($_GET['u']);

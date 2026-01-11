@@ -5,22 +5,6 @@
 
 // Resource Settings.
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "resources", $GlobalUser['lang'] );
-loca_add ( "premium", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-
 $prem = PremiumStatus ($GlobalUser);
 if ( $prem['geologist'] )
 {
@@ -98,10 +82,6 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
     }
 }
 
-PageHeader ("resources");
-
-BeginContent ();
-
 // ***********************************************************************
 
 function get_prod (int $id, array|null $planet) : float
@@ -145,8 +125,7 @@ function rgnum (float|int $num) : string
     else return "<font color=\"#ff0000\">".nicenum2($num)."</font>";
 }
 
-$unitab = LoadUniverse ( );
-$speed = $unitab['speed'];
+$speed = $GlobalUni['speed'];
 $planet = $aktplanet;
 
 // Production.
@@ -330,8 +309,4 @@ echo "  </table> \n";
 // ***********************************************************************
 
 echo "<br><br><br><br>\n";
-EndContent ();
-
-PageFooter ();
-ob_end_flush ();
 ?>

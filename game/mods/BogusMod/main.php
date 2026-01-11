@@ -26,7 +26,7 @@ class BogusMod extends GameMod
     public function uninstall() : void {
         global $db_prefix;
 
-        // Remove Tritium сolumn from users table
+        // Remove Tritium column from users table
         $query = "ALTER TABLE ".$db_prefix."users DROP COLUMN tritium;";
         dbquery ($query);
 
@@ -42,11 +42,11 @@ class BogusMod extends GameMod
         loca_add ("bogusmod", $GlobalUni['lang'], __DIR__);
     }
 
-    public function route() : bool {
-        if ( $_GET['page'] === "tipoftheday" ) {
-            include __DIR__ . "/pages/tipoftheday.php";
-            return true;
-        }
+    public function route(array &$router) : bool {
+        $router['tipoftheday'] = array (
+            'path' => "mods/BogusMod/pages/tipoftheday.php",
+            'loca' => [ "menu" ]
+        );
         return false;
     }
 

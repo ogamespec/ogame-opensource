@@ -9,26 +9,6 @@
 
 // Parameter passing between Fleet 1,2,3 pages is done via hidden POST parameters.
 
-$FleetMessage = "";
-$FleetError = "";
-
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "fleetorder", $GlobalUser['lang'] );
-loca_add ( "fleet", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 function FleetMissionText (int $num) : void
 {
     if ($num >= FTYP_ORBITING)
@@ -69,11 +49,9 @@ if ( method () === "POST" )
     if ( key_exists ( 'user_name', $_POST) && $GlobalUni['acs'] > 0 ) { 
         $fleet_id = intval ($_POST['flotten']);
         $union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
-        $FleetError = AddUnionMember ( $union_id, $_POST['user_name'] );    // add player
+        $PageError = AddUnionMember ( $union_id, $_POST['user_name'] );    // add player
     }
 }
-
-PageHeader ("flotten1");
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );    // Number of fleets
 $nowfleet = $rows = dbrows ($result);
@@ -85,7 +63,6 @@ if ( $prem['admiral'] ) $maxfleet += 2;
 $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Number of expeditions
 $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 
-BeginContent();
 ?>
 
 <script src="js/flotten.js"></script>
@@ -369,7 +346,7 @@ BeginContent();
 <?php
     if ( $prem['commander'] )        // Standard fleets (templates)
     {
-        $temp_map = array ( 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214, 215 );    // without solar sat
+        $temp_map = array_diff($fleetmap, [GID_F_SAT]);    // without solar sat
 
         echo "      <tr height=\"20\">\n";
         echo "      <td colspan=\"4\" class=\"c\"><u><a href=\"index.php?page=fleet_templates&session=$session\">".loca("FLEET1_TEMPLATE")."</a></u></td>\n";
@@ -411,8 +388,3 @@ BeginContent();
 </form>
 </table>
 <br><br><br><br>
-<?php
-EndContent ();
-PageFooter ($FleetMessage, $FleetError);
-ob_end_flush ();
-?>

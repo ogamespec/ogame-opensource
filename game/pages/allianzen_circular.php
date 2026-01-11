@@ -8,7 +8,7 @@ function AllyPage_CircularMessage () : void
     global $GlobalUser;
     global $session;
     global $ally;
-    global $AllianzenError;
+    global $PageError;
 
     // Character limit.
     $MAXCHARS = 2000;
@@ -19,7 +19,7 @@ function AllyPage_CircularMessage () : void
         $myrank = LoadRank ( $ally_id, $GlobalUser['allyrank'] );
         if ( ! ($myrank['rights'] & ARANK_CIRCULAR) )
         {
-            $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
+            $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
             return;
         }
         $rank_id = intval($_POST['r']);
