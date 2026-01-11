@@ -6,30 +6,8 @@
 
 // Fleet jump by jump gate
 
-$GateError = "";
-
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "jumpgate", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 $fleetmap_rev = array_reverse ($fleetmap);
 $fleetmap_revnosat = array_diff ($fleetmap_rev, [GID_F_SAT]);
-
-PageHeader ("sprungtor");
-
-BeginContent ();
 
 if ( key_exists ( 'qm', $_POST) ) $source_id = intval($_POST['qm']);
 else $source_id = 0;
@@ -46,28 +24,28 @@ foreach ( $fleetmap_revnosat as $i=>$gid)
 $source = GetPlanet ( $source_id );
 $target = GetPlanet ( $target_id );
 
-if ( $source['type'] != PTYP_MOON ) $GateError .= "<center>\n".loca("GATE_ERR_START")."<br></center>\n";
-if ( $target['type'] != PTYP_MOON ) $GateError .= "<center>\n".loca("GATE_ERR_TARGET")."<br></center>\n";
+if ( $source['type'] != PTYP_MOON ) $PageError .= "<center>\n".loca("GATE_ERR_START")."<br></center>\n";
+if ( $target['type'] != PTYP_MOON ) $PageError .= "<center>\n".loca("GATE_ERR_TARGET")."<br></center>\n";
 
-if ( $GateError === "" )
+if ( $PageError === "" )
 {
-    if ( $source["b".GID_B_JUMP_GATE] == 0 ) $GateError .= "<center>\n".loca("GATE_ERR_START_GATE")."<br></center>\n";
-    if ( $target["b".GID_B_JUMP_GATE] == 0 ) $GateError .= "<center>\n".loca("GATE_ERR_TARGET_GATE")."<br></center>\n";
+    if ( $source["b".GID_B_JUMP_GATE] == 0 ) $PageError .= "<center>\n".loca("GATE_ERR_START_GATE")."<br></center>\n";
+    if ( $target["b".GID_B_JUMP_GATE] == 0 ) $PageError .= "<center>\n".loca("GATE_ERR_TARGET_GATE")."<br></center>\n";
 }
 
-if ( $GateError === "" )
+if ( $PageError === "" )
 {
     if ( ($source['owner_id'] != $GlobalUser['player_id']) ||
-         ($target['owner_id'] != $GlobalUser['player_id'])  ) $GateError .= "<center>\n".loca("GATE_ERR_MOON")."<br></center>\n";
+         ($target['owner_id'] != $GlobalUser['player_id'])  ) $PageError .= "<center>\n".loca("GATE_ERR_MOON")."<br></center>\n";
 }
 
-if ( $GateError === "" )
+if ( $PageError === "" )
 {
-    if ( $total == 0 ) $GateError .= "<center>\n".loca("GATE_ERR_SHIPS")."<br></center>\n";
+    if ( $total == 0 ) $PageError .= "<center>\n".loca("GATE_ERR_SHIPS")."<br></center>\n";
 }
 
 // Prepare a fleet list for jump.
-if ( $GateError === "" )
+if ( $PageError === "" )
 {
     $fleet = array ();
     foreach ( $fleetmap_revnosat as $i=>$gid)
@@ -75,7 +53,7 @@ if ( $GateError === "" )
         $amount = floor (abs(intval($_POST["c$gid"])));
         if ( $amount > $source["f$gid"] ) 
         {
-            $GateError .= "<center>\n".loca("GATE_ERR_NOTENOUGH")."<br></center>\n";
+            $PageError .= "<center>\n".loca("GATE_ERR_NOTENOUGH")."<br></center>\n";
             break;
         }
         $fleet[$gid] = $amount;
@@ -84,7 +62,7 @@ if ( $GateError === "" )
 }
 
 // Jump
-if ( $GateError === "" )
+if ( $PageError === "" )
 {
     // Jump the fleet
     AdjustShips ( $fleet, $source_id, '-' );
@@ -103,9 +81,4 @@ if ( $GateError === "" )
     // Do a redirect to the target moon gate
     MyGoto ( "infos", "&cp=$target_id&gid=43" );
 }
-
-EndContent ();
-
-PageFooter ("", $GateError);
-ob_end_flush ();
 ?>

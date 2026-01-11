@@ -13,24 +13,6 @@
 $speed = $GlobalUni['speed'];
 $drepair = $GlobalUni['defrepair'];
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "techlong", $GlobalUser['lang'] );
-loca_add ( "jumpgate", $GlobalUser['lang'] );
-loca_add ( "infos", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet']);
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 // ***************************************************************************************
 
 function rgnum (float|int $num) : string
@@ -63,10 +45,6 @@ function rapid (int $gid) : string
 }
 
 $gid = intval($_GET['gid']);
-
-PageHeader ("infos");
-
-BeginContent ();
 
 echo "<table width=\"519\">\n";
 
@@ -505,8 +483,4 @@ else
 }
 
 echo "<br><br><br><br>\n";
-EndContent ();
-
-PageFooter ();
-ob_end_flush ();
 ?>

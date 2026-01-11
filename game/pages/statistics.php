@@ -11,24 +11,6 @@
 
 // No cache or other nonsense is used for statistics.
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "statistics", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
-PageHeader ("statistics");
-
 $start = -1;
 if ( key_exists ( "start", $_REQUEST ) ) $start = intval($_REQUEST['start']);
 
@@ -38,7 +20,6 @@ if ( key_exists ( "type", $_REQUEST ) ) $type = $_REQUEST['type'];
 $who = "player";
 if ( key_exists ( "who", $_REQUEST ) ) $who = $_REQUEST['who'];
 
-BeginContent ();
 ?>
 <!-- begin header form --> 
 <form method="post" action='index.php?page=statistics&session=<?php echo $session;?>' > 
@@ -306,8 +287,3 @@ else {
 ?>
 
 <!-- end statistic data --><br><br><br><br>
-<?php
-EndContent ();
-PageFooter ();
-ob_end_flush ();
-?>

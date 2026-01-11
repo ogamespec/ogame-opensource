@@ -2,22 +2,6 @@
 
 /** @var array $GlobalUser */
 
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
-loca_add ( "battlereport", $GlobalUser['lang'] );
-loca_add ( "espionage", $GlobalUser['lang'] );
-
 $msg = LoadMessage ( intval($_GET['bericht']) );
 
 ?>
@@ -46,7 +30,7 @@ $msg = LoadMessage ( intval($_GET['bericht']) );
     else {
         // From the same alliance as the spy report.
         $msg_user = LoadUser ($msg['owner_id']);
-        $allowed = $msg_user['ally_id'] == $GlobalUser['ally_id'] && $GlobalUser['ally_id'] != 0 && $msg['pm'] == 1;
+        $allowed = $msg_user['ally_id'] == $GlobalUser['ally_id'] && $GlobalUser['ally_id'] != 0 && $msg['pm'] == MTYP_SPY_REPORT;
     }
     
     if ( $allowed ) echo $msg['text'];
@@ -58,7 +42,3 @@ $msg = LoadMessage ( intval($_GET['bericht']) );
 </table>
 </BODY>
 </html>
-
-<?php
-ob_end_flush ();
-?>

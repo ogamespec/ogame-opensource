@@ -56,7 +56,7 @@ function PageAlly_ChangeTag () : void
     global $GlobalUser;
     global $session;
     global $ally;
-    global $AllianzenError;
+    global $PageError;
 
     if ( method() === "POST" && $_GET['a'] == 9 && $_GET['weiter'] == 1)
     {
@@ -65,10 +65,10 @@ function PageAlly_ChangeTag () : void
 
         $now = time ();
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
-        if ( ! ($myrank['rights'] & ARANK_W_MEMBERS) ) $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
-        else if ( $now < $ally['tag_until'] ) $AllianzenError = "<center>\n".va(loca("ALLY_MISC_CHANGE_WAIT"), date ("Y-m-d H:i:s", $ally['tag_until']))."<br></center>";
-        else if (mb_strlen ($_POST['newtag'], "UTF-8")  < 3) $AllianzenError = "<center>\n".loca("ALLY_MISC_CHANGE_TAG_SHORT")."<br></center>";
-        else if (IsAllyTagExist ($_POST['newtag'])) $AllianzenError = "<center>\n".va(loca("ALLY_MISC_CHANGE_TAG_EXISTS"), $_POST['newtag'])."<br></center>";
+        if ( ! ($myrank['rights'] & ARANK_W_MEMBERS) ) $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
+        else if ( $now < $ally['tag_until'] ) $PageError = "<center>\n".va(loca("ALLY_MISC_CHANGE_WAIT"), date ("Y-m-d H:i:s", $ally['tag_until']))."<br></center>";
+        else if (mb_strlen ($_POST['newtag'], "UTF-8")  < 3) $PageError = "<center>\n".loca("ALLY_MISC_CHANGE_TAG_SHORT")."<br></center>";
+        else if (IsAllyTagExist ($_POST['newtag'])) $PageError = "<center>\n".va(loca("ALLY_MISC_CHANGE_TAG_EXISTS"), $_POST['newtag'])."<br></center>";
         else
         {
             AllyChangeTag ( $ally['ally_id'], $_POST['newtag'] );
@@ -100,7 +100,7 @@ function PageAlly_ChangeName () : void
     global $GlobalUser;
     global $session;
     global $ally;
-    global $AllianzenError;
+    global $PageError;
 
     if ( method() === "POST" && $_GET['a'] == 10 && $_GET['weiter'] == 1)
     {
@@ -109,9 +109,9 @@ function PageAlly_ChangeName () : void
 
         $now = time ();
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
-        if ( ! ($myrank['rights'] & ARANK_W_MEMBERS) ) $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
-        else if ( $now < $ally['name_until'] ) $AllianzenError = "<center>\n".va(loca("ALLY_MISC_CHANGE_WAIT"), date ("Y-m-d H:i:s", $ally['name_until']))."<br></center>";
-        else if (mb_strlen ($_POST['newname'], "UTF-8")  < 3) $AllianzenError = "<center>\n".loca("ALLY_MISC_CHANGE_NAME_SHORT")."<br></center>";
+        if ( ! ($myrank['rights'] & ARANK_W_MEMBERS) ) $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
+        else if ( $now < $ally['name_until'] ) $PageError = "<center>\n".va(loca("ALLY_MISC_CHANGE_WAIT"), date ("Y-m-d H:i:s", $ally['name_until']))."<br></center>";
+        else if (mb_strlen ($_POST['newname'], "UTF-8")  < 3) $PageError = "<center>\n".loca("ALLY_MISC_CHANGE_NAME_SHORT")."<br></center>";
         else
         {
             AllyChangeName ( $ally['ally_id'], $_POST['newname'] );
@@ -143,13 +143,13 @@ function PageAlly_Dismiss () : void
     global $GlobalUser;
     global $session;
     global $ally;
-    global $AllianzenError;
+    global $PageError;
 
     if ( method() === "POST" && $_GET['a'] == 12 && key_exists('weiter', $_GET) && $_GET['weiter'] == 1)
     {
         $now = time ();
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
-        if ( ! ($myrank['rights'] & ARANK_DISMISS) ) $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
+        if ( ! ($myrank['rights'] & ARANK_DISMISS) ) $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
         else
         {
             // Send a message to all players to dismiss the alliance.
@@ -198,14 +198,14 @@ function AllyPage_Takeover () : void
     global $GlobalUser;
     global $session;
     global $ally;
-    global $AllianzenError;
+    global $PageError;
 
     // Exchange the titles of head and "right hand man".
     if ( $_GET['a'] == 18 && key_exists('s', $_REQUEST) && $_REQUEST['s'] == 1)
     {
         $now = time ();
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
-        if ( ! ($myrank['rights'] & ARANK_RIGHT_HAND) ) $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
+        if ( ! ($myrank['rights'] & ARANK_RIGHT_HAND) ) $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
         else
         {
             // Send a message to all participants that the power has changed (except for the head himself).
@@ -228,7 +228,7 @@ function AllyPage_Takeover () : void
             $newhead = LoadUser ( intval($_REQUEST['uid']) );
             $newhead_rank = LoadRank ( $ally['ally_id'], $newhead['allyrank'] );
             if ( $newhead['ally_id'] != $ally['ally_id'] || ($newhead_rank['rights'] & ARANK_RIGHT_HAND) == 0 ) {
-                $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
+                $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
                 return;
             }
             SetUserRank ( $newhead['player_id'], $GlobalUser['allyrank'] );

@@ -1,0 +1,167 @@
+{
+	"admin": {
+		"path": "pages_admin/admin.php",
+		"admin_update_queue": false,
+		"loca": [ "menu", "fleetorder", "admin", "install" ],
+		"header": false
+	},
+	"ainfo": {
+		"path": "pages/ainfo.php",
+		"external": true,
+		"loca": [ "ainfo" ],
+		"header": false,
+		"menu": false
+	},
+	"allianzdepot": {
+		"path": "pages/allianzdepot.php",
+		"loca": [ "menu" ]
+	},
+	"allianzen": {
+		"path": "pages/allianzen.php",
+		"loca": [ "menu", "ally" ]
+	},
+	"b_building": {
+		"path": "pages/b_building.php",
+		"loca": [ "menu", "techshort", "build" ]
+	},
+	"bericht": {
+		"path": "pages/bericht.php",
+		"loca": [ "battlereport", "espionage" ],
+		"header": false,
+		"menu": false,
+		"bare": true
+	},
+	"bewerben": {
+		"path": "pages/bewerben.php",
+		"loca": [ "menu", "ally" ]
+	},
+	"bewerbungen": {
+		"path": "pages/bewerbungen.php",
+		"loca": [ "menu", "ally" ]
+	},
+	"buddy": {
+		"path": "pages/buddy.php",
+		"loca": [ "menu", "buddy" ]
+	},
+	"buildings": {
+		"path": "pages/buildings.php",
+		"loca": [ "menu", "techshort", "build", "premium" ]
+	},
+	"changelog": {
+		"path": "pages/changelog.php",
+		"loca": [ "menu", "changelog" ]
+	},
+	"fleet_templates": {
+		"path": "pages/fleet_templates.php",
+		"loca": [ "menu", "fleet" ]
+	},
+	"flotten1": {
+		"path": "pages/flotten1.php",
+		"loca": [ "menu", "fleetorder", "fleet" ]
+	},
+	"flotten2": {
+		"path": "pages/flotten2.php",
+		"loca": [ "menu", "fleetorder", "fleet" ]
+	},
+	"flotten3": {
+		"path": "pages/flotten3.php",
+		"loca": [ "menu", "fleetorder", "fleet" ]
+	},
+	"flottenversand": {
+		"path": "pages/flottenversand.php",
+		"loca": [ "menu", "fleetorder", "fleet" ],
+		"redirect_page": "flotten1",
+		"redirect_sec": 1
+	},
+	"galaxy": {
+		"path": "pages/galaxy.php",
+		"loca": [ "menu", "galaxy", "espionage" ],
+		"header": false
+	},
+	"imperium": {
+		"path": "pages/imperium.php",
+		"loca": [ "menu", "empire" ],
+		"header": false
+	},
+	"infos": {
+		"path": "pages/infos.php",
+		"loca": [ "menu", "techlong", "jumpgate", "infos" ]
+	},
+	"logout": {
+		"path": "pages/logout.php",
+		"loca": [ "reg" ]
+	},
+	"messages": {
+		"path": "pages/messages.php",
+		"loca": [ "menu", "messages" ]
+	},
+	"micropayment": {
+		"path": "pages/micropayment.php",
+		"loca": [ "menu", "premium" ]
+	},
+	"notizen": {
+		"path": "pages/notizen.php",
+		"loca": [ "notes" ],
+		"header": false,
+		"menu": false
+	},
+	"options": {
+		"path": "pages/options.php",
+		"loca": [ "menu", "options" ]
+	},
+	"overview": {
+		"path": "pages/overview.php",
+		"admin_update_queue": false,
+		"update_activity": false,
+		"loca": [ "menu", "fleetorder", "overview", "events" ]
+	},
+	"payment": {
+		"path": "pages/payment.php",
+		"loca": [ "menu", "premium" ]
+	},
+	"phalanx": {
+		"path": "pages/phalanx.php",
+		"loca": [ "menu", "fleetorder", "events", "phalanx" ]
+	},
+	"pranger": {
+		"path": "pages/pranger.php",
+		"external": true,
+		"loca": [ "menu", "pranger" ]
+	},
+	"renameplanet": {
+		"path": "pages/renameplanet.php",
+		"loca": [ "menu", "renameplanet" ]
+	},
+	"resources": {
+		"path": "pages/resources.php",
+		"loca": [ "menu", "resources", "premium" ]
+	},
+	"sprungtor": {
+		"path": "pages/sprungtor.php",
+		"loca": [ "menu", "jumpgate" ]
+	},
+	"statistics": {
+		"path": "pages/statistics.php",
+		"loca": [ "menu", "statistics" ]
+	},
+	"suche": {
+		"path": "pages/suche.php",
+		"loca": [ "menu", "search" ]
+	},
+	"techtree": {
+		"path": "pages/techtree.php",
+		"loca": [ "menu", "techtree" ]
+	},
+	"techtreedetails": {
+		"path": "pages/techtreedetails.php",
+		"loca": [ "menu", "techtree" ]
+	},
+	"trader": {
+		"path": "pages/trader.php",
+		"loca": [ "menu", "trader" ]
+	},
+	"writemessages": {
+		"path": "pages/writemessages.php",
+		"loca": [ "menu", "messages" ]
+	}
+}

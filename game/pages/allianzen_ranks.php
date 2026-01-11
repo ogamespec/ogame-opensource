@@ -11,12 +11,12 @@ function PageAlly_Ranks () : void
     global $GlobalUser;
     global $session;
     global $ally;
-    global $AllianzenError;
+    global $PageError;
 
     $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
     if ( ! ($myrank['rights'] & ARANK_W_MEMBERS) )
     {
-        $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
+        $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
         return;
     }
 
@@ -24,7 +24,7 @@ function PageAlly_Ranks () : void
     {
         if ( key_exists ('newrangname', $_POST) )       // create a rank
         {
-            if ( !preg_match ("/^[a-zA-Z0-9\.\_\- ]+$/", $_POST['newrangname'] ) ) $AllianzenError = "<center>\n".loca("ALLY_RANK_ERROR_SPECIAL_CHARS")."<br></center>";
+            if ( !preg_match ("/^[a-zA-Z0-9\.\_\- ]+$/", $_POST['newrangname'] ) ) $PageError = "<center>\n".loca("ALLY_RANK_ERROR_SPECIAL_CHARS")."<br></center>";
             else AddRank ( $ally['ally_id'], $_POST['newrangname'] );
         }
         else                                                              // change ranks

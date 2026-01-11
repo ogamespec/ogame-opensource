@@ -8,24 +8,6 @@
 
 // Shipyard, Defense, and Research.
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "techshort", $GlobalUser['lang'] );
-loca_add ( "build", $GlobalUser['lang'] );
-loca_add ( "premium", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval ($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 // POST request processing.
 if ( method () === "POST" && !$GlobalUser['vacation'] )
 {
@@ -85,10 +67,6 @@ if ( method () === "GET"  && !$GlobalUser['vacation'] )
 		}
 	}
 }
-
-PageHeader ("buildings");
-
-BeginContent ();
 
 echo "<title> \n";
 echo loca("BUILD_BUILDINGS_HEAD") . "\n";
@@ -551,8 +529,4 @@ document.addEventListener("visibilitychange", function() {
 }
 
 echo "<br><br><br><br>\n";
-EndContent();
-
-PageFooter ();
-ob_end_flush ();
 ?>

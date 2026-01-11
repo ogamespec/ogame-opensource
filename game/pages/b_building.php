@@ -6,38 +6,15 @@
 
 // Building structures.
 
-$BuildError = "";
-
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "techshort", $GlobalUser['lang'] );
-loca_add ( "build", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ( $GlobalUser['player_id'], intval ($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-
 // Processing parameters.
 if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] )
 {
-    if ( $_GET['modus'] === 'add' ) $BuildError = BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 0 );
-    else if ( $_GET['modus'] === 'destroy' ) $BuildError = BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 1 );
-    else if ( $_GET['modus'] === 'remove' ) $BuildError = BuildDeque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['listid']) );
+    if ( $_GET['modus'] === 'add' ) $PageError = BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 0 );
+    else if ( $_GET['modus'] === 'destroy' ) $PageError = BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 1 );
+    else if ( $_GET['modus'] === 'remove' ) $PageError = BuildDeque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['listid']) );
 }
 
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
 $prem = PremiumStatus ($GlobalUser);
-
-PageHeader ("b_building");
-
-BeginContent();
 
 ?>
 <script type="text/javascript">
@@ -242,8 +219,4 @@ foreach ( $buildmap as $i => $id )
 echo "  </table>\n</tr>\n</table>\n";
 
 echo "<br><br><br><br>\n";
-EndContent();
-
-PageFooter ("", $BuildError);
-ob_end_flush ();
 ?>

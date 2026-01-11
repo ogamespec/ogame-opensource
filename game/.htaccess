@@ -13,3 +13,8 @@ deny from all
 order allow,deny
 deny from all
 </Files>
+
+<Files router.json>
+order allow,deny
+deny from all
+</Files>

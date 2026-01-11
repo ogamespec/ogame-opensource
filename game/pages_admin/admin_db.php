@@ -66,35 +66,35 @@ function ListDatabaseBackups() : void
 
 function CreateBackup () : void
 {
-    global $AdminMessage;
+    global $PageMessage;
     $fname = "temp/backup_" . date_format(new DateTime(), "dmY_His") . ".json";
     $source = SerializeDB ();
     file_put_contents ($fname, $source);
-    $AdminMessage .= va(loca("ADM_DB_BACKUP_SAVED"), $fname);
+    $PageMessage .= va(loca("ADM_DB_BACKUP_SAVED"), $fname);
 }
 
 function DeleteBackup (string $fname) : void
 {
-    global $AdminMessage, $AdminError;
+    global $PageMessage, $PageError;
     $fname = "temp/" . $fname;
     if (strstr ($fname, "backup") && file_exists($fname)) {
         unlink ($fname);
-        $AdminMessage .= va(loca("ADM_DB_BACKUP_DELETED"), $fname);
+        $PageMessage .= va(loca("ADM_DB_BACKUP_DELETED"), $fname);
     }
     else {
-        $AdminError .= va(loca("ADM_DB_BACKUP_NOT_FOUND"), $fname);
+        $PageError .= va(loca("ADM_DB_BACKUP_NOT_FOUND"), $fname);
     }
 }
 
 function RestoreBackup (string $fname) : void
 {
-    global $AdminMessage;
+    global $PageMessage;
     LockTables ();
     $fname = "temp/" . $fname;
     $source = file_get_contents ($fname);
     DeserializeDB ($source);
     UnlockTables ();
-    $AdminMessage .= va(loca("ADM_DB_BACKUP_RESTORED"), $fname);
+    $PageMessage .= va(loca("ADM_DB_BACKUP_RESTORED"), $fname);
 }
 
 function Admin_DB () : void

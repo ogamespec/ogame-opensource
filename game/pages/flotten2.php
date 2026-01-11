@@ -6,27 +6,8 @@
 
 // Fleet 2: Prepare target coordinates
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "fleetorder", $GlobalUser['lang'] );
-loca_add ( "fleet", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval ($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 if ( method() !== "POST" ) MyGoto ( "flotten1" );
 
-PageHeader ("flotten2");
-BeginContent();
 ?>
 
 
@@ -235,8 +216,3 @@ BeginContent();
 <script>
 window.onload=shortInfo;
 </script><br><br><br><br>
-<?php
-EndContent ();
-PageFooter ();
-ob_end_flush ();
-?>

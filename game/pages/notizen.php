@@ -7,18 +7,6 @@
 // ⚠️Important! This game feature involves a rich interaction with input from the user.
 // You need to pay a lot of attention to the security of the input data (size and content checks).
 
-loca_add ( "notes", $GlobalUser['lang'] );
-
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-
 function CreateNewNote () : void
 {
     echo "<form action=\"?page=notizen&session=".$_GET['session']."\" method=post>\n";
@@ -82,9 +70,6 @@ if ( key_exists ('a', $_GET) )
     if ( intval($_GET['a']) == 2 && LoadNote ( $GlobalUser['player_id'], intval($_GET['n']) ) === FALSE ) die();
 }
 
-PageHeader ("notizen", true, false);
-
-BeginContent ();
 echo "<script src=\"js/cntchar.js\" type=\"text/javascript\"></script>\n";
 echo "<script src=\"js/win.js\" type=\"text/javascript\"></script>\n";
 
@@ -132,8 +117,4 @@ else
     echo "</form><br><br><br><br>\n";
 }
 
-EndContent ();
-
-PageFooter ("","",true,0,true);
-ob_end_flush ();
 ?>

@@ -5,22 +5,6 @@
 
 // Payment.
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "premium", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 $ShowActivateDlg = false;
 $CouponError = "";
 
@@ -52,9 +36,6 @@ if ( method() === "POST" )
 
 }
 
-PageHeader ("payment");
-
-BeginContent ();
 ?>
 
 <?php
@@ -109,10 +90,4 @@ BeginContent ();
 
 <?php
     }
-?>
-
-<?php
-EndContent ();
-PageFooter ();
-ob_end_flush ();
 ?>

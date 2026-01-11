@@ -14,7 +14,7 @@ function PageAlly_Settings () : void
     global $session;
     global $ally;
     global $GlobalUser;
-    global $AllianzenError;
+    global $PageError;
 
     // Limit the number of characters of texts.
     $MAXTEXT = 5000;
@@ -22,7 +22,7 @@ function PageAlly_Settings () : void
     $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
     if ( ! ($myrank['rights'] & ARANK_W_MEMBERS) )
     {
-        $AllianzenError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
+        $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
         return;
     }
 
@@ -59,7 +59,7 @@ function PageAlly_Settings () : void
             dbquery ($query);
 
             if ($_POST['fname'] !== "") {    // Name of the founder's rank
-                if ( !preg_match ("/^[a-zA-Z0-9\.\_\- ]+$/", $_POST['fname'] ) ) $AllianzenError = "<center>\n".loca("ALLY_RANK_ERROR_SPECIAL_CHARS")."<br></center>";
+                if ( !preg_match ("/^[a-zA-Z0-9\.\_\- ]+$/", $_POST['fname'] ) ) $PageError = "<center>\n".loca("ALLY_RANK_ERROR_SPECIAL_CHARS")."<br></center>";
                 else {
                     $query = "UPDATE ".$db_prefix."allyranks SET name = '".$_POST['fname']."' WHERE ally_id = $ally_id AND rank_id = 0";
                     dbquery ($query);

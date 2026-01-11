@@ -7,24 +7,6 @@
 
 $maxchars = 2000;
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "ally", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
-PageHeader ("bewerbungen");
-
 $ally = LoadAlly ( $GlobalUser['ally_id'] );
 
 $show = 0;
@@ -93,7 +75,7 @@ $apps = dbrows ( $result );
 
 if ($apps > 0 )
 {
-    BeginContent ();
+
 ?>
 <table width=519>
 <tr><td class=c colspan=2><?=va(loca("ALLY_APPA_OVERVIEW"), $ally['tag']);?></td></tr>
@@ -131,17 +113,15 @@ if ($apps > 0 )
 ?>
 </table><br><br><br><br>
 <?php
-    EndContent ();
+
 }
 else
 {
-    BeginContent ();
+
 ?>
 <table width=519><tr><td class=c colspan=2><?=va(loca("ALLY_APPA_OVERVIEW"), $ally['tag']);?></td></tr><tr><th colspan=2><?=loca("ALLY_APPA_NONE");?></th></tr></table><br><br><br><br>
 <?php
-    EndContent ();
+
 }
 
-PageFooter ();
-ob_end_flush ();
 ?>

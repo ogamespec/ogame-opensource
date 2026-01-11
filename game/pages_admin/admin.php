@@ -21,16 +21,6 @@
 
 if ( $GlobalUser['admin'] == 0 ) RedirectHome ();    // regular users are not allowed
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "fleetorder", $GlobalUser['lang'] );
-loca_add ( "admin", $GlobalUser['lang'] );
-loca_add ( "install", $GlobalUser['lang'] );
-
-$AdminMessage = "";
-$AdminError = "";
-
-$session = $_GET['session'];
-
 if ( key_exists ('mode', $_GET) ) $mode = $_GET['mode'];
 else $mode = "Home";
 
@@ -200,11 +190,6 @@ include "admin_mods.php";
 
 // ========================================================================================
 
-PageHeader ("admin", true);
-
-echo "<!-- CONTENT AREA -->\n";
-echo "<div id='content'>\n";
-echo "<center>\n";
 echo "<table width=\"750\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\">\n\n";
 
 if ( $mode === "Home" ) Admin_Home ();
@@ -237,11 +222,4 @@ else Admin_Home ();
 
 echo "</table>\n";
 echo "<br><br><br><br>\n";
-echo "</center>\n";
-echo "</div>\n";
-echo "<!-- END CONTENT AREA -->\n";
-
-PageFooter ($AdminMessage, $AdminError, false, 0, true);
-
-ob_end_flush ();
 ?>

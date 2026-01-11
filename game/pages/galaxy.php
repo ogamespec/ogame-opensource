@@ -4,26 +4,6 @@
 /** @var array $GlobalUni */
 /** @var array $UnitParam */
 
-$GalaxyMessage = "";
-$GalaxyError = "";
-
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "galaxy", $GlobalUser['lang'] );
-loca_add ( "espionage", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
 
 function empty_row ($p)
@@ -45,32 +25,32 @@ if ( method () === "POST" && isset($_POST['aktion']) )
 
         if ( !in_array ($type, $defmap_norak ) ) $type = 0;
 
-        if ( $GalaxyError === "" )    // Check the permitted parameters
+        if ( $PageError === "" )    // Check the permitted parameters
         {
-            if ($amount == 0) $GalaxyError = loca("GALAXY_RAK_NO_ROCKETS");
-            if ($amount > $aktplanet["d".GID_D_IPM]) $GalaxyError = loca("GALAXY_RAK_NOT_ENOUGH");
-            if ($dist > $ipm_radius) $GalaxyError = loca("GALAXY_RAK_WEAK_DRIVE");
+            if ($amount == 0) $PageError = loca("GALAXY_RAK_NO_ROCKETS");
+            if ($amount > $aktplanet["d".GID_D_IPM]) $PageError = loca("GALAXY_RAK_NOT_ENOUGH");
+            if ($dist > $ipm_radius) $PageError = loca("GALAXY_RAK_WEAK_DRIVE");
         }
 
-        if ( $GalaxyError === "" )        // Check player modes
+        if ( $PageError === "" )        // Check player modes
         {
-            if ($GlobalUser['vacation']) $GalaxyError = loca("GALAXY_RAK_VACATION_SELF");
-            else if ($target_user['vacation']) $GalaxyError = loca("GALAXY_RAK_VACATION_OTHER");
-            else if ($target['owner_id'] == $GlobalUser['player_id']) $GalaxyError = loca("GALAXY_RAK_SELF");
-            else if ( IsPlayerNewbie($target_user['player_id']) || IsPlayerStrong($target_user['player_id']) ) $GalaxyError = loca("GALAXY_RAK_NOOB");
+            if ($GlobalUser['vacation']) $PageError = loca("GALAXY_RAK_VACATION_SELF");
+            else if ($target_user['vacation']) $PageError = loca("GALAXY_RAK_VACATION_OTHER");
+            else if ($target['owner_id'] == $GlobalUser['player_id']) $PageError = loca("GALAXY_RAK_SELF");
+            else if ( IsPlayerNewbie($target_user['player_id']) || IsPlayerStrong($target_user['player_id']) ) $PageError = loca("GALAXY_RAK_NOOB");
         }
 
-        if ( $GalaxyError === "" )
+        if ( $PageError === "" )
         {
             LaunchRockets ( $origin, $target, 30 + 60 * $dist, $amount, $type );
             $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // get the latest planetary data after the IPM is launched.
             if ($aktplanet == null) {
                 Error ("Can't get aktplanet");
             }
-            $GalaxyMessage = va ( loca("GALAXY_RAK_LAUNCHED"), $amount );
+            $PageMessage = va ( loca("GALAXY_RAK_LAUNCHED"), $amount );
         }
     }
-    else $GalaxyError = loca("GALAXY_RAK_NO_TARGET");
+    else $PageError = loca("GALAXY_RAK_NO_TARGET");
 }
 
 // Choose a solar system.
@@ -135,10 +115,6 @@ $maxfleet = $GlobalUser['r'.GID_R_COMPUTER] + 1;
 
 $prem = PremiumStatus ($GlobalUser);
 if ( $prem['admiral'] ) $maxfleet += 2;
-
-PageHeader ("galaxy", true);
-
-BeginContent ();
 
 /***** Scripts. *****/
 
@@ -779,8 +755,4 @@ echo "</table>\n\n";
 }    // Not enough deuterium
 
 echo "<br><br><br><br>\n";
-EndContent ();
-
-PageFooter ($GalaxyMessage, $GalaxyError, false, 0, true);
-ob_end_flush ();
 ?>

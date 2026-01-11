@@ -4,21 +4,8 @@
 if ( !file_exists ("config.php"))
 {
     echo "<html><head><meta http-equiv='refresh' content='0;url=install.php' /></head><body></body></html>";
-    exit ();
 }
 else {
-    require_once "config.php";
+    echo "<html><head><meta http-equiv='refresh' content='0;url=index.php?page=pranger' /></head><body></body></html>";
 }
-
-header('Pragma:no-cache');
-
-require_once "core/core.php";
-
-InitDB();
-
-$GlobalUni = LoadUniverse ();
-
-ModsInit();
-
-include "pages/pranger.php";
 ?>

@@ -7,42 +7,13 @@
 
 // TODO: Carefully check the generated HTML code for authenticity with the original (especially the recently discovered issue with "free" #76).
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "fleetorder", $GlobalUser['lang'] );
-loca_add ( "overview", $GlobalUser['lang'] );
-loca_add ( "events", $GlobalUser['lang'] );
-
-$OverviewMessage = "";
-$OverviewError = "";
-
 require_once "overview_events.php";
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-
-$now = time();
-if ($GlobalUser['admin'] == 0) UpdateQueue ( $now );    // Do not update Overview for admins
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
-PageHeader ("overview");
-
-// *******************************************************************
 
 if ( key_exists ('lgn', $_GET) )
 {
 
     UpdatePlanetActivity ( $aktplanet['planet_id'] );  // Update the activity on the Home Planet when you log into the game.
 }
-
-$uni = $GlobalUni;
-
-BeginContent ();
 ?>
 
 <script type="text/javascript"> 
@@ -89,7 +60,7 @@ function t_building() {
 </script> 
 
 <?php
-    if ( $now < $uni['news_until'])        // Show the news?
+    if ( $now < $GlobalUni['news_until'])        // Show the news?
     {
         $combox_url = "";
         if (!empty($GlobalUni['ext_board'])) $combox_url = $GlobalUni['ext_board'];
@@ -99,8 +70,8 @@ function t_building() {
 <!-- _________________ComBox___________________ --> 
 <div id="combox_container" > 
 <a id="combox" href="<?=$combox_url;?>" target=_blank> 
-<div id="anfang"><?=$uni['news1'];?></div> 
-<div id="ende"><?=$uni['news2'];?></div> 
+<div id="anfang"><?=$GlobalUni['news1'];?></div> 
+<div id="ende"><?=$GlobalUni['news2'];?></div> 
 </a> 
 </div> 
 <!-- _________________ComBox Ende _____________ --> 
@@ -204,16 +175,12 @@ else $score = nicenum(floor($GlobalUser['score1']/1000));
 echo "<tr><th> ".va(loca("OVERVIEW_DIAM"), nicenum($aktplanet['diameter']))."     ".va(loca("OVERVIEW_FIELDS"), $aktplanet['fields'], $aktplanet['maxfields'])."   </th></tr>\n";
 echo "<tr><th> ".va ( loca("OVERVIEW_TEMP"), $aktplanet['temp'], $aktplanet['temp']+40 )."   \n";
 echo "<tr><th> ".va ( loca("OVERVIEW_COORD"), "<a href=\"index.php?page=galaxy&galaxy=".$aktplanet['g']."&system=".$aktplanet['s']."&position=".$aktplanet['p']."&session=$session\" >[".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."]</a>")."\n";
-echo "<tr><th> ".va( loca("OVERVIEW_RANK"),  $score,  "<a href='index.php?page=statistics&session=$session&start=".(floor($GlobalUser['place1']/100)*100+1)."'>".nicenum($GlobalUser['place1'])."</a>", nicenum($uni['usercount']) )."     \n";
+echo "<tr><th> ".va( loca("OVERVIEW_RANK"),  $score,  "<a href='index.php?page=statistics&session=$session&start=".(floor($GlobalUser['place1']/100)*100+1)."'>".nicenum($GlobalUser['place1'])."</a>", nicenum($GlobalUni['usercount']) )."     \n";
 
 echo "</table>\n<br><br><br><br><br>\n";
-EndContent ();
 
-if ( $GlobalUser['vacation']) $OverviewError = "<center>\n".loca("OVERVIEW_VM")."<br></center>\n";
-if ( $uni['freeze'] ) $OverviewError .= "<center>\n".loca("OVERVIEW_UNI_FREEZE")."<br></center>\n";
+if ( $GlobalUser['vacation']) $PageError = "<center>\n".loca("OVERVIEW_VM")."<br></center>\n";
+if ( $GlobalUni['freeze'] ) $PageError .= "<center>\n".loca("OVERVIEW_UNI_FREEZE")."<br></center>\n";
 
-if ( $GlobalUser['admin'] > 0 ) $OverviewMessage .= "<center>".loca("OVERVIEW_ADMIN_NOTE")."<br></center>\n";
-
-PageFooter ($OverviewMessage, $OverviewError);
-ob_end_flush ();
+if ( $GlobalUser['admin'] > 0 ) $PageMessage .= "<center>".loca("OVERVIEW_ADMIN_NOTE")."<br></center>\n";
 ?>

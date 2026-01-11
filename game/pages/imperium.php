@@ -5,12 +5,6 @@
 
 // Empire.
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "empire", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-
 // Processing parameters.
 if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] )
 {
@@ -19,23 +13,10 @@ if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] )
     else if ( $_GET['modus'] === 'remove' ) BuildDeque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['listid']) );
 }
 
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 $prem = PremiumStatus ($GlobalUser);
 if (!$prem['commander']) {
     MyGoto ("overview");
 }
-
-PageHeader ("imperium", true);
 
 $planettype = intval($_GET['planettype']);
 
@@ -66,10 +47,8 @@ if ( $planettype == 1 || $planettype == 3)
     }
 }
 
-$unitab = $GlobalUni;
-$speed = $unitab['speed'];
+$speed = $GlobalUni['speed'];
 
-BeginContent ();
 ?>
 
 <script>t=0;</script>  
@@ -516,8 +495,3 @@ BeginContent ();
 
 </table>
 <br><br><br><br>
-<?php
-EndContent();
-PageFooter ("", "", false, 0, true);
-ob_end_flush ();
-?>

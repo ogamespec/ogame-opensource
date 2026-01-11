@@ -8,25 +8,6 @@
 
 // Also in our project there is no billing system (communism). Instead of payment, coupons are used, which are distributed by the administrator.
 
-$MicropaymentMessage = "";
-$MicropaymentError = "";
-
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "premium", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 // Cost of Officers.
 $price = array ( USER_OFFICER_COMMANDER => 10000, USER_OFFICER_ADMIRAL => 10000, USER_OFFICER_ENGINEER => 10000, USER_OFFICER_GEOLOGE => 10000, USER_OFFICER_TECHNOCRATE => 10000 );
 
@@ -55,7 +36,7 @@ if ( key_exists ( 'buynow', $_GET ) )
         else if ( $days == 90) $required = $price[$type] * 10;
         if ( $dm < $required )
         {
-            $MicropaymentError = loca ("PREM_NOTENOUGH") . "<br>";
+            $PageError = loca ("PREM_NOTENOUGH") . "<br>";
         }
         else
         {
@@ -73,15 +54,11 @@ if ( key_exists ( 'buynow', $_GET ) )
 
                 RecruitOfficer ( $GlobalUser['player_id'], $type, $days * 24 * 60 * 60 );
                 
-                $MicropaymentMessage = loca ("PREM_OK") . "<br>";
+                $PageMessage = loca ("PREM_OK") . "<br>";
             }
         }
     }
 }
-
-PageHeader ("micropayment");
-
-BeginContent ();
 
 ?>
 
@@ -288,8 +265,4 @@ BeginContent ();
 <?php
 
 echo "<br><br><br><br>\n";
-EndContent ();
-
-PageFooter ($MicropaymentMessage, $MicropaymentError);
-ob_end_flush ();
 ?>

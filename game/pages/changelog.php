@@ -1,7 +1,5 @@
 <?php
 
-/** @var array $GlobalUser */
-
 // Version History.
 $changelog = array ( 
     "0.312apl2", "0.312apl3", "0.312apl4", "0.312apl5", "0.312apl6", "0.312apl7", "0.312apl8", "0.312apl9", "0.312apl10", 
@@ -16,24 +14,6 @@ $changelog = array (
     "0.78", "0.78a", "0.78b", "0.78c", "0.80", "0.81", "0.82", "0.83", "0.84"
 );
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "changelog", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
-PageHeader ("changelog");
-BeginContent ();
 ?>
 
 <center>
@@ -60,8 +40,3 @@ BeginContent ();
 
 </table><br><br><br><br>
 
-<?php
-EndContent ();
-PageFooter ();
-ob_end_flush ();
-?>

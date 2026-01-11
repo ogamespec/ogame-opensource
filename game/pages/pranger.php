@@ -1,13 +1,10 @@
 <?php
 
-/** @var array $GlobalUser */
 /** @var string $db_prefix */
 
 // Pillar of Shame.
 
 $limit = 50;    // Entries per page.
-
-$uni = LoadUniverse();
 $internal = key_exists ( 'session', $_GET );
 
 // Fixed version of the date
@@ -17,56 +14,10 @@ function MyDate ( $fmt, $timestamp )
     return $date->format ($fmt);
 }
 
-if ($internal)
-{
-    loca_add ( "menu", $GlobalUser['lang'] );
-    loca_add ( "pranger", $GlobalUser['lang'] );
-
-    if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-    $GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-    $now = time();
-    UpdateQueue ( $now );
-    $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-    if ($aktplanet == null) {
-        Error ("Can't get aktplanet");
-    }
-    ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-    UpdatePlanetActivity ( $aktplanet['planet_id'] );
-    UpdateLastClick ( $GlobalUser['player_id'] );
-    $session = $_GET['session'];
-
-    PageHeader ("pranger");
-
-    BeginContent ();
-}
-else {
-
-    // For external reference to the Pillar of Shame, try to take the language from the cookies. If there is no language in cookies, try to take the language of the Universe.
-    // Otherwise, use the default language.
-
-    if ( key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $_COOKIE['ogamelang'];
-    else $loca_lang = $uni['lang'];
-    if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
-    
-    loca_add ( "pranger", $loca_lang );
-}
-
 // ************************************************************************************
 ?>
 
-<html>
- <head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <link rel='stylesheet' type='text/css' href='css/default.css' />
-  <link rel='stylesheet' type='text/css' href='css/formate.css' />
-  <link rel="stylesheet" type="text/css" href="<?=UserSkin();?>formate.css">
-
-
- </head>
-   <body>
-   <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-  <center>
-   <h1><?=va(loca("PRANGER_TITLE"), $uni['num']);?></h1>
+   <h1><?=va(loca("PRANGER_TITLE"), $GlobalUni['num']);?></h1>
    <p><?=loca("PRANGER_INFO");?></p>
 
    <table border="0" cellpadding="2" cellspacing="1">
@@ -108,21 +59,3 @@ else {
       </th>
    </tr>
    </table>
-  </center>
-
- </body>
-</html>
-
-<?php
-
-// ************************************************************************************
-
-if ($internal)
-{
-    echo "<br><br><br><br>\n";
-    EndContent ();
-
-    PageFooter ("", "");
-    ob_end_flush ();
-}
-?>

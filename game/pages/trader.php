@@ -7,25 +7,6 @@
 
 $trader_dm = 2500;
 
-$TraderMessage = "";
-$TraderError = "";
-
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "trader", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 $not_enough = false;
 
 function CallNewTrader ()
@@ -112,7 +93,7 @@ if ( method () === "POST" )
             if ( $dm < $trader_dm )
             {
                 $not_enough = true;
-                $TraderError = loca("TRADER_ERROR_DM") . "<br>";
+                $PageError = loca("TRADER_ERROR_DM") . "<br>";
             }
             else
             {
@@ -122,7 +103,7 @@ if ( method () === "POST" )
         }
         else if ( key_exists ( 'trade', $_POST) )
         {
-            $TraderError = '';
+            $PageError = '';
 
             $value_1 = 0;
             $value_2 = 0;
@@ -145,10 +126,10 @@ if ( method () === "POST" )
                 $met = floor ( $value_2 * $GlobalUser['rate_m'] / $GlobalUser['rate_k'] ) + 
                        floor ( $value_3 * $GlobalUser['rate_m'] / $GlobalUser['rate_d'] );
 
-                if ( $met > $aktplanet['m']) $TraderError = loca("TRADER_ERROR_RES") . "<br>";
-                else if ( $crys > $aktplanet['kmax'] || $deut > $aktplanet['dmax'] ) $TraderError = loca("TRADER_ERROR_STORAGE") . "<br>";
+                if ( $met > $aktplanet['m']) $PageError = loca("TRADER_ERROR_RES") . "<br>";
+                else if ( $crys > $aktplanet['kmax'] || $deut > $aktplanet['dmax'] ) $PageError = loca("TRADER_ERROR_STORAGE") . "<br>";
 
-                if ( $TraderError === '' && $met > 0 ) {
+                if ( $PageError === '' && $met > 0 ) {
                     $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
                     dbquery ( $query );
                     $query = "UPDATE ".$db_prefix."planets SET m = m - '".intval($met)."', k = '".intval($crys)."', d = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
@@ -165,10 +146,10 @@ if ( method () === "POST" )
                 $crys = floor ( $value_1 * $GlobalUser['rate_k'] / $GlobalUser['rate_m'] ) + 
                         floor ( $value_3 * $GlobalUser['rate_k'] / $GlobalUser['rate_d'] );
 
-                if ( $crys > $aktplanet['k']) $TraderError = loca("TRADER_ERROR_RES") . "<br>";
-                else if ( $met > $aktplanet['mmax'] || $deut > $aktplanet['dmax'] ) $TraderError = loca("TRADER_ERROR_STORAGE") . "<br>";
+                if ( $crys > $aktplanet['k']) $PageError = loca("TRADER_ERROR_RES") . "<br>";
+                else if ( $met > $aktplanet['mmax'] || $deut > $aktplanet['dmax'] ) $PageError = loca("TRADER_ERROR_STORAGE") . "<br>";
 
-                if ( $TraderError === '' && $crys > 0 ) {
+                if ( $PageError === '' && $crys > 0 ) {
                     $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
                     dbquery ( $query );
                     $query = "UPDATE ".$db_prefix."planets SET k = k - '".intval($crys)."', m = '".intval($met)."', d = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
@@ -185,10 +166,10 @@ if ( method () === "POST" )
                 $deut = floor ( $value_1 * $GlobalUser['rate_d'] / $GlobalUser['rate_m'] ) + 
                         floor ( $value_2 * $GlobalUser['rate_d'] / $GlobalUser['rate_k'] );
 
-                if ( $deut > $aktplanet['d']) $TraderError .= loca("TRADER_ERROR_RES") . "<br>";
-                else if ( $met > $aktplanet['mmax'] || $crys > $aktplanet['kmax'] ) $TraderError .= loca("TRADER_ERROR_STORAGE") . "<br>";
+                if ( $deut > $aktplanet['d']) $PageError .= loca("TRADER_ERROR_RES") . "<br>";
+                else if ( $met > $aktplanet['mmax'] || $crys > $aktplanet['kmax'] ) $PageError .= loca("TRADER_ERROR_STORAGE") . "<br>";
 
-                if ( $TraderError === '' && $deut > 0 ) {
+                if ( $PageError === '' && $deut > 0 ) {
                     $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
                     dbquery ( $query );
                     $query = "UPDATE ".$db_prefix."planets SET d = d - '".intval($deut)."', k = '".intval($crys)."', m = '".intval($met)."' WHERE planet_id = " . $aktplanet['planet_id'];
@@ -205,7 +186,7 @@ if ( method () === "POST" )
         if ( $dm < $trader_dm )
         {
             $not_enough = true;
-            $TraderError = loca("TRADER_ERROR_DM") . "<br>";
+            $PageError = loca("TRADER_ERROR_DM") . "<br>";
         }
         else
         {
@@ -215,8 +196,6 @@ if ( method () === "POST" )
     }
 
 }
-
-PageHeader ("trader");
 
 function is_selected ( $a, $b )
 {
@@ -244,7 +223,6 @@ if ( $GlobalUser['trader'] > 0 )
     else $ratewhat = 1.0;
 }
 
-BeginContent ();
 ?>
 <script>
 storage      = new Array(<?=$storage;?>);
@@ -523,8 +501,3 @@ function setMaxValue(id) {
     }
 ?>
 	<br><br><br><br>
-<?php
-EndContent ();
-PageFooter ($TraderMessage, $TraderError);
-ob_end_flush ();
-?>
