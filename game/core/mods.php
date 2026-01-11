@@ -10,6 +10,8 @@ abstract class GameMod {
     abstract public function uninstall() : void;
     abstract public function init() : void;
 
+    // Hooks
+
     public function route() : bool {
         return false;
     }
