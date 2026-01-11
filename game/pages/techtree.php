@@ -75,11 +75,11 @@ foreach ($techtree as $i => $req )
     foreach ($req['techs'] as $tech) {
 
         if (count ($requrements[$tech]) == 0) $details = "&nbsp;";
-        else $details = "<a href=\"index.php?page=techtreedetails&session=".$_GET['session']."&tid=$c\">[i]</a>";
+        else $details = "<a href=\"index.php?page=techtreedetails&session=".$_GET['session']."&tid=$tech\">[i]</a>";
 
         echo "<tr> \n";
         echo "<td class=l> \n";
-        echo "<table width=\"100%\" border=0 cellspacing=0 cellpadding=0><tr><td align=left><a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$c\">".loca("NAME_$c")."</a> \n";
+        echo "<table width=\"100%\" border=0 cellspacing=0 cellpadding=0><tr><td align=left><a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$tech\">".loca("NAME_$tech")."</a> \n";
         echo "</td><td align=right>$details</td></tr></table></td> \n";
 
         echo "<td class=l> \n";
