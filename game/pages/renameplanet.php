@@ -7,9 +7,12 @@
 
 // Sneakily hidden in the Overview - you have to click on the name of the planet.
 
-function PlanetDestroyMenu () : never
+$show_main_menu = true;
+
+function PlanetDestroyMenu () : bool
 {
     global $GlobalUser;
+    global $aktplanet;
 
     echo "<h1>".loca("REN_TITLE")."</h1>\n";
     echo "<form action=\"index.php?page=renameplanet&session=".$_GET['session']."&pl=".$aktplanet['planet_id']."\" method=\"POST\">\n";
@@ -23,6 +26,7 @@ function PlanetDestroyMenu () : never
     echo "<th><input type=\"submit\" name=\"aktion\" value=\"".loca("REN_DELETE_PLANET")."\" alt=\"".loca("REN_ABANDON_COLONY")."\"></th></tr>\n";
     echo "</table>\n</form>\n</center>\n\n";
     echo "<br><br><br><br>\n";
+    return false;
 }
 
 // POST request processing.
@@ -35,7 +39,7 @@ if ( method() === "POST" )
     }
     else if ( $_POST['aktion'] === loca("REN_ABANDON_COLONY") )
     {
-        PlanetDestroyMenu ();
+        $show_main_menu = PlanetDestroyMenu ();
     }
     else if ( $_POST['aktion'] === loca("REN_DELETE_PLANET") )
     {
@@ -110,23 +114,27 @@ if ( method() === "POST" )
     }
 }
 
-$name = $aktplanet['name'];
-$maxlen = 20;
+if ($show_main_menu) {
 
-echo "<h1>".loca("REN_TITLE")."</h1>\n";
-echo "<form action=\"index.php?page=renameplanet&session=".$_GET['session']."&pl=".$aktplanet['planet_id']."\" method=\"POST\">\n";
-echo "<input type='hidden' name='page' value='renameplanet'>\n";
-echo "<center>\n";
-echo "<table width=519>\n";
-echo "  <tr>\n    <td class=\"c\" colspan=\"3\">".loca("REN_PLANET_INFO")."</td>\n  </tr>\n";
-echo "  <tr>\n    <th>".loca("REN_COORD")."</th><th>".loca("REN_NAME")."</th><th>".loca("REN_ACTIONS")."</th>\n  </tr>\n";
-echo "  <tr>\n    <th>".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."</th>\n";
-echo "    <th>".$name."</th>\n";
-echo "    <th><input type=\"submit\" name=\"aktion\" value=\"".loca("REN_ABANDON_COLONY")."\" alt=\"".loca("REN_ABANDON_COLONY")."\"></th>\n  </tr>\n";
-echo "  <tr>\n    <th>".loca("REN_RENAME")."</th>\n";
-echo "  	<th><input type=\"text\" name=\"newname\" size=\"25\" maxlength=\"".$maxlen."\"><br/></th>\n";
-echo "  <th><input type=\"submit\" name=\"aktion\" value=\"".loca("REN_RENAME")."\"></th>\n</tr>\n";
-echo "</table>\n</form>\n";
-echo "</center>\n\n";
-echo "<br><br><br><br>\n";
+    $name = $aktplanet['name'];
+    $maxlen = 20;
+
+    echo "<h1>".loca("REN_TITLE")."</h1>\n";
+    echo "<form action=\"index.php?page=renameplanet&session=".$_GET['session']."&pl=".$aktplanet['planet_id']."\" method=\"POST\">\n";
+    echo "<input type='hidden' name='page' value='renameplanet'>\n";
+    echo "<center>\n";
+    echo "<table width=519>\n";
+    echo "  <tr>\n    <td class=\"c\" colspan=\"3\">".loca("REN_PLANET_INFO")."</td>\n  </tr>\n";
+    echo "  <tr>\n    <th>".loca("REN_COORD")."</th><th>".loca("REN_NAME")."</th><th>".loca("REN_ACTIONS")."</th>\n  </tr>\n";
+    echo "  <tr>\n    <th>".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."</th>\n";
+    echo "    <th>".$name."</th>\n";
+    echo "    <th><input type=\"submit\" name=\"aktion\" value=\"".loca("REN_ABANDON_COLONY")."\" alt=\"".loca("REN_ABANDON_COLONY")."\"></th>\n  </tr>\n";
+    echo "  <tr>\n    <th>".loca("REN_RENAME")."</th>\n";
+    echo "  	<th><input type=\"text\" name=\"newname\" size=\"25\" maxlength=\"".$maxlen."\"><br/></th>\n";
+    echo "  <th><input type=\"submit\" name=\"aktion\" value=\"".loca("REN_RENAME")."\"></th>\n</tr>\n";
+    echo "</table>\n</form>\n";
+    echo "</center>\n\n";
+    echo "<br><br><br><br>\n";
+}
+
 ?>
