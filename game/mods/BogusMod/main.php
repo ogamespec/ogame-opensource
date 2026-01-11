@@ -26,7 +26,7 @@ class BogusMod extends GameMod
     public function uninstall() : void {
         global $db_prefix;
 
-        // Remove Tritium сolumn from users table
+        // Remove Tritium column from users table
         $query = "ALTER TABLE ".$db_prefix."users DROP COLUMN tritium;";
         dbquery ($query);
 
