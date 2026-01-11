@@ -659,7 +659,7 @@ function InvalidSessionPage () : void
     echo "    Error-ID: ".$id."  </b></font></center> </body></html>\n";
 }
 
-function MyGoto (string $page, string $param="") : void
+function MyGoto (string $page, string $param="") : never
 {
     global $GlobalUser;
     ob_end_clean ();
