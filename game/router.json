@@ -89,7 +89,10 @@
 	},
 	"logout": {
 		"path": "pages/logout.php",
-		"loca": [ "reg" ]
+		"loca": [ "reg" ],
+		"header": false,
+		"menu": false,
+		"bare": true		
 	},
 	"messages": {
 		"path": "pages/messages.php",
