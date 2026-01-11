@@ -6,7 +6,7 @@
 
 $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
 
-function empty_row ($p)
+function empty_row (string $p) : void
 {
     echo "<tr><th width=\"30\"><a href=\"#\" >".$p."</a></th><th width=\"30\"></th><th width=\"130\" style='white-space: nowrap;'></th><th width=\"30\" style='white-space: nowrap;'></th><th width=\"30\"></th><th width=\"150\"></th><th width=\"80\"></th><th width=\"125\" style='white-space: nowrap;'></th></tr>\n\n";
 }

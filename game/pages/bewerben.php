@@ -20,7 +20,7 @@ if ( key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_TEMPLA
 }
 
 // Send an application
-if ( key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_SUBMIT") && $ally['open'] )
+if ( method() === "POST" && key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_SUBMIT") && $ally['open'] )
 {
     $text = $_POST['text'];
     $text = addslashes ( $text );
@@ -37,8 +37,9 @@ if ( key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_SUBMIT
 
 }
 
-if ( $ally['open'] )        // Submit an application
-{
+else {  // GET
+    if ( $ally['open'] )        // Submit an application
+    {
 
 ?>
 <h1><?=loca("ALLY_APPU_REG");?></h1>
@@ -51,9 +52,9 @@ if ( $ally['open'] )        // Submit an application
 </table></form></center><br><br><br><br>
 <?php
 
-}
-else            // It's impossible to apply, the alliance is closed.
-{
+    }
+    else            // It's impossible to apply, the alliance is closed.
+    {
 
 ?>
 <h1><?=loca("ALLY_APPU_REG");?></h1>
@@ -64,6 +65,7 @@ else            // It's impossible to apply, the alliance is closed.
 <tr><th><input type=submit value="<?=loca("ALLY_APPU_BACK");?>"></th></tr></table></form></center><br><br><br><br>
 <?php
 
-}
+    }
+} // GET
 
 ?>

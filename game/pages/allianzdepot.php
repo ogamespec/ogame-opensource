@@ -9,28 +9,6 @@
 // with refueling discrete to fleet consumption per hour.
 // A missile cannot unload less fuel into the fleet than it consumes in a specified number of hours.
 
-$DepotError = "";
-
-loca_add ( "common", $GlobalUser['lang'] );
-loca_add ( "menu", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
-PageHeader ("allianzdepot");
-
-BeginContent();
-
 // Launch a rocket with supplies
 
 $depot_cap = 10000 * pow ( 2, $aktplanet['b'.GID_B_ALLY_DEPOT] );
@@ -80,9 +58,4 @@ if ( $spent > 0 ) AdjustResources ( 0, 0, $spent, $aktplanet['planet_id'], '-' )
 
 // Redirect to the alliance depot
 MyGoto ( "infos", "&gid=".GID_B_ALLY_DEPOT );
-
-EndContent ();
-
-PageFooter ("", $DepotError);
-ob_end_flush ();
 ?>

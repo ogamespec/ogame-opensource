@@ -10,7 +10,7 @@ $msg = LoadMessage ( intval($_GET['bericht']) );
 <HEAD>
 <LINK rel="stylesheet" type="text/css" href="<?=UserSkin();?>formate.css">
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <TITLE><?=loca($msg['pm'] == 1 ? "SPY_REPORT" : "BATTLE_REPORT");?></TITLE>
+  <TITLE><?=loca($msg['pm'] == MTYP_SPY_REPORT ? "SPY_REPORT" : "BATTLE_REPORT");?></TITLE>
   <script src="js/utilities.js" type="text/javascript"></script>
   <script type="text/javascript" src="js/overLib/overlib.js"></script>
   <script language="JavaScript">var session="<?=$session;?>";</script>

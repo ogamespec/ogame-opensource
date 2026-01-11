@@ -10,30 +10,12 @@
 // https://board.en.ogame.gameforge.com/index.php?thread/195023-version-0-74e/
 $MAX = $GlobalUser['r'.GID_R_COMPUTER] + 1;
 
-loca_add ( "menu", $GlobalUser['lang'] );
-loca_add ( "fleet", $GlobalUser['lang'] );
-
-if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));
-$GlobalUser['aktplanet'] = GetSelectedPlanet ($GlobalUser['player_id']);
-$now = time();
-UpdateQueue ( $now );
-$aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
-if ($aktplanet == null) {
-    Error ("Can't get aktplanet");
-}
-ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
-UpdatePlanetActivity ( $aktplanet['planet_id'] );
-UpdateLastClick ( $GlobalUser['player_id'] );
-$session = $_GET['session'];
-
 $prem = PremiumStatus ($GlobalUser);
 if (!$prem['commander']) {
     MyGoto ("overview");
 }
 
 $fleetmap_nosat = array_diff($fleetmap, [GID_F_SAT]);
-
-PageHeader ("fleet_templates");
 
 if ( method() === "POST" && key_exists('mode', $_POST) && $_POST['mode'] === "save" ) {
     $id = intval ( $_POST['template_id'] );
@@ -93,7 +75,6 @@ if ( method () === "GET" && key_exists('mode', $_GET) && $_GET['mode'] === "dele
     }
 }
 
-BeginContent();
 ?>
 
     <script type="text/javascript">
@@ -182,8 +163,3 @@ BeginContent();
         </table>
         </div>
 <br><br><br><br>
-<?php
-EndContent ();
-PageFooter ();
-ob_end_flush ();
-?>

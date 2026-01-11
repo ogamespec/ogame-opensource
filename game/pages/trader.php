@@ -9,7 +9,7 @@ $trader_dm = 2500;
 
 $not_enough = false;
 
-function CallNewTrader ()
+function CallNewTrader () : void
 {
     global $GlobalUser;
     global $db_prefix;
@@ -197,7 +197,7 @@ if ( method () === "POST" )
 
 }
 
-function is_selected ( $a, $b )
+function is_selected ( int $a, int $b ) : string
 {
     if ( $a == $b ) return "selected";
     else return "";

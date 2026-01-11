@@ -121,7 +121,10 @@
 	},
 	"phalanx": {
 		"path": "pages/phalanx.php",
-		"loca": [ "menu", "fleetorder", "events", "phalanx" ]
+		"loca": [ "menu", "fleetorder", "events", "phalanx" ],
+		"header": false,
+		"menu": false,
+		"bare": true
 	},
 	"pranger": {
 		"path": "pages/pranger.php",
