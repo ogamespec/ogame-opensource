@@ -2,6 +2,7 @@
 
 /** @var array $GlobalUser */
 /** @var array $fleetmap */
+/** @var string $aktplanet */
 
 // Fleet Hold extension by alliance depot
 

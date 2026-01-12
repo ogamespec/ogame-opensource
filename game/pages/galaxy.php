@@ -3,6 +3,7 @@
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
 /** @var array $UnitParam */
+/** @var string $aktplanet */
 
 $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
 

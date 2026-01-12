@@ -3,6 +3,7 @@
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
 /** @var array $fleetmap */
+/** @var string $aktplanet */
 
 // Fleet 2: Prepare target coordinates
 
