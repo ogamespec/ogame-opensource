@@ -183,7 +183,7 @@ function ResearchNetwork ( int $planetid, int $id ) : int
     $labnum = 0;
 
     // List the player's planets (do not list moons and other special objects). Also skip planets that do not have lab.
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type = ".PTYP_PLANET." AND ".GID_B_RES_LAB." > 0";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = $player_id AND type = ".PTYP_PLANET." AND `".GID_B_RES_LAB."` > 0";
     $result = dbquery ($query);
     $pnum = dbrows ( $result );
 
