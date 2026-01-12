@@ -134,7 +134,7 @@ if ( $_GET['mode'] === "Flotte" )
             if ($k) echo " ".loca("CRYSTAL").": <b>".nicenum($k)."</b>";
             if ($d) echo " ".loca("DEUTERIUM").": <b>".nicenum($d)."</b>";
             if ($e) echo " ".loca("ENERGY").": <b>".nicenum($e)."</b>";
-            $t = ShipyardDuration ( $id, $aktplanet['b21'], $aktplanet['b15'], $GlobalUni['speed'] );
+            $t = ShipyardDuration ( $id, $aktplanet[GID_B_SHIPYARD], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
             echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>".loca("BUILD_SHIPYARD_CANT")."</font>";
@@ -217,7 +217,7 @@ if ( $_GET['mode'] === "Verteidigung" )
             if ($k) echo " ".loca("CRYSTAL").": <b>".nicenum($k)."</b>";
             if ($d) echo " ".loca("DEUTERIUM").": <b>".nicenum($d)."</b>";
             if ($e) echo " ".loca("ENERGY").": <b>".nicenum($e)."</b>";
-            $t = ShipyardDuration ( $id, $aktplanet['b21'], $aktplanet['b15'], $GlobalUni['speed'] );
+            $t = ShipyardDuration ( $id, $aktplanet[GID_B_SHIPYARD], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
             echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !$busy ) {
