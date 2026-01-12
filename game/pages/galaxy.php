@@ -397,7 +397,7 @@ echo "</form>\n";
 
     $system_radius = abs ($aktplanet['s'] - $coord_s);
     $ipm_radius = max (0, 5 * $GlobalUser[GID_R_IMPULSE_DRIVE] - 1);
-    $show_ipm_button = ($system_radius <= $ipm_radius) && ($aktplanet["d".GID_D_IPM] > 0) && ($aktplanet['g'] == $coord_g);
+    $show_ipm_button = ($system_radius <= $ipm_radius) && ($aktplanet[GID_D_IPM] > 0) && ($aktplanet['g'] == $coord_g);
 
     if ( isset($_GET['mode']) ) {
 
@@ -460,7 +460,7 @@ $tabindex = 3;
 $result = EnumPlanetsGalaxy ( $coord_g, $coord_s );
 $num = $planets = dbrows ($result);
 
-$phalanx_radius = $aktplanet['b42'] * $aktplanet['b42'] - 1;
+$phalanx_radius = $aktplanet[GID_B_PHALANX] * $aktplanet[GID_B_PHALANX] - 1;
 
 while ($num--)
 {

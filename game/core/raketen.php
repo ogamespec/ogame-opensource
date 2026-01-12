@@ -13,11 +13,11 @@ function RocketAttackMain ( int $amount, int $primary, bool $moon_attack, array 
 
     // Repel IPM attack by interceptors (ABMs)
     $ipm = $amount;
-    $abm = $moon_attack ? $moon_planet['d'.GID_D_ABM] : $target['d'.GID_D_ABM];
+    $abm = $moon_attack ? $moon_planet[GID_D_ABM] : $target[GID_D_ABM];
     $ipm = (int)max (0, $ipm - $abm);
     $ipm_destroyed = $amount - $ipm;
-    if ($moon_attack) $moon_planet['d'.GID_D_ABM] -= $ipm_destroyed;
-    else $target['d'.GID_D_ABM] -= $ipm_destroyed;
+    if ($moon_attack) $moon_planet[GID_D_ABM] -= $ipm_destroyed;
+    else $target[GID_D_ABM] -= $ipm_destroyed;
 
     $maxdamage = $ipm * $UnitParam[503][2] * (1 + $origin_user_attack / 10);
 

@@ -29,8 +29,8 @@ if ( $target['type'] != PTYP_MOON ) $PageError .= "<center>\n".loca("GATE_ERR_TA
 
 if ( $PageError === "" )
 {
-    if ( $source["b".GID_B_JUMP_GATE] == 0 ) $PageError .= "<center>\n".loca("GATE_ERR_START_GATE")."<br></center>\n";
-    if ( $target["b".GID_B_JUMP_GATE] == 0 ) $PageError .= "<center>\n".loca("GATE_ERR_TARGET_GATE")."<br></center>\n";
+    if ( $source[GID_B_JUMP_GATE] == 0 ) $PageError .= "<center>\n".loca("GATE_ERR_START_GATE")."<br></center>\n";
+    if ( $target[GID_B_JUMP_GATE] == 0 ) $PageError .= "<center>\n".loca("GATE_ERR_TARGET_GATE")."<br></center>\n";
 }
 
 if ( $PageError === "" )
@@ -51,7 +51,7 @@ if ( $PageError === "" )
     foreach ( $fleetmap_revnosat as $i=>$gid)
     {
         $amount = floor (abs(intval($_POST["c$gid"])));
-        if ( $amount > $source["f$gid"] ) 
+        if ( $amount > $source[$gid] ) 
         {
             $PageError .= "<center>\n".loca("GATE_ERR_NOTENOUGH")."<br></center>\n";
             break;

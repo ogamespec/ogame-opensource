@@ -88,9 +88,9 @@ if ( $target == NULL )
 
 $target_user = LoadUser ( $target['owner_id'] );
 
-$probes = $aktplanet['f'.GID_F_PROBE];
-$recyclers = $aktplanet['f'.GID_F_RECYCLER];
-$missiles = $aktplanet['d'.GID_D_IPM];
+$probes = $aktplanet[GID_F_PROBE];
+$recyclers = $aktplanet[GID_F_RECYCLER];
+$missiles = $aktplanet[GID_D_IPM];
 
 if ( ( 
 ( $GlobalUser['ally_id'] == $target_user['ally_id'] && $GlobalUser['ally_id'] > 0 )   || 
@@ -100,7 +100,7 @@ if ( (
 
 if ( $order == FTYP_SPY )
 {
-    $amount = min ($aktplanet["f210"], $shipcount);
+    $amount = min ($aktplanet[GID_F_PROBE], $shipcount);
 
     if ( $target['owner_id'] == $GlobalUser['player_id'] ) AjaxSendError ();    // Own planet
     if ( $GlobalUser['noattack'] || $BlockAttack ) AjaxSendError ();    // Attack ban
@@ -129,7 +129,7 @@ if ( $order == FTYP_SPY )
 
 if ( $order == FTYP_RECYCLE )
 {
-    $amount = min ($aktplanet["f209"], $shipcount);
+    $amount = min ($aktplanet[GID_F_RECYCLER], $shipcount);
 
     if ( $amount == 0 ) AjaxSendError (611);    // no ships to send
 

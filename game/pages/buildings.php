@@ -30,7 +30,7 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             if ( $gid == GID_D_SDOME || $gid == GID_D_LDOME ) $value = 1;
 
             // Limit the number of missiles to the capacity of the silo.
-            $free_space = $aktplanet['b44'] * 10 - ($aktplanet['d502'] + 2 * $aktplanet['d503']);
+            $free_space = $aktplanet[GID_B_MISS_SILO] * 10 - ($aktplanet[GID_D_ABM] + 2 * $aktplanet[GID_D_IPM]);
             if ( $gid == GID_D_ABM ) $value = min ( $free_space, $value );
             if ( $gid == GID_D_IPM ) $value = min ( floor ($free_space / 2), $value );
             
@@ -107,12 +107,12 @@ if ( $_GET['mode'] === "Flotte" )
     echo "          </tr> \n\n";
 
     // See if there's a shipyard on the planet.
-    if ( $aktplanet['b21'] ) {
+    if ( $aktplanet[GID_B_SHIPYARD] ) {
         // Output the objects that can be built in the Shipyard.
         foreach ( $fleetmap as $i => $id ) {
             if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) )
             {
-                if ($aktplanet['f'.$id] <= 0) continue;
+                if ($aktplanet[$id] <= 0) continue;
             }
 
             echo "<tr>    			";
@@ -126,7 +126,7 @@ if ( $_GET['mode'] === "Flotte" )
             }
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
-            if ($aktplanet['f'.$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet['f'.$id]).")";
+            if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]).")";
             $res = ShipyardPrice ( $id );
             $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
@@ -190,12 +190,12 @@ if ( $_GET['mode'] === "Verteidigung" )
     echo "          </tr> \n\n";
 
     // See if there's a shipyard on the planet.
-    if ( $aktplanet['b21'] ) {
+    if ( $aktplanet[GID_B_SHIPYARD] ) {
         // Output the objects that can be built in the Shipyard.
         foreach ( $defmap as $i => $id ) {
             if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) )
             {
-                if($aktplanet['d'.$id] == 0) continue;
+                if($aktplanet[$id] == 0) continue;
             }
 
             echo "<tr>    			";
@@ -209,7 +209,7 @@ if ( $_GET['mode'] === "Verteidigung" )
             }
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
-            if ($aktplanet['d'.$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet['d'.$id]).")";
+            if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]).")";
             $res = ShipyardPrice ( $id );
             $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
@@ -221,13 +221,13 @@ if ( $_GET['mode'] === "Verteidigung" )
             echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !$busy ) {
-                if ( ($id == GID_D_SDOME || $id == GID_D_LDOME) && $aktplanet['d'.$id] > 0 ) echo "<font color=#FF0000>".loca("BUILD_ERROR_DOME")."</font>";
+                if ( ($id == GID_D_SDOME || $id == GID_D_LDOME) && $aktplanet[$id] > 0 ) echo "<font color=#FF0000>".loca("BUILD_ERROR_DOME")."</font>";
                 else if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>".loca("BUILD_SHIPYARD_CANT")."</font>";
                 else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) {
                     echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
                     if ( $prem['commander'] && !( $id == GID_D_SDOME || $id == GID_D_LDOME ) ) {
-                        if ( $id == GID_D_ABM ) $max = $aktplanet['b44'] * 10 - (2*$aktplanet['d503'] + $aktplanet['d502']);
-                        else if ( $id == GID_D_IPM ) $max = ($aktplanet['b44'] * 10 - (2*$aktplanet['d503'] + $aktplanet['d502'])) / 2;
+                        if ( $id == GID_D_ABM ) $max = $aktplanet[GID_B_MISS_SILO] * 10 - (2*$aktplanet[GID_D_IPM] + $aktplanet[GID_D_ABM]);
+                        else if ( $id == GID_D_IPM ) $max = ($aktplanet[GID_B_MISS_SILO] * 10 - (2*$aktplanet[GID_D_IPM] + $aktplanet[GID_D_ABM])) / 2;
                         else $max = $GlobalUni['max_werf'];
                         if ( $m ) $max = floor (min ($max, $aktplanet['m'] / $m));
                         if ( $k ) $max = floor (min ($max, $aktplanet['k'] / $k));
@@ -280,7 +280,7 @@ if ( $_GET['mode'] === "Forschung" )
     echo "          </tr> \n\n";
 
     // See if there's a lab on the planet.
-    if ( $aktplanet['b31'] ) {
+    if ( $aktplanet[GID_B_RES_LAB] ) {
         // Display a list of available research
         foreach ( $resmap as $i => $id ) {
             if ( ! ResearchMeetRequirement ($GlobalUser, $aktplanet, $id) ) continue;

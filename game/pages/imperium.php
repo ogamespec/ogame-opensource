@@ -281,7 +281,7 @@ $speed = $GlobalUni['speed'];
         $sum = 0;
         foreach ( $plist as $j=>$planet )
         {
-            $sum += $planet["b$gid"];
+            $sum += $planet[$gid];
         }
         if ( $sum > 0)
         {
@@ -303,20 +303,20 @@ $speed = $GlobalUni['speed'];
 
                 echo "            <th width=\"75\" >\n";
 
-                if ( $planet["b$gid"] > 0 ) {
+                if ( $planet[$gid] > 0 ) {
                     echo "                <a style=\"cursor:pointer\" \n";
                     echo "                   onClick=\"if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=$session&planet=".$planet['planet_id']."&cp=".$planet['planet_id']."\';t=0;',500);}\" \n";
                     echo "                   onDblClick=\"clearTimeout(t);document.location.href='index.php?page=imperium&session=$session&planettype=$planettype&no_header=1&modus=add&planet=".$planet['planet_id']."&techid=$gid';t=0;\"\n";
                     echo "                   title=\"".loca("EMPIRE_ACTION")."\">       \n";
 
-                    if ( CanBuild ($GlobalUser, $planet, $gid, $planet["b$gid"]+1, 0) === "" ) {
+                    if ( CanBuild ($GlobalUser, $planet, $gid, $planet[$gid]+1, 0) === "" ) {
                         echo "                    <font color=\"lime\">\n";
                     }
                     else {
                         echo "                    <font color=\"red\">\n";
                     }
 
-                    echo "                        ".$planet["b$gid"]."                    </font>                    \n\n";
+                    echo "                        ".$planet[$gid]."                    </font>                    \n\n";
                     echo "                    </font>\n";
                     echo "                </a>    \n";
 
@@ -397,7 +397,7 @@ $speed = $GlobalUni['speed'];
     foreach ($fleetmap as $i=>$fleet)
     {
         $sum = 0;
-        foreach ( $plist as $j=>$planet ) $sum += $planet["f$fleet"];
+        foreach ( $plist as $j=>$planet ) $sum += $planet[$fleet];
         if ( $sum == 0 ) continue;
 
         echo "        <tr height=\"20\">\n";
@@ -408,7 +408,7 @@ $speed = $GlobalUni['speed'];
 
         foreach ( $plist as $j=>$planet )
         {
-            $amount = $planet["f$fleet"];
+            $amount = $planet[$fleet];
             echo "            <th width=\"75\" >\n";
             if ($amount > 0)
             {
@@ -450,7 +450,7 @@ $speed = $GlobalUni['speed'];
     foreach ($defmap as $i=>$def)
     {
         $sum = 0;
-        foreach ( $plist as $j=>$planet ) $sum += $planet["d$def"];
+        foreach ( $plist as $j=>$planet ) $sum += $planet[$def];
         if ( $sum == 0 ) continue;
 
         echo "        <tr height=\"20\">\n";
@@ -461,7 +461,7 @@ $speed = $GlobalUni['speed'];
 
         foreach ( $plist as $j=>$planet )
         {
-            $amount = $planet["d$def"];
+            $amount = $planet[$def];
             echo "            <th width=\"75\" >\n";
             if ($amount > 0)
             {

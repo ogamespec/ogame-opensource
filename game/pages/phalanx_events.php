@@ -208,7 +208,7 @@ function PhalanxEventList ($planet_id)
                 $fleet_obj = dbarray ($acs_result);
 
                 $task[$tasknum]['fleet'][$f] = array ();
-                foreach ( $fleetmap as $id=>$gid ) $task[$tasknum]['fleet'][$f][$gid] = $fleet_obj["ship$gid"];
+                foreach ( $fleetmap as $id=>$gid ) $task[$tasknum]['fleet'][$f][$gid] = $fleet_obj[$gid];
                 $task[$tasknum]['fleet'][$f]['owner_id'] = $fleet_obj['owner_id'];
                 $task[$tasknum]['fleet'][$f]['origin_id'] = $fleet_obj['start_planet'];
                 $task[$tasknum]['fleet'][$f]['target_id'] = $fleet_obj['target_planet'];
@@ -242,7 +242,7 @@ function PhalanxEventList ($planet_id)
             // Fleet
             $task[$tasknum]['fleets'] = 1;
             $task[$tasknum]['fleet'][0] = array ();
-            foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj["ship$gid"];
+            foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj[$gid];
             $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
             $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
             $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
@@ -260,7 +260,7 @@ function PhalanxEventList ($planet_id)
             // Fleet
             $task[$tasknum]['fleets'] = 1;
             $task[$tasknum]['fleet'][0] = array ();
-            foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj["ship$gid"];
+            foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj[$gid];
             $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
             $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
             $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
@@ -279,7 +279,7 @@ function PhalanxEventList ($planet_id)
         // Fleet
         $task[$tasknum]['fleets'] = 1;
         $task[$tasknum]['fleet'][0] = array ();
-        foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj["ship$gid"];
+        foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj[$gid];
         $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
         $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
         $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
@@ -319,7 +319,7 @@ function PhalanxEventList ($planet_id)
             // Fleet
             $task[$tasknum]['fleets'] = 1;
             $task[$tasknum]['fleet'][0] = array ();
-            foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj["ship$gid"];
+            foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj[$gid];
             $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
             $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
             $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];

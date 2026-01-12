@@ -277,7 +277,7 @@ function CanBuild (array $user, array $planet, int $id, int $lvl, bool $destroy,
     if ( $destroy )
     {
         if ( $id == GID_B_TERRAFORMER || $id == GID_B_LUNAR_BASE ) return loca_lang("BUILD_ERROR_CANT_DEMOLISH", $user['lang']);
-        else if ( $planet["b".$id] <= 0 ) return loca_lang("BUILD_ERROR_NO_SUCH_BUILDING", $user['lang']);
+        else if ( $planet[$id] <= 0 ) return loca_lang("BUILD_ERROR_NO_SUCH_BUILDING", $user['lang']);
     }
 
     return "";
@@ -312,7 +312,7 @@ function PropagateBuildQueue (int $planet_id, int $from) : void
                 if ( $destroy ) $BuildEvent = QTYP_DEMOLISH;
                 else $BuildEvent = QTYP_BUILD;
 
-                $duration = floor (BuildDuration ( $id, $lvl, $planet['b'.GID_B_ROBOTS], $planet['b'.GID_B_NANITES], $speed ));
+                $duration = floor (BuildDuration ( $id, $lvl, $planet[GID_B_ROBOTS], $planet[GID_B_NANITES], $speed ));
                 AddQueue ( $user['player_id'], $BuildEvent, $row['id'], $id, $lvl, $from, $duration, QUEUE_PRIO_BUILD );
 
                 // Update the start and end time of construction
@@ -364,8 +364,8 @@ function BuildEnque ( array $user, int $planet_id, int $id, int $destroy, int $n
     if ($now == 0) $now = time ();
 
     // Write down the user's action, even if the user does something wrong
-    if ($destroy) UserLog ( $planet['owner_id'], "BUILD", va(loca_lang("DEBUG_LOG_DEMOLISH", $GlobalUni['lang']), loca("NAME_$id"), $planet['b'.$id]-1, $planet_id)  );
-    else UserLog ( $planet['owner_id'], "BUILD", va(loca_lang("DEBUG_LOG_BUILD", $GlobalUni['lang']), loca("NAME_$id"), $planet['b'.$id]+1, $planet_id)  );
+    if ($destroy) UserLog ( $planet['owner_id'], "BUILD", va(loca_lang("DEBUG_LOG_DEMOLISH", $GlobalUni['lang']), loca("NAME_$id"), $planet[$id]-1, $planet_id)  );
+    else UserLog ( $planet['owner_id'], "BUILD", va(loca_lang("DEBUG_LOG_BUILD", $GlobalUni['lang']), loca("NAME_$id"), $planet[$id]+1, $planet_id)  );
 
     $result = GetBuildQueue ( $planet_id );
     $cnt = dbrows ( $result );
@@ -385,7 +385,7 @@ function BuildEnque ( array $user, int $planet_id, int $id, int $destroy, int $n
     }    
 
     // Define the level to be added and the order of construction (list_id).
-    $nowlevel = $planet['b'.$id];
+    $nowlevel = $planet[$id];
     $list_id = 0;
     for ($i=0; $i<$cnt; $i++)
     {
@@ -412,7 +412,7 @@ function BuildEnque ( array $user, int $planet_id, int $id, int $destroy, int $n
         if ( $destroy ) $BuildEvent = QTYP_DEMOLISH;
         else $BuildEvent = QTYP_BUILD;
 
-        $duration = floor (BuildDuration ( $id, $lvl, $planet['b'.GID_B_ROBOTS], $planet['b'.GID_B_NANITES], $speed ));
+        $duration = floor (BuildDuration ( $id, $lvl, $planet[GID_B_ROBOTS], $planet[GID_B_NANITES], $speed ));
         $row = array ( 'owner_id' => $user['player_id'], 'planet_id' => $planet_id, 'list_id' => $list_id, 'tech_id' => $id, 'level' => $lvl, 'destroy' => $destroy, 'start' => $now, 'end' => $now+$duration );
         $sub_id = AddDBRow ( $row, "buildqueue" );
         if ($list_id == 1) AddQueue ( $user['player_id'], $BuildEvent, $sub_id, $id, $lvl, $now, $duration, QUEUE_PRIO_BUILD );
@@ -492,8 +492,8 @@ function Queue_Build_End (array $queue) : void
     ProdResources ( $planet, $planet['lastpeek'], $queue['end'] );
 
     // Foolproofing
-    if ( ($queue['type'] === QTYP_BUILD && $planet["b".$id] >= $lvl) ||
-         ($queue['type'] === QTYP_DEMOLISH && $planet["b".$id] <= $lvl) )
+    if ( ($queue['type'] === QTYP_BUILD && $planet[$id] >= $lvl) ||
+         ($queue['type'] === QTYP_DEMOLISH && $planet[$id] <= $lvl) )
     {
         RemoveQueue ( $queue['task_id'] );
         dbquery ( "DELETE FROM ".$db_prefix."buildqueue WHERE id = " . $queue['sub_id'] );
@@ -511,7 +511,7 @@ function Queue_Build_End (array $queue) : void
     else $fields = "fields = fields - 1";
 
     // Update the level of construction and the number of fields in the database.
-    $query = "UPDATE ".$db_prefix."planets SET ".('b'.$id)." = $lvl, $fields WHERE planet_id = $planet_id";
+    $query = "UPDATE ".$db_prefix."planets SET ".($id)." = $lvl, $fields WHERE planet_id = $planet_id";
     dbquery ($query);
 
     RemoveQueue ( $queue['task_id'] );
@@ -597,7 +597,7 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
     // Limit the number of missiles ordered to those already under construction
     $result = GetShipyardQueue ($planet_id);
     $tasknum = dbrows ($result);
-    $rak_space = $planet['b'.GID_B_MISS_SILO] * 10 - ($planet['d'.GID_D_ABM] + 2 * $planet['d'.GID_D_IPM]);
+    $rak_space = $planet[GID_B_MISS_SILO] * 10 - ($planet[GID_D_ABM] + 2 * $planet[GID_D_IPM]);
     while ($tasknum--)
     {
         $queue = dbarray ( $result );
@@ -627,8 +627,8 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
     if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && ShipyardMeetRequirement ($user, $planet, $gid) ) {
         $speed = $uni['speed'];
         $now = ShipyardLatestTime ($planet_id, $now);
-        $shipyard = $planet["b".GID_B_SHIPYARD];
-        $nanits = $planet["b".GID_B_NANITES];
+        $shipyard = $planet[GID_B_SHIPYARD];
+        $nanits = $planet[GID_B_NANITES];
         $seconds = ShipyardDuration ( $gid, $shipyard, $nanits, $speed );
 
         // Write off resources.

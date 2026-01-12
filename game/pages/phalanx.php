@@ -56,9 +56,9 @@ require_once "phalanx_events.php";
     $target = GetPlanet ( intval($_GET['spid']) );
 
     $outofrange = false;                    // Check the radius of the phalanx
-    if ( $aktplanet['g'] != $target['g'] || $aktplanet["b".GID_B_PHALANX] <= 0 )  $outofrange = true;
+    if ( $aktplanet['g'] != $target['g'] || $aktplanet[GID_B_PHALANX] <= 0 )  $outofrange = true;
     else {
-        $range = $aktplanet["b".GID_B_PHALANX] * $aktplanet["b".GID_B_PHALANX] - 1;
+        $range = $aktplanet[GID_B_PHALANX] * $aktplanet[GID_B_PHALANX] - 1;
         if ( abs($aktplanet['s'] - $target['s']) > $range) $outofrange = true;
     }
 

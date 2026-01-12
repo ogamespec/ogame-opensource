@@ -13,9 +13,9 @@ start_planet: Start (INT)
 target_planet: Target (INT)
 flight_time: One-way flight time in seconds (INT)
 deploy_time: Fleet holding time in seconds (INT)
-ipm_amount: Number of interplanetary missiles (INT)
-ipm_target: target id for interplanetary rockets, 0 - all (INT)
-shipXX: number of ships of each type (INT)
+ipm_amount: Number of interplanetary missiles (INT DEFAULT 0)
+ipm_target: target id for interplanetary rockets, 0 - all (INT DEFAULT 0)
+XX: number of ships of each type (INT DEFAULT 0)
 
 Fleet missions are issued as an events for the global queue.
 
@@ -285,7 +285,7 @@ function AdjustShips (array $fleet, int $planet_id, string $sign) : void
     foreach ($fleetmap as $i=>$gid)
     {
         if ($i > 0) $query .= ",";
-        $query .= "f$gid = f$gid $sign " . $fleet[$gid] ;
+        $query .= "$gid = $gid $sign " . $fleet[$gid] ;
     }
     $query .= " WHERE planet_id=$planet_id;";
     dbquery ($query);
@@ -295,6 +295,7 @@ function AdjustShips (array $fleet, int $planet_id, string $sign) : void
 function DispatchFleet (array $fleet, array $origin, array $target, int $order, int $seconds, int $m, int $k, int $d, int $cons, int $when, int $union_id=0, int $deploy_time=0) : int
 {
     global $db_prefix;
+    global $fleetmap;
     $uni = LoadUniverse ();
     if ( $uni['freeze'] ) return 0;
 
@@ -303,21 +304,20 @@ function DispatchFleet (array $fleet, array $origin, array $target, int $order, 
     $flight_time = $seconds;
 
     // Add the fleet.
-    $fleet_obj = array ( 'owner_id' => $origin['owner_id'], 'union_id' => $union_id, 'm' => $m, 'k' => $k, 'd' => $d, 'fuel' => $cons, 'mission' => $order, 'start_planet' => $origin['planet_id'], 'target_planet' => $target['planet_id'], 'flight_time' => $flight_time, 'deploy_time' => $deploy_time,
-                         'ipm_amount' => 0, 'ipm_target' => 0,
-                         'ship202' => $fleet[202], 'ship203' => $fleet[203], 'ship204' => $fleet[204], 'ship205' => $fleet[205], 'ship206' => $fleet[206], 'ship207' => $fleet[207], 'ship208' => $fleet[208], 'ship209' => $fleet[209], 'ship210' => $fleet[210],
-                         'ship211' => $fleet[211], 'ship212' => $fleet[212], 'ship213' => $fleet[213], 'ship214' => $fleet[214], 'ship215' => $fleet[215] );
+    $fleet_obj = array ( 'owner_id' => $origin['owner_id'], 'union_id' => $union_id, 'm' => $m, 'k' => $k, 'd' => $d, 'fuel' => $cons, 'mission' => $order, 
+        'start_planet' => $origin['planet_id'], 'target_planet' => $target['planet_id'], 'flight_time' => $flight_time, 'deploy_time' => $deploy_time );
+    foreach ($fleetmap as $i=>$gid) $fleet_obj[$gid] = $fleet[$gid];
     $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
     // Log entry
     $weeks = $now - 4 * (7 * 24 * 60 * 60);
     $query = "DELETE FROM ".$db_prefix."fleetlogs WHERE start < $weeks;";
     dbquery ($query);
-    $fleetlog = array ( 'owner_id' => $origin['owner_id'], 'target_id' => $target['owner_id'], 'union_id' => $union_id, 'pm' => $origin['m'], 'pk' => $origin['k'], 'pd' => $origin['d'], 'm' => $m, 'k' => $k, 'd' => $d, 'fuel' => $cons, 'mission' => $order, 'flight_time' => $flight_time, 'deploy_time' => $deploy_time, 'start' => $now, 'end' => $now+$seconds, 
-                        'origin_g' => $origin['g'], 'origin_s' => $origin['s'], 'origin_p' => $origin['p'], 'origin_type' => $origin['type'], 'target_g' => $target['g'], 'target_s' => $target['s'], 'target_p' => $target['p'], 'target_type' => $target['type'], 
-                         'ipm_amount' => 0, 'ipm_target' => 0,
-                         'ship202' => $fleet[202], 'ship203' => $fleet[203], 'ship204' => $fleet[204], 'ship205' => $fleet[205], 'ship206' => $fleet[206], 'ship207' => $fleet[207], 'ship208' => $fleet[208], 'ship209' => $fleet[209], 'ship210' => $fleet[210],
-                         'ship211' => $fleet[211], 'ship212' => $fleet[212], 'ship213' => $fleet[213], 'ship214' => $fleet[214], 'ship215' => $fleet[215] );
+    $fleetlog = array ( 'owner_id' => $origin['owner_id'], 'target_id' => $target['owner_id'], 'union_id' => $union_id, 'pm' => $origin['m'], 'pk' => $origin['k'], 'pd' => $origin['d'], 
+        'm' => $m, 'k' => $k, 'd' => $d, 'fuel' => $cons, 'mission' => $order, 'flight_time' => $flight_time, 'deploy_time' => $deploy_time, 'start' => $now, 'end' => $now+$seconds, 
+        'origin_g' => $origin['g'], 'origin_s' => $origin['s'], 'origin_p' => $origin['p'], 'origin_type' => $origin['type'], 
+        'target_g' => $target['g'], 'target_s' => $target['s'], 'target_p' => $target['p'], 'target_type' => $target['type'] );
+    foreach ($fleetmap as $i=>$gid) $fleetlog[$gid] = $fleet[$gid];
     AddDBRow ($fleetlog, 'fleetlogs');
 
     // Add the task to the global event queue.
@@ -335,7 +335,7 @@ function RecallFleet (int $fleet_id, int $now=0) : void
     $fleet_obj = LoadFleet ($fleet_id);
     global $fleetmap;
     $fleet = array ();
-    foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj["ship$gid"];
+    foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj[$gid];
 
     // If the fleet is already returning, do nothing.
     if ( $fleet_obj['mission'] >= FTYP_RETURN && $fleet_obj['mission'] < FTYP_ORBITING ) return;
@@ -393,8 +393,8 @@ function SetFleet (int $fleet_id, array $fleet) : void
     global $fleetmap;
     $query = "UPDATE ".$db_prefix."fleet SET ";
     foreach ( $fleetmap as $i=>$gid ) {
-        if ( $i == 0 ) $query .= "ship".$gid."=".$fleet[$gid];
-        else $query .= ", ship".$gid."=".$fleet[$gid];
+        if ( $i == 0 ) $query .= $gid."=".$fleet[$gid];
+        else $query .= ", ".$gid."=".$fleet[$gid];
     }
     $query .= " WHERE fleet_id=$fleet_id;";
     dbquery ($query);
@@ -442,7 +442,7 @@ function LaunchRockets ( array $origin, array $target, int $seconds, int $amount
     $uni = LoadUniverse ( );
     if ( $uni['freeze'] ) return 0;
 
-    if ( $amount > $origin['d503'] ) return 0;    // You can't launch more missiles than there are rockets on the planet.
+    if ( $amount > $origin[GID_D_IPM] ) return 0;    // You can't launch more missiles than there are rockets on the planet.
 
     $now = time ();
     $prio = QUEUE_PRIO_FLEET + FTYP_MISSILE;
@@ -452,19 +452,20 @@ function LaunchRockets ( array $origin, array $target, int $seconds, int $amount
     SetPlanetDefense ( $origin['planet_id'], $origin );
 
     // Add a missile attack.
-    $fleet_obj = array ( 'owner_id' => $origin['owner_id'], 'union_id' => 0, 'm' => 0, 'k' => 0, 'd' => 0, 'fuel' => 0, 'mission' => FTYP_MISSILE, 'start_planet' => $origin['planet_id'], 'target_planet' => $target['planet_id'], 'flight_time' => $seconds, 'deploy_time' => 0,
-                         'ipm_amount' => $amount, 'ipm_target' => $type,
-                         'ship202' => 0, 'ship203' => 0, 'ship204' => 0, 'ship205' => 0, 'ship206' => 0, 'ship207' => 0, 'ship208' => 0, 'ship209' => 0, 'ship210' => 0, 'ship211' => 0, 'ship212' => 0, 'ship213' => 0, 'ship214' => 0, 'ship215' => 0 );
+    $fleet_obj = array ( 'owner_id' => $origin['owner_id'], 'union_id' => 0, 'm' => 0, 'k' => 0, 'd' => 0, 'fuel' => 0, 'mission' => FTYP_MISSILE, 
+        'start_planet' => $origin['planet_id'], 'target_planet' => $target['planet_id'], 'flight_time' => $seconds, 'deploy_time' => 0,
+        'ipm_amount' => $amount, 'ipm_target' => $type );
     $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
     // Log entry
     $weeks = $now - 4 * (7 * 24 * 60 * 60);
     $query = "DELETE FROM ".$db_prefix."fleetlogs WHERE start < $weeks;";
     dbquery ($query);
-    $fleetlog = array ( 'owner_id' => $origin['owner_id'], 'target_id' => $target['owner_id'], 'union_id' => 0, 'pm' => 0, 'pk' => 0, 'pd' => 0, 'm' => 0, 'k' => 0, 'd' => 0, 'fuel' => 0, 'mission' => FTYP_MISSILE, 'flight_time' => $seconds, 'deploy_time' => 0, 'start' => $now, 'end' => $now+$seconds, 
-                        'origin_g' => $origin['g'], 'origin_s' => $origin['s'], 'origin_p' => $origin['p'], 'origin_type' => $origin['type'], 'target_g' => $target['g'], 'target_s' => $target['s'], 'target_p' => $target['p'], 'target_type' => $target['type'], 
-                        'ipm_amount' => $amount, 'ipm_target' => $type,
-                        'ship202' => 0, 'ship203' => 0, 'ship204' => 0, 'ship205' => 0, 'ship206' => 0, 'ship207' => 0, 'ship208' => 0, 'ship209' => 0, 'ship210' => 0, 'ship211' => 0, 'ship212' => 0, 'ship213' => 0, 'ship214' => 0, 'ship215' => 0 );
+    $fleetlog = array ( 'owner_id' => $origin['owner_id'], 'target_id' => $target['owner_id'], 'union_id' => 0, 'pm' => 0, 'pk' => 0, 'pd' => 0, 
+        'm' => 0, 'k' => 0, 'd' => 0, 'fuel' => 0, 'mission' => FTYP_MISSILE, 'flight_time' => $seconds, 'deploy_time' => 0, 'start' => $now, 'end' => $now+$seconds, 
+        'origin_g' => $origin['g'], 'origin_s' => $origin['s'], 'origin_p' => $origin['p'], 'origin_type' => $origin['type'], 
+        'target_g' => $target['g'], 'target_s' => $target['s'], 'target_p' => $target['p'], 'target_type' => $target['type'], 
+        'ipm_amount' => $amount, 'ipm_target' => $type );
     AddDBRow ($fleetlog, 'fleetlogs');
 
     // Add the task to the global event queue.
@@ -669,9 +670,9 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
     $origin_ships = $target_ships = $origin_cost = 0;
     foreach ( $fleetmap as $i=>$gid )
     {
-        $origin_ships += $fleet_obj["ship$gid"];
-        $origin_cost += $fleet_obj["ship$gid"] * $UnitParam[$gid][0];
-        $target_ships += $target["f$gid"];
+        $origin_ships += $fleet_obj[$gid];
+        $origin_cost += $fleet_obj[$gid] * $UnitParam[$gid][0];
+        $target_ships += $target[$gid];
     }
 
     $origin_prem = PremiumStatus ($origin_user);
@@ -728,7 +729,7 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
     while ( $fobj = dbarray ($result) )
     {
         foreach ( $fleetmap as $i=>$gid ) {
-            $holding_fleet[$gid] += $fobj["ship$gid"];
+            $holding_fleet[$gid] += $fobj[$gid];
         }
     }
 
@@ -738,7 +739,7 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
         $count = 0;
         foreach ( $fleetmap as $i=>$gid )
         {
-            $amount = $target["f$gid"] + $holding_fleet[$gid];
+            $amount = $target[$gid] + $holding_fleet[$gid];
             if ($amount > 0) {
                 if ( ($count % 2) == 0 ) $report .= "</tr>\n";
                 $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
@@ -754,7 +755,7 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
         $count = 0;
         foreach ( $defmap as $i=>$gid )
         {
-            $amount = $target["d$gid"];
+            $amount = $target[$gid];
             if ($amount > 0) {
                 if ( ($count % 2) == 0 ) $report .= "</tr>\n";
                 $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
@@ -770,7 +771,7 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
         $count = 0;
         foreach ( $buildmap as $i=>$gid )
         {
-            $amount = $target["b$gid"];
+            $amount = $target[$gid];
             if ($amount > 0) {
                 if ( ($count % 2) == 0 ) $report .= "</tr>\n";
                 $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
@@ -786,7 +787,7 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
         $count = 0;
         foreach ( $resmap as $i=>$gid )
         {
-            $amount = $target_user["r$gid"];
+            $amount = $target_user[$gid];
             if ($amount > 0) {
                 if ( ($count % 2) == 0 ) $report .= "</tr>\n";
                 $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
@@ -939,8 +940,8 @@ function ColonizationReturn (array $queue, array $fleet_obj, array $fleet, array
 
 function RecycleArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
-    if ( $fleet[GID_F_RECYCLER] == 0 ) Error ( "Попытка сбора ПО без переработчиков" );
-    if ( $target['type'] != PTYP_DF ) Error ( "Перерабатывать можно только поля обломков!" );
+    if ( $fleet[GID_F_RECYCLER] == 0 ) Error ( "Attempt to harvest DF without recyclers" );
+    if ( $target['type'] != PTYP_DF ) Error ( "Only debris fields can be recycled!" );
 
     $sum_cargo = FleetCargoSummary ( $fleet ) - ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']);
     $recycler_cargo = FleetCargo (GID_F_RECYCLER) * $fleet[GID_F_RECYCLER];
@@ -999,7 +1000,7 @@ function Queue_Fleet_End (array $queue) : void
     if ( $fleet_obj['d'] < 0 ) $fleet_obj['d'] = 0;
 
     $fleet = array ();
-    foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj["ship$gid"];
+    foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj[$gid];
 
     // Update resource production on planets
     $origin = GetPlanet ( $fleet_obj['start_planet'] );
@@ -1036,7 +1037,7 @@ function Queue_Fleet_End (array $queue) : void
         case FTYP_MISSILE: RocketAttackArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case FTYP_ACS_ATTACK_HEAD: AttackArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case (FTYP_ACS_ATTACK_HEAD+FTYP_RETURN): CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
-        //default: Error ( "Неизвестное задание для флота: " . $fleet_obj['mission'] ); break;
+        //default: Error ( "Unknown mission for the fleet: " . $fleet_obj['mission'] ); break;
     }
 
     if ( $fleet_obj['union_id'] && $fleet_obj['mission'] < FTYP_RETURN )    // remove all fleets and union missions so that ACS attack will no longer trigger

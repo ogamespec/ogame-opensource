@@ -144,9 +144,9 @@ $maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );
         $totalships = 0;
         foreach ( $fleetmap as $i=>$gid)
         {
-            if ( $fleet["ship$gid"] > 0 ) {
-                echo loca("NAME_$gid") . ": " . nicenum($fleet["ship$gid"]) . " \n";
-                $totalships += $fleet["ship$gid"];
+            if ( $fleet[gid] > 0 ) {
+                echo loca("NAME_$gid") . ": " . nicenum($fleet[$gid]) . " \n";
+                $totalships += $fleet[$gid];
             }
         }
 ?>
@@ -311,7 +311,7 @@ $maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );
 
     foreach ($fleetmap as $i=>$gid) {
         
-        $amount = $aktplanet["f$gid"];
+        $amount = $aktplanet[$gid];
         if ($amount > 0) {
             $speed = FleetSpeed ($gid, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE]);
             $cargo = FleetCargo ($gid );
@@ -365,7 +365,7 @@ $maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );
             echo "       <a href=\"javascript:setShips(";
             foreach ( $temp_map as $i=>$gid ) {
                 if ( $i ) echo ",";
-                echo $temp["ship$gid"];
+                echo $temp[$gid];
             }
             echo ");\">\n";
             echo "       ".$temp['name']."</a>\n";

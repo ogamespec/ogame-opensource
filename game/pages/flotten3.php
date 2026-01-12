@@ -65,7 +65,7 @@ if ( $planet > 16 ) $planet = 16;
     foreach ($fleetmap_nosat as $i=>$gid) 
     {
         // Limit the number of fleets to the maximum number on a planet.
-        if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet["f$gid"] , abs ( intval($_POST["ship$gid"]) ) );
+        if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet[$gid] , abs ( intval($_POST["ship$gid"]) ) );
         else $amount = 0;
         $total += $amount;
 

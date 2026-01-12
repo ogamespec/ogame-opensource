@@ -22,10 +22,9 @@ function Admin_Planets () : void
 
         if ($action === "update")        // Update the planet's data.
         {
-            $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
-                                       'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
-                                      'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
-                                      'm', 'k', 'd', 'g', 's', 'p', 'diameter', 'type', 'temp', 'mprod', 'kprod', 'dprod', 'sprod', 'fprod', 'ssprod' );
+            $param = array_merge ( 
+                $buildmap, $defmap, $fleetmap, 
+                array ( 'm', 'k', 'd', 'g', 's', 'p', 'diameter', 'type', 'temp', 'mprod', 'kprod', 'dprod', 'sprod', 'fprod', 'ssprod') );
             $moon_param = array ( 'g', 's', 'p' );
 
             $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";

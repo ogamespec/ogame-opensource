@@ -117,7 +117,7 @@ function Admin_Fleetlogs () : void
         <th <?=$style;?> >
 <?php
     foreach ($fleetmap as $i=>$gid) {
-        $amount = $fleet_obj["ship".$gid];
+        $amount = $fleet_obj[$gid];
         if ( $amount > 0 ) echo loca ("NAME_$gid") . ":" . nicenum($amount) . " ";
     }
 ?>

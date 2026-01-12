@@ -55,7 +55,7 @@ place1,2,3: Place for buildings, fleet, research (INT)
 oldscore1,2,3: Old points for buildings, fleets, and research (BIGINT UNSIGNED, INT UNSIGNED, INT UNSIGNED )
 oldplace1,2,3: old place for buildings, fleet, research (INT)
 scoredate: Time of saving old statistics (INT UNSIGNED)
-rXXX: Research XXX level (INT DEFAULT 0)
+XXX: Research XXX level (INT DEFAULT 0)
 flags: User flags. The full list is below (USER_FLAG). I didn't think of this idea right away, some variables can also be made into flags (INT UNSIGNED)
 feedid: feed id (eg 5aa28084f43ad54d9c8f7dd92f774d03)  (CHAR(32))
 lastfeed: last Feed update timestamp (INT UNSIGNED)
@@ -693,7 +693,7 @@ function RecalcStats (int $player_id) : void
     if ( $user != null )
     {
         foreach ($resmap as $i=>$gid) {
-            $level = $user["r$gid"];
+            $level = $user[$gid];
             $rpoints += $level;
             if ($level > 0) {
                 for ( $lv = 1; $lv<=$level; $lv ++ )

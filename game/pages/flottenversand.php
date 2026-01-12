@@ -78,7 +78,7 @@ $union_id = 0;
 $fleet = array ();
 foreach ($fleetmap as $i=>$gid) 
 {
-    if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = min ( $aktplanet["f$gid"], intval($_POST["ship$gid"]) );
+    if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = min ( $aktplanet[$gid], intval($_POST["ship$gid"]) );
     else $fleet[$gid] = 0;
 }
 $fleet[GID_F_SAT] = 0;        // solar satellites don't fly.

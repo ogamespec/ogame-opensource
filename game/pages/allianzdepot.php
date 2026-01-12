@@ -11,8 +11,8 @@
 
 // Launch a rocket with supplies
 
-$depot_cap = 10000 * pow ( 2, $aktplanet['b'.GID_B_ALLY_DEPOT] );
-if ($aktplanet['b'.GID_B_ALLY_DEPOT]) $deut_avail = min(floor($aktplanet['d']), $depot_cap);
+$depot_cap = 10000 * pow ( 2, $aktplanet[GID_B_ALLY_DEPOT] );
+if ($aktplanet[GID_B_ALLY_DEPOT]) $deut_avail = min(floor($aktplanet['d']), $depot_cap);
 else $deut_avail = 0;
 
 $loaded = $deut_avail;
@@ -35,7 +35,7 @@ while ($rows--)
     // Calculate fleet consumption per hour.
     $cons = 0;
     foreach ($fleetmap as $i=>$id) {
-        $amount = $fleet_obj["ship".$id];
+        $amount = $fleet_obj[$id];
         if ($amount > 0) { 
             $cons += $amount * FleetCons ($id, $user[GID_R_COMBUST_DRIVE], $user[GID_R_IMPULSE_DRIVE], $user[GID_R_HYPER_DRIVE]) / 10;
         }

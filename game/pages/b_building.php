@@ -129,7 +129,7 @@ for ( $i=0; $i<$cnt; $i++ )
 
 foreach ( $buildmap as $i => $id )
 {
-    $lvl = $aktplanet['b'.$id];
+    $lvl = $aktplanet[$id];
     if ( ! BuildMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) continue;
 
     echo "<tr>";
@@ -151,7 +151,7 @@ foreach ( $buildmap as $i => $id )
     if ($k) echo " ".loca("CRYSTAL").": <b>".nicenum($k)."</b>";
     if ($d) echo " ".loca("DEUTERIUM").": <b>".nicenum($d)."</b>";
     if ($e) echo " ".loca("ENERGY").": <b>".nicenum($e)."</b>";
-    $t = BuildDuration ( $id, $lvl+1, $aktplanet['b'.GID_B_ROBOTS], $aktplanet['b'.GID_B_NANITES], $GlobalUni['speed'] );
+    $t = BuildDuration ( $id, $lvl+1, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
     echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br>";
 
     if ( $prem['commander'] ) {

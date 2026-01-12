@@ -23,9 +23,9 @@ R temp: Minimum temperature (INT)
 fields: Number of developed fields (INT)
 R maxfields: Maximum number of fields (INT)
 date: Creation date (INT UNSIGNED time)
-bXX: Building level of each type (INT DEFAULT 0)
-dXX: Number of defenses of each type (INT DEFAULT 0)
-fXX: Number of fleet of each type (INT DEFAULT 0)
+BBB: Building level of each type (INT DEFAULT 0)
+DDD: Number of defenses of each type (INT DEFAULT 0)
+FFF: Number of fleet of each type (INT DEFAULT 0)
 m, k, d: Metal, crystal, deuterium (DOUBLE)
 mprod, kprod, dprod: Percentage of mine production of metal, crystal, deuterium ( 0...1 DOUBLE)
 sprod, fprod, ssprod: Percentage of output of solar power plant, fusion and solar satellites ( 0...1 DOUBLE)
@@ -185,16 +185,16 @@ function GetPlanet ( int $planet_id) : array|null
     if ( $prem['engineer'] ) $e_factor = 1.1;
     else $e_factor = 1.0;
 
-    $planet['mmax'] = store_capacity ( $planet['b22'] );
-    $planet['kmax'] = store_capacity ( $planet['b23'] );
-    $planet['dmax'] = store_capacity ( $planet['b24'] );
-    $planet['emax'] = prod_solar($planet['b4'], $planet['sprod']) * $e_factor  + 
-                    prod_fusion($planet['b12'], $user[GID_R_ENERGY], $planet['fprod']) * $e_factor  + 
-                    prod_sat($planet['temp']+40) * $planet['f212'] * $planet['ssprod'] * $e_factor ;
+    $planet['mmax'] = store_capacity ( $planet[GID_B_METAL_STOR] );
+    $planet['kmax'] = store_capacity ( $planet[GID_B_CRYS_STOR] );
+    $planet['dmax'] = store_capacity ( $planet[GID_B_DEUT_STOR] );
+    $planet['emax'] = prod_solar($planet[GID_B_SOLAR], $planet['sprod']) * $e_factor  + 
+                    prod_fusion($planet[GID_B_FUSION], $user[GID_R_ENERGY], $planet['fprod']) * $e_factor  + 
+                    prod_sat($planet['temp']+40) * $planet[GID_F_SAT] * $planet['ssprod'] * $e_factor ;
 
-    $planet['econs'] = ( cons_metal ($planet['b1']) * $planet['mprod'] + 
-                        cons_crys ($planet['b2']) * $planet['kprod'] + 
-                        cons_deut ($planet['b3']) * $planet['dprod'] );
+    $planet['econs'] = ( cons_metal ($planet[GID_B_METAL_MINE]) * $planet['mprod'] + 
+                        cons_crys ($planet[GID_B_CRYS_MINE]) * $planet['kprod'] + 
+                        cons_deut ($planet[GID_B_DEUT_SYNTH]) * $planet['dprod'] );
 
     $planet['e'] = floor ( $planet['emax'] - $planet['econs'] );
     $planet['factor'] = 1;
@@ -463,8 +463,8 @@ function RecalcFields (int $planet_id) : void
     $fields = 0;
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) $maxfields = 1;    // moon
     else $maxfields = floor (pow (($planet['diameter'] / 1000), 2));    // planet
-    foreach ( $buildmap as $i=>$gid ) $fields += $planet["b$gid"];
-    $maxfields += 5 * $planet["b".GID_B_TERRAFORMER] + 3 * $planet["b".GID_B_LUNAR_BASE];    // terraformer and moonbase
+    foreach ( $buildmap as $i=>$gid ) $fields += $planet[$gid];
+    $maxfields += 5 * $planet[GID_B_TERRAFORMER] + 3 * $planet[GID_B_LUNAR_BASE];    // terraformer and moonbase
     $query = "UPDATE ".$db_prefix."planets SET fields=$fields, maxfields=$maxfields WHERE planet_id=$planet_id;";
     dbquery ($query);
 }
@@ -479,8 +479,10 @@ function CreateOuterSpace (int $g, int $s, int $p) : int
     $result = dbquery ($query);
     if ( dbrows ($result) == 0 ) 
     {
-        $planet = array( 'name' => loca("FAR_SPACE"), 'type' => PTYP_FARSPACE, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => USER_SPACE, 'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => time(),
-                         'm' => 0, 'k' => 0, 'd' => 0, 'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 'lastpeek' => 0, 'lastakt' => 0, 'gate_until' => 0, 'remove' => 0 );
+        $planet = array( 'name' => loca("FAR_SPACE"), 'type' => PTYP_FARSPACE, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => USER_SPACE, 
+            'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => time(),
+            'm' => 0, 'k' => 0, 'd' => 0, 'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 
+            'lastpeek' => 0, 'lastakt' => 0, 'gate_until' => 0, 'remove' => 0 );
         $id = AddDBRow ( $planet, 'planets' );
     }
     else
@@ -495,8 +497,9 @@ function CreateOuterSpace (int $g, int $s, int $p) : int
 function SetPlanetFleetDefense ( int $planet_id, array $objects ) : void
 {
     global $db_prefix;
-    $param = array (  'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 
-                      'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215' );
+    global $defmap;
+    global $fleetmap;
+    $param = array_merge ( array_diff($defmap, [GID_D_ABM, GID_D_IPM]), $fleetmap);
     $query = "UPDATE ".$db_prefix."planets SET ";
     foreach ( $param as $i=>$p ) {
         if ( $i == 0 ) $query .= "$p=".$objects[$p];
@@ -510,7 +513,8 @@ function SetPlanetFleetDefense ( int $planet_id, array $objects ) : void
 function SetPlanetDefense ( int $planet_id, array $objects ) : void
 {
     global $db_prefix;
-    $param = array (  'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503' );
+    global $defmap;
+    $param = $defmap;
     $query = "UPDATE ".$db_prefix."planets SET ";
     foreach ( $param as $i=>$p ) {
         if ( $i == 0 ) $query .= "$p=".$objects[$p];
@@ -524,7 +528,8 @@ function SetPlanetDefense ( int $planet_id, array $objects ) : void
 function SetPlanetBuildings ( int $planet_id, array $objects ) : void
 {
     global $db_prefix;
-    $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44' );
+    global $buildmap;
+    $param = $buildmap;
     $query = "UPDATE ".$db_prefix."planets SET ";
     foreach ( $param as $i=>$p ) {
         if ( $i == 0 ) $query .= "$p=".$objects[$p];
