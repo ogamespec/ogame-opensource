@@ -199,7 +199,7 @@ function BotGetResearch (int $n) : int
     global $BotID, $BotNow;
     $bot = LoadUser ($BotID);
     if ($bot == null) return 0;
-    return $bot['r'.$n];
+    return $bot[$n];
 }
 
 // Check - can we start research on the active planet (1-yes, 0-no)
@@ -211,7 +211,7 @@ function BotCanResearch (int $obj_id) : bool
     $aktplanet = GetPlanet ( $user['aktplanet'] );
     if ($aktplanet == null) return false;
     ProdResources ( $aktplanet, $aktplanet['lastpeek'], $BotNow );
-    $level = $aktplanet['r'.$obj_id] + 1;
+    $level = $aktplanet[$obj_id] + 1;
     $text = CanResearch ($user, $aktplanet, $obj_id, $level);
     return ($text === '' );
 }
@@ -225,7 +225,7 @@ function BotResearch (int $obj_id) : int
     if ($user == null) return 0;
     $aktplanet = GetPlanet ( $user['aktplanet'] );
     if ($aktplanet == null) return 0;
-    $level = $aktplanet['r'.$obj_id] + 1;
+    $level = $aktplanet[$obj_id] + 1;
     $text = StartResearch ($user[player_id], $user[aktplanet], $obj_id, 0);
     if ( $text === '' ) {
         $speed = $uni['speed'];

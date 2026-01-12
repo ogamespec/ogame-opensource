@@ -21,7 +21,7 @@ if ( method () === "POST" && isset($_POST['aktion']) )
     if ($target != null) {
         $target_user = LoadUser ($target['owner_id']);
         $dist = abs ($origin['s'] - $target['s']);
-        $ipm_radius = max (0, 5 * $GlobalUser['r'.GID_R_IMPULSE_DRIVE] - 1);
+        $ipm_radius = max (0, 5 * $GlobalUser[GID_R_IMPULSE_DRIVE] - 1);
 
         if ( !in_array ($type, $defmap_norak ) ) $type = 0;
 
@@ -111,7 +111,7 @@ if ( !$not_enough_deut && $GlobalUser['admin'] == 0 )
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
-$maxfleet = $GlobalUser['r'.GID_R_COMPUTER] + 1;
+$maxfleet = $GlobalUser[GID_R_COMPUTER] + 1;
 
 $prem = PremiumStatus ($GlobalUser);
 if ( $prem['admiral'] ) $maxfleet += 2;
@@ -396,7 +396,7 @@ echo "</form>\n";
 /***** A form of interplanetary rocket launch *****/
 
     $system_radius = abs ($aktplanet['s'] - $coord_s);
-    $ipm_radius = max (0, 5 * $GlobalUser['r'.GID_R_IMPULSE_DRIVE] - 1);
+    $ipm_radius = max (0, 5 * $GlobalUser[GID_R_IMPULSE_DRIVE] - 1);
     $show_ipm_button = ($system_radius <= $ipm_radius) && ($aktplanet["d".GID_D_IPM] > 0) && ($aktplanet['g'] == $coord_g);
 
     if ( isset($_GET['mode']) ) {

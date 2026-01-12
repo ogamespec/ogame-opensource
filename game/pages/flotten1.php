@@ -55,7 +55,7 @@ if ( method () === "POST" )
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );    // Number of fleets
 $nowfleet = $rows = dbrows ($result);
-$maxfleet = $GlobalUser['r'.GID_R_COMPUTER] + 1;
+$maxfleet = $GlobalUser[GID_R_COMPUTER] + 1;
 
 $prem = PremiumStatus ($GlobalUser);
 if ( $prem['admiral'] ) $maxfleet += 2;
@@ -313,9 +313,9 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
         
         $amount = $aktplanet["f$gid"];
         if ($amount > 0) {
-            $speed = FleetSpeed ($gid, $GlobalUser['r'.GID_R_COMBUST_DRIVE], $GlobalUser['r'.GID_R_IMPULSE_DRIVE], $GlobalUser['r'.GID_R_HYPER_DRIVE]);
+            $speed = FleetSpeed ($gid, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE]);
             $cargo = FleetCargo ($gid );
-            $cons = FleetCons ( $gid, $GlobalUser['r'.GID_R_COMBUST_DRIVE], $GlobalUser['r'.GID_R_IMPULSE_DRIVE], $GlobalUser['r'.GID_R_HYPER_DRIVE]);
+            $cons = FleetCons ( $gid, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE]);
 
             echo "   <tr height=\"20\">\n";
             echo "    <th><a title=\"".loca("FLEET1_SPEED").": $speed\">".loca("NAME_$gid")."</a></th>\n";

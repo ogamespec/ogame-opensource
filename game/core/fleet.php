@@ -676,9 +676,9 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
 
     $origin_prem = PremiumStatus ($origin_user);
     $target_prem = PremiumStatus ($target_user);
-    $origin_tech = $origin_user['r'.GID_R_ESPIONAGE];
+    $origin_tech = $origin_user[GID_R_ESPIONAGE];
     if ($origin_prem['technocrat']) $origin_tech += 2;
-    $target_tech = $target_user['r'.GID_R_ESPIONAGE];
+    $target_tech = $target_user[GID_R_ESPIONAGE];
     if ($target_prem['technocrat']) $target_tech += 2;
 
     loca_add ( "technames", $origin_user['lang'] );

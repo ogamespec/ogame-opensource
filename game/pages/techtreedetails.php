@@ -31,7 +31,7 @@ function walk_tree (array $arr, int $id) : void
 
 function MeetRequirement ( array $user, array $planet, int $id, int $level ) : bool
 {
-    if (IsResearch($id)) return $user['r'.$id] >= $level;
+    if (IsResearch($id)) return $user[$id] >= $level;
     else return $planet['b'.$id] >= $level;
 }
 

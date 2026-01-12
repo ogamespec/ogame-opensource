@@ -750,7 +750,7 @@ function StartResearch (int $player_id, int $planet_id, int $id, int $now) : voi
 
     // Get a level of research.
     $user = LoadUser ( $player_id );
-    $level = $user['r'.$id] + 1;
+    $level = $user[$id] + 1;
 
     $prem = PremiumStatus ($user);
     if ( $prem['technocrat'] ) $r_factor = 1.1;
@@ -836,7 +836,7 @@ function Queue_Research_End (array $queue) : void
     ProdResources ( $planet, $planet['lastpeek'], $queue['end'] );
 
     // Update the research level in the database.
-    $query = "UPDATE ".$db_prefix."users SET ".('r'.$id)." = $lvl WHERE player_id = $player_id";
+    $query = "UPDATE ".$db_prefix."users SET ".$id." = $lvl WHERE player_id = $player_id";
     dbquery ($query);
 
     RemoveQueue ( $queue['task_id'] );

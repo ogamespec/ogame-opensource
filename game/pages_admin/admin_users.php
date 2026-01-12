@@ -82,7 +82,7 @@ function Admin_Users () : void
 
             foreach ( $resmap as $i=>$gid)
             {
-                $query .= "r$gid = ".intval ($_POST["r$gid"]).", ";
+                $query .= "$gid = ".intval ($_POST["r$gid"]).", ";
             }
 
             if ( key_exists('deaktjava', $_POST) && $_POST['deaktjava'] === "on" ) {
@@ -349,7 +349,7 @@ function Admin_Users () : void
         <th valign=top><table>
 <?php
         foreach ( $resmap as $i=>$gid) {
-            echo "<tr><th>".loca("NAME_$gid")."</th><th><input type=\"text\" size=3 name=\"r$gid\" value=\"".$user["r$gid"]."\" /></th></tr>\n";
+            echo "<tr><th>".loca("NAME_$gid")."</th><th><input type=\"text\" size=3 name=\"r$gid\" value=\"".$user[$gid]."\" /></th></tr>\n";
         }
 ?>
         <tr><td colspan=2>&nbsp;</td></tr>

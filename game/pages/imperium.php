@@ -358,7 +358,7 @@ $speed = $GlobalUni['speed'];
 <?php
     foreach ($resmap as $i=>$res)
     {
-        if ( $GlobalUser["r$res"] == 0 ) continue;
+        if ( $GlobalUser[$res] == 0 ) continue;
 
         echo "        <tr height=\"20\">\n";
         echo "            <th width=\"75\">\n";
@@ -371,13 +371,13 @@ $speed = $GlobalUni['speed'];
             echo "            <th width=\"75\" >\n\n";
             echo "                <a href=\"index.php?page=buildings&session=$session&cp=".$planet['planet_id']."&mode=Forschung&planettype=$planettype\">\n";
             echo "                    <font color =\"lime\">\n\n";
-            echo "                        ".$GlobalUser["r$res"]."                      \n";
+            echo "                        ".$GlobalUser[$res]."                      \n";
             echo "                    </font>\n";
             echo "                </a>\n\n";
             echo "            </th>\n\n";
         }
 
-        echo "            <th width=\"75\">".$GlobalUser["r$res"]."</th>\n\n";
+        echo "            <th width=\"75\">".$GlobalUser[$res]."</th>\n\n";
         echo "        </tr>\n";
     }
 

@@ -287,7 +287,7 @@ if ( $_GET['mode'] === "Forschung" )
 
             $reslab = ResearchNetwork ( $aktplanet['planet_id'], $id );
 
-            $level = $GlobalUser['r'.$id]+1;
+            $level = $GlobalUser[$id]+1;
             echo "<tr>             ";
             if ( $GlobalUser['useskin'] ) {
                 echo "                <td class=l>\n";
@@ -299,11 +299,11 @@ if ( $_GET['mode'] === "Forschung" )
             }
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
-            if ($GlobalUser['r'.$id]) echo "</a> (" . va(loca("BUILD_LEVEL"), $GlobalUser['r'.$id]);
+            if ($GlobalUser[$id]) echo "</a> (" . va(loca("BUILD_LEVEL"), $GlobalUser[$id]);
             if ( $id == GID_R_ESPIONAGE && $prem['technocrat'] ) { 
                 echo " <b><font style=\"color:lime;\">+2</font></b> <img border=\"0\" src=\"img/technokrat_ikon.gif\" alt=\"".loca("PREM_TECHNOCRATE")."\" onmouseover=\"return overlib('<font color=white>".loca("PREM_TECHNOCRATE")."</font>', WIDTH, 100);\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
             }
-            if ($GlobalUser['r'.$id]) echo ")";
+            if ($GlobalUser[$id]) echo ")";
             $res = ResearchPrice ( $id, $level );
             $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
@@ -360,7 +360,7 @@ if ( $_GET['mode'] === "Forschung" )
             }
             else        // The research is not in progress.
             {
-                if ($GlobalUser['r'.$id]) {
+                if ($GlobalUser[$id]) {
                     if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".va(loca("BUILD_RESEARCH_LEVEL"), $level)."</font></a>";
                     else echo "<font color=#FF0000>".va(loca("BUILD_RESEARCH_LEVEL"), $level)."</font>";
                 }

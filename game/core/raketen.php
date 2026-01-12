@@ -78,8 +78,8 @@ function RocketAttack ( int $fleet_id, int $planet_id, int $when ) : void
         $moon_attack, 
         $target, 
         $moon_planet, 
-        $origin_user['r'.GID_R_WEAPON], 
-        $target_user['r'.GID_R_ARMOUR] );
+        $origin_user[GID_R_WEAPON], 
+        $target_user[GID_R_ARMOUR] );
 
     // Write back the defense's losses.
     SetPlanetDefense ( $planet_id, $target );

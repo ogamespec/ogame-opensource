@@ -177,7 +177,7 @@ function ResearchNetwork ( int $planetid, int $id ) : int
     $player_id = $planet['owner_id'];
     $user = LoadUser ($player_id);
     if ($user == null) return 0;
-    $ign = $user ["r".GID_R_IGN];
+    $ign = $user [GID_R_IGN];
     $reslab = $planet["b".GID_B_RES_LAB];
     $labs = array ();
     $labnum = 0;

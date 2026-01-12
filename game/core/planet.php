@@ -189,7 +189,7 @@ function GetPlanet ( int $planet_id) : array|null
     $planet['kmax'] = store_capacity ( $planet['b23'] );
     $planet['dmax'] = store_capacity ( $planet['b24'] );
     $planet['emax'] = prod_solar($planet['b4'], $planet['sprod']) * $e_factor  + 
-                    prod_fusion($planet['b12'], $user['r113'], $planet['fprod']) * $e_factor  + 
+                    prod_fusion($planet['b12'], $user[GID_R_ENERGY], $planet['fprod']) * $e_factor  + 
                     prod_sat($planet['temp']+40) * $planet['f212'] * $planet['ssprod'] * $e_factor ;
 
     $planet['econs'] = ( cons_metal ($planet['b1']) * $planet['mprod'] + 

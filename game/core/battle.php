@@ -619,7 +619,7 @@ function GenBattleSourceData (array $a, array $d, int $rf, int $fid, int $did) :
         $source .= "Attacker".$num." = ({".$attacker['oname']."} ";
         $source .= $attacker['id'] . " ";
         $source .= $attacker['g'] . " " . $attacker['s'] . " " . $attacker['p'] . " ";
-        $source .= $attacker['r'.GID_R_WEAPON] . " " . $attacker['r'.GID_R_SHIELD] . " " . $attacker['r'.GID_R_ARMOUR] . " ";
+        $source .= $attacker[GID_R_WEAPON] . " " . $attacker[GID_R_SHIELD] . " " . $attacker[GID_R_ARMOUR] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $attacker['fleet'][$gid] . " ";
         $source .= ")\n";
     }
@@ -628,7 +628,7 @@ function GenBattleSourceData (array $a, array $d, int $rf, int $fid, int $did) :
         $source .= "Defender".$num." = ({".$defender['oname']."} ";
         $source .= $defender['id'] . " ";
         $source .= $defender['g'] . " " . $defender['s'] . " " . $defender['p'] . " ";
-        $source .= $defender['r'.GID_R_WEAPON] . " " . $defender['r'.GID_R_SHIELD] . " " . $defender['r'.GID_R_ARMOUR] . " ";
+        $source .= $defender[GID_R_WEAPON] . " " . $defender[GID_R_SHIELD] . " " . $defender[GID_R_ARMOUR] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $defender['fleet'][$gid] . " ";
         foreach ($defmap_norak as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
         $source .= ")\n";
@@ -1061,15 +1061,15 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
     $d[0] = LoadUser ( USER_SPACE );
     if ( $pirates ) {
         $d[0]['oname'] = "Piraten";
-        $d[0]['r'.GID_R_WEAPON] = max (0, $a[0]['r'.GID_R_WEAPON] - 3);
-        $d[0]['r'.GID_R_SHIELD] = max (0, $a[0]['r'.GID_R_SHIELD] - 3);
-        $d[0]['r'.GID_R_ARMOUR] = max (0, $a[0]['r'.GID_R_ARMOUR] - 3);
+        $d[0][GID_R_WEAPON] = max (0, $a[0][GID_R_WEAPON] - 3);
+        $d[0][GID_R_SHIELD] = max (0, $a[0][GID_R_SHIELD] - 3);
+        $d[0][GID_R_ARMOUR] = max (0, $a[0][GID_R_ARMOUR] - 3);
     }
     else {
         $d[0]['oname'] = "Aliens";
-        $d[0]['r'.GID_R_WEAPON] = $a[0]['r'.GID_R_WEAPON] + 3;
-        $d[0]['r'.GID_R_SHIELD] = $a[0]['r'.GID_R_SHIELD] + 3;
-        $d[0]['r'.GID_R_ARMOUR] = $a[0]['r'.GID_R_ARMOUR] + 3;
+        $d[0][GID_R_WEAPON] = $a[0][GID_R_WEAPON] + 3;
+        $d[0][GID_R_SHIELD] = $a[0][GID_R_SHIELD] + 3;
+        $d[0][GID_R_ARMOUR] = $a[0][GID_R_ARMOUR] + 3;
     }
     $d[0]['fleet'] = array ();
     $d[0]['defense'] = array ();

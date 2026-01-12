@@ -20,7 +20,22 @@ $tab_users = array (    // Users
     'dm'=>'INT UNSIGNED', 'dmfree'=>'INT UNSIGNED', 'sniff'=>'INT', 'debug'=>'INT', 'trader'=>'INT', 'rate_m'=>'DOUBLE', 'rate_k'=>'DOUBLE', 'rate_d'=>'DOUBLE',
     'score1'=>'BIGINT', 'score2'=>'INT', 'score3'=>'INT', 'place1'=>'INT', 'place2'=>'INT', 'place3'=>'INT',
     'oldscore1'=>'BIGINT', 'oldscore2'=>'INT', 'oldscore3'=>'INT', 'oldplace1'=>'INT', 'oldplace2'=>'INT', 'oldplace3'=>'INT', 'scoredate'=>'INT UNSIGNED',
-    'r106'=>'INT DEFAULT 0', 'r108'=>'INT DEFAULT 0', 'r109'=>'INT DEFAULT 0', 'r110'=>'INT DEFAULT 0', 'r111'=>'INT DEFAULT 0', 'r113'=>'INT DEFAULT 0', 'r114'=>'INT DEFAULT 0', 'r115'=>'INT DEFAULT 0', 'r117'=>'INT DEFAULT 0', 'r118'=>'INT DEFAULT 0', 'r120'=>'INT DEFAULT 0', 'r121'=>'INT DEFAULT 0', 'r122'=>'INT DEFAULT 0', 'r123'=>'INT DEFAULT 0', 'r124'=>'INT DEFAULT 0', 'r199'=>'INT DEFAULT 0',
+    GID_R_ESPIONAGE=>'INT DEFAULT 0',
+    GID_R_COMPUTER=>'INT DEFAULT 0',
+    GID_R_WEAPON=>'INT DEFAULT 0',
+    GID_R_SHIELD=>'INT DEFAULT 0',
+    GID_R_ARMOUR=>'INT DEFAULT 0',
+    GID_R_ENERGY=>'INT DEFAULT 0',
+    GID_R_HYPERSPACE=>'INT DEFAULT 0',
+    GID_R_COMBUST_DRIVE=>'INT DEFAULT 0',
+    GID_R_IMPULSE_DRIVE=>'INT DEFAULT 0',
+    GID_R_HYPER_DRIVE=>'INT DEFAULT 0',
+    GID_R_LASER_TECH=>'INT DEFAULT 0',
+    GID_R_ION_TECH=>'INT DEFAULT 0',
+    GID_R_PLASMA_TECH=>'INT DEFAULT 0',
+    GID_R_IGN=>'INT DEFAULT 0',
+    GID_R_EXPEDITION=>'INT DEFAULT 0',
+    GID_R_GRAVITON=>'INT DEFAULT 0',
     'flags'=>'INT UNSIGNED', 'feedid'=>'CHAR(32)', 'lastfeed'=>'INT UNSIGNED', 'com_until'=>'INT UNSIGNED', 'adm_until'=>'INT UNSIGNED', 'eng_until'=>'INT UNSIGNED', 'geo_until'=>'INT UNSIGNED', 'tec_until'=>'INT UNSIGNED'
 );
 
