@@ -95,7 +95,7 @@ function Admin_Fleetlogs () : void
         <th <?=$style;?> >
 <?php
     echo "<nobr>".BuildDurationFormat ($fleet_obj['flight_time']) . "</nobr><br>";
-    echo "<nobr>".$fleet_obj['flight_time'] . " сек.</nobr>";
+    echo "<nobr>".$fleet_obj['flight_time'] . " ".loca("TIME_SEC")."</nobr>";
 ?>
         </th>
         <th <?=$style;?> >
@@ -117,7 +117,7 @@ function Admin_Fleetlogs () : void
         <th <?=$style;?> >
 <?php
     foreach ($fleetmap as $i=>$gid) {
-        $amount = $fleet_obj["ship".$gid];
+        $amount = $fleet_obj[$gid];
         if ( $amount > 0 ) echo loca ("NAME_$gid") . ":" . nicenum($amount) . " ";
     }
 ?>

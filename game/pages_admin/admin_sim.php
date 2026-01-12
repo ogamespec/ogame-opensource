@@ -39,9 +39,9 @@ function ParseBattleDataSource (string $source, array &$a, array &$d) : void
                 'g' => (int)$values[1],
                 's' => (int)$values[2],
                 'p' => (int)$values[3],
-                'r'.GID_R_WEAPON => (int)$values[4],
-                'r'.GID_R_SHIELD => (int)$values[5],
-                'r'.GID_R_ARMOUR => (int)$values[6],
+                GID_R_WEAPON => (int)$values[4],
+                GID_R_SHIELD => (int)$values[5],
+                GID_R_ARMOUR => (int)$values[6],
                 'fleet' => array (
                     GID_F_SC => (int)$values[7],
                     GID_F_LC => (int)$values[8],
@@ -85,9 +85,9 @@ function ParseBattleDataSource (string $source, array &$a, array &$d) : void
                 'g' => (int)$values[1],
                 's' => (int)$values[2],
                 'p' => (int)$values[3],
-                'r'.GID_R_WEAPON => (int)$values[4],
-                'r'.GID_R_SHIELD => (int)$values[5],
-                'r'.GID_R_ARMOUR => (int)$values[6],
+                GID_R_WEAPON => (int)$values[4],
+                GID_R_SHIELD => (int)$values[5],
+                GID_R_ARMOUR => (int)$values[6],
                 'fleet' => array (
                     GID_F_SC => (int)$values[7],
                     GID_F_LC => (int)$values[8],
@@ -259,9 +259,9 @@ function Admin_BattleSim () : void
             if ( $_POST["a".$i."_shld"] === "" ) $_POST["a".$i."_shld"] = 0;
             if ( $_POST["a".$i."_armor"] === "" ) $_POST["a".$i."_armor"] = 0;
 
-            $a[$i]['r'.GID_R_WEAPON] = intval ($_POST["a".$i."_weap"]);
-            $a[$i]['r'.GID_R_SHIELD] = intval ($_POST["a".$i."_shld"]);
-            $a[$i]['r'.GID_R_ARMOUR] = intval ($_POST["a".$i."_armor"]);
+            $a[$i][GID_R_WEAPON] = intval ($_POST["a".$i."_weap"]);
+            $a[$i][GID_R_SHIELD] = intval ($_POST["a".$i."_shld"]);
+            $a[$i][GID_R_ARMOUR] = intval ($_POST["a".$i."_armor"]);
             $a[$i]['oname'] = "Attacker$i";
             $a[$i]['id'] = mt_rand(1,10000);
     
@@ -284,9 +284,9 @@ function Admin_BattleSim () : void
             if ( $_POST["d".$i."_shld"] === "" ) $_POST["d".$i."_shld"] = 0;
             if ( $_POST["d".$i."_armor"] === "" ) $_POST["d".$i."_armor"] = 0;
 
-            $d[$i]['r'.GID_R_WEAPON] = intval ($_POST["d".$i."_weap"]);
-            $d[$i]['r'.GID_R_SHIELD] = intval ($_POST["d".$i."_shld"]);
-            $d[$i]['r'.GID_R_ARMOUR] = intval ($_POST["d".$i."_armor"]);
+            $d[$i][GID_R_WEAPON] = intval ($_POST["d".$i."_weap"]);
+            $d[$i][GID_R_SHIELD] = intval ($_POST["d".$i."_shld"]);
+            $d[$i][GID_R_ARMOUR] = intval ($_POST["d".$i."_armor"]);
             $d[$i]['oname'] = "Defender$i";
             $d[$i]['id'] = mt_rand(1,10000);
     

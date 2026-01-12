@@ -68,7 +68,7 @@ function BotCanBuild (int $obj_id) : bool
     $aktplanet = GetPlanet ( $user['aktplanet'] );
     if ($aktplanet == null) return false;
     ProdResources ( $aktplanet, $aktplanet['lastpeek'], $BotNow );
-    $level = $aktplanet['b'.$obj_id] + 1;
+    $level = $aktplanet[$obj_id] + 1;
     $text = CanBuild ( $user, $aktplanet, $obj_id, $level, 0 );
     return ( $text === '' );
 }
@@ -82,11 +82,11 @@ function BotBuild (int $obj_id) : int
     if ($user == null) return 0;
     $aktplanet = GetPlanet ( $user['aktplanet'] );
     if ($aktplanet == null) return 0;
-    $level = $aktplanet['b'.$obj_id] + 1;
+    $level = $aktplanet[$obj_id] + 1;
     $text = CanBuild ( $user, $aktplanet, $obj_id, $level, 0 );
     if ( $text === '' ) {
         $speed = $GlobalUni['speed'];
-        $duration = floor (BuildDuration ( $obj_id, $level, $aktplanet['b14'], $aktplanet['b15'], $speed ));
+        $duration = floor (BuildDuration ( $obj_id, $level, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed ));
         BuildEnque ( $user, $user['aktplanet'], $obj_id, 0, $BotNow);
         UpdatePlanetActivity ( $user['aktplanet'], $BotNow );
         return $duration;
@@ -102,7 +102,7 @@ function BotGetBuild (int $n) : int
     if ($bot == null) return 0;
     $aktplanet = GetPlanet ( $bot['aktplanet'] );
     if ($aktplanet == null) return 0;
-    return $aktplanet['b'.$n];
+    return $aktplanet[$n];
 }
 
 // Set the resource settings of the active planet (numbers in percentages 0-100)
@@ -180,8 +180,8 @@ function BotBuildFleet (int $obj_id, int $n) : int
     if ( $text === '' ) {
         $speed = $GlobalUni['speed'];
         $now = ShipyardLatestTime ($aktplanet, $BotNow);
-        $shipyard = $aktplanet["b21"];
-        $nanits = $aktplanet["b15"];
+        $shipyard = $aktplanet[GID_B_SHIPYARD];
+        $nanits = $aktplanet[GID_B_NANITES];
         $seconds = ShipyardDuration ( $obj_id, $shipyard, $nanits, $speed );
         AddQueue ($user['player_id'], "Shipyard", $aktplanet['planet_id'], $obj_id, $n, $now, $seconds);
         UpdatePlanetActivity ( $user['aktplanet'], $BotNow );
@@ -199,7 +199,7 @@ function BotGetResearch (int $n) : int
     global $BotID, $BotNow;
     $bot = LoadUser ($BotID);
     if ($bot == null) return 0;
-    return $bot['r'.$n];
+    return $bot[$n];
 }
 
 // Check - can we start research on the active planet (1-yes, 0-no)
@@ -211,7 +211,7 @@ function BotCanResearch (int $obj_id) : bool
     $aktplanet = GetPlanet ( $user['aktplanet'] );
     if ($aktplanet == null) return false;
     ProdResources ( $aktplanet, $aktplanet['lastpeek'], $BotNow );
-    $level = $aktplanet['r'.$obj_id] + 1;
+    $level = $aktplanet[$obj_id] + 1;
     $text = CanResearch ($user, $aktplanet, $obj_id, $level);
     return ($text === '' );
 }
@@ -225,7 +225,7 @@ function BotResearch (int $obj_id) : int
     if ($user == null) return 0;
     $aktplanet = GetPlanet ( $user['aktplanet'] );
     if ($aktplanet == null) return 0;
-    $level = $aktplanet['r'.$obj_id] + 1;
+    $level = $aktplanet[$obj_id] + 1;
     $text = StartResearch ($user[player_id], $user[aktplanet], $obj_id, 0);
     if ( $text === '' ) {
         $speed = $uni['speed'];

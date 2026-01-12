@@ -65,7 +65,7 @@ if ( $planet > 16 ) $planet = 16;
     foreach ($fleetmap_nosat as $i=>$gid) 
     {
         // Limit the number of fleets to the maximum number on a planet.
-        if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet["f$gid"] , abs ( intval($_POST["ship$gid"]) ) );
+        if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet[$gid] , abs ( intval($_POST["ship$gid"]) ) );
         else $amount = 0;
         $total += $amount;
 
@@ -267,7 +267,7 @@ if ( $planet > 16 ) $planet = 16;
     // ----------------------------------------------------------------------------------------------------
     // Expedition duration time
 
-    if ( $mission_exp && $GlobalUser['r'.GID_R_EXPEDITION] > 0 )
+    if ( $mission_exp && $GlobalUser[GID_R_EXPEDITION] > 0 )
     {
 ?>
 
@@ -278,7 +278,7 @@ if ( $planet > 16 ) $planet = 16;
    <th colspan="3">
     <select name="expeditiontime" >
 <?php
-    for ($i=1; $i<=$GlobalUser['r'.GID_R_EXPEDITION]; $i++)
+    for ($i=1; $i<=$GlobalUser[GID_R_EXPEDITION]; $i++)
     {
         echo "          <option value=\"$i\">$i</option>\n";
     }

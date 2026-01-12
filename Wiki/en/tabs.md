@@ -133,7 +133,7 @@ In other words - there is no reason to worry that the tables are organized a bit
 |oldscore1,2,3|BIGINT,INT,INT|Old points for buildings, fleets, and research | 
 |oldplace1,2,3|INT,INT,INT|old place for buildings, fleet, research. | 
 |scoredate|INT UNSIGNED|Time of saving old statistics, time()|
-|rXXX|INT|Research level XXX |
+|XXX|INT DEFAULT 0|Research level XXX |
 |flags|INT UNSIGNED|User flags. The full list is below (USER_FLAG). I didn't think of this idea right away, some variables can also be made into flags|
 |feedid|CHAR(32)| feed id (eg 5aa28084f43ad54d9c8f7dd92f774d03) |
 |lastfeed|INT UNSIGNED | last Feed update timestamp ()|
@@ -181,9 +181,9 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |fields|INT|Number of developed fields | 
 |maxfields|INT|Maximum number of fields | 
 |date|INT UNSIGNED|Date of Creation | 
-|bXXX|INT|Building level XXX | 
-|dXXX|INT|Number of defenses XXX| 
-|fXXX|INT|Number of fleets of each type XXX | 
+|BBB|INT DEFAULT 0|Building level BBB | 
+|DDD|INT DEFAULT 0|Number of defenses DDD| 
+|FFF|INT DEFAULT 0|Number of fleets of each type FFF | 
 |m|DOUBLE|Metal | 
 |k|DOUBLE|crystal | 
 |d|DOUBLE|deuterium | 
@@ -378,9 +378,9 @@ Message types (pm):
 |target_planet|INT|Target | 
 |flight_time|INT|One-way flight time in seconds | 
 |deploy_time|INT|Fleet holding time in seconds |
-|ipm_amount|INT|Number of interplanetary missiles | 
-|ipm_target|INT|target id for interplanetary missiles, 0 - all | 
-|shipXXX|INT|number of ships of each type | 
+|ipm_amount|INT DEFAULT 0|Number of interplanetary missiles | 
+|ipm_target|INT DEFAULT 0|target id for interplanetary missiles, 0 - all | 
+|XXX|INT DEFAULT 0|number of ships of each type | 
 
 ## ACS (union)
 
@@ -432,9 +432,9 @@ Message types (pm):
 |target_s|INT| | 
 |target_p|INT| | 
 |target_type|INT| | 
-|ipm_amount|INT| | 
-|ipm_target|INT| | 
-|shipXXX|INT| | 
+|ipm_amount|INT DEFAULT 0| | 
+|ipm_target|INT DEFAULT 0| | 
+|XXX|INT DEFAULT 0| | 
 
 ## IP Logs (iplogs)
 
@@ -487,7 +487,7 @@ Message types (pm):
 |owner_id|INT| | 
 |name|CHAR(30)| | 
 |date|INT UNSIGNED| |
-|shipXXX|INT| | 
+|XXX|INT DEFAULT 0| | 
 
 ## Bot variables (botvars)
 

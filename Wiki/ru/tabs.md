@@ -133,7 +133,7 @@
 |oldscore1,2,3|BIGINT,INT,INT|Старые очки за постройки, флот, исследования | 
 |oldplace1,2,3|INT,INT,INT|старое место за постройки, флот, исследования | 
 |scoredate|INT UNSIGNED|Время сохранения старой статистики time()|
-|rXXX|INT|Уровень исследования XXX |
+|XXX|INT DEFAULT 0|Уровень исследования XXX |
 |flags|INT UNSIGNED|Флаги пользователя. Полный список ниже (USER_FLAG). Не сразу додумался до этой идеи, некоторые переменные также можно сделать флагами|
 |feedid|CHAR(32)| feed id (eg 5aa28084f43ad54d9c8f7dd92f774d03) |
 |lastfeed|INT UNSIGNED | Время последнего обновления Feed timestamp ()|
@@ -181,9 +181,9 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |fields|INT|Количество застроенных полей | 
 |maxfields|INT|Максимальное количество полей | 
 |date|INT UNSIGNED|Дата создания | 
-|bXXX|INT|Уровень постройки XXX | 
-|dXXX|INT|Количество оборонительных сооружений XXX| 
-|fXXX|INT|Количество флота каждого типа XXX | 
+|BBB|INT DEFAULT 0|Уровень постройки BBB | 
+|DDD|INT DEFAULT 0|Количество оборонительных сооружений DDD| 
+|FFF|INT DEFAULT 0|Количество флота каждого типа FFF | 
 |m|DOUBLE|Металла | 
 |k|DOUBLE|кристалла | 
 |d|DOUBLE|дейтерия | 
@@ -379,9 +379,9 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |target_planet|INT|Финиш | 
 |flight_time|INT|Время полёта в одну сторону в секундах | 
 |deploy_time|INT|Время удержания флота в секундах |
-|ipm_amount|INT|Количество межлпланетных ракет | 
-|ipm_target|INT|id цели для межпланетных ракет, 0 - все | 
-|shipXXX|INT|количество кораблей каждого типа | 
+|ipm_amount|INT DEFAULT 0|Количество межлпланетных ракет | 
+|ipm_target|INT DEFAULT 0|id цели для межпланетных ракет, 0 - все | 
+|XXX|INT DEFAULT 0|количество кораблей каждого типа | 
 
 ## САБы (union)
 
@@ -433,9 +433,9 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |target_s|INT| | 
 |target_p|INT| | 
 |target_type|INT| | 
-|ipm_amount|INT| | 
-|ipm_target|INT| | 
-|shipXXX|INT| | 
+|ipm_amount|INT DEFAULT 0| | 
+|ipm_target|INT DEFAULT 0| | 
+|XXX|INT DEFAULT 0| | 
 
 ## Логи IP (iplogs)
 
@@ -488,7 +488,7 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |owner_id|INT| | 
 |name|CHAR(30)| | 
 |date|INT UNSIGNED| |
-|shipXXX|INT| | 
+|XXX|INT DEFAULT 0| | 
 
 ## Переменные бота (botvars)
 

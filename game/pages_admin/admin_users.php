@@ -82,7 +82,7 @@ function Admin_Users () : void
 
             foreach ( $resmap as $i=>$gid)
             {
-                $query .= "r$gid = ".intval ($_POST["r$gid"]).", ";
+                $query .= "`$gid` = ".intval ($_POST["r$gid"]).", ";
             }
 
             if ( key_exists('deaktjava', $_POST) && $_POST['deaktjava'] === "on" ) {
@@ -100,21 +100,21 @@ function Admin_Users () : void
 
             $query .= "pemail = '".$_POST['pemail']."', ";
             $query .= "email = '".$_POST['email']."', ";
-            $query .= "admin = '".$_POST['admin']."', ";
+            $query .= "admin = ".$_POST['admin'].", ";
             $query .= "validated = ".(key_exists('validated', $_POST) && $_POST['validated']==="on"?1:0).", ";
             $query .= "sniff = ".(key_exists('sniff', $_POST) && $_POST['sniff']==="on"?1:0).", ";
             $query .= "debug = ".(key_exists('debug', $_POST) && $_POST['debug']==="on"?1:0).", ";
 
-            $query .= "dm = '".intval ($_POST['dm'])."', ";
-            $query .= "dmfree = '".intval ($_POST['dmfree'])."', ";
+            $query .= "dm = ".intval ($_POST['dm']).", ";
+            $query .= "dmfree = ".intval ($_POST['dmfree']).", ";
 
-            $query .= "sortby = '".intval ($_POST['settings_sort'])."', ";
-            $query .= "sortorder = '".intval ($_POST['settings_order'])."', ";
+            $query .= "sortby = ".intval ($_POST['settings_sort']).", ";
+            $query .= "sortorder = ".intval ($_POST['settings_order']).", ";
             $query .= "skin = '".$_POST['dpath']."', ";
             $query .= "useskin = ".($_POST['design']==="on"?1:0).", ";
             $query .= "deact_ip = ".(key_exists('deact_ip', $_POST) && $_POST['deact_ip']==="on"?1:0).", ";
-            $query .= "maxspy = '".intval ($_POST['spio_anz'])."', ";
-            $query .= "maxfleetmsg = '".intval ($_POST['settings_fleetactions'])."' ";
+            $query .= "maxspy = ".intval ($_POST['spio_anz']).", ";
+            $query .= "maxfleetmsg = ".intval ($_POST['settings_fleetactions'])." ";
 
             $query .= " WHERE player_id=$player_id;";
             dbquery ($query);
@@ -349,7 +349,7 @@ function Admin_Users () : void
         <th valign=top><table>
 <?php
         foreach ( $resmap as $i=>$gid) {
-            echo "<tr><th>".loca("NAME_$gid")."</th><th><input type=\"text\" size=3 name=\"r$gid\" value=\"".$user["r$gid"]."\" /></th></tr>\n";
+            echo "<tr><th>".loca("NAME_$gid")."</th><th><input type=\"text\" size=3 name=\"r$gid\" value=\"".$user[$gid]."\" /></th></tr>\n";
         }
 ?>
         <tr><td colspan=2>&nbsp;</td></tr>
@@ -467,7 +467,7 @@ function Admin_Users () : void
         <th <?php echo $style;?> >
 <?php
     foreach ($fleetmap as $i=>$gid) {
-        $amount = $fleet_obj["ship".$gid];
+        $amount = $fleet_obj[$gid];
         if ( $amount > 0 ) echo loca ("NAME_$gid") . ":" . nicenum($amount) . " ";
     }
 ?>

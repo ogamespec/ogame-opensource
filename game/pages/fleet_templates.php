@@ -8,7 +8,7 @@
 
 // You are able to create standard fleets. The maximum of standard fleets is your research level "Computer Technology" plus one
 // https://board.en.ogame.gameforge.com/index.php?thread/195023-version-0-74e/
-$MAX = $GlobalUser['r'.GID_R_COMPUTER] + 1;
+$MAX = $GlobalUser[GID_R_COMPUTER] + 1;
 
 $prem = PremiumStatus ($GlobalUser);
 if (!$prem['commander']) {
@@ -30,7 +30,7 @@ if ( method() === "POST" && key_exists('mode', $_POST) && $_POST['mode'] === "sa
         if ( dbrows ($result) > 0 ) {
             $query = "UPDATE ".$db_prefix."template SET name='".$name."', date=$now";
             foreach ( $fleetmap_nosat as $i=>$gid ) {
-                $query .= ", ship$gid ='" . intval ( $_POST['ship'][$gid] ) . "' ";
+                $query .= ", `$gid` =" . intval ( $_POST['ship'][$gid] ) . " ";
             }
             $query .= " WHERE id = $id";
             dbquery ( $query );
@@ -44,22 +44,8 @@ if ( method() === "POST" && key_exists('mode', $_POST) && $_POST['mode'] === "sa
 
         if ( $rows < $MAX )
         {
-            $temp = array ( 'owner_id' => $GlobalUser['player_id'], 'name' => $name, 'date' => $now,
-                'ship202' => intval ( $_POST['ship'][202] ), 
-                'ship203' => intval ( $_POST['ship'][203] ), 
-                'ship204' => intval ( $_POST['ship'][204] ), 
-                'ship205' => intval ( $_POST['ship'][205] ), 
-                'ship206' => intval ( $_POST['ship'][206] ), 
-                'ship207' => intval ( $_POST['ship'][207] ), 
-                'ship208' => intval ( $_POST['ship'][208] ), 
-                'ship209' => intval ( $_POST['ship'][209] ), 
-                'ship210' => intval ( $_POST['ship'][210] ), 
-                'ship211' => intval ( $_POST['ship'][211] ), 
-                'ship212' => 0, 
-                'ship213' => intval ( $_POST['ship'][213] ), 
-                'ship214' => intval ( $_POST['ship'][214] ), 
-                'ship215' => intval ( $_POST['ship'][215] ), 
-            );
+            $temp = array ( 'owner_id' => $GlobalUser['player_id'], 'name' => $name, 'date' => $now );
+            foreach ($fleetmap_nosat as $i=>$gid) $temp[$gid] = intval ( $_POST['ship'][$gid] );
             AddDBRow ( $temp, 'template' );
         }
     }
@@ -122,13 +108,13 @@ if ( method () === "GET" && key_exists('mode', $_GET) && $_GET['mode'] === "dele
 ?>
                 <tr>
             <th><?php echo $count;?></th><th width=160 ><a href=# onclick="show_input(<?php echo $temp['id'];?>,'<?php echo $temp['name'];?>',
-            <?php echo $temp['ship202'];?>,<?php echo $temp['ship203'];?>,<?php echo $temp['ship204'];?>,<?php echo $temp['ship205'];?>,<?php echo $temp['ship206'];?>,
-            <?php echo $temp['ship207'];?>,<?php echo $temp['ship208'];?>,<?php echo $temp['ship209'];?>,<?php echo $temp['ship210'];?>,<?php echo $temp['ship211'];?>,
-            <?php echo $temp['ship212'];?>,<?php echo $temp['ship213'];?>,<?php echo $temp['ship214'];?>,<?php echo $temp['ship215'];?>);"><?php echo $temp['name'];?></a></th>
+            <?php echo $temp['202'];?>,<?php echo $temp['203'];?>,<?php echo $temp['204'];?>,<?php echo $temp['205'];?>,<?php echo $temp['206'];?>,
+            <?php echo $temp['207'];?>,<?php echo $temp['208'];?>,<?php echo $temp['209'];?>,<?php echo $temp['210'];?>,<?php echo $temp['211'];?>,
+            <?php echo $temp['212'];?>,<?php echo $temp['213'];?>,<?php echo $temp['214'];?>,<?php echo $temp['215'];?>);"><?php echo $temp['name'];?></a></th>
             <th width=80 ><a href=# onclick="show_input(<?php echo $temp['id'];?>,'<?php echo $temp['name'];?>',
-            <?php echo $temp['ship202'];?>,<?php echo $temp['ship203'];?>,<?php echo $temp['ship204'];?>,<?php echo $temp['ship205'];?>,<?php echo $temp['ship206'];?>,
-            <?php echo $temp['ship207'];?>,<?php echo $temp['ship208'];?>,<?php echo $temp['ship209'];?>,<?php echo $temp['ship210'];?>,<?php echo $temp['ship211'];?>,
-            <?php echo $temp['ship212'];?>,<?php echo $temp['ship213'];?>,<?php echo $temp['ship214'];?>,<?php echo $temp['ship215'];?>);">O</a></th>
+            <?php echo $temp['202'];?>,<?php echo $temp['203'];?>,<?php echo $temp['204'];?>,<?php echo $temp['205'];?>,<?php echo $temp['206'];?>,
+            <?php echo $temp['207'];?>,<?php echo $temp['208'];?>,<?php echo $temp['209'];?>,<?php echo $temp['210'];?>,<?php echo $temp['211'];?>,
+            <?php echo $temp['212'];?>,<?php echo $temp['213'];?>,<?php echo $temp['214'];?>,<?php echo $temp['215'];?>);">O</a></th>
             <th width=80 ><a href=index.php?page=fleet_templates&session=<?php echo $session;?>&mode=delete&id=<?php echo $temp['id'];?> >X</a></th>
         </tr>
 <?php

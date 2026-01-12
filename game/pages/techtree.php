@@ -41,8 +41,8 @@ $techtree = array ( 'building' => $req_building, 'research' => $req_research, 'f
 
 function MeetRequirement ( array $user, array $planet, int $id, int $level ) : bool
 {
-    if (IsResearch($id)) return $user['r'.$id] >= $level;
-    else return $planet['b'.$id] >= $level;
+    if (IsResearch($id)) return $user[$id] >= $level;
+    else return $planet[$id] >= $level;
 }
 
 echo "<center> \n";

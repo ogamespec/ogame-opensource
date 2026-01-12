@@ -55,13 +55,13 @@ if ( method () === "POST" )
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );    // Number of fleets
 $nowfleet = $rows = dbrows ($result);
-$maxfleet = $GlobalUser['r'.GID_R_COMPUTER] + 1;
+$maxfleet = $GlobalUser[GID_R_COMPUTER] + 1;
 
 $prem = PremiumStatus ($GlobalUser);
 if ( $prem['admiral'] ) $maxfleet += 2;
 
 $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Number of expeditions
-$maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
+$maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );
 
 ?>
 
@@ -144,9 +144,9 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
         $totalships = 0;
         foreach ( $fleetmap as $i=>$gid)
         {
-            if ( $fleet["ship$gid"] > 0 ) {
-                echo loca("NAME_$gid") . ": " . nicenum($fleet["ship$gid"]) . " \n";
-                $totalships += $fleet["ship$gid"];
+            if ( $fleet[gid] > 0 ) {
+                echo loca("NAME_$gid") . ": " . nicenum($fleet[$gid]) . " \n";
+                $totalships += $fleet[$gid];
             }
         }
 ?>
@@ -311,11 +311,11 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
 
     foreach ($fleetmap as $i=>$gid) {
         
-        $amount = $aktplanet["f$gid"];
+        $amount = $aktplanet[$gid];
         if ($amount > 0) {
-            $speed = FleetSpeed ($gid, $GlobalUser['r'.GID_R_COMBUST_DRIVE], $GlobalUser['r'.GID_R_IMPULSE_DRIVE], $GlobalUser['r'.GID_R_HYPER_DRIVE]);
+            $speed = FleetSpeed ($gid, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE]);
             $cargo = FleetCargo ($gid );
-            $cons = FleetCons ( $gid, $GlobalUser['r'.GID_R_COMBUST_DRIVE], $GlobalUser['r'.GID_R_IMPULSE_DRIVE], $GlobalUser['r'.GID_R_HYPER_DRIVE]);
+            $cons = FleetCons ( $gid, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE]);
 
             echo "   <tr height=\"20\">\n";
             echo "    <th><a title=\"".loca("FLEET1_SPEED").": $speed\">".loca("NAME_$gid")."</a></th>\n";
@@ -365,7 +365,7 @@ $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
             echo "       <a href=\"javascript:setShips(";
             foreach ( $temp_map as $i=>$gid ) {
                 if ( $i ) echo ",";
-                echo $temp["ship$gid"];
+                echo $temp[$gid];
             }
             echo ");\">\n";
             echo "       ".$temp['name']."</a>\n";

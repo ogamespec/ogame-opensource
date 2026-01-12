@@ -22,10 +22,9 @@ function Admin_Planets () : void
 
         if ($action === "update")        // Update the planet's data.
         {
-            $param = array (  'b1', 'b2', 'b3', 'b4', 'b12', 'b14', 'b15', 'b21', 'b22', 'b23', 'b24', 'b31', 'b33', 'b34', 'b41', 'b42', 'b43', 'b44',
-                                       'd401', 'd402', 'd403', 'd404', 'd405', 'd406', 'd407', 'd408', 'd502', 'd503',
-                                      'f202', 'f203', 'f204', 'f205', 'f206', 'f207', 'f208', 'f209', 'f210', 'f211', 'f212', 'f213', 'f214', 'f215',
-                                      'm', 'k', 'd', 'g', 's', 'p', 'diameter', 'type', 'temp', 'mprod', 'kprod', 'dprod', 'sprod', 'fprod', 'ssprod' );
+            $param = array_merge ( 
+                $buildmap, $defmap, $fleetmap, 
+                array ( 'm', 'k', 'd', 'g', 's', 'p', 'diameter', 'type', 'temp', 'mprod', 'kprod', 'dprod', 'sprod', 'fprod', 'ssprod') );
             $moon_param = array ( 'g', 's', 'p' );
 
             $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
@@ -34,8 +33,8 @@ function Admin_Planets () : void
                     if (key_exists($p, $_POST)) $query .= ", $p='".$_POST[$p]."'";
                 }
                 else {
-                    if ( $i == 0 ) $query .= "$p=".intval($_POST[$p]);
-                    else $query .= ", $p=".intval($_POST[$p]);
+                    if ( $i == 0 ) $query .= "`$p`=".intval($_POST[$p]);
+                    else $query .= ", `$p`=".intval($_POST[$p]);
                 }
             }
             $query .= " WHERE planet_id=$cp;";
@@ -343,7 +342,7 @@ function reset ()
                     echo " " . date ('i\m s\s', $delta) . " <a href=\"index.php?page=admin&session=$session&mode=Planets&action=cooldown_gates&cp=".$planet['planet_id']."\">".loca("ADM_PLANET_GATE_COOLDOWN")."</a>";
                 }
             }
-            echo "</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=3 name=\"b$gid\" value=\"".$planet["b$gid"]."\" />";
+            echo "</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=3 name=\"$gid\" value=\"".$planet[$gid]."\" />";
 
             // mine management and power generation.
             if ( $gid == 1 && $planet['type'] != PTYP_MOON ) {
@@ -398,8 +397,8 @@ function reset ()
 
         echo "<th valign=top><table>\n";
         foreach ( $fleetmap as $i=>$gid) {
-            echo "<tr><th>".loca("NAME_$gid")."</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=6 name=\"f$gid\" value=\"".$planet["f$gid"]."\" />";
-            if ( $gid == 212 && $planet['type'] != PTYP_MOON ) {
+            echo "<tr><th>".loca("NAME_$gid")."</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=6 name=\"$gid\" value=\"".$planet[$gid]."\" />";
+            if ( $gid == GID_F_SAT && $planet['type'] != PTYP_MOON ) {
                 echo "<select name='ssprod'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
@@ -414,7 +413,7 @@ function reset ()
 
         echo "<th valign=top><table>\n";
         foreach ( $defmap as $i=>$gid) {
-            echo "<tr><th>".loca("NAME_$gid")."</th><th><input id=\"obj$gid\" type=\"text\" size=6 name=\"d$gid\" value=\"".$planet["d$gid"]."\" /></th></tr>\n";
+            echo "<tr><th>".loca("NAME_$gid")."</th><th><input id=\"obj$gid\" type=\"text\" size=6 name=\"$gid\" value=\"".$planet[$gid]."\" /></th></tr>\n";
         }
         echo "</table></th>\n";
 

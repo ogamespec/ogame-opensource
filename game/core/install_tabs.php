@@ -20,15 +20,75 @@ $tab_users = array (    // Users
     'dm'=>'INT UNSIGNED', 'dmfree'=>'INT UNSIGNED', 'sniff'=>'INT', 'debug'=>'INT', 'trader'=>'INT', 'rate_m'=>'DOUBLE', 'rate_k'=>'DOUBLE', 'rate_d'=>'DOUBLE',
     'score1'=>'BIGINT', 'score2'=>'INT', 'score3'=>'INT', 'place1'=>'INT', 'place2'=>'INT', 'place3'=>'INT',
     'oldscore1'=>'BIGINT', 'oldscore2'=>'INT', 'oldscore3'=>'INT', 'oldplace1'=>'INT', 'oldplace2'=>'INT', 'oldplace3'=>'INT', 'scoredate'=>'INT UNSIGNED',
-    'r106'=>'INT DEFAULT 0', 'r108'=>'INT DEFAULT 0', 'r109'=>'INT DEFAULT 0', 'r110'=>'INT DEFAULT 0', 'r111'=>'INT DEFAULT 0', 'r113'=>'INT DEFAULT 0', 'r114'=>'INT DEFAULT 0', 'r115'=>'INT DEFAULT 0', 'r117'=>'INT DEFAULT 0', 'r118'=>'INT DEFAULT 0', 'r120'=>'INT DEFAULT 0', 'r121'=>'INT DEFAULT 0', 'r122'=>'INT DEFAULT 0', 'r123'=>'INT DEFAULT 0', 'r124'=>'INT DEFAULT 0', 'r199'=>'INT DEFAULT 0',
+
+    GID_R_ESPIONAGE=>'INT DEFAULT 0',
+    GID_R_COMPUTER=>'INT DEFAULT 0',
+    GID_R_WEAPON=>'INT DEFAULT 0',
+    GID_R_SHIELD=>'INT DEFAULT 0',
+    GID_R_ARMOUR=>'INT DEFAULT 0',
+    GID_R_ENERGY=>'INT DEFAULT 0',
+    GID_R_HYPERSPACE=>'INT DEFAULT 0',
+    GID_R_COMBUST_DRIVE=>'INT DEFAULT 0',
+    GID_R_IMPULSE_DRIVE=>'INT DEFAULT 0',
+    GID_R_HYPER_DRIVE=>'INT DEFAULT 0',
+    GID_R_LASER_TECH=>'INT DEFAULT 0',
+    GID_R_ION_TECH=>'INT DEFAULT 0',
+    GID_R_PLASMA_TECH=>'INT DEFAULT 0',
+    GID_R_IGN=>'INT DEFAULT 0',
+    GID_R_EXPEDITION=>'INT DEFAULT 0',
+    GID_R_GRAVITON=>'INT DEFAULT 0',
+    
     'flags'=>'INT UNSIGNED', 'feedid'=>'CHAR(32)', 'lastfeed'=>'INT UNSIGNED', 'com_until'=>'INT UNSIGNED', 'adm_until'=>'INT UNSIGNED', 'eng_until'=>'INT UNSIGNED', 'geo_until'=>'INT UNSIGNED', 'tec_until'=>'INT UNSIGNED'
 );
 
 $tab_planets = array (    // Planets
     'planet_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'name'=>'CHAR(20)', 'type'=>'INT', 'g'=>'INT', 's'=>'INT', 'p'=>'INT', 'owner_id'=>'INT', 'diameter'=>'INT', 'temp'=>'INT', 'fields'=>'INT', 'maxfields'=>'INT', 'date'=>'INT UNSIGNED',
-    'b1'=>'INT DEFAULT 0', 'b2'=>'INT DEFAULT 0', 'b3'=>'INT DEFAULT 0', 'b4'=>'INT DEFAULT 0', 'b12'=>'INT DEFAULT 0', 'b14'=>'INT DEFAULT 0', 'b15'=>'INT DEFAULT 0', 'b21'=>'INT DEFAULT 0', 'b22'=>'INT DEFAULT 0', 'b23'=>'INT DEFAULT 0', 'b24'=>'INT DEFAULT 0', 'b31'=>'INT DEFAULT 0', 'b33'=>'INT DEFAULT 0', 'b34'=>'INT DEFAULT 0', 'b41'=>'INT DEFAULT 0', 'b42'=>'INT DEFAULT 0', 'b43'=>'INT DEFAULT 0', 'b44'=>'INT DEFAULT 0',
-    'd401'=>'INT DEFAULT 0', 'd402'=>'INT DEFAULT 0', 'd403'=>'INT DEFAULT 0', 'd404'=>'INT DEFAULT 0', 'd405'=>'INT DEFAULT 0', 'd406'=>'INT DEFAULT 0', 'd407'=>'INT DEFAULT 0', 'd408'=>'INT DEFAULT 0', 'd502'=>'INT DEFAULT 0', 'd503'=>'INT DEFAULT 0',
-    'f202'=>'INT DEFAULT 0', 'f203'=>'INT DEFAULT 0', 'f204'=>'INT DEFAULT 0', 'f205'=>'INT DEFAULT 0', 'f206'=>'INT DEFAULT 0', 'f207'=>'INT DEFAULT 0', 'f208'=>'INT DEFAULT 0', 'f209'=>'INT DEFAULT 0', 'f210'=>'INT DEFAULT 0', 'f211'=>'INT DEFAULT 0', 'f212'=>'INT DEFAULT 0', 'f213'=>'INT DEFAULT 0', 'f214'=>'INT DEFAULT 0', 'f215'=>'INT DEFAULT 0',
+    
+    GID_B_METAL_MINE=>'INT DEFAULT 0', 
+    GID_B_CRYS_MINE=>'INT DEFAULT 0', 
+    GID_B_DEUT_SYNTH=>'INT DEFAULT 0', 
+    GID_B_SOLAR=>'INT DEFAULT 0', 
+    GID_B_FUSION=>'INT DEFAULT 0', 
+    GID_B_ROBOTS=>'INT DEFAULT 0', 
+    GID_B_NANITES=>'INT DEFAULT 0', 
+    GID_B_SHIPYARD=>'INT DEFAULT 0', 
+    GID_B_METAL_STOR=>'INT DEFAULT 0', 
+    GID_B_CRYS_STOR=>'INT DEFAULT 0', 
+    GID_B_DEUT_STOR=>'INT DEFAULT 0', 
+    GID_B_RES_LAB=>'INT DEFAULT 0', 
+    GID_B_TERRAFORMER=>'INT DEFAULT 0', 
+    GID_B_ALLY_DEPOT=>'INT DEFAULT 0', 
+    GID_B_LUNAR_BASE=>'INT DEFAULT 0', 
+    GID_B_PHALANX=>'INT DEFAULT 0', 
+    GID_B_JUMP_GATE=>'INT DEFAULT 0', 
+    GID_B_MISS_SILO=>'INT DEFAULT 0',
+
+    GID_D_RL=>'INT DEFAULT 0', 
+    GID_D_LL=>'INT DEFAULT 0', 
+    GID_D_HL=>'INT DEFAULT 0', 
+    GID_D_GAUSS=>'INT DEFAULT 0', 
+    GID_D_ION=>'INT DEFAULT 0', 
+    GID_D_PLASMA=>'INT DEFAULT 0', 
+    GID_D_SDOME=>'INT DEFAULT 0', 
+    GID_D_LDOME=>'INT DEFAULT 0', 
+    GID_D_ABM=>'INT DEFAULT 0', 
+    GID_D_IPM=>'INT DEFAULT 0',
+
+    GID_F_SC=>'INT DEFAULT 0', 
+    GID_F_LC=>'INT DEFAULT 0', 
+    GID_F_LF=>'INT DEFAULT 0', 
+    GID_F_HF=>'INT DEFAULT 0', 
+    GID_F_CRUISER=>'INT DEFAULT 0', 
+    GID_F_BATTLESHIP=>'INT DEFAULT 0', 
+    GID_F_COLON=>'INT DEFAULT 0', 
+    GID_F_RECYCLER=>'INT DEFAULT 0', 
+    GID_F_PROBE=>'INT DEFAULT 0', 
+    GID_F_BOMBER=>'INT DEFAULT 0', 
+    GID_F_SAT=>'INT DEFAULT 0', 
+    GID_F_DESTRO=>'INT DEFAULT 0', 
+    GID_F_DEATHSTAR=>'INT DEFAULT 0', 
+    GID_F_BATTLECRUISER=>'INT DEFAULT 0',
+
     'm'=>'DOUBLE', 'k'=>'DOUBLE', 'd'=>'DOUBLE', 'mprod'=>'DOUBLE', 'kprod'=>'DOUBLE', 'dprod'=>'DOUBLE', 'sprod'=>'DOUBLE', 'fprod'=>'DOUBLE', 'ssprod'=>'DOUBLE', 'lastpeek'=>'INT UNSIGNED', 'lastakt'=>'INT UNSIGNED', 'gate_until'=>'INT UNSIGNED', 'remove'=>'INT UNSIGNED'
 );
 
@@ -84,7 +144,21 @@ $tab_buildqueue = array (    // Build queue
 
 $tab_fleet = array (    // Fleet
     'fleet_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'union_id'=>'INT', 'm'=>'DOUBLE', 'k'=>'DOUBLE', 'd'=>'DOUBLE', 'fuel'=>'INT', 'mission'=>'INT', 'start_planet'=>'INT', 'target_planet'=>'INT', 'flight_time'=>'INT', 'deploy_time'=>'INT',
-    'ipm_amount'=>'INT', 'ipm_target'=>'INT', 'ship202'=>'INT', 'ship203'=>'INT', 'ship204'=>'INT', 'ship205'=>'INT', 'ship206'=>'INT', 'ship207'=>'INT', 'ship208'=>'INT', 'ship209'=>'INT', 'ship210'=>'INT', 'ship211'=>'INT', 'ship212'=>'INT', 'ship213'=>'INT', 'ship214'=>'INT', 'ship215'=>'INT'
+    'ipm_amount'=>'INT DEFAULT 0', 'ipm_target'=>'INT DEFAULT 0', 
+    GID_F_SC=>'INT DEFAULT 0', 
+    GID_F_LC=>'INT DEFAULT 0', 
+    GID_F_LF=>'INT DEFAULT 0', 
+    GID_F_HF=>'INT DEFAULT 0', 
+    GID_F_CRUISER=>'INT DEFAULT 0', 
+    GID_F_BATTLESHIP=>'INT DEFAULT 0', 
+    GID_F_COLON=>'INT DEFAULT 0', 
+    GID_F_RECYCLER=>'INT DEFAULT 0', 
+    GID_F_PROBE=>'INT DEFAULT 0', 
+    GID_F_BOMBER=>'INT DEFAULT 0', 
+    GID_F_SAT=>'INT DEFAULT 0', 
+    GID_F_DESTRO=>'INT DEFAULT 0', 
+    GID_F_DEATHSTAR=>'INT DEFAULT 0', 
+    GID_F_BATTLECRUISER=>'INT DEFAULT 0',
 );
 
 $tab_union = array (    // ACS
@@ -98,7 +172,21 @@ $tab_battledata = array (    // Data for the battle engine (deprecated)
 $tab_fleetlogs = array (    // Flight logs
     'log_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'target_id'=>'INT', 'union_id'=>'INT', 'pm'=>'DOUBLE', 'pk'=>'DOUBLE', 'pd'=>'DOUBLE', 'm'=>'DOUBLE', 'k'=>'DOUBLE', 'd'=>'DOUBLE', 'fuel'=>'INT', 'mission'=>'INT', 'flight_time'=>'INT', 'deploy_time'=>'INT', 'start'=>'INT UNSIGNED', 'end'=>'INT UNSIGNED',
     'origin_g'=>'INT', 'origin_s'=>'INT', 'origin_p'=>'INT', 'origin_type'=>'INT', 'target_g'=>'INT', 'target_s'=>'INT', 'target_p'=>'INT', 'target_type'=>'INT',
-    'ipm_amount'=>'INT', 'ipm_target'=>'INT', 'ship202'=>'INT', 'ship203'=>'INT', 'ship204'=>'INT', 'ship205'=>'INT', 'ship206'=>'INT', 'ship207'=>'INT', 'ship208'=>'INT', 'ship209'=>'INT', 'ship210'=>'INT', 'ship211'=>'INT', 'ship212'=>'INT', 'ship213'=>'INT', 'ship214'=>'INT', 'ship215'=>'INT'
+    'ipm_amount'=>'INT DEFAULT 0', 'ipm_target'=>'INT DEFAULT 0', 
+    GID_F_SC=>'INT DEFAULT 0', 
+    GID_F_LC=>'INT DEFAULT 0', 
+    GID_F_LF=>'INT DEFAULT 0', 
+    GID_F_HF=>'INT DEFAULT 0', 
+    GID_F_CRUISER=>'INT DEFAULT 0', 
+    GID_F_BATTLESHIP=>'INT DEFAULT 0', 
+    GID_F_COLON=>'INT DEFAULT 0', 
+    GID_F_RECYCLER=>'INT DEFAULT 0', 
+    GID_F_PROBE=>'INT DEFAULT 0', 
+    GID_F_BOMBER=>'INT DEFAULT 0', 
+    GID_F_SAT=>'INT DEFAULT 0', 
+    GID_F_DESTRO=>'INT DEFAULT 0', 
+    GID_F_DEATHSTAR=>'INT DEFAULT 0', 
+    GID_F_BATTLECRUISER=>'INT DEFAULT 0',
 );
 
 $tab_iplogs = array (    // IP Logs
@@ -130,7 +218,20 @@ $tab_coltab = array (    // Colonization settings (can be changed in admin)
 
 $tab_template = array (    // Fleet templates
     'id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'name'=>'CHAR(30)', 'date'=>'INT UNSIGNED',
-    'ship202'=>'INT', 'ship203'=>'INT', 'ship204'=>'INT', 'ship205'=>'INT', 'ship206'=>'INT', 'ship207'=>'INT', 'ship208'=>'INT', 'ship209'=>'INT', 'ship210'=>'INT', 'ship211'=>'INT', 'ship212'=>'INT', 'ship213'=>'INT', 'ship214'=>'INT', 'ship215'=>'INT',
+    GID_F_SC=>'INT DEFAULT 0', 
+    GID_F_LC=>'INT DEFAULT 0', 
+    GID_F_LF=>'INT DEFAULT 0', 
+    GID_F_HF=>'INT DEFAULT 0', 
+    GID_F_CRUISER=>'INT DEFAULT 0', 
+    GID_F_BATTLESHIP=>'INT DEFAULT 0', 
+    GID_F_COLON=>'INT DEFAULT 0', 
+    GID_F_RECYCLER=>'INT DEFAULT 0', 
+    GID_F_PROBE=>'INT DEFAULT 0', 
+    GID_F_BOMBER=>'INT DEFAULT 0', 
+    GID_F_SAT=>'INT DEFAULT 0', 
+    GID_F_DESTRO=>'INT DEFAULT 0', 
+    GID_F_DEATHSTAR=>'INT DEFAULT 0', 
+    GID_F_BATTLECRUISER=>'INT DEFAULT 0',
 );
 
 $tab_botvars = array (    // Bot variables

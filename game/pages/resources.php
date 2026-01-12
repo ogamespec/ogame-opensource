@@ -129,21 +129,21 @@ $speed = $GlobalUni['speed'];
 $planet = $aktplanet;
 
 // Production.
-$m_hourly = prod_metal ($planet['b'.GID_B_METAL_MINE], $planet['mprod']) * $planet['factor'] * $speed * $g_factor;
-$k_hourly = prod_crys ($planet['b'.GID_B_CRYS_MINE], $planet['kprod']) * $planet['factor'] * $speed * $g_factor;
-$d_hourly = prod_deut ($planet['b'.GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed * $g_factor;
-$s_prod = prod_solar($planet['b'.GID_B_SOLAR], $planet['sprod']) * $e_factor;
-$f_prod = prod_fusion($planet['b'.GID_B_FUSION], $GlobalUser['r113'], $planet['fprod']) * $e_factor;
-$ss_prod = prod_sat($planet['temp']+40) * $planet['f'.GID_F_SAT] * $planet['ssprod'] * $e_factor;
+$m_hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['mprod']) * $planet['factor'] * $speed * $g_factor;
+$k_hourly = prod_crys ($planet[GID_B_CRYS_MINE], $planet['kprod']) * $planet['factor'] * $speed * $g_factor;
+$d_hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed * $g_factor;
+$s_prod = prod_solar($planet[GID_B_SOLAR], $planet['sprod']) * $e_factor;
+$f_prod = prod_fusion($planet[GID_B_FUSION], $GlobalUser[GID_R_ENERGY], $planet['fprod']) * $e_factor;
+$ss_prod = prod_sat($planet['temp']+40) * $planet[GID_F_SAT] * $planet['ssprod'] * $e_factor;
 
 // Consumption.
-$m_cons = cons_metal ($planet['b'.GID_B_METAL_MINE]) * $planet['mprod'];
+$m_cons = cons_metal ($planet[GID_B_METAL_MINE]) * $planet['mprod'];
 $m_cons0 = round ($m_cons * $planet['factor']);
-$k_cons = cons_crys ($planet['b'.GID_B_CRYS_MINE]) * $planet['kprod'];
+$k_cons = cons_crys ($planet[GID_B_CRYS_MINE]) * $planet['kprod'];
 $k_cons0 = round ($k_cons * $planet['factor']);
-$d_cons = cons_deut ($planet['b'.GID_B_DEUT_SYNTH]) * $planet['dprod'];
+$d_cons = cons_deut ($planet[GID_B_DEUT_SYNTH]) * $planet['dprod'];
 $d_cons0 = round ($d_cons * $planet['factor']);
-$f_cons = - cons_fusion ( $planet['b'.GID_B_FUSION], $planet['fprod'] ) * $speed;
+$f_cons = - cons_fusion ( $planet[GID_B_FUSION], $planet['fprod'] ) * $speed;
 
 $m_total = $m_hourly + (20*$speed);
 $k_total = $k_hourly + (10*$speed);
@@ -186,11 +186,11 @@ echo "   <td class=\"k\">".(20*$speed)."</td>    <td class=\"k\">".(10*$speed)."
 echo "  </tr>\n";
 
 // Metal mine
-if ($aktplanet['b1']) {
+if ($aktplanet[GID_B_METAL_MINE]) {
     $color1 = $m_hourly ? "<font color='00FF00'>" : "";
     $color2 = $m_cons ? "<font color='FF0000'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_1")." (".va(loca("RES_LEVEL"), $aktplanet['b1']).")</th><th>".$geologe_text."</th>   <th> \n";
+	echo "<th>".loca("NAME_1")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_METAL_MINE]).")</th><th>".$geologe_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        $color1".nicenum2($m_hourly)."</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
@@ -200,11 +200,11 @@ if ($aktplanet['b1']) {
 }
 
 // Crystal mine
-if ($aktplanet['b2']) {
+if ($aktplanet[GID_B_CRYS_MINE]) {
     $color1 = $k_hourly ? "<font color='00FF00'>" : "";
     $color2 = $k_cons ? "<font color='FF0000'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_2")." (".va(loca("RES_LEVEL"), $aktplanet['b2']).")</th><th>".$geologe_text."</th>   <th> \n";
+	echo "<th>".loca("NAME_2")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_CRYS_MINE]).")</th><th>".$geologe_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        $color1".nicenum2($k_hourly)."</font>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
@@ -214,11 +214,11 @@ if ($aktplanet['b2']) {
 }
 
 // Deuterium synthesizer
-if ($aktplanet['b3']) {
+if ($aktplanet[GID_B_DEUT_SYNTH]) {
     $color1 = $d_hourly ? "<font color='00FF00'>" : "";
     $color2 = $d_cons ? "<font color='FF0000'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_3")." (".va(loca("RES_LEVEL"), $aktplanet['b3']).")</th><th>".$geologe_text."</th>   <th> \n";
+	echo "<th>".loca("NAME_3")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_DEUT_SYNTH]).")</th><th>".$geologe_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       $color1".nicenum2($d_hourly)."</font>   <th>\n";
@@ -228,10 +228,10 @@ if ($aktplanet['b3']) {
 }
 
 // Solar Plant
-if ($aktplanet['b4']) {
+if ($aktplanet[GID_B_SOLAR]) {
     $color = $s_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_4")." (".va(loca("RES_LEVEL"), $aktplanet['b4']).")</th><th>".$engineer_text."</th>   <th> \n";
+	echo "<th>".loca("NAME_4")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_SOLAR]).")</th><th>".$engineer_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
@@ -241,11 +241,11 @@ if ($aktplanet['b4']) {
 }
 
 // Fusion Reactor
-if ($aktplanet['b12']) {
+if ($aktplanet[GID_B_FUSION]) {
     $color1 = $f_cons ? "<font color='FF0000'>" : "";
     $color2 = $f_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_12")." (".va(loca("RES_LEVEL"), $aktplanet['b12']).")</th><th>".$engineer_text."</th>   <th> \n";
+	echo "<th>".loca("NAME_12")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_FUSION]).")</th><th>".$engineer_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       $color1".nicenum2($f_cons)."</font>   <th>\n";
@@ -255,10 +255,10 @@ if ($aktplanet['b12']) {
 }
 
 // Solar satellites
-if ($aktplanet['f212']) {
+if ($aktplanet[GID_F_SAT]) {
     $color = $ss_prod ? "<font color='00FF00'>" : "";
 	echo "  <tr> \n";
-	echo "<th>".loca("NAME_212")." (".va(loca("RES_AMOUNT"), $aktplanet['f212']).")</th><th>".$engineer_text."</th>   <th> \n";
+	echo "<th>".loca("NAME_212")." (".va(loca("RES_AMOUNT"), $aktplanet[GID_F_SAT]).")</th><th>".$engineer_text."</th>   <th> \n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
 	echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";

@@ -205,7 +205,7 @@ function RecalcAllyStats () : void
             if ($score['sum1'] < 0) $score['sum1'] = 0;
             if ($score['sum2'] < 0) $score['sum2'] = 0;
             if ($score['sum3'] < 0) $score['sum3'] = 0;
-            $query = "UPDATE ".$db_prefix."ally SET score1 = '".$score['sum1']."', score2 = '".$score['sum2']."', score3 = '".$score['sum3']."' WHERE ally_id = " . $ally['ally_id'];
+            $query = "UPDATE ".$db_prefix."ally SET score1 = ".$score['sum1'].", score2 = ".$score['sum2'].", score3 = ".$score['sum3']." WHERE ally_id = " . $ally['ally_id'];
             dbquery ( $query );
         }
     }

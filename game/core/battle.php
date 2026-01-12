@@ -8,8 +8,12 @@ require_once "raketen.php";
 // Repairing the defense.
 function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_delta, bool $premium=true ) : array
 {
-    $repaired = array ( 401=>0, 402=>0, 403=>0, 404=>0, 405=>0, 406=>0, 407=>0, 408=>0 );
-    $exploded = array ( 401=>0, 402=>0, 403=>0, 404=>0, 405=>0, 406=>0, 407=>0, 408=>0 );
+    global $defmap;
+    $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
+    foreach ( $defmap_norak as $n=>$gid ) {
+        $repaired[$gid] = 0;
+        $exploded[$gid] = 0;
+    }
     $exploded_total = 0;
 
     if ( $premium) $prem = PremiumStatus ($d[0]);
@@ -254,10 +258,10 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
             {
                 AdjustResources ( $cm, $ck, $cd, $defender['id'], '-' );
                 $objects = array ();
-                foreach ( $fleetmap as $ii=>$gid ) $objects["f$gid"] = $defender[$gid] ? $defender[$gid] : 0;
+                foreach ( $fleetmap as $ii=>$gid ) $objects[$gid] = $defender[$gid] ? $defender[$gid] : 0;
                 foreach ( $defmap_norak as $ii=>$gid ) {
-                    $objects["d$gid"] = $repaired[$gid] ? $repaired[$gid] : 0;
-                    $objects["d$gid"] += $defender[$gid];
+                    $objects[$gid] = $repaired[$gid] ? $repaired[$gid] : 0;
+                    $objects[$gid] += $defender[$gid];
                 }
                 SetPlanetFleetDefense ( $defender['id'], $objects );
             }
@@ -619,7 +623,7 @@ function GenBattleSourceData (array $a, array $d, int $rf, int $fid, int $did) :
         $source .= "Attacker".$num." = ({".$attacker['oname']."} ";
         $source .= $attacker['id'] . " ";
         $source .= $attacker['g'] . " " . $attacker['s'] . " " . $attacker['p'] . " ";
-        $source .= $attacker['r'.GID_R_WEAPON] . " " . $attacker['r'.GID_R_SHIELD] . " " . $attacker['r'.GID_R_ARMOUR] . " ";
+        $source .= $attacker[GID_R_WEAPON] . " " . $attacker[GID_R_SHIELD] . " " . $attacker[GID_R_ARMOUR] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $attacker['fleet'][$gid] . " ";
         $source .= ")\n";
     }
@@ -628,7 +632,7 @@ function GenBattleSourceData (array $a, array $d, int $rf, int $fid, int $did) :
         $source .= "Defender".$num." = ({".$defender['oname']."} ";
         $source .= $defender['id'] . " ";
         $source .= $defender['g'] . " " . $defender['s'] . " " . $defender['p'] . " ";
-        $source .= $defender['r'.GID_R_WEAPON] . " " . $defender['r'.GID_R_SHIELD] . " " . $defender['r'.GID_R_ARMOUR] . " ";
+        $source .= $defender[GID_R_WEAPON] . " " . $defender[GID_R_SHIELD] . " " . $defender[GID_R_ARMOUR] . " ";
         foreach ($fleetmap as $i=>$gid) $source .= $defender['fleet'][$gid] . " ";
         foreach ($defmap_norak as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
         $source .= ")\n";
@@ -668,7 +672,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     {
         $a[0] = LoadUser ( $f['owner_id'] );
         $a[0]['fleet'] = array ();
-        foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = abs($f["ship$gid"]);
+        foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = abs($f[$gid]);
         $start_planet = GetPlanet ( $f['start_planet'] );
         $a[0]['g'] = $start_planet['g'];
         $a[0]['s'] = $start_planet['s'];
@@ -687,7 +691,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
 
             $a[$anum] = LoadUser ( $fleet_obj['owner_id'] );
             $a[$anum]['fleet'] = array ();
-            foreach ($fleetmap as $i=>$gid) $a[$anum]['fleet'][$gid] = abs($fleet_obj["ship$gid"]);
+            foreach ($fleetmap as $i=>$gid) $a[$anum]['fleet'][$gid] = abs($fleet_obj[$gid]);
             $start_planet = GetPlanet ( $fleet_obj['start_planet'] );
             $a[$anum]['g'] = $start_planet['g'];
             $a[$anum]['s'] = $start_planet['s'];
@@ -705,8 +709,8 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     $d[0] = LoadUser ( $p['owner_id'] );
     $d[0]['fleet'] = array ();
     $d[0]['defense'] = array ();
-    foreach ($fleetmap as $i=>$gid) $d[0]['fleet'][$gid] = abs($p["f$gid"]);
-    foreach ($defmap_norak as $i=>$gid) $d[0]['defense'][$gid] = abs($p["d$gid"]);
+    foreach ($fleetmap as $i=>$gid) $d[0]['fleet'][$gid] = abs($p[$gid]);
+    foreach ($defmap_norak as $i=>$gid) $d[0]['defense'][$gid] = abs($p[$gid]);
     $d[0]['g'] = $p['g'];
     $d[0]['s'] = $p['s'];
     $d[0]['p'] = $p['p'];
@@ -724,7 +728,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
         $d[$dnum] = LoadUser ( $fleet_obj['owner_id'] );
         $d[$dnum]['fleet'] = array ();
         $d[$dnum]['defense'] = array ();
-        foreach ($fleetmap as $i=>$gid) $d[$dnum]['fleet'][$gid] = abs($fleet_obj["ship$gid"]);
+        foreach ($fleetmap as $i=>$gid) $d[$dnum]['fleet'][$gid] = abs($fleet_obj[$gid]);
         foreach ($defmap_norak as $i=>$gid) $d[$dnum]['defense'][$gid] = 0;
         $start_planet = GetPlanet ( $fleet_obj['start_planet'] );
         $d[$dnum]['g'] = $start_planet['g'];
@@ -1047,7 +1051,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
     $anum = 0;
     $a[0] = LoadUser ( $f['owner_id'] );
     $a[0]['fleet'] = array ();
-    foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = abs($f["ship$gid"]);
+    foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = abs($f[$gid]);
     $start_planet = GetPlanet ( $f['start_planet'] );
     $a[0]['g'] = $start_planet['g'];
     $a[0]['s'] = $start_planet['s'];
@@ -1061,15 +1065,15 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
     $d[0] = LoadUser ( USER_SPACE );
     if ( $pirates ) {
         $d[0]['oname'] = "Piraten";
-        $d[0]['r'.GID_R_WEAPON] = max (0, $a[0]['r'.GID_R_WEAPON] - 3);
-        $d[0]['r'.GID_R_SHIELD] = max (0, $a[0]['r'.GID_R_SHIELD] - 3);
-        $d[0]['r'.GID_R_ARMOUR] = max (0, $a[0]['r'.GID_R_ARMOUR] - 3);
+        $d[0][GID_R_WEAPON] = max (0, $a[0][GID_R_WEAPON] - 3);
+        $d[0][GID_R_SHIELD] = max (0, $a[0][GID_R_SHIELD] - 3);
+        $d[0][GID_R_ARMOUR] = max (0, $a[0][GID_R_ARMOUR] - 3);
     }
     else {
         $d[0]['oname'] = "Aliens";
-        $d[0]['r'.GID_R_WEAPON] = $a[0]['r'.GID_R_WEAPON] + 3;
-        $d[0]['r'.GID_R_SHIELD] = $a[0]['r'.GID_R_SHIELD] + 3;
-        $d[0]['r'.GID_R_ARMOUR] = $a[0]['r'.GID_R_ARMOUR] + 3;
+        $d[0][GID_R_WEAPON] = $a[0][GID_R_WEAPON] + 3;
+        $d[0][GID_R_SHIELD] = $a[0][GID_R_SHIELD] + 3;
+        $d[0][GID_R_ARMOUR] = $a[0][GID_R_ARMOUR] + 3;
     }
     $d[0]['fleet'] = array ();
     $d[0]['defense'] = array ();

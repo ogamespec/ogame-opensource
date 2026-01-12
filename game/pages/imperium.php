@@ -168,7 +168,7 @@ $speed = $GlobalUni['speed'];
     $avg_prod = 0;
     foreach ( $plist as $i=>$planet )
     {
-        $res_hourly = prod_metal ($planet['b1'], $planet['mprod']) * $planet['factor'] * $speed + 20*$speed;
+        $res_hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['mprod']) * $planet['factor'] * $speed + 20*$speed;
         $res = floor ( $planet['m'] );
         $total += $res;
         $avg_prod += $res_hourly;
@@ -194,7 +194,7 @@ $speed = $GlobalUni['speed'];
     $avg_prod = 0;
     foreach ( $plist as $i=>$planet )
     {
-        $res_hourly = prod_crys ($planet['b2'], $planet['kprod']) * $planet['factor'] * $speed + 10*$speed;
+        $res_hourly = prod_crys ($planet[GID_B_CRYS_MINE], $planet['kprod']) * $planet['factor'] * $speed + 10*$speed;
         $res = floor ( $planet['k'] );
         $total += $res;
         $avg_prod += $res_hourly;
@@ -220,7 +220,7 @@ $speed = $GlobalUni['speed'];
     $avg_prod = 0;
     foreach ( $plist as $i=>$planet )
     {
-        $res_hourly = prod_deut ($planet['b3'], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed - cons_fusion ( $planet['b12'], $planet['fprod'] ) * $speed;
+        $res_hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed - cons_fusion ( $planet[GID_B_FUSION], $planet['fprod'] ) * $speed;
         $res = floor ( $planet['d'] );
         $total += $res;
         $avg_prod += $res_hourly;
@@ -281,7 +281,7 @@ $speed = $GlobalUni['speed'];
         $sum = 0;
         foreach ( $plist as $j=>$planet )
         {
-            $sum += $planet["b$gid"];
+            $sum += $planet[$gid];
         }
         if ( $sum > 0)
         {
@@ -303,20 +303,20 @@ $speed = $GlobalUni['speed'];
 
                 echo "            <th width=\"75\" >\n";
 
-                if ( $planet["b$gid"] > 0 ) {
+                if ( $planet[$gid] > 0 ) {
                     echo "                <a style=\"cursor:pointer\" \n";
                     echo "                   onClick=\"if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=$session&planet=".$planet['planet_id']."&cp=".$planet['planet_id']."\';t=0;',500);}\" \n";
                     echo "                   onDblClick=\"clearTimeout(t);document.location.href='index.php?page=imperium&session=$session&planettype=$planettype&no_header=1&modus=add&planet=".$planet['planet_id']."&techid=$gid';t=0;\"\n";
                     echo "                   title=\"".loca("EMPIRE_ACTION")."\">       \n";
 
-                    if ( CanBuild ($GlobalUser, $planet, $gid, $planet["b$gid"]+1, 0) === "" ) {
+                    if ( CanBuild ($GlobalUser, $planet, $gid, $planet[$gid]+1, 0) === "" ) {
                         echo "                    <font color=\"lime\">\n";
                     }
                     else {
                         echo "                    <font color=\"red\">\n";
                     }
 
-                    echo "                        ".$planet["b$gid"]."                    </font>                    \n\n";
+                    echo "                        ".$planet[$gid]."                    </font>                    \n\n";
                     echo "                    </font>\n";
                     echo "                </a>    \n";
 
@@ -358,7 +358,7 @@ $speed = $GlobalUni['speed'];
 <?php
     foreach ($resmap as $i=>$res)
     {
-        if ( $GlobalUser["r$res"] == 0 ) continue;
+        if ( $GlobalUser[$res] == 0 ) continue;
 
         echo "        <tr height=\"20\">\n";
         echo "            <th width=\"75\">\n";
@@ -371,13 +371,13 @@ $speed = $GlobalUni['speed'];
             echo "            <th width=\"75\" >\n\n";
             echo "                <a href=\"index.php?page=buildings&session=$session&cp=".$planet['planet_id']."&mode=Forschung&planettype=$planettype\">\n";
             echo "                    <font color =\"lime\">\n\n";
-            echo "                        ".$GlobalUser["r$res"]."                      \n";
+            echo "                        ".$GlobalUser[$res]."                      \n";
             echo "                    </font>\n";
             echo "                </a>\n\n";
             echo "            </th>\n\n";
         }
 
-        echo "            <th width=\"75\">".$GlobalUser["r$res"]."</th>\n\n";
+        echo "            <th width=\"75\">".$GlobalUser[$res]."</th>\n\n";
         echo "        </tr>\n";
     }
 
@@ -397,7 +397,7 @@ $speed = $GlobalUni['speed'];
     foreach ($fleetmap as $i=>$fleet)
     {
         $sum = 0;
-        foreach ( $plist as $j=>$planet ) $sum += $planet["f$fleet"];
+        foreach ( $plist as $j=>$planet ) $sum += $planet[$fleet];
         if ( $sum == 0 ) continue;
 
         echo "        <tr height=\"20\">\n";
@@ -408,7 +408,7 @@ $speed = $GlobalUni['speed'];
 
         foreach ( $plist as $j=>$planet )
         {
-            $amount = $planet["f$fleet"];
+            $amount = $planet[$fleet];
             echo "            <th width=\"75\" >\n";
             if ($amount > 0)
             {
@@ -450,7 +450,7 @@ $speed = $GlobalUni['speed'];
     foreach ($defmap as $i=>$def)
     {
         $sum = 0;
-        foreach ( $plist as $j=>$planet ) $sum += $planet["d$def"];
+        foreach ( $plist as $j=>$planet ) $sum += $planet[$def];
         if ( $sum == 0 ) continue;
 
         echo "        <tr height=\"20\">\n";
@@ -461,7 +461,7 @@ $speed = $GlobalUni['speed'];
 
         foreach ( $plist as $j=>$planet )
         {
-            $amount = $planet["d$def"];
+            $amount = $planet[$def];
             echo "            <th width=\"75\" >\n";
             if ($amount > 0)
             {

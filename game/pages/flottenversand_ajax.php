@@ -71,7 +71,7 @@ if ( $GlobalUser['vacation'] ) AjaxSendError (605);    // user in vacation mode
 // Check for available slots
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
-$maxfleet = $GlobalUser['r108'] + 1;
+$maxfleet = $GlobalUser[GID_R_COMPUTER] + 1;
 
 $prem = PremiumStatus ($GlobalUser);
 if ( $prem['admiral'] ) $maxfleet += 2;
@@ -88,9 +88,9 @@ if ( $target == NULL )
 
 $target_user = LoadUser ( $target['owner_id'] );
 
-$probes = $aktplanet['f'.GID_F_PROBE];
-$recyclers = $aktplanet['f'.GID_F_RECYCLER];
-$missiles = $aktplanet['d'.GID_D_IPM];
+$probes = $aktplanet[GID_F_PROBE];
+$recyclers = $aktplanet[GID_F_RECYCLER];
+$missiles = $aktplanet[GID_D_IPM];
 
 if ( ( 
 ( $GlobalUser['ally_id'] == $target_user['ally_id'] && $GlobalUser['ally_id'] > 0 )   || 
@@ -100,7 +100,7 @@ if ( (
 
 if ( $order == FTYP_SPY )
 {
-    $amount = min ($aktplanet["f210"], $shipcount);
+    $amount = min ($aktplanet[GID_F_PROBE], $shipcount);
 
     if ( $target['owner_id'] == $GlobalUser['player_id'] ) AjaxSendError ();    // Own planet
     if ( $GlobalUser['noattack'] || $BlockAttack ) AjaxSendError ();    // Attack ban
@@ -129,7 +129,7 @@ if ( $order == FTYP_SPY )
 
 if ( $order == FTYP_RECYCLE )
 {
-    $amount = min ($aktplanet["f209"], $shipcount);
+    $amount = min ($aktplanet[GID_F_RECYCLER], $shipcount);
 
     if ( $amount == 0 ) AjaxSendError (611);    // no ships to send
 
@@ -145,9 +145,9 @@ if ( $order == FTYP_RECYCLE )
 
 // Calculate distance, flight time, and deuterium costs.
 $dist = FlightDistance ( $aktplanet['g'], $aktplanet['s'], $aktplanet['p'], $galaxy, $system, $planet );
-$slowest_speed = FlightSpeed ( $fleet, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118'] );
+$slowest_speed = FlightSpeed ( $fleet, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE] );
 $flighttime = FlightTime ( $dist, $slowest_speed, $speed, $unispeed );
-$arr = FlightCons ( $fleet, $dist, $flighttime, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118'], $unispeed );
+$arr = FlightCons ( $fleet, $dist, $flighttime, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE], $unispeed );
 $cons = $arr['fleet'] + $arr['probes'];
 
 if ( $aktplanet['d'] < $cons ) AjaxSendError (613);        // not enough deut to fly.
