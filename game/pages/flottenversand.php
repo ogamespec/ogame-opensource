@@ -47,7 +47,7 @@ if ( $rows ) {
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
-$maxfleet = $GlobalUser['r108'] + 1;
+$maxfleet = $GlobalUser[GID_R_COMPUTER] + 1;
 
 $prem = PremiumStatus ($GlobalUser);
 if ( $prem['admiral'] ) $maxfleet += 2;
@@ -123,7 +123,7 @@ $hold_time = 0;
 if ( $order == FTYP_EXPEDITION ) {
     if ( key_exists ('expeditiontime', $_POST) ) {
         $hold_time = floor (intval($_POST['expeditiontime']));
-        if ( $hold_time > $GlobalUser['r124'] ) $hold_time = $GlobalUser['r124'];
+        if ( $hold_time > $GlobalUser[GID_R_EXPEDITION] ) $hold_time = $GlobalUser[GID_R_EXPEDITION];
         if ( $hold_time < 1 ) $hold_time = 1;
     }
     else $hold_time = 1;
@@ -141,9 +141,9 @@ else if ( $order == FTYP_ACS_HOLD ) {
 
 // Calculate distance, flight time, and deuterium costs.
 $dist = FlightDistance ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']) );
-$slowest_speed = FlightSpeed ( $fleet, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'] );
+$slowest_speed = FlightSpeed ( $fleet, $origin_user[GID_R_COMBUST_DRIVE], $origin_user[GID_R_IMPULSE_DRIVE], $origin_user[GID_R_HYPER_DRIVE] );
 $flighttime = FlightTime ( $dist, $slowest_speed, $fleetspeed / 10, $unispeed );
-$cons = FlightCons ( $fleet, $dist, $flighttime, $origin_user['r115'], $origin_user['r117'], $origin_user['r118'], $unispeed, $hold_time / 3600 );
+$cons = FlightCons ( $fleet, $dist, $flighttime, $origin_user[GID_R_COMBUST_DRIVE], $origin_user[GID_R_IMPULSE_DRIVE], $origin_user[GID_R_HYPER_DRIVE], $unispeed, $hold_time / 3600 );
 $cargo = $spycargo = $numships = 0;
 
 foreach ($fleet as $id=>$amount)
@@ -276,7 +276,7 @@ switch ( $order )
             if ($id != GID_F_PROBE) $manned += $amount;        // not counting probes.
         }
         $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Number of expeditions
-        $maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
+        $maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );
         if ( $expnum >= $maxexp ) FleetError ( loca("FLEET_ERR_EXP_LIMIT") );
         else if ( $manned == 0 ) FleetError ( loca("FLEET_ERR_EXP_REQUIRED") );
         else if ( intval($_POST['planet']) != 16 ) FleetError ( loca("FLEET_ERR_EXP_INVALID") );

@@ -133,7 +133,7 @@ $m_hourly = prod_metal ($planet['b'.GID_B_METAL_MINE], $planet['mprod']) * $plan
 $k_hourly = prod_crys ($planet['b'.GID_B_CRYS_MINE], $planet['kprod']) * $planet['factor'] * $speed * $g_factor;
 $d_hourly = prod_deut ($planet['b'.GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed * $g_factor;
 $s_prod = prod_solar($planet['b'.GID_B_SOLAR], $planet['sprod']) * $e_factor;
-$f_prod = prod_fusion($planet['b'.GID_B_FUSION], $GlobalUser['r113'], $planet['fprod']) * $e_factor;
+$f_prod = prod_fusion($planet['b'.GID_B_FUSION], $GlobalUser[GID_R_ENERGY], $planet['fprod']) * $e_factor;
 $ss_prod = prod_sat($planet['temp']+40) * $planet['f'.GID_F_SAT] * $planet['ssprod'] * $e_factor;
 
 // Consumption.

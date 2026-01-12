@@ -30,13 +30,13 @@ function BuildMeetRequirement ( array $user, array $planet, int $id ) : bool
     // Rocket silo => Shipyard (level 1)
     // Sensor phalanx => Lunar base (level 1)
     // JumpGate => Moonbase (level 1), Hyperspace Technology (level 7)
-    if ( $id == GID_B_FUSION && ( $planet['b3'] < 5 || $user['r113'] < 3 ) ) return false;
-    if ( $id == GID_B_NANITES && ( $planet['b14'] < 10 || $user['r108'] < 10 ) ) return false;
+    if ( $id == GID_B_FUSION && ( $planet['b3'] < 5 || $user[GID_R_ENERGY] < 3 ) ) return false;
+    if ( $id == GID_B_NANITES && ( $planet['b14'] < 10 || $user[GID_R_COMPUTER] < 10 ) ) return false;
     if ( $id == GID_B_SHIPYARD && ( $planet['b14'] < 2 ) ) return false;
-    if ( $id == GID_B_TERRAFORMER && ( $planet['b15'] < 1 || $user['r113'] < 12 ) ) return false;
+    if ( $id == GID_B_TERRAFORMER && ( $planet['b15'] < 1 || $user[GID_R_ENERGY] < 12 ) ) return false;
     if ( $id == GID_B_MISS_SILO && ( $planet['b21'] < 1 ) ) return false;
     if ( $id == GID_B_PHALANX && ( $planet['b41'] < 1 ) ) return false;
-    if ( $id == GID_B_JUMP_GATE && ( $planet['b41'] < 1 || $user['r114'] < 7 ) ) return false;
+    if ( $id == GID_B_JUMP_GATE && ( $planet['b41'] < 1 || $user[GID_R_HYPERSPACE] < 7 ) ) return false;
 
     return true;
 }
@@ -71,31 +71,31 @@ function BuildDuration ( int $id, int $lvl, int $robots, int $nanits, int $speed
 
 function ShipyardMeetRequirement ( array $user, array $planet, int $id ) : bool
 {
-    if ( $id == GID_F_SC && ( $planet['b21'] < 2  || $user['r115'] < 2 ) ) return false;
-    else if ( $id == GID_F_LC && ( $planet['b21'] < 4  || $user['r115'] < 6 ) ) return false;
-    else if ( $id == GID_F_LF && ( $planet['b21'] < 1  || $user['r115'] < 1 ) ) return false;
-    else if ( $id == GID_F_HF && ( $planet['b21'] < 3  || $user['r111'] < 2 || $user['r117'] < 2 ) ) return false;
-    else if ( $id == GID_F_CRUISER && ( $planet['b21'] < 5  || $user['r117'] < 4 || $user['r121'] < 2 ) ) return false;
-    else if ( $id == GID_F_BATTLESHIP && ( $planet['b21'] < 7  || $user['r118'] < 4 ) ) return false;
-    else if ( $id == GID_F_COLON && ( $planet['b21'] < 4  || $user['r117'] < 3 ) ) return false;
-    else if ( $id == GID_F_RECYCLER && ( $planet['b21'] < 4  || $user['r115'] < 6 || $user['r110'] < 2 ) ) return false;
-    else if ( $id == GID_F_PROBE && ( $planet['b21'] < 3  || $user['r115'] < 3 || $user['r106'] < 2 ) ) return false;
-    else if ( $id == GID_F_BOMBER && ( $planet['b21'] < 8  || $user['r117'] < 6 || $user['r122'] < 5 ) ) return false;
+    if ( $id == GID_F_SC && ( $planet['b21'] < 2  || $user[GID_R_COMBUST_DRIVE] < 2 ) ) return false;
+    else if ( $id == GID_F_LC && ( $planet['b21'] < 4  || $user[GID_R_COMBUST_DRIVE] < 6 ) ) return false;
+    else if ( $id == GID_F_LF && ( $planet['b21'] < 1  || $user[GID_R_COMBUST_DRIVE] < 1 ) ) return false;
+    else if ( $id == GID_F_HF && ( $planet['b21'] < 3  || $user[GID_R_ARMOUR] < 2 || $user[GID_R_IMPULSE_DRIVE] < 2 ) ) return false;
+    else if ( $id == GID_F_CRUISER && ( $planet['b21'] < 5  || $user[GID_R_IMPULSE_DRIVE] < 4 || $user[GID_R_ION_TECH] < 2 ) ) return false;
+    else if ( $id == GID_F_BATTLESHIP && ( $planet['b21'] < 7  || $user[GID_R_HYPER_DRIVE] < 4 ) ) return false;
+    else if ( $id == GID_F_COLON && ( $planet['b21'] < 4  || $user[GID_R_IMPULSE_DRIVE] < 3 ) ) return false;
+    else if ( $id == GID_F_RECYCLER && ( $planet['b21'] < 4  || $user[GID_R_COMBUST_DRIVE] < 6 || $user[GID_R_SHIELD] < 2 ) ) return false;
+    else if ( $id == GID_F_PROBE && ( $planet['b21'] < 3  || $user[GID_R_COMBUST_DRIVE] < 3 || $user[GID_R_ESPIONAGE] < 2 ) ) return false;
+    else if ( $id == GID_F_BOMBER && ( $planet['b21'] < 8  || $user[GID_R_IMPULSE_DRIVE] < 6 || $user[GID_R_PLASMA_TECH] < 5 ) ) return false;
     else if ( $id == GID_F_SAT && ( $planet['b21'] < 1  ) ) return false;
-    else if ( $id == GID_F_DESTRO && ( $planet['b21'] < 9  || $user['r118'] < 6 || $user['r114'] < 5 ) ) return false;
-    else if ( $id == GID_F_DEATHSTAR && ( $planet['b21'] < 12 || $user['r118'] < 7 || $user['r114'] < 6 || $user['r199'] < 1 ) ) return false;
-    else if ( $id == GID_F_BATTLECRUISER && ( $planet['b21'] < 8  || $user['r114'] < 5 || $user['r120'] < 12 || $user['r118'] < 5 ) ) return false;
+    else if ( $id == GID_F_DESTRO && ( $planet['b21'] < 9  || $user[GID_R_HYPER_DRIVE] < 6 || $user[GID_R_HYPERSPACE] < 5 ) ) return false;
+    else if ( $id == GID_F_DEATHSTAR && ( $planet['b21'] < 12 || $user[GID_R_HYPER_DRIVE] < 7 || $user[GID_R_HYPERSPACE] < 6 || $user[GID_R_GRAVITON] < 1 ) ) return false;
+    else if ( $id == GID_F_BATTLECRUISER && ( $planet['b21'] < 8  || $user[GID_R_HYPERSPACE] < 5 || $user[GID_R_LASER_TECH] < 12 || $user[GID_R_HYPER_DRIVE] < 5 ) ) return false;
 
     else if ( $id == GID_D_RL && ( $planet['b21'] < 1 ) ) return false;
-    else if ( $id == GID_D_LL && ( $planet['b21'] < 2 || $user['r113'] < 1 || $user['r120'] < 3 ) ) return false;
-    else if ( $id == GID_D_HL && ( $planet['b21'] < 4 || $user['r113'] < 3 || $user['r120'] < 6 ) ) return false;
-    else if ( $id == GID_D_GAUSS && ( $planet['b21'] < 6 || $user['r113'] < 6 || $user['r109'] < 3 || $user['r110'] < 1 ) ) return false;
-    else if ( $id == GID_D_ION && ( $planet['b21'] < 4 || $user['r121'] < 4 ) ) return false;
-    else if ( $id == GID_D_PLASMA && ( $planet['b21'] < 8 || $user['r122'] < 7 ) ) return false;
-    else if ( $id == GID_D_SDOME && ( $planet['b21'] < 1 || $user['r110'] < 2 ) ) return false;
-    else if ( $id == GID_D_LDOME && ( $planet['b21'] < 6 || $user['r110'] < 6 ) ) return false;
+    else if ( $id == GID_D_LL && ( $planet['b21'] < 2 || $user[GID_R_ENERGY] < 1 || $user[GID_R_LASER_TECH] < 3 ) ) return false;
+    else if ( $id == GID_D_HL && ( $planet['b21'] < 4 || $user[GID_R_ENERGY] < 3 || $user[GID_R_LASER_TECH] < 6 ) ) return false;
+    else if ( $id == GID_D_GAUSS && ( $planet['b21'] < 6 || $user[GID_R_ENERGY] < 6 || $user[GID_R_WEAPON] < 3 || $user[GID_R_SHIELD] < 1 ) ) return false;
+    else if ( $id == GID_D_ION && ( $planet['b21'] < 4 || $user[GID_R_ION_TECH] < 4 ) ) return false;
+    else if ( $id == GID_D_PLASMA && ( $planet['b21'] < 8 || $user[GID_R_PLASMA_TECH] < 7 ) ) return false;
+    else if ( $id == GID_D_SDOME && ( $planet['b21'] < 1 || $user[GID_R_SHIELD] < 2 ) ) return false;
+    else if ( $id == GID_D_LDOME && ( $planet['b21'] < 6 || $user[GID_R_SHIELD] < 6 ) ) return false;
     else if ( $id == GID_D_ABM && ( $planet['b21'] < 1 || $planet['b44'] < 2 ) ) return false;
-    else if ( $id == GID_D_IPM && ( $planet['b21'] < 1 || $planet['b44'] < 4 || $user['r117'] < 1 ) ) return false;
+    else if ( $id == GID_D_IPM && ( $planet['b21'] < 1 || $planet['b44'] < 4 || $user[GID_R_IMPULSE_DRIVE] < 1 ) ) return false;
 
     return true;
 }
@@ -125,18 +125,18 @@ function ResearchMeetRequirement ( array $user, array $planet, int $id ) : bool
     if ( $id == GID_R_ESPIONAGE && ( $planet['b31'] < 3 ) ) return false;
     else if ( $id == GID_R_COMPUTER && ( $planet['b31'] < 1 ) ) return false;
     else if ( $id == GID_R_WEAPON && ( $planet['b31'] < 4 ) ) return false;
-    else if ( $id == GID_R_SHIELD && ( $user['r113'] < 3 || $planet['b31'] < 6 ) ) return false;
+    else if ( $id == GID_R_SHIELD && ( $user[GID_R_ENERGY] < 3 || $planet['b31'] < 6 ) ) return false;
     else if ( $id == GID_R_ARMOUR && ( $planet['b31'] < 2 ) ) return false;
     else if ( $id == GID_R_ENERGY && ( $planet['b31'] < 1 ) ) return false;
-    else if ( $id == GID_R_HYPERSPACE && ( $user['r113'] < 5 || $user['r110'] < 5 || $planet['b31'] < 7  ) ) return false;
-    else if ( $id == GID_R_COMBUST_DRIVE && ( $user['r113'] < 1 || $planet['b31'] < 1 ) ) return false;
-    else if ( $id == GID_R_IMPULSE_DRIVE && ( $user['r113'] < 1 || $planet['b31'] < 2  ) ) return false;
-    else if ( $id == GID_R_HYPER_DRIVE && ( $user['r114'] < 3 || $planet['b31'] < 7  ) ) return false;
-    else if ( $id == GID_R_LASER_TECH && ( $user['r113'] < 2 || $planet['b31'] < 1  ) ) return false;
-    else if ( $id == GID_R_ION_TECH && ( $user['r120'] < 5 || $user['r113'] < 4 || $planet['b31'] < 4  ) ) return false;
-    else if ( $id == GID_R_PLASMA_TECH && ( $user['r113'] < 8 || $user['r120'] < 10 || $user['r121'] < 5 || $planet['b31'] < 4 ) ) return false;
-    else if ( $id == GID_R_IGN && ( $user['r108'] < 8 || $user['r114'] < 8 || $planet['b31'] < 10  ) ) return false;
-    else if ( $id == GID_R_EXPEDITION && ( $user['r106'] < 4 || $user['r117'] < 3 || $planet['b31'] < 3 ) ) return false;
+    else if ( $id == GID_R_HYPERSPACE && ( $user[GID_R_ENERGY] < 5 || $user[GID_R_SHIELD] < 5 || $planet['b31'] < 7  ) ) return false;
+    else if ( $id == GID_R_COMBUST_DRIVE && ( $user[GID_R_ENERGY] < 1 || $planet['b31'] < 1 ) ) return false;
+    else if ( $id == GID_R_IMPULSE_DRIVE && ( $user[GID_R_ENERGY] < 1 || $planet['b31'] < 2  ) ) return false;
+    else if ( $id == GID_R_HYPER_DRIVE && ( $user[GID_R_HYPERSPACE] < 3 || $planet['b31'] < 7  ) ) return false;
+    else if ( $id == GID_R_LASER_TECH && ( $user[GID_R_ENERGY] < 2 || $planet['b31'] < 1  ) ) return false;
+    else if ( $id == GID_R_ION_TECH && ( $user[GID_R_LASER_TECH] < 5 || $user[GID_R_ENERGY] < 4 || $planet['b31'] < 4  ) ) return false;
+    else if ( $id == GID_R_PLASMA_TECH && ( $user[GID_R_ENERGY] < 8 || $user[GID_R_LASER_TECH] < 10 || $user[GID_R_ION_TECH] < 5 || $planet['b31'] < 4 ) ) return false;
+    else if ( $id == GID_R_IGN && ( $user[GID_R_COMPUTER] < 8 || $user[GID_R_HYPERSPACE] < 8 || $planet['b31'] < 10  ) ) return false;
+    else if ( $id == GID_R_EXPEDITION && ( $user[GID_R_ESPIONAGE] < 4 || $user[GID_R_IMPULSE_DRIVE] < 3 || $planet['b31'] < 3 ) ) return false;
     else if ( $id == GID_R_GRAVITON && ( $planet['b31'] < 12 ) ) return false;
 
     return true;

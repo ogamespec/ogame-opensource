@@ -5,7 +5,7 @@
 function OverFleet ($fleet, $summary, $mission, $acs=false)
 {
     global $GlobalUser;
-    $level = $GlobalUser['r106'];
+    $level = $GlobalUser[GID_R_ESPIONAGE];
     if ( $fleet['owner_id'] == $GlobalUser['player_id'] || $acs ) $level = 99;
     global $fleetmap;
     $sum = 0;
@@ -36,7 +36,7 @@ function OverFleet ($fleet, $summary, $mission, $acs=false)
 function TitleFleet ($fleet, $summary, $acs=false)
 {
     global $GlobalUser;
-    $level = $GlobalUser['r106'];
+    $level = $GlobalUser[GID_R_ESPIONAGE];
     if ( $fleet['owner_id'] == $GlobalUser['player_id'] || $acs ) $level = 99;
     global $fleetmap;
     $sum = 0;

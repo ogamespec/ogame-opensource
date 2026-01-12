@@ -61,7 +61,7 @@ $prem = PremiumStatus ($GlobalUser);
 if ( $prem['admiral'] ) $maxfleet += 2;
 
 $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Number of expeditions
-$maxexp = floor ( sqrt ( $GlobalUser['r124'] ) );
+$maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );
 
 ?>
 

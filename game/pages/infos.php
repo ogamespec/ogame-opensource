@@ -210,10 +210,10 @@ else
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_CONS_DEUT")."</td><td class='c'>".loca("INFO_DIFF")."</td>\n";
         $level = $aktplanet['b'.$gid]-2;
         if ($level <= 0) $level = 1;
-        $prod_now = prod_fusion ($aktplanet['b'.$gid], $GlobalUser['r113'], 1 );
+        $prod_now = prod_fusion ($aktplanet['b'.$gid], $GlobalUser[GID_R_ENERGY], 1 );
         $cons_now = -cons_fusion ($aktplanet['b'.$gid], 1 );
         for ($i=$level; $i<$level+15; $i++) {
-            $prod = prod_fusion ($i, $GlobalUser['r113'], 1 );
+            $prod = prod_fusion ($i, $GlobalUser[GID_R_ENERGY], 1 );
             $cons = -cons_fusion ($i, 1 ) * $speed;
 
             if ($i==$aktplanet['b'.$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
@@ -271,7 +271,7 @@ else
             $amount = $fleet_obj["ship".$id];
             if ($amount > 0) { 
                 echo loca ("NAME_".$id).":".$amount."<br>";
-                $cons += $amount * FleetCons ($id, $user['r115'], $user['r117'], $user['r118']) / 10;
+                $cons += $amount * FleetCons ($id, $user[GID_R_COMBUST_DRIVE], $user[GID_R_IMPULSE_DRIVE], $user[GID_R_HYPER_DRIVE]) / 10;
             }
         }
         echo "</th>\n";

@@ -71,7 +71,7 @@ if ( $GlobalUser['vacation'] ) AjaxSendError (605);    // user in vacation mode
 // Check for available slots
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
-$maxfleet = $GlobalUser['r108'] + 1;
+$maxfleet = $GlobalUser[GID_R_COMPUTER] + 1;
 
 $prem = PremiumStatus ($GlobalUser);
 if ( $prem['admiral'] ) $maxfleet += 2;
@@ -145,9 +145,9 @@ if ( $order == FTYP_RECYCLE )
 
 // Calculate distance, flight time, and deuterium costs.
 $dist = FlightDistance ( $aktplanet['g'], $aktplanet['s'], $aktplanet['p'], $galaxy, $system, $planet );
-$slowest_speed = FlightSpeed ( $fleet, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118'] );
+$slowest_speed = FlightSpeed ( $fleet, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE] );
 $flighttime = FlightTime ( $dist, $slowest_speed, $speed, $unispeed );
-$arr = FlightCons ( $fleet, $dist, $flighttime, $GlobalUser['r115'], $GlobalUser['r117'], $GlobalUser['r118'], $unispeed );
+$arr = FlightCons ( $fleet, $dist, $flighttime, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE], $unispeed );
 $cons = $arr['fleet'] + $arr['probes'];
 
 if ( $aktplanet['d'] < $cons ) AjaxSendError (613);        // not enough deut to fly.
