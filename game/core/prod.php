@@ -299,7 +299,7 @@ function ProdResources ( array &$planet, int $time_from, int $time_to ) : void
     }
 
     $planet_id = $planet['planet_id'];
-    $query = "UPDATE ".$db_prefix."planets SET m = '".$planet['m']."', k = '".$planet['k']."', d = '".$planet['d']."', lastpeek = '".$time_to."' WHERE planet_id = $planet_id";
+    $query = "UPDATE ".$db_prefix."planets SET m = ".$planet['m'].", k = ".$planet['k'].", d = ".$planet['d'].", lastpeek = ".$time_to." WHERE planet_id = $planet_id";
     dbquery ($query);
     $planet['lastpeek'] = $time_to;
 }

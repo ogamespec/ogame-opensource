@@ -132,7 +132,7 @@ function ActivateCoupon (array $user, string $code) : bool
         $id = CheckCoupon ($code);
         if ( $id ) {
             $coupon = LoadCoupon ($id);
-            $query = "UPDATE coupons SET used=1, user_uni='".$GlobalUni['num']."', user_id='".$user['player_id']."', user_name='".$user['oname']."' WHERE id = $id";    // redeem coupon
+            $query = "UPDATE coupons SET used=1, user_uni=".$GlobalUni['num'].", user_id=".$user['player_id'].", user_name='".$user['oname']."' WHERE id = $id";    // redeem coupon
             MDBQuery ($query);
             $query = "UPDATE ".$db_prefix."users SET dm = dm + ".$coupon['amount']." WHERE player_id = " . $user['player_id'];    // add a paid DM user.
             dbquery ($query);

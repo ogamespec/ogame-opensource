@@ -30,7 +30,7 @@ if ( method() === "POST" && key_exists('mode', $_POST) && $_POST['mode'] === "sa
         if ( dbrows ($result) > 0 ) {
             $query = "UPDATE ".$db_prefix."template SET name='".$name."', date=$now";
             foreach ( $fleetmap_nosat as $i=>$gid ) {
-                $query .= ", $gid ='" . intval ( $_POST['ship'][$gid] ) . "' ";
+                $query .= ", `$gid` =" . intval ( $_POST['ship'][$gid] ) . " ";
             }
             $query .= " WHERE id = $id";
             dbquery ( $query );

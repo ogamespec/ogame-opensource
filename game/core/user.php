@@ -411,7 +411,7 @@ function SelectPlanet (int $player_id, int $cp) : void
         Hacking ( "HACK_SELECT_PLANET" );
         return;
     }
-    $query = "UPDATE ".$db_prefix."users SET aktplanet = '".$cp."' WHERE player_id = '".$player_id."'";
+    $query = "UPDATE ".$db_prefix."users SET aktplanet = ".$cp." WHERE player_id = ".$player_id.";";
     dbquery ($query);
     InvalidateUserCache ();
 }
@@ -741,7 +741,7 @@ function AdjustStats ( int $player_id, int $points, int $fpoints, int $rpoints, 
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."users SET ";
-    $query .= "score1=score1 $sign '".$points."', score2=score2 $sign '".$fpoints."', score3=score3 $sign '".$rpoints."' WHERE player_id = $player_id AND banned = 0 AND admin = 0;";
+    $query .= "score1=score1 $sign ".$points.", score2=score2 $sign ".$fpoints.", score3=score3 $sign ".$rpoints." WHERE player_id = $player_id AND banned = 0 AND admin = 0;";
     dbquery ($query);
 }
 

@@ -412,7 +412,7 @@ function AdjustResources (float|int $m, float|int $k, float|int $d, int $planet_
 {
     global $db_prefix;
     $now = time ();
-    $query = "UPDATE ".$db_prefix."planets SET m=m $sign '".$m."', k=k $sign '".$k."', d=d $sign '".$d."', lastpeek = '".$now."' WHERE planet_id=$planet_id;";
+    $query = "UPDATE ".$db_prefix."planets SET m=m $sign ".$m.", k=k $sign ".$k.", d=d $sign ".$d.", lastpeek = ".$now." WHERE planet_id=$planet_id;";
     dbquery ($query);
 }
 
@@ -502,8 +502,8 @@ function SetPlanetFleetDefense ( int $planet_id, array $objects ) : void
     $param = array_merge ( array_diff($defmap, [GID_D_ABM, GID_D_IPM]), $fleetmap);
     $query = "UPDATE ".$db_prefix."planets SET ";
     foreach ( $param as $i=>$p ) {
-        if ( $i == 0 ) $query .= "$p=".$objects[$p];
-        else $query .= ", $p=".$objects[$p];
+        if ( $i == 0 ) $query .= "`$p`=".$objects[$p];
+        else $query .= ", `$p`=".$objects[$p];
     }
     $query .= " WHERE planet_id=$planet_id;";
     dbquery ($query);
@@ -517,8 +517,8 @@ function SetPlanetDefense ( int $planet_id, array $objects ) : void
     $param = $defmap;
     $query = "UPDATE ".$db_prefix."planets SET ";
     foreach ( $param as $i=>$p ) {
-        if ( $i == 0 ) $query .= "$p=".$objects[$p];
-        else $query .= ", $p=".$objects[$p];
+        if ( $i == 0 ) $query .= "`$p`=".$objects[$p];
+        else $query .= ", `$p`=".$objects[$p];
     }
     $query .= " WHERE planet_id=$planet_id;";
     dbquery ($query);
@@ -532,8 +532,8 @@ function SetPlanetBuildings ( int $planet_id, array $objects ) : void
     $param = $buildmap;
     $query = "UPDATE ".$db_prefix."planets SET ";
     foreach ( $param as $i=>$p ) {
-        if ( $i == 0 ) $query .= "$p=".$objects[$p];
-        else $query .= ", $p=".$objects[$p];
+        if ( $i == 0 ) $query .= "`$p`=".$objects[$p];
+        else $query .= ", `$p`=".$objects[$p];
     }
     $query .= " WHERE planet_id=$planet_id;";
     dbquery ($query);
@@ -619,11 +619,11 @@ function SaveColonySettings (array $coltab) : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."coltab SET " .
-        "t1_a='".$coltab['t1_a']."', t1_b='".$coltab['t1_b']."', t1_c='".$coltab['t1_c']."', " .
-        "t2_a='".$coltab['t2_a']."', t2_b='".$coltab['t2_b']."', t2_c='".$coltab['t2_c']."', " .
-        "t3_a='".$coltab['t3_a']."', t3_b='".$coltab['t3_b']."', t3_c='".$coltab['t3_c']."', " .
-        "t4_a='".$coltab['t4_a']."', t4_b='".$coltab['t4_b']."', t4_c='".$coltab['t4_c']."', " .
-        "t5_a='".$coltab['t5_a']."', t5_b='".$coltab['t5_b']."', t5_c='".$coltab['t5_c']."'; " ;
+        "t1_a=".$coltab['t1_a'].", t1_b=".$coltab['t1_b'].", t1_c=".$coltab['t1_c'].", " .
+        "t2_a=".$coltab['t2_a'].", t2_b=".$coltab['t2_b'].", t2_c=".$coltab['t2_c'].", " .
+        "t3_a=".$coltab['t3_a'].", t3_b=".$coltab['t3_b'].", t3_c=".$coltab['t3_c'].", " .
+        "t4_a=".$coltab['t4_a'].", t4_b=".$coltab['t4_b'].", t4_c=".$coltab['t4_c'].", " .
+        "t5_a=".$coltab['t5_a'].", t5_b=".$coltab['t5_b'].", t5_c=".$coltab['t5_c']."; " ;
     dbquery ($query);
 }
 

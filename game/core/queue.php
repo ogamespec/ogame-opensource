@@ -511,7 +511,7 @@ function Queue_Build_End (array $queue) : void
     else $fields = "fields = fields - 1";
 
     // Update the level of construction and the number of fields in the database.
-    $query = "UPDATE ".$db_prefix."planets SET ".($id)." = $lvl, $fields WHERE planet_id = $planet_id";
+    $query = "UPDATE ".$db_prefix."planets SET `".($id)."` = $lvl, $fields WHERE planet_id = $planet_id";
     dbquery ($query);
 
     RemoveQueue ( $queue['task_id'] );
@@ -662,8 +662,8 @@ function Queue_Shipyard_End (array $queue, int $when=0) : void
     $newe = $e + $done * $one;
 
     // Add a fleet to the planet
-    if (IsDefense($gid)) $query = "UPDATE ".$db_prefix."planets SET d$gid = d$gid + $done WHERE planet_id = $planet_id";
-    else $query = "UPDATE ".$db_prefix."planets SET f$gid = f$gid + $done WHERE planet_id = $planet_id";
+    if (IsDefense($gid)) $query = "UPDATE ".$db_prefix."planets SET `$gid` = `$gid` + $done WHERE planet_id = $planet_id";
+    else $query = "UPDATE ".$db_prefix."planets SET `$gid` = `$gid` + $done WHERE planet_id = $planet_id";
     dbquery ($query);
 
     // Add points.
@@ -836,7 +836,7 @@ function Queue_Research_End (array $queue) : void
     ProdResources ( $planet, $planet['lastpeek'], $queue['end'] );
 
     // Update the research level in the database.
-    $query = "UPDATE ".$db_prefix."users SET ".$id." = $lvl WHERE player_id = $player_id";
+    $query = "UPDATE ".$db_prefix."users SET `".$id."` = $lvl WHERE player_id = $player_id";
     dbquery ($query);
 
     RemoveQueue ( $queue['task_id'] );

@@ -44,42 +44,42 @@ function SaveExpeditionSettings (array $exptab) : void
     $query = "UPDATE ".$db_prefix."exptab SET ".
         "chance_success='".$exptab['chance_success']."', ".
 
-        "depleted_min='".$exptab['depleted_min']."', ".
-        "depleted_med='".$exptab['depleted_med']."', ".
-        "depleted_max='".$exptab['depleted_max']."', ".
+        "depleted_min=".$exptab['depleted_min'].", ".
+        "depleted_med=".$exptab['depleted_med'].", ".
+        "depleted_max=".$exptab['depleted_max'].", ".
 
-        "chance_depleted_min='".$exptab['chance_depleted_min']."', ".
-        "chance_depleted_med='".$exptab['chance_depleted_med']."', ".
-        "chance_depleted_max='".$exptab['chance_depleted_max']."', ".
+        "chance_depleted_min=".$exptab['chance_depleted_min'].", ".
+        "chance_depleted_med=".$exptab['chance_depleted_med'].", ".
+        "chance_depleted_max=".$exptab['chance_depleted_max'].", ".
 
-        "chance_alien='".$exptab['chance_alien']."', ".
-        "chance_pirates='".$exptab['chance_pirates']."', ".
-        "chance_dm='".$exptab['chance_dm']."', ".
-        "chance_lost='".$exptab['chance_lost']."', ".
-        "chance_delay='".$exptab['chance_delay']."', ".
-        "chance_accel='".$exptab['chance_accel']."', ".
-        "chance_res='".$exptab['chance_res']."', ".
-        "chance_fleet='".$exptab['chance_fleet']."', ".
+        "chance_alien=".$exptab['chance_alien'].", ".
+        "chance_pirates=".$exptab['chance_pirates'].", ".
+        "chance_dm=".$exptab['chance_dm'].", ".
+        "chance_lost=".$exptab['chance_lost'].", ".
+        "chance_delay=".$exptab['chance_delay'].", ".
+        "chance_accel=".$exptab['chance_accel'].", ".
+        "chance_res=".$exptab['chance_res'].", ".
+        "chance_fleet=".$exptab['chance_fleet'].", ".
 
-        "dm_factor='".$exptab['dm_factor']."', ".
+        "dm_factor=".$exptab['dm_factor'].", ".
 
-        "score_cap1='".$exptab['score_cap1']."', ".
-        "score_cap2='".$exptab['score_cap2']."', ".
-        "score_cap3='".$exptab['score_cap3']."', ".
-        "score_cap4='".$exptab['score_cap4']."', ".
-        "score_cap5='".$exptab['score_cap5']."', ".
-        "score_cap6='".$exptab['score_cap6']."', ".
-        "score_cap7='".$exptab['score_cap7']."', ".
-        "score_cap8='".$exptab['score_cap8']."', ".
-        "limit_cap1='".$exptab['limit_cap1']."', ".
-        "limit_cap2='".$exptab['limit_cap2']."', ".
-        "limit_cap3='".$exptab['limit_cap3']."', ".
-        "limit_cap4='".$exptab['limit_cap4']."', ".
-        "limit_cap5='".$exptab['limit_cap5']."', ".
-        "limit_cap6='".$exptab['limit_cap6']."', ".
-        "limit_cap7='".$exptab['limit_cap7']."', ".
-        "limit_cap8='".$exptab['limit_cap8']."', ".
-        "limit_max='".$exptab['limit_max']."';" ;
+        "score_cap1=".$exptab['score_cap1'].", ".
+        "score_cap2=".$exptab['score_cap2'].", ".
+        "score_cap3=".$exptab['score_cap3'].", ".
+        "score_cap4=".$exptab['score_cap4'].", ".
+        "score_cap5=".$exptab['score_cap5'].", ".
+        "score_cap6=".$exptab['score_cap6'].", ".
+        "score_cap7=".$exptab['score_cap7'].", ".
+        "score_cap8=".$exptab['score_cap8'].", ".
+        "limit_cap1=".$exptab['limit_cap1'].", ".
+        "limit_cap2=".$exptab['limit_cap2'].", ".
+        "limit_cap3=".$exptab['limit_cap3'].", ".
+        "limit_cap4=".$exptab['limit_cap4'].", ".
+        "limit_cap5=".$exptab['limit_cap5'].", ".
+        "limit_cap6=".$exptab['limit_cap6'].", ".
+        "limit_cap7=".$exptab['limit_cap7'].", ".
+        "limit_cap8=".$exptab['limit_cap8'].", ".
+        "limit_max=".$exptab['limit_max'].";" ;
 
     dbquery ($query);
 }
@@ -329,7 +329,7 @@ function Exp_DarkMatterFound (array $exptab, array $queue, array $fleet_obj, arr
     $msg .= va ( loca_lang("EXP_FOUND", $lang), nicenum($dm), loca_lang("DM", $lang) );
 
     // Credit DM
-    $query = "UPDATE ".$db_prefix."users SET dmfree = dmfree + '".$dm."' WHERE player_id=$player_id;";
+    $query = "UPDATE ".$db_prefix."users SET dmfree = dmfree + ".$dm." WHERE player_id=$player_id;";
     dbquery ($query);
 
     // Bring back the fleet.
@@ -688,7 +688,7 @@ function Exp_TraderFound (array $exptab, array $queue, array $fleet_obj, array $
 
     // Activate the Merchant.
     if ( $user['trader'] == 0 || ($rate_m + $rate_k + $rate_d) > $rate_sum ) {
-        $query = "UPDATE ".$db_prefix."users SET trader = $offer_id, rate_m = '$rate_m', rate_k = '$rate_k', rate_d = '$rate_d' WHERE player_id=$player_id;";
+        $query = "UPDATE ".$db_prefix."users SET trader = $offer_id, rate_m = $rate_m, rate_k = $rate_k, rate_d = $rate_d WHERE player_id=$player_id;";
         dbquery ($query);
     }
 

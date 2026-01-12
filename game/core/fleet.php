@@ -285,7 +285,7 @@ function AdjustShips (array $fleet, int $planet_id, string $sign) : void
     foreach ($fleetmap as $i=>$gid)
     {
         if ($i > 0) $query .= ",";
-        $query .= "$gid = $gid $sign " . $fleet[$gid] ;
+        $query .= "`$gid` = `$gid` $sign " . $fleet[$gid] ;
     }
     $query .= " WHERE planet_id=$planet_id;";
     dbquery ($query);
@@ -393,8 +393,8 @@ function SetFleet (int $fleet_id, array $fleet) : void
     global $fleetmap;
     $query = "UPDATE ".$db_prefix."fleet SET ";
     foreach ( $fleetmap as $i=>$gid ) {
-        if ( $i == 0 ) $query .= $gid."=".$fleet[$gid];
-        else $query .= ", ".$gid."=".$fleet[$gid];
+        if ( $i == 0 ) $query .= "`$gid`=".$fleet[$gid];
+        else $query .= ", `$gid`=".$fleet[$gid];
     }
     $query .= " WHERE fleet_id=$fleet_id;";
     dbquery ($query);
