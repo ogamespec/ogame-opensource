@@ -290,10 +290,12 @@ else
     }
     else if ( $gid == GID_B_MISS_SILO && $aktplanet[GID_B_MISS_SILO] > 0)        // Missile Silo
     {
+        // TODO: It looks like the code for the missiles was shared, as it copy-pasted. I'm not yet sure whether it's necessary to generalize this and add some missile-specific tables to techs.php; I'll have to think about that.
+
         $rak_space = $aktplanet[GID_B_MISS_SILO] * 10;
         if ( key_exists ( 'aktion', $_POST) )
         {
-            $amount1 = min ( $aktplanet[GID_D_ABM], intval ( $_POST['ab502'] ) );
+            $amount1 = min ( $aktplanet[GID_D_ABM], key_exists ('ab'.GID_D_ABM, $_POST) ? intval ( $_POST['ab'.GID_D_ABM] ) : 0 );
             if ( $amount1 > 0) {
                 $aktplanet[GID_D_ABM] -= $amount1;
                 $res = ShipyardPrice ( GID_D_ABM );
@@ -302,7 +304,7 @@ else
                 AdjustStats ( $aktplanet['owner_id'], $points, 0, 0, '-');
             }
 
-            $amount2 = min ($aktplanet[GID_D_ABM], intval ( $_POST['ab503'] ) );
+            $amount2 = min ($aktplanet[GID_D_ABM], key_exists ('ab'.GID_D_IPM, $_POST) ? intval ( $_POST['ab'.GID_D_IPM] ) : 0 );
             if ( $amount2 > 0) {
                 $aktplanet[GID_D_IPM] -= $amount2;
                 $res = ShipyardPrice ( GID_D_IPM );
@@ -327,7 +329,7 @@ else
     if ( ($aktplanet[GID_D_ABM] + $aktplanet[GID_D_IPM]) > 0 )  
     {
 ?>
-<form action="index.php?page=infos&session=<?=$session;?>&gid=44"  method=post> 
+<form action="index.php?page=infos&session=<?=$session;?>&gid=<?=GID_B_MISS_SILO;?>"  method=post> 
 <tr> 
  <td class=c><?=loca("INFO_SILO_TYPE");?></td><td class=c><?=loca("INFO_SILO_AMOUNT");?></td><td class=c><?=loca("INFO_SILO_DEMOLISH");?></td> 
  <td class=c></td></tr> 
@@ -335,7 +337,7 @@ else
             if ($aktplanet[GID_D_ABM] > 0) 
             {
 ?>
-<tr><td class=c><?=loca("NAME_502");?></td><td class=c><?=$aktplanet[GID_D_ABM];?></td><td class=c><input type=text name="ab502" size=2 value=""></td><td class=c></td></tr>
+<tr><td class=c><?=loca("NAME_".GID_D_ABM);?></td><td class=c><?=$aktplanet[GID_D_ABM];?></td><td class=c><input type=text name="ab<?=GID_D_ABM;?>" size=2 value=""></td><td class=c></td></tr>
 <?php
             }
 ?>
@@ -343,7 +345,7 @@ else
             if ($aktplanet[GID_D_IPM] > 0) 
             {
 ?>
-<tr><td class=c><?=loca("NAME_503");?></td><td class=c><?=$aktplanet[GID_D_IPM];?></td><td class=c><input type=text name="ab503" size=2 value=""></td><td class=c></td></tr>
+<tr><td class=c><?=loca("NAME_".GID_D_IPM);?></td><td class=c><?=$aktplanet[GID_D_IPM];?></td><td class=c><input type=text name="ab<?=GID_D_IPM;?>" size=2 value=""></td><td class=c></td></tr>
 <?php
             }
 ?>
