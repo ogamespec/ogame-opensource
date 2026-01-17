@@ -71,34 +71,34 @@ const GID_D_IPM = 503;      // Interplanetary Missiles
 
 function IsBuilding (int $gid) : bool
 {
-    return $gid >= GID_B_METAL_MINE && $gid <= GID_B_MISS_SILO;
+    global $buildmap;
+    return in_array($gid, $buildmap, true);
 }
 
 function IsResearch (int $gid) : bool
 {
-    return $gid >= GID_R_ESPIONAGE && $gid <= GID_R_GRAVITON;
+    global $resmap;
+    return in_array($gid, $resmap, true);
 }
 
 function IsFleet (int $gid) : bool
 {
-    return $gid >= GID_F_SC && $gid <= GID_F_BATTLECRUISER;
+    global $fleetmap;
+    return in_array($gid, $fleetmap, true);
 }
 
 function IsDefense (int $gid) : bool
 {
-    return $gid >= GID_D_RL && $gid <= GID_D_IPM;
+    global $defmap;
+    return in_array($gid, $defmap, true);
 }
 
 // Defense, but no missiles
 function IsDefenseNoRak (int $gid) : bool
 {
-    return $gid >= GID_D_RL && $gid <= GID_D_LDOME;
-}
-
-// Shooting defenses
-function IsDefenseShoot (int $gid) : bool
-{
-    return $gid >= GID_D_RL && $gid <= GID_D_PLASMA;
+    global $defmap, $rakmap;
+    $defmap_norak = array_diff($defmap, $rakmap);
+    return in_array($gid, $defmap_norak, true);
 }
 
 // Arrays of objects that are very commonly used elsewhere.
@@ -107,6 +107,7 @@ $buildmap = array ( GID_B_METAL_MINE, GID_B_CRYS_MINE, GID_B_DEUT_SYNTH, GID_B_S
 $resmap = array ( GID_R_ESPIONAGE, GID_R_COMPUTER, GID_R_WEAPON, GID_R_SHIELD, GID_R_ARMOUR, GID_R_ENERGY, GID_R_HYPERSPACE, GID_R_COMBUST_DRIVE, GID_R_IMPULSE_DRIVE, GID_R_HYPER_DRIVE, GID_R_LASER_TECH, GID_R_ION_TECH, GID_R_PLASMA_TECH, GID_R_IGN, GID_R_EXPEDITION, GID_R_GRAVITON );
 $fleetmap = array ( GID_F_SC, GID_F_LC, GID_F_LF, GID_F_HF, GID_F_CRUISER, GID_F_BATTLESHIP, GID_F_COLON, GID_F_RECYCLER, GID_F_PROBE, GID_F_BOMBER, GID_F_SAT, GID_F_DESTRO, GID_F_DEATHSTAR, GID_F_BATTLECRUISER );
 $defmap = array ( GID_D_RL, GID_D_LL, GID_D_HL, GID_D_GAUSS, GID_D_ION, GID_D_PLASMA, GID_D_SDOME, GID_D_LDOME, GID_D_ABM, GID_D_IPM );
+$rakmap = array ( GID_D_ABM, GID_D_IPM );
 
 // Level 1 cost.
 // Factor in the exponential growth of technology. OGame is a game of exponential.

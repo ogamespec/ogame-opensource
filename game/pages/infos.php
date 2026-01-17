@@ -43,6 +43,14 @@ function rapid (int $gid) : string
     return $res;
 }
 
+// Shooting defenses
+// A custom method that used to be in techs.php, but was moved here because it's only used in one place (not very mod-compatible).
+function IsDefenseShoot (int $gid) : bool
+{
+    global $UnitParam;
+    return IsDefenseNoRak($gid) && $UnitParam[$gid][2] > 1;
+}
+
 $gid = intval($_GET['gid']);
 
 echo "<table width=\"519\">\n";

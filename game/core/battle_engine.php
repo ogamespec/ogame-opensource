@@ -66,7 +66,8 @@ function InitBattle (array $slot, int $num, int $objs, bool $attacker, string &$
     global $UnitParam;
     global $fleetmap;
     global $defmap;
-    $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
+    global $rakmap;
+    $defmap_norak = array_diff($defmap, $rakmap);
 
     $amap = $fleetmap;
     $dmap = $defmap_norak;
@@ -365,7 +366,8 @@ function DoBattle (array &$res, int $Rapidfire, int $fid, int $did) : void
     global $exploded_counter;
     global $fleetmap;
     global $defmap;
-    $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
+    global $rakmap;
+    $defmap_norak = array_diff($defmap, $rakmap);
 
     // A set of working array strings for calculations. Arrays of shields and armor use packing of long numbers
 
@@ -643,7 +645,8 @@ function deserialize_slot (string $str, bool $att) : array
 {
     global $fleetmap;
     global $defmap;
-    $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
+    global $rakmap;
+    $defmap_norak = array_diff($defmap, $rakmap);
     
     $amap = $fleetmap;
     $dmap = $defmap_norak;

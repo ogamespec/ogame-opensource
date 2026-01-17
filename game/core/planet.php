@@ -487,7 +487,8 @@ function SetPlanetFleetDefense ( int $planet_id, array $objects ) : void
     global $db_prefix;
     global $defmap;
     global $fleetmap;
-    $param = array_merge ( array_diff($defmap, [GID_D_ABM, GID_D_IPM]), $fleetmap);
+    global $rakmap;
+    $param = array_merge ( array_diff($defmap, $rakmap), $fleetmap);
     $query = "UPDATE ".$db_prefix."planets SET ";
     foreach ( $param as $i=>$p ) {
         if ( $i == 0 ) $query .= "`$p`=".$objects[$p];
