@@ -57,43 +57,6 @@ end: construction completion time (INT UNSIGNED)
 
 const QUEUE_BATCH = 16;         // The event queue is not executed in its entirety, but in small portions specified in this constant (so as not to overload the server)
 
-// Queue task type
-// For some reason during the development phase, the identifiers were made strings. TODO: Change them to INT type (but this would require a clean reinstall of the Universe)
-const QTYP_UNBAN = "UnbanPlayer";               // unban player
-const QTYP_CHANGE_EMAIL = "ChangeEmail";        // write down a permanent mailing address
-const QTYP_ALLOW_NAME = "AllowName";            // allow player name changes
-const QTYP_ALLOW_ATTACKS = "AllowAttacks";      // unban player's attack ban
-const QTYP_UNLOAD_ALL = "UnloadAll";            // re-login all players
-const QTYP_CLEAN_DEBRIS = "CleanDebris";        // virtual debris field cleanup
-const QTYP_CLEAN_PLANETS = "CleanPlanets";      // removal of destroyed planets / abandoned moons
-const QTYP_CLEAN_PLAYERS = "CleanPlayers";      // deleting inactive players and players put up for deletion (1:10 server time)
-const QTYP_UPDATE_STATS = "UpdateStats";        // saving old stat points
-const QTYP_RECALC_POINTS = "RecalcPoints";      // recalculation of player statistics
-const QTYP_RECALC_ALLY_POINTS = "RecalcAllyPoints";  // recalculation of alliance statistics
-const QTYP_BUILD = "Build";                     // completion of building on the planet (sub_id - task ID in the build queue, obj_id - type of building)
-const QTYP_DEMOLISH = "Demolish";               // completion of demolition on the planet (sub_id - task ID in the build queue, obj_id - type of building)
-const QTYP_RESEARCH = "Research";               // research (sub_id - number of the planet where the research was launched, obj_id - type of research)
-const QTYP_SHIPYARD = "Shipyard";               // shipyard task (sub_id - planet number, obj_id - construction type)
-const QTYP_FLEET = "Fleet";                     // Fleet task / IPM attack (sub_id - number of record in the fleet table)
-const QTYP_DEBUG = "Debug";                     // debug event
-const QTYP_AI = "AI";                           // tasks for bot (sub_id - strategy number, obj_id - current block number)
-const QTYP_COUPON = "Coupon";                   // Coupon crediting (the handler is located in coupon.php)
-
-// Queue task priorities
-const QUEUE_PRIO_LOWEST = 0;            // Consider it no priority
-const QUEUE_PRIO_DEBUG = 9999;          // Debug event priority (AddDebugEvent)
-const QUEUE_PRIO_BUILD = 20;            // Priority for buildings and construction queue
-const QUEUE_PRIO_FLEET = 200;       // Priority of fleet missions. The mission type is added to this value (see FTYP_)
-const QUEUE_PRIO_RECALC_ALLY_POINTS = 400;
-const QUEUE_PRIO_RECALC_POINTS = 500;
-const QUEUE_PRIO_UPDATE_STATS = 510;
-const QUEUE_PRIO_COUPON = 520;
-const QUEUE_PRIO_CLEAN_DEBRIS = 600;
-const QUEUE_PRIO_CLEAN_PLANETS = 700;
-const QUEUE_PRIO_RELOGIN = 777;
-const QUEUE_PRIO_CLEAN_PLAYERS = 900;
-const QUEUE_PRIO_BOT = 1000;
-
 // Add a task to the queue. Returns the ID of the added task.
 function AddQueue (int $owner_id, string $type, int $sub_id, int $obj_id, int $level, int $now, int $seconds, int $prio=QUEUE_PRIO_LOWEST) : int
 {

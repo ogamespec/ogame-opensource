@@ -16,16 +16,6 @@
 // date: Date of message (INT UNSIGNED)
 // planet_id: The ordinal number of the planet/moon. Used for espionage reports to display shared espionage reports in the galaxy
 
-// Message types (pm)
-// It so happened that in the early stages of development pm=1 meant that the message was private. When it came time to make filters for the Commander, it was decided not to create a new type column in the table, but to use pm.
-const MTYP_PM = 0;              // private message
-const MTYP_SPY_REPORT = 1;              // spy report
-const MTYP_BATTLE_REPORT_LINK = 2;      // link to battle report AND missile attack
-const MTYP_EXP = 3;             // expedition report
-const MTYP_ALLY = 4;            // alliance
-const MTYP_MISC = 5;            // miscellaneous
-const MTYP_BATTLE_REPORT_TEXT = 6;      // battle report text
-
 // A user can have a maximum of 127 messages in total. If an overflow occurs, the oldest message is deleted and a new one is added.
 // The message is kept for 24 hours (7 days with the Commander)
 

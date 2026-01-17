@@ -68,38 +68,6 @@ tec_until: Officer expires: Technocrat (INT UNSIGNED)
 Q - task in the task queue is used to process this event.
 */
 
-// Flag mask (flags property)
-const USER_FLAG_SHOW_ESPIONAGE_BUTTON = 0x1;    // 1: Display the "Espionage" icon" in the galaxy
-const USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON = 0x2;       // 1: Display the "Write message" icon in the galaxy
-const USER_FLAG_SHOW_BUDDY_BUTTON = 0x4;        // 1: Display the "Buddy request" icon in the galaxy
-const USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON = 0x8;    // 1: Display the "Missile Attack" icon in the galaxy
-const USER_FLAG_SHOW_VIEW_REPORT_BUTTON = 0x10;     // 1: Display the "View Message" icon in the galaxy
-const USER_FLAG_DONT_USE_FOLDERS = 0x20;        // 1: Do not sort messages into folders in Commander mode
-const USER_FLAG_PARTIAL_REPORTS = 0x40;         // 1: Show partial spy report
-const USER_FLAG_FOLDER_ESPIONAGE = 0x100;           // Message Filter. 1: Show spy reports (pm=1)
-const USER_FLAG_FOLDER_COMBAT = 0x200;              // Message Filter. 1: Show battle reports & missile attacks (pm=2)
-const USER_FLAG_FOLDER_EXPEDITION = 0x400;          // Message Filter. 1: Show expedition results (pm=3)
-const USER_FLAG_FOLDER_ALLIANCE = 0x800;            // Message Filter. 1: Show alliance messages (pm=4)
-const USER_FLAG_FOLDER_PLAYER = 0x1000;             // Message Filter. 1: Show private messages (pm=0)
-const USER_FLAG_FOLDER_OTHER = 0x2000;              // Message Filter. 1: Show all other messages (pm=5)
-const USER_FLAG_HIDE_GO_EMAIL = 0x4000;                 // Show an in-game message icon instead of the operator's email (not all operators may like to publish their email)
-const USER_FLAG_FEED_ENABLE = 0x8000;               // 1: feed enabled
-const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - use Atom format
-
-const USER_OFFICER_COMMANDER = 1;
-const USER_OFFICER_ADMIRAL = 2;
-const USER_OFFICER_ENGINEER = 3;
-const USER_OFFICER_GEOLOGE = 4;
-const USER_OFFICER_TECHNOCRATE = 5;
-
-// Default flags after creating a player
-const USER_FLAG_DEFAULT = USER_FLAG_SHOW_ESPIONAGE_BUTTON | USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON | USER_FLAG_SHOW_BUDDY_BUTTON | USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON | USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
-
-const USER_LEGOR = 1;
-const USER_SPACE = 99999;           // A technical account that owns global events as well as "nobody's" galaxy objects
-
-const USER_NOOB_LIMIT = 5000;           // Number of points for a newbie
-
 // Very limited cache implementation: The cache is only kept for the lifetime of the script.
 // Attention! Using caches in the game introduces a significant probability of obscure errors ("Heisenbugs"), so it is NOT recommended to use persistent cache (which is kept between HTTP requests)
 $UserCache = array ();

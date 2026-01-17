@@ -239,9 +239,7 @@ $RapidFire = array (
     GID_D_LDOME => array ( ),
 );
 
-// **************************************************************************************
 // A list of what-what-it-requires objects.
-
 $requrements = array (
 
     GID_B_METAL_MINE => array (),

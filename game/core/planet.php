@@ -41,18 +41,6 @@ Cleaning of systems from "destroyed planets" takes place every 24 hours at 01-10
 
 */
 
-// Types of galactic objects (planets, moons, etc.)
-const PTYP_MOON = 0;        // moon
-const PTYP_PLANET = 1;      // planet; In the early stages of development for planets were reserved types for each picture (ice, desert, etc.). But after the algorithm of getting a picture from ID was cracked, there was no need in this.
-const PTYP_DF = 10000;          // debris field
-const PTYP_DEST_PLANET = 10001;         // destroyed planet (deleted by the player)
-const PTYP_COLONY_PHANTOM = 10002;      // colonization phantom (exists for the duration of the Colonize mission)
-const PTYP_DEST_MOON = 10003;           // destroyed moon (deleted by the player)
-const PTYP_ABANDONED = 10004;           // abandoned colony (instead of the buggy "overlib" that was in the vanilla version)
-const PTYP_FARSPACE = 20000;        // infinite distances (for expeditions)
-
-// In addition to planet types for the database, there are also so-called "game planet types", such as those used for the Empire page (see GetPlanetType method).
-
 // Create planet. Returns planet_id, or 0 if the position is occupied.
 // colony: 1 - create colony, 0 - Home planet
 // moon: 1 - create the moon

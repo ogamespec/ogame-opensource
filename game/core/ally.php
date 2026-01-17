@@ -245,17 +245,6 @@ function RecalcAllyRanks () : void
 // The names may be the same.
 // No more than 25 ranks per alliance.
 
-// Rank Mask.
-const ARANK_DISMISS = 0x001;    // Dismiss the alliance
-const ARANK_KICK = 0x002;       // Kick a player
-const ARANK_R_APPLY = 0x004;    // View applications
-const ARANK_R_MEMBERS = 0x008;  // View member list
-const ARANK_W_APPLY = 0x010;    // Edit applications
-const ARANK_W_MEMBERS = 0x020;  // Alliance management
-const ARANK_ONLINE = 0x040;     // View the "online" status in the member list
-const ARANK_CIRCULAR = 0x080;   // Write a circular message
-const ARANK_RIGHT_HAND = 0x100; // 'Right Hand' (required to transfer founder status)
-
 // Rank entries in the database (allyranks).
 // rank_id: Rank ordinal number (INT)
 // ally_id: ID of the alliance to which the rank is assigned
