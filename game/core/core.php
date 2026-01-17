@@ -2,6 +2,7 @@
 
 $GlobalUser = array ();
 
+require_once "defs.php";
 require_once "db.php";
 require_once "utils.php";
 require_once "techs.php";

@@ -23,6 +23,7 @@ function Admin_Checksum () : void
         'core/botapi.php', 
         'core/coupon.php', 
         'core/db.php', 
+        'core/defs.php', 
         'core/debug.php', 
         'core/expedition.php', 
         'core/fleet.php', 

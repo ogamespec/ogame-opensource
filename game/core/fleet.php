@@ -36,22 +36,6 @@ players: IDs of invited players, separated by commas (TEXT)
 
 */
 
-// List of fleet mission types
-const FTYP_ATTACK = 1;      // Attack
-const FTYP_ACS_ATTACK = 2;  // ACS Attack (slot > 0)
-const FTYP_TRANSPORT = 3;   // Transport
-const FTYP_DEPLOY = 4;      // Deploy
-const FTYP_ACS_HOLD = 5;    // ACS Hold
-const FTYP_SPY = 6;         // Spy
-const FTYP_COLONIZE = 7;    // Colonize
-const FTYP_RECYCLE = 8;     // Recycle
-const FTYP_DESTROY = 9;     // Destroy (moon)
-const FTYP_EXPEDITION = 15; // Expedition
-const FTYP_MISSILE = 20;        // Missile attack (IPMs)
-const FTYP_ACS_ATTACK_HEAD = 21;    // ACS Attack head (slot = 0)
-const FTYP_RETURN = 100;            // Fleet returns (add this value to any mission)
-const FTYP_ORBITING = 200;          // Fleet is in orbit (add this value to any mission)
-
 // ==================================================================================
 // Get a list of available missions for the fleet.
 

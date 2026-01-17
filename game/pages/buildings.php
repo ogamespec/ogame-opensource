@@ -111,7 +111,7 @@ if ( $_GET['mode'] === "Flotte" )
     if ( $aktplanet[GID_B_SHIPYARD] ) {
         // Output the objects that can be built in the Shipyard.
         foreach ( $fleetmap as $i => $id ) {
-            if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) )
+            if ( !TechMeetRequirement ( $GlobalUser, $aktplanet, $id ) )
             {
                 if ($aktplanet[$id] <= 0) continue;
             }
@@ -138,7 +138,7 @@ if ( $_GET['mode'] === "Flotte" )
             $t = ShipyardDuration ( $id, $aktplanet[GID_B_SHIPYARD], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
             echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
-            if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>".loca("BUILD_SHIPYARD_CANT")."</font>";
+            if ( !TechMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>".loca("BUILD_SHIPYARD_CANT")."</font>";
             else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) && !$busy) {
                 echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
                 if ( $prem['commander'] ) {
@@ -194,7 +194,7 @@ if ( $_GET['mode'] === "Verteidigung" )
     if ( $aktplanet[GID_B_SHIPYARD] ) {
         // Output the objects that can be built in the Shipyard.
         foreach ( $defmap as $i => $id ) {
-            if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) )
+            if ( !TechMeetRequirement ( $GlobalUser, $aktplanet, $id ) )
             {
                 if($aktplanet[$id] == 0) continue;
             }
@@ -223,7 +223,7 @@ if ( $_GET['mode'] === "Verteidigung" )
             echo "<td class=k >";
             if ( !$busy ) {
                 if ( ($id == GID_D_SDOME || $id == GID_D_LDOME) && $aktplanet[$id] > 0 ) echo "<font color=#FF0000>".loca("BUILD_ERROR_DOME")."</font>";
-                else if ( !ShipyardMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>".loca("BUILD_SHIPYARD_CANT")."</font>";
+                else if ( !TechMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>".loca("BUILD_SHIPYARD_CANT")."</font>";
                 else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) {
                     echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
                     if ( $prem['commander'] && !( $id == GID_D_SDOME || $id == GID_D_LDOME ) ) {
@@ -284,7 +284,7 @@ if ( $_GET['mode'] === "Forschung" )
     if ( $aktplanet[GID_B_RES_LAB] ) {
         // Display a list of available research
         foreach ( $resmap as $i => $id ) {
-            if ( ! ResearchMeetRequirement ($GlobalUser, $aktplanet, $id) ) continue;
+            if ( ! TechMeetRequirement ($GlobalUser, $aktplanet, $id) ) continue;
 
             $reslab = ResearchNetwork ( $aktplanet['planet_id'], $id );
 

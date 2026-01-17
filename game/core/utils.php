@@ -2,7 +2,9 @@
 
 // Various auxiliary utilities that used to be scattered all over the place.
 
-function method () : string { return $_SERVER['REQUEST_METHOD']; }
+function method () : string {
+    return $_SERVER['REQUEST_METHOD'];
+}
 
 function scriptname () : string {
     $break = explode('/', $_SERVER["SCRIPT_NAME"]);
