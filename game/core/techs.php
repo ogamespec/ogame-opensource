@@ -240,7 +240,7 @@ $RapidFire = array (
 );
 
 // A list of what-what-it-requires objects.
-$requrements = array (
+$requirements = array (
 
     GID_B_METAL_MINE => array (),
     GID_B_CRYS_MINE => array (),

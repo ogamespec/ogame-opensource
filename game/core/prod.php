@@ -8,7 +8,7 @@ function TechMeetRequirement ( array $user, array $planet, int $id ) : bool
 {
     global $CanBuildTab;
     global $buildmap, $resmap;
-    global $requrements;
+    global $requirements;
 
     // Check that the specified type of object can be built on the specified type of planet
     if (IsBuilding($id) && isset($CanBuildTab[$planet['type']])) {
@@ -26,8 +26,8 @@ function TechMeetRequirement ( array $user, array $planet, int $id ) : bool
     }
 
     // Check the requirements for the specified object type using the requirements table (technology tree)
-    if (isset($requrements[$id])) {
-        foreach ($requrements[$id] as $gid=>$req_level) {
+    if (isset($requirements[$id])) {
+        foreach ($requirements[$id] as $gid=>$req_level) {
             if ($obj_levels[$gid] < $req_level) return false;
         }
     }

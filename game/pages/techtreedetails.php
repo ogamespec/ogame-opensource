@@ -1,7 +1,7 @@
 <?php
 
 /** @var array $GlobalUser */
-/** @var array $requrements */
+/** @var array $requirements */
 
 // Technologies (details).
 
@@ -13,7 +13,7 @@ $maxreclevel = -1;
 
 function walk_tree (array $arr, int $id) : void
 {
-    global $requrements, $reclevel, $maxreclevel, $tree;
+    global $requirements, $reclevel, $maxreclevel, $tree;
     $reclevel++;
     if ($reclevel >= $maxreclevel) $maxreclevel = $reclevel;
     if ($arr == null) { $reclevel--; return; }
@@ -24,7 +24,7 @@ function walk_tree (array $arr, int $id) : void
         if ($tree[$reclevel][$i] < $level) $tree[$reclevel][$i] = $level;
     }
     foreach ($arr as $i=>$level) {
-        walk_tree ( $requrements[$i], $i );
+        walk_tree ( $requirements[$i], $i );
     }
     $reclevel--;
 }
@@ -44,7 +44,7 @@ echo "<td class=c align=center nowrap> \n";
 echo va( loca("TECHTREE_COND_FOR"), "<a href=\"index.php?page=infos&session=$session&gid=$id\">'".loca("NAME_$id")."'</a>") . "</td> \n";
 echo "</tr> \n";
 
-walk_tree ( $requrements[$id], $id );
+walk_tree ( $requirements[$id], $id );
 
 if ( $maxreclevel == 0 ) echo "<tr><td class=l align=center>".loca("TECHTREE_COND_NO")."</td></tr> ";
 

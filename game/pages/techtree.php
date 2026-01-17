@@ -5,7 +5,7 @@
 /** @var array $resmap */
 /** @var array $fleetmap */
 /** @var array $defmap */
-/** @var array $requrements */
+/** @var array $requirements */
 
 // Technologies.
 
@@ -54,7 +54,7 @@ foreach ($techtree as $i => $req )
 
     foreach ($req['techs'] as $tech) {
 
-        if (count ($requrements[$tech]) == 0) $details = "&nbsp;";
+        if (count ($requirements[$tech]) == 0) $details = "&nbsp;";
         else $details = "<a href=\"index.php?page=techtreedetails&session=".$_GET['session']."&tid=$tech\">[i]</a>";
 
         echo "<tr> \n";
@@ -63,7 +63,7 @@ foreach ($techtree as $i => $req )
         echo "</td><td align=right>$details</td></tr></table></td> \n";
 
         echo "<td class=l> \n";
-        foreach ($requrements[$tech] as $obj => $lvl ) {
+        foreach ($requirements[$tech] as $obj => $lvl ) {
             $ok = MeetRequirement ( $GlobalUser, $aktplanet, $obj, $lvl );
             if ($ok) $color = '#00ff00';
             else $color = '#ff0000';
