@@ -292,94 +292,84 @@ function ResourceList (array $aktplanet, int $m, int $k, int $d, int $enow, int 
     echo "</table></td>\n";
 }
 
-function calco (int $now, int $who) : array
+function GetOfficerBonus (int $now, int $who, string $img_base, string $loca_id, string|null $loca_info) : array
 {
     global $GlobalUser;
-    $reply = array ();
+    $sess = $GlobalUser['session'];
+
     $end = GetOfficerLeft ( $GlobalUser, $who );
     if ($end <= $now) {
-        $reply['img'] = "_un";
-        $reply['days'] = '';
-        $reply['action'] = loca("PR_PURCHASE");
+        $img_fix = "_un";
+        $days = '';
+        $action = loca("PR_PURCHASE");
     }
     else
     {
         $d = ($end - $now) / (60*60*24);
-        if ( $d  > 0 )
-        {
-            $reply['days'] = va(loca("PR_ACTIVE_DAYS"), ceil($d));
-            $reply['action'] = loca("PR_RENEW");
-            $reply['img'] = '';
-        }
+        $days = va(loca("PR_ACTIVE_DAYS"), ceil($d));
+        $action = loca("PR_RENEW");
+        $img_fix = '';
     }
-    return $reply;
+
+    $res = [];
+
+    $res['href'] = "index.php?page=micropayment&session=$sess";
+    $res['accesskey'] = loca ("HK_PAYMENT");
+    $res['img'] = "img/$img_base".$img_fix.".gif";
+    $res['alt'] = loca($loca_id);
+    $overlib = "";
+    $overlib .= "<center><font size=1 color=white><b>".$days."<br>".loca($loca_id)."</font><br>";
+    if ($loca_info != null) {
+        $overlib .= "<font size=1 color=skyblue>".loca($loca_info)."</font><br>";
+    }
+    $overlib .= "<br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action."</b></font></a></center>";
+    $res['overlib'] = $overlib;
+
+    return $res;
 }
 
 // Previously, this panel was used only for officers; after the addition of the modding engine, it is now called the "Bonus Panel" and displays various account "bonuses" (officers are a special case).
 function BonusList () : void
 {
-    global $GlobalUser;
-    $sess = $GlobalUser['session'];
-    $img = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '' );
-    $days = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '' );
-    $action = array ( 'commander' => '', 'admiral' => '', 'engineer' => '', 'geologist' => '', 'technocrat' => '' );
-
     $now = time ();
 
-    $reply = calco ($now, USER_OFFICER_COMMANDER);
-    $img['commander'] = $reply['img'];
-    $days['commander'] = $reply['days'];
-    $action['commander'] = $reply['action'];
+    // Add standard bonuses (Officers)
+    $bonuses = [];
+    $bonuses['commander'] = GetOfficerBonus ($now, USER_OFFICER_COMMANDER, "commander_ikon", "PR_COMA", null);
+    $bonuses['admiral'] = GetOfficerBonus ($now, USER_OFFICER_ADMIRAL, "admiral_ikon", "PR_ADMIRAL", "PR_ADMIRAL_INFO");
+    $bonuses['engineer'] = GetOfficerBonus ($now, USER_OFFICER_ENGINEER, "ingenieur_ikon", "PR_ENGINEER", "PR_ENGINEER_INFO");
+    $bonuses['geologist'] = GetOfficerBonus ($now, USER_OFFICER_GEOLOGE, "geologe_ikon", "PR_GEOLOGIST", "PR_GEOLOGIST_INFO");
+    $bonuses['technocrat'] = GetOfficerBonus ($now, USER_OFFICER_TECHNOCRATE, "technokrat_ikon", "PR_TECHNO", "PR_TECHNO_INFO");
 
-    $reply = calco ($now, USER_OFFICER_ADMIRAL);
-    $img['admiral'] = $reply['img'];
-    $days['admiral'] = $reply['days'];
-    $action['admiral'] = $reply['action'];
-
-    $reply = calco ($now, USER_OFFICER_ENGINEER);
-    $img['engineer'] = $reply['img'];
-    $days['engineer'] = $reply['days'];
-    $action['engineer'] = $reply['action'];
-
-    $reply = calco ($now, USER_OFFICER_GEOLOGE);
-    $img['geologist'] = $reply['img'];
-    $days['geologist'] = $reply['days'];
-    $action['geologist'] = $reply['action'];
-
-    $reply = calco ($now, USER_OFFICER_TECHNOCRATE);
-    $img['technocrat'] = $reply['img'];
-    $days['technocrat'] = $reply['days'];
-    $action['technocrat'] = $reply['action'];
+    // Allow modifications to add their own bonuses
 
     echo "<td class='header'>\n";
     echo "<table class='header' align=left>\n";
     echo "<tr class='header'>\n\n";
-    echo "    <td align='center' width='35' class='header'>\n";
-    echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
-    echo "	<img border='0' src='img/commander_ikon".$img['commander'].".gif' width='32' height='32' alt='".loca("PR_COMA")."'\n";
-    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['commander']."<br>".loca("PR_COMA")."</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['commander']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
-    echo "    </a></td>\n\n";
-    echo "    <td align='center' width='35' class='header'>\n";
-    echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
-    echo "	<img border='0' src='img/admiral_ikon".$img['admiral'].".gif' width='32' height='32' alt='".loca("PR_ADMIRAL")."'\n";
-    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['admiral']."<br>".loca("PR_ADMIRAL")."</font><br><font size=1 color=skyblue>".loca("PR_ADMIRAL_INFO")."</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['admiral']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
-    echo "    </a></td>\n\n";
-    echo "    <td align='center' width='35' class='header'>\n";
-    echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
-    echo "	<img border='0' src='img/ingenieur_ikon".$img['engineer'].".gif' width='32' height='32' alt='".loca("PR_ENGINEER")."'\n";
-    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['engineer']."<br>".loca("PR_ENGINEER")."</font><br><font size=1 color=skyblue>".loca("PR_ENGINEER_INFO")."</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['engineer']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
-    echo "    </a></td>\n\n";
-    echo "    <td align='center' width='35' class='header'>\n";
-    echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
-    echo "	<img border='0' src='img/geologe_ikon".$img['geologist'].".gif' width='32' height='32' alt='".loca("PR_GEOLOGIST")."'\n";
-    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['geologist']."<br>".loca("PR_GEOLOGIST")."</font><br><font size=1 color=skyblue>".loca("PR_GEOLOGIST_INFO")."</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['geologist']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
-    echo "    </a></td>\n\n";
-    echo "    <td align='center' width='35' class='header'>\n";
-    echo "    <a href='index.php?page=micropayment&session=$sess' accesskey='o' >\n";
-    echo "	<img border='0' src='img/technokrat_ikon".$img['technocrat'].".gif' width='32' height='32' alt='".loca("PR_TECHNO")."'\n";
-    echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['technocrat']."<br>".loca("PR_TECHNO")."</font><br><font size=1 color=skyblue>".loca("PR_TECHNO_INFO")."</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['technocrat']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
-    echo "    </a></td>\n\n";
-    echo "<td align='center' class='header'></td></tr></table></td>\n\n";
+
+    foreach ($bonuses as $i=>$bonus) {
+        echo "    <td align='center' width='35' class='header'>\n";
+        $link = key_exists('href', $bonus);
+        $accesskey = key_exists('accesskey', $bonus);
+        if ($link) {
+            echo "    <a href='".$bonus['href']."' ";
+            if ($accesskey) {
+                echo "accesskey='".$bonus['accesskey']."' ";
+            }
+            echo ">\n";
+        }
+
+        echo "  <img border='0' src='".$bonus['img']."' width='32' height='32' alt='".$bonus['alt']."'\n";
+        echo "  onmouseover=\"return overlib('".$bonus['overlib']."', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
+
+        if ($link) {
+            echo "    </a>";
+        }
+        echo "</td>\n\n";
+    }
+
+    echo "<td align='center' class='header'></td>";
+    echo "</tr></table></td>\n\n";
 }
 
 function LeftMenu () : void
