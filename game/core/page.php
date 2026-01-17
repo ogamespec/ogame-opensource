@@ -128,19 +128,14 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
             (int)floor($aktplanet['m']), (int)floor($aktplanet['k']), (int)floor($aktplanet['d']), 
             (int)$aktplanet['e'], (int)$aktplanet['emax'], 
             $GlobalUser['dm']+$GlobalUser['dmfree'], $aktplanet['mmax'], $aktplanet['kmax'], $aktplanet['dmax']);
-        $coma = BonusList ();
+        BonusList ();
         echo "</tr>\n";
         echo "</table>\n";
         echo "</div><!-- END HEADER -->\n\n";
     }
-    else 
-    {
-        $end = GetOfficerLeft ( $GlobalUser, USER_OFFICER_COMMANDER );
-        $coma = $end > time ();
-    }
 
     echo "<!-- LEFTMENU -->\n\n";
-    if ($leftmenu) LeftMenu ($coma);
+    if ($leftmenu) LeftMenu ();
     echo "<!-- END LEFTMENU -->\n\n";
 }
 
@@ -321,7 +316,7 @@ function calco (int $now, int $who) : array
 }
 
 // Previously, this panel was used only for officers; after the addition of the modding engine, it is now called the "Bonus Panel" and displays various account "bonuses" (officers are a special case).
-function BonusList () : bool
+function BonusList () : void
 {
     global $GlobalUser;
     $sess = $GlobalUser['session'];
@@ -385,11 +380,9 @@ function BonusList () : bool
     echo "	onmouseover=\"return overlib('<center><font size=1 color=white><b>".$days['technocrat']."<br>".loca("PR_TECHNO")."</font><br><font size=1 color=skyblue>".loca("PR_TECHNO_INFO")."</font><br><br><a href=index.php?page=micropayment&session=$sess><font size=1 color=lime>".$action['technocrat']."</b></font></a></center>', LEFT, WIDTH, 150);\" onmouseout='return nd();'>\n";
     echo "    </a></td>\n\n";
     echo "<td align='center' class='header'></td></tr></table></td>\n\n";
-
-    return $days['commander'] !== '';
 }
 
-function LeftMenu (bool $coma) : void
+function LeftMenu () : void
 {
     global $GlobalUser;
     global $GlobalUni;
@@ -397,6 +390,10 @@ function LeftMenu (bool $coma) : void
 
     $unitab = $GlobalUni;
     $uni = $unitab['num'];
+
+    // Commander active?
+    $end = GetOfficerLeft ( $GlobalUser, USER_OFFICER_COMMANDER );
+    $coma = $end > time ();
 
     echo "   <div id='leftmenu'>\n\n";
     echo "<script language='JavaScript'>\n";
