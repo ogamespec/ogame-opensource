@@ -35,6 +35,8 @@ class SpaceStorm extends GameMod {
         dbquery ($query);        
         $query = "ALTER TABLE ".$db_prefix."planets ADD COLUMN `".GID_B_REALITY_STAB."` INT DEFAULT 0;";
         dbquery ($query);
+        $query = "ALTER TABLE ".$db_prefix."planets ADD COLUMN `s".GID_B_REALITY_STAB."` INT DEFAULT 0;";   // Storm mask
+        dbquery ($query);        
 
         // Start Space Storm event
         $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_SPACE_STORM."'";
@@ -57,6 +59,8 @@ class SpaceStorm extends GameMod {
         $query = "ALTER TABLE ".$db_prefix."uni DROP COLUMN storm;";
         dbquery ($query);        
         $query = "ALTER TABLE ".$db_prefix."planets DROP COLUMN `".GID_B_REALITY_STAB."`;";
+        dbquery ($query);
+        $query = "ALTER TABLE ".$db_prefix."planets DROP COLUMN `s".GID_B_REALITY_STAB."`;";
         dbquery ($query);
 
         // Delete Space Storm event
