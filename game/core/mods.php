@@ -24,6 +24,10 @@ abstract class GameMod {
         return false;
     }
 
+    public function add_bonuses(array &$bonuses) : bool {
+        return false;
+    }
+
     public function add_menuitems(array &$json) : bool {
         return false;
     }

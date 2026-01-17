@@ -342,6 +342,7 @@ function BonusList () : void
     $bonuses['technocrat'] = GetOfficerBonus ($now, USER_OFFICER_TECHNOCRATE, "technokrat_ikon", "PR_TECHNO", "PR_TECHNO_INFO");
 
     // Allow modifications to add their own bonuses
+    ModsExecRef ('add_bonuses', $bonuses);
 
     echo "<td class='header'>\n";
     echo "<table class='header' align=left>\n";

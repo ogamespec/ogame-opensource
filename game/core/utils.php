@@ -196,6 +196,46 @@ function array_insert_after_key(array &$array, string $after_key, string $new_ke
     return $array;
 }
 
+/**
+ * Insert a new key-value pair into an array before a specified key.
+ * Preserves all original keys and their order.
+ *
+ * @param array &$array The original array (passed by reference)
+ * @param string $before_key The key before which to insert the new element
+ * @param string $new_key The key for the new element
+ * @param mixed $new_value The value for the new element
+ * @return array The modified array
+ */
+function array_insert_before_key(array &$array, string $before_key, string $new_key, mixed $new_value) : array {
+    // Get all keys from the original array
+    $keys = array_keys($array);
+    
+    // Find the position of the target key
+    $index = array_search($before_key, $keys);
+
+    if ($index === false) {
+        // Key not found, prepend to the beginning
+        // Create new array with the new element first, then original array
+        $new_array = [$new_key => $new_value] + $array;
+        $array = $new_array;
+        return $array;
+    }
+
+    // Split the array into two parts:
+    // Part 1: elements before the target position
+    // Part 2: elements from target position to the end
+    $part1 = array_slice($array, 0, $index, true);
+    $part2 = array_slice($array, $index, null, true);
+
+    // Insert the new element between the two parts
+    // Using union operator (+) to preserve keys
+    $part1[$new_key] = $new_value;
+    $new_array = $part1 + $part2;
+    $array = $new_array;
+
+    return $array;
+}
+
 function gen_trivial_password () : string
 {
     $pass = "";

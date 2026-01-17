@@ -111,7 +111,24 @@ class SpaceStorm extends GameMod {
             return true;
         }
         return false;
-    }    
+    }
+
+    public function add_bonuses (array &$bonuses) : bool {
+
+        $storm = [];
+
+        $storm['img'] = "mods/SpaceStorm/img/storm_ikon.png";
+        $storm['alt'] = "Космический Шторм";
+
+        $overlib = "";
+        $overlib .= "<center><font size=1 color=white><b>"."Ещё 7 дн."."<br>"."Космический Шторм"."</font><br>";
+        $overlib .= "<font size=1 color=skyblue>"."Типы и описание шторма"."</font><br>";
+
+        $storm['overlib'] = $overlib;
+
+        array_insert_before_key ($bonuses, 'commander', 'storm', $storm);
+        return false;
+    }
 }
 
 ?>
