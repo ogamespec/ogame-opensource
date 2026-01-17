@@ -25,10 +25,10 @@ function RocketAttackMain ( int $amount, int $primary, bool $moon_attack, array 
     if ( $primary > 0 && $ipm > 0 )
     {
         $armor = $UnitParam[$primary][0] * (1 + 0.1 * $target_user_armor) / 10;
-        $count = $target["d$primary"];
+        $count = $target[$primary];
         if ($count != 0) {
             $destroyed = min ( floor ( $maxdamage / $armor ), $count );
-            $target["d$primary"] -= $destroyed;
+            $target[$primary] -= $destroyed;
             $maxdamage -= $destroyed * $armor;
             $maxdamage -= $destroyed;
         }
@@ -42,10 +42,10 @@ function RocketAttackMain ( int $amount, int $primary, bool $moon_attack, array 
         {
             if ($id == $primary) continue;
             $armor = $UnitParam[$id][0] * (1 + 0.1 * $target_user_armor) / 10;
-            $count = $target["d$id"];
+            $count = $target[$id];
             if ($count != 0) {
                 $destroyed = min ( floor ( $maxdamage / $armor ), $count );
-                $target["d$id"] -= $destroyed;
+                $target[$id] -= $destroyed;
                 $maxdamage -= $destroyed * $armor;
                 $maxdamage -= $destroyed;
             }
@@ -136,12 +136,12 @@ function GetDestroyedDefenseText (string $lang, array &$target, array &$moon_pla
     foreach ( $defmap_rev as $i=>$gid )
     {
         if ( ($n % 2) == 0 ) $deftext .= "</tr>";
-        if ( $target["d$gid"] ) {
+        if ( $target[$gid] ) {
 
-            $count = $target["d$gid"];
+            $count = $target[$gid];
             // Consider the defense of the moon by interceptors from the planet.
             if ($moon_attack && $gid == GID_D_ABM ) {
-                $count = $moon_planet["d".GID_D_ABM];
+                $count = $moon_planet[GID_D_ABM];
             }
 
             $deftext .= "<td>".loca_lang("NAME_$gid", $lang)."</td><td>".nicenum($count)."</td>";

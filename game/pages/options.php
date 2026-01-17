@@ -263,7 +263,7 @@ $prem = PremiumStatus ($GlobalUser);
 
             // Save skin path + checkbox show/disable skin.
             // TODO : OPTIONS_MSG_SKIN
-            ChangeSkinPath ( $GlobalUser['player_id'], $_POST['dpath'] );
+            ChangeSkinPath ( $GlobalUser['player_id'], SecureText($_POST['dpath']) );
             EnableSkin ( $GlobalUser['player_id'], ($_POST['design']==="on"?1:0) );
 
             $lang = substr ( addslashes($_POST['lang']), 0, 2 );

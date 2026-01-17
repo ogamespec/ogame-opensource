@@ -591,7 +591,7 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
     $planet = GetPlanet ( $planet_id );
 
     // If the planet already has a shield dome, we don't build it.
-    if ( ($gid == GID_D_SDOME || $gid == GID_D_LDOME) && $planet["d".$gid] > 0 ) return;
+    if ( ($gid == GID_D_SDOME || $gid == GID_D_LDOME) && $planet[$gid] > 0 ) return;
 
     // If a dome of the same type is already being built in the queue, then do not add another dome to the queue.
     // Limit the number of missiles ordered to those already under construction
