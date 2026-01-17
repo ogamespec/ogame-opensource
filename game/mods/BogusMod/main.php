@@ -9,6 +9,8 @@ class BogusMod extends GameMod
     public function install() : void {
         global $db_prefix;
 
+        LockTables();
+
         // Add a column for storing Tritium reserves
         $query = "ALTER TABLE ".$db_prefix."users ADD COLUMN tritium INT DEFAULT 0;";
         dbquery ($query);
@@ -20,11 +22,15 @@ class BogusMod extends GameMod
             AddQueue (USER_SPACE, QTYP_ADD_TRITIUM, 0, 0, 0, time(), BOGUS_MOD_TRITIUM_CREDIT_PERIOD_SECONDS);
         }
 
+        UnlockTables();
+
         Debug ("BogusMod install success.");
     }
 
     public function uninstall() : void {
         global $db_prefix;
+
+        LockTables();
 
         // Remove Tritium column from users table
         $query = "ALTER TABLE ".$db_prefix."users DROP COLUMN tritium;";
@@ -33,6 +39,8 @@ class BogusMod extends GameMod
         // Delete Tritium resource credit event
         $query = "DELETE FROM ".$db_prefix."queue WHERE type = '".QTYP_ADD_TRITIUM."'";
         dbquery ($query);
+
+        UnlockTables();
 
         Debug ("BogusMod uninstall success.");
     }

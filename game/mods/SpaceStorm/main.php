@@ -26,9 +26,13 @@ class SpaceStorm extends GameMod {
     public function install() : void {
         global $db_prefix;
 
+        LockTables();
+
         // Add new columns
-        $query = "ALTER TABLE ".$db_prefix."uni ADD COLUMN prev_storm INT DEFAULT 0, storm INT DEFAULT 0;";
+        $query = "ALTER TABLE ".$db_prefix."uni ADD COLUMN prev_storm INT DEFAULT 0;";
         dbquery ($query);
+        $query = "ALTER TABLE ".$db_prefix."uni ADD COLUMN storm INT DEFAULT 0;";
+        dbquery ($query);        
         $query = "ALTER TABLE ".$db_prefix."planets ADD COLUMN `".GID_B_REALITY_STAB."` INT DEFAULT 0;";
         dbquery ($query);
 
@@ -37,21 +41,36 @@ class SpaceStorm extends GameMod {
         $result = dbquery ($query);
         if ( dbrows ($result) == 0 ) {
             AddQueue (USER_SPACE, QTYP_SPACE_STORM, 0, 0, 0, time(), SPACE_STORM_PERIOD_SECONDS);
-        }        
+        }
+
+        UnlockTables();
     }
 
     public function uninstall() : void {
         global $db_prefix;
 
+        LockTables();
+
         // Remove columns
-        $query = "ALTER TABLE ".$db_prefix."uni DROP COLUMN prev_storm, storm;";
+        $query = "ALTER TABLE ".$db_prefix."uni DROP COLUMN prev_storm;";
         dbquery ($query);
+        $query = "ALTER TABLE ".$db_prefix."uni DROP COLUMN storm;";
+        dbquery ($query);        
         $query = "ALTER TABLE ".$db_prefix."planets DROP COLUMN `".GID_B_REALITY_STAB."`;";
         dbquery ($query);
 
         // Delete Space Storm event
         $query = "DELETE FROM ".$db_prefix."queue WHERE type = '".QTYP_SPACE_STORM."'";
         dbquery ($query);
+
+        UnlockTables();
+    }
+
+    public function install_tabs_included (array &$tabs) : bool {
+        $tabs['uni']['prev_storm'] = 'INT DEFAULT 0';
+        $tabs['uni']['storm'] = 'INT DEFAULT 0';
+        $tabs['planets'][GID_B_REALITY_STAB] = 'INT DEFAULT 0';
+        return false;
     }
 
     public function init() : void {
@@ -65,6 +84,9 @@ class SpaceStorm extends GameMod {
         $initial[GID_B_REALITY_STAB] = array (50000, 125000, 50000, 0, 3.0);
         $requirements[GID_B_REALITY_STAB] = array (GID_B_RES_LAB=>3, GID_B_TERRAFORMER=>1);
         $CanBuildTab[PTYP_PLANET][] = GID_B_REALITY_STAB;
+
+        global $GlobalUni;
+        loca_add ("space_storm", $GlobalUni['lang'], __DIR__);
     }
 
     public function update_queue(array &$queue) : bool {
