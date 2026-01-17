@@ -100,6 +100,14 @@ class SpaceStorm extends GameMod {
             return false;
         }
     }
+
+    public function get_object_image(int $id, array &$img) : bool {
+        if ($id == GID_B_REALITY_STAB) {
+            $img['path'] = "mods/SpaceStorm/img/reality_stab.png";
+            return true;
+        }
+        return false;
+    }    
 }
 
 ?>

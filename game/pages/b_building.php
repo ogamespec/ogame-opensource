@@ -137,7 +137,7 @@ foreach ( $buildmap as $i => $id )
     if ( $GlobalUser['useskin'] ) {
         echo "<td class=l>";
         echo "<a href=index.php?page=infos&session=$session&gid=".$id.">";
-        echo "<img border='0' src=\"".UserSkin()."gebaeude/".$id.".gif\" align='top' width='120' height='120'></a></td>";
+        echo GetObjectImage(UserSkin(), $id) . "</a></td>";
     }
 
     echo "<td class=l>";

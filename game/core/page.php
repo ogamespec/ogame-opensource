@@ -4,11 +4,21 @@
 
 $pagetime = 0;
 
+function GetObjectImage (string $skinpath, int $id) : string
+{
+    $img_path = $skinpath."gebaeude/".$id.".gif";
+    $img = array();
+    if (ModsExecIntRef('get_object_image', $id, $img)) {
+        $img_path = $img['path'];
+    }
+    return "<img border='0' src=\"".$img_path."\" align='top' width='120' height='120'>";
+}
+
 // Get a small picture of the planet.
 function GetPlanetSmallImage (string $skinpath, array $planet) : string
 {
     $img = array();
-    if (ModsExecRefRef('get_planet_small_image', $planet, $img)) {
+    if (ModsExecIntRef('get_planet_small_image', $planet['type'], $img)) {
         return $img['path'];
     }
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return $skinpath."planeten/small/s_mond.jpg";
@@ -31,7 +41,7 @@ function GetPlanetSmallImage (string $skinpath, array $planet) : string
 function GetPlanetImage (string $skinpath, array $planet) : string
 {
     $img = array();
-    if (ModsExecRefRef('get_planet_image', $planet, $img)) {
+    if (ModsExecIntRef('get_planet_image', $planet['type'], $img)) {
         return $img['path'];
     }
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return $skinpath."planeten/mond.jpg";
