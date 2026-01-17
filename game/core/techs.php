@@ -303,4 +303,17 @@ $requrements = array (
 
 );
 
+// An array that defines which buildings can be built for the specified planet type.
+$CanBuildTab = array (
+
+    PTYP_MOON => array ( GID_B_ROBOTS, GID_B_SHIPYARD, GID_B_METAL_STOR, GID_B_CRYS_STOR, GID_B_DEUT_STOR, GID_B_LUNAR_BASE, GID_B_PHALANX, GID_B_JUMP_GATE),
+    PTYP_PLANET => array ( GID_B_METAL_MINE, GID_B_CRYS_MINE, GID_B_DEUT_SYNTH, GID_B_SOLAR, GID_B_FUSION, GID_B_ROBOTS, GID_B_NANITES, GID_B_SHIPYARD, GID_B_METAL_STOR, GID_B_CRYS_STOR, GID_B_DEUT_STOR, GID_B_RES_LAB, GID_B_TERRAFORMER, GID_B_ALLY_DEPOT, GID_B_MISS_SILO ),
+    PTYP_DF => array (),
+    PTYP_DEST_PLANET => array (),
+    PTYP_COLONY_PHANTOM => array (),
+    PTYP_DEST_MOON => array (),
+    PTYP_ABANDONED => array (),
+    PTYP_FARSPACE => array (),
+);
+
 ?>

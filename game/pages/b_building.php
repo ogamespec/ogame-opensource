@@ -130,7 +130,7 @@ for ( $i=0; $i<$cnt; $i++ )
 foreach ( $buildmap as $i => $id )
 {
     $lvl = $aktplanet[$id];
-    if ( ! BuildMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) continue;
+    if ( ! TechMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) continue;
 
     echo "<tr>";
 

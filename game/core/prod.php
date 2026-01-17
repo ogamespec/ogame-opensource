@@ -4,39 +4,33 @@
 
 // Calculation of cost, build time and required conditions.
 
-function BuildMeetRequirement ( array $user, array $planet, int $id ) : bool
+function TechMeetRequirement ( array $user, array $planet, int $id ) : bool
 {
-    if ( $planet['type'] == PTYP_MOON )
-    {
-        if ( $id == GID_B_METAL_MINE || 
-            $id == GID_B_CRYS_MINE || 
-            $id == GID_B_DEUT_SYNTH || 
-            $id == GID_B_SOLAR || 
-            $id == GID_B_FUSION || 
-            $id == GID_B_NANITES || 
-            $id == GID_B_RES_LAB || 
-            $id == GID_B_TERRAFORMER || 
-            $id == GID_B_MISS_SILO ) return false;
-    }
-    else
-    {
-        if ( $id == GID_B_LUNAR_BASE || $id == GID_B_PHALANX || $id == GID_B_JUMP_GATE ) return false;
+    global $CanBuildTab;
+    global $buildmap, $resmap;
+    global $requrements;
+
+    // Check that the specified type of object can be built on the specified type of planet
+    if (IsBuilding($id) && isset($CanBuildTab[$planet['type']])) {
+        $can_build = in_array($id, $CanBuildTab[$planet['type']], true);
+        if (!$can_build) return false;
     }
 
-    // Fusion Reactor => Deuterium Synthesizer (level 5), Energy Technology (level 3)
-    // Nanite Factory => Robot Factory (level 10), Computer Technology (level 10)
-    // Shipyard => Robot Factory (level 2)
-    // Terraformer => Nanite Factory (level 1), Energy Technology (level 12)
-    // Rocket silo => Shipyard (level 1)
-    // Sensor phalanx => Lunar base (level 1)
-    // JumpGate => Moonbase (level 1), Hyperspace Technology (level 7)
-    if ( $id == GID_B_FUSION && ( $planet[GID_B_DEUT_SYNTH] < 5 || $user[GID_R_ENERGY] < 3 ) ) return false;
-    if ( $id == GID_B_NANITES && ( $planet[GID_B_ROBOTS] < 10 || $user[GID_R_COMPUTER] < 10 ) ) return false;
-    if ( $id == GID_B_SHIPYARD && ( $planet[GID_B_ROBOTS] < 2 ) ) return false;
-    if ( $id == GID_B_TERRAFORMER && ( $planet[GID_B_NANITES] < 1 || $user[GID_R_ENERGY] < 12 ) ) return false;
-    if ( $id == GID_B_MISS_SILO && ( $planet[GID_B_SHIPYARD] < 1 ) ) return false;
-    if ( $id == GID_B_PHALANX && ( $planet[GID_B_LUNAR_BASE] < 1 ) ) return false;
-    if ( $id == GID_B_JUMP_GATE && ( $planet[GID_B_LUNAR_BASE] < 1 || $user[GID_R_HYPERSPACE] < 7 ) ) return false;
+    // Collect building and research levels into one linear array
+    $obj_levels = [];
+    foreach ($buildmap as $i=>$gid) {
+        $obj_levels[$gid] = $planet[$gid];
+    }
+    foreach ($resmap as $i=>$gid) {
+        $obj_levels[$gid] = $user[$gid];
+    }
+
+    // Check the requirements for the specified object type using the requirements table (technology tree)
+    if (isset($requrements[$id])) {
+        foreach ($requrements[$id] as $gid=>$req_level) {
+            if ($obj_levels[$gid] < $req_level) return false;
+        }
+    }
 
     return true;
 }
@@ -69,37 +63,6 @@ function BuildDuration ( int $id, int $lvl, int $robots, int $nanits, int $speed
     return (int)$secs;
 }
 
-function ShipyardMeetRequirement ( array $user, array $planet, int $id ) : bool
-{
-    if ( $id == GID_F_SC && ( $planet[GID_B_SHIPYARD] < 2  || $user[GID_R_COMBUST_DRIVE] < 2 ) ) return false;
-    else if ( $id == GID_F_LC && ( $planet[GID_B_SHIPYARD] < 4  || $user[GID_R_COMBUST_DRIVE] < 6 ) ) return false;
-    else if ( $id == GID_F_LF && ( $planet[GID_B_SHIPYARD] < 1  || $user[GID_R_COMBUST_DRIVE] < 1 ) ) return false;
-    else if ( $id == GID_F_HF && ( $planet[GID_B_SHIPYARD] < 3  || $user[GID_R_ARMOUR] < 2 || $user[GID_R_IMPULSE_DRIVE] < 2 ) ) return false;
-    else if ( $id == GID_F_CRUISER && ( $planet[GID_B_SHIPYARD] < 5  || $user[GID_R_IMPULSE_DRIVE] < 4 || $user[GID_R_ION_TECH] < 2 ) ) return false;
-    else if ( $id == GID_F_BATTLESHIP && ( $planet[GID_B_SHIPYARD] < 7  || $user[GID_R_HYPER_DRIVE] < 4 ) ) return false;
-    else if ( $id == GID_F_COLON && ( $planet[GID_B_SHIPYARD] < 4  || $user[GID_R_IMPULSE_DRIVE] < 3 ) ) return false;
-    else if ( $id == GID_F_RECYCLER && ( $planet[GID_B_SHIPYARD] < 4  || $user[GID_R_COMBUST_DRIVE] < 6 || $user[GID_R_SHIELD] < 2 ) ) return false;
-    else if ( $id == GID_F_PROBE && ( $planet[GID_B_SHIPYARD] < 3  || $user[GID_R_COMBUST_DRIVE] < 3 || $user[GID_R_ESPIONAGE] < 2 ) ) return false;
-    else if ( $id == GID_F_BOMBER && ( $planet[GID_B_SHIPYARD] < 8  || $user[GID_R_IMPULSE_DRIVE] < 6 || $user[GID_R_PLASMA_TECH] < 5 ) ) return false;
-    else if ( $id == GID_F_SAT && ( $planet[GID_B_SHIPYARD] < 1  ) ) return false;
-    else if ( $id == GID_F_DESTRO && ( $planet[GID_B_SHIPYARD] < 9  || $user[GID_R_HYPER_DRIVE] < 6 || $user[GID_R_HYPERSPACE] < 5 ) ) return false;
-    else if ( $id == GID_F_DEATHSTAR && ( $planet[GID_B_SHIPYARD] < 12 || $user[GID_R_HYPER_DRIVE] < 7 || $user[GID_R_HYPERSPACE] < 6 || $user[GID_R_GRAVITON] < 1 ) ) return false;
-    else if ( $id == GID_F_BATTLECRUISER && ( $planet[GID_B_SHIPYARD] < 8  || $user[GID_R_HYPERSPACE] < 5 || $user[GID_R_LASER_TECH] < 12 || $user[GID_R_HYPER_DRIVE] < 5 ) ) return false;
-
-    else if ( $id == GID_D_RL && ( $planet[GID_B_SHIPYARD] < 1 ) ) return false;
-    else if ( $id == GID_D_LL && ( $planet[GID_B_SHIPYARD] < 2 || $user[GID_R_ENERGY] < 1 || $user[GID_R_LASER_TECH] < 3 ) ) return false;
-    else if ( $id == GID_D_HL && ( $planet[GID_B_SHIPYARD] < 4 || $user[GID_R_ENERGY] < 3 || $user[GID_R_LASER_TECH] < 6 ) ) return false;
-    else if ( $id == GID_D_GAUSS && ( $planet[GID_B_SHIPYARD] < 6 || $user[GID_R_ENERGY] < 6 || $user[GID_R_WEAPON] < 3 || $user[GID_R_SHIELD] < 1 ) ) return false;
-    else if ( $id == GID_D_ION && ( $planet[GID_B_SHIPYARD] < 4 || $user[GID_R_ION_TECH] < 4 ) ) return false;
-    else if ( $id == GID_D_PLASMA && ( $planet[GID_B_SHIPYARD] < 8 || $user[GID_R_PLASMA_TECH] < 7 ) ) return false;
-    else if ( $id == GID_D_SDOME && ( $planet[GID_B_SHIPYARD] < 1 || $user[GID_R_SHIELD] < 2 ) ) return false;
-    else if ( $id == GID_D_LDOME && ( $planet[GID_B_SHIPYARD] < 6 || $user[GID_R_SHIELD] < 6 ) ) return false;
-    else if ( $id == GID_D_ABM && ( $planet[GID_B_SHIPYARD] < 1 || $planet[GID_B_MISS_SILO] < 2 ) ) return false;
-    else if ( $id == GID_D_IPM && ( $planet[GID_B_SHIPYARD] < 1 || $planet[GID_B_MISS_SILO] < 4 || $user[GID_R_IMPULSE_DRIVE] < 1 ) ) return false;
-
-    return true;
-}
-
 function ShipyardPrice ( int $id ) : array
 {
     global $initial;
@@ -118,28 +81,6 @@ function ShipyardDuration ( int $id, int $shipyard, int $nanits, int $speed ) : 
     $secs = floor ( ( ( ($m + $k) / (2500 * (1 + $shipyard)) ) * pow (0.5, $nanits) * 60*60 ) / $speed );
     if ($secs < 1) $secs = 1;
     return (int)$secs;
-}
-
-function ResearchMeetRequirement ( array $user, array $planet, int $id ) : bool
-{
-    if ( $id == GID_R_ESPIONAGE && ( $planet[GID_B_RES_LAB] < 3 ) ) return false;
-    else if ( $id == GID_R_COMPUTER && ( $planet[GID_B_RES_LAB] < 1 ) ) return false;
-    else if ( $id == GID_R_WEAPON && ( $planet[GID_B_RES_LAB] < 4 ) ) return false;
-    else if ( $id == GID_R_SHIELD && ( $user[GID_R_ENERGY] < 3 || $planet[GID_B_RES_LAB] < 6 ) ) return false;
-    else if ( $id == GID_R_ARMOUR && ( $planet[GID_B_RES_LAB] < 2 ) ) return false;
-    else if ( $id == GID_R_ENERGY && ( $planet[GID_B_RES_LAB] < 1 ) ) return false;
-    else if ( $id == GID_R_HYPERSPACE && ( $user[GID_R_ENERGY] < 5 || $user[GID_R_SHIELD] < 5 || $planet[GID_B_RES_LAB] < 7  ) ) return false;
-    else if ( $id == GID_R_COMBUST_DRIVE && ( $user[GID_R_ENERGY] < 1 || $planet[GID_B_RES_LAB] < 1 ) ) return false;
-    else if ( $id == GID_R_IMPULSE_DRIVE && ( $user[GID_R_ENERGY] < 1 || $planet[GID_B_RES_LAB] < 2  ) ) return false;
-    else if ( $id == GID_R_HYPER_DRIVE && ( $user[GID_R_HYPERSPACE] < 3 || $planet[GID_B_RES_LAB] < 7  ) ) return false;
-    else if ( $id == GID_R_LASER_TECH && ( $user[GID_R_ENERGY] < 2 || $planet[GID_B_RES_LAB] < 1  ) ) return false;
-    else if ( $id == GID_R_ION_TECH && ( $user[GID_R_LASER_TECH] < 5 || $user[GID_R_ENERGY] < 4 || $planet[GID_B_RES_LAB] < 4  ) ) return false;
-    else if ( $id == GID_R_PLASMA_TECH && ( $user[GID_R_ENERGY] < 8 || $user[GID_R_LASER_TECH] < 10 || $user[GID_R_ION_TECH] < 5 || $planet[GID_B_RES_LAB] < 4 ) ) return false;
-    else if ( $id == GID_R_IGN && ( $user[GID_R_COMPUTER] < 8 || $user[GID_R_HYPERSPACE] < 8 || $planet[GID_B_RES_LAB] < 10  ) ) return false;
-    else if ( $id == GID_R_EXPEDITION && ( $user[GID_R_ESPIONAGE] < 4 || $user[GID_R_IMPULSE_DRIVE] < 3 || $planet[GID_B_RES_LAB] < 3 ) ) return false;
-    else if ( $id == GID_R_GRAVITON && ( $planet[GID_B_RES_LAB] < 12 ) ) return false;
-
-    return true;
 }
 
 function ResearchPrice ( int $id, int $lvl ) : array
@@ -192,7 +133,7 @@ function ResearchNetwork ( int $planetid, int $id ) : int
     {
         $p = dbarray ($result);
         if ( $p['planet_id'] == $planetid) continue;    // Skip the current planet.
-        if ( ResearchMeetRequirement ( $user, $p, $id ) ) $labs[$labnum++] = $p[GID_B_RES_LAB];
+        if ( TechMeetRequirement ( $user, $p, $id ) ) $labs[$labnum++] = $p[GID_B_RES_LAB];
     }
     rsort ( $labs );
 

@@ -235,7 +235,7 @@ function CanBuild (array $user, array $planet, int $id, int $lvl, bool $destroy,
     else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) && !$enqueue ) return loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
 
     // Check available technologies.
-    else if ( !BuildMeetRequirement ( $user, $planet, $id ) ) return loca_lang("BUILD_ERROR_REQUIREMENTS", $user['lang']);
+    else if ( !TechMeetRequirement ( $user, $planet, $id ) ) return loca_lang("BUILD_ERROR_REQUIREMENTS", $user['lang']);
 
     if ( $destroy )
     {
@@ -587,7 +587,7 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
     $k *= $value;
     $d *= $value;
 
-    if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && ShipyardMeetRequirement ($user, $planet, $gid) ) {
+    if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && TechMeetRequirement ($user, $planet, $gid) ) {
         $speed = $uni['speed'];
         $now = ShipyardLatestTime ($planet_id, $now);
         $shipyard = $planet[GID_B_SHIPYARD];
@@ -696,7 +696,7 @@ function CanResearch (array $user, array $planet, int $id, int $lvl) : string
 
         else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) ) return loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
 
-        else if ( !ResearchMeetRequirement ( $user, $planet, $id ) ) return loca_lang("BUILD_ERROR_REQUIREMENTS", $user['lang']);
+        else if ( !TechMeetRequirement ( $user, $planet, $id ) ) return loca_lang("BUILD_ERROR_REQUIREMENTS", $user['lang']);
     }
     return "";
 }
