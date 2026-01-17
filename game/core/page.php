@@ -126,7 +126,7 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
         PlanetsDropList ($page);
         ResourceList ($aktplanet, 
             (int)floor($aktplanet['m']), (int)floor($aktplanet['k']), (int)floor($aktplanet['d']), 
-            $aktplanet['e'], $aktplanet['emax'], 
+            (int)$aktplanet['e'], (int)$aktplanet['emax'], 
             $GlobalUser['dm']+$GlobalUser['dmfree'], $aktplanet['mmax'], $aktplanet['kmax'], $aktplanet['dmax']);
         $coma = BonusList ();
         echo "</tr>\n";
