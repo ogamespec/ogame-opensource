@@ -3,6 +3,7 @@
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
 /** @var array $UnitParam */
+/** @var string $aktplanet */
 
 // Information on buildings, fleets, defense and research.
 // Some pages (particularly buildings) contain additional information or controls.

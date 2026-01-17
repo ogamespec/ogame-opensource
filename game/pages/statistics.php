@@ -3,6 +3,7 @@
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
 /** @var string $db_prefix */
+/** @var string $session */
 
 // Statistics
 

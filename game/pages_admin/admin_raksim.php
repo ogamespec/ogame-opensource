@@ -8,8 +8,8 @@ function Admin_RakSim () : void
     global $db_prefix;
     global $GlobalUser;
     global $GlobalUni;
+    global $defmap;
 
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
     $def = array ();
 
     foreach ($defmap as $i=>$gid) {
@@ -42,7 +42,7 @@ function Admin_RakSim () : void
             if ( key_exists ( 'd_'.$gid, $_POST) ) {
                 $def[$gid] = intval ($_POST['d_'.$gid]);
             }
-            $target["d".$gid] = $def[$gid];
+            $target[$gid] = $def[$gid];
         }
 
         $ipm_destroyed = RocketAttackMain (
@@ -55,7 +55,7 @@ function Admin_RakSim () : void
             $d_armor );
 
         foreach ($defmap as $i=>$gid) {
-            $def[$gid] = $target["d".$gid];
+            $def[$gid] = $target[$gid];
         }
     }
 ?>
@@ -118,7 +118,6 @@ function Admin_RakSim () : void
 <?php
 
     echo "<tr><td class=c colspan=2><b>".loca("ADM_RAKSIM_DEFENSE")."</b></td></tr>\n";
-    $defmap = array ( 401, 402, 403, 404, 405, 406, 407, 408, 502, 503 );
     foreach ($defmap as $i=>$gid)
     {
 ?>

@@ -119,6 +119,27 @@ function ParseBattleDataSource (string $source, array &$a, array &$d) : void
     }
 }
 
+function getval(string $name) : string
+{
+    if ( $_POST[$name] != "" ) return "value=\"".$_POST[$name]."\" ";
+}
+
+function getval2(string $arr, string $id) : string
+{
+    if ( $_POST[$arr][$id] != 0 ) return "value=\"".$_POST[$arr][$id]."\" ";
+    else return "";
+}
+
+function get_intval(string $id) : int
+{
+    if (isset($_POST[$id])) {
+        return intval($_POST[$id]);
+    }
+    else {
+        return 0;
+    }
+}
+
 function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid, int $did, bool $debug, int &$battle_result, int &$aloss, int &$dloss )
 {
     global $db_prefix;
@@ -328,27 +349,6 @@ function Admin_BattleSim () : void
 
     // --------------------------------------------------------------------------------------------------------------------------
     // Simulation parameter input table.
-
-    function getval(string $name) : string
-    {
-        if ( $_POST[$name] != "" ) return "value=\"".$_POST[$name]."\" ";
-    }
-
-    function getval2(string $arr, string $id) : string
-    {
-        if ( $_POST[$arr][$id] != 0 ) return "value=\"".$_POST[$arr][$id]."\" ";
-        else return "";
-    }
-
-    function get_intval(string $id) : int
-    {
-        if (isset($_POST[$id])) {
-            return intval($_POST[$id]);
-        }
-        else {
-            return 0;
-        }
-    }
 
 ?>
 

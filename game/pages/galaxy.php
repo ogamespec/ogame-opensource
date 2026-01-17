@@ -3,6 +3,7 @@
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
 /** @var array $UnitParam */
+/** @var string $aktplanet */
 
 $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
 
@@ -28,7 +29,7 @@ if ( method () === "POST" && isset($_POST['aktion']) )
         if ( $PageError === "" )    // Check the permitted parameters
         {
             if ($amount == 0) $PageError = loca("GALAXY_RAK_NO_ROCKETS");
-            if ($amount > $aktplanet["d".GID_D_IPM]) $PageError = loca("GALAXY_RAK_NOT_ENOUGH");
+            if ($amount > $aktplanet[GID_D_IPM]) $PageError = loca("GALAXY_RAK_NOT_ENOUGH");
             if ($dist > $ipm_radius) $PageError = loca("GALAXY_RAK_WEAK_DRIVE");
         }
 
@@ -414,7 +415,7 @@ echo "</form>\n";
     </tr>
     <tr>
      <td class="c">
-     <?=va(loca("GALAXY_RAK_AMOUNT"), $aktplanet["d".GID_D_IPM]);?>:     <input type="text" name="anz" size="2" maxlength="2" /></td>
+     <?=va(loca("GALAXY_RAK_AMOUNT"), $aktplanet[GID_D_IPM]);?>:     <input type="text" name="anz" size="2" maxlength="2" /></td>
     <td class="c">
     <?=loca("GALAXY_RAK_TARGET");?>:
      <select name="pziel">
@@ -712,18 +713,18 @@ $extra_info = "";
 $sep = "&nbsp;&nbsp;&nbsp;&nbsp;";
 $sep_required = false;
 
-if ($prem['commander'] && $aktplanet["f".GID_F_PROBE] > 0) {
-    $extra_info .= "<span id=\"probes\">".nicenum($aktplanet["f".GID_F_PROBE])."</span>".loca("GALAXY_INFO_SPY_PROBES");
+if ($prem['commander'] && $aktplanet[GID_F_PROBE] > 0) {
+    $extra_info .= "<span id=\"probes\">".nicenum($aktplanet[GID_F_PROBE])."</span>".loca("GALAXY_INFO_SPY_PROBES");
     $sep_required = true;
 }
-if ($prem['commander'] && $aktplanet["f".GID_F_RECYCLER] > 0) {
+if ($prem['commander'] && $aktplanet[GID_F_RECYCLER] > 0) {
     if ($sep_required) $extra_info .= $sep;
-    $extra_info .= "<span id=\"recyclers\">".nicenum($aktplanet["f".GID_F_RECYCLER])."</span>".loca("GALAXY_INFO_RECYCLERS");
+    $extra_info .= "<span id=\"recyclers\">".nicenum($aktplanet[GID_F_RECYCLER])."</span>".loca("GALAXY_INFO_RECYCLERS");
     $sep_required = true;
 }
-if ($prem['commander'] && $aktplanet["d".GID_D_IPM] > 0) {
+if ($prem['commander'] && $aktplanet[GID_D_IPM] > 0) {
     if ($sep_required) $extra_info .= $sep;
-    $extra_info .= "<span id=\"missiles\">".nicenum($aktplanet["d".GID_D_IPM])."</span>".loca("GALAXY_INFO_IPM");
+    $extra_info .= "<span id=\"missiles\">".nicenum($aktplanet[GID_D_IPM])."</span>".loca("GALAXY_INFO_IPM");
 }
 // Deuterium is only shown for moons (even without Commander)
 if ($aktplanet['type'] == PTYP_MOON) {

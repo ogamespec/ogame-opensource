@@ -2,6 +2,7 @@
 
 /** @var array $GlobalUser */
 /** @var string $db_prefix */
+/** @var string $session */
 
 // Built in game search.
 

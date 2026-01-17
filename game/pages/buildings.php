@@ -5,6 +5,7 @@
 /** @var array $fleetmap */
 /** @var array $defmap */
 /** @var array $resmap */
+/** @var string $aktplanet */
 
 // Shipyard, Defense, and Research.
 
