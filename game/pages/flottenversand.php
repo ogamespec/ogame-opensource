@@ -62,9 +62,9 @@ if ( !key_exists('resource1', $_POST) ) $_POST['resource1'] = 0;
 if ( !key_exists('resource2', $_POST) ) $_POST['resource2'] = 0;
 if ( !key_exists('resource3', $_POST) ) $_POST['resource3'] = 0;
 
-$resource1 = min ( intval($aktplanet['m']), abs(intval($_POST['resource1'])) );
-$resource2 = min ( intval($aktplanet['k']), abs(intval($_POST['resource2'])) );
-$resource3 = min ( intval($aktplanet['d']), abs(intval($_POST['resource3'])) );
+$resource1 = min ( intval($aktplanet[GID_RC_METAL]), abs(intval($_POST['resource1'])) );
+$resource2 = min ( intval($aktplanet[GID_RC_CRYSTAL]), abs(intval($_POST['resource2'])) );
+$resource3 = min ( intval($aktplanet[GID_RC_DEUTERIUM]), abs(intval($_POST['resource3'])) );
 
 foreach ($fleetmap as $i=>$gid)
 {
@@ -155,7 +155,7 @@ foreach ($fleet as $id=>$amount)
 
 $space = ( ($cargo + $spycargo) - ($cons['fleet'] + $cons['probes']) ) - ($spycargo - $cons['probes']);
 
-if ( $origin['d'] < ($cons['fleet'] + $cons['probes']) ) FleetError ( loca("FLEET_ERR_FUEL") );
+if ( $origin[GID_RC_DEUTERIUM] < ($cons['fleet'] + $cons['probes']) ) FleetError ( loca("FLEET_ERR_FUEL") );
 else if ( $space < 0 ) FleetError ( loca("FLEET_ERR_CARGO") );
 
 // Limit transported resources to fleet payload capacity and flight costs.

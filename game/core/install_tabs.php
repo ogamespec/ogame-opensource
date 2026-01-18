@@ -89,7 +89,10 @@ $tab_planets = array (    // Planets
     GID_F_DEATHSTAR=>'INT DEFAULT 0', 
     GID_F_BATTLECRUISER=>'INT DEFAULT 0',
 
-    'm'=>'DOUBLE', 'k'=>'DOUBLE', 'd'=>'DOUBLE', 'mprod'=>'DOUBLE', 'kprod'=>'DOUBLE', 'dprod'=>'DOUBLE', 'sprod'=>'DOUBLE', 'fprod'=>'DOUBLE', 'ssprod'=>'DOUBLE', 'lastpeek'=>'INT UNSIGNED', 'lastakt'=>'INT UNSIGNED', 'gate_until'=>'INT UNSIGNED', 'remove'=>'INT UNSIGNED'
+    GID_RC_METAL=>'DOUBLE', GID_RC_CRYSTAL=>'DOUBLE', GID_RC_DEUTERIUM=>'DOUBLE',
+
+    'mprod'=>'DOUBLE', 'kprod'=>'DOUBLE', 'dprod'=>'DOUBLE', 'sprod'=>'DOUBLE', 'fprod'=>'DOUBLE', 'ssprod'=>'DOUBLE',
+    'lastpeek'=>'INT UNSIGNED', 'lastakt'=>'INT UNSIGNED', 'gate_until'=>'INT UNSIGNED', 'remove'=>'INT UNSIGNED'
 );
 
 $tab_ally = array (    // Alliances
@@ -143,7 +146,11 @@ $tab_buildqueue = array (    // Build queue
 );
 
 $tab_fleet = array (    // Fleet
-    'fleet_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'union_id'=>'INT', 'm'=>'DOUBLE', 'k'=>'DOUBLE', 'd'=>'DOUBLE', 'fuel'=>'INT', 'mission'=>'INT', 'start_planet'=>'INT', 'target_planet'=>'INT', 'flight_time'=>'INT', 'deploy_time'=>'INT',
+    'fleet_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'union_id'=>'INT',
+    
+    GID_RC_METAL=>'DOUBLE', GID_RC_CRYSTAL=>'DOUBLE', GID_RC_DEUTERIUM=>'DOUBLE',
+    
+    'fuel'=>'INT', 'mission'=>'INT', 'start_planet'=>'INT', 'target_planet'=>'INT', 'flight_time'=>'INT', 'deploy_time'=>'INT',
     'ipm_amount'=>'INT DEFAULT 0', 'ipm_target'=>'INT DEFAULT 0', 
     GID_F_SC=>'INT DEFAULT 0', 
     GID_F_LC=>'INT DEFAULT 0', 
@@ -170,7 +177,12 @@ $tab_battledata = array (    // Data for the battle engine (deprecated)
 );
 
 $tab_fleetlogs = array (    // Flight logs
-    'log_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'target_id'=>'INT', 'union_id'=>'INT', 'pm'=>'DOUBLE', 'pk'=>'DOUBLE', 'pd'=>'DOUBLE', 'm'=>'DOUBLE', 'k'=>'DOUBLE', 'd'=>'DOUBLE', 'fuel'=>'INT', 'mission'=>'INT', 'flight_time'=>'INT', 'deploy_time'=>'INT', 'start'=>'INT UNSIGNED', 'end'=>'INT UNSIGNED',
+    'log_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'target_id'=>'INT', 'union_id'=>'INT',
+
+    'p'.GID_RC_METAL=>'DOUBLE', 'p'.GID_RC_CRYSTAL=>'DOUBLE', 'p'.GID_RC_DEUTERIUM=>'DOUBLE',
+    GID_RC_METAL=>'DOUBLE', GID_RC_CRYSTAL=>'DOUBLE', GID_RC_DEUTERIUM=>'DOUBLE',
+    
+    'fuel'=>'INT', 'mission'=>'INT', 'flight_time'=>'INT', 'deploy_time'=>'INT', 'start'=>'INT UNSIGNED', 'end'=>'INT UNSIGNED',
     'origin_g'=>'INT', 'origin_s'=>'INT', 'origin_p'=>'INT', 'origin_type'=>'INT', 'target_g'=>'INT', 'target_s'=>'INT', 'target_p'=>'INT', 'target_type'=>'INT',
     'ipm_amount'=>'INT DEFAULT 0', 'ipm_target'=>'INT DEFAULT 0', 
     GID_F_SC=>'INT DEFAULT 0', 

@@ -95,8 +95,8 @@ require_once "phalanx_events.php";
         PhalanxEventList ($target['planet_id']);
 
         // Write off phalanx cost deuterium.
-        $aktplanet['d'] -= $PhalanxCost;
-        $query = "UPDATE ".$db_prefix."planets SET d = '".$aktplanet['d']."', lastpeek = '".$now."' WHERE planet_id = " . $aktplanet['planet_id'];
+        $aktplanet[GID_RC_DEUTERIUM] -= $PhalanxCost;
+        $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_DEUTERIUM."` = '".$aktplanet[GID_RC_DEUTERIUM]."', lastpeek = '".$now."' WHERE planet_id = " . $aktplanet['planet_id'];
         dbquery ($query);
     }
 

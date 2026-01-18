@@ -187,8 +187,8 @@ function UnitShoot (
             $price = ShipyardPrice ($b_gid);
 
             // If a defense is blown, use DID (Defense-in-Debris), if a fleet is blown, use FID (Fleet-in-Debris)
-            $dm += intval (ceil($price['m'] * ((float)( ($b_gid >= 401 ? $did : $fid) / 100.0))));
-            $dk += intval (ceil($price['k'] * ((float)( ($b_gid >= 401 ? $did : $fid) / 100.0))));
+            $dm += intval (ceil($price[GID_RC_METAL] * ((float)( (IsDefense($b_gid) ? $did : $fid) / 100.0))));
+            $dk += intval (ceil($price[GID_RC_CRYSTAL] * ((float)( (IsDefense($b_gid) ? $did : $fid) / 100.0))));
 
             $dexplo[$b] = chr(1);
             $exploded_counter++;

@@ -23,9 +23,9 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             if ( $value > $GlobalUni['max_werf'] ) $value = $GlobalUni['max_werf'];
 
             $res = ShipyardPrice ( $gid );
-            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
+            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
 
-            if ( $aktplanet['m'] < $m || $aktplanet['k'] < $k || $aktplanet['d'] < $d ) continue;    // insufficient resources for one unit
+            if ( $aktplanet[GID_RC_METAL] < $m || $aktplanet[GID_RC_CRYSTAL] < $k || $aktplanet[GID_RC_DEUTERIUM] < $d ) continue;    // insufficient resources for one unit
 
             // Shield Domes.
             if ( $gid == GID_D_SDOME || $gid == GID_D_LDOME ) $value = 1;
@@ -35,11 +35,11 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             if ( $gid == GID_D_ABM ) $value = min ( $free_space, $value );
             if ( $gid == GID_D_IPM ) $value = min ( floor ($free_space / 2), $value );
             
-            if ($m) $cm = floor ($aktplanet['m'] / $m);
+            if ($m) $cm = floor ($aktplanet[GID_RC_METAL] / $m);
             else $cm = 1000;
-            if ($k) $ck = floor ($aktplanet['k'] / $k);
+            if ($k) $ck = floor ($aktplanet[GID_RC_CRYSTAL] / $k);
             else $ck = 1000;
-            if ($d) $cd = floor ($aktplanet['d'] / $d);
+            if ($d) $cd = floor ($aktplanet[GID_RC_DEUTERIUM] / $d);
             else $cd = 1000;
             $v = min ( $cm, min ($ck, $cd) );
             if ( $value > $v ) $value = $v;
@@ -129,7 +129,7 @@ if ( $_GET['mode'] === "Flotte" )
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]).")";
             $res = ShipyardPrice ( $id );
-            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
+            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
             if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";
             if ($k) echo " ".loca("NAME_".GID_RC_CRYSTAL).": <b>".nicenum($k)."</b>";
@@ -143,9 +143,9 @@ if ( $_GET['mode'] === "Flotte" )
                 echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
                 if ( $prem['commander'] ) {
                     $max = $GlobalUni['max_werf'];
-                    if ( $m ) $max = floor (min ($max, $aktplanet['m'] / $m));
-                    if ( $k ) $max = floor (min ($max, $aktplanet['k'] / $k));
-                    if ( $d ) $max = floor (min ($max, $aktplanet['d'] / $d));
+                    if ( $m ) $max = floor (min ($max, $aktplanet[GID_RC_METAL] / $m));
+                    if ( $k ) $max = floor (min ($max, $aktplanet[GID_RC_CRYSTAL] / $k));
+                    if ( $d ) $max = floor (min ($max, $aktplanet[GID_RC_DEUTERIUM] / $d));
                     echo "<br><a href=\"javascript:setMax($id, $max);\">(max. $max)</a>";
                 }
             }
@@ -212,7 +212,7 @@ if ( $_GET['mode'] === "Verteidigung" )
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]).")";
             $res = ShipyardPrice ( $id );
-            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
+            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
             if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";
             if ($k) echo " ".loca("NAME_".GID_RC_CRYSTAL).": <b>".nicenum($k)."</b>";
@@ -230,9 +230,9 @@ if ( $_GET['mode'] === "Verteidigung" )
                         if ( $id == GID_D_ABM ) $max = $aktplanet[GID_B_MISS_SILO] * 10 - (2*$aktplanet[GID_D_IPM] + $aktplanet[GID_D_ABM]);
                         else if ( $id == GID_D_IPM ) $max = ($aktplanet[GID_B_MISS_SILO] * 10 - (2*$aktplanet[GID_D_IPM] + $aktplanet[GID_D_ABM])) / 2;
                         else $max = $GlobalUni['max_werf'];
-                        if ( $m ) $max = floor (min ($max, $aktplanet['m'] / $m));
-                        if ( $k ) $max = floor (min ($max, $aktplanet['k'] / $k));
-                        if ( $d ) $max = floor (min ($max, $aktplanet['d'] / $d));
+                        if ( $m ) $max = floor (min ($max, $aktplanet[GID_RC_METAL] / $m));
+                        if ( $k ) $max = floor (min ($max, $aktplanet[GID_RC_CRYSTAL] / $k));
+                        if ( $d ) $max = floor (min ($max, $aktplanet[GID_RC_DEUTERIUM] / $d));
                         echo "<br><a href=\"javascript:setMax($id, $max);\">(max. $max)</a>";
                     }
                 }
@@ -306,7 +306,7 @@ if ( $_GET['mode'] === "Forschung" )
             }
             if ($GlobalUser[$id]) echo ")";
             $res = ResearchPrice ( $id, $level );
-            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
+            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
             if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";
             if ($k) echo " ".loca("NAME_".GID_RC_CRYSTAL).": <b>".nicenum($k)."</b>";

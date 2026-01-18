@@ -95,7 +95,7 @@ else if ( isset($_POST['galaxyRight']) )
     if ( $coord_g > $GlobalUni['galaxies'] ) $coord_g = $GlobalUni['galaxies'];
 }
 
-$not_enough_deut = ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s) && $aktplanet['d'] < 10;
+$not_enough_deut = ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s) && $aktplanet[GID_RC_DEUTERIUM] < 10;
 
 // Charge 10 deuterium for viewing a non-home system (regular users only)
 if ( !$not_enough_deut && $GlobalUser['admin'] == 0 )
@@ -573,12 +573,12 @@ while ($num--)
     $debris = LoadPlanet ( $coord_g, $coord_s, $p, 2 );
     if ( $debris )
     {
-        $harvesters = ceil ( ($debris['m'] + $debris['k']) / $UnitParam[GID_F_RECYCLER][3]);
-        if ( ($debris['m'] + $debris['k']) >= 300 )
+        $harvesters = ceil ( ($debris[GID_RC_METAL] + $debris[GID_RC_CRYSTAL]) / $UnitParam[GID_F_RECYCLER][3]);
+        if ( ($debris[GID_RC_METAL] + $debris[GID_RC_CRYSTAL]) >= 300 )
         {
 ?>
     <a style="cursor:pointer"
-       onmouseover="return overlib('<table width=240 ><tr><td class=c colspan=2 ></td></tr><tr><th width=80 ><img src=<?=UserSkin();?>planeten/debris.jpg height=75 width=75 alt=T /></th><th><table><tr><td class=c colspan=2><?=loca("GALAXY_DF_RESOURCES");?></td></tr><tr><th><?=loca("GALAXY_DF_M");?></th><th><?=nicenum($debris['m']);?></th></tr><tr><th><?=loca("GALAXY_DF_K");?></th><th><?=nicenum($debris['k']);?></th></tr><tr><td class=c colspan=2><?=loca("GALAXY_DF_ACTIONS");?></tr><tr><th colspan=2 align=left ><a href=# onclick=doit(8,<?=$coord_g;?>,<?=$coord_s;?>,<?=$p;?>,2,<?=$harvesters;?>) ><?=loca("GALAXY_FLEET_RECYCLE");?></a></tr></table></th></tr></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -40 );" onmouseout="return nd();"
+       onmouseover="return overlib('<table width=240 ><tr><td class=c colspan=2 ></td></tr><tr><th width=80 ><img src=<?=UserSkin();?>planeten/debris.jpg height=75 width=75 alt=T /></th><th><table><tr><td class=c colspan=2><?=loca("GALAXY_DF_RESOURCES");?></td></tr><tr><th><?=loca("GALAXY_DF_M");?></th><th><?=nicenum($debris[GID_RC_METAL]);?></th></tr><tr><th><?=loca("GALAXY_DF_K");?></th><th><?=nicenum($debris[GID_RC_CRYSTAL]);?></th></tr><tr><td class=c colspan=2><?=loca("GALAXY_DF_ACTIONS");?></tr><tr><th colspan=2 align=left ><a href=# onclick=doit(8,<?=$coord_g;?>,<?=$coord_s;?>,<?=$p;?>,2,<?=$harvesters;?>) ><?=loca("GALAXY_FLEET_RECYCLE");?></a></tr></table></th></tr></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -40 );" onmouseout="return nd();"
 href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harvesters;?>)'
 >
 <img src="<?=UserSkin();?>planeten/debris.jpg" height="22" width="22" /></a>

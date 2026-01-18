@@ -124,11 +124,11 @@ function Admin_Fleetlogs () : void
         </th>
         <th <?=$style;?> >
 <?php
-    $total = $fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d'];
+    $total = $fleet_obj[GID_RC_METAL] + $fleet_obj[GID_RC_CRYSTAL] + $fleet_obj[GID_RC_DEUTERIUM];
     if ( $total > 0 ) {
-        echo loca("NAME_".GID_RC_METAL) . ": " . nicenum ($fleet_obj['m']) . "<br>" ;
-        echo loca("NAME_".GID_RC_CRYSTAL) . ": " . nicenum ($fleet_obj['k']) . "<br>" ;
-        echo loca("NAME_".GID_RC_DEUTERIUM) . ": " . nicenum ($fleet_obj['d']) ;
+        echo loca("NAME_".GID_RC_METAL) . ": " . nicenum ($fleet_obj[GID_RC_METAL]) . "<br>" ;
+        echo loca("NAME_".GID_RC_CRYSTAL) . ": " . nicenum ($fleet_obj[GID_RC_CRYSTAL]) . "<br>" ;
+        echo loca("NAME_".GID_RC_DEUTERIUM) . ": " . nicenum ($fleet_obj[GID_RC_DEUTERIUM]) ;
     }
     else echo "-";
 ?>

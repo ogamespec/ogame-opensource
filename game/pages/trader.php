@@ -122,12 +122,12 @@ if ( method () === "POST" )
 
             if ( $GlobalUser['trader'] == 1)
             {
-                $crys = floor ( $aktplanet['k'] + $value_2 );
-                $deut = floor ( $aktplanet['d'] + $value_3 );
+                $crys = floor ( $aktplanet[GID_RC_CRYSTAL] + $value_2 );
+                $deut = floor ( $aktplanet[GID_RC_DEUTERIUM] + $value_3 );
                 $met = floor ( $value_2 * $GlobalUser['rate_m'] / $GlobalUser['rate_k'] ) + 
                        floor ( $value_3 * $GlobalUser['rate_m'] / $GlobalUser['rate_d'] );
 
-                if ( $met > $aktplanet['m']) $PageError = loca("TRADER_ERROR_RES") . "<br>";
+                if ( $met > $aktplanet[GID_RC_METAL]) $PageError = loca("TRADER_ERROR_RES") . "<br>";
                 else if ( $crys > $aktplanet['kmax'] || $deut > $aktplanet['dmax'] ) $PageError = loca("TRADER_ERROR_STORAGE") . "<br>";
 
                 if ( $PageError === '' && $met > 0 ) {
@@ -142,12 +142,12 @@ if ( method () === "POST" )
 
             else if ( $GlobalUser['trader'] == 2)
             {
-                $met = floor ( $aktplanet['m'] + $value_1 );
-                $deut = floor ( $aktplanet['d'] + $value_3 );
+                $met = floor ( $aktplanet[GID_RC_METAL] + $value_1 );
+                $deut = floor ( $aktplanet[GID_RC_DEUTERIUM] + $value_3 );
                 $crys = floor ( $value_1 * $GlobalUser['rate_k'] / $GlobalUser['rate_m'] ) + 
                         floor ( $value_3 * $GlobalUser['rate_k'] / $GlobalUser['rate_d'] );
 
-                if ( $crys > $aktplanet['k']) $PageError = loca("TRADER_ERROR_RES") . "<br>";
+                if ( $crys > $aktplanet[GID_RC_CRYSTAL]) $PageError = loca("TRADER_ERROR_RES") . "<br>";
                 else if ( $met > $aktplanet['mmax'] || $deut > $aktplanet['dmax'] ) $PageError = loca("TRADER_ERROR_STORAGE") . "<br>";
 
                 if ( $PageError === '' && $crys > 0 ) {
@@ -162,12 +162,12 @@ if ( method () === "POST" )
 
             else if ( $GlobalUser['trader'] == 3)
             {
-                $met = floor ( $aktplanet['m'] + $value_1 );
-                $crys = floor ( $aktplanet['k'] + $value_2 );
+                $met = floor ( $aktplanet[GID_RC_METAL] + $value_1 );
+                $crys = floor ( $aktplanet[GID_RC_CRYSTAL] + $value_2 );
                 $deut = floor ( $value_1 * $GlobalUser['rate_d'] / $GlobalUser['rate_m'] ) + 
                         floor ( $value_2 * $GlobalUser['rate_d'] / $GlobalUser['rate_k'] );
 
-                if ( $deut > $aktplanet['d']) $PageError .= loca("TRADER_ERROR_RES") . "<br>";
+                if ( $deut > $aktplanet[GID_RC_DEUTERIUM]) $PageError .= loca("TRADER_ERROR_RES") . "<br>";
                 else if ( $met > $aktplanet['mmax'] || $crys > $aktplanet['kmax'] ) $PageError .= loca("TRADER_ERROR_STORAGE") . "<br>";
 
                 if ( $PageError === '' && $deut > 0 ) {
@@ -207,12 +207,12 @@ function is_selected ( int $a, int $b ) : string
 if ( $GlobalUser['trader'] > 0 )
 {
     $offer_id = $GlobalUser['trader'];
-    if ( $offer_id == 1) $amount = floor ($aktplanet['m']);
-    else if ( $offer_id == 2) $amount = floor ($aktplanet['k']);
-    else if ( $offer_id == 3) $amount = floor ($aktplanet['d']);
-    $mmax = max (0, $aktplanet['mmax'] - $aktplanet['m'] );
-    $kmax = max (0, $aktplanet['kmax'] - $aktplanet['k'] );
-    $dmax = max (0, $aktplanet['dmax'] - $aktplanet['d'] );
+    if ( $offer_id == 1) $amount = floor ($aktplanet[GID_RC_METAL]);
+    else if ( $offer_id == 2) $amount = floor ($aktplanet[GID_RC_CRYSTAL]);
+    else if ( $offer_id == 3) $amount = floor ($aktplanet[GID_RC_DEUTERIUM]);
+    $mmax = max (0, $aktplanet['mmax'] - $aktplanet[GID_RC_METAL] );
+    $kmax = max (0, $aktplanet['kmax'] - $aktplanet[GID_RC_CRYSTAL] );
+    $dmax = max (0, $aktplanet['dmax'] - $aktplanet[GID_RC_DEUTERIUM] );
     $storage = "0, " . $mmax . ", " . $kmax . ", " . $dmax;
     $factor = "0, " . $GlobalUser['rate_m'] . ", " . $GlobalUser['rate_k'] . ", " . $GlobalUser['rate_d'];
 

@@ -3,7 +3,9 @@
 // This module is a unification of what was previously scattered throughout all parts of the game (id.php, unit.php, prod.php, techtree)
 // Here you will find various definitions of game object properties that can be changed by modifications.
 
-// TODO: Fleet engine "patches" (small cargo, bomber, etc.)
+// TODO: Fleet engine "patches" (small cargo, bomber, etc.), mod-friendly
+
+// TODO: Fleet resource capture priority (mod-friendly plunder algo)
 
 // Game object identifiers used commonly in code.
 

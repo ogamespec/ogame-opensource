@@ -125,8 +125,8 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
         $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
         PlanetsDropList ($page);
         ResourceList ($aktplanet, 
-            (int)floor($aktplanet['m']), (int)floor($aktplanet['k']), (int)floor($aktplanet['d']), 
-            (int)$aktplanet['e'], (int)$aktplanet['emax'], 
+            (int)floor($aktplanet[GID_RC_METAL]), (int)floor($aktplanet[GID_RC_CRYSTAL]), (int)floor($aktplanet[GID_RC_DEUTERIUM]), 
+            (int)$aktplanet['e'], (int)$aktplanet[GID_RC_ENERGY], 
             $GlobalUser['dm']+$GlobalUser['dmfree'], $aktplanet['mmax'], $aktplanet['kmax'], $aktplanet['dmax']);
         BonusList ();
         echo "</tr>\n";

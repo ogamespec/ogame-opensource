@@ -109,9 +109,9 @@ function FleetSpan ( $fleet_entry )
     $target = GetPlanet ( $fleet_entry['target_id'] );
     $fleet = $fleet_entry;
     $owner = LoadUser ( $origin['owner_id'] );
-    $m = $fleet_entry['m'];
-    $k = $fleet_entry['k'];
-    $d = $fleet_entry['d'];
+    $m = $fleet_entry[GID_RC_METAL];
+    $k = $fleet_entry[GID_RC_CRYSTAL];
+    $d = $fleet_entry[GID_RC_DEUTERIUM];
 
 // $dir mask:
 // 0x0 - own fleet departs 
@@ -324,7 +324,7 @@ function EventList ()
             $task[$tasknum]['fleet'][0] = array ();
             foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj[$gid];
             $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
-            $task[$tasknum]['fleet'][0]['m'] = $task[$tasknum]['fleet'][0]['k'] = $task[$tasknum]['fleet'][0]['d'] = 0;
+            $task[$tasknum]['fleet'][0][GID_RC_METAL] = $task[$tasknum]['fleet'][0][GID_RC_CRYSTAL] = $task[$tasknum]['fleet'][0][GID_RC_DEUTERIUM] = 0;
             $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
             $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
             $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
@@ -345,7 +345,7 @@ function EventList ()
             $task[$tasknum]['fleet'][0] = array ();
             foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj[$gid];
             $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
-            $task[$tasknum]['fleet'][0]['m'] = $task[$tasknum]['fleet'][0]['k'] = $task[$tasknum]['fleet'][0]['d'] = 0;
+            $task[$tasknum]['fleet'][0][GID_RC_METAL] = $task[$tasknum]['fleet'][0][GID_RC_CRYSTAL] = $task[$tasknum]['fleet'][0][GID_RC_DEUTERIUM] = 0;
             $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
             $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
             $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
@@ -363,9 +363,9 @@ function EventList ()
         $task[$tasknum]['fleet'][0] = array ();
         foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj[$gid];
         $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
-        $task[$tasknum]['fleet'][0]['m'] = $fleet_obj['m'];
-        $task[$tasknum]['fleet'][0]['k'] = $fleet_obj['k'];
-        $task[$tasknum]['fleet'][0]['d'] = $fleet_obj['d'];
+        $task[$tasknum]['fleet'][0][GID_RC_METAL] = $fleet_obj[GID_RC_METAL];
+        $task[$tasknum]['fleet'][0][GID_RC_CRYSTAL] = $fleet_obj[GID_RC_CRYSTAL];
+        $task[$tasknum]['fleet'][0][GID_RC_DEUTERIUM] = $fleet_obj[GID_RC_DEUTERIUM];
         if ( $fleet_obj['mission'] < FTYP_RETURN || $fleet_obj['mission'] > FTYP_ORBITING ) {
             $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
             $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
@@ -402,7 +402,7 @@ function EventList ()
             $task[$tasknum]['fleet'][0] = array ();
             foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj[$gid];
             $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
-            $task[$tasknum]['fleet'][0]['m'] = $task[$tasknum]['fleet'][0]['k'] = $task[$tasknum]['fleet'][0]['d'] = 0;
+            $task[$tasknum]['fleet'][0][GID_RC_METAL] = $task[$tasknum]['fleet'][0][GID_RC_CRYSTAL] = $task[$tasknum]['fleet'][0][GID_RC_DEUTERIUM] = 0;
             $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['target_planet'];
             $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['start_planet'];
             $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
@@ -447,7 +447,7 @@ function EventList ()
                     $task[$tasknum]['fleet'][0] = array ();
                     foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj[$gid];
                     $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
-                    $task[$tasknum]['fleet'][0]['m'] = $task[$tasknum]['fleet'][0]['k'] = $task[$tasknum]['fleet'][0]['d'] = 0;
+                    $task[$tasknum]['fleet'][0][GID_RC_METAL] = $task[$tasknum]['fleet'][0][GID_RC_CRYSTAL] = $task[$tasknum]['fleet'][0][GID_RC_DEUTERIUM] = 0;
                     $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['target_planet'];
                     $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['start_planet'];
                     $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
@@ -458,9 +458,9 @@ function EventList ()
                 $task[$tn]['fleet'][$f] = array ();
                 foreach ( $fleetmap as $id=>$gid ) $task[$tn]['fleet'][$f][$gid] = $fleet_obj[$gid];
                 $task[$tn]['fleet'][$f]['owner_id'] = $fleet_obj['owner_id'];
-                $task[$tn]['fleet'][$f]['m'] = $fleet_obj['m'];
-                $task[$tn]['fleet'][$f]['k'] = $fleet_obj['k'];
-                $task[$tn]['fleet'][$f]['d'] = $fleet_obj['d'];
+                $task[$tn]['fleet'][$f][GID_RC_METAL] = $fleet_obj[GID_RC_METAL];
+                $task[$tn]['fleet'][$f][GID_RC_CRYSTAL] = $fleet_obj[GID_RC_CRYSTAL];
+                $task[$tn]['fleet'][$f][GID_RC_DEUTERIUM] = $fleet_obj[GID_RC_DEUTERIUM];
                 $task[$tn]['fleet'][$f]['origin_id'] = $fleet_obj['start_planet'];
                 $task[$tn]['fleet'][$f]['target_id'] = $fleet_obj['target_planet'];
                 $task[$tn]['fleet'][$f]['mission'] = GetMission ($fleet_obj);
