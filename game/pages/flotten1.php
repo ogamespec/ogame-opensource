@@ -144,7 +144,7 @@ $maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );
         $totalships = 0;
         foreach ( $fleetmap as $i=>$gid)
         {
-            if ( $fleet[gid] > 0 ) {
+            if ( $fleet[$gid] > 0 ) {
                 echo loca("NAME_$gid") . ": " . nicenum($fleet[$gid]) . " \n";
                 $totalships += $fleet[$gid];
             }

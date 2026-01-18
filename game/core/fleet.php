@@ -6,7 +6,7 @@
 fleet_id: Ordinal number of the fleet in the table (INT AUTO_INCREMENT PRIMARY KEY)
 owner_id: User number to which the fleet belongs (INT)
 union_id: The number of the union in which the fleet is flying (INT)
-m, k, d: Cargo transported (metal/crystal/deuterium) (DOUBLE)
+`700`, `701`, `702`: Cargo transported (metal/crystal/deuterium) (DOUBLE)
 fuel: Loaded fuel for flight (deuterium) (DOUBLE)
 mission: Type of mission (INT)
 start_planet: Start (INT)
@@ -276,7 +276,7 @@ function AdjustShips (array $fleet, int $planet_id, string $sign) : void
 }
 
 // Dispatch the fleet. No checks are performed. Returns the ID of the fleet.
-function DispatchFleet (array $fleet, array $origin, array $target, int $order, int $seconds, int $m, int $k, int $d, int $cons, int $when, int $union_id=0, int $deploy_time=0) : int
+function DispatchFleet (array $fleet, array $origin, array $target, int $order, int $seconds, int|float $m, int|float $k, int|float $d, int $cons, int $when, int $union_id=0, int $deploy_time=0) : int
 {
     global $db_prefix;
     global $fleetmap;

@@ -105,17 +105,21 @@ if (
 }
 
 $origin_user = LoadUser ( $origin['owner_id'] );
-$target_user = LoadUser ( $target['owner_id'] );
 
-if ( $origin_user['vacation'] ) FleetError ( loca("FLEET_ERR_VACATION_SELF") );
-if ( $target_user['vacation'] && $order != FTYP_RECYCLE ) FleetError ( loca("FLEET_ERR_VACATION_OTHER") );
-if ( $nowfleet >= $maxfleet ) FleetError ( loca("FLEET_ERR_MAX_FLEET") );
+if ($target != null) {
 
-// DO NOT check fleet dispatch between players with the same IP only if BOTH have IP checking disabled in the settings.
-// OR if the sent is on localhost (local web server for debugging)
-if ( ! ($origin_user['deact_ip'] && $target_user['deact_ip']) && !localhost($origin_user['ip_addr']) )
-{
-    if ( $origin_user['ip_addr'] === $target_user['ip_addr'] && $origin_user['player_id'] != $target_user['player_id'] ) FleetError ( loca("FLEET_ERR_IP") );
+    $target_user = LoadUser ( $target['owner_id'] );
+
+    if ( $origin_user['vacation'] ) FleetError ( loca("FLEET_ERR_VACATION_SELF") );
+    if ( $target_user['vacation'] && $order != FTYP_RECYCLE ) FleetError ( loca("FLEET_ERR_VACATION_OTHER") );
+    if ( $nowfleet >= $maxfleet ) FleetError ( loca("FLEET_ERR_MAX_FLEET") );
+
+    // DO NOT check fleet dispatch between players with the same IP only if BOTH have IP checking disabled in the settings.
+    // OR if the sent is on localhost (local web server for debugging)
+    if ( ! ($origin_user['deact_ip'] && $target_user['deact_ip']) && !localhost($origin_user['ip_addr']) )
+    {
+        if ( $origin_user['ip_addr'] === $target_user['ip_addr'] && $origin_user['player_id'] != $target_user['player_id'] ) FleetError ( loca("FLEET_ERR_IP") );
+    }
 }
 
 // Hold time
