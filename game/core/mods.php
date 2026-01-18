@@ -24,6 +24,10 @@ abstract class GameMod {
         return false;
     }
 
+    public function add_bonuses(array &$bonuses) : bool {
+        return false;
+    }
+
     public function add_menuitems(array &$json) : bool {
         return false;
     }
@@ -36,11 +40,15 @@ abstract class GameMod {
         return false;
     }
 
-    public function get_planet_small_image(array &$planet, array &$img) : bool {
+    public function get_planet_small_image(int $type, array &$img) : bool {
         return false;
     }
 
-    public function get_planet_image(array &$planet, array &$img) : bool {
+    public function get_planet_image(int $type, array &$img) : bool {
+        return false;
+    }
+
+    public function get_object_image(int $id, array &$img) : bool {
         return false;
     }
 
@@ -139,6 +147,20 @@ function ModsExecRefRef(string $method, array &$args, array &$arr) : bool
     foreach ($modlist as $instance) {
         if(method_exists($instance, $method)) {
             $res = $instance->$method($args, $arr);
+            if ($res) {
+                return true;
+            }
+        }
+    }
+    return false;    
+}
+
+function ModsExecIntRef(string $method, int $val, array &$arr) : bool
+{
+    global $modlist;
+    foreach ($modlist as $instance) {
+        if(method_exists($instance, $method)) {
+            $res = $instance->$method($val, $arr);
             if ($res) {
                 return true;
             }

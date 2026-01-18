@@ -43,6 +43,14 @@ function rapid (int $gid) : string
     return $res;
 }
 
+// Shooting defenses
+// A custom method that used to be in techs.php, but was moved here because it's only used in one place (not very mod-compatible).
+function IsDefenseShoot (int $gid) : bool
+{
+    global $UnitParam;
+    return IsDefenseNoRak($gid) && $UnitParam[$gid][2] > 1;
+}
+
 $gid = intval($_GET['gid']);
 
 echo "<table width=\"519\">\n";
@@ -70,7 +78,7 @@ if (IsFleet($gid))    // Fleet
     echo "<tr><th>".loca("INFO_NAME")."</th><th>".loca("NAME_$gid")."</th></tr>\n";
     echo "<tr><th colspan=\"2\">\n";
     echo "<table border=\"0\">\n";
-    echo "<tr><td valign=\"top\"><img border=\"0\" src=\"".UserSkin()."gebaeude/$gid.gif\" width=\"120\" height=\"120\"></td>\n";
+    echo "<tr><td valign=\"top\">".GetObjectImage(UserSkin(), $gid)."</td>\n";
     echo "<td>".loca("LONG_$gid")."<br/>".rapid($gid)."</td>\n";
     echo "</tr></table></th></tr>\n";
     echo "<tr><th>".loca("INFO_STRUCTURE")."</th><th>".nicenum($UnitParam[$gid][0])."</th></tr>\n";
@@ -96,7 +104,7 @@ else if (IsDefenseNoRak($gid))    // Defense.
     echo "<tr><th>".loca("INFO_NAME")."</th><th>".loca("NAME_$gid")."</th></tr>\n";
     echo "<tr><th colspan=\"2\">\n";
     echo "<table border=\"0\">\n";
-    echo "<tr><td valign=\"top\"><img border=\"0\" src=\"".UserSkin()."gebaeude/$gid.gif\" width=\"120\" height=\"120\"></td>\n";
+    echo "<tr><td valign=\"top\">".GetObjectImage(UserSkin(), $gid)."</td>\n";
     echo "<td>".loca("LONG_$gid");
     if (IsDefenseShoot($gid)) {
         // For shooting defenses, output the damage repair percentage.
@@ -113,7 +121,7 @@ else if (IsResearch($gid))    // Research.
 {
     echo "<tr><td class=\"c\">".loca("NAME_$gid")."</td></tr>\n";
     echo "<tr><th><table>\n";
-    echo "<tr><td><img border=\"0\" src=\"".UserSkin()."gebaeude/$gid.gif\" align=\"top\" width=\"120\" height=\"120\"></td>\n";
+    echo "<tr><td>".GetObjectImage(UserSkin(), $gid)."</td>\n";
     echo "<td>".loca("LONG_$gid")."</td></tr>\n";
     echo "</table></th></tr>\n";
     echo "</table>\n";
@@ -122,7 +130,7 @@ else
 {
     echo "<tr><td class=\"c\">".loca("NAME_$gid")."</td></tr>\n";
     echo "<tr><th><table>\n";
-    echo "<tr><td><img border=\"0\" src=\"".UserSkin()."gebaeude/$gid.gif\" align=\"top\" width=\"120\" height=\"120\"></td>\n";
+    echo "<tr><td>".GetObjectImage(UserSkin(), $gid)."</td>\n";
     echo "<td>".loca("LONG_$gid")."</td></tr>\n";
     echo "</table></th></tr>\n";
 

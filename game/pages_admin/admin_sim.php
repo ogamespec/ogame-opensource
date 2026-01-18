@@ -242,7 +242,8 @@ function Admin_BattleSim () : void
     global $GlobalUser;
     global $fleetmap;
     global $defmap;
-    $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
+    global $rakmap;
+    $defmap_norak = array_diff($defmap, $rakmap);
     global $PageError;
 
     $unitab = LoadUniverse ();

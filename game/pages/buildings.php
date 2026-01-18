@@ -120,7 +120,7 @@ if ( $_GET['mode'] === "Flotte" )
             if ( $GlobalUser['useskin'] ) {
                 echo "                <td class=l>\n";
                 echo "    			<a href=index.php?page=infos&session=$session&gid=$id>\n";
-                echo "    			<img border='0' src=\"".UserSkin()."gebaeude/$id.gif\" align='top' width='120' height='120'>\n";
+                echo "    			".GetObjectImage(UserSkin(), $id)."\n";
                 echo "    			</a>\n";
                 echo "    			</td>\n";
                 echo "        <td class=l >";
@@ -203,7 +203,7 @@ if ( $_GET['mode'] === "Verteidigung" )
             if ( $GlobalUser['useskin'] ) {
                 echo "                <td class=l>\n";
                 echo "    			<a href=index.php?page=infos&session=$session&gid=$id>\n";
-                echo "    			<img border='0' src=\"".UserSkin()."gebaeude/$id.gif\" align='top' width='120' height='120'>\n";
+                echo "    			".GetObjectImage(UserSkin(), $id)."\n";
                 echo "    			</a>\n";
                 echo "    			</td>\n";
                 echo "        <td class=l >";
@@ -293,7 +293,7 @@ if ( $_GET['mode'] === "Forschung" )
             if ( $GlobalUser['useskin'] ) {
                 echo "                <td class=l>\n";
                 echo "    			<a href=index.php?page=infos&session=$session&gid=$id>\n";
-                echo "    			<img border='0' src=\"".UserSkin()."gebaeude/$id.gif\" align='top' width='120' height='120'>\n";
+                echo "    			".GetObjectImage(UserSkin(), $id)."\n";
                 echo "    			</a>\n";
                 echo "    			</td>\n";
                 echo "        <td class=l >";

@@ -9,7 +9,8 @@ require_once "raketen.php";
 function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_delta, bool $premium=true ) : array
 {
     global $defmap;
-    $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
+    global $rakmap;
+    $defmap_norak = array_diff($defmap, $rakmap);
     foreach ( $defmap_norak as $n=>$gid ) {
         $repaired[$gid] = 0;
         $exploded[$gid] = 0;
@@ -88,7 +89,8 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
 {
     global $fleetmap;
     global $defmap;
-    $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
+    global $rakmap;
+    $defmap_norak = array_diff($defmap, $rakmap);
     $amap = $fleetmap;
     $dmap = array_merge($fleetmap, $defmap_norak);
 
@@ -219,7 +221,8 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
 {
     global $fleetmap;
     global $defmap;
-    $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
+    global $rakmap;
+    $defmap_norak = array_diff($defmap, $rakmap);
     global $db_prefix;
 
     // Combat with rounds.
@@ -401,7 +404,8 @@ function BattleReport ( array $res, int $now, int $aloss, int $dloss, int $cm, i
 {
     global $fleetmap;
     global $defmap;
-    $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
+    global $rakmap;
+    $defmap_norak = array_diff($defmap, $rakmap);
     $amap = $fleetmap;
     $dmap = array_merge ($fleetmap, $defmap_norak);
 
@@ -605,7 +609,8 @@ function GenBattleSourceData (array $a, array $d, int $rf, int $fid, int $did) :
 {
     global $fleetmap;
     global $defmap;
-    $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
+    global $rakmap;
+    $defmap_norak = array_diff($defmap, $rakmap);
 
     $source = "";
     $source .= "Rapidfire = $rf\n";
@@ -648,7 +653,8 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     global $GlobalUni;
     global $fleetmap;
     global $defmap;
-    $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
+    global $rakmap;
+    $defmap_norak = array_diff($defmap, $rakmap);
 
     $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
     $d_result = array ( 1=>"combatreport_igotattacked_iwon", 0=>"combatreport_igotattacked_ilost", 2=>"combatreport_igotattacked_draw" );
@@ -955,7 +961,8 @@ function ShortBattleReport ( array $res, int $now, string $lang ) : string
 {
     global $fleetmap;
     global $defmap;
-    $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
+    global $rakmap;
+    $defmap_norak = array_diff($defmap, $rakmap);
     $amap = $fleetmap;
     $dmap = array_merge($fleetmap, $defmap_norak);
 
@@ -1029,7 +1036,8 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
     global $GlobalUni;
     global $fleetmap;
     global $defmap;
-    $defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
+    global $rakmap;
+    $defmap_norak = array_diff($defmap, $rakmap);
 
     $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
 

@@ -5,7 +5,7 @@
 /** @var array $UnitParam */
 /** @var string $aktplanet */
 
-$defmap_norak = array_diff($defmap, [GID_D_ABM, GID_D_IPM]);
+$defmap_norak = array_diff($defmap, $rakmap);
 
 function empty_row (string $p) : void
 {
