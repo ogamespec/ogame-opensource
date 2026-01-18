@@ -474,11 +474,11 @@ function Admin_Users () : void
         </th>
         <th <?php echo $style;?> >
 <?php
-    $total = $fleet_obj['pm'] + $fleet_obj['pk'] + $fleet_obj['pd'];
+    $total = $fleet_obj['p'.GID_RC_METAL] + $fleet_obj['p'.GID_RC_CRYSTAL] + $fleet_obj['p'.GID_RC_DEUTERIUM];
     if ( $total > 0 ) {
-        echo loca("NAME_".GID_RC_METAL) . ": " . nicenum ($fleet_obj['pm']) . "<br>" ;
-        echo loca("NAME_".GID_RC_CRYSTAL) . ": " . nicenum ($fleet_obj['pk']) . "<br>" ;
-        echo loca("NAME_".GID_RC_DEUTERIUM) . ": " . nicenum ($fleet_obj['pd']) ;
+        echo loca("NAME_".GID_RC_METAL) . ": " . nicenum ($fleet_obj['p'.GID_RC_METAL]) . "<br>" ;
+        echo loca("NAME_".GID_RC_CRYSTAL) . ": " . nicenum ($fleet_obj['p'.GID_RC_CRYSTAL]) . "<br>" ;
+        echo loca("NAME_".GID_RC_DEUTERIUM) . ": " . nicenum ($fleet_obj['p'.GID_RC_DEUTERIUM]) ;
     }
     else echo "-";
 ?>
