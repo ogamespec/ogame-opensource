@@ -231,9 +231,9 @@ function spio ()
 <?php
     foreach ( $Languages as $lang => $langname ) {
         $loca_lang = $lang;        
-        echo "\"".loca("METAL")."\": 'm', ";
-        echo "\"".loca("CRYSTAL")."\": 'k', ";
-        echo "\"".loca("DEUTERIUM")."\": 'd', ";
+        echo "\"".loca("NAME_".GID_RC_METAL)."\": 'm', ";
+        echo "\"".loca("NAME_".GID_RC_CRYSTAL)."\": 'k', ";
+        echo "\"".loca("NAME_".GID_RC_DEUTERIUM)."\": 'd', ";
     }
 
     $loca_lang = $old_lang;
@@ -452,10 +452,10 @@ function reset ()
         echo "<tr><th>".loca("ADM_PLANET_COORD")."</th><th>[<input type=\"text\" name=\"g\" value=\"".$planet['g']."\" size=1 />:<input type=\"text\" name=\"s\" value=\"".$planet['s']."\" size=2 />:<input type=\"text\" name=\"p\" value=\"".$planet['p']."\" size=1 />]</th></tr>\n";
 
         echo "<tr><td class=c colspan=2>".loca("ADM_PLANET_RESOURCES")."</td></tr>\n";
-        echo "<tr><th>".loca("METAL")."</th><th><input id=\"objm\" type=\"text\" name=\"m\" value=\"".ceil($planet['m'])."\" /></th></tr>\n";
-        echo "<tr><th>".loca("CRYSTAL")."</th><th><input id=\"objk\" type=\"text\" name=\"k\" value=\"".ceil($planet['k'])."\" /></th></tr>\n";
-        echo "<tr><th>".loca("DEUTERIUM")."</th><th><input id=\"objd\" type=\"text\" name=\"d\" value=\"".ceil($planet['d'])."\" /></th></tr>\n";
-        echo "<tr><th>".loca("ENERGY")."</th><th>".$planet['e']." / ".$planet['emax']."</th></tr>\n";
+        echo "<tr><th>".loca("NAME_".GID_RC_METAL)."</th><th><input id=\"objm\" type=\"text\" name=\"m\" value=\"".ceil($planet['m'])."\" /></th></tr>\n";
+        echo "<tr><th>".loca("NAME_".GID_RC_CRYSTAL)."</th><th><input id=\"objk\" type=\"text\" name=\"k\" value=\"".ceil($planet['k'])."\" /></th></tr>\n";
+        echo "<tr><th>".loca("NAME_".GID_RC_DEUTERIUM)."</th><th><input id=\"objd\" type=\"text\" name=\"d\" value=\"".ceil($planet['d'])."\" /></th></tr>\n";
+        echo "<tr><th>".loca("NAME_".GID_RC_ENERGY)."</th><th>".$planet['e']." / ".$planet['emax']."</th></tr>\n";
         echo "<tr><th>".loca("ADM_PLANET_FACTOR")."</th><th>".$planet['factor']."</th></tr>\n";
 
         echo "<tr><th colspan=8><input type=\"submit\" value=\"".loca("ADM_PLANET_SAVE")."\" />  <input type=\"submit\" name=\"delete_planet\" value=\"".loca("ADM_PLANET_REMOVE")."\" /> </th></tr>\n";

@@ -69,7 +69,7 @@ $rows = MDBRows ( $result );
    <table border="0" cellpadding="2" cellspacing="1">
     <tr height="20">
      <td class="c"><?=loca("ADM_COUPON_CODE");?></td>
-     <td class="c"><?=loca("DM");?></td>
+     <td class="c"><?=loca("NAME_".GID_RC_DM);?></td>
      <td class="c"><?=loca("ADM_COUPON_ACTIVATED");?></td>
      <td class="c"><?=loca("ADM_COUPON_UNI");?></td>
      <td class="c"><?=loca("ADM_COUPON_NAME");?></td>
@@ -107,7 +107,7 @@ $rows = MDBRows ( $result );
 <tr><td class="c"><?=loca("ADM_COUPON_ADD_SINGLE");?></td></tr>
 <tr><td>
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Coupons&action=add_one" method="POST">
-<?=loca("DM");?> <input type="text" size="10" name="dm"> <input type="submit">
+<?=loca("NAME_".GID_RC_DM);?> <input type="text" size="10" name="dm"> <input type="submit">
 </form>
 </td></tr>
 </table>

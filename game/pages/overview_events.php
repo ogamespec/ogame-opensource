@@ -88,13 +88,13 @@ function Cargo ($m, $k, $d, $mission, $text)
 {
     if ( ($m + $k + $d) != 0 ) {
         return "<a href='#' onmouseover='return overlib(\"&lt;font color=white&gt;&lt;b&gt;".loca("EVENT_CARGO").": &lt;br /&gt; ".
-            loca("METAL").": ".nicenum($m)."&lt;br /&gt;".
-            loca("CRYSTAL").": ".nicenum($k)."&lt;br /&gt;".
-            loca("DEUTERIUM").": ".nicenum($d)."&lt;/b&gt;&lt;/font&gt;\");' " .
+            loca("NAME_".GID_RC_METAL).": ".nicenum($m)."&lt;br /&gt;".
+            loca("NAME_".GID_RC_CRYSTAL).": ".nicenum($k)."&lt;br /&gt;".
+            loca("NAME_".GID_RC_DEUTERIUM).": ".nicenum($d)."&lt;/b&gt;&lt;/font&gt;\");' " .
                 "onmouseout='return nd();'' class='$mission'>$text</a><a href='#' title='".loca("EVENT_CARGO").": ".
-                loca("METAL").": ".nicenum($m)." ".
-                loca("CRYSTAL").": ".nicenum($k)." ".
-                loca("DEUTERIUM").": ".nicenum($d)."'></a>";
+                loca("NAME_".GID_RC_METAL).": ".nicenum($m)." ".
+                loca("NAME_".GID_RC_CRYSTAL).": ".nicenum($k)." ".
+                loca("NAME_".GID_RC_DEUTERIUM).": ".nicenum($d)."'></a>";
     }
     else return "<span class='class'>$text</span>";
 }

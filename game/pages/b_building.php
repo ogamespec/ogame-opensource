@@ -147,10 +147,10 @@ foreach ( $buildmap as $i => $id )
     $res = BuildPrice ( $id, $lvl+1 );
     $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
     echo "<br>".loca("BUILD_PRICE").":";
-    if ($m) echo " ".loca("METAL").": <b>".nicenum($m)."</b>";
-    if ($k) echo " ".loca("CRYSTAL").": <b>".nicenum($k)."</b>";
-    if ($d) echo " ".loca("DEUTERIUM").": <b>".nicenum($d)."</b>";
-    if ($e) echo " ".loca("ENERGY").": <b>".nicenum($e)."</b>";
+    if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";
+    if ($k) echo " ".loca("NAME_".GID_RC_CRYSTAL).": <b>".nicenum($k)."</b>";
+    if ($d) echo " ".loca("NAME_".GID_RC_DEUTERIUM).": <b>".nicenum($d)."</b>";
+    if ($e) echo " ".loca("NAME_".GID_RC_ENERGY).": <b>".nicenum($e)."</b>";
     $t = BuildDuration ( $id, $lvl+1, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
     echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br>";
 

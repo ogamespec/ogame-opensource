@@ -326,7 +326,7 @@ function Exp_DarkMatterFound (array $exptab, array $queue, array $fleet_obj, arr
     if ($dm_factor == 0) $dm_factor = 1;
     $dm *= $dm_factor;
 
-    $msg .= va ( loca_lang("EXP_FOUND", $lang), nicenum($dm), loca_lang("DM", $lang) );
+    $msg .= va ( loca_lang("EXP_FOUND", $lang), nicenum($dm), loca_lang("NAME_".GID_RC_DM, $lang) );
 
     // Credit DM
     $query = "UPDATE ".$db_prefix."users SET dmfree = dmfree + ".$dm." WHERE player_id=$player_id;";
@@ -440,7 +440,7 @@ function Exp_ResourcesFound (array $exptab, array $queue, array $fleet_obj, arra
         loca_lang ("EXP_RESFOUND_LOGBOOK_3", $lang),
         loca_lang ("EXP_RESFOUND_LOGBOOK_4", $lang),
     );
-    $resname = array ( loca_lang ("METAL", $lang), loca_lang ("CRYSTAL", $lang), loca_lang ("DEUTERIUM", $lang) );
+    $resname = array ( loca_lang ("NAME_".GID_RC_METAL, $lang), loca_lang ("NAME_".GID_RC_CRYSTAL, $lang), loca_lang ("NAME_".GID_RC_DEUTERIUM, $lang) );
 
     // Calculate the type of resource found
     $type = mt_rand (0, 2);

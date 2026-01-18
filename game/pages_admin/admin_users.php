@@ -476,9 +476,9 @@ function Admin_Users () : void
 <?php
     $total = $fleet_obj['pm'] + $fleet_obj['pk'] + $fleet_obj['pd'];
     if ( $total > 0 ) {
-        echo loca("METAL") . ": " . nicenum ($fleet_obj['pm']) . "<br>" ;
-        echo loca("CRYSTAL") . ": " . nicenum ($fleet_obj['pk']) . "<br>" ;
-        echo loca("DEUTERIUM") . ": " . nicenum ($fleet_obj['pd']) ;
+        echo loca("NAME_".GID_RC_METAL) . ": " . nicenum ($fleet_obj['pm']) . "<br>" ;
+        echo loca("NAME_".GID_RC_CRYSTAL) . ": " . nicenum ($fleet_obj['pk']) . "<br>" ;
+        echo loca("NAME_".GID_RC_DEUTERIUM) . ": " . nicenum ($fleet_obj['pd']) ;
     }
     else echo "-";
 ?>
@@ -487,9 +487,9 @@ function Admin_Users () : void
 <?php
     $total = $fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d'];
     if ( $total > 0 ) {
-        echo loca("METAL") . ": " . nicenum ($fleet_obj['m']) . "<br>" ;
-        echo loca("CRYSTAL") . ": " . nicenum ($fleet_obj['k']) . "<br>" ;
-        echo loca("DEUTERIUM") . ": " . nicenum ($fleet_obj['d']) ;
+        echo loca("NAME_".GID_RC_METAL) . ": " . nicenum ($fleet_obj['m']) . "<br>" ;
+        echo loca("NAME_".GID_RC_CRYSTAL) . ": " . nicenum ($fleet_obj['k']) . "<br>" ;
+        echo loca("NAME_".GID_RC_DEUTERIUM) . ": " . nicenum ($fleet_obj['d']) ;
     }
     else echo "-";
 ?>

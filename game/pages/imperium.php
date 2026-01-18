@@ -161,7 +161,7 @@ $speed = $GlobalUni['speed'];
 <!-- ## -->
  
         <tr height="20">
-            <th width="75"><?php echo loca("METAL");?></th>
+            <th width="75"><?php echo loca("NAME_".GID_RC_METAL);?></th>
 
 <?php
     $total = 0;
@@ -187,7 +187,7 @@ $speed = $GlobalUni['speed'];
 
  
         <tr height="20">
-            <th width="75"><?php echo loca("CRYSTAL");?></th>
+            <th width="75"><?php echo loca("NAME_".GID_RC_CRYSTAL);?></th>
  
 <?php 
     $total = 0;
@@ -213,7 +213,7 @@ $speed = $GlobalUni['speed'];
         </tr>
  
         <tr height="20">
-            <th width="75"><?php echo loca("DEUTERIUM");?></th>
+            <th width="75"><?php echo loca("NAME_".GID_RC_DEUTERIUM);?></th>
 
 <?php 
     $total = 0;
@@ -243,7 +243,7 @@ $speed = $GlobalUni['speed'];
 <!-- ## Resources-Energy -->
 <!-- ## -->
         <tr height="20">
-            <th width="75"><?php echo loca("ENERGY");?></th>
+            <th width="75"><?php echo loca("NAME_".GID_RC_ENERGY);?></th>
 
 <?php
     $sum_e = 0;

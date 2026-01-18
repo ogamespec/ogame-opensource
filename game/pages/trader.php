@@ -216,7 +216,7 @@ if ( $GlobalUser['trader'] > 0 )
     $storage = "0, " . $mmax . ", " . $kmax . ", " . $dmax;
     $factor = "0, " . $GlobalUser['rate_m'] . ", " . $GlobalUser['rate_k'] . ", " . $GlobalUser['rate_d'];
 
-    $resname = array ( "", loca("METAL"), loca("CRYSTAL"), loca("DEUTERIUM") );
+    $resname = array ( "", loca("NAME_".GID_RC_METAL), loca("NAME_".GID_RC_CRYSTAL), loca("NAME_".GID_RC_DEUTERIUM) );
 
     if ( $GlobalUser['trader'] == 1 ) $ratewhat = $GlobalUser['rate_m'];
     else if ( $GlobalUser['trader'] == 2 ) $ratewhat = $GlobalUser['rate_k'];
@@ -345,9 +345,9 @@ function setMaxValue(id) {
 			<th class="c" align='center'><br>
 				<?=loca("TRADER_SELL_RES");?>				<select name="offer_id" style="color: lime;">
 
-				  <option value="1" <?=is_selected($GlobalUser['trader'], 1);?>><?=loca("METAL");?></option>
-				  <option value="2" <?=is_selected($GlobalUser['trader'], 2);?>><?=loca("CRYSTAL");?></option>
-				  <option value="3" <?=is_selected($GlobalUser['trader'], 3);?>><?=loca("DEUTERIUM");?></option>
+				  <option value="1" <?=is_selected($GlobalUser['trader'], 1);?>><?=loca("NAME_".GID_RC_METAL);?></option>
+				  <option value="2" <?=is_selected($GlobalUser['trader'], 2);?>><?=loca("NAME_".GID_RC_CRYSTAL);?></option>
+				  <option value="3" <?=is_selected($GlobalUser['trader'], 3);?>><?=loca("NAME_".GID_RC_DEUTERIUM);?></option>
 				</select>		
 				!				<br>
 				<div id='darkmatter2'><?=va(loca("TRADER_DM_COST"), $trader_dm);?></div><br><br>
@@ -391,7 +391,7 @@ function setMaxValue(id) {
         
         
         <TR>
-            <th class="c" align="center" width=25% ><?=loca("METAL");?></th>
+            <th class="c" align="center" width=25% ><?=loca("NAME_".GID_RC_METAL);?></th>
 <?php
     if ( $GlobalUser['trader'] == 1 ) echo "                          <th class=\"c\" align='center' width=25% ><span id=\"1_value\">0</span></th>\n";
     else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"1_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(1);'> <a href=\"#\" onClick=\"setMaxValue(1);\">max</a></th>\n";
@@ -425,7 +425,7 @@ function setMaxValue(id) {
         </TR>
         
         <TR>
-            <th class="c" align="center" width=25% ><?=loca("CRYSTAL");?></th>
+            <th class="c" align="center" width=25% ><?=loca("NAME_".GID_RC_CRYSTAL);?></th>
 <?php
     if ( $GlobalUser['trader'] == 2 ) echo "                          <th class=\"c\" align='center' width=25% ><span id=\"2_value\">0</span></th>\n";
     else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"2_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(2);'> <a href=\"#\" onClick=\"setMaxValue(2);\">max</a></th>\n";
@@ -459,7 +459,7 @@ function setMaxValue(id) {
         </TR>
         
         <TR>
-            <th class="c" align="center" width=25% ><?=loca("DEUTERIUM");?></th>
+            <th class="c" align="center" width=25% ><?=loca("NAME_".GID_RC_DEUTERIUM);?></th>
 <?php
     if ( $GlobalUser['trader'] == 3 ) echo "                          <th class=\"c\" align='center' width=25% ><span id=\"3_value\">0</span></th>\n";
     else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"3_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(3);'> <a href=\"#\" onClick=\"setMaxValue(3);\">max</a></th>\n";

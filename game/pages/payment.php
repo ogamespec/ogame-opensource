@@ -51,7 +51,7 @@ if ( method() === "POST" )
 <tbody>
 <tr><td class="c" colspan="2">
 <big>
-<?=loca("DM");?> <?=nicenum($coupon['amount']);?> !
+<?=loca("NAME_".GID_RC_DM);?> <?=nicenum($coupon['amount']);?> !
 </big>
 </td></tr>
 <tr><td colspan="2"><center><input type="submit" value="<?=loca("PAY_CREDIT");?>"></center></td></tr>

@@ -177,7 +177,7 @@ echo "    </td> \n";
 echo "  </tr>\n";
 
 echo "  <tr> \n";
-echo "   <th colspan=\"2\"></th>    <th>".loca("METAL")."</th>    <th>".loca("CRYSTAL")."</th>    <th>".loca("DEUTERIUM")."</th>    <th>".loca("ENERGY")."</th> \n";
+echo "   <th colspan=\"2\"></th>    <th>".loca("NAME_".GID_RC_METAL)."</th>    <th>".loca("NAME_".GID_RC_CRYSTAL)."</th>    <th>".loca("NAME_".GID_RC_DEUTERIUM)."</th>    <th>".loca("NAME_".GID_RC_ENERGY)."</th> \n";
 echo "  </tr>\n";
 
 // Natural production

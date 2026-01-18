@@ -4,11 +4,11 @@
 
 $LOCA["ru"]["PAGE_TITLE"] = "Вселенная #1 ОГейм";
 
-$LOCA["ru"]["METAL"] = "Металл";
-$LOCA["ru"]["CRYSTAL"] = "Кристалл";
-$LOCA["ru"]["DEUTERIUM"] = "Дейтерий";
-$LOCA["ru"]["ENERGY"] = "Энергия";
-$LOCA["ru"]["DM"] = "Тёмная материя";
+$LOCA["ru"]["NAME_".GID_RC_METAL] = "Металл";
+$LOCA["ru"]["NAME_".GID_RC_CRYSTAL] = "Кристалл";
+$LOCA["ru"]["NAME_".GID_RC_DEUTERIUM] = "Дейтерий";
+$LOCA["ru"]["NAME_".GID_RC_ENERGY] = "Энергия";
+$LOCA["ru"]["NAME_".GID_RC_DM] = "Тёмная материя";
 
 $LOCA["ru"]["PLANET_HOME"] = "Главная планета";
 $LOCA["ru"]["PLANET_COLONY"] = "Колония";

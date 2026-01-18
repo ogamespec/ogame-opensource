@@ -4,11 +4,11 @@
 
 $LOCA["jp"]["PAGE_TITLE"] = "ユニバース #1 OGame";
 
-$LOCA["jp"]["METAL"] = "メタル";
-$LOCA["jp"]["CRYSTAL"] = "クリスタル";
-$LOCA["jp"]["DEUTERIUM"] = "重水素";
-$LOCA["jp"]["ENERGY"] = "エネルギー";
-$LOCA["jp"]["DM"] = "ダークマター";
+$LOCA["jp"]["NAME_".GID_RC_METAL] = "メタル";
+$LOCA["jp"]["NAME_".GID_RC_CRYSTAL] = "クリスタル";
+$LOCA["jp"]["NAME_".GID_RC_DEUTERIUM] = "重水素";
+$LOCA["jp"]["NAME_".GID_RC_ENERGY] = "エネルギー";
+$LOCA["jp"]["NAME_".GID_RC_DM] = "ダークマター";
 
 $LOCA["jp"]["PLANET_HOME"] = "ホーム・プラネット";
 $LOCA["jp"]["PLANET_COLONY"] = "コロニー";

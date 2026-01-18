@@ -69,6 +69,12 @@ const GID_D_LDOME = 408;    // Large Shield Dome
 const GID_D_ABM = 502;      // Anti-Ballistic Missiles
 const GID_D_IPM = 503;      // Interplanetary Missiles
 
+const GID_RC_METAL = 700;       // Metal
+const GID_RC_CRYSTAL = 701;     // Crystal
+const GID_RC_DEUTERIUM = 702;   // Deuterium
+const GID_RC_ENERGY = 703;      // Energy
+const GID_RC_DM = 704;          // Dark Matter
+
 function IsBuilding (int $gid) : bool
 {
     global $buildmap;
@@ -101,6 +107,12 @@ function IsDefenseNoRak (int $gid) : bool
     return in_array($gid, $defmap_norak, true);
 }
 
+function IsResource (int $gid) : bool
+{
+    global $resourcemap;
+    return in_array($gid, $resourcemap, true);
+}
+
 // Arrays of objects that are very commonly used elsewhere.
 
 $buildmap = array ( GID_B_METAL_MINE, GID_B_CRYS_MINE, GID_B_DEUT_SYNTH, GID_B_SOLAR, GID_B_FUSION, GID_B_ROBOTS, GID_B_NANITES, GID_B_SHIPYARD, GID_B_METAL_STOR, GID_B_CRYS_STOR, GID_B_DEUT_STOR, GID_B_RES_LAB, GID_B_TERRAFORMER, GID_B_ALLY_DEPOT, GID_B_LUNAR_BASE, GID_B_PHALANX, GID_B_JUMP_GATE, GID_B_MISS_SILO );
@@ -108,6 +120,7 @@ $resmap = array ( GID_R_ESPIONAGE, GID_R_COMPUTER, GID_R_WEAPON, GID_R_SHIELD, G
 $fleetmap = array ( GID_F_SC, GID_F_LC, GID_F_LF, GID_F_HF, GID_F_CRUISER, GID_F_BATTLESHIP, GID_F_COLON, GID_F_RECYCLER, GID_F_PROBE, GID_F_BOMBER, GID_F_SAT, GID_F_DESTRO, GID_F_DEATHSTAR, GID_F_BATTLECRUISER );
 $defmap = array ( GID_D_RL, GID_D_LL, GID_D_HL, GID_D_GAUSS, GID_D_ION, GID_D_PLASMA, GID_D_SDOME, GID_D_LDOME, GID_D_ABM, GID_D_IPM );
 $rakmap = array ( GID_D_ABM, GID_D_IPM );
+$resourcemap = array ( GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM, GID_RC_ENERGY, GID_RC_DM );
 
 // Level 1 cost.
 // Factor in the exponential growth of technology. OGame is a game of exponential.
