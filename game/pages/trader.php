@@ -122,12 +122,12 @@ if ( method () === "POST" )
 
             if ( $GlobalUser['trader'] == 1)
             {
-                $crys = floor ( $aktplanet['k'] + $value_2 );
-                $deut = floor ( $aktplanet['d'] + $value_3 );
+                $crys = floor ( $aktplanet[GID_RC_CRYSTAL] + $value_2 );
+                $deut = floor ( $aktplanet[GID_RC_DEUTERIUM] + $value_3 );
                 $met = floor ( $value_2 * $GlobalUser['rate_m'] / $GlobalUser['rate_k'] ) + 
                        floor ( $value_3 * $GlobalUser['rate_m'] / $GlobalUser['rate_d'] );
 
-                if ( $met > $aktplanet['m']) $PageError = loca("TRADER_ERROR_RES") . "<br>";
+                if ( $met > $aktplanet[GID_RC_METAL]) $PageError = loca("TRADER_ERROR_RES") . "<br>";
                 else if ( $crys > $aktplanet['kmax'] || $deut > $aktplanet['dmax'] ) $PageError = loca("TRADER_ERROR_STORAGE") . "<br>";
 
                 if ( $PageError === '' && $met > 0 ) {
@@ -142,12 +142,12 @@ if ( method () === "POST" )
 
             else if ( $GlobalUser['trader'] == 2)
             {
-                $met = floor ( $aktplanet['m'] + $value_1 );
-                $deut = floor ( $aktplanet['d'] + $value_3 );
+                $met = floor ( $aktplanet[GID_RC_METAL] + $value_1 );
+                $deut = floor ( $aktplanet[GID_RC_DEUTERIUM] + $value_3 );
                 $crys = floor ( $value_1 * $GlobalUser['rate_k'] / $GlobalUser['rate_m'] ) + 
                         floor ( $value_3 * $GlobalUser['rate_k'] / $GlobalUser['rate_d'] );
 
-                if ( $crys > $aktplanet['k']) $PageError = loca("TRADER_ERROR_RES") . "<br>";
+                if ( $crys > $aktplanet[GID_RC_CRYSTAL]) $PageError = loca("TRADER_ERROR_RES") . "<br>";
                 else if ( $met > $aktplanet['mmax'] || $deut > $aktplanet['dmax'] ) $PageError = loca("TRADER_ERROR_STORAGE") . "<br>";
 
                 if ( $PageError === '' && $crys > 0 ) {
@@ -162,12 +162,12 @@ if ( method () === "POST" )
 
             else if ( $GlobalUser['trader'] == 3)
             {
-                $met = floor ( $aktplanet['m'] + $value_1 );
-                $crys = floor ( $aktplanet['k'] + $value_2 );
+                $met = floor ( $aktplanet[GID_RC_METAL] + $value_1 );
+                $crys = floor ( $aktplanet[GID_RC_CRYSTAL] + $value_2 );
                 $deut = floor ( $value_1 * $GlobalUser['rate_d'] / $GlobalUser['rate_m'] ) + 
                         floor ( $value_2 * $GlobalUser['rate_d'] / $GlobalUser['rate_k'] );
 
-                if ( $deut > $aktplanet['d']) $PageError .= loca("TRADER_ERROR_RES") . "<br>";
+                if ( $deut > $aktplanet[GID_RC_DEUTERIUM]) $PageError .= loca("TRADER_ERROR_RES") . "<br>";
                 else if ( $met > $aktplanet['mmax'] || $crys > $aktplanet['kmax'] ) $PageError .= loca("TRADER_ERROR_STORAGE") . "<br>";
 
                 if ( $PageError === '' && $deut > 0 ) {
@@ -207,16 +207,16 @@ function is_selected ( int $a, int $b ) : string
 if ( $GlobalUser['trader'] > 0 )
 {
     $offer_id = $GlobalUser['trader'];
-    if ( $offer_id == 1) $amount = floor ($aktplanet['m']);
-    else if ( $offer_id == 2) $amount = floor ($aktplanet['k']);
-    else if ( $offer_id == 3) $amount = floor ($aktplanet['d']);
-    $mmax = max (0, $aktplanet['mmax'] - $aktplanet['m'] );
-    $kmax = max (0, $aktplanet['kmax'] - $aktplanet['k'] );
-    $dmax = max (0, $aktplanet['dmax'] - $aktplanet['d'] );
+    if ( $offer_id == 1) $amount = floor ($aktplanet[GID_RC_METAL]);
+    else if ( $offer_id == 2) $amount = floor ($aktplanet[GID_RC_CRYSTAL]);
+    else if ( $offer_id == 3) $amount = floor ($aktplanet[GID_RC_DEUTERIUM]);
+    $mmax = max (0, $aktplanet['mmax'] - $aktplanet[GID_RC_METAL] );
+    $kmax = max (0, $aktplanet['kmax'] - $aktplanet[GID_RC_CRYSTAL] );
+    $dmax = max (0, $aktplanet['dmax'] - $aktplanet[GID_RC_DEUTERIUM] );
     $storage = "0, " . $mmax . ", " . $kmax . ", " . $dmax;
     $factor = "0, " . $GlobalUser['rate_m'] . ", " . $GlobalUser['rate_k'] . ", " . $GlobalUser['rate_d'];
 
-    $resname = array ( "", loca("METAL"), loca("CRYSTAL"), loca("DEUTERIUM") );
+    $resname = array ( "", loca("NAME_".GID_RC_METAL), loca("NAME_".GID_RC_CRYSTAL), loca("NAME_".GID_RC_DEUTERIUM) );
 
     if ( $GlobalUser['trader'] == 1 ) $ratewhat = $GlobalUser['rate_m'];
     else if ( $GlobalUser['trader'] == 2 ) $ratewhat = $GlobalUser['rate_k'];
@@ -345,9 +345,9 @@ function setMaxValue(id) {
 			<th class="c" align='center'><br>
 				<?=loca("TRADER_SELL_RES");?>				<select name="offer_id" style="color: lime;">
 
-				  <option value="1" <?=is_selected($GlobalUser['trader'], 1);?>><?=loca("METAL");?></option>
-				  <option value="2" <?=is_selected($GlobalUser['trader'], 2);?>><?=loca("CRYSTAL");?></option>
-				  <option value="3" <?=is_selected($GlobalUser['trader'], 3);?>><?=loca("DEUTERIUM");?></option>
+				  <option value="1" <?=is_selected($GlobalUser['trader'], 1);?>><?=loca("NAME_".GID_RC_METAL);?></option>
+				  <option value="2" <?=is_selected($GlobalUser['trader'], 2);?>><?=loca("NAME_".GID_RC_CRYSTAL);?></option>
+				  <option value="3" <?=is_selected($GlobalUser['trader'], 3);?>><?=loca("NAME_".GID_RC_DEUTERIUM);?></option>
 				</select>		
 				!				<br>
 				<div id='darkmatter2'><?=va(loca("TRADER_DM_COST"), $trader_dm);?></div><br><br>
@@ -391,7 +391,7 @@ function setMaxValue(id) {
         
         
         <TR>
-            <th class="c" align="center" width=25% ><?=loca("METAL");?></th>
+            <th class="c" align="center" width=25% ><?=loca("NAME_".GID_RC_METAL);?></th>
 <?php
     if ( $GlobalUser['trader'] == 1 ) echo "                          <th class=\"c\" align='center' width=25% ><span id=\"1_value\">0</span></th>\n";
     else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"1_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(1);'> <a href=\"#\" onClick=\"setMaxValue(1);\">max</a></th>\n";
@@ -425,7 +425,7 @@ function setMaxValue(id) {
         </TR>
         
         <TR>
-            <th class="c" align="center" width=25% ><?=loca("CRYSTAL");?></th>
+            <th class="c" align="center" width=25% ><?=loca("NAME_".GID_RC_CRYSTAL);?></th>
 <?php
     if ( $GlobalUser['trader'] == 2 ) echo "                          <th class=\"c\" align='center' width=25% ><span id=\"2_value\">0</span></th>\n";
     else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"2_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(2);'> <a href=\"#\" onClick=\"setMaxValue(2);\">max</a></th>\n";
@@ -459,7 +459,7 @@ function setMaxValue(id) {
         </TR>
         
         <TR>
-            <th class="c" align="center" width=25% ><?=loca("DEUTERIUM");?></th>
+            <th class="c" align="center" width=25% ><?=loca("NAME_".GID_RC_DEUTERIUM);?></th>
 <?php
     if ( $GlobalUser['trader'] == 3 ) echo "                          <th class=\"c\" align='center' width=25% ><span id=\"3_value\">0</span></th>\n";
     else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"3_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(3);'> <a href=\"#\" onClick=\"setMaxValue(3);\">max</a></th>\n";

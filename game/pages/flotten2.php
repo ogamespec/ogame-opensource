@@ -57,9 +57,9 @@ if ( method() !== "POST" ) MyGoto ( "flotten1" );
 <input name="thisplanet" type="hidden" value="<?php echo $aktplanet['p'];?>" />
 <input name="thisplanettype" type="hidden" value="<?php echo GetPlanetType($aktplanet);?>" />
 <input name="speedfactor" type="hidden" value="<?php echo $GlobalUni['fspeed'];?>" />
-<input name="thisresource1" type="hidden" value="<?php echo floor($aktplanet['m']);?>" />
-<input name="thisresource2" type="hidden" value="<?php echo floor($aktplanet['k']);?>" />
-<input name="thisresource3" type="hidden" value="<?php echo floor($aktplanet['d']);?>" />
+<input name="thisresource1" type="hidden" value="<?php echo floor($aktplanet[GID_RC_METAL]);?>" />
+<input name="thisresource2" type="hidden" value="<?php echo floor($aktplanet[GID_RC_CRYSTAL]);?>" />
+<input name="thisresource3" type="hidden" value="<?php echo floor($aktplanet[GID_RC_DEUTERIUM]);?>" />
 
 <?php
 

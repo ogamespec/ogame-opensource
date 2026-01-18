@@ -24,7 +24,7 @@ function Admin_Planets () : void
         {
             $param = array_merge ( 
                 $buildmap, $defmap, $fleetmap, 
-                array ( 'm', 'k', 'd', 'g', 's', 'p', 'diameter', 'type', 'temp', 'mprod', 'kprod', 'dprod', 'sprod', 'fprod', 'ssprod') );
+                array ( GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM, 'g', 's', 'p', 'diameter', 'type', 'temp', 'mprod', 'kprod', 'dprod', 'sprod', 'fprod', 'ssprod') );
             $moon_param = array ( 'g', 's', 'p' );
 
             $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
@@ -231,9 +231,9 @@ function spio ()
 <?php
     foreach ( $Languages as $lang => $langname ) {
         $loca_lang = $lang;        
-        echo "\"".loca("METAL")."\": 'm', ";
-        echo "\"".loca("CRYSTAL")."\": 'k', ";
-        echo "\"".loca("DEUTERIUM")."\": 'd', ";
+        echo "\"".loca("NAME_".GID_RC_METAL)."\": ".GID_RC_METAL.", ";
+        echo "\"".loca("NAME_".GID_RC_CRYSTAL)."\": ".GID_RC_CRYSTAL.", ";
+        echo "\"".loca("NAME_".GID_RC_DEUTERIUM)."\": ".GID_RC_DEUTERIUM.", ";
     }
 
     $loca_lang = $old_lang;
@@ -296,7 +296,7 @@ function reset ()
         echo "<br>".loca("ADM_PLANET_BUILDINGS").": " . nicenum( ($pp['points'] - ($pp['fleet_pts']+$pp['defense_pts']) ) / 1000) ;
         echo "<br>".loca("ADM_PLANET_FLEET").": " . nicenum($pp['fleet_pts'] / 1000) ;
         echo "<br>".loca("ADM_PLANET_DEFENSE").": " . nicenum($pp['defense_pts'] / 1000) ;
-        if ($planet['type'] == PTYP_DF ) echo "<br>М: ".nicenum($planet['m'])."<br>К: ".nicenum($planet['k'])."<br>";
+        if ($planet['type'] == PTYP_DF ) echo "<br>М: ".nicenum($planet[GID_RC_METAL])."<br>К: ".nicenum($planet[GID_RC_CRYSTAL])."<br>";
         echo "</th><th>";
         if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
         {
@@ -313,7 +313,7 @@ function reset ()
                 $debris = GetPlanet ($debris_id);
                 echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$debris['planet_id']."\"><img src=\"".UserSkin()."planeten/debris.jpg\"><br>\n";
                 echo $debris['name'] . "</a>";
-                echo "<br>М: ".nicenum($debris['m'])."<br>К: ".nicenum($debris['k'])."<br>";
+                echo "<br>М: ".nicenum($debris[GID_RC_METAL])."<br>К: ".nicenum($debris[GID_RC_CRYSTAL])."<br>";
             }
             else echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=create_debris&cp=".$planet['planet_id']."\" >".loca("ADM_PLANET_ADD_DF")."</a>\n";
         }
@@ -452,10 +452,10 @@ function reset ()
         echo "<tr><th>".loca("ADM_PLANET_COORD")."</th><th>[<input type=\"text\" name=\"g\" value=\"".$planet['g']."\" size=1 />:<input type=\"text\" name=\"s\" value=\"".$planet['s']."\" size=2 />:<input type=\"text\" name=\"p\" value=\"".$planet['p']."\" size=1 />]</th></tr>\n";
 
         echo "<tr><td class=c colspan=2>".loca("ADM_PLANET_RESOURCES")."</td></tr>\n";
-        echo "<tr><th>".loca("METAL")."</th><th><input id=\"objm\" type=\"text\" name=\"m\" value=\"".ceil($planet['m'])."\" /></th></tr>\n";
-        echo "<tr><th>".loca("CRYSTAL")."</th><th><input id=\"objk\" type=\"text\" name=\"k\" value=\"".ceil($planet['k'])."\" /></th></tr>\n";
-        echo "<tr><th>".loca("DEUTERIUM")."</th><th><input id=\"objd\" type=\"text\" name=\"d\" value=\"".ceil($planet['d'])."\" /></th></tr>\n";
-        echo "<tr><th>".loca("ENERGY")."</th><th>".$planet['e']." / ".$planet['emax']."</th></tr>\n";
+        echo "<tr><th>".loca("NAME_".GID_RC_METAL)."</th><th><input id=\"objm\" type=\"text\" name=\"".GID_RC_METAL."\" value=\"".ceil($planet[GID_RC_METAL])."\" /></th></tr>\n";
+        echo "<tr><th>".loca("NAME_".GID_RC_CRYSTAL)."</th><th><input id=\"objk\" type=\"text\" name=\"".GID_RC_CRYSTAL."\" value=\"".ceil($planet[GID_RC_CRYSTAL])."\" /></th></tr>\n";
+        echo "<tr><th>".loca("NAME_".GID_RC_DEUTERIUM)."</th><th><input id=\"objd\" type=\"text\" name=\"".GID_RC_DEUTERIUM."\" value=\"".ceil($planet[GID_RC_DEUTERIUM])."\" /></th></tr>\n";
+        echo "<tr><th>".loca("NAME_".GID_RC_ENERGY)."</th><th>".$planet['e']." / ".$planet[GID_RC_ENERGY]."</th></tr>\n";
         echo "<tr><th>".loca("ADM_PLANET_FACTOR")."</th><th>".$planet['factor']."</th></tr>\n";
 
         echo "<tr><th colspan=8><input type=\"submit\" value=\"".loca("ADM_PLANET_SAVE")."\" />  <input type=\"submit\" name=\"delete_planet\" value=\"".loca("ADM_PLANET_REMOVE")."\" /> </th></tr>\n";

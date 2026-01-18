@@ -72,13 +72,13 @@ if ( key_exists ( 'buynow', $_GET ) )
                 <table width=600>
 
                 <tr>
-                      <td colspan="3" class="c"><?php echo loca("DM");?></td>
+                      <td colspan="3" class="c"><?php echo loca("NAME_".GID_RC_DM);?></td>
 
                 </tr>
                 <tr>
                     <td class=l><img border='0' src="img/DMaterie.jpg" align='top' width='120' height='120'>
                     </td>
-                    <td class=l><strong><?php echo loca("DM");?></strong><br>
+                    <td class=l><strong><?php echo loca("NAME_".GID_RC_DM);?></strong><br>
                             <?php echo loca("PREM_DM_INFO");?>                         <div style="margin:4px 4px;">
                             <table><tr><td><img src="img/dm_klein_1.jpg" width="32" height="32" style="vertical-align:middle;"></td>
                             <td style='background-color:transparent;'><strong style="color:skyblue; vertical-align:middle;"><?php echo loca("PREM_DM_NOTE");?></strong></td></tr></table>
@@ -116,7 +116,7 @@ if ( key_exists ( 'buynow', $_GET ) )
                                                     <td class=l style="width:90px;text-align:center; vertical-align:middle;">
                                 <a href='index.php?page=micropayment&buynow=1&type=1&days=90&session=<?php echo $session;?>' >
                                 <b><?php echo loca("PREM_3MONTH");?>                              <br><font color=lime><?php echo loca("PREM_TOTAL");?> <?php echo nicenum($price[1]*10);?></font>
-                                <br><?php echo loca("DM");?></b></a>
+                                <br><?php echo loca("NAME_".GID_RC_DM);?></b></a>
 
                             </td>
                             </tr>
@@ -124,7 +124,7 @@ if ( key_exists ( 'buynow', $_GET ) )
                             <td class=l style="width:90px;text-align:center; vertical-align:middle;">
                                 <a href='index.php?page=micropayment&buynow=1&type=1&days=7&session=<?php echo $session;?>' >
                                 <b><?php echo loca("PREM_WEEK");?>                              <br><font color=lime><?php echo nicenum($price[1]);?></font>
-                                <br><?php echo loca("DM");?></b></a>
+                                <br><?php echo loca("NAME_".GID_RC_DM);?></b></a>
 
                             </td>
                         </tr>
@@ -152,7 +152,7 @@ if ( key_exists ( 'buynow', $_GET ) )
                                                 <td class=l style="width:90px;text-align:center; vertical-align:middle;">
                             <a href='index.php?page=micropayment&buynow=1&type=2&days=90&session=<?php echo $session;?>' >
                             <b><?php echo loca("PREM_3MONTH");?>                          <br><font color=lime><?php echo loca("PREM_TOTAL");?> <?php echo nicenum($price[2]*10);?></font>
-                            <br><?php echo loca("DM");?></b></a>
+                            <br><?php echo loca("NAME_".GID_RC_DM);?></b></a>
                         </td>
                     </tr>
 
@@ -160,7 +160,7 @@ if ( key_exists ( 'buynow', $_GET ) )
                         <td class=l style="width:90px;text-align:center; vertical-align:middle;">
                             <a href='index.php?page=micropayment&buynow=1&type=2&days=7&session=<?php echo $session;?>' >
                             <b><?php echo loca("PREM_WEEK");?>                          <br><font color=lime><?php echo nicenum($price[2]);?></font>
-                            <br><?php echo loca("DM");?></b></a>
+                            <br><?php echo loca("NAME_".GID_RC_DM);?></b></a>
                         </td>
                     </tr>
 
@@ -183,7 +183,7 @@ if ( key_exists ( 'buynow', $_GET ) )
                             <a href='index.php?page=micropayment&buynow=1&type=3&days=90&session=<?php echo $session;?>' >
                             <b><?php echo loca("PREM_3MONTH");?>                          <br><font color=lime><?php echo loca("PREM_TOTAL");?> <?php echo nicenum($price[3]*10);?></font>
 
-                            <br><?php echo loca("DM");?></b></a>
+                            <br><?php echo loca("NAME_".GID_RC_DM);?></b></a>
                         </td>
                     </tr>
                     <tr>
@@ -191,7 +191,7 @@ if ( key_exists ( 'buynow', $_GET ) )
                             <a href='index.php?page=micropayment&buynow=1&type=3&days=7&session=<?php echo $session;?>' >
                             <b><?php echo loca("PREM_WEEK");?>                          <br><font color=lime><?php echo nicenum($price[3]);?></font>
 
-                            <br><?php echo loca("DM");?></b></a>
+                            <br><?php echo loca("NAME_".GID_RC_DM);?></b></a>
                         </td>
                     </tr>
                         
@@ -213,7 +213,7 @@ if ( key_exists ( 'buynow', $_GET ) )
                                                 <td class=l style="width:90px;text-align:center; vertical-align:middle;">
                             <a href='index.php?page=micropayment&buynow=1&type=4&days=90&session=<?php echo $session;?>' >
                             <b><?php echo loca("PREM_3MONTH");?>                          <br><font color=lime><?php echo loca("PREM_TOTAL");?> <?php echo nicenum($price[4]*10);?></font>
-                            <br><?php echo loca("DM");?></b></a>
+                            <br><?php echo loca("NAME_".GID_RC_DM);?></b></a>
                         </td>
                     </tr>
 
@@ -221,7 +221,7 @@ if ( key_exists ( 'buynow', $_GET ) )
                         <td class=l style="width:90px;text-align:center; vertical-align:middle;">
                             <a href='index.php?page=micropayment&buynow=1&type=4&days=7&session=<?php echo $session;?>' >
                             <b><?php echo loca("PREM_WEEK");?>                          <br><font color=lime><?php echo nicenum($price[4]);?></font>
-                            <br><?php echo loca("DM");?></b></a>
+                            <br><?php echo loca("NAME_".GID_RC_DM);?></b></a>
                         </td>
                     </tr>
 
@@ -245,7 +245,7 @@ if ( key_exists ( 'buynow', $_GET ) )
                             <a href='index.php?page=micropayment&buynow=1&type=5&days=90&session=<?php echo $session;?>' >
                             <b><?php echo loca("PREM_3MONTH");?>                          <br><font color=lime><?php echo loca("PREM_TOTAL");?> <?php echo nicenum($price[5]*10);?></font>
 
-                            <br><?php echo loca("DM");?></b></a>
+                            <br><?php echo loca("NAME_".GID_RC_DM);?></b></a>
                         </td>
                     </tr>
 
@@ -254,7 +254,7 @@ if ( key_exists ( 'buynow', $_GET ) )
                             <a href='index.php?page=micropayment&buynow=1&type=5&days=7&session=<?php echo $session;?>' >
                             <b><?php echo loca("PREM_WEEK");?>                          <br><font color=lime><?php echo nicenum($price[5]);?></font>
 
-                            <br><?php echo loca("DM");?></b></a>
+                            <br><?php echo loca("NAME_".GID_RC_DM);?></b></a>
                         </td>
                     </tr>
                         

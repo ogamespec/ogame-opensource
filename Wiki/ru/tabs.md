@@ -184,9 +184,9 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |BBB|INT DEFAULT 0|Уровень постройки BBB | 
 |DDD|INT DEFAULT 0|Количество оборонительных сооружений DDD| 
 |FFF|INT DEFAULT 0|Количество флота каждого типа FFF | 
-|m|DOUBLE|Металла | 
-|k|DOUBLE|кристалла | 
-|d|DOUBLE|дейтерия | 
+|700|DOUBLE|Металла | 
+|701|DOUBLE|кристалла | 
+|702|DOUBLE|дейтерия | 
 |mprod|DOUBLE|Процент выработки шахты металла (0...1)| 
 |kprod|DOUBLE|Процент выработки шахты кристалла (0...1)| 
 |dprod|DOUBLE|Процент выработки шахты дейтерия (0...1)| 
@@ -372,7 +372,7 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |fleet_id|INT AUTO_INCREMENT PRIMARY KEY|Порядковый номер флота в таблице | 
 |owner_id|INT|Номер пользователя, которому принадлежит флот | 
 |union_id|INT|Номер союза, в котором летит флот | 
-|m,k,d|DOUBLE,DOUBLE,DOUBLE|Перевозимый груз (металл/кристалл/дейтерий) | 
+|700,701,702|DOUBLE,DOUBLE,DOUBLE|Перевозимый груз (металл/кристалл/дейтерий) | 
 |fuel|INT|Загруженное топливо на полёт (дейтерий) | 
 |mission|INT|Тип задания | 
 |start_planet|INT|Старт | 
@@ -413,12 +413,12 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |owner_id|INT| | 
 |target_id|INT| | 
 |union_id|INT| | 
-|pm|DOUBLE| | 
-|pk|DOUBLE| | 
-|pd|DOUBLE| | 
-|m|DOUBLE| | 
-|k|DOUBLE| | 
-|d|DOUBLE| | 
+|p700|DOUBLE| | 
+|p701|DOUBLE| | 
+|p702|DOUBLE| | 
+|700|DOUBLE| | 
+|701|DOUBLE| | 
+|702|DOUBLE| | 
 |fuel|INT| | 
 |mission|INT| | 
 |flight_time|INT| | 

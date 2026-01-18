@@ -4,11 +4,11 @@
 
 $LOCA["de"]["PAGE_TITLE"] = "Uni#1 OGame";
 
-$LOCA["de"]["METAL"] = "Metall";
-$LOCA["de"]["CRYSTAL"] = "Kristall";
-$LOCA["de"]["DEUTERIUM"] = "Deuterium";
-$LOCA["de"]["ENERGY"] = "Energie";
-$LOCA["de"]["DM"] = "Dunkle Materie";
+$LOCA["de"]["NAME_".GID_RC_METAL] = "Metall";
+$LOCA["de"]["NAME_".GID_RC_CRYSTAL] = "Kristall";
+$LOCA["de"]["NAME_".GID_RC_DEUTERIUM] = "Deuterium";
+$LOCA["de"]["NAME_".GID_RC_ENERGY] = "Energie";
+$LOCA["de"]["NAME_".GID_RC_DM] = "Dunkle Materie";
 
 $LOCA["de"]["PLANET_HOME"] = "Heimatplanet";
 $LOCA["de"]["PLANET_COLONY"] = "Kolonie";

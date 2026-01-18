@@ -14,7 +14,7 @@ function GalaxyToolUpdateGalaxy () : void
     while ($rows--)
     {
         $planet = dbarray ( $result );
-        if ( $planet['type'] == PTYP_DF && (($planet['m'] + $planet['k']) < 300) ) continue;
+        if ( $planet['type'] == PTYP_DF && (($planet[GID_RC_METAL] + $planet[GID_RC_CRYSTAL]) < 300) ) continue;
         $list[ $planet['planet_id'] ] = array ();
         $list[ $planet['planet_id'] ]['g'] = $planet['g'];
         $list[ $planet['planet_id'] ]['s'] = $planet['s'];

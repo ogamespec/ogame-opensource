@@ -150,7 +150,7 @@ $flighttime = FlightTime ( $dist, $slowest_speed, $speed, $unispeed );
 $arr = FlightCons ( $fleet, $dist, $flighttime, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE], $unispeed );
 $cons = $arr['fleet'] + $arr['probes'];
 
-if ( $aktplanet['d'] < $cons ) AjaxSendError (613);        // not enough deut to fly.
+if ( $aktplanet[GID_RC_DEUTERIUM] < $cons ) AjaxSendError (613);        // not enough deut to fly.
 if ( $cargo < $cons ) AjaxSendError (615);        // there's no room in the cargo hold for deuterium.
 
 // Fleet lock

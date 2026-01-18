@@ -13,7 +13,7 @@
 // Launch a rocket with supplies
 
 $depot_cap = 10000 * pow ( 2, $aktplanet[GID_B_ALLY_DEPOT] );
-if ($aktplanet[GID_B_ALLY_DEPOT]) $deut_avail = min(floor($aktplanet['d']), $depot_cap);
+if ($aktplanet[GID_B_ALLY_DEPOT]) $deut_avail = min(floor($aktplanet[GID_RC_DEUTERIUM]), $depot_cap);
 else $deut_avail = 0;
 
 $loaded = $deut_avail;

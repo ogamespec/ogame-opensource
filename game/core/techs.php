@@ -3,7 +3,9 @@
 // This module is a unification of what was previously scattered throughout all parts of the game (id.php, unit.php, prod.php, techtree)
 // Here you will find various definitions of game object properties that can be changed by modifications.
 
-// TODO: Fleet engine "patches" (small cargo, bomber, etc.)
+// TODO: Fleet engine "patches" (small cargo, bomber, etc.), mod-friendly
+
+// TODO: Fleet resource capture priority (mod-friendly plunder algo)
 
 // Game object identifiers used commonly in code.
 
@@ -69,6 +71,12 @@ const GID_D_LDOME = 408;    // Large Shield Dome
 const GID_D_ABM = 502;      // Anti-Ballistic Missiles
 const GID_D_IPM = 503;      // Interplanetary Missiles
 
+const GID_RC_METAL = 700;       // Metal
+const GID_RC_CRYSTAL = 701;     // Crystal
+const GID_RC_DEUTERIUM = 702;   // Deuterium
+const GID_RC_ENERGY = 703;      // Energy
+const GID_RC_DM = 704;          // Dark Matter
+
 function IsBuilding (int $gid) : bool
 {
     global $buildmap;
@@ -101,6 +109,12 @@ function IsDefenseNoRak (int $gid) : bool
     return in_array($gid, $defmap_norak, true);
 }
 
+function IsResource (int $gid) : bool
+{
+    global $resourcemap;
+    return in_array($gid, $resourcemap, true);
+}
+
 // Arrays of objects that are very commonly used elsewhere.
 
 $buildmap = array ( GID_B_METAL_MINE, GID_B_CRYS_MINE, GID_B_DEUT_SYNTH, GID_B_SOLAR, GID_B_FUSION, GID_B_ROBOTS, GID_B_NANITES, GID_B_SHIPYARD, GID_B_METAL_STOR, GID_B_CRYS_STOR, GID_B_DEUT_STOR, GID_B_RES_LAB, GID_B_TERRAFORMER, GID_B_ALLY_DEPOT, GID_B_LUNAR_BASE, GID_B_PHALANX, GID_B_JUMP_GATE, GID_B_MISS_SILO );
@@ -108,76 +122,77 @@ $resmap = array ( GID_R_ESPIONAGE, GID_R_COMPUTER, GID_R_WEAPON, GID_R_SHIELD, G
 $fleetmap = array ( GID_F_SC, GID_F_LC, GID_F_LF, GID_F_HF, GID_F_CRUISER, GID_F_BATTLESHIP, GID_F_COLON, GID_F_RECYCLER, GID_F_PROBE, GID_F_BOMBER, GID_F_SAT, GID_F_DESTRO, GID_F_DEATHSTAR, GID_F_BATTLECRUISER );
 $defmap = array ( GID_D_RL, GID_D_LL, GID_D_HL, GID_D_GAUSS, GID_D_ION, GID_D_PLASMA, GID_D_SDOME, GID_D_LDOME, GID_D_ABM, GID_D_IPM );
 $rakmap = array ( GID_D_ABM, GID_D_IPM );
+$resourcemap = array ( GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM, GID_RC_ENERGY, GID_RC_DM );
 
 // Level 1 cost.
 // Factor in the exponential growth of technology. OGame is a game of exponential.
-$initial = array (      // m, k, d, e, factor
+$initial = array (
     // Buildings
-    GID_B_METAL_MINE => array (60, 15, 0, 0, 1.5),
-    GID_B_CRYS_MINE => array (48, 24, 0, 0, 1.6),
-    GID_B_DEUT_SYNTH => array (225, 75, 0, 0, 1.5),
-    GID_B_SOLAR => array (75, 30, 0, 0, 1.5),
-    GID_B_FUSION => array (900, 360, 180, 0, 1.8),
-    GID_B_ROBOTS => array (400, 120, 200, 0, 2),
-    GID_B_NANITES => array (1000000, 500000, 100000, 0, 2),
-    GID_B_SHIPYARD => array (400, 200, 100, 0, 2),
-    GID_B_METAL_STOR => array (2000, 0, 0, 0, 2),
-    GID_B_CRYS_STOR => array (2000, 1000, 0, 0, 2),
-    GID_B_DEUT_STOR => array (2000, 2000, 0, 0, 2),
-    GID_B_RES_LAB => array (200, 400, 200, 0, 2),
-    GID_B_TERRAFORMER => array (0, 50000, 100000, 1000, 2),
-    GID_B_ALLY_DEPOT => array (20000, 40000,  0, 0, 2),
-    GID_B_MISS_SILO => array (20000, 20000, 1000, 0, 2),
+    GID_B_METAL_MINE => array (GID_RC_METAL=>60, GID_RC_CRYSTAL=>15, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>1.5),
+    GID_B_CRYS_MINE => array (GID_RC_METAL=>48, GID_RC_CRYSTAL=>24, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>1.6),
+    GID_B_DEUT_SYNTH => array (GID_RC_METAL=>225, GID_RC_CRYSTAL=>75, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>1.5),
+    GID_B_SOLAR => array (GID_RC_METAL=>75, GID_RC_CRYSTAL=>30, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>1.5),
+    GID_B_FUSION => array (GID_RC_METAL=>900, GID_RC_CRYSTAL=>360, GID_RC_DEUTERIUM=>180, GID_RC_ENERGY=>0, 'factor'=>1.8),
+    GID_B_ROBOTS => array (GID_RC_METAL=>400, GID_RC_CRYSTAL=>120, GID_RC_DEUTERIUM=>200, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_B_NANITES => array (GID_RC_METAL=>1000000, GID_RC_CRYSTAL=>500000, GID_RC_DEUTERIUM=>100000, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_B_SHIPYARD => array (GID_RC_METAL=>400, GID_RC_CRYSTAL=>200, GID_RC_DEUTERIUM=>100, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_B_METAL_STOR => array (GID_RC_METAL=>2000, GID_RC_CRYSTAL=>0, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_B_CRYS_STOR => array (GID_RC_METAL=>2000, GID_RC_CRYSTAL=>1000, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_B_DEUT_STOR => array (GID_RC_METAL=>2000, GID_RC_CRYSTAL=>2000, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_B_RES_LAB => array (GID_RC_METAL=>200, GID_RC_CRYSTAL=>400, GID_RC_DEUTERIUM=>200, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_B_TERRAFORMER => array (GID_RC_METAL=>0, GID_RC_CRYSTAL=>50000, GID_RC_DEUTERIUM=>100000, GID_RC_ENERGY=>1000, 'factor'=>2),
+    GID_B_ALLY_DEPOT => array (GID_RC_METAL=>20000, GID_RC_CRYSTAL=>40000, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_B_MISS_SILO => array (GID_RC_METAL=>20000, GID_RC_CRYSTAL=>20000, GID_RC_DEUTERIUM=>1000, GID_RC_ENERGY=>0, 'factor'=>2),
     // Moon
-    GID_B_LUNAR_BASE => array (20000, 40000, 20000, 0, 2),
-    GID_B_PHALANX => array (20000, 40000, 20000, 0, 2),
-    GID_B_JUMP_GATE => array (2000000, 4000000, 2000000, 0, 2),
+    GID_B_LUNAR_BASE => array (GID_RC_METAL=>20000, GID_RC_CRYSTAL=>40000, GID_RC_DEUTERIUM=>20000, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_B_PHALANX => array (GID_RC_METAL=>20000, GID_RC_CRYSTAL=>40000, GID_RC_DEUTERIUM=>20000, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_B_JUMP_GATE => array (GID_RC_METAL=>2000000, GID_RC_CRYSTAL=>4000000, GID_RC_DEUTERIUM=>2000000, GID_RC_ENERGY=>0, 'factor'=>2),
 
     // Fleet
-    GID_F_SC => array (2000, 2000, 0, 0, 0),
-    GID_F_LC => array (6000, 6000, 0, 0, 0),
-    GID_F_LF => array (3000, 1000, 0, 0, 0),
-    GID_F_HF => array (6000, 4000, 0, 0, 0),
-    GID_F_CRUISER => array (20000, 7000, 2000, 0, 0),
-    GID_F_BATTLESHIP => array (45000, 15000, 0, 0, 0),
-    GID_F_COLON => array (10000, 20000, 10000, 0, 0),
-    GID_F_RECYCLER => array (10000, 6000, 2000, 0, 0),
-    GID_F_PROBE => array (0, 1000, 0, 0, 0),
-    GID_F_BOMBER => array (50000, 25000, 15000, 0, 0),
-    GID_F_SAT => array (0, 2000, 500, 0, 0),
-    GID_F_DESTRO => array (60000, 50000, 15000, 0, 0),
-    GID_F_DEATHSTAR => array (5000000, 4000000, 1000000, 0, 0),
-    GID_F_BATTLECRUISER => array (30000, 40000, 15000, 0, 0),
+    GID_F_SC => array (GID_RC_METAL=>2000, GID_RC_CRYSTAL=>2000, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_F_LC => array (GID_RC_METAL=>6000, GID_RC_CRYSTAL=>6000, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_F_LF => array (GID_RC_METAL=>3000, GID_RC_CRYSTAL=>1000, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_F_HF => array (GID_RC_METAL=>6000, GID_RC_CRYSTAL=>4000, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_F_CRUISER => array (GID_RC_METAL=>20000, GID_RC_CRYSTAL=>7000, GID_RC_DEUTERIUM=>2000, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_F_BATTLESHIP => array (GID_RC_METAL=>45000, GID_RC_CRYSTAL=>15000, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_F_COLON => array (GID_RC_METAL=>10000, GID_RC_CRYSTAL=>20000, GID_RC_DEUTERIUM=>10000, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_F_RECYCLER => array (GID_RC_METAL=>10000, GID_RC_CRYSTAL=>6000, GID_RC_DEUTERIUM=>2000, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_F_PROBE => array (GID_RC_METAL=>0, GID_RC_CRYSTAL=>1000, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_F_BOMBER => array (GID_RC_METAL=>50000, GID_RC_CRYSTAL=>25000, GID_RC_DEUTERIUM=>15000, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_F_SAT => array (GID_RC_METAL=>0, GID_RC_CRYSTAL=>2000, GID_RC_DEUTERIUM=>500, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_F_DESTRO => array (GID_RC_METAL=>60000, GID_RC_CRYSTAL=>50000, GID_RC_DEUTERIUM=>15000, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_F_DEATHSTAR => array (GID_RC_METAL=>5000000, GID_RC_CRYSTAL=>4000000, GID_RC_DEUTERIUM=>1000000, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_F_BATTLECRUISER => array (GID_RC_METAL=>30000, GID_RC_CRYSTAL=>40000, GID_RC_DEUTERIUM=>15000, GID_RC_ENERGY=>0, 'factor'=>0),
 
     // Defense
-    GID_D_RL => array (2000, 0, 0, 0, 0),
-    GID_D_LL => array (1500, 500, 0, 0, 0),
-    GID_D_HL => array (6000, 2000, 0, 0, 0),
-    GID_D_GAUSS => array (20000, 15000, 2000, 0, 0),
-    GID_D_ION => array (2000, 6000, 0, 0, 0),
-    GID_D_PLASMA => array (50000, 50000, 30000, 0, 0),
-    GID_D_SDOME => array (10000, 10000, 0, 0, 0),
-    GID_D_LDOME => array (50000, 50000, 0, 0, 0),
-    GID_D_ABM => array (8000, 0, 2000, 0, 0),
-    GID_D_IPM => array (12500, 2500, 10000, 0, 0),
+    GID_D_RL => array (GID_RC_METAL=>2000, GID_RC_CRYSTAL=>0, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_D_LL => array (GID_RC_METAL=>1500, GID_RC_CRYSTAL=>500, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_D_HL => array (GID_RC_METAL=>6000, GID_RC_CRYSTAL=>2000, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_D_GAUSS => array (GID_RC_METAL=>20000, GID_RC_CRYSTAL=>15000, GID_RC_DEUTERIUM=>2000, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_D_ION => array (GID_RC_METAL=>2000, GID_RC_CRYSTAL=>6000, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_D_PLASMA => array (GID_RC_METAL=>50000, GID_RC_CRYSTAL=>50000, GID_RC_DEUTERIUM=>30000, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_D_SDOME => array (GID_RC_METAL=>10000, GID_RC_CRYSTAL=>10000, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_D_LDOME => array (GID_RC_METAL=>50000, GID_RC_CRYSTAL=>50000, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_D_ABM => array (GID_RC_METAL=>8000, GID_RC_CRYSTAL=>0, GID_RC_DEUTERIUM=>2000, GID_RC_ENERGY=>0, 'factor'=>0),
+    GID_D_IPM => array (GID_RC_METAL=>12500, GID_RC_CRYSTAL=>2500, GID_RC_DEUTERIUM=>10000, GID_RC_ENERGY=>0, 'factor'=>0),
 
     // Research
-    GID_R_ESPIONAGE => array (200, 1000, 200, 0, 2),
-    GID_R_COMPUTER => array (0, 400, 600, 0, 2),
-    GID_R_WEAPON => array (800, 200, 0, 0, 2),
-    GID_R_SHIELD => array (200, 600, 0, 0, 2),
-    GID_R_ARMOUR => array (1000, 0, 0, 0, 2),
-    GID_R_ENERGY => array (0, 800, 400, 0, 2),
-    GID_R_HYPERSPACE => array (0, 4000, 2000, 0, 2),
-    GID_R_COMBUST_DRIVE => array (400, 0, 600, 0, 2),
-    GID_R_IMPULSE_DRIVE => array (2000, 4000, 600, 0, 2),
-    GID_R_HYPER_DRIVE => array (10000, 20000, 6000, 0, 2),
-    GID_R_LASER_TECH => array (200, 100, 0, 0, 2),
-    GID_R_ION_TECH => array (1000, 300, 100, 0, 2),
-    GID_R_PLASMA_TECH => array (2000, 4000, 1000, 0, 2),
-    GID_R_IGN => array (240000, 400000, 160000, 0, 2),
-    GID_R_EXPEDITION => array (4000, 8000, 4000, 0, 2),
-    GID_R_GRAVITON => array (0, 0, 0, 300000, 3),
+    GID_R_ESPIONAGE => array (GID_RC_METAL=>200, GID_RC_CRYSTAL=>1000, GID_RC_DEUTERIUM=>200, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_COMPUTER => array (GID_RC_METAL=>0, GID_RC_CRYSTAL=>400, GID_RC_DEUTERIUM=>600, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_WEAPON => array (GID_RC_METAL=>800, GID_RC_CRYSTAL=>200, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_SHIELD => array (GID_RC_METAL=>200, GID_RC_CRYSTAL=>600, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_ARMOUR => array (GID_RC_METAL=>1000, GID_RC_CRYSTAL=>0, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_ENERGY => array (GID_RC_METAL=>0, GID_RC_CRYSTAL=>800, GID_RC_DEUTERIUM=>400, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_HYPERSPACE => array (GID_RC_METAL=>0, GID_RC_CRYSTAL=>4000, GID_RC_DEUTERIUM=>2000, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_COMBUST_DRIVE => array (GID_RC_METAL=>400, GID_RC_CRYSTAL=>0, GID_RC_DEUTERIUM=>600, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_IMPULSE_DRIVE => array (GID_RC_METAL=>2000, GID_RC_CRYSTAL=>4000, GID_RC_DEUTERIUM=>600, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_HYPER_DRIVE => array (GID_RC_METAL=>10000, GID_RC_CRYSTAL=>20000, GID_RC_DEUTERIUM=>6000, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_LASER_TECH => array (GID_RC_METAL=>200, GID_RC_CRYSTAL=>100, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_ION_TECH => array (GID_RC_METAL=>1000, GID_RC_CRYSTAL=>300, GID_RC_DEUTERIUM=>100, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_PLASMA_TECH => array (GID_RC_METAL=>2000, GID_RC_CRYSTAL=>4000, GID_RC_DEUTERIUM=>1000, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_IGN => array (GID_RC_METAL=>240000, GID_RC_CRYSTAL=>400000, GID_RC_DEUTERIUM=>160000, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_EXPEDITION => array (GID_RC_METAL=>4000, GID_RC_CRYSTAL=>8000, GID_RC_DEUTERIUM=>4000, GID_RC_ENERGY=>0, 'factor'=>2),
+    GID_R_GRAVITON => array (GID_RC_METAL=>0, GID_RC_CRYSTAL=>0, GID_RC_DEUTERIUM=>0, GID_RC_ENERGY=>300000, 'factor'=>3),
 );
 
 

@@ -62,9 +62,9 @@ if ( !key_exists('resource1', $_POST) ) $_POST['resource1'] = 0;
 if ( !key_exists('resource2', $_POST) ) $_POST['resource2'] = 0;
 if ( !key_exists('resource3', $_POST) ) $_POST['resource3'] = 0;
 
-$resource1 = min ( intval($aktplanet['m']), abs(intval($_POST['resource1'])) );
-$resource2 = min ( intval($aktplanet['k']), abs(intval($_POST['resource2'])) );
-$resource3 = min ( intval($aktplanet['d']), abs(intval($_POST['resource3'])) );
+$resource1 = min ( intval($aktplanet[GID_RC_METAL]), abs(intval($_POST['resource1'])) );
+$resource2 = min ( intval($aktplanet[GID_RC_CRYSTAL]), abs(intval($_POST['resource2'])) );
+$resource3 = min ( intval($aktplanet[GID_RC_DEUTERIUM]), abs(intval($_POST['resource3'])) );
 
 foreach ($fleetmap as $i=>$gid)
 {
@@ -105,17 +105,21 @@ if (
 }
 
 $origin_user = LoadUser ( $origin['owner_id'] );
-$target_user = LoadUser ( $target['owner_id'] );
 
-if ( $origin_user['vacation'] ) FleetError ( loca("FLEET_ERR_VACATION_SELF") );
-if ( $target_user['vacation'] && $order != FTYP_RECYCLE ) FleetError ( loca("FLEET_ERR_VACATION_OTHER") );
-if ( $nowfleet >= $maxfleet ) FleetError ( loca("FLEET_ERR_MAX_FLEET") );
+if ($target != null) {
 
-// DO NOT check fleet dispatch between players with the same IP only if BOTH have IP checking disabled in the settings.
-// OR if the sent is on localhost (local web server for debugging)
-if ( ! ($origin_user['deact_ip'] && $target_user['deact_ip']) && !localhost($origin_user['ip_addr']) )
-{
-    if ( $origin_user['ip_addr'] === $target_user['ip_addr'] && $origin_user['player_id'] != $target_user['player_id'] ) FleetError ( loca("FLEET_ERR_IP") );
+    $target_user = LoadUser ( $target['owner_id'] );
+
+    if ( $origin_user['vacation'] ) FleetError ( loca("FLEET_ERR_VACATION_SELF") );
+    if ( $target_user['vacation'] && $order != FTYP_RECYCLE ) FleetError ( loca("FLEET_ERR_VACATION_OTHER") );
+    if ( $nowfleet >= $maxfleet ) FleetError ( loca("FLEET_ERR_MAX_FLEET") );
+
+    // DO NOT check fleet dispatch between players with the same IP only if BOTH have IP checking disabled in the settings.
+    // OR if the sent is on localhost (local web server for debugging)
+    if ( ! ($origin_user['deact_ip'] && $target_user['deact_ip']) && !localhost($origin_user['ip_addr']) )
+    {
+        if ( $origin_user['ip_addr'] === $target_user['ip_addr'] && $origin_user['player_id'] != $target_user['player_id'] ) FleetError ( loca("FLEET_ERR_IP") );
+    }
 }
 
 // Hold time
@@ -155,7 +159,7 @@ foreach ($fleet as $id=>$amount)
 
 $space = ( ($cargo + $spycargo) - ($cons['fleet'] + $cons['probes']) ) - ($spycargo - $cons['probes']);
 
-if ( $origin['d'] < ($cons['fleet'] + $cons['probes']) ) FleetError ( loca("FLEET_ERR_FUEL") );
+if ( $origin[GID_RC_DEUTERIUM] < ($cons['fleet'] + $cons['probes']) ) FleetError ( loca("FLEET_ERR_FUEL") );
 else if ( $space < 0 ) FleetError ( loca("FLEET_ERR_CARGO") );
 
 // Limit transported resources to fleet payload capacity and flight costs.

@@ -85,7 +85,7 @@ class SpaceStorm extends GameMod {
 
         // Add a new building to the game
         $buildmap[] = GID_B_REALITY_STAB;
-        $initial[GID_B_REALITY_STAB] = array (50000, 125000, 50000, 0, 3.0);
+        $initial[GID_B_REALITY_STAB] = array (GID_RC_METAL=>50000, GID_RC_CRYSTAL=>125000, GID_RC_DEUTERIUM=>50000, GID_RC_ENERGY=>0, 'factor'=>3);
         $requirements[GID_B_REALITY_STAB] = array (GID_B_RES_LAB=>3, GID_B_TERRAFORMER=>1);
         $CanBuildTab[PTYP_PLANET][] = GID_B_REALITY_STAB;
 

@@ -184,9 +184,9 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |BBB|INT DEFAULT 0|Building level BBB | 
 |DDD|INT DEFAULT 0|Number of defenses DDD| 
 |FFF|INT DEFAULT 0|Number of fleets of each type FFF | 
-|m|DOUBLE|Metal | 
-|k|DOUBLE|crystal | 
-|d|DOUBLE|deuterium | 
+|700|DOUBLE|Metal | 
+|701|DOUBLE|crystal | 
+|702|DOUBLE|deuterium | 
 |mprod|DOUBLE|Percentage of metal mine production (0...1)| 
 |kprod|DOUBLE|Percentage of crystal mine production (0...1)| 
 |dprod|DOUBLE|Percentage of deuterium mine production (0...1)| 
@@ -371,7 +371,7 @@ Message types (pm):
 |fleet_id|INT AUTO_INCREMENT PRIMARY KEY|Order number of the fleet in the table | 
 |owner_id|INT|Owner's ID of the user to whom the fleet belongs | 
 |union_id|INT|The number of the alliance in which the fleet is flying | 
-|m,k,d|DOUBLE,DOUBLE,DOUBLE|Cargo to be transported (metal/crystal/deuterium) | 
+|700,701,702|DOUBLE,DOUBLE,DOUBLE|Cargo to be transported (metal/crystal/deuterium) | 
 |fuel|INT|Loaded fuel for flight (deuterium) | 
 |mission|INT|Fleet task type | 
 |start_planet|INT|Start | 
@@ -412,12 +412,12 @@ Message types (pm):
 |owner_id|INT| | 
 |target_id|INT| | 
 |union_id|INT| | 
-|pm|DOUBLE| | 
-|pk|DOUBLE| | 
-|pd|DOUBLE| | 
-|m|DOUBLE| | 
-|k|DOUBLE| | 
-|d|DOUBLE| | 
+|p700|DOUBLE| | 
+|p701|DOUBLE| | 
+|p702|DOUBLE| | 
+|700|DOUBLE| | 
+|701|DOUBLE| | 
+|702|DOUBLE| | 
 |fuel|INT| | 
 |mission|INT| | 
 |flight_time|INT| | 

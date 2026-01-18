@@ -21,14 +21,6 @@ function isValidEmail($email){
 	return filter_var($email, FILTER_VALIDATE_EMAIL);
 }
 
-function gen_trivial_password ($len = 8)
-{
-    $r = '';
-    for($i=0; $i<$len; $i++)
-        $r .= chr(rand(0, 25) + ord('a'));
-    return $r;
-}
-
 InitDB();
 
 $uni = LoadUniverse ();

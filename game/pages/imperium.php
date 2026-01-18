@@ -161,7 +161,7 @@ $speed = $GlobalUni['speed'];
 <!-- ## -->
  
         <tr height="20">
-            <th width="75"><?php echo loca("METAL");?></th>
+            <th width="75"><?php echo loca("NAME_".GID_RC_METAL);?></th>
 
 <?php
     $total = 0;
@@ -169,7 +169,7 @@ $speed = $GlobalUni['speed'];
     foreach ( $plist as $i=>$planet )
     {
         $res_hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['mprod']) * $planet['factor'] * $speed + 20*$speed;
-        $res = floor ( $planet['m'] );
+        $res = floor ( $planet[GID_RC_METAL] );
         $total += $res;
         $avg_prod += $res_hourly;
         echo "             <th width=\"75\" >\n";
@@ -187,7 +187,7 @@ $speed = $GlobalUni['speed'];
 
  
         <tr height="20">
-            <th width="75"><?php echo loca("CRYSTAL");?></th>
+            <th width="75"><?php echo loca("NAME_".GID_RC_CRYSTAL);?></th>
  
 <?php 
     $total = 0;
@@ -195,7 +195,7 @@ $speed = $GlobalUni['speed'];
     foreach ( $plist as $i=>$planet )
     {
         $res_hourly = prod_crys ($planet[GID_B_CRYS_MINE], $planet['kprod']) * $planet['factor'] * $speed + 10*$speed;
-        $res = floor ( $planet['k'] );
+        $res = floor ( $planet[GID_RC_CRYSTAL] );
         $total += $res;
         $avg_prod += $res_hourly;
         echo "             <th width=\"75\" >\n";
@@ -213,7 +213,7 @@ $speed = $GlobalUni['speed'];
         </tr>
  
         <tr height="20">
-            <th width="75"><?php echo loca("DEUTERIUM");?></th>
+            <th width="75"><?php echo loca("NAME_".GID_RC_DEUTERIUM);?></th>
 
 <?php 
     $total = 0;
@@ -221,7 +221,7 @@ $speed = $GlobalUni['speed'];
     foreach ( $plist as $i=>$planet )
     {
         $res_hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed - cons_fusion ( $planet[GID_B_FUSION], $planet['fprod'] ) * $speed;
-        $res = floor ( $planet['d'] );
+        $res = floor ( $planet[GID_RC_DEUTERIUM] );
         $total += $res;
         $avg_prod += $res_hourly;
         echo "             <th width=\"75\" >\n";
@@ -243,7 +243,7 @@ $speed = $GlobalUni['speed'];
 <!-- ## Resources-Energy -->
 <!-- ## -->
         <tr height="20">
-            <th width="75"><?php echo loca("ENERGY");?></th>
+            <th width="75"><?php echo loca("NAME_".GID_RC_ENERGY);?></th>
 
 <?php
     $sum_e = 0;
@@ -251,13 +251,13 @@ $speed = $GlobalUni['speed'];
     foreach ( $plist as $i=>$planet )
     {
         $sum_e += $planet['e'];
-        $sum_emax += $planet['emax'];
+        $sum_emax += $planet[GID_RC_ENERGY];
         echo "            <th width=\"75\" >\n";
         if ($planet['e'] < 0) echo "                <font color=\"red\">\n";
         echo "                    ".nicenum($planet['e'])." \n";
         if ($planet['e'] < 0) echo "                </font>\n";
         echo "                / \n";
-        echo "                ".nicenum($planet['emax'])."           </th>\n";
+        echo "                ".nicenum($planet[GID_RC_ENERGY])."           </th>\n";
     }
 ?>
 
@@ -413,10 +413,10 @@ $speed = $GlobalUni['speed'];
             if ($amount > 0)
             {
                 $cost = ShipyardPrice ( $fleet );
-                $m = $cost['m'];
-                $k = $cost['k'];
-                $d = $cost['d'];
-                $e = $cost['e'];
+                $m = $cost[GID_RC_METAL];
+                $k = $cost[GID_RC_CRYSTAL];
+                $d = $cost[GID_RC_DEUTERIUM];
+                $e = $cost[GID_RC_ENERGY];
                 $meet = IsEnoughResources ( $planet, $m, $k, $d, $e );
                 $color = $meet ? "lime" : "red";
 
@@ -466,10 +466,10 @@ $speed = $GlobalUni['speed'];
             if ($amount > 0)
             {
                 $cost = ShipyardPrice ( $def );
-                $m = $cost['m'];
-                $k = $cost['k'];
-                $d = $cost['d'];
-                $e = $cost['e'];
+                $m = $cost[GID_RC_METAL];
+                $k = $cost[GID_RC_CRYSTAL];
+                $d = $cost[GID_RC_DEUTERIUM];
+                $e = $cost[GID_RC_ENERGY];
                 $meet = IsEnoughResources ( $planet, $m, $k, $d, $e );
                 $color = $meet ? "lime" : "red";
 

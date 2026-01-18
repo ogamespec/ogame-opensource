@@ -94,7 +94,7 @@ function ExpPoints ( array $fleet ) : int
     {
         $amount = $fleet[$gid];
         $res = ShipyardPrice ( $gid );
-        $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
+        $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
         $structure += ($m + $k) * $amount;
     }
 
@@ -143,7 +143,9 @@ function Exp_NothingHappens (array $exptab, array $queue, array $fleet_obj, arra
 
     // Bring back the fleet.
     // The hold time is used as the flight time.
-    DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end']);
+    DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'],
+        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        0, $queue['end']);
 
     $n = mt_rand ( 0, count($msg) - 1 );
     return $msg[$n];
@@ -326,7 +328,7 @@ function Exp_DarkMatterFound (array $exptab, array $queue, array $fleet_obj, arr
     if ($dm_factor == 0) $dm_factor = 1;
     $dm *= $dm_factor;
 
-    $msg .= va ( loca_lang("EXP_FOUND", $lang), nicenum($dm), loca_lang("DM", $lang) );
+    $msg .= va ( loca_lang("EXP_FOUND", $lang), nicenum($dm), loca_lang("NAME_".GID_RC_DM, $lang) );
 
     // Credit DM
     $query = "UPDATE ".$db_prefix."users SET dmfree = dmfree + ".$dm." WHERE player_id=$player_id;";
@@ -334,7 +336,9 @@ function Exp_DarkMatterFound (array $exptab, array $queue, array $fleet_obj, arr
 
     // Bring back the fleet.
     // The hold time is used as the flight time.
-    DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end']);
+    DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'],
+        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        0, $queue['end']);
 
     return $msg;
 }
@@ -386,7 +390,9 @@ function Exp_DelayFleet (array $exptab, array $queue, array $fleet_obj, array $f
 
     // Bring back the fleet.
     // The hold time is used as the flight time.
-    DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'] + $delay, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end']);
+    DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'] + $delay,
+        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        0, $queue['end']);
 
     $n = mt_rand ( 0, count($msg) - 1 );
     return $msg[$n];
@@ -408,7 +414,9 @@ function Exp_AccelFleet (array $exptab, array $queue, array $fleet_obj, array $f
 
     // Bring back the fleet.
     // The hold time is used as the flight time.
-    DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'] / $ratio, $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end']);
+    DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'] / $ratio,
+        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        0, $queue['end']);
 
     $n = mt_rand ( 0, count($msg) - 1 );
     return $msg[$n];
@@ -440,7 +448,7 @@ function Exp_ResourcesFound (array $exptab, array $queue, array $fleet_obj, arra
         loca_lang ("EXP_RESFOUND_LOGBOOK_3", $lang),
         loca_lang ("EXP_RESFOUND_LOGBOOK_4", $lang),
     );
-    $resname = array ( loca_lang ("METAL", $lang), loca_lang ("CRYSTAL", $lang), loca_lang ("DEUTERIUM", $lang) );
+    $resname = array ( loca_lang ("NAME_".GID_RC_METAL, $lang), loca_lang ("NAME_".GID_RC_CRYSTAL, $lang), loca_lang ("NAME_".GID_RC_DEUTERIUM, $lang) );
 
     // Calculate the type of resource found
     $type = mt_rand (0, 2);
@@ -468,7 +476,7 @@ function Exp_ResourcesFound (array $exptab, array $queue, array $fleet_obj, arra
 
     // Calculate the quantity of the resource found
     $points = min ( max ( 200, ExpPoints ($fleet)), ExpUpperLimit($exptab) );
-    $cargo = max (0, FleetCargoSummary ($fleet) - ($fleet_obj['m'] + $fleet_obj['k'] + $fleet_obj['d']));
+    $cargo = max (0, FleetCargoSummary ($fleet) - ($fleet_obj[GID_RC_METAL] + $fleet_obj[GID_RC_CRYSTAL] + $fleet_obj[GID_RC_DEUTERIUM]));
     $amount = $roll * $points;
 
     // The number of resources found is reduced to the total carrying capacity of the fleet
@@ -491,7 +499,9 @@ function Exp_ResourcesFound (array $exptab, array $queue, array $fleet_obj, arra
 
     // Bring back the fleet.
     // The hold time is used as the flight time.
-    DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'], $fleet_obj['m'] + $m, $fleet_obj['k'] + $k, $fleet_obj['d'] + $d, 0, $queue['end']);
+    DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'], 
+        $fleet_obj[GID_RC_METAL] + $m, $fleet_obj[GID_RC_CRYSTAL] + $k, $fleet_obj[GID_RC_DEUTERIUM] + $d,
+        0, $queue['end']);
 
     return $msg;
 }
@@ -594,7 +604,7 @@ function Exp_FleetFound (array $exptab, array $queue, array $fleet_obj, array $f
         foreach ( $found_fleet as $id=>$amount)
         {
             $res = ShipyardPrice ( $id );
-            $m = $res['m']; $k = $res['k']; $d = $res['d']; $e = $res['e'];
+            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
             $points += ($m + $k + $d) * $amount;
             $fpoints += $amount;
             $msg .= "<br>" . loca_lang ("NAME_$id", $lang) . " " . nicenum ($amount);
@@ -615,7 +625,9 @@ function Exp_FleetFound (array $exptab, array $queue, array $fleet_obj, array $f
 
     // Bring back the fleet.
     // The hold time is used as the flight time.
-    DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end']);
+    DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'],
+        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        0, $queue['end']);
 
     return $msg;
 }
@@ -694,7 +706,9 @@ function Exp_TraderFound (array $exptab, array $queue, array $fleet_obj, array $
 
     // Bring back the fleet.
     // The hold time is used as the flight time.
-    DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end']);
+    DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'],
+        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        0, $queue['end']);
 
     $n = mt_rand ( 0, count($msg) - 1 );
     return $msg[$n];
@@ -706,7 +720,9 @@ function ExpeditionArrive (array $queue, array $fleet_obj, array $fleet, array $
 {
     // Start an orbit hold task.
     // Make the hold time a flight time (so that it can be used when returning the fleet)
-    DispatchFleet ($fleet, $origin, $target, (FTYP_ORBITING+FTYP_EXPEDITION), $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], 0, $queue['end'], 0, $fleet_obj['flight_time']);
+    DispatchFleet ($fleet, $origin, $target, (FTYP_ORBITING+FTYP_EXPEDITION), $fleet_obj['deploy_time'],
+        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        0, $queue['end'], 0, $fleet_obj['flight_time']);
 }
 
 // Algorithmic part of the expedition
@@ -751,7 +767,7 @@ function ExpeditionHold (array $queue, array $fleet_obj, array $fleet, array $or
     loca_add ( "fleetmsg", $origin_user['lang'] );
 
     // Expedition Event.
-    $expcount = $target['m'];    // visit counter
+    $expcount = $target[GID_RC_METAL];    // visit counter
     $exp_res = Expedition ($expcount, $exptab, $hold_time);
 
     switch ($exp_res)

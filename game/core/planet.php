@@ -26,7 +26,7 @@ date: Creation date (INT UNSIGNED time)
 BBB: Building level of each type (INT DEFAULT 0)
 DDD: Number of defenses of each type (INT DEFAULT 0)
 FFF: Number of fleet of each type (INT DEFAULT 0)
-m, k, d: Metal, crystal, deuterium (DOUBLE)
+`700`, `701`, `702`: Metal, crystal, deuterium (DOUBLE)
 mprod, kprod, dprod: Percentage of mine production of metal, crystal, deuterium ( 0...1 DOUBLE)
 sprod, fprod, ssprod: Percentage of output of solar power plant, fusion and solar satellites ( 0...1 DOUBLE)
 lastpeek: Time of last planet state update (INT UNSIGNED time)
@@ -121,8 +121,10 @@ function CreatePlanet ( int $g, int $s, int $p, int $owner_id, int $colony=1, in
     // Add planet
     if ( $when == 0 ) $now = time();
     else $now = $when;
-    $planet = array( 'name' => $name, 'type' => $type, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => $owner_id, 'diameter' => $diam, 'temp' => $temp, 'fields' => 0, 'maxfields' => $fields, 'date' => $now,
-                     'm' => $initial_met, 'k' => $initial_crys, 'd' => 0, 'mprod' => 1, 'kprod' => 1, 'dprod' => 1, 'sprod' => 1, 'fprod' => 1, 'ssprod' => 1, 'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
+    $planet = array(
+        'name' => $name, 'type' => $type, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => $owner_id, 'diameter' => $diam, 'temp' => $temp, 'fields' => 0, 'maxfields' => $fields, 'date' => $now,
+        GID_RC_METAL => $initial_met, GID_RC_CRYSTAL => $initial_crys, GID_RC_DEUTERIUM => 0,
+        'mprod' => 1, 'kprod' => 1, 'dprod' => 1, 'sprod' => 1, 'fprod' => 1, 'ssprod' => 1, 'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
     $id = AddDBRow ( $planet, "planets" );
 
     return $id;
@@ -176,7 +178,7 @@ function GetPlanet ( int $planet_id) : array|null
     $planet['mmax'] = store_capacity ( $planet[GID_B_METAL_STOR] );
     $planet['kmax'] = store_capacity ( $planet[GID_B_CRYS_STOR] );
     $planet['dmax'] = store_capacity ( $planet[GID_B_DEUT_STOR] );
-    $planet['emax'] = prod_solar($planet[GID_B_SOLAR], $planet['sprod']) * $e_factor  + 
+    $planet[GID_RC_ENERGY] = prod_solar($planet[GID_B_SOLAR], $planet['sprod']) * $e_factor  + 
                     prod_fusion($planet[GID_B_FUSION], $user[GID_R_ENERGY], $planet['fprod']) * $e_factor  + 
                     prod_sat($planet['temp']+40) * $planet[GID_F_SAT] * $planet['ssprod'] * $e_factor ;
 
@@ -184,7 +186,7 @@ function GetPlanet ( int $planet_id) : array|null
                         cons_crys ($planet[GID_B_CRYS_MINE]) * $planet['kprod'] + 
                         cons_deut ($planet[GID_B_DEUT_SYNTH]) * $planet['dprod'] );
 
-    $planet['e'] = floor ( $planet['emax'] - $planet['econs'] );
+    $planet['e'] = floor ( $planet[GID_RC_ENERGY] - $planet['econs'] );
     $planet['factor'] = 1;
     if ( $planet['e'] < 0 ) $planet['factor'] = max (0, 1 - abs ($planet['e']) / $planet['econs']);
     return $planet;
@@ -309,8 +311,10 @@ function CreateDebris (int $g, int $s, int $p, int $owner_id) : int
     $debris_id = HasDebris ($g, $s, $p);
     if ($debris_id > 0 ) return $debris_id;
     $now = time();
-    $planet = array ( 'name' => loca("DEBRIS"), 'type' => PTYP_DF, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => $owner_id, 'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => $now,
-                      'm' => 0, 'k' => 0, 'd' => 0, 'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
+    $planet = array (
+        'name' => loca("DEBRIS"), 'type' => PTYP_DF, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => $owner_id, 'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => $now,
+        GID_RC_METAL => 0, GID_RC_CRYSTAL => 0, GID_RC_DEUTERIUM => 0,
+        'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
     $id = AddDBRow ( $planet, 'planets' );
     return $id;
 }
@@ -322,8 +326,8 @@ function HarvestDebris (int $planet_id, int $cargo, int $when) : array
     $harvest = array ();
     $debris = GetPlanet ($planet_id);
 
-    $dm = $debris['m'];
-    $dk = $debris['k'];
+    $dm = $debris[GID_RC_METAL];
+    $dk = $debris[GID_RC_CRYSTAL];
 
     $m = $cargo / 2;
     if ( floor($dm) < $m) $m = $dm;
@@ -336,11 +340,11 @@ function HarvestDebris (int $planet_id, int $cargo, int $when) : array
     if ( floor ( $dm-$m) < $m2 ) $m2 = $dm - $m;
     $m += $m2;
 
-    $query = "UPDATE ".$db_prefix."planets SET m = m - $m, k = k - $k, lastpeek = $when WHERE planet_id = $planet_id";
+    $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."` = `".GID_RC_METAL."` - $m, `".GID_RC_CRYSTAL."` = `".GID_RC_CRYSTAL."` - $k, lastpeek = $when WHERE planet_id = $planet_id";
     dbquery ($query);
 
-    $harvest['m'] = $m;
-    $harvest['k'] = $k;
+    $harvest[GID_RC_METAL] = $m;
+    $harvest[GID_RC_CRYSTAL] = $k;
     return $harvest;
 }
 
@@ -349,7 +353,7 @@ function AddDebris (int $id, int $m, int $k) : void
 {
     global $db_prefix;
     $now = time ();
-    $query = "UPDATE ".$db_prefix."planets SET m = m + $m, k = k + $k, lastpeek = $now WHERE planet_id = $id";
+    $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."` = `".GID_RC_METAL."` + $m, `".GID_RC_CRYSTAL."` = `".GID_RC_CRYSTAL."` + $k, lastpeek = $now WHERE planet_id = $id";
     dbquery ($query);
 }
 
@@ -364,8 +368,10 @@ function GetPlanetType (array $planet) : int
 // Create a colonization phantom. Return ID.
 function CreateColonyPhantom (int $g, int $s, int $p, int $owner_id) : int
 {
-    $planet = array( 'name' => loca("PLANET_PHANTOM"), 'type' => PTYP_COLONY_PHANTOM, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => $owner_id, 'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => time(),
-                     'm' => 0, 'k' => 0, 'd' => 0, 'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 'lastpeek' => 0, 'lastakt' => 0, 'gate_until' => 0, 'remove' => 0 );
+    $planet = array(
+        'name' => loca("PLANET_PHANTOM"), 'type' => PTYP_COLONY_PHANTOM, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => $owner_id, 'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => time(),
+        GID_RC_METAL => 0, GID_RC_CRYSTAL => 0, GID_RC_DEUTERIUM => 0,
+        'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 'lastpeek' => 0, 'lastakt' => 0, 'gate_until' => 0, 'remove' => 0 );
     $id = AddDBRow ( $planet, 'planets' );
     return $id;
 }
@@ -376,8 +382,10 @@ function CreateAbandonedColony (int $g, int $s, int $p, int $when) : int
     // If there is no planet at the given coordinates, add Abandoned Colony.
     if ( !HasPlanet ( $g, $s, $p ) )
     {
-        $planet = array( 'name' => loca("PLANET_ABANDONED"), 'type' => PTYP_ABANDONED, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => USER_SPACE, 'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => $when,
-                         'm' => 0, 'k' => 0, 'd' => 0, 'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 'lastpeek' => $when, 'lastakt' => $when, 'gate_until' => 0, 'remove' => $when + 24*3600 );
+        $planet = array(
+            'name' => loca("PLANET_ABANDONED"), 'type' => PTYP_ABANDONED, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => USER_SPACE, 'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => $when,
+            GID_RC_METAL => 0, GID_RC_CRYSTAL => 0, GID_RC_DEUTERIUM => 0,
+            'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 'lastpeek' => $when, 'lastakt' => $when, 'gate_until' => 0, 'remove' => $when + 24*3600 );
         $id = AddDBRow ( $planet, 'planets' );
     }
     else $id = 0;
@@ -400,7 +408,7 @@ function AdjustResources (float|int $m, float|int $k, float|int $d, int $planet_
 {
     global $db_prefix;
     $now = time ();
-    $query = "UPDATE ".$db_prefix."planets SET m=m $sign ".$m.", k=k $sign ".$k.", d=d $sign ".$d.", lastpeek = ".$now." WHERE planet_id=$planet_id;";
+    $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."`=`".GID_RC_METAL."` $sign ".$m.", `".GID_RC_CRYSTAL."`=`".GID_RC_CRYSTAL."` $sign ".$k.", `".GID_RC_DEUTERIUM."`=`".GID_RC_DEUTERIUM."` $sign ".$d.", lastpeek = ".$now." WHERE planet_id=$planet_id;";
     dbquery ($query);
 }
 
@@ -469,7 +477,8 @@ function CreateOuterSpace (int $g, int $s, int $p) : int
     {
         $planet = array( 'name' => loca("FAR_SPACE"), 'type' => PTYP_FARSPACE, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => USER_SPACE, 
             'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => time(),
-            'm' => 0, 'k' => 0, 'd' => 0, 'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 
+            GID_RC_METAL => 0, GID_RC_CRYSTAL => 0, GID_RC_DEUTERIUM => 0,
+            'mprod' => 0, 'kprod' => 0, 'dprod' => 0, 'sprod' => 0, 'fprod' => 0, 'ssprod' => 0, 
             'lastpeek' => 0, 'lastakt' => 0, 'gate_until' => 0, 'remove' => 0 );
         $id = AddDBRow ( $planet, 'planets' );
     }

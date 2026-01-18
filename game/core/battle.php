@@ -106,8 +106,8 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
             $amount = $attacker['fleet'][$gid];
             if ( $amount > 0 ) {
                 $cost = ShipyardPrice ( $gid  );
-                $aprice += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
-                $a[$i]['points'] += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
+                $aprice += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                $a[$i]['points'] += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
                 $a[$i]['fpoints'] += $amount;
             }
         }
@@ -122,8 +122,8 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
             $amount = $defender['fleet'][$gid];
             if ( $amount > 0 ) {
                 $cost = ShipyardPrice ( $gid );
-                $dprice += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
-                $d[$i]['points'] += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
+                $dprice += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                $d[$i]['points'] += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
                 $d[$i]['fpoints'] += $amount;
             }
         }
@@ -132,8 +132,8 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
             $amount = $defender['defense'][$gid];
             if ( $amount > 0 ) {
                 $cost = ShipyardPrice ( $gid );
-                $dprice += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
-                $d[$i]['points'] += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
+                $dprice += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                $d[$i]['points'] += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
             }
         }
     }
@@ -152,8 +152,8 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
                 $amount = $attacker[$gid];
                 if ( $amount > 0 ) {
                     $cost = ShipyardPrice ( $gid );
-                    $alast += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
-                    $a[$i]['points'] -= ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
+                    $alast += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                    $a[$i]['points'] -= ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
                     $a[$i]['fpoints'] -= $amount;
                 }
             }
@@ -167,8 +167,8 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
                 else $amount = $defender[$gid];
                 if ( $amount > 0 ) {
                     $cost = ShipyardPrice ( $gid );
-                    $dlast += ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
-                    $d[$i]['points'] -= ( $cost['m'] + $cost['k'] + $cost['d'] ) * $amount;
+                    $dlast += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                    $d[$i]['points'] -= ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
                     if ( IsFleet($gid) ) $d[$i]['fpoints'] -= $amount;
                 }
             }
@@ -202,7 +202,7 @@ function CargoSummaryLastRound ( array $a, array $res ) : int
         foreach ( $last['attackers'] as $i=>$attacker )        // Attackers
         {
             $f = LoadFleet ( $attacker['id'] );
-            $cargo += FleetCargoSummary ( $attacker ) - ($f['m'] + $f['k'] + $f['d']) - $f['fuel'];
+            $cargo += FleetCargoSummary ( $attacker ) - ($f[GID_RC_METAL] + $f[GID_RC_CRYSTAL] + $f[GID_RC_DEUTERIUM]) - $f['fuel'];
         }
     }
     else
@@ -210,7 +210,7 @@ function CargoSummaryLastRound ( array $a, array $res ) : int
         foreach ($a as $i=>$attacker)                // Attackers
         {
             $f = LoadFleet ( $attacker['id'] );
-            $cargo += FleetCargoSummary ( $attacker['fleet'] ) - ($f['m'] + $f['k'] + $f['d']) - $f['fuel'];
+            $cargo += FleetCargoSummary ( $attacker['fleet'] ) - ($f[GID_RC_METAL] + $f[GID_RC_CRYSTAL] + $f[GID_RC_DEUTERIUM]) - $f['fuel'];
         }
     }
     return (int)max ( 0, $cargo );
@@ -247,11 +247,13 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
             $ships = 0;
             foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker[$gid];
             if ( $sum_cargo == 0) $cargo = 0;
-            else $cargo = ( FleetCargoSummary ( $attacker ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
+            else $cargo = ( FleetCargoSummary ( $attacker ) - ($fleet_obj[GID_RC_METAL]+$fleet_obj[GID_RC_CRYSTAL]+$fleet_obj[GID_RC_DEUTERIUM]) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) {
                 if ( $fleet_obj['mission'] == FTYP_DESTROY && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker, $queue['end'] );
                 else $result = 0;
-                if ( $result < 2 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj['m']+$cm * $cargo, $fleet_obj['k']+$ck * $cargo, $fleet_obj['d']+$cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
+                if ( $result < 2 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'],
+                    $fleet_obj[GID_RC_METAL]+$cm * $cargo, $fleet_obj[GID_RC_CRYSTAL]+$ck * $cargo, $fleet_obj[GID_RC_DEUTERIUM]+$cd * $cargo,
+                    $fleet_obj['fuel'] / 2, $queue['end']);
             }
         }
 
@@ -301,11 +303,13 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
             $ships = 0;
             foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['fleet'][$gid];
             if ( $sum_cargo == 0) $cargo = 0;
-            else $cargo = ( FleetCargoSummary ( $attacker['fleet'] ) - ($fleet_obj['m']+$fleet_obj['k']+$fleet_obj['d']) - $fleet_obj['fuel'] ) / $sum_cargo;
+            else $cargo = ( FleetCargoSummary ( $attacker['fleet'] ) - ($fleet_obj[GID_RC_METAL]+$fleet_obj[GID_RC_CRYSTAL]+$fleet_obj[GID_RC_DEUTERIUM]) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) {
                 if ( $fleet_obj['mission'] == FTYP_DESTROY && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['fleet'], $queue['end'] );
                 else $result = 0;
-                if ( $result < 2 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj['m']+$cm * $cargo, $fleet_obj['k']+$ck * $cargo, $fleet_obj['d']+$cd * $cargo, $fleet_obj['fuel'] / 2, $queue['end']);
+                if ( $result < 2 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'],
+                    $fleet_obj[GID_RC_METAL]+$cm * $cargo, $fleet_obj[GID_RC_CRYSTAL]+$ck * $cargo, $fleet_obj[GID_RC_DEUTERIUM]+$cd * $cargo,
+                    $fleet_obj['fuel'] / 2, $queue['end']);
             }
         }
 
@@ -801,7 +805,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     if ( $battle_result == 0 )
     {
         $sum_cargo = CargoSummaryLastRound ( $a, $res );
-        $captured = Plunder ( $sum_cargo, $p['m'], $p['k'], $p['d'] );
+        $captured = Plunder ( $sum_cargo, $p[GID_RC_METAL], $p[GID_RC_CRYSTAL], $p[GID_RC_DEUTERIUM] );
         $cm = $captured['cm']; $ck = $captured['ck']; $cd = $captured['cd'];
     }
 
@@ -930,7 +934,9 @@ function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : v
 
             // Return the fleet, if there's anything left.
             // The hold time is used as the flight time.
-            if ($ships > 0) DispatchFleet ($attacker, $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
+            if ($ships > 0) DispatchFleet ($attacker, $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'],
+                $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+                $fleet_obj['fuel'] / 2, $queue['end']);
         }
 
     }
@@ -950,7 +956,9 @@ function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : v
 
             // Return the fleet, if there's anything left.
             // The hold time is used as the flight time.
-            if ($ships > 0)  DispatchFleet ($attacker['fleet'], $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'], $fleet_obj['m'], $fleet_obj['k'], $fleet_obj['d'], $fleet_obj['fuel'] / 2, $queue['end']);
+            if ($ships > 0)  DispatchFleet ($attacker['fleet'], $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'],
+                $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+                $fleet_obj['fuel'] / 2, $queue['end']);
         }
 
     }
