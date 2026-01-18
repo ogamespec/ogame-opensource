@@ -72,7 +72,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
         {
             if ( !$first ) $opt .= ", ";
             if ( $first ) $first = false;
-            $opt .= $row . " " . $type;
+            $opt .= "`".$row."`" . " " . $type;
         }
         $opt .= ")";
 
@@ -122,37 +122,45 @@ if ( key_exists("install", $_POST) && CheckParameters() )
 
     // Create technical account "space"
     $md = md5 ( gen_trivial_password() . $_POST['db_secret'] );
-    $user_space = array( 'player_id' => USER_SPACE, 'regdate' => $now, 'ally_id' => 0, 'joindate' => 0, 'allyrank' => 0, 'session' => "",  'private_session' => "", 'name' => "space", 'oname' => "space", 'name_changed' => 0, 'name_until' => 0,
-                        'password' => $md, 'temp_pass' => "", 'pemail' => "", 'email' => "",
-                        'email_changed' => 0, 'email_until' => 0, 'disable' => 0, 'disable_until' => 0, 'vacation' => 0, 'vacation_until' => 0, 'banned' => 0, 'banned_until' => 0, 'noattack' => 0, 'noattack_until' => 0,
-                        'lastlogin' => 0, 'lastclick' => 0, 'ip_addr' => "0.0.0.0", 'validated' => 1, 'validatemd' => "", 'hplanetid' => 1, 'admin' => 1, 'sortby' => 0, 'sortorder' => 0,
-                        'skin' => hostname() . "evolution/", 'useskin' => 1, 'deact_ip' => 1, 'maxspy' => 1, 'maxfleetmsg' => 3, 'lang' => $_POST["uni_lang"], 'aktplanet' => 0,
-                        'dm' => 0, 'dmfree' => 0, 'sniff' => 0, 'debug' => 0, 'trader' => 0, 'rate_m' => 0, 'rate_k' => 0, 'rate_d' => 0,
-                        'score1' => 0, 'score2' => 0, 'score3' => 0, 'place1' => 0, 'place2' => 0, 'place3' => 0,
-                        'oldscore1' => 0, 'oldscore2' => 0, 'oldscore3' => 0, 'oldplace1' => 0, 'oldplace2' => 0, 'oldplace3' => 0, 'scoredate' => 0,
-                        'flags' => USER_FLAG_DEFAULT, 'feedid' => "", 'lastfeed' => 0, 'com_until' => 0, 'adm_until' => 0, 'eng_until' => 0, 'geo_until' => 0, 'tec_until' => 0 );
+    $user_space = array( 
+        'player_id' => USER_SPACE, 'regdate' => $now, 'ally_id' => 0, 'joindate' => 0, 'allyrank' => 0, 'session' => "",  'private_session' => "", 
+        'name' => "space", 'oname' => "space", 'name_changed' => 0, 'name_until' => 0,
+        'password' => $md, 'temp_pass' => "", 'pemail' => "", 'email' => "",
+        'email_changed' => 0, 'email_until' => 0, 'disable' => 0, 'disable_until' => 0, 'vacation' => 0, 'vacation_until' => 0, 'banned' => 0, 'banned_until' => 0, 'noattack' => 0, 'noattack_until' => 0,
+        'lastlogin' => 0, 'lastclick' => 0, 'ip_addr' => "0.0.0.0", 'validated' => 1, 'validatemd' => "", 'hplanetid' => 1, 'admin' => 1, 'sortby' => 0, 'sortorder' => 0,
+        'skin' => hostname() . "evolution/", 'useskin' => 1, 'deact_ip' => 1, 'maxspy' => 1, 'maxfleetmsg' => 3, 'lang' => $_POST["uni_lang"], 'aktplanet' => 0,
+        'dm' => 0, 'dmfree' => 0, 'sniff' => 0, 'debug' => 0, 'trader' => 0, 'rate_m' => 0, 'rate_k' => 0, 'rate_d' => 0,
+        'score1' => 0, 'score2' => 0, 'score3' => 0, 'place1' => 0, 'place2' => 0, 'place3' => 0,
+        'oldscore1' => 0, 'oldscore2' => 0, 'oldscore3' => 0, 'oldplace1' => 0, 'oldplace2' => 0, 'oldplace3' => 0, 'scoredate' => 0,
+        'flags' => USER_FLAG_DEFAULT, 'feedid' => "", 'lastfeed' => 0, 'com_until' => 0, 'adm_until' => 0, 'eng_until' => 0, 'geo_until' => 0, 'tec_until' => 0 );
     AddDBRow ($user_space, "users");
 
     // Create administrator account (Legor).
     $md = md5 ($_POST['admin_pass'] . $_POST['db_secret']);
-    $user_legor = array( 'player_id' => USER_LEGOR, 'regdate' => $now, 'ally_id' => 0, 'joindate' => 0, 'allyrank' => 0, 'session' => "",  'private_session' => "", 'name' => "legor", 'oname' => "Legor", 'name_changed' => 0, 'name_until' => 0,
-                        'password' => $md, 'temp_pass' => "", 'pemail' => $_POST['admin_email'], 'email' => $_POST['admin_email'],
-                        'email_changed' => 0, 'email_until' => 0, 'disable' => 0, 'disable_until' => 0, 'vacation' => 0, 'vacation_until' => 0, 'banned' => 0, 'banned_until' => 0, 'noattack' => 0, 'noattack_until' => 0,
-                        'lastlogin' => 0, 'lastclick' => 0, 'ip_addr' => "0.0.0.0", 'validated' => 1, 'validatemd' => "", 'hplanetid' => 1, 'admin' => 2, 'sortby' => 0, 'sortorder' => 0,
-                        'skin' => hostname() . "evolution/", 'useskin' => 1, 'deact_ip' => 1, 'maxspy' => 1, 'maxfleetmsg' => 3, 'lang' => $_POST["uni_lang"], 'aktplanet' => 1,
-                        'dm' => 0, 'dmfree' => 0, 'sniff' => 0, 'debug' => 0, 'trader' => 0, 'rate_m' => 0, 'rate_k' => 0, 'rate_d' => 0,
-                        'score1' => 0, 'score2' => 0, 'score3' => 0, 'place1' => 0, 'place2' => 0, 'place3' => 0,
-                        'oldscore1' => 0, 'oldscore2' => 0, 'oldscore3' => 0, 'oldplace1' => 0, 'oldplace2' => 0, 'oldplace3' => 0, 'scoredate' => 0,
-                        'flags' => USER_FLAG_DEFAULT, 'feedid' => "", 'lastfeed' => 0, 'com_until' => 0, 'adm_until' => 0, 'eng_until' => 0, 'geo_until' => 0, 'tec_until' => 0 );
+    $user_legor = array(
+        'player_id' => USER_LEGOR, 'regdate' => $now, 'ally_id' => 0, 'joindate' => 0, 'allyrank' => 0, 'session' => "",  'private_session' => "", 
+        'name' => "legor", 'oname' => "Legor", 'name_changed' => 0, 'name_until' => 0,
+        'password' => $md, 'temp_pass' => "", 'pemail' => $_POST['admin_email'], 'email' => $_POST['admin_email'],
+        'email_changed' => 0, 'email_until' => 0, 'disable' => 0, 'disable_until' => 0, 'vacation' => 0, 'vacation_until' => 0, 'banned' => 0, 'banned_until' => 0, 'noattack' => 0, 'noattack_until' => 0,
+        'lastlogin' => 0, 'lastclick' => 0, 'ip_addr' => "0.0.0.0", 'validated' => 1, 'validatemd' => "", 'hplanetid' => 1, 'admin' => 2, 'sortby' => 0, 'sortorder' => 0,
+        'skin' => hostname() . "evolution/", 'useskin' => 1, 'deact_ip' => 1, 'maxspy' => 1, 'maxfleetmsg' => 3, 'lang' => $_POST["uni_lang"], 'aktplanet' => 1,
+        'dm' => 0, 'dmfree' => 0, 'sniff' => 0, 'debug' => 0, 'trader' => 0, 'rate_m' => 0, 'rate_k' => 0, 'rate_d' => 0,
+        'score1' => 0, 'score2' => 0, 'score3' => 0, 'place1' => 0, 'place2' => 0, 'place3' => 0,
+        'oldscore1' => 0, 'oldscore2' => 0, 'oldscore3' => 0, 'oldplace1' => 0, 'oldplace2' => 0, 'oldplace3' => 0, 'scoredate' => 0,
+        'flags' => USER_FLAG_DEFAULT, 'feedid' => "", 'lastfeed' => 0, 'com_until' => 0, 'adm_until' => 0, 'eng_until' => 0, 'geo_until' => 0, 'tec_until' => 0 );
     AddDBRow ($user_legor, "users");
 
     // Create the planet Arakis [1:1:2] and the moon Mond (yes, there's only one letter `r` in the planet name, it's a reference to Dune)
-    $planet = array( 'planet_id' => 1, 'name' => "Arakis", 'type' => PTYP_PLANET, 'g' => 1, 's' => 1, 'p' => 2, 'owner_id' => USER_LEGOR, 'diameter' => 12800, 'temp' => 40, 'fields' => 0, 'maxfields' => 163, 'date' => $now,
-                     'm' => 500, 'k' => 500, 'd' => 0, 'mprod' => 1, 'kprod' => 1, 'dprod' => 1, 'sprod' => 1, 'fprod' => 1, 'ssprod' => 1, 'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
+    $planet = array( 
+        'planet_id' => 1, 'name' => "Arakis", 'type' => PTYP_PLANET, 'g' => 1, 's' => 1, 'p' => 2, 'owner_id' => USER_LEGOR, 
+        'diameter' => 12800, 'temp' => 40, 'fields' => 0, 'maxfields' => 163, 'date' => $now,
+        'mprod' => 1, 'kprod' => 1, 'dprod' => 1, 'sprod' => 1, 'fprod' => 1, 'ssprod' => 1, 'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
     AddDBRow ($planet, "planets");
 
-    $moon = array( 'planet_id' => 2, 'name' => "Mond", 'type' => PTYP_MOON, 'g' => 1, 's' => 1, 'p' => 2, 'owner_id' => USER_LEGOR, 'diameter' => 8944, 'temp' => 10, 'fields' => 0, 'maxfields' => 1, 'date' => $now,
-                   'm' => 0, 'k' => 0, 'd' => 0, 'mprod' => 1, 'kprod' => 1, 'dprod' => 1, 'sprod' => 1, 'fprod' => 1, 'ssprod' => 1, 'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
+    $moon = array( 
+        'planet_id' => 2, 'name' => "Mond", 'type' => PTYP_MOON, 'g' => 1, 's' => 1, 'p' => 2, 'owner_id' => USER_LEGOR, 
+        'diameter' => 8944, 'temp' => 10, 'fields' => 0, 'maxfields' => 1, 'date' => $now,
+        'mprod' => 1, 'kprod' => 1, 'dprod' => 1, 'sprod' => 1, 'fprod' => 1, 'ssprod' => 1, 'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
     AddDBRow ($moon, "planets");
 
     // Add default Expedition Parameters.
