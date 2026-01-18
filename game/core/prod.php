@@ -43,11 +43,11 @@ function BuildPrice ( int $id, int $lvl ) : array
     // - Exponential growth formula with a linear factor
     // - In the context of video games, it's called the "experience formula" or "level curve"
 
-    $factor = $initial[$id][4];
-    $m = $initial[$id][0] * pow($factor, $lvl-1);
-    $k = $initial[$id][1] * pow($factor, $lvl-1);
-    $d = $initial[$id][2] * pow($factor, $lvl-1);
-    $e = $initial[$id][3] * pow($factor, $lvl-1);
+    $factor = $initial[$id]['factor'];
+    $m = $initial[$id][GID_RC_METAL] * pow($factor, $lvl-1);
+    $k = $initial[$id][GID_RC_CRYSTAL] * pow($factor, $lvl-1);
+    $d = $initial[$id][GID_RC_DEUTERIUM] * pow($factor, $lvl-1);
+    $e = $initial[$id][GID_RC_ENERGY] * pow($factor, $lvl-1);
 
     $res = array ( GID_RC_METAL => $m, GID_RC_CRYSTAL => $k, GID_RC_DEUTERIUM => $d, GID_RC_ENERGY => $e );
     return $res;
@@ -66,9 +66,9 @@ function BuildDuration ( int $id, int $lvl, int $robots, int $nanits, int $speed
 function ShipyardPrice ( int $id ) : array
 {
     global $initial;
-    $m = $initial[$id][0];
-    $k = $initial[$id][1];
-    $d = $initial[$id][2];
+    $m = $initial[$id][GID_RC_METAL];
+    $k = $initial[$id][GID_RC_CRYSTAL];
+    $d = $initial[$id][GID_RC_DEUTERIUM];
     $e = 0;
     $res = array ( GID_RC_METAL => $m, GID_RC_CRYSTAL => $k, GID_RC_DEUTERIUM => $d, GID_RC_ENERGY => $e );
     return $res;
@@ -87,11 +87,11 @@ function ResearchPrice ( int $id, int $lvl ) : array
 {
     global $initial;
 
-    $factor = $initial[$id][4];
-    $m = $initial[$id][0] * pow($factor, $lvl-1);
-    $k = $initial[$id][1] * pow($factor, $lvl-1);
-    $d = $initial[$id][2] * pow($factor, $lvl-1);
-    $e = $initial[$id][3] * pow($factor, $lvl-1);
+    $factor = $initial[$id]['factor'];
+    $m = $initial[$id][GID_RC_METAL] * pow($factor, $lvl-1);
+    $k = $initial[$id][GID_RC_CRYSTAL] * pow($factor, $lvl-1);
+    $d = $initial[$id][GID_RC_DEUTERIUM] * pow($factor, $lvl-1);
+    $e = $initial[$id][GID_RC_ENERGY] * pow($factor, $lvl-1);
 
     $res = array ( GID_RC_METAL => $m, GID_RC_CRYSTAL => $k, GID_RC_DEUTERIUM => $d, GID_RC_ENERGY => $e );
     return $res;

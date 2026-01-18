@@ -340,7 +340,7 @@ function HarvestDebris (int $planet_id, int $cargo, int $when) : array
     if ( floor ( $dm-$m) < $m2 ) $m2 = $dm - $m;
     $m += $m2;
 
-    $query = "UPDATE ".$db_prefix."planets SET m = m - $m, k = k - $k, lastpeek = $when WHERE planet_id = $planet_id";
+    $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."` = `".GID_RC_METAL."` - $m, `".GID_RC_CRYSTAL."` = `".GID_RC_CRYSTAL."` - $k, lastpeek = $when WHERE planet_id = $planet_id";
     dbquery ($query);
 
     $harvest[GID_RC_METAL] = $m;
@@ -353,7 +353,7 @@ function AddDebris (int $id, int $m, int $k) : void
 {
     global $db_prefix;
     $now = time ();
-    $query = "UPDATE ".$db_prefix."planets SET m = m + $m, k = k + $k, lastpeek = $now WHERE planet_id = $id";
+    $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."` = `".GID_RC_METAL."` + $m, `".GID_RC_CRYSTAL."` = `".GID_RC_CRYSTAL."` + $k, lastpeek = $now WHERE planet_id = $id";
     dbquery ($query);
 }
 
@@ -408,7 +408,7 @@ function AdjustResources (float|int $m, float|int $k, float|int $d, int $planet_
 {
     global $db_prefix;
     $now = time ();
-    $query = "UPDATE ".$db_prefix."planets SET m=m $sign ".$m.", k=k $sign ".$k.", d=d $sign ".$d.", lastpeek = ".$now." WHERE planet_id=$planet_id;";
+    $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."`=`".GID_RC_METAL."` $sign ".$m.", `".GID_RC_CRYSTAL."`=`".GID_RC_CRYSTAL."` $sign ".$k.", `".GID_RC_DEUTERIUM."`=`".GID_RC_DEUTERIUM."` $sign ".$d.", lastpeek = ".$now." WHERE planet_id=$planet_id;";
     dbquery ($query);
 }
 
