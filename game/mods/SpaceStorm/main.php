@@ -74,6 +74,7 @@ class SpaceStorm extends GameMod {
         $tabs['uni']['prev_storm'] = 'INT DEFAULT 0';
         $tabs['uni']['storm'] = 'INT DEFAULT 0';
         $tabs['planets'][GID_B_REALITY_STAB] = 'INT DEFAULT 0';
+        $tabs['planets']['s'.GID_B_REALITY_STAB] = 'INT DEFAULT 0';
         return false;
     }
 
