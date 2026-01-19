@@ -1030,7 +1030,7 @@ function Queue_CleanDebris_End (array $queue) : void
 {
     global $db_prefix;
     $query = "SELECT target_planet FROM ".$db_prefix."fleet WHERE mission = ".FTYP_RECYCLE." OR mission = ".(FTYP_RECYCLE+FTYP_RETURN);
-    $query = "DELETE FROM ".$db_prefix."planets WHERE (type=".PTYP_DF." AND m=0 AND k=0) AND planet_id <> ALL ($query)";
+    $query = "DELETE FROM ".$db_prefix."planets WHERE (type=".PTYP_DF." AND `".GID_RC_METAL."`=0 AND `".GID_RC_CRYSTAL."`=0) AND planet_id <> ALL ($query)";
     dbquery ( $query );
     RemoveQueue ( $queue['task_id'] );
     AddCleanDebrisEvent ();
