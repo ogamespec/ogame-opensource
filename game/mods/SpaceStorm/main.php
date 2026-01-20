@@ -222,7 +222,7 @@ class SpaceStorm extends GameMod {
 
             $mask = 0;
             while ($mask == 0) {
-                $bitnum = mt_rand(0, SPACE_STORM_MASK_MSB);
+                $bitnum = mt_rand(0, SPACE_STORM_MASK_MSB-1);
                 if ( ($storm & (1 << $bitnum)) == 0) {
                     $mask = 1 << $bitnum;
                     break;
@@ -253,7 +253,7 @@ class SpaceStorm extends GameMod {
     private function CountStormBits (int $storm) : int {
 
         $count = 0;
-        for ($i=0; $i<=SPACE_STORM_MASK_MSB; $i++) {
+        for ($i=0; $i<SPACE_STORM_MASK_MSB; $i++) {
             if ( ($storm & (1 << $i)) != 0) {
                 $count++;
             }
