@@ -13,7 +13,7 @@ function Admin_Broadcast () : void
     // POST request processing.
     if ( method () === "POST" )
     {
-        $cat = $_POST['cat'];
+        $cat = intval($_POST['cat']);
         $subj = $_POST['subj'];
         if ( $subj === "" ) $write_error = "<center><font color=#FF0000>".loca("ADM_BCAST_ERROR_SUBJ")."</font><br/></center>\n";
         $text = $_POST['text'];
@@ -21,28 +21,14 @@ function Admin_Broadcast () : void
 
         if ( $write_error === "" )
         {
-            if ( $cat == 1 ) $query = "SELECT * FROM ".$db_prefix."users WHERE score1 < ".USER_NOOB_LIMIT.";";        // Newbies (usually less than 5.000 points)
-            else if ( $cat == 2 ) $query = "SELECT * FROM ".$db_prefix."users WHERE place1 < 100;";        // Players from the top 100
-            else if ( $cat == 3 ) $query = "SELECT * FROM ".$db_prefix."users WHERE admin = 1;";        // Operators
-            else $query = "SELECT * FROM ".$db_prefix."users;";                // Everyone
-
             $ownhome = GetPlanet ( $GlobalUser['hplanetid'] );
 
             $from = $GlobalUser['oname'] . " <a href=\"index.php?page=galaxy&galaxy=".$ownhome['g']."&system=".$ownhome['s']."&position=".$ownhome['p']."&session={PUBLIC_SESSION}\">[".$ownhome['g'].":".$ownhome['s'].":".$ownhome['p']."]</a>\n";
             $subj = $subj . " <a href=\"index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=".$GlobalUser['player_id']."&re=1&betreff=Re:".$subj."\">\n"
-                        . "</a>\n";            
+                        . "</a>\n";
 
-            $text = str_replace ( '\"', "&quot;", bb($text) );
-            $text = str_replace ( '\'', "&rsquo;", $text );
-            $text = str_replace ( '\`', "&lsquo;", $text );
+            $usernum = BroadcastMessage ($cat, $from, $subj, $text);
 
-            $result = dbquery ($query);
-            $usernum = $rows = dbrows ($result);
-            while ($rows--)
-            {
-                $user = dbarray ($result);
-                SendMessage ( $user['player_id'], $from, $subj, $text, MTYP_MISC);
-            }
             if ($usernum > 0) $write_error = "<center><font color=#00FF00>".va(loca("ADM_BCAST_SUCCESS"), $usernum)."</font><br/></center>\n";
             else $write_error = "<center><font color=#00FF00>".loca("ADM_BCAST_ERROR_USERS")."</font><br/></center>\n";
         }

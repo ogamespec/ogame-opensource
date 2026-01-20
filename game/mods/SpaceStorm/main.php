@@ -44,6 +44,10 @@ class SpaceStorm extends GameMod {
             AddQueue (USER_SPACE, QTYP_SPACE_STORM, 0, 0, 0, time(), SPACE_STORM_PERIOD_SECONDS);
         }
 
+        global $GlobalUni;
+        loca_add ("space_storm", $GlobalUni['lang'], __DIR__);
+        BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_ON"), loca("STORM_TEXT_ON") );
+
         UnlockTables();
     }
 
@@ -63,6 +67,8 @@ class SpaceStorm extends GameMod {
         // Delete Space Storm event
         $query = "DELETE FROM ".$db_prefix."queue WHERE type = '".QTYP_SPACE_STORM."'";
         dbquery ($query);
+
+        BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_OFF"), loca("STORM_TEXT_OFF") );
 
         UnlockTables();
     }
@@ -236,7 +242,15 @@ class SpaceStorm extends GameMod {
             $storm |= $mask;
         }
 
-        Debug ("prev_storm: $prev_storm ($count), new storm: $storm ($new_count)" );
+        Debug ("prev_storm: $prev_storm ($count bits), new storm: $storm ($new_count bits)" );
+
+        if ($new_count == 0) {
+            BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_0"), loca("STORM_TEXT_0") );
+        }
+        else {
+            if ($new_count > $count) BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_INC"), loca("STORM_TEXT_INC") );
+            else BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_DEC"), loca("STORM_TEXT_DEC") );
+        }
 
         return $storm;
     }
