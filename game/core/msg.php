@@ -214,4 +214,28 @@ function ReportMessage (int $player_id, int $msg_id, string &$ResultMessage="", 
     return $id;
 }
 
+function BroadcastMessage (int $cat, string $from, string $subj, string $text) : int
+{
+    global $db_prefix;
+
+    if ( $cat == 1 ) $query = "SELECT * FROM ".$db_prefix."users WHERE score1 < ".USER_NOOB_LIMIT.";";        // Newbies (usually less than 5.000 points)
+    else if ( $cat == 2 ) $query = "SELECT * FROM ".$db_prefix."users WHERE place1 < 100;";        // Players from the top 100
+    else if ( $cat == 3 ) $query = "SELECT * FROM ".$db_prefix."users WHERE admin = 1;";        // Operators
+    else $query = "SELECT * FROM ".$db_prefix."users;";                // Everyone
+
+    $text = str_replace ( '\"', "&quot;", bb($text) );
+    $text = str_replace ( '\'', "&rsquo;", $text );
+    $text = str_replace ( '\`', "&lsquo;", $text );
+
+    $result = dbquery ($query);
+    $usernum = $rows = dbrows ($result);
+    while ($rows--)
+    {
+        $user = dbarray ($result);
+        SendMessage ( $user['player_id'], $from, $subj, $text, MTYP_MISC);
+    }
+
+    return $usernum;
+}
+
 ?>

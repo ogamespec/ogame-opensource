@@ -41,6 +41,7 @@ $LOCA["en"]["PR_TECHNO_INFO" ] = "+2 espionage level for probes, 25% less resear
 $LOCA["en"]["PR_PURCHASE" ] = "Order now!";
 $LOCA["en"]["PR_RENEW" ] = "Renew!";   		// TODO: I'm not sure what it was exactly, since there is no HTML
 $LOCA["en"]["PR_ACTIVE_DAYS" ] = "Still &lt;font color=lime&gt;active&lt;/font&gt; for more than #1 days";
+$LOCA["en"]["PR_ACTIVE_HOURS" ] = "Still &lt;font color=lime&gt;active&lt;/font&gt; for more than #1 hours";
 
 $LOCA["en"]["GLOBAL_ERROR"] = "Error";
 

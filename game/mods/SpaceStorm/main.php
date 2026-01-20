@@ -14,6 +14,7 @@ const SPACE_STORM_MASK_GRAV_DEFENSE = 0x40;     // Gravitational Defense Anomaly
 const SPACE_STORM_MASK_MATTER_SIGNATURE = 0x80; // Matter Signature
 const SPACE_STORM_MASK_COMM_BREAKDOWN = 0x100;  // Communication Breakdown
 const SPACE_STORM_MASK_ATTACK_REVERB = 0x200;   // Attack Reverberation
+const SPACE_STORM_MASK_MSB = 10;            // The most significant bit for setting the storm type. The type is set as a random bit from 0 to the MSB (inclusive).
 
 const GID_B_REALITY_STAB = 157384;      // Reality Stabilizer Object ID
 
@@ -29,8 +30,6 @@ class SpaceStorm extends GameMod {
         LockTables();
 
         // Add new columns
-        $query = "ALTER TABLE ".$db_prefix."uni ADD COLUMN prev_storm INT DEFAULT 0;";
-        dbquery ($query);
         $query = "ALTER TABLE ".$db_prefix."uni ADD COLUMN storm INT DEFAULT 0;";
         dbquery ($query);        
         $query = "ALTER TABLE ".$db_prefix."planets ADD COLUMN `".GID_B_REALITY_STAB."` INT DEFAULT 0;";
@@ -45,6 +44,10 @@ class SpaceStorm extends GameMod {
             AddQueue (USER_SPACE, QTYP_SPACE_STORM, 0, 0, 0, time(), SPACE_STORM_PERIOD_SECONDS);
         }
 
+        global $GlobalUni;
+        loca_add ("space_storm", $GlobalUni['lang'], __DIR__);
+        BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_ON"), loca("STORM_TEXT_ON") );
+
         UnlockTables();
     }
 
@@ -54,8 +57,6 @@ class SpaceStorm extends GameMod {
         LockTables();
 
         // Remove columns
-        $query = "ALTER TABLE ".$db_prefix."uni DROP COLUMN prev_storm;";
-        dbquery ($query);
         $query = "ALTER TABLE ".$db_prefix."uni DROP COLUMN storm;";
         dbquery ($query);        
         $query = "ALTER TABLE ".$db_prefix."planets DROP COLUMN `".GID_B_REALITY_STAB."`;";
@@ -67,13 +68,15 @@ class SpaceStorm extends GameMod {
         $query = "DELETE FROM ".$db_prefix."queue WHERE type = '".QTYP_SPACE_STORM."'";
         dbquery ($query);
 
+        BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_OFF"), loca("STORM_TEXT_OFF") );
+
         UnlockTables();
     }
 
     public function install_tabs_included (array &$tabs) : bool {
-        $tabs['uni']['prev_storm'] = 'INT DEFAULT 0';
         $tabs['uni']['storm'] = 'INT DEFAULT 0';
         $tabs['planets'][GID_B_REALITY_STAB] = 'INT DEFAULT 0';
+        $tabs['planets']['s'.GID_B_REALITY_STAB] = 'INT DEFAULT 0';
         return false;
     }
 
@@ -97,6 +100,10 @@ class SpaceStorm extends GameMod {
         global $db_prefix;
         if ($queue['type'] === QTYP_SPACE_STORM) {
 
+            $prev = $this->GetStorm ();
+            $storm = $this->NewStorm ($prev);
+            $this->SetStorm ($storm);
+
             ProlongQueue ($queue['task_id'], SPACE_STORM_PERIOD_SECONDS);
             return true;
         }
@@ -115,19 +122,161 @@ class SpaceStorm extends GameMod {
 
     public function add_bonuses (array &$bonuses) : bool {
 
-        $storm = [];
+        global $db_prefix;
 
-        $storm['img'] = "mods/SpaceStorm/img/storm_ikon.png";
-        $storm['alt'] = "Космический Шторм";
+        // Получить тип шторма и таймстамп его окончания
+
+        $storm = $this->GetStorm();
+
+        $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_SPACE_STORM."'";
+        $result = dbquery ($query);
+        $end = 0;
+        if ($result != null) {
+            $event = dbarray ($result);
+            $end = $event['end'];
+        }
+        else {
+            $storm = 0;
+        }
+
+        // Вернуть описание бонуса
+
+        $storm_bonus = [];
+
+        $img_fix = $storm == 0 ? "_un" : "";
+        $storm_bonus['img'] = "mods/SpaceStorm/img/storm_ikon$img_fix.png";
+        $storm_bonus['alt'] = loca ("STORM_STORM");
 
         $overlib = "";
-        $overlib .= "<center><font size=1 color=white><b>"."Ещё 7 дн."."<br>"."Космический Шторм"."</font><br>";
-        $overlib .= "<font size=1 color=skyblue>"."Типы и описание шторма"."</font><br>";
 
-        $storm['overlib'] = $overlib;
+        if ($storm != 0) {
 
-        array_insert_before_key ($bonuses, 'commander', 'storm', $storm);
+            $now = time();
+            $d = ($end - $now) / (60*60*24);
+            if ($d < 1) {
+                $hr = ($end - $now) / (60*60);
+                $active = va(loca("PR_ACTIVE_HOURS"), ceil($hr));
+            }
+            else $active = va(loca("PR_ACTIVE_DAYS"), ceil($d));
+
+            $overlib .= "<center><font size=1 color=white><b>".$active."<br>".loca ("STORM_STORM")."</font><br>";
+            
+            // Типы и описание шторма
+            for ($i=0; $i<SPACE_STORM_MASK_MSB; $i++) {
+                if ( ($storm & (1 << $i)) != 0 ) {
+                    $overlib .= "<font size=1 color=skyblue>";
+                    $overlib .= loca("STORM_" . $i);
+                    $overlib .= "</font><br>";
+                }
+            }
+        }
+        else {
+
+            $overlib .= "<center><font size=1 color=white><b>" . loca("STORM_NONE");
+        }
+
+        $overlib .= "</b></font></center>";
+        $storm_bonus['overlib'] = $overlib;
+
+        array_insert_before_key ($bonuses, 'commander', 'storm', $storm_bonus);
         return false;
+    }
+
+    private function NewStorm (int $prev_storm) : int {
+
+        // Посчитать количество эффектов предыдущего шторма
+        $count = $this->CountStormBits($prev_storm);
+
+        // Если не было шторма (0 эффектов): 75% что будет слабый шторм (1 эффект)
+        // Если был слабый шторм (1 эффект): 50% что будет средний шторм (2 эффекта), иначе - шторм пропадает (0 эффектов)
+        // Если был средний шторм (2 эффекта): 25% что будет сильный шторм (3 эффекта), иначе: [50% что будет слабый шторм (1 эффект) или шторм пропадёт (0 эффектов)]
+        // Если был сильный шторм (3 эффекта): 75% что шторм пропадёт, иначе: [25% что шторм ослабнет до слабого (1 эффект) или шторм пропадёт (0 эффектов)]
+
+        $new_count = 0;         // default
+
+        switch ($count) {
+
+            case 0:
+                if (mt_rand(1,100) <= 75) $new_count = 1;
+                break;
+
+            case 1:
+                if (mt_rand(1,100) <= 50) $new_count = 2;
+                break;
+
+            case 2:
+                if (mt_rand(1,100) <= 25) {
+                    $new_count = 3;
+                }
+                else {
+                    if (mt_rand(1,100) <= 50) $new_count = 1;
+                }
+                break;
+
+            case 3:
+            default:
+                if (mt_rand(1,100) <= 75) {
+                    $new_count = 0;
+                }
+                else {
+                    if (mt_rand(1,100) <= 25) $new_count = 1;
+                }
+                break;
+        }
+
+        // Установить `new_count` новых штормов (установить случайные биты)
+
+        $storm = 0;
+
+        for ($n=0; $n<$new_count; $n++) {
+
+            $mask = 0;
+            while ($mask == 0) {
+                $bitnum = mt_rand(0, SPACE_STORM_MASK_MSB-1);
+                if ( ($storm & (1 << $bitnum)) == 0) {
+                    $mask = 1 << $bitnum;
+                    break;
+                }
+            }
+
+            $storm |= $mask;
+        }
+
+        Debug ("prev_storm: $prev_storm ($count bits), new storm: $storm ($new_count bits)" );
+
+        if ($new_count == 0) {
+            BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_0"), loca("STORM_TEXT_0") );
+        }
+        else {
+            if ($new_count > $count) BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_INC"), loca("STORM_TEXT_INC") );
+            else BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_DEC"), loca("STORM_TEXT_DEC") );
+        }
+
+        return $storm;
+    }
+
+    private function GetStorm () : int {
+        global $GlobalUni;
+        return $GlobalUni['storm'];
+    }
+
+    private function SetStorm(int $storm) : void {
+
+        global $db_prefix, $GlobalUni;
+        $query = "UPDATE ".$db_prefix."uni SET storm = $storm;";
+        dbquery ($query);
+        $GlobalUni['storm'] = $storm;
+    }
+
+    private function CountStormBits (int $storm) : int {
+
+        $count = 0;
+        for ($i=0; $i<SPACE_STORM_MASK_MSB; $i++) {
+            if ( ($storm & (1 << $i)) != 0) {
+                $count++;
+            }
+        }
+        return $count;
     }
 }
 

@@ -41,6 +41,7 @@ $LOCA["fr"]["PR_TECHNO_INFO" ] = "+2 niveau d'espionnage pour les sondes, -25% d
 $LOCA["fr"]["PR_PURCHASE" ] = "Commander!";
 $LOCA["fr"]["PR_RENEW" ] = "Renouveler!";   		// TODO: I'm not sure what it was exactly, since there is no HTML
 $LOCA["fr"]["PR_ACTIVE_DAYS" ] = "Encore &lt;font color=lime&gt;actif&lt;/font&gt; pour #1 jours";
+$LOCA["fr"]["PR_ACTIVE_HOURS" ] = "Encore &lt;font color=lime&gt;actif&lt;/font&gt; pour #1 hrs";
 
 $LOCA["fr"]["GLOBAL_ERROR"] = "Erreur";
 

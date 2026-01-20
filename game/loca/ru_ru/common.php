@@ -41,6 +41,7 @@ $LOCA["ru"]["PR_TECHNO_INFO"] = "+2 уровень шпионажа, 25% мен�
 $LOCA["ru"]["PR_PURCHASE"] = "Заказать!";
 $LOCA["ru"]["PR_RENEW"] = "Продлить!";
 $LOCA["ru"]["PR_ACTIVE_DAYS"] = "&lt;font color=lime&gt;Активен&lt;/font&gt; ещё #1 д.";
+$LOCA["ru"]["PR_ACTIVE_HOURS"] = "&lt;font color=lime&gt;Активен&lt;/font&gt; ещё #1 ч.";
 
 $LOCA["ru"]["GLOBAL_ERROR"] = "Произошла ошбка";
 
