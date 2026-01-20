@@ -185,7 +185,7 @@ function CanBuild (array $user, array $planet, int $id, int $lvl, bool $destroy,
     global $buildmap;
 
     // Cost of building
-    $res = BuildPrice ( $id, $lvl );
+    $res = TechPrice ( $id, $lvl );
     $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
 
     $result = GetResearchQueue ( $user['player_id'] );
@@ -268,7 +268,7 @@ function PropagateBuildQueue (int $planet_id, int $from) : void
             $text = CanBuild ($user, $planet, $id, $lvl, $destroy);
             if ( $text === '' ) {
                 // Write off resources
-                $res = BuildPrice ( $id, $lvl );
+                $res = TechPrice ( $id, $lvl );
                 $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
                 AdjustResources ( $m, $k, $d, $planet_id, '-' );
 
@@ -367,7 +367,7 @@ function BuildEnque ( array $user, int $planet_id, int $id, int $destroy, int $n
 
         // Write off resources for the very first construction
         if ( $list_id == 1) {
-            $res = BuildPrice ( $id, $lvl );
+            $res = TechPrice ( $id, $lvl );
             $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
             AdjustResources ( $m, $k, $d, $planet_id, '-' );
         }
@@ -408,7 +408,7 @@ function BuildDeque ( array $user, int $planet_id, int $listid ) : string
             $queue_id = $queue['task_id'];
 
             // Return resources
-            $res = BuildPrice ( $id, $lvl );
+            $res = TechPrice ( $id, $lvl );
             $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
             AdjustResources ( $m, $k, $d, $planet_id, '+' );           
         }
@@ -482,13 +482,13 @@ function Queue_Build_End (array $queue) : void
 
     // Add points. Recalculate places only for large constructions.
     if ( $queue['type'] === "Build" ) {
-        $res = BuildPrice ( $id, $lvl );
+        $res = TechPrice ( $id, $lvl );
         $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
         $points = (int)$m + (int)$k + (int)$d;
         AdjustStats ( $queue['owner_id'], $points, 0, 0, '+');
     }
     else {
-        $res = BuildPrice ( $id, $lvl+1 );
+        $res = TechPrice ( $id, $lvl+1 );
         $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
         $points = (int)$m + (int)$k + (int)$d;
         AdjustStats ( $queue['owner_id'], $points, 0, 0, '-');
@@ -581,7 +581,7 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
 
     $user = LoadUser ( $player_id );
 
-    $res = ShipyardPrice ( $gid );
+    $res = TechPrice ( $gid, 1 );
     $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
     $m *= $value;
     $k *= $value;
@@ -630,7 +630,7 @@ function Queue_Shipyard_End (array $queue, int $when=0) : void
     dbquery ($query);
 
     // Add points.
-    $res = ShipyardPrice ( $gid );
+    $res = TechPrice ( $gid, 1 );
     $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $enrg = $res[GID_RC_ENERGY];
     $points = ((int)$m + (int)$k + (int)$d) * $done;
     if (IsFleet($gid)) $fpoints = $done;
@@ -682,7 +682,7 @@ function CanResearch (array $user, array $planet, int $id, int $lvl) : string
         $busy = ( dbrows ($result) > 0 );
         if ( $busy ) return loca_lang("BUILD_ERROR_RESEARCH_LAB_BUILDING", $user['lang']);
 
-        $res = ResearchPrice ( $id, $lvl );
+        $res = TechPrice ( $id, $lvl );
         $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
 
         // Not research
@@ -729,7 +729,7 @@ function StartResearch (int $player_id, int $planet_id, int $id, int $now) : voi
         $seconds = ResearchDuration ( $id, $level, $reslab, $speed * $r_factor);
 
         // Списать ресурсы.
-        $res = ResearchPrice ( $id, $level );
+        $res = TechPrice ( $id, $level );
         AdjustResources ( $res[GID_RC_METAL], $res[GID_RC_CRYSTAL], $res[GID_RC_DEUTERIUM], $planet_id, '-' );
 
         AddQueue ($player_id, QTYP_RESEARCH, $planet_id, $id, $level, $now, $seconds);
@@ -765,7 +765,7 @@ function StopResearch (int $player_id) : void
         );
         return;
     }
-    $res = ResearchPrice ( $id, $level );
+    $res = TechPrice ( $id, $level );
     $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
 
     // Return resources
@@ -805,7 +805,7 @@ function Queue_Research_End (array $queue) : void
     RemoveQueue ( $queue['task_id'] );
 
     // Add points.
-    $res = ResearchPrice ( $id, $lvl );
+    $res = TechPrice ( $id, $lvl );
     $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
     $points = (int)$m + (int)$k + (int)$d;
     AdjustStats ( $queue['owner_id'], $points, 0, 1, '+');

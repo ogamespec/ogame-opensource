@@ -22,7 +22,7 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             // Calculate amount (no more than the resources on the planet and no more than `max_werf`)
             if ( $value > $GlobalUni['max_werf'] ) $value = $GlobalUni['max_werf'];
 
-            $res = ShipyardPrice ( $gid );
+            $res = TechPrice ( $gid, 1 );
             $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
 
             if ( $aktplanet[GID_RC_METAL] < $m || $aktplanet[GID_RC_CRYSTAL] < $k || $aktplanet[GID_RC_DEUTERIUM] < $d ) continue;    // insufficient resources for one unit
@@ -128,7 +128,7 @@ if ( $_GET['mode'] === "Flotte" )
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]).")";
-            $res = ShipyardPrice ( $id );
+            $res = TechPrice ( $id, 1 );
             $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
             if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";
@@ -211,7 +211,7 @@ if ( $_GET['mode'] === "Verteidigung" )
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]).")";
-            $res = ShipyardPrice ( $id );
+            $res = TechPrice ( $id, 1 );
             $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
             if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";
@@ -305,7 +305,7 @@ if ( $_GET['mode'] === "Forschung" )
                 echo " <b><font style=\"color:lime;\">+2</font></b> <img border=\"0\" src=\"img/technokrat_ikon.gif\" alt=\"".loca("PREM_TECHNOCRATE")."\" onmouseover=\"return overlib('<font color=white>".loca("PREM_TECHNOCRATE")."</font>', WIDTH, 100);\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
             }
             if ($GlobalUser[$id]) echo ")";
-            $res = ResearchPrice ( $id, $level );
+            $res = TechPrice ( $id, $level );
             $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
             if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";

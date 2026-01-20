@@ -144,7 +144,7 @@ foreach ( $buildmap as $i => $id )
     echo "<a href=index.php?page=infos&session=$session&gid=".$id.">".loca("NAME_$id")."</a></a>";
     if ( $lvl ) echo " (".va(loca("BUILD_LEVEL"), $lvl).")";
     echo "<br>". loca("SHORT_$id");
-    $res = BuildPrice ( $id, $lvl+1 );
+    $res = TechPrice ( $id, $lvl+1 );
     $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
     echo "<br>".loca("BUILD_PRICE").":";
     if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";

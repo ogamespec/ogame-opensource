@@ -412,7 +412,7 @@ $speed = $GlobalUni['speed'];
             echo "            <th width=\"75\" >\n";
             if ($amount > 0)
             {
-                $cost = ShipyardPrice ( $fleet );
+                $cost = TechPrice ( $fleet, 1 );
                 $m = $cost[GID_RC_METAL];
                 $k = $cost[GID_RC_CRYSTAL];
                 $d = $cost[GID_RC_DEUTERIUM];
@@ -465,7 +465,7 @@ $speed = $GlobalUni['speed'];
             echo "            <th width=\"75\" >\n";
             if ($amount > 0)
             {
-                $cost = ShipyardPrice ( $def );
+                $cost = TechPrice ( $def, 1 );
                 $m = $cost[GID_RC_METAL];
                 $k = $cost[GID_RC_CRYSTAL];
                 $d = $cost[GID_RC_DEUTERIUM];

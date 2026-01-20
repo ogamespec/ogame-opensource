@@ -93,7 +93,7 @@ function ExpPoints ( array $fleet ) : int
     foreach ( $fleetmap as $i=>$gid )
     {
         $amount = $fleet[$gid];
-        $res = ShipyardPrice ( $gid );
+        $res = TechPrice ( $gid, 1 );
         $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
         $structure += ($m + $k) * $amount;
     }
@@ -603,7 +603,7 @@ function Exp_FleetFound (array $exptab, array $queue, array $fleet_obj, array $f
         $msg .= loca_lang ("EXP_FLEET_FOUND", $lang);
         foreach ( $found_fleet as $id=>$amount)
         {
-            $res = ShipyardPrice ( $id );
+            $res = TechPrice ( $id, 1 );
             $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
             $points += ($m + $k + $d) * $amount;
             $fpoints += $amount;

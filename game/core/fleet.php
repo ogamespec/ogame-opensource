@@ -870,7 +870,7 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
             if ( $fleet[GID_F_COLON] > 0 ) {
                 $fleet[GID_F_COLON]--;
                 $met = $kris = $deut = $energy = 0;
-                $cost = ShipyardPrice ( GID_F_COLON );
+                $cost = TechPrice ( GID_F_COLON, 1 );
                 AdjustStats ( $origin['owner_id'], ($cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM]), 1, 0, '-' );
                 RecalcRanks ();
             }

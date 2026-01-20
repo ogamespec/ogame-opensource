@@ -184,7 +184,7 @@ function UnitShoot (
 
         if (mt_rand (0, 99) >= (($b_hull * 100) / $b_hullmax) || $b_hull == 0) {
 
-            $price = ShipyardPrice ($b_gid);
+            $price = TechPrice ($b_gid, 1);
 
             // If a defense is blown, use DID (Defense-in-Debris), if a fleet is blown, use FID (Fleet-in-Debris)
             $dm += intval (ceil($price[GID_RC_METAL] * ((float)( (IsDefense($b_gid) ? $did : $fid) / 100.0))));
