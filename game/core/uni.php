@@ -72,7 +72,7 @@ function ResetHackCounter () : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."uni SET hacks = 0";
-    dbquery ($query);  
+    dbquery ($query);
 }
 
 // Increment the game's hack attempt counter.
@@ -80,7 +80,7 @@ function IncrementHackCounter () : void
 {
     global $db_prefix;
     $query = "UPDATE ".$db_prefix."uni SET hacks = hacks + 1";
-    dbquery ($query);  
+    dbquery ($query);
 }
 
 ?>
