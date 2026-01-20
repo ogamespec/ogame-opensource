@@ -41,6 +41,7 @@ $LOCA["de"]["PR_TECHNO_INFO"] = "+2 Spionagestufen,&lt;br&gt;25% weniger Forschu
 $LOCA["de"]["PR_PURCHASE"] = "Jetzt bestellen!";
 $LOCA["de"]["PR_RENEW"] = "Jetzt verlangern!";
 $LOCA["de"]["PR_ACTIVE_DAYS"] = "Noch #1 Tage &lt;font color=lime&gt;aktiv&lt;/font&gt;";
+$LOCA["de"]["PR_ACTIVE_HOURS"] = "Noch #1 Hrs &lt;font color=lime&gt;aktiv&lt;/font&gt;";
 
 $LOCA["de"]["GLOBAL_ERROR"] = "Fehler";
 

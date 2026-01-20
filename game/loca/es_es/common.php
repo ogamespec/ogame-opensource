@@ -41,6 +41,7 @@ $LOCA["es"]["PR_TECHNO_INFO" ] = "+2 al nivel de espionaje, un 25 % menos de tie
 $LOCA["es"]["PR_PURCHASE" ] = "¡Contrata ahora!";
 $LOCA["es"]["PR_RENEW" ] = "Renew!";   		// TODO: I'm not sure what it was exactly, since there is no HTML
 $LOCA["es"]["PR_ACTIVE_DAYS" ] = "Aún &lt;font color=lime&gt;activo&lt;/font&gt; por #1 días más"; // Wanna give this a second pass afte comparing with original translation
+$LOCA["es"]["PR_ACTIVE_HOURS" ] = "Aún &lt;font color=lime&gt;activo&lt;/font&gt; por #1 días hrs";
 
 $LOCA["es"]["GLOBAL_ERROR"] = "Error";
 

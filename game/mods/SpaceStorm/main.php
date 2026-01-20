@@ -147,9 +147,13 @@ class SpaceStorm extends GameMod {
 
             $now = time();
             $d = ($end - $now) / (60*60*24);
-            $days = va(loca("PR_ACTIVE_DAYS"), ceil($d));
+            if ($d < 1) {
+                $hr = ($end - $now) / (60*60);
+                $active = va(loca("PR_ACTIVE_HOURS"), ceil($hr));
+            }
+            else $active = va(loca("PR_ACTIVE_DAYS"), ceil($d));
 
-            $overlib .= "<center><font size=1 color=white><b>".$days."<br>".loca ("STORM_STORM")."</font><br>";
+            $overlib .= "<center><font size=1 color=white><b>".$active."<br>".loca ("STORM_STORM")."</font><br>";
             
             // Типы и описание шторма
             for ($i=0; $i<SPACE_STORM_MASK_MSB; $i++) {

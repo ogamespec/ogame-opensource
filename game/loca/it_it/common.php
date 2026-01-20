@@ -41,6 +41,7 @@ $LOCA["it"]["PR_TECHNO_INFO" ] = "+2 livelli spionaggio, -25% tempo di ricerca";
 $LOCA["it"]["PR_PURCHASE" ] = "Recluta ora!";
 $LOCA["it"]["PR_RENEW" ] = "";
 $LOCA["it"]["PR_ACTIVE_DAYS" ] = "&lt;font color=white&gt;Attivo per altri&lt;/font&gt; #1 giorni <br>-";
+$LOCA["it"]["PR_ACTIVE_HOURS" ] = "&lt;font color=white&gt;Attivo per altri&lt;/font&gt; #1 hrs <br>-";
 
 $LOCA["it"]["GLOBAL_ERROR"] = "Errore";
 

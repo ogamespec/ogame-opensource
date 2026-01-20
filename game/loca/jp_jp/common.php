@@ -41,6 +41,7 @@ $LOCA["jp"]["PR_TECHNO_INFO"] = "スパイ活動レベル+2、調査時間25%短
 $LOCA["jp"]["PR_PURCHASE"] = "注文する！";
 $LOCA["jp"]["PR_RENEW"] = "それを延長する！";
 $LOCA["jp"]["PR_ACTIVE_DAYS"] = "&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと#1日";
+$LOCA["jp"]["PR_ACTIVE_HOURS"] = "&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと#1hr.";
 
 $LOCA["jp"]["GLOBAL_ERROR"] = "何かの間違いだ。";
 
