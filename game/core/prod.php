@@ -55,31 +55,12 @@ function TechPrice ( int $id, int $lvl ) : array
     return $res;
 }
 
-// Time to build a $id level $lvl building in seconds.
-function BuildDuration ( int $id, int $lvl, int $robots, int $nanits, int $speed ) : int
+// Time to produce a $id level $lvl tech in seconds. b1 - robots/shipyard/reslab. b2 - nanites (0 for research). const_factor - see in defs.php
+function TechDuration ( int $id, int $lvl, int $const_factor, int $b1, int $b2, int $speed ) : int
 {
     $res = TechPrice ( $id, $lvl );
-    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-    $secs = floor ( ( ( ($m + $k) / (2500 * (1 + $robots)) ) * pow (0.5, $nanits) * 60*60 ) / $speed );
-    if ($secs < 1) $secs = 1;
-    return (int)$secs;
-}
-
-function ShipyardDuration ( int $id, int $shipyard, int $nanits, int $speed ) : int
-{
-    $res = TechPrice ($id, 1);
-    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-    $secs = floor ( ( ( ($m + $k) / (2500 * (1 + $shipyard)) ) * pow (0.5, $nanits) * 60*60 ) / $speed );
-    if ($secs < 1) $secs = 1;
-    return (int)$secs;
-}
-
-function ResearchDuration ( int $id, int $lvl, int $reslab, int $speed ) : int
-{
-    if ( $id == GID_R_GRAVITON ) return 1;
-    $res= TechPrice ($id, $lvl );
-    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-    $secs = floor ( ( ($m + $k) / (1000 * (1 + $reslab)) * 60*60 ) / $speed );
+    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL];
+    $secs = floor ( ( ( ($m + $k) / ($const_factor * (1 + $b1)) ) * pow (0.5, $b2) * 60*60 ) / $speed );
     if ($secs < 1) $secs = 1;
     return (int)$secs;
 }

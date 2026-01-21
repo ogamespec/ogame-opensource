@@ -275,7 +275,7 @@ function PropagateBuildQueue (int $planet_id, int $from) : void
                 if ( $destroy ) $BuildEvent = QTYP_DEMOLISH;
                 else $BuildEvent = QTYP_BUILD;
 
-                $duration = floor (BuildDuration ( $id, $lvl, $planet[GID_B_ROBOTS], $planet[GID_B_NANITES], $speed ));
+                $duration = floor (TechDuration ( $id, $lvl, PROD_BUILDING_DURATION_FACTOR, $planet[GID_B_ROBOTS], $planet[GID_B_NANITES], $speed ));
                 AddQueue ( $user['player_id'], $BuildEvent, $row['id'], $id, $lvl, $from, $duration, QUEUE_PRIO_BUILD );
 
                 // Update the start and end time of construction
@@ -375,7 +375,7 @@ function BuildEnque ( array $user, int $planet_id, int $id, int $destroy, int $n
         if ( $destroy ) $BuildEvent = QTYP_DEMOLISH;
         else $BuildEvent = QTYP_BUILD;
 
-        $duration = floor (BuildDuration ( $id, $lvl, $planet[GID_B_ROBOTS], $planet[GID_B_NANITES], $speed ));
+        $duration = floor (TechDuration ( $id, $lvl, PROD_BUILDING_DURATION_FACTOR, $planet[GID_B_ROBOTS], $planet[GID_B_NANITES], $speed ));
         $row = array ( 'owner_id' => $user['player_id'], 'planet_id' => $planet_id, 'list_id' => $list_id, 'tech_id' => $id, 'level' => $lvl, 'destroy' => $destroy, 'start' => $now, 'end' => $now+$duration );
         $sub_id = AddDBRow ( $row, "buildqueue" );
         if ($list_id == 1) AddQueue ( $user['player_id'], $BuildEvent, $sub_id, $id, $lvl, $now, $duration, QUEUE_PRIO_BUILD );
@@ -592,7 +592,7 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
         $now = ShipyardLatestTime ($planet_id, $now);
         $shipyard = $planet[GID_B_SHIPYARD];
         $nanits = $planet[GID_B_NANITES];
-        $seconds = ShipyardDuration ( $gid, $shipyard, $nanits, $speed );
+        $seconds = TechDuration ( $gid, 1, PROD_SHIPYARD_DURATION_FACTOR, $shipyard, $nanits, $speed );
 
         // Write off resources.
         AdjustResources ( $m, $k, $d, $planet_id, '-' );
@@ -726,7 +726,7 @@ function StartResearch (int $player_id, int $planet_id, int $id, int $now) : voi
         $speed = $uni['speed'];
         if ($now == 0) $now = time ();
         $reslab = ResearchNetwork ( $planet['planet_id'], $id );
-        $seconds = ResearchDuration ( $id, $level, $reslab, $speed * $r_factor);
+        $seconds = TechDuration ( $id, $level, PROD_RESEARCH_DURATION_FACTOR, $reslab, 0, $speed * $r_factor);
 
         // Списать ресурсы.
         $res = TechPrice ( $id, $level );

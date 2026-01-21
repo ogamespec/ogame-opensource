@@ -469,7 +469,7 @@ else
         if ($m) echo loca("INFO_DEMOLISH_M") . "<b>".nicenum($m)."</b> ";
         if ($k) echo loca("INFO_DEMOLISH_K") . "<b>".nicenum($k)."</b> ";
         if ($d) echo loca("INFO_DEMOLISH_D") . "<b>".nicenum($d)."</b> ";
-        $t = BuildDuration ( $gid, $aktplanet[$gid]-1, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed );
+        $t = TechDuration ( $gid, $aktplanet[$gid]-1, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed );
         echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".DurationFormat ( $t )."<br></th></tr></table>\n";
     }
 
@@ -485,7 +485,7 @@ else
         if ($m) echo loca("INFO_DEMOLISH_M") . "<b>".nicenum($m)."</b> ";
         if ($k) echo loca("INFO_DEMOLISH_K") . "<b>".nicenum($k)."</b> ";
         if ($d) echo loca("INFO_DEMOLISH_D") . "<b>".nicenum($d)."</b> ";
-        $t = BuildDuration ( $gid, $aktplanet[$gid]-1, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed );
+        $t = TechDuration ( $gid, $aktplanet[$gid]-1, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed );
         echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".DurationFormat ( $t )."<br></th></tr></table>\n";
     }
 

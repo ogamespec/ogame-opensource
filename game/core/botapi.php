@@ -86,7 +86,7 @@ function BotBuild (int $obj_id) : int
     $text = CanBuild ( $user, $aktplanet, $obj_id, $level, 0 );
     if ( $text === '' ) {
         $speed = $GlobalUni['speed'];
-        $duration = floor (BuildDuration ( $obj_id, $level, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed ));
+        $duration = floor (TechDuration ( $obj_id, $level, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed ));
         BuildEnque ( $user, $user['aktplanet'], $obj_id, 0, $BotNow);
         UpdatePlanetActivity ( $user['aktplanet'], $BotNow );
         return $duration;
@@ -182,7 +182,7 @@ function BotBuildFleet (int $obj_id, int $n) : int
         $now = ShipyardLatestTime ($aktplanet, $BotNow);
         $shipyard = $aktplanet[GID_B_SHIPYARD];
         $nanits = $aktplanet[GID_B_NANITES];
-        $seconds = ShipyardDuration ( $obj_id, $shipyard, $nanits, $speed );
+        $seconds = TechDuration ( $obj_id, 1, PROD_SHIPYARD_DURATION_FACTOR, $shipyard, $nanits, $speed );
         AddQueue ($user['player_id'], "Shipyard", $aktplanet['planet_id'], $obj_id, $n, $now, $seconds);
         UpdatePlanetActivity ( $user['aktplanet'], $BotNow );
         return $seconds;
@@ -234,7 +234,7 @@ function BotResearch (int $obj_id) : int
         $prem = PremiumStatus ($user);
         if ( $prem['technocrat'] ) $r_factor = 1.1;
         else $r_factor = 1.0;
-        $seconds = ResearchDuration ( $obj_id, $level, $reslab, $speed * $r_factor);
+        $seconds = TechDuration ( $obj_id, $level, PROD_RESEARCH_DURATION_FACTOR, $reslab, 0, $speed * $r_factor);
         UpdatePlanetActivity ( $user['aktplanet'], $BotNow );
         return $seconds;
     }

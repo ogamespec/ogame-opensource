@@ -135,7 +135,7 @@ if ( $_GET['mode'] === "Flotte" )
             if ($k) echo " ".loca("NAME_".GID_RC_CRYSTAL).": <b>".nicenum($k)."</b>";
             if ($d) echo " ".loca("NAME_".GID_RC_DEUTERIUM).": <b>".nicenum($d)."</b>";
             if ($e) echo " ".loca("NAME_".GID_RC_ENERGY).": <b>".nicenum($e)."</b>";
-            $t = ShipyardDuration ( $id, $aktplanet[GID_B_SHIPYARD], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
+            $t = TechDuration ( $id, 1, PROD_SHIPYARD_DURATION_FACTOR, $aktplanet[GID_B_SHIPYARD], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
             echo "<br>".loca("BUILD_DURATION").": ".DurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !TechMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>".loca("BUILD_SHIPYARD_CANT")."</font>";
@@ -218,7 +218,7 @@ if ( $_GET['mode'] === "Verteidigung" )
             if ($k) echo " ".loca("NAME_".GID_RC_CRYSTAL).": <b>".nicenum($k)."</b>";
             if ($d) echo " ".loca("NAME_".GID_RC_DEUTERIUM).": <b>".nicenum($d)."</b>";
             if ($e) echo " ".loca("NAME_".GID_RC_ENERGY).": <b>".nicenum($e)."</b>";
-            $t = ShipyardDuration ( $id, $aktplanet[GID_B_SHIPYARD], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
+            $t = TechDuration ( $id, 1, PROD_SHIPYARD_DURATION_FACTOR, $aktplanet[GID_B_SHIPYARD], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
             echo "<br>".loca("BUILD_DURATION").": ".DurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !$busy ) {
@@ -312,7 +312,7 @@ if ( $_GET['mode'] === "Forschung" )
             if ($k) echo " ".loca("NAME_".GID_RC_CRYSTAL).": <b>".nicenum($k)."</b>";
             if ($d) echo " ".loca("NAME_".GID_RC_DEUTERIUM).": <b>".nicenum($d)."</b>";
             if ($e) echo " ".loca("NAME_".GID_RC_ENERGY).": <b>".nicenum($e)."</b>";
-            $t = ResearchDuration ( $id, $level, $reslab, $GlobalUni['speed'] * $r_factor );
+            $t = TechDuration ( $id, $level, PROD_RESEARCH_DURATION_FACTOR, $reslab, 0, $GlobalUni['speed'] * $r_factor );
             echo "<br>".loca("BUILD_DURATION").": ".DurationFormat ( $t )."<br></th>";
             echo "<td class=k>";
             if ( $operating )        // The research is in progress
