@@ -127,7 +127,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
         'name' => "space", 'oname' => "space", 'name_changed' => 0, 'name_until' => 0,
         'password' => $md, 'temp_pass' => "", 'pemail' => "", 'email' => "",
         'email_changed' => 0, 'email_until' => 0, 'disable' => 0, 'disable_until' => 0, 'vacation' => 0, 'vacation_until' => 0, 'banned' => 0, 'banned_until' => 0, 'noattack' => 0, 'noattack_until' => 0,
-        'lastlogin' => 0, 'lastclick' => 0, 'ip_addr' => "0.0.0.0", 'validated' => 1, 'validatemd' => "", 'hplanetid' => 1, 'admin' => 1, 'sortby' => 0, 'sortorder' => 0,
+        'lastlogin' => 0, 'lastclick' => 0, 'ip_addr' => "0.0.0.0", 'validated' => 1, 'validatemd' => "", 'hplanetid' => 1, 'admin' => 2, 'sortby' => 0, 'sortorder' => 0,
         'skin' => hostname() . "evolution/", 'useskin' => 1, 'deact_ip' => 1, 'maxspy' => 1, 'maxfleetmsg' => 3, 'lang' => $_POST["uni_lang"], 'aktplanet' => 0,
         'dm' => 0, 'dmfree' => 0, 'sniff' => 0, 'debug' => 0, 'trader' => 0, 'rate_m' => 0, 'rate_k' => 0, 'rate_d' => 0,
         'score1' => 0, 'score2' => 0, 'score3' => 0, 'place1' => 0, 'place2' => 0, 'place3' => 0,
