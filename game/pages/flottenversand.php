@@ -327,7 +327,7 @@ else {
         va(loca_lang("DEBUG_LOG_FLEET_SEND1", $GlobalUni['lang']), $fleet_id) . GetMissionNameDebug ($order) . " " .
         $origin['name'] ." [".$origin['g'].":".$origin['s'].":".$origin['p']."] -&gt; ".$target['name']." [".$target['g'].":".$target['s'].":".$target['p']."]<br>" .
         DumpFleet ($fleet) . "<br>" .
-        va(loca_lang("DEBUG_LOG_FLEET_SEND2", $GlobalUni['lang']), BuildDurationFormat ($flighttime), BuildDurationFormat ($hold_time), nicenum ($cons['fleet'] + $cons['probes']), $union_id) );
+        va(loca_lang("DEBUG_LOG_FLEET_SEND2", $GlobalUni['lang']), DurationFormat ($flighttime), DurationFormat ($hold_time), nicenum ($cons['fleet'] + $cons['probes']), $union_id) );
 
     if ( $union_id ) {
         $union_time = UpdateUnionTime ( $union_id, $queue['end'], $fleet_id );

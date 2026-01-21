@@ -470,7 +470,7 @@ else
         if ($k) echo loca("INFO_DEMOLISH_K") . "<b>".nicenum($k)."</b> ";
         if ($d) echo loca("INFO_DEMOLISH_D") . "<b>".nicenum($d)."</b> ";
         $t = BuildDuration ( $gid, $aktplanet[$gid]-1, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed );
-        echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".BuildDurationFormat ( $t )."<br></th></tr></table>\n";
+        echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".DurationFormat ( $t )."<br></th></tr></table>\n";
     }
 
     if ( $gid == GID_B_MISS_SILO && $aktplanet[$gid])    // Missile Silo
@@ -486,7 +486,7 @@ else
         if ($k) echo loca("INFO_DEMOLISH_K") . "<b>".nicenum($k)."</b> ";
         if ($d) echo loca("INFO_DEMOLISH_D") . "<b>".nicenum($d)."</b> ";
         $t = BuildDuration ( $gid, $aktplanet[$gid]-1, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed );
-        echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".BuildDurationFormat ( $t )."<br></th></tr></table>\n";
+        echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".DurationFormat ( $t )."<br></th></tr></table>\n";
     }
 
 }

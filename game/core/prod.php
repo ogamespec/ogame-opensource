@@ -119,23 +119,6 @@ function ResearchNetwork ( int $planetid, int $id ) : int
     return $reslab;
 }
 
-// Return a string of durations by days, hours, minutes, seconds.
-function BuildDurationFormat ( int $seconds ) : string
-{
-    $res = "";
-    $days = floor ($seconds / (24*3600));
-    $hours = floor (intdiv($seconds, 3600) % 24);
-    $mins = floor (intdiv($seconds, 60) % 60);
-    $secs = round ($seconds % 60);
-    if ($days) {
-        $res .= "$days".loca("TIME_DAYS")." ";
-    }
-    if ($hours || $days) $res .= "$hours".loca("TIME_HOUR")." ";
-    if ($mins || $days) $res .= "$mins".loca("TIME_MIN")." ";
-    if ($secs) $res .= "$secs".loca("TIME_SEC");
-    return $res;
-}
-
 function IsEnoughResources (array $planet, float $m, float $k, float $d, int $e) : bool
 {
     if ( $m && $planet[GID_RC_METAL] < $m ) return false;

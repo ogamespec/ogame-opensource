@@ -168,7 +168,7 @@ UserLog ( $aktplanet['owner_id'], "FLEET",
     va(loca_lang("DEBUG_LOG_FLEET_SEND_AJAX1", $GlobalUni['lang']), $fleet_id) . GetMissionNameDebug ($order) . " " .
     $aktplanet['name'] ." [".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."] -&gt; ".$target['name']." [".$target['g'].":".$target['s'].":".$target['p']."]<br>" .
     DumpFleet ($fleet) . "<br>" .
-    va(loca_lang("DEBUG_LOG_FLEET_SEND_AJAX2", $GlobalUni['lang']), BuildDurationFormat ($flighttime), nicenum ($cons)) );
+    va(loca_lang("DEBUG_LOG_FLEET_SEND_AJAX2", $GlobalUni['lang']), DurationFormat ($flighttime), nicenum ($cons)) );
 
 // Get the fleet off the planet.
 AdjustResources ( 0, 0, $cons, $aktplanet['planet_id'], '-' );
