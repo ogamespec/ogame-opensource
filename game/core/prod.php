@@ -161,20 +161,20 @@ function ProdResources ( array &$planet, int $time_from, int $time_to ) : void
     if ( $prem['geologist'] ) $g_factor = 1.1;
     else $g_factor = 1.0;
 
-    $hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['mprod']) * $planet['factor'] * $speed * $g_factor + 20 * $speed;        // Metal
+    $hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['prod'.GID_B_METAL_MINE]) * $planet['factor'] * $speed * $g_factor + 20 * $speed;        // Metal
     if ( $planet[GID_RC_METAL] < $planet['mmax'] ) {
         $planet[GID_RC_METAL] += ($hourly * $diff) / 3600;
         if ( $planet[GID_RC_METAL] >= $planet['mmax'] ) $planet[GID_RC_METAL] = $planet['mmax'];
     }
 
-    $hourly = prod_crys ($planet[GID_B_CRYS_MINE], $planet['kprod']) * $planet['factor'] * $speed * $g_factor + 10 * $speed;        // Crystal
+    $hourly = prod_crys ($planet[GID_B_CRYS_MINE], $planet['prod'.GID_B_CRYS_MINE]) * $planet['factor'] * $speed * $g_factor + 10 * $speed;        // Crystal
     if ( $planet[GID_RC_CRYSTAL] < $planet['kmax'] ) {
         $planet[GID_RC_CRYSTAL] += ($hourly * $diff) / 3600;
         if ( $planet[GID_RC_CRYSTAL] >= $planet['kmax'] ) $planet[GID_RC_CRYSTAL] = $planet['kmax'];
     }
 
-    $hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed * $g_factor;    // Deuterium
-    $hourly -= cons_fusion ( $planet[GID_B_FUSION], $planet['fprod'] ) * $speed;	// fusion
+    $hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['prod'.GID_B_DEUT_SYNTH]) * $planet['factor'] * $speed * $g_factor;    // Deuterium
+    $hourly -= cons_fusion ( $planet[GID_B_FUSION], $planet['prod'.GID_B_FUSION] ) * $speed;	// fusion
     if ( $planet[GID_RC_DEUTERIUM] < $planet['dmax'] ) {
         $planet[GID_RC_DEUTERIUM] += ($hourly * $diff) / 3600;
         if ( $planet[GID_RC_DEUTERIUM] >= $planet['dmax'] ) $planet[GID_RC_DEUTERIUM] = $planet['dmax'];
