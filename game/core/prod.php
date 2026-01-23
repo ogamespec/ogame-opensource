@@ -56,7 +56,7 @@ function TechPrice ( int $id, int $lvl ) : array
 }
 
 // Time to produce a $id level $lvl tech in seconds. b1 - robots/shipyard/reslab. b2 - nanites (0 for research). const_factor - see in defs.php
-function TechDuration ( int $id, int $lvl, int $const_factor, int $b1, int $b2, int $speed ) : int
+function TechDuration ( int $id, int $lvl, int $const_factor, int $b1, int $b2, float $speed ) : int
 {
     $res = TechPrice ( $id, $lvl );
     $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL];
