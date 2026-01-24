@@ -187,12 +187,12 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |700|DOUBLE|Metal | 
 |701|DOUBLE|crystal | 
 |702|DOUBLE|deuterium | 
-|mprod|DOUBLE|Percentage of metal mine production (0...1)| 
-|kprod|DOUBLE|Percentage of crystal mine production (0...1)| 
-|dprod|DOUBLE|Percentage of deuterium mine production (0...1)| 
-|sprod|DOUBLE|Percentage of output of the solar power plant (0...1)| 
-|fprod|DOUBLE|Percentage of thermonuclear production (0...1)| 
-|ssprod|DOUBLE|Percentage of solar satellite generation (0...1)| 
+|prod1|DOUBLE|Percentage of metal mine production (0...1)| 
+|prod2|DOUBLE|Percentage of crystal mine production (0...1)| 
+|prod3|DOUBLE|Percentage of deuterium mine production (0...1)| 
+|prod4|DOUBLE|Percentage of output of the solar power plant (0...1)| 
+|prod12|DOUBLE|Percentage of thermonuclear production (0...1)| 
+|prod212|DOUBLE|Percentage of solar satellite generation (0...1)| 
 |lastpeek|INT UNSIGNED|Time of last planetary status update, time() |
 |lastakt|INT UNSIGNED|Time of last activity, time()| 
 |gate_until|INT UNSIGNED|Gate cooling time, time()| 

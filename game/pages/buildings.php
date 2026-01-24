@@ -9,6 +9,41 @@
 
 // Shipyard, Defense, and Research.
 
+// Get a list of bonuses for the specified technology. By default, +2 is shown for Espionage with a Technocrat. Modifications can add their own bonuses.
+function GetBuildingsBonus (int $gid) : array
+{
+    global $GlobalUser;
+    $bonues = array();
+
+    $prem = PremiumStatus ($GlobalUser);
+
+    if ( $gid == GID_R_ESPIONAGE && $prem['technocrat'] ) { 
+
+        $bonus = [];
+        $bonus['value'] = "+2";
+        $bonus['img'] = "img/technokrat_ikon.gif";
+        $bonus['alt'] = loca("PREM_TECHNOCRATE");
+        $bonus['descr'] = loca("PREM_TECHNOCRATE");
+
+        $bonues[] = $bonus;
+    }
+
+    ModsExecIntRef ('page_buildings_get_bonus', $gid, $bonues);
+    return $bonues;
+}
+
+function ShowBuildingsBonus (int $gid) : void
+{
+    $bonues = GetBuildingsBonus ($gid);
+    foreach ($bonues as $i=>$bonus) {
+
+        echo " <b><font style=\"color:lime;\">".$bonus['value']."</font></b> ";
+        echo "<img border=\"0\" src=\"".$bonus['img']."\" alt=\"".$bonus['alt']."\" onmouseover=\"return overlib('<font color=white>";
+        echo $bonus['descr'];
+        echo "</font>', WIDTH, 100);\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
+    }
+}
+
 // POST request processing.
 if ( method () === "POST" && !$GlobalUser['vacation'] )
 {
@@ -22,7 +57,7 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             // Calculate amount (no more than the resources on the planet and no more than `max_werf`)
             if ( $value > $GlobalUni['max_werf'] ) $value = $GlobalUni['max_werf'];
 
-            $res = ShipyardPrice ( $gid );
+            $res = TechPrice ( $gid, 1 );
             $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
 
             if ( $aktplanet[GID_RC_METAL] < $m || $aktplanet[GID_RC_CRYSTAL] < $k || $aktplanet[GID_RC_DEUTERIUM] < $d ) continue;    // insufficient resources for one unit
@@ -127,25 +162,29 @@ if ( $_GET['mode'] === "Flotte" )
             }
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
-            if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]).")";
-            $res = ShipyardPrice ( $id );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+            if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]);
+            ShowBuildingsBonus ($id);
+            if ($aktplanet[$id]) echo ")";
+            $cost = TechPrice ( $id, 1 );
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
-            if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";
-            if ($k) echo " ".loca("NAME_".GID_RC_CRYSTAL).": <b>".nicenum($k)."</b>";
-            if ($d) echo " ".loca("NAME_".GID_RC_DEUTERIUM).": <b>".nicenum($d)."</b>";
-            if ($e) echo " ".loca("NAME_".GID_RC_ENERGY).": <b>".nicenum($e)."</b>";
-            $t = ShipyardDuration ( $id, $aktplanet[GID_B_SHIPYARD], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
-            echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
+            foreach ($resourcemap as $i=>$rc) {
+                if (isset($cost[$rc]) && $cost[$rc]) {
+                    echo " ".loca("NAME_".$rc).": <b>".nicenum($cost[$rc])."</b>";
+                }
+            }
+            $t = TechDuration ( $id, 1, PROD_SHIPYARD_DURATION_FACTOR, $aktplanet[GID_B_SHIPYARD], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
+            echo "<br>".loca("BUILD_DURATION").": ".DurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !TechMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>".loca("BUILD_SHIPYARD_CANT")."</font>";
-            else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) && !$busy) {
+            else if (IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) && !$busy) {
                 echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
                 if ( $prem['commander'] ) {
                     $max = $GlobalUni['max_werf'];
-                    if ( $m ) $max = floor (min ($max, $aktplanet[GID_RC_METAL] / $m));
-                    if ( $k ) $max = floor (min ($max, $aktplanet[GID_RC_CRYSTAL] / $k));
-                    if ( $d ) $max = floor (min ($max, $aktplanet[GID_RC_DEUTERIUM] / $d));
+                    foreach ($resourcemap as $i=>$rc) {
+                        if (isset($cost[$rc]) && isset($aktplanet[$rc]) && $cost[$rc]) {
+                            $max = floor (min ($max, $aktplanet[$rc] / $cost[$rc]));
+                        }
+                    }
                     echo "<br><a href=\"javascript:setMax($id, $max);\">(max. $max)</a>";
                 }
             }
@@ -210,29 +249,33 @@ if ( $_GET['mode'] === "Verteidigung" )
             }
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
-            if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]).")";
-            $res = ShipyardPrice ( $id );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+            if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]);
+            ShowBuildingsBonus ($id);
+            if ($aktplanet[$id]) echo ")";
+            $cost = TechPrice ( $id, 1 );
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
-            if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";
-            if ($k) echo " ".loca("NAME_".GID_RC_CRYSTAL).": <b>".nicenum($k)."</b>";
-            if ($d) echo " ".loca("NAME_".GID_RC_DEUTERIUM).": <b>".nicenum($d)."</b>";
-            if ($e) echo " ".loca("NAME_".GID_RC_ENERGY).": <b>".nicenum($e)."</b>";
-            $t = ShipyardDuration ( $id, $aktplanet[GID_B_SHIPYARD], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
-            echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
+            foreach ($resourcemap as $i=>$rc) {
+                if (isset($cost[$rc]) && $cost[$rc]) {
+                    echo " ".loca("NAME_".$rc).": <b>".nicenum($cost[$rc])."</b>";
+                }
+            }
+            $t = TechDuration ( $id, 1, PROD_SHIPYARD_DURATION_FACTOR, $aktplanet[GID_B_SHIPYARD], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
+            echo "<br>".loca("BUILD_DURATION").": ".DurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !$busy ) {
                 if ( ($id == GID_D_SDOME || $id == GID_D_LDOME) && $aktplanet[$id] > 0 ) echo "<font color=#FF0000>".loca("BUILD_ERROR_DOME")."</font>";
                 else if ( !TechMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>".loca("BUILD_SHIPYARD_CANT")."</font>";
-                else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) {
+                else if (IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) ) {
                     echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
                     if ( $prem['commander'] && !( $id == GID_D_SDOME || $id == GID_D_LDOME ) ) {
                         if ( $id == GID_D_ABM ) $max = $aktplanet[GID_B_MISS_SILO] * 10 - (2*$aktplanet[GID_D_IPM] + $aktplanet[GID_D_ABM]);
                         else if ( $id == GID_D_IPM ) $max = ($aktplanet[GID_B_MISS_SILO] * 10 - (2*$aktplanet[GID_D_IPM] + $aktplanet[GID_D_ABM])) / 2;
                         else $max = $GlobalUni['max_werf'];
-                        if ( $m ) $max = floor (min ($max, $aktplanet[GID_RC_METAL] / $m));
-                        if ( $k ) $max = floor (min ($max, $aktplanet[GID_RC_CRYSTAL] / $k));
-                        if ( $d ) $max = floor (min ($max, $aktplanet[GID_RC_DEUTERIUM] / $d));
+                        foreach ($resourcemap as $i=>$rc) {
+                            if (isset($cost[$rc]) && isset($aktplanet[$rc]) && $cost[$rc]) {
+                                $max = floor (min ($max, $aktplanet[$rc] / $cost[$rc]));
+                            }
+                        }
                         echo "<br><a href=\"javascript:setMax($id, $max);\">(max. $max)</a>";
                     }
                 }
@@ -301,19 +344,17 @@ if ( $_GET['mode'] === "Forschung" )
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($GlobalUser[$id]) echo "</a> (" . va(loca("BUILD_LEVEL"), $GlobalUser[$id]);
-            if ( $id == GID_R_ESPIONAGE && $prem['technocrat'] ) { 
-                echo " <b><font style=\"color:lime;\">+2</font></b> <img border=\"0\" src=\"img/technokrat_ikon.gif\" alt=\"".loca("PREM_TECHNOCRATE")."\" onmouseover=\"return overlib('<font color=white>".loca("PREM_TECHNOCRATE")."</font>', WIDTH, 100);\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
-            }
+            ShowBuildingsBonus ($id);
             if ($GlobalUser[$id]) echo ")";
-            $res = ResearchPrice ( $id, $level );
+            $res = TechPrice ( $id, $level );
             $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
             if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";
             if ($k) echo " ".loca("NAME_".GID_RC_CRYSTAL).": <b>".nicenum($k)."</b>";
             if ($d) echo " ".loca("NAME_".GID_RC_DEUTERIUM).": <b>".nicenum($d)."</b>";
             if ($e) echo " ".loca("NAME_".GID_RC_ENERGY).": <b>".nicenum($e)."</b>";
-            $t = ResearchDuration ( $id, $level, $reslab, $GlobalUni['speed'] * $r_factor );
-            echo "<br>".loca("BUILD_DURATION").": ".BuildDurationFormat ( $t )."<br></th>";
+            $t = TechDuration ( $id, $level, PROD_RESEARCH_DURATION_FACTOR, $reslab, 0, $GlobalUni['speed'] * $r_factor );
+            echo "<br>".loca("BUILD_DURATION").": ".DurationFormat ( $t )."<br></th>";
             echo "<td class=k>";
             if ( $operating )        // The research is in progress
             {
@@ -362,11 +403,11 @@ if ( $_GET['mode'] === "Forschung" )
             else        // The research is not in progress.
             {
                 if ($GlobalUser[$id]) {
-                    if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".va(loca("BUILD_RESEARCH_LEVEL"), $level)."</font></a>";
+                    if (IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".va(loca("BUILD_RESEARCH_LEVEL"), $level)."</font></a>";
                     else echo "<font color=#FF0000>".va(loca("BUILD_RESEARCH_LEVEL"), $level)."</font>";
                 }
                 else {
-                    if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".loca("BUILD_RESEARCH")."</font></a>";
+                    if (IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".loca("BUILD_RESEARCH")."</font></a>";
                     else echo "<font color=#FF0000>".loca("BUILD_RESEARCH")."</font></a>";
                 }
             }
@@ -524,7 +565,7 @@ document.addEventListener("visibilitychange", function() {
 </form>
 <?=loca("BUILD_SHIPYARD_TIME");?>
 
-  <?=BuildDurationFormat ($total_time); ?><br>
+  <?=DurationFormat ($total_time); ?><br>
 <?php
     }
 }

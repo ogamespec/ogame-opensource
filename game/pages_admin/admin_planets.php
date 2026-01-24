@@ -24,7 +24,8 @@ function Admin_Planets () : void
         {
             $param = array_merge ( 
                 $buildmap, $defmap, $fleetmap, 
-                array ( GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM, 'g', 's', 'p', 'diameter', 'type', 'temp', 'mprod', 'kprod', 'dprod', 'sprod', 'fprod', 'ssprod') );
+                array ( GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM, 'g', 's', 'p', 'diameter', 'type', 'temp',
+                    'prod'.GID_B_METAL_MINE, 'prod'.GID_B_CRYS_MINE, 'prod'.GID_B_DEUT_SYNTH, 'prod'.GID_B_SOLAR, 'prod'.GID_B_FUSION, 'prod'.GID_F_SAT) );
             $moon_param = array ( 'g', 's', 'p' );
 
             $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
@@ -346,46 +347,46 @@ function reset ()
 
             // mine management and power generation.
             if ( $gid == 1 && $planet['type'] != PTYP_MOON ) {
-                echo "<select name='mprod'>\n";
+                echo "<select name='prod1'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
-                    if ( $planet["mprod"] == $prc."" ) echo " selected";
+                    if ( $planet["prod".GID_B_METAL_MINE] == $prc."" ) echo " selected";
                     echo ">".($prc * 100)."</option>\n";
                 }
                 echo "</select>\n";
             }
             if ( $gid == 2 && $planet['type'] != PTYP_MOON ) {
-                echo "<select name='kprod'>\n";
+                echo "<select name='prod2'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
-                    if ( $planet["kprod"] == $prc."" ) echo " selected";
+                    if ( $planet["prod".GID_B_CRYS_MINE] == $prc."" ) echo " selected";
                     echo ">".($prc * 100)."</option>\n";
                 }
                 echo "</select>\n";
             }
             if ( $gid == 3 && $planet['type'] != PTYP_MOON ) {
-                echo "<select name='dprod'>\n";
+                echo "<select name='prod3'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
-                    if ( $planet["dprod"] == $prc."" ) echo " selected";
+                    if ( $planet["prod".GID_B_DEUT_SYNTH] == $prc."" ) echo " selected";
                     echo ">".($prc * 100)."</option>\n";
                 }
                 echo "</select>\n";
             }
             if ( $gid == 4 && $planet['type'] != PTYP_MOON ) {
-                echo "<select name='sprod'>\n";
+                echo "<select name='prod4'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
-                    if ( $planet["sprod"] == $prc."" ) echo " selected";
+                    if ( $planet["prod".GID_B_SOLAR] == $prc."" ) echo " selected";
                     echo ">".($prc * 100)."</option>\n";
                 }
                 echo "</select>\n";
             }
             if ( $gid == 12 && $planet['type'] != PTYP_MOON ) {
-                echo "<select name='fprod'>\n";
+                echo "<select name='prod12'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
-                    if ( $planet["fprod"] == $prc."" ) echo " selected";
+                    if ( $planet["prod".GID_B_FUSION] == $prc."" ) echo " selected";
                     echo ">".($prc * 100)."</option>\n";
                 }
                 echo "</select>\n";
@@ -399,10 +400,10 @@ function reset ()
         foreach ( $fleetmap as $i=>$gid) {
             echo "<tr><th>".loca("NAME_$gid")."</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=6 name=\"$gid\" value=\"".$planet[$gid]."\" />";
             if ( $gid == GID_F_SAT && $planet['type'] != PTYP_MOON ) {
-                echo "<select name='ssprod'>\n";
+                echo "<select name='prod212'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
-                    if ( $planet["ssprod"] == $prc."" ) echo " selected";
+                    if ( $planet["prod".GID_F_SAT] == $prc."" ) echo " selected";
                     echo ">".($prc * 100)."</option>\n";
                 }
                 echo "</select>\n";

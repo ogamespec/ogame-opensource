@@ -93,8 +93,8 @@ function ExpPoints ( array $fleet ) : int
     foreach ( $fleetmap as $i=>$gid )
     {
         $amount = $fleet[$gid];
-        $res = ShipyardPrice ( $gid );
-        $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+        $res = TechPrice ( $gid, 1 );
+        $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL];
         $structure += ($m + $k) * $amount;
     }
 
@@ -144,7 +144,7 @@ function Exp_NothingHappens (array $exptab, array $queue, array $fleet_obj, arra
     // Bring back the fleet.
     // The hold time is used as the flight time.
     DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'],
-        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        $fleet_obj,
         0, $queue['end']);
 
     $n = mt_rand ( 0, count($msg) - 1 );
@@ -337,7 +337,7 @@ function Exp_DarkMatterFound (array $exptab, array $queue, array $fleet_obj, arr
     // Bring back the fleet.
     // The hold time is used as the flight time.
     DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'],
-        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        $fleet_obj,
         0, $queue['end']);
 
     return $msg;
@@ -391,7 +391,7 @@ function Exp_DelayFleet (array $exptab, array $queue, array $fleet_obj, array $f
     // Bring back the fleet.
     // The hold time is used as the flight time.
     DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'] + $delay,
-        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        $fleet_obj,
         0, $queue['end']);
 
     $n = mt_rand ( 0, count($msg) - 1 );
@@ -415,7 +415,7 @@ function Exp_AccelFleet (array $exptab, array $queue, array $fleet_obj, array $f
     // Bring back the fleet.
     // The hold time is used as the flight time.
     DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'] / $ratio,
-        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        $fleet_obj,
         0, $queue['end']);
 
     $n = mt_rand ( 0, count($msg) - 1 );
@@ -427,6 +427,7 @@ function Exp_AccelFleet (array $exptab, array $queue, array $fleet_obj, array $f
 // Finding resources
 function Exp_ResourcesFound (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
+    global $transportableResources;
     $small = array (
         loca_lang ("EXP_RESFOUND_SMALL_1", $lang),
         loca_lang ("EXP_RESFOUND_SMALL_2", $lang),
@@ -492,15 +493,24 @@ function Exp_ResourcesFound (array $exptab, array $queue, array $fleet_obj, arra
         $msg .= "<br><br>" . $footer[$n];
     }
 
-    $m = $k = $d = 0;
-    if ( $type == 0) $m = $amount;
-    else if ( $type == 1) $k = $amount;
-    else if ( $type == 2) $d = $amount;
+    $found = array ();
+    foreach ($transportableResources as $i=>$rc) {
+        $found[$rc] = 0;
+    }
+    if ( $type == 0) $found[GID_RC_METAL] = $amount;
+    else if ( $type == 1) $found[GID_RC_CRYSTAL] = $amount;
+    else if ( $type == 2) $found[GID_RC_DEUTERIUM] = $amount;
 
     // Bring back the fleet.
     // The hold time is used as the flight time.
+
+    $resources = array ();
+    foreach ($transportableResources as $i=>$rc) {
+        $resources[$rc] = $fleet_obj[$rc] + $found[$rc];
+    }
+
     DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'], 
-        $fleet_obj[GID_RC_METAL] + $m, $fleet_obj[GID_RC_CRYSTAL] + $k, $fleet_obj[GID_RC_DEUTERIUM] + $d,
+        $resources,
         0, $queue['end']);
 
     return $msg;
@@ -603,9 +613,8 @@ function Exp_FleetFound (array $exptab, array $queue, array $fleet_obj, array $f
         $msg .= loca_lang ("EXP_FLEET_FOUND", $lang);
         foreach ( $found_fleet as $id=>$amount)
         {
-            $res = ShipyardPrice ( $id );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-            $points += ($m + $k + $d) * $amount;
+            $res = TechPrice ( $id, 1 );
+            $points += TechPriceInPoints($res) * $amount;
             $fpoints += $amount;
             $msg .= "<br>" . loca_lang ("NAME_$id", $lang) . " " . nicenum ($amount);
             $fleet[$id] += $amount;    // Add ships to the expeditionary fleet
@@ -626,7 +635,7 @@ function Exp_FleetFound (array $exptab, array $queue, array $fleet_obj, array $f
     // Bring back the fleet.
     // The hold time is used as the flight time.
     DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'],
-        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        $fleet_obj,
         0, $queue['end']);
 
     return $msg;
@@ -707,7 +716,7 @@ function Exp_TraderFound (array $exptab, array $queue, array $fleet_obj, array $
     // Bring back the fleet.
     // The hold time is used as the flight time.
     DispatchFleet ($fleet, $origin, $target, (FTYP_RETURN+FTYP_EXPEDITION), $fleet_obj['deploy_time'],
-        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        $fleet_obj,
         0, $queue['end']);
 
     $n = mt_rand ( 0, count($msg) - 1 );
@@ -721,7 +730,7 @@ function ExpeditionArrive (array $queue, array $fleet_obj, array $fleet, array $
     // Start an orbit hold task.
     // Make the hold time a flight time (so that it can be used when returning the fleet)
     DispatchFleet ($fleet, $origin, $target, (FTYP_ORBITING+FTYP_EXPEDITION), $fleet_obj['deploy_time'],
-        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        $fleet_obj,
         0, $queue['end'], 0, $fleet_obj['flight_time']);
 }
 
@@ -808,7 +817,8 @@ function ExpeditionHold (array $queue, array $fleet_obj, array $fleet, array $or
     }
 
     // Updating the expedition's visit counter on the planet.
-    AdjustResources ( 1, 0, 0, $target['planet_id'], '+' );
+    $cost = array (GID_RC_METAL => 1);
+    AdjustResources ( $cost, $target['planet_id'], '+' );
 
     // Captain's logbook
     if ( $fleet[GID_F_PROBE] > 0 ) $text .= "\n<br/>\n<br/>\n" . Logbook ( $expcount, $exptab, $origin_user['lang']);

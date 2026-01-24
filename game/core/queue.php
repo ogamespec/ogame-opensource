@@ -185,8 +185,7 @@ function CanBuild (array $user, array $planet, int $id, int $lvl, bool $destroy,
     global $buildmap;
 
     // Cost of building
-    $res = BuildPrice ( $id, $lvl );
-    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+    $cost = TechPrice ( $id, $lvl );
 
     $result = GetResearchQueue ( $user['player_id'] );
     $resqueue = dbarray ($result);
@@ -200,7 +199,7 @@ function CanBuild (array $user, array $planet, int $id, int $lvl, bool $destroy,
     if ( $GlobalUni['freeze'] ) return loca_lang("BUILD_ERROR_UNI_FREEZE", $user['lang']);
 
     // Not a building
-    if ( ! in_array ( $id, $buildmap ) ) return loca_lang("BUILD_ERROR_INVALID_ID", $user['lang']);
+    if ( !IsBuilding($id) ) return loca_lang("BUILD_ERROR_INVALID_ID", $user['lang']);
 
     // You can't build in vacation mode
     else if ( $user['vacation'] ) return loca_lang("BUILD_ERROR_VACATION_MODE", $user['lang']);
@@ -232,7 +231,7 @@ function CanBuild (array $user, array $planet, int $id, int $lvl, bool $destroy,
     else if ( ($id == GID_B_NANITES || $id == GID_B_SHIPYARD) && $shipyard_operating ) return loca_lang("BUILD_ERROR_SHIPYARD_ACTIVE", $user['lang']);
 
     // Check the available amount of resources on the planet
-    else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) && !$enqueue ) return loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
+    else if ( !IsEnoughResources ( $user, $planet, $cost ) && !$enqueue ) return loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
 
     // Check available technologies.
     else if ( !TechMeetRequirement ( $user, $planet, $id ) ) return loca_lang("BUILD_ERROR_REQUIREMENTS", $user['lang']);
@@ -268,14 +267,13 @@ function PropagateBuildQueue (int $planet_id, int $from) : void
             $text = CanBuild ($user, $planet, $id, $lvl, $destroy);
             if ( $text === '' ) {
                 // Write off resources
-                $res = BuildPrice ( $id, $lvl );
-                $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-                AdjustResources ( $m, $k, $d, $planet_id, '-' );
+                $cost = TechPrice ( $id, $lvl );
+                AdjustResources ( $cost, $planet_id, '-' );
 
                 if ( $destroy ) $BuildEvent = QTYP_DEMOLISH;
                 else $BuildEvent = QTYP_BUILD;
 
-                $duration = floor (BuildDuration ( $id, $lvl, $planet[GID_B_ROBOTS], $planet[GID_B_NANITES], $speed ));
+                $duration = floor (TechDuration ( $id, $lvl, PROD_BUILDING_DURATION_FACTOR, $planet[GID_B_ROBOTS], $planet[GID_B_NANITES], $speed ));
                 AddQueue ( $user['player_id'], $BuildEvent, $row['id'], $id, $lvl, $from, $duration, QUEUE_PRIO_BUILD );
 
                 // Update the start and end time of construction
@@ -367,15 +365,14 @@ function BuildEnque ( array $user, int $planet_id, int $id, int $destroy, int $n
 
         // Write off resources for the very first construction
         if ( $list_id == 1) {
-            $res = BuildPrice ( $id, $lvl );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-            AdjustResources ( $m, $k, $d, $planet_id, '-' );
+            $cost = TechPrice ( $id, $lvl );
+            AdjustResources ( $cost, $planet_id, '-' );
         }
 
         if ( $destroy ) $BuildEvent = QTYP_DEMOLISH;
         else $BuildEvent = QTYP_BUILD;
 
-        $duration = floor (BuildDuration ( $id, $lvl, $planet[GID_B_ROBOTS], $planet[GID_B_NANITES], $speed ));
+        $duration = floor (TechDuration ( $id, $lvl, PROD_BUILDING_DURATION_FACTOR, $planet[GID_B_ROBOTS], $planet[GID_B_NANITES], $speed ));
         $row = array ( 'owner_id' => $user['player_id'], 'planet_id' => $planet_id, 'list_id' => $list_id, 'tech_id' => $id, 'level' => $lvl, 'destroy' => $destroy, 'start' => $now, 'end' => $now+$duration );
         $sub_id = AddDBRow ( $row, "buildqueue" );
         if ($list_id == 1) AddQueue ( $user['player_id'], $BuildEvent, $sub_id, $id, $lvl, $now, $duration, QUEUE_PRIO_BUILD );
@@ -408,9 +405,8 @@ function BuildDeque ( array $user, int $planet_id, int $listid ) : string
             $queue_id = $queue['task_id'];
 
             // Return resources
-            $res = BuildPrice ( $id, $lvl );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-            AdjustResources ( $m, $k, $d, $planet_id, '+' );           
+            $cost = TechPrice ( $id, $lvl );
+            AdjustResources ( $cost, $planet_id, '+' );           
         }
         else $queue_id = 0;
 
@@ -482,15 +478,13 @@ function Queue_Build_End (array $queue) : void
 
     // Add points. Recalculate places only for large constructions.
     if ( $queue['type'] === "Build" ) {
-        $res = BuildPrice ( $id, $lvl );
-        $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-        $points = (int)$m + (int)$k + (int)$d;
+        $res = TechPrice ( $id, $lvl );
+        $points = TechPriceInPoints($res);
         AdjustStats ( $queue['owner_id'], $points, 0, 0, '+');
     }
     else {
-        $res = BuildPrice ( $id, $lvl+1 );
-        $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-        $points = (int)$m + (int)$k + (int)$d;
+        $res = TechPrice ( $id, $lvl+1 );
+        $points = TechPriceInPoints($res);
         AdjustStats ( $queue['owner_id'], $points, 0, 0, '-');
     }
     if ( $lvl > 10 ) RecalcRanks ();
@@ -538,6 +532,7 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
     global $db_prefix, $GlobalUni;
     global $fleetmap;
     global $defmap;
+    global $resourcemap;
 
     if ( in_array ( $gid, $defmap ) ) UserLog ( $player_id, "DEFENSE", va(loca_lang("DEBUG_LOG_DEFENSE", $GlobalUni['lang']), loca("NAME_$gid"), $value, $planet_id)  );
     else UserLog ( $player_id, "SHIPYARD", va(loca_lang("DEBUG_LOG_SHIPYARD", $GlobalUni['lang']), loca("NAME_$gid"), $value, $planet_id)  );
@@ -581,21 +576,22 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
 
     $user = LoadUser ( $player_id );
 
-    $res = ShipyardPrice ( $gid );
-    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-    $m *= $value;
-    $k *= $value;
-    $d *= $value;
+    $cost = TechPrice ( $gid, 1 );
+    foreach ($resourcemap as $i=>$rc) {
+        if (isset($cost[$rc])) {
+            $cost[$rc] *= $value;
+        }
+    }
 
-    if ( IsEnoughResources ( $planet, $m, $k, $d, $e ) && TechMeetRequirement ($user, $planet, $gid) ) {
+    if ( IsEnoughResources ( $user, $planet, $cost ) && TechMeetRequirement ($user, $planet, $gid) ) {
         $speed = $uni['speed'];
         $now = ShipyardLatestTime ($planet_id, $now);
         $shipyard = $planet[GID_B_SHIPYARD];
         $nanits = $planet[GID_B_NANITES];
-        $seconds = ShipyardDuration ( $gid, $shipyard, $nanits, $speed );
+        $seconds = TechDuration ( $gid, 1, PROD_SHIPYARD_DURATION_FACTOR, $shipyard, $nanits, $speed );
 
         // Write off resources.
-        AdjustResources ( $m, $k, $d, $planet_id, '-' );
+        AdjustResources ( $cost, $planet_id, '-' );
 
         AddQueue ($player_id, QTYP_SHIPYARD, $planet_id, $gid, $value, $now, $seconds);
     }
@@ -625,14 +621,12 @@ function Queue_Shipyard_End (array $queue, int $when=0) : void
     $newe = $e + $done * $one;
 
     // Add a fleet to the planet
-    if (IsDefense($gid)) $query = "UPDATE ".$db_prefix."planets SET `$gid` = `$gid` + $done WHERE planet_id = $planet_id";
-    else $query = "UPDATE ".$db_prefix."planets SET `$gid` = `$gid` + $done WHERE planet_id = $planet_id";
+    $query = "UPDATE ".$db_prefix."planets SET `$gid` = `$gid` + $done WHERE planet_id = $planet_id";
     dbquery ($query);
 
     // Add points.
-    $res = ShipyardPrice ( $gid );
-    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $enrg = $res[GID_RC_ENERGY];
-    $points = ((int)$m + (int)$k + (int)$d) * $done;
+    $res = TechPrice ( $gid, 1 );
+    $points = TechPriceInPoints($res) * $done;
     if (IsFleet($gid)) $fpoints = $done;
     else $fpoints = 0;
     AdjustStats ( $queue['owner_id'], $points, $fpoints, 0, '+');
@@ -682,8 +676,7 @@ function CanResearch (array $user, array $planet, int $id, int $lvl) : string
         $busy = ( dbrows ($result) > 0 );
         if ( $busy ) return loca_lang("BUILD_ERROR_RESEARCH_LAB_BUILDING", $user['lang']);
 
-        $res = ResearchPrice ( $id, $lvl );
-        $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+        $cost = TechPrice ( $id, $lvl );
 
         // Not research
         if ( ! in_array ( $id, $resmap ) ) return loca_lang("BUILD_ERROR_INVALID_ID", $user['lang']);
@@ -694,7 +687,7 @@ function CanResearch (array $user, array $planet, int $id, int $lvl) : string
         // You can't research on foreign planet
         else if ( $planet['owner_id'] != $user['player_id'] ) return loca_lang("BUILD_ERROR_INVALID_PLANET", $user['lang']);
 
-        else if ( !IsEnoughResources ( $planet, $m, $k, $d, $e ) ) return loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
+        else if ( !IsEnoughResources ( $user, $planet, $cost ) ) return loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
 
         else if ( !TechMeetRequirement ( $user, $planet, $id ) ) return loca_lang("BUILD_ERROR_REQUIREMENTS", $user['lang']);
     }
@@ -726,11 +719,11 @@ function StartResearch (int $player_id, int $planet_id, int $id, int $now) : voi
         $speed = $uni['speed'];
         if ($now == 0) $now = time ();
         $reslab = ResearchNetwork ( $planet['planet_id'], $id );
-        $seconds = ResearchDuration ( $id, $level, $reslab, $speed * $r_factor);
+        $seconds = TechDuration ( $id, $level, PROD_RESEARCH_DURATION_FACTOR, $reslab, 0, $speed * $r_factor);
 
-        // Списать ресурсы.
-        $res = ResearchPrice ( $id, $level );
-        AdjustResources ( $res[GID_RC_METAL], $res[GID_RC_CRYSTAL], $res[GID_RC_DEUTERIUM], $planet_id, '-' );
+        // Write off resources
+        $cost = TechPrice ( $id, $level );
+        AdjustResources ( $cost, $planet_id, '-' );
 
         AddQueue ($player_id, QTYP_RESEARCH, $planet_id, $id, $level, $now, $seconds);
     }
@@ -765,11 +758,10 @@ function StopResearch (int $player_id) : void
         );
         return;
     }
-    $res = ResearchPrice ( $id, $level );
-    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+    $cost = TechPrice ( $id, $level );
 
     // Return resources
-    AdjustResources ( $m, $k, $d, $planet_id, '+' );
+    AdjustResources ( $cost, $planet_id, '+' );
 
     RemoveQueue ( $resq['task_id'] );
 
@@ -805,9 +797,8 @@ function Queue_Research_End (array $queue) : void
     RemoveQueue ( $queue['task_id'] );
 
     // Add points.
-    $res = ResearchPrice ( $id, $lvl );
-    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-    $points = (int)$m + (int)$k + (int)$d;
+    $res = TechPrice ( $id, $lvl );
+    $points = TechPriceInPoints($res);
     AdjustStats ( $queue['owner_id'], $points, 0, 1, '+');
     RecalcRanks ();
 

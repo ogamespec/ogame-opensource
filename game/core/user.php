@@ -666,9 +666,8 @@ function RecalcStats (int $player_id) : void
             if ($level > 0) {
                 for ( $lv = 1; $lv<=$level; $lv ++ )
                 {
-                    $res = ResearchPrice ( $gid, $lv );
-                    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-                    $points += ($m + $k + $d);
+                    $res = TechPrice ( $gid, $lv );
+                    $points += TechPriceInPoints($res);
                 }
             }
         }
@@ -686,17 +685,15 @@ function RecalcStats (int $player_id) : void
         foreach ( $fleetmap as $i=>$gid ) {        // Fleet
             $level = $fleet["ship$gid"];
             if ($level > 0){
-                $res = ShipyardPrice ( $gid );
-                $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-                $points += ($m + $k + $d) * $level;
+                $res = TechPrice ( $gid, 1 );
+                $points += TechPriceInPoints($res) * $level;
                 $fpoints += $level;
             }
         }
     
         if ( $fleet['ipm_amount'] > 0 ) {        // IPM
-            $res = ShipyardPrice ( GID_D_IPM );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-            $points += ($m + $k + $d) * $fleet['ipm_amount'];
+            $res = TechPrice ( GID_D_IPM, 1 );
+            $points += TechPriceInPoints($res) * $fleet['ipm_amount'];
         }
     }
 

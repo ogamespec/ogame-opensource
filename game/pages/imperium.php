@@ -168,7 +168,7 @@ $speed = $GlobalUni['speed'];
     $avg_prod = 0;
     foreach ( $plist as $i=>$planet )
     {
-        $res_hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['mprod']) * $planet['factor'] * $speed + 20*$speed;
+        $res_hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['prod'.GID_B_METAL_MINE]) * $planet['factor'] * $speed + 20*$speed;
         $res = floor ( $planet[GID_RC_METAL] );
         $total += $res;
         $avg_prod += $res_hourly;
@@ -194,7 +194,7 @@ $speed = $GlobalUni['speed'];
     $avg_prod = 0;
     foreach ( $plist as $i=>$planet )
     {
-        $res_hourly = prod_crys ($planet[GID_B_CRYS_MINE], $planet['kprod']) * $planet['factor'] * $speed + 10*$speed;
+        $res_hourly = prod_crys ($planet[GID_B_CRYS_MINE], $planet['prod'.GID_B_CRYS_MINE]) * $planet['factor'] * $speed + 10*$speed;
         $res = floor ( $planet[GID_RC_CRYSTAL] );
         $total += $res;
         $avg_prod += $res_hourly;
@@ -220,7 +220,7 @@ $speed = $GlobalUni['speed'];
     $avg_prod = 0;
     foreach ( $plist as $i=>$planet )
     {
-        $res_hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed - cons_fusion ( $planet[GID_B_FUSION], $planet['fprod'] ) * $speed;
+        $res_hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['prod'.GID_B_DEUT_SYNTH]) * $planet['factor'] * $speed - cons_fusion ( $planet[GID_B_FUSION], $planet['prod'.GID_B_FUSION] ) * $speed;
         $res = floor ( $planet[GID_RC_DEUTERIUM] );
         $total += $res;
         $avg_prod += $res_hourly;
@@ -412,12 +412,8 @@ $speed = $GlobalUni['speed'];
             echo "            <th width=\"75\" >\n";
             if ($amount > 0)
             {
-                $cost = ShipyardPrice ( $fleet );
-                $m = $cost[GID_RC_METAL];
-                $k = $cost[GID_RC_CRYSTAL];
-                $d = $cost[GID_RC_DEUTERIUM];
-                $e = $cost[GID_RC_ENERGY];
-                $meet = IsEnoughResources ( $planet, $m, $k, $d, $e );
+                $cost = TechPrice ( $fleet, 1 );
+                $meet = IsEnoughResources ( $GlobalUser, $planet, $cost );
                 $color = $meet ? "lime" : "red";
 
                 echo "                <a href=\"index.php?page=buildings&session=$session&cp=".$planet['planet_id']."&mode=Flotte&planettype=$planettype\">\n";
@@ -465,12 +461,8 @@ $speed = $GlobalUni['speed'];
             echo "            <th width=\"75\" >\n";
             if ($amount > 0)
             {
-                $cost = ShipyardPrice ( $def );
-                $m = $cost[GID_RC_METAL];
-                $k = $cost[GID_RC_CRYSTAL];
-                $d = $cost[GID_RC_DEUTERIUM];
-                $e = $cost[GID_RC_ENERGY];
-                $meet = IsEnoughResources ( $planet, $m, $k, $d, $e );
+                $cost = TechPrice ( $def, 1 );
+                $meet = IsEnoughResources ( $GlobalUser, $planet, $cost );
                 $color = $meet ? "lime" : "red";
 
                 echo "                <a href=\"index.php?page=buildings&session=$session&cp=".$planet['planet_id']."&mode=Verteidigung&planettype=$planettype\">\n";

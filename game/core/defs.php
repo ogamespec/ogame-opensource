@@ -119,4 +119,11 @@ const USER_SPACE = 99999;           // A technical account that owns global even
 
 const USER_NOOB_LIMIT = 5000;           // Number of points for a newbie
 
+// for TechDuration method ($const_factor)
+const PROD_BUILDING_DURATION_FACTOR = 2500;
+const PROD_SHIPYARD_DURATION_FACTOR = 2500;
+const PROD_RESEARCH_DURATION_FACTOR = 1000;
+
+const GALAXY_DEUTERIUM_CONS = 10; 			// Deuterium consumption for viewing the Galaxy
+
 ?>

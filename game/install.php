@@ -154,13 +154,13 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     $planet = array( 
         'planet_id' => 1, 'name' => "Arakis", 'type' => PTYP_PLANET, 'g' => 1, 's' => 1, 'p' => 2, 'owner_id' => USER_LEGOR, 
         'diameter' => 12800, 'temp' => 40, 'fields' => 0, 'maxfields' => 163, 'date' => $now,
-        'mprod' => 1, 'kprod' => 1, 'dprod' => 1, 'sprod' => 1, 'fprod' => 1, 'ssprod' => 1, 'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
+        'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
     AddDBRow ($planet, "planets");
 
     $moon = array( 
         'planet_id' => 2, 'name' => "Mond", 'type' => PTYP_MOON, 'g' => 1, 's' => 1, 'p' => 2, 'owner_id' => USER_LEGOR, 
         'diameter' => 8944, 'temp' => 10, 'fields' => 0, 'maxfields' => 1, 'date' => $now,
-        'mprod' => 1, 'kprod' => 1, 'dprod' => 1, 'sprod' => 1, 'fprod' => 1, 'ssprod' => 1, 'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
+        'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
     AddDBRow ($moon, "planets");
 
     // Add default Expedition Parameters.

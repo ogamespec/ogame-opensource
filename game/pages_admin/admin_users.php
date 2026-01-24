@@ -446,7 +446,7 @@ function Admin_Users () : void
         <th <?php echo $style;?> ><?php echo date ("d.m.Y", $fleet_obj['end']);?> <br> <?php echo date ("H:i:s", $fleet_obj['end']);?></th>
         <th <?php echo $style;?> >
 <?php
-    echo "<nobr>".BuildDurationFormat ($fleet_obj['flight_time']) . "</nobr><br>";
+    echo "<nobr>".DurationFormat ($fleet_obj['flight_time']) . "</nobr><br>";
     echo "<nobr>".$fleet_obj['flight_time'] . " ".loca("TIME_SEC")."</nobr>";
 ?>
         </th>

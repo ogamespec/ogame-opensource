@@ -35,74 +35,42 @@ function TechMeetRequirement ( array $user, array $planet, int $id ) : bool
     return true;
 }
 
-function BuildPrice ( int $id, int $lvl ) : array
+function TechPrice ( int $id, int $lvl ) : array
 {
-    global $initial;
+    global $initial, $resourcemap;
 
     // This formula does not have a single, generally accepted name, but it is most often referred to as:
     // - Exponential growth formula with a linear factor
     // - In the context of video games, it's called the "experience formula" or "level curve"
 
+    $res = array();
     $factor = $initial[$id]['factor'];
-    $m = $initial[$id][GID_RC_METAL] * pow($factor, $lvl-1);
-    $k = $initial[$id][GID_RC_CRYSTAL] * pow($factor, $lvl-1);
-    $d = $initial[$id][GID_RC_DEUTERIUM] * pow($factor, $lvl-1);
-    $e = $initial[$id][GID_RC_ENERGY] * pow($factor, $lvl-1);
+    foreach ($resourcemap as $i=>$rc) {
+        if (isset($initial[$id][$rc])) {
+            $res[$rc] = $initial[$id][$rc] * pow($factor, $lvl-1);
+        }
+        else $res[$rc] = 0;
+    }
 
-    $res = array ( GID_RC_METAL => $m, GID_RC_CRYSTAL => $k, GID_RC_DEUTERIUM => $d, GID_RC_ENERGY => $e );
     return $res;
 }
 
-// Time to build a $id level $lvl building in seconds.
-function BuildDuration ( int $id, int $lvl, int $robots, int $nanits, int $speed ) : int
+function TechPriceInPoints (array $cost) : int
 {
-    $res = BuildPrice ( $id, $lvl );
-    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-    $secs = floor ( ( ( ($m + $k) / (2500 * (1 + $robots)) ) * pow (0.5, $nanits) * 60*60 ) / $speed );
-    if ($secs < 1) $secs = 1;
-    return (int)$secs;
+    global $scoreResources;
+    $points = 0;
+    foreach ($scoreResources as $i=>$rc) {
+        if (isset($cost[$rc])) $points += $cost[$rc];
+    }
+    return (int)$points;
 }
 
-function ShipyardPrice ( int $id ) : array
+// Time to produce a $id level $lvl tech in seconds. b1 - robots/shipyard/reslab. b2 - nanites (0 for research). const_factor - see in defs.php
+function TechDuration ( int $id, int $lvl, int $const_factor, int $b1, int $b2, float $speed ) : int
 {
-    global $initial;
-    $m = $initial[$id][GID_RC_METAL];
-    $k = $initial[$id][GID_RC_CRYSTAL];
-    $d = $initial[$id][GID_RC_DEUTERIUM];
-    $e = 0;
-    $res = array ( GID_RC_METAL => $m, GID_RC_CRYSTAL => $k, GID_RC_DEUTERIUM => $d, GID_RC_ENERGY => $e );
-    return $res;
-}
-
-function ShipyardDuration ( int $id, int $shipyard, int $nanits, int $speed ) : int
-{
-    $res = ShipyardPrice ($id);
-    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-    $secs = floor ( ( ( ($m + $k) / (2500 * (1 + $shipyard)) ) * pow (0.5, $nanits) * 60*60 ) / $speed );
-    if ($secs < 1) $secs = 1;
-    return (int)$secs;
-}
-
-function ResearchPrice ( int $id, int $lvl ) : array
-{
-    global $initial;
-
-    $factor = $initial[$id]['factor'];
-    $m = $initial[$id][GID_RC_METAL] * pow($factor, $lvl-1);
-    $k = $initial[$id][GID_RC_CRYSTAL] * pow($factor, $lvl-1);
-    $d = $initial[$id][GID_RC_DEUTERIUM] * pow($factor, $lvl-1);
-    $e = $initial[$id][GID_RC_ENERGY] * pow($factor, $lvl-1);
-
-    $res = array ( GID_RC_METAL => $m, GID_RC_CRYSTAL => $k, GID_RC_DEUTERIUM => $d, GID_RC_ENERGY => $e );
-    return $res;
-}
-
-function ResearchDuration ( int $id, int $lvl, int $reslab, int $speed ) : int
-{
-    if ( $id == GID_R_GRAVITON ) return 1;
-    $res= ResearchPrice ($id, $lvl );
-    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-    $secs = floor ( ( ($m + $k) / (1000 * (1 + $reslab)) * 60*60 ) / $speed );
+    $res = TechPrice ( $id, $lvl );
+    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL];     // structure points
+    $secs = floor ( ( ( ($m + $k) / ($const_factor * (1 + $b1)) ) * pow (0.5, $b2) * 60*60 ) / $speed );
     if ($secs < 1) $secs = 1;
     return (int)$secs;
 }
@@ -142,29 +110,14 @@ function ResearchNetwork ( int $planetid, int $id ) : int
     return $reslab;
 }
 
-// Return a string of durations by days, hours, minutes, seconds.
-function BuildDurationFormat ( int $seconds ) : string
+function IsEnoughResources (array $user, array $planet, array $cost) : bool
 {
-    $res = "";
-    $days = floor ($seconds / (24*3600));
-    $hours = floor (intdiv($seconds, 3600) % 24);
-    $mins = floor (intdiv($seconds, 60) % 60);
-    $secs = round ($seconds % 60);
-    if ($days) {
-        $res .= "$days".loca("TIME_DAYS")." ";
+    $useroplanet = array_merge($user, $planet);
+    foreach ($cost as $rc=>$value) {
+        if ($value > 0 && isset($useroplanet[$rc])) {
+            if ($useroplanet[$rc] < $value) return false;
+        }
     }
-    if ($hours || $days) $res .= "$hours".loca("TIME_HOUR")." ";
-    if ($mins || $days) $res .= "$mins".loca("TIME_MIN")." ";
-    if ($secs) $res .= "$secs".loca("TIME_SEC");
-    return $res;
-}
-
-function IsEnoughResources (array $planet, float $m, float $k, float $d, int $e) : bool
-{
-    if ( $m && $planet[GID_RC_METAL] < $m ) return false;
-    if ( $k && $planet[GID_RC_CRYSTAL] < $k ) return false;
-    if ( $d && $planet[GID_RC_DEUTERIUM] < $d ) return false;
-    if ( $e && $planet[GID_RC_ENERGY] < $e ) return false;
     return true;
 }
 
@@ -220,20 +173,20 @@ function ProdResources ( array &$planet, int $time_from, int $time_to ) : void
     if ( $prem['geologist'] ) $g_factor = 1.1;
     else $g_factor = 1.0;
 
-    $hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['mprod']) * $planet['factor'] * $speed * $g_factor + 20 * $speed;        // Metal
+    $hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['prod'.GID_B_METAL_MINE]) * $planet['factor'] * $speed * $g_factor + 20 * $speed;        // Metal
     if ( $planet[GID_RC_METAL] < $planet['mmax'] ) {
         $planet[GID_RC_METAL] += ($hourly * $diff) / 3600;
         if ( $planet[GID_RC_METAL] >= $planet['mmax'] ) $planet[GID_RC_METAL] = $planet['mmax'];
     }
 
-    $hourly = prod_crys ($planet[GID_B_CRYS_MINE], $planet['kprod']) * $planet['factor'] * $speed * $g_factor + 10 * $speed;        // Crystal
+    $hourly = prod_crys ($planet[GID_B_CRYS_MINE], $planet['prod'.GID_B_CRYS_MINE]) * $planet['factor'] * $speed * $g_factor + 10 * $speed;        // Crystal
     if ( $planet[GID_RC_CRYSTAL] < $planet['kmax'] ) {
         $planet[GID_RC_CRYSTAL] += ($hourly * $diff) / 3600;
         if ( $planet[GID_RC_CRYSTAL] >= $planet['kmax'] ) $planet[GID_RC_CRYSTAL] = $planet['kmax'];
     }
 
-    $hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed * $g_factor;    // Deuterium
-    $hourly -= cons_fusion ( $planet[GID_B_FUSION], $planet['fprod'] ) * $speed;	// fusion
+    $hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['prod'.GID_B_DEUT_SYNTH]) * $planet['factor'] * $speed * $g_factor;    // Deuterium
+    $hourly -= cons_fusion ( $planet[GID_B_FUSION], $planet['prod'.GID_B_FUSION] ) * $speed;	// fusion
     if ( $planet[GID_RC_DEUTERIUM] < $planet['dmax'] ) {
         $planet[GID_RC_DEUTERIUM] += ($hourly * $diff) / 3600;
         if ( $planet[GID_RC_DEUTERIUM] >= $planet['dmax'] ) $planet[GID_RC_DEUTERIUM] = $planet['dmax'];
@@ -261,9 +214,8 @@ function PlanetPrice (array $planet) : array
         if ($level > 0){
             for ( $lv = 1; $lv<=$level; $lv ++ )
             {
-                $res = BuildPrice ( $gid, $lv );
-                $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-                $pp['points'] += ($m + $k + $d);
+                $res = TechPrice ( $gid, $lv );
+                $pp['points'] += TechPriceInPoints($res);
             }
         }
     }
@@ -271,10 +223,10 @@ function PlanetPrice (array $planet) : array
     foreach ( $fleetmap as $i=>$gid ) {        // Fleet
         $level = $planet[$gid];
         if ($level > 0){
-            $res = ShipyardPrice ( $gid);
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-            $pp['points'] += ($m + $k + $d) * $level;
-            $pp['fleet_pts'] += ($m + $k + $d) * $level;
+            $res = TechPrice ( $gid, 1 );
+            $points = TechPriceInPoints($res);
+            $pp['points'] += $points * $level;
+            $pp['fleet_pts'] += $points * $level;
             $pp['fpoints'] += $level;
         }
     }
@@ -282,10 +234,10 @@ function PlanetPrice (array $planet) : array
     foreach ( $defmap as $i=>$gid ) {        // Defense
         $level = $planet[$gid];
         if ($level > 0){
-            $res = ShipyardPrice ( $gid );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-            $pp['points'] += ($m + $k + $d) * $level;
-            $pp['defense_pts'] += ($m + $k + $d) * $level;
+            $res = TechPrice ( $gid, 1 );
+            $points = TechPriceInPoints ($res);
+            $pp['points'] += $points * $level;
+            $pp['defense_pts'] += $points * $level;
         }
     }
 
@@ -303,9 +255,8 @@ function FleetPrice ( array $fleet_obj ) : array
     foreach ( $fleetmap as $i=>$gid ) {        // Fleet
         $level = $fleet_obj[$gid];
         if ($level > 0){
-            $res = ShipyardPrice ( $gid );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-            $points += ($m + $k + $d) * $level;
+            $res = TechPrice ( $gid, 1 );
+            $points += TechPriceInPoints($res) * $level;
             $fpoints += $level;
         }
     }

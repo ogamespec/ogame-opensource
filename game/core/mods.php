@@ -63,6 +63,14 @@ abstract class GameMod {
     public function add_db_row(array &$row, string $tabname) : bool {
         return false;
     }
+
+    // Default pages hooks (various modifications of the original content)
+
+    public function page_buildings_get_bonus(int $id, array &$bonuses) : bool {
+        return false;
+    }
+
+    // Hooks for bonuses and changes to the original game mechanics
 }
 
 function ModInitOne(string $modname) : void

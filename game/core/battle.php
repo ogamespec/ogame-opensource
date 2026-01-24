@@ -55,6 +55,7 @@ function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_de
 // Capture resources.
 function Plunder ( int $cargo, int $m, int $k, int $d ) : array
 {
+    global $transportableResources;
     $m /=2; $k /=2; $d /= 2;
     $total = $m+$k+$d;
     
@@ -80,7 +81,15 @@ function Plunder ( int $cargo, int $m, int $k, int $d ) : array
         else $kc += $cargo;
     }
 
-    $res = array ( 'cm' => floor($mc), 'ck' => floor($kc), 'cd' => floor($dc) );
+    // TODO: We are laying the groundwork for capturing custom resources added by modifications
+    $res = array ();
+    foreach ($transportableResources as $i=>$rc) {
+        $res[$rc] = 0;
+    }
+    $res[GID_RC_METAL] = floor($mc);
+    $res[GID_RC_CRYSTAL] = floor($kc);
+    $res[GID_RC_DEUTERIUM] = floor($dc);
+
     return $res;
 }
 
@@ -105,9 +114,10 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
         {
             $amount = $attacker['fleet'][$gid];
             if ( $amount > 0 ) {
-                $cost = ShipyardPrice ( $gid  );
-                $aprice += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
-                $a[$i]['points'] += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                $cost = TechPrice ( $gid, 1 );
+                $points = TechPriceInPoints($cost);
+                $aprice += $points * $amount;
+                $a[$i]['points'] += $points * $amount;
                 $a[$i]['fpoints'] += $amount;
             }
         }
@@ -121,9 +131,10 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
         {
             $amount = $defender['fleet'][$gid];
             if ( $amount > 0 ) {
-                $cost = ShipyardPrice ( $gid );
-                $dprice += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
-                $d[$i]['points'] += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                $cost = TechPrice ( $gid, 1 );
+                $points = TechPriceInPoints ($cost);
+                $dprice += $points * $amount;
+                $d[$i]['points'] += $points * $amount;
                 $d[$i]['fpoints'] += $amount;
             }
         }
@@ -131,9 +142,10 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
         {
             $amount = $defender['defense'][$gid];
             if ( $amount > 0 ) {
-                $cost = ShipyardPrice ( $gid );
-                $dprice += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
-                $d[$i]['points'] += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                $cost = TechPrice ( $gid, 1 );
+                $points = TechPriceInPoints ($cost);
+                $dprice += $points * $amount;
+                $d[$i]['points'] += $points * $amount;
             }
         }
     }
@@ -151,9 +163,10 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
             {
                 $amount = $attacker[$gid];
                 if ( $amount > 0 ) {
-                    $cost = ShipyardPrice ( $gid );
-                    $alast += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
-                    $a[$i]['points'] -= ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                    $cost = TechPrice ( $gid, 1 );
+                    $points = TechPriceInPoints ($cost);
+                    $alast += $points * $amount;
+                    $a[$i]['points'] -= $points * $amount;
                     $a[$i]['fpoints'] -= $amount;
                 }
             }
@@ -166,9 +179,10 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
                 if ( IsDefense($gid) && $i == 0 ) $amount = $defender[$gid] + $repaired[$gid];
                 else $amount = $defender[$gid];
                 if ( $amount > 0 ) {
-                    $cost = ShipyardPrice ( $gid );
-                    $dlast += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
-                    $d[$i]['points'] -= ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                    $cost = TechPrice ( $gid, 1 );
+                    $points = TechPriceInPoints ($cost);
+                    $dlast += $points * $amount;
+                    $d[$i]['points'] -= $points * $amount;
                     if ( IsFleet($gid) ) $d[$i]['fpoints'] -= $amount;
                 }
             }
@@ -217,13 +231,14 @@ function CargoSummaryLastRound ( array $a, array $res ) : int
 }
 
 // Modify fleets and planet (add/remove resources, return attack fleets if ships remain)
-function WritebackBattleResults ( array $a, array $d, array $res, array $repaired, int $cm, int $ck, int $cd, int $sum_cargo ) : void
+function WritebackBattleResults ( array $a, array $d, array $res, array $repaired, array $captured, int $sum_cargo ) : void
 {
     global $fleetmap;
     global $defmap;
     global $rakmap;
     $defmap_norak = array_diff($defmap, $rakmap);
     global $db_prefix;
+    global $transportableResources;
 
     // Combat with rounds.
 
@@ -251,9 +266,15 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
             if ($ships > 0) {
                 if ( $fleet_obj['mission'] == FTYP_DESTROY && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker, $queue['end'] );
                 else $result = 0;
-                if ( $result < 2 ) DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'],
-                    $fleet_obj[GID_RC_METAL]+$cm * $cargo, $fleet_obj[GID_RC_CRYSTAL]+$ck * $cargo, $fleet_obj[GID_RC_DEUTERIUM]+$cd * $cargo,
+                if ( $result < 2 ) {
+                    $resources = array ();
+                    foreach ($transportableResources as $i=>$rc) {
+                        $resources[$rc] = $fleet_obj[$rc] + $captured[$rc] * $cargo;
+                    }
+                    DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'],
+                    $resources,
                     $fleet_obj['fuel'] / 2, $queue['end']);
+                }
             }
         }
 
@@ -261,7 +282,7 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
         {
             if ( $i == 0 )    // Planet
             {
-                AdjustResources ( $cm, $ck, $cd, $defender['id'], '-' );
+                AdjustResources ( $captured, $defender['id'], '-' );
                 $objects = array ();
                 foreach ( $fleetmap as $ii=>$gid ) $objects[$gid] = $defender[$gid] ? $defender[$gid] : 0;
                 foreach ( $defmap_norak as $ii=>$gid ) {
@@ -307,9 +328,15 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
             if ($ships > 0) {
                 if ( $fleet_obj['mission'] == FTYP_DESTROY && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['fleet'], $queue['end'] );
                 else $result = 0;
-                if ( $result < 2 ) DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'],
-                    $fleet_obj[GID_RC_METAL]+$cm * $cargo, $fleet_obj[GID_RC_CRYSTAL]+$ck * $cargo, $fleet_obj[GID_RC_DEUTERIUM]+$cd * $cargo,
+                if ( $result < 2 ) {
+                    $resources = array ();
+                    foreach ($transportableResources as $i=>$rc) {
+                        $resources[$rc] = $fleet_obj[$rc] + $captured[$rc] * $cargo;
+                    }
+                    DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'],
+                    $resources,
                     $fleet_obj['fuel'] / 2, $queue['end']);
+                }
             }
         }
 
@@ -319,7 +346,7 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
         {
             if ( $i == 0 && $res['result'] == 'awon')    // Planet
             {
-                AdjustResources ( $cm, $ck, $cd, $defender['id'], '-' );
+                AdjustResources ( $captured, $defender['id'], '-' );
             }
         }
 
@@ -404,7 +431,7 @@ function GenSlot ( int $weap, int $shld, int $armor, string $name, int $g, int $
 }
 
 // Generate a battle report.
-function BattleReport ( array $res, int $now, int $aloss, int $dloss, int $cm, int $ck, int $cd, int $moonchance, bool $mooncreated, array $repaired, string $lang ) : string
+function BattleReport ( array $res, int $now, int $aloss, int $dloss, array $captured, int $moonchance, bool $mooncreated, array $repaired, string $lang ) : string
 {
     global $fleetmap;
     global $defmap;
@@ -466,7 +493,7 @@ function BattleReport ( array $res, int $now, int $aloss, int $dloss, int $cm, i
     // TODO: Add a loss label that is in the HTML: <!--A:167658,W:167658-->
     if ( $res['result'] === "awon" )
     {
-        $text .= "<p> ".loca_lang("BATTLE_AWON", $lang)."<br>" . va(loca_lang("BATTLE_PLUNDER", $lang), nicenum($cm), nicenum($ck), nicenum($cd));
+        $text .= "<p> ".loca_lang("BATTLE_AWON", $lang)."<br>" . va(loca_lang("BATTLE_PLUNDER", $lang), nicenum($captured[GID_RC_METAL]), nicenum($captured[GID_RC_CRYSTAL]), nicenum($captured[GID_RC_DEUTERIUM]));
     }
     else if ( $res['result'] === "dwon" ) $text .= "<p> " . loca_lang("BATTLE_DWON", $lang);
     else if ( $res['result'] === "draw" ) $text .= "<p> " . loca_lang("BATTLE_DRAW", $lang);
@@ -658,6 +685,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     global $fleetmap;
     global $defmap;
     global $rakmap;
+    global $transportableResources;
     $defmap_norak = array_diff($defmap, $rakmap);
 
     $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
@@ -801,12 +829,17 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     $dloss = $loss['dloss'];
 
     // Capture resources
-    $cm = $ck = $cd = $sum_cargo = 0;
+    $captured = array ();
+    $sum_cargo = 0;
     if ( $battle_result == 0 )
     {
         $sum_cargo = CargoSummaryLastRound ( $a, $res );
         $captured = Plunder ( $sum_cargo, $p[GID_RC_METAL], $p[GID_RC_CRYSTAL], $p[GID_RC_DEUTERIUM] );
-        $cm = $captured['cm']; $ck = $captured['ck']; $cd = $captured['cd'];
+    }
+    else {
+        foreach ($transportableResources as $i=>$rc) {
+            $captured[$rc] = 0;
+        }
     }
 
     // Create a debris field.
@@ -830,7 +863,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     $battle_text = array();
 
     // Generate a battle report in the universe language (for log history)
-    $text = BattleReport ( $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired, $GlobalUni['lang'] );
+    $text = BattleReport ( $res, $when, $aloss, $dloss, $captured, $moonchance, $mooncreated, $repaired, $GlobalUni['lang'] );
     $battle_text[$GlobalUni['lang']] = $text;
 
     // Send out messages, mailbox is used to avoid sending multiple messages to ACS players.
@@ -841,7 +874,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
         // Generate a battle report in the user's language if it is not in the cache
         if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
         else {
-            $text = BattleReport ( $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired, $user['lang'] );
+            $text = BattleReport ( $res, $when, $aloss, $dloss, $captured, $moonchance, $mooncreated, $repaired, $user['lang'] );
             $battle_text[$user['lang']] = $text;
         }
 
@@ -870,7 +903,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
         // Generate a battle report in the user's language if it is not in the cache
         if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
         else {
-            $text = BattleReport ( $res, $when, $aloss, $dloss, $cm, $ck, $cd, $moonchance, $mooncreated, $repaired, $user['lang'] );
+            $text = BattleReport ( $res, $when, $aloss, $dloss, $captured, $moonchance, $mooncreated, $repaired, $user['lang'] );
             $battle_text[$user['lang']] = $text;
         }
 
@@ -895,7 +928,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     dbquery ($query);
 
     // Modify fleets and planet according to losses and captured resources
-    WritebackBattleResults ( $a, $d, $res, $repaired, $cm, $ck, $cd, $sum_cargo );
+    WritebackBattleResults ( $a, $d, $res, $repaired, $captured, $sum_cargo );
 
     // Change player statistics
     foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
@@ -935,7 +968,7 @@ function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : v
             // Return the fleet, if there's anything left.
             // The hold time is used as the flight time.
             if ($ships > 0) DispatchFleet ($attacker, $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'],
-                $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+                $fleet_obj,
                 $fleet_obj['fuel'] / 2, $queue['end']);
         }
 
@@ -957,7 +990,7 @@ function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : v
             // Return the fleet, if there's anything left.
             // The hold time is used as the flight time.
             if ($ships > 0)  DispatchFleet ($attacker['fleet'], $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'],
-                $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+                $fleet_obj,
                 $fleet_obj['fuel'] / 2, $queue['end']);
         }
 

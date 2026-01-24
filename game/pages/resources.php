@@ -47,7 +47,7 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
 
     // Checking for incorrect parameters.
     if ( $last1 > 100 || $last2 > 100 || $last3 > 100 ||
-         $last4 > 100 || $last12 > 100 || $last212 > 100 ) Error ( "resources: Попытка установки производительности больше 100%" );
+         $last4 > 100 || $last12 > 100 || $last212 > 100 ) Error ( "resources: Attempt to set prod settings to more than 100%" );
 
     if ( $last1 < 0 ) $last1 = 0;        // It should not be < 0.
     if ( $last2 < 0 ) $last2 = 0;
@@ -67,12 +67,12 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
     $planet_id = $aktplanet['planet_id'];
     if ( $exist1 || $exist2 || $exist3 || $exist4 || $exist12 || $exist212 ) {
         $query = "UPDATE ".$db_prefix."planets SET ";
-        if ($exist1) $query .= "mprod = $last1, ";
-        if ($exist2) $query .= "kprod = $last2, ";
-        if ($exist3) $query .= "dprod = $last3, ";
-        if ($exist4) $query .= "sprod = $last4, ";
-        if ($exist12) $query .= "fprod = $last12, ";
-        if ($exist212) $query .= "ssprod = $last212, ";
+        if ($exist1) $query .= "prod1 = $last1, ";
+        if ($exist2) $query .= "prod2 = $last2, ";
+        if ($exist3) $query .= "prod3 = $last3, ";
+        if ($exist4) $query .= "prod4 = $last4, ";
+        if ($exist12) $query .= "prod12 = $last12, ";
+        if ($exist212) $query .= "prod212 = $last212, ";
         $query .= " type = type WHERE planet_id = $planet_id";
         dbquery ($query);
     }
@@ -90,13 +90,14 @@ function get_prod (int $id, array|null $planet) : float
     if ($planet == null) return 0;
     switch ($id)
     {
-        case GID_B_METAL_MINE: return 100 * $planet['mprod'];
-        case GID_B_CRYS_MINE: return 100 * $planet['kprod'];
-        case GID_B_DEUT_SYNTH: return 100 * $planet['dprod'];
-        case GID_B_SOLAR: return 100 * $planet['sprod'];
-        case GID_B_FUSION: return 100 * $planet['fprod'];
-        case GID_F_SAT: return 100 * $planet['ssprod'];
+        case GID_B_METAL_MINE: return 100 * $planet['prod'.GID_B_METAL_MINE];
+        case GID_B_CRYS_MINE: return 100 * $planet['prod'.GID_B_CRYS_MINE];
+        case GID_B_DEUT_SYNTH: return 100 * $planet['prod'.GID_B_DEUT_SYNTH];
+        case GID_B_SOLAR: return 100 * $planet['prod'.GID_B_SOLAR];
+        case GID_B_FUSION: return 100 * $planet['prod'.GID_B_FUSION];
+        case GID_F_SAT: return 100 * $planet['prod'.GID_F_SAT];
     }
+    return 0;
 }
 
 function prod_select (int $id, array|null $planet) : void
@@ -130,21 +131,21 @@ $speed = $GlobalUni['speed'];
 $planet = $aktplanet;
 
 // Production.
-$m_hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['mprod']) * $planet['factor'] * $speed * $g_factor;
-$k_hourly = prod_crys ($planet[GID_B_CRYS_MINE], $planet['kprod']) * $planet['factor'] * $speed * $g_factor;
-$d_hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['dprod']) * $planet['factor'] * $speed * $g_factor;
-$s_prod = prod_solar($planet[GID_B_SOLAR], $planet['sprod']) * $e_factor;
-$f_prod = prod_fusion($planet[GID_B_FUSION], $GlobalUser[GID_R_ENERGY], $planet['fprod']) * $e_factor;
-$ss_prod = prod_sat($planet['temp']+40) * $planet[GID_F_SAT] * $planet['ssprod'] * $e_factor;
+$m_hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['prod'.GID_B_METAL_MINE]) * $planet['factor'] * $speed * $g_factor;
+$k_hourly = prod_crys ($planet[GID_B_CRYS_MINE], $planet['prod'.GID_B_CRYS_MINE]) * $planet['factor'] * $speed * $g_factor;
+$d_hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['prod'.GID_B_DEUT_SYNTH]) * $planet['factor'] * $speed * $g_factor;
+$s_prod = prod_solar($planet[GID_B_SOLAR], $planet['prod'.GID_B_SOLAR]) * $e_factor;
+$f_prod = prod_fusion($planet[GID_B_FUSION], $GlobalUser[GID_R_ENERGY], $planet['prod'.GID_B_FUSION]) * $e_factor;
+$ss_prod = prod_sat($planet['temp']+40) * $planet[GID_F_SAT] * $planet['prod'.GID_F_SAT] * $e_factor;
 
 // Consumption.
-$m_cons = cons_metal ($planet[GID_B_METAL_MINE]) * $planet['mprod'];
+$m_cons = cons_metal ($planet[GID_B_METAL_MINE]) * $planet['prod'.GID_B_METAL_MINE];
 $m_cons0 = round ($m_cons * $planet['factor']);
-$k_cons = cons_crys ($planet[GID_B_CRYS_MINE]) * $planet['kprod'];
+$k_cons = cons_crys ($planet[GID_B_CRYS_MINE]) * $planet['prod'.GID_B_CRYS_MINE];
 $k_cons0 = round ($k_cons * $planet['factor']);
-$d_cons = cons_deut ($planet[GID_B_DEUT_SYNTH]) * $planet['dprod'];
+$d_cons = cons_deut ($planet[GID_B_DEUT_SYNTH]) * $planet['prod'.GID_B_DEUT_SYNTH];
 $d_cons0 = round ($d_cons * $planet['factor']);
-$f_cons = - cons_fusion ( $planet[GID_B_FUSION], $planet['fprod'] ) * $speed;
+$f_cons = - cons_fusion ( $planet[GID_B_FUSION], $planet['prod'.GID_B_FUSION] ) * $speed;
 
 $m_total = $m_hourly + (20*$speed);
 $k_total = $k_hourly + (10*$speed);

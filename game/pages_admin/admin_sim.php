@@ -144,6 +144,7 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
 {
     global $db_prefix;
     global $GlobalUser;
+    global $transportableResources;
 
     $unitab = LoadUniverse ();
 
@@ -232,7 +233,11 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
     else $battle_result = 2;
 
     // Generate battle report (in admin language)
-    return BattleReport ( $res, time(), $aloss, $dloss, 1, 2, 3, $moonchance, $mooncreated, $repaired, $GlobalUser['lang'] );
+    $captured = array ();
+    foreach ($transportableResources as $i=>$rc) {
+        $captured[$rc] = $i + 1;
+    }
+    return BattleReport ( $res, time(), $aloss, $dloss, $captured, $moonchance, $mooncreated, $repaired, $GlobalUser['lang'] );
 }
 
 function Admin_BattleSim () : void

@@ -94,7 +94,7 @@ function Admin_Fleetlogs () : void
         <th <?=$style;?> ><?=date ("d.m.Y", $queue['end']);?> <br> <?=date ("H:i:s", $queue['end']);?></th>
         <th <?=$style;?> >
 <?php
-    echo "<nobr>".BuildDurationFormat ($fleet_obj['flight_time']) . "</nobr><br>";
+    echo "<nobr>".DurationFormat ($fleet_obj['flight_time']) . "</nobr><br>";
     echo "<nobr>".$fleet_obj['flight_time'] . " ".loca("TIME_SEC")."</nobr>";
 ?>
         </th>

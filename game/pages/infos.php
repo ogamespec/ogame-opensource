@@ -307,18 +307,16 @@ else
             $amount1 = min ( $aktplanet[GID_D_ABM], key_exists ('ab'.GID_D_ABM, $_POST) ? intval ( $_POST['ab'.GID_D_ABM] ) : 0 );
             if ( $amount1 > 0) {
                 $aktplanet[GID_D_ABM] -= $amount1;
-                $res = ShipyardPrice ( GID_D_ABM );
-                $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-                $points  = ( $m + $k + $d ) * $amount1;
+                $cost = TechPrice ( GID_D_ABM, 1 );
+                $points  = TechPriceInPoints ($cost) * $amount1;
                 AdjustStats ( $aktplanet['owner_id'], $points, 0, 0, '-');
             }
 
             $amount2 = min ($aktplanet[GID_D_ABM], key_exists ('ab'.GID_D_IPM, $_POST) ? intval ( $_POST['ab'.GID_D_IPM] ) : 0 );
             if ( $amount2 > 0) {
                 $aktplanet[GID_D_IPM] -= $amount2;
-                $res = ShipyardPrice ( GID_D_IPM );
-                $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-                $points  = ( $m + $k + $d ) * $amount2;
+                $cost = TechPrice ( GID_D_IPM, 1 );
+                $points  = TechPriceInPoints ($cost) * $amount2;
                 AdjustStats ( $aktplanet['owner_id'], $points, 0, 0, '-');
             }
 
@@ -463,14 +461,15 @@ else
     if ( IsBuilding($gid) && $aktplanet[$gid] && !($gid == GID_B_TERRAFORMER || $gid == GID_B_LUNAR_BASE || $gid == GID_B_MISS_SILO) ) {
         echo "<table width=519 >\n";
         echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">".va(loca("INFO_DEMOLISH_TITLE"), loca("NAME_$gid"), $aktplanet[$gid])."</a></td></tr>\n";
-        $res = BuildPrice ( $gid, $aktplanet[$gid]-1 );
-        $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+        $cost = TechPrice ( $gid, $aktplanet[$gid]-1 );
         echo "<br><tr><th>" . loca("INFO_DEMOLISH_RES");
-        if ($m) echo loca("INFO_DEMOLISH_M") . "<b>".nicenum($m)."</b> ";
-        if ($k) echo loca("INFO_DEMOLISH_K") . "<b>".nicenum($k)."</b> ";
-        if ($d) echo loca("INFO_DEMOLISH_D") . "<b>".nicenum($d)."</b> ";
-        $t = BuildDuration ( $gid, $aktplanet[$gid]-1, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed );
-        echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".BuildDurationFormat ( $t )."<br></th></tr></table>\n";
+        foreach ($resourcemap as $i=>$rc) {
+            if(isset($cost[$rc]) && $cost[$rc]) {
+                echo loca("INFO_DEMOLISH_".$rc) . "<b>".nicenum($cost[$rc])."</b> ";
+            }
+        }
+        $t = TechDuration ( $gid, $aktplanet[$gid]-1, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed );
+        echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".DurationFormat ( $t )."<br></th></tr></table>\n";
     }
 
     if ( $gid == GID_B_MISS_SILO && $aktplanet[$gid])    // Missile Silo
@@ -479,14 +478,15 @@ else
         echo "<table width=519 >\n";
         if ( $raknum == 0 ) echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">".va(loca("INFO_DEMOLISH_TITLE"), loca("NAME_$gid"), $aktplanet[$gid])."</a></td></tr>\n";
         else echo "<tr><td class=c align=center>".loca("INFO_DEMOLISH_DEFENSE")."</a></td></tr>";
-        $res = BuildPrice ( $gid, $aktplanet[$gid]-1 );
-        $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+        $cost = TechPrice ( $gid, $aktplanet[$gid]-1 );
         echo "<br><tr><th>" . loca("INFO_DEMOLISH_RES");
-        if ($m) echo loca("INFO_DEMOLISH_M") . "<b>".nicenum($m)."</b> ";
-        if ($k) echo loca("INFO_DEMOLISH_K") . "<b>".nicenum($k)."</b> ";
-        if ($d) echo loca("INFO_DEMOLISH_D") . "<b>".nicenum($d)."</b> ";
-        $t = BuildDuration ( $gid, $aktplanet[$gid]-1, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed );
-        echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".BuildDurationFormat ( $t )."<br></th></tr></table>\n";
+        foreach ($resourcemap as $i=>$rc) {
+            if(isset($cost[$rc]) && $cost[$rc]) {
+                echo loca("INFO_DEMOLISH_".$rc) . "<b>".nicenum($cost[$rc])."</b> ";
+            }
+        }
+        $t = TechDuration ( $gid, $aktplanet[$gid]-1, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed );
+        echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".DurationFormat ( $t )."<br></th></tr></table>\n";
     }
 
 }

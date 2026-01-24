@@ -3,6 +3,7 @@
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
 /** @var array $aktplanet */
+/** @var array $transportableResources */
 
 // Fast dispatch of fleets from the Galaxy via AJAX.
 
@@ -159,7 +160,11 @@ $f = fopen ( $fleetlock, 'w' );
 fclose ($f);
 
 // Send in the fleet.
-$fleet_id = DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, 0, 0, 0, $cons, time(), 0 );
+$resources = array ();
+foreach ($transportableResources as $i=>$rc) {
+    $resources[$rc] = 0;
+}
+$fleet_id = DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, $resources, $cons, time(), 0 );
 if ($fleet_id == 0) {
     AjaxSendError (611);    // no ships to send
 }
@@ -168,10 +173,11 @@ UserLog ( $aktplanet['owner_id'], "FLEET",
     va(loca_lang("DEBUG_LOG_FLEET_SEND_AJAX1", $GlobalUni['lang']), $fleet_id) . GetMissionNameDebug ($order) . " " .
     $aktplanet['name'] ." [".$aktplanet['g'].":".$aktplanet['s'].":".$aktplanet['p']."] -&gt; ".$target['name']." [".$target['g'].":".$target['s'].":".$target['p']."]<br>" .
     DumpFleet ($fleet) . "<br>" .
-    va(loca_lang("DEBUG_LOG_FLEET_SEND_AJAX2", $GlobalUni['lang']), BuildDurationFormat ($flighttime), nicenum ($cons)) );
+    va(loca_lang("DEBUG_LOG_FLEET_SEND_AJAX2", $GlobalUni['lang']), DurationFormat ($flighttime), nicenum ($cons)) );
 
 // Get the fleet off the planet.
-AdjustResources ( 0, 0, $cons, $aktplanet['planet_id'], '-' );
+$cost = array (GID_RC_DEUTERIUM => $cons);
+AdjustResources ( $cost, $aktplanet['planet_id'], '-' );
 AdjustShips ( $fleet, $aktplanet['planet_id'], '-' );
 UpdatePlanetActivity ($aktplanet['planet_id']);
 

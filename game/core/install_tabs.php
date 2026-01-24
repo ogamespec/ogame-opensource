@@ -91,7 +91,13 @@ $tab_planets = array (    // Planets
 
     GID_RC_METAL=>'DOUBLE DEFAULT 0', GID_RC_CRYSTAL=>'DOUBLE DEFAULT 0', GID_RC_DEUTERIUM=>'DOUBLE DEFAULT 0',
 
-    'mprod'=>'DOUBLE', 'kprod'=>'DOUBLE', 'dprod'=>'DOUBLE', 'sprod'=>'DOUBLE', 'fprod'=>'DOUBLE', 'ssprod'=>'DOUBLE',
+    'prod'.GID_B_METAL_MINE=>'DOUBLE DEFAULT 1',
+    'prod'.GID_B_CRYS_MINE=>'DOUBLE DEFAULT 1',
+    'prod'.GID_B_DEUT_SYNTH=>'DOUBLE DEFAULT 1',
+    'prod'.GID_B_SOLAR=>'DOUBLE DEFAULT 1',
+    'prod'.GID_B_FUSION=>'DOUBLE DEFAULT 1',
+    'prod'.GID_F_SAT=>'DOUBLE DEFAULT 1',
+    
     'lastpeek'=>'INT UNSIGNED', 'lastakt'=>'INT UNSIGNED', 'gate_until'=>'INT UNSIGNED', 'remove'=>'INT UNSIGNED'
 );
 
