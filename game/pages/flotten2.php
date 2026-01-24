@@ -4,6 +4,7 @@
 /** @var array $GlobalUni */
 /** @var array $fleetmap */
 /** @var string $aktplanet */
+/** @var array $transportableResources */
 
 // Fleet 2: Prepare target coordinates
 
@@ -57,9 +58,11 @@ if ( method() !== "POST" ) MyGoto ( "flotten1" );
 <input name="thisplanet" type="hidden" value="<?php echo $aktplanet['p'];?>" />
 <input name="thisplanettype" type="hidden" value="<?php echo GetPlanetType($aktplanet);?>" />
 <input name="speedfactor" type="hidden" value="<?php echo $GlobalUni['fspeed'];?>" />
-<input name="thisresource1" type="hidden" value="<?php echo floor($aktplanet[GID_RC_METAL]);?>" />
-<input name="thisresource2" type="hidden" value="<?php echo floor($aktplanet[GID_RC_CRYSTAL]);?>" />
-<input name="thisresource3" type="hidden" value="<?php echo floor($aktplanet[GID_RC_DEUTERIUM]);?>" />
+<?php
+    foreach ($transportableResources as $i=>$rc) {
+        echo "<input name=\"thisresource".($i+1)."\" type=\"hidden\" value=\"".floor($aktplanet[$rc])."\" />\n";
+    }
+?>
 
 <?php
 

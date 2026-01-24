@@ -2,6 +2,7 @@
 
 /** @var array $GlobalUser */
 /** @var array $fleetmap */
+/** @var array $transportableResources */
 
 // Fleet 3: mission list output, resource loading.
 
@@ -51,9 +52,9 @@ if ( $planet > 16 ) $planet = 16;
     echo "<input name=\"thisplanet\" type=\"hidden\" value=\"".intval($_POST['thisplanet'])."\" />\n";
     echo "<input name=\"thisplanettype\" type=\"hidden\" value=\"".intval($_POST['thisplanettype'])."\" />\n";
     echo "<input name=\"speedfactor\" type=\"hidden\" value=\"".intval($_POST['speedfactor'])."\" />\n";
-    echo "<input name=\"thisresource1\" type=\"hidden\" value=\"".floor($aktplanet[GID_RC_METAL])."\" />\n";
-    echo "<input name=\"thisresource2\" type=\"hidden\" value=\"".floor($aktplanet[GID_RC_CRYSTAL])."\" />\n";
-    echo "<input name=\"thisresource3\" type=\"hidden\" value=\"".floor($aktplanet[GID_RC_DEUTERIUM])."\" />\n";
+    foreach ($transportableResources as $i=>$rc) {
+        echo "<input name=\"thisresource".($i+1)."\" type=\"hidden\" value=\"".floor($aktplanet[$rc])."\" />\n";
+    }
     echo "<input name=\"galaxy\" type=\"hidden\" value=\"".$galaxy."\" />\n";
     echo "<input name=\"system\" type=\"hidden\" value=\"".$system."\" />\n";
     echo "<input name=\"planet\" type=\"hidden\" value=\"".$planet."\" />\n";
@@ -141,7 +142,7 @@ if ( $planet > 16 ) $planet = 16;
             if ( $id == FTYP_ACS_HOLD ) $mission_hold = true;
             if ( $id == FTYP_EXPEDITION ) $mission_exp = true;
 
-            if ($id == FTYP_EXPEDITION)        // Экспедиция.
+            if ($id == FTYP_EXPEDITION)
             {
                 echo "    <tr height=\"20\">\n";
                 echo "<th>\n";
@@ -169,23 +170,18 @@ if ( $planet > 16 ) $planet = 16;
      <tr height="20">
   <td colspan="3" class="c"><?=loca("FLEET3_RESOURCES");?></td>
      </tr>
-       <tr height="20">
-      <th><?=loca("NAME_".GID_RC_METAL);?></th>
-      <th><a href="javascript:maxResource('1');">max</a></th>
 
-      <th><input name="resource1" type="text" alt="<?=loca("NAME_".GID_RC_METAL);?> <?php echo floor($aktplanet[GID_RC_METAL]);?>" size="10" onChange="calculateTransportCapacity();" /></th>
-     </tr>
-       <tr height="20">
-      <th><?=loca("NAME_".GID_RC_CRYSTAL);?></th>
-      <th><a href="javascript:maxResource('2');">max</a></th>
-      <th><input name="resource2" type="text" alt="<?=loca("NAME_".GID_RC_CRYSTAL);?> <?php echo floor($aktplanet[GID_RC_CRYSTAL]);?>" size="10" onChange="calculateTransportCapacity();" /></th>
-     </tr>
-       <tr height="20">
+<?php
+    foreach ($transportableResources as $i=>$rc) {
+        echo "       <tr height=\"20\">\n";
+        echo "      <th>".loca("NAME_".$rc)."</th>\n";
+        echo "      <th><a href=\"javascript:maxResource('".($i+1)."');\">max</a></th>\n";
+        echo "      <th><input name=\"resource".($i+1)."\" type=\"text\" alt=\"".loca("NAME_".$rc)." ";
+        echo floor($aktplanet[$rc])."\" size=\"10\" onChange=\"calculateTransportCapacity();\" /></th>\n";
+        echo "     </tr>\n";
+    }
+?>
 
-      <th><?=loca("NAME_".GID_RC_DEUTERIUM);?></th>
-      <th><a href="javascript:maxResource('3');">max</a></th>
-      <th><input name="resource3" type="text" alt="<?=loca("NAME_".GID_RC_DEUTERIUM);?> <?php echo floor($aktplanet[GID_RC_DEUTERIUM]);?>" size="10" onChange="calculateTransportCapacity();" /></th>
-     </tr>
        <tr height="20">
   <th><?=loca("FLEET3_RES_LEFT");?></th>
       <th colspan="2"><div id="remainingresources">-</div></th>

@@ -3,6 +3,7 @@
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
 /** @var array $fleetmap */
+/** @var array $transportableResources */
 
 // Sending fleet with all parameters checked.
 // If the fleet was sent successfully - output brief information, otherwise output an error.
@@ -58,13 +59,11 @@ $fleetspeed = min ( max (10, $fleetspeed), 100 ) / 10;
 
 // Turn all empty parameters into zeros.
 
-if ( !key_exists('resource1', $_POST) ) $_POST['resource1'] = 0;
-if ( !key_exists('resource2', $_POST) ) $_POST['resource2'] = 0;
-if ( !key_exists('resource3', $_POST) ) $_POST['resource3'] = 0;
-
-$resource1 = min ( intval($aktplanet[GID_RC_METAL]), abs(intval($_POST['resource1'])) );
-$resource2 = min ( intval($aktplanet[GID_RC_CRYSTAL]), abs(intval($_POST['resource2'])) );
-$resource3 = min ( intval($aktplanet[GID_RC_DEUTERIUM]), abs(intval($_POST['resource3'])) );
+$resource = array();
+foreach ($transportableResources as $i=>$rc) {
+    if ( !key_exists('resource'.($i+1), $_POST) ) $_POST['resource'.($i+1)] = 0;
+    $resource[$i+1] = min ( intval($aktplanet[$rc]), abs(intval($_POST['resource'.($i+1)])) );        
+}
 
 foreach ($fleetmap as $i=>$gid)
 {
@@ -163,18 +162,15 @@ if ( $origin[GID_RC_DEUTERIUM] < ($cons['fleet'] + $cons['probes']) ) FleetError
 else if ( $space < 0 ) FleetError ( loca("FLEET_ERR_CARGO") );
 
 // Limit transported resources to fleet payload capacity and flight costs.
-$cargo_m = $cargo_k = $cargo_d = 0;
-if ( $space > 0 ) {
-    $cargo_m = min ( $space, $resource1 );
-    $space -= $cargo_m;
-}
-if ( $space > 0 ) {
-    $cargo_k = min ( $space, $resource2 );
-    $space -= $cargo_k;
-}
-if ( $space > 0 ) {
-    $cargo_d = min ( $space, $resource3 );
-    $space -= $cargo_d;
+$resources = array();
+foreach ($transportableResources as $i=>$rc) {
+    if ( $space > 0 ) {
+        $resources[$rc] = min ( $space, $resource[$i+1] );
+        $space -= $resources[$rc];
+    }
+    else {
+        $resources[$rc] = 0;
+    }
 }
 
 if ($numships <= 0) FleetError ( loca("FLEET_ERR_NO_SHIPS") );
@@ -320,7 +316,9 @@ else {
     $f = fopen ( $fleetlock, 'w' );
     fclose ($f);
 
-    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, $cargo_m, $cargo_k, $cargo_d, $cons['fleet'] + $cons['probes'], time(), $union_id, $hold_time );
+    $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, 
+        $resources[GID_RC_METAL], $resources[GID_RC_CRYSTAL], $resources[GID_RC_DEUTERIUM], 
+        $cons['fleet'] + $cons['probes'], time(), $union_id, $hold_time );
     $queue = GetFleetQueue ($fleet_id);
 
     UserLog ( $aktplanet['owner_id'], "FLEET", 
@@ -334,9 +332,9 @@ else {
         UpdateFleetTime ( $fleet_id, $union_time );
     }
 
-    // Get the fleet off the planet.
-    $cost = array (GID_RC_METAL => $cargo_m, GID_RC_CRYSTAL => $cargo_k, GID_RC_DEUTERIUM => $cargo_d + $cons['fleet'] + $cons['probes']);
-    AdjustResources ( $cost, $origin['planet_id'], '-' );
+    // Lift off.
+    $resources[GID_RC_DEUTERIUM] += $cons['fleet'] + $cons['probes'];
+    AdjustResources ( $resources, $origin['planet_id'], '-' );
     AdjustShips ( $fleet, $origin['planet_id'], '-' );
 
     unlink ( $fleetlock );
