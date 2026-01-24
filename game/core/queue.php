@@ -479,14 +479,12 @@ function Queue_Build_End (array $queue) : void
     // Add points. Recalculate places only for large constructions.
     if ( $queue['type'] === "Build" ) {
         $res = TechPrice ( $id, $lvl );
-        $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-        $points = (int)$m + (int)$k + (int)$d;
+        $points = TechPriceInPoints($res);
         AdjustStats ( $queue['owner_id'], $points, 0, 0, '+');
     }
     else {
         $res = TechPrice ( $id, $lvl+1 );
-        $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-        $points = (int)$m + (int)$k + (int)$d;
+        $points = TechPriceInPoints($res);
         AdjustStats ( $queue['owner_id'], $points, 0, 0, '-');
     }
     if ( $lvl > 10 ) RecalcRanks ();
@@ -623,14 +621,12 @@ function Queue_Shipyard_End (array $queue, int $when=0) : void
     $newe = $e + $done * $one;
 
     // Add a fleet to the planet
-    if (IsDefense($gid)) $query = "UPDATE ".$db_prefix."planets SET `$gid` = `$gid` + $done WHERE planet_id = $planet_id";
-    else $query = "UPDATE ".$db_prefix."planets SET `$gid` = `$gid` + $done WHERE planet_id = $planet_id";
+    $query = "UPDATE ".$db_prefix."planets SET `$gid` = `$gid` + $done WHERE planet_id = $planet_id";
     dbquery ($query);
 
     // Add points.
     $res = TechPrice ( $gid, 1 );
-    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $enrg = $res[GID_RC_ENERGY];
-    $points = ((int)$m + (int)$k + (int)$d) * $done;
+    $points = TechPriceInPoints($res) * $done;
     if (IsFleet($gid)) $fpoints = $done;
     else $fpoints = 0;
     AdjustStats ( $queue['owner_id'], $points, $fpoints, 0, '+');
@@ -802,8 +798,7 @@ function Queue_Research_End (array $queue) : void
 
     // Add points.
     $res = TechPrice ( $id, $lvl );
-    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-    $points = (int)$m + (int)$k + (int)$d;
+    $points = TechPriceInPoints($res);
     AdjustStats ( $queue['owner_id'], $points, 0, 1, '+');
     RecalcRanks ();
 

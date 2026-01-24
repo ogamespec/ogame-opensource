@@ -51,9 +51,10 @@ $LOCA["es"]["INFO_PHALANX_RADIUS"] = "operating radius";
 
 $LOCA["es"]["INFO_DEMOLISH_TITLE"] = "Demolish: #1 Level #2 destroy?";
 $LOCA["es"]["INFO_DEMOLISH_RES"] = "Required ";
-$LOCA["es"]["INFO_DEMOLISH_M"] = "metal:";
-$LOCA["es"]["INFO_DEMOLISH_K"] = "crystal:";
-$LOCA["es"]["INFO_DEMOLISH_D"] = "deuterium:";
+$LOCA["es"]["INFO_DEMOLISH_".GID_RC_METAL] = "metal:";
+$LOCA["es"]["INFO_DEMOLISH_".GID_RC_CRYSTAL] = "crystal:";
+$LOCA["es"]["INFO_DEMOLISH_".GID_RC_DEUTERIUM] = "deuterium:";
+$LOCA["es"]["INFO_DEMOLISH_".GID_RC_ENERGY] = "energy:";
 $LOCA["es"]["INFO_DEMOLISH_DURATION"] = "Duration of demolition:";
 $LOCA["es"]["INFO_DEMOLISH_DEFENSE"] = "defensive structures";
 

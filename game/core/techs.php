@@ -123,6 +123,10 @@ $fleetmap = array ( GID_F_SC, GID_F_LC, GID_F_LF, GID_F_HF, GID_F_CRUISER, GID_F
 $defmap = array ( GID_D_RL, GID_D_LL, GID_D_HL, GID_D_GAUSS, GID_D_ION, GID_D_PLASMA, GID_D_SDOME, GID_D_LDOME, GID_D_ABM, GID_D_IPM );
 $rakmap = array ( GID_D_ABM, GID_D_IPM );
 $resourcemap = array ( GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM, GID_RC_ENERGY, GID_RC_DM );
+// Scoring resources (usually metal, crystal, deuterium)
+$scoreResources = array(GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
+// Transported resources (usually energy and DM are not transported)
+$transportableResources = array(GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
 
 // Level 1 cost.
 // Factor in the exponential growth of technology. OGame is a game of exponential.

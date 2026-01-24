@@ -50,9 +50,10 @@ $LOCA["it"]["INFO_PHALANX_RADIUS"] = "Raggio della falange";
 
 $LOCA["it"]["INFO_DEMOLISH_TITLE"] = "Smantellare #1 livello #2?";
 $LOCA["it"]["INFO_DEMOLISH_RES"] = "Costo ";
-$LOCA["it"]["INFO_DEMOLISH_M"] = "Metallo:";
-$LOCA["it"]["INFO_DEMOLISH_K"] = "Cristallo:";
-$LOCA["it"]["INFO_DEMOLISH_D"] = "Deuterio:";
+$LOCA["it"]["INFO_DEMOLISH_".GID_RC_METAL] = "Metallo:";
+$LOCA["it"]["INFO_DEMOLISH_".GID_RC_CRYSTAL] = "Cristallo:";
+$LOCA["it"]["INFO_DEMOLISH_".GID_RC_DEUTERIUM] = "Deuterio:";
+$LOCA["it"]["INFO_DEMOLISH_".GID_RC_ENERGY] = "Energia:";
 $LOCA["it"]["INFO_DEMOLISH_DURATION"] = "Tempo di smantellamento:";
 $LOCA["it"]["INFO_DEMOLISH_DEFENSE"] = "difese";
 

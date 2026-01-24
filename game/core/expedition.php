@@ -94,7 +94,7 @@ function ExpPoints ( array $fleet ) : int
     {
         $amount = $fleet[$gid];
         $res = TechPrice ( $gid, 1 );
-        $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+        $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL];
         $structure += ($m + $k) * $amount;
     }
 
@@ -604,8 +604,7 @@ function Exp_FleetFound (array $exptab, array $queue, array $fleet_obj, array $f
         foreach ( $found_fleet as $id=>$amount)
         {
             $res = TechPrice ( $id, 1 );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
-            $points += ($m + $k + $d) * $amount;
+            $points += TechPriceInPoints($res) * $amount;
             $fpoints += $amount;
             $msg .= "<br>" . loca_lang ("NAME_$id", $lang) . " " . nicenum ($amount);
             $fleet[$id] += $amount;    // Add ships to the expeditionary fleet

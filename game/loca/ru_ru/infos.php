@@ -50,9 +50,10 @@ $LOCA["ru"]["INFO_PHALANX_RADIUS"] = "радиус действия";
 
 $LOCA["ru"]["INFO_DEMOLISH_TITLE"] = "Снести: #1 Level #2 уничтожить?";
 $LOCA["ru"]["INFO_DEMOLISH_RES"] = "Необходимо ";
-$LOCA["ru"]["INFO_DEMOLISH_M"] = "металла:";
-$LOCA["ru"]["INFO_DEMOLISH_K"] = "кристалла:";
-$LOCA["ru"]["INFO_DEMOLISH_D"] = "дейтерия:";
+$LOCA["ru"]["INFO_DEMOLISH_".GID_RC_METAL] = "металла:";
+$LOCA["ru"]["INFO_DEMOLISH_".GID_RC_CRYSTAL] = "кристалла:";
+$LOCA["ru"]["INFO_DEMOLISH_".GID_RC_DEUTERIUM] = "дейтерия:";
+$LOCA["ru"]["INFO_DEMOLISH_".GID_RC_ENERGY] = "энергии:";
 $LOCA["ru"]["INFO_DEMOLISH_DURATION"] = "Продолжительность сноса:";
 $LOCA["ru"]["INFO_DEMOLISH_DEFENSE"] = "об оборонительных сооружениях";
 

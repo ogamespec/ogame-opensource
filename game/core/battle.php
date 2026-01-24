@@ -106,8 +106,9 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
             $amount = $attacker['fleet'][$gid];
             if ( $amount > 0 ) {
                 $cost = TechPrice ( $gid, 1 );
-                $aprice += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
-                $a[$i]['points'] += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                $points = TechPriceInPoints($cost);
+                $aprice += $points * $amount;
+                $a[$i]['points'] += $points * $amount;
                 $a[$i]['fpoints'] += $amount;
             }
         }
@@ -122,8 +123,9 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
             $amount = $defender['fleet'][$gid];
             if ( $amount > 0 ) {
                 $cost = TechPrice ( $gid, 1 );
-                $dprice += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
-                $d[$i]['points'] += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                $points = TechPriceInPoints ($cost);
+                $dprice += $points * $amount;
+                $d[$i]['points'] += $points * $amount;
                 $d[$i]['fpoints'] += $amount;
             }
         }
@@ -132,8 +134,9 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
             $amount = $defender['defense'][$gid];
             if ( $amount > 0 ) {
                 $cost = TechPrice ( $gid, 1 );
-                $dprice += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
-                $d[$i]['points'] += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                $points = TechPriceInPoints ($cost);
+                $dprice += $points * $amount;
+                $d[$i]['points'] += $points * $amount;
             }
         }
     }
@@ -152,8 +155,9 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
                 $amount = $attacker[$gid];
                 if ( $amount > 0 ) {
                     $cost = TechPrice ( $gid, 1 );
-                    $alast += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
-                    $a[$i]['points'] -= ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                    $points = TechPriceInPoints ($cost);
+                    $alast += $points * $amount;
+                    $a[$i]['points'] -= $points * $amount;
                     $a[$i]['fpoints'] -= $amount;
                 }
             }
@@ -167,8 +171,9 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
                 else $amount = $defender[$gid];
                 if ( $amount > 0 ) {
                     $cost = TechPrice ( $gid, 1 );
-                    $dlast += ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
-                    $d[$i]['points'] -= ( $cost[GID_RC_METAL] + $cost[GID_RC_CRYSTAL] + $cost[GID_RC_DEUTERIUM] ) * $amount;
+                    $points = TechPriceInPoints ($cost);
+                    $dlast += $points * $amount;
+                    $d[$i]['points'] -= $points * $amount;
                     if ( IsFleet($gid) ) $d[$i]['fpoints'] -= $amount;
                 }
             }
