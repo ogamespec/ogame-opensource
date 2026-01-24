@@ -276,10 +276,11 @@ function AdjustShips (array $fleet, int $planet_id, string $sign) : void
 }
 
 // Dispatch the fleet. No checks are performed. Returns the ID of the fleet.
-function DispatchFleet (array $fleet, array $origin, array $target, int $order, int $seconds, int|float $m, int|float $k, int|float $d, int $cons, int $when, int $union_id=0, int $deploy_time=0) : int
+function DispatchFleet (array $fleet, array $origin, array $target, int $order, int $seconds, array $resources, int $cons, int $when, int $union_id=0, int $deploy_time=0) : int
 {
     global $db_prefix;
     global $fleetmap;
+    global $transportableResources;
     $uni = LoadUniverse ();
     if ( $uni['freeze'] ) return 0;
 
@@ -289,9 +290,9 @@ function DispatchFleet (array $fleet, array $origin, array $target, int $order, 
 
     // Add the fleet.
     $fleet_obj = array ( 'owner_id' => $origin['owner_id'], 'union_id' => $union_id,
-        GID_RC_METAL => $m, GID_RC_CRYSTAL => $k, GID_RC_DEUTERIUM => $d,
         'fuel' => $cons, 'mission' => $order, 
         'start_planet' => $origin['planet_id'], 'target_planet' => $target['planet_id'], 'flight_time' => $flight_time, 'deploy_time' => $deploy_time );
+    foreach ($transportableResources as $i=>$rc) $fleet_obj[$rc] = $resources[$rc];
     foreach ($fleetmap as $i=>$gid) $fleet_obj[$gid] = $fleet[$gid];
     $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
@@ -300,11 +301,11 @@ function DispatchFleet (array $fleet, array $origin, array $target, int $order, 
     $query = "DELETE FROM ".$db_prefix."fleetlogs WHERE start < $weeks;";
     dbquery ($query);
     $fleetlog = array ( 'owner_id' => $origin['owner_id'], 'target_id' => $target['owner_id'], 'union_id' => $union_id, 
-        'p'.GID_RC_METAL => $origin[GID_RC_METAL], 'p'.GID_RC_CRYSTAL => $origin[GID_RC_CRYSTAL], 'p'.GID_RC_DEUTERIUM => $origin[GID_RC_DEUTERIUM], 
-        GID_RC_METAL => $m, GID_RC_CRYSTAL => $k, GID_RC_DEUTERIUM => $d,
         'fuel' => $cons, 'mission' => $order, 'flight_time' => $flight_time, 'deploy_time' => $deploy_time, 'start' => $now, 'end' => $now+$seconds, 
         'origin_g' => $origin['g'], 'origin_s' => $origin['s'], 'origin_p' => $origin['p'], 'origin_type' => $origin['type'], 
         'target_g' => $target['g'], 'target_s' => $target['s'], 'target_p' => $target['p'], 'target_type' => $target['type'] );
+    foreach ($transportableResources as $i=>$rc) $fleetlog['p'.$rc] = $origin[$rc];
+    foreach ($transportableResources as $i=>$rc) $fleetlog[$rc] = $resources[$rc];
     foreach ($fleetmap as $i=>$gid) $fleetlog[$gid] = $fleet[$gid];
     AddDBRow ($fleetlog, 'fleetlogs');
 
@@ -343,10 +344,10 @@ function RecallFleet (int $fleet_id, int $now=0) : void
 
     // For recall missions with a hold, the hold time is used as the return flight time.
     if ($fleet_obj['mission'] < FTYP_RETURN) DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] + FTYP_RETURN, $now-$queue['start'],
-        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        $fleet_obj,
         $fleet_obj['fuel'] / 2, $now);
     else DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] - FTYP_RETURN, $fleet_obj['deploy_time'],
-        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        $fleet_obj,
         $fleet_obj['fuel'] / 2, $now);
 
     DeleteFleet ($fleet_obj['fleet_id']);            // delete fleet
@@ -445,7 +446,6 @@ function LaunchRockets ( array $origin, array $target, int $seconds, int $amount
 
     // Add a missile attack.
     $fleet_obj = array ( 'owner_id' => $origin['owner_id'], 'union_id' => 0,
-        GID_RC_METAL => 0, GID_RC_CRYSTAL => 0, GID_RC_DEUTERIUM => 0,
         'fuel' => 0, 'mission' => FTYP_MISSILE, 
         'start_planet' => $origin['planet_id'], 'target_planet' => $target['planet_id'], 'flight_time' => $seconds, 'deploy_time' => 0,
         'ipm_amount' => $amount, 'ipm_target' => $type );
@@ -456,8 +456,6 @@ function LaunchRockets ( array $origin, array $target, int $seconds, int $amount
     $query = "DELETE FROM ".$db_prefix."fleetlogs WHERE start < $weeks;";
     dbquery ($query);
     $fleetlog = array ( 'owner_id' => $origin['owner_id'], 'target_id' => $target['owner_id'], 'union_id' => 0,
-        'p'.GID_RC_METAL => 0, 'p'.GID_RC_CRYSTAL => 0, 'p'.GID_RC_DEUTERIUM => 0, 
-        GID_RC_METAL => 0, GID_RC_CRYSTAL => 0, GID_RC_DEUTERIUM => 0,
         'fuel' => 0, 'mission' => FTYP_MISSILE, 'flight_time' => $seconds, 'deploy_time' => 0, 'start' => $now, 'end' => $now+$seconds, 
         'origin_g' => $origin['g'], 'origin_s' => $origin['s'], 'origin_p' => $origin['p'], 'origin_type' => $origin['type'], 
         'target_g' => $target['g'], 'target_s' => $target['s'], 'target_p' => $target['p'], 'target_type' => $target['type'], 
@@ -494,6 +492,8 @@ function AttackArrive (array $queue, array $fleet_obj, array $fleet, array $orig
 
 function TransportArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
+    global $transportableResources;
+
     $oldm = $target[GID_RC_METAL];
     $oldk = $target[GID_RC_CRYSTAL];
     $oldd = $target[GID_RC_DEUTERIUM];
@@ -507,7 +507,11 @@ function TransportArrive (array $queue, array $fleet_obj, array $fleet, array $o
     }
     loca_add ( "fleetmsg", $origin_user['lang'] );
 
-    DispatchFleet ($fleet, $origin, $target, FTYP_TRANSPORT+FTYP_RETURN, $fleet_obj['flight_time'], 0, 0, 0, $fleet_obj['fuel'] / 2, $queue['end']);
+    $resources = array ();
+    foreach ($transportableResources as $i=>$rc) {
+        $resources[$rc] = 0;
+    }
+    DispatchFleet ($fleet, $origin, $target, FTYP_TRANSPORT+FTYP_RETURN, $fleet_obj['flight_time'], $resources, $fleet_obj['fuel'] / 2, $queue['end']);
 
     $text = va(loca_lang("FLEET_TRANSPORT_OWN", $origin_user['lang']), 
             "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>",
@@ -639,7 +643,7 @@ function HoldingArrive (array $queue, array $fleet_obj, array $fleet, array $ori
     // Start an orbit hold task.
     // Make the hold time a flight time (so that it can be used when returning the fleet)
     DispatchFleet ($fleet, $origin, $target, FTYP_ACS_HOLD+FTYP_ORBITING, $fleet_obj['deploy_time'], 
-        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM], 
+        $fleet_obj, 
         0, $queue['end'], 0, $fleet_obj['flight_time']);
 }
 
@@ -648,7 +652,7 @@ function HoldingHold (array $queue, array $fleet_obj, array $fleet, array $origi
     // Return the fleet.
     // The hold time is used as the flight time.
     DispatchFleet ($fleet, $origin, $target, FTYP_ACS_HOLD+FTYP_RETURN, $fleet_obj['deploy_time'],
-        $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+        $fleet_obj,
         0, $queue['end']);
 }
 
@@ -824,7 +828,7 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
 
     // Return the fleet.
     if ( mt_rand (0, 100) < $counter ) StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'], $queue['end'] );
-    else DispatchFleet ($fleet, $origin, $target, FTYP_SPY+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM], $fleet_obj['fuel'] / 2, $queue['end']);
+    else DispatchFleet ($fleet, $origin, $target, FTYP_SPY+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj, $fleet_obj['fuel'] / 2, $queue['end']);
 }
 
 function SpyReturn (array $queue, array $fleet_obj, array $fleet) : void
@@ -888,7 +892,7 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
             if ($target['type'] == PTYP_COLONY_PHANTOM) DestroyPlanet ( $target['planet_id'] );
             $target = GetPlanet ($id);
             DispatchFleet ($fleet, $origin, $target, FTYP_COLONIZE+FTYP_RETURN, $fleet_obj['flight_time'], 
-                $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM], 
+                $fleet_obj, 
                 $fleet_obj['fuel'] / 2, $queue['end']);
         }
         else {
@@ -901,7 +905,7 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
 
         // Return the fleet.
         DispatchFleet ($fleet, $origin, $target, FTYP_COLONIZE+FTYP_RETURN, $fleet_obj['flight_time'],
-            $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM],
+            $fleet_obj,
             $fleet_obj['fuel'] / 2, $queue['end']);
     }
 
@@ -946,6 +950,7 @@ function ColonizationReturn (array $queue, array $fleet_obj, array $fleet, array
 
 function RecycleArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
+    global $transportableResources;
     if ( $fleet[GID_F_RECYCLER] == 0 ) Error ( "Attempt to harvest DF without recyclers" );
     if ( $target['type'] != PTYP_DF ) Error ( "Only debris fields can be recycled!" );
 
@@ -954,8 +959,6 @@ function RecycleArrive (array $queue, array $fleet_obj, array $fleet, array $ori
     $cargo = min ($recycler_cargo, $sum_cargo);
 
     $harvest = HarvestDebris ( $target['planet_id'], $cargo, $queue['end'] );
-    $dm = $harvest[GID_RC_METAL];
-    $dk = $harvest[GID_RC_CRYSTAL];
 
     $origin_user = LoadUser ( $origin['owner_id'] );
     if ($origin_user == null) return;
@@ -967,11 +970,15 @@ function RecycleArrive (array $queue, array $fleet_obj, array $fleet, array $ori
         nicenum($cargo),
         nicenum($target[GID_RC_METAL]),
         nicenum($target[GID_RC_CRYSTAL]),
-        nicenum($dm),
-        nicenum($dk) );
+        nicenum($harvest[GID_RC_METAL]),
+        nicenum($harvest[GID_RC_CRYSTAL]) );
 
     // Return the fleet.
-    DispatchFleet ($fleet, $origin, $target, FTYP_RECYCLE+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj[GID_RC_METAL] + $dm, $fleet_obj[GID_RC_CRYSTAL] + $dk, $fleet_obj[GID_RC_DEUTERIUM], $fleet_obj['fuel'] / 2, $queue['end']);
+    $resources = array ();
+    foreach ($transportableResources as $i=>$rc) {
+        $resources[$rc] = $fleet_obj[$rc] + $harvest[$rc];
+    }
+    DispatchFleet ($fleet, $origin, $target, FTYP_RECYCLE+FTYP_RETURN, $fleet_obj['flight_time'], $resources, $fleet_obj['fuel'] / 2, $queue['end']);
 
     SendMessage ( $fleet_obj['owner_id'], loca_lang("FLEET_MESSAGE_FLEET", $origin_user['lang']), $subj, $report, MTYP_MISC, $queue['end']);
 }

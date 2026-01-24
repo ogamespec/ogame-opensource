@@ -317,7 +317,7 @@ else {
     fclose ($f);
 
     $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, 
-        $resources[GID_RC_METAL], $resources[GID_RC_CRYSTAL], $resources[GID_RC_DEUTERIUM], 
+        $resources, 
         $cons['fleet'] + $cons['probes'], time(), $union_id, $hold_time );
     $queue = GetFleetQueue ($fleet_id);
 

@@ -323,6 +323,7 @@ function CreateDebris (int $g, int $s, int $p, int $owner_id) : int
 function HarvestDebris (int $planet_id, int $cargo, int $when) : array
 {
     global $db_prefix;
+    global $transportableResources;
     $harvest = array ();
     $debris = GetPlanet ($planet_id);
 
@@ -343,6 +344,9 @@ function HarvestDebris (int $planet_id, int $cargo, int $when) : array
     $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."` = `".GID_RC_METAL."` - $m, `".GID_RC_CRYSTAL."` = `".GID_RC_CRYSTAL."` - $k, lastpeek = $when WHERE planet_id = $planet_id";
     dbquery ($query);
 
+    foreach ($transportableResources as $i=>$rc) {
+        $harvest[$rc] = 0;
+    }
     $harvest[GID_RC_METAL] = $m;
     $harvest[GID_RC_CRYSTAL] = $k;
     return $harvest;
