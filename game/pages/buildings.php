@@ -346,13 +346,13 @@ if ( $_GET['mode'] === "Forschung" )
             if ($GlobalUser[$id]) echo "</a> (" . va(loca("BUILD_LEVEL"), $GlobalUser[$id]);
             ShowBuildingsBonus ($id);
             if ($GlobalUser[$id]) echo ")";
-            $res = TechPrice ( $id, $level );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+            $cost = TechPrice ( $id, $level );
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
-            if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";
-            if ($k) echo " ".loca("NAME_".GID_RC_CRYSTAL).": <b>".nicenum($k)."</b>";
-            if ($d) echo " ".loca("NAME_".GID_RC_DEUTERIUM).": <b>".nicenum($d)."</b>";
-            if ($e) echo " ".loca("NAME_".GID_RC_ENERGY).": <b>".nicenum($e)."</b>";
+            foreach ($resourcemap as $i=>$rc) {
+                if (isset($cost[$rc]) && $cost[$rc]) {
+                    echo " ".loca("NAME_".$rc).": <b>".nicenum($cost[$rc])."</b>";
+                }
+            }
             $t = TechDuration ( $id, $level, PROD_RESEARCH_DURATION_FACTOR, $reslab, 0, $GlobalUni['speed'] * $r_factor );
             echo "<br>".loca("BUILD_DURATION").": ".DurationFormat ( $t )."<br></th>";
             echo "<td class=k>";
