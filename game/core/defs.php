@@ -124,4 +124,6 @@ const PROD_BUILDING_DURATION_FACTOR = 2500;
 const PROD_SHIPYARD_DURATION_FACTOR = 2500;
 const PROD_RESEARCH_DURATION_FACTOR = 1000;
 
+const GALAXY_DEUTERIUM_CONS = 10; 			// Deuterium consumption for viewing the Galaxy
+
 ?>

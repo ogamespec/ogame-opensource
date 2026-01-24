@@ -95,14 +95,15 @@ else if ( isset($_POST['galaxyRight']) )
     if ( $coord_g > $GlobalUni['galaxies'] ) $coord_g = $GlobalUni['galaxies'];
 }
 
-$not_enough_deut = ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s) && $aktplanet[GID_RC_DEUTERIUM] < 10;
+$not_enough_deut = ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s) && $aktplanet[GID_RC_DEUTERIUM] < GALAXY_DEUTERIUM_CONS;
 
-// Charge 10 deuterium for viewing a non-home system (regular users only)
+// Charge GALAXY_DEUTERIUM_CONS deuterium for viewing a non-home system (regular users only)
 if ( !$not_enough_deut && $GlobalUser['admin'] == 0 )
 {
     if ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s )
     {
-        AdjustResources (0, 0, 10, $aktplanet['planet_id'], '-');
+        $cost = array (GID_RC_DEUTERIUM => GALAXY_DEUTERIUM_CONS);
+        AdjustResources ($cost, $aktplanet['planet_id'], '-');
         $aktplanet = GetPlanet ( $aktplanet['planet_id'] );
         if ($aktplanet == null) {
             Error ("Can't get aktplanet");

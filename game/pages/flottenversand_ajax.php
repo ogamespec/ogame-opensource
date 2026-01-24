@@ -171,7 +171,8 @@ UserLog ( $aktplanet['owner_id'], "FLEET",
     va(loca_lang("DEBUG_LOG_FLEET_SEND_AJAX2", $GlobalUni['lang']), DurationFormat ($flighttime), nicenum ($cons)) );
 
 // Get the fleet off the planet.
-AdjustResources ( 0, 0, $cons, $aktplanet['planet_id'], '-' );
+$cost = array (GID_RC_DEUTERIUM => $cons);
+AdjustResources ( $cost, $aktplanet['planet_id'], '-' );
 AdjustShips ( $fleet, $aktplanet['planet_id'], '-' );
 UpdatePlanetActivity ($aktplanet['planet_id']);
 

@@ -808,7 +808,8 @@ function ExpeditionHold (array $queue, array $fleet_obj, array $fleet, array $or
     }
 
     // Updating the expedition's visit counter on the planet.
-    AdjustResources ( 1, 0, 0, $target['planet_id'], '+' );
+    $cost = array (GID_RC_METAL => 1);
+    AdjustResources ( $cost, $target['planet_id'], '+' );
 
     // Captain's logbook
     if ( $fleet[GID_F_PROBE] > 0 ) $text .= "\n<br/>\n<br/>\n" . Logbook ( $expcount, $exptab, $origin_user['lang']);

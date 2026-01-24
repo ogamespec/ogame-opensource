@@ -166,13 +166,13 @@ foreach ( $buildmap as $i => $id )
     ShowBuildingsBonus ($id);
     if ( $lvl ) echo ")";
     echo "<br>". loca("SHORT_$id");
-    $res = TechPrice ( $id, $lvl+1 );
-    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+    $cost = TechPrice ( $id, $lvl+1 );
     echo "<br>".loca("BUILD_PRICE").":";
-    if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";
-    if ($k) echo " ".loca("NAME_".GID_RC_CRYSTAL).": <b>".nicenum($k)."</b>";
-    if ($d) echo " ".loca("NAME_".GID_RC_DEUTERIUM).": <b>".nicenum($d)."</b>";
-    if ($e) echo " ".loca("NAME_".GID_RC_ENERGY).": <b>".nicenum($e)."</b>";
+    foreach ($resourcemap as $i=>$rc) {
+        if (isset($cost[$rc]) && $cost[$rc]) {
+            echo " ".loca("NAME_".$rc).": <b>".nicenum($cost[$rc])."</b>";
+        }
+    }
     $t = TechDuration ( $id, $lvl+1, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
     echo "<br>".loca("BUILD_DURATION").": ".DurationFormat ( $t )."<br>";
 
@@ -194,12 +194,12 @@ foreach ( $buildmap as $i => $id )
 			}
    			else if ( $lvl == 0 )
       		{
-        		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".loca("BUILD_BUILD")."</font></a>\n";
+        		if ( IsEnoughResources ( $GlobalUser, $aktplanet, $cost )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".loca("BUILD_BUILD")."</font></a>\n";
           		else echo "<td class=l><font color=#FF0000>".loca("BUILD_BUILD")."</font>\n";
 			}
    			else
       		{
-        		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font></a>\n";
+        		if ( IsEnoughResources ( $GlobalUser, $aktplanet, $cost )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font></a>\n";
           		else echo "<td class=l><font color=#FF0000>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font>";
 			}
         }
@@ -225,12 +225,12 @@ foreach ( $buildmap as $i => $id )
 			}
    			else if ( $lvl == 0 )
       		{
-        		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".loca("BUILD_BUILD")."</font></a>\n";
+        		if ( IsEnoughResources ( $GlobalUser, $aktplanet, $cost )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".loca("BUILD_BUILD")."</font></a>\n";
           		else echo "<td class=l><font color=#FF0000>".loca("BUILD_BUILD")."</font>\n";
 			}
    			else
       		{
-        		if ( IsEnoughResources ( $aktplanet, $m, $k, $d, $e )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font></a>\n";
+        		if ( IsEnoughResources ( $GlobalUser, $aktplanet, $cost )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font></a>\n";
           		else echo "<td class=l><font color=#FF0000>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font>";
 			}
 		}

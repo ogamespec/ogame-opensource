@@ -413,11 +413,7 @@ $speed = $GlobalUni['speed'];
             if ($amount > 0)
             {
                 $cost = TechPrice ( $fleet, 1 );
-                $m = $cost[GID_RC_METAL];
-                $k = $cost[GID_RC_CRYSTAL];
-                $d = $cost[GID_RC_DEUTERIUM];
-                $e = $cost[GID_RC_ENERGY];
-                $meet = IsEnoughResources ( $planet, $m, $k, $d, $e );
+                $meet = IsEnoughResources ( $GlobalUser, $planet, $cost );
                 $color = $meet ? "lime" : "red";
 
                 echo "                <a href=\"index.php?page=buildings&session=$session&cp=".$planet['planet_id']."&mode=Flotte&planettype=$planettype\">\n";
@@ -466,11 +462,7 @@ $speed = $GlobalUni['speed'];
             if ($amount > 0)
             {
                 $cost = TechPrice ( $def, 1 );
-                $m = $cost[GID_RC_METAL];
-                $k = $cost[GID_RC_CRYSTAL];
-                $d = $cost[GID_RC_DEUTERIUM];
-                $e = $cost[GID_RC_ENERGY];
-                $meet = IsEnoughResources ( $planet, $m, $k, $d, $e );
+                $meet = IsEnoughResources ( $GlobalUser, $planet, $cost );
                 $color = $meet ? "lime" : "red";
 
                 echo "                <a href=\"index.php?page=buildings&session=$session&cp=".$planet['planet_id']."&mode=Verteidigung&planettype=$planettype\">\n";

@@ -261,7 +261,8 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
         {
             if ( $i == 0 )    // Planet
             {
-                AdjustResources ( $cm, $ck, $cd, $defender['id'], '-' );
+                $cost = array (GID_RC_METAL => $cm, GID_RC_CRYSTAL => $ck, GID_RC_DEUTERIUM => $cd);
+                AdjustResources ( $cost, $defender['id'], '-' );
                 $objects = array ();
                 foreach ( $fleetmap as $ii=>$gid ) $objects[$gid] = $defender[$gid] ? $defender[$gid] : 0;
                 foreach ( $defmap_norak as $ii=>$gid ) {
@@ -319,7 +320,8 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
         {
             if ( $i == 0 && $res['result'] == 'awon')    // Planet
             {
-                AdjustResources ( $cm, $ck, $cd, $defender['id'], '-' );
+                $cost = array (GID_RC_METAL => $cm, GID_RC_CRYSTAL => $ck, GID_RC_DEUTERIUM => $cd);
+                AdjustResources ( $cost, $defender['id'], '-' );
             }
         }
 

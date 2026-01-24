@@ -165,24 +165,26 @@ if ( $_GET['mode'] === "Flotte" )
             if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]);
             ShowBuildingsBonus ($id);
             if ($aktplanet[$id]) echo ")";
-            $res = TechPrice ( $id, 1 );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+            $cost = TechPrice ( $id, 1 );
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
-            if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";
-            if ($k) echo " ".loca("NAME_".GID_RC_CRYSTAL).": <b>".nicenum($k)."</b>";
-            if ($d) echo " ".loca("NAME_".GID_RC_DEUTERIUM).": <b>".nicenum($d)."</b>";
-            if ($e) echo " ".loca("NAME_".GID_RC_ENERGY).": <b>".nicenum($e)."</b>";
+            foreach ($resourcemap as $i=>$rc) {
+                if (isset($cost[$rc]) && $cost[$rc]) {
+                    echo " ".loca("NAME_".$rc).": <b>".nicenum($cost[$rc])."</b>";
+                }
+            }
             $t = TechDuration ( $id, 1, PROD_SHIPYARD_DURATION_FACTOR, $aktplanet[GID_B_SHIPYARD], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
             echo "<br>".loca("BUILD_DURATION").": ".DurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !TechMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>".loca("BUILD_SHIPYARD_CANT")."</font>";
-            else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) && !$busy) {
+            else if (IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) && !$busy) {
                 echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
                 if ( $prem['commander'] ) {
                     $max = $GlobalUni['max_werf'];
-                    if ( $m ) $max = floor (min ($max, $aktplanet[GID_RC_METAL] / $m));
-                    if ( $k ) $max = floor (min ($max, $aktplanet[GID_RC_CRYSTAL] / $k));
-                    if ( $d ) $max = floor (min ($max, $aktplanet[GID_RC_DEUTERIUM] / $d));
+                    foreach ($resourcemap as $i=>$rc) {
+                        if (isset($cost[$rc]) && isset($aktplanet[$rc]) && $cost[$rc]) {
+                            $max = floor (min ($max, $aktplanet[$rc] / $cost[$rc]));
+                        }
+                    }
                     echo "<br><a href=\"javascript:setMax($id, $max);\">(max. $max)</a>";
                 }
             }
@@ -250,28 +252,30 @@ if ( $_GET['mode'] === "Verteidigung" )
             if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]);
             ShowBuildingsBonus ($id);
             if ($aktplanet[$id]) echo ")";
-            $res = TechPrice ( $id, 1 );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+            $cost = TechPrice ( $id, 1 );
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
-            if ($m) echo " ".loca("NAME_".GID_RC_METAL).": <b>".nicenum($m)."</b>";
-            if ($k) echo " ".loca("NAME_".GID_RC_CRYSTAL).": <b>".nicenum($k)."</b>";
-            if ($d) echo " ".loca("NAME_".GID_RC_DEUTERIUM).": <b>".nicenum($d)."</b>";
-            if ($e) echo " ".loca("NAME_".GID_RC_ENERGY).": <b>".nicenum($e)."</b>";
+            foreach ($resourcemap as $i=>$rc) {
+                if (isset($cost[$rc]) && $cost[$rc]) {
+                    echo " ".loca("NAME_".$rc).": <b>".nicenum($cost[$rc])."</b>";
+                }
+            }
             $t = TechDuration ( $id, 1, PROD_SHIPYARD_DURATION_FACTOR, $aktplanet[GID_B_SHIPYARD], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
             echo "<br>".loca("BUILD_DURATION").": ".DurationFormat ( $t )."<br></th>";
             echo "<td class=k >";
             if ( !$busy ) {
                 if ( ($id == GID_D_SDOME || $id == GID_D_LDOME) && $aktplanet[$id] > 0 ) echo "<font color=#FF0000>".loca("BUILD_ERROR_DOME")."</font>";
                 else if ( !TechMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) echo "<font color=#FF0000>".loca("BUILD_SHIPYARD_CANT")."</font>";
-                else if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) {
+                else if (IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) ) {
                     echo "<input type=text name='fmenge[$id]' alt='".loca("NAME_$id")."' size=6 maxlength=6 value=0 tabindex=1> ";
                     if ( $prem['commander'] && !( $id == GID_D_SDOME || $id == GID_D_LDOME ) ) {
                         if ( $id == GID_D_ABM ) $max = $aktplanet[GID_B_MISS_SILO] * 10 - (2*$aktplanet[GID_D_IPM] + $aktplanet[GID_D_ABM]);
                         else if ( $id == GID_D_IPM ) $max = ($aktplanet[GID_B_MISS_SILO] * 10 - (2*$aktplanet[GID_D_IPM] + $aktplanet[GID_D_ABM])) / 2;
                         else $max = $GlobalUni['max_werf'];
-                        if ( $m ) $max = floor (min ($max, $aktplanet[GID_RC_METAL] / $m));
-                        if ( $k ) $max = floor (min ($max, $aktplanet[GID_RC_CRYSTAL] / $k));
-                        if ( $d ) $max = floor (min ($max, $aktplanet[GID_RC_DEUTERIUM] / $d));
+                        foreach ($resourcemap as $i=>$rc) {
+                            if (isset($cost[$rc]) && isset($aktplanet[$rc]) && $cost[$rc]) {
+                                $max = floor (min ($max, $aktplanet[$rc] / $cost[$rc]));
+                            }
+                        }
                         echo "<br><a href=\"javascript:setMax($id, $max);\">(max. $max)</a>";
                     }
                 }
@@ -399,11 +403,11 @@ if ( $_GET['mode'] === "Forschung" )
             else        // The research is not in progress.
             {
                 if ($GlobalUser[$id]) {
-                    if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".va(loca("BUILD_RESEARCH_LEVEL"), $level)."</font></a>";
+                    if (IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".va(loca("BUILD_RESEARCH_LEVEL"), $level)."</font></a>";
                     else echo "<font color=#FF0000>".va(loca("BUILD_RESEARCH_LEVEL"), $level)."</font>";
                 }
                 else {
-                    if (IsEnoughResources ( $aktplanet, $m, $k, $d, $e ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".loca("BUILD_RESEARCH")."</font></a>";
+                    if (IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".loca("BUILD_RESEARCH")."</font></a>";
                     else echo "<font color=#FF0000>".loca("BUILD_RESEARCH")."</font></a>";
                 }
             }

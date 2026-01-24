@@ -335,7 +335,8 @@ else {
     }
 
     // Get the fleet off the planet.
-    AdjustResources ( $cargo_m, $cargo_k, $cargo_d + $cons['fleet'] + $cons['probes'], $origin['planet_id'], '-' );
+    $cost = array (GID_RC_METAL => $cargo_m, GID_RC_CRYSTAL => $cargo_k, GID_RC_DEUTERIUM => $cargo_d + $cons['fleet'] + $cons['probes']);
+    AdjustResources ( $cost, $origin['planet_id'], '-' );
     AdjustShips ( $fleet, $origin['planet_id'], '-' );
 
     unlink ( $fleetlock );

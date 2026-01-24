@@ -404,11 +404,18 @@ function HasPlanet (int $g, int $s, int $p) : bool
 }
 
 // Change the amount of resources on the planet.
-function AdjustResources (float|int $m, float|int $k, float|int $d, int $planet_id, string $sign) : void
+function AdjustResources (array $cost, int $planet_id, string $sign) : void
 {
     global $db_prefix;
+    global $resourcemap;
     $now = time ();
-    $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."`=`".GID_RC_METAL."` $sign ".$m.", `".GID_RC_CRYSTAL."`=`".GID_RC_CRYSTAL."` $sign ".$k.", `".GID_RC_DEUTERIUM."`=`".GID_RC_DEUTERIUM."` $sign ".$d.", lastpeek = ".$now." WHERE planet_id=$planet_id;";
+    $query = "UPDATE ".$db_prefix."planets SET ";
+    foreach ($resourcemap as $i=>$rc) {
+        if (isset($cost[$rc]) && $cost[$rc]) {
+            $query .= "`".$rc."`=`".$rc."` $sign ".$cost[$rc].", ";
+        }
+    }
+    $query .= "lastpeek = ".$now." WHERE planet_id=$planet_id;";
     dbquery ($query);
 }
 

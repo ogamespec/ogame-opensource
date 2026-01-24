@@ -498,7 +498,7 @@ function TransportArrive (array $queue, array $fleet_obj, array $fleet, array $o
     $oldk = $target[GID_RC_CRYSTAL];
     $oldd = $target[GID_RC_DEUTERIUM];
 
-    AdjustResources ( $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM], $target['planet_id'], '+' );
+    AdjustResources ( $fleet_obj, $target['planet_id'], '+' );
     UpdatePlanetActivity ( $target['planet_id'], $queue['end'] );
 
     $origin_user = LoadUser ( $origin['owner_id'] );
@@ -551,7 +551,7 @@ function CommonReturn (array $queue, array $fleet_obj, array $fleet, array $orig
     if ( $fleet_obj[GID_RC_CRYSTAL] < 0 ) $fleet_obj[GID_RC_CRYSTAL] = 0;
     if ( $fleet_obj[GID_RC_DEUTERIUM] < 0 ) $fleet_obj[GID_RC_DEUTERIUM] = 0;
 
-    AdjustResources ( $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM], $fleet_obj['start_planet'], '+' );
+    AdjustResources ( $fleet_obj, $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 
@@ -584,7 +584,9 @@ function CommonReturn (array $queue, array $fleet_obj, array $fleet, array $orig
 function DeployArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     // Also unload half the fuel
-    AdjustResources ( $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM] + floor ($fleet_obj['fuel'] / 2), $target['planet_id'], '+' );
+    $cost = $fleet_obj;
+    $cost[GID_RC_DEUTERIUM] += floor ($fleet_obj['fuel'] / 2);
+    AdjustResources ( $cost, $target['planet_id'], '+' );
     AdjustShips ( $fleet, $fleet_obj['target_planet'], '+' );
     UpdatePlanetActivity ( $target['planet_id'], $queue['end'] );
 
@@ -827,7 +829,7 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
 
 function SpyReturn (array $queue, array $fleet_obj, array $fleet) : void
 {
-    AdjustResources ( $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM], $fleet_obj['start_planet'], '+' );
+    AdjustResources ( $fleet_obj, $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 }
@@ -911,7 +913,7 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
 
 function ColonizationReturn (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
-    AdjustResources ( $fleet_obj[GID_RC_METAL], $fleet_obj[GID_RC_CRYSTAL], $fleet_obj[GID_RC_DEUTERIUM], $fleet_obj['start_planet'], '+' );
+    AdjustResources ( $fleet_obj, $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
     UpdatePlanetActivity ( $fleet_obj['start_planet'], $queue['end'] );
 

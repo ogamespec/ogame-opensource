@@ -55,7 +55,10 @@ while ($rows--)
 
 // Modify the resources on the planet
 $spent = $loaded - $deut_avail;
-if ( $spent > 0 ) AdjustResources ( 0, 0, $spent, $aktplanet['planet_id'], '-' );
+if ( $spent > 0 ) {
+    $cost = array (GID_RC_DEUTERIUM => $spent);
+    AdjustResources ( $cost, $aktplanet['planet_id'], '-' );
+}
 
 // Redirect to the alliance depot
 MyGoto ( "infos", "&gid=".GID_B_ALLY_DEPOT );

@@ -100,12 +100,14 @@ function ResearchNetwork ( int $planetid, int $id ) : int
     return $reslab;
 }
 
-function IsEnoughResources (array $planet, float $m, float $k, float $d, int $e) : bool
+function IsEnoughResources (array $user, array $planet, array $cost) : bool
 {
-    if ( $m && $planet[GID_RC_METAL] < $m ) return false;
-    if ( $k && $planet[GID_RC_CRYSTAL] < $k ) return false;
-    if ( $d && $planet[GID_RC_DEUTERIUM] < $d ) return false;
-    if ( $e && $planet[GID_RC_ENERGY] < $e ) return false;
+    $useroplanet = array_merge($user, $planet);
+    foreach ($cost as $rc=>$value) {
+        if ($value > 0 && isset($useroplanet[$rc])) {
+            if ($useroplanet[$rc] < $value) return false;
+        }
+    }
     return true;
 }
 
