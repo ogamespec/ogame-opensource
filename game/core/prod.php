@@ -62,7 +62,7 @@ function TechPriceInPoints (array $cost) : int
     foreach ($scoreResources as $i=>$rc) {
         if (isset($cost[$rc])) $points += $cost[$rc];
     }
-    return $points;
+    return (int)$points;
 }
 
 // Time to produce a $id level $lvl tech in seconds. b1 - robots/shipyard/reslab. b2 - nanites (0 for research). const_factor - see in defs.php
