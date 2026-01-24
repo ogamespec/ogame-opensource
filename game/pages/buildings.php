@@ -9,6 +9,41 @@
 
 // Shipyard, Defense, and Research.
 
+// Get a list of bonuses for the specified technology. By default, +2 is shown for Espionage with a Technocrat. Modifications can add their own bonuses.
+function GetBuildingsBonus (int $gid) : array
+{
+    global $GlobalUser;
+    $bonues = array();
+
+    $prem = PremiumStatus ($GlobalUser);
+
+    if ( $gid == GID_R_ESPIONAGE && $prem['technocrat'] ) { 
+
+        $bonus = [];
+        $bonus['value'] = "+2";
+        $bonus['img'] = "img/technokrat_ikon.gif";
+        $bonus['alt'] = loca("PREM_TECHNOCRATE");
+        $bonus['descr'] = loca("PREM_TECHNOCRATE");
+
+        $bonues[] = $bonus;
+    }
+
+    ModsExecIntRef ('page_buildings_get_bonus', $gid, $bonues);
+    return $bonues;
+}
+
+function ShowBuildingsBonus (int $gid) : void
+{
+    $bonues = GetBuildingsBonus ($gid);
+    foreach ($bonues as $i=>$bonus) {
+
+        echo " <b><font style=\"color:lime;\">".$bonus['value']."</font></b> ";
+        echo "<img border=\"0\" src=\"".$bonus['img']."\" alt=\"".$bonus['alt']."\" onmouseover=\"return overlib('<font color=white>";
+        echo $bonus['descr'];
+        echo "</font>', WIDTH, 100);\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
+    }
+}
+
 // POST request processing.
 if ( method () === "POST" && !$GlobalUser['vacation'] )
 {
@@ -127,7 +162,9 @@ if ( $_GET['mode'] === "Flotte" )
             }
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
-            if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]).")";
+            if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]);
+            ShowBuildingsBonus ($id);
+            if ($aktplanet[$id]) echo ")";
             $res = TechPrice ( $id, 1 );
             $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
@@ -210,7 +247,9 @@ if ( $_GET['mode'] === "Verteidigung" )
             }
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
-            if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]).")";
+            if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]);
+            ShowBuildingsBonus ($id);
+            if ($aktplanet[$id]) echo ")";
             $res = TechPrice ( $id, 1 );
             $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
@@ -301,9 +340,7 @@ if ( $_GET['mode'] === "Forschung" )
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($GlobalUser[$id]) echo "</a> (" . va(loca("BUILD_LEVEL"), $GlobalUser[$id]);
-            if ( $id == GID_R_ESPIONAGE && $prem['technocrat'] ) { 
-                echo " <b><font style=\"color:lime;\">+2</font></b> <img border=\"0\" src=\"img/technokrat_ikon.gif\" alt=\"".loca("PREM_TECHNOCRATE")."\" onmouseover=\"return overlib('<font color=white>".loca("PREM_TECHNOCRATE")."</font>', WIDTH, 100);\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
-            }
+            ShowBuildingsBonus ($id);
             if ($GlobalUser[$id]) echo ")";
             $res = TechPrice ( $id, $level );
             $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
