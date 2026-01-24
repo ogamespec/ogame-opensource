@@ -688,6 +688,14 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
     $target_tech = $target_user[GID_R_ESPIONAGE];
     if ($target_prem['technocrat']) $target_tech += 2;
 
+    $bonus = array();
+    $bonus['level'] = $origin_tech;
+    ModsExecIntRef ('bonus_technology', GID_R_ESPIONAGE, $bonus);
+    $origin_tech = max ($bonus['level'], 0);
+    $bonus['level'] = $target_tech;
+    ModsExecIntRef ('bonus_technology', GID_R_ESPIONAGE, $bonus);
+    $target_tech = max ($bonus['level'], 0);
+
     loca_add ( "technames", $origin_user['lang'] );
     loca_add ( "espionage", $origin_user['lang'] );
     loca_add ( "fleetmsg", $origin_user['lang'] );

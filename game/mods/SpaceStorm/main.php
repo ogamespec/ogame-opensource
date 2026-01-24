@@ -182,6 +182,30 @@ class SpaceStorm extends GameMod {
         return false;
     }
 
+    public function page_buildings_get_bonus(int $id, array &$bonuses) : bool {
+        $storm = $this->GetStorm();
+        if ($id == GID_R_ESPIONAGE && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
+            $bonus = [];
+            $bonus['value'] = "-2";
+            $bonus['color'] = "red";
+            $bonus['img'] = "mods/SpaceStorm/img/storm_ikon.png";
+            $bonus['alt'] = loca("STORM_STORM");
+            $bonus['descr'] = "<b>".loca("STORM_4") . "</b><br/>" . loca("STORM_DESC_4");
+            $bonus['overlib_width'] = 200;
+
+            $bonuses[] = $bonus;
+        }
+        return false;
+    }
+
+    public function bonus_technology (int $id, array &$bonus) : bool {
+        $storm = $this->GetStorm();
+        if ($id == GID_R_ESPIONAGE && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
+            $bonus['level'] -= 2;
+        }
+        return false;
+    }
+
     private function NewStorm (int $prev_storm) : int {
 
         // Посчитать количество эффектов предыдущего шторма

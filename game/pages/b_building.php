@@ -9,20 +9,20 @@
 // Get a list of bonuses for the specified technology. By default, +2 is shown for Espionage with a Technocrat. Modifications can add their own bonuses.
 function GetBuildingsBonus (int $gid) : array
 {
-    $bonues = array();
-    ModsExecIntRef ('page_buildings_get_bonus', $gid, $bonues);
-    return $bonues;
+    $bonuses = array();
+    ModsExecIntRef ('page_buildings_get_bonus', $gid, $bonuses);
+    return $bonuses;
 }
 
 function ShowBuildingsBonus (int $gid) : void
 {
-    $bonues = GetBuildingsBonus ($gid);
-    foreach ($bonues as $i=>$bonus) {
+    $bonuses = GetBuildingsBonus ($gid);
+    foreach ($bonuses as $i=>$bonus) {
 
-        echo " <b><font style=\"color:lime;\">".$bonus['value']."</font></b> ";
+        echo " <b><font style=\"color:".$bonus['color'].";\">".$bonus['value']."</font></b> ";
         echo "<img border=\"0\" src=\"".$bonus['img']."\" alt=\"".$bonus['alt']."\" onmouseover=\"return overlib('<font color=white>";
         echo $bonus['descr'];
-        echo "</font>', WIDTH, 100);\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
+        echo "</font>', WIDTH, ".$bonus['overlib_width'].");\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
     }
 }
 

@@ -71,6 +71,10 @@ abstract class GameMod {
     }
 
     // Hooks for bonuses and changes to the original game mechanics
+
+    public function bonus_technology (int $id, array &$bonus) : bool {
+        return false;
+    }
 }
 
 function ModInitOne(string $modname) : void

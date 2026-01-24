@@ -8,6 +8,12 @@ function OverFleet (array $fleet, int $summary, string $mission, bool $ignore_le
     $level = $GlobalUser[GID_R_ESPIONAGE];
     $prem = PremiumStatus ($GlobalUser);
     if ($prem['technocrat']) $level += 2;
+    
+    $bonus = array();
+    $bonus['level'] = $level;
+    ModsExecIntRef ('bonus_technology', GID_R_ESPIONAGE, $bonus);
+    $level = max ($bonus['level'], 0);
+
     if ( $fleet['owner_id'] == $GlobalUser['player_id'] || $ignore_level ) $level = 99;
     global $fleetmap;
     $sum = 0;
@@ -41,6 +47,12 @@ function TitleFleet (array $fleet, int $summary, bool $ignore_level=false) : str
     $level = $GlobalUser[GID_R_ESPIONAGE];
     $prem = PremiumStatus ($GlobalUser);
     if ($prem['technocrat']) $level += 2;
+
+    $bonus = array();
+    $bonus['level'] = $level;
+    ModsExecIntRef ('bonus_technology', GID_R_ESPIONAGE, $bonus);
+    $level = max ($bonus['level'], 0);
+
     if ( $fleet['owner_id'] == $GlobalUser['player_id'] || $ignore_level ) $level = 99;
     global $fleetmap;
     $sum = 0;
