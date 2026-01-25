@@ -213,7 +213,7 @@ foreach ( $buildmap as $i => $id )
         {
             if ($lvl == 0) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".loca("BUILD_BUILD")."</font></a>\n";
             else echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font></a>\n";
-        }        
+        }
     }
 
     echo "</td></tr>\n";
