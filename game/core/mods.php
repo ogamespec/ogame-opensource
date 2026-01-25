@@ -64,6 +64,14 @@ abstract class GameMod {
         return false;
     }
 
+    public function can_build(array &$info) : bool {
+        return false;
+    }
+
+    public function can_research(array &$info) : bool {
+        return false;
+    }
+
     // Default pages hooks (various modifications of the original content)
 
     public function page_buildings_get_bonus(int $id, array &$bonuses) : bool {

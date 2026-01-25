@@ -40,58 +40,58 @@ $prem = PremiumStatus ($GlobalUser);
 <script type="text/javascript">
 <!--
 function t() {
-	v = new Date();
-	var bxx = document.getElementById('bxx');
-	var timeout = 1;
-	n=new Date();
-	if (!('dpp' in bxx)) {
-		bxx.dpp = n.getTime() + pp * 1000;
-	}
-	ss=Math.round((bxx.dpp-n.getTime())/1000.);
-	aa=Math.round((n.getTime()-v.getTime())/1000.);
-	s=ss-aa;
-	m=0;
-	h=0;
-	
-	if ((ss + 3) < aa) {
-	  bxx.innerHTML="<?=loca("BUILD_COMPLETE");?><br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+"><?=loca("BUILD_NEXT");?></a>";
-	  
-	  if ((ss + 6) >= aa) {	    
-	  	window.setTimeout('document.location.href="index.php?page=b_building&session='+ps+'&planet='+pl+'";', 3500);
-  	  }
-	} else {
-	if(s < 0) {
-	    if (1) {
-			bxx.innerHTML="<?=loca("BUILD_COMPLETE");?><br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+"><?=loca("BUILD_NEXT");?></a>";
-			window.setTimeout('document.location.href="index.php?page=b_building&session='+ps+'&planet='+pl+'";', 2000);
-		} else {
-			timeout = 0;
-			bxx.innerHTML="<?=loca("BUILD_COMPLETE");?><br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+"><?=loca("BUILD_NEXT");?></a>";
-		}
-	} else {
-		if(s>59){
-			m=Math.floor(s/60);
-			s=s-m*60;
-		}
+    v = new Date();
+    var bxx = document.getElementById('bxx');
+    var timeout = 1;
+    n=new Date();
+    if (!('dpp' in bxx)) {
+        bxx.dpp = n.getTime() + pp * 1000;
+    }
+    ss=Math.round((bxx.dpp-n.getTime())/1000.);
+    aa=Math.round((n.getTime()-v.getTime())/1000.);
+    s=ss-aa;
+    m=0;
+    h=0;
+    
+    if ((ss + 3) < aa) {
+      bxx.innerHTML="<?=loca("BUILD_COMPLETE");?><br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+"><?=loca("BUILD_NEXT");?></a>";
+      
+      if ((ss + 6) >= aa) {     
+        window.setTimeout('document.location.href="index.php?page=b_building&session='+ps+'&planet='+pl+'";', 3500);
+      }
+    } else {
+    if(s < 0) {
+        if (1) {
+            bxx.innerHTML="<?=loca("BUILD_COMPLETE");?><br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+"><?=loca("BUILD_NEXT");?></a>";
+            window.setTimeout('document.location.href="index.php?page=b_building&session='+ps+'&planet='+pl+'";', 2000);
+        } else {
+            timeout = 0;
+            bxx.innerHTML="<?=loca("BUILD_COMPLETE");?><br>"+"<a href=index.php?page=b_building&session="+ps+"&planet="+pl+"><?=loca("BUILD_NEXT");?></a>";
+        }
+    } else {
+        if(s>59){
+            m=Math.floor(s/60);
+            s=s-m*60;
+        }
         if(m>59){
-        	h=Math.floor(m/60);
-        	m=m-h*60;
+            h=Math.floor(m/60);
+            m=m-h*60;
         }
         if(s<10){
-        	s="0"+s;
+            s="0"+s;
         }
         if(m<10){
-        	m="0"+m;
+            m="0"+m;
         }
         
         if (1) {
-        	bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=b_building&session="+ps+"&listid="+pk+"&modus="+pm+"&planet="+pl+"><?=loca("BUILD_CANCEL");?></a>";
-    	} else {
-    		bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=b_building&session="+ps+"&listid="+pk+"&modus="+pm+"&planet="+pl+"><?=loca("BUILD_CANCEL");?></a>";
-    	}
-	}    
-	if (timeout == 1) {
-    	window.setTimeout("t();", 999);
+            bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=b_building&session="+ps+"&listid="+pk+"&modus="+pm+"&planet="+pl+"><?=loca("BUILD_CANCEL");?></a>";
+        } else {
+            bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=b_building&session="+ps+"&listid="+pk+"&modus="+pm+"&planet="+pl+"><?=loca("BUILD_CANCEL");?></a>";
+        }
+    }    
+    if (timeout == 1) {
+        window.setTimeout("t();", 999);
     }
     }
 }
@@ -176,36 +176,15 @@ foreach ( $buildmap as $i => $id )
     $t = TechDuration ( $id, $lvl+1, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
     echo "<br>".loca("BUILD_DURATION").": ".DurationFormat ( $t )."<br>";
 
-    if ( $prem['commander'] ) {
-        if ( $cnt ) {
+    if ($cnt) {
+
+        if ($prem['commander']) {
+
             if ( $cnt < 5) echo "<td class=k><a href=\"index.php?page=b_building&session=$session&modus=add&techid=$id&planet=".$aktplanet['planet_id']."\">".loca("BUILD_ENQUEUE")."</a></td>";
             else echo "<td class=k>";
         }
-        else
-        {
-                  if ( $aktplanet['fields'] >= $aktplanet['maxfields'] ) {
-                        echo "<td class=l><font color=#FF0000>".loca("BUILD_QUEUE_FULL")."</font>";
-                  }
-                  else if ( $id == GID_B_RES_LAB && $reslab_operating ) {
-				echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
-			}
-			else if ( ($id == GID_B_NANITES || $id == GID_B_SHIPYARD ) && $shipyard_operating ) {
-				echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
-			}
-   			else if ( $lvl == 0 )
-      		{
-        		if ( IsEnoughResources ( $GlobalUser, $aktplanet, $cost )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".loca("BUILD_BUILD")."</font></a>\n";
-          		else echo "<td class=l><font color=#FF0000>".loca("BUILD_BUILD")."</font>\n";
-			}
-   			else
-      		{
-        		if ( IsEnoughResources ( $GlobalUser, $aktplanet, $cost )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font></a>\n";
-          		else echo "<td class=l><font color=#FF0000>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font>";
-			}
-        }
-    }
-    else {
-        if ( $cnt ) {
+        else {
+
             if ( $queue0['tech_id'] == $id )
             {
                 $left = $queue0['end'] - time ();
@@ -213,28 +192,30 @@ foreach ( $buildmap as $i => $id )
             }
             else echo "<td class=k>";
         }
-        else {
-                  if ( $aktplanet['fields'] >= $aktplanet['maxfields'] ) {
-                        echo "<td class=l><font color=#FF0000>".loca("BUILD_QUEUE_FULL")."</font>";
-                  }
-			else if ( $id == GID_B_RES_LAB && $reslab_operating ) {
-				echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
-			}
-			else if ( ($id == GID_B_NANITES || $id == GID_B_SHIPYARD ) && $shipyard_operating ) {
-				echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
-			}
-   			else if ( $lvl == 0 )
-      		{
-        		if ( IsEnoughResources ( $GlobalUser, $aktplanet, $cost )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".loca("BUILD_BUILD")."</font></a>\n";
-          		else echo "<td class=l><font color=#FF0000>".loca("BUILD_BUILD")."</font>\n";
-			}
-   			else
-      		{
-        		if ( IsEnoughResources ( $GlobalUser, $aktplanet, $cost )) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font></a>\n";
-          		else echo "<td class=l><font color=#FF0000>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font>";
-			}
-		}
     }
+    else {
+
+        if ( $aktplanet['fields'] >= $aktplanet['maxfields'] ) {
+            echo "<td class=l><font color=#FF0000>".loca("BUILD_QUEUE_FULL")."</font>";
+        }
+        else if ( $id == GID_B_RES_LAB && $reslab_operating ) {
+            echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
+        }
+        else if ( ($id == GID_B_NANITES || $id == GID_B_SHIPYARD ) && $shipyard_operating ) {
+            echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
+        }
+        else if ( !IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) )
+        {
+            if ($lvl == 0) echo "<td class=l><font color=#FF0000>".loca("BUILD_BUILD")."</font>\n";
+            else echo "<td class=l><font color=#FF0000>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font>";
+        }
+        else
+        {
+            if ($lvl == 0) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".loca("BUILD_BUILD")."</font></a>\n";
+            else echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font></a>\n";
+        }        
+    }
+
     echo "</td></tr>\n";
 }
 

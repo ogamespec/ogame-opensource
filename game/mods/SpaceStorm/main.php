@@ -182,6 +182,15 @@ class SpaceStorm extends GameMod {
         return false;
     }
 
+    public function can_build(array &$info) : bool {
+        $storm = $this->GetStorm();
+        if ($info['id'] == GID_B_REALITY_STAB && $storm == 0) {
+            $info['result'] = loca ("STORM_REQUIRED");
+            return true;
+        }
+        return false;
+    }
+
     public function page_buildings_get_bonus(int $id, array &$bonuses) : bool {
         $storm = $this->GetStorm();
         if ($id == GID_R_ESPIONAGE && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
@@ -268,12 +277,22 @@ class SpaceStorm extends GameMod {
 
         Debug ("prev_storm: $prev_storm ($count bits), new storm: $storm ($new_count bits)" );
 
+        // Описание штормов, если активен (bb-код)
+        $storm_desc = "";
+        if ($new_count != 0) {
+            for ($i=0; $i<SPACE_STORM_MASK_MSB; $i++) {
+                if ( ($storm & (1 << $i)) != 0 ) {
+                    $storm_desc .= "\n\n[b]" . loca("STORM_" . $i) . ":[/b]\n" . loca("STORM_DESC_" . $i);
+                }
+            }
+        }
+
         if ($new_count == 0) {
             BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_0"), loca("STORM_TEXT_0") );
         }
         else {
-            if ($new_count > $count) BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_INC"), loca("STORM_TEXT_INC") );
-            else BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_DEC"), loca("STORM_TEXT_DEC") );
+            if ($new_count > $count) BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_INC"), loca("STORM_TEXT_INC") . $storm_desc );
+            else BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_DEC"), loca("STORM_TEXT_DEC") . $storm_desc );
         }
 
         return $storm;

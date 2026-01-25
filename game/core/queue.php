@@ -242,6 +242,17 @@ function CanBuild (array $user, array $planet, int $id, int $lvl, bool $destroy,
         else if ( $planet[$id] <= 0 ) return loca_lang("BUILD_ERROR_NO_SUCH_BUILDING", $user['lang']);
     }
 
+    $info = array ();
+    $info['id'] = $id;
+    $info['level'] = $lvl;
+    $info['user'] = $user;
+    $info['planet'] = $planet;
+    $info['destroy'] = $destroy;
+    $info['enqueue'] = $enqueue;
+    if (ModsExecRef ('can_build', $info)) {
+        return $info['result']; 
+    }
+
     return "";
 }
 
@@ -660,37 +671,45 @@ function CanResearch (array $user, array $planet, int $id, int $lvl) : string
     global $db_prefix, $GlobalUni;
     global $resmap;
 
-    {
-        loca_add ("build", $user['lang']);
+    loca_add ("build", $user['lang']);
 
-        if ( $GlobalUni['freeze'] ) return loca_lang("BUILD_ERROR_UNI_FREEZE", $user['lang']);
+    if ( $GlobalUni['freeze'] ) return loca_lang("BUILD_ERROR_UNI_FREEZE", $user['lang']);
 
-        // Is the research already in progress?
-        $result = GetResearchQueue ( $user['player_id'] );
-        $resq = dbarray ($result);
-        if ($resq) return loca_lang("BUILD_ERROR_RESEARCH_ALREADY", $user['lang']);
+    // Is the research already in progress?
+    $result = GetResearchQueue ( $user['player_id'] );
+    $resq = dbarray ($result);
+    if ($resq) return loca_lang("BUILD_ERROR_RESEARCH_ALREADY", $user['lang']);
 
-        // Is the research lab being upgraded on any planet?
-        $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = ".GID_B_RES_LAB." AND (type = '".QTYP_BUILD."' OR type = '".QTYP_DEMOLISH."') AND owner_id = " . $user['player_id'];
-        $result = dbquery ( $query );
-        $busy = ( dbrows ($result) > 0 );
-        if ( $busy ) return loca_lang("BUILD_ERROR_RESEARCH_LAB_BUILDING", $user['lang']);
+    // Is the research lab being upgraded on any planet?
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE obj_id = ".GID_B_RES_LAB." AND (type = '".QTYP_BUILD."' OR type = '".QTYP_DEMOLISH."') AND owner_id = " . $user['player_id'];
+    $result = dbquery ( $query );
+    $busy = ( dbrows ($result) > 0 );
+    if ( $busy ) return loca_lang("BUILD_ERROR_RESEARCH_LAB_BUILDING", $user['lang']);
 
-        $cost = TechPrice ( $id, $lvl );
+    $cost = TechPrice ( $id, $lvl );
 
-        // Not research
-        if ( ! in_array ( $id, $resmap ) ) return loca_lang("BUILD_ERROR_INVALID_ID", $user['lang']);
+    // Not research
+    if ( ! in_array ( $id, $resmap ) ) return loca_lang("BUILD_ERROR_INVALID_ID", $user['lang']);
 
-        // You can't build in vacation mode
-        else if ( $user['vacation'] ) return loca_lang("BUILD_ERROR_RESEARCH_VACATION", $user['lang']);
+    // You can't build in vacation mode
+    else if ( $user['vacation'] ) return loca_lang("BUILD_ERROR_RESEARCH_VACATION", $user['lang']);
 
-        // You can't research on foreign planet
-        else if ( $planet['owner_id'] != $user['player_id'] ) return loca_lang("BUILD_ERROR_INVALID_PLANET", $user['lang']);
+    // You can't research on foreign planet
+    else if ( $planet['owner_id'] != $user['player_id'] ) return loca_lang("BUILD_ERROR_INVALID_PLANET", $user['lang']);
 
-        else if ( !IsEnoughResources ( $user, $planet, $cost ) ) return loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
+    else if ( !IsEnoughResources ( $user, $planet, $cost ) ) return loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
 
-        else if ( !TechMeetRequirement ( $user, $planet, $id ) ) return loca_lang("BUILD_ERROR_REQUIREMENTS", $user['lang']);
+    else if ( !TechMeetRequirement ( $user, $planet, $id ) ) return loca_lang("BUILD_ERROR_REQUIREMENTS", $user['lang']);
+
+    $info = array ();
+    $info['id'] = $id;
+    $info['level'] = $lvl;
+    $info['user'] = $user;
+    $info['planet'] = $planet;
+    if (ModsExecRef ('can_research', $info)) {
+        return $info['result']; 
     }
+
     return "";
 }
 
