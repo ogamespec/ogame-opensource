@@ -12,6 +12,8 @@
 
 BrowseHistory ();
 
+ob_clean();
+
 if ( $GlobalUni['freeze'] ) AjaxSendError ();    // The universe is on pause.
 $unispeed = $GlobalUni['fspeed'];
 

@@ -371,6 +371,19 @@ class SpaceStorm extends GameMod {
         }
         return $count;
     }
+
+    private function GetStabLevelMask (int $planet_id, int &$level, int &$mask) : void {
+        $level = $mask = 0;
+        $planet = LoadPlanetById ($planet_id);
+        if ($planet == null) return;
+        if ($planet['type'] == PTYP_MOON) {
+            $planet = LoadPlanet ($planet['g'], $planet['s'], $planet['p'], 1);
+            if ($planet == null) return;
+        }
+        if ($planet['type'] != PTYP_PLANET) return;
+        $level = $planet[GID_B_REALITY_STAB];
+        $mask = $planet['s'.GID_B_REALITY_STAB];
+    }
 }
 
 ?>

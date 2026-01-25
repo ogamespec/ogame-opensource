@@ -64,7 +64,7 @@ function RocketAttack ( int $fleet_id, int $planet_id, int $when ) : void
     $primary = $fleet['ipm_target'];
     $origin = LoadPlanetById ($fleet['start_planet']);
     $target = LoadPlanetById ($planet_id);
-    $moon_attack = $target['type'] == 0;
+    $moon_attack = $target['type'] == PTYP_MOON;
     if ($moon_attack) {
         // If a missile attack is made on the Moon, interceptors from the planet are involved in defense
         $moon_planet = LoadPlanet ($target['g'], $target['s'], $target['p'], 1);

@@ -568,12 +568,12 @@ function CreateHomePlanet (int $player_id) : int
     $d = ($sg - 1) * $ppg;
     while ($d < $ppg*9) 
     {
-        $g = floor ( $d / $ppg ) + 1;
+        $g = (int)floor ( $d / $ppg ) + 1;
         $dd = $d - ($g - 1) * $ppg;
-        $s = floor ($dd/$ss) + 1;
+        $s = (int)floor ($dd/$ss) + 1;
         $p = $dd % $ss + 1;
 
-        if ( !$planet[floor($d)] && $g>=1 && $p>3 && $p<13 ) {
+        if ( !$planet[(int)floor($d)] && $g>=1 && $p>3 && $p<13 ) {
             return CreatePlanet ( $g, $s, $p, $player_id, 0);
         }
         $d += 1.3;

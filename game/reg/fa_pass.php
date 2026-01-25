@@ -15,7 +15,7 @@ require_once "../core/core.php";
 if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
 else $loca_lang = $_COOKIE['ogamelang'];
 
-loca_add ( "reg", $loca_lang );
+loca_add ( "reg", $loca_lang, "../" );
 
 function isValidEmail($email){
 	return filter_var($email, FILTER_VALIDATE_EMAIL);

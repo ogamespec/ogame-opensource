@@ -15,7 +15,7 @@ require_once "../core/core.php";
 if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
 else $loca_lang = $_COOKIE['ogamelang'];
 
-loca_add ( "reg", $loca_lang );
+loca_add ( "reg", $loca_lang, "../" );
 
 function isValidEmail($email){
 	return filter_var($email, FILTER_VALIDATE_EMAIL);
@@ -33,14 +33,12 @@ if ( method() === "POST" )        // Register a player.
     $now = time ();
     $last = GetLastRegistrationByIP ( $ip );
 
-    $localhost = $ip === "127.0.0.1" || $ip === "::1";
-
     if ( !key_exists ( "agb", $_POST ) ) {
         $error = loca("REG_NEW_ERROR_AGB");
         $agbclass = "error";
     }
 
-    else if ( ( $now - $last ) < 10 * 60 && !$localhost ) $error = loca("REG_NEW_ERROR_IP");
+    else if ( ( $now - $last ) < 10 * 60 && !localhost($ip) ) $error = loca("REG_NEW_ERROR_IP");
     else if ( mb_strlen ($_POST['character']) < 3 || mb_strlen ($_POST['character']) > 20 || preg_match ('/[;,<>()\`\"\']/', $_POST['character']) ) $error = va ( loca("REG_NEW_ERROR_CHARS"), $_POST['character'] );
     else if ( IsUserExist ( $_POST['character'])) $error = va ( loca("REG_NEW_ERROR_EXISTS"), $_POST['character'] ) ;
     else if ( !isValidEmail ($_POST['email']) ) $error = va ( loca("REG_NEW_ERROR_EMAIL"), $_POST['email'] ) ;
@@ -50,7 +48,7 @@ if ( method() === "POST" )        // Register a player.
     if ( $error === "" )
     {
         $password = gen_trivial_password ();
-        CreateUser ( $_POST['character'], $password, $_POST['email'] );
+        CreateUser ( $_POST['character'], $password, $_POST['email'], false, true );
 
 ?>
 <html>
