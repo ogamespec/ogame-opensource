@@ -505,6 +505,8 @@ function Queue_Build_End (array $queue) : void
         $GlobalUser = LoadUser ( $player_id );    // update the current user's data
     }
 
+    ModsExecIntRef ('build_end', $planet_id, $queue);
+
     // Start the next construction
     PropagateBuildQueue ($planet_id, $queue['end']);
 }
@@ -827,6 +829,8 @@ function Queue_Research_End (array $queue) : void
         InvalidateUserCache ();
         $GlobalUser = LoadUser ( $player_id );    // update the current user's data
     }
+
+    ModsExecRef ('research_end', $queue);
 }
 
 // ===============================================================================================================

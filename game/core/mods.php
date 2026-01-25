@@ -72,6 +72,14 @@ abstract class GameMod {
         return false;
     }
 
+    public function build_end(int $planet_id, array &$queue) : bool {
+        return false;
+    }
+
+    public function research_end(array &$queue) : bool {
+        return false;
+    }
+
     // Default pages hooks (various modifications of the original content)
 
     public function page_buildings_get_bonus(int $id, array &$bonuses) : bool {

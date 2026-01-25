@@ -169,17 +169,21 @@ function GetPlanet ( int $planet_id) : array|null
     $planet = dbarray ($result);
     if ($planet == null) return null;
     $user = LoadUser ( $planet['owner_id'] );
-    if ($user == null) return null;
 
-    $prem = PremiumStatus ($user);
-    if ( $prem['engineer'] ) $e_factor = 1.1;
-    else $e_factor = 1.0;
+    $e_factor = 1.0;
+    $energo_tech = 0;
+
+    if ($user != null) {
+        $prem = PremiumStatus ($user);
+        if ( $prem['engineer'] ) $e_factor = 1.1;
+        $energo_tech = $user[GID_R_ENERGY];
+    }
 
     $planet['mmax'] = store_capacity ( $planet[GID_B_METAL_STOR] );
     $planet['kmax'] = store_capacity ( $planet[GID_B_CRYS_STOR] );
     $planet['dmax'] = store_capacity ( $planet[GID_B_DEUT_STOR] );
     $planet[GID_RC_ENERGY] = prod_solar($planet[GID_B_SOLAR], $planet['prod'.GID_B_SOLAR]) * $e_factor  + 
-                    prod_fusion($planet[GID_B_FUSION], $user[GID_R_ENERGY], $planet['prod'.GID_B_FUSION]) * $e_factor  + 
+                    prod_fusion($planet[GID_B_FUSION], $energo_tech, $planet['prod'.GID_B_FUSION]) * $e_factor  + 
                     prod_sat($planet['temp']+40) * $planet[GID_F_SAT] * $planet['prod'.GID_F_SAT] * $e_factor ;
 
     $planet['econs'] = ( cons_metal ($planet[GID_B_METAL_MINE]) * $planet['prod'.GID_B_METAL_MINE] + 

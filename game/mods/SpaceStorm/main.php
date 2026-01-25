@@ -80,6 +80,7 @@ class SpaceStorm extends GameMod {
         return false;
     }
 
+    // Инициализировать глобальные таблицы фичами Космического шторма
     public function init() : void {
         global $buildmap;
         global $initial;
@@ -96,6 +97,7 @@ class SpaceStorm extends GameMod {
         loca_add ("space_storm", $GlobalUni['lang'], __DIR__);
     }
 
+    // Событие завершения Космического шторма. Формируется новый шторм, согласно правилам
     public function update_queue(array &$queue) : bool {
         global $db_prefix;
         if ($queue['type'] === QTYP_SPACE_STORM) {
@@ -112,6 +114,7 @@ class SpaceStorm extends GameMod {
         }
     }
 
+    // Вернуть картинку Стабилизатора реальности
     public function get_object_image(int $id, array &$img) : bool {
         if ($id == GID_B_REALITY_STAB) {
             $img['path'] = "mods/SpaceStorm/img/reality_stab.png";
@@ -120,6 +123,7 @@ class SpaceStorm extends GameMod {
         return false;
     }
 
+    // Вывести картинку Космиического шторма в бонусную панель
     public function add_bonuses (array &$bonuses) : bool {
 
         global $db_prefix;
@@ -182,6 +186,7 @@ class SpaceStorm extends GameMod {
         return false;
     }
 
+    // Проверка на возможность строительства Стабилизатора реальности (можно только во время шторма)
     public function can_build(array &$info) : bool {
         $storm = $this->GetStorm();
         if ($info['id'] == GID_B_REALITY_STAB && $storm == 0) {
@@ -191,6 +196,25 @@ class SpaceStorm extends GameMod {
         return false;
     }
 
+    // Событие завершения строительства Стабилизатора реальности сопровождается установкой маски текущего шторма.
+    // При сносе - маска наоборот сбрасывается.
+    public function build_end(int $planet_id, array &$queue) : bool {
+        global $db_prefix;
+        $id = $queue['obj_id'];
+        $storm = $this->GetStorm();
+        if ($id == GID_B_REALITY_STAB && $storm != 0) {
+            $demolish = $queue['type'] === QTYP_DEMOLISH;
+            $planet = GetPlanet ( $planet_id );
+            $mask = $planet['s'.GID_B_REALITY_STAB];
+            if ($demolish) $mask &= ~$storm;
+            else $mask |= $storm;
+            $query = "UPDATE ".$db_prefix."planets SET `s".(GID_B_REALITY_STAB)."` = $mask WHERE planet_id = $planet_id";
+            dbquery ($query);
+        } 
+        return false;
+    }
+
+    // Отобразить бонус Космического шторма для страницы Исследования (-2 шпионаж для Хроно-шпионский сбой)
     public function page_buildings_get_bonus(int $id, array &$bonuses) : bool {
         $storm = $this->GetStorm();
         if ($id == GID_R_ESPIONAGE && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
@@ -207,6 +231,7 @@ class SpaceStorm extends GameMod {
         return false;
     }
 
+    // Применить бонус хроношпиоского сбоя в местах, где получается Шпионаж
     public function bonus_technology (int $id, array &$bonus) : bool {
         $storm = $this->GetStorm();
         if ($id == GID_R_ESPIONAGE && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
