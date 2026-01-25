@@ -231,6 +231,31 @@ class SpaceStorm extends GameMod {
         return false;
     }
 
+    public function page_infos(int $id, array &$planet) : bool {
+        global $GlobalUser;
+        if ($id == GID_B_REALITY_STAB && $planet[GID_B_REALITY_STAB] > 0) {
+
+            echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("STORM_STORM")."</td><td class='c'>".loca("NAME_".GID_B_REALITY_STAB)."</td></tr> \n";
+
+            $storm_now = $this->GetStorm();
+            $storm_mask = $planet['s'.GID_B_REALITY_STAB];
+            for ($i=0; $i<SPACE_STORM_MASK_MSB; $i++) {
+                if ( ($storm_mask & (1 << $i)) != 0 ) {
+                    echo "<tr>";
+                    echo "<th>";
+                    $color = ($storm_now & (1 << $i)) != 0 ? "lime" : "red";
+                    echo "<font style='color:$color'>";
+                    echo loca("STORM_".$i);
+                    echo "</font>";
+                    echo "</th><th>".loca("STORM_STAB_".$i)."</th></tr>\n";
+                }
+            }
+
+            echo "</table></center></tr></th>";
+        }
+        return false;
+    }
+
     // Применить бонус хроношпиоского сбоя в местах, где получается Шпионаж
     public function bonus_technology (int $id, array &$bonus) : bool {
         $storm = $this->GetStorm();

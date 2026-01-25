@@ -86,6 +86,10 @@ abstract class GameMod {
         return false;
     }
 
+    public function page_infos(int $id, array &$planet) : bool {
+        return false;
+    }
+
     // Hooks for bonuses and changes to the original game mechanics
 
     public function bonus_technology (int $id, array &$bonus) : bool {
