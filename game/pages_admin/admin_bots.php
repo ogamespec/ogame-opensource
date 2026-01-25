@@ -58,7 +58,7 @@ function Admin_Bots () : void
     while ($rows--) {
         $queue = dbarray ($result);
         $user = LoadUser ( $queue['owner_id'] );
-        $planet = GetPlanet ( $user['hplanetid'] );
+        $planet = LoadPlanetById ( $user['hplanetid'] );
         echo "<tr>";
         echo "<td>".$user['player_id']."</td>";
         echo "<td>".AdminUserName ($user)."</td>";

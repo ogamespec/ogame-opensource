@@ -248,7 +248,7 @@ switch ( $order )
         else {
             // If a colonizer is sent - add a colonization phantom.
             $id = CreateColonyPhantom ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), USER_SPACE );
-            $target = GetPlanet ($id);
+            $target = LoadPlanetById ($id);
         }
         break;
 
@@ -282,7 +282,7 @@ switch ( $order )
         else if ( intval($_POST['planet']) != 16 ) FleetError ( loca("FLEET_ERR_EXP_INVALID") );
         else {
             $id = CreateOuterSpace ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']) );
-            $target = GetPlanet ($id);
+            $target = LoadPlanetById ($id);
         }
         break;
 

@@ -197,7 +197,7 @@ if ( method() !== "POST" ) MyGoto ( "flotten1" );
             $fleet_obj = LoadFleet ( $union['fleet_id'] );
             if ( $fleet_obj['union_id'] != $union['union_id'] ) continue;
             $queue = GetFleetQueue ( $union['fleet_id'] );
-            $target = GetPlanet ( $fleet_obj['target_planet'] );
+            $target = LoadPlanetById ( $fleet_obj['target_planet'] );
             echo "  <tr height=\"20\">";
             echo "<th><div id='bxx".($i+1)."' title='".max($queue['end']-$now, 0)."'star='".$queue['end']."'></div></th>";
             echo "<th><a href=\"javascript:setTarget(".$target['g'].",".$target['s'].",".$target['p'].",".GetPlanetType($target)."); setUnion(".$union['union_id']."); shortInfo()\">";

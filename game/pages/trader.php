@@ -6,15 +6,12 @@
 
 // Merchant.
 
-$trader_dm = 2500;
-
 $not_enough = false;
 
 function CallNewTrader () : void
 {
     global $GlobalUser;
     global $db_prefix;
-    global $trader_dm;
 
     // Generate new rates.
     $offer_id = intval ($_POST['offer_id']);
@@ -70,9 +67,9 @@ function CallNewTrader () : void
     if ( $offer_id > 0 && $offer_id <= 3 )
     {
         // Списать ТМ.
-        if ( $GlobalUser['dm'] >= $trader_dm ) $GlobalUser['dm'] -= $trader_dm;
+        if ( $GlobalUser['dm'] >= TRADER_DM ) $GlobalUser['dm'] -= TRADER_DM;
         else {
-            $GlobalUser['dmfree'] -= $trader_dm - $GlobalUser['dm'];
+            $GlobalUser['dmfree'] -= TRADER_DM - $GlobalUser['dm'];
             $GlobalUser['dm'] = 0;
         }
 
@@ -91,7 +88,7 @@ if ( method () === "POST" )
     {
         if ( key_exists ( 'call_trader', $_POST) )
         {
-            if ( $dm < $trader_dm )
+            if ( $dm < TRADER_DM )
             {
                 $not_enough = true;
                 $PageError = loca("TRADER_ERROR_DM") . "<br>";
@@ -135,7 +132,7 @@ if ( method () === "POST" )
                     dbquery ( $query );
                     $query = "UPDATE ".$db_prefix."planets SET m = m - '".intval($met)."', k = '".intval($crys)."', d = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
                     dbquery ( $query );
-                    $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+                    $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );
                     $GlobalUser['trader'] = 0;
                 }
             }
@@ -155,7 +152,7 @@ if ( method () === "POST" )
                     dbquery ( $query );
                     $query = "UPDATE ".$db_prefix."planets SET k = k - '".intval($crys)."', m = '".intval($met)."', d = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
                     dbquery ( $query );
-                    $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+                    $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );
                     $GlobalUser['trader'] = 0;
                 }
             }
@@ -175,7 +172,7 @@ if ( method () === "POST" )
                     dbquery ( $query );
                     $query = "UPDATE ".$db_prefix."planets SET d = d - '".intval($deut)."', k = '".intval($crys)."', m = '".intval($met)."' WHERE planet_id = " . $aktplanet['planet_id'];
                     dbquery ( $query );
-                    $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+                    $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );
                     $GlobalUser['trader'] = 0;
                 }
             }
@@ -184,7 +181,7 @@ if ( method () === "POST" )
     }
     else        // Call a (new) merchant
     {
-        if ( $dm < $trader_dm )
+        if ( $dm < TRADER_DM )
         {
             $not_enough = true;
             $PageError = loca("TRADER_ERROR_DM") . "<br>";
@@ -350,7 +347,7 @@ function setMaxValue(id) {
 				  <option value="3" <?=is_selected($GlobalUser['trader'], 3);?>><?=loca("NAME_".GID_RC_DEUTERIUM);?></option>
 				</select>		
 				!				<br>
-				<div id='darkmatter2'><?=va(loca("TRADER_DM_COST"), $trader_dm);?></div><br><br>
+				<div id='darkmatter2'><?=va(loca("TRADER_DM_COST"), TRADER_DM);?></div><br><br>
 
 <?php
     if ( $not_enough )

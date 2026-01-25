@@ -107,7 +107,7 @@ EventList ();
 $moonid = PlanetHasMoon ( $aktplanet['planet_id'] );
 if ($moonid)
 {
-    $moonobj = GetPlanet ( $moonid );
+    $moonobj = LoadPlanetById ( $moonid );
     echo "<th>    ".$moonobj['name']."     <br>\n";
     echo "<a href=\"index.php?page=overview&session=$session&cp=".$moonid."\"><img src=\"".GetPlanetSmallImage ( UserSkin (), $moonobj )."\" width=\"50\" alt=\"".loca("MOON")."\" height=\"50\" ></a>\n";
     echo "</th>\n";

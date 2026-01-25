@@ -251,11 +251,11 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
         {
             $fleet_obj = LoadFleet ( $attacker['id'] );
             $queue = GetFleetQueue ($fleet_obj['fleet_id']);
-            $origin = GetPlanet ( $fleet_obj['start_planet'] );
+            $origin = LoadPlanetById ( $fleet_obj['start_planet'] );
             if ($origin == null) {
                 Error ("WritebackBattleResults origin null");
             }
-            $target = GetPlanet ( $fleet_obj['target_planet'] );
+            $target = LoadPlanetById ( $fleet_obj['target_planet'] );
             if ($target == null) {
                 Error ("WritebackBattleResults target null");
             }
@@ -313,11 +313,11 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
         {
             $fleet_obj = LoadFleet ( $attacker['id'] );
             $queue = GetFleetQueue ($fleet_obj['fleet_id']);
-            $origin = GetPlanet ( $fleet_obj['start_planet'] );
+            $origin = LoadPlanetById ( $fleet_obj['start_planet'] );
             if ($origin == null) {
                 Error ("WritebackBattleResults origin null");
             }
-            $target = GetPlanet ( $fleet_obj['target_planet'] );
+            $target = LoadPlanetById ( $fleet_obj['target_planet'] );
             if ($target == null) {
                 Error ("WritebackBattleResults target null");
             }
@@ -537,8 +537,8 @@ function BattleReport ( array $res, int $now, int $aloss, int $dloss, array $cap
 // Returns the result encoded in 2 bits: bit0 - the moon is destroyed, bit1 - Deathstar exploded with the whole fleet
 function GravitonAttack (array $fleet_obj, array $fleet, int $when) : int
 {
-    $origin = GetPlanet ( $fleet_obj['start_planet'] );
-    $target = GetPlanet ( $fleet_obj['target_planet'] );
+    $origin = LoadPlanetById ( $fleet_obj['start_planet'] );
+    $target = LoadPlanetById ( $fleet_obj['target_planet'] );
 
     if ( $fleet[GID_F_DEATHSTAR] == 0 ) return 0;
     if ( ! ($target['type'] == PTYP_MOON || $target['type'] == PTYP_DEST_MOON) ) Error ( "Уничтожать можно только луны!" );
@@ -711,7 +711,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
         $a[0] = LoadUser ( $f['owner_id'] );
         $a[0]['fleet'] = array ();
         foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = abs($f[$gid]);
-        $start_planet = GetPlanet ( $f['start_planet'] );
+        $start_planet = LoadPlanetById ( $f['start_planet'] );
         $a[0]['g'] = $start_planet['g'];
         $a[0]['s'] = $start_planet['s'];
         $a[0]['p'] = $start_planet['p'];
@@ -730,7 +730,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
             $a[$anum] = LoadUser ( $fleet_obj['owner_id'] );
             $a[$anum]['fleet'] = array ();
             foreach ($fleetmap as $i=>$gid) $a[$anum]['fleet'][$gid] = abs($fleet_obj[$gid]);
-            $start_planet = GetPlanet ( $fleet_obj['start_planet'] );
+            $start_planet = LoadPlanetById ( $fleet_obj['start_planet'] );
             $a[$anum]['g'] = $start_planet['g'];
             $a[$anum]['s'] = $start_planet['s'];
             $a[$anum]['p'] = $start_planet['p'];
@@ -743,7 +743,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
 
     // List of defenders
     $dnum = 0;
-    $p = GetPlanet ( $planet_id );
+    $p = LoadPlanetById ( $planet_id );
     $d[0] = LoadUser ( $p['owner_id'] );
     $d[0]['fleet'] = array ();
     $d[0]['defense'] = array ();
@@ -768,7 +768,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
         $d[$dnum]['defense'] = array ();
         foreach ($fleetmap as $i=>$gid) $d[$dnum]['fleet'][$gid] = abs($fleet_obj[$gid]);
         foreach ($defmap_norak as $i=>$gid) $d[$dnum]['defense'][$gid] = 0;
-        $start_planet = GetPlanet ( $fleet_obj['start_planet'] );
+        $start_planet = LoadPlanetById ( $fleet_obj['start_planet'] );
         $d[$dnum]['g'] = $start_planet['g'];
         $d[$dnum]['s'] = $start_planet['s'];
         $d[$dnum]['p'] = $start_planet['p'];
@@ -960,8 +960,8 @@ function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : v
         {
             $fleet_obj = LoadFleet ( $attacker['id'] );
             $queue = GetFleetQueue ($fleet_obj['fleet_id']);
-            $origin = GetPlanet ( $fleet_obj['start_planet'] );
-            $target = GetPlanet ( $fleet_obj['target_planet'] );
+            $origin = LoadPlanetById ( $fleet_obj['start_planet'] );
+            $target = LoadPlanetById ( $fleet_obj['target_planet'] );
             $ships = 0;
             foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker[$gid];
 
@@ -982,8 +982,8 @@ function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : v
         {
             $fleet_obj = LoadFleet ( $attacker['id'] );
             $queue = GetFleetQueue ($fleet_obj['fleet_id']);
-            $origin = GetPlanet ( $fleet_obj['start_planet'] );
-            $target = GetPlanet ( $fleet_obj['target_planet'] );
+            $origin = LoadPlanetById ( $fleet_obj['start_planet'] );
+            $target = LoadPlanetById ( $fleet_obj['target_planet'] );
             $ships = 0;
             foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['fleet'][$gid];
 
@@ -1101,7 +1101,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
     $a[0] = LoadUser ( $f['owner_id'] );
     $a[0]['fleet'] = array ();
     foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = abs($f[$gid]);
-    $start_planet = GetPlanet ( $f['start_planet'] );
+    $start_planet = LoadPlanetById ( $f['start_planet'] );
     $a[0]['g'] = $start_planet['g'];
     $a[0]['s'] = $start_planet['s'];
     $a[0]['p'] = $start_planet['p'];
@@ -1173,7 +1173,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
     }
 
     foreach ($defmap_norak as $i=>$gid) $d[0]['defense'][$gid] = 0;
-    $target_planet = GetPlanet ( $f['target_planet'] );
+    $target_planet = LoadPlanetById ( $f['target_planet'] );
     $d[0]['g'] = $target_planet['g'];
     $d[0]['s'] = $target_planet['s'];
     $d[0]['p'] = $target_planet['p'];

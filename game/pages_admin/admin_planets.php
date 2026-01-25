@@ -42,7 +42,7 @@ function Admin_Planets () : void
 
             if ( key_exists ( "delete_planet", $_POST ) )        // Delete a planet. The home planet cannot be deleted.
             {
-                $planet = GetPlanet ($cp);
+                $planet = LoadPlanetById ($cp);
                 $user = LoadUser ($planet['owner_id']);
                 if ( $user['hplanetid'] != $cp)
                 {
@@ -118,7 +118,7 @@ function Admin_Planets () : void
 
         if ( $action === "create_moon" )    // Create the moon
         {
-            $planet = GetPlanet ($cp);
+            $planet = LoadPlanetById ($cp);
             if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
             {
                 if ( PlanetHasMoon ($cp) == 0 ) CreatePlanet ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id'], 0, 1, 20);
@@ -126,7 +126,7 @@ function Admin_Planets () : void
         }
         else if ( $action === "create_debris" )    // Create debris field
         {
-            $planet = GetPlanet ($cp);
+            $planet = LoadPlanetById ($cp);
             if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
             {
                 if ( HasDebris ($planet['g'], $planet['s'], $planet['p']) == 0 ) CreateDebris ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id']);
@@ -134,7 +134,7 @@ function Admin_Planets () : void
         }
         else if ( $action === "cooldown_gates" )    // Cool down the gate
         {
-            $planet = GetPlanet ($cp);
+            $planet = LoadPlanetById ($cp);
             if ( $planet['type'] == PTYP_MOON )
             {
                 $query = "UPDATE ".$db_prefix."planets SET gate_until=0 WHERE planet_id=" . $planet['planet_id'];
@@ -143,7 +143,7 @@ function Admin_Planets () : void
         }
         else if ( $action === "warmup_gates" )    // Warm up the gate
         {
-            $planet = GetPlanet ($cp);
+            $planet = LoadPlanetById ($cp);
             if ( $planet['type'] == PTYP_MOON )
             {
                 $query = "UPDATE ".$db_prefix."planets SET gate_until=".($now+59*60+59)." WHERE planet_id=" . $planet['planet_id'];
@@ -156,7 +156,7 @@ function Admin_Planets () : void
         }
         else if ( $action === "random_diam" )    // Random diameter (planets only)
         {
-            $planet = GetPlanet ($cp);
+            $planet = LoadPlanetById ($cp);
             if ( GetPlanetType ($planet) == 1 )
             {
                 $p = $planet['p'];
@@ -173,7 +173,7 @@ function Admin_Planets () : void
     }
 
     if ( key_exists("cp", $_GET) ) {     // Planet Information.
-        $planet = GetPlanet ( intval ($_GET['cp']) );
+        $planet = GetUpdatePlanet ( intval ($_GET['cp']), time() );
         if (!$planet) {
             Error ( va(loca("ADM_PLANET_ERROR_LOAD"), intval ($_GET['cp'])) );
         }
@@ -303,7 +303,7 @@ function reset ()
         {
             if ($moon_id)
             {
-                $moon = GetPlanet ($moon_id);
+                $moon = LoadPlanetById ($moon_id);
                 echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$moon['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $moon)."\"><br>\n";
                 echo $moon['name'] . "</a>";
             }
@@ -311,7 +311,7 @@ function reset ()
             echo "<br/><br/>\n";
             if ($debris_id)
             {
-                $debris = GetPlanet ($debris_id);
+                $debris = LoadPlanetById ($debris_id);
                 echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$debris['planet_id']."\"><img src=\"".UserSkin()."planeten/debris.jpg\"><br>\n";
                 echo $debris['name'] . "</a>";
                 echo "<br>М: ".nicenum($debris[GID_RC_METAL])."<br>К: ".nicenum($debris[GID_RC_CRYSTAL])."<br>";

@@ -126,4 +126,6 @@ const PROD_RESEARCH_DURATION_FACTOR = 1000;
 
 const GALAXY_DEUTERIUM_CONS = 10; 			// Deuterium consumption for viewing the Galaxy
 
+const TRADER_DM = 2500; 			// Cost of calling a Merchant
+
 ?>

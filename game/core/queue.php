@@ -263,7 +263,7 @@ function PropagateBuildQueue (int $planet_id, int $from) : void
 
     $speed = $GlobalUni['speed'];
 
-    $planet = GetPlanet ( $planet_id );
+    $planet = LoadPlanetById ( $planet_id );
     $user = LoadUser ( $planet['owner_id'] );
 
     $result = GetBuildQueue ( $planet_id );
@@ -327,7 +327,7 @@ function BuildEnque ( array $user, int $planet_id, int $id, int $destroy, int $n
     $speed = $GlobalUni['speed'];
     if ( $GlobalUni['freeze'] ) return "";
 
-    $planet = GetPlanet ( $planet_id );
+    $planet = LoadPlanetById ( $planet_id );
 
     $prem = PremiumStatus ($user);
     if ($prem['commander']) $maxcnt = 5;
@@ -425,7 +425,7 @@ function BuildDeque ( array $user, int $planet_id, int $listid ) : string
         $query = "UPDATE ".$db_prefix."buildqueue SET level = level - 1 WHERE tech_id = ".$row['tech_id']." AND planet_id = $planet_id AND list_id > " . $row['list_id'];
         dbquery ($query);
 
-        $planet = GetPlanet ( $planet_id );
+        $planet = LoadPlanetById ( $planet_id );
         UserLog ( $planet['owner_id'], "BUILD", va(loca_lang("DEBUG_LOG_BUILD_CANCEL", $GlobalUni['lang']), loca("NAME_".$id), $lvl, $listid, $planet_id)  );
 
         // Remove event handler and construction from the queue
@@ -457,9 +457,8 @@ function Queue_Build_End (array $queue) : void
     $planet_id = $bqueue['planet_id'];
 
     // Calculate the planet's production since the last update.
-    $planet = GetPlanet ( $planet_id );
+    $planet = GetUpdatePlanet ( $planet_id, $queue['end'] );
     $player_id = $planet['owner_id'];
-    ProdResources ( $planet, $planet['lastpeek'], $queue['end'] );
 
     // Foolproofing
     if ( ($queue['type'] === QTYP_BUILD && $planet[$id] >= $lvl) ||
@@ -559,7 +558,7 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
     // Shield domes can be built up to a maximum of 1 unit.
     if ( ($gid == GID_D_SDOME || $gid == GID_D_LDOME) && $value > 1 ) $value = 1;
 
-    $planet = GetPlanet ( $planet_id );
+    $planet = LoadPlanetById ( $planet_id );
 
     // If the planet already has a shield dome, we don't build it.
     if ( ($gid == GID_D_SDOME || $gid == GID_D_LDOME) && $planet[$gid] > 0 ) return;
@@ -619,7 +618,7 @@ function Queue_Shipyard_End (array $queue, int $when=0) : void
     else $now = $when;
     $gid = $queue['obj_id'];
     $planet_id = $queue['sub_id'];
-    $planet = GetPlanet ($planet_id);
+    $planet = LoadPlanetById ($planet_id);
     $player_id = $planet['owner_id'];
 
     // Old values
@@ -721,7 +720,7 @@ function StartResearch (int $player_id, int $planet_id, int $id, int $now) : voi
     global $db_prefix, $GlobalUni;
     $uni = $GlobalUni;
 
-    $planet = GetPlanet ( $planet_id );
+    $planet = LoadPlanetById ( $planet_id );
 
     UserLog ( $player_id, "RESEARCH", va(loca_lang("DEBUG_LOG_RESEARCH", $GlobalUni['lang']), loca("NAME_$id"), $planet_id)  );
 
@@ -769,7 +768,7 @@ function StopResearch (int $player_id) : void
 
     // Get the cost of the research
     $user = LoadUser ( $player_id );
-    $planet = GetPlanet ( $planet_id );
+    $planet = LoadPlanetById ( $planet_id );
     if ($planet['owner_id'] != $player_id )
     {
         Error ( va(loca_lang("DEBUG_QUEUE_CANCEL_RESEARCH_FOREIGN", $GlobalUni['lang']), 
@@ -808,8 +807,7 @@ function Queue_Research_End (array $queue) : void
     $player_id = $queue['owner_id'];
 
     // Calculate the planet's production since the last update.
-    $planet = GetPlanet ( $planet_id );
-    ProdResources ( $planet, $planet['lastpeek'], $queue['end'] );
+    $planet = GetUpdatePlanet ( $planet_id, $queue['end'] );
 
     // Update the research level in the database.
     $query = "UPDATE ".$db_prefix."users SET `".$id."` = $lvl WHERE player_id = $player_id";

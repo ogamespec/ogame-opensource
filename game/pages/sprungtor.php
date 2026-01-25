@@ -21,8 +21,8 @@ foreach ( $fleetmap_revnosat as $i=>$gid)
     $total += floor (abs (intval($_POST["c$gid"])));
 }
 
-$source = GetPlanet ( $source_id );
-$target = GetPlanet ( $target_id );
+$source = LoadPlanetById ( $source_id );
+$target = LoadPlanetById ( $target_id );
 
 if ( $source['type'] != PTYP_MOON ) $PageError .= "<center>\n".loca("GATE_ERR_START")."<br></center>\n";
 if ( $target['type'] != PTYP_MOON ) $PageError .= "<center>\n".loca("GATE_ERR_TARGET")."<br></center>\n";

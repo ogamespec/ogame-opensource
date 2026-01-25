@@ -72,6 +72,7 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
     global $pagetime;
     global $GlobalUser;
     global $GlobalUni;
+    global $aktplanet;
 
     BrowseHistory ();
 
@@ -122,7 +123,6 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
         echo "<div id='header_top'><center>\n";
         echo "<table class='header'>\n";
         echo "<tr class='header' >\n";
-        $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
         PlanetsDropList ($page);
         ResourceList ($aktplanet, 
             (int)floor($aktplanet[GID_RC_METAL]), (int)floor($aktplanet[GID_RC_CRYSTAL]), (int)floor($aktplanet[GID_RC_DEUTERIUM]), 
@@ -154,7 +154,7 @@ function PlanetsDropList (string $page) : void
 {
     global $GlobalUser;
     $sess = $GlobalUser['session'];
-    $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+    $aktplanet = LoadPlanetById ( $GlobalUser['aktplanet'] );
     $result = EnumPlanets ();
 
     echo "<td class='header' style='width:5;' >\n";

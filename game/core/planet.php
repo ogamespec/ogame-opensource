@@ -159,43 +159,6 @@ function EnumPlanetsGalaxy (int $g, int $s) : mixed
     return $result;
 }
 
-// Get the state of the planet (array).
-function GetPlanet ( int $planet_id) : array|null
-{
-    global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE planet_id = '".$planet_id."' LIMIT 1";
-    $result = dbquery ($query);
-    if ( dbrows($result) == 0 ) return null;
-    $planet = dbarray ($result);
-    if ($planet == null) return null;
-    $user = LoadUser ( $planet['owner_id'] );
-
-    $e_factor = 1.0;
-    $energo_tech = 0;
-
-    if ($user != null) {
-        $prem = PremiumStatus ($user);
-        if ( $prem['engineer'] ) $e_factor = 1.1;
-        $energo_tech = $user[GID_R_ENERGY];
-    }
-
-    $planet['mmax'] = store_capacity ( $planet[GID_B_METAL_STOR] );
-    $planet['kmax'] = store_capacity ( $planet[GID_B_CRYS_STOR] );
-    $planet['dmax'] = store_capacity ( $planet[GID_B_DEUT_STOR] );
-    $planet[GID_RC_ENERGY] = prod_solar($planet[GID_B_SOLAR], $planet['prod'.GID_B_SOLAR]) * $e_factor  + 
-                    prod_fusion($planet[GID_B_FUSION], $energo_tech, $planet['prod'.GID_B_FUSION]) * $e_factor  + 
-                    prod_sat($planet['temp']+40) * $planet[GID_F_SAT] * $planet['prod'.GID_F_SAT] * $e_factor ;
-
-    $planet['econs'] = ( cons_metal ($planet[GID_B_METAL_MINE]) * $planet['prod'.GID_B_METAL_MINE] + 
-                        cons_crys ($planet[GID_B_CRYS_MINE]) * $planet['prod'.GID_B_CRYS_MINE] + 
-                        cons_deut ($planet[GID_B_DEUT_SYNTH]) * $planet['prod'.GID_B_DEUT_SYNTH] );
-
-    $planet['e'] = floor ( $planet[GID_RC_ENERGY] - $planet['econs'] );
-    $planet['factor'] = 1;
-    if ( $planet['e'] < 0 ) $planet['factor'] = max (0, 1 - abs ($planet['e']) / $planet['econs']);
-    return $planet;
-}
-
 // Load planet state by specified coordinates (without pre-processing)
 // Return the $planet array, or null.
 function LoadPlanet (int $g, int $s, int $p, int $type) : mixed
@@ -217,7 +180,10 @@ function LoadPlanetById (int $planet_id) : mixed
     global $db_prefix;
     $query = "SELECT * FROM ".$db_prefix."planets WHERE planet_id=$planet_id LIMIT 1;";
     $result = dbquery ($query);
-    if ( $result ) return dbarray ($result);
+    if ( $result ) {
+        if ( dbrows($result) == 0 ) return null;
+        return dbarray ($result);
+    }
     else return null;
 }
 
@@ -295,7 +261,7 @@ function UpdatePlanetActivity ( int $planet_id, int $t=0) : void
 }
 
 // Management of debris fields.
-// DF loading is performed by calling GetPlanet. DF is deleted by calling DestroyPlanet.
+// DF loading is performed by calling LoadPlanetById. DF is deleted by calling DestroyPlanet.
 
 // Checks if there is a DF at the given coordinates. Returns DF id, or 0.
 function HasDebris (int $g, int $s, int $p) : int
@@ -329,7 +295,7 @@ function HarvestDebris (int $planet_id, int $cargo, int $when) : array
     global $db_prefix;
     global $transportableResources;
     $harvest = array ();
-    $debris = GetPlanet ($planet_id);
+    $debris = LoadPlanetById ($planet_id);
 
     $dm = $debris[GID_RC_METAL];
     $dk = $debris[GID_RC_CRYSTAL];
@@ -433,7 +399,7 @@ function DestroyMoon (int $moon_id, int $when, int $fleet_id) : void
 {
     global $db_prefix;
 
-    $moon = GetPlanet ( $moon_id );
+    $moon = LoadPlanetById ( $moon_id );
     $planet = LoadPlanet ( $moon['g'], $moon['s'], $moon['p'], 1 );
     if ( $moon == null || $planet == null ) return;
 
@@ -470,7 +436,7 @@ function RecalcFields (int $planet_id) : void
 {
     global $db_prefix;
     global $buildmap;
-    $planet = GetPlanet ($planet_id);
+    $planet = LoadPlanetById ($planet_id);
     $fields = 0;
     if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) $maxfields = 1;    // moon
     else $maxfields = floor (pow (($planet['diameter'] / 1000), 2));    // planet
@@ -564,7 +530,7 @@ function SetPlanetDiameter (int $planet_id, int $diam) : void
 function AdminPlanetName (int $planet_id) : string
 {
     global $session;
-    $planet = GetPlanet ($planet_id);
+    $planet = LoadPlanetById ($planet_id);
     return "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet_id."\">".$planet['name']."</a>";
 }
 

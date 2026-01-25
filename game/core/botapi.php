@@ -65,9 +65,8 @@ function BotCanBuild (int $obj_id) : bool
     global $BotID, $BotNow;
     $user = LoadUser ($BotID);
     if ($user == null) return false;
-    $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $aktplanet = GetUpdatePlanet ( $user['aktplanet'], $BotNow );
     if ($aktplanet == null) return false;
-    ProdResources ( $aktplanet, $aktplanet['lastpeek'], $BotNow );
     $level = $aktplanet[$obj_id] + 1;
     $text = CanBuild ( $user, $aktplanet, $obj_id, $level, 0 );
     return ( $text === '' );
@@ -80,7 +79,7 @@ function BotBuild (int $obj_id) : int
     global $BotID, $BotNow, $GlobalUni;
     $user = LoadUser ($BotID);
     if ($user == null) return 0;
-    $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $aktplanet = LoadPlanetById ( $user['aktplanet'] );
     if ($aktplanet == null) return 0;
     $level = $aktplanet[$obj_id] + 1;
     $text = CanBuild ( $user, $aktplanet, $obj_id, $level, 0 );
@@ -100,7 +99,7 @@ function BotGetBuild (int $n) : int
     global $BotID, $BotNow;
     $bot = LoadUser ($BotID);
     if ($bot == null) return 0;
-    $aktplanet = GetPlanet ( $bot['aktplanet'] );
+    $aktplanet = LoadPlanetById ( $bot['aktplanet'] );
     if ($aktplanet == null) return 0;
     return $aktplanet[$n];
 }
@@ -111,7 +110,7 @@ function BotResourceSettings ( int $last1=100, int $last2=100, int $last3=100, i
     global $db_prefix, $BotID, $BotNow;
     $user = LoadUser ($BotID);
     if ($user == null) return;
-    $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $aktplanet = LoadPlanetById ( $user['aktplanet'] );
     if ($aktplanet == null) return;
 
     if ( $last1 < 0 ) $last1 = 0;        // Should not be < 0.
@@ -156,7 +155,7 @@ function BotEnergyAbove (int $energy) : bool
     global $BotID, $BotNow;
     $user = LoadUser ($BotID);
     if ($user == null) return false;
-    $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $aktplanet = GetUpdatePlanet ( $user['aktplanet'], $BotNow );
     if ($aktplanet == null) return false;
     $currentenergy = $aktplanet['e'];
     if ($currentenergy >= $energy){
@@ -174,7 +173,7 @@ function BotBuildFleet (int $obj_id, int $n) : int
     global $db_prefix, $BotID, $BotNow, $GlobalUni;
     $user = LoadUser ($BotID);
     if ($user == null) return 0;
-    $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $aktplanet = LoadPlanetById ( $user['aktplanet'] );
     if ($aktplanet == null) return 0;
     $text = AddShipyard ($user['player_id'], $user['aktplanet'], $obj_id, $n, 0 );
     if ( $text === '' ) {
@@ -208,9 +207,8 @@ function BotCanResearch (int $obj_id) : bool
     global $BotID, $BotNow;
     $user = LoadUser ($BotID);
     if ($user == null) return false;
-    $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $aktplanet = GetUpdatePlanet ( $user['aktplanet'], $BotNow );
     if ($aktplanet == null) return false;
-    ProdResources ( $aktplanet, $aktplanet['lastpeek'], $BotNow );
     $level = $aktplanet[$obj_id] + 1;
     $text = CanResearch ($user, $aktplanet, $obj_id, $level);
     return ($text === '' );
@@ -223,7 +221,7 @@ function BotResearch (int $obj_id) : int
     global $BotID, $BotNow, $GlobalUni;
     $user = LoadUser ($BotID);
     if ($user == null) return 0;
-    $aktplanet = GetPlanet ( $user['aktplanet'] );
+    $aktplanet = LoadPlanetById ( $user['aktplanet'] );
     if ($aktplanet == null) return 0;
     $level = $aktplanet[$obj_id] + 1;
     $text = StartResearch ($user[player_id], $user[aktplanet], $obj_id, 0);

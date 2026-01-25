@@ -229,7 +229,7 @@ else {
         else echo "      <a href='#' onmouseover='return overlib(\"<font color=87CEEB>*</font><br/><font color=white>".$date_change."\");' onmouseout='return nd();'><font color='87CEEB'>*</font></a> \n";
         echo "    </th> \n\n";
 
-        $home = GetPlanet ( $user['hplanetid'] );
+        $home = LoadPlanetById ( $user['hplanetid'] );
         echo "    <!-- nick --> \n";
         echo "    <th> \n";
         if ( $user['player_id'] == $GlobalUser['player_id'] ) {

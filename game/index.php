@@ -122,11 +122,10 @@ if ($pk != false) {
         if ($update_queue) {
             UpdateQueue ( $now );
         }
-        $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+        $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );
         if ($aktplanet == null) {
             Error ("Can't get aktplanet");
         }
-        ProdResources ( $aktplanet, $aktplanet['lastpeek'], $now );
         $update_activity = true;
         if (key_exists('update_activity', $router[$pk])) {
             $update_activity = $router[$pk]['update_activity'];

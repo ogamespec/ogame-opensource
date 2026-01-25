@@ -17,20 +17,20 @@ function QueueDesc ( array $queue ) : string
             $result = dbquery ($query);
             $bqueue = dbarray ($result);
             $planet_id = $bqueue['planet_id'];
-            $planet = GetPlanet ($planet_id);
+            $planet = LoadPlanetById ($planet_id);
             return va(loca("ADM_QUEUE_TYPE_BUILD"), loca("NAME_$obj_id"), $level, AdminPlanetName ($planet['planet_id']));
         case QTYP_DEMOLISH:
             $query = "SELECT * FROM ".$db_prefix."buildqueue WHERE id = " . $queue['sub_id'] . " LIMIT 1";
             $result = dbquery ($query);
             $bqueue = dbarray ($result);
             $planet_id = $bqueue['planet_id'];
-            $planet = GetPlanet ($planet_id);
+            $planet = LoadPlanetById ($planet_id);
             return va(loca("ADM_QUEUE_TYPE_DEMOLISH"), loca("NAME_$obj_id"), $level, AdminPlanetName ($planet['planet_id']));
         case QTYP_SHIPYARD:
-            $planet = GetPlanet ($sub_id);
+            $planet = LoadPlanetById ($sub_id);
             return va(loca("ADM_QUEUE_TYPE_SHIPYARD"), loca("NAME_$obj_id"), $level, AdminPlanetName ($sub_id));
         case QTYP_RESEARCH:
-            $planet = GetPlanet ($sub_id);
+            $planet = LoadPlanetById ($sub_id);
             return va(loca("ADM_QUEUE_TYPE_RESEARCH"), loca("NAME_$obj_id"), $level, AdminPlanetName ($sub_id));
         case QTYP_UPDATE_STATS: return loca("ADM_QUEUE_TYPE_UPDATE_STATS");
         case QTYP_RECALC_POINTS: return loca("ADM_QUEUE_TYPE_RECALC_POINTS");

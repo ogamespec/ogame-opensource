@@ -132,7 +132,7 @@ function FleetAvailableMissions ( int $thisgalaxy, int $thissystem, int $thispla
         $unions = EnumUnion ( $origin_user['player_id'] );
         foreach ( $unions as $u=>$union ) {
             $fleet_obj = LoadFleet ( $union['fleet_id'] );
-            $fleet_target = GetPlanet ( $fleet_obj['target_planet'] );
+            $fleet_target = LoadPlanetById ( $fleet_obj['target_planet'] );
             if ( $fleet_target['planet_id'] == $target['planet_id'] ) {
                 $missions[$i++] = FTYP_ACS_ATTACK;
                 break;
@@ -329,9 +329,9 @@ function RecallFleet (int $fleet_id, int $now=0) : void
     // If the fleet is already returning, do nothing.
     if ( $fleet_obj['mission'] >= FTYP_RETURN && $fleet_obj['mission'] < FTYP_ORBITING ) return;
 
-    $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    $origin = LoadPlanetById ( $fleet_obj['start_planet'] );
     if ($origin == null) return;
-    $target = GetPlanet ( $fleet_obj['target_planet'] );
+    $target = LoadPlanetById ( $fleet_obj['target_planet'] );
     if ($target == null) return;
     $queue = GetFleetQueue ($fleet_obj['fleet_id']);
 
@@ -898,7 +898,7 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
         }
         if ($num_ships > 0) {
             if ($target['type'] == PTYP_COLONY_PHANTOM) DestroyPlanet ( $target['planet_id'] );
-            $target = GetPlanet ($id);
+            $target = LoadPlanetById ($id);
             DispatchFleet ($fleet, $origin, $target, FTYP_COLONIZE+FTYP_RETURN, $fleet_obj['flight_time'], 
                 $fleet_obj, 
                 $fleet_obj['fuel'] / 2, $queue['end']);
@@ -1024,12 +1024,10 @@ function Queue_Fleet_End (array $queue) : void
     foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj[$gid];
 
     // Update resource production on planets
-    $origin = GetPlanet ( $fleet_obj['start_planet'] );
+    $origin = GetUpdatePlanet ( $fleet_obj['start_planet'], $queue['end'] );
     if ($origin == null) return;
-    $target = GetPlanet ( $fleet_obj['target_planet'] );
+    $target = GetUpdatePlanet ( $fleet_obj['target_planet'], $queue['end'] );
     if ($target == null) return;
-    ProdResources ( $target, $target['lastpeek'], $queue['end'] );
-    ProdResources ( $origin, $origin['lastpeek'], $queue['end'] );
 
     switch ( $fleet_obj['mission'] )
     {
@@ -1105,7 +1103,7 @@ function CreateUnion (int $fleet_id, string $name) : int
     // Unions can only be created for departing attacks.
     if ($fleet_obj['mission'] != 1) return 0;
 
-    $target_planet = GetPlanet ( $fleet_obj['target_planet'] );
+    $target_planet = LoadPlanetById ( $fleet_obj['target_planet'] );
     if ($target_planet == null) return 0;
     $target_player = $target_planet['owner_id'];
 
@@ -1189,7 +1187,7 @@ function AddUnionMember (int $union_id, string $name) : string
 
     $target_player = LoadUser ( $union['target_player'] );
     $head_fleet = LoadFleet ( $union['fleet_id'] );
-    $target_planet = GetPlanet ( $head_fleet['target_planet'] );
+    $target_planet = LoadPlanetById ( $head_fleet['target_planet'] );
     $queue = GetFleetQueue ( $union['fleet_id'] );
 
     // The ACS invitation message is sent in the language of the invited user.
