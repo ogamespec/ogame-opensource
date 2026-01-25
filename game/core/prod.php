@@ -112,10 +112,14 @@ function ResearchNetwork ( int $planetid, int $id ) : int
 
 function IsEnoughResources (array $user, array $planet, array $cost) : bool
 {
-    $useroplanet = array_merge($user, $planet);
     foreach ($cost as $rc=>$value) {
-        if ($value > 0 && isset($useroplanet[$rc])) {
-            if ($useroplanet[$rc] < $value) return false;
+        if ($value > 0 && isset($user[$rc])) {
+            if ($user[$rc] < $value) return false;
+        }
+    }
+    foreach ($cost as $rc=>$value) {
+        if ($value > 0 && isset($planet[$rc])) {
+            if ($planet[$rc] < $value) return false;
         }
     }
     return true;

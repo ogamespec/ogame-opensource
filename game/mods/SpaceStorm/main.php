@@ -80,6 +80,7 @@ class SpaceStorm extends GameMod {
         return false;
     }
 
+    // Инициализировать глобальные таблицы фичами Космического шторма
     public function init() : void {
         global $buildmap;
         global $initial;
@@ -96,6 +97,7 @@ class SpaceStorm extends GameMod {
         loca_add ("space_storm", $GlobalUni['lang'], __DIR__);
     }
 
+    // Событие завершения Космического шторма. Формируется новый шторм, согласно правилам
     public function update_queue(array &$queue) : bool {
         global $db_prefix;
         if ($queue['type'] === QTYP_SPACE_STORM) {
@@ -112,6 +114,7 @@ class SpaceStorm extends GameMod {
         }
     }
 
+    // Вернуть картинку Стабилизатора реальности
     public function get_object_image(int $id, array &$img) : bool {
         if ($id == GID_B_REALITY_STAB) {
             $img['path'] = "mods/SpaceStorm/img/reality_stab.png";
@@ -120,6 +123,7 @@ class SpaceStorm extends GameMod {
         return false;
     }
 
+    // Вывести картинку Космиического шторма в бонусную панель
     public function add_bonuses (array &$bonuses) : bool {
 
         global $db_prefix;
@@ -179,6 +183,85 @@ class SpaceStorm extends GameMod {
         $storm_bonus['overlib'] = $overlib;
 
         array_insert_before_key ($bonuses, 'commander', 'storm', $storm_bonus);
+        return false;
+    }
+
+    // Проверка на возможность строительства Стабилизатора реальности (можно только во время шторма)
+    public function can_build(array &$info) : bool {
+        $storm = $this->GetStorm();
+        if ($info['id'] == GID_B_REALITY_STAB && $storm == 0) {
+            $info['result'] = loca ("STORM_REQUIRED");
+            return true;
+        }
+        return false;
+    }
+
+    // Событие завершения строительства Стабилизатора реальности сопровождается установкой маски текущего шторма.
+    // При сносе - маска наоборот сбрасывается.
+    public function build_end(int $planet_id, array &$queue) : bool {
+        global $db_prefix;
+        $id = $queue['obj_id'];
+        $storm = $this->GetStorm();
+        if ($id == GID_B_REALITY_STAB && $storm != 0) {
+            $demolish = $queue['type'] === QTYP_DEMOLISH;
+            $planet = GetPlanet ( $planet_id );
+            $mask = $planet['s'.GID_B_REALITY_STAB];
+            if ($demolish) $mask &= ~$storm;
+            else $mask |= $storm;
+            $query = "UPDATE ".$db_prefix."planets SET `s".(GID_B_REALITY_STAB)."` = $mask WHERE planet_id = $planet_id";
+            dbquery ($query);
+        } 
+        return false;
+    }
+
+    // Отобразить бонус Космического шторма для страницы Исследования (-2 шпионаж для Хроно-шпионский сбой)
+    public function page_buildings_get_bonus(int $id, array &$bonuses) : bool {
+        $storm = $this->GetStorm();
+        if ($id == GID_R_ESPIONAGE && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
+            $bonus = [];
+            $bonus['value'] = "-2";
+            $bonus['color'] = "red";
+            $bonus['img'] = "mods/SpaceStorm/img/storm_ikon.png";
+            $bonus['alt'] = loca("STORM_STORM");
+            $bonus['descr'] = "<b>".loca("STORM_4") . "</b><br/>" . loca("STORM_DESC_4");
+            $bonus['overlib_width'] = 200;
+
+            $bonuses[] = $bonus;
+        }
+        return false;
+    }
+
+    public function page_infos(int $id, array &$planet) : bool {
+        global $GlobalUser;
+        if ($id == GID_B_REALITY_STAB && $planet[GID_B_REALITY_STAB] > 0) {
+
+            echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("STORM_STORM")."</td><td class='c'>".loca("NAME_".GID_B_REALITY_STAB)."</td></tr> \n";
+
+            $storm_now = $this->GetStorm();
+            $storm_mask = $planet['s'.GID_B_REALITY_STAB];
+            for ($i=0; $i<SPACE_STORM_MASK_MSB; $i++) {
+                if ( ($storm_mask & (1 << $i)) != 0 ) {
+                    echo "<tr>";
+                    echo "<th>";
+                    $color = ($storm_now & (1 << $i)) != 0 ? "lime" : "red";
+                    echo "<font style='color:$color'>";
+                    echo loca("STORM_".$i);
+                    echo "</font>";
+                    echo "</th><th>".loca("STORM_STAB_".$i)."</th></tr>\n";
+                }
+            }
+
+            echo "</table></center></tr></th>";
+        }
+        return false;
+    }
+
+    // Применить бонус хроношпиоского сбоя в местах, где получается Шпионаж
+    public function bonus_technology (int $id, array &$bonus) : bool {
+        $storm = $this->GetStorm();
+        if ($id == GID_R_ESPIONAGE && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
+            $bonus['level'] -= 2;
+        }
         return false;
     }
 
@@ -244,12 +327,22 @@ class SpaceStorm extends GameMod {
 
         Debug ("prev_storm: $prev_storm ($count bits), new storm: $storm ($new_count bits)" );
 
+        // Описание штормов, если активен (bb-код)
+        $storm_desc = "";
+        if ($new_count != 0) {
+            for ($i=0; $i<SPACE_STORM_MASK_MSB; $i++) {
+                if ( ($storm & (1 << $i)) != 0 ) {
+                    $storm_desc .= "\n\n[b]" . loca("STORM_" . $i) . ":[/b]\n" . loca("STORM_DESC_" . $i);
+                }
+            }
+        }
+
         if ($new_count == 0) {
             BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_0"), loca("STORM_TEXT_0") );
         }
         else {
-            if ($new_count > $count) BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_INC"), loca("STORM_TEXT_INC") );
-            else BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_DEC"), loca("STORM_TEXT_DEC") );
+            if ($new_count > $count) BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_INC"), loca("STORM_TEXT_INC") . $storm_desc );
+            else BroadcastMessage (0, loca("STORM_STORM"), loca("STORM_SUBJ_DEC"), loca("STORM_TEXT_DEC") . $storm_desc );
         }
 
         return $storm;

@@ -64,13 +64,37 @@ abstract class GameMod {
         return false;
     }
 
+    public function can_build(array &$info) : bool {
+        return false;
+    }
+
+    public function can_research(array &$info) : bool {
+        return false;
+    }
+
+    public function build_end(int $planet_id, array &$queue) : bool {
+        return false;
+    }
+
+    public function research_end(array &$queue) : bool {
+        return false;
+    }
+
     // Default pages hooks (various modifications of the original content)
 
     public function page_buildings_get_bonus(int $id, array &$bonuses) : bool {
         return false;
     }
 
+    public function page_infos(int $id, array &$planet) : bool {
+        return false;
+    }
+
     // Hooks for bonuses and changes to the original game mechanics
+
+    public function bonus_technology (int $id, array &$bonus) : bool {
+        return false;
+    }
 }
 
 function ModInitOne(string $modname) : void

@@ -452,6 +452,10 @@ else
         }
     }
 
+    // Provide the ability to display additional information about a game object for modifications
+
+    ModsExecIntRef ('page_infos', $gid, $aktplanet);
+
     echo "</table>\n";
 
     // Building Demolition.
