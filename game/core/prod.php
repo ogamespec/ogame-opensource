@@ -81,7 +81,7 @@ function TechDuration ( int $id, int $lvl, int $const_factor, int $b1, int $b2, 
 function ResearchNetwork ( int $planetid, int $id ) : int
 {
     global $db_prefix;
-    $planet = GetPlanet ($planetid);
+    $planet = LoadPlanetById ($planetid);
     if ($planet == null) return 0;
     $player_id = $planet['owner_id'];
     $user = LoadUser ($player_id);
@@ -160,22 +160,51 @@ function cons_deut (int $lvl) : float { return ceil (20 * $lvl * pow (1.1, $lvl)
 // Consumption of deuterium by the fusion reactor
 function cons_fusion (int $lvl, float $pr) : float { return ceil (10 * $lvl * pow (1.1, $lvl) * $pr) ; }
 
-// Calculate resource production increase. Limit storage capacity.
+// Get the state of the planet (array) and update resource production from planet's lastpeek until $time_to. Limit storage capacity.
 // NOTE: The calculation excludes external events, such as the end of officers' actions, attack of another player, completion of building construction, etc.
-function ProdResources ( array &$planet, int $time_from, int $time_to ) : void
+function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
 {
     global $db_prefix, $GlobalUni;
-    if ( $planet['type'] != PTYP_PLANET ) return;        // NOT a planet
-    $user = LoadUser ($planet['owner_id']);
-    if ($user == null) return;
-    if ( $user['player_id'] == USER_SPACE ) return;    // technical account space
+
+    $planet = LoadPlanetById ($planet_id);
+    if ($planet == null) return null;
+    if ( $planet['type'] != PTYP_PLANET ) {
+        $planet['mmax'] = $planet['kmax'] = $planet['dmax'] = 0;
+        $planet['factor'] = 0;
+        $planet['e'] = $planet['econs'] = $planet[GID_RC_ENERGY] = 0;
+        return $planet;        // NOT a planet
+    }
+    $user = LoadUser ( $planet['owner_id'] );
+    if ($user == null) return $planet;
+    if ( $user['player_id'] == USER_SPACE ) return $planet;    // technical account space
+
+    $time_from = $planet['lastpeek'];
     $diff = $time_to - $time_from;
 
     $speed = $GlobalUni['speed'];
 
     $prem = PremiumStatus ($user);
+    if ( $prem['engineer'] ) $e_factor = 1.1;
+    else $e_factor = 1.0; 
     if ( $prem['geologist'] ) $g_factor = 1.1;
     else $g_factor = 1.0;
+
+    $planet['mmax'] = store_capacity ( $planet[GID_B_METAL_STOR] );
+    $planet['kmax'] = store_capacity ( $planet[GID_B_CRYS_STOR] );
+    $planet['dmax'] = store_capacity ( $planet[GID_B_DEUT_STOR] );
+    $planet[GID_RC_ENERGY] = prod_solar($planet[GID_B_SOLAR], $planet['prod'.GID_B_SOLAR]) * $e_factor  + 
+                    prod_fusion($planet[GID_B_FUSION], $user[GID_R_ENERGY], $planet['prod'.GID_B_FUSION]) * $e_factor  + 
+                    prod_sat($planet['temp']+40) * $planet[GID_F_SAT] * $planet['prod'.GID_F_SAT] * $e_factor ;
+
+    $planet['econs'] = ( cons_metal ($planet[GID_B_METAL_MINE]) * $planet['prod'.GID_B_METAL_MINE] + 
+                        cons_crys ($planet[GID_B_CRYS_MINE]) * $planet['prod'.GID_B_CRYS_MINE] + 
+                        cons_deut ($planet[GID_B_DEUT_SYNTH]) * $planet['prod'.GID_B_DEUT_SYNTH] );
+
+    $planet['e'] = floor ( $planet[GID_RC_ENERGY] - $planet['econs'] );
+    $planet['factor'] = 1;
+    if ( $planet['e'] < 0 ) $planet['factor'] = max (0, 1 - abs ($planet['e']) / $planet['econs']);
+
+    // Calculate resource production increase (previously ProdResources method)
 
     $hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['prod'.GID_B_METAL_MINE]) * $planet['factor'] * $speed * $g_factor + 20 * $speed;        // Metal
     if ( $planet[GID_RC_METAL] < $planet['mmax'] ) {
@@ -190,7 +219,7 @@ function ProdResources ( array &$planet, int $time_from, int $time_to ) : void
     }
 
     $hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['prod'.GID_B_DEUT_SYNTH]) * $planet['factor'] * $speed * $g_factor;    // Deuterium
-    $hourly -= cons_fusion ( $planet[GID_B_FUSION], $planet['prod'.GID_B_FUSION] ) * $speed;	// fusion
+    $hourly -= cons_fusion ( $planet[GID_B_FUSION], $planet['prod'.GID_B_FUSION] ) * $speed;    // fusion
     if ( $planet[GID_RC_DEUTERIUM] < $planet['dmax'] ) {
         $planet[GID_RC_DEUTERIUM] += ($hourly * $diff) / 3600;
         if ( $planet[GID_RC_DEUTERIUM] >= $planet['dmax'] ) $planet[GID_RC_DEUTERIUM] = $planet['dmax'];
@@ -200,6 +229,8 @@ function ProdResources ( array &$planet, int $time_from, int $time_to ) : void
     $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."` = ".$planet[GID_RC_METAL].", `".GID_RC_CRYSTAL."` = ".$planet[GID_RC_CRYSTAL].", `".GID_RC_DEUTERIUM."` = ".$planet[GID_RC_DEUTERIUM].", lastpeek = ".$time_to." WHERE planet_id = $planet_id";
     dbquery ($query);
     $planet['lastpeek'] = $time_to;
+
+    return $planet;
 }
 
 // The cost of the planet in points.

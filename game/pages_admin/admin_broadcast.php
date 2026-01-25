@@ -21,7 +21,7 @@ function Admin_Broadcast () : void
 
         if ( $write_error === "" )
         {
-            $ownhome = GetPlanet ( $GlobalUser['hplanetid'] );
+            $ownhome = LoadPlanetById ( $GlobalUser['hplanetid'] );
 
             $from = $GlobalUser['oname'] . " <a href=\"index.php?page=galaxy&galaxy=".$ownhome['g']."&system=".$ownhome['s']."&position=".$ownhome['p']."&session={PUBLIC_SESSION}\">[".$ownhome['g'].":".$ownhome['s'].":".$ownhome['p']."]</a>\n";
             $subj = $subj . " <a href=\"index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=".$GlobalUser['player_id']."&re=1&betreff=Re:".$subj."\">\n"

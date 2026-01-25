@@ -359,7 +359,7 @@ function ChangeActivationCode ( string $name) : string
 function SelectPlanet (int $player_id, int $cp) : void
 {
     global $db_prefix;
-    $planet = GetPlanet ($cp);
+    $planet = LoadPlanetById ($cp);
     // If the planet could not be loaded (this happens, for example, when the page with the destroyed moon is open),
     // try to load the player's home planet.
     if ($planet == null) {
@@ -368,7 +368,7 @@ function SelectPlanet (int $player_id, int $cp) : void
             Error ("Error loading user.");
         }
         $cp = $user['hplanetid'];
-        $planet = GetPlanet ($cp);
+        $planet = LoadPlanetById ($cp);
         if ($planet == null) {
             Error ("Error loading the current planet.");
         }

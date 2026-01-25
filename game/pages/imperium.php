@@ -41,8 +41,7 @@ if ( $planettype == 1 || $planettype == 3)
         if ($planet['type'] == PTYP_MOON ) $moons++;
         if ( $planettype == 1 && $planet['type'] == PTYP_MOON ) continue;
         if ( $planettype == 3 && $planet['type'] != PTYP_MOON ) continue;
-        $plist[$num] = GetPlanet ($planet['planet_id']);
-        ProdResources ( $plist[$num], $plist[$num]['lastpeek'], $now );
+        $plist[$num] = GetUpdatePlanet ($planet['planet_id'], $now);
         $num ++;
     }
 }

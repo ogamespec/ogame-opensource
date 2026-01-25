@@ -100,7 +100,7 @@ function Admin_Fleetlogs () : void
         </th>
         <th <?=$style;?> >
 <?php
-    $planet = GetPlanet ( $fleet_obj['start_planet'] );
+    $planet = LoadPlanetById ( $fleet_obj['start_planet'] );
     $user = LoadUser ( $planet['owner_id'] );
     echo AdminPlanetName($planet['planet_id']) . " " . AdminPlanetCoord($planet) . " <br>";
     echo AdminUserName($user);
@@ -108,7 +108,7 @@ function Admin_Fleetlogs () : void
         </th>
         <th <?=$style;?> >
 <?php
-    $planet = GetPlanet ( $fleet_obj['target_planet'] );
+    $planet = LoadPlanetById ( $fleet_obj['target_planet'] );
     $user = LoadUser ( $planet['owner_id'] );
     echo AdminPlanetName($planet['planet_id']) . " " . AdminPlanetCoord($planet). " <br>";
     echo AdminUserName($user);

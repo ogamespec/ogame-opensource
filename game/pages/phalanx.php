@@ -54,7 +54,7 @@ require_once "phalanx_events.php";
 
 <?php
 
-    $target = GetPlanet ( intval($_GET['spid']) );
+    $target = LoadPlanetById ( intval($_GET['spid']) );
 
     $outofrange = false;                    // Check the radius of the phalanx
     if ( $aktplanet['g'] != $target['g'] || $aktplanet[GID_B_PHALANX] <= 0 )  $outofrange = true;

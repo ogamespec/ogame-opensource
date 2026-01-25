@@ -122,8 +122,8 @@ function FleetSpanMissile (int $dir, array $fleet, array $owner, array $origin, 
 function FleetSpan ( array $fleet_entry ) : void
 {
     $mission = $fleet_entry['mission'];
-    $origin = GetPlanet ( $fleet_entry['origin_id'] );
-    $target = GetPlanet ( $fleet_entry['target_id'] );
+    $origin = LoadPlanetById ( $fleet_entry['origin_id'] );
+    $target = LoadPlanetById ( $fleet_entry['target_id'] );
     $fleet = $fleet_entry;
     $dir = $fleet_entry['dir'];
     $owner = LoadUser ( $origin['owner_id'] );
@@ -173,7 +173,7 @@ function FleetSpan ( array $fleet_entry ) : void
 
 function PhalanxEventList (int $planet_id) : void
 {
-    $planet = GetPlanet ($planet_id);
+    $planet = LoadPlanetById ($planet_id);
     $user = LoadUser ($planet['owner_id']);
     global $fleetmap;
     $result = EnumPlanetFleets ( $planet_id );

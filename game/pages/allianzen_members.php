@@ -45,7 +45,7 @@ function PageAlly_MemberList () : void
     {
         $user = dbarray ($result);
         $rank = LoadRank ( $user['ally_id'], $user['allyrank'] );
-        $hplanet = GetPlanet ($user['hplanetid']);
+        $hplanet = LoadPlanetById ($user['hplanetid']);
         echo "<tr>\n";
         echo "    <th>".($i+1)."</th>\n";
         echo "    <th>".$user['oname']."</th>\n";
@@ -147,7 +147,7 @@ function PageAlly_MemberSettings () : void
     {
         $user = dbarray ($result);
         $rank = LoadRank ( $user['ally_id'], $user['allyrank'] );
-        $hplanet = GetPlanet ($user['hplanetid']);
+        $hplanet = LoadPlanetById ($user['hplanetid']);
         $days = floor ( ( $now - $user['lastclick'] ) / (60 * 60 * 24) );
         echo "<tr>";
         echo "<th>".($i+1)."</th>";

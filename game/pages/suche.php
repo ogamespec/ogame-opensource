@@ -88,7 +88,7 @@ if ( method () === "POST" )
             if ( $_POST['type'] === "playername" )
             {
                 $user = dbarray ( $result );
-                $homeplanet = GetPlanet ( intval($user['hplanetid']) );
+                $homeplanet = LoadPlanetById ( intval($user['hplanetid']) );
                 $ally = LoadAlly ( intval($user['ally_id']) );
                 $ally_tag = "";
                 if ($ally) {

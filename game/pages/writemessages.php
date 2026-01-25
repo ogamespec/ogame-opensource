@@ -49,8 +49,8 @@ function SendNotActivated () : void
 // *******************************************************************
 
 $user = LoadUser ( intval($_GET['messageziel']) );
-$home = GetPlanet ( $user['hplanetid']);
-$ownhome = GetPlanet ( $GlobalUser['hplanetid']);
+$home = LoadPlanetById ( $user['hplanetid']);
+$ownhome = LoadPlanetById ( $GlobalUser['hplanetid']);
 $write_error = "";
 
 $betreff = key_exists('betreff', $_REQUEST) ? $_REQUEST['betreff'] : loca("WRITE_MSG_DEFAULT_SUBJ");

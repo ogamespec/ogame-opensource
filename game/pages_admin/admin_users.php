@@ -237,13 +237,13 @@ function Admin_Users () : void
             <tr><th><?=loca("ADM_USER_ACTIVATED");?></th><th><input type="checkbox" name="validated" <?php echo IsChecked($user, "validated");?> /> <a href="index.php?page=admin&session=<?php echo $session;?>&mode=Users&action=reactivate&player_id=<?php echo $user['player_id'];?>"><?=loca("ADM_USER_SEND_PASS");?></a></th></tr>
             <tr><th><?=loca("ADM_USER_HOMEPLANET");?></th><th>
 <?php
-    $planet = GetPlanet ($user['hplanetid']);
+    $planet = LoadPlanetById ($user['hplanetid']);
     echo "[".$planet['g'].":".$planet['s'].":".$planet['p']."] <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\">".$planet['name']."</a>";
 ?>
 </th></tr>
             <tr><th><?=loca("ADM_USER_ACTPLANET");?></th><th>
 <?php
-    $planet = GetPlanet ($user['aktplanet']);
+    $planet = LoadPlanetById ($user['aktplanet']);
     if ($planet == null) $planet = array ('g' => 0, 's' => 0, 'p' => 0, 'planet_id' => 0, 'name' => '' );
     echo "[".$planet['g'].":".$planet['s'].":".$planet['p']."] <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\">".$planet['name']."</a>";
 ?>
@@ -552,7 +552,7 @@ function Admin_Users () : void
         while ($rows--) 
         {
             $user = dbarray ( $result );
-            $hplanet = GetPlanet ( $user['hplanetid'] );
+            $hplanet = LoadPlanetById ( $user['hplanetid'] );
 
             echo "<tr><th>".date ("Y-m-d H:i:s", $user['regdate'])."</th>";
             echo "<th>[".$hplanet['g'].":".$hplanet['s'].":".$hplanet['p']."] <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$hplanet['planet_id']."\">".$hplanet['name']."</a></th>";

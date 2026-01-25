@@ -121,9 +121,9 @@ $maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );
         {
             $queue = dbarray ($result);
             $fleet = LoadFleet ($queue['sub_id']);
-            $origin = GetPlanet ($fleet['start_planet']);
+            $origin = LoadPlanetById ($fleet['start_planet']);
             if ($origin == null) $origin = array ('g' => 0, 's' => 0, 'p' => 0);
-            $target = GetPlanet ($fleet['target_planet']);
+            $target = LoadPlanetById ($fleet['target_planet']);
             if ($target == null) { 
                 $target = array ('g' => 0, 's' => 0, 'p' => 0, 'type' => PTYP_ABANDONED);
                 $target_user = array ( 'oname' => 'space' );

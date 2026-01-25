@@ -169,8 +169,8 @@ function FleetSpan ( array $fleet_entry ) : void
     $assign = $fleet_entry['assign'];
     $dir = $fleet_entry['dir'];
     $dir = $dir | ($assign << 4);
-    $origin = GetPlanet ( $fleet_entry['origin_id'] );
-    $target = GetPlanet ( $fleet_entry['target_id'] );
+    $origin = LoadPlanetById ( $fleet_entry['origin_id'] );
+    $target = LoadPlanetById ( $fleet_entry['target_id'] );
     $fleet = $fleet_entry;
     $owner = LoadUser ( $origin['owner_id'] );
 

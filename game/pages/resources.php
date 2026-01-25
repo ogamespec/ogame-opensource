@@ -77,7 +77,7 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
         dbquery ($query);
     }
 
-    $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // reload the planet.
+    $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], time() );    // reload the planet.
     if ($aktplanet == null) {
         Error ("Can't get aktplanet");
     }

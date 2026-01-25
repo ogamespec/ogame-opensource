@@ -18,7 +18,7 @@ if ( method () === "POST" && isset($_POST['aktion']) )
     $amount = abs(intval($_POST['anz']));        // Number of missiles
     $type = abs(intval($_POST['pziel']));        // Primary target (0-all)
     $origin = $aktplanet;
-    $target = GetPlanet (intval($_GET['pdd']));
+    $target = LoadPlanetById (intval($_GET['pdd']));
     if ($target != null) {
         $target_user = LoadUser ($target['owner_id']);
         $dist = abs ($origin['s'] - $target['s']);
@@ -44,7 +44,7 @@ if ( method () === "POST" && isset($_POST['aktion']) )
         if ( $PageError === "" )
         {
             LaunchRockets ( $origin, $target, 30 + 60 * $dist, $amount, $type );
-            $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // get the latest planetary data after the IPM is launched.
+            $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], time() );    // get the latest planetary data after the IPM is launched.
             if ($aktplanet == null) {
                 Error ("Can't get aktplanet");
             }
@@ -104,7 +104,7 @@ if ( !$not_enough_deut && $GlobalUser['admin'] == 0 )
     {
         $cost = array (GID_RC_DEUTERIUM => GALAXY_DEUTERIUM_CONS);
         AdjustResources ($cost, $aktplanet['planet_id'], '-');
-        $aktplanet = GetPlanet ( $aktplanet['planet_id'] );
+        $aktplanet = GetUpdatePlanet ( $aktplanet['planet_id'], time() );
         if ($aktplanet == null) {
             Error ("Can't get aktplanet");
         }
@@ -403,7 +403,7 @@ echo "</form>\n";
 
     if ( isset($_GET['mode']) ) {
 
-        $target = GetPlanet ( intval($_GET['pdd']) );
+        $target = LoadPlanetById ( intval($_GET['pdd']) );
 
 ?>
 

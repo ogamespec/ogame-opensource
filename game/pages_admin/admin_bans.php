@@ -79,7 +79,7 @@ function SetClearCheckbox (status)
 
             while ( $rows-- ) {
                 $user = dbarray ( $result );
-                $hp = GetPlanet ( $user['hplanetid'] );
+                $hp = LoadPlanetById ( $user['hplanetid'] );
 ?>
 <tr> <th><input type="checkbox" name="id[<?php echo $user['player_id'];?>]" class="ids"/><?php echo $user['player_id'];?></th> 
         <th><a><?php echo AdminUserName($user);?></a></th> 

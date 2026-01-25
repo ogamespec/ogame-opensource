@@ -42,7 +42,7 @@ function Buddy_Home () : void
             $buddy = dbarray ($result);
             $user_id = $buddy['request_from'] == $GlobalUser['player_id'] ? $buddy['request_to'] : $buddy['request_from'];
             $user = LoadUser ($user_id);
-            $home = GetPlanet ($user['hplanetid']);
+            $home = LoadPlanetById ($user['hplanetid']);
             echo "<tr>\n";
             echo " <th width=\"20\">$i</th>\n";
             echo " <th><a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\">".$user['oname']."</a></th>\n";
@@ -106,7 +106,7 @@ function Buddy_Income () : void
         {
             $buddy = dbarray ($result);
             $user = LoadUser ($buddy['request_from']);
-            $home = GetPlanet ($user['hplanetid']);
+            $home = LoadPlanetById ($user['hplanetid']);
             echo "  <tr>\n";
             echo " <th width=\"20\">$i</th>\n";
             echo "  <th><a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\">".$user['oname']."</a></th>\n";
@@ -163,7 +163,7 @@ function Buddy_Outcome () : void
         {
             $buddy = dbarray ($result);
             $userto = LoadUser ($buddy['request_to']);
-            $home = GetPlanet ($userto['hplanetid']);
+            $home = LoadPlanetById ($userto['hplanetid']);
             echo "  <tr>\n";
             echo " <th width=\"20\">$i</th>\n";
             echo "  <th><a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$userto['player_id']."\">".$userto['oname']."</a></th>\n";

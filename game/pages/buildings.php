@@ -82,7 +82,7 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             if ( $value > $v ) $value = $v;
 
             AddShipyard ( $GlobalUser['player_id'], $aktplanet['planet_id'], intval ($gid), intval ($value) );
-            $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // update the planet's state.
+            $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], time() );    // update the planet's state.
         }
     }
 }
@@ -96,12 +96,12 @@ if ( method () === "GET"  && !$GlobalUser['vacation'] )
 		if ( $resqueue == null )		// The research is not in progress (run)
 		{
 			if ( key_exists ( 'bau', $_GET ) ) StartResearch ( $GlobalUser['player_id'], $aktplanet['planet_id'], intval ($_GET['bau']), $now );
-                  $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // update the planet's state.
+                  $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], time() );    // update the planet's state.
 		}
 		else	// Research in progress (cancel)
 		{
 			if ( key_exists ( 'unbau', $_GET ) ) StopResearch ( $GlobalUser['player_id'] );
-                  $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );    // update the planet's state.
+                  $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], time() );    // update the planet's state.
 		}
 	}
 }

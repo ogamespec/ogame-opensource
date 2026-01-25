@@ -36,7 +36,7 @@ if ( method() === "POST" )
     if ( $_POST['aktion'] === loca("REN_RENAME") )
     {
         RenamePlanet ( $GlobalUser['aktplanet'], $_POST['newname'] );
-        $aktplanet = GetPlanet ( $GlobalUser['aktplanet'] );
+        $aktplanet = LoadPlanetById ( $GlobalUser['aktplanet'] );
     }
     else if ( $_POST['aktion'] === loca("REN_ABANDON_COLONY") )
     {
@@ -54,7 +54,7 @@ if ( method() === "POST" )
         else
         {
             // Check if the planet belongs to this user.
-            $planet = GetPlanet ( intval($_POST['deleteid']) );
+            $planet = LoadPlanetById ( intval($_POST['deleteid']) );
             if ( $planet['owner_id'] == $GlobalUser['player_id'] )
             {
                 // The home planet cannot be deleted.
@@ -78,7 +78,7 @@ if ( method() === "POST" )
                         $moon_id = PlanetHasMoon ($planet['planet_id']);
                         if ( $moon_id )
                         {
-                            $moon = GetPlanet ( $moon_id );        // Delete only not yet destroyed moons
+                            $moon = LoadPlanetById ( $moon_id );        // Delete only not yet destroyed moons
                             if ( $moon['type'] == 0 )
                             {
                                 $query = "UPDATE ".$db_prefix."planets SET type = ".PTYP_DEST_MOON.", owner_id = ".USER_SPACE.", date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $moon_id . ";";
