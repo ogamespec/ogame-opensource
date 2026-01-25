@@ -111,6 +111,7 @@ function GetLastRegistrationByIP ( string $ip ) : int
     $result = dbquery ( $query );
     if ( $result == null ) return 0;
     else {
+        if (dbrows($result) == 0) return 0;
         $row = dbarray ( $result );
         return $row['date'];
     }

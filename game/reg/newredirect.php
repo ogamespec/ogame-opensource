@@ -31,9 +31,7 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
     $now = time ();
     $last = GetLastRegistrationByIP ( $ip );
 
-    $localhost = $ip === "127.0.0.1" || $ip === "::1";
-
-    if ( ( $now - $last ) < 10 * 60 && !$localhost ) $RegError = 108;
+    if ( ( $now - $last ) < 10 * 60 && !localhost($ip) ) $RegError = 108;
     else if ( strlen ($_POST['password']) < 8 ) $RegError = 107;
     else if ( mb_strlen ($_POST['character']) < 3 || mb_strlen ($_POST['character']) > 20 || preg_match ('/[;,<>()\`\"\']/', $_POST['character']) ) $RegError = 103;
     else if ( IsUserExist ( $_POST['character'])) $RegError = 101;
@@ -45,7 +43,7 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
     // If all parameters are correct - create a new user and log in to the game.
     if ($RegError == 0 && $AGB)
     {
-        CreateUser ( $_POST['character'], $_POST['password'], $_POST['email'] );
+        CreateUser ( $_POST['character'], $_POST['password'], $_POST['email'], false, true );
         Login ( $_POST['character'], $_POST['password'] );
         exit ();
     }
