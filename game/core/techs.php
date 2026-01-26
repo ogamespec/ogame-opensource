@@ -9,8 +9,6 @@
 
 // Game object identifiers used commonly in code.
 
-const GID_X_NATURAL_PROD = 0;   // Natural production on the planet. Used only in production calculations and does not fall into any other category.
-
 const GID_B_METAL_MINE = 1;     // Metal Mine
 const GID_B_CRYS_MINE = 2;      // Crystal Mine
 const GID_B_DEUT_SYNTH = 3;     // Deuterium Synthesizer
@@ -129,6 +127,7 @@ $resourcemap = array ( GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM, GID_RC_EN
 $scoreResources = array(GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
 // Transported resources (usually energy and DM are not transported)
 $transportableResources = array(GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
+$prodPriority = array (GID_RC_ENERGY, GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
 
 // Level 1 cost.
 // Factor in the exponential growth of technology. OGame is a game of exponential.
