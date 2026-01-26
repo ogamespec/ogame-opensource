@@ -865,7 +865,7 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
         $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = '".$fleet_obj['owner_id']."' AND (type = ".PTYP_PLANET.");";
         $result = dbquery ($query);
         $num_planets = dbrows ($result);
-        if ( $num_planets >= 9 )
+        if ( $num_planets >= MAX_PLANET )
         {
             $text .= loca_lang("FLEET_COLONIZE_MAX", $origin_user['lang']);
 

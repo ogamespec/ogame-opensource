@@ -127,6 +127,7 @@ $resourcemap = array ( GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM, GID_RC_EN
 $scoreResources = array(GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
 // Transported resources (usually energy and DM are not transported)
 $transportableResources = array(GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
+$prodPriority = array (GID_RC_ENERGY, GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
 
 // Level 1 cost.
 // Factor in the exponential growth of technology. OGame is a game of exponential.

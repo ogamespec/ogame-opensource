@@ -128,37 +128,190 @@ function IsEnoughResources (array $user, array $planet, array $cost) : bool
 // Anything related to resource production and calculation.
 
 // Get the size of the storages.
-function store_capacity (int $lvl) : int { return 100000 + 50000 * (int)(ceil (pow (1.6, $lvl) - 1)); }
-
-// Energy production
-function prod_solar (int $lvl, float $pr) : float
-{
-    $prod = floor (20 * $lvl * pow (1.1, $lvl) * $pr);
-    return $prod;
-}
-function prod_fusion (int $lvl, int $energo, float $pr) : float
-{
-    $prod = floor (30 * $lvl * pow (1.05 + $energo*0.01, $lvl) * $pr);
-    return $prod;
-}
-function prod_sat (int $maxtemp) : float
-{
-    $prod = floor (($maxtemp / 4) + 20);
-    return max (1, $prod);
+function store_capacity (int $lvl) : int {
+    return 100000 + 50000 * (int)(ceil (pow (1.6, $lvl) - 1));
 }
 
-// Mines production
-function prod_metal (int $lvl, float $pr) : float { return floor (30 * $lvl * pow (1.1, $lvl) * $pr); }
-function prod_crys (int $lvl, float $pr) : float { return floor (20 * $lvl * pow (1.1, $lvl) * $pr); }
-function prod_deut (int $lvl, int $maxtemp, float $pr) : float { return floor ( 10 * $lvl * pow (1.1, $lvl) * $pr) * (1.28 - 0.002 * ($maxtemp)); }
+$PlanetProd = [
 
-// Energy consumption
-function cons_metal (int $lvl) : float { return ceil (10 * $lvl * pow (1.1, $lvl)); }
-function cons_crys (int $lvl) : float { return ceil (10 * $lvl * pow (1.1, $lvl)); }
-function cons_deut (int $lvl) : float { return ceil (20 * $lvl * pow (1.1, $lvl)); }
+    GID_B_METAL_MINE => [
+        'prod' => [
+            GID_RC_METAL => function ($uni, $user, $planet) { 
+                return floor (30 * $planet[GID_B_METAL_MINE] * pow (1.1, $planet[GID_B_METAL_MINE]) * $planet['prod'.GID_B_METAL_MINE]) * $uni['speed'];
+            }
+        ],
+        'cons' => [
+            GID_RC_ENERGY => function ($uni, $user, $planet) {
+                return ceil (10 * $planet[GID_B_METAL_MINE] * pow (1.1, $planet[GID_B_METAL_MINE]));
+            }
+        ]
+    ],
 
-// Consumption of deuterium by the fusion reactor
-function cons_fusion (int $lvl, float $pr) : float { return ceil (10 * $lvl * pow (1.1, $lvl) * $pr) ; }
+    GID_B_CRYS_MINE => [
+        'prod' => [
+            GID_RC_CRYSTAL => function ($uni, $user, $planet) { 
+                return floor (20 * $planet[GID_B_CRYS_MINE] * pow (1.1, $planet[GID_B_CRYS_MINE]) * $planet['prod'.GID_B_CRYS_MINE]) * $uni['speed'];
+            }
+        ],
+        'cons' => [
+            GID_RC_ENERGY => function ($uni, $user, $planet) {
+                return ceil (10 * $planet[GID_B_CRYS_MINE] * pow (1.1, $planet[GID_B_CRYS_MINE]));
+            }
+        ]
+    ],
+
+    GID_B_DEUT_SYNTH => [
+        'prod' => [
+            GID_RC_DEUTERIUM => function ($uni, $user, $planet) { 
+                return floor ( 10 * $planet[GID_B_DEUT_SYNTH] * pow (1.1, $planet[GID_B_DEUT_SYNTH]) * $planet['prod'.GID_B_DEUT_SYNTH]) * (1.28 - 0.002 * ($planet['temp']+40)) * $uni['speed'];
+            }
+        ],
+        'cons' => [
+            GID_RC_ENERGY => function ($uni, $user, $planet) {
+                return ceil (20 * $planet[GID_B_DEUT_SYNTH] * pow (1.1, $planet[GID_B_DEUT_SYNTH]));
+            }
+        ]
+    ],
+
+    GID_B_SOLAR => [
+        'prod' => [
+            GID_RC_ENERGY => function ($uni, $user, $planet) {
+                return floor (20 * $planet[GID_B_SOLAR] * pow (1.1, $planet[GID_B_SOLAR]) * $planet['prod'.GID_B_SOLAR]);
+            }
+        ],
+        'cons' => []
+    ],
+
+    GID_B_FUSION => [
+        'prod' => [
+            GID_RC_ENERGY => function ($uni, $user, $planet) {
+                return floor (30 * $planet[GID_B_FUSION] * pow (1.05 + $user[GID_R_ENERGY]*0.01, $planet[GID_B_FUSION]) * $planet['prod'.GID_B_FUSION]);
+            }
+        ],
+        'cons' => [
+            GID_RC_DEUTERIUM => function ($uni, $user, $planet) {
+                return ceil (10 * $planet[GID_B_FUSION] * pow (1.1, $planet[GID_B_FUSION]) * $planet['prod'.GID_B_FUSION]);
+            }
+        ]
+    ],
+
+    GID_F_SAT => [
+        'prod' => [
+            GID_RC_ENERGY => function ($uni, $user, $planet) {
+                $prod = floor ((($planet['temp']+40) / 4) + 20);
+                $prod_sat = max (1, $prod);
+                return $prod_sat * $planet[GID_F_SAT] * $planet['prod'.GID_F_SAT];
+            }
+        ],
+        'cons' => []
+    ],
+
+];
+
+function ProdBonus (array $uni, array $user, array $planet, int $rc, array &$prod_bonus) {
+
+    // A production bonus offered by the original OGame 0.84 mechanic. The bonus is not necessarily positive.
+    $prem = PremiumStatus ($user);
+    switch ($rc) {
+
+        case GID_RC_METAL:
+        case GID_RC_CRYSTAL:
+        case GID_RC_DEUTERIUM:
+            if ( $prem['geologist'] ) $prod_bonus[] = 1.1;
+            $prod_bonus[] = $planet['factor'];
+            break;
+
+        case GID_RC_ENERGY:
+            if ( $prem['engineer'] ) $prod_bonus[] = 1.1;
+            break;
+    }
+}
+
+function ConsBonus (array $uni, array $user, array $planet, int $rc, array &$cons_bonus) {
+
+    // A bonus to consumption offered by the original OGame 0.84 mechanic. The bonus is not necessarily positive.
+    // none.
+}
+
+function ProdResources (array $uni, array $user, array &$planet) : void {
+
+    global $prodPriority, $PlanetProd;
+
+    $prod = [];                 // Производство ресурса по каждому типу игрового объекта
+    $prod_with_bonus = [];      // Производство ресурса по каждому типу игрового объекта (с учётом бонуса)
+    $cons = [];                 // Потребление ресурса по каждому типу игрового объекта
+    $cons_with_bonus = [];      // Потребление ресурса по каждому типу игрового объекта (с учётом бонуса)
+    $net_prod = [];             // Общее производство указанного ресурса
+    $net_cons = [];             // Общее потребление указанного ресурса
+    $balance = [];              // Баланс указанного ресурса (производство - потребление)
+
+    foreach ($prodPriority as $i=>$rc) {
+
+        // *** PRODUCTION
+
+        // Get production bonus
+        $prod_bonus = [];
+        ProdBonus ($uni, $user, $planet, $rc, $prod_bonus);
+        $net_prod[$rc] = 0;
+
+        foreach ($PlanetProd as $gid=>$rules) {
+            if (isset($rules['prod'][$rc])) {
+                $res = $rules['prod'][$rc] ($uni, $user, $planet);
+                $prod[$gid] = $res;
+                foreach ($prod_bonus as $n=>$factor) {
+                    $res *= $factor;
+                }
+                $prod_with_bonus[$gid] = $res;
+                $net_prod[$rc] += $res;
+            }
+        }
+
+        // *** CONSUMPTION
+
+        // Get consumption bonus
+        $cons_bonus = [];
+        ConsBonus ($uni, $user, $planet, $rc, $cons_bonus);
+        $net_cons[$rc] = 0;
+
+        foreach ($PlanetProd as $gid=>$rules) {
+            if (isset($rules['cons'][$rc])) {
+                $res = $rules['cons'][$rc] ($uni, $user, $planet);
+                $cons[$gid] = $res;
+                foreach ($cons_bonus as $n=>$factor) {
+                    $res *= $factor;
+                }
+                $cons_with_bonus[$gid] = $res;
+                $net_cons[$rc] += $res;
+            }
+        }
+
+        $balance[$rc] = floor ($net_prod[$rc] - $net_cons[$rc]);
+
+        // *** POST-PROCESSING
+        // Any special actions with the planet that affect resource production (Natural production, Production coefficient)
+
+        switch ($rc) {
+            case GID_RC_METAL:
+                $net_prod[$rc] += 20 * $uni['speed'];
+                break;
+            case GID_RC_CRYSTAL:
+                $net_prod[$rc] += 10 * $uni['speed'];
+                break;
+            case GID_RC_ENERGY:
+                $planet['factor'] = 1;
+                if ( $balance[$rc] < 0 ) $planet['factor'] = max (0, 1 - abs ($balance[$rc]) / $net_cons[$rc]);
+                break;
+        }
+    }
+
+    $planet['prod'] = $prod;
+    $planet['prod_with_bonus'] = $prod_with_bonus;
+    $planet['cons'] = $cons;
+    $planet['cons_with_bonus'] = $cons_with_bonus;
+    $planet['net_prod'] = $net_prod;
+    $planet['net_cons'] = $net_cons;
+    $planet['balance'] = $balance;
+}
 
 // Get the state of the planet (array) and update resource production from planet's lastpeek until $time_to. Limit storage capacity.
 // NOTE: The calculation excludes external events, such as the end of officers' actions, attack of another player, completion of building construction, etc.
@@ -178,57 +331,38 @@ function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
     if ($user == null) return $planet;
     if ( $user['player_id'] == USER_SPACE ) return $planet;    // technical account space
 
-    $time_from = $planet['lastpeek'];
-    $diff = $time_to - $time_from;
+    // Planet Economics
+    
+    ProdResources ($GlobalUni, $user, $planet);
 
-    $speed = $GlobalUni['speed'];
-
-    $prem = PremiumStatus ($user);
-    if ( $prem['engineer'] ) $e_factor = 1.1;
-    else $e_factor = 1.0; 
-    if ( $prem['geologist'] ) $g_factor = 1.1;
-    else $g_factor = 1.0;
+    // Update the state of the planet
 
     $planet['mmax'] = store_capacity ( $planet[GID_B_METAL_STOR] );
     $planet['kmax'] = store_capacity ( $planet[GID_B_CRYS_STOR] );
     $planet['dmax'] = store_capacity ( $planet[GID_B_DEUT_STOR] );
-    $planet[GID_RC_ENERGY] = prod_solar($planet[GID_B_SOLAR], $planet['prod'.GID_B_SOLAR]) * $e_factor  + 
-                    prod_fusion($planet[GID_B_FUSION], $user[GID_R_ENERGY], $planet['prod'.GID_B_FUSION]) * $e_factor  + 
-                    prod_sat($planet['temp']+40) * $planet[GID_F_SAT] * $planet['prod'.GID_F_SAT] * $e_factor ;
 
-    $planet['econs'] = ( cons_metal ($planet[GID_B_METAL_MINE]) * $planet['prod'.GID_B_METAL_MINE] + 
-                        cons_crys ($planet[GID_B_CRYS_MINE]) * $planet['prod'.GID_B_CRYS_MINE] + 
-                        cons_deut ($planet[GID_B_DEUT_SYNTH]) * $planet['prod'.GID_B_DEUT_SYNTH] );
+    $time_from = $planet['lastpeek'];
+    $diff = $time_to - $time_from;
 
-    $planet['e'] = floor ( $planet[GID_RC_ENERGY] - $planet['econs'] );
-    $planet['factor'] = 1;
-    if ( $planet['e'] < 0 ) $planet['factor'] = max (0, 1 - abs ($planet['e']) / $planet['econs']);
+    $hourly = $planet['balance'][GID_RC_METAL];
+    $planet[GID_RC_METAL] = min ($planet[GID_RC_METAL] + ($hourly * $diff) / 3600, $planet['mmax']);
 
-    // Calculate resource production increase (previously ProdResources method)
+    $hourly = $planet['balance'][GID_RC_CRYSTAL];
+    $planet[GID_RC_CRYSTAL] = min ($planet[GID_RC_CRYSTAL] + ($hourly * $diff) / 3600, $planet['kmax']);
 
-    $hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['prod'.GID_B_METAL_MINE]) * $planet['factor'] * $speed * $g_factor + 20 * $speed;        // Metal
-    if ( $planet[GID_RC_METAL] < $planet['mmax'] ) {
-        $planet[GID_RC_METAL] += ($hourly * $diff) / 3600;
-        if ( $planet[GID_RC_METAL] >= $planet['mmax'] ) $planet[GID_RC_METAL] = $planet['mmax'];
-    }
-
-    $hourly = prod_crys ($planet[GID_B_CRYS_MINE], $planet['prod'.GID_B_CRYS_MINE]) * $planet['factor'] * $speed * $g_factor + 10 * $speed;        // Crystal
-    if ( $planet[GID_RC_CRYSTAL] < $planet['kmax'] ) {
-        $planet[GID_RC_CRYSTAL] += ($hourly * $diff) / 3600;
-        if ( $planet[GID_RC_CRYSTAL] >= $planet['kmax'] ) $planet[GID_RC_CRYSTAL] = $planet['kmax'];
-    }
-
-    $hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['prod'.GID_B_DEUT_SYNTH]) * $planet['factor'] * $speed * $g_factor;    // Deuterium
-    $hourly -= cons_fusion ( $planet[GID_B_FUSION], $planet['prod'.GID_B_FUSION] ) * $speed;    // fusion
-    if ( $planet[GID_RC_DEUTERIUM] < $planet['dmax'] ) {
-        $planet[GID_RC_DEUTERIUM] += ($hourly * $diff) / 3600;
-        if ( $planet[GID_RC_DEUTERIUM] >= $planet['dmax'] ) $planet[GID_RC_DEUTERIUM] = $planet['dmax'];
-    }
+    $hourly = $planet['balance'][GID_RC_DEUTERIUM];
+    $planet[GID_RC_DEUTERIUM] = min ($planet[GID_RC_DEUTERIUM] + ($hourly * $diff) / 3600, $planet['dmax']);
 
     $planet_id = $planet['planet_id'];
     $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."` = ".$planet[GID_RC_METAL].", `".GID_RC_CRYSTAL."` = ".$planet[GID_RC_CRYSTAL].", `".GID_RC_DEUTERIUM."` = ".$planet[GID_RC_DEUTERIUM].", lastpeek = ".$time_to." WHERE planet_id = $planet_id";
     dbquery ($query);
     $planet['lastpeek'] = $time_to;
+
+    // Deprecated
+
+    $planet[GID_RC_ENERGY] = $planet['net_prod'][GID_RC_ENERGY];
+    $planet['e'] = $planet['balance'][GID_RC_ENERGY];
+    $planet['econs'] = $planet['net_cons'][GID_RC_ENERGY];
 
     return $planet;
 }
