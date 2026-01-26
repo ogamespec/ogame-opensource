@@ -141,11 +141,18 @@ else
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
         $level = $aktplanet[$gid]-2;
         if ($level <= 0) $level = 1;
-        $prod_now = prod_metal ($aktplanet[$gid], 1 );
-        $cons_now = -cons_metal ($aktplanet[$gid]);
+        $planet = $aktplanet;
+        $planet[GID_B_SOLAR] = 99;
+        $planet['prod'.GID_B_METAL_MINE] = 1;
+        ProdResources ($GlobalUni, $GlobalUser, $planet);
+        $prod_now = $planet['prod'][GID_B_METAL_MINE];
+        $cons_now = - $planet['cons'][GID_B_METAL_MINE];
         for ($i=$level; $i<$level+15; $i++) {
-            $prod = prod_metal ($i, 1 ) * $speed;
-            $cons = -cons_metal ($i);
+            
+            $planet[$gid] = $i;
+            ProdResources ($GlobalUni, $GlobalUser, $planet);
+            $prod = $planet['prod'][GID_B_METAL_MINE];
+            $cons = - $planet['cons'][GID_B_METAL_MINE];
 
             if ($i==$aktplanet[$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
             else echo "<tr> <th> $i</th> ";
@@ -161,11 +168,18 @@ else
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
         $level = $aktplanet[$gid]-2;
         if ($level <= 0) $level = 1;
-        $prod_now = prod_crys ($aktplanet[$gid], 1 );
-        $cons_now = -cons_crys ($aktplanet[$gid]);
+        $planet = $aktplanet;
+        $planet[GID_B_SOLAR] = 99;
+        $planet['prod'.GID_B_CRYS_MINE] = 1;
+        ProdResources ($GlobalUni, $GlobalUser, $planet);
+        $prod_now = $planet['prod'][GID_B_CRYS_MINE];
+        $cons_now = - $planet['cons'][GID_B_CRYS_MINE];
         for ($i=$level; $i<$level+15; $i++) {
-            $prod = prod_crys ($i, 1 ) * $speed;
-            $cons = -cons_crys ($i);
+
+            $planet[$gid] = $i;
+            ProdResources ($GlobalUni, $GlobalUser, $planet);
+            $prod = $planet['prod'][GID_B_CRYS_MINE];
+            $cons = - $planet['cons'][GID_B_CRYS_MINE];
 
             if ($i==$aktplanet[$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
             else echo "<tr> <th> $i</th> ";
@@ -181,11 +195,18 @@ else
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
         $level = $aktplanet[$gid]-2;
         if ($level <= 0) $level = 1;
-        $prod_now = prod_deut ($aktplanet[$gid], $aktplanet['temp']+40, 1 );
-        $cons_now = -cons_deut ($aktplanet[$gid]);
+        $planet = $aktplanet;
+        $planet[GID_B_SOLAR] = 99;
+        $planet['prod'.GID_B_DEUT_SYNTH] = 1;
+        ProdResources ($GlobalUni, $GlobalUser, $planet);
+        $prod_now = $planet['prod'][GID_B_DEUT_SYNTH];
+        $cons_now = - $planet['cons'][GID_B_DEUT_SYNTH];
         for ($i=$level; $i<$level+15; $i++) {
-            $prod = prod_deut ($i, $aktplanet['temp']+40, 1 ) * $speed;
-            $cons = -cons_deut ($i);
+
+            $planet[$gid] = $i;
+            ProdResources ($GlobalUni, $GlobalUser, $planet);
+            $prod = $planet['prod'][GID_B_DEUT_SYNTH];
+            $cons = - $planet['cons'][GID_B_DEUT_SYNTH];
 
             if ($i==$aktplanet[$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
             else echo "<tr> <th> $i</th> ";
@@ -201,9 +222,15 @@ else
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td>\n";
         $level = $aktplanet[$gid]-2;
         if ($level <= 0) $level = 1;
-        $prod_now = prod_solar ($aktplanet[$gid], 1 );
+        $planet = $aktplanet;
+        $planet['prod'.GID_B_SOLAR] = 1;
+        ProdResources ($GlobalUni, $GlobalUser, $planet);
+        $prod_now = $planet['prod'][GID_B_SOLAR];
         for ($i=$level; $i<$level+15; $i++) {
-            $prod = prod_solar ($i, 1 );
+
+            $planet[$gid] = $i;
+            ProdResources ($GlobalUni, $GlobalUser, $planet);
+            $prod = $planet['prod'][GID_B_SOLAR];            
 
             if ($i==$aktplanet[$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
             else echo "<tr> <th> $i</th> ";
@@ -217,11 +244,17 @@ else
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_CONS_DEUT")."</td><td class='c'>".loca("INFO_DIFF")."</td>\n";
         $level = $aktplanet[$gid]-2;
         if ($level <= 0) $level = 1;
-        $prod_now = prod_fusion ($aktplanet[$gid], $GlobalUser[GID_R_ENERGY], 1 );
-        $cons_now = -cons_fusion ($aktplanet[$gid], 1 );
+        $planet = $aktplanet;
+        $planet['prod'.GID_B_FUSION] = 1;
+        ProdResources ($GlobalUni, $GlobalUser, $planet);
+        $prod_now = $planet['prod'][GID_B_FUSION];
+        $cons_now = - $planet['cons'][GID_B_FUSION];
         for ($i=$level; $i<$level+15; $i++) {
-            $prod = prod_fusion ($i, $GlobalUser[GID_R_ENERGY], 1 );
-            $cons = -cons_fusion ($i, 1 ) * $speed;
+
+            $planet[$gid] = $i;
+            ProdResources ($GlobalUni, $GlobalUser, $planet);
+            $prod = $planet['prod'][GID_B_FUSION];
+            $cons = - $planet['cons'][GID_B_FUSION];
 
             if ($i==$aktplanet[$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
             else echo "<tr> <th> $i</th> ";

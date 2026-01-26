@@ -132,57 +132,6 @@ function store_capacity (int $lvl) : int {
     return 100000 + 50000 * (int)(ceil (pow (1.6, $lvl) - 1));
 }
 
-// Energy production
-
-function prod_solar (int $lvl, float $pr) : float {
-    $prod = floor (20 * $lvl * pow (1.1, $lvl) * $pr);
-    return $prod;
-}
-
-function prod_fusion (int $lvl, int $energo, float $pr) : float {
-    $prod = floor (30 * $lvl * pow (1.05 + $energo*0.01, $lvl) * $pr);
-    return $prod;
-}
-
-function prod_sat (int $maxtemp) : float {
-    $prod = floor (($maxtemp / 4) + 20);
-    return max (1, $prod);
-}
-
-// Mines production
-
-function prod_metal (int $lvl, float $pr) : float {
-    return floor (30 * $lvl * pow (1.1, $lvl) * $pr);
-}
-
-function prod_crys (int $lvl, float $pr) : float {
-    return floor (20 * $lvl * pow (1.1, $lvl) * $pr);
-}
-
-function prod_deut (int $lvl, int $maxtemp, float $pr) : float {
-    return floor ( 10 * $lvl * pow (1.1, $lvl) * $pr) * (1.28 - 0.002 * ($maxtemp));
-}
-
-// Energy consumption
-
-function cons_metal (int $lvl) : float {
-    return ceil (10 * $lvl * pow (1.1, $lvl));
-}
-
-function cons_crys (int $lvl) : float {
-    return ceil (10 * $lvl * pow (1.1, $lvl));
-}
-
-function cons_deut (int $lvl) : float {
-    return ceil (20 * $lvl * pow (1.1, $lvl));
-}
-
-// Consumption of deuterium by the fusion reactor
-
-function cons_fusion (int $lvl, float $pr) : float {
-    return ceil (10 * $lvl * pow (1.1, $lvl) * $pr);
-}
-
 $PlanetProd = [
 
     GID_B_METAL_MINE => [
