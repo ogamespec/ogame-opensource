@@ -140,7 +140,8 @@
 	},
 	"resources": {
 		"path": "pages/resources.php",
-		"loca": [ "menu", "resources", "premium" ]
+		"loca": [ "menu", "resources", "premium" ],
+		"mvc": true
 	},
 	"sprungtor": {
 		"path": "pages/sprungtor.php",
