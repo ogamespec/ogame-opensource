@@ -128,4 +128,6 @@ const GALAXY_DEUTERIUM_CONS = 10; 			// Deuterium consumption for viewing the Ga
 
 const TRADER_DM = 2500; 			// Cost of calling a Merchant
 
+const MAX_PLANET = 9; 			// Maximum number of planets a player can own (home + colonies), not greater (<= this value)
+
 ?>

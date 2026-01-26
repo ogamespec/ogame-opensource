@@ -165,7 +165,7 @@ while ($rows--)
     $pl = dbarray ($result);
     if ( $pl['type'] != PTYP_MOON ) $count++;
 }
-if ( $count > 9 ) echo "<br><font color=#ff000>".loca("RES_INFO")."</font>";
+if ( $count > MAX_PLANET ) echo "<br><font color=#ff000>".loca("RES_INFO")."</font>";
 
 echo "<form action=\"index.php?page=resources&session=".$_GET['session']."\" method=\"post\" id='ressourcen'> \n";
 echo "<input type=hidden name='screen' id='screen'> \n";

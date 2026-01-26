@@ -9,6 +9,8 @@
 
 // Game object identifiers used commonly in code.
 
+const GID_X_NATURAL_PROD = 0;   // Natural production on the planet. Used only in production calculations and does not fall into any other category.
+
 const GID_B_METAL_MINE = 1;     // Metal Mine
 const GID_B_CRYS_MINE = 2;      // Crystal Mine
 const GID_B_DEUT_SYNTH = 3;     // Deuterium Synthesizer
@@ -76,8 +78,6 @@ const GID_RC_CRYSTAL = 701;     // Crystal
 const GID_RC_DEUTERIUM = 702;   // Deuterium
 const GID_RC_ENERGY = 703;      // Energy
 const GID_RC_DM = 704;          // Dark Matter
-
-const GID_X_NATURAL_PROD = 800;     // Natural production on the planet. Used only in production calculations and does not fall into any other category.
 
 function IsBuilding (int $gid) : bool
 {
