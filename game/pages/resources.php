@@ -183,7 +183,7 @@ echo "  </tr>\n";
 
 // Natural production
 echo "  <tr> \n";
-echo "   <th colspan=\"2\">".loca("RES_BASIC")."</th> \n";
+echo "   <th colspan=\"2\">".loca("RES_NATURAL")."</th> \n";
 echo "   <td class=\"k\">".(20*$speed)."</td>    <td class=\"k\">".(10*$speed)."</td>    <td class=\"k\">0</td>    <td class=\"k\">0</td> \n";
 echo "  </tr>\n";
 

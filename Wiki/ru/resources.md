@@ -98,4 +98,5 @@ const GID_RC_DM = 704;          // Dark Matter
 <img width="551" height="218" alt="image" src="https://github.com/user-attachments/assets/6f79aa9c-2029-4ae9-ba70-0616bc9e2953" />
 
 Боевой доклад:
+
 <img width="968" height="424" alt="image" src="https://github.com/user-attachments/assets/26ebcc57-d42f-4e08-bd38-91792cca5210" />
