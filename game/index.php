@@ -167,17 +167,48 @@ if ($pk != false) {
         $bare = $router[$pk]['bare'];
     }
 
-    if (!$bare) {
-        PageHeader ($pk, !$header, $menu, $redirect_page, $redirect_sec);
-        BeginContent ();
+    $mvc = false;
+    if (key_exists('mvc', $router[$pk])) {
+        $mvc = $router[$pk]['mvc'];
     }
 
-    // Pages can use the following global variables: $now, $aktplanet, $session, $PageMessage, $PageError, $GlobalUser, $GlobalUni
-    include $router[$pk]['path'];
+    if ($mvc) {
 
-    if (!$bare) {
-        EndContent ();
-        PageFooter ($PageMessage, $PageError, !$menu /*popup*/, $header ? 81 : 0, !$header);
+        // New-style
+
+        $classFile = $router[$pk]['path'];
+        if (file_exists($classFile)) {
+
+            require_once $classFile;
+            $className = ucfirst($pk);
+            $inst = new $className;
+            $show = $inst->controller ();
+
+            if ($show) {
+                PageHeader ($pk, !$header, $menu, $redirect_page, $redirect_sec);
+                BeginContent ();
+                $inst->view ();
+                EndContent ();
+                PageFooter ($PageMessage, $PageError, !$menu /*popup*/, $header ? 81 : 0, !$header);
+            }
+        }
+    }
+    else {
+
+        // Old-style
+
+        if (!$bare) {
+            PageHeader ($pk, !$header, $menu, $redirect_page, $redirect_sec);
+            BeginContent ();
+        }
+
+        // Pages can use the following global variables: $now, $aktplanet, $session, $PageMessage, $PageError, $GlobalUser, $GlobalUni
+        include $router[$pk]['path'];
+
+        if (!$bare) {
+            EndContent ();
+            PageFooter ($PageMessage, $PageError, !$menu /*popup*/, $header ? 81 : 0, !$header);
+        }
     }
 
     ob_end_flush ();
