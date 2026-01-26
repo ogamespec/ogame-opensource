@@ -167,7 +167,7 @@ $speed = $GlobalUni['speed'];
     $avg_prod = 0;
     foreach ( $plist as $i=>$planet )
     {
-        $res_hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['prod'.GID_B_METAL_MINE]) * $planet['factor'] * $speed + 20*$speed;
+        $res_hourly = $planet['prod'][GID_B_METAL_MINE] + 20*$speed;
         $res = floor ( $planet[GID_RC_METAL] );
         $total += $res;
         $avg_prod += $res_hourly;
@@ -193,7 +193,7 @@ $speed = $GlobalUni['speed'];
     $avg_prod = 0;
     foreach ( $plist as $i=>$planet )
     {
-        $res_hourly = prod_crys ($planet[GID_B_CRYS_MINE], $planet['prod'.GID_B_CRYS_MINE]) * $planet['factor'] * $speed + 10*$speed;
+        $res_hourly = $planet['prod'][GID_B_CRYS_MINE] + 10*$speed;
         $res = floor ( $planet[GID_RC_CRYSTAL] );
         $total += $res;
         $avg_prod += $res_hourly;
@@ -219,7 +219,7 @@ $speed = $GlobalUni['speed'];
     $avg_prod = 0;
     foreach ( $plist as $i=>$planet )
     {
-        $res_hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['prod'.GID_B_DEUT_SYNTH]) * $planet['factor'] * $speed - cons_fusion ( $planet[GID_B_FUSION], $planet['prod'.GID_B_FUSION] ) * $speed;
+        $res_hourly = $planet['prod'][GID_B_DEUT_SYNTH] - $planet['prod'][GID_B_FUSION];
         $res = floor ( $planet[GID_RC_DEUTERIUM] );
         $total += $res;
         $avg_prod += $res_hourly;
@@ -249,8 +249,8 @@ $speed = $GlobalUni['speed'];
     $sum_emax = 0;
     foreach ( $plist as $i=>$planet )
     {
-        $sum_e += $planet['e'];
-        $sum_emax += $planet[GID_RC_ENERGY];
+        $sum_e += $planet['balance'][GID_RC_ENERGY];
+        $sum_emax += $planet['net_prod'][GID_RC_ENERGY];
         echo "            <th width=\"75\" >\n";
         if ($planet['e'] < 0) echo "                <font color=\"red\">\n";
         echo "                    ".nicenum($planet['e'])." \n";

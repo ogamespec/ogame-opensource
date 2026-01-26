@@ -61,7 +61,7 @@ const GID_RC_DM = 704;          // Dark Matter
 
 <img width="635" height="216" alt="image" src="https://github.com/user-attachments/assets/67c7606c-a6a0-4afe-af9c-56c7982285a1" />
 
-Посторойки/Исследования/Верфь/Оборона:
+Постройки/Исследования/Верфь/Оборона:
 
 <img width="601" height="189" alt="image" src="https://github.com/user-attachments/assets/38c59e25-b551-4b3a-aa78-02ddd65a8ea2" />
 

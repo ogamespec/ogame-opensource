@@ -259,7 +259,7 @@ $PlanetProd = [
 
 ];
 
-function ProdBonus (array $uni, array $user, array $planet, int $rc, array $prod_bonus) {
+function ProdBonus (array $uni, array $user, array $planet, int $rc, array &$prod_bonus) {
 
     // A production bonus offered by the original OGame 0.84 mechanic. The bonus is not necessarily positive.
     $prem = PremiumStatus ($user);
@@ -278,7 +278,7 @@ function ProdBonus (array $uni, array $user, array $planet, int $rc, array $prod
     }
 }
 
-function ConsBonus (array $uni, array $user, array $planet, int $rc, array $cons_bonus) {
+function ConsBonus (array $uni, array $user, array $planet, int $rc, array &$cons_bonus) {
 
     // A bonus to consumption offered by the original OGame 0.84 mechanic. The bonus is not necessarily positive.
     // none.

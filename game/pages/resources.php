@@ -10,22 +10,18 @@ $prem = PremiumStatus ($GlobalUser);
 if ( $prem['geologist'] )
 {
     $geologe_text = "<img border=\"0\" src=\"img/geologe_ikon.gif\" alt=\"".loca("PREM_GEOLOGE")."\" onmouseover='return overlib(\"<font color=#ffffff>".loca("PREM_GEOLOGE")."</font>\", WIDTH, 80);' onmouseout='return nd();' width=\"20\" height=\"20\">";
-    $g_factor = 1.1;
 }
 else
 {
     $geologe_text = "&nbsp;";
-    $g_factor = 1.0;
 }
 if ( $prem['engineer'] )
 {
     $engineer_text = "<img border=\"0\" src=\"img/ingenieur_ikon.gif\" alt=\"".loca("PREM_ENGINEER")."\" onmouseover='return overlib(\"<font color=#ffffff>".loca("PREM_ENGINEER")."</font>\", WIDTH, 80);' onmouseout='return nd();' width=\"20\" height=\"20\">";
-    $e_factor = 1.1;
 }
 else
 {
     $engineer_text = "&nbsp;";
-    $e_factor = 1.0;
 }
 
 // POST requests processing (you cannot change energy settings in VM)
@@ -88,14 +84,8 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
 function get_prod (int $id, array|null $planet) : float
 {
     if ($planet == null) return 0;
-    switch ($id)
-    {
-        case GID_B_METAL_MINE: return 100 * $planet['prod'.GID_B_METAL_MINE];
-        case GID_B_CRYS_MINE: return 100 * $planet['prod'.GID_B_CRYS_MINE];
-        case GID_B_DEUT_SYNTH: return 100 * $planet['prod'.GID_B_DEUT_SYNTH];
-        case GID_B_SOLAR: return 100 * $planet['prod'.GID_B_SOLAR];
-        case GID_B_FUSION: return 100 * $planet['prod'.GID_B_FUSION];
-        case GID_F_SAT: return 100 * $planet['prod'.GID_F_SAT];
+    if (isset($planet['prod'.$id])) {
+        return 100 * $planet['prod'.$id];
     }
     return 0;
 }
@@ -131,21 +121,21 @@ $speed = $GlobalUni['speed'];
 $planet = $aktplanet;
 
 // Production.
-$m_hourly = prod_metal ($planet[GID_B_METAL_MINE], $planet['prod'.GID_B_METAL_MINE]) * $planet['factor'] * $speed * $g_factor;
-$k_hourly = prod_crys ($planet[GID_B_CRYS_MINE], $planet['prod'.GID_B_CRYS_MINE]) * $planet['factor'] * $speed * $g_factor;
-$d_hourly = prod_deut ($planet[GID_B_DEUT_SYNTH], $planet['temp']+40, $planet['prod'.GID_B_DEUT_SYNTH]) * $planet['factor'] * $speed * $g_factor;
-$s_prod = prod_solar($planet[GID_B_SOLAR], $planet['prod'.GID_B_SOLAR]) * $e_factor;
-$f_prod = prod_fusion($planet[GID_B_FUSION], $GlobalUser[GID_R_ENERGY], $planet['prod'.GID_B_FUSION]) * $e_factor;
-$ss_prod = prod_sat($planet['temp']+40) * $planet[GID_F_SAT] * $planet['prod'.GID_F_SAT] * $e_factor;
+$m_hourly = $planet['prod_with_bonus'][GID_B_METAL_MINE];
+$k_hourly = $planet['prod_with_bonus'][GID_B_CRYS_MINE];
+$d_hourly = $planet['prod_with_bonus'][GID_B_DEUT_SYNTH];
+$s_prod = $planet['prod_with_bonus'][GID_B_SOLAR];
+$f_prod = $planet['prod_with_bonus'][GID_B_FUSION];
+$ss_prod = $planet['prod_with_bonus'][GID_F_SAT];
 
 // Consumption.
-$m_cons = cons_metal ($planet[GID_B_METAL_MINE]) * $planet['prod'.GID_B_METAL_MINE];
+$m_cons = $planet['cons_with_bonus'][GID_B_METAL_MINE];
 $m_cons0 = round ($m_cons * $planet['factor']);
-$k_cons = cons_crys ($planet[GID_B_CRYS_MINE]) * $planet['prod'.GID_B_CRYS_MINE];
+$k_cons = $planet['cons_with_bonus'][GID_B_CRYS_MINE];
 $k_cons0 = round ($k_cons * $planet['factor']);
-$d_cons = cons_deut ($planet[GID_B_DEUT_SYNTH]) * $planet['prod'.GID_B_DEUT_SYNTH];
+$d_cons = $planet['cons_with_bonus'][GID_B_DEUT_SYNTH];
 $d_cons0 = round ($d_cons * $planet['factor']);
-$f_cons = - cons_fusion ( $planet[GID_B_FUSION], $planet['prod'.GID_B_FUSION] ) * $speed;
+$f_cons = - $planet['cons_with_bonus'][GID_B_FUSION];
 
 $m_total = $m_hourly + (20*$speed);
 $k_total = $k_hourly + (10*$speed);
