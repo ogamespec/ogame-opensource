@@ -52,3 +52,50 @@ const GID_RC_DM = 704;          // Dark Matter
 ## Визуал
 
 В данном разделе картинки, где игрок может увидеть ресурсы. Пока всё подряд, потом может быть с описанием будет, пока не до этого.
+
+Панель ресурсов:
+
+<img width="795" height="86" alt="image" src="https://github.com/user-attachments/assets/0d573aec-7935-455c-971d-a0dfeae02dcc" />
+
+События в обзоре:
+
+<img width="635" height="216" alt="image" src="https://github.com/user-attachments/assets/67c7606c-a6a0-4afe-af9c-56c7982285a1" />
+
+Посторойки/Исследования/Верфь/Оборона:
+
+<img width="601" height="189" alt="image" src="https://github.com/user-attachments/assets/38c59e25-b551-4b3a-aa78-02ddd65a8ea2" />
+
+Сырьё:
+
+<img width="637" height="378" alt="image" src="https://github.com/user-attachments/assets/377bbd85-f2d3-48bc-95ce-4385a9d24641" />
+
+Империя:
+
+<img width="852" height="437" alt="image" src="https://github.com/user-attachments/assets/1728ea1f-996f-411a-85b6-5f6942cfad87" />
+
+Скупщик:
+
+<img width="599" height="373" alt="image" src="https://github.com/user-attachments/assets/deeecdb1-8bfc-4356-86c5-c31bdc241ef9" />
+
+Офицерское казино:
+
+<img width="691" height="230" alt="image" src="https://github.com/user-attachments/assets/79b93a5e-42c1-46d3-b90a-ddaa40baa24f" />
+
+Флот 3:
+
+<img width="621" height="238" alt="image" src="https://github.com/user-attachments/assets/f96a60de-48e6-46de-9924-20f685de25b5" />
+
+Галактика (ПО):
+
+<img width="610" height="387" alt="image" src="https://github.com/user-attachments/assets/d83c7402-a815-489d-a205-a8f5a79df8ff" />
+
+Сообщения (транспорт):
+
+<img width="559" height="386" alt="image" src="https://github.com/user-attachments/assets/7c93525a-f2ea-4003-9cc1-dd61f75d7604" />
+
+Шпионский доклад:
+
+<img width="551" height="218" alt="image" src="https://github.com/user-attachments/assets/6f79aa9c-2029-4ae9-ba70-0616bc9e2953" />
+
+Боевой доклад:
+<img width="968" height="424" alt="image" src="https://github.com/user-attachments/assets/26ebcc57-d42f-4e08-bd38-91792cca5210" />
