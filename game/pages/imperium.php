@@ -219,7 +219,7 @@ $speed = $GlobalUni['speed'];
     $avg_prod = 0;
     foreach ( $plist as $i=>$planet )
     {
-        $res_hourly = $planet['prod'][GID_B_DEUT_SYNTH] - $planet['prod'][GID_B_FUSION];
+        $res_hourly = $planet['prod'][GID_B_DEUT_SYNTH] - $planet['cons'][GID_B_FUSION];
         $res = floor ( $planet[GID_RC_DEUTERIUM] );
         $total += $res;
         $avg_prod += $res_hourly;
