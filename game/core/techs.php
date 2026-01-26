@@ -77,6 +77,8 @@ const GID_RC_DEUTERIUM = 702;   // Deuterium
 const GID_RC_ENERGY = 703;      // Energy
 const GID_RC_DM = 704;          // Dark Matter
 
+const GID_X_NATURAL_PROD = 800;     // Natural production on the planet. Used only in production calculations and does not fall into any other category.
+
 function IsBuilding (int $gid) : bool
 {
     global $buildmap;
