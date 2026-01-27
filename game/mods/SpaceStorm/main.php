@@ -58,7 +58,7 @@ class SpaceStorm extends GameMod {
 
         // Remove columns
         $query = "ALTER TABLE ".$db_prefix."uni DROP COLUMN storm;";
-        dbquery ($query);        
+        dbquery ($query);
         $query = "ALTER TABLE ".$db_prefix."planets DROP COLUMN `".GID_B_REALITY_STAB."`;";
         dbquery ($query);
         $query = "ALTER TABLE ".$db_prefix."planets DROP COLUMN `s".GID_B_REALITY_STAB."`;";
@@ -93,8 +93,8 @@ class SpaceStorm extends GameMod {
         $requirements[GID_B_REALITY_STAB] = array (GID_B_RES_LAB=>3, GID_B_TERRAFORMER=>1);
         $CanBuildTab[PTYP_PLANET][] = GID_B_REALITY_STAB;
 
-        global $GlobalUni;
-        loca_add ("space_storm", $GlobalUni['lang'], __DIR__);
+        global $GlobalUser;
+        loca_add ("space_storm", $GlobalUser['lang'], __DIR__);
     }
 
     // Событие завершения Космического шторма. Формируется новый шторм, согласно правилам

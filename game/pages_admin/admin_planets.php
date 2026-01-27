@@ -299,7 +299,7 @@ function reset ()
         echo "<br>".loca("ADM_PLANET_DEFENSE").": " . nicenum($pp['defense_pts'] / 1000) ;
         if ($planet['type'] == PTYP_DF ) echo "<br>М: ".nicenum($planet[GID_RC_METAL])."<br>К: ".nicenum($planet[GID_RC_CRYSTAL])."<br>";
         echo "</th><th>";
-        if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
+        if ( $planet['type'] == PTYP_PLANET )
         {
             if ($moon_id)
             {
@@ -320,9 +320,12 @@ function reset ()
         }
         else
         {
+            // Show the parent planet of a galactic object
             $parent = LoadPlanet ( $planet['g'], $planet['s'], $planet['p'], 1 );
-            echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$parent['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $parent)."\"><br>\n";
-            echo $parent['name'] . "</a>";
+            if ($parent != null) {
+                echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$parent['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $parent)."\"><br>\n";
+                echo $parent['name'] . "</a>";
+            }
         }
 ?>
         <br><br><textarea rows=10 cols=10 id="spiotext"></textarea>
@@ -398,6 +401,7 @@ function reset ()
 
         echo "<th valign=top><table>\n";
         foreach ( $fleetmap as $i=>$gid) {
+            if (!isset($planet[$gid])) continue;
             echo "<tr><th>".loca("NAME_$gid")."</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=6 name=\"$gid\" value=\"".$planet[$gid]."\" />";
             if ( $gid == GID_F_SAT && $planet['type'] != PTYP_MOON ) {
                 echo "<select name='prod212'>\n";
@@ -414,6 +418,7 @@ function reset ()
 
         echo "<th valign=top><table>\n";
         foreach ( $defmap as $i=>$gid) {
+            if (!isset($planet[$gid])) continue;
             echo "<tr><th>".loca("NAME_$gid")."</th><th><input id=\"obj$gid\" type=\"text\" size=6 name=\"$gid\" value=\"".$planet[$gid]."\" /></th></tr>\n";
         }
         echo "</table></th>\n";
