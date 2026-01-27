@@ -65,11 +65,6 @@ foreach ($transportableResources as $i=>$rc) {
     $resource[$i+1] = min ( intval($aktplanet[$rc]), abs(intval($_POST['resource'.($i+1)])) );        
 }
 
-foreach ($fleetmap as $i=>$gid)
-{
-    if ( !key_exists("ship$gid", $_POST) ) $_POST["ship$gid"] = 0;
-}
-
 $order = intval($_POST['order']);
 $union_id = 0;
 
@@ -314,13 +309,20 @@ else {
 
     // Fleet lock
     $fleetlock = "temp/fleetlock_" . $aktplanet['planet_id'];
-    if ( file_exists ($fleetlock) ) MyGoto ( "flotten1" );
+    if ( file_exists ($fleetlock) ) {
+        $fileCreationTime = filectime($filename);
+        if ((time() - $fileCreationTime) < 3) {
+            MyGoto ( "flotten1" );
+        } else {
+            unlink ( $fleetlock );
+        }
+    }
     $f = fopen ( $fleetlock, 'w' );
     fclose ($f);
 
     $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, 
         $resources, 
-        $cons['fleet'] + $cons['probes'], time(), $union_id, $hold_time );
+        (int)($cons['fleet'] + $cons['probes']), time(), $union_id, (int)$hold_time );
     $queue = GetFleetQueue ($fleet_id);
 
     UserLog ( $aktplanet['owner_id'], "FLEET", 
