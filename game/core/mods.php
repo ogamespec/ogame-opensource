@@ -90,6 +90,10 @@ abstract class GameMod {
         return false;
     }
 
+    public function page_galaxy_custom_object (array $planet, array &$info) : bool {
+        return false;
+    }
+
     // Hooks for bonuses and changes to the original game mechanics
 
     public function bonus_technology (int $id, array &$bonus) : bool {
@@ -156,7 +160,7 @@ function ModsExecRef(string $method, array &$args) : bool
             }
         }
     }
-    return false;    
+    return false;
 }
 
 function ModsExecRefArr(string $method, array &$args, array $arr) : bool
@@ -170,7 +174,21 @@ function ModsExecRefArr(string $method, array &$args, array $arr) : bool
             }
         }
     }
-    return false;    
+    return false;
+}
+
+function ModsExecArrRef(string $method, array $args, array &$arr) : bool
+{
+    global $modlist;
+    foreach ($modlist as $instance) {
+        if(method_exists($instance, $method)) {
+            $res = $instance->$method($args, $arr);
+            if ($res) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 function ModsExecRefRef(string $method, array &$args, array &$arr) : bool

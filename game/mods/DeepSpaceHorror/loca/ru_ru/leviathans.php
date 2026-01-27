@@ -18,4 +18,9 @@ $LOCA["ru"]["LONG_".GID_LEVI_JUGGERNAUT] = "Левиафан — это вопл
 
 $LOCA["ru"]["FLEET_ORDER_".FTYP_LEVI_PREPARE_JUMP] = "Подготовка к гиперпереходу";
 
+$LOCA["ru"]["GALAXY_LEVI_PROPS"] = "Свойства";
+$LOCA["ru"]["GALAXY_LEVI_SIZE"] = "размер:";
+$LOCA["ru"]["GALAXY_LEVI_TEMP"] = "температура:";
+$LOCA["ru"]["GALAXY_LEVI_ACTIONS"] = "Действия:";
+
 ?>

@@ -264,6 +264,36 @@ class DeepSpaceHorror extends GameMod {
         }
         return false;
     }
+
+    public function page_galaxy_custom_object (array $planet, array &$info) : bool {
+
+        if ($this->IsPlanetLeviathan($planet['type'])) {
+
+            $info['overlib'] = $this->GetLeviathanOverlib ($planet);
+            return true;
+        }
+        return false;
+    }
+
+    private function GetLeviathanOverlib (array $planet) : string {
+
+        global $GlobalUser;
+        global $session;
+
+        $res = "";
+        $res .= "<table width=240 ><tr>";
+        $res .= "<td class=c colspan=2 >".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]</td></tr>";
+        $res .= "<tr><th width=80 ><img src=".GetPlanetSmallImage ( UserSkin(), $planet )." height=75 width=75 /></th>";
+        $res .= "<th><table width=120 ><tr><td colspan=2 class=c >".loca("GALAXY_LEVI_PROPS")."</td></tr>";
+        $res .= "<tr><th>".loca("GALAXY_LEVI_SIZE")."</td><th>".nicenum($planet['diameter'])."</td></tr>";
+        $res .= "<tr><th>".loca("GALAXY_LEVI_TEMP")."</td><th>".$planet['temp']."</td></tr>";
+        $res .= "<tr><td colspan=2 class=c >".loca("GALAXY_LEVI_ACTIONS")."</td></tr>";
+        $res .= "<tr><th align=left colspan=2 >";
+        if ($GlobalUser['admin'] >= 2) $res .= "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id'].">".loca("GALAXY_PLANET_ADMIN")."</a><br />";
+        $res .= "</th></tr></table></tr></table>";
+
+        return $res;
+    }
 }
 
 ?>

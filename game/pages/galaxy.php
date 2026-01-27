@@ -7,9 +7,8 @@
 
 $defmap_norak = array_diff($defmap, $rakmap);
 
-function empty_row (int $p, array $custom_planets) : void
-{
-    echo "<tr><th width=\"30\"><a href=\"#\" >".$p."</a></th><th width=\"30\"></th><th width=\"130\" style='white-space: nowrap;'></th><th width=\"30\" style='white-space: nowrap;'></th><th width=\"30\"></th>";
+// Display custom Galaxy objects added by mods.
+function ShowCustomObjects (int $p, array $custom_planets) : void {
 
     // Display custom Galaxy objects added by mods.
     if (count($custom_planets) > 0) {
@@ -17,14 +16,24 @@ function empty_row (int $p, array $custom_planets) : void
         foreach ($custom_planets as $i=>$custom_planet) {
             if ($custom_planet['p'] == $p) {
 
-                echo "<a style=\"cursor:pointer\" onmouseover=\"return overlib('', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -40 );\" ";
+                $info = array ();
+                $res = ModsExecArrRef ('page_galaxy_custom_object', $custom_planet, $info);
+                if ($res) $overlib = $info['overlib'];
+                else $overlib = "";
+
+                echo "<a style=\"cursor:pointer\" onmouseover=\"return overlib('$overlib', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -40 );\" ";
                 echo "onmouseout=\"return nd();\">";
                 echo "<img src=\"".GetPlanetSmallImage ( UserSkin(), $custom_planet )."\" height=\"30\" width=\"30\"/></a>\n";
             }
         }
         echo "</th>\n";
     }
+}
 
+function empty_row (int $p, array $custom_planets) : void
+{
+    echo "<tr><th width=\"30\"><a href=\"#\" >".$p."</a></th><th width=\"30\"></th><th width=\"130\" style='white-space: nowrap;'></th><th width=\"30\" style='white-space: nowrap;'></th><th width=\"30\"></th>";
+    ShowCustomObjects ($p, $custom_planets);
     echo "<th width=\"150\"></th><th width=\"80\"></th><th width=\"125\" style='white-space: nowrap;'></th></tr>\n\n";
 }
 
@@ -616,16 +625,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
 
     // Display custom Galaxy objects added by mods.
     if ($num_custom > 0) {
-        echo "<th>";
-        foreach ($custom_planets as $i=>$custom_planet) {
-            if ($custom_planet['p'] == $p) {
-
-                echo "<a style=\"cursor:pointer\" onmouseover=\"return overlib('', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -40 );\" ";
-                echo "onmouseout=\"return nd();\">";
-                echo "<img src=\"".GetPlanetSmallImage ( UserSkin(), $custom_planet )."\" height=\"30\" width=\"30\"/></a>\n";
-            }
-        }
-        echo "</th>\n";
+        ShowCustomObjects ($p, $custom_planets);
     }
 
     // player (status)
