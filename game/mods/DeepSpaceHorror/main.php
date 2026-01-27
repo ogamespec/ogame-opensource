@@ -94,7 +94,7 @@ class DeepSpaceHorror extends GameMod {
     }
 
     public function init() : void {
-        global $fleetmap, $UnitParam, $RapidFire;
+        global $fleetmap, $UnitParam, $RapidFire, $requirements;
 
         $fleetmap[] = GID_LEVI_AMOEBA;
         $UnitParam[GID_LEVI_AMOEBA] = array ( 250000000, 10000, 5000, 0, 100, 0 );
@@ -146,6 +146,12 @@ class DeepSpaceHorror extends GameMod {
             GID_D_SDOME => 20,
             GID_D_LDOME => 5,
         );
+
+        // We'll add Leviathans to the tech tree, but they still won't be able to be built on the planet, 
+        // since there are no corresponding columns in the database for the planet object.
+        $requirements[GID_LEVI_AMOEBA] = [];
+        $requirements[GID_LEVI_GUARDIAN] = [];
+        $requirements[GID_LEVI_JUGGERNAUT] = [];
 
         global $GlobalUser;
         loca_add ("leviathans", $GlobalUser['lang'], __DIR__);
