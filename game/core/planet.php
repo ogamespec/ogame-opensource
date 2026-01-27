@@ -154,7 +154,16 @@ function EnumPlanets () : mixed
 function EnumPlanetsGalaxy (int $g, int $s) : mixed
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND (type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED.") ORDER BY p ASC";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = ".$g." AND s = ".$s." AND (type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED.") ORDER BY p ASC";
+    $result = dbquery ($query);
+    return $result;
+}
+
+// List custom galaxy objects to display on the Galaxy page
+function EnumCustomPlanetsGalaxy (int $g, int $s) : mixed
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = ".$g." AND s = ".$s." AND type >= ".PTYP_CUSTOM." ORDER BY p ASC";
     $result = dbquery ($query);
     return $result;
 }

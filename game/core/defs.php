@@ -28,6 +28,7 @@ const FTYP_MISSILE = 20;        // Missile attack (IPMs)
 const FTYP_ACS_ATTACK_HEAD = 21;    // ACS Attack head (slot = 0)
 const FTYP_RETURN = 100;            // Fleet returns (add this value to any mission)
 const FTYP_ORBITING = 200;          // Fleet is in orbit (add this value to any mission)
+const FTYP_CUSTOM = 1000; 		// If >= this value, then this is some kind of custom task (modification)
 
 // Message types (pm)
 // It so happened that in the early stages of development pm=1 meant that the message was private. When it came time to make filters for the Commander, it was decided not to create a new type column in the table, but to use pm.
@@ -49,6 +50,7 @@ const PTYP_COLONY_PHANTOM = 10002;      // colonization phantom (exists for the 
 const PTYP_DEST_MOON = 10003;           // destroyed moon (deleted by the player)
 const PTYP_ABANDONED = 10004;           // abandoned colony (instead of the buggy "overlib" that was in the vanilla version)
 const PTYP_FARSPACE = 20000;        // infinite distances (for expeditions)
+const PTYP_CUSTOM = 20001; 			// All values >= are considered custom galaxy objects added by mods
 
 // Queue task type
 // For some reason during the development phase, the identifiers were made strings. TODO: Change them to INT type (but this would require a clean reinstall of the Universe)
@@ -125,6 +127,7 @@ const PROD_SHIPYARD_DURATION_FACTOR = 2500;
 const PROD_RESEARCH_DURATION_FACTOR = 1000;
 
 const GALAXY_DEUTERIUM_CONS = 10; 			// Deuterium consumption for viewing the Galaxy
+const GALAXY_PHANTOM_DEBRIS = 300;   		// If the total resource value is < the specified value, then the debris field is not visible in the Galaxy.
 
 const TRADER_DM = 2500; 			// Cost of calling a Merchant
 

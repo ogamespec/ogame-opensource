@@ -264,10 +264,12 @@ function AdjustShips (array $fleet, int $planet_id, string $sign) : void
 {
     global $fleetmap;
     global $db_prefix;
+    $planet = LoadPlanetById ($planet_id);
 
     $query = "UPDATE ".$db_prefix."planets SET ";
     foreach ($fleetmap as $i=>$gid)
     {
+        if (!isset($planet[$gid])) continue;
         if ($i > 0) $query .= ",";
         $query .= "`$gid` = `$gid` $sign " . $fleet[$gid] ;
     }
@@ -1293,7 +1295,10 @@ function IsPlayerInUnion (int $player_id, array $union) : bool
 
 function FleetlogsMissionText (int $num) : void
 {
-    if ($num >= FTYP_ORBITING)
+    if ($num >= FTYP_CUSTOM) {
+        $desc = "(Custom)";
+    }
+    else if ($num >= FTYP_ORBITING)
     {
         $desc = "<a title=\"На планете\">(Д)</a>";
         $num -= FTYP_ORBITING;

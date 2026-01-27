@@ -65,11 +65,6 @@ foreach ($transportableResources as $i=>$rc) {
     $resource[$i+1] = min ( intval($aktplanet[$rc]), abs(intval($_POST['resource'.($i+1)])) );        
 }
 
-foreach ($fleetmap as $i=>$gid)
-{
-    if ( !key_exists("ship$gid", $_POST) ) $_POST["ship$gid"] = 0;
-}
-
 $order = intval($_POST['order']);
 $union_id = 0;
 
@@ -77,10 +72,12 @@ $union_id = 0;
 $fleet = array ();
 foreach ($fleetmap as $i=>$gid) 
 {
-    if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = min ( $aktplanet[$gid], intval($_POST["ship$gid"]) );
-    else $fleet[$gid] = 0;
+    $fleet[$gid] = 0;
+    if (isset($aktplanet[$gid])) {
+        if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = min ( $aktplanet[$gid], intval($_POST["ship$gid"]) );
+    }
 }
-$fleet[GID_F_SAT] = 0;        // solar satellites don't fly.
+$fleet[GID_F_SAT] = 0;        // solar satellites can't fly.
 
 $origin = LoadPlanet ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['thisplanettype']) );
 $target = LoadPlanet ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), intval($_POST['planettype']) );
@@ -312,13 +309,20 @@ else {
 
     // Fleet lock
     $fleetlock = "temp/fleetlock_" . $aktplanet['planet_id'];
-    if ( file_exists ($fleetlock) ) MyGoto ( "flotten1" );
+    if ( file_exists ($fleetlock) ) {
+        $fileCreationTime = filectime($filename);
+        if ((time() - $fileCreationTime) < 3) {
+            MyGoto ( "flotten1" );
+        } else {
+            unlink ( $fleetlock );
+        }
+    }
     $f = fopen ( $fleetlock, 'w' );
     fclose ($f);
 
     $fleet_id = DispatchFleet ( $fleet, $origin, $target, $order, $flighttime, 
         $resources, 
-        $cons['fleet'] + $cons['probes'], time(), $union_id, $hold_time );
+        (int)($cons['fleet'] + $cons['probes']), time(), $union_id, (int)$hold_time );
     $queue = GetFleetQueue ($fleet_id);
 
     UserLog ( $aktplanet['owner_id'], "FLEET", 

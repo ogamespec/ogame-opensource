@@ -58,6 +58,7 @@ $LOCA["it"]["GALAXY_HEAD_PLANET"] = "Pianeta";
 $LOCA["it"]["GALAXY_HEAD_NAME_ACT"] = "Nome (attivit&agrave;)";
 $LOCA["it"]["GALAXY_HEAD_MOON"] = "Luna";
 $LOCA["it"]["GALAXY_HEAD_DF"] = "Detriti";
+$LOCA["it"]["GALAXY_HEAD_OTHER"] = "Altro";
 $LOCA["it"]["GALAXY_HEAD_PLAYER_STATUS"] = "Giocatore (Stato)";
 $LOCA["it"]["GALAXY_HEAD_ALLY"] = "Аlleanza";
 $LOCA["it"]["GALAXY_HEAD_ACTIONS"] = "Azioni";

@@ -311,6 +311,7 @@ $maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );
 
     foreach ($fleetmap as $i=>$gid) {
         
+        if (!isset($aktplanet[$gid])) continue;
         $amount = $aktplanet[$gid];
         if ($amount > 0) {
             $speed = FleetSpeed ($gid, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE]);
