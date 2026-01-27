@@ -35,6 +35,8 @@ class DeepSpaceHorror extends GameMod {
         $query = "ALTER TABLE ".$db_prefix."fleetlogs ADD COLUMN `".GID_LEVI_JUGGERNAUT."` INT DEFAULT 0;";
         dbquery ($query);
 
+        $this->init();
+
         global $GlobalUni;
         loca_add ("leviathans", $GlobalUni['lang'], __DIR__);
 

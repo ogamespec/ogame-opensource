@@ -44,9 +44,9 @@ function TechPrice ( int $id, int $lvl ) : array
     // - In the context of video games, it's called the "experience formula" or "level curve"
 
     $res = array();
-    $factor = $initial[$id]['factor'];
     foreach ($resourcemap as $i=>$rc) {
         if (isset($initial[$id][$rc])) {
+            $factor = $initial[$id]['factor'];
             $res[$rc] = $initial[$id][$rc] * pow($factor, $lvl-1);
         }
         else $res[$rc] = 0;
