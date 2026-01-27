@@ -769,7 +769,7 @@ if ($prem['commander'] && $aktplanet[GID_D_IPM] > 0) {
 }
 // Deuterium is only shown for moons (even without Commander)
 if ($aktplanet['type'] == PTYP_MOON) {
-    $extra_info .= loca("GALAXY_INFO_DEUTERIUM") . nicenum($aktplanet["d"]);
+    $extra_info .= loca("GALAXY_INFO_DEUTERIUM") . nicenum($aktplanet[GID_RC_DEUTERIUM]);
 }
 if ($prem['commander']) {
     $extra_info .= $sep . "<span id='slots'>".$nowfleet."</span>&nbsp;".va(loca("GALAXY_INFO_SLOTS"), $maxfleet);

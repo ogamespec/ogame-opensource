@@ -264,10 +264,12 @@ function AdjustShips (array $fleet, int $planet_id, string $sign) : void
 {
     global $fleetmap;
     global $db_prefix;
+    $planet = LoadPlanetById ($planet_id);
 
     $query = "UPDATE ".$db_prefix."planets SET ";
     foreach ($fleetmap as $i=>$gid)
     {
+        if (!isset($planet[$gid])) continue;
         if ($i > 0) $query .= ",";
         $query .= "`$gid` = `$gid` $sign " . $fleet[$gid] ;
     }
