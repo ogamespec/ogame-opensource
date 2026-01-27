@@ -395,6 +395,7 @@ $speed = $GlobalUni['speed'];
 <?php
     foreach ($fleetmap as $i=>$fleet)
     {
+        if (!isset($planet[$fleet])) continue;
         $sum = 0;
         foreach ( $plist as $j=>$planet ) $sum += $planet[$fleet];
         if ( $sum == 0 ) continue;
@@ -444,6 +445,7 @@ $speed = $GlobalUni['speed'];
 <?php
     foreach ($defmap as $i=>$def)
     {
+        if (!isset($planet[$def])) continue;
         $sum = 0;
         foreach ( $plist as $j=>$planet ) $sum += $planet[$def];
         if ( $sum == 0 ) continue;

@@ -77,10 +77,12 @@ $union_id = 0;
 $fleet = array ();
 foreach ($fleetmap as $i=>$gid) 
 {
-    if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = min ( $aktplanet[$gid], intval($_POST["ship$gid"]) );
-    else $fleet[$gid] = 0;
+    $fleet[$gid] = 0;
+    if (isset($aktplanet[$gid])) {
+        if ( key_exists("ship$gid", $_POST) ) $fleet[$gid] = min ( $aktplanet[$gid], intval($_POST["ship$gid"]) );
+    }
 }
-$fleet[GID_F_SAT] = 0;        // solar satellites don't fly.
+$fleet[GID_F_SAT] = 0;        // solar satellites can't fly.
 
 $origin = LoadPlanet ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['thisplanettype']) );
 $target = LoadPlanet ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), intval($_POST['planettype']) );

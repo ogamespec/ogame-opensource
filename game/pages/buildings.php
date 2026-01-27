@@ -148,6 +148,7 @@ if ( $_GET['mode'] === "Flotte" )
     if ( $aktplanet[GID_B_SHIPYARD] ) {
         // Output the objects that can be built in the Shipyard.
         foreach ( $fleetmap as $i => $id ) {
+            if (!isset($aktplanet[$id])) continue;
             if ( !TechMeetRequirement ( $GlobalUser, $aktplanet, $id ) )
             {
                 if ($aktplanet[$id] <= 0) continue;
@@ -235,6 +236,7 @@ if ( $_GET['mode'] === "Verteidigung" )
     if ( $aktplanet[GID_B_SHIPYARD] ) {
         // Output the objects that can be built in the Shipyard.
         foreach ( $defmap as $i => $id ) {
+            if (!isset($aktplanet[$id])) continue;
             if ( !TechMeetRequirement ( $GlobalUser, $aktplanet, $id ) )
             {
                 if($aktplanet[$id] == 0) continue;

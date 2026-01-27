@@ -28,6 +28,7 @@ const FTYP_MISSILE = 20;        // Missile attack (IPMs)
 const FTYP_ACS_ATTACK_HEAD = 21;    // ACS Attack head (slot = 0)
 const FTYP_RETURN = 100;            // Fleet returns (add this value to any mission)
 const FTYP_ORBITING = 200;          // Fleet is in orbit (add this value to any mission)
+const FTYP_CUSTOM = 1000; 		// If >= this value, then this is some kind of custom task (modification)
 
 // Message types (pm)
 // It so happened that in the early stages of development pm=1 meant that the message was private. When it came time to make filters for the Commander, it was decided not to create a new type column in the table, but to use pm.
