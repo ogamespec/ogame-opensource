@@ -1,7 +1,7 @@
 #pragma once
 
-#define MAX_UNIT_TYPES 256          // Максимальное количество уникальных ID игровых объектов для flatten массивов
-#define GID_MAX 0xFFFF              // ID игрового объекта не может быть больше этого значения (не умещается в uint16_t)
+#define MAX_UNIT_TYPES 256          // Maximum number of unique game object IDs for flattened arrays
+#define GID_MAX 0xFFFF              // The game object ID cannot be greater than this value (does not fit in uint16_t)
 #define RF_MAX 2000                 // Maximum rapidfire value (if > this value, then error)
 #define RF_DICE 10000               // Number of dice faces for a rapid-fire throw (1d`RF_DICE)
 
@@ -16,15 +16,15 @@ typedef struct _TechParam {
 
 typedef struct _UnitCount
 {
-    uint16_t gid;           // ID игрового объекта (флот, оборона, ...)
-    uint32_t count;         // Количество
+    uint16_t gid;           // Game object ID (fleet, defense, ...)
+    uint32_t count;         // Quantity
 } UnitCount;
 
 // Slot data
 typedef struct _Slot
 {
-    UnitCount*  unit;           // Юниты слота (ID + количество юнитов)
-    int         unit_count;     // Количество записей в unit (НЕ количество юнитов, а количество ТИПОВ юнитов)
+    UnitCount*  unit;           // Slot units (ID + number of units)
+    int         unit_count;     // Number of records in `unit` (NOT the number of units, but the number of unit TYPES)
     float       weap, shld, armor;      // Tech
 } Slot;
 
@@ -40,8 +40,8 @@ typedef struct _Unit {
 } Unit;
 
 typedef struct _RFTab {
-    int count;              // количество целей для скорострела (массив to)
-    UnitCount* to;          // Динамически аллоцируемый массив для целей скорострела
+    int count;              // number of targets for rapid fire (array `to`)
+    UnitCount* to;          // Dynamically allocated array for rapid-fire purposes
 } RFTab;
 
 #pragma pack(pop)
@@ -59,17 +59,17 @@ enum {
     BATTLE_ERROR_DATA_LOAD = -4000,                         // Error loading input data
     BATTLE_ERROR_DATA_SAVE = -5000,                         // Error saving output data
     BATTLE_ERROR_RESULT_BUFFER_OVERFLOW = -6000,            // Output data accumulation buffer overflow
-    BATTLE_ERROR_GID_TYPES_OVERFLOW = -7000,            // Количество уникальных ID игровых объектов превысило лимит (> MAX_UNIT_TYPES)
-    BATTLE_ERROR_GID_MAX = -7001,                       // Какой-то ID юнита больше макс. значения (не умещается в тип данных)
-    BATTLE_ERROR_GID_UNKNOWN = -7002,                   // в слотах или параметрах скорострела есть ID юнита, для которого отстутствуют параметры в таблице UnitParam
-    BATTLE_ERROR_MISSING_UNIT_PARAM = -8000,            // отстутсвует таблица с параметрами юнитов
-    BATTLE_ERROR_MISSING_RF_TAB = -8001,                // отсутствует таблица с настройками скорострела 
-    BATTLE_ERROR_PARSE_UNIT_PARAM_NOT_ENOUGH = -9000,       // не хватает значений для парсинга параметров
-    BATTLE_ERROR_PARSE_UNIT_PARAM_NOT_ALIGNED = -9001,      // значение не кратно количеству параметров
-    BATTLE_ERROR_PARSE_UNIT_PARAM_DUPLICATED = -9002,       // дублирование ID
-    BATTLE_ERROR_PARSE_SLOT_NOT_ENOUGH = -10000,            // не хватает данных для слота
-    BATTLE_ERROR_PARSE_SLOT_NOT_ALIGNED = -10001,           // не выровненные значения в слоте
-    BATTLE_ERROR_PARSE_RF_NOT_ALIGNED = -11000,         // данные скорострела не выровнены
-    BATTLE_ERROR_PARSE_RF_NOT_ENOUGH = -11001,          // недостаточно данных для заполнение очередной записи скорострела
-    BATTLE_ERROR_PARSE_RF_MALFORMED = -11002,           // количество целей для скорострела больше чем известных игровых объектов (ID); значение скорострела > RF_MAX
+    BATTLE_ERROR_GID_TYPES_OVERFLOW = -7000,            // The number of unique game object IDs has exceeded the limit (> MAX_UNIT_TYPES)
+    BATTLE_ERROR_GID_MAX = -7001,                       // Some unit ID is greater than the max value (does not fit into the data type)
+    BATTLE_ERROR_GID_UNKNOWN = -7002,                   // The rapid-fire slots or parameters contain a unit ID for which there are no parameters in the UnitParam table
+    BATTLE_ERROR_MISSING_UNIT_PARAM = -8000,            // There is no table with unit parameters
+    BATTLE_ERROR_MISSING_RF_TAB = -8001,                // There is no table with the rapid-fire settings 
+    BATTLE_ERROR_PARSE_UNIT_PARAM_NOT_ENOUGH = -9000,       // not enough values to parse parameters
+    BATTLE_ERROR_PARSE_UNIT_PARAM_NOT_ALIGNED = -9001,      // the value is not a multiple of the number of parameters
+    BATTLE_ERROR_PARSE_UNIT_PARAM_DUPLICATED = -9002,       // ID duplication
+    BATTLE_ERROR_PARSE_SLOT_NOT_ENOUGH = -10000,            // not enough data for the slot
+    BATTLE_ERROR_PARSE_SLOT_NOT_ALIGNED = -10001,           // misaligned values in the slot
+    BATTLE_ERROR_PARSE_RF_NOT_ALIGNED = -11000,         // the rapid fire data is not aligned
+    BATTLE_ERROR_PARSE_RF_NOT_ENOUGH = -11001,          // insufficient data to complete another rapid-fire entry
+    BATTLE_ERROR_PARSE_RF_MALFORMED = -11002,           // The number of targets for rapid fire is greater than the number of known game objects (ID); the rapid fire value is > RF_MAX
 };

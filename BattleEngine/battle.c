@@ -18,17 +18,17 @@ Format (after unserialize() transformation):
 
 Array (
    'battle_seed' => Initial seed for RNG
-   'peak_allocated' => Сколько памяти скушало в пике
+   'peak_allocated' => How much memory did it consume during the peak
    'result' => 'awon' (The attacker won), 'dwon' (The defender won), 'draw' (Draw)
 
    'before' => Array (  // The fleets before the battle
             'attackers' => Array (    // attacker slots
-                  [0] => Array ( 'id'=>100002, 'weap' => 10.0, 'shld' => 11.0, 'armr' => 12.0, 202=>5, 203=>6, ... ),   // fleets
+                  [0] => Array ( weap' => 10.0, 'shld' => 11.0, 'armr' => 12.0, 'units' => Array (202=>5, 203=>6, ...) ),   // units
                   [1] => Array ( ... )
             )
 
             'defenders' => Array (    // defenders' slots
-                  [0] => Array ( 'id'=>100006, 'weap' => 10.0, 'shld' => 11.0, 'armr' => 12.0, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // fleets and defenses
+                  [0] => Array ( weap' => 10.0, 'shld' => 11.0, 'armr' => 12.0, 'units' => Array (202=>5, 203=>6, ..., 401=>5, 402=>44) ),   // units
                   [1] => Array ( ... )
             )
 
@@ -45,12 +45,12 @@ Array (
             'aabsorb' => The attacker's shields absorb 355.453
 
             'attackers' => Array (    // attacker slots
-                  [0] => Array ( 'id'=>100002, 202=>5, 203=>6, ... ),   // fleets
+                  [0] => Array ( 202=>5, 203=>6, ... ),   // units
                   [1] => Array ( ... )
             )
 
             'defenders' => Array (    // defenders' slots
-                  [0] => Array ( 'id'=>100006, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // fleets and defenses
+                  [0] => Array ( 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // units
                   [1] => Array ( ... )
             )
 
@@ -71,12 +71,12 @@ RFTab RF[MAX_UNIT_TYPES];
 uint64_t peak_allocated_round;
 uint64_t peak_allocated_all_rounds;
 
-// Flatten массивы используются для быстрого преобразования ID игрового объекта в ординал.
-// Проблематика: имеем на входе ID объектов вида 202, 401, 12000.
-// Сплющиваем все ID в массив: [0] = 202, [1] = 401, [2] = 12000.
-// flatten_array используется для получения ординала по ID (12000 -> 2)
-// unflatten_array используется для получения ID по ординалу (2 -> 12000)
-// flatten_counter содержит общее количество "сплющенных" ID  (3 в данном примере)
+// Flatten arrays are used to quickly convert a game object ID to an ordinal.
+// Problem: we have at the input object IDs of the type 202, 401, 12000.
+// We flatten all IDs into an array: [0] = 202, [1] = 401, [2] = 12000.
+// flatten_array is used to get the ordinal by ID (12000 -> 2)
+// unflatten_array is used to get ID by ordinal (2 -> 12000)
+// flatten_counter contains the total number of flattened IDs (3 in this example) - aka number of known IDs
 
 uint8_t flatten_array[0x10000];
 uint16_t unflatten_array[MAX_UNIT_TYPES];
@@ -105,20 +105,12 @@ void FlattenId(uint16_t id) {
 
 // ==========================================================================================
 
-/**
- * Аналог PHP explode() на чистом C
- *
- * @param delimiter Разделитель строк
- * @param str Строка для разделения
- * @param count Указатель на переменную для хранения количества подстрок
- * @return Динамический массив строк (нужно освободить память с помощью free_explode_result)
- */
 char** explode(const char delimiter, const char* str, int* count) {
     if (!str || !count) {
         return NULL;
     }
 
-    // Подсчитываем количество подстрок
+    // Counting the number of substrings
     *count = 1;
     for (const char* p = str; *p; p++) {
         if (*p == delimiter) {
@@ -126,30 +118,30 @@ char** explode(const char delimiter, const char* str, int* count) {
         }
     }
 
-    // Выделяем память для массива указателей
+    // Allocating memory for an array of pointers
     char** result = (char**)malloc(*count * sizeof(char*));
     if (!result) {
         return NULL;
     }
 
-    // Выделяем память для всех строк одним блоком
+    // We allocate memory for all rows in one block
     size_t str_len = strlen(str);
-    char* storage = (char*)malloc(str_len + *count); // +count для нулевых символов
+    char* storage = (char*)malloc(str_len + *count); // +count for null characters
     if (!storage) {
         free(result);
         return NULL;
     }
 
-    // Копируем исходную строку для работы с ней
+    // Copy the original string to work with it
     strcpy(storage, str);
 
-    // Разделяем строку
+    // Split the string
     int index = 0;
     char* token = storage;
 
     for (size_t i = 0; i <= str_len; i++) {
         if (storage[i] == delimiter || storage[i] == '\0') {
-            storage[i] = '\0'; // Заменяем разделитель на нулевой символ
+            storage[i] = '\0'; // Replace the separator with a null character
             result[index++] = token;
             token = &storage[i + 1];
         }
@@ -158,14 +150,12 @@ char** explode(const char delimiter, const char* str, int* count) {
     return result;
 }
 
-/**
- * Освобождение памяти, выделенной explode()
- */
+// Freeing memory allocated by explode()
 void free_explode_result(char** result) {
     if (!result) return;
 
-    // все строки хранятся в одном блоке памяти
-    // который является первым элементом массива
+    // all lines are stored in one memory block
+    // which is the first element of the array
     if (result[0]) {
         free(result[0]);
     }
@@ -571,7 +561,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
         if (fastdraw) { rounds ++; break; }
     }
 
-    // До 99 раундов
+    // Up to 99 rounds
     char patch[10];
     sprintf(patch, "%02i", rounds);
     round_patch[0] = patch[0];
@@ -611,13 +601,13 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
 Input data format.
 The input data contains the initial parameters of the battle in text format. For ease of parsing in C, the values are represented in the "key = value" format.
 
-MaxRound = 6            макс. количество раундов
+MaxRound = 6            max number of rounds
 Rapidfire = 1
-RFTab = 202 2 210 5 212 5 ...           вначале идёт ID юнита который делает скорострел, потом количество пар. затем следуют пары значений: ID юнита по которому делается выстрел и значение скорострела; Если скорострел отключен можно не указывать эту таблицу
-UnitParam = 202 4000 10 5 5000 5000 10 ...  значения идут 7-значными пачками. первое значение ID, затем 6 параметров юнита (см. TechParam)
+RFTab = 202 2 210 5 212 5 ...           First comes the ID of the unit that is performing the rapid-fire, then the number of pairs. Then follow the pairs of values: the ID of the unit being shot and the rapid-fire value; if rapid-fire is disabled, you can omit this table.
+UnitParam = 202 4000 10 5 5000 5000 10 ...  The values come in 7-value batches. The first value is the ID, then 6 unit parameters (see TechParam)
 Attackers = N
 Defenders = M
-AttackerN = WEAP SHLD ARMR 202 MT 203 BT 204 LF 205 HF ...  вначале идут значения атака(float), щиты(float), броня(float), затем следуют пары значенй ID юнита+количество юнитов
+AttackerN = WEAP SHLD ARMR 202 MT 203 BT 204 LF 205 HF ...  First come the values of attack (float), shields (float), armor (float), then come the pairs of values of unit ID + number of units
 DefenderM = WEAP SHLD ARMR 202 MT 203 BT 204 LF 205 HF ...
 
 */
@@ -641,7 +631,7 @@ char* extract_payload(char* lp) {
     return text;
 }
 
-// ID WEAP SHLD ARMR 202 MT 203 BT 204 LF 205 HF ...
+// WEAP SHLD ARMR 202 MT 203 BT 204 LF 205 HF ...
 int ParseSlot(Slot* slot, char* lp)
 {
     char* text = extract_payload(lp);
@@ -651,7 +641,7 @@ int ParseSlot(Slot* slot, char* lp)
     char** argv = explode(' ', text, &argc);
     free(text);
 
-    // Должно быть хотя бы 3 поля для атака/щиты/броня и ещё как минимум 2 для какого-то объекта и его количества
+    // There must be at least 3 fields for attack/shields/armor and at least 2 more for some object and its quantity
 
     int pc = 0;
     if (argc < 5) return BATTLE_ERROR_PARSE_SLOT_NOT_ENOUGH;
@@ -703,12 +693,12 @@ int ParseUnitParam(char* lp)
     free(text);
 
     int params_per_unit = 1 + 6;
-    // Должен быть хотя бы 1 набор параметров 
+    // There must be at least 1 set of parameters
     if (argc < params_per_unit) {
         free_explode_result(argv);
         return BATTLE_ERROR_PARSE_UNIT_PARAM_NOT_ENOUGH;
     }
-    // Параметры должны быть кратны 
+    // Parameters must be multiples
     if (argc % params_per_unit != 0) {
         free_explode_result(argv);
         return BATTLE_ERROR_PARSE_UNIT_PARAM_NOT_ALIGNED;
@@ -761,7 +751,7 @@ int SetRapidfire(int enable, char* rftab) {
         char** argv = explode(' ', text, &argc);
         free(text);
 
-        // Записи идут парами
+        // The entries come in pairs.
         if (argc % 2 != 0) {
             free_explode_result(argv);
             return BATTLE_ERROR_PARSE_RF_NOT_ALIGNED;
