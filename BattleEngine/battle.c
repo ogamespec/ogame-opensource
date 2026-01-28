@@ -194,17 +194,17 @@ TechParam* GetUnitParam(uint16_t id)
     return &UnitParam[ord];
 }
 
-int32_t hullmax(uint16_t id, Slot* slot) {
+int32_t get_hullmax(uint16_t id, Slot* slot) {
     TechParam* techParam = GetUnitParam(id);
     return techParam->structure * 0.1f * (10 + slot->armor) / 10;
 }
 
-int32_t shieldmax(uint16_t id, Slot* slot) {
+int32_t get_shieldmax(uint16_t id, Slot* slot) {
     TechParam* techParam = GetUnitParam(id);
     return techParam->shield * (10 + slot->shld) / 10;
 }
 
-int32_t apower(uint16_t id, Slot* slot) {
+int32_t get_apower(uint16_t id, Slot* slot) {
     TechParam* techParam = GetUnitParam(id);
     return techParam->attack * (10 + slot->weap) / 10;
 }
@@ -225,7 +225,7 @@ Unit *InitBattle (Slot *slot, int num, int objs)
         for (n=0; n<slot[i].unit_count; n++)
         {
             for (obj=0; obj<slot[i].unit[n].count; obj++) {
-                u[ucnt].hull = hullmax (slot[i].unit[n].gid, &slot[i]);
+                u[ucnt].hull = get_hullmax (slot[i].unit[n].gid, &slot[i]);
                 u[ucnt].obj_type = slot[i].unit[n].gid;
                 u[ucnt].slot_id = slot_id;
                 ucnt++;
@@ -241,41 +241,41 @@ Unit *InitBattle (Slot *slot, int num, int objs)
 long UnitShoot (Unit *a, Slot* aslot, Unit *b, Slot* bslot, uint64_t *absorbed )
 {
     float prc, depleted;
-    long apow, adelta = 0, b_shieldmax, b_hullmax;
-    apow = apower(a->obj_type, &aslot[a->slot_id]);
+    long apower, adelta = 0, b_shieldmax, b_hullmax;
+    apower = get_apower(a->obj_type, &aslot[a->slot_id]);
 
-    if (b->exploded) return apow; // Already blown up.
+    if (b->exploded) return apower; // Already blown up.
     if (b->shield == 0) {  // No shields.
-        if (apow >= b->hull) b->hull = 0;
-        else b->hull -= apow;
+        if (apower >= b->hull) b->hull = 0;
+        else b->hull -= apower;
     }
     else { // We take away from shields, and if there is enough damage, from armor as well.
 
-        b_shieldmax = shieldmax(b->obj_type, &bslot[b->slot_id]);
+        b_shieldmax = get_shieldmax(b->obj_type, &bslot[b->slot_id]);
 
         prc = (float)b_shieldmax * 0.01f;
-        depleted = (float)floor ((float)apow / prc);
+        depleted = (float)floor ((float)apower / prc);
         if (b->shield < (depleted * prc)) {
             *absorbed += (uint64_t)b->shield;
-            adelta = apow - b->shield;
+            adelta = apower - b->shield;
             if (adelta >= b->hull) b->hull = 0;
             else b->hull -= adelta;
             b->shield = 0;
         }
         else {
             b->shield -= depleted * prc;
-            *absorbed += (uint64_t)apow;
+            *absorbed += (uint64_t)apower;
         }
     }
 
-    b_hullmax = hullmax(b->obj_type, &bslot[b->slot_id]);
+    b_hullmax = get_hullmax(b->obj_type, &bslot[b->slot_id]);
 
     if (b->hull <= b_hullmax * 0.7 && b->shield == 0) {    // Blow it up.
         if (MyRand (0, 99) >= ((b->hull * 100) / b_hullmax) || b->hull == 0) {
             b->exploded = 1;
         }
     }
-    return apow;
+    return apower;
 }
 
 // Clean up blown up ships and defenses. Returns the number of units blown up.
@@ -302,16 +302,16 @@ int WipeExploded (Unit **slot, int amount, int *exploded_count)
 int CheckFastDraw (Unit *aunits, int aobjs, Slot* aslot, Unit *dunits, int dobjs, Slot* dslot)
 {
     int i;
-    long hullm;
+    long hullmax;
     for (i=0; i<aobjs; i++) {
-        hullm = hullmax(aunits[i].obj_type, &aslot[aunits[i].slot_id]);
+        hullmax = get_hullmax(aunits[i].obj_type, &aslot[aunits[i].slot_id]);
 
-        if (aunits[i].hull != hullm) return 0;
+        if (aunits[i].hull != hullmax) return 0;
     }
     for (i=0; i<dobjs; i++) {
-        hullm = hullmax(dunits[i].obj_type, &dslot[dunits[i].slot_id]);
+        hullmax = get_hullmax(dunits[i].obj_type, &dslot[dunits[i].slot_id]);
 
-        if (dunits[i].hull != hullm) return 0;
+        if (dunits[i].hull != hullmax) return 0;
     }
     return 1;
 }
@@ -347,10 +347,8 @@ static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, S
         }
     }
 
-    int array_size = unique_gids + techs * 3 + 1;
+    int array_size = unique_gids + techs * 3;
     ptr += sprintf ( ptr, "i:%i;a:%i:{", slot, array_size);
-
-    ptr += sprintf (ptr, "s:2:\"id\";i:%i;", s[slot].id );
 
     if ( techs ) {
         ptr += sprintf (ptr, "s:4:\"weap\";d:%f;", s[slot].weap );
@@ -369,65 +367,25 @@ static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, S
     return ptr;
 }
 
-// Check the possibility of re-firing. Original unit IDs are used for convenience
-static int RapidFire (int atyp, int dtyp)
-{
-    int rapidfire = 0;
+static int RapidFire(int atyp, int dtyp) {
 
-    if ( atyp > 400 ) return 0;
+    int rf = 0;
 
-    // Deathstar vs Espionage Probe/Solar Satellite
-    if (atyp==214 && (dtyp==210 || dtyp==212) && MyRand(1,10000)>8) rapidfire = 1;
-    // Other units vs Espionage Probe/Solar Satellite
-    else if (atyp!=210 && (dtyp==210 || dtyp==212) && MyRand(1,100)>20) rapidfire = 1;
-    // Heavy Fighter vs Small Cargo
-    else if (atyp==205 && dtyp==202 && MyRand(1,100)>33) rapidfire = 1;
-    // Cruiser vs Light Fighter
-    else if (atyp==206 && dtyp==204 && MyRand(1,1000)>166) rapidfire = 1;
-    // Cruiser vs Rocket Launcher
-    else if (atyp==206 && dtyp==401 && MyRand(1,100)>10) rapidfire = 1;
-    // Bomber vs light defense
-    else if (atyp==211 && (dtyp==401 || dtyp==402) && MyRand(1,100)>20) rapidfire = 1;
-    // Bomber vs medium defense
-    else if (atyp==211 && (dtyp==403 || dtyp==405) && MyRand(1,100)>10) rapidfire = 1;
-    // Destroyer vs Battlecruiser
-    else if (atyp==213 && dtyp==215 && MyRand(1,100)>50) rapidfire = 1;
-    // Destroyer vs Light Laser
-    else if (atyp==213 && dtyp==402 && MyRand(1,100)>10) rapidfire = 1;
-    // Battlecruiser vs transport
-    else if (atyp==215 && (dtyp==202 || dtyp==203) && MyRand(1,100)>20) rapidfire = 1;
-    // Battlecruiser vs medium fleet
-    else if (atyp==215 && (dtyp==205 || dtyp==206) && MyRand(1,100)>25) rapidfire = 1;
-    // Battlecruiser vs Battleship
-    else if (atyp==215 && dtyp==207 && MyRand(1,1000)>143) rapidfire = 1;
-    // Deathstar vs civilian fleet
-    else if (atyp==214 && (dtyp==202 || dtyp==203 || dtyp==208 || dtyp==209) && MyRand(1,1000)>4) rapidfire = 1;
-    // Deathstar vs Light Fighter
-    else if (atyp==214 && dtyp==204 && MyRand(1,1000)>5) rapidfire = 1;
-    // Deathstar vs Heavy Fighter
-    else if (atyp==214 && dtyp==205 && MyRand(1,1000)>10) rapidfire = 1;
-    // Deathstar vs Cruiser
-    else if (atyp==214 && dtyp==206 && MyRand(1,1000)>30) rapidfire = 1;
-    // Deathstar vs Battleship
-    else if (atyp==214 && dtyp==207 && MyRand(1,1000)>33) rapidfire = 1;
-    // Deathstar vs Bomber
-    else if (atyp==214 && dtyp==211 && MyRand(1,1000)>40) rapidfire = 1;
-    // Deathstar vs Destroyer
-    else if (atyp==214 && dtyp==213 && MyRand(1,1000)>200) rapidfire = 1;
-    // Deathstar vs Battlecruiser
-    else if (atyp==214 && dtyp==215 && MyRand(1,1000)>66) rapidfire = 1;
-    // Deathstar vs light defense
-    else if (atyp==214 && (dtyp==401 || dtyp==402) && MyRand(1,1000)>5) rapidfire = 1;
-    // Deathstar vs medium defense
-    else if (atyp==214 && (dtyp==403 || dtyp==405) && MyRand(1,1000)>10) rapidfire = 1;
-    // Deathstar vs heavy defense
-    else if (atyp==214 && dtyp==404 && MyRand(1,1000)>20) rapidfire = 1;
+    uint8_t aord = IdToOrd(atyp);
 
-    return rapidfire;
-}
+    RFTab* rftab = &RF[aord];
+    if (rftab->count) {
+        for (int i = 0; i < rftab->count; i++) {
+            if (rftab->to[i].gid == dtyp && rftab->to[i].count) {
+                int rnd = MyRand(1, RF_DICE);
+                int cmp = RF_DICE / rftab->to[i].count;
+                rf = rnd > cmp ? 1 : 0;
+                break;
+            }
+        }
+    }
 
-static int TableDrivenRapidFire(int atyp, int dtyp) {
-    return RapidFire(atyp, dtyp);
+    return rf;
 }
 
 int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, int max_round)
@@ -502,11 +460,11 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
         // Charge shields.
         for (i=0; i<aobjs; i++) {
             if (aunits[i].exploded) aunits[i].shield = 0;
-            else aunits[i].shield = shieldmax(aunits[i].obj_type, &a[aunits[i].slot_id]);
+            else aunits[i].shield = get_shieldmax(aunits[i].obj_type, &a[aunits[i].slot_id]);
         }
         for (i=0; i<dobjs; i++) {
             if (dunits[i].exploded) dunits[i].shield = 0;
-            else dunits[i].shield = shieldmax(dunits[i].obj_type, &d[dunits[i].slot_id]);
+            else dunits[i].shield = get_shieldmax(dunits[i].obj_type, &d[dunits[i].slot_id]);
         }
 
         // Fire shots.
@@ -527,7 +485,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
                         dtyp = dunits[idx].obj_type;
 
                         if (Rapidfire == 0) rapidfire = 0;
-                        else rapidfire = TableDrivenRapidFire(atyp, dtyp);
+                        else rapidfire = RapidFire(atyp, dtyp);
                     }
                 }
             }
@@ -655,12 +613,12 @@ The input data contains the initial parameters of the battle in text format. For
 
 MaxRound = 6            макс. количество раундов
 Rapidfire = 1
-RFTab = 202 2 210 5 212 5 ...           вначале идёт ID юнита который делает скорострел, потом количество пар. затем следуют пары значений: ID юнита по которому делается выстрел и значение скорострела
+RFTab = 202 2 210 5 212 5 ...           вначале идёт ID юнита который делает скорострел, потом количество пар. затем следуют пары значений: ID юнита по которому делается выстрел и значение скорострела; Если скорострел отключен можно не указывать эту таблицу
 UnitParam = 202 4000 10 5 5000 5000 10 ...  значения идут 7-значными пачками. первое значение ID, затем 6 параметров юнита (см. TechParam)
 Attackers = N
 Defenders = M
-AttackerN = ID WEAP SHLD ARMR 202 MT 203 BT 204 LF 205 HF ...  вначале идут значения ID флота, атака(float), щиты(float), броня(float), затем следуют пары значенй ID юнита+количество юнитов
-DefenderM = ID WEAP SHLD ARMR 202 MT 203 BT 204 LF 205 HF ...
+AttackerN = WEAP SHLD ARMR 202 MT 203 BT 204 LF 205 HF ...  вначале идут значения атака(float), щиты(float), броня(float), затем следуют пары значенй ID юнита+количество юнитов
+DefenderM = WEAP SHLD ARMR 202 MT 203 BT 204 LF 205 HF ...
 
 */
 
@@ -693,12 +651,11 @@ int ParseSlot(Slot* slot, char* lp)
     char** argv = explode(' ', text, &argc);
     free(text);
 
-    // Должно быть хотя бы 4 поля для ID/атака/щиты/броня и ещё как минимум 2 для какого-то объекта и его количества
+    // Должно быть хотя бы 3 поля для атака/щиты/броня и ещё как минимум 2 для какого-то объекта и его количества
 
     int pc = 0;
-    if (argc < 6) return BATTLE_ERROR_PARSE_SLOT_NOT_ENOUGH;
+    if (argc < 5) return BATTLE_ERROR_PARSE_SLOT_NOT_ENOUGH;
 
-    slot->id = atoi(argv[pc++]);
     slot->weap = (float)atof(argv[pc++]);
     slot->shld = (float)atof(argv[pc++]);
     slot->armor = (float)atof(argv[pc++]);
@@ -856,7 +813,12 @@ int SetRapidfire(int enable, char* rftab) {
                         return BATTLE_ERROR_GID_UNKNOWN;
                     }
                     RF[ord].to[i].gid = gid;
-                    RF[ord].to[i].count = atoi(argv[pc++]); args_left--;
+                    int count = atoi(argv[pc++]); args_left--;
+                    if (count > RF_MAX) {
+                        free_explode_result(argv);
+                        return BATTLE_ERROR_PARSE_RF_MALFORMED;
+                    }
+                    RF[ord].to[i].count = count;
                 }
             }
         }

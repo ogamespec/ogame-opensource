@@ -2,6 +2,8 @@
 
 #define MAX_UNIT_TYPES 256          // Максимальное количество уникальных ID игровых объектов для flatten массивов
 #define GID_MAX 0xFFFF              // ID игрового объекта не может быть больше этого значения (не умещается в uint16_t)
+#define RF_MAX 2000                 // Maximum rapidfire value (if > this value, then error)
+#define RF_DICE 10000               // Number of dice faces for a rapid-fire throw (1d`RF_DICE)
 
 typedef struct _TechParam {
     int     structure;
@@ -22,9 +24,8 @@ typedef struct _UnitCount
 typedef struct _Slot
 {
     UnitCount*  unit;           // Юниты слота (ID + количество юнитов)
-    int         unit_count;     // Количество записей в unit
+    int         unit_count;     // Количество записей в unit (НЕ количество юнитов, а количество ТИПОВ юнитов)
     float       weap, shld, armor;      // Tech
-    int         id;                     // ID флота для ассоциативной привязки к слоту
 } Slot;
 
 #pragma pack(push, 1)
@@ -70,5 +71,5 @@ enum {
     BATTLE_ERROR_PARSE_SLOT_NOT_ALIGNED = -10001,           // не выровненные значения в слоте
     BATTLE_ERROR_PARSE_RF_NOT_ALIGNED = -11000,         // данные скорострела не выровнены
     BATTLE_ERROR_PARSE_RF_NOT_ENOUGH = -11001,          // недостаточно данных для заполнение очередной записи скорострела
-    BATTLE_ERROR_PARSE_RF_MALFORMED = -11002,           // количество целей для скорострела больше чем известных игровых объектов (ID)
+    BATTLE_ERROR_PARSE_RF_MALFORMED = -11002,           // количество целей для скорострела больше чем известных игровых объектов (ID); значение скорострела > RF_MAX
 };
