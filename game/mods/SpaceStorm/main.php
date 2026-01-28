@@ -204,7 +204,7 @@ class SpaceStorm extends GameMod {
         $storm = $this->GetStorm();
         if ($id == GID_B_REALITY_STAB && $storm != 0) {
             $demolish = $queue['type'] === QTYP_DEMOLISH;
-            $planet = GetPlanet ( $planet_id );
+            $planet = LoadPlanetById ( $planet_id );
             $mask = $planet['s'.GID_B_REALITY_STAB];
             if ($demolish) $mask &= ~$storm;
             else $mask |= $storm;

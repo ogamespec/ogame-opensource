@@ -134,6 +134,6 @@ const TRADER_DM = 2500;             // Cost of calling a Merchant
 const MAX_PLANET = 9;           // Maximum number of planets a player can own (home + colonies), not greater (<= this value)
 
 const RF_MAX = 2000;            // Maximum rapidfire value (if > this value, then error)
-сщтые RF_DICE = 10000;          // Number of dice faces for a rapid-fire throw (1d`RF_DICE)
+const RF_DICE = 10000;          // Number of dice faces for a rapid-fire throw (1d`RF_DICE)
 
 ?>
