@@ -39,14 +39,14 @@ typedef struct _Unit {
 } Unit;
 
 typedef struct _RFTab {
-    UnitCount from;             // ID юнита который производит скорострел и количество целей для него
-    UnitCount* to;              // Динамически аллоцируемый массив для целей скорострела
+    int count;              // количество целей для скорострела (массив to)
+    UnitCount* to;          // Динамически аллоцируемый массив для целей скорострела
 } RFTab;
 
 #pragma pack(pop)
 
 extern TechParam UnitParam[MAX_UNIT_TYPES];
-extern RFTab RF;
+extern RFTab RF[MAX_UNIT_TYPES];
 
 // Battle Engine Errors.
 // Little attention has been paid to them in the past, you need to screw up various checks, it's a key and crucial part of the game.
@@ -60,7 +60,7 @@ enum {
     BATTLE_ERROR_RESULT_BUFFER_OVERFLOW = -6000,            // Output data accumulation buffer overflow
     BATTLE_ERROR_GID_TYPES_OVERFLOW = -7000,            // Количество уникальных ID игровых объектов превысило лимит (> MAX_UNIT_TYPES)
     BATTLE_ERROR_GID_MAX = -7001,                       // Какой-то ID юнита больше макс. значения (не умещается в тип данных)
-    BATTLE_ERROR_GID_UNKNOWN = -7002,                   // в слотах есть ID юнита, для которого отстутствуют параметры в таблице UnitParam
+    BATTLE_ERROR_GID_UNKNOWN = -7002,                   // в слотах или параметрах скорострела есть ID юнита, для которого отстутствуют параметры в таблице UnitParam
     BATTLE_ERROR_MISSING_UNIT_PARAM = -8000,            // отстутсвует таблица с параметрами юнитов
     BATTLE_ERROR_MISSING_RF_TAB = -8001,                // отсутствует таблица с настройками скорострела 
     BATTLE_ERROR_PARSE_UNIT_PARAM_NOT_ENOUGH = -9000,       // не хватает значений для парсинга параметров
@@ -68,4 +68,7 @@ enum {
     BATTLE_ERROR_PARSE_UNIT_PARAM_DUPLICATED = -9002,       // дублирование ID
     BATTLE_ERROR_PARSE_SLOT_NOT_ENOUGH = -10000,            // не хватает данных для слота
     BATTLE_ERROR_PARSE_SLOT_NOT_ALIGNED = -10001,           // не выровненные значения в слоте
+    BATTLE_ERROR_PARSE_RF_NOT_ALIGNED = -11000,         // данные скорострела не выровнены
+    BATTLE_ERROR_PARSE_RF_NOT_ENOUGH = -11001,          // недостаточно данных для заполнение очередной записи скорострела
+    BATTLE_ERROR_PARSE_RF_MALFORMED = -11002,           // количество целей для скорострела больше чем известных игровых объектов (ID)
 };

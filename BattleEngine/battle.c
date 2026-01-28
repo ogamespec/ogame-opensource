@@ -66,7 +66,7 @@ char ResultBuffer[64*1024];     // Output data buffer
 int Rapidfire = 1;  // 1: enable rapidfire
 
 TechParam UnitParam[MAX_UNIT_TYPES];
-RFTab RF;
+RFTab RF[MAX_UNIT_TYPES];
 
 uint64_t peak_allocated_round;
 uint64_t peak_allocated_all_rounds;
@@ -796,8 +796,91 @@ int SetRapidfire(int enable, char* rftab) {
     memset(&RF, 0, sizeof(RFTab));
     if (Rapidfire) {
         // Setup rapidfire table
+
+        char* text = extract_payload(rftab);
+        if (!text) return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
+
+        int argc = 0;
+        char** argv = explode(' ', text, &argc);
+        free(text);
+
+        // Записи идут парами
+        if (argc % 2 != 0) {
+            free_explode_result(argv);
+            return BATTLE_ERROR_PARSE_RF_NOT_ALIGNED;
+        }
+
+        int pc = 0;
+        int args_left = argc;
+
+        while (args_left) {
+
+            int gid = atoi(argv[pc++]); args_left--;
+            if (gid > GID_MAX) {
+                free_explode_result(argv);
+                return BATTLE_ERROR_GID_MAX;
+            }
+            if (!IsFlattened(gid)) {
+                free_explode_result(argv);
+                return BATTLE_ERROR_GID_UNKNOWN;
+            }
+            int num_targets = atoi(argv[pc++]); args_left--;
+            if (num_targets > flatten_counter) {
+                free_explode_result(argv);
+                return BATTLE_ERROR_PARSE_RF_MALFORMED;
+            }
+            if (args_left < (num_targets * 2)) {
+                free_explode_result(argv);
+                return BATTLE_ERROR_PARSE_RF_NOT_ENOUGH;
+            }
+            int ord = IdToOrd(gid);
+
+            RF[ord].count = num_targets;
+
+            if (num_targets != 0) {
+                RF[ord].to = malloc(sizeof(UnitCount) * num_targets);
+                if (!RF[ord].to) {
+                    free_explode_result(argv);
+                    return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
+                }
+
+                for (int i = 0; i < num_targets; i++) {
+
+                    gid = atoi(argv[pc++]); args_left--;
+                    if (gid > GID_MAX) {
+                        free_explode_result(argv);
+                        return BATTLE_ERROR_GID_MAX;
+                    }
+                    if (!IsFlattened(gid)) {
+                        free_explode_result(argv);
+                        return BATTLE_ERROR_GID_UNKNOWN;
+                    }
+                    RF[ord].to[i].gid = gid;
+                    RF[ord].to[i].count = atoi(argv[pc++]); args_left--;
+                }
+            }
+        }
+
+        free_explode_result(argv);
     }
     return 0;
+}
+
+void DumpRFTab() {
+
+    printf("$RapidFire = array (\n");
+    for (int i = 0; i < flatten_counter; i++) {
+
+        int gid = OrdToId(i);
+        printf("  %i => array ( ", gid);
+        RFTab* rf = &RF[i];
+        for (int t = 0; t < rf->count; t++) {
+            printf("%i => %i, ", rf->to[t].gid, rf->to[t].count);
+        }
+        printf("),\n");
+
+    }
+    printf(")\n");
 }
 
 int StartBattle (char *text, int battle_id, unsigned long battle_seed)
@@ -913,6 +996,7 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
     if (res < 0) {
         goto exit_with_result;
     }
+    //DumpRFTab();
     
     // **** START BATTLE ****
     peak_allocated_round = 0;
@@ -939,8 +1023,10 @@ exit_with_result:
         free(d);
     }
 
-    if (RF.to) {
-        free(RF.to);
+    for (int i = 0; i < flatten_counter; i++) {
+        if (RF[i].to) {
+            free(RF[i].to);
+        }
     }
 
     // Write down the results
