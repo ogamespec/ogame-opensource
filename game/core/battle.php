@@ -641,12 +641,37 @@ function GenBattleSourceData (array $a, array $d, int $rf, int $fid, int $did) :
     global $fleetmap;
     global $defmap;
     global $rakmap;
+    global $UnitParam;
+    global $RapidFire;
     $defmap_norak = array_diff($defmap, $rakmap);
 
     $source = "";
+    $source .= "MaxRound = 6\n";
     $source .= "Rapidfire = $rf\n";
+
+    if ($rf) {
+        $source .= "RFTab =";
+        foreach ($RapidFire as $gid=>$targets) {
+            $target_num = count ($targets);
+            $source .= " " . $gid . " " . $target_num;
+            foreach ($targets as $target_id=>$count) {
+                $source .= " " . $target_id . " " . $count;
+            }
+        }
+        $source .= "\n";
+    }
+
     $source .= "FID = $fid\n";
     $source .= "DID = $did\n";
+
+    $source .= "UnitParam =";
+    foreach ($UnitParam as $gid=>$param) {
+        $source .= " " . $gid;
+        foreach ($param as $i=>$val) {
+            $source .= " " . $val;
+        }
+    }
+    $source .= "\n";
 
     $anum = count ($a);
     $dnum = count ($d);

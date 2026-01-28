@@ -7,6 +7,8 @@
 #include <time.h>
 #include <math.h>
 #include "battle.h"
+#include "file.h"
+#include "rand.h"
 
 /*
 Output data format
@@ -16,19 +18,18 @@ Format (after unserialize() transformation):
 
 Array (
    'battle_seed' => Initial seed for RNG
+   'peak_allocated' => Сколько памяти скушало в пике
    'result' => 'awon' (The attacker won), 'dwon' (The defender won), 'draw' (Draw)
-   'dm' => the amount of metal in the debris field
-   'dk' => the amount of crystal in the Debris Field
 
    'before' => Array (  // The fleets before the battle
             'attackers' => Array (    // attacker slots
-                  [0] => Array ( 'name' => player name, 'id'=>100002, 'g' => 1, 's' => 2 'p' => 3, 'weap' => 10, 'shld' => 11, 'armr' => 12, 202=>5, 203=>6, ... ),   // fleets
-                  [1] => Array ( )
+                  [0] => Array ( 'id'=>100002, 'weap' => 10.0, 'shld' => 11.0, 'armr' => 12.0, 202=>5, 203=>6, ... ),   // fleets
+                  [1] => Array ( ... )
             )
 
             'defenders' => Array (    // defenders' slots
-                  [0] => Array ( 'name' => player name, 'id'=>100006, 'g' => 1, 's' => 2 'p' => 3, 'weap' => 10, 'shld' => 11, 'armr' => 12, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // fleets and defenses
-                  [1] => Array ( )
+                  [0] => Array ( 'id'=>100006, 'weap' => 10.0, 'shld' => 11.0, 'armr' => 12.0, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // fleets and defenses
+                  [1] => Array ( ... )
             )
 
        ),
@@ -44,13 +45,13 @@ Array (
             'aabsorb' => The attacker's shields absorb 355.453
 
             'attackers' => Array (    // attacker slots
-                  [0] => Array ( 'name' => player name, 'id'=>100002, 'g' => 1, 's' => 2 'p' => 3, 202=>5, 203=>6, ... ),   // fleets
-                  [1] => Array ( )
+                  [0] => Array ( 'id'=>100002, 202=>5, 203=>6, ... ),   // fleets
+                  [1] => Array ( ... )
             )
 
             'defenders' => Array (    // defenders' slots
-                  [0] => Array ( 'name' => player name, 'id'=>100006, 'g' => 1, 's' => 2 'p' => 3, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // fleets and defenses
-                  [1] => Array ( )
+                  [0] => Array ( 'id'=>100006, 202=>5, 203=>6, ..., 401=>5, 402=>44 ),   // fleets and defenses
+                  [1] => Array ( ... )
             )
 
        ),
@@ -62,172 +63,114 @@ Array (
 
 char ResultBuffer[64*1024];     // Output data buffer
 
-// Wreckage drop settings
-int DefenseInDebris = 0, FleetInDebris = 30;
 int Rapidfire = 1;  // 1: enable rapidfire
 
-// Cost table
-static UnitPrice FleetPrice[] = {
- { 2000, 2000, 0 }, { 6000, 6000, 0 }, { 3000, 1000, 0 }, { 6000, 4000, 0 },
- { 20000, 7000, 2000 }, { 45000, 15000, 0 }, { 10000, 20000, 10000 }, { 10000, 6000, 2000 },
- { 0, 1000, 0 }, { 50000, 25000, 15000 }, { 0, 2000, 500 }, { 60000, 50000, 15000 },
- { 5000000, 4000000, 1000000 }, { 30000, 40000, 15000 }
-};
-static UnitPrice DefensePrice[] = {
- { 2000, 0, 0 }, { 1500, 500, 0 }, { 6000, 2000, 0 }, { 20000, 15000, 2000 },
- { 2000, 6000, 0 }, { 50000, 50000, 30000 }, { 10000, 10000, 0 }, { 50000, 50000, 0 }
-};
-
-TechParam fleetParam[14] = { // Fleet parameters
- { 4000, 10, 5, 5000 },
- { 12000, 25, 5, 25000 },
- { 4000, 10, 50, 50 },
- { 10000, 25, 150, 100 },
- { 27000, 50, 400, 800 },
- { 60000, 200, 1000, 1500 },
- { 30000, 100, 50, 7500 },
- { 16000, 10, 1, 20000 },      
- { 1000, 0, 0, 0 },
- { 75000, 500, 1000, 500 },
- { 2000, 1, 1, 0 },
- { 110000, 500, 2000, 2000 }, 
- { 9000000, 50000, 200000, 1000000 }, 
- { 70000, 400, 700, 750 }
-};
-
-TechParam defenseParam[8] = { // Defense parameters
- { 2000, 20, 80, 0 },
- { 2000, 25, 100, 0 },
- { 8000, 100, 250, 0 },
- { 35000, 200, 1100, 0 },
- { 8000, 500, 150, 0 },
- { 100000, 300, 3000, 0 },
- { 20000, 2000, 1, 0 },
- { 100000, 10000, 1, 0 },
-};
+TechParam UnitParam[MAX_UNIT_TYPES];
+RFTab RF;
 
 uint64_t peak_allocated_round;
 uint64_t peak_allocated_all_rounds;
 
-// ==========================================================================================
+// Flatten массивы используются для быстрого преобразования ID игрового объекта в ординал.
+// Проблематика: имеем на входе ID объектов вида 202, 401, 12000.
+// Сплющиваем все ID в массив: [0] = 202, [1] = 401, [2] = 12000.
+// flatten_array используется для получения ординала по ID (12000 -> 2)
+// unflatten_array используется для получения ID по ординалу (2 -> 12000)
+// flatten_counter содержит общее количество "сплющенных" ID  (3 в данном примере)
 
-// load data from file
-void * FileLoad(char *filename, unsigned long *size, char * mode)
-{
-    FILE*   f;
-    void*   buffer;
-    unsigned long     filesize;
+uint8_t flatten_array[0x10000];
+uint16_t unflatten_array[MAX_UNIT_TYPES];
+int flatten_counter = 0;
 
-    if(size) *size = 0;
-
-    f = fopen(filename, mode);
-    if(f == NULL) return NULL;
-
-    fseek(f, 0, SEEK_END);
-    filesize = ftell(f);
-    fseek(f, 0, SEEK_SET);
-
-    buffer = malloc(filesize + 10);
-    if(buffer == NULL)
-    {
-        fclose(f);
-        return NULL;
-    }
-    memset ( buffer, 0, filesize+10);
-
-    fread(buffer, filesize, 1, f);
-    fclose(f);
-    if(size) *size = filesize;    
-    return buffer;
+uint8_t IdToOrd(uint16_t id) {
+    return flatten_array[id];
 }
 
-// save data in file
-int FileSave(char *filename, void *data, unsigned long size)
-{
-    FILE *f = fopen(filename, "wt");
-    if(f == NULL) return -1;
+uint16_t OrdToId(uint8_t ord) {
+    return unflatten_array[ord];
+}
 
-    fwrite(data, size, 1, f);
-    fclose(f);
+int IsFlattened(uint16_t id) {
+    for (int i = 0; i < flatten_counter; i++) {
+        if (unflatten_array[i] == id) return 1;
+    }
     return 0;
 }
 
-// ==========================================================================================
-// Random number generator.
-// Mersenne Twister.
-
-#define N 624
-#define M 397
-#define MATRIX_A 0x9908b0dfUL
-#define UPPER_MASK 0x80000000UL
-#define LOWER_MASK 0x7fffffffUL
-
-static unsigned long mt[N];
-static int mti=N+1;
-
-void init_genrand(unsigned long s)
-{
-    mt[0]= s & 0xffffffffUL;
-    for (mti=1; mti<N; mti++) {
-        mt[mti] = 
-        (1812433253UL * (mt[mti-1] ^ (mt[mti-1] >> 30)) + mti); 
-        mt[mti] &= 0xffffffffUL;
-    }
-}
-
-unsigned long genrand_int32(void)
-{
-    unsigned long y;
-    static unsigned long mag01[2]={0x0UL, MATRIX_A};
-
-    if (mti >= N) {
-        int kk;
-
-        if (mti == N+1)
-            init_genrand(5489UL);
-
-        for (kk=0;kk<N-M;kk++) {
-            y = (mt[kk]&UPPER_MASK)|(mt[kk+1]&LOWER_MASK);
-            mt[kk] = mt[kk+M] ^ (y >> 1) ^ mag01[y & 0x1UL];
-        }
-        for (;kk<N-1;kk++) {
-            y = (mt[kk]&UPPER_MASK)|(mt[kk+1]&LOWER_MASK);
-            mt[kk] = mt[kk+(M-N)] ^ (y >> 1) ^ mag01[y & 0x1UL];
-        }
-        y = (mt[N-1]&UPPER_MASK)|(mt[0]&LOWER_MASK);
-        mt[N-1] = mt[M-1] ^ (y >> 1) ^ mag01[y & 0x1UL];
-
-        mti = 0;
-    }
-  
-    y = mt[mti++];
-
-    y ^= (y >> 11);
-    y ^= (y << 7) & 0x9d2c5680UL;
-    y ^= (y << 15) & 0xefc60000UL;
-    y ^= (y >> 18);
-
-    return y;
-}
-
-double genrand_real1(void) { return genrand_int32()*(1.0/4294967295.0); }
-double genrand_real2(void) { return genrand_int32()*(1.0/4294967296.0); }
-
-// Initiate pseudorandom sequence.
-void MySrand (unsigned long seed)
-{
-    init_genrand (seed);
-    //srand (seed);
-}
-
-// Return a random number between a and b (including a and b)
-unsigned long MyRand (unsigned long a, unsigned long b)
-{
-    return a + (unsigned long)(genrand_real1 () * (b - a + 1));
-    //return a + (unsigned long)((rand ()*(1.0/RAND_MAX)) * (b - a + 1));
+void FlattenId(uint16_t id) {
+    if (IsFlattened(id)) return;
+    flatten_array[id] = flatten_counter;
+    unflatten_array[flatten_counter++] = id;
 }
 
 // ==========================================================================================
+
+/**
+ * Аналог PHP explode() на чистом C
+ *
+ * @param delimiter Разделитель строк
+ * @param str Строка для разделения
+ * @param count Указатель на переменную для хранения количества подстрок
+ * @return Динамический массив строк (нужно освободить память с помощью free_explode_result)
+ */
+char** explode(const char delimiter, const char* str, int* count) {
+    if (!str || !count) {
+        return NULL;
+    }
+
+    // Подсчитываем количество подстрок
+    *count = 1;
+    for (const char* p = str; *p; p++) {
+        if (*p == delimiter) {
+            (*count)++;
+        }
+    }
+
+    // Выделяем память для массива указателей
+    char** result = (char**)malloc(*count * sizeof(char*));
+    if (!result) {
+        return NULL;
+    }
+
+    // Выделяем память для всех строк одним блоком
+    size_t str_len = strlen(str);
+    char* storage = (char*)malloc(str_len + *count); // +count для нулевых символов
+    if (!storage) {
+        free(result);
+        return NULL;
+    }
+
+    // Копируем исходную строку для работы с ней
+    strcpy(storage, str);
+
+    // Разделяем строку
+    int index = 0;
+    char* token = storage;
+
+    for (size_t i = 0; i <= str_len; i++) {
+        if (storage[i] == delimiter || storage[i] == '\0') {
+            storage[i] = '\0'; // Заменяем разделитель на нулевой символ
+            result[index++] = token;
+            token = &storage[i + 1];
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Освобождение памяти, выделенной explode()
+ */
+void free_explode_result(char** result) {
+    if (!result) return;
+
+    // все строки хранятся в одном блоке памяти
+    // который является первым элементом массива
+    if (result[0]) {
+        free(result[0]);
+    }
+    free(result);
+}
 
 static char *longnumber (uint64_t n)
 {
@@ -245,39 +188,29 @@ static char *longnumber (uint64_t n)
     return p;
 }
 
-// Set debris drop settings
-void SetDebrisOptions (int did, int fid)
+TechParam* GetUnitParam(uint16_t id)
 {
-    if (did < 0) did = 0;
-    if (fid < 0) fid = 0;
-    if (did > 100) did = 100;
-    if (fid > 100) fid = 100;
-    DefenseInDebris = did;
-    FleetInDebris = fid;
+    uint8_t ord = IdToOrd(id);
+    return &UnitParam[ord];
 }
 
-void SetRapidfire (int enable) { Rapidfire = enable & 1; }
+int32_t hullmax(uint16_t id, Slot* slot) {
+    TechParam* techParam = GetUnitParam(id);
+    return techParam->structure * 0.1f * (10 + slot->armor) / 10;
+}
 
-// Calculate the combat characteristics of a slot
-void CalcSlotParam(Slot* slot)
-{
-    int n;
+int32_t shieldmax(uint16_t id, Slot* slot) {
+    TechParam* techParam = GetUnitParam(id);
+    return techParam->shield * (10 + slot->shld) / 10;
+}
 
-    for (n = 0; n < 14; n++) {
-        slot->hullmax_fleet[n] = fleetParam[n].structure * 0.1 * (10 + slot->armor) / 10;
-        slot->shieldmax_fleet[n] = fleetParam[n].shield * (10 + slot->shld) / 10;
-        slot->apower_fleet[n] = fleetParam[n].attack * (10 + slot->weap) / 10;
-    }
-
-    for (n = 0; n < 8; n++) {
-        slot->hullmax_def[n] = defenseParam[n].structure * 0.1 * (10 + slot->armor) / 10;
-        slot->shieldmax_def[n] = defenseParam[n].shield * (10 + slot->shld) / 10;
-        slot->apower_def[n] = defenseParam[n].attack * (10 + slot->weap) / 10;
-    }
+int32_t apower(uint16_t id, Slot* slot) {
+    TechParam* techParam = GetUnitParam(id);
+    return techParam->attack * (10 + slot->weap) / 10;
 }
 
 // Allocate memory for units and set initial values
-Unit *InitBattle (Slot *slot, int num, int objs, int attacker)
+Unit *InitBattle (Slot *slot, int num, int objs)
 {
     Unit *u;
     int slot_id = 0;
@@ -289,24 +222,13 @@ Unit *InitBattle (Slot *slot, int num, int objs, int attacker)
     memset (u, 0, objs * sizeof(Unit));
     
     for (i=0; i<num; i++, slot_id++) {
-        for (n=0; n<14; n++)
+        for (n=0; n<slot[i].unit_count; n++)
         {
-            for (obj=0; obj<slot[i].fleet[n]; obj++) {
-                u[ucnt].hull = slot->hullmax_fleet[n];
-                u[ucnt].obj_type = FLEET_ID_BASE + n;
+            for (obj=0; obj<slot[i].unit[n].count; obj++) {
+                u[ucnt].hull = hullmax (slot[i].unit[n].gid, &slot[i]);
+                u[ucnt].obj_type = slot[i].unit[n].gid;
                 u[ucnt].slot_id = slot_id;
                 ucnt++;
-            }
-        }
-        if (!attacker) {
-            for (n=0; n<8; n++)
-            {
-                for (obj=0; obj<slot[i].def[n]; obj++) {
-                    u[ucnt].hull = slot->hullmax_def[n];
-                    u[ucnt].obj_type = DEFENSE_ID_BASE + n;
-                    u[ucnt].slot_id = slot_id;
-                    ucnt++;
-                }
             }
         }
     }
@@ -316,55 +238,44 @@ Unit *InitBattle (Slot *slot, int num, int objs, int attacker)
 
 // Shot a => b. Returns damage.
 // absorbed - the accumulator of damage absorbed by shields (for the one who is attacked, i.e. for unit "b").
-long UnitShoot (Unit *a, Slot* aslot, Unit *b, Slot* bslot, uint64_t *absorbed, uint64_t *dm, uint64_t *dk )
+long UnitShoot (Unit *a, Slot* aslot, Unit *b, Slot* bslot, uint64_t *absorbed )
 {
     float prc, depleted;
-    long apower, adelta = 0, b_shieldmax, b_hullmax;
-    if (a->obj_type < DEFENSE_ID_BASE) apower = aslot[a->slot_id].apower_fleet[a->obj_type - FLEET_ID_BASE];
-    else apower = aslot[a->slot_id].apower_def[a->obj_type - DEFENSE_ID_BASE];
+    long apow, adelta = 0, b_shieldmax, b_hullmax;
+    apow = apower(a->obj_type, &aslot[a->slot_id]);
 
-    if (b->exploded) return apower; // Уже взорван.
-    if (b->shield == 0) {  // Щитов нет.
-        if (apower >= b->hull) b->hull = 0;
-        else b->hull -= apower;
+    if (b->exploded) return apow; // Already blown up.
+    if (b->shield == 0) {  // No shields.
+        if (apow >= b->hull) b->hull = 0;
+        else b->hull -= apow;
     }
     else { // We take away from shields, and if there is enough damage, from armor as well.
 
-        if (b->obj_type < DEFENSE_ID_BASE) b_shieldmax = bslot[b->slot_id].shieldmax_fleet[b->obj_type - FLEET_ID_BASE];
-        else b_shieldmax = bslot[b->slot_id].shieldmax_def[b->obj_type - DEFENSE_ID_BASE];
+        b_shieldmax = shieldmax(b->obj_type, &bslot[b->slot_id]);
 
-        prc = (float)b_shieldmax * 0.01;
-        depleted = floor ((float)apower / prc);
+        prc = (float)b_shieldmax * 0.01f;
+        depleted = (float)floor ((float)apow / prc);
         if (b->shield < (depleted * prc)) {
             *absorbed += (uint64_t)b->shield;
-            adelta = apower - b->shield;
+            adelta = apow - b->shield;
             if (adelta >= b->hull) b->hull = 0;
             else b->hull -= adelta;
             b->shield = 0;
         }
         else {
             b->shield -= depleted * prc;
-            *absorbed += (uint64_t)apower;
+            *absorbed += (uint64_t)apow;
         }
     }
 
-    if (b->obj_type < DEFENSE_ID_BASE) b_hullmax = bslot[b->slot_id].hullmax_fleet[b->obj_type - FLEET_ID_BASE];
-    else b_hullmax = bslot[b->slot_id].hullmax_def[b->obj_type - DEFENSE_ID_BASE];
+    b_hullmax = hullmax(b->obj_type, &bslot[b->slot_id]);
 
-    if (b->hull <= b_hullmax * 0.7 && b->shield == 0) {    // Blow it up and dump the debris.
+    if (b->hull <= b_hullmax * 0.7 && b->shield == 0) {    // Blow it up.
         if (MyRand (0, 99) >= ((b->hull * 100) / b_hullmax) || b->hull == 0) {
-            if (b->obj_type >= DEFENSE_ID_BASE) {
-                *dm += (uint64_t)(ceil(DefensePrice[b->obj_type-DEFENSE_ID_BASE].m * ((float)DefenseInDebris/100.0f)));
-                *dk += (uint64_t)(ceil(DefensePrice[b->obj_type-DEFENSE_ID_BASE].k * ((float)DefenseInDebris/100.0f)));
-            }
-            else {
-                *dm += (uint64_t)(ceil(FleetPrice[b->obj_type-FLEET_ID_BASE].m * ((float)FleetInDebris/100.0f)));
-                *dk += (uint64_t)(ceil(FleetPrice[b->obj_type-FLEET_ID_BASE].k * ((float)FleetInDebris/100.0f)));
-            }
             b->exploded = 1;
         }
     }
-    return apower;
+    return apow;
 }
 
 // Clean up blown up ships and defenses. Returns the number of units blown up.
@@ -391,71 +302,66 @@ int WipeExploded (Unit **slot, int amount, int *exploded_count)
 int CheckFastDraw (Unit *aunits, int aobjs, Slot* aslot, Unit *dunits, int dobjs, Slot* dslot)
 {
     int i;
-    long hullmax;
+    long hullm;
     for (i=0; i<aobjs; i++) {
-        if (aunits[i].obj_type < DEFENSE_ID_BASE) hullmax = aslot[aunits[i].slot_id].hullmax_fleet[aunits[i].obj_type - FLEET_ID_BASE];
-        else hullmax = aslot[aunits[i].slot_id].hullmax_def[aunits[i].obj_type - DEFENSE_ID_BASE];
+        hullm = hullmax(aunits[i].obj_type, &aslot[aunits[i].slot_id]);
 
-        if (aunits[i].hull != hullmax) return 0;
+        if (aunits[i].hull != hullm) return 0;
     }
     for (i=0; i<dobjs; i++) {
-        if (dunits[i].obj_type < DEFENSE_ID_BASE) hullmax = dslot[dunits[i].slot_id].hullmax_fleet[dunits[i].obj_type - FLEET_ID_BASE];
-        else hullmax = dslot[dunits[i].slot_id].hullmax_def[dunits[i].obj_type - DEFENSE_ID_BASE];
+        hullm = hullmax(dunits[i].obj_type, &dslot[dunits[i].slot_id]);
 
-        if (dunits[i].hull != hullmax) return 0;
+        if (dunits[i].hull != hullm) return 0;
     }
     return 1;
 }
 
-// Generate a slot result.
+UnitCount pseudo_slot[MAX_UNIT_TYPES];
+
+// Generate slot result.
 // If techs = 1, show techs (no need to show techs in rounds).
 static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, Slot *d, int attacker, int techs)
 {
     Slot *s = attacker ? a : d;
-    Slot coll;
     Unit *u;
-    int n, i, count = 0;
+    int i, count = 0;
     unsigned long sum = 0;
 
-    // Collect all units in a slot
-    memset (&coll, 0, sizeof(Slot));
+    // Collect all units in a pseudo-slot
+    memset(pseudo_slot, 0, sizeof(pseudo_slot));
     for (i=0; i<objnum; i++) {
         u = &units[i];
         if (u->slot_id == slot) {
-            if (u->obj_type < DEFENSE_ID_BASE) { coll.fleet[u->obj_type-FLEET_ID_BASE]++; sum++; }
-            else { coll.def[u->obj_type-DEFENSE_ID_BASE]++; sum++; }
+
+            uint8_t ord = IdToOrd(u->obj_type);
+            pseudo_slot[ord].count++;
+            sum++;
         }
     }
 
-    if ( techs ) {
-        if ( attacker) ptr += sprintf ( ptr, "i:%i;a:22:{", slot );
-        else ptr += sprintf ( ptr, "i:%i;a:30:{", slot );
-    }
-    else {
-        if ( attacker) ptr += sprintf ( ptr, "i:%i;a:19:{", slot );
-        else ptr += sprintf ( ptr, "i:%i;a:27:{", slot );
+    int unique_gids = 0;
+    for (uint8_t ord = 0; ord < flatten_counter; ord++) {
+        int gid = OrdToId(ord);
+        if (pseudo_slot[ord].count) {
+            unique_gids++;
+        }
     }
 
-    ptr += sprintf (ptr, "s:4:\"name\";s:%i:\"%s\";", (int)strlen(s[slot].name), s[slot].name );
+    int array_size = unique_gids + techs * 3 + 1;
+    ptr += sprintf ( ptr, "i:%i;a:%i:{", slot, array_size);
+
     ptr += sprintf (ptr, "s:2:\"id\";i:%i;", s[slot].id );
-    ptr += sprintf (ptr, "s:1:\"g\";i:%i;", s[slot].g );
-    ptr += sprintf (ptr, "s:1:\"s\";i:%i;", s[slot].s );
-    ptr += sprintf (ptr, "s:1:\"p\";i:%i;", s[slot].p );
 
     if ( techs ) {
-        ptr += sprintf (ptr, "s:4:\"weap\";i:%i;", s[slot].weap );
-        ptr += sprintf (ptr, "s:4:\"shld\";i:%i;", s[slot].shld );
-        ptr += sprintf (ptr, "s:4:\"armr\";i:%i;", s[slot].armor );
+        ptr += sprintf (ptr, "s:4:\"weap\";d:%f;", s[slot].weap );
+        ptr += sprintf (ptr, "s:4:\"shld\";d:%f;", s[slot].shld );
+        ptr += sprintf (ptr, "s:4:\"armr\";d:%f;", s[slot].armor );
     }
 
-    for (n=0; n<14; n++) {      // Fleets
-        ptr += sprintf ( ptr, "i:%i;i:%i;", 202+n, coll.fleet[n]);
-    }
-
-    if ( !attacker)             // Defense
-    {
-        for (n=0; n<8; n++) {
-            ptr += sprintf ( ptr, "i:%i;i:%i;", 401+n, coll.def[n]);
+    for (uint8_t ord = 0; ord < flatten_counter; ord++) {
+        int gid = OrdToId(ord);
+        if (pseudo_slot[ord].count) {
+            ptr += sprintf(ptr, "i:%i;i:%i;", gid, pseudo_slot[ord].count);
         }
     }
 
@@ -520,7 +426,11 @@ static int RapidFire (int atyp, int dtyp)
     return rapidfire;
 }
 
-int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
+static int TableDrivenRapidFire(int atyp, int dtyp) {
+    return RapidFire(atyp, dtyp);
+}
+
+int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, int max_round)
 {
     long slot, i, n, aobjs = 0, dobjs = 0, idx, rounds, sum = 0;
     long apower, atyp, dtyp, rapidfire, fastdraw;
@@ -528,34 +438,34 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
     char * ptr = ResultBuffer, * res, *round_patch;
     int exploded, exploded_res;
 
-    uint64_t         shoots[2] = { 0,0 }, spower[2] = { 0,0 }, absorbed[2] = { 0,0 }; // Total shot statistics.
-    uint64_t         dm = 0, dk = 0;             // The debris field
+    uint64_t shoots[2] = { 0,0 }, spower[2] = { 0,0 }, absorbed[2] = { 0,0 }; // Total shot statistics.
 
     // Count the number of units before battle.
     for (i=0; i<anum; i++) {
-        for (n=0; n<14; n++) aobjs += a[i].fleet[n];
+        for (n = 0; n < a[i].unit_count; n++) {
+            aobjs += a[i].unit[n].count;
+        }
     }
     for (i=0; i<dnum; i++) {
-        for (n=0; n<14; n++) dobjs += d[i].fleet[n];
-        if (i == 0) {
-            for (n=0; n<8; n++) dobjs += d[i].def[n];
+        for (n = 0; n < d[i].unit_count; n++) {
+            dobjs += d[i].unit[n].count;
         }
     }
 
     // Prepare an array of units to be used.
     peak_allocated_round = 0;
-    aunits = InitBattle (a, anum, aobjs, 1);
+    aunits = InitBattle (a, anum, aobjs);
     if (aunits == NULL) {
         return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
     }
-    dunits = InitBattle (d, dnum, dobjs, 0);
+    dunits = InitBattle (d, dnum, dobjs);
     if (dunits == NULL) {
         free(aunits);
         return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
     }
     peak_allocated_all_rounds = peak_allocated_round;
 
-    ptr += sprintf (ptr, "a:7:{");
+    ptr += sprintf (ptr, "a:5:{");
 
     // Fleets before the battle
     ptr += sprintf (ptr, "s:6:\"before\";a:2:{");
@@ -572,7 +482,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
     ptr += sprintf ( ptr, "}" );
 
     round_patch = ptr + 15;
-    ptr += sprintf (ptr, "s:6:\"rounds\";a:X:{");
+    ptr += sprintf (ptr, "s:6:\"rounds\";a:XX:{");
 
     if ((ptr - ResultBuffer) >= sizeof(ResultBuffer)) {
         free(aunits);
@@ -580,7 +490,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
         return BATTLE_ERROR_RESULT_BUFFER_OVERFLOW;
     }
 
-    for (rounds=0; rounds<6; rounds++)
+    for (rounds=0; rounds<max_round; rounds++)
     {
         if (aobjs == 0 || dobjs == 0) break;
 
@@ -592,14 +502,11 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
         // Charge shields.
         for (i=0; i<aobjs; i++) {
             if (aunits[i].exploded) aunits[i].shield = 0;
-            else aunits[i].shield = a[aunits[i].slot_id].shieldmax_fleet[aunits[i].obj_type - FLEET_ID_BASE];
+            else aunits[i].shield = shieldmax(aunits[i].obj_type, &a[aunits[i].slot_id]);
         }
         for (i=0; i<dobjs; i++) {
             if (dunits[i].exploded) dunits[i].shield = 0;
-            else {
-                if (dunits[i].obj_type >= DEFENSE_ID_BASE) dunits[i].shield = d[dunits[i].slot_id].shieldmax_def[dunits[i].obj_type - DEFENSE_ID_BASE];
-                else dunits[i].shield = d[dunits[i].slot_id].shieldmax_fleet[dunits[i].obj_type - FLEET_ID_BASE];
-            }
+            else dunits[i].shield = shieldmax(dunits[i].obj_type, &d[dunits[i].slot_id]);
         }
 
         // Fire shots.
@@ -612,20 +519,15 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
                     // Shot.
                     while (rapidfire) {
                         idx = MyRand (0, dobjs-1);
-                        apower = UnitShoot (unit, a, &dunits[idx], d, &absorbed[1], &dm, &dk );
+                        apower = UnitShoot (unit, a, &dunits[idx], d, &absorbed[1] );
                         shoots[0]++;
                         spower[0] += apower;
 
-                        // Translate the ID into regular format to make it easier to understand.
                         atyp = unit->obj_type;
-                        if ( atyp < 200 ) atyp += 102;
-                        else atyp += 201;
                         dtyp = dunits[idx].obj_type;
-                        if ( dtyp < 200 ) dtyp += 102;
-                        else dtyp += 201;
-                        rapidfire = RapidFire (atyp, dtyp);
 
                         if (Rapidfire == 0) rapidfire = 0;
+                        else rapidfire = TableDrivenRapidFire(atyp, dtyp);
                     }
                 }
             }
@@ -639,20 +541,15 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
                     // Shot.
                     while (rapidfire) {
                         idx = MyRand (0, aobjs-1);
-                        apower = UnitShoot (unit, d, &aunits[idx], a, &absorbed[0], &dm, &dk );
+                        apower = UnitShoot (unit, d, &aunits[idx], a, &absorbed[0] );
                         shoots[1]++;
                         spower[1] += apower;
 
-                        // Translate the ID into regular format to make it easier to understand.
                         atyp = unit->obj_type;      
-                        if ( atyp < 200 ) atyp += 102;
-                        else atyp += 201;
                         dtyp = aunits[idx].obj_type;
-                        if ( dtyp < 200 ) dtyp += 102;
-                        else dtyp += 201;
-                        rapidfire = RapidFire (atyp, dtyp);
 
                         if (Rapidfire == 0) rapidfire = 0;
+                        else rapidfire = RapidFire(atyp, dtyp);
                     }
                 }
             }
@@ -716,7 +613,11 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
         if (fastdraw) { rounds ++; break; }
     }
 
-    *round_patch = '0' + (char)(rounds);
+    // До 99 раундов
+    char patch[10];
+    sprintf(patch, "%02i", rounds);
+    round_patch[0] = patch[0];
+    round_patch[1] = patch[1];
     
     // Battle Results.
     if (aobjs > 0 && dobjs == 0){ // The attacker won
@@ -732,10 +633,8 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
 
     ptr += sprintf (ptr, "}s:6:\"result\";s:4:\"%s\";", res);
     ptr += sprintf (ptr, "s:11:\"battle_seed\";d:%s;", longnumber (battle_seed));
-    ptr += sprintf (ptr, "s:14:\"peak_allocated\";d:%s;", longnumber (peak_allocated_all_rounds));
-    ptr += sprintf (ptr, "s:2:\"dm\";d:%s;", longnumber (dm));
-    ptr += sprintf (ptr, "s:2:\"dk\";d:%s;}", longnumber (dk));
-    
+    ptr += sprintf (ptr, "s:14:\"peak_allocated\";d:%s;}", longnumber (peak_allocated_all_rounds));
+
     free (aunits);
     free (dunits);
 
@@ -749,161 +648,165 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed)
 // ==========================================================================================
 // Battle engine initialization - get data and allocate it to arrays.
 
-static SimParam *simargv;
-static long simargc = 0;
-
-// Convert a string of the form %EF%F0%E8%E2%E5%F2 to a byte string.
-static void hexize (char *string)
-{
-    int hexnum;
-    char *temp, c, *oldstring = string;
-    long length = (long)strlen (string), p = 0, digit = 0;
-    temp = (char *)malloc (length + 1);
-    if (temp == NULL) return;
-    while (length--) {
-        c = *string++;
-        if (c == 0) break;
-        if (c == '%') { 
-            digit = 1;
-        }
-        else {
-            if (digit == 1) {
-                if (c <= '9') hexnum = (c - '0') << 4;
-                else hexnum = (10 +(c - 'A')) << 4;
-                digit = 2;
-            }
-            else if (digit == 2) {
-                if (c <= '9') hexnum |= (c - '0');
-                else hexnum |= 10 + (c - 'A');
-                temp[p++] = (unsigned char)hexnum;
-                digit = 0;
-            }
-            else temp[p++] = c;
-        }
-    }
-    temp[p++] = 0;
-    memcpy (oldstring, temp, p);
-    free (temp);
-}
-
-static void AddSimParam (char *name, char *string)
-{
-    long i;
-
-    // Check if such a parameter already exists, just update its value.
-    for (i=0; i<simargc; i++) {
-        if (!strcmp (name, simargv[i].name)) {
-            strncpy (simargv[i].string, string, sizeof(simargv[i].string));
-            simargv[i].value = strtoul (simargv[i].string, NULL, 10);
-            return;
-        }
-    }
-
-    // Allocate space for the new parameter and write the values.
-    hexize (string);
-    simargv = (SimParam *)realloc (simargv, (simargc + 1) * sizeof (SimParam) );
-    if (simargv) {
-        strncpy(simargv[simargc].name, name, sizeof(simargv[simargc].name));
-        strncpy(simargv[simargc].string, string, sizeof(simargv[simargc].string));
-        simargv[simargc].value = strtoul(simargv[simargc].string, NULL, 10);
-        simargc++;
-    }
-}
-
-static void PrintParams (void)
-{
-    long i;
-    SimParam *p;
-    for (i=0; i<simargc; i++) {
-        p = &simargv[i];
-        printf ( "%i: %s = %s (%i)<br>\n", i, p->name, p->string, p->value );
-    }
-    printf ("<hr/>");
-}
-
-// Parse the parameters.
-static void ParseQueryString (char *str)
-{
-    int collectname = 1;
-    char namebuffer[100], stringbuffer[100], c;
-    long length, namelen = 0, stringlen = 0;
-    memset (namebuffer, 0, sizeof(namebuffer));
-    memset (stringbuffer, 0, sizeof(stringbuffer));
-    if (str == NULL) return;
-    length = (long)strlen (str);
-    while (length--) {
-        c = *str++;
-        if ( c == '=' ) {
-            collectname = 0;
-        }
-        else if (c == '&') { // Add a parameter.
-            collectname = 1;
-            if (namelen >0 && stringlen > 0) {
-                AddSimParam (namebuffer, stringbuffer);
-            }
-            memset (namebuffer, 0, sizeof(namebuffer));
-            memset (stringbuffer, 0, sizeof(stringbuffer));
-            namelen = stringlen = 0;
-        }
-        else {
-            if (collectname) {
-                if (namelen < 31) namebuffer[namelen++] = c;
-            }
-            else {
-                if (stringlen < 63) stringbuffer[stringlen++] = c;
-            }
-        }
-    }
-    // Add the last parameter.
-    if (namelen > 0 && stringlen > 0) AddSimParam (namebuffer, stringbuffer);
-}
-
-static SimParam *ParamLookup (char *name)
-{
-    SimParam *p = NULL;
-    long i;
-    for (i=0; i<simargc; i++) {
-        if (!strcmp (simargv[i].name, name)) return &simargv[i];
-    }
-    return p;
-}
-
-static int GetSimParamI (char *name, int def)
-{
-    SimParam *p = ParamLookup (name);
-    if (p == NULL) return def;
-    else return p->value;
-}
-
-static char *GetSimParamS (char *name, char *def)
-{
-    SimParam *p = ParamLookup (name);
-    if (p == NULL) return def;
-    else return p->string;
-}
-
 /*
 
 Input data format.
 The input data contains the initial parameters of the battle in text format. For ease of parsing in C, the values are represented in the "key = value" format.
 
+MaxRound = 6            макс. количество раундов
 Rapidfire = 1
-FID = 30
-DID = 0
+RFTab = 202 2 210 5 212 5 ...           вначале идёт ID юнита который делает скорострел, потом количество пар. затем следуют пары значений: ID юнита по которому делается выстрел и значение скорострела
+UnitParam = 202 4000 10 5 5000 5000 10 ...  значения идут 7-значными пачками. первое значение ID, затем 6 параметров юнита (см. TechParam)
 Attackers = N
 Defenders = M
-AttackerN = ({NAME} ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
-DefenderM = ({NAME} ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
+AttackerN = ID WEAP SHLD ARMR 202 MT 203 BT 204 LF 205 HF ...  вначале идут значения ID флота, атака(float), щиты(float), броня(float), затем следуют пары значенй ID юнита+количество юнитов
+DefenderM = ID WEAP SHLD ARMR 202 MT 203 BT 204 LF 205 HF ...
 
 */
+
+char* extract_payload(char* lp) {
+
+    size_t text_size = strlen(lp);
+    if (text_size < 8) return NULL;
+    char* text = malloc(text_size + 1);
+    if (!text) return NULL;
+    memset(text, 0, text_size + 1);
+
+    char* text_ptr = text;
+    while (*lp <= ' ') lp++;
+    while (*lp >= ' ') *text_ptr++ = *lp++;
+    *text_ptr++ = 0;
+    size_t last_char = strlen(text) - 1;
+    text_ptr = &text[last_char];
+    while (*text_ptr <= ' ') *text_ptr-- = 0;
+
+    return text;
+}
+
+// ID WEAP SHLD ARMR 202 MT 203 BT 204 LF 205 HF ...
+int ParseSlot(Slot* slot, char* lp)
+{
+    char* text = extract_payload(lp);
+    if (!text) return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
+
+    int argc = 0;
+    char** argv = explode(' ', text, &argc);
+    free(text);
+
+    // Должно быть хотя бы 4 поля для ID/атака/щиты/броня и ещё как минимум 2 для какого-то объекта и его количества
+
+    int pc = 0;
+    if (argc < 6) return BATTLE_ERROR_PARSE_SLOT_NOT_ENOUGH;
+
+    slot->id = atoi(argv[pc++]);
+    slot->weap = (float)atof(argv[pc++]);
+    slot->shld = (float)atof(argv[pc++]);
+    slot->armor = (float)atof(argv[pc++]);
+
+    int args_left = argc - pc;
+    if (args_left % 2 != 0) {
+        free_explode_result(argv);
+        return BATTLE_ERROR_PARSE_SLOT_NOT_ALIGNED;
+    }
+
+    slot->unit_count = args_left / 2;
+    slot->unit = malloc(sizeof(UnitCount) * slot->unit_count);
+    if (!slot->unit) {
+        free_explode_result(argv);
+        return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
+    }
+    memset(slot->unit, 0, sizeof(UnitCount) * slot->unit_count);
+
+    for (int i = 0; i < slot->unit_count; i++) {
+
+        int gid = atoi(argv[pc++]);
+        if (gid > GID_MAX) {
+            free_explode_result(argv);
+            return BATTLE_ERROR_GID_MAX;
+        }
+        if (!IsFlattened(gid)) {
+            free_explode_result(argv);
+            return BATTLE_ERROR_GID_UNKNOWN;
+        }
+        slot->unit[i].gid = gid;
+        slot->unit[i].count = atoi(argv[pc++]);
+    }
+
+    free_explode_result(argv);
+    return 0;
+}
+
+int ParseUnitParam(char* lp)
+{
+    char* text = extract_payload(lp);
+    if (!text) return BATTLE_ERROR_INSUFFICIENT_RESOURCES;
+
+    int argc = 0;
+    char** argv = explode(' ', text, &argc);
+    free(text);
+
+    int params_per_unit = 1 + 6;
+    // Должен быть хотя бы 1 набор параметров 
+    if (argc < params_per_unit) {
+        free_explode_result(argv);
+        return BATTLE_ERROR_PARSE_UNIT_PARAM_NOT_ENOUGH;
+    }
+    // Параметры должны быть кратны 
+    if (argc % params_per_unit != 0) {
+        free_explode_result(argv);
+        return BATTLE_ERROR_PARSE_UNIT_PARAM_NOT_ALIGNED;
+    }
+
+    memset(UnitParam, 0, sizeof(UnitParam));
+
+    int pc = 0;
+    int num_params = argc / params_per_unit;
+    for (int i = 0; i < num_params; i++) {
+
+        int gid = atoi(argv[pc++]);
+        if (flatten_counter >= MAX_UNIT_TYPES) {
+            free_explode_result(argv);
+            return BATTLE_ERROR_GID_TYPES_OVERFLOW;
+        }
+        if (gid > GID_MAX) {
+            free_explode_result(argv);
+            return BATTLE_ERROR_GID_MAX;
+        }
+        if (IsFlattened(gid)) {
+            free_explode_result(argv);
+            return BATTLE_ERROR_PARSE_UNIT_PARAM_DUPLICATED;
+        }
+        FlattenId(gid);
+
+        TechParam* unitParam = &UnitParam[IdToOrd(gid)];
+        unitParam->structure = atoi(argv[pc++]);
+        unitParam->shield = atoi(argv[pc++]);
+        unitParam->attack = atoi(argv[pc++]);
+        unitParam->cargo = atoi(argv[pc++]);
+        unitParam->speed = atoi(argv[pc++]);
+        unitParam->consumption = atoi(argv[pc++]);
+    }
+
+    free_explode_result(argv);
+    return 0;
+}
+
+int SetRapidfire(int enable, char* rftab) {
+    Rapidfire = enable & 1;
+    memset(&RF, 0, sizeof(RFTab));
+    if (Rapidfire) {
+        // Setup rapidfire table
+    }
+    return 0;
+}
 
 int StartBattle (char *text, int battle_id, unsigned long battle_seed)
 {
     char filename[1024];
-    Slot *a, *d;
-    int rf, fid, did, i, res;
-    int anum = 0, dnum = 0;
-    char *ptr, line[3000], buf[64], *lp, *tmp;
+    Slot *a = NULL, *d = NULL;
+    int rf, i, res = -1;
+    int anum = 0, dnum = 0, max_round = 6;
+    char *ptr, line[0x1000], buf[64], *lp, *rftab, *uparam;
 
     ptr = strstr (text, "Rapidfire");       // Rapid-fire
     if ( ptr ) {
@@ -912,19 +815,35 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
     }
     else rf = 1;
 
-    ptr = strstr (text, "FID");             // Fleet into the debris
-    if ( ptr ) {
-        ptr = strstr ( ptr, "=" ) + 1;
-        fid = atoi (ptr);
+    ptr = strstr(text, "MaxRound");       // Max rounds
+    if (ptr) {
+        ptr = strstr(ptr, "=") + 1;
+        max_round = atoi(ptr);
     }
-    else fid = 30;
+    else max_round = 6;
 
-    ptr = strstr (text, "DID");             // Defense to debris
-    if ( ptr ) {
-        ptr = strstr ( ptr, "=" ) + 1;
-        did = atoi (ptr);
+    ptr = strstr(text, "RFTab");       // Rapid-fire Table
+    if (ptr) {
+        ptr = strstr(ptr, "=") + 1;
+        rftab = ptr;
+        while (*rftab == ' ') rftab++;
     }
-    else did = 0;
+    else rftab = NULL;
+
+    if (rf && !rftab) return BATTLE_ERROR_MISSING_RF_TAB;
+
+    ptr = strstr(text, "UnitParam");       // UnitParam Table
+    if (ptr) {
+        ptr = strstr(ptr, "=") + 1;
+        uparam = ptr;
+        while (*uparam == ' ') uparam++;
+    }
+    else return BATTLE_ERROR_MISSING_UNIT_PARAM;
+
+    res = ParseUnitParam(uparam);
+    if (res < 0) {
+        goto exit_with_result;
+    }
 
     ptr = strstr (text, "Attackers");        // Number of attackers
     if ( ptr ) {
@@ -961,40 +880,14 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
         if ( ptr ) {
             lp = line;
             ptr = strstr ( ptr, "=" ) + 1;
-            while ( *ptr != '(' ) ptr++;
-            ptr++;
-            while ( *ptr != ')' ) *lp++ = *ptr++;
+            while ( *ptr >= ' ' ) *lp++ = *ptr++;
             *lp++ = 0;
         }
 
-        // Cut the name
-        lp = line;
-        tmp = a[i].name;
-        while ( *lp == '{' ) lp++;              // search the beginning of the name
-        while ( *lp != '}' ) *tmp++ = *lp++;    // cut characters up to }
-        *tmp++ = 0;
-        lp++;
-        while ( *lp <= ' ' ) lp++;              // skip spaces
-        
-        // ({NAME} ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC)
-        sscanf ( lp, "%i " "%i %i %i " "%i %i %i " "%i %i %i %i %i %i %i %i %i %i %i %i %i %i", 
-                       &a[i].id, 
-                       &a[i].g, &a[i].s, &a[i].p,
-                       &a[i].weap, &a[i].shld, &a[i].armor,
-                       &a[i].fleet[0], // MT
-                       &a[i].fleet[1], // BT
-                       &a[i].fleet[2], // LF
-                       &a[i].fleet[3], // HF
-                       &a[i].fleet[4], // CR
-                       &a[i].fleet[5], // LINK
-                       &a[i].fleet[6], // COLON
-                       &a[i].fleet[7], // REC
-                       &a[i].fleet[8], // SPY
-                       &a[i].fleet[9], // BOMB
-                       &a[i].fleet[10], // SS
-                       &a[i].fleet[11], // DEST
-                       &a[i].fleet[12], // DS
-                       &a[i].fleet[13] ); // BC
+        res = ParseSlot(&a[i], line);
+        if (res < 0) {
+            goto exit_with_result;
+        }
     }
 
     // Defenders.
@@ -1005,71 +898,50 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
         if ( ptr ) {
             lp = line;
             ptr = strstr ( ptr, "=" ) + 1;
-            while ( *ptr != '(' ) ptr++;
-            ptr++;
-            while ( *ptr != ')' ) *lp++ = *ptr++;
+            while ( *ptr >= ' ' ) *lp++ = *ptr++;
             *lp++ = 0;
         }
 
-        // Cut the name
-        lp = line;
-        tmp = d[i].name;
-        while ( *lp == '{' ) lp++;              // search the beginning of the name
-        while ( *lp != '}' ) *tmp++ = *lp++;    // cut characters up to }
-        *tmp++ = 0;
-        lp++;
-        while ( *lp <= ' ' ) lp++;              // skip spaces
-
-        // ({NAME} ID G S P WEAP SHLD ARMR MT BT LF HF CR LINK COLON REC SPY BOMB SS DEST DS BC RT LL HL GS IC PL SDOM LDOM)
-        sscanf ( lp, "%i " "%i %i %i " "%i %i %i " "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i", 
-                       &d[i].id, 
-                       &d[i].g, &d[i].s, &d[i].p,
-                       &d[i].weap, &d[i].shld, &d[i].armor,
-                       &d[i].fleet[0], // MT
-                       &d[i].fleet[1], // BT
-                       &d[i].fleet[2], // LF
-                       &d[i].fleet[3], // HF
-                       &d[i].fleet[4], // CR
-                       &d[i].fleet[5], // LINK
-                       &d[i].fleet[6], // COLON
-                       &d[i].fleet[7], // REC
-                       &d[i].fleet[8], // SPY
-                       &d[i].fleet[9], // BOMB
-                       &d[i].fleet[10], // SS
-                       &d[i].fleet[11], // DEST
-                       &d[i].fleet[12], // DS
-                       &d[i].fleet[13], // BC
-                       &d[i].def[0], // RT
-                       &d[i].def[1], // LL
-                       &d[i].def[2], // HL
-                       &d[i].def[3], // GS
-                       &d[i].def[4], // IC
-                       &d[i].def[5], // PL
-                       &d[i].def[6], // SDOM
-                       &d[i].def[7] // LDOM
-                ); 
+        res = ParseSlot(&d[i], line);
+        if (res < 0) {
+            goto exit_with_result;
+        }
     }
 
     // Battle engine settings
-    SetDebrisOptions ( did, fid );
-    SetRapidfire ( rf );
-
-    // Calculate in advance the armor, shields and attack parameters of the units of each slot
-
-    for (i = 0; i < anum; i++) {
-        CalcSlotParam(&a[i]);
-    }
-    for (i = 0; i < dnum; i++) {
-        CalcSlotParam(&d[i]);
+    res = SetRapidfire ( rf, rftab );
+    if (res < 0) {
+        goto exit_with_result;
     }
     
     // **** START BATTLE ****
     peak_allocated_round = 0;
     peak_allocated_all_rounds = 0;
-    res = DoBattle ( a, anum, d, dnum, battle_seed );
+    res = DoBattle ( a, anum, d, dnum, battle_seed, max_round);
 
-    free (a);
-    free (d);
+exit_with_result:
+
+    if (a) {
+        for (i = 0; i < anum; i++) {
+            if (a[i].unit) {
+                free(a[i].unit);
+            }
+        }
+        free(a);
+    }
+
+    if (d) {
+        for (i = 0; i < dnum; i++) {
+            if (d[i].unit) {
+                free(d[i].unit);
+            }
+        }
+        free(d);
+    }
+
+    if (RF.to) {
+        free(RF.to);
+    }
 
     // Write down the results
     if ( res >= 0 )
@@ -1090,21 +962,18 @@ int main(int argc, char **argv)
     char *battle_data;
     unsigned long battle_seed = 0;
 
-    if ( argc < 2 ) return BATTLE_ERROR_NOT_ENOUGH_CMD_LINE_PARAMS;
-
-    ParseQueryString ( argv[1] );
-    //PrintParams ();
+    if ( argc < 3 ) return BATTLE_ERROR_NOT_ENOUGH_CMD_LINE_PARAMS;
 
     // Load the source file and select the source data
     {
-        int battle_id = GetSimParamI("battle_id", 0);
+        int battle_id = atoi(argv[1]);
 
         if (battle_id <= 0) {
             return BATTLE_ERROR_INVALID_BATTLE_ID;
         }
 
         // Initialize RNG
-        battle_seed = GetSimParamI("battle_seed", 0);
+        battle_seed = atoi(argv[2]);
         if (battle_seed == 0) {
             battle_seed = (unsigned long)time(NULL);
         }
