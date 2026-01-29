@@ -582,7 +582,7 @@ function GenBattleSourceData (array $a, array $d, int $rf, int $max_round) : str
     return $source;
 }
 
-// Распространить некоторые свойства с начальных условий на результаты боевого результата.
+// Extend some properties from the initial conditions to the results of the battle outcome.
 function PostProcessBattleResult (array $a, array $d, array &$res) : void {
 
     foreach ($res['before']['attackers'] as $i=>$attacker) {
@@ -590,6 +590,8 @@ function PostProcessBattleResult (array $a, array $d, array &$res) : void {
         $res['before']['attackers'][$i]['g'] = $a[$i]['g'];
         $res['before']['attackers'][$i]['s'] = $a[$i]['s'];
         $res['before']['attackers'][$i]['p'] = $a[$i]['p'];
+        $res['before']['attackers'][$i]['id'] = $a[$i]['id'];
+        $res['before']['attackers'][$i]['pf'] = $a[$i]['pf'];
     }
 
     foreach ($res['before']['defenders'] as $i=>$defender) {
@@ -597,6 +599,8 @@ function PostProcessBattleResult (array $a, array $d, array &$res) : void {
         $res['before']['defenders'][$i]['g'] = $d[$i]['g'];
         $res['before']['defenders'][$i]['s'] = $d[$i]['s'];
         $res['before']['defenders'][$i]['p'] = $d[$i]['p'];
+        $res['before']['defenders'][$i]['id'] = $d[$i]['id'];
+        $res['before']['defenders'][$i]['pf'] = $d[$i]['pf'];
     }
 
     foreach ($res['rounds'] as $n=>$round) {
@@ -606,6 +610,8 @@ function PostProcessBattleResult (array $a, array $d, array &$res) : void {
             $res['rounds'][$n]['attackers'][$i]['g'] = $a[$i]['g'];
             $res['rounds'][$n]['attackers'][$i]['s'] = $a[$i]['s'];
             $res['rounds'][$n]['attackers'][$i]['p'] = $a[$i]['p'];
+            $res['rounds'][$n]['attackers'][$i]['id'] = $a[$i]['id'];
+            $res['rounds'][$n]['attackers'][$i]['pf'] = $a[$i]['pf'];
         }
 
         foreach ($round['defenders'] as $i=>$defender) {
@@ -613,6 +619,8 @@ function PostProcessBattleResult (array $a, array $d, array &$res) : void {
             $res['rounds'][$n]['defenders'][$i]['g'] = $d[$i]['g'];
             $res['rounds'][$n]['defenders'][$i]['s'] = $d[$i]['s'];
             $res['rounds'][$n]['defenders'][$i]['p'] = $d[$i]['p'];
+            $res['rounds'][$n]['defenders'][$i]['id'] = $d[$i]['id'];
+            $res['rounds'][$n]['defenders'][$i]['pf'] = $d[$i]['pf'];
         }
     }
 
