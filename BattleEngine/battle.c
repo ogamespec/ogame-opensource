@@ -310,9 +310,8 @@ UnitCount pseudo_slot[MAX_UNIT_TYPES];
 
 // Generate slot result.
 // If techs = 1, show techs (no need to show techs in rounds).
-static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *a, Slot *d, int attacker, int techs)
+static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *s, int techs)
 {
-    Slot *s = attacker ? a : d;
     Unit *u;
     int i, count = 0;
     unsigned long sum = 0;
@@ -419,12 +418,12 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
     ptr += sprintf (ptr, "s:6:\"before\";a:2:{");
     ptr += sprintf ( ptr, "s:9:\"attackers\";a:%i:{", anum );
     for (slot=0; slot<anum; slot++) {
-        ptr = GenSlot (ptr, aunits, slot, aobjs, a, d, 1, 1);
+        ptr = GenSlot (ptr, aunits, slot, aobjs, a, 1);
     }
     ptr += sprintf ( ptr, "}" );
     ptr += sprintf ( ptr, "s:9:\"defenders\";a:%i:{", dnum );
     for (slot=0; slot<dnum; slot++) {
-        ptr = GenSlot (ptr, dunits, slot, dobjs, a, d, 0, 1);
+        ptr = GenSlot (ptr, dunits, slot, dobjs, d, 1);
     }
     ptr += sprintf ( ptr, "}" );
     ptr += sprintf ( ptr, "}" );
@@ -536,7 +535,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
         ptr += sprintf ( ptr, "s:7:\"aabsorb\";d:%s;", longnumber(absorbed[0]) );
         ptr += sprintf ( ptr, "s:9:\"attackers\";a:%i:{", anum );
         for (slot=0; slot<anum; slot++) {
-            ptr = GenSlot (ptr, aunits, slot, aobjs, a, d, 1, 0);
+            ptr = GenSlot (ptr, aunits, slot, aobjs, a, 0);
 
             if ((ptr - ResultBuffer) >= sizeof(ResultBuffer)) {
                 free(aunits);
@@ -547,7 +546,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
         ptr += sprintf ( ptr, "}" );
         ptr += sprintf ( ptr, "s:9:\"defenders\";a:%i:{", dnum );
         for (slot=0; slot<dnum; slot++) {
-            ptr = GenSlot (ptr, dunits, slot, dobjs, a, d, 0, 0);
+            ptr = GenSlot (ptr, dunits, slot, dobjs, d, 0);
 
             if ((ptr - ResultBuffer) >= sizeof(ResultBuffer)) {
                 free(aunits);

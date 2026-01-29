@@ -135,5 +135,6 @@ const MAX_PLANET = 9;           // Maximum number of planets a player can own (h
 
 const RF_MAX = 2000;            // Maximum rapidfire value (if > this value, then error)
 const RF_DICE = 10000;          // Number of dice faces for a rapid-fire throw (1d`RF_DICE)
+const BATTLE_MAX_ROUND = 6; 		// The default value for the number of rounds for the battle engine
 
 ?>

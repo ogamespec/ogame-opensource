@@ -825,10 +825,10 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     }
     else {
 
-        $arg = "\"battle_id=$battle_id\"";
+        $arg = "$battle_id 0";
         system ( $unitab['battle_engine'] . " $arg", $retval );
         if ($retval < 0) {
-            Error (va("Ошибка в работе боевого движка: #1 #2", $retval, $battle_id));
+            Error (va("An error occurred in the battle engine: #1 #2", $retval, $battle_id));
         }
     }
 
