@@ -4,6 +4,20 @@ $battle_debug = 0;
 $exploded_counter = 0;
 $already_exploded_counter = 0;
 
+// Local versions of arrays for calculations within the battle engine. We do NOT use external arrays; we parse battledata.
+$RapidFireLocal = array ();
+$UnitParamLocal = array ();
+
+if (!defined('GID_MAX')) {
+    define ('GID_MAX', 0xffff);     // Game object ID value must not be > this value (restriction) 
+}
+if (!defined('RF_MAX')) {
+    define ('RF_MAX', 2000);        // Maximum rapidfire value (if > this value, then error)
+}
+if (!defined('RF_DICE')) {
+    define ('RF_DICE', 10000);      // Number of dice faces for a rapid-fire throw (1d`RF_DICE)
+}
+
 if ($battle_debug) {
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
@@ -73,7 +87,7 @@ function set_packed_half (string &$arr, int $idx, int $val) : void
 // Allocate memory for units and set initial values.
 function InitBattle (array $slot, int $num, int $objs, string &$explo_arr, string &$obj_arr, string &$slot_arr, string &$hull_arr, string &$shld_arr ) : void
 {
-    global $UnitParam;
+    global $UnitParamLocal;
 
     $ucnt = 0;
     $slot_id = 0;
@@ -82,7 +96,7 @@ function InitBattle (array $slot, int $num, int $objs, string &$explo_arr, strin
 
         foreach ( $slot[$i]['units'] as $gid=>$amount ) {
 
-            $hull = $UnitParam[$gid][0] * 0.1 * (10+$slot[$i]['armr']) / 10;
+            $hull = $UnitParamLocal[$gid][0] * 0.1 * (10+$slot[$i]['armr']) / 10;
             
             for ($obj=0; $obj<$amount; $obj++) {
                 $explo_arr[$ucnt] = chr(0);
@@ -107,7 +121,7 @@ function UnitShoot (
     string &$dunits, string &$dslot, string &$dhull, string &$dshld, string &$dexplo, array $defenders, 
     float|int &$absorbed ) : float|int
 {
-    global $UnitParam;
+    global $UnitParamLocal;
     global $exploded_counter;
     global $already_exploded_counter;
 
@@ -117,7 +131,7 @@ function UnitShoot (
     $b_slot_id = ord($dslot[$b]);
     $b_gid = get_packed_half ($dunits, $b);
 
-    $apower = $UnitParam[$a_gid][2] * (10 + $attackers[$a_slot_id]['weap']) / 10;
+    $apower = $UnitParamLocal[$a_gid][2] * (10 + $attackers[$a_slot_id]['weap']) / 10;
 
     if (ord($dexplo[$b]) !=0 ) {
         $already_exploded_counter++;
@@ -133,7 +147,7 @@ function UnitShoot (
     }
     else { // We take away from shields, and if there is enough damage, from armor as well.
 
-        $b_shieldmax = $UnitParam[$b_gid][1] * (10 + $defenders[$b_slot_id]['shld']) / 10;
+        $b_shieldmax = $UnitParamLocal[$b_gid][1] * (10 + $defenders[$b_slot_id]['shld']) / 10;
         $b_shield = get_packed_word ($dshld, $b);
 
         $prc = $b_shieldmax * 0.01;
@@ -157,7 +171,7 @@ function UnitShoot (
         }
     }
 
-    $b_hullmax = $UnitParam[$b_gid][0] * 0.1 * (10 + $defenders[$b_slot_id]['armr']) / 10;
+    $b_hullmax = $UnitParamLocal[$b_gid][0] * 0.1 * (10 + $defenders[$b_slot_id]['armr']) / 10;
     $b_hull = get_packed_word($dhull, $b);
     $b_shield = get_packed_word ($dshld, $b);
 
@@ -231,7 +245,7 @@ function WipeExploded (int $count, string &$explo_arr, string &$obj_arr, string 
 // Charge shields on unexploded units
 function ChargeShields (array $slot, int $count, string &$explo_arr, string &$obj_arr, string &$slot_arr, string &$shld_arr) : void
 {
-    global $UnitParam;
+    global $UnitParamLocal;
 
     for ($i=0; $i<$count; $i++) {
 
@@ -243,7 +257,7 @@ function ChargeShields (array $slot, int $count, string &$explo_arr, string &$ob
 
             $slot_id = ord($slot_arr[$i]);
             $gid = get_packed_half ($obj_arr, $i);
-            $shield_max = $UnitParam[$gid][1] * (10 + $slot[$slot_id]['shld']) / 10;
+            $shield_max = $UnitParamLocal[$gid][1] * (10 + $slot[$slot_id]['shld']) / 10;
             set_packed_word ($shld_arr, $i, $shield_max);
         }
     }
@@ -254,13 +268,13 @@ function CheckFastDraw (
     string &$aunits, string &$aslot, string &$ahull, int $aobjs, array $attackers, 
     string &$dunits, string &$dslot, string &$dhull, int $dobjs, array $defenders) : bool
 {
-    global $UnitParam;
+    global $UnitParamLocal;
 
     for ($i=0; $i<$aobjs; $i++) {
 
         $slot_id = ord($aslot[$i]);
         $gid = get_packed_half ($aunits, $i);
-        $hull_max = $UnitParam[$gid][0] * 0.1 * (10+$attackers[$slot_id]['armr']) / 10;
+        $hull_max = $UnitParamLocal[$gid][0] * 0.1 * (10+$attackers[$slot_id]['armr']) / 10;
 
         if (get_packed_word($ahull, $i) != $hull_max) return false;
     }
@@ -269,7 +283,7 @@ function CheckFastDraw (
 
         $slot_id = ord($dslot[$i]);
         $gid = get_packed_half ($dunits, $i);
-        $hull_max = $UnitParam[$gid][0] * 0.1 * (10+$defenders[$slot_id]['armr']) / 10;
+        $hull_max = $UnitParamLocal[$gid][0] * 0.1 * (10+$defenders[$slot_id]['armr']) / 10;
 
         if (get_packed_word($dhull, $i) != $hull_max) return false;
     }
@@ -280,11 +294,11 @@ function CheckFastDraw (
 // Check the possibility of re-firing. Original unit IDs are used for convenience
 function RapidFire (int $atyp, int $dtyp) : int
 {
-    global $RapidFire;
+    global $RapidFireLocal;
     $rapidfire = 0;
 
-    if (isset($RapidFire[$atyp])) {
-        foreach ($RapidFire[$atyp] as $gid=>$count) {
+    if (isset($RapidFireLocal[$atyp])) {
+        foreach ($RapidFireLocal[$atyp] as $gid=>$count) {
             if ($gid == $dtyp && $count) {
                 $rnd = mt_rand (1, RF_DICE);
                 $cmp = RF_DICE / $count;
@@ -467,16 +481,17 @@ function DoBattle (array &$res, int $Rapidfire, int $max_round) : void
 
         for ($slot=0; $slot<$anum; $slot++) {
 
+            $r['attackers'][$slot]['units'] = array();
             for ($i=0; $i<$aobjs; $i++) {
                 if (ord($slot_att[$i]) != $slot) {
                     continue;
                 }
                 $obj_id = get_packed_half ($obj_att, $i);
                 if (isset($r['attackers'][$slot][$obj_id])) {
-                    $r['attackers'][$slot][$obj_id]++;
+                    $r['attackers'][$slot]['units'][$obj_id]++;
                 }
                 else {
-                    $r['attackers'][$slot][$obj_id] = 1;
+                    $r['attackers'][$slot]['units'][$obj_id] = 1;
                 }
             }
         }
@@ -485,16 +500,17 @@ function DoBattle (array &$res, int $Rapidfire, int $max_round) : void
 
         for ($slot=0; $slot<$dnum; $slot++) {
 
+            $r['defenders'][$slot]['units'] = array ();
             for ($i=0; $i<$dobjs; $i++) {
                 if (ord($slot_def[$i]) != $slot) {
                     continue;
                 }                
                 $obj_id = get_packed_half ($obj_def, $i);
                 if (isset($r['defenders'][$slot][$obj_id])) {
-                    $r['defenders'][$slot][$obj_id]++;
+                    $r['defenders'][$slot]['units'][$obj_id]++;
                 }
                 else {
-                    $r['defenders'][$slot][$obj_id] = 1;
+                    $r['defenders'][$slot]['units'][$obj_id] = 1;
                 }
             }
         }
@@ -536,10 +552,12 @@ function DoBattle (array &$res, int $Rapidfire, int $max_round) : void
 
 function deserialize_slot (string $str) : array
 {
+    global $UnitParamLocal; 
     $res = array();
 
+    if ($str === "") Error ("BATTLE_ERROR_INSUFFICIENT_RESOURCES");
     $items = explode (" ", trim($str));    
-    if (count($items) < 5) return $res;
+    if (count($items) < 5) Error ("BATTLE_ERROR_PARSE_SLOT_NOT_ENOUGH");
 
     $pc = 0;
     $res['weap'] = (float) ($items[$pc++]);
@@ -547,12 +565,18 @@ function deserialize_slot (string $str) : array
     $res['armr'] = (float) ($items[$pc++]);
 
     $left_items = count ($items) - $pc;
-    if ($left_items % 2 != 0) return $res;
+    if ($left_items % 2 != 0) Error ("BATTLE_ERROR_PARSE_SLOT_NOT_ALIGNED");
     $gids = $left_items / 2;
 
     $res['units'] = array ();
     for ($i=0; $i<$gids; $i++) {
         $gid = intval ($items[$pc++]);
+        if ($gid > GID_MAX) {
+            Error ("BATTLE_ERROR_GID_MAX");
+        }
+        if (!isset($UnitParamLocal[$gid])) {
+            Error ("BATTLE_ERROR_GID_UNKNOWN");
+        }
         $count = intval ($items[$pc++]);
         $res['units'][$gid] = $count;
     }
@@ -560,10 +584,118 @@ function deserialize_slot (string $str) : array
     return $res;
 }
 
+function ParseRFTable (string $text) : array {
+
+    global $UnitParamLocal;
+    $RapidFire = array ();
+
+    if ($text === "") Error ("BATTLE_ERROR_INSUFFICIENT_RESOURCES");
+
+    $v = explode (' ', $text);
+    $c = count ($v);
+
+    // The entries come in pairs.
+    if ($c % 2 != 0) {
+        Error ("BATTLE_ERROR_PARSE_RF_NOT_ALIGNED");
+    }
+
+    $pc = 0;
+    $args_left = $c;
+
+    while ($args_left) {
+
+        $source_gid = intval ($v[$pc++]); $args_left--;
+        if ($source_gid > GID_MAX) {
+            Error ("BATTLE_ERROR_GID_MAX");
+        }
+        if (!isset($UnitParamLocal[$source_gid])) {
+            Error ("BATTLE_ERROR_GID_UNKNOWN");
+        }
+        $num_targets = intval ($v[$pc++]); $args_left--;
+        if ($num_targets > count($UnitParamLocal)) {
+            Error ("BATTLE_ERROR_PARSE_RF_MALFORMED");
+        }
+        if ($args_left < ($num_targets * 2)) {
+            Error ("BATTLE_ERROR_PARSE_RF_NOT_ENOUGH");
+        }
+
+        if ($num_targets != 0) {
+            $to = array();
+
+            for ($i = 0; $i < $num_targets; $i++) {
+
+                $gid = intval ($v[$pc++]); $args_left--;
+                if ($gid > GID_MAX) {
+                    Error ("BATTLE_ERROR_GID_MAX");
+                }
+                if (!isset($UnitParamLocal[$gid])) {
+                    Error ("BATTLE_ERROR_GID_UNKNOWN");
+                }
+                $count = intval ($v[$pc++]); $args_left--;
+                if ($count > RF_MAX) {
+                    Error ("BATTLE_ERROR_PARSE_RF_MALFORMED");
+                }
+                $to[$gid] = $count;
+            }
+
+            $RapidFire[$source_gid] = $to;
+        }
+    }
+
+    return $RapidFire;
+}
+
+function ParseUnitParam (string $text) : array {
+
+    $UnitParam = array ();
+    if ($text === "") Error ("BATTLE_ERROR_INSUFFICIENT_RESOURCES");
+
+    $v = explode (' ', $text);
+    $c = count ($v);
+
+    $params_per_unit = 1 + 6;
+    // There must be at least 1 set of parameters
+    if ($c < $params_per_unit) {
+        Error ("BATTLE_ERROR_PARSE_UNIT_PARAM_NOT_ENOUGH");
+    }
+    // Parameters must be multiples
+    if ($c % $params_per_unit != 0) {
+        Error ("BATTLE_ERROR_PARSE_UNIT_PARAM_NOT_ALIGNED");
+    }
+
+    $pc = 0;
+    $num_params = $c / $params_per_unit;
+    for ($i = 0; $i < $num_params; $i++) {
+
+        $gid = intval ($v[$pc++]);
+        if ($gid > GID_MAX) {
+            Error ("BATTLE_ERROR_GID_MAX");
+        }
+        if ( isset($UnitParam[$gid])) {
+            Error ("BATTLE_ERROR_PARSE_UNIT_PARAM_DUPLICATED");
+        }
+
+        $unitParam = array();
+
+        $unitParam[] = intval ($v[$pc++]);
+        $unitParam[] = intval ($v[$pc++]);
+        $unitParam[] = intval ($v[$pc++]);
+        $unitParam[] = intval ($v[$pc++]);
+        $unitParam[] = intval ($v[$pc++]);
+        $unitParam[] = intval ($v[$pc++]);
+
+        $UnitParam[$gid] = $unitParam;
+    }
+
+    return $UnitParam;
+}
+
 // Parse the input data
 function ParseInput (string $source, int &$rf, int &$max_round, array &$attackers, array &$defenders) : void
 {
     global $battle_debug;
+    global $RapidFireLocal;
+    global $UnitParamLocal;
 
     $kv = array();
 
@@ -590,6 +722,17 @@ function ParseInput (string $source, int &$rf, int &$max_round, array &$attacker
     // Spread the parameters where they need to go
     $rf = intval ($kv['Rapidfire']);
     $max_round = intval ($kv['MaxRound']);
+    $UnitParamLocal = ParseUnitParam ($kv['UnitParam']);
+    if ($rf) {
+        $RapidFireLocal = ParseRFTable ($kv['RFTab']);
+    }
+
+    if ($battle_debug) {
+        echo "<pre>";
+        echo "RapidFireLocal = "; print_r ($RapidFireLocal);
+        echo "UnitParamLocal = "; print_r ($UnitParamLocal);
+        echo "</pre>";
+    }
 
     $anum = intval ($kv['Attackers']);
     $dnum = intval ($kv['Defenders']);
