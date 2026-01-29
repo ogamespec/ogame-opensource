@@ -198,9 +198,7 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
 
     $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
     $res = unserialize($battleres);
-
-    // HACK
-    $res['dm'] = $res['dk'] = 0;
+    PostProcessBattleResult ($a, $d, $res);
 
     if ( $debug ) {
         print_r ( $battle );

@@ -267,6 +267,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
 
     $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
     $res = unserialize($battleres);
+    PostProcessBattleResult ($a, $d, $res);
 
     // Determine the outcome of the battle.
     if ( $res['result'] === "awon" ) $battle_result = 0;

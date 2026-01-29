@@ -568,6 +568,45 @@ function GenBattleSourceData (array $a, array $d, int $rf, int $max_round) : str
     return $source;
 }
 
+// Распространить некоторые свойства с начальных условий на результаты боевого результата.
+function PostProcessBattleResult (array $a, array $d, array &$res) : void {
+
+    foreach ($res['before']['attackers'] as $i=>$attacker) {
+        $res['before']['attackers'][$i]['name'] = $a[$i]['oname'];
+        $res['before']['attackers'][$i]['g'] = $a[$i]['g'];
+        $res['before']['attackers'][$i]['s'] = $a[$i]['s'];
+        $res['before']['attackers'][$i]['p'] = $a[$i]['p'];
+    }
+
+    foreach ($res['before']['defenders'] as $i=>$defender) {
+        $res['before']['defenders'][$i]['name'] = $d[$i]['oname'];
+        $res['before']['defenders'][$i]['g'] = $d[$i]['g'];
+        $res['before']['defenders'][$i]['s'] = $d[$i]['s'];
+        $res['before']['defenders'][$i]['p'] = $d[$i]['p'];
+    }
+
+    foreach ($res['rounds'] as $n=>$round) {
+
+        foreach ($round['attackers'] as $i=>$attacker) {
+            $res['rounds'][$n]['attackers'][$i]['name'] = $a[$i]['oname'];
+            $res['rounds'][$n]['attackers'][$i]['g'] = $a[$i]['g'];
+            $res['rounds'][$n]['attackers'][$i]['s'] = $a[$i]['s'];
+            $res['rounds'][$n]['attackers'][$i]['p'] = $a[$i]['p'];
+        }
+
+        foreach ($round['defenders'] as $i=>$defender) {
+            $res['rounds'][$n]['defenders'][$i]['name'] = $d[$i]['oname'];
+            $res['rounds'][$n]['defenders'][$i]['g'] = $d[$i]['g'];
+            $res['rounds'][$n]['defenders'][$i]['s'] = $d[$i]['s'];
+            $res['rounds'][$n]['defenders'][$i]['p'] = $d[$i]['p'];
+        }
+    }
+
+    // TBD.
+    $res['dm'] = 0;
+    $res['dk'] = 0;
+}
+
 // Start a battle between attacking fleet_id and defending planet_id.
 function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
 {
@@ -702,6 +741,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
 
     $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
     $res = unserialize($battleres);
+    PostProcessBattleResult ($a, $d, $res);
 
     // Determine the outcome of the battle.
     if ( $res['result'] === "awon" ) $battle_result = 0;

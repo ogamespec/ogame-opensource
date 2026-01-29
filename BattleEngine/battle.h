@@ -2,8 +2,8 @@
 
 #define MAX_UNIT_TYPES 256          // Maximum number of unique game object IDs for flattened arrays
 #define GID_MAX 0xFFFF              // The game object ID cannot be greater than this value (does not fit in uint16_t)
-#define RF_MAX 2000                 // Maximum rapidfire value (if > this value, then error)
-#define RF_DICE 10000               // Number of dice faces for a rapid-fire throw (1d`RF_DICE)
+#define RF_MAX 5000                 // Maximum rapidfire value (if > this value, then error)
+#define RF_DICE 100000              // Number of dice faces for a rapid-fire throw (1d`RF_DICE)
 
 typedef struct _TechParam {
     int     structure;

@@ -12,10 +12,10 @@ if (!defined('GID_MAX')) {
     define ('GID_MAX', 0xffff);     // Game object ID value must not be > this value (restriction) 
 }
 if (!defined('RF_MAX')) {
-    define ('RF_MAX', 2000);        // Maximum rapidfire value (if > this value, then error)
+    define ('RF_MAX', 5000);        // Maximum rapidfire value (if > this value, then error)
 }
 if (!defined('RF_DICE')) {
-    define ('RF_DICE', 10000);      // Number of dice faces for a rapid-fire throw (1d`RF_DICE)
+    define ('RF_DICE', 100000);      // Number of dice faces for a rapid-fire throw (1d`RF_DICE)
 }
 
 if ($battle_debug) {
@@ -633,7 +633,7 @@ function ParseRFTable (string $text) : array {
                 }
                 $count = intval ($v[$pc++]); $args_left--;
                 if ($count > RF_MAX) {
-                    Error ("BATTLE_ERROR_PARSE_RF_MALFORMED");
+                    Error ("BATTLE_ERROR_PARSE_RF_MALFORMED ($source_gid: $gid => $count)");
                 }
                 $to[$gid] = $count;
             }
