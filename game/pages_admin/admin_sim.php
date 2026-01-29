@@ -140,7 +140,7 @@ function get_intval(string $id) : int
     }
 }
 
-function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid, int $did, bool $debug, int &$battle_result, int &$aloss, int &$dloss )
+function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid, int $did, int $max_round, bool $debug, int &$battle_result, int &$aloss, int &$dloss ) : string
 {
     global $db_prefix;
     global $GlobalUser;
@@ -163,7 +163,7 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
 
     // *** Generate source data
 
-    $source = GenBattleSourceData ($a, $d, $rf, $fid, $did);
+    $source = GenBattleSourceData ($a, $d, $rf, $max_round);
 
     if ($debug) echo "<pre>" . $source . "</pre><hr>";
 
@@ -187,10 +187,10 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
     }
     else {
 
-        $arg = "\"battle_id=$battle_id\"";
+        $arg = "$battle_id 0";
         system ( $unitab['battle_engine'] . " $arg", $retval );
         if ($retval < 0) {
-            Error (va("Ошибка в работе боевого движка: #1 #2", $retval, $battle_id));
+            Error (va("An error occurred in the battle engine: #1 #2", $retval, $battle_id));
         }        
     }
 
@@ -198,6 +198,9 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
 
     $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
     $res = unserialize($battleres);
+
+    // HACK
+    $res['dm'] = $res['dk'] = 0;
 
     if ( $debug ) {
         print_r ( $battle );
@@ -255,6 +258,7 @@ function Admin_BattleSim () : void
     $rf = $unitab['rapid'];
     $fid = $unitab['fid'];
     $did = $unitab['did'];
+    $max_round = BATTLE_MAX_ROUND;
     $debug = false;
     $maxslot = $unitab['acs'] * $unitab['acs'];
 
@@ -296,11 +300,11 @@ function Admin_BattleSim () : void
             $a[$i]['s'] = mt_rand (1, 499);
             $a[$i]['p'] = mt_rand (1, 15);
 
-            $a[$i]['fleet'] = array ();
+            $a[$i]['units'] = array ();
             foreach ( $fleetmap as $n=>$gid)
             {
                 if ( !isset($_POST["a".$i."_$gid"]) ) $_POST["a".$i."_$gid"] = 0;
-                $a[$i]['fleet'][$gid] = intval ($_POST["a".$i."_$gid"]);
+                $a[$i]['units'][$gid] = intval ($_POST["a".$i."_$gid"]);
             }
         }
 
@@ -321,18 +325,17 @@ function Admin_BattleSim () : void
             $d[$i]['s'] = mt_rand (1, 499);
             $d[$i]['p'] = mt_rand (1, 15);
 
-            $d[$i]['fleet'] = array ();
+            $d[$i]['units'] = array ();
             foreach ( $fleetmap as $n=>$gid)
             {
                 if ( !isset($_POST["d".$i."_$gid"]) ) $_POST["d".$i."_$gid"] = 0;
-                $d[$i]['fleet'][$gid] = intval ($_POST["d".$i."_$gid"]);
+                $d[$i]['units'][$gid] = intval ($_POST["d".$i."_$gid"]);
             }
 
-            $d[$i]['defense'] = array ();
             foreach ( $defmap_norak as $n=>$gid)
             {
                 if ( !isset($_POST["d".$i."_$gid"]) ) $_POST["d".$i."_$gid"] = 0;
-                $d[$i]['defense'][$gid] = intval ($_POST["d".$i."_$gid"]);
+                $d[$i]['units'][$gid] = intval ($_POST["d".$i."_$gid"]);
             }
         }
 
@@ -346,11 +349,13 @@ function Admin_BattleSim () : void
         else $fid = intval ($_POST['fid']);
         if ( $_POST['did'] === "" ) $did = 0;
         else $did = intval ($_POST['did']);
+        if ( $_POST['max_round'] === "" ) $max_round = BATTLE_MAX_ROUND;
+        else $max_round = intval ($_POST['max_round']);
         $battle_source = $_POST['battle_source'] ?? null;
         if ($battle_source === "") {
             $battle_source = null;
         }
-        $BattleReport = SimBattle ( $battle_source, $a, $d, $rf, $fid, $did, $debug, $battle_result, $aloss, $dloss );
+        $BattleReport = SimBattle ( $battle_source, $a, $d, $rf, $fid, $did, $max_round, $debug, $battle_result, $aloss, $dloss );
     }
 
     // --------------------------------------------------------------------------------------------------------------------------
@@ -543,6 +548,7 @@ RecalcAttackersDefendersNum ();
 <tr><td><?=loca("ADM_SIM_RAPIDFIRE");?></td><td><input type="checkbox" name="rapid" <?php if($rf) echo "checked"; ?> ></td></tr>
 <tr><td><?=loca("ADM_SIM_FID");?></td><td><input name="fid" size=3 value="<?=$fid;?>"> </td></tr>
 <tr><td><?=loca("ADM_SIM_DID");?></td><td><input name="did" size=3 value="<?=$did;?>"></td></tr>
+<tr><td><?=loca("ADM_SIM_MAX_ROUND");?></td><td><input name="max_round" size=3 value="<?=$max_round;?>"></td></tr>
 </table>
 </td></tr>
 
