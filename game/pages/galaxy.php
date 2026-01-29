@@ -12,7 +12,8 @@ function ShowCustomObjects (int $p, array $custom_planets) : void {
 
     // Display custom Galaxy objects added by mods.
     if (count($custom_planets) > 0) {
-        echo "<th>";
+        $width = 100 * count($custom_planets);
+        echo "<th width='$width'>";
         foreach ($custom_planets as $i=>$custom_planet) {
             if ($custom_planet['p'] == $p) {
 

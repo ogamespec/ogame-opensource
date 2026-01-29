@@ -623,3 +623,43 @@ EN: The Juggernaut is the embodiment of cosmic apocalypse, a living calamity bor
 Короткое описание — отображать при наведении курсора на значок Левиафана в галактике или в списке целей.
 
 Длинное описание — разместить в разделе "Справка" или в анонсе события о появлении чудовища, создавая предысторию и атмосферу.
+
+```
+Придумай запрос для генератора картинок, мне нужна картинка для Точки выхода в Галактике, куда прыгают левиафаны, что-то типа гиперперехода
+```
+
+Отличная деталь! «Точка выхода» или «Портал Бездны» добавит мистики и подскажет игрокам логику перемещений. Вот несколько вариантов промптов.
+
+Вариант 1: Стабильная космическая аномалия (рекомендуется)
+Концепция: Древний, нестабильный разрыв в ткани пространства, откуда появляются Левиафаны.
+Промпт (Midjourney / DALL-E 3):
+
+text
+A massive, stable spatial rift in deep space, serving as a cosmic gateway. It looks like a swirling vortex of distorted spacetime, with tendrils of dark energy and lightning crackling around its edges. In its center, a glimpse into a terrifying void filled with swirling nebulae and the faint silhouettes of colossal creatures. The area around it is littered with ancient debris and strange crystalline formations. Dark cosmic background, hyperrealistic, cinematic lighting, sci-fi concept art, sense of immense scale and danger. --ar 16:9 --style raw
+Вариант 2: Активный портал в момент прыжка
+Концепция: Картинка, фиксирующая сам момент перехода, когда Левиафан выходит из портала.
+Промпт:
+
+text
+Cinematic shot: A colossal serpentine space creature (Galactic Leviathan) is halfway emerging from a violent spatial gateway. The portal is a crackling sphere of blue and purple energy, distorting the light of nearby stars. Energy discharge and debris fly from the exit point. The creature's armored head and part of its body are visible, glowing with absorbed energy. Dark space, dramatic lighting, sci-fi, sense of motion and imminent threat. --ar 16:9
+Вариант 3: Графичный и аномальный объект
+Концепция: Более абстрактный и необъяснимый космический феномен.
+Промпт:
+
+text
+A bizarre and permanent cosmic anomaly - a floating, non-euclidean geometric structure in space, like a twisted dodecahedron made of black energy and exotic matter. It pulses with a sickly green light, and space around it visually warps. It acts as a one-way gateway for monstrous entities. Starfield background, digital painting, style of cosmic horror, intricate details. --ar 16:9
+Вариант 4: Просто гипер-переход (как в OGame)
+Концепция: Более техничное и знакомое по играм представление гиперпрыжка, но в гигантском масштабе.
+Промпт:
+
+text
+The moment of a hyperjump exit on a planetary scale. A gigantic, focused tunnel of compressed blue energy and light is collapsing, leaving behind a massive shockwave ripple in the nebula. At the epicenter, residual spatial distortions and ionized particles glow. No ship is visible, only the aftermath of something truly enormous arriving. Sci-fi, clean, powerful, sense of released energy. --ar 16:9
+Советы:
+
+Для более мрачной и таинственной атмосферы добавьте: lovecraftian cosmic horror, mysterious, ominous.
+
+Для более техногенного или древне-артефактного вида: alien megastructure, ancient gateway, covered in strange runes.
+
+Чтобы выделить следы Левиафанов: surrounded by strange organic residue and crystalline growths typical of the creatures.
+
+Лучший запрос для старта — Вариант 1. Он создает самостоятельную, узнаваемую и очень атмосферную точку на карте галактики.

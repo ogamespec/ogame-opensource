@@ -1,8 +1,9 @@
 <?php
 
-$LOCA["ru"]["PLANET_".GID_LEVI_AMOEBA] = "Амёба";
-$LOCA["ru"]["PLANET_".GID_LEVI_GUARDIAN] = "Страж";
-$LOCA["ru"]["PLANET_".GID_LEVI_JUGGERNAUT] = "Левиафан";
+$LOCA["ru"]["PLANET_".PTYP_LEVI_PORTAL] = "Портал Бездны";
+$LOCA["ru"]["PLANET_".PTYP_LEVI_AMOEBA] = "Амёба";
+$LOCA["ru"]["PLANET_".PTYP_LEVI_GUARDIAN] = "Страж";
+$LOCA["ru"]["PLANET_".PTYP_LEVI_JUGGERNAUT] = "Левиафан";
 
 $LOCA["ru"]["NAME_".GID_LEVI_AMOEBA] = "Планктонный Пожиратель";
 $LOCA["ru"]["SHORT_".GID_LEVI_AMOEBA] = "Био-рой, пожирающий лёгкие корабли.";
