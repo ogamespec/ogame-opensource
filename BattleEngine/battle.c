@@ -306,12 +306,11 @@ int CheckFastDraw (Unit *aunits, int aobjs, Slot* aslot, Unit *dunits, int dobjs
     return 1;
 }
 
-UnitCount pseudo_slot[MAX_UNIT_TYPES];
-
 // Generate slot result.
 // If techs = 1, show techs (no need to show techs in rounds).
 static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *s, int techs)
 {
+    static UnitCount pseudo_slot[MAX_UNIT_TYPES];
     Unit *u;
     int i, count = 0;
     unsigned long sum = 0;
@@ -336,7 +335,7 @@ static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *s, i
         }
     }
 
-    int array_size = unique_gids + techs * 3;
+    int array_size = techs * 3 + 1;
     ptr += sprintf ( ptr, "i:%i;a:%i:{", slot, array_size);
 
     if ( techs ) {
@@ -345,12 +344,14 @@ static char * GenSlot (char * ptr, Unit *units, int slot, int objnum, Slot *s, i
         ptr += sprintf (ptr, "s:4:\"armr\";d:%f;", s[slot].armor );
     }
 
+    ptr += sprintf(ptr, "s:5:\"units\";a:%i:{", unique_gids);
     for (uint8_t ord = 0; ord < flatten_counter; ord++) {
         int gid = OrdToId(ord);
         if (pseudo_slot[ord].count) {
             ptr += sprintf(ptr, "i:%i;i:%i;", gid, pseudo_slot[ord].count);
         }
     }
+    ptr += sprintf(ptr, "}");
 
     ptr += sprintf ( ptr, "}" );
     return ptr;
