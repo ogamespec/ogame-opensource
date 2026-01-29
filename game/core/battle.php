@@ -30,7 +30,9 @@ function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_de
         $last = $res['rounds'][$rounds - 1];
         foreach ( $exploded as $gid=>$amount )
         {
-            $exploded[$gid] = $d[0]['units'][$gid] - $last['defenders'][0]['units'][$gid];
+            $before = isset($d[0]['units'][$gid]) ? $d[0]['units'][$gid] : 0;
+            $after =  isset ($last['defenders'][0]['units'][$gid]) ? $last['defenders'][0]['units'][$gid] : 0;
+            $exploded[$gid] = $before - $after;
             if ( key_exists ('engineer', $prem) && $prem['engineer'] ) $exploded[$gid] = floor ($exploded[$gid] / 2);
             $exploded_total += $exploded[$gid];
         }
@@ -356,7 +358,9 @@ function GenSlot ( int $weap, int $shld, int $armor, string $name, int $g, int $
     $sum = 0;
     foreach ( $unitmap as $i=>$gid )
     {
-        $sum += $units[$gid];
+        if (isset($units[$gid])) {
+            $sum += $units[$gid];
+        }
     }
 
     if ( $sum > 0 )
@@ -366,40 +370,50 @@ function GenSlot ( int $weap, int $shld, int $armor, string $name, int $g, int $
         $text .= "<tr><th>".loca_lang("BATTLE_TYPE", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
-            $n = $units[$gid];
-            if ( $n > 0 ) $text .= "<th>".loca_lang("SNAME_$gid", $lang)."</th>";
+            if (isset($units[$gid])) {
+                $n = $units[$gid];
+                if ( $n > 0 ) $text .= "<th>".loca_lang("SNAME_$gid", $lang)."</th>";
+            }
         }
         $text .= "</tr>";
 
         $text .= "<tr><th>".loca_lang("BATTLE_AMOUNT", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
-            $n = $units[$gid];
-            if ( $n > 0 ) $text .= "<th>".nicenum($n)."</th>";
+            if (isset($units[$gid])) {
+                $n = $units[$gid];
+                if ( $n > 0 ) $text .= "<th>".nicenum($n)."</th>";
+            }
         }
         $text .= "</tr>";
 
         $text .= "<tr><th>".loca_lang("BATTLE_WEAP", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
-            $n = $units[$gid];
-            if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][2] * (10 + $weap ) / 10 )."</th>";
+            if (isset($units[$gid])) {
+                $n = $units[$gid];
+                if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][2] * (10 + $weap ) / 10 )."</th>";
+            }
         }
         $text .= "</tr>";
 
         $text .= "<tr><th>".loca_lang("BATTLE_SHLD", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
-            $n = $units[$gid];
-            if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][1] * (10 + $shld ) / 10 )."</th>";
+            if (isset($units[$gid])) {
+                $n = $units[$gid];
+                if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][1] * (10 + $shld ) / 10 )."</th>";
+            }
         }
         $text .= "</tr>";
 
         $text .= "<tr><th>".loca_lang("BATTLE_ARMR", $lang)."</th>";
         foreach ( $unitmap as $i=>$gid )
         {
-            $n = $units[$gid];
-            if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][0] * (10 + $armor ) / 100 )."</th>";
+            if (isset($units[$gid])) {
+                $n = $units[$gid];
+                if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][0] * (10 + $armor ) / 100 )."</th>";
+            }
         }
         $text .= "</tr>";
 
