@@ -18,9 +18,21 @@
     <ClCompile Include="..\battle.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\file.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rand.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\battle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\file.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

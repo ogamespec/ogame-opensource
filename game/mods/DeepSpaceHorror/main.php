@@ -2,6 +2,7 @@
 
 // Deep Space Horror
 
+const PTYP_LEVI_PORTAL = 22848;         // Портал Бездны (точка выхода)
 // Планета - Космический монстр
 const PTYP_LEVI_AMOEBA = 22849;
 const PTYP_LEVI_GUARDIAN = 22850;
@@ -65,6 +66,10 @@ class DeepSpaceHorror extends GameMod {
                 DeleteFleet ($fleet_obj['fleet_id']);
                 RemoveQueue ($queue['task_id']);
                 DestroyPlanet ($origin['planet_id']);
+            }
+            $target = LoadPlanetById ($fleet_obj['target_planet']);
+            if ($target && $target['type'] == PTYP_LEVI_PORTAL) {
+                DestroyPlanet ($target['planet_id']);
             }
         }
 
@@ -174,6 +179,9 @@ class DeepSpaceHorror extends GameMod {
             case PTYP_LEVI_JUGGERNAUT:
                 $img['path'] = "mods/DeepSpaceHorror/img/leviathan.jpg";
                 return true;
+            case PTYP_LEVI_PORTAL:
+                $img['path'] = "mods/DeepSpaceHorror/img/portal.jpg";
+                return true;
         }
         return false;
     }
@@ -215,7 +223,7 @@ class DeepSpaceHorror extends GameMod {
         if ($gid == 0) return 0;
 
         $now = time();
-        $name = loca ("PLANET_".$gid, $GlobalUni['lang']);
+        $origin_name = loca ("PLANET_".$type, $GlobalUni['lang']);
 
         $g = mt_rand (1, $GlobalUni['galaxies']);
         $s = mt_rand (1, $GlobalUni['systems']);
@@ -225,12 +233,21 @@ class DeepSpaceHorror extends GameMod {
         $temp = 200;
         $fields = 1;
 
-        $planet = array(
-            'name' => $name, 'type' => $type, 'g' => $g, 's' => $s, 'p' => $p, 
+        $origin = array(
+            'name' => $origin_name, 'type' => $type, 'g' => $g, 's' => $s, 'p' => $p, 
             'owner_id' => USER_SPACE, 'diameter' => $diam, 'temp' => $temp, 'fields' => 0, 'maxfields' => $fields, 'date' => $now,
             'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
-        $id = AddDBRow ( $planet, "planets" );
-        $planet = LoadPlanetById ($id);         // reload
+        $id = AddDBRow ( $origin, "planets" );
+        $origin = LoadPlanetById ($id);         // reload
+
+        $target_name = loca ("PLANET_".PTYP_LEVI_PORTAL);
+
+        $target = array(
+            'name' => $target_name, 'type' => PTYP_LEVI_PORTAL, 'g' => $g, 's' => $s, 'p' => $p, 
+            'owner_id' => USER_SPACE, 'diameter' => $diam, 'temp' => -200, 'fields' => 0, 'maxfields' => 0, 'date' => $now,
+            'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
+        $id = AddDBRow ( $target, "planets" );
+        $target = LoadPlanetById ($id);         // reload
 
         // Запустить "флот"
 
@@ -248,7 +265,7 @@ class DeepSpaceHorror extends GameMod {
         foreach ($transportableResources as $i=>$rc) {
             $resources[$rc] = 0;
         }
-        DispatchFleet ($fleet, $planet, $planet, FTYP_LEVI_PREPARE_JUMP, $seconds, $resources, $cons, $now);
+        $id = DispatchFleet ($fleet, $origin, $target, FTYP_LEVI_PREPARE_JUMP, $seconds, $resources, $cons, $now);
 
         return $id;
     }
@@ -272,10 +289,35 @@ class DeepSpaceHorror extends GameMod {
             $info['overlib'] = $this->GetLeviathanOverlib ($planet);
             return true;
         }
+        else if ($planet['type'] == PTYP_LEVI_PORTAL) {
+
+            $info['overlib'] = $this->GetPortalOverlib ($planet);
+            return true;
+        }
         return false;
     }
 
     private function GetLeviathanOverlib (array $planet) : string {
+
+        global $GlobalUser;
+        global $session;
+
+        $res = "";
+        $res .= "<table width=240 ><tr>";
+        $res .= "<td class=c colspan=2 >".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]</td></tr>";
+        $res .= "<tr><th width=80 ><img src=".GetPlanetSmallImage ( UserSkin(), $planet )." height=75 width=75 /></th>";
+        $res .= "<th><table width=120 ><tr><td colspan=2 class=c >".loca("GALAXY_LEVI_PROPS")."</td></tr>";
+        $res .= "<tr><th>".loca("GALAXY_LEVI_SIZE")."</td><th>".nicenum($planet['diameter'])."</td></tr>";
+        $res .= "<tr><th>".loca("GALAXY_LEVI_TEMP")."</td><th>".$planet['temp']."</td></tr>";
+        $res .= "<tr><td colspan=2 class=c >".loca("GALAXY_LEVI_ACTIONS")."</td></tr>";
+        $res .= "<tr><th align=left colspan=2 >";
+        if ($GlobalUser['admin'] >= 2) $res .= "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id'].">".loca("GALAXY_PLANET_ADMIN")."</a><br />";
+        $res .= "</th></tr></table></tr></table>";
+
+        return $res;
+    }
+
+    private function GetPortalOverlib (array $planet) : string {
 
         global $GlobalUser;
         global $session;

@@ -47,6 +47,6 @@ RUN chown -R www-data:www-data /var/www/html
 
 # C battle engine
 COPY ./BattleEngine /var/www/BattleEngine
-RUN gcc /var/www/BattleEngine/battle.c -lm -o /usr/lib/cgi-bin/battle
+RUN gcc /var/www/BattleEngine/*.c -lm -o /usr/lib/cgi-bin/battle
 RUN chmod 755 /usr/lib/cgi-bin/battle
 RUN rm -rf /var/www/BattleEngine

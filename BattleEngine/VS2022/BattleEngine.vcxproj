@@ -20,9 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\battle.c" />
+    <ClCompile Include="..\file.c" />
+    <ClCompile Include="..\rand.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\battle.h" />
+    <ClInclude Include="..\file.h" />
+    <ClInclude Include="..\rand.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
