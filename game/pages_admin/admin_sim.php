@@ -293,6 +293,7 @@ function Admin_BattleSim () : void
             $a[$i][GID_R_ARMOUR] = intval ($_POST["a".$i."_armor"]);
             $a[$i]['oname'] = "Attacker$i";
             $a[$i]['id'] = mt_rand(1,10000);
+            $a[$i]['pf'] = 0;   // fleet
     
             $a[$i]['g'] = mt_rand (1, 9);
             $a[$i]['s'] = mt_rand (1, 499);
@@ -318,6 +319,7 @@ function Admin_BattleSim () : void
             $d[$i][GID_R_ARMOUR] = intval ($_POST["d".$i."_armor"]);
             $d[$i]['oname'] = "Defender$i";
             $d[$i]['id'] = mt_rand(1,10000);
+            $d[$i]['pf'] = 0;   // fleet
     
             $d[$i]['g'] = mt_rand (1, 9);
             $d[$i]['s'] = mt_rand (1, 499);

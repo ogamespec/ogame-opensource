@@ -5,6 +5,10 @@ $LOCA["ru"]["PLANET_".PTYP_LEVI_AMOEBA] = "Амёба";
 $LOCA["ru"]["PLANET_".PTYP_LEVI_GUARDIAN] = "Страж";
 $LOCA["ru"]["PLANET_".PTYP_LEVI_JUGGERNAUT] = "Левиафан";
 
+$LOCA["ru"]["SNAME_".GID_LEVI_AMOEBA] = "Амёба";
+$LOCA["ru"]["SNAME_".GID_LEVI_GUARDIAN] = "Страж";
+$LOCA["ru"]["SNAME_".GID_LEVI_JUGGERNAUT] = "Левиафан";
+
 $LOCA["ru"]["NAME_".GID_LEVI_AMOEBA] = "Планктонный Пожиратель";
 $LOCA["ru"]["SHORT_".GID_LEVI_AMOEBA] = "Био-рой, пожирающий лёгкие корабли.";
 $LOCA["ru"]["LONG_".GID_LEVI_AMOEBA] = "Амёба — не единый организм, а гигантский колониальный рой протоплазматических существ. Она дрейфует в космических течениях, поглощая энергию и дейтерий из всего, что встречает на пути. Её слабость — массивная броня, но она способна растворить целые эскадры лёгких истребителей за секунды, обволакивая их кислотной массой.";

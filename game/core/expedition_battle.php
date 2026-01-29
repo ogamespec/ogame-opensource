@@ -161,6 +161,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
     $a[0]['s'] = $start_planet['s'];
     $a[0]['p'] = $start_planet['p'];
     $a[0]['id'] = $fleet_id;
+    $a[0]['pf'] = 0;        // fleet
     $a[0]['points'] = $a[0]['fpoints'] = 0;
     $anum++;
 
@@ -231,6 +232,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
     $d[0]['s'] = $target_planet['s'];
     $d[0]['p'] = $target_planet['p'];
     $d[0]['id'] = $target_planet['planet_id'];
+    $d[0]['pf'] = 1;    // planet
     $d[0]['points'] = $d[0]['fpoints'] = 0;
     $dnum++;
 

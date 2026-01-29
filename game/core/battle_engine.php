@@ -487,7 +487,7 @@ function DoBattle (array &$res, int $Rapidfire, int $max_round) : void
                     continue;
                 }
                 $obj_id = get_packed_half ($obj_att, $i);
-                if (isset($r['attackers'][$slot][$obj_id])) {
+                if (isset($r['attackers'][$slot]['units'][$obj_id])) {
                     $r['attackers'][$slot]['units'][$obj_id]++;
                 }
                 else {
@@ -506,7 +506,7 @@ function DoBattle (array &$res, int $Rapidfire, int $max_round) : void
                     continue;
                 }                
                 $obj_id = get_packed_half ($obj_def, $i);
-                if (isset($r['defenders'][$slot][$obj_id])) {
+                if (isset($r['defenders'][$slot]['units'][$obj_id])) {
                     $r['defenders'][$slot]['units'][$obj_id]++;
                 }
                 else {
