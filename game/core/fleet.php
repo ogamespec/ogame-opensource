@@ -70,33 +70,32 @@ function FleetAvailableMissions ( int $thisgalaxy, int $thissystem, int $thispla
 
     if ( $planet >= 16 )
     {
-        $missions[0] = FTYP_EXPEDITION;
+        $missions[] = FTYP_EXPEDITION;
         return $missions;
     }
 
     if ( $planettype == 2)        // debris field.
     {
-        if ( $fleet[GID_F_RECYCLER] > 0 ) $missions[0] = FTYP_RECYCLE;    // if there are recyclers in the fleet
+        if ( $fleet[GID_F_RECYCLER] > 0 ) $missions[] = FTYP_RECYCLE;    // if there are recyclers in the fleet
         return $missions;
     }
 
     if ( $target == null )        // empty space
     {
-        $missions[0] = FTYP_TRANSPORT;
-        $missions[1] = FTYP_ATTACK;
-        if ( $fleet[GID_F_COLON] > 0 ) $missions[2] = FTYP_COLONIZE;    // if there's a colonizer in the fleet
+        $missions[] = FTYP_TRANSPORT;
+        $missions[] = FTYP_ATTACK;
+        if ( $fleet[GID_F_COLON] > 0 ) $missions[] = FTYP_COLONIZE;    // if there's a colonizer in the fleet
         return $missions;
     }
 
     if ( $origin['owner_id'] == $target['owner_id'] )        // own moons/planets
     {
-        $missions[0] = FTYP_TRANSPORT;
-        $missions[1] = FTYP_DEPLOY;
+        $missions[] = FTYP_TRANSPORT;
+        $missions[] = FTYP_DEPLOY;
         return $missions;
     }
     else
     {
-        $i = 0;
         $origin_user = LoadUser ($origin['owner_id']);
         if ($origin_user == null) {
             return array();
@@ -108,18 +107,18 @@ function FleetAvailableMissions ( int $thisgalaxy, int $thissystem, int $thispla
 
         if ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) )      // allies or buddies
         {
-            $missions[$i++] = FTYP_TRANSPORT;
-            $missions[$i++] = FTYP_ATTACK;
-            if ( $uni['acs'] > 0 ) $missions[$i++] = FTYP_ACS_HOLD;
-            if ( $fleet[GID_F_DEATHSTAR] > 0 && GetPlanetType($target) == 3 ) $missions[$i++] = FTYP_DESTROY;
-            if ( $fleet[GID_F_PROBE] > 0  ) $missions[$i++] = FTYP_SPY;
+            $missions[] = FTYP_TRANSPORT;
+            $missions[] = FTYP_ATTACK;
+            if ( $uni['acs'] > 0 ) $missions[] = FTYP_ACS_HOLD;
+            if ( $fleet[GID_F_DEATHSTAR] > 0 && GetPlanetType($target) == 3 ) $missions[] = FTYP_DESTROY;
+            if ( $fleet[GID_F_PROBE] > 0  ) $missions[] = FTYP_SPY;
         }
         else        // all others
         {
-            $missions[$i++] = FTYP_TRANSPORT;
-            $missions[$i++] = FTYP_ATTACK;
-            if ( $fleet[GID_F_DEATHSTAR] > 0 && GetPlanetType($target) == 3 ) $missions[$i++] = FTYP_DESTROY;
-            if ( $fleet[GID_F_PROBE] > 0  ) $missions[$i++] = FTYP_SPY;
+            $missions[] = FTYP_TRANSPORT;
+            $missions[] = FTYP_ATTACK;
+            if ( $fleet[GID_F_DEATHSTAR] > 0 && GetPlanetType($target) == 3 ) $missions[] = FTYP_DESTROY;
+            if ( $fleet[GID_F_PROBE] > 0  ) $missions[] = FTYP_SPY;
         }
 
         // If the target planet is on the ACS attack list, add the task
@@ -128,7 +127,7 @@ function FleetAvailableMissions ( int $thisgalaxy, int $thissystem, int $thispla
             $fleet_obj = LoadFleet ( $union['fleet_id'] );
             $fleet_target = LoadPlanetById ( $fleet_obj['target_planet'] );
             if ( $fleet_target['planet_id'] == $target['planet_id'] ) {
-                $missions[$i++] = FTYP_ACS_ATTACK;
+                $missions[] = FTYP_ACS_ATTACK;
                 break;
             }
         }
