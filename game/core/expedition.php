@@ -7,8 +7,6 @@
 
 // Expedition visit counter is stored as the metal value on the far space planet object.
 
-require_once "expedition_battle.php";
-
 // Expedition result (it is not needed anywhere else except for this module, so there is no need to add it to defs.php)
 const EXP_NOTHING = 0;
 const EXP_ALIENS = 1;

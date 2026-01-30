@@ -1,9 +1,5 @@
 <?php
 
-require_once "battle_engine.php";
-require_once "raketen.php";
-require_once "graviton.php";
-
 // OGame Battle Engine frontend.
 
 const BATTLE_RESULT_AWON = 0;       // The attacker won
