@@ -22,43 +22,22 @@ function ParseBattleDataSource (string $source, array &$a, array &$d) : void
             $index = (int)substr($prefix, 8);
             
             // Processing data
-            $data = $parts[1]; // "({NAME} ... )"
-            $data = trim($data, '() ');
-            
-            // Extracting the name
-            $nameEnd = strpos($data, '}');
-            $name = substr($data, 1, $nameEnd - 1);
-            
-            // Other values
-            $values = substr($data, $nameEnd + 2);
-            $values = preg_split('/\s+/', trim($values));
-            
-            $a[$index] = [
-                'oname' => $name,
-                'id' => (int)$values[0],
-                'g' => (int)$values[1],
-                's' => (int)$values[2],
-                'p' => (int)$values[3],
-                GID_R_WEAPON => (int)$values[4],
-                GID_R_SHIELD => (int)$values[5],
-                GID_R_ARMOUR => (int)$values[6],
-                'fleet' => array (
-                    GID_F_SC => (int)$values[7],
-                    GID_F_LC => (int)$values[8],
-                    GID_F_LF => (int)$values[9],
-                    GID_F_HF => (int)$values[10],
-                    GID_F_CRUISER => (int)$values[11],
-                    GID_F_BATTLESHIP => (int)$values[12],
-                    GID_F_COLON => (int)$values[13],
-                    GID_F_RECYCLER => (int)$values[14],
-                    GID_F_PROBE => (int)$values[15],
-                    GID_F_BOMBER => (int)$values[16],
-                    GID_F_SAT => (int)$values[17],
-                    GID_F_DESTRO => (int)$values[18],
-                    GID_F_DEATHSTAR => (int)$values[19],
-                    GID_F_BATTLECRUISER => (int)$values[20]
-                )
-            ];
+            $values = preg_split('/\s+/', trim($parts[1]));
+
+            $pc = 0;
+            $a[$index][GID_R_WEAPON] = (int)$values[$pc++];
+            $a[$index][GID_R_SHIELD] = (int)$values[$pc++];
+            $a[$index][GID_R_ARMOUR] = (int)$values[$pc++];
+
+            $num_gids = count($values) - $pc;
+            if ($num_gids % 2 != 0) continue;
+
+            for ($i=0; $i<$num_gids; $i++) {
+                $gid = (int)$values[$pc++];
+                $count = (int)$values[$pc++];
+                $a[$index]['units'][$gid] = $count;
+            }
+
         } elseif (strpos($line, 'Defender') === 0) {
             // Extracting the defender's number
             $parts = explode(' = ', $line);
@@ -68,53 +47,22 @@ function ParseBattleDataSource (string $source, array &$a, array &$d) : void
             $index = (int)substr($prefix, 8);
             
             // Processing data
-            $data = $parts[1]; // "({NAME} ... )"
-            $data = trim($data, '() ');
+            $values = preg_split('/\s+/', trim($parts[1]));
             
-            // Extracting the name
-            $nameEnd = strpos($data, '}');
-            $name = substr($data, 1, $nameEnd - 1);
+            $pc = 0;
+            $d[$index][GID_R_WEAPON] = (int)$values[$pc++];
+            $d[$index][GID_R_SHIELD] = (int)$values[$pc++];
+            $d[$index][GID_R_ARMOUR] = (int)$values[$pc++];
+
+            $num_gids = count($values) - $pc;
+            if ($num_gids % 2 != 0) continue;
+
+            for ($i=0; $i<$num_gids; $i++) {
+                $gid = (int)$values[$pc++];
+                $count = (int)$values[$pc++];
+                $d[$index]['units'][$gid] = $count;
+            }
             
-            // Other values
-            $values = substr($data, $nameEnd + 2);
-            $values = preg_split('/\s+/', trim($values));
-            
-            $d[$index] = [
-                'oname' => $name,
-                'id' => (int)$values[0],
-                'g' => (int)$values[1],
-                's' => (int)$values[2],
-                'p' => (int)$values[3],
-                GID_R_WEAPON => (int)$values[4],
-                GID_R_SHIELD => (int)$values[5],
-                GID_R_ARMOUR => (int)$values[6],
-                'fleet' => array (
-                    GID_F_SC => (int)$values[7],
-                    GID_F_LC => (int)$values[8],
-                    GID_F_LF => (int)$values[9],
-                    GID_F_HF => (int)$values[10],
-                    GID_F_CRUISER => (int)$values[11],
-                    GID_F_BATTLESHIP => (int)$values[12],
-                    GID_F_COLON => (int)$values[13],
-                    GID_F_RECYCLER => (int)$values[14],
-                    GID_F_PROBE => (int)$values[15],
-                    GID_F_BOMBER => (int)$values[16],
-                    GID_F_SAT => (int)$values[17],
-                    GID_F_DESTRO => (int)$values[18],
-                    GID_F_DEATHSTAR => (int)$values[19],
-                    GID_F_BATTLECRUISER => (int)$values[20]
-                ),
-                'defense' => array (
-                    GID_D_RL => (int)$values[21],
-                    GID_D_LL => (int)$values[22],
-                    GID_D_HL => (int)$values[23],
-                    GID_D_GAUSS => (int)$values[24],
-                    GID_D_ION => (int)$values[25],
-                    GID_D_PLASMA => (int)$values[26],
-                    GID_D_SDOME => (int)$values[27],
-                    GID_D_LDOME => (int)$values[28]
-                )
-            ];
         }
     }
 }
