@@ -60,7 +60,7 @@ foreign moon without Deathstar                Transport, Attack, ACS Attack
 if there's only a spy in the fleet     Espionage
 */
 
-function FleetAvailableMissions ( int $thisgalaxy, int $thissystem, int $thisplanet, int $thisplanettype, int $galaxy, int $system, int $planet, int $planettype, array $fleet ) : array
+function FleetAvailableMissionsDefault ( int $thisgalaxy, int $thissystem, int $thisplanet, int $thisplanettype, int $galaxy, int $system, int $planet, int $planettype, array $fleet ) : array
 {
     $missions = array ( );
 
@@ -133,6 +133,27 @@ function FleetAvailableMissions ( int $thisgalaxy, int $thissystem, int $thispla
         }
         return $missions;
     }
+}
+
+// First, the default procedure is called to obtain missions from 0.84, then the list is modified by mods and goes into the visual.
+function FleetAvailableMissions ( int $thisgalaxy, int $thissystem, int $thisplanet, int $thisplanettype, int $galaxy, int $system, int $planet, int $planettype, array $fleet ) : array {
+
+    $missions = FleetAvailableMissionsDefault ($thisgalaxy, $thissystem, $thisplanet, $thisplanettype, $galaxy, $system, $planet, $planettype, $fleet);
+
+    $param = [];
+    $param['thisgalaxy'] = $thisgalaxy;
+    $param['thissystem'] = $thissystem;
+    $param['thisplanet'] = $thisplanet;
+    $param['thisplanettype'] = $thisplanettype;
+    $param['galaxy'] = $galaxy;
+    $param['system'] = $system;
+    $param['planet'] = $planet;
+    $param['planettype'] = $planettype;
+    $param['fleet'] = $fleet;
+
+    ModsExecArrRef ('fleet_available_missions', $param, $missions);
+
+    return $missions;
 }
 
 // ==================================================================================
@@ -259,12 +280,14 @@ function AdjustShips (array $fleet, int $planet_id, string $sign) : void
     global $db_prefix;
     $planet = LoadPlanetById ($planet_id);
 
+    $need_comma = false;
     $query = "UPDATE ".$db_prefix."planets SET ";
     foreach ($fleetmap as $i=>$gid)
     {
         if (!isset($planet[$gid])) continue;
-        if ($i > 0) $query .= ",";
+        if ($need_comma) $query .= ",";
         $query .= "`$gid` = `$gid` $sign " . $fleet[$gid] ;
+        $need_comma = true;
     }
     $query .= " WHERE planet_id=$planet_id;";
     dbquery ($query);

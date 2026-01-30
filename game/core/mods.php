@@ -80,6 +80,10 @@ abstract class GameMod {
         return false;
     }
 
+    public function fleet_available_missions (array $param, array &$missions) : bool {
+        return false;
+    }
+
     // Default pages hooks (various modifications of the original content)
 
     public function page_buildings_get_bonus(int $id, array &$bonuses) : bool {
