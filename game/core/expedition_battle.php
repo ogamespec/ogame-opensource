@@ -1,5 +1,7 @@
 <?php
 
+require_once "battle_engine.php";
+
 // Modify the fleet (after a battle with aliens/pirates)
 function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : void
 {
@@ -241,40 +243,12 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
     $battle = array ( 'source' => $source, 'title' => "", 'report' => "", 'date' => $when );
     $battle_id = AddDBRow ( $battle, "battledata" );
 
-    $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
-    fwrite ( $bf, $source );
-    fclose ( $bf );
-
-    // *** Transfer data to the battle engine
-
-    if ($unitab['php_battle']) {
-
-        $battle_source = file_get_contents ( "battledata/battle_".$battle_id.".txt" );
-        $res = BattleEngine ($battle_source);
-
-        $bf = fopen ( "battleresult/battle_".$battle_id.".txt", "w" );
-        fwrite ( $bf, serialize($res) );
-        fclose ( $bf );
-    }
-    else {
-
-        $arg = "$battle_id 0";
-        system ( $unitab['battle_engine'] . " $arg", $retval );
-        if ($retval < 0) {
-            Error (va("An error occurred in the battle engine: #1 #2", $retval, $battle_id));
-        }
-    }
-
-    // *** Process output data
-
-    $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
-    $res = unserialize($battleres);
-    PostProcessBattleResult ($a, $d, $res);
+    $res = ExecuteBattle ($unitab, $battle_id, $source, $a, $d);
 
     // Determine the outcome of the battle.
-    if ( $res['result'] === "awon" ) $battle_result = 0;
-    else if ( $res['result'] === "dwon" ) $battle_result = 1;
-    else $battle_result = 2;
+    if ( $res['result'] === "awon" ) $battle_result = BATTLE_RESULT_AWON;
+    else if ( $res['result'] === "dwon" ) $battle_result = BATTLE_RESULT_DWON;
+    else $battle_result = BATTLE_RESULT_DRAW;
 
     // Calculate total losses (account for deuterium and repaired defenses)
     $aloss = $dloss = 0;
@@ -305,7 +279,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
         }
 
         // If fleet is destroyed in 1 or 2 rounds - do not show battle log for attackers.
-        if ( count($res['rounds']) <= 2 && $battle_result == 1 ) $text = loca_lang("BATTLE_LOST", $user['lang']) . " <!--A:$aloss,W:$dloss-->";
+        if ( count($res['rounds']) <= 2 && $battle_result == BATTLE_RESULT_DWON ) $text = loca_lang("BATTLE_LOST", $user['lang']) . " <!--A:$aloss,W:$dloss-->";
 
         loca_add ( "fleetmsg", $user['lang'] );
 

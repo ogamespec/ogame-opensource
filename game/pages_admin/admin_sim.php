@@ -22,43 +22,30 @@ function ParseBattleDataSource (string $source, array &$a, array &$d) : void
             $index = (int)substr($prefix, 8);
             
             // Processing data
-            $data = $parts[1]; // "({NAME} ... )"
-            $data = trim($data, '() ');
-            
-            // Extracting the name
-            $nameEnd = strpos($data, '}');
-            $name = substr($data, 1, $nameEnd - 1);
-            
-            // Other values
-            $values = substr($data, $nameEnd + 2);
-            $values = preg_split('/\s+/', trim($values));
-            
-            $a[$index] = [
-                'oname' => $name,
-                'id' => (int)$values[0],
-                'g' => (int)$values[1],
-                's' => (int)$values[2],
-                'p' => (int)$values[3],
-                GID_R_WEAPON => (int)$values[4],
-                GID_R_SHIELD => (int)$values[5],
-                GID_R_ARMOUR => (int)$values[6],
-                'fleet' => array (
-                    GID_F_SC => (int)$values[7],
-                    GID_F_LC => (int)$values[8],
-                    GID_F_LF => (int)$values[9],
-                    GID_F_HF => (int)$values[10],
-                    GID_F_CRUISER => (int)$values[11],
-                    GID_F_BATTLESHIP => (int)$values[12],
-                    GID_F_COLON => (int)$values[13],
-                    GID_F_RECYCLER => (int)$values[14],
-                    GID_F_PROBE => (int)$values[15],
-                    GID_F_BOMBER => (int)$values[16],
-                    GID_F_SAT => (int)$values[17],
-                    GID_F_DESTRO => (int)$values[18],
-                    GID_F_DEATHSTAR => (int)$values[19],
-                    GID_F_BATTLECRUISER => (int)$values[20]
-                )
-            ];
+            $values = preg_split('/\s+/', trim($parts[1]));
+
+            $a[$index]['oname'] = "Attacker$index";
+            $a[$index]['id'] = mt_rand(1,10000);
+            $a[$index]['pf'] = 0;   // fleet
+            $a[$index]['g'] = mt_rand (1, 9);
+            $a[$index]['s'] = mt_rand (1, 499);
+            $a[$index]['p'] = mt_rand (1, 15);
+
+            $pc = 0;
+            $a[$index][GID_R_WEAPON] = (float)$values[$pc++];
+            $a[$index][GID_R_SHIELD] = (float)$values[$pc++];
+            $a[$index][GID_R_ARMOUR] = (float)$values[$pc++];
+
+            $num_gids = count($values) - $pc;
+            if ($num_gids % 2 != 0) continue;
+            $num_gids /= 2;
+
+            for ($i=0; $i<$num_gids; $i++) {
+                $gid = (int)$values[$pc++];
+                $count = (int)$values[$pc++];
+                $a[$index]['units'][$gid] = $count;
+            }
+
         } elseif (strpos($line, 'Defender') === 0) {
             // Extracting the defender's number
             $parts = explode(' = ', $line);
@@ -68,53 +55,30 @@ function ParseBattleDataSource (string $source, array &$a, array &$d) : void
             $index = (int)substr($prefix, 8);
             
             // Processing data
-            $data = $parts[1]; // "({NAME} ... )"
-            $data = trim($data, '() ');
+            $values = preg_split('/\s+/', trim($parts[1]));
             
-            // Extracting the name
-            $nameEnd = strpos($data, '}');
-            $name = substr($data, 1, $nameEnd - 1);
-            
-            // Other values
-            $values = substr($data, $nameEnd + 2);
-            $values = preg_split('/\s+/', trim($values));
-            
-            $d[$index] = [
-                'oname' => $name,
-                'id' => (int)$values[0],
-                'g' => (int)$values[1],
-                's' => (int)$values[2],
-                'p' => (int)$values[3],
-                GID_R_WEAPON => (int)$values[4],
-                GID_R_SHIELD => (int)$values[5],
-                GID_R_ARMOUR => (int)$values[6],
-                'fleet' => array (
-                    GID_F_SC => (int)$values[7],
-                    GID_F_LC => (int)$values[8],
-                    GID_F_LF => (int)$values[9],
-                    GID_F_HF => (int)$values[10],
-                    GID_F_CRUISER => (int)$values[11],
-                    GID_F_BATTLESHIP => (int)$values[12],
-                    GID_F_COLON => (int)$values[13],
-                    GID_F_RECYCLER => (int)$values[14],
-                    GID_F_PROBE => (int)$values[15],
-                    GID_F_BOMBER => (int)$values[16],
-                    GID_F_SAT => (int)$values[17],
-                    GID_F_DESTRO => (int)$values[18],
-                    GID_F_DEATHSTAR => (int)$values[19],
-                    GID_F_BATTLECRUISER => (int)$values[20]
-                ),
-                'defense' => array (
-                    GID_D_RL => (int)$values[21],
-                    GID_D_LL => (int)$values[22],
-                    GID_D_HL => (int)$values[23],
-                    GID_D_GAUSS => (int)$values[24],
-                    GID_D_ION => (int)$values[25],
-                    GID_D_PLASMA => (int)$values[26],
-                    GID_D_SDOME => (int)$values[27],
-                    GID_D_LDOME => (int)$values[28]
-                )
-            ];
+            $d[$index]['oname'] = "Defender$index";
+            $d[$index]['id'] = mt_rand(1,10000);
+            $d[$index]['pf'] = 0;   // fleet
+            $d[$index]['g'] = mt_rand (1, 9);
+            $d[$index]['s'] = mt_rand (1, 499);
+            $d[$index]['p'] = mt_rand (1, 15);
+
+            $pc = 0;
+            $d[$index][GID_R_WEAPON] = (float)$values[$pc++];
+            $d[$index][GID_R_SHIELD] = (float)$values[$pc++];
+            $d[$index][GID_R_ARMOUR] = (float)$values[$pc++];
+
+            $num_gids = count($values) - $pc;
+            if ($num_gids % 2 != 0) continue;
+            $num_gids /= 2;
+
+            for ($i=0; $i<$num_gids; $i++) {
+                $gid = (int)$values[$pc++];
+                $count = (int)$values[$pc++];
+                $d[$index]['units'][$gid] = $count;
+            }
+
         }
     }
 }
@@ -170,35 +134,7 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
     $battle = array ( 'source' => $source, 'title' => '', 'report' => '', 'date' => time() );
     $battle_id = AddDBRow ( $battle, "battledata");
 
-    $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
-    fwrite ( $bf, $source );
-    fclose ( $bf );
-
-    // *** Transfer data to the battle engine
-
-    if ($unitab['php_battle']) {
-
-        $battle_source = file_get_contents ( "battledata/battle_".$battle_id.".txt" );
-        $res = BattleEngine ($battle_source);
-
-        $bf = fopen ( "battleresult/battle_".$battle_id.".txt", "w" );
-        fwrite ( $bf, serialize($res) );
-        fclose ( $bf );
-    }
-    else {
-
-        $arg = "$battle_id 0";
-        system ( $unitab['battle_engine'] . " $arg", $retval );
-        if ($retval < 0) {
-            Error (va("An error occurred in the battle engine: #1 #2", $retval, $battle_id));
-        }        
-    }
-
-    // *** Process output data
-
-    $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
-    $res = unserialize($battleres);
-    PostProcessBattleResult ($a, $d, $res);
+    $res = ExecuteBattle ($unitab, $battle_id, $source, $a, $d);
 
     if ( $debug ) {
         print_r ( $battle );
@@ -229,9 +165,9 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
         $mooncreated = true;
     }
 
-    if ( $res['result'] === "awon" ) $battle_result = 0;
-    else if ( $res['result'] === "dwon" ) $battle_result = 1;
-    else $battle_result = 2;
+    if ( $res['result'] === "awon" ) $battle_result = BATTLE_RESULT_AWON;
+    else if ( $res['result'] === "dwon" ) $battle_result = BATTLE_RESULT_DWON;
+    else $battle_result = BATTLE_RESULT_DRAW;
 
     // Generate battle report (in admin language)
     $captured = array ();
@@ -340,7 +276,7 @@ function Admin_BattleSim () : void
         }
 
         // Simulate the battle
-        $battle_result = 0;
+        $battle_result = BATTLE_RESULT_AWON;
         if ( key_exists ('debug', $_POST) && $_POST['debug'] === "on" ) $debug = true;
         else $debug = false;
         if ( $_POST['rapid'] === "on" ) $rf = true;
