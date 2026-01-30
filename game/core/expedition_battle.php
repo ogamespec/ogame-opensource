@@ -243,35 +243,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
     $battle = array ( 'source' => $source, 'title' => "", 'report' => "", 'date' => $when );
     $battle_id = AddDBRow ( $battle, "battledata" );
 
-    $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
-    fwrite ( $bf, $source );
-    fclose ( $bf );
-
-    // *** Transfer data to the battle engine
-
-    if ($unitab['php_battle']) {
-
-        $battle_source = file_get_contents ( "battledata/battle_".$battle_id.".txt" );
-        $res = BattleEngine ($battle_source);
-
-        $bf = fopen ( "battleresult/battle_".$battle_id.".txt", "w" );
-        fwrite ( $bf, serialize($res) );
-        fclose ( $bf );
-    }
-    else {
-
-        $arg = "$battle_id 0";
-        system ( $unitab['battle_engine'] . " $arg", $retval );
-        if ($retval < 0) {
-            Error (va("An error occurred in the battle engine: #1 #2", $retval, $battle_id));
-        }
-    }
-
-    // *** Process output data
-
-    $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
-    $res = unserialize($battleres);
-    PostProcessBattleResult ($a, $d, $res);
+    $res = ExecuteBattle ($unitab, $battle_id, $source, $a, $d);
 
     // Determine the outcome of the battle.
     if ( $res['result'] === "awon" ) $battle_result = BATTLE_RESULT_AWON;

@@ -633,6 +633,67 @@ function PostProcessBattleResult (array $a, array $d, array &$res) : void {
     $res['dk'] = 0;
 }
 
+/**
+ * @brief Executes a battle between two forces and processes the results.
+ *
+ * This function manages the battle execution pipeline. It first writes battle data to a file,
+ * then transfers control to a battle engine (either a PHP function or an external executable backend),
+ * and finally reads and post-processes the battle results.
+ *
+ * @param array $unitab Configuration array containing battle engine settings.
+ *                      Expected keys:
+ *                      - 'php_battle': bool - If true, use internal PHP battle engine.
+ *                      - 'battle_engine': string - Path to external battle engine executable.
+ * @param int $battle_id Unique identifier for the battle. Used for naming battle data and result files.
+ * @param string $source Serialized battle data to be passed to the battle engine.
+ * @param array $a Array containing data for the attacking force.
+ * @param array $d Array containing data for the defending force.
+ *
+ * @return array The processed battle results as an associative array.
+ *
+ * @throws Error If the external battle engine returns a negative exit code.
+ *
+ * @note The battle data is serialized and stored in `battledata/battle_<id>.txt`.
+ * @note The battle results are serialized and stored in `battleresult/battle_<id>.txt`.
+ * @note The function assumes the existence of `PostProcessBattleResult()` for final result processing.
+ *
+ * @warning File paths are constructed relative to the current working directory.
+ */
+function ExecuteBattle (array $unitab, int $battle_id, string $source, array $a, array $d) : array {
+
+    $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
+    fwrite ( $bf, $source );
+    fclose ( $bf );
+
+    // *** Transfer data to the battle engine
+
+    if ($unitab['php_battle']) {
+
+        $battle_source = file_get_contents ( "battledata/battle_".$battle_id.".txt" );
+        $res = BattleEngine ($battle_source);
+
+        $bf = fopen ( "battleresult/battle_".$battle_id.".txt", "w" );
+        fwrite ( $bf, serialize($res) );
+        fclose ( $bf );
+    }
+    else {
+
+        $arg = "$battle_id 0";
+        system ( $unitab['battle_engine'] . " $arg", $retval );
+        if ($retval < 0) {
+            Error (va("An error occurred in the battle engine: #1 #2", $retval, $battle_id));
+        }
+    }
+
+    // *** Process output data
+
+    $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
+    $res = unserialize($battleres);
+    PostProcessBattleResult ($a, $d, $res);
+
+    return $res;
+}
+
 // Start a battle between attacking fleet_id and defending planet_id.
 function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
 {
@@ -739,35 +800,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     $battle = array ( 'source' => $source, 'title' => "", 'report' => "", 'date' => $when );
     $battle_id = AddDBRow ( $battle, "battledata" );
 
-    $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
-    fwrite ( $bf, $source );
-    fclose ( $bf );
-
-    // *** Transfer data to the battle engine
-
-    if ($unitab['php_battle']) {
-
-        $battle_source = file_get_contents ( "battledata/battle_".$battle_id.".txt" );
-        $res = BattleEngine ($battle_source);
-
-        $bf = fopen ( "battleresult/battle_".$battle_id.".txt", "w" );
-        fwrite ( $bf, serialize($res) );
-        fclose ( $bf );
-    }
-    else {
-
-        $arg = "$battle_id 0";
-        system ( $unitab['battle_engine'] . " $arg", $retval );
-        if ($retval < 0) {
-            Error (va("An error occurred in the battle engine: #1 #2", $retval, $battle_id));
-        }
-    }
-
-    // *** Process output data
-
-    $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
-    $res = unserialize($battleres);
-    PostProcessBattleResult ($a, $d, $res);
+    $res = ExecuteBattle ($unitab, $battle_id, $source, $a, $d);
 
     // Determine the outcome of the battle.
     if ( $res['result'] === "awon" ) $battle_result = BATTLE_RESULT_AWON;

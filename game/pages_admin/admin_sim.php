@@ -170,35 +170,7 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
     $battle = array ( 'source' => $source, 'title' => '', 'report' => '', 'date' => time() );
     $battle_id = AddDBRow ( $battle, "battledata");
 
-    $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
-    fwrite ( $bf, $source );
-    fclose ( $bf );
-
-    // *** Transfer data to the battle engine
-
-    if ($unitab['php_battle']) {
-
-        $battle_source = file_get_contents ( "battledata/battle_".$battle_id.".txt" );
-        $res = BattleEngine ($battle_source);
-
-        $bf = fopen ( "battleresult/battle_".$battle_id.".txt", "w" );
-        fwrite ( $bf, serialize($res) );
-        fclose ( $bf );
-    }
-    else {
-
-        $arg = "$battle_id 0";
-        system ( $unitab['battle_engine'] . " $arg", $retval );
-        if ($retval < 0) {
-            Error (va("An error occurred in the battle engine: #1 #2", $retval, $battle_id));
-        }        
-    }
-
-    // *** Process output data
-
-    $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
-    $res = unserialize($battleres);
-    PostProcessBattleResult ($a, $d, $res);
+    $res = ExecuteBattle ($unitab, $battle_id, $source, $a, $d);
 
     if ( $debug ) {
         print_r ( $battle );
@@ -229,9 +201,9 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
         $mooncreated = true;
     }
 
-    if ( $res['result'] === "awon" ) $battle_result = 0;
-    else if ( $res['result'] === "dwon" ) $battle_result = 1;
-    else $battle_result = 2;
+    if ( $res['result'] === "awon" ) $battle_result = BATTLE_RESULT_AWON;
+    else if ( $res['result'] === "dwon" ) $battle_result = BATTLE_RESULT_DWON;
+    else $battle_result = BATTLE_RESULT_DRAW;
 
     // Generate battle report (in admin language)
     $captured = array ();
@@ -340,7 +312,7 @@ function Admin_BattleSim () : void
         }
 
         // Simulate the battle
-        $battle_result = 0;
+        $battle_result = BATTLE_RESULT_AWON;
         if ( key_exists ('debug', $_POST) && $_POST['debug'] === "on" ) $debug = true;
         else $debug = false;
         if ( $_POST['rapid'] === "on" ) $rf = true;
