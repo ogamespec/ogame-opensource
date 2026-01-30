@@ -24,13 +24,21 @@ function ParseBattleDataSource (string $source, array &$a, array &$d) : void
             // Processing data
             $values = preg_split('/\s+/', trim($parts[1]));
 
+            $a[$index]['oname'] = "Attacker$index";
+            $a[$index]['id'] = mt_rand(1,10000);
+            $a[$index]['pf'] = 0;   // fleet
+            $a[$index]['g'] = mt_rand (1, 9);
+            $a[$index]['s'] = mt_rand (1, 499);
+            $a[$index]['p'] = mt_rand (1, 15);
+
             $pc = 0;
-            $a[$index][GID_R_WEAPON] = (int)$values[$pc++];
-            $a[$index][GID_R_SHIELD] = (int)$values[$pc++];
-            $a[$index][GID_R_ARMOUR] = (int)$values[$pc++];
+            $a[$index][GID_R_WEAPON] = (float)$values[$pc++];
+            $a[$index][GID_R_SHIELD] = (float)$values[$pc++];
+            $a[$index][GID_R_ARMOUR] = (float)$values[$pc++];
 
             $num_gids = count($values) - $pc;
             if ($num_gids % 2 != 0) continue;
+            $num_gids /= 2;
 
             for ($i=0; $i<$num_gids; $i++) {
                 $gid = (int)$values[$pc++];
@@ -49,20 +57,28 @@ function ParseBattleDataSource (string $source, array &$a, array &$d) : void
             // Processing data
             $values = preg_split('/\s+/', trim($parts[1]));
             
+            $d[$index]['oname'] = "Defender$index";
+            $d[$index]['id'] = mt_rand(1,10000);
+            $d[$index]['pf'] = 0;   // fleet
+            $d[$index]['g'] = mt_rand (1, 9);
+            $d[$index]['s'] = mt_rand (1, 499);
+            $d[$index]['p'] = mt_rand (1, 15);
+
             $pc = 0;
-            $d[$index][GID_R_WEAPON] = (int)$values[$pc++];
-            $d[$index][GID_R_SHIELD] = (int)$values[$pc++];
-            $d[$index][GID_R_ARMOUR] = (int)$values[$pc++];
+            $d[$index][GID_R_WEAPON] = (float)$values[$pc++];
+            $d[$index][GID_R_SHIELD] = (float)$values[$pc++];
+            $d[$index][GID_R_ARMOUR] = (float)$values[$pc++];
 
             $num_gids = count($values) - $pc;
             if ($num_gids % 2 != 0) continue;
+            $num_gids /= 2;
 
             for ($i=0; $i<$num_gids; $i++) {
                 $gid = (int)$values[$pc++];
                 $count = (int)$values[$pc++];
                 $d[$index]['units'][$gid] = $count;
             }
-            
+
         }
     }
 }

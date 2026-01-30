@@ -575,7 +575,7 @@ function deserialize_slot (string $str) : array
             Error ("BATTLE_ERROR_GID_MAX");
         }
         if (!isset($UnitParamLocal[$gid])) {
-            Error ("BATTLE_ERROR_GID_UNKNOWN");
+            Error ("BATTLE_ERROR_GID_UNKNOWN ($gid)");
         }
         $count = intval ($items[$pc++]);
         $res['units'][$gid] = $count;
