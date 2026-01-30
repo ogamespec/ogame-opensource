@@ -546,9 +546,14 @@ function TransportArrive (array $queue, array $fleet_obj, array $fleet, array $o
 
 function CommonReturn (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
-    if ( $fleet_obj[GID_RC_METAL] < 0 ) $fleet_obj[GID_RC_METAL] = 0;    // Protection against negative resources (just in case)
-    if ( $fleet_obj[GID_RC_CRYSTAL] < 0 ) $fleet_obj[GID_RC_CRYSTAL] = 0;
-    if ( $fleet_obj[GID_RC_DEUTERIUM] < 0 ) $fleet_obj[GID_RC_DEUTERIUM] = 0;
+    global $transportableResources;
+
+    // Protection against negative resources (just in case)
+    foreach ($transportableResources as $i=>$rc) {
+        if (isset($fleet_obj[$rc])) {
+            if ( $fleet_obj[$rc] < 0 ) $fleet_obj[$rc] = 0;
+        }
+    }
 
     AdjustResources ( $fleet_obj, $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
@@ -873,7 +878,7 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
 
             // Create a new colony.
             $id = CreatePlanet ( $target['g'], $target['s'], $target['p'], $fleet_obj['owner_id'], 1, 0, 0, $queue['end'] );
-            Debug ( "Игроком ".$origin['owner_id']." колонизирована планета $id [".$target['g'].":".$target['s'].":".$target['p']."]");
+            Debug ( "Player ".$origin['owner_id']." has colonized the planet $id [".$target['g'].":".$target['s'].":".$target['p']."]");
 
             // Take 1 colony ship away from the fleet
             if ( $fleet[GID_F_COLON] > 0 ) {
@@ -957,7 +962,13 @@ function RecycleArrive (array $queue, array $fleet_obj, array $fleet, array $ori
     if ( $fleet[GID_F_RECYCLER] == 0 ) Error ( "Attempt to harvest DF without recyclers" );
     if ( $target['type'] != PTYP_DF ) Error ( "Only debris fields can be recycled!" );
 
-    $sum_cargo = FleetCargoSummary ( $fleet ) - ($fleet_obj[GID_RC_METAL] + $fleet_obj[GID_RC_CRYSTAL] + $fleet_obj[GID_RC_DEUTERIUM]);
+    $res_total = 0;
+    foreach ($transportableResources as $i=>$rc) {
+        if (isset($fleet_obj[$rc])) {
+            $res_total += $fleet_obj[$rc];
+        }
+    }
+    $sum_cargo = FleetCargoSummary ( $fleet ) - $res_total;
     $recycler_cargo = FleetCargo (GID_F_RECYCLER) * $fleet[GID_F_RECYCLER];
     $cargo = min ($recycler_cargo, $sum_cargo);
 
@@ -1008,12 +1019,15 @@ function Queue_Fleet_End (array $queue) : void
 {
     global $GlobalUser;
     global $fleetmap;
+    global $transportableResources;
     $fleet_obj = LoadFleet ( $queue['sub_id'] );
     if ( $fleet_obj == null ) return;
 
-    if ( $fleet_obj[GID_RC_METAL] < 0 ) $fleet_obj[GID_RC_METAL] = 0;
-    if ( $fleet_obj[GID_RC_CRYSTAL] < 0 ) $fleet_obj[GID_RC_CRYSTAL] = 0;
-    if ( $fleet_obj[GID_RC_DEUTERIUM] < 0 ) $fleet_obj[GID_RC_DEUTERIUM] = 0;
+    foreach ($transportableResources as $i=>$rc) {
+        if (isset($fleet_obj[$rc])) {
+            if ( $fleet_obj[$rc] < 0 ) $fleet_obj[$rc] = 0;
+        }
+    }
 
     $fleet = array ();
     foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj[$gid];
