@@ -1,5 +1,7 @@
 <?php
 
+require_once "battle_engine.php";
+
 // Modify the fleet (after a battle with aliens/pirates)
 function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : void
 {
@@ -272,9 +274,9 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
     PostProcessBattleResult ($a, $d, $res);
 
     // Determine the outcome of the battle.
-    if ( $res['result'] === "awon" ) $battle_result = 0;
-    else if ( $res['result'] === "dwon" ) $battle_result = 1;
-    else $battle_result = 2;
+    if ( $res['result'] === "awon" ) $battle_result = BATTLE_RESULT_AWON;
+    else if ( $res['result'] === "dwon" ) $battle_result = BATTLE_RESULT_DWON;
+    else $battle_result = BATTLE_RESULT_DRAW;
 
     // Calculate total losses (account for deuterium and repaired defenses)
     $aloss = $dloss = 0;
@@ -305,7 +307,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
         }
 
         // If fleet is destroyed in 1 or 2 rounds - do not show battle log for attackers.
-        if ( count($res['rounds']) <= 2 && $battle_result == 1 ) $text = loca_lang("BATTLE_LOST", $user['lang']) . " <!--A:$aloss,W:$dloss-->";
+        if ( count($res['rounds']) <= 2 && $battle_result == BATTLE_RESULT_DWON ) $text = loca_lang("BATTLE_LOST", $user['lang']) . " <!--A:$aloss,W:$dloss-->";
 
         loca_add ( "fleetmsg", $user['lang'] );
 

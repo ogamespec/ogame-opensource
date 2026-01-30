@@ -6,6 +6,10 @@ require_once "graviton.php";
 
 // OGame Battle Engine frontend.
 
+const BATTLE_RESULT_AWON = 0;       // The attacker won
+const BATTLE_RESULT_DWON = 1;       // The defender won
+const BATTLE_RESULT_DRAW = 2;       // Draw
+
 // Repairing the defense.
 function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_delta, bool $premium=true ) : array
 {
@@ -766,9 +770,9 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     PostProcessBattleResult ($a, $d, $res);
 
     // Determine the outcome of the battle.
-    if ( $res['result'] === "awon" ) $battle_result = 0;
-    else if ( $res['result'] === "dwon" ) $battle_result = 1;
-    else $battle_result = 2;
+    if ( $res['result'] === "awon" ) $battle_result = BATTLE_RESULT_AWON;
+    else if ( $res['result'] === "dwon" ) $battle_result = BATTLE_RESULT_DWON;
+    else $battle_result = BATTLE_RESULT_DRAW;
 
     // Restore the defense
     $repaired = RepairDefense ( $d, $res, $unitab['defrepair'], $unitab['defrepair_delta'] );
@@ -784,7 +788,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     // Capture resources
     $captured = array ();
     $sum_cargo = 0;
-    if ( $battle_result == 0 )
+    if ( $battle_result == BATTLE_RESULT_AWON )
     {
         $sum_cargo = CargoSummaryLastRound ( $a, $res );
         $captured = Plunder ( $sum_cargo, $p[GID_RC_METAL], $p[GID_RC_CRYSTAL], $p[GID_RC_DEUTERIUM] );
@@ -861,7 +865,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
         }
 
         // If fleet is destroyed in 1 or 2 rounds - do not show battle log for attackers.
-        if ( count($res['rounds']) <= 2 && $battle_result == 1 ) $text = loca_lang("BATTLE_LOST", $user['lang']) . " <!--A:$aloss,W:$dloss-->";
+        if ( count($res['rounds']) <= 2 && $battle_result == BATTLE_RESULT_DWON ) $text = loca_lang("BATTLE_LOST", $user['lang']) . " <!--A:$aloss,W:$dloss-->";
 
         loca_add ( "fleetmsg", $user['lang'] );
 
