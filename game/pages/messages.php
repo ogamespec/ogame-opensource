@@ -221,9 +221,9 @@ while ($num--)
         $msg['subj'] = "<a href=\"#\" onclick=\"fenster('index.php?page=bericht&session=". $_GET['session'] ."&bericht=". $msg['msg_id'] ."', 'Bericht_Spionage');\" >". $msg['subj'] ."</a>";
         $msg['text'] = "";
     }    
-    echo "<tr><th><input type=\"checkbox\" name=\"delmes".$msg['msg_id']."\"/></th><th>".date ("m-d H:i:s", $msg['date'])."</th><th>".$msg['msgfrom']." </th><th>".$msg['subj']." </th></tr>\n";
+    echo "<tr><th><input type=\"checkbox\" name=\"delmes".$msg['msg_id']."\"/></th><th>".date ("m-d H:i:s", $msg['date'])."</th><th>".stripslashes($msg['msgfrom'])." </th><th>".stripslashes($msg['subj'])." </th></tr>\n";
     if ($msg['text'] !== "") {
-        echo "<tr><td class=\"b\"> </td><td class=\"b\" colspan=\"3\">".$msg['text']."</td></tr>\n";
+        echo "<tr><td class=\"b\"> </td><td class=\"b\" colspan=\"3\">".stripslashes($msg['text'])."</td></tr>\n";
     }
     if ($pm == MTYP_PM) echo "<tr><th colspan=\"4\"><input type=\"checkbox\" name=\"sneak".$msg['msg_id']."\"/><input type=\"submit\" value=\"".loca("MSG_REPORT")."\"/></th></tr>\n";
     MarkMessage ( $msg['owner_id'], $msg['msg_id'] );

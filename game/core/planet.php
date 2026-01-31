@@ -176,7 +176,10 @@ function LoadPlanet (int $g, int $s, int $p, int $type) : mixed
     if ($type == 1) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET.") LIMIT 1;";
     else if ($type == 2) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=".PTYP_DF." LIMIT 1;";
     else if ($type == 3) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type=".PTYP_MOON." OR type=".PTYP_DEST_MOON.") LIMIT 1;";
-    else return null;
+    else {
+        // Treat a galaxy object's game type as a real planet type (PTYP)
+        $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=".$type." LIMIT 1;";
+    }
     $result = dbquery ($query);
     if ( $result ) return dbarray ($result);
     else return null;

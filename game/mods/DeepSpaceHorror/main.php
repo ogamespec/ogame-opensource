@@ -407,16 +407,27 @@ class DeepSpaceHorror extends GameMod {
         return false;
     }
 
+    public function page_flotten2_planet_types (array &$planet_types) : bool {
+        $planet_types[] = PTYP_LEVI_AMOEBA;
+        $planet_types[] = PTYP_LEVI_GUARDIAN;
+        $planet_types[] = PTYP_LEVI_JUGGERNAUT;
+        $planet_types[] = PTYP_LEVI_PORTAL;
+        return false;
+    }
+
+    public function page_flottenversand_ajax_spy_planets (array &$planet_types) : bool {
+        $planet_types[] = PTYP_LEVI_AMOEBA;
+        $planet_types[] = PTYP_LEVI_GUARDIAN;
+        $planet_types[] = PTYP_LEVI_JUGGERNAUT;
+        $planet_types[] = PTYP_LEVI_PORTAL;
+        return false;
+    }
+
     public function page_galaxy_custom_object (array $planet, array &$info) : bool {
 
-        if ($this->IsPlanetLeviathan($planet['type'])) {
+        if ($this->IsPlanetLeviathan($planet['type']) || $planet['type'] == PTYP_LEVI_PORTAL) {
 
             $info['overlib'] = $this->GetLeviathanOverlib ($planet);
-            return true;
-        }
-        else if ($planet['type'] == PTYP_LEVI_PORTAL) {
-
-            $info['overlib'] = $this->GetPortalOverlib ($planet);
             return true;
         }
         return false;
@@ -429,6 +440,7 @@ class DeepSpaceHorror extends GameMod {
         global $aktplanet;
 
         $phalanx = CanPhalanx ($aktplanet, $planet);
+        $ptyp = $planet['type'];
 
         $res = "";
         $res .= "<table width=240 ><tr>";
@@ -439,31 +451,10 @@ class DeepSpaceHorror extends GameMod {
         $res .= "<tr><th>".loca("GALAXY_LEVI_TEMP")."</td><th>".$planet['temp']."</td></tr>";
         $res .= "<tr><td colspan=2 class=c >".loca("GALAXY_LEVI_ACTIONS")."</td></tr>";
         $res .= "<tr><th align=left colspan=2 >";
+        $res .= "<a href=# onclick=doit(6,".$planet['g'].",".$planet['s'].",".$planet['p'].",$ptyp,".$GlobalUser['maxspy'].") >".loca("GALAXY_FLEET_SPY")."</a><br><br />";
         if ($phalanx) $res .= "<a href=# onclick=fenster(&#039;index.php?page=phalanx&session=$session&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."&#039;) >".loca("GALAXY_FLEET_PHALANX")."</a><br />";
-        if ($GlobalUser['admin'] >= 2) $res .= "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id'].">".loca("GALAXY_PLANET_ADMIN")."</a><br />";
-        $res .= "</th></tr></table></tr></table>";
-
-        return $res;
-    }
-
-    private function GetPortalOverlib (array $planet) : string {
-
-        global $GlobalUser;
-        global $session;
-        global $aktplanet;
-
-        $phalanx = CanPhalanx ($aktplanet, $planet);
-
-        $res = "";
-        $res .= "<table width=240 ><tr>";
-        $res .= "<td class=c colspan=2 >".$planet['name']." [".$planet['g'].":".$planet['s'].":".$planet['p']."]</td></tr>";
-        $res .= "<tr><th width=80 ><img src=".GetPlanetSmallImage ( UserSkin(), $planet )." height=75 width=75 /></th>";
-        $res .= "<th><table width=120 ><tr><td colspan=2 class=c >".loca("GALAXY_LEVI_PROPS")."</td></tr>";
-        $res .= "<tr><th>".loca("GALAXY_LEVI_SIZE")."</td><th>".nicenum($planet['diameter'])."</td></tr>";
-        $res .= "<tr><th>".loca("GALAXY_LEVI_TEMP")."</td><th>".$planet['temp']."</td></tr>";
-        $res .= "<tr><td colspan=2 class=c >".loca("GALAXY_LEVI_ACTIONS")."</td></tr>";
-        $res .= "<tr><th align=left colspan=2 >";
-        if ($phalanx) $res .= "<a href=# onclick=fenster(&#039;index.php?page=phalanx&session=$session&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."&#039;) >".loca("GALAXY_FLEET_PHALANX")."</a><br />";
+        $res .= "<a href=index.php?page=flotten1&session=$session&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=$ptyp&target_mission=3 >".loca("GALAXY_FLEET_TRANSPORT")."</a><br />";
+        $res .= "<a href=index.php?page=flotten1&session=$session&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=$ptyp&target_mission=1 >".loca("GALAXY_FLEET_ATTACK")."</a><br />";
         if ($GlobalUser['admin'] >= 2) $res .= "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id'].">".loca("GALAXY_PLANET_ADMIN")."</a><br />";
         $res .= "</th></tr></table></tr></table>";
 

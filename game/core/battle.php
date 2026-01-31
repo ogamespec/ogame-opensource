@@ -781,8 +781,16 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     $p = LoadPlanetById ( $planet_id );
     $d[0] = LoadUser ( $p['owner_id'] );
     $d[0]['units'] = array ();
-    foreach ($fleetmap as $i=>$gid) $d[0]['units'][$gid] = abs($p[$gid]);
-    foreach ($defmap_norak as $i=>$gid) $d[0]['units'][$gid] = abs($p[$gid]);
+    foreach ($fleetmap as $i=>$gid) {
+        if (isset($p[$gid])) {
+            $d[0]['units'][$gid] = abs($p[$gid]);
+        }
+    }
+    foreach ($defmap_norak as $i=>$gid) {
+        if (isset($p[$gid])) {
+            $d[0]['units'][$gid] = abs($p[$gid]);
+        }
+    }
     $d[0]['g'] = $p['g'];
     $d[0]['s'] = $p['s'];
     $d[0]['p'] = $p['p'];
