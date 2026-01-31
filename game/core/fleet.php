@@ -197,8 +197,8 @@ function FlightCons (array $fleet, int $dist, int $flighttime, int $combustion, 
             $basecons = $amount * FleetCons ($id, $combustion, $impulse, $hyper );
             $consumption = $basecons * $dist / 35000 * (($spd / 10) + 1) * (($spd / 10) + 1);
             $consumption += $hours * $amount * FleetCons ($id, $combustion, $impulse, $hyper ) / 10;    // holding costs
-            if ( $id == GID_F_PROBE ) $cons['probes'] += $consumption;
-            else $cons['fleet'] += $consumption;
+            if ( $id == GID_F_PROBE ) $cons['probes'] += (int)$consumption;
+            else $cons['fleet'] += (int)$consumption;
         }
     }
     return $cons;

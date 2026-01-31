@@ -205,6 +205,8 @@ if ( $prem['admiral'] ) $maxfleet += 2;
   */
   function whenResponse(){
 
+    //alert (this.response);
+
       /*
       *
       *  600   OK
@@ -780,7 +782,7 @@ if ($extra_info !== "") {
 <?php
 }   // extra_info
 ?>
-<tr style="display: none;" id="fleetstatusrow"><th colspan="8"><!--<div id="fleetstatus"></div>-->
+<tr style="display: none;" id="fleetstatusrow"><th colspan="<?=(8+$num_custom);?>"><!--<div id="fleetstatus"></div>-->
 <table style="font-weight: bold;" width=100% id="fleetstatustable">
 <!-- will be filled with content later on while processing ajax replys -->
 </table>
