@@ -25,7 +25,7 @@ function AjaxSendError (int $id=601) : never
     die ();
 }
 
-function AjaxSendDone (int $slots, int $probes, int $recyclers, int $missiles) : void
+function AjaxSendDone (int $slots, int $probes, int $recyclers, int $missiles) : never
 {
     header ('Content-Type: text/html;');
     echo "600 $slots ".nicenum($probes)." ".nicenum($recyclers)." ".nicenum($missiles);
@@ -108,7 +108,7 @@ if ( $order == FTYP_SPY )
 
     if ( $target['owner_id'] == $GlobalUser['player_id'] ) AjaxSendError ();    // Own planet
     if ( $GlobalUser['noattack'] || $BlockAttack ) AjaxSendError ();    // Attack ban
-    if ( $target_user['admin'] > 0 ) AjaxSendError ();    // the administration can't be scanned.
+    if ( $target_user['admin'] > 0 && $target_user['player_id'] != USER_SPACE ) AjaxSendError ();    // the administration can't be scanned (except space)
     if ( IsPlayerNewbie ($target_user['player_id']) ) AjaxSendError (603);    // newbie protection
     if ( IsPlayerStrong ($target_user['player_id']) ) AjaxSendError (604);    // strong protection
     if ( $target_user['vacation'] ) AjaxSendError (605);    // user in vacation mode
