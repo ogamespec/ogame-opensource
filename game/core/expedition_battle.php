@@ -53,78 +53,6 @@ function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : v
     }
 }
 
-// Generate short battle report.
-function ShortBattleReport ( array $res, int $now, string $lang ) : string
-{
-    global $fleetmap;
-    global $defmap;
-    global $rakmap;
-    $defmap_norak = array_diff($defmap, $rakmap);
-    $amap = $fleetmap;
-    $dmap = array_merge($fleetmap, $defmap_norak);
-
-    loca_add ( "battlereport", $lang );
-    loca_add ( "technames", $lang );
-
-    $text = "";
-
-    // Title of the report.
-    // In vanilla 0.84 the header of the battle report was slightly different. For example, in en it says "At" for the attacker and "On" for the defender.
-    // We will not engage in such perversions. We consider all battle reports to be from the attacker.  
-    $text .= va(loca_lang("BATTLE_ADATE_INFO", $lang), date ("m-d H:i:s", $now)) . ":<br>";
-
-    // Fleets before the battle.
-    $text .= "<table border=1 width=100%><tr>";
-    foreach ( $res['before']['attackers'] as $i=>$attacker)
-    {
-        $text .= GenSlot ( $attacker['weap'], $attacker['shld'], $attacker['armr'], $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker['units'], 1, 1, $lang );
-    }
-    $text .= "</tr></table>";
-    $text .= "<table border=1 width=100%><tr>";
-    foreach ( $res['before']['defenders'] as $i=>$defender)
-    {
-        $user = array ();
-        $user['fleet'] = array ();
-        $user['defense'] = array ();
-        foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $defender[$gid];
-        foreach ($defmap as $g=>$gid) $user['defense'][$gid] = 0;
-        $text .= GenSlot ( $defender['weap'], $defender['shld'], $defender['armr'], $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender['units'], 1, 0, $lang );
-    }
-    $text .= "</tr></table>";
-
-    // Rounds.
-    foreach ( $res['rounds'] as $i=>$round)
-    {
-        $text .= "<br><center>";
-        $text .= va (loca_lang("BATTLE_ASHOT", $lang), nicenum($round['ashoot']), nicenum($round['apower']), nicenum($round['dabsorb']) );
-        $text .= "<br>";
-        $text .= va (loca_lang("BATTLE_DSHOT", $lang), nicenum($round['dshoot']), nicenum($round['dpower']), nicenum($round['aabsorb']) );
-        $text .= "</center>";
-
-        $text .= "<table border=1 width=100%><tr>";        // Attackers
-        foreach ( $round['attackers'] as $n=>$attacker )
-        {
-            $text .= GenSlot ( 0, 0, 0, $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker['units'], 0, 1, $lang );
-        }
-        $text .= "</tr></table>";
-
-        $text .= "<table border=1 width=100%><tr>";        // Defenders
-        foreach ( $round['defenders'] as $n=>$defender )
-        {
-            $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender['units'], 0, 0, $lang );
-        }
-        $text .= "</tr></table>";
-    }
-
-    // Battle Results.
-    // TODO: Add a loss label that is in the HTML: <!--A:167658,W:167658-->
-    if ( $res['result'] === "awon" ) $text .= "<p> " . loca_lang("BATTLE_AWON", $lang);
-    else if ( $res['result'] === "dwon" ) $text .= "<p> " . loca_lang("BATTLE_DWON", $lang);
-    else if ( $res['result'] === "draw" ) $text .= "<p> " . loca_lang("BATTLE_DRAW", $lang);
-
-    return $text;
-}
-
 // Battle with Aliens/Pirates.
 // The composition of the Alien/Pirate fleet is determined by the level parameter ( 0: weak, 1: medium, 2: strong )
 function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when ) : int
@@ -258,7 +186,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
     $battle_text = array();
 
     // Generate a battle report in the universe language (for log history)
-    $text = ShortBattleReport ( $res, $when, $GlobalUni['lang'] );
+    $text = BattleReport ( $res, $when, null, null, 0, false, null, null, $GlobalUni['lang'] );
     $battle_text[$GlobalUni['lang']] = $text;
 
     // Send out messages
@@ -269,7 +197,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
         // Generate a battle report in the user's language if it is not in the cache
         if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
         else {
-            $text = ShortBattleReport ( $res, $when, $user['lang'] );
+            $text = BattleReport ( $res, $when, null, null, 0, false, null, null, $user['lang'] );
             $battle_text[$user['lang']] = $text;
         }
 

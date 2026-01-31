@@ -84,7 +84,7 @@ function GenSlot ( int $weap, int $shld, int $armor, string $name, int $g, int $
 }
 
 // Generate a battle report.
-function BattleReport ( array $res, int $now, int $aloss, int $dloss, array $captured, int $moonchance, bool $mooncreated, array $repaired, array $debris, string $lang ) : string
+function BattleReport ( array $res, int $now, array|null $loss, array|null $captured, int $moonchance, bool $mooncreated, array|null $repaired, array|null $debris, string $lang ) : string
 {
     global $fleetmap;
     global $defmap;
@@ -136,7 +136,7 @@ function BattleReport ( array $res, int $now, int $aloss, int $dloss, array $cap
         $text .= "<table border=1 width=100%><tr>";        // Defenders
         foreach ( $round['defenders'] as $n=>$defender )
         {
-            if ( $n == 0 ) $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender['units'], 0, 0, $lang );
+            if ( $defender['pf'] == 1 ) $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender['units'], 0, 0, $lang );
             else $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $amap, $defender['units'], 0, 0, $lang );
         }
         $text .= "</tr></table>";
@@ -146,46 +146,56 @@ function BattleReport ( array $res, int $now, int $aloss, int $dloss, array $cap
     // TODO: Add a loss label that is in the HTML: <!--A:167658,W:167658-->
     if ( $res['result'] === "awon" )
     {
-        $text .= "<p> ".loca_lang("BATTLE_AWON", $lang)."<br>" . va(loca_lang("BATTLE_PLUNDER", $lang), nicenum($captured[GID_RC_METAL]), nicenum($captured[GID_RC_CRYSTAL]), nicenum($captured[GID_RC_DEUTERIUM]));
+        $text .= "<p> " . loca_lang("BATTLE_AWON", $lang);
+        if ($captured) {
+            $text .= "<br>" . va(loca_lang("BATTLE_PLUNDER", $lang), nicenum($captured[GID_RC_METAL]), nicenum($captured[GID_RC_CRYSTAL]), nicenum($captured[GID_RC_DEUTERIUM]));
+        }
     }
     else if ( $res['result'] === "dwon" ) $text .= "<p> " . loca_lang("BATTLE_DWON", $lang);
     else if ( $res['result'] === "draw" ) $text .= "<p> " . loca_lang("BATTLE_DRAW", $lang);
-    //else Error ("Неизвестный исход битвы!");
-    $text .= "<br><p><br>".va(loca_lang("BATTLE_ALOSS", $lang), nicenum($aloss))."<br>" . va(loca_lang("BATTLE_DLOSS", $lang), nicenum($dloss));
-    $text .= "<br>" . va(loca_lang("BATTLE_DEBRIS", $lang), nicenum($debris[GID_RC_METAL]), nicenum($debris[GID_RC_CRYSTAL]));
+
+    if ($loss) {
+        $text .= "<br><p><br>".va(loca_lang("BATTLE_ALOSS", $lang), nicenum($loss['aloss']))."<br>" . va(loca_lang("BATTLE_DLOSS", $lang), nicenum($loss['dloss']));
+    }
+    if ($debris) {
+        $text .= "<br>" . va(loca_lang("BATTLE_DEBRIS", $lang), nicenum($debris[GID_RC_METAL]), nicenum($debris[GID_RC_CRYSTAL]));
+    }
     if ( $moonchance ) $text .= "<br>" . va(loca_lang("BATTLE_MOONCHANCE", $lang), $moonchance);
     if ( $mooncreated ) $text .= "<br>" . loca_lang("BATTLE_MOON", $lang);
 
-    // Repairing the Defense.
-    // There is an error in the output of the original battle report: the Small Shield Dome is not output in its turn, but before the Plasma Cannon.
-    // To be as similar as possible to the original report, the RepairMap permutation table is used in the output of the repaired defense.
-    $repairmap = array ( GID_D_RL, GID_D_LL, GID_D_HL, GID_D_GAUSS, GID_D_ION, GID_D_SDOME, GID_D_PLASMA, GID_D_LDOME );
+    if ($repaired) {
+        
+        // Repairing the Defense.
+        // There is an error in the output of the original battle report: the Small Shield Dome is not output in its turn, but before the Plasma Cannon.
+        // To be as similar as possible to the original report, the RepairMap permutation table is used in the output of the repaired defense.
+        $repairmap = array ( GID_D_RL, GID_D_LL, GID_D_HL, GID_D_GAUSS, GID_D_ION, GID_D_SDOME, GID_D_PLASMA, GID_D_LDOME );
 
-    foreach ( $res['before']['defenders'] as $i=>$defender) {
-        if ($defender['pf'] == 0) continue;     // not planet
+        foreach ( $res['before']['defenders'] as $i=>$defender) {
+            if ($defender['pf'] == 0) continue;     // not planet
 
-        $repaired_num = 0;
-        foreach ($repaired[$i] as $gid=>$amount) $repaired_num += $amount;
-        if ( $repaired_num > 0)
-        {
-            $text .= "<br>";
-            $need_comma = false;
-            foreach ($repairmap as $i=>$gid)
+            $repaired_num = 0;
+            foreach ($repaired[$i] as $gid=>$amount) $repaired_num += $amount;
+            if ( $repaired_num > 0)
             {
-                if ($repaired[$i][$gid])
+                $text .= "<br>";
+                $need_comma = false;
+                foreach ($repairmap as $i=>$gid)
                 {
-                    if ( $need_comma ) $text .= ", ";
-                    $text .= nicenum ($repaired[$i][$gid]) . " " . loca_lang ("NAME_$gid", $lang);
-                    $need_comma = true;
+                    if ($repaired[$i][$gid])
+                    {
+                        if ( $need_comma ) $text .= ", ";
+                        $text .= nicenum ($repaired[$i][$gid]) . " " . loca_lang ("NAME_$gid", $lang);
+                        $need_comma = true;
+                    }
                 }
+                if ($repaired_num > 1) {
+                    $text .= loca_lang("BATTLE_REPAIRED", $lang);
+                }
+                else {
+                    $text .= loca_lang("BATTLE_REPAIRED1", $lang);
+                }
+                $text .= "<br>";
             }
-            if ($repaired_num > 1) {
-                $text .= loca_lang("BATTLE_REPAIRED", $lang);
-            }
-            else {
-                $text .= loca_lang("BATTLE_REPAIRED1", $lang);
-            }
-            $text .= "<br>";
         }
     }
 
