@@ -19,6 +19,7 @@ function Admin_Checksum () : void
         'core/ally.php', 
         'core/battle.php', 
         'core/battle_engine.php', 
+        'core/battle_report.php', 
         'core/bbcode.php', 
         'core/bot.php', 
         'core/botapi.php', 

@@ -151,16 +151,21 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
     $repaired = RepairDefense ( $d, $res, $unitab['defrepair'], $unitab['defrepair_delta'], false );
 
     // Calculate total losses
-    $aloss = $dloss = 0;
     $loss = CalcLosses ( $a, $d, $res, $repaired );
-    $a = $loss['a'];
-    $d = $loss['d'];
     $aloss = $loss['aloss'];
     $dloss = $loss['dloss'];
 
+    // Calc debris drop
+    CalcDebris ( $a, $d, $res, $repaired, $fid, $did );
+    $debris = GetDebrisTotal ($a, $d);
+    $debris_total = 0;
+    foreach ($debris as $rc=>$amount) {
+        $debris_total += $amount;
+    }
+
     // Create the moon
     $mooncreated = false;
-    $moonchance = min ( floor ( ($res['dm'] + $res['dk']) / 100000), 20 );
+    $moonchance = min ( floor ( $debris_total / 100000), 20 );
     if ( mt_rand (1, 100) <= $moonchance ) {
         $mooncreated = true;
     }
@@ -174,7 +179,7 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
     foreach ($transportableResources as $i=>$rc) {
         $captured[$rc] = $i + 1;
     }
-    return BattleReport ( $res, time(), $aloss, $dloss, $captured, $moonchance, $mooncreated, $repaired, $GlobalUser['lang'] );
+    return BattleReport ( $res, time(), $aloss, $dloss, $captured, $moonchance, $mooncreated, $repaired, $debris, $GlobalUser['lang'] );
 }
 
 function Admin_BattleSim () : void

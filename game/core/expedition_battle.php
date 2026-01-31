@@ -249,11 +249,8 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
     else $battle_result = BATTLE_RESULT_DRAW;
 
     // Calculate total losses (account for deuterium and repaired defenses)
-    $aloss = $dloss = 0;
     $repaired = array ( GID_D_RL=>0, GID_D_LL=>0, GID_D_HL=>0, GID_D_GAUSS=>0, GID_D_ION=>0, GID_D_PLASMA=>0, GID_D_SDOME=>0, GID_D_LDOME=>0 );
     $loss = CalcLosses ( $a, $d, $res, $repaired );
-    $a = $loss['a'];
-    $d = $loss['d'];
     $aloss = $loss['aloss'];
     $dloss = $loss['dloss'];
 
