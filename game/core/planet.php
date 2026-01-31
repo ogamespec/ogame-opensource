@@ -614,4 +614,20 @@ function SaveColonySettings (array $coltab) : void
     dbquery ($query);
 }
 
+function GetPhalanxRadius (int $level) : int {
+    
+    return $level * $level - 1;
+}
+
+function CanPhalanx ($origin, $target) : bool {
+    
+    $system_radius = abs ($origin['s'] - $target['s']);
+    $phalanx_radius = GetPhalanxRadius ($origin[GID_B_PHALANX]);
+
+    return ($system_radius <= $phalanx_radius) && 
+        ($origin['type'] == PTYP_MOON) && 
+        ($target['owner_id'] != $origin['owner_id']) &&
+        ($target['g'] == $origin['g']);
+}
+
 ?>

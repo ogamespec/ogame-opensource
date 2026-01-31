@@ -119,6 +119,16 @@ function FleetSpanMissile (int $dir, array $fleet, array $owner, array $origin, 
     echo "</span>";
 }
 
+function FleetSpanCustom (int $dir, array $fleet, array $owner, array $origin, array $target) : void
+{
+    if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
+        va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
+        ". ".loca("EVENT_MISSION").": ".loca("FLEET_ORDER_".$fleet['mission'])."</span>";
+    else echo "<span class='return phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
+        va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
+        ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("FLEET_ORDER_".$fleet['mission'])."</span></span>";
+}
+
 function FleetSpan ( array $fleet_entry ) : void
 {
     $mission = $fleet_entry['mission'];
@@ -166,7 +176,7 @@ function FleetSpan ( array $fleet_entry ) : void
             FleetSpanMissile ($dir, $fleet, $owner, $origin, $target);
             break;
         default:
-            echo loca("EVENT_MISSION")." Type:$mission, Dir:$dir, Fleet: " .TitleFleet($fleet,0). ", from " .PlanetFrom($origin, ""). " to " .PlanetTo($target, ""). ", " . Cargo ($fleet,"","Cargo");
+            FleetSpanCustom  ($dir, $fleet, $owner, $origin, $target);
             break;
     }
 }
@@ -218,7 +228,7 @@ function PhalanxEventList (int $planet_id) : void
             continue;
         }
 
-        if ( $fleet_obj['union_id'] > 0 && $fleet_obj['target_planet'] == $planet_id && $fleet_obj['mission'] != 21 ) continue;
+        if ( $fleet_obj['union_id'] > 0 && $fleet_obj['target_planet'] == $planet_id && $fleet_obj['mission'] != FTYP_ACS_ATTACK_HEAD ) continue;
 
         // Do not show departure and return for Deploy mission.
         if ( $fleet_obj['mission'] == (FTYP_RETURN+FTYP_DEPLOY) ) continue;

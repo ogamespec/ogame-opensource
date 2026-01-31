@@ -16,7 +16,7 @@ const GID_LEVI_JUGGERNAUT = 22854;      // Galactic Juggernaut
 const FTYP_LEVI_PREPARE_JUMP = 22855;
 
 const LEVI_DIAMETER = 1000;          // Диаметр левиафана
-const LEVI_TEMP = -200;          // Температура левиафана
+const LEVI_TEMP = 200;          // Температура левиафана
 
 const LEVI_PORTAL_DIAMETER = 1000;          // Диаметр портала
 const LEVI_PORTAL_TEMP = -200;          // Температура портала
@@ -426,6 +426,9 @@ class DeepSpaceHorror extends GameMod {
 
         global $GlobalUser;
         global $session;
+        global $aktplanet;
+
+        $phalanx = CanPhalanx ($aktplanet, $planet);
 
         $res = "";
         $res .= "<table width=240 ><tr>";
@@ -436,6 +439,7 @@ class DeepSpaceHorror extends GameMod {
         $res .= "<tr><th>".loca("GALAXY_LEVI_TEMP")."</td><th>".$planet['temp']."</td></tr>";
         $res .= "<tr><td colspan=2 class=c >".loca("GALAXY_LEVI_ACTIONS")."</td></tr>";
         $res .= "<tr><th align=left colspan=2 >";
+        if ($phalanx) $res .= "<a href=# onclick=fenster(&#039;index.php?page=phalanx&session=$session&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."&#039;) >".loca("GALAXY_FLEET_PHALANX")."</a><br />";
         if ($GlobalUser['admin'] >= 2) $res .= "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id'].">".loca("GALAXY_PLANET_ADMIN")."</a><br />";
         $res .= "</th></tr></table></tr></table>";
 
@@ -446,6 +450,9 @@ class DeepSpaceHorror extends GameMod {
 
         global $GlobalUser;
         global $session;
+        global $aktplanet;
+
+        $phalanx = CanPhalanx ($aktplanet, $planet);
 
         $res = "";
         $res .= "<table width=240 ><tr>";
@@ -456,6 +463,7 @@ class DeepSpaceHorror extends GameMod {
         $res .= "<tr><th>".loca("GALAXY_LEVI_TEMP")."</td><th>".$planet['temp']."</td></tr>";
         $res .= "<tr><td colspan=2 class=c >".loca("GALAXY_LEVI_ACTIONS")."</td></tr>";
         $res .= "<tr><th align=left colspan=2 >";
+        if ($phalanx) $res .= "<a href=# onclick=fenster(&#039;index.php?page=phalanx&session=$session&scanid=".$planet['owner_id']."&spid=".$planet['planet_id']."&#039;) >".loca("GALAXY_FLEET_PHALANX")."</a><br />";
         if ($GlobalUser['admin'] >= 2) $res .= "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id'].">".loca("GALAXY_PLANET_ADMIN")."</a><br />";
         $res .= "</th></tr></table></tr></table>";
 

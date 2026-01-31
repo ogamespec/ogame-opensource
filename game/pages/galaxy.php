@@ -22,9 +22,9 @@ function ShowCustomObjects (int $p, array $custom_planets) : void {
                 if ($res) $overlib = $info['overlib'];
                 else $overlib = "";
 
-                echo "<a style=\"cursor:pointer\" onmouseover=\"return overlib('$overlib', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -40 );\" ";
-                echo "onmouseout=\"return nd();\">";
-                echo "<img src=\"".GetPlanetSmallImage ( UserSkin(), $custom_planet )."\" height=\"30\" width=\"30\"/></a>\n";
+                echo "<a style='cursor:pointer' onmouseover='return overlib(\"".$overlib."\", STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -40 );' ";
+                echo "onmouseout='return nd();'>";
+                echo "<img src='".GetPlanetSmallImage ( UserSkin(), $custom_planet )."' height='30' width='30'/></a>\n";
             }
         }
         echo "</th>\n";
@@ -498,8 +498,6 @@ $tabindex = 3;
 $result = EnumPlanetsGalaxy ( $coord_g, $coord_s );
 $num = $planets = dbrows ($result);
 
-$phalanx_radius = $aktplanet[GID_B_PHALANX] * $aktplanet[GID_B_PHALANX] - 1;
-
 while ($num--)
 {
     $planet = dbarray ($result);
@@ -507,10 +505,7 @@ while ($num--)
     $own = $user['player_id'] == $GlobalUser['player_id'];
     for ($p; $p<$planet['p']; $p++) empty_row ($p, $custom_planets);
 
-    $phalanx = ($system_radius <= $phalanx_radius) && 
-               ($aktplanet['type'] == PTYP_MOON) && 
-               ($planet['owner_id'] != $GlobalUser['player_id']) &&
-               ($planet['g'] == $aktplanet['g']);
+    $phalanx = CanPhalanx ($aktplanet, $planet);
 
     // Coord.
     echo "<tr>\n";
