@@ -21,6 +21,7 @@ require_once "fleet.php";
 require_once "acs.php";
 require_once "expedition.php";
 require_once "battle.php";
+require_once "battle_report.php";
 require_once "expedition_battle.php";
 require_once "battle_engine.php";
 require_once "raketen.php";
