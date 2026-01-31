@@ -800,7 +800,7 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
         {
             $amount = 0;
             if (isset($target[$gid])) {
-                $mount += $target[$gid];
+                $amount += $target[$gid];
             }
             if ($amount > 0) {
                 if ( ($count % 2) == 0 ) $report .= "</tr>\n";
