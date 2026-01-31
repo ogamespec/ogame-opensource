@@ -25,7 +25,7 @@ function AjaxSendError (int $id=601) : never
     die ();
 }
 
-function AjaxSendDone (int $slots, int $probes, int $recyclers, int $missiles) : void
+function AjaxSendDone (int $slots, int $probes, int $recyclers, int $missiles) : never
 {
     header ('Content-Type: text/html;');
     echo "600 $slots ".nicenum($probes)." ".nicenum($recyclers)." ".nicenum($missiles);
@@ -61,10 +61,12 @@ if ( $rows ) {
 
 // Check the parameters.
 
-if ( $planettype < 1 || $planettype > 3 ) AjaxSendError ();    // wrong target
+$planettypes = [ 1, 3 ];
+ModsExecRef ('page_flottenversand_ajax_spy_planets', $planettypes);
+
 if ( ! ( $order == FTYP_SPY || $order == FTYP_RECYCLE ) ) AjaxSendError ();    // can only be sent to espionage or recycle
 if ( $order == FTYP_RECYCLE && $planettype != 2 ) AjaxSendError ();    // recyclers can only be sent to the debris field
-if ( $order == FTYP_SPY && ! ($planettype == 1 || $planettype == 3) )  AjaxSendError ();     // You can only spy on planets or moons
+if ( $order == FTYP_SPY && ! in_array($planettype, $planettypes) )  AjaxSendError ();     // You can only spy on planets or moons or other planets allowed by modifications 
 if ( $galaxy < 1 || $galaxy > $GlobalUni['galaxies'] ) AjaxSendError ();    // wrong coordinates (Galaxy)
 if ( $system < 1 || $system > $GlobalUni['systems'] ) AjaxSendError ();    // wrong coordinates (System)
 if ( $planet < 1 || $planet > 15 ) AjaxSendError ();    // wrong coordinates (Position)
@@ -106,7 +108,7 @@ if ( $order == FTYP_SPY )
 
     if ( $target['owner_id'] == $GlobalUser['player_id'] ) AjaxSendError ();    // Own planet
     if ( $GlobalUser['noattack'] || $BlockAttack ) AjaxSendError ();    // Attack ban
-    if ( $target_user['admin'] > 0 ) AjaxSendError ();    // the administration can't be scanned.
+    if ( $target_user['admin'] > 0 && $target_user['player_id'] != USER_SPACE ) AjaxSendError ();    // the administration can't be scanned (except space)
     if ( IsPlayerNewbie ($target_user['player_id']) ) AjaxSendError (603);    // newbie protection
     if ( IsPlayerStrong ($target_user['player_id']) ) AjaxSendError (604);    // strong protection
     if ( $target_user['vacation'] ) AjaxSendError (605);    // user in vacation mode
@@ -157,7 +159,14 @@ if ( $cargo < $cons ) AjaxSendError (615);        // there's no room in the carg
 
 // Fleet lock
 $fleetlock = "temp/fleetlock_" . $aktplanet['planet_id'];
-if ( file_exists ($fleetlock) ) AjaxSendError ();
+if ( file_exists ($fleetlock) ) {
+    $fileCreationTime = filectime($filename);
+    if ((time() - $fileCreationTime) < 3) {
+        AjaxSendError ();
+    } else {
+        unlink ( $fleetlock );
+    }
+}
 $f = fopen ( $fleetlock, 'w' );
 fclose ($f);
 
@@ -168,6 +177,7 @@ foreach ($transportableResources as $i=>$rc) {
 }
 $fleet_id = DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, $resources, $cons, time(), 0 );
 if ($fleet_id == 0) {
+    unlink ( $fleetlock );
     AjaxSendError (611);    // no ships to send
 }
 

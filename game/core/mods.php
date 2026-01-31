@@ -94,6 +94,14 @@ abstract class GameMod {
         return false;
     }
 
+    public function page_flotten2_planet_types (array &$planet_types) : bool {
+        return false;
+    }
+
+    public function page_flottenversand_ajax_spy_planets (array &$planet_types) : bool {
+        return false;
+    }
+
     public function page_infos(int $id, array &$planet) : bool {
         return false;
     }

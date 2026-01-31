@@ -98,11 +98,11 @@ function FleetAvailableMissionsDefault ( int $thisgalaxy, int $thissystem, int $
     {
         $origin_user = LoadUser ($origin['owner_id']);
         if ($origin_user == null) {
-            return array();
+            return $missions;
         }
         $target_user = LoadUser ($target['owner_id']);
         if ($target_user == null) {
-            return array();
+            return $missions;
         }
 
         if ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) )      // allies or buddies
@@ -197,8 +197,8 @@ function FlightCons (array $fleet, int $dist, int $flighttime, int $combustion, 
             $basecons = $amount * FleetCons ($id, $combustion, $impulse, $hyper );
             $consumption = $basecons * $dist / 35000 * (($spd / 10) + 1) * (($spd / 10) + 1);
             $consumption += $hours * $amount * FleetCons ($id, $combustion, $impulse, $hyper ) / 10;    // holding costs
-            if ( $id == GID_F_PROBE ) $cons['probes'] += $consumption;
-            else $cons['fleet'] += $consumption;
+            if ( $id == GID_F_PROBE ) $cons['probes'] += (int)$consumption;
+            else $cons['fleet'] += (int)$consumption;
         }
     }
     return $cons;
@@ -701,7 +701,9 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
     {
         $origin_ships += $fleet_obj[$gid];
         $origin_cost += $fleet_obj[$gid] * $UnitParam[$gid][0];
-        $target_ships += $target[$gid];
+        if (isset($target[$gid])) {
+            $target_ships += $target[$gid];
+        }
     }
 
     $origin_prem = PremiumStatus ($origin_user);
@@ -776,7 +778,11 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
         $count = 0;
         foreach ( $fleetmap as $i=>$gid )
         {
-            $amount = $target[$gid] + $holding_fleet[$gid];
+            $amount = 0;
+            if (isset($target[$gid])) {
+                $amount += $target[$gid];
+            }
+            $amount += $holding_fleet[$gid];
             if ($amount > 0) {
                 if ( ($count % 2) == 0 ) $report .= "</tr>\n";
                 $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
@@ -792,7 +798,10 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
         $count = 0;
         foreach ( $defmap as $i=>$gid )
         {
-            $amount = $target[$gid];
+            $amount = 0;
+            if (isset($target[$gid])) {
+                $amount += $target[$gid];
+            }
             if ($amount > 0) {
                 if ( ($count % 2) == 0 ) $report .= "</tr>\n";
                 $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";

@@ -28,4 +28,10 @@ $LOCA["ru"]["GALAXY_LEVI_SIZE"] = "размер:";
 $LOCA["ru"]["GALAXY_LEVI_TEMP"] = "температура:";
 $LOCA["ru"]["GALAXY_LEVI_ACTIONS"] = "Действия:";
 
+// для выпадающего списка на странице Флот 2
+$LOCA["ru"]["FLEET_PLANETTYPE_".PTYP_LEVI_PORTAL] = "портал бездны";
+$LOCA["ru"]["FLEET_PLANETTYPE_".PTYP_LEVI_AMOEBA] = "амёба";
+$LOCA["ru"]["FLEET_PLANETTYPE_".PTYP_LEVI_GUARDIAN] = "страж";
+$LOCA["ru"]["FLEET_PLANETTYPE_".PTYP_LEVI_JUGGERNAUT] = "левиафан";
+
 ?>
