@@ -495,29 +495,235 @@ class DeepSpaceHorror extends GameMod {
 
         // Начать битву
 
-        $this->LeviathanBattle ($fleet, $old_portal);
+        $battle_result = $this->LeviathanBattle ($gid, $fleet_obj['fleet_id'], $fleet, $old_portal, $now);
 
-        // Создать новый портал
+        // Создать новый портал (только если левиафан не уничтожен)
 
-        $coords = $this->DeterminePortalCoords ($gid, $old_portal);
+        if ($battle_result != BATTLE_RESULT_DWON) {
 
-        $name = loca ("PLANET_".PTYP_LEVI_PORTAL);
+            $coords = $this->DeterminePortalCoords ($gid, $old_portal);
 
-        $new_portal = array(
-            'name' => $name, 'type' => PTYP_LEVI_PORTAL, 'g' => $coords['g'], 's' => $coords['s'], 'p' => $coords['p'], 
-            'owner_id' => USER_SPACE, 'diameter' => LEVI_PORTAL_DIAMETER, 'temp' => LEVI_PORTAL_TEMP, 'fields' => 0, 'maxfields' => 0, 'date' => $now,
-            'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
-        $id = AddDBRow ( $new_portal, "planets" );
-        $new_portal = LoadPlanetById ($id);         // reload
+            $name = loca ("PLANET_".PTYP_LEVI_PORTAL);
 
-        // Запустить флот
+            $new_portal = array(
+                'name' => $name, 'type' => PTYP_LEVI_PORTAL, 'g' => $coords['g'], 's' => $coords['s'], 'p' => $coords['p'], 
+                'owner_id' => USER_SPACE, 'diameter' => LEVI_PORTAL_DIAMETER, 'temp' => LEVI_PORTAL_TEMP, 'fields' => 0, 'maxfields' => 0, 'date' => $now,
+                'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
+            $id = AddDBRow ( $new_portal, "planets" );
+            $new_portal = LoadPlanetById ($id);         // reload
 
-        $this->DispatchLeviathan ($gid, $origin, $new_portal, $queue['end'], 1);
+            // Запустить флот
+
+            $this->DispatchLeviathan ($gid, $origin, $new_portal, $queue['end'], 1);
+        }
     }
 
-    private function LeviathanBattle (array $fleet, array $old_portal) : void {
+    private function LeviathanBattle (int $levi_gid, int $fleet_id, array $fleet, array $old_portal, int $when) : int {
+
+        global $db_prefix;
+        global $GlobalUni;
+        global $fleetmap;
+        global $defmap;
+        global $rakmap;
+        global $transportableResources;
+        $defmap_norak = array_diff($defmap, $rakmap);
 
         Debug ( "LeviathanBattle" );
+
+        $unitab = LoadUniverse ();
+        $fid = $unitab['fid'];
+        $did = $unitab['did'];
+        $rf = $unitab['rapid'];
+
+        // Определить списки участников
+
+        $a = [];
+        $d = [];
+        $anum = 0;
+        $dnum = 0;
+
+        $a[0] = LoadUser ($old_portal['owner_id']);
+        $a[0]['units'] = array ();
+        foreach ($fleetmap as $i=>$gid) $a[0]['units'][$gid] = abs($fleet[$gid]);
+        $a[0]['g'] = $old_portal['g'];
+        $a[0]['s'] = $old_portal['s'];
+        $a[0]['p'] = $old_portal['p'];
+        $a[0]['id'] = $fleet_id;
+        $a[0]['pf'] = BATTLE_PTCP_FLEET;    // fleet
+        $a[0]['points'] = $a[0]['fpoints'] = 0;
+        $anum++;
+
+        // Выбрать радиус поражения
+        switch ($levi_gid) {
+            case GID_LEVI_AMOEBA:
+                $delta = 1;
+                break;
+            case GID_LEVI_GUARDIAN:
+                $delta = 2;
+                break;
+            case GID_LEVI_JUGGERNAUT:
+                $delta = 3;
+                break;
+        }
+
+        $p_min = max (1, $old_portal['p'] - $delta);
+        $p_max = min (15, $old_portal['p'] + $delta);
+
+        $result = EnumPlanetsGalaxy ($old_portal['g'], $old_portal['s']);
+        $rows = dbrows ($result);
+        while ($rows--) {
+
+            $planet = dbarray ($result);
+            // Пропустить особенные планеты
+            if ($planet['type'] != PTYP_PLANET) continue;
+            // Пропустить планеты не в радиусе поражения
+            if ($planet['p'] < $p_min || $planet['p'] > $p_max) continue;
+
+            // Иначе добавить планету и союзные флоты 
+            $p = $planet;
+            $planet_id = $planet['planet_id'];
+            $d[$dnum] = LoadUser ( $p['owner_id'] );
+            $d[$dnum]['units'] = array ();
+            foreach ($fleetmap as $i=>$gid) {
+                if (isset($p[$gid])) {
+                    $d[$dnum]['units'][$gid] = abs($p[$gid]);
+                }
+            }
+            foreach ($defmap_norak as $i=>$gid) {
+                if (isset($p[$gid])) {
+                    $d[$dnum]['units'][$gid] = abs($p[$gid]);
+                }
+            }
+            $d[$dnum]['g'] = $p['g'];
+            $d[$dnum]['s'] = $p['s'];
+            $d[$dnum]['p'] = $p['p'];
+            $d[$dnum]['id'] = $planet_id;
+            $d[$dnum]['pf'] = BATTLE_PTCP_PLANET;    // planet
+            $d[$dnum]['points'] = $d[$dnum]['fpoints'] = 0;
+            $dnum++;
+
+            // Fleets on hold (ACS)
+            $acs_result = GetHoldingFleets ($planet_id);
+            $acs_rows = dbrows ($acs_result);
+            while ($acs_rows--)
+            {
+                $fleet_obj = dbarray ($acs_result);
+
+                $d[$dnum] = LoadUser ( $fleet_obj['owner_id'] );
+                $d[$dnum]['units'] = array ();
+                foreach ($fleetmap as $i=>$gid) $d[$dnum]['units'][$gid] = abs($fleet_obj[$gid]);
+                $start_planet = LoadPlanetById ( $fleet_obj['start_planet'] );
+                $d[$dnum]['g'] = $start_planet['g'];
+                $d[$dnum]['s'] = $start_planet['s'];
+                $d[$dnum]['p'] = $start_planet['p'];
+                $d[$dnum]['id'] = $fleet_obj['fleet_id'];
+                $d[$dnum]['pf'] = BATTLE_PTCP_FLEET;    // fleet  
+                $d[$dnum]['points'] = $d[$dnum]['fpoints'] = 0;
+
+                $dnum++;
+            }
+        }
+
+        if ($dnum == 0) return BATTLE_RESULT_AWON;
+
+        // Начать битву
+
+        $max_round = BATTLE_MAX_ROUND;
+        switch ($levi_gid) {
+            case GID_LEVI_AMOEBA:
+                $max_round += 1;
+                break;
+            case GID_LEVI_GUARDIAN:
+                $max_round += 2;
+                break;
+            case GID_LEVI_JUGGERNAUT:
+                $max_round += 3;
+                break;
+        }
+
+        $source = GenBattleSourceData ($a, $d, $rf, $max_round);
+
+        $battle = array ( 'source' => $source, 'title' => "", 'report' => "", 'date' => $when );
+        $battle_id = AddDBRow ( $battle, "battledata" );
+
+        $res = ExecuteBattle ($unitab, $battle_id, $source, $a, $d);
+
+        // Обработать результаты
+
+        // Determine the outcome of the battle.
+        if ( $res['result'] === "awon" ) $battle_result = BATTLE_RESULT_AWON;
+        else if ( $res['result'] === "dwon" ) $battle_result = BATTLE_RESULT_DWON;
+        else $battle_result = BATTLE_RESULT_DRAW;
+
+        // Restore the defense
+        $repaired = RepairDefense ( $d, $res, $unitab['defrepair'], $unitab['defrepair_delta'] );
+
+        // Calculate total losses (account for deuterium and repaired defenses)
+        $loss = CalcLosses ( $a, $d, $res, $repaired );
+        $aloss = $loss['aloss'];
+        $dloss = $loss['dloss'];
+
+        // .............. TBD
+        $captured = null;
+        $moonchance = 0;
+        $mooncreated = false;
+        $debris = null;
+
+        // This array contains a cache of generated battle reports for each language.
+        $battle_text = array();
+
+        // Generate a battle report in the universe language (for log history)
+        $text = BattleReport ( $res, $when, $loss, $captured, $moonchance, $mooncreated, $repaired, $debris, $GlobalUni['lang'] );
+        $battle_text[$GlobalUni['lang']] = $text;
+
+        // Send out messages, mailbox is used to avoid sending multiple messages to ACS players.
+        $mailbox = array ();
+        $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
+        $d_result = array ( 1=>"combatreport_igotattacked_iwon", 0=>"combatreport_igotattacked_ilost", 2=>"combatreport_igotattacked_draw" );
+
+        foreach ( $d as $i=>$user )        // Defenders
+        {
+            // Generate a battle report in the user's language if it is not in the cache
+            if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
+            else {
+                $text = BattleReport ( $res, $when, $loss, $captured, $moonchance, $mooncreated, $repaired, $debris, $user['lang'] );
+                $battle_text[$user['lang']] = $text;
+            }
+
+            loca_add ( "fleetmsg", $user['lang'] );
+
+            if ( key_exists($user['player_id'], $mailbox) ) continue;
+            $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, MTYP_BATTLE_REPORT_TEXT, $when );
+            MarkMessage ( $user['player_id'], $bericht );
+            $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$d_result[$battle_result]."\">" .
+                loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']) .
+                " [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
+            SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", MTYP_BATTLE_REPORT_LINK, $when );
+            $mailbox[ $user['player_id'] ] = true;
+        }
+
+        // Update the battle report log (use the universe language battle report)
+        loca_add ( "fleetmsg", $GlobalUni['lang'] );
+        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=admin&session={PUBLIC_SESSION}&mode=BattleReport&bericht=$battle_id\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
+            loca_lang("FLEET_MESSAGE_BATTLE", $GlobalUni['lang']) .
+            " [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
+        $query = "UPDATE ".$db_prefix."battledata SET title = '".$subj."', report = '".$battle_text[$GlobalUni['lang']]."' WHERE battle_id = $battle_id;";
+        dbquery ( $query );
+
+
+
+        // Clean up old battle reports
+        $ago = $when - 2 * 7 * 24 * 60 * 60;
+        $query = "DELETE FROM ".$db_prefix."battledata WHERE date < $ago;";
+        dbquery ($query);
+
+
+
+        // Cleaning up the battle engine's intermediate data
+        unlink ( "battledata/battle_".$battle_id.".txt" );
+        unlink ( "battleresult/battle_".$battle_id.".txt" );
+
+        return $battle_result;
     }
 }
 
