@@ -401,7 +401,7 @@ else
         $level = $aktplanet[$gid]-3;
         if ($level <= 0) $level = 1;
         for ($i=$level; $i<$aktplanet[$gid]+5; $i++) {
-            $radius = $i*$i-1;
+            $radius = GetPhalanxRadius ($i);
             if ($i==$aktplanet[$gid]) echo "<tr><th align=center >&nbsp;<FONT color=FF0000>$i</FONT></th><th align=center >&nbsp;$radius&nbsp;</th></tr>";
             else echo "<tr><th align=center >&nbsp;<FONT color=FFFFFF>$i</FONT></th><th align=center >&nbsp;$radius&nbsp;</th></tr>";
         }

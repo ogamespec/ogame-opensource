@@ -18,10 +18,17 @@ require_once "queue.php";
 require_once "page.php";
 require_once "ally.php";
 require_once "fleet.php";
+require_once "acs.php";
+require_once "expedition.php";
 require_once "battle.php";
+require_once "expedition_battle.php";
+require_once "battle_engine.php";
+require_once "raketen.php";
+require_once "graviton.php";
 require_once "debug.php";
 require_once "galaxytool.php";
 require_once "bot.php";
+require_once "botapi.php";
 require_once "coupon.php";
 require_once "mods.php";
 

@@ -1,9 +1,5 @@
 <?php
 
-require_once "battle_engine.php";
-require_once "raketen.php";
-require_once "graviton.php";
-
 // OGame Battle Engine frontend.
 
 const BATTLE_RESULT_AWON = 0;       // The attacker won
@@ -11,49 +7,64 @@ const BATTLE_RESULT_DWON = 1;       // The defender won
 const BATTLE_RESULT_DRAW = 2;       // Draw
 
 // Repairing the defense.
+// Multiple planetary defenders are taken into account.
 function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_delta, bool $premium=true ) : array
 {
     global $defmap;
     global $rakmap;
     $defmap_norak = array_diff($defmap, $rakmap);
+
     $repaired = [];
     $exploded = [];
-    foreach ( $defmap_norak as $n=>$gid ) {
-        $repaired[$gid] = 0;
-        $exploded[$gid] = 0;
-    }
-    $exploded_total = 0;
+    $exploded_total = [];
+    $premium_status = [];
 
-    if ( $premium) $prem = PremiumStatus ($d[0]);
-    else $prem = array();
+    foreach ( $d as $i=>$defender) {
+        if ($defender['pf'] == 0) continue;     // not planet
+        $exploded_total[$i] = 0;    
+        $repaired[$i] = [];
+        $exploded[$i] = [];
+        foreach ( $defmap_norak as $n=>$gid ) {
+            $repaired[$i][$gid] = 0;
+            $exploded[$i][$gid] = 0;
+        }
+        if ( $premium) $prem = PremiumStatus ($d[$i]);
+        else $prem = array();
+        $premium_status[$i] = key_exists ('engineer', $prem) && $prem['engineer'];
+    }
 
     $rounds = count ( $res['rounds'] );
     if ( $rounds > 0 ) 
     {
         // Count the blown defenses.
         $last = $res['rounds'][$rounds - 1];
-        foreach ( $exploded as $gid=>$amount )
-        {
-            $before = isset($d[0]['units'][$gid]) ? $d[0]['units'][$gid] : 0;
-            $after =  isset ($last['defenders'][0]['units'][$gid]) ? $last['defenders'][0]['units'][$gid] : 0;
-            $exploded[$gid] = $before - $after;
-            if ( key_exists ('engineer', $prem) && $prem['engineer'] ) $exploded[$gid] = floor ($exploded[$gid] / 2);
-            $exploded_total += $exploded[$gid];
-        }
 
-        // Restore the defense
-        if ($exploded_total)
-        {
-            foreach ( $exploded as $gid=>$amount )
+        foreach ($d as $i=>$defender) {
+            if ($defender['pf'] == 0) continue;     // not planet
+
+            foreach ( $defmap_norak as $n=>$gid )
             {
-                if ( $amount < 10 )
+                $before = isset($d[$i]['units'][$gid]) ? $d[$i]['units'][$gid] : 0;
+                $after =  isset ($last['defenders'][$i]['units'][$gid]) ? $last['defenders'][$i]['units'][$gid] : 0;
+                $exploded[$i][$gid] = $before - $after;
+                if ( $premium_status[$i] ) $exploded[$i][$gid] = floor ($exploded[$i][$gid] / 2);
+                $exploded_total[$i] += $exploded[$i][$gid];
+            }
+
+            // Restore the defense
+            if ($exploded_total[$i])
+            {
+                foreach ( $exploded[$i] as $gid=>$amount )
                 {
-                    for ($i=0; $i<$amount; $i++)
+                    if ( $amount < 10 )
                     {
-                        if ( mt_rand (0, 99) < $defrepair ) $repaired[$gid]++;
+                        for ($i=0; $i<$amount; $i++)
+                        {
+                            if ( mt_rand (0, 99) < $defrepair ) $repaired[$i][$gid]++;
+                        }
                     }
+                    else $repaired[$i][$gid] = floor ( mt_rand ($defrepair-$defrepair_delta, $defrepair+$defrepair_delta) * $amount / 100 );
                 }
-                else $repaired[$gid] = floor ( mt_rand ($defrepair-$defrepair_delta, $defrepair+$defrepair_delta) * $amount / 100 );
             }
         }
     }
@@ -165,7 +176,7 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
         {
             foreach ( $defender['units'] as $gid=>$amount )
             {
-                if ( IsDefense($gid) && $i == 0 ) $amount += $repaired[$gid];
+                if ( IsDefense($gid) && $defender['pf'] == 1 ) $amount += $repaired[$i][$gid];
                 if ( $amount > 0 ) {
                     $cost = TechPrice ( $gid, 1 );
                     $points = TechPriceInPoints ($cost);
@@ -273,13 +284,13 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
 
         foreach ( $last['defenders'] as $i=>$defender )        // Defenders
         {
-            if ( $i == 0 )    // Planet
+            if ( $defender['pf'] )    // Planet
             {
                 AdjustResources ( $captured, $defender['id'], '-' );
                 $objects = array ();
                 foreach ( $fleetmap as $ii=>$gid ) $objects[$gid] = $defender['units'][$gid];
                 foreach ( $defmap_norak as $ii=>$gid ) {
-                    $objects[$gid] = $repaired[$gid];
+                    $objects[$gid] = $repaired[$i][$gid];
                     $objects[$gid] += $defender['units'][$gid];
                 }
                 SetPlanetFleetDefense ( $defender['id'], $objects );
@@ -506,27 +517,33 @@ function BattleReport ( array $res, int $now, int $aloss, int $dloss, array $cap
     // There is an error in the output of the original battle report: the Small Shield Dome is not output in its turn, but before the Plasma Cannon.
     // To be as similar as possible to the original report, the RepairMap permutation table is used in the output of the repaired defense.
     $repairmap = array ( GID_D_RL, GID_D_LL, GID_D_HL, GID_D_GAUSS, GID_D_ION, GID_D_SDOME, GID_D_PLASMA, GID_D_LDOME );
-    $repaired_num = $sum = 0;
-    foreach ($repaired as $gid=>$amount) $repaired_num += $amount;
-    if ( $repaired_num > 0)
-    {
-        $text .= "<br>";
-        foreach ($repairmap as $i=>$gid)
+
+    foreach ( $res['before']['defenders'] as $i=>$defender) {
+        if ($defender['pf'] == 0) continue;     // not planet
+
+        $repaired_num = 0;
+        foreach ($repaired[$i] as $gid=>$amount) $repaired_num += $amount;
+        if ( $repaired_num > 0)
         {
-            if ($repaired[$gid])
+            $text .= "<br>";
+            $need_comma = false;
+            foreach ($repairmap as $i=>$gid)
             {
-                if ( $sum > 0 ) $text .= ", ";
-                $text .= nicenum ($repaired[$gid]) . " " . loca_lang ("NAME_$gid", $lang);
-                $sum += $repaired[$gid];
+                if ($repaired[$i][$gid])
+                {
+                    if ( $need_comma ) $text .= ", ";
+                    $text .= nicenum ($repaired[$i][$gid]) . " " . loca_lang ("NAME_$gid", $lang);
+                    $need_comma = true;
+                }
             }
+            if ($repaired_num > 1) {
+                $text .= loca_lang("BATTLE_REPAIRED", $lang);
+            }
+            else {
+                $text .= loca_lang("BATTLE_REPAIRED1", $lang);
+            }
+            $text .= "<br>";
         }
-        if ($sum > 1) {
-            $text .= loca_lang("BATTLE_REPAIRED", $lang);
-        }
-        else {
-            $text .= loca_lang("BATTLE_REPAIRED1", $lang);
-        }
-        $text .= "<br>";
     }
 
     return $text;

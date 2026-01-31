@@ -59,7 +59,7 @@ require_once "phalanx_events.php";
     $outofrange = false;                    // Check the radius of the phalanx
     if ( $aktplanet['g'] != $target['g'] || $aktplanet[GID_B_PHALANX] <= 0 )  $outofrange = true;
     else {
-        $range = $aktplanet[GID_B_PHALANX] * $aktplanet[GID_B_PHALANX] - 1;
+        $range = GetPhalanxRadius($aktplanet[GID_B_PHALANX]);
         if ( abs($aktplanet['s'] - $target['s']) > $range) $outofrange = true;
     }
 
@@ -71,24 +71,31 @@ require_once "phalanx_events.php";
     else
 */
 
-    if ( $aktplanet["b42"] <= 0 )        // Attempting a phalanx scan from a planet or another moon without a phalanx
+    if ( $aktplanet[GID_B_PHALANX] <= 0 )        // Attempting a phalanx scan from a planet or another moon without a phalanx
     {
         echo "<font color=#FF0000>".loca("PHALANX_ERR_MISSING")."</font>";
     }
-    else if ( $aktplanet["d"] < $PhalanxCost )        // Not enough deuterium
+    else if ( $aktplanet[GID_RC_DEUTERIUM] < $PhalanxCost )        // Not enough deuterium
     {
         echo "<font color=#FF0000>".loca("PHALANX_ERR_DEUT")."</font>";
     }
     else if (                                        // Cheating attempt
-        $target['owner_id'] == $GlobalUser['player_id']         ||          // scan of your planets
-        $aktplanet['owner_id'] != $GlobalUser['player_id']      ||         // scan from foreign moon/planet
-        !( ( $target['type'] > PTYP_MOON && $target['type'] < PTYP_DF ) || $target['type'] == PTYP_DEST_PLANET )   ||           // scan NOT (of a planet or a destroyed planet)
-        $outofrange                                                                        // scan beyond the radius of the phalanx.
+
+        // scan of your planets
+        $target['owner_id'] == $GlobalUser['player_id']         ||
+        // scan from foreign moon/planet
+        $aktplanet['owner_id'] != $GlobalUser['player_id']      ||
+        // scan NOT (of custom or planet or a destroyed planet)
+        !( $target['type'] >= PTYP_CUSTOM || $target['type'] == PTYP_PLANET || $target['type'] == PTYP_DEST_PLANET )  ||
+        // scan beyond the radius of the phalanx.
+        $outofrange
     )        
     {
         // Issue an automatic ban without an VM for an hour.
 
         echo "<font color=#FF0000>".loca("PHALANX_ERR_CHEATER")."</font>";
+
+        // TODO.
     }
     else
     {

@@ -79,7 +79,15 @@ function TitleFleet (array $fleet, int $summary, bool $ignore_level=false) : str
 
 function PlayerDetails (array $user) : string
 {
-    return $user['oname'] . " <a href='#' onclick='showMessageMenu(".$user['player_id'].")'><img src='".UserSkin()."img/m.gif' title='".loca("EVENT_WRITE")."' alt='".loca("EVENT_WRITE")."'></a>";
+    $res = $user['oname'] . " ";
+
+    // It is not possible to give the opportunity to write to the technical account space and admins.
+    if ($user['admin'] == 0) {
+        $res .= "<a href='#' onclick='showMessageMenu(".$user['player_id'].")'>";
+        $res .= "<img src='".UserSkin()."img/m.gif' title='".loca("EVENT_WRITE")."' alt='".loca("EVENT_WRITE")."'></a>";
+    }
+
+    return $res;
 }
 
 function PlanetFrom (array $planet, string $mission) : string
@@ -110,25 +118,27 @@ function PlanetOn (array $planet, string $mission) : string
 
 function Cargo (array $fleet, string $mission, string $text) : string
 {
-	global $transportableResources;
+    global $transportableResources;
 
-	$sum = 0;
-	foreach ($transportableResources as $i=>$rc) {
-		$sum += $fleet[$rc];
-	}
+    $sum = 0;
+    foreach ($transportableResources as $i=>$rc) {
+        if (isset($fleet[$rc])) {
+            $sum += $fleet[$rc];
+        }
+    }
 
-	$res = "";
+    $res = "";
     if ( $sum != 0 ) {
         $res .= "<a href='#' onmouseover='return overlib(\"&lt;font color=white&gt;&lt;b&gt;".loca("EVENT_CARGO").": ";
-		foreach ($transportableResources as $i=>$rc) {
-			$res .= "&lt;br /&gt;".loca("NAME_".$rc).": ".nicenum($fleet[$rc]);
-		}
-		$res .= "&lt;/b&gt;&lt;/font&gt;\");' ";
-		$res .="onmouseout='return nd();'' class='$mission'>$text</a><a href='#' title='".loca("EVENT_CARGO").":";
-		foreach ($transportableResources as $i=>$rc) {
-			$res .= " ".loca("NAME_".$rc).": ".nicenum($fleet[$rc]);
-		}
-		$res .= "'></a>";
+        foreach ($transportableResources as $i=>$rc) {
+            $res .= "&lt;br /&gt;".loca("NAME_".$rc).": ".nicenum($fleet[$rc]);
+        }
+        $res .= "&lt;/b&gt;&lt;/font&gt;\");' ";
+        $res .="onmouseout='return nd();'' class='$mission'>$text</a><a href='#' title='".loca("EVENT_CARGO").":";
+        foreach ($transportableResources as $i=>$rc) {
+            $res .= " ".loca("NAME_".$rc).": ".nicenum($fleet[$rc]);
+        }
+        $res .= "'></a>";
     }
     else $res .= "<span class='class'>$text</span>";
     return $res;
@@ -136,7 +146,8 @@ function Cargo (array $fleet, string $mission, string $text) : string
 
 function GetMission ( array $fleet_obj ) : int
 {
-    if ( $fleet_obj['mission'] < FTYP_RETURN ) return $fleet_obj['mission'];
+    if ( $fleet_obj['mission'] >= FTYP_CUSTOM ) return $fleet_obj['mission'];
+    else if ( $fleet_obj['mission'] < FTYP_RETURN ) return $fleet_obj['mission'];
     else if ( $fleet_obj['mission'] < FTYP_ORBITING ) return $fleet_obj['mission'] - FTYP_RETURN;
     else return $fleet_obj['mission'] - FTYP_ORBITING;
 }

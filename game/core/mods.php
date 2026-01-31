@@ -80,6 +80,14 @@ abstract class GameMod {
         return false;
     }
 
+    public function fleet_available_missions (array $param, array &$missions) : bool {
+        return false;
+    }
+
+    public function fleet_handler (array $param) : bool {
+        return false;
+    }
+
     // Default pages hooks (various modifications of the original content)
 
     public function page_buildings_get_bonus(int $id, array &$bonuses) : bool {
@@ -147,6 +155,20 @@ function ModsExec(string $method) : bool
         }
     }
     return false;    
+}
+
+function ModsExecArr(string $method, array $arr) : bool
+{
+    global $modlist;
+    foreach ($modlist as $instance) {
+        if(method_exists($instance, $method)) {
+            $res = $instance->$method($arr);
+            if ($res) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 function ModsExecRef(string $method, array &$args) : bool

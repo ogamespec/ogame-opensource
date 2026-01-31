@@ -1,7 +1,5 @@
 <?php
 
-require_once "battle_engine.php";
-
 // Modify the fleet (after a battle with aliens/pirates)
 function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : void
 {
