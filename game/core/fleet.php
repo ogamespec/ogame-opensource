@@ -1088,7 +1088,17 @@ function Queue_Fleet_End (array $queue) : void
         case FTYP_MISSILE: RocketAttackArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case FTYP_ACS_ATTACK_HEAD: AttackArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case (FTYP_ACS_ATTACK_HEAD+FTYP_RETURN): CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
-        //default: Error ( "Unknown mission for the fleet: " . $fleet_obj['mission'] ); break;
+
+        // Transfer control to modifications
+        default:
+            $param = [];
+            $param['queue'] = $queue;
+            $param['fleet_obj'] = $fleet_obj;
+            $param['fleet'] = $fleet;
+            $param['origin'] = $origin;
+            $param['target'] = $target;
+            ModsExecArr ('fleet_handler', $param);
+            break;
     }
 
     if ( $fleet_obj['union_id'] && $fleet_obj['mission'] < FTYP_RETURN )    // remove all fleets and union missions so that ACS attack will no longer trigger
