@@ -780,7 +780,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     $battle_text = array();
 
     // Generate a battle report in the universe language (for log history)
-    $text = BattleReport ( $res, $when, $aloss, $dloss, $captured, $moonchance, $mooncreated, $repaired, $debris, $GlobalUni['lang'] );
+    $text = BattleReport ( $res, $when, $loss, $captured, $moonchance, $mooncreated, $repaired, $debris, $GlobalUni['lang'] );
     $battle_text[$GlobalUni['lang']] = $text;
 
     // Send out messages, mailbox is used to avoid sending multiple messages to ACS players.
@@ -791,7 +791,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
         // Generate a battle report in the user's language if it is not in the cache
         if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
         else {
-            $text = BattleReport ( $res, $when, $aloss, $dloss, $captured, $moonchance, $mooncreated, $repaired, $debris, $user['lang'] );
+            $text = BattleReport ( $res, $when, $loss, $captured, $moonchance, $mooncreated, $repaired, $debris, $user['lang'] );
             $battle_text[$user['lang']] = $text;
         }
 
@@ -820,7 +820,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
         // Generate a battle report in the user's language if it is not in the cache
         if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
         else {
-            $text = BattleReport ( $res, $when, $aloss, $dloss, $captured, $moonchance, $mooncreated, $repaired, $debris, $user['lang'] );
+            $text = BattleReport ( $res, $when, $loss, $captured, $moonchance, $mooncreated, $repaired, $debris, $user['lang'] );
             $battle_text[$user['lang']] = $text;
         }
 

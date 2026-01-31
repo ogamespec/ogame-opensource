@@ -179,7 +179,7 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
     foreach ($transportableResources as $i=>$rc) {
         $captured[$rc] = $i + 1;
     }
-    return BattleReport ( $res, time(), $aloss, $dloss, $captured, $moonchance, $mooncreated, $repaired, $debris, $GlobalUser['lang'] );
+    return BattleReport ( $res, time(), $loss, $captured, $moonchance, $mooncreated, $repaired, $debris, $GlobalUser['lang'] );
 }
 
 function Admin_BattleSim () : void
