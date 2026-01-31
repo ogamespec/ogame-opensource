@@ -285,9 +285,9 @@ class DeepSpaceHorror extends GameMod {
                 // При обновлении координат с вероятностью 70% меняет только Позицию (P) в пределах 1-15, с вероятностью 25% меняет Систему (S) в пределах ±5 от текущей, 
                 // и с вероятностью 5% меняет Галактику (G) на ±1
                 case GID_LEVI_AMOEBA:
+                    $coords['g'] = $origin['g'];
+                    $coords['s'] = $origin['s'];
                     if (mt_rand(1, 100) <= 70) {
-                        $coords['g'] = $origin['g'];
-                        $coords['s'] = $origin['s'];
                         $coords['p'] = mt_rand (1, 15);
                     }
                     else {
@@ -513,7 +513,7 @@ class DeepSpaceHorror extends GameMod {
 
         // Запустить флот
 
-        $this->DispatchLeviathan ($gid, $old_portal, $new_portal, $queue['end'], 1);
+        $this->DispatchLeviathan ($gid, $origin, $new_portal, $queue['end'], 1);
     }
 
     private function LeviathanBattle (array $fleet, array $old_portal) : void {

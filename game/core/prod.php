@@ -45,7 +45,7 @@ function TechPrice ( int $id, int $lvl ) : array
 
     $res = array();
     foreach ($resourcemap as $i=>$rc) {
-        if (isset($initial[$id][$rc])) {
+        if (isset($initial[$id]) && isset($initial[$id][$rc])) {
             $factor = $initial[$id]['factor'];
             $res[$rc] = $initial[$id][$rc] * pow($factor, $lvl-1);
         }

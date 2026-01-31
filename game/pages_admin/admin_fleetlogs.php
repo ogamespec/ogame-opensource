@@ -65,9 +65,12 @@ function Admin_Fleetlogs () : void
         $queue = dbarray ( $result );
         $fleet_obj = LoadFleet ( $queue['sub_id'] );
 
-        $fleet_price = FleetPrice ( $fleet_obj );
-        $points = $fleet_price['points'];
-        $fpoints = $fleet_price['fpoints'];
+        $points = $fpoints = 0;
+        if ($fleet_obj) {
+            $fleet_price = FleetPrice ( $fleet_obj );
+            $points = $fleet_price['points'];
+            $fpoints = $fleet_price['fpoints'];
+        }
         $style = "";
         if ( $points >= $big_fleet_points ) {
             switch ($fleet_obj['mission']) {
