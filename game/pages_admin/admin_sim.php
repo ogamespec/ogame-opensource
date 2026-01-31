@@ -26,7 +26,7 @@ function ParseBattleDataSource (string $source, array &$a, array &$d) : void
 
             $a[$index]['oname'] = "Attacker$index";
             $a[$index]['id'] = mt_rand(1,10000);
-            $a[$index]['pf'] = 0;   // fleet
+            $a[$index]['pf'] = BATTLE_PTCP_VIRTUAL;
             $a[$index]['g'] = mt_rand (1, 9);
             $a[$index]['s'] = mt_rand (1, 499);
             $a[$index]['p'] = mt_rand (1, 15);
@@ -59,7 +59,7 @@ function ParseBattleDataSource (string $source, array &$a, array &$d) : void
             
             $d[$index]['oname'] = "Defender$index";
             $d[$index]['id'] = mt_rand(1,10000);
-            $d[$index]['pf'] = 0;   // fleet
+            $d[$index]['pf'] = BATTLE_PTCP_VIRTUAL;
             $d[$index]['g'] = mt_rand (1, 9);
             $d[$index]['s'] = mt_rand (1, 499);
             $d[$index]['p'] = mt_rand (1, 15);
@@ -234,7 +234,7 @@ function Admin_BattleSim () : void
             $a[$i][GID_R_ARMOUR] = intval ($_POST["a".$i."_armor"]);
             $a[$i]['oname'] = "Attacker$i";
             $a[$i]['id'] = mt_rand(1,10000);
-            $a[$i]['pf'] = 0;   // fleet
+            $a[$i]['pf'] = BATTLE_PTCP_VIRTUAL;
     
             $a[$i]['g'] = mt_rand (1, 9);
             $a[$i]['s'] = mt_rand (1, 499);
@@ -260,7 +260,7 @@ function Admin_BattleSim () : void
             $d[$i][GID_R_ARMOUR] = intval ($_POST["d".$i."_armor"]);
             $d[$i]['oname'] = "Defender$i";
             $d[$i]['id'] = mt_rand(1,10000);
-            $d[$i]['pf'] = 0;   // fleet
+            $d[$i]['pf'] = BATTLE_PTCP_VIRTUAL;
     
             $d[$i]['g'] = mt_rand (1, 9);
             $d[$i]['s'] = mt_rand (1, 499);

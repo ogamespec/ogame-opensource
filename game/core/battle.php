@@ -6,6 +6,12 @@ const BATTLE_RESULT_AWON = 0;       // The attacker won
 const BATTLE_RESULT_DWON = 1;       // The defender won
 const BATTLE_RESULT_DRAW = 2;       // Draw
 
+// Displays the battle participant type. Stored in the `bf` variable in the source data (a/d).
+// This primarily affects the output results—what to do with the participants after the battle.
+const BATTLE_PTCP_FLEET = 0;        // The participant arrived on the Fleet (from the fleet table)
+const BATTLE_PTCP_PLANET = 1;       // The participant arrived from Planet (id from the planets table)
+const BATTLE_PTCP_VIRTUAL = 2;      // The participant is virtual ("drawn"), the ID has no meaning (example - pirates/aliens on an expedition)
+
 // Repairing the defense.
 // Multiple planetary defenders are taken into account.
 function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_delta, bool $premium=true ) : array
@@ -20,7 +26,7 @@ function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_de
     $premium_status = [];
 
     foreach ( $d as $i=>$defender) {
-        if ($defender['pf'] == 0) continue;     // not planet
+        if ($defender['pf'] != BATTLE_PTCP_PLANET) continue;     // not planet
         $exploded_total[$i] = 0;    
         $repaired[$i] = [];
         $exploded[$i] = [];
@@ -40,7 +46,7 @@ function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_de
         $last = $res['rounds'][$rounds - 1];
 
         foreach ($d as $i=>$defender) {
-            if ($defender['pf'] == 0) continue;     // not planet
+            if ($defender['pf'] != BATTLE_PTCP_PLANET) continue;     // not planet
 
             foreach ( $defmap_norak as $n=>$gid )
             {
@@ -176,7 +182,7 @@ function CalcLosses ( array &$a, array &$d, array $res, array $repaired ) : arra
         {
             foreach ( $defender['units'] as $gid=>$amount )
             {
-                if ( IsDefense($gid) && $defender['pf'] == 1 ) $amount += $repaired[$i][$gid];
+                if ( IsDefense($gid) && $defender['pf'] == BATTLE_PTCP_PLANET ) $amount += $repaired[$i][$gid];
                 if ( $amount > 0 ) {
                     $cost = TechPrice ( $gid, 1 );
                     $points = TechPriceInPoints ($cost);
@@ -264,7 +270,7 @@ function CalcDebris (array &$a, array &$d, array $res, array $repaired, int $fid
             {
                 if ($initial) {
                     $amount = isset($defender['units'][$gid]) ? $defender['units'][$gid] : 0;
-                    if ( IsDefense($gid) && $defender['pf'] == 1 ) $amount += $repaired[$i][$gid];      // Repaired
+                    if ( IsDefense($gid) && $defender['pf'] == BATTLE_PTCP_PLANET ) $amount += $repaired[$i][$gid];      // Repaired
                     $diff = max (0, $initial - $amount);
                     $cost = TechPrice ($gid, 1);
                     $coef = IsDefense($gid) ? $did : $fid;
@@ -381,27 +387,29 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
 
         foreach ( $last['defenders'] as $i=>$defender )        // Defenders
         {
-            if ( $defender['pf'] )    // Planet
-            {
-                AdjustResources ( $captured, $defender['id'], '-' );
-                $objects = array ();
-                foreach ( $fleetmap as $ii=>$gid ) $objects[$gid] = $defender['units'][$gid];
-                foreach ( $defmap_norak as $ii=>$gid ) {
-                    $objects[$gid] = $repaired[$i][$gid];
-                    $objects[$gid] += $defender['units'][$gid];
-                }
-                SetPlanetFleetDefense ( $defender['id'], $objects );
-            }
-            else        // Fleets on hold
-            {
-                $ships = 0;
-                foreach ( $fleetmap as $ii=>$gid ) $ships += $defender['units'][$gid];
-                if ( $ships > 0 ) SetFleet ( $defender['id'], $defender['units'] );
-                else {
-                    $queue = GetFleetQueue ($defender['id']);
-                    DeleteFleet ($defender['id']);    // delete fleet
-                    RemoveQueue ( $queue['task_id'] );    // delete task
-                }
+            switch ($defender['pf']) {
+
+                case BATTLE_PTCP_PLANET:        // Planet
+                    AdjustResources ( $captured, $defender['id'], '-' );
+                    $objects = array ();
+                    foreach ( $fleetmap as $ii=>$gid ) $objects[$gid] = $defender['units'][$gid];
+                    foreach ( $defmap_norak as $ii=>$gid ) {
+                        $objects[$gid] = $repaired[$i][$gid];
+                        $objects[$gid] += $defender['units'][$gid];
+                    }
+                    SetPlanetFleetDefense ( $defender['id'], $objects );
+                    break;
+
+                case BATTLE_PTCP_FLEET:     // Fleets on hold
+                    $ships = 0;
+                    foreach ( $fleetmap as $ii=>$gid ) $ships += $defender['units'][$gid];
+                    if ( $ships > 0 ) SetFleet ( $defender['id'], $defender['units'] );
+                    else {
+                        $queue = GetFleetQueue ($defender['id']);
+                        DeleteFleet ($defender['id']);    // delete fleet
+                        RemoveQueue ( $queue['task_id'] );    // delete task
+                    }
+                    break;
             }
         }
     }
@@ -650,7 +658,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
         $a[0]['s'] = $start_planet['s'];
         $a[0]['p'] = $start_planet['p'];
         $a[0]['id'] = $fleet_id;
-        $a[0]['pf'] = 0;    // fleet
+        $a[0]['pf'] = BATTLE_PTCP_FLEET;    // fleet
         $a[0]['points'] = $a[0]['fpoints'] = 0;
         $anum++;
     }
@@ -670,7 +678,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
             $a[$anum]['s'] = $start_planet['s'];
             $a[$anum]['p'] = $start_planet['p'];
             $a[$anum]['id'] = $fleet_obj['fleet_id'];
-            $a[$anum]['pf'] = 0;    // fleet  
+            $a[$anum]['pf'] = BATTLE_PTCP_FLEET;    // fleet  
             $a[$anum]['points'] = $a[$anum]['fpoints'] = 0;
 
             $anum++;
@@ -696,7 +704,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     $d[0]['s'] = $p['s'];
     $d[0]['p'] = $p['p'];
     $d[0]['id'] = $planet_id;
-    $d[0]['pf'] = 1;    // planet
+    $d[0]['pf'] = BATTLE_PTCP_PLANET;    // planet
     $d[0]['points'] = $d[0]['fpoints'] = 0;
     $dnum++;
 
@@ -715,7 +723,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
         $d[$dnum]['s'] = $start_planet['s'];
         $d[$dnum]['p'] = $start_planet['p'];
         $d[$dnum]['id'] = $fleet_obj['fleet_id'];
-        $d[$dnum]['pf'] = 0;    // fleet  
+        $d[$dnum]['pf'] = BATTLE_PTCP_FLEET;    // fleet  
         $d[$dnum]['points'] = $d[$dnum]['fpoints'] = 0;
 
         $dnum++;
