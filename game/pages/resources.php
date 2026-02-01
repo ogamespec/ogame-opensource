@@ -12,50 +12,27 @@ class Resources extends Page {
         // POST requests processing (you cannot change energy settings in VM)
         if ( method () === "POST" && !$GlobalUser['vacation'] )
         {
-            $exist1 = key_exists ( 'last1', $_POST ) ? true : false;
-            $exist2 = key_exists ( 'last2', $_POST ) ? true : false;
-            $exist3 = key_exists ( 'last3', $_POST ) ? true : false;
-            $exist4 = key_exists ( 'last4', $_POST ) ? true : false;
-            $exist12 = key_exists ( 'last12', $_POST ) ? true : false;
-            $exist212 = key_exists ( 'last212', $_POST ) ? true : false;
+            global $PlanetProd;
 
-            $last1 = key_exists ( 'last1', $_POST ) ? intval($_POST['last1']) : 0;
-            $last2 = key_exists ( 'last2', $_POST ) ? intval($_POST['last2']) : 0;
-            $last3 = key_exists ( 'last3', $_POST ) ? intval($_POST['last3']) : 0;
-            $last4 = key_exists ( 'last4', $_POST ) ? intval($_POST['last4']) : 0;
-            $last12 = key_exists ( 'last12', $_POST ) ? intval($_POST['last12']) : 0;
-            $last212 = key_exists ( 'last212', $_POST ) ? intval($_POST['last212']) : 0;
+            foreach ($PlanetProd as $gid=>$prod) {
 
-            // Checking for incorrect parameters.
-            if ( $last1 > 100 || $last2 > 100 || $last3 > 100 ||
-                 $last4 > 100 || $last12 > 100 || $last212 > 100 ) Error ( "resources: Attempt to set prod settings to more than 100%" );
+                $exist = key_exists ( 'last'.$gid, $_POST ) ? true : false;
+                $last = key_exists ( 'last'.$gid, $_POST ) ? intval($_POST['last'.$gid]) : 0;
 
-            if ( $last1 < 0 ) $last1 = 0;        // It should not be < 0.
-            if ( $last2 < 0 ) $last2 = 0;
-            if ( $last3 < 0 ) $last3 = 0;
-            if ( $last4 < 0 ) $last4 = 0;
-            if ( $last12 < 0 ) $last12 = 0;
-            if ( $last212 < 0 ) $last212 = 0;
+                // Checking for incorrect parameters.
+                if ($last > 100) Error ( "resources: Attempt to set prod settings to more than 100%" );
+                if ( $last < 0 ) $last = 0;        // It should not be < 0.
 
-            // Make multiples of 10.
-            $last1 = round ($last1 / 10) * 10 / 100;
-            $last2 = round ($last2 / 10) * 10 / 100;
-            $last3 = round ($last3 / 10) * 10 / 100;
-            $last4 = round ($last4 / 10) * 10 / 100;
-            $last12 = round ($last12 / 10) * 10 / 100;
-            $last212 = round ($last212 / 10) * 10 / 100;
+                // Make multiples of 10.
+                $last = round ($last / 10) * 10 / 100;
 
-            $planet_id = $aktplanet['planet_id'];
-            if ( $exist1 || $exist2 || $exist3 || $exist4 || $exist12 || $exist212 ) {
-                $query = "UPDATE ".$db_prefix."planets SET ";
-                if ($exist1) $query .= "prod1 = $last1, ";
-                if ($exist2) $query .= "prod2 = $last2, ";
-                if ($exist3) $query .= "prod3 = $last3, ";
-                if ($exist4) $query .= "prod4 = $last4, ";
-                if ($exist12) $query .= "prod12 = $last12, ";
-                if ($exist212) $query .= "prod212 = $last212, ";
-                $query .= " type = type WHERE planet_id = $planet_id";
-                dbquery ($query);
+                $planet_id = $aktplanet['planet_id'];
+                if ( $exist ) {
+                    $query = "UPDATE ".$db_prefix."planets SET ";
+                    $query .= "prod$gid = $last ";
+                    $query .= "WHERE planet_id = $planet_id";
+                    dbquery ($query);
+                }
             }
 
             $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], time() );    // reload the planet.
@@ -93,26 +70,9 @@ class Resources extends Page {
         $speed = $GlobalUni['speed'];
         $planet = $aktplanet;
 
-        // Production.
-        $m_hourly = $planet['prod_with_bonus'][GID_B_METAL_MINE];
-        $k_hourly = $planet['prod_with_bonus'][GID_B_CRYS_MINE];
-        $d_hourly = $planet['prod_with_bonus'][GID_B_DEUT_SYNTH];
-        $s_prod = $planet['prod_with_bonus'][GID_B_SOLAR];
-        $f_prod = $planet['prod_with_bonus'][GID_B_FUSION];
-        $ss_prod = $planet['prod_with_bonus'][GID_F_SAT];
-
-        // Consumption.
-        $m_cons = $planet['cons_with_bonus'][GID_B_METAL_MINE];
-        $m_cons0 = round ($m_cons * $planet['factor']);
-        $k_cons = $planet['cons_with_bonus'][GID_B_CRYS_MINE];
-        $k_cons0 = round ($k_cons * $planet['factor']);
-        $d_cons = $planet['cons_with_bonus'][GID_B_DEUT_SYNTH];
-        $d_cons0 = round ($d_cons * $planet['factor']);
-        $f_cons = - $planet['cons_with_bonus'][GID_B_FUSION];
-
-        $m_total = $m_hourly + (20*$speed);
-        $k_total = $k_hourly + (10*$speed);
-        $d_total = $d_hourly + $f_cons;
+        $m_total = (20*$speed);
+        $k_total = (10*$speed);
+        $d_total = 0;
 
         echo "<center> \n";
         echo "<br> \n";
@@ -152,6 +112,10 @@ class Resources extends Page {
 
         // Metal mine
         if ($aktplanet[GID_B_METAL_MINE]) {
+            $m_hourly = $planet['prod_with_bonus'][GID_B_METAL_MINE];
+            $m_total += $m_hourly;
+            $m_cons = $planet['cons_with_bonus'][GID_B_METAL_MINE];
+            $m_cons0 = round ($m_cons * $planet['factor']);
             $color1 = $m_hourly ? "<font color='00FF00'>" : "";
             $color2 = $m_cons ? "<font color='FF0000'>" : "";
             echo "  <tr> \n";
@@ -166,6 +130,10 @@ class Resources extends Page {
 
         // Crystal mine
         if ($aktplanet[GID_B_CRYS_MINE]) {
+            $k_hourly = $planet['prod_with_bonus'][GID_B_CRYS_MINE];
+            $k_total += $k_hourly;
+            $k_cons = $planet['cons_with_bonus'][GID_B_CRYS_MINE];
+            $k_cons0 = round ($k_cons * $planet['factor']);
             $color1 = $k_hourly ? "<font color='00FF00'>" : "";
             $color2 = $k_cons ? "<font color='FF0000'>" : "";
             echo "  <tr> \n";
@@ -180,6 +148,10 @@ class Resources extends Page {
 
         // Deuterium synthesizer
         if ($aktplanet[GID_B_DEUT_SYNTH]) {
+            $d_hourly = $planet['prod_with_bonus'][GID_B_DEUT_SYNTH];
+            $d_total += $d_hourly;
+            $d_cons = $planet['cons_with_bonus'][GID_B_DEUT_SYNTH];
+            $d_cons0 = round ($d_cons * $planet['factor']);
             $color1 = $d_hourly ? "<font color='00FF00'>" : "";
             $color2 = $d_cons ? "<font color='FF0000'>" : "";
             echo "  <tr> \n";
@@ -194,6 +166,7 @@ class Resources extends Page {
 
         // Solar Plant
         if ($aktplanet[GID_B_SOLAR]) {
+            $s_prod = $planet['prod_with_bonus'][GID_B_SOLAR];
             $color = $s_prod ? "<font color='00FF00'>" : "";
             echo "  <tr> \n";
             echo "<th>".loca("NAME_4")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_SOLAR]).")</th><th>".$engineer_text."</th>   <th> \n";
@@ -207,6 +180,9 @@ class Resources extends Page {
 
         // Fusion Reactor
         if ($aktplanet[GID_B_FUSION]) {
+            $f_prod = $planet['prod_with_bonus'][GID_B_FUSION];
+            $f_cons = - $planet['cons_with_bonus'][GID_B_FUSION];
+            $d_total += $f_cons;
             $color1 = $f_cons ? "<font color='FF0000'>" : "";
             $color2 = $f_prod ? "<font color='00FF00'>" : "";
             echo "  <tr> \n";
@@ -221,6 +197,7 @@ class Resources extends Page {
 
         // Solar satellites
         if ($aktplanet[GID_F_SAT]) {
+            $ss_prod = $planet['prod_with_bonus'][GID_F_SAT];
             $color = $ss_prod ? "<font color='00FF00'>" : "";
             echo "  <tr> \n";
             echo "<th>".loca("NAME_212")." (".va(loca("RES_AMOUNT"), $aktplanet[GID_F_SAT]).")</th><th>".$engineer_text."</th>   <th> \n";

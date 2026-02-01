@@ -225,12 +225,26 @@ function ProdBonus (array $uni, array $user, array $planet, int $rc, array &$pro
             if ( $prem['engineer'] ) $prod_bonus[] = 1.1;
             break;
     }
+
+    $param = [];
+    $param['uni'] = $uni;
+    $param['user'] = $user;
+    $param['planet'] = $planet;
+    $param['rc'] = $rc;
+    ModsExecArrRef ('bonus_prod', $param, $prod_bonus);
 }
 
 function ConsBonus (array $uni, array $user, array $planet, int $rc, array &$cons_bonus) {
 
     // A bonus to consumption offered by the original OGame 0.84 mechanic. The bonus is not necessarily positive.
     // none.
+
+    $param = [];
+    $param['uni'] = $uni;
+    $param['user'] = $user;
+    $param['planet'] = $planet;
+    $param['rc'] = $rc;
+    ModsExecArrRef ('bonus_cons', $param, $cons_bonus);
 }
 
 function ProdResources (array $uni, array $user, array &$planet) : void {
