@@ -384,6 +384,26 @@ class SpaceStorm extends GameMod {
         $level = $planet[GID_B_REALITY_STAB];
         $mask = $planet['s'.GID_B_REALITY_STAB];
     }
+
+    public function add_db_row(array &$row, string $tabname) : bool {
+
+        $storm = $this->GetStorm ();
+
+        // Если добавляется событие флота Шпионаж убывает И активен шторм хроно-шпионский сбой, то замедлить флот
+        if ($tabname === 'queue' && $row['type'] === QTYP_FLEET) {
+
+            $fleet_id = $row['sub_id'];
+            $fleet_obj = LoadFleet ($fleet_id);
+
+            if ($fleet_obj && $fleet_obj['mission'] == FTYP_SPY && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
+
+                $delay_seconds = mt_rand (1, 5) * 60;
+                $row['end'] += $delay_seconds;
+            }
+        }
+
+        return false;
+    }
 }
 
 ?>
