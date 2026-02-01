@@ -80,13 +80,33 @@ abstract class GameMod {
         return false;
     }
 
+    public function fleet_available_missions (array $param, array &$missions) : bool {
+        return false;
+    }
+
+    public function fleet_handler (array $param) : bool {
+        return false;
+    }
+
     // Default pages hooks (various modifications of the original content)
 
     public function page_buildings_get_bonus(int $id, array &$bonuses) : bool {
         return false;
     }
 
+    public function page_flotten2_planet_types (array &$planet_types) : bool {
+        return false;
+    }
+
+    public function page_flottenversand_ajax_spy_planets (array &$planet_types) : bool {
+        return false;
+    }
+
     public function page_infos(int $id, array &$planet) : bool {
+        return false;
+    }
+
+    public function page_galaxy_custom_object (array $planet, array &$info) : bool {
         return false;
     }
 
@@ -145,6 +165,20 @@ function ModsExec(string $method) : bool
     return false;    
 }
 
+function ModsExecArr(string $method, array $arr) : bool
+{
+    global $modlist;
+    foreach ($modlist as $instance) {
+        if(method_exists($instance, $method)) {
+            $res = $instance->$method($arr);
+            if ($res) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 function ModsExecRef(string $method, array &$args) : bool
 {
     global $modlist;
@@ -156,7 +190,7 @@ function ModsExecRef(string $method, array &$args) : bool
             }
         }
     }
-    return false;    
+    return false;
 }
 
 function ModsExecRefArr(string $method, array &$args, array $arr) : bool
@@ -170,7 +204,21 @@ function ModsExecRefArr(string $method, array &$args, array $arr) : bool
             }
         }
     }
-    return false;    
+    return false;
+}
+
+function ModsExecArrRef(string $method, array $args, array &$arr) : bool
+{
+    global $modlist;
+    foreach ($modlist as $instance) {
+        if(method_exists($instance, $method)) {
+            $res = $instance->$method($args, $arr);
+            if ($res) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 function ModsExecRefRef(string $method, array &$args, array &$arr) : bool

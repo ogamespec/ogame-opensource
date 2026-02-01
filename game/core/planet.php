@@ -154,7 +154,16 @@ function EnumPlanets () : mixed
 function EnumPlanetsGalaxy (int $g, int $s) : mixed
 {
     global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = '".$g."' AND s = '".$s."' AND (type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED.") ORDER BY p ASC";
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = ".$g." AND s = ".$s." AND (type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED.") ORDER BY p ASC";
+    $result = dbquery ($query);
+    return $result;
+}
+
+// List custom galaxy objects to display on the Galaxy page
+function EnumCustomPlanetsGalaxy (int $g, int $s) : mixed
+{
+    global $db_prefix;
+    $query = "SELECT * FROM ".$db_prefix."planets WHERE g = ".$g." AND s = ".$s." AND type >= ".PTYP_CUSTOM." ORDER BY p ASC";
     $result = dbquery ($query);
     return $result;
 }
@@ -167,7 +176,10 @@ function LoadPlanet (int $g, int $s, int $p, int $type) : mixed
     if ($type == 1) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET.") LIMIT 1;";
     else if ($type == 2) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=".PTYP_DF." LIMIT 1;";
     else if ($type == 3) $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND (type=".PTYP_MOON." OR type=".PTYP_DEST_MOON.") LIMIT 1;";
-    else return null;
+    else {
+        // Treat a galaxy object's game type as a real planet type (PTYP)
+        $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND type=".$type." LIMIT 1;";
+    }
     $result = dbquery ($query);
     if ( $result ) return dbarray ($result);
     else return null;
@@ -603,6 +615,22 @@ function SaveColonySettings (array $coltab) : void
         "t4_a=".$coltab['t4_a'].", t4_b=".$coltab['t4_b'].", t4_c=".$coltab['t4_c'].", " .
         "t5_a=".$coltab['t5_a'].", t5_b=".$coltab['t5_b'].", t5_c=".$coltab['t5_c']."; " ;
     dbquery ($query);
+}
+
+function GetPhalanxRadius (int $level) : int {
+    
+    return $level * $level - 1;
+}
+
+function CanPhalanx ($origin, $target) : bool {
+    
+    $system_radius = abs ($origin['s'] - $target['s']);
+    $phalanx_radius = GetPhalanxRadius ($origin[GID_B_PHALANX]);
+
+    return ($system_radius <= $phalanx_radius) && 
+        ($origin['type'] == PTYP_MOON) && 
+        ($target['owner_id'] != $origin['owner_id']) &&
+        ($target['g'] == $origin['g']);
 }
 
 ?>

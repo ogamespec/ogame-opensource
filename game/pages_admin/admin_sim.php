@@ -22,43 +22,30 @@ function ParseBattleDataSource (string $source, array &$a, array &$d) : void
             $index = (int)substr($prefix, 8);
             
             // Processing data
-            $data = $parts[1]; // "({NAME} ... )"
-            $data = trim($data, '() ');
-            
-            // Extracting the name
-            $nameEnd = strpos($data, '}');
-            $name = substr($data, 1, $nameEnd - 1);
-            
-            // Other values
-            $values = substr($data, $nameEnd + 2);
-            $values = preg_split('/\s+/', trim($values));
-            
-            $a[$index] = [
-                'oname' => $name,
-                'id' => (int)$values[0],
-                'g' => (int)$values[1],
-                's' => (int)$values[2],
-                'p' => (int)$values[3],
-                GID_R_WEAPON => (int)$values[4],
-                GID_R_SHIELD => (int)$values[5],
-                GID_R_ARMOUR => (int)$values[6],
-                'fleet' => array (
-                    GID_F_SC => (int)$values[7],
-                    GID_F_LC => (int)$values[8],
-                    GID_F_LF => (int)$values[9],
-                    GID_F_HF => (int)$values[10],
-                    GID_F_CRUISER => (int)$values[11],
-                    GID_F_BATTLESHIP => (int)$values[12],
-                    GID_F_COLON => (int)$values[13],
-                    GID_F_RECYCLER => (int)$values[14],
-                    GID_F_PROBE => (int)$values[15],
-                    GID_F_BOMBER => (int)$values[16],
-                    GID_F_SAT => (int)$values[17],
-                    GID_F_DESTRO => (int)$values[18],
-                    GID_F_DEATHSTAR => (int)$values[19],
-                    GID_F_BATTLECRUISER => (int)$values[20]
-                )
-            ];
+            $values = preg_split('/\s+/', trim($parts[1]));
+
+            $a[$index]['oname'] = "Attacker$index";
+            $a[$index]['id'] = mt_rand(1,10000);
+            $a[$index]['pf'] = BATTLE_PTCP_VIRTUAL;
+            $a[$index]['g'] = mt_rand (1, 9);
+            $a[$index]['s'] = mt_rand (1, 499);
+            $a[$index]['p'] = mt_rand (1, 15);
+
+            $pc = 0;
+            $a[$index][GID_R_WEAPON] = (float)$values[$pc++];
+            $a[$index][GID_R_SHIELD] = (float)$values[$pc++];
+            $a[$index][GID_R_ARMOUR] = (float)$values[$pc++];
+
+            $num_gids = count($values) - $pc;
+            if ($num_gids % 2 != 0) continue;
+            $num_gids /= 2;
+
+            for ($i=0; $i<$num_gids; $i++) {
+                $gid = (int)$values[$pc++];
+                $count = (int)$values[$pc++];
+                $a[$index]['units'][$gid] = $count;
+            }
+
         } elseif (strpos($line, 'Defender') === 0) {
             // Extracting the defender's number
             $parts = explode(' = ', $line);
@@ -68,53 +55,30 @@ function ParseBattleDataSource (string $source, array &$a, array &$d) : void
             $index = (int)substr($prefix, 8);
             
             // Processing data
-            $data = $parts[1]; // "({NAME} ... )"
-            $data = trim($data, '() ');
+            $values = preg_split('/\s+/', trim($parts[1]));
             
-            // Extracting the name
-            $nameEnd = strpos($data, '}');
-            $name = substr($data, 1, $nameEnd - 1);
-            
-            // Other values
-            $values = substr($data, $nameEnd + 2);
-            $values = preg_split('/\s+/', trim($values));
-            
-            $d[$index] = [
-                'oname' => $name,
-                'id' => (int)$values[0],
-                'g' => (int)$values[1],
-                's' => (int)$values[2],
-                'p' => (int)$values[3],
-                GID_R_WEAPON => (int)$values[4],
-                GID_R_SHIELD => (int)$values[5],
-                GID_R_ARMOUR => (int)$values[6],
-                'fleet' => array (
-                    GID_F_SC => (int)$values[7],
-                    GID_F_LC => (int)$values[8],
-                    GID_F_LF => (int)$values[9],
-                    GID_F_HF => (int)$values[10],
-                    GID_F_CRUISER => (int)$values[11],
-                    GID_F_BATTLESHIP => (int)$values[12],
-                    GID_F_COLON => (int)$values[13],
-                    GID_F_RECYCLER => (int)$values[14],
-                    GID_F_PROBE => (int)$values[15],
-                    GID_F_BOMBER => (int)$values[16],
-                    GID_F_SAT => (int)$values[17],
-                    GID_F_DESTRO => (int)$values[18],
-                    GID_F_DEATHSTAR => (int)$values[19],
-                    GID_F_BATTLECRUISER => (int)$values[20]
-                ),
-                'defense' => array (
-                    GID_D_RL => (int)$values[21],
-                    GID_D_LL => (int)$values[22],
-                    GID_D_HL => (int)$values[23],
-                    GID_D_GAUSS => (int)$values[24],
-                    GID_D_ION => (int)$values[25],
-                    GID_D_PLASMA => (int)$values[26],
-                    GID_D_SDOME => (int)$values[27],
-                    GID_D_LDOME => (int)$values[28]
-                )
-            ];
+            $d[$index]['oname'] = "Defender$index";
+            $d[$index]['id'] = mt_rand(1,10000);
+            $d[$index]['pf'] = BATTLE_PTCP_VIRTUAL;
+            $d[$index]['g'] = mt_rand (1, 9);
+            $d[$index]['s'] = mt_rand (1, 499);
+            $d[$index]['p'] = mt_rand (1, 15);
+
+            $pc = 0;
+            $d[$index][GID_R_WEAPON] = (float)$values[$pc++];
+            $d[$index][GID_R_SHIELD] = (float)$values[$pc++];
+            $d[$index][GID_R_ARMOUR] = (float)$values[$pc++];
+
+            $num_gids = count($values) - $pc;
+            if ($num_gids % 2 != 0) continue;
+            $num_gids /= 2;
+
+            for ($i=0; $i<$num_gids; $i++) {
+                $gid = (int)$values[$pc++];
+                $count = (int)$values[$pc++];
+                $d[$index]['units'][$gid] = $count;
+            }
+
         }
     }
 }
@@ -140,7 +104,7 @@ function get_intval(string $id) : int
     }
 }
 
-function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid, int $did, bool $debug, int &$battle_result, int &$aloss, int &$dloss )
+function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid, int $did, int $max_round, bool $debug, int &$battle_result, int &$aloss, int &$dloss ) : string
 {
     global $db_prefix;
     global $GlobalUser;
@@ -163,41 +127,14 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
 
     // *** Generate source data
 
-    $source = GenBattleSourceData ($a, $d, $rf, $fid, $did);
+    $source = GenBattleSourceData ($a, $d, $rf, $max_round);
 
     if ($debug) echo "<pre>" . $source . "</pre><hr>";
 
     $battle = array ( 'source' => $source, 'title' => '', 'report' => '', 'date' => time() );
     $battle_id = AddDBRow ( $battle, "battledata");
 
-    $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
-    fwrite ( $bf, $source );
-    fclose ( $bf );
-
-    // *** Transfer data to the battle engine
-
-    if ($unitab['php_battle']) {
-
-        $battle_source = file_get_contents ( "battledata/battle_".$battle_id.".txt" );
-        $res = BattleEngine ($battle_source);
-
-        $bf = fopen ( "battleresult/battle_".$battle_id.".txt", "w" );
-        fwrite ( $bf, serialize($res) );
-        fclose ( $bf );
-    }
-    else {
-
-        $arg = "\"battle_id=$battle_id\"";
-        system ( $unitab['battle_engine'] . " $arg", $retval );
-        if ($retval < 0) {
-            Error (va("Ошибка в работе боевого движка: #1 #2", $retval, $battle_id));
-        }        
-    }
-
-    // *** Process output data
-
-    $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
-    $res = unserialize($battleres);
+    $res = ExecuteBattle ($unitab, $battle_id, $source, $a, $d);
 
     if ( $debug ) {
         print_r ( $battle );
@@ -214,30 +151,35 @@ function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid
     $repaired = RepairDefense ( $d, $res, $unitab['defrepair'], $unitab['defrepair_delta'], false );
 
     // Calculate total losses
-    $aloss = $dloss = 0;
     $loss = CalcLosses ( $a, $d, $res, $repaired );
-    $a = $loss['a'];
-    $d = $loss['d'];
     $aloss = $loss['aloss'];
     $dloss = $loss['dloss'];
 
+    // Calc debris drop
+    CalcDebris ( $a, $d, $res, $repaired, $fid, $did );
+    $debris = GetDebrisTotal ($a, $d);
+    $debris_total = 0;
+    foreach ($debris as $rc=>$amount) {
+        $debris_total += $amount;
+    }
+
     // Create the moon
     $mooncreated = false;
-    $moonchance = min ( floor ( ($res['dm'] + $res['dk']) / 100000), 20 );
+    $moonchance = min ( floor ( $debris_total / 100000), 20 );
     if ( mt_rand (1, 100) <= $moonchance ) {
         $mooncreated = true;
     }
 
-    if ( $res['result'] === "awon" ) $battle_result = 0;
-    else if ( $res['result'] === "dwon" ) $battle_result = 1;
-    else $battle_result = 2;
+    if ( $res['result'] === "awon" ) $battle_result = BATTLE_RESULT_AWON;
+    else if ( $res['result'] === "dwon" ) $battle_result = BATTLE_RESULT_DWON;
+    else $battle_result = BATTLE_RESULT_DRAW;
 
     // Generate battle report (in admin language)
     $captured = array ();
     foreach ($transportableResources as $i=>$rc) {
         $captured[$rc] = $i + 1;
     }
-    return BattleReport ( $res, time(), $aloss, $dloss, $captured, $moonchance, $mooncreated, $repaired, $GlobalUser['lang'] );
+    return BattleReport ( $res, time(), $loss, $captured, $moonchance, $mooncreated, $repaired, $debris, $GlobalUser['lang'] );
 }
 
 function Admin_BattleSim () : void
@@ -255,6 +197,7 @@ function Admin_BattleSim () : void
     $rf = $unitab['rapid'];
     $fid = $unitab['fid'];
     $did = $unitab['did'];
+    $max_round = BATTLE_MAX_ROUND;
     $debug = false;
     $maxslot = $unitab['acs'] * $unitab['acs'];
 
@@ -291,16 +234,17 @@ function Admin_BattleSim () : void
             $a[$i][GID_R_ARMOUR] = intval ($_POST["a".$i."_armor"]);
             $a[$i]['oname'] = "Attacker$i";
             $a[$i]['id'] = mt_rand(1,10000);
+            $a[$i]['pf'] = BATTLE_PTCP_VIRTUAL;
     
             $a[$i]['g'] = mt_rand (1, 9);
             $a[$i]['s'] = mt_rand (1, 499);
             $a[$i]['p'] = mt_rand (1, 15);
 
-            $a[$i]['fleet'] = array ();
+            $a[$i]['units'] = array ();
             foreach ( $fleetmap as $n=>$gid)
             {
                 if ( !isset($_POST["a".$i."_$gid"]) ) $_POST["a".$i."_$gid"] = 0;
-                $a[$i]['fleet'][$gid] = intval ($_POST["a".$i."_$gid"]);
+                $a[$i]['units'][$gid] = intval ($_POST["a".$i."_$gid"]);
             }
         }
 
@@ -316,28 +260,28 @@ function Admin_BattleSim () : void
             $d[$i][GID_R_ARMOUR] = intval ($_POST["d".$i."_armor"]);
             $d[$i]['oname'] = "Defender$i";
             $d[$i]['id'] = mt_rand(1,10000);
+            $d[$i]['pf'] = BATTLE_PTCP_VIRTUAL;
     
             $d[$i]['g'] = mt_rand (1, 9);
             $d[$i]['s'] = mt_rand (1, 499);
             $d[$i]['p'] = mt_rand (1, 15);
 
-            $d[$i]['fleet'] = array ();
+            $d[$i]['units'] = array ();
             foreach ( $fleetmap as $n=>$gid)
             {
                 if ( !isset($_POST["d".$i."_$gid"]) ) $_POST["d".$i."_$gid"] = 0;
-                $d[$i]['fleet'][$gid] = intval ($_POST["d".$i."_$gid"]);
+                $d[$i]['units'][$gid] = intval ($_POST["d".$i."_$gid"]);
             }
 
-            $d[$i]['defense'] = array ();
             foreach ( $defmap_norak as $n=>$gid)
             {
                 if ( !isset($_POST["d".$i."_$gid"]) ) $_POST["d".$i."_$gid"] = 0;
-                $d[$i]['defense'][$gid] = intval ($_POST["d".$i."_$gid"]);
+                $d[$i]['units'][$gid] = intval ($_POST["d".$i."_$gid"]);
             }
         }
 
         // Simulate the battle
-        $battle_result = 0;
+        $battle_result = BATTLE_RESULT_AWON;
         if ( key_exists ('debug', $_POST) && $_POST['debug'] === "on" ) $debug = true;
         else $debug = false;
         if ( $_POST['rapid'] === "on" ) $rf = true;
@@ -346,11 +290,13 @@ function Admin_BattleSim () : void
         else $fid = intval ($_POST['fid']);
         if ( $_POST['did'] === "" ) $did = 0;
         else $did = intval ($_POST['did']);
+        if ( $_POST['max_round'] === "" ) $max_round = BATTLE_MAX_ROUND;
+        else $max_round = intval ($_POST['max_round']);
         $battle_source = $_POST['battle_source'] ?? null;
         if ($battle_source === "") {
             $battle_source = null;
         }
-        $BattleReport = SimBattle ( $battle_source, $a, $d, $rf, $fid, $did, $debug, $battle_result, $aloss, $dloss );
+        $BattleReport = SimBattle ( $battle_source, $a, $d, $rf, $fid, $did, $max_round, $debug, $battle_result, $aloss, $dloss );
     }
 
     // --------------------------------------------------------------------------------------------------------------------------
@@ -543,6 +489,7 @@ RecalcAttackersDefendersNum ();
 <tr><td><?=loca("ADM_SIM_RAPIDFIRE");?></td><td><input type="checkbox" name="rapid" <?php if($rf) echo "checked"; ?> ></td></tr>
 <tr><td><?=loca("ADM_SIM_FID");?></td><td><input name="fid" size=3 value="<?=$fid;?>"> </td></tr>
 <tr><td><?=loca("ADM_SIM_DID");?></td><td><input name="did" size=3 value="<?=$did;?>"></td></tr>
+<tr><td><?=loca("ADM_SIM_MAX_ROUND");?></td><td><input name="max_round" size=3 value="<?=$max_round;?>"></td></tr>
 </table>
 </td></tr>
 

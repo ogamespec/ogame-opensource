@@ -44,9 +44,9 @@ function TechPrice ( int $id, int $lvl ) : array
     // - In the context of video games, it's called the "experience formula" or "level curve"
 
     $res = array();
-    $factor = $initial[$id]['factor'];
     foreach ($resourcemap as $i=>$rc) {
-        if (isset($initial[$id][$rc])) {
+        if (isset($initial[$id]) && isset($initial[$id][$rc])) {
+            $factor = $initial[$id]['factor'];
             $res[$rc] = $initial[$id][$rc] * pow($factor, $lvl-1);
         }
         else $res[$rc] = 0;
@@ -390,23 +390,27 @@ function PlanetPrice (array $planet) : array
     }
 
     foreach ( $fleetmap as $i=>$gid ) {        // Fleet
-        $level = $planet[$gid];
-        if ($level > 0){
-            $res = TechPrice ( $gid, 1 );
-            $points = TechPriceInPoints($res);
-            $pp['points'] += $points * $level;
-            $pp['fleet_pts'] += $points * $level;
-            $pp['fpoints'] += $level;
+        if (isset($planet[$gid])) {
+            $level = $planet[$gid];
+            if ($level > 0){
+                $res = TechPrice ( $gid, 1 );
+                $points = TechPriceInPoints($res);
+                $pp['points'] += $points * $level;
+                $pp['fleet_pts'] += $points * $level;
+                $pp['fpoints'] += $level;
+            }
         }
     }
 
     foreach ( $defmap as $i=>$gid ) {        // Defense
-        $level = $planet[$gid];
-        if ($level > 0){
-            $res = TechPrice ( $gid, 1 );
-            $points = TechPriceInPoints ($res);
-            $pp['points'] += $points * $level;
-            $pp['defense_pts'] += $points * $level;
+        if (isset($planet[$gid])) {
+            $level = $planet[$gid];
+            if ($level > 0){
+                $res = TechPrice ( $gid, 1 );
+                $points = TechPriceInPoints ($res);
+                $pp['points'] += $points * $level;
+                $pp['defense_pts'] += $points * $level;
+            }
         }
     }
 

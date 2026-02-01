@@ -2,8 +2,6 @@
 
 // Bot Management.
 
-require_once "botapi.php";        // API
-
 // Global bot variables.
 $BotID = 0;        // ordinal number of the current bot
 $BotNow = 0;       // start time of bot task execution

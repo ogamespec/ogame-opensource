@@ -30,12 +30,14 @@ function Admin_Planets () : void
 
             $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
             foreach ( $param as $i=>$p ) {
-                if ( strpos ( $p, "prod") ) {
-                    if (key_exists($p, $_POST)) $query .= ", $p='".$_POST[$p]."'";
-                }
-                else {
-                    if ( $i == 0 ) $query .= "`$p`=".intval($_POST[$p]);
-                    else $query .= ", `$p`=".intval($_POST[$p]);
+                if (key_exists($p, $_POST)) {
+                    if ( strpos ( $p, "prod") ) {
+                        $query .= ", $p='".$_POST[$p]."'";
+                    }
+                    else {
+                        if ( $i == 0 ) $query .= "`$p`=".intval($_POST[$p]);
+                        else $query .= ", `$p`=".intval($_POST[$p]);
+                    }
                 }
             }
             $query .= " WHERE planet_id=$cp;";
@@ -299,7 +301,7 @@ function reset ()
         echo "<br>".loca("ADM_PLANET_DEFENSE").": " . nicenum($pp['defense_pts'] / 1000) ;
         if ($planet['type'] == PTYP_DF ) echo "<br>М: ".nicenum($planet[GID_RC_METAL])."<br>К: ".nicenum($planet[GID_RC_CRYSTAL])."<br>";
         echo "</th><th>";
-        if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
+        if ( $planet['type'] == PTYP_PLANET )
         {
             if ($moon_id)
             {
@@ -317,12 +319,28 @@ function reset ()
                 echo "<br>М: ".nicenum($debris[GID_RC_METAL])."<br>К: ".nicenum($debris[GID_RC_CRYSTAL])."<br>";
             }
             else echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&action=create_debris&cp=".$planet['planet_id']."\" >".loca("ADM_PLANET_ADD_DF")."</a>\n";
+            echo "<br/><br/>\n";
+
+            // Custom Galaxy objects
+            $result_custom = EnumCustomPlanetsGalaxy ($planet['g'], $planet['s']);
+            $num_custom = dbrows ($result_custom);
+            $custom_planets = array ();
+            for ($i=0; $i<$num_custom; $i++) {
+                $custom_planets[] = dbarray ($result_custom);
+            }
+            foreach ($custom_planets as $i=>$custom_planet) {
+                echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$custom_planet['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $custom_planet)."\"><br>\n";
+                echo $custom_planet['name'] . "</a><br/>\n";
+            }
         }
         else
         {
+            // Show the parent planet of a galactic object
             $parent = LoadPlanet ( $planet['g'], $planet['s'], $planet['p'], 1 );
-            echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$parent['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $parent)."\"><br>\n";
-            echo $parent['name'] . "</a>";
+            if ($parent != null) {
+                echo "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$parent['planet_id']."\"><img src=\"".GetPlanetSmallImage (UserSkin(), $parent)."\"><br>\n";
+                echo $parent['name'] . "</a>";
+            }
         }
 ?>
         <br><br><textarea rows=10 cols=10 id="spiotext"></textarea>
@@ -398,6 +416,7 @@ function reset ()
 
         echo "<th valign=top><table>\n";
         foreach ( $fleetmap as $i=>$gid) {
+            if (!isset($planet[$gid])) continue;
             echo "<tr><th>".loca("NAME_$gid")."</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=6 name=\"$gid\" value=\"".$planet[$gid]."\" />";
             if ( $gid == GID_F_SAT && $planet['type'] != PTYP_MOON ) {
                 echo "<select name='prod212'>\n";
@@ -414,6 +433,7 @@ function reset ()
 
         echo "<th valign=top><table>\n";
         foreach ( $defmap as $i=>$gid) {
+            if (!isset($planet[$gid])) continue;
             echo "<tr><th>".loca("NAME_$gid")."</th><th><input id=\"obj$gid\" type=\"text\" size=6 name=\"$gid\" value=\"".$planet[$gid]."\" /></th></tr>\n";
         }
         echo "</table></th>\n";

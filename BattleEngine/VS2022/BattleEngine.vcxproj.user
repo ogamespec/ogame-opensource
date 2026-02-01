@@ -3,21 +3,21 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerWorkingDirectory>$(ProjectDir)../test</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>battle_id=2&amp;battle_seed=1</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>3 1</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerWorkingDirectory>$(ProjectDir)../test</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>battle_id=2&amp;battle_seed=1</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>3 1</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerWorkingDirectory>$(ProjectDir)../test</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>battle_id=2&amp;battle_seed=1</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>3 1</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerWorkingDirectory>$(ProjectDir)../test</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>battle_id=2&amp;battle_seed=1</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>3 1</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

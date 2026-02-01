@@ -54,6 +54,7 @@ foreach ($techtree as $i => $req )
 
     foreach ($req['techs'] as $tech) {
 
+        if (!isset($requirements[$tech])) continue;
         if (count ($requirements[$tech]) == 0) $details = "&nbsp;";
         else $details = "<a href=\"index.php?page=techtreedetails&session=".$_GET['session']."&tid=$tech\">[i]</a>";
 

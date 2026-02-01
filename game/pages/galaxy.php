@@ -3,13 +3,39 @@
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
 /** @var array $UnitParam */
-/** @var string $aktplanet */
+/** @var array $aktplanet */
 
 $defmap_norak = array_diff($defmap, $rakmap);
 
-function empty_row (string $p) : void
+// Display custom Galaxy objects added by mods.
+function ShowCustomObjects (int $p, array $custom_planets) : void {
+
+    // Display custom Galaxy objects added by mods.
+    if (count($custom_planets) > 0) {
+        $width = 100 * count($custom_planets);
+        echo "<th width='$width'>";
+        foreach ($custom_planets as $i=>$custom_planet) {
+            if ($custom_planet['p'] == $p) {
+
+                $info = array ();
+                $res = ModsExecArrRef ('page_galaxy_custom_object', $custom_planet, $info);
+                if ($res) $overlib = $info['overlib'];
+                else $overlib = "";
+
+                echo "<a style='cursor:pointer' onmouseover='return overlib(\"".$overlib."\", STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -40 );' ";
+                echo "onmouseout='return nd();'>";
+                echo "<img src='".GetPlanetSmallImage ( UserSkin(), $custom_planet )."' height='30' width='30'/></a>\n";
+            }
+        }
+        echo "</th>\n";
+    }
+}
+
+function empty_row (int $p, array $custom_planets) : void
 {
-    echo "<tr><th width=\"30\"><a href=\"#\" >".$p."</a></th><th width=\"30\"></th><th width=\"130\" style='white-space: nowrap;'></th><th width=\"30\" style='white-space: nowrap;'></th><th width=\"30\"></th><th width=\"150\"></th><th width=\"80\"></th><th width=\"125\" style='white-space: nowrap;'></th></tr>\n\n";
+    echo "<tr><th width=\"30\"><a href=\"#\" >".$p."</a></th><th width=\"30\"></th><th width=\"130\" style='white-space: nowrap;'></th><th width=\"30\" style='white-space: nowrap;'></th><th width=\"30\"></th>";
+    ShowCustomObjects ($p, $custom_planets);
+    echo "<th width=\"150\"></th><th width=\"80\"></th><th width=\"125\" style='white-space: nowrap;'></th></tr>\n\n";
 }
 
 // Missile attack.
@@ -178,6 +204,8 @@ if ( $prem['admiral'] ) $maxfleet += 2;
   which normally evaluates the xml return value via eval(this.response).
   */
   function whenResponse(){
+
+    //alert (this.response);
 
       /*
       *
@@ -442,14 +470,24 @@ echo "</form>\n";
 
 /***** Table header *****/
 
+$result_custom = EnumCustomPlanetsGalaxy ($coord_g, $coord_s);
+$num_custom = dbrows ($result_custom);
+$custom_planets = array ();
+for ($i=0; $i<$num_custom; $i++) {
+    $custom_planets[] = dbarray ($result_custom);
+}
+
 echo "<table width=\"569\">\n";
-echo "<tr><td class=\"c\" colspan=\"8\">".loca("GALAXY_SYSTEM")." ".$coord_g.":".$coord_s."</td></tr>\n";
+echo "<tr><td class=\"c\" colspan=\"".(8+$num_custom)."\">".loca("GALAXY_SYSTEM")." ".$coord_g.":".$coord_s."</td></tr>\n";
 echo "<tr>\n";
 echo "<td class=\"c\">".loca("GALAXY_HEAD_COORD")."</td>\n";
 echo "<td class=\"c\">".loca("GALAXY_HEAD_PLANET")."</td>\n";
 echo "<td class=\"c\">".loca("GALAXY_HEAD_NAME_ACT")."</td>\n";
 echo "<td class=\"c\">".loca("GALAXY_HEAD_MOON")."</td>\n";
 echo "<td class=\"c\">".loca("GALAXY_HEAD_DF")."</td>\n";
+if ($num_custom > 0) {
+    echo "<td class=\"c\">".loca("GALAXY_HEAD_OTHER")."</td>\n";
+}
 echo "<td class=\"c\">".loca("GALAXY_HEAD_PLAYER_STATUS")."</td>\n";
 echo "<td class=\"c\">".loca("GALAXY_HEAD_ALLY")."</td>\n";
 echo "<td class=\"c\">".loca("GALAXY_HEAD_ACTIONS")."</td>\n";
@@ -462,19 +500,14 @@ $tabindex = 3;
 $result = EnumPlanetsGalaxy ( $coord_g, $coord_s );
 $num = $planets = dbrows ($result);
 
-$phalanx_radius = $aktplanet[GID_B_PHALANX] * $aktplanet[GID_B_PHALANX] - 1;
-
 while ($num--)
 {
     $planet = dbarray ($result);
     $user = LoadUser ( $planet['owner_id']);
     $own = $user['player_id'] == $GlobalUser['player_id'];
-    for ($p; $p<$planet['p']; $p++) empty_row ($p);
+    for ($p; $p<$planet['p']; $p++) empty_row ($p, $custom_planets);
 
-    $phalanx = ($system_radius <= $phalanx_radius) && 
-               ($aktplanet['type'] == PTYP_MOON) && 
-               ($planet['owner_id'] != $GlobalUser['player_id']) &&
-               ($planet['g'] == $aktplanet['g']);
+    $phalanx = CanPhalanx ($aktplanet, $planet);
 
     // Coord.
     echo "<tr>\n";
@@ -569,13 +602,13 @@ while ($num--)
     }
     echo "</th>\n";
 
-    // debris field (do not show DF < 300 units)
+    // debris field (do not show DF < GALAXY_PHANTOM_DEBRIS units)
     echo "<th width=\"30\">";
     $debris = LoadPlanet ( $coord_g, $coord_s, $p, 2 );
     if ( $debris )
     {
         $harvesters = ceil ( ($debris[GID_RC_METAL] + $debris[GID_RC_CRYSTAL]) / $UnitParam[GID_F_RECYCLER][3]);
-        if ( ($debris[GID_RC_METAL] + $debris[GID_RC_CRYSTAL]) >= 300 )
+        if ( ($debris[GID_RC_METAL] + $debris[GID_RC_CRYSTAL]) >= GALAXY_PHANTOM_DEBRIS )
         {
 ?>
     <a style="cursor:pointer"
@@ -587,6 +620,11 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
         }
     }
     echo "</th>\n";
+
+    // Display custom Galaxy objects added by mods.
+    if ($num_custom > 0) {
+        ShowCustomObjects ($p, $custom_planets);
+    }
 
     // player (status)
     // Newbie or Strong or Regular
@@ -691,12 +729,12 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
     echo "</tr>\n\n";
     $p++;
 }
-for ($p; $p<=15; $p++) empty_row ($p);
+for ($p; $p<=15; $p++) empty_row ($p, $custom_planets);
 
 /***** Bottom of table *****/
-echo "<tr><th style='height:32px;'>16</th><th colspan='7'><a href ='index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$coord_g."&system=".$coord_s."&planet=16&planettype=1&target_mission=15'>".loca("FAR_SPACE")."</a></th></tr>\n\n";
+echo "<tr><th style='height:32px;'>16</th><th colspan='".(7+$num_custom)."'><a href ='index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$coord_g."&system=".$coord_s."&planet=16&planettype=1&target_mission=15'>".loca("FAR_SPACE")."</a></th></tr>\n\n";
 
-echo "<tr><td class=\"c\" colspan=\"6\">(".va(loca("GALAXY_INFO_POPULATED"), $planets).")</td>\n";
+echo "<tr><td class=\"c\" colspan=\"".(6+$num_custom)."\">(".va(loca("GALAXY_INFO_POPULATED"), $planets).")</td>\n";
 echo "<td class=\"c\" colspan=\"2\"><a href='#' onmouseover='return overlib(\"<table><tr><td class=c colspan=2>".loca("GALAXY_LEGEND")."</td></tr>";
 echo "<tr><td width=125>".loca("GALAXY_LEGEND_STRONG_LONG")."</td><td><span class=strong>".loca("GALAXY_LEGEND_STRONG")."</span></td></tr>";
 echo "<tr><td>".loca("GALAXY_LEGEND_NOOB_LONG")."</td><td><span class=noob>".loca("GALAXY_LEGEND_NOOB")."</span></td></tr>";
@@ -729,7 +767,7 @@ if ($prem['commander'] && $aktplanet[GID_D_IPM] > 0) {
 }
 // Deuterium is only shown for moons (even without Commander)
 if ($aktplanet['type'] == PTYP_MOON) {
-    $extra_info .= loca("GALAXY_INFO_DEUTERIUM") . nicenum($aktplanet["d"]);
+    $extra_info .= loca("GALAXY_INFO_DEUTERIUM") . nicenum($aktplanet[GID_RC_DEUTERIUM]);
 }
 if ($prem['commander']) {
     $extra_info .= $sep . "<span id='slots'>".$nowfleet."</span>&nbsp;".va(loca("GALAXY_INFO_SLOTS"), $maxfleet);
@@ -738,13 +776,13 @@ if ($prem['commander']) {
 if ($extra_info !== "") {
 ?>
 <tr>
-<td class="c" colspan="8">
+<td class="c" colspan="<?=(8+$num_custom);?>">
 <?=$extra_info;?></td>
 </tr>
 <?php
 }   // extra_info
 ?>
-<tr style="display: none;" id="fleetstatusrow"><th colspan="8"><!--<div id="fleetstatus"></div>-->
+<tr style="display: none;" id="fleetstatusrow"><th colspan="<?=(8+$num_custom);?>"><!--<div id="fleetstatus"></div>-->
 <table style="font-weight: bold;" width=100% id="fleetstatustable">
 <!-- will be filled with content later on while processing ajax replys -->
 </table>

@@ -16,7 +16,7 @@ const SPACE_STORM_MASK_COMM_BREAKDOWN = 0x100;  // Communication Breakdown
 const SPACE_STORM_MASK_ATTACK_REVERB = 0x200;   // Attack Reverberation
 const SPACE_STORM_MASK_MSB = 10;            // The most significant bit for setting the storm type. The type is set as a random bit from 0 to the MSB (inclusive).
 
-const GID_B_REALITY_STAB = 157384;      // Reality Stabilizer Object ID
+const GID_B_REALITY_STAB = 57384;      // Reality Stabilizer Object ID
 
 const QTYP_SPACE_STORM = "SpaceStorm";
 
@@ -58,7 +58,7 @@ class SpaceStorm extends GameMod {
 
         // Remove columns
         $query = "ALTER TABLE ".$db_prefix."uni DROP COLUMN storm;";
-        dbquery ($query);        
+        dbquery ($query);
         $query = "ALTER TABLE ".$db_prefix."planets DROP COLUMN `".GID_B_REALITY_STAB."`;";
         dbquery ($query);
         $query = "ALTER TABLE ".$db_prefix."planets DROP COLUMN `s".GID_B_REALITY_STAB."`;";
@@ -93,8 +93,8 @@ class SpaceStorm extends GameMod {
         $requirements[GID_B_REALITY_STAB] = array (GID_B_RES_LAB=>3, GID_B_TERRAFORMER=>1);
         $CanBuildTab[PTYP_PLANET][] = GID_B_REALITY_STAB;
 
-        global $GlobalUni;
-        loca_add ("space_storm", $GlobalUni['lang'], __DIR__);
+        global $GlobalUser;
+        loca_add ("space_storm", $GlobalUser['lang'], __DIR__);
     }
 
     // Событие завершения Космического шторма. Формируется новый шторм, согласно правилам
@@ -204,7 +204,7 @@ class SpaceStorm extends GameMod {
         $storm = $this->GetStorm();
         if ($id == GID_B_REALITY_STAB && $storm != 0) {
             $demolish = $queue['type'] === QTYP_DEMOLISH;
-            $planet = GetPlanet ( $planet_id );
+            $planet = LoadPlanetById ( $planet_id );
             $mask = $planet['s'.GID_B_REALITY_STAB];
             if ($demolish) $mask &= ~$storm;
             else $mask |= $storm;

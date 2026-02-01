@@ -15,9 +15,11 @@ function Admin_Checksum () : void
 
     $engine_files = array (
         'ainfo.php', 
+        'core/acs.php', 
         'core/ally.php', 
         'core/battle.php', 
         'core/battle_engine.php', 
+        'core/battle_report.php', 
         'core/bbcode.php', 
         'core/bot.php', 
         'core/botapi.php', 
@@ -27,8 +29,10 @@ function Admin_Checksum () : void
         'core/defs.php', 
         'core/debug.php', 
         'core/expedition.php', 
+        'core/expedition_battle.php', 
         'core/fleet.php', 
         'core/galaxytool.php', 
+        'core/graviton.php', 
         'index.php', 
         'install.php', 
         'core/install_tabs.php', 

@@ -28,12 +28,6 @@ One fleet task can spawn another task upon completion, e.g. after reaching Trans
 
 In Overview, all subsequent missions are "predicted", they are not really there. The Fleet menu shows the description of the missions close to the database data.
 
-The structure of the ACS table:
-union_id: Union ID (INT PRIMARY KEY)
-fleet_id: ID of the ACS's lead fleet (initial Attack = slot 0) (INT)
-name: union name. default: "KV" + number (CHAR(20))
-players: IDs of invited players, separated by commas (TEXT)
-
 */
 
 // ==================================================================================
@@ -66,7 +60,7 @@ foreign moon without Deathstar                Transport, Attack, ACS Attack
 if there's only a spy in the fleet     Espionage
 */
 
-function FleetAvailableMissions ( int $thisgalaxy, int $thissystem, int $thisplanet, int $thisplanettype, int $galaxy, int $system, int $planet, int $planettype, array $fleet ) : array
+function FleetAvailableMissionsDefault ( int $thisgalaxy, int $thissystem, int $thisplanet, int $thisplanettype, int $galaxy, int $system, int $planet, int $planettype, array $fleet ) : array
 {
     $missions = array ( );
 
@@ -76,56 +70,55 @@ function FleetAvailableMissions ( int $thisgalaxy, int $thissystem, int $thispla
 
     if ( $planet >= 16 )
     {
-        $missions[0] = FTYP_EXPEDITION;
+        $missions[] = FTYP_EXPEDITION;
         return $missions;
     }
 
     if ( $planettype == 2)        // debris field.
     {
-        if ( $fleet[GID_F_RECYCLER] > 0 ) $missions[0] = FTYP_RECYCLE;    // if there are recyclers in the fleet
+        if ( $fleet[GID_F_RECYCLER] > 0 ) $missions[] = FTYP_RECYCLE;    // if there are recyclers in the fleet
         return $missions;
     }
 
     if ( $target == null )        // empty space
     {
-        $missions[0] = FTYP_TRANSPORT;
-        $missions[1] = FTYP_ATTACK;
-        if ( $fleet[GID_F_COLON] > 0 ) $missions[2] = FTYP_COLONIZE;    // if there's a colonizer in the fleet
+        $missions[] = FTYP_TRANSPORT;
+        $missions[] = FTYP_ATTACK;
+        if ( $fleet[GID_F_COLON] > 0 ) $missions[] = FTYP_COLONIZE;    // if there's a colonizer in the fleet
         return $missions;
     }
 
     if ( $origin['owner_id'] == $target['owner_id'] )        // own moons/planets
     {
-        $missions[0] = FTYP_TRANSPORT;
-        $missions[1] = FTYP_DEPLOY;
+        $missions[] = FTYP_TRANSPORT;
+        $missions[] = FTYP_DEPLOY;
         return $missions;
     }
     else
     {
-        $i = 0;
         $origin_user = LoadUser ($origin['owner_id']);
         if ($origin_user == null) {
-            return array();
+            return $missions;
         }
         $target_user = LoadUser ($target['owner_id']);
         if ($target_user == null) {
-            return array();
+            return $missions;
         }
 
         if ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) )      // allies or buddies
         {
-            $missions[$i++] = FTYP_TRANSPORT;
-            $missions[$i++] = FTYP_ATTACK;
-            if ( $uni['acs'] > 0 ) $missions[$i++] = FTYP_ACS_HOLD;
-            if ( $fleet[GID_F_DEATHSTAR] > 0 && GetPlanetType($target) == 3 ) $missions[$i++] = FTYP_DESTROY;
-            if ( $fleet[GID_F_PROBE] > 0  ) $missions[$i++] = FTYP_SPY;
+            $missions[] = FTYP_TRANSPORT;
+            $missions[] = FTYP_ATTACK;
+            if ( $uni['acs'] > 0 ) $missions[] = FTYP_ACS_HOLD;
+            if ( $fleet[GID_F_DEATHSTAR] > 0 && GetPlanetType($target) == 3 ) $missions[] = FTYP_DESTROY;
+            if ( $fleet[GID_F_PROBE] > 0  ) $missions[] = FTYP_SPY;
         }
         else        // all others
         {
-            $missions[$i++] = FTYP_TRANSPORT;
-            $missions[$i++] = FTYP_ATTACK;
-            if ( $fleet[GID_F_DEATHSTAR] > 0 && GetPlanetType($target) == 3 ) $missions[$i++] = FTYP_DESTROY;
-            if ( $fleet[GID_F_PROBE] > 0  ) $missions[$i++] = FTYP_SPY;
+            $missions[] = FTYP_TRANSPORT;
+            $missions[] = FTYP_ATTACK;
+            if ( $fleet[GID_F_DEATHSTAR] > 0 && GetPlanetType($target) == 3 ) $missions[] = FTYP_DESTROY;
+            if ( $fleet[GID_F_PROBE] > 0  ) $missions[] = FTYP_SPY;
         }
 
         // If the target planet is on the ACS attack list, add the task
@@ -134,12 +127,33 @@ function FleetAvailableMissions ( int $thisgalaxy, int $thissystem, int $thispla
             $fleet_obj = LoadFleet ( $union['fleet_id'] );
             $fleet_target = LoadPlanetById ( $fleet_obj['target_planet'] );
             if ( $fleet_target['planet_id'] == $target['planet_id'] ) {
-                $missions[$i++] = FTYP_ACS_ATTACK;
+                $missions[] = FTYP_ACS_ATTACK;
                 break;
             }
         }
         return $missions;
     }
+}
+
+// First, the default procedure is called to obtain missions from 0.84, then the list is modified by mods and goes into the visual.
+function FleetAvailableMissions ( int $thisgalaxy, int $thissystem, int $thisplanet, int $thisplanettype, int $galaxy, int $system, int $planet, int $planettype, array $fleet ) : array {
+
+    $missions = FleetAvailableMissionsDefault ($thisgalaxy, $thissystem, $thisplanet, $thisplanettype, $galaxy, $system, $planet, $planettype, $fleet);
+
+    $param = [];
+    $param['thisgalaxy'] = $thisgalaxy;
+    $param['thissystem'] = $thissystem;
+    $param['thisplanet'] = $thisplanet;
+    $param['thisplanettype'] = $thisplanettype;
+    $param['galaxy'] = $galaxy;
+    $param['system'] = $system;
+    $param['planet'] = $planet;
+    $param['planettype'] = $planettype;
+    $param['fleet'] = $fleet;
+
+    ModsExecArrRef ('fleet_available_missions', $param, $missions);
+
+    return $missions;
 }
 
 // ==================================================================================
@@ -183,8 +197,8 @@ function FlightCons (array $fleet, int $dist, int $flighttime, int $combustion, 
             $basecons = $amount * FleetCons ($id, $combustion, $impulse, $hyper );
             $consumption = $basecons * $dist / 35000 * (($spd / 10) + 1) * (($spd / 10) + 1);
             $consumption += $hours * $amount * FleetCons ($id, $combustion, $impulse, $hyper ) / 10;    // holding costs
-            if ( $id == GID_F_PROBE ) $cons['probes'] += $consumption;
-            else $cons['fleet'] += $consumption;
+            if ( $id == GID_F_PROBE ) $cons['probes'] += (int)$consumption;
+            else $cons['fleet'] += (int)$consumption;
         }
     }
     return $cons;
@@ -264,12 +278,16 @@ function AdjustShips (array $fleet, int $planet_id, string $sign) : void
 {
     global $fleetmap;
     global $db_prefix;
+    $planet = LoadPlanetById ($planet_id);
 
+    $need_comma = false;
     $query = "UPDATE ".$db_prefix."planets SET ";
     foreach ($fleetmap as $i=>$gid)
     {
-        if ($i > 0) $query .= ",";
+        if (!isset($planet[$gid])) continue;
+        if ($need_comma) $query .= ",";
         $query .= "`$gid` = `$gid` $sign " . $fleet[$gid] ;
+        $need_comma = true;
     }
     $query .= " WHERE planet_id=$planet_id;";
     dbquery ($query);
@@ -551,9 +569,14 @@ function TransportArrive (array $queue, array $fleet_obj, array $fleet, array $o
 
 function CommonReturn (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
-    if ( $fleet_obj[GID_RC_METAL] < 0 ) $fleet_obj[GID_RC_METAL] = 0;    // Protection against negative resources (just in case)
-    if ( $fleet_obj[GID_RC_CRYSTAL] < 0 ) $fleet_obj[GID_RC_CRYSTAL] = 0;
-    if ( $fleet_obj[GID_RC_DEUTERIUM] < 0 ) $fleet_obj[GID_RC_DEUTERIUM] = 0;
+    global $transportableResources;
+
+    // Protection against negative resources (just in case)
+    foreach ($transportableResources as $i=>$rc) {
+        if (isset($fleet_obj[$rc])) {
+            if ( $fleet_obj[$rc] < 0 ) $fleet_obj[$rc] = 0;
+        }
+    }
 
     AdjustResources ( $fleet_obj, $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );
@@ -678,7 +701,9 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
     {
         $origin_ships += $fleet_obj[$gid];
         $origin_cost += $fleet_obj[$gid] * $UnitParam[$gid][0];
-        $target_ships += $target[$gid];
+        if (isset($target[$gid])) {
+            $target_ships += $target[$gid];
+        }
     }
 
     $origin_prem = PremiumStatus ($origin_user);
@@ -753,7 +778,11 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
         $count = 0;
         foreach ( $fleetmap as $i=>$gid )
         {
-            $amount = $target[$gid] + $holding_fleet[$gid];
+            $amount = 0;
+            if (isset($target[$gid])) {
+                $amount += $target[$gid];
+            }
+            $amount += $holding_fleet[$gid];
             if ($amount > 0) {
                 if ( ($count % 2) == 0 ) $report .= "</tr>\n";
                 $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
@@ -769,7 +798,10 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
         $count = 0;
         foreach ( $defmap as $i=>$gid )
         {
-            $amount = $target[$gid];
+            $amount = 0;
+            if (isset($target[$gid])) {
+                $amount += $target[$gid];
+            }
             if ($amount > 0) {
                 if ( ($count % 2) == 0 ) $report .= "</tr>\n";
                 $report .= "<td>".loca_lang("NAME_$gid", $origin_user['lang'])."</td><td>".nicenum($amount)."</td>\n";
@@ -878,7 +910,7 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
 
             // Create a new colony.
             $id = CreatePlanet ( $target['g'], $target['s'], $target['p'], $fleet_obj['owner_id'], 1, 0, 0, $queue['end'] );
-            Debug ( "Игроком ".$origin['owner_id']." колонизирована планета $id [".$target['g'].":".$target['s'].":".$target['p']."]");
+            Debug ( "Player ".$origin['owner_id']." has colonized the planet $id [".$target['g'].":".$target['s'].":".$target['p']."]");
 
             // Take 1 colony ship away from the fleet
             if ( $fleet[GID_F_COLON] > 0 ) {
@@ -962,7 +994,13 @@ function RecycleArrive (array $queue, array $fleet_obj, array $fleet, array $ori
     if ( $fleet[GID_F_RECYCLER] == 0 ) Error ( "Attempt to harvest DF without recyclers" );
     if ( $target['type'] != PTYP_DF ) Error ( "Only debris fields can be recycled!" );
 
-    $sum_cargo = FleetCargoSummary ( $fleet ) - ($fleet_obj[GID_RC_METAL] + $fleet_obj[GID_RC_CRYSTAL] + $fleet_obj[GID_RC_DEUTERIUM]);
+    $res_total = 0;
+    foreach ($transportableResources as $i=>$rc) {
+        if (isset($fleet_obj[$rc])) {
+            $res_total += $fleet_obj[$rc];
+        }
+    }
+    $sum_cargo = FleetCargoSummary ( $fleet ) - $res_total;
     $recycler_cargo = FleetCargo (GID_F_RECYCLER) * $fleet[GID_F_RECYCLER];
     $cargo = min ($recycler_cargo, $sum_cargo);
 
@@ -1000,7 +1038,7 @@ function DestroyArrive (array $queue, array $fleet_obj, array $fleet, array $ori
 
 // *** Expedition ***
 
-require_once "expedition.php";
+// See expedition.php
 
 // *** Missile attack ***
 
@@ -1013,12 +1051,15 @@ function Queue_Fleet_End (array $queue) : void
 {
     global $GlobalUser;
     global $fleetmap;
+    global $transportableResources;
     $fleet_obj = LoadFleet ( $queue['sub_id'] );
     if ( $fleet_obj == null ) return;
 
-    if ( $fleet_obj[GID_RC_METAL] < 0 ) $fleet_obj[GID_RC_METAL] = 0;
-    if ( $fleet_obj[GID_RC_CRYSTAL] < 0 ) $fleet_obj[GID_RC_CRYSTAL] = 0;
-    if ( $fleet_obj[GID_RC_DEUTERIUM] < 0 ) $fleet_obj[GID_RC_DEUTERIUM] = 0;
+    foreach ($transportableResources as $i=>$rc) {
+        if (isset($fleet_obj[$rc])) {
+            if ( $fleet_obj[$rc] < 0 ) $fleet_obj[$rc] = 0;
+        }
+    }
 
     $fleet = array ();
     foreach ($fleetmap as $i=>$gid) $fleet[$gid] = $fleet_obj[$gid];
@@ -1056,7 +1097,17 @@ function Queue_Fleet_End (array $queue) : void
         case FTYP_MISSILE: RocketAttackArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case FTYP_ACS_ATTACK_HEAD: AttackArrive ($queue, $fleet_obj, $fleet, $origin, $target); break;
         case (FTYP_ACS_ATTACK_HEAD+FTYP_RETURN): CommonReturn ($queue, $fleet_obj, $fleet, $origin, $target); break;
-        //default: Error ( "Unknown mission for the fleet: " . $fleet_obj['mission'] ); break;
+
+        // Transfer control to modifications
+        default:
+            $param = [];
+            $param['queue'] = $queue;
+            $param['fleet_obj'] = $fleet_obj;
+            $param['fleet'] = $fleet;
+            $param['origin'] = $origin;
+            $param['target'] = $target;
+            ModsExecArr ('fleet_handler', $param);
+            break;
     }
 
     if ( $fleet_obj['union_id'] && $fleet_obj['mission'] < FTYP_RETURN )    // remove all fleets and union missions so that ACS attack will no longer trigger
@@ -1088,212 +1139,14 @@ function Queue_Fleet_End (array $queue) : void
 
 // ==================================================================================
 
-// ACS Management.
-
-// Create ACS union. $fleet_id - head fleet. $name - union name.
-function CreateUnion (int $fleet_id, string $name) : int
-{
-    global $db_prefix;
-
-    $fleet_obj = LoadFleet ($fleet_id);
-
-    // Check to see if there's already an union?
-    if ( $fleet_obj['union_id'] != 0 ) return $fleet_obj['union_id'];
-
-    // Unions can only be created for departing attacks.
-    if ($fleet_obj['mission'] != 1) return 0;
-
-    $target_planet = LoadPlanetById ( $fleet_obj['target_planet'] );
-    if ($target_planet == null) return 0;
-    $target_player = $target_planet['owner_id'];
-
-    // You can't create an union against yourself
-    if ( $target_player == $fleet_obj['owner_id'] ) return 0;
-
-    // Add union
-    $union = array ( 'fleet_id' => $fleet_id, 'target_player' => $target_player, 'name' => $name, 'players' => $fleet_obj['owner_id'] );
-    $union_id = AddDBRow ($union, 'union');
-
-    // Add a fleet to the union and change the Attack type (the ACS head is shown in a special way in the event list)
-    $query = "UPDATE ".$db_prefix."fleet SET union_id = $union_id, mission = ".FTYP_ACS_ATTACK_HEAD." WHERE fleet_id = $fleet_id";
-    dbquery ($query);
-    return $union_id;
-}
-
-// Load ACS union
-function LoadUnion (int $union_id) : array|null
-{
-    global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."union WHERE union_id = $union_id";
-    $result = dbquery ($query);
-    if ( dbrows ($result) == 0) return null;
-    $union = dbarray ($result);
-    $union['player'] = explode (",", $union['players'] );
-    $union['players'] = count ($union['player']);
-    return $union;
-}
-
-// An union is removed when the last union fleet is recalled, or the objective is reached
-function RemoveUnion (int $union_id) : void
-{
-    global $db_prefix;
-    $query = "DELETE FROM ".$db_prefix."union WHERE union_id = $union_id";        // delete the union record
-    dbquery ($query);
-}
-
-// Rename the ACS union.
-function RenameUnion (int $union_id, string $name) : void
-{
-    global $db_prefix;
-    $query = "UPDATE ".$db_prefix."union SET name = '".$name."' WHERE union_id = " . intval ($union_id);
-    dbquery ($query);
-}
-
-// Add a new member to the union.
-function AddUnionMember (int $union_id, string $name) : string
-{
-    global $db_prefix;
-    global $GlobalUni;
-    global $GlobalUser;
-    $union = LoadUnion ($union_id);
-
-    // The error of adding a player to ACS union is given in the language of the current user (the one who adds players via the Fleet menu)
-    loca_add ("union", $GlobalUser['lang']);
-
-    // Empty name, do nothing.
-    if ($name === "") return "";
-
-    // Maximum number of users reached
-    $max_players = $GlobalUni['acs'] + 1;
-    if ( $union['players'] >= $max_players ) return va(loca("ACS_MAX_USERS"), $max_players);
-
-    // Find a user
-    $name = mb_strtolower ($name, 'UTF-8');
-    $query = "SELECT * FROM ".$db_prefix."users WHERE name = '".$name."' LIMIT 1";
-    $result = dbquery ($query);
-    if (dbrows ($result) == 0) return loca("ACS_USER_NOT_FOUND");
-    $user = dbarray ($result);
-
-    // Check if there is already such a user in ACS union.
-    for ($i=0; $i<$union['players']; $i++)
-    {
-        if ( $union["player"][$i] == $user['player_id'] ) return loca("ACS_ALREADY_ADDED");    // there is.
-    }
-
-    // Add the user to the ACS union and send them an invitation message.
-    $union['player'][$union['players']] = $user['player_id'];
-    $query = "UPDATE ".$db_prefix."union SET players = '".implode(",", $union['player'])."' WHERE union_id = $union_id";
-    dbquery ($query);
-
-    $target_player = LoadUser ( $union['target_player'] );
-    $head_fleet = LoadFleet ( $union['fleet_id'] );
-    $target_planet = LoadPlanetById ( $head_fleet['target_planet'] );
-    $queue = GetFleetQueue ( $union['fleet_id'] );
-
-    // The ACS invitation message is sent in the language of the invited user.
-    loca_add ("union", $user['lang']);
-
-    $text = va ( loca_lang("ACS_INVITE_TEXT1", $user['lang']),
-                        $GlobalUser['oname'], 
-                        $union['name'], 
-                        $target_player['oname'] ) .
-            va (" <a href=\"#\" onClick=showGalaxy(#1,#2,#3)><b><u>[#4:#5:#6]</u></b></a>. ",
-                        $target_planet['g'], $target_planet['s'], $target_planet['p'], 
-                        $target_planet['g'], $target_planet['s'], $target_planet['p'] ) .
-            va ( loca_lang("ACS_INVITE_TEXT2", $user['lang']), date ( "D M Y H:i:s", $queue['end'] ) );
-    SendMessage ( $user['player_id'], $GlobalUser['oname'], loca_lang("ACS_INVITE_SUBJ", $user['lang']), $text, MTYP_MISC );
-
-    return "";
-}
-
-// List the unions the player is in, as well as the union that the player is targeting (unless the friendly flag is set).
-function EnumUnion (int $player_id, int $friendly=0) : array
-{
-    global $db_prefix;
-    $count = 0;
-    $unions = array ();
-    $query = "SELECT * FROM ".$db_prefix."union ";
-    $result = dbquery ($query);
-    $rows = dbrows ($result);
-    while ($rows--)
-    {
-        $union = dbarray ($result);
-        $union['player'] = explode (",", $union['players'] );
-        $union['players'] = count ($union['player']);
-        for ($i=0; $i<$union['players']; $i++) {
-            if ( $union["player"][$i] == $player_id || ( $union['target_player'] == $player_id && !$friendly )) { $unions[$count++] = $union; break; }
-        }
-    }
-    return $unions;
-}
-
-// List the Union fleets
-function EnumUnionFleets (int $union_id) : mixed
-{
-    global $db_prefix;
-    $query = "SELECT * FROM ".$db_prefix."fleet WHERE union_id = $union_id";
-    return dbquery ( $query );
-}
-
-// Update the arrival time of all union fleets except fleet_id. Return the new arrival time of the union.
-function UpdateUnionTime (int $union_id, int $end, int $fleet_id, bool $force_set=false) : int
-{
-    global $db_prefix;
-    $result = EnumUnionFleets ($union_id);
-    $rows = dbrows ($result);
-    while ($rows--)
-    {
-        $fleet_obj = dbarray ($result);
-        if ( $fleet_obj['fleet_id'] == $fleet_id ) continue;
-        $queue = GetFleetQueue ( $fleet_obj['fleet_id'] );
-        $union_time = $queue['end'];
-        $queue_id = $queue['task_id'];
-        if ( $end > $union_time || $force_set )
-        {
-            $union_time = $end;
-            $query = "UPDATE ".$db_prefix."queue SET end = $end WHERE task_id = $queue_id";
-            dbquery ($query);
-        }
-    }
-    return $union_time;
-}
-
-// Update fleet arrival time
-function UpdateFleetTime (int $fleet_id, int $when) : void
-{
-    global $db_prefix;
-    $queue = GetFleetQueue ($fleet_id);
-    $queue_id = $queue['task_id'];
-    $query = "UPDATE ".$db_prefix."queue SET end = $when WHERE task_id = $queue_id";
-    dbquery ($query);
-}
-
-// List the fleets on hold
-function GetHoldingFleets (int $planet_id) : mixed
-{
-    global $db_prefix;
-    $uni = LoadUniverse ();    // limit the number of fleets to the universe settings
-    $max = max (0, $uni['acs'] * $uni['acs'] - 1);
-    $query = "SELECT * FROM ".$db_prefix."fleet WHERE mission = ".(FTYP_ORBITING+FTYP_ACS_HOLD)." AND target_planet = $planet_id LIMIT $max";
-    $result = dbquery ($query);
-    return $result;
-}
-
-function IsPlayerInUnion (int $player_id, array $union) : bool
-{
-    if ( $union == null ) return false;
-    foreach ( $union['player'] as $i=>$pid )
-    {
-        if ( $pid == $player_id ) return true;
-    }
-    return false;
-}
-
 // Flight logs.
 
 function FleetlogsMissionText (int $num) : void
 {
-    if ($num >= FTYP_ORBITING)
+    if ($num >= FTYP_CUSTOM) {
+        $desc = "(Custom)";
+    }
+    else if ($num >= FTYP_ORBITING)
     {
         $desc = "<a title=\"На планете\">(Д)</a>";
         $num -= FTYP_ORBITING;

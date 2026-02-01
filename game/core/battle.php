@@ -1,50 +1,76 @@
 <?php
 
-require_once "battle_engine.php";
-require_once "raketen.php";
-
 // OGame Battle Engine frontend.
 
+const BATTLE_RESULT_AWON = 0;       // The attacker won
+const BATTLE_RESULT_DWON = 1;       // The defender won
+const BATTLE_RESULT_DRAW = 2;       // Draw
+
+// Displays the battle participant type. Stored in the `bf` variable in the source data (a/d).
+// This primarily affects the output results—what to do with the participants after the battle.
+const BATTLE_PTCP_FLEET = 0;        // The participant arrived on the Fleet (from the fleet table)
+const BATTLE_PTCP_PLANET = 1;       // The participant arrived from Planet (id from the planets table)
+const BATTLE_PTCP_VIRTUAL = 2;      // The participant is virtual ("drawn"), the ID has no meaning (example - pirates/aliens on an expedition)
+
 // Repairing the defense.
+// Multiple planetary defenders are taken into account.
 function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_delta, bool $premium=true ) : array
 {
     global $defmap;
     global $rakmap;
     $defmap_norak = array_diff($defmap, $rakmap);
-    foreach ( $defmap_norak as $n=>$gid ) {
-        $repaired[$gid] = 0;
-        $exploded[$gid] = 0;
-    }
-    $exploded_total = 0;
 
-    if ( $premium) $prem = PremiumStatus ($d[0]);
-    else $prem = array();
+    $repaired = [];
+    $exploded = [];
+    $exploded_total = [];
+    $premium_status = [];
+
+    foreach ( $d as $i=>$defender) {
+        if ($defender['pf'] != BATTLE_PTCP_PLANET) continue;     // not planet
+        $exploded_total[$i] = 0;    
+        $repaired[$i] = [];
+        $exploded[$i] = [];
+        foreach ( $defmap_norak as $n=>$gid ) {
+            $repaired[$i][$gid] = 0;
+            $exploded[$i][$gid] = 0;
+        }
+        if ( $premium) $prem = PremiumStatus ($d[$i]);
+        else $prem = array();
+        $premium_status[$i] = key_exists ('engineer', $prem) && $prem['engineer'];
+    }
 
     $rounds = count ( $res['rounds'] );
     if ( $rounds > 0 ) 
     {
         // Count the blown defenses.
         $last = $res['rounds'][$rounds - 1];
-        foreach ( $exploded as $gid=>$amount )
-        {
-            $exploded[$gid] = $d[0]['defense'][$gid] - $last['defenders'][0][$gid];
-            if ( key_exists ('engineer', $prem) && $prem['engineer'] ) $exploded[$gid] = floor ($exploded[$gid] / 2);
-            $exploded_total += $exploded[$gid];
-        }
 
-        // Restore the defense
-        if ($exploded_total)
-        {
-            foreach ( $exploded as $gid=>$amount )
+        foreach ($d as $i=>$defender) {
+            if ($defender['pf'] != BATTLE_PTCP_PLANET) continue;     // not planet
+
+            foreach ( $defmap_norak as $n=>$gid )
             {
-                if ( $amount < 10 )
+                $before = isset($d[$i]['units'][$gid]) ? $d[$i]['units'][$gid] : 0;
+                $after =  isset ($last['defenders'][$i]['units'][$gid]) ? $last['defenders'][$i]['units'][$gid] : 0;
+                $exploded[$i][$gid] = $before - $after;
+                if ( $premium_status[$i] ) $exploded[$i][$gid] = floor ($exploded[$i][$gid] / 2);
+                $exploded_total[$i] += $exploded[$i][$gid];
+            }
+
+            // Restore the defense
+            if ($exploded_total[$i])
+            {
+                foreach ( $exploded[$i] as $gid=>$amount )
                 {
-                    for ($i=0; $i<$amount; $i++)
+                    if ( $amount < 10 )
                     {
-                        if ( mt_rand (0, 99) < $defrepair ) $repaired[$gid]++;
+                        for ($i=0; $i<$amount; $i++)
+                        {
+                            if ( mt_rand (0, 99) < $defrepair ) $repaired[$i][$gid]++;
+                        }
                     }
+                    else $repaired[$i][$gid] = floor ( mt_rand ($defrepair-$defrepair_delta, $defrepair+$defrepair_delta) * $amount / 100 );
                 }
-                else $repaired[$gid] = floor ( mt_rand ($defrepair-$defrepair_delta, $defrepair+$defrepair_delta) * $amount / 100 );
             }
         }
     }
@@ -94,15 +120,8 @@ function Plunder ( int $cargo, int $m, int $k, int $d ) : array
 }
 
 // Calculate total losses (taking into account repaired defenses).
-function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
+function CalcLosses ( array &$a, array &$d, array $res, array $repaired ) : array
 {
-    global $fleetmap;
-    global $defmap;
-    global $rakmap;
-    $defmap_norak = array_diff($defmap, $rakmap);
-    $amap = $fleetmap;
-    $dmap = array_merge($fleetmap, $defmap_norak);
-
     $aprice = $dprice = 0;
 
     // The cost of units before combat.
@@ -110,15 +129,14 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
     {
         $a[$i]['points'] = 0;
         $a[$i]['fpoints'] = 0;
-        foreach ( $fleetmap as $n=>$gid )
+        foreach ( $attacker['units'] as $gid=>$amount )
         {
-            $amount = $attacker['fleet'][$gid];
             if ( $amount > 0 ) {
                 $cost = TechPrice ( $gid, 1 );
                 $points = TechPriceInPoints($cost);
                 $aprice += $points * $amount;
                 $a[$i]['points'] += $points * $amount;
-                $a[$i]['fpoints'] += $amount;
+                if (IsFleet($gid)) $a[$i]['fpoints'] += $amount;
             }
         }
     }
@@ -127,25 +145,14 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
     {
         $d[$i]['points'] = 0;
         $d[$i]['fpoints'] = 0;
-        foreach ( $fleetmap as $n=>$gid )
+        foreach ( $defender['units'] as $gid=>$amount )
         {
-            $amount = $defender['fleet'][$gid];
             if ( $amount > 0 ) {
                 $cost = TechPrice ( $gid, 1 );
                 $points = TechPriceInPoints ($cost);
                 $dprice += $points * $amount;
                 $d[$i]['points'] += $points * $amount;
-                $d[$i]['fpoints'] += $amount;
-            }
-        }
-        foreach ( $defmap_norak as $n=>$gid )
-        {
-            $amount = $defender['defense'][$gid];
-            if ( $amount > 0 ) {
-                $cost = TechPrice ( $gid, 1 );
-                $points = TechPriceInPoints ($cost);
-                $dprice += $points * $amount;
-                $d[$i]['points'] += $points * $amount;
+                if (IsFleet($gid)) $d[$i]['fpoints'] += $amount;
             }
         }
     }
@@ -159,25 +166,23 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
 
         foreach ( $last['attackers'] as $i=>$attacker )        // Attackers
         {
-            foreach ( $amap as $n=>$gid )
+            foreach ( $attacker['units'] as $gid=>$amount )
             {
-                $amount = $attacker[$gid];
                 if ( $amount > 0 ) {
                     $cost = TechPrice ( $gid, 1 );
                     $points = TechPriceInPoints ($cost);
                     $alast += $points * $amount;
                     $a[$i]['points'] -= $points * $amount;
-                    $a[$i]['fpoints'] -= $amount;
+                    if (IsFleet($gid)) $a[$i]['fpoints'] -= $amount;
                 }
             }
         }
 
         foreach ( $last['defenders'] as $i=>$defender )        // Defenders
         {
-            foreach ( $dmap as $n=>$gid )
+            foreach ( $defender['units'] as $gid=>$amount )
             {
-                if ( IsDefense($gid) && $i == 0 ) $amount = $defender[$gid] + $repaired[$gid];
-                else $amount = $defender[$gid];
+                if ( IsDefense($gid) && $defender['pf'] == BATTLE_PTCP_PLANET ) $amount += $repaired[$i][$gid];
                 if ( $amount > 0 ) {
                     $cost = TechPrice ( $gid, 1 );
                     $points = TechPriceInPoints ($cost);
@@ -201,12 +206,110 @@ function CalcLosses ( array $a, array $d, array $res, array $repaired ) : array
         $aloss = $dloss = 0;
     }
 
-    return array ( 'a' => $a, 'd' => $d, 'aloss' => $aloss, 'dloss' => $dloss );
+    return array ( 'aloss' => $aloss, 'dloss' => $dloss );
+}
+
+function CalcDebris (array &$a, array &$d, array $res, array $repaired, int $fid, int $did) : void {
+
+    global $debrisResources;
+    global $fleetmap;
+    global $defmap;
+    global $rakmap;
+    $defmap_norak = array_diff($defmap, $rakmap);
+
+    // Get a list of units before battle
+
+    $before_a = [];
+    $before_d = [];
+
+    foreach ($a as $i=>$attacker) {
+        $a[$i]['debris'] = [];
+        foreach ($debrisResources as $n=>$rc) $a[$i]['debris'][$rc] = 0;
+        $before_a[$i] = [];
+        foreach ($fleetmap as $ii=>$gid) { 
+            $before_a[$i][$gid] = isset ($res['before']['attackers'][$i]['units'][$gid]) ? $res['before']['attackers'][$i]['units'][$gid] : 0;
+        }
+    }
+    foreach ($d as $i=>$defender) {
+        $d[$i]['debris'] = [];
+        foreach ($debrisResources as $n=>$rc) $d[$i]['debris'][$rc] = 0;
+        $before_d[$i] = [];
+        foreach ($fleetmap as $ii=>$gid) { 
+            $before_d[$i][$gid] = isset ($res['before']['defenders'][$i]['units'][$gid]) ? $res['before']['defenders'][$i]['units'][$gid] : 0;
+        }
+        foreach ($defmap_norak as $ii=>$gid) { 
+            $before_d[$i][$gid] = isset ($res['before']['defenders'][$i]['units'][$gid]) ? $res['before']['defenders'][$i]['units'][$gid] : 0;
+        }
+    }
+
+    // If there are rounds, get a list of units after the battle and subtract them from the pre-battle units to determine losses. Take into account the restored defense.
+
+    $rounds = count ( $res['rounds'] );
+    if ($rounds > 0) {
+        $last = $res['rounds'][$rounds - 1];
+
+        foreach ( $last['attackers'] as $i=>$attacker )        // Attackers
+        {
+            foreach ( $before_a[$i] as $gid=>$initial )
+            {
+                if ($initial > 0) {
+                    $amount = isset($attacker['units'][$gid]) ? $attacker['units'][$gid] : 0;
+                    $diff = max (0, $initial - $amount);
+                    $cost = TechPrice ($gid, 1);
+                    $coef = IsDefense($gid) ? $did : $fid;
+                    foreach ($debrisResources as $n=>$rc) {
+                        $a[$i]['debris'][$rc] += intval (ceil($cost[$rc] * $diff * ((float)( $coef / 100.0)) ));
+                    }
+                }
+            }
+        }
+
+        foreach ( $last['defenders'] as $i=>$defender )        // Defenders
+        {
+            foreach ( $before_d[$i] as $gid=>$initial )
+            {
+                if ($initial) {
+                    $amount = isset($defender['units'][$gid]) ? $defender['units'][$gid] : 0;
+                    if ( IsDefense($gid) && $defender['pf'] == BATTLE_PTCP_PLANET ) $amount += $repaired[$i][$gid];      // Repaired
+                    $diff = max (0, $initial - $amount);
+                    $cost = TechPrice ($gid, 1);
+                    $coef = IsDefense($gid) ? $did : $fid;
+                    foreach ($debrisResources as $n=>$rc) {
+                        $d[$i]['debris'][$rc] += intval (ceil($cost[$rc] * $diff * ((float)( $coef / 100.0)) ));
+                    }
+                }
+            }
+        }
+    }
+}
+
+function GetDebrisTotal (array &$a, array &$d) : array {
+
+    global $debrisResources;
+
+    foreach ($debrisResources as $i=>$rc) {
+        $debris[$rc] = 0;
+    }
+
+    foreach ($a as $i=>$attacker) {
+        foreach ($debrisResources as $ii=>$rc) {
+            $debris[$rc] += $attacker['debris'][$rc];
+        }
+    }
+
+    foreach ($d as $i=>$defender) {
+        foreach ($debrisResources as $ii=>$rc) {
+            $debris[$rc] += $defender['debris'][$rc];
+        }
+    }
+
+    return $debris;
 }
 
 // Total cargo capacity of fleets in the last round.
 function CargoSummaryLastRound ( array $a, array $res ) : int
 {
+    global $transportableResources;
     $cargo = 0;
     $rounds = count ( $res['rounds'] );
     if ( $rounds > 0 ) 
@@ -216,7 +319,9 @@ function CargoSummaryLastRound ( array $a, array $res ) : int
         foreach ( $last['attackers'] as $i=>$attacker )        // Attackers
         {
             $f = LoadFleet ( $attacker['id'] );
-            $cargo += FleetCargoSummary ( $attacker ) - ($f[GID_RC_METAL] + $f[GID_RC_CRYSTAL] + $f[GID_RC_DEUTERIUM]) - $f['fuel'];
+            $total = 0;
+            foreach ($transportableResources as $i=>$rc) $total += $f[$rc];
+            $cargo += FleetCargoSummary ( $attacker['units'] ) - $total - $f['fuel'];
         }
     }
     else
@@ -224,7 +329,9 @@ function CargoSummaryLastRound ( array $a, array $res ) : int
         foreach ($a as $i=>$attacker)                // Attackers
         {
             $f = LoadFleet ( $attacker['id'] );
-            $cargo += FleetCargoSummary ( $attacker['fleet'] ) - ($f[GID_RC_METAL] + $f[GID_RC_CRYSTAL] + $f[GID_RC_DEUTERIUM]) - $f['fuel'];
+            $total = 0;
+            foreach ($transportableResources as $i=>$rc) $total += $f[$rc];
+            $cargo += FleetCargoSummary ( $attacker['units'] ) - $total - $f['fuel'];
         }
     }
     return (int)max ( 0, $cargo );
@@ -260,18 +367,18 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
                 Error ("WritebackBattleResults target null");
             }
             $ships = 0;
-            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker[$gid];
+            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['units'][$gid];
             if ( $sum_cargo == 0) $cargo = 0;
-            else $cargo = ( FleetCargoSummary ( $attacker ) - ($fleet_obj[GID_RC_METAL]+$fleet_obj[GID_RC_CRYSTAL]+$fleet_obj[GID_RC_DEUTERIUM]) - $fleet_obj['fuel'] ) / $sum_cargo;
+            else $cargo = ( FleetCargoSummary ( $attacker['units'] ) - ($fleet_obj[GID_RC_METAL]+$fleet_obj[GID_RC_CRYSTAL]+$fleet_obj[GID_RC_DEUTERIUM]) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) {
-                if ( $fleet_obj['mission'] == FTYP_DESTROY && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker, $queue['end'] );
+                if ( $fleet_obj['mission'] == FTYP_DESTROY && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['units'], $queue['end'] );
                 else $result = 0;
                 if ( $result < 2 ) {
                     $resources = array ();
                     foreach ($transportableResources as $i=>$rc) {
                         $resources[$rc] = $fleet_obj[$rc] + $captured[$rc] * $cargo;
                     }
-                    DispatchFleet ($attacker, $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'],
+                    DispatchFleet ($attacker['units'], $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'],
                     $resources,
                     $fleet_obj['fuel'] / 2, $queue['end']);
                 }
@@ -280,27 +387,29 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
 
         foreach ( $last['defenders'] as $i=>$defender )        // Defenders
         {
-            if ( $i == 0 )    // Planet
-            {
-                AdjustResources ( $captured, $defender['id'], '-' );
-                $objects = array ();
-                foreach ( $fleetmap as $ii=>$gid ) $objects[$gid] = $defender[$gid] ? $defender[$gid] : 0;
-                foreach ( $defmap_norak as $ii=>$gid ) {
-                    $objects[$gid] = $repaired[$gid] ? $repaired[$gid] : 0;
-                    $objects[$gid] += $defender[$gid];
-                }
-                SetPlanetFleetDefense ( $defender['id'], $objects );
-            }
-            else        // Fleets on hold
-            {
-                $ships = 0;
-                foreach ( $fleetmap as $ii=>$gid ) $ships += $defender[$gid];
-                if ( $ships > 0 ) SetFleet ( $defender['id'], $defender );
-                else {
-                    $queue = GetFleetQueue ($defender['id']);
-                    DeleteFleet ($defender['id']);    // delete fleet
-                    RemoveQueue ( $queue['task_id'] );    // delete task
-                }
+            switch ($defender['pf']) {
+
+                case BATTLE_PTCP_PLANET:        // Planet
+                    AdjustResources ( $captured, $defender['id'], '-' );
+                    $objects = array ();
+                    foreach ( $fleetmap as $ii=>$gid ) $objects[$gid] = $defender['units'][$gid];
+                    foreach ( $defmap_norak as $ii=>$gid ) {
+                        $objects[$gid] = $repaired[$i][$gid];
+                        $objects[$gid] += $defender['units'][$gid];
+                    }
+                    SetPlanetFleetDefense ( $defender['id'], $objects );
+                    break;
+
+                case BATTLE_PTCP_FLEET:     // Fleets on hold
+                    $ships = 0;
+                    foreach ( $fleetmap as $ii=>$gid ) $ships += $defender['units'][$gid];
+                    if ( $ships > 0 ) SetFleet ( $defender['id'], $defender['units'] );
+                    else {
+                        $queue = GetFleetQueue ($defender['id']);
+                        DeleteFleet ($defender['id']);    // delete fleet
+                        RemoveQueue ( $queue['task_id'] );    // delete task
+                    }
+                    break;
             }
         }
     }
@@ -322,18 +431,18 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
                 Error ("WritebackBattleResults target null");
             }
             $ships = 0;
-            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['fleet'][$gid];
+            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['units'][$gid];
             if ( $sum_cargo == 0) $cargo = 0;
-            else $cargo = ( FleetCargoSummary ( $attacker['fleet'] ) - ($fleet_obj[GID_RC_METAL]+$fleet_obj[GID_RC_CRYSTAL]+$fleet_obj[GID_RC_DEUTERIUM]) - $fleet_obj['fuel'] ) / $sum_cargo;
+            else $cargo = ( FleetCargoSummary ( $attacker['units'] ) - ($fleet_obj[GID_RC_METAL]+$fleet_obj[GID_RC_CRYSTAL]+$fleet_obj[GID_RC_DEUTERIUM]) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) {
-                if ( $fleet_obj['mission'] == FTYP_DESTROY && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['fleet'], $queue['end'] );
+                if ( $fleet_obj['mission'] == FTYP_DESTROY && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['units'], $queue['end'] );
                 else $result = 0;
                 if ( $result < 2 ) {
                     $resources = array ();
                     foreach ($transportableResources as $i=>$rc) {
                         $resources[$rc] = $fleet_obj[$rc] + $captured[$rc] * $cargo;
                     }
-                    DispatchFleet ($attacker['fleet'], $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'],
+                    DispatchFleet ($attacker['units'], $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'],
                     $resources,
                     $fleet_obj['fuel'] / 2, $queue['end']);
                 }
@@ -353,300 +462,35 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
     }
 }
 
-// Generate the HTML code of a single slot.
-function GenSlot ( int $weap, int $shld, int $armor, string $name, int $g, int $s, int $p, array $unitmap, array $fleet, array|null $defense, bool $show_techs, bool $attack, string $lang ) : string
+function GenBattleSourceData (array $a, array $d, int $rf, int $max_round) : string
 {
     global $UnitParam;
-
-    $text = "<th><br>";
-
-    $text .= "<center>";
-    if ($attack) $text .= loca_lang("BATTLE_ATTACKER", $lang);
-    else $text .= loca_lang("BATTLE_DEFENDER", $lang);
-    $text .= " ".$name." (<a href=# onclick=showGalaxy($g,$s,$p); >[$g:$s:$p]</a>)";
-    if ($show_techs) $text .= "<br>".loca_lang("BATTLE_ATTACK", $lang)." ".($weap * 10)."% ".loca_lang("BATTLE_SHIELD", $lang)." ".($shld * 10)."% ".loca_lang("BATTLE_ARMOR", $lang)." ".($armor * 10)."% ";
-
-    $sum = 0;
-    foreach ( $unitmap as $i=>$gid )
-    {
-            if ( IsDefense($gid) ) $sum += $defense[$gid];
-            else $sum += $fleet[$gid];
-    }
-
-    if ( $sum > 0 )
-    {
-        $text .= "<table border=1>";
-
-        $text .= "<tr><th>".loca_lang("BATTLE_TYPE", $lang)."</th>";
-        foreach ( $unitmap as $i=>$gid )
-        {
-            if ( IsDefense($gid) ) $n = $defense[$gid];
-            else $n = $fleet[$gid];
-            if ( $n > 0 ) $text .= "<th>".loca_lang("SNAME_$gid", $lang)."</th>";
-        }
-        $text .= "</tr>";
-
-        $text .= "<tr><th>".loca_lang("BATTLE_AMOUNT", $lang)."</th>";
-        foreach ( $unitmap as $i=>$gid )
-        {
-            if ( IsDefense($gid) ) $n = $defense[$gid];
-            else $n = $fleet[$gid];
-            if ( $n > 0 ) $text .= "<th>".nicenum($n)."</th>";
-        }
-        $text .= "</tr>";
-
-        $text .= "<tr><th>".loca_lang("BATTLE_WEAP", $lang)."</th>";
-        foreach ( $unitmap as $i=>$gid )
-        {
-            if ( IsDefense($gid) ) $n = $defense[$gid];
-            else $n = $fleet[$gid];
-            if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][2] * (10 + $weap ) / 10 )."</th>";
-        }
-        $text .= "</tr>";
-
-        $text .= "<tr><th>".loca_lang("BATTLE_SHLD", $lang)."</th>";
-        foreach ( $unitmap as $i=>$gid )
-        {
-            if ( IsDefense($gid) ) $n = $defense[$gid];
-            else $n = $fleet[$gid];
-            if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][1] * (10 + $shld ) / 10 )."</th>";
-        }
-        $text .= "</tr>";
-
-        $text .= "<tr><th>".loca_lang("BATTLE_ARMR", $lang)."</th>";
-        foreach ( $unitmap as $i=>$gid )
-        {
-            if ( IsDefense($gid) ) $n = $defense[$gid];
-            else $n = $fleet[$gid];
-            if ( $n > 0 ) $text .= "<th>".nicenum( $UnitParam[$gid][0] * (10 + $armor ) / 100 )."</th>";
-        }
-        $text .= "</tr>";
-
-        $text .= "</table>";
-    }
-    else $text .= "<br>" . loca_lang("BATTLE_DESTROYED", $lang);
-
-    $text .= "</center></th>";
-    return $text;
-}
-
-// Generate a battle report.
-function BattleReport ( array $res, int $now, int $aloss, int $dloss, array $captured, int $moonchance, bool $mooncreated, array $repaired, string $lang ) : string
-{
-    global $fleetmap;
-    global $defmap;
-    global $rakmap;
-    $defmap_norak = array_diff($defmap, $rakmap);
-    $amap = $fleetmap;
-    $dmap = array_merge ($fleetmap, $defmap_norak);
-
-    loca_add ( "battlereport", $lang );
-    loca_add ( "technames", $lang );
-
-    $text = "";
-
-    // Title of the report.
-    // In vanilla 0.84 the header of the battle report was slightly different. For example, in en it says "At" for the attacker and "On" for the defender.
-    // We will not engage in such perversions. We consider all battle reports to be from the attacker.
-    $text .= va(loca_lang("BATTLE_ADATE_INFO", $lang), date ("m-d H:i:s", $now)) . ":<br>";
-
-    // Fleets before the battle.
-    $text .= "<table border=1 width=100%><tr>";
-    foreach ( $res['before']['attackers'] as $i=>$attacker)
-    {
-        $text .= GenSlot ( $attacker['weap'], $attacker['shld'], $attacker['armr'], $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 1, 1, $lang );
-    }
-    $text .= "</tr></table>";
-    $text .= "<table border=1 width=100%><tr>";
-    foreach ( $res['before']['defenders'] as $i=>$defender)
-    {
-        $text .= GenSlot ( $defender['weap'], $defender['shld'], $defender['armr'], $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 1, 0, $lang );
-    }
-    $text .= "</tr></table>";
-
-    // Rounds.
-    foreach ( $res['rounds'] as $i=>$round)
-    {
-        $text .= "<br><center>";
-        $text .= va (loca_lang("BATTLE_ASHOT", $lang), nicenum($round['ashoot']), nicenum($round['apower']), nicenum($round['dabsorb']) );
-        $text .= "<br>";
-        $text .= va (loca_lang("BATTLE_DSHOT", $lang), nicenum($round['dshoot']), nicenum($round['dpower']), nicenum($round['aabsorb']) );
-        $text .= "</center>";
-
-        $text .= "<table border=1 width=100%><tr>";        // Attackers
-        foreach ( $round['attackers'] as $n=>$attacker )
-        {
-            $text .= GenSlot ( 0, 0, 0, $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 0, 1, $lang );
-        }
-        $text .= "</tr></table>";
-
-        $text .= "<table border=1 width=100%><tr>";        // Defenders
-        foreach ( $round['defenders'] as $n=>$defender )
-        {
-            if ( $n == 0 ) $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 0, 0, $lang );
-            else $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $amap, $defender, null, 0, 0, $lang );
-        }
-        $text .= "</tr></table>";
-    }
-
-    // Battle Results.
-    // TODO: Add a loss label that is in the HTML: <!--A:167658,W:167658-->
-    if ( $res['result'] === "awon" )
-    {
-        $text .= "<p> ".loca_lang("BATTLE_AWON", $lang)."<br>" . va(loca_lang("BATTLE_PLUNDER", $lang), nicenum($captured[GID_RC_METAL]), nicenum($captured[GID_RC_CRYSTAL]), nicenum($captured[GID_RC_DEUTERIUM]));
-    }
-    else if ( $res['result'] === "dwon" ) $text .= "<p> " . loca_lang("BATTLE_DWON", $lang);
-    else if ( $res['result'] === "draw" ) $text .= "<p> " . loca_lang("BATTLE_DRAW", $lang);
-    //else Error ("Неизвестный исход битвы!");
-    $text .= "<br><p><br>".va(loca_lang("BATTLE_ALOSS", $lang), nicenum($aloss))."<br>" . va(loca_lang("BATTLE_DLOSS", $lang), nicenum($dloss));
-    $text .= "<br>" . va(loca_lang("BATTLE_DEBRIS", $lang), nicenum($res['dm']), nicenum($res['dk']));
-    if ( $moonchance ) $text .= "<br>" . va(loca_lang("BATTLE_MOONCHANCE", $lang), $moonchance);
-    if ( $mooncreated ) $text .= "<br>" . loca_lang("BATTLE_MOON", $lang);
-
-    // Repairing the Defense.
-    // There is an error in the output of the original battle report: the Small Shield Dome is not output in its turn, but before the Plasma Cannon.
-    // To be as similar as possible to the original report, the RepairMap permutation table is used in the output of the repaired defense.
-    $repairmap = array ( GID_D_RL, GID_D_LL, GID_D_HL, GID_D_GAUSS, GID_D_ION, GID_D_SDOME, GID_D_PLASMA, GID_D_LDOME );
-    $repaired_num = $sum = 0;
-    foreach ($repaired as $gid=>$amount) $repaired_num += $amount;
-    if ( $repaired_num > 0)
-    {
-        $text .= "<br>";
-        foreach ($repairmap as $i=>$gid)
-        {
-            if ($repaired[$gid])
-            {
-                if ( $sum > 0 ) $text .= ", ";
-                $text .= nicenum ($repaired[$gid]) . " " . loca_lang ("NAME_$gid", $lang);
-                $sum += $repaired[$gid];
-            }
-        }
-        if ($sum > 1) {
-            $text .= loca_lang("BATTLE_REPAIRED", $lang);
-        }
-        else {
-            $text .= loca_lang("BATTLE_REPAIRED1", $lang);
-        }
-        $text .= "<br>";
-    }
-
-    return $text;
-}
-
-// Moon attack.
-// Returns the result encoded in 2 bits: bit0 - the moon is destroyed, bit1 - Deathstar exploded with the whole fleet
-function GravitonAttack (array $fleet_obj, array $fleet, int $when) : int
-{
-    $origin = LoadPlanetById ( $fleet_obj['start_planet'] );
-    $target = LoadPlanetById ( $fleet_obj['target_planet'] );
-
-    if ( $fleet[GID_F_DEATHSTAR] == 0 ) return 0;
-    if ( ! ($target['type'] == PTYP_MOON || $target['type'] == PTYP_DEST_MOON) ) Error ( "Уничтожать можно только луны!" );
-
-    $diam = $target['diameter'];
-    $rips = $fleet[GID_F_DEATHSTAR];
-    $moonchance = (100 - sqrt($diam)) * sqrt($rips);
-    if ($moonchance >= 100) $moonchance = 99.9;
-    $ripchance = sqrt ($diam) / 2;
-    $moondes =  mt_rand(1, 999) < $moonchance * 10;
-    $ripdes = mt_rand(1, 999) < $ripchance * 10;
-
-    $origin_user = LoadUser ($origin['owner_id']);
-    $target_user = LoadUser ($target['owner_id']);
-    loca_add ( "graviton", $origin_user['lang'] );
-    loca_add ( "graviton", $target_user['lang'] );
-    loca_add ( "fleetmsg", $origin_user['lang'] );
-    loca_add ( "fleetmsg", $target_user['lang'] );
-
-    if ( !$ripdes && !$moondes )
-    {
-            $atext = va ( loca_lang("GRAVITON_ATK_00", $origin_user['lang']), 
-                                $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
-                                floor ($moonchance), floor ($ripchance)
-                            );
-            $dtext = va ( loca_lang("GRAVITON_DEF_00", $target_user['lang']), 
-                                $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
-                                $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", 
-                                floor ($moonchance), floor ($ripchance)
-                             );
-            $result  = 0;
-    }
-
-    else if ( !$ripdes && $moondes )
-    {
-            $atext = va ( loca_lang("GRAVITON_ATK_01", $origin_user['lang']), 
-                                $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
-                                floor ($moonchance), floor ($ripchance)
-                            );
-            $dtext = va ( loca_lang("GRAVITON_DEF_01", $target_user['lang']), 
-                                $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
-                                floor ($moonchance), floor ($ripchance)
-                             );
-
-            DestroyMoon ( $target['planet_id'], $when, $fleet_obj['fleet_id'] );
-            $result  = 1;
-    }
-
-    else if ( $ripdes && !$moondes )
-    {
-            $atext = va ( loca_lang("GRAVITON_ATK_10", $origin_user['lang']), 
-                                $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
-                                floor ($moonchance), floor ($ripchance)
-                            );
-            $dtext = va ( loca_lang("GRAVITON_DEF_10", $target_user['lang']), 
-                                $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
-                                floor ($moonchance), floor ($ripchance)
-                             );
-            $result  = 2;
-    }
-
-    else if ( $ripdes && $moondes )
-    {
-            $atext = va ( loca_lang("GRAVITON_ATK_11", $origin_user['lang']), 
-                                $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
-                                floor ($moonchance), floor ($ripchance)
-                            );
-            $dtext = va ( loca_lang("GRAVITON_DEF_11", $target_user['lang']), 
-                                $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
-                                floor ($moonchance), floor ($ripchance)
-                             );
-
-            DestroyMoon ( $target['planet_id'], $when, $fleet_obj['fleet_id'] );
-            $result  = 3;
-    }
-
-    // Recalculate stats if a fleet was blown up by a failed graviton attack
-    if ($result >= 2) {
-
-        $price = FleetPrice ( $fleet_obj );
-        AdjustStats ( $fleet_obj['owner_id'], $price['points'], $price['fpoints'], 0, '-' );
-        RecalcRanks ();
-    }
-
-    // Send out messages.
-    SendMessage ( $origin['owner_id'], 
-        loca_lang("FLEET_MESSAGE_FROM", $origin_user['lang']), 
-        loca_lang("GRAVITON_ATK_SUBJ", $origin_user['lang']),
-        $atext, MTYP_MISC, $when);
-    SendMessage ( $target['owner_id'], 
-        loca_lang("FLEET_MESSAGE_FROM", $target_user['lang']),
-        loca_lang("GRAVITON_DEF_SUBJ", $target_user['lang']),
-        $dtext, MTYP_MISC, $when);
-
-    return $result;
-}
-
-function GenBattleSourceData (array $a, array $d, int $rf, int $fid, int $did) : string
-{
-    global $fleetmap;
-    global $defmap;
-    global $rakmap;
-    $defmap_norak = array_diff($defmap, $rakmap);
+    global $RapidFire;
 
     $source = "";
+    $source .= "MaxRound = $max_round\n";
     $source .= "Rapidfire = $rf\n";
-    $source .= "FID = $fid\n";
-    $source .= "DID = $did\n";
+
+    if ($rf) {
+        $source .= "RFTab =";
+        foreach ($RapidFire as $gid=>$targets) {
+            $target_num = count ($targets);
+            $source .= " " . $gid . " " . $target_num;
+            foreach ($targets as $target_id=>$count) {
+                $source .= " " . $target_id . " " . $count;
+            }
+        }
+        $source .= "\n";
+    }
+
+    $source .= "UnitParam =";
+    foreach ($UnitParam as $gid=>$param) {
+        $source .= " " . $gid;
+        foreach ($param as $i=>$val) {
+            $source .= " " . $val;
+        }
+    }
+    $source .= "\n";
 
     $anum = count ($a);
     $dnum = count ($d);
@@ -656,132 +500,92 @@ function GenBattleSourceData (array $a, array $d, int $rf, int $fid, int $did) :
 
     foreach ($a as $num=>$attacker)
     {
-        $source .= "Attacker".$num." = ({".$attacker['oname']."} ";
-        $source .= $attacker['id'] . " ";
-        $source .= $attacker['g'] . " " . $attacker['s'] . " " . $attacker['p'] . " ";
-        $source .= $attacker[GID_R_WEAPON] . " " . $attacker[GID_R_SHIELD] . " " . $attacker[GID_R_ARMOUR] . " ";
-        foreach ($fleetmap as $i=>$gid) $source .= $attacker['fleet'][$gid] . " ";
-        $source .= ")\n";
+        $source .= "Attacker".$num." = ";
+        $source .= $attacker[GID_R_WEAPON] . " " . $attacker[GID_R_SHIELD] . " " . $attacker[GID_R_ARMOUR];
+        foreach ($attacker['units'] as $gid=>$amount) $source .= " " . $gid . " " . $amount;
+        $source .= "\n";
     }
     foreach ($d as $num=>$defender)
     {
-        $source .= "Defender".$num." = ({".$defender['oname']."} ";
-        $source .= $defender['id'] . " ";
-        $source .= $defender['g'] . " " . $defender['s'] . " " . $defender['p'] . " ";
-        $source .= $defender[GID_R_WEAPON] . " " . $defender[GID_R_SHIELD] . " " . $defender[GID_R_ARMOUR] . " ";
-        foreach ($fleetmap as $i=>$gid) $source .= $defender['fleet'][$gid] . " ";
-        foreach ($defmap_norak as $i=>$gid) $source .= $defender['defense'][$gid] . " ";
-        $source .= ")\n";
+        $source .= "Defender".$num." = ";
+        $source .= $defender[GID_R_WEAPON] . " " . $defender[GID_R_SHIELD] . " " . $defender[GID_R_ARMOUR];
+        foreach ($defender['units'] as $gid=>$amount) $source .= " " . $gid . " " . $amount;
+        $source .= "\n";
     }
 
     return $source;
 }
 
-// Start a battle between attacking fleet_id and defending planet_id.
-function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
-{
-    global $db_prefix;
-    global $GlobalUni;
-    global $fleetmap;
-    global $defmap;
-    global $rakmap;
-    global $transportableResources;
-    $defmap_norak = array_diff($defmap, $rakmap);
+// Extend some properties from the initial conditions to the results of the battle outcome.
+function PostProcessBattleResult (array $a, array $d, array &$res) : void {
 
-    $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
-    $d_result = array ( 1=>"combatreport_igotattacked_iwon", 0=>"combatreport_igotattacked_ilost", 2=>"combatreport_igotattacked_draw" );
-
-    global  $db_host, $db_user, $db_pass, $db_name, $db_prefix;
-    $a = array ();
-    $d = array ();
-
-    $unitab = LoadUniverse ();
-    $fid = $unitab['fid'];
-    $did = $unitab['did'];
-    $rf = $unitab['rapid'];
-
-    $f = LoadFleet ( $fleet_id );
-
-    // *** Generate source data
-
-    // List of attackers
-    $anum = 0;
-    if ( $f['union_id'] == 0 )    // Single attack
-    {
-        $a[0] = LoadUser ( $f['owner_id'] );
-        $a[0]['fleet'] = array ();
-        foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = abs($f[$gid]);
-        $start_planet = LoadPlanetById ( $f['start_planet'] );
-        $a[0]['g'] = $start_planet['g'];
-        $a[0]['s'] = $start_planet['s'];
-        $a[0]['p'] = $start_planet['p'];
-        $a[0]['id'] = $fleet_id;
-        $a[0]['points'] = $a[0]['fpoints'] = 0;
-        $anum++;
+    foreach ($res['before']['attackers'] as $i=>$attacker) {
+        $res['before']['attackers'][$i]['name'] = $a[$i]['oname'];
+        $res['before']['attackers'][$i]['g'] = $a[$i]['g'];
+        $res['before']['attackers'][$i]['s'] = $a[$i]['s'];
+        $res['before']['attackers'][$i]['p'] = $a[$i]['p'];
+        $res['before']['attackers'][$i]['id'] = $a[$i]['id'];
+        $res['before']['attackers'][$i]['pf'] = $a[$i]['pf'];
     }
-    else        // Cooperative attack (ACS)
-    {
-        $result = EnumUnionFleets ( $f['union_id'] );
-        $rows = dbrows ($result);
-        while ($rows--)
-        {
-            $fleet_obj = dbarray ($result);
 
-            $a[$anum] = LoadUser ( $fleet_obj['owner_id'] );
-            $a[$anum]['fleet'] = array ();
-            foreach ($fleetmap as $i=>$gid) $a[$anum]['fleet'][$gid] = abs($fleet_obj[$gid]);
-            $start_planet = LoadPlanetById ( $fleet_obj['start_planet'] );
-            $a[$anum]['g'] = $start_planet['g'];
-            $a[$anum]['s'] = $start_planet['s'];
-            $a[$anum]['p'] = $start_planet['p'];
-            $a[$anum]['id'] = $fleet_obj['fleet_id'];
-            $a[$anum]['points'] = $a[$anum]['fpoints'] = 0;
+    foreach ($res['before']['defenders'] as $i=>$defender) {
+        $res['before']['defenders'][$i]['name'] = $d[$i]['oname'];
+        $res['before']['defenders'][$i]['g'] = $d[$i]['g'];
+        $res['before']['defenders'][$i]['s'] = $d[$i]['s'];
+        $res['before']['defenders'][$i]['p'] = $d[$i]['p'];
+        $res['before']['defenders'][$i]['id'] = $d[$i]['id'];
+        $res['before']['defenders'][$i]['pf'] = $d[$i]['pf'];
+    }
 
-            $anum++;
+    foreach ($res['rounds'] as $n=>$round) {
+
+        foreach ($round['attackers'] as $i=>$attacker) {
+            $res['rounds'][$n]['attackers'][$i]['name'] = $a[$i]['oname'];
+            $res['rounds'][$n]['attackers'][$i]['g'] = $a[$i]['g'];
+            $res['rounds'][$n]['attackers'][$i]['s'] = $a[$i]['s'];
+            $res['rounds'][$n]['attackers'][$i]['p'] = $a[$i]['p'];
+            $res['rounds'][$n]['attackers'][$i]['id'] = $a[$i]['id'];
+            $res['rounds'][$n]['attackers'][$i]['pf'] = $a[$i]['pf'];
+        }
+
+        foreach ($round['defenders'] as $i=>$defender) {
+            $res['rounds'][$n]['defenders'][$i]['name'] = $d[$i]['oname'];
+            $res['rounds'][$n]['defenders'][$i]['g'] = $d[$i]['g'];
+            $res['rounds'][$n]['defenders'][$i]['s'] = $d[$i]['s'];
+            $res['rounds'][$n]['defenders'][$i]['p'] = $d[$i]['p'];
+            $res['rounds'][$n]['defenders'][$i]['id'] = $d[$i]['id'];
+            $res['rounds'][$n]['defenders'][$i]['pf'] = $d[$i]['pf'];
         }
     }
+}
 
-    // List of defenders
-    $dnum = 0;
-    $p = LoadPlanetById ( $planet_id );
-    $d[0] = LoadUser ( $p['owner_id'] );
-    $d[0]['fleet'] = array ();
-    $d[0]['defense'] = array ();
-    foreach ($fleetmap as $i=>$gid) $d[0]['fleet'][$gid] = abs($p[$gid]);
-    foreach ($defmap_norak as $i=>$gid) $d[0]['defense'][$gid] = abs($p[$gid]);
-    $d[0]['g'] = $p['g'];
-    $d[0]['s'] = $p['s'];
-    $d[0]['p'] = $p['p'];
-    $d[0]['id'] = $planet_id;
-    $d[0]['points'] = $d[0]['fpoints'] = 0;
-    $dnum++;
-
-    // Fleets on hold (ACS)
-    $result = GetHoldingFleets ($planet_id);
-    $rows = dbrows ($result);
-    while ($rows--)
-    {
-        $fleet_obj = dbarray ($result);
-
-        $d[$dnum] = LoadUser ( $fleet_obj['owner_id'] );
-        $d[$dnum]['fleet'] = array ();
-        $d[$dnum]['defense'] = array ();
-        foreach ($fleetmap as $i=>$gid) $d[$dnum]['fleet'][$gid] = abs($fleet_obj[$gid]);
-        foreach ($defmap_norak as $i=>$gid) $d[$dnum]['defense'][$gid] = 0;
-        $start_planet = LoadPlanetById ( $fleet_obj['start_planet'] );
-        $d[$dnum]['g'] = $start_planet['g'];
-        $d[$dnum]['s'] = $start_planet['s'];
-        $d[$dnum]['p'] = $start_planet['p'];
-        $d[$dnum]['id'] = $fleet_obj['fleet_id'];
-        $d[$dnum]['points'] = $d[$dnum]['fpoints'] = 0;
-
-        $dnum++;
-    }
-
-    $source = GenBattleSourceData ($a, $d, $rf, $fid, $did);
-
-    $battle = array ( 'source' => $source, 'title' => "", 'report' => "", 'date' => $when );
-    $battle_id = AddDBRow ( $battle, "battledata" );
+/**
+ * @brief Executes a battle between two forces and processes the results.
+ *
+ * This function manages the battle execution pipeline. It first writes battle data to a file,
+ * then transfers control to a battle engine (either a PHP function or an external executable backend),
+ * and finally reads and post-processes the battle results.
+ *
+ * @param array $unitab Configuration array containing battle engine settings.
+ *                      Expected keys:
+ *                      - 'php_battle': bool - If true, use internal PHP battle engine.
+ *                      - 'battle_engine': string - Path to external battle engine executable.
+ * @param int $battle_id Unique identifier for the battle. Used for naming battle data and result files.
+ * @param string $source Serialized battle data to be passed to the battle engine.
+ * @param array $a Array containing data for the attacking force.
+ * @param array $d Array containing data for the defending force.
+ *
+ * @return array The processed battle results as an associative array.
+ *
+ * @throws Error If the external battle engine returns a negative exit code.
+ *
+ * @note The battle data is serialized and stored in `battledata/battle_<id>.txt`.
+ * @note The battle results are serialized and stored in `battleresult/battle_<id>.txt`.
+ * @note The function assumes the existence of `PostProcessBattleResult()` for final result processing.
+ *
+ * @warning File paths are constructed relative to the current working directory.
+ */
+function ExecuteBattle (array $unitab, int $battle_id, string $source, array $a, array $d) : array {
 
     $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
     fwrite ( $bf, $source );
@@ -800,10 +604,10 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     }
     else {
 
-        $arg = "\"battle_id=$battle_id\"";
+        $arg = "$battle_id 0";
         system ( $unitab['battle_engine'] . " $arg", $retval );
         if ($retval < 0) {
-            Error (va("Ошибка в работе боевого движка: #1 #2", $retval, $battle_id));
+            Error (va("An error occurred in the battle engine: #1 #2", $retval, $battle_id));
         }
     }
 
@@ -811,27 +615,148 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
 
     $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
     $res = unserialize($battleres);
+    PostProcessBattleResult ($a, $d, $res);
+
+    return $res;
+}
+
+// Start a battle between attacking fleet_id and defending planet_id.
+function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
+{
+    global $db_prefix;
+    global $GlobalUni;
+    global $fleetmap;
+    global $defmap;
+    global $rakmap;
+    global $transportableResources;
+    $defmap_norak = array_diff($defmap, $rakmap);
+
+    $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
+    $d_result = array ( 1=>"combatreport_igotattacked_iwon", 0=>"combatreport_igotattacked_ilost", 2=>"combatreport_igotattacked_draw" );
+
+    $a = array ();
+    $d = array ();
+
+    $unitab = LoadUniverse ();
+    $fid = $unitab['fid'];
+    $did = $unitab['did'];
+    $rf = $unitab['rapid'];
+
+    $f = LoadFleet ( $fleet_id );
+
+    // *** Generate source data
+
+    // List of attackers
+    $anum = 0;
+    if ( $f['union_id'] == 0 )    // Single attack
+    {
+        $a[0] = LoadUser ( $f['owner_id'] );
+        $a[0]['units'] = array ();
+        foreach ($fleetmap as $i=>$gid) $a[0]['units'][$gid] = abs($f[$gid]);
+        $start_planet = LoadPlanetById ( $f['start_planet'] );
+        $a[0]['g'] = $start_planet['g'];
+        $a[0]['s'] = $start_planet['s'];
+        $a[0]['p'] = $start_planet['p'];
+        $a[0]['id'] = $fleet_id;
+        $a[0]['pf'] = BATTLE_PTCP_FLEET;    // fleet
+        $a[0]['points'] = $a[0]['fpoints'] = 0;
+        $anum++;
+    }
+    else        // Cooperative attack (ACS)
+    {
+        $result = EnumUnionFleets ( $f['union_id'] );
+        $rows = dbrows ($result);
+        while ($rows--)
+        {
+            $fleet_obj = dbarray ($result);
+
+            $a[$anum] = LoadUser ( $fleet_obj['owner_id'] );
+            $a[$anum]['units'] = array ();
+            foreach ($fleetmap as $i=>$gid) $a[$anum]['units'][$gid] = abs($fleet_obj[$gid]);
+            $start_planet = LoadPlanetById ( $fleet_obj['start_planet'] );
+            $a[$anum]['g'] = $start_planet['g'];
+            $a[$anum]['s'] = $start_planet['s'];
+            $a[$anum]['p'] = $start_planet['p'];
+            $a[$anum]['id'] = $fleet_obj['fleet_id'];
+            $a[$anum]['pf'] = BATTLE_PTCP_FLEET;    // fleet  
+            $a[$anum]['points'] = $a[$anum]['fpoints'] = 0;
+
+            $anum++;
+        }
+    }
+
+    // List of defenders
+    $dnum = 0;
+    $p = LoadPlanetById ( $planet_id );
+    $d[0] = LoadUser ( $p['owner_id'] );
+    $d[0]['units'] = array ();
+    foreach ($fleetmap as $i=>$gid) {
+        if (isset($p[$gid])) {
+            $d[0]['units'][$gid] = abs($p[$gid]);
+        }
+    }
+    foreach ($defmap_norak as $i=>$gid) {
+        if (isset($p[$gid])) {
+            $d[0]['units'][$gid] = abs($p[$gid]);
+        }
+    }
+    $d[0]['g'] = $p['g'];
+    $d[0]['s'] = $p['s'];
+    $d[0]['p'] = $p['p'];
+    $d[0]['id'] = $planet_id;
+    $d[0]['pf'] = BATTLE_PTCP_PLANET;    // planet
+    $d[0]['points'] = $d[0]['fpoints'] = 0;
+    $dnum++;
+
+    // Fleets on hold (ACS)
+    $result = GetHoldingFleets ($planet_id);
+    $rows = dbrows ($result);
+    while ($rows--)
+    {
+        $fleet_obj = dbarray ($result);
+
+        $d[$dnum] = LoadUser ( $fleet_obj['owner_id'] );
+        $d[$dnum]['units'] = array ();
+        foreach ($fleetmap as $i=>$gid) $d[$dnum]['units'][$gid] = abs($fleet_obj[$gid]);
+        $start_planet = LoadPlanetById ( $fleet_obj['start_planet'] );
+        $d[$dnum]['g'] = $start_planet['g'];
+        $d[$dnum]['s'] = $start_planet['s'];
+        $d[$dnum]['p'] = $start_planet['p'];
+        $d[$dnum]['id'] = $fleet_obj['fleet_id'];
+        $d[$dnum]['pf'] = BATTLE_PTCP_FLEET;    // fleet  
+        $d[$dnum]['points'] = $d[$dnum]['fpoints'] = 0;
+
+        $dnum++;
+    }
+
+    $source = GenBattleSourceData ($a, $d, $rf, BATTLE_MAX_ROUND);
+
+    $battle = array ( 'source' => $source, 'title' => "", 'report' => "", 'date' => $when );
+    $battle_id = AddDBRow ( $battle, "battledata" );
+
+    $res = ExecuteBattle ($unitab, $battle_id, $source, $a, $d);
 
     // Determine the outcome of the battle.
-    if ( $res['result'] === "awon" ) $battle_result = 0;
-    else if ( $res['result'] === "dwon" ) $battle_result = 1;
-    else $battle_result = 2;
+    if ( $res['result'] === "awon" ) $battle_result = BATTLE_RESULT_AWON;
+    else if ( $res['result'] === "dwon" ) $battle_result = BATTLE_RESULT_DWON;
+    else $battle_result = BATTLE_RESULT_DRAW;
 
     // Restore the defense
     $repaired = RepairDefense ( $d, $res, $unitab['defrepair'], $unitab['defrepair_delta'] );
 
     // Calculate total losses (account for deuterium and repaired defenses)
-    $aloss = $dloss = 0;
     $loss = CalcLosses ( $a, $d, $res, $repaired );
-    $a = $loss['a'];
-    $d = $loss['d'];
     $aloss = $loss['aloss'];
     $dloss = $loss['dloss'];
+
+    // Calc debris drop
+    CalcDebris ( $a, $d, $res, $repaired, $fid, $did );
+    $debris = GetDebrisTotal ($a, $d);
 
     // Capture resources
     $captured = array ();
     $sum_cargo = 0;
-    if ( $battle_result == 0 )
+    if ( $battle_result == BATTLE_RESULT_AWON )
     {
         $sum_cargo = CargoSummaryLastRound ( $a, $res );
         $captured = Plunder ( $sum_cargo, $p[GID_RC_METAL], $p[GID_RC_CRYSTAL], $p[GID_RC_DEUTERIUM] );
@@ -844,11 +769,11 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
 
     // Create a debris field.
     $debris_id = CreateDebris ( $p['g'], $p['s'], $p['p'], $p['owner_id'] );
-    AddDebris ( $debris_id, $res['dm'], $res['dk'] );
+    AddDebris ( $debris_id, $debris[GID_RC_METAL], $debris[GID_RC_CRYSTAL] );
 
     // Create the moon
     $mooncreated = false;
-    $moonchance = min ( floor ( ($res['dm'] + $res['dk']) / 100000), 20 );
+    $moonchance = min ( floor ( ($debris[GID_RC_METAL] + $debris[GID_RC_CRYSTAL]) / 100000), 20 );
     if ( PlanetHasMoon ( $planet_id ) || $p['type'] == PTYP_MOON || $p['type'] == PTYP_DEST_MOON ) $moonchance = 0;
     if ( mt_rand (1, 100) <= $moonchance ) {
         CreatePlanet ( $p['g'], $p['s'], $p['p'], $p['owner_id'], 0, 1, $moonchance );
@@ -863,7 +788,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     $battle_text = array();
 
     // Generate a battle report in the universe language (for log history)
-    $text = BattleReport ( $res, $when, $aloss, $dloss, $captured, $moonchance, $mooncreated, $repaired, $GlobalUni['lang'] );
+    $text = BattleReport ( $res, $when, $loss, $captured, $moonchance, $mooncreated, $repaired, $debris, $GlobalUni['lang'] );
     $battle_text[$GlobalUni['lang']] = $text;
 
     // Send out messages, mailbox is used to avoid sending multiple messages to ACS players.
@@ -874,7 +799,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
         // Generate a battle report in the user's language if it is not in the cache
         if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
         else {
-            $text = BattleReport ( $res, $when, $aloss, $dloss, $captured, $moonchance, $mooncreated, $repaired, $user['lang'] );
+            $text = BattleReport ( $res, $when, $loss, $captured, $moonchance, $mooncreated, $repaired, $debris, $user['lang'] );
             $battle_text[$user['lang']] = $text;
         }
 
@@ -903,12 +828,12 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
         // Generate a battle report in the user's language if it is not in the cache
         if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
         else {
-            $text = BattleReport ( $res, $when, $aloss, $dloss, $captured, $moonchance, $mooncreated, $repaired, $user['lang'] );
+            $text = BattleReport ( $res, $when, $loss, $captured, $moonchance, $mooncreated, $repaired, $debris, $user['lang'] );
             $battle_text[$user['lang']] = $text;
         }
 
         // If fleet is destroyed in 1 or 2 rounds - do not show battle log for attackers.
-        if ( count($res['rounds']) <= 2 && $battle_result == 1 ) $text = loca_lang("BATTLE_LOST", $user['lang']) . " <!--A:$aloss,W:$dloss-->";
+        if ( count($res['rounds']) <= 2 && $battle_result == BATTLE_RESULT_DWON ) $text = loca_lang("BATTLE_LOST", $user['lang']) . " <!--A:$aloss,W:$dloss-->";
 
         loca_add ( "fleetmsg", $user['lang'] );
 
@@ -933,354 +858,6 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
     // Change player statistics
     foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
     foreach ( $d as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
-    RecalcRanks ();
-
-    // Cleaning up the battle engine's intermediate data
-    unlink ( "battledata/battle_".$battle_id.".txt" );
-    unlink ( "battleresult/battle_".$battle_id.".txt" );
-
-    return $battle_result;
-}
-
-// -----------------------------------------------------------------------------------------------------------------------------------------------------------
-
-// Modify the fleet (after a battle with aliens/pirates)
-function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : void
-{
-    global $fleetmap;
-
-    // Combat with rounds.
-
-    $rounds = count ( $res['rounds'] );
-    if ( $rounds > 0 ) 
-    {
-        $last = $res['rounds'][$rounds - 1];        
-
-        foreach ( $last['attackers'] as $i=>$attacker )        // Attackers
-        {
-            $fleet_obj = LoadFleet ( $attacker['id'] );
-            $queue = GetFleetQueue ($fleet_obj['fleet_id']);
-            $origin = LoadPlanetById ( $fleet_obj['start_planet'] );
-            $target = LoadPlanetById ( $fleet_obj['target_planet'] );
-            $ships = 0;
-            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker[$gid];
-
-            // Return the fleet, if there's anything left.
-            // The hold time is used as the flight time.
-            if ($ships > 0) DispatchFleet ($attacker, $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'],
-                $fleet_obj,
-                $fleet_obj['fuel'] / 2, $queue['end']);
-        }
-
-    }
-
-    // Combat with no rounds.
-
-    else 
-    {
-        foreach ( $a as $i=>$attacker )            // Attackers
-        {
-            $fleet_obj = LoadFleet ( $attacker['id'] );
-            $queue = GetFleetQueue ($fleet_obj['fleet_id']);
-            $origin = LoadPlanetById ( $fleet_obj['start_planet'] );
-            $target = LoadPlanetById ( $fleet_obj['target_planet'] );
-            $ships = 0;
-            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['fleet'][$gid];
-
-            // Return the fleet, if there's anything left.
-            // The hold time is used as the flight time.
-            if ($ships > 0)  DispatchFleet ($attacker['fleet'], $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'],
-                $fleet_obj,
-                $fleet_obj['fuel'] / 2, $queue['end']);
-        }
-
-    }
-}
-
-// Generate short battle report.
-function ShortBattleReport ( array $res, int $now, string $lang ) : string
-{
-    global $fleetmap;
-    global $defmap;
-    global $rakmap;
-    $defmap_norak = array_diff($defmap, $rakmap);
-    $amap = $fleetmap;
-    $dmap = array_merge($fleetmap, $defmap_norak);
-
-    loca_add ( "battlereport", $lang );
-    loca_add ( "technames", $lang );
-
-    $text = "";
-
-    // Title of the report.
-    // In vanilla 0.84 the header of the battle report was slightly different. For example, in en it says "At" for the attacker and "On" for the defender.
-    // We will not engage in such perversions. We consider all battle reports to be from the attacker.  
-    $text .= va(loca_lang("BATTLE_ADATE_INFO", $lang), date ("m-d H:i:s", $now)) . ":<br>";
-
-    // Fleets before the battle.
-    $text .= "<table border=1 width=100%><tr>";
-    foreach ( $res['before']['attackers'] as $i=>$attacker)
-    {
-        $text .= GenSlot ( $attacker['weap'], $attacker['shld'], $attacker['armr'], $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 1, 1, $lang );
-    }
-    $text .= "</tr></table>";
-    $text .= "<table border=1 width=100%><tr>";
-    foreach ( $res['before']['defenders'] as $i=>$defender)
-    {
-        $user = array ();
-        $user['fleet'] = array ();
-        $user['defense'] = array ();
-        foreach ($fleetmap as $g=>$gid) $user['fleet'][$gid] = $defender[$gid];
-        foreach ($defmap as $g=>$gid) $user['defense'][$gid] = 0;
-        $text .= GenSlot ( $defender['weap'], $defender['shld'], $defender['armr'], $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 1, 0, $lang );
-    }
-    $text .= "</tr></table>";
-
-    // Раунды.
-    foreach ( $res['rounds'] as $i=>$round)
-    {
-        $text .= "<br><center>";
-        $text .= va (loca_lang("BATTLE_ASHOT", $lang), nicenum($round['ashoot']), nicenum($round['apower']), nicenum($round['dabsorb']) );
-        $text .= "<br>";
-        $text .= va (loca_lang("BATTLE_DSHOT", $lang), nicenum($round['dshoot']), nicenum($round['dpower']), nicenum($round['aabsorb']) );
-        $text .= "</center>";
-
-        $text .= "<table border=1 width=100%><tr>";        // Attackers
-        foreach ( $round['attackers'] as $n=>$attacker )
-        {
-            $text .= GenSlot ( 0, 0, 0, $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker, null, 0, 1, $lang );
-        }
-        $text .= "</tr></table>";
-
-        $text .= "<table border=1 width=100%><tr>";        // Defenders
-        foreach ( $round['defenders'] as $n=>$defender )
-        {
-            $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender, $defender, 0, 0, $lang );
-        }
-        $text .= "</tr></table>";
-    }
-
-    // Battle Results.
-    // TODO: Add a loss label that is in the HTML: <!--A:167658,W:167658-->
-    if ( $res['result'] === "awon" ) $text .= "<p> " . loca_lang("BATTLE_AWON", $lang);
-    else if ( $res['result'] === "dwon" ) $text .= "<p> " . loca_lang("BATTLE_DWON", $lang);
-    else if ( $res['result'] === "draw" ) $text .= "<p> " . loca_lang("BATTLE_DRAW", $lang);
-
-    return $text;
-}
-
-// Battle with Aliens/Pirates.
-// The composition of the Alien/Pirate fleet is determined by the level parameter ( 0: weak, 1: medium, 2: strong )
-function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when ) : int
-{
-    global $db_prefix;
-    global $GlobalUni;
-    global $fleetmap;
-    global $defmap;
-    global $rakmap;
-    $defmap_norak = array_diff($defmap, $rakmap);
-
-    $a_result = array ( 0=>"combatreport_ididattack_iwon", 1=>"combatreport_ididattack_ilost", 2=>"combatreport_ididattack_draw" );
-
-    global  $db_host, $db_user, $db_pass, $db_name, $db_prefix;
-    $a = array ();
-    $d = array ();
-
-    $unitab = LoadUniverse ();
-    $fid = $unitab['fid'];
-    $did = $unitab['did'];
-    $rf = $unitab['rapid'];
-
-    // *** Union attacks should not enter the battle. Ignore them.
-    $f = LoadFleet ( $fleet_id );
-
-    // *** Generate source data
-
-    // List of attackers
-    $anum = 0;
-    $a[0] = LoadUser ( $f['owner_id'] );
-    $a[0]['fleet'] = array ();
-    foreach ($fleetmap as $i=>$gid) $a[0]['fleet'][$gid] = abs($f[$gid]);
-    $start_planet = LoadPlanetById ( $f['start_planet'] );
-    $a[0]['g'] = $start_planet['g'];
-    $a[0]['s'] = $start_planet['s'];
-    $a[0]['p'] = $start_planet['p'];
-    $a[0]['id'] = $fleet_id;
-    $a[0]['points'] = $a[0]['fpoints'] = 0;
-    $anum++;
-
-    // List of defenders
-    $dnum = 0;
-    $d[0] = LoadUser ( USER_SPACE );
-    if ( $pirates ) {
-        $d[0]['oname'] = "Piraten";
-        $d[0][GID_R_WEAPON] = max (0, $a[0][GID_R_WEAPON] - 3);
-        $d[0][GID_R_SHIELD] = max (0, $a[0][GID_R_SHIELD] - 3);
-        $d[0][GID_R_ARMOUR] = max (0, $a[0][GID_R_ARMOUR] - 3);
-    }
-    else {
-        $d[0]['oname'] = "Aliens";
-        $d[0][GID_R_WEAPON] = $a[0][GID_R_WEAPON] + 3;
-        $d[0][GID_R_SHIELD] = $a[0][GID_R_SHIELD] + 3;
-        $d[0][GID_R_ARMOUR] = $a[0][GID_R_ARMOUR] + 3;
-    }
-    $d[0]['fleet'] = array ();
-    $d[0]['defense'] = array ();
-    foreach ($fleetmap as $i=>$gid) {        // Determine the composition of the pirate / alien fleet
-
-        if ( $pirates ) {
-            // Pirate Fleet, rounding down the fleet composition.
-            // Normal - 30% +/- 3% of the number of ships in your fleet + 5 LFs
-            // Strong - 50% +/- 5% of the number of ships in your fleet + 3 Cruisers
-            // Very Strong - 80% +/- 8% of the number of ships in your fleet + 2 Battleships
-
-            if ( $a[0]['fleet'][$gid] > 0 )
-            {
-                if ( $level == 0 ) $ratio = mt_rand ( 27, 33 ) / 100;
-                else if ( $level == 1 ) $ratio = mt_rand ( 45, 55 ) / 100;
-                else if ( $level == 2 ) $ratio = mt_rand ( 72, 88 ) / 100;
-                $d[0]['fleet'][$gid] = floor ($a[0]['fleet'][$gid] * $ratio);
-            }
-            else $d[0]['fleet'][$gid] = 0;
-        }
-        else {
-            // Alien fleet, rounding fleet composition up.
-            // Normal - 40% +/- 4% of the number of ships in your fleet + 5 Heavy Fighters
-            // Strong - 60% +/- 6% of the number of ships in your fleet + 3 Battlecruisers
-            // Very Strong - 90% +/- 9% of the number of ships in your fleet + 2 Destros
-
-            if ( $a[0]['fleet'][$gid] > 0 )
-            {
-                if ( $level == 0 ) $ratio = mt_rand ( 36, 44 ) / 100;
-                else if ( $level == 1 ) $ratio = mt_rand ( 54, 66 ) / 100;
-                else if ( $level == 2 ) $ratio = mt_rand ( 81, 99 ) / 100;
-                $d[0]['fleet'][$gid] = ceil ($a[0]['fleet'][$gid] * $ratio);
-            }
-            else $d[0]['fleet'][$gid] = 0;
-        }
-
-    }
-
-    if ( $pirates ) {
-        if ( $level == 0 ) $d[0]['fleet'][GID_F_LF] += 5;
-        else if ( $level == 1 ) $d[0]['fleet'][GID_F_CRUISER] += 3;
-        else if ( $level == 2 ) $d[0]['fleet'][GID_F_BATTLESHIP] += 2;
-    }
-    else {
-        if ( $level == 0 ) $d[0]['fleet'][GID_F_HF] += 5;
-        else if ( $level == 1 ) $d[0]['fleet'][GID_F_BATTLECRUISER] += 3;
-        else if ( $level == 2 ) $d[0]['fleet'][GID_F_DESTRO] += 2;
-    }
-
-    foreach ($defmap_norak as $i=>$gid) $d[0]['defense'][$gid] = 0;
-    $target_planet = LoadPlanetById ( $f['target_planet'] );
-    $d[0]['g'] = $target_planet['g'];
-    $d[0]['s'] = $target_planet['s'];
-    $d[0]['p'] = $target_planet['p'];
-    $d[0]['id'] = $target_planet['planet_id'];
-    $d[0]['points'] = $d[0]['fpoints'] = 0;
-    $dnum++;
-
-    $source = GenBattleSourceData ($a, $d, $rf, $fid, $did);
-
-    $battle = array ( 'source' => $source, 'title' => "", 'report' => "", 'date' => $when );
-    $battle_id = AddDBRow ( $battle, "battledata" );
-
-    $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
-    fwrite ( $bf, $source );
-    fclose ( $bf );
-
-    // *** Transfer data to the battle engine
-
-    if ($unitab['php_battle']) {
-
-        $battle_source = file_get_contents ( "battledata/battle_".$battle_id.".txt" );
-        $res = BattleEngine ($battle_source);
-
-        $bf = fopen ( "battleresult/battle_".$battle_id.".txt", "w" );
-        fwrite ( $bf, serialize($res) );
-        fclose ( $bf );
-    }
-    else {
-
-        $arg = "\"battle_id=$battle_id\"";
-        system ( $unitab['battle_engine'] . " $arg", $retval );
-        if ($retval < 0) {
-            Error (va("Ошибка в работе боевого движка: #1 #2", $retval, $battle_id));
-        }
-    }
-
-    // *** Process output data
-
-    $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
-    $res = unserialize($battleres);
-
-    // Determine the outcome of the battle.
-    if ( $res['result'] === "awon" ) $battle_result = 0;
-    else if ( $res['result'] === "dwon" ) $battle_result = 1;
-    else $battle_result = 2;
-
-    // Calculate total losses (account for deuterium and repaired defenses)
-    $aloss = $dloss = 0;
-    $repaired = array ( GID_D_RL=>0, GID_D_LL=>0, GID_D_HL=>0, GID_D_GAUSS=>0, GID_D_ION=>0, GID_D_PLASMA=>0, GID_D_SDOME=>0, GID_D_LDOME=>0 );
-    $loss = CalcLosses ( $a, $d, $res, $repaired );
-    $a = $loss['a'];
-    $d = $loss['d'];
-    $aloss = $loss['aloss'];
-    $dloss = $loss['dloss'];
-
-    // This array contains a cache of generated battle reports for each language.
-    $battle_text = array();
-
-    // Generate a battle report in the universe language (for log history)
-    $text = ShortBattleReport ( $res, $when, $GlobalUni['lang'] );
-    $battle_text[$GlobalUni['lang']] = $text;
-
-    // Send out messages
-    $mailbox = array ();
-
-    foreach ( $a as $i=>$user )        // Attackers
-    {
-        // Generate a battle report in the user's language if it is not in the cache
-        if (key_exists($user['lang'], $battle_text)) $text = $battle_text[$user['lang']];
-        else {
-            $text = ShortBattleReport ( $res, $when, $user['lang'] );
-            $battle_text[$user['lang']] = $text;
-        }
-
-        // If fleet is destroyed in 1 or 2 rounds - do not show battle log for attackers.
-        if ( count($res['rounds']) <= 2 && $battle_result == 1 ) $text = loca_lang("BATTLE_LOST", $user['lang']) . " <!--A:$aloss,W:$dloss-->";
-
-        loca_add ( "fleetmsg", $user['lang'] );
-
-        if ( key_exists($user['player_id'], $mailbox) ) continue;
-        $bericht = SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']), $text, MTYP_BATTLE_REPORT_TEXT, $when );
-        MarkMessage ( $user['player_id'], $bericht );
-        $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
-            loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']) . 
-            " [".$target_planet['g'].":".$target_planet['s'].":".$target_planet['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-        SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", MTYP_BATTLE_REPORT_LINK, $when );
-        $mailbox[ $user['player_id'] ] = true;
-    }
-
-    // Update the battle report log
-    loca_add ( "fleetmsg", $GlobalUni['lang'] );
-    $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=admin&session={PUBLIC_SESSION}&mode=BattleReport&bericht=$battle_id\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
-        loca_lang("FLEET_MESSAGE_BATTLE", $GlobalUni['lang']) . 
-        " [".$target_planet['g'].":".$target_planet['s'].":".$target_planet['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-    $query = "UPDATE ".$db_prefix."battledata SET title = '".$subj."', report = '".$text."' WHERE battle_id = $battle_id;";
-    dbquery ( $query );
-
-    // Clean up old battle reports
-    $ago = $when - 2 * 7 * 24 * 60 * 60;
-    $query = "DELETE FROM ".$db_prefix."battledata WHERE date < $ago;";
-    dbquery ($query);
-
-    // Modify the fleet
-    WritebackBattleResultsExpedition ( $a, $d, $res );
-
-    // Modify player statistics
-    foreach ( $a as $i=>$user ) AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
     RecalcRanks ();
 
     // Cleaning up the battle engine's intermediate data

@@ -37,6 +37,8 @@ if ( method() !== "POST" ) MyGoto ( "flotten1" );
 <?php
     }
 
+    //print_r ($_POST);
+
     if ( key_exists ( 'target_galaxy', $_POST ) ) $target_galaxy = intval ($_POST['target_galaxy']);
     else $target_galaxy = $aktplanet['g'];
 
@@ -46,11 +48,12 @@ if ( method() !== "POST" ) MyGoto ( "flotten1" );
     if ( key_exists ( 'target_planet', $_POST ) ) $target_planet = intval ($_POST['target_planet']);
     else $target_planet = $aktplanet['p'];
 
-    function planettype (int $n) : void
+    function planettype (int $n) : string
     {
         if ( key_exists ( 'target_planettype', $_POST ) ) {
-            if ( intval ($_POST['target_planettype']) == $n ) echo "selected";
+            if ( intval ($_POST['target_planettype']) == $n ) return "selected";
         }
+        return "";
     }
 ?>
 <input name="thisgalaxy" type="hidden" value="<?php echo $aktplanet['g'];?>" />
@@ -91,6 +94,11 @@ if ( method() !== "POST" ) MyGoto ( "flotten1" );
     // The fleet is not selected.
     if ( $total == 0 ) MyGoto ( "flotten1" );
 
+    // Standard planet types for the drop-down list
+    $planet_types = [ 1, 2, 3 ];
+
+    // Expand with modifications
+    ModsExecRef ('page_flotten2_planet_types', $planet_types);
 ?>
 
 
@@ -105,10 +113,11 @@ if ( method() !== "POST" ) MyGoto ( "flotten1" );
    <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?php echo $target_system;?>" />
    <input name="planet" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="<?php echo $target_planet;?>" />
    <select name="planettype" onChange="shortInfo()" onKeyUp="shortInfo()">
-     <option value="1" <?php planettype(1);?>><?php echo loca("FLEET_PLANETTYPE_1");?> </option>
-  <option value="2" <?php planettype(2);?>><?php echo loca("FLEET_PLANETTYPE_2");?> </option>
-  <option value="3" <?php planettype(3);?>><?php echo loca("FLEET_PLANETTYPE_3");?> </option>
-   </select>
+   <?php
+    foreach ($planet_types as $i=>$ptyp) {
+        echo "  <option value=\"".$ptyp."\" ".planettype($ptyp).">".loca("FLEET_PLANETTYPE_".$ptyp)." </option>\n";        
+    }
+?>   </select>
  </tr>
  <tr height="20">
   <th><?=loca("FLEET2_SPEED");?></th>

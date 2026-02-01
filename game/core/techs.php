@@ -77,6 +77,8 @@ const GID_RC_DEUTERIUM = 702;   // Deuterium
 const GID_RC_ENERGY = 703;      // Energy
 const GID_RC_DM = 704;          // Dark Matter
 
+const GID_MAX = 0xffff;         // Game object ID value must not be > this value (restriction) 
+
 function IsBuilding (int $gid) : bool
 {
     global $buildmap;
@@ -127,6 +129,8 @@ $resourcemap = array ( GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM, GID_RC_EN
 $scoreResources = array(GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
 // Transported resources (usually energy and DM are not transported)
 $transportableResources = array(GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
+// Resources that convert into debris fields
+$debrisResources = array (GID_RC_METAL, GID_RC_CRYSTAL);
 $prodPriority = array (GID_RC_ENERGY, GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
 
 // Level 1 cost.

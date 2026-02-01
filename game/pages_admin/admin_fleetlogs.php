@@ -8,12 +8,13 @@ function Admin_Fleetlogs () : void
     global $db_prefix;
     global $GlobalUser;
     global $fleetmap;
+    global $transportableResources;
 
     $big_fleet_points = 100000000;      // If a fleet is larger than the specified number of points, it is highlighted in a special way ("large").
 
     $now = time ();
 
-    // Обработка POST-запросов.
+    // Processing POST requests.
     $player_id = 0;
     if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
     {
@@ -49,7 +50,7 @@ function Admin_Fleetlogs () : void
         }
     }
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE type='Fleet' ORDER BY end ASC";
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type='".QTYP_FLEET."' ORDER BY end ASC";
     $result = dbquery ($query);
     $anz = $rows = dbrows ($result);
     $bxx = 1;
@@ -64,13 +65,23 @@ function Admin_Fleetlogs () : void
         $queue = dbarray ( $result );
         $fleet_obj = LoadFleet ( $queue['sub_id'] );
 
-        $fleet_price = FleetPrice ( $fleet_obj );
-        $points = $fleet_price['points'];
-        $fpoints = $fleet_price['fpoints'];
+        $points = $fpoints = 0;
+        if ($fleet_obj) {
+            $fleet_price = FleetPrice ( $fleet_obj );
+            $points = $fleet_price['points'];
+            $fpoints = $fleet_price['fpoints'];
+        }
         $style = "";
         if ( $points >= $big_fleet_points ) {
-            if ( $fleet_obj['mission'] <= 2 ) $style = " style=\"background-color: FireBrick;\" ";
-            else $style = " style=\"background-color: DarkGreen;\" ";
+            switch ($fleet_obj['mission']) {
+                case FTYP_ATTACK:
+                case FTYP_ACS_ATTACK:
+                    $style = " style=\"background-color: FireBrick;\" ";
+                    break;
+                default:
+                    $style = " style=\"background-color: DarkGreen;\" ";
+                    break;
+            }
         }
 
 ?>
@@ -124,11 +135,16 @@ function Admin_Fleetlogs () : void
         </th>
         <th <?=$style;?> >
 <?php
-    $total = $fleet_obj[GID_RC_METAL] + $fleet_obj[GID_RC_CRYSTAL] + $fleet_obj[GID_RC_DEUTERIUM];
+    $total = 0;
+    foreach ($transportableResources as $i=>$rc) {
+        $total += $fleet_obj[$rc];
+    }
     if ( $total > 0 ) {
-        echo loca("NAME_".GID_RC_METAL) . ": " . nicenum ($fleet_obj[GID_RC_METAL]) . "<br>" ;
-        echo loca("NAME_".GID_RC_CRYSTAL) . ": " . nicenum ($fleet_obj[GID_RC_CRYSTAL]) . "<br>" ;
-        echo loca("NAME_".GID_RC_DEUTERIUM) . ": " . nicenum ($fleet_obj[GID_RC_DEUTERIUM]) ;
+        foreach ($transportableResources as $i=>$rc) {
+            if ($fleet_obj[$rc]) {
+                echo loca("NAME_".$rc) . ": " . nicenum ($fleet_obj[$rc]) . "<br>" ;
+            }
+        }
     }
     else echo "-";
 ?>
