@@ -115,6 +115,14 @@ abstract class GameMod {
     public function bonus_technology (int $id, array &$bonus) : bool {
         return false;
     }
+
+    public function bonus_prod (array $param, array &$bonus) : bool {
+        return false;
+    }
+
+    public function bonus_cons (array $param, array &$bonus) : bool {
+        return false;
+    }
 }
 
 function ModInitOne(string $modname) : void
