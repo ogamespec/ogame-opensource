@@ -532,7 +532,7 @@ function TransportArrive (array $queue, array $fleet_obj, array $fleet, array $o
     DispatchFleet ($fleet, $origin, $target, FTYP_TRANSPORT+FTYP_RETURN, $fleet_obj['flight_time'], $resources, $fleet_obj['fuel'] / 2, $queue['end']);
 
     $text = va(loca_lang("FLEET_TRANSPORT_OWN", $origin_user['lang']), 
-            "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>",
+            ShowGalaxy ($target),
             nicenum($fleet_obj[GID_RC_METAL]),
             nicenum($fleet_obj[GID_RC_CRYSTAL]),
             nicenum($fleet_obj[GID_RC_DEUTERIUM]) );
@@ -550,7 +550,7 @@ function TransportArrive (array $queue, array $fleet_obj, array $fleet, array $o
         $text = va(loca_lang("FLEET_TRANSPORT_OTHER", $target_user['lang']),
                 $origin_user['oname'],
                 $target['name'],
-                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>",
+                ShowGalaxy ($target),
                 nicenum($fleet_obj[GID_RC_METAL]),
                 nicenum($fleet_obj[GID_RC_CRYSTAL]),
                 nicenum($fleet_obj[GID_RC_DEUTERIUM]),
@@ -591,9 +591,9 @@ function CommonReturn (array $queue, array $fleet_obj, array $fleet, array $orig
 
     $text = va(loca_lang("FLEET_RETURN", $origin_user['lang']),
         FleetList($fleet, $origin_user['lang']),
-        "<a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>",
+        ShowGalaxy ($target),
         $origin['name'],
-        "<a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>" );
+        ShowGalaxy ($origin) );
     if ( ($fleet_obj[GID_RC_METAL] + $fleet_obj[GID_RC_CRYSTAL] + $fleet_obj[GID_RC_DEUTERIUM]) != 0 ) {
         $text .= va(loca_lang("FLEET_RETURN_RES", $origin_user['lang']), 
             nicenum($fleet_obj[GID_RC_METAL]),
@@ -627,7 +627,7 @@ function DeployArrive (array $queue, array $fleet_obj, array $fleet, array $orig
     $text = va(loca_lang("FLEET_DEPLOY", $origin_user['lang']),
         FleetList($fleet, $origin_user['lang']),
         $target['name'],
-        "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>" );
+        ShowGalaxy ($target) );
     $text .= va(loca_lang("FLEET_DEPLOY_RES", $origin_user['lang']),
         nicenum($fleet_obj[GID_RC_METAL]),
         nicenum($fleet_obj[GID_RC_CRYSTAL]),
@@ -739,14 +739,14 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
 
     $subj = "\n<span class=\"espionagereport\">\n" .
                 va(loca_lang("SPY_SUBJ", $origin_user['lang']), $target['name']) . "\n" .
-                "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>\n";
+                ShowGalaxy ($target);
 
     $report = "";
 
     // Head
     $report .= "<table width=400><tr><td class=c colspan=4>" .
-            va(loca_lang("SPY_RESOURCES", $origin_user['lang']), $target['name']) .
-            " <a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a> " .
+            va(loca_lang("SPY_RESOURCES", $origin_user['lang']), $target['name']) . " " .
+            ShowGalaxy ($target) . " " .
             va(loca_lang("SPY_PLAYER", $origin_user['lang']), $target_user['oname'], date ("m-d H:i:s", $now)) .
             "</td></tr>\n";
     $report .= "</div></font></TD></TR><tr><td>".loca_lang("SPY_M", $origin_user['lang'])."</td><td>".nicenum($target[GID_RC_METAL])."</td>\n";
@@ -854,9 +854,9 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
     // Send a message to other player about spying.
     $text = va(loca_lang("FLEET_SPY_OTHER", $target_user['lang']), 
             $origin['name'],
-            "<a onclick=\"showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p'].");\" href=\"#\">[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>",
+            ShowGalaxy ($origin),
             $target['name'],
-            "<a onclick=\"showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].");\" href=\"#\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>",
+            ShowGalaxy ($target),
             $counter ) ;
     SendMessage ( $target['owner_id'],
         loca_lang("FLEET_MESSAGE_OBSERVE", $target_user['lang']),
@@ -889,7 +889,7 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
     loca_add ( "fleetmsg", $origin_user['lang'] );
 
     $text = va(loca_lang("FLEET_COLONIZE", $origin_user['lang']), 
-                "<a href=\"javascript:showGalaxy(".$target['g'].",".$target['s'].",".$target['p'].")\">[".$target['g'].":".$target['s'].":".$target['p']."]</a>" );
+                ShowGalaxy ($target) );
 
     if ( !HasPlanet($target['g'], $target['s'], $target['p']) )    // If the place is unoccupied, then colonization is successful.
     {
@@ -968,9 +968,9 @@ function ColonizationReturn (array $queue, array $fleet_obj, array $fleet, array
 
     $text = va(loca_lang("FLEET_RETURN", $origin_user['lang']), 
             FleetList($fleet, $origin_user['lang']),
-            "<a href=# onclick=showGalaxy(".$target['g'].",".$target['s'].",".$target['p']."); >[".$target['g'].":".$target['s'].":".$target['p']."]</a>",
+            ShowGalaxy ($target),
             $origin['name'],
-            "<a href=# onclick=showGalaxy(".$origin['g'].",".$origin['s'].",".$origin['p']."); >[".$origin['g'].":".$origin['s'].":".$origin['p']."]</a>" );
+            ShowGalaxy ($origin) );
     if ( ($fleet_obj[GID_RC_METAL] + $fleet_obj[GID_RC_CRYSTAL] + $fleet_obj[GID_RC_DEUTERIUM]) != 0 ) {
         $text .= va(loca_lang("FLEET_RETURN_RES", $origin_user['lang']), 
             nicenum($fleet_obj[GID_RC_METAL]),

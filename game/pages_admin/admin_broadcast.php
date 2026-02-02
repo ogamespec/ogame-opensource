@@ -27,6 +27,10 @@ function Admin_Broadcast () : void
             $subj = $subj . " <a href=\"index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=".$GlobalUser['player_id']."&re=1&betreff=Re:".$subj."\">\n"
                         . "</a>\n";
 
+            $text = str_replace ( '\"', "&quot;", bb($text) );
+            $text = str_replace ( '\'', "&rsquo;", $text );
+            $text = str_replace ( '\`', "&lsquo;", $text );
+
             $usernum = BroadcastMessage ($cat, $from, $subj, $text);
 
             if ($usernum > 0) $write_error = "<center><font color=#00FF00>".va(loca("ADM_BCAST_SUCCESS"), $usernum)."</font><br/></center>\n";

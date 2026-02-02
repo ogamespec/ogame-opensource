@@ -682,6 +682,14 @@ function EndContent () : void
     echo "<!-- END CONTENT AREA -->\n\n";
 }
 
+function ShowGalaxy (array $planet) : string {
+
+    if ($planet) {
+        return "<a onclick=\"showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].");\" href=\"#\">[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
+    }
+    else return "";
+}
+
 abstract class Page {
 
     public function controller () : bool {

@@ -472,13 +472,14 @@ echo "</form>\n";
 
 $result_custom = EnumCustomPlanetsGalaxy ($coord_g, $coord_s);
 $num_custom = dbrows ($result_custom);
+$has_custom = $num_custom != 0 ? 1 : 0;
 $custom_planets = array ();
 for ($i=0; $i<$num_custom; $i++) {
     $custom_planets[] = dbarray ($result_custom);
 }
 
 echo "<table width=\"569\">\n";
-echo "<tr><td class=\"c\" colspan=\"".(8+$num_custom)."\">".loca("GALAXY_SYSTEM")." ".$coord_g.":".$coord_s."</td></tr>\n";
+echo "<tr><td class=\"c\" colspan=\"".(8+$has_custom)."\">".loca("GALAXY_SYSTEM")." ".$coord_g.":".$coord_s."</td></tr>\n";
 echo "<tr>\n";
 echo "<td class=\"c\">".loca("GALAXY_HEAD_COORD")."</td>\n";
 echo "<td class=\"c\">".loca("GALAXY_HEAD_PLANET")."</td>\n";
@@ -732,9 +733,9 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
 for ($p; $p<=15; $p++) empty_row ($p, $custom_planets);
 
 /***** Bottom of table *****/
-echo "<tr><th style='height:32px;'>16</th><th colspan='".(7+$num_custom)."'><a href ='index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$coord_g."&system=".$coord_s."&planet=16&planettype=1&target_mission=15'>".loca("FAR_SPACE")."</a></th></tr>\n\n";
+echo "<tr><th style='height:32px;'>16</th><th colspan='".(7+$has_custom)."'><a href ='index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$coord_g."&system=".$coord_s."&planet=16&planettype=1&target_mission=15'>".loca("FAR_SPACE")."</a></th></tr>\n\n";
 
-echo "<tr><td class=\"c\" colspan=\"".(6+$num_custom)."\">(".va(loca("GALAXY_INFO_POPULATED"), $planets).")</td>\n";
+echo "<tr><td class=\"c\" colspan=\"".(6+$has_custom)."\">(".va(loca("GALAXY_INFO_POPULATED"), $planets).")</td>\n";
 echo "<td class=\"c\" colspan=\"2\"><a href='#' onmouseover='return overlib(\"<table><tr><td class=c colspan=2>".loca("GALAXY_LEGEND")."</td></tr>";
 echo "<tr><td width=125>".loca("GALAXY_LEGEND_STRONG_LONG")."</td><td><span class=strong>".loca("GALAXY_LEGEND_STRONG")."</span></td></tr>";
 echo "<tr><td>".loca("GALAXY_LEGEND_NOOB_LONG")."</td><td><span class=noob>".loca("GALAXY_LEGEND_NOOB")."</span></td></tr>";
@@ -776,13 +777,13 @@ if ($prem['commander']) {
 if ($extra_info !== "") {
 ?>
 <tr>
-<td class="c" colspan="<?=(8+$num_custom);?>">
+<td class="c" colspan="<?=(8+$has_custom);?>">
 <?=$extra_info;?></td>
 </tr>
 <?php
 }   // extra_info
 ?>
-<tr style="display: none;" id="fleetstatusrow"><th colspan="<?=(8+$num_custom);?>"><!--<div id="fleetstatus"></div>-->
+<tr style="display: none;" id="fleetstatusrow"><th colspan="<?=(8+$has_custom);?>"><!--<div id="fleetstatus"></div>-->
 <table style="font-weight: bold;" width=100% id="fleetstatustable">
 <!-- will be filled with content later on while processing ajax replys -->
 </table>
