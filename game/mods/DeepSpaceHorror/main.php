@@ -710,7 +710,15 @@ class DeepSpaceHorror extends GameMod {
         $query = "UPDATE ".$db_prefix."battledata SET title = '".$subj."', report = '".$battle_text[$GlobalUni['lang']]."' WHERE battle_id = $battle_id;";
         dbquery ( $query );
 
+        // При поражении левиафана разослать всем игрокам броадкаст об этом событии
 
+        if ($battle_result == BATTLE_RESULT_DWON) {
+            
+            BroadcastMessage (0, 
+                loca_lang ("FLEET_MESSAGE_FROM", $GlobalUni['lang']), 
+                $subj, 
+                va(loca_lang("LEVI_DEFEAT_MSG_".$levi_gid, $GlobalUni['lang']), ShowGalaxy ($old_portal)) );
+        }
 
         // Clean up old battle reports
         $ago = $when - 2 * 7 * 24 * 60 * 60;

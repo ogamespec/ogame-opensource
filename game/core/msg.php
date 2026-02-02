@@ -223,10 +223,6 @@ function BroadcastMessage (int $cat, string $from, string $subj, string $text) :
     else if ( $cat == 3 ) $query = "SELECT * FROM ".$db_prefix."users WHERE admin = 1;";        // Operators
     else $query = "SELECT * FROM ".$db_prefix."users;";                // Everyone
 
-    $text = str_replace ( '\"', "&quot;", bb($text) );
-    $text = str_replace ( '\'', "&rsquo;", $text );
-    $text = str_replace ( '\`', "&lsquo;", $text );
-
     $result = dbquery ($query);
     $usernum = $rows = dbrows ($result);
     while ($rows--)

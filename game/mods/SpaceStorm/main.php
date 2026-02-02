@@ -327,12 +327,12 @@ class SpaceStorm extends GameMod {
 
         Debug ("prev_storm: $prev_storm ($count bits), new storm: $storm ($new_count bits)" );
 
-        // Описание штормов, если активен (bb-код)
+        // Описание штормов, если активен
         $storm_desc = "";
         if ($new_count != 0) {
             for ($i=0; $i<SPACE_STORM_MASK_MSB; $i++) {
                 if ( ($storm & (1 << $i)) != 0 ) {
-                    $storm_desc .= "\n\n[b]" . loca("STORM_" . $i) . ":[/b]\n" . loca("STORM_DESC_" . $i);
+                    $storm_desc .= "<br/><br/><b>" . loca("STORM_" . $i) . ":</b><br/>" . loca("STORM_DESC_" . $i);
                 }
             }
         }
