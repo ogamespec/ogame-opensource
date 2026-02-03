@@ -22,7 +22,8 @@
 	},
 	"b_building": {
 		"path": "pages/b_building.php",
-		"loca": [ "menu", "techshort", "build" ]
+		"loca": [ "menu", "techshort", "build" ],
+		"mvc": true
 	},
 	"bericht": {
 		"path": "pages/bericht.php",

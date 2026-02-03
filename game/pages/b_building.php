@@ -1,40 +1,40 @@
 <?php
 
-/** @var array $GlobalUni */
-/** @var array $GlobalUser */
-/** @var array $buildmap */
-
 // Building structures.
 
-// Get a list of bonuses for the specified technology. By default, +2 is shown for Espionage with a Technocrat. Modifications can add their own bonuses.
-function GetBuildingsBonus (int $gid) : array
-{
-    $bonuses = array();
-    ModsExecIntRef ('page_buildings_get_bonus', $gid, $bonuses);
-    return $bonuses;
-}
+class B_Building extends Page {
 
-function ShowBuildingsBonus (int $gid) : void
-{
-    $bonuses = GetBuildingsBonus ($gid);
-    foreach ($bonuses as $i=>$bonus) {
+    public function controller () : bool {
+        global $GlobalUser;
+        global $PageError;
+        global $aktplanet;
 
-        echo " <b><font style=\"color:".$bonus['color'].";\">".$bonus['value']."</font></b> ";
-        echo "<img border=\"0\" src=\"".$bonus['img']."\" alt=\"".$bonus['alt']."\" onmouseover=\"return overlib('<font color=white>";
-        echo $bonus['descr'];
-        echo "</font>', WIDTH, ".$bonus['overlib_width'].");\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
+        // Processing parameters.
+        if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] )
+        {
+            if ( $_GET['modus'] === 'add' ) $PageError = BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 0 );
+            else if ( $_GET['modus'] === 'destroy' ) $PageError = BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 1 );
+            else if ( $_GET['modus'] === 'remove' ) $PageError = BuildDeque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['listid']) );
+
+            $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], time() );    // reload the planet.
+            if ($aktplanet == null) {
+                Error ("Can't get aktplanet");
+            }
+        }
+
+        return true;
     }
-}
 
-// Processing parameters.
-if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] )
-{
-    if ( $_GET['modus'] === 'add' ) $PageError = BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 0 );
-    else if ( $_GET['modus'] === 'destroy' ) $PageError = BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 1 );
-    else if ( $_GET['modus'] === 'remove' ) $PageError = BuildDeque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['listid']) );
-}
+    public function view () : void {
+        global $GlobalUni;
+        global $GlobalUser;
+        global $aktplanet;
+        global $session;
+        global $buildmap;
+        global $resourcemap;
+        global $now;
 
-$prem = PremiumStatus ($GlobalUser);
+        $prem = PremiumStatus ($GlobalUser);
 
 ?>
 <script type="text/javascript">
@@ -100,126 +100,150 @@ function t() {
 
 <?php
 
-if ( $GlobalUser['vacation'] ) {
-    echo "<font color=#FF0000><center>".va(loca("BUILD_ERROR_VACATION"), date ("Y-m-d H:i:s", $GlobalUser['vacation_until']))."</center></font>\n\n";
-}
-
-echo "<table align=top ><tr><td style='background-color:transparent;'>\n";
-if ( $GlobalUser['useskin'] ) echo "<table width=\"530\">\n";
-else echo "<table width=\"468\">\n";
-
-// Check whether the research is in progress or not.
-$result = GetResearchQueue ( $GlobalUser['player_id'] );
-$resqueue = dbarray ($result);
-$reslab_operating = ($resqueue != null);
-
-// Check to see if construction is underway at the shipyard.
-$result = GetShipyardQueue ( $aktplanet['planet_id'] );
-$shipqueue = dbarray ($result);
-$shipyard_operating = ($shipqueue != null);
-
-// Display the build queue (if Commander is active)
-$result = GetBuildQueue ( $aktplanet['planet_id'] );
-$cnt = dbrows ( $result );
-for ( $i=0; $i<$cnt; $i++ )
-{
-    $queue = dbarray ($result);
-    if ($i == 0) $queue0 = $queue;
-    if ( $prem['commander'] )
-    {
-        if ( $queue['destroy'] ) $queue['level']++;
-        echo "<tr><td class=\"l\" colspan=\"2\">".($i+1).".: ".loca("NAME_".$queue['tech_id']);
-        if ($queue['level'] > 0) echo " , " . va(loca("BUILD_LEVEL"), $queue['level']);
-        if ( $queue['destroy'] ) echo "\n " . loca("BUILD_DEMOLISH");
-        if ($i==0) {
-            echo "<td class=\"k\"><div id=\"bxx\" class=\"z\"></div><SCRIPT language=JavaScript>\n";
-            echo "                  pp=\"".($queue['end']-$now)."\"\n";
-            echo "                  pk=\"".$queue['list_id']."\"\n";
-            echo "                  pm=\"remove\"\n";
-            echo "                  pl=\"".$aktplanet['planet_id']."\"\n";
-            echo "                  ps=\"$session\"\n";
-            echo "                  t();\n";
-            echo "                  </script></tr>\n";
+        if ( $GlobalUser['vacation'] ) {
+            echo "<font color=#FF0000><center>".va(loca("BUILD_ERROR_VACATION"), date ("Y-m-d H:i:s", $GlobalUser['vacation_until']))."</center></font>\n\n";
         }
-        else {
-            echo "<td class=\"k\"><font color=\"red\"><a href=\"index.php?page=b_building&session=$session&modus=remove&listid=".$queue['list_id']."&planet=".$aktplanet['planet_id']."\">".loca("BUILD_DEQUEUE")."</a></font></td></td></tr>\n";
-        }
-    }
-}
 
-foreach ( $buildmap as $i => $id )
-{
-    $lvl = $aktplanet[$id];
-    if ( ! TechMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) continue;
+        echo "<table align=top ><tr><td style='background-color:transparent;'>\n";
+        if ( $GlobalUser['useskin'] ) echo "<table width=\"530\">\n";
+        else echo "<table width=\"468\">\n";
 
-    echo "<tr>";
+        // Check whether the research is in progress or not.
+        $result = GetResearchQueue ( $GlobalUser['player_id'] );
+        $resqueue = dbarray ($result);
+        $reslab_operating = ($resqueue != null);
 
-    if ( $GlobalUser['useskin'] ) {
-        echo "<td class=l>";
-        echo "<a href=index.php?page=infos&session=$session&gid=".$id.">";
-        echo GetObjectImage(UserSkin(), $id) . "</a></td>";
-    }
+        // Check to see if construction is underway at the shipyard.
+        $result = GetShipyardQueue ( $aktplanet['planet_id'] );
+        $shipqueue = dbarray ($result);
+        $shipyard_operating = ($shipqueue != null);
 
-    echo "<td class=l>";
-    echo "<a href=index.php?page=infos&session=$session&gid=".$id.">".loca("NAME_$id")."</a></a>";
-    if ( $lvl ) echo " (".va(loca("BUILD_LEVEL"), $lvl);
-    ShowBuildingsBonus ($id);
-    if ( $lvl ) echo ")";
-    echo "<br>". loca("SHORT_$id");
-    $cost = TechPrice ( $id, $lvl+1 );
-    echo "<br>".loca("BUILD_PRICE").":";
-    foreach ($resourcemap as $i=>$rc) {
-        if (isset($cost[$rc]) && $cost[$rc]) {
-            echo " ".loca("NAME_".$rc).": <b>".nicenum($cost[$rc])."</b>";
-        }
-    }
-    $t = TechDuration ( $id, $lvl+1, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
-    echo "<br>".loca("BUILD_DURATION").": ".DurationFormat ( $t )."<br>";
-
-    if ($cnt) {
-
-        if ($prem['commander']) {
-
-            if ( $cnt < 5) echo "<td class=k><a href=\"index.php?page=b_building&session=$session&modus=add&techid=$id&planet=".$aktplanet['planet_id']."\">".loca("BUILD_ENQUEUE")."</a></td>";
-            else echo "<td class=k>";
-        }
-        else {
-
-            if ( $queue0['tech_id'] == $id )
+        // Display the build queue (if Commander is active)
+        $result = GetBuildQueue ( $aktplanet['planet_id'] );
+        $cnt = dbrows ( $result );
+        for ( $i=0; $i<$cnt; $i++ )
+        {
+            $queue = dbarray ($result);
+            if ($i == 0) $queue0 = $queue;
+            if ( $prem['commander'] )
             {
-                $left = $queue0['end'] - time ();
-                echo "<td class=k><div id=\"bxx\" class=\"z\"></div><SCRIPT language=JavaScript>pp='".$left."'; pk='1'; pm='remove'; pl='".$aktplanet['planet_id']."'; ps='".$_GET['session']."'; t();</script>\n";
+                if ( $queue['destroy'] ) $queue['level']++;
+                echo "<tr><td class=\"l\" colspan=\"2\">".($i+1).".: ".loca("NAME_".$queue['tech_id']);
+                if ($queue['level'] > 0) echo " , " . va(loca("BUILD_LEVEL"), $queue['level']);
+                if ( $queue['destroy'] ) echo "\n " . loca("BUILD_DEMOLISH");
+                if ($i==0) {
+                    echo "<td class=\"k\"><div id=\"bxx\" class=\"z\"></div><SCRIPT language=JavaScript>\n";
+                    echo "                  pp=\"".($queue['end']-$now)."\"\n";
+                    echo "                  pk=\"".$queue['list_id']."\"\n";
+                    echo "                  pm=\"remove\"\n";
+                    echo "                  pl=\"".$aktplanet['planet_id']."\"\n";
+                    echo "                  ps=\"$session\"\n";
+                    echo "                  t();\n";
+                    echo "                  </script></tr>\n";
+                }
+                else {
+                    echo "<td class=\"k\"><font color=\"red\"><a href=\"index.php?page=b_building&session=$session&modus=remove&listid=".$queue['list_id']."&planet=".$aktplanet['planet_id']."\">".loca("BUILD_DEQUEUE")."</a></font></td></td></tr>\n";
+                }
             }
-            else echo "<td class=k>";
+        }
+
+        foreach ( $buildmap as $i => $id )
+        {
+            $lvl = $aktplanet[$id];
+            if ( ! TechMeetRequirement ( $GlobalUser, $aktplanet, $id ) ) continue;
+
+            echo "<tr>";
+
+            if ( $GlobalUser['useskin'] ) {
+                echo "<td class=l>";
+                echo "<a href=index.php?page=infos&session=$session&gid=".$id.">";
+                echo GetObjectImage(UserSkin(), $id) . "</a></td>";
+            }
+
+            echo "<td class=l>";
+            echo "<a href=index.php?page=infos&session=$session&gid=".$id.">".loca("NAME_$id")."</a></a>";
+            if ( $lvl ) echo " (".va(loca("BUILD_LEVEL"), $lvl);
+            $this->ShowBuildingsBonus ($id);
+            if ( $lvl ) echo ")";
+            echo "<br>". loca("SHORT_$id");
+            $cost = TechPrice ( $id, $lvl+1 );
+            echo "<br>".loca("BUILD_PRICE").":";
+            foreach ($resourcemap as $i=>$rc) {
+                if (isset($cost[$rc]) && $cost[$rc]) {
+                    echo " ".loca("NAME_".$rc).": <b>".nicenum($cost[$rc])."</b>";
+                }
+            }
+            $t = TechDuration ( $id, $lvl+1, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $GlobalUni['speed'] );
+            echo "<br>".loca("BUILD_DURATION").": ".DurationFormat ( $t )."<br>";
+
+            if ($cnt) {
+
+                if ($prem['commander']) {
+
+                    if ( $cnt < 5) echo "<td class=k><a href=\"index.php?page=b_building&session=$session&modus=add&techid=$id&planet=".$aktplanet['planet_id']."\">".loca("BUILD_ENQUEUE")."</a></td>";
+                    else echo "<td class=k>";
+                }
+                else {
+
+                    if ( $queue0['tech_id'] == $id )
+                    {
+                        $left = $queue0['end'] - time ();
+                        echo "<td class=k><div id=\"bxx\" class=\"z\"></div><SCRIPT language=JavaScript>pp='".$left."'; pk='1'; pm='remove'; pl='".$aktplanet['planet_id']."'; ps='".$_GET['session']."'; t();</script>\n";
+                    }
+                    else echo "<td class=k>";
+                }
+            }
+            else {
+
+                if ( $aktplanet['fields'] >= $aktplanet['maxfields'] ) {
+                    echo "<td class=l><font color=#FF0000>".loca("BUILD_QUEUE_FULL")."</font>";
+                }
+                else if ( $id == GID_B_RES_LAB && $reslab_operating ) {
+                    echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
+                }
+                else if ( ($id == GID_B_NANITES || $id == GID_B_SHIPYARD ) && $shipyard_operating ) {
+                    echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
+                }
+                else if ( !IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) )
+                {
+                    if ($lvl == 0) echo "<td class=l><font color=#FF0000>".loca("BUILD_BUILD")."</font>\n";
+                    else echo "<td class=l><font color=#FF0000>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font>";
+                }
+                else
+                {
+                    if ($lvl == 0) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".loca("BUILD_BUILD")."</font></a>\n";
+                    else echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font></a>\n";
+                }
+            }
+
+            echo "</td></tr>\n";
+        }
+
+        echo "  </table>\n</tr>\n</table>\n";
+
+        echo "<br><br><br><br>\n";
+    }
+
+    // Get a list of bonuses for the specified technology. By default, +2 is shown for Espionage with a Technocrat. Modifications can add their own bonuses.
+    function GetBuildingsBonus (int $gid) : array
+    {
+        $bonuses = array();
+        ModsExecIntRef ('page_buildings_get_bonus', $gid, $bonuses);
+        return $bonuses;
+    }
+
+    function ShowBuildingsBonus (int $gid) : void
+    {
+        $bonuses = $this->GetBuildingsBonus ($gid);
+        foreach ($bonuses as $i=>$bonus) {
+
+            echo " <b><font style=\"color:".$bonus['color'].";\">".$bonus['value']."</font></b> ";
+            echo "<img border=\"0\" src=\"".$bonus['img']."\" alt=\"".$bonus['alt']."\" onmouseover=\"return overlib('<font color=white>";
+            echo $bonus['descr'];
+            echo "</font>', WIDTH, ".$bonus['overlib_width'].");\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
         }
     }
-    else {
 
-        if ( $aktplanet['fields'] >= $aktplanet['maxfields'] ) {
-            echo "<td class=l><font color=#FF0000>".loca("BUILD_QUEUE_FULL")."</font>";
-        }
-        else if ( $id == GID_B_RES_LAB && $reslab_operating ) {
-            echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
-        }
-        else if ( ($id == GID_B_NANITES || $id == GID_B_SHIPYARD ) && $shipyard_operating ) {
-            echo "<td class=l><font  color=#FF0000>".loca("BUILD_BUSY")."</font> <br>";
-        }
-        else if ( !IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) )
-        {
-            if ($lvl == 0) echo "<td class=l><font color=#FF0000>".loca("BUILD_BUILD")."</font>\n";
-            else echo "<td class=l><font color=#FF0000>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font>";
-        }
-        else
-        {
-            if ($lvl == 0) echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".loca("BUILD_BUILD")."</font></a>\n";
-            else echo "<td class=l><a href='index.php?page=b_building&session=$session&modus=add&techid=".$id."&planet=".$aktplanet['planet_id']."'><font color=#00FF00>".va(loca("BUILD_BUILD_LEVEL"),$lvl+1)."</font></a>\n";
-        }
-    }
-
-    echo "</td></tr>\n";
 }
 
-echo "  </table>\n</tr>\n</table>\n";
-
-echo "<br><br><br><br>\n";
 ?>
