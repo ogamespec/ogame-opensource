@@ -107,13 +107,13 @@ function BattleReport ( array $res, int $now, array|null $loss, array|null $capt
     $text .= "<table border=1 width=100%><tr>";
     foreach ( $res['before']['attackers'] as $i=>$attacker)
     {
-        $text .= GenSlot ( $attacker['weap'], $attacker['shld'], $attacker['armr'], $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker['units'], 1, 1, $lang );
+        $text .= GenSlot ( $attacker['weap'], $attacker['shld'], $attacker['armr'], $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker['units'], true, true, $lang );
     }
     $text .= "</tr></table>";
     $text .= "<table border=1 width=100%><tr>";
     foreach ( $res['before']['defenders'] as $i=>$defender)
     {
-        $text .= GenSlot ( $defender['weap'], $defender['shld'], $defender['armr'], $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender['units'], 1, 0, $lang );
+        $text .= GenSlot ( $defender['weap'], $defender['shld'], $defender['armr'], $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender['units'], true, false, $lang );
     }
     $text .= "</tr></table>";
 
@@ -129,15 +129,15 @@ function BattleReport ( array $res, int $now, array|null $loss, array|null $capt
         $text .= "<table border=1 width=100%><tr>";        // Attackers
         foreach ( $round['attackers'] as $n=>$attacker )
         {
-            $text .= GenSlot ( 0, 0, 0, $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker['units'], 0, 1, $lang );
+            $text .= GenSlot ( 0, 0, 0, $attacker['name'], $attacker['g'], $attacker['s'], $attacker['p'], $amap, $attacker['units'], false, true, $lang );
         }
         $text .= "</tr></table>";
 
         $text .= "<table border=1 width=100%><tr>";        // Defenders
         foreach ( $round['defenders'] as $n=>$defender )
         {
-            if ( $defender['pf'] == 1 ) $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender['units'], 0, 0, $lang );
-            else $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $amap, $defender['units'], 0, 0, $lang );
+            if ( $defender['pf'] == 1 ) $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $dmap, $defender['units'], false, false, $lang );
+            else $text .= GenSlot ( 0, 0, 0, $defender['name'], $defender['g'], $defender['s'], $defender['p'], $amap, $defender['units'], false, false, $lang );
         }
         $text .= "</tr></table>";
     }

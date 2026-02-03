@@ -3,6 +3,7 @@
 /** @var array $GlobalUser */
 /** @var array $fleetmap */
 /** @var array $transportableResources */
+/** @var array $aktplanet */
 
 // Fleet 3: mission list output, resource loading.
 
