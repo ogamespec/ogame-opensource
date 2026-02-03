@@ -70,7 +70,9 @@ function RocketAttack ( int $fleet_id, int $planet_id, int $when ) : void
         $moon_planet = LoadPlanet ($target['g'], $target['s'], $target['p'], 1);
     }
     $origin_user = LoadUser ($origin['owner_id']);
+    if ($origin_user == null) return;
     $target_user = LoadUser ($target['owner_id']);
+    if ($target_user == null) return;
 
     $ipm_destroyed = RocketAttackMain (
         $amount, 

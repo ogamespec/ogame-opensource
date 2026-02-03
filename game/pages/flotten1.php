@@ -4,6 +4,7 @@
 /** @var array $GlobalUser */
 /** @var array $fleetmap */
 /** @var string $db_prefix */
+/** @var string $session */
 
 // Fleet 1: prepares the composition of the fleet
 

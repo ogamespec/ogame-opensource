@@ -4,6 +4,10 @@
 /** @var array $GlobalUni */
 /** @var array $UnitParam */
 /** @var array $aktplanet */
+/** @var array $defmap */
+/** @var array $rakmap */
+/** @var string $PageError */
+/** @var string $session */
 
 $defmap_norak = array_diff($defmap, $rakmap);
 

@@ -8,7 +8,9 @@ const GRAVI_FLEET_DESTR = 2;
 function GravitonAttack (array $fleet_obj, array $fleet, int $when) : int
 {
     $origin = LoadPlanetById ( $fleet_obj['start_planet'] );
+    if ($origin == null) return 0;
     $target = LoadPlanetById ( $fleet_obj['target_planet'] );
+    if ($target == null) return 0;
 
     if ( $fleet[GID_F_DEATHSTAR] == 0 ) return 0;
     if ( ! ($target['type'] == PTYP_MOON || $target['type'] == PTYP_DEST_MOON) ) Error ( "Only moons can be destroyed!" );
@@ -22,11 +24,15 @@ function GravitonAttack (array $fleet_obj, array $fleet, int $when) : int
     $ripdes = mt_rand(1, 999) < $ripchance * 10;
 
     $origin_user = LoadUser ($origin['owner_id']);
+    if ($origin_user == 0) return 0;
     $target_user = LoadUser ($target['owner_id']);
+    if ($target_user == 0) return 0;
     loca_add ( "graviton", $origin_user['lang'] );
     loca_add ( "graviton", $target_user['lang'] );
     loca_add ( "fleetmsg", $origin_user['lang'] );
     loca_add ( "fleetmsg", $target_user['lang'] );
+
+    $result = 0;
 
     if ( !$ripdes && !$moondes )
     {

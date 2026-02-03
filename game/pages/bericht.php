@@ -1,6 +1,7 @@
 <?php
 
 /** @var array $GlobalUser */
+/** @var string $session */
 
 $msg = LoadMessage ( intval($_GET['bericht']) );
 

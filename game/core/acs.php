@@ -163,6 +163,7 @@ function UpdateUnionTime (int $union_id, int $end, int $fleet_id, bool $force_se
     global $db_prefix;
     $result = EnumUnionFleets ($union_id);
     $rows = dbrows ($result);
+    $union_time = $end;
     while ($rows--)
     {
         $fleet_obj = dbarray ($result);

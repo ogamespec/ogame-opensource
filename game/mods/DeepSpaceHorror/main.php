@@ -470,7 +470,7 @@ class DeepSpaceHorror extends GameMod {
         return false;
     }
 
-    private function LeviathanArrive ($queue, $fleet_obj, $fleet, $origin, $old_portal) : void {
+    private function LeviathanArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $old_portal) : void {
 
         global $db_prefix;
 
@@ -563,6 +563,9 @@ class DeepSpaceHorror extends GameMod {
                 break;
             case GID_LEVI_JUGGERNAUT:
                 $delta = 3;
+                break;
+            default:
+                $delta = 0;
                 break;
         }
 
@@ -697,7 +700,7 @@ class DeepSpaceHorror extends GameMod {
             MarkMessage ( $user['player_id'], $bericht );
             $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$bericht\', \'Bericht_Kampf\');\" ><span class=\"".$d_result[$battle_result]."\">" .
                 loca_lang("FLEET_MESSAGE_BATTLE", $user['lang']) .
-                " [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
+                " [".$user['g'].":".$user['s'].":".$user['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
             SendMessage ( $user['player_id'], loca_lang("FLEET_MESSAGE_FROM", $user['lang']), $subj, "", MTYP_BATTLE_REPORT_LINK, $when );
             $mailbox[ $user['player_id'] ] = true;
         }
@@ -706,7 +709,7 @@ class DeepSpaceHorror extends GameMod {
         loca_add ( "fleetmsg", $GlobalUni['lang'] );
         $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=admin&session={PUBLIC_SESSION}&mode=BattleReport&bericht=$battle_id\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
             loca_lang("FLEET_MESSAGE_BATTLE", $GlobalUni['lang']) .
-            " [".$p['g'].":".$p['s'].":".$p['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
+            " [".$old_portal['g'].":".$old_portal['s'].":".$old_portal['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
         $query = "UPDATE ".$db_prefix."battledata SET title = '".$subj."', report = '".$battle_text[$GlobalUni['lang']]."' WHERE battle_id = $battle_id;";
         dbquery ( $query );
 
