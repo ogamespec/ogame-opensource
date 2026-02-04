@@ -43,7 +43,7 @@ class Resources extends Page {
         return true;
     }
 
-    private function GetResourceBonus (int $rc) : string {
+    private function GetResourceBonus (array $planet, int $gid, int $rc) : string {
 
         global $GlobalUser;
         $prem = PremiumStatus ($GlobalUser);
@@ -56,24 +56,28 @@ class Resources extends Page {
             case GID_RC_METAL:
             case GID_RC_CRYSTAL:
             case GID_RC_DEUTERIUM:
-                $prem = PremiumStatus ($GlobalUser);
-                if ($prem['geologist']) {
-                    $bonus = [];
-                    $bonus['img'] = "img/geologe_ikon.gif";
-                    $bonus['text'] = loca("PREM_GEOLOGE");
-                    $bonus['width'] = 80;
-                    $bonuses[] = $bonus;
+                if ($gid == GID_B_METAL_MINE || $gid == GID_B_CRYS_MINE || $gid == GID_B_DEUT_SYNTH) {
+                    $prem = PremiumStatus ($GlobalUser);
+                    if ($prem['geologist']) {
+                        $bonus = [];
+                        $bonus['img'] = "img/geologe_ikon.gif";
+                        $bonus['text'] = loca("PREM_GEOLOGE");
+                        $bonus['width'] = 80;
+                        $bonuses[] = $bonus;
+                    }
                 }
                 break;
 
             case GID_RC_ENERGY:
-                $prem = PremiumStatus ($GlobalUser);
-                if ($prem['engineer']) {
-                    $bonus = [];
-                    $bonus['img'] = "img/ingenieur_ikon.gif";
-                    $bonus['text'] = loca("PREM_ENGINEER");
-                    $bonus['width'] = 80;
-                    $bonuses[] = $bonus;
+                if ($gid == GID_B_SOLAR || $gid == GID_B_FUSION || $gid == GID_F_SAT) {
+                    $prem = PremiumStatus ($GlobalUser);
+                    if ($prem['engineer']) {
+                        $bonus = [];
+                        $bonus['img'] = "img/ingenieur_ikon.gif";
+                        $bonus['text'] = loca("PREM_ENGINEER");
+                        $bonus['width'] = 80;
+                        $bonuses[] = $bonus;
+                    }
                 }
                 break;
         }
@@ -97,6 +101,7 @@ class Resources extends Page {
         global $resourcemap;
         global $PlanetProd;
         global $naturalProduction;
+        global $resourcesWithNonZeroDerivative;
 
         $speed = $GlobalUni['speed'];
         $planet = $aktplanet;
@@ -117,7 +122,7 @@ class Resources extends Page {
         echo "<center> \n";
         echo "<br> \n";
         echo "<br> \n";
-        echo va(loca("RES_FACTOR")." ", round($aktplanet['factor'],2))."\n";
+        echo va(loca("RES_FACTOR")." ", round($planet['factor'],2))."\n";
 
         // Not known for what, but it's in the original game.
         $count = 0;
@@ -136,7 +141,7 @@ class Resources extends Page {
 
         echo "  <tr> \n";
         echo "    <td class=\"c\" colspan=\"6\"> \n";
-        echo "    ".loca("RES_PROD")." &quot;".$aktplanet['name']."&quot;\n";
+        echo "    ".loca("RES_PROD")." &quot;".$planet['name']."&quot;\n";
         echo "    </td> \n";
         echo "  </tr>\n";
 
@@ -158,6 +163,54 @@ class Resources extends Page {
         }
         echo "  </tr>\n";
 
+        foreach ($PlanetProd as $gid=>$rules) {
+
+            if ($planet[$gid]) {
+
+                echo "  <tr> \n";
+                echo "<th>".loca("NAME_".$gid)." (".va(loca(IsBuilding($gid) ? "RES_LEVEL" : "RES_AMOUNT"), $planet[$gid]).")</th>";
+
+                echo "<th>";
+                foreach ($reslist as $i=>$rc) {
+                    if (isset($rules['prod'][$rc])) {
+                        echo $this->GetResourceBonus($planet, $gid, $rc);
+                    }
+                    if (isset($rules['cons'][$rc])) {
+                        echo $this->GetResourceBonus($planet, $gid, $rc);
+                    }
+                }
+                echo "</th>";
+
+                foreach ($reslist as $i=>$rc) {
+
+                    $val_with_bonus = 0;
+
+                    if (isset($rules['prod'][$rc]) && $planet['prod_with_bonus'][$gid] != 0) {
+                        $val_with_bonus = $planet['prod_with_bonus'][$gid];
+                    }
+                    else if (isset($rules['cons'][$rc]) && $planet['cons_with_bonus'][$gid] != 0) {
+                        $val_with_bonus = - $planet['cons_with_bonus'][$gid];
+                    }
+
+                    $color = $val > 0 ? '00FF00' : ($val < 0 ? 'FF0000' : 'FFFFFF');
+                    $deriv = in_array ($rc, $resourcesWithNonZeroDerivative, true);
+                    echo "   <th><font color=\"$color\">";
+                    if ($deriv) {
+                        echo $this->nicenum2($val_with_bonus);
+                    }
+                    else {
+                        $val_factor = abs($val_with_bonus) * $planet['factor'];
+                        echo $this->nicenum2(abs($val_factor))."/".$this->nicenum2(abs($val_with_bonus));
+                    }
+                    echo "</font></th>\n";
+                }
+
+                echo " \n";
+                $this->prod_select ($gid, $planet);
+                echo "  </tr>\n";
+            }
+        }
+
         // Metal mine
         if ($aktplanet[GID_B_METAL_MINE]) {
             $m_hourly = $planet['prod_with_bonus'][GID_B_METAL_MINE];
@@ -166,13 +219,15 @@ class Resources extends Page {
             $color1 = $m_hourly ? "<font color='00FF00'>" : "";
             $color2 = $m_cons ? "<font color='FF0000'>" : "";
             echo "  <tr> \n";
-            echo "<th>".loca("NAME_1")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_METAL_MINE]).")</th><th>";
-            echo $this->GetResourceBonus(GID_RC_METAL);
-            echo "</th>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        $color1".$this->nicenum2($m_hourly)."</font>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        $color2".$this->nicenum2($m_cons0)."/".$this->nicenum2($m_cons)."</th> \n";
+            echo "<th>".loca("NAME_1")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_METAL_MINE]).")</th>";
+            echo "<th>".$this->GetResourceBonus($planet, GID_B_METAL_MINE, GID_RC_METAL)."</th>";
+
+            echo "   <th> \n    <font color=\"#FFFFFF\">        $color1".$this->nicenum2($m_hourly)."</font></th>";
+            echo "   <th> \n    <font color=\"#FFFFFF\">        0</font></th>";
+            echo "   <th> \n    <font color=\"#FFFFFF\">        0</font></th>";
+            echo "   <th> \n    <font color=\"#FFFFFF\">        $color2".$this->nicenum2($m_cons0)."/".$this->nicenum2($m_cons)."</font></th>";
+
+            echo " \n";
             $this->prod_select (GID_B_METAL_MINE, $planet);
             echo "  </tr>\n";
         }
@@ -186,7 +241,7 @@ class Resources extends Page {
             $color2 = $k_cons ? "<font color='FF0000'>" : "";
             echo "  <tr> \n";
             echo "<th>".loca("NAME_2")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_CRYS_MINE]).")</th><th>";
-            echo $this->GetResourceBonus(GID_RC_CRYSTAL);
+            echo $this->GetResourceBonus($planet, GID_B_CRYS_MINE, GID_RC_CRYSTAL);
             echo "</th>   <th> \n";
             echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
             echo "    <font color=\"#FFFFFF\">        $color1".$this->nicenum2($k_hourly)."</font>   <th> \n";
@@ -205,7 +260,7 @@ class Resources extends Page {
             $color2 = $d_cons ? "<font color='FF0000'>" : "";
             echo "  <tr> \n";
             echo "<th>".loca("NAME_3")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_DEUT_SYNTH]).")</th><th>";
-            echo $this->GetResourceBonus(GID_RC_DEUTERIUM);
+            echo $this->GetResourceBonus($planet, GID_B_DEUT_SYNTH, GID_RC_DEUTERIUM);
             echo "</th>   <th> \n";
             echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
             echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
@@ -221,7 +276,7 @@ class Resources extends Page {
             $color = $s_prod ? "<font color='00FF00'>" : "";
             echo "  <tr> \n";
             echo "<th>".loca("NAME_4")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_SOLAR]).")</th><th>";
-            echo $this->GetResourceBonus(GID_RC_ENERGY);
+            echo $this->GetResourceBonus($planet, GID_B_SOLAR, GID_RC_ENERGY);
             echo "</th>   <th> \n";
             echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
             echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
@@ -239,7 +294,7 @@ class Resources extends Page {
             $color2 = $f_prod ? "<font color='00FF00'>" : "";
             echo "  <tr> \n";
             echo "<th>".loca("NAME_12")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_FUSION]).")</th><th>";
-            echo $this->GetResourceBonus(GID_RC_ENERGY);
+            echo $this->GetResourceBonus($planet, GID_B_FUSION, GID_RC_ENERGY);
             echo "</th>   <th> \n";
             echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
             echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
@@ -255,7 +310,7 @@ class Resources extends Page {
             $color = $ss_prod ? "<font color='00FF00'>" : "";
             echo "  <tr> \n";
             echo "<th>".loca("NAME_212")." (".va(loca("RES_AMOUNT"), $aktplanet[GID_F_SAT]).")</th><th>";
-            echo $this->GetResourceBonus(GID_RC_ENERGY);
+            echo $this->GetResourceBonus($planet, GID_F_SAT, GID_RC_ENERGY);
             echo "</th>   <th> \n";
             echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
             echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
