@@ -250,33 +250,38 @@ function ConsBonus (array $uni, array $user, array $planet, int $rc, array &$con
 function ProdResources (array $uni, array $user, array &$planet) : void {
 
     global $prodPriority, $PlanetProd;
+    global $naturalProduction;
 
-    $prod = [];                 // Производство ресурса по каждому типу игрового объекта
-    $prod_with_bonus = [];      // Производство ресурса по каждому типу игрового объекта (с учётом бонуса)
-    $cons = [];                 // Потребление ресурса по каждому типу игрового объекта
-    $cons_with_bonus = [];      // Потребление ресурса по каждому типу игрового объекта (с учётом бонуса)
-    $net_prod = [];             // Общее производство указанного ресурса
-    $net_cons = [];             // Общее потребление указанного ресурса
-    $balance = [];              // Баланс указанного ресурса (производство - потребление)
+    $eco = array();
+
+    $eco['prod'] = [];                 // Производство ресурса по каждому типу игрового объекта
+    $eco['prod_with_bonus'] = [];      // Производство ресурса по каждому типу игрового объекта (с учётом бонуса)
+    $eco['cons'] = [];                 // Потребление ресурса по каждому типу игрового объекта
+    $eco['cons_with_bonus'] = [];      // Потребление ресурса по каждому типу игрового объекта (с учётом бонуса)
+    $eco['net_prod'] = [];             // Общее производство указанного ресурса
+    $eco['net_cons'] = [];             // Общее потребление указанного ресурса
+    $eco['balance'] = [];              // Баланс указанного ресурса (производство - потребление)
 
     foreach ($prodPriority as $i=>$rc) {
+
+        $eco['rc'] = $rc;
 
         // *** PRODUCTION
 
         // Get production bonus
         $prod_bonus = [];
         ProdBonus ($uni, $user, $planet, $rc, $prod_bonus);
-        $net_prod[$rc] = 0;
+        $eco['net_prod'][$rc] = 0;
 
         foreach ($PlanetProd as $gid=>$rules) {
             if (isset($rules['prod'][$rc])) {
                 $res = $rules['prod'][$rc] ($uni, $user, $planet);
-                $prod[$gid] = $res;
+                $eco['prod'][$gid] = $res;
                 foreach ($prod_bonus as $n=>$factor) {
                     $res *= $factor;
                 }
-                $prod_with_bonus[$gid] = $res;
-                $net_prod[$rc] += $res;
+                $eco['prod_with_bonus'][$gid] = $res;
+                $eco['net_prod'][$rc] += $res;
             }
         }
 
@@ -285,46 +290,50 @@ function ProdResources (array $uni, array $user, array &$planet) : void {
         // Get consumption bonus
         $cons_bonus = [];
         ConsBonus ($uni, $user, $planet, $rc, $cons_bonus);
-        $net_cons[$rc] = 0;
+        $eco['net_cons'][$rc] = 0;
 
         foreach ($PlanetProd as $gid=>$rules) {
             if (isset($rules['cons'][$rc])) {
                 $res = $rules['cons'][$rc] ($uni, $user, $planet);
-                $cons[$gid] = $res;
+                $eco['cons'][$gid] = $res;
                 foreach ($cons_bonus as $n=>$factor) {
                     $res *= $factor;
                 }
-                $cons_with_bonus[$gid] = $res;
-                $net_cons[$rc] += $res;
+                $eco['cons_with_bonus'][$gid] = $res;
+                $eco['net_cons'][$rc] += $res;
             }
         }
 
-        $balance[$rc] = floor ($net_prod[$rc] - $net_cons[$rc]);
+        $eco['balance'][$rc] = floor ($eco['net_prod'][$rc] - $eco['net_cons'][$rc]);
 
         // *** POST-PROCESSING
         // Any special actions with the planet that affect resource production (Natural production, Production coefficient)
 
         switch ($rc) {
             case GID_RC_METAL:
-                $net_prod[$rc] += 20 * $uni['speed'];
-                break;
             case GID_RC_CRYSTAL:
-                $net_prod[$rc] += 10 * $uni['speed'];
+            case GID_RC_DEUTERIUM:
+                if (isset($naturalProduction[$rc])) {
+                    $eco['net_prod'][$rc] += $naturalProduction[$rc] * $uni['speed'];
+                }
                 break;
             case GID_RC_ENERGY:
                 $planet['factor'] = 1;
-                if ( $balance[$rc] < 0 ) $planet['factor'] = max (0, 1 - abs ($balance[$rc]) / $net_cons[$rc]);
+                if ( $eco['balance'][$rc] < 0 ) $planet['factor'] = max (0, 1 - abs ($eco['balance'][$rc]) / $eco['net_cons'][$rc]);
                 break;
         }
+
+        // Mods post-processing
+        ModsExecRefRef ('prod_post_process', $planet, $eco);
     }
 
-    $planet['prod'] = $prod;
-    $planet['prod_with_bonus'] = $prod_with_bonus;
-    $planet['cons'] = $cons;
-    $planet['cons_with_bonus'] = $cons_with_bonus;
-    $planet['net_prod'] = $net_prod;
-    $planet['net_cons'] = $net_cons;
-    $planet['balance'] = $balance;
+    $planet['prod'] = $eco['prod'];
+    $planet['prod_with_bonus'] = $eco['prod_with_bonus'];
+    $planet['cons'] = $eco['cons'];
+    $planet['cons_with_bonus'] = $eco['cons_with_bonus'];
+    $planet['net_prod'] = $eco['net_prod'];
+    $planet['net_cons'] = $eco['net_cons'];
+    $planet['balance'] = $eco['balance'];
 }
 
 // Get the state of the planet (array) and update resource production from planet's lastpeek until $time_to. Limit storage capacity.
@@ -332,11 +341,15 @@ function ProdResources (array $uni, array $user, array &$planet) : void {
 function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
 {
     global $db_prefix, $GlobalUni;
+    global $storagemap;
+    global $resourcesWithNonZeroDerivative;
 
     $planet = LoadPlanetById ($planet_id);
     if ($planet == null) return null;
     if ( $planet['type'] != PTYP_PLANET ) {
-        $planet['mmax'] = $planet['kmax'] = $planet['dmax'] = 0;
+        foreach ($storagemap as $rc=>$gid) {
+            $planet['max'.$rc] = 0;
+        }
         $planet['factor'] = 0;
         $planet['e'] = $planet['econs'] = $planet[GID_RC_ENERGY] = 0;
         return $planet;        // NOT a planet
@@ -351,24 +364,25 @@ function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
 
     // Update the state of the planet
 
-    $planet['mmax'] = store_capacity ( $planet[GID_B_METAL_STOR] );
-    $planet['kmax'] = store_capacity ( $planet[GID_B_CRYS_STOR] );
-    $planet['dmax'] = store_capacity ( $planet[GID_B_DEUT_STOR] );
+    foreach ($storagemap as $rc=>$gid) {
+        $planet['max'.$rc] = store_capacity ( $planet[$gid] );
+    }
 
     $time_from = $planet['lastpeek'];
     $diff = $time_to - $time_from;
 
-    $hourly = $planet['balance'][GID_RC_METAL];
-    $planet[GID_RC_METAL] = min ($planet[GID_RC_METAL] + ($hourly * $diff) / 3600, $planet['mmax']);
+    // Calculate resource growth (only for resources that change over time)
+    $update_query = "";
+    foreach ($resourcesWithNonZeroDerivative as $i=>$rc) {
 
-    $hourly = $planet['balance'][GID_RC_CRYSTAL];
-    $planet[GID_RC_CRYSTAL] = min ($planet[GID_RC_CRYSTAL] + ($hourly * $diff) / 3600, $planet['kmax']);
-
-    $hourly = $planet['balance'][GID_RC_DEUTERIUM];
-    $planet[GID_RC_DEUTERIUM] = min ($planet[GID_RC_DEUTERIUM] + ($hourly * $diff) / 3600, $planet['dmax']);
+        $hourly = $planet['balance'][$rc];
+        $cap = isset($planet['max'.$rc]) ? $planet['max'.$rc] : PHP_INT_MAX;
+        $planet[$rc] = min ($planet[$rc] + ($hourly * $diff) / 3600, $cap);
+        $update_query .= "`".$rc."` = ".$planet[$rc].", ";
+    }
 
     $planet_id = $planet['planet_id'];
-    $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."` = ".$planet[GID_RC_METAL].", `".GID_RC_CRYSTAL."` = ".$planet[GID_RC_CRYSTAL].", `".GID_RC_DEUTERIUM."` = ".$planet[GID_RC_DEUTERIUM].", lastpeek = ".$time_to." WHERE planet_id = $planet_id";
+    $query = "UPDATE ".$db_prefix."planets SET $update_query lastpeek = ".$time_to." WHERE planet_id = $planet_id";
     dbquery ($query);
     $planet['lastpeek'] = $time_to;
 
