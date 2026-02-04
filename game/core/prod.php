@@ -281,7 +281,7 @@ function ProdResources (array $uni, array $user, array &$planet) : void {
                     $res *= $factor;
                 }
                 $eco['prod_with_bonus'][$gid] = $res;
-                $eco['net_prod'][$rc] += $res;
+                $eco['net_prod'][$rc] += ceil ($res);
             }
         }
 
@@ -300,7 +300,7 @@ function ProdResources (array $uni, array $user, array &$planet) : void {
                     $res *= $factor;
                 }
                 $eco['cons_with_bonus'][$gid] = $res;
-                $eco['net_cons'][$rc] += $res;
+                $eco['net_cons'][$rc] += ceil ($res);
             }
         }
 

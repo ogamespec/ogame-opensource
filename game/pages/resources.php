@@ -4,6 +4,8 @@
 
 class Resources extends Page {
 
+    private bool $debug_no_rounding = false;
+
     public function controller () : bool {
         global $GlobalUser;
         global $db_prefix;
@@ -179,28 +181,36 @@ class Resources extends Page {
                         echo $this->GetResourceBonus($planet, $gid, $rc);
                     }
                 }
-                echo "</th>";
+                echo "</th>\n";
 
                 foreach ($reslist as $i=>$rc) {
 
                     $val_with_bonus = 0;
 
+                    $produced = false;
                     if (isset($rules['prod'][$rc]) && $planet['prod_with_bonus'][$gid] != 0) {
                         $val_with_bonus = $planet['prod_with_bonus'][$gid];
+                        $produced = true;
                     }
                     else if (isset($rules['cons'][$rc]) && $planet['cons_with_bonus'][$gid] != 0) {
                         $val_with_bonus = - $planet['cons_with_bonus'][$gid];
+                        $produced = false;
                     }
 
                     $color = $val_with_bonus > 0 ? '00FF00' : ($val_with_bonus < 0 ? 'FF0000' : 'FFFFFF');
                     $deriv = in_array ($rc, $resourcesWithNonZeroDerivative, true);
-                    echo "   <th><font color=\"$color\">";
+                    echo "   <th><font color=\"#$color\">";
                     if ($deriv) {
                         echo $this->nicenum2($val_with_bonus);
                     }
                     else {
-                        $val_factor = abs($val_with_bonus) * $planet['factor'];
-                        echo $this->nicenum2(abs($val_factor))."/".$this->nicenum2(abs($val_with_bonus));
+                        if ($produced) {
+                            echo $this->nicenum2($val_with_bonus);
+                        }
+                        else {
+                            $val_factor = abs($val_with_bonus) * $planet['factor'];
+                            echo $this->nicenum2(abs($val_factor))."/".$this->nicenum2(abs($val_with_bonus));
+                        }
                     }
                     echo "</font></th>\n";
                 }
@@ -209,115 +219,6 @@ class Resources extends Page {
                 $this->prod_select ($gid, $planet);
                 echo "  </tr>\n";
             }
-        }
-
-        // Metal mine
-        if ($aktplanet[GID_B_METAL_MINE]) {
-            $m_hourly = $planet['prod_with_bonus'][GID_B_METAL_MINE];
-            $m_cons = $planet['cons_with_bonus'][GID_B_METAL_MINE];
-            $m_cons0 = round ($m_cons * $planet['factor']);
-            $color1 = $m_hourly ? "<font color='00FF00'>" : "";
-            $color2 = $m_cons ? "<font color='FF0000'>" : "";
-            echo "  <tr> \n";
-            echo "<th>".loca("NAME_1")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_METAL_MINE]).")</th>";
-            echo "<th>".$this->GetResourceBonus($planet, GID_B_METAL_MINE, GID_RC_METAL)."</th>";
-
-            echo "   <th> \n    <font color=\"#FFFFFF\">        $color1".$this->nicenum2($m_hourly)."</font></th>";
-            echo "   <th> \n    <font color=\"#FFFFFF\">        0</font></th>";
-            echo "   <th> \n    <font color=\"#FFFFFF\">        0</font></th>";
-            echo "   <th> \n    <font color=\"#FFFFFF\">        $color2".$this->nicenum2($m_cons0)."/".$this->nicenum2($m_cons)."</font></th>";
-
-            echo " \n";
-            $this->prod_select (GID_B_METAL_MINE, $planet);
-            echo "  </tr>\n";
-        }
-
-        // Crystal mine
-        if ($aktplanet[GID_B_CRYS_MINE]) {
-            $k_hourly = $planet['prod_with_bonus'][GID_B_CRYS_MINE];
-            $k_cons = $planet['cons_with_bonus'][GID_B_CRYS_MINE];
-            $k_cons0 = round ($k_cons * $planet['factor']);
-            $color1 = $k_hourly ? "<font color='00FF00'>" : "";
-            $color2 = $k_cons ? "<font color='FF0000'>" : "";
-            echo "  <tr> \n";
-            echo "<th>".loca("NAME_2")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_CRYS_MINE]).")</th><th>";
-            echo $this->GetResourceBonus($planet, GID_B_CRYS_MINE, GID_RC_CRYSTAL);
-            echo "</th>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        $color1".$this->nicenum2($k_hourly)."</font>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        $color2".$this->nicenum2($k_cons0)."/".$this->nicenum2($k_cons)."</th> \n";
-            $this->prod_select (GID_B_CRYS_MINE, $planet);
-            echo "  </tr>\n";
-        }
-
-        // Deuterium synthesizer
-        if ($aktplanet[GID_B_DEUT_SYNTH]) {
-            $d_hourly = $planet['prod_with_bonus'][GID_B_DEUT_SYNTH];
-            $d_cons = $planet['cons_with_bonus'][GID_B_DEUT_SYNTH];
-            $d_cons0 = round ($d_cons * $planet['factor']);
-            $color1 = $d_hourly ? "<font color='00FF00'>" : "";
-            $color2 = $d_cons ? "<font color='FF0000'>" : "";
-            echo "  <tr> \n";
-            echo "<th>".loca("NAME_3")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_DEUT_SYNTH]).")</th><th>";
-            echo $this->GetResourceBonus($planet, GID_B_DEUT_SYNTH, GID_RC_DEUTERIUM);
-            echo "</th>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       $color1".$this->nicenum2($d_hourly)."</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       $color2".$this->nicenum2($d_cons0)."/".$this->nicenum2($d_cons)."</th>\n";
-            $this->prod_select (GID_B_DEUT_SYNTH, $planet);
-            echo "  </tr>\n";
-        }
-
-        // Solar Plant
-        if ($aktplanet[GID_B_SOLAR]) {
-            $s_prod = $planet['prod_with_bonus'][GID_B_SOLAR];
-            $color = $s_prod ? "<font color='00FF00'>" : "";
-            echo "  <tr> \n";
-            echo "<th>".loca("NAME_4")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_SOLAR]).")</th><th>";
-            echo $this->GetResourceBonus($planet, GID_B_SOLAR, GID_RC_ENERGY);
-            echo "</th>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       $color".$this->nicenum2($s_prod)."</th>\n";
-            $this->prod_select (GID_B_SOLAR, $planet);
-            echo "  </tr>\n";
-        }
-
-        // Fusion Reactor
-        if ($aktplanet[GID_B_FUSION]) {
-            $f_prod = $planet['prod_with_bonus'][GID_B_FUSION];
-            $f_cons = - $planet['cons_with_bonus'][GID_B_FUSION];
-            $color1 = $f_cons ? "<font color='FF0000'>" : "";
-            $color2 = $f_prod ? "<font color='00FF00'>" : "";
-            echo "  <tr> \n";
-            echo "<th>".loca("NAME_12")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_FUSION]).")</th><th>";
-            echo $this->GetResourceBonus($planet, GID_B_FUSION, GID_RC_ENERGY);
-            echo "</th>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       $color1".$this->nicenum2($f_cons)."</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       $color2".$this->nicenum2($f_prod)."</th>\n";
-            $this->prod_select (GID_B_FUSION, $planet);
-            echo "  </tr>\n";
-        }
-
-        // Solar satellites
-        if ($aktplanet[GID_F_SAT]) {
-            $ss_prod = $planet['prod_with_bonus'][GID_F_SAT];
-            $color = $ss_prod ? "<font color='00FF00'>" : "";
-            echo "  <tr> \n";
-            echo "<th>".loca("NAME_212")." (".va(loca("RES_AMOUNT"), $aktplanet[GID_F_SAT]).")</th><th>";
-            echo $this->GetResourceBonus($planet, GID_F_SAT, GID_RC_ENERGY);
-            echo "</th>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       $color".$this->nicenum2($ss_prod)."</th>\n";
-            $this->prod_select (GID_F_SAT, $planet);
-            echo "  </tr>\n";
         }
 
         // Storages
@@ -370,10 +271,11 @@ class Resources extends Page {
         echo "   </th>\n";
     }
 
-    private function nicenum2 (float|int $num) : string    // for debugging. the Germans messed up with rounding, I don't know where they call floor, ceil and round.
+    private function nicenum2 (float|int $num) : string
     {
+        // for debugging. the Germans messed up with rounding, I don't know where they call floor, ceil and round.
+        if ($this->debug_no_rounding) return $num;
         return nicenum(round($num));
-        //return $num;
     }
 
     private function rgnum (float|int $num) : string
