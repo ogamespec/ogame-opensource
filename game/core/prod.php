@@ -325,6 +325,8 @@ function ProdResources (array $uni, array $user, array &$planet) : void {
 
         // Mods post-processing
         ModsExecRefRef ('prod_post_process', $planet, $eco);
+
+        $eco['balance'][$rc] = floor ($eco['net_prod'][$rc] - $eco['net_cons'][$rc]);
     }
 
     $planet['prod'] = $eco['prod'];

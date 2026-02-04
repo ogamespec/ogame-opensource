@@ -192,7 +192,7 @@ class Resources extends Page {
                         $val_with_bonus = - $planet['cons_with_bonus'][$gid];
                     }
 
-                    $color = $val > 0 ? '00FF00' : ($val < 0 ? 'FF0000' : 'FFFFFF');
+                    $color = $val_with_bonus > 0 ? '00FF00' : ($val_with_bonus < 0 ? 'FF0000' : 'FFFFFF');
                     $deriv = in_array ($rc, $resourcesWithNonZeroDerivative, true);
                     echo "   <th><font color=\"$color\">";
                     if ($deriv) {
@@ -323,7 +323,7 @@ class Resources extends Page {
         // Storages
         echo "    <tr>   <tr> \n";
         echo "    <th colspan=\"2\">".loca("RES_CAPACITY")."</th> \n";
-        $this->DisplayStorages ($reslist);
+        $this->DisplayStorages ($planet, $reslist);
         echo "    <td class=\"k\"> \n";
         echo "    <input type=\"submit\" name=\"action\" value=\"".loca("RES_CALCULATE")."\"></td> \n";
         echo "  </tr> \n";
@@ -400,10 +400,10 @@ class Resources extends Page {
 
     }
 
-    private function DisplayStorages (array $reslist) : void {
+    private function DisplayStorages (array $planet, array $reslist) : void {
 
         foreach ($reslist as $i=>$rc) {
-            $val_str = isset($planet['max'.$rc]) ? $this->nicenum2($planet['mmax']/1000) : '-';
+            $val_str = isset($planet['max'.$rc]) ? $this->nicenum2($planet['max'.$rc]/1000) . "k" : '-';
             echo "    <td class=\"k\"><font color=\"#00ff00\">$val_str</font></td> \n";
         }
     }
