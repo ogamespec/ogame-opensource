@@ -142,7 +142,7 @@ $PlanetProd = [
         ],
         'cons' => [
             GID_RC_ENERGY => function ($uni, $user, $planet) {
-                return ceil (10 * $planet[GID_B_METAL_MINE] * pow (1.1, $planet[GID_B_METAL_MINE]));
+                return ceil (10 * $planet[GID_B_METAL_MINE] * pow (1.1, $planet[GID_B_METAL_MINE]) * $planet['prod'.GID_B_METAL_MINE]);
             }
         ]
     ],
@@ -155,7 +155,7 @@ $PlanetProd = [
         ],
         'cons' => [
             GID_RC_ENERGY => function ($uni, $user, $planet) {
-                return ceil (10 * $planet[GID_B_CRYS_MINE] * pow (1.1, $planet[GID_B_CRYS_MINE]));
+                return ceil (10 * $planet[GID_B_CRYS_MINE] * pow (1.1, $planet[GID_B_CRYS_MINE]) * $planet['prod'.GID_B_CRYS_MINE]);
             }
         ]
     ],
@@ -168,7 +168,7 @@ $PlanetProd = [
         ],
         'cons' => [
             GID_RC_ENERGY => function ($uni, $user, $planet) {
-                return ceil (20 * $planet[GID_B_DEUT_SYNTH] * pow (1.1, $planet[GID_B_DEUT_SYNTH]));
+                return ceil (20 * $planet[GID_B_DEUT_SYNTH] * pow (1.1, $planet[GID_B_DEUT_SYNTH]) * $planet['prod'.GID_B_DEUT_SYNTH]);
             }
         ]
     ],
