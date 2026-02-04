@@ -88,6 +88,10 @@ abstract class GameMod {
         return false;
     }
 
+    public function prod_post_process (array &$planet, array &$eco) : bool {
+        return false;
+    }
+
     // Default pages hooks (various modifications of the original content)
 
     public function page_buildings_get_bonus(int $id, array &$bonuses) : bool {

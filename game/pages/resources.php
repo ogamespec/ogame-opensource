@@ -4,6 +4,8 @@
 
 class Resources extends Page {
 
+    private bool $debug_no_rounding = false;
+
     public function controller () : bool {
         global $GlobalUser;
         global $db_prefix;
@@ -43,41 +45,86 @@ class Resources extends Page {
         return true;
     }
 
+    private function GetResourceBonus (array $planet, int $gid, int $rc) : string {
+
+        global $GlobalUser;
+        $prem = PremiumStatus ($GlobalUser);
+
+        // First, take into account the bonuses offered by the original mechanics of 0.84
+
+        $bonuses = [];
+
+        switch ($rc) {
+            case GID_RC_METAL:
+            case GID_RC_CRYSTAL:
+            case GID_RC_DEUTERIUM:
+                if ($gid == GID_B_METAL_MINE || $gid == GID_B_CRYS_MINE || $gid == GID_B_DEUT_SYNTH) {
+                    $prem = PremiumStatus ($GlobalUser);
+                    if ($prem['geologist']) {
+                        $bonus = [];
+                        $bonus['img'] = "img/geologe_ikon.gif";
+                        $bonus['text'] = loca("PREM_GEOLOGE");
+                        $bonus['width'] = 80;
+                        $bonuses[] = $bonus;
+                    }
+                }
+                break;
+
+            case GID_RC_ENERGY:
+                if ($gid == GID_B_SOLAR || $gid == GID_B_FUSION || $gid == GID_F_SAT) {
+                    $prem = PremiumStatus ($GlobalUser);
+                    if ($prem['engineer']) {
+                        $bonus = [];
+                        $bonus['img'] = "img/ingenieur_ikon.gif";
+                        $bonus['text'] = loca("PREM_ENGINEER");
+                        $bonus['width'] = 80;
+                        $bonuses[] = $bonus;
+                    }
+                }
+                break;
+        }
+
+        $text = "";
+        foreach ($bonuses as $i=>$bonus) {
+
+            $text .= "<img border=\"0\" src=\"".$bonus['img']."\" alt=\"".$bonus['text']."\" ";
+            $text .= "onmouseover='return overlib(\"<font color=#ffffff>".$bonus['text']."</font>\", WIDTH, ".$bonus['width'].");' ";
+            $text .= "onmouseout='return nd();' width=\"20\" height=\"20\">";
+        }
+
+        return $text === "" ? "&nbsp;" : $text;
+    }
+
     public function view () : void {
 
         global $GlobalUni;
         global $GlobalUser;
         global $aktplanet;
-
-        $prem = PremiumStatus ($GlobalUser);
-        if ( $prem['geologist'] )
-        {
-            $geologe_text = "<img border=\"0\" src=\"img/geologe_ikon.gif\" alt=\"".loca("PREM_GEOLOGE")."\" onmouseover='return overlib(\"<font color=#ffffff>".loca("PREM_GEOLOGE")."</font>\", WIDTH, 80);' onmouseout='return nd();' width=\"20\" height=\"20\">";
-        }
-        else
-        {
-            $geologe_text = "&nbsp;";
-        }
-        if ( $prem['engineer'] )
-        {
-            $engineer_text = "<img border=\"0\" src=\"img/ingenieur_ikon.gif\" alt=\"".loca("PREM_ENGINEER")."\" onmouseover='return overlib(\"<font color=#ffffff>".loca("PREM_ENGINEER")."</font>\", WIDTH, 80);' onmouseout='return nd();' width=\"20\" height=\"20\">";
-        }
-        else
-        {
-            $engineer_text = "&nbsp;";
-        }
+        global $resourcemap;
+        global $PlanetProd;
+        global $naturalProduction;
+        global $resourcesWithNonZeroDerivative;
 
         $speed = $GlobalUni['speed'];
         $planet = $aktplanet;
 
-        $m_total = (20*$speed);
-        $k_total = (10*$speed);
-        $d_total = 0;
+        // Get a list of resource types to display their production
+        $reslist = [];
+        foreach ($resourcemap as $i=>$rc) {
+
+            // If the resource is found in production or consumption, add it to the list
+            foreach ($PlanetProd as $ii=>$rules) {
+                if (isset($rules['prod'][$rc]) || isset($rules['cons'][$rc])) {
+                    $reslist[] = $rc;
+                    break;
+                }
+            }
+        }
 
         echo "<center> \n";
         echo "<br> \n";
         echo "<br> \n";
-        echo va(loca("RES_FACTOR")." ", round($aktplanet['factor'],2))."\n";
+        echo va(loca("RES_FACTOR")." ", round($planet['factor'],2))."\n";
 
         // Not known for what, but it's in the original game.
         $count = 0;
@@ -86,7 +133,7 @@ class Resources extends Page {
         while ($rows--)
         {
             $pl = dbarray ($result);
-            if ( $pl['type'] != PTYP_MOON ) $count++;
+            if ( $pl['type'] == PTYP_PLANET ) $count++;
         }
         if ( $count > MAX_PLANET ) echo "<br><font color=#ff000>".loca("RES_INFO")."</font>";
 
@@ -96,155 +143,97 @@ class Resources extends Page {
 
         echo "  <tr> \n";
         echo "    <td class=\"c\" colspan=\"6\"> \n";
-        echo "    ".loca("RES_PROD")." &quot;".$aktplanet['name']."&quot;\n";
+        echo "    ".loca("RES_PROD")." &quot;".$planet['name']."&quot;\n";
         echo "    </td> \n";
         echo "  </tr>\n";
 
+        // List resources
         echo "  <tr> \n";
-        echo "   <th colspan=\"2\"></th>    <th>".loca("NAME_".GID_RC_METAL)."</th>    <th>".loca("NAME_".GID_RC_CRYSTAL)."</th>    <th>".loca("NAME_".GID_RC_DEUTERIUM)."</th>    <th>".loca("NAME_".GID_RC_ENERGY)."</th> \n";
+        echo "   <th colspan=\"2\"></th>";
+        foreach ($reslist as $i=>$rc) {
+            echo "    <th>".loca("NAME_".$rc)."</th>";
+        }
+        echo "</th> \n";
         echo "  </tr>\n";
 
         // Natural production
         echo "  <tr> \n";
         echo "   <th colspan=\"2\">".loca("RES_NATURAL")."</th> \n";
-        echo "   <td class=\"k\">".(20*$speed)."</td>    <td class=\"k\">".(10*$speed)."</td>    <td class=\"k\">0</td>    <td class=\"k\">0</td> \n";
+        foreach ($reslist as $i=>$rc) {
+            $val = (isset($naturalProduction[$rc]) ? $naturalProduction[$rc] : 0) * $speed;
+            echo "    <td class=\"k\">".$val."</td>\n";
+        }
         echo "  </tr>\n";
 
-        // Metal mine
-        if ($aktplanet[GID_B_METAL_MINE]) {
-            $m_hourly = $planet['prod_with_bonus'][GID_B_METAL_MINE];
-            $m_total += $m_hourly;
-            $m_cons = $planet['cons_with_bonus'][GID_B_METAL_MINE];
-            $m_cons0 = round ($m_cons * $planet['factor']);
-            $color1 = $m_hourly ? "<font color='00FF00'>" : "";
-            $color2 = $m_cons ? "<font color='FF0000'>" : "";
-            echo "  <tr> \n";
-            echo "<th>".loca("NAME_1")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_METAL_MINE]).")</th><th>".$geologe_text."</th>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        $color1".$this->nicenum2($m_hourly)."</font>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        $color2".$this->nicenum2($m_cons0)."/".$this->nicenum2($m_cons)."</th> \n";
-            $this->prod_select (GID_B_METAL_MINE, $planet);
-            echo "  </tr>\n";
-        }
+        foreach ($PlanetProd as $gid=>$rules) {
 
-        // Crystal mine
-        if ($aktplanet[GID_B_CRYS_MINE]) {
-            $k_hourly = $planet['prod_with_bonus'][GID_B_CRYS_MINE];
-            $k_total += $k_hourly;
-            $k_cons = $planet['cons_with_bonus'][GID_B_CRYS_MINE];
-            $k_cons0 = round ($k_cons * $planet['factor']);
-            $color1 = $k_hourly ? "<font color='00FF00'>" : "";
-            $color2 = $k_cons ? "<font color='FF0000'>" : "";
-            echo "  <tr> \n";
-            echo "<th>".loca("NAME_2")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_CRYS_MINE]).")</th><th>".$geologe_text."</th>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        $color1".$this->nicenum2($k_hourly)."</font>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        0</font>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">        $color2".$this->nicenum2($k_cons0)."/".$this->nicenum2($k_cons)."</th> \n";
-            $this->prod_select (GID_B_CRYS_MINE, $planet);
-            echo "  </tr>\n";
-        }
+            if ($planet[$gid]) {
 
-        // Deuterium synthesizer
-        if ($aktplanet[GID_B_DEUT_SYNTH]) {
-            $d_hourly = $planet['prod_with_bonus'][GID_B_DEUT_SYNTH];
-            $d_total += $d_hourly;
-            $d_cons = $planet['cons_with_bonus'][GID_B_DEUT_SYNTH];
-            $d_cons0 = round ($d_cons * $planet['factor']);
-            $color1 = $d_hourly ? "<font color='00FF00'>" : "";
-            $color2 = $d_cons ? "<font color='FF0000'>" : "";
-            echo "  <tr> \n";
-            echo "<th>".loca("NAME_3")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_DEUT_SYNTH]).")</th><th>".$geologe_text."</th>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       $color1".$this->nicenum2($d_hourly)."</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       $color2".$this->nicenum2($d_cons0)."/".$this->nicenum2($d_cons)."</th>\n";
-            $this->prod_select (GID_B_DEUT_SYNTH, $planet);
-            echo "  </tr>\n";
-        }
+                echo "  <tr> \n";
+                echo "<th>".loca("NAME_".$gid)." (".va(loca(IsBuilding($gid) ? "RES_LEVEL" : "RES_AMOUNT"), $planet[$gid]).")</th>";
 
-        // Solar Plant
-        if ($aktplanet[GID_B_SOLAR]) {
-            $s_prod = $planet['prod_with_bonus'][GID_B_SOLAR];
-            $color = $s_prod ? "<font color='00FF00'>" : "";
-            echo "  <tr> \n";
-            echo "<th>".loca("NAME_4")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_SOLAR]).")</th><th>".$engineer_text."</th>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       $color".$this->nicenum2($s_prod)."</th>\n";
-            $this->prod_select (GID_B_SOLAR, $planet);
-            echo "  </tr>\n";
-        }
+                echo "<th>";
+                foreach ($reslist as $i=>$rc) {
+                    if (isset($rules['prod'][$rc])) {
+                        echo $this->GetResourceBonus($planet, $gid, $rc);
+                    }
+                    if (isset($rules['cons'][$rc])) {
+                        echo $this->GetResourceBonus($planet, $gid, $rc);
+                    }
+                }
+                echo "</th>\n";
 
-        // Fusion Reactor
-        if ($aktplanet[GID_B_FUSION]) {
-            $f_prod = $planet['prod_with_bonus'][GID_B_FUSION];
-            $f_cons = - $planet['cons_with_bonus'][GID_B_FUSION];
-            $d_total += $f_cons;
-            $color1 = $f_cons ? "<font color='FF0000'>" : "";
-            $color2 = $f_prod ? "<font color='00FF00'>" : "";
-            echo "  <tr> \n";
-            echo "<th>".loca("NAME_12")." (".va(loca("RES_LEVEL"), $aktplanet[GID_B_FUSION]).")</th><th>".$engineer_text."</th>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       $color1".$this->nicenum2($f_cons)."</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       $color2".$this->nicenum2($f_prod)."</th>\n";
-            $this->prod_select (GID_B_FUSION, $planet);
-            echo "  </tr>\n";
-        }
+                foreach ($reslist as $i=>$rc) {
 
-        // Solar satellites
-        if ($aktplanet[GID_F_SAT]) {
-            $ss_prod = $planet['prod_with_bonus'][GID_F_SAT];
-            $color = $ss_prod ? "<font color='00FF00'>" : "";
-            echo "  <tr> \n";
-            echo "<th>".loca("NAME_212")." (".va(loca("RES_AMOUNT"), $aktplanet[GID_F_SAT]).")</th><th>".$engineer_text."</th>   <th> \n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       0</font>   <th>\n";
-            echo "    <font color=\"#FFFFFF\">       $color".$this->nicenum2($ss_prod)."</th>\n";
-            $this->prod_select (GID_F_SAT, $planet);
-            echo "  </tr>\n";
+                    $val_with_bonus = 0;
+
+                    $produced = false;
+                    if (isset($rules['prod'][$rc]) && $planet['prod_with_bonus'][$gid] != 0) {
+                        $val_with_bonus = $planet['prod_with_bonus'][$gid];
+                        $produced = true;
+                    }
+                    else if (isset($rules['cons'][$rc]) && $planet['cons_with_bonus'][$gid] != 0) {
+                        $val_with_bonus = - $planet['cons_with_bonus'][$gid];
+                        $produced = false;
+                    }
+
+                    $color = $val_with_bonus > 0 ? '00FF00' : ($val_with_bonus < 0 ? 'FF0000' : 'FFFFFF');
+                    $deriv = in_array ($rc, $resourcesWithNonZeroDerivative, true);
+                    echo "   <th><font color=\"#$color\">";
+                    if ($deriv) {
+                        echo $this->nicenum2($val_with_bonus);
+                    }
+                    else {
+                        if ($produced) {
+                            echo $this->nicenum2($val_with_bonus);
+                        }
+                        else {
+                            $val_factor = abs($val_with_bonus) * $planet['factor'];
+                            echo $this->nicenum2(abs($val_factor))."/".$this->nicenum2(abs($val_with_bonus));
+                        }
+                    }
+                    echo "</font></th>\n";
+                }
+
+                echo " \n";
+                $this->prod_select ($gid, $planet);
+                echo "  </tr>\n";
+            }
         }
 
         // Storages
         echo "    <tr>   <tr> \n";
         echo "    <th colspan=\"2\">".loca("RES_CAPACITY")."</th> \n";
-        echo "    <td class=\"k\"><font color=\"#00ff00\">".$this->nicenum2($planet['mmax']/1000)."k</font></td> \n";
-        echo "    <td class=\"k\"><font color=\"#00ff00\">".$this->nicenum2($planet['kmax']/1000)."k</font></td> \n";
-        echo "    <td class=\"k\"><font color=\"#00ff00\">".$this->nicenum2($planet['dmax']/1000)."k</font></td> \n";
-        echo "    <td class=\"k\"><font color=\"#00ff00\">-</font></td> \n";
+        $this->DisplayStorages ($planet, $reslist);
         echo "    <td class=\"k\"> \n";
         echo "    <input type=\"submit\" name=\"action\" value=\"".loca("RES_CALCULATE")."\"></td> \n";
         echo "  </tr> \n";
         echo "  <tr>     <th colspan=\"6\" height=\"4\"></th>   </tr> \n";
 
         // Total production
-        echo "  <tr> \n";
-        echo "    <th colspan=\"2\">".loca("RES_PER_HOUR")."</th> \n";
-        echo "    <td class=\"k\">".$this->rgnum($m_total)."</td> \n";
-        echo "    <td class=\"k\">".$this->rgnum($k_total)."</td> \n";
-        echo "    <td class=\"k\">".$this->rgnum($d_total)."</td> \n";
-        echo "    <td class=\"k\">".$this->rgnum($planet['e'])."</td> \n";
-        echo "  </tr> \n";
-
-        echo "  <tr> \n";
-        echo "    <th colspan=\"2\">".loca("RES_PER_DAY")."</th> \n";
-        echo "    <td class=\"k\">".$this->rgnum($m_total*24)."</td> \n";
-        echo "    <td class=\"k\">".$this->rgnum($k_total*24)."</td> \n";
-        echo "    <td class=\"k\">".$this->rgnum($d_total*24)."</td> \n";
-        echo "    <td class=\"k\">".$this->rgnum($planet['e'])."</td> \n";
-        echo "  </tr> \n";
-
-        echo "  <tr> \n";
-        echo "    <th colspan=\"2\">".loca("RES_PER_WEEK")."</th> \n";
-        echo "    <td class=\"k\">".$this->rgnum($m_total*24*7)."</td> \n";
-        echo "    <td class=\"k\">".$this->rgnum($k_total*24*7)."</td> \n";
-        echo "    <td class=\"k\">".$this->rgnum($d_total*24*7)."</td> \n";
-        echo "    <td class=\"k\">".$this->rgnum($planet['e'])."</td> \n";
-        echo "  </tr>\n";
+        $this->DisplayTotalProduction ($planet, $reslist, loca("RES_PER_HOUR"), 1);
+        $this->DisplayTotalProduction ($planet, $reslist, loca("RES_PER_DAY"), 24);
+        $this->DisplayTotalProduction ($planet, $reslist, loca("RES_PER_WEEK"), 24*7);
 
         echo "  </table> \n";
 
@@ -263,28 +252,62 @@ class Resources extends Page {
     private function prod_select (int $id, array|null $planet) : void
     {
         if ($planet == null) return;
-        echo"  <th> <select name=\"last$id\" size=\"1\">\n";
+
+        // The planet does not support the configuration of the specified resource producing facility.
+        if (!isset($planet['prod'.$id])) {
+            echo "<th>&nbsp;</th>\n";
+            return;
+        }
+
+        echo "  <th> <select name=\"last$id\" size=\"1\">\n";
         $prod = $this->get_prod ( $id, $planet );
         for ($i=10; $i>=0; $i--)
         {
             $selected = "";
             if (10*$i == $prod) $selected = "selected";
-            echo"      <option value=\"".(10*$i)."\" $selected>".(10*$i)."%</option>\n";
+            echo "      <option value=\"".(10*$i)."\" $selected>".(10*$i)."%</option>\n";
         }
-        echo"        </select>\n";
-        echo"   </th>\n";
+        echo "        </select>\n";
+        echo "   </th>\n";
     }
 
-    private function nicenum2 (float|int $num) : string    // for debugging. the Germans messed up with rounding, I don't know where they call floor, ceil and round.
+    private function nicenum2 (float|int $num) : string
     {
+        // for debugging. the Germans messed up with rounding, I don't know where they call floor, ceil and round.
+        if ($this->debug_no_rounding) return $num;
         return nicenum(round($num));
-        //return $num;
     }
 
     private function rgnum (float|int $num) : string
     {
         if ( $num > 0 ) return "<font color=\"#00ff00\">".$this->nicenum2($num)."</font>";
         else return "<font color=\"#ff0000\">".$this->nicenum2($num)."</font>";
+    }
+
+    private function DisplayTotalProduction (array $planet, array $reslist, string $head, int $hours) : void {
+
+        global $resourcesWithNonZeroDerivative;         // used to determine the type (integral, constant)
+
+        echo "  <tr> \n";
+        echo "    <th colspan=\"2\">".$head."</th> \n";
+        foreach ($reslist as $i=>$rc) {
+            $factor = in_array ($rc, $resourcesWithNonZeroDerivative, true) ? $hours : 1;
+            $total = $planet['balance'][$rc] * $factor;
+            echo "    <td class=\"k\">".$this->rgnum($total)."</td> \n";
+        }
+        echo "  </tr> \n";
+    }
+
+    private function DisplayFacilityProduction () : void {
+
+    }
+
+    private function DisplayStorages (array $planet, array $reslist) : void {
+
+        foreach ($reslist as $i=>$rc) {
+            $val_str = isset($planet['max'.$rc]) ? $this->nicenum2($planet['max'.$rc]/1000) . "k" : '-';
+            echo "    <td class=\"k\"><font color=\"#00ff00\">$val_str</font></td> \n";
+        }
     }
 }
 ?>

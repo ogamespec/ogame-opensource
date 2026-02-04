@@ -125,7 +125,7 @@ if ( method () === "POST" )
                        floor ( $value_3 * $GlobalUser['rate_m'] / $GlobalUser['rate_d'] );
 
                 if ( $met > $aktplanet[GID_RC_METAL]) $PageError = loca("TRADER_ERROR_RES") . "<br>";
-                else if ( $crys > $aktplanet['kmax'] || $deut > $aktplanet['dmax'] ) $PageError = loca("TRADER_ERROR_STORAGE") . "<br>";
+                else if ( $crys > $aktplanet['max'.GID_RC_METAL] || $deut > $aktplanet['max'.GID_RC_DEUTERIUM] ) $PageError = loca("TRADER_ERROR_STORAGE") . "<br>";
 
                 if ( $PageError === '' && $met > 0 ) {
                     $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
@@ -145,7 +145,7 @@ if ( method () === "POST" )
                         floor ( $value_3 * $GlobalUser['rate_k'] / $GlobalUser['rate_d'] );
 
                 if ( $crys > $aktplanet[GID_RC_CRYSTAL]) $PageError = loca("TRADER_ERROR_RES") . "<br>";
-                else if ( $met > $aktplanet['mmax'] || $deut > $aktplanet['dmax'] ) $PageError = loca("TRADER_ERROR_STORAGE") . "<br>";
+                else if ( $met > $aktplanet['max'.GID_RC_METAL] || $deut > $aktplanet['max'.GID_RC_DEUTERIUM] ) $PageError = loca("TRADER_ERROR_STORAGE") . "<br>";
 
                 if ( $PageError === '' && $crys > 0 ) {
                     $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
@@ -165,7 +165,7 @@ if ( method () === "POST" )
                         floor ( $value_2 * $GlobalUser['rate_d'] / $GlobalUser['rate_k'] );
 
                 if ( $deut > $aktplanet[GID_RC_DEUTERIUM]) $PageError .= loca("TRADER_ERROR_RES") . "<br>";
-                else if ( $met > $aktplanet['mmax'] || $crys > $aktplanet['kmax'] ) $PageError .= loca("TRADER_ERROR_STORAGE") . "<br>";
+                else if ( $met > $aktplanet['max'.GID_RC_METAL] || $crys > $aktplanet['max'.GID_RC_CRYSTAL] ) $PageError .= loca("TRADER_ERROR_STORAGE") . "<br>";
 
                 if ( $PageError === '' && $deut > 0 ) {
                     $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
@@ -207,9 +207,9 @@ if ( $GlobalUser['trader'] > 0 )
     if ( $offer_id == 1) $amount = floor ($aktplanet[GID_RC_METAL]);
     else if ( $offer_id == 2) $amount = floor ($aktplanet[GID_RC_CRYSTAL]);
     else if ( $offer_id == 3) $amount = floor ($aktplanet[GID_RC_DEUTERIUM]);
-    $mmax = max (0, $aktplanet['mmax'] - $aktplanet[GID_RC_METAL] );
-    $kmax = max (0, $aktplanet['kmax'] - $aktplanet[GID_RC_CRYSTAL] );
-    $dmax = max (0, $aktplanet['dmax'] - $aktplanet[GID_RC_DEUTERIUM] );
+    $mmax = max (0, $aktplanet['max'.GID_RC_METAL] - $aktplanet[GID_RC_METAL] );
+    $kmax = max (0, $aktplanet['max'.GID_RC_CRYSTAL] - $aktplanet[GID_RC_CRYSTAL] );
+    $dmax = max (0, $aktplanet['max'.GID_RC_DEUTERIUM] - $aktplanet[GID_RC_DEUTERIUM] );
     $storage = "0, " . $mmax . ", " . $kmax . ", " . $dmax;
     $factor = "0, " . $GlobalUser['rate_m'] . ", " . $GlobalUser['rate_k'] . ", " . $GlobalUser['rate_d'];
 

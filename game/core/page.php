@@ -127,7 +127,8 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
         ResourceList ($aktplanet, 
             (int)floor($aktplanet[GID_RC_METAL]), (int)floor($aktplanet[GID_RC_CRYSTAL]), (int)floor($aktplanet[GID_RC_DEUTERIUM]), 
             (int)$aktplanet['e'], (int)$aktplanet[GID_RC_ENERGY], 
-            $GlobalUser['dm']+$GlobalUser['dmfree'], $aktplanet['mmax'], $aktplanet['kmax'], $aktplanet['dmax']);
+            $GlobalUser['dm']+$GlobalUser['dmfree'], 
+            $aktplanet['max'.GID_RC_METAL], $aktplanet['max'.GID_RC_CRYSTAL], $aktplanet['max'.GID_RC_DEUTERIUM]);
         BonusList ();
         echo "</tr>\n";
         echo "</table>\n";
