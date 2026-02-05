@@ -404,6 +404,41 @@ class SpaceStorm extends GameMod {
 
         return false;
     }
+
+    // Отобразить (анти)бонусы Шторма на странице Флот 1 (для флотов)
+    public function page_flotten1_get_bonus(array &$bonuses) : bool {
+
+        $storm = $this->GetStorm ();
+
+        // Эффекты шторма, которые можно отобразить на странице отправки флота
+        $storm_fleet_bonus = [ 
+            SPACE_STORM_MASK_SUBSPACE_TURB,
+            SPACE_STORM_MASK_SUBSPACE_JUMP,
+            SPACE_STORM_MASK_QUANTUM_DRIVE,
+            SPACE_STORM_MASK_CHRONO_SPY,
+            SPACE_STORM_MASK_COMM_BREAKDOWN ];
+
+        for ($i=0; $i<SPACE_STORM_MASK_MSB; $i++) {
+
+            $mask = 1 << $i;
+            if (!in_array($mask, $storm_fleet_bonus, true)) continue;
+
+            if (($storm & $mask) != 0) {
+
+                $bonus = [];
+                $bonus['color'] = "";
+                $bonus['text'] = "";
+                $bonus['alt'] = loca("STORM_STORM");
+                $bonus['img'] = "mods/SpaceStorm/img/storm_ikon.png";
+                $bonus['overlib'] = "<font color=white><b>".loca("STORM_$i") . "</b><br/>" . loca("STORM_DESC_$i") . "</font>";
+                $bonus['width'] = 200;
+
+                $bonuses[] = $bonus;
+            }
+        }
+
+        return false;
+    }
 }
 
 ?>

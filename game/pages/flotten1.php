@@ -57,8 +57,10 @@ function GetFleetBonusesHtml (array &$bonuses) : string {
 
     foreach ($bonuses as $i=>$bonus) {
 
-        $res .= "<b><font style=\"color:".$bonus['color'].";\">".$bonus['text']."</font></b> ";
-        $res .= "<img border=\"0\" alt=\"".$bonus['alt']."\" src=\"".$bonus['img']."\" ";
+        if ($bonus['text'] !== "") {
+            $res .= "<b><font style=\"color:".$bonus['color'].";\">".$bonus['text']."</font></b>";
+        }
+        $res .= " <img border=\"0\" alt=\"".$bonus['alt']."\" src=\"".$bonus['img']."\" ";
         $res .= "onmouseover='return overlib(\"".$bonus['overlib']."\", WIDTH, ".$bonus['width'].");' onmouseout=\"return nd();\" width=\"20\" height=\"20\" style=\"vertical-align:middle;\">";
     }
 
