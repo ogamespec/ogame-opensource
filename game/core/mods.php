@@ -92,6 +92,10 @@ abstract class GameMod {
         return false;
     }
 
+    public function battle_post_process (array &$res) : bool {
+        return false;
+    }
+
     // Default pages hooks (various modifications of the original content)
 
     public function page_buildings_get_bonus(int $id, array &$bonuses) : bool {

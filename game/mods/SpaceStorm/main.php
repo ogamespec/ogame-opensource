@@ -494,6 +494,50 @@ class SpaceStorm extends GameMod {
         return false;
     }
 
+    // Применить эффект Реверберации Атаки на планете.
+    public function battle_post_process (array &$res) : bool {
+
+        global $GlobalUni;
+
+        if ($res['result'] !== "awon" ) return false;
+
+        $reverb_losses = [];
+        $total_units_lost = 0;
+
+        $rounds = count($res['rounds']);
+        if ($rounds > 0) {
+
+            $last = $res['rounds'][$rounds - 1];
+            foreach ($last['attackers'] as $i=>$attacker) {
+                foreach ($attacker['units'] as $gid=>$count) {
+                    $after = (int)ceil($count * 0.95);
+                    $res['rounds'][$rounds-1]['attackers'][$i]['units'][$gid] = $after;
+                    $units_lost = $count - $after;
+                    if (isset($reverb_losses[$gid])) $reverb_losses[$gid] += $units_lost;
+                    else $reverb_losses[$gid] = $units_lost;
+                    $total_units_lost += $units_lost;
+                }
+            }
+        }
+
+        if ($units_lost) {
+
+            loca_add ( "technames", $GlobalUni['lang'] );
+            loca_add ( "space_storm", $GlobalUni['lang'], __DIR__);
+
+            $text = loca_lang ("STORM_BATTLE_REVERB_LOSS", $GlobalUni['lang']) . ": ";
+            $need_comma = false;
+            foreach ($reverb_losses as $gid=>$count) {
+                if ($need_comma) $text .= ", ";
+                $text .= $count . " " . loca_lang ("NAME_$gid", $GlobalUni['lang']);
+                $need_comma = true;
+            }
+            $res['extra'][] = $text;
+        }
+
+        return false;
+    }
+
 }
 
 ?>

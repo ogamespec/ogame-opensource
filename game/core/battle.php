@@ -557,6 +557,10 @@ function PostProcessBattleResult (array $a, array $d, array &$res) : void {
             $res['rounds'][$n]['defenders'][$i]['pf'] = $d[$i]['pf'];
         }
     }
+
+    $res['extra'] = [];
+
+    ModsExecRef ('battle_post_process', $res);
 }
 
 /**
