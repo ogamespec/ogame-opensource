@@ -338,6 +338,36 @@ function ProdResources (array $uni, array $user, array &$planet) : void {
     $planet['balance'] = $eco['balance'];
 }
 
+function SetDefaultProduction (array &$planet) : void {
+    global $prodPriority;
+
+    $planet['factor'] = 0;
+
+    $eco = array();
+
+    $eco['prod'] = [];
+    $eco['prod_with_bonus'] = [];
+    $eco['cons'] = [];
+    $eco['cons_with_bonus'] = [];
+    $eco['net_prod'] = [];
+    $eco['net_cons'] = [];
+    $eco['balance'] = [];
+
+    foreach ($prodPriority as $i=>$rc) {
+        $eco['net_prod'][$rc] = 0;
+        $eco['net_cons'][$rc] = 0;
+        $eco['balance'][$rc] = 0;
+    }
+
+    $planet['prod'] = $eco['prod'];
+    $planet['prod_with_bonus'] = $eco['prod_with_bonus'];
+    $planet['cons'] = $eco['cons'];
+    $planet['cons_with_bonus'] = $eco['cons_with_bonus'];
+    $planet['net_prod'] = $eco['net_prod'];
+    $planet['net_cons'] = $eco['net_cons'];
+    $planet['balance'] = $eco['balance'];
+}
+
 // Get the state of the planet (array) and update resource production from planet's lastpeek until $time_to. Limit storage capacity.
 // NOTE: The calculation excludes external events, such as the end of officers' actions, attack of another player, completion of building construction, etc.
 function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
@@ -352,8 +382,7 @@ function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
         foreach ($storagemap as $rc=>$gid) {
             $planet['max'.$rc] = 0;
         }
-        $planet['factor'] = 0;
-        $planet['e'] = $planet['econs'] = $planet[GID_RC_ENERGY] = 0;
+        SetDefaultProduction ($planet);
         return $planet;        // NOT a planet
     }
     $user = LoadUser ( $planet['owner_id'] );
@@ -387,12 +416,6 @@ function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
     $query = "UPDATE ".$db_prefix."planets SET $update_query lastpeek = ".$time_to." WHERE planet_id = $planet_id";
     dbquery ($query);
     $planet['lastpeek'] = $time_to;
-
-    // Deprecated
-
-    $planet[GID_RC_ENERGY] = $planet['net_prod'][GID_RC_ENERGY];
-    $planet['e'] = $planet['balance'][GID_RC_ENERGY];
-    $planet['econs'] = $planet['net_cons'][GID_RC_ENERGY];
 
     return $planet;
 }

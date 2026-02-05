@@ -61,9 +61,9 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             if ( $value > $GlobalUni['max_werf'] ) $value = $GlobalUni['max_werf'];
 
             $res = TechPrice ( $gid, 1 );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM];
 
-            if ( $aktplanet[GID_RC_METAL] < $m || $aktplanet[GID_RC_CRYSTAL] < $k || $aktplanet[GID_RC_DEUTERIUM] < $d ) continue;    // insufficient resources for one unit
+            if ( !IsEnoughResources($GlobalUser, $aktplanet, $res) ) continue;    // insufficient resources for one unit
 
             // Shield Domes.
             if ( $gid == GID_D_SDOME || $gid == GID_D_LDOME ) $value = 1;
