@@ -267,4 +267,17 @@ function DurationFormat ( int $seconds ) : string
     return $res;
 }
 
+function RunBackgroundProcess(string $command) : int {
+    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+        // Windows
+        $handle = popen("start /B " . $command, "r");
+        pclose($handle);
+        return 0;
+    } else {
+        // Linux/Unix
+        exec("nohup " . $command . " > /dev/null 2>&1 & echo $!", $output);
+        return (int)$output[0]; // Returning the PID
+    }
+}
+
 ?>

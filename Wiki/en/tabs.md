@@ -349,6 +349,8 @@ Message types (pm):
 |start|INT UNSIGNED|task start time | 
 |end|INT UNSIGNED|task end time | 
 |prio|INT|event priority, used for events that end at the same time, the higher the priority, the earlier the event will be executed. |
+|freeze|INT|Pause task completion|
+|frozen|INT UNSIGNED|Start time of task completion pause|
 
 ## Queue of buildings (buildqueue)
 

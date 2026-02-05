@@ -38,6 +38,8 @@ level: Building level / number of units ordered at the shipyard (INT)
 start: task start time (INT UNSIGNED)
 end: task completion time (INT UNSIGNED)
 prio: event priority, used for events that end at the same time, the higher the priority, the earlier the event will be executed. (INT)
+freeze: Pause task completion (INT DEFAULT 0)
+frozen: Start time of task completion pause (INT UNSIGNED DEFAULT 0)
 
 How the queue is updated:
 After the next click by one of the users, each queue task is checked for completion. If the task is completed, its handler is called and the task is removed from the queue.
@@ -102,7 +104,7 @@ function UpdateQueue (int $until) : void
 
     LockTables ();
 
-    $query = "SELECT * FROM ".$db_prefix."queue WHERE end <= $until ORDER BY end ASC, prio DESC LIMIT " . QUEUE_BATCH;
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE end <= $until AND freeze=0 ORDER BY end ASC, prio DESC LIMIT " . QUEUE_BATCH;
     $result = dbquery ($query);
 
     $rows = dbrows ($result);
@@ -164,6 +166,32 @@ function FlushQueue (int $planet_id) : void
     }
     $query = "DELETE FROM ".$db_prefix."buildqueue WHERE planet_id = " . $planet_id;
     dbquery ( $query );
+}
+
+function FreezeQueue (int $task_id, bool $freeze, int $when=0) : void
+{
+    global $db_prefix;
+    $queue = LoadQueue ($task_id);
+    if ($queue == null) return;
+    if ($when == 0) $when = time();
+    if ($freeze) {
+        if ($queue['freeze'] == 0) {
+            // When freezing, record the freezing time and set a flag
+            $query = "UPDATE ".$db_prefix."queue SET freeze=1, frozen=$when WHERE task_id = $task_id";
+            dbquery ( $query );
+        }
+    }
+    else {
+        if ($queue['freeze']) {
+            // When unfreezing, extend the end time of the event by the amount it was frozen and reset the flag.
+            // If the unfreeze time somehow happened to be earlier than the time when the event was frozen (bug?) - do not extend the end time
+            $frozen_seconds = $when - $queue['frozen'];
+            if ($frozen_seconds > 0) $end = $queue['end'] + $frozen_seconds;
+            else $end = $queue['end'];
+            $query = "UPDATE ".$db_prefix."queue SET freeze=0, frozen=0, end=$end WHERE task_id = $task_id";
+            dbquery ( $query );
+        }
+    }
 }
 
 // ===============================================================================================================

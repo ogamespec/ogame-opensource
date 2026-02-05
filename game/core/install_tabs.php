@@ -144,7 +144,7 @@ $tab_browse = array (    // Browser history
 );
 
 $tab_queue = array (    // Event queue
-    'task_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'type'=>'CHAR(20)', 'sub_id'=>'INT', 'obj_id'=>'INT', 'level'=>'INT', 'start'=>'INT UNSIGNED', 'end'=>'INT UNSIGNED', 'prio'=>'INT'
+    'task_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'owner_id'=>'INT', 'type'=>'CHAR(20)', 'sub_id'=>'INT', 'obj_id'=>'INT', 'level'=>'INT', 'start'=>'INT UNSIGNED', 'end'=>'INT UNSIGNED', 'prio'=>'INT', 'freeze'=>'INT DEFAULT 0', 'frozen'=>'INT UNSIGNED DEFAULT 0'
 );
 
 $tab_buildqueue = array (    // Build queue
