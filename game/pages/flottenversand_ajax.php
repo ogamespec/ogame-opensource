@@ -75,10 +75,8 @@ if ( $GlobalUser['vacation'] ) AjaxSendError (605);    // user in vacation mode
 // Check for available slots
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
-$maxfleet = $GlobalUser[GID_R_COMPUTER] + 1;
-
-$prem = PremiumStatus ($GlobalUser);
-if ( $prem['admiral'] ) $maxfleet += 2;
+$maxfleet = $maxfleet_no_bonus = 0;
+GetMaxFleet ($GlobalUser, $maxfleet, $maxfleet_no_bonus);
 
 if ( $nowfleet >= $maxfleet ) AjaxSendError (612);
 

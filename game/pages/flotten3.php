@@ -23,7 +23,7 @@ if ( $galaxy > $uni['galaxies'] ) $galaxy = $uni['galaxies'];
 if ( $system < 1 ) $system = 1;
 if ( $system > $uni['systems'] ) $system = $uni['systems'];
 
-if ( $planet < 0 ) $planet = 0;
+if ( $planet < 1 ) $planet = 1;
 if ( $planet > 16 ) $planet = 16;
 
 ?>
