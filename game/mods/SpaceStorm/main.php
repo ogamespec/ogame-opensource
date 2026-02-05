@@ -602,6 +602,16 @@ class SpaceStorm extends GameMod {
         return false;
     }
 
+    public function bonus_fleet_cons (array $param, array &$bonus) : bool {
+
+        $storm = $this->GetStorm ();
+
+        if (($storm & SPACE_STORM_MASK_QUANTUM_DRIVE) != 0) {
+            $bonus['value'] *= 2;
+        }        
+
+        return false;
+    }
 }
 
 ?>

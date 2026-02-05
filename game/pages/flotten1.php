@@ -346,9 +346,9 @@ $prem = PremiumStatus ($GlobalUser);
         if (!isset($aktplanet[$gid])) continue;
         $amount = $aktplanet[$gid];
         if ($amount > 0) {
-            $speed = FleetSpeed ($gid, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE]);
+            $speed = FleetSpeed ($gid, $GlobalUser, $aktplanet);
             $cargo = FleetCargo ($gid );
-            $cons = FleetCons ( $gid, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE]);
+            $cons = FleetCons ( $gid, $GlobalUser, $aktplanet);
 
             echo "   <tr height=\"20\">\n";
             echo "    <th><a title=\"".loca("FLEET1_SPEED").": $speed\">".loca("NAME_$gid")."</a></th>\n";
@@ -358,7 +358,7 @@ $prem = PremiumStatus ($GlobalUser);
             echo "     <input type=\"hidden\" name=\"speed$gid\" value=\"$speed\" /></th>\n";
             echo "     <input type=\"hidden\" name=\"capacity$gid\" value=\"$cargo\" /></th>\n";
             if ( $speed ) {
-                echo "     <th><a href=\"javascript:maxShip('ship$gid');\" >все</a> </th>\n";
+                echo "     <th><a href=\"javascript:maxShip('ship$gid');\" >".loca("FLEET1_ALL")."</a> </th>\n";
                 echo "     <th><input name=\"ship$gid\" size=\"10\" value=\"0\" alt=\"".loca("NAME_$gid")." $amount\"/></th>\n";
             }
             else {

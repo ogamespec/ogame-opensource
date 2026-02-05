@@ -139,9 +139,9 @@ else if ( $order == FTYP_ACS_HOLD ) {
 
 // Calculate distance, flight time, and deuterium costs.
 $dist = FlightDistance ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']) );
-$slowest_speed = FlightSpeed ( $fleet, $origin_user[GID_R_COMBUST_DRIVE], $origin_user[GID_R_IMPULSE_DRIVE], $origin_user[GID_R_HYPER_DRIVE] );
+$slowest_speed = FlightSpeed ( $fleet, $origin_user, $origin );
 $flighttime = FlightTime ( $dist, $slowest_speed, $fleetspeed / 10, $unispeed );
-$cons = FlightCons ( $fleet, $dist, $flighttime, $origin_user[GID_R_COMBUST_DRIVE], $origin_user[GID_R_IMPULSE_DRIVE], $origin_user[GID_R_HYPER_DRIVE], $unispeed, $hold_time / 3600 );
+$cons = FlightCons ( $fleet, $dist, $flighttime, $origin_user, $origin, $unispeed, $hold_time / 3600 );
 $cargo = $spycargo = $numships = 0;
 
 foreach ($fleet as $id=>$amount)

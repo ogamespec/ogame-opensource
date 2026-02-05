@@ -147,9 +147,9 @@ if ( $order == FTYP_RECYCLE )
 
 // Calculate distance, flight time, and deuterium costs.
 $dist = FlightDistance ( $aktplanet['g'], $aktplanet['s'], $aktplanet['p'], $galaxy, $system, $planet );
-$slowest_speed = FlightSpeed ( $fleet, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE] );
+$slowest_speed = FlightSpeed ( $fleet, $GlobalUser, $aktplanet );
 $flighttime = FlightTime ( $dist, $slowest_speed, $speed, $unispeed );
-$arr = FlightCons ( $fleet, $dist, $flighttime, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE], $unispeed );
+$arr = FlightCons ( $fleet, $dist, $flighttime, $GlobalUser, $aktplanet, $unispeed );
 $cons = $arr['fleet'] + $arr['probes'];
 
 if ( $aktplanet[GID_RC_DEUTERIUM] < $cons ) AjaxSendError (613);        // not enough deut to fly.

@@ -46,6 +46,7 @@ $LOCA["ru"]["FLEET1_CLEAR"] = "Обнулить";
 $LOCA["ru"]["FLEET1_ALL_SHIPS"] = "Все корабли";
 $LOCA["ru"]["FLEET1_TEMPLATE"] = "Стандартные";
 $LOCA["ru"]["FLEET1_NEXT"] = "Дальше";
+$LOCA["ru"]["FLEET1_ALL"] = "все";
 
 // flotten2
 
