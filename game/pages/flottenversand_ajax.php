@@ -76,7 +76,7 @@ if ( $GlobalUser['vacation'] ) AjaxSendError (605);    // user in vacation mode
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
 $maxfleet = $maxfleet_no_bonus = 0;
-GetMaxFleet ($GlobalUser, $maxfleet, $maxfleet_no_bonus);
+GetMaxFleet ($GlobalUser, $aktplanet, $maxfleet, $maxfleet_no_bonus);
 
 if ( $nowfleet >= $maxfleet ) AjaxSendError (612);
 

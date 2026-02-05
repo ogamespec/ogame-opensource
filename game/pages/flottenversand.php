@@ -49,7 +49,7 @@ if ( $rows ) {
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
 $maxfleet = $maxfleet_no_bonus = 0;
-GetMaxFleet ($GlobalUser, $maxfleet, $maxfleet_no_bonus);
+GetMaxFleet ($GlobalUser, $aktplanet, $maxfleet, $maxfleet_no_bonus);
 
 // Limit the speed and make it a multiple of 10.
 $fleetspeed = round ( abs(intval($_POST['speed']) * 10) / 10) * 10;

@@ -5,6 +5,7 @@
 /** @var array $fleetmap */
 /** @var string $db_prefix */
 /** @var string $session */
+/** @var array $aktplanet */
 
 // Fleet 1: prepares the composition of the fleet
 
@@ -12,7 +13,10 @@
 
 function FleetMissionText (int $num) : void
 {
-    if ($num >= FTYP_ORBITING)
+    if ($num >= FTYP_CUSTOM) {
+        $desc = "<a title=\"".loca("FLEET1_CUSTOM")."\">".loca("FLEET1_CUSTOM_SHORT")."</a>";
+    }
+    else if ($num >= FTYP_ORBITING)
     {
         $desc = "<a title=\"".loca("FLEET1_HOLD")."\">".loca("FLEET1_HOLD_SHORT")."</a>";
         $num -= FTYP_ORBITING;
@@ -97,7 +101,7 @@ if ( method () === "POST" )
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );    // Number of fleets
 $nowfleet = $rows = dbrows ($result);
 $maxfleet = $maxfleet_no_bonus = 0;
-GetMaxFleet ($GlobalUser, $maxfleet, $maxfleet_no_bonus);
+GetMaxFleet ($GlobalUser, $aktplanet, $maxfleet, $maxfleet_no_bonus);
 
 $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Number of expeditions
 $maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );

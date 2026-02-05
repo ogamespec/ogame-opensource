@@ -271,7 +271,7 @@ function FleetCons (int $id, int $combustion, int $impulse, int $hyper ) : int
     else return $UnitParam[$id][5];
 }
 
-function GetMaxFleet (array|null $user, int &$maxfleet, int &$maxfleet_no_bonus) : void {
+function GetMaxFleet (array|null $user, array|null $planet, int &$maxfleet, int &$maxfleet_no_bonus) : void {
 
     if ($user == null) {
         $maxfleet = $maxfleet_no_bonus = 0;
@@ -287,6 +287,7 @@ function GetMaxFleet (array|null $user, int &$maxfleet, int &$maxfleet_no_bonus)
     // The maxfleet variable is passed through an array to receive the bonus.
     $param = [];
     $param['user'] = $user;
+    $param['planet'] = $planet;
     $bonus = [];
     $bonus['value'] = $maxfleet;
     ModsExecArrRef('bonus_max_fleet', $param, $bonus);
