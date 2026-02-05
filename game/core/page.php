@@ -221,7 +221,7 @@ function ResourceList (array $planet, int $dm) : void
     $json = LoadJsonFirst ("pages/res_panel.json");
 
     foreach ($resourcemap as $i=>$rc) {
-        if (!isset($planet[$rc])) continue;
+        if (!isset($planet['balance'][$rc])) continue;
 
         $deriv = in_array ($rc, $resourcesWithNonZeroDerivative, true);
         if ($deriv) {
@@ -378,6 +378,22 @@ function BonusList () : void
 
     echo "<td align='center' class='header'></td>";
     echo "</tr></table></td>\n\n";
+}
+
+function GetBonusesInHeader (array &$bonuses) : string {
+
+    $res = "";
+
+    foreach ($bonuses as $i=>$bonus) {
+
+        if ($bonus['text'] !== "") {
+            $res .= "<b><font style=\"color:".$bonus['color'].";\">".$bonus['text']."</font></b>";
+        }
+        $res .= " <img border=\"0\" alt=\"".$bonus['alt']."\" src=\"".$bonus['img']."\" ";
+        $res .= "onmouseover='return overlib(\"".$bonus['overlib']."\", WIDTH, ".$bonus['width'].");' onmouseout=\"return nd();\" width=\"20\" height=\"20\" style=\"vertical-align:middle;\">";
+    }
+
+    return $res;
 }
 
 function LeftMenu () : void

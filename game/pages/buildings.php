@@ -61,9 +61,9 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             if ( $value > $GlobalUni['max_werf'] ) $value = $GlobalUni['max_werf'];
 
             $res = TechPrice ( $gid, 1 );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM]; $e = $res[GID_RC_ENERGY];
+            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM];
 
-            if ( $aktplanet[GID_RC_METAL] < $m || $aktplanet[GID_RC_CRYSTAL] < $k || $aktplanet[GID_RC_DEUTERIUM] < $d ) continue;    // insufficient resources for one unit
+            if ( !IsEnoughResources($GlobalUser, $aktplanet, $res) ) continue;    // insufficient resources for one unit
 
             // Shield Domes.
             if ( $gid == GID_D_SDOME || $gid == GID_D_LDOME ) $value = 1;
@@ -83,7 +83,7 @@ if ( method () === "POST" && !$GlobalUser['vacation'] )
             if ( $value > $v ) $value = $v;
 
             AddShipyard ( $GlobalUser['player_id'], $aktplanet['planet_id'], intval ($gid), intval ($value) );
-            $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], time() );    // update the planet's state.
+            $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );    // update the planet's state.
         }
     }
 }
@@ -97,12 +97,12 @@ if ( method () === "GET"  && !$GlobalUser['vacation'] )
 		if ( $resqueue == null )		// The research is not in progress (run)
 		{
 			if ( key_exists ( 'bau', $_GET ) ) StartResearch ( $GlobalUser['player_id'], $aktplanet['planet_id'], intval ($_GET['bau']), $now );
-                  $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], time() );    // update the planet's state.
+                  $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );    // update the planet's state.
 		}
 		else	// Research in progress (cancel)
 		{
 			if ( key_exists ( 'unbau', $_GET ) ) StopResearch ( $GlobalUser['player_id'] );
-                  $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], time() );    // update the planet's state.
+                  $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );    // update the planet's state.
 		}
 	}
 }
@@ -365,6 +365,8 @@ if ( $_GET['mode'] === "Forschung" )
             {
                 if ( $id == $resq['obj_id'] )
                 {
+                    $freeze_seconds = $resq['freeze'] ? max (0, $now - $resq['frozen']) : 0;
+
 ?>
                 <div id="bxx" class="z"></div>
                 <script   type="text/javascript">
@@ -372,7 +374,7 @@ if ( $_GET['mode'] === "Forschung" )
                 var bxx=document.getElementById('bxx');
                 function t(){
                     n=new Date();
-                    ss=<?=($resq['end'] - time());?>;
+                    ss=<?=($resq['end'] - $now + $freeze_seconds);?>;
                     s=ss-Math.round((n.getTime()-v.getTime())/1000.);
                     m=0;h=0;
                     if(s<0){

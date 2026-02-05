@@ -199,6 +199,13 @@ function BattleReport ( array $res, int $now, array|null $loss, array|null $capt
         }
     }
 
+    // Additional text that modifications can add (in the language of the Universe)
+    if (isset($res['extra'])) {
+        foreach ($res['extra'] as $msg) {
+            $text .= "<br>" . $msg;
+        }
+    }
+
     return $text;
 }
 

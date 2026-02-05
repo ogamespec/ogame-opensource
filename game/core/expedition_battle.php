@@ -122,6 +122,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
                 if ( $level == 0 ) $ratio = mt_rand ( 27, 33 ) / 100;
                 else if ( $level == 1 ) $ratio = mt_rand ( 45, 55 ) / 100;
                 else if ( $level == 2 ) $ratio = mt_rand ( 72, 88 ) / 100;
+                else $ratio = mt_rand ( 27, 33 ) / 100; // default
                 $d[0]['units'][$gid] = floor ($a[0]['units'][$gid] * $ratio);
             }
             else $d[0]['units'][$gid] = 0;
@@ -137,6 +138,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
                 if ( $level == 0 ) $ratio = mt_rand ( 36, 44 ) / 100;
                 else if ( $level == 1 ) $ratio = mt_rand ( 54, 66 ) / 100;
                 else if ( $level == 2 ) $ratio = mt_rand ( 81, 99 ) / 100;
+                else $ratio = mt_rand ( 36, 44 ) / 100; // default
                 $d[0]['units'][$gid] = ceil ($a[0]['units'][$gid] * $ratio);
             }
             else $d[0]['units'][$gid] = 0;

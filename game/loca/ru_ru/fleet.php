@@ -14,6 +14,8 @@ $LOCA["ru"]["FLEET1_RETURN"] = "Возвращение к планете";
 $LOCA["ru"]["FLEET1_RETURN_SHORT"] = "(В)";
 $LOCA["ru"]["FLEET1_FLYING"] = "Уход на задание";
 $LOCA["ru"]["FLEET1_FLYING_SHORT"] = "(У)";
+$LOCA["ru"]["FLEET1_CUSTOM"] = "Особенное";
+$LOCA["ru"]["FLEET1_CUSTOM_SHORT"] = "(О)";
 
 $LOCA["ru"]["FLEET1_FLEETS"] = "Флоты #1 / #2";
 $LOCA["ru"]["FLEET1_EXPEDITIONS"] = "#1/#2 Экспедиции";
@@ -44,6 +46,7 @@ $LOCA["ru"]["FLEET1_CLEAR"] = "Обнулить";
 $LOCA["ru"]["FLEET1_ALL_SHIPS"] = "Все корабли";
 $LOCA["ru"]["FLEET1_TEMPLATE"] = "Стандартные";
 $LOCA["ru"]["FLEET1_NEXT"] = "Дальше";
+$LOCA["ru"]["FLEET1_ALL"] = "все";
 
 // flotten2
 

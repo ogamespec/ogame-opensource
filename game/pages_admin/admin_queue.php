@@ -62,6 +62,15 @@ function QueueDesc ( array $queue ) : string
     return loca("ADM_QUEUE_TYPE_UNKNOWN") . " (type=$type, sub_id=$sub_id, obj_id=$obj_id, level=$level)";
 }
 
+function QueueFrozenDesc (array $queue) : string {
+
+    if ($queue['freeze']) {
+        $frozen_seconds = time() - $queue['frozen'];
+        return " (".loca("ADM_QUEUE_FROZEN")." " . $frozen_seconds . ")";
+    }
+    else return "";
+}
+
 function Admin_Queue () : void
 {
     global $session;
@@ -92,6 +101,14 @@ function Admin_Queue () : void
         if ( key_exists ( "order_remove", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Delete task
             RemoveQueue ( intval ($_POST['order_remove']) );
         }
+
+        if ( key_exists ( "order_freeze", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Freeze task
+            FreezeQueue ( intval ($_POST['order_freeze']), true );
+        }
+
+        if ( key_exists ( "order_unfreeze", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // UnFreeze task
+            FreezeQueue ( intval ($_POST['order_unfreeze']), false );
+        }
     }
 
     if ( $player_id > 0 ) $query = "SELECT * FROM ".$db_prefix."queue WHERE (type <> '".QTYP_FLEET."') AND owner_id=$player_id ORDER BY end ASC, prio DESC";
@@ -111,19 +128,62 @@ function Admin_Queue () : void
         $queue = dbarray ( $result );
         $user = LoadUser ( $queue['owner_id'] );
         $pid = $user['player_id'];
-        echo "<tr><th> <table><tr><th><div id='bxx".$bxx."' title='".($queue['end'] - $now)."' star='".$queue['start']."'></th>";
-        echo "<tr><th>".date ("d.m.Y H:i:s", $queue['end'])."</th></tr></table></th><th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=$pid\">".$user['oname']."</a></th><th>".$queue['type']."</th><th>".QueueDesc($queue)."</th><th>".$queue['prio']."</th><th>".$queue['task_id']."</th>\n";
+        $freeze_seconds = $queue['freeze'] ? max (0, $now - $queue['frozen']) : 0;
+        echo "<tr><th> <table><tr><th><div id='bxx".$bxx."' title='".($queue['end'] - $now + $freeze_seconds)."' star='".$queue['start']."'></th>";
+        echo "<tr><th>".date ("d.m.Y H:i:s", $queue['end'])."</th></tr></table></th><th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=$pid\">".$user['oname']."</a></th><th>".$queue['type']."</th><th>".QueueDesc($queue).QueueFrozenDesc($queue)."</th><th>".$queue['prio']."</th><th>".$queue['task_id']."</th>\n";
+
+        if ($queue['freeze']) {
+            $freeze_loca = "ADM_QUEUE_UNFREEZE";
+            $freeze_order = "unfreeze";
+        }
+        else {
+            $freeze_loca = "ADM_QUEUE_FREEZE";
+            $freeze_order = "freeze";
+        }
 ?>
-    <th> 
-         <form action="index.php?page=admin&session=<?=$session;?>&mode=Queue" method="POST">
-    <input type="hidden" name="order_end" value="<?=$queue['task_id'];?>" />
-        <input type="submit" value="<?=loca("ADM_QUEUE_COMPLETE");?>" />
-     </form>
-         <form action="index.php?page=admin&session=<?=$session;?>&mode=Queue" method="POST" style="border: 1px solid red">
-    <input type="hidden" name="order_remove" value="<?=$queue['task_id'];?>" />
-        <input type="submit" value="<?=loca("ADM_QUEUE_DELETE");?>" />
-     </form>
-    </th>
+
+<style>
+.compact-buttons {
+    white-space: nowrap;
+}
+
+.compact-buttons form {
+    display: inline-block;
+    margin: 0 1px;
+}
+
+.btn-compact {
+    padding: 2px 2px !important;
+    font-size: 12px !important;
+    margin: 0;
+    line-height: 1.2;
+    height: auto;
+}
+
+.btn-delete {
+    border: 1px solid red;
+}
+
+.delete-form {
+    display: inline-block;
+}
+</style>
+
+<th class="compact-buttons"> 
+    <form action="index.php?page=admin&session=<?=$session;?>&mode=Queue" method="POST">
+        <input type="hidden" name="order_end" value="<?=$queue['task_id'];?>" />
+        <input type="submit" class="btn-compact" value="<?=loca("ADM_QUEUE_COMPLETE");?>" />
+    </form>
+    <form action="index.php?page=admin&session=<?=$session;?>&mode=Queue" method="POST">
+        <input type="hidden" name="order_<?=$freeze_order;?>" value="<?=$queue['task_id'];?>" />
+        <input type="submit" class="btn-compact" value="<?=loca($freeze_loca);?>" />
+    </form>
+    <form action="index.php?page=admin&session=<?=$session;?>&mode=Queue" method="POST" class="delete-form">
+        <input type="hidden" name="order_remove" value="<?=$queue['task_id'];?>" />
+        <input type="submit" class="btn-compact btn-delete" value="<?=loca("ADM_QUEUE_DELETE");?>" />
+    </form>
+</th>
+
 </tr>
 <?php
         $bxx++;

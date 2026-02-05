@@ -5,6 +5,7 @@
 /** @var array $fleetmap */
 /** @var string $db_prefix */
 /** @var string $session */
+/** @var array $aktplanet */
 
 // Fleet 1: prepares the composition of the fleet
 
@@ -12,7 +13,10 @@
 
 function FleetMissionText (int $num) : void
 {
-    if ($num >= FTYP_ORBITING)
+    if ($num >= FTYP_CUSTOM) {
+        $desc = "<a title=\"".loca("FLEET1_CUSTOM")."\">".loca("FLEET1_CUSTOM_SHORT")."</a>";
+    }
+    else if ($num >= FTYP_ORBITING)
     {
         $desc = "<a title=\"".loca("FLEET1_HOLD")."\">".loca("FLEET1_HOLD_SHORT")."</a>";
         $num -= FTYP_ORBITING;
@@ -27,10 +31,12 @@ function FleetMissionText (int $num) : void
     echo "      <a title=\"\">".loca("FLEET_ORDER_$num")."</a>\n$desc\n";
 }
 
-function GetFleetBonuses (array &$bonuses) : void {
+function GetFleetBonuses (array|null $user, array|null $planet, array &$bonuses) : void {
 
-    global $GlobalUser;
-    $prem = PremiumStatus ($GlobalUser);
+    if ($user == null) return;
+    if ($planet == null) return;
+
+    $prem = PremiumStatus ($user);
 
     // Default 0.84 bonuses
 
@@ -48,21 +54,10 @@ function GetFleetBonuses (array &$bonuses) : void {
     }
 
     // Modification bonuses
-    ModsExecRef ('page_flotten1_get_bonus', $bonuses);
-}
-
-function GetFleetBonusesHtml (array &$bonuses) : string {
-
-    $res = "";
-
-    foreach ($bonuses as $i=>$bonus) {
-
-        $res .= "<b><font style=\"color:".$bonus['color'].";\">".$bonus['text']."</font></b> ";
-        $res .= "<img border=\"0\" alt=\"".$bonus['alt']."\" src=\"".$bonus['img']."\" ";
-        $res .= "onmouseover='return overlib(\"".$bonus['overlib']."\", WIDTH, ".$bonus['width'].");' onmouseout=\"return nd();\" width=\"20\" height=\"20\" style=\"vertical-align:middle;\">";
-    }
-
-    return $res;
+    $param = [];
+    $param['user'] = $user;
+    $param['planet'] = $planet;
+    ModsExecArrRef ('page_flotten1_get_bonus', $param, $bonuses);
 }
 
 $union_id = 0;
@@ -95,13 +90,13 @@ if ( method () === "POST" )
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );    // Number of fleets
 $nowfleet = $rows = dbrows ($result);
 $maxfleet = $maxfleet_no_bonus = 0;
-GetMaxFleet ($GlobalUser, $maxfleet, $maxfleet_no_bonus);
+GetMaxFleet ($GlobalUser, $aktplanet, $maxfleet, $maxfleet_no_bonus);
 
 $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Number of expeditions
 $maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );
 
 $bonuses = [];
-GetFleetBonuses ($bonuses);
+GetFleetBonuses ($GlobalUser, $aktplanet, $bonuses);
 
 $prem = PremiumStatus ($GlobalUser);
 
@@ -125,7 +120,7 @@ $prem = PremiumStatus ($GlobalUser);
     if (count($bonuses)) echo "    <div style=\"margin-top:2;margin-bottom:2;\">";
     echo va(loca("FLEET1_FLEETS"), $rows, $maxfleet_no_bonus);
     if (count($bonuses)) {
-        echo GetFleetBonusesHtml ($bonuses);
+        echo GetBonusesInHeader ($bonuses);
         echo "</div>\n";
     }
 ?>
@@ -351,9 +346,9 @@ $prem = PremiumStatus ($GlobalUser);
         if (!isset($aktplanet[$gid])) continue;
         $amount = $aktplanet[$gid];
         if ($amount > 0) {
-            $speed = FleetSpeed ($gid, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE]);
+            $speed = FleetSpeed ($gid, $GlobalUser, $aktplanet);
             $cargo = FleetCargo ($gid );
-            $cons = FleetCons ( $gid, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE]);
+            $cons = FleetCons ( $gid, $GlobalUser, $aktplanet);
 
             echo "   <tr height=\"20\">\n";
             echo "    <th><a title=\"".loca("FLEET1_SPEED").": $speed\">".loca("NAME_$gid")."</a></th>\n";
@@ -363,7 +358,7 @@ $prem = PremiumStatus ($GlobalUser);
             echo "     <input type=\"hidden\" name=\"speed$gid\" value=\"$speed\" /></th>\n";
             echo "     <input type=\"hidden\" name=\"capacity$gid\" value=\"$cargo\" /></th>\n";
             if ( $speed ) {
-                echo "     <th><a href=\"javascript:maxShip('ship$gid');\" >все</a> </th>\n";
+                echo "     <th><a href=\"javascript:maxShip('ship$gid');\" >".loca("FLEET1_ALL")."</a> </th>\n";
                 echo "     <th><input name=\"ship$gid\" size=\"10\" value=\"0\" alt=\"".loca("NAME_$gid")." $amount\"/></th>\n";
             }
             else {

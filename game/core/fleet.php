@@ -174,12 +174,12 @@ function FlightDistance ( int $thisgalaxy, int $thissystem, int $thisplanet, int
 }
 
 // Group fleet speed.
-function FlightSpeed (array $fleet, int $combustion, int $impulse, int $hyper) : int
+function FlightSpeed (array $fleet, array $user, array $planet) : int
 {
-    $minspeed = FleetSpeed ( GID_F_PROBE, $combustion, $impulse, $hyper );        // the fastest ship is the Spy Probe.
+    $minspeed = FleetSpeed ( GID_F_PROBE, $user, $planet );        // the fastest ship is the Spy Probe.
     foreach ($fleet as $id=>$amount)
     {
-        $speed = FleetSpeed ( $id, $combustion, $impulse, $hyper);
+        $speed = FleetSpeed ( $id, $user, $planet );
         if ( $amount == 0 || $speed == 0 ) continue;
         if ($speed < $minspeed) $minspeed = $speed;
     }
@@ -187,16 +187,16 @@ function FlightSpeed (array $fleet, int $combustion, int $impulse, int $hyper) :
 }
 
 // Deuterium consumption per flight by the entire fleet.
-function FlightCons (array $fleet, int $dist, int $flighttime, int $combustion, int $impulse, int $hyper, int $speedfactor, int $hours=0) : array
+function FlightCons (array $fleet, int $dist, int $flighttime, array $user, array $planet, int $speedfactor, int $hours=0) : array
 {
     $cons = array ( 'fleet' => 0, 'probes' => 0 );
     foreach ($fleet as $id=>$amount)
     {
         if ($amount > 0) {
-            $spd = 35000 / ( $flighttime * $speedfactor - 10) * sqrt($dist * 10 / FleetSpeed($id, $combustion, $impulse, $hyper ) );
-            $basecons = $amount * FleetCons ($id, $combustion, $impulse, $hyper );
+            $spd = 35000 / ( $flighttime * $speedfactor - 10) * sqrt($dist * 10 / FleetSpeed($id, $user, $planet ) );
+            $basecons = $amount * FleetCons ($id, $user, $planet );
             $consumption = $basecons * $dist / 35000 * (($spd / 10) + 1) * (($spd / 10) + 1);
-            $consumption += $hours * $amount * FleetCons ($id, $combustion, $impulse, $hyper ) / 10;    // holding costs
+            $consumption += $hours * $amount * FleetCons ($id, $user, $planet ) / 10;    // holding costs
             if ( $id == GID_F_PROBE ) $cons['probes'] += (int)$consumption;
             else $cons['fleet'] += (int)$consumption;
         }
@@ -212,11 +212,14 @@ function FlightTime (int $dist, int $slowest_speed, float $prc, int $xspeed) : i
 
 // The speed of the ship
 // 202-C/I, 203-C, 204-C, 205-I, 206-I, 207-H, 208-I, 209-C, 210-C, 211-I/H, 212-C, 213-H, 214-H, 215-H
-function FleetSpeed ( int $id, int $combustion, int $impulse, int $hyper) : float
+function FleetSpeed ( int $id, array $user, array $planet) : float
 {
     global $UnitParam;
 
     $baseSpeed = $UnitParam[$id][4];
+    $combustion = $user[GID_R_COMBUST_DRIVE];
+    $impulse = $user[GID_R_IMPULSE_DRIVE];
+    $hyper = $user[GID_R_HYPER_DRIVE];
 
     switch ($id) {
         case GID_F_SC:
@@ -263,15 +266,26 @@ function FleetCargoSummary ( array $fleet ) : int
     return $cargo;
 }
 
-function FleetCons (int $id, int $combustion, int $impulse, int $hyper ) : int
+function FleetCons (int $id, array $user, array $planet ) : int
 {
     global $UnitParam;
+    $impulse = $user[GID_R_IMPULSE_DRIVE];
     // The Small Cargo has a 2X increase in consumption when changing engines. In a bomber, it does NOT increase.
-    if ($id == GID_F_SC && $impulse >= 5) return $UnitParam[$id][5] * 2;
-    else return $UnitParam[$id][5];
+    if ($id == GID_F_SC && $impulse >= 5) $cons = $UnitParam[$id][5] * 2;
+    else $cons = $UnitParam[$id][5];
+
+    $param = [];
+    $param['user'] = $user;
+    $param['planet'] = $planet;
+    $bonus = [];
+    $bonus['value'] = $cons;
+    ModsExecArrRef ('bonus_fleet_cons', $param, $bonus);
+    $cons = max (0, $bonus['value']);
+
+    return $cons;
 }
 
-function GetMaxFleet (array|null $user, int &$maxfleet, int &$maxfleet_no_bonus) : void {
+function GetMaxFleet (array|null $user, array|null $planet, int &$maxfleet, int &$maxfleet_no_bonus) : void {
 
     if ($user == null) {
         $maxfleet = $maxfleet_no_bonus = 0;
@@ -287,6 +301,7 @@ function GetMaxFleet (array|null $user, int &$maxfleet, int &$maxfleet_no_bonus)
     // The maxfleet variable is passed through an array to receive the bonus.
     $param = [];
     $param['user'] = $user;
+    $param['planet'] = $planet;
     $bonus = [];
     $bonus['value'] = $maxfleet;
     ModsExecArrRef('bonus_max_fleet', $param, $bonus);
@@ -1183,35 +1198,39 @@ function FleetlogsMissionText (int $num) : void
     echo "      <a title=\"\">".loca("FLEET_ORDER_$num")."</a>\n$desc\n";
 }
 
-function FleetlogsFromPlayer (int $player_id, array $missions) : mixed
+function FleetlogsFromPlayer (int $player_id, array|null $missions) : mixed
 {
     global $db_prefix;
 
-    if ( count ($missions) == 0 ) return null;
-
     $list = "";
-    foreach ($missions as $i=>$num) {
-        if ($i > 0) $list .= "OR ";
-        $list .= "mission = $num ";
+    if ($missions != null) {
+        $list .= "(";
+        foreach ($missions as $i=>$num) {
+            if ($i > 0) $list .= "OR ";
+            $list .= "mission = $num ";
+        }
+        $list .= ") AND";
     }
 
-    $query = "SELECT * FROM ".$db_prefix."fleetlogs WHERE (".$list.") AND owner_id = $player_id ORDER BY start ASC;";
+    $query = "SELECT * FROM ".$db_prefix."fleetlogs WHERE $list owner_id = $player_id ORDER BY start ASC;";
     return dbquery ( $query );
 }
 
-function FleetlogsToPlayer (int $player_id, array $missions) : mixed
+function FleetlogsToPlayer (int $player_id, array|null $missions) : mixed
 {
     global $db_prefix;
 
-    if ( count ($missions) == 0 ) return null;
-
     $list = "";
-    foreach ($missions as $i=>$num) {
-        if ($i > 0) $list .= "OR ";
-        $list .= "mission = $num ";
+    if ($missions != null) {
+        $list = "(";
+        foreach ($missions as $i=>$num) {
+            if ($i > 0) $list .= "OR ";
+            $list .= "mission = $num ";
+        }
+        $list .= ") AND";
     }
 
-    $query = "SELECT * FROM ".$db_prefix."fleetlogs WHERE (".$list.") AND owner_id <> target_id AND target_id = $player_id ORDER BY start ASC;";
+    $query = "SELECT * FROM ".$db_prefix."fleetlogs WHERE $list owner_id <> target_id AND target_id = $player_id ORDER BY start ASC;";
     return dbquery ( $query );
 }
 

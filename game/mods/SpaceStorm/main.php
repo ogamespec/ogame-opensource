@@ -22,6 +22,12 @@ const QTYP_SPACE_STORM = "SpaceStorm";
 
 const SPACE_STORM_PERIOD_SECONDS = 60*60;
 
+const SPACE_STORM_CHRONO_SPY_DELAY_MIN = 1;
+const SPACE_STORM_CHRONO_SPY_DELAY_MAX = 5;
+const SPACE_STORM_MATTER_SIGNATURE_BASE_BONUS = 0.2;
+const SPACE_STORM_QUANTUM_DRIVE_BASE_BONUS = 0.25;
+const SPACE_STORM_ENERGY_COLLAPSE_BASE_PENALTY = 0.4;
+
 class SpaceStorm extends GameMod {
 
     public function install() : void {
@@ -100,6 +106,7 @@ class SpaceStorm extends GameMod {
     // Событие завершения Космического шторма. Формируется новый шторм, согласно правилам
     public function update_queue(array &$queue) : bool {
         global $db_prefix;
+        global $resourcesWithNonZeroDerivative;
         if ($queue['type'] === QTYP_SPACE_STORM) {
 
             $prev = $this->GetStorm ();
@@ -107,6 +114,16 @@ class SpaceStorm extends GameMod {
             $this->SetStorm ($storm);
 
             ProlongQueue ($queue['task_id'], SPACE_STORM_PERIOD_SECONDS);
+
+            // Для Сигнатуры Материи нужно выбрать тип ресурса, в который переносится всё производство
+            $res_types = count ($resourcesWithNonZeroDerivative);
+            if ($res_types) {
+                $idx = mt_rand (0, $res_types - 1);
+                $obj_id = $resourcesWithNonZeroDerivative[$idx];
+                $query = "UPDATE ".$db_prefix."queue SET obj_id=$obj_id WHERE task_id = ".$queue['task_id'];
+                dbquery ($query);
+            }
+
             return true;
         }
         else {
@@ -385,6 +402,15 @@ class SpaceStorm extends GameMod {
         $mask = $planet['s'.GID_B_REALITY_STAB];
     }
 
+    private function GetStormQueue () : array|null {
+
+        global $db_prefix;
+        $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_SPACE_STORM."' LIMIT 1;";
+        $result = dbquery ($query);
+        if ($result == null) return null;
+        return dbarray ($result);
+    }
+
     public function add_db_row(array &$row, string $tabname) : bool {
 
         $storm = $this->GetStorm ();
@@ -397,8 +423,222 @@ class SpaceStorm extends GameMod {
 
             if ($fleet_obj && $fleet_obj['mission'] == FTYP_SPY && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
 
-                $delay_seconds = mt_rand (1, 5) * 60;
+                $delay_seconds = mt_rand (SPACE_STORM_CHRONO_SPY_DELAY_MIN, SPACE_STORM_CHRONO_SPY_DELAY_MAX) * 60;
                 $row['end'] += $delay_seconds;
+            }
+        }
+
+        return false;
+    }
+
+    // Отобразить (анти)бонусы Шторма на странице Флот 1 (для флотов)
+    public function page_flotten1_get_bonus(array $param, array &$bonuses) : bool {
+
+        // Эффекты шторма, которые можно отобразить на странице отправки флота
+        $storm_fleet_bonus = [ 
+            SPACE_STORM_MASK_SUBSPACE_TURB,
+            SPACE_STORM_MASK_SUBSPACE_JUMP,
+            SPACE_STORM_MASK_QUANTUM_DRIVE,
+            SPACE_STORM_MASK_CHRONO_SPY,
+            SPACE_STORM_MASK_COMM_BREAKDOWN,
+        ];
+
+        $this->GetStormBonuses ($storm_fleet_bonus, $bonuses);
+
+        return false;
+    }
+
+    public function page_overview_get_bonus (array $param, array &$bonuses) : bool {
+
+        // Эффекты шторма которые можно отобразить на странице Обзор
+        $storm_overview_bonus = [
+            SPACE_STORM_MASK_GRAV_DEFENSE,
+            SPACE_STORM_MASK_ATTACK_REVERB,
+        ];
+
+        $this->GetStormBonuses ($storm_overview_bonus, $bonuses);
+
+        return false;
+    }
+
+    public function page_resources_get_bonus (array $param, array &$bonuses) : bool {
+
+        $storm = $this->GetStorm ();
+
+        // Эффекты шторма которые можно отобразить в меню Сырьё
+        $storm_resources_bonus = [];
+
+        if ($param['rc'] == GID_RC_DEUTERIUM && $param['produce']) {
+            $storm_resources_bonus[] = SPACE_STORM_MASK_QUANTUM_DRIVE;
+        }
+        if ($param['rc'] == GID_RC_ENERGY && $param['produce']) {
+            $storm_resources_bonus[] = SPACE_STORM_MASK_ENERGY_COLLAPSE;
+        }
+        if (($storm & SPACE_STORM_MASK_MATTER_SIGNATURE) != 0 && $param['produce']) {
+
+            $queue = $this->GetStormQueue ();
+            if ($queue) {
+                $res_id = $queue['obj_id'];
+                if ($param['rc'] == $res_id) {
+                    $storm_resources_bonus[] = SPACE_STORM_MASK_MATTER_SIGNATURE;    
+                }
+            }
+        }
+
+        $this->GetStormBonuses ($storm_resources_bonus, $bonuses);
+
+        return false;
+    }
+
+    private function GetStormBonuses (array $storm_bonus_list, array &$bonuses) : void {
+
+        $storm = $this->GetStorm ();
+
+        for ($i=0; $i<SPACE_STORM_MASK_MSB; $i++) {
+
+            $mask = 1 << $i;
+            if (!in_array($mask, $storm_bonus_list, true)) continue;
+
+            if (($storm & $mask) != 0) {
+
+                $bonus = [];
+                $bonus['color'] = "";
+                $bonus['text'] = "";
+                $bonus['alt'] = loca("STORM_STORM");
+                $bonus['img'] = "mods/SpaceStorm/img/storm_ikon.png";
+                $bonus['overlib'] = "<font color=white><b>".loca("STORM_$i") . "</b><br/>" . loca("STORM_DESC_$i") . "</font>";
+                $bonus['width'] = 200;
+
+                $bonuses[] = $bonus;
+            }
+        }
+    }
+
+    // Невизуальный бонус выработки ресурсов для эффектов шторма
+    public function bonus_prod (array $param, array &$bonus) : bool {
+
+        $storm = $this->GetStorm ();
+
+        if ($param['rc'] == GID_RC_DEUTERIUM && ($storm & SPACE_STORM_MASK_QUANTUM_DRIVE) != 0) {
+            $bonus[] = 1 + SPACE_STORM_QUANTUM_DRIVE_BASE_BONUS;
+        }
+        if ($param['rc'] == GID_RC_ENERGY && ($storm & SPACE_STORM_MASK_ENERGY_COLLAPSE) != 0) {
+            $bonus[] = 1 - SPACE_STORM_ENERGY_COLLAPSE_BASE_PENALTY;
+        }
+
+        return false;
+    }
+
+    // Пост-процессинг для эффекта Сигнатура Материи (конвертирует выработку всех ресурсов в определённый тип)
+    public function prod_post_process (array &$planet, array &$eco) : bool {
+
+        global $resourcesWithNonZeroDerivative;
+        $storm = $this->GetStorm ();
+
+        if (($storm & SPACE_STORM_MASK_MATTER_SIGNATURE) != 0) {
+
+            $queue = $this->GetStormQueue ();
+            if ($queue == null) return false;
+            $res_id = $queue['obj_id'];
+
+            foreach ($resourcesWithNonZeroDerivative as $i=>$rc) {
+
+                if ($rc != $res_id && isset($eco['net_prod'][$res_id])) {
+
+                    $converted = $eco['net_prod'][$rc] * SPACE_STORM_MATTER_SIGNATURE_BASE_BONUS;
+
+                    $eco['net_prod'][$res_id] += $converted;
+                    $eco['balance'][$res_id] += $converted;
+                    $eco['net_prod'][$rc] -= $converted;
+                    $eco['balance'][$rc] -= $converted;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // Применить эффект Реверберации Атаки на планете.
+    public function battle_post_process (array &$res) : bool {
+
+        global $GlobalUni;
+        $storm = $this->GetStorm ();
+
+        if (($storm & SPACE_STORM_MASK_ATTACK_REVERB) == 0) return false;
+        if ($res['result'] !== "awon" ) return false;
+
+        $reverb_losses = [];
+        $total_units_lost = 0;
+
+        $rounds = count($res['rounds']);
+        if ($rounds > 0) {
+
+            $last = $res['rounds'][$rounds - 1];
+            foreach ($last['attackers'] as $i=>$attacker) {
+                foreach ($attacker['units'] as $gid=>$count) {
+                    $after = (int)ceil($count * 0.95);
+                    $res['rounds'][$rounds-1]['attackers'][$i]['units'][$gid] = $after;
+                    $units_lost = $count - $after;
+                    if (isset($reverb_losses[$gid])) $reverb_losses[$gid] += $units_lost;
+                    else $reverb_losses[$gid] = $units_lost;
+                    $total_units_lost += $units_lost;
+                }
+            }
+        }
+
+        if ($units_lost) {
+
+            loca_add ( "technames", $GlobalUni['lang'] );
+            loca_add ( "space_storm", $GlobalUni['lang'], __DIR__);
+
+            $text = loca_lang ("STORM_BATTLE_REVERB_LOSS", $GlobalUni['lang']) . ": ";
+            $need_comma = false;
+            foreach ($reverb_losses as $gid=>$count) {
+                if ($need_comma) $text .= ", ";
+                $text .= $count . " " . loca_lang ("NAME_$gid", $GlobalUni['lang']);
+                $need_comma = true;
+            }
+            $res['extra'][] = $text;
+        }
+
+        return false;
+    }
+
+    // Увеличить затраты топлива для Квантовая Нестабильность Двигателей
+    public function bonus_fleet_cons (array $param, array &$bonus) : bool {
+
+        $storm = $this->GetStorm ();
+
+        if (($storm & SPACE_STORM_MASK_QUANTUM_DRIVE) != 0) {
+            $bonus['value'] *= 2;
+        }        
+
+        return false;
+    }
+
+    // Запретить Транспорт для полёта на свои планеты при Провал в Связи
+    public function fleet_available_missions (array $param, array &$missions) : bool {
+
+        $storm = $this->GetStorm ();
+
+        if (($storm & SPACE_STORM_MASK_COMM_BREAKDOWN) != 0) {
+
+            $origin = LoadPlanet ( $param['thisgalaxy'], $param['thissystem'], $param['thisplanet'], $param['thisplanettype'] );
+            if ($origin == null) return false;
+            $origin_user = LoadUser ($origin['owner_id']);
+            if ($origin_user == null) return false;
+
+            $target = LoadPlanet ( $param['galaxy'], $param['system'], $param['planet'], $param['planettype'] );
+            if ($target == null) return false;
+            $target_user = LoadUser ($target['owner_id']);
+            if ($target_user == null) return false;
+
+            if ($target_user['player_id'] == $origin_user['player_id']) {
+
+                $key = array_search(FTYP_TRANSPORT, $missions);
+                if ($key !== false) {
+                    unset ($missions[$key]);
+                }
             }
         }
 

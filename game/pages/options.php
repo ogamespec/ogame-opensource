@@ -4,6 +4,7 @@
 /** @var array $GlobalUni */
 /** @var string $db_prefix */
 /** @var string $db_secret */
+/** @var string $PageError */
 
 // Settings.
 

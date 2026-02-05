@@ -38,7 +38,7 @@ while ($rows--)
     foreach ($fleetmap as $i=>$id) {
         $amount = $fleet_obj[$id];
         if ($amount > 0) { 
-            $cons += $amount * FleetCons ($id, $user[GID_R_COMBUST_DRIVE], $user[GID_R_IMPULSE_DRIVE], $user[GID_R_HYPER_DRIVE]) / 10;
+            $cons += $amount * FleetCons ($id, $user, $aktplanet) / 10;
         }
     }
 

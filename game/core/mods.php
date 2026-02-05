@@ -92,13 +92,17 @@ abstract class GameMod {
         return false;
     }
 
+    public function battle_post_process (array &$res) : bool {
+        return false;
+    }
+
     // Default pages hooks (various modifications of the original content)
 
     public function page_buildings_get_bonus(int $id, array &$bonuses) : bool {
         return false;
     }
 
-    public function page_flotten1_get_bonus(array &$bonuses) : bool {
+    public function page_flotten1_get_bonus(array $param, array &$bonuses) : bool {
         return false;
     }
 
@@ -118,6 +122,14 @@ abstract class GameMod {
         return false;
     }
 
+    public function page_overview_get_bonus (array $param, array &$bonuses) : bool {
+        return false;
+    }
+
+    public function page_resources_get_bonus (array $param, array &$bonuses) : bool {
+        return false;
+    }
+
     // Hooks for bonuses and changes to the original game mechanics
 
     public function bonus_technology (int $id, array &$bonus) : bool {
@@ -133,6 +145,10 @@ abstract class GameMod {
     }
 
     public function bonus_max_fleet (array $param, array &$bonus) : bool {
+        return false;
+    }
+
+    public function bonus_fleet_cons (array $param, array &$bonus) : bool {
         return false;
     }
 }
