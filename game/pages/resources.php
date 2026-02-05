@@ -45,7 +45,7 @@ class Resources extends Page {
         return true;
     }
 
-    private function GetResourceBonus (array $planet, int $gid, int $rc) : string {
+    private function GetResourceBonus (array $planet, int $gid, int $rc, bool $produce) : string {
 
         global $GlobalUser;
         $prem = PremiumStatus ($GlobalUser);
@@ -63,7 +63,8 @@ class Resources extends Page {
                     if ($prem['geologist']) {
                         $bonus = [];
                         $bonus['img'] = "img/geologe_ikon.gif";
-                        $bonus['text'] = loca("PREM_GEOLOGE");
+                        $bonus['alt'] = loca("PREM_GEOLOGE");
+                        $bonus['overlib'] = "<font color=#ffffff>".loca("PREM_GEOLOGE")."</font>";
                         $bonus['width'] = 80;
                         $bonuses[] = $bonus;
                     }
@@ -76,7 +77,8 @@ class Resources extends Page {
                     if ($prem['engineer']) {
                         $bonus = [];
                         $bonus['img'] = "img/ingenieur_ikon.gif";
-                        $bonus['text'] = loca("PREM_ENGINEER");
+                        $bonus['alt'] = loca("PREM_ENGINEER");
+                        $bonus['overlib'] = "<font color=#ffffff>".loca("PREM_ENGINEER")."</font>";
                         $bonus['width'] = 80;
                         $bonuses[] = $bonus;
                     }
@@ -84,11 +86,21 @@ class Resources extends Page {
                 break;
         }
 
+        // Get visual bonuses from modifications
+
+        $param = [];
+        $param['user'] = $GlobalUser;
+        $param['planet'] = $planet;
+        $param['gid'] = $gid;
+        $param['rc'] = $rc;
+        $param['produce'] = $produce;
+        ModsExecArrRef ('page_resources_get_bonus', $param, $bonuses);
+
         $text = "";
         foreach ($bonuses as $i=>$bonus) {
 
-            $text .= "<img border=\"0\" src=\"".$bonus['img']."\" alt=\"".$bonus['text']."\" ";
-            $text .= "onmouseover='return overlib(\"<font color=#ffffff>".$bonus['text']."</font>\", WIDTH, ".$bonus['width'].");' ";
+            $text .= "<img border=\"0\" src=\"".$bonus['img']."\" alt=\"".$bonus['alt']."\" ";
+            $text .= "onmouseover='return overlib(\"".$bonus['overlib']."\", WIDTH, ".$bonus['width'].");' ";
             $text .= "onmouseout='return nd();' width=\"20\" height=\"20\">";
         }
 
@@ -175,10 +187,10 @@ class Resources extends Page {
                 echo "<th>";
                 foreach ($reslist as $i=>$rc) {
                     if (isset($rules['prod'][$rc])) {
-                        echo $this->GetResourceBonus($planet, $gid, $rc);
+                        echo $this->GetResourceBonus($planet, $gid, $rc, true);
                     }
                     if (isset($rules['cons'][$rc])) {
-                        echo $this->GetResourceBonus($planet, $gid, $rc);
+                        echo $this->GetResourceBonus($planet, $gid, $rc, false);
                     }
                 }
                 echo "</th>\n";

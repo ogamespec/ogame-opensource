@@ -427,9 +427,30 @@ class SpaceStorm extends GameMod {
         // Эффекты шторма которые можно отобразить на странице Обзор
         $storm_overview_bonus = [
             SPACE_STORM_MASK_GRAV_DEFENSE,
+            SPACE_STORM_MASK_ATTACK_REVERB,
         ];
 
         $this->GetStormBonuses ($storm_overview_bonus, $bonuses);
+
+        return false;
+    }
+
+    public function page_resources_get_bonus (array $param, array &$bonuses) : bool {
+
+        // Эффекты шторма которые можно отобразить в меню Сырьё
+        $storm_resources_bonus = [];
+
+        if ($param['rc'] == GID_RC_DEUTERIUM && $param['produce']) {
+            $storm_resources_bonus[] = SPACE_STORM_MASK_QUANTUM_DRIVE;
+        }
+        if ($param['rc'] == GID_RC_ENERGY && $param['produce']) {
+            $storm_resources_bonus[] = SPACE_STORM_MASK_ENERGY_COLLAPSE;
+        }
+        if ($param['rc'] == GID_RC_METAL && $param['produce']) {
+            $storm_resources_bonus[] = SPACE_STORM_MASK_MATTER_SIGNATURE;
+        }
+
+        $this->GetStormBonuses ($storm_resources_bonus, $bonuses);
 
         return false;
     }

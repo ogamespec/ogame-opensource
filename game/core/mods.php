@@ -122,6 +122,10 @@ abstract class GameMod {
         return false;
     }
 
+    public function page_resources_get_bonus (array $param, array &$bonuses) : bool {
+        return false;
+    }
+
     // Hooks for bonuses and changes to the original game mechanics
 
     public function bonus_technology (int $id, array &$bonus) : bool {
