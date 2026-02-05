@@ -107,7 +107,8 @@
 		"path": "pages/notizen.php",
 		"loca": [ "notes" ],
 		"header": false,
-		"menu": false
+		"menu": false,
+		"mvc": true
 	},
 	"options": {
 		"path": "pages/options.php",
