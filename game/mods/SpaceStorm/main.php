@@ -22,6 +22,12 @@ const QTYP_SPACE_STORM = "SpaceStorm";
 
 const SPACE_STORM_PERIOD_SECONDS = 60*60;
 
+const SPACE_STORM_CHRONO_SPY_DELAY_MIN = 1;
+const SPACE_STORM_CHRONO_SPY_DELAY_MAX = 5;
+const SPACE_STORM_MATTER_SIGNATURE_BASE_BONUS = 0.2;
+const SPACE_STORM_QUANTUM_DRIVE_BASE_BONUS = 0.25;
+const SPACE_STORM_ENERGY_COLLAPSE_BASE_PENALTY = 0.4;
+
 class SpaceStorm extends GameMod {
 
     public function install() : void {
@@ -100,6 +106,7 @@ class SpaceStorm extends GameMod {
     // Событие завершения Космического шторма. Формируется новый шторм, согласно правилам
     public function update_queue(array &$queue) : bool {
         global $db_prefix;
+        global $resourcesWithNonZeroDerivative;
         if ($queue['type'] === QTYP_SPACE_STORM) {
 
             $prev = $this->GetStorm ();
@@ -107,6 +114,16 @@ class SpaceStorm extends GameMod {
             $this->SetStorm ($storm);
 
             ProlongQueue ($queue['task_id'], SPACE_STORM_PERIOD_SECONDS);
+
+            // Для Сигнатуры Материи нужно выбрать тип ресурса, в который переносится всё производство
+            $res_types = count ($resourcesWithNonZeroDerivative);
+            if ($res_types) {
+                $idx = mt_rand (0, $res_types - 1);
+                $obj_id = $resourcesWithNonZeroDerivative[$idx];
+                $query = "UPDATE ".$db_prefix."queue SET obj_id=$obj_id WHERE task_id = ".$queue['task_id'];
+                dbquery ($query);
+            }
+
             return true;
         }
         else {
@@ -385,6 +402,15 @@ class SpaceStorm extends GameMod {
         $mask = $planet['s'.GID_B_REALITY_STAB];
     }
 
+    private function GetStormQueue () : array|null {
+
+        global $db_prefix;
+        $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_SPACE_STORM."' LIMIT 1;";
+        $result = dbquery ($query);
+        if ($result == null) return null;
+        return dbarray ($result);
+    }
+
     public function add_db_row(array &$row, string $tabname) : bool {
 
         $storm = $this->GetStorm ();
@@ -397,7 +423,7 @@ class SpaceStorm extends GameMod {
 
             if ($fleet_obj && $fleet_obj['mission'] == FTYP_SPY && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
 
-                $delay_seconds = mt_rand (1, 5) * 60;
+                $delay_seconds = mt_rand (SPACE_STORM_CHRONO_SPY_DELAY_MIN, SPACE_STORM_CHRONO_SPY_DELAY_MAX) * 60;
                 $row['end'] += $delay_seconds;
             }
         }
@@ -437,6 +463,8 @@ class SpaceStorm extends GameMod {
 
     public function page_resources_get_bonus (array $param, array &$bonuses) : bool {
 
+        $storm = $this->GetStorm ();
+
         // Эффекты шторма которые можно отобразить в меню Сырьё
         $storm_resources_bonus = [];
 
@@ -446,8 +474,15 @@ class SpaceStorm extends GameMod {
         if ($param['rc'] == GID_RC_ENERGY && $param['produce']) {
             $storm_resources_bonus[] = SPACE_STORM_MASK_ENERGY_COLLAPSE;
         }
-        if ($param['rc'] == GID_RC_METAL && $param['produce']) {
-            $storm_resources_bonus[] = SPACE_STORM_MASK_MATTER_SIGNATURE;
+        if (($storm & SPACE_STORM_MASK_MATTER_SIGNATURE) != 0 && $param['produce']) {
+
+            $queue = $this->GetStormQueue ();
+            if ($queue) {
+                $res_id = $queue['obj_id'];
+                if ($param['rc'] == $res_id) {
+                    $storm_resources_bonus[] = SPACE_STORM_MASK_MATTER_SIGNATURE;    
+                }
+            }
         }
 
         $this->GetStormBonuses ($storm_resources_bonus, $bonuses);
@@ -485,10 +520,39 @@ class SpaceStorm extends GameMod {
         $storm = $this->GetStorm ();
 
         if ($param['rc'] == GID_RC_DEUTERIUM && ($storm & SPACE_STORM_MASK_QUANTUM_DRIVE) != 0) {
-            $bonus[] = 1.25;
+            $bonus[] = 1 + SPACE_STORM_QUANTUM_DRIVE_BASE_BONUS;
         }
         if ($param['rc'] == GID_RC_ENERGY && ($storm & SPACE_STORM_MASK_ENERGY_COLLAPSE) != 0) {
-            $bonus[] = 0.6;
+            $bonus[] = 1 - SPACE_STORM_ENERGY_COLLAPSE_BASE_PENALTY;
+        }
+
+        return false;
+    }
+
+    // Пост-процессинг для эффекта Сигнатура Материи (конвертирует выработку всех ресурсов в определённый тип)
+    public function prod_post_process (array &$planet, array &$eco) : bool {
+
+        global $resourcesWithNonZeroDerivative;
+        $storm = $this->GetStorm ();
+
+        if (($storm & SPACE_STORM_MASK_MATTER_SIGNATURE) != 0) {
+
+            $queue = $this->GetStormQueue ();
+            if ($queue == null) return false;
+            $res_id = $queue['obj_id'];
+
+            foreach ($resourcesWithNonZeroDerivative as $i=>$rc) {
+
+                if ($rc != $res_id && isset($eco['net_prod'][$res_id])) {
+
+                    $converted = $eco['net_prod'][$rc] * SPACE_STORM_MATTER_SIGNATURE_BASE_BONUS;
+
+                    $eco['net_prod'][$res_id] += $converted;
+                    $eco['balance'][$res_id] += $converted;
+                    $eco['net_prod'][$rc] -= $converted;
+                    $eco['balance'][$rc] -= $converted;
+                }
+            }
         }
 
         return false;

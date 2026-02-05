@@ -264,8 +264,6 @@ function ProdResources (array $uni, array $user, array &$planet) : void {
 
     foreach ($prodPriority as $i=>$rc) {
 
-        $eco['rc'] = $rc;
-
         // *** PRODUCTION
 
         // Get production bonus
@@ -323,11 +321,11 @@ function ProdResources (array $uni, array $user, array &$planet) : void {
                 break;
         }
 
-        // Mods post-processing
-        ModsExecRefRef ('prod_post_process', $planet, $eco);
-
         $eco['balance'][$rc] = floor ($eco['net_prod'][$rc] - $eco['net_cons'][$rc]);
     }
+
+    // Mods post-processing
+    ModsExecRefRef ('prod_post_process', $planet, $eco);
 
     $planet['prod'] = $eco['prod'];
     $planet['prod_with_bonus'] = $eco['prod_with_bonus'];
