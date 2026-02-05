@@ -415,18 +415,40 @@ class SpaceStorm extends GameMod {
 
     public function add_db_row(array &$row, string $tabname) : bool {
 
+        global $db_prefix;
         $storm = $this->GetStorm ();
 
-        // Если добавляется событие флота Шпионаж убывает И активен шторм хроно-шпионский сбой, то замедлить флот
         if ($tabname === 'queue' && $row['type'] === QTYP_FLEET) {
 
             $fleet_id = $row['sub_id'];
             $fleet_obj = LoadFleet ($fleet_id);
 
+            // Если добавляется событие флота Шпионаж убывает И активен шторм хроно-шпионский сбой, то замедлить флот
             if ($fleet_obj && $fleet_obj['mission'] == FTYP_SPY && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
 
                 $delay_seconds = mt_rand (SPACE_STORM_CHRONO_SPY_DELAY_MIN, SPACE_STORM_CHRONO_SPY_DELAY_MAX) * 60;
                 $row['end'] += $delay_seconds;
+            }
+
+            // Если флот улетает и активен эффект Прыжка, то либо с шансом 5% перебросить его либо с шансом 1% что он заблудится
+            if ($fleet_obj && ($fleet_obj['mission'] <= FTYP_EXPEDITION || $fleet_obj['mission'] >= FTYP_CUSTOM) && ($storm & SPACE_STORM_MASK_SUBSPACE_JUMP) != 0) {
+
+                $bool_test_jump = false;
+                $bool_test_loss = false;
+
+                if ($bool_test_jump || mt_rand(1, 100) <= 5) {
+
+                    $row['end'] = $row['start'];
+                }
+                else if ( ( $bool_test_loss || mt_rand(1, 100) <= 1) && $fleet_obj['mission'] <= FTYP_EXPEDITION) {    // кастомные флоты не умеем отзывать
+
+                    $flight_time = mt_rand(60*60, 2*60*60);
+                    $mission = $fleet_obj['mission'] + FTYP_RETURN;
+                    $row['end'] = $row['start'] + $flight_time;
+
+                    $query = "UPDATE ".$db_prefix."fleet SET flight_time = $flight_time, mission = $mission WHERE fleet_id = $fleet_id";
+                    dbquery ($query);
+                }
             }
         }
 
