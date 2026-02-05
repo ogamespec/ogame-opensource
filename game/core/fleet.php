@@ -279,7 +279,7 @@ function FleetCons (int $id, array $user, array $planet ) : int
     $param['planet'] = $planet;
     $bonus = [];
     $bonus['value'] = $cons;
-    $ModsExecArrRef ('bonus_fleet_cons', $param, $bonus);
+    ModsExecArrRef ('bonus_fleet_cons', $param, $bonus);
     $cons = max (0, $bonus['value']);
 
     return $cons;
