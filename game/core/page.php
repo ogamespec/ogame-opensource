@@ -124,11 +124,7 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
         echo "<table class='header'>\n";
         echo "<tr class='header' >\n";
         PlanetsDropList ($page);
-        ResourceList ($aktplanet, 
-            (int)floor($aktplanet[GID_RC_METAL]), (int)floor($aktplanet[GID_RC_CRYSTAL]), (int)floor($aktplanet[GID_RC_DEUTERIUM]), 
-            (int)$aktplanet['e'], (int)$aktplanet[GID_RC_ENERGY], 
-            $GlobalUser['dm']+$GlobalUser['dmfree'], 
-            $aktplanet['max'.GID_RC_METAL], $aktplanet['max'.GID_RC_CRYSTAL], $aktplanet['max'.GID_RC_DEUTERIUM]);
+        ResourceList ($aktplanet, $GlobalUser['dm']+$GlobalUser['dmfree']);
         BonusList ();
         echo "</tr>\n";
         echo "</table>\n";
@@ -215,38 +211,48 @@ function LoadJsonFirst (string $path) : array
     return $json;
 }
 
-function ResourceList (array $aktplanet, int $m, int $k, int $d, int $enow, int $emax, int $dm, int $mmax, int $kmax, int $dmax) : void
+function ResourceList (array $planet, int $dm) : void
 {
     global $GlobalUser;
+    global $resourcemap;
+    global $resourcesWithNonZeroDerivative;
     $sess = $GlobalUser['session'];
-
-    $mcol = $kcol = $dcol = $ecol = "";
-    if ($m >= $mmax) $mcol = "#ff0000";
-    if ($k >= $kmax) $kcol = "#ff0000";
-    if ($d >= $dmax) $dcol = "#ff0000";
-    if ($enow < 0) $ecol = "#ff0000";
 
     $json = LoadJsonFirst ("pages/res_panel.json");
 
-    $json['metall']['val'] = $m;
-    $json['metall']['color'] = $mcol;
-    $json['kristall']['val'] = $k;
-    $json['kristall']['color'] = $kcol;
-    $json['deuterium']['val'] = $d;
-    $json['deuterium']['color'] = $dcol;
-    $json['dm']['val'] = $dm;
-    $json['energie']['val'] = $enow;
-    $json['energie']['val2'] = $emax;
-    $json['energie']['color'] = $ecol;
+    foreach ($resourcemap as $i=>$rc) {
+        if (!isset($planet[$rc])) continue;
 
-    ModsExecRefArr ('add_resources', $json, $aktplanet);
+        $deriv = in_array ($rc, $resourcesWithNonZeroDerivative, true);
+        if ($deriv) {
+
+            $val = (int)floor ($planet[$rc]);
+            $cap = isset($planet['max'.$rc]) ? $planet['max'.$rc] : PHP_INT_MAX;
+            $color = $val >= $cap ? "#ff0000" : "";
+            $json[$rc]['val'] = $val;
+            $json[$rc]['color'] = $color;
+        }
+        else {
+
+            $val = (int)$planet['balance'][$rc];
+            $val2 = (int)$planet['net_prod'][$rc];
+            $color = $val < 0 ? "#ff0000" : "";
+            $json[$rc]['val'] = $val;
+            $json[$rc]['val2'] = $val2;
+            $json[$rc]['color'] = $color;
+        }
+    }
+
+    $json[GID_RC_DM]['val'] = $dm;
+
+    ModsExecRefArr ('add_resources', $json, $planet);
 
     //print_r ($json);
 
     // Row 1 (Icons)
     echo "<td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >\n";
     echo "<tr class='header'>\n";
-    foreach ($json as $res) {
+    foreach ($json as $i=>$res) {
 
         echo "<td align='center' width='85' class='header'>\n";
         if (key_exists('href', $res)) {
@@ -270,14 +276,14 @@ function ResourceList (array $aktplanet, int $m, int $k, int $d, int $enow, int 
 
     // Row 2 (Names)
     echo "<tr class='header'>\n";
-    foreach ($json as $res) {
+    foreach ($json as $i=>$res) {
         echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>".loca($res['loca'])."</font></b></i></td>\n";
     }
     echo "</tr>\n";
 
     // Row 3 (Values)
     echo "<tr class='header'>\n";
-    foreach ($json as $res) {
+    foreach ($json as $i=>$res) {
         $col = "";
         if ($res['color'] !== "") {
             $col = "color='".$res['color']."'";
