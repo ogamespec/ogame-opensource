@@ -602,6 +602,7 @@ class SpaceStorm extends GameMod {
         return false;
     }
 
+    // Увеличить затраты топлива для Квантовая Нестабильность Двигателей
     public function bonus_fleet_cons (array $param, array &$bonus) : bool {
 
         $storm = $this->GetStorm ();
@@ -609,6 +610,35 @@ class SpaceStorm extends GameMod {
         if (($storm & SPACE_STORM_MASK_QUANTUM_DRIVE) != 0) {
             $bonus['value'] *= 2;
         }        
+
+        return false;
+    }
+
+    // Запретить Транспорт для полёта на свои планеты при Провал в Связи
+    public function fleet_available_missions (array $param, array &$missions) : bool {
+
+        $storm = $this->GetStorm ();
+
+        if (($storm & SPACE_STORM_MASK_COMM_BREAKDOWN) != 0) {
+
+            $origin = LoadPlanet ( $param['thisgalaxy'], $param['thissystem'], $param['thisplanet'], $param['thisplanettype'] );
+            if ($origin == null) return false;
+            $origin_user = LoadUser ($origin['owner_id']);
+            if ($origin_user == null) return false;
+
+            $target = LoadPlanet ( $param['galaxy'], $param['system'], $param['planet'], $param['planettype'] );
+            if ($target == null) return false;
+            $target_user = LoadUser ($target['owner_id']);
+            if ($target_user == null) return false;
+
+            if ($target_user['player_id'] == $origin_user['player_id']) {
+
+                $key = array_search(FTYP_TRANSPORT, $missions);
+                if ($key !== false) {
+                    unset ($missions[$key]);
+                }
+            }
+        }
 
         return false;
     }
