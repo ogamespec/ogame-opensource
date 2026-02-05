@@ -274,6 +274,14 @@ function FleetCons (int $id, array $user, array $planet ) : int
     if ($id == GID_F_SC && $impulse >= 5) $cons = $UnitParam[$id][5] * 2;
     else $cons = $UnitParam[$id][5];
 
+    $param = [];
+    $param['user'] = $user;
+    $param['planet'] = $planet;
+    $bonus = [];
+    $bonus['value'] = $cons;
+    $ModsExecArrRef ('bonus_fleet_cons', $param, $bonus);
+    $cons = max (0, $bonus['value']);
+
     return $cons;
 }
 
