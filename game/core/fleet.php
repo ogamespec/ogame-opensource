@@ -1183,35 +1183,39 @@ function FleetlogsMissionText (int $num) : void
     echo "      <a title=\"\">".loca("FLEET_ORDER_$num")."</a>\n$desc\n";
 }
 
-function FleetlogsFromPlayer (int $player_id, array $missions) : mixed
+function FleetlogsFromPlayer (int $player_id, array|null $missions) : mixed
 {
     global $db_prefix;
 
-    if ( count ($missions) == 0 ) return null;
-
     $list = "";
-    foreach ($missions as $i=>$num) {
-        if ($i > 0) $list .= "OR ";
-        $list .= "mission = $num ";
+    if ($missions != null) {
+        $list .= "(";
+        foreach ($missions as $i=>$num) {
+            if ($i > 0) $list .= "OR ";
+            $list .= "mission = $num ";
+        }
+        $list .= ") AND";
     }
 
-    $query = "SELECT * FROM ".$db_prefix."fleetlogs WHERE (".$list.") AND owner_id = $player_id ORDER BY start ASC;";
+    $query = "SELECT * FROM ".$db_prefix."fleetlogs WHERE $list owner_id = $player_id ORDER BY start ASC;";
     return dbquery ( $query );
 }
 
-function FleetlogsToPlayer (int $player_id, array $missions) : mixed
+function FleetlogsToPlayer (int $player_id, array|null $missions) : mixed
 {
     global $db_prefix;
 
-    if ( count ($missions) == 0 ) return null;
-
     $list = "";
-    foreach ($missions as $i=>$num) {
-        if ($i > 0) $list .= "OR ";
-        $list .= "mission = $num ";
+    if ($missions != null) {
+        $list = "(";
+        foreach ($missions as $i=>$num) {
+            if ($i > 0) $list .= "OR ";
+            $list .= "mission = $num ";
+        }
+        $list .= ") AND";
     }
 
-    $query = "SELECT * FROM ".$db_prefix."fleetlogs WHERE (".$list.") AND owner_id <> target_id AND target_id = $player_id ORDER BY start ASC;";
+    $query = "SELECT * FROM ".$db_prefix."fleetlogs WHERE $list owner_id <> target_id AND target_id = $player_id ORDER BY start ASC;";
     return dbquery ( $query );
 }
 

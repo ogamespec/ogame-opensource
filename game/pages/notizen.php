@@ -73,6 +73,7 @@ class Notizen extends Page {
                     if ($note['prio'] == 0) $col = "lime";
                     else if ($note['prio'] == 1) $col = "yellow";
                     else if ($note['prio'] == 2) $col = "red";
+                    else $col = "white";
                     echo "<tr>\n";
                     echo "  <th width=20><input type=checkbox name=\"delmes[".$note['note_id']."]\" value=\"y\"></th>\n";
                     echo "  <th width=150>".date ("Y-m-d H:i:s", $note['date'])."</th>\n";

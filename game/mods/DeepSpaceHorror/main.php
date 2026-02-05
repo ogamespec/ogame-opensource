@@ -237,7 +237,7 @@ class DeepSpaceHorror extends GameMod {
         if ($gid == 0) return 0;
 
         $now = time();
-        $origin_name = loca ("PLANET_".$type, $GlobalUni['lang']);
+        $origin_name = loca_lang ("PLANET_".$type, $GlobalUni['lang']);
 
         if ($type == PTYP_LEVI_GUARDIAN) {
 

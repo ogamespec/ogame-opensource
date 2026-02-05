@@ -5,22 +5,22 @@
 $big_fleet_points = 100000000;      // Mark large fleets with a special color.
 
 $FleetMissionList = array (
-    0 => array ( 1, 101, 2, 102, 3, 103, 4, 104, 5, 105, 205, 6, 106, 7, 107, 8, 108, 9, 109, 15, 115, 215, 20, 21, 121 ),
-    1 => array ( 1, 101 ),
-    2 => array ( 2, 102 ),
-    3 => array ( 3, 103 ),
-    4 => array ( 4, 104 ),
-    5 => array ( 5, 105, 205 ),
-    6 => array ( 6, 106 ), 
-    7 => array ( 7, 107 ), 
-    8 => array ( 8, 108 ), 
-    9 => array ( 9, 109 ), 
-    15 => array ( 15, 115, 215 ), 
-    20 => array ( 20 ), 
-    21 => array ( 21, 121 ), 
+    0 => null,    // All
+    FTYP_ATTACK => array ( FTYP_ATTACK, FTYP_ATTACK+FTYP_RETURN ),
+    FTYP_ACS_ATTACK => array ( FTYP_ACS_ATTACK, FTYP_ACS_ATTACK+FTYP_RETURN ),
+    FTYP_TRANSPORT => array ( FTYP_TRANSPORT, FTYP_TRANSPORT+FTYP_RETURN ),
+    FTYP_DEPLOY => array ( FTYP_DEPLOY, FTYP_DEPLOY+FTYP_RETURN ),
+    FTYP_ACS_HOLD => array ( FTYP_ACS_HOLD, FTYP_ACS_HOLD+FTYP_RETURN, FTYP_ACS_HOLD+FTYP_ORBITING ),
+    FTYP_SPY => array ( FTYP_SPY, FTYP_SPY+FTYP_RETURN ), 
+    FTYP_COLONIZE => array ( FTYP_COLONIZE, FTYP_COLONIZE+FTYP_RETURN ), 
+    FTYP_RECYCLE => array ( FTYP_RECYCLE, FTYP_RECYCLE+FTYP_RETURN ), 
+    FTYP_DESTROY => array ( FTYP_DESTROY, FTYP_DESTROY+FTYP_RETURN ), 
+    FTYP_EXPEDITION => array ( FTYP_EXPEDITION, FTYP_EXPEDITION+FTYP_RETURN, FTYP_EXPEDITION+FTYP_ORBITING ), 
+    FTYP_MISSILE => array ( FTYP_MISSILE ), 
+    FTYP_ACS_ATTACK_HEAD => array ( FTYP_ACS_ATTACK_HEAD, FTYP_ACS_ATTACK_HEAD+FTYP_RETURN ), 
 );
 
-function LinkFleetsFrom ($user, $mission)
+function LinkFleetsFrom (array|null $user, int $mission) : string
 {
     global $session, $FleetMissionList;
     $result = FleetlogsFromPlayer ( $user['player_id'], $FleetMissionList[$mission] );
@@ -30,7 +30,7 @@ function LinkFleetsFrom ($user, $mission)
     else return "0";
 }
 
-function LinkFleetsTo ($user, $mission)
+function LinkFleetsTo (array|null $user, int $mission) : string
 {
     global $session, $FleetMissionList;
     $result = FleetlogsToPlayer ( $user['player_id'], $FleetMissionList[$mission] );
