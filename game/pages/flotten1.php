@@ -31,10 +31,12 @@ function FleetMissionText (int $num) : void
     echo "      <a title=\"\">".loca("FLEET_ORDER_$num")."</a>\n$desc\n";
 }
 
-function GetFleetBonuses (array &$bonuses) : void {
+function GetFleetBonuses (array|null $user, array|null $planet, array &$bonuses) : void {
 
-    global $GlobalUser;
-    $prem = PremiumStatus ($GlobalUser);
+    if ($user == null) return;
+    if ($planet == null) return;
+
+    $prem = PremiumStatus ($user);
 
     // Default 0.84 bonuses
 
@@ -52,23 +54,10 @@ function GetFleetBonuses (array &$bonuses) : void {
     }
 
     // Modification bonuses
-    ModsExecRef ('page_flotten1_get_bonus', $bonuses);
-}
-
-function GetFleetBonusesHtml (array &$bonuses) : string {
-
-    $res = "";
-
-    foreach ($bonuses as $i=>$bonus) {
-
-        if ($bonus['text'] !== "") {
-            $res .= "<b><font style=\"color:".$bonus['color'].";\">".$bonus['text']."</font></b>";
-        }
-        $res .= " <img border=\"0\" alt=\"".$bonus['alt']."\" src=\"".$bonus['img']."\" ";
-        $res .= "onmouseover='return overlib(\"".$bonus['overlib']."\", WIDTH, ".$bonus['width'].");' onmouseout=\"return nd();\" width=\"20\" height=\"20\" style=\"vertical-align:middle;\">";
-    }
-
-    return $res;
+    $param = [];
+    $param['user'] = $user;
+    $param['planet'] = $planet;
+    ModsExecArrRef ('page_flotten1_get_bonus', $param, $bonuses);
 }
 
 $union_id = 0;
@@ -107,7 +96,7 @@ $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Number of expe
 $maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );
 
 $bonuses = [];
-GetFleetBonuses ($bonuses);
+GetFleetBonuses ($GlobalUser, $aktplanet, $bonuses);
 
 $prem = PremiumStatus ($GlobalUser);
 
@@ -131,7 +120,7 @@ $prem = PremiumStatus ($GlobalUser);
     if (count($bonuses)) echo "    <div style=\"margin-top:2;margin-bottom:2;\">";
     echo va(loca("FLEET1_FLEETS"), $rows, $maxfleet_no_bonus);
     if (count($bonuses)) {
-        echo GetFleetBonusesHtml ($bonuses);
+        echo GetBonusesInHeader ($bonuses);
         echo "</div>\n";
     }
 ?>

@@ -101,7 +101,13 @@ function t_building() {
         if ($aktplanet['type'] == PTYP_MOON) $name = va ( loca ("OVERVIEW_MOON"), $aktplanet['name'], $aktplanet['g'], $aktplanet['s'], $aktplanet['p'] );
         else $name = va ( loca("OVERVIEW_PLANET"), $aktplanet['name'] );
 
-        echo "<a href='index.php?page=renameplanet&session=$session&pl=".$aktplanet['planet_id']."' title='".loca("OVERVIEW_PLANET_MENU")."'>".$name."</a>     (".$GlobalUser['oname'].")\n";
+        $bonuses = [];
+        $param = [];
+        $param['user'] = $GlobalUser;
+        $param['planet'] = $aktplanet;
+        ModsExecArrRef ('page_overview_get_bonus', $param, $bonuses);
+
+        echo "<a href='index.php?page=renameplanet&session=$session&pl=".$aktplanet['planet_id']."' title='".loca("OVERVIEW_PLANET_MENU")."'>".$name."</a>     (".$GlobalUser['oname'].")" .GetBonusesInHeader ($bonuses). "\n";
         echo "</td></tr>\n";
 
         // New Messages.

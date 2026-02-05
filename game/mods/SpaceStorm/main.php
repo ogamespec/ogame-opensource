@@ -408,20 +408,40 @@ class SpaceStorm extends GameMod {
     // Отобразить (анти)бонусы Шторма на странице Флот 1 (для флотов)
     public function page_flotten1_get_bonus(array &$bonuses) : bool {
 
-        $storm = $this->GetStorm ();
-
         // Эффекты шторма, которые можно отобразить на странице отправки флота
         $storm_fleet_bonus = [ 
             SPACE_STORM_MASK_SUBSPACE_TURB,
             SPACE_STORM_MASK_SUBSPACE_JUMP,
             SPACE_STORM_MASK_QUANTUM_DRIVE,
             SPACE_STORM_MASK_CHRONO_SPY,
-            SPACE_STORM_MASK_COMM_BREAKDOWN ];
+            SPACE_STORM_MASK_COMM_BREAKDOWN,
+        ];
+
+        $this->GetStormBonuses ($storm_fleet_bonus, $bonuses);
+
+        return false;
+    }
+
+    public function page_overview_get_bonus (array $param, array &$bonuses) : bool {
+
+        // Эффекты шторма которые можно отобразить на странице Обзор
+        $storm_overview_bonus = [
+            SPACE_STORM_MASK_GRAV_DEFENSE,
+        ];
+
+        $this->GetStormBonuses ($storm_overview_bonus, $bonuses);
+
+        return false;
+    }
+
+    private function GetStormBonuses (array $storm_bonus_list, array &$bonuses) : void {
+
+        $storm = $this->GetStorm ();
 
         for ($i=0; $i<SPACE_STORM_MASK_MSB; $i++) {
 
             $mask = 1 << $i;
-            if (!in_array($mask, $storm_fleet_bonus, true)) continue;
+            if (!in_array($mask, $storm_bonus_list, true)) continue;
 
             if (($storm & $mask) != 0) {
 
@@ -436,8 +456,6 @@ class SpaceStorm extends GameMod {
                 $bonuses[] = $bonus;
             }
         }
-
-        return false;
     }
 }
 
