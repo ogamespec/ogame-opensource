@@ -562,7 +562,9 @@ class SpaceStorm extends GameMod {
     public function battle_post_process (array &$res) : bool {
 
         global $GlobalUni;
+        $storm = $this->GetStorm ();
 
+        if (($storm & SPACE_STORM_MASK_ATTACK_REVERB) == 0) return false;
         if ($res['result'] !== "awon" ) return false;
 
         $reverb_losses = [];
