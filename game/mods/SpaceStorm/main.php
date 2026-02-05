@@ -478,6 +478,22 @@ class SpaceStorm extends GameMod {
             }
         }
     }
+
+    // Невизуальный бонус выработки ресурсов для эффектов шторма
+    public function bonus_prod (array $param, array &$bonus) : bool {
+
+        $storm = $this->GetStorm ();
+
+        if ($param['rc'] == GID_RC_DEUTERIUM && ($storm & SPACE_STORM_MASK_QUANTUM_DRIVE) != 0) {
+            $bonus[] = 1.25;
+        }
+        if ($param['rc'] == GID_RC_ENERGY && ($storm & SPACE_STORM_MASK_ENERGY_COLLAPSE) != 0) {
+            $bonus[] = 0.6;
+        }
+
+        return false;
+    }
+
 }
 
 ?>

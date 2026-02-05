@@ -221,7 +221,7 @@ function ResourceList (array $planet, int $dm) : void
     $json = LoadJsonFirst ("pages/res_panel.json");
 
     foreach ($resourcemap as $i=>$rc) {
-        if (!isset($planet[$rc])) continue;
+        if (!isset($planet['balance'][$rc])) continue;
 
         $deriv = in_array ($rc, $resourcesWithNonZeroDerivative, true);
         if ($deriv) {
