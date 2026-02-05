@@ -118,7 +118,8 @@
 		"path": "pages/overview.php",
 		"admin_update_queue": false,
 		"update_activity": false,
-		"loca": [ "menu", "fleetorder", "overview", "events" ]
+		"loca": [ "menu", "fleetorder", "overview", "events" ],
+		"mvc": true
 	},
 	"payment": {
 		"path": "pages/payment.php",
