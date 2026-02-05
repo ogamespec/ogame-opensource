@@ -406,7 +406,7 @@ class SpaceStorm extends GameMod {
     }
 
     // Отобразить (анти)бонусы Шторма на странице Флот 1 (для флотов)
-    public function page_flotten1_get_bonus(array &$bonuses) : bool {
+    public function page_flotten1_get_bonus(array $param, array &$bonuses) : bool {
 
         // Эффекты шторма, которые можно отобразить на странице отправки флота
         $storm_fleet_bonus = [ 

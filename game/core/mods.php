@@ -98,7 +98,7 @@ abstract class GameMod {
         return false;
     }
 
-    public function page_flotten1_get_bonus(array &$bonuses) : bool {
+    public function page_flotten1_get_bonus(array $param, array &$bonuses) : bool {
         return false;
     }
 
