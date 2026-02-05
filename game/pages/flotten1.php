@@ -27,6 +27,44 @@ function FleetMissionText (int $num) : void
     echo "      <a title=\"\">".loca("FLEET_ORDER_$num")."</a>\n$desc\n";
 }
 
+function GetFleetBonuses (array &$bonuses) : void {
+
+    global $GlobalUser;
+    $prem = PremiumStatus ($GlobalUser);
+
+    // Default 0.84 bonuses
+
+    if ($prem['admiral']) {
+
+        $bonus = [];
+        $bonus['color'] = "lime";
+        $bonus['text'] = "+2";
+        $bonus['alt'] = loca("PR_ADMIRAL");
+        $bonus['img'] = "img/admiral_ikon.gif";
+        $bonus['overlib'] = "&lt;font color=white &gt;".loca("PR_ADMIRAL")."&lt;/font&gt;";
+        $bonus['width'] = 100;
+
+        $bonuses[] = $bonus;
+    }
+
+    // Modification bonuses
+    ModsExecRef ('page_flotten1_get_bonus', $bonuses);
+}
+
+function GetFleetBonusesHtml (array &$bonuses) : string {
+
+    $res = "";
+
+    foreach ($bonuses as $i=>$bonus) {
+
+        $res .= "<b><font style=\"color:".$bonus['color'].";\">".$bonus['text']."</font></b> ";
+        $res .= "<img border=\"0\" alt=\"".$bonus['alt']."\" src=\"".$bonus['img']."\" ";
+        $res .= "onmouseover='return overlib(\"".$bonus['overlib']."\", WIDTH, ".$bonus['width'].");' onmouseout=\"return nd();\" width=\"20\" height=\"20\" style=\"vertical-align:middle;\">";
+    }
+
+    return $res;
+}
+
 $union_id = 0;
 
 // POST requests processing
@@ -56,13 +94,16 @@ if ( method () === "POST" )
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );    // Number of fleets
 $nowfleet = $rows = dbrows ($result);
-$maxfleet = $GlobalUser[GID_R_COMPUTER] + 1;
-
-$prem = PremiumStatus ($GlobalUser);
-if ( $prem['admiral'] ) $maxfleet += 2;
+$maxfleet = $maxfleet_no_bonus = 0;
+GetMaxFleet ($GlobalUser, $maxfleet, $maxfleet_no_bonus);
 
 $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Number of expeditions
 $maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );
+
+$bonuses = [];
+GetFleetBonuses ($bonuses);
+
+$prem = PremiumStatus ($GlobalUser);
 
 ?>
 
@@ -81,19 +122,14 @@ $maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );
 
     <td style='background-color:transparent;'>
 <?php
-    if ($prem['admiral'])
-    {
-?>
-    <div style="margin-top:2;margin-bottom:2;"><?=va(loca("FLEET1_FLEETS"), $rows, $maxfleet-2);?> <b><font style="color:lime;">+2</font></b> <img border="0" alt="<?=loca("PR_ADMIRAL");?>" src="img/admiral_ikon.gif" onmouseover='return overlib("&lt;font color=white &gt;<?=loca("PR_ADMIRAL");?>&lt;/font&gt;", WIDTH, 100);' onmouseout="return nd();" width="20" height="20" style="vertical-align:middle;"></div>
-<?php
-    }
-    else
-    {
-?>
-    <?=va(loca("FLEET1_FLEETS"), $rows, $maxfleet);?>    </td>
-<?php
+    if (count($bonuses)) echo "    <div style=\"margin-top:2;margin-bottom:2;\">";
+    echo va(loca("FLEET1_FLEETS"), $rows, $maxfleet_no_bonus);
+    if (count($bonuses)) {
+        echo GetFleetBonusesHtml ($bonuses);
+        echo "</div>\n";
     }
 ?>
+    </td>
     <td align=right style='background-color:transparent;'>
       <?=va(loca("FLEET1_EXPEDITIONS"), $expnum, $maxexp);?>    
     </td>

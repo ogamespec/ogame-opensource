@@ -143,10 +143,10 @@ if ( !$not_enough_deut && $GlobalUser['admin'] == 0 )
 
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
-$maxfleet = $GlobalUser[GID_R_COMPUTER] + 1;
+$maxfleet = $maxfleet_no_bonus = 0;
+GetMaxFleet ($GlobalUser, $maxfleet, $maxfleet_no_bonus);
 
 $prem = PremiumStatus ($GlobalUser);
-if ( $prem['admiral'] ) $maxfleet += 2;
 
 /***** Scripts. *****/
 

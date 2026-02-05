@@ -271,6 +271,28 @@ function FleetCons (int $id, int $combustion, int $impulse, int $hyper ) : int
     else return $UnitParam[$id][5];
 }
 
+function GetMaxFleet (array|null $user, int &$maxfleet, int &$maxfleet_no_bonus) : void {
+
+    if ($user == null) {
+        $maxfleet = $maxfleet_no_bonus = 0;
+        return;
+    }
+
+    $maxfleet_no_bonus = $user[GID_R_COMPUTER] + 1;
+    $maxfleet = $maxfleet_no_bonus;
+
+    $prem = PremiumStatus ($user);
+    if ( $prem['admiral'] ) $maxfleet += 2;
+
+    // The maxfleet variable is passed through an array to receive the bonus.
+    $param = [];
+    $param['user'] = $user;
+    $bonus = [];
+    $bonus['value'] = $maxfleet;
+    ModsExecArrRef('bonus_max_fleet', $param, $bonus);
+    $maxfleet = max (0, $bonus['value']);
+}
+
 // ==================================================================================
 
 // Alter the number of ships on a planet.

@@ -98,6 +98,10 @@ abstract class GameMod {
         return false;
     }
 
+    public function page_flotten1_get_bonus(array &$bonuses) : bool {
+        return false;
+    }
+
     public function page_flotten2_planet_types (array &$planet_types) : bool {
         return false;
     }
@@ -125,6 +129,10 @@ abstract class GameMod {
     }
 
     public function bonus_cons (array $param, array &$bonus) : bool {
+        return false;
+    }
+
+    public function bonus_max_fleet (array $param, array &$bonus) : bool {
         return false;
     }
 }
