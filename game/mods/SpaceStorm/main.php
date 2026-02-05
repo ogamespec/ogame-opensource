@@ -27,6 +27,8 @@ const SPACE_STORM_CHRONO_SPY_DELAY_MAX = 5;
 const SPACE_STORM_MATTER_SIGNATURE_BASE_BONUS = 0.2;
 const SPACE_STORM_QUANTUM_DRIVE_BASE_BONUS = 0.25;
 const SPACE_STORM_ENERGY_COLLAPSE_BASE_PENALTY = 0.4;
+const SPACE_STORM_SUBSPACE_TURB_PENALTY_MIN = 30;
+const SPACE_STORM_SUBSPACE_TURB_PENALTY_MAX = 50;
 
 class SpaceStorm extends GameMod {
 
@@ -611,7 +613,20 @@ class SpaceStorm extends GameMod {
 
         if (($storm & SPACE_STORM_MASK_QUANTUM_DRIVE) != 0) {
             $bonus['value'] *= 2;
-        }        
+        }
+
+        return false;
+    }
+
+    public function bonus_fleet_speed (array $param, array &$bonus) : bool {
+
+        $storm = $this->GetStorm ();
+
+        if (($storm & SPACE_STORM_MASK_SUBSPACE_TURB) != 0) {
+
+            $penalty = mt_rand (SPACE_STORM_SUBSPACE_TURB_PENALTY_MIN, SPACE_STORM_SUBSPACE_TURB_PENALTY_MAX) / 100;
+            $bonus['value'] *= 1 - $penalty;
+        }
 
         return false;
     }

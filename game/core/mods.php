@@ -151,6 +151,10 @@ abstract class GameMod {
     public function bonus_fleet_cons (array $param, array &$bonus) : bool {
         return false;
     }
+
+    public function bonus_fleet_speed (array $param, array &$bonus) : bool {
+        return false;
+    }
 }
 
 function ModInitOne(string $modname) : void
