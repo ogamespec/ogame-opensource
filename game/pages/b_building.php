@@ -132,8 +132,10 @@ function t() {
                 if ($queue['level'] > 0) echo " , " . va(loca("BUILD_LEVEL"), $queue['level']);
                 if ( $queue['destroy'] ) echo "\n " . loca("BUILD_DEMOLISH");
                 if ($i==0) {
+                    //$freeze_seconds = $queue['freeze'] ? max (0, $now - $queue['frozen']) : 0;
+                    $freeze_seconds = 0;
                     echo "<td class=\"k\"><div id=\"bxx\" class=\"z\"></div><SCRIPT language=JavaScript>\n";
-                    echo "                  pp=\"".($queue['end']-$now)."\"\n";
+                    echo "                  pp=\"".($queue['end']-$now+$freeze_seconds)."\"\n";
                     echo "                  pk=\"".$queue['list_id']."\"\n";
                     echo "                  pm=\"remove\"\n";
                     echo "                  pl=\"".$aktplanet['planet_id']."\"\n";
