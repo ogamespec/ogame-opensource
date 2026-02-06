@@ -43,25 +43,25 @@
          🪪  variable.undefined                                                             
   306    Variable $debris might not be defined.                                             
          🪪  variable.undefined                                                             
-  591    Parameter #1 $stream of function fwrite expects resource, resource|false given.    
+  595    Parameter #1 $stream of function fwrite expects resource, resource|false given.    
          🪪  argument.type                                                                  
-  592    Parameter #1 $stream of function fclose expects resource, resource|false given.    
+  596    Parameter #1 $stream of function fclose expects resource, resource|false given.    
          🪪  argument.type                                                                  
-  599    Parameter #1 $source of function BattleEngine expects string, string|false given.  
+  603    Parameter #1 $source of function BattleEngine expects string, string|false given.  
          🪪  argument.type                                                                  
-  602    Parameter #1 $stream of function fwrite expects resource, resource|false given.    
+  606    Parameter #1 $stream of function fwrite expects resource, resource|false given.    
          🪪  argument.type                                                                  
-  603    Parameter #1 $stream of function fclose expects resource, resource|false given.    
+  607    Parameter #1 $stream of function fclose expects resource, resource|false given.    
          🪪  argument.type                                                                  
-  617    Parameter #1 $data of function unserialize expects string, string|false given.     
+  621    Parameter #1 $data of function unserialize expects string, string|false given.     
          🪪  argument.type                                                                  
-  779    Parameter #7 $moonchance of function CreatePlanet expects int, float|int given.    
+  783    Parameter #7 $moonchance of function CreatePlanet expects int, float|int given.    
          🪪  argument.type                                                                  
-  791    Parameter #5 $moonchance of function BattleReport expects int, float|int given.    
+  795    Parameter #5 $moonchance of function BattleReport expects int, float|int given.    
          🪪  argument.type                                                                  
-  802    Parameter #5 $moonchance of function BattleReport expects int, float|int given.    
+  806    Parameter #5 $moonchance of function BattleReport expects int, float|int given.    
          🪪  argument.type                                                                  
-  831    Parameter #5 $moonchance of function BattleReport expects int, float|int given.    
+  835    Parameter #5 $moonchance of function BattleReport expects int, float|int given.    
          🪪  argument.type                                                                  
  ------ ----------------------------------------------------------------------------------- 
 
@@ -226,26 +226,26 @@
  ------ ----------------------------------------------------------------------------------------------------- 
   Line   game/core/fleet.php                                                                                  
  ------ ----------------------------------------------------------------------------------------------------- 
-  281    Parameter &$maxfleet_no_bonus by-ref type of function GetMaxFleet() expects int, (float|int) given.  
+  312    Parameter &$maxfleet_no_bonus by-ref type of function GetMaxFleet() expects int, (float|int) given.  
          🪪  parameterByRef.type                                                                              
          💡  You can change the parameter out type with @param-out PHPDoc tag.                                
-  282    Parameter &$maxfleet by-ref type of function GetMaxFleet() expects int, (float|int) given.           
+  313    Parameter &$maxfleet by-ref type of function GetMaxFleet() expects int, (float|int) given.           
          🪪  parameterByRef.type                                                                              
          💡  You can change the parameter out type with @param-out PHPDoc tag.                                
-  285    Parameter &$maxfleet by-ref type of function GetMaxFleet() expects int, (float|int) given.           
+  316    Parameter &$maxfleet by-ref type of function GetMaxFleet() expects int, (float|int) given.           
          🪪  parameterByRef.type                                                                              
          💡  You can change the parameter out type with @param-out PHPDoc tag.                                
-  570    Offset 'lang' might not exist on array|null.                                                         
+  602    Offset 'lang' might not exist on array|null.                                                         
          🪪  offsetAccess.notFound                                                                            
-  572    Offset 'lang' might not exist on array|null.                                                         
+  604    Offset 'lang' might not exist on array|null.                                                         
          🪪  offsetAccess.notFound                                                                            
-  586    Offset 'lang' might not exist on array|null.                                                         
+  618    Offset 'lang' might not exist on array|null.                                                         
          🪪  offsetAccess.notFound                                                                            
-  587    Offset 'lang' might not exist on array|null.                                                         
+  619    Offset 'lang' might not exist on array|null.                                                         
          🪪  offsetAccess.notFound                                                                            
-  757    Parameter #2 $max of function rand expects int, float|int given.                                     
+  789    Parameter #2 $max of function rand expects int, float|int given.                                     
          🪪  argument.type                                                                                    
-  1109   Function SpyReturn invoked with 5 parameters, 3 required.                                            
+  1141   Function SpyReturn invoked with 5 parameters, 3 required.                                            
          🪪  arguments.count                                                                                  
  ------ ----------------------------------------------------------------------------------------------------- 
 
@@ -286,9 +286,9 @@
  ------ ------------------------------------------------ 
   Line   game/core/mods.php                              
  ------ ------------------------------------------------ 
-  157    Call to an undefined method object::init().     
+  177    Call to an undefined method object::init().     
          🪪  method.notFound                             
-  371    Call to an undefined method object::install().  
+  391    Call to an undefined method object::install().  
          🪪  method.notFound                             
  ------ ------------------------------------------------ 
 
@@ -348,74 +348,74 @@
  ------ ------------------------------------------------------------------------------------- 
   Line   game/core/queue.php                                                                  
  ------ ------------------------------------------------------------------------------------- 
-  278    Parameter #1 $user of function CanBuild expects array, array|null given.             
+  306    Parameter #1 $user of function CanBuild expects array, array|null given.             
          🪪  argument.type                                                                    
-  288    Offset 'player_id' might not exist on array|null.                                    
+  316    Offset 'player_id' might not exist on array|null.                                    
          🪪  offsetAccess.notFound                                                            
-  288    Parameter #7 $seconds of function AddQueue expects int, float given.                 
+  316    Parameter #7 $seconds of function AddQueue expects int, float given.                 
          🪪  argument.type                                                                    
-  296    Offset 'lang' might not exist on array|null.                                         
+  324    Offset 'lang' might not exist on array|null.                                         
          🪪  offsetAccess.notFound                                                            
-  297    Offset 'lang' might not exist on array|null.                                         
+  325    Offset 'lang' might not exist on array|null.                                         
          🪪  offsetAccess.notFound                                                            
-  299    Offset 'lang' might not exist on array|null.                                         
+  327    Offset 'lang' might not exist on array|null.                                         
          🪪  offsetAccess.notFound                                                            
-  300    Offset 'lang' might not exist on array|null.                                         
+  328    Offset 'lang' might not exist on array|null.                                         
          🪪  offsetAccess.notFound                                                            
-  301    Offset 'lang' might not exist on array|null.                                         
+  329    Offset 'lang' might not exist on array|null.                                         
          🪪  offsetAccess.notFound                                                            
-  301    Offset 'lang' might not exist on array|null.                                         
+  329    Offset 'lang' might not exist on array|null.                                         
          🪪  offsetAccess.notFound                                                            
-  302    Offset 'player_id' might not exist on array|null.                                    
+  330    Offset 'player_id' might not exist on array|null.                                    
          🪪  offsetAccess.notFound                                                            
-  303    Offset 'lang' might not exist on array|null.                                         
+  331    Offset 'lang' might not exist on array|null.                                         
          🪪  offsetAccess.notFound                                                            
-  304    Offset 'lang' might not exist on array|null.                                         
+  332    Offset 'lang' might not exist on array|null.                                         
          🪪  offsetAccess.notFound                                                            
-  373    Parameter #5 $destroy of function CanBuild expects bool, int given.                  
+  401    Parameter #5 $destroy of function CanBuild expects bool, int given.                  
          🪪  argument.type                                                                    
-  389    Parameter #7 $seconds of function AddQueue expects int, float given.                 
+  417    Parameter #7 $seconds of function AddQueue expects int, float given.                 
          🪪  argument.type                                                                    
-  461    Offset 'owner_id' might not exist on array|null.                                     
+  489    Offset 'owner_id' might not exist on array|null.                                     
          🪪  offsetAccess.notFound                                                            
-  464    Offset mixed might not exist on array|null.                                          
+  492    Offset mixed might not exist on array|null.                                          
          🪪  offsetAccess.notFound                                                            
-  465    Offset mixed might not exist on array|null.                                          
+  493    Offset mixed might not exist on array|null.                                          
          🪪  offsetAccess.notFound                                                            
-  598    Parameter #1 $user of function IsEnoughResources expects array, array|null given.    
+  626    Parameter #1 $user of function IsEnoughResources expects array, array|null given.    
          🪪  argument.type                                                                    
-  598    Parameter #1 $user of function TechMeetRequirement expects array, array|null given.  
+  626    Parameter #1 $user of function TechMeetRequirement expects array, array|null given.  
          🪪  argument.type                                                                    
-  729    Offset int might not exist on array|null.                                            
+  757    Offset int might not exist on array|null.                                            
          🪪  offsetAccess.notFound                                                            
-  731    Parameter #1 $user of function PremiumStatus expects array, array|null given.        
+  759    Parameter #1 $user of function PremiumStatus expects array, array|null given.        
          🪪  argument.type                                                                    
-  736    Parameter #1 $user of function CanResearch expects array, array|null given.          
+  764    Parameter #1 $user of function CanResearch expects array, array|null given.          
          🪪  argument.type                                                                    
-  776    Offset 'oname' might not exist on array|null.                                        
+  804    Offset 'oname' might not exist on array|null.                                        
          🪪  offsetAccess.notFound                                                            
-  779    Unreachable statement - code above always terminates.                                
+  807    Unreachable statement - code above always terminates.                                
          🪪  deadCode.unreachable                                                             
-  848    Parameter #4 $month of function mktime expects int|null, string given.               
+  876    Parameter #4 $month of function mktime expects int|null, string given.               
          🪪  argument.type                                                                    
-  848    Parameter #6 $year of function mktime expects int|null, string given.                
+  876    Parameter #6 $year of function mktime expects int|null, string given.                
          🪪  argument.type                                                                    
-  938    Function AddChangeEmailEvent() should return int but return statement is missing.    
-  1003   Parameter #4 $month of function mktime expects int|null, string given.               
+  966    Function AddChangeEmailEvent() should return int but return statement is missing.    
+  1031   Parameter #4 $month of function mktime expects int|null, string given.               
          🪪  argument.type                                                                    
-  1003   Parameter #6 $year of function mktime expects int|null, string given.                
+  1031   Parameter #6 $year of function mktime expects int|null, string given.                
          🪪  argument.type                                                                    
-  1063   Parameter #4 $month of function mktime expects int|null, string given.               
+  1091   Parameter #4 $month of function mktime expects int|null, string given.               
          🪪  argument.type                                                                    
-  1063   Parameter #6 $year of function mktime expects int|null, string given.                
+  1091   Parameter #6 $year of function mktime expects int|null, string given.                
          🪪  argument.type                                                                    
-  1113   Parameter #4 $month of function mktime expects int|null, string given.               
+  1141   Parameter #4 $month of function mktime expects int|null, string given.               
          🪪  argument.type                                                                    
-  1113   Parameter #6 $year of function mktime expects int|null, string given.                
+  1141   Parameter #6 $year of function mktime expects int|null, string given.                
          🪪  argument.type                                                                    
-  1160   Parameter #4 $month of function mktime expects int|null, string given.               
+  1188   Parameter #4 $month of function mktime expects int|null, string given.               
          🪪  argument.type                                                                    
-  1160   Parameter #6 $year of function mktime expects int|null, string given.                
+  1188   Parameter #6 $year of function mktime expects int|null, string given.                
          🪪  argument.type                                                                    
  ------ ------------------------------------------------------------------------------------- 
 
@@ -456,6 +456,8 @@
   99     Parameter #3 $subject of function str_replace expects array<string>|string, string|null given.  
          🪪  argument.type                                                                               
   245    Parameter #1 $seed of function srand expects int|null, float given.                             
+         🪪  argument.type                                                                               
+  274    Parameter #1 $handle of function pclose expects resource, resource|false given.                 
          🪪  argument.type                                                                               
  ------ ------------------------------------------------------------------------------------------------ 
 
@@ -541,13 +543,26 @@
          🪪  argument.type                                                                      
  ------ --------------------------------------------------------------------------------------- 
 
+ ------ ------------------------------------------------------------- 
+  Line   game/mods/DeepSpaceHorror/main.php                           
+ ------ ------------------------------------------------------------- 
+  385    Function FlightSpeed invoked with 4 parameters, 3 required.  
+         🪪  arguments.count                                          
+ ------ ------------------------------------------------------------- 
+
  ------ ------------------------------------------------------------------------- 
   Line   game/mods/SpaceStorm/main.php                                            
  ------ ------------------------------------------------------------------------- 
-  317    Loose comparison using == between 0 and 0 will always evaluate to true.  
+  336    Loose comparison using == between 0 and 0 will always evaluate to true.  
          🪪  equal.alwaysTrue                                                     
-  375    Method SpaceStorm::GetStabLevelMask() is unused.                         
+  394    Method SpaceStorm::GetStabLevelMask() is unused.                         
          🪪  method.unused                                                        
+  439    Left side of || is always false.                                         
+         🪪  booleanOr.leftAlwaysFalse                                            
+  443    Left side of || is always false.                                         
+         🪪  booleanOr.leftAlwaysFalse                                            
+  613    Variable $units_lost might not be defined.                               
+         🪪  variable.undefined                                                   
  ------ ------------------------------------------------------------------------- 
 
  ------ ---------------------------------------------------------------------- 
@@ -569,6 +584,8 @@
          🪪  argument.type                                                        
   22     Offset 'planet_id' does not exist on string.                             
          🪪  offsetAccess.notFound                                                
+  41     Parameter #3 $planet of function FleetCons expects array, string given.  
+         🪪  argument.type                                                        
   60     Offset 'planet_id' does not exist on string.                             
          🪪  offsetAccess.notFound                                                
  ------ ------------------------------------------------------------------------- 
@@ -661,9 +678,9 @@
  ------ ---------------------------------------- 
   Line   game/pages/b_building.php               
  ------ ---------------------------------------- 
-  188    Variable $queue0 might not be defined.  
-         🪪  variable.undefined                  
   190    Variable $queue0 might not be defined.  
+         🪪  variable.undefined                  
+  192    Variable $queue0 might not be defined.  
          🪪  variable.undefined                  
  ------ ---------------------------------------- 
 
@@ -743,9 +760,15 @@
          🪪  offsetAccess.notFound                                                            
   85     Offset 'planet_id' might not exist on array|null.                                    
          🪪  offsetAccess.notFound                                                            
+  86     Variable $now might not be defined.                                                  
+         🪪  variable.undefined                                                               
   99     Offset 'planet_id' might not exist on array|null.                                    
          🪪  offsetAccess.notFound                                                            
   99     Variable $now might not be defined.                                                  
+         🪪  variable.undefined                                                               
+  100    Variable $now might not be defined.                                                  
+         🪪  variable.undefined                                                               
+  105    Variable $now might not be defined.                                                  
          🪪  variable.undefined                                                               
   126    Offset 'planet_id' might not exist on array|null.                                    
          🪪  offsetAccess.notFound                                                            
@@ -767,13 +790,17 @@
          🪪  offsetAccess.notFound                                                            
   356    Variable $resourcemap might not be defined.                                          
          🪪  variable.undefined                                                               
-  435    Offset 'planet_id' might not exist on array|null.                                    
+  368    Variable $now might not be defined.                                                  
+         🪪  variable.undefined                                                               
+  377    Variable $now might not be defined.                                                  
+         🪪  variable.undefined                                                               
+  437    Offset 'planet_id' might not exist on array|null.                                    
          🪪  offsetAccess.notFound                                                            
-  448    Variable $now might not be defined.                                                  
+  450    Variable $now might not be defined.                                                  
          🪪  variable.undefined                                                               
-  456    Variable $g might not be defined.                                                    
+  458    Variable $g might not be defined.                                                    
          🪪  variable.undefined                                                               
-  465    Variable $g might not be defined.                                                    
+  467    Variable $g might not be defined.                                                    
          🪪  variable.undefined                                                               
  ------ ------------------------------------------------------------------------------------- 
 
@@ -789,17 +816,17 @@
  ------ ------------------------------------------------- 
   Line   game/pages/flotten1.php                          
  ------ ------------------------------------------------- 
-  13     PHPDoc tag @var above a function has no effect.  
+  14     PHPDoc tag @var above a function has no effect.  
          🪪  varTag.misplaced                             
-  197    Offset 'oname' might not exist on array|null.    
+  190    Offset 'oname' might not exist on array|null.    
          🪪  offsetAccess.notFound                        
-  267    Offset 'name' might not exist on array|null.     
+  260    Offset 'name' might not exist on array|null.     
          🪪  offsetAccess.notFound                        
-  270    Offset 'name' might not exist on array|null.     
+  263    Offset 'name' might not exist on array|null.     
          🪪  offsetAccess.notFound                        
-  280    Offset 'players' might not exist on array|null.  
+  273    Offset 'players' might not exist on array|null.  
          🪪  offsetAccess.notFound                        
-  285    Offset 'oname' might not exist on array|null.    
+  278    Offset 'oname' might not exist on array|null.    
          🪪  offsetAccess.notFound                        
  ------ ------------------------------------------------- 
 
@@ -844,6 +871,8 @@
  ------ ---------------------------------------------------------------------------------- 
   Line   game/pages/flottenversand.php                                                     
  ------ ---------------------------------------------------------------------------------- 
+  52     Variable $aktplanet might not be defined.                                         
+         🪪  variable.undefined                                                            
   63     Variable $aktplanet might not be defined.                                         
          🪪  variable.undefined                                                            
   107    Offset 'vacation' might not exist on array|null.                                  
@@ -854,18 +883,10 @@
          🪪  offsetAccess.notFound                                                         
   115    Offset 'ip_addr' might not exist on array|null.                                   
          🪪  offsetAccess.notFound                                                         
-  142    Offset 115 might not exist on array|null.                                         
-         🪪  offsetAccess.notFound                                                         
-  142    Offset 117 might not exist on array|null.                                         
-         🪪  offsetAccess.notFound                                                         
-  142    Offset 118 might not exist on array|null.                                         
-         🪪  offsetAccess.notFound                                                         
-  144    Offset 115 might not exist on array|null.                                         
-         🪪  offsetAccess.notFound                                                         
-  144    Offset 117 might not exist on array|null.                                         
-         🪪  offsetAccess.notFound                                                         
-  144    Offset 118 might not exist on array|null.                                         
-         🪪  offsetAccess.notFound                                                         
+  142    Parameter #2 $user of function FlightSpeed expects array, array|null given.       
+         🪪  argument.type                                                                 
+  144    Parameter #4 $user of function FlightCons expects array, array|null given.        
+         🪪  argument.type                                                                 
   178    Offset 'ally_id' might not exist on array|null.                                   
          🪪  offsetAccess.notFound                                                         
   178    Offset 'ally_id' might not exist on array|null.                                   
@@ -1110,30 +1131,26 @@
          🪪  offsetAccess.notFound                                                            
  ------ ------------------------------------------------------------------------------------- 
 
- ------ ----------------------------------------------- 
-  Line   game/pages/infos.php                           
- ------ ----------------------------------------------- 
-  305    Variable $now might not be defined.            
-         🪪  variable.undefined                         
-  308    Offset 'oname' might not exist on array|null.  
-         🪪  offsetAccess.notFound                      
-  310    Variable $fleetmap might not be defined.       
-         🪪  variable.undefined                         
-  315    Offset 115 might not exist on array|null.      
-         🪪  offsetAccess.notFound                      
-  315    Offset 117 might not exist on array|null.      
-         🪪  offsetAccess.notFound                      
-  315    Offset 118 might not exist on array|null.      
-         🪪  offsetAccess.notFound                      
-  415    Variable $now might not be defined.            
-         🪪  variable.undefined                         
-  456    Variable $fleetmap might not be defined.       
-         🪪  variable.undefined                         
-  504    Variable $resourcemap might not be defined.    
-         🪪  variable.undefined                         
-  521    Variable $resourcemap might not be defined.    
-         🪪  variable.undefined                         
- ------ ----------------------------------------------- 
+ ------ --------------------------------------------------------------------------- 
+  Line   game/pages/infos.php                                                       
+ ------ --------------------------------------------------------------------------- 
+  305    Variable $now might not be defined.                                        
+         🪪  variable.undefined                                                     
+  308    Offset 'oname' might not exist on array|null.                              
+         🪪  offsetAccess.notFound                                                  
+  310    Variable $fleetmap might not be defined.                                   
+         🪪  variable.undefined                                                     
+  315    Parameter #2 $user of function FleetCons expects array, array|null given.  
+         🪪  argument.type                                                          
+  415    Variable $now might not be defined.                                        
+         🪪  variable.undefined                                                     
+  456    Variable $fleetmap might not be defined.                                   
+         🪪  variable.undefined                                                     
+  504    Variable $resourcemap might not be defined.                                
+         🪪  variable.undefined                                                     
+  521    Variable $resourcemap might not be defined.                                
+         🪪  variable.undefined                                                     
+ ------ --------------------------------------------------------------------------- 
 
  ------ ------------------------------------------------------------------------------------- 
   Line   game/pages/messages.php                                                              
@@ -1404,9 +1421,9 @@
  ------ -------------------------------------------------------------------------- 
   Line   game/pages/resources.php                                                  
  ------ -------------------------------------------------------------------------- 
-  277    Method Resources::nicenum2() should return string but returns float|int.  
+  289    Method Resources::nicenum2() should return string but returns float|int.  
          🪪  return.type                                                           
-  301    Method Resources::DisplayFacilityProduction() is unused.                  
+  313    Method Resources::DisplayFacilityProduction() is unused.                  
          🪪  method.unused                                                         
  ------ -------------------------------------------------------------------------- 
 
@@ -1725,11 +1742,11 @@
  ------ --------------------------------------------------- 
   59     Variable $block_text might not be defined.         
          🪪  variable.undefined                             
-  113    Offset 'player_id' might not exist on array|null.  
+  130    Offset 'player_id' might not exist on array|null.  
          🪪  offsetAccess.notFound                          
-  115    Offset 'oname' might not exist on array|null.      
+  133    Offset 'oname' might not exist on array|null.      
          🪪  offsetAccess.notFound                          
-  139    Offset 'name' might not exist on array|null.       
+  199    Offset 'name' might not exist on array|null.       
          🪪  offsetAccess.notFound                          
  ------ --------------------------------------------------- 
 
@@ -2024,5 +2041,5 @@
          🪪  variable.undefined                                                   
  ------ ------------------------------------------------------------------------- 
 
- [ERROR] Found 744 errors                                                                                               
+ [ERROR] Found 750 errors                                                                                               
 
