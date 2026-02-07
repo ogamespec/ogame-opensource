@@ -68,7 +68,7 @@
 		"loca": "ADM_MENU_BROADCAST"
 	},
 	"Expedition": {
-		"path": "pages_admin/admin_bans.php",
+		"path": "pages_admin/admin_expedition.php",
 		"skin": true,
 		"img": "gebaeude/210.gif",
 		"loca": "ADM_MENU_EXPEDITION"
