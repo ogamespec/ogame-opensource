@@ -2,6 +2,16 @@
 
 // Admin Area: Users.
 
+class Admin_Users extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 $big_fleet_points = 100000000;      // Mark large fleets with a special color.
 
 $FleetMissionList = array (

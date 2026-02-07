@@ -8,6 +8,16 @@
 
 // TODO: We don't know how to fix tables yet. An admin must manually fix tables by himself using phpMyAdmin or similar tool.
 
+class Admin_DB extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function DiffTab (string $tabname, array $src, array $dst) : string
 {
     $error = false;

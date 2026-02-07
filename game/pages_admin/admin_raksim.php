@@ -2,6 +2,16 @@
 
 // Admin Area: missile attack simulator. Used for verification and debugging of the algorithmic part of the missile attack.
 
+class Admin_Raksim extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_RakSim () : void
 {
     global $session;

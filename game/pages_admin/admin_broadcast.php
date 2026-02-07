@@ -2,6 +2,16 @@
 
 // Admin Area: Broadcast message to users.
 
+class Admin_Broadcast extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_Broadcast () : void
 {
     global $session;

@@ -2,102 +2,45 @@
 
 // Admin Area: Check localization
 
-function CompareTwoLocas (string $src, string $dst) : string
-{
-    $res = "";
+class Admin_Loca extends Page {
 
-    $filename = basename ($src);
+    private string $base_loca_dir = 'loca';
+    private string $diff_res = "";
 
-    $res .= "<h2>$filename</h2>\n\n";
+    public function controller () : bool {
 
-    // Local loca :)
-    $LOCA = array();
+        $this->diff_res = "";
 
-    include $src;
-    include $dst;
+        // Обработка POST-запроса.
+        if ( method () === "POST" )
+        {
+            $src_files = scandir ($this->base_loca_dir . '/' . $_POST['loca_src']);
+            $dst_files = scandir ($this->base_loca_dir . '/' . $_POST['loca_dst']);
+            $processed = array();
 
-    $src_lang = "";
-    $dst_lang = "";
+            // Go through all the files in the source directory and compare them to the files in the target directory.
 
-    foreach ($LOCA as $i=>$lang) {
-        if (strpos($src, $i.'_'.$i)) {
-            $src_lang = $i;
-        }
-        if (strpos($dst, $i.'_'.$i)) {
-            $dst_lang = $i;
-        }        
-    }    
+            foreach ($src_files as $i=>$file) {
+                
+                if ($file == '.' || $file == '..' || is_dir($this->base_loca_dir . '/' . $file) || !strpos($file, ".php"))
+                    continue;
 
-    // List the keys from the source file:
-    // - If the string matches in the target file - highlight yellow (no translation, but the string is there)
-    // - If there is no string in the target file at all - highlight in red
+                $this->diff_res .= $this->CompareTwoLocas (
+                    $this->base_loca_dir . '/' . $_POST['loca_src'] . '/' . $file,
+                    $this->base_loca_dir . '/' . $_POST['loca_dst'] . '/' . $file );
 
-    if (!empty($src_lang)) {
-        $res .= "<table>\n";
-        foreach ($LOCA[$src_lang] as $key=>$value) {
-
-            $dst_value = "";
-            $bg_col = "style=\"background-color: green;\"";
-            if (key_exists($dst_lang, $LOCA) && key_exists($key, $LOCA[$dst_lang])) {
-                $dst_value = $LOCA[$dst_lang][$key];
-                if (!empty($value) && $value === $dst_value) {
-                    $bg_col = "style=\"background-color: orange;\"";
-                }
+                $processed[$file] = true;
             }
-            else {
-                $dst_value = loca("ADM_LOCA_LOCALE_MISSING");
-                $bg_col = "style=\"background-color: red;\"";
-            }
-
-            $res .= "<tr>";
-            $res .= "<td $bg_col>$key</td>";
-            $res .= "<td $bg_col><pre>".htmlspecialchars($value)."</pre></td>";
-            $res .= "<td $bg_col><pre>".htmlspecialchars($dst_value)."</pre></td>";
-            $res .= "</tr>";
         }
-        $res .= "</table>\n";
-    }
-    else {
-        $res .= "<font color=red>".loca("ADM_LOCA_FILE_MISSING")."</font><br/>\n";
+
+        return true;
     }
 
-    return $res;
-}
+    public function view () : void {
 
-function Admin_Loca () : void
-{
-    global $session;
-    global $db_prefix;
-    global $GlobalUser;
-
-    $base_loca_dir = 'loca';
-    $loca_dirs = scandir ($base_loca_dir);
-    $diff_res = "";
-
-    // Обработка POST-запроса.
-    if ( method () === "POST" )
-    {
-        $src_files = scandir ($base_loca_dir . '/' . $_POST['loca_src']);
-        $dst_files = scandir ($base_loca_dir . '/' . $_POST['loca_dst']);
-        $processed = array();
-
-        // Go through all the files in the source directory and compare them to the files in the target directory.
-
-        foreach ($src_files as $i=>$file) {
-            
-            if ($file == '.' || $file == '..' || is_dir($base_loca_dir . '/' . $file) || !strpos($file, ".php"))
-                continue;
-
-            $diff_res .= CompareTwoLocas (
-                $base_loca_dir . '/' . $_POST['loca_src'] . '/' . $file,
-                $base_loca_dir . '/' . $_POST['loca_dst'] . '/' . $file );
-
-            $processed[$file] = true;
-        }
-    }
+        global $session;
+        $loca_dirs = scandir ($this->base_loca_dir);
 ?>
-
-<?php AdminPanel();?>
 
 <table>
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Loca&action=search" method="POST" >
@@ -109,7 +52,7 @@ function Admin_Loca () : void
 <?php
     foreach ($loca_dirs as $i=>$dir) {
         
-        if ($dir == '.' || $dir == '..' || !is_dir($base_loca_dir . '/' . $dir))
+        if ($dir == '.' || $dir == '..' || !is_dir($this->base_loca_dir . '/' . $dir))
             continue;
 
         $selected = (key_exists('loca_src', $_POST) && $_POST['loca_src'] == $dir) ? "selected" : "";
@@ -125,7 +68,7 @@ function Admin_Loca () : void
 <?php
     foreach ($loca_dirs as $i=>$dir) {
         
-        if ($dir == '.' || $dir == '..' || !is_dir($base_loca_dir . '/' . $dir))
+        if ($dir == '.' || $dir == '..' || !is_dir($this->base_loca_dir . '/' . $dir))
             continue;
 
         $selected = (key_exists('loca_dst', $_POST) && $_POST['loca_dst'] == $dir) ? "selected" : "";
@@ -144,8 +87,72 @@ function Admin_Loca () : void
 
 <br/>
 
-<?=$diff_res;?>
+<?=$this->diff_res;?>
 
 <?php
-}   // Admin_Loca
+    }
+
+    function CompareTwoLocas (string $src, string $dst) : string
+    {
+        $res = "";
+
+        $filename = basename ($src);
+
+        $res .= "<h2>$filename</h2>\n\n";
+
+        // Local loca :)
+        $LOCA = array();
+
+        include $src;
+        include $dst;
+
+        $src_lang = "";
+        $dst_lang = "";
+
+        foreach ($LOCA as $i=>$lang) {
+            if (strpos($src, $i.'_'.$i)) {
+                $src_lang = $i;
+            }
+            if (strpos($dst, $i.'_'.$i)) {
+                $dst_lang = $i;
+            }        
+        }    
+
+        // List the keys from the source file:
+        // - If the string matches in the target file - highlight yellow (no translation, but the string is there)
+        // - If there is no string in the target file at all - highlight in red
+
+        if (!empty($src_lang)) {
+            $res .= "<table>\n";
+            foreach ($LOCA[$src_lang] as $key=>$value) {
+
+                $dst_value = "";
+                $bg_col = "style=\"background-color: green;\"";
+                if (key_exists($dst_lang, $LOCA) && key_exists($key, $LOCA[$dst_lang])) {
+                    $dst_value = $LOCA[$dst_lang][$key];
+                    if (!empty($value) && $value === $dst_value) {
+                        $bg_col = "style=\"background-color: orange;\"";
+                    }
+                }
+                else {
+                    $dst_value = loca("ADM_LOCA_LOCALE_MISSING");
+                    $bg_col = "style=\"background-color: red;\"";
+                }
+
+                $res .= "<tr>";
+                $res .= "<td $bg_col>$key</td>";
+                $res .= "<td $bg_col><pre>".htmlspecialchars($value)."</pre></td>";
+                $res .= "<td $bg_col><pre>".htmlspecialchars($dst_value)."</pre></td>";
+                $res .= "</tr>";
+            }
+            $res .= "</table>\n";
+        }
+        else {
+            $res .= "<font color=red>".loca("ADM_LOCA_FILE_MISSING")."</font><br/>\n";
+        }
+
+        return $res;
+    }
+}
+
 ?>

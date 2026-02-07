@@ -2,6 +2,16 @@
 
 // Admin Area: history of player and operator actions
 
+class Admin_Userlogs extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_UserLogs () : void
 {
     global $session;

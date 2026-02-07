@@ -3,6 +3,16 @@
 // Admin Area: Errors.
 // Errors occur when something very bad happens to the game during the execution of a request. In most cases, the error will result in the player being unloaded.
 
+class Admin_Errors extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_Errors () : void
 {
     global $session;

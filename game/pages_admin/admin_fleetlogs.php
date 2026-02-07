@@ -2,6 +2,16 @@
 
 // Admin Area: Current flights of players, as well as flight logs
 
+class Admin_Fleetlogs extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_Fleetlogs () : void
 {
     global $session;

@@ -2,6 +2,16 @@
 
 // Admin Area: Global Event Queue.
 
+class Admin_Queue extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function QueueDesc ( array $queue ) : string
 {
     global $session, $db_prefix;

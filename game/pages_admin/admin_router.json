@@ -1,7 +1,8 @@
 {
 	"Home": {
 		"path": "pages_admin/admin_home.php",
-		"skip": true
+		"skip": true,
+		"panel": false
 	},	
 
 	"Fleetlogs": {

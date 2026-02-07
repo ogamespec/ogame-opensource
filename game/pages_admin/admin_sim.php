@@ -2,6 +2,16 @@
 
 // Admin Area: Battle Simulator.
 
+class Admin_BattleSim extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function ParseBattleDataSource (string $source, array &$a, array &$d) : void
 {
     $lines = explode("\n", $source);

@@ -2,6 +2,16 @@
 
 // Admin Area: expedition settings & simulator.
 
+class Admin_Expedition extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_Expedition () : void
 {
     global $session;

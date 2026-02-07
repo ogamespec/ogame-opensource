@@ -2,6 +2,16 @@
 
 // Admin Area: Planets.
 
+class Admin_Planets extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_Planets () : void
 {
     global $loca_lang, $Languages;

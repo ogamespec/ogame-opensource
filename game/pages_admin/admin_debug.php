@@ -2,6 +2,16 @@
 
 // Admin Area: Debug messages.
 
+class Admin_Debug extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_Debug () : void
 {
     global $session;

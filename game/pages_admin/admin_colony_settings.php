@@ -2,6 +2,16 @@
 
 // Admin Area: Colonization Settings
 
+class Admin_ColonySettings extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_ColonySettings () : void
 {
     global $session;

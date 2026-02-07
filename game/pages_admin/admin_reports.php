@@ -2,6 +2,16 @@
 
 // Admin Area: user complains about abusive messages. Although Legor commands to dominate the universe, it must be done with respect.
 
+class Admin_Reports extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_Reports () : void
 {
     global $session;

@@ -2,6 +2,16 @@
 
 // Admin Area: Bot intelligence graphical editor.
 
+class Admin_Botedit extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_Botedit () : void
 {
     global $session;

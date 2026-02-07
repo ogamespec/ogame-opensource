@@ -2,6 +2,16 @@
 
 // Admin Area: Browser history (only for players with the `sniff` flag enabled).
 
+class Admin_Browse extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_Browse () : void
 {
     global $session;

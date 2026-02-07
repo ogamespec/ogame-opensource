@@ -2,6 +2,16 @@
 
 // Admin Area: Bans
 
+class Admin_Bans extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_Bans () : void
 {
     global $session;

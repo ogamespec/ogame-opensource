@@ -2,6 +2,16 @@
 
 // Admin Area: source code checksum.
 
+class Admin_Checksum extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_Checksum () : void
 {
     global $session;

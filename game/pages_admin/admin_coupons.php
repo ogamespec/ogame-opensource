@@ -2,6 +2,16 @@
 
 // Admin Area: DM coupons
 
+class Admin_Coupons extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_Coupons () : void
 {
     global $session;

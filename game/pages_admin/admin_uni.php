@@ -2,6 +2,16 @@
 
 // Admin Area: Universe Settings.
 
+class Admin_Uni extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function UniIsSelected (mixed $option, mixed $value) : string
 {
     if ( $option == $value ) return "selected";

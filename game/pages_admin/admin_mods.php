@@ -2,6 +2,16 @@
 
 // Admin Area: Modifications.
 
+class Admin_Mods extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function GenModPanelSource(string $session, bool $acitive, bool $can_be_installed, array $mod) : void
 {
     echo "        <div class=\"mod-item\">\n";

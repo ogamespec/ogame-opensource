@@ -2,6 +2,16 @@
 
 // Admin Area: Bot control
 
+class Admin_Bots extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_Bots () : void
 {
     global $session;

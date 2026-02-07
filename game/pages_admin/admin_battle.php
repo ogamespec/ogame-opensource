@@ -3,6 +3,16 @@
 // Admin Area: battle reports.
 // Battle reports are kept for 2 weeks.
 
+class Admin_BattleReport extends Page {
+
+    public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
+    }
+}
+
 function Admin_BattleReport () : void
 {
     global $session;
