@@ -3,7 +3,7 @@
 		"path": "pages_admin/admin.php",
 		"admin_update_queue": false,
 		"loca": [ "menu", "fleetorder", "admin", "install" ],
-		"header": false
+		"bare": true
 	},
 	"ainfo": {
 		"path": "pages/ainfo.php",
