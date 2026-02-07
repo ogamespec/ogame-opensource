@@ -27,7 +27,7 @@ else $mode = "Home";
 $admin_router = LoadJsonFirst ("pages_admin/admin_router.json");
 
 $header = false;
-$mnu = true;
+$menu = true;
 
 $classFile = $admin_router[$mode]['path'];
 if (file_exists($classFile)) {
