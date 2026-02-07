@@ -16,7 +16,7 @@
 		"loca": "ADM_MENU_BROWSE"
 	},
 	"Reports": {
-		"path": "pages_admin/admin_report.php",
+		"path": "pages_admin/admin_reports.php",
 		"img": "img/admin_report.png",
 		"loca": "ADM_MENU_REPORTS"
 	},
@@ -47,7 +47,7 @@
 		"loca": "ADM_MENU_UNI"
 	},
 	"Errors": {
-		"path": "pages_admin/admin_error.php",
+		"path": "pages_admin/admin_errors.php",
 		"img": "img/admin_error.png",
 		"loca": "ADM_MENU_ERRORS"
 	},
