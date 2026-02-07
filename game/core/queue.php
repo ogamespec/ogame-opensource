@@ -1074,7 +1074,6 @@ function Queue_CleanDebris_End (array $queue) : void
     dbquery ( $query );
     RemoveQueue ( $queue['task_id'] );
     AddCleanDebrisEvent ();
-    GalaxyToolUpdate ();
 }
 
 // Add the task of cleaning up deleted planets and moons, if it doesn't already exist.

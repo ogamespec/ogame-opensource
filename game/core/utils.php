@@ -39,6 +39,7 @@ function va (string $subject) : string
 {
     $num_arg = func_num_args();
     $pattern = array ();
+    $replace = array ();
     for ($i=1; $i<$num_arg; $i++)
     {
         $pattern[$i-1] = "/#$i/";

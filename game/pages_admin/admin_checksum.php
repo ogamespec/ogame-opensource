@@ -31,7 +31,6 @@ function Admin_Checksum () : void
         'core/expedition.php', 
         'core/expedition_battle.php', 
         'core/fleet.php', 
-        'core/galaxytool.php', 
         'core/graviton.php', 
         'index.php', 
         'install.php', 
