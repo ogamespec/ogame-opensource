@@ -24,6 +24,8 @@ if ( $GlobalUser['admin'] == 0 ) RedirectHome ();    // regular users are not al
 if ( key_exists ('mode', $_GET) ) $mode = $_GET['mode'];
 else $mode = "Home";
 
+$admin_router = LoadJsonFirst ("pages_admin/admin_router.json");
+
 include "admin_home.php";
 include "admin_panel.php";
 include "admin_fleetlogs.php";
