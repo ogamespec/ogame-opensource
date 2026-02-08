@@ -5,29 +5,85 @@
 class Admin_Botedit extends Page {
 
     public function controller () : bool {
-        return true;
-    }
+        global $db_prefix;
+        global $GlobalUser;
+        global $GlobalUni;
+        global $session;
 
-    public function view () : void {
-    }
-}
+        // POST request processing.
+        if ( method () === "POST" && key_exists('action', $_POST) && $GlobalUser['admin'] >= 2 )
+        {
+            if ( $_POST['action'] === "load" ) {        // Load
+                $id = intval ( $_POST['strat'] );
+                $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
+                $result = dbquery ($query);
+                $row = dbarray ($result);
+                ob_clean ();
+                setcookie ( "uni".$GlobalUni['num']."_".$GlobalUser['name']."_strategy", $id, 9999 );
+                die ($row['source']);
+            }
+            else if ( $_POST['action'] === "save" ) {    // Save
+                $id = intval ( $_POST['strat'] );
 
-function Admin_Botedit () : void
-{
-    global $session;
-    global $db_prefix;
-    global $GlobalUser, $GlobalUni;
+                // Save the current source to a backup
+                $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
+                $result = dbquery ($query);
+                $row = dbarray ($result);
+                $query = "UPDATE ".$db_prefix."botstrat SET source = '".$row['source']."' WHERE id = 1;";
+                dbquery ( $query );
 
-    // GET request processing.
-    if ( method () === "GET" && key_exists('action', $_GET) && $GlobalUser['admin'] >= 2 )
-    {
-        if ( $_GET['action'] === "preview" ) {      // Preview
-            $id = intval ( $_GET['strat'] );
-            $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
-            $result = dbquery ($query);
-            $row = dbarray ($result);
+                $source = urldecode ( $_POST['source'] );
+                $source = addslashes ( $source );
+                $query = "UPDATE ".$db_prefix."botstrat SET source = '".$source."' WHERE id = $id;";
+                dbquery ( $query );
+                ob_clean ();
+                die ();
+            }
+            else if ( $_POST['action'] === "new" ) {    // New strategy
+                $name = $_POST['name'];
+                $name = addslashes ( $name );
+                $source = "{ \"class\": \"go.GraphLinksModel\",
+                             \"linkFromPortIdProperty\": \"fromPort\",
+                             \"linkToPortIdProperty\": \"toPort\",
+                             \"nodeDataArray\": [ ],
+                             \"linkDataArray\": [ ]}";
+                $strat = array ( 'name' => $name, 'source' => $source );
+                AddDBRow ($strat, 'botstrat');
+                ob_clean ();
+                die ( );
+            }
+            else if ( $_POST['action'] === "rename" ) {    // Rename
+                $id = intval ( $_POST['strat'] );
+                $name = $_POST['name'];
+                $name = addslashes ( $name );
+                $query = "UPDATE ".$db_prefix."botstrat SET name = '".$name."' WHERE id = $id;";
+                dbquery ( $query );
+                ob_clean ();
+                $query = "SELECT * FROM ".$db_prefix."botstrat ORDER BY id ASC";
+                $result = dbquery ($query);
+                echo "<option value=\"0\">".loca("ADM_BOTEDIT_CHOOSE")."</option>\n";
+                while ($row = dbarray ($result) ) {
+                    echo "<option value=\"".$row['id']."\"  ";
+                    if ( $row['id'] == $id ) echo "selected";
+                    echo ">".stripslashes($row['name'])."</option>\n";
+                }
+                die ( );
+            }
+            else {
+                ob_clean ();
+                die ();
+            }
+        }
 
-            ob_clean ();
+        // GET request processing.
+        if ( method () === "GET" && key_exists('action', $_GET) && $GlobalUser['admin'] >= 2 )
+        {
+            if ( $_GET['action'] === "preview" ) {      // Preview
+                $id = intval ( $_GET['strat'] );
+                $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
+                $result = dbquery ($query);
+                $row = dbarray ($result);
+
 ?>
 
 <html>
@@ -82,89 +138,28 @@ function Admin_Botedit () : void
 </html>
 
 <?php
-            die ();
+                return false;
+            } // GET preview
         }
+
+        return true;
     }
 
-    // POST request processing.
-    if ( method () === "POST" && key_exists('action', $_POST) && $GlobalUser['admin'] >= 2 )
-    {
-        if ( $_POST['action'] === "load" ) {        // Load
-            $id = intval ( $_POST['strat'] );
-            $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
-            $result = dbquery ($query);
-            $row = dbarray ($result);
-            ob_clean ();
-            setcookie ( "uni".$GlobalUni['num']."_".$GlobalUser['name']."_strategy", $id, 9999 );
-            die ($row['source']);
-        }
-        else if ( $_POST['action'] === "save" ) {    // Save
-            $id = intval ( $_POST['strat'] );
-
-            // Save the current source to a backup
-            $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
-            $result = dbquery ($query);
-            $row = dbarray ($result);
-            $query = "UPDATE ".$db_prefix."botstrat SET source = '".$row['source']."' WHERE id = 1;";
-            dbquery ( $query );
-
-            $source = urldecode ( $_POST['source'] );
-            $source = addslashes ( $source );
-            $query = "UPDATE ".$db_prefix."botstrat SET source = '".$source."' WHERE id = $id;";
-            dbquery ( $query );
-            ob_clean ();
-            die ();
-        }
-        else if ( $_POST['action'] === "new" ) {    // New strategy
-            $name = $_POST['name'];
-            $name = addslashes ( $name );
-            $source = "{ \"class\": \"go.GraphLinksModel\",
-                         \"linkFromPortIdProperty\": \"fromPort\",
-                         \"linkToPortIdProperty\": \"toPort\",
-                         \"nodeDataArray\": [ ],
-                         \"linkDataArray\": [ ]}";
-            $strat = array ( 'name' => $name, 'source' => $source );
-            AddDBRow ($strat, 'botstrat');
-            ob_clean ();
-            die ( );
-        }
-        else if ( $_POST['action'] === "rename" ) {    // Rename
-            $id = intval ( $_POST['strat'] );
-            $name = $_POST['name'];
-            $name = addslashes ( $name );
-            $query = "UPDATE ".$db_prefix."botstrat SET name = '".$name."' WHERE id = $id;";
-            dbquery ( $query );
-            ob_clean ();
-            $query = "SELECT * FROM ".$db_prefix."botstrat ORDER BY id ASC";
-            $result = dbquery ($query);
-            echo "<option value=\"0\">".loca("ADM_BOTEDIT_CHOOSE")."</option>\n";
-            while ($row = dbarray ($result) ) {
-                echo "<option value=\"".$row['id']."\"  ";
-                if ( $row['id'] == $id ) echo "selected";
-                echo ">".stripslashes($row['name'])."</option>\n";
-            }
-            die ( );
-        }
-        else {
-            ob_clean ();
-            die ();
-        }
-    }
+    public function view () : void {
+        global $db_prefix;
+        global $GlobalUser;
 
 ?>
-
 <script type="text/javascript" src="js/tw-sack.js"></script>
 <script type="text/javascript" src="js/go.js"></script>
 <script type="text/javascript" src="js/go-game.js"></script>
 
-<?php AdminPanel();?>
-
 <?php
-    if ( $GlobalUser['admin'] < 2) {
+        if ( $GlobalUser['admin'] < 2) {
 
-        echo "<font color=red>".loca("ADM_BOTEDIT_FORBIDDEN")."</font>";
-        return;
-    }
+            echo "<font color=red>".loca("ADM_BOTEDIT_FORBIDDEN")."</font>";
+            return;
+        }
 ?>
 
 <div id="sample">
@@ -189,11 +184,11 @@ function Admin_Botedit () : void
 <select id="strategyId">
 <option value="0"><?=loca("ADM_BOTEDIT_CHOOSE");?></option>
 <?php
-    $query = "SELECT * FROM ".$db_prefix."botstrat ORDER BY id ASC";
-    $result = dbquery ($query);
-    while ($row = dbarray ($result) ) {
-        echo "<option value=\"".$row['id']."\">".stripslashes($row['name'])."</option>\n";
-    }
+        $query = "SELECT * FROM ".$db_prefix."botstrat ORDER BY id ASC";
+        $result = dbquery ($query);
+        while ($row = dbarray ($result) ) {
+            echo "<option value=\"".$row['id']."\">".stripslashes($row['name'])."</option>\n";
+        }
 ?>
 </select>
   <button onclick="load()"><?=loca("ADM_BOTEDIT_LOAD");?></button>
@@ -212,7 +207,9 @@ init ();
 </script>
 
 <img src="" id="preview_img" style="display:none;">
-
 <?php
+
+    } // view
 }
+
 ?>
