@@ -341,3 +341,8 @@
       var new_win = window.open("index.php?page=admin&session="+session+"&mode=BotEdit&action=preview&strat=" + document.getElementById("strategyId").value, document.getElementById("strategyName").value, 'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=800,height=400,resizable=yes');
       new_win.focus();
   }
+
+  function export_strat() {
+    var new_win = window.open("index.php?page=admin&session="+session+"&mode=BotEdit&action=export&strat=" + document.getElementById("strategyId").value, document.getElementById("strategyName").value, 'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=800,height=400,resizable=yes');
+    new_win.focus();
+  }

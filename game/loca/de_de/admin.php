@@ -20,7 +20,7 @@ $LOCA["de"]["ADM_MENU_CHECKSUM"] = "Quellenprüfung";
 $LOCA["de"]["ADM_MENU_BOTS"] = "Bot-Kontrollen";
 $LOCA["de"]["ADM_MENU_BATTLELOGS"] = "Kampfberichte";
 $LOCA["de"]["ADM_MENU_USERLOGS"] = "Benutzerprotokolle";
-$LOCA["de"]["ADM_MENU_BOTEDIT"] = "Bot Editor";
+$LOCA["de"]["ADM_MENU_BOTEDIT"] = "Botstrat Editor";
 $LOCA["de"]["ADM_MENU_COUPONS"] = "Gutscheine";
 $LOCA["de"]["ADM_MENU_RAKSIM"] = "Raketenangriffssimulation";
 $LOCA["de"]["ADM_MENU_DB"] = "Datenbank-Integrität";
@@ -69,6 +69,8 @@ $LOCA["de"]["ADM_BOTEDIT_SHOW"] = "Anzeigen";
 $LOCA["de"]["ADM_BOTEDIT_SAVE"] = "Speichern";
 $LOCA["de"]["ADM_BOTEDIT_LOAD"] = "Herunterladen";
 $LOCA["de"]["ADM_BOTEDIT_FORBIDDEN"] = "Zugang verweigert.";
+$LOCA["de"]["ADM_BOTEDIT_NAME"] = "Name der bearbeiteten Strategie:";
+$LOCA["de"]["ADM_BOTEDIT_EXPORT"] = "Export";
 
 // admin_bots
 

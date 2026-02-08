@@ -10,7 +10,7 @@ class Admin_Botedit extends Page {
         global $GlobalUni;
         global $session;
 
-        // POST request processing.
+        // AJAX POST request processing.
         if ( method () === "POST" && key_exists('action', $_POST) && $GlobalUser['admin'] >= 2 )
         {
             if ( $_POST['action'] === "load" ) {        // Load
@@ -139,7 +139,17 @@ class Admin_Botedit extends Page {
 
 <?php
                 return false;
-            } // GET preview
+            } // preview
+            else if ( $_GET['action'] === "export" ) {    // Export Strat
+
+                $id = intval ( $_GET['strat'] );
+                $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
+                $result = dbquery ($query);
+                $row = dbarray ($result);
+                echo $row['source'];
+
+                return false;
+            }
         }
 
         return true;
@@ -173,10 +183,11 @@ class Admin_Botedit extends Page {
   </div>
 
 <span style="float:left;">
- <input type="text" size="50" id="strategyName">
+ <?=loca("ADM_BOTEDIT_NAME");?> <input type="text" size="50" id="strategyName">
  <button onclick="newstrat()"><?=loca("ADM_BOTEDIT_NEW");?></button>
  <button onclick="rename()"><?=loca("ADM_BOTEDIT_RENAME");?></button>
  <button onclick="showimg()"><?=loca("ADM_BOTEDIT_SHOW");?></button>
+ <button onclick="export_strat()"><?=loca("ADM_BOTEDIT_EXPORT");?></button>
 </span>
 
 <span style="float:right;">

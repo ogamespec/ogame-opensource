@@ -20,7 +20,7 @@ $LOCA["en"]["ADM_MENU_CHECKSUM"] = "Source Check";
 $LOCA["en"]["ADM_MENU_BOTS"] = "Bot Controls";
 $LOCA["en"]["ADM_MENU_BATTLELOGS"] = "Battle Reports";
 $LOCA["en"]["ADM_MENU_USERLOGS"] = "User Logs";
-$LOCA["en"]["ADM_MENU_BOTEDIT"] = "Bot Editor";
+$LOCA["en"]["ADM_MENU_BOTEDIT"] = "Botstrat Editor";
 $LOCA["en"]["ADM_MENU_COUPONS"] = "Coupons";
 $LOCA["en"]["ADM_MENU_RAKSIM"] = "Rocket Attack Sim";
 $LOCA["en"]["ADM_MENU_DB"] = "DB Integrity";
@@ -69,6 +69,8 @@ $LOCA["en"]["ADM_BOTEDIT_SHOW"] = "Show";
 $LOCA["en"]["ADM_BOTEDIT_SAVE"] = "Save";
 $LOCA["en"]["ADM_BOTEDIT_LOAD"] = "Load";
 $LOCA["en"]["ADM_BOTEDIT_FORBIDDEN"] = "Access denied.";
+$LOCA["en"]["ADM_BOTEDIT_NAME"] = "Name of the edited strategy:";
+$LOCA["en"]["ADM_BOTEDIT_EXPORT"] = "Export";
 
 // admin_bots
 
