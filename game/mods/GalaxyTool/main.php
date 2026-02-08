@@ -73,7 +73,7 @@ class GalaxyTool extends GameMod {
     }
 
     // Updating the embedded galaxytool.
-    // It is updated every week, after the phantom debris cleanup.
+    // It is updated every week (by default)
 
     private function GalaxyToolUpdateGalaxy () : void
     {
@@ -110,7 +110,7 @@ class GalaxyTool extends GameMod {
         $week3 = time() - 604800*3;
 
         $list = array ();
-        $query = "SELECT * FROM ".$db_prefix."users WHERE place1 < 1000 AND admin = 0 ORDER BY player_id ASC";    // только игроков из топ1000 и не админов
+        $query = "SELECT * FROM ".$db_prefix."users WHERE place1 < 1000 AND admin = 0 ORDER BY player_id ASC";    // only players from the top 1000 and not admins
         $result = dbquery ( $query );
         $rows = dbrows ( $result );
         while ($rows--)
@@ -178,6 +178,14 @@ class GalaxyTool extends GameMod {
         $this->GalaxyToolUpdateAllyStats ();
     }
 
+    public function route_admin(array &$router) : bool {
+        $item = [];
+        $item['path'] = "mods/GalaxyTool/pages_admin/admin_galaxytool.php";
+        $item['img'] = "mods/GalaxyTool/img/admin_galaxytool.png";
+        $item['loca'] = "GALATOOL_TITLE";
+        $router['GalaxyTool'] = $item;
+        return false;
+    }
 }
 
 ?>

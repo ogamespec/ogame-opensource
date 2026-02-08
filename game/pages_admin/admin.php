@@ -29,6 +29,9 @@ else $mode = "Home";
 require_once "admin_panel.php";
 
 $admin_router = LoadJsonFirst ("pages_admin/admin_router.json");
+ModsExecRef ('route_admin', $admin_router);
+
+if (!isset($admin_router[$mode])) $mode = "Home";
 
 $header = false;
 $menu = true;
