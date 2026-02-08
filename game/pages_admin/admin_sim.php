@@ -417,7 +417,7 @@ RecalcAttackersDefendersNum ();
 
     }
 
-    function ParseBattleDataSource (string $source, array &$a, array &$d) : void
+    private function ParseBattleDataSource (string $source, array &$a, array &$d) : void
     {
         $lines = explode("\n", $source);
 
@@ -498,7 +498,7 @@ RecalcAttackersDefendersNum ();
         }
     }
 
-    function get_intval(string $id) : int
+    private function get_intval(string $id) : int
     {
         if (isset($_POST[$id])) {
             return intval($_POST[$id]);
@@ -508,7 +508,7 @@ RecalcAttackersDefendersNum ();
         }
     }
 
-    function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid, int $did, int $max_round, bool $debug, int &$battle_result, int &$aloss, int &$dloss ) : string
+    private function SimBattle ( mixed $battle_source, array $a, array $d, int $rf, int $fid, int $did, int $max_round, bool $debug, int &$battle_result, int &$aloss, int &$dloss ) : string
     {
         global $db_prefix;
         global $GlobalUni;
