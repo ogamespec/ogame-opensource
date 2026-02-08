@@ -87,7 +87,7 @@ class DeepSpaceHorror extends GameMod {
         }
 
         // Удалить планеты без флотов, если вдруг мод баганул в процессе.
-        $query = "DELETE FROM ".$db_prefix."planets WHERE planet_id IN (".PTYP_LEVI_AMOEBA.", ".PTYP_LEVI_GUARDIAN.", ".PTYP_LEVI_JUGGERNAUT.");";
+        $query = "DELETE FROM ".$db_prefix."planets WHERE type IN (".PTYP_LEVI_PORTAL.", ".PTYP_LEVI_AMOEBA.", ".PTYP_LEVI_GUARDIAN.", ".PTYP_LEVI_JUGGERNAUT.");";
         dbquery ($query);
 
         // Remove columns
