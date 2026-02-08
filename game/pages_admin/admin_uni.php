@@ -6,6 +6,7 @@ class Admin_Uni extends Page {
 
     public function controller () : bool {
         global $db_prefix;
+        global $GlobalUni;
         global $GlobalUser;
         global $now;
 
@@ -66,6 +67,8 @@ class Admin_Uni extends Page {
                 $query = "UPDATE ".$db_prefix."users SET vacation = 1, vacation_until = ".$now." WHERE lastclick >= $days7 AND admin = 0";
                 dbquery ( $query );
             }
+
+            $GlobalUni = LoadUniverse ();       // reload uni
 
             //print_r ( $_POST );
         }

@@ -19,5 +19,7 @@ $LOCA["ru"]["GALATOOL_FIND"] = "Найти все планеты игрока : 
 $LOCA["ru"]["GALATOOL_SEARCH"] = "Поиск";
 $LOCA["ru"]["GALATOOL_NOT_UPDATED"] = "Обновления ещё не было";
 
+$LOCA["ru"]["ADMIN_GALATOOL_UPDATE_PERIOD"] = "Периодичность обновления (дн.)";
+$LOCA["ru"]["ADMIN_GALATOOL_SUBMIT"] = "Сохранить";
 
 ?>
