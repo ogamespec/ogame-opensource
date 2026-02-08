@@ -16,6 +16,10 @@ abstract class GameMod {
         return false;
     }
 
+    public function route_admin(array &$router) : bool {
+        return false;
+    }
+
     public function update_queue(array &$queue) : bool {
         return false;
     }

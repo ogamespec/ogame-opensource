@@ -18,10 +18,12 @@ class Admin_Mods extends Page {
 
             if ($action === "install" && $modname) {
                 ModsInstall ($modname);
+                MyGoto ('admin', '&mode=Mods');
             }
 
             if ($action === "remove" && $modname) {
                 ModsRemove ($modname);
+                MyGoto ('admin', '&mode=Mods');
             }
 
             if ($action === "move_up" && $modname) {
