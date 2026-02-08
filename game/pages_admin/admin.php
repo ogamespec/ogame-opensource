@@ -1,6 +1,8 @@
 <?php
 
 /** @var array $GlobalUser */
+/** @var string $PageMessage */
+/** @var string $PageError */
 
 // Admin Panel.
 // The main panel is a typical admin panel with categories.
