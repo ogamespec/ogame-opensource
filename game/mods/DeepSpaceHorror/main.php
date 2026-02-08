@@ -358,35 +358,32 @@ class DeepSpaceHorror extends GameMod {
         $fleet[$gid] = $count;
 
         // Выбрать уровни двигателей
-
-        $combustion = 0;
-        $impulse = 0;
-        $hyper = 0;
+        // Уровни двигаталей левиафанов зависят от топ1 игрока.
 
         $top1 = GetTop1 ();
+        if ($top1 == null) {
+            $top1 = LoadUser (USER_SPACE);
+        }
 
         if ($top1) {
             switch ($gid) {
                 case GID_LEVI_AMOEBA:
-                    $combustion = max (0, $top1[GID_R_COMBUST_DRIVE] - 2);
-                    $impulse = max (0, $top1[GID_R_IMPULSE_DRIVE] - 2);
-                    $hyper = max (0, $top1[GID_R_HYPER_DRIVE] - 2);
+                    $top1[GID_R_COMBUST_DRIVE] = max (0, $top1[GID_R_COMBUST_DRIVE] - 2);
+                    $top1[GID_R_IMPULSE_DRIVE] = max (0, $top1[GID_R_IMPULSE_DRIVE] - 2);
+                    $top1[GID_R_HYPER_DRIVE] = max (0, $top1[GID_R_HYPER_DRIVE] - 2);
                     break;
                 case GID_LEVI_GUARDIAN:
-                    $combustion = max (0, $top1[GID_R_COMBUST_DRIVE] - 1);
-                    $impulse = max (0, $top1[GID_R_IMPULSE_DRIVE] - 1);
-                    $hyper = max (0, $top1[GID_R_HYPER_DRIVE] - 1);
+                    $top1[GID_R_COMBUST_DRIVE] = max (0, $top1[GID_R_COMBUST_DRIVE] - 1);
+                    $top1[GID_R_IMPULSE_DRIVE] = max (0, $top1[GID_R_IMPULSE_DRIVE] - 1);
+                    $top1[GID_R_HYPER_DRIVE] = max (0, $top1[GID_R_HYPER_DRIVE] - 1);
                     break;
                 case GID_LEVI_JUGGERNAUT:
-                    $combustion = $top1[GID_R_COMBUST_DRIVE];
-                    $impulse = $top1[GID_R_IMPULSE_DRIVE];
-                    $hyper = $top1[GID_R_HYPER_DRIVE];
                     break;
             }
         }
 
         $dist = FlightDistance ($origin['g'], $origin['s'], $origin['p'], $target['g'], $target['s'], $target['p']);
-        $speed = FlightSpeed ($fleet, $combustion, $impulse, $hyper);
+        $speed = FlightSpeed ($fleet, $top1, $origin);
         $seconds = FlightTime ($dist, $speed, 1.0, $GlobalUni['fspeed']);
         $cons = 0;
 
