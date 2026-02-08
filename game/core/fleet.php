@@ -223,28 +223,45 @@ function FleetSpeed ( int $id, array $user, array $planet) : float
 
     switch ($id) {
         case GID_F_SC:
-            if ($impulse >= 5) return ($baseSpeed + 5000) * (1 + 0.2 * $impulse);
-            else return $baseSpeed * (1 + 0.1 * $combustion);
+            if ($impulse >= 5) $speed = ($baseSpeed + 5000) * (1 + 0.2 * $impulse);
+            else $speed = $baseSpeed * (1 + 0.1 * $combustion);
+            break;
         case GID_F_BOMBER:
-            if ($hyper >= 8) return ($baseSpeed + 1000) * (1 + 0.3 * $hyper);
-            else return $baseSpeed * (1 + 0.2 * $impulse);            
+            if ($hyper >= 8) $speed = ($baseSpeed + 1000) * (1 + 0.3 * $hyper);
+            else $speed = $baseSpeed * (1 + 0.2 * $impulse);
+            break;
         case GID_F_LC:
         case GID_F_LF:
         case GID_F_RECYCLER:
         case GID_F_PROBE:
         case GID_F_SAT:
-            return $baseSpeed * (1 + 0.1 * $combustion);
+            $speed = $baseSpeed * (1 + 0.1 * $combustion);
+            break;
         case GID_F_HF:
         case GID_F_CRUISER:
         case GID_F_COLON:
-            return $baseSpeed * (1 + 0.2 * $impulse);
+            $speed = $baseSpeed * (1 + 0.2 * $impulse);
+            break;
         case GID_F_BATTLESHIP:
         case GID_F_DESTRO:
         case GID_F_DEATHSTAR:
         case GID_F_BATTLECRUISER:
-            return $baseSpeed * (1 + 0.3 * $hyper);
-        default: return $baseSpeed;
+            $speed = $baseSpeed * (1 + 0.3 * $hyper);
+            break;
+        default:
+            $speed = $baseSpeed;
+            break;
     }
+
+    $param = [];
+    $param['user'] = $user;
+    $param['planet'] = $planet;
+    $bonus = [];
+    $bonus['value'] = $speed;
+    ModsExecArrRef ('bonus_fleet_speed', $param, $bonus);
+    $speed = max (0, $bonus['value']);
+
+    return $speed;
 }
 
 function FleetCargo ( int $id ) : int

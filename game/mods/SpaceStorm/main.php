@@ -27,6 +27,8 @@ const SPACE_STORM_CHRONO_SPY_DELAY_MAX = 5;
 const SPACE_STORM_MATTER_SIGNATURE_BASE_BONUS = 0.2;
 const SPACE_STORM_QUANTUM_DRIVE_BASE_BONUS = 0.25;
 const SPACE_STORM_ENERGY_COLLAPSE_BASE_PENALTY = 0.4;
+const SPACE_STORM_SUBSPACE_TURB_PENALTY_MIN = 30;
+const SPACE_STORM_SUBSPACE_TURB_PENALTY_MAX = 50;
 
 class SpaceStorm extends GameMod {
 
@@ -413,18 +415,40 @@ class SpaceStorm extends GameMod {
 
     public function add_db_row(array &$row, string $tabname) : bool {
 
+        global $db_prefix;
         $storm = $this->GetStorm ();
 
-        // Если добавляется событие флота Шпионаж убывает И активен шторм хроно-шпионский сбой, то замедлить флот
         if ($tabname === 'queue' && $row['type'] === QTYP_FLEET) {
 
             $fleet_id = $row['sub_id'];
             $fleet_obj = LoadFleet ($fleet_id);
 
+            // Если добавляется событие флота Шпионаж убывает И активен шторм хроно-шпионский сбой, то замедлить флот
             if ($fleet_obj && $fleet_obj['mission'] == FTYP_SPY && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
 
                 $delay_seconds = mt_rand (SPACE_STORM_CHRONO_SPY_DELAY_MIN, SPACE_STORM_CHRONO_SPY_DELAY_MAX) * 60;
                 $row['end'] += $delay_seconds;
+            }
+
+            // Если флот улетает и активен эффект Прыжка, то либо с шансом 5% перебросить его либо с шансом 1% что он заблудится
+            if ($fleet_obj && ($fleet_obj['mission'] <= FTYP_EXPEDITION || $fleet_obj['mission'] >= FTYP_CUSTOM) && ($storm & SPACE_STORM_MASK_SUBSPACE_JUMP) != 0) {
+
+                $bool_test_jump = false;
+                $bool_test_loss = false;
+
+                if ($bool_test_jump || mt_rand(1, 100) <= 5) {
+
+                    $row['end'] = $row['start'];
+                }
+                else if ( ( $bool_test_loss || mt_rand(1, 100) <= 1) && $fleet_obj['mission'] <= FTYP_EXPEDITION) {    // кастомные флоты не умеем отзывать
+
+                    $flight_time = mt_rand(60*60, 2*60*60);
+                    $mission = $fleet_obj['mission'] + FTYP_RETURN;
+                    $row['end'] = $row['start'] + $flight_time;
+
+                    $query = "UPDATE ".$db_prefix."fleet SET flight_time = $flight_time, mission = $mission WHERE fleet_id = $fleet_id";
+                    dbquery ($query);
+                }
             }
         }
 
@@ -611,7 +635,20 @@ class SpaceStorm extends GameMod {
 
         if (($storm & SPACE_STORM_MASK_QUANTUM_DRIVE) != 0) {
             $bonus['value'] *= 2;
-        }        
+        }
+
+        return false;
+    }
+
+    public function bonus_fleet_speed (array $param, array &$bonus) : bool {
+
+        $storm = $this->GetStorm ();
+
+        if (($storm & SPACE_STORM_MASK_SUBSPACE_TURB) != 0) {
+
+            $penalty = mt_rand (SPACE_STORM_SUBSPACE_TURB_PENALTY_MIN, SPACE_STORM_SUBSPACE_TURB_PENALTY_MAX) / 100;
+            $bonus['value'] *= 1 - $penalty;
+        }
 
         return false;
     }
