@@ -5,12 +5,19 @@
 const GALATOOL_BASE_DIR_NAME = "temp";
 
 const QTYP_GALAXY_TOOL = "GalaxyTool";
-const GALAXY_TOOL_PERIOD_SECONDS = 7 * 24 * 60 * 60;
+const GALAXY_TOOL_PERIOD_DAYS = 7;
+const GALAXY_TOOL_PERIOD_SECONDS = GALAXY_TOOL_PERIOD_DAYS * 24 * 60 * 60;
 
 class GalaxyTool extends GameMod {
 
     public function install() : void {
         global $db_prefix;
+
+        LockTables();
+
+        // Add a column to the Universe settings where the update period will be stored
+        $query = "ALTER TABLE ".$db_prefix."uni ADD COLUMN galaxytool_update INT DEFAULT ".GALAXY_TOOL_PERIOD_DAYS.";";
+        dbquery ($query);
 
         // Start GalaxyTool update event
         $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_GALAXY_TOOL."'";
@@ -18,14 +25,24 @@ class GalaxyTool extends GameMod {
         if ( dbrows ($result) == 0 ) {
             AddQueue (USER_SPACE, QTYP_GALAXY_TOOL, 0, 0, 0, time(), GALAXY_TOOL_PERIOD_SECONDS);
         }
+
+        UnlockTables();
     }
 
     public function uninstall() : void {
         global $db_prefix;
 
+        LockTables();
+
+        // Remove update settings column from Universe table
+        $query = "ALTER TABLE ".$db_prefix."uni DROP COLUMN galaxytool_update;";
+        dbquery ($query);
+
         // Delete GalaxyTool update event
         $query = "DELETE FROM ".$db_prefix."queue WHERE type = '".QTYP_GALAXY_TOOL."'";
         dbquery ($query);
+
+        UnlockTables();
     }
 
     public function init() : void {
@@ -34,6 +51,10 @@ class GalaxyTool extends GameMod {
         loca_add ("galaxytool", $GlobalUser['lang'], __DIR__);
     }
 
+    public function install_tabs_included (array &$tabs) : bool {
+        $tabs['uni']['galaxytool_update'] = 'INT DEFAULT '.GALAXY_TOOL_PERIOD_DAYS;
+        return false;
+    }
 
     public function route(array &$router) : bool {
         $router['galaxytool'] = array (
