@@ -4,26 +4,7 @@
 
 class Admin_Checksum extends Page {
 
-    public function controller () : bool {
-        return true;
-    }
-
-    public function view () : void {
-    }
-}
-
-function Admin_Checksum () : void
-{
-    global $session;
-    global $db_prefix;
-    global $GlobalUser;
-
-    $engine_md = unserialize ( file_get_contents ('temp/engine.md5') );
-    $page_md = unserialize ( file_get_contents ('temp/page.md5') );
-    $page_admin_md = unserialize ( file_get_contents ('temp/page_admin.md5') );
-    $reg_md = unserialize ( file_get_contents ('temp/reg.md5') );
-
-    $engine_files = array (
+    private array $engine_files = array (
         'ainfo.php', 
         'core/acs.php', 
         'core/ally.php', 
@@ -67,7 +48,7 @@ function Admin_Checksum () : void
         '../feed/viewitem.php', 
     );
 
-    $page_admin_files = array (
+    private array $page_admin_files = array (
         'pages_admin/admin.php', 
         'pages_admin/admin_bans.php', 
         'pages_admin/admin_battle.php', 
@@ -92,13 +73,14 @@ function Admin_Checksum () : void
         'pages_admin/admin_queue.php', 
         'pages_admin/admin_raksim.php', 
         'pages_admin/admin_reports.php', 
+        'pages_admin/admin_router.json', 
         'pages_admin/admin_sim.php', 
         'pages_admin/admin_uni.php', 
         'pages_admin/admin_userlogs.php', 
         'pages_admin/admin_users.php', 
     );
 
-    $page_files = array (
+    private array $page_files = array (
         'pages/ainfo.php', 
         'pages/allianzdepot.php', 
         'pages/allianzen.php', 
@@ -150,7 +132,7 @@ function Admin_Checksum () : void
         'pages/writemessages.php', 
     );
 
-    $reg_files = array (
+    private array $reg_files = array (
         'reg/check_registration.php', 
         'reg/errorpage.php', 
         'reg/fa_pass.php', 
@@ -161,39 +143,53 @@ function Admin_Checksum () : void
         'reg/newredirect.php', 
     );
 
-    if ( method () === "POST" ) {    // Сохранить контрольные суммы файлов
-        foreach ( $engine_files as $i=>$filename ) {
-            $md = md5_file($filename) ;
-            $engine_md[$filename] = $md;
+    public function controller () : bool {
+
+        if ( method () === "POST" ) {    // Сохранить контрольные суммы файлов
+            $engine_md = array();
+            foreach ( $this->engine_files as $i=>$filename ) {
+                $md = md5_file($filename) ;
+                $engine_md[$filename] = $md;
+            }
+            $page_admin_md = array();
+            foreach ( $this->page_admin_files as $i=>$filename ) {
+                $md = md5_file($filename) ;
+                $page_admin_md[$filename] = $md;
+            }
+            $page_md = array();
+            foreach ( $this->page_files as $i=>$filename ) {
+                $md = md5_file($filename) ;
+                $page_md[$filename] = $md;
+            }
+            $reg_md = array();
+            foreach ( $this->reg_files as $i=>$filename ) {
+                $md = md5_file($filename) ;
+                $reg_md[$filename] = $md;
+            }
+            file_put_contents ( 'temp/engine.md5', serialize ( $engine_md ) );
+            file_put_contents ( 'temp/page_admin.md5', serialize ( $page_admin_md ) );
+            file_put_contents ( 'temp/page.md5', serialize ( $page_md ) );
+            file_put_contents ( 'temp/reg.md5', serialize ( $reg_md ) );
         }
-        foreach ( $page_admin_files as $i=>$filename ) {
-            $md = md5_file($filename) ;
-            $page_admin_md[$filename] = $md;
-        }
-        foreach ( $page_files as $i=>$filename ) {
-            $md = md5_file($filename) ;
-            $page_md[$filename] = $md;
-        }
-        foreach ( $reg_files as $i=>$filename ) {
-            $md = md5_file($filename) ;
-            $reg_md[$filename] = $md;
-        }
-        file_put_contents ( 'temp/engine.md5', serialize ( $engine_md ) );
-        file_put_contents ( 'temp/page_admin.md5', serialize ( $page_admin_md ) );
-        file_put_contents ( 'temp/page.md5', serialize ( $page_md ) );
-        file_put_contents ( 'temp/reg.md5', serialize ( $reg_md ) );
+
+        return true;
     }
 
+    public function view () : void {
+        global $session;
+
+        $engine_md = unserialize ( file_get_contents ('temp/engine.md5') );
+        $page_md = unserialize ( file_get_contents ('temp/page.md5') );
+        $page_admin_md = unserialize ( file_get_contents ('temp/page_admin.md5') );
+        $reg_md = unserialize ( file_get_contents ('temp/reg.md5') );
+
 ?>
-
-<?php AdminPanel();?>
-
 <h2><?=loca("ADM_CSUM_ENGINE");?></h2>
 
 <table width="519">
 <tr><td class=c><?=loca("ADM_CSUM_PATH");?></td><td class=c><?=loca("ADM_CSUM_DIGEST");?></td><td class=c><?=loca("ADM_CSUM_STATUS");?></td></tr>
 <?php
-    foreach ( $engine_files as $i=>$filename ) {
+    foreach ( $this->engine_files as $i=>$filename ) {
         $md = md5_file($filename) ;
         echo "<tr><td>$filename</td><td>$md</td>";
 
@@ -213,7 +209,7 @@ function Admin_Checksum () : void
 <table width="519">
 <tr><td class=c><?=loca("ADM_CSUM_PATH");?></td><td class=c><?=loca("ADM_CSUM_DIGEST");?></td><td class=c><?=loca("ADM_CSUM_STATUS");?></td></tr>
 <?php
-    foreach ( $page_admin_files as $i=>$filename ) {
+    foreach ( $this->page_admin_files as $i=>$filename ) {
         $md = md5_file($filename) ;
         echo "<tr><td>$filename</td><td>$md</td>";
         if ( $page_admin_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
@@ -228,7 +224,7 @@ function Admin_Checksum () : void
 <table width="519">
 <tr><td class=c><?=loca("ADM_CSUM_PATH");?></td><td class=c><?=loca("ADM_CSUM_DIGEST");?></td><td class=c><?=loca("ADM_CSUM_STATUS");?></td></tr>
 <?php
-    foreach ( $page_files as $i=>$filename ) {
+    foreach ( $this->page_files as $i=>$filename ) {
         $md = md5_file($filename) ;
         echo "<tr><td>$filename</td><td>$md</td>";
         if ( $page_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
@@ -243,7 +239,7 @@ function Admin_Checksum () : void
 <table width="519">
 <tr><td class=c><?=loca("ADM_CSUM_PATH");?></td><td class=c><?=loca("ADM_CSUM_DIGEST");?></td><td class=c><?=loca("ADM_CSUM_STATUS");?></td></tr>
 <?php
-    foreach ( $reg_files as $i=>$filename ) {
+    foreach ( $this->reg_files as $i=>$filename ) {
         $md = md5_file($filename) ;
         echo "<tr><td>$filename</td><td>$md</td>";
         if ( $reg_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
@@ -258,8 +254,9 @@ function Admin_Checksum () : void
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Checksum" method="POST">
 <input type=submit value="<?=loca("ADM_CSUM_FIX");?>">
 </form>
+<?php
 
-<?php    
+    } // view
 }
 
 ?>
