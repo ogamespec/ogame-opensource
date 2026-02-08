@@ -67,9 +67,9 @@ function ExecuteBlock (array $queue, array $block, array $childs ) : void
                         break;
                     }
                 }
-                if (!$done) Debug ( "Не удалось найти метку перехода \"".$block['text']."\"" );
+                if (!$done) Debug ( "Unable to find branch label \"".$block['text']."\"" );
             }
-            else Debug ( "Не удалось загрузить текущую стратегию при обработке перехода." );
+            else Debug ( "Failed to load current strategy while processing branch." );
             RemoveQueue ( $queue['task_id'] );
             break;
 
@@ -116,7 +116,7 @@ function ExecuteBlock (array $queue, array $block, array $childs ) : void
                 }    // random jump
             }
             if ( $block_id != 0xdeadbeef ) AddBotQueue ( $BotID, $strat_id, $block_id, $BotNow, 0 );
-            else Debug ( "Не удалось выбрать условный переход." );
+            else Debug ( "Failed to choose conditional branch." );
             RemoveQueue ( $queue['task_id'] );
             break;
 
@@ -139,6 +139,7 @@ function AddBot (string $name) : bool
 
     if ( !IsUserExist ($name) ) {
         $player_id = CreateUser ( $name, $pass, '', true );
+        InvalidateUserCache ();
         $query = "UPDATE ".$db_prefix."users SET validatemd = '', validated = 1 WHERE player_id = " . $player_id;
         dbquery ($query);
         StartBot ( $player_id );
@@ -156,7 +157,7 @@ function StartBot (int $player_id) : void
     $BotID = $player_id;
     $BotNow = time ();
 
-    if ( BotExec("_start") == 0 ) Debug ( "Стартовая стратегия не найдена." );
+    if ( BotExec("_start") == 0 ) Debug ( "Starting strategy not found." );
 }
 
 // Stop the bot (just remove all AI tasks)
@@ -207,7 +208,7 @@ function Queue_Bot_End (array $queue) : void
         }
 
     }
-    else Debug ( "Не удалось загрузить программу " . $queue['sub_id'] );
+    else Debug ( "Failed to load the program " . $queue['sub_id'] );
 }
 
 // Bot Variables.

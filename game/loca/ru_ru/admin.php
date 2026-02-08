@@ -20,7 +20,7 @@ $LOCA["ru"]["ADM_MENU_CHECKSUM"] = "Целостность кода";
 $LOCA["ru"]["ADM_MENU_BOTS"] = "Управление ботами";
 $LOCA["ru"]["ADM_MENU_BATTLELOGS"] = "Боевые доклады";
 $LOCA["ru"]["ADM_MENU_USERLOGS"] = "История действий";
-$LOCA["ru"]["ADM_MENU_BOTEDIT"] = "Редактор ботов";
+$LOCA["ru"]["ADM_MENU_BOTEDIT"] = "Редактор ботстратов";
 $LOCA["ru"]["ADM_MENU_COUPONS"] = "Купоны";
 $LOCA["ru"]["ADM_MENU_RAKSIM"] = "Симулятор ракетной атаки";
 $LOCA["ru"]["ADM_MENU_DB"] = "Целостность БД";
@@ -69,6 +69,11 @@ $LOCA["ru"]["ADM_BOTEDIT_SHOW"] = "Показать";
 $LOCA["ru"]["ADM_BOTEDIT_SAVE"] = "Сохранить";
 $LOCA["ru"]["ADM_BOTEDIT_LOAD"] = "Загрузить";
 $LOCA["ru"]["ADM_BOTEDIT_FORBIDDEN"] = "Доступ запрещён.";
+$LOCA["ru"]["ADM_BOTEDIT_NAME"] = "Имя редактируемой стратегии:";
+$LOCA["ru"]["ADM_BOTEDIT_EXPORT"] = "Экспортировать";
+$LOCA["ru"]["ADM_BOTEDIT_IMPORT_SUCCESS"] = "Стратегия #1 импортирована успешно. Перезагрузите стратегию.";
+$LOCA["ru"]["ADM_BOTEDIT_IMPORT_FAILED"] = "Необходимо вначале загрузить стратегию!";
+$LOCA["ru"]["ADM_BOTEDIT_IMPORT"] = "Импортировать";
 
 // admin_bots
 

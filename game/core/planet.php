@@ -584,7 +584,7 @@ function CreateHomePlanet (int $player_id) : int
         $g = (int)floor ( $d / $ppg ) + 1;
         $dd = $d - ($g - 1) * $ppg;
         $s = (int)floor ($dd/$ss) + 1;
-        $p = $dd % $ss + 1;
+        $p = (int)$dd % $ss + 1;
 
         if ( !$planet[(int)floor($d)] && $g>=1 && $p>3 && $p<13 ) {
             return CreatePlanet ( $g, $s, $p, $player_id, 0);

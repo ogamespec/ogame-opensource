@@ -9,10 +9,39 @@ class Admin_Botedit extends Page {
         global $GlobalUser;
         global $GlobalUni;
         global $session;
+        global $PageMessage;
+        global $PageError;
 
-        // POST request processing.
-        if ( method () === "POST" && key_exists('action', $_POST) && $GlobalUser['admin'] >= 2 )
+        $PageMessage = "";
+        $PageError = "";
+
+        // AJAX POST request processing.
+        if ( method () === "POST" && key_exists('action', $_REQUEST) && $GlobalUser['admin'] >= 2 )
         {
+            if ( $_GET['action'] === "import" ) {        // Import
+                $id = intval($_POST['strategyId_ForImport']);
+                if ($id != 0) {
+
+                    // Save the current source to a backup
+                    $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
+                    $result = dbquery ($query);
+                    $row = dbarray ($result);
+                    $query = "UPDATE ".$db_prefix."botstrat SET source = '".$row['source']."' WHERE id = 1;";
+                    dbquery ( $query );
+
+                    $source = file_get_contents($_FILES['fileToUpload']['tmp_name']);
+                    $source = addslashes ( $source );
+                    $query = "UPDATE ".$db_prefix."botstrat SET source = '".$source."' WHERE id = $id;";
+                    dbquery ( $query );
+
+                    $PageMessage = va(loca("ADM_BOTEDIT_IMPORT_SUCCESS"), $row['name']);
+                }
+                else {
+                    $PageError = loca("ADM_BOTEDIT_IMPORT_FAILED");
+                }
+                return true;
+            }
+
             if ( $_POST['action'] === "load" ) {        // Load
                 $id = intval ( $_POST['strat'] );
                 $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
@@ -139,7 +168,17 @@ class Admin_Botedit extends Page {
 
 <?php
                 return false;
-            } // GET preview
+            } // preview
+            else if ( $_GET['action'] === "export" ) {    // Export Strat
+
+                $id = intval ( $_GET['strat'] );
+                $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
+                $result = dbquery ($query);
+                $row = dbarray ($result);
+                echo $row['source'];
+
+                return false;
+            }
         }
 
         return true;
@@ -148,6 +187,7 @@ class Admin_Botedit extends Page {
     public function view () : void {
         global $db_prefix;
         global $GlobalUser;
+        global $session;
 
 ?>
 <script type="text/javascript" src="js/tw-sack.js"></script>
@@ -173,10 +213,11 @@ class Admin_Botedit extends Page {
   </div>
 
 <span style="float:left;">
- <input type="text" size="50" id="strategyName">
+ <?=loca("ADM_BOTEDIT_NAME");?> <input type="text" size="50" id="strategyName">
  <button onclick="newstrat()"><?=loca("ADM_BOTEDIT_NEW");?></button>
  <button onclick="rename()"><?=loca("ADM_BOTEDIT_RENAME");?></button>
  <button onclick="showimg()"><?=loca("ADM_BOTEDIT_SHOW");?></button>
+ <button onclick="export_strat()"><?=loca("ADM_BOTEDIT_EXPORT");?></button>
 </span>
 
 <span style="float:right;">
@@ -205,6 +246,11 @@ class Admin_Botedit extends Page {
 <script type="text/javascript">
 init ();
 </script>
+
+<form action="index.php?page=admin&session=<?=$session;?>&mode=BotEdit&action=import" method="post" enctype="multipart/form-data">
+ <input type="hidden" id="strategyId_ForImport" name="strategyId_ForImport" value="0" >
+ <input type="file" name="fileToUpload" id="fileToUpload" /> <input type="submit" value="<?=loca("ADM_BOTEDIT_IMPORT");?>" />
+</form>
 
 <img src="" id="preview_img" style="display:none;">
 <?php

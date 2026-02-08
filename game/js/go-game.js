@@ -276,6 +276,7 @@
       myDiagram.model = go.Model.fromJson( this.response );
       myDiagram.undoManager.isEnabled = true;
       document.getElementById("strategyName").value = getSelectedText ('strategyId');
+      document.getElementById("strategyId_ForImport").value = document.getElementById("strategyId").value;
 
       data = myDiagram.makeImageData ({ scale: 1, background: 'rgba(65, 86, 128, 0.9)', maxSize: new go.Size(10000, 10000) });
       document.getElementById("preview_img").src = data; 
@@ -340,4 +341,9 @@
   function showimg() {
       var new_win = window.open("index.php?page=admin&session="+session+"&mode=BotEdit&action=preview&strat=" + document.getElementById("strategyId").value, document.getElementById("strategyName").value, 'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=800,height=400,resizable=yes');
       new_win.focus();
+  }
+
+  function export_strat() {
+    var new_win = window.open("index.php?page=admin&session="+session+"&mode=BotEdit&action=export&strat=" + document.getElementById("strategyId").value, document.getElementById("strategyName").value, 'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=800,height=400,resizable=yes');
+    new_win.focus();
   }
