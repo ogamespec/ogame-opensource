@@ -281,4 +281,8 @@ function RunBackgroundProcess(string $command) : int {
     }
 }
 
+function FloatEqual (float $a, float $b) : bool {
+    return abs($a-$b) < PHP_FLOAT_EPSILON;
+}
+
 ?>

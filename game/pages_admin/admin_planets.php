@@ -4,195 +4,197 @@
 
 class Admin_Planets extends Page {
 
+    private string $SearchResult = "";
+
     public function controller () : bool {
+        global $GlobalUser;
+        global $now;
+        global $session;
+        global $db_prefix;
+        global $buildmap;
+        global $fleetmap;
+        global $defmap;
+
+        // POST request processing.
+        if ( method () === "POST" && $GlobalUser['admin'] >= 2 ) {
+            $cp = intval ($_GET['cp']);
+            $action = $_GET['action'];
+
+            if ($action === "update")        // Update the planet's data.
+            {
+                //print_r ($_POST);
+                //echo "<hr/>";
+
+                $param = array_merge ( 
+                    $buildmap, $defmap, $fleetmap, 
+                    array ( GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM, 'g', 's', 'p', 'diameter', 'type', 'temp',
+                        'prod'.GID_B_METAL_MINE, 'prod'.GID_B_CRYS_MINE, 'prod'.GID_B_DEUT_SYNTH, 'prod'.GID_B_SOLAR, 'prod'.GID_B_FUSION, 'prod'.GID_F_SAT) );
+                $moon_param = array ( 'g', 's', 'p' );
+
+                $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
+                foreach ( $param as $i=>$p ) {
+                    if (key_exists($p, $_POST)) {
+                        if ( str_contains ( $p, "prod") ) {
+                            $query .= ", `$p`=".(float)$_POST[$p];
+                        }
+                        else {
+                            if ( $i == 0 ) $query .= "`$p`=".intval($_POST[$p]);
+                            else $query .= ", `$p`=".intval($_POST[$p]);
+                        }
+                    }
+                }
+                $query .= " WHERE planet_id=$cp;";
+
+                if ( key_exists ( "delete_planet", $_POST ) )        // Delete a planet. The home planet cannot be deleted.
+                {
+                    $planet = LoadPlanetById ($cp);
+                    $user = LoadUser ($planet['owner_id']);
+                    if ( $user['hplanetid'] != $cp)
+                    {
+                        DestroyPlanet ($cp);
+                        $_GET['cp'] = $user['hplanetid'];        // redirect to the home planet.
+                    }
+                }
+                else {                                        // Update planet data
+
+                    $moon_id = PlanetHasMoon ( $cp );        // Move the moon beyond the planet.
+                    if ( $moon_id )
+                    {
+                        $mquery = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
+                        foreach ( $moon_param as $i=>$p ) {
+                            if ( $i == 0 ) $mquery .= "$p=".intval($_POST[$p]);
+                            else $mquery .= ", $p=".intval($_POST[$p]);
+                        }
+                        $mquery .= " WHERE planet_id=$moon_id;";
+                        dbquery ($mquery);
+                    }
+
+                    dbquery ($query);
+                    RecalcFields ($cp);
+                }
+            }
+            else if ( $action === "search" )        // Search
+            {
+                $searchtype = $_POST['type'];
+                if ( $_POST['searchtext'] === "" ) {
+                    $this->SearchResult .= loca("ADM_PLANET_SPECIFY_TEXT") . "<br>\n";
+                    $searchtype = "none";
+                }
+                if ( $searchtype === "playername") {
+                    $query = "SELECT player_id FROM ".$db_prefix."users WHERE oname LIKE '".$_POST['searchtext']."%'";
+                    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = ANY ($query);";
+                }
+                else if ( $searchtype === "planetname") {
+                    $query = "SELECT * FROM ".$db_prefix."planets WHERE name LIKE '".$_POST['searchtext']."%';";
+                }
+                else if ( $searchtype === "allytag") {
+                    $query = "SELECT ally_id FROM ".$db_prefix."ally WHERE tag LIKE '".$_POST['searchtext']."%'";
+                    $query = "SELECT player_id FROM ".$db_prefix."users WHERE ally_id <> 0 AND ally_id = ANY ($query)";
+                    $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = ANY ($query);";
+                }
+                if ($query) $result = dbquery ($query);
+                $this->SearchResult .= "<table>\n";
+                $rows = dbrows ($result);
+                if ( $rows > 0 )
+                {
+                    while ($rows--)
+                    {
+                        $planet = dbarray ( $result );
+                        $user = LoadUser ( $planet['owner_id'] );
+                        $this->SearchResult .= "<tr><th>".date ("Y-m-d H:i:s", $planet['date'])."</th><th>".AdminPlanetCoord($planet)."</th>";
+                        $this->SearchResult .= "<th><a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\">".$planet['name']."</a></th>";
+                        $this->SearchResult .= "<th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a></th></tr>\n";
+                    }
+                }
+                else $this->SearchResult .= loca("ADM_PLANET_NOT_FOUND") . "<br>\n";
+                $this->SearchResult .= "</table>\n";
+            }
+        }
+
+        // GET request processing.
+        if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
+            if ( key_exists('cp', $_GET) ) $cp = intval ($_GET['cp']);
+            else $cp = 0;
+            
+            if ( key_exists('action', $_GET) && $cp ) $action = $_GET['action'];
+            else $action = "";
+
+            if ( $action === "create_moon" )    // Create the moon
+            {
+                $planet = LoadPlanetById ($cp);
+                if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
+                {
+                    if ( PlanetHasMoon ($cp) == 0 ) CreatePlanet ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id'], 0, 1, 20);
+                }
+            }
+            else if ( $action === "create_debris" )    // Create debris field
+            {
+                $planet = LoadPlanetById ($cp);
+                if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
+                {
+                    if ( HasDebris ($planet['g'], $planet['s'], $planet['p']) == 0 ) CreateDebris ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id']);
+                }
+            }
+            else if ( $action === "cooldown_gates" )    // Cool down the gate
+            {
+                $planet = LoadPlanetById ($cp);
+                if ( $planet['type'] == PTYP_MOON )
+                {
+                    $query = "UPDATE ".$db_prefix."planets SET gate_until=0 WHERE planet_id=" . $planet['planet_id'];
+                    dbquery ($query);
+                }
+            }
+            else if ( $action === "warmup_gates" )    // Warm up the gate
+            {
+                $planet = LoadPlanetById ($cp);
+                if ( $planet['type'] == PTYP_MOON )
+                {
+                    $query = "UPDATE ".$db_prefix."planets SET gate_until=".($now+59*60+59)." WHERE planet_id=" . $planet['planet_id'];
+                    dbquery ($query);
+                }
+            }
+            else if ( $action === "recalc_fields" )    // Recalculate fields
+            {
+                RecalcFields ($cp);
+            }
+            else if ( $action === "random_diam" )    // Random diameter (planets only)
+            {
+                $planet = LoadPlanetById ($cp);
+                if ( GetPlanetType ($planet) == GAME_PTYP_PLANET )
+                {
+                    $p = $planet['p'];
+                    $coltab = LoadColonySettings();
+                    if ($p <= 3) $diam = mt_rand ( $coltab['t1_a'], $coltab['t1_b'] ) * $coltab['t1_c'];
+                    else if ($p >= 4 && $p <= 6) $diam = mt_rand ( $coltab['t2_a'], $coltab['t2_b'] ) * $coltab['t2_c'];
+                    else if ($p >= 7 && $p <= 9) $diam = mt_rand ( $coltab['t3_a'], $coltab['t3_b'] ) * $coltab['t3_c'];
+                    else if ($p >= 10 && $p <= 12) $diam = mt_rand ( $coltab['t4_a'], $coltab['t4_b'] ) * $coltab['t4_c'];
+                    else if ($p >= 13 && $p <= 15) $diam = mt_rand ( $coltab['t5_a'], $coltab['t5_b'] ) * $coltab['t5_c'];
+                    $query = "UPDATE ".$db_prefix."planets SET diameter=$diam WHERE planet_id=" . $planet['planet_id'];
+                    dbquery ($query);
+                }
+            }
+        }
+
         return true;
     }
 
     public function view () : void {
-    }
-}
-
-function Admin_Planets () : void
-{
-    global $loca_lang, $Languages;
-    global $session;
-    global $db_prefix;
-    global $GlobalUser;
-    global $buildmap;
-    global $fleetmap;
-    global $defmap;
-
-    $SearchResult = "";
-
-    // POST request processing.
-    if ( method () === "POST" && $GlobalUser['admin'] >= 2 ) {
-        $cp = intval ($_GET['cp']);
-        $action = $_GET['action'];
-        $now = time();
-
-        if ($action === "update")        // Update the planet's data.
-        {
-            $param = array_merge ( 
-                $buildmap, $defmap, $fleetmap, 
-                array ( GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM, 'g', 's', 'p', 'diameter', 'type', 'temp',
-                    'prod'.GID_B_METAL_MINE, 'prod'.GID_B_CRYS_MINE, 'prod'.GID_B_DEUT_SYNTH, 'prod'.GID_B_SOLAR, 'prod'.GID_B_FUSION, 'prod'.GID_F_SAT) );
-            $moon_param = array ( 'g', 's', 'p' );
-
-            $query = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
-            foreach ( $param as $i=>$p ) {
-                if (key_exists($p, $_POST)) {
-                    if ( strpos ( $p, "prod") ) {
-                        $query .= ", $p='".$_POST[$p]."'";
-                    }
-                    else {
-                        if ( $i == 0 ) $query .= "`$p`=".intval($_POST[$p]);
-                        else $query .= ", `$p`=".intval($_POST[$p]);
-                    }
-                }
-            }
-            $query .= " WHERE planet_id=$cp;";
-
-            if ( key_exists ( "delete_planet", $_POST ) )        // Delete a planet. The home planet cannot be deleted.
-            {
-                $planet = LoadPlanetById ($cp);
-                $user = LoadUser ($planet['owner_id']);
-                if ( $user['hplanetid'] != $cp)
-                {
-                    DestroyPlanet ($cp);
-                    $_GET['cp'] = $user['hplanetid'];        // redirect to the home planet.
-                }
-            }
-            else {                                        // Update planet data
-
-                $moon_id = PlanetHasMoon ( $cp );        // Move the moon beyond the planet.
-                if ( $moon_id )
-                {
-                    $mquery = "UPDATE ".$db_prefix."planets SET lastpeek=$now, ";
-                    foreach ( $moon_param as $i=>$p ) {
-                        if ( $i == 0 ) $mquery .= "$p=".intval($_POST[$p]);
-                        else $mquery .= ", $p=".intval($_POST[$p]);
-                    }
-                    $mquery .= " WHERE planet_id=$moon_id;";
-                    dbquery ($mquery);
-                }
-
-                dbquery ($query);
-                RecalcFields ($cp);
-            }
-        }
-        else if ( $action === "search" )        // Search
-        {
-            $searchtype = $_POST['type'];
-            if ( $_POST['searchtext'] === "" ) {
-                $SearchResult .= loca("ADM_PLANET_SPECIFY_TEXT") . "<br>\n";
-                $searchtype = "none";
-            }
-            if ( $searchtype === "playername") {
-                $query = "SELECT player_id FROM ".$db_prefix."users WHERE oname LIKE '".$_POST['searchtext']."%'";
-                $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = ANY ($query);";
-            }
-            else if ( $searchtype === "planetname") {
-                $query = "SELECT * FROM ".$db_prefix."planets WHERE name LIKE '".$_POST['searchtext']."%';";
-            }
-            else if ( $searchtype === "allytag") {
-                $query = "SELECT ally_id FROM ".$db_prefix."ally WHERE tag LIKE '".$_POST['searchtext']."%'";
-                $query = "SELECT player_id FROM ".$db_prefix."users WHERE ally_id <> 0 AND ally_id = ANY ($query)";
-                $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = ANY ($query);";
-            }
-            if ($query) $result = dbquery ($query);
-            $SearchResult .= "<table>\n";
-            $rows = dbrows ($result);
-            if ( $rows > 0 )
-            {
-                while ($rows--)
-                {
-                    $planet = dbarray ( $result );
-                    $user = LoadUser ( $planet['owner_id'] );
-                    $SearchResult .= "<tr><th>".date ("Y-m-d H:i:s", $planet['date'])."</th><th>".AdminPlanetCoord($planet)."</th>";
-                    $SearchResult .= "<th><a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\">".$planet['name']."</a></th>";
-                    $SearchResult .= "<th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a></th></tr>\n";
-                }
-            }
-            else $SearchResult .= loca("ADM_PLANET_NOT_FOUND") . "<br>\n";
-            $SearchResult .= "</table>\n";
-        }
-    }
-
-    // GET request processing.
-    if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
-        if ( key_exists('cp', $_GET) ) $cp = intval ($_GET['cp']);
-        else $cp = 0;
-        
-        if ( key_exists('action', $_GET) && $cp ) $action = $_GET['action'];
-        else $action = "";
-        
-        $now = time();
-
-        if ( $action === "create_moon" )    // Create the moon
-        {
-            $planet = LoadPlanetById ($cp);
-            if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
-            {
-                if ( PlanetHasMoon ($cp) == 0 ) CreatePlanet ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id'], 0, 1, 20);
-            }
-        }
-        else if ( $action === "create_debris" )    // Create debris field
-        {
-            $planet = LoadPlanetById ($cp);
-            if ( $planet['type'] > PTYP_MOON && $planet['type'] < PTYP_DF )
-            {
-                if ( HasDebris ($planet['g'], $planet['s'], $planet['p']) == 0 ) CreateDebris ($planet['g'], $planet['s'], $planet['p'], $planet['owner_id']);
-            }
-        }
-        else if ( $action === "cooldown_gates" )    // Cool down the gate
-        {
-            $planet = LoadPlanetById ($cp);
-            if ( $planet['type'] == PTYP_MOON )
-            {
-                $query = "UPDATE ".$db_prefix."planets SET gate_until=0 WHERE planet_id=" . $planet['planet_id'];
-                dbquery ($query);
-            }
-        }
-        else if ( $action === "warmup_gates" )    // Warm up the gate
-        {
-            $planet = LoadPlanetById ($cp);
-            if ( $planet['type'] == PTYP_MOON )
-            {
-                $query = "UPDATE ".$db_prefix."planets SET gate_until=".($now+59*60+59)." WHERE planet_id=" . $planet['planet_id'];
-                dbquery ($query);
-            }
-        }
-        else if ( $action === "recalc_fields" )    // Recalculate fields
-        {
-            RecalcFields ($cp);
-        }
-        else if ( $action === "random_diam" )    // Random diameter (planets only)
-        {
-            $planet = LoadPlanetById ($cp);
-            if ( GetPlanetType ($planet) == 1 )
-            {
-                $p = $planet['p'];
-                $coltab = LoadColonySettings();
-                if ($p <= 3) $diam = mt_rand ( $coltab['t1_a'], $coltab['t1_b'] ) * $coltab['t1_c'];
-                else if ($p >= 4 && $p <= 6) $diam = mt_rand ( $coltab['t2_a'], $coltab['t2_b'] ) * $coltab['t2_c'];
-                else if ($p >= 7 && $p <= 9) $diam = mt_rand ( $coltab['t3_a'], $coltab['t3_b'] ) * $coltab['t3_c'];
-                else if ($p >= 10 && $p <= 12) $diam = mt_rand ( $coltab['t4_a'], $coltab['t4_b'] ) * $coltab['t4_c'];
-                else if ($p >= 13 && $p <= 15) $diam = mt_rand ( $coltab['t5_a'], $coltab['t5_b'] ) * $coltab['t5_c'];
-                $query = "UPDATE ".$db_prefix."planets SET diameter=$diam WHERE planet_id=" . $planet['planet_id'];
-                dbquery ($query);
-            }
-        }
-    }
+        global $loca_lang, $Languages;
+        global $now;
+        global $session;
+        global $db_prefix;
+        global $buildmap;
+        global $fleetmap;
+        global $defmap;
 
     if ( key_exists("cp", $_GET) ) {     // Planet Information.
-        $planet = GetUpdatePlanet ( intval ($_GET['cp']), time() );
+        $planet = GetUpdatePlanet ( intval ($_GET['cp']), $now );
         if (!$planet) {
             Error ( va(loca("ADM_PLANET_ERROR_LOAD"), intval ($_GET['cp'])) );
         }
         $user = LoadUser ( $planet['owner_id'] );
         $moon_id = PlanetHasMoon ( $planet['planet_id'] );
         $debris_id = HasDebris ( $planet['g'], $planet['s'], $planet['p'] );
-        $now = time ();
 
         // Spy Report Parser.
 ?>
@@ -297,8 +299,6 @@ function reset ()
 
 <?php
 
-        AdminPanel();
-
         echo "<table>\n";
         echo "<form action=\"index.php?page=admin&session=$session&mode=Planets&action=update&cp=".$planet['planet_id']."\" method=\"POST\" >\n";
         echo "<tr><td class=c colspan=2>".loca("ADM_PLANET_PLANET")." \"".$planet['name']."\" (<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>)</td>\n";
@@ -362,7 +362,7 @@ function reset ()
         echo "<th valign=top><table>\n";
         foreach ( $buildmap as $i=>$gid) {
             echo "<tr><th>".loca("NAME_$gid");
-            if ( $gid == 43 && $planet['type'] == PTYP_MOON ) {    // jump gate control.
+            if ( $gid == GID_B_JUMP_GATE && $planet['type'] == PTYP_MOON ) {    // jump gate control.
                 if ( $now >= $planet["gate_until"] ) {    // jump gate is ready
                     echo " <a href=\"index.php?page=admin&session=$session&mode=Planets&action=warmup_gates&cp=".$planet['planet_id']."\" >".loca("ADM_PLANET_GATE_WARMUP")."</a>";
                 }
@@ -374,47 +374,47 @@ function reset ()
             echo "</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=3 name=\"$gid\" value=\"".$planet[$gid]."\" />";
 
             // mine management and power generation.
-            if ( $gid == 1 && $planet['type'] != PTYP_MOON ) {
+            if ( $gid == GID_B_METAL_MINE ) {
                 echo "<select name='prod1'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
-                    if ( $planet["prod".GID_B_METAL_MINE] == $prc."" ) echo " selected";
+                    if ( FloatEqual($planet["prod".GID_B_METAL_MINE], $prc) ) echo " selected";
                     echo ">".($prc * 100)."</option>\n";
                 }
                 echo "</select>\n";
             }
-            if ( $gid == 2 && $planet['type'] != PTYP_MOON ) {
+            if ( $gid == GID_B_CRYS_MINE ) {
                 echo "<select name='prod2'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
-                    if ( $planet["prod".GID_B_CRYS_MINE] == $prc."" ) echo " selected";
+                    if ( FloatEqual($planet["prod".GID_B_CRYS_MINE], $prc) ) echo " selected";
                     echo ">".($prc * 100)."</option>\n";
                 }
                 echo "</select>\n";
             }
-            if ( $gid == 3 && $planet['type'] != PTYP_MOON ) {
+            if ( $gid == GID_B_DEUT_SYNTH ) {
                 echo "<select name='prod3'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
-                    if ( $planet["prod".GID_B_DEUT_SYNTH] == $prc."" ) echo " selected";
+                    if ( FloatEqual($planet["prod".GID_B_DEUT_SYNTH], $prc) ) echo " selected";
                     echo ">".($prc * 100)."</option>\n";
                 }
                 echo "</select>\n";
             }
-            if ( $gid == 4 && $planet['type'] != PTYP_MOON ) {
+            if ( $gid == GID_B_SOLAR ) {
                 echo "<select name='prod4'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
-                    if ( $planet["prod".GID_B_SOLAR] == $prc."" ) echo " selected";
+                    if ( FloatEqual($planet["prod".GID_B_SOLAR], $prc) ) echo " selected";
                     echo ">".($prc * 100)."</option>\n";
                 }
                 echo "</select>\n";
             }
-            if ( $gid == 12 && $planet['type'] != PTYP_MOON ) {
+            if ( $gid == GID_B_FUSION ) {
                 echo "<select name='prod12'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
-                    if ( $planet["prod".GID_B_FUSION] == $prc."" ) echo " selected";
+                    if ( FloatEqual($planet["prod".GID_B_FUSION], $prc) ) echo " selected";
                     echo ">".($prc * 100)."</option>\n";
                 }
                 echo "</select>\n";
@@ -428,11 +428,11 @@ function reset ()
         foreach ( $fleetmap as $i=>$gid) {
             if (!isset($planet[$gid])) continue;
             echo "<tr><th>".loca("NAME_$gid")."</th><th><nobr><input id=\"obj$gid\" type=\"text\" size=6 name=\"$gid\" value=\"".$planet[$gid]."\" />";
-            if ( $gid == GID_F_SAT && $planet['type'] != PTYP_MOON ) {
+            if ( $gid == GID_F_SAT ) {
                 echo "<select name='prod212'>\n";
                 for ($prc=0; $prc<=1; $prc+=0.1) {
                     echo "<option value='$prc' ";
-                    if ( $planet["prod".GID_F_SAT] == $prc."" ) echo " selected";
+                    if ( FloatEqual($planet["prod".GID_F_SAT], $prc) ) echo " selected";
                     echo ">".($prc * 100)."</option>\n";
                 }
                 echo "</select>\n";
@@ -483,10 +483,10 @@ function reset ()
         echo "<tr><th>".loca("ADM_PLANET_COORD")."</th><th>[<input type=\"text\" name=\"g\" value=\"".$planet['g']."\" size=1 />:<input type=\"text\" name=\"s\" value=\"".$planet['s']."\" size=2 />:<input type=\"text\" name=\"p\" value=\"".$planet['p']."\" size=1 />]</th></tr>\n";
 
         echo "<tr><td class=c colspan=2>".loca("ADM_PLANET_RESOURCES")."</td></tr>\n";
-        echo "<tr><th>".loca("NAME_".GID_RC_METAL)."</th><th><input id=\"objm\" type=\"text\" name=\"".GID_RC_METAL."\" value=\"".ceil($planet[GID_RC_METAL])."\" /></th></tr>\n";
-        echo "<tr><th>".loca("NAME_".GID_RC_CRYSTAL)."</th><th><input id=\"objk\" type=\"text\" name=\"".GID_RC_CRYSTAL."\" value=\"".ceil($planet[GID_RC_CRYSTAL])."\" /></th></tr>\n";
-        echo "<tr><th>".loca("NAME_".GID_RC_DEUTERIUM)."</th><th><input id=\"objd\" type=\"text\" name=\"".GID_RC_DEUTERIUM."\" value=\"".ceil($planet[GID_RC_DEUTERIUM])."\" /></th></tr>\n";
-        echo "<tr><th>".loca("NAME_".GID_RC_ENERGY)."</th><th>".$planet['e']." / ".$planet[GID_RC_ENERGY]."</th></tr>\n";
+        echo "<tr><th>".loca("NAME_".GID_RC_METAL)."</th><th><input id=\"obj".GID_RC_METAL."\" type=\"text\" name=\"".GID_RC_METAL."\" value=\"".ceil($planet[GID_RC_METAL])."\" /></th></tr>\n";
+        echo "<tr><th>".loca("NAME_".GID_RC_CRYSTAL)."</th><th><input id=\"obj".GID_RC_CRYSTAL."\" type=\"text\" name=\"".GID_RC_CRYSTAL."\" value=\"".ceil($planet[GID_RC_CRYSTAL])."\" /></th></tr>\n";
+        echo "<tr><th>".loca("NAME_".GID_RC_DEUTERIUM)."</th><th><input id=\"obj".GID_RC_DEUTERIUM."\" type=\"text\" name=\"".GID_RC_DEUTERIUM."\" value=\"".ceil($planet[GID_RC_DEUTERIUM])."\" /></th></tr>\n";
+        echo "<tr><th>".loca("NAME_".GID_RC_ENERGY)."</th><th>".$planet['balance'][GID_RC_ENERGY]." / ".$planet['net_prod'][GID_RC_ENERGY]."</th></tr>\n";
         echo "<tr><th>".loca("ADM_PLANET_FACTOR")."</th><th>".$planet['factor']."</th></tr>\n";
 
         echo "<tr><th colspan=8><input type=\"submit\" value=\"".loca("ADM_PLANET_SAVE")."\" />  <input type=\"submit\" name=\"delete_planet\" value=\"".loca("ADM_PLANET_REMOVE")."\" /> </th></tr>\n";
@@ -496,8 +496,6 @@ function reset ()
     else {
         $query = "SELECT * FROM ".$db_prefix."planets ORDER BY date DESC LIMIT 25";
         $result = dbquery ($query);
-
-        AdminPanel();
 
         echo "    </th> \n";
         echo "   </tr> \n";
@@ -541,17 +539,20 @@ function reset ()
  </form>
 <?php
 
-        if ( $SearchResult !== "" )
+        if ( $this->SearchResult !== "" )
         {
 ?>
        </th> 
        </tr> 
     </table>
     <?=loca("ADM_PLANET_SEARCH_RESULT");?><br>
-    <?php echo $SearchResult;?>
+    <?php echo $this->SearchResult;?>
 <?php
         }
-    }
-}
+
+    } // else
+} // view
+
+} // Admin_Planets
 
 ?>

@@ -166,7 +166,7 @@ if ( method() !== "POST" ) MyGoto ( "flotten1" );
     while ($rows--)
     {
         $planet = dbarray ($result);
-        if ( $planet['planet_id'] == $aktplanet['planet_id'] || GetPlanetType($planet) == 2 ) continue;
+        if ( $planet['planet_id'] == $aktplanet['planet_id'] || GetPlanetType($planet) == GAME_PTYP_DF ) continue;
         if ( $leftcol ) echo "<tr height=\"20\">\n";
         echo "<th><a href=\"javascript:setTarget(".$planet['g'].",".$planet['s'].",".$planet['p'].",".GetPlanetType($planet)."); shortInfo()\">\n".$planet['name']." ".$planet['g'].":".$planet['s'].":".$planet['p']."</a></th>\n";
         if ( !$leftcol ) echo "</tr>\n";
