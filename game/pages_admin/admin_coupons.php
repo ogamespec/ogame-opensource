@@ -5,75 +5,65 @@
 class Admin_Coupons extends Page {
 
     public function controller () : bool {
+        global $GlobalUser;
+        global $PageMessage, $PageError;
+        global $now;
+
+        // POST request processing.
+        if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
+        {
+            $action = $_GET['action'];
+
+            if ( $action === "add_one" )
+            {
+                $code = AddCoupon ( intval ( $_POST['dm'] ) );
+                if ( $code == null) $PageError = "<font color=red>".loca("ADM_COUPON_ERROR")."</font>";
+                else $PageMessage = "<font color=lime>".va(loca("ADM_COUPON_SUCCESS"), $code)."</font>";
+            }
+
+            if ( $action === "add_date" )
+            {
+                $ddmm = explode ( '.', $_POST['ddmm'] );
+                $hhmm = explode ( ':', $_POST['hhmm'] );
+
+                $end = mktime ( $hhmm[0], $hhmm[1], 0, $ddmm[1], $ddmm[0] );
+
+                $inactive_days = intval ( $_POST['inactive_days'] );
+                $ingame_days = intval ( $_POST['ingame_days'] );
+                $darkmatter = intval ( $_POST['darkmatter'] );
+                $periodic = intval ( $_POST['periodic'] );
+
+                AddQueue (USER_SPACE, QTYP_COUPON, $darkmatter, ($inactive_days << 16) | $ingame_days, $periodic, $now, $end, QUEUE_PRIO_COUPON);
+            }
+        }
+
+        // GET request processing.
+        if ( method () === "GET" && key_exists('action', $_GET) && $GlobalUser['admin'] >= 2 )
+        {
+            $action = $_GET['action'];
+
+            if ( $action === "remove_one" ) DeleteCoupon ( $_GET['item_id'] );
+
+            if ( $action === "remove_date" ) RemoveQueue ( $_GET['item_id'] );
+
+        }
+
         return true;
     }
 
     public function view () : void {
-    }
-}
+        global $db_prefix;
+        global $session;
 
-function Admin_Coupons () : void
-{
-    global $session;
-    global $db_prefix;
-    global $GlobalUser;
-    global $PageMessage, $PageError;
+        // Display a list of coupons.
 
-    // POST request processing.
-    if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
-    {
-        $action = $_GET['action'];
+        $count = 15;        // number of coupons per page
+        $from = 0;
+        if (key_exists('from', $_GET)) $from = intval ( $_GET['from'] );
+        $total = TotalCoupons ();
 
-        if ( $action === "add_one" )
-        {
-            $code = AddCoupon ( intval ( $_POST['dm'] ) );
-            if ( $code == NULL) $PageError = "<font color=red>".loca("ADM_COUPON_ERROR")."</font>";
-            else $PageMessage = "<font color=lime>".va(loca("ADM_COUPON_SUCCESS"), $code)."</font>";
-        }
-
-        if ( $action === "add_date" )
-        {
-            $ddmm = explode ( '.', $_POST['ddmm'] );
-            $hhmm = explode ( ':', $_POST['hhmm'] );
-
-            $now = time ();
-            $end = mktime ( $hhmm[0], $hhmm[1], 0, $ddmm[1], $ddmm[0] );
-
-            $inactive_days = intval ( $_POST['inactive_days'] );
-            $ingame_days = intval ( $_POST['ingame_days'] );
-            $darkmatter = intval ( $_POST['darkmatter'] );
-            $periodic = intval ( $_POST['periodic'] );
-
-            AddQueue (USER_SPACE, QTYP_COUPON, $darkmatter, ($inactive_days << 16) | $ingame_days, $periodic, $now, $end, QUEUE_PRIO_COUPON);
-        }
-    }
-
-    // GET request processing.
-    if ( method () === "GET" && key_exists('action', $_GET) && $GlobalUser['admin'] >= 2 )
-    {
-        $action = $_GET['action'];
-
-        if ( $action === "remove_one" ) DeleteCoupon ( $_GET['item_id'] );
-
-        if ( $action === "remove_date" ) RemoveQueue ( $_GET['item_id'] );
-
-    }
-
-?>
-
-<?php AdminPanel();?>
-
-<?php
-
-// Display a list of coupons.
-
-$count = 15;        // number of coupons per page
-$from = 0;
-if (key_exists('from', $_GET)) $from = intval ( $_GET['from'] );
-$total = TotalCoupons ();
-
-$result = EnumCoupons ($from, $count);
-$rows = MDBRows ( $result );
+        $result = EnumCoupons ($from, $count);
+        $rows = MDBRows ( $result );
 
 ?>
    <table border="0" cellpadding="2" cellspacing="1">
@@ -147,7 +137,9 @@ $rows = MDBRows ( $result );
 <tr><td colspan=2><input type="submit"></td></tr>
 </table>
 </form>
-
 <?php
+
+    } // view
 }
+
 ?>
