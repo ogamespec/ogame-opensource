@@ -153,13 +153,13 @@ function FleetSpanMissile (int $dir, array $fleet, array $owner, array $origin, 
 {
     if ($dir == 0)
     {
-        echo "<span class='ownmissile'>" .va(loca("EVENT_RAK"), $fleet_entry['ipm_amount'], PlanetFrom($origin, ""), PlanetTo($target, "own")) . " ";
+        echo "<span class='ownmissile'>" .va(loca("EVENT_RAK"), $fleet['ipm_amount'], PlanetFrom($origin, ""), PlanetTo($target, "own")) . " ";
     }
     else if ($dir == 0x10)
     {
-        echo "<span class='missile'>" .va(loca("EVENT_RAK"), $fleet_entry['ipm_amount'], PlanetFrom($origin, ""), PlanetTo($target, "")) . " ";
+        echo "<span class='missile'>" .va(loca("EVENT_RAK"), $fleet['ipm_amount'], PlanetFrom($origin, ""), PlanetTo($target, "")) . " ";
     }
-    if ( $fleet_entry['ipm_target'] > 0 ) echo loca("EVENT_RAK_TARGET") . " " . loca ("NAME_".$fleet_entry['ipm_target']);
+    if ( $fleet['ipm_target'] > 0 ) echo loca("EVENT_RAK_TARGET") . " " . loca ("NAME_".$fleet['ipm_target']);
     echo "</span>";    
 }
 
