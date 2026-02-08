@@ -276,6 +276,7 @@
       myDiagram.model = go.Model.fromJson( this.response );
       myDiagram.undoManager.isEnabled = true;
       document.getElementById("strategyName").value = getSelectedText ('strategyId');
+      document.getElementById("strategyId_ForImport").value = document.getElementById("strategyId").value;
 
       data = myDiagram.makeImageData ({ scale: 1, background: 'rgba(65, 86, 128, 0.9)', maxSize: new go.Size(10000, 10000) });
       document.getElementById("preview_img").src = data; 

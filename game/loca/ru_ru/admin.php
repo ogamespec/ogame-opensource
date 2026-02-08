@@ -71,6 +71,9 @@ $LOCA["ru"]["ADM_BOTEDIT_LOAD"] = "Загрузить";
 $LOCA["ru"]["ADM_BOTEDIT_FORBIDDEN"] = "Доступ запрещён.";
 $LOCA["ru"]["ADM_BOTEDIT_NAME"] = "Имя редактируемой стратегии:";
 $LOCA["ru"]["ADM_BOTEDIT_EXPORT"] = "Экспортировать";
+$LOCA["ru"]["ADM_BOTEDIT_IMPORT_SUCCESS"] = "Стратегия #1 импортирована успешно. Перезагрузите стратегию.";
+$LOCA["ru"]["ADM_BOTEDIT_IMPORT_FAILED"] = "Необходимо вначале загрузить стратегию!";
+$LOCA["ru"]["ADM_BOTEDIT_IMPORT"] = "Импортировать";
 
 // admin_bots
 
