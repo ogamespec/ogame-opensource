@@ -2,73 +2,73 @@
 
 // Admin Area: history of player and operator actions
 
-function Admin_UserLogs () : void
-{
-    global $session;
-    global $db_prefix;
-    global $GlobalUser;
+class Admin_Userlogs extends Page {
 
-    $results = "";
+    private string $results = "";
 
-    // POST request processing.
-    if ( method () === "POST" && $GlobalUser['admin'] >= 1 )
-    {
-        $name = $_POST['name'];
-        $type = $_POST['type'];
-        $period = intval($_POST['days'])*24*60*60 + intval($_POST['hours'])*60*60;
-        $arr = date_parse_from_format ( "j.n.Y", $_POST['since']);
-        $since = mktime ( 0, 0, 0, $arr['month'], $arr['day'], $arr['year'] );
+    public function controller () : bool {
+        global $db_prefix;
+        global $GlobalUser;
 
-        // Step 1: find all users by imprecise comparison
-        $users = array ();
-        $query = "SELECT * FROM ".$db_prefix."users WHERE player_id > 0";
-        $result = dbquery ($query);
-        while ( $user = dbarray($result) ) {
-            $percent = 0;
-            similar_text ( mb_strtolower ($name), mb_strtolower ($user['oname']), $percent );
-            if ( $percent > 75 ) $users[] = $user;
-        }
+        // POST request processing.
+        if ( method () === "POST" && $GlobalUser['admin'] >= 1 )
+        {
+            $name = $_POST['name'];
+            $type = $_POST['type'];
+            $period = intval($_POST['days'])*24*60*60 + intval($_POST['hours'])*60*60;
+            $arr = date_parse_from_format ( "j.n.Y", $_POST['since']);
+            $since = mktime ( 0, 0, 0, $arr['month'], $arr['day'], $arr['year'] );
 
-        // Step 2: select the events of the specified category for the time interval
-        foreach ( $users as $i=>$user ) {
-            if ( $type !== "ALL" ) $tstr = "AND type = '".$type."'";
-            else $tstr = "";
-            $query = "SELECT * FROM ".$db_prefix."userlogs WHERE owner_id = ".$user['player_id']." AND (date >= ".$since." AND date <= ".($since+$period).") ".$tstr." ORDER BY date ASC";
+            // Step 1: find all users by imprecise comparison
+            $users = array ();
+            $query = "SELECT * FROM ".$db_prefix."users WHERE player_id > 0";
             $result = dbquery ($query);
-            $count = dbrows ($result);
-            $results .= "<h2>".va(loca("ADM_USERLOG_USER_HISTORY"), $type)." ".AdminUserName($user)." ($count)</h2>\n";
-            $results .= "<table><tr><td class=\"c\">".loca("ADM_USERLOG_DATE")."</td><td class=\"c\">".loca("ADM_USERLOG_TYPE")."</td><td class=\"c\">".loca("ADM_USERLOG_ACTION")."</td></tr>\n";
-            while ($log = dbarray ($result) ) {
-                $results .= "<tr><td>".date ("d.m.Y H:i:s", $log['date'])."</td><td>".$log['type']."</td><td>".$log['text']."</td></tr>\n";
+            while ( $user = dbarray($result) ) {
+                $percent = 0;
+                similar_text ( mb_strtolower ($name), mb_strtolower ($user['oname']), $percent );
+                if ( $percent > 75 ) $users[] = $user;
             }
-            $results .= "</table>";
+
+            // Step 2: select the events of the specified category for the time interval
+            foreach ( $users as $i=>$user ) {
+                if ( $type !== "ALL" ) $tstr = "AND type = '".$type."'";
+                else $tstr = "";
+                $query = "SELECT * FROM ".$db_prefix."userlogs WHERE owner_id = ".$user['player_id']." AND (date >= ".$since." AND date <= ".($since+$period).") ".$tstr." ORDER BY date ASC";
+                $result = dbquery ($query);
+                $count = dbrows ($result);
+                $this->results .= "<h2>".va(loca("ADM_USERLOG_USER_HISTORY"), $type)." ".AdminUserName($user)." ($count)</h2>\n";
+                $this->results .= "<table><tr><td class=\"c\">".loca("ADM_USERLOG_DATE")."</td><td class=\"c\">".loca("ADM_USERLOG_TYPE")."</td><td class=\"c\">".loca("ADM_USERLOG_ACTION")."</td></tr>\n";
+                while ($log = dbarray ($result) ) {
+                    $this->results .= "<tr><td>".date ("d.m.Y H:i:s", $log['date'])."</td><td>".$log['type']."</td><td>".$log['text']."</td></tr>\n";
+                }
+                $this->results .= "</table>";
+            }
         }
+        return true;
     }
+
+    public function view () : void {
+        global $db_prefix;
+        global $session;
+
+        if ( method () === "GET" ) {
+            $query = "SELECT * FROM ".$db_prefix."userlogs WHERE owner_id > 0 ORDER BY date DESC LIMIT 50";
+            $result = dbquery ($query );
+            echo "<h2>".loca("ADM_USERLOG_LAST_ACTIONS")."</h2>\n";
+            echo "<table><tr><td class=\"c\">".loca("ADM_USERLOG_DATE")."</td><td class=\"c\">".loca("ADM_USERLOG_USER")."</td><td class=\"c\">".loca("ADM_USERLOG_CATEGORY")."</td><td class=\"c\">".loca("ADM_USERLOG_ACTION")."</td></tr>\n";
+            $rows = array ();
+            while ($log = dbarray ($result) ) {
+                $user = LoadUser($log['owner_id']);
+                $rows[] = "<tr><td>".date ("d.m.Y H:i:s", $log['date'])."</td><td>".AdminUserName($user)."</td><td>".$log['type']."</td><td>".$log['text']."</td></tr>\n";
+            }
+            $rows = array_reverse ($rows);
+            foreach ($rows as $i=>$row) echo $row;
+            echo "</table>";
+        }
 
 ?>
 
-<?php AdminPanel();?>
-
-<?php
-
-if ( method () === "GET" ) {
-    $query = "SELECT * FROM ".$db_prefix."userlogs WHERE owner_id > 0 ORDER BY date DESC LIMIT 50";
-    $result = dbquery ($query );
-    echo "<h2>".loca("ADM_USERLOG_LAST_ACTIONS")."</h2>\n";
-    echo "<table><tr><td class=\"c\">".loca("ADM_USERLOG_DATE")."</td><td class=\"c\">".loca("ADM_USERLOG_USER")."</td><td class=\"c\">".loca("ADM_USERLOG_CATEGORY")."</td><td class=\"c\">".loca("ADM_USERLOG_ACTION")."</td></tr>\n";
-    $rows = array ();
-    while ($log = dbarray ($result) ) {
-        $user = LoadUser($log['owner_id']);
-        $rows[] = "<tr><td>".date ("d.m.Y H:i:s", $log['date'])."</td><td>".AdminUserName($user)."</td><td>".$log['type']."</td><td>".$log['text']."</td></tr>\n";
-    }
-    $rows = array_reverse ($rows);
-    foreach ($rows as $i=>$row) echo $row;
-    echo "</table>";
-}
-
-?>
-
-<?=$results;?>
+<?=$this->results;?>
 
 <h2><?=loca("ADM_USERLOG_HISTORY");?></h2>
 
@@ -97,7 +97,8 @@ if ( method () === "GET" ) {
 </form>
 </table>
 
-<?php    
+<?php
+    }
 }
 
 ?>

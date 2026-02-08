@@ -93,7 +93,7 @@ function PlayerDetails (array $user) : string
 function PlanetFrom (array $planet, string $mission) : string
 {
     $res = "";
-    if ( GetPlanetType ($planet) == 1 ) $res .= loca("EVENT_FROM_PLANET");
+    if ( GetPlanetType ($planet) == GAME_PTYP_PLANET ) $res .= loca("EVENT_FROM_PLANET");
     if ( $planet['type'] == PTYP_COLONY_PHANTOM || $planet['type'] == PTYP_FARSPACE ) $res = " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     else $res .= " " . $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     return $res;
@@ -102,7 +102,7 @@ function PlanetFrom (array $planet, string $mission) : string
 function PlanetTo (array $planet, string $mission) : string
 {
     $res = "";
-    if ( GetPlanetType ($planet) == 1 ) $res .= loca("EVENT_TO_PLANET");
+    if ( GetPlanetType ($planet) == GAME_PTYP_PLANET ) $res .= loca("EVENT_TO_PLANET");
     if ( $planet['type'] == PTYP_COLONY_PHANTOM || $planet['type'] == PTYP_FARSPACE ) $res = " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     else $res .= " " . $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     return $res;

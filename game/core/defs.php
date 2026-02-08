@@ -52,6 +52,12 @@ const PTYP_ABANDONED = 10004;           // abandoned colony (instead of the bugg
 const PTYP_FARSPACE = 20000;        // infinite distances (for expeditions)
 const PTYP_CUSTOM = 20001;          // All values >= are considered custom galaxy objects added by mods
 
+// Game planet type. Used for in-game display in various places (galaxy, flotten2, imperium). May not match the PTYP definition. See `GetPlanetType` method (planet.php)
+const GAME_PTYP_PLANET = 1; 	// PTYP_PLANET + PTYP_DEST_PLANET + PTYP_COLONY_PHANTOM + PTYP_ABANDONED + PTYP_FARSPACE
+const GAME_PTYP_DF = 2; 		// PTYP_DF
+const GAME_PTYP_MOON = 3;  		// PTYP_MOON + PTYP_DEST_MOON
+// All custom planet types (PTYP_CUSTOM) = game planet types
+
 // Queue task type
 // For some reason during the development phase, the identifiers were made strings. TODO: Change them to INT type (but this would require a clean reinstall of the Universe)
 const QTYP_UNBAN = "UnbanPlayer";               // unban player

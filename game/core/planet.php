@@ -346,9 +346,10 @@ function AddDebris (int $id, int $m, int $k) : void
 // Get a game type of planet.
 function GetPlanetType (array $planet) : int
 {
-    if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return 3;
-    else if ( $planet['type'] == PTYP_DF) return 2;
-    else return 1;
+    if ( $planet['type'] >= PTYP_CUSTOM) return $planet['type'];
+    else if ( $planet['type'] == PTYP_MOON || $planet['type'] == PTYP_DEST_MOON ) return GAME_PTYP_MOON;
+    else if ( $planet['type'] == PTYP_DF) return GAME_PTYP_DF;
+    else return GAME_PTYP_PLANET;
 }
 
 // Create a colonization phantom. Return ID.

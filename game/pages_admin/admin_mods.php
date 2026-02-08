@@ -2,75 +2,47 @@
 
 // Admin Area: Modifications.
 
-function GenModPanelSource(string $session, bool $acitive, bool $can_be_installed, array $mod) : void
-{
-    echo "        <div class=\"mod-item\">\n";
-    echo "            <span class=\"status-indicator ". ($acitive ? "" : ($can_be_installed ? "status-inactive" : "status-installed") ) ." \">" . ($acitive ? loca("ADM_MODS_STATE_ACTIVE") : ($can_be_installed ? loca("ADM_MODS_STATE_AVAILABLE") : loca("ADM_MODS_STATE_INSTALLED")) ) . "</span>\n";
-    echo "            <img src=\"".$mod['bg_image']."\" alt=\"".$mod['name']."\" class=\"mod-background\">\n";
-    echo "            <div class=\"mod-content\">\n";
-    echo "                <div class=\"mod-title\">".$mod['name']."</div>\n";
-    echo "                <div class=\"mod-description\">".$mod['description']."</div>\n";
-    if ($acitive || $can_be_installed) {
-    echo "                <div class=\"mod-info\">\n";
-    echo "                    ".loca("ADM_MODS_INFO_VERSION").": ".$mod['version']."<br>\n";
-    echo "                    ".loca("ADM_MODS_INFO_AUTHOR").": ".$mod['author']."<br>\n";
-    echo "                    ".loca("ADM_MODS_INFO_WEBSITE").": <a href=\"".$mod['website']."\" style=\"color:#E6EBFB;\" target=_blank>".$mod['website']."</a>\n";
-    echo "                </div>\n";
-    }
-    echo "                <div class=\"mod-actions\">\n";
-    if ($acitive) {
-    echo "                    <a href=\"index.php?page=admin&session=$session&mode=Mods&action=move_up&modname=".$mod['folder']."\" class=\"mod-action-link\">".loca("ADM_MODS_OP_MOVEUP")."</a>\n";
-    echo "                    <a href=\"index.php?page=admin&session=$session&mode=Mods&action=move_down&modname=".$mod['folder']."\" class=\"mod-action-link\">".loca("ADM_MODS_OP_MOVEDOWN")."</a>\n";
-    echo "                    <a href=\"index.php?page=admin&session=$session&mode=Mods&action=remove&modname=".$mod['folder']."\" class=\"mod-action-link\">".loca("ADM_MODS_OP_REMOVE")."</a>\n";
-    }
-    if ($can_be_installed) {
-    echo "                    <a href=\"index.php?page=admin&session=$session&mode=Mods&action=install&modname=".$mod['folder']."\" class=\"mod-action-link\">".loca("ADM_MODS_OP_INSTALL")."</a>\n";
-    }
-    echo "                </div>\n";
-    echo "            </div>\n";
-    echo "        </div>\n\n";
-}
+class Admin_Mods extends Page {
 
-function Admin_Mods ()
-{
-    global $session;
-    global $db_prefix;
-    global $GlobalUser;
+    public function controller () : bool {
+        global $GlobalUser;
 
-    // GET request processing.
-    if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
+        // GET request processing.
+        if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
 
-        if ( key_exists ('modname', $_GET) ) $modname = $_GET['modname'];
-        else $modname = null;
-        
-        if ( key_exists ('action', $_GET) && $modname ) $action = $_GET['action'];
-        else $action = "";
+            if ( key_exists ('modname', $_GET) ) $modname = $_GET['modname'];
+            else $modname = null;
+            
+            if ( key_exists ('action', $_GET) && $modname ) $action = $_GET['action'];
+            else $action = "";
 
-        if ($action === "install" && $modname) {
-            ModsInstall ($modname);
+            if ($action === "install" && $modname) {
+                ModsInstall ($modname);
+            }
+
+            if ($action === "remove" && $modname) {
+                ModsRemove ($modname);
+            }
+
+            if ($action === "move_up" && $modname) {
+                ModsMoveUp ($modname);
+            }
+
+            if ($action === "move_down" && $modname) {
+                ModsMoveDown ($modname);
+            }
         }
 
-        if ($action === "remove" && $modname) {
-            ModsRemove ($modname);
-        }
-
-        if ($action === "move_up" && $modname) {
-            ModsMoveUp ($modname);
-        }
-
-        if ($action === "move_down" && $modname) {
-            ModsMoveDown ($modname);
-        }
+        return true;
     }
 
-    AdminPanel();
+    public function view () : void {
+        global $session;
 
-    $mods = ModsList();
-    //print_r ($mods);
+        $mods = ModsList();
+        //print_r ($mods);
+
 ?>
-
-
-
 <style>
     /* Additional styles for the mod control panel */
     .mods-container {
@@ -220,7 +192,7 @@ function Admin_Mods ()
         foreach ($mods['installed'] as $modname) {
             $mod = ModsGetInfo($modname);
             if ($mod) {
-                GenModPanelSource ($session, true, false, $mod);
+                $this->GenModPanelSource ($session, true, false, $mod);
             }
             else {
                 ModsRemove ($modname);  // Heal DB
@@ -244,7 +216,7 @@ function Admin_Mods ()
             $mod = ModsGetInfo($modname);
             if ($mod) {
                 $can_be_installed = !in_array($modname, $mods['installed']);
-                GenModPanelSource ($session, false, $can_be_installed, $mod);
+                $this->GenModPanelSource ($session, false, $can_be_installed, $mod);
             }
         }
     }
@@ -259,8 +231,38 @@ function Admin_Mods ()
 <div style="text-align: center; margin-top: 20px; color: #E6EBFB;">
     <p><?=loca("ADM_MODS_TOT_ACTIVE");?>: <?=count($mods['installed']);?> | <?=loca("ADM_MODS_TOT_AVAILABLE");?>: <?=count($mods['available']);?></p>
 </div>
-
-
 <?php
+
+    } // view
+
+    function GenModPanelSource(string $session, bool $acitive, bool $can_be_installed, array $mod) : void
+    {
+        echo "        <div class=\"mod-item\">\n";
+        echo "            <span class=\"status-indicator ". ($acitive ? "" : ($can_be_installed ? "status-inactive" : "status-installed") ) ." \">" . ($acitive ? loca("ADM_MODS_STATE_ACTIVE") : ($can_be_installed ? loca("ADM_MODS_STATE_AVAILABLE") : loca("ADM_MODS_STATE_INSTALLED")) ) . "</span>\n";
+        echo "            <img src=\"".$mod['bg_image']."\" alt=\"".$mod['name']."\" class=\"mod-background\">\n";
+        echo "            <div class=\"mod-content\">\n";
+        echo "                <div class=\"mod-title\">".$mod['name']."</div>\n";
+        echo "                <div class=\"mod-description\">".$mod['description']."</div>\n";
+        if ($acitive || $can_be_installed) {
+        echo "                <div class=\"mod-info\">\n";
+        echo "                    ".loca("ADM_MODS_INFO_VERSION").": ".$mod['version']."<br>\n";
+        echo "                    ".loca("ADM_MODS_INFO_AUTHOR").": ".$mod['author']."<br>\n";
+        echo "                    ".loca("ADM_MODS_INFO_WEBSITE").": <a href=\"".$mod['website']."\" style=\"color:#E6EBFB;\" target=_blank>".$mod['website']."</a>\n";
+        echo "                </div>\n";
+        }
+        echo "                <div class=\"mod-actions\">\n";
+        if ($acitive) {
+        echo "                    <a href=\"index.php?page=admin&session=$session&mode=Mods&action=move_up&modname=".$mod['folder']."\" class=\"mod-action-link\">".loca("ADM_MODS_OP_MOVEUP")."</a>\n";
+        echo "                    <a href=\"index.php?page=admin&session=$session&mode=Mods&action=move_down&modname=".$mod['folder']."\" class=\"mod-action-link\">".loca("ADM_MODS_OP_MOVEDOWN")."</a>\n";
+        echo "                    <a href=\"index.php?page=admin&session=$session&mode=Mods&action=remove&modname=".$mod['folder']."\" class=\"mod-action-link\">".loca("ADM_MODS_OP_REMOVE")."</a>\n";
+        }
+        if ($can_be_installed) {
+        echo "                    <a href=\"index.php?page=admin&session=$session&mode=Mods&action=install&modname=".$mod['folder']."\" class=\"mod-action-link\">".loca("ADM_MODS_OP_INSTALL")."</a>\n";
+        }
+        echo "                </div>\n";
+        echo "            </div>\n";
+        echo "        </div>\n\n";
+    }
 }
+
 ?>

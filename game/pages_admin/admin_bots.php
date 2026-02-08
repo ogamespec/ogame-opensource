@@ -2,46 +2,48 @@
 
 // Admin Area: Bot control
 
-function Admin_Bots () : void
-{
-    global $session;
-    global $db_prefix;
-    global $GlobalUser;
+class Admin_Bots extends Page {
 
-    $result = "";
+    private string $result = "";
 
-    // POST request processing.
-    if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
-    {
-        if (BotStrategyExists("_start")) {
-            if ( AddBot ( $_POST['name'] ) ) $result = "<font color=lime>".loca("ADM_BOTS_ADDED")."</font>";
-            else $result = "<font color=red>".loca("ADM_BOTS_USER_NOT_FOUND")."</font>";
+    public function controller () : bool {
+        global $GlobalUser;
+
+        // POST request processing.
+        if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
+        {
+            if (BotStrategyExists("_start")) {
+                if ( AddBot ( $_POST['name'] ) ) $this->result = "<font color=lime>".loca("ADM_BOTS_ADDED")."</font>";
+                else $this->result = "<font color=red>".loca("ADM_BOTS_USER_NOT_FOUND")."</font>";
+            }
+            else {
+                $this->result = "<font color=red>".loca("ADM_BOTS_NO_START")."</font>";
+            }
         }
-        else {
-            $result = "<font color=red>".loca("ADM_BOTS_NO_START")."</font>";
+
+        // GET request processing.
+        if ( method () === "GET" && key_exists('id', $_GET) && $GlobalUser['admin'] >= 2 )
+        {
+            StopBot ( intval ($_GET['id']) );
+            $this->result = "<font color=lime>".loca("ADM_BOTS_STOPPED")."</font>";
         }
+
+        return true;
     }
 
-    // GET request processing.
-    if ( method () === "GET" && key_exists('id', $_GET) && $GlobalUser['admin'] >= 2 )
-    {
-        StopBot ( intval ($_GET['id']) );
-        $result = "<font color=lime>".loca("ADM_BOTS_STOPPED")."</font>";
-    }
+    public function view () : void {
+        global $GlobalUser;
+        global $session;
+        global $db_prefix;
+
+        if ( $GlobalUser['admin'] < 2) {
+
+            echo "<font color=red>".loca("ADM_BOTS_FORBIDDEN")."</font>";
+            return;
+        }
 
 ?>
-
-<?php AdminPanel();?>
-
-<?php
-    if ( $GlobalUser['admin'] < 2) {
-
-        echo "<font color=red>".loca("ADM_BOTS_FORBIDDEN")."</font>";
-        return;
-    }
-?>
-
-<center><?=$result;?></center>
+<center><?=$this->result;?></center>
 
 <h2><?=loca("ADM_BOTS_LIST");?></h2>
 
@@ -76,7 +78,9 @@ function Admin_Bots () : void
 <tr><td><?=loca("ADM_BOTS_NAME");?> <input type=text size=10 name="name" /> <input type=submit value="<?=loca("ADM_BOTS_SUBMIT");?>" /></td></tr>
 </table>
 </form>
-
 <?php
+
+    }
 }
+
 ?>

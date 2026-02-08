@@ -2,60 +2,64 @@
 
 // Admin Area: Current flights of players, as well as flight logs
 
-function Admin_Fleetlogs () : void
-{
-    global $session;
-    global $db_prefix;
-    global $GlobalUser;
-    global $fleetmap;
-    global $transportableResources;
+class Admin_Fleetlogs extends Page {
 
-    $big_fleet_points = 100000000;      // If a fleet is larger than the specified number of points, it is highlighted in a special way ("large").
+    private int $big_fleet_points = 100000000;      // If a fleet is larger than the specified number of points, it is highlighted in a special way ("large").
 
-    $now = time ();
+    public function controller () : bool {
+        global $db_prefix;
+        global $GlobalUser;
+        global $now;
 
-    // Processing POST requests.
-    $player_id = 0;
-    if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
-    {
-        if ( key_exists ( "order_2min", $_POST ) ) {        // -2 minutes before the task commences
-            $id = intval ($_POST['order_2min']);
-            $queue = LoadQueue ( $id );
-            $fleet_obj = LoadFleet ( $queue['sub_id'] );
-            if ( $fleet_obj['union_id'] ) {
-                UpdateUnionTime ( $fleet_obj['union_id'], $now+2*60, 0, true );
+        // Processing POST requests.
+        if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
+        {
+            if ( key_exists ( "order_2min", $_POST ) ) {        // -2 minutes before the task commences
+                $id = intval ($_POST['order_2min']);
+                $queue = LoadQueue ( $id );
+                $fleet_obj = LoadFleet ( $queue['sub_id'] );
+                if ( $fleet_obj['union_id'] ) {
+                    UpdateUnionTime ( $fleet_obj['union_id'], $now+2*60, 0, true );
+                }
+                else {
+                    $query = "UPDATE ".$db_prefix."queue SET end=".($now+2*60)." WHERE task_id=$id";
+                    dbquery ( $query );
+                }
             }
-            else {
-                $query = "UPDATE ".$db_prefix."queue SET end=".($now+2*60)." WHERE task_id=$id";
-                dbquery ( $query );
+
+            if ( key_exists ( "order_end", $_POST ) ) {        // Complete the task
+                $id = intval ($_POST['order_end']);
+                $queue = LoadQueue ( $id );
+                $fleet_obj = LoadFleet ( $queue['sub_id'] );
+                if ( $fleet_obj['union_id'] ) {
+                    UpdateUnionTime ( $fleet_obj['union_id'], $now, 0, true );
+                }
+                else {
+                    $query = "UPDATE ".$db_prefix."queue SET end=$now WHERE task_id=$id";
+                    dbquery ( $query );
+                }
+            }
+
+            if ( key_exists ( "order_return", $_POST ) ) {        // Return the fleet
+                $queue = LoadQueue ( intval ($_POST['order_return']) );
+                RecallFleet ( $queue['sub_id'] );
             }
         }
 
-        if ( key_exists ( "order_end", $_POST ) ) {        // Complete the task
-            $id = intval ($_POST['order_end']);
-            $queue = LoadQueue ( $id );
-            $fleet_obj = LoadFleet ( $queue['sub_id'] );
-            if ( $fleet_obj['union_id'] ) {
-                UpdateUnionTime ( $fleet_obj['union_id'], $now, 0, true );
-            }
-            else {
-                $query = "UPDATE ".$db_prefix."queue SET end=$now WHERE task_id=$id";
-                dbquery ( $query );
-            }
-        }
-
-        if ( key_exists ( "order_return", $_POST ) ) {        // Return the fleet
-            $queue = LoadQueue ( intval ($_POST['order_return']) );
-            RecallFleet ( $queue['sub_id'] );
-        }
+        return true;
     }
+
+    public function view () : void {
+        global $db_prefix;
+        global $session;
+        global $fleetmap;
+        global $transportableResources;
+        global $now;
 
     $query = "SELECT * FROM ".$db_prefix."queue WHERE type='".QTYP_FLEET."' ORDER BY end ASC";
     $result = dbquery ($query);
     $anz = $rows = dbrows ($result);
     $bxx = 1;
-
-    AdminPanel();
 
     echo "<table>\n";
     echo "<tr><td class=c>N</td> <td class=c>".loca("ADM_FLOGS_TIMER")."</td> <td class=c>".loca("ADM_FLOGS_ORDER")."</td> <td class=c>".loca("ADM_FLOGS_SEND_TIME")."</td> <td class=c>".loca("ADM_FLOGS_ARRIVE_TIME")."</td><td class=c>".loca("ADM_FLOGS_FLIGHT_TIME")."</td> <td class=c>".loca("ADM_FLOGS_START")."</td> <td class=c>".loca("ADM_FLOGS_TARGET")."</td> <td class=c>".loca("ADM_FLOGS_FLEET")."</td> <td class=c>".loca("ADM_FLOGS_CARGO")."</td> <td class=c>".loca("ADM_FLOGS_FUEL")."</td> <td class=c>".loca("ADM_FLOGS_ACS")."</td> <td class=c colspan=3>".loca("ADM_FLOGS_ACTION")."</td> </tr>\n";
@@ -72,7 +76,7 @@ function Admin_Fleetlogs () : void
             $fpoints = $fleet_price['fpoints'];
         }
         $style = "";
-        if ( $points >= $big_fleet_points ) {
+        if ( $points >= $this->big_fleet_points ) {
             switch ($fleet_obj['mission']) {
                 case FTYP_ATTACK:
                 case FTYP_ACS_ATTACK:
@@ -189,5 +193,7 @@ function Admin_Fleetlogs () : void
 
     echo "</table>\n";
 
+    }
 }
+
 ?>

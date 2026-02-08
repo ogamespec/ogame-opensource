@@ -2,47 +2,49 @@
 
 // Admin Area: Broadcast message to users.
 
-function Admin_Broadcast () : void
-{
-    global $session;
-    global $db_prefix;
-    global $GlobalUser;
+class Admin_Broadcast extends Page {
 
-    $write_error = "";
+    private string $write_error = "";
 
-    // POST request processing.
-    if ( method () === "POST" )
-    {
-        $cat = intval($_POST['cat']);
-        $subj = $_POST['subj'];
-        if ( $subj === "" ) $write_error = "<center><font color=#FF0000>".loca("ADM_BCAST_ERROR_SUBJ")."</font><br/></center>\n";
-        $text = $_POST['text'];
-        if ( $text === "" ) $write_error = "<center><font color=#FF0000>".loca("ADM_BCAST_ERROR_TEXT")."</font><br/></center>\n";
+    public function controller () : bool {
+        global $GlobalUser;
 
-        if ( $write_error === "" )
+        // POST request processing.
+        if ( method () === "POST" )
         {
-            $ownhome = LoadPlanetById ( $GlobalUser['hplanetid'] );
+            $cat = intval($_POST['cat']);
+            $subj = $_POST['subj'];
+            if ( $subj === "" ) $this->write_error = "<center><font color=#FF0000>".loca("ADM_BCAST_ERROR_SUBJ")."</font><br/></center>\n";
+            $text = $_POST['text'];
+            if ( $text === "" ) $this->write_error = "<center><font color=#FF0000>".loca("ADM_BCAST_ERROR_TEXT")."</font><br/></center>\n";
 
-            $from = $GlobalUser['oname'] . " <a href=\"index.php?page=galaxy&galaxy=".$ownhome['g']."&system=".$ownhome['s']."&position=".$ownhome['p']."&session={PUBLIC_SESSION}\">[".$ownhome['g'].":".$ownhome['s'].":".$ownhome['p']."]</a>\n";
-            $subj = $subj . " <a href=\"index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=".$GlobalUser['player_id']."&re=1&betreff=Re:".$subj."\">\n"
-                        . "</a>\n";
+            if ( $this->write_error === "" )
+            {
+                $ownhome = LoadPlanetById ( $GlobalUser['hplanetid'] );
 
-            $text = str_replace ( '\"', "&quot;", bb($text) );
-            $text = str_replace ( '\'', "&rsquo;", $text );
-            $text = str_replace ( '\`', "&lsquo;", $text );
+                $from = $GlobalUser['oname'] . " <a href=\"index.php?page=galaxy&galaxy=".$ownhome['g']."&system=".$ownhome['s']."&position=".$ownhome['p']."&session={PUBLIC_SESSION}\">[".$ownhome['g'].":".$ownhome['s'].":".$ownhome['p']."]</a>\n";
+                $subj = $subj . " <a href=\"index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=".$GlobalUser['player_id']."&re=1&betreff=Re:".$subj."\">\n"
+                            . "</a>\n";
 
-            $usernum = BroadcastMessage ($cat, $from, $subj, $text);
+                $text = str_replace ( '\"', "&quot;", bb($text) );
+                $text = str_replace ( '\'', "&rsquo;", $text );
+                $text = str_replace ( '\`', "&lsquo;", $text );
 
-            if ($usernum > 0) $write_error = "<center><font color=#00FF00>".va(loca("ADM_BCAST_SUCCESS"), $usernum)."</font><br/></center>\n";
-            else $write_error = "<center><font color=#00FF00>".loca("ADM_BCAST_ERROR_USERS")."</font><br/></center>\n";
+                $usernum = BroadcastMessage ($cat, $from, $subj, $text);
+
+                if ($usernum > 0) $this->write_error = "<center><font color=#00FF00>".va(loca("ADM_BCAST_SUCCESS"), $usernum)."</font><br/></center>\n";
+                else $this->write_error = "<center><font color=#00FF00>".loca("ADM_BCAST_ERROR_USERS")."</font><br/></center>\n";
+            }
         }
+
+        return true;
     }
 
+    public function view () : void {
+        global $session;
+
 ?>
-
-<?php AdminPanel();?>
-
-<?=$write_error;?>
+<?=$this->write_error;?>
 
 <table>
 <form action="index.php?page=admin&session=<?=$session;?>&mode=Broadcast" method="POST">
@@ -70,8 +72,9 @@ function Admin_Broadcast () : void
 
 </form>
 </table>
-
 <?php
+
+    } // view
 }
 
 ?>

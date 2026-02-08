@@ -1,0 +1,139 @@
+{
+	"Home": {
+		"path": "pages_admin/admin_home.php",
+		"skip": true,
+		"panel": false
+	},	
+
+	"Fleetlogs": {
+		"path": "pages_admin/admin_fleetlogs.php",
+		"img": "img/admin_fleetlogs.png",
+		"loca": "ADM_MENU_FLEETLOGS"
+	},
+	"Browse": {
+		"path": "pages_admin/admin_browse.php",
+		"img": "img/admin_browse.png",
+		"loca": "ADM_MENU_BROWSE"
+	},
+	"Reports": {
+		"path": "pages_admin/admin_reports.php",
+		"img": "img/admin_report.png",
+		"loca": "ADM_MENU_REPORTS"
+	},
+	"Bans": {
+		"path": "pages_admin/admin_bans.php",
+		"img": "img/admin_ban.png",
+		"loca": "ADM_MENU_BANS"
+	},
+	"Users": {
+		"path": "pages_admin/admin_users.php",
+		"img": "img/admin_users.png",
+		"loca": "ADM_MENU_USERS"
+	},
+
+	"Planets": {
+		"path": "pages_admin/admin_planets.php",
+		"img": "img/admin_planets.png",
+		"loca": "ADM_MENU_PLANETS"
+	},
+	"Queue": {
+		"path": "pages_admin/admin_queue.php",
+		"img": "img/admin_queue.png",
+		"loca": "ADM_MENU_QUEUE"
+	},
+	"Uni": {
+		"path": "pages_admin/admin_uni.php",
+		"img": "img/admin_uni.png",
+		"loca": "ADM_MENU_UNI"
+	},
+	"Errors": {
+		"path": "pages_admin/admin_errors.php",
+		"img": "img/admin_error.png",
+		"loca": "ADM_MENU_ERRORS"
+	},
+	"Debug": {
+		"path": "pages_admin/admin_debug.php",
+		"img": "img/admin_debug.png",
+		"loca": "ADM_MENU_DEBUG"
+	},
+
+	"BattleSim": {
+		"path": "pages_admin/admin_sim.php",
+		"img": "img/admin_sim.png",
+		"loca": "ADM_MENU_BATTLESIM"
+	},
+	"Broadcast": {
+		"path": "pages_admin/admin_broadcast.php",
+		"img": "img/admin_broadcast.png",
+		"loca": "ADM_MENU_BROADCAST"
+	},
+	"Expedition": {
+		"path": "pages_admin/admin_expedition.php",
+		"skin": true,
+		"img": "gebaeude/210.gif",
+		"loca": "ADM_MENU_EXPEDITION"
+	},
+	"Logins": {
+		"path": "pages_admin/admin_logins.php",
+		"img": "img/admin_logins.png",
+		"loca": "ADM_MENU_LOGINS"
+	},
+	"Checksum": {
+		"path": "pages_admin/admin_checksum.php",
+		"img": "img/admin_checksum.png",
+		"loca": "ADM_MENU_CHECKSUM"
+	},
+
+	"Bots": {
+		"path": "pages_admin/admin_bots.php",
+		"img": "img/admin_bots.png",
+		"loca": "ADM_MENU_BOTS"
+	},
+	"BattleReport": {
+		"path": "pages_admin/admin_battle.php",
+		"img": "img/admin_battle.png",
+		"loca": "ADM_MENU_BATTLELOGS"
+	},
+	"UserLogs": {
+		"path": "pages_admin/admin_userlogs.php",
+		"img": "img/admin_userlogs.png",
+		"loca": "ADM_MENU_USERLOGS"
+	},
+	"BotEdit": {
+		"path": "pages_admin/admin_botedit.php",
+		"img": "img/admin_botedit.png",
+		"loca": "ADM_MENU_BOTEDIT"
+	},
+	"Coupons": {
+		"path": "pages_admin/admin_coupons.php",
+		"img": "img/admin_coupons.png",
+		"loca": "ADM_MENU_COUPONS"
+	},
+
+	"RakSim": {
+		"path": "pages_admin/admin_raksim.php",
+		"img": "img/admin_raksim.png",
+		"loca": "ADM_MENU_RAKSIM"
+	},
+	"DB": {
+		"path": "pages_admin/admin_db.php",
+		"img": "img/admin_db.png",
+		"loca": "ADM_MENU_DB"
+	},
+	"ColonySettings": {
+		"path": "pages_admin/admin_colony_settings.php",
+		"img": "img/admin_colony_settings.png",
+		"loca": "ADM_MENU_COLONY_SETTINGS"
+	},
+	"Loca": {
+		"path": "pages_admin/admin_loca.php",
+		"img": "img/admin_loca.png",
+		"loca": "ADM_MENU_LOCA"
+	},
+	"Mods": {
+		"path": "pages_admin/admin_mods.php",
+		"img": "img/admin_mods.png",
+		"loca": "ADM_MENU_MODS"
+	}
+
+}

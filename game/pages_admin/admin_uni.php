@@ -2,93 +2,87 @@
 
 // Admin Area: Universe Settings.
 
-function UniIsSelected (mixed $option, mixed $value) : string
-{
-    if ( $option == $value ) return "selected";
-    else return "";
-}
+class Admin_Uni extends Page {
 
-function UniIsChecked (int $option) : string
-{
-    if ( $option ) return "checked";
-    else return "";
-}
+    public function controller () : bool {
+        global $db_prefix;
+        global $GlobalUser;
+        global $now;
 
-function Admin_Uni () : void
-{
-    global $db_prefix;
-    global $GlobalUser;
-    global $session;
-    $now = time ();
-
-    //$info = "[i]";
-    $info = "<img src='img/r5.png' />";
-
-    if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
-    {
-        if ( key_exists ('news_upd', $_POST) )        // Update the news
+        if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
         {
-            if ( $_POST['news_upd'] > 0 ) UpdateNews ( $_POST['news1'], $_POST['news2'], $_POST['news_upd'] );
+            if ( key_exists ('news_upd', $_POST) )        // Update the news
+            {
+                if ( $_POST['news_upd'] > 0 ) UpdateNews ( $_POST['news1'], $_POST['news2'], $_POST['news_upd'] );
+            }
+            if ( key_exists ('news_off', $_POST) && $_POST['news_off'] === "on" )    // Remove the news
+            {
+                DisableNews ();
+            }
+
+            $rapid = ($_POST['rapid'] === "on") ? 1 : 0;
+            $moons = ($_POST['moons'] === "on") ? 1 : 0;
+            $freeze = (key_exists ('freeze', $_POST) && $_POST['freeze'] === "on") ? 1 : 0;
+            $php_battle = (key_exists ('php_battle', $_POST) && $_POST['php_battle'] === "on") ? 1 : 0;
+            $force_lang = (key_exists ('force_lang', $_POST) && $_POST['force_lang'] === "on") ? 1 : 0;
+
+            SetUniParam ( 
+                $_POST['speed'], 
+                $_POST['fspeed'], 
+                $_POST['acs'], 
+                $_POST['fid'], 
+                $_POST['did'], 
+                $_POST['defrepair'], 
+                $_POST['defrepair_delta'], 
+                intval($_POST['galaxies']), 
+                intval($_POST['systems']), 
+                $rapid, 
+                $moons, 
+                $freeze, 
+                $_POST['lang'],
+                $_POST['battle_engine'],
+                $php_battle,
+                $force_lang,
+                intval($_POST['start_dm']),
+                intval($_POST['max_werf']),
+                intval($_POST['feedage']) );
+
+            // Set external links. If the link is empty - the menu item will be missing.
+
+            SetExtLinks (
+                $_POST['ext_board'],
+                $_POST['ext_discord'],
+                $_POST['ext_tutorial'],
+                $_POST['ext_rules'],
+                $_POST['ext_impressum'] );
+
+            // Set the maximum number of users.
+
+            SetMaxUsers (intval($_POST['maxusers']));
+
+            // Enable forced VM to active players if the universe is paused.
+            if ( $freeze ) {
+                $days7 = $now - 7*24*60*60;
+                $query = "UPDATE ".$db_prefix."users SET vacation = 1, vacation_until = ".$now." WHERE lastclick >= $days7 AND admin = 0";
+                dbquery ( $query );
+            }
+
+            //print_r ( $_POST );
         }
-        if ( key_exists ('news_off', $_POST) && $_POST['news_off'] === "on" )    // Remove the news
-        {
-            DisableNews ();
-        }
 
-        $rapid = ($_POST['rapid'] === "on") ? 1 : 0;
-        $moons = ($_POST['moons'] === "on") ? 1 : 0;
-        $freeze = (key_exists ('freeze', $_POST) && $_POST['freeze'] === "on") ? 1 : 0;
-        $php_battle = (key_exists ('php_battle', $_POST) && $_POST['php_battle'] === "on") ? 1 : 0;
-        $force_lang = (key_exists ('force_lang', $_POST) && $_POST['force_lang'] === "on") ? 1 : 0;
-
-        SetUniParam ( 
-            $_POST['speed'], 
-            $_POST['fspeed'], 
-            $_POST['acs'], 
-            $_POST['fid'], 
-            $_POST['did'], 
-            $_POST['defrepair'], 
-            $_POST['defrepair_delta'], 
-            intval($_POST['galaxies']), 
-            intval($_POST['systems']), 
-            $rapid, 
-            $moons, 
-            $freeze, 
-            $_POST['lang'],
-            $_POST['battle_engine'],
-            $php_battle,
-            $force_lang,
-            intval($_POST['start_dm']),
-            intval($_POST['max_werf']),
-            intval($_POST['feedage']) );
-
-        // Set external links. If the link is empty - the menu item will be missing.
-
-        SetExtLinks (
-            $_POST['ext_board'],
-            $_POST['ext_discord'],
-            $_POST['ext_tutorial'],
-            $_POST['ext_rules'],
-            $_POST['ext_impressum'] );
-
-        // Set the maximum number of users.
-
-        SetMaxUsers (intval($_POST['maxusers']));
-
-        // Enable forced VM to active players if the universe is paused.
-        if ( $freeze ) {
-            $days7 = $now - 7*24*60*60;
-            $query = "UPDATE ".$db_prefix."users SET vacation = 1, vacation_until = ".$now." WHERE lastclick >= $days7 AND admin = 0";
-            dbquery ( $query );
-        }
-
-        //print_r ( $_POST );
+        return true;
     }
 
-    $unitab = LoadUniverse ();
-?>
+    public function view () : void {
+        global $GlobalUni;
+        global $session;
+        global $now;
 
-<?php AdminPanel();?>
+        //$info = "[i]";
+        $info = "<img src='img/r5.png' />";
+
+        $unitab = $GlobalUni;
+?>
 
 <table >
 <form action="index.php?page=admin&session=<?php echo $session;?>&mode=Uni" method="POST" >
@@ -107,16 +101,16 @@ function Admin_Uni () : void
    <th><?=loca("ADM_UNI_SPEED");?></th>
    <th>
    <select name="speed">
-     <option value="1" <?php echo UniIsSelected($unitab['speed'], 1);?>>1x</option>
-     <option value="2" <?php echo UniIsSelected($unitab['speed'], 2);?>>2x</option>
-     <option value="3" <?php echo UniIsSelected($unitab['speed'], 3);?>>3x</option>
-     <option value="4" <?php echo UniIsSelected($unitab['speed'], 4);?>>4x</option>
-     <option value="5" <?php echo UniIsSelected($unitab['speed'], 5);?>>5x</option>
-     <option value="6" <?php echo UniIsSelected($unitab['speed'], 6);?>>6x</option>
-     <option value="7" <?php echo UniIsSelected($unitab['speed'], 7);?>>7x</option>
-     <option value="8" <?php echo UniIsSelected($unitab['speed'], 8);?>>8x</option>
-     <option value="9" <?php echo UniIsSelected($unitab['speed'], 9);?>>9x</option>
-     <option value="10" <?php echo UniIsSelected($unitab['speed'], 10);?>>10x</option>
+     <option value="1" <?php echo $this->UniIsSelected($unitab['speed'], 1);?>>1x</option>
+     <option value="2" <?php echo $this->UniIsSelected($unitab['speed'], 2);?>>2x</option>
+     <option value="3" <?php echo $this->UniIsSelected($unitab['speed'], 3);?>>3x</option>
+     <option value="4" <?php echo $this->UniIsSelected($unitab['speed'], 4);?>>4x</option>
+     <option value="5" <?php echo $this->UniIsSelected($unitab['speed'], 5);?>>5x</option>
+     <option value="6" <?php echo $this->UniIsSelected($unitab['speed'], 6);?>>6x</option>
+     <option value="7" <?php echo $this->UniIsSelected($unitab['speed'], 7);?>>7x</option>
+     <option value="8" <?php echo $this->UniIsSelected($unitab['speed'], 8);?>>8x</option>
+     <option value="9" <?php echo $this->UniIsSelected($unitab['speed'], 9);?>>9x</option>
+     <option value="10" <?php echo $this->UniIsSelected($unitab['speed'], 10);?>>10x</option>
    </select>
    </th>
  </tr>
@@ -125,16 +119,16 @@ function Admin_Uni () : void
    <th><?=loca("ADM_UNI_FSPEED");?></th>
    <th>
    <select name="fspeed">
-     <option value="1" <?php echo UniIsSelected($unitab['fspeed'], 1);?>>1x</option>
-     <option value="2" <?php echo UniIsSelected($unitab['fspeed'], 2);?>>2x</option>
-     <option value="3" <?php echo UniIsSelected($unitab['fspeed'], 3);?>>3x</option>
-     <option value="4" <?php echo UniIsSelected($unitab['fspeed'], 4);?>>4x</option>
-     <option value="5" <?php echo UniIsSelected($unitab['fspeed'], 5);?>>5x</option>
-     <option value="6" <?php echo UniIsSelected($unitab['fspeed'], 6);?>>6x</option>
-     <option value="7" <?php echo UniIsSelected($unitab['fspeed'], 7);?>>7x</option>
-     <option value="8" <?php echo UniIsSelected($unitab['fspeed'], 8);?>>8x</option>
-     <option value="9" <?php echo UniIsSelected($unitab['fspeed'], 9);?>>9x</option>
-     <option value="10" <?php echo UniIsSelected($unitab['fspeed'], 10);?>>10x</option>
+     <option value="1" <?php echo $this->UniIsSelected($unitab['fspeed'], 1);?>>1x</option>
+     <option value="2" <?php echo $this->UniIsSelected($unitab['fspeed'], 2);?>>2x</option>
+     <option value="3" <?php echo $this->UniIsSelected($unitab['fspeed'], 3);?>>3x</option>
+     <option value="4" <?php echo $this->UniIsSelected($unitab['fspeed'], 4);?>>4x</option>
+     <option value="5" <?php echo $this->UniIsSelected($unitab['fspeed'], 5);?>>5x</option>
+     <option value="6" <?php echo $this->UniIsSelected($unitab['fspeed'], 6);?>>6x</option>
+     <option value="7" <?php echo $this->UniIsSelected($unitab['fspeed'], 7);?>>7x</option>
+     <option value="8" <?php echo $this->UniIsSelected($unitab['fspeed'], 8);?>>8x</option>
+     <option value="9" <?php echo $this->UniIsSelected($unitab['fspeed'], 9);?>>9x</option>
+     <option value="10" <?php echo $this->UniIsSelected($unitab['fspeed'], 10);?>>10x</option>
    </select>
    </th>
  </tr>
@@ -143,17 +137,17 @@ function Admin_Uni () : void
    <th><?=loca("ADM_UNI_FID");?></th>
    <th>
    <select name="fid">
-     <option value="0" <?php echo UniIsSelected($unitab['fid'], 0);?>>0%</option>
-     <option value="10" <?php echo UniIsSelected($unitab['fid'], 10);?>>10%</option>
-     <option value="20" <?php echo UniIsSelected($unitab['fid'], 20);?>>20%</option>
-     <option value="30" <?php echo UniIsSelected($unitab['fid'], 30);?>>30%</option>
-     <option value="40" <?php echo UniIsSelected($unitab['fid'], 40);?>>40%</option>
-     <option value="50" <?php echo UniIsSelected($unitab['fid'], 50);?>>50%</option>
-     <option value="60" <?php echo UniIsSelected($unitab['fid'], 60);?>>60%</option>
-     <option value="70" <?php echo UniIsSelected($unitab['fid'], 70);?>>70%</option>
-     <option value="80" <?php echo UniIsSelected($unitab['fid'], 80);?>>80%</option>
-     <option value="90" <?php echo UniIsSelected($unitab['fid'], 90);?>>90%</option>
-     <option value="100" <?php echo UniIsSelected($unitab['fid'], 100);?>>100%</option>
+     <option value="0" <?php echo $this->UniIsSelected($unitab['fid'], 0);?>>0%</option>
+     <option value="10" <?php echo $this->UniIsSelected($unitab['fid'], 10);?>>10%</option>
+     <option value="20" <?php echo $this->UniIsSelected($unitab['fid'], 20);?>>20%</option>
+     <option value="30" <?php echo $this->UniIsSelected($unitab['fid'], 30);?>>30%</option>
+     <option value="40" <?php echo $this->UniIsSelected($unitab['fid'], 40);?>>40%</option>
+     <option value="50" <?php echo $this->UniIsSelected($unitab['fid'], 50);?>>50%</option>
+     <option value="60" <?php echo $this->UniIsSelected($unitab['fid'], 60);?>>60%</option>
+     <option value="70" <?php echo $this->UniIsSelected($unitab['fid'], 70);?>>70%</option>
+     <option value="80" <?php echo $this->UniIsSelected($unitab['fid'], 80);?>>80%</option>
+     <option value="90" <?php echo $this->UniIsSelected($unitab['fid'], 90);?>>90%</option>
+     <option value="100" <?php echo $this->UniIsSelected($unitab['fid'], 100);?>>100%</option>
    </select>
    </th>
  </tr>
@@ -162,17 +156,17 @@ function Admin_Uni () : void
    <th><?=loca("ADM_UNI_DID");?></th>
    <th>
    <select name="did">
-     <option value="0" <?php echo UniIsSelected($unitab['did'], 0);?>>0%</option>
-     <option value="10" <?php echo UniIsSelected($unitab['did'], 10);?>>10%</option>
-     <option value="20" <?php echo UniIsSelected($unitab['did'], 20);?>>20%</option>
-     <option value="30" <?php echo UniIsSelected($unitab['did'], 30);?>>30%</option>
-     <option value="40" <?php echo UniIsSelected($unitab['did'], 40);?>>40%</option>
-     <option value="50" <?php echo UniIsSelected($unitab['did'], 50);?>>50%</option>
-     <option value="60" <?php echo UniIsSelected($unitab['did'], 60);?>>60%</option>
-     <option value="70" <?php echo UniIsSelected($unitab['did'], 70);?>>70%</option>
-     <option value="80" <?php echo UniIsSelected($unitab['did'], 80);?>>80%</option>
-     <option value="90" <?php echo UniIsSelected($unitab['did'], 90);?>>90%</option>
-     <option value="100" <?php echo UniIsSelected($unitab['did'], 100);?>>100%</option>
+     <option value="0" <?php echo $this->UniIsSelected($unitab['did'], 0);?>>0%</option>
+     <option value="10" <?php echo $this->UniIsSelected($unitab['did'], 10);?>>10%</option>
+     <option value="20" <?php echo $this->UniIsSelected($unitab['did'], 20);?>>20%</option>
+     <option value="30" <?php echo $this->UniIsSelected($unitab['did'], 30);?>>30%</option>
+     <option value="40" <?php echo $this->UniIsSelected($unitab['did'], 40);?>>40%</option>
+     <option value="50" <?php echo $this->UniIsSelected($unitab['did'], 50);?>>50%</option>
+     <option value="60" <?php echo $this->UniIsSelected($unitab['did'], 60);?>>60%</option>
+     <option value="70" <?php echo $this->UniIsSelected($unitab['did'], 70);?>>70%</option>
+     <option value="80" <?php echo $this->UniIsSelected($unitab['did'], 80);?>>80%</option>
+     <option value="90" <?php echo $this->UniIsSelected($unitab['did'], 90);?>>90%</option>
+     <option value="100" <?php echo $this->UniIsSelected($unitab['did'], 100);?>>100%</option>
    </select>
    </th>
  </tr>
@@ -184,8 +178,8 @@ function Admin_Uni () : void
 
 <tr><th><?=loca("ADM_UNI_ACS_PLAYERS");?></th><th><input type="text" name="acs" maxlength="3" size="3" value="<?php echo $unitab['acs'];?>" /> (<?=va(loca("ADM_UNI_ACS_FLEETS"), $unitab['acs']*$unitab['acs']);?>)</th></tr>
 
-<tr><th><?=loca("ADM_UNI_RAPIDFIRE");?></th><th><input type="checkbox" name="rapid"  <?php echo UniIsChecked($unitab['rapid']);?> /></th></tr>
-<tr><th><?=loca("ADM_UNI_MOONS");?></th><th><input type="checkbox" name="moons" <?php echo UniIsChecked($unitab['moons']);?> /></th></tr>
+<tr><th><?=loca("ADM_UNI_RAPIDFIRE");?></th><th><input type="checkbox" name="rapid"  <?php echo $this->UniIsChecked($unitab['rapid']);?> /></th></tr>
+<tr><th><?=loca("ADM_UNI_MOONS");?></th><th><input type="checkbox" name="moons" <?php echo $this->UniIsChecked($unitab['moons']);?> /></th></tr>
 <tr><th><?=loca("ADM_UNI_NEWS1");?></th><th><input type="text" name="news1" maxlength="99" size="20" value="<?php echo $unitab['news1'];?>" /></th></tr>
 <tr><th><?=loca("ADM_UNI_NEWS2");?></th><th><input type="text" name="news2" maxlength="99" size="20" value="<?php echo $unitab['news2'];?>" /></th></tr>
 <?php
@@ -197,12 +191,12 @@ function Admin_Uni () : void
 <?php
     global $Languages;
     foreach ( $Languages as $lang_id=>$lang_name ) {
-        echo "    <option value=\"".$lang_id."\" " . UniIsSelected($unitab['lang'], $lang_id)." >$lang_name</option>\n";
+        echo "    <option value=\"".$lang_id."\" " . $this->UniIsSelected($unitab['lang'], $lang_id)." >$lang_name</option>\n";
     }
 ?>
    </select>
 </th></tr>
-<tr><th><?php echo loca("ADM_UNI_FORCE_LANG");?></th><th><input type="checkbox" name="force_lang"  <?php echo UniIsChecked($unitab['force_lang']);?> /></th></tr>
+<tr><th><?php echo loca("ADM_UNI_FORCE_LANG");?></th><th><input type="checkbox" name="force_lang"  <?php echo $this->UniIsChecked($unitab['force_lang']);?> /></th></tr>
 
 <tr><th><?php echo loca("MENU_BOARD");?></th><th><input type="text" name="ext_board" maxlength="99" size="20" value="<?php echo $unitab['ext_board'];?>" /></th></tr>
 <tr><th><?php echo loca("MENU_DISCORD");?></th><th><input type="text" name="ext_discord" maxlength="99" size="20" value="<?php echo $unitab['ext_discord'];?>" /></th></tr>
@@ -210,15 +204,30 @@ function Admin_Uni () : void
 <tr><th><?php echo loca("MENU_RULES");?></th><th><input type="text" name="ext_rules" maxlength="99" size="20" value="<?php echo $unitab['ext_rules'];?>" /></th></tr>
 <tr><th><?php echo loca("MENU_IMPRESSUM");?></th><th><input type="text" name="ext_impressum" maxlength="99" size="20" value="<?php echo $unitab['ext_impressum'];?>" /></th></tr>
 <tr><th><?php echo loca("INSTALL_UNI_BATTLE");?></th><th><input type="text" name="battle_engine" maxlength="99" size="20" value="<?php echo $unitab['battle_engine'];?>" /></th></tr>
-<tr><th><?php echo loca("INSTALL_UNI_PHP_BATTLE");?></th><th><input type="checkbox" name="php_battle"  <?php echo UniIsChecked($unitab['php_battle']);?> /></th></tr>
+<tr><th><?php echo loca("INSTALL_UNI_PHP_BATTLE");?></th><th><input type="checkbox" name="php_battle"  <?php echo $this->UniIsChecked($unitab['php_battle']);?> /></th></tr>
 
 <tr><th><?=loca("ADM_UNI_FREEZE");?> <a title="<?=loca("ADM_UNI_FREEZE_INFO");?>"><?php echo $info;?></a>
-</th><th><input type="checkbox" name="freeze"  <?php echo UniIsChecked($unitab['freeze']);?> /></th></tr>
+</th><th><input type="checkbox" name="freeze"  <?php echo $this->UniIsChecked($unitab['freeze']);?> /></th></tr>
 <tr><th colspan=2><input type="submit" value="<?=loca("ADM_UNI_SAVE");?>" /></th></tr>
 
 </form>
 </table>
 
 <?php
+
+    }
+
+    private function UniIsSelected (mixed $option, mixed $value) : string
+    {
+        if ( $option == $value ) return "selected";
+        else return "";
+    }
+
+    private function UniIsChecked (int $option) : string
+    {
+        if ( $option ) return "checked";
+        else return "";
+    }
 }
+
 ?>
