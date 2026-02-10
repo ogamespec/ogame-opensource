@@ -212,4 +212,59 @@ function IsPlayerInUnion (int $player_id, array $union) : bool
     return false;
 }
 
+// Count all battle units in ACS Attack, including units in the lead attack.
+function GetUnionUnitsCount (int $union_id) : int 
+{
+    global $fleetmap, $defmap, $rakmap;
+    $unitmap = array_merge( $fleetmap, array_diff($defmap, $rakmap));
+    $num_units = 0;
+
+    if ($union_id == 0) return 0;
+
+    $result = EnumUnionFleets ( $union_id );
+    $rows = dbrows ($result);
+    while ($rows--) {
+        $fleet_obj = dbarray ($result);
+        foreach ($unitmap as $i=>$gid) {
+            if (isset($fleet_obj[$gid])) {
+                $num_units += $fleet_obj[$gid];
+            }
+        }
+    }
+
+    return $num_units;
+}
+
+// Calculate the number of battle units on the planet, including units from all held fleets (ACS Hold).
+function GetHoldingUnitsCount (int $planet_id) : int 
+{
+    global $fleetmap, $defmap, $rakmap;
+    $unitmap = array_merge( $fleetmap, array_diff($defmap, $rakmap));
+    $num_units = 0;
+
+    // Calculate the number of units on the planet
+    $planet = LoadPlanetById ($planet_id);
+    if ($planet != null) {
+        foreach ($unitmap as $i=>$gid) {
+            if (isset($planet[$gid])) {
+                $num_units += $planet[$gid];
+            }
+        }
+    }
+
+    // Count the number of units in each held fleet
+    $result = GetHoldingFleets ($planet_id);
+    $rows = dbrows ($result);
+    while ($rows--) {
+        $fleet_obj = dbarray ($result);
+        foreach ($unitmap as $i=>$gid) {
+            if (isset($fleet_obj[$gid])) {
+                $num_units += $fleet_obj[$gid];
+            }
+        }
+    }
+
+    return $num_units;
+}
+
 ?>

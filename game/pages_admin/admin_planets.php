@@ -38,8 +38,12 @@ class Admin_Planets extends Page {
                             $query .= ", `$p`=".(float)$_POST[$p];
                         }
                         else {
-                            if ( $i == 0 ) $query .= "`$p`=".intval($_POST[$p]);
-                            else $query .= ", `$p`=".intval($_POST[$p]);
+                            $val = abs(intval($_POST[$p]));
+                            if (is_int($p) && IsBuilding($p)) {
+                                $val = min (MAX_BUILDINGS_LEVEL, $val);
+                            }
+                            if ( $i == 0 ) $query .= "`$p`=$val";
+                            else $query .= ", `$p`=$val";
                         }
                     }
                 }

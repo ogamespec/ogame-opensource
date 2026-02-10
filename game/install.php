@@ -112,6 +112,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
         'ext_rules' => $_POST["ext_rules"],
         'ext_impressum' => $_POST["ext_impressum"],
         'php_battle' => (key_exists("php_battle", $_POST) && $_POST["php_battle"]==="on"?1:0),
+        'battle_max' => intval ($_POST["battle_max"]),
         'force_lang' => (key_exists("force_lang", $_POST) && $_POST["force_lang"]==="on"?1:0),
         'max_werf' => intval($_POST["max_werf"]),
         'feedage' => intval($_POST["feedage"]),
@@ -325,6 +326,7 @@ $info = " <img src='img/r5.png' />";
 <tr><td><?php echo loca('INSTALL_UNI_MOONS');?></td><td><input type=checkbox class='text' name='uni_moons' CHECKED></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_BATTLE');?><a title='<?php echo loca('INSTALL_TIP11');?>'><?php echo $info;?></a></td><td><input type=text value='../cgi-bin/battle' class='text' name='uni_battle_engine'></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_PHP_BATTLE');?></td><td><input type=checkbox class='text' name='php_battle' CHECKED></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_BATTLE_MAX');?></td><td><input type=text value='<?=BATTLE_MAX_UNITS;?>' class='text' name='battle_max'></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_FORCE_LANG');?></td><td><input type=checkbox class='text' name='force_lang' ></td></tr>
 <tr><td><?php echo loca('INSTALL_MAX_WERF');?></td><td><input type=text value='999' class='text' name='max_werf'></td></tr>
 <tr><td><?php echo loca('INSTALL_FEED_AGE');?></td><td><input type=text value='60' class='text' name='feedage'></td></tr>

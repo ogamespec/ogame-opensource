@@ -37,6 +37,7 @@ $LOCA["ru"]["INSTALL_UNI_RAPID"] = "Скорострел";
 $LOCA["ru"]["INSTALL_UNI_MOONS"] = "Луны и Звезды Смерти";
 $LOCA["ru"]["INSTALL_UNI_BATTLE"] = "Путь к боевому движку";
 $LOCA["ru"]["INSTALL_UNI_PHP_BATTLE"] = "Использовать боевой движок на PHP";
+$LOCA["ru"]["INSTALL_UNI_BATTLE_MAX"] = "Максимальное количество юнитов с одной стороны";
 $LOCA["ru"]["INSTALL_UNI_FORCE_LANG"] = "Принудительно использовать язык вселенной";
 $LOCA["ru"]["INSTALL_MAX_WERF"] = "Максимальное количество юнитов на верфи";
 $LOCA["ru"]["INSTALL_FEED_AGE"] = "Период обновления RSS/Atom в минутах для Командира";

@@ -417,10 +417,10 @@ function RecallFleet (int $fleet_id, int $now=0) : void
     // For recall missions with a hold, the hold time is used as the return flight time.
     if ($fleet_obj['mission'] < FTYP_RETURN) DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] + FTYP_RETURN, $now-$queue['start'],
         $fleet_obj,
-        $fleet_obj['fuel'] / 2, $now);
+        (int)($fleet_obj['fuel'] / 2), $now);
     else DispatchFleet ($fleet, $origin, $target, $fleet_obj['mission'] - FTYP_RETURN, $fleet_obj['deploy_time'],
         $fleet_obj,
-        $fleet_obj['fuel'] / 2, $now);
+        (int)($fleet_obj['fuel'] / 2), $now);
 
     DeleteFleet ($fleet_obj['fleet_id']);            // delete fleet
     RemoveQueue ( $queue['task_id'] );    // delete the task
@@ -583,7 +583,7 @@ function TransportArrive (array $queue, array $fleet_obj, array $fleet, array $o
     foreach ($transportableResources as $i=>$rc) {
         $resources[$rc] = 0;
     }
-    DispatchFleet ($fleet, $origin, $target, FTYP_TRANSPORT+FTYP_RETURN, $fleet_obj['flight_time'], $resources, $fleet_obj['fuel'] / 2, $queue['end']);
+    DispatchFleet ($fleet, $origin, $target, FTYP_TRANSPORT+FTYP_RETURN, $fleet_obj['flight_time'], $resources, (int)($fleet_obj['fuel'] / 2), $queue['end']);
 
     $text = va(loca_lang("FLEET_TRANSPORT_OWN", $origin_user['lang']), 
             ShowGalaxy ($target),
@@ -922,7 +922,7 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
 
     // Return the fleet.
     if ( mt_rand (0, 100) < $counter ) StartBattle ( $fleet_obj['fleet_id'], $fleet_obj['target_planet'], $queue['end'] );
-    else DispatchFleet ($fleet, $origin, $target, FTYP_SPY+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj, $fleet_obj['fuel'] / 2, $queue['end']);
+    else DispatchFleet ($fleet, $origin, $target, FTYP_SPY+FTYP_RETURN, $fleet_obj['flight_time'], $fleet_obj, (int)($fleet_obj['fuel'] / 2), $queue['end']);
 }
 
 function SpyReturn (array $queue, array $fleet_obj, array $fleet) : void
@@ -987,7 +987,7 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
             $target = LoadPlanetById ($id);
             DispatchFleet ($fleet, $origin, $target, FTYP_COLONIZE+FTYP_RETURN, $fleet_obj['flight_time'], 
                 $fleet_obj, 
-                $fleet_obj['fuel'] / 2, $queue['end']);
+                (int)($fleet_obj['fuel'] / 2), $queue['end']);
         }
         else {
             if ($target['type'] == PTYP_COLONY_PHANTOM) DestroyPlanet ( $target['planet_id'] );
@@ -1000,7 +1000,7 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
         // Return the fleet.
         DispatchFleet ($fleet, $origin, $target, FTYP_COLONIZE+FTYP_RETURN, $fleet_obj['flight_time'],
             $fleet_obj,
-            $fleet_obj['fuel'] / 2, $queue['end']);
+            (int)($fleet_obj['fuel'] / 2), $queue['end']);
     }
 
     SendMessage ( $fleet_obj['owner_id'], 
@@ -1078,7 +1078,7 @@ function RecycleArrive (array $queue, array $fleet_obj, array $fleet, array $ori
     foreach ($transportableResources as $i=>$rc) {
         $resources[$rc] = $fleet_obj[$rc] + $harvest[$rc];
     }
-    DispatchFleet ($fleet, $origin, $target, FTYP_RECYCLE+FTYP_RETURN, $fleet_obj['flight_time'], $resources, $fleet_obj['fuel'] / 2, $queue['end']);
+    DispatchFleet ($fleet, $origin, $target, FTYP_RECYCLE+FTYP_RETURN, $fleet_obj['flight_time'], $resources, (int)($fleet_obj['fuel'] / 2), $queue['end']);
 
     SendMessage ( $fleet_obj['owner_id'], loca_lang("FLEET_MESSAGE_FLEET", $origin_user['lang']), $subj, $report, MTYP_MISC, $queue['end']);
 }

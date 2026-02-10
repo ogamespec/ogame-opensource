@@ -138,9 +138,13 @@ const GALAXY_PHANTOM_DEBRIS = 300;          // If the total resource value is < 
 const TRADER_DM = 2500;             // Cost of calling a Merchant
 
 const MAX_PLANET = 9;           // Maximum number of planets a player can own (home + colonies), not greater (<= this value)
+const MAX_BUILDINGS_LEVEL = 99;  	// Maximum building level on the planet
+const MAX_RESEARCH_LEVEL = 99; 		// Maximum research level
+const MAX_SHIPYARD_ORDERS = 99;  	// Maximum number of orders at the shipyard (queue)
 
 const RF_MAX = 5000;            // Maximum rapidfire value (if > this value, then error)
 const RF_DICE = 100000;        	// Number of dice faces for a rapid-fire throw (1d`RF_DICE)
 const BATTLE_MAX_ROUND = 6; 		// The default value for the number of rounds for the battle engine
+const BATTLE_MAX_UNITS = 1000000; 	// Maximum number of units on one side (default). You can change it by setting uni['battle_max']
 
 ?>

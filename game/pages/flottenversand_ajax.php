@@ -173,7 +173,7 @@ $resources = array ();
 foreach ($transportableResources as $i=>$rc) {
     $resources[$rc] = 0;
 }
-$fleet_id = DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, $resources, $cons, time(), 0 );
+$fleet_id = DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, $resources, (int)$cons, time(), 0 );
 if ($fleet_id == 0) {
     unlink ( $fleetlock );
     AjaxSendError (611);    // no ships to send

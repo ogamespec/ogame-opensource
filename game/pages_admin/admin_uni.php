@@ -43,6 +43,7 @@ class Admin_Uni extends Page {
                 $_POST['lang'],
                 $_POST['battle_engine'],
                 $php_battle,
+                intval($_POST['battle_max']),
                 $force_lang,
                 intval($_POST['start_dm']),
                 intval($_POST['max_werf']),
@@ -208,6 +209,7 @@ class Admin_Uni extends Page {
 <tr><th><?php echo loca("MENU_IMPRESSUM");?></th><th><input type="text" name="ext_impressum" maxlength="99" size="20" value="<?php echo $unitab['ext_impressum'];?>" /></th></tr>
 <tr><th><?php echo loca("INSTALL_UNI_BATTLE");?></th><th><input type="text" name="battle_engine" maxlength="99" size="20" value="<?php echo $unitab['battle_engine'];?>" /></th></tr>
 <tr><th><?php echo loca("INSTALL_UNI_PHP_BATTLE");?></th><th><input type="checkbox" name="php_battle"  <?php echo $this->UniIsChecked($unitab['php_battle']);?> /></th></tr>
+<tr><th><?php echo loca("INSTALL_UNI_BATTLE_MAX");?></th><th><input type="text" name="battle_max" maxlength="99" size="20" value="<?php echo $unitab['battle_max'];?>" /></th></tr>
 
 <tr><th><?=loca("ADM_UNI_FREEZE");?> <a title="<?=loca("ADM_UNI_FREEZE_INFO");?>"><?php echo $info;?></a>
 </th><th><input type="checkbox" name="freeze"  <?php echo $this->UniIsChecked($unitab['freeze']);?> /></th></tr>

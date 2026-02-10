@@ -72,6 +72,10 @@ In other words - there is no reason to worry that the tables are organized a bit
 |ext_rules|TEXT|External link to Rules. If the line is empty, the item is not shown in the menu.|
 |ext_impressum|TEXT|External link to Impressum ("About Us"). If the string is empty, the item is not shown in the menu.|
 |php_battle|INT|1: Use a spare PHP battle engine (battle_engine.php) instead of a C implementation.|
+|battle_max|INT UNSIGNED DEFAULT BATTLE_MAX_UNITS|Maximum number of units per side for the battle engine (no more than)|
+|force_lang|INT|1: Force the use of the in-universe language (prevent players from changing the language in the settings)|
+|start_dm|INT|Initial amount of Dark Matter|
+|max_werf|INT|Maximum number of units simultaneously ordered at the shipyard|
 |feedage|INT|the RSS(Atom) update period in minutes, 60 by default|
 |modlist|TEXT|List of active modifications separated by `;` in order of activation|
 
@@ -133,7 +137,7 @@ In other words - there is no reason to worry that the tables are organized a bit
 |oldscore1,2,3|BIGINT,INT,INT|Old points for buildings, fleets, and research | 
 |oldplace1,2,3|INT,INT,INT|old place for buildings, fleet, research. | 
 |scoredate|INT UNSIGNED|Time of saving old statistics, time()|
-|XXX|INT DEFAULT 0|Research level XXX |
+|XXX|TINYINT DEFAULT 0|Research level XXX |
 |flags|INT UNSIGNED|User flags. The full list is below (USER_FLAG). I didn't think of this idea right away, some variables can also be made into flags|
 |feedid|CHAR(32)| feed id (eg 5aa28084f43ad54d9c8f7dd92f774d03) |
 |lastfeed|INT UNSIGNED | last Feed update timestamp ()|
@@ -181,9 +185,9 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |fields|INT|Number of developed fields | 
 |maxfields|INT|Maximum number of fields | 
 |date|INT UNSIGNED|Date of Creation | 
-|BBB|INT DEFAULT 0|Building level BBB | 
-|DDD|INT DEFAULT 0|Number of defenses DDD| 
-|FFF|INT DEFAULT 0|Number of fleets of each type FFF | 
+|BBB|TINYINT DEFAULT 0|Building level BBB | 
+|DDD|INT UNSIGNED DEFAULT 0|Number of defenses DDD| 
+|FFF|INT UNSIGNED DEFAULT 0|Number of fleets of each type FFF | 
 |700|DOUBLE|Metal | 
 |701|DOUBLE|crystal | 
 |702|DOUBLE|deuterium | 
@@ -382,7 +386,7 @@ Message types (pm):
 |deploy_time|INT|Fleet holding time in seconds |
 |ipm_amount|INT DEFAULT 0|Number of interplanetary missiles | 
 |ipm_target|INT DEFAULT 0|target id for interplanetary missiles, 0 - all | 
-|XXX|INT DEFAULT 0|number of ships of each type | 
+|XXX|INT UNSIGNED DEFAULT 0|number of ships of each type | 
 
 ## ACS (union)
 
@@ -436,7 +440,7 @@ Message types (pm):
 |target_type|INT| | 
 |ipm_amount|INT DEFAULT 0| | 
 |ipm_target|INT DEFAULT 0| | 
-|XXX|INT DEFAULT 0| | 
+|XXX|INT UNSIGNED DEFAULT 0| | 
 
 ## IP Logs (iplogs)
 
@@ -489,7 +493,7 @@ Message types (pm):
 |owner_id|INT| | 
 |name|CHAR(30)| | 
 |date|INT UNSIGNED| |
-|XXX|INT DEFAULT 0| | 
+|XXX|INT UNSIGNED DEFAULT 0| | 
 
 ## Bot variables (botvars)
 

@@ -29,12 +29,12 @@ function DisableNews () : void
 }
 
 // Set the parameters of the universe (all at the same time)
-function SetUniParam (int $speed, int $fspeed, int $acs, int $fid, int $did, int $defrepair, int $defrepair_delta, int $galaxies, int $systems, int $rapid, int $moons, int $freeze, string $lang, string $battle_engine, int $php_battle, int $force_lang, int $start_dm, int $max_werf, int $feedage) : void
+function SetUniParam (int $speed, int $fspeed, int $acs, int $fid, int $did, int $defrepair, int $defrepair_delta, int $galaxies, int $systems, int $rapid, int $moons, int $freeze, string $lang, string $battle_engine, int $php_battle, int $battle_max, int $force_lang, int $start_dm, int $max_werf, int $feedage) : void
 {
     global $db_prefix;
     global $GlobalUni;
     
-    $query = "UPDATE ".$db_prefix."uni SET lang='".$lang."', battle_engine='".$battle_engine."', freeze=$freeze, speed=$speed, fspeed=$fspeed, acs=$acs, fid=$fid, did=$did, defrepair=$defrepair, defrepair_delta=$defrepair_delta, galaxies=$galaxies, systems=$systems, rapid=$rapid, moons=$moons, php_battle=$php_battle, force_lang=$force_lang, start_dm=$start_dm, max_werf=$max_werf, feedage=$feedage";
+    $query = "UPDATE ".$db_prefix."uni SET lang='".$lang."', battle_engine='".$battle_engine."', freeze=$freeze, speed=$speed, fspeed=$fspeed, acs=$acs, fid=$fid, did=$did, defrepair=$defrepair, defrepair_delta=$defrepair_delta, galaxies=$galaxies, systems=$systems, rapid=$rapid, moons=$moons, php_battle=$php_battle, battle_max=$battle_max, force_lang=$force_lang, start_dm=$start_dm, max_werf=$max_werf, feedage=$feedage";
     dbquery ($query);
 
     $GlobalUni = LoadUniverse ();

@@ -119,6 +119,7 @@ $LOCA["en"]["FLEET_ERR_EXP_LIMIT"] = "Too many simultaneous expeditions";
 $LOCA["en"]["FLEET_ERR_EXP_REQUIRED"] = "The expedition must consist of at least one human-controlled ship.";
 $LOCA["en"]["FLEET_ERR_EXP_INVALID"] = "The purpose of the expedition is invalid!";
 $LOCA["en"]["FLEET_ERR_ORDER"] = "You need to choose an mission!";
+$LOCA["en"]["FLEET_ERR_BATTLE_MAX"] = "Unit limit reached!";
 
 $LOCA["en"]["FLEET_SEND_ERROR"] = " The fleet could not be dispatched!";
 

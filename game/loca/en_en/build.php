@@ -53,7 +53,8 @@ $LOCA["en"]["BUILD_ERROR_NO_SUCH_BUILDING"] = "You have no buildings of this typ
 $LOCA["en"]["BUILD_ERROR_RESEARCH_ALREADY"] = "Research is already underway!";
 $LOCA["en"]["BUILD_ERROR_RESEARCH_LAB_BUILDING"] = "The research lab is being improved!";
 $LOCA["en"]["BUILD_ERROR_RESEARCH_LAB_BUILDING"] = "The research lab is being improved!";
-$LOCA["en"]["BUILD_ERROR_RESEARCH_VACATION"] = "Research is not possible in vacation mode (RO).";
+$LOCA["en"]["BUILD_ERROR_RESEARCH_VACATION"] = "Research is not possible in vacation mode (VM).";
+$LOCA["en"]["BUILD_ERROR_MAX_LEVEL"] = "Maximum level reached.";
 
 $LOCA["en"]["BUILD_ERROR_SHIPYARD_BUSY"] = "Neither ships nor defenses can be built as the shipyard or nanite factory is upgraded";
 $LOCA["en"]["BUILD_ERROR_VACATION"] = "Vacation mode minimum to #1";
