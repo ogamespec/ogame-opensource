@@ -46,7 +46,8 @@
 	},
 	"buildings": {
 		"path": "pages/buildings.php",
-		"loca": [ "menu", "techshort", "build", "premium" ]
+		"loca": [ "menu", "techshort", "build", "premium" ],
+		"mvc": true
 	},
 	"changelog": {
 		"path": "pages/changelog.php",

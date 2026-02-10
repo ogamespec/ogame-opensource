@@ -140,6 +140,7 @@ const TRADER_DM = 2500;             // Cost of calling a Merchant
 const MAX_PLANET = 9;           // Maximum number of planets a player can own (home + colonies), not greater (<= this value)
 const MAX_BUILDINGS_LEVEL = 99;  	// Maximum building level on the planet
 const MAX_RESEARCH_LEVEL = 99; 		// Maximum research level
+const MAX_SHIPYARD_ORDERS = 99;  	// Maximum number of orders at the shipyard (queue)
 
 const RF_MAX = 5000;            // Maximum rapidfire value (if > this value, then error)
 const RF_DICE = 100000;        	// Number of dice faces for a rapid-fire throw (1d`RF_DICE)

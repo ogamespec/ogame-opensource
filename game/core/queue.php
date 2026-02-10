@@ -747,17 +747,19 @@ function CanResearch (array $user, array $planet, int $id, int $lvl) : string
 }
 
 // Start research on the planet (includes all checks).
-function StartResearch (int $player_id, int $planet_id, int $id, int $now) : void
+function StartResearch (int $player_id, int $planet_id, int $id, int $now) : string
 {
     global $db_prefix, $GlobalUni;
     $uni = $GlobalUni;
 
     $planet = LoadPlanetById ( $planet_id );
+    if ($planet == null) return "";
 
     UserLog ( $player_id, "RESEARCH", va(loca_lang("DEBUG_LOG_RESEARCH", $GlobalUni['lang']), loca("NAME_$id"), $planet_id)  );
 
     // Get a level of research.
     $user = LoadUser ( $player_id );
+    if ($user == null) return "";
     $level = $user[$id] + 1;
 
     $prem = PremiumStatus ($user);
@@ -779,6 +781,8 @@ function StartResearch (int $player_id, int $planet_id, int $id, int $now) : voi
 
         AddQueue ($player_id, QTYP_RESEARCH, $planet_id, $id, $level, $now, $seconds);
     }
+
+    return $text;
 }
 
 // Cancel the research.

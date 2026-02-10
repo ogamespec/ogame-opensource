@@ -1,111 +1,90 @@
 <?php
 
-/** @var array $GlobalUser */
-/** @var array $GlobalUni */
-/** @var array $fleetmap */
-/** @var array $defmap */
-/** @var array $resmap */
-/** @var array $aktplanet */
-/** @var string $session */
-
 // Shipyard, Defense, and Research.
 
-// Get a list of bonuses for the specified technology. By default, +2 is shown for Espionage with a Technocrat. Modifications can add their own bonuses.
-function GetBuildingsBonus (int $gid) : array
-{
-    global $GlobalUser;
-    $bonuses = array();
+class Buildings extends Page {
 
-    $prem = PremiumStatus ($GlobalUser);
+    public function controller () : bool {
+        global $GlobalUni;
+        global $GlobalUser;
+        global $aktplanet;
+        global $PageError;
+        global $now;
 
-    if ( $gid == GID_R_ESPIONAGE && $prem['technocrat'] ) { 
+        // POST request processing.
+        if ( method () === "POST" && !$GlobalUser['vacation'] )
+        {
+            foreach ( $_POST['fmenge'] as $gid=>$value )
+            {
+                $result = GetShipyardQueue ( $aktplanet['planet_id'] );    // Limit the number of shipyard orders.
+                if ( dbrows ($result) >= MAX_SHIPYARD_ORDERS ) $value = 0;
 
-        $bonus = [];
-        $bonus['value'] = "+2";
-        $bonus['color'] = "lime";
-        $bonus['img'] = "img/technokrat_ikon.gif";
-        $bonus['alt'] = loca("PREM_TECHNOCRATE");
-        $bonus['descr'] = loca("PREM_TECHNOCRATE");
-        $bonus['overlib_width'] = 100;
+                if ( $value < 0 ) $value = 0;
+                if ( $value > 0 ) {
+                    // Calculate amount (no more than the resources on the planet and no more than `max_werf`)
+                    if ( $value > $GlobalUni['max_werf'] ) $value = $GlobalUni['max_werf'];
 
-        $bonuses[] = $bonus;
-    }
+                    $res = TechPrice ( $gid, 1 );
+                    $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM];
 
-    ModsExecIntRef ('page_buildings_get_bonus', $gid, $bonuses);
-    return $bonuses;
-}
+                    if ( !IsEnoughResources($GlobalUser, $aktplanet, $res) ) continue;    // insufficient resources for one unit
 
-function ShowBuildingsBonus (int $gid) : void
-{
-    $bonuses = GetBuildingsBonus ($gid);
-    foreach ($bonuses as $i=>$bonus) {
+                    // Shield Domes.
+                    if ( $gid == GID_D_SDOME || $gid == GID_D_LDOME ) $value = 1;
 
-        echo " <b><font style=\"color:".$bonus['color'].";\">".$bonus['value']."</font></b> ";
-        echo "<img border=\"0\" src=\"".$bonus['img']."\" alt=\"".$bonus['alt']."\" onmouseover=\"return overlib('<font color=white>";
-        echo $bonus['descr'];
-        echo "</font>', WIDTH, ".$bonus['overlib_width'].");\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
-    }
-}
+                    // Limit the number of missiles to the capacity of the silo.
+                    $free_space = $aktplanet[GID_B_MISS_SILO] * 10 - ($aktplanet[GID_D_ABM] + 2 * $aktplanet[GID_D_IPM]);
+                    if ( $gid == GID_D_ABM ) $value = min ( $free_space, $value );
+                    if ( $gid == GID_D_IPM ) $value = min ( floor ($free_space / 2), $value );
+                    
+                    if ($m) $cm = floor ($aktplanet[GID_RC_METAL] / $m);
+                    else $cm = 1000;
+                    if ($k) $ck = floor ($aktplanet[GID_RC_CRYSTAL] / $k);
+                    else $ck = 1000;
+                    if ($d) $cd = floor ($aktplanet[GID_RC_DEUTERIUM] / $d);
+                    else $cd = 1000;
+                    $v = min ( $cm, min ($ck, $cd) );
+                    if ( $value > $v ) $value = $v;
 
-// POST request processing.
-if ( method () === "POST" && !$GlobalUser['vacation'] )
-{
-    foreach ( $_POST['fmenge'] as $gid=>$value )
-    {
-        $result = GetShipyardQueue ( $aktplanet['planet_id'] );    // Limit the number of shipyard orders.
-        if ( dbrows ($result)  >= 99 ) $value = 0;
-
-        if ( $value < 0 ) $value = 0;
-        if ( $value > 0 ) {
-            // Calculate amount (no more than the resources on the planet and no more than `max_werf`)
-            if ( $value > $GlobalUni['max_werf'] ) $value = $GlobalUni['max_werf'];
-
-            $res = TechPrice ( $gid, 1 );
-            $m = $res[GID_RC_METAL]; $k = $res[GID_RC_CRYSTAL]; $d = $res[GID_RC_DEUTERIUM];
-
-            if ( !IsEnoughResources($GlobalUser, $aktplanet, $res) ) continue;    // insufficient resources for one unit
-
-            // Shield Domes.
-            if ( $gid == GID_D_SDOME || $gid == GID_D_LDOME ) $value = 1;
-
-            // Limit the number of missiles to the capacity of the silo.
-            $free_space = $aktplanet[GID_B_MISS_SILO] * 10 - ($aktplanet[GID_D_ABM] + 2 * $aktplanet[GID_D_IPM]);
-            if ( $gid == GID_D_ABM ) $value = min ( $free_space, $value );
-            if ( $gid == GID_D_IPM ) $value = min ( floor ($free_space / 2), $value );
-            
-            if ($m) $cm = floor ($aktplanet[GID_RC_METAL] / $m);
-            else $cm = 1000;
-            if ($k) $ck = floor ($aktplanet[GID_RC_CRYSTAL] / $k);
-            else $ck = 1000;
-            if ($d) $cd = floor ($aktplanet[GID_RC_DEUTERIUM] / $d);
-            else $cd = 1000;
-            $v = min ( $cm, min ($ck, $cd) );
-            if ( $value > $v ) $value = $v;
-
-            AddShipyard ( $GlobalUser['player_id'], $aktplanet['planet_id'], intval ($gid), intval ($value) );
-            $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );    // update the planet's state.
+                    AddShipyard ( $GlobalUser['player_id'], $aktplanet['planet_id'], intval ($gid), intval ($value) );
+                    $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );    // update the planet's state.
+                }
+            }
         }
-    }
-}
 
-// GET request processing.
-if ( method () === "GET"  && !$GlobalUser['vacation'] )
-{
-	if ( $_GET['mode'] === "Forschung" ) {
-		$result = GetResearchQueue ( $GlobalUser['player_id'] );
-		$resqueue = dbarray ($result);
-		if ( $resqueue == null )		// The research is not in progress (run)
-		{
-			if ( key_exists ( 'bau', $_GET ) ) StartResearch ( $GlobalUser['player_id'], $aktplanet['planet_id'], intval ($_GET['bau']), $now );
-                  $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );    // update the planet's state.
-		}
-		else	// Research in progress (cancel)
-		{
-			if ( key_exists ( 'unbau', $_GET ) ) StopResearch ( $GlobalUser['player_id'] );
-                  $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );    // update the planet's state.
-		}
-	}
-}
+        // GET request processing.
+        if ( method () === "GET"  && !$GlobalUser['vacation'] )
+        {
+            if ( $_GET['mode'] === "Forschung" ) {
+                $result = GetResearchQueue ( $GlobalUser['player_id'] );
+                $resqueue = dbarray ($result);
+                if ( $resqueue == null )        // The research is not in progress (run)
+                {
+                    if ( key_exists ( 'bau', $_GET ) ) $PageError = StartResearch ( $GlobalUser['player_id'], $aktplanet['planet_id'], intval ($_GET['bau']), $now );
+                    $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );    // update the planet's state.
+                }
+                else    // Research in progress (cancel)
+                {
+                    if ( key_exists ( 'unbau', $_GET ) ) StopResearch ( $GlobalUser['player_id'] );
+                    $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );    // update the planet's state.
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public function view () : void {
+        global $db_prefix;
+        global $GlobalUni;
+        global $GlobalUser;
+        global $session;
+        global $aktplanet;
+        global $now;
+        global $resourcemap;
+        global $fleetmap;
+        global $defmap;
+        global $resmap;
 
 echo "<title> \n";
 echo loca("BUILD_BUILDINGS_HEAD") . "\n";
@@ -155,19 +134,19 @@ if ( $_GET['mode'] === "Flotte" )
                 if ($aktplanet[$id] <= 0) continue;
             }
 
-            echo "<tr>    			";
+            echo "<tr>              ";
             if ( $GlobalUser['useskin'] ) {
                 echo "                <td class=l>\n";
-                echo "    			<a href=index.php?page=infos&session=$session&gid=$id>\n";
-                echo "    			".GetObjectImage(UserSkin(), $id)."\n";
-                echo "    			</a>\n";
-                echo "    			</td>\n";
+                echo "              <a href=index.php?page=infos&session=$session&gid=$id>\n";
+                echo "              ".GetObjectImage(UserSkin(), $id)."\n";
+                echo "              </a>\n";
+                echo "              </td>\n";
                 echo "        <td class=l >";
             }
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]);
-            ShowBuildingsBonus ($id);
+            $this->ShowBuildingsBonus ($id);
             if ($aktplanet[$id]) echo ")";
             $cost = TechPrice ( $id, 1 );
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
@@ -243,19 +222,19 @@ if ( $_GET['mode'] === "Verteidigung" )
                 if($aktplanet[$id] == 0) continue;
             }
 
-            echo "<tr>    			";
+            echo "<tr>              ";
             if ( $GlobalUser['useskin'] ) {
                 echo "                <td class=l>\n";
-                echo "    			<a href=index.php?page=infos&session=$session&gid=$id>\n";
-                echo "    			".GetObjectImage(UserSkin(), $id)."\n";
-                echo "    			</a>\n";
-                echo "    			</td>\n";
+                echo "              <a href=index.php?page=infos&session=$session&gid=$id>\n";
+                echo "              ".GetObjectImage(UserSkin(), $id)."\n";
+                echo "              </a>\n";
+                echo "              </td>\n";
                 echo "        <td class=l >";
             }
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($aktplanet[$id]) echo "</a> (".va(loca("BUILD_SHIPYARD_UNITS"), $aktplanet[$id]);
-            ShowBuildingsBonus ($id);
+            $this->ShowBuildingsBonus ($id);
             if ($aktplanet[$id]) echo ")";
             $cost = TechPrice ( $id, 1 );
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
@@ -340,16 +319,16 @@ if ( $_GET['mode'] === "Forschung" )
             echo "<tr>             ";
             if ( $GlobalUser['useskin'] ) {
                 echo "                <td class=l>\n";
-                echo "    			<a href=index.php?page=infos&session=$session&gid=$id>\n";
-                echo "    			".GetObjectImage(UserSkin(), $id)."\n";
-                echo "    			</a>\n";
-                echo "    			</td>\n";
+                echo "              <a href=index.php?page=infos&session=$session&gid=$id>\n";
+                echo "              ".GetObjectImage(UserSkin(), $id)."\n";
+                echo "              </a>\n";
+                echo "              </td>\n";
                 echo "        <td class=l >";
             }
             else echo "        <td class=l colspan=2>";
             echo "<a href=index.php?page=infos&session=$session&gid=$id>".loca("NAME_$id")."</a>";
             if ($GlobalUser[$id]) echo "</a> (" . va(loca("BUILD_LEVEL"), $GlobalUser[$id]);
-            ShowBuildingsBonus ($id);
+            $this->ShowBuildingsBonus ($id);
             if ($GlobalUser[$id]) echo ")";
             $cost = TechPrice ( $id, $level );
             echo "<br>".loca("SHORT_$id")."<br>".loca("BUILD_PRICE").":";
@@ -409,13 +388,19 @@ if ( $_GET['mode'] === "Forschung" )
             }
             else        // The research is not in progress.
             {
-                if ($GlobalUser[$id]) {
-                    if (IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".va(loca("BUILD_RESEARCH_LEVEL"), $level)."</font></a>";
-                    else echo "<font color=#FF0000>".va(loca("BUILD_RESEARCH_LEVEL"), $level)."</font>";
+                if ($GlobalUser[$id] >= MAX_RESEARCH_LEVEL) {
+                    echo "<font color=#FF0000>".loca("BUILD_ERROR_MAX_LEVEL")."</font>";
                 }
                 else {
-                    if (IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".loca("BUILD_RESEARCH")."</font></a>";
-                    else echo "<font color=#FF0000>".loca("BUILD_RESEARCH")."</font></a>";
+
+                    if ($GlobalUser[$id]) {
+                        if (IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".va(loca("BUILD_RESEARCH_LEVEL"), $level)."</font></a>";
+                        else echo "<font color=#FF0000>".va(loca("BUILD_RESEARCH_LEVEL"), $level)."</font>";
+                    }
+                    else {
+                        if (IsEnoughResources ( $GlobalUser, $aktplanet, $cost ) ) echo " <a href=index.php?page=buildings&session=$session&mode=Forschung&bau=$id><font color=#00FF00>".loca("BUILD_RESEARCH")."</font></a>";
+                        else echo "<font color=#FF0000>".loca("BUILD_RESEARCH")."</font></a>";
+                    }
                 }
             }
             echo "</td></tr>";
@@ -458,7 +443,7 @@ if ( $_GET['mode'] === "Verteidigung" || $_GET['mode'] === "Flotte" )
         $total_time -= $g;
 ?>
 
-      <br>Сейчас производится: <div id="bx" class="z"></div>
+      <br><?=loca("BUILD_SHIPYARD_PROCESSING");?>: <div id="bx" class="z"></div>
 
 <!-- JAVASCRIPT -->
 <script  type="text/javascript">
@@ -578,4 +563,45 @@ document.addEventListener("visibilitychange", function() {
 }
 
 echo "<br><br><br><br>\n";
+
+    } // view
+
+    // Get a list of bonuses for the specified technology. By default, +2 is shown for Espionage with a Technocrat. Modifications can add their own bonuses.
+    private function GetBuildingsBonus (int $gid) : array
+    {
+        global $GlobalUser;
+        $bonuses = array();
+
+        $prem = PremiumStatus ($GlobalUser);
+
+        if ( $gid == GID_R_ESPIONAGE && $prem['technocrat'] ) { 
+
+            $bonus = [];
+            $bonus['value'] = "+2";
+            $bonus['color'] = "lime";
+            $bonus['img'] = "img/technokrat_ikon.gif";
+            $bonus['alt'] = loca("PREM_TECHNOCRATE");
+            $bonus['descr'] = loca("PREM_TECHNOCRATE");
+            $bonus['overlib_width'] = 100;
+
+            $bonuses[] = $bonus;
+        }
+
+        ModsExecIntRef ('page_buildings_get_bonus', $gid, $bonuses);
+        return $bonuses;
+    }
+
+    private function ShowBuildingsBonus (int $gid) : void
+    {
+        $bonuses = $this->GetBuildingsBonus ($gid);
+        foreach ($bonuses as $i=>$bonus) {
+
+            echo " <b><font style=\"color:".$bonus['color'].";\">".$bonus['value']."</font></b> ";
+            echo "<img border=\"0\" src=\"".$bonus['img']."\" alt=\"".$bonus['alt']."\" onmouseover=\"return overlib('<font color=white>";
+            echo $bonus['descr'];
+            echo "</font>', WIDTH, ".$bonus['overlib_width'].");\" onmouseout='return nd();' width=\"20\" height=\"20\" style=\"vertical-align:middle;\"> ";
+        }
+    }
+}
+
 ?>
