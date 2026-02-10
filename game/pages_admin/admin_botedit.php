@@ -146,6 +146,7 @@ class Admin_Botedit extends Page {
     </span>
   </div>
 
+<input type="hidden" id="strategyId_ForImport" name="strategyId_ForImport" value="0" >
 <input type="text" size="50" id="strategyName" style="display:none;">
 <select id="strategyId" style="display:none;">
 <option value="<?=$row['id'];?>" selected><?=$row['id'];?></option>
@@ -169,7 +170,7 @@ class Admin_Botedit extends Page {
 <?php
                 return false;
             } // preview
-            else if ( $_GET['action'] === "export" ) {    // Export Strat
+            else if ( method () === "GET" && $_GET['action'] === "export" && $GlobalUser['admin'] >= 2) {    // Export Strat
 
                 $id = intval ( $_GET['strat'] );
                 $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";

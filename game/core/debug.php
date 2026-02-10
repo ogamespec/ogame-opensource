@@ -7,7 +7,8 @@ function Error (string $text) : never
 {
     global $GlobalUser;
     global $GlobalUni;
-    if ( !$GlobalUser ) {
+    global $from_cron;
+    if ( $GlobalUser == null ) {
         $GlobalUser = array ();
         $GlobalUser['player_id'] = 0;
     }
@@ -18,8 +19,14 @@ function Error (string $text) : never
 
     $now = time ();
 
-    $error = array ( 'owner_id' => $GlobalUser['player_id'], 'ip' => $_SERVER['REMOTE_ADDR'], 'agent' => $_SERVER['HTTP_USER_AGENT'], 'url' => $_SERVER['REQUEST_URI'], 'text' => $text, 'date' => $now );
+    $ip = $from_cron ? '0.0.0.0' : $_SERVER['REMOTE_ADDR'];
+    $agent = $from_cron ? 'cron' : $_SERVER['HTTP_USER_AGENT'];
+    $url = $from_cron ? 'cron.php' : $_SERVER['REQUEST_URI'];
+
+    $error = array ( 'owner_id' => $GlobalUser['player_id'], 'ip' => $ip, 'agent' => $agent, 'url' => $url, 'text' => $text, 'date' => $now );
     $id = AddDBRow ( $error, 'errors' );
+
+    if ($from_cron) exit();
 
     Logout ( $_GET['session'] );    // End the session.
 
@@ -44,7 +51,8 @@ function Error (string $text) : never
 function Debug (string $message) : void
 {
     global $GlobalUser;
-    if ( !$GlobalUser ) return;
+    global $from_cron;
+    if ( $GlobalUser == null ) return;
 
     $message = str_replace ( "\"", "&quot;", $message );
     $message = str_replace ( "'", "&rsquo;", $message );
@@ -52,7 +60,11 @@ function Debug (string $message) : void
 
     $now = time ();
 
-    $error = array ( 'owner_id' => $GlobalUser['player_id'], 'ip' => $_SERVER['REMOTE_ADDR'], 'agent' => $_SERVER['HTTP_USER_AGENT'], 'url' => $_SERVER['REQUEST_URI'], 'text' => $message, 'date' => $now );
+    $ip = $from_cron ? '0.0.0.0' : $_SERVER['REMOTE_ADDR'];
+    $agent = $from_cron ? 'cron' : $_SERVER['HTTP_USER_AGENT'];
+    $url = $from_cron ? 'cron.php' : $_SERVER['REQUEST_URI'];
+
+    $error = array ( 'owner_id' => $GlobalUser['player_id'], 'ip' => $ip, 'agent' => $agent, 'url' => $url, 'text' => $message, 'date' => $now );
     $id = AddDBRow ( $error, 'debug' );
 }
 

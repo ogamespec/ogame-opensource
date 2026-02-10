@@ -42,6 +42,12 @@ class Admin_Queue extends Page {
             if ( key_exists ( "order_unfreeze", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // UnFreeze task
                 FreezeQueue ( intval ($_POST['order_unfreeze']), false );
             }
+
+            if ( key_exists ( "order_cron", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Check CRON
+                $saved_player_id = $GlobalUser['player_id'];
+                include "cron.php";
+                $GlobalUser = LoadUser ($saved_player_id);  // reload original admin
+            }
         }
 
         if ( $this->player_id > 0 ) $query = "SELECT * FROM ".$db_prefix."queue WHERE (type <> '".QTYP_FLEET."') AND owner_id=$this->player_id ORDER BY end ASC, prio DESC";
@@ -143,6 +149,11 @@ class Admin_Queue extends Page {
     <form action="index.php?page=admin&session=<?=$session;?>&mode=Queue" method="POST">
     <?=loca("ADM_QUEUE_LOOKUP");?> <input size=15 name="player" value="<?=$playername;?>">
     <input type="submit" value="<?=loca("ADM_QUEUE_SUBMIT");?>">
+    </form>
+
+    <form action="index.php?page=admin&session=<?=$session;?>&mode=Queue" method="POST">
+        <input type="hidden" name="order_cron" value="1" />
+        <input type="submit" value="<?=loca("ADM_QUEUE_CRON");?>" />
     </form>
 
 <?php
