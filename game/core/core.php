@@ -1,6 +1,7 @@
 <?php
 
 $GlobalUser = array ();
+$from_cron = false;
 
 require_once "defs.php";
 require_once "db.php";
