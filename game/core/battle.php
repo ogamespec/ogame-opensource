@@ -79,7 +79,7 @@ function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_de
 }
 
 // Capture resources.
-function Plunder ( int $cargo, int $m, int $k, int $d ) : array
+function Plunder ( int $cargo, float $m, float $k, float $d ) : array
 {
     global $transportableResources;
     $m /=2; $k /=2; $d /= 2;
@@ -380,7 +380,7 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
                     }
                     DispatchFleet ($attacker['units'], $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'],
                     $resources,
-                    $fleet_obj['fuel'] / 2, $queue['end']);
+                    (int)($fleet_obj['fuel'] / 2), $queue['end']);
                 }
             }
         }
@@ -444,7 +444,7 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
                     }
                     DispatchFleet ($attacker['units'], $origin, $target, $fleet_obj['mission']+FTYP_RETURN, $fleet_obj['flight_time'],
                     $resources,
-                    $fleet_obj['fuel'] / 2, $queue['end']);
+                    (int)($fleet_obj['fuel'] / 2), $queue['end']);
                 }
             }
         }

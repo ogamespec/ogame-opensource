@@ -120,6 +120,7 @@ $LOCA["ru"]["FLEET_ERR_EXP_LIMIT"] = "Слишком много одноврем
 $LOCA["ru"]["FLEET_ERR_EXP_REQUIRED"] = "Экспедиция должна состоять как минимум из одного управляемого людьми корабля.";
 $LOCA["ru"]["FLEET_ERR_EXP_INVALID"] = "Цель экспедиции недействительна!";
 $LOCA["ru"]["FLEET_ERR_ORDER"] = "Необходимо выбрать задание!";
+$LOCA["ru"]["FLEET_ERR_BATTLE_MAX"] = "Достигнут предел количества юнитов!";
 
 $LOCA["ru"]["FLEET_SEND_ERROR"] = " Флот не удалось отправить!";
 

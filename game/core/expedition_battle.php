@@ -25,7 +25,7 @@ function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : v
             // The hold time is used as the flight time.
             if ($ships > 0) DispatchFleet ($attacker['units'], $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'],
                 $fleet_obj,
-                $fleet_obj['fuel'] / 2, $queue['end']);
+                (int)($fleet_obj['fuel'] / 2), $queue['end']);
         }
 
     }
@@ -47,7 +47,7 @@ function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : v
             // The hold time is used as the flight time.
             if ($ships > 0)  DispatchFleet ($attacker['units'], $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'],
                 $fleet_obj,
-                $fleet_obj['fuel'] / 2, $queue['end']);
+                (int)($fleet_obj['fuel'] / 2), $queue['end']);
         }
 
     }

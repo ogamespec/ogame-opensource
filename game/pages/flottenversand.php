@@ -182,6 +182,7 @@ switch ( $order )
         else if ( $target['owner_id'] == $origin['owner_id'] ) FleetError ( loca("FLEET_ERR_OWN_PLANET") );
         else if ($BlockAttack) FleetError ( loca("FLEET_ERR_ATTACK_BAN_UNI") );
         else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
+        else if ($numships > $GlobalUni['battle_max']) FleetError ( loca("FLEET_ERR_BATTLE_MAX") );
         break;
 
     case FTYP_ACS_ATTACK:        // ACS Attack
@@ -204,6 +205,7 @@ switch ( $order )
         else if ($BlockAttack) FleetError ( loca("FLEET_ERR_ATTACK_BAN_UNI") );
         else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
         else if ($acs_fleets >= $GlobalUni['acs'] * $GlobalUni['acs']) FleetError ( va (loca("FLEET_ERR_ACS_LIMIT"), $GlobalUni['acs'] * $GlobalUni['acs']) );
+        else if ($numships + GetUnionUnitsCount($union['union_id']) > $GlobalUni['battle_max']) FleetError ( loca("FLEET_ERR_BATTLE_MAX") );
         break;
 
     case FTYP_TRANSPORT:        // Transport
@@ -220,6 +222,7 @@ switch ( $order )
         if ( IsPlayerNewbie ($target['owner_id']) || IsPlayerStrong ($target['owner_id']) ) FleetError ( loca("FLEET_ERR_NOOB") );
         if ( $target == NULL ) FleetError ( loca("FLEET_ERR_INVALID") );
         if ( GetHoldingFleetsCount ($target['planet_id']) >= $maxhold_fleets ) FleetError ( va(loca("FLEET_ERR_HOLD_FLEET_LIMIT"), $maxhold_fleets));
+        if ( $numships + GetHoldingUnitsCount($target['planet_id']) > $GlobalUni['battle_max'] ) FleetError ( loca("FLEET_ERR_BATTLE_MAX") );
         if ( ! CanStandHold ( $target['planet_id'], $origin['owner_id'], $maxhold_users ) ) FleetError ( va(loca("FLEET_ERR_HOLD_PLAYER_LIMIT"), $maxhold_users));
         if ( ! ( ( $origin_user['ally_id'] == $target_user['ally_id'] && $origin_user['ally_id'] > 0 )   || IsBuddy ( $origin_user['player_id'],  $target_user['player_id']) ) ) FleetError (loca("FLEET_ERR_HOLD_ALLY"));
         break;
@@ -235,6 +238,7 @@ switch ( $order )
         else if ( $fleet[GID_F_PROBE] == 0 ) FleetError ( loca("FLEET_ERR_SPY_REQUIRED") );
         else if ($BlockAttack) FleetError ( loca("FLEET_ERR_ATTACK_BAN_UNI") );
         else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
+        else if ($numships > $GlobalUni['battle_max']) FleetError ( loca("FLEET_ERR_BATTLE_MAX") );
         break;
 
     case FTYP_COLONIZE:        // Colonize
@@ -262,6 +266,7 @@ switch ( $order )
         else if ($target['type'] != PTYP_MOON ) FleetError ( loca("FLEET_ERR_DESTROY_MOON") );
         else if ($BlockAttack) FleetError ( loca("FLEET_ERR_ATTACK_BAN_UNI") );
         else if ($GlobalUser['noattack']) FleetError ( va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util'])) );
+        else if ($numships > $GlobalUni['battle_max']) FleetError ( loca("FLEET_ERR_BATTLE_MAX") );
         break;
 
     case FTYP_EXPEDITION:       // Expedition
@@ -275,6 +280,7 @@ switch ( $order )
         if ( $expnum >= $maxexp ) FleetError ( loca("FLEET_ERR_EXP_LIMIT") );
         else if ( $manned == 0 ) FleetError ( loca("FLEET_ERR_EXP_REQUIRED") );
         else if ( intval($_POST['planet']) != 16 ) FleetError ( loca("FLEET_ERR_EXP_INVALID") );
+        else if ($numships > $GlobalUni['battle_max']) FleetError ( loca("FLEET_ERR_BATTLE_MAX") );
         else {
             $id = CreateOuterSpace ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']) );
             $target = LoadPlanetById ($id);
