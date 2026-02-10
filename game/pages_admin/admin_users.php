@@ -47,7 +47,7 @@ class Admin_Users extends Page {
 
                 foreach ( $resmap as $i=>$gid)
                 {
-                    $query .= "`$gid` = ".intval ($_POST["r$gid"]).", ";
+                    $query .= "`$gid` = ".min(MAX_RESEARCH_LEVEL, abs(intval ($_POST["r$gid"]))).", ";
                 }
 
                 if ( key_exists('deaktjava', $_POST) && $_POST['deaktjava'] === "on" ) {

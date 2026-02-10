@@ -50,6 +50,7 @@ $LOCA["ru"]["BUILD_ERROR_NO_SUCH_BUILDING"] = "У Вас нет построек
 $LOCA["ru"]["BUILD_ERROR_RESEARCH_ALREADY"] = "Исследование уже ведется!";
 $LOCA["ru"]["BUILD_ERROR_RESEARCH_LAB_BUILDING"] = "Исследовательская лаборатория усовершенствуется!";
 $LOCA["ru"]["BUILD_ERROR_RESEARCH_VACATION"] = "В режиме отпуска (РО) исследование невозможно.";
+$LOCA["ru"]["BUILD_ERROR_MAX_LEVEL"] = "Достигнут максимальный уровень.";
 
 $LOCA["ru"]["BUILD_ERROR_SHIPYARD_BUSY"] = "Невозможно строить ни корабли ни оборонительные сооружения, так как верфь либо фабрика нанитов усовершенствуются";
 $LOCA["ru"]["BUILD_ERROR_VACATION"] = "Режим отпуска минимум до  #1";

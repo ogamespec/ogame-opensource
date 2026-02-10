@@ -37,6 +37,7 @@ $LOCA["en"]["INSTALL_UNI_RAPID"] = "Rapidfire";
 $LOCA["en"]["INSTALL_UNI_MOONS"] = "Moons and deathstars";
 $LOCA["en"]["INSTALL_UNI_BATTLE"] = "Path to battle engine";
 $LOCA["en"]["INSTALL_UNI_PHP_BATTLE"] = "Use a PHP-based battle engine";
+$LOCA["en"]["INSTALL_UNI_BATTLE_MAX"] = "Maximum number of units on one side";
 $LOCA["en"]["INSTALL_UNI_FORCE_LANG"] = "Forced to use the language of the universe";
 $LOCA["en"]["INSTALL_MAX_WERF"] = "Maximum number of units in a shipyard order";
 $LOCA["en"]["INSTALL_FEED_AGE"] = "RSS/Atom refresh period in minutes for Commander";

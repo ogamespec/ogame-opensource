@@ -72,6 +72,10 @@
 |ext_rules|TEXT|Внешняя ссылка на Правила. Если строка пустая, то пункт в меню не показывается.|
 |ext_impressum|TEXT|Внешняя ссылка на Импрессум ("О нас"). Если строка пустая, то пункт в меню не показывается.|
 |php_battle|INT|1: Использовать запасной боевой движок на PHP (battle_engine.php) вместо реализации на C.|
+|battle_max|INT UNSIGNED DEFAULT BATTLE_MAX_UNITS|Максимальное количество юнитов с одной стороны для боевого движка (не более)|
+|force_lang|INT|1: Принудительно использовать язык вселенной (не давать менять игрокам язык в настройках)|
+|start_dm|INT|Начальное количество Тёмной материи|
+|max_werf|INT|Максимальное количество одновременно заказанных юнитов на верфи|
 |feedage|INT|период обновления RSS(Atom) в минутах, по умолчанию 60|
 |modlist|TEXT|Список активных модификаций через `;` в порядке активации|
 
@@ -133,7 +137,7 @@
 |oldscore1,2,3|BIGINT,INT,INT|Старые очки за постройки, флот, исследования | 
 |oldplace1,2,3|INT,INT,INT|старое место за постройки, флот, исследования | 
 |scoredate|INT UNSIGNED|Время сохранения старой статистики time()|
-|XXX|INT DEFAULT 0|Уровень исследования XXX |
+|XXX|TINYINT DEFAULT 0|Уровень исследования XXX |
 |flags|INT UNSIGNED|Флаги пользователя. Полный список ниже (USER_FLAG). Не сразу додумался до этой идеи, некоторые переменные также можно сделать флагами|
 |feedid|CHAR(32)| feed id (eg 5aa28084f43ad54d9c8f7dd92f774d03) |
 |lastfeed|INT UNSIGNED | Время последнего обновления Feed timestamp ()|
@@ -181,9 +185,9 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |fields|INT|Количество застроенных полей | 
 |maxfields|INT|Максимальное количество полей | 
 |date|INT UNSIGNED|Дата создания | 
-|BBB|INT DEFAULT 0|Уровень постройки BBB | 
-|DDD|INT DEFAULT 0|Количество оборонительных сооружений DDD| 
-|FFF|INT DEFAULT 0|Количество флота каждого типа FFF | 
+|BBB|TINYINT DEFAULT 0|Уровень постройки BBB | 
+|DDD|INT UNSIGNED DEFAULT 0|Количество оборонительных сооружений DDD| 
+|FFF|INT UNSIGNED DEFAULT 0|Количество флота каждого типа FFF | 
 |700|DOUBLE|Металла | 
 |701|DOUBLE|кристалла | 
 |702|DOUBLE|дейтерия | 
@@ -383,7 +387,7 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |deploy_time|INT|Время удержания флота в секундах |
 |ipm_amount|INT DEFAULT 0|Количество межлпланетных ракет | 
 |ipm_target|INT DEFAULT 0|id цели для межпланетных ракет, 0 - все | 
-|XXX|INT DEFAULT 0|количество кораблей каждого типа | 
+|XXX|INT UNSIGNED DEFAULT 0|количество кораблей каждого типа | 
 
 ## САБы (union)
 
@@ -437,7 +441,7 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |target_type|INT| | 
 |ipm_amount|INT DEFAULT 0| | 
 |ipm_target|INT DEFAULT 0| | 
-|XXX|INT DEFAULT 0| | 
+|XXX|INT UNSIGNED DEFAULT 0| | 
 
 ## Логи IP (iplogs)
 
@@ -490,7 +494,7 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |owner_id|INT| | 
 |name|CHAR(30)| | 
 |date|INT UNSIGNED| |
-|XXX|INT DEFAULT 0| | 
+|XXX|INT UNSIGNED DEFAULT 0| | 
 
 ## Переменные бота (botvars)
 

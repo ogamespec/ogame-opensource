@@ -270,6 +270,8 @@ function CanBuild (array $user, array $planet, int $id, int $lvl, bool $destroy,
         else if ( $planet[$id] <= 0 ) return loca_lang("BUILD_ERROR_NO_SUCH_BUILDING", $user['lang']);
     }
 
+    if ($planet[$id] >= MAX_BUILDINGS_LEVEL) return loca_lang("BUILD_ERROR_MAX_LEVEL", $user['lang']);
+
     $info = array ();
     $info['id'] = $id;
     $info['level'] = $lvl;
@@ -729,6 +731,8 @@ function CanResearch (array $user, array $planet, int $id, int $lvl) : string
     else if ( !IsEnoughResources ( $user, $planet, $cost ) ) return loca_lang("BUILD_ERROR_NO_RES", $user['lang']);
 
     else if ( !TechMeetRequirement ( $user, $planet, $id ) ) return loca_lang("BUILD_ERROR_REQUIREMENTS", $user['lang']);
+
+    if ($user[$id] >= MAX_RESEARCH_LEVEL) return loca_lang("BUILD_ERROR_MAX_LEVEL", $user['lang']);
 
     $info = array ();
     $info['id'] = $id;
