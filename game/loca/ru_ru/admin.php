@@ -365,6 +365,7 @@ $LOCA["ru"]["ADM_QUEUE_UNFREEZE"] = "Разморозить";
 $LOCA["ru"]["ADM_QUEUE_FROZEN"] = "Заморожено:";
 $LOCA["ru"]["ADM_QUEUE_LOOKUP"] = "Показать задания игрока:";
 $LOCA["ru"]["ADM_QUEUE_SUBMIT"] = "Отправить";
+$LOCA["ru"]["ADM_QUEUE_CRON"] = "Проверить CRON";
 
 // admin_raksim
 

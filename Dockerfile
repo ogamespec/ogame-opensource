@@ -45,6 +45,12 @@ RUN ln -s /var/www/html/persistent_configs/game_config.php /var/www/html/game/co
 
 RUN chown -R www-data:www-data /var/www/html
 
+# RUN apt-get update && apt-get install -y cron
+# COPY cronfile /etc/cron.d/cronfile
+# RUN chmod 0644 /etc/cron.d/cronfile
+# RUN crontab /etc/cron.d/cronfile
+# CMD ["cron", "-f"]
+
 # C battle engine
 COPY ./BattleEngine /var/www/BattleEngine
 RUN gcc /var/www/BattleEngine/*.c -lm -o /usr/lib/cgi-bin/battle
