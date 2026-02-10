@@ -39,7 +39,7 @@ class Admin_Planets extends Page {
                         }
                         else {
                             $val = abs(intval($_POST[$p]));
-                            if (IsBuilding($p)) {
+                            if (is_int($p) && IsBuilding($p)) {
                                 $val = min (MAX_BUILDINGS_LEVEL, $val);
                             }
                             if ( $i == 0 ) $query .= "`$p`=$val";
