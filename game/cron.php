@@ -23,7 +23,7 @@ if ( file_exists ("config.php"))
     loca_add ( "technames", $GlobalUni['lang'] );
 
     UpdateQueue ( time() );
-    Debug ("cron.php executed");
+    //Debug ("cron.php executed");
 }
 
 ?>
