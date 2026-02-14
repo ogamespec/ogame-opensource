@@ -7,8 +7,7 @@ parameters:
   excludePaths:
     - BattleEngine/*
     - download/*
-    - imgstore/*
-    - Wiki/*
+    - wiki/*
     - game/css/*
     - game/js/*
     - game/img/*
