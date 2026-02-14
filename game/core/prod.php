@@ -406,8 +406,10 @@ function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
 
         $hourly = $planet['balance'][$rc];
         $cap = isset($planet['max'.$rc]) ? $planet['max'.$rc] : PHP_INT_MAX;
-        $planet[$rc] = min ($planet[$rc] + ($hourly * $diff) / 3600, $cap);
-        $update_query .= "`".$rc."` = ".$planet[$rc].", ";
+        if ($planet[$rc] < $cap) {
+            $planet[$rc] = min ($planet[$rc] + ($hourly * $diff) / 3600, $cap);
+            $update_query .= "`".$rc."` = ".$planet[$rc].", ";
+        }
     }
 
     $planet_id = $planet['planet_id'];
