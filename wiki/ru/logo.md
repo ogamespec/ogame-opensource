@@ -1,6 +1,6 @@
 # Логотип OGame
 
-![logo](/imgstore/logo.png)
+![logo](/wiki/imgstore/logo.png)
 
 6 Apr 2006:
 

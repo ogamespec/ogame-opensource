@@ -8,15 +8,15 @@
 
 Бонус выработки в меню Сырьё:
 
-![bonus_prod](/imgstore/bonus_prod.png)
+![bonus_prod](/wiki/imgstore/bonus_prod.png)
 
 Пометка про уровень исследований:
 
-![bonus_tech_level](/imgstore/bonus_tech_level.png)
+![bonus_tech_level](/wiki/imgstore/bonus_tech_level.png)
 
 Пометка про количество флотов:
 
-![bonus_fleet_count](/imgstore/bonus_fleet_count.png)
+![bonus_fleet_count](/wiki/imgstore/bonus_fleet_count.png)
 
 В общем случае - бонусы могут быть там, где вообще есть какие-то цифры в игре. В данном разделе собираем все эти места, чтобы дать возможность модификациям добавлять разного рода бонусы, не ограничиваясь теми, что добавляют офицеры. 
 

@@ -44,7 +44,7 @@ Each bot planet has its own decision chain, and also a global decision chain is 
 
 In general, there can be as many chains as you like.
 
-![whc5138c41c4d579](/imgstore/whc5138c41c4d579.jpg)
+![whc5138c41c4d579](/wiki/imgstore/whc5138c41c4d579.jpg)
 
 # How to program bots AI
 
@@ -64,7 +64,7 @@ The environment is a visual editor of specialized graphical diagrams consisting 
 
 Basic Graphical Blocks:
 
-![bots002](/imgstore/bots002.jpg)
+![bots002](/wiki/imgstore/bots002.jpg)
 
 |Block|Description|
 |---|---|
@@ -77,13 +77,13 @@ Basic Graphical Blocks:
 
 Graphical diagrams are built according to a certain principle: "top-down and left-to-right":
 
-![bots003](/imgstore/bots003.jpg)
+![bots003](/wiki/imgstore/bots003.jpg)
 
 A special construction is a chain of blocks (skewer), highlighted in the picture. The scheme as a whole is made by such chains, which perform the role of subtasks. And at the end of each chain it is indicated where to go next.
 
 At the same time, the graphic editor draws connections between blocks by itself, approximately like this:
 
-![resized_whc51dabba016b15](/imgstore/resized_whc51dabba016b15.jpg)
+![resized_whc51dabba016b15](/wiki/imgstore/resized_whc51dabba016b15.jpg)
 
 The user can attach and detach blocks from the diagram, set links between blocks, and move blocks within the diagram. When moving blocks, the graphical editor also takes care of preserving the layout of the diagram by itself.
 
@@ -91,7 +91,7 @@ The user can attach and detach blocks from the diagram, set links between blocks
 
 The blocks are executed one by one, starting with the first one (Start).
 
-![resized_whc51dd447fe4417](/imgstore/resized_whc51dd447fe4417.jpg)
+![resized_whc51dd447fe4417](/wiki/imgstore/resized_whc51dd447fe4417.jpg)
 
 - Bot strategies can be edited on the fly without interrupting bot activity.
 - The changes made to the strategy are applied to all running bots at the same time

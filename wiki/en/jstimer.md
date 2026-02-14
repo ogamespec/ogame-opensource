@@ -8,7 +8,7 @@ and then the JavaScript script is used to output the value.
 Timer processing in different variations can be found in the following modules:
 - /game/js/ocnt.json: Included in flotten2.php; used to show ACS union times. :warning: Works with slowdown, see bug below.
 
-![ocnt_timer](/imgstore/ocnt_timer.png)
+![ocnt_timer](/wiki/imgstore/ocnt_timer.png)
 
 - /game/js/utilities.json: Included in most of the pages. Contains an implementation of t(). :warning: Works with slowdown, see bug below.
 - /game/pages/buildings.php: Fleet and defense construction queue. The script is integrated in HTML. Kind of does not contain a bug with slowdown.

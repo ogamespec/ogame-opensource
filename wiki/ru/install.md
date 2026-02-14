@@ -46,17 +46,17 @@
 
 После первого открытия неустановленной игры вас попросят инициализировать мастер-базу:
 
-![install1.png](/imgstore/install1.png)
+![install1.png](/wiki/imgstore/install1.png)
 
 Укажите все данные (MySQL БД должна быть создана отдельно какими-то другими средствами, какими вам нравится, например с помощью Navicat MySQL).
 
-![install2.png](/imgstore/install2.png)
+![install2.png](/wiki/imgstore/install2.png)
 
 ## Настройка Вселенной
 
 Для настройки вселенной нужно перейти по прямой ссылке на страницу установки, например: http://localhost/game/install.php
 
-![install3.png](/imgstore/install3.png)
+![install3.png](/wiki/imgstore/install3.png)
 
 Обязательно нужно отметить галочку и указать настройки master базы, чтобы вселенная стала доступна с главной страницы.
 

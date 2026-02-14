@@ -4,23 +4,23 @@
 
 Скачиваем Docker Desktop и открываем терминал:
 
-<img width="1553" height="801" alt="image" src="/imgstore/531410774-2576af5b-cb0f-42ab-885f-d61255ca528e.png" />
+<img width="1553" height="801" alt="image" src="/wiki/imgstore/531410774-2576af5b-cb0f-42ab-885f-d61255ca528e.png" />
 
 Переходим в локальный Git репозиторий проекта и запускаем команду `docker compose up --build`:
 
-<img width="711" height="210" alt="image" src="/imgstore/531411110-3a85a86e-013b-4fe6-acd3-5d275626e07f.png" />
+<img width="711" height="210" alt="image" src="/wiki/imgstore/531411110-3a85a86e-013b-4fe6-acd3-5d275626e07f.png" />
 
 :warning: Предварительно можно скопировать файл `.env.example` -> `.env` и поменять там пароль root для MySQL. Если это не делать, то пароль для root будет `123`
 
 Ну и в принципе всё. Докер развернёт все нужные контейнеры и запустит локальный веб-сервер:
 
-<img width="1553" height="801" alt="image" src="/imgstore/531412314-b0b8752b-7b08-4176-a633-455eba6d0b65.png" />
+<img width="1553" height="801" alt="image" src="/wiki/imgstore/531412314-b0b8752b-7b08-4176-a633-455eba6d0b65.png" />
 
 ## Настройка Лобби и установка Master базы
 
 Открываем `localhost` и вводим кредентиалы для подключения к MySQL root:
 
-<img width="931" height="525" alt="image" src="/imgstore/531413062-eea522b1-7e2c-4c96-b14e-f18ef7c31904.png" />
+<img width="931" height="525" alt="image" src="/wiki/imgstore/531413062-eea522b1-7e2c-4c96-b14e-f18ef7c31904.png" />
 
 Нажимаем кнопку "Инсталлировать" и убеждаемся что появилась зелёная надпись. Всё готово.
 
@@ -28,15 +28,15 @@
 
 Открываем локальный phpMyAdmin по адресу `localhost:8080` и заходим под root:
 
-<img width="406" height="517" alt="image" src="/imgstore/531413384-edb51356-290c-410d-97e3-3ea8011f8b20.png" />
+<img width="406" height="517" alt="image" src="/wiki/imgstore/531413384-edb51356-290c-410d-97e3-3ea8011f8b20.png" />
 
 Создаём базу `uni` для хранения данных вселенной:
 
-<img width="834" height="302" alt="image" src="/imgstore/531413655-2de38ce3-8487-4bd4-8ac2-2ff5002343da.png" />
+<img width="834" height="302" alt="image" src="/wiki/imgstore/531413655-2de38ce3-8487-4bd4-8ac2-2ff5002343da.png" />
 
 Переходим в игру по адресу `localhost/game` и настраиваем всё как на картинке:
 
-<img width="987" height="885" alt="image" src="/imgstore/531414041-a9b2ecc3-c238-4a2d-b018-fad229d88dc1.png" />
+<img width="987" height="885" alt="image" src="/wiki/imgstore/531414041-a9b2ecc3-c238-4a2d-b018-fad229d88dc1.png" />
 
 После нажатия на кнопку "Инсталлировать" убеждаемся что появилась зелёная надпись. Вселенная готова к игре.
 
@@ -44,11 +44,11 @@
 
 Вводим на главной логин и пароль Легора и попадаем в игру:
 
-<img width="1720" height="700" alt="image" src="/imgstore/531416154-21a6b1a9-38bc-4c46-8811-1fc6b34b0685.png" />
+<img width="1720" height="700" alt="image" src="/wiki/imgstore/531416154-21a6b1a9-38bc-4c46-8811-1fc6b34b0685.png" />
 
 Теперь можно проверить работу боевого движка и в целом можно играть. Для этого заходим в админку и запускаем Симулятор с типовым боем 200 крейсеров против 1667 лайтов:
 
-<img width="597" height="698" alt="image" src="/imgstore/531416637-5537d55c-bfc5-49e7-9d36-eb621cd33dcf.png" />
+<img width="597" height="698" alt="image" src="/wiki/imgstore/531416637-5537d55c-bfc5-49e7-9d36-eb621cd33dcf.png" />
 
 Если видно зелёный лог, значит всё Ок.
 
@@ -66,4 +66,4 @@ docker cp .\game\ ogame-opensource-server-1:/var/www/html/
 chown -R www-data:www-data /var/www/html/game
 ```
 
-![docker_cp_chown](/imgstore/docker_cp_chown.png)
+![docker_cp_chown](/wiki/imgstore/docker_cp_chown.png)

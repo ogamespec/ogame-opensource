@@ -1,6 +1,6 @@
-# Old News
+# Старые новости
 
-:warning: News from an older iteration of development. No longer relevant (especially the last one).
+:warning: Новости со старой итерации разработки. Больше не актуальны (особенно последняя).
 
 
 **07.11.2013**<br>
@@ -11,11 +11,11 @@ Some nice announcements:<br>
 
 <b>10.07.2013</b><br>
 Bot engine completed:<br>
-<img src='/imgstore/whc51dd5050c32f8.jpg' />
+<img src='/wiki/imgstore/whc51dd5050c32f8.jpg' />
 
 <b>08.07.2013</b><br>
 Bot AI editor:<br>
-<img src='/imgstore/resized_whc51dabba016b15.jpg' />
+<img src='/wiki/imgstore/resized_whc51dabba016b15.jpg' />
 
 <b>02.03.2013</b><br>
 - Change email fixed<br>
@@ -30,7 +30,7 @@ Bot AI editor:<br>
 <br>
 <b>08.03.2012</b> : Added redesign to test how fast is it. Its damn sloooow )) And not because of server side, it simply overburned by javascript and css. Some teaser :<br>
 <br>
-<img src='/imgstore/resized_whc4f65a6d576292.jpg'> <br>
+<img src='/wiki/imgstore/resized_whc4f65a6d576292.jpg'> <br>
 Will be included in game as custom skin (type "redesign" in skin path to enable it)<br>
 <br>
 <b>08.03.2012</b> : Now we have near complete engine, including: ACS, Expeditions and ingame bots. English and Deutch translations will be added after miscellaneous bugs will be fixed.<br>
@@ -45,34 +45,34 @@ Will be included in game as custom skin (type "redesign" in skin path to enable 
 Added Issues list. Fixed numerous defects. Improved battle engine.<br>
 <br>
 <b>01.04.2011</b> : Shipyard queue:<br>
-<img src='/imgstore/whc4d95b79f2081e.jpg'>
+<img src='/wiki/imgstore/whc4d95b79f2081e.jpg'>
 
 <b>29.03.2011</b> : Empire:<br>
-<img src='/imgstore/whc4d9199bfb7766.jpg'><br>
+<img src='/wiki/imgstore/whc4d9199bfb7766.jpg'><br>
 Search:<br>
-<img src='/imgstore/whc4d91bf99bbb36.jpg'><br>
+<img src='/wiki/imgstore/whc4d91bf99bbb36.jpg'><br>
 
 <b>26.03.2011</b> : Damn fast CGI battle engine, written on C-language:<br>
-<img src='/imgstore/whc4d8e106f9fd18.jpg'><br>
-<img src='/imgstore/whc4d8e1074df54c.jpg'><br>
+<img src='/wiki/imgstore/whc4d8e106f9fd18.jpg'><br>
+<img src='/wiki/imgstore/whc4d8e1074df54c.jpg'><br>
 ( 3kk light figthers + dozen of Death Stars and other fleet meet in battle )<br>
 <br>
 <b>22.03.2011</b> : Colonization:<br>
-<img src='/imgstore/whc4d88a63dbf46f.jpg'><br>
+<img src='/wiki/imgstore/whc4d88a63dbf46f.jpg'><br>
 Spy reports:<br>
-<img src='/imgstore/whc4d88a80a8636c.jpg'>
+<img src='/wiki/imgstore/whc4d88a80a8636c.jpg'>
 
 <b>21.03.2011</b> : First flight:<br>
-<img src='/imgstore/whc4d872f36f25de.jpg'><br>
-<img src='/imgstore/whc4d872f55a0363.jpg'><br>
-<img src='/imgstore/whc4d872f8a3b58b.jpg'><br>
-<img src='/imgstore/whc4d872f9886662.jpg'><br>
-<img src='/imgstore/whc4d872fd8d930b.jpg'><br>
-<img src='/imgstore/whc4d87339654956.jpg'><br>
+<img src='/wiki/imgstore/whc4d872f36f25de.jpg'><br>
+<img src='/wiki/imgstore/whc4d872f55a0363.jpg'><br>
+<img src='/wiki/imgstore/whc4d872f8a3b58b.jpg'><br>
+<img src='/wiki/imgstore/whc4d872f9886662.jpg'><br>
+<img src='/wiki/imgstore/whc4d872fd8d930b.jpg'><br>
+<img src='/wiki/imgstore/whc4d87339654956.jpg'><br>
 SVN updated with latest fleet management modules + overview loca added.<br>
 <br>
 <b>16.03.2011</b> : Decent progress on multiple pages. Started to implement Admin section. By security reasons Admin Tool will be differ from the original one, but will include more features.<br>
-<img src='/imgstore/whc4d7fe533a9c61.jpg'>
+<img src='/wiki/imgstore/whc4d7fe533a9c61.jpg'>
 
 <b>14.03.2011</b> : SVNed pages: buddy, notizen, messages, writemessages, infos. Still need some work on them.<br>
 +changelog and some work on imperium.<br>
@@ -81,5 +81,5 @@ SVN updated with latest fleet management modules + overview loca added.<br>
 <a href='http://uni777.oldogame.ru/game/reg/login2.php?login=legor&pass='><a href='http://uni777.oldogame.ru/game/reg/login2.php?login=legor&pass='>http://uni777.oldogame.ru/game/reg/login2.php?login=legor&amp;pass=</a></a>
 
 <b>10.03.2011</b> : After some brainstorm first OGame page was shown itself:<br>
-<img src='/imgstore/whc4d78e760ba013.jpg'><br>
+<img src='/wiki/imgstore/whc4d78e760ba013.jpg'><br>
 EDIT: resources, techtree and techtreedetails are also SVNed.

@@ -1,4 +1,4 @@
-# Introduction #
+# Introduction
 
 Нашёл краткое описание способов защиты :
 

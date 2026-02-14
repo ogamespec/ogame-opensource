@@ -7,6 +7,6 @@ composer require --dev phpstan/phpstan
 ./vendor/bin/phpstan analyze
 ```
 
-![phpstan](/imgstore/phpstan.png)
+![phpstan](/wiki/imgstore/phpstan.png)
 
 Последний отчёт находится в `phpstan_report_latest.txt`, когда скучно можно добавлять исправления.
