@@ -51,5 +51,5 @@ RUN chown -R www-data:www-data /var/www/html
 # CMD ["cron", "-f"]
 
 # C battle engine
-RUN g++ /var/www/game/battle/*.c -lm -o /usr/lib/cgi-bin/battle
+RUN g++ /var/www/html/game/battle/*.cpp -lm -o /usr/lib/cgi-bin/battle
 RUN chmod 755 /usr/lib/cgi-bin/battle
