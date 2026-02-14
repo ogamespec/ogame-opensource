@@ -786,7 +786,7 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
     $cost = $origin_cost / 1000 / 400;
     $c = sqrt ( pow (2,($origin_ships-($level+1))) ) * ($cost * sqrt($target_ships)*5);
     if ($c > 2) $c = 2;
-    $c = rand (0, $c*100) / 100;
+    $c = rand (0, (int)($c*100)) / 100;
     if ($c < 0) $c = 0;
     if ($c > 1) $c = 1;
     $counter = $c * 100;
@@ -806,7 +806,7 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
     $report .= "</div></font></TD></TR><tr><td>".loca_lang("SPY_M", $origin_user['lang'])."</td><td>".nicenum($target[GID_RC_METAL])."</td>\n";
     $report .= "<td>".loca_lang("SPY_K", $origin_user['lang'])."</td><td>".nicenum($target[GID_RC_CRYSTAL])."</td></tr>\n";
     $report .= "<tr><td>".loca_lang("SPY_D", $origin_user['lang'])."</td><td>".nicenum($target[GID_RC_DEUTERIUM])."</td>\n";
-    $report .= "<td>".loca_lang("SPY_E", $origin_user['lang'])."</td><td>".nicenum($target[GID_RC_ENERGY])."</td></tr>\n";
+    $report .= "<td>".loca_lang("SPY_E", $origin_user['lang'])."</td><td>".nicenum($target['net_prod'][GID_RC_ENERGY])."</td></tr>\n";
     $report .= "</table>\n";
 
     // Activity
