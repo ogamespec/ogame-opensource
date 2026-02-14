@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 // load data from file
-void* FileLoad(char* filename, unsigned long* size, char* mode)
+void* FileLoad(char* filename, unsigned long* size, const char* mode)
 {
     FILE* f;
     void* buffer;

@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\battle.c" />
-    <ClCompile Include="..\file.c" />
-    <ClCompile Include="..\rand.c" />
+    <ClCompile Include="..\battle.cpp" />
+    <ClCompile Include="..\file.cpp" />
+    <ClCompile Include="..\rand.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\battle.h" />

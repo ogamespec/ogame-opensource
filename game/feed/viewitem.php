@@ -3,15 +3,15 @@
 /** @var string $db_prefix */
 
 // Check if the configuration file is missing - exit
-if ( !file_exists ("../game/config.php"))
+if ( !file_exists ("../config.php"))
 {
 	exit ("Game not installed");
 }
 else {
-	require_once "../game/config.php";
+	require_once "../config.php";
 }
 
-require_once "../game/core/core.php";
+require_once "../core/core.php";
 
 InitDB();
 

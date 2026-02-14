@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\battle.c">
+    <ClCompile Include="..\battle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\file.c">
+    <ClCompile Include="..\file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\rand.c">
+    <ClCompile Include="..\rand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

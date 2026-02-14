@@ -3,15 +3,15 @@
 /** @var string $db_prefix */
 
 // Check if the configuration file is missing - exit
-if ( !file_exists ("../game/config.php"))
+if ( !file_exists ("../config.php"))
 {
 	exit ("Game not installed");
 }
 else {
-	require_once "../game/config.php";
+	require_once "../config.php";
 }
 
-require_once "../game/core/core.php";
+require_once "../core/core.php";
 
 InitDB();
 
@@ -66,11 +66,12 @@ $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id AND d
 $result = dbquery ($query);
 //print_r ($result);
 
+	echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+
 	// Atom Format
 
 	if (($user['flags'] & USER_FLAG_FEED_ATOM) != 0) {
 ?>
-<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 	<title>OGame-Nachrichten von <?=$user['oname'];?></title>
 	<link href="<?=hostname("feed");?>feed/show.php?feedid=<?=$feedid;?>" rel="self" type="application/rss+xml" />
@@ -105,7 +106,6 @@ $result = dbquery ($query);
 
 	else {
 ?>
-<?xml version="1.0" encoding="UTF-8"?> 
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
 		<title>OGame-Nachrichten von <?=$user['oname'];?></title>

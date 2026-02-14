@@ -1,14 +1,12 @@
 parameters:
   level: 8
   paths:
-    - feed
     - game
     - wwwroot
   excludePaths:
     - BattleEngine/*
     - download/*
-    - imgstore/*
-    - Wiki/*
+    - wiki/*
     - game/css/*
     - game/js/*
     - game/img/*
