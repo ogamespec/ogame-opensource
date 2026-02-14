@@ -1,13 +1,13 @@
 # Introduction
 
 > [!WARNING]
-> We're currently undergoing a massive refactoring based on PHPStan analysis results, and a [modification engine](/Wiki/en/mods.md) is being added. Therefore, some bugs and syntax errors may be present, but they will be fixed as we go.
+> We're currently undergoing a massive refactoring based on PHPStan analysis results, and a [modification engine](/wiki/en/mods.md) is being added. Therefore, some bugs and syntax errors may be present, but they will be fixed as we go.
 
 This is revived OGame v 0.84 with old design.
 
 Need help with installation? You have the following options:
-- Use the millennial guide: [install](/Wiki/en/install.md)
-- Use the zoomer guide: [install_docker](/Wiki/en/install_docker.md)
+- Use the millennial guide: [install](/wiki/en/install.md)
+- Use the zoomer guide: [install_docker](/wiki/en/install_docker.md)
 - There is also another deployment option with Docker from Noli: https://gitlab.com/nolialsea/ogame-opensource-docker
 - Ask the community for help. Discord: https://discord.gg/xpCV3McAj2
 
@@ -17,7 +17,7 @@ Need help with installation? You have the following options:
 
 _Thank you for the great game, but redesign is not we like_
 
-![whc50b7bd1f6b2a2](/imgstore/whc50b7bd1f6b2a2.jpg)
+![whc50b7bd1f6b2a2](/wiki/imgstore/whc50b7bd1f6b2a2.jpg)
 
 Currently only Russian, English and Deutch languages are supported. Other language packs can be submitted by volunteers. The game engine is multilingual.
 
@@ -37,9 +37,9 @@ Features:
 - Open-source!
 - And many, many more!
 
-![screen1](/imgstore/screen1.jpg)
-![screen2](/imgstore/screen2.jpg)
-![screen5](/imgstore/screen5.jpg)
+![screen1](/wiki/imgstore/screen1.jpg)
+![screen2](/wiki/imgstore/screen2.jpg)
+![screen5](/wiki/imgstore/screen5.jpg)
 
 **This is non commercial project, all Premium functions of original OGame (Dark Matter, Officeers and Trader) are free.**
 

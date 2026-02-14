@@ -46,17 +46,17 @@ As of recently, the game also has a backup PHP battle engine. If you don't have 
 
 After opening an uninstalled game for the first time, you will be asked to initialize the master database:
 
-![install1.png](/imgstore/install1.png)
+![install1.png](/wiki/imgstore/install1.png)
 
 Specify all data (MySQL database should be created separately by some other means you like, for example with Navicat MySQL).
 
-![install2.png](/imgstore/install2.png)
+![install2.png](/wiki/imgstore/install2.png)
 
 ## Customizing the Universe
 
 To customize the universe, you need to follow the direct link to the setup page, for example: http://localhost/game/install.php
 
-![install3.png](/imgstore/install3.png)
+![install3.png](/wiki/imgstore/install3.png)
 
 Be sure to check the box and specify the master base settings to make the universe available from the home page.
 

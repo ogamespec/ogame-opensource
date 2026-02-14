@@ -1321,14 +1321,14 @@ OGame redesign? 3D animations? LOL
 
 Here they are:
 
-![ogame_de_01](/imgstore/ogame_de_01.jpg)
-![ogame_de_02](/imgstore/ogame_de_02.jpg)
-![ogame_de_03](/imgstore/ogame_de_03.jpg)
-![ogame_de_04](/imgstore/ogame_de_04.jpg)
-![ogame_de_05](/imgstore/ogame_de_05.jpg)
-![ogame_de_06](/imgstore/ogame_de_06.jpg)
-![ogame_de_07](/imgstore/ogame_de_07.jpg)
-![ogame_de_08](/imgstore/ogame_de_08.jpg)
+![ogame_de_01](/wiki/imgstore/ogame_de_01.jpg)
+![ogame_de_02](/wiki/imgstore/ogame_de_02.jpg)
+![ogame_de_03](/wiki/imgstore/ogame_de_03.jpg)
+![ogame_de_04](/wiki/imgstore/ogame_de_04.jpg)
+![ogame_de_05](/wiki/imgstore/ogame_de_05.jpg)
+![ogame_de_06](/wiki/imgstore/ogame_de_06.jpg)
+![ogame_de_07](/wiki/imgstore/ogame_de_07.jpg)
+![ogame_de_08](/wiki/imgstore/ogame_de_08.jpg)
 
 # Ogame Mexico has opened its portals
 Cassandra Vandales
