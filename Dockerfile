@@ -15,7 +15,6 @@ RUN chmod 644 /etc/msmtprc
 COPY ./wwwroot /var/www/html
 COPY ./download /var/www/html/download
 # Universe (game) files
-COPY ./feed /var/www/html/feed
 COPY ./game /var/www/html/game
 
 # PHP extensions
@@ -52,7 +51,5 @@ RUN chown -R www-data:www-data /var/www/html
 # CMD ["cron", "-f"]
 
 # C battle engine
-COPY ./BattleEngine /var/www/BattleEngine
-RUN gcc /var/www/BattleEngine/*.c -lm -o /usr/lib/cgi-bin/battle
+RUN g++ /var/www/game/battle/*.c -lm -o /usr/lib/cgi-bin/battle
 RUN chmod 755 /usr/lib/cgi-bin/battle
-RUN rm -rf /var/www/BattleEngine

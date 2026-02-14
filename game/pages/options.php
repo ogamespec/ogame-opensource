@@ -576,8 +576,8 @@ $prem = PremiumStatus ($GlobalUser);
 <tr>
     <th><?=loca("OPTIONS_FEED_LINK");?></th>
     <th>
-    <input readonly="1" size="40" type="text" name="feed_link" value="<?=hostname();?>feed/show.php?feedid=<?=$GlobalUser['feedid'];?>" /><br />
-    <a href="<?=hostname();?>feed/show.php?feedid=<?=$GlobalUser['feedid'];?>" target="_blank"><?=loca("OPTIONS_FEED_SHOW");?></a>
+    <input readonly="1" size="40" type="text" name="feed_link" value="<?=hostname();?>game/feed/show.php?feedid=<?=$GlobalUser['feedid'];?>" /><br />
+    <a href="<?=hostname();?>game/feed/show.php?feedid=<?=$GlobalUser['feedid'];?>" target="_blank"><?=loca("OPTIONS_FEED_SHOW");?></a>
     </th>
 </tr>
 <?php
