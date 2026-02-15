@@ -161,11 +161,13 @@
 	},
 	"techtree": {
 		"path": "pages/techtree.php",
-		"loca": [ "menu", "techtree" ]
+		"loca": [ "menu", "techtree" ],
+		"mvc": true
 	},
 	"techtreedetails": {
 		"path": "pages/techtreedetails.php",
-		"loca": [ "menu", "techtree" ]
+		"loca": [ "menu", "techtree" ],
+		"mvc": true
 	},
 	"trader": {
 		"path": "pages/trader.php",

@@ -14,7 +14,7 @@ class Admin_Errors extends Page {
 
         loca_add ( "messages", $GlobalUser['lang'] );
 
-        if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
+        if ( method () === "POST" && $GlobalUser['admin'] >= USER_TYPE_ADMIN )
         {
             $query = "SELECT * FROM ".$db_prefix."errors ORDER BY date DESC LIMIT 50";
             $result = dbquery ($query);

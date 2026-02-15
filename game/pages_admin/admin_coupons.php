@@ -10,7 +10,7 @@ class Admin_Coupons extends Page {
         global $now;
 
         // POST request processing.
-        if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
+        if ( method () === "POST" && $GlobalUser['admin'] >= USER_TYPE_ADMIN )
         {
             $action = $_GET['action'];
 
@@ -38,7 +38,7 @@ class Admin_Coupons extends Page {
         }
 
         // GET request processing.
-        if ( method () === "GET" && key_exists('action', $_GET) && $GlobalUser['admin'] >= 2 )
+        if ( method () === "GET" && key_exists('action', $_GET) && $GlobalUser['admin'] >= USER_TYPE_ADMIN )
         {
             $action = $_GET['action'];
 

@@ -33,7 +33,7 @@ class Admin_Users extends Page {
         $speed = $GlobalUni['speed'];
 
         // Processing a POST request.
-        if ( method () === "POST" && $GlobalUser['admin'] >= 2 ) {
+        if ( method () === "POST" && $GlobalUser['admin'] >= USER_TYPE_ADMIN ) {
             
             if ( key_exists('player_id', $_GET) ) $player_id = intval ($_GET['player_id']);
             else $player_id = 0;
@@ -113,7 +113,7 @@ class Admin_Users extends Page {
         }
 
         // GET request processing.
-        if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
+        if ( method () === "GET" && $GlobalUser['admin'] >= USER_TYPE_ADMIN ) {
             
             if ( key_exists ('player_id', $_GET) ) $player_id = intval ($_GET['player_id']);
             else $player_id = 0;

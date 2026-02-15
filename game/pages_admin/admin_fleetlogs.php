@@ -12,7 +12,7 @@ class Admin_Fleetlogs extends Page {
         global $now;
 
         // Processing POST requests.
-        if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
+        if ( method () === "POST" && $GlobalUser['admin'] >= USER_TYPE_ADMIN )
         {
             if ( key_exists ( "order_2min", $_POST ) ) {        // -2 minutes before the task commences
                 $id = intval ($_POST['order_2min']);

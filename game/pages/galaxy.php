@@ -128,7 +128,7 @@ else if ( isset($_POST['galaxyRight']) )
 $not_enough_deut = ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s) && $aktplanet[GID_RC_DEUTERIUM] < GALAXY_DEUTERIUM_CONS;
 
 // Charge GALAXY_DEUTERIUM_CONS deuterium for viewing a non-home system (regular users only)
-if ( !$not_enough_deut && $GlobalUser['admin'] == 0 )
+if ( !$not_enough_deut && $GlobalUser['admin'] == USER_TYPE_PLAYER )
 {
     if ( $aktplanet['g'] != $coord_g || $aktplanet['s'] != $coord_s )
     {
@@ -154,7 +154,7 @@ include "galaxy_js.php";
 
 // Not enough deuterium?
 // Operators and administrators can view the Galaxy without the cost of deuterium.
-if ( $not_enough_deut && $GlobalUser['admin'] == 0 )
+if ( $not_enough_deut && $GlobalUser['admin'] == USER_TYPE_PLAYER )
 {
 ?>
   <center>
@@ -317,7 +317,7 @@ while ($num--)
             echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=5 >".loca("GALAXY_FLEET_DEFEND")."</a><br />";
             echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$planet['g']."&system=".$planet['s']."&planet=".$planet['p']."&planettype=1&target_mission=3 >".loca("GALAXY_FLEET_TRANSPORT")."</a><br />";
         }
-        if ($GlobalUser['admin'] >= 2) echo "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id'].">".loca("GALAXY_PLANET_ADMIN")."</a><br />";
+        if ($GlobalUser['admin'] >= USER_TYPE_ADMIN) echo "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id'].">".loca("GALAXY_PLANET_ADMIN")."</a><br />";
         echo "</th></tr></table>\", STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -40 );' onmouseout=\"return nd();\">\n";
         echo "<img src=\"".GetPlanetSmallImage ( UserSkin(), $planet )."\" height=\"30\" width=\"30\"/></a>\n";
     }
@@ -374,7 +374,7 @@ while ($num--)
                 echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=5 >".loca("GALAXY_FLEET_DEFEND")."</a><br />";
                 echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=9 >".loca("GALAXY_FLEET_DESTROY")."</a><br />";
             }
-            if ($GlobalUser['admin'] >= 2) echo "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$moon['planet_id'].">".loca("GALAXY_PLANET_ADMIN")."</a><br />";
+            if ($GlobalUser['admin'] >= USER_TYPE_ADMIN) echo "<a href=index.php?page=admin&session=$session&mode=Planets&cp=".$moon['planet_id'].">".loca("GALAXY_PLANET_ADMIN")."</a><br />";
             echo "</th></tr></table></tr></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -110 );\" style=\"cursor: pointer;\" \n";
             echo " href='#' onclick='doit(6, ".$moon['g'].", ".$moon['s'].", ".$moon['p'].", 3, ".$GlobalUser['maxspy'].")' \n";
             echo ">\n";
@@ -424,7 +424,7 @@ href='#' onclick='doit(8, <?=$coord_g;?>, <?=$coord_s;?>, <?=$p;?>, 2, <?=$harve
             echo "<tr><td><a href=index.php?page=buddy&session=".$_GET['session']."&action=7&buddy_id=".$planet['owner_id']." >".loca("GALAXY_USER_BUDDY")."</a></td></tr>";
         }
         echo "<tr><td><a href=index.php?page=statistics&session=".$_GET['session']."&start=".(floor($user['place1']/100)*100+1)." >".loca("GALAXY_USER_STATS")."</a></td></tr>";
-        if ($GlobalUser['admin'] >= 2) echo "<tr><td><a href=index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id'].">".loca("GALAXY_USER_ADMIN")."</a></td></tr>";
+        if ($GlobalUser['admin'] >= USER_TYPE_ADMIN) echo "<tr><td><a href=index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id'].">".loca("GALAXY_USER_ADMIN")."</a></td></tr>";
         echo "</table>";
         echo "</th></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETY, -40 );\" onmouseout=\"return nd();\">\n";
         if ( IsPlayerNewbie ( $user['player_id'] ) )

@@ -8,12 +8,15 @@ class Admin_Checksum extends Page {
         'ainfo.php', 
         'core/acs.php', 
         'core/ally.php', 
+        'core/allyapps.php', 
+        'core/allyranks.php', 
         'core/battle.php', 
         'core/battle_engine.php', 
         'core/battle_report.php', 
         'core/bbcode.php', 
         'core/bot.php', 
         'core/botapi.php', 
+        'core/buddy.php', 
         'core/core.php', 
         'core/coupon.php', 
         'core/db.php', 
@@ -44,8 +47,8 @@ class Admin_Checksum extends Page {
         'core/user.php', 
         'core/utils.php', 
         'validate.php', 
-        'game/feed/show.php', 
-        'game/feed/viewitem.php', 
+        'feed/show.php', 
+        'feed/viewitem.php', 
     );
 
     private array $page_admin_files = array (

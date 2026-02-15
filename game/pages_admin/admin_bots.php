@@ -10,7 +10,7 @@ class Admin_Bots extends Page {
         global $GlobalUser;
 
         // POST request processing.
-        if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
+        if ( method () === "POST" && $GlobalUser['admin'] >= USER_TYPE_ADMIN )
         {
             if (BotStrategyExists("_start")) {
                 if ( AddBot ( $_POST['name'] ) ) $this->result = "<font color=lime>".loca("ADM_BOTS_ADDED")."</font>";
@@ -22,7 +22,7 @@ class Admin_Bots extends Page {
         }
 
         // GET request processing.
-        if ( method () === "GET" && key_exists('id', $_GET) && $GlobalUser['admin'] >= 2 )
+        if ( method () === "GET" && key_exists('id', $_GET) && $GlobalUser['admin'] >= USER_TYPE_ADMIN )
         {
             StopBot ( intval ($_GET['id']) );
             $this->result = "<font color=lime>".loca("ADM_BOTS_STOPPED")."</font>";
@@ -36,7 +36,7 @@ class Admin_Bots extends Page {
         global $session;
         global $db_prefix;
 
-        if ( $GlobalUser['admin'] < 2) {
+        if ( $GlobalUser['admin'] < USER_TYPE_ADMIN) {
 
             echo "<font color=red>".loca("ADM_BOTS_FORBIDDEN")."</font>";
             return;

@@ -83,7 +83,7 @@ function EnumNotes (int $player_id) : mixed
 
     $limit = 20;
     $user = LoadUser ($player_id);
-    if ( $user['admin'] > 0 ) $limit = 150;
+    if ( $user['admin'] > USER_TYPE_PLAYER ) $limit = 150;
 
     $query = "SELECT * FROM ".$db_prefix."notes WHERE owner_id = $player_id ORDER BY date DESC LIMIT $limit";
     $result = dbquery ($query);

@@ -119,6 +119,10 @@ const USER_OFFICER_ENGINEER = 3;
 const USER_OFFICER_GEOLOGE = 4;
 const USER_OFFICER_TECHNOCRATE = 5;
 
+const USER_TYPE_PLAYER = 0; 		// Regular player or bot
+const USER_TYPE_GO = 1;  			// The game operator, has limited capabilities in the admin panel.
+const USER_TYPE_ADMIN = 2; 			// Administrator (Legor, space)
+
 // Default flags after creating a player
 const USER_FLAG_DEFAULT = USER_FLAG_SHOW_ESPIONAGE_BUTTON | USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON | USER_FLAG_SHOW_BUDDY_BUTTON | USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON | USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
 

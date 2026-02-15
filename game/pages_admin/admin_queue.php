@@ -25,25 +25,25 @@ class Admin_Queue extends Page {
                 }
             }
 
-            if ( key_exists ( "order_end", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Complete the task
+            if ( key_exists ( "order_end", $_POST ) && $GlobalUser['admin'] >= USER_TYPE_ADMIN ) {        // Complete the task
                 $id = intval ($_POST['order_end']);
                 $query = "UPDATE ".$db_prefix."queue SET end=$now WHERE task_id=$id";
                 dbquery ( $query );
             }
 
-            if ( key_exists ( "order_remove", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Delete task
+            if ( key_exists ( "order_remove", $_POST ) && $GlobalUser['admin'] >= USER_TYPE_ADMIN ) {        // Delete task
                 RemoveQueue ( intval ($_POST['order_remove']) );
             }
 
-            if ( key_exists ( "order_freeze", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Freeze task
+            if ( key_exists ( "order_freeze", $_POST ) && $GlobalUser['admin'] >= USER_TYPE_ADMIN ) {        // Freeze task
                 FreezeQueue ( intval ($_POST['order_freeze']), true );
             }
 
-            if ( key_exists ( "order_unfreeze", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // UnFreeze task
+            if ( key_exists ( "order_unfreeze", $_POST ) && $GlobalUser['admin'] >= USER_TYPE_ADMIN ) {        // UnFreeze task
                 FreezeQueue ( intval ($_POST['order_unfreeze']), false );
             }
 
-            if ( key_exists ( "order_cron", $_POST ) && $GlobalUser['admin'] >= 2 ) {        // Check CRON
+            if ( key_exists ( "order_cron", $_POST ) && $GlobalUser['admin'] >= USER_TYPE_ADMIN ) {        // Check CRON
                 $saved_player_id = $GlobalUser['player_id'];
                 include "cron.php";
                 $GlobalUser = LoadUser ($saved_player_id);  // reload original admin

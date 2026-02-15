@@ -12,7 +12,7 @@ class Admin_Reports extends Page {
 
         loca_add ( "messages", $GlobalUser['lang'] );
 
-        if ( method () === "POST" && $GlobalUser['admin'] >= 1 )
+        if ( method () === "POST" && $GlobalUser['admin'] >= USER_TYPE_GO )
         {
             $query = "SELECT * FROM ".$db_prefix."reports ORDER BY date DESC LIMIT 50";
             $result = dbquery ($query);

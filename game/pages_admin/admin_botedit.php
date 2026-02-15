@@ -16,7 +16,7 @@ class Admin_Botedit extends Page {
         $PageError = "";
 
         // AJAX POST request processing.
-        if ( method () === "POST" && key_exists('action', $_REQUEST) && $GlobalUser['admin'] >= 2 )
+        if ( method () === "POST" && key_exists('action', $_REQUEST) && $GlobalUser['admin'] >= USER_TYPE_ADMIN )
         {
             if ( $_GET['action'] === "import" ) {        // Import
                 $id = intval($_POST['strategyId_ForImport']);
@@ -105,7 +105,7 @@ class Admin_Botedit extends Page {
         }
 
         // GET request processing.
-        if ( method () === "GET" && key_exists('action', $_GET) && $GlobalUser['admin'] >= 2 )
+        if ( method () === "GET" && key_exists('action', $_GET) && $GlobalUser['admin'] >= USER_TYPE_ADMIN )
         {
             if ( $_GET['action'] === "preview" ) {      // Preview
                 $id = intval ( $_GET['strat'] );
@@ -170,7 +170,7 @@ class Admin_Botedit extends Page {
 <?php
                 return false;
             } // preview
-            else if ( method () === "GET" && $_GET['action'] === "export" && $GlobalUser['admin'] >= 2) {    // Export Strat
+            else if ( method () === "GET" && $_GET['action'] === "export" && $GlobalUser['admin'] >= USER_TYPE_ADMIN) {    // Export Strat
 
                 $id = intval ( $_GET['strat'] );
                 $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";
@@ -196,7 +196,7 @@ class Admin_Botedit extends Page {
 <script type="text/javascript" src="js/go-game.js"></script>
 
 <?php
-        if ( $GlobalUser['admin'] < 2) {
+        if ( $GlobalUser['admin'] < USER_TYPE_ADMIN) {
 
             echo "<font color=red>".loca("ADM_BOTEDIT_FORBIDDEN")."</font>";
             return;

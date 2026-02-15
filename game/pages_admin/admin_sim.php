@@ -34,7 +34,7 @@ class Admin_BattleSim extends Page {
         $this->maxslot = $unitab['acs'] * $unitab['acs'];
 
         // POST request processing.
-        if ( method () === "POST" && $GlobalUser['admin'] != 0 ) {
+        if ( method () === "POST" && $GlobalUser['admin'] != USER_TYPE_PLAYER ) {
             //print_r ( $_POST );
             //echo "<hr>";
 
