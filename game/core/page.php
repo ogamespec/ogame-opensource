@@ -95,7 +95,7 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
     }
     echo "<link rel='stylesheet' type='text/css' href='css/combox.css'>\n";
     echo "<link rel='stylesheet' type='text/css' href='".UserSkin()."formate.css' />\n";
-    echo "<title>".va(loca("PAGE_TITLE"), $uni)."</title>\n";
+    echo "<title>".va(loca("PAGE_TITLE"), $uni, loca("OGAME_LOC"))."</title>\n";
     echo "  <script src='js/utilities.js' type='text/javascript'></script>\n";
     echo "  <script language='JavaScript'>\n";
     echo "  </script>\n";
@@ -671,7 +671,7 @@ function InvalidSessionPage () : void
     echo "  <link rel='stylesheet' type='text/css' href='css/default.css' />\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/formate.css' />\n";
     echo "  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n";
-    echo "  <title>".va(loca_lang("PAGE_TITLE", $GlobalUser['lang']), $uni)."</title>\n";
+    echo "  <title>".va(loca_lang("PAGE_TITLE", $GlobalUser['lang']), $uni, loca_lang("OGAME_LOC", $GlobalUser['lang']))."</title>\n";
     echo " </head>\n";
     echo " <body>\n";
     echo "  <center><font size='3'><b>    <br /><br />\n";

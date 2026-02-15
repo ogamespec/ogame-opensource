@@ -32,7 +32,7 @@ function SendNotActivated () : void
     echo "  <link rel=\"stylesheet\" type=\"text/css\" href=\"formate.css\" />\n";
     echo "  <link rel=\"stylesheet\" type=\"text/css\" href=\"css/combox.css\">\n";
     echo "  <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\n";
-    echo "  <title>".va(loca("PAGE_TITLE"), $uni)."</title>\n";
+    echo "  <title>".va(loca("PAGE_TITLE"), $uni, loca("OGAME_LOC"))."</title>\n";
     echo " </head>\n\n";
     echo " <body>\n";
     echo "  <center><font size=\"3\"><b>\n";

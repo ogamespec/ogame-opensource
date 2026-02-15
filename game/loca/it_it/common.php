@@ -2,7 +2,10 @@
 
 // Stringhe comuni. Sono presenti nella maggior parte delle pagine.
 
-$LOCA["it"]["PAGE_TITLE"] = "OGame Universo #1";
+$LOCA["it"]["OGAME_INT"] = "OGame";
+$LOCA["it"]["OGAME_LOC"] = "OGame";
+
+$LOCA["it"]["PAGE_TITLE"] = "#2 Universo #1";
 
 $LOCA["it"]["NAME_".GID_RC_METAL] = "Metallo";
 $LOCA["it"]["NAME_".GID_RC_CRYSTAL] = "Cristallo";

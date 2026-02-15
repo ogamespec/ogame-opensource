@@ -2,7 +2,10 @@
 
 // Gemeinsame Zeilen. Kommen auf den meisten Seiten vor.
 
-$LOCA["de"]["PAGE_TITLE"] = "Uni#1 OGame";
+$LOCA["de"]["OGAME_INT"] = "OGame";
+$LOCA["de"]["OGAME_LOC"] = "OGame";
+
+$LOCA["de"]["PAGE_TITLE"] = "Uni#1 #2";
 
 $LOCA["de"]["NAME_".GID_RC_METAL] = "Metall";
 $LOCA["de"]["NAME_".GID_RC_CRYSTAL] = "Kristall";
@@ -27,7 +30,7 @@ $LOCA["de"]["TIME_SEC"] = "s";
 
 // Kommandant und Offiziere.
 
-$LOCA["de"]["PR_COMA"] = "OGame Commander";
+$LOCA["de"]["PR_COMA"] = "Commander";
 $LOCA["de"]["PR_ADMIRAL"] = "Flottenadmiral";
 $LOCA["de"]["PR_ENGINEER"] = "Ingenieur";
 $LOCA["de"]["PR_GEOLOGIST"] = "Geologe";
