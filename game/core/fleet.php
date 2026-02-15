@@ -74,7 +74,7 @@ function FleetAvailableMissionsDefault ( int $thisgalaxy, int $thissystem, int $
         return $missions;
     }
 
-    if ( $planettype == 2)        // debris field.
+    if ( $planettype == GAME_PTYP_DF)        // debris field.
     {
         if ( $fleet[GID_F_RECYCLER] > 0 ) $missions[] = FTYP_RECYCLE;    // if there are recyclers in the fleet
         return $missions;
@@ -110,14 +110,14 @@ function FleetAvailableMissionsDefault ( int $thisgalaxy, int $thissystem, int $
             $missions[] = FTYP_TRANSPORT;
             $missions[] = FTYP_ATTACK;
             if ( $uni['acs'] > 0 ) $missions[] = FTYP_ACS_HOLD;
-            if ( $fleet[GID_F_DEATHSTAR] > 0 && GetPlanetType($target) == 3 ) $missions[] = FTYP_DESTROY;
+            if ( $fleet[GID_F_DEATHSTAR] > 0 && GetPlanetType($target) == GAME_PTYP_MOON ) $missions[] = FTYP_DESTROY;
             if ( $fleet[GID_F_PROBE] > 0  ) $missions[] = FTYP_SPY;
         }
         else        // all others
         {
             $missions[] = FTYP_TRANSPORT;
             $missions[] = FTYP_ATTACK;
-            if ( $fleet[GID_F_DEATHSTAR] > 0 && GetPlanetType($target) == 3 ) $missions[] = FTYP_DESTROY;
+            if ( $fleet[GID_F_DEATHSTAR] > 0 && GetPlanetType($target) == GAME_PTYP_MOON ) $missions[] = FTYP_DESTROY;
             if ( $fleet[GID_F_PROBE] > 0  ) $missions[] = FTYP_SPY;
         }
 
@@ -277,8 +277,10 @@ function FleetCargoSummary ( array $fleet ) : int
     $cargo = 0;
     foreach ( $fleetmap as $n=>$gid )
     {
-        $amount = $fleet[$gid];
-        if ($gid != GID_F_PROBE) $cargo += FleetCargo ($gid) * $amount;        // not counting probes.
+        if (isset($fleet[$gid])) {
+            $amount = $fleet[$gid];
+            if ($gid != GID_F_PROBE) $cargo += FleetCargo ($gid) * $amount;        // not counting probes.
+        }
     }
     return $cargo;
 }
@@ -937,6 +939,7 @@ function SpyReturn (array $queue, array $fleet_obj, array $fleet) : void
 function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     global $db_prefix;
+    global $fleetmap;
 
     $origin_user = LoadUser ( $origin['owner_id'] );
     if ($origin_user == null) return;
@@ -977,7 +980,6 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
         }
 
         // Return the fleet, if there's anything left.
-        global $fleetmap;
         $num_ships = 0;
         foreach ($fleetmap as $i=>$gid) {
             $num_ships += $fleet[$gid];
