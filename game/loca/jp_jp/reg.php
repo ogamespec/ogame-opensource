@@ -11,13 +11,13 @@ $LOCA["jp"]["REG_MAIL_SUBMIT"] = "データ送信";
 $LOCA["jp"]["REG_FORGOT_TITLE"] = "#1 パスワードの送信";
 $LOCA["jp"]["REG_FORGOT_ERROR"] = "パーマネントアドレスが間違っています。";
 $LOCA["jp"]["REG_FORGOT_OK"] = "パスワードは #1.";
-$LOCA["jp"]["REG_FORGOT_SUBJ"] = "#1 のパスワード";
-$LOCA["jp"]["REG_FORGOT_MAIL"] = "#1 、ようこそ！\n\n" .
+$LOCA["jp"]["REG_FORGOT_SUBJ"] = "#1のパスワード";
+$LOCA["jp"]["REG_FORGOT_MAIL"] = "#1、ようこそ！\n\n" .
 "パスワード#3を入力しなければ、#2の宇宙には戻れない。\n\n" .
 "パスワードは、アカウントプロファイルに記載されたアドレスにのみ送信されます。\n\n" .
 "パスワード回復をご注文されていない場合は、このメールを無視してください。\n\n" .
 "幸運を祈る,\n\n" .
-"あなたのO #5 チーム.";
+"あなたのO#5チーム.";
 
 // ページ読み込み時のセッションエラー
 
@@ -115,8 +115,8 @@ $LOCA["jp"]["REG_CHANGE_MAIL_BODY"] = "ご挨拶 #1,\n\n" .
             "#4\n\n" .
             "あなたのOGameチーム";
 
-$LOCA["jp"]["REG_GREET_MSG_SUBJ"] = "OGameへようこそ！";
-$LOCA["jp"]["REG_GREET_MSG_TEXT"] = "ようこそ[b]OGame[/b]へ !\n" .
+$LOCA["jp"]["REG_GREET_MSG_SUBJ"] = "#1へようこそ！";
+$LOCA["jp"]["REG_GREET_MSG_TEXT"] = "ようこそ[b]#3[/b]へ !\n" .
         "\n" .
         "まずは鉱山を開発する必要がある。\n" .
         "これは \"Buildings\" メニューでできる。\n" .

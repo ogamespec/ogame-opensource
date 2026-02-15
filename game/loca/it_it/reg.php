@@ -118,8 +118,8 @@ $LOCA["it"]["REG_CHANGE_MAIL_BODY"] = "Ciao #1,\n\n" .
                "#4\n\n" .
                "Il team di OGame";
 
-$LOCA["it"]["REG_GREET_MSG_SUBJ"] = "Benvenuto su OGame!";
-$LOCA["it"]["REG_GREET_MSG_TEXT"] = "Ciao, benvenuto su [b]OGame[/b] !\n" .
+$LOCA["it"]["REG_GREET_MSG_SUBJ"] = "Benvenuto su #1!";
+$LOCA["it"]["REG_GREET_MSG_TEXT"] = "Ciao, benvenuto su [b]#3[/b] !\n" .
         "\n" .
         "Per farlo clicca su \"Costruzioni\" nel menù a sinistra, seleziona la Miniera di metallo e clicca su Costruisci.\n" .
         "Ora hai un pò di tempo per conoscere il gioco.\n" .

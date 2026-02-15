@@ -116,8 +116,8 @@ $LOCA["de"]["REG_CHANGE_MAIL_BODY"] = "Grüße #1,\n\n" .
             "#4\n\n" .
             "Ihr OGame-Team";
 
-$LOCA["de"]["REG_GREET_MSG_SUBJ"] = "Willkommen bei OGame!";
-$LOCA["de"]["REG_GREET_MSG_TEXT"] = "Willkommen bei [b]OGame[/b] !\n" .
+$LOCA["de"]["REG_GREET_MSG_SUBJ"] = "Willkommen bei #1!";
+$LOCA["de"]["REG_GREET_MSG_TEXT"] = "Willkommen bei [b]#3[/b] !\n" .
         "\n" .
         "Erstens müssen Sie die Minen entwickeln.\n" .
         "Sie können dies im Menü \"Gebäude\" tun.\n" .
