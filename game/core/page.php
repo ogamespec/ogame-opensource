@@ -426,7 +426,7 @@ function LeftMenu () : void
     $json = LoadJsonFirst ("pages/leftmenu.json");
 
     // Admin Area
-    if ($GlobalUser['admin'] == 0) {
+    if ($GlobalUser['admin'] == USER_TYPE_PLAYER) {
         if (isset($json["admin"])) {
             unset ($json["admin"]);
         }

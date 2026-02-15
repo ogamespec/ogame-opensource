@@ -106,7 +106,7 @@ if ( $order == FTYP_SPY )
 
     if ( $target['owner_id'] == $GlobalUser['player_id'] ) AjaxSendError ();    // Own planet
     if ( $GlobalUser['noattack'] || $BlockAttack ) AjaxSendError ();    // Attack ban
-    if ( $target_user['admin'] > 0 && $target_user['player_id'] != USER_SPACE ) AjaxSendError ();    // the administration can't be scanned (except space)
+    if ( $target_user['admin'] > USER_TYPE_PLAYER && $target_user['player_id'] != USER_SPACE ) AjaxSendError ();    // the administration can't be scanned (except space)
     if ( IsPlayerNewbie ($target_user['player_id']) ) AjaxSendError (603);    // newbie protection
     if ( IsPlayerStrong ($target_user['player_id']) ) AjaxSendError (604);    // strong protection
     if ( $target_user['vacation'] ) AjaxSendError (605);    // user in vacation mode

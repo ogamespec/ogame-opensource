@@ -10,7 +10,7 @@ class Admin_Uni extends Page {
         global $GlobalUser;
         global $now;
 
-        if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
+        if ( method () === "POST" && $GlobalUser['admin'] >= USER_TYPE_ADMIN )
         {
             if ( key_exists ('news_upd', $_POST) )        // Update the news
             {

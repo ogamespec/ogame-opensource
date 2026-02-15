@@ -17,7 +17,7 @@ class Admin_Bans extends Page {
         global $GlobalUser;
 
         // POST request processing.
-        if ( method () === "POST" && $GlobalUser['admin'] >= 1 )
+        if ( method () === "POST" && $GlobalUser['admin'] >= USER_TYPE_GO )
         {
 
             if ( $_GET['action'] === 'search' )    {        // Search results

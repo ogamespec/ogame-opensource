@@ -320,7 +320,7 @@ $prem = PremiumStatus ($GlobalUser);
             }
 
             // Flags for the operator
-            if ( $GlobalUser['admin'] == 1 ) {
+            if ( $GlobalUser['admin'] == USER_TYPE_GO ) {
 
                 $flags = $GlobalUser['flags'];
                 $hide_go_email = (key_exists('hide_go_email', $_POST) && $_POST['hide_go_email']==="on");
@@ -583,7 +583,7 @@ $prem = PremiumStatus ($GlobalUser);
 ?>
 
 <?php
-    if ( $GlobalUser['admin'] == 1 )    // Additional settings visible only to operators
+    if ( $GlobalUser['admin'] == USER_TYPE_GO )    // Additional settings visible only to operators
     {
 ?>
 <tr>

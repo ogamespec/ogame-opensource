@@ -12,7 +12,7 @@ class Admin_ColonySettings extends Page {
         $this->coltab = LoadColonySettings();
 
         // POST request processing.
-        if ( method () === "POST" && $GlobalUser['admin'] >= 2 )
+        if ( method () === "POST" && $GlobalUser['admin'] >= USER_TYPE_ADMIN )
         {
             $this->coltab = $_POST;
             SaveColonySettings ($this->coltab);

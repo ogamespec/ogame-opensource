@@ -8,7 +8,7 @@ class Admin_Mods extends Page {
         global $GlobalUser;
 
         // GET request processing.
-        if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
+        if ( method () === "GET" && $GlobalUser['admin'] >= USER_TYPE_ADMIN ) {
 
             if ( key_exists ('modname', $_GET) ) $modname = $_GET['modname'];
             else $modname = null;

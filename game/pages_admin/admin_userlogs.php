@@ -11,7 +11,7 @@ class Admin_Userlogs extends Page {
         global $GlobalUser;
 
         // POST request processing.
-        if ( method () === "POST" && $GlobalUser['admin'] >= 1 )
+        if ( method () === "POST" && $GlobalUser['admin'] >= USER_TYPE_GO )
         {
             $name = $_POST['name'];
             $type = $_POST['type'];

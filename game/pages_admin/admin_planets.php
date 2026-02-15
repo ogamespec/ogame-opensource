@@ -16,7 +16,7 @@ class Admin_Planets extends Page {
         global $defmap;
 
         // POST request processing.
-        if ( method () === "POST" && $GlobalUser['admin'] >= 2 ) {
+        if ( method () === "POST" && $GlobalUser['admin'] >= USER_TYPE_ADMIN ) {
             $cp = intval ($_GET['cp']);
             $action = $_GET['action'];
 
@@ -116,7 +116,7 @@ class Admin_Planets extends Page {
         }
 
         // GET request processing.
-        if ( method () === "GET" && $GlobalUser['admin'] >= 2 ) {
+        if ( method () === "GET" && $GlobalUser['admin'] >= USER_TYPE_ADMIN ) {
             if ( key_exists('cp', $_GET) ) $cp = intval ($_GET['cp']);
             else $cp = 0;
             

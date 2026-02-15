@@ -18,7 +18,7 @@ class Admin_Debug extends Page {
         if ( key_exists ('filter', $_REQUEST) ) $filter = $_REQUEST['filter'];
         else $filter = "";
 
-        if ( method () === "POST" && $filter === "" && $GlobalUser['admin'] >= 2 )
+        if ( method () === "POST" && $filter === "" && $GlobalUser['admin'] >= USER_TYPE_ADMIN )
         {
             if ( $_POST['deletemessages'] === "deleteall" )
             {

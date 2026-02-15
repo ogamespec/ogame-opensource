@@ -204,7 +204,7 @@ function t_building() {
         if ( $GlobalUser['vacation']) $PageError = "<center>\n".loca("OVERVIEW_VM")."<br></center>\n";
         if ( $GlobalUni['freeze'] ) $PageError .= "<center>\n".loca("OVERVIEW_UNI_FREEZE")."<br></center>\n";
 
-        if ( $GlobalUser['admin'] > 0 ) $PageMessage .= "<center>".loca("OVERVIEW_ADMIN_NOTE")."<br></center>\n";
+        if ( $GlobalUser['admin'] > USER_TYPE_PLAYER ) $PageMessage .= "<center>".loca("OVERVIEW_ADMIN_NOTE")."<br></center>\n";
 
     }
 }
