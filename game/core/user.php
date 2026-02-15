@@ -796,10 +796,11 @@ function ChangeSkinPath (int $player_id, string $dpath) : void
 }
 
 // Enable/disable skin display. When the skin is disabled, the default skin is displayed.
-function EnableSkin (int $player_id, int $enable) : void
+function EnableSkin (int $player_id, bool $enable) : void
 {
     global $db_prefix;
-    $query = "UPDATE ".$db_prefix."users SET useskin = $enable WHERE player_id = $player_id";
+    $useskin = $enable ? 1 : 0;
+    $query = "UPDATE ".$db_prefix."users SET useskin = $useskin WHERE player_id = $player_id";
     dbquery ($query);
 }
 
@@ -978,6 +979,43 @@ function FeedActivate (bool $enable) : void
     $query = "UPDATE ".$db_prefix."users SET flags = ".$GlobalUser['flags'].", lastfeed = 0, feedid = '".$feedid."' WHERE player_id = $player_id";
     dbquery ($query);
     $GlobalUser['feedid'] = $feedid;
+}
+
+function EnableVacation (int $player_id, int $vacation_until, bool $enable) : void
+{
+    global $db_prefix;
+    global $GlobalUser;
+    global $PlanetProd;
+
+    if ($enable) {
+        $query = "UPDATE ".$db_prefix."users SET vacation=1,vacation_until=$vacation_until WHERE player_id=".$player_id;
+        dbquery ($query);
+        if ($player_id == $GlobalUser['player_id']) {
+            $GlobalUser['vacation'] = 1;
+            $GlobalUser['vacation_until'] = $vacation_until;
+        }
+
+        // Force production settings of all buildings for all planets to 0%.
+        $sub_query = "";
+        $need_comma = false;
+        foreach ($PlanetProd as $gid=>$prod) {
+            if ($need_comma) {
+                $sub_query .= ", ";
+            }
+            $sub_query .= "prod$gid = 0";
+            $need_comma = true;
+        }
+
+        $query = "UPDATE ".$db_prefix."planets SET $sub_query WHERE owner_id = " . $player_id;
+        dbquery ($query);
+    }
+    else {
+        $query = "UPDATE ".$db_prefix."users SET vacation=0,vacation_until=0 WHERE player_id=".$player_id;
+        dbquery ($query);
+        if ($player_id == $GlobalUser['player_id']) {
+            $GlobalUser['vacation'] = $GlobalUser['vacation_until'] = 0;
+        }
+    }
 }
 
 ?>
