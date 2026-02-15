@@ -11,7 +11,7 @@ $LOCA["es"]["PREM_DM_GET"] = "Get the dark matter";
 
 $LOCA["es"]["PREM_OFICEERS"] = "Officers";
 
-$LOCA["es"]["PREM_COMMANDER"] = "OGame Commander";
+$LOCA["es"]["PREM_COMMANDER"] = "Commander";
 $LOCA["es"]["PREM_COMMANDER_INFO"] = "The rank of commander has proven itself time and time again in modern combat. Thanks to the simplified structure, your orders can be executed faster, allowing you to maintain control of your entire empire! You will be able to develop strategies that allow you to always be one step ahead of the enemy.";
 $LOCA["es"]["PREM_COMMANDER_NOTE"] = "Build queue, empire overview, enhanced galaxy overview, message filter, no ads";
 

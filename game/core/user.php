@@ -107,7 +107,7 @@ function SendGreetingsMail ( string $name, string $pass, string $email, string $
     $text .= loca_lang ("REG_GREET_MAIL_FOOTER", $unitab['lang']);
 
     $domain = "";   // ru, org..
-    mail_utf8 ( $email, loca_lang ("REG_GREET_MAIL_SUBJ", $unitab['lang']), $text, "From: OGame Uni $domain $uni <noreply@".$_SERVER['SERVER_NAME'].">");
+    mail_utf8 ( $email, loca_lang ("REG_GREET_MAIL_SUBJ", $unitab['lang']), $text, va("From: #1 Uni $domain $uni <noreply@".$_SERVER['SERVER_NAME'].">", loca_lang("OGAME_INT", $unitab['lang'])) );
 }
 
 // Send a letter confirming the change of address (in the language of the universe).
@@ -124,7 +124,7 @@ function SendChangeMail ( string $name, string $email, string $pemail, string $a
         hostname()."game/validate.php?ack=$ack" );
 
     $domain = "";   // ru, org..
-    mail_utf8 ( $pemail, loca_lang ("REG_CHANGE_MAIL_SUBJ", $unitab['lang']), $text, "From: OGame Uni $domain $uni <noreply@".$_SERVER['SERVER_NAME'].">");
+    mail_utf8 ( $pemail, loca_lang ("REG_CHANGE_MAIL_SUBJ", $unitab['lang']), $text, va("From: #1 Uni $domain $uni <noreply@".$_SERVER['SERVER_NAME'].">", loca_lang("OGAME_INT", $unitab['lang'])) );
 }
 
 // Send a welcome message (in the user's language)

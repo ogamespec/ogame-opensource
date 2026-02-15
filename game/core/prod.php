@@ -1,6 +1,6 @@
 <?php
 
-// Auxiliary functions for the economic part of OGame.
+// Auxiliary functions for the economic part of the game.
 
 // Calculation of cost, build time and required conditions.
 
@@ -210,7 +210,7 @@ $PlanetProd = [
 
 function ProdBonus (array $uni, array $user, array $planet, int $rc, array &$prod_bonus) : void {
 
-    // A production bonus offered by the original OGame 0.84 mechanic. The bonus is not necessarily positive.
+    // A production bonus offered by the original 0.84 mechanic. The bonus is not necessarily positive.
     $prem = PremiumStatus ($user);
     switch ($rc) {
 
@@ -236,7 +236,7 @@ function ProdBonus (array $uni, array $user, array $planet, int $rc, array &$pro
 
 function ConsBonus (array $uni, array $user, array $planet, int $rc, array &$cons_bonus) : void {
 
-    // A bonus to consumption offered by the original OGame 0.84 mechanic. The bonus is not necessarily positive.
+    // A bonus to consumption offered by the original 0.84 mechanic. The bonus is not necessarily positive.
     // none.
 
     $param = [];

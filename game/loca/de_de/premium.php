@@ -11,7 +11,7 @@ $LOCA["de"]["PREM_DM_GET"] = "Dunkle Materie beschaffen";
 
 $LOCA["de"]["PREM_OFICEERS"] = "Offiziere";
 
-$LOCA["de"]["PREM_COMMANDER"] = "OGame Commander";
+$LOCA["de"]["PREM_COMMANDER"] = "Commander";
 $LOCA["de"]["PREM_COMMANDER_INFO"] = "Der Commander-Rang hat sich in der modernen Kriegsführung vielfach bewährt. Durch die vereinfachte Befehlsstruktur können Anweisungen schneller ausgeführt werden. Dadurch behältst Du den Überblick über Dein ganzes Imperium! Somit können Strategien entwickelt werden, die dem Gegner immer einen Schritt voraus sind.";
 $LOCA["de"]["PREM_COMMANDER_NOTE"] = "Bauliste, Imperiumsansicht, verbesserte Galaxieansicht, Nachrichtenfilter, Shortcuts, Werbefreiheit";
 
