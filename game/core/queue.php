@@ -315,7 +315,7 @@ function PropagateBuildQueue (int $planet_id, int $from) : void
                 else $BuildEvent = QTYP_BUILD;
 
                 $duration = floor (TechDuration ( $id, $lvl, PROD_BUILDING_DURATION_FACTOR, $planet[GID_B_ROBOTS], $planet[GID_B_NANITES], $speed ));
-                AddQueue ( $user['player_id'], $BuildEvent, $row['id'], $id, $lvl, $from, $duration, QUEUE_PRIO_BUILD );
+                AddQueue ( $user['player_id'], $BuildEvent, $row['id'], $id, $lvl, $from, (int)$duration, QUEUE_PRIO_BUILD );
 
                 // Update the start and end time of construction
                 $query = "UPDATE ".$db_prefix."buildqueue SET start = $from, end = ".($from+$duration)." WHERE id = " . $row['id'];
@@ -569,7 +569,7 @@ function ShipyardLatestTime (int $planet_id, int $now) : int
 }
 
 // Add fleet/defense at the shipyard ($gid - unit type, $value - quantity)
-function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int $now=0 ) : void
+function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int $now=0 ) : bool
 {
     global $db_prefix, $GlobalUni;
     global $fleetmap;
@@ -580,10 +580,10 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
     else UserLog ( $player_id, "SHIPYARD", va(loca_lang("DEBUG_LOG_SHIPYARD", $GlobalUni['lang']), loca("NAME_$gid"), $value, $planet_id)  );
 
     $techmap = array_merge ($fleetmap, $defmap);
-    if ( ! in_array ( $gid, $techmap ) ) return;
+    if ( ! in_array ( $gid, $techmap ) ) return false;
 
     $uni = $GlobalUni;
-    if ( $uni['freeze'] ) return;
+    if ( $uni['freeze'] ) return false;
 
     // Shield domes can be built up to a maximum of 1 unit.
     if ( ($gid == GID_D_SDOME || $gid == GID_D_LDOME) && $value > 1 ) $value = 1;
@@ -591,7 +591,7 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
     $planet = LoadPlanetById ( $planet_id );
 
     // If the planet already has a shield dome, we don't build it.
-    if ( ($gid == GID_D_SDOME || $gid == GID_D_LDOME) && $planet[$gid] > 0 ) return;
+    if ( ($gid == GID_D_SDOME || $gid == GID_D_LDOME) && $planet[$gid] > 0 ) return false;
 
     // If a dome of the same type is already being built in the queue, then do not add another dome to the queue.
     // Limit the number of missiles ordered to those already under construction
@@ -603,7 +603,7 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
         $queue = dbarray ( $result );
         if ( $queue['obj_id'] == GID_D_SDOME || $queue['obj_id'] == GID_D_LDOME )
         {
-            if ( $queue['obj_id'] == $gid ) return;    // is in line to build a dome of the same type.
+            if ( $queue['obj_id'] == $gid ) return false;    // is in line to build a dome of the same type.
         }
         if ( $queue['obj_id'] == GID_D_ABM || $queue['obj_id'] == GID_D_IPM )
         {
@@ -614,9 +614,10 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
 
     if ( $gid == GID_D_ABM ) $value = min ( $rak_space, $value );
     if ( $gid == GID_D_IPM ) $value = min ( floor ($rak_space / 2), $value );
-    if ( $value <= 0 ) return;
+    if ( $value <= 0 ) return false;
 
     $user = LoadUser ( $player_id );
+    if ($user == null) return false;
 
     $cost = TechPrice ( $gid, 1 );
     foreach ($resourcemap as $i=>$rc) {
@@ -636,6 +637,10 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
         AdjustResources ( $cost, $planet_id, '-' );
 
         AddQueue ($player_id, QTYP_SHIPYARD, $planet_id, $gid, $value, $now, $seconds);
+        return true;
+    }
+    else {
+        return false;
     }
 }
 

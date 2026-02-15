@@ -791,7 +791,7 @@ function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
 
     // Create the moon
     $mooncreated = false;
-    $moonchance = min ( floor ( ($debris[GID_RC_METAL] + $debris[GID_RC_CRYSTAL]) / 100000), 20 );
+    $moonchance = (int) min ( floor ( ($debris[GID_RC_METAL] + $debris[GID_RC_CRYSTAL]) / 100000), 20 );
     if ( PlanetHasMoon ( $planet_id ) || $p['type'] == PTYP_MOON || $p['type'] == PTYP_DEST_MOON ) $moonchance = 0;
     if ( mt_rand (1, 100) <= $moonchance ) {
         CreatePlanet ( $p['g'], $p['s'], $p['p'], $p['owner_id'], 0, 1, $moonchance );

@@ -68,7 +68,7 @@ function BotCanBuild (int $obj_id) : bool
     $aktplanet = GetUpdatePlanet ( $user['aktplanet'], $BotNow );
     if ($aktplanet == null) return false;
     $level = $aktplanet[$obj_id] + 1;
-    $text = CanBuild ( $user, $aktplanet, $obj_id, $level, 0 );
+    $text = CanBuild ( $user, $aktplanet, $obj_id, $level, false );
     return ( $text === '' );
 }
 
@@ -82,7 +82,7 @@ function BotBuild (int $obj_id) : int
     $aktplanet = LoadPlanetById ( $user['aktplanet'] );
     if ($aktplanet == null) return 0;
     $level = $aktplanet[$obj_id] + 1;
-    $text = CanBuild ( $user, $aktplanet, $obj_id, $level, 0 );
+    $text = CanBuild ( $user, $aktplanet, $obj_id, $level, false );
     if ( $text === '' ) {
         $speed = $GlobalUni['speed'];
         $duration = floor (TechDuration ( $obj_id, $level, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed ));
@@ -175,14 +175,14 @@ function BotBuildFleet (int $obj_id, int $n) : int
     if ($user == null) return 0;
     $aktplanet = LoadPlanetById ( $user['aktplanet'] );
     if ($aktplanet == null) return 0;
-    $text = AddShipyard ($user['player_id'], $user['aktplanet'], $obj_id, $n, 0 );
-    if ( $text === '' ) {
+    $res = AddShipyard ($user['player_id'], $user['aktplanet'], $obj_id, $n, 0 );
+    if ( $res ) {
         $speed = $GlobalUni['speed'];
         $now = ShipyardLatestTime ($aktplanet, $BotNow);
         $shipyard = $aktplanet[GID_B_SHIPYARD];
         $nanits = $aktplanet[GID_B_NANITES];
         $seconds = TechDuration ( $obj_id, 1, PROD_SHIPYARD_DURATION_FACTOR, $shipyard, $nanits, $speed );
-        AddQueue ($user['player_id'], "Shipyard", $aktplanet['planet_id'], $obj_id, $n, $now, $seconds);
+        AddQueue ($user['player_id'], QTYP_SHIPYARD, $aktplanet['planet_id'], $obj_id, $n, $now, $seconds);
         UpdatePlanetActivity ( $user['aktplanet'], $BotNow );
         return $seconds;
     }

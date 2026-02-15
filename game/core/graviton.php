@@ -24,9 +24,9 @@ function GravitonAttack (array $fleet_obj, array $fleet, int $when) : int
     $ripdes = mt_rand(1, 999) < $ripchance * 10;
 
     $origin_user = LoadUser ($origin['owner_id']);
-    if ($origin_user == 0) return 0;
+    if ($origin_user == null) return 0;
     $target_user = LoadUser ($target['owner_id']);
-    if ($target_user == 0) return 0;
+    if ($target_user == null) return 0;
     loca_add ( "graviton", $origin_user['lang'] );
     loca_add ( "graviton", $target_user['lang'] );
     loca_add ( "fleetmsg", $origin_user['lang'] );

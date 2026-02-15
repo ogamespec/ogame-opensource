@@ -625,8 +625,10 @@ function GetPhalanxRadius (int $level) : int {
     return $level * $level - 1;
 }
 
-function CanPhalanx ($origin, $target) : bool {
+function CanPhalanx (array|null $origin, array|null $target) : bool {
     
+    if ($origin == null || $target == null) return false;
+
     $system_radius = abs ($origin['s'] - $target['s']);
     $phalanx_radius = GetPhalanxRadius ($origin[GID_B_PHALANX]);
 

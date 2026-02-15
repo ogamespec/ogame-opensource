@@ -82,6 +82,8 @@ function AddUnionMember (int $union_id, string $name) : string
     // The error of adding a player to ACS union is given in the language of the current user (the one who adds players via the Fleet menu)
     loca_add ("union", $GlobalUser['lang']);
 
+    if ($union == null) return loca("ACS_UNION_NOT_FOUND");
+
     // Empty name, do nothing.
     if ($name === "") return "";
 
