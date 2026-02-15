@@ -47,8 +47,8 @@ class Admin_Checksum extends Page {
         'core/user.php', 
         'core/utils.php', 
         'validate.php', 
-        'game/feed/show.php', 
-        'game/feed/viewitem.php', 
+        'feed/show.php', 
+        'feed/viewitem.php', 
     );
 
     private array $page_admin_files = array (
