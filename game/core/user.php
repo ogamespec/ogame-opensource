@@ -85,9 +85,11 @@ function SendGreetingsMail ( string $name, string $pass, string $email, string $
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
     if ($from_reg) {
+        loca_add ("common", $unitab['lang'], "../");
         loca_add ("reg", $unitab['lang'], "../");
     }
     else {
+        loca_add ("common", $unitab['lang']);
         loca_add ("reg", $unitab['lang']);
     }
 
@@ -97,17 +99,20 @@ function SendGreetingsMail ( string $name, string $pass, string $email, string $
         hostname()."game/validate.php?ack=$ack",
         $name,
         $pass,
-        $uni );
+        $uni,
+        loca_lang("OGAME_LOC", $unitab['lang']) );
     if (!empty($unitab['ext_board'])) {
         $text .= va (loca_lang("REG_GREET_MAIL_BOARD", $unitab['lang']), $unitab['ext_board']);
     }
     if (!empty($unitab['ext_tutorial'])) {
         $text .= va (loca_lang("REG_GREET_MAIL_TUTORIAL", $unitab['lang']), $unitab['ext_tutorial']);
     }
-    $text .= loca_lang ("REG_GREET_MAIL_FOOTER", $unitab['lang']);
+    $text .= va(loca_lang ("REG_GREET_MAIL_FOOTER", $unitab['lang']), loca_lang ("OGAME_LOC", $unitab['lang']));
 
     $domain = "";   // ru, org..
-    mail_utf8 ( $email, loca_lang ("REG_GREET_MAIL_SUBJ", $unitab['lang']), $text, va("From: #1 Uni $domain $uni <noreply@".$_SERVER['SERVER_NAME'].">", loca_lang("OGAME_INT", $unitab['lang'])) );
+    mail_utf8 ( $email, 
+        va(loca_lang ("REG_GREET_MAIL_SUBJ", $unitab['lang']), loca_lang ("OGAME_LOC", $unitab['lang'])),
+        $text, va("From: #1 Uni $domain $uni <noreply@".$_SERVER['SERVER_NAME'].">", loca_lang("OGAME_INT", $unitab['lang'])) );
 }
 
 // Send a letter confirming the change of address (in the language of the universe).
@@ -134,10 +139,12 @@ function SendGreetingsMessage ( int $player_id, bool $from_reg) : void
     $user = LoadUser ($player_id);
     if ($user == null) return;
     if ($from_reg) {
+        loca_add ("common", $user['lang'], "../");
         loca_add ("reg", $user['lang'], "../");
         loca_add ("fleetmsg", $user['lang'], "../");
     }
     else {
+        loca_add ("common", $user['lang']);
         loca_add ("reg", $user['lang']);
         loca_add ("fleetmsg", $user['lang']);
     }

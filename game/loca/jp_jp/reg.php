@@ -94,9 +94,9 @@ $LOCA["jp"]["REG_NEW_MESSAGE_204"] = "ゲームを開始するには、基本レ
 
 // user.php
 
-$LOCA["jp"]["REG_GREET_MAIL_SUBJ"] = "OGameへようこそ ";
+$LOCA["jp"]["REG_GREET_MAIL_SUBJ"] = "#1へようこそ ";
 $LOCA["jp"]["REG_GREET_MAIL_BODY"] = "ご挨拶 #1,\n\n" .
-            "あなたはOGameユニバースの#2に自分の帝国を作ることを決めた！\n\n" .
+            "あなたは#7ユニバースの#2に自分の帝国を作ることを決めた！\n\n" .
             "アカウントを有効化するには、このリンクをクリックしてください：\n" .
             "#3\n\n" .
             "あなたの試合の詳細：\n" .
@@ -105,7 +105,7 @@ $LOCA["jp"]["REG_GREET_MAIL_BODY"] = "ご挨拶 #1,\n\n" .
             "ユニバース: #6\n\n\n";
 $LOCA["jp"]["REG_GREET_MAIL_BOARD"] = "他の皇帝からの助けやアドバイスが必要な場合は、私たちのフォーラムで見つけることができます (#1).\n\n";
 $LOCA["jp"]["REG_GREET_MAIL_TUTORIAL"] = "ここでは（#1）、新参者ができるだけ早くゲームを理解できるよう、選手やチームメンバーが集めたすべての情報を紹介する。\n\n";
-$LOCA["jp"]["REG_GREET_MAIL_FOOTER"] = "我々は、あなた方の帝国建設が成功し、今後の戦いで幸運がもたらされることを祈っている！\n\nあなたのOGameチーム";
+$LOCA["jp"]["REG_GREET_MAIL_FOOTER"] = "我々は、あなた方の帝国建設が成功し、今後の戦いで幸運がもたらされることを祈っている！\n\nあなたの#1チーム";
 
 $LOCA["jp"]["REG_CHANGE_MAIL_SUBJ"] = "ゲーム内のメールアドレスが変更されました ";
 $LOCA["jp"]["REG_CHANGE_MAIL_BODY"] = "ご挨拶 #1,\n\n" .

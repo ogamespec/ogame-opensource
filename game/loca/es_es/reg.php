@@ -95,9 +95,9 @@ $LOCA["es"]["REG_NEW_MESSAGE_204"] = "In order to start the game you must agree 
 
 // user.php
 
-$LOCA["es"]["REG_GREET_MAIL_SUBJ"] = "Welcome to OGame ";
+$LOCA["es"]["REG_GREET_MAIL_SUBJ"] = "Welcome to #1 ";
 $LOCA["es"]["REG_GREET_MAIL_BODY"] = "Greetings #1,\n\n" .
-            "You've decided to create your own empire in #2 of the OGame universe!\n\n" .
+            "You've decided to create your own empire in #2 of the #7 universe!\n\n" .
             "Click on this link to activate your account:\n" .
             "#3\n\n" .
             "Your gaming credentials:\n" .
@@ -106,7 +106,7 @@ $LOCA["es"]["REG_GREET_MAIL_BODY"] = "Greetings #1,\n\n" .
             "Universe: #6\n\n\n";
 $LOCA["es"]["REG_GREET_MAIL_BOARD"] = "If you need help or advice from other emperors, you can find it all in our forum (#1).\n\n";
 $LOCA["es"]["REG_GREET_MAIL_TUTORIAL"] = "Here (#1) is all the information gathered by players and team members to help newcomers understand the game as quickly as possible.\n\n";
-$LOCA["es"]["REG_GREET_MAIL_FOOTER"] = "We wish you success in building your empire and good luck in the upcoming battles!\n\nYour OGame team";
+$LOCA["es"]["REG_GREET_MAIL_FOOTER"] = "We wish you success in building your empire and good luck in the upcoming battles!\n\nYour #1 team";
 
 $LOCA["es"]["REG_CHANGE_MAIL_SUBJ"] = "Your in-game e-mail address has been changed ";
 $LOCA["es"]["REG_CHANGE_MAIL_BODY"] = "Greetings #1,\n\n" .

@@ -97,9 +97,9 @@ $LOCA["it"]["REG_NEW_MESSAGE_204"] = "Per proseguire devi accettare i termini e 
 
 // user.php
 
-$LOCA["it"]["REG_GREET_MAIL_SUBJ"] = "Registrazione a OGame ";
+$LOCA["it"]["REG_GREET_MAIL_SUBJ"] = "Registrazione a #1 ";
 $LOCA["it"]["REG_GREET_MAIL_BODY"] = "Ciao #1,\n\n" .
-                "Grazie per esserti iscritto a OGame  #2!\n\n" .
+                "Grazie per esserti iscritto a #7  #2!\n\n" .
                 "Per convalidare il tuo account clicca sul seguente link:\n" .
                 "#3\n\n" .
                 "Di seguito i tuoi dati di accesso:\n" .
@@ -108,7 +108,7 @@ $LOCA["it"]["REG_GREET_MAIL_BODY"] = "Ciao #1,\n\n" .
                 "Universo: #6\n\n\n";
 $LOCA["it"]["REG_GREET_MAIL_BOARD"] = "Se hai bisogno di aiuto o di consigli da parte di altri imperatori, puoi trovare tutto nel nostro forum (#1).\n\n";
 $LOCA["it"]["REG_GREET_MAIL_TUTORIAL"] = "Qui (#1) ci sono tutte le informazioni raccolte dai giocatori e dai membri della squadra per aiutare i nuovi arrivati a capire il gioco il più rapidamente possibile.\n\n";
-$LOCA["it"]["REG_GREET_MAIL_FOOTER"] = "Vi auguriamo successo nella costruzione del vostro impero e buona fortuna nelle prossime battaglie! Lo staff di OGame.\n\n\n\n\n\n";
+$LOCA["it"]["REG_GREET_MAIL_FOOTER"] = "Vi auguriamo successo nella costruzione del vostro impero e buona fortuna nelle prossime battaglie! Lo staff di #1.\n\n\n\n\n\n";
 
 $LOCA["it"]["REG_CHANGE_MAIL_SUBJ"] = "Attivazione account OGame ";
 $LOCA["it"]["REG_CHANGE_MAIL_BODY"] = "Ciao #1,\n\n" .
