@@ -522,7 +522,12 @@ class Admin_Users extends Page {
             $hplanet = LoadPlanetById ( $user['hplanetid'] );
 
             echo "<tr><th>".date ("Y-m-d H:i:s", $user['regdate'])."</th>";
-            echo "<th>[".$hplanet['g'].":".$hplanet['s'].":".$hplanet['p']."] <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$hplanet['planet_id']."\">".$hplanet['name']."</a></th>";
+            if ($hplanet) {
+                echo "<th>[".$hplanet['g'].":".$hplanet['s'].":".$hplanet['p']."] <a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$hplanet['planet_id']."\">".$hplanet['name']."</a></th>";
+            }
+            else {
+                echo "<th>-</th>";  // not yet selected
+            }
             echo "<th>".AdminUserName($user)."</th></tr>\n";
         }
         echo "</table>\n";
