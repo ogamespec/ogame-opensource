@@ -367,13 +367,17 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
                 Error ("WritebackBattleResults target null");
             }
             $ships = 0;
-            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['units'][$gid];
+            foreach ( $fleetmap as $ii=>$gid ) {
+                if (isset($attacker['units'][$gid])) {
+                    $ships += $attacker['units'][$gid];
+                }
+            }
             if ( $sum_cargo == 0) $cargo = 0;
             else $cargo = ( FleetCargoSummary ( $attacker['units'] ) - ($fleet_obj[GID_RC_METAL]+$fleet_obj[GID_RC_CRYSTAL]+$fleet_obj[GID_RC_DEUTERIUM]) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) {
                 if ( $fleet_obj['mission'] == FTYP_DESTROY && $res['result'] === "awon" ) $result = GravitonAttack ( $fleet_obj, $attacker['units'], $queue['end'] );
                 else $result = 0;
-                if ( $result < 2 ) {
+                if ( ($result & GRAVI_FLEET_DESTR) == 0 ) {
                     $resources = array ();
                     foreach ($transportableResources as $i=>$rc) {
                         $resources[$rc] = $fleet_obj[$rc] + $captured[$rc] * $cargo;
@@ -392,17 +396,23 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
                 case BATTLE_PTCP_PLANET:        // Planet
                     AdjustResources ( $captured, $defender['id'], '-' );
                     $objects = array ();
-                    foreach ( $fleetmap as $ii=>$gid ) $objects[$gid] = $defender['units'][$gid];
+                    foreach ( $fleetmap as $ii=>$gid ) {
+                        $objects[$gid] = isset($defender['units'][$gid]) ? $defender['units'][$gid] : 0;
+                    }
                     foreach ( $defmap_norak as $ii=>$gid ) {
                         $objects[$gid] = $repaired[$i][$gid];
-                        $objects[$gid] += $defender['units'][$gid];
+                        $objects[$gid] += isset($defender['units'][$gid]) ? $defender['units'][$gid] : 0;
                     }
                     SetPlanetFleetDefense ( $defender['id'], $objects );
                     break;
 
                 case BATTLE_PTCP_FLEET:     // Fleets on hold
                     $ships = 0;
-                    foreach ( $fleetmap as $ii=>$gid ) $ships += $defender['units'][$gid];
+                    foreach ( $fleetmap as $ii=>$gid ) {
+                        if (isset($defender['units'][$gid])) {
+                            $ships += $defender['units'][$gid];
+                        }
+                    }
                     if ( $ships > 0 ) SetFleet ( $defender['id'], $defender['units'] );
                     else {
                         $queue = GetFleetQueue ($defender['id']);
@@ -431,7 +441,11 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
                 Error ("WritebackBattleResults target null");
             }
             $ships = 0;
-            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['units'][$gid];
+            foreach ( $fleetmap as $ii=>$gid ) {
+                if (isset($attacker['units'][$gid])) {
+                    $ships += $attacker['units'][$gid];
+                }
+            }
             if ( $sum_cargo == 0) $cargo = 0;
             else $cargo = ( FleetCargoSummary ( $attacker['units'] ) - ($fleet_obj[GID_RC_METAL]+$fleet_obj[GID_RC_CRYSTAL]+$fleet_obj[GID_RC_DEUTERIUM]) - $fleet_obj['fuel'] ) / $sum_cargo;
             if ($ships > 0) {
