@@ -28,6 +28,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zlib1g-dev \
     libonig-dev \
+    msmtp \
     && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 RUN docker-php-ext-install gd
