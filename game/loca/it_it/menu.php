@@ -2,7 +2,7 @@
 
 // Menu di sinistra.
 
-$LOCA["it"]["MENU_DIS"] = "For problems specifically for the blind, send an email to barrierefrei@ogame.de.";
+$LOCA["it"]["MENU_DIS"] = "For problems specifically for the blind, send an email to #1.";
 $LOCA["it"]["MENU_UNIVERSE"] = "Universo";
 $LOCA["it"]["MENU_OVERVIEW"] = "Riepilogo";
 $LOCA["it"]["MENU_ADMIN"] = "*Admin Area*";

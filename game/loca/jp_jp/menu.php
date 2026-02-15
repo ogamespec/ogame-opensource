@@ -2,7 +2,7 @@
 
 // 左メニュー.
 
-$LOCA["jp"]["MENU_DIS"] = "視覚障害のある選手に関する問題は、下記までお問い合わせください barrierefrei@ogame.de.";
+$LOCA["jp"]["MENU_DIS"] = "視覚障害のある選手に関する問題は、下記までお問い合わせください #1.";
 $LOCA["jp"]["MENU_UNIVERSE"] = "ユニバース";
 $LOCA["jp"]["MENU_OVERVIEW"] = "レビュー";
 $LOCA["jp"]["MENU_ADMIN"] = "* 管理者 *";

@@ -418,7 +418,7 @@ function LeftMenu () : void
     echo "</script>\n";
     echo "<center>\n\n";
     echo "<div id='menu'>\n";
-    echo "<a href='mailto:barrierefrei@ogame.de' title='".loca("MENU_DIS")."' style='width:1px;'></a>\n";
+    echo "<a href='mailto:barrierefrei@ogame.de' title='".va(loca("MENU_DIS"),EMAIL_BARRIERFREI)."' style='width:1px;'></a>\n";
     echo "<p style='width:110px;'><NOBR>".loca("MENU_UNIVERSE")." ".$uni." (<a href='index.php?page=changelog&session=".$sess."'>v 0.84</a>)</NOBR></p>\n";
     echo "<table width='110' cellspacing='0' cellpadding='0'>\n";
 
