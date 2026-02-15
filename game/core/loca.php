@@ -72,6 +72,7 @@ function loca_lang (string $key, string $lang) : string
 function loca_add ( string $section, string $lang='en', string $dir='' ) : void
 {
     global $LOCA, $Languages;
+    global $from_reg;
 
     // Check if the language is on the list (to exclude injections)
     $found = false;
@@ -79,6 +80,10 @@ function loca_add ( string $section, string $lang='en', string $dir='' ) : void
         if ( $i === $lang) { $found = true; break; }
     }
     if ( !$found ) return;
+
+    if ($from_reg) {
+        $dir = "../";
+    }
 
     $path = str_replace('\\', '/', $dir);
     if ($dir !== "" && !str_ends_with($path, '/')) {

@@ -16,12 +16,14 @@ if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
 else $loca_lang = $_COOKIE['ogamelang'];
 
 loca_add ( "common", $loca_lang, "../" );
+loca_add ( "debug", $loca_lang, "../" );
 loca_add ( "reg", $loca_lang, "../" );
 
 InitDB();
 
-$uni = LoadUniverse ();
-$uninum = $uni['num'];
+$GlobalUni = LoadUniverse ();
+$uninum = $GlobalUni['num'];
+$from_reg = true;
 
 $error = $agbclass = "";
 if ( method() === "POST" )        // Register a player.
@@ -40,7 +42,7 @@ if ( method() === "POST" )        // Register a player.
     else if ( IsUserExist ( $_POST['character'])) $error = va ( loca("REG_NEW_ERROR_EXISTS"), $_POST['character'] ) ;
     else if ( !isValidEmail ($_POST['email']) ) $error = va ( loca("REG_NEW_ERROR_EMAIL"), $_POST['email'] ) ;
     else if ( IsEmailExist ( $_POST['email'])) $error = va ( loca("REG_NEW_ERROR_EMAIL_EXISTS"), $_POST['email'] );
-    else if ( GetUsersCount() >= $uni['maxusers']) $error = va (loca("REG_NEW_ERROR_MAX_PLAYERS"), $uni['maxusers']);
+    else if ( GetUsersCount() >= $GlobalUni['maxusers']) $error = va (loca("REG_NEW_ERROR_MAX_PLAYERS"), $GlobalUni['maxusers']);
 
     $forbidden = explode ( ",", FORBIDDEN_LOGINS );
     $lower = mb_strtolower ($_POST['character'], 'UTF-8');
@@ -54,7 +56,7 @@ if ( method() === "POST" )        // Register a player.
     if ( $error === "" )
     {
         $password = gen_trivial_password ();
-        CreateUser ( $_POST['character'], $password, $_POST['email'], false, true );
+        CreateUser ( $_POST['character'], $password, $_POST['email'], false );
 
 ?>
 <html>

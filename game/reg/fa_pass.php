@@ -29,8 +29,8 @@ function EmailExist ( $email)
 
 InitDB();
 
-$uni = LoadUniverse ();
-$uninum = $uni['num'];
+$GlobalUni = LoadUniverse ();
+$uninum = $GlobalUni['num'];
 
 $pass_ok = false;
 if ( method () === "POST" ) {

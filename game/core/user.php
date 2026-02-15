@@ -80,18 +80,12 @@ function fixed_date ( string $fmt, int $timestamp ) : string
 }
 
 // Send a welcome email with a link to activate your account (in the language of the universe).
-function SendGreetingsMail ( string $name, string $pass, string $email, string $ack, bool $from_reg) : void
+function SendGreetingsMail ( string $name, string $pass, string $email, string $ack) : void
 {
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
-    if ($from_reg) {
-        loca_add ("common", $unitab['lang'], "../");
-        loca_add ("reg", $unitab['lang'], "../");
-    }
-    else {
-        loca_add ("common", $unitab['lang']);
-        loca_add ("reg", $unitab['lang']);
-    }
+    loca_add ("common", $unitab['lang']);
+    loca_add ("reg", $unitab['lang']);
 
     $text = va ( loca_lang("REG_GREET_MAIL_BODY", $unitab['lang']), 
         $name,
@@ -138,21 +132,15 @@ function SendChangeMail ( string $name, string $email, string $pemail, string $a
 }
 
 // Send a welcome message (in the user's language)
-function SendGreetingsMessage ( int $player_id, bool $from_reg) : void
+function SendGreetingsMessage ( int $player_id) : void
 {
     $unitab = LoadUniverse ();
     $user = LoadUser ($player_id);
     if ($user == null) return;
-    if ($from_reg) {
-        loca_add ("common", $user['lang'], "../");
-        loca_add ("reg", $user['lang'], "../");
-        loca_add ("fleetmsg", $user['lang'], "../");
-    }
-    else {
-        loca_add ("common", $user['lang']);
-        loca_add ("reg", $user['lang']);
-        loca_add ("fleetmsg", $user['lang']);
-    }
+    loca_add ("common", $user['lang']);
+    loca_add ("reg", $user['lang']);
+    loca_add ("fleetmsg", $user['lang']);
+
     SendMessage ( $player_id, 
         loca_lang ("FLEET_MESSAGE_FROM", $user['lang']), 
         va(loca_lang ("REG_GREET_MSG_SUBJ", $user['lang']), loca_lang ("OGAME_LOC", $user['lang']) ),
@@ -182,7 +170,7 @@ function IsEmailExist ( string $email, string $name="") : bool
 
 // There are no checks for correctness! This is handled by the registration procedure.
 // Returns the ID of the created user.
-function CreateUser ( string $name, string $pass, string $email, bool $bot=false, bool $from_reg=false) : int
+function CreateUser ( string $name, string $pass, string $email, bool $bot=false) : int
 {
     global $db_prefix, $db_secret, $Languages;
     $origname = $name;
@@ -219,12 +207,7 @@ function CreateUser ( string $name, string $pass, string $email, bool $bot=false
 
     LogIPAddress ( $ip, $id, 1 );
 
-    if ($from_reg) {
-        loca_add ("common", $user['lang'], "../");
-    }
-    else {
-        loca_add ("common", $user['lang']);
-    }
+    loca_add ("common", $user['lang']);
 
     // Create a Home Planet.
     $homeplanet = CreateHomePlanet ($id);
@@ -234,8 +217,8 @@ function CreateUser ( string $name, string $pass, string $email, bool $bot=false
 
     // Send a welcome email and message.
     if ( !$bot ) {
-        if ( !localhost($ip) ) SendGreetingsMail ( $origname, $pass, $email, $ack, $from_reg);
-        SendGreetingsMessage ( $id, $from_reg);
+        if ( !localhost($ip) ) SendGreetingsMail ( $origname, $pass, $email, $ack);
+        SendGreetingsMessage ( $id);
     }
 
     // Delete an inactivated user after 3 days.
@@ -544,9 +527,10 @@ function RecruitOfficer ( int $player_id, int $off_type, int $seconds ) : void
 }
 
 // Called when you click on "Exit" in the menu.
-function Logout ( string $session ) : void
+function Logout ( string|null $session ) : void
 {
     global $db_prefix;
+    if ($session == null) return;
     $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$session."'";
     $result = dbquery ($query);
     if (dbrows ($result) == 0) return;
@@ -651,11 +635,11 @@ function Login ( string $login, string $pass, string $passmd="" ) : never
         AddUpdateStatsEvent ();
         AddRecalcPointsEvent ($player_id);
 
+        LogIPAddress ( $ip, $player_id );
+
         // Redirect to Home Planet Overview.
         header ( "Location: ".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1" );
         echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
-
-        LogIPAddress ( $ip, $player_id );
     }
     else
     {

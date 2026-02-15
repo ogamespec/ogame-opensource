@@ -73,6 +73,7 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
     global $GlobalUser;
     global $GlobalUni;
     global $aktplanet;
+    global $session;
 
     BrowseHistory ();
 
@@ -88,10 +89,10 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
     echo " <head>\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/default.css' />\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/formate.css' />\n";
-    echo "  <script language=\"JavaScript\">var session=\"".$GlobalUser['session']."\";</script>\n";
+    echo "  <script language=\"JavaScript\">var session=\"$session\";</script>\n";
     echo "  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n";
     if ( $redirect_page !== "" ) {
-        echo "  <meta http-equiv=\"refresh\" content=\"".$redirect_sec."; URL=index.php?page=".$redirect_page."&session=".$GlobalUser['session']."&redirect=1\">\n\n";
+        echo "  <meta http-equiv=\"refresh\" content=\"".$redirect_sec."; URL=index.php?page=".$redirect_page."&session=$session&redirect=1\">\n\n";
     }
     echo "<link rel='stylesheet' type='text/css' href='css/combox.css'>\n";
     echo "<link rel='stylesheet' type='text/css' href='".UserSkin()."formate.css' />\n";

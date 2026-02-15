@@ -8,10 +8,15 @@ function Error (string $text) : never
     global $GlobalUser;
     global $GlobalUni;
     global $from_cron;
+    global $DefaultLanguage;
     if ( $GlobalUser == null ) {
         $GlobalUser = array ();
         $GlobalUser['player_id'] = 0;
     }
+
+    if ( isset($GlobalUser['lang']) ) $loca_lang = $GlobalUser['lang'];
+    else if ( isset($GlobalUni['lang']) ) $loca_lang = $GlobalUni['lang'];
+    else $loca_lang = $DefaultLanguage;
 
     $text = str_replace ( "\"", "&quot;", $text );
     $text = str_replace ( "'", "&rsquo;", $text );
@@ -35,10 +40,10 @@ function Error (string $text) : never
 
     echo "<center><font size=\"3\"><b>\n";
     echo "<br /><br />\n";
-    echo "<font color=\"#FF0000\">".loca_lang("DEBUG_ERROR", $GlobalUni['lang'])."</font> - $text\n";
+    echo "<font color=\"#FF0000\">".loca_lang("DEBUG_ERROR", $loca_lang)."</font> - $text\n";
     echo "<br /><br />\n";
     echo BackTrace() . "<br /><br />\n";
-    echo loca_lang("DEBUG_ERROR_INFO1", $GlobalUni['lang']) . "<br/><br/>" . loca_lang("DEBUG_ERROR_INFO2", $GlobalUni['lang']) . "\n";
+    echo loca_lang("DEBUG_ERROR_INFO1", $loca_lang) . "<br/><br/>" . loca_lang("DEBUG_ERROR_INFO2", $loca_lang) . "\n";
     echo "<br /><br />\n";
     echo "Error-ID: $id</b></font></center>\n";
 
@@ -91,7 +96,8 @@ function BrowseHistory () : void
 {
     global $GlobalUser;
 
-    if ( $GlobalUser['sniff'] )
+    if ($GlobalUser == null) return;
+    if ( isset($GlobalUser['sniff']) && $GlobalUser['sniff'] )
     {
         $getdata = serialize ( $_GET );
         $postdata = serialize ( $_POST );
