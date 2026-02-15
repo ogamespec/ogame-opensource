@@ -110,13 +110,13 @@ $LOCA["it"]["REG_GREET_MAIL_BOARD"] = "Se hai bisogno di aiuto o di consigli da 
 $LOCA["it"]["REG_GREET_MAIL_TUTORIAL"] = "Qui (#1) ci sono tutte le informazioni raccolte dai giocatori e dai membri della squadra per aiutare i nuovi arrivati a capire il gioco il più rapidamente possibile.\n\n";
 $LOCA["it"]["REG_GREET_MAIL_FOOTER"] = "Vi auguriamo successo nella costruzione del vostro impero e buona fortuna nelle prossime battaglie! Lo staff di #1.\n\n\n\n\n\n";
 
-$LOCA["it"]["REG_CHANGE_MAIL_SUBJ"] = "Attivazione account OGame ";
+$LOCA["it"]["REG_CHANGE_MAIL_SUBJ"] = "Attivazione account #1 ";
 $LOCA["it"]["REG_CHANGE_MAIL_BODY"] = "Ciao #1,\n\n" .
-               "Hai richiesto la convalida dell'account di OGame Universo #2 inserendo l'indirizzo email #3.\n" .
+               "Hai richiesto la convalida dell'account di #5 Universo #2 inserendo l'indirizzo email #3.\n" .
                "\n\n" .
                "Per convalidare il tuo account clicca sul seguente link:\n\n" .
                "#4\n\n" .
-               "Il team di OGame";
+               "Il team di #5";
 
 $LOCA["it"]["REG_GREET_MSG_SUBJ"] = "Benvenuto su #1!";
 $LOCA["it"]["REG_GREET_MSG_TEXT"] = "Ciao, benvenuto su [b]#3[/b] !\n" .

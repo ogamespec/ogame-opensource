@@ -120,16 +120,21 @@ function SendChangeMail ( string $name, string $email, string $pemail, string $a
 {
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
+    loca_add ("common", $unitab['lang']);
     loca_add ("reg", $unitab['lang']);
     
     $text = va (loca_lang("REG_CHANGE_MAIL_BODY", $unitab['lang']), 
         $name,
         $uni,
         $email,
-        hostname()."game/validate.php?ack=$ack" );
+        hostname()."game/validate.php?ack=$ack",
+        loca_lang("OGAME_INT", $unitab['lang'])
+    );
 
     $domain = "";   // ru, org..
-    mail_utf8 ( $pemail, loca_lang ("REG_CHANGE_MAIL_SUBJ", $unitab['lang']), $text, va("From: #1 Uni $domain $uni <noreply@".$_SERVER['SERVER_NAME'].">", loca_lang("OGAME_INT", $unitab['lang'])) );
+    mail_utf8 ( $pemail, 
+        va (loca_lang ("REG_CHANGE_MAIL_SUBJ", $unitab['lang']), loca_lang ("OGAME_INT", $unitab['lang'])),
+        $text, va("From: #1 Uni $domain $uni <noreply@".$_SERVER['SERVER_NAME'].">", loca_lang("OGAME_INT", $unitab['lang'])) );
 }
 
 // Send a welcome message (in the user's language)

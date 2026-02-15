@@ -114,7 +114,7 @@ $LOCA["en"]["REG_CHANGE_MAIL_BODY"] = "Greetings #1,\n\n" .
             "If you don't change it within a week, it will become permanent.\n\n" .
             "Confirm your new e-mail address using the following link to continue playing without any problems:\n\n" .
             "#4\n\n" .
-            "Your OGame team";
+            "Your #5 team";
 
 $LOCA["en"]["REG_GREET_MSG_SUBJ"] = "Welcome to #1!";
 $LOCA["en"]["REG_GREET_MSG_TEXT"] = "Welcome to [b]#3[/b] !\n" .
