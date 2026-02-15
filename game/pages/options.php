@@ -31,10 +31,6 @@ function IsSelected (string $option, mixed $value) : string
     else return "";
 }
 
-function isValidEmail(string $email) : mixed {
-    return filter_var($email, FILTER_VALIDATE_EMAIL);
-}
-
 $speed = $GlobalUni['speed'];
 $prem = PremiumStatus ($GlobalUser);
 
@@ -174,14 +170,17 @@ $prem = PremiumStatus ($GlobalUser);
         if ( method () === "POST" && !key_exists ( 'urlaub_aus', $_POST) ) {
 
             if ( $GlobalUser['name_changed'] == 0 && $_POST['db_character'] !== $GlobalUser['oname'] ) {        // Change the name.
-                $forbidden = explode ( ",", "hitler, fick, adolf, legor, aleena, ogame, mainman, fishware, osama, bin laden, stalin, goebbels, drecksjude, saddam, space, ringkeeper, administration" );
+                $forbidden = explode ( ",", FORBIDDEN_LOGINS );
                 if ( IsUserExist ( $_POST['db_character'] )) $PageError = loca ("OPTIONS_ERR_EXISTNAME");
                 else if ( !CanChangeName ($GlobalUser['player_id']) ) $PageError = loca ("OPTIONS_ERR_NAME_WEEK");
                 else if ( mb_strlen ($_POST['db_character']) < 3 || mb_strlen ($_POST['db_character']) > 20 ) $PageError = loca ("OPTIONS_ERR_NAME_3_20");
                 else if ( preg_match ( '/[<>()\[\]{}\\\\\/\`\"\'.,:;*+]/', $_POST['db_character'] )) $PageError = loca ("OPTIONS_ERR_NAME_SPECIAL");
                 $lower = mb_strtolower ($_POST['db_character'], 'UTF-8');
                 foreach ( $forbidden as $i=>$name) {
-                    if ( $lower === $name ) $PageError = loca ("OPTIONS_ERR_NAME");
+                    if ( strpos($lower, $name) !== false ) {
+                        $PageError = loca ("OPTIONS_ERR_NAME");
+                        break;
+                    }
                 }
 
                 if ( $PageError === "" )

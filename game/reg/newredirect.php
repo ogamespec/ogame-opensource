@@ -16,10 +16,6 @@ InitDB();
 
 // Verify registration information.
 
-function isValidEmail($email){
-	return filter_var($email, FILTER_VALIDATE_EMAIL);
-}
-
 $uni = LoadUniverse ();
 
 if ( $_SERVER['REQUEST_METHOD'] === "POST" )

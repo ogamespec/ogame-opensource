@@ -285,4 +285,8 @@ function FloatEqual (float $a, float $b) : bool {
     return abs($a-$b) < PHP_FLOAT_EPSILON;
 }
 
+function isValidEmail(string $email) : mixed {
+    return filter_var($email, FILTER_VALIDATE_EMAIL);
+}
+
 ?>

@@ -18,10 +18,6 @@ else $loca_lang = $_COOKIE['ogamelang'];
 loca_add ( "common", $loca_lang, "../" );
 loca_add ( "reg", $loca_lang, "../" );
 
-function isValidEmail($email){
-	return filter_var($email, FILTER_VALIDATE_EMAIL);
-}
-
 function EmailExist ( $email)
 {
     global $db_prefix;

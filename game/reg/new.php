@@ -18,10 +18,6 @@ else $loca_lang = $_COOKIE['ogamelang'];
 loca_add ( "common", $loca_lang, "../" );
 loca_add ( "reg", $loca_lang, "../" );
 
-function isValidEmail($email){
-	return filter_var($email, FILTER_VALIDATE_EMAIL);
-}
-
 InitDB();
 
 $uni = LoadUniverse ();
@@ -45,6 +41,15 @@ if ( method() === "POST" )        // Register a player.
     else if ( !isValidEmail ($_POST['email']) ) $error = va ( loca("REG_NEW_ERROR_EMAIL"), $_POST['email'] ) ;
     else if ( IsEmailExist ( $_POST['email'])) $error = va ( loca("REG_NEW_ERROR_EMAIL_EXISTS"), $_POST['email'] );
     else if ( GetUsersCount() >= $uni['maxusers']) $error = va (loca("REG_NEW_ERROR_MAX_PLAYERS"), $uni['maxusers']);
+
+    $forbidden = explode ( ",", FORBIDDEN_LOGINS );
+    $lower = mb_strtolower ($_POST['character'], 'UTF-8');
+    foreach ( $forbidden as $i=>$name) {
+        if ( strpos($lower, $name) !== false ) {
+            $error = va ( loca("REG_NEW_ERROR_CHARS"), $_POST['character'] );
+            break;
+        }
+    }
 
     if ( $error === "" )
     {
@@ -80,7 +85,7 @@ if ( method() === "POST" )        // Register a player.
 ?>
 </tr>
 </table>
-<div style="position:relative; width: 700px; height: 300px; color: #000000; text-align: left; border: 1px solid #415680;"><a href="http://ogame.de/portal"><img src="login.jpg" width="700" height="300" alt="" /></a>
+<div style="position:relative; width: 700px; height: 300px; color: #000000; text-align: left; border: 1px solid #415680;"><a href="<?=hostname();?>"><img src="login.jpg" width="700" height="300" alt="" /></a>
 	<div style="position:absolute; top:135px; left:170px; width:130px; height:16px;"><?=va(loca("REG_NEW_UNI"), $uninum);?></div>
 	<div style="position:absolute; top:135px; left:345px; width:85px; height:16px;"><?=$_POST['character'];?></div>
 
