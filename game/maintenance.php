@@ -100,7 +100,7 @@ a:hover {
 <body id="maintenance">
     <div id="infowrapper">
         <h2><?=loca("MAINTAIN_HEAD");?></h2>
-        <p><?=loca("MAINTAIN_INFO1");?></p>
+        <p><?=va(loca("MAINTAIN_INFO1"), loca("OGAME_LOC"));?></p>
         <p><?=loca("MAINTAIN_INFO2");?></p>
         <br/>
         <br/>
