@@ -15,6 +15,7 @@ require_once "../core/core.php";
 if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
 else $loca_lang = $_COOKIE['ogamelang'];
 
+loca_add ( "common", $loca_lang, "../" );
 loca_add ( "reg", $loca_lang, "../" );
 
 function isValidEmail($email){
@@ -45,12 +46,13 @@ if ( method () === "POST" ) {
             $md5 = md5 ($pass . $db_secret );
             $query = "UPDATE ".$db_prefix."users SET session = '', password = '".$md5."' WHERE player_id = " . $user['player_id'];
             dbquery ($query);
-            mail_utf8 ( $user['pemail'], loca("REG_FORGOT_SUBJ"),
+            mail_utf8 ( $user['pemail'], va(loca("REG_FORGOT_SUBJ"), loca("OGAME_LOC")),
                 va ( loca("REG_FORGOT_MAIL"),
                     $user['oname'],
                     $uninum,
                     $pass,
-                    "" . hostname()
+                    hostname(),
+                    loca("OGAME_LOC")
                 ), "From: welcome@" . $_SERVER['SERVER_NAME'] );
             $pass_ok = true;
         }
@@ -61,7 +63,7 @@ if ( method () === "POST" ) {
 
 <html>
  <head>
-  <title><?=loca("REG_FORGOT_TITLE");?></title>
+  <title><?=va(loca("REG_FORGOT_TITLE"), loca("OGAME_INT"));?></title>
 <!--  <meta http-equiv="refresh" content="5; URL=http://<?=hostname();?>"> -->
   <link rel="stylesheet" type="text/css" href="<?=hostname();?>evolution/formate.css">
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
