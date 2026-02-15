@@ -58,9 +58,9 @@ $LOCA["it"]["REG_NEW_ERROR_EXISTS"] = "Username #1 gi&agrave; esistente";
 $LOCA["it"]["REG_NEW_ERROR_EMAIL"] = "Email #1 non valida !";
 $LOCA["it"]["REG_NEW_ERROR_EMAIL_EXISTS"] = "Email #1 gi&agrave; esistente!";
 $LOCA["it"]["REG_NEW_ERROR_MAX_PLAYERS"] = "Il numero massimo di giocatori (#1) è stato raggiunto!";
-$LOCA["it"]["REG_NEW_TITLE"] = "Registrazione Universo #1";
+$LOCA["it"]["REG_NEW_TITLE"] = "Registrazione Universo #1 #2";
 $LOCA["it"]["REG_NEW_SUCCESS"] = "Registrazione completata con successo!";
-$LOCA["it"]["REG_NEW_TEXT"] = "Congratulazioni, <span class='fine'>#1</span>!<br /><br />ti sei registrato con successo a OGame (<span class='fine'>#2</span>). <br /><br/>\n".
+$LOCA["it"]["REG_NEW_TEXT"] = "Congratulazioni, <span class='fine'>Universo #1</span>!<br /><br />ti sei registrato con successo a #6 (<span class='fine'>#2</span>). <br /><br/>\n".
             "L'email utilizzata per la registrazione &egrave;: <span class='fine'>#3</span>. Clicca sul seguente link per richiedere l'invio dell'email contenente la tua password: <center><a href='mail.php' style='text-decoration: underline;font-size: large;'><br/><br/>CLICCA QUI</a></center><br />\n".
             "<br/><br />\n".
             "" .

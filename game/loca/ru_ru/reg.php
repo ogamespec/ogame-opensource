@@ -55,15 +55,15 @@ $LOCA["ru"]["REG_NEW_ERROR_EXISTS"] = "Имя #1 уже существует";
 $LOCA["ru"]["REG_NEW_ERROR_EMAIL"] = "Адрес #1 недействителен!";
 $LOCA["ru"]["REG_NEW_ERROR_EMAIL_EXISTS"] = "Адрес #1 уже существует!";
 $LOCA["ru"]["REG_NEW_ERROR_MAX_PLAYERS"] = "Достигнуто максимальное количество игроков (#1)!";
-$LOCA["ru"]["REG_NEW_TITLE"] = "Огейм Вселенная #1 Регистрация";
+$LOCA["ru"]["REG_NEW_TITLE"] = "#2 Вселенная #1 Регистрация";
 $LOCA["ru"]["REG_NEW_SUCCESS"] = "Регистрация прошла удачно!";
-$LOCA["ru"]["REG_NEW_TEXT"] = "Поздравляем, <span class='fine'>#1</span>!<br /><br />Вы удачно прошли регистрацию в Огейм (<span class='fine'>#2</span>). <br />\n".
+$LOCA["ru"]["REG_NEW_TEXT"] = "Поздравляем, <span class='fine'>Вселенная #1</span>!<br /><br />Вы удачно прошли регистрацию в #6 (<span class='fine'>#2</span>). <br />\n".
             "Скоро Вы получите на адрес <span class='fine'>#3</span> письмо с паролем и некоторыми важными ссылками.<br />\n".
             "Для того, чтобы играть, Вы должны войти через <a href='#4'>главную страницу</a>.<br />\n".
             "На последующей картинке Вы увидите, как это правильно сделать.<br /><br />\n" .
             "<center><a href='#5' style='text-decoration: underline;font-size: large;'>Вперёд!</a></center><br /><br /> \n" .
             "Удачи<br /> \n" .
-            "Ваша команда ОГейм</th>";
+            "Ваша команда #6</th>";
 $LOCA["ru"]["REG_NEW_UNI"] = "Вселенная #1";
 $LOCA["ru"]["REG_NEW_CHOOSE_UNI"] = "Выберите вселенную";
 $LOCA["ru"]["REG_NEW_NAME"] = "Введите имя";

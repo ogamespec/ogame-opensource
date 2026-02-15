@@ -56,15 +56,15 @@ $LOCA["de"]["REG_NEW_ERROR_EXISTS"] = "Name #1 existiert bereits";
 $LOCA["de"]["REG_NEW_ERROR_EMAIL"] = "Adresse #1 ist ungültig!";
 $LOCA["de"]["REG_NEW_ERROR_EMAIL_EXISTS"] = "Adresse #1 existiert bereits!";
 $LOCA["de"]["REG_NEW_ERROR_MAX_PLAYERS"] = "Die maximale Anzahl von Spielern (#1) wurde erreicht!";
-$LOCA["de"]["REG_NEW_TITLE"] = "OGame Universe #1 Registrierung";
+$LOCA["de"]["REG_NEW_TITLE"] = "#2 Universe #1 Registrierung";
 $LOCA["de"]["REG_NEW_SUCCESS"] = "Die Anmeldung ist gut gelaufen!";
-$LOCA["de"]["REG_NEW_TEXT"] = "Glückwunsch, <span class='fine'>#1</span>!<br /><br />Sie haben sich erfolgreich bei OGame registriert (<span class='fine'>#2</span>). <br />\n".
+$LOCA["de"]["REG_NEW_TEXT"] = "Glückwunsch, <span class='fine'>Universe #1</span>!<br /><br />Sie haben sich erfolgreich bei #6 registriert (<span class='fine'>#2</span>). <br />\n".
             "Sie werden erhalten <span class='fine'>#3</span> eine E-Mail mit einem Passwort und einigen wichtigen Links.<br />\n".
             "Um spielen zu können, müssen Sie eingeloggt sein über <a href='#4'>Hauptseite</a>.<br />\n".
             "In der folgenden Abbildung sehen Sie, wie man es richtig macht.<br /><br />\n" .
             "<center><a href='#5' style='text-decoration: underline;font-size: large;'>Los geht's!</a></center><br /><br /> \n" .
             "Viel Glück!<br /> \n" .
-            "Ihr OGame-Team</th>";
+            "Ihr #6-Team</th>";
 $LOCA["de"]["REG_NEW_UNI"] = "Universum #1";
 $LOCA["de"]["REG_NEW_CHOOSE_UNI"] = "Wählen Sie ein Universum";
 $LOCA["de"]["REG_NEW_NAME"] = "Einen Namen eingeben";

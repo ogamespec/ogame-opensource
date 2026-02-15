@@ -55,15 +55,15 @@ $LOCA["jp"]["REG_NEW_ERROR_EXISTS"] = "名前#1はすでに存在する";
 $LOCA["jp"]["REG_NEW_ERROR_EMAIL"] = "アドレス#1は無効です！";
 $LOCA["jp"]["REG_NEW_ERROR_EMAIL_EXISTS"] = "アドレス#1はすでに存在する！";
 $LOCA["jp"]["REG_NEW_ERROR_MAX_PLAYERS"] = "最大到達選手数 (#1)!";
-$LOCA["jp"]["REG_NEW_TITLE"] = "OGame ユニバース #1 登録";
+$LOCA["jp"]["REG_NEW_TITLE"] = "#2 ユニバース #1 登録";
 $LOCA["jp"]["REG_NEW_SUCCESS"] = "登録はうまくいった！";
-$LOCA["jp"]["REG_NEW_TEXT"] = "おめでとう, <span class='fine'>#1</span>!<br /><br />あなたはOGameへの登録に成功しました (<span class='fine'>#2</span>). <br />\n".
+$LOCA["jp"]["REG_NEW_TEXT"] = "おめでとう, <span class='fine'>ユニバース #1</span>!<br /><br />あなたは#6への登録に成功しました (<span class='fine'>#2</span>). <br />\n".
             "あなたが受け取るのは <span class='fine'>#3</span> パスワードといくつかの重要なリンクが記載された電子メール。<br />\n".
             "プレイするには、以下の方法でログインする必要があります <a href='#4'>ホームページ</a>.<br />\n".
             "この後の写真で、正しいやり方をご覧いただきたい。<br /><br />\n" .
             "<center><a href='#5' style='text-decoration: underline;font-size: large;'>行こう！</a></center><br /><br /> \n" .
             "幸運を祈る<br /> \n" .
-            "あなたのOGameチーム</th>";
+            "あなたの#6チーム</th>";
 $LOCA["jp"]["REG_NEW_UNI"] = "ユニバース #1";
 $LOCA["jp"]["REG_NEW_CHOOSE_UNI"] = "宇宙を選ぶ";
 $LOCA["jp"]["REG_NEW_NAME"] = "名前を入力";

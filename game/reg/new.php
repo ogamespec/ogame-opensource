@@ -15,6 +15,7 @@ require_once "../core/core.php";
 if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
 else $loca_lang = $_COOKIE['ogamelang'];
 
+loca_add ( "common", $loca_lang, "../" );
 loca_add ( "reg", $loca_lang, "../" );
 
 function isValidEmail($email){
@@ -60,7 +61,7 @@ if ( method() === "POST" )        // Register a player.
 <body >
 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 <center>
-<h1 style="font-size: 22;"><?=va(loca("REG_NEW_TITLE"), $uninum);?></h1>
+<h1 style="font-size: 22;"><?=va(loca("REG_NEW_TITLE"), $uninum, loca("OGAME_LOC"));?></h1>
 <table width="704">
 <tr>
 <td class="c"><h3><font color="lime"><?=loca("REG_NEW_SUCCESS");?></font></h3></td>
@@ -69,7 +70,13 @@ if ( method() === "POST" )        // Register a player.
 <th style="text-align: left;">
 <?php
     echo va(loca("REG_NEW_TEXT"),
-         $_POST['character'], "Вселенная $uninum", $_POST['email'], $StartPage, $StartPage );
+        $_POST['character'],
+        $uninum,
+        $_POST['email'],
+        $StartPage,
+        $StartPage,
+        loca("OGAME_LOC")
+    );
 ?>
 </tr>
 </table>
@@ -176,7 +183,7 @@ function printMessage(code, div) {
 <body>
 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 <center>
-<h1 style="font-size: 22;"><?=va(loca("REG_NEW_TITLE"), $uninum);?></h1>
+<h1 style="font-size: 22;"><?=va(loca("REG_NEW_TITLE"), $uninum, loca("OGAME_LOC"));?></h1>
 
 <form id="registration" method="POST">
 <?php
