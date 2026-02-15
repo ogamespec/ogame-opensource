@@ -102,7 +102,7 @@ class Admin_Fleetlogs extends Page {
         </th>
         <th <?=$style;?> >
 <?php
-    echo FleetlogsMissionText ( $fleet_obj['mission'] );
+    FleetlogsMissionText ( $fleet_obj['mission'] );
 ?>
         </th>
         <th <?=$style;?> ><?=date ("d.m.Y", $queue['start']);?> <br> <?=date ("H:i:s", $queue['start']);?></th>
@@ -117,7 +117,7 @@ class Admin_Fleetlogs extends Page {
 <?php
     $planet = LoadPlanetById ( $fleet_obj['start_planet'] );
     $user = LoadUser ( $planet['owner_id'] );
-    echo AdminPlanetName($planet['planet_id']) . " " . AdminPlanetCoord($planet) . " <br>";
+    echo AdminPlanetName($planet) . " " . AdminPlanetCoord($planet) . " <br>";
     echo AdminUserName($user);
 ?>
         </th>
@@ -125,7 +125,7 @@ class Admin_Fleetlogs extends Page {
 <?php
     $planet = LoadPlanetById ( $fleet_obj['target_planet'] );
     $user = LoadUser ( $planet['owner_id'] );
-    echo AdminPlanetName($planet['planet_id']) . " " . AdminPlanetCoord($planet). " <br>";
+    echo AdminPlanetName($planet) . " " . AdminPlanetCoord($planet). " <br>";
     echo AdminUserName($user);
 ?>
         </th>

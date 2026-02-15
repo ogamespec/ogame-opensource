@@ -540,17 +540,19 @@ function SetPlanetDiameter (int $planet_id, int $diam) : void
 }
 
 // Return the name of the planet with a link to the admin area.
-function AdminPlanetName (int $planet_id) : string
+function AdminPlanetName (array|null $planet) : string
 {
     global $session;
-    $planet = LoadPlanetById ($planet_id);
+    if ($planet == null) return "";
+    $planet_id = $planet['planet_id'];
     return "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet_id."\">".$planet['name']."</a>";
 }
 
 // Return planet coordinate string with a link to the galaxy
-function AdminPlanetCoord (array $p) : string
+function AdminPlanetCoord (array|null $p) : string
 {
     global $session;
+    if ($p == null) return "[::]";
     return "[<a href=\"index.php?page=galaxy&session=$session&galaxy=".$p['g']."&system=".$p['s']."\">".$p['g'].":".$p['s'].":".$p['p']."</a>]";
 }
 
