@@ -2,7 +2,7 @@
 
 // Registrazione, login, invio dell'e-mail dimenticata
 
-// The translation was adapted by Quaua, but SpaceWars replaced by OGame.
+// The translation was adapted by Quaua.
 
 $LOCA["it"]["REG_MAIL_TITLE"] = "Riepilogo";
 $LOCA["it"]["REG_MAIL_SEND"] = "Richiedi Password";
@@ -13,14 +13,14 @@ $LOCA["it"]["REG_MAIL_SUBMIT"] = "Richiedi Password";
 $LOCA["it"]["REG_FORGOT_TITLE"] = "Invio Password";
 $LOCA["it"]["REG_FORGOT_ERROR"] = "L'email inserita non esiste";
 $LOCA["it"]["REG_FORGOT_OK"] = "La password &egrave; stata inviata per il giocatore #1.<br><br>Controlla anche la cartella di posta indesiderata se non ricevi l\'email contenente la tua password nella casella di posta principale.";
-$LOCA["it"]["REG_FORGOT_SUBJ"] = "Password OGame";
+$LOCA["it"]["REG_FORGOT_SUBJ"] = "Password #1";
 $LOCA["it"]["REG_FORGOT_MAIL"] = "Ciao #1,\n\n" .
-"La tua password per accedere a Universo #2 di OGame è:\n\n" .
+"La tua password per accedere a Universo #2 di #5 è:\n\n" .
 "#3\n\n" .
 "Da adesso puoi fare login all'indirizzo #4 con Username che hai scelto e la password che ti è stata appena inviata.\n\n" .
 "Se non hai richiesto tu questa email ignora semplicemente il messaggio.\n\n" .
 "\n\n" .
-"Il team di OGame";
+"Il team di #5";
 
 // Errore di sessione durante il caricamento della pagina
 
@@ -58,9 +58,9 @@ $LOCA["it"]["REG_NEW_ERROR_EXISTS"] = "Username #1 gi&agrave; esistente";
 $LOCA["it"]["REG_NEW_ERROR_EMAIL"] = "Email #1 non valida !";
 $LOCA["it"]["REG_NEW_ERROR_EMAIL_EXISTS"] = "Email #1 gi&agrave; esistente!";
 $LOCA["it"]["REG_NEW_ERROR_MAX_PLAYERS"] = "Il numero massimo di giocatori (#1) è stato raggiunto!";
-$LOCA["it"]["REG_NEW_TITLE"] = "Registrazione Universo #1";
+$LOCA["it"]["REG_NEW_TITLE"] = "Registrazione Universo #1 #2";
 $LOCA["it"]["REG_NEW_SUCCESS"] = "Registrazione completata con successo!";
-$LOCA["it"]["REG_NEW_TEXT"] = "Congratulazioni, <span class='fine'>#1</span>!<br /><br />ti sei registrato con successo a OGame (<span class='fine'>#2</span>). <br /><br/>\n".
+$LOCA["it"]["REG_NEW_TEXT"] = "Congratulazioni, <span class='fine'>Universo #1</span>!<br /><br />ti sei registrato con successo a #6 (<span class='fine'>#2</span>). <br /><br/>\n".
             "L'email utilizzata per la registrazione &egrave;: <span class='fine'>#3</span>. Clicca sul seguente link per richiedere l'invio dell'email contenente la tua password: <center><a href='mail.php' style='text-decoration: underline;font-size: large;'><br/><br/>CLICCA QUI</a></center><br />\n".
             "<br/><br />\n".
             "" .
@@ -97,9 +97,9 @@ $LOCA["it"]["REG_NEW_MESSAGE_204"] = "Per proseguire devi accettare i termini e 
 
 // user.php
 
-$LOCA["it"]["REG_GREET_MAIL_SUBJ"] = "Registrazione a OGame ";
+$LOCA["it"]["REG_GREET_MAIL_SUBJ"] = "Registrazione a #1 ";
 $LOCA["it"]["REG_GREET_MAIL_BODY"] = "Ciao #1,\n\n" .
-                "Grazie per esserti iscritto a OGame  #2!\n\n" .
+                "Grazie per esserti iscritto a #7  #2!\n\n" .
                 "Per convalidare il tuo account clicca sul seguente link:\n" .
                 "#3\n\n" .
                 "Di seguito i tuoi dati di accesso:\n" .
@@ -108,18 +108,18 @@ $LOCA["it"]["REG_GREET_MAIL_BODY"] = "Ciao #1,\n\n" .
                 "Universo: #6\n\n\n";
 $LOCA["it"]["REG_GREET_MAIL_BOARD"] = "Se hai bisogno di aiuto o di consigli da parte di altri imperatori, puoi trovare tutto nel nostro forum (#1).\n\n";
 $LOCA["it"]["REG_GREET_MAIL_TUTORIAL"] = "Qui (#1) ci sono tutte le informazioni raccolte dai giocatori e dai membri della squadra per aiutare i nuovi arrivati a capire il gioco il più rapidamente possibile.\n\n";
-$LOCA["it"]["REG_GREET_MAIL_FOOTER"] = "Vi auguriamo successo nella costruzione del vostro impero e buona fortuna nelle prossime battaglie! Lo staff di OGame.\n\n\n\n\n\n";
+$LOCA["it"]["REG_GREET_MAIL_FOOTER"] = "Vi auguriamo successo nella costruzione del vostro impero e buona fortuna nelle prossime battaglie! Lo staff di #1.\n\n\n\n\n\n";
 
-$LOCA["it"]["REG_CHANGE_MAIL_SUBJ"] = "Attivazione account OGame ";
+$LOCA["it"]["REG_CHANGE_MAIL_SUBJ"] = "Attivazione account #1 ";
 $LOCA["it"]["REG_CHANGE_MAIL_BODY"] = "Ciao #1,\n\n" .
-               "Hai richiesto la convalida dell'account di OGame Universo #2 inserendo l'indirizzo email #3.\n" .
+               "Hai richiesto la convalida dell'account di #5 Universo #2 inserendo l'indirizzo email #3.\n" .
                "\n\n" .
                "Per convalidare il tuo account clicca sul seguente link:\n\n" .
                "#4\n\n" .
-               "Il team di OGame";
+               "Il team di #5";
 
-$LOCA["it"]["REG_GREET_MSG_SUBJ"] = "Benvenuto su OGame!";
-$LOCA["it"]["REG_GREET_MSG_TEXT"] = "Ciao, benvenuto su [b]OGame[/b] !\n" .
+$LOCA["it"]["REG_GREET_MSG_SUBJ"] = "Benvenuto su #1!";
+$LOCA["it"]["REG_GREET_MSG_TEXT"] = "Ciao, benvenuto su [b]#3[/b] !\n" .
         "\n" .
         "Per farlo clicca su \"Costruzioni\" nel menù a sinistra, seleziona la Miniera di metallo e clicca su Costruisci.\n" .
         "Ora hai un pò di tempo per conoscere il gioco.\n" .

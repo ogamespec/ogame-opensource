@@ -1,6 +1,6 @@
 <?php
 
-// OGame Battle Engine frontend.
+// Battle Engine frontend.
 
 const BATTLE_RESULT_AWON = 0;       // The attacker won
 const BATTLE_RESULT_DWON = 1;       // The defender won

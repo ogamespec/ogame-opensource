@@ -15,16 +15,15 @@ require_once "../core/core.php";
 if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
 else $loca_lang = $_COOKIE['ogamelang'];
 
+loca_add ( "common", $loca_lang, "../" );
+loca_add ( "debug", $loca_lang, "../" );
 loca_add ( "reg", $loca_lang, "../" );
-
-function isValidEmail($email){
-	return filter_var($email, FILTER_VALIDATE_EMAIL);
-}
 
 InitDB();
 
-$uni = LoadUniverse ();
-$uninum = $uni['num'];
+$GlobalUni = LoadUniverse ();
+$uninum = $GlobalUni['num'];
+$from_reg = true;
 
 $error = $agbclass = "";
 if ( method() === "POST" )        // Register a player.
@@ -43,12 +42,21 @@ if ( method() === "POST" )        // Register a player.
     else if ( IsUserExist ( $_POST['character'])) $error = va ( loca("REG_NEW_ERROR_EXISTS"), $_POST['character'] ) ;
     else if ( !isValidEmail ($_POST['email']) ) $error = va ( loca("REG_NEW_ERROR_EMAIL"), $_POST['email'] ) ;
     else if ( IsEmailExist ( $_POST['email'])) $error = va ( loca("REG_NEW_ERROR_EMAIL_EXISTS"), $_POST['email'] );
-    else if ( GetUsersCount() >= $uni['maxusers']) $error = va (loca("REG_NEW_ERROR_MAX_PLAYERS"), $uni['maxusers']);
+    else if ( GetUsersCount() >= $GlobalUni['maxusers']) $error = va (loca("REG_NEW_ERROR_MAX_PLAYERS"), $GlobalUni['maxusers']);
+
+    $forbidden = explode ( ",", FORBIDDEN_LOGINS );
+    $lower = mb_strtolower ($_POST['character'], 'UTF-8');
+    foreach ( $forbidden as $i=>$name) {
+        if ( strpos($lower, $name) !== false ) {
+            $error = va ( loca("REG_NEW_ERROR_CHARS"), $_POST['character'] );
+            break;
+        }
+    }
 
     if ( $error === "" )
     {
         $password = gen_trivial_password ();
-        CreateUser ( $_POST['character'], $password, $_POST['email'], false, true );
+        CreateUser ( $_POST['character'], $password, $_POST['email'], false );
 
 ?>
 <html>
@@ -60,7 +68,7 @@ if ( method() === "POST" )        // Register a player.
 <body >
 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 <center>
-<h1 style="font-size: 22;"><?=va(loca("REG_NEW_TITLE"), $uninum);?></h1>
+<h1 style="font-size: 22;"><?=va(loca("REG_NEW_TITLE"), $uninum, loca("OGAME_LOC"));?></h1>
 <table width="704">
 <tr>
 <td class="c"><h3><font color="lime"><?=loca("REG_NEW_SUCCESS");?></font></h3></td>
@@ -69,11 +77,17 @@ if ( method() === "POST" )        // Register a player.
 <th style="text-align: left;">
 <?php
     echo va(loca("REG_NEW_TEXT"),
-         $_POST['character'], "Вселенная $uninum", $_POST['email'], $StartPage, $StartPage );
+        $_POST['character'],
+        $uninum,
+        $_POST['email'],
+        $StartPage,
+        $StartPage,
+        loca("OGAME_LOC")
+    );
 ?>
 </tr>
 </table>
-<div style="position:relative; width: 700px; height: 300px; color: #000000; text-align: left; border: 1px solid #415680;"><a href="http://ogame.de/portal"><img src="login.jpg" width="700" height="300" alt="" /></a>
+<div style="position:relative; width: 700px; height: 300px; color: #000000; text-align: left; border: 1px solid #415680;"><a href="<?=hostname();?>"><img src="login.jpg" width="700" height="300" alt="" /></a>
 	<div style="position:absolute; top:135px; left:170px; width:130px; height:16px;"><?=va(loca("REG_NEW_UNI"), $uninum);?></div>
 	<div style="position:absolute; top:135px; left:345px; width:85px; height:16px;"><?=$_POST['character'];?></div>
 
@@ -176,7 +190,7 @@ function printMessage(code, div) {
 <body>
 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 <center>
-<h1 style="font-size: 22;"><?=va(loca("REG_NEW_TITLE"), $uninum);?></h1>
+<h1 style="font-size: 22;"><?=va(loca("REG_NEW_TITLE"), $uninum, loca("OGAME_LOC"));?></h1>
 
 <form id="registration" method="POST">
 <?php

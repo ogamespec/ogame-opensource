@@ -147,4 +147,7 @@ const RF_DICE = 100000;        	// Number of dice faces for a rapid-fire throw (
 const BATTLE_MAX_ROUND = 6; 		// The default value for the number of rounds for the battle engine
 const BATTLE_MAX_UNITS = 1000000; 	// Maximum number of units on one side (default). You can change it by setting uni['battle_max']
 
+const EMAIL_BARRIERFREI = "barrierefrei@ogame.de";  		// Special mail for visually impaired people. There were definitely a lot of such players playing the classic 0.84.
+const FORBIDDEN_LOGINS = "adolf,hitler,fick,legor,aleena,ogame,kkk,osama,bin,laden,porn,sex,hentai,god,allah,putin,nazi,gameforge,stalin,goebbels,saddam,space,admin";
+
 ?>

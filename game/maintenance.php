@@ -23,6 +23,7 @@ $GlobalUni = LoadUniverse ();
 $loca_lang = $GlobalUni['lang'];
 if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
 
+loca_add ( "common", $loca_lang );
 loca_add ( "maintain", $loca_lang );
 
 if ( !$GlobalUni['freeze'] ) {
@@ -100,7 +101,7 @@ a:hover {
 <body id="maintenance">
     <div id="infowrapper">
         <h2><?=loca("MAINTAIN_HEAD");?></h2>
-        <p><?=loca("MAINTAIN_INFO1");?></p>
+        <p><?=va(loca("MAINTAIN_INFO1"), loca("OGAME_LOC"));?></p>
         <p><?=loca("MAINTAIN_INFO2");?></p>
         <br/>
         <br/>

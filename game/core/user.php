@@ -80,16 +80,12 @@ function fixed_date ( string $fmt, int $timestamp ) : string
 }
 
 // Send a welcome email with a link to activate your account (in the language of the universe).
-function SendGreetingsMail ( string $name, string $pass, string $email, string $ack, bool $from_reg) : void
+function SendGreetingsMail ( string $name, string $pass, string $email, string $ack) : void
 {
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
-    if ($from_reg) {
-        loca_add ("reg", $unitab['lang'], "../");
-    }
-    else {
-        loca_add ("reg", $unitab['lang']);
-    }
+    loca_add ("common", $unitab['lang']);
+    loca_add ("reg", $unitab['lang']);
 
     $text = va ( loca_lang("REG_GREET_MAIL_BODY", $unitab['lang']), 
         $name,
@@ -97,17 +93,20 @@ function SendGreetingsMail ( string $name, string $pass, string $email, string $
         hostname()."game/validate.php?ack=$ack",
         $name,
         $pass,
-        $uni );
+        $uni,
+        loca_lang("OGAME_LOC", $unitab['lang']) );
     if (!empty($unitab['ext_board'])) {
         $text .= va (loca_lang("REG_GREET_MAIL_BOARD", $unitab['lang']), $unitab['ext_board']);
     }
     if (!empty($unitab['ext_tutorial'])) {
         $text .= va (loca_lang("REG_GREET_MAIL_TUTORIAL", $unitab['lang']), $unitab['ext_tutorial']);
     }
-    $text .= loca_lang ("REG_GREET_MAIL_FOOTER", $unitab['lang']);
+    $text .= va(loca_lang ("REG_GREET_MAIL_FOOTER", $unitab['lang']), loca_lang ("OGAME_LOC", $unitab['lang']));
 
     $domain = "";   // ru, org..
-    mail_utf8 ( $email, loca_lang ("REG_GREET_MAIL_SUBJ", $unitab['lang']), $text, "From: OGame Uni $domain $uni <noreply@".$_SERVER['SERVER_NAME'].">");
+    mail_utf8 ( $email, 
+        va(loca_lang ("REG_GREET_MAIL_SUBJ", $unitab['lang']), loca_lang ("OGAME_LOC", $unitab['lang'])),
+        $text, va("From: #1 Uni $domain $uni <noreply@".$_SERVER['SERVER_NAME'].">", loca_lang("OGAME_INT", $unitab['lang'])) );
 }
 
 // Send a letter confirming the change of address (in the language of the universe).
@@ -115,36 +114,37 @@ function SendChangeMail ( string $name, string $email, string $pemail, string $a
 {
     $unitab = LoadUniverse ();
     $uni = $unitab['num'];
+    loca_add ("common", $unitab['lang']);
     loca_add ("reg", $unitab['lang']);
     
     $text = va (loca_lang("REG_CHANGE_MAIL_BODY", $unitab['lang']), 
         $name,
         $uni,
         $email,
-        hostname()."game/validate.php?ack=$ack" );
+        hostname()."game/validate.php?ack=$ack",
+        loca_lang("OGAME_INT", $unitab['lang'])
+    );
 
     $domain = "";   // ru, org..
-    mail_utf8 ( $pemail, loca_lang ("REG_CHANGE_MAIL_SUBJ", $unitab['lang']), $text, "From: OGame Uni $domain $uni <noreply@".$_SERVER['SERVER_NAME'].">");
+    mail_utf8 ( $pemail, 
+        va (loca_lang ("REG_CHANGE_MAIL_SUBJ", $unitab['lang']), loca_lang ("OGAME_INT", $unitab['lang'])),
+        $text, va("From: #1 Uni $domain $uni <noreply@".$_SERVER['SERVER_NAME'].">", loca_lang("OGAME_INT", $unitab['lang'])) );
 }
 
 // Send a welcome message (in the user's language)
-function SendGreetingsMessage ( int $player_id, bool $from_reg) : void
+function SendGreetingsMessage ( int $player_id) : void
 {
     $unitab = LoadUniverse ();
     $user = LoadUser ($player_id);
     if ($user == null) return;
-    if ($from_reg) {
-        loca_add ("reg", $user['lang'], "../");
-        loca_add ("fleetmsg", $user['lang'], "../");
-    }
-    else {
-        loca_add ("reg", $user['lang']);
-        loca_add ("fleetmsg", $user['lang']);
-    }
+    loca_add ("common", $user['lang']);
+    loca_add ("reg", $user['lang']);
+    loca_add ("fleetmsg", $user['lang']);
+
     SendMessage ( $player_id, 
         loca_lang ("FLEET_MESSAGE_FROM", $user['lang']), 
-        loca_lang ("REG_GREET_MSG_SUBJ", $user['lang']), 
-        bb ( va(loca_lang("REG_GREET_MSG_TEXT", $user['lang']), $unitab['ext_board'], $unitab['ext_tutorial']) ), MTYP_MISC );
+        va(loca_lang ("REG_GREET_MSG_SUBJ", $user['lang']), loca_lang ("OGAME_LOC", $user['lang']) ),
+        bb ( va(loca_lang("REG_GREET_MSG_TEXT", $user['lang']), $unitab['ext_board'], $unitab['ext_tutorial'], loca_lang ("OGAME_INT", $user['lang'])) ), MTYP_MISC );
 }
 
 function IsUserExist ( string $name) : bool
@@ -170,7 +170,7 @@ function IsEmailExist ( string $email, string $name="") : bool
 
 // There are no checks for correctness! This is handled by the registration procedure.
 // Returns the ID of the created user.
-function CreateUser ( string $name, string $pass, string $email, bool $bot=false, bool $from_reg=false) : int
+function CreateUser ( string $name, string $pass, string $email, bool $bot=false) : int
 {
     global $db_prefix, $db_secret, $Languages;
     $origname = $name;
@@ -207,12 +207,7 @@ function CreateUser ( string $name, string $pass, string $email, bool $bot=false
 
     LogIPAddress ( $ip, $id, 1 );
 
-    if ($from_reg) {
-        loca_add ("common", $user['lang'], "../");
-    }
-    else {
-        loca_add ("common", $user['lang']);
-    }
+    loca_add ("common", $user['lang']);
 
     // Create a Home Planet.
     $homeplanet = CreateHomePlanet ($id);
@@ -222,8 +217,8 @@ function CreateUser ( string $name, string $pass, string $email, bool $bot=false
 
     // Send a welcome email and message.
     if ( !$bot ) {
-        if ( !localhost($ip) ) SendGreetingsMail ( $origname, $pass, $email, $ack, $from_reg);
-        SendGreetingsMessage ( $id, $from_reg);
+        if ( !localhost($ip) ) SendGreetingsMail ( $origname, $pass, $email, $ack);
+        SendGreetingsMessage ( $id);
     }
 
     // Delete an inactivated user after 3 days.
@@ -532,9 +527,10 @@ function RecruitOfficer ( int $player_id, int $off_type, int $seconds ) : void
 }
 
 // Called when you click on "Exit" in the menu.
-function Logout ( string $session ) : void
+function Logout ( string|null $session ) : void
 {
     global $db_prefix;
+    if ($session == null) return;
     $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$session."'";
     $result = dbquery ($query);
     if (dbrows ($result) == 0) return;
@@ -639,11 +635,11 @@ function Login ( string $login, string $pass, string $passmd="" ) : never
         AddUpdateStatsEvent ();
         AddRecalcPointsEvent ($player_id);
 
+        LogIPAddress ( $ip, $player_id );
+
         // Redirect to Home Planet Overview.
         header ( "Location: ".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1" );
         echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/index.php?page=overview&session=".$sess."&lgn=1' /></head><body></body>";
-
-        LogIPAddress ( $ip, $player_id );
     }
     else
     {
@@ -784,10 +780,11 @@ function ChangeSkinPath (int $player_id, string $dpath) : void
 }
 
 // Enable/disable skin display. When the skin is disabled, the default skin is displayed.
-function EnableSkin (int $player_id, int $enable) : void
+function EnableSkin (int $player_id, bool $enable) : void
 {
     global $db_prefix;
-    $query = "UPDATE ".$db_prefix."users SET useskin = $enable WHERE player_id = $player_id";
+    $useskin = $enable ? 1 : 0;
+    $query = "UPDATE ".$db_prefix."users SET useskin = $useskin WHERE player_id = $player_id";
     dbquery ($query);
 }
 
@@ -966,6 +963,43 @@ function FeedActivate (bool $enable) : void
     $query = "UPDATE ".$db_prefix."users SET flags = ".$GlobalUser['flags'].", lastfeed = 0, feedid = '".$feedid."' WHERE player_id = $player_id";
     dbquery ($query);
     $GlobalUser['feedid'] = $feedid;
+}
+
+function EnableVacation (int $player_id, int $vacation_until, bool $enable) : void
+{
+    global $db_prefix;
+    global $GlobalUser;
+    global $PlanetProd;
+
+    if ($enable) {
+        $query = "UPDATE ".$db_prefix."users SET vacation=1,vacation_until=$vacation_until WHERE player_id=".$player_id;
+        dbquery ($query);
+        if ($player_id == $GlobalUser['player_id']) {
+            $GlobalUser['vacation'] = 1;
+            $GlobalUser['vacation_until'] = $vacation_until;
+        }
+
+        // Force production settings of all buildings for all planets to 0%.
+        $sub_query = "";
+        $need_comma = false;
+        foreach ($PlanetProd as $gid=>$prod) {
+            if ($need_comma) {
+                $sub_query .= ", ";
+            }
+            $sub_query .= "prod$gid = 0";
+            $need_comma = true;
+        }
+
+        $query = "UPDATE ".$db_prefix."planets SET $sub_query WHERE owner_id = " . $player_id;
+        dbquery ($query);
+    }
+    else {
+        $query = "UPDATE ".$db_prefix."users SET vacation=0,vacation_until=0 WHERE player_id=".$player_id;
+        dbquery ($query);
+        if ($player_id == $GlobalUser['player_id']) {
+            $GlobalUser['vacation'] = $GlobalUser['vacation_until'] = 0;
+        }
+    }
 }
 
 ?>

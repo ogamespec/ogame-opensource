@@ -2,7 +2,7 @@
 
 // Menu de gauche.
 
-$LOCA["fr"]["MENU_DIS"] = "Pour les problèmes spécifiques pour les aveugles, envoyez un e-mail à barrierefrei@ogame.de.";
+$LOCA["fr"]["MENU_DIS"] = "Pour les problèmes spécifiques pour les aveugles, envoyez un e-mail à #1.";
 $LOCA["fr"]["MENU_UNIVERSE"] = "Univers";
 $LOCA["fr"]["MENU_OVERVIEW"] = "Vue d`ensemble";
 $LOCA["fr"]["MENU_ADMIN"] = "*Espace Admin*";

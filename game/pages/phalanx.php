@@ -20,7 +20,7 @@ require_once "phalanx_events.php";
 
 <link rel="stylesheet" type="text/css" href="css/combox.css">
 
-<title><?=va(loca("PAGE_TITLE"), $GlobalUni['num']);?></title>
+<title><?=va(loca("PAGE_TITLE"), $GlobalUni['num'], loca("OGAME_LOC"));?></title>
 
   <script src="js/utilities.js" type="text/javascript"></script>
   <script language="JavaScript">

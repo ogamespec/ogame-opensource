@@ -73,6 +73,7 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
     global $GlobalUser;
     global $GlobalUni;
     global $aktplanet;
+    global $session;
 
     BrowseHistory ();
 
@@ -88,14 +89,14 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
     echo " <head>\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/default.css' />\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/formate.css' />\n";
-    echo "  <script language=\"JavaScript\">var session=\"".$GlobalUser['session']."\";</script>\n";
+    echo "  <script language=\"JavaScript\">var session=\"$session\";</script>\n";
     echo "  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n";
     if ( $redirect_page !== "" ) {
-        echo "  <meta http-equiv=\"refresh\" content=\"".$redirect_sec."; URL=index.php?page=".$redirect_page."&session=".$GlobalUser['session']."&redirect=1\">\n\n";
+        echo "  <meta http-equiv=\"refresh\" content=\"".$redirect_sec."; URL=index.php?page=".$redirect_page."&session=$session&redirect=1\">\n\n";
     }
     echo "<link rel='stylesheet' type='text/css' href='css/combox.css'>\n";
     echo "<link rel='stylesheet' type='text/css' href='".UserSkin()."formate.css' />\n";
-    echo "<title>".va(loca("PAGE_TITLE"), $uni)."</title>\n";
+    echo "<title>".va(loca("PAGE_TITLE"), $uni, loca("OGAME_LOC"))."</title>\n";
     echo "  <script src='js/utilities.js' type='text/javascript'></script>\n";
     echo "  <script language='JavaScript'>\n";
     echo "  </script>\n";
@@ -418,7 +419,7 @@ function LeftMenu () : void
     echo "</script>\n";
     echo "<center>\n\n";
     echo "<div id='menu'>\n";
-    echo "<a href='mailto:barrierefrei@ogame.de' title='".loca("MENU_DIS")."' style='width:1px;'></a>\n";
+    echo "<a href='mailto:barrierefrei@ogame.de' title='".va(loca("MENU_DIS"),EMAIL_BARRIERFREI)."' style='width:1px;'></a>\n";
     echo "<p style='width:110px;'><NOBR>".loca("MENU_UNIVERSE")." ".$uni." (<a href='index.php?page=changelog&session=".$sess."'>v 0.84</a>)</NOBR></p>\n";
     echo "<table width='110' cellspacing='0' cellpadding='0'>\n";
 
@@ -671,7 +672,7 @@ function InvalidSessionPage () : void
     echo "  <link rel='stylesheet' type='text/css' href='css/default.css' />\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/formate.css' />\n";
     echo "  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n";
-    echo "  <title>".va(loca_lang("PAGE_TITLE", $GlobalUser['lang']), $uni)."</title>\n";
+    echo "  <title>".va(loca_lang("PAGE_TITLE", $GlobalUser['lang']), $uni, loca_lang("OGAME_LOC", $GlobalUser['lang']))."</title>\n";
     echo " </head>\n";
     echo " <body>\n";
     echo "  <center><font size='3'><b>    <br /><br />\n";

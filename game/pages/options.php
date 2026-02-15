@@ -31,10 +31,6 @@ function IsSelected (string $option, mixed $value) : string
     else return "";
 }
 
-function isValidEmail(string $email) : mixed {
-    return filter_var($email, FILTER_VALIDATE_EMAIL);
-}
-
 $speed = $GlobalUni['speed'];
 $prem = PremiumStatus ($GlobalUser);
 
@@ -47,12 +43,10 @@ $prem = PremiumStatus ($GlobalUser);
     // Disable Vacation Mode.
     if ( method () === "POST") {
 
-        if ( time () >= $GlobalUser['vacation_until'] && key_exists('urlaub_aus', $_POST) && $_POST['urlaub_aus'] === "on" && $GlobalUser['vacation'] )
+        if ( $now >= $GlobalUser['vacation_until'] && key_exists('urlaub_aus', $_POST) && $_POST['urlaub_aus'] === "on" && $GlobalUser['vacation'] )
         {
+            EnableVacation ($GlobalUser['player_id'], 0, false);
             $PageError = va ( loca("OPTIONS_MSG_VMDISABLED"), $GlobalUser['oname'] ) . "\n<br/>\n";
-            $query = "UPDATE ".$db_prefix."users SET vacation=0,vacation_until=0 WHERE player_id=".intval($GlobalUser['player_id']);
-            dbquery ($query);
-            $GlobalUser['vacation'] = $GlobalUser['vacation_until'] = 0;
         }
     }
 
@@ -78,7 +72,7 @@ $prem = PremiumStatus ($GlobalUser);
 
                 if ( $PageError === "" )
                 {
-                    $ack = md5(time ().$db_secret);
+                    $ack = md5($now.$db_secret);
                     $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . $GlobalUser['player_id'];
                     dbquery ($query);
                     AddChangeEmailEvent ($GlobalUser['player_id']);
@@ -133,7 +127,7 @@ $prem = PremiumStatus ($GlobalUser);
   <tr> <th colspan=2>   <?php echo loca("OPTIONS_MSG_VMENABLED");?><br />
      <?php echo date ("d.m.Y. H:i:s", $GlobalUser['vacation_until']);?>   </th>   </tr>
 <?php
-    if ( time () >= $GlobalUser['vacation_until'] )
+    if ( $now >= $GlobalUser['vacation_until'] )
     {
 ?>
      <tr>
@@ -174,14 +168,17 @@ $prem = PremiumStatus ($GlobalUser);
         if ( method () === "POST" && !key_exists ( 'urlaub_aus', $_POST) ) {
 
             if ( $GlobalUser['name_changed'] == 0 && $_POST['db_character'] !== $GlobalUser['oname'] ) {        // Change the name.
-                $forbidden = explode ( ",", "hitler, fick, adolf, legor, aleena, ogame, mainman, fishware, osama, bin laden, stalin, goebbels, drecksjude, saddam, space, ringkeeper, administration" );
+                $forbidden = explode ( ",", FORBIDDEN_LOGINS );
                 if ( IsUserExist ( $_POST['db_character'] )) $PageError = loca ("OPTIONS_ERR_EXISTNAME");
                 else if ( !CanChangeName ($GlobalUser['player_id']) ) $PageError = loca ("OPTIONS_ERR_NAME_WEEK");
                 else if ( mb_strlen ($_POST['db_character']) < 3 || mb_strlen ($_POST['db_character']) > 20 ) $PageError = loca ("OPTIONS_ERR_NAME_3_20");
                 else if ( preg_match ( '/[<>()\[\]{}\\\\\/\`\"\'.,:;*+]/', $_POST['db_character'] )) $PageError = loca ("OPTIONS_ERR_NAME_SPECIAL");
                 $lower = mb_strtolower ($_POST['db_character'], 'UTF-8');
                 foreach ( $forbidden as $i=>$name) {
-                    if ( $lower === $name ) $PageError = loca ("OPTIONS_ERR_NAME");
+                    if ( strpos($lower, $name) !== false ) {
+                        $PageError = loca ("OPTIONS_ERR_NAME");
+                        break;
+                    }
                 }
 
                 if ( $PageError === "" )
@@ -220,7 +217,7 @@ $prem = PremiumStatus ($GlobalUser);
                 if ( $PageError === "" )
                 {
                     $ip = $_SERVER['REMOTE_ADDR'];
-                    $ack = md5(time ().$db_secret);
+                    $ack = md5($now.$db_secret);
                     $query = "UPDATE ".$db_prefix."users SET validated = 0, validatemd = '".$ack."', email = '".$email."' WHERE player_id = " . intval($GlobalUser['player_id']);
                     dbquery ($query);
                     AddChangeEmailEvent ($GlobalUser['player_id']);
@@ -231,23 +228,18 @@ $prem = PremiumStatus ($GlobalUser);
             }
 
             if ( key_exists('urlaubs_modus', $_POST) && $_POST['urlaubs_modus'] === "on" && $GlobalUser['vacation'] == 0 ) {        // Activate vacation mode
-                $vacation_min = max ( 12*60*60, (2 * 24 * 60 * 60) / $speed);    // не менее 12 часов
-                $vacation_until = time() + $vacation_min;
+                $vacation_min = max ( 12*60*60, (2 * 24 * 60 * 60) / $speed);    // at least 12 hours
+                $vacation_until = $now + $vacation_min;
 
                 if ( CanEnableVacation ($GlobalUser['player_id']) ) {
-                    $query = "UPDATE ".$db_prefix."users SET vacation=1,vacation_until=$vacation_until WHERE player_id=".$GlobalUser['player_id'];
-                    dbquery ($query);
-                    $GlobalUser['vacation'] = 1;
-                    $GlobalUser['vacation_until'] = $vacation_until;
-                    $query = "UPDATE ".$db_prefix."planets SET mprod = 0, kprod = 0, dprod = 0, sprod = 0, fprod = 0, ssprod = 0 WHERE owner_id = " . $GlobalUser['player_id'];
-                    dbquery ($query);
+                    EnableVacation ($GlobalUser['player_id'], $vacation_until, true);
                     MyGoto ( "options" );
                 }
                 else $PageError = loca ("OPTIONS_ERR_VM");
             }
 
             if ( key_exists('db_deaktjava', $_POST) && $_POST['db_deaktjava'] === "on" && $GlobalUser['disable'] == 0 ) {        // Set the account for deletion
-                $disable_until = time() + (7 * 24 * 60 * 60);
+                $disable_until = $now + (7 * 24 * 60 * 60);
 
                 $query = "UPDATE ".$db_prefix."users SET disable=1,disable_until=$disable_until WHERE player_id=".intval($GlobalUser['player_id']);
                 dbquery ($query);
@@ -255,7 +247,7 @@ $prem = PremiumStatus ($GlobalUser);
                 $GlobalUser['disable_until'] = $disable_until;
             }
 
-            if ( !key_exists("db_deaktjava", $_POST) && $GlobalUser['disable'] ) {    // Отменить удаление аккаунта
+            if ( !key_exists("db_deaktjava", $_POST) && $GlobalUser['disable'] ) {    // Cancel account deletion
                 $query = "UPDATE ".$db_prefix."users SET disable=0,disable_until=0 WHERE player_id=".$GlobalUser['player_id'];
                 dbquery ($query);
                 $GlobalUser['disable'] = 0;
@@ -264,10 +256,12 @@ $prem = PremiumStatus ($GlobalUser);
 
             // Save skin path + checkbox show/disable skin.
             // TODO : OPTIONS_MSG_SKIN
-            ChangeSkinPath ( $GlobalUser['player_id'], SecureText($_POST['dpath']) );
-            EnableSkin ( $GlobalUser['player_id'], ($_POST['design']==="on"?1:0) );
+            $design_path = SecureText($_POST['dpath']);
+            ChangeSkinPath ( $GlobalUser['player_id'], $design_path );
+            $enable_design = key_exists('design', $_POST) ? ($_POST['design']==="on"?true:false) : false;
+            EnableSkin ( $GlobalUser['player_id'], $enable_design );
 
-            $lang = substr ( addslashes($_POST['lang']), 0, 2 );
+            $lang = key_exists("lang", $_POST) ? substr ( addslashes($_POST['lang']), 0, 2 ) : $GlobalUni['lang'];
             // If the admin has forbidden users to choose a language, then force set them to the Universe language.
             if ($GlobalUni['force_lang']) {
                 $lang = $GlobalUni['lang'];
@@ -285,8 +279,8 @@ $prem = PremiumStatus ($GlobalUser);
             $GlobalUser['maxfleetmsg'] = $maxfleetmsg;
             $GlobalUser['lang'] = $lang;
             $GlobalUser['deact_ip'] = $deactip;
-            $GlobalUser['skin'] = $_POST['dpath'];
-            $GlobalUser['useskin'] = ($_POST['design']==="on"?1:0);
+            $GlobalUser['skin'] = $design_path;
+            $GlobalUser['useskin'] = ($enable_design?1:0);
 
             // Flags -- process only with Commander enabled
             if ( $prem['commander'] ) {
@@ -331,7 +325,7 @@ $prem = PremiumStatus ($GlobalUser);
                 $flags = $GlobalUser['flags'];
                 $hide_go_email = (key_exists('hide_go_email', $_POST) && $_POST['hide_go_email']==="on");
                 if ($hide_go_email) $flags |= USER_FLAG_HIDE_GO_EMAIL;
-                else $flags &= ~USER_FLAG_HIDE_GO_EMAIL;                
+                else $flags &= ~USER_FLAG_HIDE_GO_EMAIL;
                 if ($flags != $GlobalUser['flags']) {
                     SetUserFlags ($GlobalUser['player_id'], $flags);
                     $GlobalUser['flags'] = $flags;

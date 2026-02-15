@@ -8,17 +8,17 @@ $LOCA["es"]["REG_MAIL_NOTE"] = "Please enter your email-address";
 $LOCA["es"]["REG_MAIL_EMAIL"] = "E-Mail:";
 $LOCA["es"]["REG_MAIL_SUBMIT"] = "send login data";
 
-$LOCA["es"]["REG_FORGOT_TITLE"] = "Send OGame Password";
+$LOCA["es"]["REG_FORGOT_TITLE"] = "Send #1 Password";
 $LOCA["es"]["REG_FORGOT_ERROR"] = "This email-address doesn't exist as a permanent or variable address";
 $LOCA["es"]["REG_FORGOT_OK"] = "Your password has been sent to #1.";
-$LOCA["es"]["REG_FORGOT_SUBJ"] = "OGame password";
+$LOCA["es"]["REG_FORGOT_SUBJ"] = "#1 password";
 $LOCA["es"]["REG_FORGOT_MAIL"] = "Hi #1,\n\n" .
-"your password for OGame Universe #2 is:\n\n" .
+"your password for #5 Universe #2 is:\n\n" .
 "#3\n\n" .
 "You may log in at #4 with this login data.\n\n" .
 "We only send passwords to the E-Mail address entered in your account. Please ignore this email if you didn't request it.\n\n" .
-"We wish you good success while playing OGame!\n\n" .
-"Your OGame-Team";
+"We wish you good success while playing #5!\n\n" .
+"Your #5-Team";
 
 // Session error on page load
 
@@ -56,15 +56,15 @@ $LOCA["es"]["REG_NEW_ERROR_EXISTS"] = "Name #1 already exists";
 $LOCA["es"]["REG_NEW_ERROR_EMAIL"] = "Address #1 is invalid!";
 $LOCA["es"]["REG_NEW_ERROR_EMAIL_EXISTS"] = "Address #1 already exists!";
 $LOCA["es"]["REG_NEW_ERROR_MAX_PLAYERS"] = "The maximum number of players (#1) has been reached!";
-$LOCA["es"]["REG_NEW_TITLE"] = "OGame Universe #1 Registration";
+$LOCA["es"]["REG_NEW_TITLE"] = "#2 Universe #1 Registration";
 $LOCA["es"]["REG_NEW_SUCCESS"] = "Registration was a success!";
-$LOCA["es"]["REG_NEW_TEXT"] = "Congratulations, <span class='fine'>#1</span>!<br /><br />You've successfully registered with OGame. (<span class='fine'>#2</span>). <br />\n".
+$LOCA["es"]["REG_NEW_TEXT"] = "Congratulations, <span class='fine'>Universe #1</span>!<br /><br />You've successfully registered with #6. (<span class='fine'>#2</span>). <br />\n".
             "You'll soon receive <span class='fine'>#3</span> an e-mail with a password and some important links.<br />\n".
             "In order to play, you must be logged in via <a href='#4'>home page</a>.<br />\n".
             "In the subsequent picture you will see how to do it correctly.<br /><br />\n" .
             "<center><a href='#5' style='text-decoration: underline;font-size: large;'>Let's go!</a></center><br /><br /> \n" .
             "Good luck<br /> \n" .
-            "Your OGame team</th>";
+            "Your #6 team</th>";
 $LOCA["es"]["REG_NEW_UNI"] = "Universe #1";
 $LOCA["es"]["REG_NEW_CHOOSE_UNI"] = "Choose the universe";
 $LOCA["es"]["REG_NEW_NAME"] = "Enter name";
@@ -95,9 +95,9 @@ $LOCA["es"]["REG_NEW_MESSAGE_204"] = "In order to start the game you must agree 
 
 // user.php
 
-$LOCA["es"]["REG_GREET_MAIL_SUBJ"] = "Welcome to OGame ";
+$LOCA["es"]["REG_GREET_MAIL_SUBJ"] = "Welcome to #1 ";
 $LOCA["es"]["REG_GREET_MAIL_BODY"] = "Greetings #1,\n\n" .
-            "You've decided to create your own empire in #2 of the OGame universe!\n\n" .
+            "You've decided to create your own empire in #2 of the #7 universe!\n\n" .
             "Click on this link to activate your account:\n" .
             "#3\n\n" .
             "Your gaming credentials:\n" .
@@ -106,7 +106,7 @@ $LOCA["es"]["REG_GREET_MAIL_BODY"] = "Greetings #1,\n\n" .
             "Universe: #6\n\n\n";
 $LOCA["es"]["REG_GREET_MAIL_BOARD"] = "If you need help or advice from other emperors, you can find it all in our forum (#1).\n\n";
 $LOCA["es"]["REG_GREET_MAIL_TUTORIAL"] = "Here (#1) is all the information gathered by players and team members to help newcomers understand the game as quickly as possible.\n\n";
-$LOCA["es"]["REG_GREET_MAIL_FOOTER"] = "We wish you success in building your empire and good luck in the upcoming battles!\n\nYour OGame team";
+$LOCA["es"]["REG_GREET_MAIL_FOOTER"] = "We wish you success in building your empire and good luck in the upcoming battles!\n\nYour #1 team";
 
 $LOCA["es"]["REG_CHANGE_MAIL_SUBJ"] = "Your in-game e-mail address has been changed ";
 $LOCA["es"]["REG_CHANGE_MAIL_BODY"] = "Greetings #1,\n\n" .
@@ -114,10 +114,10 @@ $LOCA["es"]["REG_CHANGE_MAIL_BODY"] = "Greetings #1,\n\n" .
             "If you don't change it within a week, it will become permanent.\n\n" .
             "Confirm your new e-mail address using the following link to continue playing without any problems:\n\n" .
             "#4\n\n" .
-            "Your OGame team";
+            "Your #5 team";
 
-$LOCA["es"]["REG_GREET_MSG_SUBJ"] = "Welcome to OGame!";
-$LOCA["es"]["REG_GREET_MSG_TEXT"] = "Welcome to [b]OGame[/b] !\n" .
+$LOCA["es"]["REG_GREET_MSG_SUBJ"] = "Welcome to #1!";
+$LOCA["es"]["REG_GREET_MSG_TEXT"] = "Welcome to [b]#3[/b] !\n" .
         "\n" .
         "First you need to develop the mines.\n" .
         "You can do this in the \"Buildings\" menu.\n" .
