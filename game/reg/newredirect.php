@@ -31,7 +31,7 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
     $ip = $_SERVER['REMOTE_ADDR'];
     $now = time ();
     $last = GetLastRegistrationByIP ( $ip );
-    $check_ip_reg = false;
+    $check_ip_reg = true;
     
     $RegError = 0;
 
