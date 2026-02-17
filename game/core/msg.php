@@ -38,7 +38,7 @@ function DeleteExpiredMessages (int $player_id, int $days) : void
 
     // Do not delete administration messages.
     $user = LoadUser ($player_id);
-    if ($user['admin'] > USER_TYPE_PLAYER ) return;
+    if ($user && $user['admin'] > USER_TYPE_PLAYER ) return;
 
     $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id";
     $result = dbquery ($query);

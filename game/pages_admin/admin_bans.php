@@ -168,7 +168,7 @@ function SetClearCheckbox (status)
 ?>
 <tr> <th><input type="checkbox" name="id[<?php echo $user['player_id'];?>]" class="ids"/><?php echo $user['player_id'];?></th> 
         <th><a><?php echo AdminUserName($user);?></a></th> 
-        <th><?php echo AdminPlanetCoord($hp);?> <?php echo AdminPlanetName($hp['planet_id']);?></th> 
+        <th><?php echo AdminPlanetCoord($hp);?> <?php echo AdminPlanetName($hp);?></th> 
         <th><a><?php echo $user['pemail'];?></a></th> 
         <th><a><?php echo $user['email'];?></a></th> 
         <th><?php echo $user['ip_addr'];?></th> 

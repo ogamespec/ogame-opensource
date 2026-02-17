@@ -5,6 +5,8 @@
 /** @var string $db_prefix */
 /** @var string $db_secret */
 /** @var string $PageError */
+/** @var string $session */
+/** @var int $now */
 
 // Settings.
 

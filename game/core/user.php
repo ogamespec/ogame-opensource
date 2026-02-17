@@ -827,10 +827,11 @@ function InvalidateUserCache () : void
 }
 
 // Return player's name with a link to the edit page and status (inactive, VM, etc).
-function AdminUserName (array $user) : string
+function AdminUserName (array|null $user) : string
 {
     global $session;
 
+    if ($user == null) return "";
     $name = $user['oname'];
 
     $week = time() - 604800;

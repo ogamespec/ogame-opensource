@@ -175,20 +175,20 @@ class Admin_Queue extends Page {
                 $bqueue = dbarray ($result);
                 $planet_id = $bqueue['planet_id'];
                 $planet = LoadPlanetById ($planet_id);
-                return va(loca("ADM_QUEUE_TYPE_BUILD"), loca("NAME_$obj_id"), $level, AdminPlanetName ($planet['planet_id']));
+                return va(loca("ADM_QUEUE_TYPE_BUILD"), loca("NAME_$obj_id"), $level, AdminPlanetName ($planet));
             case QTYP_DEMOLISH:
                 $query = "SELECT * FROM ".$db_prefix."buildqueue WHERE id = " . $queue['sub_id'] . " LIMIT 1";
                 $result = dbquery ($query);
                 $bqueue = dbarray ($result);
                 $planet_id = $bqueue['planet_id'];
                 $planet = LoadPlanetById ($planet_id);
-                return va(loca("ADM_QUEUE_TYPE_DEMOLISH"), loca("NAME_$obj_id"), $level, AdminPlanetName ($planet['planet_id']));
+                return va(loca("ADM_QUEUE_TYPE_DEMOLISH"), loca("NAME_$obj_id"), $level, AdminPlanetName ($planet));
             case QTYP_SHIPYARD:
                 $planet = LoadPlanetById ($sub_id);
-                return va(loca("ADM_QUEUE_TYPE_SHIPYARD"), loca("NAME_$obj_id"), $level, AdminPlanetName ($sub_id));
+                return va(loca("ADM_QUEUE_TYPE_SHIPYARD"), loca("NAME_$obj_id"), $level, AdminPlanetName ($planet));
             case QTYP_RESEARCH:
                 $planet = LoadPlanetById ($sub_id);
-                return va(loca("ADM_QUEUE_TYPE_RESEARCH"), loca("NAME_$obj_id"), $level, AdminPlanetName ($sub_id));
+                return va(loca("ADM_QUEUE_TYPE_RESEARCH"), loca("NAME_$obj_id"), $level, AdminPlanetName ($planet));
             case QTYP_UPDATE_STATS: return loca("ADM_QUEUE_TYPE_UPDATE_STATS");
             case QTYP_RECALC_POINTS: return loca("ADM_QUEUE_TYPE_RECALC_POINTS");
             case QTYP_RECALC_ALLY_POINTS: return loca("ADM_QUEUE_TYPE_RECALC_ALLY_POINTS");

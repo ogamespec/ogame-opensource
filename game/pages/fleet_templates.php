@@ -3,6 +3,7 @@
 /** @var array $GlobalUser */
 /** @var string $db_prefix */
 /** @var array $fleetmap */
+/** @var string $session */
 
 // Fleet templates.
 

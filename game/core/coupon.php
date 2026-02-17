@@ -99,7 +99,7 @@ function TotalCoupons () : int
             return $val;
         }
     }
-    else return 0;
+    return 0;
 }
 
 // Add a coupon (DM quantity). Return the coupon code, or NULL if failure.
