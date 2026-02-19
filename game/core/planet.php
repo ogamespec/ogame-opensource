@@ -395,10 +395,11 @@ function AdjustResources (array $cost, int $planet_id, string $sign) : void
 {
     global $db_prefix;
     global $resourcemap;
+    $planet = LoadPlanetById ($planet_id);
     $now = time ();
     $query = "UPDATE ".$db_prefix."planets SET ";
     foreach ($resourcemap as $i=>$rc) {
-        if (isset($cost[$rc]) && $cost[$rc]) {
+        if (isset($cost[$rc]) && $cost[$rc] && isset($planet[$rc])) {
             $query .= "`".$rc."`=`".$rc."` $sign ".$cost[$rc].", ";
         }
     }

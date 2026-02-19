@@ -416,6 +416,7 @@ function LoadUser ( int $player_id) : array|null
     if (!$user) {
         return null;
     }
+    $user[GID_RC_DM] = $user['dm'] + $user['dmfree'];
     $UserCache [ $player_id ] = $user;
     return $user;
 }
@@ -552,6 +553,7 @@ function AuthUser ( string $session ) : bool
     $result = dbquery ($query);
     if (dbrows ($result) == 0) { RedirectHome(); return false; }
     $GlobalUser = dbarray ($result);
+    $GlobalUser[GID_RC_DM] = $GlobalUser['dm'] + $GlobalUser['dmfree'];
     $unitab = $GlobalUni;
     $uni = $unitab['num'];
     $ip = $_SERVER['REMOTE_ADDR'];
@@ -622,6 +624,7 @@ function Login ( string $login, string $pass, string $passmd="" ) : never
         $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$sess."'";
         $result = dbquery ($query);
         $user = dbarray ($result);
+        $user[GID_RC_DM] = $user['dm'] + $user['dmfree'];
         SelectPlanet ($player_id, $user['hplanetid']);
 
         // Setting events for player unload, virtual DF cleanup, cleanup of destroyed planets, recalculation of alliance stats, and other global events

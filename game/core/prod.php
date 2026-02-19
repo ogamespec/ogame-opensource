@@ -113,15 +113,21 @@ function ResearchNetwork ( int $planetid, int $id ) : int
 function IsEnoughResources (array $user, array $planet, array $cost) : bool
 {
     foreach ($cost as $rc=>$value) {
-        if ($value > 0 && isset($user[$rc])) {
-            if ($user[$rc] < $value) return false;
+        if (isset($user[$rc])) {
+            if ($value > 0 && $user[$rc] < $value) {
+                return false;
+            }
+        }
+        else if (isset($planet[$rc])) {
+            if ($value > 0 && $planet[$rc] < $value) {
+                return false;
+            }
+        }
+        else {
+            return false;      // An unknown resource type that neither the player nor the planet has.
         }
     }
-    foreach ($cost as $rc=>$value) {
-        if ($value > 0 && isset($planet[$rc])) {
-            if ($planet[$rc] < $value) return false;
-        }
-    }
+    // All conditions are met, all resources are sufficient.
     return true;
 }
 
@@ -416,6 +422,10 @@ function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
     $query = "UPDATE ".$db_prefix."planets SET $update_query lastpeek = ".$time_to." WHERE planet_id = $planet_id";
     dbquery ($query);
     $planet['lastpeek'] = $time_to;
+
+    // TODO: Still needed for IsEnoughResources method :(
+    // Set energy as a virtual resource, obtained only when calling GetUpdatePlanet. Loading a raw planet using the LoadPlanetById method will not provide energy.
+    $planet[GID_RC_ENERGY] = $planet['balance'][GID_RC_ENERGY];
 
     return $planet;
 }

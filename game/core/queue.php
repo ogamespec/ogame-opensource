@@ -357,13 +357,13 @@ function BuildEnque ( array $user, int $planet_id, int $id, int $destroy, int $n
     $speed = $GlobalUni['speed'];
     if ( $GlobalUni['freeze'] ) return "";
 
-    $planet = LoadPlanetById ( $planet_id );
+    if ($now == 0) $now = time ();
+
+    $planet = GetUpdatePlanet ( $planet_id, $now );
 
     $prem = PremiumStatus ($user);
     if ($prem['commander']) $maxcnt = 5;
     else $maxcnt = 1;
-
-    if ($now == 0) $now = time ();
 
     // Write down the user's action, even if the user does something wrong
     if ($destroy) UserLog ( $planet['owner_id'], "BUILD", va(loca_lang("DEBUG_LOG_DEMOLISH", $GlobalUni['lang']), loca("NAME_$id"), $planet[$id]-1, $planet_id)  );
@@ -757,7 +757,7 @@ function StartResearch (int $player_id, int $planet_id, int $id, int $now) : str
     global $db_prefix, $GlobalUni;
     $uni = $GlobalUni;
 
-    $planet = LoadPlanetById ( $planet_id );
+    $planet = GetUpdatePlanet ( $planet_id, $now );
     if ($planet == null) return "";
 
     UserLog ( $player_id, "RESEARCH", va(loca_lang("DEBUG_LOG_RESEARCH", $GlobalUni['lang']), loca("NAME_$id"), $planet_id)  );
