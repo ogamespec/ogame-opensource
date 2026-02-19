@@ -417,6 +417,10 @@ function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
     dbquery ($query);
     $planet['lastpeek'] = $time_to;
 
+    // TODO: Still needed for IsEnoughResources method :(
+    // Set energy as a virtual resource, obtained only when calling GetUpdatePlanet. Loading a raw planet using the LoadPlanetById method will not provide energy.
+    $planet[GID_RC_ENERGY] = $planet['balance'][GID_RC_ENERGY];
+
     return $planet;
 }
 
