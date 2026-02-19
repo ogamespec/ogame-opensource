@@ -113,15 +113,15 @@ function ResearchNetwork ( int $planetid, int $id ) : int
 function IsEnoughResources (array $user, array $planet, array $cost) : bool
 {
     foreach ($cost as $rc=>$value) {
-        if ($value > 0 && isset($user[$rc])) {
-            if ($user[$rc] < $value) return false;
+        if (isset($user[$rc])) {
+            if ($value > 0 && $user[$rc] < $value) return false;
         }
-    }
-    foreach ($cost as $rc=>$value) {
-        if ($value > 0 && isset($planet[$rc])) {
-            if ($planet[$rc] < $value) return false;
+        else if (isset($planet[$rc])) {
+            if ($value > 0 && $planet[$rc] < $value) return false;
         }
+        else return false;      // An unknown resource type that neither the player nor the planet has.
     }
+    // All conditions are met, all resources are sufficient.
     return true;
 }
 
