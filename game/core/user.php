@@ -416,6 +416,7 @@ function LoadUser ( int $player_id) : array|null
     if (!$user) {
         return null;
     }
+    $user[GID_RC_DM] = $user['dm'] + $user['dmfree'];
     $UserCache [ $player_id ] = $user;
     return $user;
 }

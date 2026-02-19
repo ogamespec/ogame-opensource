@@ -125,7 +125,7 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
         echo "<table class='header'>\n";
         echo "<tr class='header' >\n";
         PlanetsDropList ($page);
-        ResourceList ($aktplanet, $GlobalUser['dm']+$GlobalUser['dmfree']);
+        ResourceList ($aktplanet, $GlobalUser[GID_RC_DM]);
         BonusList ();
         echo "</tr>\n";
         echo "</table>\n";

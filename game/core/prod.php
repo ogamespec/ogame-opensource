@@ -114,12 +114,18 @@ function IsEnoughResources (array $user, array $planet, array $cost) : bool
 {
     foreach ($cost as $rc=>$value) {
         if (isset($user[$rc])) {
-            if ($value > 0 && $user[$rc] < $value) return false;
+            if ($value > 0 && $user[$rc] < $value) {
+                return false;
+            }
         }
         else if (isset($planet[$rc])) {
-            if ($value > 0 && $planet[$rc] < $value) return false;
+            if ($value > 0 && $planet[$rc] < $value) {
+                return false;
+            }
         }
-        else return false;      // An unknown resource type that neither the player nor the planet has.
+        else {
+            return false;      // An unknown resource type that neither the player nor the planet has.
+        }
     }
     // All conditions are met, all resources are sufficient.
     return true;
