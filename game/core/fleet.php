@@ -515,7 +515,7 @@ function LaunchRockets ( array $origin, array $target, int $seconds, int $amount
     $prio = QUEUE_PRIO_FLEET + FTYP_MISSILE;
 
     // Write the IPM off the planet.
-    $origin['d503'] -= $amount;
+    $origin[GID_D_IPM] -= $amount;
     SetPlanetDefense ( $origin['planet_id'], $origin );
 
     // Add a missile attack.
