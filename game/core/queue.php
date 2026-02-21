@@ -588,7 +588,9 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
     // Shield domes can be built up to a maximum of 1 unit.
     if ( ($gid == GID_D_SDOME || $gid == GID_D_LDOME) && $value > 1 ) $value = 1;
 
-    $planet = LoadPlanetById ( $planet_id );
+    if ($now == 0) $now = time ();
+
+    $planet = GetUpdatePlanet ( $planet_id, $now );
 
     // If the planet already has a shield dome, we don't build it.
     if ( ($gid == GID_D_SDOME || $gid == GID_D_LDOME) && $planet[$gid] > 0 ) return false;
