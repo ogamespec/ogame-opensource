@@ -367,7 +367,9 @@ function DispatchFleet (array $fleet, array $origin, array $target, int $order, 
         'fuel' => $cons, 'mission' => $order, 
         'start_planet' => $origin['planet_id'], 'target_planet' => $target['planet_id'], 'flight_time' => $flight_time, 'deploy_time' => $deploy_time );
     foreach ($transportableResources as $i=>$rc) $fleet_obj[$rc] = $resources[$rc];
-    foreach ($fleetmap as $i=>$gid) $fleet_obj[$gid] = $fleet[$gid];
+    foreach ($fleetmap as $i=>$gid) {
+        $fleet_obj[$gid] = isset($fleet[$gid]) ? $fleet[$gid] : 0;
+    }
     $fleet_id = AddDBRow ($fleet_obj, 'fleet');
 
     // Log entry
@@ -380,7 +382,9 @@ function DispatchFleet (array $fleet, array $origin, array $target, int $order, 
         'target_g' => $target['g'], 'target_s' => $target['s'], 'target_p' => $target['p'], 'target_type' => $target['type'] );
     foreach ($transportableResources as $i=>$rc) $fleetlog['p'.$rc] = $origin[$rc];
     foreach ($transportableResources as $i=>$rc) $fleetlog[$rc] = $resources[$rc];
-    foreach ($fleetmap as $i=>$gid) $fleetlog[$gid] = $fleet[$gid];
+    foreach ($fleetmap as $i=>$gid) {
+        $fleetlog[$gid] = isset($fleet[$gid]) ? $fleet[$gid] : 0;
+    }
     AddDBRow ($fleetlog, 'fleetlogs');
 
     // Add the task to the global event queue.
