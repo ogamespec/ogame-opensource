@@ -19,7 +19,9 @@ function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : v
             $origin = LoadPlanetById ( $fleet_obj['start_planet'] );
             $target = LoadPlanetById ( $fleet_obj['target_planet'] );
             $ships = 0;
-            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['units'][$gid];
+            foreach ( $fleetmap as $ii=>$gid ) {
+                $ships += isset($attacker['units'][$gid]) ? $attacker['units'][$gid] : 0;
+            }
 
             // Return the fleet, if there's anything left.
             // The hold time is used as the flight time.
@@ -41,7 +43,9 @@ function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : v
             $origin = LoadPlanetById ( $fleet_obj['start_planet'] );
             $target = LoadPlanetById ( $fleet_obj['target_planet'] );
             $ships = 0;
-            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['units'][$gid];
+            foreach ( $fleetmap as $ii=>$gid ) {
+                $ships += isset($attacker['units'][$gid]) ? $attacker['units'][$gid] : 0;
+            }
 
             // Return the fleet, if there's anything left.
             // The hold time is used as the flight time.
