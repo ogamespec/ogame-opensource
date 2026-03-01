@@ -76,7 +76,7 @@ function Debug (string $message) : void
 // Call Trace.
 function BackTrace () : string
 {
-    $bt = debug_backtrace ();
+    $bt = debug_backtrace (DEBUG_BACKTRACE_IGNORE_ARGS);
 
     $trace  = "";
     $sp = 0;
