@@ -9,6 +9,7 @@ $db_connect = 0;
 function dbconnect (string $db_host, string $db_user, string $db_pass, string $db_name) : void
 {
     global  $query_counter, $query_log, $db_connect;
+    mysqli_report(MYSQLI_REPORT_OFF);
     $db_connect = @mysqli_connect($db_host, $db_user, $db_pass);
     $db_select = @mysqli_select_db($db_connect, $db_name);
     if (!$db_connect) {
@@ -104,6 +105,7 @@ function MDBConnect () : bool
 {
     global $MDB_link, $mdb_host, $mdb_user, $mdb_pass, $mdb_name, $mdb_enable;
     if (!$mdb_enable) return false;
+    mysqli_report(MYSQLI_REPORT_OFF);
     $MDB_link = @mysqli_connect ($mdb_host, $mdb_user, $mdb_pass );
     if (!$MDB_link) return false;
     if ( ! @mysqli_select_db ($MDB_link, $mdb_name) ) return false;
