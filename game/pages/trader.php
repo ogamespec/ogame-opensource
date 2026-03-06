@@ -130,7 +130,7 @@ if ( method () === "POST" )
                 if ( $PageError === '' && $met > 0 ) {
                     $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
                     dbquery ( $query );
-                    $query = "UPDATE ".$db_prefix."planets SET m = m - '".intval($met)."', k = '".intval($crys)."', d = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
+                    $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."` = `".GID_RC_METAL."` - '".intval($met)."', `".GID_RC_CRYSTAL."` = '".intval($crys)."', `".GID_RC_DEUTERIUM."` = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
                     dbquery ( $query );
                     $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );
                     $GlobalUser['trader'] = 0;
@@ -150,7 +150,7 @@ if ( method () === "POST" )
                 if ( $PageError === '' && $crys > 0 ) {
                     $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
                     dbquery ( $query );
-                    $query = "UPDATE ".$db_prefix."planets SET k = k - '".intval($crys)."', m = '".intval($met)."', d = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
+                    $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_CRYSTAL."` = `".GID_RC_CRYSTAL."` - '".intval($crys)."', `".GID_RC_METAL."` = '".intval($met)."', `".GID_RC_DEUTERIUM."` = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
                     dbquery ( $query );
                     $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );
                     $GlobalUser['trader'] = 0;
@@ -170,7 +170,7 @@ if ( method () === "POST" )
                 if ( $PageError === '' && $deut > 0 ) {
                     $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
                     dbquery ( $query );
-                    $query = "UPDATE ".$db_prefix."planets SET d = d - '".intval($deut)."', k = '".intval($crys)."', m = '".intval($met)."' WHERE planet_id = " . $aktplanet['planet_id'];
+                    $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_DEUTERIUM."` = `".GID_RC_DEUTERIUM."` - '".intval($deut)."', `".GID_RC_CRYSTAL."` = '".intval($crys)."', `".GID_RC_METAL."` = '".intval($met)."' WHERE planet_id = " . $aktplanet['planet_id'];
                     dbquery ( $query );
                     $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );
                     $GlobalUser['trader'] = 0;
