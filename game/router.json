@@ -54,7 +54,12 @@
 		"loca": [ "menu", "changelog" ],
 		"mvc": true
 	},
-"\t\"fleet_templates\": {\n\t\t\"path\": \"pages/fleet_templates.php\",\n\t\t\"loca\": [ \"menu\", \"fleet\" ],\n\t\t\"mvc\": true\n\t},\n"}	"flotten1": {
+	"fleet_templates": {
+		"path": "pages/fleet_templates.php",
+		"loca": [ "menu", "fleet" ],
+		"mvc": true
+	},
+	"flotten1": {
 		"path": "pages/flotten1.php",
 		"loca": [ "menu", "fleetorder", "fleet" ]
 	},

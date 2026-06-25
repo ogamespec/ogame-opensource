@@ -10,7 +10,7 @@
  * MVC implementation of the fleet templates page.
  * Allows users to create and manage standard fleet compositions.
  */
-class FleetTemplates extends Page
+class Fleet_templates extends Page
 {
     private array $fleetmap_nosat;
     private int $maxTemplates;
@@ -25,6 +25,8 @@ class FleetTemplates extends Page
     {
         global $GlobalUser, $fleetmap, $db_prefix;
 
+        // You are able to create standard fleets. The maximum of standard fleets is your research level "Computer Technology" plus one
+        // https://board.en.ogame.gameforge.com/index.php?thread/195023-version-0-74e/
         $this->maxTemplates = $GlobalUser[GID_R_COMPUTER] + 1;
         $this->fleetmap_nosat = array_diff($fleetmap, [GID_F_SAT]);
 
