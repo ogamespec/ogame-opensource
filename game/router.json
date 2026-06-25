@@ -51,7 +51,8 @@
 	},
 	"changelog": {
 		"path": "pages/changelog.php",
-		"loca": [ "menu", "changelog" ]
+		"loca": [ "menu", "changelog" ],
+		"mvc": true
 	},
 	"fleet_templates": {
 		"path": "pages/fleet_templates.php",

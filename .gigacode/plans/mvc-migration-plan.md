@@ -2,7 +2,7 @@
 
 ## Current Status
 
-### Pages Already Using MVC (6 pages):
+### Pages Already Using MVC (8 pages):
 1. b_building.php
 2. overview.php
 3. resources.php
@@ -10,6 +10,7 @@
 5. notizen.php
 6. techtree.php
 7. techtreedetails.php
+8. changelog.php
 
 ### Pages That Need MVC Migration:
 1. allianzen.php (alliances)
@@ -17,26 +18,25 @@
 3. bewerben.php (apply)
 4. bewerbungen.php (applications)
 5. buddy.php (buddy system)
-6. changelog.php
-7. fleet_templates.php
-8. flotten1.php (fleet 1)
-9. flotten2.php (fleet 2)
-10. flotten3.php (fleet 3)
-11. flottenversand.php (fleet dispatch - redirect page)
-12. galaxy.php
-13. imperium.php
-14. infos.php
-15. messages.php
-16. micropayment.php
-17. options.php
-18. payment.php
-19. pranger.php (external)
-20. renameplanet.php
-21. sprungtor.php (jumpgate)
-22. statistics.php
-23. suche.php (search)
-24. trader.php
-25. writemessages.php
+6. fleet_templates.php
+7. flotten1.php (fleet 1)
+8. flotten2.php (fleet 2)
+9. flotten3.php (fleet 3)
+10. flottenversand.php (fleet dispatch - redirect page)
+11. galaxy.php
+12. imperium.php
+13. infos.php
+14. messages.php
+15. micropayment.php
+16. options.php
+17. payment.php
+18. pranger.php (external)
+19. renameplanet.php
+20. sprungtor.php (jumpgate)
+21. statistics.php
+22. suche.php (search)
+23. trader.php
+24. writemessages.php
 
 ### Special Pages (Bare/External):
 1. bericht.php (bare - battle reports)
@@ -48,12 +48,11 @@
 
 ### Phase 1: Simple Pages (Low Complexity)
 Start with pages that have minimal GET/POST processing:
-1. changelog.php
-2. fleet_templates.php
-3. sprungtor.php
-4. statistics.php
-5. suche.php
-6. renameplanet.php
+1. fleet_templates.php
+2. sprungtor.php
+3. statistics.php
+4. suche.php
+5. renameplanet.php
 
 ### Phase 2: Medium Complexity Pages
 Pages with some form processing:
