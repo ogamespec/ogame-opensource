@@ -1,273 +1,290 @@
 <?php
 
-/** @var array $GlobalUser */
-/** @var array $GlobalUni */
-/** @var array $UnitParam */
-/** @var array $aktplanet */
-/** @var string $session */
-
 // Information on buildings, fleets, defense and research.
-// Some pages (particularly buildings) contain additional information or controls.
 
-// Small transport contains additional text (yellow), to indicate the change in base speed and consumption after a engine change.
-// A bomber does NOT have a change in consumption after an engine change.
+class Infos extends Page {
 
-$speed = $GlobalUni['speed'];
-$drepair = $GlobalUni['defrepair'];
+    private int $gid = 0;
+    private string $rapid_info = "";
 
-// ***************************************************************************************
+    public function controller () : bool {
+        global $GlobalUni;
+        global $aktplanet;
+        global $session;
 
-function rgnum (float|int $num) : string
-{
-    if ($num < 0) return "<font color=\"#FF0000\">".nicenum($num)."</font>";
-    else if ($num > 0) return "<font color=\"#00FF00\">".nicenum($num)."</font>";
-    else return nicenum($num);
-}
+        $this->gid = intval($_GET['gid']);
+        $this->rapid_info = $this->RapidInfo ($this->gid);
 
-function rapidIn (int $gid, int $n) : string
-{
-    return "<br/>".loca("INFO_RAPID_IN1")."<a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$gid\">".loca("NAME_$gid")."</a>".va(loca("INFO_RAPID_IN2"), "<font color=\"red\">$n</font>")."\n";
-}
-
-function rapidOut (int $gid, int $n) : string
-{
-    return "<br/>".loca("INFO_RAPID_OUT1")."<a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$gid\">".loca("NAME_$gid")."</a>".va(loca("INFO_RAPID_OUT2"), "<font color=\"lime\">$n</font>")."\n";
-}
-
-// Rapid-fire information.
-function rapid (int $gid) : string
-{
-    global $RapidFire;
-    $res = "";
-    foreach ($RapidFire as $n => $arr) if ( key_exists($n, $RapidFire[$gid]) && $RapidFire[$gid][$n] > 1 ) $res .= rapidOut ( $n, $RapidFire[$gid][$n] );
-    foreach ($RapidFire as $n => $arr) if ( key_exists($gid, $RapidFire[$n]) && $RapidFire[$n][$gid] > 1 ) $res .= rapidIn ( $n, $RapidFire[$n][$gid] );
-    return $res;
-}
-
-// Shooting defenses
-// A custom method that used to be in techs.php, but was moved here because it's only used in one place (not very mod-compatible).
-function IsDefenseShoot (int $gid) : bool
-{
-    global $UnitParam;
-    return IsDefenseNoRak($gid) && $UnitParam[$gid][2] > 1;
-}
-
-$gid = intval($_GET['gid']);
-
-echo "<table width=\"519\">\n";
-
-if (IsFleet($gid))    // Fleet
-{
-    $base_speed = $UnitParam[$gid][4];
-    $base_cons = $UnitParam[$gid][5];
-    $base_speed2 = 0;
-    $base_cons2 = 0;
-
-    // The base values for Small Cargo and Bomber change when you change engines
-
-    if ($gid == GID_F_SC) {
-        $base_speed2 = $base_speed + 5000;
-        $base_cons2 = $base_cons * 2;
-    }
-    else if ($gid == GID_F_BOMBER) {
-        $base_speed2 = $base_speed + 1000;
-        // Consumption doesn't change.
+        return true;
     }
 
-    echo "<!-- begin fleet or defense information -->\n";
-    echo "<tr><td class=\"c\" colspan=\"2\">".loca("INFO_FLEET")."</td></tr>\n";
-    echo "<tr><th>".loca("INFO_NAME")."</th><th>".loca("NAME_$gid")."</th></tr>\n";
-    echo "<tr><th colspan=\"2\">\n";
-    echo "<table border=\"0\">\n";
-    echo "<tr><td valign=\"top\">".GetObjectImage(UserSkin(), $gid)."</td>\n";
-    echo "<td>".loca("LONG_$gid")."<br/>".rapid($gid)."</td>\n";
-    echo "</tr></table></th></tr>\n";
-    echo "<tr><th>".loca("INFO_STRUCTURE")."</th><th>".nicenum($UnitParam[$gid][0])."</th></tr>\n";
-    echo "<tr><th>".loca("INFO_SHIELD")."</th><th>".nicenum($UnitParam[$gid][1])."</th></tr>\n";
-    echo "<tr><th>".loca("INFO_ATTACK")."</th><th>".nicenum($UnitParam[$gid][2])."</th></tr>\n";
-    echo "<tr><th>".loca("INFO_CARGO")."</th><th>".nicenum(FleetCargo($gid)).loca("INFO_UNITS")."</th></tr>\n";
-    echo "<tr><th>".loca("INFO_BASE_SPEED")."</th><th>".nicenum($base_speed);
-    if ($base_speed2 != 0) {
-        echo "             <font color=\"yellow\">(". nicenum($base_speed2) .")</font> \n           ";
-    }
-    echo "</th></tr>\n";
-    echo "<tr><th>".loca("INFO_BASE_CONS")."</th><th>".nicenum($base_cons);
-    if ($base_cons2 != 0) {
-        echo "             <font color=\"yellow\">(". nicenum($base_cons2) .")</font> \n           ";
-    }
-    echo "</th></tr>\n";
-    echo "</table></th></tr></table>\n";
-}
-else if (IsDefenseNoRak($gid))    // Defense.
-{
-    echo "<!-- begin fleet or defense information -->\n";
-    echo "<tr><td class=\"c\" colspan=\"2\">".loca("INFO_DEFENSE")."</td></tr>\n";
-    echo "<tr><th>".loca("INFO_NAME")."</th><th>".loca("NAME_$gid")."</th></tr>\n";
-    echo "<tr><th colspan=\"2\">\n";
-    echo "<table border=\"0\">\n";
-    echo "<tr><td valign=\"top\">".GetObjectImage(UserSkin(), $gid)."</td>\n";
-    echo "<td>".loca("LONG_$gid");
-    if (IsDefenseShoot($gid)) {
-        // For shooting defenses, output the damage repair percentage.
-        echo " " . va(loca("INFO_REPAIR"), $drepair);
-    }
-    echo "<br/>".rapid($gid)."</td>\n";
-    echo "</tr></table></th></tr>\n";
-    echo "<tr><th>".loca("INFO_STRUCTURE")."</th><th>".nicenum($UnitParam[$gid][0])."</th></tr>\n";
-    echo "<tr><th>".loca("INFO_SHIELD")."</th><th>".nicenum($UnitParam[$gid][1])."</th></tr>\n";
-    echo "<tr><th>".loca("INFO_ATTACK")."</th><th>".nicenum($UnitParam[$gid][2])."</th></tr>\n";
-    echo "</th></tr></table>\n";
-}
-else if (IsResearch($gid))    // Research.
-{
-    echo "<tr><td class=\"c\">".loca("NAME_$gid")."</td></tr>\n";
-    echo "<tr><th><table>\n";
-    echo "<tr><td>".GetObjectImage(UserSkin(), $gid)."</td>\n";
-    echo "<td>".loca("LONG_$gid")."</td></tr>\n";
-    echo "</table></th></tr>\n";
-    echo "</table>\n";
-}
-else
-{
-    echo "<tr><td class=\"c\">".loca("NAME_$gid")."</td></tr>\n";
-    echo "<tr><th><table>\n";
-    echo "<tr><td>".GetObjectImage(UserSkin(), $gid)."</td>\n";
-    echo "<td>".loca("LONG_$gid")."</td></tr>\n";
-    echo "</table></th></tr>\n";
+    public function view () : void {
+        global $GlobalUser;
+        global $GlobalUni;
+        global $UnitParam;
+        global $aktplanet;
+        global $session;
+        global $RapidFire;
+        global $fleetmap;
+        global $db_prefix;
+        global $now;
+        global $resourcemap;
 
-    // Additional information and buttons.
+        $gid = $this->gid;
+        $speed = $GlobalUni['speed'];
+        $drepair = $GlobalUni['defrepair'];
 
-    if ($gid == GID_B_METAL_MINE)    // Metal mine
-    {
-        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
+        echo "<table width=\"519\">\n";
+
+        if (IsFleet($gid)) {
+            $base_speed = $UnitParam[$gid][4];
+            $base_cons = $UnitParam[$gid][5];
+            $base_speed2 = 0;
+            $base_cons2 = 0;
+
+            if ($gid == GID_F_SC) {
+                $base_speed2 = $base_speed + 5000;
+                $base_cons2 = $base_cons * 2;
+            }
+            else if ($gid == GID_F_BOMBER) {
+                $base_speed2 = $base_speed + 1000;
+            }
+
+            echo "<!-- begin fleet or defense information -->\n";
+            echo "<tr><td class=\"c\" colspan=\"2\">".loca("INFO_FLEET")."</td></tr>\n";
+            echo "<tr><th>".loca("INFO_NAME")."</th><th>".loca("NAME_$gid")."</th></tr>\n";
+            echo "<tr><th colspan=\"2\">\n";
+            echo "<table border=\"0\">\n";
+            echo "<tr><td valign=\"top\">".GetObjectImage(UserSkin(), $gid)."</td>\n";
+            echo "<td>".loca("LONG_$gid")."<br/>".$this->rapid_info."</td>\n";
+            echo "</tr></table></th></tr>\n";
+            echo "<tr><th>".loca("INFO_STRUCTURE")."</th><th>".nicenum($UnitParam[$gid][0])."</th></tr>\n";
+            echo "<tr><th>".loca("INFO_SHIELD")."</th><th>".nicenum($UnitParam[$gid][1])."</th></tr>\n";
+            echo "<tr><th>".loca("INFO_ATTACK")."</th><th>".nicenum($UnitParam[$gid][2])."</th></tr>\n";
+            echo "<tr><th>".loca("INFO_CARGO")."</th><th>".nicenum(FleetCargo($gid)).loca("INFO_UNITS")."</th></tr>\n";
+            echo "<tr><th>".loca("INFO_BASE_SPEED")."</th><th>".nicenum($base_speed);
+            if ($base_speed2 != 0) echo "             <font color=\"yellow\">(". nicenum($base_speed2) .")</font> \n           ";
+            echo "</th></tr>\n";
+            echo "<tr><th>".loca("INFO_BASE_CONS")."</th><th>".nicenum($base_cons);
+            if ($base_cons2 != 0) echo "             <font color=\"yellow\">(". nicenum($base_cons2) .")</font> \n           ";
+            echo "</th></tr>\n";
+            echo "</table></th></tr></table>\n";
+        }
+        else if (IsDefenseNoRak($gid)) {
+            echo "<!-- begin fleet or defense information -->\n";
+            echo "<tr><td class=\"c\" colspan=\"2\">".loca("INFO_DEFENSE")."</td></tr>\n";
+            echo "<tr><th>".loca("INFO_NAME")."</th><th>".loca("NAME_$gid")."</th></tr>\n";
+            echo "<tr><th colspan=\"2\">\n";
+            echo "<table border=\"0\">\n";
+            echo "<tr><td valign=\"top\">".GetObjectImage(UserSkin(), $gid)."</td>\n";
+            echo "<td>".loca("LONG_$gid");
+            if (IsDefenseShoot($gid)) echo " " . va(loca("INFO_REPAIR"), $drepair);
+            echo "<br/>".$this->rapid_info."</td>\n";
+            echo "</tr></table></th></tr>\n";
+            echo "<tr><th>".loca("INFO_STRUCTURE")."</th><th>".nicenum($UnitParam[$gid][0])."</th></tr>\n";
+            echo "<tr><th>".loca("INFO_SHIELD")."</th><th>".nicenum($UnitParam[$gid][1])."</th></tr>\n";
+            echo "<tr><th>".loca("INFO_ATTACK")."</th><th>".nicenum($UnitParam[$gid][2])."</th></tr>\n";
+            echo "</th></tr></table>\n";
+        }
+        else if (IsResearch($gid)) {
+            echo "<tr><td class=\"c\">".loca("NAME_$gid")."</td></tr>\n";
+            echo "<tr><th><table>\n";
+            echo "<tr><td>".GetObjectImage(UserSkin(), $gid)."</td>\n";
+            echo "<td>".loca("LONG_$gid")."</td></tr>\n";
+            echo "</table></th></tr>\n";
+            echo "</table>\n";
+        }
+        else {
+            echo "<tr><td class=\"c\">".loca("NAME_$gid")."</td></tr>\n";
+            echo "<tr><th><table>\n";
+            echo "<tr><td>".GetObjectImage(UserSkin(), $gid)."</td>\n";
+            echo "<td>".loca("LONG_$gid")."</td></tr>\n";
+            echo "</table></th></tr>\n";
+
+            // Additional information and buttons.
+            if ( $gid == GID_B_METAL_MINE || $gid == GID_B_CRYS_MINE || $gid == GID_B_DEUT_SYNTH || $gid == GID_B_SOLAR || $gid == GID_B_FUSION ) {
+                $this->DisplayProductionTable ($gid);
+            }
+            else if ( $gid == GID_B_METAL_STOR || $gid == GID_B_CRYS_STOR || $gid == GID_B_DEUT_STOR ) {
+                $this->DisplayStorageTable ($gid);
+            }
+            else if ( $gid == GID_B_ALLY_DEPOT ) {
+                $this->DisplayAllianceDepot ();
+            }
+            else if ( $gid == GID_B_MISS_SILO && $aktplanet[GID_B_MISS_SILO] > 0) {
+                $this->DisplayMissileSilo ();
+            }
+            else if ( $gid == GID_B_PHALANX ) {
+                $this->DisplayPhalanxInfo ();
+            }
+            else if ( $gid == GID_B_JUMP_GATE && $aktplanet[GID_B_JUMP_GATE] > 0) {
+                $this->DisplayJumpGate ();
+            }
+
+            ModsExecIntRef ('page_infos', $gid, $aktplanet);
+
+            echo "</table>\n";
+
+            // Building Demolition.
+            if ( IsBuilding($gid) && $aktplanet[$gid] && !($gid == GID_B_TERRAFORMER || $gid == GID_B_LUNAR_BASE || $gid == GID_B_MISS_SILO) ) {
+                echo "<table width=519 >\n";
+                echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">".va(loca("INFO_DEMOLISH_TITLE"), loca("NAME_$gid"), $aktplanet[$gid])."</a></td></tr>\n";
+                $cost = TechPrice ( $gid, $aktplanet[$gid]-1 );
+                echo "<br><tr><th>" . loca("INFO_DEMOLISH_RES");
+                foreach ($resourcemap as $i=>$rc) {
+                    if(isset($cost[$rc]) && $cost[$rc]) {
+                        echo loca("INFO_DEMOLISH_".$rc) . "<b>".nicenum($cost[$rc])."</b> ";
+                    }
+                }
+                $t = TechDuration ( $gid, $aktplanet[$gid]-1, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed );
+                echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".DurationFormat ( $t )."<br></th></tr></table>\n";
+            }
+
+            if ( $gid == GID_B_MISS_SILO && $aktplanet[$gid]) {
+                $raknum = $aktplanet[GID_D_ABM] + $aktplanet[GID_D_IPM];
+                echo "<table width=519 >\n";
+                if ( $raknum == 0 ) echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">".va(loca("INFO_DEMOLISH_TITLE"), loca("NAME_$gid"), $aktplanet[$gid])."</a></td></tr>\n";
+                else echo "<tr><td class=c align=center>".loca("INFO_DEMOLISH_DEFENSE")."</a></td></tr>";
+                $cost = TechPrice ( $gid, $aktplanet[$gid]-1 );
+                echo "<br><tr><th>" . loca("INFO_DEMOLISH_RES");
+                foreach ($resourcemap as $i=>$rc) {
+                    if(isset($cost[$rc]) && $cost[$rc]) {
+                        echo loca("INFO_DEMOLISH_".$rc) . "<b>".nicenum($cost[$rc])."</b> ";
+                    }
+                }
+                $t = TechDuration ( $gid, $aktplanet[$gid]-1, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed );
+                echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".DurationFormat ( $t )."<br></th></tr></table>\n";
+            }
+        }
+
+        echo "<br><br><br><br>\n";
+    }
+
+    private function RapidInfo (int $gid) : string {
+        global $RapidFire;
+        $res = "";
+        foreach ($RapidFire as $n => $arr) if ( key_exists($n, $RapidFire[$gid]) && $RapidFire[$gid][$n] > 1 ) $res .= $this->rapidOut ( $n, $RapidFire[$gid][$n] );
+        foreach ($RapidFire as $n => $arr) if ( key_exists($gid, $RapidFire[$n]) && $RapidFire[$n][$gid] > 1 ) $res .= $this->rapidIn ( $n, $RapidFire[$n][$gid] );
+        return $res;
+    }
+
+    private function rapidIn (int $gid, int $n) : string {
+        return "<br/>".loca("INFO_RAPID_IN1")."<a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$gid\">".loca("NAME_$gid")."</a>".va(loca("INFO_RAPID_IN2"), "<font color=\"red\">$n</font>")."\n";
+    }
+
+    private function rapidOut (int $gid, int $n) : string {
+        return "<br/>".loca("INFO_RAPID_OUT1")."<a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$gid\">".loca("NAME_$gid")."</a>".va(loca("INFO_RAPID_OUT2"), "<font color=\"lime\">$n</font>")."\n";
+    }
+
+    private function DisplayProductionTable (int $gid) : void {
+        global $GlobalUni;
+        global $GlobalUser;
+        global $aktplanet;
+
+        $prod_fields = [];
+        $energy_fields = [];
+
+        if ($gid == GID_B_METAL_MINE) {
+            $prod_fields = ['prod', 'cons'];
+            $energy_fields = ['energy'];
+        }
+        else if ($gid == GID_B_CRYS_MINE) {
+            $prod_fields = ['prod', 'cons'];
+            $energy_fields = ['energy'];
+        }
+        else if ($gid == GID_B_DEUT_SYNTH) {
+            $prod_fields = ['prod', 'cons'];
+            $energy_fields = ['energy'];
+        }
+        else if ($gid == GID_B_SOLAR) {
+            $prod_fields = ['energy'];
+        }
+        else if ($gid == GID_B_FUSION) {
+            $prod_fields = ['energy', 'cons_deut'];
+        }
+
+        $header = "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>";
+        foreach ($prod_fields as $f) $header .= "<td class='c'>".loca("INFO_".strtoupper($f))."</td>";
+        foreach ($energy_fields as $f) $header .= "<td class='c'>".loca("INFO_".strtoupper($f))."</td>";
+        $header .= "</td> \n";
+
         $level = $aktplanet[$gid]-2;
         if ($level <= 0) $level = 1;
         $planet = $aktplanet;
         $planet[GID_B_SOLAR] = 99;
         $planet['prod'.GID_B_METAL_MINE] = 1;
         ProdResources ($GlobalUni, $GlobalUser, $planet);
-        $prod_now = $planet['prod'][GID_B_METAL_MINE];
-        $cons_now = - $planet['cons'][GID_B_METAL_MINE];
+
+        $prod_now = 0;
+        $cons_now = 0;
+        $prod_now_e = 0;
+        $cons_now_e = 0;
+
+        if (in_array('prod', $prod_fields)) {
+            if ($gid == GID_B_METAL_MINE) $prod_now = $planet['prod'][GID_B_METAL_MINE];
+            else if ($gid == GID_B_CRYS_MINE) $prod_now = $planet['prod'][GID_B_CRYS_MINE];
+            else if ($gid == GID_B_DEUT_SYNTH) $prod_now = $planet['prod'][GID_B_DEUT_SYNTH];
+        }
+        if (in_array('cons', $prod_fields)) {
+            if ($gid == GID_B_METAL_MINE) $cons_now = - $planet['cons'][GID_B_METAL_MINE];
+            else if ($gid == GID_B_CRYS_MINE) $cons_now = - $planet['cons'][GID_B_CRYS_MINE];
+            else if ($gid == GID_B_DEUT_SYNTH) $cons_now = - $planet['cons'][GID_B_DEUT_SYNTH];
+        }
+        if (in_array('energy', $energy_fields)) $prod_now_e = $planet['prod'][GID_B_SOLAR];
+        if (in_array('cons_deut', $energy_fields)) $cons_now_e = - $planet['cons'][GID_B_FUSION];
+
+        echo $header;
+
         for ($i=$level; $i<$level+15; $i++) {
-            
             $planet[$gid] = $i;
             ProdResources ($GlobalUni, $GlobalUser, $planet);
-            $prod = $planet['prod'][GID_B_METAL_MINE];
-            $cons = - $planet['cons'][GID_B_METAL_MINE];
 
-            if ($i==$aktplanet[$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
-            else echo "<tr> <th> $i</th> ";
-            echo "<th> " . nicenum($prod). "</th> ";
-            echo "<th> " . rgnum($prod-$prod_now) . "</th> ";
-            echo "<th> " . nicenum ($cons) . "</th> ";
-            echo "<th> " . rgnum ($cons-$cons_now) ." </th> </tr> \n";
+            $prod = 0;
+            $cons = 0;
+            $prod_e = 0;
+            $cons_e = 0;
+
+            if (in_array('prod', $prod_fields)) {
+                if ($gid == GID_B_METAL_MINE) $prod = $planet['prod'][GID_B_METAL_MINE];
+                else if ($gid == GID_B_CRYS_MINE) $prod = $planet['prod'][GID_B_CRYS_MINE];
+                else if ($gid == GID_B_DEUT_SYNTH) $prod = $planet['prod'][GID_B_DEUT_SYNTH];
+            }
+            if (in_array('cons', $prod_fields)) {
+                if ($gid == GID_B_METAL_MINE) $cons = - $planet['cons'][GID_B_METAL_MINE];
+                else if ($gid == GID_B_CRYS_MINE) $cons = - $planet['cons'][GID_B_CRYS_MINE];
+                else if ($gid == GID_B_DEUT_SYNTH) $cons = - $planet['cons'][GID_B_DEUT_SYNTH];
+            }
+            if (in_array('energy', $energy_fields)) $prod_e = $planet['prod'][GID_B_SOLAR];
+            if (in_array('cons_deut', $energy_fields)) $cons_e = - $planet['cons'][GID_B_FUSION];
+
+            echo "<tr> <th> ";
+            if ($i==$aktplanet[$gid]) echo "<font color=#FF0000>$i</font>";
+            else echo "$i";
+            echo "</th> ";
+
+            if (in_array('prod', $prod_fields)) {
+                echo "<th> " . nicenum($prod). "</th> ";
+                echo "<th> " . $this->rgnum($prod-$prod_now) . "</th> ";
+            }
+            if (in_array('cons', $prod_fields)) {
+                echo "<th> " . nicenum ($cons) . "</th> ";
+                echo "<th> " . $this->rgnum ($cons-$cons_now) ." </th> </tr> \n";
+            }
+            if (in_array('energy', $energy_fields)) {
+                echo "<th> " . nicenum($prod_e). "</th> ";
+                echo "<th> " . $this->rgnum($prod_e-$prod_now_e) . "</th> </tr> \n";
+            }
+            if (in_array('cons_deut', $energy_fields)) {
+                echo "<th> " . nicenum($cons_e). "</th> ";
+                echo "<th> " . $this->rgnum($cons_e-$cons_now_e) . "</th> </tr> \n";
+            }
         }
         echo "</table></center></tr></th>";
     }
-    else if ($gid == GID_B_CRYS_MINE)    // Crystal mine
-    {
-        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
-        $level = $aktplanet[$gid]-2;
-        if ($level <= 0) $level = 1;
-        $planet = $aktplanet;
-        $planet[GID_B_SOLAR] = 99;
-        $planet['prod'.GID_B_CRYS_MINE] = 1;
-        ProdResources ($GlobalUni, $GlobalUser, $planet);
-        $prod_now = $planet['prod'][GID_B_CRYS_MINE];
-        $cons_now = - $planet['cons'][GID_B_CRYS_MINE];
-        for ($i=$level; $i<$level+15; $i++) {
 
-            $planet[$gid] = $i;
-            ProdResources ($GlobalUni, $GlobalUser, $planet);
-            $prod = $planet['prod'][GID_B_CRYS_MINE];
-            $cons = - $planet['cons'][GID_B_CRYS_MINE];
+    private function DisplayStorageTable (int $gid) : void {
+        global $aktplanet;
 
-            if ($i==$aktplanet[$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
-            else echo "<tr> <th> $i</th> ";
-            echo "<th> " . nicenum($prod). "</th> ";
-            echo "<th> " . rgnum($prod-$prod_now) . "</th> ";
-            echo "<th> " . nicenum ($cons) . "</th> ";
-            echo "<th> " . rgnum ($cons-$cons_now) ." </th> </tr> \n";
-        }
-        echo "</table></center></tr></th>";
-    }
-    else if ($gid == GID_B_DEUT_SYNTH)    // Deuterium synthesizer
-    {
-        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
-        $level = $aktplanet[$gid]-2;
-        if ($level <= 0) $level = 1;
-        $planet = $aktplanet;
-        $planet[GID_B_SOLAR] = 99;
-        $planet['prod'.GID_B_DEUT_SYNTH] = 1;
-        ProdResources ($GlobalUni, $GlobalUser, $planet);
-        $prod_now = $planet['prod'][GID_B_DEUT_SYNTH];
-        $cons_now = - $planet['cons'][GID_B_DEUT_SYNTH];
-        for ($i=$level; $i<$level+15; $i++) {
-
-            $planet[$gid] = $i;
-            ProdResources ($GlobalUni, $GlobalUser, $planet);
-            $prod = $planet['prod'][GID_B_DEUT_SYNTH];
-            $cons = - $planet['cons'][GID_B_DEUT_SYNTH];
-
-            if ($i==$aktplanet[$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
-            else echo "<tr> <th> $i</th> ";
-            echo "<th> " . nicenum($prod). "</th> ";
-            echo "<th> " . rgnum($prod-$prod_now) . "</th> ";
-            echo "<th> " . nicenum ($cons) . "</th> ";
-            echo "<th> " . rgnum ($cons-$cons_now) ." </th> </tr> \n";
-        }
-        echo "</table></center></tr></th>";
-    }
-    else if ($gid == GID_B_SOLAR)    // Solar Plant
-    {
-        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td>\n";
-        $level = $aktplanet[$gid]-2;
-        if ($level <= 0) $level = 1;
-        $planet = $aktplanet;
-        $planet['prod'.GID_B_SOLAR] = 1;
-        ProdResources ($GlobalUni, $GlobalUser, $planet);
-        $prod_now = $planet['prod'][GID_B_SOLAR];
-        for ($i=$level; $i<$level+15; $i++) {
-
-            $planet[$gid] = $i;
-            ProdResources ($GlobalUni, $GlobalUser, $planet);
-            $prod = $planet['prod'][GID_B_SOLAR];            
-
-            if ($i==$aktplanet[$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
-            else echo "<tr> <th> $i</th> ";
-            echo "<th> " . nicenum($prod). "</th> ";
-            echo "<th> " . rgnum($prod-$prod_now) . "</th> </tr> \n";
-        }
-        echo "</table></center></tr></th>";
-    }
-    else if ($gid == GID_B_FUSION)    // Fusion Reactor
-    {
-        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_CONS_DEUT")."</td><td class='c'>".loca("INFO_DIFF")."</td>\n";
-        $level = $aktplanet[$gid]-2;
-        if ($level <= 0) $level = 1;
-        $planet = $aktplanet;
-        $planet['prod'.GID_B_FUSION] = 1;
-        ProdResources ($GlobalUni, $GlobalUser, $planet);
-        $prod_now = $planet['prod'][GID_B_FUSION];
-        $cons_now = - $planet['cons'][GID_B_FUSION];
-        for ($i=$level; $i<$level+15; $i++) {
-
-            $planet[$gid] = $i;
-            ProdResources ($GlobalUni, $GlobalUser, $planet);
-            $prod = $planet['prod'][GID_B_FUSION];
-            $cons = - $planet['cons'][GID_B_FUSION];
-
-            if ($i==$aktplanet[$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
-            else echo "<tr> <th> $i</th> ";
-            echo "<th> " . nicenum($prod). "</th> ";
-            echo "<th> " . rgnum($prod-$prod_now) . "</th> \n";
-            echo "<th> " . nicenum($cons). "</th> ";
-            echo "<th> " . rgnum($cons-$cons_now) . "</th> </tr> \n";
-        }
-        echo "</table></center></tr></th>";
-    }
-    else if ($gid == GID_B_METAL_STOR || $gid == GID_B_CRYS_STOR || $gid == GID_B_DEUT_STOR )     // Storages
-    {
         echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_STORAGE")."</td><td class='c'>".loca("INFO_DIFF")."</td></tr>\n";
         $level = $aktplanet[$gid];
         $cap_now = store_capacity ( $aktplanet[$gid] ) / 1000;
@@ -278,12 +295,19 @@ else
         }
         echo "</table>";
     }
-    else if ( $gid == GID_B_ALLY_DEPOT )                                    // Alliance Depot
-    {
+
+    private function DisplayAllianceDepot () : void {
+        global $GlobalUser;
+        global $aktplanet;
+        global $fleetmap;
+        global $db_prefix;
+        global $now;
+        global $session;
+
         $depot_cap = 10000 * pow ( 2, $aktplanet[GID_B_ALLY_DEPOT] );
         $deut_avail = 0;
         if ($aktplanet[GID_B_ALLY_DEPOT]) $deut_avail = min(floor($aktplanet[GID_RC_DEUTERIUM]), $depot_cap);
-?>
+        ?>
     </th>
    </tr>
 </table>
@@ -292,7 +316,6 @@ else
 <table width='519'>
 <td class='c' colspan='2'><?=va(loca("INFO_DEPOT_CAPACITY"), $deut_avail, $depot_cap);?></td>
 <?php
-
     $result = GetHoldingFleets ($aktplanet['planet_id']);
     $rows = dbrows ($result);
     $c = 1;
@@ -310,7 +333,7 @@ else
         $fleetmap_nosat = array_diff($fleetmap, [GID_F_SAT]);
         foreach ($fleetmap_nosat as $i=>$id) {
             $amount = $fleet_obj[$id];
-            if ($amount > 0) { 
+            if ($amount > 0) {
                 echo loca ("NAME_".$id).":".$amount."<br>";
                 $cons += $amount * FleetCons ($id, $user, $aktplanet) / 10;
             }
@@ -323,7 +346,6 @@ else
         echo "  </tr>\n";
         $c ++;
     }
-
 ?>
   <tr><th colspan='2'><input type='submit' value='<?=loca("INFO_DEPOT_SUBMIT");?>'></th>
 </table>
@@ -331,90 +353,67 @@ else
 </form>
 <?php
     }
-    else if ( $gid == GID_B_MISS_SILO && $aktplanet[GID_B_MISS_SILO] > 0)        // Missile Silo
-    {
-        // TODO: It looks like the code for the missiles was shared, as it copy-pasted. I'm not yet sure whether it's necessary to generalize this and add some missile-specific tables to techs.php; I'll have to think about that.
+
+    private function DisplayMissileSilo () : void {
+        global $GlobalUser;
+        global $aktplanet;
+        global $db_prefix;
+        global $session;
+        global $now;
 
         $rak_space = $aktplanet[GID_B_MISS_SILO] * 10;
-        if ( key_exists ( 'aktion', $_POST) )
-        {
-            $amount1 = min ( $aktplanet[GID_D_ABM], key_exists ('ab'.GID_D_ABM, $_POST) ? intval ( $_POST['ab'.GID_D_ABM] ) : 0 );
-            if ( $amount1 > 0) {
-                $aktplanet[GID_D_ABM] -= $amount1;
-                $cost = TechPrice ( GID_D_ABM, 1 );
-                $points  = TechPriceInPoints ($cost) * $amount1;
-                AdjustStats ( $aktplanet['owner_id'], $points, 0, 0, '-');
-            }
-
-            $amount2 = min ($aktplanet[GID_D_ABM], key_exists ('ab'.GID_D_IPM, $_POST) ? intval ( $_POST['ab'.GID_D_IPM] ) : 0 );
-            if ( $amount2 > 0) {
-                $aktplanet[GID_D_IPM] -= $amount2;
-                $cost = TechPrice ( GID_D_IPM, 1 );
-                $points  = TechPriceInPoints ($cost) * $amount2;
-                AdjustStats ( $aktplanet['owner_id'], $points, 0, 0, '-');
-            }
-
-            if ( ($amount1 + $amount2) > 0 ) {
-                SetPlanetDefense ( $aktplanet['planet_id'], $aktplanet );
-                RecalcRanks ();
-            }
-        }
-
-?>
-    </th> 
-   </tr> 
-</table> 
-<?=va(loca("INFO_SILO_INFO"), $rak_space/2, $rak_space);?><br><table border=0> 
-
+        ?>
+    </th>
+   </tr>
+</table>
+<?=va(loca("INFO_SILO_INFO"), $rak_space/2, $rak_space);?><br><table border=0>
 <?php
-    if ( ($aktplanet[GID_D_ABM] + $aktplanet[GID_D_IPM]) > 0 )  
-    {
-?>
-<form action="index.php?page=infos&session=<?=$session;?>&gid=<?=GID_B_MISS_SILO;?>"  method=post> 
-<tr> 
- <td class=c><?=loca("INFO_SILO_TYPE");?></td><td class=c><?=loca("INFO_SILO_AMOUNT");?></td><td class=c><?=loca("INFO_SILO_DEMOLISH");?></td> 
- <td class=c></td></tr> 
-<?php
-            if ($aktplanet[GID_D_ABM] > 0) 
-            {
-?>
+        if ( ($aktplanet[GID_D_ABM] + $aktplanet[GID_D_IPM]) > 0 ) {
+            ?>
+<form action="index.php?page=infos&session=<?=$session;?>&gid=<?=GID_B_MISS_SILO;?>"  method=post>
+<tr>
+ <td class=c><?=loca("INFO_SILO_TYPE");?></td><td class=c><?=loca("INFO_SILO_AMOUNT");?></td><td class=c><?=loca("INFO_SILO_DEMOLISH");?></td>
+ <td class=c></td></tr>
+ <?php
+            if ($aktplanet[GID_D_ABM] > 0) {
+                ?>
 <tr><td class=c><?=loca("NAME_".GID_D_ABM);?></td><td class=c><?=$aktplanet[GID_D_ABM];?></td><td class=c><input type=text name="ab<?=GID_D_ABM;?>" size=2 value=""></td><td class=c></td></tr>
 <?php
             }
-?>
-<?php
-            if ($aktplanet[GID_D_IPM] > 0) 
-            {
-?>
+            if ($aktplanet[GID_D_IPM] > 0) {
+                ?>
 <tr><td class=c><?=loca("NAME_".GID_D_IPM);?></td><td class=c><?=$aktplanet[GID_D_IPM];?></td><td class=c><input type=text name="ab<?=GID_D_IPM;?>" size=2 value=""></td><td class=c></td></tr>
 <?php
             }
-?>
+            ?>
 <tr><td class=c colspan=4><input type=submit name=aktion value="<?=loca("INFO_SILO_SUBMIT");?>"></table><p></form>
 <?php
         }
     }
-    else if ( $gid == GID_B_PHALANX )        // Sensor Phalanx
-    {
-?>
-<tr><th><p><center><table border=1 ><tr><td class='c'><?=loca("INFO_PHALANX_LEVEL");?></td><td class='c'><?=loca("INFO_PHALANX_RADIUS");?></td></tr>
-<?php
-        $level = $aktplanet[$gid]-3;
+
+    private function DisplayPhalanxInfo () : void {
+        global $aktplanet;
+
+        echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_PHALANX_LEVEL")."</td><td class='c'>".loca("INFO_PHALANX_RADIUS")."</td></tr>\n";
+        $level = $aktplanet[GID_B_PHALANX]-3;
         if ($level <= 0) $level = 1;
-        for ($i=$level; $i<$aktplanet[$gid]+5; $i++) {
+        for ($i=$level; $i<$aktplanet[GID_B_PHALANX]+5; $i++) {
             $radius = GetPhalanxRadius ($i);
-            if ($i==$aktplanet[$gid]) echo "<tr><th align=center >&nbsp;<FONT color=FF0000>$i</FONT></th><th align=center >&nbsp;$radius&nbsp;</th></tr>";
+            if ($i==$aktplanet[GID_B_PHALANX]) echo "<tr><th align=center >&nbsp;<FONT color=FF0000>$i</FONT></th><th align=center >&nbsp;$radius&nbsp;</th></tr>";
             else echo "<tr><th align=center >&nbsp;<FONT color=FFFFFF>$i</FONT></th><th align=center >&nbsp;$radius&nbsp;</th></tr>";
         }
-?>
-</center></table></tr></th></table> 
-<?php
+        echo "</center></table></tr></th></table> \n";
     }
-    else if ( $gid == GID_B_JUMP_GATE && $aktplanet[GID_B_JUMP_GATE] > 0)        // Jump Gate
-    {
-        if ( $now >= $aktplanet["gate_until"] ) 
-        {
-?>
+
+    private function DisplayJumpGate () : void {
+        global $GlobalUser;
+        global $aktplanet;
+        global $fleetmap;
+        global $session;
+        global $now;
+
+        if ( $now >= $aktplanet["gate_until"] ) {
+            ?>
     </th>
    </tr>
 </table>
@@ -428,21 +427,20 @@ else
     </tr>
     <tr>
       <td><?=loca("GATE_TARGET");?></td>
-
       <td>
         <select name="zm">
-<?php
-    $result = EnumPlanets ();
-    $rows = dbrows ($result);
-    while ($rows--)
-    {
-        $planet = dbarray ($result);
-        if ( $planet['planet_id'] == $aktplanet['planet_id'] ) continue;    // current moon
-        if ( $planet[GID_B_JUMP_GATE] == 0 ) continue;    // no jump gate
-        if ( $planet['type'] != PTYP_MOON || $now < $planet['gate_until'] ) continue;
-        echo "             <option value=\"".$planet['planet_id']."\">".$planet['name']." <a href=\"index.php?page=galaxy&galaxy=".$planet['g']."&system=".$planet['s']."&position=".$planet['p']."&session=$session\" >[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a></option>\n";
-    }
-?>
+        <?php
+        $result = EnumPlanets ();
+        $rows = dbrows ($result);
+        while ($rows--)
+        {
+            $planet = dbarray ($result);
+            if ( $planet['planet_id'] == $aktplanet['planet_id'] ) continue;
+            if ( $planet[GID_B_JUMP_GATE] == 0 ) continue;
+            if ( $planet['type'] != PTYP_MOON || $now < $planet['gate_until'] ) continue;
+            echo "             <option value=\"".$planet['planet_id']."\">".$planet['name']." <a href=\"index.php?page=galaxy&galaxy=".$planet['g']."&system=".$planet['s']."&position=".$planet['p']."&session=$session\" >[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a></option>\n";
+        }
+        ?>
         </select>
       </td>
     </tr>
@@ -452,7 +450,7 @@ else
     <tr>
       <td class="c" colspan="2"><?=loca("GATE_HEAD");?></td>
     </tr>
-<?php
+    <?php
     $fleetmap_rev = array_reverse ($fleetmap);
     $fleetmap_revnosat = array_diff ($fleetmap_rev, [GID_F_SAT]);
     foreach ($fleetmap_revnosat as $i=>$id)
@@ -466,18 +464,17 @@ else
             echo "    </tr>\n";
         }
     }
-?>
-    <tr> 
+    ?>
+    <tr>
       <th colspan="2"><input type="submit" value="<?=loca("GATE_JUMP");?>" /></th>
-    </tr> 
+    </tr>
   </table>
 </form>
 <?php
         }
-        else        // The gate is not ready.
-        {
+        else {
             $delta = $aktplanet["gate_until"] - $now;
-?>
+            ?>
     </th>
    </tr>
 </table>
@@ -486,48 +483,10 @@ else
         }
     }
 
-    // Provide the ability to display additional information about a game object for modifications
-
-    ModsExecIntRef ('page_infos', $gid, $aktplanet);
-
-    echo "</table>\n";
-
-    // Building Demolition.
-    // The terraformer and moonbase cannot be demolished.
-    // A missile silo can only be demolished if there are no missiles on the planet.
-
-    if ( IsBuilding($gid) && $aktplanet[$gid] && !($gid == GID_B_TERRAFORMER || $gid == GID_B_LUNAR_BASE || $gid == GID_B_MISS_SILO) ) {
-        echo "<table width=519 >\n";
-        echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">".va(loca("INFO_DEMOLISH_TITLE"), loca("NAME_$gid"), $aktplanet[$gid])."</a></td></tr>\n";
-        $cost = TechPrice ( $gid, $aktplanet[$gid]-1 );
-        echo "<br><tr><th>" . loca("INFO_DEMOLISH_RES");
-        foreach ($resourcemap as $i=>$rc) {
-            if(isset($cost[$rc]) && $cost[$rc]) {
-                echo loca("INFO_DEMOLISH_".$rc) . "<b>".nicenum($cost[$rc])."</b> ";
-            }
-        }
-        $t = TechDuration ( $gid, $aktplanet[$gid]-1, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed );
-        echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".DurationFormat ( $t )."<br></th></tr></table>\n";
+    private function rgnum (float|int $num) : string {
+        if ($num < 0) return "<font color=\"#FF0000\">".nicenum($num)."</font>";
+        else if ($num > 0) return "<font color=\"#00FF00\">".nicenum($num)."</font>";
+        else return nicenum($num);
     }
-
-    if ( $gid == GID_B_MISS_SILO && $aktplanet[$gid])    // Missile Silo
-    {
-        $raknum = $aktplanet[GID_D_ABM] + $aktplanet[GID_D_IPM];
-        echo "<table width=519 >\n";
-        if ( $raknum == 0 ) echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">".va(loca("INFO_DEMOLISH_TITLE"), loca("NAME_$gid"), $aktplanet[$gid])."</a></td></tr>\n";
-        else echo "<tr><td class=c align=center>".loca("INFO_DEMOLISH_DEFENSE")."</a></td></tr>";
-        $cost = TechPrice ( $gid, $aktplanet[$gid]-1 );
-        echo "<br><tr><th>" . loca("INFO_DEMOLISH_RES");
-        foreach ($resourcemap as $i=>$rc) {
-            if(isset($cost[$rc]) && $cost[$rc]) {
-                echo loca("INFO_DEMOLISH_".$rc) . "<b>".nicenum($cost[$rc])."</b> ";
-            }
-        }
-        $t = TechDuration ( $gid, $aktplanet[$gid]-1, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed );
-        echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".DurationFormat ( $t )."<br></th></tr></table>\n";
-    }
-
 }
-
-echo "<br><br><br><br>\n";
 ?>

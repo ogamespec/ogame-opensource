@@ -722,6 +722,16 @@ abstract class Page {
 
     public function view () : void {
     }
+
+    public function reloadPlanet () : void {
+        global $GlobalUser;
+        global $aktplanet;
+
+        $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], time() );
+        if ($aktplanet == null) {
+            Error ("Can't get aktplanet");
+        }
+    }
 }
 
 ?>
