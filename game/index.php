@@ -167,9 +167,7 @@ if ($pk != false) {
         $bare = $router[$pk]['bare'];
     }
 
-    // MVC is used for all non-bare pages by default.
-    // Pages can opt out by setting "mvc": false in router.json.
-    $mvc = true;
+    $mvc = false;
     if (key_exists('mvc', $router[$pk])) {
         $mvc = $router[$pk]['mvc'];
     }
@@ -185,12 +183,6 @@ if ($pk != false) {
             $className = ucfirst($pk);
             $inst = new $className;
             $show = $inst->controller ();
-
-            // Reload planet data after controller processing to ensure
-            // the view sees updated values (fixes stale resource bar issue).
-            if ($show && method_exists($inst, 'reloadPlanet')) {
-                $inst->reloadPlanet ();
-            }
 
             if ($show) {
                 PageHeader ($pk, !$header, $menu, $redirect_page, $redirect_sec);
