@@ -8,12 +8,16 @@ class MockDbResult
     public $data;
     public $rows;
     public $fetched;
+    public $allRows;
+    public $currentRow;
 
-    public function __construct($data, $rowCount)
+    public function __construct(array $allRows)
     {
-        $this->data = $data;
-        $this->rows = $rowCount;
+        $this->allRows = $allRows;
+        $this->rows = count($allRows);
         $this->fetched = false;
+        $this->data = null;
+        $this->currentRow = 0;
     }
 }
 
@@ -97,8 +101,8 @@ class PageRenderer
                 if (stripos(trim($query), 'SELECT') === 0) {
                     try {
                         $stmt = $_mockDbPDO->query($query);
-                        $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-                        return new MockDbResult($data[0] ?? null, count($data));
+                        $allRows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                        return new MockDbResult($allRows);
                     } catch (\PDOException $e) {
                         if (!$mute) echo "SELECT error: " . $e->getMessage();
                         return false;
@@ -125,23 +129,10 @@ class PageRenderer
         if (!function_exists('mock_dbarray')) {
             function mock_dbarray(mixed $result) : mixed {
                 if ($result && is_object($result) && $result instanceof MockDbResult) {
-                    if (!$result->fetched) {
-                        $result->fetched = true;
-                        if (is_array($result->data)) {
-                            // Return first row and cache remaining
-                            $result->_rows = $result->data;
-                            $result->_current = 0;
-                            $result->data = $result->_rows[$result->_current] ?? null;
-                            return $result->data;
-                        }
+                    if ($result->currentRow < $result->rows) {
+                        $result->data = $result->allRows[$result->currentRow];
+                        $result->currentRow++;
                         return $result->data;
-                    }
-                    // Return next row if available
-                    if (isset($result->_rows) && isset($result->_current)) {
-                        $result->_current++;
-                        if ($result->_current < count($result->_rows)) {
-                            return $result->_rows[$result->_current];
-                        }
                     }
                     return false;
                 }
