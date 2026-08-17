@@ -388,7 +388,7 @@ function DeserializeTable (string $name, array $tab) : void
             $first_val = true;
             foreach ($row as $value) {
                 if (!$first_val) $query .= ", ";
-                $query .= "\"".mysqli_escape_string($db_connect, $value)."\"";
+                $query .= "\"".mysqli_real_escape_string($db_connect, $value)."\"";
                 if ($first_val) $first_val = false;
             }
             $query .= ")";
@@ -414,6 +414,9 @@ function DeserializeTable (string $name, array $tab) : void
 function DeserializeDB (string $text) : void
 {
     $tabs = json_decode ($text, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new InvalidArgumentException("JSON decode error: ".json_last_error_msg());
+    }    
 
     foreach ($tabs as $i=>$tab) {
         DeserializeTable ($i, $tab);
