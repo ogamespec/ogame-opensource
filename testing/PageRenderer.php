@@ -1,6 +1,23 @@
 <?php
 
 /**
+ * MockDbResult wraps PDO query results for the mock DB functions.
+ */
+class MockDbResult
+{
+    public $data;
+    public $rows;
+    public $fetched;
+
+    public function __construct($data, $rowCount)
+    {
+        $this->data = $data;
+        $this->rows = $rowCount;
+        $this->fetched = false;
+    }
+}
+
+/**
  * PageRenderer simulates rendering game pages for Golden Pages snapshot testing.
  * It sets up the game environment from a fixture and captures the HTML output.
  */
@@ -38,25 +55,6 @@ class PageRenderer
      */
     private function setupMockDbFunctions(): void
     {
-        // Mock PDO result wrapper that caches rows
-        if (!class_exists('MockDbResult')) {
-            class MockDbResult {
-                public $data;
-                public $rows;
-                public $fetched;
-                public $fetchAllResult;
-                public $fetchCount;
-                
-                public function __construct($data, $rowCount) {
-                    $this->data = $data;
-                    $this->rows = $rowCount;
-                    $this->fetched = false;
-                    $this->fetchAllResult = null;
-                    $this->fetchCount = 0;
-                }
-            }
-        }
-        
         // Mock dbquery - executes SQL against fixture's PDO
         if (!function_exists('mock_dbquery')) {
             function mock_dbquery(string $query, bool $mute = false) : mixed {
@@ -231,11 +229,6 @@ class PageRenderer
         ob_start();
 
         try {
-            // Set up mock DB context for this page render
-            global $_mockDbPDO, $_mockDbPrefix;
-            $_mockDbPDO = $this->fixture->getPDO();
-            $_mockDbPrefix = $this->fixture->getDbPrefix();
-            
             $this->includePage($page);
             $output = ob_get_clean();
             
@@ -273,6 +266,10 @@ class PageRenderer
         $stmt->execute([$playerId]);
         $this->currentUser = $stmt->fetch();
 
+        if (!$this->currentUser) {
+            throw new RuntimeException("User not found: player_id=$playerId, db_prefix={$this->fixture->getDbPrefix()}");
+        }
+
         // Set officer expiration times to far future
         if ($this->currentUser) {
             $farFuture = $this->now + 365 * 24 * 60 * 60;
@@ -309,6 +306,11 @@ class PageRenderer
      */
     private function includePage(string $page): void
     {
+        // Set up mock DB context FIRST - before any core files are loaded
+        global $_mockDbPDO, $_mockDbPrefix;
+        $_mockDbPDO = $this->fixture->getPDO();
+        $_mockDbPrefix = $this->fixture->getDbPrefix();
+        
         global $GlobalUser, $GlobalUni, $aktplanet, $session, $now, $db_prefix, $pagetime;
         global $resourcemap, $fleetmap, $defmap, $rakmap, $buildmap, $resmap;
         global $UnitParam, $RapidFire, $transportableResources;
@@ -327,6 +329,11 @@ class PageRenderer
         $session = $this->session;
         $now = $this->now;
         $pagetime = microtime(true);
+
+        // Validate GlobalUser is set correctly
+        if (!$GlobalUser || !isset($GlobalUser['aktplanet']) || !$GlobalUser['aktplanet']) {
+            throw new RuntimeException("GlobalUser not set correctly. currentUser: " . json_encode($this->currentUser));
+        }
 
         // Initialize localization globals
         $LOCA = [];
