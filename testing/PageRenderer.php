@@ -127,7 +127,21 @@ class PageRenderer
                 if ($result && is_object($result) && $result instanceof MockDbResult) {
                     if (!$result->fetched) {
                         $result->fetched = true;
+                        if (is_array($result->data)) {
+                            // Return first row and cache remaining
+                            $result->_rows = $result->data;
+                            $result->_current = 0;
+                            $result->data = $result->_rows[$result->_current] ?? null;
+                            return $result->data;
+                        }
                         return $result->data;
+                    }
+                    // Return next row if available
+                    if (isset($result->_rows) && isset($result->_current)) {
+                        $result->_current++;
+                        if ($result->_current < count($result->_rows)) {
+                            return $result->_rows[$result->_current];
+                        }
                     }
                     return false;
                 }
