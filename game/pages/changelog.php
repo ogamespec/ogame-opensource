@@ -75,3 +75,5 @@ class Changelog extends Page
         <?php
     }
 }
+
+?>

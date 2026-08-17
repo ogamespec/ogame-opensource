@@ -208,7 +208,6 @@ class Micropayment extends Page {
             <br>
             <?php
             echo "<br><br><br><br>\n";
-        }
     }
 }
 ?>

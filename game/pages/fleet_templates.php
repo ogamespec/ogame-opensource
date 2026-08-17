@@ -224,3 +224,5 @@ class Fleet_templates extends Page
         <?php
     }
 }
+
+?>
