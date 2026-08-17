@@ -179,54 +179,6 @@ class PageRenderer
                 return mock_AddDBRow($data, $tabname);
             }
         }
-        
-        // Mock LoadUser - returns the GlobalUser if player_id matches
-        if (!function_exists('mock_LoadUser')) {
-            function mock_LoadUser(int $player_id) : ?array {
-                global $GlobalUser;
-                if ($GlobalUser && isset($GlobalUser['player_id']) && $GlobalUser['player_id'] == $player_id) {
-                    return $GlobalUser;
-                }
-                return null;
-            }
-        }
-        
-        if (!function_exists('LoadUser')) {
-            function LoadUser(int $player_id) : ?array {
-                return mock_LoadUser($player_id);
-            }
-        }
-        
-        // Mock LoadPlanetById - returns the aktplanet if planet_id matches
-        if (!function_exists('mock_LoadPlanetById')) {
-            function mock_LoadPlanetById(int $planet_id) : ?array {
-                global $aktplanet;
-                if ($aktplanet && isset($aktplanet['planet_id']) && $aktplanet['planet_id'] == $planet_id) {
-                    return $aktplanet;
-                }
-                return null;
-            }
-        }
-        
-        if (!function_exists('LoadPlanetById')) {
-            function LoadPlanetById(int $planet_id) : ?array {
-                return mock_LoadPlanetById($planet_id);
-            }
-        }
-        
-        // Mock LoadUniverse - returns the GlobalUni
-        if (!function_exists('mock_LoadUniverse')) {
-            function mock_LoadUniverse() : array {
-                global $GlobalUni;
-                return $GlobalUni;
-            }
-        }
-        
-        if (!function_exists('LoadUniverse')) {
-            function LoadUniverse() : array {
-                return mock_LoadUniverse();
-            }
-        }
     }
 
     /**
