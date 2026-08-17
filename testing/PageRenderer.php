@@ -249,7 +249,6 @@ class PageRenderer
             throw new RuntimeException("Failed to render page '$page': " . $e->getMessage() . " at " . $e->getFile() . ":" . $e->getLine(), 0, $e);
         }
 
-        $this->renderedHtml = ob_get_clean();
         chdir($originalDir);
         return $this->renderedHtml;
     }
