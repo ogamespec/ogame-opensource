@@ -68,7 +68,7 @@ class PageRenderer
                 if (stripos(trim($query), 'INSERT') === 0) {
                     try {
                         $_mockDbPDO->exec($query);
-                        return new MockDbResult(null, 0);
+                        return new MockDbResult([]);
                     } catch (\PDOException $e) {
                         if (!$mute) echo "INSERT error: " . $e->getMessage();
                         return false;
@@ -79,7 +79,7 @@ class PageRenderer
                 if (stripos(trim($query), 'UPDATE') === 0) {
                     try {
                         $_mockDbPDO->exec($query);
-                        return new MockDbResult(null, 0);
+                        return new MockDbResult([]);
                     } catch (\PDOException $e) {
                         if (!$mute) echo "UPDATE error: " . $e->getMessage();
                         return false;
@@ -90,7 +90,7 @@ class PageRenderer
                 if (stripos(trim($query), 'DELETE') === 0) {
                     try {
                         $_mockDbPDO->exec($query);
-                        return new MockDbResult(null, 0);
+                        return new MockDbResult([]);
                     } catch (\PDOException $e) {
                         if (!$mute) echo "DELETE error: " . $e->getMessage();
                         return false;
