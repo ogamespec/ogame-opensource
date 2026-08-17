@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php"
-         colors="true"
-         verbose="true">
+<phpunit bootstrap="testing/bootstrap_golden.php"
+          colors="true"
+          verbose="true">
     
     <testsuites>
         <testsuite name="OGame Open Source Test Suite">
             <directory>testing</directory>
         </testsuite>
+        <testsuite name="Golden Pages">
+            <file>testing/GoldenPagesTest.php</file>
+        </testsuite>
     </testsuites>
-    
-    <filter>
-        <whitelist>
-            <directory suffix=".php">testing</directory>
-        </whitelist>
-    </filter>
     
     <php>
         <env name="APP_ENV" value="testing"/>
