@@ -38,43 +38,100 @@ class PageRenderer
      */
     private function setupMockDbFunctions(): void
     {
-        // Mock dbquery - intercepts SQL and returns mock results from fixture
+        // Mock PDO result wrapper that caches rows
+        if (!class_exists('MockDbResult')) {
+            class MockDbResult {
+                public $data;
+                public $rows;
+                public $fetched;
+                public $fetchAllResult;
+                public $fetchCount;
+                
+                public function __construct($data, $rowCount) {
+                    $this->data = $data;
+                    $this->rows = $rowCount;
+                    $this->fetched = false;
+                    $this->fetchAllResult = null;
+                    $this->fetchCount = 0;
+                }
+            }
+        }
+        
+        // Mock dbquery - executes SQL against fixture's PDO
         if (!function_exists('mock_dbquery')) {
-            function mock_dbquery(string $query) : mixed {
-                global $_mockDbResult;
-                // Handle SELECT queries - return mock data from the fixture
-                if (stripos($query, 'SELECT') === 0) {
-                    return (object)['data' => null, 'rows' => 0, 'fetched' => false];
+            function mock_dbquery(string $query, bool $mute = false) : mixed {
+                global $_mockDbPDO, $_mockDbPrefix;
+                
+                // Handle INSERT queries - execute and return mock result
+                if (stripos(trim($query), 'INSERT') === 0) {
+                    try {
+                        $_mockDbPDO->exec($query);
+                        return new MockDbResult(null, 0);
+                    } catch (\PDOException $e) {
+                        if (!$mute) echo "INSERT error: " . $e->getMessage();
+                        return false;
+                    }
                 }
-                // Handle INSERT queries - return mock ID
-                if (stripos($query, 'INSERT') === 0) {
-                    return (object)['data' => null, 'rows' => 0, 'fetched' => false];
+                
+                // Handle UPDATE queries - execute and return mock result
+                if (stripos(trim($query), 'UPDATE') === 0) {
+                    try {
+                        $_mockDbPDO->exec($query);
+                        return new MockDbResult(null, 0);
+                    } catch (\PDOException $e) {
+                        if (!$mute) echo "UPDATE error: " . $e->getMessage();
+                        return false;
+                    }
                 }
-                // Handle UPDATE queries
-                if (stripos($query, 'UPDATE') === 0) {
-                    return (object)['data' => null, 'rows' => 0, 'fetched' => false];
+                
+                // Handle DELETE queries - execute and return mock result
+                if (stripos(trim($query), 'DELETE') === 0) {
+                    try {
+                        $_mockDbPDO->exec($query);
+                        return new MockDbResult(null, 0);
+                    } catch (\PDOException $e) {
+                        if (!$mute) echo "DELETE error: " . $e->getMessage();
+                        return false;
+                    }
                 }
-                // Handle DELETE queries
-                if (stripos($query, 'DELETE') === 0) {
-                    return (object)['data' => null, 'rows' => 0, 'fetched' => false];
+                
+                // Handle SELECT queries - execute and return cached result
+                if (stripos(trim($query), 'SELECT') === 0) {
+                    try {
+                        $stmt = $_mockDbPDO->query($query);
+                        $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                        return new MockDbResult($data[0] ?? null, count($data));
+                    } catch (\PDOException $e) {
+                        if (!$mute) echo "SELECT error: " . $e->getMessage();
+                        return false;
+                    }
                 }
-                return (object)['data' => null, 'rows' => 0, 'fetched' => false];
+                
+                // For other queries (CREATE, ALTER, etc.)
+                try {
+                    $_mockDbPDO->exec($query);
+                    return new MockDbResult(null, 0);
+                } catch (\PDOException $e) {
+                    if (!$mute) echo "Other error: " . $e->getMessage();
+                    return false;
+                }
             }
         }
         
         if (!function_exists('dbquery')) {
             function dbquery(string $query, bool $mute = false) : mixed {
-                return mock_dbquery($query);
+                return mock_dbquery($query, $mute);
             }
         }
         
         if (!function_exists('mock_dbarray')) {
             function mock_dbarray(mixed $result) : mixed {
-                if ($result && is_object($result) && isset($result->data)) {
+                if ($result && is_object($result) && $result instanceof MockDbResult) {
                     if (!$result->fetched) {
                         $result->fetched = true;
                         return $result->data;
                     }
+                    return false;
                 }
                 return false;
             }
@@ -88,7 +145,7 @@ class PageRenderer
         
         if (!function_exists('mock_dbrows')) {
             function mock_dbrows(mixed $result) : int {
-                if ($result && is_object($result) && isset($result->rows)) {
+                if ($result && is_object($result) && $result instanceof MockDbResult) {
                     return $result->rows;
                 }
                 return 0;
@@ -103,13 +160,19 @@ class PageRenderer
         
         if (!function_exists('dbfree')) {
             function dbfree(mixed $result) : void {
-                // No-op for tests
+                // No-op for MockDbResult
             }
         }
         
         if (!function_exists('mock_AddDBRow')) {
             function mock_AddDBRow(array $data, string $tabname) : int {
-                return 0;
+                global $_mockDbPDO, $_mockDbPrefix;
+                $columns = implode(',', array_map(fn($k) => "`$k`", array_keys($data)));
+                $placeholders = implode(',', array_fill(0, count($data), '?'));
+                $values = array_values($data);
+                $sql = "INSERT INTO `{$_mockDbPrefix}{$tabname}` ($columns) VALUES ($placeholders)";
+                $_mockDbPDO->prepare($sql)->execute($values);
+                return (int)$_mockDbPDO->lastInsertId();
             }
         }
         
@@ -168,9 +231,10 @@ class PageRenderer
         ob_start();
 
         try {
-            // Set up mock DB result for this page render
-            global $_mockDbResult;
-            $_mockDbResult = (object)['data' => null, 'rows' => 0, 'fetched' => false];
+            // Set up mock DB context for this page render
+            global $_mockDbPDO, $_mockDbPrefix;
+            $_mockDbPDO = $this->fixture->getPDO();
+            $_mockDbPrefix = $this->fixture->getDbPrefix();
             
             $this->includePage($page);
             $output = ob_get_clean();
