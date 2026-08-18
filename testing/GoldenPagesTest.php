@@ -614,14 +614,18 @@ class GoldenPagesTest extends TestCase
 
     /**
      * Compare rendered HTML against golden snapshot or save new snapshot
+     * Always saves a copy to testing/golden/{page}_p{index}_actual.html for visual inspection
      */
     private function compareOrSaveGolden(string $pageName, int $playerIndex, string $html): void
     {
         $snapshotFile = $this->getSnapshotFilePath($pageName, $playerIndex);
+        $outputFile = str_replace('.html', '_actual.html', $snapshotFile);
+        
+        // Always save rendered HTML for visual inspection
+        file_put_contents($outputFile, $html);
         
         if ($this->updateGolden) {
             file_put_contents($snapshotFile, $html);
-            $this->markTestSkipped("Golden snapshot updated: $snapshotFile");
             return;
         }
         
