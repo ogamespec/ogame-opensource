@@ -118,7 +118,6 @@ testing/
 ├── PageRenderer.php          # Renders real game pages through the real DB layer
 ├── FixtureBuilder.php        # Builds the test universe via the in-memory engine (mysqlite)
 ├── bootstrap.php             # PHPUnit bootstrap: loads the game core with the SQLite backend
-├── bootstrap_golden.php      # Thin wrapper over bootstrap.php for standalone scripts
 └── golden/                   # Golden snapshots
     ├── .gitignore
     ├── overview_p0.html

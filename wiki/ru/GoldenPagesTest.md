@@ -118,7 +118,6 @@ testing/
 ├── PageRenderer.php          # Рендеринг настоящих игровых страниц через реальный DB-слой
 ├── FixtureBuilder.php        # Создание тестовой вселенной через in-memory движок (mysqlite)
 ├── bootstrap.php             # PHPUnit bootstrap: загрузка игрового ядра с SQLite-бэкендом
-├── bootstrap_golden.php      # Тонкая обёртка над bootstrap.php для автономных скриптов
 └── golden/                   # Golden-снимки
     ├── .gitignore
     ├── overview_p0.html

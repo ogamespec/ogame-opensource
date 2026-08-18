@@ -2,7 +2,7 @@
 
 // Load game constants (GID_R_*, GID_B_*, GID_F_*, GID_D_*, GID_RC_*, ...).
 // The bootstrap (testing/bootstrap.php) already loads these at the top level;
-// the require_once calls below are for standalone use (e.g. bootstrap_golden.php).
+// the require_once calls below are for standalone use of this class.
 require_once __DIR__ . '/../game/core/defs.php';
 require_once __DIR__ . '/../game/core/techs.php';
 
