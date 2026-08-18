@@ -97,6 +97,9 @@ Before comparison, HTML is normalized to handle dynamic content:
 | Pattern | Replacement |
 |---------|-------------|
 | Timestamps (`YYYY-MM-DD HH:MM:SS`) | `DATE_TIME` |
+| Statistics timestamps (`YYYY-MM-DD, HH:MM:SS`) | `DATE_TIME` |
+| Overview timestamps (`Tue Aug 18 15:38:36`) | `DATE_TIME` |
+| Timestamps (`DD.MM.YYYY HH:MM:SS`, `MM-DD HH:MM:SS`) | `DATE_TIME` |
 | Numeric timestamps (`10+ digits`) | `TIMESTAMP` |
 | Floating point numbers | `FLOAT` |
 | `planet_id=X` | `planet_id=ID` |
@@ -111,13 +114,27 @@ Before comparison, HTML is normalized to handle dynamic content:
 
 ```
 testing/
-├── GoldenPagesTest.php      # Main test class
-├── PageRenderer.php          # Simulates game page rendering
-├── FixtureBuilder.php        # Creates test universe fixture
-├── bootstrap_golden.php      # PHPUnit bootstrap for golden tests
-└── golden/                   # Golden snapshot files
-    ├── .gitkeep
+├── GoldenPagesTest.php      # Main test class (each test in a separate process)
+├── PageRenderer.php          # Renders real game pages through the real DB layer
+├── FixtureBuilder.php        # Builds the test universe via the in-memory engine (mysqlite)
+├── bootstrap.php             # PHPUnit bootstrap: loads the game core with the SQLite backend
+├── bootstrap_golden.php      # Thin wrapper over bootstrap.php for standalone scripts
+└── golden/                   # Golden snapshots
+    ├── .gitignore
     ├── overview_p0.html
     ├── overview_p1.html
     └── ...
 ```
+
+### Notes
+
+- The tests use the **real in-memory DB engine** from master
+  (`game/core/db.php` + `game/core/db_sqlite.php`, `DB_CONNECTION=sqlite`).
+  The schema is created from `install_tabs.php` via `CreateDBTables()` and the
+  data is inserted with `AddDBRow()` — no hand-rolled schema, no mock DB.
+- Each test runs in a separate PHP process (`#[RunTestsInSeparateProcesses]`,
+  like NotesTest/DbSqliteTest): only the process-isolated child template loads
+  the PHPUnit bootstrap at the true top level, where the game core declares
+  the global variables the pages rely on.
+- `PageRenderer` repeats the `game/index.php` boot flow (LoadUniverse, AuthUser,
+  router from `router.json`, MVC/classic pages).
