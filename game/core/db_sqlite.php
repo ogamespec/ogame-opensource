@@ -39,6 +39,11 @@ function dbconnect (string $db_host, string $db_user, string $db_pass, string $d
 {
     global $query_counter, $query_log, $db_connect;
 
+    // The PDO SQLite driver must be enabled in PHP (php-sqlite3 / pdo_sqlite).
+    if ( !class_exists ('PDO') || !in_array ('sqlite', PDO::getAvailableDrivers (), true) ) {
+        die("<div style='font-family:Verdana;font-size:11px;text-align:center;'><b>Unable to establish connection to SQLite: the PDO SQLite driver (pdo_sqlite) is not available in PHP.<br>Install it, e.g. 'sudo apt install php-sqlite3' (Debian/Ubuntu) or enable extension=pdo_sqlite in php.ini.</b></div>");
+    }
+
     // DB_DATABASE (e.g. ":memory:" from phpunit.xml) overrides the config database name.
     $db_file = getenv('DB_DATABASE');
     if ($db_file === false || $db_file === '') $db_file = $db_name;

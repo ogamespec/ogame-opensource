@@ -32,7 +32,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 RUN docker-php-ext-install gd
-RUN docker-php-ext-install mbstring mysqli pdo pdo_mysql
+RUN docker-php-ext-install mbstring mysqli pdo pdo_mysql sqlite3 pdo_sqlite
 
 # To prevent configuration files from being destroyed after redeployment, you need to make them symbolic links, and drag the configs themselves into the volume
 # Create a directory that will be managed by a Docker volume

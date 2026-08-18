@@ -3,10 +3,15 @@
 В целом обычные юнит-тесты. Находятся в папке `testing`.
 
 ```
-sudo apt install php8.1-xml php8.1-dom php8.1-xmlwriter php8.1-mbstring
+sudo apt install php8.1-xml php8.1-dom php8.1-xmlwriter php8.1-mbstring php8.1-sqlite3
 composer require --dev phpunit/phpunit "^10.0"
 ./vendor/bin/phpunit --testdox
 ```
+
+> ВАЖНО: для тестов нужен PDO-драйвер SQLite. В Debian/Ubuntu он ставится
+> пакетом `php-sqlite3` (для PHP 8.1 — `php8.1-sqlite3`). Проверить:
+> `php -m | grep -i sqlite`. В официальном Docker-образе проекта
+> (`Dockerfile`) драйвер уже включён (`docker-php-ext-install ... sqlite3 pdo_sqlite`).
 
 ### База данных в памяти
 
