@@ -275,20 +275,15 @@ class FixtureBuilder
                 speed INT DEFAULT 0
             )",
             "CREATE TABLE {$this->dbPrefix}messages (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                msg_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 owner_id INT DEFAULT 0,
-                time INT UNSIGNED DEFAULT 0,
-                category INT DEFAULT 0,
-                type INT DEFAULT 0,
-                from_name CHAR(20) DEFAULT '',
-                from_player_id INT DEFAULT 0,
-                to_name CHAR(20) DEFAULT '',
-                to_player_id INT DEFAULT 0,
-                subject TEXT DEFAULT '',
+                pm INT DEFAULT 0,
+                msgfrom TEXT DEFAULT '',
+                subj TEXT DEFAULT '',
                 text TEXT DEFAULT '',
-                read INT DEFAULT 0,
-                deleted_from INT DEFAULT 0,
-                deleted_to INT DEFAULT 0
+                shown INT DEFAULT 0,
+                date INT UNSIGNED DEFAULT 0,
+                planet_id INT DEFAULT 0
             )",
             "CREATE TABLE {$this->dbPrefix}notes (
                 note_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -628,8 +623,8 @@ class FixtureBuilder
 
         // Add some messages for player 1
         $msgs = [
-            ['owner_id' => 1, 'time' => $now - 3600, 'category' => 0, 'type' => 0, 'from_name' => 'System', 'subject' => 'Welcome!', 'text' => 'Welcome to OGame!', 'read' => 0],
-            ['owner_id' => 1, 'time' => $now - 1800, 'category' => 0, 'type' => 0, 'from_name' => 'PlayerTwo', 'subject' => 'Hello', 'text' => 'Hi there!', 'read' => 1],
+            ['owner_id' => 1, 'pm' => 0, 'msgfrom' => 'System', 'subj' => 'Welcome!', 'text' => 'Welcome to OGame!', 'shown' => 0, 'date' => $now - 3600],
+            ['owner_id' => 1, 'pm' => 0, 'msgfrom' => 'PlayerTwo', 'subj' => 'Hello', 'text' => 'Hi there!', 'shown' => 1, 'date' => $now - 1800],
         ];
 
         foreach ($msgs as $mData) {
