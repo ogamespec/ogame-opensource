@@ -38,9 +38,9 @@ function reloadImages() {
 <td class='header'>
 <table class='header'>
 <select size='1' onchange='haha(this)'>
-    <option value='index.php?page=allianzen&session=0000000003e9&cp=1' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1' >[1:1:4]</a></option>
-    <option value='index.php?page=allianzen&session=0000000003e9&cp=2' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2' >[1:1:5]</a></option>
-    <option value='index.php?page=allianzen&session=0000000003e9&cp=3' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3' >[1:2:4]</a></option>
+    <option value='index.php?page=overview&session=0000000003e9&cp=1' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1' >[1:1:4]</a></option>
+    <option value='index.php?page=overview&session=0000000003e9&cp=2' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2' >[1:1:5]</a></option>
+    <option value='index.php?page=overview&session=0000000003e9&cp=3' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3' >[1:2:4]</a></option>
 </select></table></td></tr></table></td>
 
 <td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
@@ -313,23 +313,84 @@ function fenster(target_url,win_name) {
 <!-- CONTENT AREA -->
 <div id='content'>
 <center>
-<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
-<script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
-<tr><th colspan=2><img src="/game/img/preload.gif" class="reloadimage" title="pic.php?url="></td></tr>
-<table width=519>
-<tr><td class=c colspan=2>Your alliance</td></tr>
-<tr><th>Abbreviation</th><th>TST</th></tr>
-<tr><th>Name</th><th>Test Alliance</th></tr>
-<tr><th>Members</th><th>3 (<a href="index.php?page=allianzen&session=0000000003e9&a=4">members list</a>)</th></tr>
-<tr><th>your rank</th><th>Founder (<a href="index.php?page=allianzen&session=0000000003e9&a=5">alliance management</a>)</th></tr>
-<tr><th>General Message</th><th><a href="index.php?page=allianzen&session=0000000003e9&a=17">Send General Message</a></th></tr>
-<tr><th colspan=2 height=100>External description of the Test Alliance.</th></tr>
-<tr><th>Homepage</th><th><a href="redir.php?url=https://example.com" target="_blank">https://example.com</a></th></tr>
-<tr><td class=c colspan=2>Internal Competency</th></tr><tr><th colspan=2 height=100>Internal description of the Test Alliance.</th></tr>
-</table><br>
-<table width=519>
-<form action="index.php?page=allianzen&session=0000000003e9&a=3" method=POST>
-<tr><td class=c colspan=2>Leave this alliance</td></tr><tr><th colspan=2><input type=submit value="Yes!"></th></tr></table></form>
+
+<script type="text/javascript"> 
+<!--
+function t_building() {
+    v = new Date();
+    var bxx = document.getElementById('bxx');
+    var timeout = 1;
+    n=new Date();
+    ss=pp;
+    aa=Math.round((n.getTime()-v.getTime())/1000.);
+    s=ss-aa;
+    m=0;
+    h=0;
+    
+    if (s < 0) {
+        bxx.innerHTML='--';
+        
+        if ((ss + 6) >= aa) {
+            window.setTimeout('document.location.href="index.php?page=overview&session='+ps+'";', 1500);
+        }
+    } else {
+        if(s>59){
+            m=Math.floor(s/60);
+            s=s-m*60;
+        }
+        if(m>59){
+            h=Math.floor(m/60);
+            m=m-h*60;
+        }
+        if(s<10){
+            s="0"+s;
+        }
+        if(m<10){
+            m="0"+m;
+        }
+        bxx.innerHTML=h+":"+m+":"+s;
+    }    
+    pp=pp-1;
+    window.setTimeout("t_building();", 999);
+}
+//--> 
+
+</script> 
+
+<table width='519'>
+
+<tr><td class='c' colspan='4'>
+<a href='index.php?page=renameplanet&session=0000000003e9&pl=1' title='Planet menu'>Planet "Home"</a>     (PlayerOne)
+</td></tr>
+<tr><th colspan="4"><a href="index.php?page=messages&dsp=1&session=0000000003e9">  You have 1 new message   </th></tr>
+<tr><th>    Server time   </th> <th colspan=3>Tue Aug 18 15:43:39</th></tr>
+<tr><td colspan='4' class='c'>  Events   </td> </tr>
+
+<th>
+</th>
+<th colspan="2">
+<img src="http://localhost/evolution/planeten/dschjungelplanet02.jpg" width="200" height="200">
+<br><center>free</center><br>
+</th>
+<th class='s'>
+<table border='0' align='top' class='s'>
+<tr>
+<th> Colony A<br> <a href="index.php?page=overview&session=0000000003e9&cp=2" title="Colony A [1:1:5]"><img src="http://localhost/evolution/planeten/dschjungelplanet03.jpg" width="50" height="50" title="Colony A [1:1:5]" ></a>
+<br><center>free</center></th>
+<th> Colony B<br> <a href="index.php?page=overview&session=0000000003e9&cp=3" title="Colony B [1:2:4]"><img src="http://localhost/evolution/planeten/dschjungelplanet04.jpg" width="50" height="50" title="Colony B [1:2:4]" ></a>
+<br><center>free</center></th>
+</tr>
+
+<tr></tr>
+</table>
+</th>
+
+<tr><th> Diameter</th><th colspan=3>12.200 км     (<a title="Developed fields">14 </a> / <a title="max. developed fields">14 </a> fields)   </th></tr>
+<tr><th> Temperature </th> <th colspan=3>approx. 65°C to 105°C</th> </tr>   
+<tr><th> Position</th><th colspan=3><a href="index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9" >[1:1:4]</a></th></tr>
+<tr><th> Points</th><th colspan=3>50 (Rank <a href='index.php?page=statistics&session=0000000003e9&start=1'>1</a> of 3)</th></tr>     
+</table>
+<br><br><br><br><br>
 </center>
 </div>
 <!-- END CONTENT AREA -->

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="testing/bootstrap.php"
-         colors="true">
+         colors="true"
+         defaultTestSuite="OGame Open Source Test Suite">
 
     <testsuites>
         <testsuite name="OGame Open Source Test Suite">

@@ -6,8 +6,8 @@
 
 ### Принцип работы
 
-1. **Тестовая вселенная**: FixtureBuilder создаёт in-memory базу данных SQLite с 3 игроками (PlayerOne, PlayerTwo, PlayerThree), каждый из которых имеет 3 планеты, данные флота, сообщения и заметки.
-2. **Рендеринг страниц**: Класс `PageRenderer` имитирует точку входа `index.php` игры, загружая все необходимые core-модули, файлы локализации и файлы страниц. Он захватывает сгенерированный HTML-вывод.
+1. **Тестовая вселенная**: FixtureBuilder создаёт тестовую вселенную с 3 игроками (PlayerOne, PlayerTwo, PlayerThree) в **in-memory движке** (`game/core/db.php` с SQLite-бэкендом, `DB_CONNECTION=sqlite`, `DB_DATABASE=:memory:`, см. `phpunit.xml`). Реальная схема БД создаётся через `CreateDBTables()` (из `install_tabs.php`), данные вставляются через реальную функцию `AddDBRow()` — без самодельных моков и ручной схемы.
+2. **Рендеринг страниц**: Класс `PageRenderer` повторяет цикл загрузки `index.php` (LoadUniverse → AuthUser → роутер → MVC/классические страницы) и рендерит **настоящие игровые страницы** через реальный DB-слой. Каждый тест запускается в отдельном PHP-процессе (`#[RunTestsInSeparateProcesses]`), как и `NotesTest`/`DbSqliteTest`: только так bootstrap загружается в глобальной области видимости, где игровые модули объявляют свои глобальные переменные (`$GlobalUser`, `$LOCA`, `$resourcemap`, ...).
 3. **Сравнение снимков**: Сгенерированный HTML сравнивается с golden-снимками, хранящимися в `testing/golden/`. Перед сравнением динамический контент (временные метки, ID, токены сессий) нормализуется.
 
 ### Golden-снимки
@@ -97,6 +97,9 @@ UPDATE_GOLDEN=1 vendor/bin/phpunit --testsuite "Golden Pages"
 | Паттерн | Замена |
 |---------|--------|
 | Временные метки (`YYYY-MM-DD HH:MM:SS`) | `DATE_TIME` |
+| Временные метки статистики (`YYYY-MM-DD, HH:MM:SS`) | `DATE_TIME` |
+| Временные метки overview (`Tue Aug 18 15:38:36`) | `DATE_TIME` |
+| Временные метки (`DD.MM.YYYY HH:MM:SS`, `MM-DD HH:MM:SS`) | `DATE_TIME` |
 | Числовые временные метки (10+ цифр) | `TIMESTAMP` |
 | Числа с плавающей точкой | `FLOAT` |
 | `planet_id=X` | `planet_id=ID` |
@@ -111,13 +114,25 @@ UPDATE_GOLDEN=1 vendor/bin/phpunit --testsuite "Golden Pages"
 
 ```
 testing/
-├── GoldenPagesTest.php      # Основной класс тестов
-├── PageRenderer.php          # Имитация рендеринга игровых страниц
-├── FixtureBuilder.php        # Создание тестовой вселенной
-├── bootstrap_golden.php      # PHPUnit bootstrap для golden-тестов
+├── GoldenPagesTest.php      # Основной класс тестов (каждый тест в отдельном процессе)
+├── PageRenderer.php          # Рендеринг настоящих игровых страниц через реальный DB-слой
+├── FixtureBuilder.php        # Создание тестовой вселенной через in-memory движок (mysqlite)
+├── bootstrap.php             # PHPUnit bootstrap: загрузка игрового ядра с SQLite-бэкендом
+├── bootstrap_golden.php      # Тонкая обёртка над bootstrap.php для автономных скриптов
 └── golden/                   # Golden-снимки
-    ├── .gitkeep
+    ├── .gitignore
     ├── overview_p0.html
     ├── overview_p1.html
     └── ...
 ```
+
+### Замечания
+
+- Тесты используют **реальный in-memory DB-движок** из мастера (`game/core/db.php` +
+  `game/core/db_sqlite.php`, `DB_CONNECTION=sqlite`). Схема создаётся из
+  `install_tabs.php` через `CreateDBTables()`, данные — через `AddDBRow()`.
+- Тесты запускаются в отдельных PHP-процессах: только так PHPUnit загружает
+  bootstrap в глобальной области видимости, где игровые модули объявляют
+  глобальные переменные, от которых зависят страницы.
+- `PageRenderer` повторяет цикл загрузки `game/index.php` (LoadUniverse,
+  AuthUser, роутер из `router.json`, MVC/классические страницы).

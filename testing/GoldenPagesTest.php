@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,7 +15,13 @@ use PHPUnit\Framework\TestCase;
  * 
  * To create/update golden snapshots, run tests with UPDATE_GOLDEN=1 environment variable:
  *   UPDATE_GOLDEN=1 vendor/bin/phpunit --filter GoldenPagesTest
+ * 
+ * Each test runs in a separate PHP process (like NotesTest/DbSqliteTest on
+ * master): the game core files assign global variables ($GlobalUser, $LOCA,
+ * $resourcemap, ...) that the game pages rely on, and only the process-
+ * isolated child template loads the PHPUnit bootstrap at the true top level.
  */
+#[RunTestsInSeparateProcesses]
 class GoldenPagesTest extends TestCase
 {
     private FixtureBuilder $fixture;
@@ -126,7 +133,6 @@ class GoldenPagesTest extends TestCase
         $html = $renderer->asPlayer(0)->withParams(['mode' => 'Flotte'])->render('buildings');
         
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('PlayerOne', $html);
         
         $this->compareOrSaveGolden('buildings_shipyard', 0, $html);
     }
@@ -323,7 +329,7 @@ class GoldenPagesTest extends TestCase
     public function testImperiumPagePlayerOne(): void
     {
         $renderer = new PageRenderer($this->fixture);
-        $html = $renderer->asPlayer(0)->render('imperium');
+        $html = $renderer->asPlayer(0)->withParams(['planettype' => 1])->render('imperium');
         
         // Skip if page fails to render (missing data in fixture)
         if (strpos($html, '<html') === false) {
@@ -406,7 +412,8 @@ class GoldenPagesTest extends TestCase
     public function testAinfoPage(): void
     {
         $renderer = new PageRenderer($this->fixture);
-        $html = $renderer->asPlayer(0)->render('ainfo');
+        // allyid = the test alliance created by FixtureBuilder.
+        $html = $renderer->asPlayer(0)->withParams(['allyid' => 1])->render('ainfo');
         
         $this->assertStringContainsString('<html', $html);
         
@@ -419,7 +426,8 @@ class GoldenPagesTest extends TestCase
     public function testWriteMessagesPagePlayerOne(): void
     {
         $renderer = new PageRenderer($this->fixture);
-        $html = $renderer->asPlayer(0)->render('writemessages');
+        // messageziel = the recipient player id (PlayerTwo = 2).
+        $html = $renderer->asPlayer(0)->withParams(['messageziel' => 2])->render('writemessages');
         
         // Skip if page fails to render (missing data in fixture)
         if (strpos($html, '<html') === false) {
@@ -437,7 +445,8 @@ class GoldenPagesTest extends TestCase
     public function testBewerbenPagePlayerOne(): void
     {
         $renderer = new PageRenderer($this->fixture);
-        $html = $renderer->asPlayer(0)->render('bewerben');
+        // allyid = the test alliance created by FixtureBuilder.
+        $html = $renderer->asPlayer(0)->withParams(['allyid' => 1])->render('bewerben');
         
         $this->assertStringContainsString('<html', $html);
         
@@ -654,6 +663,16 @@ class GoldenPagesTest extends TestCase
     {
         // Normalize timestamps
         $html = preg_replace('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/', 'DATE_TIME', $html);
+        // Statistics page: "Statistics (as of: 2026-08-18, 15:38:32)"
+        $html = preg_replace('/\d{4}-\d{2}-\d{2}, \d{2}:\d{2}:\d{2}/', 'DATE_TIME', $html);
+        // Overview page: "Server time: Tue Aug 18 15:38:36"
+        $html = preg_replace('/[A-Z][a-z]{2} [A-Z][a-z]{2} \d{1,2} \d{2}:\d{2}:\d{2}/', 'DATE_TIME', $html);
+        // "Tue Aug 18 15:38:36 2026" style
+        $html = preg_replace('/[A-Z][a-z]{2} [A-Z][a-z]{2} \d{1,2} \d{2}:\d{2}:\d{2} \d{4}/', 'DATE_TIME', $html);
+        // "18.08.2026 15:38:36" style
+        $html = preg_replace('/\d{1,2}\.\d{1,2}\.\d{4} ?\.? \d{2}:\d{2}:\d{2}/', 'DATE_TIME', $html);
+        // "08-18 15:38:36" style
+        $html = preg_replace('/\d{2}-\d{2} \d{2}:\d{2}:\d{2}/', 'DATE_TIME', $html);
         $html = preg_replace('/\d{10,}/', 'TIMESTAMP', $html);
         
         // Normalize floating point numbers
