@@ -64,6 +64,10 @@ class Flotten1 extends Page {
         ?>
 
         <script src="js/flotten.js"></script>
+        <!--
+        <body>
+        <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+        -->
         <center>
           <table width="519" border="0" cellpadding="0" cellspacing="1">
            <tr height="20">
@@ -262,6 +266,7 @@ class Flotten1 extends Page {
                  <tr height="20">
                   <th><?=loca("FLEET1_TYPE");?></th>
                   <th><?=loca("FLEET1_AMOUNT");?></th>
+                  <!--    <th>Gesch.</th> -->
                   <th>-</th>
                   <th>-</th>
                  </tr>
@@ -334,7 +339,8 @@ class Flotten1 extends Page {
                  <tr height="20">
                   <th colspan="4"><input type="submit" value="<?=loca("FLEET1_NEXT");?>" /></th>
                  </tr>
-                 <tr><th colspan=4></th></tr>
+                 <tr><th colspan=4>
+                 </th></tr>
                  </form>
                  </table>
                  <br><br><br><br>

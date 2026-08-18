@@ -2,7 +2,7 @@
 
 ### Обзор
 
-`GoldenPagesTest` — это класс PHPUnit-тестов, выполняющий snapshot-тестирование (тестированиеgolden files) фронтенд-страниц OGame. Он рендерит каждую игровую страницу с использованием тестовой вселенной с 3 игроками и сравнивает сгенерированный HTML-код с сохранёнными golden-снимками.
+`GoldenPagesTest` — это класс PHPUnit-тестов, выполняющий snapshot-тестирование (тестирование golden files) фронтенд-страниц OGame. Он рендерит каждую игровую страницу с использованием тестовой вселенной с 3 игроками и сравнивает сгенерированный HTML-код с сохранёнными golden-снимками.
 
 ### Принцип работы
 
@@ -116,7 +116,7 @@ UPDATE_GOLDEN=1 vendor/bin/phpunit --testsuite "Golden Pages"
 testing/
 ├── GoldenPagesTest.php      # Основной класс тестов (каждый тест в отдельном процессе)
 ├── PageRenderer.php          # Рендеринг настоящих игровых страниц через реальный DB-слой
-├── FixtureBuilder.php        # Создание тестовой вселенной через in-memory движок (mysqlite)
+├── FixtureBuilder.php        # Создание тестовой вселенной через in-memory движок (SQLite)
 ├── bootstrap.php             # PHPUnit bootstrap: загрузка игрового ядра с SQLite-бэкендом
 └── golden/                   # Golden-снимки
     ├── .gitignore

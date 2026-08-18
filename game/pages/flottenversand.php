@@ -426,6 +426,7 @@ class Flottenversand extends Page {
     private array $resource = [];
     private int $order = 0;
     private int $union_id = 0;
+    private ?array $union;
     private array $fleet = [];
     private array $origin;
     private array $target;

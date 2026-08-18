@@ -32,7 +32,6 @@ class Statistics extends Page {
         $type = $this->type;
         $start = $this->start;
 
-        if ( $type === "" ) $type = "ressources";
         ?>
         <!-- begin header form -->
         <form method="post" action='index.php?page=statistics&session=<?php echo $session;?>' >
@@ -86,6 +85,9 @@ class Statistics extends Page {
         </form>
         <!-- end header form -->
 
+        <?php
+        if ( $type === "" ) $type = "ressources";
+        ?>
         <!-- begin statistic data -->
         <?php if ( $who === 'ally' ) { ?>
         <!-- begin ally -->
@@ -265,10 +267,7 @@ class Statistics extends Page {
                 echo "</table>\n";
                 echo "<!-- end user -->\n";
             }
-            ?>
-        <!-- end statistic data -->
-        <br><br><br><br>
-        <?php
+            ?><!-- end statistic data --><br><br><br><br><?php
     }
 }
 ?>

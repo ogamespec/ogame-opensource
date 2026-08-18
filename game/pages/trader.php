@@ -301,11 +301,11 @@ class Trader extends Page {
                         else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"1_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(1);'> <a href=\"#\" onClick=\"setMaxValue(1);\">max</a></th>\n";
                         ?>
                         <th class="c" align='center' width=25% >
-                            <?php
+<?php
                             if ( $GlobalUser['trader'] != 1 ) echo "<span id=\"1_storage\">".nicenum($mmax)."</span>";
                             else echo "---";
-                            ?>
-                        </th>
+?>
+</th>
                         <th class="c" align='center' width=25% >
                             <?php
                             if ( $GlobalUser['trader'] != 1 ) {
@@ -331,11 +331,11 @@ class Trader extends Page {
                         else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"2_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(2);'> <a href=\"#\" onClick=\"setMaxValue(2);\">max</a></th>\n";
                         ?>
                         <th class="c" align='center' width=25% >
-                            <?php
+<?php
                             if ( $GlobalUser['trader'] != 2 ) echo "<span id=\"2_storage\">".nicenum($kmax)."</span>";
                             else echo "---";
-                            ?>
-                        </th>
+?>
+</th>
                         <th class="c" align='center' width=25% >
                             <?php
                             if ( $GlobalUser['trader'] != 2 ) {
@@ -361,11 +361,11 @@ class Trader extends Page {
                         else echo "                          <th class=\"c\" align='center' width=25% ><input type=\"text\" size=\"9\" name=\"3_value\" value=\"0\" style=\"text-align:right;\" onkeyup='checkValue(3);'> <a href=\"#\" onClick=\"setMaxValue(3);\">max</a></th>\n";
                         ?>
                         <th class="c" align='center' width=25% >
-                            <?php
+<?php
                             if ( $GlobalUser['trader'] != 3 ) echo "<span id=\"3_storage\">".nicenum($dmax)."</span>";
                             else echo "---";
-                            ?>
-                        </th>
+?>
+</th>
                         <th class="c" align='center' width=25% >
                             <?php
                             if ( $GlobalUser['trader'] != 3 ) {
@@ -393,8 +393,7 @@ class Trader extends Page {
             <?php
         }
         ?>
-        <br><br><br><br>
-        <?php
+<br><br><br><br><?php
     }
 
     private function CallNewTrader () : void {

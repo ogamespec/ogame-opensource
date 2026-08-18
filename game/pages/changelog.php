@@ -65,13 +65,10 @@ class Changelog extends Page
                 <?php foreach ($ch as $version) : ?>
                 <tr>
                     <th><?= $version; ?></th>
-                    <th style="text-align:left;"><?= loca("CHANGELOG_$version"); ?></th>
+                    <th style="text-align:left"><?= loca("CHANGELOG_$version"); ?></th>
                 </tr>
                 <?php endforeach; ?>
-            </table>
-            <br><br><br><br>
-        </center>
-        
+            </table><br><br><br><br>
         <?php
     }
 }

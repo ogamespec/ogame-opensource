@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /** @var array $GlobalUser */
 /** @var string $db_prefix */
@@ -118,7 +118,8 @@ class Fleet_templates extends Page
         ?>
 
         <script type="text/javascript">
-        function show_input(id,name,s16,s17,s18,s19,s20,s21,s22,s23,s24,s25,s27,s28,s29){
+
+        function show_input(id,name,s16,s17,s18,s19,s20,s21,s22,s23,s24,s25,s26,s27,s28,s29){
             document.getElementById('input_field').style.visibility="visible";
             document.getElementsByName('template_id')[0].value=id;
             document.getElementsByName('template_name')[0].value=name;
@@ -136,23 +137,22 @@ class Fleet_templates extends Page
             document.getElementsByName('ship[214]')[0].value=s28;
             document.getElementsByName('ship[215]')[0].value=s29;
         }
+
         </script>
 
+        <body>
         <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 
         <center>
             <table style='cellpadding=5px;' border=0>
                 <tr>
-                    <td class='c' colspan=4 width=517><?=va(loca("FLEET_TEMP_TITLE_MAX"), $this->maxTemplates);?></td>
+                    <td class='c' colspan=4 width=517 ><?=va(loca("FLEET_TEMP_TITLE_MAX"), $this->maxTemplates);?></td>
                 </tr>
                 <tr>
-                    <th width=60>#</th>
-                    <th width=267><?=loca("FLEET_TEMP_NAME");?></th>
-                    <th><?=loca("FLEET_TEMP_UPDATE");?></th>
-                    <th><?=loca("FLEET_TEMP_DELETE");?></th>
+                    <th width=60 >#</th><th  width=267 ><?=loca("FLEET_TEMP_NAME");?><th><?=loca("FLEET_TEMP_UPDATE");?></th><th><?=loca("FLEET_TEMP_DELETE");?></th>
                 </tr>
                 <?php
-                $query = "SELECT * FROM " . $db_prefix . "template WHERE owner_id =" . $GlobalUser['player_id'] . " ORDER BY date DESC LIMIT " . $this->maxTemplates;
+                $query = "SELECT * FROM " . $db_prefix . "template WHERE owner_id = " . $GlobalUser['player_id'] . " ORDER BY date DESC LIMIT " . $this->maxTemplates;
                 $result = dbquery($query);
                 $rows = dbrows($result);
                 $count = 1;
@@ -160,66 +160,47 @@ class Fleet_templates extends Page
                     $temp = dbarray($result);
                 ?>
                 <tr>
-                    <th><?= $count; ?></th>
-                    <th width=160>
-                        <a href="#" onclick="show_input(<?= $temp['id']; ?>,'<?= $temp['name']; ?>',
-                            <?= $temp['202']; ?>,<?= $temp['203']; ?>,<?= $temp['204']; ?>,<?= $temp['205']; ?>,<?= $temp['206']; ?>,
-                            <?= $temp['207']; ?>,<?= $temp['208']; ?>,<?= $temp['209']; ?>,<?= $temp['210']; ?>,<?= $temp['211']; ?>,
-                            <?= $temp['213']; ?>,<?= $temp['214']; ?>,<?= $temp['215']; ?>);">
-                            <?= $temp['name']; ?>
-                        </a>
-                    </th>
-                    <th width=80>
-                        <a href="#" onclick="show_input(<?= $temp['id']; ?>,'<?= $temp['name']; ?>',
-                            <?= $temp['202']; ?>,<?= $temp['203']; ?>,<?= $temp['204']; ?>,<?= $temp['205']; ?>,<?= $temp['206']; ?>,
-                            <?= $temp['207']; ?>,<?= $temp['208']; ?>,<?= $temp['209']; ?>,<?= $temp['210']; ?>,<?= $temp['211']; ?>,
-                            <?= $temp['213']; ?>,<?= $temp['214']; ?>,<?= $temp['215']; ?>);">O</a>
-                    </th>
-                    <th width=80>
-                        <a href="index.php?page=fleet_templates&session=<?= $session; ?>&mode=delete&id=<?= $temp['id']; ?>">X</a>
-                    </th>
+                    <th><?php echo $count;?></th><th width=160 ><a href=# onclick="show_input(<?php echo $temp['id'];?>,'<?php echo $temp['name'];?>',
+                    <?php echo $temp['202'];?>,<?php echo $temp['203'];?>,<?php echo $temp['204'];?>,<?php echo $temp['205'];?>,<?php echo $temp['206'];?>,
+                    <?php echo $temp['207'];?>,<?php echo $temp['208'];?>,<?php echo $temp['209'];?>,<?php echo $temp['210'];?>,<?php echo $temp['211'];?>,
+                    <?php echo $temp['212'];?>,<?php echo $temp['213'];?>,<?php echo $temp['214'];?>,<?php echo $temp['215'];?>);"><?php echo $temp['name'];?></a></th>
+                    <th width=80 ><a href=# onclick="show_input(<?php echo $temp['id'];?>,'<?php echo $temp['name'];?>',
+                    <?php echo $temp['202'];?>,<?php echo $temp['203'];?>,<?php echo $temp['204'];?>,<?php echo $temp['205'];?>,<?php echo $temp['206'];?>,
+                    <?php echo $temp['207'];?>,<?php echo $temp['208'];?>,<?php echo $temp['209'];?>,<?php echo $temp['210'];?>,<?php echo $temp['211'];?>,
+                    <?php echo $temp['212'];?>,<?php echo $temp['213'];?>,<?php echo $temp['214'];?>,<?php echo $temp['215'];?>);">O</a></th>
+                    <th width=80 ><a href=index.php?page=fleet_templates&session=<?php echo $session;?>&mode=delete&id=<?php echo $temp['id'];?> >X</a></th>
                 </tr>
                 <?php
                     $count++;
                 }
                 ?>
-                <th colspan=4 align=center>
-                    <input type="button" name="send" value='<?= loca("FLEET_TEMP_CREATE"); ?>'
-                           onclick="show_input(0,'',0,0,0,0,0,0,0,0,0,0,0,0,0,0)">
-                </th>
-            </table>
-            <br>
-            <div id='input_field' style='visibility:hidden;'>
-                <form action='index.php?page=fleet_templates&session=<?= $session; ?>' method="POST">
-                    <input type="hidden" name="mode" value="save">
-                    <table style='cellpadding=5px;' border=0>
-                        <tr>
-                            <td class='c' colspan=2 width=517><?= loca("FLEET_TEMP_CREATE"); ?></td>
-                        </tr>
-                        <tr>
-                            <th><?= loca("FLEET_TEMP_NAME"); ?></th>
-                            <th>
-                                <input name='template_name' size=20>
-                                <input type="hidden" name='template_id' size=6>
-                            </th>
-                        </tr>
-                        <?php
-                        foreach ($this->fleetmap_nosat as $i => $gid) {
-                            echo "<tr>\n";
-                            echo "    <th>" . loca("NAME_$gid") . "</th>\n";
-                            echo "    <th><input name='ship[$gid]' size=3></th>\n";
-                            echo "    </tr>\n";
-                        }
-                        ?>
-                        <th colspan=2 align=center>
-                            <input type="submit" name="send" value='<?= loca("FLEET_TEMP_SAVE"); ?>'>
-                        </th>
-                    </tr>
-                    </table>
+                <th colspan=4 align=center ><input type=button name=send value='<?=loca("FLEET_TEMP_CREATE");?>' onclick="show_input(0,'',0,0,0,0,0,0,0,0,0,0,0,0,0,0)"></th>
+                </table>
+                <br>
+                <div id='input_field' style='visibility:hidden;'>
+                <form action='index.php?page=fleet_templates&session=<?php echo $session;?>' method="POST">
+                <input type="hidden" name=mode value=save >
+                <table style='cellpadding=5px;' border=0>
+                <tr><td class='c' colspan=2 width=517 ><?=loca("FLEET_TEMP_CREATE");?></td></tr>
+                <tr>
+                <th><?=loca("FLEET_TEMP_NAME");?></th>
+                <th><input name='template_name' size=20 >
+                <input type=hidden name='template_id' size=6></th>
+                </tr>
+                <?php
+                foreach ($this->fleetmap_nosat as $i => $gid) {
+                    echo "                <tr>\n";
+                    echo "        <th>" . loca("NAME_$gid") . "</th>\n";
+                    echo "        <th><input name='ship[$gid]' size=3></th>\n";
+                    echo "        </tr>\n";
+                }
+                ?>
+                <th colspan=4 align=center ><input type=submit name=send value='<?=loca("FLEET_TEMP_SAVE");?>'></th>
+                </tr>
                 </form>
-            </div>
-            <br><br><br><br>
-        </center>
+                </table>
+                </div>
+                <br><br><br><br>
 
         <?php
     }

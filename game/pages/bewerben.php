@@ -4,7 +4,7 @@
 
 class Bewerben extends Page {
 
-    private array $ally = [];
+    private ?array $ally = null;
     private string $template = "";
 
     public function controller () : bool {
@@ -13,8 +13,9 @@ class Bewerben extends Page {
 
         if ( ! $GlobalUser['validated'] ) Error ( loca("ALLY_APPU_NOT_ACTIVATED") );
 
-        $ally_id = intval($_GET['allyid']);
-        $this->ally = LoadAlly ($ally_id);
+        $ally_id = intval($_GET['allyid'] ?? 0);
+        $ally = LoadAlly ($ally_id);
+        $this->ally = is_array ($ally) ? $ally : null;
 
         if ( key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_TEMPLATE") || $this->ally['insertapp']) {
             $this->template = $this->ally['apptext'];

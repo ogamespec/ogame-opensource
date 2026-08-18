@@ -214,6 +214,7 @@ class Options extends Page {
         global $db_secret;
         global $session;
         global $now;
+        global $Languages;
 
         $speed = $GlobalUni['speed'];
         $prem = PremiumStatus ($GlobalUser);
@@ -302,6 +303,7 @@ class Options extends Page {
         }
         else {
             ?>
+             <table width="519">
              <form action="index.php?page=options&session=<?php echo $session;?>&mode=change" method="POST" >
                   <tr><td class="c" colspan ="2"><?=loca("OPTIONS_USER");?></td></tr>
              <tr>
@@ -340,7 +342,8 @@ class Options extends Page {
                <th><?php echo loca("OPTIONS_USER_PEMAIL");?></th>
                 <th><?php echo $GlobalUser['pemail'];?></th>
                </tr>
-                <tr><th colspan="2"></tr>
+                <tr><th colspan="2">
+                </tr>
                 <tr>
                 <td class="c" colspan="2"><?php echo loca("OPTIONS_GENERAL");?></td>
                 </tr>
@@ -393,6 +396,7 @@ class Options extends Page {
                     <?php
                          }
                    ?>
+                   </select>
                  </th>
                 </tr>
                 <tr>
@@ -413,6 +417,10 @@ class Options extends Page {
                  <th><a title="<?php echo loca("OPTIONS_GALAXY_SPIES_TIP");?>"><?php echo loca("OPTIONS_GALAXY_SPIES");?></a></th>
                  <th><input type="text" name="spio_anz" maxlength="2" size="2" value="<?php echo $GlobalUser['maxspy'];?>" /></th>
                 </tr>
+                <!--<tr>
+                 <th><?php echo loca("OPTIONS_GALAXY_TOOLTIPTIME");?></th>
+                 <th><input type="text" name="settings_tooltiptime" maxlength="2" size="2" value="0" /> сек.</th>
+                </tr>-->
                 <tr>
                  <th><?php echo loca("OPTIONS_GALAXY_MAXMSG");?></th>
                  <th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="<?php echo $GlobalUser['maxfleetmsg'];?>" /></th>

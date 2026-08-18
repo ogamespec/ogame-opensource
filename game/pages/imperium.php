@@ -22,7 +22,7 @@ class Imperium extends Page {
             MyGoto ("overview");
         }
 
-        $this->planettype = intval($_GET['planettype']);
+        $this->planettype = intval($_GET['planettype'] ?? 0);
         if ( $GlobalUni['moons'] ) {
             if ( $this->planettype != 1 && $this->planettype != 3) $this->planettype = 1;
         }
@@ -76,6 +76,10 @@ class Imperium extends Page {
         <script>t=0;</script>
 
         <table width="750" border="0" cellpadding="0" cellspacing="1">
+
+<!-- ## -->
+<!-- ## Tablehead -->
+<!-- ## -->
             <tr height="20" valign="left">
                 <td class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_OVERVIEW");?></td>
             </tr>
@@ -90,6 +94,10 @@ class Imperium extends Page {
                 <?php
             }
             ?>
+
+<!-- ## -->
+<!-- ## Planetimages -->
+<!-- ## -->
             <tr height="75">
                 <th width="75"></th>
                 <?php
@@ -104,6 +112,10 @@ class Imperium extends Page {
                 ?>
                 <th width="75"><?php echo loca("EMPIRE_SUM");?></th>
             </tr>
+
+<!-- ## -->
+<!-- ## Name -->
+<!-- ## -->
             <tr height="20">
                 <th width="75"><?php echo loca("EMPIRE_NAME");?></th>
                 <?php
@@ -114,6 +126,10 @@ class Imperium extends Page {
                 ?>
                 <th width="75">&nbsp;</th>
             </tr>
+
+<!-- ## -->
+<!-- ## Coordinates -->
+<!-- ## -->
             <tr height="20">
                 <th width="75"><?php echo loca("EMPIRE_COORD");?></th>
                 <?php
@@ -124,6 +140,10 @@ class Imperium extends Page {
                 ?>
                 <th width="75">&nbsp;</th>
             </tr>
+
+<!-- ## -->
+<!-- ## Fields -->
+<!-- ## -->
             <tr height="20">
                 <th width="75"><?php echo loca("EMPIRE_FIELDS");?></th>
                 <?php
@@ -139,9 +159,17 @@ class Imperium extends Page {
                 ?>
                 <th width="75"><?php echo nicenum($sum_fields);?>&nbsp;<a href='#' onMouseOver="return overlib('<font color=white><?php echo loca("EMPIRE_AVG");?></font>');" onMouseOut="return nd();">(<?php echo nicenum($avg_fields);?>)</a>&nbsp;/&nbsp;<?php echo nicenum($sum_maxfields);?>&nbsp;<a href='#' onMouseOver="return overlib('<font color=white><?php echo loca("EMPIRE_AVG");?></font>');" onMouseOut="return nd();">(<?php echo nicenum($avg_maxfields);?>)</a></th>
             </tr>
+
+<!-- ## -->
+<!-- ## Resources-Head -->
+<!-- ## -->
             <tr height="20">
                 <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_RES");?></td>
             </tr>
+
+<!-- ## -->
+<!-- ## Resources (without Energy) -->
+<!-- ## -->
             <tr height="20">
                 <th width="75"><?php echo loca("NAME_".GID_RC_METAL);?></th>
                 <?php
@@ -208,6 +236,10 @@ class Imperium extends Page {
                 ?>
                 <th width="75"><?php echo nicenum($total);?>&nbsp;/&nbsp;<?php echo nicenum($avg_prod);?></th>
             </tr>
+
+<!-- ## -->
+<!-- ## Resources-Energy -->
+<!-- ## -->
             <tr height="20">
                 <th width="75"><?php echo loca("NAME_".GID_RC_ENERGY);?></th>
                 <?php
@@ -229,9 +261,17 @@ class Imperium extends Page {
                 ?>
                 <th width="75"><?php echo nicenum($sum_e);?> / <?php echo nicenum($sum_emax);?> </th>
             </tr>
+
+<!-- ## -->
+<!-- ## Buildings-Head -->
+<!-- ## -->
             <tr height="20">
                 <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_BUILDINGS");?></td>
             </tr>
+
+<!-- ## -->
+<!-- ## Buildings -->
+<!-- ## -->
             <?php
             foreach ($buildmap as $i=>$gid)
             {
@@ -294,9 +334,17 @@ class Imperium extends Page {
                 }
             }
             ?>
+
+<!-- ## -->
+<!-- ## Research-Head -->
+<!-- ## -->
             <tr height="20">
                 <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_RESEARCH");?></td>
             </tr>
+
+<!-- ## -->
+<!-- ## Researches -->
+<!-- ## -->
             <?php
             foreach ($resmap as $i=>$res)
             {
@@ -323,9 +371,17 @@ class Imperium extends Page {
                 echo "        </tr>\n";
             }
             ?>
+
+<!-- ## -->
+<!-- ## Ships-Head -->
+<!-- ## -->
             <tr height="20">
                 <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_FLEET");?></td>
             </tr>
+
+<!-- ## -->
+<!-- ## Ships -->
+<!-- ## -->
             <?php
             foreach ($fleetmap as $i=>$fleet)
             {
@@ -363,9 +419,17 @@ class Imperium extends Page {
                 echo "       </tr>\n";
             }
             ?>
+
+<!-- ## -->
+<!-- ## Defense-Head -->
+<!-- ## -->
             <tr height="20">
                 <td align="left" class="c" colspan="<?php echo ($num+2);?>"><?php echo loca("EMPIRE_DEFENSE");?></td>
             </tr>
+
+<!-- ## -->
+<!-- ## Defense -->
+<!-- ## -->
             <?php
             foreach ($defmap as $i=>$def)
             {
@@ -403,6 +467,10 @@ class Imperium extends Page {
                 echo "       </tr>\n";
             }
             ?>
+
+<!-- ## -->
+<!-- ## Footer -->
+<!-- ## -->
         </table>
         <br><br><br><br>
         <?php

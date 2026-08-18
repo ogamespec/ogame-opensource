@@ -4,9 +4,9 @@
 
 class Writemessages extends Page {
 
-    private array $user = [];
-    private array $home = [];
-    private array $ownhome = [];
+    private ?array $user = null;
+    private ?array $home = null;
+    private ?array $ownhome = null;
     private string $betreff = "";
     private string $write_error = "";
 
@@ -15,9 +15,9 @@ class Writemessages extends Page {
 
         $this->betreff = key_exists('betreff', $_REQUEST) ? $_REQUEST['betreff'] : loca("WRITE_MSG_DEFAULT_SUBJ");
 
-        $user_id = intval($_GET['messageziel']);
+        $user_id = intval($_GET['messageziel'] ?? 0);
         $this->user = LoadUser ( $user_id );
-        $this->home = LoadPlanetById ( $this->user['hplanetid']);
+        $this->home = ($this->user !== null) ? LoadPlanetById ( $this->user['hplanetid']) : null;
         $this->ownhome = LoadPlanetById ( $GlobalUser['hplanetid']);
 
         if ( key_exists ('gesendet', $_GET) && $_GET['gesendet'] == 1) {

@@ -145,6 +145,10 @@ class Galaxy extends Page {
         $maxfleet_no_bonus = $this->maxfleet_no_bonus;
         $prem = $this->prem;
 
+        /***** Scripts. *****/
+
+        include "galaxy_js.php";
+
         // Not enough deuterium?
         // Operators and administrators can view the Galaxy without the cost of deuterium.
         if ( $not_enough_deut && $GlobalUser['admin'] == USER_TYPE_PLAYER )
@@ -601,6 +605,8 @@ class Galaxy extends Page {
     }
 
     private array $defmap_norak;
+    private string $PageError = "";
+    private string $PageMessage = "";
     private int $coord_g = 0;
     private int $coord_s = 0;
     private int $coord_p = 0;

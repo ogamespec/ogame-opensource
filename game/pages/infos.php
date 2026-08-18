@@ -163,8 +163,8 @@ class Infos extends Page {
     private function RapidInfo (int $gid) : string {
         global $RapidFire;
         $res = "";
-        foreach ($RapidFire as $n => $arr) if ( key_exists($n, $RapidFire[$gid]) && $RapidFire[$gid][$n] > 1 ) $res .= $this->rapidOut ( $n, $RapidFire[$gid][$n] );
-        foreach ($RapidFire as $n => $arr) if ( key_exists($gid, $RapidFire[$n]) && $RapidFire[$n][$gid] > 1 ) $res .= $this->rapidIn ( $n, $RapidFire[$n][$gid] );
+        foreach ($RapidFire as $n => $arr) if ( isset($RapidFire[$gid][$n]) && $RapidFire[$gid][$n] > 1 ) $res .= $this->rapidOut ( $n, $RapidFire[$gid][$n] );
+        foreach ($RapidFire as $n => $arr) if ( isset($RapidFire[$n][$gid]) && $RapidFire[$n][$gid] > 1 ) $res .= $this->rapidIn ( $n, $RapidFire[$n][$gid] );
         return $res;
     }
 
@@ -181,105 +181,75 @@ class Infos extends Page {
         global $GlobalUser;
         global $aktplanet;
 
-        $prod_fields = [];
-        $energy_fields = [];
-
-        if ($gid == GID_B_METAL_MINE) {
-            $prod_fields = ['prod', 'cons'];
-            $energy_fields = ['energy'];
-        }
-        else if ($gid == GID_B_CRYS_MINE) {
-            $prod_fields = ['prod', 'cons'];
-            $energy_fields = ['energy'];
-        }
-        else if ($gid == GID_B_DEUT_SYNTH) {
-            $prod_fields = ['prod', 'cons'];
-            $energy_fields = ['energy'];
-        }
-        else if ($gid == GID_B_SOLAR) {
-            $prod_fields = ['energy'];
-        }
-        else if ($gid == GID_B_FUSION) {
-            $prod_fields = ['energy', 'cons_deut'];
-        }
-
-        $header = "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>";
-        foreach ($prod_fields as $f) $header .= "<td class='c'>".loca("INFO_".strtoupper($f))."</td>";
-        foreach ($energy_fields as $f) $header .= "<td class='c'>".loca("INFO_".strtoupper($f))."</td>";
-        $header .= "</td> \n";
-
-        $level = $aktplanet[$gid]-2;
-        if ($level <= 0) $level = 1;
-        $planet = $aktplanet;
-        $planet[GID_B_SOLAR] = 99;
-        $planet['prod'.GID_B_METAL_MINE] = 1;
-        ProdResources ($GlobalUni, $GlobalUser, $planet);
-
-        $prod_now = 0;
-        $cons_now = 0;
-        $prod_now_e = 0;
-        $cons_now_e = 0;
-
-        if (in_array('prod', $prod_fields)) {
-            if ($gid == GID_B_METAL_MINE) $prod_now = $planet['prod'][GID_B_METAL_MINE];
-            else if ($gid == GID_B_CRYS_MINE) $prod_now = $planet['prod'][GID_B_CRYS_MINE];
-            else if ($gid == GID_B_DEUT_SYNTH) $prod_now = $planet['prod'][GID_B_DEUT_SYNTH];
-        }
-        if (in_array('cons', $prod_fields)) {
-            if ($gid == GID_B_METAL_MINE) $cons_now = - $planet['cons'][GID_B_METAL_MINE];
-            else if ($gid == GID_B_CRYS_MINE) $cons_now = - $planet['cons'][GID_B_CRYS_MINE];
-            else if ($gid == GID_B_DEUT_SYNTH) $cons_now = - $planet['cons'][GID_B_DEUT_SYNTH];
-        }
-        if (in_array('energy', $energy_fields)) $prod_now_e = $planet['prod'][GID_B_SOLAR];
-        if (in_array('cons_deut', $energy_fields)) $cons_now_e = - $planet['cons'][GID_B_FUSION];
-
-        echo $header;
-
-        for ($i=$level; $i<$level+15; $i++) {
-            $planet[$gid] = $i;
+        if ($gid == GID_B_METAL_MINE || $gid == GID_B_CRYS_MINE || $gid == GID_B_DEUT_SYNTH) {
+            // Mines: production per hour, difference, energy balance, difference.
+            echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_PROD")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td> \n";
+            $level = $aktplanet[$gid]-2;
+            if ($level <= 0) $level = 1;
+            $planet = $aktplanet;
+            $planet[GID_B_SOLAR] = 99;
+            $planet['prod'.$gid] = 1;
             ProdResources ($GlobalUni, $GlobalUser, $planet);
-
-            $prod = 0;
-            $cons = 0;
-            $prod_e = 0;
-            $cons_e = 0;
-
-            if (in_array('prod', $prod_fields)) {
-                if ($gid == GID_B_METAL_MINE) $prod = $planet['prod'][GID_B_METAL_MINE];
-                else if ($gid == GID_B_CRYS_MINE) $prod = $planet['prod'][GID_B_CRYS_MINE];
-                else if ($gid == GID_B_DEUT_SYNTH) $prod = $planet['prod'][GID_B_DEUT_SYNTH];
-            }
-            if (in_array('cons', $prod_fields)) {
-                if ($gid == GID_B_METAL_MINE) $cons = - $planet['cons'][GID_B_METAL_MINE];
-                else if ($gid == GID_B_CRYS_MINE) $cons = - $planet['cons'][GID_B_CRYS_MINE];
-                else if ($gid == GID_B_DEUT_SYNTH) $cons = - $planet['cons'][GID_B_DEUT_SYNTH];
-            }
-            if (in_array('energy', $energy_fields)) $prod_e = $planet['prod'][GID_B_SOLAR];
-            if (in_array('cons_deut', $energy_fields)) $cons_e = - $planet['cons'][GID_B_FUSION];
-
-            echo "<tr> <th> ";
-            if ($i==$aktplanet[$gid]) echo "<font color=#FF0000>$i</font>";
-            else echo "$i";
-            echo "</th> ";
-
-            if (in_array('prod', $prod_fields)) {
+            $prod_now = $planet['prod'][$gid];
+            $cons_now = - $planet['cons'][$gid];
+            for ($i=$level; $i<$level+15; $i++) {
+                $planet[$gid] = $i;
+                ProdResources ($GlobalUni, $GlobalUser, $planet);
+                $prod = $planet['prod'][$gid];
+                $cons = - $planet['cons'][$gid];
+                if ($i==$aktplanet[$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
+                else echo "<tr> <th> $i</th> ";
                 echo "<th> " . nicenum($prod). "</th> ";
                 echo "<th> " . $this->rgnum($prod-$prod_now) . "</th> ";
-            }
-            if (in_array('cons', $prod_fields)) {
                 echo "<th> " . nicenum ($cons) . "</th> ";
                 echo "<th> " . $this->rgnum ($cons-$cons_now) ." </th> </tr> \n";
             }
-            if (in_array('energy', $energy_fields)) {
-                echo "<th> " . nicenum($prod_e). "</th> ";
-                echo "<th> " . $this->rgnum($prod_e-$prod_now_e) . "</th> </tr> \n";
-            }
-            if (in_array('cons_deut', $energy_fields)) {
-                echo "<th> " . nicenum($cons_e). "</th> ";
-                echo "<th> " . $this->rgnum($cons_e-$cons_now_e) . "</th> </tr> \n";
-            }
+            echo "</table></center></tr></th>";
         }
-        echo "</table></center></tr></th>";
+        else if ($gid == GID_B_SOLAR)    // Solar Plant
+        {
+            echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td>\n";
+            $level = $aktplanet[$gid]-2;
+            if ($level <= 0) $level = 1;
+            $planet = $aktplanet;
+            $planet['prod'.$gid] = 1;
+            ProdResources ($GlobalUni, $GlobalUser, $planet);
+            $prod_now = $planet['prod'][$gid];
+            for ($i=$level; $i<$level+15; $i++) {
+                $planet[$gid] = $i;
+                ProdResources ($GlobalUni, $GlobalUser, $planet);
+                $prod = $planet['prod'][$gid];
+                if ($i==$aktplanet[$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
+                else echo "<tr> <th> $i</th> ";
+                echo "<th> " . nicenum($prod). "</th> ";
+                echo "<th> " . $this->rgnum($prod-$prod_now) . "</th> </tr> \n";
+            }
+            echo "</table></center></tr></th>";
+        }
+        else if ($gid == GID_B_FUSION)    // Fusion Reactor
+        {
+            echo "<tr><th><p><center><table border=1 ><tr><td class='c'>".loca("INFO_LEVEL")."</td><td class='c'>".loca("INFO_ENERGY")."</td><td class='c'>".loca("INFO_DIFF")."</td><td class='c'>".loca("INFO_CONS_DEUT")."</td><td class='c'>".loca("INFO_DIFF")."</td>\n";
+            $level = $aktplanet[$gid]-2;
+            if ($level <= 0) $level = 1;
+            $planet = $aktplanet;
+            $planet['prod'.$gid] = 1;
+            ProdResources ($GlobalUni, $GlobalUser, $planet);
+            $prod_now = $planet['prod'][$gid];
+            $cons_now = - $planet['cons'][$gid];
+            for ($i=$level; $i<$level+15; $i++) {
+                $planet[$gid] = $i;
+                ProdResources ($GlobalUni, $GlobalUser, $planet);
+                $prod = $planet['prod'][$gid];
+                $cons = - $planet['cons'][$gid];
+                if ($i==$aktplanet[$gid]) echo "<tr> <th> <font color=#FF0000>$i</font></th> ";
+                else echo "<tr> <th> $i</th> ";
+                echo "<th> " . nicenum($prod). "</th> ";
+                echo "<th> " . $this->rgnum($prod-$prod_now) . "</th> \n";
+                echo "<th> " . nicenum($cons). "</th> ";
+                echo "<th> " . $this->rgnum($cons-$cons_now) . "</th> </tr> \n";
+            }
+            echo "</table></center></tr></th>";
+        }
     }
 
     private function DisplayStorageTable (int $gid) : void {

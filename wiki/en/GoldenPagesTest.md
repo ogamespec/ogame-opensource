@@ -116,7 +116,7 @@ Before comparison, HTML is normalized to handle dynamic content:
 testing/
 ├── GoldenPagesTest.php      # Main test class (each test in a separate process)
 ├── PageRenderer.php          # Renders real game pages through the real DB layer
-├── FixtureBuilder.php        # Builds the test universe via the in-memory engine (mysqlite)
+├── FixtureBuilder.php        # Builds the test universe via the in-memory engine (SQLite)
 ├── bootstrap.php             # PHPUnit bootstrap: loads the game core with the SQLite backend
 └── golden/                   # Golden snapshots
     ├── .gitignore
