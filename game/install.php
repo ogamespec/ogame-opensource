@@ -43,9 +43,6 @@ if (file_exists ("config.php"))
     exit ();
 }
 
-// Database tables
-include "core/install_tabs.php";
-
 // -------------------------------------------------------------------------------------------------------------------------
 
 // Save the settings.
@@ -63,24 +60,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
 
     // Delete all tables and create new empty tables.
     InitDB ();
-
-    foreach ( $tabs as $tabname => $tab )
-    {
-        $opt = " (";
-        $first = true;
-        foreach ( $tab as $row => $type )
-        {
-            if ( !$first ) $opt .= ", ";
-            if ( $first ) $first = false;
-            $opt .= "`".$row."`" . " " . $type;
-        }
-        $opt .= ")";
-
-        $query = 'DROP TABLE IF EXISTS '.$db_prefix.$tabname;
-        dbquery ($query, TRUE);
-        $query = 'CREATE TABLE '.$db_prefix.$tabname.$opt." CHARACTER SET utf8 COLLATE utf8_general_ci";
-        dbquery ($query, TRUE);
-    }
+    CreateDBTables ();
 
     // Create the universe.
     $uni = array ( 
