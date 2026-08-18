@@ -291,11 +291,13 @@ class FixtureBuilder
                 deleted_to INT DEFAULT 0
             )",
             "CREATE TABLE {$this->dbPrefix}notes (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                note_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 owner_id INT DEFAULT 0,
-                time INT UNSIGNED DEFAULT 0,
                 subj TEXT DEFAULT '',
-                text TEXT DEFAULT ''
+                text TEXT DEFAULT '',
+                textsize INT DEFAULT 0,
+                prio INT DEFAULT 0,
+                date INT UNSIGNED DEFAULT 0
             )",
             "CREATE TABLE {$this->dbPrefix}errors (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -639,7 +641,7 @@ class FixtureBuilder
         }
 
         // Add a note for player 1
-        $noteSql = "INSERT INTO {$this->dbPrefix}notes (owner_id, time, subj, text) VALUES (1, $now, 'Test Note', 'This is a test note for PlayerOne.')";
+        $noteSql = "INSERT INTO {$this->dbPrefix}notes (owner_id, subj, text, textsize, prio, date) VALUES (1, 'Test Note', 'This is a test note for PlayerOne.', 34, 0, $now)";
         $this->pdo->exec($noteSql);
 
         return $this;
