@@ -282,6 +282,9 @@ class PageRenderer
             $this->currentUser['eng_until'] = $farFuture;
             $this->currentUser['geo_until'] = $farFuture;
             $this->currentUser['tec_until'] = $farFuture;
+            // Set GID_RC_DM (Dark Matter) - defined in core/techs.php
+            $dmKey = defined('GID_RC_DM') ? GID_RC_DM : 704;
+            $this->currentUser[$dmKey] = ($this->currentUser['dm'] ?? 0) + ($this->currentUser['dmfree'] ?? 0);
         }
     }
 
