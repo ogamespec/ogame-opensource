@@ -405,15 +405,41 @@ class PageRenderer
             throw new InvalidArgumentException("Page file not found: $pageFile");
         }
 
+        // Load router to determine page configuration
+        $routerFile = $this->gameRoot . 'router.json';
+        $router = [];
+        if (file_exists($routerFile)) {
+            $router = json_decode(file_get_contents($routerFile), true) ?? [];
+        }
+        
+        $bare = isset($router[$page]['bare']) && $router[$page]['bare'];
+        $header = !isset($router[$page]['header']) || $router[$page]['header'] !== false;
+        $menu = !isset($router[$page]['menu']) || $router[$page]['menu'] !== false;
+        $mvc = isset($router[$page]['mvc']) && $router[$page]['mvc'];
+        
+        // Wrap with PageHeader/PageFooter unless bare mode
+        if (!$bare) {
+            PageHeader($page, !$header, $menu, '', 0);
+            BeginContent();
+        }
+
         // Include the page
         require_once $pageFile;
 
         // If the page defines a class that extends Page (MVC pattern), instantiate and render it
-        $className = ucfirst($page);
-        if (class_exists($className) && is_subclass_of($className, 'Page')) {
-            $inst = new $className();
-            $inst->controller();
-            $inst->view();
+        if ($mvc) {
+            $className = ucfirst($page);
+            if (class_exists($className) && is_subclass_of($className, 'Page')) {
+                $inst = new $className();
+                $inst->controller();
+                $inst->view();
+            }
+        }
+
+        // Wrap with EndContent/PageFooter unless bare mode
+        if (!$bare) {
+            EndContent();
+            PageFooter($PageMessage, $PageError, !$menu, $header ? 81 : 0, !$header);
         }
     }
 
