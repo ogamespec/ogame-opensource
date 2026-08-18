@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="testing/bootstrap_golden.php"
-          colors="true"
-          verbose="true">
-    
+<phpunit bootstrap="testing/bootstrap.php"
+         colors="true">
+
     <testsuites>
         <testsuite name="OGame Open Source Test Suite">
             <directory>testing</directory>
@@ -11,12 +10,17 @@
             <file>testing/GoldenPagesTest.php</file>
         </testsuite>
     </testsuites>
-    
+
+    <source>
+        <include>
+            <directory suffix=".php">testing</directory>
+        </include>
+    </source>
+
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
-        <env name="UPDATE_GOLDEN" value="1"/>
     </php>
-    
+
 </phpunit>
