@@ -340,7 +340,6 @@ class PageRenderer
         }
 
         // Initialize localization globals
-        $LOCA = [];
         $loca_lang = 'en';
         $from_reg = false;
 
@@ -359,10 +358,10 @@ class PageRenderer
 
         // Load core definitions (defines constants like GID_B_METAL_MINE, Page class, etc.)
         require_once $this->gameRoot . 'core/defs.php';
+        require_once $this->gameRoot . 'core/loca.php';
         require_once $this->gameRoot . 'core/page.php';
         require_once $this->gameRoot . 'core/utils.php';
         require_once $this->gameRoot . 'core/techs.php';
-        require_once $this->gameRoot . 'core/loca.php';
         require_once $this->gameRoot . 'core/prod.php';
         require_once $this->gameRoot . 'core/planet.php';
         require_once $this->gameRoot . 'core/user.php';
@@ -398,6 +397,10 @@ class PageRenderer
         foreach ($localeModules as $module) {
             loca_add($module, 'en');
         }
+
+        // Load common and menu locales needed by PageHeader/PageFooter
+        loca_add('common', 'en');
+        loca_add('menu', 'en');
 
         // Load the page file
         $pageFile = $this->gameRoot . 'pages/' . $page . '.php';

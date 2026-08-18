@@ -16,6 +16,7 @@
         <env name="APP_ENV" value="testing"/>
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
+        <env name="UPDATE_GOLDEN" value="1"/>
     </php>
     
 </phpunit>
