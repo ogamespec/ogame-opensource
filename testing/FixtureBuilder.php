@@ -1,6 +1,7 @@
 <?php
 
 // Load game constants (GID_R_*, GID_B_*, GID_F_*, GID_D_*, GID_RC_*)
+require_once __DIR__ . '/../game/core/defs.php';
 require_once __DIR__ . '/../game/core/techs.php';
 
 /**
@@ -270,13 +271,13 @@ class FixtureBuilder
                 `".GID_RC_CRYSTAL."` DOUBLE DEFAULT 0,
                 `".GID_RC_DEUTERIUM."` DOUBLE DEFAULT 0,
                 fuel INT DEFAULT 0,
-                mission INT DEFAULT 0,
                 start_planet INT DEFAULT 0,
                 target_planet INT DEFAULT 0,
                 flight_time INT DEFAULT 0,
                 deploy_time INT DEFAULT 0,
                 ipm_amount INT DEFAULT 0,
                 ipm_target INT DEFAULT 0,
+                mission INT DEFAULT 0,
                 `".GID_F_SC."` INT UNSIGNED DEFAULT 0,
                 `".GID_F_LC."` INT UNSIGNED DEFAULT 0,
                 `".GID_F_LF."` INT UNSIGNED DEFAULT 0,
@@ -749,8 +750,8 @@ class FixtureBuilder
 
         // Add some fleet to player 1
         $fleetData = [
-            ['owner_id' => 1, 'start_planet' => 1, 'target_planet' => 4, 'mission' => 6, 'amount' => 5, 'tech_id' => GID_F_SC],  // Small Cargo
-            ['owner_id' => 1, 'start_planet' => 1, 'target_planet' => 7, 'mission' => 1, 'amount' => 3, 'tech_id' => GID_F_LF], // Light Fighter
+            ['owner_id' => 1, 'start_planet' => 1, 'target_planet' => 4, 'mission' => 6 ],  // Small Cargo
+            ['owner_id' => 1, 'start_planet' => 1, 'target_planet' => 7, 'mission' => 1 ], // Light Fighter
         ];
 
         foreach ($fleetData as $fData) {
