@@ -48,7 +48,7 @@ function UpdateNote ( int $player_id, int $note_id, string $subj, string $text, 
 
     // You can't touch someone else's notes
     $note = LoadNote ( $player_id, $note_id);
-    if ( $note['owner_id'] != $player_id ) return;
+    if ( !$note || $note['owner_id'] != $player_id ) return;
 
     $user = LoadUser ($player_id);
     loca_add ( "notes", $user['lang'] );
@@ -71,7 +71,7 @@ function DelNote ( int $player_id, int $note_id ) : void
 
     // You can't touch someone else's notes
     $note = LoadNote ( $player_id, $note_id);
-    if ( $note['owner_id'] != $player_id ) return;
+    if ( !$note || $note['owner_id'] != $player_id ) return;
 
     $query = "DELETE FROM ".$db_prefix."notes WHERE owner_id = $player_id AND note_id = $note_id";
     dbquery ($query);
