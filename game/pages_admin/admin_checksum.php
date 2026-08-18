@@ -20,6 +20,8 @@ class Admin_Checksum extends Page {
         'core/core.php', 
         'core/coupon.php', 
         'core/db.php', 
+        'core/db_mysql.php', 
+        'core/db_sqlite.php', 
         'core/defs.php', 
         'core/debug.php', 
         'core/expedition.php', 
