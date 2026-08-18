@@ -1,5 +1,8 @@
 <?php
 
+// Load game constants (GID_R_*, GID_B_*, GID_F_*, GID_D_*, GID_RC_*)
+require_once __DIR__ . '/../game/core/techs.php';
+
 /**
  * FixtureBuilder creates a test universe with 3 players in an in-memory SQLite database.
  * Used for Golden Pages snapshot testing.
@@ -124,6 +127,22 @@ class FixtureBuilder
                 oldplace2 INT DEFAULT 0,
                 oldplace3 INT DEFAULT 0,
                 scoredate INT UNSIGNED DEFAULT 0,
+                `".GID_R_ESPIONAGE."` TINYINT DEFAULT 0,
+                `".GID_R_COMPUTER."` TINYINT DEFAULT 0,
+                `".GID_R_WEAPON."` TINYINT DEFAULT 0,
+                `".GID_R_SHIELD."` TINYINT DEFAULT 0,
+                `".GID_R_ARMOUR."` TINYINT DEFAULT 0,
+                `".GID_R_ENERGY."` TINYINT DEFAULT 0,
+                `".GID_R_HYPERSPACE."` TINYINT DEFAULT 0,
+                `".GID_R_COMBUST_DRIVE."` TINYINT DEFAULT 0,
+                `".GID_R_IMPULSE_DRIVE."` TINYINT DEFAULT 0,
+                `".GID_R_HYPER_DRIVE."` TINYINT DEFAULT 0,
+                `".GID_R_LASER_TECH."` TINYINT DEFAULT 0,
+                `".GID_R_ION_TECH."` TINYINT DEFAULT 0,
+                `".GID_R_PLASMA_TECH."` TINYINT DEFAULT 0,
+                `".GID_R_IGN."` TINYINT DEFAULT 0,
+                `".GID_R_EXPEDITION."` TINYINT DEFAULT 0,
+                `".GID_R_GRAVITON."` TINYINT DEFAULT 0,
                 flags INT UNSIGNED DEFAULT 0,
                 feedid CHAR(32) DEFAULT '',
                 lastfeed INT UNSIGNED DEFAULT 0,
@@ -146,9 +165,57 @@ class FixtureBuilder
                 fields INT DEFAULT 0,
                 maxfields INT DEFAULT 100,
                 date INT UNSIGNED DEFAULT 0,
-                `700` DOUBLE DEFAULT 0,
-                `701` DOUBLE DEFAULT 0,
-                `702` DOUBLE DEFAULT 0,
+                `".GID_B_METAL_MINE."` TINYINT DEFAULT 0,
+                `".GID_B_CRYS_MINE."` TINYINT DEFAULT 0,
+                `".GID_B_DEUT_SYNTH."` TINYINT DEFAULT 0,
+                `".GID_B_SOLAR."` TINYINT DEFAULT 0,
+                `".GID_B_FUSION."` TINYINT DEFAULT 0,
+                `".GID_B_ROBOTS."` TINYINT DEFAULT 0,
+                `".GID_B_NANITES."` TINYINT DEFAULT 0,
+                `".GID_B_SHIPYARD."` TINYINT DEFAULT 0,
+                `".GID_B_METAL_STOR."` TINYINT DEFAULT 0,
+                `".GID_B_CRYS_STOR."` TINYINT DEFAULT 0,
+                `".GID_B_DEUT_STOR."` TINYINT DEFAULT 0,
+                `".GID_B_RES_LAB."` TINYINT DEFAULT 0,
+                `".GID_B_TERRAFORMER."` TINYINT DEFAULT 0,
+                `".GID_B_ALLY_DEPOT."` TINYINT DEFAULT 0,
+                `".GID_B_LUNAR_BASE."` TINYINT DEFAULT 0,
+                `".GID_B_PHALANX."` TINYINT DEFAULT 0,
+                `".GID_B_JUMP_GATE."` TINYINT DEFAULT 0,
+                `".GID_B_MISS_SILO."` TINYINT DEFAULT 0,
+                `".GID_D_RL."` INT UNSIGNED DEFAULT 0,
+                `".GID_D_LL."` INT UNSIGNED DEFAULT 0,
+                `".GID_D_HL."` INT UNSIGNED DEFAULT 0,
+                `".GID_D_GAUSS."` INT UNSIGNED DEFAULT 0,
+                `".GID_D_ION."` INT UNSIGNED DEFAULT 0,
+                `".GID_D_PLASMA."` INT UNSIGNED DEFAULT 0,
+                `".GID_D_SDOME."` INT UNSIGNED DEFAULT 0,
+                `".GID_D_LDOME."` INT UNSIGNED DEFAULT 0,
+                `".GID_D_ABM."` INT UNSIGNED DEFAULT 0,
+                `".GID_D_IPM."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_SC."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_LC."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_LF."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_HF."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_CRUISER."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_BATTLESHIP."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_COLON."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_RECYCLER."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_PROBE."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_BOMBER."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_SAT."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_DESTRO."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_DEATHSTAR."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_BATTLECRUISER."` INT UNSIGNED DEFAULT 0,
+                `".GID_RC_METAL."` DOUBLE DEFAULT 0,
+                `".GID_RC_CRYSTAL."` DOUBLE DEFAULT 0,
+                `".GID_RC_DEUTERIUM."` DOUBLE DEFAULT 0,
+                prod".GID_B_METAL_MINE." DOUBLE DEFAULT 1,
+                prod".GID_B_CRYS_MINE." DOUBLE DEFAULT 1,
+                prod".GID_B_DEUT_SYNTH." DOUBLE DEFAULT 1,
+                prod".GID_B_SOLAR." DOUBLE DEFAULT 1,
+                prod".GID_B_FUSION." DOUBLE DEFAULT 1,
+                prod".GID_F_SAT." DOUBLE DEFAULT 1,
                 lastpeek INT UNSIGNED DEFAULT 0,
                 lastakt INT UNSIGNED DEFAULT 0,
                 gate_until INT UNSIGNED DEFAULT 0,
@@ -199,9 +266,9 @@ class FixtureBuilder
                 fleet_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 owner_id INT DEFAULT 0,
                 union_id INT DEFAULT 0,
-                `700` DOUBLE DEFAULT 0,
-                `701` DOUBLE DEFAULT 0,
-                `702` DOUBLE DEFAULT 0,
+                `".GID_RC_METAL."` DOUBLE DEFAULT 0,
+                `".GID_RC_CRYSTAL."` DOUBLE DEFAULT 0,
+                `".GID_RC_DEUTERIUM."` DOUBLE DEFAULT 0,
                 fuel INT DEFAULT 0,
                 mission INT DEFAULT 0,
                 start_planet INT DEFAULT 0,
@@ -210,21 +277,20 @@ class FixtureBuilder
                 deploy_time INT DEFAULT 0,
                 ipm_amount INT DEFAULT 0,
                 ipm_target INT DEFAULT 0,
-                `1` INT UNSIGNED DEFAULT 0,
-                `2` INT UNSIGNED DEFAULT 0,
-                `3` INT UNSIGNED DEFAULT 0,
-                `4` INT UNSIGNED DEFAULT 0,
-                `5` INT UNSIGNED DEFAULT 0,
-                `6` INT UNSIGNED DEFAULT 0,
-                `7` INT UNSIGNED DEFAULT 0,
-                `8` INT UNSIGNED DEFAULT 0,
-                `9` INT UNSIGNED DEFAULT 0,
-                `10` INT UNSIGNED DEFAULT 0,
-                `11` INT UNSIGNED DEFAULT 0,
-                `12` INT UNSIGNED DEFAULT 0,
-                `13` INT UNSIGNED DEFAULT 0,
-                `14` INT UNSIGNED DEFAULT 0,
-                `15` INT UNSIGNED DEFAULT 0
+                `".GID_F_SC."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_LC."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_LF."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_HF."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_CRUISER."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_BATTLESHIP."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_COLON."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_RECYCLER."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_PROBE."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_BOMBER."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_SAT."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_DESTRO."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_DEATHSTAR."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_BATTLECRUISER."` INT UNSIGNED DEFAULT 0
             )",
             "CREATE TABLE {$this->dbPrefix}messages (
                 msg_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -388,21 +454,20 @@ class FixtureBuilder
                 owner_id INT DEFAULT 0,
                 name CHAR(30) DEFAULT '',
                 date INT UNSIGNED DEFAULT 0,
-                `1` INT UNSIGNED DEFAULT 0,
-                `2` INT UNSIGNED DEFAULT 0,
-                `3` INT UNSIGNED DEFAULT 0,
-                `4` INT UNSIGNED DEFAULT 0,
-                `5` INT UNSIGNED DEFAULT 0,
-                `6` INT UNSIGNED DEFAULT 0,
-                `7` INT UNSIGNED DEFAULT 0,
-                `8` INT UNSIGNED DEFAULT 0,
-                `9` INT UNSIGNED DEFAULT 0,
-                `10` INT UNSIGNED DEFAULT 0,
-                `11` INT UNSIGNED DEFAULT 0,
-                `12` INT UNSIGNED DEFAULT 0,
-                `13` INT UNSIGNED DEFAULT 0,
-                `14` INT UNSIGNED DEFAULT 0,
-                `15` INT UNSIGNED DEFAULT 0
+                `".GID_F_SC."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_LC."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_LF."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_HF."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_CRUISER."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_BATTLESHIP."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_COLON."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_RECYCLER."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_PROBE."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_BOMBER."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_SAT."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_DESTRO."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_DEATHSTAR."` INT UNSIGNED DEFAULT 0,
+                `".GID_F_BATTLECRUISER."` INT UNSIGNED DEFAULT 0
             )",
             "CREATE TABLE {$this->dbPrefix}botvars (
                 id INTEGER PRIMARY KEY,
@@ -617,9 +682,9 @@ class FixtureBuilder
             $sql = "INSERT INTO {$this->dbPrefix}users (
                 player_id, regdate, session, name, oname, email, lang, admin, validated, aktplanet,
                 score1, score2, score3, place1, place2, place3, lastlogin, lastclick,
-                GID_R_ESPIONAGE, GID_R_COMPUTER, GID_R_WEAPON, GID_R_SHIELD, GID_R_ARMOUR, GID_R_ENERGY,
-                GID_R_HYPERSPACE, GID_R_COMBUST_DRIVE, GID_R_IMPULSE_DRIVE, GID_R_HYPER_DRIVE,
-                GID_R_LASER_TECH, GID_R_ION_TECH, GID_R_PLASMA_TECH, GID_R_IGN, GID_R_EXPEDITION, GID_R_GRAVITON
+                `".GID_R_ESPIONAGE."`, `".GID_R_COMPUTER."`, `".GID_R_WEAPON."`, `".GID_R_SHIELD."`, `".GID_R_ARMOUR."`, `".GID_R_ENERGY."`,
+                `".GID_R_HYPERSPACE."`, `".GID_R_COMBUST_DRIVE."`, `".GID_R_IMPULSE_DRIVE."`, `".GID_R_HYPER_DRIVE."`,
+                `".GID_R_LASER_TECH."`, `".GID_R_ION_TECH."`, `".GID_R_PLASMA_TECH."`, `".GID_R_IGN."`, `".GID_R_EXPEDITION."`, `".GID_R_GRAVITON."`
             ) VALUES (
                 $playerId, $now, '$session', '{$pData['name']}', '{$pData['oname']}', '{$pData['email']}', 
                 '{$pData['lang']}', {$pData['admin']}, {$pData['validated']}, {$pData['aktplanet']},
@@ -643,21 +708,24 @@ class FixtureBuilder
         // Create planets for each player
         $planetConfigs = [
             // Player 1 planets
-            ['owner_id' => 1, 'name' => 'Home', 'g' => 1, 's' => 1, 'p' => 4, 'diameter' => 12200, 'temp' => 65, 'fields' => 14, 'maxfields' => 14, '1' => 5, '2' => 3, '3' => 2, '4' => 3, '212' => 1, '12' => 0, '14' => 3, '31' => 5, '21' => 4, '22' => 5, '23' => 4, '24' => 3, '44' => 1, '42' => 0, '43' => 0, '15' => 0],
-            ['owner_id' => 1, 'name' => 'Colony A', 'g' => 1, 's' => 1, 'p' => 5, 'diameter' => 11000, 'temp' => 60, 'fields' => 12, 'maxfields' => 12, '1' => 3, '2' => 2, '3' => 1, '4' => 2, '212' => 0, '12' => 0, '14' => 2, '31' => 3, '21' => 2, '22' => 3, '23' => 2, '24' => 2, '44' => 0, '42' => 0, '43' => 0, '15' => 0],
-            ['owner_id' => 1, 'name' => 'Colony B', 'g' => 1, 's' => 2, 'p' => 4, 'diameter' => 10500, 'temp' => 55, 'fields' => 10, 'maxfields' => 10, '1' => 2, '2' => 1, '3' => 1, '4' => 1, '212' => 0, '12' => 0, '14' => 1, '31' => 2, '21' => 1, '22' => 2, '23' => 1, '24' => 1, '44' => 0, '42' => 0, '43' => 0, '15' => 0],
+            ['owner_id' => 1, 'name' => 'Home', 'g' => 1, 's' => 1, 'p' => 4, 'diameter' => 12200, 'temp' => 65, 'fields' => 14, 'maxfields' => 14, GID_B_METAL_MINE => 5, GID_B_CRYS_MINE => 3, GID_B_DEUT_SYNTH => 2, GID_B_SOLAR => 3, GID_F_SAT => 1, GID_B_ROBOTS => 0, GID_B_SHIPYARD => 3, GID_B_METAL_STOR => 5, GID_B_METAL_MINE => 4, GID_B_CRYS_STOR => 5, GID_B_DEUT_STOR => 4, GID_B_MISS_SILO => 3, GID_B_ALLY_DEPOT => 1, GID_B_RES_LAB => 0, GID_B_TERRAFORMER => 0, GID_B_LUNAR_BASE => 0, GID_B_PHALANX => 0, GID_B_JUMP_GATE => 0, GID_B_LUNAR_BASE => 0],
+            ['owner_id' => 1, 'name' => 'Colony A', 'g' => 1, 's' => 1, 'p' => 5, 'diameter' => 11000, 'temp' => 60, 'fields' => 12, 'maxfields' => 12, GID_B_METAL_MINE => 3, GID_B_CRYS_MINE => 2, GID_B_DEUT_SYNTH => 1, GID_B_SOLAR => 2, GID_F_SAT => 0, GID_B_ROBOTS => 0, GID_B_SHIPYARD => 2, GID_B_METAL_STOR => 3, GID_B_METAL_MINE => 2, GID_B_CRYS_STOR => 3, GID_B_DEUT_STOR => 2, GID_B_MISS_SILO => 2, GID_B_ALLY_DEPOT => 0, GID_B_RES_LAB => 0, GID_B_TERRAFORMER => 0, GID_B_LUNAR_BASE => 0, GID_B_PHALANX => 0, GID_B_JUMP_GATE => 0, GID_B_LUNAR_BASE => 0],
+            ['owner_id' => 1, 'name' => 'Colony B', 'g' => 1, 's' => 2, 'p' => 4, 'diameter' => 10500, 'temp' => 55, 'fields' => 10, 'maxfields' => 10, GID_B_METAL_MINE => 2, GID_B_CRYS_MINE => 1, GID_B_DEUT_SYNTH => 1, GID_B_SOLAR => 1, GID_F_SAT => 0, GID_B_ROBOTS => 0, GID_B_SHIPYARD => 1, GID_B_METAL_STOR => 2, GID_B_METAL_MINE => 1, GID_B_CRYS_STOR => 2, GID_B_DEUT_STOR => 1, GID_B_MISS_SILO => 1, GID_B_ALLY_DEPOT => 0, GID_B_RES_LAB => 0, GID_B_TERRAFORMER => 0, GID_B_LUNAR_BASE => 0, GID_B_PHALANX => 0, GID_B_JUMP_GATE => 0, GID_B_LUNAR_BASE => 0],
             // Player 2 planets
-            ['owner_id' => 2, 'name' => 'Home', 'g' => 1, 's' => 3, 'p' => 4, 'diameter' => 11800, 'temp' => 62, 'fields' => 13, 'maxfields' => 13, '1' => 4, '2' => 3, '3' => 2, '4' => 2, '212' => 1, '12' => 0, '14' => 2, '31' => 4, '21' => 3, '22' => 4, '23' => 3, '24' => 2, '44' => 1, '42' => 0, '43' => 0, '15' => 0],
-            ['owner_id' => 2, 'name' => 'Colony X', 'g' => 1, 's' => 3, 'p' => 5, 'diameter' => 10800, 'temp' => 58, 'fields' => 11, 'maxfields' => 11, '1' => 2, '2' => 2, '3' => 1, '4' => 2, '212' => 0, '12' => 0, '14' => 1, '31' => 2, '21' => 1, '22' => 2, '23' => 1, '24' => 1, '44' => 0, '42' => 0, '43' => 0, '15' => 0],
-            ['owner_id' => 2, 'name' => 'Colony Y', 'g' => 1, 's' => 4, 'p' => 4, 'diameter' => 12500, 'temp' => 70, 'fields' => 15, 'maxfields' => 15, '1' => 3, '2' => 1, '3' => 2, '4' => 1, '212' => 0, '12' => 0, '14' => 2, '31' => 1, '21' => 2, '22' => 3, '23' => 1, '24' => 2, '44' => 0, '42' => 0, '43' => 0, '15' => 0],
+            ['owner_id' => 2, 'name' => 'Home', 'g' => 1, 's' => 3, 'p' => 4, 'diameter' => 11800, 'temp' => 62, 'fields' => 13, 'maxfields' => 13, GID_B_METAL_MINE => 4, GID_B_CRYS_MINE => 3, GID_B_DEUT_SYNTH => 2, GID_B_SOLAR => 2, GID_F_SAT => 1, GID_B_ROBOTS => 0, GID_B_SHIPYARD => 2, GID_B_METAL_STOR => 4, GID_B_METAL_MINE => 3, GID_B_CRYS_STOR => 4, GID_B_DEUT_STOR => 3, GID_B_MISS_SILO => 2, GID_B_ALLY_DEPOT => 1, GID_B_RES_LAB => 0, GID_B_TERRAFORMER => 0, GID_B_LUNAR_BASE => 0, GID_B_PHALANX => 0, GID_B_JUMP_GATE => 0, GID_B_LUNAR_BASE => 0],
+            ['owner_id' => 2, 'name' => 'Colony X', 'g' => 1, 's' => 3, 'p' => 5, 'diameter' => 10800, 'temp' => 58, 'fields' => 11, 'maxfields' => 11, GID_B_METAL_MINE => 2, GID_B_CRYS_MINE => 2, GID_B_DEUT_SYNTH => 1, GID_B_SOLAR => 2, GID_F_SAT => 0, GID_B_ROBOTS => 0, GID_B_SHIPYARD => 1, GID_B_METAL_STOR => 2, GID_B_METAL_MINE => 1, GID_B_CRYS_STOR => 2, GID_B_DEUT_STOR => 1, GID_B_MISS_SILO => 1, GID_B_ALLY_DEPOT => 0, GID_B_RES_LAB => 0, GID_B_TERRAFORMER => 0, GID_B_LUNAR_BASE => 0, GID_B_PHALANX => 0, GID_B_JUMP_GATE => 0, GID_B_LUNAR_BASE => 0],
+            ['owner_id' => 2, 'name' => 'Colony Y', 'g' => 1, 's' => 4, 'p' => 4, 'diameter' => 12500, 'temp' => 70, 'fields' => 15, 'maxfields' => 15, GID_B_METAL_MINE => 3, GID_B_CRYS_MINE => 1, GID_B_DEUT_SYNTH => 2, GID_B_SOLAR => 1, GID_F_SAT => 0, GID_B_ROBOTS => 0, GID_B_SHIPYARD => 2, GID_B_METAL_STOR => 1, GID_B_METAL_MINE => 2, GID_B_CRYS_STOR => 3, GID_B_DEUT_STOR => 1, GID_B_MISS_SILO => 2, GID_B_ALLY_DEPOT => 0, GID_B_RES_LAB => 0, GID_B_TERRAFORMER => 0, GID_B_LUNAR_BASE => 0, GID_B_PHALANX => 0, GID_B_JUMP_GATE => 0, GID_B_LUNAR_BASE => 0],
             // Player 3 planets
-            ['owner_id' => 3, 'name' => 'Home', 'g' => 1, 's' => 5, 'p' => 4, 'diameter' => 11500, 'temp' => 55, 'fields' => 12, 'maxfields' => 12, '1' => 3, '2' => 2, '3' => 1, '4' => 2, '212' => 0, '12' => 0, '14' => 1, '31' => 3, '21' => 2, '22' => 3, '23' => 2, '24' => 1, '44' => 0, '42' => 0, '43' => 0, '15' => 0],
-            ['owner_id' => 3, 'name' => 'Colony Alpha', 'g' => 1, 's' => 5, 'p' => 5, 'diameter' => 10200, 'temp' => 50, 'fields' => 9, 'maxfields' => 9, '1' => 1, '2' => 1, '3' => 0, '4' => 1, '212' => 0, '12' => 0, '14' => 0, '31' => 1, '21' => 0, '22' => 1, '23' => 1, '24' => 0, '44' => 0, '42' => 0, '43' => 0, '15' => 0],
-            ['owner_id' => 3, 'name' => 'Colony Beta', 'g' => 1, 's' => 6, 'p' => 4, 'diameter' => 12000, 'temp' => 60, 'fields' => 14, 'maxfields' => 14, '1' => 2, '2' => 2, '3' => 1, '4' => 2, '212' => 1, '12' => 0, '14' => 1, '31' => 2, '21' => 1, '22' => 2, '23' => 2, '24' => 1, '44' => 0, '42' => 0, '43' => 0, '15' => 0],
+            ['owner_id' => 3, 'name' => 'Home', 'g' => 1, 's' => 5, 'p' => 4, 'diameter' => 11500, 'temp' => 55, 'fields' => 12, 'maxfields' => 12, GID_B_METAL_MINE => 3, GID_B_CRYS_MINE => 2, GID_B_DEUT_SYNTH => 1, GID_B_SOLAR => 2, GID_F_SAT => 0, GID_B_ROBOTS => 0, GID_B_SHIPYARD => 1, GID_B_METAL_STOR => 3, GID_B_METAL_MINE => 2, GID_B_CRYS_STOR => 3, GID_B_DEUT_STOR => 2, GID_B_MISS_SILO => 1, GID_B_ALLY_DEPOT => 0, GID_B_RES_LAB => 0, GID_B_TERRAFORMER => 0, GID_B_LUNAR_BASE => 0, GID_B_PHALANX => 0, GID_B_JUMP_GATE => 0, GID_B_LUNAR_BASE => 0],
+            ['owner_id' => 3, 'name' => 'Colony Alpha', 'g' => 1, 's' => 5, 'p' => 5, 'diameter' => 10200, 'temp' => 50, 'fields' => 9, 'maxfields' => 9, GID_B_METAL_MINE => 1, GID_B_CRYS_MINE => 1, GID_B_DEUT_SYNTH => 0, GID_B_SOLAR => 1, GID_F_SAT => 0, GID_B_ROBOTS => 0, GID_B_SHIPYARD => 0, GID_B_METAL_STOR => 1, GID_B_METAL_MINE => 0, GID_B_CRYS_STOR => 1, GID_B_DEUT_STOR => 1, GID_B_MISS_SILO => 0, GID_B_ALLY_DEPOT => 0, GID_B_RES_LAB => 0, GID_B_TERRAFORMER => 0, GID_B_LUNAR_BASE => 0, GID_B_PHALANX => 0, GID_B_JUMP_GATE => 0, GID_B_LUNAR_BASE => 0],
+            ['owner_id' => 3, 'name' => 'Colony Beta', 'g' => 1, 's' => 6, 'p' => 4, 'diameter' => 12000, 'temp' => 60, 'fields' => 14, 'maxfields' => 14, GID_B_METAL_MINE => 2, GID_B_CRYS_MINE => 2, GID_B_DEUT_SYNTH => 1, GID_B_SOLAR => 2, GID_F_SAT => 1, GID_B_ROBOTS => 0, GID_B_SHIPYARD => 1, GID_B_METAL_STOR => 2, GID_B_METAL_MINE => 1, GID_B_CRYS_STOR => 2, GID_B_DEUT_STOR => 2, GID_B_MISS_SILO => 1, GID_B_ALLY_DEPOT => 0, GID_B_RES_LAB => 0, GID_B_TERRAFORMER => 0, GID_B_LUNAR_BASE => 0, GID_B_PHALANX => 0, GID_B_JUMP_GATE => 0, GID_B_LUNAR_BASE => 0],
         ];
 
         foreach ($planetConfigs as $pConfig) {
-            $columns = array_map(fn($k) => "`$k`", array_keys($pConfig));
+            $columns = [];
+            foreach (array_keys($pConfig) as $k) {
+                $columns[] = is_numeric($k) ? "`$k`" : "`$k`";
+            }
             $columnsStr = implode(',', $columns);
             $values = array_values($pConfig);
             $placeholders = str_repeat('?,', count($values) - 1) . '?';
@@ -681,8 +749,8 @@ class FixtureBuilder
 
         // Add some fleet to player 1
         $fleetData = [
-            ['owner_id' => 1, 'start_planet' => 1, 'target_planet' => 4, 'mission' => 6, 'amount' => 5, 'tech_id' => 1],  // Small Cargo
-            ['owner_id' => 1, 'start_planet' => 1, 'target_planet' => 7, 'mission' => 1, 'amount' => 3, 'tech_id' => 15], // Light Fighter
+            ['owner_id' => 1, 'start_planet' => 1, 'target_planet' => 4, 'mission' => 6, 'amount' => 5, 'tech_id' => GID_F_SC],  // Small Cargo
+            ['owner_id' => 1, 'start_planet' => 1, 'target_planet' => 7, 'mission' => 1, 'amount' => 3, 'tech_id' => GID_F_LF], // Light Fighter
         ];
 
         foreach ($fleetData as $fData) {
