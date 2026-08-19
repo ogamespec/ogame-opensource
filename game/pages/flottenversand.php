@@ -23,7 +23,8 @@ class Flottenversand extends Page {
 
         // If the page is opened through a browser, make a redirect to the main page.
         if ( method () === "GET" ) {
-            return false;    // Signal to not render view
+            RedirectHome ();
+            die ();
         }
 
         // Handle AJAX requests
@@ -168,12 +169,10 @@ class Flottenversand extends Page {
 
         if ($this->numships <= 0) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_NO_SHIPS")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
 
-        $this->success = !$this->FleetError;
-
-        if (!$this->success) {
-            return true;
-        }
-
+        // The classic page always ran the order switch (accumulating further
+        // error rows and side effects like colony phantoms) even when a
+        // pre-switch check already failed; the final gate below decides
+        // between error display and dispatch.
         switch ( $this->order )
         {
             case FTYP_ATTACK:        // Attack
@@ -432,10 +431,10 @@ class Flottenversand extends Page {
     private int $union_id = 0;
     private ?array $union;
     private array $fleet = [];
-    private array $origin;
-    private array $target;
-    private array $origin_user;
-    private array $target_user;
+    private $origin;
+    private $target;
+    private $origin_user;
+    private $target_user;
     private int $hold_time = 0;
     private int $dist = 0;
     private int $slowest_speed = 0;
@@ -445,7 +444,6 @@ class Flottenversand extends Page {
     private int $spycargo = 0;
     private int $numships = 0;
     private array $resources = [];
-    private bool $success = false;
     private int $fleet_id = 0;
     private array $queue;
     private int $union_time = 0;

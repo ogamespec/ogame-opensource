@@ -315,15 +315,16 @@ function fenster(target_url,win_name) {
 <!-- CONTENT AREA -->
 <div id='content'>
 <center>
-   <input type="hidden" name="ship202" value="5" />
-   <input type="hidden" name="ship204" value="5" />
 
         <script language="JavaScript" src="js/flotten.js"></script>
         <script language="JavaScript" src="js/ocnt.js"></script>
 
         <script type="text/javascript">
-        function getStorageFaktor(){ return 1; }
+        function getStorageFaktor(){
+            return 1  }
         </script>
+
+        <!-- <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>  -->
 
         <center>
         <table width="519" border="0" cellpadding="0" cellspacing="1">
@@ -337,6 +338,8 @@ function fenster(target_url,win_name) {
         <input name="thisresource1" type="hidden" value="25047" />
 <input name="thisresource2" type="hidden" value="15016" />
 <input name="thisresource3" type="hidden" value="8003" />
+   <input type="hidden" name="ship202" value="5" />
+   <input type="hidden" name="ship204" value="5" />
 
         <tr height="20">
             <td colspan="2" class="c">Departure of the fleet</td>
@@ -353,7 +356,6 @@ function fenster(target_url,win_name) {
   <option value="2" >debris field </option>
   <option value="3" >moon </option>
                 </select>
-            </th>
         </tr>
         <tr height="20">
             <th>Speed</th>

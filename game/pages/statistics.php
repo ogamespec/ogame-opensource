@@ -267,7 +267,8 @@ class Statistics extends Page {
                 echo "</table>\n";
                 echo "<!-- end user -->\n";
             }
-            ?><!-- end statistic data --><br><br><br><br><?php
+            ?><!-- end statistic data --><br><br><br><br>
+<?php
     }
 }
 ?>

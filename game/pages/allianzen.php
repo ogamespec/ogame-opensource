@@ -17,10 +17,12 @@ class Allianzen extends Page {
     private string $SearchResults = "";
     private array $ally = [];
     private int $action = 0;
+    private bool $ally_created = false;
 
     public function controller () : bool {
         global $GlobalUser;
         global $session;
+        global $PageError;
 
         $this->SearchResults = "";
 
@@ -40,7 +42,10 @@ class Allianzen extends Page {
                 else if (IsAllyTagExist ($_POST['tag'])) $PageError = va(loca("ALLY_FOUND_ERROR_EXISTS"), $_POST['tag']);
                 else {
                     CreateAlly ($GlobalUser['player_id'], $_POST['tag'], $_POST['name']);
-                    MyGoto ( "allianzen" );
+                    // The classic page rendered an inline success confirmation
+                    // (ALLY_FOUND_SUCCESS + confirm form) and exited; keep that
+                    // instead of redirecting away.
+                    $this->ally_created = true;
                 }
             }
             else if ( $_GET['a'] == 2 ) {
@@ -102,6 +107,15 @@ class Allianzen extends Page {
 
         echo "<script src=\"js/cntchar.js\" type=\"text/javascript\"></script><script src=\"js/win.js\" type=\"text/javascript\"></script>\n";
 
+        // Alliance successfully created: render the inline success page (like
+        // the classic page did before exiting).
+        if ( $this->ally_created ) {
+            echo "<br/><p>".va(loca("ALLY_FOUND_SUCCESS"), $_POST['name'], $_POST['tag'])."</p>\n";
+            echo "<form method=\"post\" action=\"index.php?page=allianzen&session=".$_GET['session']."\">\n";
+            echo "<input type=\"submit\" value=\"".loca("ALLY_FOUND_CONFIRM")."\"/></form><br/><br/><br/><br/>\n";
+            return;
+        }
+
         if ( $GlobalUser['ally_id'] == 0 ) {
             $app_id = GetUserApplication ($GlobalUser['player_id']);
             if ( $app_id > 0 ) {
@@ -162,22 +176,23 @@ class Allianzen extends Page {
 
     private function AllyPage_SearchResult (mixed $result) : void {
         global $session;
+        $this->SearchResults = "";
         $rows = dbrows ($result);
         if ($rows == 0) return;
-        echo "<table width=519>\n";
-        echo "<tr><td class=c colspan=3>".loca("ALLY_FIND_RESULT")."</th></tr>\n";
-        echo "<tr><th><center>".loca("ALLY_FIND_TAG")."</center></th><th><center>".loca("ALLY_FIND_NAME")."</center></th><th><center>".loca("ALLY_FIND_MEMBERS")."</center></th></tr>\n";
+        $this->SearchResults .= "<table width=519>\n";
+        $this->SearchResults .= "<tr><td class=c colspan=3>".loca("ALLY_FIND_RESULT")."</th></tr>\n";
+        $this->SearchResults .= "<tr><th><center>".loca("ALLY_FIND_TAG")."</center></th><th><center>".loca("ALLY_FIND_NAME")."</center></th><th><center>".loca("ALLY_FIND_MEMBERS")."</center></th></tr>\n";
         if ($rows > 30) $rows = 30;
         for ($i=0; $i<$rows; $i++)
         {
             $ally = dbarray ($result);
             $enum = EnumerateAlly ($ally['ally_id']);
             $players = dbrows ($enum);
-            echo "<tr><th><center>[<a href=\"index.php?page=bewerben&session=".$_GET['session']."&allyid=".$ally['ally_id']."\">".$ally['tag']."</a>]</center></th>\n";
-            echo "<th><center>".$ally['name']."</center></th>\n";
-            echo "<th><center>".$players."</center></th></tr>\n";
+            $this->SearchResults .= "<tr><th><center>[<a href=\"index.php?page=bewerben&session=".$_GET['session']."&allyid=".$ally['ally_id']."\">".$ally['tag']."</a>]</center></th>\n";
+            $this->SearchResults .= "<th><center>".$ally['name']."</center></th>\n";
+            $this->SearchResults .= "<th><center>".$players."</center></th></tr>\n";
         }
-        echo "</table><br>\n";
+        $this->SearchResults .= "</table><br>\n";
     }
 
     private function AllyPage_Already (int $app_id) : void {

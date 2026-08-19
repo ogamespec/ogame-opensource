@@ -44,24 +44,19 @@ class Flotten3 extends Page {
 
         $fleetmap_nosat = array_diff($fleetmap, [GID_F_SAT]);
 
+        $galaxy = $this->galaxy;
+        $system = $this->system;
+        $planet = $this->planet;
+
         $total = 0;
         foreach ($fleetmap_nosat as $i=>$gid) 
         {
             if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet[$gid] , abs ( intval($_POST["ship$gid"]) ) );
             else $amount = 0;
             $total += $amount;
-
-            if ( $amount > 0 ) {
-                if ( key_exists("ship$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"ship$gid\" value=\"".$amount."\" />\n";
-                if ( key_exists("consumption$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"consumption$gid\" value=\"".intval($_POST["consumption$gid"])."\" />\n";
-                if ( key_exists("speed$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"speed$gid\" value=\"".intval($_POST["speed$gid"])."\" />\n";
-                if ( key_exists("capacity$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"capacity$gid\" value=\"".intval ($_POST["capacity$gid"])."\" />\n";
-            }
         }
 
         if ( $total == 0 ) MyGoto ( "flotten1" );
-
-        echo "<input type=\"hidden\" name=\"speed\" value=\"".intval($_POST['speed'])."\" />\n";
         ?>
 
         <script language="JavaScript" src="js/flotten.js"></script>
@@ -69,23 +64,45 @@ class Flotten3 extends Page {
         function getStorageFaktor(){ return 1; }
         </script>
 
+        <!--
+         <body>
+         <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+        -->
         <center>
         <table width="519" border="0" cellpadding="0" cellspacing="1">
+
         <form action="index.php?page=flottenversand&session=<?php echo $session;?>" method="POST">
 
-        <input name="thisgalaxy" type="hidden" value="<?php echo intval($_POST['thisgalaxy']);?>" />
-        <input name="thissystem" type="hidden" value="<?php echo intval($_POST['thissystem']);?>" />
-        <input name="thisplanet" type="hidden" value="<?php echo intval($_POST['thisplanet']);?>" />
-        <input name="thisplanettype" type="hidden" value="<?php echo intval($_POST['thisplanettype']);?>" />
-        <input name="speedfactor" type="hidden" value="<?php echo intval($_POST['speedfactor']);?>" />
         <?php
+        // Target coordinates and resource data.
+        echo "<input name=\"thisgalaxy\" type=\"hidden\" value=\"".intval($_POST['thisgalaxy'])."\" />\n";
+        echo "<input name=\"thissystem\" type=\"hidden\" value=\"".intval($_POST['thissystem'])."\" />\n";
+        echo "<input name=\"thisplanet\" type=\"hidden\" value=\"".intval($_POST['thisplanet'])."\" />\n";
+        echo "<input name=\"thisplanettype\" type=\"hidden\" value=\"".intval($_POST['thisplanettype'])."\" />\n";
+        echo "<input name=\"speedfactor\" type=\"hidden\" value=\"".intval($_POST['speedfactor'])."\" />\n";
         foreach ($transportableResources as $i=>$rc) {
             echo "<input name=\"thisresource".($i+1)."\" type=\"hidden\" value=\"".floor($aktplanet[$rc])."\" />\n";
         }
-        echo "<input name=\"galaxy\" type=\"hidden\" value=\"".$this->galaxy."\" />\n";
-        echo "<input name=\"system\" type=\"hidden\" value=\"".$this->system."\" />\n";
-        echo "<input name=\"planet\" type=\"hidden\" value=\"".$this->planet."\" />\n";
+        echo "<input name=\"galaxy\" type=\"hidden\" value=\"".$galaxy."\" />\n";
+        echo "<input name=\"system\" type=\"hidden\" value=\"".$system."\" />\n";
+        echo "<input name=\"planet\" type=\"hidden\" value=\"".$planet."\" />\n";
         echo "<input name=\"planettype\" type=\"hidden\" value=\"".intval($_POST['planettype'])."\" />\n\n";
+
+        // Fleet List.
+        foreach ($fleetmap_nosat as $i=>$gid)
+        {
+            if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet[$gid] , abs ( intval($_POST["ship$gid"]) ) );
+            else $amount = 0;
+
+            if ( $amount > 0 ) {
+                if ( key_exists("ship$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"ship$gid\" value=\"".$amount."\" />\n";
+                if ( key_exists("consumption$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"consumption$gid\" value=\"".intval($_POST["consumption$gid"])."\" />\n";
+                if ( key_exists("speed$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"speed$gid\" value=\"".intval($_POST["speed$gid"])."\" />\n";
+                if ( key_exists("capacity$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"capacity$gid\" value=\"".intval($_POST["capacity$gid"])."\" />\n";
+            }
+        }
+
+        echo "<input type=\"hidden\" name=\"speed\" value=\"".intval($_POST['speed'])."\" />\n";
         ?>
 
         <tr height="20" align="left">

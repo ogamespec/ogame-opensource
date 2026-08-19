@@ -11,6 +11,7 @@ class Sprungtor extends Page {
         global $db_prefix;
         global $fleetmap;
         global $PageError;
+        global $now;
 
         // In the pre-MVC layout $PageError was a page-level global set by the
         // renderer; declare it here so the checks below see it.

@@ -281,11 +281,12 @@ class Messages extends Page {
             // Communication with operators involved the use of regular mail (mailto).
             $result = EnumOperators ();
             $rows = dbrows ($result);
+            $uni = LoadUniverse ();
             while ($rows--)
             {
                 $oper = dbarray ($result);
                 // Customize the option to send a regular game message if the operator does not want to reveal their mailing address
-                $subj = va(loca("MSG_OPER_TEXT"), $GlobalUser['oname'], $oper['uni']);
+                $subj = va(loca("MSG_OPER_TEXT"), $GlobalUser['oname'], $uni['num']);
                 if ($oper['flags'] & USER_FLAG_HIDE_GO_EMAIL) $href = "index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$oper['player_id']."&betreff=".$subj;
                 else $href = "mailto:".$oper['email']."?subject=".$subj;
 

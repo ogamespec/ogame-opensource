@@ -1,37 +1,78 @@
 <?php
 
-// Buddy applications list
+// List of applications to join the alliance.
 
 class Bewerbungen extends Page {
 
+    private ?array $ally = null;
+    private int $show = 0;
+    private int $sort = 1;
+
     public function controller () : bool {
         global $GlobalUser;
+        global $db_prefix;
+        global $now;
 
-        // Process GET action
-        if ( key_exists ('action', $_GET) ) {
-            if ( $_GET['action'] == 1 && key_exists('buddy_id', $_GET) ) {
-                $buddy_id = intval ($_GET['buddy_id']);
-                $buddy = LoadBuddy ($buddy_id);
-                if ( $buddy['request_to'] == $GlobalUser['player_id'] ) {
-                    AcceptBuddy ($buddy_id);
-                    SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va(loca("BUDDY_MSG_ADDED"), $GlobalUser['oname']), MTYP_PM);
+        $this->ally = LoadAlly ( $GlobalUser['ally_id'] );
+
+        $this->show = 0;
+        if ( key_exists ( 'show', $_GET ) ) $this->show = intval($_GET['show']);
+        $this->sort = 1;
+        if ( key_exists ( 'sort', $_GET ) ) $this->sort = intval($_GET['sort']) & 1;
+
+        if ( method () === "POST" )
+        {
+            if ( $_POST['aktion'] === loca("ALLY_APPA_ACCEPT") && $this->show > 0 )
+            {
+                $app = LoadApplication ($this->show);
+                $ally_id = $this->ally['ally_id'];
+                $player_id = $app['player_id'];
+                $newcomer = LoadUser ($player_id);
+                if ($newcomer == null) {
+                    MyGoto ("bewerbungen");
                 }
+
+                $result = EnumerateAlly ($ally_id);        // Send out messages to alliance members and the player about the acceptance.
+                $rows = dbrows ($result);
+                while ($rows--)
+                {
+                    $user = dbarray ($result);
+                    loca_add ("ally", $user['lang']);
+                    SendMessage ( $user['player_id'],
+                        va(loca_lang("ALLY_MSG_FROM", $user['lang']), $this->ally['tag']),
+                        loca_lang("ALLY_MSG_COMMON", $user['lang']),
+                        va(loca_lang("ALLY_MSG_APPLY_ALLY", $user['lang']), $newcomer['oname']), MTYP_ALLY);
+                }
+                loca_add ("ally", $newcomer['lang']);
+                SendMessage ( $player_id,
+                    va(loca_lang("ALLY_MSG_FROM", $newcomer['lang']), $this->ally['tag']),
+                    va(loca_lang("ALLY_MSG_APPLY_YES", $newcomer['lang']), $this->ally['tag']),
+                    va(loca_lang("ALLY_MSG_APPLY_PLAYER", $newcomer['lang']), $this->ally['tag']), MTYP_ALLY );
+
+                $query = "UPDATE ".$db_prefix."users SET ally_id = $ally_id, allyrank = 1, joindate = $now WHERE player_id = $player_id";
+                dbquery ($query);
+                RemoveApplication ( $this->show );
+                MyGoto ("bewerbungen");
             }
-            else if ( $_GET['action'] == 2 && key_exists('buddy_id', $_GET) ) {
-                $buddy_id = intval ($_GET['buddy_id']);
-                $buddy = LoadBuddy ($buddy_id);
-                if ( $buddy['request_to'] == $GlobalUser['player_id'] ) {
-                    RemoveBuddy ($buddy_id);
-                    SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va(loca("BUDDY_MSG_DECLINED"), $GlobalUser['oname']), MTYP_PM);
+
+            if ( $_POST['aktion'] === loca("ALLY_APPA_REJECT") && $this->show > 0 )
+            {
+                $app = LoadApplication ($this->show);
+                $player_id = $app['player_id'];
+                $newcomer = LoadUser ($player_id);
+                RemoveApplication ( $this->show );
+
+                // Send a rejection message.
+                if ($newcomer != null) {
+                    loca_add ("ally", $newcomer['lang']);
+                    $reason = loca_lang("ALLY_MSG_APPLY_NO_REASON", $newcomer['lang']);
+                    if ( $_POST['text'] !== "" ) $reason = $_POST['text'];
+                    SendMessage ( $app['player_id'],
+                        va(loca_lang("ALLY_MSG_FROM", $newcomer['lang']), $this->ally['tag']),
+                        va(loca_lang("ALLY_MSG_APPLY_NO", $newcomer['lang']), $this->ally['tag']),
+                        $reason, MTYP_ALLY );
                 }
-            }
-            else if ( $_GET['action'] == 3 && key_exists('buddy_id', $_GET) ) {
-                $buddy_id = intval ($_GET['buddy_id']);
-                $buddy = LoadBuddy ($buddy_id);
-                if ( $buddy['request_from'] == $GlobalUser['player_id'] ) {
-                    RemoveBuddy ($buddy_id);
-                    SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va (loca("BUDDY_MSG_RECALLED"), $GlobalUser['oname']), MTYP_PM );
-                }
+                MyGoto ("bewerbungen");
             }
         }
 
@@ -42,51 +83,64 @@ class Bewerbungen extends Page {
         global $GlobalUser;
         global $session;
 
-        echo "<table width=\"519\">\n";
-        echo " <tr><td class=\"c\" colspan=\"6\">".loca("BUDDY_APPLICATIONS")."</td></tr>\n";
+        $ally = $this->ally;
+        $show = $this->show;
+        $sort = $this->sort;
+        $maxchars = 2000;
 
-        $result = EnumApplications ($GlobalUser['player_id']);
-        $num = dbrows ($result);
-        if ($num)
+        $result = EnumApplications ( $ally['ally_id'] );
+        $apps = dbrows ( $result );
+
+        if ($apps > 0 )
         {
-            echo " <tr>\n";
-            echo " <th></th>\n";
-            echo " <th>".loca("BUDDY_USER")."</th>\n";
-            echo "  <th>".loca("BUDDY_ALLY")."</th>\n";
-            echo "  <th>".loca("BUDDY_COORD")."</th>\n";
-            echo "  <th>".loca("BUDDY_TEXT")."</th>\n";
-            echo "  <th></th>\n";
-            echo " </tr>\n";
-            $i = 1;
-            while ($num--)
+
+        ?>
+        <table width=519>
+        <tr><td class=c colspan=2><?=va(loca("ALLY_APPA_OVERVIEW"), $ally['tag']);?></td></tr>
+        <?php
+            if ( $show > 0 )
+            {
+                $app = LoadApplication ($show);
+                $user = LoadUser ($app['player_id']);
+        ?>
+        <tr><th colspan=2><?=va(loca("ALLY_APPA_FROM"), $user['oname']);?></th></tr>
+        <form action="index.php?page=bewerbungen&session=<?=$session;?>&show=<?=$show;?>&sort=<?=$sort;?>" method=POST>
+        <tr><th colspan=2><?=str_replace("\n", "\n<br>", stripslashes($app['text']) );?></th></tr>
+        <tr><td class=c colspan=2><?=loca("ALLY_APPA_ACTION");?></td></tr>
+        <tr><th>&#160;</th><th><input type=submit name="aktion" value="<?=loca("ALLY_APPA_ACCEPT");?>"></th></tr>
+        <tr><th><?=va(loca("ALLY_APPA_REASON"), "<span id=\"cntChars\">0</span>", $maxchars);?></th><th><textarea name="text" cols=40 rows=10 onkeyup="javascript:cntchar(<?=$maxchars;?>)"></textarea></th></tr>
+        <tr><th>&#160;</th><th><input type=submit name="aktion" value="<?=loca("ALLY_APPA_REJECT");?>"></th></tr>
+        <tr><td>&#160;</td></tr>
+        </form>
+        <?php
+            }
+        ?>
+        <tr><th colspan=2><?=va(loca("ALLY_APPA_AVAILABLE"), $apps);?></th></tr>
+        <tr>
+            <td class=c><center><a href="index.php?page=bewerbungen&session=<?=$session;?>&show=<?=$show;?>&sort=1"><?=loca("ALLY_APPA_USER");?></a></center></td>
+            <td class=c><center><a href="index.php?page=bewerbungen&session=<?=$session;?>&show=<?=$show;?>&sort=0"><?=loca("ALLY_APPA_DATE");?></a></center></th></tr>
+        <tr>
+        <?php
+            while ($apps--)
             {
                 $app = dbarray ($result);
-                $userfrom = LoadUser ($app['player_id']);
-                $home = LoadPlanetById ($userfrom['hplanetid']);
-                echo "  <tr>\n";
-                echo " <th width=\"20\">$i</th>\n";
-                echo "  <th><a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$userfrom['player_id']."\">".$userfrom['oname']."</a></th>\n";
-                if ($userfrom['ally_id'] > 0)
-                {
-                    $ally = LoadAlly ($userfrom['ally_id']);
-                    echo "    <th><a href=index.php?page=ainfo&session=".$_GET['session']."&allyid=".$userfrom['ally_id']." target='_ally'> ";
-                    echo $ally['tag'];
-                    if ($userfrom['allyrank'] == 0) echo "  (G)";
-                    echo "</a></th>\n";
-                }
-                else echo "    <th><a href=index.php?page=allianzen&session=".$_GET['session'].">  </a></th>\n";
-                echo "  <th><a href=\"index.php?page=galaxy&galaxy=".$home['g']."&system=".$home['s']."&position=".$home['p']."&session=".$_GET['session']."\" >[".$home['g'].":".$home['s'].":".$home['p']."]</a></th>\n";
-                echo "  <th>".$app['text']."</th>\n";
-                echo "    <th width=\"100\"><a href=?page=bewerbungen&session=".$_GET['session']."&action=1&buddy_id=".$app['app_id'].">".loca("BUDDY_APPLY")."</a>\n";
-                echo "   <a href=?page=bewerbungen&session=".$_GET['session']."&action=2&buddy_id=".$app['app_id'].">".loca("BUDDY_DECLINE")."</a></th>\n";
-                echo "  </tr>\n";
-                $i++;
+                $user = LoadUser ($app['player_id']);
+                echo "    <th><center><a href=\"index.php?page=bewerbungen&session=$session&show=".$app['app_id']."&sort=$sort\">".$user['oname']."</a></center></th>\n";
+                echo "    <th><center>".date ("Y-m-d H:i:s", $app['date'])."</center></th></tr>\n";
             }
-        }
-        else echo " <tr>   <th colspan=\"6\">".loca("BUDDY_NO_APPLICATIONS")."</th>  </tr>\n";
+        ?>
+        </table><br><br><br><br>
+        <?php
 
-        echo " <tr>  <td class=\"c\" colspan=\"6\"><a href=\"?page=buddy&session=".$_GET['session']."\">".loca("BUDDY_BACK")."</a></td> </tr>\n";
-        echo "</table><br><br><br><br>\n";
+        }
+        else
+        {
+
+        ?>
+        <table width=519><tr><td class=c colspan=2><?=va(loca("ALLY_APPA_OVERVIEW"), $ally['tag']);?></td></tr><tr><th colspan=2><?=loca("ALLY_APPA_NONE");?></th></tr></table><br><br><br><br>
+        <?php
+
+        }
     }
 }
 ?>

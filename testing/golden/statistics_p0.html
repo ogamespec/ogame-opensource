@@ -315,65 +315,55 @@ function fenster(target_url,win_name) {
 <!-- CONTENT AREA -->
 <div id='content'>
 <center>
-<!-- begin header form --> 
-<form method="post" action='index.php?page=statistics&session=0000000003e9' > 
-  
-  <!-- begin head table --> 
-  <table width="525"> 
-    <tr> 
-      <td class="c">Statistics (as of: 2026-08-19, 07:13:01)</td> 
-    </tr> 
-    <tr> 
-      <th> 
-        
- 
-        What kind of&nbsp;
-          
-        <select name="who"> 
-          <option value="player" selected>Player</option> 
-          <option value="ally" >Alliance</option> 
-        </select> 
-          
-        &nbsp;by&nbsp;
-              
-        <select name="type"> 
-          <option value="ressources" >Points</option> 
-          <option value="fleet" >Fleets</option> 
-          <option value="research" >Research</option> 
-        </select> 
-          
-        &nbsp;in place        <select name="start"> 
-          <option value="-1" selected>[Own position]</option> 
-          <option value="1" >1-100</option> 
-        </select> 
-          
-        <input type="hidden" id="sort_per_member" name="sort_per_member" value="0" /> 
-        <input type=submit value="Show"> 
-      </th> 
-    </tr> 
-  </table> 
-  <!-- end head table --> 
-    
-</form> 
-<!-- end header form --> 
+        <!-- begin header form -->
+        <form method="post" action='index.php?page=statistics&session=0000000003e9' >
+            <!-- begin head table -->
+            <table width="525">
+                <tr>
+                    <td class="c">Statistics (as of: 2026-08-19, 16:45:41)</td>
+                </tr>
+                <tr>
+                    <th>
+                        What kind of&nbsp;
+                        <select name="who">
+                            <option value="player" selected>Player</option>
+                            <option value="ally" >Alliance</option>
+                        </select>
+                        &nbsp;by&nbsp;
+                        <select name="type">
+                            <option value="ressources" >Points</option>
+                            <option value="fleet" >Fleets</option>
+                            <option value="research" >Research</option>
+                        </select>
+                        &nbsp;in place                        <select name="start">
+                            <option value="-1" selected>[Own position]</option>
+                                      <option value="1" >1-100</option> 
+                        </select>
+                        <input type="hidden" id="sort_per_member" name="sort_per_member" value="0" />
+                        <input type=submit value="Show">
+                    </th>
+                </tr>
+            </table>
+            <!-- end head table -->
+        </form>
+        <!-- end header form -->
 
-<!-- begin statistic data --> 
-<!-- begin user --> 
-<table width="525"> 
-  <tr> 
-    <td class="c" width="30">Place</td> 
-    <td class="c">Player</td> 
-    <td class="c">&nbsp;</td> 
-    <td class="c">Alliance</td> 
-    <td class="c">Points</td> 
-  </tr>
-
-  <tr> 
+                <!-- begin statistic data -->
+                <!-- begin user -->
+        <table width="525">
+            <tr>
+                <td class="c" width="30">Place</td>
+                <td class="c">Player</td>
+                <td class="c">&nbsp;</td>
+                <td class="c">Alliance</td>
+                <td class="c">Points</td>
+            </tr>
+              <tr> 
     <!-- rank --> 
     <th> 
       1&nbsp;&nbsp;
 
-      <a href='#' onmouseover='return overlib("<font color=red>-1</font><br/><font color=white>From 2026-08-19 07:13:01");' onmouseout='return nd();'><font color='red'>-</font></a> 
+      <a href='#' onmouseover='return overlib("<font color=red>-1</font><br/><font color=white>From 2026-08-19 16:45:41");' onmouseout='return nd();'><font color='red'>-</font></a> 
     </th> 
 
     <!-- nick --> 
@@ -403,7 +393,7 @@ PlayerOne</a>
     <th> 
       2&nbsp;&nbsp;
 
-      <a href='#' onmouseover='return overlib("<font color=red>-2</font><br/><font color=white>From 2026-08-19 07:13:01");' onmouseout='return nd();'><font color='red'>-</font></a> 
+      <a href='#' onmouseover='return overlib("<font color=red>-2</font><br/><font color=white>From 2026-08-19 16:45:41");' onmouseout='return nd();'><font color='red'>-</font></a> 
     </th> 
 
     <!-- nick --> 
@@ -437,7 +427,7 @@ PlayerTwo</a>
     <th> 
       3&nbsp;&nbsp;
 
-      <a href='#' onmouseover='return overlib("<font color=red>-3</font><br/><font color=white>From 2026-08-19 07:13:01");' onmouseout='return nd();'><font color='red'>-</font></a> 
+      <a href='#' onmouseover='return overlib("<font color=red>-3</font><br/><font color=white>From 2026-08-19 16:45:41");' onmouseout='return nd();'><font color='red'>-</font></a> 
     </th> 
 
     <!-- nick --> 
@@ -468,8 +458,8 @@ PlayerThree</a>
   </tr> 
 </table>
 <!-- end user -->
-
-<!-- end statistic data --><br><br><br><br></center>
+<!-- end statistic data --><br><br><br><br>
+</center>
 </div>
 <!-- END CONTENT AREA -->
 

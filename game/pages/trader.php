@@ -394,7 +394,8 @@ class Trader extends Page {
             <?php
         }
         ?>
-<br><br><br><br><?php
+<br><br><br><br>
+<?php
     }
 
     private function CallNewTrader () : void {

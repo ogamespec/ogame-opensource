@@ -41,13 +41,6 @@ class Flotten2 extends Page {
             $total += $amount;
 
             if ($gid != GID_F_PROBE) $cargo += FleetCargo ($gid) * $amount;
-
-            if ( $amount > 0 ) {
-                if ( key_exists("ship$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"ship$gid\" value=\"".$amount."\" />\n";
-                if ( key_exists("consumption$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"consumption$gid\" value=\"".intval ($_POST["consumption$gid"])."\" />\n";
-                if ( key_exists("speed$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"speed$gid\" value=\"".intval($_POST["speed$gid"])."\" />\n";
-                if ( key_exists("capacity$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"capacity$gid\" value=\"".intval ($_POST["capacity$gid"])."\" />\n";
-            }
         }
 
         if ( $total == 0 ) MyGoto ( "flotten1" );
@@ -60,13 +53,23 @@ class Flotten2 extends Page {
         <script language="JavaScript" src="js/ocnt.js"></script>
 
         <script type="text/javascript">
-        function getStorageFaktor(){ return 1; }
+        function getStorageFaktor(){
+            return 1  }
         </script>
+
+        <!-- <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>  -->
 
         <center>
         <table width="519" border="0" cellpadding="0" cellspacing="1">
         <form action="index.php?page=flotten3&session=<?php echo $session;?>" method="POST">
-        <input type="hidden" name="target_mission" value="<?php echo $target_misson;?>" />
+        <?php
+        // The classic page echoed the target_mission input only when the POST
+        // carried the parameter; keep that (otherwise an extra value=0 field
+        // changes the submitted form data).
+        if ( key_exists ( 'target_mission', $_POST ) ) {
+            echo "        <input type=\"hidden\" name=\"target_mission\" value=\"".$target_misson."\" />\n";
+        }
+        ?>
         <input name="thisgalaxy" type="hidden" value="<?php echo $aktplanet['g'];?>" />
         <input name="thissystem" type="hidden" value="<?php echo $aktplanet['s'];?>" />
         <input name="thisplanet" type="hidden" value="<?php echo $aktplanet['p'];?>" />
@@ -75,6 +78,21 @@ class Flotten2 extends Page {
         <?php
         foreach ($transportableResources as $i=>$rc) {
             echo "<input name=\"thisresource".($i+1)."\" type=\"hidden\" value=\"".floor($aktplanet[$rc])."\" />\n";
+        }
+
+        // Hidden ship inputs (same position as the classic page: inside the
+        // form, after the resource passthrough fields).
+        foreach ($fleetmap_nosat as $i=>$gid)
+        {
+            if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet[$gid] , abs (intval ($_POST["ship$gid"])) );
+            else $amount = 0;
+
+            if ( $amount > 0 ) {
+                if ( key_exists("ship$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"ship$gid\" value=\"".$amount."\" />\n";
+                if ( key_exists("consumption$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"consumption$gid\" value=\"".intval ($_POST["consumption$gid"])."\" />\n";
+                if ( key_exists("speed$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"speed$gid\" value=\"".intval($_POST["speed$gid"])."\" />\n";
+                if ( key_exists("capacity$gid", $_POST) ) echo "   <input type=\"hidden\" name=\"capacity$gid\" value=\"".intval ($_POST["capacity$gid"])."\" />\n";
+            }
         }
         ?>
 
@@ -96,7 +114,6 @@ class Flotten2 extends Page {
                 }
                 ?>
                 </select>
-            </th>
         </tr>
         <tr height="20">
             <th><?=loca("FLEET2_SPEED");?></th>

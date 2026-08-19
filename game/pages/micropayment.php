@@ -7,6 +7,8 @@ class Micropayment extends Page {
     public function controller () : bool {
         global $GlobalUser;
         global $db_prefix;
+        global $PageError;
+        global $PageMessage;
 
         // Process GET request.
         if ( key_exists ( 'buynow', $_GET ) ) {
@@ -42,21 +44,21 @@ class Micropayment extends Page {
         return true;
     }
 
+    private function OfficerLeft ( int $type ) : string {
+        global $GlobalUser;
+        $now = time ();
+        $end = GetOfficerLeft ( $GlobalUser, $type );
+        if ( $end <= $now ) return loca("PREM_INACTIVE");
+        else {
+            $d = ceil ( ($end - $now) / (60*60*24) );
+            return va(loca("PREM_ACTIVE"), $d);
+        }
+    }
+
     public function view () : void {
         global $session;
 
         $price = array ( USER_OFFICER_COMMANDER => 10000, USER_OFFICER_ADMIRAL => 10000, USER_OFFICER_ENGINEER => 10000, USER_OFFICER_GEOLOGE => 10000, USER_OFFICER_TECHNOCRATE => 10000 );
-
-        function OfficerLeft ( int $type ) : string {
-            global $GlobalUser;
-            $now = time ();
-            $end = GetOfficerLeft ( $GlobalUser, $type );
-            if ( $end <= $now ) return loca("PREM_INACTIVE");
-            else {
-                $d = ceil ( ($end - $now) / (60*60*24) );
-                return va(loca("PREM_ACTIVE"), $d);
-            }
-        }
         ?>
 <center>
 
@@ -97,7 +99,7 @@ class Micropayment extends Page {
                                                 <td class=l rowspan="2"><img border='0' src="img/commander_stern_gross.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b><?php echo loca("PREM_COMMANDER");?></b>(<b>
-                        <?php echo OfficerLeft(USER_OFFICER_COMMANDER);?></b>)<br>
+                        <?php echo $this->OfficerLeft(USER_OFFICER_COMMANDER);?></b>)<br>
                             <?php echo loca("PREM_COMMANDER_INFO");?>                         <div style="margin:4px 4px;">
                             <table>
                                 <tr>
@@ -139,7 +141,7 @@ class Micropayment extends Page {
                                                 <td class=l rowspan="2"><img border='0' src="img/ogame_admiral.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b><?php echo loca("PREM_ADMIRAL");?></b>(<b>
-                        <?php echo OfficerLeft(USER_OFFICER_ADMIRAL);?>)<br>
+                        <?php echo $this->OfficerLeft(USER_OFFICER_ADMIRAL);?>)<br>
                             <?php echo loca("PREM_ADMIRAL_INFO");?><br>
                             <div style="margin:4px 4px;">
                             <table><tr><td><img src="img/admiral_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="<?php echo loca("PREM_ADMIRAL");?>"></td>
@@ -170,7 +172,7 @@ class Micropayment extends Page {
                                                 <td class=l rowspan="2"><img border='0' src="img/ogame_ingenieur.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b><?php echo loca("PREM_ENGINEER");?></b>(<b>
-                        <?php echo OfficerLeft(USER_OFFICER_ENGINEER);?></b>)<br>
+                        <?php echo $this->OfficerLeft(USER_OFFICER_ENGINEER);?></b>)<br>
                             <?php echo loca("PREM_ENGINEER_INFO");?><br>
                             <div style="margin:4px 4px;">
                             <table><tr><td><img src="img/ingenieur_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="<?php echo loca("PREM_ENGINEER");?>"></td>
@@ -200,7 +202,7 @@ class Micropayment extends Page {
                                                 <td class=l rowspan="2"><img border='0' src="img/ogame_geologe.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b><?php echo loca("PREM_GEOLOGE");?></b>(<b>
-                        <?php echo OfficerLeft(USER_OFFICER_GEOLOGE);?></b>)<br>
+                        <?php echo $this->OfficerLeft(USER_OFFICER_GEOLOGE);?></b>)<br>
                             <?php echo loca("PREM_GEOLOGE_INFO");?><br>
                             <div style="margin:4px 4px;">
                             <table><tr><td><img src="img/geologe_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="<?php echo loca("PREM_GEOLOGE");?>"></td>
@@ -232,7 +234,7 @@ class Micropayment extends Page {
                                                 <td class=l rowspan="2"><img border='0' src="img/ogame_technokrat.jpg" align='top' width='120' height='120'></td>
 
                         <td class=l rowspan="2"><b><?php echo loca("PREM_TECHNOCRATE");?></b>(<b>
-                        <?php echo OfficerLeft(USER_OFFICER_TECHNOCRATE);?></b>)<br>
+                        <?php echo $this->OfficerLeft(USER_OFFICER_TECHNOCRATE);?></b>)<br>
                             <?php echo loca("PREM_TECHNOCRATE_INFO");?><br>
                             <div style="margin:4px 4px;">
                             <table><tr><td><img src="img/technokrat_ikon.gif" width="32" height="32" style="vertical-align:middle;" alt="<?php echo loca("PREM_TECHNOCRATE");?>"></td>

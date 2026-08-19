@@ -11,9 +11,37 @@ class Infos extends Page {
         global $GlobalUni;
         global $aktplanet;
         global $session;
+        global $db_prefix;
+        global $now;
 
         $this->gid = intval($_GET['gid']);
         $this->rapid_info = $this->RapidInfo ($this->gid);
+
+        // Missile Silo: process the demolition form POST (the classic page
+        // handled it inline before rendering the silo table).
+        if ( $this->gid == GID_B_MISS_SILO && $aktplanet[GID_B_MISS_SILO] > 0 && key_exists ( 'aktion', $_POST) )
+        {
+            $amount1 = min ( $aktplanet[GID_D_ABM], key_exists ('ab'.GID_D_ABM, $_POST) ? intval ( $_POST['ab'.GID_D_ABM] ) : 0 );
+            if ( $amount1 > 0) {
+                $aktplanet[GID_D_ABM] -= $amount1;
+                $cost = TechPrice ( GID_D_ABM, 1 );
+                $points  = TechPriceInPoints ($cost) * $amount1;
+                AdjustStats ( $aktplanet['owner_id'], $points, 0, 0, '-');
+            }
+
+            $amount2 = min ($aktplanet[GID_D_ABM], key_exists ('ab'.GID_D_IPM, $_POST) ? intval ( $_POST['ab'.GID_D_IPM] ) : 0 );
+            if ( $amount2 > 0) {
+                $aktplanet[GID_D_IPM] -= $amount2;
+                $cost = TechPrice ( GID_D_IPM, 1 );
+                $points  = TechPriceInPoints ($cost) * $amount2;
+                AdjustStats ( $aktplanet['owner_id'], $points, 0, 0, '-');
+            }
+
+            if ( ($amount1 + $amount2) > 0 ) {
+                SetPlanetDefense ( $aktplanet['planet_id'], $aktplanet );
+                RecalcRanks ();
+            }
+        }
 
         return true;
     }

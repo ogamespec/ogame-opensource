@@ -8,6 +8,7 @@ class Buddy extends Page {
 
     public function controller () : bool {
         global $GlobalUser;
+        global $PageError;
 
         $this->action = key_exists ('action', $_GET) ? intval($_GET['action']) : 0;
 
@@ -63,7 +64,13 @@ class Buddy extends Page {
 
         $action = $this->action;
 
-        if ( $action == 5 ) $this->Buddy_Income ();
+        // After processing an action (accept/reject/withdraw request), the
+        // classic page re-rendered the affected list (Buddy_Income after
+        // accept/reject, Buddy_Outcome after withdraw) instead of the home
+        // page; keep that behavior.
+        if ( $action == 2 || $action == 3 ) $this->Buddy_Income ();
+        else if ( $action == 4 ) $this->Buddy_Outcome ();
+        else if ( $action == 5 ) $this->Buddy_Income ();
         else if ( $action == 6 ) $this->Buddy_Outcome ();
         else if ( $action == 7 ) $this->Buddy_Request ();
         else $this->Buddy_Home ();
@@ -131,25 +138,28 @@ class Buddy extends Page {
         global $GlobalUser;
         global $session;
 
-        echo "<table width=\"519\">\n";
-        echo " <tr><td class=\"c\" colspan=\"6\">".loca("BUDDY_REQUESTS")."</td></tr>\n";
-        echo " <tr><th colspan=\"6\"><a href=?page=buddy&session=".$_GET['session'].">".loca("BUDDY_BACK")."</a></th></tr>\n";
-        echo " </table>\n";
-        echo " <table width=\"519\">\n";
-        echo "  <tr>\n";
-        echo "   <th></th>\n";
-        echo "   <th>".loca("BUDDY_USER")."</th>\n";
-        echo "   <th>".loca("BUDDY_ALLY")."</th>\n";
-        echo "   <th>".loca("BUDDY_COORD")."</th>\n";
-        echo "   <th>".loca("BUDDY_TEXT")."</th>\n";
-        echo "   <th></th>\n";
-        echo "  </tr>\n";
+        ?>
+        <table width="519">
+         <tr>
+           <td class="c" colspan="6"><?=loca("BUDDY_REQUESTS");?></td>
+          </tr>
 
+        <?php
         $result = EnumIncomeBuddy ($GlobalUser['player_id']);
         $num = dbrows ($result);
         if ($num)
         {
             $i = 1;
+        ?>
+          <tr>
+          <th></th>
+          <th><?=loca("BUDDY_USER");?></th>
+          <th><?=loca("BUDDY_ALLY");?></th>
+          <th><?=loca("BUDDY_COORD");?></th>
+          <th><?=loca("BUDDY_TEXT");?></th>
+          <th></th>
+         </tr>
+        <?php
             while ($num--)
             {
                 $buddy = dbarray ($result);
@@ -176,14 +186,14 @@ class Buddy extends Page {
             }
         }
         else echo " <tr>   <th colspan=\"6\">".loca("BUDDY_NO_REQUESTS")."</th>  </tr>\n";
+        ?>
 
-        echo " </table>\n";
-        echo " <table width=\"519\">\n";
-        echo "  <tr>\n";
-        echo "   <td class=\"c\" colspan=\"6\"><a href=\"?page=buddy&session=<?=$session;?>\">".loca("BUDDY_BACK")."</a></td>\n";
-        echo "  </tr>\n";
-        echo " </table>\n";
-        echo "<br><br><br><br>\n";
+         <tr>
+          <td class="c" colspan="6"><a href="?page=buddy&session=<?=$session;?>"><?=loca("BUDDY_BACK");?></a></td>
+         </tr>
+        </table>
+        <br><br><br><br>
+        <?php
     }
 
     private function Buddy_Outcome () : void {

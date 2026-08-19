@@ -15,8 +15,8 @@ class Galaxy extends Page {
         global $now;
 
         $this->defmap_norak = array_diff($defmap, $rakmap);
-        $this->PageError = "";
-        $this->PageMessage = "";
+        $PageError = "";
+        $PageMessage = "";
 
         // Missile attack.
         if ( method () === "POST" && isset($_POST['aktion']) )
@@ -32,32 +32,32 @@ class Galaxy extends Page {
 
                 if ( !in_array ($type, $this->defmap_norak ) ) $type = 0;
 
-                if ( $this->PageError === "" )    // Check the permitted parameters
+                if ( $PageError === "" )    // Check the permitted parameters
                 {
-                    if ($amount == 0) $this->PageError = loca("GALAXY_RAK_NO_ROCKETS");
-                    if ($amount > $aktplanet[GID_D_IPM]) $this->PageError = loca("GALAXY_RAK_NOT_ENOUGH");
-                    if ($dist > $ipm_radius) $this->PageError = loca("GALAXY_RAK_WEAK_DRIVE");
+                    if ($amount == 0) $PageError = loca("GALAXY_RAK_NO_ROCKETS");
+                    if ($amount > $aktplanet[GID_D_IPM]) $PageError = loca("GALAXY_RAK_NOT_ENOUGH");
+                    if ($dist > $ipm_radius) $PageError = loca("GALAXY_RAK_WEAK_DRIVE");
                 }
 
-                if ( $this->PageError === "" )        // Check player modes
+                if ( $PageError === "" )        // Check player modes
                 {
-                    if ($GlobalUser['vacation']) $this->PageError = loca("GALAXY_RAK_VACATION_SELF");
-                    else if ($target_user['vacation']) $this->PageError = loca("GALAXY_RAK_VACATION_OTHER");
-                    else if ($target['owner_id'] == $GlobalUser['player_id']) $this->PageError = loca("GALAXY_RAK_SELF");
-                    else if ( IsPlayerNewbie($target_user['player_id']) || IsPlayerStrong($target_user['player_id']) ) $this->PageError = loca("GALAXY_RAK_NOOB");
+                    if ($GlobalUser['vacation']) $PageError = loca("GALAXY_RAK_VACATION_SELF");
+                    else if ($target_user['vacation']) $PageError = loca("GALAXY_RAK_VACATION_OTHER");
+                    else if ($target['owner_id'] == $GlobalUser['player_id']) $PageError = loca("GALAXY_RAK_SELF");
+                    else if ( IsPlayerNewbie($target_user['player_id']) || IsPlayerStrong($target_user['player_id']) ) $PageError = loca("GALAXY_RAK_NOOB");
                 }
 
-                if ( $this->PageError === "" )
+                if ( $PageError === "" )
                 {
                     LaunchRockets ( $origin, $target, 30 + 60 * $dist, $amount, $type );
                     $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], time() );    // get the latest planetary data after the IPM is launched.
                     if ($aktplanet == null) {
                         Error ("Can't get aktplanet");
                     }
-                    $this->PageMessage = va ( loca("GALAXY_RAK_LAUNCHED"), $amount );
+                    $PageMessage = va ( loca("GALAXY_RAK_LAUNCHED"), $amount );
                 }
             }
-            else $this->PageError = loca("GALAXY_RAK_NO_TARGET");
+            else $PageError = loca("GALAXY_RAK_NO_TARGET");
         }
 
         // Choose a solar system.
@@ -124,11 +124,6 @@ class Galaxy extends Page {
 
         $this->prem = PremiumStatus ($GlobalUser);
 
-        // Publish the page message/error to the globals that PageFooter reads
-        // (the classic page wrote to the globals directly).
-        $PageError = $this->PageError;
-        $PageMessage = $this->PageMessage;
-
         return true;
     }
 
@@ -139,6 +134,7 @@ class Galaxy extends Page {
         global $defmap;
         global $rakmap;
         global $session;
+        global $UnitParam;
 
         $defmap_norak = $this->defmap_norak;
         $coord_g = $this->coord_g;
@@ -368,7 +364,7 @@ class Galaxy extends Page {
                     }
                     else
                     {
-                        //echo "<font color=#808080 >Шпионаж</font><br><br />";
+                        //echo "<font color=#808080 >РЁРїРёРѕРЅР°Р¶</font><br><br />";
                         echo "<a href=# onclick=doit(6,".$moon['g'].",".$moon['s'].",".$moon['p'].",3,".$GlobalUser['maxspy'].") >".loca("GALAXY_FLEET_SPY")."</a><br><br />";
                         if ( $show_ipm_button ) echo "<a href=index.php?page=galaxy&no_header=1&session=$session&mode=1&p1=".$moon['g']."&p2=".$moon['s']."&p3=".$moon['p']."&pdd=".$moon['planet_id']."&zp=".$moon['owner_id']." >".loca("GALAXY_FLEET_RAK")."</a><br />";
                         echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=3 >".loca("GALAXY_FLEET_TRANSPORT")."</a><br />";
@@ -610,8 +606,6 @@ class Galaxy extends Page {
     }
 
     private array $defmap_norak;
-    private string $PageError = "";
-    private string $PageMessage = "";
     private int $coord_g = 0;
     private int $coord_s = 0;
     private int $coord_p = 0;
