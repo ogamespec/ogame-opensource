@@ -39,8 +39,10 @@ function reloadImages() {
 <table class='header'>
 <select size='1' onchange='haha(this)'>
     <option value='index.php?page=buildings&session=0000000003e9&cp=1&mode=Verteidigung' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1&mode=Verteidigung' >[1:1:4]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=10&mode=Verteidigung' >Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10&mode=Verteidigung' >[1:1:4]</a></option>
     <option value='index.php?page=buildings&session=0000000003e9&cp=2&mode=Verteidigung' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2&mode=Verteidigung' >[1:1:5]</a></option>
     <option value='index.php?page=buildings&session=0000000003e9&cp=3&mode=Verteidigung' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3&mode=Verteidigung' >[1:2:4]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=11&mode=Verteidigung' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11&mode=Verteidigung' >[1:2:4]</a></option>
 </select></table></td></tr></table></td>
 
 <td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
@@ -70,11 +72,11 @@ function reloadImages() {
     <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Energy</font></b></i></td>
 </tr>
 <tr class='header'>
-    <td align='center' class='header' width='90'><font >25.035</font></td>
-    <td align='center' class='header' width='90'><font >15.012</font></td>
-    <td align='center' class='header' width='90'><font >8.001</font></td>
+    <td align='center' class='header' width='90'><font >25.047</font></td>
+    <td align='center' class='header' width='90'><font >15.016</font></td>
+    <td align='center' class='header' width='90'><font >8.003</font></td>
     <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
-    <td align='center' class='header' width='90'><font color='#ff0000'>-46</font>/124</td>
+    <td align='center' class='header' width='90'><font >359</font>/529</td>
 </tr>
 </table></td>
 <td class='header'>
@@ -328,7 +330,122 @@ function setMax(key, number){
           <td class=l><b>Qty.</b></td> 
           </tr> 
 
-<tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=401>Rocket Launcher</a><br>The rocket launcher is a simple, cost-effective defensive option.<br>Cost: Metal: <b>2.000</b><br>Duration: 12m <br></th><td class=k ><input type=text name='fmenge[401]' alt='Rocket Launcher' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(401, 12);">(max. 12)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=402>Light Laser</a><br>Concentrated firing at a target with photons can produce significantly greater damage than standard ballistic weapons.<br>Cost: Metal: <b>1.500</b> Crystal: <b>500</b><br>Duration: 12m <br></th><td class=k ><input type=text name='fmenge[402]' alt='Light Laser' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(402, 16);">(max. 16)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=407>Small Shield Dome</a><br>The small shield dome covers an entire planet with a field which can absorb a tremendous amount of energy.<br>Cost: Metal: <b>10.000</b> Crystal: <b>10.000</b><br>Duration: 2h <br></th><td class=k ><input type=text name='fmenge[407]' alt='Small Shield Dome' size=6 maxlength=6 value=0 tabindex=1> </td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=502>Anti-Ballistic Missiles</a><br>Anti-Ballistic Missiles destroy attacking interplanetary missiles<br>Cost: Metal: <b>8.000</b> Deuterium: <b>2.000</b><br>Duration: 48m <br></th><td class=k ><input type=text name='fmenge[502]' alt='Anti-Ballistic Missiles' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(502, 3);">(max. 3)</a></td></tr><td class=c colspan=2 align=center><input type=submit value="Build"></td></tr></table></form></table>
+<tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=401>Rocket Launcher</a></a> (in stock 5)<br>The rocket launcher is a simple, cost-effective defensive option.<br>Cost: Metal: <b>2.000</b><br>Duration: 12m <br></th><td class=k ><input type=text name='fmenge[401]' alt='Rocket Launcher' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(401, 12);">(max. 12)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=402>Light Laser</a></a> (in stock 3)<br>Concentrated firing at a target with photons can produce significantly greater damage than standard ballistic weapons.<br>Cost: Metal: <b>1.500</b> Crystal: <b>500</b><br>Duration: 12m <br></th><td class=k ><input type=text name='fmenge[402]' alt='Light Laser' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(402, 16);">(max. 16)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=403>Heavy Laser</a></a> (in stock 2)<br>The heavy laser is the logical development of the light laser.<br>Cost: Metal: <b>6.000</b> Crystal: <b>2.000</b><br>Duration: 48m <br></th><td class=k ><font color=#FF0000>impossibly</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=404>Gauss Cannon</a></a> (in stock 1)<br>The Gauss Cannon fires projectiles weighing tons at high speeds.<br>Cost: Metal: <b>20.000</b> Crystal: <b>15.000</b> Deuterium: <b>2.000</b><br>Duration: 3h 30m <br></th><td class=k ><font color=#FF0000>impossibly</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=405>Ion Cannon</a></a> (in stock 1)<br>The Ion Cannon fires a continuous beam of accelerating ions, causing considerable damage to objects it strikes.<br>Cost: Metal: <b>2.000</b> Crystal: <b>6.000</b><br>Duration: 48m <br></th><td class=k ><font color=#FF0000>impossibly</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=407>Small Shield Dome</a></a> (in stock 1)<br>The small shield dome covers an entire planet with a field which can absorb a tremendous amount of energy.<br>Cost: Metal: <b>10.000</b> Crystal: <b>10.000</b><br>Duration: 2h <br></th><td class=k ><font color=#FF0000>A shield dome can only be built 1 time.</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=502>Anti-Ballistic Missiles</a></a> (in stock 2)<br>Anti-Ballistic Missiles destroy attacking interplanetary missiles<br>Cost: Metal: <b>8.000</b> Deuterium: <b>2.000</b><br>Duration: 48m <br></th><td class=k ><input type=text name='fmenge[502]' alt='Anti-Ballistic Missiles' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(502, 3);">(max. 3)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=503>Interplanetary Missiles</a></a> (in stock 1)<br>Interplanetary Missiles destroy enemy defenses.<br>Cost: Metal: <b>12.500</b> Crystal: <b>2.500</b> Deuterium: <b>10.000</b><br>Duration: 1h 30m <br></th><td class=k ><font color=#FF0000>impossibly</font></td></tr><td class=c colspan=2 align=center><input type=submit value="Build"></td></tr></table></form></table>
+
+      <br>Now being produced: <div id="bx" class="z"></div>
+
+<!-- JAVASCRIPT -->
+<script  type="text/javascript">
+v = new Date();
+p = 0;
+g = 60;
+s = 0;
+hs = 0;
+of = 1;
+c = new Array(360,"");
+b = new Array("Light Fighter","");
+a = new Array("5","");
+aa = "Tasks completed";
+
+
+function t() {
+    if (hs == 0) {
+        xd();
+        hs = 1;
+    }
+    n = new Date();
+    s = c[p]-g-Math.round((n.getTime()-v.getTime())/1000.);
+    s = Math.round(s);
+    m = 0;
+    h = 0;
+    if (s < 0) {
+        a[p]--;
+        xd();
+        if (a[p] <= 0) {
+            p++;
+            xd();
+        }
+        g = 0;
+        v = new Date();
+        s=0;
+    }
+    if (s > 59) {
+        m = Math.floor(s / 60);
+        s = s - m * 60;
+    }
+    if (m > 59) {
+        h = Math.floor(m / 60);
+        m = m - h * 60;
+    }
+    if (s < 10) {
+        s = "0" + s;
+    }
+    if (m < 10) {
+        m = "0" + m;
+    }
+    if (p > b.length - 2) {
+        document.getElementById("bx").innerHTML=aa ;
+    } else {
+        document.getElementById("bx").innerHTML=b[p]+" "+h+":"+m+":"+s;
+    }
+    window.setTimeout("t();", 200);
+}
+
+
+
+
+function xd() {
+    while (document.Atr.auftr.length > 0) {
+        document.Atr.auftr.options[document.Atr.auftr.length-1] = null;
+    }
+    if (p > b.length - 2) {
+        document.Atr.auftr.options[document.Atr.auftr.length] = new Option(aa);
+    }
+    for (iv = p; iv <= b.length - 2; iv++) {
+        if (a[iv] < 2) {
+            ae=" ";
+        }else{
+            ae=" ";
+        }
+        if (iv == p) {
+            act = " (produced)";
+        }else{
+            act = "";
+        }
+        document.Atr.auftr.options[document.Atr.auftr.length] = new Option(a[iv]+ae+" \""+b[iv]+"\""+act, iv + of);
+    }
+}
+
+window.onload = t;
+document.addEventListener("visibilitychange", function() {
+    if (!document.hidden) {
+        t();
+    }
+});
+</script>
+<!-- JAVASCRIPT ENDE-->
+
+
+<br>
+<form name="Atr" method="get" action="index.php?page=buildings">
+<input type="hidden" name="session" value="0000000003e9">
+<input type="hidden" name="mode" value="Flotte">
+<table width="530">
+
+ <tr>
+    <td class="c" >Expected tasks</td>
+ </tr>
+ <tr>
+  <th ><select name="auftr" size="10"></select></th>
+   </tr>
+ <tr>
+  <td class="c" ></td>
+
+ </tr>
+</table>
+</form>
+The entire production will take
+  29m <br>
 <br><br><br><br>
 </center>
 </div>

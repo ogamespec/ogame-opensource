@@ -39,8 +39,10 @@ function reloadImages() {
 <table class='header'>
 <select size='1' onchange='haha(this)'>
     <option value='index.php?page=messages&session=0000000003e9&cp=1' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1' >[1:1:4]</a></option>
+    <option value='index.php?page=messages&session=0000000003e9&cp=10' >Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10' >[1:1:4]</a></option>
     <option value='index.php?page=messages&session=0000000003e9&cp=2' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2' >[1:1:5]</a></option>
     <option value='index.php?page=messages&session=0000000003e9&cp=3' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3' >[1:2:4]</a></option>
+    <option value='index.php?page=messages&session=0000000003e9&cp=11' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11' >[1:2:4]</a></option>
 </select></table></td></tr></table></td>
 
 <td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
@@ -70,11 +72,11 @@ function reloadImages() {
     <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Energy</font></b></i></td>
 </tr>
 <tr class='header'>
-    <td align='center' class='header' width='90'><font >25.035</font></td>
-    <td align='center' class='header' width='90'><font >15.012</font></td>
-    <td align='center' class='header' width='90'><font >8.001</font></td>
+    <td align='center' class='header' width='90'><font >25.047</font></td>
+    <td align='center' class='header' width='90'><font >15.016</font></td>
+    <td align='center' class='header' width='90'><font >8.003</font></td>
     <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
-    <td align='center' class='header' width='90'><font color='#ff0000'>-46</font>/124</td>
+    <td align='center' class='header' width='90'><font >359</font>/529</td>
 </tr>
 </table></td>
 <td class='header'>
@@ -325,37 +327,55 @@ function fenster(target_url,win_name) {
 <tr><td colspan="4" class="c">Messages</td></tr>
 <tr><th>Show</th><th colspan="2">Type</th><th>Total / New</th></tr>
 <tr> 
-   <th><input type="checkbox" name="espioopen"   /></th> 
+   <th><input type="checkbox" name="espioopen"  CHECKED /></th> 
    <th colspan="2"><a href="index.php?page=messages&dsp=1&pm=1&session=0000000003e9">Spy Reports</a></th> 
-   <th>0 / 0</th> 
+   <th>1 / 1</th> 
 </tr> 
 <tr> 
-   <th><input type="checkbox" name="combatopen"   /></th> 
+   <th><input type="checkbox" name="combatopen"  CHECKED /></th> 
    <th colspan="2"><a href="index.php?page=messages&dsp=1&pm=2&session=0000000003e9">Combat Reports</a></th> 
-   <th>0 / 0</th> 
+   <th>1 / 1</th> 
 </tr> 
 <tr> 
-   <th><input type="checkbox" name="expopen"   /></th> 
+   <th><input type="checkbox" name="expopen"  CHECKED /></th> 
    <th colspan="2"><a href="index.php?page=messages&dsp=1&pm=3&session=0000000003e9">Expedition Reports</a></th> 
-   <th>0 / 0</th> 
+   <th>1 / 1</th> 
 </tr> 
 <tr> 
-   <th><input type="checkbox" name="allyopen"   /></th> 
+   <th><input type="checkbox" name="allyopen"  CHECKED /></th> 
    <th colspan="2"><a href="index.php?page=messages&dsp=1&pm=4&session=0000000003e9">Alliance Reports</a></th> 
-   <th>0 / 0</th> 
+   <th>1 / 1</th> 
 </tr> 
 <tr> 
-   <th><input type="checkbox" name="useropen"   /></th> 
+   <th><input type="checkbox" name="useropen"  CHECKED /></th> 
    <th colspan="2"><a href="index.php?page=messages&dsp=1&pm=0&session=0000000003e9">Personal Messages</a></th> 
-   <th>1 / 0</th> 
+   <th>2 / 1</th> 
 </tr> 
 <tr> 
-   <th><input type="checkbox" name="generalopen"   /></th> 
+   <th><input type="checkbox" name="generalopen"  CHECKED /></th> 
    <th colspan="2"><a href="index.php?page=messages&dsp=1&pm=5&session=0000000003e9">Other</a></th> 
    <th>1 / 1</th> 
 </tr> 
 <tr><th colspan="4"><input type="checkbox" name="fullreports"  /> Show intelligence data partially </th></tr>
 <tr><td class="c">Action</td><td class="c">Date</td><td class="c">From</td><td class="c">Subject</td></tr>
+<tr><th><input type="checkbox" name="delmes8"/></th><th>08-19 06:57:53</th><th>PlayerTwo <a href="index.php?page=galaxy&galaxy=1&system=3&position=4&session=0000000003e9">[1:3:4]</a> </th><th>Hello <a href="index.php?page=writemessages&session=0000000003e9&messageziel=2&re=1&betreff=Re:Hello"><img src="img/m.gif"></a> </th></tr>
+<tr><td class="b"> </td><td class="b" colspan="3">Hi! Are you online?</td></tr>
+<tr><th colspan="4"><input type="checkbox" name="sneak8"/><input type="submit" value="Report to operator"/></th></tr>
+<tr><th><input type="checkbox" name="delmes7"/></th><th>08-19 06:57:53</th><th>[TST] </th><th>Alliance </th></tr>
+<tr><td class="b"> </td><td class="b" colspan="3">PlayerThree has applied to the alliance TST.</td></tr>
+<tr><th><input type="checkbox" name="delmes6"/></th><th>08-19 06:57:53</th><th>Expedition </th><th>Expedition to [1:1:16] </th></tr>
+<tr><td class="b"> </td><td class="b" colspan="3">Fleet found: 5 Small Cargo<br><table width=400><tr><td class=c>Expedition result</td></tr><tr><th>You discovered a fleet of 5 Small Cargo. The ships are added to your fleet.</th></tr></table></td></tr>
+<tr><th><input type="checkbox" name="delmes5"/></th><th>08-19 06:57:53</th><th>Combat </th><th><a href="#" onclick="fenster('index.php?page=bericht&session=0000000003e9&bericht=4', 'Bericht_Kampf');"><span class="attack">Combat Report [1:3:4] (V:100.000,A:50.000)</span></a> </th></tr>
+<tr><th><input type="checkbox" name="delmes3"/></th><th>08-19 06:57:53</th><th>Fleet Command </th><th>
+<span class="espionagereport">
+Espionage report of Planet [1:3:4]
+[1:3:4]</span> </th></tr>
+<tr><td class="b"> </td><td class="b" colspan="3"><table width=400><tr><td class=c colspan=4>Resources of Planet [1:3:4]</td></tr><tr><th>Metal:</th><th>20.000</th><th>Crystal:</th><th>12.000</th></tr><tr><th>Deuterium:</th><th>6.000</th><th>Energy:</th><th>53</th></tr></table><table width=400><tr><td class=c colspan=2>Fleet</td></tr><tr><th>Small Cargo</th><th>5</th></tr><tr><th>Light Fighter</th><th>8</th></tr></table><center><a href=# onclick="doit(6,1,3,4,1,5);">Spy again</a></center></td></tr>
+<tr><th><input type="checkbox" name="delmes2"/></th><th>08-19 06:42:53</th><th>PlayerTwo </th><th>Hello </th></tr>
+<tr><td class="b"> </td><td class="b" colspan="3">Hi there!</td></tr>
+<tr><th colspan="4"><input type="checkbox" name="sneak2"/><input type="submit" value="Report to operator"/></th></tr>
+<tr><th><input type="checkbox" name="delmes1"/></th><th>08-19 06:12:53</th><th>System </th><th>Welcome! </th></tr>
+<tr><td class="b"> </td><td class="b" colspan="3">Welcome to OGame!</td></tr>
 <tr><th colspan="4" style='padding:0px 105px;'></th></tr>
 <tr><td colspan="4"><center>     </center></td></tr>
 <input type="hidden" name="messages" value="1" />

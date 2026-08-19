@@ -236,6 +236,12 @@ function fenster(target_url,win_name) {
             <td class="c" colspan="5">Empire Overview</td>
         </tr>
 
+        
+        <tr height="20">
+            <th colspan="2"><a href="index.php?page=imperium&no_header=1&session=0000000003e9&planettype=1">Planets</a></th>
+            <th colspan="2"><a href="index.php?page=imperium&no_header=1&session=0000000003e9&planettype=3">Moons</a></th>
+            <th>&nbsp;</th>
+        </tr>
 
 <!-- ## -->
 <!-- ## Planetimages -->
@@ -319,10 +325,10 @@ function fenster(target_url,win_name) {
 
              <th width="75" >
                 <a href="index.php?page=resources&session=0000000003e9&cp=1&planettype=1">
-                        25.035 
+                        25.047 
                 </a>
                 / 
-                214           </th>
+                286           </th>
              <th width="75" >
                 <a href="index.php?page=resources&session=0000000003e9&cp=2&planettype=1">
                         8.016 
@@ -336,7 +342,7 @@ function fenster(target_url,win_name) {
                 / 
                 55           </th>
  
-            <th width="75">38.060&nbsp;/&nbsp;123</th>
+            <th width="75">38.072&nbsp;/&nbsp;147</th>
         </tr>
 
  
@@ -345,10 +351,10 @@ function fenster(target_url,win_name) {
  
              <th width="75" >
                 <a href="index.php?page=resources&session=0000000003e9&cp=1&planettype=1">
-                        15.012 
+                        15.016 
                 </a>
                 / 
-                74           </th>
+                97           </th>
              <th width="75" >
                 <a href="index.php?page=resources&session=0000000003e9&cp=2&planettype=1">
                         5.007 
@@ -362,7 +368,7 @@ function fenster(target_url,win_name) {
                 / 
                 21           </th>
 
-            <th width="75">23.022&nbsp;/&nbsp;46</th>
+            <th width="75">23.026&nbsp;/&nbsp;54</th>
 
         </tr>
  
@@ -371,10 +377,10 @@ function fenster(target_url,win_name) {
 
              <th width="75" >
                 <a href="index.php?page=resources&session=0000000003e9&cp=1&planettype=1">
-                        8.001 
+                        8.003 
                 </a>
                 / 
-                10           </th>
+                18           </th>
              <th width="75" >
                 <a href="index.php?page=resources&session=0000000003e9&cp=2&planettype=1">
                         2.001 
@@ -389,7 +395,7 @@ function fenster(target_url,win_name) {
                 6           </th>
   
 
-            <th width="75">11.003&nbsp;/&nbsp;8</th>
+            <th width="75">11.005&nbsp;/&nbsp;11</th>
         </tr>
         
 
@@ -400,11 +406,9 @@ function fenster(target_url,win_name) {
             <th width="75">Energy</th>
 
             <th width="75" >
-                <font color="red">
-                    -46 
-                </font>
+                    359 
                 / 
-                124           </th>
+                529           </th>
             <th width="75" >
                 <font color="red">
                     -34 
@@ -418,7 +422,7 @@ function fenster(target_url,win_name) {
                 / 
                 25           </th>
 
-            <th width="75">-113 / 202 </th>
+            <th width="75">292 / 607 </th>
         </tr>
 
 <!-- ## -->
@@ -447,6 +451,10 @@ function fenster(target_url,win_name) {
 
                     </font>
                 </a>    
+                    <a href="index.php?page=imperium&session=0000000003e9&planettype=1&no_header=1&planet=1&modus=remove&listid=1">
+                        <font color="magenta">6</font>
+                    </a>
+
             </th>       
             <th width="75" >
                 <a style="cursor:pointer" 
@@ -487,6 +495,8 @@ function fenster(target_url,win_name) {
 
                     </font>
                 </a>    
+                    <font color="sandybrown">(<a href="index.php?page=imperium&session=0000000003e9&planettype=1&no_header=1&planet=1&modus=remove&listid=2"><font color="sandybrown">4</font></a>)</font>
+
             </th>       
             <th width="75" >
                 <a style="cursor:pointer" 
@@ -810,6 +820,30 @@ function fenster(target_url,win_name) {
         </tr>
         <tr height="20">
             <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=31&planettype=1">
+                    Research Lab                </a>
+            </th>           
+            <th width="75" >
+                <a style="cursor:pointer" 
+                   onClick="if(t==0){t=setTimeout('document.location.href=\'index.php?page=b_building&session=0000000003e9&planet=1&cp=1\';t=0;',500);}" 
+                   onDblClick="clearTimeout(t);document.location.href='index.php?page=imperium&session=0000000003e9&planettype=1&no_header=1&modus=add&planet=1&techid=31';t=0;"
+                   title="click 1x for construction menu, 2x to start construction">       
+                    <font color="red">
+                        4                    </font>                    
+
+                    </font>
+                </a>    
+            </th>       
+            <th width="75" >
+<font color="white">-</font>
+            </th>       
+            <th width="75" >
+<font color="white">-</font>
+            </th>       
+            <th width="75">4 <a href='#' onMouseOver="return overlib('<font color=white>Average per planet</font>');" onMouseOut="return nd();">(1.33)</a></th>
+        </tr>
+        <tr height="20">
+            <th width="75">
                 <a href="index.php?page=infos&session=0000000003e9&gid=34&planettype=1">
                     Alliance Depot                </a>
             </th>           
@@ -939,7 +973,7 @@ function fenster(target_url,win_name) {
                 <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Forschung&planettype=1">
                     <font color ="lime">
 
-                        4                      
+                        6                      
                     </font>
                 </a>
 
@@ -950,7 +984,7 @@ function fenster(target_url,win_name) {
                 <a href="index.php?page=buildings&session=0000000003e9&cp=2&mode=Forschung&planettype=1">
                     <font color ="lime">
 
-                        4                      
+                        6                      
                     </font>
                 </a>
 
@@ -961,13 +995,13 @@ function fenster(target_url,win_name) {
                 <a href="index.php?page=buildings&session=0000000003e9&cp=3&mode=Forschung&planettype=1">
                     <font color ="lime">
 
-                        4                      
+                        6                      
                     </font>
                 </a>
 
             </th>
 
-            <th width="75">4</th>
+            <th width="75">6</th>
 
         </tr>
         <tr height="20">
@@ -1497,6 +1531,300 @@ function fenster(target_url,win_name) {
 <!-- ## -->
 <!-- ## Ships -->
 <!-- ## -->         
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=202&planettype=1">
+
+                    Small Cargo                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte&planettype=1">
+                    <font color ="lime">
+                        10                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">10</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=203&planettype=1">
+
+                    Large Cargo                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte&planettype=1">
+                    <font color ="lime">
+                        5                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">5</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=204&planettype=1">
+
+                    Light Fighter                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte&planettype=1">
+                    <font color ="lime">
+                        20                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">20</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=205&planettype=1">
+
+                    Heavy Fighter                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte&planettype=1">
+                    <font color ="lime">
+                        3                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">3</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=206&planettype=1">
+
+                    Cruiser                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte&planettype=1">
+                    <font color ="lime">
+                        2                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">2</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=207&planettype=1">
+
+                    Battleship                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte&planettype=1">
+                    <font color ="red">
+                        1                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">1</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=208&planettype=1">
+
+                    Colony Ship                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte&planettype=1">
+                    <font color ="red">
+                        1                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">1</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=209&planettype=1">
+
+                    Recycler                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte&planettype=1">
+                    <font color ="lime">
+                        2                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">2</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=210&planettype=1">
+
+                    Espionage Probe                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte&planettype=1">
+                    <font color ="lime">
+                        5                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">5</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=211&planettype=1">
+
+                    Bomber                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte&planettype=1">
+                    <font color ="red">
+                        1                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">1</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=212&planettype=1">
+
+                    Solar Satellite                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte&planettype=1">
+                    <font color ="lime">
+                        8                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">8</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=213&planettype=1">
+
+                    Destroyer                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte&planettype=1">
+                    <font color ="red">
+                        1                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">1</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=214&planettype=1">
+
+                    Deathstar                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte&planettype=1">
+                    <font color ="red">
+                        1                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">1</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=215&planettype=1">
+
+                    Battlecruiser                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte&planettype=1">
+                    <font color ="red">
+                        1                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">1</th>
+
+            </th>
+
+       </tr>
 
 <!-- ## -->
 <!-- ## Defense-Head -->
@@ -1509,6 +1837,174 @@ function fenster(target_url,win_name) {
 <!-- ## -->
 <!-- ## Defense -->
 <!-- ## -->             
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=401&planettype=1">
+
+                    Rocket Launcher                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Verteidigung&planettype=1">
+                    <font color ="lime">
+                        5                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">5</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=402&planettype=1">
+
+                    Light Laser                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Verteidigung&planettype=1">
+                    <font color ="lime">
+                        3                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">3</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=403&planettype=1">
+
+                    Heavy Laser                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Verteidigung&planettype=1">
+                    <font color ="lime">
+                        2                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">2</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=404&planettype=1">
+
+                    Gauss Cannon                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Verteidigung&planettype=1">
+                    <font color ="lime">
+                        1                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">1</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=405&planettype=1">
+
+                    Ion Cannon                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Verteidigung&planettype=1">
+                    <font color ="lime">
+                        1                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">1</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=407&planettype=1">
+
+                    Small Shield Dome                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Verteidigung&planettype=1">
+                    <font color ="lime">
+                        1                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">1</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=502&planettype=1">
+
+                    Anti-Ballistic Missiles                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Verteidigung&planettype=1">
+                    <font color ="lime">
+                        2                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">2</th>
+
+            </th>
+
+       </tr>
+        <tr height="20">
+            <th width="75">
+                <a href="index.php?page=infos&session=0000000003e9&gid=503&planettype=1">
+
+                    Interplanetary Missiles                </a>
+            </th>
+
+            <th width="75" >
+                <a href="index.php?page=buildings&session=0000000003e9&cp=1&mode=Verteidigung&planettype=1">
+                    <font color ="red">
+                        1                  </font>
+                </a>    
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75" >
+                <font color="white">-</font>
+            <th width="75">1</th>
+
+            </th>
+
+       </tr>
 
 <!-- ## -->
 <!-- ## Footer -->

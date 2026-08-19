@@ -394,8 +394,8 @@ function fenster(target_url,win_name) {
       var e2 = document.getElementById('fleetstatustable');
       // make the table row visible
       e.style.display = '';
-      if(e2.rows.length > -1) {
-          e2.deleteRow(-1);
+      if(e2.rows.length > 9) {
+          e2.deleteRow(9);
       }
       var row = e2.insertRow('test');
       var td1 = document.createElement("td");
@@ -501,6 +501,10 @@ function fenster(target_url,win_name) {
 </th>
 <th width="130" style='white-space: nowrap;'>Home</th>
 <th width="30" style='white-space: nowrap;'>
+<a onmouseout="return nd();" onmouseover="return overlib('<table width=240 ><tr><td class=c colspan=2 >Moon Moon [1:1:4]</td></tr><tr><th width=80 ><img src=http://localhost/evolution/planeten/small/s_mond.jpg height=75 width=75 alt=\'Moon (size: 8800)\'/></th><th><table width=120 ><tr><td colspan=2 class=c >Properties</td></tr><tr><th>Size:</td><th>8.800</td></tr><tr><th>Temperatur:</td><th>-40</td></tr><tr><td colspan=2 class=c >Actions:</td></tr><tr><th align=left colspan=2 ><a href=index.php?page=flotten1&session=0000000003e9&galaxy=1&system=1&planet=4&planettype=3&target_mission=3 >Transport</a><br /><a href=index.php?page=flotten1&session=0000000003e9&galaxy=1&system=1&planet=4&planettype=3&target_mission=4 >Deploy</a><br /></th></tr></table></tr></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETX, -40, OFFSETY, -110 );" style="cursor: pointer;" 
+ href='#' onclick='doit(6, 1, 1, 4, 3, 5)' 
+>
+<img width="22" height="22" alt="Moon (size: 8800)" src="http://localhost/evolution/planeten/small/s_mond.jpg"/></a>
 </th>
 <th width="30"></th>
 <th width="150">
@@ -562,7 +566,7 @@ function fenster(target_url,win_name) {
 </tr>
 <tr>
 <td class="c" colspan="8">
-&nbsp;&nbsp;&nbsp;&nbsp;<span id='slots'>0</span>&nbsp;of the 7 slots are in service</td>
+<span id="probes">5</span> Spy probes &nbsp;&nbsp;&nbsp;&nbsp;<span id="recyclers">2</span> Recyclers  &nbsp;&nbsp;&nbsp;&nbsp;<span id="missiles">1</span> Interplanetary rockets  &nbsp;&nbsp;&nbsp;&nbsp;<span id='slots'>8</span>&nbsp;of the 9 slots are in service</td>
 </tr>
 <tr style="display: none;" id="fleetstatusrow"><th colspan="8"><!--<div id="fleetstatus"></div>-->
 <table style="font-weight: bold;" width=100% id="fleetstatustable">
