@@ -39,6 +39,7 @@ function reloadImages() {
 <table class='header'>
 <select size='1' onchange='haha(this)'>
     <option value='index.php?page=overview&session=0000000003ea&cp=4' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=3&position=4&session=0000000003ea&cp=4' >[1:3:4]</a></option>
+    <option value='index.php?page=overview&session=0000000003ea&cp=12' >Moon  <a href='index.php?page=galaxy&galaxy=1&system=3&position=4&session=0000000003ea&cp=12' >[1:3:4]</a></option>
     <option value='index.php?page=overview&session=0000000003ea&cp=5' >Colony X  <a href='index.php?page=galaxy&galaxy=1&system=3&position=5&session=0000000003ea&cp=5' >[1:3:5]</a></option>
     <option value='index.php?page=overview&session=0000000003ea&cp=6' >Colony Y  <a href='index.php?page=galaxy&galaxy=1&system=4&position=4&session=0000000003ea&cp=6' >[1:4:4]</a></option>
 </select></table></td></tr></table></td>
@@ -357,15 +358,60 @@ function t_building() {
 
 </script> 
 
+
+<!-- _________________ComBox___________________ --> 
+<div id="combox_container" > 
+<a id="combox" href="" target=_blank> 
+<div id="anfang">Welcome to the test universe!</div> 
+<div id="ende">Golden pages test server.</div> 
+</a> 
+</div> 
+<!-- _________________ComBox Ende _____________ --> 
+
 <table width='519'>
 
 <tr><td class='c' colspan='4'>
 <a href='index.php?page=renameplanet&session=0000000003ea&pl=4' title='Planet menu'>Planet "Home"</a>     (PlayerTwo)
 </td></tr>
-<tr><th>    Server time   </th> <th colspan=3>Tue Aug 18 15:53:55</th></tr>
+<tr><th>    Server time   </th> <th colspan=3>Wed Aug 19 7:12:48</th></tr>
 <tr><td colspan='4' class='c'>  Events   </td> </tr>
 
-<th>
+<tr class='flight'>
+<th><div id='bxx1' title='400'star='1787123968'></div></th>
+<th colspan='3'><span class='flight owntransport'>Your <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Small Cargo 3&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='owntransport'>fleet</a><a href='#' title='Small Cargo 3'></a> from planets Home <a href="javascript:showGalaxy(1,3,4)" owntransport>[1:3:4]</a> sent to planet Colony X <a href="javascript:showGalaxy(1,3,5)" owntransport>[1:3:5]</a>. Mission: <span class='class'>Transport</span></span></th></tr>
+
+<tr class='flight'>
+<th><div id='bxx2' title='600'star='1787124168'></div></th>
+<th colspan='3'><span class='flight espionage'>Battle <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Number of ships: 5 &lt;br&gt;Small Cargo &lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='espionage'>fleet</a><a href='#' title='Number of ships: 5 Small Cargo '></a> player PlayerOne <a href='#' onclick='showMessageMenu(1)'><img src='http://localhost/evolution/img/m.gif' title='Write message' alt='Write message'></a> from planets Home <a href="javascript:showGalaxy(1,1,4)" espionage>[1:1:4]</a> has been sent to planet Home <a href="javascript:showGalaxy(1,3,4)" espionage>[1:3:4]</a>. Mission: Espionage</span></th></tr>
+
+<tr class='return'>
+<th><div id='bxx3' title='860'star='1787124428'></div></th>
+<th colspan='3'><span class='return owntransport'>Your <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Small Cargo 3&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='owntransport'>fleet</a><a href='#' title='Small Cargo 3'></a>, sent from planets Colony X <a href="javascript:showGalaxy(1,3,5)" owntransport>[1:3:5]</a> is returned to planet Home <a href="javascript:showGalaxy(1,3,4)" owntransport>[1:3:4]</a>. Mission: <span class='class'>Transport</span></span></th></tr>
+
+<tr class='flight'>
+<th><div id='bxx4' title='900'star='1787124468'></div></th>
+<th colspan='3'><span class='flight transport'>Peaceful <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Number of ships: 7 &lt;br&gt;Small Cargo &lt;br&gt;Large Cargo &lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='transport'>fleet</a><a href='#' title='Number of ships: 7 Small Cargo Large Cargo '></a> player PlayerOne <a href='#' onclick='showMessageMenu(1)'><img src='http://localhost/evolution/img/m.gif' title='Write message' alt='Write message'></a> from planets Home <a href="javascript:showGalaxy(1,1,4)" transport>[1:1:4]</a> has been sent to planet Colony X <a href="javascript:showGalaxy(1,3,5)" transport>[1:3:5]</a>. Mission: Transport</span></th></tr>
+
+<tr class='flight'>
+<th><div id='bxx5' title='1200'star='1787124768'></div></th>
+<th colspan='3'><span class='flight ownattack'>Your <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Small Cargo 2&lt;br&gt;Light Fighter 5&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='ownattack'>fleet</a><a href='#' title='Small Cargo 2Light Fighter 5'></a> from planets Home <a href="javascript:showGalaxy(1,3,4)" ownattack>[1:3:4]</a> sent to planet Home <a href="javascript:showGalaxy(1,1,4)" ownattack>[1:1:4]</a>. Mission: <span class='class'>Attack</span></span></th></tr>
+
+<tr class='flight'>
+<th><div id='bxx6' title='1200'star='1787124768'></div></th>
+<th colspan='3'><span class='attack'>Battle <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Number of ships: 10 &lt;br&gt;Light Fighter &lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='attack'>fleet</a><a href='#' title='Number of ships: 10 Light Fighter '></a> player PlayerOne <a href='#' onclick='showMessageMenu(1)'><img src='http://localhost/evolution/img/m.gif' title='Write message' alt='Write message'></a> from planets Home <a href="javascript:showGalaxy(1,1,4)" attack>[1:1:4]</a> has been sent to planet Home <a href="javascript:showGalaxy(1,3,4)" attack>[1:3:4]</a>. Mission: Attack</span></th></tr>
+
+<tr class='flight'>
+<th><div id='bxx7' title='1500'star='1787125068'></div></th>
+<th colspan='3'><span class='flight destroy'>Battle <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Number of ships: 1 &lt;br&gt;Deathstar &lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='destroy'>fleet</a><a href='#' title='Number of ships: 1 Deathstar '></a> player PlayerOne <a href='#' onclick='showMessageMenu(1)'><img src='http://localhost/evolution/img/m.gif' title='Write message' alt='Write message'></a> from planets Home <a href="javascript:showGalaxy(1,1,4)" destroy>[1:1:4]</a> has been sent to  Moon <a href="javascript:showGalaxy(1,3,4)" destroy>[1:3:4]</a>. Mission: Destroy</span></th></tr>
+
+<tr class='return'>
+<th><div id='bxx8' title='2460'star='1787126028'></div></th>
+<th colspan='3'><span class='return ownattack'>Your <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Small Cargo 2&lt;br&gt;Light Fighter 5&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='ownattack'>fleet</a><a href='#' title='Small Cargo 2Light Fighter 5'></a>, sent from planets Home <a href="javascript:showGalaxy(1,1,4)" ownattack>[1:1:4]</a> is returned to planet Home <a href="javascript:showGalaxy(1,3,4)" ownattack>[1:3:4]</a>. Mission: <span class='class'>Attack</span></span></th></tr>
+
+<script language=javascript>anz=8;t();</script>
+
+<th>    Moon     <br>
+<a href="index.php?page=overview&session=0000000003ea&cp=12"><img src="http://localhost/evolution/planeten/small/s_mond.jpg" width="50" alt="Moon" height="50" ></a>
 </th>
 <th colspan="2">
 <img src="http://localhost/evolution/planeten/dschjungelplanet05.jpg" width="200" height="200">

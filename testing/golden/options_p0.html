@@ -39,8 +39,10 @@ function reloadImages() {
 <table class='header'>
 <select size='1' onchange='haha(this)'>
     <option value='index.php?page=options&session=0000000003e9&cp=1' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1' >[1:1:4]</a></option>
+    <option value='index.php?page=options&session=0000000003e9&cp=10' >Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10' >[1:1:4]</a></option>
     <option value='index.php?page=options&session=0000000003e9&cp=2' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2' >[1:1:5]</a></option>
     <option value='index.php?page=options&session=0000000003e9&cp=3' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3' >[1:2:4]</a></option>
+    <option value='index.php?page=options&session=0000000003e9&cp=11' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11' >[1:2:4]</a></option>
 </select></table></td></tr></table></td>
 
 <td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
@@ -70,11 +72,11 @@ function reloadImages() {
     <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Energy</font></b></i></td>
 </tr>
 <tr class='header'>
-    <td align='center' class='header' width='90'><font >25.035</font></td>
-    <td align='center' class='header' width='90'><font >15.012</font></td>
-    <td align='center' class='header' width='90'><font >8.001</font></td>
+    <td align='center' class='header' width='90'><font >25.047</font></td>
+    <td align='center' class='header' width='90'><font >15.016</font></td>
+    <td align='center' class='header' width='90'><font >8.003</font></td>
     <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
-    <td align='center' class='header' width='90'><font color='#ff0000'>-46</font>/124</td>
+    <td align='center' class='header' width='90'><font >359</font>/529</td>
 </tr>
 </table></td>
 <td class='header'>
@@ -413,7 +415,7 @@ function fenster(target_url,win_name) {
   <tr>
 
    <th><a title="Number of espionage probes that can be sent directly from each scan in the Galaxy menu.">Number of espionage probes</a></th>
-   <th><input type="text" name="spio_anz" maxlength="2" size="2" value="" /></th>
+   <th><input type="text" name="spio_anz" maxlength="2" size="2" value="5" /></th>
   </tr>
   <!--<tr>
    <th>Show tooltip for</th>
@@ -421,7 +423,7 @@ function fenster(target_url,win_name) {
   </tr>-->
   <tr>
    <th>Maximum fleet messages</th>
-   <th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="" /></th>
+   <th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="10" /></th>
   </tr>
 
   </tr>
@@ -432,25 +434,25 @@ function fenster(target_url,win_name) {
       <tr>
    <th><img src="http://localhost/evolution/img/e.gif" alt="" />   Espionage</th>
 
-   <th><input type="checkbox" name="settings_esp" /></th>
+   <th><input type="checkbox" name="settings_esp" checked='checked'/></th>
    </tr>
       <tr>
    <th><img src="http://localhost/evolution/img/m.gif" alt="" />   Write message</th>
-   <th><input type="checkbox" name="settings_wri" /></th>
+   <th><input type="checkbox" name="settings_wri" checked='checked'/></th>
    </tr>
       <tr>
    <th><img src="http://localhost/evolution/img/b.gif" alt="" />   Buddy request</th>
 
-   <th><input type="checkbox" name="settings_bud" /></th>
+   <th><input type="checkbox" name="settings_bud" checked='checked'/></th>
    </tr>
       <tr>
    <th><img src="http://localhost/evolution/img/r.gif" alt="" />   Missile attack</th>
-   <th><input type="checkbox" name="settings_mis" /></th>
+   <th><input type="checkbox" name="settings_mis" checked='checked'/></th>
    </tr>
       <tr>
    <th><img src="http://localhost/evolution/img/s.gif" alt="" />   View report</th>
 
-   <th><input type="checkbox" name="settings_rep" /></th>
+   <th><input type="checkbox" name="settings_rep" checked='checked'/></th>
    </tr>
       <tr>
    <td class="c" colspan="2">Message Options</td>

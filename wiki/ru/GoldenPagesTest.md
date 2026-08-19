@@ -4,11 +4,13 @@
 
 `GoldenPagesTest` — это класс PHPUnit-тестов, выполняющий snapshot-тестирование (тестирование golden files) фронтенд-страниц OGame. Он рендерит каждую игровую страницу с использованием тестовой вселенной с 3 игроками и сравнивает сгенерированный HTML-код с сохранёнными golden-снимками.
 
+Тестовая вселенная специально насыщена данными (issue #256 «Максимальное покрытие Golden тестов всех игровых страниц»): у каждого игрока есть луны, летящие флоты всех типов миссий (атака, шпионаж, транспорт, развёртывание, переработка, колонизация, экспедиция и **уничтожение лун**), активные очереди построек/исследований/верфей, сообщения всех типов (личные, шпионаж, бой, экспедиция, альянс, прочее), альянс с рангами и заявками, друзья, шаблоны флота, баны, обломки и дальний космос. Благодаря этому golden-снимки проверяют реальные ветки кода страниц, а не пустые оболочки.
+
 ### Принцип работы
 
 1. **Тестовая вселенная**: FixtureBuilder создаёт тестовую вселенную с 3 игроками (PlayerOne, PlayerTwo, PlayerThree) в **in-memory движке** (`game/core/db.php` с SQLite-бэкендом, `DB_CONNECTION=sqlite`, `DB_DATABASE=:memory:`, см. `phpunit.xml`). Реальная схема БД создаётся через `CreateDBTables()` (из `install_tabs.php`), данные вставляются через реальную функцию `AddDBRow()` — без самодельных моков и ручной схемы.
-2. **Рендеринг страниц**: Класс `PageRenderer` повторяет цикл загрузки `index.php` (LoadUniverse → AuthUser → роутер → MVC/классические страницы) и рендерит **настоящие игровые страницы** через реальный DB-слой. Каждый тест запускается в отдельном PHP-процессе (`#[RunTestsInSeparateProcesses]`), как и `NotesTest`/`DbSqliteTest`: только так bootstrap загружается в глобальной области видимости, где игровые модули объявляют свои глобальные переменные (`$GlobalUser`, `$LOCA`, `$resourcemap`, ...).
-3. **Сравнение снимков**: Сгенерированный HTML сравнивается с golden-снимками, хранящимися в `testing/golden/`. Перед сравнением динамический контент (временные метки, ID, токены сессий) нормализуется.
+2. **Рендеринг страниц**: Класс `PageRenderer` повторяет цикл загрузки `index.php` (LoadUniverse → AuthUser → роутер → MVC/классические страницы) и рендерит **настоящие игровые страницы** через реальный DB-слой. Каждый тест запускается в отдельном PHP-процессе (`#[RunTestsInSeparateProcesses]`), как и `NotesTest`/`DbSqliteTest`: только так bootstrap загружается в глобальной области видимости, где игровые модули объявляют свои глобальные переменные (`$GlobalUser`, `$LOCA`, `$resourcemap`, ...). Страницы, работающие только через POST (flotten2, flotten3, flottenversand, sprungtor), рендерятся через `withPost()`, который заполняет `$_POST` и переключает метод запроса на POST.
+3. **Сравнение снимков**: Сгенерированный HTML сравнивается с golden-снимками, хранящимися в `testing/golden/`. Перед сравнением динамический контент (временные метки, обратные отсчёты, ID, токены сессий) нормализуется.
 
 ### Golden-снимки
 
@@ -53,42 +55,79 @@ UPDATE_GOLDEN=1 vendor/bin/phpunit --testsuite "Golden Pages"
 | `testUniverseHasThreePlayers` | Проверяет, что тестовая вселенная содержит ровно 3 игрока |
 | `testEachPlayerHasHomePlanet` | Проверяет, что каждый игрок имеет домашнюю планету |
 | `testUniverseSettingsAreConfigured` | Проверяет настройки вселенной (num, galaxies, systems, lang) |
-| `testOverviewPagePlayerOne` | Тестирование страницы Overview для PlayerOne |
-| `testOverviewPagePlayerTwo` | Тестирование страницы Overview для PlayerTwo |
-| `testOverviewPagePlayerThree` | Тестирование страницы Overview для PlayerThree |
-| `testBuildingsPageShipyardPlayerOne` | Тестирование страницы Buildings (вкладка Shipyard) |
+| `testPlayersHaveMoons` | Проверяет, что у каждого игрока есть хотя бы одна луна |
+| `testFleetQueueEventsExist` | Проверяет события очереди для флотов (источник списка событий Overview) |
+| `testActiveBuildAndResearchQueue` | Проверяет наличие очередей построек/исследований/верфей |
+| `testAllMessageTypesExist` | Проверяет наличие всех типов сообщений MTYP_* у PlayerOne |
+| `testOverviewPagePlayerOne/Two/Three` | Тестирование страницы Overview для каждого игрока |
+| `testOverviewShowsFleetEvents` | Проверяет события флотов (свои и чужие, включая «Уничтожить» на луну) |
+| `testOverviewShowsMoonAndBuildQueue` | Проверяет отображение луны и активной постройки |
+| `testOverviewMoonView` | Тестирование Overview самой луны (cp=луна) |
+| `testBuildingsPageShipyardPlayerOne` | Тестирование страницы Buildings (вкладка Shipyard) с кораблями и активным заказом |
 | `testBuildingsPageDefensePlayerOne` | Тестирование страницы Buildings (вкладка Defense) |
-| `testBuildingsPageResearchPlayerOne` | Тестирование страницы Buildings (вкладка Research) |
-| `testInfosPageMetalMinePlayerOne` | Тестирование страницы infos для Metal Mine |
-| `testMessagesPagePlayerOne` | Тестирование страницы сообщений |
+| `testBuildingsPageResearchPlayerOne` | Тестирование страницы Buildings (вкладка Research) с активным исследованием |
+| `testBuildingPagePlayerOne` | Тестирование страницы b_building (интерфейс очереди построек) |
+| `testInfosPage*` | Тестирование страницы infos: шахты металла/кристалла/дейтерия, солнечная, термоядерная, хранилища, ракетная шахта, склад альянса, сенсорная фаланга (на луне), прыжковые врата (на луне), Малый транспорт, Лёгкий истребитель, Звезда смерти, Ракетная установка, Плазменная пушка, шпионаж, оружейная технология и обычное здание (робототехника) |
+| `testMessagesPagePlayerOne` | Тестирование страницы сообщений со всеми включёнными папками |
+| `testMessages*FolderPlayerOne` | Тестирование каждой папки сообщений (шпионаж/бой/экспедиция/альянс/личные) |
+| `testBerichtBattleReportPlayerOne` | Тестирование просмотра боевого рапорта |
+| `testBerichtSpyReportPlayerOne` | Тестирование просмотра шпионского рапорта |
+| `testWriteMessagesPagePlayerOne` | Тестирование страницы написания сообщений |
 | `testNotesPagePlayerOne` | Тестирование страницы заметок |
+| `testFleetPage1PlayerOne` | Тестирование страницы флота 1 (список флотов + выбор кораблей) |
+| `testFleetPage2PlayerOne` | Тестирование страницы флота 2 (POST: координаты и состав флота) |
+| `testFleetPage3PlayerOne` | Тестирование страницы флота 3 (POST: список миссий и ресурсы) |
+| `testFleetDispatchAttackPlayerOne` | Тестирование отправки флота (POST: миссия атаки) |
+| `testFleetTemplatesPagePlayerOne` | Тестирование страницы шаблонов флота |
+| `testGalaxyPagePlayerOne` | Тестирование галактики с лунами |
+| `testGalaxyPageEnemySystem` | Тестирование галактики чужой системы (луна + обломки) |
+| `testGalaxyPageFromMoon` | Тестирование галактики, открытой с луны |
+| `testPhalanxScanPlayerOne` | Тестирование сканирования сенсорной фалангой с обнаружением флотов |
+| `testPhalanxScanNoFleets` | Тестирование сканирования фалангой без флотов в цели |
+| `testSprungtorPagePlayerOne` | Тестирование прыжковых врат (POST-состояние ошибки) |
+| `testImperiumPagePlayerOne` | Тестирование imperium (империя), вид планет |
+| `testImperiumPageMoonsPlayerOne` | Тестирование imperium, вид лун |
+| `testTechtreePagePlayerOne` | Тестирование страницы techtree |
+| `testTechtreeDetailsPagePlayerOne` | Тестирование страницы techtreedetails (дерево Звезды смерти) |
+| `testAllianzenPagePlayerOne` | Тестирование главной страницы альянса |
+| `testAllianzenMembersPagePlayerOne` | Тестирование списка участников альянса (a=4) |
+| `testAllianzenRanksPagePlayerOne` | Тестирование рангов альянса (a=6) |
+| `testAllianzenSettingsPagePlayerOne` | Тестирование настроек альянса (a=5) |
+| `testAllianzenMemberSettingsPagePlayerOne` | Тестирование управления участниками (a=7) |
+| `testBewerbungenPagePlayerOne` | Тестирование списка заявок в альянс |
+| `testBewerbungenDetailPagePlayerOne` | Тестирование просмотра заявки в альянс |
+| `testBewerbenPagePlayerOne` | Тестирование страницы bewerben (подача заявки в альянс) |
+| `testBuddyPagePlayerOne` | Тестирование списка друзей (принятая заявка) |
+| `testBuddyRequestsPagePlayerOne` | Тестирование входящих заявок в друзья (action=5) |
 | `testStatisticsPagePlayerOne` | Тестирование страницы статистики |
 | `testOptionsPagePlayerOne` | Тестирование страницы настроек |
 | `testChangelogPagePlayerOne` | Тестирование страницы changelog |
 | `testResourcesPagePlayerOne` | Тестирование страницы ресурсов |
-| `testFleetPage1PlayerOne` | Тестирование страницы флота |
-| `testFleetTemplatesPagePlayerOne` | Тестирование страницы шаблонов флота |
-| `testBuddyPagePlayerOne` | Тестирование страницы buddy |
-| `testAllianzenPagePlayerOne` | Тестирование страницы альянса |
-| `testImperiumPagePlayerOne` | Тестирование страницы imperium (империя) |
-| `testGalaxyPagePlayerOne` | Тестирование страницы галактики |
-| `testTechtreePagePlayerOne` | Тестирование страницы techtree |
-| `testTraderPagePlayerOne` | Тестирование страницы трейдера |
+| `testTraderPagePlayerOne` | Тестирование страницы трейдера (активное предложение) |
 | `testMicropaymentPagePlayerOne` | Тестирование страницы микроплатежей |
-| `testPrangerPage` | Тестирование внешней страницы pranger |
+| `testPaymentPagePlayerOne` | Тестирование страницы payment (форма купона) |
+| `testPrangerPage` | Тестирование внешней страницы pranger с баном |
 | `testAinfoPage` | Тестирование внешней страницы ainfo |
-| `testWriteMessagesPagePlayerOne` | Тестирование страницы написания сообщений |
-| `testBewerbenPagePlayerOne` | Тестирование страницы bewerben (подача заявки в альянс) |
+| `testSuchePagePlayerOne` | Тестирование страницы поиска |
+| `testRenamePlanetPagePlayerOne` | Тестирование меню планеты (renameplanet) |
+| `testLogoutPagePlayerOne` | Тестирование страницы выхода |
+| `testAdminPage` | Тестирование главной страницы админ-панели |
 | `testPlayerTwoPlanetOverview` | Тестирование переключения планет для PlayerTwo |
 | `testPlayerThreePlanetOverview` | Тестирование переключения планет для PlayerThree |
 | `testOverviewPageDeterministic` | Проверка детерминированности рендеринга страниц |
 | `testDifferentPlayersHaveDifferentContent` | Проверка, что разные игроки имеют разное содержимое страниц |
 | `testResourcesPageShowsCorrectResources` | Проверка корректности отображения ресурсов |
 | `testAvailablePagesCanBeListed` | Проверка возможности получения списка страниц из router.json |
+| `testEveryRouterPageHasGoldenCoverage` | Проверка, что у каждой страницы router.json есть golden-снимок |
 | `testFixturePlanetCounts` | Проверка корректного количества планет на игрока |
 | `testFleetDataForPlayerOne` | Проверка наличия данных флота для PlayerOne |
 | `testMessagesForPlayerOne` | Проверка наличия сообщений для PlayerOne |
 | `testNotesForPlayerOne` | Проверка наличия заметок для PlayerOne |
+
+Единственная страница router.json без снимка — `allianzdepot`: она безусловно
+редиректит на `infos` (`MyGoto()` → `die()`) до вывода контента и не может быть
+отрендерена в процессе. Её интерфейс (форма пополнения склада альянса) покрыт
+снимком `infos_ally_depot`.
 
 ### Нормализация HTML
 
@@ -98,14 +137,13 @@ UPDATE_GOLDEN=1 vendor/bin/phpunit --testsuite "Golden Pages"
 |---------|--------|
 | Временные метки (`YYYY-MM-DD HH:MM:SS`) | `DATE_TIME` |
 | Временные метки статистики (`YYYY-MM-DD, HH:MM:SS`) | `DATE_TIME` |
-| Временные метки overview (`Tue Aug 18 15:38:36`) | `DATE_TIME` |
+| Временные метки overview (`Tue Aug 18 15:38:36`, включая однозначный час) | `DATE_TIME` |
+| Временные метки (`Tue Aug 18 15:38:36 2026`, `Tue Aug 18 2026 15:38:36`) | `DATE_TIME` |
 | Временные метки (`DD.MM.YYYY HH:MM:SS`, `MM-DD HH:MM:SS`) | `DATE_TIME` |
 | Числовые временные метки (10+ цифр) | `TIMESTAMP` |
+| Обратные отсчёты (`pp="480"`, `ss=500;`, `g = 60;`, `title='540'star=...` в списке событий) | `SECONDS` |
 | Числа с плавающей точкой | `FLOAT` |
-| `planet_id=X` | `planet_id=ID` |
-| `player_id=X` | `player_id=ID` |
-| `fleet_id=X` | `fleet_id=ID` |
-| `cp=X` | `cp=ID` |
+| `planet_id=X` / `player_id=X` / `fleet_id=X` / `cp=X` / `spid=X` | `ID` |
 | `session=XXXX` | `session=SESSION` |
 | `lastpeek=X` | `lastpeek=TIMESTAMP` |
 | Несколько пробелов | Один пробел |
@@ -116,7 +154,7 @@ UPDATE_GOLDEN=1 vendor/bin/phpunit --testsuite "Golden Pages"
 testing/
 ├── GoldenPagesTest.php      # Основной класс тестов (каждый тест в отдельном процессе)
 ├── PageRenderer.php          # Рендеринг настоящих игровых страниц через реальный DB-слой
-├── FixtureBuilder.php        # Создание тестовой вселенной через in-memory движок (SQLite)
+├── FixtureBuilder.php        # Создание тестовой вселенной через in-memory движок (mysqlite)
 ├── bootstrap.php             # PHPUnit bootstrap: загрузка игрового ядра с SQLite-бэкендом
 └── golden/                   # Golden-снимки
     ├── .gitignore
@@ -135,3 +173,10 @@ testing/
   глобальные переменные, от которых зависят страницы.
 - `PageRenderer` повторяет цикл загрузки `game/index.php` (LoadUniverse,
   AuthUser, роутер из `router.json`, MVC/классические страницы).
+- Страницы, работающие только через POST (flotten2/flotten3/flottenversand/sprungtor),
+  рендерятся через `PageRenderer::withPost()`; иначе они попадают в `MyGoto()`
+  (редирект + `die()`) и завершают тестовый процесс.
+- В фикстуре события очереди флотов используют `start = now - 60 с`, чтобы
+  антиспам-проверка flottenversand (`abs(time() - start) < 1`) не делала редирект.
+- В `game/pages/flotten1.php` обломки исключены из колонки владельца цели
+  (защита от null-пользователя), на что указал снимок миссии переработки.

@@ -34,13 +34,15 @@ function reloadImages() {
 <td class='header' style='width:5;' >
 <table class='header'>
 <tr class='header'>
-<td class='header'><img src='http://localhost/evolution/planeten/small/s_dschjungelplanet02.jpg' width='50' height='50'></td>
+<td class='header'><img src='http://localhost/evolution/planeten/small/s_mond.jpg' width='50' height='50'></td>
 <td class='header'>
 <table class='header'>
 <select size='1' onchange='haha(this)'>
-    <option value='index.php?page=flotten1&session=0000000003e9&cp=1' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1' >[1:1:4]</a></option>
-    <option value='index.php?page=flotten1&session=0000000003e9&cp=2' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2' >[1:1:5]</a></option>
-    <option value='index.php?page=flotten1&session=0000000003e9&cp=3' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3' >[1:2:4]</a></option>
+    <option value='index.php?page=infos&session=0000000003e9&cp=1&gid=43' >Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1&gid=43' >[1:1:4]</a></option>
+    <option value='index.php?page=infos&session=0000000003e9&cp=10&gid=43' selected>Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10&gid=43' >[1:1:4]</a></option>
+    <option value='index.php?page=infos&session=0000000003e9&cp=2&gid=43' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2&gid=43' >[1:1:5]</a></option>
+    <option value='index.php?page=infos&session=0000000003e9&cp=3&gid=43' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3&gid=43' >[1:2:4]</a></option>
+    <option value='index.php?page=infos&session=0000000003e9&cp=11&gid=43' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11&gid=43' >[1:2:4]</a></option>
 </select></table></td></tr></table></td>
 
 <td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
@@ -70,11 +72,11 @@ function reloadImages() {
     <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Energy</font></b></i></td>
 </tr>
 <tr class='header'>
-    <td align='center' class='header' width='90'><font >25.035</font></td>
-    <td align='center' class='header' width='90'><font >15.012</font></td>
-    <td align='center' class='header' width='90'><font >8.001</font></td>
+    <td align='center' class='header' width='90'><font color='#ff0000'>0</font></td>
+    <td align='center' class='header' width='90'><font color='#ff0000'>0</font></td>
+    <td align='center' class='header' width='90'><font color='#ff0000'>100.000</font></td>
     <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
-    <td align='center' class='header' width='90'><font color='#ff0000'>-46</font>/124</td>
+    <td align='center' class='header' width='90'><font >0</font>/0</td>
 </tr>
 </table></td>
 <td class='header'>
@@ -313,88 +315,55 @@ function fenster(target_url,win_name) {
 <!-- CONTENT AREA -->
 <div id='content'>
 <center>
+<table width="519">
+<tr><td class="c">Jump Gate</td></tr>
+<tr><th><table>
+<tr><td><img border='0' src="http://localhost/evolution/gebaeude/43.gif" align='top' width='120' height='120'></td>
+<td>A Jump Gate is a system of giant transceivers capable of sending even the largest fleets to a receiving Gate anywhere in the universe without loss of time. Utilizing technology similar to that of a Worm Hole to achieve the jump, deuterium is not required. A recharge period of a few minutes must pass between jumps to allow for regeneration. Transporting resources through the Gate is not possible either. With every upgrade level the jump gate`s cooldown time can be reduced.</td></tr>
+</table></th></tr>
+    </th>
+   </tr>
+</table>
+<form action="index.php?page=sprungtor&session=0000000003e9" method="post">
 
-<script src="js/flotten.js"></script>
-<!--
-<body>
-<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
--->
-<center>
-
-  <table width="519" border="0" cellpadding="0" cellspacing="1">
-   <tr height="20">
-  <td colspan="8" class="c">
-  <table border=0 width=100%>
-   <tr>
-
-    <td style='background-color:transparent;'>
-    <div style="margin-top:2;margin-bottom:2;">Fleets 0 / 5<b><font style="color:lime;">+2</font></b> <img border="0" alt="Fleet Admiral" src="img/admiral_ikon.gif" onmouseover='return overlib("&lt;font color=white &gt;Fleet Admiral&lt;/font&gt;", WIDTH, 100);' onmouseout="return nd();" width="20" height="20" style="vertical-align:middle;"></div>
-    </td>
-    <td align=right style='background-color:transparent;'>
-      0/1 Expeditions    
-    </td>
+  <input type="hidden" name="qm" value="10" />
+  <table border="1">
+    <tr>
+      <td>Start moon</td>
+      <td><a href="index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9" >[1:1:4]</a></td>
     </tr>
-    </table>
-    </td>
+    <tr>
+      <td>Target moon</td>
 
-   </tr>
-     <tr height="20">
-    <th>ID</th>
-    <th>Mission</th>
-    <th>Ships (total)</th>
-    <th>Origin</th>
-
-    <th>Departure Time</th>
-    <th>Target</th>
-    <th>Arrival Time</th>
-    <th>Commands</th>
-   </tr>
-   <tr height="20"> 
-    <th>-</th> 
-    <th>-</th> 
-    <th>-</th> 
-    <th>-</th> 
-    <th>-</th> 
-    <th>-</th> 
-    <th>-</th> 
-    <th>-</th> 
-   </tr> 
-
+      <td>
+        <select name="zm">
+             <option value="11">Moon B <a href="index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9" >[1:2:4]</a></option>
+        </select>
+      </td>
+    </tr>
   </table>
+  <table width="519">
 
-
-  
-<form action="index.php?page=flotten2&session=0000000003e9" method="POST">
-  <table width="519" border="0" cellpadding="0" cellspacing="1">
-       <tr height="20">
-  <td colspan="4" class="c">Please select your ships for this mission:</td>
-   </tr>
-   <tr height="20">
-
-  <th>Ship Type</th>
-  <th>Available</th>
-<!--    <th>Gesch.</th> -->
-    <th>-</th>
-    <th>-</th>
-   </tr>
-
-
-   <tr height="20">
-  <th colspan="2"><a href="javascript:noShips();" >no ships</a></th>
-  <th colspan="2"><a href="javascript:maxShips();" >all ships</a></th>
-   </tr>
-
-      <tr height="20">
-      <td colspan="4" class="c"><u><a href="index.php?page=fleet_templates&session=0000000003e9">Standard fleets</a></u></td>
-      </tr>
- 
-   <tr height="20">
-    <th colspan="4"><input type="submit" value="continue" /></th>
-   </tr>
-<tr><th colspan=4>
-</th></tr>
+    <tr>
+      <td class="c" colspan="2">Use jump gate: Select spaceships</td>
+    </tr>
+    <tr>
+      <th><a href="index.php?page=infos&session=0000000003e9&gid=204">Light Fighter</a> (4 available)</th>
+      <th><input tabindex="1" type="text" name="c204" size="7" maxlength="7" value="0"></th>
+    </tr>
+    <tr>
+      <th><a href="index.php?page=infos&session=0000000003e9&gid=202">Small Cargo</a> (2 available)</th>
+      <th><input tabindex="1" type="text" name="c202" size="7" maxlength="7" value="0"></th>
+    </tr>
+    <tr> 
+      <th colspan="2"><input type="submit" value="Execute Jump!" /></th>
+    </tr> 
+  </table>
 </form>
 </table>
+<table width=519 >
+<tr><td class=c align=center><a href="index.php?page=b_building&session=0000000003e9&techid=43&modus=destroy&planet=10">Demolish: Jump Gate Level 1 destroy?</a></td></tr>
+<br><tr><th>Required metal:<b>1.000.000</b> crystal:<b>2.000.000</b> deuterium:<b>1.000.000</b> <tr><th><br>Duration of demolition:  25d 0h 0m <br></th></tr></table>
 <br><br><br><br>
 </center>
 </div>

@@ -39,8 +39,10 @@ function reloadImages() {
 <table class='header'>
 <select size='1' onchange='haha(this)'>
     <option value='index.php?page=buildings&session=0000000003e9&cp=1&mode=Flotte' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1&mode=Flotte' >[1:1:4]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=10&mode=Flotte' >Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10&mode=Flotte' >[1:1:4]</a></option>
     <option value='index.php?page=buildings&session=0000000003e9&cp=2&mode=Flotte' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2&mode=Flotte' >[1:1:5]</a></option>
     <option value='index.php?page=buildings&session=0000000003e9&cp=3&mode=Flotte' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3&mode=Flotte' >[1:2:4]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=11&mode=Flotte' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11&mode=Flotte' >[1:2:4]</a></option>
 </select></table></td></tr></table></td>
 
 <td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
@@ -70,11 +72,11 @@ function reloadImages() {
     <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Energy</font></b></i></td>
 </tr>
 <tr class='header'>
-    <td align='center' class='header' width='90'><font >25.035</font></td>
-    <td align='center' class='header' width='90'><font >15.012</font></td>
-    <td align='center' class='header' width='90'><font >8.001</font></td>
+    <td align='center' class='header' width='90'><font >25.047</font></td>
+    <td align='center' class='header' width='90'><font >15.016</font></td>
+    <td align='center' class='header' width='90'><font >8.003</font></td>
     <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
-    <td align='center' class='header' width='90'><font color='#ff0000'>-46</font>/124</td>
+    <td align='center' class='header' width='90'><font >359</font>/529</td>
 </tr>
 </table></td>
 <td class='header'>
@@ -328,7 +330,122 @@ function setMax(key, number){
           <td class=l><b>Qty.</b></td> 
           </tr> 
 
-<tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=202>Small Cargo</a><br>The small cargo is an agile ship which can quickly transport resources to other planets. The small cargo is an agile ship which can quickly transport resources to other planets.<br>Cost: Metal: <b>2.000</b> Crystal: <b>2.000</b><br>Duration: 24m <br></th><td class=k ><input type=text name='fmenge[202]' alt='Small Cargo' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(202, 7);">(max. 7)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=204>Light Fighter</a><br>This is the first fighting ship all emperors will build. The light fighter is an agile ship, but vulnerable by themselves. In mass numbers, they can become a great threat to any empire. They are the first to accompany small and large cargo to hostile planets with minor defenses.<br>Cost: Metal: <b>3.000</b> Crystal: <b>1.000</b><br>Duration: 24m <br></th><td class=k ><input type=text name='fmenge[204]' alt='Light Fighter' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(204, 8);">(max. 8)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=205>Heavy Fighter</a><br>This fighter is better armoured and has a higher attack strength than the light fighter.<br>Cost: Metal: <b>6.000</b> Crystal: <b>4.000</b><br>Duration: 1h <br></th><td class=k ><input type=text name='fmenge[205]' alt='Heavy Fighter' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(205, 3);">(max. 3)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=210>Espionage Probe</a><br>Espionage probes are small, agile drones that provide data on fleets and planets over great distances.<br>Cost: Crystal: <b>1.000</b><br>Duration: 6m <br></th><td class=k ><input type=text name='fmenge[210]' alt='Espionage Probe' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(210, 15);">(max. 15)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=212>Solar Satellite</a><br>Solar satellites are simple platforms of solar cells, located in a high, stationary orbit. They gather sunlight and transmit it to the ground station via laser.<br>Cost: Crystal: <b>2.000</b> Deuterium: <b>500</b><br>Duration: 12m <br></th><td class=k ><input type=text name='fmenge[212]' alt='Solar Satellite' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(212, 7);">(max. 7)</a></td></tr><td class=c colspan=2 align=center><input type=submit value="Build"></td></tr></table></form></table>
+<tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=202>Small Cargo</a></a> (in stock 10)<br>The small cargo is an agile ship which can quickly transport resources to other planets. The small cargo is an agile ship which can quickly transport resources to other planets.<br>Cost: Metal: <b>2.000</b> Crystal: <b>2.000</b><br>Duration: 24m <br></th><td class=k ><input type=text name='fmenge[202]' alt='Small Cargo' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(202, 7);">(max. 7)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=203>Large Cargo</a></a> (in stock 5)<br>This cargo ship has a much larger cargo capacity than the small cargo, and is generally faster thanks to an improved drive.<br>Cost: Metal: <b>6.000</b> Crystal: <b>6.000</b><br>Duration: 1h 12m <br></th><td class=k ><font color=#FF0000>impossibly</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=204>Light Fighter</a></a> (in stock 20)<br>This is the first fighting ship all emperors will build. The light fighter is an agile ship, but vulnerable by themselves. In mass numbers, they can become a great threat to any empire. They are the first to accompany small and large cargo to hostile planets with minor defenses.<br>Cost: Metal: <b>3.000</b> Crystal: <b>1.000</b><br>Duration: 24m <br></th><td class=k ><input type=text name='fmenge[204]' alt='Light Fighter' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(204, 8);">(max. 8)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=205>Heavy Fighter</a></a> (in stock 3)<br>This fighter is better armoured and has a higher attack strength than the light fighter.<br>Cost: Metal: <b>6.000</b> Crystal: <b>4.000</b><br>Duration: 1h <br></th><td class=k ><input type=text name='fmenge[205]' alt='Heavy Fighter' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(205, 3);">(max. 3)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=206>Cruiser</a></a> (in stock 2)<br>Cruisers are armoured almost three times as heavily as heavy fighters and have more than twice the firepower. In addition, they are very fast.<br>Cost: Metal: <b>20.000</b> Crystal: <b>7.000</b> Deuterium: <b>2.000</b><br>Duration: 2h 42m <br></th><td class=k ><font color=#FF0000>impossibly</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=207>Battleship</a></a> (in stock 1)<br>Battleships form the backbone of a fleet. Their heavy cannons, high speed, and large cargo holds make them opponents to be taken seriously.<br>Cost: Metal: <b>45.000</b> Crystal: <b>15.000</b><br>Duration: 6h <br></th><td class=k ><font color=#FF0000>impossibly</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=208>Colony Ship</a></a> (in stock 1)<br>Vacant planets can be colonized with this ship.<br>Cost: Metal: <b>10.000</b> Crystal: <b>20.000</b> Deuterium: <b>10.000</b><br>Duration: 3h <br></th><td class=k ><font color=#FF0000>impossibly</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=209>Recycler</a></a> (in stock 2)<br>Recyclers are the only ships able to harvest debris fields floating in a planets orbit after combat.<br>Cost: Metal: <b>10.000</b> Crystal: <b>6.000</b> Deuterium: <b>2.000</b><br>Duration: 1h 36m <br></th><td class=k ><font color=#FF0000>impossibly</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=210>Espionage Probe</a></a> (in stock 5)<br>Espionage probes are small, agile drones that provide data on fleets and planets over great distances.<br>Cost: Crystal: <b>1.000</b><br>Duration: 6m <br></th><td class=k ><input type=text name='fmenge[210]' alt='Espionage Probe' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(210, 15);">(max. 15)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=211>Bomber</a></a> (in stock 1)<br>The bomber was developed especially to destroy the planetary defenses of a world.<br>Cost: Metal: <b>50.000</b> Crystal: <b>25.000</b> Deuterium: <b>15.000</b><br>Duration: 7h 30m <br></th><td class=k ><font color=#FF0000>impossibly</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=212>Solar Satellite</a></a> (in stock 8)<br>Solar satellites are simple platforms of solar cells, located in a high, stationary orbit. They gather sunlight and transmit it to the ground station via laser.<br>Cost: Crystal: <b>2.000</b> Deuterium: <b>500</b><br>Duration: 12m <br></th><td class=k ><input type=text name='fmenge[212]' alt='Solar Satellite' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(212, 7);">(max. 7)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=213>Destroyer</a></a> (in stock 1)<br>The destroyer is the king of the warships.<br>Cost: Metal: <b>60.000</b> Crystal: <b>50.000</b> Deuterium: <b>15.000</b><br>Duration: 11h <br></th><td class=k ><font color=#FF0000>impossibly</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=214>Deathstar</a></a> (in stock 1)<br>The destructive power of the deathstar is unsurpassed.<br>Cost: Metal: <b>5.000.000</b> Crystal: <b>4.000.000</b> Deuterium: <b>1.000.000</b><br>Duration: 37d 12h 0m <br></th><td class=k ><font color=#FF0000>impossibly</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=215>Battlecruiser</a></a> (in stock 1)<br>The Battlecruiser is highly specialized in the interception of hostile fleets.<br>Cost: Metal: <b>30.000</b> Crystal: <b>40.000</b> Deuterium: <b>15.000</b><br>Duration: 7h <br></th><td class=k ><font color=#FF0000>impossibly</font></td></tr><td class=c colspan=2 align=center><input type=submit value="Build"></td></tr></table></form></table>
+
+      <br>Now being produced: <div id="bx" class="z"></div>
+
+<!-- JAVASCRIPT -->
+<script  type="text/javascript">
+v = new Date();
+p = 0;
+g = 60;
+s = 0;
+hs = 0;
+of = 1;
+c = new Array(360,"");
+b = new Array("Light Fighter","");
+a = new Array("5","");
+aa = "Tasks completed";
+
+
+function t() {
+    if (hs == 0) {
+        xd();
+        hs = 1;
+    }
+    n = new Date();
+    s = c[p]-g-Math.round((n.getTime()-v.getTime())/1000.);
+    s = Math.round(s);
+    m = 0;
+    h = 0;
+    if (s < 0) {
+        a[p]--;
+        xd();
+        if (a[p] <= 0) {
+            p++;
+            xd();
+        }
+        g = 0;
+        v = new Date();
+        s=0;
+    }
+    if (s > 59) {
+        m = Math.floor(s / 60);
+        s = s - m * 60;
+    }
+    if (m > 59) {
+        h = Math.floor(m / 60);
+        m = m - h * 60;
+    }
+    if (s < 10) {
+        s = "0" + s;
+    }
+    if (m < 10) {
+        m = "0" + m;
+    }
+    if (p > b.length - 2) {
+        document.getElementById("bx").innerHTML=aa ;
+    } else {
+        document.getElementById("bx").innerHTML=b[p]+" "+h+":"+m+":"+s;
+    }
+    window.setTimeout("t();", 200);
+}
+
+
+
+
+function xd() {
+    while (document.Atr.auftr.length > 0) {
+        document.Atr.auftr.options[document.Atr.auftr.length-1] = null;
+    }
+    if (p > b.length - 2) {
+        document.Atr.auftr.options[document.Atr.auftr.length] = new Option(aa);
+    }
+    for (iv = p; iv <= b.length - 2; iv++) {
+        if (a[iv] < 2) {
+            ae=" ";
+        }else{
+            ae=" ";
+        }
+        if (iv == p) {
+            act = " (produced)";
+        }else{
+            act = "";
+        }
+        document.Atr.auftr.options[document.Atr.auftr.length] = new Option(a[iv]+ae+" \""+b[iv]+"\""+act, iv + of);
+    }
+}
+
+window.onload = t;
+document.addEventListener("visibilitychange", function() {
+    if (!document.hidden) {
+        t();
+    }
+});
+</script>
+<!-- JAVASCRIPT ENDE-->
+
+
+<br>
+<form name="Atr" method="get" action="index.php?page=buildings">
+<input type="hidden" name="session" value="0000000003e9">
+<input type="hidden" name="mode" value="Flotte">
+<table width="530">
+
+ <tr>
+    <td class="c" >Expected tasks</td>
+ </tr>
+ <tr>
+  <th ><select name="auftr" size="10"></select></th>
+   </tr>
+ <tr>
+  <td class="c" ></td>
+
+ </tr>
+</table>
+</form>
+The entire production will take
+  29m <br>
 <br><br><br><br>
 </center>
 </div>
