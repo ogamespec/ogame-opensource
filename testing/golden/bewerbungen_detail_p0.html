@@ -315,24 +315,26 @@ function fenster(target_url,win_name) {
 <!-- CONTENT AREA -->
 <div id='content'>
 <center>
-<table width=519>
-<tr><td class=c colspan=2>Overview of enrollment in this alliance [TST].</td></tr>
-<tr><th colspan=2>Statement from PlayerThree</th></tr>
-<form action="index.php?page=bewerbungen&session=0000000003e9&show=1&sort=1" method=POST>
-<tr><th colspan=2>Hello TST, I would like to join your alliance. My fleet is ready.</th></tr>
-<tr><td class=c colspan=2>Response to this statement</td></tr>
-<tr><th>&#160;</th><th><input type=submit name="aktion" value="Accept"></th></tr>
-<tr><th>Reason (optional) <span id="cntChars">0</span> / 2000 characters</th><th><textarea name="text" cols=40 rows=10 onkeyup="javascript:cntchar(2000)"></textarea></th></tr>
-<tr><th>&#160;</th><th><input type=submit name="aktion" value="Reject"></th></tr>
-<tr><td>&#160;</td></tr>
-</form>
-<tr><th colspan=2>Available 1 statements. Click on the desired player's name to view their message.</th></tr>
-<tr>
-    <td class=c><center><a href="index.php?page=bewerbungen&session=0000000003e9&show=1&sort=1">Applicant</a></center></td>
-    <td class=c><center><a href="index.php?page=bewerbungen&session=0000000003e9&show=1&sort=0">Application Date</a></center></th></tr>
-<tr>
-    <th><center><a href="index.php?page=bewerbungen&session=0000000003e9&show=1&sort=1">PlayerThree</a></center></th>
-    <th><center>2026-08-19 06:13:00</center></th></tr>
+<table width="519">
+ <tr><td class="c" colspan="6">BUDDY_APPLICATIONS</td></tr>
+ <tr>
+ <th></th>
+ <th>BUDDY_USER</th>
+  <th>BUDDY_ALLY</th>
+  <th>BUDDY_COORD</th>
+  <th>BUDDY_TEXT</th>
+  <th></th>
+ </tr>
+  <tr>
+ <th width="20">1</th>
+  <th><a href="index.php?page=writemessages&session=0000000003e9&messageziel=3">PlayerThree</a></th>
+    <th><a href=index.php?page=ainfo&session=0000000003e9&allyid=1 target='_ally'> TST</a></th>
+  <th><a href="index.php?page=galaxy&galaxy=1&system=5&position=4&session=0000000003e9" >[1:5:4]</a></th>
+  <th>Hello TST, I would like to join your alliance. My fleet is ready.</th>
+    <th width="100"><a href=?page=bewerbungen&session=0000000003e9&action=1&buddy_id=1>BUDDY_APPLY</a>
+   <a href=?page=bewerbungen&session=0000000003e9&action=2&buddy_id=1>BUDDY_DECLINE</a></th>
+  </tr>
+ <tr>  <td class="c" colspan="6"><a href="?page=buddy&session=0000000003e9">BUDDY_BACK</a></td> </tr>
 </table><br><br><br><br>
 </center>
 </div>

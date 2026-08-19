@@ -78,7 +78,7 @@ class Infos extends Page {
             echo "<table border=\"0\">\n";
             echo "<tr><td valign=\"top\">".GetObjectImage(UserSkin(), $gid)."</td>\n";
             echo "<td>".loca("LONG_$gid");
-            if (IsDefenseShoot($gid)) echo " " . va(loca("INFO_REPAIR"), $drepair);
+            if ($this->IsDefenseShoot($gid)) echo " " . va(loca("INFO_REPAIR"), $drepair);
             echo "<br/>".$this->rapid_info."</td>\n";
             echo "</tr></table></th></tr>\n";
             echo "<tr><th>".loca("INFO_STRUCTURE")."</th><th>".nicenum($UnitParam[$gid][0])."</th></tr>\n";
@@ -457,6 +457,14 @@ class Infos extends Page {
         if ($num < 0) return "<font color=\"#FF0000\">".nicenum($num)."</font>";
         else if ($num > 0) return "<font color=\"#00FF00\">".nicenum($num)."</font>";
         else return nicenum($num);
+    }
+
+    // Shooting defenses (rocket launcher, light/heavy laser, gauss, ion,
+    // plasma) are repairable after a battle. Non-shooting defense (domes,
+    // missiles) is not. Used in view() to show the repair note.
+    private function IsDefenseShoot (int $gid) : bool {
+        global $UnitParam;
+        return IsDefenseNoRak($gid) && $UnitParam[$gid][2] > 1;
     }
 }
 ?>

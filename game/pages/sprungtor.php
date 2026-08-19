@@ -10,6 +10,11 @@ class Sprungtor extends Page {
         global $aktplanet;
         global $db_prefix;
         global $fleetmap;
+        global $PageError;
+
+        // In the pre-MVC layout $PageError was a page-level global set by the
+        // renderer; declare it here so the checks below see it.
+        if (!isset($PageError)) $PageError = "";
 
         $fleetmap_rev = array_reverse ($fleetmap);
         $fleetmap_revnosat = array_diff ($fleetmap_rev, [GID_F_SAT]);

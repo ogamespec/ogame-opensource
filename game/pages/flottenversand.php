@@ -76,7 +76,7 @@ class Flottenversand extends Page {
         $this->origin = LoadPlanet ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['thisplanettype']) );
         $this->target = LoadPlanet ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), intval($_POST['planettype']) );
 
-        if ( $GlobalUni['freeze'] ) $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_FREEZE")."</span></th>\n  </tr>\n"; $this->FleetError = true;
+        if ( $GlobalUni['freeze'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_FREEZE")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
 
         if (  ( $_POST['thisgalaxy'] == $_POST['galaxy'] ) &&
                 ( $_POST['thissystem'] == $_POST['system'] ) &&
@@ -100,15 +100,15 @@ class Flottenversand extends Page {
 
             $this->target_user = LoadUser ( $this->target['owner_id'] );
 
-            if ( $this->origin_user['vacation'] ) $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_VACATION_SELF")."</span></th>\n  </tr>\n"; $this->FleetError = true;
-            if ( $this->target_user['vacation'] && $this->order != FTYP_RECYCLE ) $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_VACATION_OTHER")."</span></th>\n  </tr>\n"; $this->FleetError = true;
-            if ( $this->nowfleet >= $this->maxfleet ) $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_MAX_FLEET")."</span></th>\n  </tr>\n"; $this->FleetError = true;
+            if ( $this->origin_user['vacation'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_VACATION_SELF")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
+            if ( $this->target_user['vacation'] && $this->order != FTYP_RECYCLE ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_VACATION_OTHER")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
+            if ( $this->nowfleet >= $this->maxfleet ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_MAX_FLEET")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
 
             // DO NOT check fleet dispatch between players with the same IP only if BOTH have IP checking disabled in the settings.
             // OR if the sent is on localhost (local web server for debugging)
             if ( ! ($this->origin_user['deact_ip'] && $this->target_user['deact_ip']) && !localhost($this->origin_user['ip_addr']) )
             {
-                if ( $this->origin_user['ip_addr'] === $this->target_user['ip_addr'] && $this->origin_user['player_id'] != $this->target_user['player_id'] ) $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_IP")."</span></th>\n  </tr>\n"; $this->FleetError = true;
+                if ( $this->origin_user['ip_addr'] === $this->target_user['ip_addr'] && $this->origin_user['player_id'] != $this->target_user['player_id'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_IP")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
             }
         }
 
@@ -137,7 +137,7 @@ class Flottenversand extends Page {
         $this->dist = FlightDistance ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']) );
         $this->slowest_speed = FlightSpeed ( $this->fleet, $this->origin_user, $this->origin );
         $this->flighttime = FlightTime ( $this->dist, $this->slowest_speed, $fleetspeed / 10, $this->unispeed );
-        $cons = FlightCons ( $this->fleet, $this->dist, $this->flighttime, $this->origin_user, $this->origin, $this->unispeed, $this->hold_time / 3600 );
+        $this->cons = FlightCons ( $this->fleet, $this->dist, $this->flighttime, $this->origin_user, $this->origin, $this->unispeed, $this->hold_time / 3600 );
         $this->cargo = $this->spycargo = $this->numships = 0;
 
         foreach ($this->fleet as $id=>$amount)
@@ -146,6 +146,8 @@ class Flottenversand extends Page {
             else $this->spycargo = FleetCargo ($id) * $amount;
             $this->numships += $amount;
         }
+
+        $cons = $this->cons;
 
         $space = ( ($this->cargo + $this->spycargo) - ($cons['fleet'] + $cons['probes']) ) - ($this->spycargo - $cons['probes']);
 
@@ -313,6 +315,8 @@ class Flottenversand extends Page {
         $f = fopen ( $fleetlock, 'w' );
         fclose ($f);
 
+        $cons = $this->cons;
+
         $this->fleet_id = DispatchFleet ( $this->fleet, $this->origin, $this->target, $this->order, $this->flighttime, 
             $this->resources, 
             (int)($cons['fleet'] + $cons['probes']), time(), $this->union_id, (int)$this->hold_time );
@@ -377,7 +381,7 @@ class Flottenversand extends Page {
               <th><?=loca("FLEET_SEND_SPEED");?></th><th><?php echo nicenum($this->slowest_speed);?></th>
            </tr>
            <tr height="20">
-              <th><?=loca("FLEET_SEND_CONS");?></th><th><?php echo nicenum($cons['fleet'] + $cons['probes']);?></th>
+              <th><?=loca("FLEET_SEND_CONS");?></th><th><?php echo nicenum($this->cons['fleet'] + $this->cons['probes']);?></th>
            </tr>
            <tr height="20">
              <th><?=loca("FLEET_SEND_ORIGIN");?></th><th><a href="index.php?page=galaxy&galaxy=<?php echo intval($_POST['thisgalaxy']);?>&system=<?php echo intval($_POST['thissystem']);?>&position=<?php echo intval($_POST['thisplanet']);?>&session=<?php echo $session;?>" >[<?php echo intval($_POST['thisgalaxy']);?>:<?php echo intval($_POST['thissystem']);?>:<?php echo intval($_POST['thisplanet']);?>]</a></th>

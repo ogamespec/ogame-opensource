@@ -2,10 +2,21 @@
 
 // My Alliance Menu
 
+// The alliance sub-pages (member list, ranks, settings, circular, misc) are
+// plain functions (PageAlly_*), not methods of the Allianzen class. They were
+// included by the page in the pre-MVC layout; the controller still calls them,
+// so include the files here.
+include "allianzen_members.php";
+include "allianzen_ranks.php";
+include "allianzen_settings.php";
+include "allianzen_circular.php";
+include "allianzen_misc.php";
+
 class Allianzen extends Page {
 
     private string $SearchResults = "";
     private array $ally = [];
+    private int $action = 0;
 
     public function controller () : bool {
         global $GlobalUser;
@@ -40,23 +51,14 @@ class Allianzen extends Page {
             }
         }
 
-        // Handle alliance actions
+        // Handle alliance actions (the PageAlly_* functions below both process
+        // POST requests and render the sub-page, so they must run inside the
+        // page content, i.e. from view(), not from here).
         if ( $GlobalUser['ally_id'] != 0 && key_exists ('a', $_GET) ) {
-            if ( $_GET['a'] == 3 ) PageAlly_Leave ();
-            else if ( $_GET['a'] == 4 ) PageAlly_MemberList ();
-            else if ( $_GET['a'] == 5 ) PageAlly_Settings ();
-            else if ( $_GET['a'] == 6 ) PageAlly_Ranks ();
-            else if ( $_GET['a'] == 7 ) PageAlly_MemberSettings ();
-            else if ( $_GET['a'] == 9 ) PageAlly_ChangeTag ();
-            else if ( $_GET['a'] == 10 ) PageAlly_ChangeName ();
-            else if ( $_GET['a'] == 11 ) PageAlly_Settings ();
-            else if ( $_GET['a'] == 12 ) PageAlly_Dismiss ();
-            else if ( $_GET['a'] == 13 ) PageAlly_MemberSettings ();
-            else if ( $_GET['a'] == 15 ) PageAlly_Ranks ();
-            else if ( $_GET['a'] == 16 ) PageAlly_MemberSettings ();
-            else if ( $_GET['a'] == 17 ) AllyPage_CircularMessage ();
-            else if ( $_GET['a'] == 18 ) AllyPage_Takeover ();
-            // else fall through to home page
+            // Remember which sub-page to render in view(). Actions that need
+            // POST processing are handled there too, since the PageAlly_*
+            // functions are view functions in the pre-MVC layout.
+            $this->action = intval($_GET['a']);
         }
 
         return true;
@@ -69,6 +71,34 @@ class Allianzen extends Page {
         global $searchmap;
 
         $SearchResults = $this->SearchResults;
+
+        if ( $GlobalUser['ally_id'] != 0 && $this->action > 0 ) {
+            // The PageAlly_* functions read the alliance via the global $ally
+            // (like the pre-MVC layout did), so load it into $GLOBALS.
+            $GLOBALS['ally'] = LoadAlly ($GlobalUser['ally_id']);
+            // The pre-MVC page output these scripts before calling the
+            // sub-page functions (which may output them again); keep the same
+            // output.
+            echo "<script src=\"js/cntchar.js\" type=\"text/javascript\"></script><script src=\"js/win.js\" type=\"text/javascript\"></script>\n";
+            switch ( $this->action ) {
+                case 3:  PageAlly_Leave (); break;
+                case 4:  PageAlly_MemberList (); break;
+                case 5:  PageAlly_Settings (); break;
+                case 6:  PageAlly_Ranks (); break;
+                case 7:  PageAlly_MemberSettings (); break;
+                case 9:  PageAlly_ChangeTag (); break;
+                case 10: PageAlly_ChangeName (); break;
+                case 11: PageAlly_Settings (); break;
+                case 12: PageAlly_Dismiss (); break;
+                case 13: PageAlly_MemberSettings (); break;
+                case 15: PageAlly_Ranks (); break;
+                case 16: PageAlly_MemberSettings (); break;
+                case 17: AllyPage_CircularMessage (); break;
+                case 18: AllyPage_Takeover (); break;
+                default: $this->AllyPage_Home ();
+            }
+            return;
+        }
 
         echo "<script src=\"js/cntchar.js\" type=\"text/javascript\"></script><script src=\"js/win.js\" type=\"text/javascript\"></script>\n";
 
