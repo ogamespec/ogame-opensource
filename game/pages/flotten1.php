@@ -282,6 +282,7 @@ class Flotten1 extends Page {
                          echo "   <tr height=\"20\">\n";
                          echo "    <th><a title=\"".loca("FLEET1_SPEED").": $speed\">".loca("NAME_$gid")."</a></th>\n";
                          echo "    <th>$amount<input type=\"hidden\" name=\"maxship$gid\" value=\"$amount\"/></th>\n";
+                         echo "<!--    <th>$speed -->\n";
                          echo "     <input type=\"hidden\" name=\"consumption$gid\" value=\"$cons\"/>\n";
                          echo "     <input type=\"hidden\" name=\"speed$gid\" value=\"$speed\" /></th>\n";
                          echo "     <input type=\"hidden\" name=\"capacity$gid\" value=\"$cargo\" /></th>\n";

@@ -62,7 +62,7 @@ class Payment extends Page {
             <table class="ordertable">
             <tbody>
             <tr><td class="c" colspan="2"><?=loca("PAY_USE");?></td></tr>
-            <tr><td colspan="2"><?=loca("PAY_ENTER");?></td></tr>
+            <tr><td class="left" colspan="2"><?=loca("PAY_ENTER");?></td></tr>
             <tr>
             <td class="left"><?=loca("PAY_COUPON_CODE");?></td>
             <td class="right"><input name="couponcode" size="30" type="text" value=""></td>

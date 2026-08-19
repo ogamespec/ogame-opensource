@@ -16,6 +16,7 @@ class Trader extends Page {
         global $aktplanet;
         global $db_prefix;
         global $now;
+        global $PageError;
 
         $dm = $GlobalUser['dm'] + $GlobalUser['dmfree'];
 

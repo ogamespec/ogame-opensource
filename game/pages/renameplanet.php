@@ -7,12 +7,24 @@ class Renameplanet extends Page {
     private bool $show_main_menu = true;
 
     public function controller () : bool {
+        return true;
+    }
+
+    public function view () : void {
         global $GlobalUser;
         global $aktplanet;
         global $db_prefix;
         global $now;
         global $PageError;
+        global $session;
 
+        // POST request processing.
+        //
+        // This runs in view() (not controller()): the classic page was included
+        // AFTER PageHeader, so the header showed the planet list with the OLD
+        // name when a rename was submitted. Running the action in controller()
+        // (before the header) changed the header output, so the action stays
+        // here to preserve the original rendering order.
         if ( method() === "POST" ) {
             if ( $_POST['aktion'] === loca("REN_RENAME") ) {
                 RenamePlanet ( $GlobalUser['aktplanet'], $_POST['newname'] );
@@ -74,14 +86,6 @@ class Renameplanet extends Page {
                 }
             }
         }
-
-        return true;
-    }
-
-    public function view () : void {
-        global $GlobalUser;
-        global $aktplanet;
-        global $session;
 
         if (!$this->show_main_menu) return;
 

@@ -11,6 +11,8 @@ class Options extends Page {
         global $db_prefix;
         global $db_secret;
         global $now;
+        global $PageError;
+        global $PageMessage;
 
         $speed = $GlobalUni['speed'];
 
@@ -391,8 +393,43 @@ class Options extends Page {
                              ?>
                    <select name="dpath" size="1" >
                     <option selected>  </option>
+                       <option value="<?=hostname();?>download/use/allesnurgeklaut/">allesnurgeklaut </option>
+                       <option value="<?=hostname();?>download/use/ally-cpb/">allycpb </option>
+                       <option value="<?=hostname();?>download/use/asgard/">asgard </option>
+                       <option value="<?=hostname();?>download/use/aurora/">aurora </option>
+                       <option value="<?=hostname();?>download/use/bluedream/">bluedream </option>
+                       <option value="<?=hostname();?>download/use/bluegalaxy/">bluegalaxy </option>
+                       <option value="<?=hostname();?>download/use/blueplanet/">blueplanet </option>
+                       <option value="<?=hostname();?>download/use/bluechaos/">bluechaos </option>
+                       <option value="<?=hostname();?>download/use/bluemx/">blue-mx </option>
+                       <option value="<?=hostname();?>download/use/brace/">brace </option>
+                       <option value="<?=hostname();?>download/use/brotstyle/">brotstyle </option>
+                       <option value="<?=hostname();?>download/use/dd/">dd </option>
+                       <option value="<?=hostname();?>download/use/eclipse/">eclipse </option>
+                       <option value="<?=hostname();?>download/use/empire/">empire </option>
+                       <option value="<?=hostname();?>download/use/EpicBlue/">epicblue </option>
                        <option value="<?=hostname();?>download/use/evolution/">evolution </option>
-                   </select>
+                       <option value="<?=hostname();?>download/use/freakyfriday/">freakyfriday </option>
+                       <option value="<?=hostname();?>download/use/g3cko/">g3cko </option>
+                       <option value="<?=hostname();?>download/use/gruen/">gruen </option>
+                       <option value="<?=hostname();?>download/use/infraos/">infraos </option>
+                       <option value="<?=hostname();?>download/use/lambda/">lambda </option>
+                       <option value="<?=hostname();?>download/use/lego/">lego </option>
+                       <option value="<?=hostname();?>download/use/militaryskin/">militaryskin </option>
+                       <option value="<?=hostname();?>download/use/okno/">okno </option>
+                       <option value="<?=hostname();?>download/use/ovisio/">ovisio </option>
+                       <option value="<?=hostname();?>download/use/ovisiofarbig/">ovisiofarbig </option>
+                       <option value="<?=hostname();?>download/use/Paint/">paint </option>
+                       <option value="<?=hostname();?>download/use/quadratorstyle/">quadratorstyle </option>
+                       <option value="<?=hostname();?>download/use/real/">real </option>
+                       <option value="<?=hostname();?>download/use/redfuturistisch/">redfuturistisch </option>
+                       <option value="<?=hostname();?>download/use/redvision/">redvision </option>
+                       <option value="<?=hostname();?>download/use/reloaded/">reloaded </option>
+                       <option value="<?=hostname();?>download/use/shadowpato/">shadowpato </option>
+                       <option value="<?=hostname();?>download/use/simpel/">simpel </option>
+                       <option value="<?=hostname();?>download/use/starwars/">starwars </option>
+                       <option value="<?=hostname();?>download/use/w4wooden4ce/">w4wooden4ce </option>
+                       <option value="<?=hostname();?>download/use/xonic/">xonic </option>
                     <?php
                          }
                    ?>

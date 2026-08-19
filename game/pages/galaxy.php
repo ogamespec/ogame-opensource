@@ -124,6 +124,11 @@ class Galaxy extends Page {
 
         $this->prem = PremiumStatus ($GlobalUser);
 
+        // Publish the page message/error to the globals that PageFooter reads
+        // (the classic page wrote to the globals directly).
+        $PageError = $this->PageError;
+        $PageMessage = $this->PageMessage;
+
         return true;
     }
 

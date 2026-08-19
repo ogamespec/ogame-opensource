@@ -315,190 +315,164 @@ function fenster(target_url,win_name) {
 <!-- CONTENT AREA -->
 <div id='content'>
 <center>
-
- <table width="519">
-
-
- <form action="index.php?page=options&session=0000000003e9&mode=change" method="POST" >
-     <tr><td class="c" colspan ="2">User Data</td></tr>
-<tr>
-      <th>Username</th>
-   <th><input type="text" name="db_character" size ="20" value="PlayerOne" /><br/></th>
-
-    </tr>
-  <tr>
-  <th>Old password</th>
-
-   <th><input type="password" name="db_password" size ="20" value="" /></th>
-  </tr>
-  <tr>
-  <th>New password (min. 8 characters)</th>
-   <th><input type="password" name="newpass1" size="20" maxlength="40" /></th>
-  </tr>
-  <tr>
-  <th>New password (repeat)</th>
-
-   <th><input type="password" name="newpass2" size="20" maxlength="40" /></th>
-  </tr>
-  <tr>
-  <th><a title="You can change this email address at any time. This will be entered as a permanent address after 7 days without changes.">Email address</a></th>
-  <th><input type="text" name="db_email" maxlength="100" size="20" value="player1@test.com" /></th>
-  </tr>
-  <tr>
-  <th>Permanent Address</th>
-
-   <th></th>
-  </tr>
-   <tr><th colspan="2">
-  </tr>
-  <tr>
-  <td class="c" colspan="2">General Options</td>
-  </tr>
-  <tr>
-
-   <th>Language:</th>
-   <th>
-   <select name="lang">
-    <option value="de"  >Deutsch</option>
+             <table width="519">
+             <form action="index.php?page=options&session=0000000003e9&mode=change" method="POST" >
+                  <tr><td class="c" colspan ="2">User Data</td></tr>
+             <tr>
+                                        <th>Username</th>
+                    <th><input type="text" name="db_character" size ="20" value="PlayerOne" /><br/></th>
+                                      </tr>
+               <tr>
+               <th>Old password</th>
+                <th><input type="password" name="db_password" size ="20" value="" /></th>
+               </tr>
+               <tr>
+               <th>New password (min. 8 characters)</th>
+                <th><input type="password" name="newpass1" size="20" maxlength="40" /></th>
+               </tr>
+               <tr>
+               <th>New password (repeat)</th>
+                <th><input type="password" name="newpass2" size="20" maxlength="40" /></th>
+               </tr>
+               <tr>
+               <th><a title="You can change this email address at any time. This will be entered as a permanent address after 7 days without changes.">Email address</a></th>
+               <th><input type="text" name="db_email" maxlength="100" size="20" value="player1@test.com" /></th>
+               </tr>
+               <tr>
+               <th>Permanent Address</th>
+                <th></th>
+               </tr>
+                <tr><th colspan="2">
+                </tr>
+                <tr>
+                <td class="c" colspan="2">General Options</td>
+                </tr>
+                <tr>
+                                     <th>Language:</th>
+                    <th>
+                    <select name="lang">
+                         <option value="de"  >Deutsch</option>
     <option value="en" selected >English</option>
     <option value="es"  >Español</option>
     <option value="fr"  >Français</option>
     <option value="it"  >Italiano</option>
     <option value="jp"  >日本語</option>
     <option value="ru"  >Русский</option>
-   </select>
-   </th>
-  </tr>
+                    </select>
+                    </th>
+                    </tr>
+                                      <th>Sort planets by:</th>
+                 <th>
+                 <select name="settings_sort">
+                  <option value="0" selected >Order of emergence</option>
+                  <option value="1"  >Coordinates</option>
+                  <option value="2"  >Alphabet</option>
+                 </select>
+                 </th>
+                </tr>
+                <tr>
+                 <th>Assortment sequence:</th>
+                 <th>
+                 <select name="settings_order">
+                   <option value="0" selected>ascending</option>
+                   <option value="1" >descending</option>
+                 </select>
+                 </th>
+               </tr>
 
-   <th>Sort planets by:</th>
-   <th>
-   <select name="settings_sort">
-    <option value="0" selected >Order of emergence</option>
-    <option value="1"  >Coordinates</option>
-    <option value="2"  >Alphabet</option>
-   </select>
-
-   </th>
-  </tr>
-  <tr>
-   <th>Assortment sequence:</th>
-   <th>
-   <select name="settings_order">
-     <option value="0" selected>ascending</option>
-     <option value="1" >descending</option>
-
-   </select>
-   </th>
- </tr>
-
-  <th>Skin path (e.g. C:/ogame/skin/)<br /> <a href="http://localhost/download/" target="_blank">download</a></th>
-   <th><input type=text name="dpath" maxlength="80" size="40" value="" /> <br />
-    </select>
-
-   </th>
-  </tr>
-  <tr>
-  <th>Display skin</th>
-   <th>
-    <input type="checkbox" name="design"
-     />
-   </th>
-  </tr>
-
-  <tr>
-    <th><a title="IP check means that a security logout occurs automatically when the IP changes or two people are logged into an account from different IPs. Disabling the IP check may represent a security risk!">Disable IP Check - GameOperator Authorization Required</a></th>
-   <th><input type="checkbox" name="noipcheck"  /></th>
-  </tr>
-  <tr>
-   <td class="c" colspan="2">Galaxy View Options</td>
-  </tr>
-  <tr>
-
-   <th><a title="Number of espionage probes that can be sent directly from each scan in the Galaxy menu.">Number of espionage probes</a></th>
-   <th><input type="text" name="spio_anz" maxlength="2" size="2" value="5" /></th>
-  </tr>
-  <!--<tr>
-   <th>Show tooltip for</th>
-   <th><input type="text" name="settings_tooltiptime" maxlength="2" size="2" value="0" /> сек.</th>
-  </tr>-->
-  <tr>
-   <th>Maximum fleet messages</th>
-   <th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="10" /></th>
-  </tr>
-
-  </tr>
-     <tr>
-   <th>Action shortcuts</th>
-   <th>Confirm</th>
-  </tr>
-      <tr>
-   <th><img src="http://localhost/evolution/img/e.gif" alt="" />   Espionage</th>
-
-   <th><input type="checkbox" name="settings_esp" checked='checked'/></th>
-   </tr>
-      <tr>
-   <th><img src="http://localhost/evolution/img/m.gif" alt="" />   Write message</th>
-   <th><input type="checkbox" name="settings_wri" checked='checked'/></th>
-   </tr>
-      <tr>
-   <th><img src="http://localhost/evolution/img/b.gif" alt="" />   Buddy request</th>
-
-   <th><input type="checkbox" name="settings_bud" checked='checked'/></th>
-   </tr>
-      <tr>
-   <th><img src="http://localhost/evolution/img/r.gif" alt="" />   Missile attack</th>
-   <th><input type="checkbox" name="settings_mis" checked='checked'/></th>
-   </tr>
-      <tr>
-   <th><img src="http://localhost/evolution/img/s.gif" alt="" />   View report</th>
-
-   <th><input type="checkbox" name="settings_rep" checked='checked'/></th>
-   </tr>
-      <tr>
-   <td class="c" colspan="2">Message Options</td>
-   <tr>
-   <th>No folder sorting</th>
-  <th><input type="checkbox" name="settings_folders"  /></th>
-</tr>
-
-<tr>
-    <td class="c" colspan="2"><font color='FF8900'>Newsfeed</font></td>
-</tr>
-<tr>
-    <th>Activate<input type=hidden name="feed_submit" value="1"></th>
-    <th><input type="checkbox" name="feed_activated"  /></th>
-</tr>
-
-
-
-      
-  <tr>
-     <td class="c" colspan="2">Vacation mode / Delete account</td>
-  </tr>
-  <tr>
-     <th><a title="Vacation mode will protect you during long absences. It can only be activated if nothing is being built (fleet, building, or defense), nothing is being researched, and none of your fleets are underway. Once it is activated, you are protected from new attacks. Attacks that have already started will be carried out. During vacation mode, production is set to zero and must be manually returned to 100 % after vacation mode ends. Vacation mode lasts a minimum of two days and can only be deactivated after this time.">Enable vacation mode</a></th>
-   <th>
-    <input type="checkbox" name="urlaubs_modus"
-     />
-   </th>
-
-  </tr>
-  <tr>
-   <th><a title="If you mark this box, your account will be deleted automatically after 7 days.">Delete account</a></th>
-   <th><input type="checkbox" name="db_deaktjava"  />
-       </th>
-  </tr>
-  <tr>
-   <th colspan=2><input type="submit" value="save changes" /></th>
-
-  </tr>
-   
- </form>
- </table>
-
-
-<br><br><br><br>
-</center>
+               <th>Skin path (e.g. C:/ogame/skin/)<br /> <a href="http://localhost/download/" target="_blank">download</a></th>
+                <th><input type=text name="dpath" maxlength="80" size="40" value="" /> <br />
+                                    </select>
+                 </th>
+                </tr>
+                <tr>
+                <th>Display skin</th>
+                 <th>
+                  <input type="checkbox" name="design"
+                   />
+                 </th>
+                </tr>
+                <tr>
+                  <th><a title="IP check means that a security logout occurs automatically when the IP changes or two people are logged into an account from different IPs. Disabling the IP check may represent a security risk!">Disable IP Check - GameOperator Authorization Required</a></th>
+                 <th><input type="checkbox" name="noipcheck"  /></th>
+                </tr>
+                <tr>
+                 <td class="c" colspan="2">Galaxy View Options</td>
+                </tr>
+                <tr>
+                 <th><a title="Number of espionage probes that can be sent directly from each scan in the Galaxy menu.">Number of espionage probes</a></th>
+                 <th><input type="text" name="spio_anz" maxlength="2" size="2" value="5" /></th>
+                </tr>
+                <!--<tr>
+                 <th>Show tooltip for</th>
+                 <th><input type="text" name="settings_tooltiptime" maxlength="2" size="2" value="0" /> сек.</th>
+                </tr>-->
+                <tr>
+                 <th>Maximum fleet messages</th>
+                 <th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="10" /></th>
+                </tr>
+                                  </tr>
+                     <tr>
+                    <th>Action shortcuts</th>
+                    <th>Confirm</th>
+                   </tr>
+                       <tr>
+                    <th><img src="http://localhost/evolution/img/e.gif" alt="" />   Espionage</th>
+                    <th><input type="checkbox" name="settings_esp" checked='checked'/></th>
+                    </tr>
+                       <tr>
+                    <th><img src="http://localhost/evolution/img/m.gif" alt="" />   Write message</th>
+                    <th><input type="checkbox" name="settings_wri" checked='checked'/></th>
+                    </tr>
+                       <tr>
+                    <th><img src="http://localhost/evolution/img/b.gif" alt="" />   Buddy request</th>
+                    <th><input type="checkbox" name="settings_bud" checked='checked'/></th>
+                    </tr>
+                       <tr>
+                    <th><img src="http://localhost/evolution/img/r.gif" alt="" />   Missile attack</th>
+                    <th><input type="checkbox" name="settings_mis" checked='checked'/></th>
+                    </tr>
+                       <tr>
+                    <th><img src="http://localhost/evolution/img/s.gif" alt="" />   View report</th>
+                    <th><input type="checkbox" name="settings_rep" checked='checked'/></th>
+                    </tr>
+                       <tr>
+                    <td class="c" colspan="2">Message Options</td>
+                    <tr>
+                    <th>No folder sorting</th>
+                   <th><input type="checkbox" name="settings_folders"  /></th>
+                 </tr>
+                 <tr>
+                     <td class="c" colspan="2"><font color='FF8900'>Newsfeed</font></td>
+                 </tr>
+                 <tr>
+                     <th>Activate<input type=hidden name="feed_submit" value="1"></th>
+                     <th><input type="checkbox" name="feed_activated"  /></th>
+                 </tr>
+                                                                        
+                 <tr>
+                    <td class="c" colspan="2">Vacation mode / Delete account</td>
+                 </tr>
+                 <tr>
+                    <th><a title="Vacation mode will protect you during long absences. It can only be activated if nothing is being built (fleet, building, or defense), nothing is being researched, and none of your fleets are underway. Once it is activated, you are protected from new attacks. Attacks that have already started will be carried out. During vacation mode, production is set to zero and must be manually returned to 100 % after vacation mode ends. Vacation mode lasts a minimum of two days and can only be deactivated after this time.">Enable vacation mode</a></th>
+                    <th>
+                     <input type="checkbox" name="urlaubs_modus"
+                      />
+                    </th>
+                   </tr>
+                   <tr>
+                    <th><a title="If you mark this box, your account will be deleted automatically after 7 days.">Delete account</a></th>
+                    <th><input type="checkbox" name="db_deaktjava"  />
+                        </th>
+                   </tr>
+                   <tr>
+                    <th colspan=2><input type="submit" value="save changes" /></th>
+                   </tr>
+                    
+                 </form>
+                 </table>
+                         <br><br><br><br>
+        </center>
 </div>
 <!-- END CONTENT AREA -->
 
