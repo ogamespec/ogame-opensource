@@ -9,7 +9,7 @@
 ### Принцип работы
 
 1. **Тестовая вселенная**: FixtureBuilder создаёт тестовую вселенную с 3 игроками (PlayerOne, PlayerTwo, PlayerThree) в **in-memory движке** (`game/core/db.php` с SQLite-бэкендом, `DB_CONNECTION=sqlite`, `DB_DATABASE=:memory:`, см. `phpunit.xml`). Реальная схема БД создаётся через `CreateDBTables()` (из `install_tabs.php`), данные вставляются через реальную функцию `AddDBRow()` — без самодельных моков и ручной схемы.
-2. **Рендеринг страниц**: Класс `PageRenderer` повторяет цикл загрузки `index.php` (LoadUniverse → AuthUser → роутер → MVC/классические страницы) и рендерит **настоящие игровые страницы** через реальный DB-слой. Каждый тест запускается в отдельном PHP-процессе (`#[RunTestsInSeparateProcesses]`), как и `NotesTest`/`DbSqliteTest`: только так bootstrap загружается в глобальной области видимости, где игровые модули объявляют свои глобальные переменные (`$GlobalUser`, `$LOCA`, `$resourcemap`, ...). Страницы, работающие только через POST (flotten2, flotten3, flottenversand, sprungtor), рендерятся через `withPost()`, который заполняет `$_POST` и переключает метод запроса на POST.
+2. **Рендеринг страниц**: Класс `PageRenderer` повторяет цикл загрузки `index.php` (LoadUniverse → AuthUser → роутер → MVC/классические страницы) и рендерит **настоящие игровые страницы** через реальный DB-слой. Каждый тест запускается в отдельном PHP-процессе (`#[RunTestsInSeparateProcesses]`), как и `NotesTest`/`DbSqliteTest`: только так bootstrap загружается в глобальной области видимости, где игровые модули объявляют свои глобальные переменные (`$GlobalUser`, `$LOCA`, `$resourcemap`, ...). Страницы, работающие только через POST (flotten2, flotten3, flottenversand, sprungtor), рендерятся через `withPost()`, который заполняет `$_POST` и переключает метод запроса на POST. Начиная с issue #258 («Добавить больше страниц с запросом POST в GoldenPages»), **каждая страница, обрабатывающая `method() === "POST"`**, дополнительно рендерится через `withPost()` (POST-снимки с суффиксом `*_post_*`), чтобы страница, которая выглядит нормально при GET, но ломается при взаимодействии (POST), обнаруживалась сравнением снимков.
 3. **Сравнение снимков**: Сгенерированный HTML сравнивается с golden-снимками, хранящимися в `testing/golden/`. Перед сравнением динамический контент (временные метки, обратные отсчёты, ID, токены сессий) нормализуется.
 
 ### Golden-снимки
@@ -24,6 +24,11 @@ testing/golden/{имя_страницы}_{индекс_игрока}.html
 - `overview_p0.html` — страница Overview для PlayerOne
 - `overview_p1.html` — страница Overview для PlayerTwo
 - `buildings_shipyard_p0.html` — страница Buildings (вкладка Shipyard) для PlayerOne
+- `buildings_shipyard_post_p0.html` — та же страница, отрендеренная через её POST-форму (issue #258)
+
+POST-снимки именуются `{страница}_{вариант}_post_p{индекс}.html`; POST-only
+страницы флота из issue #256 (flotten2/flotten3/flottenversand/sprungtor)
+сохраняют свои обычные имена, потому что их снимки уже рендерят POST-поток.
 
 ### Запуск тестов
 
@@ -129,6 +134,48 @@ UPDATE_GOLDEN=1 vendor/bin/phpunit --testsuite "Golden Pages"
 отрендерена в процессе. Её интерфейс (форма пополнения склада альянса) покрыт
 снимком `infos_ally_depot`.
 
+### POST-тесты (issue #258)
+
+Каждая игровая страница, обрабатывающая `method() === "POST"`, получает POST
+golden-снимок (`{страница}*_post_p{индекс}.html`). Тесты отправляют те же POST-
+данные, что и реальные формы, поэтому POST-обработчик страницы выполняется
+против реальной базы данных:
+
+| Метод теста | Проверяемое POST-действие |
+|-------------|---------------------------|
+| `testFleet1RecallPostPlayerOne` | flotten1: отзыв летящего флота атаки (`order_return`) |
+| `testBuildingsShipyardBuildPostPlayerOne` | buildings (вкладка Shipyard): постройка 2 Лёгких истребителей (`fmenge[LF]`) |
+| `testBuildingsDefenseBuildPostPlayerOne` | buildings (вкладка Defense): постройка 2 Ракетных установок (`fmenge[RL]`) |
+| `testResourcesPostPlayerOne` | resources: установка производства всех объектов на 100% (`last{gid}`) |
+| `testMessagesDeleteAllPostPlayerOne` | messages: удаление всех сообщений (`deletemessages=deleteall`) |
+| `testOptionsPostPlayerOne` | options: сохранение формы настроек |
+| `testPaymentCheckPostPlayerOne` | payment: проверка неизвестного кода купона (`action=check`) |
+| `testRenamePlanetPostPlayerOne` | renameplanet: переименование текущей планеты (`aktion=Rename`) |
+| `testSuchePlayerPostPlayerOne` | suche: поиск по имени игрока (`type=playername`) |
+| `testSucheAllyPostPlayerOne` | suche: поиск по тегу альянса (`type=allytag`) |
+| `testTraderCallPostPlayerOne` | trader: вызов торговца при нехватке ТМ (состояние ошибки) |
+| `testTraderExchangePostPlayerOne` | trader: нулевой запрос обмена (ветка POST) |
+| `testGalaxyNavigatePostPlayerOne` | galaxy: форма выбора системы (POST session/galaxy/system) |
+| `testGalaxyRocketPostPlayerOne` | galaxy: запуск межпланетной ракеты (`aktion`/`anz`/`pziel`) |
+| `testFleetTemplatesSavePostPlayerOne` | fleet_templates: сохранение нового шаблона флота (`mode=save`) |
+| `testBewerbenSubmitPostPlayerTwo` | bewerben: подача заявки в альянс (`weiter=Submit`) |
+| `testAllianzenSettingsTextPostPlayerOne` | allianzen a=11&d=1: сохранение текста альянса |
+| `testAllianzenSettingsOptionsPostPlayerOne` | allianzen a=11&d=2: сохранение open/homepage/logo/имени основателя |
+| `testAllianzenRanksCreatePostPlayerOne` | allianzen a=15: создание нового ранга (`newrangname`) |
+| `testAllianzenMemberRankPostPlayerOne` | allianzen a=16&u=2: назначение ранга участнику (`newrang`) |
+| `testAllianzenCircularPostPlayerOne` | allianzen a=17: рассылка циркулярного сообщения |
+| `testAllianzenChangeTagPostPlayerOne` | allianzen a=9: смена тега альянса (`newtag`) |
+| `testAllianzenChangeNamePostPlayerOne` | allianzen a=10: смена названия альянса (`newname`) |
+| `testAllianzenDismissPostPlayerOne` | allianzen a=12: роспуск альянса |
+| `testAllianzenTakeoverPostPlayerOne` | allianzen a=18: передача статуса основателя (`s=1&uid=2`) |
+| `testEveryPostPageHasGoldenCoverage` | покрытие: у каждой страницы с `method() === "POST"` есть POST-снимок |
+
+POST-действия, которые **всегда редиректят** (`MyGoto()` → `die()`) до вывода
+контента, невозможно снять в процессе-изоляции: `bewerbungen` (принять/отклонить
+заявку) и `payment` (активация купона) задокументированы в
+`testEveryPostPageHasGoldenCoverage()`. POST-обработчики `admin` требуют прав
+администратора и для обычных игроков фикстуры не выполняются.
+
 ### Нормализация HTML
 
 Перед сравнением HTML нормализуется для обработки динамического контента:
@@ -173,9 +220,16 @@ testing/
   глобальные переменные, от которых зависят страницы.
 - `PageRenderer` повторяет цикл загрузки `game/index.php` (LoadUniverse,
   AuthUser, роутер из `router.json`, MVC/классические страницы).
-- Страницы, работающие только через POST (flotten2/flotten3/flottenversand/sprungtor),
-  рендерятся через `PageRenderer::withPost()`; иначе они попадают в `MyGoto()`
-  (редирект + `die()`) и завершают тестовый процесс.
+- Каждая страница, обрабатывающая `method() === "POST"`, рендерится через
+  `PageRenderer::withPost()` (issue #258), а не только POST-only страницы флота
+  (flotten2/flotten3/flottenversand/sprungtor). POST-страницы, чей обработчик
+  всегда редиректит (`MyGoto()` → `die()`), завершают дочерний тестовый процесс
+  и не могут быть отрендерены вовсе — они задокументированы в
+  `testEveryPostPageHasGoldenCoverage()`.
+- Строка альянса в фикстуре задаёт `nextrank`/`tag_until`/`name_until`/`old_tag`/
+  `old_name` как в `CreateAlly()` (game/core/ally.php): `AddRank()` (POST рангов
+  альянса) возвращает `$ally['nextrank']`, а проверки смены тега/имени сравнивают
+  `$now < $ally['tag_until']` / `$now < $ally['name_until']`.
 - В фикстуре события очереди флотов используют `start = now - 60 с`, чтобы
   антиспам-проверка flottenversand (`abs(time() - start) < 1`) не делала редирект.
 - В `game/pages/flotten1.php` обломки исключены из колонки владельца цели
