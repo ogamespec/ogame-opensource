@@ -410,12 +410,17 @@ class FixtureBuilder
         ), 'notes');
 
         // An alliance owned by PlayerOne (allianzen / ainfo / bewerben pages).
+        // nextrank = 3 matches the three ranks added below (0=Founder, 1=Founder,
+        // 2=Recruiter); tag_until/name_until = 0 so change-tag/name POSTs work
+        // (CreateAlly initializes the same fields, see game/core/ally.php).
         $allyId = AddDBRow (array (
             'tag' => 'TST', 'name' => 'Test Alliance', 'owner_id' => 1,
             'homepage' => 'https://example.com', 'open' => 1, 'insertapp' => 1,
             'exttext' => 'External description of the Test Alliance.',
             'inttext' => 'Internal description of the Test Alliance.',
             'apptext' => 'Please introduce yourself.',
+            'nextrank' => 3, 'old_tag' => '', 'old_name' => '',
+            'tag_until' => 0, 'name_until' => 0,
             'score1' => 90000, 'score2' => 58000, 'score3' => 38000,
             'place1' => 1, 'place2' => 1, 'place3' => 1,
         ), 'ally');
