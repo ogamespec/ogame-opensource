@@ -9,7 +9,7 @@ The fixture universe is rich on purpose (issue #256 "Maximum golden test coverag
 ### How It Works
 
 1. **Test Universe**: A fixture builder creates an in-memory SQLite database with 3 players (PlayerOne, PlayerTwo, PlayerThree), each having 3 planets plus moons, fleet data with queue events, active queues, messages, and notes.
-2. **Page Rendering**: The `PageRenderer` class simulates the game's `index.php` entry point, loading all necessary core modules, locale files, and page files. It captures the rendered HTML output. POST-only pages (flotten2, flotten3, flottenversand, sprungtor) are rendered with `withPost()` which sets `$_POST` and switches the request method to POST.
+2. **Page Rendering**: The `PageRenderer` class simulates the game's `index.php` entry point, loading all necessary core modules, locale files, and page files. It captures the rendered HTML output. POST-only pages (flotten2, flotten3, flottenversand, sprungtor) are rendered with `withPost()` which sets `$_POST` and switches the request method to POST. Since issue #258 ("Add more pages with POST request in GoldenPages"), **every page that handles `method() === "POST"`** is additionally rendered with `withPost()` (POST golden snapshots with the `*_post_*` suffix), so a page that looks fine on GET but breaks when the player interacts (POST) is caught by the snapshot comparison.
 3. **Snapshot Comparison**: The generated HTML is compared against golden snapshot files stored in `testing/golden/`. Dynamic content (timestamps, countdowns, IDs, session tokens) is normalized before comparison.
 
 ### Golden Snapshot Files
@@ -24,6 +24,11 @@ For example:
 - `overview_p0.html` — Overview page for PlayerOne
 - `overview_p1.html` — Overview page for PlayerTwo
 - `buildings_shipyard_p0.html` — Buildings page (Shipyard tab) for PlayerOne
+- `buildings_shipyard_post_p0.html` — same page rendered through its POST form (issue #258)
+
+POST snapshots are named `{page}_{variant}_post_p{index}.html`; the POST-only
+fleet pages from issue #256 (flotten2/flotten3/flottenversand/sprungtor) keep
+their plain names because their snapshots already render the POST flow.
 
 ### Running the Tests
 
@@ -129,6 +134,47 @@ redirects to `infos` (`MyGoto()` → `die()`) before producing output, so it can
 rendered in-process. Its UI (the alliance depot supply form) is covered by the
 `infos_ally_depot` snapshot instead.
 
+### POST request tests (issue #258)
+
+Every game page that handles `method() === "POST"` gets a POST golden snapshot
+(`{page}*_post_p{index}.html`). The tests submit the same POST payloads the real
+forms send, so the page's POST handler runs against the real database:
+
+| Test Method | POST Action Under Test |
+|-------------|------------------------|
+| `testFleet1RecallPostPlayerOne` | flotten1: recall an in-flight attack fleet (`order_return`) |
+| `testBuildingsShipyardBuildPostPlayerOne` | buildings (Shipyard tab): build 2 Light Fighters (`fmenge[LF]`) |
+| `testBuildingsDefenseBuildPostPlayerOne` | buildings (Defense tab): build 2 Rocket Launchers (`fmenge[RL]`) |
+| `testResourcesPostPlayerOne` | resources: set production of every facility to 100% (`last{gid}`) |
+| `testMessagesDeleteAllPostPlayerOne` | messages: delete all messages (`deletemessages=deleteall`) |
+| `testOptionsPostPlayerOne` | options: save the settings form |
+| `testPaymentCheckPostPlayerOne` | payment: check an unknown coupon code (`action=check`) |
+| `testRenamePlanetPostPlayerOne` | renameplanet: rename the current planet (`aktion=Rename`) |
+| `testSuchePlayerPostPlayerOne` | suche: search for a player name (`type=playername`) |
+| `testSucheAllyPostPlayerOne` | suche: search for an alliance tag (`type=allytag`) |
+| `testTraderCallPostPlayerOne` | trader: call the merchant with not enough DM (error state) |
+| `testTraderExchangePostPlayerOne` | trader: zero-value exchange request (POST branch) |
+| `testGalaxyNavigatePostPlayerOne` | galaxy: system-selection form (POST session/galaxy/system) |
+| `testGalaxyRocketPostPlayerOne` | galaxy: launch an interplanetary missile (`aktion`/`anz`/`pziel`) |
+| `testFleetTemplatesSavePostPlayerOne` | fleet_templates: save a new fleet template (`mode=save`) |
+| `testBewerbenSubmitPostPlayerTwo` | bewerben: submit an alliance application (`weiter=Submit`) |
+| `testAllianzenSettingsTextPostPlayerOne` | allianzen a=11&d=1: save the alliance text |
+| `testAllianzenSettingsOptionsPostPlayerOne` | allianzen a=11&d=2: save open/homepage/logo/founder-name |
+| `testAllianzenRanksCreatePostPlayerOne` | allianzen a=15: create a new rank (`newrangname`) |
+| `testAllianzenMemberRankPostPlayerOne` | allianzen a=16&u=2: assign a rank to a member (`newrang`) |
+| `testAllianzenCircularPostPlayerOne` | allianzen a=17: send a circular message |
+| `testAllianzenChangeTagPostPlayerOne` | allianzen a=9: change the alliance tag (`newtag`) |
+| `testAllianzenChangeNamePostPlayerOne` | allianzen a=10: change the alliance name (`newname`) |
+| `testAllianzenDismissPostPlayerOne` | allianzen a=12: dismiss the alliance |
+| `testAllianzenTakeoverPostPlayerOne` | allianzen a=18: transfer founder status (`s=1&uid=2`) |
+| `testEveryPostPageHasGoldenCoverage` | coverage: every `method() === "POST"` page has a POST snapshot |
+
+POST actions that **always redirect** (`MyGoto()` → `die()`) before any page
+output cannot be snapshotted in the process-isolated renderer: `bewerbungen`
+(accept/reject an application) and `payment` (activate a coupon) are documented
+in `testEveryPostPageHasGoldenCoverage()` instead. The `admin` POST handlers
+require admin rights and are skipped for the regular fixture players.
+
 ### HTML Normalization
 
 Before comparison, HTML is normalized to handle dynamic content:
@@ -175,9 +221,16 @@ testing/
   the global variables the pages rely on.
 - `PageRenderer` repeats the `game/index.php` boot flow (LoadUniverse, AuthUser,
   router from `router.json`, MVC/classic pages).
-- POST-only pages (flotten2/flotten3/flottenversand/sprungtor) are rendered with
-  `PageRenderer::withPost()`; without it they would hit `MyGoto()` (redirect +
-  `die()`) and terminate the test process.
+- Every page that handles `method() === "POST"` is rendered with
+  `PageRenderer::withPost()` (issue #258), not just the POST-only fleet pages
+  (flotten2/flotten3/flottenversand/sprungtor). POST pages whose handler always
+  redirects (`MyGoto()` → `die()`) terminate the child test process, so they
+  cannot be rendered at all — they are documented in
+  `testEveryPostPageHasGoldenCoverage()`.
+- The fixture alliance row sets `nextrank`/`tag_until`/`name_until`/`old_tag`/
+  `old_name` like `CreateAlly()` does (game/core/ally.php): `AddRank()` (allianzen
+  ranks POST) returns `$ally['nextrank']`, and the change-tag/name checks compare
+  `$now < $ally['tag_until']` / `$now < $ally['name_until']`.
 - The fixture fleet queue events use `start = now - 60 s` so that the
   flottenversand anti-spam check (`abs(time() - start) < 1`) does not redirect.
 - `game/pages/flotten1.php` excludes debris fields from the target-owner column
