@@ -39,8 +39,10 @@ function reloadImages() {
 <table class='header'>
 <select size='1' onchange='haha(this)'>
     <option value='index.php?page=trader&session=0000000003e9&cp=1' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1' >[1:1:4]</a></option>
+    <option value='index.php?page=trader&session=0000000003e9&cp=10' >Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10' >[1:1:4]</a></option>
     <option value='index.php?page=trader&session=0000000003e9&cp=2' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2' >[1:1:5]</a></option>
     <option value='index.php?page=trader&session=0000000003e9&cp=3' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3' >[1:2:4]</a></option>
+    <option value='index.php?page=trader&session=0000000003e9&cp=11' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11' >[1:2:4]</a></option>
 </select></table></td></tr></table></td>
 
 <td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
@@ -70,11 +72,11 @@ function reloadImages() {
     <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Energy</font></b></i></td>
 </tr>
 <tr class='header'>
-    <td align='center' class='header' width='90'><font >25.035</font></td>
-    <td align='center' class='header' width='90'><font >15.012</font></td>
-    <td align='center' class='header' width='90'><font >8.001</font></td>
+    <td align='center' class='header' width='90'><font >25.047</font></td>
+    <td align='center' class='header' width='90'><font >15.016</font></td>
+    <td align='center' class='header' width='90'><font >8.003</font></td>
     <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
-    <td align='center' class='header' width='90'><font color='#ff0000'>-46</font>/124</td>
+    <td align='center' class='header' width='90'><font >359</font>/529</td>
 </tr>
 </table></td>
 <td class='header'>
@@ -314,10 +316,10 @@ function fenster(target_url,win_name) {
 <div id='content'>
 <center>
 <script>
-storage      = new Array(0, 574964.33333333, 584987.66666667, 391998.33333333);
+storage      = new Array(0, 574952.33333333, 584983.83333333, 391997);
 factor       = new Array(0, 2.4, 2, 1);
 offer_id     = 1;
-offer_amount = 25035;
+offer_amount = 25047;
 offer_costs  = 0;
 
 function number_format(number, decimals, dec_point, thousands_sep) {
@@ -471,7 +473,7 @@ function setMaxValue(id) {
             <th class="c" align="center" width=25% >Crystal</th>
                           <th class="c" align='center' width=25% ><input type="text" size="9" name="2_value" value="0" style="text-align:right;" onkeyup='checkValue(2);'> <a href="#" onClick="setMaxValue(2);">max</a></th>
               <th class="c" align='center' width=25% >
-<span id="2_storage">584.988</span></th>
+<span id="2_storage">584.984</span></th>
                         
             <th class="c" align='center' width=25% >
                           <a href=# onmouseover="return overlib('<font color=white>One Metal gives 0.83 Crystal</font>');" onmouseout="return nd();">
@@ -484,7 +486,7 @@ function setMaxValue(id) {
             <th class="c" align="center" width=25% >Deuterium</th>
                           <th class="c" align='center' width=25% ><input type="text" size="9" name="3_value" value="0" style="text-align:right;" onkeyup='checkValue(3);'> <a href="#" onClick="setMaxValue(3);">max</a></th>
               <th class="c" align='center' width=25% >
-<span id="3_storage">391.998</span></th>
+<span id="3_storage">391.997</span></th>
                         
             <th class="c" align='center' width=25% >
                           <a href=# onmouseover="return overlib('<font color=white>One Metal gives 0.42 Deuterium</font>');" onmouseout="return nd();">

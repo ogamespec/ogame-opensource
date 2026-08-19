@@ -39,8 +39,10 @@ function reloadImages() {
 <table class='header'>
 <select size='1' onchange='haha(this)'>
     <option value='index.php?page=resources&session=0000000003e9&cp=1' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1' >[1:1:4]</a></option>
+    <option value='index.php?page=resources&session=0000000003e9&cp=10' >Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10' >[1:1:4]</a></option>
     <option value='index.php?page=resources&session=0000000003e9&cp=2' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2' >[1:1:5]</a></option>
     <option value='index.php?page=resources&session=0000000003e9&cp=3' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3' >[1:2:4]</a></option>
+    <option value='index.php?page=resources&session=0000000003e9&cp=11' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11' >[1:2:4]</a></option>
 </select></table></td></tr></table></td>
 
 <td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
@@ -70,11 +72,11 @@ function reloadImages() {
     <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Energy</font></b></i></td>
 </tr>
 <tr class='header'>
-    <td align='center' class='header' width='90'><font >25.035</font></td>
-    <td align='center' class='header' width='90'><font >15.012</font></td>
-    <td align='center' class='header' width='90'><font >8.001</font></td>
+    <td align='center' class='header' width='90'><font >25.047</font></td>
+    <td align='center' class='header' width='90'><font >15.016</font></td>
+    <td align='center' class='header' width='90'><font >8.003</font></td>
     <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
-    <td align='center' class='header' width='90'><font color='#ff0000'>-46</font>/124</td>
+    <td align='center' class='header' width='90'><font >359</font>/529</td>
 </tr>
 </table></td>
 <td class='header'>
@@ -316,7 +318,7 @@ function fenster(target_url,win_name) {
 <center> 
 <br> 
 <br> 
-Production factor: 0.73 
+Production factor: 1 
 <form action="index.php?page=resources&session=0000000003e9" method="post" id='ressourcen'> 
 <input type=hidden name='screen' id='screen'> 
 <table width="550"> 
@@ -337,10 +339,10 @@ Production factor: 0.73
   </tr>
   <tr> 
 <th>Metal Mine (Level 5)</th><th><img border="0" src="img/geologe_ikon.gif" alt="Geologist" onmouseover='return overlib("<font color=#ffffff>Geologist</font>", WIDTH, 80);' onmouseout='return nd();' width="20" height="20">&nbsp;</th>
-   <th><font color="#00FF00">193</font></th>
+   <th><font color="#00FF00">265</font></th>
    <th><font color="#FFFFFF">0</font></th>
    <th><font color="#FFFFFF">0</font></th>
-   <th><font color="#FF0000">59/81</font></th>
+   <th><font color="#FF0000">81/81</font></th>
  
   <th> <select name="last1" size="1">
       <option value="100" selected>100%</option>
@@ -360,9 +362,9 @@ Production factor: 0.73
   <tr> 
 <th>Crystal Mine (Level 3)</th><th><img border="0" src="img/geologe_ikon.gif" alt="Geologist" onmouseover='return overlib("<font color=#ffffff>Geologist</font>", WIDTH, 80);' onmouseout='return nd();' width="20" height="20">&nbsp;</th>
    <th><font color="#FFFFFF">0</font></th>
-   <th><font color="#00FF00">63</font></th>
+   <th><font color="#00FF00">87</font></th>
    <th><font color="#FFFFFF">0</font></th>
-   <th><font color="#FF0000">29/40</font></th>
+   <th><font color="#FF0000">40/40</font></th>
  
   <th> <select name="last2" size="1">
       <option value="100" selected>100%</option>
@@ -383,8 +385,8 @@ Production factor: 0.73
 <th>Deuterium Synthesizer (Level 2)</th><th><img border="0" src="img/geologe_ikon.gif" alt="Geologist" onmouseover='return overlib("<font color=#ffffff>Geologist</font>", WIDTH, 80);' onmouseout='return nd();' width="20" height="20">&nbsp;</th>
    <th><font color="#FFFFFF">0</font></th>
    <th><font color="#FFFFFF">0</font></th>
-   <th><font color="#00FF00">21</font></th>
-   <th><font color="#FF0000">36/49</font></th>
+   <th><font color="#00FF00">28</font></th>
+   <th><font color="#FF0000">49/49</font></th>
  
   <th> <select name="last3" size="1">
       <option value="100" selected>100%</option>
@@ -445,6 +447,28 @@ Production factor: 0.73
         </select>
    </th>
   </tr>
+  <tr> 
+<th>Solar Satellite (8 available)</th><th><img border="0" src="img/ingenieur_ikon.gif" alt="Engineer" onmouseover='return overlib("<font color=#ffffff>Engineer</font>", WIDTH, 80);' onmouseout='return nd();' width="20" height="20"></th>
+   <th><font color="#FFFFFF">0</font></th>
+   <th><font color="#FFFFFF">0</font></th>
+   <th><font color="#FFFFFF">0</font></th>
+   <th><font color="#00FF00">405</font></th>
+ 
+  <th> <select name="last212" size="1">
+      <option value="100" selected>100%</option>
+      <option value="90" >90%</option>
+      <option value="80" >80%</option>
+      <option value="70" >70%</option>
+      <option value="60" >60%</option>
+      <option value="50" >50%</option>
+      <option value="40" >40%</option>
+      <option value="30" >30%</option>
+      <option value="20" >20%</option>
+      <option value="10" >10%</option>
+      <option value="0" >0%</option>
+        </select>
+   </th>
+  </tr>
     <tr>   <tr> 
     <th colspan="2">Storage capacity</th> 
     <td class="k"><font color="#00ff00">600k</font></td> 
@@ -457,24 +481,24 @@ Production factor: 0.73
   <tr>     <th colspan="6" height="4"></th>   </tr> 
   <tr> 
     <th colspan="2">Total per hour:</th> 
-    <td class="k"><font color="#00ff00">214</font></td> 
-    <td class="k"><font color="#00ff00">74</font></td> 
-    <td class="k"><font color="#00ff00">10</font></td> 
-    <td class="k"><font color="#ff0000">-46</font></td> 
+    <td class="k"><font color="#00ff00">286</font></td> 
+    <td class="k"><font color="#00ff00">97</font></td> 
+    <td class="k"><font color="#00ff00">18</font></td> 
+    <td class="k"><font color="#00ff00">359</font></td> 
   </tr> 
   <tr> 
     <th colspan="2">Total per day:</th> 
-    <td class="k"><font color="#00ff00">5.136</font></td> 
-    <td class="k"><font color="#00ff00">1.776</font></td> 
-    <td class="k"><font color="#00ff00">240</font></td> 
-    <td class="k"><font color="#ff0000">-46</font></td> 
+    <td class="k"><font color="#00ff00">6.864</font></td> 
+    <td class="k"><font color="#00ff00">2.328</font></td> 
+    <td class="k"><font color="#00ff00">432</font></td> 
+    <td class="k"><font color="#00ff00">359</font></td> 
   </tr> 
   <tr> 
     <th colspan="2">Total per week:</th> 
-    <td class="k"><font color="#00ff00">35.952</font></td> 
-    <td class="k"><font color="#00ff00">12.432</font></td> 
-    <td class="k"><font color="#00ff00">1.680</font></td> 
-    <td class="k"><font color="#ff0000">-46</font></td> 
+    <td class="k"><font color="#00ff00">48.048</font></td> 
+    <td class="k"><font color="#00ff00">16.296</font></td> 
+    <td class="k"><font color="#00ff00">3.024</font></td> 
+    <td class="k"><font color="#00ff00">359</font></td> 
   </tr> 
   </table> 
 <br><br><br><br>

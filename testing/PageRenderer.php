@@ -14,6 +14,7 @@ class PageRenderer
     private $fixture;
     private $playerIndex;
     private $queryParams;
+    private $postParams;
     private $renderedHtml;
     private $session;
 
@@ -22,6 +23,7 @@ class PageRenderer
         $this->gameRoot = dirname(__DIR__) . '/game/';
         $this->fixture = $fixture;
         $this->queryParams = [];
+        $this->postParams = [];
         $this->renderedHtml = '';
         $this->session = '';
     }
@@ -50,16 +52,27 @@ class PageRenderer
     }
 
     /**
+     * Set POST parameters for the page (e.g., the fleet dispatch flow
+     * flotten2 / flotten3 / flottenversand are POST-only pages).
+     * When set, the request method becomes POST.
+     */
+    public function withPost(array $params): self
+    {
+        $this->postParams = $params;
+        return $this;
+    }
+
+    /**
      * Render the page and return the HTML.
      */
     public function render(string $page): string
     {
         // Re-create the request context of index.php.
         $_GET = array_merge(['page' => $page, 'session' => $this->session], $this->queryParams);
-        $_REQUEST = $_GET;
-        $_POST = [];
+        $_POST = $this->postParams;
+        $_REQUEST = array_merge($_GET, $_POST);
         $_COOKIE = [];
-        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_METHOD'] = empty($this->postParams) ? 'GET' : 'POST';
         $_SERVER['HTTP_HOST'] = 'localhost';
         $_SERVER['SCRIPT_NAME'] = '/game/index.php';
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
@@ -221,7 +234,7 @@ class PageRenderer
             // the page's own top-level code), so they cannot be imported here.
             // Pre-declare them as references so that the page assignment still
             // writes through to $GLOBALS and helper functions see the value.
-            foreach (array('ally', 'SearchResults', 'FleetError', 'FleetErrorText', 'not_enough') as $pageGlobal) {
+            foreach (array('ally', 'SearchResults', 'FleetError', 'FleetErrorText', 'not_enough', 'admin_router') as $pageGlobal) {
                 if (!array_key_exists($pageGlobal, $GLOBALS)) {
                     $GLOBALS[$pageGlobal] = null;
                 }

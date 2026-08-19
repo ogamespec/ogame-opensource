@@ -187,7 +187,7 @@ $prem = PremiumStatus ($GlobalUser);
 
     <th><?php echo date ( "D M j G:i:s", $queue['start']);?></th>
     <th><a href="index.php?page=galaxy&galaxy=<?php echo $target['g'];?>&system=<?php echo $target['s'];?>&position=<?php echo $target['p'];?>&session=<?php echo $session;?>" >[<?php echo $target['g'];?>:<?php echo $target['s'];?>:<?php echo $target['p'];?>]</a><?php
-    if ( ! ($target['type'] == PTYP_COLONY_PHANTOM || $target['type'] == PTYP_FARSPACE || $target['type'] == PTYP_ABANDONED ) ) echo "   <br />" . $target_user['oname'];
+    if ( ! ($target['type'] == PTYP_COLONY_PHANTOM || $target['type'] == PTYP_FARSPACE || $target['type'] == PTYP_ABANDONED || $target['type'] == PTYP_DF ) && $target_user != null ) echo "   <br />" . $target_user['oname'];
 ?>    </th>
     <th><?php echo date ( "D M j G:i:s", $queue['end']);?></th>
     <th>

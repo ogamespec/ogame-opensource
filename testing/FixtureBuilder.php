@@ -96,7 +96,9 @@ class FixtureBuilder
             'defrepair_delta' => 0, 'usercount' => 3, 'freeze' => 0, 'startdate' => $now - 86400,
             'battle_engine' => 'php', 'lang' => 'en', 'hacks' => 0, 'php_battle' => 1,
             'force_lang' => 0, 'start_dm' => 0, 'max_werf' => 1000, 'feedage' => 0,
-            'news1' => '', 'news2' => '', 'news_until' => 0, 'modlist' => '',
+            // News (ComBox on the Overview page) -- fixed text, active for a day.
+            'news1' => 'Welcome to the test universe!', 'news2' => 'Golden pages test server.',
+            'news_until' => $now + 86400, 'modlist' => '',
             'ext_board' => '', 'ext_discord' => '', 'ext_tutorial' => '', 'ext_rules' => '', 'ext_impressum' => '',
         ), 'uni');
 
@@ -111,7 +113,7 @@ class FixtureBuilder
 
         // Research levels for the three players (real users table columns).
         $research = array (
-            GID_R_ESPIONAGE => 5, GID_R_COMPUTER => 4, GID_R_WEAPON => 3, GID_R_SHIELD => 3,
+            GID_R_ESPIONAGE => 5, GID_R_COMPUTER => 6, GID_R_WEAPON => 3, GID_R_SHIELD => 3,
             GID_R_ARMOUR => 4, GID_R_ENERGY => 5, GID_R_HYPERSPACE => 2, GID_R_COMBUST_DRIVE => 4,
             GID_R_IMPULSE_DRIVE => 3, GID_R_HYPER_DRIVE => 2, GID_R_LASER_TECH => 4, GID_R_ION_TECH => 2,
             GID_R_PLASMA_TECH => 1, GID_R_IGN => 0, GID_R_EXPEDITION => 2, GID_R_GRAVITON => 0,
@@ -149,6 +151,11 @@ class FixtureBuilder
                 'dmfree' => 500,
                 // Trade rates (trader page reads them; schema has no defaults).
                 'trader' => 0, 'rate_m' => 1.0, 'rate_k' => 1.0, 'rate_d' => 1.0,
+                // Galaxy action icons + Commander message folders + partial spy reports.
+                'flags' => USER_FLAG_DEFAULT | USER_FLAG_FOLDER_ESPIONAGE | USER_FLAG_FOLDER_COMBAT
+                    | USER_FLAG_FOLDER_EXPEDITION | USER_FLAG_FOLDER_ALLIANCE | USER_FLAG_FOLDER_PLAYER | USER_FLAG_FOLDER_OTHER,
+                // Espionage probes sent with a single click (galaxy "spy" icon).
+                'maxspy' => 5, 'maxfleetmsg' => 10,
                 // Officer expiry timestamps: active (far future), so pages
                 // like fleet_templates render instead of redirecting away.
                 'com_until' => $now + 365 * 24 * 60 * 60,
@@ -188,15 +195,23 @@ class FixtureBuilder
         // Planets: 3 per player (home + 2 colonies).
         $planetConfigs = array (
             // Player 1
-            array ('owner_id' => 1, 'name' => 'Home',     'type' => PTYP_PLANET, 'g' => 1, 's' => 1, 'p' => 4, 'diameter' => 12200, 'temp' => 65, 'fields' => 14, 'maxfields' => 14, GID_B_METAL_MINE => 5, GID_B_CRYS_MINE => 3, GID_B_DEUT_SYNTH => 2, GID_B_SOLAR => 3, GID_B_SHIPYARD => 3, GID_B_METAL_STOR => 5, GID_B_CRYS_STOR => 5, GID_B_DEUT_STOR => 4, GID_B_MISS_SILO => 3, GID_B_ALLY_DEPOT => 1, GID_B_ROBOTS => 2, GID_B_FUSION => 1, GID_RC_METAL => 25000, GID_RC_CRYSTAL => 15000, GID_RC_DEUTERIUM => 8000, 'lastpeek' => $now - 600),
+            array ('owner_id' => 1, 'name' => 'Home',     'type' => PTYP_PLANET, 'g' => 1, 's' => 1, 'p' => 4, 'diameter' => 12200, 'temp' => 65, 'fields' => 14, 'maxfields' => 14, GID_B_METAL_MINE => 5, GID_B_CRYS_MINE => 3, GID_B_DEUT_SYNTH => 2, GID_B_SOLAR => 3, GID_B_SHIPYARD => 3, GID_B_RES_LAB => 4, GID_B_METAL_STOR => 5, GID_B_CRYS_STOR => 5, GID_B_DEUT_STOR => 4, GID_B_MISS_SILO => 3, GID_B_ALLY_DEPOT => 1, GID_B_ROBOTS => 2, GID_B_FUSION => 1, GID_RC_METAL => 25000, GID_RC_CRYSTAL => 15000, GID_RC_DEUTERIUM => 8000, 'lastpeek' => $now - 600,
+                // Fleet on the home planet (flotten1 ship list / shipyard tab / fleet dispatch).
+                GID_F_SC => 10, GID_F_LC => 5, GID_F_LF => 20, GID_F_HF => 3, GID_F_CRUISER => 2, GID_F_BATTLESHIP => 1,
+                GID_F_COLON => 1, GID_F_RECYCLER => 2, GID_F_PROBE => 5, GID_F_BOMBER => 1, GID_F_SAT => 8,
+                GID_F_DESTRO => 1, GID_F_DEATHSTAR => 1, GID_F_BATTLECRUISER => 1,
+                // Defense (Verteidigung tab / missile silo / galaxy IPM button).
+                GID_D_RL => 5, GID_D_LL => 3, GID_D_HL => 2, GID_D_GAUSS => 1, GID_D_ION => 1, GID_D_SDOME => 1, GID_D_ABM => 2, GID_D_IPM => 1),
             array ('owner_id' => 1, 'name' => 'Colony A', 'type' => PTYP_PLANET, 'g' => 1, 's' => 1, 'p' => 5, 'diameter' => 11000, 'temp' => 60, 'fields' => 12, 'maxfields' => 12, GID_B_METAL_MINE => 3, GID_B_CRYS_MINE => 2, GID_B_DEUT_SYNTH => 1, GID_B_SOLAR => 2, GID_B_SHIPYARD => 2, GID_B_METAL_STOR => 3, GID_B_CRYS_STOR => 3, GID_B_DEUT_STOR => 2, GID_B_MISS_SILO => 2, GID_B_ALLY_DEPOT => 0, GID_B_ROBOTS => 1, GID_B_FUSION => 0, GID_RC_METAL => 8000, GID_RC_CRYSTAL => 5000, GID_RC_DEUTERIUM => 2000, 'lastpeek' => $now - 600),
             array ('owner_id' => 1, 'name' => 'Colony B', 'type' => PTYP_PLANET, 'g' => 1, 's' => 2, 'p' => 4, 'diameter' => 10500, 'temp' => 55, 'fields' => 10, 'maxfields' => 10, GID_B_METAL_MINE => 2, GID_B_CRYS_MINE => 1, GID_B_DEUT_SYNTH => 1, GID_B_SOLAR => 1, GID_B_SHIPYARD => 1, GID_B_METAL_STOR => 2, GID_B_CRYS_STOR => 2, GID_B_DEUT_STOR => 1, GID_B_MISS_SILO => 1, GID_B_ALLY_DEPOT => 0, GID_B_ROBOTS => 0, GID_B_FUSION => 0, GID_RC_METAL => 5000, GID_RC_CRYSTAL => 3000, GID_RC_DEUTERIUM => 1000, 'lastpeek' => $now - 600),
             // Player 2
-            array ('owner_id' => 2, 'name' => 'Home',     'type' => PTYP_PLANET, 'g' => 1, 's' => 3, 'p' => 4, 'diameter' => 11800, 'temp' => 62, 'fields' => 13, 'maxfields' => 13, GID_B_METAL_MINE => 4, GID_B_CRYS_MINE => 3, GID_B_DEUT_SYNTH => 2, GID_B_SOLAR => 2, GID_B_SHIPYARD => 2, GID_B_METAL_STOR => 4, GID_B_CRYS_STOR => 4, GID_B_DEUT_STOR => 3, GID_B_MISS_SILO => 2, GID_B_ALLY_DEPOT => 1, GID_B_ROBOTS => 1, GID_B_FUSION => 0, GID_RC_METAL => 20000, GID_RC_CRYSTAL => 12000, GID_RC_DEUTERIUM => 6000, 'lastpeek' => $now - 600),
+            array ('owner_id' => 2, 'name' => 'Home',     'type' => PTYP_PLANET, 'g' => 1, 's' => 3, 'p' => 4, 'diameter' => 11800, 'temp' => 62, 'fields' => 13, 'maxfields' => 13, GID_B_METAL_MINE => 4, GID_B_CRYS_MINE => 3, GID_B_DEUT_SYNTH => 2, GID_B_SOLAR => 2, GID_B_SHIPYARD => 2, GID_B_METAL_STOR => 4, GID_B_CRYS_STOR => 4, GID_B_DEUT_STOR => 3, GID_B_MISS_SILO => 2, GID_B_ALLY_DEPOT => 1, GID_B_ROBOTS => 1, GID_B_FUSION => 0, GID_RC_METAL => 20000, GID_RC_CRYSTAL => 12000, GID_RC_DEUTERIUM => 6000, 'lastpeek' => $now - 600,
+                GID_F_SC => 5, GID_F_LF => 8, GID_F_PROBE => 3, GID_D_RL => 3, GID_D_LL => 2),
             array ('owner_id' => 2, 'name' => 'Colony X', 'type' => PTYP_PLANET, 'g' => 1, 's' => 3, 'p' => 5, 'diameter' => 10800, 'temp' => 58, 'fields' => 11, 'maxfields' => 11, GID_B_METAL_MINE => 2, GID_B_CRYS_MINE => 2, GID_B_DEUT_SYNTH => 1, GID_B_SOLAR => 2, GID_B_SHIPYARD => 1, GID_B_METAL_STOR => 2, GID_B_CRYS_STOR => 2, GID_B_DEUT_STOR => 1, GID_B_MISS_SILO => 1, GID_B_ALLY_DEPOT => 0, GID_B_ROBOTS => 0, GID_B_FUSION => 0, GID_RC_METAL => 7000, GID_RC_CRYSTAL => 4000, GID_RC_DEUTERIUM => 1500, 'lastpeek' => $now - 600),
             array ('owner_id' => 2, 'name' => 'Colony Y', 'type' => PTYP_PLANET, 'g' => 1, 's' => 4, 'p' => 4, 'diameter' => 12500, 'temp' => 70, 'fields' => 15, 'maxfields' => 15, GID_B_METAL_MINE => 3, GID_B_CRYS_MINE => 1, GID_B_DEUT_SYNTH => 2, GID_B_SOLAR => 1, GID_B_SHIPYARD => 2, GID_B_METAL_STOR => 1, GID_B_CRYS_STOR => 3, GID_B_DEUT_STOR => 1, GID_B_MISS_SILO => 2, GID_B_ALLY_DEPOT => 0, GID_B_ROBOTS => 1, GID_B_FUSION => 1, GID_RC_METAL => 9000, GID_RC_CRYSTAL => 5000, GID_RC_DEUTERIUM => 2500, 'lastpeek' => $now - 600),
             // Player 3
-            array ('owner_id' => 3, 'name' => 'Home',     'type' => PTYP_PLANET, 'g' => 1, 's' => 5, 'p' => 4, 'diameter' => 11500, 'temp' => 55, 'fields' => 12, 'maxfields' => 12, GID_B_METAL_MINE => 3, GID_B_CRYS_MINE => 2, GID_B_DEUT_SYNTH => 1, GID_B_SOLAR => 2, GID_B_SHIPYARD => 1, GID_B_METAL_STOR => 3, GID_B_CRYS_STOR => 3, GID_B_DEUT_STOR => 2, GID_B_MISS_SILO => 1, GID_B_ALLY_DEPOT => 0, GID_B_ROBOTS => 1, GID_B_FUSION => 0, GID_RC_METAL => 15000, GID_RC_CRYSTAL => 9000, GID_RC_DEUTERIUM => 4000, 'lastpeek' => $now - 600),
+            array ('owner_id' => 3, 'name' => 'Home',     'type' => PTYP_PLANET, 'g' => 1, 's' => 5, 'p' => 4, 'diameter' => 11500, 'temp' => 55, 'fields' => 12, 'maxfields' => 12, GID_B_METAL_MINE => 3, GID_B_CRYS_MINE => 2, GID_B_DEUT_SYNTH => 1, GID_B_SOLAR => 2, GID_B_SHIPYARD => 1, GID_B_METAL_STOR => 3, GID_B_CRYS_STOR => 3, GID_B_DEUT_STOR => 2, GID_B_MISS_SILO => 1, GID_B_ALLY_DEPOT => 0, GID_B_ROBOTS => 1, GID_B_FUSION => 0, GID_RC_METAL => 15000, GID_RC_CRYSTAL => 9000, GID_RC_DEUTERIUM => 4000, 'lastpeek' => $now - 600,
+                GID_F_SC => 3, GID_F_LF => 5, GID_F_PROBE => 2),
             array ('owner_id' => 3, 'name' => 'Colony Alpha', 'type' => PTYP_PLANET, 'g' => 1, 's' => 5, 'p' => 5, 'diameter' => 10200, 'temp' => 50, 'fields' => 9, 'maxfields' => 9, GID_B_METAL_MINE => 1, GID_B_CRYS_MINE => 1, GID_B_DEUT_SYNTH => 0, GID_B_SOLAR => 1, GID_B_SHIPYARD => 0, GID_B_METAL_STOR => 1, GID_B_CRYS_STOR => 1, GID_B_DEUT_STOR => 1, GID_B_MISS_SILO => 0, GID_B_ALLY_DEPOT => 0, GID_B_ROBOTS => 0, GID_B_FUSION => 0, GID_RC_METAL => 4000, GID_RC_CRYSTAL => 2500, GID_RC_DEUTERIUM => 800, 'lastpeek' => $now - 600),
             array ('owner_id' => 3, 'name' => 'Colony Beta', 'type' => PTYP_PLANET, 'g' => 1, 's' => 6, 'p' => 4, 'diameter' => 12000, 'temp' => 60, 'fields' => 14, 'maxfields' => 14, GID_B_METAL_MINE => 2, GID_B_CRYS_MINE => 2, GID_B_DEUT_SYNTH => 1, GID_B_SOLAR => 2, GID_B_SHIPYARD => 1, GID_B_METAL_STOR => 2, GID_B_CRYS_STOR => 2, GID_B_DEUT_STOR => 2, GID_B_MISS_SILO => 1, GID_B_ALLY_DEPOT => 0, GID_B_ROBOTS => 0, GID_B_FUSION => 0, GID_RC_METAL => 6000, GID_RC_CRYSTAL => 3500, GID_RC_DEUTERIUM => 1200, 'lastpeek' => $now - 600),
         );
@@ -216,17 +231,112 @@ class FixtureBuilder
             unset($player);
         }
 
-        // Fleets for player 1: one spy mission (Small Cargoes), one attack (Light Fighters).
-        AddDBRow (array (
-            'owner_id' => 1, 'mission' => FTYP_SPY, 'start_planet' => 1, 'target_planet' => 4,
-            'flight_time' => 600, 'deploy_time' => 0, 'fuel' => 100, GID_F_SC => 5,
-        ), 'fleet');
-        AddDBRow (array (
-            'owner_id' => 1, 'mission' => FTYP_ATTACK, 'start_planet' => 1, 'target_planet' => 7,
-            'flight_time' => 1200, 'deploy_time' => 0, 'fuel' => 300, GID_F_LF => 10,
-        ), 'fleet');
+        // ====================================================================
+        // Moons, debris fields, colony phantoms and outer space.
+        // A moon is a planets row with type = PTYP_MOON placed at the same
+        // coordinates as its planet (see game/core/planet.php LoadPlanet).
+        // --------------------------------------------------------------------
 
-        // Messages for player 1.
+        $moonConfigs = array (
+            // Player 1: two moons so the jump gate has a target list.
+            array ('owner_id' => 1, 'name' => 'Moon',      'type' => PTYP_MOON, 'g' => 1, 's' => 1, 'p' => 4, 'diameter' => 8800, 'temp' => -40, 'fields' => 1, 'maxfields' => 16, GID_B_LUNAR_BASE => 5, GID_B_PHALANX => 2, GID_B_JUMP_GATE => 1, GID_B_SHIPYARD => 2, GID_B_ROBOTS => 1, GID_B_METAL_STOR => 4, GID_B_CRYS_STOR => 4, GID_B_DEUT_STOR => 4, GID_RC_METAL => 0, GID_RC_CRYSTAL => 0, GID_RC_DEUTERIUM => 100000, GID_F_SC => 2, GID_F_LF => 4, 'lastpeek' => $now - 600),
+            array ('owner_id' => 1, 'name' => 'Moon B',    'type' => PTYP_MOON, 'g' => 1, 's' => 2, 'p' => 4, 'diameter' => 8300, 'temp' => -35, 'fields' => 1, 'maxfields' => 4, GID_B_LUNAR_BASE => 1, GID_B_JUMP_GATE => 1, GID_RC_DEUTERIUM => 50000, 'lastpeek' => $now - 600),
+            // Player 2: moon with a sensor phalanx (phalanx scans from it).
+            array ('owner_id' => 2, 'name' => 'Moon',      'type' => PTYP_MOON, 'g' => 1, 's' => 3, 'p' => 4, 'diameter' => 8500, 'temp' => -30, 'fields' => 1, 'maxfields' => 10, GID_B_LUNAR_BASE => 3, GID_B_PHALANX => 1, GID_RC_DEUTERIUM => 60000, 'lastpeek' => $now - 600),
+            // Player 3: simple moon.
+            array ('owner_id' => 3, 'name' => 'Moon',      'type' => PTYP_MOON, 'g' => 1, 's' => 5, 'p' => 4, 'diameter' => 8000, 'temp' => -25, 'fields' => 1, 'maxfields' => 7, GID_B_LUNAR_BASE => 2, GID_RC_DEUTERIUM => 50000, 'lastpeek' => $now - 600),
+        );
+        $moonIds = array ();
+        foreach ($moonConfigs as $mConfig) {
+            $moonIds[] = AddDBRow ($mConfig, 'planets');
+        }
+
+        // Debris field (recycle mission target; visible in the galaxy when metal+crystal >= 300).
+        $dfId = AddDBRow (array (
+            'name' => 'Debris', 'type' => PTYP_DF, 'g' => 1, 's' => 2, 'p' => 5, 'owner_id' => USER_SPACE,
+            'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0,
+            GID_RC_METAL => 500000, GID_RC_CRYSTAL => 300000, GID_RC_DEUTERIUM => 0, 'date' => $now,
+        ), 'planets');
+
+        // Colony phantom (colonize mission target).
+        $phantomId = AddDBRow (array (
+            'name' => 'Planet', 'type' => PTYP_COLONY_PHANTOM, 'g' => 1, 's' => 1, 'p' => 6, 'owner_id' => USER_SPACE,
+            'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => $now,
+        ), 'planets');
+
+        // Outer space (expedition mission target).
+        $farspaceId = AddDBRow (array (
+            'name' => 'Deep Space', 'type' => PTYP_FARSPACE, 'g' => 1, 's' => 1, 'p' => 16, 'owner_id' => USER_SPACE,
+            'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => $now,
+        ), 'planets');
+
+        // ====================================================================
+        // Fleets (all missions, including the moon destroy one) + queue events.
+        // The Overview "events" list is fed from the queue table (type = Fleet,
+        // sub_id = fleet_id, prio = QUEUE_PRIO_FLEET + mission), see
+        // game/core/queue.php EnumFleetQueue and game/pages/overview_events.php.
+        // --------------------------------------------------------------------
+
+        $fleetConfigs = array (
+            // PlayerOne
+            array ('owner_id' => 1, 'mission' => FTYP_SPY,       'start_planet' => 1, 'target_planet' => 4,  'flight_time' => 600,  'deploy_time' => 0, 'fuel' => 100, GID_F_SC => 5),
+            array ('owner_id' => 1, 'mission' => FTYP_ATTACK,    'start_planet' => 1, 'target_planet' => 4,  'flight_time' => 1200, 'deploy_time' => 0, 'fuel' => 300, GID_F_LF => 10),
+            array ('owner_id' => 1, 'mission' => FTYP_TRANSPORT, 'start_planet' => 1, 'target_planet' => 5,  'flight_time' => 900,  'deploy_time' => 0, 'fuel' => 150, GID_F_SC => 5, GID_F_LC => 2, GID_RC_METAL => 5000, GID_RC_CRYSTAL => 2000),
+            array ('owner_id' => 1, 'mission' => FTYP_DESTROY,   'start_planet' => 1, 'target_planet' => $moonIds[2], 'flight_time' => 1500, 'deploy_time' => 0, 'fuel' => 2000, GID_F_DEATHSTAR => 1),
+            array ('owner_id' => 1, 'mission' => FTYP_DEPLOY,    'start_planet' => 1, 'target_planet' => $moonIds[0], 'flight_time' => 300,  'deploy_time' => 0, 'fuel' => 50,  GID_F_LC => 2),
+            array ('owner_id' => 1, 'mission' => FTYP_RECYCLE,   'start_planet' => 1, 'target_planet' => $dfId,      'flight_time' => 800,  'deploy_time' => 0, 'fuel' => 120, GID_F_RECYCLER => 2),
+            array ('owner_id' => 1, 'mission' => FTYP_EXPEDITION,'start_planet' => 1, 'target_planet' => $farspaceId, 'flight_time' => 2000, 'deploy_time' => 3600, 'fuel' => 500, GID_F_LC => 1, GID_F_LF => 2, GID_F_PROBE => 1),
+            array ('owner_id' => 1, 'mission' => FTYP_COLONIZE,  'start_planet' => 1, 'target_planet' => $phantomId,   'flight_time' => 700,  'deploy_time' => 0, 'fuel' => 200, GID_F_COLON => 1),
+            // PlayerTwo: attack against PlayerOne (enemy event on PlayerOne's overview).
+            array ('owner_id' => 2, 'mission' => FTYP_ATTACK,    'start_planet' => 4, 'target_planet' => 1,  'flight_time' => 1200, 'deploy_time' => 0, 'fuel' => 200, GID_F_LF => 5, GID_F_SC => 2),
+            array ('owner_id' => 2, 'mission' => FTYP_TRANSPORT, 'start_planet' => 4, 'target_planet' => 5,  'flight_time' => 400,  'deploy_time' => 0, 'fuel' => 60,  GID_F_SC => 3),
+            // PlayerThree: espionage against PlayerOne.
+            array ('owner_id' => 3, 'mission' => FTYP_SPY,       'start_planet' => 7, 'target_planet' => 1,  'flight_time' => 1500, 'deploy_time' => 0, 'fuel' => 50,  GID_F_PROBE => 2),
+        );
+
+        $fleetQueueSeconds = array (600, 1200, 900, 1500, 300, 800, 2000, 700, 1200, 400, 1500);
+
+        foreach ($fleetConfigs as $i => $fConfig) {
+            $fleetId = AddDBRow ($fConfig, 'fleet');
+            // Queue event for the fleet: departs 60 s ago, arrives in
+            // flight_time - 60 s. The 60 s offset keeps the flottenversand
+            // anti-spam check (abs(time() - start) < 1) from redirecting.
+            AddQueue (
+                $fConfig['owner_id'], QTYP_FLEET, $fleetId, 0, 0,
+                $now - 60, $fleetQueueSeconds[$i] + 60, QUEUE_PRIO_FLEET + $fConfig['mission']
+            );
+        }
+
+        // ====================================================================
+        // Active buildings / research / shipyard queue (Overview + b_building
+        // + buildings pages). A building in progress is a buildqueue row plus
+        // a queue row (type = Build, sub_id = buildqueue.id). Research and
+        // shipyard orders are queue rows with type = Research / Shipyard.
+        // --------------------------------------------------------------------
+
+        // Building queue on PlayerOne's home planet: Metal Mine 6, then Crystal Mine 4.
+        $bq1 = AddDBRow (array (
+            'owner_id' => 1, 'planet_id' => 1, 'list_id' => 1, 'tech_id' => GID_B_METAL_MINE,
+            'level' => 6, 'destroy' => 0, 'start' => $now - 120, 'end' => $now + 480,
+        ), 'buildqueue');
+        AddQueue (1, QTYP_BUILD, $bq1, GID_B_METAL_MINE, 6, $now - 120, 600, QUEUE_PRIO_BUILD);
+        $bq2 = AddDBRow (array (
+            'owner_id' => 1, 'planet_id' => 1, 'list_id' => 2, 'tech_id' => GID_B_CRYS_MINE,
+            'level' => 4, 'destroy' => 0, 'start' => $now + 480, 'end' => $now + 1080,
+        ), 'buildqueue');
+        AddQueue (1, QTYP_BUILD, $bq2, GID_B_CRYS_MINE, 4, $now + 480, 600, QUEUE_PRIO_BUILD);
+
+        // Active research: Energy Technology 6 (sub_id = planet the lab is on).
+        AddQueue (1, QTYP_RESEARCH, 1, GID_R_ENERGY, 6, $now - 100, 600, QUEUE_PRIO_BUILD);
+
+        // Shipyard order: 5 Light Fighters (sub_id = planet id).
+        AddQueue (1, QTYP_SHIPYARD, 1, GID_F_LF, 5, $now - 60, 360, QUEUE_PRIO_BUILD);
+
+        // ====================================================================
+        // Messages for player 1 (all message types; pm = MTYP_* constants).
+        // --------------------------------------------------------------------
+
+        // Existing messages: "Welcome!" (pm=5) and "Hello" (pm=0) -- msg_id 1, 2.
         AddDBRow (array (
             'owner_id' => 1, 'pm' => MTYP_MISC, 'msgfrom' => 'System', 'subj' => 'Welcome!',
             'text' => 'Welcome to OGame!', 'shown' => 0, 'date' => $now - 3600, 'planet_id' => 0,
@@ -234,6 +344,63 @@ class FixtureBuilder
         AddDBRow (array (
             'owner_id' => 1, 'pm' => MTYP_PM, 'msgfrom' => 'PlayerTwo', 'subj' => 'Hello',
             'text' => 'Hi there!', 'shown' => 1, 'date' => $now - 1800, 'planet_id' => 0,
+        ), 'messages');
+
+        // Espionage report (pm=1). Its text is echoed raw by bericht.php.
+        $spyMsgId = AddDBRow (array (
+            'owner_id' => 1, 'pm' => MTYP_SPY_REPORT, 'msgfrom' => 'Fleet Command',
+            'subj' => "\n<span class=\"espionagereport\">\nEspionage report of Planet [1:3:4]\n[1:3:4]</span>",
+            'text' => "<table width=400><tr><td class=c colspan=4>Resources of Planet [1:3:4]</td></tr>"
+                . "<tr><th>Metal:</th><th>20.000</th><th>Crystal:</th><th>12.000</th></tr>"
+                . "<tr><th>Deuterium:</th><th>6.000</th><th>Energy:</th><th>53</th></tr>"
+                . "</table><table width=400><tr><td class=c colspan=2>Fleet</td></tr>"
+                . "<tr><th>Small Cargo</th><th>5</th></tr><tr><th>Light Fighter</th><th>8</th></tr></table>"
+                . "<center><a href=# onclick=\"doit(6,1,3,4,1,5);\">Spy again</a></center>",
+            'shown' => 0, 'date' => $now - 900, 'planet_id' => 4,
+        ), 'messages');
+
+        // Battle report body (pm=6). Never shown in the list; bericht.php target.
+        $battleMsgId = AddDBRow (array (
+            'owner_id' => 1, 'pm' => MTYP_BATTLE_REPORT_TEXT, 'msgfrom' => 'Combat',
+            'subj' => 'Combat Report',
+            'text' => "<table width=400><tr><td class=c>Attacker PlayerOne (1:1:4)</td></tr>"
+                . "<tr><th>Weapons: 30% Shields: 30% Armour: 40%</th></tr>"
+                . "<tr><th>Light Fighter 10</th></tr>"
+                . "<tr><td class=c>Defender PlayerTwo (1:3:4)</td></tr>"
+                . "<tr><th>Rocket Launcher 3</th></tr>"
+                . "<tr><td class=c>After the battle ...</td></tr>"
+                . "<tr><th>Attacker lost 0 units. Defender lost 0 units.</th></tr>"
+                . "<tr><th>Debris field: 0 metal and 0 crystal.</th></tr></table>",
+            'shown' => 0, 'date' => $now - 900, 'planet_id' => 1,
+        ), 'messages');
+
+        // Battle report link (pm=2) pointing at the report body above.
+        AddDBRow (array (
+            'owner_id' => 1, 'pm' => MTYP_BATTLE_REPORT_LINK, 'msgfrom' => 'Combat',
+            'subj' => "<a href=\"#\" onclick=\"fenster('index.php?page=bericht&session={PUBLIC_SESSION}&bericht=$battleMsgId', 'Bericht_Kampf');\"><span class=\"attack\">Combat Report [1:3:4] (V:100.000,A:50.000)</span></a>",
+            'text' => '', 'shown' => 0, 'date' => $now - 900, 'planet_id' => 1,
+        ), 'messages');
+
+        // Expedition report (pm=3).
+        AddDBRow (array (
+            'owner_id' => 1, 'pm' => MTYP_EXP, 'msgfrom' => 'Expedition',
+            'subj' => 'Expedition to [1:1:16]',
+            'text' => "Fleet found: 5 Small Cargo<br><table width=400><tr><td class=c>Expedition result</td></tr><tr><th>You discovered a fleet of 5 Small Cargo. The ships are added to your fleet.</th></tr></table>",
+            'shown' => 0, 'date' => $now - 900, 'planet_id' => 1,
+        ), 'messages');
+
+        // Alliance message (pm=4).
+        AddDBRow (array (
+            'owner_id' => 1, 'pm' => MTYP_ALLY, 'msgfrom' => '[TST]', 'subj' => 'Alliance',
+            'text' => 'PlayerThree has applied to the alliance TST.', 'shown' => 0, 'date' => $now - 900, 'planet_id' => 0,
+        ), 'messages');
+
+        // Private message (pm=0) with a reply link.
+        AddDBRow (array (
+            'owner_id' => 1, 'pm' => MTYP_PM,
+            'msgfrom' => 'PlayerTwo <a href="index.php?page=galaxy&galaxy=1&system=3&position=4&session={PUBLIC_SESSION}">[1:3:4]</a>',
+            'subj' => 'Hello <a href="index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=2&re=1&betreff=Re:Hello"><img src="img/m.gif"></a>',
+            'text' => 'Hi! Are you online?', 'shown' => 0, 'date' => $now - 900, 'planet_id' => 0,
         ), 'messages');
 
         // A note for player 1.
@@ -253,11 +420,43 @@ class FixtureBuilder
             'place1' => 1, 'place2' => 1, 'place3' => 1,
         ), 'ally');
 
-        // Add a rank and PlayerTwo/PlayerThree as members.
+        // Add ranks and PlayerTwo/PlayerThree as members.
+        // rank_id 0 = founder (needed by allianzen settings page), rank 1 = newbie
+        // (existing), rank 2 = a real rank so the ranks page has a row to show.
+        AddDBRow (array ('rank_id' => 0, 'ally_id' => $allyId, 'name' => 'Founder', 'rights' => 0x1FF), 'allyranks');
         AddDBRow (array ('rank_id' => 1, 'ally_id' => $allyId, 'name' => 'Founder', 'rights' => 0x1FF), 'allyranks');
+        AddDBRow (array ('rank_id' => 2, 'ally_id' => $allyId, 'name' => 'Recruiter', 'rights' => ARANK_R_APPLY | ARANK_R_MEMBERS), 'allyranks');
         foreach (array (1 => 1, 2 => 1, 3 => 1) as $playerId => $rankId) {
             dbquery ("UPDATE {$db_prefix}users SET ally_id = $allyId, allyrank = $rankId, joindate = $now WHERE player_id = $playerId");
         }
+
+        // PlayerThree applied to the alliance (bewerbungen page).
+        AddDBRow (array (
+            'ally_id' => $allyId, 'player_id' => 3,
+            'text' => 'Hello TST, I would like to join your alliance. My fleet is ready.',
+            'date' => $now - 3600,
+        ), 'allyapps');
+
+        // Buddies for PlayerOne: an accepted buddy (shown in the buddy list)
+        // and a pending request (shown on the buddy requests page).
+        AddDBRow (array (
+            'request_from' => 2, 'request_to' => 1, 'text' => 'Be my buddy!', 'accepted' => 1,
+        ), 'buddy');
+        AddDBRow (array (
+            'request_from' => 3, 'request_to' => 1, 'text' => 'Hello, add me please!', 'accepted' => 0,
+        ), 'buddy');
+
+        // A fleet template for PlayerOne (fleet_templates / flotten1 pages).
+        AddDBRow (array (
+            'owner_id' => 1, 'name' => 'Attack Fleet', 'date' => $now - 3600,
+            GID_F_SC => 5, GID_F_LF => 10, GID_F_CRUISER => 1,
+        ), 'template');
+
+        // A ban in the Pillar of Shame (pranger page).
+        AddDBRow (array (
+            'admin_name' => 'GO', 'user_name' => 'BadPlayer', 'admin_id' => 1, 'user_id' => 2,
+            'ban_when' => $now - 86400, 'ban_until' => $now + 86400, 'reason' => 'Fleet saving',
+        ), 'pranger');
 
         // PlayerOne has an active trade offer (trader page).
         dbquery ("UPDATE {$db_prefix}users SET trader = 1, rate_m = 2.4, rate_k = 2.0, rate_d = 1.0 WHERE player_id = 1");
