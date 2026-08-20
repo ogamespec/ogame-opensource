@@ -49,7 +49,12 @@ function ExecuteBlock (array $queue, array $block, array $childs ) : void
     $strat_id = $queue['sub_id'];
 
     // Trace block execution
-    $bot_trace = false;
+    // Can be enabled at runtime, e.g. $GLOBALS['bot_trace'] = true;
+    $bot_trace = (bool) ( $GLOBALS['bot_trace'] ?? false );
+
+    if ($bot_trace) {
+        Debug ( "Bot trace : " . $block['category'] . "(".$block['key']."): " . $block['text'] );
+    }
 
     switch ( $block['category'] )
     {
@@ -103,17 +108,25 @@ function ExecuteBlock (array $queue, array $block, array $childs ) : void
             foreach ( $childs as $i=>$child ) {
                 if ( strtolower ($child['text']) === "no" ) {
                     if ( $result == false ) {
+                        if ($bot_trace) {
+                            Debug ($block['text'] . " : ".$prefix."NO");
+                        }
                         $block_id = $child['to']; break;
                     }
                     else $block_no = $child['to'];
                 }
                 if ( strtolower ($child['text']) === "yes" && $result == true ) {
+                    if ($bot_trace)
+                        Debug ($block['text'] . " : YES");
                     $block_id = $child['to']; break;
                 }
                 if ( preg_match('/([0-9]{1,2}|100)%/', $child['text'], $matches) && $result == true ) {    // random jump
                     $prc = str_replace ( "%", "", $matches[0]);
                     $roll = mt_rand (1, 100);
                     if ( $roll <= $prc ) {
+                        if ($bot_trace) {
+                            Debug ($block['text'] . " : PROBABLY($roll/$prc) YES");
+                        }
                         $block_id = $child['to']; break;
                     }
                     else {
@@ -122,6 +135,9 @@ function ExecuteBlock (array $queue, array $block, array $childs ) : void
                             $result = false;
                         }
                         else {
+                            if ($bot_trace) {
+                                Debug ($block['text'] . " : PROBABLY($roll/$prc) NO");
+                            }
                             $block_id = $block_no; break;
                         }
                     }

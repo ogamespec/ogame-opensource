@@ -625,7 +625,9 @@ function Exp_ResourcesFound (array $exptab, array $queue, array $fleet_obj, arra
     }
     if ( $type == 0) $found[GID_RC_METAL] = $amount;
     else if ( $type == 1) $found[GID_RC_CRYSTAL] = $amount;
-    else $found[GID_RC_DEUTERIUM] = $amount;
+    // @phpstan-ignore-next-line equal.alwaysTrue -- the explicit check is kept because mods may extend this chain
+    else if ( $type == 2) $found[GID_RC_DEUTERIUM] = $amount;
+    else { /* mods can hook into the resource-type chain here */ }
 
     // Bring back the fleet.
     // The hold time is used as the flight time.
