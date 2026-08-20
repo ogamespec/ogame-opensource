@@ -1,8 +1,17 @@
 <?php
-
+/**
+ * @file debug.php
+ * @brief Debug helpers and error reporting.
+ * @details Provides debugging and tracing helpers used while developing and troubleshooting the game.
+ */
 // Functions for debugging and errors.
 
-// Error, emergency program termination.
+/**
+ * Record an error, end the user session and terminate the program.
+ *
+ * @param string $text Error message.
+ * @return never This function always exits.
+ */
 function Error (string $text) : never
 {
     global $GlobalUser;
@@ -52,7 +61,11 @@ function Error (string $text) : never
     exit ();
 }
 
-// Add debug message.
+/**
+ * Add a debug message to the debug log.
+ *
+ * @param string $message Debug message.
+ */
 function Debug (string $message) : void
 {
     global $GlobalUser;
@@ -73,7 +86,11 @@ function Debug (string $message) : void
     $id = AddDBRow ( $error, 'debug' );
 }
 
-// Call Trace.
+/**
+ * Build a formatted string of the current call trace.
+ *
+ * @return string HTML formatted call trace.
+ */
 function BackTrace () : string
 {
     $bt = debug_backtrace (DEBUG_BACKTRACE_IGNORE_ARGS);
@@ -91,7 +108,9 @@ function BackTrace () : string
     return $trace;
 }
 
-// Save the browse history
+/**
+ * Save the user's browse history when sniffing is enabled.
+ */
 function BrowseHistory () : void
 {
     global $GlobalUser;
@@ -106,21 +125,38 @@ function BrowseHistory () : void
     }
 }
 
-// Security check.
+/**
+ * Check that the text matches the pattern, raising an error on a security breach.
+ *
+ * @param string $match Regular expression pattern.
+ * @param string $text Text to check.
+ * @param string $notes Additional notes appended to the error message.
+ */
 function SecurityCheck ( string $match, string $text, string $notes ) : void
 {
     global $GlobalUni;
     if ( !preg_match ( $match, $text ) ) Error ( loca_lang("DEBUG_SECURITY_BREACH", $GlobalUni['lang']) . $notes );
 }
 
-// Add the IP address to the table.
+/**
+ * Log an IP address visit in the IP log table.
+ *
+ * @param string $ip IP address.
+ * @param int $user_id Player ID.
+ * @param int $reg Whether the log entry marks a registration.
+ */
 function LogIPAddress ( string $ip, int $user_id, int $reg=0) : void
 {
     $log = array ( 'ip' => $ip, 'user_id' => $user_id, 'reg' => $reg, 'date' => time () );
     AddDBRow ( $log, 'iplogs' );
 }
 
-// Get the last registration from the specified IP address.
+/**
+ * Get the timestamp of the last registration made from the given IP address.
+ *
+ * @param string $ip IP address.
+ * @return int Registration timestamp, or 0 if none found.
+ */
 function GetLastRegistrationByIP ( string $ip ) : int
 {
     global $db_prefix;
@@ -135,7 +171,14 @@ function GetLastRegistrationByIP ( string $ip ) : int
     }
 }
 
-// User action logs.
+/**
+ * Write a user action to the user log and delete entries older than two weeks.
+ *
+ * @param int $owner_id Player ID.
+ * @param string $type Log entry type.
+ * @param string $text Log entry text.
+ * @param int $when Timestamp of the entry; defaults to the current time.
+ */
 function UserLog (int $owner_id, string $type, string $text, int $when=0) : void
 {
     global $db_prefix;
@@ -147,8 +190,12 @@ function UserLog (int $owner_id, string $type, string $text, int $when=0) : void
     dbquery ($query);
 }
 
-// Writes player data to the database when attempting to hack the game.
-// The admin should periodically check for too smart players who try to hack the game.
+/**
+ * Log the player's request data when a hacking attempt is detected.
+ * The admin should periodically check for players who try to hack the game.
+ *
+ * @param string $code Localization code of the hacking attempt message.
+ */
 function Hacking (string $code) : void
 {
     global $GlobalUni;
@@ -176,7 +223,11 @@ function Hacking (string $code) : void
     IncrementHackCounter ();
 }
 
-// Return the SQL query log if the user has debugging information enabled.
+/**
+ * Return the SQL query log as HTML if the user has debugging information enabled.
+ *
+ * @return string HTML markup of the SQL query log.
+ */
 function GetSQLQueryLogText () : string
 {
     global $query_log;

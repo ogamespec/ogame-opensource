@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file planet.php
+ * @brief Planet management.
+ * @details Loads planet data, computes planet properties and handles planet-related state changes.
+ */
 // Planets and moons management: creation/colonization, destruction, loading planets from the database, renaming.
 // All other special objects in the Galaxy are also considered planets (but of a different type).
 
@@ -41,10 +45,19 @@ Cleaning of systems from "destroyed planets" takes place every 24 hours at 01-10
 
 */
 
-// Create planet. Returns planet_id, or 0 if the position is occupied.
-// colony: 1 - create colony, 0 - Home planet
-// moon: 1 - create the moon
-// moonchance: chance of the moon appearing (for the size of the moon)
+/**
+ * Create a planet (colony, home planet or moon) at the given coordinates.
+ *
+ * @param int $g Galaxy coordinate of the planet.
+ * @param int $s System coordinate of the planet.
+ * @param int $p Position coordinate of the planet.
+ * @param int $owner_id ID of the planet owner.
+ * @param int $colony 1 to create a colony, 0 to create the home planet.
+ * @param int $moon 1 to create a moon, 0 to create a planet.
+ * @param int $moonchance Chance of the moon appearing (used for the moon size).
+ * @param int $when Creation time (Unix timestamp); 0 uses the current time.
+ * @return int The created planet ID, or 0 if the position is occupied.
+ */
 function CreatePlanet ( int $g, int $s, int $p, int $owner_id, int $colony=1, int $moon=0, int $moonchance=0, int $when=0) : int
 {
     global $db_prefix;
@@ -130,7 +143,11 @@ function CreatePlanet ( int $g, int $s, int $p, int $owner_id, int $colony=1, in
     return $id;
 }
 
-// List all planets of the current user. Return the result of the SQL query.
+/**
+ * List all planets of the current user.
+ *
+ * @return mixed The result of the SQL query.
+ */
 function EnumPlanets () : mixed
 {
     global $db_prefix, $GlobalUser;
@@ -150,7 +167,13 @@ function EnumPlanets () : mixed
     return $result;
 }
 
-// List all the planets in the Galaxy.
+/**
+ * List all planets in the Galaxy at the given coordinates.
+ *
+ * @param int $g Galaxy coordinate.
+ * @param int $s System coordinate.
+ * @return mixed The result of the SQL query.
+ */
 function EnumPlanetsGalaxy (int $g, int $s) : mixed
 {
     global $db_prefix;
@@ -159,7 +182,13 @@ function EnumPlanetsGalaxy (int $g, int $s) : mixed
     return $result;
 }
 
-// List custom galaxy objects to display on the Galaxy page
+/**
+ * List custom galaxy objects to display on the Galaxy page.
+ *
+ * @param int $g Galaxy coordinate.
+ * @param int $s System coordinate.
+ * @return mixed The result of the SQL query.
+ */
 function EnumCustomPlanetsGalaxy (int $g, int $s) : mixed
 {
     global $db_prefix;
@@ -168,8 +197,15 @@ function EnumCustomPlanetsGalaxy (int $g, int $s) : mixed
     return $result;
 }
 
-// Load planet state by specified coordinates (without pre-processing)
-// Return the $planet array, or null.
+/**
+ * Load the planet state by the specified coordinates without pre-processing.
+ *
+ * @param int $g Galaxy coordinate of the planet.
+ * @param int $s System coordinate of the planet.
+ * @param int $p Position coordinate of the planet.
+ * @param int $type Type of the object to load (1 - planet, 2 - debris field, 3 - moon, otherwise a galaxy object game type).
+ * @return mixed The planet array, or null if not found.
+ */
 function LoadPlanet (int $g, int $s, int $p, int $type) : mixed
 {
     global $db_prefix;
@@ -185,8 +221,12 @@ function LoadPlanet (int $g, int $s, int $p, int $type) : mixed
     else return null;
 }
 
-// Load planet state by ID
-// Return the $planet array, or null.
+/**
+ * Load the planet state by its ID.
+ *
+ * @param int $planet_id ID of the planet.
+ * @return mixed The planet array, or null if not found.
+ */
 function LoadPlanetById (int $planet_id) : mixed
 {
     global $db_prefix;
@@ -199,7 +239,12 @@ function LoadPlanetById (int $planet_id) : mixed
     else return null;
 }
 
-// If the planet has a moon (even destroyed), return its ID, otherwise return 0.
+/**
+ * Return the ID of the planet's moon (even if destroyed), or 0 if there is none.
+ *
+ * @param int $planet_id ID of the planet.
+ * @return int The moon ID, or 0 if the planet has no moon.
+ */
 function PlanetHasMoon ( int $planet_id ) : int
 {
     global $db_prefix;
@@ -215,11 +260,13 @@ function PlanetHasMoon ( int $planet_id ) : int
     return $planet['planet_id'];
 }
 
-// The length of the planet name is max. 20 characters (the word (Moon) is also taken into account)
-// The following characters are cut out of the name: / ' " * ( )
-// If there are characters in the name ; , < > \ ` then the name doesn't change.
-// If the name of a planet is blank, it is called "планета"
-// More than one space is cut out.
+/**
+ * Rename the planet: the name is limited to 20 characters, forbidden characters are removed and the name cannot be left blank.
+ *
+ * @param int $planet_id ID of the planet to rename.
+ * @param string $name The new name of the planet.
+ * @return void
+ */
 function RenamePlanet (int $planet_id, string $name) : void
 {
     // Find the planet.
@@ -253,7 +300,12 @@ function RenamePlanet (int $planet_id, string $name) : void
     dbquery ($query);
 }
 
-// NO CHECKS ARE MADE!!!
+/**
+ * Delete the planet from the database without any checks.
+ *
+ * @param int $planet_id ID of the planet to destroy.
+ * @return void
+ */
 function DestroyPlanet (int $planet_id) : void
 {
     global $db_prefix;
@@ -262,7 +314,13 @@ function DestroyPlanet (int $planet_id) : void
     dbquery ($query);
 }
 
-// Update the activity on the planet
+/**
+ * Update the last activity time of the planet.
+ *
+ * @param int $planet_id ID of the planet.
+ * @param int $t Activity time (Unix timestamp); 0 uses the current time.
+ * @return void
+ */
 function UpdatePlanetActivity ( int $planet_id, int $t=0) : void
 {
     global $db_prefix;
@@ -275,7 +333,14 @@ function UpdatePlanetActivity ( int $planet_id, int $t=0) : void
 // Management of debris fields.
 // DF loading is performed by calling LoadPlanetById. DF is deleted by calling DestroyPlanet.
 
-// Checks if there is a DF at the given coordinates. Returns DF id, or 0.
+/**
+ * Check if there is a debris field at the given coordinates.
+ *
+ * @param int $g Galaxy coordinate.
+ * @param int $s System coordinate.
+ * @param int $p Position coordinate.
+ * @return int The debris field ID, or 0 if there is none.
+ */
 function HasDebris (int $g, int $s, int $p) : int
 {
     global $db_prefix;
@@ -286,7 +351,15 @@ function HasDebris (int $g, int $s, int $p) : int
     return $debris['planet_id'];
 }
 
-// Creates a new DF at the specified coordinates
+/**
+ * Create a new debris field at the specified coordinates.
+ *
+ * @param int $g Galaxy coordinate.
+ * @param int $s System coordinate.
+ * @param int $p Position coordinate.
+ * @param int $owner_id ID of the debris field owner.
+ * @return int The ID of the created or existing debris field.
+ */
 function CreateDebris (int $g, int $s, int $p, int $owner_id) : int
 {
     global $db_prefix;
@@ -301,7 +374,14 @@ function CreateDebris (int $g, int $s, int $p, int $owner_id) : int
     return $id;
 }
 
-// Collect DF with the specified capacity. The variables $harvest m/k contains the harvested DF.
+/**
+ * Collect resources from a debris field up to the given cargo capacity.
+ *
+ * @param int $planet_id ID of the debris field.
+ * @param int $cargo Cargo capacity available for harvesting.
+ * @param int $when Time of the harvest (Unix timestamp).
+ * @return array The harvested amounts per resource type.
+ */
 function HarvestDebris (int $planet_id, int $cargo, int $when) : array
 {
     global $db_prefix;
@@ -334,7 +414,14 @@ function HarvestDebris (int $planet_id, int $cargo, int $when) : array
     return $harvest;
 }
 
-// Pour scrap into the specified DF
+/**
+ * Add resources to the specified debris field.
+ *
+ * @param int $id ID of the debris field.
+ * @param int $m Amount of metal to add.
+ * @param int $k Amount of crystal to add.
+ * @return void
+ */
 function AddDebris (int $id, int $m, int $k) : void
 {
     global $db_prefix;
@@ -343,7 +430,12 @@ function AddDebris (int $id, int $m, int $k) : void
     dbquery ($query);
 }
 
-// Get a game type of planet.
+/**
+ * Return the game type of the given planet object.
+ *
+ * @param array $planet The planet array.
+ * @return int The game type of the planet.
+ */
 function GetPlanetType (array $planet) : int
 {
     if ( $planet['type'] >= PTYP_CUSTOM) return $planet['type'];
@@ -352,7 +444,15 @@ function GetPlanetType (array $planet) : int
     else return GAME_PTYP_PLANET;
 }
 
-// Create a colonization phantom. Return ID.
+/**
+ * Create a colonization phantom at the given coordinates.
+ *
+ * @param int $g Galaxy coordinate.
+ * @param int $s System coordinate.
+ * @param int $p Position coordinate.
+ * @param int $owner_id ID of the colonizing player.
+ * @return int The ID of the created phantom.
+ */
 function CreateColonyPhantom (int $g, int $s, int $p, int $owner_id) : int
 {
     $planet = array(
@@ -363,7 +463,15 @@ function CreateColonyPhantom (int $g, int $s, int $p, int $owner_id) : int
     return $id;
 }
 
-// Add an abandoned colony.
+/**
+ * Add an abandoned colony at the given coordinates if the position is free.
+ *
+ * @param int $g Galaxy coordinate.
+ * @param int $s System coordinate.
+ * @param int $p Position coordinate.
+ * @param int $when Creation time (Unix timestamp).
+ * @return int The ID of the created abandoned colony, or 0 if the position is occupied.
+ */
 function CreateAbandonedColony (int $g, int $s, int $p, int $when) : int
 {
     // If there is no planet at the given coordinates, add Abandoned Colony.
@@ -379,8 +487,14 @@ function CreateAbandonedColony (int $g, int $s, int $p, int $when) : int
     return $id;
 }
 
-// Check if there is already a planet at the given coordinates (for Colonization). Destroyed planets and abandoned colonies are also taken into account.
-// Colonization phantoms don't count (whoever flies first)
+/**
+ * Check if a planet already exists at the given coordinates.
+ *
+ * @param int $g Galaxy coordinate.
+ * @param int $s System coordinate.
+ * @param int $p Position coordinate.
+ * @return bool True if a planet (including destroyed or abandoned) exists there.
+ */
 function HasPlanet (int $g, int $s, int $p) : bool
 {
     global $db_prefix;
@@ -390,7 +504,14 @@ function HasPlanet (int $g, int $s, int $p) : bool
     else return false;
 }
 
-// Change the amount of resources on the planet.
+/**
+ * Change the amount of resources on the planet.
+ *
+ * @param array $cost Resource amounts to add or subtract.
+ * @param int $planet_id ID of the planet.
+ * @param string $sign Sign of the operation: "+" to add, "-" to subtract.
+ * @return void
+ */
 function AdjustResources (array $cost, int $planet_id, string $sign) : void
 {
     global $db_prefix;
@@ -407,8 +528,14 @@ function AdjustResources (array $cost, int $planet_id, string $sign) : void
     dbquery ($query);
 }
 
-// Destroy the moon, return fleets, modify player stats.
-// fleet_id - ID of the fleet that destroyed the moon. The return of this fleet is controlled by the battle engine.
+/**
+ * Destroy the moon: recall foreign fleets, redirect own fleets, update statistics and delete the moon.
+ *
+ * @param int $moon_id ID of the moon to destroy.
+ * @param int $when Time of the destruction (Unix timestamp).
+ * @param int $fleet_id ID of the fleet that destroyed the moon; its return is controlled by the battle engine.
+ * @return void
+ */
 function DestroyMoon (int $moon_id, int $when, int $fleet_id) : void
 {
     global $db_prefix;
@@ -445,7 +572,12 @@ function DestroyMoon (int $moon_id, int $when, int $fleet_id) : void
     SelectPlanet ( $planet['owner_id'], $planet['planet_id'] );
 }
 
-// Recalculate fields.
+/**
+ * Recalculate the used and maximum fields of the planet.
+ *
+ * @param int $planet_id ID of the planet.
+ * @return void
+ */
 function RecalcFields (int $planet_id) : void
 {
     global $db_prefix;
@@ -460,7 +592,14 @@ function RecalcFields (int $planet_id) : void
     dbquery ($query);
 }
 
-// Endless distances.
+/**
+ * Create an outer space object at the given coordinates, or return the ID of the existing one.
+ *
+ * @param int $g Galaxy coordinate.
+ * @param int $s System coordinate.
+ * @param int $p Position coordinate.
+ * @return int The ID of the outer space object.
+ */
 function CreateOuterSpace (int $g, int $s, int $p) : int
 {
     global $db_prefix;
@@ -484,7 +623,13 @@ function CreateOuterSpace (int $g, int $s, int $p) : int
     return $id;
 }
 
-// Set up a fleet and defenses on the planet.
+/**
+ * Set the fleet and defense amounts on the planet.
+ *
+ * @param int $planet_id ID of the planet.
+ * @param array $objects Amounts of each fleet and defense type.
+ * @return void
+ */
 function SetPlanetFleetDefense ( int $planet_id, array $objects ) : void
 {
     global $db_prefix;
@@ -501,7 +646,13 @@ function SetPlanetFleetDefense ( int $planet_id, array $objects ) : void
     dbquery ($query);
 }
 
-// Set up defenses on the planet.
+/**
+ * Set the defense amounts on the planet.
+ *
+ * @param int $planet_id ID of the planet.
+ * @param array $objects Amounts of each defense type.
+ * @return void
+ */
 function SetPlanetDefense ( int $planet_id, array $objects ) : void
 {
     global $db_prefix;
@@ -516,7 +667,13 @@ function SetPlanetDefense ( int $planet_id, array $objects ) : void
     dbquery ($query);
 }
 
-// Set up buildings on the planet.
+/**
+ * Set the building levels on the planet.
+ *
+ * @param int $planet_id ID of the planet.
+ * @param array $objects Levels of each building type.
+ * @return void
+ */
 function SetPlanetBuildings ( int $planet_id, array $objects ) : void
 {
     global $db_prefix;
@@ -531,7 +688,13 @@ function SetPlanetBuildings ( int $planet_id, array $objects ) : void
     dbquery ($query);
 }
 
-// Set the diameter of the planet/moon. After setting the new diameter, the planet fields are recalculated.
+/**
+ * Set the diameter of the planet or moon and recalculate the planet fields.
+ *
+ * @param int $planet_id ID of the planet.
+ * @param int $diam The new diameter.
+ * @return void
+ */
 function SetPlanetDiameter (int $planet_id, int $diam) : void
 {
     global $db_prefix;
@@ -540,7 +703,12 @@ function SetPlanetDiameter (int $planet_id, int $diam) : void
     RecalcFields($planet_id);
 }
 
-// Return the name of the planet with a link to the admin area.
+/**
+ * Return the planet name wrapped in a link to the admin area.
+ *
+ * @param array|null $planet The planet array, or null.
+ * @return string The linked planet name, or an empty string if the planet is null.
+ */
 function AdminPlanetName (array|null $planet) : string
 {
     global $session;
@@ -549,7 +717,12 @@ function AdminPlanetName (array|null $planet) : string
     return "<a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet_id."\">".$planet['name']."</a>";
 }
 
-// Return planet coordinate string with a link to the galaxy
+/**
+ * Return the planet coordinates as a string with a link to the galaxy.
+ *
+ * @param array|null $p The planet array, or null.
+ * @return string The linked coordinate string, or "[::]" if the planet is null.
+ */
 function AdminPlanetCoord (array|null $p) : string
 {
     global $session;
@@ -557,7 +730,12 @@ function AdminPlanetCoord (array|null $p) : string
     return "[<a href=\"index.php?page=galaxy&session=$session&galaxy=".$p['g']."&system=".$p['s']."\">".$p['g'].":".$p['s'].":".$p['p']."</a>]";
 }
 
-// Create a home planet, return the ID of the created planet
+/**
+ * Create a home planet for the player at a free position.
+ *
+ * @param int $player_id ID of the player.
+ * @return int The ID of the created home planet.
+ */
 function CreateHomePlanet (int $player_id) : int
 {
     global $db_prefix;
@@ -599,7 +777,11 @@ function CreateHomePlanet (int $player_id) : int
     return 0;
 }
 
-// Load colonization settings.
+/**
+ * Load the colonization settings table.
+ *
+ * @return mixed The first row of the colonization settings table.
+ */
 function LoadColonySettings () : mixed
 {
     global $db_prefix;
@@ -608,7 +790,12 @@ function LoadColonySettings () : mixed
     return dbarray ($result);
 }
 
-// Save the colonization settings.
+/**
+ * Save the colonization settings to the database.
+ *
+ * @param array $coltab The colonization settings array.
+ * @return void
+ */
 function SaveColonySettings (array $coltab) : void
 {
     global $db_prefix;
@@ -621,11 +808,24 @@ function SaveColonySettings (array $coltab) : void
     dbquery ($query);
 }
 
+/**
+ * Calculate the phalanx scanning radius for the given phalanx level.
+ *
+ * @param int $level Level of the phalanx building.
+ * @return int The phalanx radius in systems.
+ */
 function GetPhalanxRadius (int $level) : int {
     
     return $level * $level - 1;
 }
 
+/**
+ * Check whether a phalanx scan can be performed from the origin moon on the target.
+ *
+ * @param array|null $origin The origin planet (moon) array, or null.
+ * @param array|null $target The target planet array, or null.
+ * @return bool True if the target is within the phalanx radius and belongs to another player.
+ */
 function CanPhalanx (array|null $origin, array|null $target) : bool {
     
     if ($origin == null || $target == null) return false;

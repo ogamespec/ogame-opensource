@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file user.php
+ * @brief User (player) management.
+ * @details Implements user login, registration, session handling and the per-player settings and state used by the game.
+ */
 // User Management.
 
 /*
@@ -70,16 +74,33 @@ Q - task in the task queue is used to process this event.
 
 // Very limited cache implementation: The cache is only kept for the lifetime of the script.
 // Attention! Using caches in the game introduces a significant probability of obscure errors ("Heisenbugs"), so it is NOT recommended to use persistent cache (which is kept between HTTP requests)
+/**
+ * Script-lifetime cache of loaded user records, keyed by player ID.
+ */
 $UserCache = array ();
 
-// Corrected version of date
+/**
+ * Format a Unix timestamp as a date string using the given format.
+ *
+ * @param string $fmt Date format accepted by DateTime::format().
+ * @param int $timestamp Unix timestamp to format.
+ * @return string The formatted date string.
+ */
 function fixed_date ( string $fmt, int $timestamp ) : string
 {
     $date = new DateTime ('@' . $timestamp);
     return $date->format ($fmt);
 }
 
-// Send a welcome email with a link to activate your account (in the language of the universe).
+/**
+ * Send a welcome email with an account activation link, in the language of the universe.
+ *
+ * @param string $name User name.
+ * @param string $pass User password.
+ * @param string $email Recipient email address.
+ * @param string $ack Account activation code.
+ * @return void
+ */
 function SendGreetingsMail ( string $name, string $pass, string $email, string $ack) : void
 {
     $unitab = LoadUniverse ();
@@ -109,7 +130,15 @@ function SendGreetingsMail ( string $name, string $pass, string $email, string $
         $text, va("From: #1 Uni $domain $uni <noreply@".$_SERVER['SERVER_NAME'].">", loca_lang("OGAME_INT", $unitab['lang'])) );
 }
 
-// Send a letter confirming the change of address (in the language of the universe).
+/**
+ * Send an email confirming the change of the email address, in the language of the universe.
+ *
+ * @param string $name User name.
+ * @param string $email New email address.
+ * @param string $pemail Permanent email address to which the confirmation is sent.
+ * @param string $ack New activation code.
+ * @return void
+ */
 function SendChangeMail ( string $name, string $email, string $pemail, string $ack) : void
 {
     $unitab = LoadUniverse ();
@@ -131,7 +160,12 @@ function SendChangeMail ( string $name, string $email, string $pemail, string $a
         $text, va("From: #1 Uni $domain $uni <noreply@".$_SERVER['SERVER_NAME'].">", loca_lang("OGAME_INT", $unitab['lang'])) );
 }
 
-// Send a welcome message (in the user's language)
+/**
+ * Send a welcome message to the player, in the user's language.
+ *
+ * @param int $player_id Player ID.
+ * @return void
+ */
 function SendGreetingsMessage ( int $player_id) : void
 {
     $unitab = LoadUniverse ();
@@ -147,6 +181,12 @@ function SendGreetingsMessage ( int $player_id) : void
         bb ( va(loca_lang("REG_GREET_MSG_TEXT", $user['lang']), $unitab['ext_board'], $unitab['ext_tutorial'], loca_lang ("OGAME_INT", $user['lang'])) ), MTYP_MISC );
 }
 
+/**
+ * Check whether a user with the given name already exists.
+ *
+ * @param string $name User name to check.
+ * @return bool True if the user exists.
+ */
 function IsUserExist ( string $name) : bool
 {
     global $db_prefix;
@@ -156,7 +196,13 @@ function IsUserExist ( string $name) : bool
     return dbrows ($result) != 0;
 }
 
-// Exclude the name $name from the search.
+/**
+ * Check whether an email address is already in use.
+ *
+ * @param string $email Email address to check.
+ * @param string $name User name to exclude from the search.
+ * @return bool True if the email is already in use.
+ */
 function IsEmailExist ( string $email, string $name="") : bool
 {
     global $db_prefix;
@@ -168,8 +214,15 @@ function IsEmailExist ( string $email, string $name="") : bool
     return dbrows ($result) != 0;
 }
 
-// There are no checks for correctness! This is handled by the registration procedure.
-// Returns the ID of the created user.
+/**
+ * Create a new user account. There are no correctness checks - that is handled by the registration procedure.
+ *
+ * @param string $name User name.
+ * @param string $pass User password.
+ * @param string $email User email address.
+ * @param bool $bot Whether the user is a bot (skips welcome emails and cookie language handling).
+ * @return int The ID of the created user.
+ */
 function CreateUser ( string $name, string $pass, string $email, bool $bot=false) : int
 {
     global $db_prefix, $db_secret, $Languages;
@@ -230,8 +283,13 @@ function CreateUser ( string $name, string $pass, string $email, bool $bot=false
     return $id;
 }
 
-// Completely delete the player, all their planets and fleets.
-// Turn back fleets flying at the player.
+/**
+ * Completely delete the player, all their planets and fleets.
+ *
+ * @param int $player_id Player ID to delete.
+ * @param int $when Timestamp used to turn back the fleets flying at the player.
+ * @return void
+ */
 function RemoveUser ( int $player_id, int $when) : void
 {
     global $GlobalUser, $db_prefix;
@@ -294,7 +352,12 @@ function RemoveUser ( int $player_id, int $when) : void
     }
 }
 
-// Activate the user.
+/**
+ * Activate the user with the given activation code.
+ *
+ * @param string $code Activation code.
+ * @return void
+ */
 function ValidateUser (string $code) : void
 {
     global $db_prefix;
@@ -316,7 +379,14 @@ function ValidateUser (string $code) : void
     Login ( $user['oname'], "", $user['password'], 1 );
 }
 
-// Verify password. Returns 0, or the user ID.
+/**
+ * Verify the password for the given user name.
+ *
+ * @param string $name User name.
+ * @param string $pass Plain-text password.
+ * @param string $passmd Pre-computed MD5 hash of the password, if already known.
+ * @return int The user ID on success, or 0 if the password is wrong.
+ */
 function CheckPassword ( string $name, string $pass, string $passmd="") : int
 {
     global $db_prefix, $db_secret;
@@ -330,7 +400,13 @@ function CheckPassword ( string $name, string $pass, string $passmd="") : int
     return $user['player_id'];
 }
 
-// Change the temporary mail address. Returns true if the address was successfully changed, or false if the address is already in use.
+/**
+ * Change the temporary email address of the user.
+ *
+ * @param string $name User name.
+ * @param string $email New temporary email address.
+ * @return bool True if the address was successfully changed, or false if it is already in use.
+ */
 function ChangeEmail ( string $name, string $email) : bool
 {
     global $db_prefix, $db_secret;
@@ -347,7 +423,13 @@ function ChangeEmail ( string $name, string $email) : bool
     return true;
 }
 
-// Change username.
+/**
+ * Change the user name.
+ *
+ * @param int $player_id Player ID.
+ * @param string $name New user name.
+ * @return void
+ */
 function ChangeName ( int $player_id, string $name ) : void
 {
     global $db_prefix;
@@ -357,7 +439,12 @@ function ChangeName ( int $player_id, string $name ) : void
     AddAllowNameEvent ($player_id);
 }
 
-// Change activation code. Returns the new code.
+/**
+ * Generate and store a new activation code for the user.
+ *
+ * @param string $name User name.
+ * @return string The new activation code.
+ */
 function ChangeActivationCode ( string $name) : string
 {
     global $db_prefix, $db_secret;
@@ -368,7 +455,13 @@ function ChangeActivationCode ( string $name) : string
     return $ack;
 }
 
-// Select the current planet.
+/**
+ * Set the current (selected) planet of the player.
+ *
+ * @param int $player_id Player ID.
+ * @param int $cp Planet ID to select.
+ * @return void
+ */
 function SelectPlanet (int $player_id, int $cp) : void
 {
     global $db_prefix;
@@ -397,7 +490,12 @@ function SelectPlanet (int $player_id, int $cp) : void
     InvalidateUserCache ();
 }
 
-// Get the ID of the current selected planet
+/**
+ * Get the ID of the currently selected planet of the player.
+ *
+ * @param int $player_id Player ID.
+ * @return int The ID of the selected planet, or 0 if the user is not found.
+ */
 function GetSelectedPlanet ( int $player_id ) : int
 {
     $user = LoadUser ( $player_id );
@@ -405,7 +503,12 @@ function GetSelectedPlanet ( int $player_id ) : int
     return $user['aktplanet'];
 }
 
-// Load User.
+/**
+ * Load the user record for the given player ID, using the script-lifetime cache.
+ *
+ * @param int $player_id Player ID.
+ * @return array|null The user record, or null if the user does not exist.
+ */
 function LoadUser ( int $player_id) : array|null
 {
     global $db_prefix, $UserCache;
@@ -421,7 +524,12 @@ function LoadUser ( int $player_id) : array|null
     return $user;
 }
 
-// Update user activity (NOT PLANET activity).
+/**
+ * Update the user activity timestamp (NOT planet activity).
+ *
+ * @param int $player_id Player ID.
+ * @return void
+ */
 function UpdateLastClick ( int $player_id) : void
 {
     global $db_prefix;
@@ -435,7 +543,12 @@ function UpdateLastClick ( int $player_id) : void
 // A newbie can only be attacked by players who have no more than five times as many, and no less than five times as many points.
 // A Newbie can attack a stronger player (both Newbie and Non-Newbie) as long as the player has no more than five times as many points.
 
-// Newbie protection. Check if the player is a newbie for the current player.
+/**
+ * Newbie protection: check if the player is a newbie for the current player.
+ *
+ * @param int $player_id Player ID to check.
+ * @return bool True if the player is considered a newbie.
+ */
 function IsPlayerNewbie ( int $player_id) : bool
 {
     global $GlobalUser;
@@ -451,7 +564,12 @@ function IsPlayerNewbie ( int $player_id) : bool
     return true;
 }
 
-// Newbie protection. Check if the player for the current player is a strong player.
+/**
+ * Newbie protection: check if the player is a strong player for the current player.
+ *
+ * @param int $player_id Player ID to check.
+ * @return bool True if the player is considered strong.
+ */
 function IsPlayerStrong ( int $player_id) : bool
 {
     global $GlobalUser;
@@ -467,7 +585,12 @@ function IsPlayerStrong ( int $player_id) : bool
     return true;
 }
 
-// Get the status of the commander and the rest of the officers on the account.
+/**
+ * Get the status of the commander and the other officers on the account.
+ *
+ * @param array $user User record.
+ * @return array Officer statuses: enabled flag and remaining days for each officer.
+ */
 function PremiumStatus (array $user) : array
 {
     $prem = array ();
@@ -488,7 +611,13 @@ function PremiumStatus (array $user) : array
     return $prem;
 }
 
-// Get the officer's end time. $off_type - see USER_OFFICER_xxx.
+/**
+ * Get the expiry timestamp of the given officer. $off_type - see USER_OFFICER_xxx.
+ *
+ * @param array $user User record.
+ * @param int $off_type Officer type constant (USER_OFFICER_xxx).
+ * @return int Officer expiry timestamp, or 0 if the officer is not present.
+ */
 function GetOfficerLeft (array $user, int $off_type) : int
 {
     $qtimers = array ( USER_OFFICER_COMMANDER => 'com_until', USER_OFFICER_ADMIRAL => 'adm_until', USER_OFFICER_ENGINEER => 'eng_until', USER_OFFICER_GEOLOGE => 'geo_until', USER_OFFICER_TECHNOCRATE => 'tec_until');
@@ -498,7 +627,14 @@ function GetOfficerLeft (array $user, int $off_type) : int
     else return 0;
 }
 
-// Extend an officer for the specified number of seconds. If the number of seconds < 0 - remove the officer.
+/**
+ * Extend an officer for the specified number of seconds. If the number of seconds is negative - remove the officer.
+ *
+ * @param int $player_id Player ID.
+ * @param int $off_type Officer type constant (USER_OFFICER_xxx).
+ * @param int $seconds Number of seconds to extend the officer by.
+ * @return void
+ */
 function RecruitOfficer ( int $player_id, int $off_type, int $seconds ) : void
 {
     global $db_prefix, $GlobalUser;
@@ -527,7 +663,12 @@ function RecruitOfficer ( int $player_id, int $off_type, int $seconds ) : void
     }
 }
 
-// Called when you click on "Exit" in the menu.
+/**
+ * Called when the player clicks on "Exit" in the menu: clear the player's public session.
+ *
+ * @param string|null $session Public session of the user to log out.
+ * @return void
+ */
 function Logout ( string|null $session ) : void
 {
     global $db_prefix;
@@ -544,7 +685,12 @@ function Logout ( string|null $session ) : void
     setcookie ( "prsess_".$player_id."_".$uni, '');
 }
 
-// Authenticate user. Called on every game page is loaded.
+/**
+ * Authenticate the user. Called on every game page load.
+ *
+ * @param string $session Public session to authenticate.
+ * @return bool True if the session is valid, otherwise false (the user is redirected to the home page).
+ */
 function AuthUser ( string $session ) : bool
 {
     global $db_prefix, $GlobalUser, $loca_lang, $Languages, $GlobalUni, $DefaultLanguage;
@@ -582,7 +728,14 @@ function AuthUser ( string $session ) : bool
     return true;
 }
 
-// Login - Called from the home page, after registering or activating a new user.
+/**
+ * Log in the user. Called from the home page, after registering or activating a new user.
+ *
+ * @param string $login User name.
+ * @param string $pass Plain-text password.
+ * @param string $passmd Pre-computed MD5 hash of the password, if already known.
+ * @return never Always redirects the browser and terminates the script.
+ */
 function Login ( string $login, string $pass, string $passmd="" ) : never
 {
     global $db_prefix, $db_secret;
@@ -653,7 +806,12 @@ function Login ( string $login, string $pass, string $passmd="" ) : never
     exit ();
 }
 
-// Recalculation of stats.
+/**
+ * Recalculate the player's points from their planets, research and flying fleets.
+ *
+ * @param int $player_id Player ID.
+ * @return void
+ */
 function RecalcStats (int $player_id) : void
 {
     global $db_prefix;
@@ -719,6 +877,16 @@ function RecalcStats (int $player_id) : void
     dbquery ($query);
 }
 
+/**
+ * Adjust the player's score by adding or subtracting the given points.
+ *
+ * @param int $player_id Player ID.
+ * @param int $points Points to add or subtract.
+ * @param int $fpoints Fleet points to add or subtract.
+ * @param int $rpoints Research points to add or subtract.
+ * @param string $sign "+" or "-" sign of the adjustment.
+ * @return void
+ */
 function AdjustStats ( int $player_id, int $points, int $fpoints, int $rpoints, string $sign ) : void
 {
     global $db_prefix;
@@ -727,7 +895,11 @@ function AdjustStats ( int $player_id, int $points, int $fpoints, int $rpoints, 
     dbquery ($query);
 }
 
-// Recalculate the places of all players.
+/**
+ * Recalculate the places of all players for points, fleet and research.
+ *
+ * @return void
+ */
 function RecalcRanks () : void
 {
     global $db_prefix;
@@ -762,7 +934,11 @@ function RecalcRanks () : void
     dbquery ($query);
 }
 
-// Log out all the players
+/**
+ * Log out all the players by clearing every public session.
+ *
+ * @return void
+ */
 function UnloadAll () : void
 {
     global $db_prefix, $StartPage;
@@ -774,7 +950,13 @@ function UnloadAll () : void
     ob_end_flush ();
 }
 
-// Change skin path
+/**
+ * Change the skin path of the player.
+ *
+ * @param int $player_id Player ID.
+ * @param string $dpath New skin path.
+ * @return void
+ */
 function ChangeSkinPath (int $player_id, string $dpath) : void
 {
     global $db_prefix;
@@ -782,7 +964,13 @@ function ChangeSkinPath (int $player_id, string $dpath) : void
     dbquery ($query);
 }
 
-// Enable/disable skin display. When the skin is disabled, the default skin is displayed.
+/**
+ * Enable or disable the skin display. When the skin is disabled, the default skin is displayed.
+ *
+ * @param int $player_id Player ID.
+ * @param bool $enable True to enable the skin, false to disable it.
+ * @return void
+ */
 function EnableSkin (int $player_id, bool $enable) : void
 {
     global $db_prefix;
@@ -791,7 +979,11 @@ function EnableSkin (int $player_id, bool $enable) : void
     dbquery ($query);
 }
 
-// Get a list of operators in the universe
+/**
+ * Get a list of the operators in the universe.
+ *
+ * @return mixed Query result resource with the operator records.
+ */
 function EnumOperators () : mixed
 {
     global $db_prefix;
@@ -799,7 +991,12 @@ function EnumOperators () : mixed
     return dbquery ($query);
 }
 
-// Resend the password and activation link.
+/**
+ * Resend the password and the activation link to the user.
+ *
+ * @param int $player_id Player ID.
+ * @return void
+ */
 function ReactivateUser (int $player_id) : void
 {
     global $db_prefix, $db_secret;
@@ -822,14 +1019,23 @@ function ReactivateUser (int $player_id) : void
     if ( !localhost($_SERVER['REMOTE_ADDR']) ) SendGreetingsMail ( $name, $pass, $email, $ack, false);
 }
 
-// Clear the player cache.
+/**
+ * Clear the script-lifetime user cache.
+ *
+ * @return void
+ */
 function InvalidateUserCache () : void
 {
     global $UserCache;
     $UserCache = array ();
 }
 
-// Return player's name with a link to the edit page and status (inactive, VM, etc).
+/**
+ * Return the player's name with a link to the edit page and status markers (inactive, vacation mode, etc).
+ *
+ * @param array|null $user User record, or null.
+ * @return string HTML link with the player's name and status, or an empty string if the user is null.
+ */
 function AdminUserName (array|null $user) : string
 {
     global $session;
@@ -860,7 +1066,14 @@ function AdminUserName (array|null $user) : string
     return $name;
 }
 
-// Ban the player.
+/**
+ * Ban the player for the specified number of seconds, optionally enabling vacation mode.
+ *
+ * @param int $player_id Player ID.
+ * @param int $seconds Ban duration in seconds.
+ * @param bool $vmode Whether to also enable vacation mode.
+ * @return void
+ */
 function BanUser (int $player_id, int $seconds, bool $vmode) : void
 {
     global $db_prefix;
@@ -876,7 +1089,13 @@ function BanUser (int $player_id, int $seconds, bool $vmode) : void
     RecalcRanks ();
 }
 
-// Ban attacks.
+/**
+ * Ban attacks on the player for the specified number of seconds.
+ *
+ * @param int $player_id Player ID.
+ * @param int $seconds Duration of the attack ban in seconds.
+ * @return void
+ */
 function BanUserAttacks (int $player_id, int $seconds) : void
 {
     global $db_prefix;
@@ -889,7 +1108,12 @@ function BanUserAttacks (int $player_id, int $seconds) : void
     dbquery ($query);
 }
 
-// Unban a player
+/**
+ * Unban the player and recalculate their stats and rank.
+ *
+ * @param int $player_id Player ID.
+ * @return void
+ */
 function UnbanUser (int $player_id) : void
 {
     global $db_prefix;
@@ -901,7 +1125,12 @@ function UnbanUser (int $player_id) : void
     RecalcRanks ();
 }
 
-// Allow attacks
+/**
+ * Allow attacks on the player again.
+ *
+ * @param int $player_id Player ID.
+ * @return void
+ */
 function UnbanUserAttacks (int $player_id) : void
 {
     global $db_prefix;
@@ -911,7 +1140,13 @@ function UnbanUserAttacks (int $player_id) : void
     dbquery ($query);
 }
 
-// Set user flags
+/**
+ * Set the user flags of the player.
+ *
+ * @param int $player_id Player ID.
+ * @param int $flags New user flags value.
+ * @return void
+ */
 function SetUserFlags (int $player_id, int $flags) : void
 {
     global $db_prefix;
@@ -919,7 +1154,11 @@ function SetUserFlags (int $player_id, int $flags) : void
     dbquery ($query);
 }
 
-// Get the number of players (administrators and operators do not count)
+/**
+ * Get the number of players (administrators and operators do not count).
+ *
+ * @return int Number of regular players.
+ */
 function GetUsersCount() : int
 {
     global $db_prefix;
@@ -928,7 +1167,11 @@ function GetUsersCount() : int
     return dbrows ($result);
 }
 
-// Get a top1 player for expedition calculations.
+/**
+ * Get the top-1 player, used for expedition calculations.
+ *
+ * @return array|null The record of the top player, or null if there are no players.
+ */
 function GetTop1 () : array|null
 {
     global $db_prefix;
@@ -940,6 +1183,12 @@ function GetTop1 () : array|null
     return null;
 }
 
+/**
+ * Enable or disable the feed for the current user.
+ *
+ * @param bool $enable True to enable the feed, false to disable it.
+ * @return void
+ */
 function FeedActivate (bool $enable) : void
 {
     global $GlobalUser, $db_prefix, $GlobalUni;
@@ -969,6 +1218,14 @@ function FeedActivate (bool $enable) : void
     $GlobalUser['feedid'] = $feedid;
 }
 
+/**
+ * Enable or disable vacation mode for the player.
+ *
+ * @param int $player_id Player ID.
+ * @param int $vacation_until Timestamp when vacation mode ends.
+ * @param bool $enable True to enable vacation mode, false to disable it.
+ * @return void
+ */
 function EnableVacation (int $player_id, int $vacation_until, bool $enable) : void
 {
     global $db_prefix;

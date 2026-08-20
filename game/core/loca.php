@@ -1,10 +1,16 @@
 <?php
-
+/**
+ * @file loca.php
+ * @brief Localization support.
+ * @details Lists the available languages and provides the interface used by the localization system.
+ */
 // A new LOCA engine that does not use a database.
 // Original game load all loca's at every page access (they had 'english.php', 'deutch.php' and so on)
 // But actually you don't need it all at same time, only some of them (except very important ones)
 
-// Supported language list
+/**
+ * List of supported languages (language code => native name).
+ */
 $Languages = array ( 
 #    'ae' => "اللغة العربية", 
 #    'ar' => "Español", 
@@ -39,19 +45,33 @@ $Languages = array (
 #    'ua' => "Українська",
 );
 
-// Default language if you have to make a choice. Since the project is already quite well internationalized - the default language is English.
+/**
+ * Default language used when no explicit choice is made; English, since the project is already well internationalized.
+ */
 $DefaultLanguage = "en";
 
 //
 // The global language is set during the creation of a user session.
 //
 
+/**
+ * Language currently used by the localization engine; can be changed at any time.
+ */
 $loca_lang = $DefaultLanguage;        // Language used. Can be changed at any time.
 
+/**
+ * Storage of all loaded localization keys (language => key => value).
+ */
 $LOCA = array ();        // all the keys are in here.
 
-// Return the value of the key. The latest version is returned.
-// If there is no connection to the LOCA or no such key exists, return the key name.
+/**
+ * Return the localized value of a key, or the key name if it is not found.
+ *
+ * If there is no connection to the LOCA or no such key exists, the key name is returned.
+ *
+ * @param string $key Localization key to look up.
+ * @return string The localized string, or the key name if not found.
+ */
 function loca (string $key) : string
 {
     global $LOCA, $loca_lang;
@@ -59,8 +79,15 @@ function loca (string $key) : string
     else return $LOCA[$loca_lang][$key];
 }
 
-// Similar to regular loca(), but the language is selected from a method parameter rather than a global variable.
-// It is used when it is necessary to work simultaneously with several languages (e.g. battle reports for players with different languages).
+/**
+ * Return the localized value of a key in the language passed as a parameter.
+ *
+ * Similar to loca(), but the language is taken from a parameter rather than from the global variable; used when working with several languages at once (e.g. battle reports for players with different languages).
+ *
+ * @param string $key Localization key to look up.
+ * @param string $lang Language code to use.
+ * @return string The localized string, or the key name if not found.
+ */
 function loca_lang (string $key, string $lang) : string
 {
     global $LOCA;
@@ -68,7 +95,14 @@ function loca_lang (string $key, string $lang) : string
     else return $LOCA[$lang][$key];
 }
 
-// Add a set of language keys.
+/**
+ * Load a set of language keys for the given section.
+ *
+ * @param string $section Name of the localization section file to load.
+ * @param string $lang Language code to load.
+ * @param string $dir Optional directory prefix for the localization files.
+ * @return void
+ */
 function loca_add ( string $section, string $lang='en', string $dir='' ) : void
 {
     global $LOCA, $Languages;

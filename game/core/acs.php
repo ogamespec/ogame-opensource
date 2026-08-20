@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file acs.php
+ * @brief ACS (Alliance Combat System) union management.
+ * @details Creates, loads, renames and removes ACS unions and manages the fleets attached to them.
+ */
 // ACS Management.
 
 /*
@@ -12,7 +16,13 @@ The structure of the ACS table:
 
 */
 
-// Create ACS union. $fleet_id - head fleet. $name - union name.
+/**
+ * Create an ACS union for a departing attack fleet.
+ *
+ * @param int $fleet_id ID of the head fleet.
+ * @param string $name Name of the union.
+ * @return int Union ID, the existing union ID if the fleet is already in one, or 0 on failure.
+ */
 function CreateUnion (int $fleet_id, string $name) : int
 {
     global $db_prefix;
@@ -42,7 +52,12 @@ function CreateUnion (int $fleet_id, string $name) : int
     return $union_id;
 }
 
-// Load ACS union
+/**
+ * Load an ACS union by its ID.
+ *
+ * @param int $union_id Union ID.
+ * @return array|null Union data with a player list, or null if not found.
+ */
 function LoadUnion (int $union_id) : array|null
 {
     global $db_prefix;
@@ -55,7 +70,11 @@ function LoadUnion (int $union_id) : array|null
     return $union;
 }
 
-// An union is removed when the last union fleet is recalled, or the objective is reached
+/**
+ * Remove an ACS union from the database when the last union fleet is recalled or the objective is reached.
+ *
+ * @param int $union_id Union ID.
+ */
 function RemoveUnion (int $union_id) : void
 {
     global $db_prefix;
@@ -63,7 +82,12 @@ function RemoveUnion (int $union_id) : void
     dbquery ($query);
 }
 
-// Rename the ACS union.
+/**
+ * Rename an ACS union.
+ *
+ * @param int $union_id Union ID.
+ * @param string $name New union name.
+ */
 function RenameUnion (int $union_id, string $name) : void
 {
     global $db_prefix;
@@ -71,7 +95,13 @@ function RenameUnion (int $union_id, string $name) : void
     dbquery ($query);
 }
 
-// Add a new member to the union.
+/**
+ * Add a new member to an ACS union and send them an invitation message.
+ *
+ * @param int $union_id Union ID.
+ * @param string $name Name of the player to invite.
+ * @return string Empty string on success, or an error message.
+ */
 function AddUnionMember (int $union_id, string $name) : string
 {
     global $db_prefix;
@@ -130,7 +160,13 @@ function AddUnionMember (int $union_id, string $name) : string
     return "";
 }
 
-// List the unions the player is in, as well as the union that the player is targeting (unless the friendly flag is set).
+/**
+ * List the unions the player belongs to, and the union the player is targeting unless the friendly flag is set.
+ *
+ * @param int $player_id Player ID.
+ * @param int $friendly When non-zero, exclude unions that target the player.
+ * @return array List of unions.
+ */
 function EnumUnion (int $player_id, int $friendly=0) : array
 {
     global $db_prefix;
@@ -151,7 +187,12 @@ function EnumUnion (int $player_id, int $friendly=0) : array
     return $unions;
 }
 
-// List the Union fleets
+/**
+ * List all fleets attached to an ACS union.
+ *
+ * @param int $union_id Union ID.
+ * @return mixed Database result of the union fleets.
+ */
 function EnumUnionFleets (int $union_id) : mixed
 {
     global $db_prefix;
@@ -159,7 +200,15 @@ function EnumUnionFleets (int $union_id) : mixed
     return dbquery ( $query );
 }
 
-// Update the arrival time of all union fleets except fleet_id. Return the new arrival time of the union.
+/**
+ * Update the arrival time of all union fleets except the given fleet, and return the union's new arrival time.
+ *
+ * @param int $union_id Union ID.
+ * @param int $end New arrival time.
+ * @param int $fleet_id Fleet ID to skip.
+ * @param bool $force_set Force updating fleets that arrive later.
+ * @return int The union's arrival time.
+ */
 function UpdateUnionTime (int $union_id, int $end, int $fleet_id, bool $force_set=false) : int
 {
     global $db_prefix;
@@ -183,7 +232,12 @@ function UpdateUnionTime (int $union_id, int $end, int $fleet_id, bool $force_se
     return $union_time;
 }
 
-// Update fleet arrival time
+/**
+ * Update the arrival time of a single fleet.
+ *
+ * @param int $fleet_id Fleet ID.
+ * @param int $when New arrival time.
+ */
 function UpdateFleetTime (int $fleet_id, int $when) : void
 {
     global $db_prefix;
@@ -193,7 +247,12 @@ function UpdateFleetTime (int $fleet_id, int $when) : void
     dbquery ($query);
 }
 
-// List the fleets on hold
+/**
+ * List the fleets holding position in orbit over a planet, limited by the universe settings.
+ *
+ * @param int $planet_id Planet ID.
+ * @return mixed Database result of the holding fleets.
+ */
 function GetHoldingFleets (int $planet_id) : mixed
 {
     global $db_prefix;
@@ -204,6 +263,13 @@ function GetHoldingFleets (int $planet_id) : mixed
     return $result;
 }
 
+/**
+ * Check whether a player is a member of the given union.
+ *
+ * @param int $player_id Player ID.
+ * @param array $union Union data.
+ * @return bool True if the player is in the union.
+ */
 function IsPlayerInUnion (int $player_id, array $union) : bool
 {
     if ( $union == null ) return false;
@@ -214,7 +280,12 @@ function IsPlayerInUnion (int $player_id, array $union) : bool
     return false;
 }
 
-// Count all battle units in ACS Attack, including units in the lead attack.
+/**
+ * Count all battle units in an ACS attack, including the units of the lead attack.
+ *
+ * @param int $union_id Union ID.
+ * @return int Total number of battle units.
+ */
 function GetUnionUnitsCount (int $union_id) : int 
 {
     global $fleetmap, $defmap, $rakmap;
@@ -237,7 +308,12 @@ function GetUnionUnitsCount (int $union_id) : int
     return $num_units;
 }
 
-// Calculate the number of battle units on the planet, including units from all held fleets (ACS Hold).
+/**
+ * Count the battle units on a planet, including units from all held fleets (ACS Hold).
+ *
+ * @param int $planet_id Planet ID.
+ * @return int Total number of battle units.
+ */
 function GetHoldingUnitsCount (int $planet_id) : int 
 {
     global $fleetmap, $defmap, $rakmap;

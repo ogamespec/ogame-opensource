@@ -1,17 +1,30 @@
 <?php
-
+/**
+ * @file botapi.php
+ * @brief Bot API endpoints.
+ * @details Exposes HTTP endpoints used to control and query the automated bot players.
+ */
 // Interface between bots and the engine.
 // This is where all the built-in functions are located.
 
 //------------------------------------------------------------------------------------
 // Auxiliary functions
 
-// Do nothing
+/**
+ * Do nothing; used as a placeholder action for an idle bot.
+ *
+ * @return void
+ */
 function BotIdle () : void
 {
 }
 
-// Check that there is a strategy with the specified name.
+/**
+ * Check that a strategy with the specified name exists.
+ *
+ * @param string $name Name of the strategy to look for.
+ * @return bool True if the strategy exists, false otherwise.
+ */
 function BotStrategyExists (string $name) : bool
 {
     global $db_prefix;
@@ -20,7 +33,12 @@ function BotStrategyExists (string $name) : bool
     return ($result && dbrows($result) != 0);
 }
 
-// In parallel, start a new bot strategy. Return true if OK or false if the strategy could not be started.
+/**
+ * Start a new bot strategy in parallel.
+ *
+ * @param string $name Name of the strategy to start.
+ * @return bool True if the strategy was started, false if it could not be started.
+ */
 function BotExec (string $name) : bool
 {
     global $db_prefix, $BotID, $BotNow;
@@ -42,14 +60,26 @@ function BotExec (string $name) : bool
     else return false;
 }
 
-// Bot variables.
-
+/**
+ * Get the value of a bot variable.
+ *
+ * @param string $var Name of the variable.
+ * @param string|null $def_value Default value returned if the variable is not set.
+ * @return string|null Value of the variable, or the default value if it is not set.
+ */
 function BotGetVar ( string $var, string|null $def_value=null ) : string|null
 {
     global $BotID, $BotNow;
     return GetVar ( $BotID, $var, $def_value);
 }
 
+/**
+ * Set the value of a bot variable.
+ *
+ * @param string $var Name of the variable.
+ * @param string $value Value to set.
+ * @return void
+ */
 function BotSetVar ( string $var, string $value ) : void
 {
     global $BotID, $BotNow;
@@ -59,7 +89,12 @@ function BotSetVar ( string $var, string $value ) : void
 //------------------------------------------------------------------------------------
 // Construction/demolition of buildings, management of Resouce settings
 
-// Check if we can build the specified building on the active planet (1-yes, 0-no).
+/**
+ * Check if the specified building can be built on the active planet.
+ *
+ * @param int $obj_id ID of the building to check.
+ * @return bool True if the building can be built, false otherwise.
+ */
 function BotCanBuild (int $obj_id) : bool
 {
     global $BotID, $BotNow;
@@ -72,8 +107,12 @@ function BotCanBuild (int $obj_id) : bool
     return ( $text === '' );
 }
 
-// Start building on an active planet.
-// Return 0 if there are not enough conditions or resources to start building. Return the number of seconds to wait until the construction is completed.
+/**
+ * Start building the specified building on the active planet.
+ *
+ * @param int $obj_id ID of the building to build.
+ * @return int Number of seconds until the construction completes, or 0 if the building could not be started.
+ */
 function BotBuild (int $obj_id) : int
 {
     global $BotID, $BotNow, $GlobalUni;
@@ -93,7 +132,12 @@ function BotBuild (int $obj_id) : int
     else return 0;
 }
 
-// Get a building level
+/**
+ * Get the level of a building on the active planet.
+ *
+ * @param int $n ID of the building.
+ * @return int Current level of the building, or 0 on error.
+ */
 function BotGetBuild (int $n) : int
 {
     global $BotID, $BotNow;
@@ -104,7 +148,17 @@ function BotGetBuild (int $n) : int
     return $aktplanet[$n];
 }
 
-// Set the resource settings of the active planet (numbers in percentages 0-100)
+/**
+ * Set the resource settings of the active planet (percentages 0-100).
+ *
+ * @param int $last1 Production percentage for metal mines.
+ * @param int $last2 Production percentage for crystal mines.
+ * @param int $last3 Production percentage for deuterium mines.
+ * @param int $last4 Output percentage for the solar power plant.
+ * @param int $last12 Output percentage for the fusion power plant.
+ * @param int $last212 Output percentage for solar satellites.
+ * @return void
+ */
 function BotResourceSettings ( int $last1=100, int $last2=100, int $last3=100, int $last4=100, int $last12=100, int $last212=100 ) : void
 {
     global $db_prefix, $BotID, $BotNow;
@@ -149,7 +203,12 @@ function BotResourceSettings ( int $last1=100, int $last2=100, int $last3=100, i
     UpdatePlanetActivity ( $planet_id, $BotNow );
 }
 
-// Check if energy is at or above value
+/**
+ * Check if the current energy of the active planet is at or above the given value.
+ *
+ * @param int $energy Energy value to compare against.
+ * @return bool True if the energy is at or above the value, false otherwise.
+ */
 function BotEnergyAbove (int $energy) : bool
 {
     global $BotID, $BotNow;
@@ -168,6 +227,13 @@ function BotEnergyAbove (int $energy) : bool
 //------------------------------------------------------------------------------------
 // Fleet/defense construction (Shipyard)
 
+/**
+ * Build a number of ships or defense units in the shipyard of the active planet.
+ *
+ * @param int $obj_id ID of the ship or defense unit to build.
+ * @param int $n Number of units to build.
+ * @return int Number of seconds until the construction completes, or 0 on failure.
+ */
 function BotBuildFleet (int $obj_id, int $n) : int
 {
     global $db_prefix, $BotID, $BotNow, $GlobalUni;
@@ -192,7 +258,12 @@ function BotBuildFleet (int $obj_id, int $n) : int
 //------------------------------------------------------------------------------------
 // Research
 
-// Get the research level
+/**
+ * Get the research level of the bot.
+ *
+ * @param int $n ID of the research.
+ * @return int Current research level, or 0 on error.
+ */
 function BotGetResearch (int $n) : int
 {
     global $BotID, $BotNow;
@@ -201,7 +272,12 @@ function BotGetResearch (int $n) : int
     return $bot[$n];
 }
 
-// Check - can we start research on the active planet (1-yes, 0-no)
+/**
+ * Check if the specified research can be started on the active planet.
+ *
+ * @param int $obj_id ID of the research to check.
+ * @return bool True if the research can be started, false otherwise.
+ */
 function BotCanResearch (int $obj_id) : bool
 {
     global $BotID, $BotNow;
@@ -214,8 +290,12 @@ function BotCanResearch (int $obj_id) : bool
     return ($text === '' );
 }
 
-// Begin research on the active planet.
-// Return 0 if there are not enough conditions or resources to start the research. Return the number of seconds to wait until the research is completed.
+/**
+ * Begin research on the active planet.
+ *
+ * @param int $obj_id ID of the research to start.
+ * @return int Number of seconds until the research completes, or 0 if the research could not be started.
+ */
 function BotResearch (int $obj_id) : int
 {
     global $BotID, $BotNow, $GlobalUni;

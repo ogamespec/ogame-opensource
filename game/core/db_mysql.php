@@ -1,12 +1,28 @@
 <?php
-
+/**
+ * @file db_mysql.php
+ * @brief MySQL database backend.
+ * @details Implements the database layer on top of the mysqli extension. This is the default backend used by the live game.
+ */
 // Working with MySQL database (default backend).
 // Included by db.php when DB_CONNECTION is not "sqlite".
 
+/** Number of executed queries. */
 $query_counter = 0;
+/** Log of executed queries. */
 $query_log = "";
+/** MySQL connection handle. */
 $db_connect = 0;
 
+/**
+ * Establishes a connection to the MySQL server and selects the game database.
+ *
+ * @param string $db_host Database server host.
+ * @param string $db_user Database user name.
+ * @param string $db_pass Database user password.
+ * @param string $db_name Name of the database to select.
+ * @return void
+ */
 function dbconnect (string $db_host, string $db_user, string $db_pass, string $db_name) : void
 {
     global  $query_counter, $query_log, $db_connect;
@@ -23,6 +39,13 @@ function dbconnect (string $db_host, string $db_user, string $db_pass, string $d
     $query_log = "";
 }
 
+/**
+ * Executes a query on the game database and returns the result.
+ *
+ * @param string $query SQL query to execute.
+ * @param bool $mute If true, suppresses the error output on failure.
+ * @return mixed Query result resource or false on failure.
+ */
 function dbquery (string $query, bool $mute=false) : mixed
 {
     global  $query_counter, $query_log, $db_connect;
@@ -38,12 +61,24 @@ function dbquery (string $query, bool $mute=false) : mixed
     else return $result;
 }
 
+/**
+ * Returns the number of rows in a query result.
+ *
+ * @param mixed $result Query result resource.
+ * @return int Number of rows in the result.
+ */
 function dbrows (mixed $result) : int
 {
     $rows = @mysqli_num_rows($result);
     return $rows;
 }
 
+/**
+ * Fetches the next row of a query result as an associative array.
+ *
+ * @param mixed $result Query result resource.
+ * @return mixed Associative array with the row data or false when there are no more rows.
+ */
 function dbarray (mixed $result) : mixed
 {
     global $db_connect;
@@ -55,11 +90,21 @@ function dbarray (mixed $result) : mixed
     else return $arr;
 }
 
+/**
+ * Frees the memory associated with a query result.
+ *
+ * @param mixed $result Query result resource.
+ * @return void
+ */
 function dbfree (mixed $result) : void {
     @mysqli_free_result ($result);
 }
 
-// Connect to the database
+/**
+ * Connects to the database and sets the UTF-8 connection settings.
+ *
+ * @return void
+ */
 function InitDB () : void
 {
     global $db_host, $db_user, $db_pass, $db_name;
@@ -69,8 +114,14 @@ function InitDB () : void
     dbquery("SET SESSION collation_connection = 'utf8_general_ci';");
 }
 
-// Add a row to the table.
-// This method now takes into account that the table may have additional columns added by the mod that do not need to be touched.
+/**
+ * Adds a row to the specified table and returns the id of the inserted row.
+ * The method takes into account that the table may have additional columns added by the mod that do not need to be touched.
+ *
+ * @param array $row Associative array of column names and values.
+ * @param string $tabname Name of the table to insert into.
+ * @return int Id of the inserted row.
+ */
 function AddDBRow ( array $row, string $tabname ) : int
 {
     global $db_connect, $db_prefix;
@@ -99,9 +150,14 @@ function AddDBRow ( array $row, string $tabname ) : int
 // Working with the master database, where information common to all universes (e.g. coupons) is stored.
 // The master database can be accessed from any universe
 
-// Link to connect to the master database
+/** Link to the master database connection. */
 $MDB_link = 0;
 
+/**
+ * Establishes a connection to the master database and applies UTF-8 settings.
+ *
+ * @return bool True on success, false if the master database is disabled or the connection fails.
+ */
 function MDBConnect () : bool
 {
     global $MDB_link, $mdb_host, $mdb_user, $mdb_pass, $mdb_name, $mdb_enable;
@@ -118,6 +174,12 @@ function MDBConnect () : bool
     return true;
 }
 
+/**
+ * Executes a query on the master database and returns the result.
+ *
+ * @param string $query SQL query to execute.
+ * @return mixed Query result resource or null on failure.
+ */
 function MDBQuery (string $query) : mixed
 {
     global $MDB_link;
@@ -126,12 +188,24 @@ function MDBQuery (string $query) : mixed
     else return $result;
 }
 
+/**
+ * Returns the number of rows in a master database query result.
+ *
+ * @param mixed $result Query result resource.
+ * @return int Number of rows in the result.
+ */
 function MDBRows (mixed $result) : int
 {
     $rows = @mysqli_num_rows($result);
     return $rows;
 }
 
+/**
+ * Fetches the next row of a master database query result as an associative array.
+ *
+ * @param mixed $result Query result resource.
+ * @return mixed Associative array with the row data or null when there are no more rows.
+ */
 function MDBArray (mixed $result) : mixed
 {
     $arr = @mysqli_fetch_assoc($result);
@@ -140,9 +214,11 @@ function MDBArray (mixed $result) : mixed
 }
 
 
-// Table locking is critical in a multi-user environment. It is protection against simultaneous work with the database from several users.
-// Think of it as analogous to multitasking lock (mutex).
-
+/**
+ * Locks all game tables for writing to protect against simultaneous access from several users.
+ *
+ * @return void
+ */
 function LockTables () : void
 {
     global $db_prefix;
@@ -156,11 +232,22 @@ function LockTables () : void
     dbquery ($query);
 }
 
+/**
+ * Unlocks all previously locked tables.
+ *
+ * @return void
+ */
 function UnlockTables () : void
 {
     dbquery ( "UNLOCK TABLES" );
 }
 
+/**
+ * Serializes a table into an array with its autoincrement value, column list and row data.
+ *
+ * @param string $name Name of the table to serialize.
+ * @return array Serialized table data.
+ */
 function SerializeTable (string $name) : array
 {
     global $db_name;
@@ -205,6 +292,11 @@ function SerializeTable (string $name) : array
     return $tab;
 }
 
+/**
+ * Serializes all game tables into a JSON string.
+ *
+ * @return string JSON representation of the whole database.
+ */
 function SerializeDB () : string
 {
     include __DIR__ . "/install_tabs.php";
@@ -219,12 +311,25 @@ function SerializeDB () : string
     return json_encode ($db_tabs, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
 }
 
+/**
+ * Executes a single query during database deserialization.
+ *
+ * @param string $query SQL query to execute.
+ * @return void
+ */
 function DeserExecQuery (string $query) : void
 {
     //echo $query . "\n";
     dbquery ($query);
 }
 
+/**
+ * Restores a table from its serialized data, replacing the existing rows.
+ *
+ * @param string $name Name of the table to restore.
+ * @param array $tab Serialized table data.
+ * @return void
+ */
 function DeserializeTable (string $name, array $tab) : void
 {
     global $db_prefix;
@@ -269,6 +374,12 @@ function DeserializeTable (string $name, array $tab) : void
     }
 }
 
+/**
+ * Restores the whole database from a JSON serialized string.
+ *
+ * @param string $text JSON string with serialized tables.
+ * @return void
+ */
 function DeserializeDB (string $text) : void
 {
     $tabs = json_decode ($text, true);

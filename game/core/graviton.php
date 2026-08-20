@@ -1,10 +1,25 @@
 <?php
-
+/**
+ * @file graviton.php
+ * @brief Graviton research logic.
+ * @details Computes the progress and requirements of the graviton research.
+ */
+/**
+ * Graviton attack result flags.
+ */
 const GRAVI_MOON_DESTR = 1;
 const GRAVI_FLEET_DESTR = 2;
 
-// Moon attack.
-// Returns the result encoded in 2 bits: bit0 - the moon is destroyed, bit1 - Deathstar exploded with the whole fleet
+/**
+ * Perform a Deathstar graviton attack on a moon.
+ *
+ * The result is encoded in 2 bits: bit0 - the moon is destroyed, bit1 - the Deathstar exploded with the whole fleet.
+ *
+ * @param array $fleet_obj Fleet record from the database.
+ * @param array $fleet Fleet composition (ship counts).
+ * @param int $when Timestamp when the attack resolves.
+ * @return int Attack result flags (GRAVI_MOON_DESTR / GRAVI_FLEET_DESTR), or 0.
+ */
 function GravitonAttack (array $fleet_obj, array $fleet, int $when) : int
 {
     $origin = LoadPlanetById ( $fleet_obj['start_planet'] );

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file buddy.php
+ * @brief Buddy list management.
+ * @details Adds and removes friends on the buddy list and handles buddy requests between players.
+ */
 // Small Alliance System (Buddies). No more than 16 buddies.
 
 // Database entries (buddy)
@@ -9,7 +13,14 @@
 // text: Request text (TEXT)
 // accepted: Request verified. Users are buddies.
 
-// Returns the request ID if a request has been sent, or 0 if a buddy request has already been submitted.
+/**
+ * Send a buddy request, returning the request ID or 0 if the request cannot be made.
+ *
+ * @param int $from Player ID of the sender.
+ * @param int $to Player ID of the recipient.
+ * @param string $text Request text.
+ * @return int Buddy request ID, or 0 if a request already exists or the players are buddies.
+ */
 function AddBuddy (int $from, int $to, string $text) : int
 {
     global $db_prefix;
@@ -30,7 +41,11 @@ function AddBuddy (int $from, int $to, string $text) : int
     return $id;
 }
 
-// Delete buddy request.
+/**
+ * Delete a buddy request.
+ *
+ * @param int $buddy_id Buddy request ID.
+ */
 function RemoveBuddy (int $buddy_id) : void
 {
     global $db_prefix;
@@ -38,7 +53,11 @@ function RemoveBuddy (int $buddy_id) : void
     dbquery ($query);
 }
 
-// Accept buddy request.
+/**
+ * Accept a buddy request.
+ *
+ * @param int $buddy_id Buddy request ID.
+ */
 function AcceptBuddy (int $buddy_id) : void
 {
     global $db_prefix;
@@ -46,7 +65,12 @@ function AcceptBuddy (int $buddy_id) : void
     dbquery ($query);
 }
 
-// Load request.
+/**
+ * Load a buddy request by its ID.
+ *
+ * @param int $buddy_id Buddy request ID.
+ * @return mixed Buddy request data row.
+ */
 function LoadBuddy (int $buddy_id) : mixed
 {
     global $db_prefix;
@@ -55,7 +79,12 @@ function LoadBuddy (int $buddy_id) : mixed
     return dbarray ($result);
 }
 
-// List all sent player requests (your own).
+/**
+ * List all buddy requests sent by the player that are still pending.
+ *
+ * @param int $player_id Player ID.
+ * @return mixed Database result of the sent requests.
+ */
 function EnumOutcomeBuddy (int $player_id) : mixed
 {
     global $db_prefix;
@@ -63,7 +92,12 @@ function EnumOutcomeBuddy (int $player_id) : mixed
     return dbquery ($query);
 }
 
-// List all incoming requests (other people's requests).
+/**
+ * List all buddy requests received by the player that are still pending.
+ *
+ * @param int $player_id Player ID.
+ * @return mixed Database result of the incoming requests.
+ */
 function EnumIncomeBuddy (int $player_id) : mixed
 {
     global $db_prefix;
@@ -71,7 +105,12 @@ function EnumIncomeBuddy (int $player_id) : mixed
     return dbquery ($query);
 }
 
-// List all of the player's buddies.
+/**
+ * List all of the player's accepted buddies.
+ *
+ * @param int $player_id Player ID.
+ * @return mixed Database result of the buddies.
+ */
 function EnumBuddy (int $player_id) : mixed
 {
     global $db_prefix;
@@ -79,7 +118,13 @@ function EnumBuddy (int $player_id) : mixed
     return dbquery ($query);
 }
 
-// Check if the players are buddies.
+/**
+ * Check whether two players are buddies.
+ *
+ * @param int $player1 Player ID.
+ * @param int $player2 Player ID.
+ * @return bool True if the players are buddies.
+ */
 function IsBuddy (int $player1, int $player2) : bool
 {
     global $db_prefix;

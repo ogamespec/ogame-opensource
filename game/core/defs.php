@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file defs.php
+ * @brief Game constants and definitions.
+ * @details Declares the numeric constants used for planet types, fleet mission types and other game-wide identifiers.
+ */
 // Various engine definitions, previously scattered across all modules, are now in one place.
 
 // Rank Mask.

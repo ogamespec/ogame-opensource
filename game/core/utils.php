@@ -1,16 +1,36 @@
 <?php
-
+/**
+ * @file utils.php
+ * @brief Miscellaneous utility functions.
+ * @details Collects small helpers used across the game core: HTTP request data, string formatting, array sorting, mail sending and input sanitisation.
+ */
 // Various auxiliary utilities that used to be scattered all over the place.
 
+/**
+ * Returns the HTTP request method.
+ *
+ * @return string The request method, e.g. "GET" or "POST".
+ */
 function method () : string {
     return $_SERVER['REQUEST_METHOD'];
 }
 
+/**
+ * Returns the name of the currently executed script.
+ *
+ * @return string The script file name.
+ */
 function scriptname () : string {
     $break = explode('/', $_SERVER["SCRIPT_NAME"]);
     return $break[count($break) - 1];
 }
 
+/**
+ * Returns the base URL up to and including the given directory.
+ *
+ * @param string $dir Directory name that marks the base path.
+ * @return string The base URL with trailing slash.
+ */
 function hostname (string $dir = "game") : string {
     if (!empty($_SERVER['HTTPS']))  { // get if request is http or https
        $encr ="https://";
@@ -22,11 +42,20 @@ function hostname (string $dir = "game") : string {
     return substr ( $host, 0, $pos+1 );
 }
 
+/**
+ * Formats a number with thousands separators and no decimals.
+ *
+ * @param float|int $number The number to format.
+ * @return string The formatted number.
+ */
 function nicenum (float|int $number) : string
 {
     return number_format($number,0,",",".");
 }
 
+/**
+ * Redirects the browser to the game start page.
+ */
 function RedirectHome () : void
 {
     // The start page address can be found in config.php
@@ -34,7 +63,12 @@ function RedirectHome () : void
     echo "<html><head><meta http-equiv='refresh' content='0;url=$StartPage' /></head><body></body>";
 }
 
-// Format string, according to tokens from the text. Tokens are represented as #1, #2 and so on.
+/**
+ * Replaces tokens (#1, #2, ...) in the subject string with the given arguments.
+ *
+ * @param string $subject The format string containing tokens.
+ * @return string The formatted string.
+ */
 function va (string $subject) : string
 {
     $num_arg = func_num_args();
@@ -48,7 +82,14 @@ function va (string $subject) : string
     return preg_replace($pattern, $replace, $subject);
 }
 
-// Here is a function to sort an array by the key of its sub-array
+/**
+ * Sorts an array by the given key of its sub-arrays.
+ *
+ * @param array $array The array to sort, passed by reference.
+ * @param string $subkey Key of the sub-arrays to sort by.
+ * @param bool $sort_ascending Whether to sort in ascending order.
+ * @return array The sorted array.
+ */
 function sksort (array &$array, string $subkey="id", bool $sort_ascending=false) : array
 {
     $temp_array = array ();
@@ -78,18 +119,37 @@ function sksort (array &$array, string $subkey="id", bool $sort_ascending=false)
     return $array;
 }
 
+/**
+ * Sends a UTF-8 encoded e-mail message.
+ *
+ * @param string $to Recipient address.
+ * @param string $subject Message subject.
+ * @param string $message Message body.
+ * @param string $header Additional mail headers.
+ */
 function mail_utf8(string $to, string $subject = '(No subject)', string $message = '', string $header = '') : void
 {
     $header_ = 'MIME-Version: 1.0' . "\n" . 'Content-type: text/plain; charset=UTF-8' . "\n";
     mail($to, '=?UTF-8?B?'.base64_encode($subject).'?=', $message, $header_ . $header);
 }
 
+/**
+ * Checks whether the given IP address is a localhost address.
+ *
+ * @param string $ip The IP address to check.
+ * @return bool True if the address is 127.0.0.1 or ::1.
+ */
 function localhost (string $ip) : bool
 {
     return $ip === "127.0.0.1" || $ip === "::1";
 }
 
-// Cut all sorts of injections out of the string.
+/**
+ * Removes scripts, HTML tags and dangerous characters from a string.
+ *
+ * @param string $text The input text.
+ * @return string The sanitized text.
+ */
 function SecureText ( string $text ) : string
 {
     $search = array ( "'<script[^>]*?>.*?</script>'si",  // Cuts out javaScript
@@ -175,6 +235,16 @@ function CheckParams (array $inputParams): array {
     ];
 }
 
+/**
+ * Inserts a new key-value pair into an array after a specified key.
+ * Preserves all original keys and their order.
+ *
+ * @param array $array The original array, passed by reference.
+ * @param string $after_key Key after which to insert the new element.
+ * @param string $new_key Key for the new element.
+ * @param mixed $new_value Value for the new element.
+ * @return array The modified array.
+ */
 function array_insert_after_key(array &$array, string $after_key, string $new_key, mixed $new_value) : array {
     $keys = array_keys($array);
     $index = array_search($after_key, $keys);
@@ -237,6 +307,11 @@ function array_insert_before_key(array &$array, string $before_key, string $new_
     return $array;
 }
 
+/**
+ * Generates a simple human-readable password from random syllables and digits.
+ *
+ * @return string The generated password.
+ */
 function gen_trivial_password () : string
 {
     $pass = "";
@@ -251,7 +326,12 @@ function gen_trivial_password () : string
     return $pass;
 }
 
-// Return a string of durations by days, hours, minutes, seconds.
+/**
+ * Formats a duration in seconds as a string of days, hours, minutes and seconds.
+ *
+ * @param int $seconds The duration in seconds.
+ * @return string The formatted duration string.
+ */
 function DurationFormat ( int $seconds ) : string
 {
     $res = "";
@@ -268,6 +348,12 @@ function DurationFormat ( int $seconds ) : string
     return $res;
 }
 
+/**
+ * Runs a command in the background without waiting for it to finish.
+ *
+ * @param string $command The command to run.
+ * @return int The process id (Linux/Unix) or 0 (Windows).
+ */
 function RunBackgroundProcess(string $command) : int {
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
         // Windows
@@ -281,10 +367,23 @@ function RunBackgroundProcess(string $command) : int {
     }
 }
 
+/**
+ * Compares two floats for approximate equality.
+ *
+ * @param float $a First value.
+ * @param float $b Second value.
+ * @return bool True if the values are within float epsilon.
+ */
 function FloatEqual (float $a, float $b) : bool {
     return abs($a-$b) < PHP_FLOAT_EPSILON;
 }
 
+/**
+ * Validates an e-mail address.
+ *
+ * @param string $email The e-mail address to validate.
+ * @return mixed The validated address, or false if invalid.
+ */
 function isValidEmail(string $email) : mixed {
     return filter_var($email, FILTER_VALIDATE_EMAIL);
 }

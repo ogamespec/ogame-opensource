@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file expedition.php
+ * @brief Expedition mission logic.
+ * @details Handles expedition fleets: departure, event generation (resources, ships, battles, losses) and the results reported back to the player.
+ */
 // Expeditions.
 // Expedition messages are sent out in the user's language (the loca_lang method is used).
 
@@ -7,7 +11,9 @@
 
 // Expedition visit counter is stored as the metal value on the far space planet object.
 
-// Expedition result (it is not needed anywhere else except for this module, so there is no need to add it to defs.php)
+/**
+ * Expedition result; used only by this module, so it is not added to defs.php.
+ */
 const EXP_NOTHING = 0;
 const EXP_ALIENS = 1;
 const EXP_PIRATES = 2;
@@ -19,7 +25,12 @@ const EXP_RESOURCES = 7;
 const EXP_FLEET = 8;
 const EXP_TRADER = 9;
 
-// Count the number of active expeditions of the specified player.
+/**
+ * Count the number of active expeditions of the specified player.
+ *
+ * @param int $player_id Player identifier.
+ * @return int Number of active expeditions.
+ */
 function GetExpeditionsCount (int $player_id) : int
 {
     global $db_prefix;
@@ -28,7 +39,11 @@ function GetExpeditionsCount (int $player_id) : int
     return dbrows ($result);
 }
 
-// Load Expedition Settings.
+/**
+ * Load the expedition settings from the database.
+ *
+ * @return mixed Expedition settings row, or false if none is found.
+ */
 function LoadExpeditionSettings () : mixed
 {
     global $db_prefix;
@@ -37,6 +52,12 @@ function LoadExpeditionSettings () : mixed
     return dbarray ($result);
 }
 
+/**
+ * Save the expedition settings to the database.
+ *
+ * @param array $exptab Expedition settings to save.
+ * @return void
+ */
 function SaveExpeditionSettings (array $exptab) : void
 {
     global $db_prefix;
@@ -84,7 +105,12 @@ function SaveExpeditionSettings (array $exptab) : void
     dbquery ($query);
 }
 
-// Count the points of the expeditionary fleet.
+/**
+ * Count the points of the expeditionary fleet.
+ *
+ * @param array $fleet Fleet composition (ship counts).
+ * @return int Points of the expeditionary fleet.
+ */
 function ExpPoints ( array $fleet ) : int
 {
     global $fleetmap;
@@ -101,7 +127,12 @@ function ExpPoints ( array $fleet ) : int
     return $structure / 1000;
 }
 
-// The upper limit of expedition points.
+/**
+ * Compute the upper limit of expedition points based on the top player's score.
+ *
+ * @param array $exptab Expedition settings with score caps and point limits.
+ * @return int Upper limit of expedition points.
+ */
 function ExpUpperLimit (array $exptab) : int
 {
     $user = GetTop1 ();
@@ -123,7 +154,18 @@ function ExpUpperLimit (array $exptab) : int
     return $exptab['limit_cap1'];
 }
 
-// Nothing happened.
+/**
+ * Handle the expedition event where nothing happens and send the fleet back.
+ *
+ * @param array $exptab Expedition settings.
+ * @param array $queue Queue entry with the expedition timings.
+ * @param array $fleet_obj Fleet record from the database.
+ * @param array $fleet Fleet composition (ship counts).
+ * @param array $origin Origin planet of the expedition.
+ * @param array $target Destination planet of the expedition.
+ * @param string $lang Language code used for the message.
+ * @return string Message text for the player.
+ */
 function Exp_NothingHappens (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     $msg = array (
@@ -151,7 +193,14 @@ function Exp_NothingHappens (array $exptab, array $queue, array $fleet_obj, arra
     return $msg[$n];
 }
 
-// Message from on-board engineer (visit counter)
+/**
+ * Generate a logbook message from the on-board engineer based on the visit counter.
+ *
+ * @param int $expcount Expedition visit counter.
+ * @param array $exptab Expedition settings with depletion thresholds.
+ * @param string $lang Language code used for the message.
+ * @return string Logbook message text.
+ */
 function Logbook (int $expcount, array $exptab, string $lang) : string
 {
     $msg_1 = array (
@@ -195,7 +244,18 @@ function Logbook (int $expcount, array $exptab, string $lang) : string
 // ------------- 
 // Successful events of the expedition
 
-// Encountering aliens
+/**
+ * Handle the expedition event of encountering aliens and start a battle.
+ *
+ * @param array $exptab Expedition settings.
+ * @param array $queue Queue entry with the expedition timings.
+ * @param array $fleet_obj Fleet record from the database.
+ * @param array $fleet Fleet composition (ship counts).
+ * @param array $origin Origin planet of the expedition.
+ * @param array $target Destination planet of the expedition.
+ * @param string $lang Language code used for the message.
+ * @return string Message text for the player.
+ */
 function Exp_BattleAliens (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     $weak = array (
@@ -239,7 +299,18 @@ function Exp_BattleAliens (array $exptab, array $queue, array $fleet_obj, array 
 
 // ---
 
-// Meet the pirates
+/**
+ * Handle the expedition event of meeting pirates and start a battle.
+ *
+ * @param array $exptab Expedition settings.
+ * @param array $queue Queue entry with the expedition timings.
+ * @param array $fleet_obj Fleet record from the database.
+ * @param array $fleet Fleet composition (ship counts).
+ * @param array $origin Origin planet of the expedition.
+ * @param array $target Destination planet of the expedition.
+ * @param string $lang Language code used for the message.
+ * @return string Message text for the player.
+ */
 function Exp_BattlePirates (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     $weak = array (
@@ -284,7 +355,18 @@ function Exp_BattlePirates (array $exptab, array $queue, array $fleet_obj, array
 
 // ---
 
-// Finding Dark Matter
+/**
+ * Handle the expedition event of finding dark matter and credit it to the player.
+ *
+ * @param array $exptab Expedition settings.
+ * @param array $queue Queue entry with the expedition timings.
+ * @param array $fleet_obj Fleet record from the database.
+ * @param array $fleet Fleet composition (ship counts).
+ * @param array $origin Origin planet of the expedition.
+ * @param array $target Destination planet of the expedition.
+ * @param string $lang Language code used for the message.
+ * @return string Message text for the player.
+ */
 function Exp_DarkMatterFound (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     global $db_prefix;
@@ -345,7 +427,18 @@ function Exp_DarkMatterFound (array $exptab, array $queue, array $fleet_obj, arr
 
 // ---
 
-// The loss of the entire fleet
+/**
+ * Handle the expedition event where the entire fleet is lost and write off its points.
+ *
+ * @param array $exptab Expedition settings.
+ * @param array $queue Queue entry with the expedition timings.
+ * @param array $fleet_obj Fleet record from the database.
+ * @param array $fleet Fleet composition (ship counts).
+ * @param array $origin Origin planet of the expedition.
+ * @param array $target Destination planet of the expedition.
+ * @param string $lang Language code used for the message.
+ * @return string Message text for the player.
+ */
 function Exp_LostFleet (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     $msg = array (
@@ -369,7 +462,18 @@ function Exp_LostFleet (array $exptab, array $queue, array $fleet_obj, array $fl
 
 // ---
 
-// Delayed return of the expedition
+/**
+ * Handle the expedition event of a delayed return of the fleet.
+ *
+ * @param array $exptab Expedition settings.
+ * @param array $queue Queue entry with the expedition timings.
+ * @param array $fleet_obj Fleet record from the database.
+ * @param array $fleet Fleet composition (ship counts).
+ * @param array $origin Origin planet of the expedition.
+ * @param array $target Destination planet of the expedition.
+ * @param string $lang Language code used for the message.
+ * @return string Message text for the player.
+ */
 function Exp_DelayFleet (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     $msg = array (
@@ -398,7 +502,18 @@ function Exp_DelayFleet (array $exptab, array $queue, array $fleet_obj, array $f
     return $msg[$n];
 }
 
-// Accelerating the return of the expedition
+/**
+ * Handle the expedition event of an accelerated return of the fleet.
+ *
+ * @param array $exptab Expedition settings.
+ * @param array $queue Queue entry with the expedition timings.
+ * @param array $fleet_obj Fleet record from the database.
+ * @param array $fleet Fleet composition (ship counts).
+ * @param array $origin Origin planet of the expedition.
+ * @param array $target Destination planet of the expedition.
+ * @param string $lang Language code used for the message.
+ * @return string Message text for the player.
+ */
 function Exp_AccelFleet (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     $msg = array (
@@ -424,7 +539,18 @@ function Exp_AccelFleet (array $exptab, array $queue, array $fleet_obj, array $f
 
 // ---
 
-// Finding resources
+/**
+ * Handle the expedition event of finding resources and load them into the fleet.
+ *
+ * @param array $exptab Expedition settings.
+ * @param array $queue Queue entry with the expedition timings.
+ * @param array $fleet_obj Fleet record from the database.
+ * @param array $fleet Fleet composition (ship counts).
+ * @param array $origin Origin planet of the expedition.
+ * @param array $target Destination planet of the expedition.
+ * @param string $lang Language code used for the message.
+ * @return string Message text for the player.
+ */
 function Exp_ResourcesFound (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     global $transportableResources;
@@ -518,7 +644,18 @@ function Exp_ResourcesFound (array $exptab, array $queue, array $fleet_obj, arra
 
 // ---
 
-// Finding ships
+/**
+ * Handle the expedition event of finding ships and add them to the fleet.
+ *
+ * @param array $exptab Expedition settings.
+ * @param array $queue Queue entry with the expedition timings.
+ * @param array $fleet_obj Fleet record from the database.
+ * @param array $fleet Fleet composition (ship counts).
+ * @param array $origin Origin planet of the expedition.
+ * @param array $target Destination planet of the expedition.
+ * @param string $lang Language code used for the message.
+ * @return string Message text for the player.
+ */
 function Exp_FleetFound (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     global $UnitParam;
@@ -643,7 +780,18 @@ function Exp_FleetFound (array $exptab, array $queue, array $fleet_obj, array $f
 
 // ---
 
-// Finding the Merchant
+/**
+ * Handle the expedition event of finding the merchant and activate its trade offer.
+ *
+ * @param array $exptab Expedition settings.
+ * @param array $queue Queue entry with the expedition timings.
+ * @param array $fleet_obj Fleet record from the database.
+ * @param array $fleet Fleet composition (ship counts).
+ * @param array $origin Origin planet of the expedition.
+ * @param array $target Destination planet of the expedition.
+ * @param string $lang Language code used for the message.
+ * @return string Message text for the player.
+ */
 function Exp_TraderFound (array $exptab, array $queue, array $fleet_obj, array $fleet, array $origin, array $target, string $lang) : string
 {
     global $db_prefix;
@@ -725,6 +873,16 @@ function Exp_TraderFound (array $exptab, array $queue, array $fleet_obj, array $
 
 // -------------
 
+/**
+ * Start the orbit hold task when the expedition arrives at its destination.
+ *
+ * @param array $queue Queue entry with the expedition timings.
+ * @param array $fleet_obj Fleet record from the database.
+ * @param array $fleet Fleet composition (ship counts).
+ * @param array $origin Origin planet of the expedition.
+ * @param array $target Destination planet of the expedition.
+ * @return void
+ */
 function ExpeditionArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     // Start an orbit hold task.
@@ -734,7 +892,14 @@ function ExpeditionArrive (array $queue, array $fleet_obj, array $fleet, array $
         0, $queue['end'], 0, $fleet_obj['flight_time']);
 }
 
-// Algorithmic part of the expedition
+/**
+ * Roll the expedition event based on the settings, visit counter and hold time.
+ *
+ * @param int $expcount Expedition visit counter.
+ * @param array $exptab Expedition settings with event chances.
+ * @param int $hold_time Hold time in hours.
+ * @return int Expedition result code (EXP_* constant).
+ */
 function Expedition (int $expcount, array $exptab, int $hold_time) : int
 {
     $res = EXP_NOTHING;
@@ -763,6 +928,16 @@ function Expedition (int $expcount, array $exptab, int $hold_time) : int
     return $res;
 }
 
+/**
+ * Resolve the expedition event when the fleet finishes its hold and report the result to the player.
+ *
+ * @param array $queue Queue entry with the expedition timings.
+ * @param array $fleet_obj Fleet record from the database.
+ * @param array $fleet Fleet composition (ship counts).
+ * @param array $origin Origin planet of the expedition.
+ * @param array $target Destination planet of the expedition.
+ * @return void
+ */
 function ExpeditionHold (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     $exptab = LoadExpeditionSettings ();

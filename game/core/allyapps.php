@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file allyapps.php
+ * @brief Alliance application handling.
+ * @details Accepts, rejects and manages player applications to join an alliance.
+ */
 // Alliance applications.
 
 // Entries of applications in the database (allyapps).
@@ -9,7 +13,14 @@
 // text: Application text (TEXT)
 // date: Application date time() (INT UNSIGNED)
 
-// Add an application to the alliance. Returns the ordinal number of the application.
+/**
+ * Add an application to the alliance and return its ordinal number.
+ *
+ * @param int $ally_id ID of the alliance to apply to.
+ * @param int $player_id ID of the applying player.
+ * @param string $text Application text.
+ * @return int ID of the newly created application.
+ */
 function AddApplication (int $ally_id, int $player_id, string $text) : int
 {
     $app = array ( 'ally_id' => $ally_id, 'player_id' => $player_id, 'text' => $text, 'date' => time() );
@@ -17,7 +28,12 @@ function AddApplication (int $ally_id, int $player_id, string $text) : int
     return $id;
 }
 
-// Delete the application.
+/**
+ * Delete an application.
+ *
+ * @param int $app_id ID of the application to delete.
+ * @return void
+ */
 function RemoveApplication (int $app_id) : void
 {
     global $db_prefix;
@@ -25,7 +41,12 @@ function RemoveApplication (int $app_id) : void
     dbquery ($query);
 }
 
-// List all applications in the alliance.
+/**
+ * List all applications of an alliance.
+ *
+ * @param int $ally_id ID of the alliance.
+ * @return mixed Database result set with the applications.
+ */
 function EnumApplications (int $ally_id) : mixed
 {
     global $db_prefix;
@@ -33,7 +54,12 @@ function EnumApplications (int $ally_id) : mixed
     return dbquery ($query);
 }
 
-// Has the user already applied to the alliance? If yes - return the application ID, otherwise return 0.
+/**
+ * Check whether a player has already applied to an alliance.
+ *
+ * @param int $player_id ID of the player.
+ * @return int The application ID if the player has applied, otherwise 0.
+ */
 function GetUserApplication (int $player_id) : int
 {
     global $db_prefix;
@@ -47,7 +73,12 @@ function GetUserApplication (int $player_id) : int
     else return 0;
 }
 
-// Load the application.
+/**
+ * Load a single application.
+ *
+ * @param int $app_id ID of the application.
+ * @return mixed The application row as an array, or false if it does not exist.
+ */
 function LoadApplication (int $app_id) : mixed
 {
     global $db_prefix;
