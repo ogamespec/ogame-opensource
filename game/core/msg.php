@@ -268,11 +268,9 @@ function ReportMessage (int $player_id, int $msg_id, string &$ResultMessage="", 
     if ($msg) {
         if ($msg['pm'] != MTYP_PM) {
             Error ("User $player_id is attempting to report a non-private message. Admin check this smart guy.");
-            return 0;
         }
         if ($msg['owner_id'] != $player_id) {
             Error ("User $player_id is trying to report someone else's message. Admin check this smart guy.");
-            return 0;
         }
 
         // Check that such a message is not yet in the report history

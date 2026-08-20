@@ -413,7 +413,7 @@ function GetMaxFleet (array|null $user, array|null $planet, int &$maxfleet, int 
         return;
     }
 
-    $maxfleet_no_bonus = $user[GID_R_COMPUTER] + 1;
+    $maxfleet_no_bonus = (int) $user[GID_R_COMPUTER] + 1;
     $maxfleet = $maxfleet_no_bonus;
 
     $prem = PremiumStatus ($user);
@@ -791,6 +791,9 @@ function TransportArrive (array $queue, array $fleet_obj, array $fleet, array $o
     if ( $origin['owner_id'] != $target['owner_id'] )
     {
         $target_user = LoadUser ( $target['owner_id'] );
+        if ($target_user == null) {
+            return;
+        }
         loca_add ( "fleetmsg", $target_user['lang'] );
 
         $text = va(loca_lang("FLEET_TRANSPORT_OTHER", $target_user['lang']),
@@ -1185,9 +1188,11 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
  * @param array $queue Queue event data.
  * @param array $fleet_obj Fleet data.
  * @param array $fleet Fleet composition.
+ * @param array $origin Origin planet data.
+ * @param array $target Target planet data.
  * @return void
  */
-function SpyReturn (array $queue, array $fleet_obj, array $fleet) : void
+function SpyReturn (array $queue, array $fleet_obj, array $fleet, array $origin, array $target) : void
 {
     AdjustResources ( $fleet_obj, $fleet_obj['start_planet'], '+' );
     AdjustShips ( $fleet, $fleet_obj['start_planet'], '+' );

@@ -345,6 +345,7 @@ class Infos extends Page {
         $fleet_obj = dbarray ( $result );
         $queue = GetFleetQueue ( $fleet_obj['fleet_id'] );
         $user = LoadUser ($fleet_obj['owner_id']);
+        if ( $user == null ) continue;
 
         $load = $queue['end'] - $now;
 

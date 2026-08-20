@@ -41,9 +41,9 @@ class Trader extends Page {
                     $value_2 = 0;
                     $value_3 = 0;
 
-                    if (key_exists('1_value', $_POST)) $value_1 = abs (str_replace ( ".", "", $_POST['1_value'] ));
-                    if (key_exists('2_value', $_POST)) $value_2 = abs (str_replace ( ".", "", $_POST['2_value'] ));
-                    if (key_exists('3_value', $_POST)) $value_3 = abs (str_replace ( ".", "", $_POST['3_value'] ));
+                    if (key_exists('1_value', $_POST)) $value_1 = abs ( (int) str_replace ( ".", "", $_POST['1_value'] ) );
+                    if (key_exists('2_value', $_POST)) $value_2 = abs ( (int) str_replace ( ".", "", $_POST['2_value'] ) );
+                    if (key_exists('3_value', $_POST)) $value_3 = abs ( (int) str_replace ( ".", "", $_POST['3_value'] ) );
 
                     if ( $GlobalUser['trader'] == 1) {
                         $crys = floor ( $aktplanet[GID_RC_CRYSTAL] + $value_2 );
@@ -114,9 +114,9 @@ class Trader extends Page {
         // Prepare display data
         if ( $GlobalUser['trader'] > 0 ) {
             $this->offer_id = $GlobalUser['trader'];
-            if ( $this->offer_id == 1) $this->amount = floor ($aktplanet[GID_RC_METAL]);
-            else if ( $this->offer_id == 2) $this->amount = floor ($aktplanet[GID_RC_CRYSTAL]);
-            else if ( $this->offer_id == 3) $this->amount = floor ($aktplanet[GID_RC_DEUTERIUM]);
+            if ( $this->offer_id == 1) $this->amount = (int) floor ($aktplanet[GID_RC_METAL]);
+            else if ( $this->offer_id == 2) $this->amount = (int) floor ($aktplanet[GID_RC_CRYSTAL]);
+            else if ( $this->offer_id == 3) $this->amount = (int) floor ($aktplanet[GID_RC_DEUTERIUM]);
             $mmax = max (0, $aktplanet['max'.GID_RC_METAL] - $aktplanet[GID_RC_METAL] );
             $kmax = max (0, $aktplanet['max'.GID_RC_CRYSTAL] - $aktplanet[GID_RC_CRYSTAL] );
             $dmax = max (0, $aktplanet['max'.GID_RC_DEUTERIUM] - $aktplanet[GID_RC_DEUTERIUM] );

@@ -43,8 +43,10 @@ function mail_html (string $to, string $subject = '(No subject)', string $messag
 
     // Add the log to temp.
     $f = fopen ( "temp/mailto.log", "a" );
-    fprintf ( $f, "To: %s\r\nSubj: %s\r\n\r\n%s\r\n", $to, $subject, $message );
-    fclose ($f);
+    if ($f !== false) {
+        fprintf ( $f, "To: %s\r\nSubj: %s\r\n\r\n%s\r\n", $to, $subject, $message );
+        fclose ($f);
+    }
 }
 
 // ------------------------------------------------------------------
@@ -154,7 +156,7 @@ function AddCoupon (int $dm) : string|null
     if ( MDBConnect() )
     {
         while ($timeout--) {
-            $code = substr( chunk_split ( strtoupper( substr(base_convert(sha1(uniqid(mt_rand()) . $db_secret), 16, 36), 0, 20) ), 4, '-' ) , 0, -1);
+            $code = substr( chunk_split ( strtoupper( substr(base_convert(sha1(uniqid((string)mt_rand()) . $db_secret), 16, 36), 0, 20) ), 4, '-' ) , 0, -1);
             if ( CheckCoupon ($code) == 0 ) break;
         }
         if ( $timeout == 0 ) return null;
@@ -232,6 +234,7 @@ function Queue_Coupon_End (array $queue) : void
     while ( $user = dbarray ($result) )    // Send out messages with coupons
     {
         $code = AddCoupon ( $queue['sub_id'] );
+        if ($code === null) continue;
         SendCoupon ( $user, $code );
     }
 

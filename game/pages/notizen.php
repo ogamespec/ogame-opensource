@@ -49,7 +49,7 @@ class Notizen extends Page {
         if ( key_exists ('a', $_GET) )
         {
             if ( intval($_GET['a']) == 1 ) $this->CreateNewNote ();
-            else if ( intval($_GET['a']) == 2 ) $this->EditNote ( intval($_GET['n']) );
+            else $this->EditNote ( intval($_GET['n']) );
         }
         else
         {

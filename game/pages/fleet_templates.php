@@ -1,9 +1,5 @@
 <?php
 
-/** @var array $GlobalUser */
-/** @var string $db_prefix */
-/** @var array $fleetmap */
-
 // Fleet templates.
 
 /**
@@ -26,6 +22,9 @@ class Fleet_templates extends Page
     public function controller() : bool
     {
         global $GlobalUser, $fleetmap, $db_prefix;
+        /** @var array $GlobalUser */
+        /** @var array $fleetmap */
+        /** @var string $db_prefix */
 
         // You are able to create standard fleets. The maximum of standard fleets is your research level "Computer Technology" plus one
         // https://board.en.ogame.gameforge.com/index.php?thread/195023-version-0-74e/
@@ -35,8 +34,8 @@ class Fleet_templates extends Page
         // Check commander premium status
         $prem = PremiumStatus($GlobalUser);
         if (!$prem['commander']) {
+            // MyGoto() terminates the request (redirects), so no return is needed here.
             MyGoto("overview");
-            return false;
         }
 
         // POST request processing - save or update template
@@ -121,6 +120,10 @@ class Fleet_templates extends Page
     public function view() : void
     {
         global $GlobalUser, $fleetmap, $db_prefix, $session;
+        /** @var array $GlobalUser */
+        /** @var array $fleetmap */
+        /** @var string $db_prefix */
+        /** @var string $session */
         ?>
 
         <script type="text/javascript">

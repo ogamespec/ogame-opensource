@@ -345,6 +345,8 @@ function GetDebrisTotal (array &$a, array &$d) : array {
 
     global $debrisResources;
 
+    $debris = array ();
+
     foreach ($debrisResources as $i=>$rc) {
         $debris[$rc] = 0;
     }
@@ -708,6 +710,7 @@ function PostProcessBattleResult (array $a, array $d, array &$res) : void {
 function ExecuteBattle (array $unitab, int $battle_id, string $source, array $a, array $d) : array {
 
     $bf = fopen ( "battledata/battle_".$battle_id.".txt", "w" );
+    if ($bf === false) Error ( va ( "Unable to open the battle data file for battle #1", $battle_id ) );
     fwrite ( $bf, $source );
     fclose ( $bf );
 
@@ -716,9 +719,11 @@ function ExecuteBattle (array $unitab, int $battle_id, string $source, array $a,
     if ($unitab['php_battle']) {
 
         $battle_source = file_get_contents ( "battledata/battle_".$battle_id.".txt" );
+        if ($battle_source === false) Error ( va ( "Unable to read the battle data file for battle #1", $battle_id ) );
         $res = BattleEngine ($battle_source);
 
         $bf = fopen ( "battleresult/battle_".$battle_id.".txt", "w" );
+        if ($bf === false) Error ( va ( "Unable to open the battle result file for battle #1", $battle_id ) );
         fwrite ( $bf, serialize($res) );
         fclose ( $bf );
     }
@@ -734,6 +739,7 @@ function ExecuteBattle (array $unitab, int $battle_id, string $source, array $a,
     // *** Process output data
 
     $battleres = file_get_contents ( "battleresult/battle_".$battle_id.".txt" );
+    if ($battleres === false) Error ( va ( "Unable to read the battle result file for battle #1", $battle_id ) );
     $res = unserialize($battleres);
     PostProcessBattleResult ($a, $d, $res);
 

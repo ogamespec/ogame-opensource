@@ -73,6 +73,7 @@ class Admin_Bans extends Page {
                 foreach ( $ids as $player_id => $checked )
                 {
                     $user = LoadUser ( $player_id );
+                    if ( $user === null ) continue;
                     switch ( intval ( $_POST['banmode'] ) )
                     {
                         case 0 :

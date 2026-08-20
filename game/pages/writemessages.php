@@ -39,17 +39,17 @@ class Writemessages extends Page {
             if ($subj === "") $this->write_error = "<center><font color=#FF0000>".loca("WRITE_MSG_ERROR_NO_SUBJ")."</font><br/><br/></center>\n";
             else if ($text === "") $this->write_error .= "<center><font color=#FF0000>".loca("WRITE_MSG_ERROR_NO_BODY")."</font><br/><br/></center>\n";
             else {
-                if ( $this->user['useskin'] ) $skin = $this->user['skin'];
+                if ( $this->user !== null && $this->user['useskin'] ) $skin = $this->user['skin'];
                 else $skin = hostname () . "evolution/";
 
                 $text = str_replace ( '\"', "&quot;", bb($text) );
                 $text = str_replace ( '\'', "&rsquo;", $text );
                 $text = str_replace ( '\`', "&lsquo;", $text );
 
-                $from = htmlspecialchars($GlobalUser['oname']) . " <a href=\"index.php?page=galaxy&galaxy=".$this->ownhome['g']."&system=".$this->ownhome['s']."&position=".$this->ownhome['p']."&session={PUBLIC_SESSION}\">[".$this->ownhome['g'].":".$this->ownhome['s'].":".$this->ownhome['p']."]</a>\n";
+                $from = htmlspecialchars($GlobalUser['oname']) . " <a href=\"index.php?page=galaxy&galaxy=".($this->ownhome['g'] ?? "")."&system=".($this->ownhome['s'] ?? "")."&position=".($this->ownhome['p'] ?? "")."&session={PUBLIC_SESSION}\">[".($this->ownhome['g'] ?? "").":".($this->ownhome['s'] ?? "").":".($this->ownhome['p'] ?? "")."]</a>\n";
                 $subj = $subj . " <a href=\"index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=".$GlobalUser['player_id']."&re=1&betreff=Re:".$subj."\">\n"
                            . "<img border=\"0\" alt=\"".loca("WRITE_MSG_ALT_REPLY")."\" src=\"".$skin."img/m.gif\" /></a>\n";
-                SendMessage ( $this->user['player_id'], $from, $subj, $text, MTYP_PM);
+                SendMessage ( $this->user['player_id'] ?? 0, $from, $subj, $text, MTYP_PM);
                 $this->write_error = "<center><font color=#00FF00>".loca("WRITE_MSG_SUCCESS")."</font><br/></center>\n";
             }
         }
@@ -69,7 +69,7 @@ class Writemessages extends Page {
         echo "<form action=\"index.php?page=writemessages&session=".$_GET['session']."&gesendet=1&messageziel=".intval($_GET['messageziel'])."\" method=\"post\">\n";
         echo "<table width=\"519\">\n\n";
         echo "<tr><td class=\"c\" colspan=\"2\">".loca("WRITE_MSG_WRITE")."</td></tr>\n";
-        echo "<tr><th>".loca("WRITE_MSG_USER")."</th><th><input type=\"text\" name=\"to\" size=\"40\" value=\"".htmlspecialchars($this->user['oname'])." [".$this->home['g'].":".$this->home['s'].":".$this->home['p']."]\" /></th></tr>\n";
+        echo "<tr><th>".loca("WRITE_MSG_USER")."</th><th><input type=\"text\" name=\"to\" size=\"40\" value=\"".htmlspecialchars($this->user['oname'] ?? '')." [".($this->home['g'] ?? '').":".($this->home['s'] ?? '').":".($this->home['p'] ?? '')."]\" /></th></tr>\n";
         echo "<tr><th>".loca("WRITE_MSG_SUBJ")."</th><th><input type=\"text\" name=\"betreff\" size=\"40\" maxlength=\"40\" value=\"".$this->betreff."\" /></th></tr>\n";
         echo "<tr>\n";
         echo "<th>".va(loca("WRITE_MSG_CHAR_COUNT"), "<span id=\"cntChars\">0</span>", $MAXCHARS)."</th>\n";

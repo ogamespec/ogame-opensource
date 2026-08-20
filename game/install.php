@@ -25,7 +25,7 @@ $InstallError = "<font color=gold>".loca('INSTALL_TIP')."</font>";
 function uniurl () : string {
     $host = $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
     $pos = strrpos ( $host, "/game/install.php" );
-    return substr ( $host, 0, $pos );
+    return substr ( $host, 0, (int) $pos );
 }
 
 // TBD: Check the settings of the universe.
@@ -202,6 +202,9 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     if ($mdb_enable)
     {
         $mdb_connect = @mysqli_connect($_POST["mdb_host"], $_POST["mdb_user"], $_POST["mdb_pass"]);
+        if (!$mdb_connect) {
+            die("Unable to establish connection to MySQL");
+        }
         $mdb_select = @mysqli_select_db($mdb_connect, $_POST["mdb_name"]);
         $query = "SELECT id FROM unis";
         $result = mysqli_query ( $mdb_connect, $query);

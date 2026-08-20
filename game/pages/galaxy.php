@@ -26,18 +26,17 @@ class Galaxy extends Page {
             $origin = $aktplanet;
             $target = LoadPlanetById (intval($_GET['pdd']));
             if ($target != null) {
+                /** @var array $target_user */
                 $target_user = LoadUser ($target['owner_id']);
                 $dist = abs ($origin['s'] - $target['s']);
                 $ipm_radius = max (0, 5 * $GlobalUser[GID_R_IMPULSE_DRIVE] - 1);
 
                 if ( !in_array ($type, $this->defmap_norak ) ) $type = 0;
 
-                if ( $PageError === "" )    // Check the permitted parameters
-                {
-                    if ($amount == 0) $PageError = loca("GALAXY_RAK_NO_ROCKETS");
-                    if ($amount > $aktplanet[GID_D_IPM]) $PageError = loca("GALAXY_RAK_NOT_ENOUGH");
-                    if ($dist > $ipm_radius) $PageError = loca("GALAXY_RAK_WEAK_DRIVE");
-                }
+                // Check the permitted parameters
+                if ($amount == 0) $PageError = loca("GALAXY_RAK_NO_ROCKETS");
+                if ($amount > $aktplanet[GID_D_IPM]) $PageError = loca("GALAXY_RAK_NOT_ENOUGH");
+                if ($dist > $ipm_radius) $PageError = loca("GALAXY_RAK_WEAK_DRIVE");
 
                 if ( $PageError === "" )        // Check player modes
                 {
@@ -283,6 +282,7 @@ class Galaxy extends Page {
         while ($num--)
         {
             $planet = dbarray ($result);
+            /** @var array $user */
             $user = LoadUser ( $planet['owner_id']);
             $own = $user['player_id'] == $GlobalUser['player_id'];
             for ($p; $p<$planet['p']; $p++) $this->empty_row ($p, $custom_planets);

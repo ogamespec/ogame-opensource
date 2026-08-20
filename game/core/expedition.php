@@ -625,7 +625,7 @@ function Exp_ResourcesFound (array $exptab, array $queue, array $fleet_obj, arra
     }
     if ( $type == 0) $found[GID_RC_METAL] = $amount;
     else if ( $type == 1) $found[GID_RC_CRYSTAL] = $amount;
-    else if ( $type == 2) $found[GID_RC_DEUTERIUM] = $amount;
+    else $found[GID_RC_DEUTERIUM] = $amount;
 
     // Bring back the fleet.
     // The hold time is used as the flight time.
@@ -737,7 +737,7 @@ function Exp_FleetFound (array $exptab, array $queue, array $fleet_obj, array $f
     foreach ( $found_ids as $i=>$id )
     {
         $max = floor ( $structure / $UnitParam[$id][0] );
-        if ( $max > 0 ) $amount = mt_rand (1, $max);
+        if ( $max > 0 ) $amount = mt_rand (1, (int)$max);
         else $amount = 0;
         if ( $amount == 0 ) { $no_structure = true; break; }    // there wasn't enough structure for the rest of the fleet.
         $found_fleet[$id] = $amount;
@@ -802,12 +802,14 @@ function Exp_TraderFound (array $exptab, array $queue, array $fleet_obj, array $
         loca_lang ( "EXP_TRADER_2", $lang ),
     );
 
+    /** @var array<string, mixed> $user */
     $user = LoadUser ( $player_id );
     if ( $user['trader'] == 0 ) $offer_id = mt_rand ( 1, 3 );
     else $offer_id = $user['trader'];
     $rate_sum = $user['rate_m'] + $user['rate_k'] + $user['rate_d'];
 
     // Generate trade rates.
+    $rate_m = $rate_k = $rate_d = 0;
     $rand = mt_rand (0, 99);
     if ( $rand < 10 ) {
         $rate_m = 3;
@@ -944,6 +946,7 @@ function ExpeditionHold (array $queue, array $fleet_obj, array $fleet, array $or
 
     $hold_time = $fleet_obj['flight_time'] / 3600;
 
+    /** @var array<string, mixed> $origin_user */
     $origin_user = LoadUser ( $origin['owner_id'] );
     loca_add ( "common", $origin_user['lang'] );
     loca_add ( "technames", $origin_user['lang'] );

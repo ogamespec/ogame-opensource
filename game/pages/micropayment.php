@@ -23,7 +23,7 @@ class Micropayment extends Page {
                 // Cost of Officers.
                 $price = array ( USER_OFFICER_COMMANDER => 10000, USER_OFFICER_ADMIRAL => 10000, USER_OFFICER_ENGINEER => 10000, USER_OFFICER_GEOLOGE => 10000, USER_OFFICER_TECHNOCRATE => 10000 );
                 if ( $days == 7) $required = $price[$type];
-                else if ( $days == 90) $required = $price[$type] * 10;
+                else $required = $price[$type] * 10;
                 if ( $dm < $required ) {
                     $PageError = loca ("PREM_NOTENOUGH") . "<br>";
                 }

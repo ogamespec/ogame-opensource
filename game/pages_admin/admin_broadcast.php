@@ -26,7 +26,7 @@ class Admin_Broadcast extends Page {
                 $subj = $subj . " <a href=\"index.php?page=writemessages&session={PUBLIC_SESSION}&messageziel=".$GlobalUser['player_id']."&re=1&betreff=Re:".$subj."\">\n"
                             . "</a>\n";
 
-                $text = str_replace ( '\"', "&quot;", bb($text) );
+                $text = str_replace ( '\"', "&quot;", (string) bb($text) );
                 $text = str_replace ( '\'', "&rsquo;", $text );
                 $text = str_replace ( '\`', "&lsquo;", $text );
 

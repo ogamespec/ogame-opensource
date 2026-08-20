@@ -115,6 +115,7 @@ class Suche extends Page {
                     {
                         $planet = dbarray ( $result );
                         $user = LoadUser ( intval($planet['owner_id']) );
+                        if ( $user === null ) $user = array();
                         $ally = LoadAlly ( intval($user['ally_id']) );
                         $ally_tag = "";
                         if ($ally) {

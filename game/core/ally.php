@@ -50,6 +50,7 @@ function CreateAlly (int $owner_id, string $tag, string $name) : int
 
     // Texts and rank names default to the language of the player who creates the alliance
     $user = LoadUser ($owner_id);
+    if ($user == null) return 0;
     loca_add ( "ally", $user['lang'] );
 
     // Add alliance.

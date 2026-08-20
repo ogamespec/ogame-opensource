@@ -38,7 +38,8 @@ class Admin_DB extends Page {
         global $db_prefix;
         global $db_name;
 
-        include "core/install_tabs.php";
+        $tabs = array();
+        include __DIR__ . "/../core/install_tabs.php";
         ModsExecRef ('install_tabs_included', $tabs);
 
         $text_out = "";
@@ -75,7 +76,7 @@ class Admin_DB extends Page {
                 $row = dbarray ($result);
                 
                 // Provide a description of the column type by analogy with the table from install
-                $column = $row['Type'];
+                $column = (string) $row['Type'];
                 $column = str_replace ("int(10)", "int", $column);
                 $column = str_replace ("int(11)", "int", $column);
                 $column = str_replace ("bigint(20)", "bigint", $column);
@@ -219,6 +220,11 @@ class Admin_DB extends Page {
         LockTables ();
         $fname = "temp/" . $fname;
         $source = file_get_contents ($fname);
+        if ($source === false) {
+            $PageMessage .= va(loca("ADM_DB_BACKUP_NOT_FOUND"), $fname);
+            UnlockTables ();
+            return;
+        }
         DeserializeDB ($source);
         UnlockTables ();
         $PageMessage .= va(loca("ADM_DB_BACKUP_RESTORED"), $fname);

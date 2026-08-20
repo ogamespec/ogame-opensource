@@ -4,25 +4,26 @@ $query_counter = 0;
 $query_log = "";
 $db_connect = 0;
 
-function dbconnect ($db_host, $db_user, $db_pass, $db_name)
+function dbconnect (string $db_host, string $db_user, string $db_pass, string $db_name) : void
 {
     global  $query_counter, $query_log, $db_connect;
     $db_connect = @mysqli_connect($db_host, $db_user, $db_pass);
-    $db_select = @mysqli_select_db($db_connect, $db_name);
     if (!$db_connect) {
-        die("<div style='font-family:Verdana;font-size:11px;text-align:center;'><b>Unable to establish connection to MySQL</b><br>".mysqli_errno($db_connect)." : ".mysqli_error($db_connect)."</div>");
-    } elseif (!$db_select) {
+        die("<div style='font-family:Verdana;font-size:11px;text-align:center;'><b>Unable to establish connection to MySQL</b><br>".mysqli_connect_errno()." : ".mysqli_connect_error()."</div>");
+    }
+    $db_select = @mysqli_select_db($db_connect, $db_name);
+    if (!$db_select) {
         die("<div style='font-family:Verdana;font-size:11px;text-align:center;'><b>Unable to select MySQL database</b><br>".mysqli_errno($db_connect)." : ".mysqli_error($db_connect)."</div>");
     }
 }
 
-function dbquery ($query, $mute=FALSE)
+function dbquery (string $query, bool $mute=false) : mysqli_result|bool
 {
     global  $query_counter, $query_log, $db_connect;
     $query_counter ++;
     $query_log .= $query . "<br>\n";
     $result = @mysqli_query($db_connect, $query);
-    if (!$result && $mute==FALSE) {
+    if (!$result && $mute==false) {
         echo "$query <br>";
         echo mysqli_error($db_connect);
         Debug ( mysqli_error($db_connect) . "<br>" . $query . "<br>" . BackTrace () ) ;
@@ -31,13 +32,12 @@ function dbquery ($query, $mute=FALSE)
     else  return $result;
 }
 
-function dbrows ($query)
+function dbrows (mysqli_result $query) : int
 {
-    $result = @mysqli_num_rows($query);
-    return $result;
+    return (int) @mysqli_num_rows($query);
 }
 
-function dbarray ($query)
+function dbarray (mysqli_result $query) : array|false
 {
     global $db_connect;
     $result = @mysqli_fetch_assoc($query);
@@ -48,7 +48,7 @@ function dbarray ($query)
     else return $result;
 }
 
-function dbfree ($result) {
+function dbfree (mysqli_result $result) : void {
     @mysqli_free_result ($result);
 }
 

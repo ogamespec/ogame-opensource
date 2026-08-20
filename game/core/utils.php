@@ -79,7 +79,7 @@ function va (string $subject) : string
         $pattern[$i-1] = "/#$i/";
         $replace[$i-1] = func_get_arg($i);
     }
-    return preg_replace($pattern, $replace, $subject);
+    return (string) preg_replace($pattern, $replace, $subject);
 }
 
 /**
@@ -156,7 +156,7 @@ function SecureText ( string $text ) : string
                       "'<[\/\!]*?[^<>]*?>'si",           // Cuts HTML tags
                       "'([\r\n])[\s]+'" );             // Cuts out whitespace characters
     $replace = array ("", "", "\\1", "\\1" );
-    $str = preg_replace($search, $replace, $text);
+    $str = (string) preg_replace($search, $replace, $text);
     $str = str_replace ("`", "", $str);
     $str = str_replace ("'", "", $str);
     $str = str_replace ("\"", "", $str);
@@ -318,7 +318,7 @@ function gen_trivial_password () : string
     $syllables = "er,in,tia,wol,fe,pre,vet,jo,nes,al,len,son,cha,ir,ler,bo,ok,tio,nar,sim,ple,bla,ten,toe,cho,co,lat,spe,ak,er,po,co,lor,pen,cil,li,ght,wh,at,the,he,ck,is,mam,bo,no,fi,ve,any,way,pol,iti,cs,ra,dio,sou,rce,sea,rch,pa,per,com,bo,sp,eak,st,fi,rst,gr,oup,boy,ea,gle,tr,ail,bi,ble,brb,pri,dee,kay,en,be,se";
 
     $syllable_array = explode (",", $syllables);
-    srand ((double)microtime()*1000000);
+    srand ((int)((double)microtime()*1000000));
     for ($count=1; $count<=4; $count++) {
         if (rand()%10 == 1) $pass .= sprintf ("%0.0f", (rand()%50)+1);
         else $pass .= sprintf ("%s", $syllable_array[rand()%62]);
@@ -358,7 +358,9 @@ function RunBackgroundProcess(string $command) : int {
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
         // Windows
         $handle = popen("start /B " . $command, "r");
-        pclose($handle);
+        if ($handle !== false) {
+            pclose($handle);
+        }
         return 0;
     } else {
         // Linux/Unix

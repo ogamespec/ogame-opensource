@@ -14,6 +14,9 @@ class Bewerbungen extends Page {
         global $now;
 
         $this->ally = LoadAlly ( $GlobalUser['ally_id'] );
+        if ( $this->ally == null ) {
+            MyGoto ( "allianzen" );
+        }
 
         $this->show = 0;
         if ( key_exists ( 'show', $_GET ) ) $this->show = intval($_GET['show']);
@@ -84,6 +87,7 @@ class Bewerbungen extends Page {
         global $session;
 
         $ally = $this->ally;
+        if ( $ally == null ) return;
         $show = $this->show;
         $sort = $this->sort;
         $maxchars = 2000;
@@ -102,6 +106,8 @@ class Bewerbungen extends Page {
             {
                 $app = LoadApplication ($show);
                 $user = LoadUser ($app['player_id']);
+                if ( $user != null )
+                {
         ?>
         <tr><th colspan=2><?=va(loca("ALLY_APPA_FROM"), htmlspecialchars($user['oname']));?></th></tr>
         <form action="index.php?page=bewerbungen&session=<?=$session;?>&show=<?=$show;?>&sort=<?=$sort;?>" method=POST>
@@ -113,6 +119,7 @@ class Bewerbungen extends Page {
         <tr><td>&#160;</td></tr>
         </form>
         <?php
+                }
             }
         ?>
         <tr><th colspan=2><?=va(loca("ALLY_APPA_AVAILABLE"), $apps);?></th></tr>
@@ -125,6 +132,7 @@ class Bewerbungen extends Page {
             {
                 $app = dbarray ($result);
                 $user = LoadUser ($app['player_id']);
+                if ( $user == null ) continue;
                 echo "    <th><center><a href=\"index.php?page=bewerbungen&session=$session&show=".$app['app_id']."&sort=$sort\">".htmlspecialchars($user['oname'])."</a></center></th>\n";
                 echo "    <th><center>".date ("Y-m-d H:i:s", $app['date'])."</center></th></tr>\n";
             }

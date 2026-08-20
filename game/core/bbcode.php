@@ -16,11 +16,17 @@
  */
 class bbcode {
 	/* See the documentation for descriptions of properties and methods. */
+    /** @var string */
     var $tag = '';
+    /** @var array<string, string> */
     var $attrib = array();
+    /** @var string */
     var $text = '';
+    /** @var array<int, array<string, mixed>> */
     var $syntax = array();
+    /** @var array<int, array<string, mixed>> */
     var $tree = array();
+    /** @var array<string, string> */
     var $tags = array(
         'align'   => 'bb_align',
         'b'       => 'bb_strong',
@@ -38,14 +44,20 @@ class bbcode {
         'u'       => 'bb_u',
         'url'     => 'bb_a'
     );
+    /** @var array<int, string> */
     var $children = array(
         'align','b','color','email','font','hr','i','img',
         'quote','s','size','sub','sup','u','url'
     );
+    /** @var array<string, string> */
     var $mnemonics = array();
+    /** @var bool */
     var $autolinks = true;
+    /** @var bool */
     var $is_close = false;
+    /** @var int */
     var $lbr = 0;
+    /** @var int */
     var $rbr = 0;
 
     /**
@@ -60,7 +72,7 @@ class bbcode {
     /**
      * Parses BBCode text or a syntax/tree array into the parser state.
      *
-     * @param string|array $code The BBCode text or syntax/tree array to process.
+     * @param string|array<int, array<string, mixed>> $code The BBCode text or syntax/tree array to process.
      * @return void
      */
     function do_bbcode($code = '') {
@@ -91,7 +103,7 @@ class bbcode {
     /**
      * Splits the current text into lexical tokens for parsing.
      *
-     * @return array The array of tokens.
+     * @return array<int, array<int, int|string>> The array of tokens.
      */
     function get_tokens() {
         $length = strlen($this -> text);
@@ -174,12 +186,12 @@ class bbcode {
      * Parses the BBCode text into a syntax structure using a finite state machine.
      *
      * @param string $code Optional BBCode text to parse; when empty, the current text is parsed.
-     * @return array The parsed syntax structure.
+     * @return array<int, array<string, mixed>> The parsed syntax structure.
      */
     function parse($code = '') {
         if ($code) {
             $this -> do_bbcode($code);
-            return;
+            return $this -> syntax;
         }
         /*
         Uses the finite state machine method.
@@ -247,9 +259,16 @@ class bbcode {
         // End of the finite automaton description
         $mode = 0;
         $result = array();
-        $tag_decomposition = array();
+        $tag_decomposition = array(
+            'name'   => '',
+            'type'   => '',
+            'str'    => '',
+            'layout' => array(),
+            'attrib' => array()
+        );
         $token_key = -1;
         $value = '';
+        $name = '';
         // Scan the token array using the automaton built above:
         foreach ($this -> get_tokens() as $token) {
             $previous_mode = $mode;
@@ -280,7 +299,13 @@ class bbcode {
                                 'str' => $tag_decomposition['str']
                             );
                     }
-                    $tag_decomposition = array();
+                    $tag_decomposition = array(
+                        'name'   => '',
+                        'type'   => '',
+                        'str'    => '',
+                        'layout' => array(),
+                        'attrib' => array()
+                    );
                     $tag_decomposition['name']     = '';
                     $tag_decomposition['type']     = '';
                     $tag_decomposition['str']      = '[';
@@ -296,7 +321,13 @@ class bbcode {
                                 'str' => $tag_decomposition['str'].$token[1]
                             );
                     }
-                    $tag_decomposition = array();
+                    $tag_decomposition = array(
+                        'name'   => '',
+                        'type'   => '',
+                        'str'    => '',
+                        'layout' => array(),
+                        'attrib' => array()
+                    );
                     break;
                 case 4:
                     $tag_decomposition['type'] = 'close';
@@ -305,26 +336,29 @@ class bbcode {
                     break;
                 case 5:
                     $tag_decomposition['type'] = 'open';
-                    $name = strtolower($token[1]);
+                    $name = strtolower((string) $token[1]);
                     $tag_decomposition['name'] = $name;
                     $tag_decomposition['str'] .= $token[1];
                     $tag_decomposition['layout'][] = array( 2, $token[1] );
                     $tag_decomposition['attrib'][$name] = '';
                     break;
                 case 6:
-                    if (! isset($tag_decomposition['name'])) {
-                        $tag_decomposition['name'] = '';
-                    }
                     if (13 == $previous_mode || 19 == $previous_mode) {
                         $tag_decomposition['layout'][] = array( 7, $value );
                     }
                     $tag_decomposition['str'] .= ']';
                     $tag_decomposition['layout'][] = array( 0, ']' );
                     $result[++$token_key] = $tag_decomposition;
-                    $tag_decomposition = array();
+                    $tag_decomposition = array(
+                        'name'   => '',
+                        'type'   => '',
+                        'str'    => '',
+                        'layout' => array(),
+                        'attrib' => array()
+                    );
                     break;
                 case 7:
-                    $tag_decomposition['name'] = strtolower($token[1]);
+                    $tag_decomposition['name'] = strtolower((string) $token[1]);
                     $tag_decomposition['str'] .= $token[1];
                     $tag_decomposition['layout'][] = array( 2, $token[1] );
                     break;
@@ -361,13 +395,16 @@ class bbcode {
                     $tag_decomposition['layout'][] = array( 4, $token[1] );
                     break;
                 case 15:
-                    $name = strtolower($token[1]);
+                    $name = strtolower((string) $token[1]);
                     $tag_decomposition['str'] .= $token[1];
                     $tag_decomposition['layout'][] = array( 6, $token[1] );
                     $tag_decomposition['attrib'][$name] = '';
                     break;
                 case 16:
                     $tag_decomposition['str'] .= $token[1];
+                    if (! isset($tag_decomposition['attrib'][$name])) {
+                        $tag_decomposition['attrib'][$name] = '';
+                    }
                     $tag_decomposition['attrib'][$name] .= $token[1];
                     $value .= $token[1];
                     break;
@@ -379,11 +416,17 @@ class bbcode {
                     break;
                 case 18:
                     $tag_decomposition['str'] .= $token[1];
+                    if (! isset($tag_decomposition['attrib'][$name])) {
+                        $tag_decomposition['attrib'][$name] = '';
+                    }
                     $tag_decomposition['attrib'][$name] .= $token[1];
                     $value .= $token[1];
                     break;
                 case 19:
                     $tag_decomposition['str'] .= $token[1];
+                    if (! isset($tag_decomposition['attrib'][$name])) {
+                        $tag_decomposition['attrib'][$name] = '';
+                    }
                     $tag_decomposition['attrib'][$name] .= $token[1];
                     $value .= $token[1];
                     break;
@@ -397,7 +440,7 @@ class bbcode {
                     break;
             }
         }
-        if (count($tag_decomposition)) {
+        if ($tag_decomposition['str'] !== '') {
             if ( -1 < $token_key && 'text' == $result[$token_key]['type'] ) {
                 $result[$token_key]['str'] .= $tag_decomposition['str'];
             } else {
@@ -466,8 +509,8 @@ class bbcode {
     /**
      * Normalizes the syntax into a correctly nested bracket structure.
      *
-     * @param array $syntax The syntax array to normalize.
-     * @return array The normalized structure array.
+     * @param array<int, array<string, mixed>> $syntax The syntax array to normalize.
+     * @return array<int, array<string, mixed>> The normalized structure array.
      */
     function normalize_bracket($syntax) {
         $structure = array();
@@ -551,7 +594,8 @@ class bbcode {
                     }
                     if (! $val['name']) {
                         end($open_tags);
-                        list($ult_key, $ultimate) = each($open_tags);
+                        $ult_key = key($open_tags);
+                        $ultimate = current($open_tags);
                         $val['name'] = $ultimate;
                         $structure[++$structure_key] = $val;
                         $structure[$structure_key]['level'] = --$level;
@@ -605,7 +649,7 @@ class bbcode {
     /**
      * Builds the element tree from the parsed syntax.
      *
-     * @return array The element tree array.
+     * @return array<int, array<string, mixed>> The element tree array.
      */
     function get_tree() {
         /* Convert $this -> syntax into a correct bracket structure */
@@ -801,8 +845,8 @@ class bbcode {
     /**
      * Converts an element tree back into a syntax array.
      *
-     * @param array|bool $tree The tree to convert; defaults to the current tree.
-     * @return array The syntax array.
+     * @param array<int, array<string, mixed>>|bool $tree The tree to convert; defaults to the current tree.
+     * @return array<int, array<string, mixed>> The syntax array.
      */
     function get_syntax($tree = false) {
         if (! is_array($tree)) {
@@ -893,7 +937,7 @@ class bbcode {
                 '$1<a href="http://$2" target="_blank">$2</a>',
                 '$1<a href="mailto:$2">$2</a>'
             );
-            $text = preg_replace($search, $replace, $text);
+            $text = (string) preg_replace($search, $replace, $text);
         }
         foreach ($this -> mnemonics as $mnemonic => $value) {
             $text = str_replace($mnemonic, $value, $text);
@@ -904,7 +948,7 @@ class bbcode {
     /**
      * Converts the element tree into HTML.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -936,6 +980,7 @@ class bbcode {
                 }
                 $handler = $this -> tags[$elem['name']];
                 if (class_exists($handler)) {
+                    /** @var bbcode $tag */
                     $tag = new $handler;
                     $tag -> tag = $elem['name'];
                     $tag -> attrib = $elem['attrib'];
@@ -957,10 +1002,12 @@ class bbcode {
  * Class for the [a], [anchor] and [url] tags.
  */
 class bb_a extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','align','center','h1','h2','h3','hr','justify','left','list','php',
         'quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'abbr','acronym','b','bbcode','code','color','font','i','img','nobb',
         's','size','strike','sub','sup','tt','u'
@@ -968,7 +1015,7 @@ class bb_a extends bbcode {
     /**
      * Renders the link element as an HTML anchor tag.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -1034,12 +1081,14 @@ class bb_a extends bbcode {
  * Class for the [align], [center], [justify], [left] and [right] tags.
  */
 class bb_align extends bbcode {
+    /** @var int */
     var $rbr = 1;
+    /** @var array<int, string> */
     var $ends = array('*','tr','td','th');
     /**
      * Renders the alignment element as an HTML div with the alignment class.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -1073,10 +1122,12 @@ class bb_align extends bbcode {
  * Class for the [color] tag.
  */
 class bb_color extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
@@ -1085,7 +1136,7 @@ class bb_color extends bbcode {
     /**
      * Renders the color element as an HTML font tag with the color attribute.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -1099,10 +1150,12 @@ class bb_color extends bbcode {
  * Class for the [s] and [strike] tags.
  */
 class bb_del extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
@@ -1111,7 +1164,7 @@ class bb_del extends bbcode {
     /**
      * Renders the [s] and [strike] element as an HTML del tag.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -1123,10 +1176,12 @@ class bb_del extends bbcode {
  * Class for the [email] tag.
  */
 class bb_email extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'abbr','acronym','b','bbcode','code','color','email','font','i','img',
         'nobb','s','size','strike','sub','sup','tt','u'
@@ -1134,7 +1189,7 @@ class bb_email extends bbcode {
     /**
      * Renders the email element as an HTML mailto anchor tag.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -1169,10 +1224,12 @@ class bb_email extends bbcode {
  * Class for the [font] tag.
  */
 class bb_font extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','font','google','i','img','nobb','s','size','strike','sub','sup',
@@ -1181,7 +1238,7 @@ class bb_font extends bbcode {
     /**
      * Renders the font element as an HTML font tag with face, color and size attributes.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -1199,14 +1256,18 @@ class bb_font extends bbcode {
  * Class for the [hr] tag.
  */
 class bb_hr extends bbcode {
+    /** @var bool */
     var $is_close = true;
+    /** @var int */
     var $rbr = 1;
+    /** @var array<int, string> */
     var $ends = array();
+    /** @var array<int, string> */
     var $children = array();
     /**
      * Renders the horizontal rule element as an HTML hr tag.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -1218,10 +1279,12 @@ class bb_hr extends bbcode {
  * Class for the [i] tag.
  */
 class bb_i extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
@@ -1230,7 +1293,7 @@ class bb_i extends bbcode {
     /**
      * Renders the [i] element as an HTML i tag.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -1242,12 +1305,14 @@ class bb_i extends bbcode {
  * Class for the [img] tag.
  */
 class bb_img extends bbcode {
+    /** @var array<int, string> */
     var $ends = array();
+    /** @var array<int, string> */
     var $children = array();
     /**
      * Renders the image element as an HTML img tag.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -1283,12 +1348,14 @@ class bb_img extends bbcode {
  * Class for the [quote] tag.
  */
 class bb_quote extends bbcode {
+    /** @var int */
     var $rbr = 1;
+    /** @var array<int, string> */
     var $ends = array();
     /**
      * Renders the quote element as an HTML block with the author and quoted text.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -1304,10 +1371,12 @@ class bb_quote extends bbcode {
  * Class for the [size] tag.
  */
 class bb_size extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
@@ -1316,7 +1385,7 @@ class bb_size extends bbcode {
     /**
      * Renders the size element as an HTML font tag with the size attribute.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -1346,10 +1415,12 @@ class bb_size extends bbcode {
  * Class for the [b] tag.
  */
 class bb_strong extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
@@ -1358,7 +1429,7 @@ class bb_strong extends bbcode {
     /**
      * Renders the [b] element as an HTML strong tag.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -1370,10 +1441,12 @@ class bb_strong extends bbcode {
  * Class for the [sub] tag.
  */
 class bb_sub extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
@@ -1382,7 +1455,7 @@ class bb_sub extends bbcode {
     /**
      * Renders the [sub] element as an HTML sub tag.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -1394,10 +1467,12 @@ class bb_sub extends bbcode {
  * Class for the [sup] tag.
  */
 class bb_sup extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
@@ -1406,7 +1481,7 @@ class bb_sup extends bbcode {
     /**
      * Renders the [sup] element as an HTML sup tag.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {
@@ -1418,10 +1493,12 @@ class bb_sup extends bbcode {
  * Class for the [u] tag.
  */
 class bb_u extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr',
         'justify','left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
@@ -1430,7 +1507,7 @@ class bb_u extends bbcode {
     /**
      * Renders the [u] element as an HTML u tag.
      *
-     * @param array|bool $elems The elements to convert; defaults to the current tree.
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
      * @return string The generated HTML.
      */
     function get_html($elems = false) {

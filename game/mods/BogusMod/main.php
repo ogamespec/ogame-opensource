@@ -80,7 +80,7 @@ class BogusMod extends GameMod
 
         global $GlobalUser;
 
-        array_insert_after_key ($json, GID_RC_DM, GID_RC_TRITIUM, 
+        array_insert_after_key ($json, (string)GID_RC_DM, (string)GID_RC_TRITIUM, 
             array (
                 'skin' => false,
                 'img' => "mods/BogusMod/img/tritium.png",

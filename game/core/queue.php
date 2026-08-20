@@ -372,6 +372,7 @@ function PropagateBuildQueue (int $planet_id, int $from) : void
 
     $planet = LoadPlanetById ( $planet_id );
     $user = LoadUser ( $planet['owner_id'] );
+    if ($user == null) return;
 
     $result = GetBuildQueue ( $planet_id );
     $cnt = dbrows ( $result );
@@ -446,6 +447,7 @@ function BuildEnque ( array $user, int $planet_id, int $id, int $destroy, int $n
     if ($now == 0) $now = time ();
 
     $planet = GetUpdatePlanet ( $planet_id, $now );
+    if ($planet == null) return "";
 
     $prem = PremiumStatus ($user);
     if ($prem['commander']) $maxcnt = 5;
@@ -486,7 +488,7 @@ function BuildEnque ( array $user, int $planet_id, int $id, int $destroy, int $n
     else $lvl = $nowlevel + 1;
     if ($lvl < 0) return "";     // Unable to build/demolish a negative level
 
-    $text = CanBuild ($user, $planet, $id, $lvl, $destroy, $list_id != 1);
+    $text = CanBuild ($user, $planet, $id, $lvl, (bool)$destroy, $list_id != 1);
 
     if ( $text === '' ) {
 
@@ -502,7 +504,7 @@ function BuildEnque ( array $user, int $planet_id, int $id, int $destroy, int $n
         $duration = floor (TechDuration ( $id, $lvl, PROD_BUILDING_DURATION_FACTOR, $planet[GID_B_ROBOTS], $planet[GID_B_NANITES], $speed ));
         $row = array ( 'owner_id' => $user['player_id'], 'planet_id' => $planet_id, 'list_id' => $list_id, 'tech_id' => $id, 'level' => $lvl, 'destroy' => $destroy, 'start' => $now, 'end' => $now+$duration );
         $sub_id = AddDBRow ( $row, "buildqueue" );
-        if ($list_id == 1) AddQueue ( $user['player_id'], $BuildEvent, $sub_id, $id, $lvl, $now, $duration, QUEUE_PRIO_BUILD );
+        if ($list_id == 1) AddQueue ( $user['player_id'], $BuildEvent, $sub_id, $id, $lvl, $now, (int)$duration, QUEUE_PRIO_BUILD );
     }
 
     return $text;
@@ -586,6 +588,7 @@ function Queue_Build_End (array $queue) : void
 
     // Calculate the planet's production since the last update.
     $planet = GetUpdatePlanet ( $planet_id, $queue['end'] );
+    if ($planet == null) return;
     $player_id = $planet['owner_id'];
 
     // Foolproofing
@@ -711,6 +714,7 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
     if ($now == 0) $now = time ();
 
     $planet = GetUpdatePlanet ( $planet_id, $now );
+    if ($planet == null) return false;
 
     // If the planet already has a shield dome, we don't build it.
     if ( ($gid == GID_D_SDOME || $gid == GID_D_LDOME) && $planet[$gid] > 0 ) return false;
@@ -958,6 +962,7 @@ function StopResearch (int $player_id) : void
 
     // Get the cost of the research
     $user = LoadUser ( $player_id );
+    if ($user == null) return;
     $planet = LoadPlanetById ( $planet_id );
     if ($planet['owner_id'] != $player_id )
     {
@@ -966,7 +971,6 @@ function StopResearch (int $player_id) : void
             htmlspecialchars($user['oname']), 
             "[".$planet['g'].":".$planet['s'].":".$planet['p']."] " . $planet['name'] )
         );
-        return;
     }
     $cost = TechPrice ( $id, $level );
 
@@ -1051,7 +1055,7 @@ function AddRecalcPointsEvent (int $player_id) : void
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime(0, 10, 0, date("m"), date("d")+1, date("y")) - $now;
+        $when = mktime(0, 10, 0, (int)date("m"), (int)date("d")+1, (int)date("y")) - $now;
         AddQueue ($player_id, QTYP_RECALC_POINTS, 0, 0, 0, $now, $when, QUEUE_PRIO_RECALC_POINTS);
     }
 }
@@ -1182,6 +1186,7 @@ function AddChangeEmailEvent (int $player_id) : int
     $now = time ();
     $when = $now + 7 * 24 * 60 * 60;
     $id = AddQueue ($player_id, QTYP_CHANGE_EMAIL, 0, 0, 0, $now, $when, QUEUE_PRIO_LOWEST);
+    return $id;
 }
 
 /**
@@ -1267,7 +1272,7 @@ function AddReloginEvent () : void
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime(3, 0, 0, date("m"), date("d")+1, date("y")) - $now;
+        $when = mktime(3, 0, 0, (int)date("m"), (int)date("d")+1, (int)date("y")) - $now;
         $id = AddQueue (USER_SPACE, QTYP_UNLOAD_ALL, 0, 0, 0, $now, $when, QUEUE_PRIO_RELOGIN);
     }
 }
@@ -1346,7 +1351,7 @@ function AddCleanPlanetsEvent () : void
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime(1, 10, 0, date("m"), date("d")+1, date("y")) - $now;
+        $when = mktime(1, 10, 0, (int)date("m"), (int)date("d")+1, (int)date("y")) - $now;
         $id = AddQueue (USER_SPACE, QTYP_CLEAN_PLANETS, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_PLANETS);
     }
 }
@@ -1406,7 +1411,7 @@ function AddCleanPlayersEvent () : void
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime(1, 10, 0, date("m"), date("d")+1, date("y")) - $now;
+        $when = mktime(1, 10, 0, (int)date("m"), (int)date("d")+1, (int)date("y")) - $now;
         $id = AddQueue (USER_SPACE, QTYP_CLEAN_PLAYERS, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_PLAYERS);
     }
 }
@@ -1463,7 +1468,7 @@ function AddRecalcAllyPointsEvent () : void
     if ( dbrows ($result) == 0 )
     {
         $now = time ();
-        $when = mktime(0, 10, 0, date("m"), date("d")+1, date("y")) - $now;
+        $when = mktime(0, 10, 0, (int)date("m"), (int)date("d")+1, (int)date("y")) - $now;
         AddQueue (USER_SPACE, QTYP_RECALC_ALLY_POINTS, 0, 0, 0, $now, $when, QUEUE_PRIO_RECALC_ALLY_POINTS);
     }
 }

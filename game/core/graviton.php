@@ -51,6 +51,8 @@ function GravitonAttack (array $fleet_obj, array $fleet, int $when) : int
     loca_add ( "fleetmsg", $target_user['lang'] );
 
     $result = 0;
+    $atext = '';
+    $dtext = '';
 
     if ( !$ripdes && !$moondes )
     {
@@ -66,7 +68,7 @@ function GravitonAttack (array $fleet_obj, array $fleet, int $when) : int
             $result  = 0;
     }
 
-    else if ( !$ripdes && $moondes )
+    else if ( !$ripdes )
     {
             $atext = va ( loca_lang("GRAVITON_ATK_01", $origin_user['lang']), 
                                 $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
@@ -81,7 +83,7 @@ function GravitonAttack (array $fleet_obj, array $fleet, int $when) : int
             $result  = GRAVI_MOON_DESTR;
     }
 
-    else if ( $ripdes && !$moondes )
+    else if ( !$moondes )
     {
             $atext = va ( loca_lang("GRAVITON_ATK_10", $origin_user['lang']), 
                                 $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",
@@ -94,7 +96,7 @@ function GravitonAttack (array $fleet_obj, array $fleet, int $when) : int
             $result  = GRAVI_FLEET_DESTR;
     }
 
-    else if ( $ripdes && $moondes )
+    else
     {
             $atext = va ( loca_lang("GRAVITON_ATK_11", $origin_user['lang']), 
                                 $origin['name'], "[".$origin['g'].":".$origin['s'].":".$origin['p']."]", "[".$target['g'].":".$target['s'].":".$target['p']."]",

@@ -121,6 +121,7 @@ function t() {
         // Display the build queue (if Commander is active)
         $result = GetBuildQueue ( $aktplanet['planet_id'] );
         $cnt = dbrows ( $result );
+        $queue0 = false;
         for ( $i=0; $i<$cnt; $i++ )
         {
             $queue = dbarray ($result);

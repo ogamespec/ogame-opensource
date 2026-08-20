@@ -31,7 +31,8 @@ $msg = LoadMessage ( intval($_GET['bericht']) );
     else {
         // From the same alliance as the spy report.
         $msg_user = LoadUser ($msg['owner_id']);
-        $allowed = $msg_user['ally_id'] == $GlobalUser['ally_id'] && $GlobalUser['ally_id'] != 0 && $msg['pm'] == MTYP_SPY_REPORT;
+        if ( $msg_user == null ) $allowed = false;
+        else $allowed = $msg_user['ally_id'] == $GlobalUser['ally_id'] && $GlobalUser['ally_id'] != 0 && $msg['pm'] == MTYP_SPY_REPORT;
     }
     
     if ( $allowed ) echo $msg['text'];

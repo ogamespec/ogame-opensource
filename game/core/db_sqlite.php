@@ -208,7 +208,7 @@ function AddDBRow ( array $row, string $tabname ) : int
     $stmt = $db_connect->prepare ($query);
     if ( $stmt === false ) return 0;
     try {
-        $stmt->execute (array_values ($values));
+        $stmt->execute ($values);
         return (int)$db_connect->lastInsertId ();
     }
     catch (PDOException $e) {
@@ -358,6 +358,7 @@ function SerializeTable (string $name) : array
  */
 function SerializeDB () : string
 {
+    $tabs = array ();
     include __DIR__ . "/install_tabs.php";
     if ( function_exists ('ModsExecRef') ) ModsExecRef ('install_tabs_included', $tabs);
 
@@ -367,7 +368,7 @@ function SerializeDB () : string
         $db_tabs[$i] = SerializeTable ($i);
     }
 
-    return json_encode ($db_tabs, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    return (string) json_encode ($db_tabs, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
 }
 
 /**

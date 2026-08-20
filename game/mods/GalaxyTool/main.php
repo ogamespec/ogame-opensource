@@ -119,6 +119,7 @@ class GalaxyTool extends GameMod {
 
         $text = serialize ( $list );
         $f = fopen ( GALATOOL_BASE_DIR_NAME . "/galaxy.txt", "w" );
+        if ( $f === false ) return;
         fwrite ( $f, $text );
         fclose ( $f );
     }
@@ -151,6 +152,7 @@ class GalaxyTool extends GameMod {
 
         $text = serialize ( $list );
         $f = fopen ( GALATOOL_BASE_DIR_NAME . "/statistics.txt", "w" );
+        if ( $f === false ) return;
         fwrite ( $f, $text );
         fclose ( $f );
     }
@@ -172,6 +174,7 @@ class GalaxyTool extends GameMod {
 
         $text = serialize ( $list );
         $f = fopen ( GALATOOL_BASE_DIR_NAME . "/ally_statistics.txt", "w" );
+        if ( $f === false ) return;
         fwrite ( $f, $text );
         fclose ( $f );
     }

@@ -1,5 +1,10 @@
 <?php
 
+// $DefaultLanguage, $db_prefix and $db_secret come from the (runtime-generated) config.php
+/** @var string $DefaultLanguage */
+/** @var string $db_prefix */
+/** @var string $db_secret */
+
 // Check if the configuration file is missing - redirect to the game installation page.
 if ( !file_exists ("../config.php"))
 {
@@ -18,6 +23,10 @@ else $loca_lang = $_COOKIE['ogamelang'];
 loca_add ( "common", $loca_lang, "../" );
 loca_add ( "reg", $loca_lang, "../" );
 
+/**
+ * @param string $email
+ * @return array|false
+ */
 function EmailExist ( $email)
 {
     global $db_prefix;
@@ -33,6 +42,7 @@ $GlobalUni = LoadUniverse ();
 $uninum = $GlobalUni['num'];
 
 $pass_ok = false;
+$user = array ();
 if ( method () === "POST" ) {
     $email = $_POST['email'];
     if ( isValidEmail ($email) ) {
@@ -70,7 +80,7 @@ if ( method () === "POST" ) {
 <table width="519">
 <tr>
 <?php
-    if ( $pass_ok ) echo "   <th><font color=\"lime\">".va(loca("REG_FORGOT_OK"), htmlspecialchars($user['oname']))."</font></th>\n";
+    if ( $pass_ok ) echo "   <th><font color=\"lime\">".va(loca("REG_FORGOT_OK"), htmlspecialchars($user['oname'] ?? ''))."</font></th>\n";
     else echo " <th><font color=\"red\">".loca("REG_FORGOT_ERROR")."</font></th> \n";
 ?>
 </tr>
