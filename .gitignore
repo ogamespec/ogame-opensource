@@ -3,6 +3,3 @@
 .phpunit.result.cache
 /html
 /latex
-/.tools
-/phpstan_run*.txt
-/phpstan_bbcode.txt
