@@ -316,91 +316,83 @@ function fenster(target_url,win_name) {
 <div id='content'>
 <center>
 
+        <script language="JavaScript" src="js/flotten.js"></script>
+        <script language="JavaScript" src="js/ocnt.js"></script>
 
-  <script language="JavaScript" src="js/flotten.js"></script>
-  <script language="JavaScript" src="js/ocnt.js"></script>
+        <script type="text/javascript">
+        function getStorageFaktor(){
+            return 1  }
+        </script>
 
-  <script type="text/javascript">
+        <!-- <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>  -->
 
-  function getStorageFaktor(){
-    return 1  }
-
-  </script>
-  
- <!-- <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>  -->
-
-<center>
-<table width="519" border="0" cellpadding="0" cellspacing="1">
-<form action="index.php?page=flotten3&session=0000000003e9" method="POST">
-<input type="hidden" name="target_mission" value="1" />
-<input name="thisgalaxy" type="hidden" value="1" />
-<input name="thissystem" type="hidden" value="1" />
-<input name="thisplanet" type="hidden" value="4" />
-<input name="thisplanettype" type="hidden" value="1" />
-<input name="speedfactor" type="hidden" value="1" />
-<input name="thisresource1" type="hidden" value="25047" />
+        <center>
+        <table width="519" border="0" cellpadding="0" cellspacing="1">
+        <form action="index.php?page=flotten3&session=0000000003e9" method="POST">
+        <input type="hidden" name="target_mission" value="1" />
+        <input name="thisgalaxy" type="hidden" value="1" />
+        <input name="thissystem" type="hidden" value="1" />
+        <input name="thisplanet" type="hidden" value="4" />
+        <input name="thisplanettype" type="hidden" value="1" />
+        <input name="speedfactor" type="hidden" value="1" />
+        <input name="thisresource1" type="hidden" value="25047" />
 <input name="thisresource2" type="hidden" value="15016" />
 <input name="thisresource3" type="hidden" value="8003" />
-
    <input type="hidden" name="ship202" value="5" />
    <input type="hidden" name="ship204" value="5" />
 
+        <tr height="20">
+            <td colspan="2" class="c">Departure of the fleet</td>
+        </tr>
 
-    <tr height="20">
-  <td colspan="2" class="c">Departure of the fleet</td>
- </tr>
-
- <tr height="20">
-  <th width="50%">Target coordinates</th>
-  <th>
-   <input name="galaxy" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="1" />
-   <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="3" />
-   <input name="planet" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="4" />
-   <select name="planettype" onChange="shortInfo()" onKeyUp="shortInfo()">
-     <option value="1" selected>planet </option>
+        <tr height="20">
+            <th width="50%">Target coordinates</th>
+            <th>
+                <input name="galaxy" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="1" />
+                <input name="system" size="3" maxlength="3" onChange="shortInfo()" onKeyUp="shortInfo()" value="3" />
+                <input name="planet" size="3" maxlength="2" onChange="shortInfo()" onKeyUp="shortInfo()" value="4" />
+                <select name="planettype" onChange="shortInfo()" onKeyUp="shortInfo()">
+                  <option value="1" selected>planet </option>
   <option value="2" >debris field </option>
   <option value="3" >moon </option>
-   </select>
- </tr>
- <tr height="20">
-  <th>Speed</th>
-  <th>
-
-   <select name="speed" onChange="shortInfo()" onKeyUp="shortInfo()">
-         <option value="10">100</option>
-         <option value="9">90</option>
-         <option value="8">80</option>
-         <option value="7">70</option>
-         <option value="6">60</option>
-         <option value="5">50</option>
-         <option value="4">40</option>
-         <option value="3">30</option>
-         <option value="2">20</option>
-         <option value="1">10</option>
-       </select> %
-  </th>
-
- </tr>
- <tr height="20">
-  <th>Distance</th><th><div id="distance">-</div></th>
- </tr>
- <tr height="20">
-  <th>Duration (one way)</th><th><div id="duration">-</div></th>
- </tr>
- <tr height="20">
-  <th>Fuel consumption</th><th><div id="consumption">-</div></th>
- </tr>
- <tr height="20">
-  <th>Maximum speed</th><th><div id="maxspeed">-</div></th>
- </tr>
- <tr height="20">
-  <th>Load capacity</th><th><div id="storage">25.250</div></th>
- </tr>
-  <tr height="20">
-  <td colspan="2" class="c">Planet</td>
-  </tr>
-
-<tr height="20">
+                </select>
+        </tr>
+        <tr height="20">
+            <th>Speed</th>
+            <th>
+                <select name="speed" onChange="shortInfo()" onKeyUp="shortInfo()">
+                    <option value="10">100</option>
+                    <option value="9">90</option>
+                    <option value="8">80</option>
+                    <option value="7">70</option>
+                    <option value="6">60</option>
+                    <option value="5">50</option>
+                    <option value="4">40</option>
+                    <option value="3">30</option>
+                    <option value="2">20</option>
+                    <option value="1">10</option>
+                </select> %
+            </th>
+        </tr>
+        <tr height="20">
+            <th>Distance</th><th><div id="distance">-</div></th>
+        </tr>
+        <tr height="20">
+            <th>Duration (one way)</th><th><div id="duration">-</div></th>
+        </tr>
+        <tr height="20">
+            <th>Fuel consumption</th><th><div id="consumption">-</div></th>
+        </tr>
+        <tr height="20">
+            <th>Maximum speed</th><th><div id="maxspeed">-</div></th>
+        </tr>
+        <tr height="20">
+            <th>Load capacity</th><th><div id="storage">25.250</div></th>
+        </tr>
+        <tr height="20">
+            <td colspan="2" class="c">Planet</td>
+        </tr>
+        <tr height="20">
 <th><a href="javascript:setTarget(1,1,5,1); shortInfo()">
 Colony A 1:1:5</a></th>
 <th><a href="javascript:setTarget(1,2,4,1); shortInfo()">
@@ -412,28 +404,26 @@ Moon 1:1:4</a></th>
 <th><a href="javascript:setTarget(1,2,4,3); shortInfo()">
 Moon B 1:2:4</a></th>
 </tr>
+        </th>
+        </tr>
 
-   </th>
-  </tr>
+        <tr height="20">
+            <td colspan="2" class="c">Battle unions  </tr>
+             <tr height="20"><th colspan="2">-</th></tr>
 
-  <tr height="20">
-     <td colspan="2" class="c">Battle unions  </tr>
+        <tr height="20">
+            <th colspan="2">
+                <input type="submit" value="Next" />
+            </th>
+        </tr>
 
- <tr height="20"><th colspan="2">-</th></tr>
+        </form>
+        </table>
 
-<tr height="20">
- <th colspan="2">
-  <input type="submit" value="Next" />
- </th>
-</tr>
-
-</form>
-</table>
-
-<script>
-window.onload=shortInfo;
-</script><br><br><br><br>
-</center>
+        <script>
+        window.onload=shortInfo;
+        </script><br><br><br><br>
+        </center>
 </div>
 <!-- END CONTENT AREA -->
 

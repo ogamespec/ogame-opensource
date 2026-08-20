@@ -174,7 +174,7 @@ if ($pk != false) {
 
     if ($mvc) {
 
-        // New-style
+        // New-style (MVC)
 
         $classFile = $router[$pk]['path'];
         if (file_exists($classFile)) {

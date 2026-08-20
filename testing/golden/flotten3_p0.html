@@ -316,25 +316,21 @@ function fenster(target_url,win_name) {
 <div id='content'>
 <center>
 
-  <script language="JavaScript" src="js/flotten.js"></script>
-  <script type="text/javascript">
+        <script language="JavaScript" src="js/flotten.js"></script>
+        <script type="text/javascript">
+        function getStorageFaktor(){ return 1; }
+        </script>
 
-  function getStorageFaktor(){
-    return 1;
-  }
+        <!--
+         <body>
+         <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+        -->
+        <center>
+        <table width="519" border="0" cellpadding="0" cellspacing="1">
 
-  </script>
+        <form action="index.php?page=flottenversand&session=0000000003e9" method="POST">
 
-<!--
- <body>
- <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
--->
-<center>
-<table width="519" border="0" cellpadding="0" cellspacing="1">
-
-<form action="index.php?page=flottenversand&session=0000000003e9" method="POST">
-
-<input name="thisgalaxy" type="hidden" value="1" />
+        <input name="thisgalaxy" type="hidden" value="1" />
 <input name="thissystem" type="hidden" value="1" />
 <input name="thisplanet" type="hidden" value="4" />
 <input name="thisplanettype" type="hidden" value="1" />
@@ -351,18 +347,16 @@ function fenster(target_url,win_name) {
    <input type="hidden" name="ship204" value="5" />
 <input type="hidden" name="speed" value="10" />
 
-<tr height="20" align="left">
-<td class="c" colspan="2">1:3:4 - planet</td>
-
-</tr>
-<tr valign="top" align="left">
-<th width="50%">
-  <table width="259" border="0"  cellpadding="0" cellspacing="0" >
-  <tr height="20">
-  <td class="c" colspan="2">Mission</td>
-  </tr>
-
-    <tr height="20">
+        <tr height="20" align="left">
+            <td class="c" colspan="2">1:3:4 - planet</td>
+        </tr>
+        <tr valign="top" align="left">
+            <th width="50%">
+                <table width="259" border="0" cellpadding="0" cellspacing="0" >
+                <tr height="20">
+                    <td class="c" colspan="2">Mission</td>
+                </tr>
+                    <tr height="20">
 <th>
   <input type="radio" name="order" value="3" >Transport<br />
      </th>
@@ -377,17 +371,15 @@ function fenster(target_url,win_name) {
   <input type="radio" name="order" value="5" >Defend<br />
      </th>
   </tr>
+                </table>
+            </th>
 
-   </table>
-</th>
-
-<th>
-     <table  width="259" border="0" cellpadding="0" cellspacing="0">
-     <tr height="20">
-  <td colspan="3" class="c">Resources</td>
-     </tr>
-
-       <tr height="20">
+            <th>
+                <table width="259" border="0" cellpadding="0" cellspacing="0">
+                <tr height="20">
+                    <td colspan="3" class="c">Resources</td>
+                </tr>
+                       <tr height="20">
       <th>Metal</th>
       <th><a href="javascript:maxResource('1');">max</a></th>
       <th><input name="resource1" type="text" alt="Metal 25047" size="10" onChange="calculateTransportCapacity();" /></th>
@@ -402,53 +394,41 @@ function fenster(target_url,win_name) {
       <th><a href="javascript:maxResource('3');">max</a></th>
       <th><input name="resource3" type="text" alt="Deuterium 8003" size="10" onChange="calculateTransportCapacity();" /></th>
      </tr>
-
-       <tr height="20">
-  <th>Residue</th>
-      <th colspan="2"><div id="remainingresources">-</div></th>
-
-     </tr>
-     <tr height="20">
-  <th colspan="3"><a href="javascript:maxResources()">All resources</a></th>
-     </tr>
-
-  <tr height="20">
-  <th>&nbsp; </th>
-  </tr>
-
-
-
-
-    <tr height="20">
-     <td class="c" colspan="3">Hold time</td>
-  </tr>
-  <tr height="20">
-   <th colspan="3">
-    <select name="holdingtime" >
-          <option value="0">0</option>
-          <option value="1" selected>1</option>
-          <option value="2">2</option>
-          <option value="4">4</option>
-          <option value="8">8</option>
-          <option value="16">16</option>
-          <option value="32">32</option>
-           </select> 
-      Time in hours   </th>
-  </tr>
-
-
-
-
-   
-    </table>
-</th>
-</tr>
-<tr height="20" >
- <th colspan="2"><input type="submit" value="Next" /></th>
-</tr>
- </form>
-</table><br><br><br><br>
-</center>
+                <tr height="20">
+                    <th>Residue</th>
+                    <th colspan="2"><div id="remainingresources">-</div></th>
+                </tr>
+                <tr height="20">
+                    <th colspan="3"><a href="javascript:maxResources()">All resources</a></th>
+                </tr>
+                <tr height="20">
+                    <th>&nbsp; </th>
+                </tr>
+                                    <tr height="20">
+                        <td class="c" colspan="3">Hold time</td>
+                    </tr>
+                    <tr height="20">
+                        <th colspan="3">
+                            <select name="holdingtime" >
+                                <option value="0">0</option>
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                                <option value="4">4</option>
+                                <option value="8">8</option>
+                                <option value="16">16</option>
+                                <option value="32">32</option>
+                            </select> 
+                            Time in hours                        </th>
+                    </tr>
+                                    </table>
+            </th>
+        </tr>
+        <tr height="20" >
+            <th colspan="2"><input type="submit" value="Next" /></th>
+        </tr>
+        </form>
+        </table><br><br><br><br>
+        </center>
 </div>
 <!-- END CONTENT AREA -->
 
