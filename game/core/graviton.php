@@ -1,8 +1,11 @@
 <?php
 /**
  * @file graviton.php
- * @brief Graviton research logic.
- * @details Computes the progress and requirements of the graviton research.
+ * @brief Deathstar graviton attack handling.
+ * @details Resolves a Deathstar "graviton" attack against a moon: computes the
+ *          chance of destroying the moon and the chance of the attacking
+ *          Deathstar fleet exploding, applies the outcome, adjusts player
+ *          stats and sends the result messages to both players.
  */
 /**
  * Graviton attack result flags.
