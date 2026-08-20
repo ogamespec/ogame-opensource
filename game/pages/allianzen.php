@@ -2,6 +2,9 @@
 
 // My Alliance Menu
 
+// ⚠️Important! This game feature involves a rich interaction with input from the user.
+// You need to pay a lot of attention to the security of the input data (size and content checks).
+
 // The alliance sub-pages (member list, ranks, settings, circular, misc) are
 // plain functions (PageAlly_*), not methods of the Allianzen class. They were
 // included by the page in the pre-MVC layout; the controller still calls them,
@@ -143,6 +146,7 @@ class Allianzen extends Page {
         }
     }
 
+    // User is not a member of any alliance, display a menu to create/search for alliances.
     private function AllyPage_NoAlly () : void {
         global $session;
         echo "<table width=519>\n";
@@ -152,6 +156,7 @@ class Allianzen extends Page {
         echo "</table><br><br><br><br><br>\n";
     }
 
+    // Found your own alliance.
     private function AllyPage_CreateAlly (string $tag, string $name) : void {
         global $session;
         echo "<form action=\"index.php?page=allianzen&session=".$_GET['session']."&a=1&weiter=1\" method=POST>\n";
@@ -162,6 +167,7 @@ class Allianzen extends Page {
         echo "<tr><th colspan=2><input type=submit value=\"".loca("ALLY_FOUND_SUBMIT")."\"></th></tr></table></form><br><br><br><br>\n";
     }
 
+    // Searching for alliances.
     private function AllyPage_Search (string $text, string $results="") : void {
         global $session;
         echo "<table width=519>\n";
@@ -174,6 +180,7 @@ class Allianzen extends Page {
         echo "<br><br><br>\n";
     }
 
+    // Display a table of results.
     private function AllyPage_SearchResult (mixed $result) : void {
         global $session;
         $this->SearchResults = "";
@@ -195,6 +202,7 @@ class Allianzen extends Page {
         $this->SearchResults .= "</table><br>\n";
     }
 
+    // The user has already applied to the alliance.
     private function AllyPage_Already (int $app_id) : void {
         global $session;
         $app = LoadApplication ($app_id);
