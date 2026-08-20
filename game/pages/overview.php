@@ -107,7 +107,7 @@ function t_building() {
         $param['planet'] = $aktplanet;
         ModsExecArrRef ('page_overview_get_bonus', $param, $bonuses);
 
-        echo "<a href='index.php?page=renameplanet&session=$session&pl=".$aktplanet['planet_id']."' title='".loca("OVERVIEW_PLANET_MENU")."'>".$name."</a>     (".$GlobalUser['oname'].")" .GetBonusesInHeader ($bonuses). "\n";
+        echo "<a href='index.php?page=renameplanet&session=$session&pl=".$aktplanet['planet_id']."' title='".loca("OVERVIEW_PLANET_MENU")."'>".$name."</a>     (".htmlspecialchars($GlobalUser['oname']).")" .GetBonusesInHeader ($bonuses). "\n";
         echo "</td></tr>\n";
 
         // New Messages.

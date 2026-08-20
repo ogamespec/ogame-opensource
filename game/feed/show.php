@@ -73,7 +73,7 @@ $result = dbquery ($query);
 	if (($user['flags'] & USER_FLAG_FEED_ATOM) != 0) {
 ?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-	<title>OGame-Nachrichten von <?=$user['oname'];?></title>
+	<title>OGame-Nachrichten von <?=htmlspecialchars($user['oname']);?></title>
 	<link href="<?=hostname("feed");?>feed/show.php?feedid=<?=$feedid;?>" rel="self" type="application/rss+xml" />
 	<updated><?=date('c', $lastfeed);?></updated>
 	<author>
@@ -108,10 +108,10 @@ $result = dbquery ($query);
 ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-		<title>OGame-Nachrichten von <?=$user['oname'];?></title>
+		<title>OGame-Nachrichten von <?=htmlspecialchars($user['oname']);?></title>
 		<link><?=hostname("feed");?>feed/show.php?feedid=<?=$feedid;?></link>
 		<atom:link href="<?=hostname("feed");?>feed/show.php?feedid=<?=$feedid;?>" rel="self" type="application/rss+xml" />
-		<description>Kampfberichte, Spionagereports und Systemmeldungen des OGame-Accounts von <?=$user['oname'];?></description>
+		<description>Kampfberichte, Spionagereports und Systemmeldungen des OGame-Accounts von <?=htmlspecialchars($user['oname']);?></description>
 		<language>de-de</language>
 		<pubDate><?=date('D, d M Y H:i:s O', $lastfeed);?></pubDate>
 <?php

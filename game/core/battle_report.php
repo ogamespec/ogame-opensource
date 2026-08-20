@@ -33,7 +33,7 @@ function GenSlot ( int $weap, int $shld, int $armor, string $name, int $g, int $
     $text .= "<center>";
     if ($attack) $text .= loca_lang("BATTLE_ATTACKER", $lang);
     else $text .= loca_lang("BATTLE_DEFENDER", $lang);
-    $text .= " ".$name." (<a href=# onclick=showGalaxy($g,$s,$p); >[$g:$s:$p]</a>)";
+    $text .= " ".htmlspecialchars($name)." (<a href=# onclick=showGalaxy($g,$s,$p); >[$g:$s:$p]</a>)";
     if ($show_techs) $text .= "<br>".loca_lang("BATTLE_ATTACK", $lang)." ".($weap * 10)."% ".loca_lang("BATTLE_SHIELD", $lang)." ".($shld * 10)."% ".loca_lang("BATTLE_ARMOR", $lang)." ".($armor * 10)."% ";
 
     $sum = 0;

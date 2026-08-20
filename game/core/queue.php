@@ -963,7 +963,7 @@ function StopResearch (int $player_id) : void
     {
         Error ( va(loca_lang("DEBUG_QUEUE_CANCEL_RESEARCH_FOREIGN", $GlobalUni['lang']), 
             loca("NAME_$id"), 
-            $user['oname'], 
+            htmlspecialchars($user['oname']), 
             "[".$planet['g'].":".$planet['s'].":".$planet['p']."] " . $planet['name'] )
         );
         return;

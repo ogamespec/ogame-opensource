@@ -210,7 +210,7 @@ class Flotten3 extends Page {
                             foreach ( $unions as $i=>$union )
                             {
                                 $sel = (key_exists('union2', $_POST) && intval($_POST['union2']) == $union['union_id']) ? "selected" : "";
-                                echo "          <option value=\"".$union['union_id']."\" $sel>".$union['name']."</option>\n";
+                                echo "          <option value=\"".$union['union_id']."\" $sel>".htmlspecialchars($union['name'])."</option>\n";
                             }
                             ?>
                             </select> 

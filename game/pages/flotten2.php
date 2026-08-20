@@ -207,7 +207,7 @@ class Flotten2 extends Page {
                     echo "  <tr height=\"20\">";
                     echo "<th><div id='bxx".($i+1)."' title='".max($queue['end']-$now, 0)."'star='".$queue['end']."'></div></th>";
                     echo "<th><a href=\"javascript:setTarget(".$target['g'].",".$target['s'].",".$target['p'].",".GetPlanetType($target)."); setUnion(".$union['union_id']."); shortInfo()\">";
-                    echo $union['name']." [".$target['g'].":".$target['s'].":".$target['p']."]</a></th></tr>\n";
+                    echo htmlspecialchars($union['name'])." [".$target['g'].":".$target['s'].":".$target['p']."]</a></th></tr>\n";
                 }
                 echo "<script language=javascript>anz=".$union_count.";t();</script>\n\n";
             }

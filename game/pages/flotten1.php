@@ -140,7 +140,7 @@ class Flotten1 extends Page {
                         <th><a href="index.php?page=galaxy&galaxy=<?php echo $origin['g'];?>&system=<?php echo $origin['s'];?>&position=<?php echo $origin['p'];?>&session=<?php echo $session;?>" >[<?php echo $origin['g'];?>:<?php echo $origin['s'];?>:<?php echo $origin['p'];?>]</a></th>
                         <th><?php echo date ( "D M j G:i:s", $queue['start']);?></th>
                         <th><a href="index.php?page=galaxy&galaxy=<?php echo $target['g'];?>&system=<?php echo $target['s'];?>&position=<?php echo $target['p'];?>&session=<?php echo $session;?>" >[<?php echo $target['g'];?>:<?php echo $target['s'];?>:<?php echo $target['p'];?>]</a><?php
-                        if ( ! ($target['type'] == PTYP_COLONY_PHANTOM || $target['type'] == PTYP_FARSPACE || $target['type'] == PTYP_ABANDONED || $target['type'] == PTYP_DF ) && $target_user != null ) echo "   <br />" . $target_user['oname'];
+                        if ( ! ($target['type'] == PTYP_COLONY_PHANTOM || $target['type'] == PTYP_FARSPACE || $target['type'] == PTYP_ABANDONED || $target['type'] == PTYP_DF ) && $target_user != null ) echo "   <br />" . htmlspecialchars($target_user['oname']);
                         ?>    </th>
                         <th><?php echo date ( "D M j G:i:s", $queue['end']);?></th>
                         <th>
@@ -200,10 +200,10 @@ class Flotten1 extends Page {
                <form action="index.php?page=flotten1&session=<?php echo $session;?>" method="POST">
                    <input type="hidden" name="flotten" value="<?php echo $fleet['fleet_id'];?>" />
                  <table width="519" border="0" cellpadding="0" cellspacing="1">
-                                   <tr><td class="c" colspan=2><?=va(loca("FLEET1_ACS_NAME"), $union['name']);?></td></tr>
+                                   <tr><td class="c" colspan=2><?=va(loca("FLEET1_ACS_NAME"), htmlspecialchars($union['name']));?></td></tr>
                                    <tr><td class="c" colspan=2><?=loca("FLEET1_ACS_TITLE");?></td></tr>
                                    <tr><th colspan=2>
-                   <input name="union_name" type="text" value="<?php echo $union['name'];?>" /> <br /><input type="submit" value="OK" />
+                   <input name="union_name" type="text" value="<?php echo htmlspecialchars($union['name']);?>" /> <br /><input type="submit" value="OK" />
                                    </th></tr>
                                    <tr>
                                        <td class="c"><?=loca("FLEET1_ACS_PLAYERS");?></td>
@@ -213,12 +213,12 @@ class Flotten1 extends Page {
                                        <th width="50%">
                                            <select size="5">
                                            <?php
-                                           for ($i=0; $i<=$union['players']; $i++)
+                                           for ($i=0; $i<$union['players']; $i++)
                                            {
                                                $player_id = $union["player"][$i];
                                                //if ($player_id == $GlobalUser['player_id']) continue;    // keep yourself off the invitation list
                                                $user = LoadUser ($player_id);
-                                               echo "<option>".$user['oname']."</option>\n";
+                                               echo "<option>".htmlspecialchars($user['oname'])."</option>\n";
                                            }
                                            ?>
                                            </select>

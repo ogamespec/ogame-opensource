@@ -30,7 +30,7 @@ function PageAlly_Leave () : void
                 SendMessage ( $user['player_id'], 
                     va(loca_lang("ALLY_MSG_FROM", $user['lang']), htmlspecialchars($ally['tag'])), 
                     loca_lang ("ALLY_MSG_COMMON", $user['lang']), 
-                    va(loca_lang ("ALLY_MSG_LEAVE", $user['lang']), $leaver['oname']), MTYP_ALLY);
+                    va(loca_lang ("ALLY_MSG_LEAVE", $user['lang']), htmlspecialchars($leaver['oname'])), MTYP_ALLY);
             }
 
             // Make a redirect to the My Alliance page.
@@ -162,7 +162,7 @@ function PageAlly_Dismiss () : void
                 loca_add ("ally", $user['lang']);
                 $from = htmlspecialchars($ally['name']);      // Поле From содержит имя альянса при его роспуске
                 $subj = va ( loca_lang("ALLY_MSG_DISMISS_SUBJ", $user['lang']), htmlspecialchars($ally['tag']) );
-                $text = va ( loca_lang("ALLY_MSG_DISMISS", $user['lang']), $GlobalUser['oname'], htmlspecialchars($ally['tag']) );
+                $text = va ( loca_lang("ALLY_MSG_DISMISS", $user['lang']), htmlspecialchars($GlobalUser['oname']), htmlspecialchars($ally['tag']) );
                 SendMessage ( $user['player_id'], $from, $subj, $text, MTYP_ALLY);
             }
 
@@ -219,7 +219,7 @@ function AllyPage_Takeover () : void
                     loca_add ("ally", $user['lang']);
                     $from = va ( loca_lang ("ALLY_MSG_FROM", $user['lang']), htmlspecialchars($ally['tag']) );
                     $subj = va ( loca_lang ("ALLY_MSG_TAKEOVER_SUBJ", $user['lang']), htmlspecialchars($ally['tag']) );
-                    $text = va ( loca_lang ("ALLY_MSG_TAKEOVER", $user['lang']), $GlobalUser['oname'], htmlspecialchars($ally['tag']) );
+                    $text = va ( loca_lang ("ALLY_MSG_TAKEOVER", $user['lang']), htmlspecialchars($GlobalUser['oname']), htmlspecialchars($ally['tag']) );
                     SendMessage ( $user['player_id'], $from, $subj, $text, MTYP_ALLY);
                 }
             }
@@ -298,7 +298,7 @@ function AllyPage_Takeover () : void
 <tr><th><?=loca("ALLY_MISC_TAKEOVER_WHO");?></th><th><select name=uid>
 <?php
     foreach ( $users as $i=>$user ) {
-        echo "  <option value=".$user['player_id'].">".$user['oname']." (".va(loca("ALLY_MISC_TAKEOVER_RANK"), $user['rankname']).")\n";
+        echo "  <option value=".$user['player_id'].">".htmlspecialchars($user['oname'])." (".va(loca("ALLY_MISC_TAKEOVER_RANK"), $user['rankname']).")\n";
     }
 ?></select></th></tr>
 <tr><th colspan=2><input type=submit value="<?=loca("ALLY_MISC_TAKEOVER_SUBMIT");?>"></th></tr></form></table><br><br><br><br>

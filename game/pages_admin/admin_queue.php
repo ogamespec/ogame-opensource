@@ -73,7 +73,7 @@ class Admin_Queue extends Page {
         $pid = $user['player_id'];
         $freeze_seconds = $queue['freeze'] ? max (0, $now - $queue['frozen']) : 0;
         echo "<tr><th> <table><tr><th><div id='bxx".$bxx."' title='".($queue['end'] - $now + $freeze_seconds)."' star='".$queue['start']."'></th>";
-        echo "<tr><th>".date ("d.m.Y H:i:s", $queue['end'])."</th></tr></table></th><th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=$pid\">".$user['oname']."</a></th><th>".$queue['type']."</th><th>".$this->QueueDesc($queue).$this->QueueFrozenDesc($queue)."</th><th>".$queue['prio']."</th><th>".$queue['task_id']."</th>\n";
+        echo "<tr><th>".date ("d.m.Y H:i:s", $queue['end'])."</th></tr></table></th><th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=$pid\">".htmlspecialchars($user['oname'])."</a></th><th>".$queue['type']."</th><th>".$this->QueueDesc($queue).$this->QueueFrozenDesc($queue)."</th><th>".$queue['prio']."</th><th>".$queue['task_id']."</th>\n";
 
         if ($queue['freeze']) {
             $freeze_loca = "ADM_QUEUE_UNFREEZE";

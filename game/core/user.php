@@ -1041,7 +1041,7 @@ function AdminUserName (array|null $user) : string
     global $session;
 
     if ($user == null) return "";
-    $name = $user['oname'];
+    $name = htmlspecialchars($user['oname']);
 
     $week = time() - 604800;
     $week4 = time() - 604800*4;

@@ -48,8 +48,8 @@ function AllyPage_CircularMessage () : void
                 SendMessage ( $user['player_id'], 
                                        va ( loca_lang("ALLY_MSG_FROM", $user['lang']), htmlspecialchars($ally['tag']) ),
                                        va ( loca_lang("ALLY_MSG_CIRC_SUBJ", $user['lang']), htmlspecialchars($ally['tag']) ), 
-                                       va ( loca_lang("ALLY_MSG_CIRC_TEXT", $user['lang']), $GlobalUser['oname'], $text ), MTYP_ALLY );
-                echo $user['oname'] . "<br>\n";
+                                       va ( loca_lang("ALLY_MSG_CIRC_TEXT", $user['lang']), htmlspecialchars($GlobalUser['oname']), $text ), MTYP_ALLY );
+                echo htmlspecialchars($user['oname']) . "<br>\n";
             }
 ?>
 </th></tr>
