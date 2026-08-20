@@ -155,7 +155,7 @@ class Statistics extends Page {
                             if ( $ally['ally_id'] == $GlobalUser['ally_id'] ) echo "      <a href=\"#\" style='color:lime;'>\n";
                             else echo "      <a href=\"ainfo.php?allyid=".$ally['ally_id']."\" target='_ally'>      \n";
                             ?>
-                            <?php echo $ally['tag'];?>    </a>
+                            <?php echo htmlspecialchars($ally['tag']);?>    </a>
                         </th>
                         <!-- bewerben -->
                         <th>
@@ -253,12 +253,12 @@ class Statistics extends Page {
                     if ( $user['ally_id'] != 0 && $user['ally_id'] == $GlobalUser['ally_id'] ) {
                         $ally = LoadAlly ( $user['ally_id'] );
                         echo " 	  <a href=\"index.php?page=allianzen&session=$session\">\n";
-                        echo "        ".$ally['tag']."      </a>\n";
+                        echo "        ".htmlspecialchars($ally['tag'])."      </a>\n";
                     }
                     else if ( $user['ally_id'] ) {
                         $ally = LoadAlly ( $user['ally_id'] );
                         echo "   	  <a href='ainfo.php?allyid=".$user['ally_id']."' target='_ally'>\n";
-                        echo "        ".$ally['tag']."      </a>\n";
+                        echo "        ".htmlspecialchars($ally['tag'])."      </a>\n";
                     }
                     else {
                         echo "      <a href=\"index.php?page=allianzen&session=$session\"> \n";

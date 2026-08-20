@@ -13,7 +13,9 @@ class Notizen extends Page {
         // Process POST requests.
         if ( key_exists ('s', $_POST) )    // Add/Edit
         {
-            $title = htmlspecialchars($_POST['betreff']);
+            // Store the note text as-is (only SQL-escaped here); HTML
+            // escaping happens at output time so the stored data stays raw.
+            $title = $_POST['betreff'];
             $text = $_POST['text'];
 
             $title = addslashes ( $title );
@@ -77,7 +79,7 @@ class Notizen extends Page {
                     echo "<tr>\n";
                     echo "  <th width=20><input type=checkbox name=\"delmes[".$note['note_id']."]\" value=\"y\"></th>\n";
                     echo "  <th width=150>".date ("Y-m-d H:i:s", $note['date'])."</th>\n";
-                    echo "  <th><a href=?page=notizen&session=".$_GET['session']."&a=2&n=".$note['note_id']."><font color=$col>".stripslashes($note['subj'])."</font></a></th>\n";
+                    echo "  <th><a href=?page=notizen&session=".$_GET['session']."&a=2&n=".$note['note_id']."><font color=$col>".htmlspecialchars(stripslashes($note['subj']))."</font></a></th>\n";
                     echo "  <th width=40 align=right>".$note['textsize']."</th>\n";
                     echo "</tr>\n\n";
                 }
@@ -122,8 +124,8 @@ class Notizen extends Page {
         echo "<table width=519>\n";
         echo "<tr><td class=c colspan=2>".loca("NOTE_EDIT")."</td></tr>\n";
         echo "<tr><th>".loca("NOTE_PRIORITY")."</th><th><select name=u><option value=2".$u[2].">".loca("NOTE_PRIO_2")."</option><option value=1".$u[1].">".loca("NOTE_PRIO_1")."</option><option value=0".$u[0].">".loca("NOTE_PRIO_0")."</option></select></th></tr>\n";
-        echo "<tr><th>".loca("NOTE_EDIT_SUBJ")."</th><th><input type=text name=betreff size=30 maxlength=30 value='".stripslashes($note['subj'])."'></th></tr>\n";
-        echo "<tr><th>".loca("NOTE_EDIT_TEXT")." (<span id=\"cntChars\">".$note['textsize']."</span> / 5000 ".loca("NOTE_CHARS").")</th><th><textarea name=text cols=60 rows=10 onkeyup=\"javascript:cntchar(5000)\">".stripslashes($note['text'])."</textarea></th></tr>\n";
+        echo "<tr><th>".loca("NOTE_EDIT_SUBJ")."</th><th><input type=text name=betreff size=30 maxlength=30 value='".htmlspecialchars(stripslashes($note['subj']))."'></th></tr>\n";
+        echo "<tr><th>".loca("NOTE_EDIT_TEXT")." (<span id=\"cntChars\">".$note['textsize']."</span> / 5000 ".loca("NOTE_CHARS").")</th><th><textarea name=text cols=60 rows=10 onkeyup=\"javascript:cntchar(5000)\">".htmlspecialchars(stripslashes($note['text']))."</textarea></th></tr>\n";
         echo "<tr><td class=c><a href=?page=notizen&session=".$_GET['session'].">".loca("NOTE_BACK")."</a></td><td class=c><input type=reset value='".loca("NOTE_RESET")."'><input type=submit value='".loca("NOTE_APPLY")."'></td></tr>\n";
         echo "</table></form><br><br><br><br>\n";
     }

@@ -33,7 +33,7 @@ function PlayerDetails (int $player_id) : void
     echo va ( loca("GALATOOL_POINTS"), nicenum($stats[$player_id]['points'] / 1000)) ."<br>";
     echo va ( loca("GALATOOL_FLEET"), nicenum($stats[$player_id]['fpoints'])) ."<br>";
     echo va ( loca("GALATOOL_RESEARCH"), nicenum($stats[$player_id]['rpoints'])) ."<br>";
-    if ( $stats[$player_id]['ally_id'] ) echo va ( loca("GALATOOL_ALLY"), $ally[$stats[$player_id]['ally_id']]['name']) ."<br>";
+    if ( $stats[$player_id]['ally_id'] ) echo va ( loca("GALATOOL_ALLY"), htmlspecialchars($ally[$stats[$player_id]['ally_id']]['name'])) ."<br>";
     echo "</td>";
 
     foreach ( $galaxy as $planet_id=>$planet )

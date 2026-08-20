@@ -453,17 +453,17 @@ class Galaxy extends Page {
             {
                 $ally = LoadAlly ( $user['ally_id']);
                 $allytext = "<a style=\"cursor:pointer\"\n";
-                $allytext .= "         onmouseover=\"return overlib('<table width=240 ><tr><td class=c >".va(loca("GALAXY_ALLY_TITLE"), $ally['tag'], $ally['place1'], CountAllyMembers($user['ally_id']))."</td></tr><th><table>";
+                $allytext .= "         onmouseover=\"return overlib('<table width=240 ><tr><td class=c >".va(loca("GALAXY_ALLY_TITLE"), htmlspecialchars($ally['tag']), $ally['place1'], CountAllyMembers($user['ally_id']))."</td></tr><th><table>";
                 $allytext .= "<tr><td><a href=ainfo.php?allyid=".$ally['ally_id']." target=_ally>".loca("GALAXY_ALLY_PAGE")."</a></td></tr>";
                 if ($GlobalUser['ally_id'] != $user['ally_id']) {
                     $allytext .= "<tr><td><a href=index.php?page=bewerben&session=$session&allyid=".$ally['ally_id']." >".loca("GALAXY_ALLY_APPLY")."</a></td></tr>";
                 }
                 $allytext .= "<tr><td><a href=index.php?page=statistics&session=$session&start=".(floor($ally['place1']/100)*100+1)."&who=ally >".loca("GALAXY_ALLY_STATS")."</a></td></tr>";
                 if ($ally['homepage'] !== "") {
-                    $allytext .= "<tr><td><a href=redir.php?url=".$ally['homepage']." target=_blank >".loca("GALAXY_ALLY_HOMEPAGE")."</td></tr>";
+                    $allytext .= "<tr><td><a href=redir.php?url=".htmlspecialchars($ally['homepage'])." target=_blank >".loca("GALAXY_ALLY_HOMEPAGE")."</td></tr>";
                 }
                 $allytext .= "</table></th></table>', STICKY, MOUSEOFF, DELAY, 750, CENTER, OFFSETY, -50 );\" onmouseout=\"return nd();\">\n";
-                $allytext .= "   ".$ally['tag']." </a>";
+                $allytext .= "   ".htmlspecialchars($ally['tag'])." </a>";
             }
             else $allytext = "";
             echo "<th width=\"80\">$allytext</th>\n";

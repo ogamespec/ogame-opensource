@@ -94,7 +94,7 @@ class Suche extends Page {
                         $ally = LoadAlly ( intval($user['ally_id']) );
                         $ally_tag = "";
                         if ($ally) {
-                            $ally_tag = $ally['tag'];
+                            $ally_tag = htmlspecialchars($ally['tag']);
                         }
                         $name = $user['oname'];
                         $buttons = "<a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\" alt=\"".loca("SEARCH_MESSAGE")."\" ><img src=\"".UserSkin()."/img/m.gif\" alt=\"".loca("SEARCH_MESSAGE")."\" title=\"".loca("SEARCH_MESSAGE")."\" /></a><a href='index.php?page=buddy&session=$session&action=7&buddy_id=".$user['player_id']."' alt='".loca("SEARCH_BUDDY")."'><img src='".UserSkin()."/img/b.gif' border=0 alt='".loca("SEARCH_BUDDY")."' title='".loca("SEARCH_BUDDY")."'></a>";
@@ -118,7 +118,7 @@ class Suche extends Page {
                         $ally = LoadAlly ( intval($user['ally_id']) );
                         $ally_tag = "";
                         if ($ally) {
-                            $ally_tag = $ally['tag'];
+                            $ally_tag = htmlspecialchars($ally['tag']);
                         }
                         $name = $user['oname'];
                         $buttons = "<a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\" alt=\"".loca("SEARCH_MESSAGE")."\"><img src=\"".UserSkin()."/img/m.gif\" alt=\"".loca("SEARCH_MESSAGE")."\" title=\"".loca("SEARCH_MESSAGE")."\" /></a><a href='index.php?page=buddy&session=$session&action=7&buddy_id=".$user['player_id']."' alt='".loca("SEARCH_BUDDY")."'><img src='".UserSkin()."/img/b.gif' border=0 alt='".loca("SEARCH_BUDDY")."' title='".loca("SEARCH_BUDDY")."'></a>";
@@ -138,14 +138,14 @@ class Suche extends Page {
                     else if ( $_POST['type'] === "allytag" || $_POST['type'] === "allyname" )
                     {
                         $ally = dbarray ( $result );
-                        $tag = $ally['tag'];
+                        $tag = htmlspecialchars($ally['tag']);
                         $allyurl = "ainfo.php?allyid=".$ally['ally_id'];
                         if ( $ally['ally_id'] == $GlobalUser['ally_id'] && $ally['ally_id'] != 0 ) {
                             $tag = "<font color=\"lime\">$tag";
                             $allyurl = "index.php?page=allianzen&session=$session";
                         }
                         $SearchResult .= "<tr>\n";
-                        $SearchResult .= "<th><a href='".$allyurl."' target='_ally'>$tag</font></a></th><th>".$ally['name']."</th><th>4</th><th>0</th></tr>\n";
+                        $SearchResult .= "<th><a href='".$allyurl."' target='_ally'>$tag</font></a></th><th>".htmlspecialchars($ally['name'])."</th><th>4</th><th>0</th></tr>\n";
                     }
                 }
 

@@ -65,8 +65,8 @@ class Bewerben extends Page {
             <h1><?=loca("ALLY_APPU_REG");?></h1>
             <table width=519>
             <form action="index.php?page=bewerben&session=<?=$session;?>&allyid=<?=$ally['ally_id'];?>" method=POST>
-            <tr><td class=c colspan=2><?=va(loca("ALLY_APPU_TITLE"), $ally['tag']);?></td></tr>
-            <tr><th><?=va(loca("ALLY_APPU_TEXT"), "<span id=\"cntChars\">0</span>", $maxchars);?></th><th><textarea name="text" cols=40 rows=10 onkeyup="javascript:cntchar(<?=$maxchars;?>)"><?=$template;?></textarea></th></tr>
+            <tr><td class=c colspan=2><?=va(loca("ALLY_APPU_TITLE"), htmlspecialchars($ally['tag']));?></td></tr>
+            <tr><th><?=va(loca("ALLY_APPU_TEXT"), "<span id=\"cntChars\">0</span>", $maxchars);?></th><th><textarea name="text" cols=40 rows=10 onkeyup="javascript:cntchar(<?=$maxchars;?>)"><?=htmlspecialchars($template);?></textarea></th></tr>
             <tr><th><?=loca("ALLY_APPU_HINT");?></th><th><input type=submit name="weiter" value="<?=loca("ALLY_APPU_TEMPLATE");?>"></th></tr>
             <tr><th colspan=2><input type=submit name="weiter" value="<?=loca("ALLY_APPU_SUBMIT");?>"></th></tr>
             </table></form></center><br><br><br><br>
@@ -78,7 +78,7 @@ class Bewerben extends Page {
             <h1><?=loca("ALLY_APPU_REG");?></h1>
             <table width=519>
             <form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
-            <tr><td class=c><?=va(loca("ALLY_APPU_FORBIDDEN"), $ally['tag']);?></td></tr>
+            <tr><td class=c><?=va(loca("ALLY_APPU_FORBIDDEN"), htmlspecialchars($ally['tag']));?></td></tr>
             <tr><th><?=loca("ALLY_APPU_CLOSED");?></th></th></tr>
             <tr><th><input type=submit value="<?=loca("ALLY_APPU_BACK");?>"></th></tr></table></form></center><br><br><br><br>
             <?php
