@@ -1,3 +1,0 @@
-Note: Using configuration file C:\Work\ogame-opensource\phpstan.neon.
-
- [OK] No errors
