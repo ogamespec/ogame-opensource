@@ -69,6 +69,8 @@ class Messages extends Page {
                         
                         // Method 2
                         // The link shows only posts from the selected category regardless of the checkbox values
+                        // NOTE: both methods are intentionally selectable via $this->method (see controller).
+                        // @phpstan-ignore-next-line identical.alwaysFalse, booleanAnd.alwaysFalse, equal.alwaysTrue
                         if (method() === "GET" && key_exists('pm', $_GET) && $this->method == 2) {
                             $skip = $pm != intval ($_GET['pm']);
                         }
@@ -128,6 +130,8 @@ class Messages extends Page {
 
         // Method 1
         // Handling clicking on a message type link to manage checkmarks against folders (Commander)
+        // NOTE: intentionally selectable via $this->method (currently 2, so this branch is dormant).
+        // @phpstan-ignore-next-line equal.alwaysFalse, booleanAnd.alwaysFalse
         if ( method() === "GET" && $prem['commander'] && $this->use_folders && key_exists('pm', $_GET) && $this->method == 1 )
         {
             $pm = intval ($_GET['pm']);

@@ -113,7 +113,7 @@ class Admin_BattleSim extends Page {
             if ( key_exists ('debug', $_POST) && $_POST['debug'] === "on" ) $this->debug = true;
             else $this->debug = false;
             if ( $_POST['rapid'] === "on" ) $this->rf = true;
-            else $this->rf = 0;
+            else $this->rf = false;
             if ( $_POST['fid'] === "" ) $this->fid = 0;
             else $this->fid = intval ($_POST['fid']);
             if ( $_POST['did'] === "" ) $this->did = 0;
@@ -124,7 +124,7 @@ class Admin_BattleSim extends Page {
             if ($battle_source === "") {
                 $battle_source = null;
             }
-            $this->BattleReport = $this->SimBattle ( $battle_source, $this->a, $this->d, $this->rf, $this->fid, $this->did, $this->max_round, $this->debug, $this->battle_result, $this->aloss, $this->dloss );
+            $this->BattleReport = $this->SimBattle ( $battle_source, $this->a, $this->d, (int)$this->rf, $this->fid, $this->did, $this->max_round, $this->debug, $this->battle_result, $this->aloss, $this->dloss );
         }
 
         return true;
@@ -438,6 +438,9 @@ RecalcAttackersDefendersNum ();
                 
                 // Processing data
                 $values = preg_split('/\s+/', trim($parts[1]));
+                if ($values === false) {
+                    continue;
+                }
 
                 $a[$index]['oname'] = "Attacker$index";
                 $a[$index]['id'] = mt_rand(1,10000);
@@ -471,6 +474,9 @@ RecalcAttackersDefendersNum ();
                 
                 // Processing data
                 $values = preg_split('/\s+/', trim($parts[1]));
+                if ($values === false) {
+                    continue;
+                }
                 
                 $d[$index]['oname'] = "Defender$index";
                 $d[$index]['id'] = mt_rand(1,10000);
@@ -584,7 +590,7 @@ RecalcAttackersDefendersNum ();
         foreach ($transportableResources as $i=>$rc) {
             $captured[$rc] = $i + 1;
         }
-        return BattleReport ( $res, time(), $loss, $captured, $moonchance, $mooncreated, $repaired, $debris, $GlobalUser['lang'] );
+        return BattleReport ( $res, time(), $loss, $captured, (int)$moonchance, $mooncreated, $repaired, $debris, $GlobalUser['lang'] );
     }
 }
 

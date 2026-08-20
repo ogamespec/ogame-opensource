@@ -28,10 +28,13 @@ function RocketAttackMain ( int $amount, int $primary, bool $moon_attack, array 
 
     // Repel IPM attack by interceptors (ABMs)
     $ipm = $amount;
-    $abm = $moon_attack ? $moon_planet[GID_D_ABM] : $target[GID_D_ABM];
+    $abm = $moon_attack ? ( $moon_planet === null ? 0 : $moon_planet[GID_D_ABM] ) : $target[GID_D_ABM];
     $ipm = (int)max (0, $ipm - $abm);
     $ipm_destroyed = $amount - $ipm;
-    if ($moon_attack) $moon_planet[GID_D_ABM] -= $ipm_destroyed;
+    if ($moon_attack) {
+        if ($moon_planet === null) $moon_planet = array ( GID_D_ABM => 0 );
+        $moon_planet[GID_D_ABM] -= $ipm_destroyed;
+    }
     else $target[GID_D_ABM] -= $ipm_destroyed;
 
     $maxdamage = $ipm * $UnitParam[GID_D_IPM][2] * (1 + $origin_user_attack / 10);
@@ -107,7 +110,7 @@ function RocketAttack ( int $fleet_id, int $planet_id, int $when ) : void
 
     // Write back the defense's losses.
     SetPlanetDefense ( $planet_id, $target );
-    if ($moon_attack) {
+    if ($moon_attack && $moon_planet !== null) {
         SetPlanetDefense ( $moon_planet['planet_id'], $moon_planet );
     }
 
@@ -129,10 +132,10 @@ function RocketAttack ( int $fleet_id, int $planet_id, int $when ) : void
         loca_lang ("RAK_MSG_SUBJ", $target_user['lang']), 
         $text, MTYP_BATTLE_REPORT_LINK, $when);
 
-    $message_for_attacker = true;
-
     // Generate a message for the attacker: https://github.com/ogamespec/ogame-opensource/issues/61
     // The original 0.84 version did not create a message for the attacker.
+    // Can be turned off at runtime, e.g. $GLOBALS['message_for_attacker'] = false;
+    $message_for_attacker = (bool) ( $GLOBALS['message_for_attacker'] ?? true );
     if ($message_for_attacker) {
 
         loca_add ( "raketen", $origin_user['lang'] );
@@ -172,7 +175,7 @@ function GetDestroyedDefenseText (string $lang, array &$target, array|null &$moo
 
             $count = $target[$gid];
             // Consider the defense of the moon by interceptors from the planet.
-            if ($moon_attack && $gid == GID_D_ABM ) {
+            if ($moon_attack && $gid == GID_D_ABM && $moon_planet !== null) {
                 $count = $moon_planet[GID_D_ABM];
             }
 

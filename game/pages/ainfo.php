@@ -10,6 +10,7 @@
 // Attempt to get a session from the referrer.
 //echo $_SERVER['HTTP_REFERER'];
 
+$now = time ();
 $allyid = intval($_GET['allyid']);
 $ally = LoadAlly ($allyid);
 
@@ -26,7 +27,7 @@ else {
 <tr><td class=c colspan=2><?=loca("AINFO_INFO");?></td></tr><?php
     if ($ally && $ally['imglogo'] !== "") 
     {
-        echo "<tr><th colspan=2><img src=\"/game/img/preload.gif\" class=\"reloadimage\" title=\"pic.php?url=".htmlspecialchars($ally['imglogo'])."\"></td></tr>\n";
+        echo "<tr><th colspan=2><img src=\"/game/img/preload.gif\" class=\"reloadimage\" title=\"pic.php?url=".htmlspecialchars($ally['imglogo'] ?? '')."\"></td></tr>\n";
     }
 ?><tr><th><?=loca("AINFO_TAG");?></th><th><?=htmlspecialchars($ally['tag']);?><?php
     if ( $now < $ally['tag_until'] ) echo " (".loca("AINFO_PREV")." ".htmlspecialchars($ally['old_tag']).")";

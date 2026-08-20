@@ -54,6 +54,8 @@ class Admin_Expedition extends Page {
             // New Settings
             if (key_exists('action', $_GET) && $_GET['action'] === "settings") {
 
+                $exptab = LoadExpeditionSettings ();
+
                 if (key_exists('dm_factor', $_POST)) $exptab['dm_factor'] = intval($_POST['dm_factor']);
 
                 if (key_exists('chance_success', $_POST)) $exptab['chance_success'] = intval($_POST['chance_success']);

@@ -438,6 +438,7 @@ function ModInitOne(string $modname) : void
         
         $className = ucfirst($modname);
         if (class_exists($className)) {
+            /** @var GameMod $instance */
             $instance = new $className();
             $instance->init();
             $modlist[$modname] = $instance;
@@ -725,6 +726,7 @@ function ModInstallOne(string $modname) : void
         
         $className = ucfirst($modname);
         if (class_exists($className)) {
+            /** @var GameMod $instance */
             $instance = new $className();
             $instance->install();
         }

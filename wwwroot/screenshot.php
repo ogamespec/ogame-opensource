@@ -6,6 +6,10 @@ include ('common.php');
 include ('w3c.txt');
 include ('header.tpl');
 
+/**
+ * @param string $pic
+ * @return string
+ */
 function ScreenShotName ($pic)
 {
     switch ($pic)

@@ -5,7 +5,7 @@
  * @details Implements the combat rounds, fire selection and damage calculation used by battle.php.
  */
 /** Debug flag: when set, enables debug output and the battle debug page. */
-$battle_debug = 0;
+$battle_debug = (int) ( $GLOBALS['battle_debug'] ?? 0 );
 /** Total number of units that exploded during the current battle. */
 $exploded_counter = 0;
 /** Total number of shots aimed at units that had already exploded. */
@@ -66,7 +66,11 @@ To debug: just open http://localhost/game/battle_engine.php with $battle_debug =
  */
 function hex_array_to_text (string $arr) : string
 {
-    return implode(unpack("H*", $arr));
+    $unpacked = unpack("H*", $arr);
+    if ($unpacked === false) {
+        return "";
+    }
+    return implode($unpacked);
 }
 
 /**
@@ -916,7 +920,7 @@ function BattleEngine (string $source) : array
 
     // Initialize RNG
     list($usec,$sec)=explode(" ",microtime());
-    $battle_seed = (int)($sec * $usec) & 0xffffffff;
+    $battle_seed = (int)((float)$sec * (float)$usec) & 0xffffffff;
     mt_srand ($battle_seed);
     $res['battle_seed'] = $battle_seed;
 

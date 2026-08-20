@@ -4,6 +4,7 @@
 /** @var array $GlobalUni */
 /** @var array $aktplanet */
 /** @var array $transportableResources */
+/** @var array $fleetmap */
 
 // Fast dispatch of fleets from the Galaxy via AJAX.
 
@@ -88,15 +89,11 @@ if ( $target == NULL )
     else AjaxSendError ();    // no debris field
 }
 
-$target_user = LoadUser ( $target['owner_id'] );
+$target_user = LoadUser ( $target['owner_id'] ) ?? array ();
 
 $probes = $aktplanet[GID_F_PROBE];
 $recyclers = $aktplanet[GID_F_RECYCLER];
 $missiles = $aktplanet[GID_D_IPM];
-
-if ( ( 
-( $GlobalUser['ally_id'] == $target_user['ally_id'] && $GlobalUser['ally_id'] > 0 )   || 
- IsBuddy ( $GlobalUser['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
 
 /* ************ ESPIONAGE ************  */
 
@@ -105,7 +102,7 @@ if ( $order == FTYP_SPY )
     $amount = min ($aktplanet[GID_F_PROBE], $shipcount);
 
     if ( $target['owner_id'] == $GlobalUser['player_id'] ) AjaxSendError ();    // Own planet
-    if ( $GlobalUser['noattack'] || $BlockAttack ) AjaxSendError ();    // Attack ban
+    if ( $GlobalUser['noattack'] ) AjaxSendError ();    // Attack ban
     if ( $target_user['admin'] > USER_TYPE_PLAYER && $target_user['player_id'] != USER_SPACE ) AjaxSendError ();    // the administration can't be scanned (except space)
     if ( IsPlayerNewbie ($target_user['player_id']) ) AjaxSendError (603);    // newbie protection
     if ( IsPlayerStrong ($target_user['player_id']) ) AjaxSendError (604);    // strong protection
@@ -158,7 +155,7 @@ if ( $cargo < $cons ) AjaxSendError (615);        // there's no room in the carg
 // Fleet lock
 $fleetlock = "temp/fleetlock_" . $aktplanet['planet_id'];
 if ( file_exists ($fleetlock) ) {
-    $fileCreationTime = filectime($filename);
+    $fileCreationTime = filectime($fleetlock);
     if ((time() - $fileCreationTime) < 3) {
         AjaxSendError ();
     } else {
@@ -166,7 +163,7 @@ if ( file_exists ($fleetlock) ) {
     }
 }
 $f = fopen ( $fleetlock, 'w' );
-fclose ($f);
+if ( $f !== false ) fclose ($f);
 
 // Send in the fleet.
 $resources = array ();

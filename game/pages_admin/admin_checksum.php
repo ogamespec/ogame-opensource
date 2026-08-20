@@ -183,10 +183,10 @@ class Admin_Checksum extends Page {
     public function view () : void {
         global $session;
 
-        $engine_md = unserialize ( file_get_contents ('temp/engine.md5') );
-        $page_md = unserialize ( file_get_contents ('temp/page.md5') );
-        $page_admin_md = unserialize ( file_get_contents ('temp/page_admin.md5') );
-        $reg_md = unserialize ( file_get_contents ('temp/reg.md5') );
+        $engine_md = unserialize ( (string) file_get_contents ('temp/engine.md5') );
+        $page_md = unserialize ( (string) file_get_contents ('temp/page.md5') );
+        $page_admin_md = unserialize ( (string) file_get_contents ('temp/page_admin.md5') );
+        $reg_md = unserialize ( (string) file_get_contents ('temp/reg.md5') );
 
 ?>
 <h2><?=loca("ADM_CSUM_ENGINE");?></h2>

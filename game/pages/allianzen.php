@@ -40,12 +40,14 @@ class Allianzen extends Page {
                 $_POST['tag'] = str_replace ( "'", "", $_POST['tag']);
                 $_POST['name'] = str_replace ( "\"", "", $_POST['name']);
                 $_POST['name'] = str_replace ( "'", "", $_POST['name']);
+                $tag = is_string($_POST['tag']) ? $_POST['tag'] : "";
+                $name = is_string($_POST['name']) ? $_POST['name'] : "";
 
-                if (mb_strlen ($_POST['tag'], "UTF-8")  < 3) $PageError = loca("ALLY_FOUND_ERROR_TAG");
-                else if (mb_strlen ($_POST['name'], "UTF-8")  < 3) $PageError = loca("ALLY_FOUND_ERROR_NAME");
-                else if (IsAllyTagExist ($_POST['tag'])) $PageError = va(loca("ALLY_FOUND_ERROR_EXISTS"), htmlspecialchars($_POST['tag']));
+                if (mb_strlen ($tag, "UTF-8")  < 3) $PageError = loca("ALLY_FOUND_ERROR_TAG");
+                else if (mb_strlen ($name, "UTF-8")  < 3) $PageError = loca("ALLY_FOUND_ERROR_NAME");
+                else if (IsAllyTagExist ($tag)) $PageError = va(loca("ALLY_FOUND_ERROR_EXISTS"), htmlspecialchars($tag));
                 else {
-                    CreateAlly ($GlobalUser['player_id'], $_POST['tag'], $_POST['name']);
+                    CreateAlly ($GlobalUser['player_id'], $tag, $name);
                     // The classic page rendered an inline success confirmation
                     // (ALLY_FOUND_SUCCESS + confirm form) and exited; keep that
                     // instead of redirecting away.
@@ -241,7 +243,7 @@ class Allianzen extends Page {
         if ( $ally['imglogo'] !== "" ) 
         {
 ?>
-<tr><th colspan=2><img src="/game/img/preload.gif" class="reloadimage" title="pic.php?url=<?=htmlspecialchars($ally['imglogo']);?>"></td></tr>
+<tr><th colspan=2><img src="/game/img/preload.gif" class="reloadimage" title="pic.php?url=<?=htmlspecialchars($ally['imglogo'] ?? '');?>"></td></tr>
 <?php
         }
 ?>

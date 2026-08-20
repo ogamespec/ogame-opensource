@@ -17,7 +17,6 @@ class Flottenversand extends Page {
         // If the fleet was sent successfully - output brief information, otherwise output an error.
         // After 1 second, a redirect is made to the first page of fleet dispatch.   (timeout setting is in router.json)
 
-        $this->BlockAttack = 0;
         $this->FleetError = false;
         $this->FleetErrorText = "";
         $this->fleetmap = $fleetmap;
@@ -99,11 +98,11 @@ class Flottenversand extends Page {
             $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">Cheater!</span></th>\n  </tr>\n"; $this->FleetError = true;
         }
 
-        $this->origin_user = LoadUser ( $this->origin['owner_id'] );
+        $this->origin_user = LoadUser ( $this->origin['owner_id'] ) ?? array ();
 
         if ($this->target != null) {
 
-            $this->target_user = LoadUser ( $this->target['owner_id'] );
+            $this->target_user = LoadUser ( $this->target['owner_id'] ) ?? array ();
 
             if ( $this->origin_user['vacation'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_VACATION_SELF")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
             if ( $this->target_user['vacation'] && $this->order != FTYP_RECYCLE ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_VACATION_OTHER")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
@@ -121,7 +120,7 @@ class Flottenversand extends Page {
         $this->hold_time = 0;
         if ( $this->order == FTYP_EXPEDITION ) {
             if ( key_exists ('expeditiontime', $_POST) ) {
-                $this->hold_time = floor (intval($_POST['expeditiontime']));
+                $this->hold_time = (int) floor (intval($_POST['expeditiontime']));
                 if ( $this->hold_time > $GlobalUser[GID_R_EXPEDITION] ) $this->hold_time = $GlobalUser[GID_R_EXPEDITION];
                 if ( $this->hold_time < 1 ) $this->hold_time = 1;
             }
@@ -130,7 +129,7 @@ class Flottenversand extends Page {
         }
         else if ( $this->order == FTYP_ACS_HOLD ) {
             if ( key_exists ('holdingtime', $_POST) ) {
-                $this->hold_time = floor (intval($_POST['holdingtime']));
+                $this->hold_time = (int) floor (intval($_POST['holdingtime']));
                 if ( $this->hold_time > 32 ) $this->hold_time = 32;
                 if ( $this->hold_time < 0 ) $this->hold_time = 0;
             }
@@ -141,8 +140,8 @@ class Flottenversand extends Page {
         // Calculate distance, flight time, and deuterium costs.
         $this->dist = FlightDistance ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']) );
         $this->slowest_speed = FlightSpeed ( $this->fleet, $this->origin_user, $this->origin );
-        $this->flighttime = FlightTime ( $this->dist, $this->slowest_speed, $fleetspeed / 10, $this->unispeed );
-        $this->cons = FlightCons ( $this->fleet, $this->dist, $this->flighttime, $this->origin_user, $this->origin, $this->unispeed, $this->hold_time / 3600 );
+        $this->flighttime = FlightTime ( $this->dist, $this->slowest_speed, $fleetspeed / 10, (int) $this->unispeed );
+        $this->cons = FlightCons ( $this->fleet, $this->dist, $this->flighttime, $this->origin_user, $this->origin, (int) $this->unispeed, (int) ($this->hold_time / 3600) );
         $this->cargo = $this->spycargo = $this->numships = 0;
 
         foreach ($this->fleet as $id=>$amount)
@@ -181,26 +180,18 @@ class Flottenversand extends Page {
         {
             case FTYP_ATTACK:        // Attack
                 if ( $this->target == NULL ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_INVALID")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-                else if ( ( 
-                    ( $this->origin_user['ally_id'] == $this->target_user['ally_id'] && $this->origin_user['ally_id'] > 0 )   || 
-                     IsBuddy ( $this->origin_user['player_id'],  $this->target_user['player_id']) ) ) $this->BlockAttack = 0;
 
                 if ( IsPlayerNewbie ($this->target['owner_id']) || IsPlayerStrong ($this->target['owner_id']) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_NOOB")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ( $this->target['owner_id'] == $this->origin['owner_id'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_OWN_PLANET")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-                else if ($this->BlockAttack) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_ATTACK_BAN_UNI")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($GlobalUser['noattack']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util']))."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($this->numships > $GlobalUni['battle_max']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_BATTLE_MAX")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 break;
 
             case FTYP_ACS_ATTACK:        // ACS Attack
-                if ( ( 
-                    ( $this->origin_user['ally_id'] == $this->target_user['ally_id'] && $this->origin_user['ally_id'] > 0 )   || 
-                     IsBuddy ( $this->origin_user['player_id'],  $this->target_user['player_id']) ) ) $this->BlockAttack = 0;
-
-                if ( key_exists ('union2', $_POST) ) $this->union_id = floor (intval($_POST['union2']));
+                if ( key_exists ('union2', $_POST) ) $this->union_id = (int) floor (intval($_POST['union2']));
                 else $this->union_id = 0;
                 if ( $GlobalUni['acs'] == 0 ) $this->union_id = 0;
-                $this->union = LoadUnion ($this->union_id);
+                $this->union = LoadUnion ($this->union_id) ?? array ();
                 $head_queue = GetFleetQueue ( $this->union['fleet_id'] );
                 $acs_flighttime = $head_queue['end'] - time();
                 $enum_result = EnumUnionFleets ($this->union_id);
@@ -209,7 +200,6 @@ class Flottenversand extends Page {
                 else if ( $this->target['owner_id'] == $this->origin['owner_id'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_OWN_PLANET")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ( IsPlayerNewbie ($this->target['owner_id']) || IsPlayerStrong ($this->target['owner_id']) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_NOOB")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ( $this->flighttime > $acs_flighttime * 1.3 ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_ACS_SLOW")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-                else if ($this->BlockAttack) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_ATTACK_BAN_UNI")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($GlobalUser['noattack']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util']))."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($acs_fleets >= $GlobalUni['acs'] * $GlobalUni['acs']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".va (loca("FLEET_ERR_ACS_LIMIT"), $GlobalUni['acs'] * $GlobalUni['acs'])."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($this->numships + GetUnionUnitsCount($this->union['union_id']) > $GlobalUni['battle_max']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_BATTLE_MAX")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
@@ -236,14 +226,10 @@ class Flottenversand extends Page {
 
             case FTYP_SPY:        // Espionage
                 if ( $this->target == NULL ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_INVALID")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-                else if ( ( 
-                    ( $this->origin_user['ally_id'] == $this->target_user['ally_id'] && $this->origin_user['ally_id'] > 0 )   || 
-                     IsBuddy ( $this->origin_user['player_id'],  $this->target_user['player_id']) ) ) $this->BlockAttack = 0;
 
                 if ( $this->target['owner_id'] == $this->origin['owner_id'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_SPY_OWN")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ( IsPlayerNewbie ($this->target['owner_id']) || IsPlayerStrong ($this->target['owner_id']) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_SPY_NOOB")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ( $this->fleet[GID_F_PROBE] == 0 ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_SPY_REQUIRED")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-                else if ($this->BlockAttack) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_ATTACK_BAN_UNI")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($GlobalUser['noattack']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util']))."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($this->numships > $GlobalUni['battle_max']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_BATTLE_MAX")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 break;
@@ -265,13 +251,9 @@ class Flottenversand extends Page {
 
             case FTYP_DESTROY:        // Destroy (moon)
                 if ( $this->target == NULL ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_INVALID")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-                else if ( ( 
-                    ( $this->origin_user['ally_id'] == $this->target_user['ally_id'] && $this->origin_user['ally_id'] > 0 )   || 
-                     IsBuddy ( $this->origin_user['player_id'],  $this->target_user['player_id']) ) ) $this->BlockAttack = 0;
 
                 if ( $this->fleet[GID_F_DEATHSTAR] == 0 ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_DESTROY_REQUIRED")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($this->target['type'] != PTYP_MOON ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_DESTROY_MOON")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-                else if ($this->BlockAttack) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_ATTACK_BAN_UNI")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($GlobalUser['noattack']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util']))."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($this->numships > $GlobalUni['battle_max']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_BATTLE_MAX")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 break;
@@ -318,7 +300,7 @@ class Flottenversand extends Page {
             }
         }
         $f = fopen ( $fleetlock, 'w' );
-        fclose ($f);
+        if ( $f !== false ) fclose ($f);
 
         $cons = $this->cons;
 
@@ -423,7 +405,6 @@ class Flottenversand extends Page {
         <?php
     }
 
-    private int $BlockAttack = 0;
     private bool $FleetError = false;
     private string $FleetErrorText = "";
     private array $fleetmap;
@@ -435,11 +416,15 @@ class Flottenversand extends Page {
     private array $resource = [];
     private int $order = 0;
     private int $union_id = 0;
-    private ?array $union;
+    private array $union = [];
     private array $fleet = [];
+    /** @var array $origin */
     private $origin;
+    /** @var array $target */
     private $target;
+    /** @var array $origin_user */
     private $origin_user;
+    /** @var array $target_user */
     private $target_user;
     private int $hold_time = 0;
     private int $dist = 0;

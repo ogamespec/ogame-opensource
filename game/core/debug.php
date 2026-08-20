@@ -99,7 +99,9 @@ function BackTrace () : string
     $sp = 0;
     foreach($bt as $k=>$v) 
     { 
-        extract($v); 
+        $file = isset($v['file']) ? $v['file'] : '';
+        $line = isset($v['line']) ? $v['line'] : '';
+        $function = $v['function'];
         $file=substr($file,1+strrpos($file,"/")); 
         if($file=="db.php")continue; // the db object 
         $trace.=str_repeat("&nbsp;",++$sp); //spaces(++$sp); 

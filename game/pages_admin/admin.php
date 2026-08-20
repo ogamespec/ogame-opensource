@@ -33,20 +33,19 @@ ModsExecRef ('route_admin', $admin_router);
 
 if (!isset($admin_router[$mode])) $mode = "Home";
 
-$header = false;
-$menu = true;
-
 $classFile = $admin_router[$mode]['path'];
 if (file_exists($classFile)) {
 
     require_once $classFile;
     $className = "Admin_" . $mode;
+    /** @var Page $inst */
     $inst = new $className;
 
     $show = $inst->controller ();
 
     if ($show) {
-        PageHeader ($mode, !$header, $menu, "", 0);
+        // Admin pages are always shown without the site header, with the admin menu, not as a popup.
+        PageHeader ($mode, true, true, "", 0);
         BeginContent ();
 
         echo "<table width=\"750\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\">\n\n";
@@ -64,7 +63,7 @@ if (file_exists($classFile)) {
         echo "<br><br><br><br>\n";
            
         EndContent ();
-        PageFooter ($PageMessage, $PageError, !$menu /*popup*/, $header ? 81 : 0, !$header);
+        PageFooter ($PageMessage, $PageError, false /*popup*/, 0, true);
     }
 }
 

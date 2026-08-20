@@ -150,7 +150,7 @@ function AddUnionMember (int $union_id, string $name) : string
     $text = va ( loca_lang("ACS_INVITE_TEXT1", $user['lang']),
                         htmlspecialchars($GlobalUser['oname']), 
                         htmlspecialchars($union['name']), 
-                        htmlspecialchars($target_player['oname']) ) .
+                        htmlspecialchars($target_player['oname'] ?? '') ) .
             va (" <a href=\"#\" onClick=showGalaxy(#1,#2,#3)><b><u>[#4:#5:#6]</u></b></a>. ",
                         $target_planet['g'], $target_planet['s'], $target_planet['p'], 
                         $target_planet['g'], $target_planet['s'], $target_planet['p'] ) .

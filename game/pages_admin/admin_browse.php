@@ -25,6 +25,7 @@ class Admin_Browse extends Page {
         {
             $log = dbarray ( $result );
             $user = LoadUser ( $log['owner_id'] );
+            if ( $user === null ) { continue; }
 ?>
             <tr><td><table>
             <tr> <th> <?=htmlspecialchars($user['oname']);?> </th> <th> <?=$log['url'];?> </th> </tr>

@@ -1,5 +1,8 @@
 <?php
 
+// $DefaultLanguage comes from the (runtime-generated) config.php
+/** @var string $DefaultLanguage */
+
 // Check if the configuration file is missing - redirect to the game installation page.
 if ( !file_exists ("../config.php"))
 {

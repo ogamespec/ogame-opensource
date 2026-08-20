@@ -121,6 +121,7 @@ class Buddy extends Page {
                 $buddy = dbarray ($result);
                 $user_id = $buddy['request_from'] == $GlobalUser['player_id'] ? $buddy['request_to'] : $buddy['request_from'];
                 $user = LoadUser ($user_id);
+                if ( $user == null ) continue;
                 $home = LoadPlanetById ($user['hplanetid']);
                 echo "<tr>\n";
                 echo " <th width=\"20\">$i</th>\n";
@@ -182,6 +183,7 @@ class Buddy extends Page {
             {
                 $buddy = dbarray ($result);
                 $user = LoadUser ($buddy['request_from']);
+                if ( $user == null ) continue;
                 $home = LoadPlanetById ($user['hplanetid']);
                 echo "  <tr>\n";
                 echo " <th width=\"20\">$i</th>\n";
@@ -239,6 +241,7 @@ class Buddy extends Page {
             {
                 $buddy = dbarray ($result);
                 $userto = LoadUser ($buddy['request_to']);
+                if ( $userto == null ) continue;
                 $home = LoadPlanetById ($userto['hplanetid']);
                 echo "  <tr>\n";
                 echo " <th width=\"20\">$i</th>\n";
@@ -270,6 +273,7 @@ class Buddy extends Page {
         global $GlobalUser;
         global $session;
         $user = LoadUser ( intval ($_GET['buddy_id']) );
+        if ( $user == null ) return;
         echo "<form action=\"?page=buddy&session=".$_GET['session']."&action=1&buddy_id=".intval($_GET['buddy_id'])."\" method=\"POST\">\n";
         echo "<table width=\"519\">\n";
         echo " <tr>\n<td class=\"c\" colspan=\"2\">".loca("BUDDY_REQUEST")."</td>\n</tr>\n";

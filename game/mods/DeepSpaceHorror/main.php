@@ -364,22 +364,23 @@ class DeepSpaceHorror extends GameMod {
         if ($top1 == null) {
             $top1 = LoadUser (USER_SPACE);
         }
+        if ($top1 == null) {
+            return 0;
+        }
 
-        if ($top1) {
-            switch ($gid) {
-                case GID_LEVI_AMOEBA:
-                    $top1[GID_R_COMBUST_DRIVE] = max (0, $top1[GID_R_COMBUST_DRIVE] - 2);
-                    $top1[GID_R_IMPULSE_DRIVE] = max (0, $top1[GID_R_IMPULSE_DRIVE] - 2);
-                    $top1[GID_R_HYPER_DRIVE] = max (0, $top1[GID_R_HYPER_DRIVE] - 2);
-                    break;
-                case GID_LEVI_GUARDIAN:
-                    $top1[GID_R_COMBUST_DRIVE] = max (0, $top1[GID_R_COMBUST_DRIVE] - 1);
-                    $top1[GID_R_IMPULSE_DRIVE] = max (0, $top1[GID_R_IMPULSE_DRIVE] - 1);
-                    $top1[GID_R_HYPER_DRIVE] = max (0, $top1[GID_R_HYPER_DRIVE] - 1);
-                    break;
-                case GID_LEVI_JUGGERNAUT:
-                    break;
-            }
+        switch ($gid) {
+            case GID_LEVI_AMOEBA:
+                $top1[GID_R_COMBUST_DRIVE] = max (0, $top1[GID_R_COMBUST_DRIVE] - 2);
+                $top1[GID_R_IMPULSE_DRIVE] = max (0, $top1[GID_R_IMPULSE_DRIVE] - 2);
+                $top1[GID_R_HYPER_DRIVE] = max (0, $top1[GID_R_HYPER_DRIVE] - 2);
+                break;
+            case GID_LEVI_GUARDIAN:
+                $top1[GID_R_COMBUST_DRIVE] = max (0, $top1[GID_R_COMBUST_DRIVE] - 1);
+                $top1[GID_R_IMPULSE_DRIVE] = max (0, $top1[GID_R_IMPULSE_DRIVE] - 1);
+                $top1[GID_R_HYPER_DRIVE] = max (0, $top1[GID_R_HYPER_DRIVE] - 1);
+                break;
+            case GID_LEVI_JUGGERNAUT:
+                break;
         }
 
         $dist = FlightDistance ($origin['g'], $origin['s'], $origin['p'], $target['g'], $target['s'], $target['p']);

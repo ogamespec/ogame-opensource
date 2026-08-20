@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @param string $select
+ * @return void
+ */
 function mainmenu ($select)
 {
     if ($select == 'home') echo "    <div class=\"menupoint\">" . loca("MENU_START") . "</div>\n";

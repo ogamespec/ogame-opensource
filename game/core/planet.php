@@ -95,10 +95,10 @@ function CreatePlanet ( int $g, int $s, int $p, int $owner_id, int $colony=1, in
             // Planets are divided into 5 Tier (T1-T5). For each Tier there are three parameters (a, b, c), for RND.
 
             if ($p <= 3) $diam = mt_rand ( $coltab['t1_a'], $coltab['t1_b'] ) * $coltab['t1_c'];
-            else if ($p >= 4 && $p <= 6) $diam = mt_rand ( $coltab['t2_a'], $coltab['t2_b'] ) * $coltab['t2_c'];
-            else if ($p >= 7 && $p <= 9) $diam = mt_rand ( $coltab['t3_a'], $coltab['t3_b'] ) * $coltab['t3_c'];
-            else if ($p >= 10 && $p <= 12) $diam = mt_rand ( $coltab['t4_a'], $coltab['t4_b'] ) * $coltab['t4_c'];
-            else if ($p >= 13 && $p <= 15) $diam = mt_rand ( $coltab['t5_a'], $coltab['t5_b'] ) * $coltab['t5_c'];
+            else if ($p <= 6) $diam = mt_rand ( $coltab['t2_a'], $coltab['t2_b'] ) * $coltab['t2_c'];
+            else if ($p <= 9) $diam = mt_rand ( $coltab['t3_a'], $coltab['t3_b'] ) * $coltab['t3_c'];
+            else if ($p <= 12) $diam = mt_rand ( $coltab['t4_a'], $coltab['t4_b'] ) * $coltab['t4_c'];
+            else if ($p <= 15) $diam = mt_rand ( $coltab['t5_a'], $coltab['t5_b'] ) * $coltab['t5_c'];
             else $diam = mt_rand ( $coltab['t5_a'], $coltab['t5_b'] ) * $coltab['t5_c'];
         }
         else $diam = 12800;
@@ -120,10 +120,10 @@ function CreatePlanet ( int $g, int $s, int $p, int $owner_id, int $colony=1, in
 
     // Temperature
     if ($p <= 3) $temp = 80 + (rand() % 10) - 2*$p;
-    else if ($p >= 4 && $p <= 6) $temp = 30 + (rand() % 10) - 2*$p;
-    else if ($p >= 7 && $p <= 9) $temp = 10 + (rand() % 10) - 2*$p;
-    else if ($p >= 10 && $p <= 12) $temp = -10 + (rand() % 10) - 2*$p;
-    else if ($p >= 13 && $p <= 15) $temp = -60 + (rand() % 10) - 2*$p;
+    else if ($p <= 6) $temp = 30 + (rand() % 10) - 2*$p;
+    else if ($p <= 9) $temp = 10 + (rand() % 10) - 2*$p;
+    else if ($p <= 12) $temp = -10 + (rand() % 10) - 2*$p;
+    else if ($p <= 15) $temp = -60 + (rand() % 10) - 2*$p;
     else $temp = -60 + (rand() % 10) - 2*$p;
     if ( $moon ) {
         $pl = LoadPlanet ($g, $s, $p, 1);
@@ -283,7 +283,7 @@ function RenamePlanet (int $planet_id, string $name) : void
     if (preg_match ($pattern, $name)) return;    // Forbidden characters.
     $pattern = '/[\\\\()*\"\']/';
     $name = preg_replace ($pattern, '', $name);
-    $name = trim ($name);
+    $name = trim ((string) $name);
     if (strlen ($name) == 0) {
         if ( $planet['type'] == PTYP_MOON ) $name = loca("MOON");
         else $name = "планета";
@@ -746,7 +746,7 @@ function CreateHomePlanet (int $player_id) : int
 
     $sg = 1;        // starting galaxy for registration
     $planet = array ();
-    for ( $i=0; $i<($sg-1)*$ppg; $i++) $planet[$i] = 1;
+    $i = 0;
     for ( $i; $i<$uni['galaxies']*$ppg; $i++) $planet[$i] = 0;
 
     $query = "SELECT * FROM ".$db_prefix."planets WHERE g >= $sg AND p <= $ss AND type <> ".PTYP_COLONY_PHANTOM." ORDER BY g, s, p";
@@ -774,7 +774,6 @@ function CreateHomePlanet (int $player_id) : int
     }
 
     Error ( "No more planets!!!" );
-    return 0;
 }
 
 /**

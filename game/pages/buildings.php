@@ -428,6 +428,7 @@ if ( $_GET['mode'] === "Verteidigung" || $_GET['mode'] === "Flotte" )
         $b = "";
         $a = "";
         $total_time = 0;
+        $g = 0;
         while ($rows--)
         {
             $queue = dbarray ($result);

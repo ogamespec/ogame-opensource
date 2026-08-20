@@ -49,7 +49,8 @@ function ExecuteBlock (array $queue, array $block, array $childs ) : void
     $strat_id = $queue['sub_id'];
 
     // Trace block execution
-    $bot_trace = false;
+    // Can be enabled at runtime, e.g. $GLOBALS['bot_trace'] = true;
+    $bot_trace = (bool) ( $GLOBALS['bot_trace'] ?? false );
 
     if ($bot_trace) {
         Debug ( "Bot trace : " . $block['category'] . "(".$block['key']."): " . $block['text'] );

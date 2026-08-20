@@ -60,6 +60,7 @@ class Admin_Bots extends Page {
     while ($rows--) {
         $queue = dbarray ($result);
         $user = LoadUser ( $queue['owner_id'] );
+        if ( $user === null ) { continue; }
         $planet = LoadPlanetById ( $user['hplanetid'] );
         echo "<tr>";
         echo "<td>".$user['player_id']."</td>";

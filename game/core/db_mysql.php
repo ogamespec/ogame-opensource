@@ -28,10 +28,11 @@ function dbconnect (string $db_host, string $db_user, string $db_pass, string $d
     global  $query_counter, $query_log, $db_connect;
     mysqli_report(MYSQLI_REPORT_OFF);
     $db_connect = @mysqli_connect($db_host, $db_user, $db_pass);
-    $db_select = @mysqli_select_db($db_connect, $db_name);
     if (!$db_connect) {
         die("<div style='font-family:Verdana;font-size:11px;text-align:center;'><b>Unable to establish connection to MySQL</b></div>");
-    } elseif (!$db_select) {
+    }
+    $db_select = @mysqli_select_db($db_connect, $db_name);
+    if (!$db_select) {
         die("<div style='font-family:Verdana;font-size:11px;text-align:center;'><b>Unable to select MySQL database</b></div>");
     }
 
@@ -69,8 +70,7 @@ function dbquery (string $query, bool $mute=false) : mixed
  */
 function dbrows (mixed $result) : int
 {
-    $rows = @mysqli_num_rows($result);
-    return $rows;
+    return (int) @mysqli_num_rows($result);
 }
 
 /**
@@ -143,7 +143,7 @@ function AddDBRow ( array $row, string $tabname ) : int
     $columns .= ")";
     $query = "INSERT INTO ".$db_prefix."$tabname $columns VALUES ".$values;
     dbquery( $query);
-    return mysqli_insert_id ($db_connect);
+    return (int) mysqli_insert_id ($db_connect);
 }
 
 // ---
@@ -196,8 +196,7 @@ function MDBQuery (string $query) : mixed
  */
 function MDBRows (mixed $result) : int
 {
-    $rows = @mysqli_num_rows($result);
-    return $rows;
+    return (int) @mysqli_num_rows($result);
 }
 
 /**
@@ -299,6 +298,7 @@ function SerializeTable (string $name) : array
  */
 function SerializeDB () : string
 {
+    $tabs = array();
     include __DIR__ . "/install_tabs.php";
     ModsExecRef ('install_tabs_included', $tabs);
 
@@ -308,7 +308,7 @@ function SerializeDB () : string
         $db_tabs[$i] = SerializeTable ($i);
     }
 
-    return json_encode ($db_tabs, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    return (string) json_encode ($db_tabs, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
 }
 
 /**

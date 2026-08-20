@@ -85,6 +85,7 @@ function PageAlly_MemberSettings () : void
     if ( method() === "GET" && $_GET['a'] == 13 && $selected_user)        // Kick member
     {
         $leaver = LoadUser ($selected_user);
+        if ( $leaver === null ) $leaver = array();
 
         $query = "UPDATE ".$db_prefix."users SET ally_id = 0 WHERE player_id = $selected_user";
         dbquery ($query);

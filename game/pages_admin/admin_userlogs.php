@@ -17,7 +17,7 @@ class Admin_Userlogs extends Page {
             $type = $_POST['type'];
             $period = intval($_POST['days'])*24*60*60 + intval($_POST['hours'])*60*60;
             $arr = date_parse_from_format ( "j.n.Y", $_POST['since']);
-            $since = mktime ( 0, 0, 0, $arr['month'], $arr['day'], $arr['year'] );
+            $since = mktime ( 0, 0, 0, (int) $arr['month'], (int) $arr['day'], (int) $arr['year'] );
 
             // Step 1: find all users by imprecise comparison
             $users = array ();

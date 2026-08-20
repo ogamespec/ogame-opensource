@@ -4,6 +4,22 @@
 
 // Es wurden bereits 2 E-Mails an Dich geschickt. Heute ist kein weiterer E-Mail-Versand möglich, bitte versuch es morgen nochmal.
 
+function IsChecked (string $option) : string {
+    global $GlobalUser;
+    if ( $GlobalUser[$option] ) return "checked=checked";
+    else return "";
+}
+function IsCheckedFlag (int $flag) : string {
+    global $GlobalUser;
+    if ( $GlobalUser['flags'] & $flag ) return "checked='checked'";
+    else return "";
+}
+function IsSelected (string $option, mixed $value) : string {
+    global $GlobalUser;
+    if ( $GlobalUser[$option] == $value ) return "selected";
+    else return "";
+}
+
 class Options extends Page {
 
     public function controller () : bool {
@@ -57,7 +73,8 @@ class Options extends Page {
         // Vacation mode enabled
         else if ( $GlobalUser['vacation'] ) {
             if ( method () === "POST") {
-                if ( $now >= $GlobalUser['vacation_until'] && key_exists('urlaub_aus', $_POST) && $_POST['urlaub_aus'] === "on" && $GlobalUser['vacation'] ) {
+                // $GlobalUser['vacation'] is guaranteed here by the outer condition
+                if ( $now >= $GlobalUser['vacation_until'] && key_exists('urlaub_aus', $_POST) && $_POST['urlaub_aus'] === "on" ) {
                     EnableVacation ($GlobalUser['player_id'], 0, false);
                     $PageError = va ( loca("OPTIONS_MSG_VMDISABLED"), htmlspecialchars($GlobalUser['oname']) ) . "\n<br/>\n";
                 }
@@ -240,22 +257,6 @@ class Options extends Page {
 
         $speed = $GlobalUni['speed'];
         $prem = PremiumStatus ($GlobalUser);
-
-        function IsChecked (string $option) : string {
-            global $GlobalUser;
-            if ( $GlobalUser[$option] ) return "checked=checked";
-            else return "";
-        }
-        function IsCheckedFlag (int $flag) : string {
-            global $GlobalUser;
-            if ( $GlobalUser['flags'] & $flag ) return "checked='checked'";
-            else return "";
-        }
-        function IsSelected (string $option, mixed $value) : string {
-            global $GlobalUser;
-            if ( $GlobalUser[$option] == $value ) return "selected";
-            else return "";
-        }
 
         if ( $GlobalUser['validated'] == 0 ) {
             ?>

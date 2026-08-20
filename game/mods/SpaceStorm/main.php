@@ -333,7 +333,7 @@ class SpaceStorm extends GameMod {
         for ($n=0; $n<$new_count; $n++) {
 
             $mask = 0;
-            while ($mask == 0) {
+            while (true) {
                 $bitnum = mt_rand(0, SPACE_STORM_MASK_MSB-1);
                 if ( ($storm & (1 << $bitnum)) == 0) {
                     $mask = 1 << $bitnum;
@@ -391,19 +391,6 @@ class SpaceStorm extends GameMod {
         return $count;
     }
 
-    private function GetStabLevelMask (int $planet_id, int &$level, int &$mask) : void {
-        $level = $mask = 0;
-        $planet = LoadPlanetById ($planet_id);
-        if ($planet == null) return;
-        if ($planet['type'] == PTYP_MOON) {
-            $planet = LoadPlanet ($planet['g'], $planet['s'], $planet['p'], 1);
-            if ($planet == null) return;
-        }
-        if ($planet['type'] != PTYP_PLANET) return;
-        $level = $planet[GID_B_REALITY_STAB];
-        $mask = $planet['s'.GID_B_REALITY_STAB];
-    }
-
     private function GetStormQueue () : array|null {
 
         global $db_prefix;
@@ -433,7 +420,9 @@ class SpaceStorm extends GameMod {
             // Если флот улетает и активен эффект Прыжка, то либо с шансом 5% перебросить его либо с шансом 1% что он заблудится
             if ($fleet_obj && ($fleet_obj['mission'] <= FTYP_EXPEDITION || $fleet_obj['mission'] >= FTYP_CUSTOM) && ($storm & SPACE_STORM_MASK_SUBSPACE_JUMP) != 0) {
 
+                /** @var bool $bool_test_jump */
                 $bool_test_jump = false;
+                /** @var bool $bool_test_loss */
                 $bool_test_loss = false;
 
                 if ($bool_test_jump || mt_rand(1, 100) <= 5) {
@@ -593,6 +582,7 @@ class SpaceStorm extends GameMod {
 
         $reverb_losses = [];
         $total_units_lost = 0;
+        $units_lost = 0;
 
         $rounds = count($res['rounds']);
         if ($rounds > 0) {

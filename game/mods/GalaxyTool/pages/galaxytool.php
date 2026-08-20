@@ -17,6 +17,8 @@
 
 <?php
 
+global $session;
+
 function PlayerDetails (int $player_id) : void
 {
     global $galaxy, $stats, $ally;
@@ -24,6 +26,7 @@ function PlayerDetails (int $player_id) : void
     if ( !key_exists($player_id, $stats) ) return;
 
     $planets = array ();
+    /** @var array<int, array{name: string, type: int, present: int}> $moons */
     $moons = array ();
     echo "<br><br><font size=+2>".htmlspecialchars($stats[$player_id]['name']).":</font>";
 
@@ -67,6 +70,7 @@ function PlayerDetails (int $player_id) : void
 
     echo "<td class=b><b>".loca("GALATOOL_PLANETS")."</b>:";
     echo "<table>";
+    $planet = array ();
     foreach ( $planets as $id=>$planet )
     {
         echo "<tr><td align=center><img src=\"". GetPlanetSmallImage ( hostname () . "/evolution/", $planet ) . "\" height=30px><br>\n";
@@ -101,19 +105,19 @@ else $last_update = 0;
 if ( $last_update) echo "<br>".va ( loca("GALATOOL_DATE"), date ( "d.m.Y H:i:s", $last_update )) . "<br>";
 else echo "<br>".va ( loca("GALATOOL_NOT_UPDATED") ) . "<br>";
 
-if ( file_exists(GALATOOL_BASE_DIR_NAME . '/ally_statistics.txt') ) $ally = unserialize ( file_get_contents ( GALATOOL_BASE_DIR_NAME . '/ally_statistics.txt' ) );
+if ( file_exists(GALATOOL_BASE_DIR_NAME . '/ally_statistics.txt') ) $ally = unserialize ( (string) file_get_contents ( GALATOOL_BASE_DIR_NAME . '/ally_statistics.txt' ) );
 else $ally = array();
 
-if ( file_exists(GALATOOL_BASE_DIR_NAME . '/ally_statistics_old.txt') ) $old_ally = unserialize ( file_get_contents ( GALATOOL_BASE_DIR_NAME . '/ally_statistics_old.txt' ) );
+if ( file_exists(GALATOOL_BASE_DIR_NAME . '/ally_statistics_old.txt') ) $old_ally = unserialize ( (string) file_get_contents ( GALATOOL_BASE_DIR_NAME . '/ally_statistics_old.txt' ) );
 else $old_ally = array();
 
-if ( file_exists(GALATOOL_BASE_DIR_NAME . '/statistics.txt') ) $stats = unserialize ( file_get_contents ( GALATOOL_BASE_DIR_NAME . '/statistics.txt' ) );
+if ( file_exists(GALATOOL_BASE_DIR_NAME . '/statistics.txt') ) $stats = unserialize ( (string) file_get_contents ( GALATOOL_BASE_DIR_NAME . '/statistics.txt' ) );
 else $stats = array ();
 
-if ( file_exists(GALATOOL_BASE_DIR_NAME . '/statistics_old.txt') ) $old_stats = unserialize ( file_get_contents ( GALATOOL_BASE_DIR_NAME . '/statistics_old.txt' ) );
+if ( file_exists(GALATOOL_BASE_DIR_NAME . '/statistics_old.txt') ) $old_stats = unserialize ( (string) file_get_contents ( GALATOOL_BASE_DIR_NAME . '/statistics_old.txt' ) );
 else $old_stats = array ();
 
-if ( file_exists(GALATOOL_BASE_DIR_NAME . '/galaxy.txt') ) $galaxy = unserialize ( file_get_contents ( GALATOOL_BASE_DIR_NAME . '/galaxy.txt' ) );
+if ( file_exists(GALATOOL_BASE_DIR_NAME . '/galaxy.txt') ) $galaxy = unserialize ( (string) file_get_contents ( GALATOOL_BASE_DIR_NAME . '/galaxy.txt' ) );
 else $galaxy = array ();
 
 $delta = array ();

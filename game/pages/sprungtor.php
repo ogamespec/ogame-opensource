@@ -54,8 +54,8 @@ class Sprungtor extends Page {
         }
 
         // Prepare a fleet list for jump.
+        $fleet = array ();
         if ( $PageError === "" ) {
-            $fleet = array ();
             foreach ( $fleetmap_revnosat as $i=>$gid)
             {
                 $amount = floor (abs(intval($_POST["c$gid"])));

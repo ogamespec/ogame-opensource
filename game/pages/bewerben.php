@@ -19,13 +19,13 @@ class Bewerben extends Page {
         $this->ally = is_array ($ally) ? $ally : null;
 
         // Load a sample of the application form.
-        if ( key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_TEMPLATE") || $this->ally['insertapp']) {
-            $this->template = $this->ally['apptext'];
+        if ( key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_TEMPLATE") || ($this->ally['insertapp'] ?? 0)) {
+            $this->template = $this->ally['apptext'] ?? "";
             if ($this->template === "") $this->template = loca("ALLY_APPU_TEMPLATE_MISSING");
         }
 
         // Send an application
-        if ( method() === "POST" && key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_SUBMIT") && $this->ally['open'] ) {
+        if ( method() === "POST" && key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_SUBMIT") && ($this->ally['open'] ?? 0) ) {
             $text = $_POST['text'];
             $text = addslashes ( $text );
             AddApplication ( $this->ally['ally_id'], $GlobalUser['player_id'], $text );
@@ -59,7 +59,7 @@ class Bewerben extends Page {
         }
 
         // GET
-        if ( $ally['open'] ) {
+        if ( $ally['open'] ?? false ) {
             // Submit an application
             ?>
             <h1><?=loca("ALLY_APPU_REG");?></h1>
@@ -78,7 +78,7 @@ class Bewerben extends Page {
             <h1><?=loca("ALLY_APPU_REG");?></h1>
             <table width=519>
             <form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
-            <tr><td class=c><?=va(loca("ALLY_APPU_FORBIDDEN"), htmlspecialchars($ally['tag']));?></td></tr>
+            <tr><td class=c><?=va(loca("ALLY_APPU_FORBIDDEN"), htmlspecialchars($ally['tag'] ?? ""));?></td></tr>
             <tr><th><?=loca("ALLY_APPU_CLOSED");?></th></th></tr>
             <tr><th><input type=submit value="<?=loca("ALLY_APPU_BACK");?>"></th></tr></table></form></center><br><br><br><br>
             <?php

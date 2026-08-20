@@ -286,7 +286,7 @@ class Resources extends Page {
     private function nicenum2 (float|int $num) : string
     {
         // for debugging. the Germans messed up with rounding, I don't know where they call floor, ceil and round.
-        if ($this->debug_no_rounding) return $num;
+        if ($this->debug_no_rounding) return (string) $num;
         return nicenum(round($num));
     }
 
@@ -308,10 +308,6 @@ class Resources extends Page {
             echo "    <td class=\"k\">".$this->rgnum($total)."</td> \n";
         }
         echo "  </tr> \n";
-    }
-
-    private function DisplayFacilityProduction () : void {
-
     }
 
     private function DisplayStorages (array $planet, array $reslist) : void {

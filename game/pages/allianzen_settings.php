@@ -34,7 +34,7 @@ function PageAlly_Settings () : void
         {
             $ally_id = $ally['ally_id'];
 
-            $text = str_replace ( '\"', "&quot;", $_POST['text'] );
+            $text = (string) str_replace ( '\"', "&quot;", $_POST['text'] );
             $text = str_replace ( '\'', "&rsquo;", $text );
             $text = str_replace ( '\`', "&lsquo;", $text );
 
@@ -124,7 +124,7 @@ function PageAlly_Settings () : void
 <form action="index.php?page=allianzen&session=<?=$session;?>&a=11&d=2" method=POST><table width=519>
 <tr><td class=c colspan=2><?=loca("ALLY_SETTINGS_TITLE");?></td></tr>
 <tr><th><?=loca("ALLY_SETTINGS_HOMEPAGE");?></th><th><input type=text name="hp" value="<?=htmlspecialchars($ally['homepage']);?>" size="70"></th></tr>
-<tr><th><?=loca("ALLY_SETTINGS_LOGO");?></th><th><input type=text name="logo" value="<?=htmlspecialchars($ally['imglogo']);?>" size="70"></th></tr>
+<tr><th><?=loca("ALLY_SETTINGS_LOGO");?></th><th><input type=text name="logo" value="<?=htmlspecialchars($ally['imglogo'] ?? '');?>" size="70"></th></tr>
 <tr><th><?=loca("ALLY_SETTINGS_APPS");?></th><th><select name=bew><option value=0 <?=as_sel($ally['open'], 1);?>><?=loca("ALLY_SETTINGS_APPS_OPEN");?></option><option value=1 <?=as_sel($ally['open'], 0);?>><?=loca("ALLY_SETTINGS_APPS_CLOSED");?></option></select></th></tr>
 <tr><th><?=loca("ALLY_SETTINGS_FOUNDER");?></th><th><input type=text name=fname value="<?=$owner_name;?>" size=30></th>
 <tr><th colspan=2><input type=submit value="<?=loca("ALLY_SETTINGS_SAVE");?>"></th></tr>

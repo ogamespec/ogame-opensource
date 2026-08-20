@@ -26,7 +26,7 @@ class Flotten3 extends Page {
 
         $this->galaxy = $galaxy;
         $this->system = $system;
-        $this->planet = $planet;
+        $this->planet = (int) $planet;
 
         return true;
     }

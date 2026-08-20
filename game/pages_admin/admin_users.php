@@ -156,6 +156,7 @@ class Admin_Users extends Page {
     if ( key_exists("player_id", $_GET) ) {        // Player Information
         InvalidateUserCache ();
         $user = LoadUser ( intval ($_GET['player_id']) );
+        if ( $user === null ) return;
 ?>
 
     <table>
@@ -294,6 +295,7 @@ class Admin_Users extends Page {
         $end = GetOfficerLeft ( $user, $qtype );
 
         $img = "";
+        $days = "";
         if ($end <= $now) {
             $img = "_un";
             $days = "";
@@ -408,7 +410,7 @@ class Admin_Users extends Page {
         </th>
         <th <?php echo $style;?> >
 <?php
-    echo FleetlogsMissionText ( $fleet_obj['mission'] );
+    FleetlogsMissionText ( $fleet_obj['mission'] );
 ?>
         </th>
         <th <?php echo $style;?> ><?php echo date ("d.m.Y", $fleet_obj['start']);?> <br> <?php echo date ("H:i:s", $fleet_obj['start']);?></th>
@@ -564,6 +566,7 @@ class Admin_Users extends Page {
     private function LinkFleetsFrom (array|null $user, int $mission) : string
     {
         global $session;
+        if ( $user === null ) return "0";
         $result = FleetlogsFromPlayer ( $user['player_id'], $this->FleetMissionList[$mission] );
         if ( $result ) $rows = dbrows ($result);
         else $rows = 0;
@@ -574,6 +577,7 @@ class Admin_Users extends Page {
     private function LinkFleetsTo (array|null $user, int $mission) : string
     {
         global $session;
+        if ( $user === null ) return "0";
         $result = FleetlogsToPlayer ( $user['player_id'], $this->FleetMissionList[$mission] );
         if ( $result ) $rows = dbrows ($result);
         else $rows = 0;

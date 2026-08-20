@@ -26,14 +26,14 @@ class Admin_Coupons extends Page {
                 $ddmm = explode ( '.', $_POST['ddmm'] );
                 $hhmm = explode ( ':', $_POST['hhmm'] );
 
-                $end = mktime ( $hhmm[0], $hhmm[1], 0, $ddmm[1], $ddmm[0] );
+                $end = mktime ( (int) $hhmm[0], (int) $hhmm[1], 0, (int) $ddmm[1], (int) $ddmm[0] );
 
                 $inactive_days = intval ( $_POST['inactive_days'] );
                 $ingame_days = intval ( $_POST['ingame_days'] );
                 $darkmatter = intval ( $_POST['darkmatter'] );
                 $periodic = intval ( $_POST['periodic'] );
 
-                AddQueue (USER_SPACE, QTYP_COUPON, $darkmatter, ($inactive_days << 16) | $ingame_days, $periodic, $now, $end, QUEUE_PRIO_COUPON);
+                AddQueue (USER_SPACE, QTYP_COUPON, $darkmatter, ($inactive_days << 16) | $ingame_days, $periodic, $now, (int) $end, QUEUE_PRIO_COUPON);
             }
         }
 

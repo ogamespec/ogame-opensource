@@ -53,7 +53,7 @@ class Admin_Planets extends Page {
                 {
                     $planet = LoadPlanetById ($cp);
                     $user = LoadUser ($planet['owner_id']);
-                    if ( $user['hplanetid'] != $cp)
+                    if ( $user !== null && $user['hplanetid'] != $cp)
                     {
                         DestroyPlanet ($cp);
                         $_GET['cp'] = $user['hplanetid'];        // redirect to the home planet.
@@ -84,6 +84,8 @@ class Admin_Planets extends Page {
                     $this->SearchResult .= loca("ADM_PLANET_SPECIFY_TEXT") . "<br>\n";
                     $searchtype = "none";
                 }
+                $query = '';
+                $result = null;
                 if ( $searchtype === "playername") {
                     $query = "SELECT player_id FROM ".$db_prefix."users WHERE oname LIKE '".$_POST['searchtext']."%'";
                     $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = ANY ($query);";
@@ -105,6 +107,7 @@ class Admin_Planets extends Page {
                     {
                         $planet = dbarray ( $result );
                         $user = LoadUser ( $planet['owner_id'] );
+                        if ( $user === null ) continue;
                         $this->SearchResult .= "<tr><th>".date ("Y-m-d H:i:s", $planet['date'])."</th><th>".AdminPlanetCoord($planet)."</th>";
                         $this->SearchResult .= "<th><a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\">".$planet['name']."</a></th>";
                         $this->SearchResult .= "<th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".htmlspecialchars($user['oname'])."</a></th></tr>\n";
@@ -168,6 +171,7 @@ class Admin_Planets extends Page {
                 {
                     $p = $planet['p'];
                     $coltab = LoadColonySettings();
+                    $diam = 0;
                     if ($p <= 3) $diam = mt_rand ( $coltab['t1_a'], $coltab['t1_b'] ) * $coltab['t1_c'];
                     else if ($p >= 4 && $p <= 6) $diam = mt_rand ( $coltab['t2_a'], $coltab['t2_b'] ) * $coltab['t2_c'];
                     else if ($p >= 7 && $p <= 9) $diam = mt_rand ( $coltab['t3_a'], $coltab['t3_b'] ) * $coltab['t3_c'];
@@ -197,6 +201,7 @@ class Admin_Planets extends Page {
             Error ( va(loca("ADM_PLANET_ERROR_LOAD"), intval ($_GET['cp'])) );
         }
         $user = LoadUser ( $planet['owner_id'] );
+        if ( $user === null ) return;
         $moon_id = PlanetHasMoon ( $planet['planet_id'] );
         $debris_id = HasDebris ( $planet['g'], $planet['s'], $planet['p'] );
 

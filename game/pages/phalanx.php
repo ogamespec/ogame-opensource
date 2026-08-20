@@ -3,7 +3,9 @@
 /** @var array $GlobalUser */
 /** @var array $GlobalUni */
 /** @var string $db_prefix */
-/** @var string $aktplanet */
+/** @var array $aktplanet */
+/** @var string $session */
+/** @var int $now */
 
 $PhalanxCost = 5000;    // Amount of deuterium per phalanx scan
 
@@ -59,7 +61,7 @@ require_once "phalanx_events.php";
     $outofrange = false;                    // Check the radius of the phalanx
     if ( $aktplanet['g'] != $target['g'] || $aktplanet[GID_B_PHALANX] <= 0 )  $outofrange = true;
     else {
-        $range = GetPhalanxRadius($aktplanet[GID_B_PHALANX]);
+        $range = GetPhalanxRadius((int)$aktplanet[GID_B_PHALANX]);
         if ( abs($aktplanet['s'] - $target['s']) > $range) $outofrange = true;
     }
 
@@ -102,7 +104,7 @@ require_once "phalanx_events.php";
         PhalanxEventList ($target['planet_id']);
 
         // Write off phalanx cost deuterium.
-        $aktplanet[GID_RC_DEUTERIUM] -= $PhalanxCost;
+        $aktplanet[GID_RC_DEUTERIUM] = (int)$aktplanet[GID_RC_DEUTERIUM] - $PhalanxCost;
         $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_DEUTERIUM."` = '".$aktplanet[GID_RC_DEUTERIUM]."', lastpeek = '".$now."' WHERE planet_id = " . $aktplanet['planet_id'];
         dbquery ($query);
     }

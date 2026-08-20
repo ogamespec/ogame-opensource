@@ -47,6 +47,7 @@ function AddNote ( int $player_id, string $subj, string $text, int $prio ) : voi
     global $db_prefix;
 
     $user = LoadUser ($player_id);
+    if ($user == null) return;
     loca_add ( "notes", $user['lang'] );
 
     // Check the parameters.
@@ -81,6 +82,7 @@ function UpdateNote ( int $player_id, int $note_id, string $subj, string $text, 
     if ( !$note || $note['owner_id'] != $player_id ) return;
 
     $user = LoadUser ($player_id);
+    if ($user == null) return;
     loca_add ( "notes", $user['lang'] );
 
     // Check the parameters.

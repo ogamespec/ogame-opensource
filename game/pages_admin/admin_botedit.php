@@ -30,7 +30,7 @@ class Admin_Botedit extends Page {
                     dbquery ( $query );
 
                     $source = file_get_contents($_FILES['fileToUpload']['tmp_name']);
-                    $source = addslashes ( $source );
+                    $source = addslashes ( (string) $source );
                     $query = "UPDATE ".$db_prefix."botstrat SET source = '".$source."' WHERE id = $id;";
                     dbquery ( $query );
 
@@ -48,7 +48,7 @@ class Admin_Botedit extends Page {
                 $result = dbquery ($query);
                 $row = dbarray ($result);
                 ob_clean ();
-                setcookie ( "uni".$GlobalUni['num']."_".$GlobalUser['name']."_strategy", $id, 9999 );
+                setcookie ( "uni".$GlobalUni['num']."_".$GlobalUser['name']."_strategy", (string) $id, 9999 );
                 die ($row['source']);
             }
             else if ( $_POST['action'] === "save" ) {    // Save
@@ -170,7 +170,7 @@ class Admin_Botedit extends Page {
 <?php
                 return false;
             } // preview
-            else if ( method () === "GET" && $_GET['action'] === "export" && $GlobalUser['admin'] >= USER_TYPE_ADMIN) {    // Export Strat
+            else if ( $_GET['action'] === "export" && $GlobalUser['admin'] >= USER_TYPE_ADMIN) {    // Export Strat
 
                 $id = intval ( $_GET['strat'] );
                 $query = "SELECT * FROM ".$db_prefix."botstrat WHERE id = $id LIMIT 1";

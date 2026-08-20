@@ -276,7 +276,7 @@ function CreateUser ( string $name, string $pass, string $email, bool $bot=false
 
     // Delete an inactivated user after 3 days.
 
-    SetVar ( $id, "TimeLimit", 3*365*24*60*60 );
+    SetVar ( $id, "TimeLimit", (string)(3*365*24*60*60) );
 
     RecalcRanks ();
 
@@ -376,7 +376,7 @@ function ValidateUser (string $code) : void
     }
     $query = "UPDATE ".$db_prefix."users SET validatemd = '', validated = 1 WHERE player_id = ".$user['player_id'];
     dbquery ($query);
-    Login ( $user['oname'], "", $user['password'], 1 );
+    Login ( $user['oname'], "", $user['password'] );
 }
 
 /**
@@ -412,7 +412,7 @@ function ChangeEmail ( string $name, string $email) : bool
     global $db_prefix, $db_secret;
     $name = mb_strtolower ($name, 'UTF-8');
     $email = mb_strtolower ($email, 'UTF-8');
-    if (IsEmailExist ($uni, $email, $name)) return false;
+    if (IsEmailExist ($email, $name)) return false;
     $query = "UPDATE ".$db_prefix."users SET email = '".$email."' WHERE name = '".$name."'";
     dbquery ($query);
     $ack = ChangeActivationCode ( $name);
@@ -749,7 +749,7 @@ function Login ( string $login, string $pass, string $passmd="" ) : never
     {
         // Is the user blocked?
         $user = LoadUser ( $player_id );
-        if ($user['banned'])
+        if ( $user !== null && $user['banned'] )
         {
             UpdateLastClick ( $player_id );        // Update the user's activity so that you can extend the deletion.
             echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/reg/errorpage.php?errorcode=3&arg1=$uni&arg2=$login&arg3=". fixed_date( "D M j Y G:i:s", $user['banned_until'] ) ."' /></head><body></body>";
@@ -1016,7 +1016,7 @@ function ReactivateUser (int $player_id) : void
 
     $query = "UPDATE ".$db_prefix."users SET validatemd = '".$ack."', validated = 0, password = '".$md."' WHERE player_id = $player_id";
     dbquery ($query);
-    if ( !localhost($_SERVER['REMOTE_ADDR']) ) SendGreetingsMail ( $name, $pass, $email, $ack, false);
+    if ( !localhost($_SERVER['REMOTE_ADDR']) ) SendGreetingsMail ( $name, $pass, $email, $ack );
 }
 
 /**

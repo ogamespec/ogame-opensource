@@ -1,5 +1,8 @@
 <?php
 
+// $StartPage comes from the (runtime-generated) config.php
+/** @var string $StartPage */
+
 // Check if the configuration file is missing - redirect to the game installation page.
 if ( !file_exists ("../config.php"))
 {
@@ -14,6 +17,10 @@ require_once "../core/core.php";
 
 InitDB();
 
+/**
+ * @param string $string
+ * @return string
+ */
 function to_utf8( $string ) {
 // From http://w3.org/International/questions/qa-forms-utf-8.html
     if ( preg_match('%^(?:
@@ -28,7 +35,7 @@ function to_utf8( $string ) {
 )*$%xs', $string) ) {
         return $string;
     } else {
-        return iconv( 'CP1252', 'UTF-8', $string);
+        return (string) iconv( 'CP1252', 'UTF-8', $string);
     }
 }
 

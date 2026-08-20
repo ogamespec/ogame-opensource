@@ -37,7 +37,8 @@ class Imperium extends Page {
         $this->moons = 0;
         $this->num = 0;
 
-        if ( $this->planettype == 1 || $this->planettype == 3) {
+        // planettype is always 1 or 3 here (normalized above), so this block always runs.
+        {
             $result = EnumPlanets ();
             $rows = dbrows ($result);
             while ($rows--)
@@ -305,7 +306,7 @@ class Imperium extends Page {
                             echo "                   onDblClick=\"clearTimeout(t);document.location.href='index.php?page=imperium&session=$session&planettype=$planettype&no_header=1&modus=add&planet=".$planet['planet_id']."&techid=$gid';t=0;\"\n";
                             echo "                   title=\"".loca("EMPIRE_ACTION")."\">       \n";
 
-                            if ( CanBuild ($GlobalUser, $planet, $gid, $planet[$gid]+1, 0) === "" ) {
+                            if ( CanBuild ($GlobalUser, $planet, $gid, $planet[$gid]+1, false) === "" ) {
                                 echo "                    <font color=\"lime\">\n";
                             }
                             else {

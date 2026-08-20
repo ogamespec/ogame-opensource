@@ -45,7 +45,7 @@ class Admin_Queue extends Page {
 
             if ( key_exists ( "order_cron", $_POST ) && $GlobalUser['admin'] >= USER_TYPE_ADMIN ) {        // Check CRON
                 $saved_player_id = $GlobalUser['player_id'];
-                include "cron.php";
+                include __DIR__ . "/../cron.php";
                 $GlobalUser = LoadUser ($saved_player_id);  // reload original admin
             }
         }
@@ -70,6 +70,7 @@ class Admin_Queue extends Page {
     {
         $queue = dbarray ( $this->result );
         $user = LoadUser ( $queue['owner_id'] );
+        if ($user === null) continue;    // skip queue entries whose owner no longer exists
         $pid = $user['player_id'];
         $freeze_seconds = $queue['freeze'] ? max (0, $now - $queue['frozen']) : 0;
         echo "<tr><th> <table><tr><th><div id='bxx".$bxx."' title='".($queue['end'] - $now + $freeze_seconds)."' star='".$queue['start']."'></th>";
@@ -207,6 +208,7 @@ class Admin_Queue extends Page {
                 $result = dbquery ( $query );
                 $strat = dbarray ($result);
                 $source = json_decode ( $strat['source'], true );
+                $block_text = "";
                 foreach ( $source['nodeDataArray'] as $i=>$arr ) {
                     if ( $arr['key'] == $block_id ) {
                         $block_text = $arr['text'];

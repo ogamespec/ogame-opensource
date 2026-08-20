@@ -39,6 +39,7 @@ else {
  */
 function CreateDBTables () : void
 {
+    $tabs = array();
     include __DIR__ . "/install_tabs.php";
     if ( function_exists ('ModsExecRef') ) ModsExecRef ('install_tabs_included', $tabs);
 

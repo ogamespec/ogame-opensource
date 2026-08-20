@@ -91,7 +91,7 @@ function AllyPage_CircularMessage () : void
     }
 ?>
 </select></th></tr>
-<tr><th><?=va(loca("ALLY_CIRC_MESSAGE"), "<span id=\"cntChars\">0</span>", $MAXCHARS);?></th><th><textarea name=text cols=60 rows=10 onkeyup="javascript:cntchar(<?=loca($MAXCHARS);?>)"></textarea></th></tr>
+<tr><th><?=va(loca("ALLY_CIRC_MESSAGE"), "<span id=\"cntChars\">0</span>", $MAXCHARS);?></th><th><textarea name=text cols=60 rows=10 onkeyup="javascript:cntchar(<?=loca((string) $MAXCHARS);?>)"></textarea></th></tr>
 <tr><th colspan=2><input type=submit value="<?=loca("ALLY_CIRC_SEND");?>"></th></tr></table></center></form>
 <?php
 }

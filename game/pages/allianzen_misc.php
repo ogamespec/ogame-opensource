@@ -30,7 +30,7 @@ function PageAlly_Leave () : void
                 SendMessage ( $user['player_id'], 
                     va(loca_lang("ALLY_MSG_FROM", $user['lang']), htmlspecialchars($ally['tag'])), 
                     loca_lang ("ALLY_MSG_COMMON", $user['lang']), 
-                    va(loca_lang ("ALLY_MSG_LEAVE", $user['lang']), htmlspecialchars($leaver['oname'])), MTYP_ALLY);
+                    va(loca_lang ("ALLY_MSG_LEAVE", $user['lang']), htmlspecialchars($leaver['oname'] ?? '')), MTYP_ALLY);
             }
 
             // Make a redirect to the My Alliance page.
@@ -62,22 +62,23 @@ function PageAlly_ChangeTag () : void
     {
         $_POST['newtag'] = str_replace ( "\"", "", $_POST['newtag']);
         $_POST['newtag'] = str_replace ( "'", "", $_POST['newtag']);
+        $newtag = is_string($_POST['newtag']) ? $_POST['newtag'] : "";
 
         $now = time ();
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
         if ( ! ($myrank['rights'] & ARANK_W_MEMBERS) ) $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
         else if ( $now < $ally['tag_until'] ) $PageError = "<center>\n".va(loca("ALLY_MISC_CHANGE_WAIT"), date ("Y-m-d H:i:s", $ally['tag_until']))."<br></center>";
-        else if (mb_strlen ($_POST['newtag'], "UTF-8")  < 3) $PageError = "<center>\n".loca("ALLY_MISC_CHANGE_TAG_SHORT")."<br></center>";
-        else if (IsAllyTagExist ($_POST['newtag'])) $PageError = "<center>\n".va(loca("ALLY_MISC_CHANGE_TAG_EXISTS"), htmlspecialchars($_POST['newtag']))."<br></center>";
+        else if (mb_strlen ($newtag, "UTF-8")  < 3) $PageError = "<center>\n".loca("ALLY_MISC_CHANGE_TAG_SHORT")."<br></center>";
+        else if (IsAllyTagExist ($newtag)) $PageError = "<center>\n".va(loca("ALLY_MISC_CHANGE_TAG_EXISTS"), htmlspecialchars($newtag))."<br></center>";
         else
         {
-            AllyChangeTag ( $ally['ally_id'], $_POST['newtag'] );
+            AllyChangeTag ( $ally['ally_id'], $newtag );
 ?>
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
 <table width=519>
 <form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
 <tr><td class=c colspan=2><?=loca("ALLY_MISC_CONFIRM");?></td></tr>
-<tr><th colspan=2><?=va(loca("ALLY_MISC_CHANGE_TAG_SUCCESS"), htmlspecialchars($ally['tag']), htmlspecialchars($_POST['newtag']));?></th><tr>
+<tr><th colspan=2><?=va(loca("ALLY_MISC_CHANGE_TAG_SUCCESS"), htmlspecialchars($ally['tag']), htmlspecialchars($newtag));?></th><tr>
 <tr><th colspan=2><input type=submit value="<?=loca("ALLY_MISC_CHANGE_OK");?>"></th></tr></table></center></form>
 <?php
             return;
@@ -106,21 +107,22 @@ function PageAlly_ChangeName () : void
     {
         $_POST['newname'] = str_replace ( "\"", "", $_POST['newname']);
         $_POST['newname'] = str_replace ( "'", "", $_POST['newname']);
+        $newname = is_string($_POST['newname']) ? $_POST['newname'] : "";
 
         $now = time ();
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
         if ( ! ($myrank['rights'] & ARANK_W_MEMBERS) ) $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
         else if ( $now < $ally['name_until'] ) $PageError = "<center>\n".va(loca("ALLY_MISC_CHANGE_WAIT"), date ("Y-m-d H:i:s", $ally['name_until']))."<br></center>";
-        else if (mb_strlen ($_POST['newname'], "UTF-8")  < 3) $PageError = "<center>\n".loca("ALLY_MISC_CHANGE_NAME_SHORT")."<br></center>";
+        else if (mb_strlen ($newname, "UTF-8")  < 3) $PageError = "<center>\n".loca("ALLY_MISC_CHANGE_NAME_SHORT")."<br></center>";
         else
         {
-            AllyChangeName ( $ally['ally_id'], $_POST['newname'] );
+            AllyChangeName ( $ally['ally_id'], $newname );
 ?>
 <script src="js/cntchar.js" type="text/javascript"></script><script src="js/win.js" type="text/javascript"></script>
 <table width=519>
 <form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
 <tr><td class=c colspan=2><?=loca("ALLY_MISC_CONFIRM");?></td></tr>
-<tr><th colspan=2><?=va(loca("ALLY_MISC_CHANGE_NAME_SUCCESS"), htmlspecialchars($ally['name']), htmlspecialchars($_POST['newname']));?></th><tr>
+<tr><th colspan=2><?=va(loca("ALLY_MISC_CHANGE_NAME_SUCCESS"), htmlspecialchars($ally['name']), htmlspecialchars($newname));?></th><tr>
 <tr><th colspan=2><input type=submit value="<?=loca("ALLY_MISC_CHANGE_OK");?>"></th></tr></table></center></form>
 <?php
             return;
@@ -226,16 +228,16 @@ function AllyPage_Takeover () : void
 
             // Change ranks
             $newhead = LoadUser ( intval($_REQUEST['uid']) );
-            $newhead_rank = LoadRank ( $ally['ally_id'], $newhead['allyrank'] );
-            if ( $newhead['ally_id'] != $ally['ally_id'] || ($newhead_rank['rights'] & ARANK_RIGHT_HAND) == 0 ) {
+            $newhead_rank = LoadRank ( $ally['ally_id'], $newhead['allyrank'] ?? 0 );
+            if ( ($newhead['ally_id'] ?? 0) != $ally['ally_id'] || ($newhead_rank['rights'] & ARANK_RIGHT_HAND) == 0 ) {
                 $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
                 return;
             }
-            SetUserRank ( $newhead['player_id'], $GlobalUser['allyrank'] );
-            SetUserRank ( $GlobalUser['player_id'], $newhead['allyrank'] );
+            SetUserRank ( $newhead['player_id'] ?? 0, $GlobalUser['allyrank'] );
+            SetUserRank ( $GlobalUser['player_id'], $newhead['allyrank'] ?? 0 );
 
             // Establish a new alliance owner
-            AllyChangeOwner ( $ally['ally_id'], $newhead['player_id'] );
+            AllyChangeOwner ( $ally['ally_id'], $newhead['player_id'] ?? 0 );
 
 ?>
 <table width=519>

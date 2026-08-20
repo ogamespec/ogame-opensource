@@ -40,6 +40,7 @@ class Admin_Loca extends Page {
 
         global $session;
         $loca_dirs = scandir ($this->base_loca_dir);
+        if ($loca_dirs === false) $loca_dirs = array();
 ?>
 
 <table>
@@ -102,7 +103,7 @@ class Admin_Loca extends Page {
 
         // Local loca :)
         $LOCA = array();
-
+        /** @var array<string, array<string, string>> $LOCA */
         include $src;
         include $dst;
 

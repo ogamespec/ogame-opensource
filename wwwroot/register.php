@@ -1,5 +1,9 @@
 <?php
 
+// $UniList is populated by uni.php (required below)
+/** @var array $UniList */
+$UniList = array ();
+
 if ( !file_exists ("config.php")) {
     include ("install.php");
     die ();

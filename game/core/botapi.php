@@ -127,7 +127,7 @@ function BotBuild (int $obj_id) : int
         $duration = floor (TechDuration ( $obj_id, $level, PROD_BUILDING_DURATION_FACTOR, $aktplanet[GID_B_ROBOTS], $aktplanet[GID_B_NANITES], $speed ));
         BuildEnque ( $user, $user['aktplanet'], $obj_id, 0, $BotNow);
         UpdatePlanetActivity ( $user['aktplanet'], $BotNow );
-        return $duration;
+        return (int) $duration;
     }
     else return 0;
 }
@@ -304,10 +304,10 @@ function BotResearch (int $obj_id) : int
     $aktplanet = LoadPlanetById ( $user['aktplanet'] );
     if ($aktplanet == null) return 0;
     $level = $aktplanet[$obj_id] + 1;
-    $text = StartResearch ($user[player_id], $user[aktplanet], $obj_id, 0);
+    $text = StartResearch ($user['player_id'], $user['aktplanet'], $obj_id, 0);
     if ( $text === '' ) {
-        $speed = $uni['speed'];
-        if ($now == 0) $now = time ();
+        $speed = $GlobalUni['speed'];
+        if ($BotNow == 0) $BotNow = time ();
         $reslab = ResearchNetwork ( $user['planet_id'], $obj_id );
         $prem = PremiumStatus ($user);
         if ( $prem['technocrat'] ) $r_factor = 1.1;

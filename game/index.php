@@ -62,6 +62,10 @@ else
 
     if ( key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $_COOKIE['ogamelang'];
     else $loca_lang = $GlobalUni['lang'];
+
+    // $Languages and $DefaultLanguage come from the (runtime-generated) config.php
+    /** @var array $Languages */
+    /** @var string $DefaultLanguage */
     if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
     $GlobalUser['lang'] = $loca_lang;
 }
@@ -96,6 +100,9 @@ if (key_exists('page', $_GET)) {
     }
 }
 if ($pk != false) {
+
+    // $pk is a page name from the router (string)
+    $pk = (string)$pk;
 
     // Add locales required for the page
     foreach ($router[$pk]['loca'] as $i => $loca) {
@@ -181,6 +188,7 @@ if ($pk != false) {
 
             require_once $classFile;
             $className = ucfirst($pk);
+            /** @var Page $inst */
             $inst = new $className;
             $show = $inst->controller ();
 
