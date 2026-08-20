@@ -22,7 +22,7 @@ class Options extends Page {
         if ( method () === "POST") {
             if ( $now >= $GlobalUser['vacation_until'] && key_exists('urlaub_aus', $_POST) && $_POST['urlaub_aus'] === "on" && $GlobalUser['vacation'] ) {
                 EnableVacation ($GlobalUser['player_id'], 0, false);
-                $PageError = va ( loca("OPTIONS_MSG_VMDISABLED"), $GlobalUser['oname'] ) . "\n<br/>\n";
+                $PageError = va ( loca("OPTIONS_MSG_VMDISABLED"), htmlspecialchars($GlobalUser['oname']) ) . "\n<br/>\n";
             }
         }
 
@@ -59,7 +59,7 @@ class Options extends Page {
             if ( method () === "POST") {
                 if ( $now >= $GlobalUser['vacation_until'] && key_exists('urlaub_aus', $_POST) && $_POST['urlaub_aus'] === "on" && $GlobalUser['vacation'] ) {
                     EnableVacation ($GlobalUser['player_id'], 0, false);
-                    $PageError = va ( loca("OPTIONS_MSG_VMDISABLED"), $GlobalUser['oname'] ) . "\n<br/>\n";
+                    $PageError = va ( loca("OPTIONS_MSG_VMDISABLED"), htmlspecialchars($GlobalUser['oname']) ) . "\n<br/>\n";
                 }
             }
         }
@@ -333,13 +333,13 @@ class Options extends Page {
                  if ( $GlobalUser['name_changed'] ) {
                      ?>
                        <th><a title="<?php echo loca("OPTIONS_ERR_NAME_WEEK");?>"><?php echo loca("OPTIONS_USER_NAME");?></a></th>
-                    <th><?php echo $GlobalUser['oname'];?></th>
+                    <th><?php echo htmlspecialchars($GlobalUser['oname']);?></th>
                      <?php
                  }
                  else {
                      ?>
                        <th><?php echo loca("OPTIONS_USER_NAME");?></th>
-                    <th><input type="text" name="db_character" size ="20" value="<?php echo $GlobalUser['oname'];?>" /><br/></th>
+                    <th><input type="text" name="db_character" size ="20" value="<?php echo htmlspecialchars($GlobalUser['oname']);?>" /><br/></th>
                      <?php
                  }
                  ?>

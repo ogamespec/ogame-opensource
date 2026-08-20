@@ -25,7 +25,7 @@ function PlayerDetails (int $player_id) : void
 
     $planets = array ();
     $moons = array ();
-    echo "<br><br><font size=+2>".$stats[$player_id]['name'].":</font>";
+    echo "<br><br><font size=+2>".htmlspecialchars($stats[$player_id]['name']).":</font>";
 
     echo "<table cellpadding=0 cellspacing=0><tr>";
 
@@ -144,8 +144,8 @@ foreach ( $delta as $id=>$user)
     {
         if (!$first) echo ", ";
         else $first = false;
-        if ( $d < 1000 ) echo "<a href='index.php?page=galaxytool&session=$session&user=".$user['id']."' title='~0'>".$user['name'];
-        else echo "<a href='index.php?page=galaxytool&session=$session&user=".$user['id']."' title='+".nicenum ( $d / 1000 )."'>".$user['name'];
+        if ( $d < 1000 ) echo "<a href='index.php?page=galaxytool&session=$session&user=".$user['id']."' title='~0'>".htmlspecialchars($user['name']);
+        else echo "<a href='index.php?page=galaxytool&session=$session&user=".$user['id']."' title='+".nicenum ( $d / 1000 )."'>".htmlspecialchars($user['name']);
         if ( $d > 30000000 ) echo " (+" . nicenum ( $d / 1000 ) . ")";
         echo "</a>";
         $count++;
@@ -163,7 +163,7 @@ foreach ( $delta as $id=>$user)
     {
         if (!$first) echo ", ";
         else $first = false;
-        echo "<a href='index.php?page=galaxytool&session=$session&user=".$user['id']."' title='-".nicenum ( abs($d) / 1000 )."'>".$user['name'];
+        echo "<a href='index.php?page=galaxytool&session=$session&user=".$user['id']."' title='-".nicenum ( abs($d) / 1000 )."'>".htmlspecialchars($user['name']);
         if ( $d < -30000000 ) echo " (-" . nicenum ( abs($d) / 1000 ) . ")";
         echo "</a>";
         $count++;
@@ -186,7 +186,7 @@ foreach ( $delta as $id=>$user)
         else if ( $user['iI'] ) echo "<span class='longinactive'>";
         else if ( $user['i'] ) echo "<span class='inactive'>";
         else if ( $user['b'] ) echo "<span class='banned'>";
-        echo $user['name'];
+        echo htmlspecialchars($user['name']);
         if ( $user['v'] ) echo " (РО)</span>";
         else if ( $user['iI'] ) echo " (iI)</span>";
         else if ( $user['i'] ) echo " (i)</span>";

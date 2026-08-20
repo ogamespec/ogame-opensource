@@ -79,7 +79,7 @@ function TitleFleet (array $fleet, int $summary, bool $ignore_level=false) : str
 
 function PlayerDetails (array $user) : string
 {
-    $res = $user['oname'] . " ";
+    $res = htmlspecialchars($user['oname']) . " ";
 
     // It is not possible to give the opportunity to write to the technical account space and admins.
     if ($user['admin'] == USER_TYPE_PLAYER) {

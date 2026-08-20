@@ -148,14 +148,14 @@ function AddUnionMember (int $union_id, string $name) : string
     loca_add ("union", $user['lang']);
 
     $text = va ( loca_lang("ACS_INVITE_TEXT1", $user['lang']),
-                        $GlobalUser['oname'], 
-                        $union['name'], 
-                        $target_player['oname'] ) .
+                        htmlspecialchars($GlobalUser['oname']), 
+                        htmlspecialchars($union['name']), 
+                        htmlspecialchars($target_player['oname']) ) .
             va (" <a href=\"#\" onClick=showGalaxy(#1,#2,#3)><b><u>[#4:#5:#6]</u></b></a>. ",
                         $target_planet['g'], $target_planet['s'], $target_planet['p'], 
                         $target_planet['g'], $target_planet['s'], $target_planet['p'] ) .
             va ( loca_lang("ACS_INVITE_TEXT2", $user['lang']), date ( "D M Y H:i:s", $queue['end'] ) );
-    SendMessage ( $user['player_id'], $GlobalUser['oname'], loca_lang("ACS_INVITE_SUBJ", $user['lang']), $text, MTYP_MISC );
+    SendMessage ( $user['player_id'], htmlspecialchars($GlobalUser['oname']), loca_lang("ACS_INVITE_SUBJ", $user['lang']), $text, MTYP_MISC );
 
     return "";
 }

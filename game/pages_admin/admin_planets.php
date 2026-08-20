@@ -107,7 +107,7 @@ class Admin_Planets extends Page {
                         $user = LoadUser ( $planet['owner_id'] );
                         $this->SearchResult .= "<tr><th>".date ("Y-m-d H:i:s", $planet['date'])."</th><th>".AdminPlanetCoord($planet)."</th>";
                         $this->SearchResult .= "<th><a href=\"index.php?page=admin&session=$session&mode=Planets&cp=".$planet['planet_id']."\">".$planet['name']."</a></th>";
-                        $this->SearchResult .= "<th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a></th></tr>\n";
+                        $this->SearchResult .= "<th><a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".htmlspecialchars($user['oname'])."</a></th></tr>\n";
                     }
                 }
                 else $this->SearchResult .= loca("ADM_PLANET_NOT_FOUND") . "<br>\n";
@@ -305,7 +305,7 @@ function reset ()
 
         echo "<table>\n";
         echo "<form action=\"index.php?page=admin&session=$session&mode=Planets&action=update&cp=".$planet['planet_id']."\" method=\"POST\" >\n";
-        echo "<tr><td class=c colspan=2>".loca("ADM_PLANET_PLANET")." \"".$planet['name']."\" (<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".$user['oname']."</a>)</td>\n";
+        echo "<tr><td class=c colspan=2>".loca("ADM_PLANET_PLANET")." \"".$planet['name']."\" (<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$user['player_id']."\">".htmlspecialchars($user['oname'])."</a>)</td>\n";
         echo "       <td class=c >".loca("ADM_PLANET_BUILDINGS")."</td> <td class=c >".loca("ADM_PLANET_FLEET")."</td> <td class=c >".loca("ADM_PLANET_DEFENSE")."</td> </tr>\n";
         echo "<tr><th><img src=\"".GetPlanetImage (UserSkin(), $planet)."\"> <br>".loca("ADM_PLANET_TYPE").": " . $planet['type'];
         $pp = PlanetPrice ( $planet );

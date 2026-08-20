@@ -349,7 +349,7 @@ class Infos extends Page {
         $load = $queue['end'] - $now;
 
         echo "  <tr>\n";
-        echo "    <th>".va(loca("INFO_DEPOT_FLEET"), $user['oname'])."<br>";
+        echo "    <th>".va(loca("INFO_DEPOT_FLEET"), htmlspecialchars($user['oname']))."<br>";
         $cons = 0;
         $fleetmap_nosat = array_diff($fleetmap, [GID_F_SAT]);
         foreach ($fleetmap_nosat as $i=>$id) {

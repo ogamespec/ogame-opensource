@@ -226,7 +226,7 @@ class Statistics extends Page {
                     echo "    <th> \n";
                     if ( $user['player_id'] == $GlobalUser['player_id'] ) {
                         echo "<a href=\"#\" style='color:lime;'>\n";
-                        echo $user['oname'] . "</a>\n";
+                        echo htmlspecialchars($user['oname']) . "</a>\n";
                     }
                     else {
                         $player_color = "FFFFFF";
@@ -234,7 +234,7 @@ class Statistics extends Page {
                             $player_color = "87CEEB";
                         }
                         echo "       <a href=\"index.php?page=galaxy&no_header=1&session=$session&p1=".$home['g']."&p2=".$home['s']."&p3=".$home['p']."\" style='color:".$player_color."' >      \n\n";
-                        echo $user['oname'] . "</a> \n";
+                        echo htmlspecialchars($user['oname']) . "</a> \n";
                     }
                     echo "    </th> \n\n";
 

@@ -48,7 +48,7 @@ class Admin_Reports extends Page {
         {
             $msg = dbarray ( $this->result );
             $user = LoadUser ($msg['owner_id']);
-            $to = "<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$msg['owner_id']."\">" . $user['oname'] . "</a> ";
+            $to = "<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$msg['owner_id']."\">" . htmlspecialchars($user['oname']) . "</a> ";
             $msg['text'] = str_replace ( "{PUBLIC_SESSION}", $session, $msg['text']);
             $msg['subj'] = str_replace ( "{PUBLIC_SESSION}", $session, $msg['subj']);
             $msg['msgfrom'] = str_replace ( "{PUBLIC_SESSION}", $session, $msg['msgfrom']);

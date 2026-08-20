@@ -54,7 +54,7 @@ class Admin_Errors extends Page {
             $user = LoadUser ($msg['owner_id']);
             $user_name = "";
             if ($user) {
-                $user_name = $user['oname'];
+                $user_name = htmlspecialchars($user['oname']);
             }
             else {
                 $user_name = "Unknown UserID " . $msg['owner_id']; 

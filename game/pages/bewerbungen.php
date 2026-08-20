@@ -41,7 +41,7 @@ class Bewerbungen extends Page {
                     SendMessage ( $user['player_id'],
                         va(loca_lang("ALLY_MSG_FROM", $user['lang']), htmlspecialchars($this->ally['tag'])),
                         loca_lang("ALLY_MSG_COMMON", $user['lang']),
-                        va(loca_lang("ALLY_MSG_APPLY_ALLY", $user['lang']), $newcomer['oname']), MTYP_ALLY);
+                        va(loca_lang("ALLY_MSG_APPLY_ALLY", $user['lang']), htmlspecialchars($newcomer['oname'])), MTYP_ALLY);
                 }
                 loca_add ("ally", $newcomer['lang']);
                 SendMessage ( $player_id,
@@ -103,7 +103,7 @@ class Bewerbungen extends Page {
                 $app = LoadApplication ($show);
                 $user = LoadUser ($app['player_id']);
         ?>
-        <tr><th colspan=2><?=va(loca("ALLY_APPA_FROM"), $user['oname']);?></th></tr>
+        <tr><th colspan=2><?=va(loca("ALLY_APPA_FROM"), htmlspecialchars($user['oname']));?></th></tr>
         <form action="index.php?page=bewerbungen&session=<?=$session;?>&show=<?=$show;?>&sort=<?=$sort;?>" method=POST>
         <tr><th colspan=2><?=str_replace("\n", "\n<br>", htmlspecialchars(stripslashes($app['text'])) );?></th></tr>
         <tr><td class=c colspan=2><?=loca("ALLY_APPA_ACTION");?></td></tr>
@@ -125,7 +125,7 @@ class Bewerbungen extends Page {
             {
                 $app = dbarray ($result);
                 $user = LoadUser ($app['player_id']);
-                echo "    <th><center><a href=\"index.php?page=bewerbungen&session=$session&show=".$app['app_id']."&sort=$sort\">".$user['oname']."</a></center></th>\n";
+                echo "    <th><center><a href=\"index.php?page=bewerbungen&session=$session&show=".$app['app_id']."&sort=$sort\">".htmlspecialchars($user['oname'])."</a></center></th>\n";
                 echo "    <th><center>".date ("Y-m-d H:i:s", $app['date'])."</center></th></tr>\n";
             }
         ?>

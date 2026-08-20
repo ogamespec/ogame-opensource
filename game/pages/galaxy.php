@@ -414,7 +414,7 @@ class Galaxy extends Page {
             if ( !($planet['type'] == PTYP_DEST_PLANET || $planet['type'] == PTYP_ABANDONED) )
             {
                 echo "<a style=\"cursor:pointer\" onmouseover=\"return overlib('<table width=240 >";
-                echo "<tr><td class=c >".va(loca("GALAXY_USER_TITLE"), $user['oname'], $user['place1'])."</td></tr>";
+                echo "<tr><td class=c >".va(loca("GALAXY_USER_TITLE"), htmlspecialchars($user['oname']), $user['place1'])."</td></tr>";
                 echo "<th><table>";
                 if (!$own)
                 {
@@ -443,7 +443,7 @@ class Galaxy extends Page {
                     if ( $user['lastclick'] <= $week4 ) { if(mb_strlen($stat, "UTF-8")) $stat .= " "; $stat .= "<span class='longinactive'>".loca("GALAXY_LEGEND_INACTIVE28")."</span>";  if($pstat !== "banned") $pstat = "longinactive"; }
                     if ( $user['vacation'] ) { if(mb_strlen($stat, "UTF-8")) $stat .= " "; $stat .= "<span class='vacation'>".loca("GALAXY_LEGEND_VACATION")."</span>";  $pstat = "vacation"; }
                 }
-                echo "<span class=\"$pstat\">".$user['oname']."</span></a>\n";
+                echo "<span class=\"$pstat\">".htmlspecialchars($user['oname'])."</span></a>\n";
                 if ($pstat !== "normal") echo "($stat)\n";
             }
             echo "</th>\n";

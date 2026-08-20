@@ -286,14 +286,14 @@ class Messages extends Page {
             {
                 $oper = dbarray ($result);
                 // Customize the option to send a regular game message if the operator does not want to reveal their mailing address
-                $subj = va(loca("MSG_OPER_TEXT"), $GlobalUser['oname'], $uni['num']);
+                $subj = va(loca("MSG_OPER_TEXT"), htmlspecialchars($GlobalUser['oname']), $uni['num']);
                 if ($oper['flags'] & USER_FLAG_HIDE_GO_EMAIL) $href = "index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$oper['player_id']."&betreff=".$subj;
                 else $href = "mailto:".$oper['email']."?subject=".$subj;
 
             ?>
                     <tr>
                 <th colspan="4" valign="left">
-                <?=$oper['oname'];?>            <a href="<?=$href;?>" ><img src="<?=UserSkin();?>img/m.gif" border="0" alt="<?=loca("MSG_OPER_PM");?>"></a>          </th>
+                <?=htmlspecialchars($oper['oname']);?>            <a href="<?=$href;?>" ><img src="<?=UserSkin();?>img/m.gif" border="0" alt="<?=loca("MSG_OPER_PM");?>"></a>          </th>
             </tr>
         <?php
             }

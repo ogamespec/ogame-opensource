@@ -794,7 +794,7 @@ function TransportArrive (array $queue, array $fleet_obj, array $fleet, array $o
         loca_add ( "fleetmsg", $target_user['lang'] );
 
         $text = va(loca_lang("FLEET_TRANSPORT_OTHER", $target_user['lang']),
-                $origin_user['oname'],
+                htmlspecialchars($origin_user['oname']),
                 $target['name'],
                 ShowGalaxy ($target),
                 nicenum($fleet_obj[GID_RC_METAL]),
@@ -1055,7 +1055,7 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
     $report .= "<table width=400><tr><td class=c colspan=4>" .
             va(loca_lang("SPY_RESOURCES", $origin_user['lang']), $target['name']) . " " .
             ShowGalaxy ($target) . " " .
-            va(loca_lang("SPY_PLAYER", $origin_user['lang']), $target_user['oname'], date ("m-d H:i:s", $now)) .
+            va(loca_lang("SPY_PLAYER", $origin_user['lang']), htmlspecialchars($target_user['oname']), date ("m-d H:i:s", $now)) .
             "</td></tr>\n";
     $report .= "</div></font></TD></TR><tr><td>".loca_lang("SPY_M", $origin_user['lang'])."</td><td>".nicenum($target[GID_RC_METAL])."</td>\n";
     $report .= "<td>".loca_lang("SPY_K", $origin_user['lang'])."</td><td>".nicenum($target[GID_RC_CRYSTAL])."</td></tr>\n";

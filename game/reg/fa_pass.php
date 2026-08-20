@@ -70,7 +70,7 @@ if ( method () === "POST" ) {
 <table width="519">
 <tr>
 <?php
-    if ( $pass_ok ) echo "   <th><font color=\"lime\">".va(loca("REG_FORGOT_OK"), $user['oname'])."</font></th>\n";
+    if ( $pass_ok ) echo "   <th><font color=\"lime\">".va(loca("REG_FORGOT_OK"), htmlspecialchars($user['oname']))."</font></th>\n";
     else echo " <th><font color=\"red\">".loca("REG_FORGOT_ERROR")."</font></th> \n";
 ?>
 </tr>

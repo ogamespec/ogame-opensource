@@ -25,7 +25,7 @@ class Buddy extends Page {
             if ($from != $to) {
                 $buddy_id = AddBuddy ( $from, $to, $_POST['text']);
                 if ($buddy_id == 0) $PageError = loca("BUDDY_ALREADY_SENT");
-                else SendMessage ( $to, $GlobalUser['oname'], loca("BUDDY_REQUEST"), $_POST['text'], MTYP_PM );
+                else SendMessage ( $to, htmlspecialchars($GlobalUser['oname']), loca("BUDDY_REQUEST"), $_POST['text'], MTYP_PM );
             }
         }
         // Accept the request
@@ -33,14 +33,14 @@ class Buddy extends Page {
             $buddy_id = intval ($_GET['buddy_id']);
             $buddy = LoadBuddy ($buddy_id);
             AcceptBuddy ($buddy_id);
-            SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va(loca("BUDDY_MSG_ADDED"), $GlobalUser['oname']), MTYP_PM);
+            SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va(loca("BUDDY_MSG_ADDED"), htmlspecialchars($GlobalUser['oname'])), MTYP_PM);
         }
         // Reject the request
         else if ( $this->action == 3 && key_exists('buddy_id', $_GET) && $_GET['buddy_id']) {
             $buddy_id = intval ($_GET['buddy_id']);
             $buddy = LoadBuddy ($buddy_id);
             RemoveBuddy ($buddy_id);
-            SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va(loca("BUDDY_MSG_DECLINED"), $GlobalUser['oname']), MTYP_PM);
+            SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va(loca("BUDDY_MSG_DECLINED"), htmlspecialchars($GlobalUser['oname'])), MTYP_PM);
         }
         // Withdraw your request.
         else if ( $this->action == 4 && key_exists('buddy_id', $_GET) && $_GET['buddy_id']) {
@@ -49,7 +49,7 @@ class Buddy extends Page {
             // only your own
             if ( $buddy['request_from'] == $GlobalUser['player_id'] ) {
                 RemoveBuddy ($buddy_id);
-                SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va (loca("BUDDY_MSG_RECALLED"), $GlobalUser['oname']), MTYP_PM );
+                SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va (loca("BUDDY_MSG_RECALLED"), htmlspecialchars($GlobalUser['oname'])), MTYP_PM );
             }
         }
         // Remove from the list
@@ -59,11 +59,11 @@ class Buddy extends Page {
             // only your own
             if ($buddy['request_from'] == $GlobalUser['player_id'] ) {
                 RemoveBuddy ($buddy_id);
-                SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va (loca("BUDDY_MSG_DELETED"), $GlobalUser['oname']), MTYP_PM );
+                SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va (loca("BUDDY_MSG_DELETED"), htmlspecialchars($GlobalUser['oname'])), MTYP_PM );
             }
             if ($buddy['request_to'] == $GlobalUser['player_id'] ) {
                 RemoveBuddy ($buddy_id);
-                SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va (loca("BUDDY_MSG_DELETED"), $GlobalUser['oname']), MTYP_PM );
+                SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va (loca("BUDDY_MSG_DELETED"), htmlspecialchars($GlobalUser['oname'])), MTYP_PM );
             }
         }
 
@@ -124,7 +124,7 @@ class Buddy extends Page {
                 $home = LoadPlanetById ($user['hplanetid']);
                 echo "<tr>\n";
                 echo " <th width=\"20\">$i</th>\n";
-                echo " <th><a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\">".$user['oname']."</a></th>\n";
+                echo " <th><a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\">".htmlspecialchars($user['oname'])."</a></th>\n";
                 echo "  <th><a href=ainfo.php?allyid=".$user['ally_id']." target='_ally'> ";
                 if ($user['ally_id'] > 0)
                 {
@@ -185,7 +185,7 @@ class Buddy extends Page {
                 $home = LoadPlanetById ($user['hplanetid']);
                 echo "  <tr>\n";
                 echo " <th width=\"20\">$i</th>\n";
-                echo "  <th><a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\">".$user['oname']."</a></th>\n";
+                echo "  <th><a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\">".htmlspecialchars($user['oname'])."</a></th>\n";
                 if ($user['ally_id'] > 0)
                 {
                     $ally = LoadAlly ($user['ally_id']);
@@ -242,7 +242,7 @@ class Buddy extends Page {
                 $home = LoadPlanetById ($userto['hplanetid']);
                 echo "  <tr>\n";
                 echo " <th width=\"20\">$i</th>\n";
-                echo "  <th><a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$userto['player_id']."\">".$userto['oname']."</a></th>\n";
+                echo "  <th><a href=\"index.php?page=writemessages&session=".$_GET['session']."&messageziel=".$userto['player_id']."\">".htmlspecialchars($userto['oname'])."</a></th>\n";
                 if ($userto['ally_id'] > 0)
                 {
                     $ally = LoadAlly ($userto['ally_id']);
@@ -273,7 +273,7 @@ class Buddy extends Page {
         echo "<form action=\"?page=buddy&session=".$_GET['session']."&action=1&buddy_id=".intval($_GET['buddy_id'])."\" method=\"POST\">\n";
         echo "<table width=\"519\">\n";
         echo " <tr>\n<td class=\"c\" colspan=\"2\">".loca("BUDDY_REQUEST")."</td>\n</tr>\n";
-        echo " <tr>\n<th>".loca("BUDDY_PLAYER")."</th>\n<th>".$user['oname']."</th>\n</tr>\n";
+        echo " <tr>\n<th>".loca("BUDDY_PLAYER")."</th>\n<th>".htmlspecialchars($user['oname'])."</th>\n</tr>\n";
         echo " <tr>\n<th>".va(loca("BUDDY_TEXTLEN"), "<span id=\"cntChars\">0</span> / 5000")."</th>\n";
         echo " <th><textarea name=\"text\" cols=\"60\" rows=\"10\" onkeyup=\"javascript:cntchar(5000)\"></textarea></th>\n</tr>\n";
         echo "<tr> \n<td class=\"c\"><a href=\"?page=buddy&session=".$_GET['session']."\">".loca("BUDDY_BACK")."</a></td>\n";

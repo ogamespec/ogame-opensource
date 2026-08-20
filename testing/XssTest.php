@@ -246,4 +246,138 @@ class XssTest extends TestCase
         $this->assertStringNotContainsString('</textarea><script>alert(888);</script>', $html);
         $this->assertStringContainsString('&lt;/textarea&gt;&lt;script&gt;alert(888);&lt;/script&gt;', $html);
     }
+
+    // ========================================================================
+    // Player names (oname)
+    // ========================================================================
+
+    /**
+     * Give PlayerTwo a malicious display name (bypassing the registration
+     * restrictions to simulate a legacy/bot-created account).
+     */
+    private function makePlayerTwoNameMalicious(): void
+    {
+        $pdo = $this->fixture->getPDO();
+        $prefix = $this->fixture->getDbPrefix();
+        $pdo->exec("UPDATE {$prefix}users SET oname = '<script>alert(9);</script>' WHERE player_id = 2");
+    }
+
+    /**
+     * The player name is escaped everywhere it is displayed to other players:
+     * statistics, search, buddy list, galaxy, alliance member list, fleet
+     * list, write-message form and the overview events.
+     */
+    public function testPlayerNameEscapedOnDisplayPages(): void
+    {
+        $this->makePlayerTwoNameMalicious();
+
+        // Statistics: PlayerTwo's row in the player table.
+        $html = $this->renderPage('statistics', [], 0);
+        $this->assertStringNotContainsString('<script>alert(9);</script>', $html);
+        $this->assertStringContainsString('&lt;script&gt;alert(9);&lt;/script&gt;', $html);
+
+        // In-game search by player name (searches the display name; the
+        // payload contains "script").
+        $html = $this->renderPageWithPost('suche', [], ['type' => 'playername', 'searchtext' => 'script'], 0);
+        $this->assertStringNotContainsString('<script>alert(9);</script>', $html);
+        $this->assertStringContainsString('&lt;script&gt;alert(9);&lt;/script&gt;', $html);
+
+        // Buddy list: PlayerTwo is PlayerOne's accepted buddy.
+        $html = $this->renderPage('buddy', [], 0);
+        $this->assertStringNotContainsString('<script>alert(9);</script>', $html);
+        $this->assertStringContainsString('&lt;script&gt;alert(9);&lt;/script&gt;', $html);
+
+        // Galaxy: PlayerTwo lives at 1:3:4.
+        $html = $this->renderPage('galaxy', ['galaxy' => 1, 'system' => 3], 0);
+        $this->assertStringNotContainsString('<script>alert(9);</script>', $html);
+        $this->assertStringContainsString('&lt;script&gt;alert(9);&lt;/script&gt;', $html);
+
+        // Alliance member list: PlayerTwo is a member of the Test Alliance.
+        $html = $this->renderPage('allianzen', ['a' => '4'], 0);
+        $this->assertStringNotContainsString('<script>alert(9);</script>', $html);
+        $this->assertStringContainsString('&lt;script&gt;alert(9);&lt;/script&gt;', $html);
+
+        // Fleet list: PlayerOne's attack fleet targets PlayerTwo's home planet.
+        $html = $this->renderPage('flotten1', ['galaxy' => 1, 'system' => 3, 'planet' => 4, 'planettype' => 1, 'target_mission' => 1], 0);
+        $this->assertStringNotContainsString('<script>alert(9);</script>', $html);
+        $this->assertStringContainsString('&lt;script&gt;alert(9);&lt;/script&gt;', $html);
+
+        // Write-message form: recipient name in the input field.
+        $html = $this->renderPage('writemessages', ['messageziel' => 2], 0);
+        $this->assertStringNotContainsString('<script>alert(9);</script>', $html);
+        $this->assertStringContainsString('&lt;script&gt;alert(9);&lt;/script&gt;', $html);
+    }
+
+    /**
+     * The player name is escaped when it is embedded into in-game messages
+     * (ACS invitation, buddy request, fleet transport report).
+     */
+    public function testPlayerNameEscapedInSentMessages(): void
+    {
+        $this->makePlayerTwoNameMalicious();
+
+        // ACS invitation message: sender name goes into msgfrom and the text.
+        $pdo = $this->fixture->getPDO();
+        $prefix = $this->fixture->getDbPrefix();
+        $pdo->exec("INSERT INTO {$prefix}union (union_id, fleet_id, target_player, name, players) VALUES (1, 2, 2, 'KV2', '1')");
+        $pdo->exec("UPDATE {$prefix}fleet SET union_id = 1 WHERE fleet_id = 2");
+        // AddUnionMember looks players up by the lower-cased login name and
+        // reads the sender from the $GlobalUser/$GlobalUni globals.
+        $pdo->exec("UPDATE {$prefix}users SET name = 'playertwo' WHERE player_id = 2");
+        $GLOBALS['GlobalUser'] = LoadUser (1);
+        $GLOBALS['GlobalUni'] = LoadUniverse ();
+
+        $err = AddUnionMember (1, 'playertwo');
+        $this->assertSame ('', $err);
+
+        $stmt = $pdo->query("SELECT msgfrom, text FROM {$prefix}messages WHERE pm = " . MTYP_MISC . " ORDER BY msg_id DESC LIMIT 1");
+        $rows = $stmt->fetchAll();
+        $this->assertNotEmpty($rows);
+        foreach ($rows as $row) {
+            $joined = $row['msgfrom'] . ' ' . $row['text'];
+            $this->assertStringNotContainsString('<script>alert(9);</script>', $joined);
+            $this->assertStringContainsString('&lt;script&gt;alert(9);&lt;/script&gt;', $joined);
+        }
+    }
+
+    // ========================================================================
+    // ACS union names
+    // ========================================================================
+
+    /**
+     * The ACS union name (created from the raw union_name form field) is
+     * escaped on the fleet page and in the invitation message.
+     */
+    public function testAcsUnionNameEscaped(): void
+    {
+        $pdo = $this->fixture->getPDO();
+        $prefix = $this->fixture->getDbPrefix();
+        $malicious = '<script>alert(5);</script>';
+
+        // Attach a maliciously named union to PlayerOne's attack fleet
+        // (fleet_id 2) so the flotten1 ACS creation form loads it.
+        $pdo->exec("INSERT INTO {$prefix}union (union_id, fleet_id, target_player, name, players) VALUES (1, 2, 2, '" . $malicious . "', '1')");
+        $pdo->exec("UPDATE {$prefix}fleet SET union_id = 1 WHERE fleet_id = 2");
+
+        $html = $this->renderPageWithPost('flotten1', [], ['order_union' => '2'], 0);
+        $this->assertStringNotContainsString('<script>alert(5);</script>', $html);
+        $this->assertStringContainsString('&lt;script&gt;alert(5);&lt;/script&gt;', $html);
+
+        // The ACS invitation message embeds the union name -- it must be
+        // stored escaped.
+        $pdo->exec("UPDATE {$prefix}users SET name = 'playertwo' WHERE player_id = 2");
+        $GLOBALS['GlobalUser'] = LoadUser (1);
+        $GLOBALS['GlobalUni'] = LoadUniverse ();
+        $err = AddUnionMember (1, 'playertwo');
+        $this->assertSame ('', $err);
+
+        $stmt = $pdo->query("SELECT msgfrom, text FROM {$prefix}messages WHERE pm = " . MTYP_MISC . " ORDER BY msg_id DESC LIMIT 1");
+        $rows = $stmt->fetchAll();
+        $this->assertNotEmpty($rows);
+        foreach ($rows as $row) {
+            $joined = $row['msgfrom'] . ' ' . $row['text'];
+            $this->assertStringNotContainsString('<script>alert(5);</script>', $joined);
+            $this->assertStringContainsString('&lt;script&gt;alert(5);&lt;/script&gt;', $joined);
+        }
+    }
 }

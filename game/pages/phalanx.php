@@ -45,7 +45,7 @@ require_once "phalanx_events.php";
 <table width="519">
  <tr>
   <td class="c" colspan="4">
-<?=loca("PHALANX_REPORT");?> <a href="javascript:showGalaxy(<?=$aktplanet['g'];?>,<?=$aktplanet['s'];?>,<?=$aktplanet['p'];?>)" >[<?=$aktplanet['g'];?>:<?=$aktplanet['s'];?>:<?=$aktplanet['p'];?>]</a> (<?=$GlobalUser['oname'];?>)  </td>
+<?=loca("PHALANX_REPORT");?> <a href="javascript:showGalaxy(<?=$aktplanet['g'];?>,<?=$aktplanet['s'];?>,<?=$aktplanet['p'];?>)" >[<?=$aktplanet['g'];?>:<?=$aktplanet['s'];?>:<?=$aktplanet['p'];?>]</a> (<?=htmlspecialchars($GlobalUser['oname']);?>)  </td>
 
  </tr>
  <tr>

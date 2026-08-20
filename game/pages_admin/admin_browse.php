@@ -27,7 +27,7 @@ class Admin_Browse extends Page {
             $user = LoadUser ( $log['owner_id'] );
 ?>
             <tr><td><table>
-            <tr> <th> <?=$user['oname'];?> </th> <th> <?=$log['url'];?> </th> </tr>
+            <tr> <th> <?=htmlspecialchars($user['oname']);?> </th> <th> <?=$log['url'];?> </th> </tr>
             <tr> <th rowspan=2>
             <?=$log['method'];?><br>
             <?=date ("d M Y", $log['date']);?><br>

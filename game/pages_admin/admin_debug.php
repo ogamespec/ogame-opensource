@@ -70,7 +70,7 @@ class Admin_Debug extends Page {
         {
             $msg = dbarray ( $this->result );
             $user = LoadUser ($msg['owner_id']);
-            $from = "<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$msg['owner_id']."\">" . $user['oname'] . "</a> [" . $msg['ip'] . "]";
+            $from = "<a href=\"index.php?page=admin&session=$session&mode=Users&player_id=".$msg['owner_id']."\">" . htmlspecialchars($user['oname']) . "</a> [" . $msg['ip'] . "]";
             $msg['text'] = str_replace ( "{PUBLIC_SESSION}", $session, $msg['text']);
             echo "<tr><th><input type=\"checkbox\" name=\"delmes".$msg['error_id']."\"/></th><th>".date ("m-d H:i:s", $msg['date'])."</th><th>$from </th><th>".$msg['agent']." </th></tr>\n";
             echo "<tr><td class=\"b\"> </td><td class=\"b\" colspan=\"3\">".$msg['text']."</td></tr>\n";

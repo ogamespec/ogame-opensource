@@ -96,7 +96,7 @@ class Suche extends Page {
                         if ($ally) {
                             $ally_tag = htmlspecialchars($ally['tag']);
                         }
-                        $name = $user['oname'];
+                        $name = htmlspecialchars($user['oname']);
                         $buttons = "<a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\" alt=\"".loca("SEARCH_MESSAGE")."\" ><img src=\"".UserSkin()."/img/m.gif\" alt=\"".loca("SEARCH_MESSAGE")."\" title=\"".loca("SEARCH_MESSAGE")."\" /></a><a href='index.php?page=buddy&session=$session&action=7&buddy_id=".$user['player_id']."' alt='".loca("SEARCH_BUDDY")."'><img src='".UserSkin()."/img/b.gif' border=0 alt='".loca("SEARCH_BUDDY")."' title='".loca("SEARCH_BUDDY")."'></a>";
                         $allyurl = "ainfo.php?allyid=".$user['ally_id'];
                         if ( $user['player_id'] == $GlobalUser['player_id'] ) {
@@ -120,7 +120,7 @@ class Suche extends Page {
                         if ($ally) {
                             $ally_tag = htmlspecialchars($ally['tag']);
                         }
-                        $name = $user['oname'];
+                        $name = htmlspecialchars($user['oname']);
                         $buttons = "<a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\" alt=\"".loca("SEARCH_MESSAGE")."\"><img src=\"".UserSkin()."/img/m.gif\" alt=\"".loca("SEARCH_MESSAGE")."\" title=\"".loca("SEARCH_MESSAGE")."\" /></a><a href='index.php?page=buddy&session=$session&action=7&buddy_id=".$user['player_id']."' alt='".loca("SEARCH_BUDDY")."'><img src='".UserSkin()."/img/b.gif' border=0 alt='".loca("SEARCH_BUDDY")."' title='".loca("SEARCH_BUDDY")."'></a>";
                         $allyurl = "ainfo.php?allyid=".$user['ally_id'];
                         if ( $user['player_id'] == $GlobalUser['player_id'] ) {

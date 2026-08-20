@@ -483,7 +483,7 @@ class Admin_Users extends Page {
 ?>
 
     <tr><td class=c colspan=3><?=loca("ADM_USER_FLEET_LOGS");?></td></tr>
-    <tr><td><?=loca("ADM_USER_FLOG_ORDER");?></td><td><?=va(loca("ADM_USER_FLOG_FROM"), $user['oname']);?></td><td><?=va(loca("ADM_USER_FLOG_TO"), $user['oname']);?></td></tr>
+    <tr><td><?=loca("ADM_USER_FLOG_ORDER");?></td><td><?=va(loca("ADM_USER_FLOG_FROM"), htmlspecialchars($user['oname']));?></td><td><?=va(loca("ADM_USER_FLOG_TO"), htmlspecialchars($user['oname']));?></td></tr>
     <tr><td><?=loca("ADM_USER_FORDER_0");?></td><td><?php echo $this->LinkFleetsFrom($user,0);?></td><td><?php echo $this->LinkFleetsTo($user,0);?></td></tr>
     <tr><td><?=loca("ADM_USER_FORDER_1");?></td><td><?php echo $this->LinkFleetsFrom($user,1);?></td><td><?php echo $this->LinkFleetsTo($user,1);?></td></tr>
     <tr><td><?=loca("ADM_USER_FORDER_2");?></td><td><?php echo $this->LinkFleetsFrom($user,2);?></td><td><?php echo $this->LinkFleetsTo($user,2);?></td></tr>
