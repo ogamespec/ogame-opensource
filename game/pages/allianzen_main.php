@@ -21,20 +21,20 @@ function AllyPage_Home () : void
     if ( $ally['imglogo'] !== "" ) 
     {
 ?>
-<tr><th colspan=2><img src="/game/img/preload.gif" class="reloadimage" title="pic.php?url=<?=$ally['imglogo'];?>"></td></tr>
+<tr><th colspan=2><img src="/game/img/preload.gif" class="reloadimage" title="pic.php?url=<?=htmlspecialchars($ally['imglogo']);?>"></td></tr>
 <?php
     }
 ?>
 <table width=519>
 <tr><td class=c colspan=2><?=loca("ALLY_MAIN_HEAD");?></td></tr>
-<tr><th><?=loca("ALLY_MAIN_TAG");?></th><th><?=$ally['tag'];?>
+<tr><th><?=loca("ALLY_MAIN_TAG");?></th><th><?=htmlspecialchars($ally['tag']);?>
 <?php
-    if ( $now < $ally['tag_until'] ) echo " (".va(loca("ALLY_MAIN_PREV"), $ally['old_tag']).")";
+    if ( $now < $ally['tag_until'] ) echo " (".va(loca("ALLY_MAIN_PREV"), htmlspecialchars($ally['old_tag'])).")";
 ?>
 </th></tr>
-<tr><th><?=loca("ALLY_MAIN_NAME");?></th><th><?=$ally['name'];?>
+<tr><th><?=loca("ALLY_MAIN_NAME");?></th><th><?=htmlspecialchars($ally['name']);?>
 <?php
-    if ( $now < $ally['name_until'] ) echo " (".va(loca("ALLY_MAIN_PREV"), $ally['old_name']).")";
+    if ( $now < $ally['name_until'] ) echo " (".va(loca("ALLY_MAIN_PREV"), htmlspecialchars($ally['old_name'])).")";
 ?>
 </th></tr>
 <tr><th><?=loca("ALLY_MAIN_MEMBERS");?></th><th><?=$members;?>
@@ -64,7 +64,7 @@ function AllyPage_Home () : void
     }
 ?>
 <tr><th colspan=2 height=100><?=bb($ally['exttext']);?></th></tr>
-<tr><th><?=loca("ALLY_MAIN_HOMEPAGE");?></th><th><a href="redir.php?url=<?=$ally['homepage'];?>" target="_blank"><?=$ally['homepage'];?></a></th></tr>
+<tr><th><?=loca("ALLY_MAIN_HOMEPAGE");?></th><th><a href="redir.php?url=<?=htmlspecialchars($ally['homepage']);?>" target="_blank"><?=htmlspecialchars($ally['homepage']);?></a></th></tr>
 <tr><td class=c colspan=2><?=loca("ALLY_MAIN_INTTEXT");?></th></tr><tr><th colspan=2 height=100><?=bb($ally['inttext']);?></th></tr>
 </table><br>
 <?php

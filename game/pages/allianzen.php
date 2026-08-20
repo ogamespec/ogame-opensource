@@ -43,7 +43,7 @@ class Allianzen extends Page {
 
                 if (mb_strlen ($_POST['tag'], "UTF-8")  < 3) $PageError = loca("ALLY_FOUND_ERROR_TAG");
                 else if (mb_strlen ($_POST['name'], "UTF-8")  < 3) $PageError = loca("ALLY_FOUND_ERROR_NAME");
-                else if (IsAllyTagExist ($_POST['tag'])) $PageError = va(loca("ALLY_FOUND_ERROR_EXISTS"), $_POST['tag']);
+                else if (IsAllyTagExist ($_POST['tag'])) $PageError = va(loca("ALLY_FOUND_ERROR_EXISTS"), htmlspecialchars($_POST['tag']));
                 else {
                     CreateAlly ($GlobalUser['player_id'], $_POST['tag'], $_POST['name']);
                     // The classic page rendered an inline success confirmation
@@ -114,7 +114,7 @@ class Allianzen extends Page {
         // Alliance successfully created: render the inline success page (like
         // the classic page did before exiting).
         if ( $this->ally_created ) {
-            echo "<br/><p>".va(loca("ALLY_FOUND_SUCCESS"), $_POST['name'], $_POST['tag'])."</p>\n";
+            echo "<br/><p>".va(loca("ALLY_FOUND_SUCCESS"), htmlspecialchars($_POST['name']), htmlspecialchars($_POST['tag']))."</p>\n";
             echo "<form method=\"post\" action=\"index.php?page=allianzen&session=".$_GET['session']."\">\n";
             echo "<input type=\"submit\" value=\"".loca("ALLY_FOUND_CONFIRM")."\"/></form><br/><br/><br/><br/>\n";
             return;
@@ -163,8 +163,8 @@ class Allianzen extends Page {
         echo "<form action=\"index.php?page=allianzen&session=".$_GET['session']."&a=1&weiter=1\" method=POST>\n";
         echo "<table width=519>\n";
         echo "<tr><td class=c colspan=2>".loca("ALLY_FOUND_ALLY")."</td></tr>\n";
-        echo "<tr><th>".loca("ALLY_FOUND_TAG")."</th><th><input type=text name=\"tag\" size=8 maxlength=8 value=\"$tag\"></th></tr>\n";
-        echo "<tr><th>".loca("ALLY_FOUND_NAME")."</th><th><input type=text name=\"name\" size=20 maxlength=30 value=\"$name\"></th></tr>\n";
+        echo "<tr><th>".loca("ALLY_FOUND_TAG")."</th><th><input type=text name=\"tag\" size=8 maxlength=8 value=\"".htmlspecialchars($tag)."\"></th></tr>\n";
+        echo "<tr><th>".loca("ALLY_FOUND_NAME")."</th><th><input type=text name=\"name\" size=20 maxlength=30 value=\"".htmlspecialchars($name)."\"></th></tr>\n";
         echo "<tr><th colspan=2><input type=submit value=\"".loca("ALLY_FOUND_SUBMIT")."\"></th></tr></table></form><br><br><br><br>\n";
     }
 
@@ -175,7 +175,7 @@ class Allianzen extends Page {
         echo "<tr><td class=c colspan=2>".loca("ALLY_FIND_ALLY")."</td></tr>\n";
         echo "<tr><th>".loca("ALLY_FIND_HEAD")."</th><th>\n";
         echo "<form action=\"index.php?page=allianzen&session=".$_GET['session']."&a=2\" method=POST>\n";
-        echo "<input type=text name=suchtext value=\"$text\"><input type=submit value=\"".loca("ALLY_FIND_SUBMIT")."\">\n";
+        echo "<input type=text name=suchtext value=\"".htmlspecialchars($text)."\"><input type=submit value=\"".loca("ALLY_FIND_SUBMIT")."\">\n";
         echo "</th></tr></form></table><br>\n";
         echo "$results\n";
         echo "<br><br><br>\n";
@@ -196,8 +196,8 @@ class Allianzen extends Page {
             $ally = dbarray ($result);
             $enum = EnumerateAlly ($ally['ally_id']);
             $players = dbrows ($enum);
-            $this->SearchResults .= "<tr><th><center>[<a href=\"index.php?page=bewerben&session=".$_GET['session']."&allyid=".$ally['ally_id']."\">".$ally['tag']."</a>]</center></th>\n";
-            $this->SearchResults .= "<th><center>".$ally['name']."</center></th>\n";
+            $this->SearchResults .= "<tr><th><center>[<a href=\"index.php?page=bewerben&session=".$_GET['session']."&allyid=".$ally['ally_id']."\">".htmlspecialchars($ally['tag'])."</a>]</center></th>\n";
+            $this->SearchResults .= "<th><center>".htmlspecialchars($ally['name'])."</center></th>\n";
             $this->SearchResults .= "<th><center>".$players."</center></th></tr>\n";
         }
         $this->SearchResults .= "</table><br>\n";
@@ -217,7 +217,7 @@ class Allianzen extends Page {
         <table width=519>
         <form action="index.php?page=allianzen&session=<?=$session;?>" method=POST>
         <tr><td class=c colspan=2><?=loca("ALLY_APPLY");?></td></tr>
-        <tr><th colspan=2><?=va(loca("ALLY_APPLY_ALREADY"), $ally['tag']);?></th></tr>
+        <tr><th colspan=2><?=va(loca("ALLY_APPLY_ALREADY"), htmlspecialchars($ally['tag']));?></th></tr>
         <tr><th colspan=2><input type=submit name="bcancel" value="<?=loca("ALLY_APPLY_WITHDRAW");?>"></th></tr>
         </table></form><br><br><br><br>
         <?php
@@ -241,20 +241,20 @@ class Allianzen extends Page {
         if ( $ally['imglogo'] !== "" ) 
         {
 ?>
-<tr><th colspan=2><img src="/game/img/preload.gif" class="reloadimage" title="pic.php?url=<?=$ally['imglogo'];?>"></td></tr>
+<tr><th colspan=2><img src="/game/img/preload.gif" class="reloadimage" title="pic.php?url=<?=htmlspecialchars($ally['imglogo']);?>"></td></tr>
 <?php
         }
 ?>
 <table width=519>
 <tr><td class=c colspan=2><?=loca("ALLY_MAIN_HEAD");?></td></tr>
-<tr><th><?=loca("ALLY_MAIN_TAG");?></th><th><?=$ally['tag'];?>
+<tr><th><?=loca("ALLY_MAIN_TAG");?></th><th><?=htmlspecialchars($ally['tag']);?>
 <?php
-    if ( $now < $ally['tag_until'] ) echo " (".va(loca("ALLY_MAIN_PREV"), $ally['old_tag']).")";
+    if ( $now < $ally['tag_until'] ) echo " (".va(loca("ALLY_MAIN_PREV"), htmlspecialchars($ally['old_tag'])).")";
 ?>
 </th></tr>
-<tr><th><?=loca("ALLY_MAIN_NAME");?></th><th><?=$ally['name'];?>
+<tr><th><?=loca("ALLY_MAIN_NAME");?></th><th><?=htmlspecialchars($ally['name']);?>
 <?php
-    if ( $now < $ally['name_until'] ) echo " (".va(loca("ALLY_MAIN_PREV"), $ally['old_name']).")";
+    if ( $now < $ally['name_until'] ) echo " (".va(loca("ALLY_MAIN_PREV"), htmlspecialchars($ally['old_name'])).")";
 ?>
 </th></tr>
 <tr><th><?=loca("ALLY_MAIN_MEMBERS");?></th><th><?=$members;?>
@@ -284,7 +284,7 @@ class Allianzen extends Page {
     }
 ?>
 <tr><th colspan=2 height=100><?=bb($ally['exttext']);?></th></tr>
-<tr><th><?=loca("ALLY_MAIN_HOMEPAGE");?></th><th><a href="redir.php?url=<?=$ally['homepage'];?>" target="_blank"><?=$ally['homepage'];?></a></th></tr>
+<tr><th><?=loca("ALLY_MAIN_HOMEPAGE");?></th><th><a href="redir.php?url=<?=htmlspecialchars($ally['homepage']);?>" target="_blank"><?=htmlspecialchars($ally['homepage']);?></a></th></tr>
 <tr><td class=c colspan=2><?=loca("ALLY_MAIN_INTTEXT");?></th></tr><tr><th colspan=2 height=100><?=bb($ally['inttext']);?></th></tr>
 </table><br>
 <?php

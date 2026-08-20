@@ -39,15 +39,15 @@ class Bewerbungen extends Page {
                     $user = dbarray ($result);
                     loca_add ("ally", $user['lang']);
                     SendMessage ( $user['player_id'],
-                        va(loca_lang("ALLY_MSG_FROM", $user['lang']), $this->ally['tag']),
+                        va(loca_lang("ALLY_MSG_FROM", $user['lang']), htmlspecialchars($this->ally['tag'])),
                         loca_lang("ALLY_MSG_COMMON", $user['lang']),
                         va(loca_lang("ALLY_MSG_APPLY_ALLY", $user['lang']), $newcomer['oname']), MTYP_ALLY);
                 }
                 loca_add ("ally", $newcomer['lang']);
                 SendMessage ( $player_id,
-                    va(loca_lang("ALLY_MSG_FROM", $newcomer['lang']), $this->ally['tag']),
-                    va(loca_lang("ALLY_MSG_APPLY_YES", $newcomer['lang']), $this->ally['tag']),
-                    va(loca_lang("ALLY_MSG_APPLY_PLAYER", $newcomer['lang']), $this->ally['tag']), MTYP_ALLY );
+                    va(loca_lang("ALLY_MSG_FROM", $newcomer['lang']), htmlspecialchars($this->ally['tag'])),
+                    va(loca_lang("ALLY_MSG_APPLY_YES", $newcomer['lang']), htmlspecialchars($this->ally['tag'])),
+                    va(loca_lang("ALLY_MSG_APPLY_PLAYER", $newcomer['lang']), htmlspecialchars($this->ally['tag'])), MTYP_ALLY );
 
                 $query = "UPDATE ".$db_prefix."users SET ally_id = $ally_id, allyrank = 1, joindate = $now WHERE player_id = $player_id";
                 dbquery ($query);
@@ -66,10 +66,10 @@ class Bewerbungen extends Page {
                 if ($newcomer != null) {
                     loca_add ("ally", $newcomer['lang']);
                     $reason = loca_lang("ALLY_MSG_APPLY_NO_REASON", $newcomer['lang']);
-                    if ( $_POST['text'] !== "" ) $reason = $_POST['text'];
+                    if ( $_POST['text'] !== "" ) $reason = htmlspecialchars($_POST['text']);
                     SendMessage ( $app['player_id'],
-                        va(loca_lang("ALLY_MSG_FROM", $newcomer['lang']), $this->ally['tag']),
-                        va(loca_lang("ALLY_MSG_APPLY_NO", $newcomer['lang']), $this->ally['tag']),
+                        va(loca_lang("ALLY_MSG_FROM", $newcomer['lang']), htmlspecialchars($this->ally['tag'])),
+                        va(loca_lang("ALLY_MSG_APPLY_NO", $newcomer['lang']), htmlspecialchars($this->ally['tag'])),
                         $reason, MTYP_ALLY );
                 }
                 MyGoto ("bewerbungen");
@@ -96,7 +96,7 @@ class Bewerbungen extends Page {
 
         ?>
         <table width=519>
-        <tr><td class=c colspan=2><?=va(loca("ALLY_APPA_OVERVIEW"), $ally['tag']);?></td></tr>
+        <tr><td class=c colspan=2><?=va(loca("ALLY_APPA_OVERVIEW"), htmlspecialchars($ally['tag']));?></td></tr>
         <?php
             if ( $show > 0 )
             {
@@ -105,7 +105,7 @@ class Bewerbungen extends Page {
         ?>
         <tr><th colspan=2><?=va(loca("ALLY_APPA_FROM"), $user['oname']);?></th></tr>
         <form action="index.php?page=bewerbungen&session=<?=$session;?>&show=<?=$show;?>&sort=<?=$sort;?>" method=POST>
-        <tr><th colspan=2><?=str_replace("\n", "\n<br>", stripslashes($app['text']) );?></th></tr>
+        <tr><th colspan=2><?=str_replace("\n", "\n<br>", htmlspecialchars(stripslashes($app['text'])) );?></th></tr>
         <tr><td class=c colspan=2><?=loca("ALLY_APPA_ACTION");?></td></tr>
         <tr><th>&#160;</th><th><input type=submit name="aktion" value="<?=loca("ALLY_APPA_ACCEPT");?>"></th></tr>
         <tr><th><?=va(loca("ALLY_APPA_REASON"), "<span id=\"cntChars\">0</span>", $maxchars);?></th><th><textarea name="text" cols=40 rows=10 onkeyup="javascript:cntchar(<?=$maxchars;?>)"></textarea></th></tr>
@@ -137,7 +137,7 @@ class Bewerbungen extends Page {
         {
 
         ?>
-        <table width=519><tr><td class=c colspan=2><?=va(loca("ALLY_APPA_OVERVIEW"), $ally['tag']);?></td></tr><tr><th colspan=2><?=loca("ALLY_APPA_NONE");?></th></tr></table><br><br><br><br>
+        <table width=519><tr><td class=c colspan=2><?=va(loca("ALLY_APPA_OVERVIEW"), htmlspecialchars($ally['tag']));?></td></tr><tr><th colspan=2><?=loca("ALLY_APPA_NONE");?></th></tr></table><br><br><br><br>
         <?php
 
         }

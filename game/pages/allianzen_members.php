@@ -97,7 +97,7 @@ function PageAlly_MemberSettings () : void
             $user = dbarray ($result);
             loca_add ("ally", $user['lang']);
             SendMessage ( $user['player_id'], 
-                va(loca_lang("ALLY_MSG_FROM", $user['lang']), $ally['tag']), 
+                va(loca_lang("ALLY_MSG_FROM", $user['lang']), htmlspecialchars($ally['tag'])), 
                 loca_lang("ALLY_MSG_COMMON", $user['lang']), 
                 va(loca_lang("ALLY_MSG_KICK_TEXT", $user['lang']), $leaver['oname']), MTYP_ALLY);
         }
@@ -105,9 +105,9 @@ function PageAlly_MemberSettings () : void
         // A message to the player about the exclusion.
         loca_add ("ally", $leaver['lang']);
         SendMessage ( $leaver['player_id'], 
-                va(loca_lang("ALLY_MSG_FROM", $leaver['lang']), $ally['tag']), 
-                va(loca_lang("ALLY_MSG_KICK_SUBJ", $leaver['lang']), $ally['tag']), 
-                va(loca_lang("ALLY_MSG_YOU_KICKED", $leaver['lang']), $GlobalUser['oname'], $ally['tag']), MTYP_ALLY);
+                va(loca_lang("ALLY_MSG_FROM", $leaver['lang']), htmlspecialchars($ally['tag'])), 
+                va(loca_lang("ALLY_MSG_KICK_SUBJ", $leaver['lang']), htmlspecialchars($ally['tag'])), 
+                va(loca_lang("ALLY_MSG_YOU_KICKED", $leaver['lang']), $GlobalUser['oname'], htmlspecialchars($ally['tag'])), MTYP_ALLY);
     }
 
     if ( method() === "POST" && $_GET['a'] == 16 && $selected_user)        // Assign a rank to a player

@@ -169,7 +169,7 @@ class Admin_Users extends Page {
 <?php
     if ($user['ally_id']) {
         $ally = LoadAlly ($user['ally_id']);
-        echo "[".$ally['tag']."] ".$ally['name'];
+        echo "[".htmlspecialchars($ally['tag'])."] ".htmlspecialchars($ally['name']);
     }
 ?>
 </th></tr>
