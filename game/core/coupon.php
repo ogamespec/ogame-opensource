@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file coupon.php
+ * @brief Coupon code handling.
+ * @details Validates and redeems coupon codes that grant resources or other rewards to players.
+ */
 // API for coupon management.
 
 /*
@@ -21,7 +25,15 @@ All DM accrued through coupons is considered paid.
 
 */
 
-// Function to send an email with a coupon code (UTF-8, HTML).
+/**
+ * Sends an email with a coupon code as HTML (UTF-8) and logs it to a temporary file.
+ *
+ * @param string $to Recipient email address.
+ * @param string $subject Email subject.
+ * @param string $message Email message body.
+ * @param string $header Additional email headers.
+ * @return void
+ */
 function mail_html (string $to, string $subject = '(No subject)', string $message = '', string $header = '') : void {
     $ip = $_SERVER['REMOTE_ADDR'];
     if ( !localhost($ip) ) {
@@ -37,7 +49,12 @@ function mail_html (string $to, string $subject = '(No subject)', string $messag
 
 // ------------------------------------------------------------------
 
-// Load coupon object by ID. Return NULL if the coupon is not found.
+/**
+ * Loads a coupon by its ID from the master database.
+ *
+ * @param int $id Coupon ID.
+ * @return mixed Coupon data as an associative array, or null if the coupon is not found.
+ */
 function LoadCoupon (int $id) : mixed
 {
     if ( MDBConnect() == false) return null;
@@ -48,7 +65,13 @@ function LoadCoupon (int $id) : mixed
     else return null;
 }
 
-// Send the coupon code to the specified user
+/**
+ * Sends the coupon code to the specified user by email.
+ *
+ * @param array $user User data array.
+ * @param string $code Coupon code to send.
+ * @return void
+ */
 function SendCoupon (array $user, string $code) : void
 {
     loca_add ( "coupons", $user['lang'] );    // add the language keys of the user to whom the message is sent.
@@ -59,7 +82,12 @@ function SendCoupon (array $user, string $code) : void
         "From: coupon@" . $_SERVER['SERVER_NAME'] );
 }
 
-// Check if there is such a coupon and it is not activated. Returns the coupon ID or 0 if the coupon code is incorrect or the coupon is redeemed.
+/**
+ * Checks if a coupon with the given code exists and is not yet redeemed.
+ *
+ * @param string $code Coupon code to check.
+ * @return int Coupon ID, or 0 if the code is incorrect or the coupon is already redeemed.
+ */
 function CheckCoupon (string $code) : int
 {
     if ( MDBConnect() )
@@ -76,7 +104,13 @@ function CheckCoupon (string $code) : int
     else return 0;
 }
 
-// List all coupons. Return the result of the SQL query. Call parameters for paginator (start, count)
+/**
+ * Lists all coupons ordered by ID in descending order.
+ *
+ * @param int $start Offset for the paginator.
+ * @param int $count Number of coupons to return.
+ * @return mixed Query result resource, or null if the master database is unavailable.
+ */
 function EnumCoupons (int $start, int $count) : mixed
 {
     if ( MDBConnect() )
@@ -87,7 +121,11 @@ function EnumCoupons (int $start, int $count) : mixed
     else return null;
 }
 
-// Number of coupons in the database
+/**
+ * Returns the total number of coupons in the database.
+ *
+ * @return int Number of coupons.
+ */
 function TotalCoupons () : int
 {
     if ( MDBConnect() )
@@ -102,7 +140,12 @@ function TotalCoupons () : int
     return 0;
 }
 
-// Add a coupon (DM quantity). Return the coupon code, or NULL if failure.
+/**
+ * Generates a unique coupon code and adds a coupon with the given DM amount.
+ *
+ * @param int $dm Amount of DM granted by the coupon.
+ * @return string|null Generated coupon code, or null on failure.
+ */
 function AddCoupon (int $dm) : string|null
 {
     global $db_secret;
@@ -122,7 +165,13 @@ function AddCoupon (int $dm) : string|null
     else return null;
 }
 
-// Activate the coupon. Return true if everything is fine or false if it's a mess.
+/**
+ * Redeems the coupon for the user, marking it as used and adding the DM amount.
+ *
+ * @param array $user User data array.
+ * @param string $code Coupon code to activate.
+ * @return bool True on success, false if the coupon is invalid or the master database is unavailable.
+ */
 function ActivateCoupon (array $user, string $code) : bool
 {
     global $GlobalUni, $db_prefix;
@@ -143,7 +192,12 @@ function ActivateCoupon (array $user, string $code) : bool
     else return false;
 }
 
-// Delete coupon
+/**
+ * Deletes a coupon from the master database by its ID.
+ *
+ * @param int $id Coupon ID.
+ * @return void
+ */
 function DeleteCoupon (int $id) : void
 {
     if ( MDBConnect() )
@@ -153,10 +207,15 @@ function DeleteCoupon (int $id) : void
     }
 }
 
-// Coupon charging task handler.
-// sub_id: Number of DM
-// obj_id: (Inactive for at least ... days << 16) | (Been in the game for over ... days)
-// level: Periodicity ... days
+/**
+ * Handler for the coupon distribution queue task.
+ * Sends coupons to all users matching the criteria: sub_id holds the number of DM,
+ * obj_id is (inactive for at least N days << 16) | (in the game for over M days),
+ * level is the task periodicity in days.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_Coupon_End (array $queue) : void
 {
     global $db_prefix;

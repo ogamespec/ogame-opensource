@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file db.php
+ * @brief Database layer facade.
+ * @details Selects the active database backend (MySQL or SQLite) based on the DB_CONNECTION environment variable and exposes the shared database helper functions used across the game core.
+ */
 // Database layer.
 //
 // Two interchangeable backends are available:
@@ -28,9 +32,11 @@ else {
     require_once __DIR__ . '/db_mysql.php';
 }
 
-// Drop all game tables and create them empty according to install_tabs.php.
-// Works with both backends: the MySQL backend runs the statements as-is,
-// the SQLite backend translates them (see db_sqlite.php).
+/**
+ * Drops all game tables and creates them empty according to install_tabs.php.
+ * Works with both backends: the MySQL backend runs the statements as-is,
+ * the SQLite backend translates them (see db_sqlite.php).
+ */
 function CreateDBTables () : void
 {
     include __DIR__ . "/install_tabs.php";

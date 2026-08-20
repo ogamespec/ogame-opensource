@@ -1,6 +1,16 @@
 <?php
-
+/**
+ * @file core.php
+ * @brief Core bootstrap.
+ * @details Loads every game/core module in dependency order and declares the core version constant used to check modification compatibility.
+ */
+/**
+ * Data of the user currently logged in.
+ */
 $GlobalUser = array ();
+/**
+ * Whether the current request is executed from the cron scheduler.
+ */
 $from_cron = false;
 
 require_once "defs.php";
@@ -36,7 +46,9 @@ require_once "botapi.php";
 require_once "coupon.php";
 require_once "mods.php";
 
-// Used to check compatibility of modifications
+/**
+ * Core version used to check compatibility of modifications.
+ */
 $CoreVersion = "1.0.0.0";
 
 ?>

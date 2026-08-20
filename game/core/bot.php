@@ -1,18 +1,45 @@
 <?php
-
+/**
+ * @file bot.php
+ * @brief Automated bot player logic.
+ * @details Implements the behaviour of automated (bot) players that produce resources and build ships without human input.
+ */
 // Bot Management.
 
 // Global bot variables.
+
+/**
+ * ID of the bot currently being processed.
+ */
 $BotID = 0;        // ordinal number of the current bot
+
+/**
+ * Start time of the current bot task execution.
+ */
 $BotNow = 0;       // start time of bot task execution
 
-// Add a block to the queue
+/**
+ * Add a bot block to the queue.
+ *
+ * @param int $player_id Player ID of the bot.
+ * @param int $strat_id Strategy ID.
+ * @param int $block_id Block ID.
+ * @param int $when Start time of the block.
+ * @param int $seconds Duration of the block in seconds.
+ * @return int ID of the created queue entry.
+ */
 function AddBotQueue (int $player_id, int $strat_id, int $block_id, int $when, int $seconds) : int
 {
     return AddQueue ($player_id, QTYP_AI, $strat_id, $block_id, 0, $when, $when+$seconds, QUEUE_PRIO_BOT);
 }
 
-// Block Interpreter
+/**
+ * Interpret and execute a strategy block of the bot program.
+ *
+ * @param array $queue Queue entry of the block.
+ * @param array $block Block data.
+ * @param array $childs Child links of the block.
+ */
 function ExecuteBlock (array $queue, array $block, array $childs ) : void
 {
     global $db_prefix, $BotID, $BotNow;
@@ -130,7 +157,12 @@ function ExecuteBlock (array $queue, array $block, array $childs ) : void
     }
 }
 
-// Add bot.
+/**
+ * Create a new bot player.
+ *
+ * @param string $name Name of the bot.
+ * @return bool True if the bot was created, false if the name is already taken.
+ */
 function AddBot (string $name) : bool
 {
     global $db_prefix;
@@ -149,7 +181,11 @@ function AddBot (string $name) : bool
     else return false;
 }
 
-// Start the bot (execute the Start block for the _start strategy)
+/**
+ * Start the bot by executing the Start block of the _start strategy.
+ *
+ * @param int $player_id Player ID of the bot.
+ */
 function StartBot (int $player_id) : void
 {
     global $BotID, $BotNow;
@@ -160,7 +196,11 @@ function StartBot (int $player_id) : void
     if ( BotExec("_start") == 0 ) Debug ( "Starting strategy not found." );
 }
 
-// Stop the bot (just remove all AI tasks)
+/**
+ * Stop the bot by removing all of its AI tasks.
+ *
+ * @param int $player_id Player ID of the bot.
+ */
 function StopBot (int $player_id) : void
 {
     global $db_prefix;
@@ -171,7 +211,12 @@ function StopBot (int $player_id) : void
     }
 }
 
-// Check if the player is a bot.
+/**
+ * Check whether the player is a bot.
+ *
+ * @param int $player_id Player ID.
+ * @return bool True if the player is a bot.
+ */
 function IsBot (int $player_id) : bool
 {
     global $db_prefix;
@@ -180,8 +225,12 @@ function IsBot (int $player_id) : bool
     return ( dbrows ($result) > 0 ) ;
 }
 
-// Task completion event for the bot. Called from queue.php
-// Activate the bot's task parser.
+/**
+ * Task completion event for a bot, called from queue.php.
+ * Activates the bot's task parser for the completed task.
+ *
+ * @param array $queue Completed queue entry.
+ */
 function Queue_Bot_End (array $queue) : void
 {
     global $db_prefix;
@@ -213,6 +262,14 @@ function Queue_Bot_End (array $queue) : void
 
 // Bot Variables.
 
+/**
+ * Read a bot variable, creating it with the default value if it does not exist.
+ *
+ * @param int $owner_id Player ID of the bot.
+ * @param string $var Variable name.
+ * @param string|null $def_value Default value used when the variable is missing.
+ * @return string|null Value of the variable.
+ */
 function GetVar ( int $owner_id, string $var, string|null $def_value=null ) : string|null
 {
     global $db_prefix;
@@ -230,6 +287,13 @@ function GetVar ( int $owner_id, string $var, string|null $def_value=null ) : st
     }
 }
 
+/**
+ * Write a bot variable, creating it if it does not exist.
+ *
+ * @param int $owner_id Player ID of the bot.
+ * @param string $var Variable name.
+ * @param string $value New variable value.
+ */
 function SetVar ( int $owner_id, string $var, string $value ) : void
 {
     global $db_prefix;

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file db_sqlite.php
+ * @brief SQLite database backend.
+ * @details Implements the database layer on top of PDO SQLite, in-memory by default. Used by tests so the game code runs without a MySQL server.
+ */
 // Alternate in-memory database backend: SQLite via PDO.
 // Included by db.php when DB_CONNECTION=sqlite (see phpunit.xml).
 //
@@ -10,6 +14,11 @@
 // (LOCK TABLES, SHOW COLUMNS, ALTER TABLE ... AUTO_INCREMENT, SET @var := ...,
 // = ANY(...), ...) into their SQLite equivalents.
 
+/**
+ * Shared query bookkeeping globals: $query_counter counts executed queries,
+ * $query_log accumulates them, $db_connect holds the active PDO connection
+ * and $MDB_link is the master database link (unused in the SQLite backend).
+ */
 global $query_counter, $query_log, $db_connect, $MDB_link;
 
 $query_counter = 0;
@@ -23,18 +32,34 @@ $MDB_link = 0;
  */
 class SQLiteDBResult
 {
-    /** @var array<int,array<string,mixed>> All rows of the result set. */
+    /**
+     * All rows of the result set (list of row arrays).
+     */
     public array $rows = [];
 
     /** @var int Current position of dbarray(). */
     public int $rowIndex = 0;
 
+    /**
+     * Creates a result wrapper holding the given rows.
+     *
+     * @param array $rows All rows of the result set.
+     */
     public function __construct (array $rows = [])
     {
         $this->rows = $rows;
     }
 }
 
+/**
+ * Establishes the SQLite connection through PDO.
+ *
+ * @param string $db_host Host name (ignored by SQLite).
+ * @param string $db_user User name (ignored by SQLite).
+ * @param string $db_pass Password (ignored by SQLite).
+ * @param string $db_name Database file name, overridden by the DB_DATABASE environment variable.
+ * @return void
+ */
 function dbconnect (string $db_host, string $db_user, string $db_pass, string $db_name) : void
 {
     global $query_counter, $query_log, $db_connect;
@@ -58,6 +83,13 @@ function dbconnect (string $db_host, string $db_user, string $db_pass, string $d
     $query_log = "";
 }
 
+/**
+ * Executes a MySQL-flavoured query, translating it to SQLite.
+ *
+ * @param string $query The SQL query to execute.
+ * @param bool $mute Whether to suppress error output on failure.
+ * @return mixed An SQLiteDBResult for SELECT-like queries, true on success, false on failure.
+ */
 function dbquery (string $query, bool $mute=false) : mixed
 {
     global $query_counter, $query_log, $db_connect;
@@ -101,12 +133,24 @@ function dbquery (string $query, bool $mute=false) : mixed
     }
 }
 
+/**
+ * Returns the number of rows of a query result.
+ *
+ * @param mixed $result The query result to count.
+ * @return int The number of rows.
+ */
 function dbrows (mixed $result) : int
 {
     if ( $result instanceof SQLiteDBResult ) return count ($result->rows);
     return 0;
 }
 
+/**
+ * Fetches the next row of a query result.
+ *
+ * @param mixed $result The query result to read.
+ * @return mixed The next row as an array, or false when no rows remain.
+ */
 function dbarray (mixed $result) : mixed
 {
     if ( $result instanceof SQLiteDBResult ) {
@@ -118,12 +162,22 @@ function dbarray (mixed $result) : mixed
     return false;
 }
 
+/**
+ * Frees a query result (a no-op for SQLite results).
+ *
+ * @param mixed $result The query result to free.
+ * @return void
+ */
 function dbfree (mixed $result) : void
 {
     // SQLiteDBResult needs no freeing.
 }
 
-// Connect to the database
+/**
+ * Connects to the database using the configured credentials.
+ *
+ * @return void
+ */
 function InitDB () : void
 {
     global $db_host, $db_user, $db_pass, $db_name;
@@ -131,7 +185,13 @@ function InitDB () : void
     // SQLite is always UTF-8, so there is no SET NAMES equivalent.
 }
 
-// Add a row to the table.
+/**
+ * Adds a row to a table.
+ *
+ * @param array $row Associative array of column names to values.
+ * @param string $tabname Name of the target table.
+ * @return int The id of the inserted row, or 0 on failure.
+ */
 function AddDBRow ( array $row, string $tabname ) : int
 {
     global $db_connect, $db_prefix;
@@ -162,21 +222,44 @@ function AddDBRow ( array $row, string $tabname ) : int
 // The master database is a MySQL-only feature (multi-universe setup).
 // In the SQLite backend it is not available, so all calls report "no connection".
 
+/**
+ * Connects to the master database, which is not available in the SQLite backend.
+ *
+ * @return bool Always false.
+ */
 function MDBConnect () : bool
 {
     return false;
 }
 
+/**
+ * Runs a query on the master database (not available in the SQLite backend).
+ *
+ * @param string $query The SQL query to execute.
+ * @return mixed Always null.
+ */
 function MDBQuery (string $query) : mixed
 {
     return null;
 }
 
+/**
+ * Returns the number of rows of a master database result (not available in the SQLite backend).
+ *
+ * @param mixed $result The query result to count.
+ * @return int Always 0.
+ */
 function MDBRows (mixed $result) : int
 {
     return 0;
 }
 
+/**
+ * Fetches a row of a master database result (not available in the SQLite backend).
+ *
+ * @param mixed $result The query result to read.
+ * @return mixed Always null.
+ */
 function MDBArray (mixed $result) : mixed
 {
     return null;
@@ -186,6 +269,11 @@ function MDBArray (mixed $result) : mixed
 // Table locking. SQLite serializes writes on its own, and LOCK TABLES is a
 // MySQL syntax error, so locking is a no-op here (dbquery drops the statement).
 
+/**
+ * Locks game tables for writing (a no-op in SQLite, which serializes writes itself).
+ *
+ * @return void
+ */
 function LockTables () : void
 {
     global $db_prefix;
@@ -194,6 +282,11 @@ function LockTables () : void
     dbquery ("LOCK TABLES ".$db_prefix."uni WRITE");
 }
 
+/**
+ * Unlocks previously locked tables (a no-op in SQLite).
+ *
+ * @return void
+ */
 function UnlockTables () : void
 {
     dbquery ( "UNLOCK TABLES" );
@@ -202,6 +295,12 @@ function UnlockTables () : void
 // ---
 // Database backup (SerializeDB/DeserializeDB) in SQLite dialect.
 
+/**
+ * Serializes a table into its autoincrement value, columns and rows.
+ *
+ * @param string $name Name of the table to serialize.
+ * @return array The table data with auto_increment, cols and values keys.
+ */
 function SerializeTable (string $name) : array
 {
     global $db_connect;
@@ -252,6 +351,11 @@ function SerializeTable (string $name) : array
     return $tab;
 }
 
+/**
+ * Serializes all game tables into a JSON string.
+ *
+ * @return string The serialized database as JSON.
+ */
 function SerializeDB () : string
 {
     include __DIR__ . "/install_tabs.php";
@@ -266,11 +370,24 @@ function SerializeDB () : string
     return json_encode ($db_tabs, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
 }
 
+/**
+ * Executes a single query during database deserialization.
+ *
+ * @param string $query The SQL query to execute.
+ * @return void
+ */
 function DeserExecQuery (string $query) : void
 {
     dbquery ($query);
 }
 
+/**
+ * Restores a table from serialized data, replacing its previous contents.
+ *
+ * @param string $name Name of the table to restore.
+ * @param array $tab The serialized table data.
+ * @return void
+ */
 function DeserializeTable (string $name, array $tab) : void
 {
     global $db_connect;
@@ -308,6 +425,12 @@ function DeserializeTable (string $name, array $tab) : void
     }
 }
 
+/**
+ * Restores all tables from a serialized JSON string.
+ *
+ * @param string $text The serialized database as JSON.
+ * @return void
+ */
 function DeserializeDB (string $text) : void
 {
     $tabs = json_decode ($text, true);
@@ -322,6 +445,12 @@ function DeserializeDB (string $text) : void
 // SQL translation helpers
 // ============================================================================
 
+/**
+ * Quotes an identifier with backticks, escaping embedded backticks.
+ *
+ * @param string $ident The identifier to quote.
+ * @return string The quoted identifier.
+ */
 function SQLiteQuoteIdent (string $ident) : string
 {
     return '`' . str_replace ('`', '``', $ident) . '`';
@@ -346,7 +475,7 @@ function SQLiteIsNoop (string $q) : bool
 
 /**
  * MySQL user-variable rank assignment:
- *   UPDATE t SET c = (SELECT @pos := @pos+1) ORDER BY ...
+ *   UPDATE t SET c = (SELECT \@pos := \@pos+1) ORDER BY ...
  * SQLite has no user variables, so the ranking is done in PHP instead.
  */
 function SQLiteIsRankUpdate (string $q) : bool
@@ -354,6 +483,12 @@ function SQLiteIsRankUpdate (string $q) : bool
     return preg_match ('/^UPDATE\s+`?\w+`?\s+SET\s+`?\w+`?\s*=\s*\(\s*SELECT\s+@\w+\s*:=\s*@\w+\s*\+\s*1\s*\)\s+ORDER\s+BY\s+/is', $q) === 1;
 }
 
+/**
+ * Emulates a MySQL rank update by assigning sequential numbers in PHP.
+ *
+ * @param string $q The rank update query.
+ * @return void
+ */
 function SQLiteExecRankUpdate (string $q) : void
 {
     global $db_connect;
@@ -387,6 +522,12 @@ function SQLiteIsSetAutoIncrement (string $q) : bool
     return preg_match ('/^ALTER\s+TABLE\s+.+AUTO_INCREMENT\s*=\s*\d+/is', $q) === 1;
 }
 
+/**
+ * Updates a table autoincrement counter in sqlite_sequence.
+ *
+ * @param string $q The ALTER TABLE AUTO_INCREMENT query.
+ * @return void
+ */
 function SQLiteExecSetAutoIncrement (string $q) : void
 {
     global $db_connect;
@@ -415,6 +556,12 @@ function SQLiteIsTruncate (string $q) : bool
     return str_starts_with (strtoupper ($q), 'TRUNCATE');
 }
 
+/**
+ * Emulates TRUNCATE TABLE with a DELETE and a reset of the autoincrement counter.
+ *
+ * @param string $q The TRUNCATE query.
+ * @return void
+ */
 function SQLiteExecTruncate (string $q) : void
 {
     global $db_connect;
@@ -441,6 +588,12 @@ function SQLiteIsShowColumns (string $q) : bool
     return str_starts_with (strtoupper ($q), 'SHOW COLUMNS');
 }
 
+/**
+ * Emulates SHOW COLUMNS with PRAGMA table_info, shaped like the MySQL result.
+ *
+ * @param string $q The SHOW COLUMNS query.
+ * @return mixed An SQLiteDBResult with MySQL-shaped column metadata, or false on failure.
+ */
 function SQLiteExecShowColumns (string $q) : mixed
 {
     global $db_connect;
@@ -475,6 +628,11 @@ function SQLiteIsShowTables (string $q) : bool
     return str_starts_with (strtoupper ($q), 'SHOW TABLES');
 }
 
+/**
+ * Emulates SHOW TABLES using sqlite_master.
+ *
+ * @return mixed An SQLiteDBResult with table names, or false on failure.
+ */
 function SQLiteExecShowTables () : mixed
 {
     global $db_connect, $db_name;

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file queue.php
+ * @brief Build queue management.
+ * @details Implements the construction queue: adding, speeding up, cancelling and processing building, research, shipyard and defence orders.
+ */
 /*
 
 Global Event Queue.
@@ -57,9 +61,24 @@ end: construction completion time (INT UNSIGNED)
 
 */
 
+/**
+ * Number of queue events processed in one batch.
+ */
 const QUEUE_BATCH = 16;         // The event queue is not executed in its entirety, but in small portions specified in this constant (so as not to overload the server)
 
-// Add a task to the queue. Returns the ID of the added task.
+/**
+ * Add a task to the queue.
+ *
+ * @param int $owner_id ID of the player the task belongs to.
+ * @param string $type Task type (see QTYP_ constants).
+ * @param int $sub_id Additional task number, depends on the task type.
+ * @param int $obj_id Additional task number, depends on the task type.
+ * @param int $level Building level or number of units ordered at the shipyard.
+ * @param int $now Task start time.
+ * @param int $seconds Task duration in seconds.
+ * @param int $prio Event priority; the higher it is, the earlier the event is executed.
+ * @return int ID of the added task.
+ */
 function AddQueue (int $owner_id, string $type, int $sub_id, int $obj_id, int $level, int $now, int $seconds, int $prio=QUEUE_PRIO_LOWEST) : int
 {
     $queue = array ( 'owner_id' => $owner_id, 'type' => $type, 'sub_id' => $sub_id, 'obj_id' => $obj_id, 'level' => $level, 'start' => $now, 'end' => $now+$seconds, 'prio' => $prio );
@@ -67,7 +86,12 @@ function AddQueue (int $owner_id, string $type, int $sub_id, int $obj_id, int $l
     return $id;
 }
 
-// Load task.
+/**
+ * Load a task from the queue.
+ *
+ * @param int $task_id Task number.
+ * @return mixed Queue task row as an array, or false if not found.
+ */
 function LoadQueue (int $task_id) : mixed
 {
     global $db_prefix;
@@ -76,7 +100,12 @@ function LoadQueue (int $task_id) : mixed
     return dbarray ($result);
 }
 
-// Delete a task from the queue.
+/**
+ * Delete a task from the queue.
+ *
+ * @param int $task_id Task number.
+ * @return void
+ */
 function RemoveQueue (int $task_id) : void
 {
     global $db_prefix;
@@ -86,7 +115,13 @@ function RemoveQueue (int $task_id) : void
     }
 }
 
-// Extend the task for the number of seconds specified
+/**
+ * Extend the task for the number of seconds specified.
+ *
+ * @param int $task_id Task number.
+ * @param int $seconds Number of seconds to extend the task by.
+ * @return void
+ */
 function ProlongQueue (int $task_id, int $seconds) : void
 {
     global $db_prefix;
@@ -94,7 +129,12 @@ function ProlongQueue (int $task_id, int $seconds) : void
     dbquery ($query);
 }
 
-// Check queue tasks for completion before $until time.
+/**
+ * Check queue tasks for completion before the given time and process them.
+ *
+ * @param int $until Unix timestamp up to which completed tasks are processed.
+ * @return void
+ */
 function UpdateQueue (int $until) : void
 {
     global $db_prefix;
@@ -151,7 +191,14 @@ function UpdateQueue (int $until) : void
     while ( $queue = dbarray ($result) ) Queue_Coupon_End ($queue);
 }
 
-// Cancel all construction tasks on a planet/moon. Called before deleting it.
+/**
+ * Cancel all construction tasks on a planet or moon.
+ *
+ * Called before deleting it.
+ *
+ * @param int $planet_id Planet or moon ID.
+ * @return void
+ */
 function FlushQueue (int $planet_id) : void
 {
     global $db_prefix;
@@ -168,6 +215,14 @@ function FlushQueue (int $planet_id) : void
     dbquery ( $query );
 }
 
+/**
+ * Freeze or unfreeze a queue task, shifting its end time accordingly.
+ *
+ * @param int $task_id Task number.
+ * @param bool $freeze True to freeze the task, false to unfreeze it.
+ * @param int $when Timestamp of the freeze/unfreeze moment, defaults to the current time.
+ * @return void
+ */
 function FreezeQueue (int $task_id, bool $freeze, int $when=0) : void
 {
     global $db_prefix;
@@ -197,7 +252,12 @@ function FreezeQueue (int $task_id, bool $freeze, int $when=0) : void
 // ===============================================================================================================
 // Buildings
 
-// Get a construction queue for the planet.
+/**
+ * Get the construction queue for the planet.
+ *
+ * @param int $planet_id Planet ID.
+ * @return mixed Database query result with buildqueue rows.
+ */
 function GetBuildQueue ( int $planet_id ) : mixed
 {
     global $db_prefix;
@@ -205,8 +265,19 @@ function GetBuildQueue ( int $planet_id ) : mixed
     return dbquery ($query);
 }
 
-// Verify all conditions of build/demolition possibility
-// The $enqueue parameter is used to check if the build can be added to the queue.
+/**
+ * Verify all conditions for the possibility of building or demolition.
+ *
+ * The $enqueue parameter is used to check if the build can be added to the queue.
+ *
+ * @param array $user Player data.
+ * @param array $planet Planet data.
+ * @param int $id Building ID.
+ * @param int $lvl Target building level.
+ * @param bool $destroy True to demolish, false to build.
+ * @param bool $enqueue True if the build is added to the queue.
+ * @return string Empty string if the build is possible, otherwise an error message.
+ */
 function CanBuild (array $user, array $planet, int $id, int $lvl, bool $destroy, bool $enqueue=false) : string
 {
     global $GlobalUni;
@@ -286,7 +357,13 @@ function CanBuild (array $user, array $planet, int $id, int $lvl, bool $destroy,
     return "";
 }
 
-// Start the next construction
+/**
+ * Start the next construction from the queue.
+ *
+ * @param int $planet_id Planet ID.
+ * @param int $from Timestamp from which the construction starts.
+ * @return void
+ */
 function PropagateBuildQueue (int $planet_id, int $from) : void
 {
     global $db_prefix, $GlobalUni;
@@ -349,7 +426,16 @@ function PropagateBuildQueue (int $planet_id, int $from) : void
 
 }
 
-// Add a new construction/demolition to the queue. $user - is the user who starts the construction process.
+/**
+ * Add a new construction or demolition to the queue.
+ *
+ * @param array $user Player data of the user who starts the construction process.
+ * @param int $planet_id Planet ID.
+ * @param int $id Building ID.
+ * @param int $destroy 1 to demolish, 0 to build.
+ * @param int $now Timestamp of the action, defaults to the current time.
+ * @return string Empty string on success, otherwise an error message.
+ */
 function BuildEnque ( array $user, int $planet_id, int $id, int $destroy, int $now=0 ) : string
 {
     global $GlobalUni;
@@ -422,7 +508,14 @@ function BuildEnque ( array $user, int $planet_id, int $id, int $destroy, int $n
     return $text;
 }
 
-// Cancel construction/demolition; $user - is the user who removes build slot from the queue.
+/**
+ * Cancel a construction or demolition.
+ *
+ * @param array $user Player data of the user who removes the build slot from the queue.
+ * @param int $planet_id Planet ID.
+ * @param int $listid Position of the construction in the build queue.
+ * @return string Empty string on success, otherwise an error message.
+ */
 function BuildDeque ( array $user, int $planet_id, int $listid ) : string
 {
     global $db_prefix, $GlobalUni;
@@ -469,7 +562,12 @@ function BuildDeque ( array $user, int $planet_id, int $listid ) : string
     return "";
 }
 
-// Completion of construction/demolition
+/**
+ * Completion of construction or demolition.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_Build_End (array $queue) : void
 {
     global $db_prefix, $GlobalUser;
@@ -543,7 +641,12 @@ function Queue_Build_End (array $queue) : void
 // ===============================================================================================================
 // Shipyard
 
-// Get a queue of tasks at the shipyard.
+/**
+ * Get the queue of tasks at the shipyard.
+ *
+ * @param int $planet_id Planet ID.
+ * @return mixed Database query result with shipyard queue rows.
+ */
 function GetShipyardQueue (int $planet_id) : mixed
 {
     global $db_prefix;
@@ -551,7 +654,15 @@ function GetShipyardQueue (int $planet_id) : mixed
     return dbquery ($query);
 }
 
-// Get the end time of the last task at the shipyard, used to get the start time of a new task.
+/**
+ * Get the end time of the last task at the shipyard.
+ *
+ * Used to get the start time of a new task.
+ *
+ * @param int $planet_id Planet ID.
+ * @param int $now Current timestamp used when the shipyard is idle.
+ * @return int End time of the last shipyard task, or the current time if the shipyard is idle.
+ */
 function ShipyardLatestTime (int $planet_id, int $now) : int
 {
     global $db_prefix;
@@ -568,7 +679,16 @@ function ShipyardLatestTime (int $planet_id, int $now) : int
     }
 }
 
-// Add fleet/defense at the shipyard ($gid - unit type, $value - quantity)
+/**
+ * Add fleet or defense units at the shipyard.
+ *
+ * @param int $player_id Player ID.
+ * @param int $planet_id Planet ID.
+ * @param int $gid Unit type ID.
+ * @param int $value Quantity of units.
+ * @param int $now Timestamp of the action, defaults to the current time.
+ * @return bool True if the order was added, false otherwise.
+ */
 function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int $now=0 ) : bool
 {
     global $db_prefix, $GlobalUni;
@@ -646,7 +766,13 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
     }
 }
 
-// Finish building at the shipyard.
+/**
+ * Shipyard task completion handler.
+ *
+ * @param array $queue Queue task data.
+ * @param int $when Timestamp of completion, defaults to the current time.
+ * @return void
+ */
 function Queue_Shipyard_End (array $queue, int $when=0) : void
 {
     global $db_prefix, $GlobalUser;
@@ -703,7 +829,15 @@ function Queue_Shipyard_End (array $queue, int $when=0) : void
 // ===============================================================================================================
 // Research
 
-// Check all conditions for the possibility of starting the research
+/**
+ * Check all conditions for the possibility of starting the research.
+ *
+ * @param array $user Player data.
+ * @param array $planet Planet data.
+ * @param int $id Research ID.
+ * @param int $lvl Target research level.
+ * @return string Empty string if the research is possible, otherwise an error message.
+ */
 function CanResearch (array $user, array $planet, int $id, int $lvl) : string
 {
     global $db_prefix, $GlobalUni;
@@ -753,7 +887,15 @@ function CanResearch (array $user, array $planet, int $id, int $lvl) : string
     return "";
 }
 
-// Start research on the planet (includes all checks).
+/**
+ * Start research on the planet (includes all checks).
+ *
+ * @param int $player_id Player ID.
+ * @param int $planet_id Planet ID.
+ * @param int $id Research ID.
+ * @param int $now Timestamp of the action.
+ * @return string Empty string on success, otherwise an error message.
+ */
 function StartResearch (int $player_id, int $planet_id, int $id, int $now) : string
 {
     global $db_prefix, $GlobalUni;
@@ -792,7 +934,12 @@ function StartResearch (int $player_id, int $planet_id, int $id, int $now) : str
     return $text;
 }
 
-// Cancel the research.
+/**
+ * Cancel the research.
+ *
+ * @param int $player_id Player ID.
+ * @return void
+ */
 function StopResearch (int $player_id) : void
 {
     global $db_prefix, $GlobalUni;
@@ -831,7 +978,12 @@ function StopResearch (int $player_id) : void
     UserLog ( $player_id, "RESEARCH", va(loca_lang("DEBUG_LOG_RESEARCH_CANCEL", $GlobalUni['lang']), loca("NAME_$id"), $planet_id) );
 }
 
-// Get the current research for the account.
+/**
+ * Get the current research task for the account.
+ *
+ * @param int $player_id Player ID.
+ * @return mixed Database query result with the research task.
+ */
 function GetResearchQueue (int $player_id) : mixed
 {
     global $db_prefix;
@@ -839,7 +991,12 @@ function GetResearchQueue (int $player_id) : mixed
     return dbquery ($query);
 }
 
-// Complete the research.
+/**
+ * Research task completion handler.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_Research_End (array $queue) : void
 {
     global $db_prefix, $GlobalUser, $GlobalUni;
@@ -877,8 +1034,14 @@ function Queue_Research_End (array $queue) : void
 // ===============================================================================================================
 // Player
 
-// Add the task of recalculating a player's score if it doesn't already exist.
-// Called when any player logs in.
+/**
+ * Add the task of recalculating a player's score if it doesn't already exist.
+ *
+ * Called when any player logs in.
+ *
+ * @param int $player_id Player ID.
+ * @return void
+ */
 function AddRecalcPointsEvent (int $player_id) : void
 {
     global $db_prefix;
@@ -893,7 +1056,12 @@ function AddRecalcPointsEvent (int $player_id) : void
     }
 }
 
-// Recalculate a player's points scored and his place in the statistics.
+/**
+ * Recalculate a player's points scored and his place in the statistics.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_RecalcPoints_End (array $queue) : void
 {
     RecalcStats ( $queue['owner_id'] );
@@ -901,7 +1069,12 @@ function Queue_RecalcPoints_End (array $queue) : void
     RemoveQueue ( $queue['task_id'] );
 }
 
-// It's okay to go vaction mode or not.
+/**
+ * Check whether the player can enable vacation mode.
+ *
+ * @param int $player_id Player ID.
+ * @return bool True if the player can enable vacation mode, false otherwise.
+ */
 function CanEnableVacation (int $player_id) : bool
 {
     global $db_prefix;
@@ -911,7 +1084,12 @@ function CanEnableVacation (int $player_id) : bool
     else return true;
 }
 
-// Add a name change permission task.
+/**
+ * Add a name change permission task.
+ *
+ * @param int $player_id Player ID.
+ * @return void
+ */
 function AddAllowNameEvent (int $player_id) : void
 {
     global $db_prefix;
@@ -928,7 +1106,12 @@ function AddAllowNameEvent (int $player_id) : void
     }
 }
 
-// Can the player's name be changed.
+/**
+ * Check whether the player's name can be changed.
+ *
+ * @param int $player_id Player ID.
+ * @return bool True if the name can be changed, false otherwise.
+ */
 function CanChangeName (int $player_id) : bool
 {
     global $db_prefix;
@@ -938,7 +1121,12 @@ function CanChangeName (int $player_id) : bool
     else return true;
 }
 
-// Allow name change.
+/**
+ * Name change permission task completion handler.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_AllowName_End (array $queue) : void
 {
     global $db_prefix;
@@ -948,7 +1136,12 @@ function Queue_AllowName_End (array $queue) : void
     RemoveQueue ( $queue['task_id'] );
 }
 
-// Unban a player
+/**
+ * Unban a player.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_UnbanPlayer_End (array $queue) : void
 {
     global $db_prefix;
@@ -958,7 +1151,12 @@ function Queue_UnbanPlayer_End (array $queue) : void
     RemoveQueue ( $queue['task_id'] );
 }
 
-// Allow attacks
+/**
+ * Allow attacks.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_AllowAttacks_End (array $queue) : void
 {
     global $db_prefix;
@@ -968,7 +1166,12 @@ function Queue_AllowAttacks_End (array $queue) : void
     RemoveQueue ( $queue['task_id'] );
 }
 
-// Add a permanent mail address update task
+/**
+ * Add a permanent mail address update task.
+ *
+ * @param int $player_id Player ID.
+ * @return int Task ID of the added event.
+ */
 function AddChangeEmailEvent (int $player_id) : int
 {
     global $db_prefix;
@@ -981,7 +1184,12 @@ function AddChangeEmailEvent (int $player_id) : int
     $id = AddQueue ($player_id, QTYP_CHANGE_EMAIL, 0, 0, 0, $now, $when, QUEUE_PRIO_LOWEST);
 }
 
-// Update permanent mail address
+/**
+ * Update the permanent mail address.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_ChangeEmail_End (array $queue) : void
 {
     global $db_prefix;
@@ -994,8 +1202,14 @@ function Queue_ChangeEmail_End (array $queue) : void
 // ===============================================================================================================
 // Universe
 
-// Add a task to save "old" statistics.
-// Called when any player logs in.
+/**
+ * Add a task to save the "old" statistics.
+ *
+ * Called when any player logs in.
+ *
+ * @param int $now Timestamp used to schedule the task, defaults to the current time.
+ * @return void
+ */
 function AddUpdateStatsEvent (int $now=0) : void
 {
     global $db_prefix;
@@ -1016,7 +1230,12 @@ function AddUpdateStatsEvent (int $now=0) : void
     }
 }
 
-// Save the "old" player and alliance points.
+/**
+ * Save the "old" player and alliance points.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_UpdateStats_End (array $queue) : void
 {
     global $db_prefix, $GlobalUni;
@@ -1032,8 +1251,13 @@ function Queue_UpdateStats_End (array $queue) : void
     Debug ( va(loca_lang("DEBUG_QUEUE_OLD_SCORE_SAVED", $GlobalUni['lang']), date ("H:i", $when))  );
 }
 
-// Add a player unload task if it doesn't already exist.
-// Called when any player logs in.
+/**
+ * Add a player unload task if it doesn't already exist.
+ *
+ * Called when any player logs in.
+ *
+ * @return void
+ */
 function AddReloginEvent () : void
 {
     global $db_prefix;
@@ -1048,7 +1272,12 @@ function AddReloginEvent () : void
     }
 }
 
-// Unload all players (so called relogin event)
+/**
+ * Unload all players (the so called relogin event).
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_Relogin_End (array $queue) : void
 {
     // Cleanup of unvisited farspaces.
@@ -1064,8 +1293,13 @@ function Queue_Relogin_End (array $queue) : void
     ResetHackCounter ();
 }
 
-// Add a virtual DF cleanup task if it does not already exist.
-// Called when any player logs in.
+/**
+ * Add a virtual debris field cleanup task if it does not already exist.
+ *
+ * Called when any player logs in.
+ *
+ * @return void
+ */
 function AddCleanDebrisEvent () : void
 {
     global $db_prefix;
@@ -1080,7 +1314,12 @@ function AddCleanDebrisEvent () : void
     }
 }
 
-// Cleanup of virtual debris fields.
+/**
+ * Clean up virtual debris fields.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_CleanDebris_End (array $queue) : void
 {
     global $db_prefix;
@@ -1091,8 +1330,13 @@ function Queue_CleanDebris_End (array $queue) : void
     AddCleanDebrisEvent ();
 }
 
-// Add the task of cleaning up deleted planets and moons, if it doesn't already exist.
-// Called when any player logs in.
+/**
+ * Add the task of cleaning up deleted planets and moons, if it doesn't already exist.
+ *
+ * Called when any player logs in.
+ *
+ * @return void
+ */
 function AddCleanPlanetsEvent () : void
 {
     global $db_prefix;
@@ -1107,7 +1351,12 @@ function AddCleanPlanetsEvent () : void
     }
 }
 
-// Cleaning up destroyed planets.
+/**
+ * Clean up destroyed planets.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_CleanPlanets_End (array $queue) : void
 {
     global $db_prefix, $GlobalUni;
@@ -1141,8 +1390,13 @@ function Queue_CleanPlanets_End (array $queue) : void
     AddCleanPlanetsEvent ();
 }
 
-// Add the task of purging long inactive players and players put for deletion, if it doesn't already exist.
-// Called when any player logs in.
+/**
+ * Add the task of purging long inactive players and players put for deletion, if it doesn't already exist.
+ *
+ * Called when any player logs in.
+ *
+ * @return void
+ */
 function AddCleanPlayersEvent () : void
 {
     global $db_prefix;
@@ -1157,7 +1411,12 @@ function AddCleanPlayersEvent () : void
     }
 }
 
-// Delete players set for deletion and long inactive players
+/**
+ * Delete players set for deletion and long inactive players.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_CleanPlayers_End (array $queue) : void
 {
     global $db_prefix;
@@ -1188,8 +1447,13 @@ function Queue_CleanPlayers_End (array $queue) : void
     AddCleanPlayersEvent ();
 }
 
-// Add the task of recalculating a player's score if it doesn't already exist.
-// Called when any player logs in.
+/**
+ * Add the task of recalculating alliance points if it doesn't already exist.
+ *
+ * Called when any player logs in.
+ *
+ * @return void
+ */
 function AddRecalcAllyPointsEvent () : void
 {
     global $db_prefix;
@@ -1204,7 +1468,12 @@ function AddRecalcAllyPointsEvent () : void
     }
 }
 
-// Recalculate a player's points scored and his place in the statistics.
+/**
+ * Recalculate alliance points and their place in the statistics.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_RecalcAllyPoints_End (array $queue) : void
 {
     RecalcAllyStats ();
@@ -1212,14 +1481,24 @@ function Queue_RecalcAllyPoints_End (array $queue) : void
     RemoveQueue ( $queue['task_id'] );
 }
 
-// Add a debug event.
+/**
+ * Add a debug event.
+ *
+ * @param int $when Timestamp when the event fires.
+ * @return void
+ */
 function AddDebugEvent (int $when) : void
 {
     $now = time ();
     $id = AddQueue (USER_SPACE, QTYP_DEBUG, 0, 0, 0, $now, $when, QUEUE_PRIO_DEBUG);
 }
 
-// Debug Event.
+/**
+ * Debug event completion handler.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
 function Queue_Debug_End (array $queue) : void
 {
     RemoveQueue ( $queue['task_id'] );
@@ -1228,6 +1507,12 @@ function Queue_Debug_End (array $queue) : void
 // ===============================================================================================================
 // Fleet
 
+/**
+ * Get the fleet task for the given fleet.
+ *
+ * @param int $fleet_id Fleet ID.
+ * @return mixed Fleet task row as an array, or null if not found.
+ */
 function GetFleetQueue (int $fleet_id) : mixed
 {
     global $db_prefix;
@@ -1237,7 +1522,12 @@ function GetFleetQueue (int $fleet_id) : mixed
     else return null;
 }
 
-// List their own fleet tasks, as well as friendly and enemy ones.
+/**
+ * List the player's own fleet tasks, as well as friendly and enemy ones.
+ *
+ * @param int $player_id Player ID.
+ * @return mixed Database query result with fleet queue rows.
+ */
 function EnumFleetQueue (int $player_id) : mixed
 {
     global $db_prefix;
@@ -1248,8 +1538,13 @@ function EnumFleetQueue (int $player_id) : mixed
     return $result;
 }
 
-// List only their own fleet tasks.
-// ipm: 1 -- count also flying IPMs (for scoring purposes)
+/**
+ * List only the player's own fleet tasks.
+ *
+ * @param int $player_id Player ID.
+ * @param int $ipm 1 to also count flying IPMs (for scoring purposes).
+ * @return mixed Database query result with fleet queue rows.
+ */
 function EnumOwnFleetQueue (int $player_id, int $ipm=0) : mixed
 {
     global $db_prefix;
@@ -1263,7 +1558,12 @@ function EnumOwnFleetQueue (int $player_id, int $ipm=0) : mixed
     return $result;
 }
 
-// To verify fleet dispatch less than a second ago
+/**
+ * List the player's fleet tasks to verify fleet dispatch less than a second ago.
+ *
+ * @param int $player_id Player ID.
+ * @return mixed Database query result with fleet queue rows.
+ */
 function EnumOwnFleetQueueSpecial (int $player_id) : mixed
 {
     global $db_prefix;
@@ -1273,7 +1573,12 @@ function EnumOwnFleetQueueSpecial (int $player_id) : mixed
     return $result;
 }
 
-// List the fleets flying from or to the planet.
+/**
+ * List the fleets flying from or to the planet.
+ *
+ * @param int $planet_id Planet ID.
+ * @return mixed Database query result with fleet rows.
+ */
 function EnumPlanetFleets (int $planet_id) : mixed
 {
     global $db_prefix;

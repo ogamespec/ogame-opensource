@@ -1,12 +1,27 @@
 <?php
-
+/**
+ * @file raketen.php
+ * @brief Interplanetary missile attacks.
+ * @details Handles missile launch, flight time, interception and the damage applied to the target planet defences.
+ */
 // Missile attack. It used to be in battle.php, but for convenience it was separated into its own module.
 // TODO: It is necessary to pay more attention to this feature of the game, because there are doubts about the correctness of the algorithm. To test it, you can use the admin section to simulate a missile attack.
 
 // IPM - interplanetary missile, attacks
 // ABM - anti-ballistic missile, defends
 
-// Algorithmic part of the missile attack (without working with DB).
+/**
+ * Perform the algorithmic part of a missile attack without working with the database.
+ *
+ * @param int $amount Number of launched interplanetary missiles.
+ * @param int $primary ID of the primary target defense.
+ * @param bool $moon_attack True if the attack targets a moon.
+ * @param array $target The target planet array; defense amounts are modified in place.
+ * @param array|null $moon_planet The moon array, or null; interceptors are taken from it on a moon attack.
+ * @param int $origin_user_attack Weapon technology level of the attacker.
+ * @param int $target_user_armor Armor technology level of the defender.
+ * @return int The number of missiles destroyed by anti-ballistic missiles.
+ */
 function RocketAttackMain ( int $amount, int $primary, bool $moon_attack, array &$target, array|null &$moon_planet, int $origin_user_attack, int $target_user_armor ) : int
 {
     global $UnitParam;
@@ -56,7 +71,14 @@ function RocketAttackMain ( int $amount, int $primary, bool $moon_attack, array 
     return $ipm_destroyed;
 }
 
-// Missile attack.
+/**
+ * Execute a missile attack: apply damage, update defenses and statistics, and send messages to both players.
+ *
+ * @param int $fleet_id ID of the missile fleet.
+ * @param int $planet_id ID of the target planet.
+ * @param int $when Time of the attack (Unix timestamp).
+ * @return void
+ */
 function RocketAttack ( int $fleet_id, int $planet_id, int $when ) : void
 {
     $fleet = LoadFleet ($fleet_id);
@@ -125,7 +147,15 @@ function RocketAttack ( int $fleet_id, int $planet_id, int $when ) : void
     }
 }
 
-// Get the text for the destroyed defense
+/**
+ * Build the HTML text describing the destroyed defenses.
+ *
+ * @param string $lang Language code for localization.
+ * @param array $target The target planet array with the remaining defense amounts.
+ * @param array|null $moon_planet The moon array, or null.
+ * @param bool $moon_attack True if the attack targeted a moon.
+ * @return string The HTML table text of the destroyed defense.
+ */
 function GetDestroyedDefenseText (string $lang, array &$target, array|null &$moon_planet, bool $moon_attack) : string
 {
     loca_add ( "raketen", $lang );

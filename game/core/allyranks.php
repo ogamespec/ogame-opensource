@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file allyranks.php
+ * @brief Alliance ranks management.
+ * @details Lists, creates and edits the rank titles available inside an alliance.
+ */
 // Ranks.
 
 // Allowed characters in the rank name: [a-zA-Z0-9_-.]. Max. length - 30 characters
@@ -12,7 +16,13 @@
 // name: Rank name (CHAR(30))
 // rights: Rights (OR mask)
 
-// Add a rank with zero rights to an alliance. Returns the rank's ordinal number.
+/**
+ * Add a rank with zero rights to an alliance and return the rank's ordinal number.
+ *
+ * @param int $ally_id ID of the alliance.
+ * @param string $name Name of the rank.
+ * @return int Ordinal number of the new rank.
+ */
 function AddRank (int $ally_id, string $name) : int
 {
     global $db_prefix;
@@ -25,7 +35,14 @@ function AddRank (int $ally_id, string $name) : int
     return $ally['nextrank'];
 }
 
-// Save rights for rank.
+/**
+ * Save the rights for a rank.
+ *
+ * @param int $ally_id ID of the alliance.
+ * @param int $rank_id ID of the rank.
+ * @param int $rights Rights mask to assign to the rank.
+ * @return void
+ */
 function SetRank (int $ally_id, int $rank_id, int $rights) : void
 {
     global $db_prefix;
@@ -33,7 +50,13 @@ function SetRank (int $ally_id, int $rank_id, int $rights) : void
     dbquery ($query);
 }
 
-// Delete a rank from an alliance.
+/**
+ * Delete a rank from an alliance.
+ *
+ * @param int $ally_id ID of the alliance.
+ * @param int $rank_id ID of the rank to delete.
+ * @return void
+ */
 function RemoveRank (int $ally_id, int $rank_id) : void
 {
     global $db_prefix;
@@ -41,7 +64,12 @@ function RemoveRank (int $ally_id, int $rank_id) : void
     dbquery ($query);
 }
 
-// List all ranks in the alliance.
+/**
+ * List all ranks in the alliance.
+ *
+ * @param int $ally_id ID of the alliance.
+ * @return mixed Result of the SQL query.
+ */
 function EnumRanks (int $ally_id) : mixed
 {
     global $db_prefix;
@@ -49,7 +77,13 @@ function EnumRanks (int $ally_id) : mixed
     return dbquery ($query);
 }
 
-// Assign a rank to a specific player.
+/**
+ * Assign a rank to a specific player.
+ *
+ * @param int $player_id ID of the player.
+ * @param int $rank Rank ID to assign to the player.
+ * @return void
+ */
 function SetUserRank (int $player_id, int $rank) : void
 {
     global $db_prefix;
@@ -57,7 +91,13 @@ function SetUserRank (int $player_id, int $rank) : void
     dbquery ($query);
 }
 
-// Load Rank.
+/**
+ * Load a rank of an alliance.
+ *
+ * @param int $ally_id ID of the alliance.
+ * @param int $rank_id ID of the rank to load.
+ * @return mixed The rank row as an array, or null if it does not exist.
+ */
 function LoadRank (int $ally_id, int $rank_id) : mixed
 {
     global $db_prefix;
@@ -66,7 +106,13 @@ function LoadRank (int $ally_id, int $rank_id) : mixed
     return dbarray ($result);
 }
 
-// Load all alliance players with the specified rank
+/**
+ * Load all alliance players holding the specified rank.
+ *
+ * @param int $ally_id ID of the alliance.
+ * @param int $rank_id ID of the rank to look for.
+ * @return mixed Result of the SQL query.
+ */
 function LoadUsersWithRank (int $ally_id, int $rank_id ) : mixed
 {
     global $db_prefix;

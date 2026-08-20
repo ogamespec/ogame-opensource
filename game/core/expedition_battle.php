@@ -1,6 +1,17 @@
 <?php
-
-// Modify the fleet (after a battle with aliens/pirates)
+/**
+ * @file expedition_battle.php
+ * @brief Battle generation for expeditions.
+ * @details Builds the combat scenarios that can occur during an expedition mission.
+ */
+/**
+ * Modify the fleet after a battle with aliens or pirates.
+ *
+ * @param array $a Array of attacker slots.
+ * @param array $d Array of defender slots.
+ * @param array $res The battle result array.
+ * @return void
+ */
 function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : void
 {
     global $fleetmap;
@@ -57,8 +68,16 @@ function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : v
     }
 }
 
-// Battle with Aliens/Pirates.
-// The composition of the Alien/Pirate fleet is determined by the level parameter ( 0: weak, 1: medium, 2: strong )
+/**
+ * Battle with aliens or pirates.
+ * The composition of the alien/pirate fleet is determined by the level parameter (0: weak, 1: medium, 2: strong).
+ *
+ * @param int $fleet_id ID of the fleet that triggers the battle.
+ * @param bool $pirates True for a pirate battle, false for an alien battle.
+ * @param int $level Difficulty level of the enemy fleet (0: weak, 1: medium, 2: strong).
+ * @param int $when Unix timestamp of the battle.
+ * @return int The battle result constant (awon, dwon or draw).
+ */
 function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when ) : int
 {
     global $db_prefix;

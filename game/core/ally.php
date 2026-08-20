@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file ally.php
+ * @brief Alliance management.
+ * @details Creates, edits and deletes alliances, handles alliance applications, member ranks and alliance-wide messaging.
+ */
 // Alliance System.
 
 // Important! This game feature involves a rich interaction with input from the user.
@@ -30,7 +34,14 @@
 // oldplace1,2,3: old place for buildings, fleet, research (INT)
 // scoredate: Time of saving old statistics (INT UNSIGNED)
 
-// Create alliance. Returns the ID of the alliance.
+/**
+ * Create an alliance and return its ID.
+ *
+ * @param int $owner_id ID of the founder player.
+ * @param string $tag Alliance tag, 3-8 characters.
+ * @param string $name Alliance name, 3-30 characters.
+ * @return int ID of the created alliance.
+ */
 function CreateAlly (int $owner_id, string $tag, string $name) : int
 {
     global $db_prefix;
@@ -59,7 +70,12 @@ function CreateAlly (int $owner_id, string $tag, string $name) : int
     return $id;
 }
 
-// Dismiss the alliance.
+/**
+ * Dismiss the alliance, removing its members, ranks, applications and the alliance entry itself.
+ *
+ * @param int $ally_id ID of the alliance to dismiss.
+ * @return void
+ */
 function DismissAlly (int $ally_id) : void
 {
     global $db_prefix;
@@ -81,9 +97,15 @@ function DismissAlly (int $ally_id) : void
     dbquery ($query);
 }
 
-// List all players in the alliance.
-// Sorting: 0 - Coordinates, 1 - Name, 2 - Status, 3 - Points, 4 - Date Entry, 5 - Online
-// Order: 0 - ascending, 1 - descending
+/**
+ * List all players in the alliance.
+ *
+ * @param int $ally_id ID of the alliance.
+ * @param int $sort_by Sort key: 0 - coordinates, 1 - name, 2 - status, 3 - points, 4 - join date, 5 - online.
+ * @param int $order Sort order: 0 - ascending, 1 - descending.
+ * @param bool $use_sort Whether to apply the sorting parameters.
+ * @return mixed Result of the SQL query, or null if the alliance ID is invalid.
+ */
 function EnumerateAlly (int $ally_id, int $sort_by=0, int $order=0, bool $use_sort=false) : mixed
 {
     global $db_prefix;
@@ -113,7 +135,12 @@ function EnumerateAlly (int $ally_id, int $sort_by=0, int $order=0, bool $use_so
     return $result;
 }
 
-// Find out if there is an alliance with the specified tag.
+/**
+ * Find out if an alliance with the specified tag exists.
+ *
+ * @param string $tag Alliance tag to look for.
+ * @return bool True if the tag exists, false otherwise.
+ */
 function IsAllyTagExist (string $tag) : bool
 {
     global $db_prefix;
@@ -123,7 +150,12 @@ function IsAllyTagExist (string $tag) : bool
     else return false;
 }
 
-// Load alliance.
+/**
+ * Load an alliance by its ID.
+ *
+ * @param int $ally_id ID of the alliance to load.
+ * @return mixed The alliance row as an array, or null if it does not exist.
+ */
 function LoadAlly (int $ally_id) : mixed
 {
     global $db_prefix;
@@ -132,7 +164,12 @@ function LoadAlly (int $ally_id) : mixed
     return dbarray ($result);
 }
 
-// Search for alliances by tag. Returns the result of the SQL query.
+/**
+ * Search for alliances by a partial tag match.
+ *
+ * @param string $tag Tag fragment to search for.
+ * @return mixed Result of the SQL query.
+ */
 function SearchAllyTag (string $tag) : mixed
 {
     global $db_prefix;
@@ -141,7 +178,12 @@ function SearchAllyTag (string $tag) : mixed
     return $result;
 }
 
-// Count the number of users in the alliance.
+/**
+ * Count the number of users in the alliance.
+ *
+ * @param int $ally_id ID of the alliance.
+ * @return int Number of members, or 0 if the alliance ID is invalid.
+ */
 function CountAllyMembers (int $ally_id) : int
 {
     global $db_prefix;
@@ -150,7 +192,13 @@ function CountAllyMembers (int $ally_id) : int
     return dbrows ($result);
 }
 
-// Change the alliance tag. Can be done once every 7 days.
+/**
+ * Change the alliance tag, at most once every 7 days.
+ *
+ * @param int $ally_id ID of the alliance.
+ * @param string $tag New alliance tag.
+ * @return bool True if the tag was changed, false otherwise.
+ */
 function AllyChangeTag (int $ally_id, string $tag) : bool
 {
     global $db_prefix;
@@ -164,7 +212,13 @@ function AllyChangeTag (int $ally_id, string $tag) : bool
     return true;
 }
 
-// Change the name of the alliance. Can be done once every 7 days.
+/**
+ * Change the name of the alliance, at most once every 7 days.
+ *
+ * @param int $ally_id ID of the alliance.
+ * @param string $name New alliance name.
+ * @return bool True if the name was changed, false otherwise.
+ */
 function AllyChangeName (int $ally_id, string $name) : bool
 {
     global $db_prefix;
@@ -178,7 +232,13 @@ function AllyChangeName (int $ally_id, string $name) : bool
     return true;
 }
 
-// Change the founder of the alliance
+/**
+ * Change the founder of the alliance.
+ *
+ * @param int $ally_id ID of the alliance.
+ * @param int $owner_id ID of the new founder player.
+ * @return void
+ */
 function AllyChangeOwner (int $ally_id, int $owner_id) : void
 {
     global $db_prefix;
@@ -186,7 +246,11 @@ function AllyChangeOwner (int $ally_id, int $owner_id) : void
     dbquery ($query);
 }
 
-// Alliance points recalculation (based on player points)
+/**
+ * Recalculate the alliance points based on the points of their players.
+ *
+ * @return void
+ */
 function RecalcAllyStats () : void
 {
     global $db_prefix;
@@ -211,7 +275,11 @@ function RecalcAllyStats () : void
     }
 }
 
-// Recalculate the places of all alliances.
+/**
+ * Recalculate the ranking places of all alliances by their points.
+ *
+ * @return void
+ */
 function RecalcAllyRanks () : void
 {
     global $db_prefix;

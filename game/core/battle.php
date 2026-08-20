@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file battle.php
+ * @brief Battle simulation and combat resolution.
+ * @details Computes the outcome of fleet battles, applies damage to ships and defences, and returns the combat report data.
+ */
 // Battle Engine frontend.
 
 const BATTLE_RESULT_AWON = 0;       // The attacker won
@@ -12,8 +16,19 @@ const BATTLE_PTCP_FLEET = 0;        // The participant arrived on the Fleet (fro
 const BATTLE_PTCP_PLANET = 1;       // The participant arrived from Planet (id from the planets table)
 const BATTLE_PTCP_VIRTUAL = 2;      // The participant is virtual ("drawn"), the ID has no meaning (example - pirates/aliens on an expedition)
 
-// Repairing the defense.
-// Multiple planetary defenders are taken into account.
+/**
+ * Repairs the defense of planetary defenders after the battle.
+ *
+ * Counts the defense units destroyed in the last round and restores a
+ * percentage of them, taking multiple planetary defenders into account.
+ *
+ * @param array $d Array of defender data, indexed by defender number.
+ * @param array $res Battle result data containing the combat rounds.
+ * @param int $defrepair Base repair percentage for destroyed defense units.
+ * @param int $defrepair_delta Random deviation added to the repair percentage.
+ * @param bool $premium Whether the premium engineer bonus applies to defenders.
+ * @return array Number of repaired defense units per defender and unit id.
+ */
 function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_delta, bool $premium=true ) : array
 {
     global $defmap;
@@ -78,7 +93,18 @@ function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_de
     return $repaired;
 }
 
-// Capture resources.
+/**
+ * Captures resources from the defeated planet with the available cargo.
+ *
+ * Splits the cargo capacity between metal, crystal and deuterium, halving the
+ * available planet resources first and redistributing leftover capacity.
+ *
+ * @param int $cargo Total cargo capacity available for plunder.
+ * @param float $m Metal available on the planet.
+ * @param float $k Crystal available on the planet.
+ * @param float $d Deuterium available on the planet.
+ * @return array Captured amounts per resource id.
+ */
 function Plunder ( int $cargo, float $m, float $k, float $d ) : array
 {
     global $transportableResources;
@@ -119,7 +145,18 @@ function Plunder ( int $cargo, float $m, float $k, float $d ) : array
     return $res;
 }
 
-// Calculate total losses (taking into account repaired defenses).
+/**
+ * Calculates the total combat losses for both sides.
+ *
+ * Compares the unit costs before the battle with the units remaining in the
+ * last round, taking repaired defenses into account.
+ *
+ * @param array $a Array of attacker data, indexed by attacker number.
+ * @param array $d Array of defender data, indexed by defender number.
+ * @param array $res Battle result data containing the combat rounds.
+ * @param array $repaired Number of repaired defense units per defender.
+ * @return array Losses in points with keys 'aloss' (attackers) and 'dloss' (defenders).
+ */
 function CalcLosses ( array &$a, array &$d, array $res, array $repaired ) : array
 {
     $aprice = $dprice = 0;
@@ -209,6 +246,20 @@ function CalcLosses ( array &$a, array &$d, array $res, array $repaired ) : arra
     return array ( 'aloss' => $aloss, 'dloss' => $dloss );
 }
 
+/**
+ * Calculates the debris field produced by each combatant's losses.
+ *
+ * Compares units before the battle with units remaining after the last round
+ * and converts the difference into debris resources using the given ratios.
+ *
+ * @param array $a Array of attacker data, indexed by attacker number.
+ * @param array $d Array of defender data, indexed by defender number.
+ * @param array $res Battle result data containing the combat rounds.
+ * @param array $repaired Number of repaired defense units per defender.
+ * @param int $fid Debris percentage for fleet units.
+ * @param int $did Debris percentage for defense units.
+ * @return void
+ */
 function CalcDebris (array &$a, array &$d, array $res, array $repaired, int $fid, int $did) : void {
 
     global $debrisResources;
@@ -283,6 +334,13 @@ function CalcDebris (array &$a, array &$d, array $res, array $repaired, int $fid
     }
 }
 
+/**
+ * Sums up the debris fields of all attackers and defenders.
+ *
+ * @param array $a Array of attacker data, indexed by attacker number.
+ * @param array $d Array of defender data, indexed by defender number.
+ * @return array Total debris amounts per resource id.
+ */
 function GetDebrisTotal (array &$a, array &$d) : array {
 
     global $debrisResources;
@@ -306,7 +364,16 @@ function GetDebrisTotal (array &$a, array &$d) : array {
     return $debris;
 }
 
-// Total cargo capacity of fleets in the last round.
+/**
+ * Returns the total cargo capacity of the surviving attack fleets.
+ *
+ * Uses the fleets of the last round when rounds exist, otherwise the given
+ * attackers, subtracting loaded resources and fuel from each fleet's capacity.
+ *
+ * @param array $a Array of attacker data, indexed by attacker number.
+ * @param array $res Battle result data containing the combat rounds.
+ * @return int Total free cargo capacity, never below zero.
+ */
 function CargoSummaryLastRound ( array $a, array $res ) : int
 {
     global $transportableResources;
@@ -337,7 +404,20 @@ function CargoSummaryLastRound ( array $a, array $res ) : int
     return (int)max ( 0, $cargo );
 }
 
-// Modify fleets and planet (add/remove resources, return attack fleets if ships remain)
+/**
+ * Writes the battle results back to the fleets and the planet.
+ *
+ * Removes captured resources from the planet, updates the surviving defense,
+ * and dispatches the attack fleets back with their remaining ships and loot.
+ *
+ * @param array $a Array of attacker data, indexed by attacker number.
+ * @param array $d Array of defender data, indexed by defender number.
+ * @param array $res Battle result data containing the combat rounds.
+ * @param array $repaired Number of repaired defense units per defender.
+ * @param array $captured Captured resource amounts per resource id.
+ * @param int $sum_cargo Total cargo capacity available for plunder.
+ * @return void
+ */
 function WritebackBattleResults ( array $a, array $d, array $res, array $repaired, array $captured, int $sum_cargo ) : void
 {
     global $fleetmap;
@@ -476,6 +556,18 @@ function WritebackBattleResults ( array $a, array $d, array $res, array $repaire
     }
 }
 
+/**
+ * Generates the battle engine source data from both forces.
+ *
+ * Builds a text block with the unit parameters, rapid fire table and the
+ * weapon, shield and armour values plus unit counts of every participant.
+ *
+ * @param array $a Array of attacker data, indexed by attacker number.
+ * @param array $d Array of defender data, indexed by defender number.
+ * @param int $rf Whether the rapid fire table should be included.
+ * @param int $max_round Maximum number of rounds allowed for the battle.
+ * @return string Serialized battle source data for the battle engine.
+ */
 function GenBattleSourceData (array $a, array $d, int $rf, int $max_round) : string
 {
     global $UnitParam;
@@ -530,7 +622,17 @@ function GenBattleSourceData (array $a, array $d, int $rf, int $max_round) : str
     return $source;
 }
 
-// Extend some properties from the initial conditions to the results of the battle outcome.
+/**
+ * Extends the battle result data with properties from the initial conditions.
+ *
+ * Copies the participant names, coordinates, ids and participant types into
+ * the before-data and every round, then runs battle post-process mods.
+ *
+ * @param array $a Array of attacker data, indexed by attacker number.
+ * @param array $d Array of defender data, indexed by defender number.
+ * @param array $res Battle result data, modified in place.
+ * @return void
+ */
 function PostProcessBattleResult (array $a, array $d, array &$res) : void {
 
     foreach ($res['before']['attackers'] as $i=>$attacker) {
@@ -638,7 +740,18 @@ function ExecuteBattle (array $unitab, int $battle_id, string $source, array $a,
     return $res;
 }
 
-// Start a battle between attacking fleet_id and defending planet_id.
+/**
+ * Starts a battle between an attacking fleet and a defending planet.
+ *
+ * Gathers both forces, runs the battle engine, computes losses, debris and
+ * captured resources, generates battle reports for all participants and
+ * updates the planet, fleets and player statistics.
+ *
+ * @param int $fleet_id Id of the attacking fleet.
+ * @param int $planet_id Id of the defending planet.
+ * @param int $when Timestamp of the battle.
+ * @return int Battle result code: BATTLE_RESULT_AWON, BATTLE_RESULT_DWON or BATTLE_RESULT_DRAW.
+ */
 function StartBattle ( int $fleet_id, int $planet_id, int $when ) : int
 {
     global $db_prefix;
