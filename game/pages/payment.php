@@ -25,6 +25,9 @@ class Payment extends Page {
                     $this->coupon = LoadCoupon ($id);
                 }
                 else $this->CouponError = loca("PAY_INVALID_CODE");
+
+                //Код более не действителен.
+                //Неверный код
             }
             else if ( $_POST['action'] === "activate" ) {
                 ActivateCoupon ( $GlobalUser, $code );

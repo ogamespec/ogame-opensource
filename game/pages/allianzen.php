@@ -31,6 +31,7 @@ class Allianzen extends Page {
 
         // Handle POST requests for alliance creation/search
         if ( $GlobalUser['ally_id'] == 0 && key_exists('a', $_GET) ) {
+            // The purpose of this parameter is unknown (weiter = more German).
             $weiter = 0;
             if (key_exists('weiter', $_GET) && $_GET['weiter'] == 1) $weiter = 1;
 

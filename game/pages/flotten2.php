@@ -31,21 +31,29 @@ class Flotten2 extends Page {
         if ( key_exists ( 'target_planet', $_POST ) ) $target_planet = intval ($_POST['target_planet']);
         else $target_planet = $aktplanet['p'];
 
+        // Fleet List.
+
         $total = 0;
         $cargo = 0;
         $fleetmap_nosat = array_diff($fleetmap, [GID_F_SAT]);
         foreach ($fleetmap_nosat as $i=>$gid) 
         {
+            // Limit the number of fleets to the maximum number on a planet.
             if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet[$gid] , abs (intval ($_POST["ship$gid"])) );
             else $amount = 0;
             $total += $amount;
 
+            // not counting probes.
             if ($gid != GID_F_PROBE) $cargo += FleetCargo ($gid) * $amount;
         }
 
+        // The fleet is not selected.
         if ( $total == 0 ) MyGoto ( "flotten1" );
 
+        // Standard planet types for the drop-down list
         $planet_types = [ 1, 2, 3 ];
+
+        // Expand with modifications
         ModsExecRef ('page_flotten2_planet_types', $planet_types);
         ?>
 
@@ -69,6 +77,8 @@ class Flotten2 extends Page {
         if ( key_exists ( 'target_mission', $_POST ) ) {
             echo "        <input type=\"hidden\" name=\"target_mission\" value=\"".$target_misson."\" />\n";
         }
+
+        //print_r ($_POST);
         ?>
         <input name="thisgalaxy" type="hidden" value="<?php echo $aktplanet['g'];?>" />
         <input name="thissystem" type="hidden" value="<?php echo $aktplanet['s'];?>" />
@@ -151,6 +161,7 @@ class Flotten2 extends Page {
             <td colspan="2" class="c"><?=loca("FLEET2_HEAD_PLANETS");?></td>
         </tr>
         <?php
+        // List of planets.
         $result = EnumPlanets ();
         $rows = dbrows ($result);
         $leftcol = true;
@@ -174,6 +185,7 @@ class Flotten2 extends Page {
         <tr height="20">
             <td colspan="2" class="c"><?=loca("FLEET2_HEAD_ACS");?></tr>
             <?php
+            // List of battle unions (ACS)
             $unions = EnumUnion ( $GlobalUser['player_id'], 1);
             $union_count = 0;
             foreach ( $unions as $i=>$union )

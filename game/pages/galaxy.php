@@ -364,7 +364,7 @@ class Galaxy extends Page {
                     }
                     else
                     {
-                        //echo "<font color=#808080 >РЁРїРёРѕРЅР°Р¶</font><br><br />";
+                        //echo "<font color=#808080 >Шпионаж</font><br><br />";
                         echo "<a href=# onclick=doit(6,".$moon['g'].",".$moon['s'].",".$moon['p'].",3,".$GlobalUser['maxspy'].") >".loca("GALAXY_FLEET_SPY")."</a><br><br />";
                         if ( $show_ipm_button ) echo "<a href=index.php?page=galaxy&no_header=1&session=$session&mode=1&p1=".$moon['g']."&p2=".$moon['s']."&p3=".$moon['p']."&pdd=".$moon['planet_id']."&zp=".$moon['owner_id']." >".loca("GALAXY_FLEET_RAK")."</a><br />";
                         echo "<a href=index.php?page=flotten1&session=".$_GET['session']."&galaxy=".$moon['g']."&system=".$moon['s']."&planet=".$moon['p']."&planettype=3&target_mission=3 >".loca("GALAXY_FLEET_TRANSPORT")."</a><br />";

@@ -2,6 +2,10 @@
 
 // Ordering officers (micropayment).
 
+// In the original, the Commander appeared first, then the other Officers. But for the sake of simplicity, we consider the Commander to be an officer as well.
+
+// Also in our project there is no billing system (communism). Instead of payment, coupons are used, which are distributed by the administrator.
+
 class Micropayment extends Page {
 
     public function controller () : bool {
@@ -16,6 +20,7 @@ class Micropayment extends Page {
             $days = intval ( $_GET['days'] );
             if ( $days == 7 || $days == 90 ) {
                 $dm = $GlobalUser['dm'] + $GlobalUser['dmfree'];
+                // Cost of Officers.
                 $price = array ( USER_OFFICER_COMMANDER => 10000, USER_OFFICER_ADMIRAL => 10000, USER_OFFICER_ENGINEER => 10000, USER_OFFICER_GEOLOGE => 10000, USER_OFFICER_TECHNOCRATE => 10000 );
                 if ( $days == 7) $required = $price[$type];
                 else if ( $days == 90) $required = $price[$type] * 10;
@@ -24,6 +29,7 @@ class Micropayment extends Page {
                 }
                 else {
                     if ( $type >= USER_OFFICER_COMMANDER && $type <= USER_OFFICER_TECHNOCRATE ) {
+                        // Списать ТМ.
                         if ( $GlobalUser['dm'] >= $required ) $GlobalUser['dm'] -= $required;
                         else {
                             $GlobalUser['dmfree'] -= $required - $GlobalUser['dm'];

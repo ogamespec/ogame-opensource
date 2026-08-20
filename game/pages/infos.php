@@ -1,6 +1,10 @@
 <?php
 
 // Information on buildings, fleets, defense and research.
+// Some pages (particularly buildings) contain additional information or controls.
+
+// Small transport contains additional text (yellow), to indicate the change in base speed and consumption after a engine change.
+// A bomber does NOT have a change in consumption after an engine change.
 
 class Infos extends Page {
 
@@ -64,11 +68,14 @@ class Infos extends Page {
 
         echo "<table width=\"519\">\n";
 
+        // Fleet
         if (IsFleet($gid)) {
             $base_speed = $UnitParam[$gid][4];
             $base_cons = $UnitParam[$gid][5];
             $base_speed2 = 0;
             $base_cons2 = 0;
+
+            // The base values for Small Cargo and Bomber change when you change engines
 
             if ($gid == GID_F_SC) {
                 $base_speed2 = $base_speed + 5000;
@@ -76,6 +83,7 @@ class Infos extends Page {
             }
             else if ($gid == GID_F_BOMBER) {
                 $base_speed2 = $base_speed + 1000;
+                // Consumption doesn't change.
             }
 
             echo "<!-- begin fleet or defense information -->\n";
@@ -98,6 +106,7 @@ class Infos extends Page {
             echo "</th></tr>\n";
             echo "</table></th></tr></table>\n";
         }
+        // Defense.
         else if (IsDefenseNoRak($gid)) {
             echo "<!-- begin fleet or defense information -->\n";
             echo "<tr><td class=\"c\" colspan=\"2\">".loca("INFO_DEFENSE")."</td></tr>\n";
@@ -106,6 +115,7 @@ class Infos extends Page {
             echo "<table border=\"0\">\n";
             echo "<tr><td valign=\"top\">".GetObjectImage(UserSkin(), $gid)."</td>\n";
             echo "<td>".loca("LONG_$gid");
+            // For shooting defenses, output the damage repair percentage.
             if ($this->IsDefenseShoot($gid)) echo " " . va(loca("INFO_REPAIR"), $drepair);
             echo "<br/>".$this->rapid_info."</td>\n";
             echo "</tr></table></th></tr>\n";
@@ -114,6 +124,7 @@ class Infos extends Page {
             echo "<tr><th>".loca("INFO_ATTACK")."</th><th>".nicenum($UnitParam[$gid][2])."</th></tr>\n";
             echo "</th></tr></table>\n";
         }
+        // Research.
         else if (IsResearch($gid)) {
             echo "<tr><td class=\"c\">".loca("NAME_$gid")."</td></tr>\n";
             echo "<tr><th><table>\n";
@@ -149,11 +160,16 @@ class Infos extends Page {
                 $this->DisplayJumpGate ();
             }
 
+            // Provide the ability to display additional information about a game object for modifications
+
             ModsExecIntRef ('page_infos', $gid, $aktplanet);
 
             echo "</table>\n";
 
             // Building Demolition.
+            // The terraformer and moonbase cannot be demolished.
+            // A missile silo can only be demolished if there are no missiles on the planet.
+
             if ( IsBuilding($gid) && $aktplanet[$gid] && !($gid == GID_B_TERRAFORMER || $gid == GID_B_LUNAR_BASE || $gid == GID_B_MISS_SILO) ) {
                 echo "<table width=519 >\n";
                 echo "<tr><td class=c align=center><a href=\"index.php?page=b_building&session=$session&techid=$gid&modus=destroy&planet=".$aktplanet['planet_id']."\">".va(loca("INFO_DEMOLISH_TITLE"), loca("NAME_$gid"), $aktplanet[$gid])."</a></td></tr>\n";
@@ -168,6 +184,7 @@ class Infos extends Page {
                 echo "<tr><th><br>".loca("INFO_DEMOLISH_DURATION")."  ".DurationFormat ( $t )."<br></th></tr></table>\n";
             }
 
+            // Missile Silo
             if ( $gid == GID_B_MISS_SILO && $aktplanet[$gid]) {
                 $raknum = $aktplanet[GID_D_ABM] + $aktplanet[GID_D_IPM];
                 echo "<table width=519 >\n";
@@ -188,6 +205,7 @@ class Infos extends Page {
         echo "<br><br><br><br>\n";
     }
 
+    // Rapid-fire information.
     private function RapidInfo (int $gid) : string {
         global $RapidFire;
         $res = "";
@@ -204,6 +222,9 @@ class Infos extends Page {
         return "<br/>".loca("INFO_RAPID_OUT1")."<a href=\"index.php?page=infos&session=".$_GET['session']."&gid=$gid\">".loca("NAME_$gid")."</a>".va(loca("INFO_RAPID_OUT2"), "<font color=\"lime\">$n</font>")."\n";
     }
 
+    // Metal mine
+    // Crystal mine
+    // Deuterium synthesizer
     private function DisplayProductionTable (int $gid) : void {
         global $GlobalUni;
         global $GlobalUser;
@@ -280,6 +301,7 @@ class Infos extends Page {
         }
     }
 
+    // Storages
     private function DisplayStorageTable (int $gid) : void {
         global $aktplanet;
 
@@ -294,6 +316,7 @@ class Infos extends Page {
         echo "</table>";
     }
 
+    // Alliance Depot
     private function DisplayAllianceDepot () : void {
         global $GlobalUser;
         global $aktplanet;
@@ -352,12 +375,15 @@ class Infos extends Page {
 <?php
     }
 
+    // Missile Silo
     private function DisplayMissileSilo () : void {
         global $GlobalUser;
         global $aktplanet;
         global $db_prefix;
         global $session;
         global $now;
+
+        // TODO: It looks like the code for the missiles was shared, as it copy-pasted. I'm not yet sure whether it's necessary to generalize this and add some missile-specific tables to techs.php; I'll have to think about that.
 
         $rak_space = $aktplanet[GID_B_MISS_SILO] * 10;
         ?>
@@ -389,6 +415,7 @@ class Infos extends Page {
         }
     }
 
+    // Sensor Phalanx
     private function DisplayPhalanxInfo () : void {
         global $aktplanet;
 
@@ -403,6 +430,7 @@ class Infos extends Page {
         echo "</center></table></tr></th></table> \n";
     }
 
+    // Jump Gate
     private function DisplayJumpGate () : void {
         global $GlobalUser;
         global $aktplanet;
@@ -433,7 +461,9 @@ class Infos extends Page {
         while ($rows--)
         {
             $planet = dbarray ($result);
+            // current moon
             if ( $planet['planet_id'] == $aktplanet['planet_id'] ) continue;
+            // no jump gate
             if ( $planet[GID_B_JUMP_GATE] == 0 ) continue;
             if ( $planet['type'] != PTYP_MOON || $now < $planet['gate_until'] ) continue;
             echo "             <option value=\"".$planet['planet_id']."\">".$planet['name']." <a href=\"index.php?page=galaxy&galaxy=".$planet['g']."&system=".$planet['s']."&position=".$planet['p']."&session=$session\" >[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a></option>\n";
@@ -470,6 +500,7 @@ class Infos extends Page {
 </form>
 <?php
         }
+        // The gate is not ready.
         else {
             $delta = $aktplanet["gate_until"] - $now;
             ?>
@@ -487,6 +518,8 @@ class Infos extends Page {
         else return nicenum($num);
     }
 
+    // Shooting defenses
+    // A custom method that used to be in techs.php, but was moved here because it's only used in one place (not very mod-compatible).
     // Shooting defenses (rocket launcher, light/heavy laser, gauss, ion,
     // plasma) are repairable after a battle. Non-shooting defense (domes,
     // missiles) is not. Used in view() to show the repair note.

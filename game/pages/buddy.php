@@ -4,6 +4,11 @@
 
 class Buddy extends Page {
 
+    // ⚠️Important! This game feature involves a rich interaction with input from the user.
+    // You need to pay a lot of attention to the security of the input data (size and content checks).
+
+    // TODO: BUDDY_LIMIT
+
     private int $action = 0;
 
     public function controller () : bool {
@@ -13,6 +18,7 @@ class Buddy extends Page {
         $this->action = key_exists ('action', $_GET) ? intval($_GET['action']) : 0;
 
         // Process buddy actions
+        // Add your application.
         if ( $this->action == 1 && key_exists('buddy_id', $_GET) && $_GET['buddy_id']) {
             $from = $GlobalUser['player_id'];
             $to = intval ($_GET['buddy_id']);
@@ -22,29 +28,35 @@ class Buddy extends Page {
                 else SendMessage ( $to, $GlobalUser['oname'], loca("BUDDY_REQUEST"), $_POST['text'], MTYP_PM );
             }
         }
+        // Accept the request
         else if ( $this->action == 2 && key_exists('buddy_id', $_GET) && $_GET['buddy_id']) {
             $buddy_id = intval ($_GET['buddy_id']);
             $buddy = LoadBuddy ($buddy_id);
             AcceptBuddy ($buddy_id);
             SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va(loca("BUDDY_MSG_ADDED"), $GlobalUser['oname']), MTYP_PM);
         }
+        // Reject the request
         else if ( $this->action == 3 && key_exists('buddy_id', $_GET) && $_GET['buddy_id']) {
             $buddy_id = intval ($_GET['buddy_id']);
             $buddy = LoadBuddy ($buddy_id);
             RemoveBuddy ($buddy_id);
             SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va(loca("BUDDY_MSG_DECLINED"), $GlobalUser['oname']), MTYP_PM);
         }
+        // Withdraw your request.
         else if ( $this->action == 4 && key_exists('buddy_id', $_GET) && $_GET['buddy_id']) {
             $buddy_id = intval ($_GET['buddy_id']);
             $buddy = LoadBuddy ($buddy_id);
+            // only your own
             if ( $buddy['request_from'] == $GlobalUser['player_id'] ) {
                 RemoveBuddy ($buddy_id);
                 SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va (loca("BUDDY_MSG_RECALLED"), $GlobalUser['oname']), MTYP_PM );
             }
         }
+        // Remove from the list
         else if ( $this->action == 8 && key_exists('buddy_id', $_GET) && $_GET['buddy_id']) {
             $buddy_id = intval ($_GET['buddy_id']);
             $buddy = LoadBuddy ($buddy_id);
+            // only your own
             if ($buddy['request_from'] == $GlobalUser['player_id'] ) {
                 RemoveBuddy ($buddy_id);
                 SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va (loca("BUDDY_MSG_DELETED"), $GlobalUser['oname']), MTYP_PM );
@@ -70,12 +82,17 @@ class Buddy extends Page {
         // page; keep that behavior.
         if ( $action == 2 || $action == 3 ) $this->Buddy_Income ();
         else if ( $action == 4 ) $this->Buddy_Outcome ();
+        // Other people's requests
         else if ( $action == 5 ) $this->Buddy_Income ();
+        // Your requests
         else if ( $action == 6 ) $this->Buddy_Outcome ();
+        // Application submission window.
         else if ( $action == 7 ) $this->Buddy_Request ();
         else $this->Buddy_Home ();
     }
 
+    // Menu pages.
+    // Main page
     private function Buddy_Home () : void {
         global $GlobalUser;
         global $session;
@@ -134,6 +151,7 @@ class Buddy extends Page {
         echo "<br><br><br><br>\n";
     }
 
+    // Requests (5)
     private function Buddy_Income () : void {
         global $GlobalUser;
         global $session;
@@ -196,6 +214,7 @@ class Buddy extends Page {
         <?php
     }
 
+    // Your requests (6)
     private function Buddy_Outcome () : void {
         global $GlobalUser;
         global $session;
@@ -246,6 +265,7 @@ class Buddy extends Page {
         echo "</table><br><br><br><br>\n";
     }
 
+    // Send request (7)
     private function Buddy_Request () : void {
         global $GlobalUser;
         global $session;

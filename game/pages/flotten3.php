@@ -51,11 +51,13 @@ class Flotten3 extends Page {
         $total = 0;
         foreach ($fleetmap_nosat as $i=>$gid) 
         {
+            // Limit the number of fleets to the maximum number on a planet.
             if ( key_exists("ship$gid", $_POST) ) $amount = min ( $aktplanet[$gid] , abs ( intval($_POST["ship$gid"]) ) );
             else $amount = 0;
             $total += $amount;
         }
 
+        // The fleet has not been selected.
         if ( $total == 0 ) MyGoto ( "flotten1" );
         ?>
 
@@ -115,6 +117,7 @@ class Flotten3 extends Page {
                     <td class="c" colspan="2"><?=loca("FLEET3_ORDER");?></td>
                 </tr>
                 <?php
+                // Display a list of available missions.
                 $mission_acs = $mission_exp = $mission_hold = false;
                 $fleet = array ();
 
@@ -191,6 +194,7 @@ class Flotten3 extends Page {
                     <th>&nbsp; </th>
                 </tr>
                 <?php
+                // List of battle unions (ACS)
                 $unions = EnumUnion ( $GlobalUser['player_id'] );
 
                 if ( $mission_acs && count($unions) > 0 )
@@ -218,6 +222,7 @@ class Flotten3 extends Page {
                     <?php
                 }
 
+                // Hold time
                 if ( $mission_hold )
                 {
                     ?>
@@ -241,6 +246,7 @@ class Flotten3 extends Page {
                     <?php
                 }
 
+                // Expedition duration time
                 if ( $mission_exp && $GlobalUser[GID_R_EXPEDITION] > 0 )
                 {
                     ?>

@@ -18,11 +18,13 @@ class Bewerben extends Page {
         $ally = LoadAlly ($ally_id);
         $this->ally = is_array ($ally) ? $ally : null;
 
+        // Load a sample of the application form.
         if ( key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_TEMPLATE") || $this->ally['insertapp']) {
             $this->template = $this->ally['apptext'];
             if ($this->template === "") $this->template = loca("ALLY_APPU_TEMPLATE_MISSING");
         }
 
+        // Send an application
         if ( method() === "POST" && key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_SUBMIT") && $this->ally['open'] ) {
             $text = $_POST['text'];
             $text = addslashes ( $text );
@@ -56,7 +58,9 @@ class Bewerben extends Page {
             return;
         }
 
+        // GET
         if ( $ally['open'] ) {
+            // Submit an application
             ?>
             <h1><?=loca("ALLY_APPU_REG");?></h1>
             <table width=519>
@@ -69,6 +73,7 @@ class Bewerben extends Page {
             <?php
         }
         else {
+            // It's impossible to apply, the alliance is closed.
             ?>
             <h1><?=loca("ALLY_APPU_REG");?></h1>
             <table width=519>

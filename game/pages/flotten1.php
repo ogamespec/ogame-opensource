@@ -2,6 +2,8 @@
 
 // Fleet 1: prepares the composition of the fleet
 
+// Parameter passing between Fleet 1,2,3 pages is done via hidden POST parameters.
+
 class Flotten1 extends Page {
 
     private int $union_id = 0;
@@ -17,7 +19,7 @@ class Flotten1 extends Page {
 
         // POST requests processing
         if ( method () === "POST" ) {
-            if ( key_exists ( 'order_return', $_POST) ) {
+            if ( key_exists ( 'order_return', $_POST) ) {    // Fleet recall.
                 $fleet_id = intval ($_POST['order_return']);
                 $fleet_obj = LoadFleet ( $fleet_id );
                 if (  ($fleet_obj['owner_id'] == $GlobalUser['player_id']) &&
@@ -28,13 +30,13 @@ class Flotten1 extends Page {
             if ( key_exists ( 'union_name', $_POST) && $GlobalUni['acs'] > 0 ) {
                 $fleet_id = intval ($_POST['flotten']);
                 $this->union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
-                RenameUnion ( $this->union_id, $_POST['union_name'] );
+                RenameUnion ( $this->union_id, $_POST['union_name'] );    // rename
             }
 
             if ( key_exists ( 'user_name', $_POST) && $GlobalUni['acs'] > 0 ) {
                 $fleet_id = intval ($_POST['flotten']);
                 $this->union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
-                $PageError = AddUnionMember ( $this->union_id, $_POST['user_name'] );
+                $PageError = AddUnionMember ( $this->union_id, $_POST['user_name'] );    // add player
             }
         }
 
@@ -49,12 +51,12 @@ class Flotten1 extends Page {
         global $db_prefix;
         global $session;
 
-        $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
+        $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );    // Number of fleets
         $nowfleet = $rows = dbrows ($result);
         $maxfleet = $maxfleet_no_bonus = 0;
         GetMaxFleet ($GlobalUser, $aktplanet, $maxfleet, $maxfleet_no_bonus);
 
-        $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );
+        $expnum = GetExpeditionsCount ( $GlobalUser['player_id'] );    // Number of expeditions
         $maxexp = floor ( sqrt ( $GlobalUser[GID_R_EXPEDITION] ) );
 
         $bonuses = [];
@@ -185,6 +187,7 @@ class Flotten1 extends Page {
            </table>
 
            <?php
+           // ************************ ACS attack creation form ************************
            if ( key_exists ( 'order_union', $_POST) && $GlobalUni['acs'] > 0 ) {
                $fleet = LoadFleet ( intval ($_POST['order_union']) );
                if ( $fleet['union_id'] ) $union = LoadUnion ( $fleet['union_id'] );
@@ -213,6 +216,7 @@ class Flotten1 extends Page {
                                            for ($i=0; $i<=$union['players']; $i++)
                                            {
                                                $player_id = $union["player"][$i];
+                                               //if ($player_id == $GlobalUser['player_id']) continue;    // keep yourself off the invitation list
                                                $user = LoadUser ($player_id);
                                                echo "<option>".$user['oname']."</option>\n";
                                            }
@@ -303,8 +307,8 @@ class Flotten1 extends Page {
                  <th colspan="2"><a href="javascript:maxShips();" ><?=loca("FLEET1_ALL_SHIPS");?></a></th>
                   </tr>
                   <?php
-                  if ( $prem['commander'] ) {
-                      $temp_map = array_diff($fleetmap, [GID_F_SAT]);
+                  if ( $prem['commander'] ) {    // Standard fleets (templates)
+                      $temp_map = array_diff($fleetmap, [GID_F_SAT]);    // without solar sat
 
                       echo "      <tr height=\"20\">\n";
                       echo "      <td colspan=\"4\" class=\"c\"><u><a href=\"index.php?page=fleet_templates&session=$session\">".loca("FLEET1_TEMPLATE")."</a></u></td>\n";
@@ -372,6 +376,7 @@ function GetFleetBonuses (array|null $user, array|null $planet, array &$bonuses)
 
     $prem = PremiumStatus ($user);
 
+    // Default 0.84 bonuses
     if ($prem['admiral']) {
         $bonus = [];
         $bonus['color'] = "lime";
@@ -383,6 +388,7 @@ function GetFleetBonuses (array|null $user, array|null $planet, array &$bonuses)
         $bonuses[] = $bonus;
     }
 
+    // Modification bonuses
     $param = [];
     $param['user'] = $user;
     $param['planet'] = $planet;

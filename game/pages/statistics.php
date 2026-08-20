@@ -9,6 +9,11 @@ class Statistics extends Page {
     private int $start = -1;
 
     public function controller () : bool {
+        // The stats in the original were made simple and nice: 3 times per day player and alliance scores were saved and the difference (+/-) was shown relative to the old scores.
+        // New points were updated instantly after building, research, or battle (and other events that could change the scores)
+
+        // No cache or other nonsense is used for statistics.
+
         $this->start = -1;
         if ( key_exists ( "start", $_REQUEST ) ) $this->start = intval($_REQUEST['start']);
 
@@ -57,6 +62,8 @@ class Statistics extends Page {
                         <select name="start">
                             <option value="-1" <?php if ( $start == -1 ) echo "selected";?>><?=loca("STAT_OWN_POSITION");?></option>
                             <?php
+                            // Drop-down list of players/alliances
+
                             if ( $who === 'ally' ) {
                                 $query = "SELECT * FROM ".$db_prefix."ally";
                                 $result = dbquery ($query );

@@ -14,6 +14,9 @@ class Flottenversand extends Page {
         global $PageError;
         global $now;
 
+        // If the fleet was sent successfully - output brief information, otherwise output an error.
+        // After 1 second, a redirect is made to the first page of fleet dispatch.   (timeout setting is in router.json)
+
         $this->BlockAttack = 0;
         $this->FleetError = false;
         $this->FleetErrorText = "";
@@ -77,6 +80,7 @@ class Flottenversand extends Page {
         $this->origin = LoadPlanet ( intval($_POST['thisgalaxy']), intval($_POST['thissystem']), intval($_POST['thisplanet']), intval($_POST['thisplanettype']) );
         $this->target = LoadPlanet ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), intval($_POST['planettype']) );
 
+        // Output the text of the fleet dispatch error.
         if ( $GlobalUni['freeze'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_FREEZE")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
 
         if (  ( $_POST['thisgalaxy'] == $_POST['galaxy'] ) &&
@@ -294,6 +298,8 @@ class Flottenversand extends Page {
                 $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_ORDER")."</span></th>\n  </tr>\n"; $this->FleetError = true;
                 break;
         }
+
+        //Your fleets are engaged in battle. ("Ваши флоты ввязались в бой.")
 
         if ($this->FleetError) {
             return true;

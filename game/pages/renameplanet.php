@@ -34,14 +34,17 @@ class Renameplanet extends Page {
                 $this->show_main_menu = $this->PlanetDestroyMenu ();
             }
             else if ( $_POST['aktion'] === loca("REN_DELETE_PLANET") ) {
+                // Check the password.
                 if ( CheckPassword ( $GlobalUser['name'], $_POST['pw']) == 0 ) {
                     $PageError = "<center>\n" .
                                 va (loca("REN_ERROR_PASSWORD"), "<A HREF=reg/mail.php>", "</A>", "<a\nhref=".hostname()." target='_top'>", "</a>") .
                                 "<br></center>\n\n" ;
                 }
                 else {
+                    // Check if the planet belongs to this user.
                     $planet = LoadPlanetById ( intval($_POST['deleteid']) );
                     if ( $planet['owner_id'] == $GlobalUser['player_id'] ) {
+                        // The home planet cannot be deleted.
                         if ( intval($_POST['deleteid']) == $GlobalUser['hplanetid'] ) $PageError = "<center>\n".loca("REN_ERROR_HOME_PLANET")."<br></center>\n";
                         else {
                             $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = " . intval($_POST['deleteid']) . " AND owner_id = " . $GlobalUser['player_id'];
@@ -58,11 +61,16 @@ class Renameplanet extends Page {
                                 $when = $now + 24*3600;
                                 $moon_id = PlanetHasMoon ($planet['planet_id']);
                                 if ( $moon_id ) {
+                                    // Delete only not yet destroyed moons
                                     $moon = LoadPlanetById ( $moon_id );
                                     if ( $moon['type'] == 0 ) {
                                         $query = "UPDATE ".$db_prefix."planets SET type = ".PTYP_DEST_MOON.", owner_id = ".USER_SPACE.", date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $moon_id . ";";
                                         dbquery ( $query );
+
+                                        // Delete the queue on the moon
                                         FlushQueue ($moon_id);
+
+                                        // Modify player stats (after moon deletion)
                                         $pp = PlanetPrice ($moon);
                                         AdjustStats ( $moon['owner_id'], $pp['points'], $pp['fpoints'], 0, '-' );
                                         RecalcRanks ();
@@ -72,12 +80,15 @@ class Renameplanet extends Page {
                                 else $query = "UPDATE ".$db_prefix."planets SET type = ".PTYP_DEST_PLANET.", owner_id = ".USER_SPACE.", date = $now, remove = $when, lastakt = $now WHERE planet_id = " . $planet['planet_id'] . ";";
                                 dbquery ( $query );
 
+                                // Delete the queue on the planet
                                 FlushQueue ($planet['planet_id']);
 
+                                // Modify player stats (after planet removal)
                                 $pp = PlanetPrice ($planet);
                                 AdjustStats ( $planet['owner_id'], $pp['points'], $pp['fpoints'], 0, '-' );
                                 RecalcRanks ();
 
+                                // Redirect to Home Planet.
                                 SelectPlanet ($GlobalUser['player_id'], $GlobalUser['hplanetid']);
                                 MyGoto ( "renameplanet" );
                             }
@@ -86,6 +97,10 @@ class Renameplanet extends Page {
                 }
             }
         }
+
+        // Planet Menu.
+
+        // Sneakily hidden in the Overview - you have to click on the name of the planet.
 
         if (!$this->show_main_menu) return;
 

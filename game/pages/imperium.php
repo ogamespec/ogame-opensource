@@ -10,6 +10,8 @@ class Imperium extends Page {
         global $aktplanet;
         global $now;
 
+        // Empire.
+        // Processing parameters.
         // Process GET parameters for building queue operations
         if ( key_exists ('modus', $_GET) && !$GlobalUser['vacation'] ) {
             if ( $_GET['modus'] === 'add' ) BuildEnque ( $GlobalUser, intval ($_GET['planet']), intval ($_GET['techid']), 0 );
@@ -30,6 +32,7 @@ class Imperium extends Page {
             if ( $this->planettype != 1 ) $this->planettype = 1;
         }
 
+        // Load a list of planets/moons.
         $this->plist = array ();
         $this->moons = 0;
         $this->num = 0;
@@ -287,6 +290,7 @@ class Imperium extends Page {
 
                     foreach ( $plist as $j=>$planet )
                     {
+                        // Load the planet's build queue.
                         $bqueue = array ();
                         $result = GetBuildQueue ( $planet['planet_id'] );
                         while ( $row = dbarray ($result) ) {
@@ -312,6 +316,7 @@ class Imperium extends Page {
                             echo "                    </font>\n";
                             echo "                </a>    \n";
 
+                            // Build queue.
                             foreach ( $bqueue as $i=>$row ) {
                                 if ( $row['tech_id'] != $gid || $row['planet_id'] != $planet['planet_id'] ) continue;
                                 if ( $i == 0 ) {

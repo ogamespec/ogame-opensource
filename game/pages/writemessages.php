@@ -2,6 +2,9 @@
 
 // Write private message to a player.
 
+// ⚠️Important! This game feature involves a rich interaction with input from the user.
+// You need to pay a lot of attention to the security of the input data (size and content checks).
+
 class Writemessages extends Page {
 
     private ?array $user = null;
@@ -20,7 +23,9 @@ class Writemessages extends Page {
         $this->home = ($this->user !== null) ? LoadPlanetById ( $this->user['hplanetid']) : null;
         $this->ownhome = LoadPlanetById ( $GlobalUser['hplanetid']);
 
+        // Process POST request.
         if ( key_exists ('gesendet', $_GET) && $_GET['gesendet'] == 1) {
+            // Verify account activation.
             if ( !$GlobalUser['validated']) {
                 ob_clean ();
                 $this->SendNotActivated ();
@@ -56,6 +61,7 @@ class Writemessages extends Page {
         global $GlobalUser;
         global $session;
 
+        // Character limit.
         $MAXCHARS = 2000;
 
         echo $this->write_error;
@@ -82,6 +88,7 @@ class Writemessages extends Page {
 
         loca_add ("reg", $GlobalUser['lang']);
 
+        // Partially replicates the Error method from debug.php, but without unloading the player.
         $text = loca("REG_NOT_ACTIVATED_MESSAGE");
         $now = time ();
         $error = array ( 'owner_id' => $GlobalUser['player_id'], 'ip' => $_SERVER['REMOTE_ADDR'], 'agent' => $_SERVER['HTTP_USER_AGENT'], 'url' => $_SERVER['REQUEST_URI'], 'text' => $text, 'date' => $now );

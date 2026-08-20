@@ -2,6 +2,8 @@
 
 // Settings page
 
+// Es wurden bereits 2 E-Mails an Dich geschickt. Heute ist kein weiterer E-Mail-Versand möglich, bitte versuch es morgen nochmal.
+
 class Options extends Page {
 
     public function controller () : bool {
@@ -26,11 +28,14 @@ class Options extends Page {
 
         // Account not activated
         if ( $GlobalUser['validated'] == 0 ) {
+            // Process POST request.
             if ( method () === "POST") {
+                // Request an activation link.
                 if ( key_exists ( "validate", $_POST ) ) {
                     SendChangeMail ( $GlobalUser['oname'], $GlobalUser['email'], $GlobalUser['pemail'], $GlobalUser['validatemd'] );
                     $PageMessage = loca ("OPTIONS_MSG_VALIDATE");
                 }
+                // Change email address
                 else if ( isset($_POST['db_email']) && $_POST['db_email'] !== $GlobalUser['email'] && $_POST['db_email'] !== "" ) {
                     $email = $_POST['db_email'];
                     if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $PageError = loca ("OPTIONS_ERR_NEEDPASS");
@@ -60,7 +65,9 @@ class Options extends Page {
         }
         // Regular menu
         else {
+            // Process POST request.
             if ( method () === "POST" && !key_exists ( 'urlaub_aus', $_POST) ) {
+                // Change the name.
                 if ( $GlobalUser['name_changed'] == 0 && key_exists('db_character', $_POST) && $_POST['db_character'] !== $GlobalUser['oname'] ) {
                     $forbidden = explode ( ",", FORBIDDEN_LOGINS );
                     if ( IsUserExist ( $_POST['db_character'] )) $PageError = loca ("OPTIONS_ERR_EXISTNAME");
@@ -83,6 +90,7 @@ class Options extends Page {
                     }
                 }
 
+                // Change password
                 else if ( key_exists('newpass1', $_POST) && $_POST['newpass1'] !== "" ) {
                     if ( $_POST['newpass1'] !== $_POST['newpass2'] ) $PageError = loca ("OPTIONS_ERR_NEWPASS");
                     else if ( !preg_match ( "/^[_a-zA-Z0-9]+$/", $_POST['newpass1'] ) ) $PageError = loca ("OPTIONS_ERR_PASS_SPECIAL");
@@ -93,11 +101,13 @@ class Options extends Page {
                         $md5 = md5 ($_POST['newpass1'] . $db_secret );
                         $query = "UPDATE ".$db_prefix."users SET password = '".$md5."' WHERE player_id = " . intval($GlobalUser['player_id']);
                         dbquery ($query);
+                        // TODO: OPTIONS_MSG_UNSAFE, OPTIONS_MSG_SIMPLE
                         $PageError = loca ("OPTIONS_MSG_PASS");
                         Logout ( $GlobalUser['session'] );
                     }
                 }
 
+                // Change email address
                 else if ( key_exists('db_email', $_POST) && $_POST['db_email'] !== $GlobalUser['pemail'] && $_POST['db_email'] !== "" ) {
                     $email = $_POST['db_email'];
                     if ( $GlobalUser['password'] !== md5 ($_POST['db_password'] . $db_secret ) ) $PageError = loca ("OPTIONS_ERR_NEEDPASS");
@@ -115,7 +125,9 @@ class Options extends Page {
                     }
                 }
 
+                // Activate vacation mode
                 if ( key_exists('urlaubs_modus', $_POST) && $_POST['urlaubs_modus'] === "on" && $GlobalUser['vacation'] == 0 ) {
+                    // at least 12 hours
                     $vacation_min = max ( 12*60*60, (2 * 24 * 60 * 60) / $speed);
                     $vacation_until = $now + $vacation_min;
                     if ( CanEnableVacation ($GlobalUser['player_id']) ) {
@@ -125,6 +137,7 @@ class Options extends Page {
                     else $PageError = loca ("OPTIONS_ERR_VM");
                 }
 
+                // Set the account for deletion
                 if ( key_exists('db_deaktjava', $_POST) && $_POST['db_deaktjava'] === "on" && $GlobalUser['disable'] == 0 ) {
                     $disable_until = $now + (7 * 24 * 60 * 60);
                     $query = "UPDATE ".$db_prefix."users SET disable=1,disable_until=$disable_until WHERE player_id=".intval($GlobalUser['player_id']);
@@ -133,6 +146,7 @@ class Options extends Page {
                     $GlobalUser['disable_until'] = $disable_until;
                 }
 
+                // Cancel account deletion
                 if ( !key_exists("db_deaktjava", $_POST) && $GlobalUser['disable'] ) {
                     $query = "UPDATE ".$db_prefix."users SET disable=0,disable_until=0 WHERE player_id=".$GlobalUser['player_id'];
                     dbquery ($query);
@@ -140,12 +154,15 @@ class Options extends Page {
                     $GlobalUser['disable_until'] = 0;
                 }
 
+                // Save skin path + checkbox show/disable skin.
+                // TODO : OPTIONS_MSG_SKIN
                 $design_path = SecureText($_POST['dpath']);
                 ChangeSkinPath ( $GlobalUser['player_id'], $design_path );
                 $enable_design = key_exists('design', $_POST) ? ($_POST['design']==="on"?true:false) : false;
                 EnableSkin ( $GlobalUser['player_id'], $enable_design );
 
                 $lang = key_exists("lang", $_POST) ? substr ( addslashes($_POST['lang']), 0, 2 ) : $GlobalUni['lang'];
+                // If the admin has forbidden users to choose a language, then force set them to the Universe language.
                 if ($GlobalUni['force_lang']) $lang = $GlobalUni['lang'];
                 $sortby = min ( max(0, intval($_POST['settings_sort'])), 2);
                 $sortorder = min ( max(0, intval($_POST['settings_order'])), 1);
@@ -164,6 +181,7 @@ class Options extends Page {
                 $GlobalUser['useskin'] = ($enable_design?1:0);
 
                 $prem = PremiumStatus ($GlobalUser);
+                // Flags -- process only with Commander enabled
                 if ( $prem['commander'] ) {
                     $flags = $GlobalUser['flags'];
                     $settings_esp = (key_exists('settings_esp', $_POST) && $_POST['settings_esp']==="on");
@@ -171,6 +189,7 @@ class Options extends Page {
                     $settings_bud = (key_exists('settings_bud', $_POST) && $_POST['settings_bud']==="on");
                     $settings_mis = (key_exists('settings_mis', $_POST) && $_POST['settings_mis']==="on");
                     $settings_rep = (key_exists('settings_rep', $_POST) && $_POST['settings_rep']==="on");
+                    // 1: don't use folders.
                     $settings_folders = (key_exists('settings_folders', $_POST) && $_POST['settings_folders']==="on");
                     if ($settings_esp) $flags |= USER_FLAG_SHOW_ESPIONAGE_BUTTON; else $flags &= ~USER_FLAG_SHOW_ESPIONAGE_BUTTON;
                     if ($settings_wri) $flags |= USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON; else $flags &= ~USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON;
@@ -193,6 +212,7 @@ class Options extends Page {
                     else FeedActivate ($feed_enable);
                 }
 
+                // Flags for the operator
                 if ( $GlobalUser['admin'] == USER_TYPE_GO ) {
                     $flags = $GlobalUser['flags'];
                     $hide_go_email = (key_exists('hide_go_email', $_POST) && $_POST['hide_go_email']==="on");
@@ -351,6 +371,7 @@ class Options extends Page {
                 </tr>
                 <tr>
                  <?php
+                 // Language selection is only activated if the admin has allowed it in the Universe settings.
                  if (!$GlobalUni['force_lang']) {
                      ?>
                     <th><?php echo loca("OPTIONS_GENERAL_LANG");?></th>
@@ -389,6 +410,7 @@ class Options extends Page {
                <th><?php echo loca("OPTIONS_GENERAL_SKINPATH");?><br /> <a href="<?=hostname();?>download/" target="_blank"><?php echo loca("OPTIONS_GENERAL_DOWNLOAD");?></a></th>
                 <th><input type=text name="dpath" maxlength="80" size="40" value="<?php echo $GlobalUser['skin'];?>" /> <br />
                  <?php
+                         // If the skin path is empty, output a list of available skins on the graphics server.
                          if ( $GlobalUser['skin'] === "" ) {
                              ?>
                    <select name="dpath" size="1" >
@@ -463,6 +485,7 @@ class Options extends Page {
                  <th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="<?php echo $GlobalUser['maxfleetmsg'];?>" /></th>
                 </tr>
                 <?php
+                // Additional Commander settings
                 if ( $prem['commander'] ) {
                     ?>
                   </tr>
@@ -529,6 +552,7 @@ class Options extends Page {
                 }
                 ?>
                 <?php
+                // Additional settings visible only to operators
                 if ( $GlobalUser['admin'] == USER_TYPE_GO ) {
                     ?>
                  <tr>

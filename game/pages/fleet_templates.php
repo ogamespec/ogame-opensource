@@ -4,6 +4,8 @@
 /** @var string $db_prefix */
 /** @var array $fleetmap */
 
+// Fleet templates.
+
 /**
  * Class FleetTemplates
  *
@@ -43,6 +45,7 @@ class Fleet_templates extends Page
         }
 
         // GET request processing - delete template
+        // Delete
         if (method() === "GET" && key_exists('mode', $_GET) && $_GET['mode'] === "delete") {
             $this->processDeleteTemplate();
         }
@@ -62,6 +65,7 @@ class Fleet_templates extends Page
         $name = mb_substr($name, 0, 30);
         $now = time();
 
+        // Change
         if ($id) {
             // Update existing template
             $query = "SELECT * FROM " . $db_prefix . "template WHERE id = $id AND owner_id = " . $GlobalUser['player_id'] . " LIMIT 1";
@@ -75,6 +79,8 @@ class Fleet_templates extends Page
                 dbquery($query);
             }
         } else {
+            // Add
+            // Limit the amount.
             // Add new template
             $query = "SELECT * FROM " . $db_prefix . "template WHERE owner_id = " . $GlobalUser['player_id'];
             $result = dbquery($query);

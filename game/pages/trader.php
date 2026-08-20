@@ -20,7 +20,9 @@ class Trader extends Page {
 
         $dm = $GlobalUser['dm'] + $GlobalUser['dmfree'];
 
+        // POST request processing.
         if ( method () === "POST" ) {
+            // Exchange resources.
             if ( $GlobalUser['trader'] > 0 ) {
                 if ( key_exists ( 'call_trader', $_POST) ) {
                     if ( $dm < TRADER_DM ) {
@@ -96,6 +98,7 @@ class Trader extends Page {
                     }
                 }
             }
+            // Call a (new) merchant
             else {
                 if ( $dm < TRADER_DM ) {
                     $this->not_enough = true;
@@ -402,6 +405,7 @@ class Trader extends Page {
         global $GlobalUser;
         global $db_prefix;
 
+        // Generate new rates.
         $offer_id = intval ($_POST['offer_id']);
         $rand = mt_rand (0, 99);
         if ( $rand < 10 ) {
@@ -445,7 +449,9 @@ class Trader extends Page {
         }
         $GlobalUser['trader'] = $offer_id;
 
+        // Write the values to the database.
         if ( $offer_id > 0 && $offer_id <= 3 ) {
+            // Списать ТМ.
             if ( $GlobalUser['dm'] >= TRADER_DM ) $GlobalUser['dm'] -= TRADER_DM;
             else {
                 $GlobalUser['dmfree'] -= TRADER_DM - $GlobalUser['dm'];
