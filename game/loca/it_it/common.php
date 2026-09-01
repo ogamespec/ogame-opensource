@@ -15,7 +15,7 @@ $LOCA["it"]["NAME_".GID_RC_DM] = "Materia Oscura";
 
 $LOCA["it"]["PLANET_HOME"] = "Pianeta Madre";
 $LOCA["it"]["PLANET_COLONY"] = "Colonia";
-$LOCA["it"]["PLANET_PHANTOM"] = "Planet";
+$LOCA["it"]["PLANET_PHANTOM"] = "Pianeta";
 $LOCA["it"]["PLANET_ABANDONED"] = "Pianeta abbandonato";   	// fixed 10th planet colony phantom ("overlib" bug)
 $LOCA["it"]["PLANET_DESTROYED"] = "Pianeta distrutto";
 $LOCA["it"]["MOON"] = "Luna";
@@ -30,7 +30,7 @@ $LOCA["it"]["TIME_SEC"] = "s";
 
 // Comandante e ufficiali.
 
-$LOCA["it"]["PR_COMA" ] = "Commander";
+$LOCA["it"]["PR_COMA" ] = "Comandante";
 $LOCA["it"]["PR_ADMIRAL" ] = "Ammiraglio";
 $LOCA["it"]["PR_ENGINEER" ] = "Ingegnere";
 $LOCA["it"]["PR_GEOLOGIST" ] = "Geologo";

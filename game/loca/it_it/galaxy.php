@@ -60,7 +60,7 @@ $LOCA["it"]["GALAXY_HEAD_MOON"] = "Luna";
 $LOCA["it"]["GALAXY_HEAD_DF"] = "Detriti";
 $LOCA["it"]["GALAXY_HEAD_OTHER"] = "Altro";
 $LOCA["it"]["GALAXY_HEAD_PLAYER_STATUS"] = "Giocatore (Stato)";
-$LOCA["it"]["GALAXY_HEAD_ALLY"] = "Аlleanza";
+$LOCA["it"]["GALAXY_HEAD_ALLY"] = "Alleanza";
 $LOCA["it"]["GALAXY_HEAD_ACTIONS"] = "Azioni";
 
 // Pianeta
@@ -93,7 +93,7 @@ $LOCA["it"]["GALAXY_ALLY_TITLE"] = "Alleanza #1 in posizione #2, con un totale d
 $LOCA["it"]["GALAXY_ALLY_PAGE"] = "Visualizza pagina alleanza";
 $LOCA["it"]["GALAXY_ALLY_APPLY"] = "Applicare";
 $LOCA["it"]["GALAXY_ALLY_STATS"] = "Statistiche";
-$LOCA["it"]["GALAXY_ALLY_HOMEPAGE"] = "Homepage of the Alliance";
+$LOCA["it"]["GALAXY_ALLY_HOMEPAGE"] = "Homepage dell'Alleanza";
 
 // Compiti
 $LOCA["it"]["GALAXY_FLEET_DEPLOY"] = "Schieramento";

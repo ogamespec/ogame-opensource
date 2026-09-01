@@ -5,7 +5,7 @@
 // General
 
 $LOCA["es"]["ALLY_ALLY"] = "Alianza";
-$LOCA["es"]["ALLY_NO_WAY"] = "Not enough permissions to perform the operation";
+$LOCA["es"]["ALLY_NO_WAY"] = "No tienes permisos suficientes para realizar la operación";
 $LOCA["es"]["ALLY_BACK"] = "Volver";
 
 // Creating and searching for alliances
@@ -64,7 +64,7 @@ $LOCA["es"]["ALLY_RANK_9"] = "\"Mano Derecha\" (Necesario para transferir la ali
 $LOCA["es"]["ALLY_MAIN_HEAD"] = "Tu alianza";
 $LOCA["es"]["ALLY_MAIN_TAG"] = "Etiqueta";
 $LOCA["es"]["ALLY_MAIN_NAME"] = "Nombre";
-$LOCA["es"]["ALLY_MAIN_PREV"] = "former #1";
+$LOCA["es"]["ALLY_MAIN_PREV"] = "anterior #1";
 $LOCA["es"]["ALLY_MAIN_MEMBERS"] = "Miembros";
 $LOCA["es"]["ALLY_MAIN_MEMBERS_LINK"] = "Lista de miembros";
 $LOCA["es"]["ALLY_MAIN_RANK"] = "Rango";
@@ -90,7 +90,7 @@ $LOCA["es"]["ALLY_CIRC_TO"] = "Destinatario";
 $LOCA["es"]["ALLY_CIRC_ALL"] = "Todos los jugadores";
 $LOCA["es"]["ALLY_CIRC_RANK"] = "#1";
 $LOCA["es"]["ALLY_CIRC_MESSAGE"] = "Mensaje (#1 / #2 caracteres)";
-$LOCA["es"]["ALLY_CIRC_SEND"] = "Submit";
+$LOCA["es"]["ALLY_CIRC_SEND"] = "Enviar";
 
 
 // settings
@@ -126,7 +126,7 @@ $LOCA["es"]["ALLY_SETTINGS_LEAVE"] = "Transferir alianza";
 
 // members
 
-$LOCA["es"]["ALLY_MEMBERS_DENIED"] = "View not possible";
+$LOCA["es"]["ALLY_MEMBERS_DENIED"] = "No es posible ver";
 $LOCA["es"]["ALLY_MEMBERS_COUNT"] = "Lista de miembros (Cantidad de registros: #1)";
 $LOCA["es"]["ALLY_MEMBERS_NAME"] = "Miembro";
 $LOCA["es"]["ALLY_MEMBERS_STATUS"] = "Posición";
@@ -137,19 +137,19 @@ $LOCA["es"]["ALLY_MEMBERS_WRITE_MESSAGE"] = "Mensaje";
 $LOCA["es"]["ALLY_MEMBERS_YES"] = "Online";
 $LOCA["es"]["ALLY_MEMBERS_NO"] = "Offline";
 $LOCA["es"]["ALLY_MEMBERS_INACTIVE"] = "Inactivo";
-$LOCA["es"]["ALLY_MEMBERS_ACTION"] = "Function";
+$LOCA["es"]["ALLY_MEMBERS_ACTION"] = "Función";
 $LOCA["es"]["ALLY_MEMBERS_KICK"] = "Expulsar jugador";
 $LOCA["es"]["ALLY_MEMBERS_KICK_CONFIRM"] = "¿Estás seguro de que quieres expulsar a #1 de la alianza?";
 $LOCA["es"]["ALLY_MEMBERS_SET_RANK"] = "Asignar rango";
 $LOCA["es"]["ALLY_MEMBERS_RANK_TO"] = "Rango para #1:";
 $LOCA["es"]["ALLY_MEMBERS_SAVE"] = "Guardar";
 $LOCA["es"]["ALLY_MEMBERS_ID"] = "#";
-$LOCA["es"]["ALLY_MEMBERS_ONLINE"] = "ALLY_MEMBERS_ONLINE";
+$LOCA["es"]["ALLY_MEMBERS_ONLINE"] = "Miembros en línea";
 
 // misc
 
 $LOCA["es"]["ALLY_MISC_LEAVE_CONFIRM"] = "¿Realmente deseas salir de la alianza \"#1\"?";
-$LOCA["es"]["ALLY_MISC_CHANGE_WAIT"] = "Wait until #1";
+$LOCA["es"]["ALLY_MISC_CHANGE_WAIT"] = "Espera hasta #1";
 $LOCA["es"]["ALLY_MISC_CHANGE_TAG_SHORT"] = "La etiqueta de la alianza es demasiado corta";
 $LOCA["es"]["ALLY_MISC_CHANGE_TAG_EXISTS"] = "¡La alianza #1 ya existe!";
 $LOCA["es"]["ALLY_MISC_CONFIRM"] = "Continuar";
@@ -171,19 +171,19 @@ $LOCA["es"]["ALLY_MISC_DISMISS_WARNING1"] = "¡Atención!";
 $LOCA["es"]["ALLY_MISC_DISMISS_WARNING2"] = "¡Recuperar la alianza será imposible<br>cuando todos los miembros la abandonen!";
 $LOCA["es"]["ALLY_MISC_YES_FOR_SURE"] = " ¡Sí, quiero!";
 
-$LOCA["es"]["ALLY_MISC_TAKEOVER_SUCCESS"] = "You have forfeited your status.";
-$LOCA["es"]["ALLY_MISC_TAKEOVER_TAKEN"] = "Rank transferred";
+$LOCA["es"]["ALLY_MISC_TAKEOVER_SUCCESS"] = "Has renunciado a tu estatus.";
+$LOCA["es"]["ALLY_MISC_TAKEOVER_TAKEN"] = "Rango transferido";
 $LOCA["es"]["ALLY_MISC_TAKEOVER_STILL_ACTIVE"] = "El fundador aún está activo";
 $LOCA["es"]["ALLY_MISC_TAKEOVER_BACK"] = " Volver";
 $LOCA["es"]["ALLY_MISC_TAKEOVER_OK"] = "OK";
-$LOCA["es"]["ALLY_MISC_TAKEOVER_HEAD"] = " Transfer manual over \"#1\"";
-$LOCA["es"]["ALLY_MISC_TAKEOVER_WHO"] = " Transfer rank";
-$LOCA["es"]["ALLY_MISC_TAKEOVER_RANK"] = " Rank: #1";
-$LOCA["es"]["ALLY_MISC_TAKEOVER_SUBMIT"] = " Transfer";
+$LOCA["es"]["ALLY_MISC_TAKEOVER_HEAD"] = " Transferir manualmente \"#1\"";
+$LOCA["es"]["ALLY_MISC_TAKEOVER_WHO"] = " Transferir rango";
+$LOCA["es"]["ALLY_MISC_TAKEOVER_RANK"] = " Rango: #1";
+$LOCA["es"]["ALLY_MISC_TAKEOVER_SUBMIT"] = " Transferir";
 
 // Alliance messages
 
-$LOCA["es"]["ALLY_MSG_FROM"] = " Alliance [#1]";
+$LOCA["es"]["ALLY_MSG_FROM"] = " Alianza [#1]";
 $LOCA["es"]["ALLY_MSG_CIRC_SUBJ"] = "Enviar correo circular a tu alianza [#1]";
 $LOCA["es"]["ALLY_MSG_CIRC_TEXT"] = "El jugador #1 te informa de lo siguiente:<br>#2";
 $LOCA["es"]["ALLY_MSG_COMMON"] = "Correo circular";
@@ -192,7 +192,7 @@ $LOCA["es"]["ALLY_MSG_KICK_SUBJ"] = "La membresía de la alianza [#1] ha sido re
 $LOCA["es"]["ALLY_MSG_YOU_KICKED"] = "El jugador #1 te ha expulsado de la alianza [#2].<br>Puedes inscribirte de nuevo.";
 $LOCA["es"]["ALLY_MSG_LEAVE"] = "El jugador #1 ha abandonado la alianza.";
 $LOCA["es"]["ALLY_MSG_DISMISS_SUBJ"] = "La membresía de la alianza [#1] ha terminado.";
-$LOCA["es"]["ALLY_MSG_DISMISS"] = "[Player #1] ha disuelto la alianza [#2].<br>Puedes buscar una alianza nueva o crear la tuya propia";
+$LOCA["es"]["ALLY_MSG_DISMISS"] = "[Jugador #1] ha disuelto la alianza [#2].<br>Puedes buscar una alianza nueva o crear la tuya propia";
 $LOCA["es"]["ALLY_MSG_TAKEOVER_SUBJ"] = "Cambio de mando en la alianza [#1].";
 $LOCA["es"]["ALLY_MSG_TAKEOVER"] = "El jugador #1, que ostenta el título de fundadora de la alianza, ha abandonado la alianza";
 $LOCA["es"]["ALLY_MSG_APPLY_ALLY"] = "El jugador #1 ha sido aceptado en la alianza.";
@@ -203,7 +203,7 @@ $LOCA["es"]["ALLY_MSG_APPLY_NO_REASON"] = "-motivo no indicado-";
 
 // bewerben (App for User)
 
-$LOCA["es"]["ALLY_APPU_NOT_ACTIVATED"] = "This function is only possible after the player account has been activated.";
+$LOCA["es"]["ALLY_APPU_NOT_ACTIVATED"] = "Esta función solo es posible después de que la cuenta del jugador haya sido activada.";
 $LOCA["es"]["ALLY_APPU_TEMPLATE_MISSING"] = "Los líderes de la alianza no han creado un ejemplo de solicitud, o no tienen pretenciones.";
 $LOCA["es"]["ALLY_APPU_TEMPLATE"] = "Ejemplo de solicitud";
 $LOCA["es"]["ALLY_APPU_SUBMIT"] = "Enviar";

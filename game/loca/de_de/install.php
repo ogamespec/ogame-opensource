@@ -2,7 +2,7 @@
 
 // Install Script
 
-$LOCA["de"]["INSTALL_TITLE"] = "OGame Install";
+$LOCA["de"]["INSTALL_TITLE"] = "OGame Installation";
 $LOCA["de"]["INSTALL_TIP"] = "Verwenden mouseover um Markennamen einige Tipps";
 
 $LOCA["de"]["INSTALL_STARTPAGE"] = "Startseite Adresse";
@@ -10,7 +10,7 @@ $LOCA["de"]["INSTALL_DB"] = "Universum Database Einstellungen";
 $LOCA["de"]["INSTALL_DB_HOST"] = "Host";
 $LOCA["de"]["INSTALL_DB_USER"] = "Benutzer";
 $LOCA["de"]["INSTALL_DB_PASS"] = "Passwort";
-$LOCA["de"]["INSTALL_DB_NAME"] = "DB name";
+$LOCA["de"]["INSTALL_DB_NAME"] = "DB-Name";
 $LOCA["de"]["INSTALL_DB_PREFIX"] = "Tabellenpräfix";
 $LOCA["de"]["INSTALL_DB_SECRET"] = "geheime Wort";
 
@@ -20,11 +20,11 @@ $LOCA["de"]["INSTALL_MDB_ENABLE"] = "In Universum an eine zentrale Datenbank?";
 $LOCA["de"]["INSTALL_MDB_HOST"] = "Host";
 $LOCA["de"]["INSTALL_MDB_USER"] = "Benutzer";
 $LOCA["de"]["INSTALL_MDB_PASS"] = "Passwort";
-$LOCA["de"]["INSTALL_MDB_NAME"] = "DB name";
+$LOCA["de"]["INSTALL_MDB_NAME"] = "DB-Name";
 
 $LOCA["de"]["INSTALL_UNI"] = "Universe Einstellungen";
 $LOCA["de"]["INSTALL_UNI_NUM"] = "Universe Nummer";
-$LOCA["de"]["INSTALL_UNI_SPEED"] = "Speed";
+$LOCA["de"]["INSTALL_UNI_SPEED"] = "Geschwindigkeit";
 $LOCA["de"]["INSTALL_UNI_FLEETSPEED"] = "Flottenspeed";
 $LOCA["de"]["INSTALL_UNI_G"] = "Anzahl der Galaxien";
 $LOCA["de"]["INSTALL_UNI_S"] = "Anzahl der Systeme";
@@ -33,16 +33,16 @@ $LOCA["de"]["INSTALL_UNI_START_DM"] = "Die Menge der anfänglichen Dunklen Mater
 $LOCA["de"]["INSTALL_UNI_ACS"] = "AKS";
 $LOCA["de"]["INSTALL_UNI_FID"] = "Flotte in Trümmern (%)";
 $LOCA["de"]["INSTALL_UNI_DID"] = "Verteidigung in Trümmern (%)";
-$LOCA["de"]["INSTALL_UNI_RAPID"] = "Rapidfire";
+$LOCA["de"]["INSTALL_UNI_RAPID"] = "Rapidfeuer";
 $LOCA["de"]["INSTALL_UNI_MOONS"] = "Monde und Todesstern";
 $LOCA["de"]["INSTALL_UNI_BATTLE"] = "Pfad zur Kampfmaschine";
 $LOCA["de"]["INSTALL_UNI_PHP_BATTLE"] = "Verwendung einer PHP-basierten Kampfmaschine";
 $LOCA["de"]["INSTALL_UNI_BATTLE_MAX"] = "Maximale Anzahl an Einheiten auf einer Seite";
 $LOCA["de"]["INSTALL_UNI_FORCE_LANG"] = "Gezwungen, die Sprache des Universums zu verwenden";
 $LOCA["de"]["INSTALL_MAX_WERF"] = "Maximale Anzahl von Einheiten in der Werft";
-$LOCA["de"]["INSTALL_FEED_AGE"] = "RSS/Atom refresh period in minutes for Commander";
+$LOCA["de"]["INSTALL_FEED_AGE"] = "RSS/Atom-Aktualisierungszeitraum in Minuten für den Commander";
 
-$LOCA["de"]["INSTALL_ADMIN"] = "Admin Account";
+$LOCA["de"]["INSTALL_ADMIN"] = "Admin-Konto";
 $LOCA["de"]["INSTALL_ADMIN_EMAIL"] = "E-Mail";
 $LOCA["de"]["INSTALL_ADMIN_PASS"] = "Passwort";
 

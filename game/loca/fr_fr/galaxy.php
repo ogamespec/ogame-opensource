@@ -38,7 +38,7 @@ $LOCA["fr"]["GALAXY_ERROR_614"] = "Il n'y a aucune planète ici.";
 $LOCA["fr"]["GALAXY_ERROR_615"] = "Erreur! Capacité de transport insuffisante!";
 $LOCA["fr"]["GALAXY_ERROR_616"] = "Même I.P.!";
 
-$LOCA["fr"]["GALAXY_DOIT_SEND"] = "  Dispatch ";
+$LOCA["fr"]["GALAXY_DOIT_SEND"] = "  Envoyer ";
 $LOCA["fr"]["GALAXY_DOIT_SHIPS"] = " Vaisseaux";
 $LOCA["fr"]["GALAXY_DOIT_MANY"] = "";
 $LOCA["fr"]["GALAXY_DOIT_ONE"] = "";

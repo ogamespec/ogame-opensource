@@ -1,0 +1,1258 @@
+<html>
+ <head>
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+  <script language="JavaScript">var session="0000000003e9";</script>
+  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+<link rel='stylesheet' type='text/css' href='css/combox.css'>
+<link rel='stylesheet' type='text/css' href='http://localhost/evolution/formate.css' />
+<title>Uni1 OGame</title>
+  <script src='js/utilities.js' type='text/javascript'></script>
+  <script language='JavaScript'>
+  </script>
+<script type='text/javascript' src='js/overLib/overlib.js'></script>
+<!-- HEADER -->
+
+<script language='JavaScript'>
+function onBodyLoad() {
+    window.setTimeout('reloadImages()', 100);
+}
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != '')) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script>
+</head>
+<body style='overflow: hidden;' onload='onBodyLoad();' onunload='' >
+<div id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>
+<div id='header_top'><center>
+<table class='header'>
+<tr class='header' >
+<td class='header' style='width:5;' >
+<table class='header'>
+<tr class='header'>
+<td class='header'><img src='http://localhost/evolution/planeten/small/s_dschjungelplanet02.jpg' width='50' height='50'></td>
+<td class='header'>
+<table class='header'>
+<select size='1' onchange='haha(this)'>
+    <option value='index.php?page=changelog&session=0000000003e9&cp=1' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1' >[1:1:4]</a></option>
+    <option value='index.php?page=changelog&session=0000000003e9&cp=10' >Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10' >[1:1:4]</a></option>
+    <option value='index.php?page=changelog&session=0000000003e9&cp=2' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2' >[1:1:5]</a></option>
+    <option value='index.php?page=changelog&session=0000000003e9&cp=3' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3' >[1:2:4]</a></option>
+    <option value='index.php?page=changelog&session=0000000003e9&cp=11' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11' >[1:2:4]</a></option>
+</select></table></td></tr></table></td>
+
+<td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
+<tr class='header'>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/metall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/kristall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/deuterium.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<a href=index.php?page=micropayment&session=0000000003e9>
+<img border='0' src='img/dm_klein_2.jpg' width='42' height='22' title='Dark Matter'></a>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/energie.gif' width='42' height='22'>
+</td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Metal</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Crystal</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Deuterium</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Dark Matter</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Energy</font></b></i></td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='90'><font >25.047</font></td>
+    <td align='center' class='header' width='90'><font >15.016</font></td>
+    <td align='center' class='header' width='90'><font >8.003</font></td>
+    <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
+    <td align='center' class='header' width='90'><font >359</font>/529</td>
+</tr>
+</table></td>
+<td class='header'>
+<table class='header' align=left>
+<tr class='header'>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/commander_ikon.gif' width='32' height='32' alt='Commander'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Still &lt;font color=lime&gt;active&lt;/font&gt; for more than 365 days<br>Commander</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Renew!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/admiral_ikon.gif' width='32' height='32' alt='Fleet Admiral'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Still &lt;font color=lime&gt;active&lt;/font&gt; for more than 365 days<br>Fleet Admiral</font><br><font size=1 color=skyblue>&amp;nbsp;max. fleet slots +2</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Renew!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/ingenieur_ikon.gif' width='32' height='32' alt='Engineer'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Still &lt;font color=lime&gt;active&lt;/font&gt; for more than 365 days<br>Engineer</font><br><font size=1 color=skyblue>Reduces the losses of the defense by half&lt;br&gt; +10% more energy</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Renew!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/geologe_ikon.gif' width='32' height='32' alt='Geologist'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Still &lt;font color=lime&gt;active&lt;/font&gt; for more than 365 days<br>Geologist</font><br><font size=1 color=skyblue>+10% mine production</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Renew!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/technokrat_ikon.gif' width='32' height='32' alt='Technocrat'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Still &lt;font color=lime&gt;active&lt;/font&gt; for more than 365 days<br>Technocrat</font><br><font size=1 color=skyblue>+2 espionage level for probes, 25% less research time</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Renew!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+<td align='center' class='header'></td></tr></table></td>
+
+</tr>
+</table>
+</div><!-- END HEADER -->
+
+<!-- LEFTMENU -->
+
+   <div id='leftmenu'>
+
+<script language='JavaScript'>
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+<center>
+
+<div id='menu'>
+<a href='mailto:barrierefrei@ogame.de' title='For problems specifically for the blind, send an email to barrierefrei@ogame.de.' style='width:1px;'></a>
+<p style='width:110px;'><NOBR>Universe 1 (<a href='index.php?page=changelog&session=0000000003e9'>v 0.84</a>)</NOBR></p>
+<table width='110' cellspacing='0' cellpadding='0'>
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/ogame-produktion.jpg' width='110' height='40' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=0000000003e9' accesskey="o">Overview</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=imperium&session=0000000003e9&planettype=1&no_header=1' accesskey="e">Empire</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=b_building&session=0000000003e9' accesskey="b">Buildings</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=0000000003e9' accesskey="r">Resources</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=0000000003e9' accesskey=""><font color='FF8900'>Merchant</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Forschung' accesskey="c">Research</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Flotte' accesskey="s">Shipyard</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=0000000003e9&mode=Flotte' accesskey="f">Fleet</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=0000000003e9' accesskey="t">Technology</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=0000000003e9&no_header=1' accesskey="g">Galaxy</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Verteidigung' accesskey="d">Defense</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/info-help.jpg' width='110' height='19' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=0000000003e9' accesskey="a">Alliance</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+    <td align=center>
+     <a id='darkmatter2' style='cursor:pointer; width:110px;'
+         href='index.php?page=micropayment&session=0000000003e9' accesskey="i"><b>Officers Recruitment</a></b>
+    </div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=statistics&session=0000000003e9' accesskey="k">Statistics</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=0000000003e9' accesskey="h">Search</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/user-menu.jpg' width='110' height='35' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=messages&session=0000000003e9&dsp=1' accesskey="m">Messages</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=0000000003e9&no_header=1", "Notizen");' accesskey="n">Notes</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=0000000003e9' accesskey="u">Buddylist</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=0000000003e9' accesskey="p">Options</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=0000000003e9' accesskey="q">Logout</a>
+    </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+    </div>
+<!-- END LEFTMENU -->
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+        
+        <center>
+            <table width="668">
+                <tr>
+                    <td class="c">Version</td>
+                    <td class="c">Description</td>
+                </tr>
+                
+                                <tr>
+                    <th>0.84</th>
+                    <th style="text-align:left">- Problem with special characters fixed<br>
+- Several security holes are closed (XSS)<br>
+- Fixed a bug that prevents you from going to VM when there are no buildings under construction<br>
+- Small security vulnerabilities in the alliance system have been closed<br>
+- Bug with loss of all rights for existing ranks in alliance fixed<br>
+- Problem with characters in RSS fixed<br>
+- BBCode [url] is working again<br>
+- The ability to create new paragraphs in notes has been fixed</th>
+                </tr>
+                                <tr>
+                    <th>0.83</th>
+                    <th style="text-align:left">- Fixed a vulnerability that allows you to get resources from nothing<br>
+- Fixed a vulnerability that allows you to unban yourself<br></th>
+                </tr>
+                                <tr>
+                    <th>0.82</th>
+                    <th style="text-align:left">- Some technical improvements for account registration, activation and e-mail change</br>
+- Fixed a serious bug with shipyard and fleet movement.</th>
+                </tr>
+                                <tr>
+                    <th>0.81</th>
+                    <th style="text-align:left">- Fixed research statistics<BR>
+- Rapid fire is accounted for in combat reports<BR>
+- Alliance applications from deleted players are deleted <BR>
+- Proper sorting of messages from the expedition<BR>
+- Fixed forced VM on account inactivation<BR>
+- Alliance names up to 30 characters<BR>
+- Fixed some bugs in research</th>
+                </tr>
+                                <tr>
+                    <th>0.80</th>
+                    <th style="text-align:left">- Rearrangement in PHP5<br>
+- Stopping resource production after the storage facility is full <br>
+- Coordinates with a link in the phalanx<br>
+- Improved construction queue<br>
+- Improved battle scripts<br>
+- Fixed a bug on the alliance page<br>
+- Fixed a bug during registration<br>
+- Fixed an error in displaying costs<br>
+- Disabled [IMG] tag in messages<BR>
+- Links to coordinates and player names have been improved<br></th>
+                </tr>
+                                <tr>
+                    <th>0.78c</th>
+                    <th style="text-align:left">- Constant updating of statistics<br />
+- The range of interplanetary rockets has been increased<br />
+- Detailed technology view<br />
+- Proper update when building ships and defenses<br />
+- An attack link has been added to the intelligence<br />
+- Deleted alliances no longer block their players<br />
+- Fixed a bug in the alliance menu<br />
+- Anti-spam message protection<br />
+- The maximum size of messages has been increased to 2000 characters<br />
+- Fixed the number of interceptor missiles to build<br />
+- Fixed various errors in the text<br />
+- Additional measure against cheaters</th>
+                </tr>
+                                <tr>
+                    <th>0.78b</th>
+                    <th style="text-align:left">- Improved security system<br/ >
+- Barrier-free play has been restored<br/ >
+- Changes in enforced VM<br/ >
+- RSS bug fixes<br/ >
+- Improvements to the database</th>
+                </tr>
+                                <tr>
+                    <th>0.78a</th>
+                    <th style="text-align:left">New:
+- Fusion power plant: new formula for energy generation: 30 * Fusion level* (1.05 + energy tech level * 0.01) ^ Fusion level<br />
+- Moons can be attacked by interplanetary missiles. Interceptor missiles from a planet can defend the moon<br />
+- RSS for commanders<br />
+- Message when the offer to become friends is withdrawn<br />
+- Averages in the empire view<br />
+
+Fixed bugs:
+- Improved game speed in universes<br />
+- Intelligence can be shared with the alliance again<br />
+- Coordinates with link in combat reports<br />
+- Phalanx no longer shows returning fleets of other players<br />
+- Defensive structures are displayed even without the presence of a shipyard<br />
+- It is possible to hold at 0 hours again<br />
+- Fixed an error when destroying the moon<br />
+
+When the moon is destroyed:
+- Own fleets flying to the moon are flying to the planet<br />
+- All other fleets flying to the moon return to the start planet</th>
+                </tr>
+                                <tr>
+                    <th>0.78</th>
+                    <th style="text-align:left">- New feature: expeditions <br />
+- New feature: the merchant <br />
+- Color text of combat reports <br />
+- Sum column in the empire overview <br />
+- Expanded display of power plants, mines and storage facilities <br />
+- Fixed minor bugs</th>
+                </tr>
+                                <tr>
+                    <th>0.77d</th>
+                    <th style="text-align:left">- Fixed alliance pages<br />
+- A new construction queue</th>
+                </tr>
+                                <tr>
+                    <th>0.77c</th>
+                    <th style="text-align:left">- New class of alternative text<br>
+- Fixed a bug in the construction queue<br />
+Alliance:<br />
+- Javascript filtering. Alliances with javascript may display an error<br />
+- Only .jpg, .gif, .bmp and .png formats can be uploaded <br />
+- Javascript is no longer possible in shared messages<br />
+<br />
+- The possibility of demolishing the missile silo<br />
+- The number of fields on the moons is now calculated and displayed correctly<br />
+- Empty entries in the friends list are no longer displayed<br />
+- CSS bug in the pillar of shame has been fixed<br />
+- You can't send a fleet to position 0<br />
+- Fixed minor bugs</th>
+                </tr>
+                                <tr>
+                    <th>0.77b</th>
+                    <th style="text-align:left">- Fixed canceling of construction<br>
+- In a missile attack, the primary target is again taken into account<br>
+- Fixed display of research status<br>
+- Fixed display of dark matter in officer's casino<br>
+- Fixed several error messages<br>
+- Removed terraformer and moonbase demolition times<br>
+- Moons can be removed like planets<br>
+- Fixed display of rating in alliance search<br>
+- Fixed alternative text in statistics<br>
+- Fixed alternative text for engineer<br>
+- Corrected intelligence in alternate text in galaxy<br>
+- Fixed message when delivering resources<br>
+- Fixed minor security flaws<br>
+- Added error message when deleting a planet
+- Fixed activity indicator</th>
+                </tr>
+                                <tr>
+                    <th>0.77a</th>
+                    <th style="text-align:left">In the game:<br />
+- A level 1 shipyard is required to build interplanetary rockets and interceptor missiles. <br />
+<br />
+Fixed bugs:<br />
+- Deuterium reading on fleet dispatch<br />
+- After using the gate, automatic transition to the target moon<br />
+- When sending interplanetary rockets, target reach messages are issued again<br />
+- Fixed posting an error message when abandoning a colony<br />
+- When viewing statistics, automatic transition to the required page<br />
+- You can't invite yourself to the ACS anymore<br /></th>
+                </tr>
+                                <tr>
+                    <th>0.77</th>
+                    <th style="text-align:left">- Frames removed<br/>
+- Debris fields utilize the full payload of recyclers when processing fields <br/>
+- New format for error messages <br/>
+- The activity indicator has been moved from the Galaxy menu to the Intelligence<br/>
+- Fixed some bugs<br/></th>
+                </tr>
+                                <tr>
+                    <th>0.76c</th>
+                    <th style="text-align:left">- When changing the temporary address, the password is asked for. <br />
+- Fixed the activity indicator in the galaxy view.</th>
+                </tr>
+                                <tr>
+                    <th>0.76b</th>
+                    <th style="text-align:left">- Updated and simplified registration.<br />
+- Fixed a bug in resource display.</th>
+                </tr>
+                                <tr>
+                    <th>0.76a</th>
+                    <th style="text-align:left">- Statistics expanded on all players<br />
+- New players receive a welcome letter</th>
+                </tr>
+                                <tr>
+                    <th>0.76</th>
+                    <th style="text-align:left">- Officers:<br />You can now hire an admiral, a geologist, an engineer and a technocrat<br /><br />
+- Alliances:<br /> Automatic message to the whole alliance when you leave / join or exclude from the alliance. <br />Small changes to the menu.<br /><br />
+- Rockets:<br /> When building missiles, it shows how many missiles can still be built.<br /> When sending interplanetary missiles, the number of available missiles in the galaxy is displayed.<br /><br />
+- Thousands in numbers are separated by a period ".", e.g.:<br />
+10000000 => 10.000.000<br /><br />
+- Coordinates are linked to the galaxy from all menus</th>
+                </tr>
+                                <tr>
+                    <th>0.75a</th>
+                    <th style="text-align:left">- In the overview below the planet image, the current construction is shown<br>
+- When a player is removed from an alliance, a control question appears<br>
+- Operator addresses are visible to all players in the message menu<br>
+- Sorting planets now works in the empire overview and in the gate menu</th>
+                </tr>
+                                <tr>
+                    <th>0.75</th>
+                    <th style="text-align:left">- A new ship: an interceptor<br>
+- Changes to the rapid-fire <br>
+- Reduced battleship cost (45k metal and 15k crystal)<br>
+- Ability to rename moons</th>
+                </tr>
+                                <tr>
+                    <th>0.74e</th>
+                    <th style="text-align:left">- For commanders: in the "Fleets" menu, you can create standard fleets whose number corresponds to the level of computer technology plus 1<br>
+- The order of the planets in the menu can be changed<br>
+- The description of the sensor phalanx specifies the range of action<br>
+- The statistics indicate the time of the last recalculation</th>
+                </tr>
+                                <tr>
+                    <th>0.74d</th>
+                    <th style="text-align:left">- The alliance page can be accessed from the statistics menu<br>
+- Offers to befriend can be sent from the search menu<br>
+- For commanders: when you click on the maximum number of ships/defenses that can be built, the entire number is entered into the build field</th>
+                </tr>
+                                <tr>
+                    <th>0.74c</th>
+                    <th style="text-align:left">- Sorting alliance members by coordinates in the alliance list is now working<br />
+- Session ID is no longer displayed in the friends list<br />
+- Buildings are displayed even if there are not enough resources to build them. The link is inactive and highlighted in red color<br>
+- Others' alliance views now open in a new window<br />
+- Players with disabled IP verification have their session terminated after 60 min for security reasons<br />
+- Gates now only take time to recharge if at least 1 ship has passed through them</th>
+                </tr>
+                                <tr>
+                    <th>0.74b</th>
+                    <th style="text-align:left">- When registering and renaming, the possibility of using several spaces in a row has been canceled <br>
+- When renaming, the same special characters are filtered as during registration <br>
+- Fixed a bug with alliance text <br>
+- The storage capacity in the empire overview is shown correctly</th>
+                </tr>
+                                <tr>
+                    <th>0.74a</th>
+                    <th style="text-align:left">- The cargo capacity of spy probes has been reduced to 0 <br>
+- The "ACS Hold" mission checks if the owner of the target planet is under beginner protection. <br>
+- bug in the "settings" menu has been fixed</th>
+                </tr>
+                                <tr>
+                    <th>0.74</th>
+                    <th style="text-align:left">- New registration <br />
+- Fixed a bug in the resource menu when setting percentages <br />
+- Fixed a minor bug during construction.</th>
+                </tr>
+                                <tr>
+                    <th>0.73e</th>
+                    <th style="text-align:left">- Go to the alliance page without a session<br>
+- Repetitions in the alliance text have been eliminated<br>
+- Removing planets has been made possible in the Opera<br>
+- Only valid image links can be used as the alliance logo. Available formats are Bitmap (.bmp), PNG (.png), Tiff (.tif, .tiff), JPEG (.jpg, .jpeg) and GIF (.gif).<br>
+- The pictures in the alliance text refer to the same thing</th>
+                </tr>
+                                <tr>
+                    <th>0.73d</th>
+                    <th style="text-align:left">- Fixed flaws in the build, notes and alliance menus<br>
+- Automatic deletion of empty alliances<br>
+- Alliances stats are shown correctly</th>
+                </tr>
+                                <tr>
+                    <th>0.73c</th>
+                    <th style="text-align:left">For commanders:<br>
+- you can see how many ships/defenses can be built on a planet with the available resources.<br>
+- if there are not enough resources for construction, they are highlighted in red. The exact number is given in the alternative text</th>
+                </tr>
+                                <tr>
+                    <th>0.73b</th>
+                    <th style="text-align:left">Improving the galaxy view:<br>
+- it is possible to move between galaxies and solar systems using the arrows <br><br>
+For commanders:<br>
+- in the settings you can specify whether to sort messages into folders or not <br>
+- Display the time remaining until the start of building or ship construction or research</th>
+                </tr>
+                                <tr>
+                    <th>0.73a</th>
+                    <th style="text-align:left">- Improvement of the request processing system</th>
+                </tr>
+                                <tr>
+                    <th>0.73</th>
+                    <th style="text-align:left">- Major bug fixed</th>
+                </tr>
+                                <tr>
+                    <th>0.72c</th>
+                    <th style="text-align:left">Changes to the galaxy view:<br>
+- In the coordinates, the distance is increased to two spaces <br>
+- The moon size is displayed again <br>
+- If there is no debris field, the link to it is not displayed <br>
+- The image of the debris field is now called <br><br>
+
+- When an e-mail address is changed, a check is made to ensure that it is registered as the primary e-mail address <br>
+- Fixing minor bugs</th>
+                </tr>
+                                <tr>
+                    <th>0.72b</th>
+                    <th style="text-align:left">- Planets can be viewed again by clicking on its name in the phalanx <br>
+- It is impossible to change the name of the moons <br>
+- Fixed message displayed when ships have insufficient cargo capacity</th>
+                </tr>
+                                <tr>
+                    <th>0.72</th>
+                    <th style="text-align:left">New overview:<br>
+- improved design<br>
+- graphical representation of planets, moons and debris fields<br>
+- simplified fleet dispatch from the galaxy menu<br>
+- indicating the ranking in the alternative text<br>
+- ranking and number of alliances in the alternative text<br>
+- probe dispatch<br><br>
+
+For commanders:<br>
+- dispatch of recyclers<br>
+- status bar for recyclers, spies, interplanetary missiles and fleet slots in use<br>
+- ability to configure icons in the settings</th>
+                </tr>
+                                <tr>
+                    <th>0.71b</th>
+                    <th style="text-align:left">- When the temporary e-mail address is changed, a message is sent to the permanent address<br> 
+- New translations added</th>
+                </tr>
+                                <tr>
+                    <th>0.71</th>
+                    <th style="text-align:left">Updated fleet dispatch/arrival messages:<br /> 
+- Syntactic and stylistic errors have been eliminated<br /> 
+- The resource load of your own fleets is now displayed in alternate text<br> 
+- All posts can be customized with skins:<br> 
+&nbsp;&nbsp - colors can be changed depending on the class<br /> 
+&nbsp;&nbsp - Fleet departure, arrival and hold messages can be issued in different colors<br /> 
+&nbsp;&nbsp - names in messages can take on a color that matches the color of the fleet message<br><br> 
+- The moons became known as moons</th>
+                </tr>
+                                <tr>
+                    <th>0.70d</th>
+                    <th style="text-align:left">- 3 first days without ads after registration <br> 
+- After four days with cut-rate advertising <br><br> 
+
+Bug Fixes:<br> 
+- The level of development of weapons technology affects the power of a missile attack<br> 
+- Fixed bug of intercept function in ACS in non-German versions <br> 
+- Fixed typos and translation errors <br><br> 
+
+Improvements:<br> 
+- Alliance information is available from the Statistics menu<br> 
+- Pressing the sensor phalanx does not lead to a galaxy view <br> 
+- In the empire overview, it is possible to start construction with a double click</th>
+                </tr>
+                                <tr>
+                    <th>0.70c</th>
+                    <th style="text-align:left">- In Stats:<br> 
+  - Your name is shown in green color<br>
+  - Alliance members are displayed in blue color<br>
+  - Those who are not in an alliance can apply directly from stats<br>
+  - Alliance points are shown in total and per player. Sorting is possible<br>
+  - When you click on a statistic, you are automatically taken to the section you are in yourself<br>
+  - The difference in scoring is highlighted in color:<br>
+&nbsp;&nbsp;- green (rise in rating), blue (no change in rating), red (fall in rating)<br>
+&nbsp;&nbsp;- A detailed change can be seen by moving the cursor over "+" or "-".<br><br>
+- Search:<br>
+  - your name is shown in green, your co-allies' names are shown in blue.<br>
+  - the search now shows the place in the ranking,<br>
+&nbsp;&nbsp; the number of points is related to statistics<br><br>
+- inactivity is shown after 7 days<br><br>
+- the pillar of shame can be seen in the epicblue skin<br><br>
+- the ranking in the Overview menu is related to statistics<br><br>
+- in the standard skin appeared pictures for terraformer and intergalactic research network (thanks da woife)</th>
+                </tr>
+                                <tr>
+                    <th>0.70b</th>
+                    <th style="text-align:left">- In Stats: <br />
+  Added research and fleet statistics to the alliance statistics.<br />  
+  The overall stats have been redone.</th>
+                </tr>
+                                <tr>
+                    <th>0.70a</th>
+                    <th style="text-align:left">- New construction: terraformer<br />
+  Terraformer increases the buildable area of a planet.<br /><br />
+- New research: an intergalactic research network<br />
+  Scientists from different planets share data through this network<br /><br />
+- The terraformer and moonbase can't be demolished.</th>
+                </tr>
+                                <tr>
+                    <th>0.69c</th>
+                    <th style="text-align:left">- Engine Improvements: <br />
+&nbsp;&nbsp;  - A small cargo is equipped with a impulse drive if it is developed to 5th level and its initial speed is increased<br />
+&nbsp;&nbsp;  - A bomber is equipped with a hyperspace drive if it is developed to 8th level and its initial speed is increased <br />
+- New speed data has been added to the ship descriptions<br />
+- Attack damage strength has been implemented in the description of ships<br />
+- The defender can see the order to the attacker's fleet<br /></th>
+                </tr>
+                                <tr>
+                    <th>0.69b</th>
+                    <th style="text-align:left">- Interplanetary missiles cost half as much (12.5, 2.5, and 10k).<br>
+- Each level of missile silo development increases its capacity by 10 interceptor missiles (either 3 interplanetary missiles and 4 interceptor missiles, or 1 IPM and 8 ABMs, etc.)<br>
+- Fixed minor bugs</th>
+                </tr>
+                                <tr>
+                    <th>0.69a</th>
+                    <th style="text-align:left">- A new galaxy view for the commander:<br />
+- Sending probes from the moons<br />
+- The ability to recycle the debris field right out of the galaxy.<br />
+- The ability to view intelligence from the galaxy<br />
+- Ability to share intelligence with alliance members<br />
+- Personal messages to game operators are prohibited - all questions are sent to the e-mail address<br /><br />
+- Fixed bugs:<br />
+- In the 24-hour ban<br />
+- Colonies are removed without PW<br />
+- Inactive players have resources mined continuously<br /></th>
+                </tr>
+                                <tr>
+                    <th>0.68a</th>
+                    <th style="text-align:left">- Fixed deuterium consumption in mixed allied fleets <br />
+- Adding deuterium to positioned fleets <br />
+- Key combinations for menus <br />
+  -alt+o = Overview<br />
+  -alt+e = Empire<br />
+  -alt+b = Buildings<br />
+  -alt+r = Resources<br />
+  -alt+c = Research<br />
+  -alt+s = Shipyard<br />
+  -alt+f = Fleet<br />
+  -alt+t = Technology<br />
+  -alt+g = Galaxy<br />
+  -alt+d = Defense <br />
+  -alt+a = My alliance<br />
+  -alt+1 = Forum<br />
+  -alt+k = Statistics<br />
+  -alt+h = Search<br />
+  -alt+2 = Help<br />
+  -alt+m = Messages<br />
+  -alt+n = Notes<br />
+  -alt+u = Buddies<br />
+  -alt+p = Settings<br />
+  -alt+q = Logout<br /><br />
+
+  Windows and Internet Explorer: "Alt" + Access key + "Enter"<br />
+  Windows and Mozilla/Netscape: "Alt" + Access key <br />
+  Windows and Opera: "Shift" + "Esc" + Access key<br />
+  Macintosh and Internet Explorer: "Ctrl" + Access key + "Enter"<br />
+  Macintosh and Safari: "Ctrl" + Access key<br />
+  Macintosh and Mozilla/Netscape: "Ctrl" + Access key<br />
+  Macintosh and Opera: "Shift" + "Esc" + Access key<br />
+  Linux Mandrake and Galeon/Mozilla: "Alt" + Access key<br />
+  All systems and Amaya: "Ctrl" + Access key<br />
+<br />
+- Statistics are updated at 0, 8 and 16 hours on the server.<br />
+<br />
+------------------------------------------------------------------<br />
+- On rollbacks:<br />
+  - Flight Blocking<br />
+  - Partial fleet recall</th>
+                </tr>
+                                <tr>
+                    <th>0.67a</th>
+                    <th style="text-align:left">- Some improvements</th>
+                </tr>
+                                <tr>
+                    <th>0.66a1</th>
+                    <th style="text-align:left">- Fixed bugs in ACS<br />
+- Internal correction of possible errors during planet removal<br />
+- Fixed a bug in the skin when showing the galaxy<br />
+- When changing a name, the name is checked against the list of forbidden names, spaces at the beginning and at the end are automatically removed, the limit is 20 characters.<br />
+- Alliance abbreviations should contain only two characters, spaces at the beginning and end are removed<br /></th>
+                </tr>
+                                <tr>
+                    <th>0.65a1</th>
+                    <th style="text-align:left">- Accelerated combat system<br />
+- New commander features: building queue and empire overview</th>
+                </tr>
+                                <tr>
+                    <th>0.64a</th>
+                    <th style="text-align:left">- The galaxy is also displayed in the skins<br />
+- Buttons in the fleets menu are made as links again<br />
+- Deuterium consumption is highlighted in color (green for sufficient payload, otherwise red)<br />
+- You can no longer enter four-digit numbers in the fleets menu<br />
+- Fleet tasks are now displayed correctly in Internet Explorer<br />
+- Sorting fleets by time of arrival<br />
+- After sending a spy probe out of the galaxy automatic redirect to the galaxy menu<br />
+- The fleets in flight are again shown in the alternative text one below the other<br />
+- The icon to send a message has reappeared below the list of alliance members<br />
+- The fleet return time is shown on the last page of the fleet menu</th>
+                </tr>
+                                <tr>
+                    <th>0.63a</th>
+                    <th style="text-align:left">- Additional skins that have been given names<br />
+- Minor changes to the fleets menu<br />
+- Fixes for various bugs</th>
+                </tr>
+                                <tr>
+                    <th>0.62a</th>
+                    <th style="text-align:left">- Preparing the ACS<br />
+- When sending a fleet, you can select maximum resources</th>
+                </tr>
+                                <tr>
+                    <th>0.61a</th>
+                    <th style="text-align:left">- For all players<br />
+  - display of the remaining carrying capacity when dispatching a fleet<br />
+  - When sending a fleet, you can select all ships of the same type or all ships of all types<br />
+  - own planets can be selected by clicking on the link<br />
+  - Intelligence data can be displayed in a separate window<br />
+<br />
+- For commanders<br />
+  - Improved message folder<br />
+  - Sorting individual messages into intelligence, combat reports, alliance reports, and others<br />
+  - an address book of alliance members, friends and operators<br />
+   - notes can be viewed through messages and are sorted automatically by priority and time.</th>
+                </tr>
+                                <tr>
+                    <th>0.60a</th>
+                    <th style="text-align:left">- advanced settings menu<br/>
+- A link to the operator's e-mail address has been added to the Pranger</th>
+                </tr>
+                                <tr>
+                    <th>0.59a</th>
+                    <th style="text-align:left">- Deathstar now has more problems with destroyers and a weaker rapid fire rate<br>
+- Group messaging in alliances works again<br>
+- The BB code is now visible to guests<br>
+- Fixed minor bugs</th>
+                </tr>
+                                <tr>
+                    <th>0.58b</th>
+                    <th style="text-align:left">- The asteroid fields are being removed</th>
+                </tr>
+                                <tr>
+                    <th>0.58a</th>
+                    <th style="text-align:left">- Time gap before planet removal (after 24 hours only)<br>
+  Prior to removal, the planet is labeled as an asteroid field (in the galaxy is referred to as "A")<br>
+- Fixed moon bug<br>
+- Fixed an error when blocking for 24 hours<br>
+- Fixed an error when loading skins<br>
+- When attacked, the resources loaded into transports are not overridden by the number of resources captured<br>
+- Weapon technology now affects the power of interplanetary rockets<br>
+  One missile used to destroy 33 missiles, with level 10 weapon technology it destroys 66</th>
+                </tr>
+                                <tr>
+                    <th>0.57a</th>
+                    <th style="text-align:left">- The number of spy probes sent out of the galaxy is set in the settings</th>
+                </tr>
+                                <tr>
+                    <th>0.56b</th>
+                    <th style="text-align:left">- Gates are available in all universes</th>
+                </tr>
+                                <tr>
+                    <th>0.56a</th>
+                    <th style="text-align:left">- Combat reports show only total combat power, not effective combat power<br>
+- Through the sensor phalanx, you can again view the planet being scanned<br>
+- Players with a blank password must create a password for themselves<br>
+- If a spy probe is detected and combat begins, no intelligence is sent in<br>
+- If the attacking fleet is destroyed in the first round, the attacker does not receive a report<br>
+- Deuterium production and consumption by the fusion plant by levels now correspond to<br>
+- Deathstar can destroy moons from planets with 500k of energy<br>
+- A planet cannot be deleted if a fleet returns to it<br>
+- Space is now peaceful<br>
+- Improvements to the alliance system:<br>
+- there are 25 ranks<br>
+- Fixed a bug in the number of alliance members<br>
+- "former alliance so-and-so" now seen by outsiders<br>
+- the list of rights can be sorted and inactive status can be added <br>
+- group mailing to all members or a specific rank (requires the right to do so)<br>
+- Head change (ability to leave the alliance)<br>
+- Head status can be transferred (when the head is inactive)<br>
+- online status display (requires the right to do so)<br>
+- the alliance page is modifiable (tags are described below)<br>
+- the name of the head of the alliance can be changed by the head himself/herself<br>
+- alliance application restrictions<br>
+- fixed the date of alliance membership<br>
+- the friends list now has an online status<br>
+- automatic display of a sample application<br>
+- if you have a right to manage, you cannot be given a higher right<br>
+- internal alliance pages have been added<br>
+- automatic updating of alliance statistics when the founder visits the alliance page<br>
+- small things<br>
+- displays the remaining characters as you type<br>
+- Tags for the alliance page<br>
+Examples:<br>
+[b] -bold - [b]Hallo[/b]<br>
+[i] - italics - [i]Hallo[/i]<br>
+[img] - images - [img]http://seite.de/bild.jpg[/img]<br>
+[fc] - color - [fc]#FF0000[/fc]Hallo[/f]<br>
+[ff] - font - [ff]Verdana[/ff]Hallo[/f]<br>
+[fs] - size - [fs]6[/fs]Hallo[/f]<br>
+- Fixing minor bugs</th>
+                </tr>
+                                <tr>
+                    <th>0.55a</th>
+                    <th style="text-align:left">- Before each moon is destroyed, a normal attack takes place. The moon is destroyed only if the attacker wins the battle and has at least one Deathstar remaining<br>
+- There's a new menu item called "notes"</th>
+                </tr>
+                                <tr>
+                    <th>0.53</th>
+                    <th style="text-align:left">- Fusion power plants use deuterium. They need enough deuterium at all times to function properly<br>
+- During combat, the attacked can no longer send additional fleets</th>
+                </tr>
+                                <tr>
+                    <th>0.52</th>
+                    <th style="text-align:left">- Fixed several bugs in the combat system</th>
+                </tr>
+                                <tr>
+                    <th>0.51</th>
+                    <th style="text-align:left">- Positive effect of cold planets on deuterium production doubled</th>
+                </tr>
+                                <tr>
+                    <th>0.50</th>
+                    <th style="text-align:left">- Improved battle system (large battles are possible again)</th>
+                </tr>
+                                <tr>
+                    <th>0.49b</th>
+                    <th style="text-align:left">- Unselected messages can be deleted<br>
+- Removed the back button in the fleet menu<br>
+- The pillar of shame shows the years<br>
+- When blocked, users are blocked immediately<br>
+- The path for graphics consists of 80 characters<br>
+- Graphics can be changed again in the settings (thanks to all the authors). If the path for the graphic is empty, the menu appears<br>
+- A separate message about the return of the spy probes has been deleted<br>
+- Newbis and VM accounts can't be attacked with missiles<br></th>
+                </tr>
+                                <tr>
+                    <th>0.49a</th>
+                    <th style="text-align:left">- Introduction of interplanetary rockets and interceptor missiles<br>
+- Fleets cannot be dispatched during VM<br>
+- Bombers have a cargo capacity of 5,000<br>
+- Operators are not listed in the statistics<br>
+- Interplanetary missiles have doubled range, destructive power increased 1.5 times<br>
+- Minor improvements to the admin section<br>
+- Fixed a minor bug in the Deathstar rapid-fire<br></th>
+                </tr>
+                                <tr>
+                    <th>0.48</th>
+                    <th style="text-align:left">- Improved page construction</th>
+                </tr>
+                                <tr>
+                    <th>0.47b</th>
+                    <th style="text-align:left">- The bomber's new stats</th>
+                </tr>
+                                <tr>
+                    <th>0.47a</th>
+                    <th style="text-align:left">- New ship: Bomber<br>
+- Deuterium production is now higher and depends on the temperature of the planet<br>
+  Hot planets have at least 1% more production, while cold planets have up to 20% more production<br>
+- Solar satellites have disabled rapid-fire against spy probes</th>
+                </tr>
+                                <tr>
+                    <th>0.46</th>
+                    <th style="text-align:left">The cruiser now has a rapid-fire against rocket launchers. The average cruiser <br>
+fires at rocket launchers 5 times per round.<br>
+- The attacker also has a rapid-fire, the Deathstar makes several volleys when attacking as well<br>
+- Battles up to 300,000 units can now be fought<br>
+- Fixed error in search<br>
+- Fixed a bug in the shield<br>
+- Viewing the universe costs 10 deuterium to spite the scripters<br></th>
+                </tr>
+                                <tr>
+                    <th>0.45</th>
+                    <th style="text-align:left">- Just one message if a player sends himself resources<br>
+- Code optimization<br>
+- Using a sensory phalanx costs 5,000 deuterium<br>
+- Fixed a bug when renaming planets<br>
+- New graphics in the settings menu</th>
+                </tr>
+                                <tr>
+                    <th>0.44</th>
+                    <th style="text-align:left">- In the path to the skins, the end of the line should always be "/"<br>
+- Once a day at 3:00 on the server there is a forced unload<br>
+- Fixed VM bug</th>
+                </tr>
+                                <tr>
+                    <th>0.43</th>
+                    <th style="text-align:left">- Automatic deletion of accounts set for deletion<br>
+- When a planet is removed, the adjacent moon is also removed<br>
+- The VM can only be deactivated after 2 days</th>
+                </tr>
+                                <tr>
+                    <th>0.41</th>
+                    <th style="text-align:left">- Skins can be installed. Download at ogame.de/ogame.zip<br>
+ install, specify the path in the settings and activate.</th>
+                </tr>
+                                <tr>
+                    <th>0.40</th>
+                    <th style="text-align:left">- Resources can be sent to the moon</th>
+                </tr>
+                                <tr>
+                    <th>0.39</th>
+                    <th style="text-align:left">- Graphics can be enabled optionally<br>
+- Development of missile silos<br>
+- Fixed phalanx bug<br>
+- Small fields of debris are decaying<br>
+- One less bug in the combat script thanks to Dragosan....</th>
+                </tr>
+                                <tr>
+                    <th>0.38</th>
+                    <th style="text-align:left">- Ships can fly from moon to planet</th>
+                </tr>
+                                <tr>
+                    <th>0.3779a</th>
+                    <th style="text-align:left">- Newcomer protection is reduced to 5k points and is effective up to 20%<br />
+- Accounts inactive for more than 48 days are deleted once a day<br />
+- Fixed display bug in research<br />
+- Fixed moon bug<br />
+- You can no longer send messages to yourself<br />
+- Fixed a bug where you could create a moon with 82 fighters<br />
+- Colonies can only be removed if there is no fleet on them</th>
+                </tr>
+                                <tr>
+                    <th>0.3778a</th>
+                    <th style="text-align:left">- Activation of protection for newbies
+<br />
+<br />
+Information on protection for newbies:<br />
+The protection is in effect for players with less than 10k points.<br />
+When the protection is on, you cannot attack active players who have a number of points<br /> less than 10 times less than the attacker (highlighted in green in the galaxy), <br />
+Also, active players with 10 times more points than the attacker cannot be attacked<br />
+Examples:<br />
+Player A - 2k points, Player B < 200 points - both cannot attack each other<br />
+Player A - (20k), Player B (< 2k) - both cannot attack each other<br />
+Player A - (200k), Player B (< 10k) - both cannot attack each other<br />
+Player A - (200k), Player B (> 10k) - both can attack each other <br />
+Player A - (50k), Player B (8k) - both can attack each other</th>
+                </tr>
+                                <tr>
+                    <th>0.3771a</th>
+                    <th style="text-align:left">- Password request when deleting a planet</th>
+                </tr>
+                                <tr>
+                    <th>0.377a</th>
+                    <th style="text-align:left">- In the galaxy, weaker players are indicated in green and stronger players in red (if the opponent is not in VM)</th>
+                </tr>
+                                <tr>
+                    <th>0.376a</th>
+                    <th style="text-align:left">- Statistics calculation has been improved, the place in the ranking is shown immediately after recalculation.</th>
+                </tr>
+                                <tr>
+                    <th>0.375a</th>
+                    <th style="text-align:left">- Players who have registered on the page "Helft OGame" for a sufficient number of programs have ads disabled.</th>
+                </tr>
+                                <tr>
+                    <th>0.374a</th>
+                    <th style="text-align:left">- Transportation between different players' planets is now called trade</th>
+                </tr>
+                                <tr>
+                    <th>0.373a</th>
+                    <th style="text-align:left">- Increased chance of a moon</th>
+                </tr>
+                                <tr>
+                    <th>0.372a</th>
+                    <th style="text-align:left">- After big fights, moons may appear<br />
+- Moonbase<br />
+- Possibility to demolish buildings (for resources)<br />
+- Debris fields without planets cannot be attacked or spied on<br />
+- Fixed a minor bug in vacation mode<br />
+- Sensor phalanx</th>
+                </tr>
+                                <tr>
+                    <th>0.371a</th>
+                    <th style="text-align:left">- You can search for alliances in the search menu<br />
+- Reactivation of moons (test)</th>
+                </tr>
+                                <tr>
+                    <th>0.36a</th>
+                    <th style="text-align:left">- Fixed bugs 6,7,9?,10,13,18,19,22</th>
+                </tr>
+                                <tr>
+                    <th>0.35a</th>
+                    <th style="text-align:left">- Fixed bug in ban lists 1,2,4,5</th>
+                </tr>
+                                <tr>
+                    <th>0.34a</th>
+                    <th style="text-align:left">- Vacation mode is activated by Mouseover<br />
+- Research becomes valid when the research is completed</th>
+                </tr>
+                                <tr>
+                    <th>0.331apl2</th>
+                    <th style="text-align:left">- Removed email alert <br/>
+- Password recovery simplified <br/>
+- Recyclers are no longer disappearing</th>
+                </tr>
+                                <tr>
+                    <th>0.331apl1</th>
+                    <th style="text-align:left">- Fixed construction bug</th>
+                </tr>
+                                <tr>
+                    <th>0.331a</th>
+                    <th style="text-align:left">- Ban is possible with a long session</th>
+                </tr>
+                                <tr>
+                    <th>0.330apl4</th>
+                    <th style="text-align:left">- Deathstar has become more effective against the defense <br/>
+- Fixed some flaws in the security <br/>
+- First preparations for the accelerated version</th>
+                </tr>
+                                <tr>
+                    <th>0.330apl3</th>
+                    <th style="text-align:left">- Deathstar was too weak on offense</th>
+                </tr>
+                                <tr>
+                    <th>0.330apl2</th>
+                    <th style="text-align:left">- Security hole fixed</th>
+                </tr>
+                                <tr>
+                    <th>0.330apl1</th>
+                    <th style="text-align:left">- Security hole fixed</th>
+                </tr>
+                                <tr>
+                    <th>0.330a</th>
+                    <th style="text-align:left">- The death star can fly<br />
+- Vacation mode can be deactivated</th>
+                </tr>
+                                <tr>
+                    <th>0.327a</th>
+                    <th style="text-align:left">- Defense debris no longer falls into debris fields<br />
+- Spy probes no longer have weapons or defenses (1% of old values)<br />
+- Ability to save recyclers</th>
+                </tr>
+                                <tr>
+                    <th>0.326a</th>
+                    <th style="text-align:left">- Canceling vacation mode</th>
+                </tr>
+                                <tr>
+                    <th>0.325apl1</th>
+                    <th style="text-align:left">- Fixed an error with displaying 1000<br />
+- Message with empty name<br />
+- Recycler bug (it is now possible to transport more than 8M resources)<br />
+- New error message when changing alliance name</th>
+                </tr>
+                                <tr>
+                    <th>0.325a</th>
+                    <th style="text-align:left">- Implemented script detectors</th>
+                </tr>
+                                <tr>
+                    <th>0.324a</th>
+                    <th style="text-align:left">- Fixed a bug with planet jumping (failed)</th>
+                </tr>
+                                <tr>
+                    <th>0.323a</th>
+                    <th style="text-align:left">- Fixed display of zero level of storages<br />
+- Expanded database for ship types<br />
+- Fixed an error in the display of ship construction</th>
+                </tr>
+                                <tr>
+                    <th>0.322a</th>
+                    <th style="text-align:left">- Messages to individual alliance members can be sent from the alliance menu</th>
+                </tr>
+                                <tr>
+                    <th>0.321apl3</th>
+                    <th style="text-align:left">- Alliance search has been eliminated from the search function<br />
+- The search function is tailored to alliances<br />
+- The head of an alliance has only the rights given to him by his rank.</th>
+                </tr>
+                                <tr>
+                    <th>0.321apl1</th>
+                    <th style="text-align:left">- Fixed several bugs in ACS</th>
+                </tr>
+                                <tr>
+                    <th>0.321a</th>
+                    <th style="text-align:left">- Small Alliance System</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl10</th>
+                    <th style="text-align:left">- Allowed space in alliance abbreviation</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl9</th>
+                    <th style="text-align:left">- Partially fixed a bug that incorrectly displayed the level of construction and research.<br />
+- Cannot send to coordinate <0</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl8</th>
+                    <th style="text-align:left">- Correcting an error in production display</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl7</th>
+                    <th style="text-align:left">- Fixing a bug in the shipyard<br />
+- Fixes bug when calculating free fields after construction is finished</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl6</th>
+                    <th style="text-align:left">- Works return after sending spies<br />
+- Thanks to dragoscan in the galaxy works return</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl5</th>
+                    <th style="text-align:left">- Deleted text about the cost of fleet maintenance</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl4</th>
+                    <th style="text-align:left">- Link to CHANGELOG<br />
+- Clearing the cache when building structures<br />
+- Building a nanite factory is not possible when building ships</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl3</th>
+                    <th style="text-align:left">- Corrects a shipyard bug where negative time was shown<br />
+- Adding a link to the home page on exit.<br />
+- Fixed the shield dome bug. Now they can only be built once.</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl2</th>
+                    <th style="text-align:left">- Fixing special characters</th>
+                </tr>
+                            </table><br><br><br><br>
+        </center>
+</div>
+<!-- END CONTENT AREA -->
+
+
+
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+<div id='messagebox'><center></center></div>
+<div id='errorbox'><center></center></div>
+<script>
+headerHeight = 81;
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = '_blank';
+  }
+}
+</script>
+<style>
+.layer {
+    z-index:999999999;
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 757px; 
+    height: 475px; 
+    background-color: #040e1e;
+    border: 3px double orange;
+    padding: 0;
+    opacity: .90;
+}
+</style>
+</body></html>

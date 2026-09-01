@@ -2,25 +2,25 @@
 
 // Search
 
-$LOCA["es"]["SEARCH_SEARCH"] = "Search Universe";
-$LOCA["es"]["SEARCH_SEL_USER"] = "Player Name";
-$LOCA["es"]["SEARCH_SEL_PLANET"] = "Planet Name";
-$LOCA["es"]["SEARCH_SEL_TAG"] = "Alliance Tag";
-$LOCA["es"]["SEARCH_SEL_ALLY"] = "Alliance Name";
-$LOCA["es"]["SEARCH_BUTTON"] = "search";
-$LOCA["es"]["SEARCH_NAME"] = "Name";
-$LOCA["es"]["SEARCH_ALLY"] = "Alliance";
-$LOCA["es"]["SEARCH_PLANET"] = "Planet";
-$LOCA["es"]["SEARCH_COORDS"] = "Position";
-$LOCA["es"]["SEARCH_PLACE"] = "Place";
-$LOCA["es"]["SEARCH_POINTS"] = "Points";
-$LOCA["es"]["SEARCH_TAG"] = "Tag";
-$LOCA["es"]["SEARCH_MEMBERS"] = "Member";
-$LOCA["es"]["SEARCH_MESSAGE"] = "write message";
-$LOCA["es"]["SEARCH_BUDDY"] = "Buddy request";
-$LOCA["es"]["SEARCH_NORESULT"] = "no entries found";
-$LOCA["es"]["SEARCH_MAX_USERS_PLANETS"] = "More than #1 entries were found.";
-$LOCA["es"]["SEARCH_MAX_ALLY"] = "more than #1 entries found";
-$LOCA["es"]["SEARCH_ERROR_NOT_ENOUGH"] = "Too few characters! Please enter at least 2 characters.";
+$LOCA["es"]["SEARCH_SEARCH"] = "Buscar en el universo";
+$LOCA["es"]["SEARCH_SEL_USER"] = "Nombre de jugador";
+$LOCA["es"]["SEARCH_SEL_PLANET"] = "Nombre de planeta";
+$LOCA["es"]["SEARCH_SEL_TAG"] = "Etiqueta de alianza";
+$LOCA["es"]["SEARCH_SEL_ALLY"] = "Nombre de alianza";
+$LOCA["es"]["SEARCH_BUTTON"] = "buscar";
+$LOCA["es"]["SEARCH_NAME"] = "Nombre";
+$LOCA["es"]["SEARCH_ALLY"] = "Alianza";
+$LOCA["es"]["SEARCH_PLANET"] = "Planeta";
+$LOCA["es"]["SEARCH_COORDS"] = "Posición";
+$LOCA["es"]["SEARCH_PLACE"] = "Puesto";
+$LOCA["es"]["SEARCH_POINTS"] = "Puntos";
+$LOCA["es"]["SEARCH_TAG"] = "Etiqueta";
+$LOCA["es"]["SEARCH_MEMBERS"] = "Miembro";
+$LOCA["es"]["SEARCH_MESSAGE"] = "escribir mensaje";
+$LOCA["es"]["SEARCH_BUDDY"] = "Solicitud de amistad";
+$LOCA["es"]["SEARCH_NORESULT"] = "no se encontraron resultados";
+$LOCA["es"]["SEARCH_MAX_USERS_PLANETS"] = "Se encontraron más de #1 resultados.";
+$LOCA["es"]["SEARCH_MAX_ALLY"] = "se encontraron más de #1 resultados";
+$LOCA["es"]["SEARCH_ERROR_NOT_ENOUGH"] = "¡Muy pocos caracteres! Por favor, introduce al menos 2 caracteres.";
 
 ?>

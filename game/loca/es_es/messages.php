@@ -4,50 +4,50 @@
 
 // messages
 
-$LOCA["es"]["MSG_FOLDER1"] = "Spy Reports";
-$LOCA["es"]["MSG_FOLDER2"] = "Combat Reports";
-$LOCA["es"]["MSG_FOLDER3"] = "Expedition Reports";
-$LOCA["es"]["MSG_FOLDER4"] = "Alliance Reports";
-$LOCA["es"]["MSG_FOLDER5"] = "Personal Messages";
-$LOCA["es"]["MSG_FOLDER6"] = "Other";
+$LOCA["es"]["MSG_FOLDER1"] = "Informes de espionaje";
+$LOCA["es"]["MSG_FOLDER2"] = "Informes de combate";
+$LOCA["es"]["MSG_FOLDER3"] = "Informes de expedición";
+$LOCA["es"]["MSG_FOLDER4"] = "Informes de alianza";
+$LOCA["es"]["MSG_FOLDER5"] = "Mensajes personales";
+$LOCA["es"]["MSG_FOLDER6"] = "Otros";
 
-$LOCA["es"]["MSG_DELETE_MARKED"] = "Delete highlighted messages";
-$LOCA["es"]["MSG_DELETE_UNMARKED"] = "Delete all unselected messages";
-$LOCA["es"]["MSG_DELETE_SHOWN"] = "Delete all displayed messages ";
-$LOCA["es"]["MSG_DELETE_ALL"] = "Delete all messages";
+$LOCA["es"]["MSG_DELETE_MARKED"] = "Borrar los mensajes marcados";
+$LOCA["es"]["MSG_DELETE_UNMARKED"] = "Borrar todos los mensajes no seleccionados";
+$LOCA["es"]["MSG_DELETE_SHOWN"] = "Borrar todos los mensajes mostrados ";
+$LOCA["es"]["MSG_DELETE_ALL"] = "Borrar todos los mensajes";
 
-$LOCA["es"]["MSG_MESSAGES"] = "Messages";
-$LOCA["es"]["MSG_FOLDER_SHOW"] = "Show";
-$LOCA["es"]["MSG_FOLDER_TYPE"] = "Type";
-$LOCA["es"]["MSG_FOLDER_STAT"] = "Total / New";
-$LOCA["es"]["MSG_ACTION"] = "Action";
-$LOCA["es"]["MSG_DATE"] = "Date";
-$LOCA["es"]["MSG_FROM"] = "From";
-$LOCA["es"]["MSG_SUBJ"] = "Subject";
+$LOCA["es"]["MSG_MESSAGES"] = "Mensajes";
+$LOCA["es"]["MSG_FOLDER_SHOW"] = "Mostrar";
+$LOCA["es"]["MSG_FOLDER_TYPE"] = "Tipo";
+$LOCA["es"]["MSG_FOLDER_STAT"] = "Total / Nuevos";
+$LOCA["es"]["MSG_ACTION"] = "Acción";
+$LOCA["es"]["MSG_DATE"] = "Fecha";
+$LOCA["es"]["MSG_FROM"] = "De";
+$LOCA["es"]["MSG_SUBJ"] = "Asunto";
 
-$LOCA["es"]["MSG_SUBMIT"] = "ok";
+$LOCA["es"]["MSG_SUBMIT"] = "aceptar";
 
-$LOCA["es"]["MSG_PARTIAL_ESPIONAGE"] = " Show intelligence data partially ";
+$LOCA["es"]["MSG_PARTIAL_ESPIONAGE"] = " Mostrar los datos de inteligencia parcialmente ";
 
-$LOCA["es"]["MSG_REPORT"] = "Report to operator";
-$LOCA["es"]["MSG_REPORT_DB_ERROR"] = "Database error!";
-$LOCA["es"]["MSG_REPORT_SUCCESS"] = "Report sent!";
-$LOCA["es"]["MSG_REPORT_EXISTS"] = "The report has already been sent earlier!";
-$LOCA["es"]["MSG_OPER"] = "Operators";
-$LOCA["es"]["MSG_OPER_TEXT"] = "Question from #1 of the #2 universe";
-$LOCA["es"]["MSG_OPER_PM"] = "Write message";
+$LOCA["es"]["MSG_REPORT"] = "Informar al operador";
+$LOCA["es"]["MSG_REPORT_DB_ERROR"] = "¡Error de base de datos!";
+$LOCA["es"]["MSG_REPORT_SUCCESS"] = "¡Informe enviado!";
+$LOCA["es"]["MSG_REPORT_EXISTS"] = "¡El informe ya ha sido enviado anteriormente!";
+$LOCA["es"]["MSG_OPER"] = "Operadores";
+$LOCA["es"]["MSG_OPER_TEXT"] = "Pregunta de #1 del universo #2";
+$LOCA["es"]["MSG_OPER_PM"] = "Escribir mensaje";
 
 // writemessages
 
-$LOCA["es"]["WRITE_MSG_ERROR_NO_SUBJ"] = "Missing topic";
-$LOCA["es"]["WRITE_MSG_ERROR_NO_BODY"] = "Where's the message?";
-$LOCA["es"]["WRITE_MSG_SUCCESS"] = "Message sent";
-$LOCA["es"]["WRITE_MSG_WRITE"] = "Write message";
-$LOCA["es"]["WRITE_MSG_USER"] = "Recipient";
-$LOCA["es"]["WRITE_MSG_SUBJ"] = "Subject";
-$LOCA["es"]["WRITE_MSG_DEFAULT_SUBJ"] = "No Subject";
-$LOCA["es"]["WRITE_MSG_CHAR_COUNT"] = " Message(#1 / #2 characters) ";
-$LOCA["es"]["WRITE_MSG_SUBMIT"] = "Send";
-$LOCA["es"]["WRITE_MSG_ALT_REPLY"] = "Reply";
+$LOCA["es"]["WRITE_MSG_ERROR_NO_SUBJ"] = "Falta el asunto";
+$LOCA["es"]["WRITE_MSG_ERROR_NO_BODY"] = "¿Dónde está el mensaje?";
+$LOCA["es"]["WRITE_MSG_SUCCESS"] = "Mensaje enviado";
+$LOCA["es"]["WRITE_MSG_WRITE"] = "Escribir mensaje";
+$LOCA["es"]["WRITE_MSG_USER"] = "Destinatario";
+$LOCA["es"]["WRITE_MSG_SUBJ"] = "Asunto";
+$LOCA["es"]["WRITE_MSG_DEFAULT_SUBJ"] = "Sin asunto";
+$LOCA["es"]["WRITE_MSG_CHAR_COUNT"] = " Mensaje(#1 / #2 caracteres) ";
+$LOCA["es"]["WRITE_MSG_SUBMIT"] = "Enviar";
+$LOCA["es"]["WRITE_MSG_ALT_REPLY"] = "Responder";
 
 ?>

@@ -710,7 +710,7 @@ $LOCA["it"][
     "CHANGELOG_0.76"] =
     "- Ufficiali:<br />Ora è possibile assumere un ammiraglio, un geologo, un ingegnere e un tecnocrate<br /><br />\n" .
     "- Alleanze:<br /> Messaggio automatico a tutta l'alleanza quando si lascia / si entra o si viene espulsi dall'alleanza. <br />Piccole modifiche al menu.<br /><br />\n" .
-    "- Ракеты:<br /> Quando si costruiscono razzi, mostra quanti razzi si possono ancora costruire.<br /> Quando si inviano razzi interplanetari, viene visualizzato il numero di razzi disponibili nella galassia.<br /><br />\n" .
+    "- Razzi:<br /> Quando si costruiscono razzi, mostra quanti razzi si possono ancora costruire.<br /> Quando si inviano razzi interplanetari, viene visualizzato il numero di razzi disponibili nella galassia.<br /><br />\n" .
     "- Le migliaia nei numeri sono separate da un punto \".\", ad esempio:<br />\n" .
     "10000000 => 10.000.000<br /><br />\n" .
     "- Le coordinate sono collegate alla galassia da tutti i menu"

@@ -4,7 +4,7 @@
 
 $LOCA["fr"]["OPTIONS_USER"] = "Données Utilisateur";
 $LOCA["fr"]["OPTIONS_USER_NAME"] = "Pseudo";
-$LOCA["fr"]["OPTIONS_USER_PASS"] = "Password";
+$LOCA["fr"]["OPTIONS_USER_PASS"] = "Mot de passe";
 $LOCA["fr"]["OPTIONS_USER_OLDPASS"] = "Ancien mot de passe";
 $LOCA["fr"]["OPTIONS_USER_NEWPASS1"] = "Nouveau mot de passe (min. 8 charactères)";
 $LOCA["fr"]["OPTIONS_USER_NEWPASS2"] = "Nouveau mot de passe (confirmation)";
@@ -84,10 +84,13 @@ $LOCA["fr"]["OPTIONS_ACTIVATE_SUBMIT"] = "Lien d'activation de la commande";
 
 $LOCA["fr"]["OPTIONS_FEED"] = "Newsfeed";
 $LOCA["fr"]["OPTIONS_FEED_ACTIVATE"] = "Activer";
-$LOCA["fr"]["OPTIONS_FEED_ACTIVATED"] = "Activated";
+$LOCA["fr"]["OPTIONS_FEED_ACTIVATED"] = "Activé";
 $LOCA["fr"]["OPTIONS_FEED_FORMAT"] = "Format";
-$LOCA["fr"]["OPTIONS_FEED_LINK"] = "Link to Feed";
-$LOCA["fr"]["OPTIONS_FEED_SHOW"] = "show";
-$LOCA["fr"]["OPTIONS_FEED_PROHIBITED"] = "Feed is prohibited by Universe settings!";
+$LOCA["fr"]["OPTIONS_FEED_LINK"] = "Lien vers le flux";
+$LOCA["fr"]["OPTIONS_FEED_SHOW"] = "afficher";
+$LOCA["fr"]["OPTIONS_FEED_PROHIBITED"] = "Le flux est interdit par les paramètres de l'univers !";
+
+$LOCA["fr"]["OPTIONS_OPER"] = "Paramètres d'opérateur";
+$LOCA["fr"]["OPTIONS_OPER_HIDE_EMAIL"] = "Masquer l'e-mail sur la page de messages pour les joueurs";
 
 ?>

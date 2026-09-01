@@ -1,22 +1,22 @@
 <?php
 
-// Planet Menu.
-// TODO: Search for original texts.
+// Menú del planeta.
+// TODO: Buscar los textos originales.
 
-$LOCA["es"]["REN_TITLE"] = "Rename/leave the planet";
-$LOCA["es"]["REN_WARNING"] = "Just in case";
-$LOCA["es"]["REN_DELETE_INFO"] = "Destruction of the planet #1 confirm password";
-$LOCA["es"]["REN_PASSWORD"] = "Password";
-$LOCA["es"]["REN_DELETE_PLANET"] = "Delete the planet!";
-$LOCA["es"]["REN_ABANDON_COLONY"] = "Abandon the colony";
-$LOCA["es"]["REN_RENAME"] = "Rename";
-$LOCA["es"]["REN_ERROR_PASSWORD"] = "The password is wrong.<BR><BR>  If you have forgotten your password, click #1here#2 <BR><BR>  or try #3again#4 .";
-$LOCA["es"]["REN_ERROR_HOME_PLANET"] = "You can't abandon the home planet!";
-$LOCA["es"]["REN_ERROR_FLEET_INCOME"] = "Your fleets are still on their way to this planet!";
-$LOCA["es"]["REN_ERROR_FLEET_OUTCOME"] = "The fleets from this planet have not yet returned!";
-$LOCA["es"]["REN_PLANET_INFO"] = "Planet information";
-$LOCA["es"]["REN_COORD"] = "Coordinates";
-$LOCA["es"]["REN_NAME"] = "Name";
-$LOCA["es"]["REN_ACTIONS"] = "Actions";
+$LOCA["es"]["REN_TITLE"] = "Renombrar/abandonar el planeta";
+$LOCA["es"]["REN_WARNING"] = "Por si acaso";
+$LOCA["es"]["REN_DELETE_INFO"] = "Destrucción del planeta #1 confirmar contraseña";
+$LOCA["es"]["REN_PASSWORD"] = "Contraseña";
+$LOCA["es"]["REN_DELETE_PLANET"] = "¡Borrar el planeta!";
+$LOCA["es"]["REN_ABANDON_COLONY"] = "Abandonar la colonia";
+$LOCA["es"]["REN_RENAME"] = "Renombrar";
+$LOCA["es"]["REN_ERROR_PASSWORD"] = "La contraseña es incorrecta.<BR><BR> Si has olvidado tu contraseña, haz clic #1aquí#2 <BR><BR> o inténtalo #3de nuevo#4 .";
+$LOCA["es"]["REN_ERROR_HOME_PLANET"] = "¡No puedes abandonar el planeta principal!";
+$LOCA["es"]["REN_ERROR_FLEET_INCOME"] = "¡Tus flotas siguen de camino hacia este planeta!";
+$LOCA["es"]["REN_ERROR_FLEET_OUTCOME"] = "¡Las flotas de este planeta aún no han vuelto!";
+$LOCA["es"]["REN_PLANET_INFO"] = "Información del planeta";
+$LOCA["es"]["REN_COORD"] = "Coordenadas";
+$LOCA["es"]["REN_NAME"] = "Nombre";
+$LOCA["es"]["REN_ACTIONS"] = "Acciones";
 
 ?>

@@ -10,21 +10,41 @@
 
 1. **Тестовая вселенная**: FixtureBuilder создаёт тестовую вселенную с 3 игроками (PlayerOne, PlayerTwo, PlayerThree) в **in-memory движке** (`game/core/db.php` с SQLite-бэкендом, `DB_CONNECTION=sqlite`, `DB_DATABASE=:memory:`, см. `phpunit.xml`). Реальная схема БД создаётся через `CreateDBTables()` (из `install_tabs.php`), данные вставляются через реальную функцию `AddDBRow()` — без самодельных моков и ручной схемы.
 2. **Рендеринг страниц**: Класс `PageRenderer` повторяет цикл загрузки `index.php` (LoadUniverse → AuthUser → роутер → MVC/классические страницы) и рендерит **настоящие игровые страницы** через реальный DB-слой. Каждый тест запускается в отдельном PHP-процессе (`#[RunTestsInSeparateProcesses]`), как и `NotesTest`/`DbSqliteTest`: только так bootstrap загружается в глобальной области видимости, где игровые модули объявляют свои глобальные переменные (`$GlobalUser`, `$LOCA`, `$resourcemap`, ...). Страницы, работающие только через POST (flotten2, flotten3, flottenversand, sprungtor), рендерятся через `withPost()`, который заполняет `$_POST` и переключает метод запроса на POST. Начиная с issue #258 («Добавить больше страниц с запросом POST в GoldenPages»), **каждая страница, обрабатывающая `method() === "POST"`**, дополнительно рендерится через `withPost()` (POST-снимки с суффиксом `*_post_*`), чтобы страница, которая выглядит нормально при GET, но ломается при взаимодействии (POST), обнаруживалась сравнением снимков.
-3. **Сравнение снимков**: Сгенерированный HTML сравнивается с golden-снимками, хранящимися в `testing/golden/`. Перед сравнением динамический контент (временные метки, обратные отсчёты, ID, токены сессий) нормализуется.
+3. **Сравнение снимков**: Сгенерированный HTML сравнивается с golden-снимками, хранящимися в `testing/golden/{lang}/`. Перед сравнением динамический контент (временные метки, обратные отсчёты, ID, токены сессий) нормализуется.
+
+### Поддержка языков (issue #268)
+
+Каждый page-тест выполняется один раз для каждого поддерживаемого языка —
+языков, перечисленных в `game/core/loca.php` и присутствующих в `game/loca/`
+(de, en, es, fr, it, jp, ru). Вселенная и игроки создаются с языком текущего
+набора данных (`FixtureBuilder::createTestUniverse($lang)`), поэтому страницы
+рендерятся с файлами локализации соответствующего языка. Снимки хранятся по
+языкам:
+
+```
+testing/golden/{lang}/{имя_страницы}_{индекс_игрока}.html
+```
+
+Проверки содержимого, зависящие от переведённых строк (названия построек/
+кораблей/исследований, надписи интерфейса), выполняются только для английского
+языка; для остальных языков основная проверка — сравнение golden-снимков.
+
+Переменная окружения `GOLDEN_LANG` ограничивает запуск подмножеством языков
+(через запятую), например `GOLDEN_LANG=de,ru`.
 
 ### Golden-снимки
 
-Golden-снимки хранятся в `testing/golden/` с соглашением об именовании:
+Golden-снимки хранятся в `testing/golden/{lang}/` с соглашением об именовании:
 
 ```
-testing/golden/{имя_страницы}_{индекс_игрока}.html
+testing/golden/{lang}/{имя_страницы}_{индекс_игрока}.html
 ```
 
 Например:
-- `overview_p0.html` — страница Overview для PlayerOne
-- `overview_p1.html` — страница Overview для PlayerTwo
-- `buildings_shipyard_p0.html` — страница Buildings (вкладка Shipyard) для PlayerOne
-- `buildings_shipyard_post_p0.html` — та же страница, отрендеренная через её POST-форму (issue #258)
+- `testing/golden/en/overview_p0.html` — страница Overview для PlayerOne (английский)
+- `testing/golden/de/overview_p0.html` — та же страница на немецком
+- `testing/golden/en/buildings_shipyard_p0.html` — страница Buildings (вкладка Shipyard) для PlayerOne
+- `testing/golden/en/buildings_shipyard_post_p0.html` — та же страница, отрендеренная через её POST-форму (issue #258)
 
 POST-снимки именуются `{страница}_{вариант}_post_p{индекс}.html`; POST-only
 страницы флота из issue #256 (flotten2/flotten3/flottenversand/sprungtor)
@@ -33,25 +53,25 @@ POST-снимки именуются `{страница}_{вариант}_post_p
 ### Запуск тестов
 
 ```bash
-# Запуск всех golden-тестов страниц
+# Запуск всех golden-тестов страниц (все поддерживаемые языки)
 vendor/bin/phpunit --testsuite "Golden Pages"
 
-# Запуск конкретного теста
+# Запуск конкретного теста (все языки; для ограничения используйте GOLDEN_LANG)
 vendor/bin/phpunit --filter testOverviewPagePlayerOne
 
-# Запуск тестов с пропуском сравнения golden (только вывод)
-# HTML будет выведен в stdout, но не будет сравниваться
+# Запуск только немецкого и русского наборов данных
+GOLDEN_LANG=de,ru vendor/bin/phpunit --testsuite "Golden Pages"
 ```
 
 ### Обновление golden-снимков
 
-При изменении макетов страниц golden-снимки необходимо перегенерировать:
+При изменении макетов страниц или переводов golden-снимки необходимо перегенерировать:
 
 ```bash
 UPDATE_GOLDEN=1 vendor/bin/phpunit --testsuite "Golden Pages"
 ```
 
-Это перезапишет все существующие golden-снимки новым сгенерированным HTML.
+Это перезапишет все существующие golden-снимки (для каждого языка) новым сгенерированным HTML.
 
 ### Структура тестов
 
@@ -199,14 +219,19 @@ POST-действия, которые **всегда редиректят** (`My
 
 ```
 testing/
-├── GoldenPagesTest.php      # Основной класс тестов (каждый тест в отдельном процессе)
+├── GoldenPagesTest.php      # Основной класс тестов (каждый тест в отдельном процессе, один раз на язык)
 ├── PageRenderer.php          # Рендеринг настоящих игровых страниц через реальный DB-слой
 ├── FixtureBuilder.php        # Создание тестовой вселенной через in-memory движок (mysqlite)
 ├── bootstrap.php             # PHPUnit bootstrap: загрузка игрового ядра с SQLite-бэкендом
-└── golden/                   # Golden-снимки
+└── golden/                   # Golden-снимки (по языкам)
     ├── .gitignore
-    ├── overview_p0.html
-    ├── overview_p1.html
+    ├── en/
+    │   ├── overview_p0.html
+    │   ├── overview_p1.html
+    │   └── ...
+    ├── de/
+    │   ├── overview_p0.html
+    │   └── ...
     └── ...
 ```
 

@@ -1,44 +1,44 @@
 <?php
 
 // Divers messages relatifs à la flotte (par exemple, Transport, Recyclage, etc.). C'est un véritable désordre. Le même désordre existait dans la version 0.84 de vanilla.
-// TODO
+// TODO: Prendre les messages du jeu officiel actuel.
 
-// From/Subj
-$LOCA["fr"]["FLEET_MESSAGE_FROM"] = "Командование флотом";
-$LOCA["fr"]["FLEET_MESSAGE_RETURN"] = "Возвращение флота";
-$LOCA["fr"]["FLEET_MESSAGE_HOLD"] = "Удержание флота";
-$LOCA["fr"]["FLEET_MESSAGE_INTEL"] = "Разведданные";
-$LOCA["fr"]["FLEET_MESSAGE_FLEET"] = "Флот ";
-$LOCA["fr"]["FLEET_MESSAGE_OBSERVE"] = "Наблюдение";
-$LOCA["fr"]["FLEET_MESSAGE_ARRIVE"] = "Достижение планеты";
-$LOCA["fr"]["FLEET_MESSAGE_TRADE"] = "Чужой флот доставляет сырьё";
-$LOCA["fr"]["FLEET_MESSAGE_SPY"] = "Шпионаж";
-$LOCA["fr"]["FLEET_MESSAGE_BATTLE"] = "Боевой доклад";
+// De/Sujet
+$LOCA["fr"]["FLEET_MESSAGE_FROM"] = "Commandement de la flotte";
+$LOCA["fr"]["FLEET_MESSAGE_RETURN"] = "Retour de la flotte";
+$LOCA["fr"]["FLEET_MESSAGE_HOLD"] = "Maintien de la flotte";
+$LOCA["fr"]["FLEET_MESSAGE_INTEL"] = "Renseignements";
+$LOCA["fr"]["FLEET_MESSAGE_FLEET"] = "Flotte ";
+$LOCA["fr"]["FLEET_MESSAGE_OBSERVE"] = "Observation";
+$LOCA["fr"]["FLEET_MESSAGE_ARRIVE"] = "Arrivée sur la planète";
+$LOCA["fr"]["FLEET_MESSAGE_TRADE"] = "Une flotte étrangère livre des ressources";
+$LOCA["fr"]["FLEET_MESSAGE_SPY"] = "Espionnage";
+$LOCA["fr"]["FLEET_MESSAGE_BATTLE"] = "Rapport de bataille";
 
-$LOCA["fr"]["FLEET_TRANSPORT_OWN"] = "Ваш флот достигает планеты (\n#1\n) и доставляет свой груз:.\n<br/>\n" .
-				"#2 металла, #3 кристалла и #4 дейтерия.\n<br/>\n";
-$LOCA["fr"]["FLEET_TRANSPORT_OTHER"] = "Чужой флот игрока #1 доставляет на Вашу планету #2\n#3\n<br/>\n" .
-					"#4 металла, #5 кристалла и #6 дейтерия\n<br/>\n" .
-                    "Прежде у Вас было #7 металла, #8 кристалла и #9 дейтерия.\n<br/>\n" .
-                    "Теперь же у Вас #10 металла, #11 кристалла и #12 дейтерия.\n<br/>\n";
+$LOCA["fr"]["FLEET_TRANSPORT_OWN"] = "Votre flotte atteint la planète (\n#1\n) et livre sa cargaison :.\n<br/>\n" .
+				"#2 métal, #3 cristal et #4 deutérium.\n<br/>\n";
+$LOCA["fr"]["FLEET_TRANSPORT_OTHER"] = "La flotte du joueur #1 livre à votre planète #2\n#3\n<br/>\n" .
+					"#4 métal, #5 cristal et #6 deutérium\n<br/>\n" .
+                    "Avant, vous aviez #7 métal, #8 cristal et #9 deutérium.\n<br/>\n" .
+                    "Maintenant, vous avez #10 métal, #11 cristal et #12 deutérium.\n<br/>\n";
 
-$LOCA["fr"]["FLEET_RECYCLE"] = "Переработчики в количестве #1 штук обладают общей грузоподъёмностью в #2. " .
-	"Поле обломков содержит #3 металла и #4 кристалла. " .
-	"Добыто #5 металла и #6 кристалла.";
+$LOCA["fr"]["FLEET_RECYCLE"] = "Les #1 recycleurs ont une capacité totale de #2. " .
+	"Le champ de débris contient #3 métal et #4 cristal. " .
+	"#5 métal et #6 cristal ont été recyclés.";
 
-$LOCA["fr"]["FLEET_RETURN"] = "Один из Ваших флотов ( #1 ), отправленных с #2, достигает #3 #4 . ";
-$LOCA["fr"]["FLEET_RETURN_RES"] = "Флот доставляет #1 металла, #2 кристалла и #3 дейтерия<br>";
+$LOCA["fr"]["FLEET_RETURN"] = "L'une de vos flottes ( #1 ), envoyée depuis #2, atteint #3 #4 . ";
+$LOCA["fr"]["FLEET_RETURN_RES"] = "La flotte livre #1 métal, #2 cristal et #3 deutérium<br>";
 
-$LOCA["fr"]["FLEET_DEPLOY"] = "\nОдин из Ваших флотов (#1) достиг #2\n#3\n. ";
-$LOCA["fr"]["FLEET_DEPLOY_RES"] = "Флот доставляет #1 металла, #2 кристалла и #3 дейтерия\n<br/>\n";
+$LOCA["fr"]["FLEET_DEPLOY"] = "\nL'une de vos flottes (#1) a atteint #2\n#3\n. ";
+$LOCA["fr"]["FLEET_DEPLOY_RES"] = "La flotte livre #1 métal, #2 cristal et #3 deutérium\n<br/>\n";
 
-$LOCA["fr"]["FLEET_COLONIZE"] = "\nФлот достигает заданных координат\n#1\n";
-$LOCA["fr"]["FLEET_COLONIZE_MAX"] = ", и устанавливает, что эта планета пригодна для колонизации. Вскоре после начала освоения планеты поступает сообщение о беспорядках на главной планете, так как империя становится слишком большой и люди возвращаются обратно.\n";
-$LOCA["fr"]["FLEET_COLONIZE_SUCCESS"] = ", находит там новую планету и сразу же начинает её освоение.\n";
-$LOCA["fr"]["FLEET_COLONIZE_FAIL"] = ", но не находит там пригодной для колонизации планеты. В подавленном состоянии поселенцы возвращаются обратно.\n";
-$LOCA["fr"]["FLEET_COLONIZE_FROM"] = "Поселенцы";
-$LOCA["fr"]["FLEET_COLONIZE_SUBJ"] = "Доклад поселенцев";
+$LOCA["fr"]["FLEET_COLONIZE"] = "\nLa flotte atteint les coordonnées définies\n#1\n";
+$LOCA["fr"]["FLEET_COLONIZE_MAX"] = ", et constate que cette planète convient à la colonisation. Peu après le début de l'exploration de la planète, des troubles sont signalés sur la planète mère, car l'empire devient trop grand et les habitants font demi-tour.\n";
+$LOCA["fr"]["FLEET_COLONIZE_SUCCESS"] = ", y trouve une nouvelle planète et commence immédiatement à l'explorer.\n";
+$LOCA["fr"]["FLEET_COLONIZE_FAIL"] = ", mais n'y trouve aucune planète propice à la colonisation. Les colons rentrent déçus.\n";
+$LOCA["fr"]["FLEET_COLONIZE_FROM"] = "Colons";
+$LOCA["fr"]["FLEET_COLONIZE_SUBJ"] = "Rapport des colons";
 
-$LOCA["fr"]["FLEET_SPY_OTHER"] = "\nЧужой флот с планеты #1\n#2\nбыл обнаружен вблизи от планеты #3\n#4\n. Шанс на защиту от шпионажа: #5 %\n";
+$LOCA["fr"]["FLEET_SPY_OTHER"] = "\nLa flotte étrangère de la planète #1\n#2\n a été détectée à proximité de la planète #3\n#4\n. Chance de se défendre contre l'espionnage : #5 %\n";
 
 ?>

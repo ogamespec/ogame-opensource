@@ -2,7 +2,7 @@
 
 // Buoni sconto
 
-$LOCA["it"]["COUPON_SUBJ"] = "Present to you";
-$LOCA["it"]["COUPON_MESSAGE"] = "Dear #1, you have present : #2";
+$LOCA["it"]["COUPON_SUBJ"] = "Un regalo per te";
+$LOCA["it"]["COUPON_MESSAGE"] = "Caro #1, hai ricevuto un regalo: #2";
 
 ?>

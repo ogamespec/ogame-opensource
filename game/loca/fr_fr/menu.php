@@ -26,9 +26,33 @@ $LOCA["fr"]["MENU_MESSAGES"] = "Messages";
 $LOCA["fr"]["MENU_NOTES"] = "Notes";
 $LOCA["fr"]["MENU_BUDDY"] = "Amis";
 $LOCA["fr"]["MENU_OPTIONS"] = "Options";
-$LOCA["fr"]["MENU_LOGOUT"] = "Logout";
+$LOCA["fr"]["MENU_LOGOUT"] = "Déconnexion";
 $LOCA["fr"]["MENU_RULES"] = "Règles";
 $LOCA["fr"]["MENU_IMPRESSUM"] = "Impressum";
 $LOCA["fr"]["MENU_DISCORD"] = "Discord"; 		// New. The link to Discord is inserted after the link to the Board
+
+// Touches de raccourci du menu (Hotkeys).
+
+$LOCA["fr"]["HK_OVERVIEW"] = "o";
+$LOCA["fr"]["HK_EMPIRE"] = "e";
+$LOCA["fr"]["HK_BUILDING"] = "b";
+$LOCA["fr"]["HK_RESOURCES"] = "r";
+$LOCA["fr"]["HK_RESEARCH"] = "c";
+$LOCA["fr"]["HK_SHIPYARD"] = "s";
+$LOCA["fr"]["HK_FLEET"] = "f";
+$LOCA["fr"]["HK_TECHTREE"] = "t";
+$LOCA["fr"]["HK_GALAXY"] = "g";
+$LOCA["fr"]["HK_DEFENSE"] = "d";
+$LOCA["fr"]["HK_ALLY"] = "a";
+$LOCA["fr"]["HK_BOARD"] = "1";
+$LOCA["fr"]["HK_PAYMENT"] = "i";
+$LOCA["fr"]["HK_STAT"] = "k";
+$LOCA["fr"]["HK_SEARCH"] = "h";
+$LOCA["fr"]["HK_TUTORIAL"] = "2";
+$LOCA["fr"]["HK_MESSAGES"] = "m";
+$LOCA["fr"]["HK_NOTES"] = "n";
+$LOCA["fr"]["HK_BUDDY"] = "u";
+$LOCA["fr"]["HK_OPTIONS"] = "p";
+$LOCA["fr"]["HK_LOGOUT"] = "q";
 
 ?>

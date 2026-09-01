@@ -12,6 +12,7 @@ $LOCA["it"]["FLEET_ORDER_7"] = "Colonizzazione";
 $LOCA["it"]["FLEET_ORDER_8"] = "Raccolta";
 $LOCA["it"]["FLEET_ORDER_9"] = "Distruzione";
 $LOCA["it"]["FLEET_ORDER_15"] = "Spedizione";
+$LOCA["it"]["FLEET_ORDER_20"] = "Attacco missilistico";
 $LOCA["it"]["FLEET_ORDER_21"] = "Attacco";  			// Un attacco che è diventato il principale attacco dell'ACS
 
 ?>

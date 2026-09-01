@@ -4,228 +4,228 @@
 
 // Général
 
-$LOCA["fr"]["ALLY_ALLY"] = "Альянс";
-$LOCA["fr"]["ALLY_NO_WAY"] = "Недостаточно прав для проведения операции";
-$LOCA["fr"]["ALLY_BACK"] = "Назад к обзору";
+$LOCA["fr"]["ALLY_ALLY"] = "Alliance";
+$LOCA["fr"]["ALLY_NO_WAY"] = "Droits insuffisants pour effectuer l'opération";
+$LOCA["fr"]["ALLY_BACK"] = "Retour à l'aperçu";
 
 // Création et recherche d'alliances
 
-$LOCA["fr"]["ALLY_FOUND_OWN"] = "Основать собственный альянс";
-$LOCA["fr"]["ALLY_FIND_OTHER"] = "Искать альянсы";
+$LOCA["fr"]["ALLY_FOUND_OWN"] = "Fonder votre propre alliance";
+$LOCA["fr"]["ALLY_FIND_OTHER"] = "Rechercher des alliances";
 
-$LOCA["fr"]["ALLY_FOUND_ALLY"] = "Основать альянс";
-$LOCA["fr"]["ALLY_FOUND_TAG"] = "Аббревиатура альянса (3-8 знаков)";
-$LOCA["fr"]["ALLY_FOUND_NAME"] = "Название альянса (3-30 символов)";
-$LOCA["fr"]["ALLY_FOUND_SUBMIT"] = "Основать";
-$LOCA["fr"]["ALLY_FOUND_ERROR_TAG"] = "Аббревиатура альянса слишком коротка";
-$LOCA["fr"]["ALLY_FOUND_ERROR_NAME"] = "Название альянса слишком короткое";
-$LOCA["fr"]["ALLY_FOUND_ERROR_EXISTS"] = "Альянс #1 к сожалению уже существует!";
-$LOCA["fr"]["ALLY_FOUND_SUCCESS"] = "Альянс #1 [#2] успешно создан";
-$LOCA["fr"]["ALLY_FOUND_CONFIRM"] = "Да!";
+$LOCA["fr"]["ALLY_FOUND_ALLY"] = "Fonder une alliance";
+$LOCA["fr"]["ALLY_FOUND_TAG"] = "Abréviation de l'alliance (3-8 caractères)";
+$LOCA["fr"]["ALLY_FOUND_NAME"] = "Nom de l'alliance (3-30 caractères)";
+$LOCA["fr"]["ALLY_FOUND_SUBMIT"] = "Fonder";
+$LOCA["fr"]["ALLY_FOUND_ERROR_TAG"] = "L'abréviation de l'alliance est trop courte";
+$LOCA["fr"]["ALLY_FOUND_ERROR_NAME"] = "Le nom de l'alliance est trop court";
+$LOCA["fr"]["ALLY_FOUND_ERROR_EXISTS"] = "L'alliance #1 existe malheureusement déjà !";
+$LOCA["fr"]["ALLY_FOUND_SUCCESS"] = "L'alliance #1 [#2] a été créée avec succès.";
+$LOCA["fr"]["ALLY_FOUND_CONFIRM"] = "Oui !";
 
-$LOCA["fr"]["ALLY_FIND_ALLY"] = "Искать альянсы";
-$LOCA["fr"]["ALLY_FIND_HEAD"] = "Искать"; // Head
-$LOCA["fr"]["ALLY_FIND_SUBMIT"] = "Искать"; // Submit button
-$LOCA["fr"]["ALLY_FIND_RESULT"] = "Результаты поиска альянса";
-$LOCA["fr"]["ALLY_FIND_TAG"] = "Аббревиатура альянса";
-$LOCA["fr"]["ALLY_FIND_NAME"] = "Название альянса";
-$LOCA["fr"]["ALLY_FIND_MEMBERS"] = "Количество членов";
+$LOCA["fr"]["ALLY_FIND_ALLY"] = "Recherche d'alliances.";
+$LOCA["fr"]["ALLY_FIND_HEAD"] = "Chercher"; // Head
+$LOCA["fr"]["ALLY_FIND_SUBMIT"] = "Rechercher"; // Bouton de soumission
+$LOCA["fr"]["ALLY_FIND_RESULT"] = "Résultats de la recherche d'alliances";
+$LOCA["fr"]["ALLY_FIND_TAG"] = "Abréviation de l'alliance";
+$LOCA["fr"]["ALLY_FIND_NAME"] = "Nom de l'alliance";
+$LOCA["fr"]["ALLY_FIND_MEMBERS"] = "Nombre de membres";
 
-$LOCA["fr"]["ALLY_APPLY"] = "Ваше заявление";
-$LOCA["fr"]["ALLY_APPLY_ALREADY"] = "Вы уже подали заявку в альянс [#1]. Подождите ответа либо отзовите своё заявление.";
-$LOCA["fr"]["ALLY_APPLY_WITHDRAW"] = "Отозвать заявление";
+$LOCA["fr"]["ALLY_APPLY"] = "Votre candidature";
+$LOCA["fr"]["ALLY_APPLY_ALREADY"] = "Vous avez déjà postulé à l'alliance [#1]. Attendez une réponse ou retirez votre candidature.";
+$LOCA["fr"]["ALLY_APPLY_WITHDRAW"] = "Retirer la candidature";
 
-$LOCA["fr"]["ALLY_NEW_DEFAULT_TEXT"] = "Добро пожаловать на страничку альянса";
-$LOCA["fr"]["ALLY_NEW_RANK_FOUNDER"] = "Основатель";
-$LOCA["fr"]["ALLY_NEW_RANK_NEWCOMER"] = "Новичок";
+$LOCA["fr"]["ALLY_NEW_DEFAULT_TEXT"] = "Bienvenue sur la page de l'alliance";
+$LOCA["fr"]["ALLY_NEW_RANK_FOUNDER"] = "Fondateur";
+$LOCA["fr"]["ALLY_NEW_RANK_NEWCOMER"] = "Nouveau venu";
 
-// ranks
+// rangs
 
-$LOCA["fr"]["ALLY_RANK_ERROR_SPECIAL_CHARS"] = "Ранг содержит особые символы";
-$LOCA["fr"]["ALLY_RANK_MASK"] = "Сформировать права";
-$LOCA["fr"]["ALLY_RANK_NAME"] = "Название ранга";
-$LOCA["fr"]["ALLY_RANK_DELETE"] = "Удалить ранг";
-$LOCA["fr"]["ALLY_RANK_SAVE"] = "Сохранить";
-$LOCA["fr"]["ALLY_RANK_ADD_TEXT"] = "Назначить новый ранг";
-$LOCA["fr"]["ALLY_RANK_ADD_SUBMIT"] = "Назначить";
-$LOCA["fr"]["ALLY_RANK_INFO"] = "Пояснение прав";
+$LOCA["fr"]["ALLY_RANK_ERROR_SPECIAL_CHARS"] = "Le rang contient des caractères spéciaux";
+$LOCA["fr"]["ALLY_RANK_MASK"] = "Droits du rang";
+$LOCA["fr"]["ALLY_RANK_NAME"] = "Nom du rang";
+$LOCA["fr"]["ALLY_RANK_DELETE"] = "Supprimer le rang";
+$LOCA["fr"]["ALLY_RANK_SAVE"] = "Enregistrer";
+$LOCA["fr"]["ALLY_RANK_ADD_TEXT"] = "Attribuer un nouveau rang";
+$LOCA["fr"]["ALLY_RANK_ADD_SUBMIT"] = "Attribuer";
+$LOCA["fr"]["ALLY_RANK_INFO"] = "Explication des droits";
 
-$LOCA["fr"]["ALLY_RANK_1"] = "Распустить альянс";
-$LOCA["fr"]["ALLY_RANK_2"] = "Выгнать игрока";
-$LOCA["fr"]["ALLY_RANK_3"] = "Посмотреть заявления";
-$LOCA["fr"]["ALLY_RANK_4"] = "Посмотреть список членов";
-$LOCA["fr"]["ALLY_RANK_5"] = "Редактировать заявления";
-$LOCA["fr"]["ALLY_RANK_6"] = "Управление альянсом";
-$LOCA["fr"]["ALLY_RANK_7"] = "Посмотреть статус \"он-лайн\" в списке членов";
-$LOCA["fr"]["ALLY_RANK_8"] = "Составить общее сообщение";
-$LOCA["fr"]["ALLY_RANK_9"] = "'Правая рука' (необходимо для передачи статуса основателя)";
+$LOCA["fr"]["ALLY_RANK_1"] = "Dissoudre l'alliance";
+$LOCA["fr"]["ALLY_RANK_2"] = "Exclure un joueur";
+$LOCA["fr"]["ALLY_RANK_3"] = "Voir les candidatures";
+$LOCA["fr"]["ALLY_RANK_4"] = "Voir la liste des membres";
+$LOCA["fr"]["ALLY_RANK_5"] = "Modifier les candidatures";
+$LOCA["fr"]["ALLY_RANK_6"] = "Gérer l'alliance";
+$LOCA["fr"]["ALLY_RANK_7"] = "Voir le statut « en ligne » dans la liste des membres";
+$LOCA["fr"]["ALLY_RANK_8"] = "Rédiger un message général";
+$LOCA["fr"]["ALLY_RANK_9"] = "« Main droite » (requis pour transférer le statut de fondateur)";
 
-// main
+// principal
 
-$LOCA["fr"]["ALLY_MAIN_HEAD"] = "Ваш альянс";
-$LOCA["fr"]["ALLY_MAIN_TAG"] = "Аббревиатура";
-$LOCA["fr"]["ALLY_MAIN_NAME"] = "Имя";
-$LOCA["fr"]["ALLY_MAIN_PREV"] = "бывш. #1";
-$LOCA["fr"]["ALLY_MAIN_MEMBERS"] = "Члены";
-$LOCA["fr"]["ALLY_MAIN_MEMBERS_LINK"] = "список членов";
-$LOCA["fr"]["ALLY_MAIN_RANK"] = "Ваш ранг";
-$LOCA["fr"]["ALLY_MAIN_SETTINGS_LINK"] = "управление альянсом";
-$LOCA["fr"]["ALLY_MAIN_APPS"] = "Заявки";
-$LOCA["fr"]["ALLY_MAIN_APP_COUNT"] = "#1 Заявление (-я)";
-$LOCA["fr"]["ALLY_MAIN_CIRCULAR"] = "Общее сообщение";
-$LOCA["fr"]["ALLY_MAIN_CIRCULAR_LINK"] = "Послать общее сообщение";
-$LOCA["fr"]["ALLY_MAIN_HOMEPAGE"] = "Домашняя страница";
-$LOCA["fr"]["ALLY_MAIN_INTTEXT"] = "Внутренняя компетенция";
-$LOCA["fr"]["ALLY_MAIN_LEAVE"] = "Покинуть этот альянс";
-$LOCA["fr"]["ALLY_MAIN_LEAVE_SUBMIT"] = "Да!";
+$LOCA["fr"]["ALLY_MAIN_HEAD"] = "Votre alliance";
+$LOCA["fr"]["ALLY_MAIN_TAG"] = "Abréviation";
+$LOCA["fr"]["ALLY_MAIN_NAME"] = "Nom";
+$LOCA["fr"]["ALLY_MAIN_PREV"] = "ancien #1";
+$LOCA["fr"]["ALLY_MAIN_MEMBERS"] = "Membres";
+$LOCA["fr"]["ALLY_MAIN_MEMBERS_LINK"] = "liste des membres";
+$LOCA["fr"]["ALLY_MAIN_RANK"] = "votre rang";
+$LOCA["fr"]["ALLY_MAIN_SETTINGS_LINK"] = "gestion de l'alliance";
+$LOCA["fr"]["ALLY_MAIN_APPS"] = "Candidatures";
+$LOCA["fr"]["ALLY_MAIN_APP_COUNT"] = "#1 candidature(s)";
+$LOCA["fr"]["ALLY_MAIN_CIRCULAR"] = "Message général";
+$LOCA["fr"]["ALLY_MAIN_CIRCULAR_LINK"] = "Envoyer un message général";
+$LOCA["fr"]["ALLY_MAIN_HOMEPAGE"] = "Page d'accueil";
+$LOCA["fr"]["ALLY_MAIN_INTTEXT"] = "Texte interne";
+$LOCA["fr"]["ALLY_MAIN_LEAVE"] = "Quitter cette alliance";
+$LOCA["fr"]["ALLY_MAIN_LEAVE_SUBMIT"] = "Oui !";
 
-// circular
+// message circulaire
 
-$LOCA["fr"]["ALLY_CIRC_USERLIST"] = "Следующие игроки получили Ваше общее послание";
-$LOCA["fr"]["ALLY_CIRC_SUBMIT"] = "Ok";
-$LOCA["fr"]["ALLY_CIRC_ERROR"] = "Ошибка";
-$LOCA["fr"]["ALLY_CIRC_ERROR_TEXT"] = "К сожалению, получатели не найдены";
-$LOCA["fr"]["ALLY_CIRC_BACK"] = "Назад";
-$LOCA["fr"]["ALLY_CIRC_HEAD"] = "Отправить общее сообщение";
-$LOCA["fr"]["ALLY_CIRC_TO"] = "Получатель";
-$LOCA["fr"]["ALLY_CIRC_ALL"] = "Все игроки";
-$LOCA["fr"]["ALLY_CIRC_RANK"] = "Только определённому рангу: #1";
-$LOCA["fr"]["ALLY_CIRC_MESSAGE"] = "Текст сообщения (#1 / #2 Симв.)";
-$LOCA["fr"]["ALLY_CIRC_SEND"] = "Submit";
+$LOCA["fr"]["ALLY_CIRC_USERLIST"] = "Les joueurs suivants ont reçu votre message général";
+$LOCA["fr"]["ALLY_CIRC_SUBMIT"] = "OK";
+$LOCA["fr"]["ALLY_CIRC_ERROR"] = "Erreur";
+$LOCA["fr"]["ALLY_CIRC_ERROR_TEXT"] = "Désolé, aucun destinataire trouvé.";
+$LOCA["fr"]["ALLY_CIRC_BACK"] = "Retour";
+$LOCA["fr"]["ALLY_CIRC_HEAD"] = "Envoyer un message général";
+$LOCA["fr"]["ALLY_CIRC_TO"] = "Destinataire";
+$LOCA["fr"]["ALLY_CIRC_ALL"] = "Tous les joueurs";
+$LOCA["fr"]["ALLY_CIRC_RANK"] = "Uniquement à un rang spécifique : #1";
+$LOCA["fr"]["ALLY_CIRC_MESSAGE"] = "Texte du message (#1 / #2 caract.)";
+$LOCA["fr"]["ALLY_CIRC_SEND"] = "Envoyer";
 
-// settings
+// paramètres
 
-$LOCA["fr"]["ALLY_SETTINGS_HEAD"] = "управление альянсом";
-$LOCA["fr"]["ALLY_SETTINGS_RANKS"] = "Установить ранги";
-$LOCA["fr"]["ALLY_SETTINGS_MEMBERS"] = "Члены альянса";
-$LOCA["fr"]["ALLY_SETTINGS_CHANGE_TAG"] = "Изменить аббревиатуру альянса (только 1 раз в неделю)";
-$LOCA["fr"]["ALLY_SETTINGS_CHANGE_NAME"] = "Изменить название альянса (только 1 раз в неделю)";
-$LOCA["fr"]["ALLY_SETTINGS_EDIT"] = "Редактировать текст";
-$LOCA["fr"]["ALLY_SETTINGS_EXTTEXT"] = "Внешний текст";
-$LOCA["fr"]["ALLY_SETTINGS_INTTEXT"] = "Внутренний текст";
-$LOCA["fr"]["ALLY_SETTINGS_APPTEXT"] = "Текст заявки";
-$LOCA["fr"]["ALLY_SETTINGS_EXTTEXT_DEF"] = "Внешний текст альянса";
-$LOCA["fr"]["ALLY_SETTINGS_INTTEXT_DEF"] = "Внутренний текст альянса";
-$LOCA["fr"]["ALLY_SETTINGS_APPTEXT_DEF"] = "Пример текста заявки";
-$LOCA["fr"]["ALLY_SETTINGS_CHARS"] = "#1 символов";
-$LOCA["fr"]["ALLY_SETTINGS_APP_SAMPLE"] = "Пример заявки";
-$LOCA["fr"]["ALLY_SETTINGS_HIDE_APP"] = "не показывать автоматически";
-$LOCA["fr"]["ALLY_SETTINGS_SHOW_APP"] = "показывать автоматически";
-$LOCA["fr"]["ALLY_SETTINGS_DELETE"] = "Удалить";
-$LOCA["fr"]["ALLY_SETTINGS_SAVE"] = "Сохранить";
-$LOCA["fr"]["ALLY_SETTINGS_TITLE"] = "Установки";
-$LOCA["fr"]["ALLY_SETTINGS_HOMEPAGE"] = "Домашняя страница";
-$LOCA["fr"]["ALLY_SETTINGS_LOGO"] = "Логотип альянса";
-$LOCA["fr"]["ALLY_SETTINGS_APPS"] = "Заявки";
-$LOCA["fr"]["ALLY_SETTINGS_APPS_OPEN"] = "Возможны (альянс открыт)";
-$LOCA["fr"]["ALLY_SETTINGS_APPS_CLOSED"] = "Невозможны (альянс закрыт)";
-$LOCA["fr"]["ALLY_SETTINGS_FOUNDER"] = "Имя главы";
-$LOCA["fr"]["ALLY_SETTINGS_DISMISS"] = "Распустить альянс";
-$LOCA["fr"]["ALLY_SETTINGS_NEXT"] = "Дальше";
-$LOCA["fr"]["ALLY_SETTINGS_LEAVE"] = "Покинуть/перенять этот альянс";
+$LOCA["fr"]["ALLY_SETTINGS_HEAD"] = "gestion de l'alliance";
+$LOCA["fr"]["ALLY_SETTINGS_RANKS"] = "définir les rangs";
+$LOCA["fr"]["ALLY_SETTINGS_MEMBERS"] = "Membres de l'alliance";
+$LOCA["fr"]["ALLY_SETTINGS_CHANGE_TAG"] = "Changer l'abréviation de l'alliance (une fois par semaine seulement)";
+$LOCA["fr"]["ALLY_SETTINGS_CHANGE_NAME"] = "Changer le nom de l'alliance (une fois par semaine seulement)";
+$LOCA["fr"]["ALLY_SETTINGS_EDIT"] = "Modifier le texte";
+$LOCA["fr"]["ALLY_SETTINGS_EXTTEXT"] = "Texte externe";
+$LOCA["fr"]["ALLY_SETTINGS_INTTEXT"] = "Texte interne";
+$LOCA["fr"]["ALLY_SETTINGS_APPTEXT"] = "Texte de candidature";
+$LOCA["fr"]["ALLY_SETTINGS_EXTTEXT_DEF"] = "Texte externe de l'alliance";
+$LOCA["fr"]["ALLY_SETTINGS_INTTEXT_DEF"] = "Texte interne de l'alliance";
+$LOCA["fr"]["ALLY_SETTINGS_APPTEXT_DEF"] = "Exemple de texte de candidature";
+$LOCA["fr"]["ALLY_SETTINGS_CHARS"] = "#1 caractères";
+$LOCA["fr"]["ALLY_SETTINGS_APP_SAMPLE"] = "Exemple de candidature";
+$LOCA["fr"]["ALLY_SETTINGS_HIDE_APP"] = "ne pas afficher automatiquement";
+$LOCA["fr"]["ALLY_SETTINGS_SHOW_APP"] = "afficher automatiquement";
+$LOCA["fr"]["ALLY_SETTINGS_DELETE"] = "Supprimer";
+$LOCA["fr"]["ALLY_SETTINGS_SAVE"] = "Enregistrer";
+$LOCA["fr"]["ALLY_SETTINGS_TITLE"] = "Paramètres";
+$LOCA["fr"]["ALLY_SETTINGS_HOMEPAGE"] = "Page d'accueil";
+$LOCA["fr"]["ALLY_SETTINGS_LOGO"] = "Logo de l'alliance";
+$LOCA["fr"]["ALLY_SETTINGS_APPS"] = "Candidatures";
+$LOCA["fr"]["ALLY_SETTINGS_APPS_OPEN"] = "Possibles (alliance ouverte)";
+$LOCA["fr"]["ALLY_SETTINGS_APPS_CLOSED"] = "Impossibles (alliance fermée)";
+$LOCA["fr"]["ALLY_SETTINGS_FOUNDER"] = "Nom du chef";
+$LOCA["fr"]["ALLY_SETTINGS_DISMISS"] = "Dissoudre l'alliance";
+$LOCA["fr"]["ALLY_SETTINGS_NEXT"] = "Suivant";
+$LOCA["fr"]["ALLY_SETTINGS_LEAVE"] = "Quitter/Reprendre cette alliance";
 
-// members
+// membres
 
-$LOCA["fr"]["ALLY_MEMBERS_DENIED"] = "Просмотр невозможен";
-$LOCA["fr"]["ALLY_MEMBERS_COUNT"] = "Cписок членов (кол-во: #1)";
-$LOCA["fr"]["ALLY_MEMBERS_NAME"] = "Имя";
-$LOCA["fr"]["ALLY_MEMBERS_STATUS"] = "Статус";
-$LOCA["fr"]["ALLY_MEMBERS_POINTS"] = "Очки";
-$LOCA["fr"]["ALLY_MEMBERS_COORD"] = "Координаты";
-$LOCA["fr"]["ALLY_MEMBERS_JOINDATE"] = "Вступление";
-$LOCA["fr"]["ALLY_MEMBERS_WRITE_MESSAGE"] = "Написать сообщение";
-$LOCA["fr"]["ALLY_MEMBERS_YES"] = "Да";
-$LOCA["fr"]["ALLY_MEMBERS_NO"] = "Нет";
-$LOCA["fr"]["ALLY_MEMBERS_INACTIVE"] = "Неактивный";
-$LOCA["fr"]["ALLY_MEMBERS_ACTION"] = "Функция";
-$LOCA["fr"]["ALLY_MEMBERS_KICK"] = "Выгнать игрока";
-$LOCA["fr"]["ALLY_MEMBERS_KICK_CONFIRM"] = "Вы уверены, что игрок #1 должен покинуть альянс?";
-$LOCA["fr"]["ALLY_MEMBERS_SET_RANK"] = "Назначить ранг";
-$LOCA["fr"]["ALLY_MEMBERS_RANK_TO"] = "Ранг для #1:";
-$LOCA["fr"]["ALLY_MEMBERS_SAVE"] = "Сохранить";
+$LOCA["fr"]["ALLY_MEMBERS_DENIED"] = "Affichage impossible";
+$LOCA["fr"]["ALLY_MEMBERS_COUNT"] = "Liste des membres (nombre : #1)";
+$LOCA["fr"]["ALLY_MEMBERS_NAME"] = "Nom";
+$LOCA["fr"]["ALLY_MEMBERS_STATUS"] = "Statut";
+$LOCA["fr"]["ALLY_MEMBERS_POINTS"] = "Points";
+$LOCA["fr"]["ALLY_MEMBERS_COORD"] = "Coordonnées";
+$LOCA["fr"]["ALLY_MEMBERS_JOINDATE"] = "Entrée";
+$LOCA["fr"]["ALLY_MEMBERS_WRITE_MESSAGE"] = "Écrire un message";
+$LOCA["fr"]["ALLY_MEMBERS_YES"] = "Oui";
+$LOCA["fr"]["ALLY_MEMBERS_NO"] = "Non";
+$LOCA["fr"]["ALLY_MEMBERS_INACTIVE"] = "Inactif";
+$LOCA["fr"]["ALLY_MEMBERS_ACTION"] = "Fonction";
+$LOCA["fr"]["ALLY_MEMBERS_KICK"] = "Exclure le joueur";
+$LOCA["fr"]["ALLY_MEMBERS_KICK_CONFIRM"] = "Êtes-vous sûr que le joueur #1 doit quitter l'alliance ?";
+$LOCA["fr"]["ALLY_MEMBERS_SET_RANK"] = "Attribuer un rang";
+$LOCA["fr"]["ALLY_MEMBERS_RANK_TO"] = "Rang pour #1 :";
+$LOCA["fr"]["ALLY_MEMBERS_SAVE"] = "Enregistrer";
 $LOCA["fr"]["ALLY_MEMBERS_ID"] = "N";
 
-// misc
+// divers
 
-$LOCA["fr"]["ALLY_MISC_LEAVE_CONFIRM"] = "Вы действительно хотите покинуть альянс \"#1\"?";
-$LOCA["fr"]["ALLY_MISC_CHANGE_WAIT"] = "Подождите до #1";
-$LOCA["fr"]["ALLY_MISC_CHANGE_TAG_SHORT"] = "Аббревиатура альянса слишком коротка";
-$LOCA["fr"]["ALLY_MISC_CHANGE_TAG_EXISTS"] = "Альянс #1 к сожалению уже существует!";
-$LOCA["fr"]["ALLY_MISC_CONFIRM"] = "Подтвердить";
-$LOCA["fr"]["ALLY_MISC_CHANGE_TAG_SUCCESS"] = "Альянс с аббревиатурой \"#1\" имеет теперь аббревиатуру \"#2\"";
-$LOCA["fr"]["ALLY_MISC_CHANGE_OK"] = "Ok";
-$LOCA["fr"]["ALLY_MISC_CHANGE_TAG_HEAD"] = "Как следует переименовать альянс \"#1\"?";
-$LOCA["fr"]["ALLY_MISC_CHANGE_TAG_NEW"] = "Новая аббревиатура: #1";
-$LOCA["fr"]["ALLY_MISC_CHANGE_RENAME"] = "Переименовать";
-$LOCA["fr"]["ALLY_MISC_CHANGE_NAME_SHORT"] = "Название альянса слишком короткое";
-$LOCA["fr"]["ALLY_MISC_CHANGE_NAME_SUCCESS"] = "Альянс \"#1\" переименован в \"#2\"";
-$LOCA["fr"]["ALLY_MISC_CHANGE_NAME_HEAD"] = "Как следует переименовать альянс \"#1\"?";
-$LOCA["fr"]["ALLY_MISC_CHANGE_NAME_NEW"] = "Новое название:";
+$LOCA["fr"]["ALLY_MISC_LEAVE_CONFIRM"] = "Voulez-vous vraiment quitter l'alliance « #1 » ?";
+$LOCA["fr"]["ALLY_MISC_CHANGE_WAIT"] = "Attendez jusqu'à #1";
+$LOCA["fr"]["ALLY_MISC_CHANGE_TAG_SHORT"] = "L'abréviation de l'alliance est trop courte";
+$LOCA["fr"]["ALLY_MISC_CHANGE_TAG_EXISTS"] = "L'alliance #1 existe malheureusement déjà !";
+$LOCA["fr"]["ALLY_MISC_CONFIRM"] = "Confirmer";
+$LOCA["fr"]["ALLY_MISC_CHANGE_TAG_SUCCESS"] = "L'alliance avec l'abréviation « #1 » porte désormais l'abréviation « #2 »";
+$LOCA["fr"]["ALLY_MISC_CHANGE_OK"] = "OK";
+$LOCA["fr"]["ALLY_MISC_CHANGE_TAG_HEAD"] = "Comment renommer l'alliance « #1 » ?";
+$LOCA["fr"]["ALLY_MISC_CHANGE_TAG_NEW"] = "Nouvelle abréviation : #1.";
+$LOCA["fr"]["ALLY_MISC_CHANGE_RENAME"] = "Renommer";
+$LOCA["fr"]["ALLY_MISC_CHANGE_NAME_SHORT"] = "Le nom de l'alliance est trop court";
+$LOCA["fr"]["ALLY_MISC_CHANGE_NAME_SUCCESS"] = "L'alliance « #1 » a été renommée en « #2 »";
+$LOCA["fr"]["ALLY_MISC_CHANGE_NAME_HEAD"] = "Comment renommer l'alliance « #1 » ?";
+$LOCA["fr"]["ALLY_MISC_CHANGE_NAME_NEW"] = "Nouveau nom :";
 
-$LOCA["fr"]["ALLY_MISC_DISMISS_SUCCESS"] = "Альянс был распущен.";
-$LOCA["fr"]["ALLY_MISC_DISMISS_OK"] = "Ok";
-$LOCA["fr"]["ALLY_MISC_DISMISS_CONFIRM"] = "Вы действительно хотите распустить \"#1\" альянс?";
-$LOCA["fr"]["ALLY_MISC_DISMISS_WARNING1"] = "Внимание!";
-$LOCA["fr"]["ALLY_MISC_DISMISS_WARNING2"] = "Восстановление альянса будет невозможно<br>\nи все его члены покинут его!";
-$LOCA["fr"]["ALLY_MISC_YES_FOR_SURE"] = "Да, хочу!";
+$LOCA["fr"]["ALLY_MISC_DISMISS_SUCCESS"] = "L'alliance a été dissoute.";
+$LOCA["fr"]["ALLY_MISC_DISMISS_OK"] = "OK";
+$LOCA["fr"]["ALLY_MISC_DISMISS_CONFIRM"] = "Voulez-vous vraiment dissoudre l'alliance « #1 » ?";
+$LOCA["fr"]["ALLY_MISC_DISMISS_WARNING1"] = "Attention !";
+$LOCA["fr"]["ALLY_MISC_DISMISS_WARNING2"] = "La reconstitution de l'alliance sera impossible<br>\net tous ses membres la quitteront !";
+$LOCA["fr"]["ALLY_MISC_YES_FOR_SURE"] = "Oui, je le veux !";
 
-$LOCA["fr"]["ALLY_MISC_TAKEOVER_SUCCESS"] = "Вы утратили свой статус";
-$LOCA["fr"]["ALLY_MISC_TAKEOVER_TAKEN"] = "Звание передано";
-$LOCA["fr"]["ALLY_MISC_TAKEOVER_STILL_ACTIVE"] = "Глава ещё активен";
-$LOCA["fr"]["ALLY_MISC_TAKEOVER_BACK"] = "Назад";
+$LOCA["fr"]["ALLY_MISC_TAKEOVER_SUCCESS"] = "Vous avez perdu votre statut.";
+$LOCA["fr"]["ALLY_MISC_TAKEOVER_TAKEN"] = "Rang transféré";
+$LOCA["fr"]["ALLY_MISC_TAKEOVER_STILL_ACTIVE"] = "Le chef est toujours actif";
+$LOCA["fr"]["ALLY_MISC_TAKEOVER_BACK"] = "Retour";
 $LOCA["fr"]["ALLY_MISC_TAKEOVER_OK"] = "OK";
-$LOCA["fr"]["ALLY_MISC_TAKEOVER_HEAD"] = "Перенять руководство над \"#1\"";
-$LOCA["fr"]["ALLY_MISC_TAKEOVER_WHO"] = "Передача звания";
-$LOCA["fr"]["ALLY_MISC_TAKEOVER_RANK"] = "Ранг: #1";
-$LOCA["fr"]["ALLY_MISC_TAKEOVER_SUBMIT"] = "Передать";
+$LOCA["fr"]["ALLY_MISC_TAKEOVER_HEAD"] = "Reprendre la direction de « #1 »";
+$LOCA["fr"]["ALLY_MISC_TAKEOVER_WHO"] = "Transférer le rang";
+$LOCA["fr"]["ALLY_MISC_TAKEOVER_RANK"] = "Rang : #1";
+$LOCA["fr"]["ALLY_MISC_TAKEOVER_SUBMIT"] = "Transférer";
 
-// Сообщения альянса
+// Messages de l'alliance
 
-$LOCA["fr"]["ALLY_MSG_FROM"] = "Альянс [#1]";
-$LOCA["fr"]["ALLY_MSG_CIRC_SUBJ"] = "Общее послание Вашему альянсу [#1]";
-$LOCA["fr"]["ALLY_MSG_CIRC_TEXT"] = "Игрок #1 сообщает Вам следующее:<br>#2";
-$LOCA["fr"]["ALLY_MSG_COMMON"] = "Общее сообщение";
-$LOCA["fr"]["ALLY_MSG_KICK_TEXT"] = "Игрок #1 исключён из альянса.";
-$LOCA["fr"]["ALLY_MSG_KICK_SUBJ"] = "Членство в альянсе [#1] окончено";
-$LOCA["fr"]["ALLY_MSG_YOU_KICKED"] = "Игрок #1 исключает Вас из альянса [#2] .<br>Теперь Вы можете зарегистрироваться снова";
-$LOCA["fr"]["ALLY_MSG_LEAVE"] = "Игрок #1 покинул альянс.";
-$LOCA["fr"]["ALLY_MSG_DISMISS_SUBJ"] = "Членство в альянсе[#1]окончено";
-$LOCA["fr"]["ALLY_MSG_DISMISS"] = "Игрок #1 распустил альянс [#2].<br>Теперь Вы можете вступить в другой альянс или создать свой собственный";
-$LOCA["fr"]["ALLY_MSG_TAKEOVER_SUBJ"] = "Смена власти в альянсе [#1]";
-$LOCA["fr"]["ALLY_MSG_TAKEOVER"] = "Игрок #1, обладающий титулом основателя альянса, покинул его";
-$LOCA["fr"]["ALLY_MSG_APPLY_ALLY"] = "Игрок #1 был принят в наш альянс.";
-$LOCA["fr"]["ALLY_MSG_APPLY_YES"] = "Регистрация [#1] принята";
-$LOCA["fr"]["ALLY_MSG_APPLY_PLAYER"] = "Сердечно поздравляем, Вы теперь член альянса [#1]";
-$LOCA["fr"]["ALLY_MSG_APPLY_NO"] = "Регистрация [#1] отклонена";
-$LOCA["fr"]["ALLY_MSG_APPLY_NO_REASON"] = "-причина не указана-";
+$LOCA["fr"]["ALLY_MSG_FROM"] = "Alliance [#1]";
+$LOCA["fr"]["ALLY_MSG_CIRC_SUBJ"] = "Message général à votre alliance [#1]";
+$LOCA["fr"]["ALLY_MSG_CIRC_TEXT"] = "Le joueur #1 vous informe de ce qui suit :<br>#2";
+$LOCA["fr"]["ALLY_MSG_COMMON"] = "Message général";
+$LOCA["fr"]["ALLY_MSG_KICK_TEXT"] = "Le joueur #1 a été exclu de l'alliance.";
+$LOCA["fr"]["ALLY_MSG_KICK_SUBJ"] = "L'adhésion à l'alliance [#1] est terminée.";
+$LOCA["fr"]["ALLY_MSG_YOU_KICKED"] = "Le joueur #1 vous a exclu de l'alliance [#2].<br>Vous pouvez maintenant vous réinscrire.";
+$LOCA["fr"]["ALLY_MSG_LEAVE"] = "Le joueur #1 a quitté l'alliance.";
+$LOCA["fr"]["ALLY_MSG_DISMISS_SUBJ"] = "L'adhésion à l'alliance [#1] a pris fin.";
+$LOCA["fr"]["ALLY_MSG_DISMISS"] = "Le joueur #1 a dissous l'alliance [#2].<br>Vous pouvez maintenant rejoindre une autre alliance ou en créer une nouvelle";
+$LOCA["fr"]["ALLY_MSG_TAKEOVER_SUBJ"] = "Un changement de pouvoir dans l'alliance [#1].";
+$LOCA["fr"]["ALLY_MSG_TAKEOVER"] = "Le joueur #1, qui détenait le titre de fondateur de l'alliance, a quitté l'alliance";
+$LOCA["fr"]["ALLY_MSG_APPLY_ALLY"] = "Le joueur #1 a été accepté dans notre alliance.";
+$LOCA["fr"]["ALLY_MSG_APPLY_YES"] = "La candidature [#1] a été acceptée.";
+$LOCA["fr"]["ALLY_MSG_APPLY_PLAYER"] = "Félicitations, vous êtes maintenant membre de l'alliance [#1].";
+$LOCA["fr"]["ALLY_MSG_APPLY_NO"] = "Candidature [#1] rejetée.";
+$LOCA["fr"]["ALLY_MSG_APPLY_NO_REASON"] = "-raison non précisée-";
 
-// bewerben (App for User)
+// postuler (candidature pour l'utilisateur)
 
-$LOCA["fr"]["ALLY_APPU_NOT_ACTIVATED"] = "Эта функция возможна только после активации учетной записи игрока.";
-$LOCA["fr"]["ALLY_APPU_TEMPLATE_MISSING"] = "Управление альянса не предоставило образца";
-$LOCA["fr"]["ALLY_APPU_TEMPLATE"] = "Образец";
-$LOCA["fr"]["ALLY_APPU_SUBMIT"] = "Отправить";
-$LOCA["fr"]["ALLY_APPU_REG"] = "Регистрироваться";
-$LOCA["fr"]["ALLY_APPU_SUBMITTED"] = "Ваше заявление сохранено. Вы получите ответ в случае принятия или отклонения.";
-$LOCA["fr"]["ALLY_APPU_TITLE"] = "Заявка в альянс [#1] написать";
-$LOCA["fr"]["ALLY_APPU_TEXT"] = "Сообщение (#1 / #2 символов)";
-$LOCA["fr"]["ALLY_APPU_HINT"] = "Маленькая помощь";
-$LOCA["fr"]["ALLY_APPU_FORBIDDEN"] = "Подать заявку в альянс [#1] невозможно";
-$LOCA["fr"]["ALLY_APPU_CLOSED"] = "Этот альянс сейчас не принимает новых членов";
-$LOCA["fr"]["ALLY_APPU_BACK"] = "Назад";
+$LOCA["fr"]["ALLY_APPU_NOT_ACTIVATED"] = "Cette fonction n'est possible qu'après l'activation du compte du joueur.";
+$LOCA["fr"]["ALLY_APPU_TEMPLATE_MISSING"] = "La direction de l'alliance n'a pas fourni d'exemple.";
+$LOCA["fr"]["ALLY_APPU_TEMPLATE"] = "Exemple";
+$LOCA["fr"]["ALLY_APPU_SUBMIT"] = "Envoyer";
+$LOCA["fr"]["ALLY_APPU_REG"] = "S'inscrire";
+$LOCA["fr"]["ALLY_APPU_SUBMITTED"] = "Votre candidature a été enregistrée. Vous recevrez une réponse qu'elle soit acceptée ou rejetée.";
+$LOCA["fr"]["ALLY_APPU_TITLE"] = "Écrire une candidature à l'alliance [#1]";
+$LOCA["fr"]["ALLY_APPU_TEXT"] = "Message (#1 / #2 caractères)";
+$LOCA["fr"]["ALLY_APPU_HINT"] = "Petite aide";
+$LOCA["fr"]["ALLY_APPU_FORBIDDEN"] = "Il n'est pas possible de postuler à l'alliance [#1]";
+$LOCA["fr"]["ALLY_APPU_CLOSED"] = "Cette alliance n'accepte pas de nouveaux membres pour le moment";
+$LOCA["fr"]["ALLY_APPU_BACK"] = "Retour";
 $LOCA["fr"]["ALLY_APPU_OK"] = "OK";
 
-// bewebungen (App for Ally)
+// candidatures (pour l'alliance)
 
-$LOCA["fr"]["ALLY_APPA_ACCEPT"] = "Принять";
-$LOCA["fr"]["ALLY_APPA_REJECT"] = "Отклонить";
-$LOCA["fr"]["ALLY_APPA_FROM"] = "Заявление от #1";
-$LOCA["fr"]["ALLY_APPA_ACTION"] = "Реакция на это заявление";
-$LOCA["fr"]["ALLY_APPA_REASON"] = "Причина (по желанию) #1 / #2 символов";
-$LOCA["fr"]["ALLY_APPA_AVAILABLE"] = "В наличии #1 заявлений. Нажмите на имя желаемого игрока, чтобы просмотреть его сообщение";
-$LOCA["fr"]["ALLY_APPA_USER"] = "Заявитель";
-$LOCA["fr"]["ALLY_APPA_DATE"] = "Дата заявления";
-$LOCA["fr"]["ALLY_APPA_OVERVIEW"] = "Обзор регистрации в этом альянсе [#1]";
-$LOCA["fr"]["ALLY_APPA_NONE"] = "Больше заявлений нет";
+$LOCA["fr"]["ALLY_APPA_ACCEPT"] = "Accepter";
+$LOCA["fr"]["ALLY_APPA_REJECT"] = "Refuser";
+$LOCA["fr"]["ALLY_APPA_FROM"] = "Candidature de #1";
+$LOCA["fr"]["ALLY_APPA_ACTION"] = "Réponse à cette candidature";
+$LOCA["fr"]["ALLY_APPA_REASON"] = "Raison (facultative) #1 / #2 caractères";
+$LOCA["fr"]["ALLY_APPA_AVAILABLE"] = "#1 candidatures disponibles. Cliquez sur le nom du joueur souhaité pour voir son message.";
+$LOCA["fr"]["ALLY_APPA_USER"] = "Candidat";
+$LOCA["fr"]["ALLY_APPA_DATE"] = "Date de la candidature";
+$LOCA["fr"]["ALLY_APPA_OVERVIEW"] = "Aperçu des candidatures à cette alliance [#1].";
+$LOCA["fr"]["ALLY_APPA_NONE"] = "Plus aucune candidature.";
 
 ?>

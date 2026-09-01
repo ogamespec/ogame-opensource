@@ -3,17 +3,17 @@
 // La flotte.
 
 $LOCA["fr"]["FLEET_PLANETTYPE_1"] = "planète";       	// TODO: Not sure
-$LOCA["fr"]["FLEET_PLANETTYPE_2"] = "champs de débris";  		// TODO: Not sure
+$LOCA["fr"]["FLEET_PLANETTYPE_2"] = "champ de débris";  		// TODO: Not sure
 $LOCA["fr"]["FLEET_PLANETTYPE_3"] = "lune"; 			// TODO: Not sure
 
 // flotten1
 
-$LOCA["fr"]["FLEET1_HOLD"] = "На планете";  			// TODO
-$LOCA["fr"]["FLEET1_HOLD_SHORT"] = "(Д)";  		// TODO
+$LOCA["fr"]["FLEET1_HOLD"] = "Sur la planète";  			// TODO
+$LOCA["fr"]["FLEET1_HOLD_SHORT"] = "(A)";  		// TODO
 $LOCA["fr"]["FLEET1_RETURN"] = "La flotte rentre à la maison";
-$LOCA["fr"]["FLEET1_RETURN_SHORT"] = "(F)";
+$LOCA["fr"]["FLEET1_RETURN_SHORT"] = "(R)";
 $LOCA["fr"]["FLEET1_FLYING"] = "Partir en mission";  		// TODO
-$LOCA["fr"]["FLEET1_FLYING_SHORT"] = "(У)";  			// TODO
+$LOCA["fr"]["FLEET1_FLYING_SHORT"] = "(M)";  			// TODO
 
 $LOCA["fr"]["FLEET1_FLEETS"] = "Flottes #1 / #2";
 $LOCA["fr"]["FLEET1_EXPEDITIONS"] = "#1/#2 Expéditions";
@@ -31,7 +31,7 @@ $LOCA["fr"]["FLEET1_BUTTON_ACS"] = "Alliance";
 $LOCA["fr"]["FLEET1_BUTTON_RECALL"] = "Rappeler";
 
 $LOCA["fr"]["FLEET1_ACS_NAME"] = "Alliance #1";
-$LOCA["fr"]["FLEET1_ACS_TITLE"] = "Changer le nom de l’alliance";
+$LOCA["fr"]["FLEET1_ACS_TITLE"] = "Changer le nom de l'alliance";
 $LOCA["fr"]["FLEET1_ACS_PLAYERS"] = "Participants invités";
 $LOCA["fr"]["FLEET1_ACS_INVITE"] = "Inviter un membre";
 
@@ -42,6 +42,7 @@ $LOCA["fr"]["FLEET1_AMOUNT"] = "Disponible";
 $LOCA["fr"]["FLEET1_SPEED"] = "Vitesse";
 $LOCA["fr"]["FLEET1_CLEAR"] = "Aucun vaisseau";
 $LOCA["fr"]["FLEET1_ALL_SHIPS"] = "Tous les vaisseaux";
+$LOCA["fr"]["FLEET1_ALL"] = "Tout";
 $LOCA["fr"]["FLEET1_TEMPLATE"] = "Flottes standard";  	// TODO: Not sure
 $LOCA["fr"]["FLEET1_NEXT"] = "suivant";
 
@@ -56,79 +57,80 @@ $LOCA["fr"]["FLEET2_CONS"] = "Consommation de carburant";
 $LOCA["fr"]["FLEET2_MAX_SPEED"] = "Vitesse maximale";
 $LOCA["fr"]["FLEET2_CARGO"] = "Capacité de transport";
 $LOCA["fr"]["FLEET2_HEAD_PLANETS"] = "Planète";
-$LOCA["fr"]["FLEET2_HEAD_ACS"] = "Боевые союзы  ";
+$LOCA["fr"]["FLEET2_HEAD_ACS"] = "Alliances de combat  ";
 $LOCA["fr"]["FLEET2_NEXT"] = "Suivant";
 
 // TODO: flotten3
 
 $LOCA["fr"]["FLEET3_ORDER"] = "Ordre";
-$LOCA["fr"]["FLEET3_NO_ORDER"] = "Il n’y a pas d'ordre approprié";
-$LOCA["fr"]["FLEET3_EXP_WARNING"] = "ВНИМАНИЕ! Экспедиция - очень рискованная миссия, не предназначенная для сэйва.";
+$LOCA["fr"]["FLEET3_NO_ORDER"] = "Il n'y a pas d'ordre approprié";
+$LOCA["fr"]["FLEET3_EXP_WARNING"] = "ATTENTION ! L'expédition est une mission très risquée, pas une partie de plaisir.";
 $LOCA["fr"]["FLEET3_RESOURCES"] = "Ressources";
 $LOCA["fr"]["FLEET3_RES_LEFT"] = "Reste";
 $LOCA["fr"]["FLEET3_RES_ALL"] = "Toutes les ressources";
-$LOCA["fr"]["FLEET3_ACS"] = "Боевые союзы";
+$LOCA["fr"]["FLEET3_ACS"] = "Alliances de combat";
 $LOCA["fr"]["FLEET3_HOLD_TIME"] = "Durée";
 $LOCA["fr"]["FLEET3_HOLD_HOURS"] = "Temps en heures";
 $LOCA["fr"]["FLEET3_NEXT"] = "Suivant";
 
 // fleet_template
 
-$LOCA["fr"]["FLEET_TEMP_TITLE_MAX"] = "Стандартные флоты (макс. #1)";
-$LOCA["fr"]["FLEET_TEMP_NAME"] = "Название";
-$LOCA["fr"]["FLEET_TEMP_UPDATE"] = "Обработать";
-$LOCA["fr"]["FLEET_TEMP_DELETE"] = "Удалить";
-$LOCA["fr"]["FLEET_TEMP_CREATE"] = "Создать новый стандартный флот";
-$LOCA["fr"]["FLEET_TEMP_SAVE"] = "Сохранить";
+$LOCA["fr"]["FLEET_TEMP_TITLE_MAX"] = "Flottes standard (max. #1)";
+$LOCA["fr"]["FLEET_TEMP_NAME"] = "Nom";
+$LOCA["fr"]["FLEET_TEMP_UPDATE"] = "Traiter";
+$LOCA["fr"]["FLEET_TEMP_DELETE"] = "Supprimer";
+$LOCA["fr"]["FLEET_TEMP_CREATE"] = "Créer une nouvelle flotte standard";
+$LOCA["fr"]["FLEET_TEMP_SAVE"] = "Enregistrer";
 
 // flottenversand
 
-$LOCA["fr"]["FLEET_ERR_FREEZE"] = "Невозможно отправить флот, Вселенная поставлена на паузу.";
-$LOCA["fr"]["FLEET_ERR_SAME_PLANET"] = "И как ты это себе представляешь?";
-$LOCA["fr"]["FLEET_ERR_INVALID"] = "Планета необитаема либо должна быть колонизирована!";
-$LOCA["fr"]["FLEET_ERR_VACATION_SELF"] = "Находясь в режиме отпуска нельзя отправлять флот!";
-$LOCA["fr"]["FLEET_ERR_VACATION_OTHER"] = "Этот игрок находится в режиме отпуска!";
-$LOCA["fr"]["FLEET_ERR_MAX_FLEET"] = "Достигнута максимальная численность флотов";
-$LOCA["fr"]["FLEET_ERR_IP"] = "Невозможно приблизиться к игроку!";
-$LOCA["fr"]["FLEET_ERR_FUEL"] = "Недостаточно топлива!";
-$LOCA["fr"]["FLEET_ERR_CARGO"] = "Недостаточно места в грузовом отсеке!";
-$LOCA["fr"]["FLEET_ERR_NO_SHIPS"] = "Вы не выбрали корабли либо выбрали, но слишком мало!";
-$LOCA["fr"]["FLEET_ERR_NOOB"] = "Планета находится под защитой для новичков!";
-$LOCA["fr"]["FLEET_ERR_OWN_PLANET"] = "Невозможно напасть на собственную планету!";
-$LOCA["fr"]["FLEET_ERR_ATTACK_BAN_UNI"] = "Запрет на атаки";
-$LOCA["fr"]["FLEET_ERR_ATTACK_BAN_PLAYER"] = "Запрет на атаки до #1";
-$LOCA["fr"]["FLEET_ERR_ACS_OTHER"] = "Вы не приглашены в этот альянс";
-$LOCA["fr"]["FLEET_ERR_ACS_SLOW"] = "Вы слишком медленны, чтобы присоединиться к этому флоту";
-$LOCA["fr"]["FLEET_ERR_ACS_LIMIT"] = "Атаковать флоты (>#1 флотов нельзя)";
-$LOCA["fr"]["FLEET_ERR_DEPLOY_OTHER"] = "Флоты можно располагать только на собственной планете!";
-$LOCA["fr"]["FLEET_ERR_HOLD_FLEET_LIMIT"] = "Задерживаться могут только #1 Удерживать флоты!";
-$LOCA["fr"]["FLEET_ERR_HOLD_PLAYER_LIMIT"] = "Задерживаться могут только #1 игроков!";
-$LOCA["fr"]["FLEET_ERR_HOLD_ALLY"] = "Задерживаться можно только у друзей и коллег по альянсу!";
-$LOCA["fr"]["FLEET_ERR_SPY_OWN"] = "Нельзя шпионить на собственной планете!";
-$LOCA["fr"]["FLEET_ERR_SPY_NOOB"] = "На этой планете нельзя шпионить из-за защиты для новичков!";
-$LOCA["fr"]["FLEET_ERR_SPY_REQUIRED"] = "Для шпионажа необходимы шпионские зонды.";
-$LOCA["fr"]["FLEET_ERR_COLONY_REQUIRED"] = "Для колонизации надо послать колонизаторы!";
-$LOCA["fr"]["FLEET_ERR_COLONY_EXISTS"] = "Планета уже заселена!";
-$LOCA["fr"]["FLEET_ERR_RECYCLE_REQUIRED"] = "Для переработки надо послать переработчик!";
-$LOCA["fr"]["FLEET_ERR_RECYCLE_DF"] = "При переработке можно приближаться только к полям обломков!";
-$LOCA["fr"]["FLEET_ERR_DESTROY_REQUIRED"] = "Для уничтожения луны необходима звезда смерти.";
-$LOCA["fr"]["FLEET_ERR_DESTROY_MOON"] = "Уничтожать можно только луны!";
-$LOCA["fr"]["FLEET_ERR_EXP_LIMIT"] = "Слишком много одновременных экспедиций";
-$LOCA["fr"]["FLEET_ERR_EXP_REQUIRED"] = "Экспедиция должна состоять как минимум из одного управляемого людьми корабля.";
-$LOCA["fr"]["FLEET_ERR_EXP_INVALID"] = "Цель экспедиции недействительна!";
-$LOCA["fr"]["FLEET_ERR_ORDER"] = "Необходимо выбрать задание!";
+$LOCA["fr"]["FLEET_ERR_FREEZE"] = "Impossible d'envoyer une flotte, l'univers a été mis en pause.";
+$LOCA["fr"]["FLEET_ERR_SAME_PLANET"] = "Et comment imaginez-vous cela ?";
+$LOCA["fr"]["FLEET_ERR_INVALID"] = "La planète est inhabitée ou doit être colonisée !";
+$LOCA["fr"]["FLEET_ERR_VACATION_SELF"] = "En mode vacances, vous ne pouvez pas envoyer de flotte !";
+$LOCA["fr"]["FLEET_ERR_VACATION_OTHER"] = "Ce joueur est en mode vacances !";
+$LOCA["fr"]["FLEET_ERR_MAX_FLEET"] = "Nombre maximum de flottes atteint";
+$LOCA["fr"]["FLEET_ERR_IP"] = "Impossible de s'approcher du joueur !";
+$LOCA["fr"]["FLEET_ERR_FUEL"] = "Pas assez de carburant !";
+$LOCA["fr"]["FLEET_ERR_CARGO"] = "Pas assez de place dans la soute !";
+$LOCA["fr"]["FLEET_ERR_NO_SHIPS"] = "Vous n'avez pas choisi de vaisseaux ou vous en avez choisi trop peu !";
+$LOCA["fr"]["FLEET_ERR_NOOB"] = "La planète est protégée par le bouclier du débutant !";
+$LOCA["fr"]["FLEET_ERR_OWN_PLANET"] = "Il est impossible d'attaquer votre propre planète !";
+$LOCA["fr"]["FLEET_ERR_ATTACK_BAN_UNI"] = "Interdiction d'attaques";
+$LOCA["fr"]["FLEET_ERR_ATTACK_BAN_PLAYER"] = "Attaques interdites jusqu'au #1";
+$LOCA["fr"]["FLEET_ERR_ACS_OTHER"] = "Vous n'êtes pas invité dans cette alliance";
+$LOCA["fr"]["FLEET_ERR_ACS_SLOW"] = "Vous êtes trop lent pour rejoindre cette flotte";
+$LOCA["fr"]["FLEET_ERR_ACS_LIMIT"] = "Attaques de flottes (>#1 flottes non autorisées)";
+$LOCA["fr"]["FLEET_ERR_DEPLOY_OTHER"] = "Les flottes ne peuvent être stationnées que sur leur propre planète !";
+$LOCA["fr"]["FLEET_ERR_HOLD_FLEET_LIMIT"] = "Seulement #1 flottes peuvent être maintenues !";
+$LOCA["fr"]["FLEET_ERR_HOLD_PLAYER_LIMIT"] = "Seulement #1 joueurs peuvent être maintenus !";
+$LOCA["fr"]["FLEET_ERR_HOLD_ALLY"] = "Vous ne pouvez tenir que chez des amis et des membres de votre alliance !";
+$LOCA["fr"]["FLEET_ERR_SPY_OWN"] = "Vous ne pouvez pas espionner votre propre planète !";
+$LOCA["fr"]["FLEET_ERR_SPY_NOOB"] = "Vous ne pouvez pas espionner cette planète à cause de la protection des débutants !";
+$LOCA["fr"]["FLEET_ERR_SPY_REQUIRED"] = "Des sondes d'espionnage sont requises pour espionner.";
+$LOCA["fr"]["FLEET_ERR_COLONY_REQUIRED"] = "Vous devez envoyer des vaisseaux de colonisation pour coloniser !";
+$LOCA["fr"]["FLEET_ERR_COLONY_EXISTS"] = "La planète est déjà habitée !";
+$LOCA["fr"]["FLEET_ERR_RECYCLE_REQUIRED"] = "Vous devez envoyer un recycleur pour recycler !";
+$LOCA["fr"]["FLEET_ERR_RECYCLE_DF"] = "Vous ne pouvez approcher que les champs de débris lors du recyclage !";
+$LOCA["fr"]["FLEET_ERR_DESTROY_REQUIRED"] = "Une étoile de la mort est requise pour détruire la lune.";
+$LOCA["fr"]["FLEET_ERR_DESTROY_MOON"] = "Seules les lunes peuvent être détruites !";
+$LOCA["fr"]["FLEET_ERR_EXP_LIMIT"] = "Trop d'expéditions simultanées";
+$LOCA["fr"]["FLEET_ERR_EXP_REQUIRED"] = "L'expédition doit comprendre au moins un vaisseau contrôlé par un humain.";
+$LOCA["fr"]["FLEET_ERR_EXP_INVALID"] = "Le but de l'expédition est invalide !";
+$LOCA["fr"]["FLEET_ERR_ORDER"] = "Vous devez choisir une mission !";
+$LOCA["fr"]["FLEET_ERR_BATTLE_MAX"] = "Limite d'unités atteinte !";
 
-$LOCA["fr"]["FLEET_SEND_ERROR"] = " Флот не удалось отправить!";
+$LOCA["fr"]["FLEET_SEND_ERROR"] = " La flotte n'a pas pu être envoyée !";
 
-$LOCA["fr"]["FLEET_SEND_DONE"] = "Флот отправлен:";
-$LOCA["fr"]["FLEET_SEND_MISSION"] = "Задание";
-$LOCA["fr"]["FLEET_SEND_DIST"] = "Расстояние";
-$LOCA["fr"]["FLEET_SEND_SPEED"] = "Скорость";
-$LOCA["fr"]["FLEET_SEND_CONS"] = "Потребление";
-$LOCA["fr"]["FLEET_SEND_ORIGIN"] = "Отправлен с";
-$LOCA["fr"]["FLEET_SEND_TARGET"] = "Отправлен на";
-$LOCA["fr"]["FLEET_SEND_ARRIVE"] = "Время прибытия";
-$LOCA["fr"]["FLEET_SEND_RETURN"] = "Время возврата";
-$LOCA["fr"]["FLEET_SEND_SHIPS"] = "Корабли";
+$LOCA["fr"]["FLEET_SEND_DONE"] = "Flotte envoyée :";
+$LOCA["fr"]["FLEET_SEND_MISSION"] = "Mission";
+$LOCA["fr"]["FLEET_SEND_DIST"] = "Distance";
+$LOCA["fr"]["FLEET_SEND_SPEED"] = "Vitesse";
+$LOCA["fr"]["FLEET_SEND_CONS"] = "Consommation";
+$LOCA["fr"]["FLEET_SEND_ORIGIN"] = "Envoyé de";
+$LOCA["fr"]["FLEET_SEND_TARGET"] = "Envoyé vers";
+$LOCA["fr"]["FLEET_SEND_ARRIVE"] = "Heure d'arrivée";
+$LOCA["fr"]["FLEET_SEND_RETURN"] = "Heure de retour";
+$LOCA["fr"]["FLEET_SEND_SHIPS"] = "Vaisseaux";
 
 ?>

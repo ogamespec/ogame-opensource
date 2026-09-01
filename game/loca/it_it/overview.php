@@ -2,7 +2,7 @@
 
 // Panoramica.
 
-$LOCA["it"]["OVERVIEW_PLANET_MENU"] = "Planet menu";
+$LOCA["it"]["OVERVIEW_PLANET_MENU"] = "Menu del pianeta";
 $LOCA["it"]["OVERVIEW_PLANET"] = "Pianeta \"#1\"";
 $LOCA["it"]["OVERVIEW_MOON"] = "Luna \"#1\" in orbita su [#2:#3:#4]";
 $LOCA["it"]["OVERVIEW_NEWMSG"] = "Hai #1 nuovo(i) messaggio(i) ";

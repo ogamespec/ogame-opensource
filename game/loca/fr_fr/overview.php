@@ -9,7 +9,7 @@ $LOCA["fr"]["OVERVIEW_NEWMSG"] = "Vous avez #1 nouveau message #2";
 $LOCA["fr"]["OVERVIEW_MSGS"] = "s";
 $LOCA["fr"]["OVERVIEW_TIME"] = "Temps serveur";
 $LOCA["fr"]["OVERVIEW_EVENTS"] = "Evènements";
-$LOCA["fr"]["OVERVIEW_DIAM"] = "Diamètre </th><th colspan=3>#1 км";
+$LOCA["fr"]["OVERVIEW_DIAM"] = "Diamètre </th><th colspan=3>#1 km";
 $LOCA["fr"]["OVERVIEW_FIELDS"] = "(<a title=\"Domaines développés\">#1 </a> / <a title=\"max. domaines développés\">#2 </a> domaines)";
 $LOCA["fr"]["OVERVIEW_TEMP"] = "Température </th> <th colspan=3>approx. #1°C à #2°C</th> </tr>";
 $LOCA["fr"]["OVERVIEW_COORD"] = "Position</th><th colspan=3>#1</th></tr>";

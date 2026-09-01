@@ -2,7 +2,7 @@
 
 // Buddylist
 
-$LOCA["de"]["BUDDY_LIST"] = "Buddylist";
+$LOCA["de"]["BUDDY_LIST"] = "Buddy-Liste";
 $LOCA["de"]["BUDDY_REQUESTS"] = "Anfragen";
 $LOCA["de"]["BUDDY_YOUR_REQUESTS"] = "Eigene Anfragen";
 $LOCA["de"]["BUDDY_NAME"] = "Name";
@@ -11,7 +11,7 @@ $LOCA["de"]["BUDDY_COORD"] = "Koord";
 $LOCA["de"]["BUDDY_STATUS"] = "Status";
 $LOCA["de"]["BUDDY_NONE"] = "Keine Einträge";
 $LOCA["de"]["BUDDY_DELETE"] = "Löschen";
-$LOCA["de"]["BUDDY_USER"] = "User";
+$LOCA["de"]["BUDDY_USER"] = "Benutzer";
 $LOCA["de"]["BUDDY_TEXT"] = "Text";
 $LOCA["de"]["BUDDY_NO_REQUESTS"] = "Keine Einträge";
 $LOCA["de"]["BUDDY_APPLY"] = "Annehmen";
