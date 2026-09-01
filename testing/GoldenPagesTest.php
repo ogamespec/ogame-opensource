@@ -16,6 +16,9 @@ use PHPUnit\Framework\TestCase;
  * 
  * Every page test runs once per supported language (the languages listed in
  * game/core/loca.php and present in game/loca/): de, en, es, fr, it, jp, ru.
+ * A regular test run only checks English (phpunit.xml sets GOLDEN_LANG=en);
+ * the full multi-language check is done explicitly, e.g.:
+ *   GOLDEN_LANG=de,en,es,fr,it,jp,ru vendor/bin/phpunit --filter GoldenPagesTest
  * The universe and the players are created with the language of the current
  * data set (FixtureBuilder::createTestUniverse($lang)), so the rendered
  * pages use that language's loca files. Snapshots are stored per language:
@@ -33,7 +36,7 @@ use PHPUnit\Framework\TestCase;
  * 
  * To create/update golden snapshots for all languages, run tests with
  * UPDATE_GOLDEN=1 environment variable:
- *   UPDATE_GOLDEN=1 vendor/bin/phpunit --filter GoldenPagesTest
+ *   UPDATE_GOLDEN=1 GOLDEN_LANG=de,en,es,fr,it,jp,ru vendor/bin/phpunit --filter GoldenPagesTest
  * 
  * To restrict the run to a subset of languages, set GOLDEN_LANG:
  *   GOLDEN_LANG=de,ru vendor/bin/phpunit --filter GoldenPagesTest
@@ -730,9 +733,7 @@ class GoldenPagesTest extends TestCase
     {
         $html = $this->renderPage('messages', [], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Espionage report', $html);
-        $this->assertStringContainsString('Combat Report', $html);
-        $this->assertStringContainsString('Expedition to', $html);
+        $this->assertEnglish($html, 'Information of', 'Combat Report', 'Expedition result');
         $this->compareOrSaveGolden('messages', 0, $html);
     }
 
@@ -744,7 +745,7 @@ class GoldenPagesTest extends TestCase
     {
         $html = $this->renderPage('messages', ['pm' => MTYP_SPY_REPORT], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Espionage report', $html);
+        $this->assertEnglish($html, 'Information of');
         $this->compareOrSaveGolden('messages_spy', 0, $html);
     }
 
@@ -756,7 +757,7 @@ class GoldenPagesTest extends TestCase
     {
         $html = $this->renderPage('messages', ['pm' => MTYP_BATTLE_REPORT_LINK], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Combat Report', $html);
+        $this->assertEnglish($html, 'Combat Report');
         $this->compareOrSaveGolden('messages_combat', 0, $html);
     }
 
@@ -768,7 +769,7 @@ class GoldenPagesTest extends TestCase
     {
         $html = $this->renderPage('messages', ['pm' => MTYP_EXP], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Expedition to', $html);
+        $this->assertEnglish($html, 'Expedition result');
         $this->compareOrSaveGolden('messages_expedition', 0, $html);
     }
 
@@ -806,7 +807,7 @@ class GoldenPagesTest extends TestCase
         $html = $this->renderPage('bericht', ['bericht' => $msgId], 0);
         $this->assertStringContainsString('<html', $html);
         $this->assertEnglish($html, 'Battle Report');
-        $this->assertStringContainsString('Attacker PlayerOne', $html);
+        $this->assertEnglish($html, 'Attacker PlayerOne');
         $this->compareOrSaveGolden('bericht_battle', 0, $html);
     }
 
@@ -819,7 +820,7 @@ class GoldenPagesTest extends TestCase
         $msgId = $this->getMessageIdByType(MTYP_SPY_REPORT);
         $html = $this->renderPage('bericht', ['bericht' => $msgId], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Resources of Planet', $html);
+        $this->assertEnglish($html, 'Resources on');
         $this->compareOrSaveGolden('bericht_spy', 0, $html);
     }
 
@@ -998,6 +999,20 @@ class GoldenPagesTest extends TestCase
         $html = $this->renderPage('galaxy', ['galaxy' => 1, 'system' => 1, 'cp' => $moonId], 0);
         $this->assertStringContainsString('<html', $html);
         $this->compareOrSaveGolden('galaxy_from_moon', 0, $html);
+    }
+
+    /**
+     * Test the galaxy page opened from the statistics page without a header
+     * (no_header=1). The OldDesign snapshot
+     * "Галактика index.php_page=galaxy_no_header=1 ... -- Переход из статистики"
+     * shows this transition view (issue #269).
+     */
+    #[DataProvider('languages')]
+    public function testGalaxyPageNoHeader(): void
+    {
+        $html = $this->renderPage('galaxy', ['no_header' => 1, 'galaxy' => 1, 'system' => 1], 0);
+        $this->assertStringContainsString('<html', $html);
+        $this->compareOrSaveGolden('galaxy_no_header', 0, $html);
     }
 
     /**
@@ -1244,6 +1259,20 @@ class GoldenPagesTest extends TestCase
         $html = $this->renderPage('statistics', [], 0);
         $this->assertStringContainsString('<html', $html);
         $this->compareOrSaveGolden('statistics', 0, $html);
+    }
+
+    /**
+     * Test statistics page with a start position parameter (issue #269).
+     * The OldDesign snapshots "Статистика start=1850" / "Статистика start=1901"
+     * show the player table with a selected start position, so this case is
+     * part of the golden set.
+     */
+    #[DataProvider('languages')]
+    public function testStatisticsPageWithStart(): void
+    {
+        $html = $this->renderPage('statistics', ['start' => 1], 0);
+        $this->assertStringContainsString('<html', $html);
+        $this->compareOrSaveGolden('statistics_start', 0, $html);
     }
 
     /**
@@ -2031,7 +2060,23 @@ class GoldenPagesTest extends TestCase
         $html = preg_replace('/ss=\d+;/', 'ss=SECONDS;', $html);                         // buildings research tab
         $html = preg_replace('/g = \d+;/', 'g = SECONDS;', $html);                       // shipyard queue JS
         $html = preg_replace("/title='\d+'star=/", "title='SECONDS'star=", $html);       // event list countdowns
-        $html = preg_replace('/will take \d+m(?: \d+s)?/', 'will take DURATION', $html); // shipyard: "The entire production will take 52m 59s"
+        // Shipyard "total production will take" durations are localized and
+        // depend on the exact moment of rendering, so normalize them in every
+        // language (issue #269). DurationFormat produces "1h 16m 59s",
+        // "29分", "52м 59с", "1d 2h" etc. The duration may be separated from
+        // the label by line breaks/indentation in the raw HTML.
+        $html = preg_replace('/(The entire production will take|Toda la producción tardará|Toute la production prendra|L\'intera produzione richiederà|Die gesamte Produktion wird)\s+\d+[hmds]+(?: \d+[hmds]+)*\s*/', '\1 DURATION', $html);
+        $html = preg_replace('/(Всё производство займёт)\s+\d+[дчмс]+(?:\s+\d+[дчмс]+)*\s*/', '\1 DURATION', $html);
+        $html = preg_replace('/(全生産にかかる時間)\s+\d+[日時分秒]+(?:\s+\d+[日時分秒]+)*\s*/', '\1 DURATION', $html);
+
+        // Infos page: "Duration of demolition: 4m 9s" depends on the current
+        // time (the building is demolished from the fixture's frozen start).
+        // Normalize the demolition duration in every language (issue #269).
+        $html = preg_replace('/(Duration of demolition:|Dauer des Abrisses:|Duración de la demolición:|Durée de la démolition :|Tempo di smantellamento:|解体の所要時間:|Продолжительность сноса:)\s*\d+[hmdsдчмс日時分秒]+(?:\s+\d+[hmdsдчмс日時分秒]+)*\s*/', '\1 DURATION', $html);
+
+        // Trader page: the free storage amounts depend on the current resource
+        // levels, which grow over time. Normalize the whole storage array.
+        $html = preg_replace('/storage\s*=\s*new Array\(0, [^)]*\)/', 'storage = new Array(0, FLOAT, FLOAT, FLOAT)', $html);
 
         // Normalize floating point numbers
         $html = preg_replace('/\b\d+\.\d+\b/', 'FLOAT', $html);

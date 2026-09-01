@@ -324,13 +324,53 @@ function setMax(key, number){
     document.getElementsByName('fmenge['+key+']')[0].value=number;
 }
 </script> 
-<form action=index.php?page=buildings&session=0000000003e9&mode=Verteidigung method=post><table align=top><tr><td style='background-color:transparent;'>  <table width="468">
+<form action=index.php?page=buildings&session=0000000003e9&mode=Verteidigung method=post><table align=top><tr><td style='background-color:transparent;'>  <table width="530">
           <tr> 
           <td class=l colspan="2">Beschreibung</td> 
           <td class=l><b>Packungen</b></td> 
           </tr> 
 
-<tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=401>Raketenwerfer</a></a> (auf Lager 5)<br>Der Raketenwerfer ist eine einfache und kostengünstige Verteidigungsmöglichkeit.<br>Benötigt: Metall: <b>2.000</b><br>Produktionsdauer: 12m <br></th><td class=k ><input type=text name='fmenge[401]' alt='Raketenwerfer' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(401, 12);">(max. 12)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=402>Leichtes Lasergeschütz</a></a> (auf Lager 3)<br>Durch den konzentrierten Beschuss eines Ziels mit Photonen kann wesentlich größerer Schaden erzielt werden als mit gewöhnlichen ballistischen Waffen.<br>Benötigt: Metall: <b>1.500</b> Kristall: <b>500</b><br>Produktionsdauer: 12m <br></th><td class=k ><input type=text name='fmenge[402]' alt='Leichtes Lasergeschütz' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(402, 16);">(max. 16)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=403>Schweres Lasergeschütz</a></a> (auf Lager 2)<br>Der schwere Laser ist eine konsequente Weiterentwicklung des leichten Lasers.<br>Benötigt: Metall: <b>6.000</b> Kristall: <b>2.000</b><br>Produktionsdauer: 48m <br></th><td class=k ><font color=#FF0000>Unmöglich</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=404>Gaußkanone</a></a> (auf Lager 1)<br>Die Gaußkanone beschleunigt tonnenschwere Geschosse unter gigantischem Energieaufwand.<br>Benötigt: Metall: <b>20.000</b> Kristall: <b>15.000</b> Deuterium: <b>2.000</b><br>Produktionsdauer: 3h 30m <br></th><td class=k ><font color=#FF0000>Unmöglich</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=405>Ionengeschütz</a></a> (auf Lager 1)<br>Das Ionengeschütz schleudert eine Welle von Ionen, die ihrem Ziel erheblichen Schaden zufügt.<br>Benötigt: Metall: <b>2.000</b> Kristall: <b>6.000</b><br>Produktionsdauer: 48m <br></th><td class=k ><font color=#FF0000>Unmöglich</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=407>Kleine Schildkuppel</a></a> (auf Lager 1)<br>Die kleine Schildkuppel umhüllt den ganzen Planeten mit einem Feld, das ungeheure Energiemengen absorbieren kann.<br>Benötigt: Metall: <b>10.000</b> Kristall: <b>10.000</b><br>Produktionsdauer: 2h <br></th><td class=k ><font color=#FF0000>Eine Schildkuppel kann nur 1 Mal gebaut werden.</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=502>Abfangrakete</a></a> (auf Lager 2)<br>Abfangraketen zerstören angreifende Interplanetarraketen.<br>Benötigt: Metall: <b>8.000</b> Deuterium: <b>2.000</b><br>Produktionsdauer: 48m <br></th><td class=k ><input type=text name='fmenge[502]' alt='Abfangrakete' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(502, 3);">(max. 3)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=503>Interplanetarrakete</a></a> (auf Lager 1)<br>Interplanetarraketen zerstören die gegnerische Verteidigung.<br>Benötigt: Metall: <b>12.500</b> Kristall: <b>2.500</b> Deuterium: <b>10.000</b><br>Produktionsdauer: 1h 30m <br></th><td class=k ><font color=#FF0000>Unmöglich</font></td></tr><td class=c colspan=2 align=center><input type=submit value="Bauen Sie"></td></tr></table></form></table>
+<tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=401>
+              <img border='0' src="http://localhost/evolution/gebaeude/401.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=401>Raketenwerfer</a></a> (auf Lager 5)<br>Der Raketenwerfer ist eine einfache und kostengünstige Verteidigungsmöglichkeit.<br>Benötigt: Metall: <b>2.000</b><br>Produktionsdauer: 12m <br></th><td class=k ><input type=text name='fmenge[401]' alt='Raketenwerfer' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(401, 12);">(max. 12)</a></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=402>
+              <img border='0' src="http://localhost/evolution/gebaeude/402.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=402>Leichtes Lasergeschütz</a></a> (auf Lager 3)<br>Durch den konzentrierten Beschuss eines Ziels mit Photonen kann wesentlich größerer Schaden erzielt werden als mit gewöhnlichen ballistischen Waffen.<br>Benötigt: Metall: <b>1.500</b> Kristall: <b>500</b><br>Produktionsdauer: 12m <br></th><td class=k ><input type=text name='fmenge[402]' alt='Leichtes Lasergeschütz' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(402, 16);">(max. 16)</a></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=403>
+              <img border='0' src="http://localhost/evolution/gebaeude/403.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=403>Schweres Lasergeschütz</a></a> (auf Lager 2)<br>Der schwere Laser ist eine konsequente Weiterentwicklung des leichten Lasers.<br>Benötigt: Metall: <b>6.000</b> Kristall: <b>2.000</b><br>Produktionsdauer: 48m <br></th><td class=k ><font color=#FF0000>Unmöglich</font></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=404>
+              <img border='0' src="http://localhost/evolution/gebaeude/404.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=404>Gaußkanone</a></a> (auf Lager 1)<br>Die Gaußkanone beschleunigt tonnenschwere Geschosse unter gigantischem Energieaufwand.<br>Benötigt: Metall: <b>20.000</b> Kristall: <b>15.000</b> Deuterium: <b>2.000</b><br>Produktionsdauer: 3h 30m <br></th><td class=k ><font color=#FF0000>Unmöglich</font></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=405>
+              <img border='0' src="http://localhost/evolution/gebaeude/405.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=405>Ionengeschütz</a></a> (auf Lager 1)<br>Das Ionengeschütz schleudert eine Welle von Ionen, die ihrem Ziel erheblichen Schaden zufügt.<br>Benötigt: Metall: <b>2.000</b> Kristall: <b>6.000</b><br>Produktionsdauer: 48m <br></th><td class=k ><font color=#FF0000>Unmöglich</font></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=407>
+              <img border='0' src="http://localhost/evolution/gebaeude/407.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=407>Kleine Schildkuppel</a></a> (auf Lager 1)<br>Die kleine Schildkuppel umhüllt den ganzen Planeten mit einem Feld, das ungeheure Energiemengen absorbieren kann.<br>Benötigt: Metall: <b>10.000</b> Kristall: <b>10.000</b><br>Produktionsdauer: 2h <br></th><td class=k ><font color=#FF0000>Eine Schildkuppel kann nur 1 Mal gebaut werden.</font></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=502>
+              <img border='0' src="http://localhost/evolution/gebaeude/502.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=502>Abfangrakete</a></a> (auf Lager 2)<br>Abfangraketen zerstören angreifende Interplanetarraketen.<br>Benötigt: Metall: <b>8.000</b> Deuterium: <b>2.000</b><br>Produktionsdauer: 48m <br></th><td class=k ><input type=text name='fmenge[502]' alt='Abfangrakete' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(502, 3);">(max. 3)</a></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=503>
+              <img border='0' src="http://localhost/evolution/gebaeude/503.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=503>Interplanetarrakete</a></a> (auf Lager 1)<br>Interplanetarraketen zerstören die gegnerische Verteidigung.<br>Benötigt: Metall: <b>12.500</b> Kristall: <b>2.500</b> Deuterium: <b>10.000</b><br>Produktionsdauer: 1h 30m <br></th><td class=k ><font color=#FF0000>Unmöglich</font></td></tr><td class=c colspan=2 align=center><input type=submit value="Bauen Sie"></td></tr></table></form></table>
 
       <br>Es wird jetzt produziert: <div id="bx" class="z"></div>
 

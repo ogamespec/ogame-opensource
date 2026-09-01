@@ -358,11 +358,52 @@ function fenster(target_url,win_name) {
 </tr> 
 <tr><th colspan="4"><input type="checkbox" name="fullreports"  /> Разведданные показывать частично </th></tr>
 <tr><td class="c">Действие</td><td class="c">Дата</td><td class="c">От</td><td class="c">Тема</td></tr>
-<tr><th><input type="checkbox" name="delmes3"/></th><th>09-01 07:59:37</th><th>Fleet Command </th><th>
+<tr><th><input type="checkbox" name="delmes3"/></th><th>09-01 10:27:40</th><th>Командование флотом </th><th>
 <span class="espionagereport">
-Espionage report of Planet [1:3:4]
-[1:3:4]</span> </th></tr>
-<tr><td class="b"> </td><td class="b" colspan="3"><table width=400><tr><td class=c colspan=4>Resources of Planet [1:3:4]</td></tr><tr><th>Metal:</th><th>20.000</th><th>Crystal:</th><th>12.000</th></tr><tr><th>Deuterium:</th><th>6.000</th><th>Energy:</th><th>53</th></tr></table><table width=400><tr><td class=c colspan=2>Fleet</td></tr><tr><th>Small Cargo</th><th>5</th></tr><tr><th>Light Fighter</th><th>8</th></tr></table><center><a href=# onclick="doit(6,1,3,4,1,5);">Spy again</a></center></td></tr>
+Разведданные с Home
+<a onclick="showGalaxy(1,3,4);" href="#">[1:3:4]</a> </th></tr>
+<tr><td class="b"> </td><td class="b" colspan="3"><table width=400><tr><td class=c colspan=4>Сырьё на Home <a onclick="showGalaxy(1,3,4);" href="#">[1:3:4]</a> (Игрок 'PlayerTwo')<br /> на 09-01 10:42:40</td></tr>
+</div></font></TD></TR><tr><td>металла:</td><td>20.000</td>
+<td>кристалла:</td><td>12.000</td></tr>
+<tr><td>дейтерия:</td><td>6.000</td>
+<td>энергии:</td><td>53</td></tr>
+</table>
+<table width=400><tr><td class=c colspan=4>     </td></tr>
+<TR><TD colspan=4><div onmouseover='return overlib("&lt;font color=white&gt;Активность означает, что сканируемый игрок был активен на своей планете, либо на него был произведён вылет флота другого игрока.&lt;/font&gt;", STICKY, MOUSEOFF, DELAY, 750, CENTER, WIDTH, 100, OFFSETX, -130, OFFSETY, -10);' onmouseout='return nd();'></TD></TR></table>
+<table width=400><tr><td class=c colspan=4>Флоты     </td></tr>
+</tr>
+<td>Малый транспорт</td><td>5</td>
+<td>Лёгкий истребитель</td><td>8</td>
+</tr>
+<td>Шпионский зонд</td><td>3</td>
+</table>
+<table width=400><tr><td class=c colspan=4>Оборона     </td></tr>
+</tr>
+<td>Ракетная установка</td><td>3</td>
+<td>Лёгкий лазер</td><td>2</td>
+</table>
+<table width=400><tr><td class=c colspan=4>Постройки     </td></tr>
+</tr>
+<td>Рудник по добыче металла</td><td>4</td>
+<td>Рудник по добыче кристалла</td><td>3</td>
+</tr>
+<td>Синтезатор дейтерия</td><td>2</td>
+<td>Солнечная электростанция</td><td>2</td>
+</tr>
+<td>Фабрика роботов</td><td>1</td>
+<td>Верфь</td><td>2</td>
+</tr>
+<td>Хранилище металла</td><td>4</td>
+<td>Хранилище кристалла</td><td>4</td>
+</tr>
+<td>Ёмкость для дейтерия</td><td>3</td>
+<td>Склад альянса</td><td>1</td>
+</tr>
+<td>Ракетная шахта</td><td>2</td>
+</table>
+<center> Шанс на защиту от шпионажа:0%</center>
+<center><a href='#' onclick='showFleetMenu(1,3,4,1,1);'>Атака</a></center>
+</td></tr>
 <tr><th colspan="4" style='padding:0px 105px;'></th></tr>
 <tr><td colspan="4"><center>     </center></td></tr>
 <input type="hidden" name="messages" value="1" />
