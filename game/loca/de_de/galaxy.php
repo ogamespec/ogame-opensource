@@ -5,7 +5,7 @@
 // Fehler und Meldungen des IPM
 $LOCA["de"]["GALAXY_RAK_NO_TARGET"] = "Es gibt kein Ziel";
 $LOCA["de"]["GALAXY_RAK_NO_ROCKETS"] = "Sie haben die Anzahl der Raketen nicht ausgewählt";
-$LOCA["de"]["GALAXY_RAK_NOT_ENOUGH"] = "Not enough interplanetary rockets!";
+$LOCA["de"]["GALAXY_RAK_NOT_ENOUGH"] = "Nicht genug interplanetare Raketen!";
 $LOCA["de"]["GALAXY_RAK_WEAK_DRIVE"] = "Die Reichweite (Impulsantrieb-Forschungsstufe) Ihrer interplanetarischen Rakete ist zu gering!";
 $LOCA["de"]["GALAXY_RAK_VACATION_SELF"] = "Im Urlaubsmodus kann man keine Raketen abschießen!";
 $LOCA["de"]["GALAXY_RAK_VACATION_OTHER"] = "Dieser Spieler ist im Urlaubsmodus!";
@@ -86,7 +86,7 @@ $LOCA["de"]["GALAXY_USER_TITLE"] = "Spieler #1. Rang #2";
 $LOCA["de"]["GALAXY_USER_MESSAGE"] = "Schreiben Sie eine Nachricht";
 $LOCA["de"]["GALAXY_USER_BUDDY"] = "Freundeseinladung";
 $LOCA["de"]["GALAXY_USER_STATS"] = "Statistik";
-$LOCA["de"]["GALAXY_USER_ADMIN"] = "User management";
+$LOCA["de"]["GALAXY_USER_ADMIN"] = "Benutzerverwaltung";
 
 // Allianz
 $LOCA["de"]["GALAXY_ALLY_TITLE"] = "Allianz #1. Platz in der Bewertung - #2, Anzahl der Personen - #3.";
@@ -117,7 +117,7 @@ $LOCA["de"]["GALAXY_INFO_SLOTS"] = "der Steckplätze Nr. 1 sind in Betrieb";
 $LOCA["de"]["GALAXY_LEGEND"] = "Legende";
 $LOCA["de"]["GALAXY_LEGEND_STRONG_LONG"] = "starker Spieler";
 $LOCA["de"]["GALAXY_LEGEND_STRONG"] = "s";
-$LOCA["de"]["GALAXY_LEGEND_NOOB_LONG"] = "Noob";
+$LOCA["de"]["GALAXY_LEGEND_NOOB_LONG"] = "Neuling";
 $LOCA["de"]["GALAXY_LEGEND_NOOB"] = "n";
 $LOCA["de"]["GALAXY_LEGEND_VACATION_LONG"] = "Urlaubsmodus";
 $LOCA["de"]["GALAXY_LEGEND_VACATION"] = "U";

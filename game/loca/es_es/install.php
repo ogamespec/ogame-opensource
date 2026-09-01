@@ -2,68 +2,69 @@
 
 // Install Script
 
-$LOCA["es"]["INSTALL_TITLE"] = "OGame Install";
-$LOCA["es"]["INSTALL_TIP"] = "Use mouseover on label names to get some tips";
+$LOCA["es"]["INSTALL_TITLE"] = "Instalación de OGame";
+$LOCA["es"]["INSTALL_TIP"] = "Pase el ratón por los nombres de las etiquetas para obtener consejos";
 
-$LOCA["es"]["INSTALL_STARTPAGE"] = "Startpage Address";
-$LOCA["es"]["INSTALL_DB"] = "Universe Database Settings";
-$LOCA["es"]["INSTALL_DB_HOST"] = "Host";
-$LOCA["es"]["INSTALL_DB_USER"] = "User";
-$LOCA["es"]["INSTALL_DB_PASS"] = "Password";
-$LOCA["es"]["INSTALL_DB_NAME"] = "DB name";
-$LOCA["es"]["INSTALL_DB_PREFIX"] = "Table prefix";
-$LOCA["es"]["INSTALL_DB_SECRET"] = "Secret word";
+$LOCA["es"]["INSTALL_STARTPAGE"] = "Dirección de la página de inicio";
+$LOCA["es"]["INSTALL_DB"] = "Ajustes de la base de datos del universo";
+$LOCA["es"]["INSTALL_DB_HOST"] = "Servidor";
+$LOCA["es"]["INSTALL_DB_USER"] = "Usuario";
+$LOCA["es"]["INSTALL_DB_PASS"] = "Contraseña";
+$LOCA["es"]["INSTALL_DB_NAME"] = "Nombre de la BD";
+$LOCA["es"]["INSTALL_DB_PREFIX"] = "Prefijo de tablas";
+$LOCA["es"]["INSTALL_DB_SECRET"] = "Palabra secreta";
 
-$LOCA["es"]["INSTALL_MDB"] = "Master Database Settings";
-$LOCA["es"]["INSTALL_MDB_TIP"] = "The central database can be located on another server (usually in the same place where start page located) and stores information about all the universes, coupons and other general information.";
-$LOCA["es"]["INSTALL_MDB_ENABLE"] = "Add this universe to master database?";
-$LOCA["es"]["INSTALL_MDB_HOST"] = "Host";
-$LOCA["es"]["INSTALL_MDB_USER"] = "User";
-$LOCA["es"]["INSTALL_MDB_PASS"] = "Password";
-$LOCA["es"]["INSTALL_MDB_NAME"] = "DB name";
+$LOCA["es"]["INSTALL_MDB"] = "Ajustes de la base de datos maestra";
+$LOCA["es"]["INSTALL_MDB_TIP"] = "La base de datos central puede estar ubicada en otro servidor (normalmente en el mismo lugar donde está la página de inicio) y almacena información sobre todos los universos, cupones y otra información general.";
+$LOCA["es"]["INSTALL_MDB_ENABLE"] = "¿Añadir este universo a la base de datos maestra?";
+$LOCA["es"]["INSTALL_MDB_HOST"] = "Servidor";
+$LOCA["es"]["INSTALL_MDB_USER"] = "Usuario";
+$LOCA["es"]["INSTALL_MDB_PASS"] = "Contraseña";
+$LOCA["es"]["INSTALL_MDB_NAME"] = "Nombre de la BD";
 
-$LOCA["es"]["INSTALL_UNI"] = "Universe Settings";
-$LOCA["es"]["INSTALL_UNI_NUM"] = "Universe number";
-$LOCA["es"]["INSTALL_UNI_SPEED"] = "Speed";
-$LOCA["es"]["INSTALL_UNI_FLEETSPEED"] = "Fleet speed";
-$LOCA["es"]["INSTALL_UNI_G"] = "Number of galaxies";
-$LOCA["es"]["INSTALL_UNI_S"] = "Number of systems";
-$LOCA["es"]["INSTALL_UNI_USERS"] = "Max users";
-$LOCA["es"]["INSTALL_UNI_START_DM"] = "The amount of starting Dark Matter";
+$LOCA["es"]["INSTALL_UNI"] = "Ajustes del universo";
+$LOCA["es"]["INSTALL_UNI_NUM"] = "Número de universo";
+$LOCA["es"]["INSTALL_UNI_SPEED"] = "Velocidad";
+$LOCA["es"]["INSTALL_UNI_FLEETSPEED"] = "Velocidad de la flota";
+$LOCA["es"]["INSTALL_UNI_G"] = "Número de galaxias";
+$LOCA["es"]["INSTALL_UNI_S"] = "Número de sistemas";
+$LOCA["es"]["INSTALL_UNI_USERS"] = "Máximo de usuarios";
+$LOCA["es"]["INSTALL_UNI_START_DM"] = "La cantidad de materia oscura inicial";
 $LOCA["es"]["INSTALL_UNI_ACS"] = "ACS";
-$LOCA["es"]["INSTALL_UNI_FID"] = "Fleet in debris (%)";
-$LOCA["es"]["INSTALL_UNI_DID"] = "Defense in debris (%)";
-$LOCA["es"]["INSTALL_UNI_RAPID"] = "Rapidfire";
-$LOCA["es"]["INSTALL_UNI_MOONS"] = "Moons and deathstars";
-$LOCA["es"]["INSTALL_UNI_BATTLE"] = "Path to battle engine";
-$LOCA["es"]["INSTALL_UNI_PHP_BATTLE"] = "Use a PHP-based battle engine";
-$LOCA["es"]["INSTALL_UNI_FORCE_LANG"] = "Forced to use the language of the universe";
-$LOCA["es"]["INSTALL_MAX_WERF"] = "Maximum number of units in a shipyard order";
-$LOCA["es"]["INSTALL_FEED_AGE"] = "RSS/Atom refresh period in minutes for Commander";
+$LOCA["es"]["INSTALL_UNI_FID"] = "Flota en los escombros (%)";
+$LOCA["es"]["INSTALL_UNI_DID"] = "Defensa en los escombros (%)";
+$LOCA["es"]["INSTALL_UNI_RAPID"] = "Fuego rápido";
+$LOCA["es"]["INSTALL_UNI_MOONS"] = "Lunas y estrellas de la muerte";
+$LOCA["es"]["INSTALL_UNI_BATTLE"] = "Ruta al motor de batalla";
+$LOCA["es"]["INSTALL_UNI_PHP_BATTLE"] = "Usar un motor de batalla basado en PHP";
+$LOCA["es"]["INSTALL_UNI_BATTLE_MAX"] = "Número máximo de unidades por bando";
+$LOCA["es"]["INSTALL_UNI_FORCE_LANG"] = "Obligar a usar el idioma del universo";
+$LOCA["es"]["INSTALL_MAX_WERF"] = "Número máximo de unidades en una orden del astillero";
+$LOCA["es"]["INSTALL_FEED_AGE"] = "Periodo de actualización RSS/Atom en minutos para el Comandante";
 
-$LOCA["es"]["INSTALL_ADMIN"] = "Admin Account";
-$LOCA["es"]["INSTALL_ADMIN_EMAIL"] = "E-Mail";
-$LOCA["es"]["INSTALL_ADMIN_PASS"] = "Password";
+$LOCA["es"]["INSTALL_ADMIN"] = "Cuenta de administrador";
+$LOCA["es"]["INSTALL_ADMIN_EMAIL"] = "Correo electrónico";
+$LOCA["es"]["INSTALL_ADMIN_PASS"] = "Contraseña";
 
-$LOCA["es"]["INSTALL_TIP1"] = "Use common table prefix to use multiple universes on single database";
-$LOCA["es"]["INSTALL_TIP2"] = "Used for password and session generation";
-$LOCA["es"]["INSTALL_TIP3"] = "Universe number will be shown in page title and above left menu.";
-$LOCA["es"]["INSTALL_TIP4"] = "Speed affect at resource production, buildings and research duration and minimum vacation mode period.";
-$LOCA["es"]["INSTALL_TIP5"] = "Fleet speed affect only on flight time";
-$LOCA["es"]["INSTALL_TIP6"] = "Max accounts amount. Registration will be blocked until free space not appear.";
-$LOCA["es"]["INSTALL_TIP7"] = "Max ACS invites. Max ACS fleet slots = N * 4, where N is maximum ACS invites. For N = 0 ACS disabled.";
-$LOCA["es"]["INSTALL_TIP8"] = "Specified % of fleet structure goes in debris after battle. 0 - fleet in debris disabled.";
-$LOCA["es"]["INSTALL_TIP9"] = "Specified % of defense structure goes in debris after battle. 0 - defense in debris disabled.";
-$LOCA["es"]["INSTALL_TIP10"] = "Ships have chance to make additional shots ";
-$LOCA["es"]["INSTALL_TIP11"] = "If you are using an embedded PHP engine, there is no need to compile an external battle engine and specify the path to it.";
+$LOCA["es"]["INSTALL_TIP1"] = "Use un prefijo de tablas común para usar varios universos en una sola base de datos";
+$LOCA["es"]["INSTALL_TIP2"] = "Se usa para la generación de contraseñas y sesiones";
+$LOCA["es"]["INSTALL_TIP3"] = "El número de universo se mostrará en el título de la página y sobre el menú de la izquierda.";
+$LOCA["es"]["INSTALL_TIP4"] = "La velocidad afecta a la producción de recursos, a la duración de edificios e investigaciones y al periodo mínimo de modo vacaciones.";
+$LOCA["es"]["INSTALL_TIP5"] = "La velocidad de la flota solo afecta al tiempo de vuelo";
+$LOCA["es"]["INSTALL_TIP6"] = "Cantidad máxima de cuentas. El registro se bloqueará hasta que aparezca espacio libre.";
+$LOCA["es"]["INSTALL_TIP7"] = "Máximo de invitaciones ACS. Ranuras de flota ACS máximas = N * 4, donde N es el máximo de invitaciones ACS. Con N = 0 el ACS está desactivado.";
+$LOCA["es"]["INSTALL_TIP8"] = "El % especificado de la estructura de la flota va a los escombros tras la batalla. 0 - flota en escombros desactivada.";
+$LOCA["es"]["INSTALL_TIP9"] = "El % especificado de la estructura de la defensa va a los escombros tras la batalla. 0 - defensa en escombros desactivada.";
+$LOCA["es"]["INSTALL_TIP10"] = "Las naves tienen probabilidad de realizar disparos adicionales ";
+$LOCA["es"]["INSTALL_TIP11"] = "Si está usando un motor PHP integrado, no es necesario compilar un motor de batalla externo ni especificar su ruta.";
 
-$LOCA["es"]["INSTALL_INSTALL"] = "Install";
+$LOCA["es"]["INSTALL_INSTALL"] = "Instalar";
 
-$LOCA["es"]["INSTALL_ERROR1"] ="Cannot save config file.";
-$LOCA["es"]["INSTALL_DONE"] ="Install complete. Config file created.";
+$LOCA["es"]["INSTALL_ERROR1"] ="No se puede guardar el archivo de configuración.";
+$LOCA["es"]["INSTALL_DONE"] ="Instalación completada. Archivo de configuración creado.";
 
-$LOCA["es"]["INSTALL_EXTERNAL_LINKS"] = "External links";
-$LOCA["es"]["INSTALL_EXTERNAL_LINKS_TIP"] = "If no external link is specified (empty string), the corresponding item in the menu will be absent";
+$LOCA["es"]["INSTALL_EXTERNAL_LINKS"] = "Enlaces externos";
+$LOCA["es"]["INSTALL_EXTERNAL_LINKS_TIP"] = "Si no se especifica ningún enlace externo (cadena vacía), el elemento correspondiente del menú no aparecerá";
 
 $LOCA["es"]["INSTALL_ERR_REQUIRED"] = "El campo \"#1\" no debe estar vacío.";
 $LOCA["es"]["INSTALL_ERR_INT"] = "El campo \"#1\" debe ser un número entero.";

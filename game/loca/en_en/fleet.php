@@ -44,6 +44,7 @@ $LOCA["en"]["FLEET1_AMOUNT"] = "Available";
 $LOCA["en"]["FLEET1_SPEED"] = "Speed";
 $LOCA["en"]["FLEET1_CLEAR"] = "no ships";
 $LOCA["en"]["FLEET1_ALL_SHIPS"] = "all ships";
+$LOCA["en"]["FLEET1_ALL"] = "All";
 $LOCA["en"]["FLEET1_TEMPLATE"] = "Standard fleets";  	// TODO: Not sure
 $LOCA["en"]["FLEET1_NEXT"] = "continue";
 

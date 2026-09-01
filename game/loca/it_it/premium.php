@@ -9,7 +9,7 @@ $LOCA["it"]["PREM_DM_GET"] = "Ottieni Materia Oscura";
 
 $LOCA["it"]["PREM_OFICEERS"] = "Ufficiali";
 
-$LOCA["it"]["PREM_COMMANDER"] = "Commander";
+$LOCA["it"]["PREM_COMMANDER"] = "Comandante";
 $LOCA["it"]["PREM_COMMANDER_INFO"] = "Il Commander ha assunto un ruolo importante nelle guerre moderne. La struttura di comando semplificata consente di gestire in modo più rapido le informazioni. Con il Commander sarai in grado di tenere sotto controllo tutto il tuo impero! In questo modo potrai sviluppare strutture che saranno sempre un passo più avanti rispetto a quelle dei tuoi nemici.";
 $LOCA["it"]["PREM_COMMANDER_NOTE"] = "Visuale impero, coda di costruzione, visuale galassia migliorata, filtro messaggi, nessuna pubblicit&agrave;";
 
@@ -38,5 +38,15 @@ $LOCA["it"]["PREM_ACTIVE"] = "<strong><font color=lime>Attivo</font> per #1 gior
 
 $LOCA["it"]["PREM_NOTENOUGH"] = "Non hai abbastanza materia oscura!";
 $LOCA["it"]["PREM_OK"] = "Ufficiale attivato con successo!";
+
+// pagamento
+
+$LOCA["it"]["PAY_INVALID_CODE"] = "Codice errato o coupon già utilizzato";
+$LOCA["it"]["PAY_CREDIT"] = "Riscatta!";
+$LOCA["it"]["PAY_USE"] = "Usa coupon.";
+$LOCA["it"]["PAY_ENTER"] = "Inserisci qui il tuo codice coupon.";
+$LOCA["it"]["PAY_COUPON_CODE"] = "Codice Coupon:";
+$LOCA["it"]["PAY_ERROR"] = "Errore Coupon:";
+$LOCA["it"]["PAY_CHECK"] = "Verifica coupon";
 
 ?>

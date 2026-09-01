@@ -37,9 +37,10 @@ $LOCA["it"]["INSTALL_UNI_RAPID"] = "Fuoco rapido";
 $LOCA["it"]["INSTALL_UNI_MOONS"] = "Lune e stelle della morte";
 $LOCA["it"]["INSTALL_UNI_BATTLE"] = "Motore di battaglia";
 $LOCA["it"]["INSTALL_UNI_PHP_BATTLE"] = "Utilizzare un motore di battaglia basato su PHP";
-$LOCA["it"]["INSTALL_UNI_FORCE_LANG"] = "Obligé d'utiliser le langage de l'univers";
-$LOCA["it"]["INSTALL_MAX_WERF"] = "Maximum number of units in a shipyard order";
-$LOCA["it"]["INSTALL_FEED_AGE"] = "RSS/Atom refresh period in minutes for Commander";
+$LOCA["it"]["INSTALL_UNI_BATTLE_MAX"] = "Numero massimo di unità per lato";
+$LOCA["it"]["INSTALL_UNI_FORCE_LANG"] = "Obbligato a usare la lingua dell'universo";
+$LOCA["it"]["INSTALL_MAX_WERF"] = "Numero massimo di unità in un ordine del cantiere navale";
+$LOCA["it"]["INSTALL_FEED_AGE"] = "Periodo di aggiornamento RSS/Atom in minuti per il Commander";
 
 $LOCA["it"]["INSTALL_ADMIN"] = "Account amministratore";
 $LOCA["it"]["INSTALL_ADMIN_EMAIL"] = "E-Mail";

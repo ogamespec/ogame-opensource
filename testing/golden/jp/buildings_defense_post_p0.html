@@ -1,0 +1,494 @@
+<html>
+ <head>
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+  <script language="JavaScript">var session="0000000003e9";</script>
+  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+<link rel='stylesheet' type='text/css' href='css/combox.css'>
+<link rel='stylesheet' type='text/css' href='http://localhost/evolution/formate.css' />
+<title>ユニバース 1 OGame</title>
+  <script src='js/utilities.js' type='text/javascript'></script>
+  <script language='JavaScript'>
+  </script>
+<script type='text/javascript' src='js/overLib/overlib.js'></script>
+<!-- HEADER -->
+
+<script language='JavaScript'>
+function onBodyLoad() {
+    window.setTimeout('reloadImages()', 100);
+}
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != '')) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script>
+</head>
+<body style='overflow: hidden;' onload='onBodyLoad();' onunload='' >
+<div id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>
+<div id='header_top'><center>
+<table class='header'>
+<tr class='header' >
+<td class='header' style='width:5;' >
+<table class='header'>
+<tr class='header'>
+<td class='header'><img src='http://localhost/evolution/planeten/small/s_dschjungelplanet02.jpg' width='50' height='50'></td>
+<td class='header'>
+<table class='header'>
+<select size='1' onchange='haha(this)'>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=1&mode=Verteidigung' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1&mode=Verteidigung' >[1:1:4]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=10&mode=Verteidigung' >Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10&mode=Verteidigung' >[1:1:4]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=2&mode=Verteidigung' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2&mode=Verteidigung' >[1:1:5]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=3&mode=Verteidigung' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3&mode=Verteidigung' >[1:2:4]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=11&mode=Verteidigung' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11&mode=Verteidigung' >[1:2:4]</a></option>
+</select></table></td></tr></table></td>
+
+<td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
+<tr class='header'>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/metall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/kristall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/deuterium.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<a href=index.php?page=micropayment&session=0000000003e9>
+<img border='0' src='img/dm_klein_2.jpg' width='42' height='22' title='ダークマター'></a>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/energie.gif' width='42' height='22'>
+</td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>メタル</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>クリスタル</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>重水素</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>ダークマター</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>エネルギー</font></b></i></td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='90'><font >21.047</font></td>
+    <td align='center' class='header' width='90'><font >15.016</font></td>
+    <td align='center' class='header' width='90'><font >8.003</font></td>
+    <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
+    <td align='center' class='header' width='90'><font >359</font>/529</td>
+</tr>
+</table></td>
+<td class='header'>
+<table class='header' align=left>
+<tr class='header'>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/commander_ikon.gif' width='32' height='32' alt='オジェム指揮官'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>オジェム指揮官</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/admiral_ikon.gif' width='32' height='32' alt='提督'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>提督</font><br><font size=1 color=skyblue>&amp;nbsp;最大フリート数 +2</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/ingenieur_ikon.gif' width='32' height='32' alt='エンジニア'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>エンジニア</font><br><font size=1 color=skyblue>ディフェンスロスを半減+エネルギー10%増加</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/geologe_ikon.gif' width='32' height='32' alt='地質学者'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>地質学者</font><br><font size=1 color=skyblue>鉱山収入+10</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/technokrat_ikon.gif' width='32' height='32' alt='テクノクラート'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>テクノクラート</font><br><font size=1 color=skyblue>スパイ活動レベル+2、調査時間25%短縮</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+<td align='center' class='header'></td></tr></table></td>
+
+</tr>
+</table>
+</div><!-- END HEADER -->
+
+<!-- LEFTMENU -->
+
+   <div id='leftmenu'>
+
+<script language='JavaScript'>
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+<center>
+
+<div id='menu'>
+<a href='mailto:barrierefrei@ogame.de' title='視覚障害のある選手に関する問題は、下記までお問い合わせください barrierefrei@ogame.de.' style='width:1px;'></a>
+<p style='width:110px;'><NOBR>ユニバース 1 (<a href='index.php?page=changelog&session=0000000003e9'>v 0.84</a>)</NOBR></p>
+<table width='110' cellspacing='0' cellpadding='0'>
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/ogame-produktion.jpg' width='110' height='40' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=0000000003e9' accesskey="o">レビュー</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=imperium&session=0000000003e9&planettype=1&no_header=1' accesskey="e">帝国</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=b_building&session=0000000003e9' accesskey="b">建物</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=0000000003e9' accesskey="r">原材料</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=0000000003e9' accesskey=""><font color='FF8900'>贖い主</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Forschung' accesskey="c">リサーチ</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Flotte' accesskey="s">造船所</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=0000000003e9&mode=Flotte' accesskey="f">フリート</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=0000000003e9' accesskey="t">テクノロジー</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=0000000003e9&no_header=1' accesskey="g">ギャラクシー</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Verteidigung' accesskey="d">ディフェンス</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/info-help.jpg' width='110' height='19' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=0000000003e9' accesskey="a">私の同盟</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+    <td align=center>
+     <a id='darkmatter2' style='cursor:pointer; width:110px;'
+         href='index.php?page=micropayment&session=0000000003e9' accesskey="i"><b>オフィサーズ・カジノ</a></b>
+    </div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=statistics&session=0000000003e9' accesskey="k">統計</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=0000000003e9' accesskey="h">検索</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/user-menu.jpg' width='110' height='35' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=messages&session=0000000003e9&dsp=1' accesskey="m">メッセージ</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=0000000003e9&no_header=1", "Notizen");' accesskey="n">備考</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=0000000003e9' accesskey="u">友人</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=0000000003e9' accesskey="p">設定</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=0000000003e9' accesskey="q">出力</a>
+    </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+    </div>
+<!-- END LEFTMENU -->
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<title> 
+建物#Gebaeude
+</title> 
+<script type="text/javascript"> 
+
+function setMax(key, number){
+    document.getElementsByName('fmenge['+key+']')[0].value=number;
+}
+</script> 
+<form action=index.php?page=buildings&session=0000000003e9&mode=Verteidigung method=post><table align=top><tr><td style='background-color:transparent;'>  <table width="468">
+          <tr> 
+          <td class=l colspan="2">説明</td> 
+          <td class=l><b>数量</b></td> 
+          </tr> 
+
+<tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=401>ロケットランチャー</a></a> (在庫 5)<br>ロケットランチャーは、シンプルでコスト効率の高い防衛オプションです。<br>コスト: メタル: <b>2.000</b><br>期間: 12分 <br></th><td class=k ><input type=text name='fmenge[401]' alt='ロケットランチャー' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(401, 10);">(max. 10)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=402>軽量レーザー</a></a> (在庫 3)<br>光子による目標への集中射撃は、標準的な弾道兵器よりもはるかに大きなダメージを生み出すことができます。<br>コスト: メタル: <b>1.500</b> クリスタル: <b>500</b><br>期間: 12分 <br></th><td class=k ><input type=text name='fmenge[402]' alt='軽量レーザー' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(402, 14);">(max. 14)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=403>ヘビーレーザー</a></a> (在庫 2)<br>ヘビーレーザーは、軽量レーザーの論理的な発展形です。<br>コスト: メタル: <b>6.000</b> クリスタル: <b>2.000</b><br>期間: 48分 <br></th><td class=k ><font color=#FF0000>不可能</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=404>ガウス銃</a></a> (在庫 1)<br>ガウス銃は、数トンの重さの弾丸を高速で発射します。<br>コスト: メタル: <b>20.000</b> クリスタル: <b>15.000</b> 重水素: <b>2.000</b><br>期間: 3時 30分 <br></th><td class=k ><font color=#FF0000>不可能</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=405>イオン銃</a></a> (在庫 1)<br>イオン銃は、加速するイオンの連続ビームを発射し、命中した物体に大きなダメージを与えます。<br>コスト: メタル: <b>2.000</b> クリスタル: <b>6.000</b><br>期間: 48分 <br></th><td class=k ><font color=#FF0000>不可能</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=407>小型シールドドーム</a></a> (在庫 1)<br>小型シールドドームは、膨大なエネルギーを吸収できるフィールドで惑星全体を覆います。<br>コスト: メタル: <b>10.000</b> クリスタル: <b>10.000</b><br>期間: 2時 <br></th><td class=k ><font color=#FF0000>シールドドームは 1 回しか建設できません。</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=502>迎撃ミサイル</a></a> (在庫 2)<br>迎撃ミサイルは、攻撃してくる惑星間ロケットを破壊します。<br>コスト: メタル: <b>8.000</b> 重水素: <b>2.000</b><br>期間: 48分 <br></th><td class=k ><input type=text name='fmenge[502]' alt='迎撃ミサイル' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(502, 2);">(max. 2)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=503>惑星間ロケット</a></a> (在庫 1)<br>惑星間ロケットは、敵の防衛を破壊します。<br>コスト: メタル: <b>12.500</b> クリスタル: <b>2.500</b> 重水素: <b>10.000</b><br>期間: 1時 30分 <br></th><td class=k ><font color=#FF0000>不可能</font></td></tr><td class=c colspan=2 align=center><input type=submit value="建設"></td></tr></table></form></table>
+
+      <br>生産中: <div id="bx" class="z"></div>
+
+<!-- JAVASCRIPT -->
+<script  type="text/javascript">
+v = new Date();
+p = 0;
+g = 60;
+s = 0;
+hs = 0;
+of = 1;
+c = new Array(360,720,"");
+b = new Array("軽戦闘機","ロケットランチャー","");
+a = new Array("5","2","");
+aa = "完了したタスク";
+
+
+function t() {
+    if (hs == 0) {
+        xd();
+        hs = 1;
+    }
+    n = new Date();
+    s = c[p]-g-Math.round((n.getTime()-v.getTime())/1000.);
+    s = Math.round(s);
+    m = 0;
+    h = 0;
+    if (s < 0) {
+        a[p]--;
+        xd();
+        if (a[p] <= 0) {
+            p++;
+            xd();
+        }
+        g = 0;
+        v = new Date();
+        s=0;
+    }
+    if (s > 59) {
+        m = Math.floor(s / 60);
+        s = s - m * 60;
+    }
+    if (m > 59) {
+        h = Math.floor(m / 60);
+        m = m - h * 60;
+    }
+    if (s < 10) {
+        s = "0" + s;
+    }
+    if (m < 10) {
+        m = "0" + m;
+    }
+    if (p > b.length - 2) {
+        document.getElementById("bx").innerHTML=aa ;
+    } else {
+        document.getElementById("bx").innerHTML=b[p]+" "+h+":"+m+":"+s;
+    }
+    window.setTimeout("t();", 200);
+}
+
+
+
+
+function xd() {
+    while (document.Atr.auftr.length > 0) {
+        document.Atr.auftr.options[document.Atr.auftr.length-1] = null;
+    }
+    if (p > b.length - 2) {
+        document.Atr.auftr.options[document.Atr.auftr.length] = new Option(aa);
+    }
+    for (iv = p; iv <= b.length - 2; iv++) {
+        if (a[iv] < 2) {
+            ae=" ";
+        }else{
+            ae=" ";
+        }
+        if (iv == p) {
+            act = " (生産中)";
+        }else{
+            act = "";
+        }
+        document.Atr.auftr.options[document.Atr.auftr.length] = new Option(a[iv]+ae+" \""+b[iv]+"\""+act, iv + of);
+    }
+}
+
+window.onload = t;
+document.addEventListener("visibilitychange", function() {
+    if (!document.hidden) {
+        t();
+    }
+});
+</script>
+<!-- JAVASCRIPT ENDE-->
+
+
+<br>
+<form name="Atr" method="get" action="index.php?page=buildings">
+<input type="hidden" name="session" value="0000000003e9">
+<input type="hidden" name="mode" value="Flotte">
+<table width="530">
+
+ <tr>
+    <td class="c" >予定タスク</td>
+ </tr>
+ <tr>
+  <th ><select name="auftr" size="10"></select></th>
+   </tr>
+ <tr>
+  <td class="c" ></td>
+
+ </tr>
+</table>
+</form>
+全生産にかかる時間
+  53分 <br>
+<br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+
+
+
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+<div id='messagebox'><center></center></div>
+<div id='errorbox'><center></center></div>
+<script>
+headerHeight = 81;
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = '_blank';
+  }
+}
+</script>
+<style>
+.layer {
+    z-index:999999999;
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 757px; 
+    height: 475px; 
+    background-color: #040e1e;
+    border: 3px double orange;
+    padding: 0;
+    opacity: .90;
+}
+</style>
+</body></html>

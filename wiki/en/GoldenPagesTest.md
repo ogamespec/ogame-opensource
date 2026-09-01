@@ -10,21 +10,40 @@ The fixture universe is rich on purpose (issue #256 "Maximum golden test coverag
 
 1. **Test Universe**: A fixture builder creates an in-memory SQLite database with 3 players (PlayerOne, PlayerTwo, PlayerThree), each having 3 planets plus moons, fleet data with queue events, active queues, messages, and notes.
 2. **Page Rendering**: The `PageRenderer` class simulates the game's `index.php` entry point, loading all necessary core modules, locale files, and page files. It captures the rendered HTML output. POST-only pages (flotten2, flotten3, flottenversand, sprungtor) are rendered with `withPost()` which sets `$_POST` and switches the request method to POST. Since issue #258 ("Add more pages with POST request in GoldenPages"), **every page that handles `method() === "POST"`** is additionally rendered with `withPost()` (POST golden snapshots with the `*_post_*` suffix), so a page that looks fine on GET but breaks when the player interacts (POST) is caught by the snapshot comparison.
-3. **Snapshot Comparison**: The generated HTML is compared against golden snapshot files stored in `testing/golden/`. Dynamic content (timestamps, countdowns, IDs, session tokens) is normalized before comparison.
+3. **Snapshot Comparison**: The generated HTML is compared against golden snapshot files stored in `testing/golden/{lang}/`. Dynamic content (timestamps, countdowns, IDs, session tokens) is normalized before comparison.
+
+### Language support (issue #268)
+
+Every page test runs once per supported language — the languages listed in
+`game/core/loca.php` and present in `game/loca/` (de, en, es, fr, it, jp, ru).
+The universe and the players are created with the language of the current
+data set (`FixtureBuilder::createTestUniverse($lang)`), so the rendered pages
+use that language's loca files. Snapshots are stored per language:
+
+```
+testing/golden/{lang}/{page_name}_{playerIndex}.html
+```
+
+Content assertions that depend on translated strings (building/ship/research
+names, UI labels) are English-only smoke checks; for the other languages the
+golden snapshot comparison is the real assertion.
+
+The `GOLDEN_LANG` environment variable restricts the run to a subset of
+languages (comma separated), e.g. `GOLDEN_LANG=de,ru`.
 
 ### Golden Snapshot Files
 
-Golden snapshots are stored in `testing/golden/` with the naming convention:
+Golden snapshots are stored in `testing/golden/{lang}/` with the naming convention:
 
 ```
-testing/golden/{page_name}_{playerIndex}.html
+testing/golden/{lang}/{page_name}_{playerIndex}.html
 ```
 
 For example:
-- `overview_p0.html` — Overview page for PlayerOne
-- `overview_p1.html` — Overview page for PlayerTwo
-- `buildings_shipyard_p0.html` — Buildings page (Shipyard tab) for PlayerOne
-- `buildings_shipyard_post_p0.html` — same page rendered through its POST form (issue #258)
+- `testing/golden/en/overview_p0.html` — Overview page for PlayerOne (English)
+- `testing/golden/de/overview_p0.html` — same page rendered in German
+- `testing/golden/en/buildings_shipyard_p0.html` — Buildings page (Shipyard tab) for PlayerOne
+- `testing/golden/en/buildings_shipyard_post_p0.html` — same page rendered through its POST form (issue #258)
 
 POST snapshots are named `{page}_{variant}_post_p{index}.html`; the POST-only
 fleet pages from issue #256 (flotten2/flotten3/flottenversand/sprungtor) keep
@@ -33,25 +52,26 @@ their plain names because their snapshots already render the POST flow.
 ### Running the Tests
 
 ```bash
-# Run all golden page tests
+# Run all golden page tests (every supported language)
 vendor/bin/phpunit --testsuite "Golden Pages"
 
-# Run a specific test
+# Run a specific test (all languages; use GOLDEN_LANG to restrict)
 vendor/bin/phpunit --filter testOverviewPagePlayerOne
 
-# Run tests and skip golden comparison (output only)
-# The HTML will be printed to stdout but not compared
+# Run only the German and Russian data sets
+GOLDEN_LANG=de,ru vendor/bin/phpunit --testsuite "Golden Pages"
 ```
 
 ### Updating Golden Snapshots
 
-When page layouts change, golden snapshots need to be regenerated:
+When page layouts or translations change, golden snapshots need to be regenerated:
 
 ```bash
 UPDATE_GOLDEN=1 vendor/bin/phpunit --testsuite "Golden Pages"
 ```
 
-This will overwrite all existing golden snapshot files with the newly rendered HTML.
+This will overwrite all existing golden snapshot files (for every language)
+with the newly rendered HTML.
 
 ### Test Structure
 
@@ -198,14 +218,19 @@ Before comparison, HTML is normalized to handle dynamic content:
 
 ```
 testing/
-├── GoldenPagesTest.php      # Main test class (each test in a separate process)
+├── GoldenPagesTest.php      # Main test class (each test in a separate process, once per language)
 ├── PageRenderer.php          # Renders real game pages through the real DB layer
 ├── FixtureBuilder.php        # Builds the test universe via the in-memory engine (SQLite)
 ├── bootstrap.php             # PHPUnit bootstrap: loads the game core with the SQLite backend
-└── golden/                   # Golden snapshots
+└── golden/                   # Golden snapshots (per language)
     ├── .gitignore
-    ├── overview_p0.html
-    ├── overview_p1.html
+    ├── en/
+    │   ├── overview_p0.html
+    │   ├── overview_p1.html
+    │   └── ...
+    ├── de/
+    │   ├── overview_p0.html
+    │   └── ...
     └── ...
 ```
 

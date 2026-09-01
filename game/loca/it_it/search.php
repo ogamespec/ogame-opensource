@@ -19,8 +19,8 @@ $LOCA["it"]["SEARCH_MEMBERS"] = "Membri";
 $LOCA["it"]["SEARCH_MESSAGE"] = "scrivi messaggio";
 $LOCA["it"]["SEARCH_BUDDY"] = "Richiesta di amicizia";
 $LOCA["it"]["SEARCH_NORESULT"] = "nessun risultato trovato";
-$LOCA["it"]["SEARCH_MAX_USERS_PLANETS"] = "More than #1 entries were found.";
-$LOCA["it"]["SEARCH_MAX_ALLY"] = "more than #1 entries found";
+$LOCA["it"]["SEARCH_MAX_USERS_PLANETS"] = "Sono stati trovati più di #1 risultati.";
+$LOCA["it"]["SEARCH_MAX_ALLY"] = "più di #1 risultati trovati";
 $LOCA["it"]["SEARCH_ERROR_NOT_ENOUGH"] = "Inserisci almeno 2 caratteri per la ricerca.";
 
 ?>

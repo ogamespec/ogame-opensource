@@ -1,6 +1,6 @@
 <?php
 
-$LOCA["fr"]["EXP_MESSAGE_SUBJ"] = "Результат экспедиции [#1:#2:#3]";
+$LOCA["fr"]["EXP_MESSAGE_SUBJ"] = "Résultat de l'expédition [#1:#2:#3]";
 
 // Messages des expéditions.
 // TODO: Il faut comparer très soigneusement. En principe, vous pouvez reprendre les textes du jeu officiel actuel, mais les classes peuvent avoir changé.

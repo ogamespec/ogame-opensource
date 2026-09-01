@@ -1,0 +1,1258 @@
+<html>
+ <head>
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+  <script language="JavaScript">var session="0000000003e9";</script>
+  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+<link rel='stylesheet' type='text/css' href='css/combox.css'>
+<link rel='stylesheet' type='text/css' href='http://localhost/evolution/formate.css' />
+<title>ユニバース 1 OGame</title>
+  <script src='js/utilities.js' type='text/javascript'></script>
+  <script language='JavaScript'>
+  </script>
+<script type='text/javascript' src='js/overLib/overlib.js'></script>
+<!-- HEADER -->
+
+<script language='JavaScript'>
+function onBodyLoad() {
+    window.setTimeout('reloadImages()', 100);
+}
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != '')) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script>
+</head>
+<body style='overflow: hidden;' onload='onBodyLoad();' onunload='' >
+<div id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>
+<div id='header_top'><center>
+<table class='header'>
+<tr class='header' >
+<td class='header' style='width:5;' >
+<table class='header'>
+<tr class='header'>
+<td class='header'><img src='http://localhost/evolution/planeten/small/s_dschjungelplanet02.jpg' width='50' height='50'></td>
+<td class='header'>
+<table class='header'>
+<select size='1' onchange='haha(this)'>
+    <option value='index.php?page=changelog&session=0000000003e9&cp=1' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1' >[1:1:4]</a></option>
+    <option value='index.php?page=changelog&session=0000000003e9&cp=10' >Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10' >[1:1:4]</a></option>
+    <option value='index.php?page=changelog&session=0000000003e9&cp=2' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2' >[1:1:5]</a></option>
+    <option value='index.php?page=changelog&session=0000000003e9&cp=3' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3' >[1:2:4]</a></option>
+    <option value='index.php?page=changelog&session=0000000003e9&cp=11' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11' >[1:2:4]</a></option>
+</select></table></td></tr></table></td>
+
+<td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
+<tr class='header'>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/metall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/kristall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/deuterium.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<a href=index.php?page=micropayment&session=0000000003e9>
+<img border='0' src='img/dm_klein_2.jpg' width='42' height='22' title='ダークマター'></a>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/energie.gif' width='42' height='22'>
+</td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>メタル</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>クリスタル</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>重水素</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>ダークマター</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>エネルギー</font></b></i></td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='90'><font >25.047</font></td>
+    <td align='center' class='header' width='90'><font >15.016</font></td>
+    <td align='center' class='header' width='90'><font >8.003</font></td>
+    <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
+    <td align='center' class='header' width='90'><font >359</font>/529</td>
+</tr>
+</table></td>
+<td class='header'>
+<table class='header' align=left>
+<tr class='header'>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/commander_ikon.gif' width='32' height='32' alt='オジェム指揮官'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>オジェム指揮官</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/admiral_ikon.gif' width='32' height='32' alt='提督'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>提督</font><br><font size=1 color=skyblue>&amp;nbsp;最大フリート数 +2</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/ingenieur_ikon.gif' width='32' height='32' alt='エンジニア'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>エンジニア</font><br><font size=1 color=skyblue>ディフェンスロスを半減+エネルギー10%増加</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/geologe_ikon.gif' width='32' height='32' alt='地質学者'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>地質学者</font><br><font size=1 color=skyblue>鉱山収入+10</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/technokrat_ikon.gif' width='32' height='32' alt='テクノクラート'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>テクノクラート</font><br><font size=1 color=skyblue>スパイ活動レベル+2、調査時間25%短縮</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+<td align='center' class='header'></td></tr></table></td>
+
+</tr>
+</table>
+</div><!-- END HEADER -->
+
+<!-- LEFTMENU -->
+
+   <div id='leftmenu'>
+
+<script language='JavaScript'>
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+<center>
+
+<div id='menu'>
+<a href='mailto:barrierefrei@ogame.de' title='視覚障害のある選手に関する問題は、下記までお問い合わせください barrierefrei@ogame.de.' style='width:1px;'></a>
+<p style='width:110px;'><NOBR>ユニバース 1 (<a href='index.php?page=changelog&session=0000000003e9'>v 0.84</a>)</NOBR></p>
+<table width='110' cellspacing='0' cellpadding='0'>
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/ogame-produktion.jpg' width='110' height='40' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=0000000003e9' accesskey="o">レビュー</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=imperium&session=0000000003e9&planettype=1&no_header=1' accesskey="e">帝国</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=b_building&session=0000000003e9' accesskey="b">建物</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=0000000003e9' accesskey="r">原材料</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=0000000003e9' accesskey=""><font color='FF8900'>贖い主</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Forschung' accesskey="c">リサーチ</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Flotte' accesskey="s">造船所</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=0000000003e9&mode=Flotte' accesskey="f">フリート</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=0000000003e9' accesskey="t">テクノロジー</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=0000000003e9&no_header=1' accesskey="g">ギャラクシー</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Verteidigung' accesskey="d">ディフェンス</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/info-help.jpg' width='110' height='19' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=0000000003e9' accesskey="a">私の同盟</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+    <td align=center>
+     <a id='darkmatter2' style='cursor:pointer; width:110px;'
+         href='index.php?page=micropayment&session=0000000003e9' accesskey="i"><b>オフィサーズ・カジノ</a></b>
+    </div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=statistics&session=0000000003e9' accesskey="k">統計</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=0000000003e9' accesskey="h">検索</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/user-menu.jpg' width='110' height='35' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=messages&session=0000000003e9&dsp=1' accesskey="m">メッセージ</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=0000000003e9&no_header=1", "Notizen");' accesskey="n">備考</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=0000000003e9' accesskey="u">友人</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=0000000003e9' accesskey="p">設定</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=0000000003e9' accesskey="q">出力</a>
+    </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+    </div>
+<!-- END LEFTMENU -->
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+        
+        <center>
+            <table width="668">
+                <tr>
+                    <td class="c">バージョン</td>
+                    <td class="c">説明</td>
+                </tr>
+                
+                                <tr>
+                    <th>0.84</th>
+                    <th style="text-align:left">- 特殊文字の問題を修正<br>
+- いくつかのセキュリティホールを修正（XSS）<br>
+- 建設中の建物がない場合にVMに移行できないバグを修正<br>
+- 同盟システムの軽微なセキュリティ脆弱性を修正<br>
+- 同盟の既存ランクの全権限が失われるバグを修正<br>
+- RSSの文字の問題を修正<br>
+- BBCodeの[url]が再び機能する<br>
+- メモで新しい段落を作成できる機能を修正</th>
+                </tr>
+                                <tr>
+                    <th>0.83</th>
+                    <th style="text-align:left">- 何もないところから資源を得られる脆弱性を修正<br>
+- 自分自身のBANを解除できる脆弱性を修正<br></th>
+                </tr>
+                                <tr>
+                    <th>0.82</th>
+                    <th style="text-align:left">- アカウントの登録、有効化、メール変更に関する技術的な改善</br>
+- 造船所とフリート移動の重大なバグを修正。</th>
+                </tr>
+                                <tr>
+                    <th>0.81</th>
+                    <th style="text-align:left">- 研究統計を修正<BR>
+- 連射攻撃が戦闘レポートに反映されるようになった<BR>
+- 削除されたプレイヤーからの同盟申請を削除 <BR>
+- 遠征からのメッセージの正しい並べ替え<BR>
+- アカウント非アクティブ化時の強制VMを修正<BR>
+- 同盟名は最大30文字まで<BR>
+- 研究のいくつかのバグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.80</th>
+                    <th style="text-align:left">- PHP5での再構成<br>
+- 貯蔵施設が満杯になった後の資源生産を停止 <br>
+- ファランクスの座標にリンクを追加<br>
+- 建設キューを改善<br>
+- 戦闘スクリプトを改善<br>
+- 同盟ページのバグを修正<br>
+- 登録時のバグを修正<br>
+- コスト表示のエラーを修正<br>
+- メッセージ内の[IMG]タグを無効化<BR>
+- 座標とプレイヤー名へのリンクを改善<br></th>
+                </tr>
+                                <tr>
+                    <th>0.78c</th>
+                    <th style="text-align:left">- 統計の継続的な更新<br />
+- 惑星間ロケットの射程を延長<br />
+- 詳細な技術ビュー<br />
+- 艦船とディフェンスの建設時の適切な更新<br />
+- スパイ情報に攻撃リンクを追加<br />
+- 削除された同盟がプレイヤーをブロックしなくなった<br />
+- 同盟メニューのバグを修正<br />
+- メッセージのアンチスパム保護<br />
+- メッセージの最大サイズを2000文字に拡大<br />
+- 迎撃ミサイルの建設数を修正<br />
+- テキスト内のさまざまなエラーを修正<br />
+- チーター対策を追加</th>
+                </tr>
+                                <tr>
+                    <th>0.78b</th>
+                    <th style="text-align:left">- セキュリティシステムを改善<br/ >
+- バリアフリーのプレイを復元<br/ >
+- 強制VMの変更<br/ >
+- RSSのバグ修正<br/ >
+- データベースの改善</th>
+                </tr>
+                                <tr>
+                    <th>0.78a</th>
+                    <th style="text-align:left">新機能：
+- 核融合発電所：エネルギー生成の新しい計算式：30 * 核融合レベル * (1.05 + エネルギーテクノロジーレベル * 0.01) ^ 核融合レベル<br />
+- 月は惑星間ミサイルで攻撃可能に。惑星からの迎撃ミサイルで月を防衛可能<br />
+- コマンダー向けRSS<br />
+- フレンド申請が取り下げられた際のメッセージ<br />
+- 帝国ビューの平均値<br />
+
+修正されたバグ：
+- 宇宙のゲーム速度を改善<br />
+- スパイ情報を再び同盟と共有可能に<br />
+- 戦闘レポートの座標にリンクを追加<br />
+- ファランクスが他のプレイヤーの帰還中のフリートを表示しなくなった<br />
+- 造船所がない場合でもディフェンス構造物が表示される<br />
+- 0時間での待機が再び可能に<br />
+- 月の破壊時のエラーを修正<br />
+
+月が破壊された場合：
+- 月へ飛行中の自分のフリートは惑星へ飛行する<br />
+- 月へ飛行中の他のすべてのフリートは出発惑星に戻る</th>
+                </tr>
+                                <tr>
+                    <th>0.78</th>
+                    <th style="text-align:left">- 新しい機能：遠征 <br />
+- 新しい機能：商人 <br />
+- 戦闘レポートのカラーテキスト <br />
+- 帝国概要に合計列を追加 <br />
+- 発電所、鉱山、貯蔵施設の表示を拡張 <br />
+- 軽微なバグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.77d</th>
+                    <th style="text-align:left">- 同盟ページを修正<br />
+- 新しい建設キュー</th>
+                </tr>
+                                <tr>
+                    <th>0.77c</th>
+                    <th style="text-align:left">- 新しい代替テキストのクラス<br>
+- 建設キューのバグを修正<br />
+同盟：<br />
+- Javascriptのフィルタリング。Javascriptを使用する同盟はエラーが表示されることがある<br />
+- アップロードできるのは.jpg、.gif、.bmp、.png形式のみ <br />
+- 共有メッセージでJavascriptを使用できなくなった<br />
+<br />
+- ミサイルサイロの解体が可能に<br />
+- 月のフィールド数が正しく計算・表示されるようになった<br />
+- フレンドリストの空のエントリが表示されなくなった<br />
+- 恥の柱のCSSバグを修正<br />
+- 位置0にフリートを送信できなくなった<br />
+- 軽微なバグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.77b</th>
+                    <th style="text-align:left">- 建設のキャンセルを修正<br>
+- ミサイル攻撃で、主要目標が再び考慮される<br>
+- 研究ステータスの表示を修正<br>
+- 将校のカジノでのダークマターの表示を修正<br>
+- いくつかのエラーメッセージを修正<br>
+- テラフォーマーと月基地の解体時間を削除<br>
+- 月を惑星のように削除可能に<br>
+- 同盟検索での順位の表示を修正<br>
+- 統計の代替テキストを修正<br>
+- 技術者の代替テキストを修正<br>
+- ギャラクシーの代替テキストのスパイ情報を修正<br>
+- 資源の配達時のメッセージを修正<br>
+- 軽微なセキュリティの欠陥を修正<br>
+- 惑星削除時のエラーメッセージを追加
+- アクティビティ表示を修正</th>
+                </tr>
+                                <tr>
+                    <th>0.77a</th>
+                    <th style="text-align:left">ゲーム内：<br />
+- 惑星間ロケットと迎撃ミサイルの建設にはレベル1の造船所が必要。 <br />
+<br />
+修正されたバグ：<br />
+- フリート派遣時の重水素の読み取り<br />
+- ゲート使用後、目標の月に自動移動<br />
+- 惑星間ロケットの送信時、目標到達メッセージが再び発行される<br />
+- コロニー放棄時のエラーメッセージの表示を修正<br />
+- 統計の閲覧時、必要なページへ自動移動<br />
+- 自分自身をACSに招待できなくなった<br /></th>
+                </tr>
+                                <tr>
+                    <th>0.77</th>
+                    <th style="text-align:left">- フレームを削除<br/>
+- 残骸フィールドの処理時にリサイクラーの積載容量を最大限使用 <br/>
+- エラーメッセージの新しい形式 <br/>
+- アクティビティ表示をギャラクシーメニューからスパイ情報に移動<br/>
+- いくつかのバグを修正<br/></th>
+                </tr>
+                                <tr>
+                    <th>0.76c</th>
+                    <th style="text-align:left">- 一時アドレスを変更する際、パスワードが要求される。 <br />
+- ギャラクシービューのアクティビティ表示を修正。</th>
+                </tr>
+                                <tr>
+                    <th>0.76b</th>
+                    <th style="text-align:left">- 登録を更新し簡素化。<br />
+- 資源表示のバグを修正。</th>
+                </tr>
+                                <tr>
+                    <th>0.76a</th>
+                    <th style="text-align:left">- 全プレイヤーの統計を拡張<br />
+- 新規プレイヤーにウェルカムレターが送信される</th>
+                </tr>
+                                <tr>
+                    <th>0.76</th>
+                    <th style="text-align:left">- 将校：<br />提督、地質学者、技術者、テクノクラートを雇用可能に<br /><br />
+- 同盟：<br /> 同盟からの脱退、加入、または除名時に同盟全体へ自動メッセージが送信される。 <br />メニューに小さな変更。<br /><br />
+- ロケット：<br /> ミサイルの建設時に、あと何発建設できるかが表示される。<br /> 惑星間ミサイルの送信時に、ギャラクシーで利用可能なミサイル数が表示される。<br /><br />
+- 数字の千の位はピリオド「.」で区切られる。例：<br />
+10000000 => 10.000.000<br /><br />
+- すべてのメニューから座標がギャラクシーにリンクされる</th>
+                </tr>
+                                <tr>
+                    <th>0.75a</th>
+                    <th style="text-align:left">- 概要の惑星画像の下に現在の建設が表示される<br>
+- プレイヤーが同盟から除名される際、確認の質問が表示される<br>
+- メッセージメニューで運営者のアドレスが全プレイヤーに表示される<br>
+- 帝国概要とゲートメニューで惑星の並べ替えが機能するようになった</th>
+                </tr>
+                                <tr>
+                    <th>0.75</th>
+                    <th style="text-align:left">- 新しい艦船：迎撃機<br>
+- 連射攻撃の変更 <br>
+- 戦艦のコストを削減（45kメタルと15kクリスタル）<br>
+- 月の名前を変更可能に</th>
+                </tr>
+                                <tr>
+                    <th>0.74e</th>
+                    <th style="text-align:left">- コマンダー向け：「フリート」メニューで、コンピューター技術のレベル+1の数の標準フリートを作成可能<br>
+- メニュー内の惑星の順序を変更可能<br>
+- センサーファランクスの説明に行動範囲を明記<br>
+- 統計に最後の再計算時刻が表示される</th>
+                </tr>
+                                <tr>
+                    <th>0.74d</th>
+                    <th style="text-align:left">- 統計メニューから同盟ページにアクセス可能<br>
+- 検索メニューからフレンド申請を送信可能<br>
+- コマンダー向け：建設可能な艦船/ディフェンスの最大数をクリックすると、その全数が建設フィールドに入力される</th>
+                </tr>
+                                <tr>
+                    <th>0.74c</th>
+                    <th style="text-align:left">- 同盟リストで同盟メンバーを座標順に並べ替えられるようになった<br />
+- フレンドリストにセッションIDが表示されなくなった<br />
+- 建設に十分な資源がない場合でも建物が表示される。リンクは無効になり赤字で強調表示される<br>
+- 他のプレイヤーの同盟ビューが新しいウィンドウで開くようになった<br />
+- IP検証を無効にしているプレイヤーは、セキュリティ上の理由から60分後にセッションが終了する<br />
+- ゲートは少なくとも1隻の艦船が通過した場合のみ再充電に時間がかかるようになった</th>
+                </tr>
+                                <tr>
+                    <th>0.74b</th>
+                    <th style="text-align:left">- 登録と名前変更の際、連続した複数のスペースの使用を禁止 <br>
+- 名前変更時、登録時と同じ特殊文字がフィルタリングされる <br>
+- 同盟テキストのバグを修正 <br>
+- 帝国概要の貯蔵容量が正しく表示される</th>
+                </tr>
+                                <tr>
+                    <th>0.74a</th>
+                    <th style="text-align:left">- スパイプローブの積載容量を0に削減 <br>
+- 「ACS待機」ミッションは、目標惑星の所有者が初心者保護中かどうかを確認する。 <br>
+- 「設定」メニューのバグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.74</th>
+                    <th style="text-align:left">- 新しい登録 <br />
+- 資源メニューでパーセンテージ設定時のバグを修正 <br />
+- 建設中の軽微なバグを修正。</th>
+                </tr>
+                                <tr>
+                    <th>0.73e</th>
+                    <th style="text-align:left">- セッションなしで同盟ページにアクセス可能<br>
+- 同盟テキストの重複を解消<br>
+- Operaで惑星の削除が可能に<br>
+- 同盟のロゴには有効な画像リンクのみ使用可能。利用できる形式はBitmap (.bmp)、PNG (.png)、Tiff (.tif, .tiff)、JPEG (.jpg, .jpeg)、GIF (.gif)。<br>
+- 同盟テキスト内の画像が同じものを参照するようになった</th>
+                </tr>
+                                <tr>
+                    <th>0.73d</th>
+                    <th style="text-align:left">- 建設、メモ、同盟メニューの欠陥を修正<br>
+- 空の同盟の自動削除<br>
+- 同盟統計が正しく表示される</th>
+                </tr>
+                                <tr>
+                    <th>0.73c</th>
+                    <th style="text-align:left">コマンダー向け：<br>
+- 利用可能な資源で惑星に何隻の艦船/ディフェンスを建設できるかを確認可能。<br>
+- 建設に十分な資源がない場合、赤字で強調表示される。正確な数は代替テキストに表示される</th>
+                </tr>
+                                <tr>
+                    <th>0.73b</th>
+                    <th style="text-align:left">ギャラクシービューの改善：<br>
+- 矢印を使用してギャラクシーと太陽系の間を移動可能 <br><br>
+コマンダー向け：<br>
+- 設定でメッセージをフォルダに分類するかどうかを指定可能 <br>
+- 建物・艦船の建設または研究の開始までの残り時間を表示</th>
+                </tr>
+                                <tr>
+                    <th>0.73a</th>
+                    <th style="text-align:left">- リクエスト処理システムの改善</th>
+                </tr>
+                                <tr>
+                    <th>0.73</th>
+                    <th style="text-align:left">- 重大なバグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.72c</th>
+                    <th style="text-align:left">ギャラクシービューの変更：<br>
+- 座標の間隔が2スペースに拡大 <br>
+- 月のサイズが再び表示される <br>
+- 残骸フィールドがない場合、そのリンクは表示されない <br>
+- 残骸フィールドの画像が表示されるようになった <br><br>
+
+- メールアドレスが変更された場合、主要メールアドレスとして登録されているか確認される <br>
+- 軽微なバグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.72b</th>
+                    <th style="text-align:left">- ファランクスで惑星の名前をクリックして再び惑星を閲覧可能 <br>
+- 月の名前を変更できなくなった <br>
+- 艦船の積載容量が不足している場合に表示されるメッセージを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.72</th>
+                    <th style="text-align:left">新しい概要：<br>
+- デザインを改善<br>
+- 惑星、月、残骸フィールドのグラフィック表示<br>
+- ギャラクシーメニューからのフリート派遣を簡素化<br>
+- 代替テキストにランキングを表示<br>
+- 代替テキストにランキングと同盟数を表示<br>
+- プローブの派遣<br><br>
+
+コマンダー向け：<br>
+- リサイクラーの派遣<br>
+- リサイクラー、スパイ、惑星間ミサイル、使用中のフリートスロットのステータスバー<br>
+- 設定でアイコンを設定可能</th>
+                </tr>
+                                <tr>
+                    <th>0.71b</th>
+                    <th style="text-align:left">- 一時的なメールアドレスが変更された場合、永続アドレスにメッセージが送信される<br> 
+- 新しい翻訳を追加</th>
+                </tr>
+                                <tr>
+                    <th>0.71</th>
+                    <th style="text-align:left">更新されたフリート派遣/到着メッセージ：<br /> 
+- 構文上および文体上のエラーを解消<br /> 
+- 自分のフリートの資源搭載量が代替テキストに表示されるようになった<br> 
+- すべてのメッセージをスキンでカスタマイズ可能：<br> 
+&nbsp;&nbsp - クラスに応じて色を変更可能<br /> 
+&nbsp;&nbsp - フリートの出発、到着、待機メッセージを異なる色で表示可能<br /> 
+&nbsp;&nbsp - メッセージ内の名前をフリートメッセージの色に合わせて表示可能<br><br> 
+- 月が月として認識されるようになった</th>
+                </tr>
+                                <tr>
+                    <th>0.70d</th>
+                    <th style="text-align:left">- 登録後3日間は広告なし <br> 
+- 4日後からは割引広告 <br><br> 
+
+バグ修正：<br> 
+- 武器技術の開発レベルがミサイル攻撃の威力に影響する<br> 
+- 非ドイツ語版のACSでの迎撃機能のバグを修正 <br> 
+- 誤字と翻訳エラーを修正 <br><br> 
+
+改善：<br> 
+- 統計メニューから同盟情報を確認可能<br> 
+- センサーファランクスの使用でギャラクシービューに移動しなくなった <br> 
+- 帝国概要でダブルクリックによる建設開始が可能に</th>
+                </tr>
+                                <tr>
+                    <th>0.70c</th>
+                    <th style="text-align:left">- 統計について：<br> 
+  - 自分の名前が緑色で表示される<br>
+  - 同盟メンバーが青色で表示される<br>
+  - 同盟に属していないプレイヤーは統計から直接申請できる<br>
+  - 同盟ポイントが合計とプレイヤーごとに表示される。並べ替えも可能<br>
+  - 統計をクリックすると、自分が属するセクションに自動的に移動する<br>
+  - 得点の差が色で強調表示される：<br>
+&nbsp;&nbsp;- 緑（順位が上昇）、青（順位に変化なし）、赤（順位が下落）<br>
+&nbsp;&nbsp;- カーソルを「+」または「-」の上に移動すると詳細な変化が表示される。<br><br>
+- 検索：<br>
+  - 自分の名前は緑、同盟メンバーの名前は青で表示される。<br>
+  - 検索でランキングの順位が表示されるようになった。<br>
+&nbsp;&nbsp; ポイント数は統計に関連している<br><br>
+- 7日後に非アクティブ表示される<br><br>
+- epicblueスキンで恥の柱が見られるようになった<br><br>
+- 概要メニューのランキングは統計に関連している<br><br>
+- 標準スキンにテラフォーマーと銀河間研究ネットワークの画像が登場（da woifeに感謝）</th>
+                </tr>
+                                <tr>
+                    <th>0.70b</th>
+                    <th style="text-align:left">- 統計について： <br />
+  同盟統計に研究とフリートの統計を追加。<br />  
+  全体の統計を再作成。</th>
+                </tr>
+                                <tr>
+                    <th>0.70a</th>
+                    <th style="text-align:left">- 新しい建物：テラフォーマー<br />
+  テラフォーマーは惑星の建設可能領域を増やす。<br /><br />
+- 新しい研究：銀河間研究ネットワーク<br />
+  異なる惑星の科学者がこのネットワークを通じてデータを共有する<br /><br />
+- テラフォーマーと月基地は解体できない。</th>
+                </tr>
+                                <tr>
+                    <th>0.69c</th>
+                    <th style="text-align:left">- エンジンの改善： <br />
+&nbsp;&nbsp;  - 小型輸送艦はレベル5まで開発するとインパルスドライブを搭載し、初期速度が増加する<br />
+&nbsp;&nbsp;  - ボンバーはレベル8まで開発するとハイパースペースドライブを搭載し、初期速度が増加する <br />
+- 艦船の説明に新しい速度データを追加<br />
+- 艦船の説明に攻撃ダメージの強さを実装<br />
+- 防御側は攻撃側のフリートへの命令を見ることができる<br /></th>
+                </tr>
+                                <tr>
+                    <th>0.69b</th>
+                    <th style="text-align:left">- 惑星間ミサイルのコストが半減（12.5、2.5、10k）。<br>
+- ミサイルサイロの開発レベルごとに迎撃ミサイルの容量が10増加（惑星間ミサイル3発と迎撃ミサイル4発、またはIPM 1発とABM 8発など）<br>
+- 軽微なバグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.69a</th>
+                    <th style="text-align:left">- コマンダー向けの新しいギャラクシービュー：<br />
+- 月からのプローブ送信<br />
+- ギャラクシーから直接残骸フィールドを回収可能。<br />
+- ギャラクシーからスパイ情報を閲覧可能<br />
+- 同盟メンバーとスパイ情報を共有可能<br />
+- ゲーム運営者への個人的なメッセージは禁止 - すべての質問はメールアドレスへ送信される<br /><br />
+- 修正されたバグ：<br />
+- 24時間BANについて<br />
+- パスワードなしでコロニーが削除される<br />
+- 非アクティブなプレイヤーの資源が継続的に採掘される<br /></th>
+                </tr>
+                                <tr>
+                    <th>0.68a</th>
+                    <th style="text-align:left">- 混成同盟艦隊での重水素消費を修正 <br />
+- 待機中のフリートへの重水素の追加 <br />
+- メニュー用のキーコンビネーション <br />
+  -alt+o = レビュー<br />
+  -alt+e = 帝国<br />
+  -alt+b = 建物<br />
+  -alt+r = 原材料<br />
+  -alt+c = リサーチ<br />
+  -alt+s = 造船所<br />
+  -alt+f = フリート<br />
+  -alt+t = テクノロジー<br />
+  -alt+g = ギャラクシー<br />
+  -alt+d = ディフェンス <br />
+  -alt+a = 私の同盟<br />
+  -alt+1 = フォーラム<br />
+  -alt+k = 統計<br />
+  -alt+h = 検索<br />
+  -alt+2 = チュートリアル<br />
+  -alt+m = メッセージ<br />
+  -alt+n = 備考<br />
+  -alt+u = 友人<br />
+  -alt+p = 設定<br />
+  -alt+q = 出力<br /><br />
+
+  WindowsとInternet Explorer：「Alt」+ アクセスキー +「Enter」<br />
+  WindowsとMozilla/Netscape：「Alt」+ アクセスキー <br />
+  WindowsとOpera：「Shift」+「Esc」+ アクセスキー<br />
+  MacintoshとInternet Explorer：「Ctrl」+ アクセスキー +「Enter」<br />
+  MacintoshとSafari：「Ctrl」+ アクセスキー<br />
+  MacintoshとMozilla/Netscape：「Ctrl」+ アクセスキー<br />
+  MacintoshとOpera：「Shift」+「Esc」+ アクセスキー<br />
+  Linux MandrakeとGaleon/Mozilla：「Alt」+ アクセスキー<br />
+  すべてのシステムとAmaya：「Ctrl」+ アクセスキー<br />
+<br />
+- 統計はサーバー時間の0時、8時、16時に更新される。<br />
+<br />
+------------------------------------------------------------------<br />
+- ロールバックについて：<br />
+  - フライトブロッキング<br />
+  - フリートの部分的な呼び戻し</th>
+                </tr>
+                                <tr>
+                    <th>0.67a</th>
+                    <th style="text-align:left">- いくつかの改善</th>
+                </tr>
+                                <tr>
+                    <th>0.66a1</th>
+                    <th style="text-align:left">- ACSのバグを修正<br />
+- 惑星削除中に発生する可能性のあるエラーの内部修正<br />
+- ギャラクシー表示時のスキンのバグを修正<br />
+- 名前変更時、名前は禁止名リストと照合され、先頭と末尾のスペースは自動的に削除される。制限は20文字。<br />
+- 同盟の略称は2文字のみで構成され、先頭と末尾のスペースは削除される<br /></th>
+                </tr>
+                                <tr>
+                    <th>0.65a1</th>
+                    <th style="text-align:left">- 加速戦闘システム<br />
+- 新しいコマンダー機能：建設キューと帝国概要</th>
+                </tr>
+                                <tr>
+                    <th>0.64a</th>
+                    <th style="text-align:left">- スキンにもギャラクシーが表示される<br />
+- フリートメニューのボタンが再びリンクとして表示される<br />
+- 重水素の消費量が色で強調表示される（積載量が十分なら緑、それ以外は赤）<br />
+- フリートメニューで4桁の数字を入力できなくなった<br />
+- Internet Explorerでフリートのタスクが正しく表示されるようになった<br />
+- フリートを到着時間で並べ替え<br />
+- ギャラクシー外にスパイプローブを送信後、ギャラクシーメニューへ自動的にリダイレクト<br />
+- 飛行中のフリートが代替テキストに再び縦に表示される<br />
+- 同盟メンバーリストの下にメッセージ送信アイコンが再び表示される<br />
+- フリートメニューの最後のページにフリートの帰還時間が表示される</th>
+                </tr>
+                                <tr>
+                    <th>0.63a</th>
+                    <th style="text-align:left">- 名前が付けられた追加スキン<br />
+- フリートメニューを軽微に変更<br />
+- さまざまなバグの修正</th>
+                </tr>
+                                <tr>
+                    <th>0.62a</th>
+                    <th style="text-align:left">- ACSの準備<br />
+- フリート送信時に最大資源を選択可能</th>
+                </tr>
+                                <tr>
+                    <th>0.61a</th>
+                    <th style="text-align:left">- 全プレイヤー向け<br />
+  - フリート派遣時の残り積載容量の表示<br />
+  - フリート送信時、同種の全艦船または全種類の全艦船を選択可能<br />
+  - リンクをクリックして自分の惑星を選択可能<br />
+  - スパイ情報を別ウィンドウで表示可能<br />
+<br />
+- コマンダー向け<br />
+  - メッセージフォルダを改善<br />
+  - 個々のメッセージをスパイ情報、戦闘レポート、同盟レポート、その他に分類<br />
+  - 同盟メンバー、フレンド、運営者のアドレス帳<br />
+   - メモはメッセージから閲覧でき、優先度と時間で自動的に並べ替えられる。</th>
+                </tr>
+                                <tr>
+                    <th>0.60a</th>
+                    <th style="text-align:left">- 詳細設定メニュー<br/>
+- 恥の柱に運営者のメールアドレスへのリンクを追加</th>
+                </tr>
+                                <tr>
+                    <th>0.59a</th>
+                    <th style="text-align:left">- デススターは駆逐艦に対して苦戦するようになり、連射率も弱体化<br>
+- 同盟内のグループメッセージが再び機能する<br>
+- BBコードがゲストにも表示されるようになった<br>
+- 軽微なバグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.58b</th>
+                    <th style="text-align:left">- 小惑星フィールドが削除されている</th>
+                </tr>
+                                <tr>
+                    <th>0.58a</th>
+                    <th style="text-align:left">- 惑星削除までの時間差（24時間後のみ）<br>
+  削除前、惑星は小惑星フィールドとして表示される（ギャラクシーでは「A」と表示）<br>
+- 月のバグを修正<br>
+- 24時間ブロック時のエラーを修正<br>
+- スキン読み込み時のエラーを修正<br>
+- 攻撃された場合、輸送船に積み込まれた資源は奪取された資源数で上書きされない<br>
+- 武器技術が惑星間ロケットの威力に影響するようになった<br>
+  1発のミサイルは33発を破壊していたが、武器技術レベル10では66発を破壊する</th>
+                </tr>
+                                <tr>
+                    <th>0.57a</th>
+                    <th style="text-align:left">- ギャラクシー外に送信するスパイプローブの数は設定で指定</th>
+                </tr>
+                                <tr>
+                    <th>0.56b</th>
+                    <th style="text-align:left">- ゲートがすべての宇宙で利用可能に</th>
+                </tr>
+                                <tr>
+                    <th>0.56a</th>
+                    <th style="text-align:left">- 戦闘レポートには実効戦闘力ではなく総戦闘力のみが表示される<br>
+- センサーファランクスで、スキャン中の惑星を再び閲覧可能に<br>
+- パスワードが空のプレイヤーは自分でパスワードを作成する必要がある<br>
+- スパイプローブが検出され戦闘が始まった場合、スパイ情報は送信されない<br>
+- 攻撃艦隊が第1ラウンドで全滅した場合、攻撃者はレポートを受け取らない<br>
+- 核融合発電所のレベルごとの重水素生産量と消費量が対応するようになった<br>
+- デススターは500kのエネルギーを持つ惑星から月を破壊できる<br>
+- フリートが帰還する惑星は削除できない<br>
+- 宇宙は現在平和になった<br>
+- 同盟システムの改善：<br>
+- 25のランクがある<br>
+- 同盟メンバー数のバグを修正<br>
+- 「元同盟の誰それ」が部外者にも見えるようになった<br>
+- 権限リストの並べ替えが可能で、非アクティブステータスを追加できる <br>
+- 全メンバーまたは特定のランクへのグループメール（権限が必要）<br>
+- リーダーの変更（同盟を脱退する機能）<br>
+- リーダーの地位を譲渡可能（リーダーが非アクティブな場合）<br>
+- オンラインステータスの表示（権限が必要）<br>
+- 同盟ページを編集可能（タグは下記参照）<br>
+- 同盟のリーダー名はリーダー自身で変更できる<br>
+- 同盟申請の制限<br>
+- 同盟加入日を修正<br>
+- フレンドリストにオンラインステータスを追加<br>
+- サンプル申請書の自動表示<br>
+- 管理権限を持つ場合、それより高い権限を与えられない<br>
+- 同盟内部ページを追加<br>
+- 創設者が同盟ページを訪れると同盟統計が自動更新される<br>
+- 細かな改善<br>
+- 入力時に残りの文字数を表示<br>
+- 同盟ページ用のタグ<br>
+例：<br>
+[b] - 太字 - [b]Hallo[/b]<br>
+[i] - 斜体 - [i]Hallo[/i]<br>
+[img] - 画像 - [img]http://seite.de/bild.jpg[/img]<br>
+[fc] - 色 - [fc]#FF0000[/fc]Hallo[/f]<br>
+[ff] - フォント - [ff]Verdana[/ff]Hallo[/f]<br>
+[fs] - サイズ - [fs]6[/fs]Hallo[/f]<br>
+- 軽微なバグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.55a</th>
+                    <th style="text-align:left">- 月が破壊される前に、通常の攻撃が行われる。月は攻撃者が戦闘に勝利し、少なくとも1機のデススターが残っている場合のみ破壊される<br>
+- 「メモ」と呼ばれる新しいメニュー項目を追加</th>
+                </tr>
+                                <tr>
+                    <th>0.53</th>
+                    <th style="text-align:left">- 核融合発電所は重水素を使用する。正常に機能するには常に十分な重水素が必要<br>
+- 戦闘中、攻撃された側は追加のフリートを送信できなくなった</th>
+                </tr>
+                                <tr>
+                    <th>0.52</th>
+                    <th style="text-align:left">- 戦闘システムのいくつかのバグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.51</th>
+                    <th style="text-align:left">- 低温惑星の重水素生産への好影響が2倍に</th>
+                </tr>
+                                <tr>
+                    <th>0.50</th>
+                    <th style="text-align:left">- 戦闘システムを改善（大規模な戦闘が再び可能に）</th>
+                </tr>
+                                <tr>
+                    <th>0.49b</th>
+                    <th style="text-align:left">- 未選択のメッセージを削除可能<br>
+- フリートメニューの戻るボタンを削除<br>
+- 恥の柱に年数が表示される<br>
+- ブロックされた場合、ユーザーは即座にブロックされる<br>
+- グラフィックのパスは80文字で構成される<br>
+- 設定でグラフィックを再度変更可能（すべての作者に感謝）。グラフィックのパスが空の場合はメニューが表示される<br>
+- スパイプローブの帰還に関する個別メッセージを削除<br>
+- 初心者とVMのアカウントはミサイルで攻撃できない<br></th>
+                </tr>
+                                <tr>
+                    <th>0.49a</th>
+                    <th style="text-align:left">- 惑星間ロケットと迎撃ミサイルの導入<br>
+- VM中はフリートを派遣できない<br>
+- ボンバーの積載容量が5,000に<br>
+- 運営者は統計に表示されない<br>
+- 惑星間ミサイルの射程が2倍に、破壊力が1.5倍に強化<br>
+- 管理セクションを軽微に改善<br>
+- デススターの連射攻撃の軽微なバグを修正<br></th>
+                </tr>
+                                <tr>
+                    <th>0.48</th>
+                    <th style="text-align:left">- ページ構成を改善</th>
+                </tr>
+                                <tr>
+                    <th>0.47b</th>
+                    <th style="text-align:left">- ボンバーの新しいステータス</th>
+                </tr>
+                                <tr>
+                    <th>0.47a</th>
+                    <th style="text-align:left">- 新しい艦船：ボンバー<br>
+- 重水素の生産量が増加し、惑星の気温に依存するようになった<br>
+  高温の惑星は最低1%多く生産し、低温の惑星は最大20%多く生産する<br>
+- 太陽衛星のスパイプローブに対する連射攻撃を無効化</th>
+                </tr>
+                                <tr>
+                    <th>0.46</th>
+                    <th style="text-align:left">巡洋艦は現在、ロケットランチャーに対して連射攻撃を持つ。平均的な巡洋艦は<br>
+1ラウンドにつき5回ロケットランチャーを攻撃する。<br>
+- 攻撃側も連射攻撃を持ち、デススターは攻撃時にも複数回の斉射を行う<br>
+- 最大300,000ユニット規模の戦闘が可能に<br>
+- 検索のエラーを修正<br>
+- シールドのバグを修正<br>
+- スクリプターへの当てつけとして、宇宙の閲覧に10の重水素が必要<br></th>
+                </tr>
+                                <tr>
+                    <th>0.45</th>
+                    <th style="text-align:left">- プレイヤーが自分に資源を送った場合、メッセージは1通のみ<br>
+- コードの最適化<br>
+- センサーファランクスの使用に5,000の重水素が必要<br>
+- 惑星の名前変更時のバグを修正<br>
+- 設定メニューに新しいグラフィック</th>
+                </tr>
+                                <tr>
+                    <th>0.44</th>
+                    <th style="text-align:left">- スキンへのパスの末尾は常に「"/"」にする必要がある<br>
+- サーバーで毎日3:00に強制アンロードが行われる<br>
+- VMのバグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.43</th>
+                    <th style="text-align:left">- 削除予定のアカウントの自動削除<br>
+- 惑星が削除されると、隣接する月も削除される<br>
+- VMは2日経過後にのみ無効化できる</th>
+                </tr>
+                                <tr>
+                    <th>0.41</th>
+                    <th style="text-align:left">- スキンをインストール可能。ogame.de/ogame.zipからダウンロード<br>
+ インストールし、設定でパスを指定して有効化する。</th>
+                </tr>
+                                <tr>
+                    <th>0.40</th>
+                    <th style="text-align:left">- 資源を月に送信可能</th>
+                </tr>
+                                <tr>
+                    <th>0.39</th>
+                    <th style="text-align:left">- グラフィックを任意に有効化可能<br>
+- ミサイルサイロの開発<br>
+- ファランクスのバグを修正<br>
+- 小さな残骸フィールドは消滅する<br>
+- 戦闘スクリプトのバグが1つ減った。Dragosanに感謝....</th>
+                </tr>
+                                <tr>
+                    <th>0.38</th>
+                    <th style="text-align:left">- 艦船は月から惑星へ飛行可能</th>
+                </tr>
+                                <tr>
+                    <th>0.3779a</th>
+                    <th style="text-align:left">- 初心者保護が5kポイントに引き下げられ、20%まで有効<br />
+- 48日以上非アクティブなアカウントは1日1回削除される<br />
+- 研究の表示バグを修正<br />
+- 月のバグを修正<br />
+- 自分自身にメッセージを送信できなくなった<br />
+- 82機の戦闘機で月を作成できたバグを修正<br />
+- コロニーはフリートがいない場合のみ削除できる</th>
+                </tr>
+                                <tr>
+                    <th>0.3778a</th>
+                    <th style="text-align:left">- 初心者保護の有効化
+<br />
+<br />
+初心者保護についての情報：<br />
+保護は10,000ポイント未満のプレイヤーに有効です。<br />
+保護が有効な場合、攻撃者の10分の1未満のポイントしか持たないアクティブなプレイヤー（ギャラクシーで緑色に表示）<br />を攻撃することはできません。<br />
+また、攻撃者の10倍以上のポイントを持つアクティブなプレイヤーも攻撃できません<br />
+例：<br />
+プレイヤーA - 2kポイント、プレイヤーB < 200ポイント - 互いに攻撃できない<br />
+プレイヤーA - (20k)、プレイヤーB (< 2k) - 互いに攻撃できない<br />
+プレイヤーA - (200k)、プレイヤーB (< 10k) - 互いに攻撃できない<br />
+プレイヤーA - (200k)、プレイヤーB (> 10k) - 互いに攻撃できる <br />
+プレイヤーA - (50k)、プレイヤーB (8k) - 互いに攻撃できる</th>
+                </tr>
+                                <tr>
+                    <th>0.3771a</th>
+                    <th style="text-align:left">- 惑星削除時のパスワード要求</th>
+                </tr>
+                                <tr>
+                    <th>0.377a</th>
+                    <th style="text-align:left">- ギャラクシーでは、弱いプレイヤーは緑、強いプレイヤーは赤で表示される（相手がVM中でない場合）</th>
+                </tr>
+                                <tr>
+                    <th>0.376a</th>
+                    <th style="text-align:left">- 統計計算が改善され、再計算後すぐにランキングの順位が表示される。</th>
+                </tr>
+                                <tr>
+                    <th>0.375a</th>
+                    <th style="text-align:left">- 「Helft OGame」ページで十分な数のプログラムに登録したプレイヤーは、広告が無効になる。</th>
+                </tr>
+                                <tr>
+                    <th>0.374a</th>
+                    <th style="text-align:left">- 異なるプレイヤーの惑星間の輸送は、現在トレードと呼ばれる</th>
+                </tr>
+                                <tr>
+                    <th>0.373a</th>
+                    <th style="text-align:left">- 月の出現確率を増加</th>
+                </tr>
+                                <tr>
+                    <th>0.372a</th>
+                    <th style="text-align:left">- 大規模な戦闘の後に月が出現することがある<br />
+- 月基地<br />
+- 建物の解体が可能に（資源が必要）<br />
+- 惑星のない残骸フィールドは攻撃やスパイができない<br />
+- バケーションモードの軽微なバグを修正<br />
+- センサーファランクス</th>
+                </tr>
+                                <tr>
+                    <th>0.371a</th>
+                    <th style="text-align:left">- 検索メニューで同盟を検索可能に<br />
+- 月の再活性化（テスト）</th>
+                </tr>
+                                <tr>
+                    <th>0.36a</th>
+                    <th style="text-align:left">- バグ6、7、9?、10、13、18、19、22を修正</th>
+                </tr>
+                                <tr>
+                    <th>0.35a</th>
+                    <th style="text-align:left">- BANリスト1、2、4、5のバグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.34a</th>
+                    <th style="text-align:left">- バケーションモードがマウスオーバーで有効化<br />
+- 研究完了時に研究が有効になる</th>
+                </tr>
+                                <tr>
+                    <th>0.331apl2</th>
+                    <th style="text-align:left">- メールアラートを削除 <br/>
+- パスワード復旧を簡素化 <br/>
+- リサイクラーが消えなくなった</th>
+                </tr>
+                                <tr>
+                    <th>0.331apl1</th>
+                    <th style="text-align:left">- 建設バグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.331a</th>
+                    <th style="text-align:left">- 長時間のセッションでBANが可能に</th>
+                </tr>
+                                <tr>
+                    <th>0.330apl4</th>
+                    <th style="text-align:left">- デススターがディフェンスに対してより効果的に <br/>
+- セキュリティの欠陥をいくつか修正 <br/>
+- 加速版への最初の準備</th>
+                </tr>
+                                <tr>
+                    <th>0.330apl3</th>
+                    <th style="text-align:left">- デススターの攻撃力が弱すぎた</th>
+                </tr>
+                                <tr>
+                    <th>0.330apl2</th>
+                    <th style="text-align:left">- セキュリティホールを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.330apl1</th>
+                    <th style="text-align:left">- セキュリティホールを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.330a</th>
+                    <th style="text-align:left">- デススターが飛行可能に<br />
+- バケーションモードを無効化可能に</th>
+                </tr>
+                                <tr>
+                    <th>0.327a</th>
+                    <th style="text-align:left">- ディフェンスの残骸が残骸フィールドに落ちなくなった<br />
+- スパイプローブは武器やディフェンスを持たなくなった（旧値の1%）<br />
+- リサイクラーの保存機能</th>
+                </tr>
+                                <tr>
+                    <th>0.326a</th>
+                    <th style="text-align:left">- バケーションモードのキャンセル</th>
+                </tr>
+                                <tr>
+                    <th>0.325apl1</th>
+                    <th style="text-align:left">- 1000の表示エラーを修正<br />
+- 名前が空のメッセージ<br />
+- リサイクラーのバグ（800万を超える資源の輸送が可能に）<br />
+- 同盟名変更時の新しいエラーメッセージ</th>
+                </tr>
+                                <tr>
+                    <th>0.325a</th>
+                    <th style="text-align:left">- スクリプト検出機能を実装</th>
+                </tr>
+                                <tr>
+                    <th>0.324a</th>
+                    <th style="text-align:left">- 惑星ジャンプのバグを修正（失敗）</th>
+                </tr>
+                                <tr>
+                    <th>0.323a</th>
+                    <th style="text-align:left">- 貯蔵庫のレベル0の表示を修正<br />
+- 艦船タイプのデータベースを拡張<br />
+- 艦船建設の表示エラーを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.322a</th>
+                    <th style="text-align:left">- 同盟メニューから個々の同盟メンバーにメッセージを送信可能</th>
+                </tr>
+                                <tr>
+                    <th>0.321apl3</th>
+                    <th style="text-align:left">- 検索機能から同盟検索を削除<br />
+- 検索機能は同盟に特化<br />
+- 同盟のリーダーは自分のランクで与えられた権限のみを持つ。</th>
+                </tr>
+                                <tr>
+                    <th>0.321apl1</th>
+                    <th style="text-align:left">- ACSのいくつかのバグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.321a</th>
+                    <th style="text-align:left">- 小型同盟システム</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl10</th>
+                    <th style="text-align:left">- 同盟の略称にスペースを許可</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl9</th>
+                    <th style="text-align:left">- 建設と研究のレベルを誤って表示していたバグを部分的に修正。<br />
+- 座標<0には送信できない</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl8</th>
+                    <th style="text-align:left">- 生産表示のエラーを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl7</th>
+                    <th style="text-align:left">- 造船所のバグを修正<br />
+- 建設完了後の空きフィールド計算時のバグを修正</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl6</th>
+                    <th style="text-align:left">- スパイ送信後に動作が戻るようになった<br />
+- ギャラクシーの動作復帰はdragoscanに感謝</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl5</th>
+                    <th style="text-align:left">- フリート維持費に関するテキストを削除</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl4</th>
+                    <th style="text-align:left">- CHANGELOGへのリンク<br />
+- 建物の建設時にキャッシュをクリア<br />
+- 艦船の建設中はナノマシン工場を建設できない</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl3</th>
+                    <th style="text-align:left">- 負の時間が表示される造船所のバグを修正<br />
+- 終了時にホームページへのリンクを追加。<br />
+- シールドドームのバグを修正。現在は一度しか建設できない。</th>
+                </tr>
+                                <tr>
+                    <th>0.312apl2</th>
+                    <th style="text-align:left">- 特殊文字の修正</th>
+                </tr>
+                            </table><br><br><br><br>
+        </center>
+</div>
+<!-- END CONTENT AREA -->
+
+
+
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+<div id='messagebox'><center></center></div>
+<div id='errorbox'><center></center></div>
+<script>
+headerHeight = 81;
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = '_blank';
+  }
+}
+</script>
+<style>
+.layer {
+    z-index:999999999;
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 757px; 
+    height: 475px; 
+    background-color: #040e1e;
+    border: 3px double orange;
+    padding: 0;
+    opacity: .90;
+}
+</style>
+</body></html>

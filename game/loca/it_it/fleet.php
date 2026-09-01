@@ -42,6 +42,7 @@ $LOCA["it"]["FLEET1_AMOUNT"] = "Quantit&agrave;";
 $LOCA["it"]["FLEET1_SPEED"] = "Velocit&agrave;";
 $LOCA["it"]["FLEET1_CLEAR"] = "Nessuna nave";
 $LOCA["it"]["FLEET1_ALL_SHIPS"] = "Tutte le navi";
+$LOCA["it"]["FLEET1_ALL"] = "Tutto";
 $LOCA["it"]["FLEET1_TEMPLATE"] = "Scorciatoie";
 $LOCA["it"]["FLEET1_NEXT"] = "procedi";
 
@@ -83,7 +84,7 @@ $LOCA["it"]["FLEET_TEMP_SAVE"] = "Crea";
 
 // flottenversand
 
-$LOCA["it"]["FLEET_ERR_FREEZE"] = "Невозможно отправить флот, Вселенная поставлена на паузу.";
+$LOCA["it"]["FLEET_ERR_FREEZE"] = "Impossibile inviare una flotta, l'universo è stato messo in pausa.";
 $LOCA["it"]["FLEET_ERR_SAME_PLANET"] = "Coordinate di destinazione devono essere diverse da quelle di partenza";
 $LOCA["it"]["FLEET_ERR_INVALID"] = "Coordinate di destinazione non corrette!";
 $LOCA["it"]["FLEET_ERR_VACATION_SELF"] = "Non puoi inviare flotte in modalit&agrave; vacanza!";
@@ -117,6 +118,7 @@ $LOCA["it"]["FLEET_ERR_EXP_LIMIT"] = "Devi effettuare la ricerca della tecnologi
 $LOCA["it"]["FLEET_ERR_EXP_REQUIRED"] = "Non puoi inviare satelliti solari in spedizione!";
 $LOCA["it"]["FLEET_ERR_EXP_INVALID"] = "Spedizioni possibili solo in posizione 16!";
 $LOCA["it"]["FLEET_ERR_ORDER"] = "Selezionare almeno una missione!";
+$LOCA["it"]["FLEET_ERR_BATTLE_MAX"] = "Limite di unità raggiunto!";
 
 $LOCA["it"]["FLEET_SEND_ERROR"] = " Errore!";
 

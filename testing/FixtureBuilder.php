@@ -83,8 +83,15 @@ class FixtureBuilder
 
     /**
      * Create the test universe with 3 players.
+     *
+     * @param string $lang Language code (e.g. 'en', 'de', 'ru') for the
+     *                     universe and for every player. Golden Pages tests
+     *                     run once per supported language (issue #268); the
+     *                     game pages read the language from the uni row
+     *                     ($GlobalUni['lang']) and from the users table
+     *                     ($GlobalUser['lang']), so both must match.
      */
-    public function createTestUniverse(): self
+    public function createTestUniverse(string $lang = 'en'): self
     {
         global $db_prefix;
         $now = time();
@@ -94,7 +101,7 @@ class FixtureBuilder
             'num' => 1, 'speed' => 1.0, 'fspeed' => 1.0, 'galaxies' => 1, 'systems' => 15,
             'maxusers' => 1000, 'acs' => 1, 'rapid' => 0, 'moons' => 1, 'defrepair' => 0,
             'defrepair_delta' => 0, 'usercount' => 3, 'freeze' => 0, 'startdate' => $now - 86400,
-            'battle_engine' => 'php', 'lang' => 'en', 'hacks' => 0, 'php_battle' => 1,
+            'battle_engine' => 'php', 'lang' => $lang, 'hacks' => 0, 'php_battle' => 1,
             'force_lang' => 0, 'start_dm' => 0, 'max_werf' => 1000, 'feedage' => 0,
             // News (ComBox on the Overview page) -- fixed text, active for a day.
             'news1' => 'Welcome to the test universe!', 'news2' => 'Golden pages test server.',
@@ -135,7 +142,7 @@ class FixtureBuilder
                 'name' => $pData['name'],
                 'oname' => $pData['oname'],
                 'email' => 'player' . $playerId . '@test.com',
-                'lang' => 'en',
+                'lang' => $lang,
                 'admin' => 0,
                 'validated' => 1,
                 'lastlogin' => $now - 3600,

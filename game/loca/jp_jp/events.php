@@ -17,21 +17,21 @@ $LOCA["jp"]["EVENT_FLEET_ACS_HEAD"] = "アライアンス #1 艦隊";
 $LOCA["jp"]["EVENT_MISSION"] = "割り当て";
 
 $LOCA["jp"]["EVENT_FROM_TO"] = " #1 から #2 に送信";
-$LOCA["jp"]["EVENT_FROM_RETURN_TO"] = ", отправленный с #1, возвращается на #2";
-$LOCA["jp"]["EVENT_PLAYER_FROM_TO"] = " игрока #1 с #2 отправлен на #3";
-$LOCA["jp"]["EVENT_HOLD_FROM_ONTO"] = ", отправленный с #1, находится на орбите #2";
-$LOCA["jp"]["EVENT_FROM_TO_ORBIT"] = " с #1 на орбите #2";
+$LOCA["jp"]["EVENT_FROM_RETURN_TO"] = "、#1から送られた艦隊が#2に帰還しています";
+$LOCA["jp"]["EVENT_PLAYER_FROM_TO"] = " プレイヤー#1の艦隊が#2から#3へ送信されました";
+$LOCA["jp"]["EVENT_HOLD_FROM_ONTO"] = "、#1から送られた艦隊が#2の軌道に留まっています";
+$LOCA["jp"]["EVENT_FROM_TO_ORBIT"] = " #1から#2の軌道へ";
 // 植民地化
-$LOCA["jp"]["EVENT_COLONY_FROM_TO"] = " с #1 отправлен на позицию #2";
-$LOCA["jp"]["EVENT_COLONY_FROM_RETURN_TO"] = ", отправленный с позиции #1, возвращается на #2";
+$LOCA["jp"]["EVENT_COLONY_FROM_TO"] = " #1から位置#2へ送信";
+$LOCA["jp"]["EVENT_COLONY_FROM_RETURN_TO"] = "、位置#1から送られた艦隊が#2に帰還しています";
 // 遠征のために
-$LOCA["jp"]["EVENT_EXPO_FROM_TO"] = " отправленный с #1 достигает позиции #2";
-$LOCA["jp"]["EVENT_EXPO_RETURN_FROM_TO"] = " возвращается на #1 после приказа #2";
-$LOCA["jp"]["EVENT_EXPO_FROM_ONTO"] = ", отправленный с #1 исследует позицию #2";
+$LOCA["jp"]["EVENT_EXPO_FROM_TO"] = " #1から送られた艦隊が位置#2に到着";
+$LOCA["jp"]["EVENT_EXPO_RETURN_FROM_TO"] = " #2の命令後、#1に帰還します";
+$LOCA["jp"]["EVENT_EXPO_FROM_ONTO"] = "、#1から送られた艦隊が位置#2を調査中";
 // ファランクス用
-$LOCA["jp"]["EVENT_FROM_TO_PHALANX"] = " игрока #1 с планеты #2 отправлен на #3"; 		// ファランクスで飛び立つ
-$LOCA["jp"]["EVENT_FROM_RETURN_TO_PHALANX"] = " возвратится с #1 на #2";   			// ファランクスに戻る
-$LOCA["jp"]["EVENT_EXPO_FROM_ONTO_PHALANX"] = " игрока #1 с #2 исследует позицию #3";  	// ファランクス遠征を探る
+$LOCA["jp"]["EVENT_FROM_TO_PHALANX"] = " プレイヤー#1の艦隊が惑星#2から#3へ送信"; 		// ファランクスで飛び立つ
+$LOCA["jp"]["EVENT_FROM_RETURN_TO_PHALANX"] = " #1から#2に帰還します";   			// ファランクスに戻る
+$LOCA["jp"]["EVENT_EXPO_FROM_ONTO_PHALANX"] = " プレイヤー#1の艦隊が#2から位置#3を調査中";  	// ファランクス遠征を探る
 
 // ロケット攻撃
 $LOCA["jp"]["EVENT_RAK"] = "ロケット・アタック（#1） #2から#3へ";

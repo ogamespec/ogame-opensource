@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\TestCase;
 
@@ -13,15 +14,37 @@ use PHPUnit\Framework\TestCase;
  * queues, messages of every type, an alliance with applications, ...) and
  * compare the HTML output against golden snapshot files.
  * 
- * Golden snapshots are stored in: testing/golden/{page}_{playerIndex}.html
+ * Every page test runs once per supported language (the languages listed in
+ * game/core/loca.php and present in game/loca/): de, en, es, fr, it, jp, ru.
+ * The universe and the players are created with the language of the current
+ * data set (FixtureBuilder::createTestUniverse($lang)), so the rendered
+ * pages use that language's loca files. Snapshots are stored per language:
  * 
- * To create/update golden snapshots, run tests with UPDATE_GOLDEN=1 environment variable:
+ *   testing/golden/en/overview_p0.html
+ *   testing/golden/de/overview_p0.html
+ *   ...
+ * 
+ * (The css/img/js folders at testing/golden/ are local-only helpers for
+ * browsing snapshots and are gitignored.)
+ * 
+ * Content assertions that depend on translated strings (building/ship
+ * research names, UI labels) are English-only smoke checks; for the other
+ * languages the golden snapshot comparison is the real assertion.
+ * 
+ * To create/update golden snapshots for all languages, run tests with
+ * UPDATE_GOLDEN=1 environment variable:
  *   UPDATE_GOLDEN=1 vendor/bin/phpunit --filter GoldenPagesTest
+ * 
+ * To restrict the run to a subset of languages, set GOLDEN_LANG:
+ *   GOLDEN_LANG=de,ru vendor/bin/phpunit --filter GoldenPagesTest
  * 
  * Each test runs in a separate PHP process (like NotesTest/DbSqliteTest on
  * master): the game core files assign global variables ($GlobalUser, $LOCA,
  * $resourcemap, ...) that the game pages rely on, and only the process-
  * isolated child template loads the PHPUnit bootstrap at the true top level.
+ * The loca section files are loaded with include_once (loca_add), so each
+ * process must use exactly one language -- the process isolation provides
+ * that for free.
  */
 #[RunTestsInSeparateProcesses]
 class GoldenPagesTest extends TestCase
@@ -30,17 +53,68 @@ class GoldenPagesTest extends TestCase
     private string $goldenDir;
     private bool $updateGolden;
 
+    /**
+     * Language code of the current data set (from the 'languages' data
+     * provider). Tests without a data provider keep the default 'en'.
+     */
+    protected string $lang = 'en';
+
     protected function setUp(): void
     {
+        // dataName() returns the key of the current data set, e.g. 'de';
+        // tests without a data provider get '' and use the default 'en'.
+        $dataName = $this->dataName();
+        $this->lang = is_string($dataName) && $dataName !== '' ? $dataName : 'en';
+
         $this->fixture = new FixtureBuilder();
-        $this->fixture->createTestUniverse();
+        $this->fixture->createTestUniverse($this->lang);
         
-        $this->goldenDir = __DIR__ . '/golden/';
+        $this->goldenDir = __DIR__ . '/golden/' . $this->lang . '/';
         if (!is_dir($this->goldenDir)) {
             mkdir($this->goldenDir, 0755, true);
         }
         
         $this->updateGolden = getenv('UPDATE_GOLDEN') === '1';
+    }
+
+    // ========================================================================
+    // Language data provider (issue #268: all supported languages from loca)
+    // ========================================================================
+
+    /**
+     * Every supported language: the language codes of the game/loca/{lang}_{lang}/
+     * folders, which match the $Languages list in game/core/loca.php. The
+     * folders are scanned from the filesystem so this data provider works in
+     * the PHPUnit parent process, where the bootstrap is included inside a
+     * method scope and its globals ($Languages) are not visible. The
+     * GOLDEN_LANG environment variable can restrict the run to a subset
+     * (comma separated), e.g. GOLDEN_LANG=de,ru.
+     */
+    public static function languages(): array
+    {
+        $all = array ();
+        foreach (glob(dirname(__DIR__) . '/game/loca/*', GLOB_ONLYDIR) as $dir) {
+            $code = substr(basename($dir), 0, 2);
+            if (preg_match('/^[a-z]{2}$/', $code) && !in_array($code, $all, true)) {
+                $all[] = $code;
+            }
+        }
+        sort($all);
+        if ($all === array ()) {
+            $all = array ('en');
+        }
+
+        $filter = getenv('GOLDEN_LANG');
+        if ($filter !== false && $filter !== '') {
+            $wanted = array_map('trim', explode(',', $filter));
+            $all = array_values(array_intersect($all, $wanted));
+        }
+
+        $data = array ();
+        foreach ($all as $lang) {
+            $data[$lang] = array ($lang);
+        }
+        return $data;
     }
 
     // ========================================================================
@@ -232,6 +306,7 @@ class GoldenPagesTest extends TestCase
      * Test overview page rendering for PlayerOne (moon, fleet events,
      * active building).
      */
+    #[DataProvider('languages')]
     public function testOverviewPagePlayerOne(): void
     {
         $html = $this->renderPage('overview', [], 0);
@@ -248,6 +323,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test overview page rendering for PlayerTwo
      */
+    #[DataProvider('languages')]
     public function testOverviewPagePlayerTwo(): void
     {
         $html = $this->renderPage('overview', [], 1);
@@ -261,6 +337,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test overview page rendering for PlayerThree
      */
+    #[DataProvider('languages')]
     public function testOverviewPagePlayerThree(): void
     {
         $html = $this->renderPage('overview', [], 2);
@@ -276,6 +353,7 @@ class GoldenPagesTest extends TestCase
      * at least an attack, a destroy-on-moon and an enemy attack must be
      * listed in the events table.
      */
+    #[DataProvider('languages')]
     public function testOverviewShowsFleetEvents(): void
     {
         $html = $this->renderPage('overview', [], 0);
@@ -290,28 +368,31 @@ class GoldenPagesTest extends TestCase
      * Test that the overview shows the moon and the active building
      * (issue #256).
      */
+    #[DataProvider('languages')]
     public function testOverviewShowsMoonAndBuildQueue(): void
     {
         $html = $this->renderPage('overview', [], 0);
         $this->assertStringContainsString('mond.jpg', $html);                  // moon image
-        $this->assertStringContainsString('Metal Mine', $html);                // active building
+        $this->assertEnglish($html, 'Metal Mine');                // active building
     }
 
     /**
      * Test overview of the moon itself (cp = moon id).
      */
+    #[DataProvider('languages')]
     public function testOverviewMoonView(): void
     {
         $moonId = $this->getPlayerMoonId(1);
         $html = $this->renderPage('overview', ['cp' => $moonId], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Moon', $html);
+        $this->assertEnglish($html, 'Moon');
         $this->compareOrSaveGolden('overview_moon', 0, $html);
     }
 
     /**
      * Test planet switching - overview for PlayerTwo
      */
+    #[DataProvider('languages')]
     public function testPlayerTwoPlanetOverview(): void
     {
         $html = $this->renderPage('overview', [], 1);
@@ -323,6 +404,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test planet switching - overview for PlayerThree
      */
+    #[DataProvider('languages')]
     public function testPlayerThreePlanetOverview(): void
     {
         $html = $this->renderPage('overview', [], 2);
@@ -334,6 +416,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test that page rendering produces consistent output (determinism check)
      */
+    #[DataProvider('languages')]
     public function testOverviewPageDeterministic(): void
     {
         $html1 = $this->renderPage('overview', [], 0);
@@ -349,6 +432,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test that different players have different page content
      */
+    #[DataProvider('languages')]
     public function testDifferentPlayersHaveDifferentContent(): void
     {
         $html1 = $this->renderPage('overview', [], 0);
@@ -367,23 +451,25 @@ class GoldenPagesTest extends TestCase
      * Test buildings page (Shipyard tab) for PlayerOne: ships on the planet
      * and an active shipyard order.
      */
+    #[DataProvider('languages')]
     public function testBuildingsPageShipyardPlayerOne(): void
     {
         $html = $this->renderPage('buildings', ['mode' => 'Flotte'], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Small Cargo', $html);
-        $this->assertStringContainsString('Light Fighter', $html);
+        $this->assertEnglish($html, 'Small Cargo');
+        $this->assertEnglish($html, 'Light Fighter');
         $this->compareOrSaveGolden('buildings_shipyard', 0, $html);
     }
 
     /**
      * Test buildings page (Defense tab) for PlayerOne
      */
+    #[DataProvider('languages')]
     public function testBuildingsPageDefensePlayerOne(): void
     {
         $html = $this->renderPage('buildings', ['mode' => 'Verteidigung'], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Rocket Launcher', $html);
+        $this->assertEnglish($html, 'Rocket Launcher');
         $this->compareOrSaveGolden('buildings_defense', 0, $html);
     }
 
@@ -391,11 +477,12 @@ class GoldenPagesTest extends TestCase
      * Test buildings page (Research tab) for PlayerOne with an active
      * research (issue #256).
      */
+    #[DataProvider('languages')]
     public function testBuildingsPageResearchPlayerOne(): void
     {
         $html = $this->renderPage('buildings', ['mode' => 'Forschung'], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Energy Technology', $html);
+        $this->assertEnglish($html, 'Energy Technology');
         $this->compareOrSaveGolden('buildings_research', 0, $html);
     }
 
@@ -403,12 +490,13 @@ class GoldenPagesTest extends TestCase
      * Test the b_building page (build queue interface) with active
      * constructions (issue #256).
      */
+    #[DataProvider('languages')]
     public function testBuildingPagePlayerOne(): void
     {
         $html = $this->renderPage('b_building', [], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Metal Mine', $html);
-        $this->assertStringContainsString('Crystal Mine', $html);
+        $this->assertEnglish($html, 'Metal Mine');
+        $this->assertEnglish($html, 'Crystal Mine');
         $this->compareOrSaveGolden('b_building', 0, $html);
     }
 
@@ -419,39 +507,43 @@ class GoldenPagesTest extends TestCase
     /**
      * Test infos page for a building (Metal Mine) for PlayerOne
      */
+    #[DataProvider('languages')]
     public function testInfosPageMetalMinePlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_B_METAL_MINE], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Metal Mine', $html);
+        $this->assertEnglish($html, 'Metal Mine');
         $this->compareOrSaveGolden('infos_metal_mine', 0, $html);
     }
 
     /**
      * Test infos page for the Crystal Mine (production table)
      */
+    #[DataProvider('languages')]
     public function testInfosPageCrystalMinePlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_B_CRYS_MINE], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Crystal Mine', $html);
+        $this->assertEnglish($html, 'Crystal Mine');
         $this->compareOrSaveGolden('infos_crystal_mine', 0, $html);
     }
 
     /**
      * Test infos page for the Deuterium Synthesizer
      */
+    #[DataProvider('languages')]
     public function testInfosPageDeutSynthPlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_B_DEUT_SYNTH], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Deuterium Synthesizer', $html);
+        $this->assertEnglish($html, 'Deuterium Synthesizer');
         $this->compareOrSaveGolden('infos_deut_synth', 0, $html);
     }
 
     /**
      * Test infos page for the Solar Plant
      */
+    #[DataProvider('languages')]
     public function testInfosPageSolarPlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_B_SOLAR], 0);
@@ -462,6 +554,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test infos page for the Fusion Reactor
      */
+    #[DataProvider('languages')]
     public function testInfosPageFusionPlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_B_FUSION], 0);
@@ -472,6 +565,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test infos page for a storage building
      */
+    #[DataProvider('languages')]
     public function testInfosPageStoragePlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_B_METAL_STOR], 0);
@@ -482,6 +576,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test infos page for the Missile Silo (missile forms)
      */
+    #[DataProvider('languages')]
     public function testInfosPageMissileSiloPlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_B_MISS_SILO], 0);
@@ -492,17 +587,19 @@ class GoldenPagesTest extends TestCase
     /**
      * Test infos page for the Alliance Depot (supply form)
      */
+    #[DataProvider('languages')]
     public function testInfosPageAllianceDepotPlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_B_ALLY_DEPOT], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Alliance Depot', $html);
+        $this->assertEnglish($html, 'Alliance Depot');
         $this->compareOrSaveGolden('infos_ally_depot', 0, $html);
     }
 
     /**
      * Test infos page for the Sensor Phalanx (needs a moon with a phalanx)
      */
+    #[DataProvider('languages')]
     public function testInfosPagePhalanxOnMoon(): void
     {
         $moonId = $this->getPlayerMoonId(1);
@@ -514,62 +611,68 @@ class GoldenPagesTest extends TestCase
     /**
      * Test infos page for the Jump Gate (needs a moon with a gate)
      */
+    #[DataProvider('languages')]
     public function testInfosPageJumpGateOnMoon(): void
     {
         $moonId = $this->getPlayerMoonId(1);
         $html = $this->renderPage('infos', ['gid' => GID_B_JUMP_GATE, 'cp' => $moonId], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Jump Gate', $html);
+        $this->assertEnglish($html, 'Jump Gate');
         $this->compareOrSaveGolden('infos_jump_gate', 0, $html);
     }
 
     /**
      * Test infos page for a ship (Small Cargo -- has engine-change text)
      */
+    #[DataProvider('languages')]
     public function testInfosPageSmallCargoPlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_F_SC], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Small Cargo', $html);
+        $this->assertEnglish($html, 'Small Cargo');
         $this->compareOrSaveGolden('infos_fleet_sc', 0, $html);
     }
 
     /**
      * Test infos page for a ship (Light Fighter)
      */
+    #[DataProvider('languages')]
     public function testInfosPageLightFighterPlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_F_LF], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Light Fighter', $html);
+        $this->assertEnglish($html, 'Light Fighter');
         $this->compareOrSaveGolden('infos_fleet_lf', 0, $html);
     }
 
     /**
      * Test infos page for the Deathstar (rapid fire info)
      */
+    #[DataProvider('languages')]
     public function testInfosPageDeathstarPlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_F_DEATHSTAR], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Deathstar', $html);
+        $this->assertEnglish($html, 'Deathstar');
         $this->compareOrSaveGolden('infos_fleet_deathstar', 0, $html);
     }
 
     /**
      * Test infos page for a defense (Rocket Launcher)
      */
+    #[DataProvider('languages')]
     public function testInfosPageRocketLauncherPlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_D_RL], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Rocket Launcher', $html);
+        $this->assertEnglish($html, 'Rocket Launcher');
         $this->compareOrSaveGolden('infos_defense_rl', 0, $html);
     }
 
     /**
      * Test infos page for a defense (Plasma Turret)
      */
+    #[DataProvider('languages')]
     public function testInfosPagePlasmaTurretPlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_D_PLASMA], 0);
@@ -580,22 +683,24 @@ class GoldenPagesTest extends TestCase
     /**
      * Test infos page for a research (Espionage Technology)
      */
+    #[DataProvider('languages')]
     public function testInfosPageEspionagePlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_R_ESPIONAGE], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Espionage Technology', $html);
+        $this->assertEnglish($html, 'Espionage Technology');
         $this->compareOrSaveGolden('infos_research_espionage', 0, $html);
     }
 
     /**
      * Test infos page for a research (Weapons Technology)
      */
+    #[DataProvider('languages')]
     public function testInfosPageWeaponsPlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_R_WEAPON], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Weapons Technology', $html);
+        $this->assertEnglish($html, 'Weapons Technology');
         $this->compareOrSaveGolden('infos_research_weapons', 0, $html);
     }
 
@@ -603,11 +708,12 @@ class GoldenPagesTest extends TestCase
      * Test infos page without special additional info (one plain snapshot,
      * issue #256): the Robotics Factory has no extra table.
      */
+    #[DataProvider('languages')]
     public function testInfosPagePlainPlayerOne(): void
     {
         $html = $this->renderPage('infos', ['gid' => GID_B_ROBOTS], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Robotics Factory', $html);
+        $this->assertEnglish($html, 'Robotics Factory');
         $this->compareOrSaveGolden('infos_plain', 0, $html);
     }
 
@@ -619,6 +725,7 @@ class GoldenPagesTest extends TestCase
      * Test messages page for PlayerOne: all folders enabled, so every
      * message type is listed.
      */
+    #[DataProvider('languages')]
     public function testMessagesPagePlayerOne(): void
     {
         $html = $this->renderPage('messages', [], 0);
@@ -632,6 +739,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the messages page spy folder (pm=1)
      */
+    #[DataProvider('languages')]
     public function testMessagesSpyFolderPlayerOne(): void
     {
         $html = $this->renderPage('messages', ['pm' => MTYP_SPY_REPORT], 0);
@@ -643,6 +751,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the messages page combat folder (pm=2)
      */
+    #[DataProvider('languages')]
     public function testMessagesCombatFolderPlayerOne(): void
     {
         $html = $this->renderPage('messages', ['pm' => MTYP_BATTLE_REPORT_LINK], 0);
@@ -654,6 +763,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the messages page expedition folder (pm=3)
      */
+    #[DataProvider('languages')]
     public function testMessagesExpeditionFolderPlayerOne(): void
     {
         $html = $this->renderPage('messages', ['pm' => MTYP_EXP], 0);
@@ -665,6 +775,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the messages page alliance folder (pm=4)
      */
+    #[DataProvider('languages')]
     public function testMessagesAllianceFolderPlayerOne(): void
     {
         $html = $this->renderPage('messages', ['pm' => MTYP_ALLY], 0);
@@ -676,6 +787,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the messages page private folder (pm=0)
      */
+    #[DataProvider('languages')]
     public function testMessagesPrivateFolderPlayerOne(): void
     {
         $html = $this->renderPage('messages', ['pm' => MTYP_PM], 0);
@@ -687,12 +799,13 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the bericht page with a battle report (issue #256)
      */
+    #[DataProvider('languages')]
     public function testBerichtBattleReportPlayerOne(): void
     {
         $msgId = $this->getMessageIdByType(MTYP_BATTLE_REPORT_TEXT);
         $html = $this->renderPage('bericht', ['bericht' => $msgId], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Battle Report', $html);
+        $this->assertEnglish($html, 'Battle Report');
         $this->assertStringContainsString('Attacker PlayerOne', $html);
         $this->compareOrSaveGolden('bericht_battle', 0, $html);
     }
@@ -700,6 +813,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the bericht page with a spy report (issue #256)
      */
+    #[DataProvider('languages')]
     public function testBerichtSpyReportPlayerOne(): void
     {
         $msgId = $this->getMessageIdByType(MTYP_SPY_REPORT);
@@ -712,6 +826,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test write messages page for PlayerOne
      */
+    #[DataProvider('languages')]
     public function testWriteMessagesPagePlayerOne(): void
     {
         $html = $this->renderPage('writemessages', ['messageziel' => 2], 0);
@@ -723,6 +838,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test notes page for PlayerOne
      */
+    #[DataProvider('languages')]
     public function testNotesPagePlayerOne(): void
     {
         $html = $this->renderPage('notizen', [], 0);
@@ -740,13 +856,14 @@ class GoldenPagesTest extends TestCase
      * missions (spy, attack, transport, destroy-on-moon, deploy, recycle,
      * expedition, colonize).
      */
+    #[DataProvider('languages')]
     public function testFleetPage1PlayerOne(): void
     {
         $html = $this->renderPage('flotten1', ['galaxy' => 1, 'system' => 3, 'planet' => 4, 'planettype' => 1, 'target_mission' => 1], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Small Cargo', $html);
-        $this->assertStringContainsString('Light Fighter', $html);
-        $this->assertStringContainsString('Deathstar', $html);
+        $this->assertEnglish($html, 'Small Cargo');
+        $this->assertEnglish($html, 'Light Fighter');
+        $this->assertEnglish($html, 'Deathstar');
         $this->compareOrSaveGolden('flotten1', 0, $html);
     }
 
@@ -754,6 +871,7 @@ class GoldenPagesTest extends TestCase
      * Test flotten2 (fleet step 2): coordinates and fleet summary.
      * The page is POST-only; withPost() simulates the flotten1 form submit.
      */
+    #[DataProvider('languages')]
     public function testFleetPage2PlayerOne(): void
     {
         $post = $this->fleetPostBase();
@@ -767,13 +885,14 @@ class GoldenPagesTest extends TestCase
 
         $html = $this->renderPageWithPost('flotten2', [], $post, 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Fleet', $html);
+        $this->assertEnglish($html, 'Fleet');
         $this->compareOrSaveGolden('flotten2', 0, $html);
     }
 
     /**
      * Test flotten3 (fleet step 3): mission list and resources.
      */
+    #[DataProvider('languages')]
     public function testFleetPage3PlayerOne(): void
     {
         $post = $this->fleetPostBase();
@@ -803,6 +922,7 @@ class GoldenPagesTest extends TestCase
      * Test flottenversand: dispatch an attack fleet (combat movement,
      * issue #256).
      */
+    #[DataProvider('languages')]
     public function testFleetDispatchAttackPlayerOne(): void
     {
         $post = $this->fleetPostBase();
@@ -824,13 +944,14 @@ class GoldenPagesTest extends TestCase
         $html = $this->renderPageWithPost('flottenversand', [], $post, 0);
         $this->assertStringContainsString('<html', $html);
         $this->assertStringContainsString('success', $html);
-        $this->assertStringContainsString('Light Fighter', $html);
+        $this->assertEnglish($html, 'Light Fighter');
         $this->compareOrSaveGolden('flottenversand', 0, $html);
     }
 
     /**
      * Test fleet templates page for PlayerOne (one saved template)
      */
+    #[DataProvider('languages')]
     public function testFleetTemplatesPagePlayerOne(): void
     {
         $html = $this->renderPage('fleet_templates', [], 0);
@@ -846,17 +967,19 @@ class GoldenPagesTest extends TestCase
     /**
      * Test galaxy page for PlayerOne (system 1:1 shows moons and planets)
      */
+    #[DataProvider('languages')]
     public function testGalaxyPagePlayerOne(): void
     {
         $html = $this->renderPage('galaxy', ['galaxy' => 1, 'system' => 1], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Moon', $html);
+        $this->assertEnglish($html, 'Moon');
         $this->compareOrSaveGolden('galaxy', 0, $html);
     }
 
     /**
      * Test galaxy page showing the enemy system with the moon + debris field.
      */
+    #[DataProvider('languages')]
     public function testGalaxyPageEnemySystem(): void
     {
         $html = $this->renderPage('galaxy', ['galaxy' => 1, 'system' => 3], 0);
@@ -868,6 +991,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test galaxy page from the moon (extra info shows deuterium).
      */
+    #[DataProvider('languages')]
     public function testGalaxyPageFromMoon(): void
     {
         $moonId = $this->getPlayerMoonId(1);
@@ -880,6 +1004,7 @@ class GoldenPagesTest extends TestCase
      * Test the phalanx page: scan a foreign planet from the moon with a
      * sensor phalanx and show the detected fleets (issue #256).
      */
+    #[DataProvider('languages')]
     public function testPhalanxScanPlayerOne(): void
     {
         $moonId = $this->getPlayerMoonId(1);
@@ -893,6 +1018,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the phalanx page without fleets at the target (header only).
      */
+    #[DataProvider('languages')]
     public function testPhalanxScanNoFleets(): void
     {
         $moonId = $this->getPlayerMoonId(1);
@@ -907,6 +1033,7 @@ class GoldenPagesTest extends TestCase
      * ships renders the "no ships selected" error state (the success path
      * redirects away).
      */
+    #[DataProvider('languages')]
     public function testSprungtorPagePlayerOne(): void
     {
         $moonA = $this->getPlayerMoonId(1);
@@ -935,6 +1062,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test imperium (empire) page for PlayerOne (planets view)
      */
+    #[DataProvider('languages')]
     public function testImperiumPagePlayerOne(): void
     {
         $html = $this->renderPage('imperium', ['planettype' => 1], 0);
@@ -945,17 +1073,19 @@ class GoldenPagesTest extends TestCase
     /**
      * Test imperium page showing only the moons (issue #256).
      */
+    #[DataProvider('languages')]
     public function testImperiumPageMoonsPlayerOne(): void
     {
         $html = $this->renderPage('imperium', ['planettype' => 3], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Moon', $html);
+        $this->assertEnglish($html, 'Moon');
         $this->compareOrSaveGolden('imperium_moons', 0, $html);
     }
 
     /**
      * Test techtree page for PlayerOne
      */
+    #[DataProvider('languages')]
     public function testTechtreePagePlayerOne(): void
     {
         $html = $this->renderPage('techtree', [], 0);
@@ -966,11 +1096,12 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the techtree details page for the Deathstar (rich requirement tree)
      */
+    #[DataProvider('languages')]
     public function testTechtreeDetailsPagePlayerOne(): void
     {
         $html = $this->renderPage('techtreedetails', ['tid' => GID_F_DEATHSTAR], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Deathstar', $html);
+        $this->assertEnglish($html, 'Deathstar');
         $this->compareOrSaveGolden('techtreedetails', 0, $html);
     }
 
@@ -981,6 +1112,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test allianzen (alliance home) page for PlayerOne
      */
+    #[DataProvider('languages')]
     public function testAllianzenPagePlayerOne(): void
     {
         $html = $this->renderPage('allianzen', [], 0);
@@ -993,6 +1125,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the alliance member list (a=4)
      */
+    #[DataProvider('languages')]
     public function testAllianzenMembersPagePlayerOne(): void
     {
         $html = $this->renderPage('allianzen', ['a' => 4], 0);
@@ -1005,6 +1138,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the alliance ranks page (a=6)
      */
+    #[DataProvider('languages')]
     public function testAllianzenRanksPagePlayerOne(): void
     {
         $html = $this->renderPage('allianzen', ['a' => 6], 0);
@@ -1016,6 +1150,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the alliance settings page (a=5)
      */
+    #[DataProvider('languages')]
     public function testAllianzenSettingsPagePlayerOne(): void
     {
         $html = $this->renderPage('allianzen', ['a' => 5], 0);
@@ -1027,6 +1162,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the alliance member settings page (a=7, u=2)
      */
+    #[DataProvider('languages')]
     public function testAllianzenMemberSettingsPagePlayerOne(): void
     {
         $html = $this->renderPage('allianzen', ['a' => 7, 'u' => 2], 0);
@@ -1038,6 +1174,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test bewerbungen (alliance applications) page -- list view.
      */
+    #[DataProvider('languages')]
     public function testBewerbungenPagePlayerOne(): void
     {
         $html = $this->renderPage('bewerbungen', [], 0);
@@ -1049,6 +1186,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test bewerbungen page -- application detail (show=1).
      */
+    #[DataProvider('languages')]
     public function testBewerbungenDetailPagePlayerOne(): void
     {
         $html = $this->renderPage('bewerbungen', ['show' => 1], 0);
@@ -1060,6 +1198,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test bewerben (apply to alliance) page for PlayerOne
      */
+    #[DataProvider('languages')]
     public function testBewerbenPagePlayerOne(): void
     {
         $html = $this->renderPage('bewerben', ['allyid' => 1], 0);
@@ -1071,6 +1210,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test buddy page for PlayerOne (has an accepted buddy)
      */
+    #[DataProvider('languages')]
     public function testBuddyPagePlayerOne(): void
     {
         $html = $this->renderPage('buddy', [], 0);
@@ -1082,6 +1222,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the buddy requests page (action=5, incoming request from PlayerThree)
      */
+    #[DataProvider('languages')]
     public function testBuddyRequestsPagePlayerOne(): void
     {
         $html = $this->renderPage('buddy', ['action' => 5], 0);
@@ -1097,6 +1238,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test statistics page for PlayerOne
      */
+    #[DataProvider('languages')]
     public function testStatisticsPagePlayerOne(): void
     {
         $html = $this->renderPage('statistics', [], 0);
@@ -1107,6 +1249,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test options page for PlayerOne
      */
+    #[DataProvider('languages')]
     public function testOptionsPagePlayerOne(): void
     {
         $html = $this->renderPage('options', [], 0);
@@ -1117,6 +1260,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test changelog page for PlayerOne
      */
+    #[DataProvider('languages')]
     public function testChangelogPagePlayerOne(): void
     {
         $html = $this->renderPage('changelog', [], 0);
@@ -1127,6 +1271,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test resources page for PlayerOne
      */
+    #[DataProvider('languages')]
     public function testResourcesPagePlayerOne(): void
     {
         $html = $this->renderPage('resources', [], 0);
@@ -1137,6 +1282,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test resources page shows correct resources for PlayerOne
      */
+    #[DataProvider('languages')]
     public function testResourcesPageShowsCorrectResources(): void
     {
         $html = $this->renderPage('resources', [], 0);
@@ -1146,6 +1292,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test trader page for PlayerOne (active trade offer)
      */
+    #[DataProvider('languages')]
     public function testTraderPagePlayerOne(): void
     {
         $html = $this->renderPage('trader', [], 0);
@@ -1156,6 +1303,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test micropayment page for PlayerOne
      */
+    #[DataProvider('languages')]
     public function testMicropaymentPagePlayerOne(): void
     {
         $html = $this->renderPage('micropayment', [], 0);
@@ -1166,6 +1314,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test payment page (coupon form)
      */
+    #[DataProvider('languages')]
     public function testPaymentPagePlayerOne(): void
     {
         $html = $this->renderPage('payment', [], 0);
@@ -1176,6 +1325,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test pranger (external) page (has one ban)
      */
+    #[DataProvider('languages')]
     public function testPrangerPage(): void
     {
         $html = $this->renderPage('pranger', [], 0);
@@ -1187,6 +1337,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test ainfo (external) page
      */
+    #[DataProvider('languages')]
     public function testAinfoPage(): void
     {
         // allyid = the test alliance created by FixtureBuilder.
@@ -1198,6 +1349,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the search page (form; results require a POST).
      */
+    #[DataProvider('languages')]
     public function testSuchePagePlayerOne(): void
     {
         $html = $this->renderPage('suche', [], 0);
@@ -1208,6 +1360,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the renameplanet page (planet menu form).
      */
+    #[DataProvider('languages')]
     public function testRenamePlanetPagePlayerOne(): void
     {
         $html = $this->renderPage('renameplanet', [], 0);
@@ -1218,6 +1371,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the logout page (bare HTML).
      */
+    #[DataProvider('languages')]
     public function testLogoutPagePlayerOne(): void
     {
         $html = $this->renderPage('logout', [], 0);
@@ -1230,6 +1384,7 @@ class GoldenPagesTest extends TestCase
      * Test the admin page (renders the admin Home panel even for a regular
      * player -- the redirect is a non-fatal meta refresh).
      */
+    #[DataProvider('languages')]
     public function testAdminPage(): void
     {
         $html = $this->renderPage('admin', [], 0);
@@ -1252,6 +1407,7 @@ class GoldenPagesTest extends TestCase
      * RecallFleet re-dispatches the fleet as a return mission and the page
      * re-renders the fleet list.
      */
+    #[DataProvider('languages')]
     public function testFleet1RecallPostPlayerOne(): void
     {
         $fleetId = $this->getFleetIdByMission(FTYP_ATTACK, 1);
@@ -1264,22 +1420,24 @@ class GoldenPagesTest extends TestCase
      * Test the buildings page POST: build 2 Light Fighters in the shipyard
      * (the shipyard tab form posts fmenge[gid]).
      */
+    #[DataProvider('languages')]
     public function testBuildingsShipyardBuildPostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('buildings', ['mode' => 'Flotte'], ['fmenge' => [GID_F_LF => '2']], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Light Fighter', $html);
+        $this->assertEnglish($html, 'Light Fighter');
         $this->compareOrSaveGolden('buildings_shipyard_post', 0, $html);
     }
 
     /**
      * Test the buildings page POST: build 2 Rocket Launchers (defense tab).
      */
+    #[DataProvider('languages')]
     public function testBuildingsDefenseBuildPostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('buildings', ['mode' => 'Verteidigung'], ['fmenge' => [GID_D_RL => '2']], 0);
         $this->assertStringContainsString('<html', $html);
-        $this->assertStringContainsString('Rocket Launcher', $html);
+        $this->assertEnglish($html, 'Rocket Launcher');
         $this->compareOrSaveGolden('buildings_defense_post', 0, $html);
     }
 
@@ -1287,6 +1445,7 @@ class GoldenPagesTest extends TestCase
      * Test the resources page POST: set the production of every facility to
      * 100% (the production form posts last{gid} selects).
      */
+    #[DataProvider('languages')]
     public function testResourcesPostPlayerOne(): void
     {
         global $PlanetProd;
@@ -1304,6 +1463,7 @@ class GoldenPagesTest extends TestCase
      * re-renders the empty message list. The folder checkboxes are re-posted
      * as "on" so the commander folder flags stay enabled.
      */
+    #[DataProvider('languages')]
     public function testMessagesDeleteAllPostPlayerOne(): void
     {
         $post = array (
@@ -1320,6 +1480,7 @@ class GoldenPagesTest extends TestCase
      * Test the options page POST: save the settings form (name/password/email
      * fields are left unchanged, so only the general settings get updated).
      */
+    #[DataProvider('languages')]
     public function testOptionsPostPlayerOne(): void
     {
         $post = array (
@@ -1329,7 +1490,7 @@ class GoldenPagesTest extends TestCase
             'newpass2' => '',
             'db_email' => '',                // empty: no email change
             'dpath' => '',
-            'lang' => 'en',
+            'lang' => $this->lang,
             'settings_sort' => '1',
             'settings_order' => '0',
             'spio_anz' => '5',
@@ -1350,6 +1511,7 @@ class GoldenPagesTest extends TestCase
      * and is therefore not renderable in-process (documented in
      * testEveryPostPageHasGoldenCoverage).
      */
+    #[DataProvider('languages')]
     public function testPaymentCheckPostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('payment', [], ['action' => 'check', 'couponcode' => 'ABCDEFGHIJKLMNOPQRSTUVWX'], 0);
@@ -1360,10 +1522,11 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the renameplanet page POST: rename the current planet.
      */
+    #[DataProvider('languages')]
     public function testRenamePlanetPostPlayerOne(): void
     {
-        loca_add('renameplanet', 'en');    // the page loca section is not loaded yet
-        $html = $this->renderPageWithPost('renameplanet', [], ['aktion' => loca('REN_RENAME'), 'newname' => 'New Home'], 0);
+        loca_add('renameplanet', $this->lang);    // the page loca section is not loaded yet
+        $html = $this->renderPageWithPost('renameplanet', [], ['aktion' => loca_lang('REN_RENAME', $this->lang), 'newname' => 'New Home'], 0);
         $this->assertStringContainsString('New Home', $html);
         $this->compareOrSaveGolden('renameplanet_post', 0, $html);
     }
@@ -1371,6 +1534,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the search page POST: search for a player name.
      */
+    #[DataProvider('languages')]
     public function testSuchePlayerPostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('suche', [], ['type' => 'playername', 'searchtext' => 'Player'], 0);
@@ -1381,6 +1545,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the search page POST: search for an alliance tag.
      */
+    #[DataProvider('languages')]
     public function testSucheAllyPostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('suche', [], ['type' => 'allytag', 'searchtext' => 'TST'], 0);
@@ -1393,6 +1558,7 @@ class GoldenPagesTest extends TestCase
      * (2500), and PlayerOne has only 1500 DM, so the "not enough DM" error
      * state renders (deterministic: the random-rate path is not reached).
      */
+    #[DataProvider('languages')]
     public function testTraderCallPostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('trader', [], ['call_trader' => 'Call merchant', 'offer_id' => '1'], 0);
@@ -1404,6 +1570,7 @@ class GoldenPagesTest extends TestCase
      * Test the trader page POST: a zero-value exchange request exercises the
      * POST branch without consuming resources (an exchange needs met > 0).
      */
+    #[DataProvider('languages')]
     public function testTraderExchangePostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('trader', [], ['trade' => 'Exchange!', '1_value' => '0', '2_value' => '0', '3_value' => '0'], 0);
@@ -1415,6 +1582,7 @@ class GoldenPagesTest extends TestCase
      * Test the galaxy page POST: navigate to another system with the
      * system-selection form (session/galaxy/system are posted).
      */
+    #[DataProvider('languages')]
     public function testGalaxyNavigatePostPlayerOne(): void
     {
         $post = ['session' => $this->playerSession(0), 'galaxy' => '1', 'system' => '3'];
@@ -1429,6 +1597,7 @@ class GoldenPagesTest extends TestCase
      * (GET mode=1&pdd=4). PlayerOne has 1 IPM on the home planet and
      * impulse drive 3 (range 14 >= distance 2).
      */
+    #[DataProvider('languages')]
     public function testGalaxyRocketPostPlayerOne(): void
     {
         $post = array (
@@ -1445,6 +1614,7 @@ class GoldenPagesTest extends TestCase
      * Test the fleet_templates page POST: save a new fleet template
      * (mode=save form with the ship amounts).
      */
+    #[DataProvider('languages')]
     public function testFleetTemplatesSavePostPlayerOne(): void
     {
         global $fleetmap;
@@ -1462,11 +1632,12 @@ class GoldenPagesTest extends TestCase
      * Test the bewerben (apply to alliance) page POST: PlayerTwo submits an
      * application to the Test Alliance.
      */
+    #[DataProvider('languages')]
     public function testBewerbenSubmitPostPlayerTwo(): void
     {
-        loca_add('ally', 'en');    // the page loca section is not loaded yet
+        loca_add('ally', $this->lang);    // the page loca section is not loaded yet
         $post = array (
-            'weiter' => loca('ALLY_APPU_SUBMIT'),
+            'weiter' => loca_lang('ALLY_APPU_SUBMIT', $this->lang),
             'text' => 'Hello TST, I would like to join your alliance.',
         );
         $html = $this->renderPageWithPost('bewerben', ['allyid' => '1'], $post, 1);
@@ -1478,6 +1649,7 @@ class GoldenPagesTest extends TestCase
      * Test the allianzen page POST: save the alliance external text
      * (a=11&d=1&t=1 form).
      */
+    #[DataProvider('languages')]
     public function testAllianzenSettingsTextPostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('allianzen', ['a' => '11', 'd' => '1', 't' => '1'], ['text' => 'Updated external text.'], 0);
@@ -1489,6 +1661,7 @@ class GoldenPagesTest extends TestCase
      * Test the allianzen page POST: save the alliance settings
      * (a=11&d=2 form: open, homepage, logo, founder rank name).
      */
+    #[DataProvider('languages')]
     public function testAllianzenSettingsOptionsPostPlayerOne(): void
     {
         $post = array ('bew' => '0', 'hp' => 'https://example.com', 'logo' => '', 'fname' => 'Founder');
@@ -1500,6 +1673,7 @@ class GoldenPagesTest extends TestCase
     /**
      * Test the allianzen page POST: create a new alliance rank (a=15 form).
      */
+    #[DataProvider('languages')]
     public function testAllianzenRanksCreatePostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('allianzen', ['a' => '15'], ['newrangname' => 'Diplomat'], 0);
@@ -1511,6 +1685,7 @@ class GoldenPagesTest extends TestCase
      * Test the allianzen page POST: assign the rank "Recruiter" (2) to
      * PlayerTwo (a=16&u=2 form).
      */
+    #[DataProvider('languages')]
     public function testAllianzenMemberRankPostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('allianzen', ['a' => '16', 'u' => '2'], ['newrang' => '2'], 0);
@@ -1522,6 +1697,7 @@ class GoldenPagesTest extends TestCase
      * Test the allianzen page POST: send a circular message to all members
      * (a=17 form, rank 0 = everyone).
      */
+    #[DataProvider('languages')]
     public function testAllianzenCircularPostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('allianzen', ['a' => '17'], ['r' => '0', 'text' => 'Hello alliance members!'], 0);
@@ -1533,6 +1709,7 @@ class GoldenPagesTest extends TestCase
      * Test the allianzen page POST: change the alliance tag (a=9&weiter=1
      * form). "NEW" is not taken, so the success confirmation renders.
      */
+    #[DataProvider('languages')]
     public function testAllianzenChangeTagPostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('allianzen', ['a' => '9', 'weiter' => '1'], ['newtag' => 'NEW'], 0);
@@ -1544,6 +1721,7 @@ class GoldenPagesTest extends TestCase
      * Test the allianzen page POST: change the alliance name (a=10&weiter=1
      * form).
      */
+    #[DataProvider('languages')]
     public function testAllianzenChangeNamePostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('allianzen', ['a' => '10', 'weiter' => '1'], ['newname' => 'New Alliance Name'], 0);
@@ -1555,6 +1733,7 @@ class GoldenPagesTest extends TestCase
      * Test the allianzen page POST: dismiss the alliance (a=12&weiter=1
      * form) -- the success confirmation renders.
      */
+    #[DataProvider('languages')]
     public function testAllianzenDismissPostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('allianzen', ['a' => '12', 'weiter' => '1'], ['sure' => '1'], 0);
@@ -1567,6 +1746,7 @@ class GoldenPagesTest extends TestCase
      * PlayerTwo (a=18 form, s=1&uid=2; both players hold the all-rights
      * founder rank, so the takeover succeeds).
      */
+    #[DataProvider('languages')]
     public function testAllianzenTakeoverPostPlayerOne(): void
     {
         $html = $this->renderPageWithPost('allianzen', ['a' => '18'], ['s' => '1', 'uid' => '2'], 0);
@@ -1601,6 +1781,7 @@ class GoldenPagesTest extends TestCase
      * (issue #256: "compare router.json with the golden folder").
      * Pages that only redirect away (allianzdepot) are documented.
      */
+    #[DataProvider('languages')]
     public function testEveryRouterPageHasGoldenCoverage(): void
     {
         $pages = PageRenderer::getAvailablePages();
@@ -1633,6 +1814,7 @@ class GoldenPagesTest extends TestCase
      * were already snapshotted via POST in issue #256 with plain names.
      * Pages whose POST always redirects away are documented here.
      */
+    #[DataProvider('languages')]
     public function testEveryPostPageHasGoldenCoverage(): void
     {
         // Pages with method() === "POST" handling (game/pages/*).
@@ -1794,6 +1976,24 @@ class GoldenPagesTest extends TestCase
         
         $this->assertEquals($normalizedExpected, $normalizedActual, 
             "HTML snapshot mismatch for '$pageName' (player $playerIndex). Run with UPDATE_GOLDEN=1 to update.");
+    }
+
+    /**
+     * Assert that the English page contains the given strings. The Golden
+     * Pages suite renders every page in every supported language (issue
+     * #268); strings that come from the loca files (building/ship/research
+     * names, UI labels) exist only in the English render. For the other
+     * languages the golden snapshot comparison is the real assertion, so
+     * these smoke checks run only for English.
+     */
+    private function assertEnglish(string $html, string ...$needles): void
+    {
+        if ($this->lang !== 'en') {
+            return;
+        }
+        foreach ($needles as $needle) {
+            $this->assertStringContainsString($needle, $html);
+        }
     }
 
     /**

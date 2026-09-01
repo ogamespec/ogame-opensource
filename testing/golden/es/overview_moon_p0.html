@@ -1,0 +1,527 @@
+<html>
+ <head>
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+  <script language="JavaScript">var session="0000000003e9";</script>
+  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+<link rel='stylesheet' type='text/css' href='css/combox.css'>
+<link rel='stylesheet' type='text/css' href='http://localhost/evolution/formate.css' />
+<title>Universo 1 OGame</title>
+  <script src='js/utilities.js' type='text/javascript'></script>
+  <script language='JavaScript'>
+  </script>
+<script type='text/javascript' src='js/overLib/overlib.js'></script>
+<!-- HEADER -->
+
+<script language='JavaScript'>
+function onBodyLoad() {
+    window.setTimeout('reloadImages()', 100);
+}
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != '')) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script>
+</head>
+<body style='overflow: hidden;' onload='onBodyLoad();' onunload='' >
+<div id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>
+<div id='header_top'><center>
+<table class='header'>
+<tr class='header' >
+<td class='header' style='width:5;' >
+<table class='header'>
+<tr class='header'>
+<td class='header'><img src='http://localhost/evolution/planeten/small/s_mond.jpg' width='50' height='50'></td>
+<td class='header'>
+<table class='header'>
+<select size='1' onchange='haha(this)'>
+    <option value='index.php?page=overview&session=0000000003e9&cp=1' >Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1' >[1:1:4]</a></option>
+    <option value='index.php?page=overview&session=0000000003e9&cp=10' selected>Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10' >[1:1:4]</a></option>
+    <option value='index.php?page=overview&session=0000000003e9&cp=2' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2' >[1:1:5]</a></option>
+    <option value='index.php?page=overview&session=0000000003e9&cp=3' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3' >[1:2:4]</a></option>
+    <option value='index.php?page=overview&session=0000000003e9&cp=11' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11' >[1:2:4]</a></option>
+</select></table></td></tr></table></td>
+
+<td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
+<tr class='header'>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/metall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/kristall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/deuterium.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<a href=index.php?page=micropayment&session=0000000003e9>
+<img border='0' src='img/dm_klein_2.jpg' width='42' height='22' title='Materia Oscura'></a>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/energie.gif' width='42' height='22'>
+</td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Metal</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Cristal</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Deuterio</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Materia Oscura</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Energía</font></b></i></td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='90'><font color='#ff0000'>0</font></td>
+    <td align='center' class='header' width='90'><font color='#ff0000'>0</font></td>
+    <td align='center' class='header' width='90'><font color='#ff0000'>100.000</font></td>
+    <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
+    <td align='center' class='header' width='90'><font >0</font>/0</td>
+</tr>
+</table></td>
+<td class='header'>
+<table class='header' align=left>
+<tr class='header'>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/commander_ikon.gif' width='32' height='32' alt='Comandante'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Aún &lt;font color=lime&gt;activo&lt;/font&gt; por 365 días más<br>Comandante</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Renew!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/admiral_ikon.gif' width='32' height='32' alt='Almirante'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Aún &lt;font color=lime&gt;activo&lt;/font&gt; por 365 días más<br>Almirante</font><br><font size=1 color=skyblue>Cantidad máxima de flotas +2</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Renew!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/ingenieur_ikon.gif' width='32' height='32' alt='Ingeniero'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Aún &lt;font color=lime&gt;activo&lt;/font&gt; por 365 días más<br>Ingeniero</font><br><font size=1 color=skyblue>Minimiza las pérdidas de las defensas a la mitad<br> +10%  de producción de energía</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Renew!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/geologe_ikon.gif' width='32' height='32' alt='Geólogo'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Aún &lt;font color=lime&gt;activo&lt;/font&gt; por 365 días más<br>Geólogo</font><br><font size=1 color=skyblue>+10% de producción de mineral</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Renew!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/technokrat_ikon.gif' width='32' height='32' alt='Tecnócrata'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Aún &lt;font color=lime&gt;activo&lt;/font&gt; por 365 días más<br>Tecnócrata</font><br><font size=1 color=skyblue>+2 al nivel de espionaje, un 25 % menos de tiempo de investigación </font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Renew!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+<td align='center' class='header'></td></tr></table></td>
+
+</tr>
+</table>
+</div><!-- END HEADER -->
+
+<!-- LEFTMENU -->
+
+   <div id='leftmenu'>
+
+<script language='JavaScript'>
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+<center>
+
+<div id='menu'>
+<a href='mailto:barrierefrei@ogame.de' title='Para problemas específicos para ciegos, envía un correo electrónico a barrierefrei@ogame.de.' style='width:1px;'></a>
+<p style='width:110px;'><NOBR>Universo 1 (<a href='index.php?page=changelog&session=0000000003e9'>v 0.84</a>)</NOBR></p>
+<table width='110' cellspacing='0' cellpadding='0'>
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/ogame-produktion.jpg' width='110' height='40' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=0000000003e9' accesskey="o">Resumen</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=imperium&session=0000000003e9&planettype=1&no_header=1' accesskey="e">Imperio</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=b_building&session=0000000003e9' accesskey="b">Edificios</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=0000000003e9' accesskey="r">Recursos</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=0000000003e9' accesskey=""><font color='FF8900'>Mercader</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Forschung' accesskey="c">Investigación</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Flotte' accesskey="s">Astillero</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=0000000003e9&mode=Flotte' accesskey="f">Flota</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=0000000003e9' accesskey="t">Tecnología</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=0000000003e9&no_header=1' accesskey="g">Galaxia</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Verteidigung' accesskey="d">Defensa</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/info-help.jpg' width='110' height='19' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=0000000003e9' accesskey="a">Alianza</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+    <td align=center>
+     <a id='darkmatter2' style='cursor:pointer; width:110px;'
+         href='index.php?page=micropayment&session=0000000003e9' accesskey="i"><b>Reclutamiento de oficiales</a></b>
+    </div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=statistics&session=0000000003e9' accesskey="k">Estadísticas</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=0000000003e9' accesskey="h">Buscar</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/user-menu.jpg' width='110' height='35' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=messages&session=0000000003e9&dsp=1' accesskey="m">Mensajes</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=0000000003e9&no_header=1", "Notizen");' accesskey="n">Notas</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=0000000003e9' accesskey="u">Listado de amigos</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=0000000003e9' accesskey="p">Opciones</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=0000000003e9' accesskey="q">Salir</a>
+    </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+    </div>
+<!-- END LEFTMENU -->
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+
+<script type="text/javascript"> 
+<!--
+function t_building() {
+    v = new Date();
+    var bxx = document.getElementById('bxx');
+    var timeout = 1;
+    n=new Date();
+    ss=pp;
+    aa=Math.round((n.getTime()-v.getTime())/1000.);
+    s=ss-aa;
+    m=0;
+    h=0;
+    
+    if (s < 0) {
+        bxx.innerHTML='--';
+        
+        if ((ss + 6) >= aa) {
+            window.setTimeout('document.location.href="index.php?page=overview&session='+ps+'";', 1500);
+        }
+    } else {
+        if(s>59){
+            m=Math.floor(s/60);
+            s=s-m*60;
+        }
+        if(m>59){
+            h=Math.floor(m/60);
+            m=m-h*60;
+        }
+        if(s<10){
+            s="0"+s;
+        }
+        if(m<10){
+            m="0"+m;
+        }
+        bxx.innerHTML=h+":"+m+":"+s;
+    }    
+    pp=pp-1;
+    window.setTimeout("t_building();", 999);
+}
+//--> 
+
+</script> 
+
+
+<!-- _________________ComBox___________________ --> 
+<div id="combox_container" > 
+<a id="combox" href="" target=_blank> 
+<div id="anfang">Welcome to the test universe!</div> 
+<div id="ende">Golden pages test server.</div> 
+</a> 
+</div> 
+<!-- _________________ComBox Ende _____________ --> 
+
+<table width='519'>
+
+<tr><td class='c' colspan='4'>
+<a href='index.php?page=renameplanet&session=0000000003e9&pl=10' title='Menú del planeta'>Luna "Moon" en órbita de [1:1:4]</a>     (PlayerOne)
+</td></tr>
+<tr><th colspan="4"><a href="index.php?page=messages&dsp=1&session=0000000003e9">  Tienes 7 mensaje nuevos   </th></tr>
+<tr><th>    Hora del servidor   </th> <th colspan=3>Tue Sep 1 8:14:20</th></tr>
+<tr><td colspan='4' class='c'>  Eventos   </td> </tr>
+
+<tr class='flight'>
+<th><div id='bxx1' title='300'star='1788250760'></div></th>
+<th colspan='3'><span class='flight owndeploy'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Gran carguero 2&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='owndeploy'>flota</a><a href='#' title='Gran carguero 2'></a> desde planetas Home <a href="javascript:showGalaxy(1,1,4)" owndeploy>[1:1:4]</a> enviado a  Moon <a href="javascript:showGalaxy(1,1,4)" owndeploy>[1:1:4]</a>. Misión: <span class='class'>Despliegue</span></span></th></tr>
+
+<tr class='flight'>
+<th><div id='bxx2' title='600'star='1788251060'></div></th>
+<th colspan='3'><span class='flight ownespionage'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Pequeño carguero 5&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='ownespionage'>flota</a><a href='#' title='Pequeño carguero 5'></a> desde planetas Home <a href="javascript:showGalaxy(1,1,4)" ownespionage>[1:1:4]</a> enviado a planeta Home <a href="javascript:showGalaxy(1,3,4)" ownespionage>[1:3:4]</a>. Misión: <span class='class'>Espionaje</span></span></th></tr>
+
+<tr class='flight'>
+<th><div id='bxx3' title='700'star='1788251160'></div></th>
+<th colspan='3'><span class='flight owncolony'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Nave de colonización 1&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='owncolony'>flota</a><a href='#' title='Nave de colonización 1'></a> desde planetas Home <a href="javascript:showGalaxy(1,1,4)" owncolony>[1:1:4]</a> enviado a la posición  <a href="javascript:showGalaxy(1,1,6)" owncolony>[1:1:6]</a>. Misión: <span class='class'>Colonización</span></span></th></tr>
+
+<tr class='flight'>
+<th><div id='bxx4' title='800'star='1788251260'></div></th>
+<th colspan='3'><span class='flight ownharvest'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Reciclador 2&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='ownharvest'>flota</a><a href='#' title='Reciclador 2'></a> desde planetas Home <a href="javascript:showGalaxy(1,1,4)" ownharvest>[1:1:4]</a> enviado a  Debris <a href="javascript:showGalaxy(1,2,5)" ownharvest>[1:2:5]</a>. Misión: <span class='class'>Reciclaje</span></span></th></tr>
+
+<tr class='flight'>
+<th><div id='bxx5' title='900'star='1788251360'></div></th>
+<th colspan='3'><span class='flight owntransport'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Pequeño carguero 5&lt;br&gt;Gran carguero 2&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='owntransport'>flota</a><a href='#' title='Pequeño carguero 5Gran carguero 2'></a> desde planetas Home <a href="javascript:showGalaxy(1,1,4)" owntransport>[1:1:4]</a> enviado a planeta Colony X <a href="javascript:showGalaxy(1,3,5)" owntransport>[1:3:5]</a>. Misión: <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Transporte: &lt;br /&gt;Metal: 5.000&lt;br /&gt;Cristal: 2.000&lt;br /&gt;Deuterio: 0&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();'' class='owntransport'>Transporte</a><a href='#' title='Transporte: Metal: 5.000 Cristal: 2.000 Deuterio: 0'></a></span></th></tr>
+
+<tr class='flight'>
+<th><div id='bxx6' title='1200'star='1788251660'></div></th>
+<th colspan='3'><span class='attack'>Batalla <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Número de naves: 7 &lt;br&gt;Pequeño carguero &lt;br&gt;Cazador ligero &lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='attack'>flota</a><a href='#' title='Número de naves: 7 Pequeño carguero Cazador ligero '></a> el jugador PlayerTwo <a href='#' onclick='showMessageMenu(2)'><img src='http://localhost/evolution/img/m.gif' title='Escribir mensaje' alt='Escribir mensaje'></a> desde planetas Home <a href="javascript:showGalaxy(1,3,4)" attack>[1:3:4]</a> ha sido enviado a planeta Home <a href="javascript:showGalaxy(1,1,4)" attack>[1:1:4]</a>. Misión: Ataque</span></th></tr>
+
+<tr class='flight'>
+<th><div id='bxx7' title='1200'star='1788251660'></div></th>
+<th colspan='3'><span class='flight ownattack'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Cazador ligero 10&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='ownattack'>flota</a><a href='#' title='Cazador ligero 10'></a> desde planetas Home <a href="javascript:showGalaxy(1,1,4)" ownattack>[1:1:4]</a> enviado a planeta Home <a href="javascript:showGalaxy(1,3,4)" ownattack>[1:3:4]</a>. Misión: <span class='class'>Ataque</span></span></th></tr>
+
+<tr class='return'>
+<th><div id='bxx8' title='1260'star='1788251720'></div></th>
+<th colspan='3'><span class='return ownespionage'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Pequeño carguero 5&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='ownespionage'>flota</a><a href='#' title='Pequeño carguero 5'></a>, enviado desde planetas Home <a href="javascript:showGalaxy(1,3,4)" ownespionage>[1:3:4]</a> regresa a planeta Home <a href="javascript:showGalaxy(1,1,4)" ownespionage>[1:1:4]</a>. Misión: <span class='class'>Espionaje</span></span></th></tr>
+
+<tr class='return'>
+<th><div id='bxx9' title='1460'star='1788251920'></div></th>
+<th colspan='3'><span class='return owncolony'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Nave de colonización 1&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='owncolony'>flota</a><a href='#' title='Nave de colonización 1'></a>, enviado desde la posición  <a href="javascript:showGalaxy(1,1,6)" owncolony>[1:1:6]</a> regresa a planeta Home <a href="javascript:showGalaxy(1,1,4)" owncolony>[1:1:4]</a>. Misión: <span class='class'>Colonización</span></span></th></tr>
+
+<tr class='flight'>
+<th><div id='bxx10' title='1500'star='1788251960'></div></th>
+<th colspan='3'><span class='flight espionage'>Batalla <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Número de naves: 2 &lt;br&gt;Sonda de espionaje &lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='espionage'>flota</a><a href='#' title='Número de naves: 2 Sonda de espionaje '></a> el jugador PlayerThree <a href='#' onclick='showMessageMenu(3)'><img src='http://localhost/evolution/img/m.gif' title='Escribir mensaje' alt='Escribir mensaje'></a> desde planetas Home <a href="javascript:showGalaxy(1,5,4)" espionage>[1:5:4]</a> ha sido enviado a planeta Home <a href="javascript:showGalaxy(1,1,4)" espionage>[1:1:4]</a>. Misión: Espionaje</span></th></tr>
+
+<tr class='flight'>
+<th><div id='bxx11' title='1500'star='1788251960'></div></th>
+<th colspan='3'><span class='flight owndestroy'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Estrella de la muerte 1&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='owndestroy'>flota</a><a href='#' title='Estrella de la muerte 1'></a> desde planetas Home <a href="javascript:showGalaxy(1,1,4)" owndestroy>[1:1:4]</a> enviado a  Moon <a href="javascript:showGalaxy(1,3,4)" owndestroy>[1:3:4]</a>. Misión: <span class='class'>Destrucción</span></span></th></tr>
+
+<tr class='return'>
+<th><div id='bxx12' title='1660'star='1788252120'></div></th>
+<th colspan='3'><span class='return ownharvest'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Reciclador 2&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='ownharvest'>flota</a><a href='#' title='Reciclador 2'></a> desde  Debris <a href="javascript:showGalaxy(1,2,5)" ownharvest>[1:2:5]</a> enviado a planeta Home <a href="javascript:showGalaxy(1,1,4)" ownharvest>[1:1:4]</a>. Misión: <span class='class'>Reciclaje</span></span></th></tr>
+
+<tr class='return'>
+<th><div id='bxx13' title='1860'star='1788252320'></div></th>
+<th colspan='3'><span class='return owntransport'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Pequeño carguero 5&lt;br&gt;Gran carguero 2&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='owntransport'>flota</a><a href='#' title='Pequeño carguero 5Gran carguero 2'></a>, enviado desde planetas Colony X <a href="javascript:showGalaxy(1,3,5)" owntransport>[1:3:5]</a> regresa a planeta Home <a href="javascript:showGalaxy(1,1,4)" owntransport>[1:1:4]</a>. Misión: <span class='class'>Transporte</span></span></th></tr>
+
+<tr class='flight'>
+<th><div id='bxx14' title='2000'star='1788252460'></div></th>
+<th colspan='3'><span class='flight owntransport'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Gran carguero 1&lt;br&gt;Cazador ligero 2&lt;br&gt;Sonda de espionaje 1&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='ownexpedition'>flota</a><a href='#' title='Gran carguero 1Cazador ligero 2Sonda de espionaje 1'></a> enviado desde planetas Home <a href="javascript:showGalaxy(1,1,4)" ownexpedition>[1:1:4]</a> alcanza la posición  <a href="javascript:showGalaxy(1,1,16)" ownexpedition>[1:1:16]</a>. Misión: <span class='class'>Expedición</span></span></th></tr>
+
+<tr class='return'>
+<th><div id='bxx15' title='2460'star='1788252920'></div></th>
+<th colspan='3'><span class='return ownattack'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Cazador ligero 10&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='ownattack'>flota</a><a href='#' title='Cazador ligero 10'></a>, enviado desde planetas Home <a href="javascript:showGalaxy(1,3,4)" ownattack>[1:3:4]</a> regresa a planeta Home <a href="javascript:showGalaxy(1,1,4)" ownattack>[1:1:4]</a>. Misión: <span class='class'>Ataque</span></span></th></tr>
+
+<tr class='return'>
+<th><div id='bxx16' title='3060'star='1788253520'></div></th>
+<th colspan='3'><span class='return owndestroy'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Estrella de la muerte 1&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='owndestroy'>flota</a><a href='#' title='Estrella de la muerte 1'></a>, enviado desde  Moon <a href="javascript:showGalaxy(1,3,4)" owndestroy>[1:3:4]</a> regresa a planeta Home <a href="javascript:showGalaxy(1,1,4)" owndestroy>[1:1:4]</a>. Misión: <span class='class'>Destrucción</span></span></th></tr>
+
+<tr class='holding'>
+<th><div id='bxx17' title='5600'star='1788256060'></div></th>
+<th colspan='3'><span class='holding owntransport'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Gran carguero 1&lt;br&gt;Cazador ligero 2&lt;br&gt;Sonda de espionaje 1&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='ownexpedition'>flota</a><a href='#' title='Gran carguero 1Cazador ligero 2Sonda de espionaje 1'></a>, enviado desde planetas Home <a href="javascript:showGalaxy(1,1,4)" ownexpedition>[1:1:4]</a> está investigando la posición  <a href="javascript:showGalaxy(1,1,16)" ownexpedition>[1:1:16]</a>. Misión: <span class='class'>Expedición</span></span></th></tr>
+
+<tr class='return'>
+<th><div id='bxx18' title='7600'star='1788258060'></div></th>
+<th colspan='3'><span class='return owntransport'>Tu <a href='#' onmouseover='return overlib("&lt;font color=white&gt;&lt;b&gt;Gran carguero 1&lt;br&gt;Cazador ligero 2&lt;br&gt;Sonda de espionaje 1&lt;br&gt;&lt;/b&gt;&lt;/font&gt;");' onmouseout='return nd();' class='ownexpedition'>flota</a><a href='#' title='Gran carguero 1Cazador ligero 2Sonda de espionaje 1'></a> regresa a planeta Home <a href="javascript:showGalaxy(1,1,4)" ownexpedition>[1:1:4]</a> después de la orden <span class='class'>Expedición</span></span></th></tr>
+
+<script language=javascript>anz=18;t();</script>
+
+<th>
+</th>
+<th colspan="2">
+<img src="http://localhost/evolution/planeten/mond.jpg" width="200" height="200">
+<br><center>libre</center><br>
+</th>
+<th class='s'>
+<table border='0' align='top' class='s'>
+<tr>
+<th> Home<br> <a href="index.php?page=overview&session=0000000003e9&cp=1" title="Home [1:1:4]"><img src="http://localhost/evolution/planeten/dschjungelplanet02.jpg" width="50" height="50" title="Home [1:1:4]" ></a>
+<br><center>Mina de metal</center></th>
+<th> Colony A<br> <a href="index.php?page=overview&session=0000000003e9&cp=2" title="Colony A [1:1:5]"><img src="http://localhost/evolution/planeten/dschjungelplanet03.jpg" width="50" height="50" title="Colony A [1:1:5]" ></a>
+<br><center>libre</center></th>
+</tr>
+
+<tr>
+<th> Colony B<br> <a href="index.php?page=overview&session=0000000003e9&cp=3" title="Colony B [1:2:4]"><img src="http://localhost/evolution/planeten/dschjungelplanet04.jpg" width="50" height="50" title="Colony B [1:2:4]" ></a>
+<br><center>libre</center></th>
+<tr></tr>
+</table>
+</th>
+
+<tr><th> Diámetro</th><th colspan=3>8.800 km     (<a title="Campos desarrollados">1 </a> / <a title="máx. de campos desarrollados">16 </a> campos)   </th></tr>
+<tr><th> Temperatura </th> <th colspan=3>aprox. -40°C a 0°C</th> </tr>   
+<tr><th> Posición</th><th colspan=3><a href="index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9" >[1:1:4]</a></th></tr>
+<tr><th> Puntos</th><th colspan=3>50 (Puesto <a href='index.php?page=statistics&session=0000000003e9&start=1'>1</a> de 3)</th></tr>     
+</table>
+<br><br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+
+
+
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+<div id='messagebox'><center></center></div>
+<div id='errorbox'><center></center></div>
+<script>
+headerHeight = 81;
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = '_blank';
+  }
+}
+</script>
+<style>
+.layer {
+    z-index:999999999;
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 757px; 
+    height: 475px; 
+    background-color: #040e1e;
+    border: 3px double orange;
+    padding: 0;
+    opacity: .90;
+}
+</style>
+</body></html>
