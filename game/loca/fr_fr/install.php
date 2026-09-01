@@ -65,4 +65,17 @@ $LOCA["fr"]["INSTALL_DONE"] ="Installation terminée. Fichier de config créé."
 $LOCA["fr"]["INSTALL_EXTERNAL_LINKS"] = "Liens externes";
 $LOCA["fr"]["INSTALL_EXTERNAL_LINKS_TIP"] = "Si aucun lien externe n’est spécifié (chaîne vide), l’élément correspondant dans le menu sera absent.";
 
+$LOCA["fr"]["INSTALL_ERR_REQUIRED"] = "Le champ \"#1\" ne doit pas être vide.";
+$LOCA["fr"]["INSTALL_ERR_INT"] = "Le champ \"#1\" doit être un nombre entier.";
+$LOCA["fr"]["INSTALL_ERR_MIN"] = "Le champ \"#1\" doit être au moins #2.";
+$LOCA["fr"]["INSTALL_ERR_MAX"] = "Le champ \"#1\" ne doit pas dépasser #2.";
+$LOCA["fr"]["INSTALL_ERR_EMAIL"] = "Le champ \"#1\" doit être une adresse e-mail valide.";
+$LOCA["fr"]["INSTALL_ERR_PASS_LONG"] = "Le mot de passe administrateur doit contenir au moins 8 caractères.";
+$LOCA["fr"]["INSTALL_ERR_PREFIX"] = "Le préfixe des tables ne peut contenir que des lettres latines, des chiffres et des tirets bas.";
+$LOCA["fr"]["INSTALL_ERR_URL"] = "Le champ \"#1\" doit être une URL valide ou un nom d’hôte.";
+$LOCA["fr"]["INSTALL_ERR_DBCONNECT"] = "Impossible de se connecter à la #1 : #2";
+$LOCA["fr"]["INSTALL_ERR_DB_SELECT"] = "Impossible de sélectionner la #1 : #2";
+$LOCA["fr"]["INSTALL_ERR_DB_UNI"] = "base de données de l’univers";
+$LOCA["fr"]["INSTALL_ERR_DB_MDB"] = "base de données maître";
+
 ?>

@@ -65,4 +65,17 @@ $LOCA["it"]["INSTALL_DONE"] ="Installazione completata. File di configurazione c
 $LOCA["it"]["INSTALL_EXTERNAL_LINKS"] = "Link esterni";
 $LOCA["it"]["INSTALL_EXTERNAL_LINKS_TIP"] = "Se non viene specificato alcun collegamento esterno (stringa vuota), la voce corrispondente nel menu sarà assente.";
 
+$LOCA["it"]["INSTALL_ERR_REQUIRED"] = "Il campo \"#1\" non deve essere vuoto.";
+$LOCA["it"]["INSTALL_ERR_INT"] = "Il campo \"#1\" deve essere un numero intero.";
+$LOCA["it"]["INSTALL_ERR_MIN"] = "Il campo \"#1\" deve essere almeno #2.";
+$LOCA["it"]["INSTALL_ERR_MAX"] = "Il campo \"#1\" non deve superare #2.";
+$LOCA["it"]["INSTALL_ERR_EMAIL"] = "Il campo \"#1\" deve essere un indirizzo e-mail valido.";
+$LOCA["it"]["INSTALL_ERR_PASS_LONG"] = "La password dell’amministratore deve contenere almeno 8 caratteri.";
+$LOCA["it"]["INSTALL_ERR_PREFIX"] = "Il prefisso delle tabelle può contenere solo lettere latine, cifre e trattini bassi.";
+$LOCA["it"]["INSTALL_ERR_URL"] = "Il campo \"#1\" deve essere un URL valido o un nome host.";
+$LOCA["it"]["INSTALL_ERR_DBCONNECT"] = "Impossibile connettersi alla #1: #2";
+$LOCA["it"]["INSTALL_ERR_DB_SELECT"] = "Impossibile selezionare la #1: #2";
+$LOCA["it"]["INSTALL_ERR_DB_UNI"] = "database dell’universo";
+$LOCA["it"]["INSTALL_ERR_DB_MDB"] = "database master";
+
 ?>

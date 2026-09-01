@@ -1831,6 +1831,7 @@ class GoldenPagesTest extends TestCase
         $html = preg_replace('/ss=\d+;/', 'ss=SECONDS;', $html);                         // buildings research tab
         $html = preg_replace('/g = \d+;/', 'g = SECONDS;', $html);                       // shipyard queue JS
         $html = preg_replace("/title='\d+'star=/", "title='SECONDS'star=", $html);       // event list countdowns
+        $html = preg_replace('/will take \d+m(?: \d+s)?/', 'will take DURATION', $html); // shipyard: "The entire production will take 52m 59s"
 
         // Normalize floating point numbers
         $html = preg_replace('/\b\d+\.\d+\b/', 'FLOAT', $html);

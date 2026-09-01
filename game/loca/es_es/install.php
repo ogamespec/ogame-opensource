@@ -65,4 +65,17 @@ $LOCA["es"]["INSTALL_DONE"] ="Install complete. Config file created.";
 $LOCA["es"]["INSTALL_EXTERNAL_LINKS"] = "External links";
 $LOCA["es"]["INSTALL_EXTERNAL_LINKS_TIP"] = "If no external link is specified (empty string), the corresponding item in the menu will be absent";
 
+$LOCA["es"]["INSTALL_ERR_REQUIRED"] = "El campo \"#1\" no debe estar vacío.";
+$LOCA["es"]["INSTALL_ERR_INT"] = "El campo \"#1\" debe ser un número entero.";
+$LOCA["es"]["INSTALL_ERR_MIN"] = "El campo \"#1\" debe ser al menos #2.";
+$LOCA["es"]["INSTALL_ERR_MAX"] = "El campo \"#1\" no debe superar #2.";
+$LOCA["es"]["INSTALL_ERR_EMAIL"] = "El campo \"#1\" debe ser una dirección de correo electrónico válida.";
+$LOCA["es"]["INSTALL_ERR_PASS_LONG"] = "La contraseña del administrador debe tener al menos 8 caracteres.";
+$LOCA["es"]["INSTALL_ERR_PREFIX"] = "El prefijo de tablas solo puede contener letras latinas, dígitos y guiones bajos.";
+$LOCA["es"]["INSTALL_ERR_URL"] = "El campo \"#1\" debe ser una URL válida o un nombre de host.";
+$LOCA["es"]["INSTALL_ERR_DBCONNECT"] = "No se puede conectar a la #1: #2";
+$LOCA["es"]["INSTALL_ERR_DB_SELECT"] = "No se puede seleccionar la #1: #2";
+$LOCA["es"]["INSTALL_ERR_DB_UNI"] = "base de datos del universo";
+$LOCA["es"]["INSTALL_ERR_DB_MDB"] = "base de datos maestra";
+
 ?>

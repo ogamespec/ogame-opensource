@@ -694,6 +694,9 @@ function Logout ( string|null $session ) : void
 function AuthUser ( string $session ) : bool
 {
     global $db_prefix, $GlobalUser, $loca_lang, $Languages, $GlobalUni, $DefaultLanguage;
+    // An empty session can never be valid: it would match logged-out players
+    // and the technical "space" account, whose session field is empty.
+    if ( $session === "" ) { RedirectHome(); return false; }
     // Get the user ID and universe number from a public session.
     $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$session."'";
     $result = dbquery ($query);

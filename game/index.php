@@ -116,6 +116,16 @@ if ($pk != false) {
         $external = $router[$pk]['external'];
     }
 
+    // Guests (requests without a public session) may only view pages that are
+    // explicitly marked as "external". The fallback user for guests is the
+    // technical "space" account, which owns no planet, so rendering internal
+    // pages for it (e.g. the overview) crashes on planet-dependent code. Send
+    // such requests to the start page, just like an invalid session does.
+    if (!$external && !key_exists ( 'session', $_GET )) {
+        RedirectHome ();
+        exit ();
+    }
+
     if (!$external && key_exists ( 'session', $_GET )) {
 
         if ( key_exists ('cp', $_GET)) SelectPlanet ($GlobalUser['player_id'], intval($_GET['cp']));

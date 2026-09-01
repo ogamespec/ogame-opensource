@@ -66,4 +66,17 @@ $LOCA["de"]["INSTALL_DONE"] ="Installieren abzuschließen. Config Datei erstellt
 $LOCA["de"]["INSTALL_EXTERNAL_LINKS"] = "Externe Links";
 $LOCA["de"]["INSTALL_EXTERNAL_LINKS_TIP"] = "Wird kein externer Link angegeben (Leerstring), ist der entsprechende Menüpunkt nicht verfügbar";
 
+$LOCA["de"]["INSTALL_ERR_REQUIRED"] = "Das Feld \"#1\" darf nicht leer sein.";
+$LOCA["de"]["INSTALL_ERR_INT"] = "Das Feld \"#1\" muss eine ganze Zahl sein.";
+$LOCA["de"]["INSTALL_ERR_MIN"] = "Das Feld \"#1\" muss mindestens #2 betragen.";
+$LOCA["de"]["INSTALL_ERR_MAX"] = "Das Feld \"#1\" darf #2 nicht überschreiten.";
+$LOCA["de"]["INSTALL_ERR_EMAIL"] = "Das Feld \"#1\" muss eine gültige E-Mail-Adresse sein.";
+$LOCA["de"]["INSTALL_ERR_PASS_LONG"] = "Das Administrator-Passwort muss mindestens 8 Zeichen lang sein.";
+$LOCA["de"]["INSTALL_ERR_PREFIX"] = "Der Tabellen-Präfix darf nur lateinische Buchstaben, Ziffern und Unterstriche enthalten.";
+$LOCA["de"]["INSTALL_ERR_URL"] = "Das Feld \"#1\" muss eine gültige URL oder ein Hostname sein.";
+$LOCA["de"]["INSTALL_ERR_DBCONNECT"] = "Kann keine Verbindung zur #1 herstellen: #2";
+$LOCA["de"]["INSTALL_ERR_DB_SELECT"] = "Kann die #1 nicht auswählen: #2";
+$LOCA["de"]["INSTALL_ERR_DB_UNI"] = "Universum-Datenbank";
+$LOCA["de"]["INSTALL_ERR_DB_MDB"] = "Master-Datenbank";
+
 ?>
