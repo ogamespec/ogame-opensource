@@ -358,23 +358,67 @@ function fenster(target_url,win_name) {
 </tr> 
 <tr><th colspan="4"><input type="checkbox" name="fullreports"  /> Show intelligence data partially </th></tr>
 <tr><td class="c">Action</td><td class="c">Date</td><td class="c">From</td><td class="c">Subject</td></tr>
-<tr><th><input type="checkbox" name="delmes8"/></th><th>09-01 07:59:36</th><th>PlayerTwo <a href="index.php?page=galaxy&galaxy=1&system=3&position=4&session=0000000003e9">[1:3:4]</a> </th><th>Hello <a href="index.php?page=writemessages&session=0000000003e9&messageziel=2&re=1&betreff=Re:Hello"><img src="img/m.gif"></a> </th></tr>
+<tr><th><input type="checkbox" name="delmes8"/></th><th>09-01 10:27:15</th><th>PlayerTwo <a href="index.php?page=galaxy&galaxy=1&system=3&position=4&session=0000000003e9">[1:3:4]</a> </th><th>Hello <a href="index.php?page=writemessages&session=0000000003e9&messageziel=2&re=1&betreff=Re:Hello"><img border="0" alt="Reply" src="http://localhost/evolution/img/m.gif" /></a> </th></tr>
 <tr><td class="b"> </td><td class="b" colspan="3">Hi! Are you online?</td></tr>
 <tr><th colspan="4"><input type="checkbox" name="sneak8"/><input type="submit" value="Report to operator"/></th></tr>
-<tr><th><input type="checkbox" name="delmes7"/></th><th>09-01 07:59:36</th><th>[TST] </th><th>Alliance </th></tr>
+<tr><th><input type="checkbox" name="delmes7"/></th><th>09-01 10:27:15</th><th>[TST] </th><th>Alliance </th></tr>
 <tr><td class="b"> </td><td class="b" colspan="3">PlayerThree has applied to the alliance TST.</td></tr>
-<tr><th><input type="checkbox" name="delmes6"/></th><th>09-01 07:59:36</th><th>Expedition </th><th>Expedition to [1:1:16] </th></tr>
-<tr><td class="b"> </td><td class="b" colspan="3">Fleet found: 5 Small Cargo<br><table width=400><tr><td class=c>Expedition result</td></tr><tr><th>You discovered a fleet of 5 Small Cargo. The ships are added to your fleet.</th></tr></table></td></tr>
-<tr><th><input type="checkbox" name="delmes5"/></th><th>09-01 07:59:36</th><th>Combat </th><th><a href="#" onclick="fenster('index.php?page=bericht&session=0000000003e9&bericht=4', 'Bericht_Kampf');"><span class="attack">Combat Report [1:3:4] (V:100.000,A:50.000)</span></a> </th></tr>
-<tr><th><input type="checkbox" name="delmes3"/></th><th>09-01 07:59:36</th><th>Fleet Command </th><th>
+<tr><th><input type="checkbox" name="delmes6"/></th><th>09-01 10:27:15</th><th>Fleet Command </th><th>Expedition result [1:1:16] </th></tr>
+<tr><td class="b"> </td><td class="b" colspan="3">We came across the remains of a previous expedition! Our technicians will try to get some of the ships to work again.
+<br/>
+<br/>
+Entry from the machines officers logbook: Had we brought some more ships with us, it would have been easy to take some of those beauties with us!</td></tr>
+<tr><th><input type="checkbox" name="delmes5"/></th><th>09-01 10:27:15</th><th>Fleet Command </th><th><a href="#" onclick="fenster('index.php?page=bericht&session=0000000003e9&bericht=4', 'Bericht_Kampf');"><span class="combatreport_ididattack_iwon">Battle report [1:3:4] (V:100.000,A:50.000)</span></a> </th></tr>
+<tr><th><input type="checkbox" name="delmes3"/></th><th>09-01 10:27:15</th><th>Fleet Command </th><th>
 <span class="espionagereport">
-Espionage report of Planet [1:3:4]
-[1:3:4]</span> </th></tr>
-<tr><td class="b"> </td><td class="b" colspan="3"><table width=400><tr><td class=c colspan=4>Resources of Planet [1:3:4]</td></tr><tr><th>Metal:</th><th>20.000</th><th>Crystal:</th><th>12.000</th></tr><tr><th>Deuterium:</th><th>6.000</th><th>Energy:</th><th>53</th></tr></table><table width=400><tr><td class=c colspan=2>Fleet</td></tr><tr><th>Small Cargo</th><th>5</th></tr><tr><th>Light Fighter</th><th>8</th></tr></table><center><a href=# onclick="doit(6,1,3,4,1,5);">Spy again</a></center></td></tr>
-<tr><th><input type="checkbox" name="delmes2"/></th><th>09-01 07:44:36</th><th>PlayerTwo </th><th>Hello </th></tr>
+Information of Home
+<a onclick="showGalaxy(1,3,4);" href="#">[1:3:4]</a> </th></tr>
+<tr><td class="b"> </td><td class="b" colspan="3"><table width=400><tr><td class=c colspan=4>Resources on Home <a onclick="showGalaxy(1,3,4);" href="#">[1:3:4]</a> (Player 'PlayerTwo')<br /> at 09-01 10:42:15.</td></tr>
+</div></font></TD></TR><tr><td>Metal:</td><td>20.000</td>
+<td>Cristal:</td><td>12.000</td></tr>
+<tr><td>Deuterium:</td><td>6.000</td>
+<td>Energy:</td><td>53</td></tr>
+</table>
+<table width=400><tr><td class=c colspan=4>     </td></tr>
+<TR><TD colspan=4><div onmouseover='return overlib("&lt;font color=white&gt;Active means that the scanned player was active on his planet or that another player's fleet flew to the planet.&lt;/font&gt;", STICKY, MOUSEOFF, DELAY, 750, CENTER, WIDTH, 100, OFFSETX, -130, OFFSETY, -10);' onmouseout='return nd();'></TD></TR></table>
+<table width=400><tr><td class=c colspan=4>Fleet     </td></tr>
+</tr>
+<td>Small Cargo</td><td>5</td>
+<td>Light Fighter</td><td>8</td>
+</tr>
+<td>Espionage Probe</td><td>3</td>
+</table>
+<table width=400><tr><td class=c colspan=4>Defence     </td></tr>
+</tr>
+<td>Rocket Launcher</td><td>3</td>
+<td>Light Laser</td><td>2</td>
+</table>
+<table width=400><tr><td class=c colspan=4>Buildings     </td></tr>
+</tr>
+<td>Metal Mine</td><td>4</td>
+<td>Crystal Mine</td><td>3</td>
+</tr>
+<td>Deuterium Synthesizer</td><td>2</td>
+<td>Solar Plant</td><td>2</td>
+</tr>
+<td>Robotics Factory</td><td>1</td>
+<td>Shipyard</td><td>2</td>
+</tr>
+<td>Metal Storage</td><td>4</td>
+<td>Crystal Storage</td><td>4</td>
+</tr>
+<td>Deuterium Tank</td><td>3</td>
+<td>Alliance Depot</td><td>1</td>
+</tr>
+<td>Missile Silo</td><td>2</td>
+</table>
+<center> Chance for spy counter:0%</center>
+<center><a href='#' onclick='showFleetMenu(1,3,4,1,1);'>Attack</a></center>
+</td></tr>
+<tr><th><input type="checkbox" name="delmes2"/></th><th>09-01 10:12:15</th><th>PlayerTwo </th><th>Hello </th></tr>
 <tr><td class="b"> </td><td class="b" colspan="3">Hi there!</td></tr>
 <tr><th colspan="4"><input type="checkbox" name="sneak2"/><input type="submit" value="Report to operator"/></th></tr>
-<tr><th><input type="checkbox" name="delmes1"/></th><th>09-01 07:14:36</th><th>System </th><th>Welcome! </th></tr>
+<tr><th><input type="checkbox" name="delmes1"/></th><th>09-01 09:42:15</th><th>System </th><th>Welcome! </th></tr>
 <tr><td class="b"> </td><td class="b" colspan="3">Welcome to OGame!</td></tr>
 <tr><th colspan="4" style='padding:0px 105px;'></th></tr>
 <tr><td colspan="4"><center>     </center></td></tr>

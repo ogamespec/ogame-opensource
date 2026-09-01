@@ -324,13 +324,53 @@ function setMax(key, number){
     document.getElementsByName('fmenge['+key+']')[0].value=number;
 }
 </script> 
-<form action=index.php?page=buildings&session=0000000003e9&mode=Verteidigung method=post><table align=top><tr><td style='background-color:transparent;'>  <table width="468">
+<form action=index.php?page=buildings&session=0000000003e9&mode=Verteidigung method=post><table align=top><tr><td style='background-color:transparent;'>  <table width="530">
           <tr> 
           <td class=l colspan="2">Описание</td> 
           <td class=l><b>Кол-во</b></td> 
           </tr> 
 
-<tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=401>Ракетная установка</a></a> (в наличии 5)<br>Ракетная установка - простое и дешёвое средство обороны.<br>Стоимость: Металл: <b>2.000</b><br>Длительность: 12мин <br></th><td class=k ><input type=text name='fmenge[401]' alt='Ракетная установка' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(401, 10);">(max. 10)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=402>Лёгкий лазер</a></a> (в наличии 3)<br>При помощи концентрированного обстрела цели фотонами можно достичь значительно больших разрушений, чем при применении обычного баллистического вооружения.<br>Стоимость: Металл: <b>1.500</b> Кристалл: <b>500</b><br>Длительность: 12мин <br></th><td class=k ><input type=text name='fmenge[402]' alt='Лёгкий лазер' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(402, 14);">(max. 14)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=403>Тяжёлый лазер</a></a> (в наличии 2)<br>Тяжелый лазер представляет собой дальнейшее развитие лёгкого лазера.<br>Стоимость: Металл: <b>6.000</b> Кристалл: <b>2.000</b><br>Длительность: 48мин <br></th><td class=k ><font color=#FF0000>невозможно</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=404>Пушка Гаусса</a></a> (в наличии 1)<br>Пушка Гаусса ускоряет многотонные заряды с гигантскими затратами энергии.<br>Стоимость: Металл: <b>20.000</b> Кристалл: <b>15.000</b> Дейтерий: <b>2.000</b><br>Длительность: 3ч 30мин <br></th><td class=k ><font color=#FF0000>невозможно</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=405>Ионное орудие</a></a> (в наличии 1)<br>Ионное орудие направляет на цель волну ионов, которая дестабилизирует щиты и повреждает электронику.<br>Стоимость: Металл: <b>2.000</b> Кристалл: <b>6.000</b><br>Длительность: 48мин <br></th><td class=k ><font color=#FF0000>невозможно</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=407>Малый щитовой купол</a></a> (в наличии 1)<br>Малый щитовой купол защищает планету и поглощает удары атаки.<br>Стоимость: Металл: <b>10.000</b> Кристалл: <b>10.000</b><br>Длительность: 2ч <br></th><td class=k ><font color=#FF0000>Щитовой купол можно строить только 1 раз.</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=502>Ракета-перехватчик</a></a> (в наличии 2)<br>Ракеты-перехватчики уничтожают атакующие межпланетные ракеты<br>Стоимость: Металл: <b>8.000</b> Дейтерий: <b>2.000</b><br>Длительность: 48мин <br></th><td class=k ><input type=text name='fmenge[502]' alt='Ракета-перехватчик' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(502, 2);">(max. 2)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=503>Межпланетная ракета</a></a> (в наличии 1)<br>Межпланетные ракеты уничтожают защиту противника.<br>Стоимость: Металл: <b>12.500</b> Кристалл: <b>2.500</b> Дейтерий: <b>10.000</b><br>Длительность: 1ч 30мин <br></th><td class=k ><font color=#FF0000>невозможно</font></td></tr><td class=c colspan=2 align=center><input type=submit value="Строить"></td></tr></table></form></table>
+<tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=401>
+              <img border='0' src="http://localhost/evolution/gebaeude/401.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=401>Ракетная установка</a></a> (в наличии 5)<br>Ракетная установка - простое и дешёвое средство обороны.<br>Стоимость: Металл: <b>2.000</b><br>Длительность: 12мин <br></th><td class=k ><input type=text name='fmenge[401]' alt='Ракетная установка' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(401, 10);">(max. 10)</a></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=402>
+              <img border='0' src="http://localhost/evolution/gebaeude/402.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=402>Лёгкий лазер</a></a> (в наличии 3)<br>При помощи концентрированного обстрела цели фотонами можно достичь значительно больших разрушений, чем при применении обычного баллистического вооружения.<br>Стоимость: Металл: <b>1.500</b> Кристалл: <b>500</b><br>Длительность: 12мин <br></th><td class=k ><input type=text name='fmenge[402]' alt='Лёгкий лазер' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(402, 14);">(max. 14)</a></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=403>
+              <img border='0' src="http://localhost/evolution/gebaeude/403.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=403>Тяжёлый лазер</a></a> (в наличии 2)<br>Тяжелый лазер представляет собой дальнейшее развитие лёгкого лазера.<br>Стоимость: Металл: <b>6.000</b> Кристалл: <b>2.000</b><br>Длительность: 48мин <br></th><td class=k ><font color=#FF0000>невозможно</font></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=404>
+              <img border='0' src="http://localhost/evolution/gebaeude/404.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=404>Пушка Гаусса</a></a> (в наличии 1)<br>Пушка Гаусса ускоряет многотонные заряды с гигантскими затратами энергии.<br>Стоимость: Металл: <b>20.000</b> Кристалл: <b>15.000</b> Дейтерий: <b>2.000</b><br>Длительность: 3ч 30мин <br></th><td class=k ><font color=#FF0000>невозможно</font></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=405>
+              <img border='0' src="http://localhost/evolution/gebaeude/405.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=405>Ионное орудие</a></a> (в наличии 1)<br>Ионное орудие направляет на цель волну ионов, которая дестабилизирует щиты и повреждает электронику.<br>Стоимость: Металл: <b>2.000</b> Кристалл: <b>6.000</b><br>Длительность: 48мин <br></th><td class=k ><font color=#FF0000>невозможно</font></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=407>
+              <img border='0' src="http://localhost/evolution/gebaeude/407.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=407>Малый щитовой купол</a></a> (в наличии 1)<br>Малый щитовой купол защищает планету и поглощает удары атаки.<br>Стоимость: Металл: <b>10.000</b> Кристалл: <b>10.000</b><br>Длительность: 2ч <br></th><td class=k ><font color=#FF0000>Щитовой купол можно строить только 1 раз.</font></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=502>
+              <img border='0' src="http://localhost/evolution/gebaeude/502.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=502>Ракета-перехватчик</a></a> (в наличии 2)<br>Ракеты-перехватчики уничтожают атакующие межпланетные ракеты<br>Стоимость: Металл: <b>8.000</b> Дейтерий: <b>2.000</b><br>Длительность: 48мин <br></th><td class=k ><input type=text name='fmenge[502]' alt='Ракета-перехватчик' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(502, 2);">(max. 2)</a></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=503>
+              <img border='0' src="http://localhost/evolution/gebaeude/503.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=503>Межпланетная ракета</a></a> (в наличии 1)<br>Межпланетные ракеты уничтожают защиту противника.<br>Стоимость: Металл: <b>12.500</b> Кристалл: <b>2.500</b> Дейтерий: <b>10.000</b><br>Длительность: 1ч 30мин <br></th><td class=k ><font color=#FF0000>невозможно</font></td></tr><td class=c colspan=2 align=center><input type=submit value="Строить"></td></tr></table></form></table>
 
       <br>Сейчас производится: <div id="bx" class="z"></div>
 

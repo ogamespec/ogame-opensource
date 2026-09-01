@@ -324,13 +324,53 @@ function setMax(key, number){
     document.getElementsByName('fmenge['+key+']')[0].value=number;
 }
 </script> 
-<form action=index.php?page=buildings&session=0000000003e9&mode=Verteidigung method=post><table align=top><tr><td style='background-color:transparent;'>  <table width="468">
+<form action=index.php?page=buildings&session=0000000003e9&mode=Verteidigung method=post><table align=top><tr><td style='background-color:transparent;'>  <table width="530">
           <tr> 
           <td class=l colspan="2">説明</td> 
           <td class=l><b>数量</b></td> 
           </tr> 
 
-<tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=401>ロケットランチャー</a></a> (在庫 5)<br>ロケットランチャーは、シンプルでコスト効率の高い防衛オプションです。<br>コスト: メタル: <b>2.000</b><br>期間: 12分 <br></th><td class=k ><input type=text name='fmenge[401]' alt='ロケットランチャー' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(401, 12);">(max. 12)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=402>軽量レーザー</a></a> (在庫 3)<br>光子による目標への集中射撃は、標準的な弾道兵器よりもはるかに大きなダメージを生み出すことができます。<br>コスト: メタル: <b>1.500</b> クリスタル: <b>500</b><br>期間: 12分 <br></th><td class=k ><input type=text name='fmenge[402]' alt='軽量レーザー' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(402, 16);">(max. 16)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=403>ヘビーレーザー</a></a> (在庫 2)<br>ヘビーレーザーは、軽量レーザーの論理的な発展形です。<br>コスト: メタル: <b>6.000</b> クリスタル: <b>2.000</b><br>期間: 48分 <br></th><td class=k ><font color=#FF0000>不可能</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=404>ガウス銃</a></a> (在庫 1)<br>ガウス銃は、数トンの重さの弾丸を高速で発射します。<br>コスト: メタル: <b>20.000</b> クリスタル: <b>15.000</b> 重水素: <b>2.000</b><br>期間: 3時 30分 <br></th><td class=k ><font color=#FF0000>不可能</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=405>イオン銃</a></a> (在庫 1)<br>イオン銃は、加速するイオンの連続ビームを発射し、命中した物体に大きなダメージを与えます。<br>コスト: メタル: <b>2.000</b> クリスタル: <b>6.000</b><br>期間: 48分 <br></th><td class=k ><font color=#FF0000>不可能</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=407>小型シールドドーム</a></a> (在庫 1)<br>小型シールドドームは、膨大なエネルギーを吸収できるフィールドで惑星全体を覆います。<br>コスト: メタル: <b>10.000</b> クリスタル: <b>10.000</b><br>期間: 2時 <br></th><td class=k ><font color=#FF0000>シールドドームは 1 回しか建設できません。</font></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=502>迎撃ミサイル</a></a> (在庫 2)<br>迎撃ミサイルは、攻撃してくる惑星間ロケットを破壊します。<br>コスト: メタル: <b>8.000</b> 重水素: <b>2.000</b><br>期間: 48分 <br></th><td class=k ><input type=text name='fmenge[502]' alt='迎撃ミサイル' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(502, 3);">(max. 3)</a></td></tr><tr>                      <td class=l colspan=2><a href=index.php?page=infos&session=0000000003e9&gid=503>惑星間ロケット</a></a> (在庫 1)<br>惑星間ロケットは、敵の防衛を破壊します。<br>コスト: メタル: <b>12.500</b> クリスタル: <b>2.500</b> 重水素: <b>10.000</b><br>期間: 1時 30分 <br></th><td class=k ><font color=#FF0000>不可能</font></td></tr><td class=c colspan=2 align=center><input type=submit value="建設"></td></tr></table></form></table>
+<tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=401>
+              <img border='0' src="http://localhost/evolution/gebaeude/401.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=401>ロケットランチャー</a></a> (在庫 5)<br>ロケットランチャーは、シンプルでコスト効率の高い防衛オプションです。<br>コスト: メタル: <b>2.000</b><br>期間: 12分 <br></th><td class=k ><input type=text name='fmenge[401]' alt='ロケットランチャー' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(401, 12);">(max. 12)</a></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=402>
+              <img border='0' src="http://localhost/evolution/gebaeude/402.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=402>軽量レーザー</a></a> (在庫 3)<br>光子による目標への集中射撃は、標準的な弾道兵器よりもはるかに大きなダメージを生み出すことができます。<br>コスト: メタル: <b>1.500</b> クリスタル: <b>500</b><br>期間: 12分 <br></th><td class=k ><input type=text name='fmenge[402]' alt='軽量レーザー' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(402, 16);">(max. 16)</a></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=403>
+              <img border='0' src="http://localhost/evolution/gebaeude/403.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=403>ヘビーレーザー</a></a> (在庫 2)<br>ヘビーレーザーは、軽量レーザーの論理的な発展形です。<br>コスト: メタル: <b>6.000</b> クリスタル: <b>2.000</b><br>期間: 48分 <br></th><td class=k ><font color=#FF0000>不可能</font></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=404>
+              <img border='0' src="http://localhost/evolution/gebaeude/404.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=404>ガウス銃</a></a> (在庫 1)<br>ガウス銃は、数トンの重さの弾丸を高速で発射します。<br>コスト: メタル: <b>20.000</b> クリスタル: <b>15.000</b> 重水素: <b>2.000</b><br>期間: 3時 30分 <br></th><td class=k ><font color=#FF0000>不可能</font></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=405>
+              <img border='0' src="http://localhost/evolution/gebaeude/405.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=405>イオン銃</a></a> (在庫 1)<br>イオン銃は、加速するイオンの連続ビームを発射し、命中した物体に大きなダメージを与えます。<br>コスト: メタル: <b>2.000</b> クリスタル: <b>6.000</b><br>期間: 48分 <br></th><td class=k ><font color=#FF0000>不可能</font></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=407>
+              <img border='0' src="http://localhost/evolution/gebaeude/407.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=407>小型シールドドーム</a></a> (在庫 1)<br>小型シールドドームは、膨大なエネルギーを吸収できるフィールドで惑星全体を覆います。<br>コスト: メタル: <b>10.000</b> クリスタル: <b>10.000</b><br>期間: 2時 <br></th><td class=k ><font color=#FF0000>シールドドームは 1 回しか建設できません。</font></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=502>
+              <img border='0' src="http://localhost/evolution/gebaeude/502.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=502>迎撃ミサイル</a></a> (在庫 2)<br>迎撃ミサイルは、攻撃してくる惑星間ロケットを破壊します。<br>コスト: メタル: <b>8.000</b> 重水素: <b>2.000</b><br>期間: 48分 <br></th><td class=k ><input type=text name='fmenge[502]' alt='迎撃ミサイル' size=6 maxlength=6 value=0 tabindex=1> <br><a href="javascript:setMax(502, 3);">(max. 3)</a></td></tr><tr>                              <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=503>
+              <img border='0' src="http://localhost/evolution/gebaeude/503.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=503>惑星間ロケット</a></a> (在庫 1)<br>惑星間ロケットは、敵の防衛を破壊します。<br>コスト: メタル: <b>12.500</b> クリスタル: <b>2.500</b> 重水素: <b>10.000</b><br>期間: 1時 30分 <br></th><td class=k ><font color=#FF0000>不可能</font></td></tr><td class=c colspan=2 align=center><input type=submit value="建設"></td></tr></table></form></table>
 
       <br>生産中: <div id="bx" class="z"></div>
 
