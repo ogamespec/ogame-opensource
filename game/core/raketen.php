@@ -5,7 +5,11 @@
  * @details Handles missile launch, flight time, interception and the damage applied to the target planet defences.
  */
 // Missile attack. It used to be in battle.php, but for convenience it was separated into its own module.
-// TODO: It is necessary to pay more attention to this feature of the game, because there are doubts about the correctness of the algorithm. To test it, you can use the admin section to simulate a missile attack.
+// The algorithm reproduces the original OGame 0.84 missile attack: anti-ballistic
+// missiles intercept the incoming IPMs one-to-one, the surviving IPMs deal
+// damage to the target's defensive structures (the primary target first, then
+// the rest in order). See RocketAttackMain(). The admin section (RakSim) and the
+// reference simulator (https://battlesim.logserver.net/ru) can be used to verify.
 
 // IPM - interplanetary missile, attacks
 // ABM - anti-ballistic missile, defends
@@ -13,8 +17,18 @@
 /**
  * Perform the algorithmic part of a missile attack without working with the database.
  *
+ * Each anti-ballistic missile destroys exactly one incoming interplanetary
+ * missile (the ABMs are consumed for that). The surviving IPMs then deal
+ * damage equal to their number times the IPM attack value (raised by the
+ * attacker's weapon technology by 10% per level). That damage is spent on the
+ * target's defensive structures: the primary target (if any) is hit first,
+ * then the remaining defenses in order, and leftover damage carries over to
+ * the next defense type. The defender's stored missiles are never a target:
+ * anti-ballistic missiles are consumed by interception and stored
+ * interplanetary missiles are left untouched.
+ *
  * @param int $amount Number of launched interplanetary missiles.
- * @param int $primary ID of the primary target defense.
+ * @param int $primary ID of the primary target defense (0 = attack everything).
  * @param bool $moon_attack True if the attack targets a moon.
  * @param array $target The target planet array; defense amounts are modified in place.
  * @param array|null $moon_planet The moon array, or null; interceptors are taken from it on a moon attack.
@@ -37,35 +51,43 @@ function RocketAttackMain ( int $amount, int $primary, bool $moon_attack, array 
     }
     else $target[GID_D_ABM] -= $ipm_destroyed;
 
+    // Total damage dealt by the surviving IPMs. The attacker's weapon
+    // technology raises it by 10% per level (the IPM attack value is the
+    // stat used here, see $UnitParam[GID_D_IPM][2]).
     $maxdamage = $ipm * $UnitParam[GID_D_IPM][2] * (1 + $origin_user_attack / 10);
 
-    // Launch an attack on the primary target
+    // The missiles only damage real defensive structures. The defender's
+    // stored missiles are NOT a target: anti-ballistic missiles are consumed
+    // during interception (the block above), and the interplanetary missiles
+    // stored in the silo stay untouched.
+    global $defmap, $rakmap;
+    $defmap_norak = array_diff ( $defmap, $rakmap );
+
+    // Launch an attack on the primary target first.
     if ( $primary > 0 && $ipm > 0 )
     {
         $armor = $UnitParam[$primary][0] * (1 + 0.1 * $target_user_armor) / 10;
         $count = $target[$primary];
         if ($count != 0) {
-            $destroyed = min ( floor ( $maxdamage / $armor ), $count );
+            $destroyed = (int)min ( floor ( $maxdamage / $armor ), $count );
             $target[$primary] -= $destroyed;
             $maxdamage -= $destroyed * $armor;
-            $maxdamage -= $destroyed;
         }
     }
 
-    // Calculate defense losses, if there are still IPMs left -- all the same, but ignore the ID of the primary target in the ID. Foreign missiles can also be bombed.
+    // Spread the remaining damage over the remaining defense structures
+    // in order; leftover damage carries over to the next defense type.
     if ($maxdamage > 0)
     {
-        global $defmap;
-        foreach ($defmap as $i=>$id)
+        foreach ($defmap_norak as $i=>$id)
         {
             if ($id == $primary) continue;
             $armor = $UnitParam[$id][0] * (1 + 0.1 * $target_user_armor) / 10;
             $count = $target[$id];
             if ($count != 0) {
-                $destroyed = min ( floor ( $maxdamage / $armor ), $count );
+                $destroyed = (int)min ( floor ( $maxdamage / $armor ), $count );
                 $target[$id] -= $destroyed;
                 $maxdamage -= $destroyed * $armor;
-                $maxdamage -= $destroyed;
             }
             if ($maxdamage <= 0) break;
         }
