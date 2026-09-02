@@ -16,12 +16,18 @@ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
  *    (1 + weapon_tech / 10) to the target's defensive structures;
  *  - the primary target is hit first, then the rest in order, and leftover
  *    damage carries over;
- *  - the defender's stored missiles (ABM/IPM) are never a damage target.
+ *  - once all defensive structures are gone the leftover damage destroys the
+ *    defender's stored missiles too (the original 0.84 behavior, see the
+ *    reference simulator https://battlesim.logserver.net/ru). Stored missiles
+ *    only exist on planets: a moon has no missile silo, so the leftover
+ *    damage on a moon is wasted once its structures are gone.
  *
  * Reference values (weapon/armor tech = 0, IPM attack = 12000, hitpoints of a
  * defense = structure * (1 + 0.1 * armor) / 10):
  *  - a Rocket Launcher has 2000 structure -> 200 hitpoints -> 12000/200 = 60
- *    of them are destroyed by a single IPM.
+ *    of them are destroyed by a single IPM;
+ *  - an Interplanetary Missile has 15000 structure -> 1500 hitpoints -> a
+ *    single IPM destroys 8 stored IPMs.
  */
 // The game core modules assign global variables ($UnitParam, $defmap, ...) at
 // their top level; only the process-isolated child loads the bootstrap at the
@@ -104,18 +110,84 @@ class RocketAttackTest extends TestCase
         $this->assertSame(41, $target[GID_D_LL]);
     }
 
-    public function testStoredMissilesAreNotDamaged() : void
+    public function testInterceptedMissilesNeverDamageStoredMissiles() : void
     {
-        // Even with a huge leftover damage pool, the stored missiles are never
-        // destroyed: ABMs are consumed only by interception and stored IPMs
-        // are left untouched.
+        // When every incoming IPM is intercepted there is no damage at all,
+        // so the defender's stored missiles stay untouched: the 3 IPMs are
+        // caught by 3 of the 10 ABMs, 7 ABMs remain.
         $target = $this->makeTarget([ GID_D_ABM => 10, GID_D_IPM => 5 ]);
         $moon = null;
 
-        $ipm_destroyed = RocketAttackMain(100, 0, false, $target, $moon, 0, 0);
+        $ipm_destroyed = RocketAttackMain(3, 0, false, $target, $moon, 0, 0);
 
-        $this->assertSame(10, $ipm_destroyed);
-        $this->assertSame(0, $target[GID_D_ABM]);
+        $this->assertSame(3, $ipm_destroyed);
+        $this->assertSame(7, $target[GID_D_ABM]);
         $this->assertSame(5, $target[GID_D_IPM]);
+    }
+
+    public function testOneIPMDestroysEightStoredIPMs() : void
+    {
+        // A stored IPM has 15000 structure -> 1500 hitpoints at armor tech 0,
+        // so a single IPM (12000 damage) destroys exactly 8 of them. This is
+        // the classic reference value of the OGame missile simulators.
+        $target = $this->makeTarget([ GID_D_IPM => 8 ]);
+        $moon = null;
+
+        RocketAttackMain(1, 0, false, $target, $moon, 0, 0);
+
+        $this->assertSame(0, $target[GID_D_IPM]);
+    }
+
+    public function testLeftoverDamageDestroysStoredMissilesAfterAllDefenses() : void
+    {
+        // The stored missiles are only hit once every defensive structure is
+        // gone: 1 IPM destroys the single Rocket Launcher (200 hitpoints) and
+        // the leftover 11800 damage then destroys floor(11800/1500) = 7 of
+        // the 8 stored IPMs.
+        $target = $this->makeTarget([ GID_D_RL => 1, GID_D_IPM => 8 ]);
+        $moon = null;
+
+        RocketAttackMain(1, 0, false, $target, $moon, 0, 0);
+
+        $this->assertSame(0, $target[GID_D_RL]);
+        $this->assertSame(1, $target[GID_D_IPM]);
+    }
+
+    public function testMoonAttackUsesPlanetABMsAndDamagesMoonDefenses() : void
+    {
+        // A moon has no missile silo, so it can never hold stored missiles:
+        // 2 IPMs attack a moon with 2 rocket launchers, and the single ABM of
+        // the planet below intercepts one of them. The surviving IPM (12000
+        // damage) destroys both rocket launchers of the moon.
+        $target = $this->makeTarget([ GID_D_RL => 2 ]);
+        $moon_planet = $this->makeTarget([ GID_D_ABM => 1 ]);
+
+        $ipm_destroyed = RocketAttackMain(2, 0, true, $target, $moon_planet, 0, 0);
+
+        $this->assertSame(1, $ipm_destroyed);
+        $this->assertSame(0, $moon_planet[GID_D_ABM]);    // the planet's ABM was consumed
+        $this->assertSame(0, $target[GID_D_RL]);          // the moon's launchers were destroyed
+    }
+
+    public function testRocketDefenseLossPointsCountsDestroyedDefenses() : void
+    {
+        // The loss is the resource cost of the destroyed units: 60 rocket
+        // launchers (2000 each), 3 anti-ballistic missiles (10000 each) and
+        // 4 stored interplanetary missiles (25000 each).
+        $before = $this->makeTarget([ GID_D_RL => 100, GID_D_ABM => 5, GID_D_IPM => 10 ]);
+        $after  = $this->makeTarget([ GID_D_RL => 40, GID_D_ABM => 2, GID_D_IPM => 6 ]);
+
+        $loss = RocketDefenseLossPoints($before, $after);
+
+        $this->assertSame(60 * 2000 + 3 * 10000 + 4 * 25000, $loss);
+    }
+
+    public function testRocketDefenseLossPointsIgnoresIntactAndGrownDefenses() : void
+    {
+        // Nothing destroyed (or even grown) means no loss; a grown amount is
+        // never counted as a negative loss.
+        $base = $this->makeTarget([ GID_D_RL => 10, GID_D_LL => 5 ]);
+        $this->assertSame(0, RocketDefenseLossPoints($base, $base));
+        $this->assertSame(0, RocketDefenseLossPoints($base, $this->makeTarget([ GID_D_RL => 20, GID_D_LL => 5 ])));
     }
 }
