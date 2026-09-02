@@ -381,6 +381,23 @@ abstract class GameMod {
     }
 
     /**
+     * Hook: lets a mod grant extra spy protection to a planet being espionage-targeted.
+     *
+     * Called from the espionage arrival handler (SpyArrive) for the TARGET planet,
+     * right before the report detail level is computed. The first argument carries
+     * the target planet (key: planet) and the target user; the second argument is
+     * an array with a single 'level' field (start value 0) that a mod may increase
+     * to raise the target's effective espionage defense, hiding more of the report.
+     *
+     * @param array $args Target context, passed by value.
+     * @param array $bonus Spy-protection level, passed by reference.
+     * @return bool True if the hook granted protection.
+     */
+    public function spy_protection(array $args, array &$bonus) : bool {
+        return false;
+    }
+
+    /**
      * Hook: changes a production bonus.
      *
      * @param array $param Production parameters.

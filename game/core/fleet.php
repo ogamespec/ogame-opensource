@@ -1032,6 +1032,14 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
     ModsExecIntRef ('bonus_technology', GID_R_ESPIONAGE, $bonus);
     $target_tech = max ($bonus['level'], 0);
 
+    // Spy protection granted to the target planet by mods (e.g. the Space Storm
+    // Reality Stabilizer). Raising the target's effective espionage tech hides
+    // more of the spy report, which is the "spy protection" mechanic.
+    $spy_prot = array ('level' => 0);
+    $spy_prot_args = array ('planet' => $target, 'target_user' => $target_user);
+    ModsExecArrRef ('spy_protection', $spy_prot_args, $spy_prot);
+    $target_tech += max (0, (int)$spy_prot['level']);
+
     loca_add ( "technames", $origin_user['lang'] );
     loca_add ( "espionage", $origin_user['lang'] );
     loca_add ( "fleetmsg", $origin_user['lang'] );

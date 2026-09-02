@@ -238,6 +238,38 @@ class SpaceStormTest extends TestCase
     }
 
     // ========================================================================
+    // spy_protection -- spy protection from the Reality Stabilizer
+    // ------------------------------------------------------------------------
+
+    public function testSpyProtectionStabilizerCounter(): void
+    {
+        $this->setStorm(SPACE_STORM_MASK_CHRONO_SPY);
+        $planet = array(
+            'planet_id' => 1,
+            GID_B_REALITY_STAB => 10,
+            's' . GID_B_REALITY_STAB => SPACE_STORM_MASK_CHRONO_SPY,
+        );
+        $bonus = array('level' => 0);
+        $this->mod->spy_protection(array('planet' => $planet, 'target_user' => array()), $bonus);
+
+        // Level 10 stabilizer imprinted with Chrono-Spy => +5 spy protection (1 per 2 lvls).
+        $this->assertSame(5, $bonus['level']);
+    }
+
+    public function testSpyProtectionWithoutStormIsNone(): void
+    {
+        $this->setStorm(0);
+        $planet = array(
+            'planet_id' => 1,
+            GID_B_REALITY_STAB => 10,
+            's' . GID_B_REALITY_STAB => SPACE_STORM_MASK_CHRONO_SPY,
+        );
+        $bonus = array('level' => 0);
+        $this->mod->spy_protection(array('planet' => $planet, 'target_user' => array()), $bonus);
+        $this->assertSame(0, $bonus['level']);
+    }
+
+    // ========================================================================
     // NewStorm -- storm generation probabilities (deterministic rule)
     // ------------------------------------------------------------------------
 
