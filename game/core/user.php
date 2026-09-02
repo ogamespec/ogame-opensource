@@ -783,9 +783,11 @@ function Login ( string $login, string $pass, string $passmd="" ) : never
         $user[GID_RC_DM] = $user['dm'] + $user['dmfree'];
         SelectPlanet ($player_id, $user['hplanetid']);
 
-        // Setting events for player unload, virtual DF cleanup, cleanup of destroyed planets, recalculation of alliance stats, and other global events
+        // Setting events for player unload, virtual DF cleanup, farspace cooldown/cleanup, cleanup of destroyed planets, recalculation of alliance stats, and other global events
         AddReloginEvent ();
         AddCleanDebrisEvent ();
+        AddFarspaceCooldownEvent ();
+        AddCleanFarspaceEvent ();
         AddCleanPlanetsEvent ();
         AddCleanPlayersEvent ();
         AddRecalcAllyPointsEvent ();

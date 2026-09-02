@@ -197,6 +197,8 @@ class Admin_Queue extends Page {
             case QTYP_CHANGE_EMAIL: return loca("ADM_QUEUE_TYPE_CHANGE_EMAIL");
             case QTYP_UNLOAD_ALL: return loca("ADM_QUEUE_TYPE_UNLOAD_ALL");
             case QTYP_CLEAN_DEBRIS: return loca("ADM_QUEUE_TYPE_CLEAN_DEBRIS");
+            case QTYP_FARSPACE_COOLDOWN: return loca("ADM_QUEUE_TYPE_FARSPACE_COOLDOWN");
+            case QTYP_CLEAN_FARSPACE: return loca("ADM_QUEUE_TYPE_CLEAN_FARSPACE");
             case QTYP_CLEAN_PLANETS: return loca("ADM_QUEUE_TYPE_CLEAN_PLANETS");
             case QTYP_CLEAN_PLAYERS: return loca("ADM_QUEUE_TYPE_CLEAN_PLAYERS");
             case QTYP_UNBAN: return loca("ADM_QUEUE_TYPE_UNBAN_PLAYER");

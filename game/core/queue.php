@@ -159,6 +159,8 @@ function UpdateQueue (int $until) : void
             case QTYP_FLEET: Queue_Fleet_End ($queue); break;
             case QTYP_UNLOAD_ALL: Queue_Relogin_End ($queue); break;
             case QTYP_CLEAN_DEBRIS: Queue_CleanDebris_End ($queue); break;
+            case QTYP_FARSPACE_COOLDOWN: Queue_FarspaceCooldown_End ($queue); break;
+            case QTYP_CLEAN_FARSPACE: Queue_CleanFarspace_End ($queue); break;
             case QTYP_CLEAN_PLANETS: Queue_CleanPlanets_End ($queue); break;
             case QTYP_CLEAN_PLAYERS: Queue_CleanPlayers_End ($queue); break;
             case QTYP_UPDATE_STATS: Queue_UpdateStats_End ($queue); break;
@@ -1285,17 +1287,106 @@ function AddReloginEvent () : void
  */
 function Queue_Relogin_End (array $queue) : void
 {
-    // Cleanup of unvisited farspaces.
-    global $db_prefix;
-    $query = "SELECT target_planet FROM ".$db_prefix."fleet WHERE mission = ".FTYP_EXPEDITION." OR mission = ".(FTYP_EXPEDITION+FTYP_RETURN)." OR mission = ".(FTYP_EXPEDITION+FTYP_ORBITING);
-    $query = "DELETE FROM ".$db_prefix."planets WHERE type=".PTYP_FARSPACE." AND planet_id <> ALL ($query)";
-    dbquery ( $query );
-
     UnloadAll ();
     RemoveQueue ( $queue['task_id'] );
 
     // Clear the game's daily hack attempt counter.
     ResetHackCounter ();
+}
+
+/**
+ * Add the task of cooling down the expedition visit counter on farspace objects, if it doesn't already exist.
+ *
+ * The counter decreases by 3 every hour. Called when any player logs in.
+ *
+ * @return void
+ */
+function AddFarspaceCooldownEvent () : void
+{
+    global $db_prefix;
+
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_FARSPACE_COOLDOWN."'";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0 )
+    {
+        $now = time ();
+        $id = AddQueue (USER_SPACE, QTYP_FARSPACE_COOLDOWN, 0, 0, 0, $now, EXPEDITION_COOLDOWN_PERIOD, QUEUE_PRIO_FARSPACE_COOLDOWN);
+    }
+}
+
+/**
+ * Cool down the expedition visit counter on all farspace objects.
+ *
+ * The expedition visit counter is stored as the metal value on the farspace
+ * planet object. It decreases by 3 every hour (see issue #174), so that a
+ * position can be visited 3 times per hour without increasing its depletion.
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
+function Queue_FarspaceCooldown_End (array $queue) : void
+{
+    global $db_prefix;
+    // The visit counter is stored as the metal value on the farspace planet
+    // object, i.e. in the resource column whose name is GID_RC_METAL.
+    $metal_col = "`".GID_RC_METAL."`";
+    // Decrease the visit counter by EXPEDITION_COOLDOWN_PER_HOUR, but never below 0.
+    $cooldown = EXPEDITION_COOLDOWN_PER_HOUR;
+    dbquery ("UPDATE ".$db_prefix."planets SET ".$metal_col." = CASE WHEN ".$metal_col." < ".$cooldown." THEN 0 ELSE ".$metal_col." - ".$cooldown." END WHERE type = ".PTYP_FARSPACE.";" );
+
+    RemoveQueue ( $queue['task_id'] );
+    AddFarspaceCooldownEvent ();
+}
+
+/**
+ * Add the task of cleaning farspace objects, if it doesn't already exist.
+ *
+ * Farspace objects that no fleet is flying to or from are deleted once a week.
+ * Called when any player logs in.
+ *
+ * @return void
+ */
+function AddCleanFarspaceEvent () : void
+{
+    global $db_prefix;
+
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_CLEAN_FARSPACE."'";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0 )
+    {
+        $now = time ();
+        $when = strtotime('next monday 01:10') - $now;
+        $id = AddQueue (USER_SPACE, QTYP_CLEAN_FARSPACE, 0, 0, 0, $now, $when, QUEUE_PRIO_CLEAN_FARSPACE);
+    }
+}
+
+/**
+ * Clean up farspace objects that no fleet is flying to or from.
+ *
+ * Unlike the daily re-login event (which only protected objects that were the
+ * *target* of an expedition), this weekly cleanup also protects objects that a
+ * returning expedition is leaving (start_planet), so a farspace object is kept
+ * as long as any expedition fleet is involved with it (see issue #174).
+ *
+ * @param array $queue Queue task data.
+ * @return void
+ */
+function Queue_CleanFarspace_End (array $queue) : void
+{
+    global $db_prefix;
+    // Fleets flying TO a farspace (outbound / orbiting).
+    $query = "SELECT target_planet FROM ".$db_prefix."fleet WHERE (mission = ".FTYP_EXPEDITION." OR mission = ".(FTYP_EXPEDITION+FTYP_RETURN)." OR mission = ".(FTYP_EXPEDITION+FTYP_ORBITING).") AND target_planet IS NOT NULL";
+    // Fleets flying FROM a farspace (returning).
+    $query .= " UNION SELECT start_planet FROM ".$db_prefix."fleet WHERE mission = ".(FTYP_EXPEDITION+FTYP_RETURN)." AND start_planet IS NOT NULL";
+    // NOT IN is used instead of <> ALL: it is portable to both MySQL and the
+    // SQLite backend used by the test suite. A NULL planet id inside the
+    // subquery would make NOT IN evaluate to NULL (nothing deleted), so rows
+    // with a NULL planet id are excluded explicitly.
+    $query = "DELETE FROM ".$db_prefix."planets WHERE type=".PTYP_FARSPACE." AND planet_id NOT IN ($query)";
+    dbquery ( $query );
+
+    RemoveQueue ( $queue['task_id'] );
+    AddCleanFarspaceEvent ();
 }
 
 /**
