@@ -108,6 +108,10 @@ function RepairDefense ( array $d, array $res, int $defrepair, int $defrepair_de
 function Plunder ( int $cargo, float $m, float $k, float $d ) : array
 {
     global $transportableResources;
+    // The defender planet must never hold negative resources (issue #117).
+    // Guard against any corrupted (negative) stored value, otherwise the
+    // captured amount reported to the attacker would itself become negative.
+    $m = max (0, $m); $k = max (0, $k); $d = max (0, $d);
     $m /=2; $k /=2; $d /= 2;
     $total = $m+$k+$d;
     
