@@ -148,13 +148,15 @@ game/mods/SpaceStorm/
 
 ## Тестирование
 
-Юнит-тесты мода находятся в корневом каталоге `testing`:
+Юнит-тесты мода вынесены **внутрь модификации** как самостоятельный PHPUnit-сьют, чтобы не засорять общий набор тестов проекта:
 
-- `testing/SpaceStormTest.php` — тесты чистой логики (модификаторы производства, топлива, скорости и боевых статов).
-- `testing/SpaceStormDbTest.php` — тесты против in-memory БД (боевые контр-эффекты, Сигнатура Материи, заморозка очереди).
+- `testing/SpaceStormTest.php` — тесты чистой логики (модификаторы производства, топлива, скорости, боевых статов и шпион-защиты).
+- `testing/SpaceStormDbTest.php` — тесты против in-memory БД (боевые контр-эффекты, Сигнатура Материи, заморозка/разморозка очереди).
+- `testing/phpunit.xml` — собственная конфигурация PHPUnit.
+- `testing/bootstrap.php` — загрузка игрового ядра и мода.
 
 Запуск:
 
 ```bash
-vendor/bin/phpunit --filter SpaceStorm
+vendor/bin/phpunit -c game/mods/SpaceStorm/testing/phpunit.xml
 ```
