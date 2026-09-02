@@ -46,12 +46,21 @@ class Trader extends Page {
                     if (key_exists('3_value', $_POST)) $value_3 = abs ( (int) str_replace ( ".", "", $_POST['3_value'] ) );
 
                     if ( $GlobalUser['trader'] == 1) {
+                        // The merchant buys metal and gives crystal and
+                        // deuterium. Never let the received resources exceed
+                        // the storage capacity: the planet may have produced
+                        // resources since the page was rendered (especially
+                        // after using the "max" button), so give only what
+                        // actually fits and charge for that amount only.
+                        $value_2 = min ( $value_2, $this->FreeStorage ( $aktplanet, GID_RC_CRYSTAL ) );
+                        $value_3 = min ( $value_3, $this->FreeStorage ( $aktplanet, GID_RC_DEUTERIUM ) );
+
                         $crys = floor ( $aktplanet[GID_RC_CRYSTAL] + $value_2 );
                         $deut = floor ( $aktplanet[GID_RC_DEUTERIUM] + $value_3 );
                         $met = floor ( $value_2 * $GlobalUser['rate_m'] / $GlobalUser['rate_k'] ) + floor ( $value_3 * $GlobalUser['rate_m'] / $GlobalUser['rate_d'] );
 
                         if ( $met > $aktplanet[GID_RC_METAL]) $PageError = loca("TRADER_ERROR_RES") . "<br>";
-                        else if ( $crys > $aktplanet['max'.GID_RC_METAL] || $deut > $aktplanet['max'.GID_RC_DEUTERIUM] ) $PageError = loca("TRADER_ERROR_STORAGE") . "<br>";
+                        else if ( $crys > $aktplanet['max'.GID_RC_CRYSTAL] || $deut > $aktplanet['max'.GID_RC_DEUTERIUM] ) $PageError = loca("TRADER_ERROR_STORAGE") . "<br>";
 
                         if ( $PageError === '' && $met > 0 ) {
                             $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
@@ -63,6 +72,11 @@ class Trader extends Page {
                         }
                     }
                     else if ( $GlobalUser['trader'] == 2) {
+                        // The merchant buys crystal and gives metal and
+                        // deuterium. Cap to free storage (see above).
+                        $value_1 = min ( $value_1, $this->FreeStorage ( $aktplanet, GID_RC_METAL ) );
+                        $value_3 = min ( $value_3, $this->FreeStorage ( $aktplanet, GID_RC_DEUTERIUM ) );
+
                         $met = floor ( $aktplanet[GID_RC_METAL] + $value_1 );
                         $deut = floor ( $aktplanet[GID_RC_DEUTERIUM] + $value_3 );
                         $crys = floor ( $value_1 * $GlobalUser['rate_k'] / $GlobalUser['rate_m'] ) + floor ( $value_3 * $GlobalUser['rate_k'] / $GlobalUser['rate_d'] );
@@ -80,6 +94,11 @@ class Trader extends Page {
                         }
                     }
                     else if ( $GlobalUser['trader'] == 3) {
+                        // The merchant buys deuterium and gives metal and
+                        // crystal. Cap to free storage (see above).
+                        $value_1 = min ( $value_1, $this->FreeStorage ( $aktplanet, GID_RC_METAL ) );
+                        $value_2 = min ( $value_2, $this->FreeStorage ( $aktplanet, GID_RC_CRYSTAL ) );
+
                         $met = floor ( $aktplanet[GID_RC_METAL] + $value_1 );
                         $crys = floor ( $aktplanet[GID_RC_CRYSTAL] + $value_2 );
                         $deut = floor ( $value_1 * $GlobalUser['rate_d'] / $GlobalUser['rate_m'] ) + floor ( $value_2 * $GlobalUser['rate_d'] / $GlobalUser['rate_k'] );
@@ -399,6 +418,25 @@ class Trader extends Page {
         ?>
 <br><br><br><br>
 <?php
+    }
+
+    /**
+     * Returns how much of the given resource can still be added to the planet
+     * before it reaches its storage capacity.
+     *
+     * The planet resources may have grown since the page was rendered (e.g.
+     * after using the "max" button on the merchant), so the amount the merchant
+     * still gives is limited to the actually-remaining free storage, never
+     * negative. This prevents the trade from failing with "no storage space"
+     * and from exceeding the deposit limit (issue #82).
+     *
+     * @param array $planet The planet data (with max<rc> fields set).
+     * @param int $rc The resource id (e.g. GID_RC_METAL).
+     * @return int The remaining free storage, never negative.
+     */
+    private function FreeStorage (array $planet, int $rc) : int {
+        $cap = isset($planet['max' . $rc]) ? $planet['max' . $rc] : 0;
+        return max (0, (int) floor ( $cap - $planet[$rc] ) );
     }
 
     private function CallNewTrader () : void {
