@@ -26,6 +26,8 @@ Static recalculation of player points: 0:10 on the server
 
 Virtual DF disappears on Monday at 1:10 server time if no fleets fly to/from it and if it has 0 resources.
 
+Farspace objects disappear on Monday at 1:10 server time if no fleet flies to or from them (like a colony phantom). The expedition visit counter of a farspace object (stored as its metal value) cools down by 3 every hour (#174), so a position can be visited 3 times an hour without becoming more depleted.
+
 Task Types:
 - DeleteAccount: delete account
 - UnbanPlayer: unban a player.
@@ -34,6 +36,8 @@ Task Types:
 - AllowAttacks: unban a player's attacks
 - UnloadAll: re-login all players
 - CleanDebris: clean virtual debris fields
+- FarspaceCooldown: cool down the expedition visit counter on farspace objects (every hour)
+- CleanFarspace: clean abandoned farspace objects (weekly, unless a fleet flies to or from them)
 - CleanPlanets: remove destroyed planets / abandoned moons
 - CleanPlayers: deleting inactive players and players set for deletion (1:10)
 - UpdateStats: save old stat points

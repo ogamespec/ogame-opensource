@@ -83,6 +83,8 @@ const QTYP_FLEET = "Fleet";                     // Fleet task / IPM attack (sub_
 const QTYP_DEBUG = "Debug";                     // debug event
 const QTYP_AI = "AI";                           // tasks for bot (sub_id - strategy number, obj_id - current block number)
 const QTYP_COUPON = "Coupon";                   // Coupon crediting (the handler is located in coupon.php)
+const QTYP_FARSPACE_COOLDOWN = "FarspaceCooldown";   // expedition visit counter cooldown on farspace objects
+const QTYP_CLEAN_FARSPACE = "CleanFarspace";     // farspace object cleanup (weekly)
 
 // Queue task priorities
 const QUEUE_PRIO_LOWEST = 0;            // Consider it no priority
@@ -94,7 +96,9 @@ const QUEUE_PRIO_RECALC_POINTS = 500;
 const QUEUE_PRIO_UPDATE_STATS = 510;
 const QUEUE_PRIO_COUPON = 520;
 const QUEUE_PRIO_CLEAN_DEBRIS = 600;
+const QUEUE_PRIO_FARSPACE_COOLDOWN = 610;
 const QUEUE_PRIO_CLEAN_PLANETS = 700;
+const QUEUE_PRIO_CLEAN_FARSPACE = 710;
 const QUEUE_PRIO_RELOGIN = 777;
 const QUEUE_PRIO_CLEAN_PLAYERS = 900;
 const QUEUE_PRIO_BOT = 1000;
@@ -144,6 +148,13 @@ const GALAXY_DEUTERIUM_CONS = 10;           // Deuterium consumption for viewing
 const GALAXY_PHANTOM_DEBRIS = 300;          // If the total resource value is < the specified value, then the debris field is not visible in the Galaxy.
 
 const TRADER_DM = 2500;             // Cost of calling a Merchant
+
+// Expedition visit counter cooldown (issue #174). The visit counter is stored as
+// the metal value on the farspace object and decreases by EXPEDITION_COOLDOWN_PER_HOUR
+// every EXPEDITION_COOLDOWN_PERIOD seconds, so a position can be visited 3 times an
+// hour without increasing its depletion.
+const EXPEDITION_COOLDOWN_PERIOD = 3600;    // how often the visit counter cools down (seconds)
+const EXPEDITION_COOLDOWN_PER_HOUR = 3;     // how much the visit counter cools down each tick
 
 const MAX_PLANET = 9;           // Maximum number of planets a player can own (home + colonies), not greater (<= this value)
 const MAX_BUILDINGS_LEVEL = 99;  	// Maximum building level on the planet
