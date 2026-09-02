@@ -4,8 +4,8 @@
 //
 // These tests exercise the hooks that read planet / fleet / queue state from
 // the in-memory SQLite backend. They run each method in a separate PHP process
-// (like DbSqliteTest) so they never clash with the mock dbquery()/dbarray()/
-// AddDBRow() helpers defined by the page-rendering tests.
+// so they never clash with the repository's own test helpers, and they live in
+// the modification itself (game/mods/SpaceStorm/testing) with their own suite.
 //
 // A minimal universe is built here (uni row + planets + optional fleet/queue
 // rows) with the Space Storm columns added, so the hooks have real data to
@@ -26,19 +26,25 @@ class SpaceStormDbTest extends TestCase
         $_ENV['DB_CONNECTION'] = 'sqlite';
         $_ENV['DB_DATABASE'] = ':memory:';
 
-        require_once __DIR__ . '/../game/core/defs.php';
-        require_once __DIR__ . '/../game/core/techs.php';
-
         if (!function_exists('dbquery')) {
-            require_once __DIR__ . '/../game/core/db.php';
+            require_once __DIR__ . '/../../../../game/core/db.php';
         }
 
         if (!class_exists('SpaceStorm')) {
-            require_once __DIR__ . '/../game/mods/SpaceStorm/main.php';
+            require_once __DIR__ . '/../main.php';
         }
 
         $this->mod = new SpaceStorm();
         $this->buildMinimalDb();
+    }
+
+    /**
+     * Return the mod instance (asserts it was initialized by setUp).
+     */
+    private function mod(): SpaceStorm
+    {
+        $this->assertInstanceOf(SpaceStorm::class, $this->mod);
+        return $this->mod;
     }
 
     private function buildMinimalDb(): void
@@ -123,7 +129,7 @@ class SpaceStormDbTest extends TestCase
             'extra' => array(),
         );
 
-        $this->mod->battle_post_process($res);
+        $this->mod()->battle_post_process($res);
 
         // 5% loss => ceil(100*0.95) = 95.
         $this->assertSame(95, $res['rounds'][0]['attackers'][0]['units'][GID_F_LF]);
@@ -149,7 +155,7 @@ class SpaceStormDbTest extends TestCase
             'extra' => array(),
         );
 
-        $this->mod->battle_post_process($res);
+        $this->mod()->battle_post_process($res);
 
         // 1% loss => ceil(100*0.99) = 99.
         $this->assertSame(99, $res['rounds'][0]['attackers'][0]['units'][GID_F_LF]);
@@ -172,7 +178,7 @@ class SpaceStormDbTest extends TestCase
             'defenders' => array(array('id' => $planetId, 'pf' => BATTLE_PTCP_PLANET)),
         );
 
-        $this->mod->battle_unit_stats($args, $unit);
+        $this->mod()->battle_unit_stats($args, $unit);
 
         $this->assertEqualsWithDelta(4000 * 1.1, $unit[GID_F_LF][0], 1e-6);
         $this->assertEqualsWithDelta(10 * 1.0, $unit[GID_F_LF][1], 1e-6);
@@ -204,7 +210,7 @@ class SpaceStormDbTest extends TestCase
             'balance' => array(GID_RC_METAL => 1000, GID_RC_CRYSTAL => 0, GID_RC_DEUTERIUM => 0),
         );
 
-        $this->mod->prod_post_process($planet, $eco);
+        $this->mod()->prod_post_process($planet, $eco);
 
         // 20% of 1000 metal converted into crystal => 200 crystal, 800 metal.
         $this->assertEqualsWithDelta(200, $eco['net_prod'][GID_RC_CRYSTAL], 1e-6);
@@ -220,7 +226,7 @@ class SpaceStormDbTest extends TestCase
     }
 
     // ========================================================================
-    // FreezeRandomQueue -- Energy Collapse freezing (deterministic with 1 task)
+    // FreezeRandomQueue / unfreeze -- Energy Collapse freezing (with 1 task)
     // ------------------------------------------------------------------------
 
     public function testFreezeRandomQueueFreezesBuild(): void
@@ -242,7 +248,7 @@ class SpaceStormDbTest extends TestCase
         // Invoke the (private) freeze helper through reflection.
         $method = new ReflectionMethod(SpaceStorm::class, 'FreezeRandomQueue');
         $method->setAccessible(true);
-        $method->invoke($this->mod, $planetId);
+        $method->invoke($this->mod(), $planetId);
 
         $result = dbquery("SELECT freeze FROM {$db_prefix}queue WHERE type = 'Build'");
         $row = dbarray($result);
@@ -260,7 +266,7 @@ class SpaceStormDbTest extends TestCase
 
         $method = new ReflectionMethod(SpaceStorm::class, 'EnergyCollapseTick');
         $method->setAccessible(true);
-        $method->invoke($this->mod);
+        $method->invoke($this->mod());
 
         $result = dbquery("SELECT freeze FROM {$db_prefix}queue WHERE type = 'Build'");
         $row = dbarray($result);
