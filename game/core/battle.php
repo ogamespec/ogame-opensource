@@ -591,6 +591,13 @@ function GenBattleSourceData (array $a, array $d, int $rf, int $max_round) : str
         $source .= "\n";
     }
 
+    // Let mods scale the unit base stats for this battle only (frontend-only
+    // modifier, e.g. the Space Storm). The change is applied to the serialized
+    // battle data and then reverted so the game-wide unit parameters stay intact.
+    $orig_unit_param = $UnitParam;
+    $battle_ctx = array ('attackers' => $a, 'defenders' => $d);
+    ModsExecArrRef ('battle_unit_stats', $battle_ctx, $UnitParam);
+
     $source .= "UnitParam =";
     foreach ($UnitParam as $gid=>$param) {
         $source .= " " . $gid;
@@ -599,6 +606,8 @@ function GenBattleSourceData (array $a, array $d, int $rf, int $max_round) : str
         }
     }
     $source .= "\n";
+
+    $UnitParam = $orig_unit_param;
 
     $anum = count ($a);
     $dnum = count ($d);

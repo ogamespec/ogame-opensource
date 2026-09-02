@@ -30,6 +30,24 @@ const SPACE_STORM_ENERGY_COLLAPSE_BASE_PENALTY = 0.4;
 const SPACE_STORM_SUBSPACE_TURB_PENALTY_MIN = 30;
 const SPACE_STORM_SUBSPACE_TURB_PENALTY_MAX = 50;
 
+// Battle effects (global, applied in the battle frontend).
+const SPACE_STORM_POLAR_ARMOR = 0.8;         // Polar Shield Distortion: armor -20%
+const SPACE_STORM_POLAR_SHIELD = 1.3;        // Polar Shield Distortion: shields +30%
+const SPACE_STORM_GRAV_SHIELD = 1.1;         // Gravitational Defense Anomaly: protective barrier +10%
+
+// Reality Stabilizer counter-effect steps (per level).
+const SPACE_STORM_POLAR_STAB_STEP = 0.03;    // Polar: reduce distortion by 3%/level
+const SPACE_STORM_GRAV_STAB_STEP = 0.01;     // Grav: reduce barrier by 1%/level
+const SPACE_STORM_TURB_STAB_SPEED = 0.03;    // Subspace Turbulence: +3% fleet speed/level
+const SPACE_STORM_JUMP_STAB_DELTA = 0.4;     // Subspace Jump: jump chance -0.4%/level
+const SPACE_STORM_JUMP_STAB_LOST = 0.08;     // Subspace Jump: lost chance -0.08%/level
+const SPACE_STORM_QUANTUM_STAB_FUEL = 0.08;  // Quantum Drive: fuel penalty -8%/level
+const SPACE_STORM_QUANTUM_STAB_PROD = 0.03;  // Quantum Drive: deuterium bonus +3%/level
+const SPACE_STORM_CHRONO_STAB_DELAY = 0.4;   // Chrono-Spy: spy delay -0.4 min/level
+const SPACE_STORM_ENERGY_STAB_PENALTY = 0.04;// Energy Collapse: energy penalty -4%/level
+const SPACE_STORM_MATTER_STAB_STEP = 0.02;   // Matter Signature: conversion -2%/level
+const SPACE_STORM_REVERB_STAB_STEP = 0.004;  // Attack Reverb: loss -0.4%/level
+
 class SpaceStorm extends GameMod {
 
     public function install() : void {
@@ -117,6 +135,9 @@ class SpaceStorm extends GameMod {
 
             ProlongQueue ($queue['task_id'], SPACE_STORM_PERIOD_SECONDS);
 
+            // Энергетический Коллапс: при отрицательном балансе 10%/час заморозить постройку или исследование.
+            $this->EnergyCollapseTick ();
+
             // Для Сигнатуры Материи нужно выбрать тип ресурса, в который переносится всё производство
             $res_types = count ($resourcesWithNonZeroDerivative);
             if ($res_types) {
@@ -131,6 +152,66 @@ class SpaceStorm extends GameMod {
         else {
             return false;
         }
+    }
+
+    // Тик Энергетического Коллапса: проверяет баланс энергии планет и с шансом 10%/час
+    // замораживает случайную постройку / исследование на планете с дефицитом энергии.
+    // На планетах со Стабилизатором реальности постройки не отключаются.
+    private function EnergyCollapseTick () : void {
+
+        global $db_prefix, $GlobalUni;
+        $storm = $this->GetStorm ();
+        if (($storm & SPACE_STORM_MASK_ENERGY_COLLAPSE) == 0) return;
+
+        $result = dbquery ("SELECT * FROM ".$db_prefix."planets WHERE type = ".PTYP_PLANET);
+        if ($result == null) return;
+
+        $rows = dbrows ($result);
+        while ($rows--) {
+            $planet = dbarray ($result);
+            if ($planet['owner_id'] == USER_SPACE) continue;
+
+            // Стабилизатор реальности защищает планету от отключений.
+            if ($this->HasStabCounter($planet, SPACE_STORM_MASK_ENERGY_COLLAPSE)) continue;
+
+            // Баланс энергии не хранится в БД. Вычислим его безопасно (без записи в БД)
+            // с помощью ProdResources, который только заполняет переданный массив.
+            $user = LoadUser ($planet['owner_id']);
+            if ($user == null) continue;
+            ProdResources ($GlobalUni, $user, $planet);
+
+            $energy_gap = $planet['balance'][GID_RC_ENERGY] ?? 0;
+            if ($energy_gap < 0 && mt_rand (1, 100) <= 10) {
+                $this->FreezeRandomQueue ($planet['planet_id']);
+            }
+        }
+    }
+
+    // Заморозить случайную незамороженную постройку или исследование на планете.
+    private function FreezeRandomQueue (int $planet_id) : void {
+
+        global $db_prefix;
+        $ids = [];
+
+        // Постройки/снос: очередь строительства хранится в buildqueue (sub_id ссылается на buildqueue.id).
+        $bresult = dbquery ("SELECT q.task_id FROM ".$db_prefix."queue q JOIN ".$db_prefix."buildqueue b ON q.sub_id = b.id ". 
+                "WHERE q.type IN ('".QTYP_BUILD."','".QTYP_DEMOLISH."') AND b.planet_id = $planet_id AND q.freeze = 0");
+        if ($bresult != null) {
+            $n = dbrows ($bresult);
+            while ($n--) { $row = dbarray ($bresult); $ids[] = $row['task_id']; }
+        }
+
+        // Исследование: sub_id = planet_id.
+        $rresult = dbquery ("SELECT task_id FROM ".$db_prefix."queue WHERE type = '".QTYP_RESEARCH."' AND sub_id = $planet_id AND freeze = 0");
+        if ($rresult != null) {
+            $n = dbrows ($rresult);
+            while ($n--) { $row = dbarray ($rresult); $ids[] = $row['task_id']; }
+        }
+
+        if (!count ($ids)) return;
+
+        $task_id = $ids[mt_rand (0, count ($ids) - 1)];
+        FreezeQueue ($task_id, true);
     }
 
     // Вернуть картинку Стабилизатора реальности
@@ -391,6 +472,18 @@ class SpaceStorm extends GameMod {
         return $count;
     }
 
+    // Реальный уровень Стабилизатора реальности на планете.
+    private function GetStabilizerLevel (array $planet) : int {
+        return (int)($planet[GID_B_REALITY_STAB] ?? 0);
+    }
+
+    // Есть ли на планете запечатлённый контр-эффект соответствующего шторма
+    // (маска штормов, при постройке которых планета получила Стабилизатор).
+    private function HasStabCounter (array $planet, int $storm_mask) : bool {
+        if ($this->GetStabilizerLevel($planet) <= 0) return false;
+        return (($planet['s'.GID_B_REALITY_STAB] ?? 0) & $storm_mask) != 0;
+    }
+
     private function GetStormQueue () : array|null {
 
         global $db_prefix;
@@ -414,6 +507,14 @@ class SpaceStorm extends GameMod {
             if ($fleet_obj && $fleet_obj['mission'] == FTYP_SPY && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
 
                 $delay_seconds = mt_rand (SPACE_STORM_CHRONO_SPY_DELAY_MIN, SPACE_STORM_CHRONO_SPY_DELAY_MAX) * 60;
+
+                // Стабилизатор реальности на целевой планете сокращает задержку отчётов.
+                $target_planet = LoadPlanetById ($fleet_obj['target_planet']);
+                if ($target_planet !== null && $this->HasStabCounter($target_planet, SPACE_STORM_MASK_CHRONO_SPY)) {
+                    $level = $this->GetStabilizerLevel($target_planet);
+                    $delay_seconds = max (0, $delay_seconds - (int)round(SPACE_STORM_CHRONO_STAB_DELAY * 60 * $level));
+                }
+
                 $row['end'] += $delay_seconds;
             }
 
@@ -425,11 +526,21 @@ class SpaceStorm extends GameMod {
                 /** @var bool $bool_test_loss */
                 $bool_test_loss = false;
 
-                if ($bool_test_jump || mt_rand(1, 100) <= 5) {
+                // Учёт Стабилизатора реальности на стартовой планете (снижение шансов).
+                $jump_chance = 5;
+                $lost_chance = 1;
+                $origin_planet = LoadPlanetById ($fleet_obj['start_planet']);
+                if ($origin_planet !== null && $this->HasStabCounter($origin_planet, SPACE_STORM_MASK_SUBSPACE_JUMP)) {
+                    $level = $this->GetStabilizerLevel($origin_planet);
+                    $jump_chance = max (0, 5 - (int)round(SPACE_STORM_JUMP_STAB_DELTA * $level));
+                    $lost_chance = max (0, 1 - (int)round(SPACE_STORM_JUMP_STAB_LOST * $level));
+                }
+
+                if ($bool_test_jump || mt_rand(1, 100) <= $jump_chance) {
 
                     $row['end'] = $row['start'];
                 }
-                else if ( ( $bool_test_loss || mt_rand(1, 100) <= 1) && $fleet_obj['mission'] <= FTYP_EXPEDITION) {    // кастомные флоты не умеем отзывать
+                else if ( ( $bool_test_loss || mt_rand(1, 100) <= $lost_chance) && $fleet_obj['mission'] <= FTYP_EXPEDITION) {    // кастомные флоты не умеем отзывать
 
                     $flight_time = mt_rand(60*60, 2*60*60);
                     $mission = $fleet_obj['mission'] + FTYP_RETURN;
@@ -465,6 +576,7 @@ class SpaceStorm extends GameMod {
 
         // Эффекты шторма которые можно отобразить на странице Обзор
         $storm_overview_bonus = [
+            SPACE_STORM_MASK_POLAR_SHIELD,
             SPACE_STORM_MASK_GRAV_DEFENSE,
             SPACE_STORM_MASK_ATTACK_REVERB,
         ];
@@ -531,12 +643,27 @@ class SpaceStorm extends GameMod {
     public function bonus_prod (array $param, array &$bonus) : bool {
 
         $storm = $this->GetStorm ();
+        $planet = $param['planet'] ?? [];
+
+        // Базовый бонус Стабилизатора реальности: +0.5% выработки энергии за уровень.
+        if ($param['rc'] == GID_RC_ENERGY) {
+            $level = $this->GetStabilizerLevel($planet);
+            if ($level > 0) $bonus[] = 1 + 0.005 * $level;
+        }
 
         if ($param['rc'] == GID_RC_DEUTERIUM && ($storm & SPACE_STORM_MASK_QUANTUM_DRIVE) != 0) {
-            $bonus[] = 1 + SPACE_STORM_QUANTUM_DRIVE_BASE_BONUS;
+            $factor = 1 + SPACE_STORM_QUANTUM_DRIVE_BASE_BONUS;
+            if ($this->HasStabCounter($planet, SPACE_STORM_MASK_QUANTUM_DRIVE)) {
+                $factor += SPACE_STORM_QUANTUM_STAB_PROD * $this->GetStabilizerLevel($planet);
+            }
+            $bonus[] = $factor;
         }
         if ($param['rc'] == GID_RC_ENERGY && ($storm & SPACE_STORM_MASK_ENERGY_COLLAPSE) != 0) {
-            $bonus[] = 1 - SPACE_STORM_ENERGY_COLLAPSE_BASE_PENALTY;
+            $penalty = SPACE_STORM_ENERGY_COLLAPSE_BASE_PENALTY;
+            if ($this->HasStabCounter($planet, SPACE_STORM_MASK_ENERGY_COLLAPSE)) {
+                $penalty = max (0.0, $penalty - SPACE_STORM_ENERGY_STAB_PENALTY * $this->GetStabilizerLevel($planet));
+            }
+            $bonus[] = 1 - $penalty;
         }
 
         return false;
@@ -554,16 +681,24 @@ class SpaceStorm extends GameMod {
             if ($queue == null) return false;
             $res_id = $queue['obj_id'];
 
-            foreach ($resourcesWithNonZeroDerivative as $i=>$rc) {
+            // Стабилизатор реальности снижает процент конверсии на этой планете.
+            $bonus_rate = SPACE_STORM_MATTER_SIGNATURE_BASE_BONUS;
+            if ($this->HasStabCounter($planet, SPACE_STORM_MASK_MATTER_SIGNATURE)) {
+                $bonus_rate = max (0.0, $bonus_rate - SPACE_STORM_MATTER_STAB_STEP * $this->GetStabilizerLevel($planet));
+            }
 
-                if ($rc != $res_id && isset($eco['net_prod'][$res_id])) {
+            if ($bonus_rate > 0) {
+                foreach ($resourcesWithNonZeroDerivative as $i=>$rc) {
 
-                    $converted = $eco['net_prod'][$rc] * SPACE_STORM_MATTER_SIGNATURE_BASE_BONUS;
+                    if ($rc != $res_id && isset($eco['net_prod'][$res_id])) {
 
-                    $eco['net_prod'][$res_id] += $converted;
-                    $eco['balance'][$res_id] += $converted;
-                    $eco['net_prod'][$rc] -= $converted;
-                    $eco['balance'][$rc] -= $converted;
+                        $converted = $eco['net_prod'][$rc] * $bonus_rate;
+
+                        $eco['net_prod'][$res_id] += $converted;
+                        $eco['balance'][$res_id] += $converted;
+                        $eco['net_prod'][$rc] -= $converted;
+                        $eco['balance'][$rc] -= $converted;
+                    }
                 }
             }
         }
@@ -580,6 +715,14 @@ class SpaceStorm extends GameMod {
         if (($storm & SPACE_STORM_MASK_ATTACK_REVERB) == 0) return false;
         if ($res['result'] !== "awon" ) return false;
 
+        // Учёт Стабилизатора реальности на защищаемой планете (снижение потерь атакующего).
+        $loss_rate = 0.05;
+        $planet = $this->GetBattleDefendedPlanet ($res['before']);
+        if ($planet !== null && $this->HasStabCounter($planet, SPACE_STORM_MASK_ATTACK_REVERB)) {
+            $level = $this->GetStabilizerLevel($planet);
+            $loss_rate = max (0.0, 0.05 - SPACE_STORM_REVERB_STAB_STEP * $level);
+        }
+
         $reverb_losses = [];
         $total_units_lost = 0;
         $units_lost = 0;
@@ -590,7 +733,7 @@ class SpaceStorm extends GameMod {
             $last = $res['rounds'][$rounds - 1];
             foreach ($last['attackers'] as $i=>$attacker) {
                 foreach ($attacker['units'] as $gid=>$count) {
-                    $after = (int)ceil($count * 0.95);
+                    $after = (int)ceil($count * (1 - $loss_rate));
                     $res['rounds'][$rounds-1]['attackers'][$i]['units'][$gid] = $after;
                     $units_lost = $count - $after;
                     if (isset($reverb_losses[$gid])) $reverb_losses[$gid] += $units_lost;
@@ -618,13 +761,75 @@ class SpaceStorm extends GameMod {
         return false;
     }
 
+    // Глобальные боевые эффекты Шторма (и их контр-эффекты Стабилизатора).
+    // Вызывается из фронтенда боевого движка (GenBattleSourceData) до сериализации
+    // базовых статов юнитов, поэтому меняет только данные этого боя.
+    public function battle_unit_stats(array $args, array &$unit_param) : bool {
+
+        $storm = $this->GetStorm ();
+        if ($storm == 0) return false;
+
+        $armor_factor = 1.0;
+        $shield_factor = 1.0;
+
+        // Полярное Искажение Щитов: броня -20%, щиты +30%.
+        if (($storm & SPACE_STORM_MASK_POLAR_SHIELD) != 0) {
+            $armor_factor *= SPACE_STORM_POLAR_ARMOR;
+            $shield_factor *= SPACE_STORM_POLAR_SHIELD;
+        }
+        // Гравитационная Аномалия Защиты: защитный барьер +10% к щитам.
+        if (($storm & SPACE_STORM_MASK_GRAV_DEFENSE) != 0) {
+            $shield_factor *= SPACE_STORM_GRAV_SHIELD;
+        }
+
+        // Учёт Стабилизатора реальности на защищаемой планете.
+        $planet = $this->GetBattleDefendedPlanet ($args);
+        if ($planet !== null) {
+            if (($storm & SPACE_STORM_MASK_POLAR_SHIELD) != 0 && $this->HasStabCounter($planet, SPACE_STORM_MASK_POLAR_SHIELD)) {
+                $level = $this->GetStabilizerLevel($planet);
+                $armor_factor += SPACE_STORM_POLAR_STAB_STEP * $level;
+                $shield_factor -= SPACE_STORM_POLAR_STAB_STEP * $level;
+            }
+            if (($storm & SPACE_STORM_MASK_GRAV_DEFENSE) != 0 && $this->HasStabCounter($planet, SPACE_STORM_MASK_GRAV_DEFENSE)) {
+                $level = $this->GetStabilizerLevel($planet);
+                $shield_factor -= SPACE_STORM_GRAV_STAB_STEP * $level;
+            }
+        }
+
+        if ($armor_factor != 1.0 || $shield_factor != 1.0) {
+            foreach ($unit_param as $gid=>$p) {
+                $unit_param[$gid][0] *= $armor_factor;    // броня
+                $unit_param[$gid][1] *= $shield_factor;   // щиты
+            }
+        }
+
+        return false;
+    }
+
+    // Найти защищаемую планету из контейнера с участниками боя.
+    private function GetBattleDefendedPlanet (array $container) : ?array {
+        if (!isset($container['defenders']) || !is_array($container['defenders'])) return null;
+        foreach ($container['defenders'] as $defender) {
+            if (($defender['pf'] ?? null) == BATTLE_PTCP_PLANET && !empty($defender['id'])) {
+                $planet = LoadPlanetById ($defender['id']);
+                if ($planet !== null) return $planet;
+            }
+        }
+        return null;
+    }
+
     // Увеличить затраты топлива для Квантовая Нестабильность Двигателей
     public function bonus_fleet_cons (array $param, array &$bonus) : bool {
 
         $storm = $this->GetStorm ();
 
         if (($storm & SPACE_STORM_MASK_QUANTUM_DRIVE) != 0) {
-            $bonus['value'] *= 2;
+            $mult = 2.0;
+            if ($this->HasStabCounter($param['planet'], SPACE_STORM_MASK_QUANTUM_DRIVE)) {
+                $level = $this->GetStabilizerLevel($param['planet']);
+                $mult = max (1.0, 2.0 - SPACE_STORM_QUANTUM_STAB_FUEL * $level);
+            }
+            $bonus['value'] *= $mult;
         }
 
         return false;
@@ -638,6 +843,13 @@ class SpaceStorm extends GameMod {
 
             $penalty = mt_rand (SPACE_STORM_SUBSPACE_TURB_PENALTY_MIN, SPACE_STORM_SUBSPACE_TURB_PENALTY_MAX) / 100;
             $bonus['value'] *= 1 - $penalty;
+
+            // Стабилизатор реальности ускоряет флоты, отправленные с этой планеты,
+            // компенсируя часть глобального замедления (активен во время шторма).
+            if (isset($param['planet']) && $this->HasStabCounter($param['planet'], SPACE_STORM_MASK_SUBSPACE_TURB)) {
+                $level = $this->GetStabilizerLevel($param['planet']);
+                $bonus['value'] *= 1 + SPACE_STORM_TURB_STAB_SPEED * $level;
+            }
         }
 
         return false;
@@ -662,9 +874,12 @@ class SpaceStorm extends GameMod {
 
             if ($target_user['player_id'] == $origin_user['player_id']) {
 
-                $key = array_search(FTYP_TRANSPORT, $missions);
-                if ($key !== false) {
-                    unset ($missions[$key]);
+                // Стабилизатор реальности на стартовой планете позволяет Транспорт, несмотря на шторм.
+                if (!$this->HasStabCounter($origin, SPACE_STORM_MASK_COMM_BREAKDOWN)) {
+                    $key = array_search(FTYP_TRANSPORT, $missions);
+                    if ($key !== false) {
+                        unset ($missions[$key]);
+                    }
                 }
             }
         }

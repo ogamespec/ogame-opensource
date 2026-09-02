@@ -260,6 +260,25 @@ abstract class GameMod {
         return false;
     }
 
+    /**
+     * Hook: lets a mod adjust the battle simulator parameters before the combat runs.
+     *
+     * Called once per battle from the battle frontend (GenBattleSourceData), right
+     * before the unit base stats are serialized into the battle data. The first
+     * argument carries the battle context (keys: attackers, defenders); the second
+     * argument is the global unit-stat table (armor, shield, attack, cargo, speed,
+     * consumption) passed by reference, so a mod can scale it for this battle only.
+     * The change affects only the serialized battle data, not the game's global
+     * unit parameters (they are restored right after the battle data is built).
+     *
+     * @param array $args Battle context, passed by value.
+     * @param array $unit_param Unit stat table, passed by reference.
+     * @return bool True if the hook handled the adjustment.
+     */
+    public function battle_unit_stats(array $args, array &$unit_param) : bool {
+        return false;
+    }
+
     // Default pages hooks (various modifications of the original content)
 
     /**
