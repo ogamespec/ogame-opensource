@@ -21,6 +21,18 @@ const LEVI_TEMP = 200;          // Температура левиафана
 const LEVI_PORTAL_DIAMETER = 1000;          // Диаметр портала
 const LEVI_PORTAL_TEMP = -200;          // Температура портала
 
+// Очередное событие мода: возрождение убитого левиафана (тип события в таблице queue).
+const QTYP_LEVI_RESPAWN = "DeepSpaceHorror";
+
+// Задержка возрождения убитого левиафана: 24-72 реальных часа.
+const LEVI_RESPAWN_MIN_SECONDS = 24 * 60 * 60;
+const LEVI_RESPAWN_MAX_SECONDS = 72 * 60 * 60;
+
+// Трофеи с убитых чудовищ (дизайн мода: Амёба роняет дейтерий, Страж - кристалл, Левиафан - металл).
+const LEVI_LOOT_AMOEBA_DEUTERIUM = 2500000;
+const LEVI_LOOT_GUARDIAN_CRYSTAL = 10000000;
+const LEVI_LOOT_JUGGERNAUT_METAL = 40000000;
+
 class DeepSpaceHorror extends GameMod {
 
     public function install() : void {
@@ -88,6 +100,10 @@ class DeepSpaceHorror extends GameMod {
 
         // Удалить планеты без флотов, если вдруг мод баганул в процессе.
         $query = "DELETE FROM ".$db_prefix."planets WHERE type IN (".PTYP_LEVI_PORTAL.", ".PTYP_LEVI_AMOEBA.", ".PTYP_LEVI_GUARDIAN.", ".PTYP_LEVI_JUGGERNAUT.");";
+        dbquery ($query);
+
+        // Удалить отложенные события возрождения левиафанов.
+        $query = "DELETE FROM ".$db_prefix."queue WHERE type = '".QTYP_LEVI_RESPAWN."';";
         dbquery ($query);
 
         // Remove columns
@@ -250,9 +266,9 @@ class DeepSpaceHorror extends GameMod {
         }
         else {
 
-            $g = mt_rand (1, $GlobalUni['galaxies']);
-            $s = mt_rand (1, $GlobalUni['systems']);
-            $p = mt_rand (1, 15);
+            $g = $this->Rnd (1, $GlobalUni['galaxies']);
+            $s = $this->Rnd (1, $GlobalUni['systems']);
+            $p = $this->Rnd (1, 15);
         }
 
         $origin = array(
@@ -266,7 +282,7 @@ class DeepSpaceHorror extends GameMod {
 
         $coords = $this->DeterminePortalCoords ($gid, $origin);
 
-        $target_name = loca ("PLANET_".PTYP_LEVI_PORTAL);
+        $target_name = loca_lang ("PLANET_".PTYP_LEVI_PORTAL, $GlobalUni['lang']);
 
         $target = array(
             'name' => $target_name, 'type' => PTYP_LEVI_PORTAL, 'g' => $coords['g'], 's' => $coords['s'], 'p' => $coords['p'], 
@@ -291,19 +307,21 @@ class DeepSpaceHorror extends GameMod {
                 case GID_LEVI_AMOEBA:
                     $coords['g'] = $origin['g'];
                     $coords['s'] = $origin['s'];
-                    if (mt_rand(1, 100) <= 70) {
-                        $coords['p'] = mt_rand (1, 15);
+                    if ($this->Rnd(1, 100) <= 70) {
+                        $coords['p'] = $this->Rnd (1, 15);
                     }
                     else {
-                        if (mt_rand(1, 100) <= 5) {
-                            $coords['g'] = $origin['g'] + mt_rand (-1, +1);
+                        // Каждый вызов Rnd() - независимый бросок; phpstan ошибочно
+                        // мемоизирует вызовы с одинаковыми аргументами.
+                        if ($this->Rnd(1, 100) <= 5) { // @phpstan-ignore smallerOrEqual.alwaysFalse
+                            $coords['g'] = $origin['g'] + $this->Rnd (-1, +1);
                             $coords['g'] = max (1, min($coords['g'], $GlobalUni['galaxies']));
                         }
-                        if (mt_rand(1, 100) <= 25) {
-                            $coords['s'] = $origin['s'] + mt_rand (-5, +5);
+                        if ($this->Rnd(1, 100) <= 25) { // @phpstan-ignore smallerOrEqual.alwaysFalse
+                            $coords['s'] = $origin['s'] + $this->Rnd (-5, +5);
                             $coords['s'] = max (1, min($coords['s'], $GlobalUni['systems']));
                         }
-                        $coords['p'] = mt_rand (1, 15);
+                        $coords['p'] = $this->Rnd (1, 15);
                     }
                     break;
                 // Движется по спирали. Начинает с края галактики (например, G=1, S=1, P=1). 
@@ -331,14 +349,14 @@ class DeepSpaceHorror extends GameMod {
                 // Оказавшись в галактике, он выбирает случайную Систему (S) в её центре (например, в диапазоне 100-400) и случайную Позицию (P)
                 case GID_LEVI_JUGGERNAUT:
                     $coords['g'] = $origin['g'];
-                    if (mt_rand(1, 100) <= 60) {
-                        $coords['g'] = mt_rand (1, $GlobalUni['galaxies']);
+                    if ($this->Rnd(1, 100) <= 60) {
+                        $coords['g'] = $this->Rnd (1, $GlobalUni['galaxies']);
                     }
                     $delta = (int)($GlobalUni['systems'] / 4);
                     $center = (int)($GlobalUni['systems'] / 2);
-                    $coords['s'] = mt_rand ($center - $delta, $center + $delta);
+                    $coords['s'] = $this->Rnd ($center - $delta, $center + $delta);
                     $coords['s'] = max (1, min($coords['s'], $GlobalUni['systems']));
-                    $coords['p'] = mt_rand (1, 15);
+                    $coords['p'] = $this->Rnd (1, 15);
                     break;
         }
 
@@ -409,6 +427,91 @@ class DeepSpaceHorror extends GameMod {
         return false;
     }
 
+    /**
+     * Возвращает случайное целое число из диапазона [min, max] включительно.
+     *
+     * Вынесено в отдельный метод, чтобы юнит-тесты могли подменить его
+     * детерминированной реализацией и проверять ветки случайных алгоритмов.
+     */
+    protected function Rnd (int $min, int $max) : int {
+        return mt_rand ($min, $max);
+    }
+
+    /**
+     * Сопоставляет идентификатор юнита-левиафана (GID) типу объекта галактики (PTYP).
+     */
+    private function LeviTypeFromGid (int $gid) : int {
+        switch ($gid) {
+            case GID_LEVI_AMOEBA: return PTYP_LEVI_AMOEBA;
+            case GID_LEVI_GUARDIAN: return PTYP_LEVI_GUARDIAN;
+            case GID_LEVI_JUGGERNAUT: return PTYP_LEVI_JUGGERNAUT;
+        }
+        return 0;
+    }
+
+    /**
+     * Проверяет, существует ли в данный момент левиафан указанного типа.
+     */
+    private function LeviathanExists (int $type) : bool {
+        global $db_prefix;
+        $result = dbquery ("SELECT planet_id FROM ".$db_prefix."planets WHERE type = $type LIMIT 1;");
+        return dbrows ($result) > 0;
+    }
+
+    /**
+     * Трофей с убитого левиафана: ресурс и его количество (дизайн мода).
+     */
+    private function GetLeviLoot (int $gid) : array {
+        switch ($gid) {
+            case GID_LEVI_AMOEBA: return array ( GID_RC_DEUTERIUM => LEVI_LOOT_AMOEBA_DEUTERIUM );
+            case GID_LEVI_GUARDIAN: return array ( GID_RC_CRYSTAL => LEVI_LOOT_GUARDIAN_CRYSTAL );
+            case GID_LEVI_JUGGERNAUT: return array ( GID_RC_METAL => LEVI_LOOT_JUGGERNAUT_METAL );
+        }
+        return array ();
+    }
+
+    /**
+     * Планирует возрождение убитого левиафана через 24-72 реальных часа.
+     *
+     * Событие одноразовое: когда оно сработает, мод создаст нового левиафана
+     * в случайной точке вселенной (см. update_queue).
+     */
+    private function ScheduleRespawn (int $gid, int $when) : void {
+        global $db_prefix;
+        $type = $this->LeviTypeFromGid ($gid);
+        if ($type == 0) return;
+
+        // Не плодить дубликаты событий, если убийство обработалось повторно.
+        $result = dbquery ("SELECT task_id FROM ".$db_prefix."queue WHERE type = '".QTYP_LEVI_RESPAWN."' AND obj_id = $type LIMIT 1;");
+        if (dbrows ($result) > 0) return;
+
+        AddQueue (USER_SPACE, QTYP_LEVI_RESPAWN, 0, $type, 0, $when, $this->Rnd (LEVI_RESPAWN_MIN_SECONDS, LEVI_RESPAWN_MAX_SECONDS));
+    }
+
+    /**
+     * Обработчик события возрождения: создаёт нового левиафана нужного типа,
+     * если его ещё нет во вселенной.
+     */
+    private function RespawnLeviathan (array $queue) : void {
+        $type = (int)$queue['obj_id'];
+        if (!$this->IsPlanetLeviathan($type)) return;
+        if (!$this->LeviathanExists($type)) {
+            $this->CreateLeviathan ($type);
+        }
+        RemoveQueue ($queue['task_id']);
+    }
+
+    /**
+     * Хук очереди: мод обрабатывает собственные события (возрождение левиафанов).
+     */
+    public function update_queue (array &$queue) : bool {
+        if ($queue['type'] === QTYP_LEVI_RESPAWN) {
+            $this->RespawnLeviathan ($queue);
+            return true;
+        }
+        return false;
+    }
+
     public function page_flotten2_planet_types (array &$planet_types) : bool {
         $planet_types[] = PTYP_LEVI_AMOEBA;
         $planet_types[] = PTYP_LEVI_GUARDIAN;
@@ -472,9 +575,25 @@ class DeepSpaceHorror extends GameMod {
         return false;
     }
 
+    /**
+     * Разворачивает флоты игроков, летящие к планете-объекту, который сейчас
+     * будет удалён (портал или труп чудовища), чтобы они не осиротели.
+     * Флот самого чудовища (задание FTYP_LEVI_PREPARE_JUMP) не затрагивается.
+     */
+    private function RecallIncomingFleets (int $planet_id, int $when) : void {
+        global $db_prefix;
+        $result = dbquery ("SELECT fleet_id FROM ".$db_prefix."fleet WHERE target_planet = $planet_id AND mission < ".FTYP_RETURN.";");
+        $rows = dbrows ($result);
+        while ($rows--) {
+            $fleet_obj = dbarray ($result);
+            RecallFleet ((int)$fleet_obj['fleet_id'], $when);
+        }
+    }
+
     private function LeviathanArrive (array $queue, array $fleet_obj, array $fleet, array $origin, array $old_portal) : void {
 
         global $db_prefix;
+        global $GlobalUni;
 
         $now = $queue['end'];
 
@@ -486,8 +605,9 @@ class DeepSpaceHorror extends GameMod {
         else if ($fleet[GID_LEVI_JUGGERNAUT] != 0) $gid = GID_LEVI_JUGGERNAUT;
         if ($gid == 0) return;
 
-        // Удалить портал (точку выхода)
-        
+        // Удалить портал (точку выхода); флоты игроков, летящие к нему, разворачиваем
+
+        $this->RecallIncomingFleets ($old_portal['planet_id'], $now);
         DestroyPlanet ($old_portal['planet_id']);
 
         // Переместить планету левиафана
@@ -499,25 +619,32 @@ class DeepSpaceHorror extends GameMod {
 
         $battle_result = $this->LeviathanBattle ($gid, $fleet_obj['fleet_id'], $fleet, $old_portal, $now);
 
-        // Создать новый портал (только если левиафан не уничтожен)
+        // Левиафан уничтожен: убрать труп и запланировать возрождение через 24-72 часа.
+        // Возрождение позволяет сохранить динамику игры (дизайн мода).
 
-        if ($battle_result != BATTLE_RESULT_DWON) {
-
-            $coords = $this->DeterminePortalCoords ($gid, $old_portal);
-
-            $name = loca ("PLANET_".PTYP_LEVI_PORTAL);
-
-            $new_portal = array(
-                'name' => $name, 'type' => PTYP_LEVI_PORTAL, 'g' => $coords['g'], 's' => $coords['s'], 'p' => $coords['p'], 
-                'owner_id' => USER_SPACE, 'diameter' => LEVI_PORTAL_DIAMETER, 'temp' => LEVI_PORTAL_TEMP, 'fields' => 0, 'maxfields' => 0, 'date' => $now,
-                'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
-            $id = AddDBRow ( $new_portal, "planets" );
-            $new_portal = LoadPlanetById ($id);         // reload
-
-            // Запустить флот
-
-            $this->DispatchLeviathan ($gid, $origin, $new_portal, $queue['end'], 1);
+        if ($battle_result == BATTLE_RESULT_DWON) {
+            $this->RecallIncomingFleets ($origin['planet_id'], $now);
+            DestroyPlanet ($origin['planet_id']);
+            $this->ScheduleRespawn ($gid, $now);
+            return;
         }
+
+        // Создать новый портал (точку выхода для следующего прыжка)
+
+        $coords = $this->DeterminePortalCoords ($gid, $old_portal);
+
+        $name = loca_lang ("PLANET_".PTYP_LEVI_PORTAL, $GlobalUni['lang']);
+
+        $new_portal = array(
+            'name' => $name, 'type' => PTYP_LEVI_PORTAL, 'g' => $coords['g'], 's' => $coords['s'], 'p' => $coords['p'], 
+            'owner_id' => USER_SPACE, 'diameter' => LEVI_PORTAL_DIAMETER, 'temp' => LEVI_PORTAL_TEMP, 'fields' => 0, 'maxfields' => 0, 'date' => $now,
+            'lastpeek' => $now, 'lastakt' => $now, 'gate_until' => 0, 'remove' => 0 );
+        $id = AddDBRow ( $new_portal, "planets" );
+        $new_portal = LoadPlanetById ($id);         // reload
+
+        // Запустить флот
+
+        $this->DispatchLeviathan ($gid, $origin, $new_portal, $queue['end'], 1);
     }
 
     private function LeviathanBattle (int $levi_gid, int $fleet_id, array $fleet, array $old_portal, int $when) : int {
@@ -668,7 +795,26 @@ class DeepSpaceHorror extends GameMod {
         $aloss = $loss['aloss'];
         $dloss = $loss['dloss'];
 
-        // .............. TBD
+        // Применить результат боя: списать потери с планет и флотов защитников,
+        // восстановить оборону, отметить активность и обновить статистику игроков.
+        $this->LeviathanWriteback ($d, $res, $repaired);
+        $this->UpdateDefenderActivity ($d, $when);
+        foreach ( $d as $i=>$user ) {
+            if (isset($user['player_id'])) {
+                AdjustStats ( $user['player_id'], $user['points'], $user['fpoints'], 0, '-' );
+            }
+        }
+        RecalcRanks ();
+
+        // Если чудовище уничтожено - поделить трофей между участниками обороны
+        // пропорционально нанесённому урону (дизайн мода).
+        if ($battle_result == BATTLE_RESULT_DWON) {
+            $loot = $this->GetLeviLoot ($levi_gid);
+            $this->GrantLeviathanLoot ($loot, $d, $old_portal, $when);
+        }
+
+        // У чудовища нет ресурсов для грабежа, а обломки для лун не создаются:
+        // трофей с убитого чудовища распределяется напрямую (см. выше).
         $captured = null;
         $moonchance = 0;
         $mooncreated = false;
@@ -737,6 +883,178 @@ class DeepSpaceHorror extends GameMod {
         unlink ( "battleresult/battle_".$battle_id.".txt" );
 
         return $battle_result;
+    }
+
+    /**
+     * Списывает потери защитников по итогам боя с чудовищем.
+     *
+     * Обновляет корабли и (восстановленную) оборону планет, а также флоты в
+     * ожидании (ACS): уцелевшие остаются на орбите, уничтоженные удаляются.
+     * Атакующий флот чудовища здесь не обрабатывается - его удаляет движок
+     * очереди после возврата из хука fleet_handler.
+     */
+    private function LeviathanWriteback (array $d, array $res, array $repaired) : void {
+
+        global $fleetmap;
+        global $defmap;
+        global $rakmap;
+        $defmap_norak = array_diff($defmap, $rakmap);
+
+        $rounds = count ( $res['rounds'] );
+        if ( $rounds == 0 ) return;
+
+        $last = $res['rounds'][$rounds - 1];
+
+        foreach ( $last['defenders'] as $i=>$defender )
+        {
+            switch ($defender['pf']) {
+
+                case BATTLE_PTCP_PLANET:        // Planet
+                    $objects = array ();
+                    foreach ( $fleetmap as $ii=>$gid ) {
+                        $objects[$gid] = isset($defender['units'][$gid]) ? $defender['units'][$gid] : 0;
+                    }
+                    foreach ( $defmap_norak as $ii=>$gid ) {
+                        $objects[$gid] = isset($repaired[$i][$gid]) ? $repaired[$i][$gid] : 0;
+                        $objects[$gid] += isset($defender['units'][$gid]) ? $defender['units'][$gid] : 0;
+                    }
+                    SetPlanetFleetDefense ( $defender['id'], $objects );
+                    break;
+
+                case BATTLE_PTCP_FLEET:     // Fleets on hold (ACS)
+                    $ships = 0;
+                    foreach ( $fleetmap as $ii=>$gid ) {
+                        if (isset($defender['units'][$gid])) {
+                            $ships += $defender['units'][$gid];
+                        }
+                    }
+                    if ( $ships > 0 ) SetFleet ( $defender['id'], $defender['units'] );
+                    else {
+                        $queue = GetFleetQueue ($defender['id']);
+                        if ($queue) {
+                            DeleteFleet ($defender['id']);    // delete fleet
+                            RemoveQueue ( $queue['task_id'] );    // delete task
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Отмечает активность планет, участвовавших в обороне.
+     */
+    private function UpdateDefenderActivity (array $d, int $when) : void {
+        foreach ( $d as $i=>$user ) {
+            if ( isset($user['pf']) && $user['pf'] == BATTLE_PTCP_PLANET ) {
+                UpdatePlanetActivity ( $user['id'], $when );
+            }
+        }
+    }
+
+    /**
+     * "Вклад" участника обороны: суммарная атака его кораблей и обороны с учётом
+     * уровня оружейной технологии. Используется как прокси для нанесённого урона
+     * при дележе трофея (прямого учёта урона по участникам движок не даёт).
+     */
+    private function LeviathanParticipantWeight (array $user) : float {
+        global $UnitParam;
+        $weap = isset($user[GID_R_WEAPON]) ? max (0, (int)$user[GID_R_WEAPON]) : 0;
+        $attack = 0.0;
+        if (isset($user['units'])) {
+            foreach ( $user['units'] as $gid=>$amount ) {
+                if ($amount <= 0) continue;
+                if (!isset($UnitParam[$gid])) continue;
+                $attack += $amount * $UnitParam[$gid][2];
+            }
+        }
+        return $attack * (1.0 + 0.1 * $weap);
+    }
+
+    /**
+     * Планета, на которую участник обороны получает свою долю трофея.
+     *
+     * Для планеты - это она сама; для флота в ожидании (ACS) - планета вылета
+     * флота владельца.
+     */
+    private function LeviathanLootTargetPlanet (array $user) : int {
+        if (!isset($user['id'])) return 0;
+        if (isset($user['pf']) && $user['pf'] == BATTLE_PTCP_PLANET) return (int)$user['id'];
+        $fleet_obj = LoadFleet ( (int)$user['id'] );
+        if ($fleet_obj == null) return 0;
+        return (int)$fleet_obj['start_planet'];
+    }
+
+    /**
+     * Делит трофей убитого чудовища между участниками обороны пропорционально
+     * их вкладу и доставляет доли на планеты. Остаток от деления достаётся
+     * участнику с наибольшим вкладом, чтобы ресурсы не терялись при округлении.
+     */
+    private function GrantLeviathanLoot (array $loot, array $d, array $portal, int $when) : void {
+        if (count($loot) == 0) return;
+
+        $weight = array ();
+        $total = 0.0;
+        foreach ( $d as $i=>$user ) {
+            $w = $this->LeviathanParticipantWeight ($user);
+            $weight[$i] = $w;
+            $total += $w;
+        }
+        if ($total <= 0) return;
+
+        $best = -1;
+        foreach ($weight as $i=>$w) {
+            if ($w > 0 && ($best == -1 || $w > $weight[$best])) $best = $i;
+        }
+
+        $granted = array ();
+        foreach ( $d as $i=>$user ) {
+            if ($weight[$i] <= 0) continue;
+            $share = array ();
+            foreach ( $loot as $rc=>$amount ) {
+                $share[$rc] = (int) floor ( $amount * $weight[$i] / $total );
+            }
+            $granted[$i] = $share;
+        }
+
+        // Остаток от деления - самому активному участнику.
+        foreach ( $loot as $rc=>$amount ) {
+            $given = 0;
+            foreach ($granted as $share) {
+                if (isset($share[$rc])) $given += $share[$rc];
+            }
+            if ($best >= 0 && isset($granted[$best])) {
+                $granted[$best][$rc] += $amount - $given;
+            }
+        }
+
+        $mailbox = array ();    // одно сообщение на игрока
+        foreach ( $granted as $i=>$share ) {
+            $planet_id = $this->LeviathanLootTargetPlanet ($d[$i]);
+            if ($planet_id == 0) continue;
+
+            $has = false;
+            foreach ($share as $rc=>$amount) {
+                if ($amount > 0) { $has = true; break; }
+            }
+            if (!$has) continue;
+
+            AdjustResources ( $share, $planet_id, '+' );
+
+            $player_id = isset($d[$i]['player_id']) ? $d[$i]['player_id'] : 0;
+            $lang = isset($d[$i]['lang']) ? $d[$i]['lang'] : 'en';
+            if ($player_id == 0) continue;
+            if ( key_exists($player_id, $mailbox) ) continue;
+            $mailbox[$player_id] = true;
+
+            $parts = array ();
+            foreach ($share as $rc=>$amount) {
+                if ($amount > 0) $parts[] = loca_lang("NAME_".$rc, $lang) . " " . nicenum($amount);
+            }
+            loca_add ( "leviathans", $lang, __DIR__ );
+            $text = va ( loca_lang ("LEVI_LOOT_TEXT", $lang), ShowGalaxy ($portal), implode (", ", $parts) );
+            SendMessage ( $player_id, loca_lang ("FLEET_MESSAGE_FROM", $lang), loca_lang ("LEVI_LOOT_SUBJ", $lang), $text, MTYP_MISC, $when );
+        }
     }
 }
 
