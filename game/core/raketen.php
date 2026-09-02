@@ -8,8 +8,11 @@
 // The algorithm reproduces the original OGame 0.84 missile attack: anti-ballistic
 // missiles intercept the incoming IPMs one-to-one, the surviving IPMs deal
 // damage to the target's defensive structures (the primary target first, then
-// the rest in order). See RocketAttackMain(). The admin section (RakSim) and the
-// reference simulator (https://battlesim.logserver.net/ru) can be used to verify.
+// the rest in order). Once every structure is destroyed the leftover damage
+// hits the defender's stored missiles too (the anti-ballistic missiles that
+// survived the interception first, then the interplanetary missiles). See
+// RocketAttackMain(). The admin section (RakSim) and the reference simulator
+// (https://battlesim.logserver.net/ru) can be used to verify.
 
 // IPM - interplanetary missile, attacks
 // ABM - anti-ballistic missile, defends
@@ -23,9 +26,12 @@
  * attacker's weapon technology by 10% per level). That damage is spent on the
  * target's defensive structures: the primary target (if any) is hit first,
  * then the remaining defenses in order, and leftover damage carries over to
- * the next defense type. The defender's stored missiles are never a target:
- * anti-ballistic missiles are consumed by interception and stored
- * interplanetary missiles are left untouched.
+ * the next defense type. Once all defensive structures are gone the leftover
+ * damage destroys the defender's stored missiles too: the anti-ballistic
+ * missiles that survived the interception first, then the interplanetary
+ * missiles (the original 0.84 behavior, matching the reference simulator).
+ * Stored missiles only exist on planets (a moon has no missile silo), so the
+ * leftover damage is wasted once the structures of a moon are gone.
  *
  * @param int $amount Number of launched interplanetary missiles.
  * @param int $primary ID of the primary target defense (0 = attack everything).
@@ -56,12 +62,13 @@ function RocketAttackMain ( int $amount, int $primary, bool $moon_attack, array 
     // stat used here, see $UnitParam[GID_D_IPM][2]).
     $maxdamage = $ipm * $UnitParam[GID_D_IPM][2] * (1 + $origin_user_attack / 10);
 
-    // The missiles only damage real defensive structures. The defender's
-    // stored missiles are NOT a target: anti-ballistic missiles are consumed
-    // during interception (the block above), and the interplanetary missiles
-    // stored in the silo stay untouched.
-    global $defmap, $rakmap;
-    $defmap_norak = array_diff ( $defmap, $rakmap );
+    // The damage is spent on the defensive structures first (the primary
+    // target, then the rest in order). Once all of them are destroyed the
+    // leftover damage hits the defender's stored missiles: on a planet attack
+    // the anti-ballistic missiles were already consumed by interception (the
+    // block above), and the interplanetary missiles stored in the silo are
+    // destroyed last.
+    global $defmap;
 
     // Launch an attack on the primary target first.
     if ( $primary > 0 && $ipm > 0 )
@@ -79,7 +86,7 @@ function RocketAttackMain ( int $amount, int $primary, bool $moon_attack, array 
     // in order; leftover damage carries over to the next defense type.
     if ($maxdamage > 0)
     {
-        foreach ($defmap_norak as $i=>$id)
+        foreach ($defmap as $i=>$id)
         {
             if ($id == $primary) continue;
             $armor = $UnitParam[$id][0] * (1 + 0.1 * $target_user_armor) / 10;
@@ -112,14 +119,21 @@ function RocketAttack ( int $fleet_id, int $planet_id, int $when ) : void
     $origin = LoadPlanetById ($fleet['start_planet']);
     $target = LoadPlanetById ($planet_id);
     $moon_attack = $target['type'] == PTYP_MOON;
+    $moon_planet = null;
     if ($moon_attack) {
         // If a missile attack is made on the Moon, interceptors from the planet are involved in defense
         $moon_planet = LoadPlanet ($target['g'], $target['s'], $target['p'], 1);
+        if ( $moon_planet === false ) $moon_planet = null;    // LoadPlanet returns false on an empty result.
     }
     $origin_user = LoadUser ($origin['owner_id']);
     if ($origin_user == null) return;
     $target_user = LoadUser ($target['owner_id']);
     if ($target_user == null) return;
+
+    // Statistics update (issue #145): snapshot the defense amounts before the
+    // damage so the score loss can be calculated after the attack.
+    $target_before = $target;
+    $moon_planet_before = $moon_planet;
 
     $ipm_destroyed = RocketAttackMain (
         $amount, 
@@ -136,7 +150,24 @@ function RocketAttack ( int $fleet_id, int $planet_id, int $when ) : void
         SetPlanetDefense ( $moon_planet['planet_id'], $moon_planet );
     }
 
-    // Modify player statistics
+    // Modify player statistics (issue #145). The attacker loses the score of
+    // the launched missiles, and the defender loses the score of the
+    // destroyed defenses (the anti-ballistic missiles consumed by
+    // interception included). Before, the scores were corrected only by a
+    // later full recalculation.
+    $missile_points = TechPriceInPoints ( TechPrice ( GID_D_IPM, 1 ) );
+    AdjustStats ( $fleet['owner_id'], $missile_points * $amount, 0, 0, '-' );
+
+    $loss = RocketDefenseLossPoints ( $target_before, $target );
+    if ( $loss > 0 ) AdjustStats ( $target['owner_id'], $loss, 0, 0, '-' );
+
+    if ( $moon_attack && $moon_planet_before !== null && $moon_planet !== null ) {
+        // On a moon attack the interceptors are taken from the co-located
+        // planet, so their loss reduces that planet's owner.
+        $loss = RocketDefenseLossPoints ( $moon_planet_before, $moon_planet );
+        if ( $loss > 0 ) AdjustStats ( $moon_planet['owner_id'], $loss, 0, 0, '-' );
+    }
+
     RecalcRanks ();
 
     // Update the activity on the planet.
@@ -170,6 +201,33 @@ function RocketAttack ( int $fleet_id, int $planet_id, int $when ) : void
             loca_lang ("RAK_MSG_SUBJ", $origin_user['lang']), 
             $text, MTYP_BATTLE_REPORT_LINK, $when);
     }
+}
+
+/**
+ * Calculate the score loss (in points) of the defenses destroyed by a missile attack.
+ *
+ * The loss is the resource cost of every defense unit whose amount decreased
+ * between the two snapshots of a planet or moon: the structures destroyed by
+ * the missile damage, the anti-ballistic missiles consumed by interception,
+ * and the stored missiles destroyed by the leftover damage once every
+ * structure is gone.
+ *
+ * @param array $before Defense amounts before the attack.
+ * @param array $after Defense amounts after the attack.
+ * @return int The loss in score points.
+ */
+function RocketDefenseLossPoints (array $before, array $after) : int
+{
+    global $defmap;
+    $loss = 0;
+    foreach ( $defmap as $i=>$gid )
+    {
+        $destroyed = ( $before[$gid] ?? 0 ) - ( $after[$gid] ?? 0 );
+        if ( $destroyed <= 0 ) continue;
+        $res = TechPrice ( $gid, 1 );
+        $loss += TechPriceInPoints ( $res ) * $destroyed;
+    }
+    return $loss;
 }
 
 /**
