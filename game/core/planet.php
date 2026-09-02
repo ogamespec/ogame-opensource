@@ -389,8 +389,8 @@ function HarvestDebris (int $planet_id, int $cargo, int $when) : array
     $harvest = array ();
     $debris = LoadPlanetById ($planet_id);
 
-    $dm = $debris[GID_RC_METAL];
-    $dk = $debris[GID_RC_CRYSTAL];
+    $dm = max (0, $debris[GID_RC_METAL]);
+    $dk = max (0, $debris[GID_RC_CRYSTAL]);
 
     $m = $cargo / 2;
     if ( floor($dm) < $m) $m = $dm;
@@ -517,11 +517,20 @@ function AdjustResources (array $cost, int $planet_id, string $sign) : void
     global $db_prefix;
     global $resourcemap;
     $planet = LoadPlanetById ($planet_id);
+    if ($planet === null) return;
     $now = time ();
     $query = "UPDATE ".$db_prefix."planets SET ";
     foreach ($resourcemap as $i=>$rc) {
         if (isset($cost[$rc]) && $cost[$rc] && isset($planet[$rc])) {
-            $query .= "`".$rc."`=`".$rc."` $sign ".$cost[$rc].", ";
+            // Apply the addition/subtraction in PHP and clamp the result so the
+            // stored amount can never become negative (issue #117). The old SQL
+            // form (`col` = `col` - X) could drive a resource below zero when
+            // the planet had less than the cost (e.g. when the queue deduction
+            // happens after resources were spent elsewhere).
+            $amount = $cost[$rc];
+            if ($sign === '-') $amount = -$amount;
+            $value = max (0, $planet[$rc] + $amount);
+            $query .= "`".$rc."`=".$value.", ";
         }
     }
     $query .= "lastpeek = ".$now." WHERE planet_id=$planet_id;";

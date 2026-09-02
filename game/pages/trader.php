@@ -56,7 +56,7 @@ class Trader extends Page {
                         if ( $PageError === '' && $met > 0 ) {
                             $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
                             dbquery ( $query );
-                            $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."` = `".GID_RC_METAL."` - '".intval($met)."', `".GID_RC_CRYSTAL."` = '".intval($crys)."', `".GID_RC_DEUTERIUM."` = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
+                            $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."` = '".intval(max (0, $aktplanet[GID_RC_METAL] - $met))."', `".GID_RC_CRYSTAL."` = '".intval($crys)."', `".GID_RC_DEUTERIUM."` = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
                             dbquery ( $query );
                             $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );
                             $GlobalUser['trader'] = 0;
@@ -73,7 +73,7 @@ class Trader extends Page {
                         if ( $PageError === '' && $crys > 0 ) {
                             $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
                             dbquery ( $query );
-                            $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_CRYSTAL."` = `".GID_RC_CRYSTAL."` - '".intval($crys)."', `".GID_RC_METAL."` = '".intval($met)."', `".GID_RC_DEUTERIUM."` = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
+                            $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_CRYSTAL."` = '".intval(max (0, $aktplanet[GID_RC_CRYSTAL] - $crys))."', `".GID_RC_METAL."` = '".intval($met)."', `".GID_RC_DEUTERIUM."` = '".intval($deut)."' WHERE planet_id = " . $aktplanet['planet_id'];
                             dbquery ( $query );
                             $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );
                             $GlobalUser['trader'] = 0;
@@ -90,7 +90,7 @@ class Trader extends Page {
                         if ( $PageError === '' && $deut > 0 ) {
                             $query = "UPDATE ".$db_prefix."users SET trader = 0 WHERE player_id = " . $GlobalUser['player_id'];
                             dbquery ( $query );
-                            $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_DEUTERIUM."` = `".GID_RC_DEUTERIUM."` - '".intval($deut)."', `".GID_RC_CRYSTAL."` = '".intval($crys)."', `".GID_RC_METAL."` = '".intval($met)."' WHERE planet_id = " . $aktplanet['planet_id'];
+                            $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_DEUTERIUM."` = '".intval(max (0, $aktplanet[GID_RC_DEUTERIUM] - $deut))."', `".GID_RC_CRYSTAL."` = '".intval($crys)."', `".GID_RC_METAL."` = '".intval($met)."' WHERE planet_id = " . $aktplanet['planet_id'];
                             dbquery ( $query );
                             $aktplanet = GetUpdatePlanet ( $GlobalUser['aktplanet'], $now );
                             $GlobalUser['trader'] = 0;

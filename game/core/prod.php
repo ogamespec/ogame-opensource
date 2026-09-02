@@ -516,7 +516,11 @@ function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
         $hourly = $planet['balance'][$rc];
         $cap = isset($planet['max'.$rc]) ? $planet['max'.$rc] : PHP_INT_MAX;
         if ($planet[$rc] < $cap) {
-            $planet[$rc] = min ($planet[$rc] + ($hourly * $diff) / 3600, $cap);
+            // Resource growth is capped by storage (top) and never negative
+            // (bottom). A planet with a negative balance (e.g. deuterium
+            // consumed by a fusion reactor) must not fall below zero, or the
+            // stored resources become negative (issue #117).
+            $planet[$rc] = max (0, min ($planet[$rc] + ($hourly * $diff) / 3600, $cap));
             $update_query .= "`".$rc."` = ".$planet[$rc].", ";
         }
     }
