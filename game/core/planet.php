@@ -645,12 +645,25 @@ function SetPlanetFleetDefense ( int $planet_id, array $objects ) : void
     global $defmap;
     global $fleetmap;
     global $rakmap;
+
+    // Only write the columns the planet actually has. Modifications may add
+    // fleet-only units (e.g. the Deep Space Horror leviathans) that live in
+    // the fleet table but never land on a planet, so the planets table has no
+    // column for them. Writing such a column would abort the whole UPDATE
+    // (mirrors the guard in AdjustShips()).
+    $planet = LoadPlanetById ($planet_id);
+    if ($planet == null) return;
+
     $param = array_merge ( array_diff($defmap, $rakmap), $fleetmap);
     $query = "UPDATE ".$db_prefix."planets SET ";
+    $need_comma = false;
     foreach ( $param as $i=>$p ) {
-        if ( $i == 0 ) $query .= "`$p`=".$objects[$p];
-        else $query .= ", `$p`=".$objects[$p];
+        if (!isset($planet[$p])) continue;
+        if ($need_comma) $query .= ",";
+        $query .= "`$p`=".(isset($objects[$p]) ? $objects[$p] : 0);
+        $need_comma = true;
     }
+    if (!$need_comma) return;
     $query .= " WHERE planet_id=$planet_id;";
     dbquery ($query);
 }
