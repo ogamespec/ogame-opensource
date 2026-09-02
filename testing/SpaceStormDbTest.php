@@ -248,4 +248,35 @@ class SpaceStormDbTest extends TestCase
         $row = dbarray($result);
         $this->assertSame(1, (int)$row['freeze']);
     }
+
+    public function testEnergyCollapseAutoUnfreezeWhenInactive(): void
+    {
+        global $db_prefix;
+        // When the Energy Collapse is not active, any frozen build/research
+        // must be resumed automatically (energy is back to normal).
+        $this->setStorm(0);
+        $planetId = $this->addPlanet(0, 0);
+        $this->addFrozenBuild($planetId);
+
+        $method = new ReflectionMethod(SpaceStorm::class, 'EnergyCollapseTick');
+        $method->setAccessible(true);
+        $method->invoke($this->mod);
+
+        $result = dbquery("SELECT freeze FROM {$db_prefix}queue WHERE type = 'Build'");
+        $row = dbarray($result);
+        $this->assertSame(0, (int)$row['freeze']);
+    }
+
+    private function addFrozenBuild(int $planetId): int
+    {
+        $bqId = AddDBRow(array(
+            'owner_id' => 1, 'planet_id' => $planetId, 'list_id' => 1, 'tech_id' => GID_B_METAL_MINE,
+            'level' => 6, 'destroy' => 0, 'start' => time() - 60, 'end' => time() + 600,
+        ), 'buildqueue');
+        return AddDBRow(array(
+            'owner_id' => 1, 'type' => 'Build', 'sub_id' => $bqId, 'obj_id' => GID_B_METAL_MINE,
+            'level' => 6, 'start' => time() - 60, 'end' => time() + 600, 'prio' => 0,
+            'freeze' => 1, 'frozen' => time(),
+        ), 'queue');
+    }
 }

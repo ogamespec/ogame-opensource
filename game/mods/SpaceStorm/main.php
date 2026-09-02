@@ -156,12 +156,18 @@ class SpaceStorm extends GameMod {
 
     // Тик Энергетического Коллапса: проверяет баланс энергии планет и с шансом 10%/час
     // замораживает случайную постройку / исследование на планете с дефицитом энергии.
-    // На планетах со Стабилизатором реальности постройки не отключаются.
+    // Когда энергия восстановлена (или Коллапс закончился) — заморозки снимаются.
     private function EnergyCollapseTick () : void {
 
         global $db_prefix, $GlobalUni;
         $storm = $this->GetStorm ();
-        if (($storm & SPACE_STORM_MASK_ENERGY_COLLAPSE) == 0) return;
+        $active = ($storm & SPACE_STORM_MASK_ENERGY_COLLAPSE) != 0;
+
+        // Если Коллапс больше не активен — энергия у всех восстановлена, снять заморозки.
+        if (!$active) {
+            $this->UnfreezeAll ();
+            return;
+        }
 
         $result = dbquery ("SELECT * FROM ".$db_prefix."planets WHERE type = ".PTYP_PLANET);
         if ($result == null) return;
@@ -171,9 +177,6 @@ class SpaceStorm extends GameMod {
             $planet = dbarray ($result);
             if ($planet['owner_id'] == USER_SPACE) continue;
 
-            // Стабилизатор реальности защищает планету от отключений.
-            if ($this->HasStabCounter($planet, SPACE_STORM_MASK_ENERGY_COLLAPSE)) continue;
-
             // Баланс энергии не хранится в БД. Вычислим его безопасно (без записи в БД)
             // с помощью ProdResources, который только заполняет переданный массив.
             $user = LoadUser ($planet['owner_id']);
@@ -181,7 +184,15 @@ class SpaceStorm extends GameMod {
             ProdResources ($GlobalUni, $user, $planet);
 
             $energy_gap = $planet['balance'][GID_RC_ENERGY] ?? 0;
-            if ($energy_gap < 0 && mt_rand (1, 100) <= 10) {
+            if ($energy_gap >= 0) {
+                // Энергия восстановлена — разморозить постройки/исследования планеты.
+                $this->UnfreezePlanet ($planet['planet_id']);
+                continue;
+            }
+
+            // Дефицит энергии. Стабилизатор реальности защищает планету от отключений.
+            if ($this->HasStabCounter($planet, SPACE_STORM_MASK_ENERGY_COLLAPSE)) continue;
+            if (mt_rand (1, 100) <= 10) {
                 $this->FreezeRandomQueue ($planet['planet_id']);
             }
         }
@@ -212,6 +223,44 @@ class SpaceStorm extends GameMod {
 
         $task_id = $ids[mt_rand (0, count ($ids) - 1)];
         FreezeQueue ($task_id, true);
+    }
+
+    // Снять заморозку со всех построек/исследований (когда Энергетический Коллапс закончился).
+    private function UnfreezeAll () : void {
+
+        global $db_prefix;
+        $result = dbquery ("SELECT task_id FROM ".$db_prefix."queue WHERE freeze = 1 AND type IN ('".QTYP_BUILD."','".QTYP_DEMOLISH."','".QTYP_RESEARCH."')");
+        if ($result == null) return;
+
+        $rows = dbrows ($result);
+        while ($rows--) {
+            $row = dbarray ($result);
+            FreezeQueue ($row['task_id'], false);
+        }
+    }
+
+    // Снять заморозку со всех построек/исследований конкретной планеты (энергия восстановлена).
+    private function UnfreezePlanet (int $planet_id) : void {
+
+        global $db_prefix;
+        $ids = [];
+
+        $bresult = dbquery ("SELECT q.task_id FROM ".$db_prefix."queue q JOIN ".$db_prefix."buildqueue b ON q.sub_id = b.id ". 
+                "WHERE q.type IN ('".QTYP_BUILD."','".QTYP_DEMOLISH."') AND b.planet_id = $planet_id AND q.freeze = 1");
+        if ($bresult != null) {
+            $n = dbrows ($bresult);
+            while ($n--) { $row = dbarray ($bresult); $ids[] = $row['task_id']; }
+        }
+
+        $rresult = dbquery ("SELECT task_id FROM ".$db_prefix."queue WHERE type = '".QTYP_RESEARCH."' AND sub_id = $planet_id AND freeze = 1");
+        if ($rresult != null) {
+            $n = dbrows ($rresult);
+            while ($n--) { $row = dbarray ($rresult); $ids[] = $row['task_id']; }
+        }
+
+        foreach ($ids as $task_id) {
+            FreezeQueue ($task_id, false);
+        }
     }
 
     // Вернуть картинку Стабилизатора реальности
@@ -361,6 +410,19 @@ class SpaceStorm extends GameMod {
         $storm = $this->GetStorm();
         if ($id == GID_R_ESPIONAGE && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
             $bonus['level'] -= 2;
+        }
+        return false;
+    }
+
+    // Шпион-защита планеты от Стабилизатора реальности (против Хроно-шпионского сбоя):
+    // +1 уровень защиты за каждые 2 уровня Стабилизатора.
+    public function spy_protection(array $args, array &$bonus) : bool {
+        $storm = $this->GetStorm();
+        if (($storm & SPACE_STORM_MASK_CHRONO_SPY) == 0) return false;
+        $planet = $args['planet'] ?? [];
+        if ($this->HasStabCounter($planet, SPACE_STORM_MASK_CHRONO_SPY)) {
+            $level = (int)floor($this->GetStabilizerLevel($planet) / 2);
+            if ($level > 0) $bonus['level'] += $level;
         }
         return false;
     }
