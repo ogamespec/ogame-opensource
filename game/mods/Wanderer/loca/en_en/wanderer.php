@@ -10,6 +10,7 @@ $LOCA['en']['WANDERER_MENU_STATION'] = 'Station';
 $LOCA['en']['WANDERER_MENU_MODULES'] = 'Modules';
 $LOCA['en']['WANDERER_MENU_LAB'] = 'Laboratory';
 $LOCA['en']['WANDERER_MENU_NAV'] = 'Navigation';
+$LOCA['en']['WANDERER_MENU_GALAXY'] = 'Galaxy';
 $LOCA['en']['WANDERER_MENU_MARKET'] = 'Exchange';
 $LOCA['en']['WANDERER_MENU_LEAVE'] = 'Return to the Empire';
 
@@ -18,6 +19,10 @@ $LOCA['en']['WANDERER_GALAXY_STATION'] = 'Wandering station';
 $LOCA['en']['WANDERER_GALAXY_CAPTAIN'] = 'Captain:';
 $LOCA['en']['WANDERER_GALAXY_MESSAGE'] = 'Write a message';
 $LOCA['en']['WANDERER_GALAXY_EXCHANGE'] = 'Rogue Trader Exchange';
+$LOCA['en']['WANDERER_GALAXY_TITLE'] = 'Galaxy map';
+$LOCA['en']['WANDERER_GALAXY_READONLY'] = 'observer mode: no deuterium fee, no actions';
+$LOCA['en']['WANDERER_GALAXY_OWN'] = 'My station';
+$LOCA['en']['WANDERER_GALAXY_OBSERVE'] = 'Observe';
 
 // --- Common ---
 $LOCA['en']['WANDERER_DEFAULT_NAME'] = 'Rogue Station';

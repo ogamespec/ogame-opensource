@@ -10,6 +10,7 @@ $LOCA['ru']['WANDERER_MENU_STATION'] = 'Станция';
 $LOCA['ru']['WANDERER_MENU_MODULES'] = 'Модули';
 $LOCA['ru']['WANDERER_MENU_LAB'] = 'Лаборатория';
 $LOCA['ru']['WANDERER_MENU_NAV'] = 'Навигация';
+$LOCA['ru']['WANDERER_MENU_GALAXY'] = 'Галактика';
 $LOCA['ru']['WANDERER_MENU_MARKET'] = 'Биржа';
 $LOCA['ru']['WANDERER_MENU_LEAVE'] = 'Вернуться в Империю';
 
@@ -18,6 +19,10 @@ $LOCA['ru']['WANDERER_GALAXY_STATION'] = 'Бродячая станция';
 $LOCA['ru']['WANDERER_GALAXY_CAPTAIN'] = 'Капитан:';
 $LOCA['ru']['WANDERER_GALAXY_MESSAGE'] = 'Написать сообщение';
 $LOCA['ru']['WANDERER_GALAXY_EXCHANGE'] = 'Биржа странников';
+$LOCA['ru']['WANDERER_GALAXY_TITLE'] = 'Карта галактики';
+$LOCA['ru']['WANDERER_GALAXY_READONLY'] = 'режим наблюдения: без платы дейтерия и действий';
+$LOCA['ru']['WANDERER_GALAXY_OWN'] = 'Моя станция';
+$LOCA['ru']['WANDERER_GALAXY_OBSERVE'] = 'Наблюдение';
 
 // --- Общее ---
 $LOCA['ru']['WANDERER_DEFAULT_NAME'] = 'Станция-Скиталец';

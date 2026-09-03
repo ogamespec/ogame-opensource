@@ -551,6 +551,28 @@ class WandererDbTest extends TestCase
         $this->assertGreaterThan($t - 10, (int)$after['end']);
     }
 
+    public function testStationOverlibIsQuoteFree(): void
+    {
+        global $db_prefix;
+        $t = $this->t0();
+        $this->assertSame('', Wanderer::EnterWandererMode(1, $t));
+
+        $station = Wanderer::LoadStation(1);
+        $beacon = $this->queryOne("SELECT * FROM {$db_prefix}planets WHERE planet_id = " . (int)$station['planet_id']);
+        $this->assertNotNull($beacon);
+
+        $GLOBALS['GlobalUser']['session'] = 'abcdefgh1234';
+        $info = array();
+        $res = $this->mod()->page_galaxy_custom_object($beacon, $info);
+        $this->assertTrue($res);
+
+        // The galaxy page embeds the tooltip into onmouseover='return overlib("...")',
+        // so the content must not contain quote characters.
+        $this->assertStringNotContainsString("'", $info['overlib']);
+        $this->assertStringNotContainsString('"', $info['overlib']);
+        $this->assertStringContainsString((string)$beacon['name'], $info['overlib']);
+    }
+
     public function testExitModeAndUninstall(): void
     {
         global $db_prefix;
