@@ -1338,8 +1338,13 @@ class bb_img extends bbcode {
         $src = str_replace(':', '&#'.ord(':').';', $src);
         $src = str_replace('(', '&#'.ord('(').';', $src);
         $src = str_replace(')', '&#'.ord(')').';', $src);
+        // No whitespace may survive: the attributes below are quoted, but the
+        // URL is also embedded in a query string, and an unencoded space would
+        // split the attribute value and allow attribute injection
+        // (e.g. [img]http://x onerror=...[/img]).
+        $src = preg_replace('/[\x00-\x20]+/', '', $src) ?? $src;
 
-        return "<img class=reloadimage title=$src src=pic.php?url=".$src." />";
+        return '<img class="reloadimage" title="'.$src.'" src="pic.php?url='.$src.'" />';
 //      return '<img src="'.$src.'" '.$attr.' />';
     }
 }

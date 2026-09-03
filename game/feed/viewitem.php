@@ -62,7 +62,11 @@ if ( !$result ) {
 }
 $msg = dbarray ($result);
 //print_r ($msg);
-if ( $user['lastfeed'] != 0 && $msg['date'] > $user['lastfeed'] ) {
+// The feed (show.php) delivers every owned message with date <= now (the
+// delta since the last boundary), so an item the feed has already shown
+// must be viewable here. Only a future-dated message (clock skew / bogus
+// row) is refused.
+if ( $msg['date'] > time () ) {
 	exit("The message cannot be viewed yet");
 }
 if ( $msg['owner_id'] != $player_id ) {
@@ -73,4 +77,4 @@ $subj = preg_replace('/<a[^>]*>(.*?)<\/a>/is', '$1', $msg['subj']);
 $text = preg_replace('/<a[^>]*>(.*?)<\/a>/is', '$1', $msg['text']);
 
 ?>
-<html><head><title><?=$subj;?></title></head><body><h1><?=$subj;?></h1><p><?=$text;?></p><body></html>
+<html><head><title><?=htmlspecialchars($subj, ENT_QUOTES);?></title></head><body><h1><?=htmlspecialchars($subj, ENT_QUOTES);?></h1><p><?=nl2br(htmlspecialchars($text, ENT_QUOTES));?></p><body></html>

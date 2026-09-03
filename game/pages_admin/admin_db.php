@@ -11,6 +11,12 @@
 class Admin_DB extends Page {
 
     public function controller () : bool {
+        global $GlobalUser;
+
+        // Creating, restoring or deleting a database backup rewrites every
+        // table, so only full administrators may do it (operators only get
+        // the read-only schema comparison).
+        if ( $GlobalUser['admin'] < USER_TYPE_ADMIN ) return true;
 
         // POST request processing.
         if ( method () === "POST" )

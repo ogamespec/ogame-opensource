@@ -63,7 +63,7 @@ if ( $_SERVER['REQUEST_METHOD'] === "POST" )
         Login ( $_POST['character'], $_POST['password'] );
     }
 
-    echo "<html><head><meta http-equiv='refresh' content='0;url=$StartPage/register.php?errorCode=$RegError&agb=$AGB&character=".$_POST['character']."&email=".$_POST['email']."&universe=".$_POST['universe']."' /></head><body></body></html>";
+    echo "<html><head><meta http-equiv='refresh' content='0;url=$StartPage/register.php?errorCode=".intval($RegError)."&agb=".intval($AGB)."&character=".urlencode($_POST['character'])."&email=".urlencode($_POST['email'])."&universe=".urlencode($_POST['universe'])."' /></head><body></body></html>";
     exit ();
 }
 

@@ -79,13 +79,37 @@ function PageAlly_MemberSettings () : void
     global $GlobalUser;
     global $PageError;
 
+    // The member-management page (a=7) and its destructive actions (a=13 kick,
+    // a=16 assign rank) must be gated by the alliance rank rights like every
+    // other PageAlly_* management page. Without this any alliance member could
+    // kick any player from any alliance or promote themselves to founder.
+    $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
+    if ( ! ($myrank['rights'] & ARANK_R_MEMBERS) )
+    {
+        $PageError = "<center>\n".loca("ALLY_MEMBERS_DENIED")."<br></center>";
+        return;
+    }
+
     $selected_user = 0;
     if ( key_exists ('u', $_GET) ) $selected_user = intval($_GET['u']);
 
     if ( method() === "GET" && $_GET['a'] == 13 && $selected_user)        // Kick member
     {
+        // Kick requires the ARANK_KICK right and the target must be a member
+        // of this alliance below the founder; never the actor itself.
         $leaver = LoadUser ($selected_user);
         if ( $leaver === null ) $leaver = array();
+        $can_kick = ($myrank['rights'] & ARANK_KICK) != 0
+            && isset($leaver['ally_id']) && $leaver['ally_id'] == $ally['ally_id']
+            && $leaver['player_id'] != $GlobalUser['player_id']
+            && $leaver['player_id'] != $ally['owner_id']
+            && $leaver['allyrank'] != 0;
+
+        if ( ! $can_kick )
+        {
+            $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
+            return;
+        }
 
         $query = "UPDATE ".$db_prefix."users SET ally_id = 0 WHERE player_id = $selected_user";
         dbquery ($query);
@@ -113,7 +137,36 @@ function PageAlly_MemberSettings () : void
 
     if ( method() === "POST" && $_GET['a'] == 16 && $selected_user)        // Assign a rank to a player
     {
+        // Rank assignment requires ARANK_W_MEMBERS and the target must be a
+        // non-founder member of this alliance; the new rank must exist in this
+        // alliance (a forged rank id could otherwise point at another
+        // alliance's rank or at the founder rank 0 with full rights).
+        $target = LoadUser ($selected_user);
         $newrank = intval($_POST['newrang']);
+
+        $valid_rank = false;
+        $rank_result = EnumRanks ( $ally['ally_id'] );
+        $rank_rows = dbrows ($rank_result);
+        while ( $rank_rows-- )
+        {
+            $user_rank = dbarray ( $rank_result );
+            if ( intval($user_rank['rank_id']) == $newrank && $newrank != 0 ) $valid_rank = true;
+        }
+
+        $can_assign = ($myrank['rights'] & ARANK_W_MEMBERS) != 0
+            && $target !== null
+            && isset($target['ally_id']) && $target['ally_id'] == $ally['ally_id']
+            && $target['player_id'] != $GlobalUser['player_id']
+            && $target['player_id'] != $ally['owner_id']
+            && $target['allyrank'] != 0
+            && $valid_rank;
+
+        if ( ! $can_assign )
+        {
+            $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
+            return;
+        }
+
         $query = "UPDATE ".$db_prefix."users SET allyrank = $newrank WHERE player_id = $selected_user";
         dbquery ($query);
     }

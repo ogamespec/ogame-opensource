@@ -45,7 +45,7 @@ class Admin_Bans extends Page {
                         $query = "SELECT * FROM ".$db_prefix."users WHERE ally_id = ANY ($query) ";
                         break;
                     case 6 :        // Same email address
-                        $query = "SELECT * FROM ".$db_prefix."users WHERE email = LIKE '%".$_POST['text']."%' OR pemail = LIKE '%".$_POST['text']."%' ";
+                        $query = "SELECT * FROM ".$db_prefix."users WHERE email LIKE '%".$_POST['text']."%' OR pemail LIKE '%".$_POST['text']."%' ";
                         break;
                     case 7 :        // Same IP
                         $query = "SELECT * FROM ".$db_prefix."users AS t1 INNER JOIN ( 

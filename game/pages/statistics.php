@@ -124,9 +124,20 @@ class Statistics extends Page {
                 RecalcAllyStats ();
                 RecalcAllyRanks ();
 
-                if ( $type === "fleet" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE place2 >= $start AND place2 < ".($start+99)." ORDER BY place2;";
-                else if ( $type === "research" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE place3 >= $start AND place3 < ".($start+99)." ORDER BY place3;";
-                else $query = "SELECT * FROM ".$db_prefix."ally WHERE place1 >= $start AND place1 < ".($start+99)." ORDER BY place1;";
+                // "Own position" (start=-1) means the block around the user's alliance.
+                if ( $start <= 0 ) {
+                    $own_ally = LoadAlly ( intval($GlobalUser['ally_id']) );
+                    if ( $own_ally != null ) {
+                        if ( $type === "fleet" ) $start = (floor(($own_ally['place2']-1)/100)*100+1);
+                        else if ( $type === "research" ) $start = (floor(($own_ally['place3']-1)/100)*100+1);
+                        else $start = (floor(($own_ally['place1']-1)/100)*100+1);
+                    }
+                    else $start = 1;
+                }
+
+                if ( $type === "fleet" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE place2 >= $start AND place2 < ".($start+100)." ORDER BY place2;";
+                else if ( $type === "research" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE place3 >= $start AND place3 < ".($start+100)." ORDER BY place3;";
+                else $query = "SELECT * FROM ".$db_prefix."ally WHERE place1 >= $start AND place1 < ".($start+100)." ORDER BY place1;";
 
                 $result = dbquery ($query);
                 $rows = dbrows ($result);
@@ -193,14 +204,14 @@ class Statistics extends Page {
             }
             else {
                 if ( $start <= 0 ) {
-                    if ( $type === "fleet" ) $start = (floor($GlobalUser['place2']/100)*100+1);
-                    else if ( $type === "research" ) $start = (floor($GlobalUser['place3']/100)*100+1);
-                    else $start = (floor($GlobalUser['place1']/100)*100+1);
+                    if ( $type === "fleet" ) $start = (floor(($GlobalUser['place2']-1)/100)*100+1);
+                    else if ( $type === "research" ) $start = (floor(($GlobalUser['place3']-1)/100)*100+1);
+                    else $start = (floor(($GlobalUser['place1']-1)/100)*100+1);
                 }
 
-                if ( $type === "fleet" ) $query = "SELECT * FROM ".$db_prefix."users WHERE place2 >= $start AND place2 < ".($start+99)." ORDER BY place2;";
-                else if ( $type === "research" ) $query = "SELECT * FROM ".$db_prefix."users WHERE place3 >= $start AND place3 < ".($start+99)." ORDER BY place3;";
-                else $query = "SELECT * FROM ".$db_prefix."users WHERE place1 >= $start AND place1 < ".($start+99)." ORDER BY place1;";
+                if ( $type === "fleet" ) $query = "SELECT * FROM ".$db_prefix."users WHERE place2 >= $start AND place2 < ".($start+100)." ORDER BY place2;";
+                else if ( $type === "research" ) $query = "SELECT * FROM ".$db_prefix."users WHERE place3 >= $start AND place3 < ".($start+100)." ORDER BY place3;";
+                else $query = "SELECT * FROM ".$db_prefix."users WHERE place1 >= $start AND place1 < ".($start+100)." ORDER BY place1;";
 
                 $result = dbquery ($query);
                 $rows = dbrows ($result);

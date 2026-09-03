@@ -26,7 +26,7 @@ function ScreenShotName ($pic)
 <link rel='stylesheet' type='text/css' href='css/styles.css' />
 <link rel='stylesheet' type='text/css' href='css/about.css' />
 <body> 
-<p class="bildUeberschrift"><?php echo ScreenShotName($_GET['pic']);?></p> 
-<a href="screenshots.php"><img src="<?php echo $_GET['path'].$_GET['pic'].".".$_GET['type']; ?>"></a> 
+<p class="bildUeberschrift"><?php echo htmlspecialchars(ScreenShotName($_GET['pic'] ?? ''), ENT_QUOTES);?></p> 
+<a href="screenshots.php"><img src="<?php echo htmlspecialchars($_GET['path'] ?? '', ENT_QUOTES) . htmlspecialchars($_GET['pic'] ?? '', ENT_QUOTES) . "." . htmlspecialchars($_GET['type'] ?? '', ENT_QUOTES); ?>"></a> 
 </body> 
 </html> 

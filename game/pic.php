@@ -1,6 +1,12 @@
 <?php
 
-header('Location: '.$_REQUEST['url']);
+// Only redirect to http(s) URLs: this script is referenced from in-game
+// content ([img] bbcode, alliance logos), and an unrestricted Location header
+// would be an open redirect usable for phishing.
+$url = trim ((string) ($_REQUEST['url'] ?? ''));
+if ( $url !== '' && preg_match ('#^https?://#i', $url) ) {
+    header('Location: '.$url);
+}
 die ();
 
 /*

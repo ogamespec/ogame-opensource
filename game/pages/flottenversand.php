@@ -82,6 +82,11 @@ class Flottenversand extends Page {
         // Output the text of the fleet dispatch error.
         if ( $GlobalUni['freeze'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_FREEZE")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
 
+        // The fleet can only be sent from a planet of the current player.
+        if ( $this->origin == null || $this->origin['owner_id'] != $GlobalUser['player_id'] ) {
+            $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_INVALID")."</span></th>\n  </tr>\n"; $this->FleetError = true;
+        }
+
         if (  ( $_POST['thisgalaxy'] == $_POST['galaxy'] ) &&
                 ( $_POST['thissystem'] == $_POST['system'] ) &&
                 ( $_POST['thisplanet'] ==  $_POST['planet'] ) &&
@@ -100,13 +105,17 @@ class Flottenversand extends Page {
 
         $this->origin_user = LoadUser ( $this->origin['owner_id'] ) ?? array ();
 
+        // Checks that apply to every mission, regardless of whether a target
+        // planet already exists at the coordinates (colonize/expedition create
+        // their target inside the switch below).
+        if ( $this->origin_user['vacation'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_VACATION_SELF")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
+        if ( $this->nowfleet >= $this->maxfleet ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_MAX_FLEET")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
+
         if ($this->target != null) {
 
             $this->target_user = LoadUser ( $this->target['owner_id'] ) ?? array ();
 
-            if ( $this->origin_user['vacation'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_VACATION_SELF")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
             if ( $this->target_user['vacation'] && $this->order != FTYP_RECYCLE ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_VACATION_OTHER")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-            if ( $this->nowfleet >= $this->maxfleet ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_MAX_FLEET")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
 
             // DO NOT check fleet dispatch between players with the same IP only if BOTH have IP checking disabled in the settings.
             // OR if the sent is on localhost (local web server for debugging)
@@ -237,8 +246,10 @@ class Flottenversand extends Page {
             case FTYP_COLONIZE:        // Colonize
                 if ( $this->fleet[GID_F_COLON] == 0 ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_COLONY_REQUIRED")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if (HasPlanet (intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet'])) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_COLONY_EXISTS")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-                else {
-                    // If a colonizer is sent - add a colonization phantom.
+                else if ( !$this->FleetError ) {
+                    // If a colonizer is sent - add a colonization phantom. Only
+                    // when no earlier check failed, otherwise the phantom row
+                    // would be orphaned (the fleet is never dispatched).
                     $id = CreateColonyPhantom ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']), USER_SPACE );
                     $this->target = LoadPlanetById ($id);
                 }
@@ -270,7 +281,7 @@ class Flottenversand extends Page {
                 else if ( $manned == 0 ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_EXP_REQUIRED")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ( intval($_POST['planet']) != 16 ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_EXP_INVALID")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($this->numships > $GlobalUni['battle_max']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_BATTLE_MAX")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-                else {
+                else if ( !$this->FleetError ) {
                     $id = CreateOuterSpace ( intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet']) );
                     $this->target = LoadPlanetById ($id);
                 }

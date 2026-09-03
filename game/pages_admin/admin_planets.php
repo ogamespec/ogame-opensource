@@ -86,15 +86,16 @@ class Admin_Planets extends Page {
                 }
                 $query = '';
                 $result = null;
+                $searchtext = addslashes ((string) $_POST['searchtext']);
                 if ( $searchtype === "playername") {
-                    $query = "SELECT player_id FROM ".$db_prefix."users WHERE oname LIKE '".$_POST['searchtext']."%'";
+                    $query = "SELECT player_id FROM ".$db_prefix."users WHERE oname LIKE '".$searchtext."%'";
                     $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = ANY ($query);";
                 }
                 else if ( $searchtype === "planetname") {
-                    $query = "SELECT * FROM ".$db_prefix."planets WHERE name LIKE '".$_POST['searchtext']."%';";
+                    $query = "SELECT * FROM ".$db_prefix."planets WHERE name LIKE '".$searchtext."%';";
                 }
                 else if ( $searchtype === "allytag") {
-                    $query = "SELECT ally_id FROM ".$db_prefix."ally WHERE tag LIKE '".$_POST['searchtext']."%'";
+                    $query = "SELECT ally_id FROM ".$db_prefix."ally WHERE tag LIKE '".$searchtext."%'";
                     $query = "SELECT player_id FROM ".$db_prefix."users WHERE ally_id <> 0 AND ally_id = ANY ($query)";
                     $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = ANY ($query);";
                 }

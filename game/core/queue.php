@@ -343,7 +343,10 @@ function CanBuild (array $user, array $planet, int $id, int $lvl, bool $destroy,
         else if ( $planet[$id] <= 0 ) return loca_lang("BUILD_ERROR_NO_SUCH_BUILDING", $user['lang']);
     }
 
-    if ($planet[$id] >= MAX_BUILDINGS_LEVEL) return loca_lang("BUILD_ERROR_MAX_LEVEL", $user['lang']);
+    // The level cap applies only to construction: demolition of a max-level
+    // building must stay possible, so compare the target level, not the
+    // current one (a queued build can otherwise slip past the cap).
+    if ( !$destroy && $lvl > MAX_BUILDINGS_LEVEL) return loca_lang("BUILD_ERROR_MAX_LEVEL", $user['lang']);
 
     $info = array ();
     $info['id'] = $id;
@@ -1106,7 +1109,8 @@ function AddAllowNameEvent (int $player_id) : void
     {
         $now = time ();
         $when = $now + 7 * 24 * 60 * 60;
-        $id = AddQueue ($player_id, QTYP_ALLOW_NAME, 0, 0, 0, $now, $when, QUEUE_PRIO_LOWEST);
+        // AddQueue's 7th argument is a duration: end = now + seconds.
+        $id = AddQueue ($player_id, QTYP_ALLOW_NAME, 0, 0, 0, $now, 7 * 24 * 60 * 60, QUEUE_PRIO_LOWEST);
         $query = "UPDATE ".$db_prefix."users SET name_changed = 1, name_until = $when WHERE player_id = $player_id";
         dbquery ($query);
     }
@@ -1187,7 +1191,8 @@ function AddChangeEmailEvent (int $player_id) : int
 
     $now = time ();
     $when = $now + 7 * 24 * 60 * 60;
-    $id = AddQueue ($player_id, QTYP_CHANGE_EMAIL, 0, 0, 0, $now, $when, QUEUE_PRIO_LOWEST);
+    // AddQueue's 7th argument is a duration: end = now + seconds.
+    $id = AddQueue ($player_id, QTYP_CHANGE_EMAIL, 0, 0, 0, $now, 7 * 24 * 60 * 60, QUEUE_PRIO_LOWEST);
     return $id;
 }
 
@@ -1419,8 +1424,13 @@ function AddCleanDebrisEvent () : void
 function Queue_CleanDebris_End (array $queue) : void
 {
     global $db_prefix;
-    $query = "SELECT target_planet FROM ".$db_prefix."fleet WHERE mission = ".FTYP_RECYCLE." OR mission = ".(FTYP_RECYCLE+FTYP_RETURN);
-    $query = "DELETE FROM ".$db_prefix."planets WHERE (type=".PTYP_DF." AND `".GID_RC_METAL."`=0 AND `".GID_RC_CRYSTAL."`=0) AND planet_id <> ALL ($query)";
+    // Fleets flying to a debris field (outbound / returning recyclers).
+    $query = "SELECT target_planet FROM ".$db_prefix."fleet WHERE (mission = ".FTYP_RECYCLE." OR mission = ".(FTYP_RECYCLE+FTYP_RETURN).") AND target_planet IS NOT NULL";
+    // NOT IN is used instead of <> ALL: it is portable to both MySQL and the
+    // SQLite backend used by the test suite (like the sibling CleanFarspace).
+    // A NULL planet id inside the subquery would make NOT IN evaluate to NULL
+    // (nothing deleted), so rows with a NULL planet id are excluded explicitly.
+    $query = "DELETE FROM ".$db_prefix."planets WHERE (type=".PTYP_DF." AND `".GID_RC_METAL."`=0 AND `".GID_RC_CRYSTAL."`=0) AND planet_id NOT IN ($query)";
     dbquery ( $query );
     RemoveQueue ( $queue['task_id'] );
     AddCleanDebrisEvent ();

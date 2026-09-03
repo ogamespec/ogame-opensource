@@ -53,8 +53,11 @@ function PageAlly_Settings () : void
         {
             $ally_id = $ally['ally_id'];
             $query = "UPDATE ".$db_prefix."ally SET open = " . (intval($_POST['bew']) == 0 ? 1 : 0);
-            $query .= ", homepage = '".$_POST['hp']."'";
-            $query .= ", imglogo = '".$_POST['logo']."'";
+            // hp/logo are interpolated into raw SQL below, so escape them like
+            // every other raw-SQL string in this codebase (the d=1 text branch
+            // neutralizes quotes the same way).
+            $query .= ", homepage = '".addslashes((string)($_POST['hp'] ?? ''))."'";
+            $query .= ", imglogo = '".addslashes((string)($_POST['logo'] ?? ''))."'";
             $query .= " WHERE ally_id = $ally_id";
             dbquery ($query);
 

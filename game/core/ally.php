@@ -174,6 +174,8 @@ function LoadAlly (int $ally_id) : mixed
 function SearchAllyTag (string $tag) : mixed
 {
     global $db_prefix;
+    // Escape the fragment: it is interpolated into a quoted LIKE pattern.
+    $tag = addslashes ($tag);
     $query = "SELECT * FROM ".$db_prefix."ally WHERE tag LIKE '%".$tag."%' LIMIT 30";
     $result = dbquery ($query);
     return $result;
@@ -243,7 +245,7 @@ function AllyChangeName (int $ally_id, string $name) : bool
 function AllyChangeOwner (int $ally_id, int $owner_id) : void
 {
     global $db_prefix;
-    $query = "UPDATE ".$db_prefix."ally SET owner_id = " . intval($owner_id);
+    $query = "UPDATE ".$db_prefix."ally SET owner_id = " . intval($owner_id) . " WHERE ally_id = " . intval($ally_id);
     dbquery ($query);
 }
 

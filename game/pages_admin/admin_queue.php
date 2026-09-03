@@ -17,12 +17,19 @@ class Admin_Queue extends Page {
         {
 
             if ( key_exists ( "player", $_POST ) ) {        // Filter by player name
-                $query = "SELECT * FROM ".$db_prefix."users WHERE oname LIKE '".$_POST['player']."%'";
-                $result = dbquery ( $query );
-                if ( dbrows ($result) > 0 ) {
-                    $user = dbarray ($result);
-                    $this->player_id = $user['player_id'];
+                // An empty filter clears the player filter (LIKE '%%' would
+                // otherwise match the first user row and silently filter the
+                // queue by an arbitrary player).
+                $filter = trim ((string) $_POST['player']);
+                if ( $filter !== "" ) {
+                    $query = "SELECT * FROM ".$db_prefix."users WHERE oname LIKE '".addslashes($filter)."%'";
+                    $result = dbquery ( $query );
+                    if ( dbrows ($result) > 0 ) {
+                        $user = dbarray ($result);
+                        $this->player_id = $user['player_id'];
+                    }
                 }
+                else $this->player_id = 0;
             }
 
             if ( key_exists ( "order_end", $_POST ) && $GlobalUser['admin'] >= USER_TYPE_ADMIN ) {        // Complete the task

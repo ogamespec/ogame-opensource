@@ -361,6 +361,9 @@ function RemoveUser ( int $player_id, int $when) : void
 function ValidateUser (string $code) : void
 {
     global $db_prefix;
+    // Activation codes are md5 hex strings; anything else is invalid input
+    // (also protects the interpolated query from crafted fragments).
+    if ( !preg_match ('/^[a-f0-9]{32}$/i', $code) ) { RedirectHome (); return; }
     $query = "SELECT * FROM ".$db_prefix."users WHERE validatemd = '".$code."'";
     $result = dbquery ($query);
     if (dbrows ($result) == 0)
@@ -391,6 +394,15 @@ function CheckPassword ( string $name, string $pass, string $passmd="") : int
 {
     global $db_prefix, $db_secret;
     $name = mb_strtolower ($name, 'UTF-8');
+
+    // Reject names that are not plausible player names. Registration enforces
+    // the same charset (new.php / newredirect.php forbid `[;,<>()\`\"\']`),
+    // so this keeps crafted SQL fragments out of the interpolated query while
+    // allowing every legitimately registered login.
+    $len = mb_strlen ($name, 'UTF-8');
+    if ( $len < 3 || $len > 20 ) return 0;
+    if ( preg_match ('/[;,<>()\x60"\'\\\\]/', $name) ) return 0;
+
     if ($passmd === "") $md = md5 ($pass . $db_secret);
     else $md = $passmd;
     $query = "SELECT * FROM ".$db_prefix."users WHERE name = '".$name."' AND password = '".$md."'";
@@ -673,6 +685,9 @@ function Logout ( string|null $session ) : void
 {
     global $db_prefix;
     if ($session == null) return;
+    // Public sessions are 12-char hex tokens (see index.php CheckParams).
+    // Reject anything else before interpolating into the query.
+    if ( !preg_match ('/^[a-f0-9]{1,12}$/', $session) ) return;
     $query = "SELECT * FROM ".$db_prefix."users WHERE session = '".$session."'";
     $result = dbquery ($query);
     if (dbrows ($result) == 0) return;
@@ -755,7 +770,7 @@ function Login ( string $login, string $pass, string $passmd="" ) : never
         if ( $user !== null && $user['banned'] )
         {
             UpdateLastClick ( $player_id );        // Update the user's activity so that you can extend the deletion.
-            echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/reg/errorpage.php?errorcode=3&arg1=$uni&arg2=$login&arg3=". fixed_date( "D M j Y G:i:s", $user['banned_until'] ) ."' /></head><body></body>";
+            echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/reg/errorpage.php?errorcode=3&arg1=$uni&arg2=".urlencode($login)."&arg3=". urlencode( fixed_date( "D M j Y G:i:s", $user['banned_until'] ) ) ."' /></head><body></body>";
             ob_end_flush ();
             exit ();
         }
@@ -804,8 +819,8 @@ function Login ( string $login, string $pass, string $passmd="" ) : never
     }
     else
     {
-        header ( "Location: ".hostname()."game/reg/errorpage.php?errorcode=2&arg1=$uni&arg2=$login" );
-        echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/reg/errorpage.php?errorcode=2&arg1=$uni&arg2=$login' /></head><body></body>";
+        header ( "Location: ".hostname()."game/reg/errorpage.php?errorcode=2&arg1=$uni&arg2=".urlencode($login) );
+        echo "<html><head><meta http-equiv='refresh' content='0;url=".hostname()."game/reg/errorpage.php?errorcode=2&arg1=$uni&arg2=".urlencode($login)."' /></head><body></body>";
     }
     ob_end_flush ();
     exit ();
@@ -863,7 +878,7 @@ function RecalcStats (int $player_id) : void
         $fleet = LoadFleet ( $queue['sub_id'] );
 
         foreach ( $fleetmap as $i=>$gid ) {        // Fleet
-            $level = $fleet["ship$gid"];
+            $level = $fleet[$gid] ?? 0;
             if ($level > 0){
                 $res = TechPrice ( $gid, 1 );
                 $points += TechPriceInPoints($res) * $level;
@@ -1086,7 +1101,8 @@ function BanUser (int $player_id, int $seconds, bool $vmode) : void
     dbquery ($query);
     $now = time ();
     $when = $now + $seconds;
-    $id = AddQueue ($player_id, QTYP_UNBAN, 0, 0, 0, $now, $when, QUEUE_PRIO_LOWEST);
+    // AddQueue's 7th argument is a duration: end = now + seconds (see queue.php).
+    $id = AddQueue ($player_id, QTYP_UNBAN, 0, 0, 0, $now, $seconds, QUEUE_PRIO_LOWEST);
     $query = "UPDATE ".$db_prefix."users SET score1 = 0, score2 = 0, score3 = 0, banned = 1, banned_until = $when";
     if ( $vmode ) $query .= ", vacation = 1, vacation_until = $when";
     $query .= " WHERE player_id = $player_id";
@@ -1108,7 +1124,8 @@ function BanUserAttacks (int $player_id, int $seconds) : void
     dbquery ($query);
     $now = time ();
     $when = $now + $seconds;
-    $id = AddQueue ($player_id, QTYP_ALLOW_ATTACKS, 0, 0, 0, $now, $when, QUEUE_PRIO_LOWEST);
+    // AddQueue's 7th argument is a duration: end = now + seconds (see queue.php).
+    $id = AddQueue ($player_id, QTYP_ALLOW_ATTACKS, 0, 0, 0, $now, $seconds, QUEUE_PRIO_LOWEST);
     $query = "UPDATE ".$db_prefix."users SET noattack = 1, noattack_until = $when WHERE player_id = $player_id";
     dbquery ($query);
 }

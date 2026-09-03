@@ -4,6 +4,7 @@
 /** @var string $session */
 
 $msg = LoadMessage ( intval($_GET['bericht']) );
+if ( ! is_array ($msg) ) return;    // unknown report id — nothing to show
 
 ?>
 

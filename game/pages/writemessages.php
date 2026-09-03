@@ -16,7 +16,12 @@ class Writemessages extends Page {
     public function controller () : bool {
         global $GlobalUser;
 
-        $this->betreff = key_exists('betreff', $_REQUEST) ? $_REQUEST['betreff'] : loca("WRITE_MSG_DEFAULT_SUBJ");
+        // The subject is user-controlled text that is stored and echoed as HTML
+        // (messages list, reply links, feed), so strip markup here instead of
+        // at each output site.
+        $this->betreff = key_exists('betreff', $_REQUEST) ? trim((string) $_REQUEST['betreff']) : loca("WRITE_MSG_DEFAULT_SUBJ");
+        $this->betreff = mb_substr ($this->betreff, 0, 80, "UTF-8");
+        $this->betreff = htmlspecialchars ($this->betreff, ENT_QUOTES);
 
         $user_id = intval($_GET['messageziel'] ?? 0);
         $this->user = LoadUser ( $user_id );
@@ -35,6 +40,10 @@ class Writemessages extends Page {
 
             $subj = $_POST['betreff'];
             $text = $_POST['text'];
+            // Same sanitization as the controller default: the subject ends up
+            // stored as HTML and echoed unescaped in the inbox and the feed.
+            $subj = mb_substr (trim ((string) $subj), 0, 80, "UTF-8");
+            $subj = htmlspecialchars ($subj, ENT_QUOTES);
             $this->betreff = $subj;
             if ($subj === "") $this->write_error = "<center><font color=#FF0000>".loca("WRITE_MSG_ERROR_NO_SUBJ")."</font><br/><br/></center>\n";
             else if ($text === "") $this->write_error .= "<center><font color=#FF0000>".loca("WRITE_MSG_ERROR_NO_BODY")."</font><br/><br/></center>\n";

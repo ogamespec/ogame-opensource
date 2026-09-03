@@ -30,7 +30,8 @@ $BotNow = 0;       // start time of bot task execution
  */
 function AddBotQueue (int $player_id, int $strat_id, int $block_id, int $when, int $seconds) : int
 {
-    return AddQueue ($player_id, QTYP_AI, $strat_id, $block_id, 0, $when, $when+$seconds, QUEUE_PRIO_BOT);
+    // AddQueue's 7th argument is a duration: end = now + seconds.
+    return AddQueue ($player_id, QTYP_AI, $strat_id, $block_id, 0, $when, $seconds, QUEUE_PRIO_BOT);
 }
 
 /**
