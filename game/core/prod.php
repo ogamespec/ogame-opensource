@@ -485,12 +485,17 @@ function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
 
     $planet = LoadPlanetById ($planet_id);
     if ($planet == null) return null;
-    if ( $planet['type'] != PTYP_PLANET ) {
+
+    // Mods may freeze the planet update (production) of a regular planet,
+    // e.g. for game modes that leave the classic empire inactive. A frozen
+    // planet is returned the same way as a non-planet galaxy object: default
+    // (zero) production, no storage caps and no resource crediting.
+    if ( $planet['type'] != PTYP_PLANET || ModsExecRef ('skip_planet_update', $planet) ) {
         foreach ($storagemap as $rc=>$gid) {
             $planet['max'.$rc] = 0;
         }
         SetDefaultProduction ($planet);
-        return $planet;        // NOT a planet
+        return $planet;        // NOT a planet, or frozen by a modification
     }
     $user = LoadUser ( $planet['owner_id'] );
     if ($user == null) return $planet;
