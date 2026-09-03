@@ -1,9 +1,9 @@
 <?php
 
-$LOCA["de"]["MENU_DIS"] = "Bei Problemen oder fragen, könnt ihr euch an uns unter der Mailadresse \"barrierefrei@ogame.de\" wenden.";
+$LOCA["de"]["MENU_DIS"] = "Bei Problemen oder fragen, könnt ihr euch an uns unter der Mailadresse \"#1\" wenden.";
 $LOCA["de"]["MENU_UNIVERSE"] = "Universum";
 $LOCA["de"]["MENU_OVERVIEW"] = "Übersicht";
-$LOCA["de"]["MENU_ADMIN"] = "*Admin Area*";
+$LOCA["de"]["MENU_ADMIN"] = "*Admin-Bereich*";
 $LOCA["de"]["MENU_EMPIRE"] = "Imperium";
 $LOCA["de"]["MENU_BUILDING"] = "Gebäude";
 $LOCA["de"]["MENU_RESOURCES"] = "Rohstoffe";
@@ -22,9 +22,9 @@ $LOCA["de"]["MENU_SEARCH"] = "Suche";
 $LOCA["de"]["MENU_TUTORIAL"] = "Hilfe";
 $LOCA["de"]["MENU_MESSAGES"] = "Nachrichten";
 $LOCA["de"]["MENU_NOTES"] = "Notizen";
-$LOCA["de"]["MENU_BUDDY"] = "Buddylist";
+$LOCA["de"]["MENU_BUDDY"] = "Buddy-Liste";
 $LOCA["de"]["MENU_OPTIONS"] = "Einstellungen";
-$LOCA["de"]["MENU_LOGOUT"] = "Logout";
+$LOCA["de"]["MENU_LOGOUT"] = "Abmelden";
 $LOCA["de"]["MENU_RULES"] = "Regeln";
 $LOCA["de"]["MENU_IMPRESSUM"] = "Impressum";
 $LOCA["de"]["MENU_DISCORD"] = "Discord"; 		// Neu. Der Link zu Discord wird nach dem Link zum Forum eingefügt

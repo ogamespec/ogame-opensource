@@ -1,0 +1,458 @@
+<html>
+ <head>
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+  <script language="JavaScript">var session="0000000003e9";</script>
+  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+<link rel='stylesheet' type='text/css' href='css/combox.css'>
+<link rel='stylesheet' type='text/css' href='http://localhost/evolution/formate.css' />
+<title>Вселенная 1 ОГейм</title>
+  <script src='js/utilities.js' type='text/javascript'></script>
+  <script language='JavaScript'>
+  </script>
+<script type='text/javascript' src='js/overLib/overlib.js'></script>
+<!-- HEADER -->
+
+<script language='JavaScript'>
+function onBodyLoad() {
+    window.setTimeout('reloadImages()', 100);
+}
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != '')) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script>
+</head>
+<body style='overflow: hidden;' onload='onBodyLoad();' onunload='' >
+<div id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>
+<div id='header_top'><center>
+<table class='header'>
+<tr class='header' >
+<td class='header' style='width:5;' >
+<table class='header'>
+<tr class='header'>
+<td class='header'><img src='http://localhost/evolution/planeten/small/s_dschjungelplanet02.jpg' width='50' height='50'></td>
+<td class='header'>
+<table class='header'>
+<select size='1' onchange='haha(this)'>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=1&mode=Forschung' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1&mode=Forschung' >[1:1:4]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=10&mode=Forschung' >Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10&mode=Forschung' >[1:1:4]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=2&mode=Forschung' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2&mode=Forschung' >[1:1:5]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=3&mode=Forschung' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3&mode=Forschung' >[1:2:4]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=11&mode=Forschung' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11&mode=Forschung' >[1:2:4]</a></option>
+</select></table></td></tr></table></td>
+
+<td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
+<tr class='header'>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/metall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/kristall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/deuterium.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<a href=index.php?page=micropayment&session=0000000003e9>
+<img border='0' src='img/dm_klein_2.jpg' width='42' height='22' title='Тёмная материя'></a>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/energie.gif' width='42' height='22'>
+</td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Металл</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Кристалл</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Дейтерий</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Тёмная материя</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Энергия</font></b></i></td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='90'><font >25.047</font></td>
+    <td align='center' class='header' width='90'><font >15.016</font></td>
+    <td align='center' class='header' width='90'><font >8.003</font></td>
+    <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
+    <td align='center' class='header' width='90'><font >359</font>/529</td>
+</tr>
+</table></td>
+<td class='header'>
+<table class='header' align=left>
+<tr class='header'>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='y' >
+  <img border='0' src='img/commander_ikon.gif' width='32' height='32' alt='Командир'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;Активен&lt;/font&gt; ещё 365 д.<br>Командир</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Продлить!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='y' >
+  <img border='0' src='img/admiral_ikon.gif' width='32' height='32' alt='Адмирал'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;Активен&lt;/font&gt; ещё 365 д.<br>Адмирал</font><br><font size=1 color=skyblue>&amp;nbsp;Макс. кол-во флотов +2</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Продлить!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='y' >
+  <img border='0' src='img/ingenieur_ikon.gif' width='32' height='32' alt='Инженер'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;Активен&lt;/font&gt; ещё 365 д.<br>Инженер</font><br><font size=1 color=skyblue>Сокращает вдвое потери в обороне+10% больше энергии</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Продлить!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='y' >
+  <img border='0' src='img/geologe_ikon.gif' width='32' height='32' alt='Геолог'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;Активен&lt;/font&gt; ещё 365 д.<br>Геолог</font><br><font size=1 color=skyblue>+10% доход от шахты</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Продлить!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='y' >
+  <img border='0' src='img/technokrat_ikon.gif' width='32' height='32' alt='Технократ'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;Активен&lt;/font&gt; ещё 365 д.<br>Технократ</font><br><font size=1 color=skyblue>+2 уровень шпионажа, 25% меньше времени на исследования</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Продлить!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+<td align='center' class='header'></td></tr></table></td>
+
+</tr>
+</table>
+</div><!-- END HEADER -->
+
+<!-- LEFTMENU -->
+
+   <div id='leftmenu'>
+
+<script language='JavaScript'>
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+<center>
+
+<div id='menu'>
+<a href='mailto:barrierefrei@ogame.de' title='Проблемы, касающиеся игроков со слабым зрением, отправляйте на barrierefrei@ogame.de.' style='width:1px;'></a>
+<p style='width:110px;'><NOBR>Вселенная 1 (<a href='index.php?page=changelog&session=0000000003e9'>v 0.84</a>)</NOBR></p>
+<table width='110' cellspacing='0' cellpadding='0'>
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/ogame-produktion.jpg' width='110' height='40' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=0000000003e9' accesskey="o">Обзор</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=imperium&session=0000000003e9&planettype=1&no_header=1' accesskey="r">Империя</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=b_building&session=0000000003e9' accesskey="z">Постройки</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=0000000003e9' accesskey="s">Сырьё</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=0000000003e9' accesskey=""><font color='FF8900'>Скупщик</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Forschung' accesskey="i">Исследования</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Flotte' accesskey="v">Верфь</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=0000000003e9&mode=Flotte' accesskey="f">Флот</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=0000000003e9' accesskey="t">Технологии</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=0000000003e9&no_header=1' accesskey="g">Галактика</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Verteidigung' accesskey="x">Оборона</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/info-help.jpg' width='110' height='19' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=0000000003e9' accesskey="a">Мой альянс</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+    <td align=center>
+     <a id='darkmatter2' style='cursor:pointer; width:110px;'
+         href='index.php?page=micropayment&session=0000000003e9' accesskey="y"><b>Офицерское казино</a></b>
+    </div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=statistics&session=0000000003e9' accesskey="k">Статистика</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=0000000003e9' accesskey="p">Поиск</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/user-menu.jpg' width='110' height='35' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=messages&session=0000000003e9&dsp=1' accesskey="b">Сообщения</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=0000000003e9&no_header=1", "Notizen");' accesskey="e">Заметки</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=0000000003e9' accesskey="d">Друзья</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=0000000003e9' accesskey="n">Настройки</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=0000000003e9' accesskey="q">Выход</a>
+    </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+    </div>
+<!-- END LEFTMENU -->
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<title> 
+Постройки#Gebaeude
+</title> 
+<script type="text/javascript"> 
+
+function setMax(key, number){
+    document.getElementsByName('fmenge['+key+']')[0].value=number;
+}
+</script> 
+<table align=top><tr><td style='background-color:transparent;'>  <table width="530">
+          <tr> 
+          <td class=l colspan="2">Описание</td> 
+          <td class=l><b>Кол-во</b></td> 
+          </tr> 
+
+<tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=106>
+              <img border='0' src="http://localhost/evolution/gebaeude/106.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=106>Шпионаж</a></a> (уровень 5 <b><font style="color:lime;">+2</font></b> <img border="0" src="img/technokrat_ikon.gif" alt="Технократ" onmouseover="return overlib('<font color=white>Технократ</font>', WIDTH, 100);" onmouseout='return nd();' width="20" height="20" style="vertical-align:middle;"> )<br>С помощью этой технологии добываются данные о других планетах.<br>Стоимость: Металл: <b>6.400</b> Кристалл: <b>32.000</b> Дейтерий: <b>6.400</b><br>Длительность: 6ч 58мин 54сек<br></th><td class=k> - </td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=108>
+              <img border='0' src="http://localhost/evolution/gebaeude/108.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=108>Компьютерная технология</a></a> (уровень 6)<br>С увеличением мощности компьютеров можно командовать всё большим количеством флотов. Каждый уровень компьютерной технологии увеличивает максимальное количество флотов на один.<br>Стоимость: Кристалл: <b>25.600</b> Дейтерий: <b>38.400</b><br>Длительность: 4ч 39мин 16сек<br></th><td class=k> - </td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=109>
+              <img border='0' src="http://localhost/evolution/gebaeude/109.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=109>Оружейная технология</a></a> (уровень 3)<br>Оружейная технология делает системы вооружения эффективней. Каждый уровень увеличивает мощность вооружения войсковых частей на 10% от основной мощности.<br>Стоимость: Металл: <b>6.400</b> Кристалл: <b>1.600</b><br>Длительность: 1ч 27мин 16сек<br></th><td class=k> - </td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=111>
+              <img border='0' src="http://localhost/evolution/gebaeude/111.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=111>Броня космических кораблей</a></a> (уровень 4)<br>Специальные сплавы улучшают броню космических кораблей. Так, устойчивость брони может увеличиваться с каждым уровнем на 10% .<br>Стоимость: Металл: <b>16.000</b><br>Длительность: 2ч 54мин 32сек<br></th><td class=k> - </td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=113>
+              <img border='0' src="http://localhost/evolution/gebaeude/113.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=113>Энергетическая технология</a></a> (уровень 5)<br>Обладание различными видами энергии необходимо для многих новых технологий.<br>Стоимость: Кристалл: <b>25.600</b> Дейтерий: <b>12.800</b><br>Длительность: 4ч 39мин 16сек<br></th><td class=k>                <div id="bxx" class="z"></div>
+                <script   type="text/javascript">
+                v=new Date();
+                var bxx=document.getElementById('bxx');
+                function t(){
+                    n=new Date();
+                    ss=500;
+                    s=ss-Math.round((n.getTime()-v.getTime())/1000.);
+                    m=0;h=0;
+                    if(s<0){
+    
+                        bxx.innerHTML='Окончено<br><a href=index.php?page=buildings&session=0000000003e9&mode=Forschung&cp=1 >дальше</a>';
+                    }else{
+                        if(s>59){
+                            m=Math.floor(s/60);
+                            s=s-m*60
+                        }
+                        if(m>59){
+                            h=Math.floor(m/60);
+                            m=m-h*60
+                        }
+                        if(s<10){
+                            s="0"+s
+                        }
+                        if(m<10){
+                            m="0"+m
+                        }
+                        bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=buildings&session=0000000003e9&unbau=113&mode=Forschung&cp=1"+
+                        ">Отменить</a>"                }
+                    ;
+                    window.setTimeout("t();",999);
+                }
+                window.onload=t;
+                </script>
+</td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=115>
+              <img border='0' src="http://localhost/evolution/gebaeude/115.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=115>Реактивный двигатель</a></a> (уровень 4)<br>Дальнейшее развитие этих двигателей делает некоторые корабли быстрее, однако каждый уровень повышает скорость лишь на 10%.<br>Стоимость: Металл: <b>6.400</b> Дейтерий: <b>9.600</b><br>Длительность: 1ч 9мин 49сек<br></th><td class=k> - </td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=117>
+              <img border='0' src="http://localhost/evolution/gebaeude/117.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=117>Импульсный двигатель</a></a> (уровень 3)<br>Импульсный двигатель основывается на принципе отдачи. Дальнейшее развитие этих двигателей делает некоторые корабли быстрее, однако с каждым уровнем повышает скорость лишь на 20%.<br>Стоимость: Металл: <b>16.000</b> Кристалл: <b>32.000</b> Дейтерий: <b>4.800</b><br>Длительность: 8ч 43мин 38сек<br></th><td class=k> - </td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=120>
+              <img border='0' src="http://localhost/evolution/gebaeude/120.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=120>Лазерная технология</a></a> (уровень 4)<br>Благодаря фокусированию света возникает луч, который при попадании на объект наносит ему повреждения.<br>Стоимость: Металл: <b>3.200</b> Кристалл: <b>1.600</b><br>Длительность: 52мин 21сек<br></th><td class=k> - </td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=124>
+              <img border='0' src="http://localhost/evolution/gebaeude/124.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=124>Экспедиционная технология</a></a> (уровень 2)<br>Теперь корабли можно оснащать исследовательским модулем, обеспечивающим обработку собранных данных  в условиях длительных полётов.<br>Стоимость: Металл: <b>16.000</b> Кристалл: <b>32.000</b> Дейтерий: <b>16.000</b><br>Длительность: 8ч 43мин 38сек<br></th><td class=k> - </td></tr></table></table>
+<br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+
+
+
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+<div id='messagebox'><center></center></div>
+<div id='errorbox'><center></center></div>
+<script>
+headerHeight = 81;
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = '_blank';
+  }
+}
+</script>
+<style>
+.layer {
+    z-index:999999999;
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 757px; 
+    height: 475px; 
+    background-color: #040e1e;
+    border: 3px double orange;
+    padding: 0;
+    opacity: .90;
+}
+</style>
+</body></html>

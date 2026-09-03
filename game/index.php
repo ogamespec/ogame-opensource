@@ -62,6 +62,10 @@ else
 
     if ( key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $_COOKIE['ogamelang'];
     else $loca_lang = $GlobalUni['lang'];
+
+    // $Languages and $DefaultLanguage come from the (runtime-generated) config.php
+    /** @var array $Languages */
+    /** @var string $DefaultLanguage */
     if ( !key_exists ( $loca_lang, $Languages ) ) $loca_lang = $DefaultLanguage;
     $GlobalUser['lang'] = $loca_lang;
 }
@@ -97,6 +101,9 @@ if (key_exists('page', $_GET)) {
 }
 if ($pk != false) {
 
+    // $pk is a page name from the router (string)
+    $pk = (string)$pk;
+
     // Add locales required for the page
     foreach ($router[$pk]['loca'] as $i => $loca) {
         loca_add ( $loca, $GlobalUser['lang']);
@@ -107,6 +114,16 @@ if ($pk != false) {
     $external = false;
     if (key_exists('external', $router[$pk]) && !key_exists ( 'session', $_GET )) {
         $external = $router[$pk]['external'];
+    }
+
+    // Guests (requests without a public session) may only view pages that are
+    // explicitly marked as "external". The fallback user for guests is the
+    // technical "space" account, which owns no planet, so rendering internal
+    // pages for it (e.g. the overview) crashes on planet-dependent code. Send
+    // such requests to the start page, just like an invalid session does.
+    if (!$external && !key_exists ( 'session', $_GET )) {
+        RedirectHome ();
+        exit ();
     }
 
     if (!$external && key_exists ( 'session', $_GET )) {
@@ -174,13 +191,14 @@ if ($pk != false) {
 
     if ($mvc) {
 
-        // New-style
+        // New-style (MVC)
 
         $classFile = $router[$pk]['path'];
         if (file_exists($classFile)) {
 
             require_once $classFile;
             $className = ucfirst($pk);
+            /** @var Page $inst */
             $inst = new $className;
             $show = $inst->controller ();
 

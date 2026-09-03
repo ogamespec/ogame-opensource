@@ -2,10 +2,10 @@
 
 // Maintenance
 
-$LOCA["es"]["MAINTAIN_TITLE"] = "OGame Maintenance";
-$LOCA["es"]["MAINTAIN_HEAD"] = "Maintenance";
-$LOCA["es"]["MAINTAIN_INFO1"] = "OGame is currently under maintenance.";
-$LOCA["es"]["MAINTAIN_INFO2"] = "We should be back online shortly.";
-$LOCA["es"]["MAINTAIN_BOARDLINK"] = "Please check out the <a href=\"#1\">Board</a> for updates.";
+$LOCA["es"]["MAINTAIN_TITLE"] = "Mantenimiento";
+$LOCA["es"]["MAINTAIN_HEAD"] = "Mantenimiento";
+$LOCA["es"]["MAINTAIN_INFO1"] = "#1 está actualmente en mantenimiento.";
+$LOCA["es"]["MAINTAIN_INFO2"] = "Volveremos a estar en línea en breve.";
+$LOCA["es"]["MAINTAIN_BOARDLINK"] = "Consulta el <a href=\"#1\">Foro</a> para obtener actualizaciones.";
 
 ?>

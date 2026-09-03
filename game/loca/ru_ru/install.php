@@ -37,6 +37,7 @@ $LOCA["ru"]["INSTALL_UNI_RAPID"] = "Скорострел";
 $LOCA["ru"]["INSTALL_UNI_MOONS"] = "Луны и Звезды Смерти";
 $LOCA["ru"]["INSTALL_UNI_BATTLE"] = "Путь к боевому движку";
 $LOCA["ru"]["INSTALL_UNI_PHP_BATTLE"] = "Использовать боевой движок на PHP";
+$LOCA["ru"]["INSTALL_UNI_BATTLE_MAX"] = "Максимальное количество юнитов с одной стороны";
 $LOCA["ru"]["INSTALL_UNI_FORCE_LANG"] = "Принудительно использовать язык вселенной";
 $LOCA["ru"]["INSTALL_MAX_WERF"] = "Максимальное количество юнитов на верфи";
 $LOCA["ru"]["INSTALL_FEED_AGE"] = "Период обновления RSS/Atom в минутах для Командира";
@@ -64,5 +65,18 @@ $LOCA["ru"]["INSTALL_DONE"] ="Установка завершена. Файл к
 
 $LOCA["ru"]["INSTALL_EXTERNAL_LINKS"] = "Внешние ссылки";
 $LOCA["ru"]["INSTALL_EXTERNAL_LINKS_TIP"] = "Если внешняя ссылка не указана (пустая строка) соответствующий пункт в меню будет отсутствовать";
+
+$LOCA["ru"]["INSTALL_ERR_REQUIRED"] = "Поле \"#1\" не должно быть пустым.";
+$LOCA["ru"]["INSTALL_ERR_INT"] = "Поле \"#1\" должно быть целым числом.";
+$LOCA["ru"]["INSTALL_ERR_MIN"] = "Поле \"#1\" должно быть не меньше #2.";
+$LOCA["ru"]["INSTALL_ERR_MAX"] = "Поле \"#1\" не должно превышать #2.";
+$LOCA["ru"]["INSTALL_ERR_EMAIL"] = "Поле \"#1\" должно содержать корректный e-mail адрес.";
+$LOCA["ru"]["INSTALL_ERR_PASS_LONG"] = "Пароль администратора должен быть не короче 8 символов.";
+$LOCA["ru"]["INSTALL_ERR_PREFIX"] = "Префикс таблиц может содержать только латинские буквы, цифры и символ подчёркивания.";
+$LOCA["ru"]["INSTALL_ERR_URL"] = "Поле \"#1\" должно быть корректным URL или именем хоста.";
+$LOCA["ru"]["INSTALL_ERR_DBCONNECT"] = "Не удаётся подключиться к #1: #2";
+$LOCA["ru"]["INSTALL_ERR_DB_SELECT"] = "Не удаётся выбрать #1: #2";
+$LOCA["ru"]["INSTALL_ERR_DB_UNI"] = "базе данных вселенной";
+$LOCA["ru"]["INSTALL_ERR_DB_MDB"] = "центральной базе данных";
 
 ?>

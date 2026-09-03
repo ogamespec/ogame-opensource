@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file msg.php
+ * @brief In-game messaging.
+ * @details Sends, lists and deletes the internal messages exchanged between players and game events.
+ */
 // Message Management.
 
 // ⚠️Important! This game feature involves a rich interaction with input from the user.
@@ -29,16 +33,22 @@
 
 // Each user has a post limit per day. The error "You have written too much today" is displayed.
 
-// Delete all old messages (called from the Messages menu)
+/**
+ * Delete all old messages of a player that are older than the given number of days.
+ *
+ * @param int $player_id ID of the player whose messages are checked.
+ * @param int $days Maximum age of the messages in days.
+ * @return void
+ */
 function DeleteExpiredMessages (int $player_id, int $days) : void
 {
     global $db_prefix;
     $now = time ();
     $hours = 60 * 60 * 24 * $days;
 
-    // Не удалять сообщения администрации.
+    // Do not delete administration messages.
     $user = LoadUser ($player_id);
-    if ($user['admin'] > 0 ) return;
+    if ($user && $user['admin'] > USER_TYPE_PLAYER ) return;
 
     $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id";
     $result = dbquery ($query);
@@ -50,7 +60,12 @@ function DeleteExpiredMessages (int $player_id, int $days) : void
     }
 }
 
-// Delete the oldest message (called from SendMessage)
+/**
+ * Delete the oldest message of a player.
+ *
+ * @param int $player_id ID of the player whose oldest message is deleted.
+ * @return void
+ */
 function DeleteOldestMessage (int $player_id) : void
 {
     global $db_prefix;
@@ -60,7 +75,18 @@ function DeleteOldestMessage (int $player_id) : void
     DeleteMessage ( $player_id, $msg['msg_id']);
 }
 
-// Send Message. Returns the id of a new message. (can be called from anywhere); planet_id is used for spy reports.
+/**
+ * Send a message to a player and return the ID of the new message.
+ *
+ * @param int $player_id ID of the recipient player.
+ * @param string $from Name of the sender, in HTML.
+ * @param string $subj Subject of the message.
+ * @param string $text Text of the message.
+ * @param int $pm Message type, e.g. private message or game event.
+ * @param int $when Timestamp of the message; defaults to the current time.
+ * @param int $planet_id ID of the related planet/moon, used for espionage reports.
+ * @return int ID of the new message.
+ */
 function SendMessage (int $player_id, string $from, string $subj, string $text, int $pm, int $when=0, int $planet_id=0) : int
 {
     global $db_prefix;
@@ -90,7 +116,13 @@ function SendMessage (int $player_id, string $from, string $subj, string $text, 
     return $id;
 }
 
-// Delete message (called from the Messages menu)
+/**
+ * Delete a single message of a player.
+ *
+ * @param int $player_id ID of the player who owns the message.
+ * @param int $msg_id ID of the message to delete.
+ * @return void
+ */
 function DeleteMessage (int $player_id, int $msg_id) : void
 {
     global $db_prefix;
@@ -98,8 +130,13 @@ function DeleteMessage (int $player_id, int $msg_id) : void
     dbquery ($query);
 }
 
-// Load the last N messages (called from the Messages menu).
-// Do not load the text of battle reports
+/**
+ * Load the last N messages of a player, excluding battle report texts.
+ *
+ * @param int $player_id ID of the player whose messages are loaded.
+ * @param int $max Maximum number of messages to load.
+ * @return mixed Result of the SQL query.
+ */
 function EnumMessages (int $player_id, int $max) : mixed
 {
     global $db_prefix;
@@ -108,7 +145,14 @@ function EnumMessages (int $player_id, int $max) : mixed
     return $result;
 }
 
-// Get the number of unread messages (called from Overview)
+/**
+ * Get the number of unread messages of a player, optionally filtered by type.
+ *
+ * @param int $player_id ID of the player whose unread messages are counted.
+ * @param bool $filter Whether to filter the messages by the given type.
+ * @param int $pm Message type to filter by when $filter is true.
+ * @return int Number of unread messages.
+ */
 function UnreadMessages (int $player_id, bool $filter=false, int $pm=0) : int
 {
     global $db_prefix;
@@ -124,7 +168,13 @@ function UnreadMessages (int $player_id, bool $filter=false, int $pm=0) : int
     return dbrows ($result);
 }
 
-// Mark a message as read (called from the Messages menu).
+/**
+ * Mark a message as read.
+ *
+ * @param int $player_id ID of the player who owns the message.
+ * @param int $msg_id ID of the message to mark as read.
+ * @return void
+ */
 function MarkMessage (int $player_id, int $msg_id) : void
 {
     global $db_prefix;
@@ -132,7 +182,12 @@ function MarkMessage (int $player_id, int $msg_id) : void
     dbquery ($query);
 }
 
-// Load the message.
+/**
+ * Load a single message by its ID.
+ *
+ * @param int $msg_id ID of the message to load.
+ * @return mixed The message row as an array, or null if it does not exist.
+ */
 function LoadMessage ( int $msg_id ) : mixed
 {
     global $db_prefix;
@@ -142,7 +197,12 @@ function LoadMessage ( int $msg_id ) : mixed
     else return null;
 }
 
-// Delete all messages
+/**
+ * Delete all messages of a player.
+ *
+ * @param int $player_id ID of the player whose messages are deleted.
+ * @return void
+ */
 function DeleteAllMessages (int $player_id) : void
 {
     global $db_prefix;
@@ -150,7 +210,14 @@ function DeleteAllMessages (int $player_id) : void
     dbquery ($query);
 }
 
-// Get msg_id of the shared spy report for the specified planet. If there is no report, return 0.
+/**
+ * Get the ID of the shared spy report for the specified planet, or 0 if none exists.
+ *
+ * @param int $planet_id ID of the planet the report belongs to.
+ * @param int $player_id ID of the player looking for the report.
+ * @param int $ally_id ID of the player's alliance, used to search reports shared with allies.
+ * @return int ID of the report message, or 0 if there is no report.
+ */
 function GetSharedSpyReport (int $planet_id, int $player_id, int $ally_id) : int
 {
     global $db_prefix;
@@ -169,7 +236,13 @@ function GetSharedSpyReport (int $planet_id, int $player_id, int $ally_id) : int
     return 0;
 }
 
-// Return the number of messages of a certain type (used to show the total number of messages in a folder)
+/**
+ * Return the number of messages of a certain type for a player.
+ *
+ * @param int $player_id ID of the player whose messages are counted.
+ * @param int $pm Message type to count.
+ * @return int Number of messages of the given type.
+ */
 function TotalMessages (int $player_id, int $pm) : int
 {
     global $db_prefix;
@@ -178,6 +251,15 @@ function TotalMessages (int $player_id, int $pm) : int
     return dbrows ($result);
 }
 
+/**
+ * Report a private message to the operators, storing it in the reports table.
+ *
+ * @param int $player_id ID of the player reporting the message.
+ * @param int $msg_id ID of the message being reported.
+ * @param string $ResultMessage Outputs the localization key of the result message on success.
+ * @param string $ResultError Outputs the localization key of the error message on failure.
+ * @return int ID of the created report, or 0 on failure.
+ */
 function ReportMessage (int $player_id, int $msg_id, string &$ResultMessage="", string &$ResultError="") : int
 {
     global $db_prefix;
@@ -186,11 +268,9 @@ function ReportMessage (int $player_id, int $msg_id, string &$ResultMessage="", 
     if ($msg) {
         if ($msg['pm'] != MTYP_PM) {
             Error ("User $player_id is attempting to report a non-private message. Admin check this smart guy.");
-            return 0;
         }
         if ($msg['owner_id'] != $player_id) {
             Error ("User $player_id is trying to report someone else's message. Admin check this smart guy.");
-            return 0;
         }
 
         // Check that such a message is not yet in the report history
@@ -214,6 +294,15 @@ function ReportMessage (int $player_id, int $msg_id, string &$ResultMessage="", 
     return $id;
 }
 
+/**
+ * Send a message to all users matching the given category.
+ *
+ * @param int $cat Category of recipients: 1 - newbies, 2 - top 100, 3 - operators, otherwise everyone.
+ * @param string $from Name of the sender.
+ * @param string $subj Subject of the message.
+ * @param string $text Text of the message.
+ * @return int Number of users the message was sent to.
+ */
 function BroadcastMessage (int $cat, string $from, string $subj, string $text) : int
 {
     global $db_prefix;

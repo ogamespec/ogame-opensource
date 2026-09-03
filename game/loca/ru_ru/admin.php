@@ -20,7 +20,7 @@ $LOCA["ru"]["ADM_MENU_CHECKSUM"] = "Целостность кода";
 $LOCA["ru"]["ADM_MENU_BOTS"] = "Управление ботами";
 $LOCA["ru"]["ADM_MENU_BATTLELOGS"] = "Боевые доклады";
 $LOCA["ru"]["ADM_MENU_USERLOGS"] = "История действий";
-$LOCA["ru"]["ADM_MENU_BOTEDIT"] = "Редактор ботов";
+$LOCA["ru"]["ADM_MENU_BOTEDIT"] = "Редактор ботстратов";
 $LOCA["ru"]["ADM_MENU_COUPONS"] = "Купоны";
 $LOCA["ru"]["ADM_MENU_RAKSIM"] = "Симулятор ракетной атаки";
 $LOCA["ru"]["ADM_MENU_DB"] = "Целостность БД";
@@ -69,6 +69,11 @@ $LOCA["ru"]["ADM_BOTEDIT_SHOW"] = "Показать";
 $LOCA["ru"]["ADM_BOTEDIT_SAVE"] = "Сохранить";
 $LOCA["ru"]["ADM_BOTEDIT_LOAD"] = "Загрузить";
 $LOCA["ru"]["ADM_BOTEDIT_FORBIDDEN"] = "Доступ запрещён.";
+$LOCA["ru"]["ADM_BOTEDIT_NAME"] = "Имя редактируемой стратегии:";
+$LOCA["ru"]["ADM_BOTEDIT_EXPORT"] = "Экспортировать";
+$LOCA["ru"]["ADM_BOTEDIT_IMPORT_SUCCESS"] = "Стратегия #1 импортирована успешно. Перезагрузите стратегию.";
+$LOCA["ru"]["ADM_BOTEDIT_IMPORT_FAILED"] = "Необходимо вначале загрузить стратегию!";
+$LOCA["ru"]["ADM_BOTEDIT_IMPORT"] = "Импортировать";
 
 // admin_bots
 
@@ -341,6 +346,8 @@ $LOCA["ru"]["ADM_QUEUE_TYPE_ALLOW_NAME"] = "Разрешить сменить и
 $LOCA["ru"]["ADM_QUEUE_TYPE_CHANGE_EMAIL"] = "Обновить постоянный адрес почты";
 $LOCA["ru"]["ADM_QUEUE_TYPE_UNLOAD_ALL"] = "Отгрузить всех игроков";
 $LOCA["ru"]["ADM_QUEUE_TYPE_CLEAN_DEBRIS"] = "Чистка виртуальных ПО";
+$LOCA["ru"]["ADM_QUEUE_TYPE_FARSPACE_COOLDOWN"] = "Остывание счётчика экспедиций";
+$LOCA["ru"]["ADM_QUEUE_TYPE_CLEAN_FARSPACE"] = "Чистка заброшенных объектов дальнего космоса";
 $LOCA["ru"]["ADM_QUEUE_TYPE_CLEAN_PLANETS"] = "Чистка уничтоженных планет";
 $LOCA["ru"]["ADM_QUEUE_TYPE_CLEAN_PLAYERS"] = "Удаление неактивных игроков и поставленных на удаление";
 $LOCA["ru"]["ADM_QUEUE_TYPE_UNBAN_PLAYER"] = "Разбанить игрока";
@@ -355,8 +362,12 @@ $LOCA["ru"]["ADM_QUEUE_PRIO"] = "Приоритет";
 $LOCA["ru"]["ADM_QUEUE_CONTROL"] = "Управление";
 $LOCA["ru"]["ADM_QUEUE_COMPLETE"] = "Завершить";
 $LOCA["ru"]["ADM_QUEUE_DELETE"] = "Удалить";
+$LOCA["ru"]["ADM_QUEUE_FREEZE"] = "Заморозить";
+$LOCA["ru"]["ADM_QUEUE_UNFREEZE"] = "Разморозить";
+$LOCA["ru"]["ADM_QUEUE_FROZEN"] = "Заморожено:";
 $LOCA["ru"]["ADM_QUEUE_LOOKUP"] = "Показать задания игрока:";
 $LOCA["ru"]["ADM_QUEUE_SUBMIT"] = "Отправить";
+$LOCA["ru"]["ADM_QUEUE_CRON"] = "Проверить CRON";
 
 // admin_raksim
 

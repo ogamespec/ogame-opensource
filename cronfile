@@ -1,0 +1,2 @@
+# Run every minute
+* * * * * cd /var/www/html/game && /usr/local/bin/php cron.php >> /var/log/cron.log 2>&1

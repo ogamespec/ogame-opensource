@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php"
+<phpunit bootstrap="testing/bootstrap.php"
          colors="true"
-         verbose="true">
-    
+         defaultTestSuite="OGame Open Source Test Suite">
+
     <testsuites>
         <testsuite name="OGame Open Source Test Suite">
             <directory>testing</directory>
         </testsuite>
+        <testsuite name="Golden Pages">
+            <file>testing/GoldenPagesTest.php</file>
+        </testsuite>
     </testsuites>
-    
-    <filter>
-        <whitelist>
+
+    <source>
+        <include>
             <directory suffix=".php">testing</directory>
-        </whitelist>
-    </filter>
-    
+        </include>
+    </source>
+
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
+        <!--
+            Golden Pages default language scope. A regular test run checks
+            only the English render (fast); the golden snapshots for all
+            supported languages are verified explicitly by setting the
+            GOLDEN_LANG environment variable (see
+            testing/GoldenPagesTest.php languages()).
+        -->
+        <env name="GOLDEN_LANG" value="en"/>
     </php>
-    
+
 </phpunit>

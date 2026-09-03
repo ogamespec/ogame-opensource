@@ -1,6 +1,17 @@
 <?php
-
-// Modify the fleet (after a battle with aliens/pirates)
+/**
+ * @file expedition_battle.php
+ * @brief Battle generation for expeditions.
+ * @details Builds the combat scenarios that can occur during an expedition mission.
+ */
+/**
+ * Modify the fleet after a battle with aliens or pirates.
+ *
+ * @param array $a Array of attacker slots.
+ * @param array $d Array of defender slots.
+ * @param array $res The battle result array.
+ * @return void
+ */
 function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : void
 {
     global $fleetmap;
@@ -19,13 +30,15 @@ function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : v
             $origin = LoadPlanetById ( $fleet_obj['start_planet'] );
             $target = LoadPlanetById ( $fleet_obj['target_planet'] );
             $ships = 0;
-            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['units'][$gid];
+            foreach ( $fleetmap as $ii=>$gid ) {
+                $ships += isset($attacker['units'][$gid]) ? $attacker['units'][$gid] : 0;
+            }
 
             // Return the fleet, if there's anything left.
             // The hold time is used as the flight time.
             if ($ships > 0) DispatchFleet ($attacker['units'], $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'],
                 $fleet_obj,
-                $fleet_obj['fuel'] / 2, $queue['end']);
+                (int)($fleet_obj['fuel'] / 2), $queue['end']);
         }
 
     }
@@ -41,20 +54,30 @@ function WritebackBattleResultsExpedition ( array $a, array $d, array $res ) : v
             $origin = LoadPlanetById ( $fleet_obj['start_planet'] );
             $target = LoadPlanetById ( $fleet_obj['target_planet'] );
             $ships = 0;
-            foreach ( $fleetmap as $ii=>$gid ) $ships += $attacker['units'][$gid];
+            foreach ( $fleetmap as $ii=>$gid ) {
+                $ships += isset($attacker['units'][$gid]) ? $attacker['units'][$gid] : 0;
+            }
 
             // Return the fleet, if there's anything left.
             // The hold time is used as the flight time.
             if ($ships > 0)  DispatchFleet ($attacker['units'], $origin, $target, FTYP_EXPEDITION+FTYP_RETURN, $fleet_obj['deploy_time'],
                 $fleet_obj,
-                $fleet_obj['fuel'] / 2, $queue['end']);
+                (int)($fleet_obj['fuel'] / 2), $queue['end']);
         }
 
     }
 }
 
-// Battle with Aliens/Pirates.
-// The composition of the Alien/Pirate fleet is determined by the level parameter ( 0: weak, 1: medium, 2: strong )
+/**
+ * Battle with aliens or pirates.
+ * The composition of the alien/pirate fleet is determined by the level parameter (0: weak, 1: medium, 2: strong).
+ *
+ * @param int $fleet_id ID of the fleet that triggers the battle.
+ * @param bool $pirates True for a pirate battle, false for an alien battle.
+ * @param int $level Difficulty level of the enemy fleet (0: weak, 1: medium, 2: strong).
+ * @param int $when Unix timestamp of the battle.
+ * @return int The battle result constant (awon, dwon or draw).
+ */
 function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when ) : int
 {
     global $db_prefix;
@@ -122,6 +145,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
                 if ( $level == 0 ) $ratio = mt_rand ( 27, 33 ) / 100;
                 else if ( $level == 1 ) $ratio = mt_rand ( 45, 55 ) / 100;
                 else if ( $level == 2 ) $ratio = mt_rand ( 72, 88 ) / 100;
+                else $ratio = mt_rand ( 27, 33 ) / 100; // default
                 $d[0]['units'][$gid] = floor ($a[0]['units'][$gid] * $ratio);
             }
             else $d[0]['units'][$gid] = 0;
@@ -137,6 +161,7 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
                 if ( $level == 0 ) $ratio = mt_rand ( 36, 44 ) / 100;
                 else if ( $level == 1 ) $ratio = mt_rand ( 54, 66 ) / 100;
                 else if ( $level == 2 ) $ratio = mt_rand ( 81, 99 ) / 100;
+                else $ratio = mt_rand ( 36, 44 ) / 100; // default
                 $d[0]['units'][$gid] = ceil ($a[0]['units'][$gid] * $ratio);
             }
             else $d[0]['units'][$gid] = 0;

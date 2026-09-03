@@ -1,11 +1,21 @@
 <?php
-
-$battle_debug = 0;
+/**
+ * @file battle_engine.php
+ * @brief Low-level battle engine.
+ * @details Implements the combat rounds, fire selection and damage calculation used by battle.php.
+ */
+/** Debug flag: when set, enables debug output and the battle debug page. */
+$battle_debug = (int) ( $GLOBALS['battle_debug'] ?? 0 );
+/** Total number of units that exploded during the current battle. */
 $exploded_counter = 0;
+/** Total number of shots aimed at units that had already exploded. */
 $already_exploded_counter = 0;
 
-// Local versions of arrays for calculations within the battle engine. We do NOT use external arrays; we parse battledata.
+/**
+ * Local versions of arrays for calculations within the battle engine. We do NOT use external arrays; we parse battledata.
+ */
 $RapidFireLocal = array ();
+/** Unit parameters (hull, shield, attack power) parsed from the battle input data. */
 $UnitParamLocal = array ();
 
 if (!defined('GID_MAX')) {
@@ -48,12 +58,28 @@ To debug: just open http://localhost/game/battle_engine.php with $battle_debug =
 
 */
 
-// For debugging, convert the array-string into a readable format
+/**
+ * Convert an array-string into a readable hexadecimal text format for debugging.
+ *
+ * @param string $arr The packed array-string to convert.
+ * @return string The hexadecimal representation of the array-string.
+ */
 function hex_array_to_text (string $arr) : string
 {
-    return implode(unpack("H*", $arr));
+    $unpacked = unpack("H*", $arr);
+    if ($unpacked === false) {
+        return "";
+    }
+    return implode($unpacked);
 }
 
+/**
+ * Read a 4-byte big-endian integer from a packed array-string.
+ *
+ * @param string $arr The packed array-string to read from.
+ * @param int $idx Index of the value to read.
+ * @return int The unpacked 32-bit value.
+ */
 function get_packed_word (string &$arr, int $idx) : int
 {
     return (ord($arr[4*$idx]) << 24) | 
@@ -62,6 +88,14 @@ function get_packed_word (string &$arr, int $idx) : int
         (ord($arr[4*$idx+3]) << 0);
 }
 
+/**
+ * Write a value as a 4-byte big-endian integer into a packed array-string.
+ *
+ * @param string $arr The packed array-string to write to.
+ * @param int $idx Index of the value to write.
+ * @param float|int $val Value to pack into the array-string.
+ * @return void
+ */
 function set_packed_word (string &$arr, int $idx, float|int $val) : void
 {
     $ival = (int)$val;
@@ -71,12 +105,27 @@ function set_packed_word (string &$arr, int $idx, float|int $val) : void
     $arr[4*$idx+3] = chr(($ival >> 0) & 0xff);
 }
 
+/**
+ * Read a 2-byte big-endian integer from a packed array-string.
+ *
+ * @param string $arr The packed array-string to read from.
+ * @param int $idx Index of the value to read.
+ * @return int The unpacked 16-bit value.
+ */
 function get_packed_half (string &$arr, int $idx) : int
 {
     return (ord($arr[2*$idx]) << 8) |
         (ord($arr[2*$idx+1]) << 0);
 }
 
+/**
+ * Write a value as a 2-byte big-endian integer into a packed array-string.
+ *
+ * @param string $arr The packed array-string to write to.
+ * @param int $idx Index of the value to write.
+ * @param int $val Value to pack into the array-string.
+ * @return void
+ */
 function set_packed_half (string &$arr, int $idx, int $val) : void
 {
     $ival = (int)$val;
@@ -84,7 +133,19 @@ function set_packed_half (string &$arr, int $idx, int $val) : void
     $arr[2*$idx+1] = chr(($ival >> 0) & 0xff);
 }
 
-// Allocate memory for units and set initial values.
+/**
+ * Allocate memory for units and set initial values.
+ *
+ * @param array $slot Array of fleet slots, each with units and technology levels.
+ * @param int $num Number of fleet slots.
+ * @param int $objs Total number of unit objects (unused).
+ * @param string $explo_arr Packed array-string of exploded-unit flags.
+ * @param string $obj_arr Packed array-string of unit IDs.
+ * @param string $slot_arr Packed array-string of slot numbers.
+ * @param string $hull_arr Packed array-string of hull (armor) values.
+ * @param string $shld_arr Packed array-string of shield values.
+ * @return void
+ */
 function InitBattle (array $slot, int $num, int $objs, string &$explo_arr, string &$obj_arr, string &$slot_arr, string &$hull_arr, string &$shld_arr ) : void
 {
     global $UnitParamLocal;
@@ -113,8 +174,25 @@ function InitBattle (array $slot, int $num, int $objs, string &$explo_arr, strin
     }
 }
 
-// Shot a => b. Returns damage.
-// absorbed - the accumulator of damage absorbed by shields (for the one who is attacked, i.e. for unit "b").
+/**
+ * Perform one shot from unit a to unit b and return the damage dealt.
+ *
+ * @param int $a Index of the shooting unit.
+ * @param int $b Index of the target unit.
+ * @param string $aunits Packed array-string of attacker unit IDs.
+ * @param string $aslot Packed array-string of attacker slot numbers.
+ * @param string $ahull Packed array-string of attacker hull values.
+ * @param string $ashld Packed array-string of attacker shield values.
+ * @param array $attackers Array of attacker fleet slots.
+ * @param string $dunits Packed array-string of defender unit IDs.
+ * @param string $dslot Packed array-string of defender slot numbers.
+ * @param string $dhull Packed array-string of defender hull values.
+ * @param string $dshld Packed array-string of defender shield values.
+ * @param string $dexplo Packed array-string of defender exploded flags.
+ * @param array $defenders Array of defender fleet slots.
+ * @param float|int $absorbed Accumulator of damage absorbed by the target's shields.
+ * @return float|int The attack power dealt by the shot.
+ */
 function UnitShoot (
     int $a, int $b, 
     string &$aunits, string &$aslot, string &$ahull, string &$ashld, array $attackers, 
@@ -187,7 +265,17 @@ function UnitShoot (
     return $apower;
 }
 
-// Clean up blown up ships and defenses. Returns the number of units blown up.
+/**
+ * Clean up blown up ships and defenses, returning the compacted arrays.
+ *
+ * @param int $count Number of units in the arrays.
+ * @param string $explo_arr Packed array-string of exploded-unit flags.
+ * @param string $obj_arr Packed array-string of unit IDs.
+ * @param string $slot_arr Packed array-string of slot numbers.
+ * @param string $hull_arr Packed array-string of hull values.
+ * @param string $shld_arr Packed array-string of shield values.
+ * @return array The new compacted arrays and the number of units blown up.
+ */
 function WipeExploded (int $count, string &$explo_arr, string &$obj_arr, string &$slot_arr, string &$hull_arr, string &$shld_arr) : array
 {
     $exploded = 0;
@@ -242,7 +330,17 @@ function WipeExploded (int $count, string &$explo_arr, string &$obj_arr, string 
     return $ret;
 }
 
-// Charge shields on unexploded units
+/**
+ * Charge shields to their maximum on units that have not exploded.
+ *
+ * @param array $slot Array of fleet slots with technology levels.
+ * @param int $count Number of units in the arrays.
+ * @param string $explo_arr Packed array-string of exploded-unit flags.
+ * @param string $obj_arr Packed array-string of unit IDs.
+ * @param string $slot_arr Packed array-string of slot numbers.
+ * @param string $shld_arr Packed array-string of shield values.
+ * @return void
+ */
 function ChargeShields (array $slot, int $count, string &$explo_arr, string &$obj_arr, string &$slot_arr, string &$shld_arr) : void
 {
     global $UnitParamLocal;
@@ -263,7 +361,21 @@ function ChargeShields (array $slot, int $count, string &$explo_arr, string &$ob
     }
 }
 
-// Check the combat for a quick draw. If none of the units have armor damage, the combat ends in a quick draw.
+/**
+ * Check the combat for a quick draw: if no unit has armor damage, the combat ends in a quick draw.
+ *
+ * @param string $aunits Packed array-string of attacker unit IDs.
+ * @param string $aslot Packed array-string of attacker slot numbers.
+ * @param string $ahull Packed array-string of attacker hull values.
+ * @param int $aobjs Number of attacker units.
+ * @param array $attackers Array of attacker fleet slots.
+ * @param string $dunits Packed array-string of defender unit IDs.
+ * @param string $dslot Packed array-string of defender slot numbers.
+ * @param string $dhull Packed array-string of defender hull values.
+ * @param int $dobjs Number of defender units.
+ * @param array $defenders Array of defender fleet slots.
+ * @return bool True if the combat ends in a quick draw.
+ */
 function CheckFastDraw (
     string &$aunits, string &$aslot, string &$ahull, int $aobjs, array $attackers, 
     string &$dunits, string &$dslot, string &$dhull, int $dobjs, array $defenders) : bool
@@ -291,7 +403,13 @@ function CheckFastDraw (
     return true;
 }
 
-// Check the possibility of re-firing. Original unit IDs are used for convenience
+/**
+ * Check the possibility of re-firing based on the rapidfire table.
+ *
+ * @param int $atyp Game ID of the shooting unit type.
+ * @param int $dtyp Game ID of the target unit type.
+ * @return int 1 if the shooter may fire again, otherwise 0.
+ */
 function RapidFire (int $atyp, int $dtyp) : int
 {
     global $RapidFireLocal;
@@ -311,6 +429,14 @@ function RapidFire (int $atyp, int $dtyp) : int
     return $rapidfire;
 }
 
+/**
+ * Run the full combat simulation: rounds, shots, explosions and round results.
+ *
+ * @param array $res Battle result array, filled with round data and the outcome.
+ * @param int $Rapidfire Flag enabling rapidfire checks (1) or disabling them (0).
+ * @param int $max_round Maximum number of combat rounds.
+ * @return void
+ */
 function DoBattle (array &$res, int $Rapidfire, int $max_round) : void
 {
     global $battle_debug;
@@ -550,6 +676,12 @@ function DoBattle (array &$res, int $Rapidfire, int $max_round) : void
     unset($hull_def);
 }
 
+/**
+ * Parse a slot description string into a slot array with technologies and units.
+ *
+ * @param string $str Space-separated slot data (technologies followed by unit id/count pairs).
+ * @return array The parsed slot array.
+ */
 function deserialize_slot (string $str) : array
 {
     global $UnitParamLocal; 
@@ -584,6 +716,12 @@ function deserialize_slot (string $str) : array
     return $res;
 }
 
+/**
+ * Parse the rapidfire table text into an array of rapidfire values per unit.
+ *
+ * @param string $text Space-separated rapidfire table data.
+ * @return array Rapidfire values keyed by the shooting unit ID.
+ */
 function ParseRFTable (string $text) : array {
 
     global $UnitParamLocal;
@@ -645,6 +783,12 @@ function ParseRFTable (string $text) : array {
     return $RapidFire;
 }
 
+/**
+ * Parse the unit parameter text into an array of unit parameters per unit.
+ *
+ * @param string $text Space-separated unit parameter data.
+ * @return array Unit parameters keyed by the unit ID.
+ */
 function ParseUnitParam (string $text) : array {
 
     $UnitParam = array ();
@@ -690,7 +834,16 @@ function ParseUnitParam (string $text) : array {
     return $UnitParam;
 }
 
-// Parse the input data
+/**
+ * Parse the battle input data into rapidfire, round and fleet slot parameters.
+ *
+ * @param string $source Raw battle input data as key=value lines.
+ * @param int $rf Receives the rapidfire flag.
+ * @param int $max_round Receives the maximum number of rounds.
+ * @param array $attackers Receives the attacker slots.
+ * @param array $defenders Receives the defender slots.
+ * @return void
+ */
 function ParseInput (string $source, int &$rf, int &$max_round, array &$attackers, array &$defenders) : void
 {
     global $battle_debug;
@@ -748,7 +901,12 @@ function ParseInput (string $source, int &$rf, int &$max_round, array &$attacker
     }
 }
 
-// The output is an array of battleresult, the format is similar to that of the C battle engine.
+/**
+ * Run the whole battle from raw input data and return the battle result.
+ *
+ * @param string $source Raw battle input data.
+ * @return array The battle result array, in a format similar to the C battle engine.
+ */
 function BattleEngine (string $source) : array
 {
     global $battle_debug;
@@ -762,7 +920,7 @@ function BattleEngine (string $source) : array
 
     // Initialize RNG
     list($usec,$sec)=explode(" ",microtime());
-    $battle_seed = (int)($sec * $usec) & 0xffffffff;
+    $battle_seed = (int)((float)$sec * (float)$usec) & 0xffffffff;
     mt_srand ($battle_seed);
     $res['battle_seed'] = $battle_seed;
 
@@ -780,6 +938,11 @@ function BattleEngine (string $source) : array
     return $res;
 }
 
+/**
+ * Render a debug page that runs a hardcoded battle and prints the result.
+ *
+ * @return void
+ */
 function BattleDebug() : void
 {
 

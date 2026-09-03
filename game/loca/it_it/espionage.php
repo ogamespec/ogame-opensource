@@ -12,7 +12,7 @@ $LOCA["it"]["SPY_K"] = "Cristallo:";
 $LOCA["it"]["SPY_D"] = "Deuterio:";
 $LOCA["it"]["SPY_E"] = "Energia:";
 // L'attività era interrotta alla 0.84, ma la risolveremo  (https://www.owiki.de/index.php/Spionagebericht)
-$LOCA["it"]["SPY_ACTIVITY"] = "Активность означает, что сканируемый игрок был активен на своей планете, либо на него был произведён вылет флота другого игрока.";
+$LOCA["it"]["SPY_ACTIVITY"] = "L'attività indica che il giocatore scansionato era attivo sul suo pianeta oppure che una flotta di un altro giocatore è volata verso il pianeta.";
 $LOCA["it"]["SPY_FLEET"] = "Flotta";
 $LOCA["it"]["SPY_DEFENSE"] = "Difesa";
 $LOCA["it"]["SPY_BUILDINGS"] = "Costruzioni";

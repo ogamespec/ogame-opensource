@@ -1,0 +1,560 @@
+<html>
+ <head>
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+  <script language="JavaScript">var session="0000000003e9";</script>
+  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+<link rel='stylesheet' type='text/css' href='css/combox.css'>
+<link rel='stylesheet' type='text/css' href='http://localhost/evolution/formate.css' />
+<title>Uni1 OGame</title>
+  <script src='js/utilities.js' type='text/javascript'></script>
+  <script language='JavaScript'>
+  </script>
+<script type='text/javascript' src='js/overLib/overlib.js'></script>
+<!-- HEADER -->
+
+<script language='JavaScript'>
+function onBodyLoad() {
+    window.setTimeout('reloadImages()', 100);
+}
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != '')) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script>
+</head>
+<body style='overflow: hidden;' onload='onBodyLoad();' onunload='' >
+<div id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>
+<div id='header_top'><center>
+<table class='header'>
+<tr class='header' >
+<td class='header' style='width:5;' >
+<table class='header'>
+<tr class='header'>
+<td class='header'><img src='http://localhost/evolution/planeten/small/s_dschjungelplanet02.jpg' width='50' height='50'></td>
+<td class='header'>
+<table class='header'>
+<select size='1' onchange='haha(this)'>
+    <option value='index.php?page=options&session=0000000003e9&cp=1' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1' >[1:1:4]</a></option>
+    <option value='index.php?page=options&session=0000000003e9&cp=10' >Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10' >[1:1:4]</a></option>
+    <option value='index.php?page=options&session=0000000003e9&cp=2' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2' >[1:1:5]</a></option>
+    <option value='index.php?page=options&session=0000000003e9&cp=3' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3' >[1:2:4]</a></option>
+    <option value='index.php?page=options&session=0000000003e9&cp=11' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11' >[1:2:4]</a></option>
+</select></table></td></tr></table></td>
+
+<td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
+<tr class='header'>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/metall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/kristall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/deuterium.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<a href=index.php?page=micropayment&session=0000000003e9>
+<img border='0' src='img/dm_klein_2.jpg' width='42' height='22' title='Dunkle Materie'></a>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/energie.gif' width='42' height='22'>
+</td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Metall</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Kristall</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Deuterium</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Dunkle Materie</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>Energie</font></b></i></td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='90'><font >25.047</font></td>
+    <td align='center' class='header' width='90'><font >15.016</font></td>
+    <td align='center' class='header' width='90'><font >8.003</font></td>
+    <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
+    <td align='center' class='header' width='90'><font >359</font>/529</td>
+</tr>
+</table></td>
+<td class='header'>
+<table class='header' align=left>
+<tr class='header'>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='o' >
+  <img border='0' src='img/commander_ikon.gif' width='32' height='32' alt='Commander'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Noch 365 Tage &lt;font color=lime&gt;aktiv&lt;/font&gt;<br>Commander</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Jetzt verlangern!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='o' >
+  <img border='0' src='img/admiral_ikon.gif' width='32' height='32' alt='Flottenadmiral'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Noch 365 Tage &lt;font color=lime&gt;aktiv&lt;/font&gt;<br>Flottenadmiral</font><br><font size=1 color=skyblue>&amp;nbsp;Max. Flottenanzahl +2</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Jetzt verlangern!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='o' >
+  <img border='0' src='img/ingenieur_ikon.gif' width='32' height='32' alt='Ingenieur'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Noch 365 Tage &lt;font color=lime&gt;aktiv&lt;/font&gt;<br>Ingenieur</font><br><font size=1 color=skyblue>Halbiert Verluste an Verteidigungsanlagen,&lt;br&gt;&amp;nbsp;+10% Energieproduktion</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Jetzt verlangern!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='o' >
+  <img border='0' src='img/geologe_ikon.gif' width='32' height='32' alt='Geologe'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Noch 365 Tage &lt;font color=lime&gt;aktiv&lt;/font&gt;<br>Geologe</font><br><font size=1 color=skyblue>+10% Minenertrag</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Jetzt verlangern!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='o' >
+  <img border='0' src='img/technokrat_ikon.gif' width='32' height='32' alt='Technokrat'
+  onmouseover="return overlib('<center><font size=1 color=white><b>Noch 365 Tage &lt;font color=lime&gt;aktiv&lt;/font&gt;<br>Technokrat</font><br><font size=1 color=skyblue>+2 Spionagestufen,&lt;br&gt;25% weniger Forschungszeit</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>Jetzt verlangern!</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+<td align='center' class='header'></td></tr></table></td>
+
+</tr>
+</table>
+</div><!-- END HEADER -->
+
+<!-- LEFTMENU -->
+
+   <div id='leftmenu'>
+
+<script language='JavaScript'>
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+<center>
+
+<div id='menu'>
+<a href='mailto:barrierefrei@ogame.de' title='Bei Problemen oder fragen, könnt ihr euch an uns unter der Mailadresse "barrierefrei@ogame.de" wenden.' style='width:1px;'></a>
+<p style='width:110px;'><NOBR>Universum 1 (<a href='index.php?page=changelog&session=0000000003e9'>v 0.84</a>)</NOBR></p>
+<table width='110' cellspacing='0' cellpadding='0'>
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/ogame-produktion.jpg' width='110' height='40' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=0000000003e9' accesskey="u">Übersicht</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=imperium&session=0000000003e9&planettype=1&no_header=1' accesskey="i">Imperium</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=b_building&session=0000000003e9' accesskey="g">Gebäude</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=0000000003e9' accesskey="r">Rohstoffe</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=0000000003e9' accesskey=""><font color='FF8900'>Händler</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Forschung' accesskey="f">Forschung</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Flotte' accesskey="w">Schiffswerft</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=0000000003e9&mode=Flotte' accesskey="l">Flotte</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=0000000003e9' accesskey="t">Technik</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=0000000003e9&no_header=1' accesskey="x">Galaxie</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Verteidigung' accesskey="v">Verteidigung</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/info-help.jpg' width='110' height='19' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=0000000003e9' accesskey="a">Allianzen</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+    <td align=center>
+     <a id='darkmatter2' style='cursor:pointer; width:110px;'
+         href='index.php?page=micropayment&session=0000000003e9' accesskey="o"><b>Offizierskasino</a></b>
+    </div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=statistics&session=0000000003e9' accesskey="k">Statistiken</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=0000000003e9' accesskey="s">Suche</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/user-menu.jpg' width='110' height='35' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=messages&session=0000000003e9&dsp=1' accesskey="n">Nachrichten</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=0000000003e9&no_header=1", "Notizen");' accesskey="z">Notizen</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=0000000003e9' accesskey="b">Buddy-Liste</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=0000000003e9' accesskey="e">Einstellungen</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=0000000003e9' accesskey="q">Abmelden</a>
+    </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+    </div>
+<!-- END LEFTMENU -->
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+             <table width="519">
+             <form action="index.php?page=options&session=0000000003e9&mode=change" method="POST" >
+                  <tr><td class="c" colspan ="2">Userdaten</td></tr>
+             <tr>
+                                        <th>Benutzername</th>
+                    <th><input type="text" name="db_character" size ="20" value="PlayerOne" /><br/></th>
+                                      </tr>
+               <tr>
+               <th>Passwort</th>
+                <th><input type="password" name="db_password" size ="20" value="" /></th>
+               </tr>
+               <tr>
+               <th>Neues Passwort (min. 8 Zeichen)</th>
+                <th><input type="password" name="newpass1" size="20" maxlength="40" /></th>
+               </tr>
+               <tr>
+               <th>Neues Passwort (Wiederholung)</th>
+                <th><input type="password" name="newpass2" size="20" maxlength="40" /></th>
+               </tr>
+               <tr>
+               <th><a title="Diese Mailadresse kann jederzeit von Dir geändert werden. Nach 7 Tagen ohne Änderung wird diese auch als permanente Adresse eingetragen.">E-Mail Adresse</a></th>
+               <th><input type="text" name="db_email" maxlength="100" size="20" value="player1@test.com" /></th>
+               </tr>
+               <tr>
+               <th>Permanente E-Mail Adresse</th>
+                <th></th>
+               </tr>
+                <tr><th colspan="2">
+                </tr>
+                <tr>
+                <td class="c" colspan="2">Generelle Einstellungen</td>
+                </tr>
+                <tr>
+                                     <th>Sprache:</th>
+                    <th>
+                    <select name="lang">
+                         <option value="de" selected >Deutsch</option>
+    <option value="en"  >English</option>
+    <option value="es"  >Español</option>
+    <option value="fr"  >Français</option>
+    <option value="it"  >Italiano</option>
+    <option value="jp"  >日本語</option>
+    <option value="ru"  >Русский</option>
+                    </select>
+                    </th>
+                    </tr>
+                                      <th>Planeten sortieren nach:</th>
+                 <th>
+                 <select name="settings_sort">
+                  <option value="0"  >Reihenfolge der Entstehung</option>
+                  <option value="1" selected >Koordinaten</option>
+                  <option value="2"  >Alphabet</option>
+                 </select>
+                 </th>
+                </tr>
+                <tr>
+                 <th>Sortierungsreihenfolge:</th>
+                 <th>
+                 <select name="settings_order">
+                   <option value="0" selected>aufsteigend</option>
+                   <option value="1" >absteigend</option>
+                 </select>
+                 </th>
+               </tr>
+
+               <th>Grafikpfad (z.B. C:/ogame/bilder/)<br /> <a href="http://localhost/download/" target="_blank">Download</a></th>
+                <th><input type=text name="dpath" maxlength="80" size="40" value="" /> <br />
+                                    <select name="dpath" size="1" >
+                    <option selected>  </option>
+                       <option value="http://localhost/download/use/allesnurgeklaut/">allesnurgeklaut </option>
+                       <option value="http://localhost/download/use/ally-cpb/">allycpb </option>
+                       <option value="http://localhost/download/use/asgard/">asgard </option>
+                       <option value="http://localhost/download/use/aurora/">aurora </option>
+                       <option value="http://localhost/download/use/bluedream/">bluedream </option>
+                       <option value="http://localhost/download/use/bluegalaxy/">bluegalaxy </option>
+                       <option value="http://localhost/download/use/blueplanet/">blueplanet </option>
+                       <option value="http://localhost/download/use/bluechaos/">bluechaos </option>
+                       <option value="http://localhost/download/use/bluemx/">blue-mx </option>
+                       <option value="http://localhost/download/use/brace/">brace </option>
+                       <option value="http://localhost/download/use/brotstyle/">brotstyle </option>
+                       <option value="http://localhost/download/use/dd/">dd </option>
+                       <option value="http://localhost/download/use/eclipse/">eclipse </option>
+                       <option value="http://localhost/download/use/empire/">empire </option>
+                       <option value="http://localhost/download/use/EpicBlue/">epicblue </option>
+                       <option value="http://localhost/download/use/evolution/">evolution </option>
+                       <option value="http://localhost/download/use/freakyfriday/">freakyfriday </option>
+                       <option value="http://localhost/download/use/g3cko/">g3cko </option>
+                       <option value="http://localhost/download/use/gruen/">gruen </option>
+                       <option value="http://localhost/download/use/infraos/">infraos </option>
+                       <option value="http://localhost/download/use/lambda/">lambda </option>
+                       <option value="http://localhost/download/use/lego/">lego </option>
+                       <option value="http://localhost/download/use/militaryskin/">militaryskin </option>
+                       <option value="http://localhost/download/use/okno/">okno </option>
+                       <option value="http://localhost/download/use/ovisio/">ovisio </option>
+                       <option value="http://localhost/download/use/ovisiofarbig/">ovisiofarbig </option>
+                       <option value="http://localhost/download/use/Paint/">paint </option>
+                       <option value="http://localhost/download/use/quadratorstyle/">quadratorstyle </option>
+                       <option value="http://localhost/download/use/real/">real </option>
+                       <option value="http://localhost/download/use/redfuturistisch/">redfuturistisch </option>
+                       <option value="http://localhost/download/use/redvision/">redvision </option>
+                       <option value="http://localhost/download/use/reloaded/">reloaded </option>
+                       <option value="http://localhost/download/use/shadowpato/">shadowpato </option>
+                       <option value="http://localhost/download/use/simpel/">simpel </option>
+                       <option value="http://localhost/download/use/starwars/">starwars </option>
+                       <option value="http://localhost/download/use/w4wooden4ce/">w4wooden4ce </option>
+                       <option value="http://localhost/download/use/xonic/">xonic </option>
+                                       </select>
+                 </th>
+                </tr>
+                <tr>
+                <th>Skin anzeigen</th>
+                 <th>
+                  <input type="checkbox" name="design"
+                   />
+                 </th>
+                </tr>
+                <tr>
+                  <th><a title="IP-Check bedeutet, dass automatisch ein Sicherheitslogout erfolgt, wenn die IP gewechselt wird oder zwei Leute gleichzeitig unter verschiedenen IPs in einem Account eingeloggt sind.
+Den IP-Check zu deaktivieren kann ein Sicherheitsrisiko darstellen!">IP-Check deaktivieren</a></th>
+                 <th><input type="checkbox" name="noipcheck"  /></th>
+                </tr>
+                <tr>
+                 <td class="c" colspan="2">Galaxieansicht Einstellungen</td>
+                </tr>
+                <tr>
+                 <th><a title="Anzahl der Spionagesonden, die bei jedem Scan aus dem Galaxiemenü direkt verschickt wird.">Spionagesonden Anzahl</a></th>
+                 <th><input type="text" name="spio_anz" maxlength="2" size="2" value="5" /></th>
+                </tr>
+                <!--<tr>
+                 <th>Zeige Tooltip für</th>
+                 <th><input type="text" name="settings_tooltiptime" maxlength="2" size="2" value="0" /> сек.</th>
+                </tr>-->
+                <tr>
+                 <th>Maximale Flottennachrichten</th>
+                 <th><input type="text" name="settings_fleetactions" maxlength="2" size="2" value="10" /></th>
+                </tr>
+                                  </tr>
+                     <tr>
+                    <th>Aktions-Shortcuts</th>
+                    <th>zeige</th>
+                   </tr>
+                       <tr>
+                    <th><img src="http://localhost/evolution/img/e.gif" alt="" />   Spionage</th>
+                    <th><input type="checkbox" name="settings_esp" checked='checked'/></th>
+                    </tr>
+                       <tr>
+                    <th><img src="http://localhost/evolution/img/m.gif" alt="" />   Nachricht schreiben</th>
+                    <th><input type="checkbox" name="settings_wri" checked='checked'/></th>
+                    </tr>
+                       <tr>
+                    <th><img src="http://localhost/evolution/img/b.gif" alt="" />   Buddyanfrage</th>
+                    <th><input type="checkbox" name="settings_bud" checked='checked'/></th>
+                    </tr>
+                       <tr>
+                    <th><img src="http://localhost/evolution/img/r.gif" alt="" />   Raketenangriff</th>
+                    <th><input type="checkbox" name="settings_mis" checked='checked'/></th>
+                    </tr>
+                       <tr>
+                    <th><img src="http://localhost/evolution/img/s.gif" alt="" />   Betrachte Bericht</th>
+                    <th><input type="checkbox" name="settings_rep" checked='checked'/></th>
+                    </tr>
+                       <tr>
+                    <td class="c" colspan="2">Nachrichten Einstellungen</td>
+                    <tr>
+                    <th>Keine Ordner</th>
+                   <th><input type="checkbox" name="settings_folders"  /></th>
+                 </tr>
+                 <tr>
+                     <td class="c" colspan="2"><font color='FF8900'>Newsfeed</font></td>
+                 </tr>
+                 <tr>
+                     <th>Aktivieren Sie<input type=hidden name="feed_submit" value="1"></th>
+                     <th><input type="checkbox" name="feed_activated"  /></th>
+                 </tr>
+                                                                        
+                 <tr>
+                    <td class="c" colspan="2">Urlaubsmodus / Account löschen</td>
+                 </tr>
+                 <tr>
+                    <th><a title="Der Urlaubsmodus soll euch während längerer Abwesenheitszeiten schützen. Man kann ihn nur aktivieren, wenn nichts gebaut (Flotte, Gebäude oder Verteidigung) und  nichts geforscht wird und auch keine eigenen Flotten unterwegs sind.
+Ist er aktiviert, schützt er euch vor neuen Angriffen, bereits begonnene Angriffe werden jedoch fortgesetzt. Während des Urlaubsmodus wird die Produktion auf Null gesetzt und muss nach Beenden des Urlaubsmodus manuell wieder auf 100% gesetzt werden. Der Urlaubsmodus dauert mindestens 2 Tage, erst danach könnt ihr ihn wieder deaktivieren.">Urlaubsmodus aktivieren</a></th>
+                    <th>
+                     <input type="checkbox" name="urlaubs_modus"
+                      />
+                    </th>
+                   </tr>
+                   <tr>
+                    <th><a title="Wenn du hier ein Häkchen setzt, wird dein Account nach 7 Tagen automatisch komplett gelöscht.">Account löschen</a></th>
+                    <th><input type="checkbox" name="db_deaktjava"  />
+                        </th>
+                   </tr>
+                   <tr>
+                    <th colspan=2><input type="submit" value="Änderungen speichern" /></th>
+                   </tr>
+                    
+                 </form>
+                 </table>
+                         <br><br><br><br>
+        </center>
+</div>
+<!-- END CONTENT AREA -->
+
+
+
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+<div id='messagebox'><center></center></div>
+<div id='errorbox'><center></center></div>
+<script>
+headerHeight = 81;
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = '_blank';
+  }
+}
+</script>
+<style>
+.layer {
+    z-index:999999999;
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 757px; 
+    height: 475px; 
+    background-color: #040e1e;
+    border: 3px double orange;
+    padding: 0;
+    opacity: .90;
+}
+</style>
+</body></html>

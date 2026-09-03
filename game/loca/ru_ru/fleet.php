@@ -14,6 +14,8 @@ $LOCA["ru"]["FLEET1_RETURN"] = "Возвращение к планете";
 $LOCA["ru"]["FLEET1_RETURN_SHORT"] = "(В)";
 $LOCA["ru"]["FLEET1_FLYING"] = "Уход на задание";
 $LOCA["ru"]["FLEET1_FLYING_SHORT"] = "(У)";
+$LOCA["ru"]["FLEET1_CUSTOM"] = "Особенное";
+$LOCA["ru"]["FLEET1_CUSTOM_SHORT"] = "(О)";
 
 $LOCA["ru"]["FLEET1_FLEETS"] = "Флоты #1 / #2";
 $LOCA["ru"]["FLEET1_EXPEDITIONS"] = "#1/#2 Экспедиции";
@@ -44,6 +46,7 @@ $LOCA["ru"]["FLEET1_CLEAR"] = "Обнулить";
 $LOCA["ru"]["FLEET1_ALL_SHIPS"] = "Все корабли";
 $LOCA["ru"]["FLEET1_TEMPLATE"] = "Стандартные";
 $LOCA["ru"]["FLEET1_NEXT"] = "Дальше";
+$LOCA["ru"]["FLEET1_ALL"] = "все";
 
 // flotten2
 
@@ -117,6 +120,7 @@ $LOCA["ru"]["FLEET_ERR_EXP_LIMIT"] = "Слишком много одноврем
 $LOCA["ru"]["FLEET_ERR_EXP_REQUIRED"] = "Экспедиция должна состоять как минимум из одного управляемого людьми корабля.";
 $LOCA["ru"]["FLEET_ERR_EXP_INVALID"] = "Цель экспедиции недействительна!";
 $LOCA["ru"]["FLEET_ERR_ORDER"] = "Необходимо выбрать задание!";
+$LOCA["ru"]["FLEET_ERR_BATTLE_MAX"] = "Достигнут предел количества юнитов!";
 
 $LOCA["ru"]["FLEET_SEND_ERROR"] = " Флот не удалось отправить!";
 

@@ -1,26 +1,26 @@
 {
-    "metall": {
+    "700": {
         "skin": true,
         "img": "images/metall.gif",
         "loca": "NAME_700",
         "val": 0,
         "color": "#FFFFFF"
     },
-    "kristall": {
+    "701": {
         "skin": true,
         "img": "images/kristall.gif",
         "loca": "NAME_701",
         "val": 0,
         "color": "#FFFFFF"
     },
-    "deuterium": {
+    "702": {
         "skin": true,
         "img": "images/deuterium.gif",
         "loca": "NAME_702",
         "val": 0,
         "color": "#FFFFFF"
     },
-    "dm": {
+    "704": {
         "href": "micropayment",
         "skin": false,
         "img": "img/dm_klein_2.jpg",
@@ -29,7 +29,7 @@
         "val": 0,
         "color": "#FFFFFF"
     },
-    "energie": {
+    "703": {
         "skin": true,
         "img": "images/energie.gif",
         "loca": "NAME_703",

@@ -7,6 +7,10 @@ $LOCA = array ();
 
 // Return the value of the key. The latest version is returned.
 // If no such key exists, return the name of the key.
+/**
+ * @param string $key
+ * @return string
+ */
 function loca ($key)
 {
     global $LOCA, $LocaLang;
@@ -16,6 +20,11 @@ function loca ($key)
 }
 
 // Add new version of the key.
+/**
+ * @param string $key
+ * @param string $value
+ * @return void
+ */
 function loca_add ($key, $value)
 {
     global $LOCA, $LocaLang;

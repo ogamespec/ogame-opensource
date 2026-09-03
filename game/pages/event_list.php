@@ -79,10 +79,10 @@ function TitleFleet (array $fleet, int $summary, bool $ignore_level=false) : str
 
 function PlayerDetails (array $user) : string
 {
-    $res = $user['oname'] . " ";
+    $res = htmlspecialchars($user['oname']) . " ";
 
     // It is not possible to give the opportunity to write to the technical account space and admins.
-    if ($user['admin'] == 0) {
+    if ($user['admin'] == USER_TYPE_PLAYER) {
         $res .= "<a href='#' onclick='showMessageMenu(".$user['player_id'].")'>";
         $res .= "<img src='".UserSkin()."img/m.gif' title='".loca("EVENT_WRITE")."' alt='".loca("EVENT_WRITE")."'></a>";
     }
@@ -93,7 +93,7 @@ function PlayerDetails (array $user) : string
 function PlanetFrom (array $planet, string $mission) : string
 {
     $res = "";
-    if ( GetPlanetType ($planet) == 1 ) $res .= loca("EVENT_FROM_PLANET");
+    if ( GetPlanetType ($planet) == GAME_PTYP_PLANET ) $res .= loca("EVENT_FROM_PLANET");
     if ( $planet['type'] == PTYP_COLONY_PHANTOM || $planet['type'] == PTYP_FARSPACE ) $res = " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     else $res .= " " . $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     return $res;
@@ -102,7 +102,7 @@ function PlanetFrom (array $planet, string $mission) : string
 function PlanetTo (array $planet, string $mission) : string
 {
     $res = "";
-    if ( GetPlanetType ($planet) == 1 ) $res .= loca("EVENT_TO_PLANET");
+    if ( GetPlanetType ($planet) == GAME_PTYP_PLANET ) $res .= loca("EVENT_TO_PLANET");
     if ( $planet['type'] == PTYP_COLONY_PHANTOM || $planet['type'] == PTYP_FARSPACE ) $res = " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     else $res .= " " . $planet['name'] . " <a href=\"javascript:showGalaxy(".$planet['g'].",".$planet['s'].",".$planet['p'].")\" $mission>[".$planet['g'].":".$planet['s'].":".$planet['p']."]</a>";
     return $res;

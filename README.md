@@ -1,52 +1,78 @@
-# Introduction
+# OGame Open Source
 
 > [!WARNING]
-> We're currently undergoing a massive refactoring based on PHPStan analysis results, and a [modification engine](/Wiki/en/mods.md) is being added. Therefore, some bugs and syntax errors may be present, but they will be fixed as we go.
+> We are currently undergoing a massive refactoring based on PHPStan analysis results, and a [modification engine](/wiki/en/mods.md) is being added. Therefore, some bugs and syntax errors may be present, but they will be fixed as we go.
 
-This is revived OGame v 0.84 with old design.
+This is a revived OGame v 0.84 with the old design.
 
-Need help with installation? You have the following options:
-- Use the millennial guide: [install](/Wiki/en/install.md)
-- Use the zoomer guide: [install_docker](/Wiki/en/install_docker.md)
-- There is also another deployment option with Docker from Noli: https://gitlab.com/nolialsea/ogame-opensource-docker
-- Ask the community for help. Discord: https://discord.gg/xpCV3McAj2
+---
 
-:warning: Fellow developers! Don't be confused if you see a lot of crap in the root of the repository. You probably don't need all of this; it's just spare parts for Docker, PHPStan, and PHPUnit. The main source files are in the `game` folder.
+## Table of contents
 
-**!!! All trademarks and copyrighted materials are belongs to OGame respective owners - Gameforge 4D GmbH !!!**
+- [About](#about)
+- [Installation](#installation)
+- [Features](#features)
+- [Attribution](#attribution)
+- [Legal](#legal)
 
-_Thank you for the great game, but redesign is not we like_
+---
 
-![whc50b7bd1f6b2a2](/imgstore/whc50b7bd1f6b2a2.jpg)
+## About
 
-Currently only Russian, English and Deutch languages are supported. Other language packs can be submitted by volunteers. The game engine is multilingual.
+**OGame Open Source** is a faithful recreation of the classic OGame 0.84 with the original look and feel. All gameplay mechanics, resource costs, production timings and the home-planet distribution algorithm are preserved.
 
-Features:
-- Original game mechanics!
-- Well tested fast battle engine with fair rapidfire, written on C language (there is also a backup in PHP)
+> :warning: **Fellow developers!** Don't be confused by the amount of files in the repository root. You probably don't need most of it — those are spare parts for Docker, PHPStan and PHPUnit. The main source files live in the `game` folder.
+
+![whc50b7bd1f6b2a2](/wiki/imgstore/whc50b7bd1f6b2a2.jpg)
+
+---
+
+## Installation
+
+Need help setting up the game? You have the following options:
+
+- Use the **millennial** guide: [install](/wiki/en/install.md)
+- Use the **zoomer** guide: [install_docker](/wiki/en/install_docker.md)
+- There is also another Docker deployment option by Noli: <https://gitlab.com/nolialsea/ogame-opensource-docker>
+- Ask the community for help on **Discord**: <https://discord.gg/xpCV3McAj2>
+
+---
+
+## Features
+
+- **Original game mechanics**
+- Well-tested fast battle engine with fair rapid-fire, written in C (with a PHP backup)
 - Improved admin tool
 - Integrated Galaxy-tool
-- CRON-less event queue (but there is the option of using CRON in addition if you want to)
+- CRON-less event queue (with an optional CRON mode)
 - Multi-language support
 - ACS
-- Planet temperature, planet images and sizes are same as in original game
+- Planet temperature, images and sizes identical to the original game
 - 100% match on resource costs and production timings
-- Original home planet distribution algorithm and spy protection
-- Fixed some original game bugs ("buggy" 10th planets, recalled ACS delay, buggy fleet return activity etc)
+- Original home-planet distribution algorithm and spy protection
+- Fixed several original game bugs (buggy 10th planets, recalled ACS delay, buggy fleet return activity, etc.)
 - Original expedition with triple Dark Matter chance
-- Open-source!
-- And many, many more!
+- Open source!
+- …and many more!
 
-![screen1](/imgstore/screen1.jpg)
-![screen2](/imgstore/screen2.jpg)
-![screen5](/imgstore/screen5.jpg)
+### Languages
 
-**This is non commercial project, all Premium functions of original OGame (Dark Matter, Officeers and Trader) are free.**
+Currently only **Russian**, **English** and **German** are supported. Other language packs can be contributed by volunteers — the game engine is fully multilingual.
 
-All copyrighted material is proprietary Gameforge stuff. We do not make money on it! We just have fun =)
+---
 
-## Credits
+## Attribution
 
-Credits go to Alexander Rösner (Legor) for such revolutionary breakthrough in browser games.
-He was not first, but he was the one, who was successful.
-To pay respect, we still have Legor's account, sitting on its own planet Arakis at \[1:1:2\] =)
+Credits go to **Alexander Rösner (Legor)** for such a revolutionary breakthrough in browser games. He was not the first, but he was the one who succeeded.
+
+To pay respect, we still keep Legor's account, sitting on his own planet Arakis at **[1:1:2]** =)
+
+---
+
+## Legal
+
+**This is a non-commercial project. All Premium functions of the original OGame (Dark Matter, Officers and the Trader) are free.**
+
+All copyrighted material is proprietary Gameforge stuff. We do not make money on it — we just have fun.
+
+**!!! All trademarks and copyrighted materials belong to their respective owners — OGame © Gameforge 4D GmbH !!!**

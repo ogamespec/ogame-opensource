@@ -1,5 +1,10 @@
 <?php
 
+// $DefaultLanguage, $db_prefix and $db_secret come from the (runtime-generated) config.php
+/** @var string $DefaultLanguage */
+/** @var string $db_prefix */
+/** @var string $db_secret */
+
 // Check if the configuration file is missing - redirect to the game installation page.
 if ( !file_exists ("../config.php"))
 {
@@ -15,12 +20,13 @@ require_once "../core/core.php";
 if ( !key_exists ( 'ogamelang', $_COOKIE ) ) $loca_lang = $DefaultLanguage;
 else $loca_lang = $_COOKIE['ogamelang'];
 
+loca_add ( "common", $loca_lang, "../" );
 loca_add ( "reg", $loca_lang, "../" );
 
-function isValidEmail($email){
-	return filter_var($email, FILTER_VALIDATE_EMAIL);
-}
-
+/**
+ * @param string $email
+ * @return array|false
+ */
 function EmailExist ( $email)
 {
     global $db_prefix;
@@ -32,10 +38,11 @@ function EmailExist ( $email)
 
 InitDB();
 
-$uni = LoadUniverse ();
-$uninum = $uni['num'];
+$GlobalUni = LoadUniverse ();
+$uninum = $GlobalUni['num'];
 
 $pass_ok = false;
+$user = array ();
 if ( method () === "POST" ) {
     $email = $_POST['email'];
     if ( isValidEmail ($email) ) {
@@ -45,12 +52,13 @@ if ( method () === "POST" ) {
             $md5 = md5 ($pass . $db_secret );
             $query = "UPDATE ".$db_prefix."users SET session = '', password = '".$md5."' WHERE player_id = " . $user['player_id'];
             dbquery ($query);
-            mail_utf8 ( $user['pemail'], loca("REG_FORGOT_SUBJ"),
+            mail_utf8 ( $user['pemail'], va(loca("REG_FORGOT_SUBJ"), loca("OGAME_LOC")),
                 va ( loca("REG_FORGOT_MAIL"),
                     $user['oname'],
                     $uninum,
                     $pass,
-                    "" . hostname()
+                    hostname(),
+                    loca("OGAME_LOC")
                 ), "From: welcome@" . $_SERVER['SERVER_NAME'] );
             $pass_ok = true;
         }
@@ -61,7 +69,7 @@ if ( method () === "POST" ) {
 
 <html>
  <head>
-  <title><?=loca("REG_FORGOT_TITLE");?></title>
+  <title><?=va(loca("REG_FORGOT_TITLE"), loca("OGAME_INT"));?></title>
 <!--  <meta http-equiv="refresh" content="5; URL=http://<?=hostname();?>"> -->
   <link rel="stylesheet" type="text/css" href="<?=hostname();?>evolution/formate.css">
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -72,7 +80,7 @@ if ( method () === "POST" ) {
 <table width="519">
 <tr>
 <?php
-    if ( $pass_ok ) echo "   <th><font color=\"lime\">".va(loca("REG_FORGOT_OK"), $user['oname'])."</font></th>\n";
+    if ( $pass_ok ) echo "   <th><font color=\"lime\">".va(loca("REG_FORGOT_OK"), htmlspecialchars($user['oname'] ?? ''))."</font></th>\n";
     else echo " <th><font color=\"red\">".loca("REG_FORGOT_ERROR")."</font></th> \n";
 ?>
 </tr>

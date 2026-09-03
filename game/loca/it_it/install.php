@@ -37,9 +37,10 @@ $LOCA["it"]["INSTALL_UNI_RAPID"] = "Fuoco rapido";
 $LOCA["it"]["INSTALL_UNI_MOONS"] = "Lune e stelle della morte";
 $LOCA["it"]["INSTALL_UNI_BATTLE"] = "Motore di battaglia";
 $LOCA["it"]["INSTALL_UNI_PHP_BATTLE"] = "Utilizzare un motore di battaglia basato su PHP";
-$LOCA["it"]["INSTALL_UNI_FORCE_LANG"] = "Obligé d'utiliser le langage de l'univers";
-$LOCA["it"]["INSTALL_MAX_WERF"] = "Maximum number of units in a shipyard order";
-$LOCA["it"]["INSTALL_FEED_AGE"] = "RSS/Atom refresh period in minutes for Commander";
+$LOCA["it"]["INSTALL_UNI_BATTLE_MAX"] = "Numero massimo di unità per lato";
+$LOCA["it"]["INSTALL_UNI_FORCE_LANG"] = "Obbligato a usare la lingua dell'universo";
+$LOCA["it"]["INSTALL_MAX_WERF"] = "Numero massimo di unità in un ordine del cantiere navale";
+$LOCA["it"]["INSTALL_FEED_AGE"] = "Periodo di aggiornamento RSS/Atom in minuti per il Commander";
 
 $LOCA["it"]["INSTALL_ADMIN"] = "Account amministratore";
 $LOCA["it"]["INSTALL_ADMIN_EMAIL"] = "E-Mail";
@@ -64,5 +65,18 @@ $LOCA["it"]["INSTALL_DONE"] ="Installazione completata. File di configurazione c
 
 $LOCA["it"]["INSTALL_EXTERNAL_LINKS"] = "Link esterni";
 $LOCA["it"]["INSTALL_EXTERNAL_LINKS_TIP"] = "Se non viene specificato alcun collegamento esterno (stringa vuota), la voce corrispondente nel menu sarà assente.";
+
+$LOCA["it"]["INSTALL_ERR_REQUIRED"] = "Il campo \"#1\" non deve essere vuoto.";
+$LOCA["it"]["INSTALL_ERR_INT"] = "Il campo \"#1\" deve essere un numero intero.";
+$LOCA["it"]["INSTALL_ERR_MIN"] = "Il campo \"#1\" deve essere almeno #2.";
+$LOCA["it"]["INSTALL_ERR_MAX"] = "Il campo \"#1\" non deve superare #2.";
+$LOCA["it"]["INSTALL_ERR_EMAIL"] = "Il campo \"#1\" deve essere un indirizzo e-mail valido.";
+$LOCA["it"]["INSTALL_ERR_PASS_LONG"] = "La password dell’amministratore deve contenere almeno 8 caratteri.";
+$LOCA["it"]["INSTALL_ERR_PREFIX"] = "Il prefisso delle tabelle può contenere solo lettere latine, cifre e trattini bassi.";
+$LOCA["it"]["INSTALL_ERR_URL"] = "Il campo \"#1\" deve essere un URL valido o un nome host.";
+$LOCA["it"]["INSTALL_ERR_DBCONNECT"] = "Impossibile connettersi alla #1: #2";
+$LOCA["it"]["INSTALL_ERR_DB_SELECT"] = "Impossibile selezionare la #1: #2";
+$LOCA["it"]["INSTALL_ERR_DB_UNI"] = "database dell’universo";
+$LOCA["it"]["INSTALL_ERR_DB_MDB"] = "database master";
 
 ?>

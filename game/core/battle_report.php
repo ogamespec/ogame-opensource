@@ -1,6 +1,29 @@
 <?php
-
-// Generate the HTML code of a single slot.
+/**
+ * @file battle_report.php
+ * @brief Battle report formatting.
+ * @details Builds the human-readable battle report shown to players after a combat.
+ */
+/**
+ * Generates the HTML code of a single battle report slot.
+ *
+ * Builds a table cell with the participant's name and coordinates, optionally
+ * the technology values, and the units with their weapon, shield and armour.
+ *
+ * @param int $weap Weapon technology level of the participant.
+ * @param int $shld Shield technology level of the participant.
+ * @param int $armor Armour technology level of the participant.
+ * @param string $name Name of the participant.
+ * @param int $g Galaxy coordinate of the participant.
+ * @param int $s System coordinate of the participant.
+ * @param int $p Planet coordinate of the participant.
+ * @param array $unitmap List of unit ids to display.
+ * @param array $units Unit counts keyed by unit id.
+ * @param bool $show_techs Whether the technology values are displayed.
+ * @param bool $attack Whether this slot belongs to an attacker.
+ * @param string $lang Language code used for localized strings.
+ * @return string HTML code of the slot.
+ */
 function GenSlot ( int $weap, int $shld, int $armor, string $name, int $g, int $s, int $p, array $unitmap, array $units, bool $show_techs, bool $attack, string $lang ) : string
 {
     global $UnitParam;
@@ -10,7 +33,7 @@ function GenSlot ( int $weap, int $shld, int $armor, string $name, int $g, int $
     $text .= "<center>";
     if ($attack) $text .= loca_lang("BATTLE_ATTACKER", $lang);
     else $text .= loca_lang("BATTLE_DEFENDER", $lang);
-    $text .= " ".$name." (<a href=# onclick=showGalaxy($g,$s,$p); >[$g:$s:$p]</a>)";
+    $text .= " ".htmlspecialchars($name)." (<a href=# onclick=showGalaxy($g,$s,$p); >[$g:$s:$p]</a>)";
     if ($show_techs) $text .= "<br>".loca_lang("BATTLE_ATTACK", $lang)." ".($weap * 10)."% ".loca_lang("BATTLE_SHIELD", $lang)." ".($shld * 10)."% ".loca_lang("BATTLE_ARMOR", $lang)." ".($armor * 10)."% ";
 
     $sum = 0;
@@ -83,7 +106,24 @@ function GenSlot ( int $weap, int $shld, int $armor, string $name, int $g, int $
     return $text;
 }
 
-// Generate a battle report.
+/**
+ * Generates the complete battle report text.
+ *
+ * Assembles the HTML report from the battle result: the forces before the
+ * battle, every round, the outcome, losses, debris, moon chance and the
+ * repaired defense, all localized in the given language.
+ *
+ * @param array $res Battle result data containing rounds and participant info.
+ * @param int $now Timestamp of the battle.
+ * @param array|null $loss Losses in points with keys 'aloss' and 'dloss'.
+ * @param array|null $captured Captured resource amounts per resource id.
+ * @param int $moonchance Chance in percent that a moon was created.
+ * @param bool $mooncreated Whether a moon was created.
+ * @param array|null $repaired Number of repaired defense units per defender.
+ * @param array|null $debris Debris field amounts per resource id.
+ * @param string $lang Language code used for localized strings.
+ * @return string HTML battle report text.
+ */
 function BattleReport ( array $res, int $now, array|null $loss, array|null $captured, int $moonchance, bool $mooncreated, array|null $repaired, array|null $debris, string $lang ) : string
 {
     global $fleetmap;
@@ -179,7 +219,7 @@ function BattleReport ( array $res, int $now, array|null $loss, array|null $capt
             {
                 $text .= "<br>";
                 $need_comma = false;
-                foreach ($repairmap as $i=>$gid)
+                foreach ($repairmap as $map_i=>$gid)
                 {
                     if ($repaired[$i][$gid])
                     {
@@ -196,6 +236,13 @@ function BattleReport ( array $res, int $now, array|null $loss, array|null $capt
                 }
                 $text .= "<br>";
             }
+        }
+    }
+
+    // Additional text that modifications can add (in the language of the Universe)
+    if (isset($res['extra'])) {
+        foreach ($res['extra'] as $msg) {
+            $text .= "<br>" . $msg;
         }
     }
 

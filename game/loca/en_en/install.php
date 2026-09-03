@@ -37,6 +37,7 @@ $LOCA["en"]["INSTALL_UNI_RAPID"] = "Rapidfire";
 $LOCA["en"]["INSTALL_UNI_MOONS"] = "Moons and deathstars";
 $LOCA["en"]["INSTALL_UNI_BATTLE"] = "Path to battle engine";
 $LOCA["en"]["INSTALL_UNI_PHP_BATTLE"] = "Use a PHP-based battle engine";
+$LOCA["en"]["INSTALL_UNI_BATTLE_MAX"] = "Maximum number of units on one side";
 $LOCA["en"]["INSTALL_UNI_FORCE_LANG"] = "Forced to use the language of the universe";
 $LOCA["en"]["INSTALL_MAX_WERF"] = "Maximum number of units in a shipyard order";
 $LOCA["en"]["INSTALL_FEED_AGE"] = "RSS/Atom refresh period in minutes for Commander";
@@ -64,5 +65,18 @@ $LOCA["en"]["INSTALL_DONE"] ="Install complete. Config file created.";
 
 $LOCA["en"]["INSTALL_EXTERNAL_LINKS"] = "External links";
 $LOCA["en"]["INSTALL_EXTERNAL_LINKS_TIP"] = "If no external link is specified (empty string), the corresponding item in the menu will be absent";
+
+$LOCA["en"]["INSTALL_ERR_REQUIRED"] = "The field \"#1\" must not be empty.";
+$LOCA["en"]["INSTALL_ERR_INT"] = "The field \"#1\" must be an integer.";
+$LOCA["en"]["INSTALL_ERR_MIN"] = "The field \"#1\" must be at least #2.";
+$LOCA["en"]["INSTALL_ERR_MAX"] = "The field \"#1\" must not exceed #2.";
+$LOCA["en"]["INSTALL_ERR_EMAIL"] = "The field \"#1\" must be a valid e-mail address.";
+$LOCA["en"]["INSTALL_ERR_PASS_LONG"] = "The admin password must be at least 8 characters long.";
+$LOCA["en"]["INSTALL_ERR_PREFIX"] = "The table prefix may contain only latin letters, digits and underscores.";
+$LOCA["en"]["INSTALL_ERR_URL"] = "The field \"#1\" must be a valid URL or host name.";
+$LOCA["en"]["INSTALL_ERR_DBCONNECT"] = "Cannot connect to the #1: #2";
+$LOCA["en"]["INSTALL_ERR_DB_SELECT"] = "Cannot select the #1: #2";
+$LOCA["en"]["INSTALL_ERR_DB_UNI"] = "universe database";
+$LOCA["en"]["INSTALL_ERR_DB_MDB"] = "master database";
 
 ?>

@@ -46,6 +46,7 @@ $LOCA["de"]["FLEET1_AMOUNT"] = "Vorhanden";
 $LOCA["de"]["FLEET1_SPEED"] = "Geschwindigkeit";
 $LOCA["de"]["FLEET1_CLEAR"] = "Keine Schiffe";
 $LOCA["de"]["FLEET1_ALL_SHIPS"] = "Alle Schiffe";
+$LOCA["de"]["FLEET1_ALL"] = "Alle";
 $LOCA["de"]["FLEET1_TEMPLATE"] = "Standard";
 $LOCA["de"]["FLEET1_NEXT"] = "Weiter";
 
@@ -121,6 +122,7 @@ $LOCA["de"]["FLEET_ERR_EXP_LIMIT"] = "Zu viele gleichzeitige Expeditionen";
 $LOCA["de"]["FLEET_ERR_EXP_REQUIRED"] = "Die Expedition muss aus mindestens einem von Menschen gesteuerten Schiff bestehen.";
 $LOCA["de"]["FLEET_ERR_EXP_INVALID"] = "Der Zweck der Expedition ist ungültig!";
 $LOCA["de"]["FLEET_ERR_ORDER"] = "Sie müssen Ihren Auftrag wählen!";
+$LOCA["de"]["FLEET_ERR_BATTLE_MAX"] = "Einheitenlimit erreicht!";
 
 $LOCA["de"]["FLEET_SEND_ERROR"] = " Die Flotte konnte nicht abgefertigt werden!";
 

@@ -2,335 +2,335 @@
 
 // Version History.
 
-$LOCA["es"]["CHANGELOG_VERSION"] = "Version";
-$LOCA["es"]["CHANGELOG_DESC"] = "Description";
+$LOCA["es"]["CHANGELOG_VERSION"] = "Versión";
+$LOCA["es"]["CHANGELOG_DESC"] = "Descripción";
 
 $LOCA["es"]["CHANGELOG_0.312apl2"] =
-    "- Fixing special characters"
+    "- Corrección de caracteres especiales"
 ;
 $LOCA["es"]["CHANGELOG_0.312apl3"] =
-    "- Corrects a shipyard bug where negative time was shown<br />\n".
-    "- Adding a link to the home page on exit.<br />\n".
-    "- Fixed the shield dome bug. Now they can only be built once."
+    "- Corrige un error del astillero donde se mostraba un tiempo negativo<br />\n".
+    "- Añadido un enlace a la página de inicio al salir.<br />\n".
+    "- Corregido el error del domo de escudo. Ahora solo se puede construir una vez."
 ;
 $LOCA["es"]["CHANGELOG_0.312apl4"] =
-    "- Link to CHANGELOG<br />\n".
-    "- Clearing the cache when building structures<br />\n".
-    "- Building a nanite factory is not possible when building ships"
+    "- Enlace al historial de cambios (CHANGELOG)<br />\n".
+    "- Limpieza de la caché al construir estructuras<br />\n".
+    "- No es posible construir una fábrica de nanitas mientras se construyen naves"
 ;
 $LOCA["es"]["CHANGELOG_0.312apl5"] =
-    "- Deleted text about the cost of fleet maintenance"
+    "- Eliminado el texto sobre el coste del mantenimiento de la flota"
 ;
 $LOCA["es"]["CHANGELOG_0.312apl6"] =
-    "- Works return after sending spies<br />\n".
-    "- Thanks to dragoscan in the galaxy works return"
+    "- Las flotas vuelven después de enviar espías<br />\n".
+    "- Gracias a dragoscan, las flotas vuelven en la galaxia"
 ;
 $LOCA["es"]["CHANGELOG_0.312apl7"] =
-    "- Fixing a bug in the shipyard<br />\n".
-    "- Fixes bug when calculating free fields after construction is finished"
+    "- Corregido un error en el astillero<br />\n".
+    "- Corregido un error al calcular los campos libres después de terminar una construcción"
 ;
 $LOCA["es"]["CHANGELOG_0.312apl8"] =
-    "- Correcting an error in production display"
+    "- Corregido un error en la visualización de la producción"
 ;
 $LOCA["es"]["CHANGELOG_0.312apl9"] =
-    "- Partially fixed a bug that incorrectly displayed the level of construction and research.<br />\n".
-    "- Cannot send to coordinate <0"
+    "- Corregido parcialmente un error que mostraba incorrectamente el nivel de construcción e investigación.<br />\n".
+    "- No se puede enviar a la coordenada <0"
 ;
 $LOCA["es"]["CHANGELOG_0.312apl10"] =
-    "- Allowed space in alliance abbreviation"
+    "- Se permite un espacio en la abreviatura de la alianza"
 ;
 
 $LOCA["es"]["CHANGELOG_0.321a"] =
-    "- Small Alliance System"
+    "- Sistema de combate de alianza (SAC)"
 ;
 $LOCA["es"]["CHANGELOG_0.321apl1"] =
-    "- Fixed several bugs in ACS"
+    "- Corregidos varios errores en el SAC"
 ;
 $LOCA["es"]["CHANGELOG_0.321apl3"] =
-    "- Alliance search has been eliminated from the search function<br />\n".
-    "- The search function is tailored to alliances<br />\n".
-    "- The head of an alliance has only the rights given to him by his rank."
+    "- La búsqueda de alianzas se ha eliminado de la función de búsqueda<br />\n".
+    "- La función de búsqueda está adaptada a las alianzas<br />\n".
+    "- El líder de una alianza solo tiene los derechos que le otorga su rango."
 ;
 $LOCA["es"]["CHANGELOG_0.322a"] =
-    "- Messages to individual alliance members can be sent from the alliance menu"
+    "- Se pueden enviar mensajes a miembros individuales de la alianza desde el menú de la alianza"
 ;
 $LOCA["es"]["CHANGELOG_0.323a"] =
-    "- Fixed display of zero level of storages<br />\n".
-    "- Expanded database for ship types<br />\n".
-    "- Fixed an error in the display of ship construction"
+    "- Corregida la visualización del nivel cero de los almacenes<br />\n".
+    "- Ampliada la base de datos para los tipos de naves<br />\n".
+    "- Corregido un error en la visualización de la construcción de naves"
 ;
 $LOCA["es"]["CHANGELOG_0.324a"] =
-    "- Fixed a bug with planet jumping (failed)"
+    "- Corregido un error con el salto de planeta (fallido)"
 ;
 $LOCA["es"]["CHANGELOG_0.325a"] =
-    "- Implemented script detectors"
+    "- Implementados los detectores de scripts"
 ;
 $LOCA["es"]["CHANGELOG_0.325apl1"] =
-    "- Fixed an error with displaying 1000<br />\n".
-    "- Message with empty name<br />\n".
-    "- Recycler bug (it is now possible to transport more than 8M resources)<br />\n".
-    "- New error message when changing alliance name"
+    "- Corregido un error al mostrar 1000<br />\n".
+    "- Mensaje con nombre vacío<br />\n".
+    "- Error del reciclador (ahora es posible transportar más de 8M de recursos)<br />\n".
+    "- Nuevo mensaje de error al cambiar el nombre de la alianza"
 ;
 $LOCA["es"]["CHANGELOG_0.326a"] =
-    "- Canceling vacation mode"
+    "- Cancelación del modo vacaciones"
 ;
 $LOCA["es"]["CHANGELOG_0.327a"] =
-    "- Defense debris no longer falls into debris fields<br />\n".
-    "- Spy probes no longer have weapons or defenses (1% of old values)<br />\n".
-    "- Ability to save recyclers"
+    "- Los escombros de la defensa ya no caen en los campos de escombros<br />\n".
+    "- Las sondas de espionaje ya no tienen armas ni defensas (1% de los valores antiguos)<br />\n".
+    "- Posibilidad de salvar recicladores"
 ;
 
 $LOCA["es"]["CHANGELOG_0.330a"] =
-    "- The death star can fly<br />\n".
-    "- Vacation mode can be deactivated"
+    "- La estrella de la muerte puede volar<br />\n".
+    "- El modo vacaciones se puede desactivar"
 ;
 $LOCA["es"]["CHANGELOG_0.330apl1"] =
-    "- Security hole fixed"
+    "- Agujero de seguridad corregido"
 ;
 $LOCA["es"]["CHANGELOG_0.330apl2"] =
-    "- Security hole fixed"
+    "- Agujero de seguridad corregido"
 ;
 $LOCA["es"]["CHANGELOG_0.330apl3"] =
-    "- Deathstar was too weak on offense"
+    "- La estrella de la muerte era demasiado débil en el ataque"
 ;
 $LOCA["es"]["CHANGELOG_0.330apl4"] =
-    "- Deathstar has become more effective against the defense <br/>\n".
-    "- Fixed some flaws in the security <br/>\n".
-    "- First preparations for the accelerated version"
+    "- La estrella de la muerte es ahora más efectiva contra la defensa <br/>\n".
+    "- Corregidos algunos fallos de seguridad <br/>\n".
+    "- Primeros preparativos para la versión acelerada"
 ;
 $LOCA["es"]["CHANGELOG_0.331a"] =
-    "- Ban is possible with a long session"
+    "- Es posible un ban con una sesión larga"
 ;
 $LOCA["es"]["CHANGELOG_0.331apl1"] =
-    "- Fixed construction bug"
+    "- Corregido un error de construcción"
 ;
 $LOCA["es"]["CHANGELOG_0.331apl2"] =
-    "- Removed email alert <br/>\n".
-    "- Password recovery simplified <br/>\n".
-    "- Recyclers are no longer disappearing"
+    "- Eliminada la alerta por correo electrónico <br/>\n".
+    "- Simplificada la recuperación de la contraseña <br/>\n".
+    "- Los recicladores ya no desaparecen"
 ;
 
 $LOCA["es"]["CHANGELOG_0.34a"] =
-    "- Vacation mode is activated by Mouseover<br />\n".
-    "- Research becomes valid when the research is completed"
+    "- El modo vacaciones se activa con el ratón (mouseover)<br />\n".
+    "- La investigación se activa cuando se completa"
 ;
 $LOCA["es"]["CHANGELOG_0.35a"] =
-    "- Fixed bug in ban lists 1,2,4,5"
+    "- Corregido el error en las listas de expulsión 1,2,4,5"
 ;
 $LOCA["es"]["CHANGELOG_0.36a"] =
-    "- Fixed bugs 6,7,9?,10,13,18,19,22"
+    "- Corregidos los errores 6,7,9?,10,13,18,19,22"
 ;
 $LOCA["es"]["CHANGELOG_0.371a"] =
-    "- You can search for alliances in the search menu<br />\n".
-    "- Reactivation of moons (test)"
+    "- Puedes buscar alianzas en el menú de búsqueda<br />\n".
+    "- Reactivación de las lunas (prueba)"
 ;
 $LOCA["es"]["CHANGELOG_0.372a"] =
-    "- After big fights, moons may appear<br />\n".
-    "- Moonbase<br />\n".
-    "- Possibility to demolish buildings (for resources)<br />\n".
-    "- Debris fields without planets cannot be attacked or spied on<br />\n".
-    "- Fixed a minor bug in vacation mode<br />\n".
-    "- Sensor phalanx"
+    "- Después de grandes batallas, pueden aparecer lunas<br />\n".
+    "- Base lunar<br />\n".
+    "- Posibilidad de demoler edificios (a cambio de recursos)<br />\n".
+    "- Los campos de escombros sin planetas no pueden ser atacados ni espiados<br />\n".
+    "- Corregido un error menor en el modo vacaciones<br />\n".
+    "- Falanx de sensores"
 ;
 $LOCA["es"]["CHANGELOG_0.373a"] =
-    "- Increased chance of a moon"
+    "- Aumentada la probabilidad de luna"
 ;
 $LOCA["es"]["CHANGELOG_0.374a"] =
-    "- Transportation between different players' planets is now called trade"
+    "- El transporte entre planetas de diferentes jugadores ahora se llama comercio"
 ;
 $LOCA["es"]["CHANGELOG_0.375a"] =
-    "- Players who have registered on the page \"Helft OGame\" for a sufficient number of programs have ads disabled."
+    "- Los jugadores que se han registrado en la página \"Helft OGame\" con un número suficiente de programas tienen la publicidad desactivada."
 ;
 $LOCA["es"]["CHANGELOG_0.376a"] =
-    "- Statistics calculation has been improved, the place in the ranking is shown immediately after recalculation."
+    "- El cálculo de las estadísticas se ha mejorado; la posición en el ranking se muestra inmediatamente después del recálculo."
 ;
 $LOCA["es"]["CHANGELOG_0.377a"] =
-    "- In the galaxy, weaker players are indicated in green and stronger players in red (if the opponent is not in VM)"
+    "- En la galaxia, los jugadores más débiles se indican en verde y los más fuertes en rojo (si el oponente no está en MV)"
 ;
 $LOCA["es"]["CHANGELOG_0.3771a"] =
-    "- Password request when deleting a planet"
+    "- Solicitud de contraseña al eliminar un planeta"
 ;
 $LOCA["es"]["CHANGELOG_0.3778a"] =
-    "- Activation of protection for newbies\n".
+    "- Activación de la protección para novatos\n".
     "<br />\n".
     "<br />\n".
-    "Information on protection for newbies:<br />\n".
-    "The protection is in effect for players with less than 10k points.<br />\n".
-    "When the protection is on, you cannot attack active players who have a number of points<br /> less than 10 times less than the attacker (highlighted in green in the galaxy), <br />\n".
-    "Also, active players with 10 times more points than the attacker cannot be attacked<br />\n".
-    "Examples:<br />\n".
-    "Player A - 2k points, Player B < 200 points - both cannot attack each other<br />\n".
-    "Player A - (20k), Player B (< 2k) - both cannot attack each other<br />\n".
-    "Player A - (200k), Player B (< 10k) - both cannot attack each other<br />\n".
-    "Player A - (200k), Player B (> 10k) - both can attack each other <br />\n".
-    "Player A - (50k), Player B (8k) - both can attack each other"
+    "Información sobre la protección para novatos:<br />\n".
+    "La protección está en vigor para jugadores con menos de 10k de puntos.<br />\n".
+    "Cuando la protección está activada, no puedes atacar a jugadores activos cuyo número de puntos<br /> sea 10 veces menor que el del atacante (resaltado en verde en la galaxia), <br />\n".
+    "Tampoco se puede atacar a jugadores activos con 10 veces más puntos que el atacante<br />\n".
+    "Ejemplos:<br />\n".
+    "Jugador A - 2k puntos, Jugador B < 200 puntos - ambos no pueden atacarse entre sí<br />\n".
+    "Jugador A - (20k), Jugador B (< 2k) - ambos no pueden atacarse entre sí<br />\n".
+    "Jugador A - (200k), Jugador B (< 10k) - ambos no pueden atacarse entre sí<br />\n".
+    "Jugador A - (200k), Jugador B (> 10k) - ambos pueden atacarse entre sí <br />\n".
+    "Jugador A - (50k), Jugador B (8k) - ambos pueden atacarse entre sí"
 ;
 $LOCA["es"]["CHANGELOG_0.3779a"] =
-    "- Newcomer protection is reduced to 5k points and is effective up to 20%<br />\n".
-    "- Accounts inactive for more than 48 days are deleted once a day<br />\n".
-    "- Fixed display bug in research<br />\n".
-    "- Fixed moon bug<br />\n".
-    "- You can no longer send messages to yourself<br />\n".
-    "- Fixed a bug where you could create a moon with 82 fighters<br />\n".
-    "- Colonies can only be removed if there is no fleet on them"
+    "- La protección para novatos se reduce a 5k de puntos y es efectiva hasta el 20%<br />\n".
+    "- Las cuentas inactivas durante más de 48 días se eliminan una vez al día<br />\n".
+    "- Corregido un error de visualización en la investigación<br />\n".
+    "- Corregido un error de las lunas<br />\n".
+    "- Ya no se pueden enviar mensajes a uno mismo<br />\n".
+    "- Corregido un error que permitía crear una luna con 82 cazadores<br />\n".
+    "- Las colonias solo se pueden eliminar si no hay ninguna flota en ellas"
 ;
 
 $LOCA["es"]["CHANGELOG_0.38"] =
-    "- Ships can fly from moon to planet"
+    "- Las naves pueden volar de la luna al planeta"
 ;
 $LOCA["es"]["CHANGELOG_0.39"] =
-    "- Graphics can be enabled optionally<br />\n".
-    "- Development of missile silos<br />\n".
-    "- Fixed phalanx bug<br />\n".
-    "- Small fields of debris are decaying<br />\n".
-    "- One less bug in the combat script thanks to Dragosan...."
+    "- Los gráficos se pueden activar opcionalmente<br />\n".
+    "- Desarrollo de silos de misiles<br />\n".
+    "- Corregido un error del phalanx<br />\n".
+    "- Los pequeños campos de escombros se descomponen<br />\n".
+    "- Un error menos en el script de combate gracias a Dragosan...."
 ;
 $LOCA["es"]["CHANGELOG_0.40"] =
-    "- Resources can be sent to the moon"
+    "- Los recursos se pueden enviar a la luna"
 ;
 $LOCA["es"]["CHANGELOG_0.41"] =
-    "- Skins can be installed. Download at ogame.de/ogame.zip<br />\n".
-    "- Install, specify the path in the settings and activate."
+    "- Se pueden instalar skins. Descárgalos en ogame.de/ogame.zip<br />\n".
+    "- Instálalos, indica la ruta en los ajustes y actívalos."
 ;
 $LOCA["es"]["CHANGELOG_0.43"] =
-    "- Automatic deletion of accounts set for deletion<br />\n".
-    "- When a planet is removed, the adjacent moon is also removed<br />\n".
-    "- The VM can only be deactivated after 2 days"
+    "- Eliminación automática de las cuentas marcadas para su eliminación<br />\n".
+    "- Cuando se elimina un planeta, la luna adyacente también se elimina<br />\n".
+    "- El modo vacaciones solo se puede desactivar después de 2 días"
 ;
 $LOCA["es"]["CHANGELOG_0.44"] =
-    "- In the path to the skins, the end of the line should always be \"/\"<br />\n".
-    "- Once a day at 3:00 on the server there is a forced unload<br />\n".
-    "- Fixed VM bug"
+    "- En la ruta de los skins, el final de la línea debe ser siempre \"/\"<br />\n".
+    "- Una vez al día, a las 3:00 hora del servidor, se realiza una descarga forzada<br />\n".
+    "- Corregido un error del modo vacaciones"
 ;
 $LOCA["es"]["CHANGELOG_0.45"] =
-    "- Just one message if a player sends himself resources<br />\n".
-    "- Code optimization<br />\n".
-    "- Using a sensory phalanx costs 5,000 deuterium<br />\n".
-    "- Fixed a bug when renaming planets<br />\n".
-    "- New graphics in the settings menu"
+    "- Solo un mensaje si un jugador se envía recursos a sí mismo<br />\n".
+    "- Optimización del código<br />\n".
+    "- Usar una falanx de sensores cuesta 5.000 de deuterio<br />\n".
+    "- Corregido un error al renombrar planetas<br />\n".
+    "- Nuevos gráficos en el menú de ajustes"
 ;
 $LOCA["es"]["CHANGELOG_0.46"] =
-    "The cruiser now has a rapid-fire against rocket launchers. The average cruiser <br />\n".
-    "fires at rocket launchers 5 times per round.<br />\n".
-    "- The attacker also has a rapid-fire, the Deathstar makes several volleys when attacking as well<br />\n".
-    "- Battles up to 300,000 units can now be fought<br />\n".
-    "- Fixed error in search<br />\n".
-    "- Fixed a bug in the shield<br />\n".
-    "- Viewing the universe costs 10 deuterium to spite the scripters<br>"
+    "El crucero ahora tiene fuego rápido contra los lanzamisiles. El crucero medio <br />\n".
+    "dispara a los lanzamisiles 5 veces por ronda.<br />\n".
+    "- El atacante también tiene fuego rápido; la estrella de la muerte realiza varias descargas al atacar<br />\n".
+    "- Ahora se pueden librar batallas de hasta 300.000 unidades<br />\n".
+    "- Corregido un error en la búsqueda<br />\n".
+    "- Corregido un error en el escudo<br />\n".
+    "- Ver el universo cuesta 10 de deuterio, para fastidiar a los scripters<br>"
 ;
 $LOCA["es"]["CHANGELOG_0.47a"] =
-    "- New ship: Bomber<br />\n".
-    "- Deuterium production is now higher and depends on the temperature of the planet<br />\n".
-    "- Hot planets have at least 1% more production, while cold planets have up to 20% more production<br />\n".
-    "- Solar satellites have disabled rapid-fire against spy probes"
+    "- Nueva nave: Bombardero<br />\n".
+    "- La producción de deuterio ahora es mayor y depende de la temperatura del planeta<br />\n".
+    "- Los planetas cálidos tienen al menos un 1% más de producción, mientras que los fríos tienen hasta un 20% más de producción<br />\n".
+    "- Los satélites solares tienen desactivado el fuego rápido contra las sondas de espionaje"
 ;
 $LOCA["es"]["CHANGELOG_0.47b"] =
-    "- The bomber's new stats"
+    "- Las nuevas estadísticas del bombardero"
 ;
 $LOCA["es"]["CHANGELOG_0.48"] =
-    "- Improved page construction"
+    "- Mejorada la construcción de páginas"
 ;
 $LOCA["es"]["CHANGELOG_0.49a"] =
-    "- Introduction of interplanetary rockets and interceptor missiles<br />\n".
-    "- Fleets cannot be dispatched during VM<br />\n".
-    "- Bombers have a cargo capacity of 5,000<br />\n".
-    "- Operators are not listed in the statistics<br />\n".
-    "- Interplanetary missiles have doubled range, destructive power increased 1.5 times<br />\n".
-    "- Minor improvements to the admin section<br />\n".
-    "- Fixed a minor bug in the Deathstar rapid-fire<br>"
+    "- Introducción de los cohetes interplanetarios y los misiles de intercepción<br />\n".
+    "- No se pueden enviar flotas durante el MV<br />\n".
+    "- Los bombarderos tienen una capacidad de carga de 5.000<br />\n".
+    "- Los operadores no aparecen en las estadísticas<br />\n".
+    "- Los misiles interplanetarios tienen el doble de alcance y su poder destructivo se ha multiplicado por 1,5<br />\n".
+    "- Pequeñas mejoras en la sección de administración<br />\n".
+    "- Corregido un error menor en el fuego rápido de la estrella de la muerte<br>"
 ;
 $LOCA["es"]["CHANGELOG_0.49b"] =
-    "- Unselected messages can be deleted<br />\n".
-    "- Removed the back button in the fleet menu<br />\n".
-    "- The pillar of shame shows the years<br />\n".
-    "- When blocked, users are blocked immediately<br />\n".
-    "- The path for graphics consists of 80 characters<br />\n".
-    "- Graphics can be changed again in the settings (thanks to all the authors). If the path for the graphic is empty, the menu appears<br />\n".
-    "- A separate message about the return of the spy probes has been deleted<br />\n".
-    "- Newbis and VM accounts can't be attacked with missiles<br>"
+    "- Se pueden eliminar mensajes no seleccionados<br />\n".
+    "- Eliminado el botón de retroceso en el menú de flota<br />\n".
+    "- El Pranger muestra los años<br />\n".
+    "- Al ser bloqueados, los usuarios quedan bloqueados inmediatamente<br />\n".
+    "- La ruta de los gráficos consta de 80 caracteres<br />\n".
+    "- Los gráficos se pueden cambiar de nuevo en los ajustes (gracias a todos los autores). Si la ruta de los gráficos está vacía, aparece el menú<br />\n".
+    "- Se ha eliminado el mensaje separado sobre el regreso de las sondas de espionaje<br />\n".
+    "- Las cuentas de novatos y las cuentas en MV no pueden ser atacadas con misiles<br>"
 ;
 
 $LOCA["es"]["CHANGELOG_0.50"] =
-    "- Improved battle system (large battles are possible again)"
+    "- Mejorado el sistema de batalla (las batallas grandes vuelven a ser posibles)"
 ;
 $LOCA["es"]["CHANGELOG_0.51"] =
-    "- Positive effect of cold planets on deuterium production doubled"
+    "- Duplicado el efecto positivo de los planetas fríos en la producción de deuterio"
 ;
 $LOCA["es"]["CHANGELOG_0.52"] =
-    "- Fixed several bugs in the combat system"
+    "- Corregidos varios errores en el sistema de combate"
 ;
 $LOCA["es"]["CHANGELOG_0.53"] =
-    "- Fusion power plants use deuterium. They need enough deuterium at all times to function properly<br />\n".
-    "- During combat, the attacked can no longer send additional fleets"
+    "- Las plantas de fusión usan deuterio. Necesitan suficiente deuterio en todo momento para funcionar correctamente<br />\n".
+    "- Durante el combate, el atacado ya no puede enviar flotas adicionales"
 ;
 $LOCA["es"]["CHANGELOG_0.55a"] =
-    "- Before each moon is destroyed, a normal attack takes place. The moon is destroyed only if the attacker wins the battle and has at least one Deathstar remaining<br />\n".
-    "- There's a new menu item called \"notes\""
+    "- Antes de que se destruya cada luna, tiene lugar un ataque normal. La luna solo se destruye si el atacante gana la batalla y le queda al menos una estrella de la muerte<br />\n".
+    "- Hay un nuevo elemento de menú llamado \"notas\""
 ;
 $LOCA["es"]["CHANGELOG_0.56a"] =
-    "- Combat reports show only total combat power, not effective combat power<br />\n".
-    "- Through the sensor phalanx, you can again view the planet being scanned<br />\n".
-    "- Players with a blank password must create a password for themselves<br />\n".
-    "- If a spy probe is detected and combat begins, no intelligence is sent in<br />\n".
-    "- If the attacking fleet is destroyed in the first round, the attacker does not receive a report<br />\n".
-    "- Deuterium production and consumption by the fusion plant by levels now correspond to<br />\n".
-    "- Deathstar can destroy moons from planets with 500k of energy<br />\n".
-    "- A planet cannot be deleted if a fleet returns to it<br />\n".
-    "- Space is now peaceful<br />\n".
-    "- Improvements to the alliance system:<br />\n".
-    "- there are 25 ranks<br />\n".
-    "- Fixed a bug in the number of alliance members<br />\n".
-    "- \"former alliance so-and-so\" now seen by outsiders<br />\n".
-    "- the list of rights can be sorted and inactive status can be added <br />\n".
-    "- group mailing to all members or a specific rank (requires the right to do so)<br />\n".
-    "- Head change (ability to leave the alliance)<br />\n".
-    "- Head status can be transferred (when the head is inactive)<br />\n".
-    "- online status display (requires the right to do so)<br />\n".
-    "- the alliance page is modifiable (tags are described below)<br />\n".
-    "- the name of the head of the alliance can be changed by the head himself/herself<br />\n".
-    "- alliance application restrictions<br />\n".
-    "- fixed the date of alliance membership<br />\n".
-    "- the friends list now has an online status<br />\n".
-    "- automatic display of a sample application<br />\n".
-    "- if you have a right to manage, you cannot be given a higher right<br />\n".
-    "- internal alliance pages have been added<br />\n".
-    "- automatic updating of alliance statistics when the founder visits the alliance page<br />\n".
-    "- small things<br />\n".
-    "- displays the remaining characters as you type<br />\n".
-    "- Tags for the alliance page<br />\n".
-    "Examples:<br />\n".
-    "[b] -bold - [b]Hallo[/b]<br />\n".
-    "[i] - italics - [i]Hallo[/i]<br />\n".
-    "[img] - images - [img]http://seite.de/bild.jpg[/img]<br />\n".
+    "- Los informes de combate muestran solo el poder de combate total, no el poder de combate efectivo<br />\n".
+    "- A través de la falanx de sensores, puedes volver a ver el planeta escaneado<br />\n".
+    "- Los jugadores con una contraseña vacía deben crearse una contraseña<br />\n".
+    "- Si se detecta una sonda de espionaje y comienza el combate, no se envía información<br />\n".
+    "- Si la flota atacante es destruida en la primera ronda, el atacante no recibe un informe<br />\n".
+    "- La producción y el consumo de deuterio de la planta de fusión por niveles ahora se corresponden<br />\n".
+    "- La estrella de la muerte puede destruir lunas desde planetas con 500k de energía<br />\n".
+    "- Un planeta no se puede eliminar si una flota regresa a él<br />\n".
+    "- El espacio ahora es pacífico<br />\n".
+    "- Mejoras en el sistema de alianzas:<br />\n".
+    "- hay 25 rangos<br />\n".
+    "- Corregido un error en el número de miembros de la alianza<br />\n".
+    "- \"antigua alianza tal y tal\" ahora visible para los ajenos<br />\n".
+    "- la lista de derechos se puede ordenar y se puede añadir el estado de inactividad <br />\n".
+    "- correo grupal a todos los miembros o a un rango específico (requiere el derecho para hacerlo)<br />\n".
+    "- Cambio de líder (posibilidad de abandonar la alianza)<br />\n".
+    "- El estatus de líder se puede transferir (cuando el líder está inactivo)<br />\n".
+    "- visualización del estado en línea (requiere el derecho para hacerlo)<br />\n".
+    "- la página de la alianza es modificable (las etiquetas se describen a continuación)<br />\n".
+    "- el nombre del líder de la alianza puede ser cambiado por el propio líder<br />\n".
+    "- restricciones de solicitud de ingreso en la alianza<br />\n".
+    "- corregida la fecha de pertenencia a la alianza<br />\n".
+    "- la lista de amigos ahora tiene un estado en línea<br />\n".
+    "- visualización automática de una solicitud de ejemplo<br />\n".
+    "- si tienes derecho de gestión, no se te puede otorgar un derecho superior<br />\n".
+    "- se han añadido páginas internas de la alianza<br />\n".
+    "- actualización automática de las estadísticas de la alianza cuando el fundador visita la página de la alianza<br />\n".
+    "- cosas pequeñas<br />\n".
+    "- muestra los caracteres restantes mientras escribes<br />\n".
+    "- Etiquetas para la página de la alianza<br />\n".
+    "Ejemplos:<br />\n".
+    "[b] - negrita - [b]Hallo[/b]<br />\n".
+    "[i] - cursiva - [i]Hallo[/i]<br />\n".
+    "[img] - imágenes - [img]http://seite.de/bild.jpg[/img]<br />\n".
     "[fc] - color - [fc]#FF0000[/fc]Hallo[/f]<br />\n".
-    "[ff] - font - [ff]Verdana[/ff]Hallo[/f]<br />\n".
-    "[fs] - size - [fs]6[/fs]Hallo[/f]<br />\n".
-    "- Fixing minor bugs"
+    "[ff] - fuente - [ff]Verdana[/ff]Hallo[/f]<br />\n".
+    "[fs] - tamaño - [fs]6[/fs]Hallo[/f]<br />\n".
+    "- Corrección de errores menores"
 ;
 $LOCA["es"]["CHANGELOG_0.56b"] =
-    "- Gates are available in all universes"
+    "- El salto cuántico está disponible en todos los universos"
 ;
 $LOCA["es"]["CHANGELOG_0.57a"] =
-    "- The number of spy probes sent out of the galaxy is set in the settings"
+    "- El número de sondas de espionaje enviadas desde la galaxia se configura en los ajustes"
 ;
 $LOCA["es"]["CHANGELOG_0.58a"] =
-    "- Time gap before planet removal (after 24 hours only)<br />\n".
-    "- Prior to removal, the planet is labeled as an asteroid field (in the galaxy is referred to as \"A\")<br />\n".
-    "- Fixed moon bug<br />\n".
-    "- Fixed an error when blocking for 24 hours<br />\n".
-    "- Fixed an error when loading skins<br />\n".
-    "- When attacked, the resources loaded into transports are not overridden by the number of resources captured<br />\n".
-    "- Weapon technology now affects the power of interplanetary rockets<br />\n".
-    "- One missile used to destroy 33 missiles, with level 10 weapon technology it destroys 66"
+    "- Intervalo de tiempo antes de la eliminación del planeta (solo después de 24 horas)<br />\n".
+    "- Antes de la eliminación, el planeta se etiqueta como campo de asteroides (en la galaxia se indica como \"A\")<br />\n".
+    "- Corregido un error de las lunas<br />\n".
+    "- Corregido un error al bloquear durante 24 horas<br />\n".
+    "- Corregido un error al cargar los skins<br />\n".
+    "- Al ser atacado, los recursos cargados en los transportes no se ven superados por los recursos capturados<br />\n".
+    "- La tecnología de armas ahora afecta al poder de los cohetes interplanetarios<br />\n".
+    "- Un misil solía destruir 33 misiles; con la tecnología de armas a nivel 10 destruye 66"
 ;
 $LOCA["es"]["CHANGELOG_0.58b"] =
-    "- The asteroid fields are being removed"
+    "- Los campos de asteroides se están eliminando"
 ;
 $LOCA["es"]["CHANGELOG_0.59a"] =
-    "- Deathstar now has more problems with destroyers and a weaker rapid fire rate<br />\n".
-    "- Group messaging in alliances works again<br />\n".
-    "- The BB code is now visible to guests<br />\n".
-    "- Fixed minor bugs"
+    "- La estrella de la muerte ahora tiene más problemas con los destructores y una tasa de fuego rápido más débil<br />\n".
+    "- El mensajero grupal en las alianzas vuelve a funcionar<br />\n".
+    "- El código BB ahora es visible para los invitados<br />\n".
+    "- Corregidos errores menores"
 ;
 
 $LOCA["es"]["CHANGELOG_0.60a"] =

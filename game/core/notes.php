@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file notes.php
+ * @brief Player notes.
+ * @details Creates, updates and deletes the private notes a player attaches to planets.
+ */
 // Notes.
 
 // ⚠️Important! This game feature involves a rich interaction with input from the user.
@@ -14,6 +18,13 @@
 // prio: Priority (0: Not important (green), 1: So-so (yellow), 2: Important (red) ) (INT)
 // date: Date the note was created/edited ('INT UNSIGNED')
 
+/**
+ * Load a single note for a player.
+ *
+ * @param int $player_id ID of the note owner.
+ * @param int $note_id ID of the note.
+ * @return mixed The note row as an array, or false if it does not exist.
+ */
 function LoadNote ( int $player_id, int $note_id ) : mixed
 {
     global $db_prefix;
@@ -22,11 +33,21 @@ function LoadNote ( int $player_id, int $note_id ) : mixed
     return dbarray ($result);
 }
 
+/**
+ * Create a new note for a player.
+ *
+ * @param int $player_id ID of the note owner.
+ * @param string $subj Subject of the note.
+ * @param string $text Text of the note.
+ * @param int $prio Priority of the note (0: not important, 1: so-so, 2: important).
+ * @return void
+ */
 function AddNote ( int $player_id, string $subj, string $text, int $prio ) : void
 {
     global $db_prefix;
 
     $user = LoadUser ($player_id);
+    if ($user == null) return;
     loca_add ( "notes", $user['lang'] );
 
     // Check the parameters.
@@ -42,15 +63,26 @@ function AddNote ( int $player_id, string $subj, string $text, int $prio ) : voi
     AddDBRow ( $note, "notes" );
 }
 
+/**
+ * Update an existing note if it belongs to the player.
+ *
+ * @param int $player_id ID of the note owner.
+ * @param int $note_id ID of the note to update.
+ * @param string $subj New subject of the note.
+ * @param string $text New text of the note.
+ * @param int $prio New priority of the note (0-2).
+ * @return void
+ */
 function UpdateNote ( int $player_id, int $note_id, string $subj, string $text, int $prio ) : void
 {
     global $db_prefix;
 
     // You can't touch someone else's notes
     $note = LoadNote ( $player_id, $note_id);
-    if ( $note['owner_id'] != $player_id ) return;
+    if ( !$note || $note['owner_id'] != $player_id ) return;
 
     $user = LoadUser ($player_id);
+    if ($user == null) return;
     loca_add ( "notes", $user['lang'] );
 
     // Check the parameters.
@@ -65,25 +97,38 @@ function UpdateNote ( int $player_id, int $note_id, string $subj, string $text, 
     dbquery ($query);
 }
 
+/**
+ * Delete a note if it belongs to the player.
+ *
+ * @param int $player_id ID of the note owner.
+ * @param int $note_id ID of the note to delete.
+ * @return void
+ */
 function DelNote ( int $player_id, int $note_id ) : void
 {
     global $db_prefix;
 
     // You can't touch someone else's notes
     $note = LoadNote ( $player_id, $note_id);
-    if ( $note['owner_id'] != $player_id ) return;
+    if ( !$note || $note['owner_id'] != $player_id ) return;
 
     $query = "DELETE FROM ".$db_prefix."notes WHERE owner_id = $player_id AND note_id = $note_id";
     dbquery ($query);
 }
 
+/**
+ * List the most recent notes of a player.
+ *
+ * @param int $player_id ID of the player whose notes are listed.
+ * @return mixed Database result set with the player's notes.
+ */
 function EnumNotes (int $player_id) : mixed
 {
     global $db_prefix;
 
     $limit = 20;
     $user = LoadUser ($player_id);
-    if ( $user['admin'] > 0 ) $limit = 150;
+    if ( $user && $user['admin'] > USER_TYPE_PLAYER ) $limit = 150;
 
     $query = "SELECT * FROM ".$db_prefix."notes WHERE owner_id = $player_id ORDER BY date DESC LIMIT $limit";
     $result = dbquery ($query);

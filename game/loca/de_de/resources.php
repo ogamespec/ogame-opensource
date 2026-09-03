@@ -4,7 +4,7 @@
 
 $LOCA["de"]["RES_FACTOR"] = "Produktionsfaktor: #1";
 $LOCA["de"]["RES_CALCULATE"] = "Berechne";
-$LOCA["de"]["RES_INFO"] = "Es gibt Unruhen auf dem Planeten, da das Reich zu groЯ ist.";
+$LOCA["de"]["RES_INFO"] = "Es gibt Unruhen auf dem Planeten, da das Reich zu groß ist.";
 $LOCA["de"]["RES_PROD"] = "Rohstoffproduktion  auf Planet";
 $LOCA["de"]["RES_NATURAL"] = "Grundeinkommen";
 $LOCA["de"]["RES_LEVEL"] = "Stufe #1";

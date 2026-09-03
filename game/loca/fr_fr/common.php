@@ -2,7 +2,10 @@
 
 // Chaînes de caractères courantes. Présentes sur la plupart des pages.
 
-$LOCA["fr"]["PAGE_TITLE"] = "Univers #1 OGame";
+$LOCA["fr"]["OGAME_INT"] = "OGame";
+$LOCA["fr"]["OGAME_LOC"] = "OGame";
+
+$LOCA["fr"]["PAGE_TITLE"] = "Univers #1 #2";
 
 $LOCA["fr"]["NAME_".GID_RC_METAL] = "Métal";
 $LOCA["fr"]["NAME_".GID_RC_CRYSTAL] = "Cristal";
@@ -27,7 +30,7 @@ $LOCA["fr"]["TIME_SEC"] = "s";
 
 // Commander and officers.
 
-$LOCA["fr"]["PR_COMA" ] = "Commandant OGame";
+$LOCA["fr"]["PR_COMA" ] = "Commandant";
 $LOCA["fr"]["PR_ADMIRAL" ] = "Amiral";
 $LOCA["fr"]["PR_ENGINEER" ] = "Ingénieur";
 $LOCA["fr"]["PR_GEOLOGIST" ] = "Géologiste";

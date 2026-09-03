@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file bbcode.php
+ * @brief BBCode parser (xBB library).
+ * @details Parses BBCode markup and converts it to HTML. The library is based on a finite state machine and supports nested tags, attributes and quoted values.
+ */
 /******************************************************************************
  *                                                                            *
  *   bbcode.lib.php, v 0.24 2007/03/06 - This is part of xBB library          *
@@ -7,13 +11,22 @@
  *                                                                            *
  ******************************************************************************/
 
+/**
+ * Base BBCode parser class that converts BBCode markup into an element tree and HTML.
+ */
 class bbcode {
-	/* Описания свойств и методов смотрите в документации. */
+	/* See the documentation for descriptions of properties and methods. */
+    /** @var string */
     var $tag = '';
+    /** @var array<string, string> */
     var $attrib = array();
+    /** @var string */
     var $text = '';
+    /** @var array<int, array<string, mixed>> */
     var $syntax = array();
+    /** @var array<int, array<string, mixed>> */
     var $tree = array();
+    /** @var array<string, string> */
     var $tags = array(
         'align'   => 'bb_align',
         'b'       => 'bb_strong',
@@ -31,20 +44,37 @@ class bbcode {
         'u'       => 'bb_u',
         'url'     => 'bb_a'
     );
+    /** @var array<int, string> */
     var $children = array(
         'align','b','color','email','font','hr','i','img',
         'quote','s','size','sub','sup','u','url'
     );
+    /** @var array<string, string> */
     var $mnemonics = array();
+    /** @var bool */
     var $autolinks = true;
+    /** @var bool */
     var $is_close = false;
+    /** @var int */
     var $lbr = 0;
+    /** @var int */
     var $rbr = 0;
 
+    /**
+     * Class constructor that parses the given BBCode text.
+     *
+     * @param string $code The BBCode text to parse.
+     */
     function __construct($code = '') {
         $this -> do_bbcode ($code);
     }
 
+    /**
+     * Parses BBCode text or a syntax/tree array into the parser state.
+     *
+     * @param string|array<int, array<string, mixed>> $code The BBCode text or syntax/tree array to process.
+     * @return void
+     */
     function do_bbcode($code = '') {
         if (is_array($code)) {
             $is_tree = false;
@@ -70,6 +100,11 @@ class bbcode {
         }
     }
 
+    /**
+     * Splits the current text into lexical tokens for parsing.
+     *
+     * @return array<int, array<int, int|string>> The array of tokens.
+     */
     function get_tokens() {
         $length = strlen($this -> text);
         $tokens = array();
@@ -147,56 +182,58 @@ class bbcode {
         return $tokens;
     }
 
+    /**
+     * Parses the BBCode text into a syntax structure using a finite state machine.
+     *
+     * @param string $code Optional BBCode text to parse; when empty, the current text is parsed.
+     * @return array<int, array<string, mixed>> The parsed syntax structure.
+     */
     function parse($code = '') {
         if ($code) {
             $this -> do_bbcode($code);
-            return;
+            return $this -> syntax;
         }
         /*
-        Используем метод конечных автоматов
-        Список возможных состояний автомата:
-        0  - Начало сканирования или находимся вне тега. Ожидаем что угодно.
-        1  - Встретили символ "[", который считаем началом тега. Ожидаем имя
-             тега, или символ "/".
-        2  - Нашли в теге неожидавшийся символ "[". Считаем предыдущую строку
-             ошибкой. Ожидаем имя тега, или символ "/".
-        3  - Нашли в теге синтаксическую ошибку. Текущий символ не является "[".
-             Ожидаем что угодно.
-        4  - Сразу после "[" нашли символ "/". Предполагаем, что попали в
-             закрывающий тег. Ожидаем имя тега или символ "]".
-        5  - Сразу после "[" нашли имя тега. Считаем, что находимся в
-             открывающем теге. Ожидаем пробел или "=" или "/" или "]".
-        6  - Нашли завершение тега "]". Ожидаем что угодно.
-        7  - Сразу после "[/" нашли имя тега. Ожидаем "]".
-        8  - В открывающем теге нашли "=". Ожидаем пробел или значение атрибута.
-        9  - В открывающем теге нашли "/", означающий закрытие тега. Ожидаем
-             "]".
-        10 - В открывающем теге нашли пробел после имени тега или имени
-             атрибута. Ожидаем "=" или имя другого атрибута или "/" или "]".
-        11 - Нашли '"' начинающую значение атрибута, ограниченное кавычками.
-             Ожидаем что угодно.
-        12 - Нашли "'" начинающий значение атрибута, ограниченное апострофами.
-             Ожидаем что угодно.
-        13 - Нашли начало незакавыченного значения атрибута. Ожидаем что угодно.
-        14 - В открывающем теге после "=" нашли пробел. Ожидаем значение
-             атрибута.
-        15 - Нашли имя атрибута. Ожидаем пробел или "=" или "/" или "]".
-        16 - Находимся внутри значения атрибута, ограниченного кавычками.
-             Ожидаем что угодно.
-        17 - Завершение значения атрибута. Ожидаем пробел или имя следующего
-             атрибута или "/" или "]".
-        18 - Находимся внутри значения атрибута, ограниченного апострофами.
-             Ожидаем что угодно.
-        19 - Находимся внутри незакавыченного значения атрибута. Ожидаем что
-             угодно.
-        20 - Нашли пробел после значения атрибута. Ожидаем имя следующего
-             атрибута или "/" или "]".
+        Uses the finite state machine method.
+        List of possible automaton states:
+        0  - Start of scanning or outside a tag. Expect anything.
+        1  - Encountered the "[", which is considered the start of a tag. Expect
+             a tag name or the "/" symbol.
+        2  - Found an unexpected "[" inside a tag. Consider the previous line an
+             error. Expect a tag name or the "/" symbol.
+        3  - Found a syntax error inside a tag. The current symbol is not "[".
+             Expect anything.
+        4  - Right after "[" found the "/" symbol. Assume we are inside a
+             closing tag. Expect a tag name or the "]" symbol.
+        5  - Right after "[" found a tag name. Consider ourselves inside an
+             opening tag. Expect a space, "=", "/" or "]".
+        6  - Found the end of a tag "]". Expect anything.
+        7  - Right after "[/" found a tag name. Expect "]".
+        8  - Inside an opening tag found "=". Expect a space or an attribute
+             value.
+        9  - Inside an opening tag found "/", meaning the tag closes itself.
+             Expect "]".
+        10 - Inside an opening tag found a space after a tag name or attribute
+             name. Expect "=", another attribute name, "/" or "]".
+        11 - Found '"' starting a double-quoted attribute value. Expect anything.
+        12 - Found "'" starting a single-quoted attribute value. Expect anything.
+        13 - Found the start of an unquoted attribute value. Expect anything.
+        14 - Inside an opening tag found a space after "=". Expect an attribute
+             value.
+        15 - Found an attribute name. Expect a space, "=", "/" or "]".
+        16 - Inside a double-quoted attribute value. Expect anything.
+        17 - End of an attribute value. Expect a space, the next attribute name,
+             "/" or "]".
+        18 - Inside a single-quoted attribute value. Expect anything.
+        19 - Inside an unquoted attribute value. Expect anything.
+        20 - Found a space after an attribute value. Expect the next attribute
+             name, "/" or "]".
 
-        Описание конечного автомата:
+        Description of the finite automaton:
         */
         $finite_automaton = array(
-               // Предыдущие |   Состояния для текущих событий (лексем)   |
-               //  состояния |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |
+               // Previous  | States for the current events (tokens)   |
+               //  states   |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |
                    0 => array(  1 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 )
                 ,  1 => array(  2 ,  3 ,  3 ,  3 ,  3 ,  4 ,  3 ,  3 ,  5 )
                 ,  2 => array(  2 ,  3 ,  3 ,  3 ,  3 ,  4 ,  3 ,  3 ,  5 )
@@ -219,13 +256,20 @@ class bbcode {
                 , 19 => array( 19 ,  6 , 19 , 19 , 19 , 19 , 20 , 19 , 19 )
                 , 20 => array(  2 ,  6 ,  3 ,  3 ,  3 ,  9 ,  3 , 15 , 15 )
             );
-        // Закончили описание конечного автомата
+        // End of the finite automaton description
         $mode = 0;
         $result = array();
-        $tag_decomposition = array();
+        $tag_decomposition = array(
+            'name'   => '',
+            'type'   => '',
+            'str'    => '',
+            'layout' => array(),
+            'attrib' => array()
+        );
         $token_key = -1;
         $value = '';
-        // Сканируем массив лексем с помощью построенного автомата:
+        $name = '';
+        // Scan the token array using the automaton built above:
         foreach ($this -> get_tokens() as $token) {
             $previous_mode = $mode;
             $mode = $finite_automaton[$previous_mode][$token[0]];
@@ -255,7 +299,13 @@ class bbcode {
                                 'str' => $tag_decomposition['str']
                             );
                     }
-                    $tag_decomposition = array();
+                    $tag_decomposition = array(
+                        'name'   => '',
+                        'type'   => '',
+                        'str'    => '',
+                        'layout' => array(),
+                        'attrib' => array()
+                    );
                     $tag_decomposition['name']     = '';
                     $tag_decomposition['type']     = '';
                     $tag_decomposition['str']      = '[';
@@ -271,7 +321,13 @@ class bbcode {
                                 'str' => $tag_decomposition['str'].$token[1]
                             );
                     }
-                    $tag_decomposition = array();
+                    $tag_decomposition = array(
+                        'name'   => '',
+                        'type'   => '',
+                        'str'    => '',
+                        'layout' => array(),
+                        'attrib' => array()
+                    );
                     break;
                 case 4:
                     $tag_decomposition['type'] = 'close';
@@ -280,26 +336,29 @@ class bbcode {
                     break;
                 case 5:
                     $tag_decomposition['type'] = 'open';
-                    $name = strtolower($token[1]);
+                    $name = strtolower((string) $token[1]);
                     $tag_decomposition['name'] = $name;
                     $tag_decomposition['str'] .= $token[1];
                     $tag_decomposition['layout'][] = array( 2, $token[1] );
                     $tag_decomposition['attrib'][$name] = '';
                     break;
                 case 6:
-                    if (! isset($tag_decomposition['name'])) {
-                        $tag_decomposition['name'] = '';
-                    }
                     if (13 == $previous_mode || 19 == $previous_mode) {
                         $tag_decomposition['layout'][] = array( 7, $value );
                     }
                     $tag_decomposition['str'] .= ']';
                     $tag_decomposition['layout'][] = array( 0, ']' );
                     $result[++$token_key] = $tag_decomposition;
-                    $tag_decomposition = array();
+                    $tag_decomposition = array(
+                        'name'   => '',
+                        'type'   => '',
+                        'str'    => '',
+                        'layout' => array(),
+                        'attrib' => array()
+                    );
                     break;
                 case 7:
-                    $tag_decomposition['name'] = strtolower($token[1]);
+                    $tag_decomposition['name'] = strtolower((string) $token[1]);
                     $tag_decomposition['str'] .= $token[1];
                     $tag_decomposition['layout'][] = array( 2, $token[1] );
                     break;
@@ -336,13 +395,16 @@ class bbcode {
                     $tag_decomposition['layout'][] = array( 4, $token[1] );
                     break;
                 case 15:
-                    $name = strtolower($token[1]);
+                    $name = strtolower((string) $token[1]);
                     $tag_decomposition['str'] .= $token[1];
                     $tag_decomposition['layout'][] = array( 6, $token[1] );
                     $tag_decomposition['attrib'][$name] = '';
                     break;
                 case 16:
                     $tag_decomposition['str'] .= $token[1];
+                    if (! isset($tag_decomposition['attrib'][$name])) {
+                        $tag_decomposition['attrib'][$name] = '';
+                    }
                     $tag_decomposition['attrib'][$name] .= $token[1];
                     $value .= $token[1];
                     break;
@@ -354,11 +416,17 @@ class bbcode {
                     break;
                 case 18:
                     $tag_decomposition['str'] .= $token[1];
+                    if (! isset($tag_decomposition['attrib'][$name])) {
+                        $tag_decomposition['attrib'][$name] = '';
+                    }
                     $tag_decomposition['attrib'][$name] .= $token[1];
                     $value .= $token[1];
                     break;
                 case 19:
                     $tag_decomposition['str'] .= $token[1];
+                    if (! isset($tag_decomposition['attrib'][$name])) {
+                        $tag_decomposition['attrib'][$name] = '';
+                    }
                     $tag_decomposition['attrib'][$name] .= $token[1];
                     $value .= $token[1];
                     break;
@@ -372,7 +440,7 @@ class bbcode {
                     break;
             }
         }
-        if (count($tag_decomposition)) {
+        if ($tag_decomposition['str'] !== '') {
             if ( -1 < $token_key && 'text' == $result[$token_key]['type'] ) {
                 $result[$token_key]['str'] .= $tag_decomposition['str'];
             } else {
@@ -387,6 +455,12 @@ class bbcode {
         return $result;
     }
 
+    /**
+     * Replaces special characters with internal mnemonics.
+     *
+     * @param string $string The string to process.
+     * @return string The string with special characters replaced by mnemonics.
+     */
     function specialchars($string) {
         $chars = array(
             '[' => '@l;',
@@ -398,6 +472,12 @@ class bbcode {
         return strtr($string, $chars);
     }
 
+    /**
+     * Restores special characters from internal mnemonics.
+     *
+     * @param string $string The string to process.
+     * @return string The string with mnemonics replaced by the original characters.
+     */
     function unspecialchars($string) {
         $chars = array(
             '@l;'  => '[',
@@ -409,6 +489,13 @@ class bbcode {
         return strtr($string, $chars);
     }
 
+    /**
+     * Determines whether the current tag must be closed when the next tag opens.
+     *
+     * @param string $current The name of the currently open tag.
+     * @param string $next The name of the next tag.
+     * @return bool True if the current tag must be closed, otherwise false.
+     */
     function must_close_tag($current, $next) {
         $class_vars = get_class_vars($this -> tags[$current]);
         $must_close = in_array($next, $class_vars['ends']);
@@ -419,6 +506,12 @@ class bbcode {
         return $must_close;
     }
 
+    /**
+     * Normalizes the syntax into a correctly nested bracket structure.
+     *
+     * @param array<int, array<string, mixed>> $syntax The syntax array to normalize.
+     * @return array<int, array<string, mixed>> The normalized structure array.
+     */
     function normalize_bracket($syntax) {
         $structure = array();
         $structure_key = -1;
@@ -501,7 +594,8 @@ class bbcode {
                     }
                     if (! $val['name']) {
                         end($open_tags);
-                        list($ult_key, $ultimate) = each($open_tags);
+                        $ult_key = key($open_tags);
+                        $ultimate = current($open_tags);
                         $val['name'] = $ultimate;
                         $structure[++$structure_key] = $val;
                         $structure[$structure_key]['level'] = --$level;
@@ -552,11 +646,16 @@ class bbcode {
         return $structure;
     }
 
+    /**
+     * Builds the element tree from the parsed syntax.
+     *
+     * @return array<int, array<string, mixed>> The element tree array.
+     */
     function get_tree() {
-        /* Превращаем $this -> syntax в правильную скобочную структуру */
+        /* Convert $this -> syntax into a correct bracket structure */
         $structure = $this -> normalize_bracket($this -> syntax);
-        /* Отслеживаем, имеют ли элементы неразрешенные подэлементы.
-           Соответственно этому исправляем $structure. */
+        /* Track whether elements contain disallowed sub-elements and
+           fix $structure accordingly. */
         $normalized = array();
         $normal_key = -1;
         $level = 0;
@@ -683,7 +782,7 @@ class bbcode {
             }
         }
         unset($structure);
-        // Формируем дерево элементов
+        // Build the element tree
         $result = array();
         $result_key = -1;
         $open_tags = array();
@@ -743,6 +842,12 @@ class bbcode {
         return $result;
     }
 
+    /**
+     * Converts an element tree back into a syntax array.
+     *
+     * @param array<int, array<string, mixed>>|bool $tree The tree to convert; defaults to the current tree.
+     * @return array<int, array<string, mixed>> The syntax array.
+     */
     function get_syntax($tree = false) {
         if (! is_array($tree)) {
             $tree = $this -> tree;
@@ -810,6 +915,12 @@ class bbcode {
         return $syntax;
     }
 
+    /**
+     * Converts text to HTML, replacing newlines, spaces, links and mnemonics.
+     *
+     * @param string $text The text to process.
+     * @return string The processed HTML text.
+     */
     function replace_links($text) {
         $text = nl2br(htmlspecialchars($text,ENT_NOQUOTES));
         $text = str_replace('  ', '&nbsp;&nbsp;', $text);
@@ -826,7 +937,7 @@ class bbcode {
                 '$1<a href="http://$2" target="_blank">$2</a>',
                 '$1<a href="mailto:$2">$2</a>'
             );
-            $text = preg_replace($search, $replace, $text);
+            $text = (string) preg_replace($search, $replace, $text);
         }
         foreach ($this -> mnemonics as $mnemonic => $value) {
             $text = str_replace($mnemonic, $value, $text);
@@ -834,6 +945,12 @@ class bbcode {
         return $text;
     }
 
+    /**
+     * Converts the element tree into HTML.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         if (! is_array($elems)) {
             $elems = $this -> tree;
@@ -863,6 +980,7 @@ class bbcode {
                 }
                 $handler = $this -> tags[$elem['name']];
                 if (class_exists($handler)) {
+                    /** @var bbcode $tag */
                     $tag = new $handler;
                     $tag -> tag = $elem['name'];
                     $tag -> attrib = $elem['attrib'];
@@ -880,16 +998,26 @@ class bbcode {
     }
 }
 
-// Класс для тегов [a], [anchor] и [url]
+/**
+ * Class for the [a], [anchor] and [url] tags.
+ */
 class bb_a extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','align','center','h1','h2','h3','hr','justify','left','list','php',
         'quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'abbr','acronym','b','bbcode','code','color','font','i','img','nobb',
         's','size','strike','sub','sup','tt','u'
     );
+    /**
+     * Renders the link element as an HTML anchor tag.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         $text = '';
         foreach ($this -> tree as $val) {
@@ -949,10 +1077,20 @@ class bb_a extends bbcode {
     }
 }
 
-// Класс для тегов [align], [center], [justify], [left] и [right]
+/**
+ * Class for the [align], [center], [justify], [left] and [right] tags.
+ */
 class bb_align extends bbcode {
+    /** @var int */
     var $rbr = 1;
+    /** @var array<int, string> */
     var $ends = array('*','tr','td','th');
+    /**
+     * Renders the alignment element as an HTML div with the alignment class.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         $align = '';
         if (isset($this -> attrib['justify'])) { $align = 'justify'; }
@@ -980,17 +1118,27 @@ class bb_align extends bbcode {
     }
 }
 
-// Класс для тега [color]
+/**
+ * Class for the [color] tag.
+ */
 class bb_color extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
+    /**
+     * Renders the color element as an HTML font tag with the color attribute.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         $color = htmlspecialchars($this -> attrib['color']);
         return '<font color="'.$color.'">'.parent::get_html($this -> tree)
@@ -998,32 +1146,52 @@ class bb_color extends bbcode {
     }
 }
 
-// Класс для тегов [s] и [strike]
+/**
+ * Class for the [s] and [strike] tags.
+ */
 class bb_del extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
+    /**
+     * Renders the [s] and [strike] element as an HTML del tag.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         return '<del>'.parent::get_html($this -> tree).'</del>';
     }
 }
 
-// Класс для тега [email]
+/**
+ * Class for the [email] tag.
+ */
 class bb_email extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'abbr','acronym','b','bbcode','code','color','email','font','i','img',
         'nobb','s','size','strike','sub','sup','tt','u'
     );
+    /**
+     * Renders the email element as an HTML mailto anchor tag.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         $attr = ' class="bb_email"';
         $href = $this -> attrib['email'];
@@ -1052,17 +1220,27 @@ class bb_email extends bbcode {
     }
 }
 
-// Класс для тега [font]
+/**
+ * Class for the [font] tag.
+ */
 class bb_font extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','font','google','i','img','nobb','s','size','strike','sub','sup',
         'tt','u','url'
     );
+    /**
+     * Renders the font element as an HTML font tag with face, color and size attributes.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         $face = $this -> attrib['font'];
         $attr = ' face="'.htmlspecialchars($face).'"';
@@ -1074,37 +1252,69 @@ class bb_font extends bbcode {
     }
 }
 
-// Класс для тега [hr]
+/**
+ * Class for the [hr] tag.
+ */
 class bb_hr extends bbcode {
+    /** @var bool */
     var $is_close = true;
+    /** @var int */
     var $rbr = 1;
+    /** @var array<int, string> */
     var $ends = array();
+    /** @var array<int, string> */
     var $children = array();
+    /**
+     * Renders the horizontal rule element as an HTML hr tag.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         return '<hr class="bb" />';
     }
 }
 
-// Класс для тега [i]
+/**
+ * Class for the [i] tag.
+ */
 class bb_i extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
+    /**
+     * Renders the [i] element as an HTML i tag.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         return '<i>'.parent::get_html($this -> tree).'</i>';
     }
 }
 
-// Класс для тега [img]
+/**
+ * Class for the [img] tag.
+ */
 class bb_img extends bbcode {
+    /** @var array<int, string> */
     var $ends = array();
+    /** @var array<int, string> */
     var $children = array();
+    /**
+     * Renders the image element as an HTML img tag.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         $attr = 'alt=""';
         if (isset($this -> attrib['width'])) {
@@ -1134,10 +1344,20 @@ class bb_img extends bbcode {
     }
 }
 
-// Класс для тега [quote]
+/**
+ * Class for the [quote] tag.
+ */
 class bb_quote extends bbcode {
+    /** @var int */
     var $rbr = 1;
+    /** @var array<int, string> */
     var $ends = array();
+    /**
+     * Renders the quote element as an HTML block with the author and quoted text.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         $author = htmlspecialchars($this -> attrib['quote']);
         if ($author) $author = "(\n<b style=\"color: white;\">".$author."</b>\n)";
@@ -1147,17 +1367,27 @@ class bb_quote extends bbcode {
     }
 }
 
-// Класс для тега [size]
+/**
+ * Class for the [size] tag.
+ */
 class bb_size extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
+    /**
+     * Renders the size element as an HTML font tag with the size attribute.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         $sign = '';
         if (strlen($this -> attrib['size'])) {
@@ -1181,71 +1411,116 @@ class bb_size extends bbcode {
     }
 }
 
-// Класс для тега [b]
+/**
+ * Class for the [b] tag.
+ */
 class bb_strong extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
+    /**
+     * Renders the [b] element as an HTML strong tag.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         return '<strong>'.parent::get_html($this -> tree).'</strong>';
     }
 }
 
-// Класс для тега [sub]
+/**
+ * Class for the [sub] tag.
+ */
 class bb_sub extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
+    /**
+     * Renders the [sub] element as an HTML sub tag.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         return '<sub>'.parent::get_html($this -> tree).'</sub>';
     }
 }
 
-// Класс для тега [sup]
+/**
+ * Class for the [sup] tag.
+ */
 class bb_sup extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr','justify',
         'left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
+    /**
+     * Renders the [sup] element as an HTML sup tag.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         return '<sup>'.parent::get_html($this -> tree).'</sup>';
     }
 }
 
-// Класс для тега [u]
+/**
+ * Class for the [u] tag.
+ */
 class bb_u extends bbcode {
+    /** @var array<int, string> */
     var $ends = array(
         '*','address','align','center','h1','h2','h3','hr',
         'justify','left','list','php','quote','right','table','td','th','tr'
     );
+    /** @var array<int, string> */
     var $children = array(
         'a','abbr','acronym','anchor','b','bbcode','code','color','email',
         'font','google','i','img','nobb','s','size','strike','sub','sup','tt',
         'u','url'
     );
+    /**
+     * Renders the [u] element as an HTML u tag.
+     *
+     * @param array<int, array<string, mixed>>|bool $elems The elements to convert; defaults to the current tree.
+     * @return string The generated HTML.
+     */
     function get_html($elems = false) {
         return '<u>'.parent::get_html($this -> tree).'</u>';
     }
 }
 
-// Преобразовать BB-коды в HTML.
+/**
+ * Converts BBCode text into HTML.
+ *
+ * @param string $text The BBCode text to convert.
+ * @return string The generated HTML.
+ */
 function bb ($text)
 {
     $bb = new bbcode ($text);

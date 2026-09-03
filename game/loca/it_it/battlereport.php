@@ -3,7 +3,7 @@
 // Stringhe del rapporto di battaglia.
 
 $LOCA["it"]["BATTLE_HUGE_WARNING"] = "!!! QUESTE STRINGHE DEVONO ESSERE ALMENO UGUALI A QUELLE DEL GIOCO ORIGINALE!!! Molti strumenti (websim, log server, convertitori di report di battaglia ecc.) si basano su di esse."; // Non utilizzato nel gioco, solo un avvertimento per tutti i traduttori.
-$LOCA["it"]["BATTLE_REPORT"] = "Battle Report";
+$LOCA["it"]["BATTLE_REPORT"] = "Rapporto di battaglia";
 // Nella versione inglese, la riga per l'attaccante con il tempo inizia con "At" e per il difensore con "On". Ecco perché sono ADATE e DDATE
 // Si utilizza solo ADATE_INFO
 $LOCA["it"]["BATTLE_ADATE_INFO"] = "Le seguenti flotte sono una di fronte all`altra il: #1";
@@ -32,7 +32,7 @@ $LOCA["it"]["BATTLE_MOONCHANCE"] = "La probabilit&agrave; di formazione luna &eg
 $LOCA["it"]["BATTLE_MOON"] = "L`enorme quantità di particelle di metallo e cristallo alla deriva, si attraggono a vicenda, e lentamente formano un satellite lunare in orbita attorno al pianeta.";
 $LOCA["it"]["BATTLE_REPAIRED"] = " sono stati riparati.";
 $LOCA["it"]["BATTLE_REPAIRED1"] = " sono stati riparati.";
-$LOCA["it"]["BATTLE_SPACE"] = "Your fleet has arrived at its target. Unfortunately, there is only empty space.";
+$LOCA["it"]["BATTLE_SPACE"] = "La tua flotta è arrivata a destinazione. Purtroppo, c'è solo spazio vuoto.";
 $LOCA["it"]["BATTLE_LOST"] = "E` stato perso il contatto con la flotta attaccante. <br> Questo significa che &egrave; stata completamente distrutta al primo round.";
 
 $LOCA["it"]["SNAME_202"] = "Cargo leggero";

@@ -1,0 +1,458 @@
+<html>
+ <head>
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+  <script language="JavaScript">var session="0000000003e9";</script>
+  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+<link rel='stylesheet' type='text/css' href='css/combox.css'>
+<link rel='stylesheet' type='text/css' href='http://localhost/evolution/formate.css' />
+<title>ユニバース 1 OGame</title>
+  <script src='js/utilities.js' type='text/javascript'></script>
+  <script language='JavaScript'>
+  </script>
+<script type='text/javascript' src='js/overLib/overlib.js'></script>
+<!-- HEADER -->
+
+<script language='JavaScript'>
+function onBodyLoad() {
+    window.setTimeout('reloadImages()', 100);
+}
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != '')) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script>
+</head>
+<body style='overflow: hidden;' onload='onBodyLoad();' onunload='' >
+<div id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>
+<div id='header_top'><center>
+<table class='header'>
+<tr class='header' >
+<td class='header' style='width:5;' >
+<table class='header'>
+<tr class='header'>
+<td class='header'><img src='http://localhost/evolution/planeten/small/s_dschjungelplanet02.jpg' width='50' height='50'></td>
+<td class='header'>
+<table class='header'>
+<select size='1' onchange='haha(this)'>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=1&mode=Forschung' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1&mode=Forschung' >[1:1:4]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=10&mode=Forschung' >Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10&mode=Forschung' >[1:1:4]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=2&mode=Forschung' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2&mode=Forschung' >[1:1:5]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=3&mode=Forschung' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3&mode=Forschung' >[1:2:4]</a></option>
+    <option value='index.php?page=buildings&session=0000000003e9&cp=11&mode=Forschung' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11&mode=Forschung' >[1:2:4]</a></option>
+</select></table></td></tr></table></td>
+
+<td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
+<tr class='header'>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/metall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/kristall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/deuterium.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<a href=index.php?page=micropayment&session=0000000003e9>
+<img border='0' src='img/dm_klein_2.jpg' width='42' height='22' title='ダークマター'></a>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/energie.gif' width='42' height='22'>
+</td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>メタル</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>クリスタル</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>重水素</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>ダークマター</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>エネルギー</font></b></i></td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='90'><font >25.047</font></td>
+    <td align='center' class='header' width='90'><font >15.016</font></td>
+    <td align='center' class='header' width='90'><font >8.003</font></td>
+    <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
+    <td align='center' class='header' width='90'><font >359</font>/529</td>
+</tr>
+</table></td>
+<td class='header'>
+<table class='header' align=left>
+<tr class='header'>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/commander_ikon.gif' width='32' height='32' alt='オジェム指揮官'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>オジェム指揮官</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/admiral_ikon.gif' width='32' height='32' alt='提督'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>提督</font><br><font size=1 color=skyblue>&amp;nbsp;最大フリート数 +2</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/ingenieur_ikon.gif' width='32' height='32' alt='エンジニア'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>エンジニア</font><br><font size=1 color=skyblue>ディフェンスロスを半減+エネルギー10%増加</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/geologe_ikon.gif' width='32' height='32' alt='地質学者'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>地質学者</font><br><font size=1 color=skyblue>鉱山収入+10</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/technokrat_ikon.gif' width='32' height='32' alt='テクノクラート'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>テクノクラート</font><br><font size=1 color=skyblue>スパイ活動レベル+2、調査時間25%短縮</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+<td align='center' class='header'></td></tr></table></td>
+
+</tr>
+</table>
+</div><!-- END HEADER -->
+
+<!-- LEFTMENU -->
+
+   <div id='leftmenu'>
+
+<script language='JavaScript'>
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+<center>
+
+<div id='menu'>
+<a href='mailto:barrierefrei@ogame.de' title='視覚障害のある選手に関する問題は、下記までお問い合わせください barrierefrei@ogame.de.' style='width:1px;'></a>
+<p style='width:110px;'><NOBR>ユニバース 1 (<a href='index.php?page=changelog&session=0000000003e9'>v 0.84</a>)</NOBR></p>
+<table width='110' cellspacing='0' cellpadding='0'>
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/ogame-produktion.jpg' width='110' height='40' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=0000000003e9' accesskey="o">レビュー</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=imperium&session=0000000003e9&planettype=1&no_header=1' accesskey="e">帝国</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=b_building&session=0000000003e9' accesskey="b">建物</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=0000000003e9' accesskey="r">原材料</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=0000000003e9' accesskey=""><font color='FF8900'>贖い主</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Forschung' accesskey="c">リサーチ</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Flotte' accesskey="s">造船所</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=0000000003e9&mode=Flotte' accesskey="f">フリート</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=0000000003e9' accesskey="t">テクノロジー</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=0000000003e9&no_header=1' accesskey="g">ギャラクシー</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Verteidigung' accesskey="d">ディフェンス</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/info-help.jpg' width='110' height='19' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=0000000003e9' accesskey="a">私の同盟</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+    <td align=center>
+     <a id='darkmatter2' style='cursor:pointer; width:110px;'
+         href='index.php?page=micropayment&session=0000000003e9' accesskey="i"><b>オフィサーズ・カジノ</a></b>
+    </div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=statistics&session=0000000003e9' accesskey="k">統計</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=0000000003e9' accesskey="h">検索</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/user-menu.jpg' width='110' height='35' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=messages&session=0000000003e9&dsp=1' accesskey="m">メッセージ</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=0000000003e9&no_header=1", "Notizen");' accesskey="n">備考</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=0000000003e9' accesskey="u">友人</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=0000000003e9' accesskey="p">設定</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=0000000003e9' accesskey="q">出力</a>
+    </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+    </div>
+<!-- END LEFTMENU -->
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<title> 
+建物#Gebaeude
+</title> 
+<script type="text/javascript"> 
+
+function setMax(key, number){
+    document.getElementsByName('fmenge['+key+']')[0].value=number;
+}
+</script> 
+<table align=top><tr><td style='background-color:transparent;'>  <table width="530">
+          <tr> 
+          <td class=l colspan="2">説明</td> 
+          <td class=l><b>数量</b></td> 
+          </tr> 
+
+<tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=106>
+              <img border='0' src="http://localhost/evolution/gebaeude/106.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=106>スパイ活動</a></a> (レベル 5 <b><font style="color:lime;">+2</font></b> <img border="0" src="img/technokrat_ikon.gif" alt="テクノクラート" onmouseover="return overlib('<font color=white>テクノクラート</font>', WIDTH, 100);" onmouseout='return nd();' width="20" height="20" style="vertical-align:middle;"> )<br>この技術を使用すると、他の惑星や月に関する情報を得ることができます。<br>コスト: メタル: <b>6.400</b> クリスタル: <b>32.000</b> 重水素: <b>6.400</b><br>期間: 6時 58分 54秒<br></th><td class=k> - </td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=108>
+              <img border='0' src="http://localhost/evolution/gebaeude/108.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=108>コンピューター技術</a></a> (レベル 6)<br>コンピューターの容量を増やすことで、より多くの艦隊を指揮できます。コンピューター技術のレベルごとに、艦隊の最大数が1つ増加します。<br>コスト: クリスタル: <b>25.600</b> 重水素: <b>38.400</b><br>期間: 4時 39分 16秒<br></th><td class=k> - </td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=109>
+              <img border='0' src="http://localhost/evolution/gebaeude/109.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=109>武器技術</a></a> (レベル 3)<br>武器技術は武器システムをより効率的にします。武器技術のレベルごとに、ユニットの武器強度が基本値の10％増加します。<br>コスト: メタル: <b>6.400</b> クリスタル: <b>1.600</b><br>期間: 1時 27分 16秒<br></th><td class=k> - </td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=111>
+              <img border='0' src="http://localhost/evolution/gebaeude/111.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=111>宇宙船の装甲</a></a> (レベル 4)<br>特殊合金は、艦船と防衛施設の装甲を改善します。装甲の効果はレベルごとに10％向上します。<br>コスト: メタル: <b>16.000</b><br>期間: 2時 54分 32秒<br></th><td class=k> - </td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=113>
+              <img border='0' src="http://localhost/evolution/gebaeude/113.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=113>エネルギー技術</a></a> (レベル 5)<br>さまざまな種類のエネルギーの制御は、多くの新しい技術に必要です。<br>コスト: クリスタル: <b>25.600</b> 重水素: <b>12.800</b><br>期間: 4時 39分 16秒<br></th><td class=k>                <div id="bxx" class="z"></div>
+                <script   type="text/javascript">
+                v=new Date();
+                var bxx=document.getElementById('bxx');
+                function t(){
+                    n=new Date();
+                    ss=500;
+                    s=ss-Math.round((n.getTime()-v.getTime())/1000.);
+                    m=0;h=0;
+                    if(s<0){
+    
+                        bxx.innerHTML='完了<br><a href=index.php?page=buildings&session=0000000003e9&mode=Forschung&cp=1 >次へ</a>';
+                    }else{
+                        if(s>59){
+                            m=Math.floor(s/60);
+                            s=s-m*60
+                        }
+                        if(m>59){
+                            h=Math.floor(m/60);
+                            m=m-h*60
+                        }
+                        if(s<10){
+                            s="0"+s
+                        }
+                        if(m<10){
+                            m="0"+m
+                        }
+                        bxx.innerHTML=h+":"+m+":"+s+"<br><a href=index.php?page=buildings&session=0000000003e9&unbau=113&mode=Forschung&cp=1"+
+                        ">キャンセル</a>"                }
+                    ;
+                    window.setTimeout("t();",999);
+                }
+                window.onload=t;
+                </script>
+</td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=115>
+              <img border='0' src="http://localhost/evolution/gebaeude/115.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=115>ジェットエンジン</a></a> (レベル 4)<br>このドライブの開発により一部の艦船は高速化しますが、各レベルで速度が増加するのは基本値のわずか10％です。<br>コスト: メタル: <b>6.400</b> 重水素: <b>9.600</b><br>期間: 1時 9分 49秒<br></th><td class=k> - </td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=117>
+              <img border='0' src="http://localhost/evolution/gebaeude/117.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=117>インパルスモーター</a></a> (レベル 3)<br>インパルスモーターは反動の原理に基づいています。このドライブのさらなる開発により一部の艦船は高速化しますが、各レベルで速度が増加するのは基本値のわずか20％です。<br>コスト: メタル: <b>16.000</b> クリスタル: <b>32.000</b> 重水素: <b>4.800</b><br>期間: 8時 43分 38秒<br></th><td class=k> - </td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=120>
+              <img border='0' src="http://localhost/evolution/gebaeude/120.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=120>レーザー技術</a></a> (レベル 4)<br>光を集中させると、物体に当たったときにダメージを与えるビームが生み出されます。<br>コスト: メタル: <b>3.200</b> クリスタル: <b>1.600</b><br>期間: 52分 21秒<br></th><td class=k> - </td></tr><tr>                             <td class=l>
+              <a href=index.php?page=infos&session=0000000003e9&gid=124>
+              <img border='0' src="http://localhost/evolution/gebaeude/124.gif" align='top' width='120' height='120'>
+              </a>
+              </td>
+        <td class=l ><a href=index.php?page=infos&session=0000000003e9&gid=124>遠征技術</a></a> (レベル 2)<br>艦船には研究モジュールを装備でき、宇宙の未踏地域への遠征中に収集した情報のデータバックアップが可能になります。艦船には研究モジュールを装備でき、宇宙の未踏地域への遠征中に収集した情報のデータバックアップが可能になります。<br>コスト: メタル: <b>16.000</b> クリスタル: <b>32.000</b> 重水素: <b>16.000</b><br>期間: 8時 43分 38秒<br></th><td class=k> - </td></tr></table></table>
+<br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+
+
+
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+<div id='messagebox'><center></center></div>
+<div id='errorbox'><center></center></div>
+<script>
+headerHeight = 81;
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = '_blank';
+  }
+}
+</script>
+<style>
+.layer {
+    z-index:999999999;
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 757px; 
+    height: 475px; 
+    background-color: #040e1e;
+    border: 3px double orange;
+    padding: 0;
+    opacity: .90;
+}
+</style>
+</body></html>

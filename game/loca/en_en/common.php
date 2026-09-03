@@ -2,7 +2,10 @@
 
 // Common strings. Occur on most pages.
 
-$LOCA["en"]["PAGE_TITLE"] = "Uni#1 OGame";
+$LOCA["en"]["OGAME_INT"] = "OGame";
+$LOCA["en"]["OGAME_LOC"] = "OGame";
+
+$LOCA["en"]["PAGE_TITLE"] = "Uni#1 #2";
 
 $LOCA["en"]["NAME_".GID_RC_METAL] = "Metal";
 $LOCA["en"]["NAME_".GID_RC_CRYSTAL] = "Crystal";
@@ -27,7 +30,7 @@ $LOCA["en"]["TIME_SEC"] = "s";
 
 // Commander and officers.
 
-$LOCA["en"]["PR_COMA" ] = "OGame Commander";
+$LOCA["en"]["PR_COMA" ] = "Commander";
 $LOCA["en"]["PR_ADMIRAL" ] = "Fleet Admiral";
 $LOCA["en"]["PR_ENGINEER" ] = "Engineer";
 $LOCA["en"]["PR_GEOLOGIST" ] = "Geologist";

@@ -4,7 +4,7 @@
 
 require_once "event_list.php";
 
-function FleetSpanAttack (int $dir, array $fleet, array $owner, array $origin, array $target) : void
+function FleetSpanAttack (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
 {
     if ($dir == 0) echo "<span class='flight ownattack'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownattack"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
         va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "ownattack"), PlanetTo($target, "ownattack")).
@@ -13,11 +13,11 @@ function FleetSpanAttack (int $dir, array $fleet, array $owner, array $origin, a
         va(loca("EVENT_FROM_RETURN_TO"), PlanetFrom($origin, "ownattack"), PlanetTo($target, "ownattack")).
         ". ".loca("EVENT_MISSION").": ".Cargo($fleet,"ownattack",loca("EVENT_M_ATTACK"))."</span>";
     else if ($dir == 0x10) echo "<span class='attack'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"attack"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "attack"), PlanetTo($target, "attack")).
+        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails((array) $owner), PlanetFrom($origin, "attack"), PlanetTo($target, "attack")).
         ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ATTACK")."</span>";
 }
 
-function FleetSpanAcsAttack (int $dir, array $fleet, array $owner, array $origin, array $target) : void
+function FleetSpanAcsAttack (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
 {
     if ($dir == 0) echo "<span class='federation'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownfederation"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
         va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "ownfederation"), PlanetTo($target, "ownfederation")).
@@ -26,14 +26,14 @@ function FleetSpanAcsAttack (int $dir, array $fleet, array $owner, array $origin
         va(loca("EVENT_FROM_RETURN_TO"), PlanetFrom($origin, "ownfederation"), PlanetTo($target, "ownfederation")).
         ". ".loca("EVENT_MISSION").": ".Cargo($fleet,"ownfederation",loca("EVENT_M_ACS_ATTACK"))."</span>";
     else if ($dir == 0x10) echo "<span class='federation'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"federation"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "federation"), PlanetTo($target, "federation")).
+        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails((array) $owner), PlanetFrom($origin, "federation"), PlanetTo($target, "federation")).
         ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ACS_ATTACK")."</span>";
     else if ($dir == 0x20) echo "<span class='ownfederation'>".va(loca("EVENT_FLEET_ACS_HEAD"),OverFleet($fleet,1,"ownfederation"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "ownfederation"), PlanetTo($target, "ownfederation")).
+        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails((array) $owner), PlanetFrom($origin, "ownfederation"), PlanetTo($target, "ownfederation")).
         ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ACS_ATTACK")."</span>";
 }
 
-function FleetSpanTransport (int $dir, array $fleet, array $owner, array $origin, array $target) : void
+function FleetSpanTransport (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
 {
     if ($dir == 0) echo "<span class='flight owntransport'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"owntransport"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
         va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "owntransport"), PlanetTo($target, "owntransport")).
@@ -42,11 +42,11 @@ function FleetSpanTransport (int $dir, array $fleet, array $owner, array $origin
         va(loca("EVENT_FROM_RETURN_TO"), PlanetFrom($origin, "owntransport"), PlanetTo($target, "owntransport")).
         ". ".loca("EVENT_MISSION").": ".Cargo($fleet,"owntransport",loca("EVENT_M_TRANSPORT"))."</span>";
     else if ($dir == 0x10) echo "<span class='flight transport'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"transport"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "transport"), PlanetTo($target, "transport")).
+        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails((array) $owner), PlanetFrom($origin, "transport"), PlanetTo($target, "transport")).
         ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_TRANSPORT")."</span>";
 }
 
-function FleetSpanDeploy (int $dir, array $fleet, array $owner, array $origin, array $target) : void
+function FleetSpanDeploy (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
 {
     if ($dir == 0) echo "<span class='flight owndeploy'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"owndeploy"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
         va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "owndeploy"), PlanetTo($target, "owndeploy")).
@@ -56,7 +56,7 @@ function FleetSpanDeploy (int $dir, array $fleet, array $owner, array $origin, a
         ". ".loca("EVENT_MISSION").": ".Cargo($fleet,"owndeploy",loca("EVENT_M_DEPLOY"))."</span>";
 }
 
-function FleetSpanAcsHold (int $dir, array $fleet, array $owner, array $origin, array $target) : void
+function FleetSpanAcsHold (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
 {
     if ($dir == 0) echo "<span class='flight ownhold'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownhold"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
         va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "ownhold"), PlanetTo($target, "ownhold")).
@@ -68,14 +68,14 @@ function FleetSpanAcsHold (int $dir, array $fleet, array $owner, array $origin, 
         va(loca("EVENT_HOLD_FROM_ONTO"), PlanetFrom($origin, "ownhold"), PlanetFrom($target, "ownhold")).
         ". ".loca("EVENT_MISSION").": ".Cargo($fleet,"ownhold",loca("EVENT_M_HOLD"))."</span>";
     else if ($dir == 0x20) echo "<span class='flight hold'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"hold",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "hold"), PlanetTo($target, "hold")).
+        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails((array) $owner), PlanetFrom($origin, "hold"), PlanetTo($target, "hold")).
         ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_HOLD")."</span></span>";
-    else if ($dir == 0x22) echo "<span class='holding hold'>".va(loca("EVENT_FLEET_HOLD"),PlayerDetails($owner),OverFleet($fleet,1,"hold",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
+    else if ($dir == 0x22) echo "<span class='holding hold'>".va(loca("EVENT_FLEET_HOLD"),PlayerDetails((array) $owner),OverFleet($fleet,1,"hold",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
         va(loca("EVENT_FROM_TO_ORBIT"), PlanetFrom($origin, "hold"), PlanetFrom($target, "hold")).
         ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_HOLD")."</span>";
 }
 
-function FleetSpanSpy (int $dir, array $fleet, array $owner, array $origin, array $target) : void
+function FleetSpanSpy (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
 {
     if ($dir == 0) echo "<span class='flight ownespionage'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownespionage"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
         va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "ownespionage"), PlanetTo($target, "ownespionage")).
@@ -84,11 +84,11 @@ function FleetSpanSpy (int $dir, array $fleet, array $owner, array $origin, arra
         va(loca("EVENT_FROM_RETURN_TO"), PlanetFrom($origin, "ownespionage"), PlanetTo($target, "ownespionage")).
         ". ".loca("EVENT_MISSION").": ".Cargo($fleet,"ownespionage",loca("EVENT_M_SPY"))."</span>";
     else if ($dir == 0x10) echo "<span class='flight espionage'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"espionage"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "espionage"), PlanetTo($target, "espionage")).
+        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails((array) $owner), PlanetFrom($origin, "espionage"), PlanetTo($target, "espionage")).
         ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_SPY")."</span>";
 }
 
-function FleetSpanColonize (int $dir, array $fleet, array $owner, array $origin, array $target) : void
+function FleetSpanColonize (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
 {
     if ($dir == 0) echo "<span class='flight owncolony'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"owncolony"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
         va(loca("EVENT_COLONY_FROM_TO"), PlanetFrom($origin, "owncolony"), PlanetTo($target, "owncolony")).
@@ -98,7 +98,7 @@ function FleetSpanColonize (int $dir, array $fleet, array $owner, array $origin,
         ". ".loca("EVENT_MISSION").": ".Cargo($fleet,"owncolony",loca("EVENT_M_COLONY"))."</span>";
 }
 
-function FleetSpanRecycle (int $dir, array $fleet, array $owner, array $origin, array $target) : void
+function FleetSpanRecycle (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
 {
     if ($dir == 0) echo "<span class='flight ownharvest'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownharvest"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
         va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "ownharvest"), PlanetTo($target, "ownharvest")).
@@ -108,7 +108,7 @@ function FleetSpanRecycle (int $dir, array $fleet, array $owner, array $origin, 
         ". ".loca("EVENT_MISSION").": ".Cargo($fleet,"ownharvest",loca("EVENT_M_RECYCLE"))."</span>";
 }
 
-function FleetSpanDestroy (int $dir, array $fleet, array $owner, array $origin, array $target) : void
+function FleetSpanDestroy (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
 {
     if ($dir == 0) echo "<span class='flight owndestroy'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"owndestroy"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
         va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "owndestroy"), PlanetTo($target, "owndestroy")).
@@ -117,11 +117,11 @@ function FleetSpanDestroy (int $dir, array $fleet, array $owner, array $origin, 
         va(loca("EVENT_FROM_RETURN_TO"), PlanetFrom($origin, "owndestroy"), PlanetTo($target, "owndestroy")).
         ". ".loca("EVENT_MISSION").": ".Cargo($fleet,"owndestroy",loca("EVENT_M_DESTROY"))."</span>";
     else if ($dir == 0x10) echo "<span class='flight destroy'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"destroy"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "destroy"), PlanetTo($target, "destroy")).
+        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails((array) $owner), PlanetFrom($origin, "destroy"), PlanetTo($target, "destroy")).
         ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_DESTROY")."</span>";
 }
 
-function FleetSpanAcsAttackHead (int $dir, array $fleet, array $owner, array $origin, array $target) : void
+function FleetSpanAcsAttackHead (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
 {
     if ($dir == 0) echo "<span class='attack'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownattack"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
         va(loca("EVENT_FROM_TO"), PlanetFrom($origin, "ownattack"), PlanetTo($target, "ownattack")).
@@ -130,14 +130,14 @@ function FleetSpanAcsAttackHead (int $dir, array $fleet, array $owner, array $or
         va(loca("EVENT_FROM_RETURN_TO"), PlanetFrom($origin, "ownattack"), PlanetTo($target, "ownattack")).
         ". ".loca("EVENT_MISSION").": ".Cargo($fleet,"ownattack",loca("EVENT_M_ACS_ATTACK_HEAD"))."</span>";
     else if ($dir == 0x10) echo "<span class='attack'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"attack"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "attack"), PlanetTo($target, "attack")).
+        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails((array) $owner), PlanetFrom($origin, "attack"), PlanetTo($target, "attack")).
         ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ACS_ATTACK_HEAD")."</span>";
     else if ($dir == 0x20) echo "<span class='ownattack'>".va(loca("EVENT_FLEET_ACS_HEAD"),OverFleet($fleet,1,"ownattack"))."</a><a href='#' title='".TitleFleet($fleet,1)."'></a>".
-        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner), PlanetFrom($origin, "ownattack"), PlanetTo($target, "ownattack")).
+        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails((array) $owner), PlanetFrom($origin, "ownattack"), PlanetTo($target, "ownattack")).
         ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ACS_ATTACK_HEAD")."</span>";
 }
 
-function FleetSpanExpedition (int $dir, array $fleet, array $owner, array $origin, array $target) : void
+function FleetSpanExpedition (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
 {
     if ($dir == 0) echo "<span class='flight owntransport'>".va(loca("EVENT_FLEET_OWN"),OverFleet($fleet,0,"ownexpedition"))."</a><a href='#' title='".TitleFleet($fleet,0)."'></a>".
         va(loca("EVENT_EXPO_FROM_TO"), PlanetFrom($origin, "ownexpedition"), PlanetTo($target, "ownexpedition")).
@@ -149,17 +149,17 @@ function FleetSpanExpedition (int $dir, array $fleet, array $owner, array $origi
         ". ".loca("EVENT_MISSION").": ".Cargo($fleet,"ownexpedition",loca("EVENT_M_EXPO"))."</span>";
 }
 
-function FleetSpanMissile (int $dir, array $fleet, array $owner, array $origin, array $target) : void
+function FleetSpanMissile (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
 {
     if ($dir == 0)
     {
-        echo "<span class='ownmissile'>" .va(loca("EVENT_RAK"), $fleet_entry['ipm_amount'], PlanetFrom($origin, ""), PlanetTo($target, "own")) . " ";
+        echo "<span class='ownmissile'>" .va(loca("EVENT_RAK"), $fleet['ipm_amount'], PlanetFrom($origin, ""), PlanetTo($target, "own")) . " ";
     }
     else if ($dir == 0x10)
     {
-        echo "<span class='missile'>" .va(loca("EVENT_RAK"), $fleet_entry['ipm_amount'], PlanetFrom($origin, ""), PlanetTo($target, "")) . " ";
+        echo "<span class='missile'>" .va(loca("EVENT_RAK"), $fleet['ipm_amount'], PlanetFrom($origin, ""), PlanetTo($target, "")) . " ";
     }
-    if ( $fleet_entry['ipm_target'] > 0 ) echo loca("EVENT_RAK_TARGET") . " " . loca ("NAME_".$fleet_entry['ipm_target']);
+    if ( $fleet['ipm_target'] > 0 ) echo loca("EVENT_RAK_TARGET") . " " . loca ("NAME_".$fleet['ipm_target']);
     echo "</span>";    
 }
 
@@ -449,7 +449,7 @@ function EventList () : void
             echo "<th colspan='3'>";
             for ($fl=0; $fl<$t['fleets']; $fl++)
             {
-                echo FleetSpan ($t['fleet'][$fl]);
+                FleetSpan ($t['fleet'][$fl]);
                 if ($t['fleets'] > 1) echo "<br /><br />";
             }
             echo "</th></tr>\n\n";

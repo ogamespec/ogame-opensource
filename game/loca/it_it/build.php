@@ -16,6 +16,23 @@ $LOCA["it"]["BUILD_BUSY"] = "In ricerca";
 $LOCA["it"]["BUILD_BUILD"] = " costruisci ";
 $LOCA["it"]["BUILD_BUILD_LEVEL"] = "Sviluppa <br>il livello  #1";
 
+// Localizzazioni per la pagina degli edifici (Cantiere/Difese/Ricerca)
+
+$LOCA["it"]["BUILD_BUILDINGS_HEAD"] = "Edifici#Gebaeude";
+$LOCA["it"]["BUILD_DESC"] = "Descrizione";
+$LOCA["it"]["BUILD_AMOUNT"] = "Quantità";
+$LOCA["it"]["BUILD_SHIPYARD_UNITS"] = "in magazzino #1";
+$LOCA["it"]["BUILD_SHIPYARD_CANT"] = "impossibile";
+$LOCA["it"]["BUILD_SHIPYARD_SUBMIT"] = "Costruisci";
+$LOCA["it"]["BUILD_RESEARCH_NEXT"] = "successivo";
+$LOCA["it"]["BUILD_RESEARCH_LEVEL"] = "Ricerca<br> livello #1";
+$LOCA["it"]["BUILD_RESEARCH"] = " ricerca ";
+$LOCA["it"]["BUILD_SHIPYARD_PROCESSING"] = "In produzione";
+$LOCA["it"]["BUILD_SHIPYARD_COMPLETE"] = "Ordini completati";
+$LOCA["it"]["BUILD_SHIPYARD_CURRENT"] = " (in produzione)";
+$LOCA["it"]["BUILD_SHIPYARD_QUEUE"] = "Ordini in coda";
+$LOCA["it"]["BUILD_SHIPYARD_TIME"] = "L'intera produzione richiederà";
+
 // Testi di errore per il metodo CanBuild, CanResearch (queue.php)
 
 $LOCA["it"]["BUILD_ERROR_UNI_FREEZE"] = "L'universo è in pausa!";
@@ -33,6 +50,13 @@ $LOCA["it"]["BUILD_ERROR_NO_SUCH_BUILDING"] = "Impossibile smantellare questa st
 $LOCA["it"]["BUILD_ERROR_RESEARCH_ALREADY"] = "La ricerca è già in corso!";
 $LOCA["it"]["BUILD_ERROR_RESEARCH_LAB_BUILDING"] = "Il laboratorio di ricerca è stato potenziato!";
 $LOCA["it"]["BUILD_ERROR_RESEARCH_VACATION"] = "In modalità Vacanza (VM), lo studio non è possibile.";
+$LOCA["it"]["BUILD_ERROR_MAX_LEVEL"] = "Livello massimo raggiunto.";
+$LOCA["it"]["BUILD_ERROR_SHIPYARD_BUSY"] = "Non è possibile costruire navi o difese perché il cantiere spaziale o la fabbrica dei naniti è in fase di potenziamento";
+$LOCA["it"]["BUILD_ERROR_VACATION"] = "Modalità vacanza minima fino al #1";
+$LOCA["it"]["BUILD_ERROR_SHIPYARD_REQUIRED"] = "Per fare questo, devi costruire un cantiere spaziale!";
+$LOCA["it"]["BUILD_ERROR_RESLAB_BUSY"] = "Non è possibile condurre ricerche perché il laboratorio di ricerca è in fase di potenziamento.";
+$LOCA["it"]["BUILD_ERROR_RESLAB_REQUIRED"] = "Per fare questo, devi costruire un laboratorio di ricerca!";
+$LOCA["it"]["BUILD_ERROR_DOME"] = "La cupola di scudo può essere costruita solo 1 volta.";
 
 // Messaggio di cancellazione della coda per il comandante.
 

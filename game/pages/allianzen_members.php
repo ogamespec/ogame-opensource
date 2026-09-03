@@ -48,7 +48,7 @@ function PageAlly_MemberList () : void
         $hplanet = LoadPlanetById ($user['hplanetid']);
         echo "<tr>\n";
         echo "    <th>".($i+1)."</th>\n";
-        echo "    <th>".$user['oname']."</th>\n";
+        echo "    <th>".htmlspecialchars($user['oname'])."</th>\n";
         if ( $GlobalUser['player_id'] != $user['player_id'] ) {
             echo "    <th><a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=0 alt=\"".loca("ALLY_MEMBERS_WRITE_MESSAGE")."\"></a></th>\n";
         }
@@ -85,6 +85,7 @@ function PageAlly_MemberSettings () : void
     if ( method() === "GET" && $_GET['a'] == 13 && $selected_user)        // Kick member
     {
         $leaver = LoadUser ($selected_user);
+        if ( $leaver === null ) $leaver = array();
 
         $query = "UPDATE ".$db_prefix."users SET ally_id = 0 WHERE player_id = $selected_user";
         dbquery ($query);
@@ -97,7 +98,7 @@ function PageAlly_MemberSettings () : void
             $user = dbarray ($result);
             loca_add ("ally", $user['lang']);
             SendMessage ( $user['player_id'], 
-                va(loca_lang("ALLY_MSG_FROM", $user['lang']), $ally['tag']), 
+                va(loca_lang("ALLY_MSG_FROM", $user['lang']), htmlspecialchars($ally['tag'])), 
                 loca_lang("ALLY_MSG_COMMON", $user['lang']), 
                 va(loca_lang("ALLY_MSG_KICK_TEXT", $user['lang']), $leaver['oname']), MTYP_ALLY);
         }
@@ -105,9 +106,9 @@ function PageAlly_MemberSettings () : void
         // A message to the player about the exclusion.
         loca_add ("ally", $leaver['lang']);
         SendMessage ( $leaver['player_id'], 
-                va(loca_lang("ALLY_MSG_FROM", $leaver['lang']), $ally['tag']), 
-                va(loca_lang("ALLY_MSG_KICK_SUBJ", $leaver['lang']), $ally['tag']), 
-                va(loca_lang("ALLY_MSG_YOU_KICKED", $leaver['lang']), $GlobalUser['oname'], $ally['tag']), MTYP_ALLY);
+                va(loca_lang("ALLY_MSG_FROM", $leaver['lang']), htmlspecialchars($ally['tag'])), 
+                va(loca_lang("ALLY_MSG_KICK_SUBJ", $leaver['lang']), htmlspecialchars($ally['tag'])), 
+                va(loca_lang("ALLY_MSG_YOU_KICKED", $leaver['lang']), $GlobalUser['oname'], htmlspecialchars($ally['tag'])), MTYP_ALLY);
     }
 
     if ( method() === "POST" && $_GET['a'] == 16 && $selected_user)        // Assign a rank to a player
@@ -151,7 +152,7 @@ function PageAlly_MemberSettings () : void
         $days = floor ( ( $now - $user['lastclick'] ) / (60 * 60 * 24) );
         echo "<tr>";
         echo "<th>".($i+1)."</th>";
-        echo "<th>".$user['oname']."</th>";
+        echo "<th>".htmlspecialchars($user['oname'])."</th>";
         if ( $GlobalUser['player_id'] != $user['player_id'] ) {
             echo "<th><a href=\"index.php?page=writemessages&session=$session&messageziel=".$user['player_id']."\"><img src=\"".UserSkin()."img/m.gif\" border=0 alt=\"".loca("ALLY_MEMBERS_WRITE_MESSAGE")."\"></a></th>";
         }
@@ -163,7 +164,7 @@ function PageAlly_MemberSettings () : void
         echo "<th>".$days."d</th>";
         if ( $user['allyrank'] > 0 ) {
             echo "<th>";
-            echo "<a onmouseover='return overlib(\"<font color=white>".loca("ALLY_MEMBERS_KICK")."</font>\", WIDTH, 100);' onmouseout='return nd();' alt='".loca("ALLY_MEMBERS_KICK")."' href='javascript:if(confirm(\"".va(loca("ALLY_MEMBERS_KICK_CONFIRM"), $user['oname'])."\"))document.location=\"index.php?page=allianzen&session=$session&a=13&u=".$user['player_id']."\"';>";
+            echo "<a onmouseover='return overlib(\"<font color=white>".loca("ALLY_MEMBERS_KICK")."</font>\", WIDTH, 100);' onmouseout='return nd();' alt='".loca("ALLY_MEMBERS_KICK")."' href='javascript:if(confirm(\"".va(loca("ALLY_MEMBERS_KICK_CONFIRM"), htmlspecialchars($user['oname']))."\"))document.location=\"index.php?page=allianzen&session=$session&a=13&u=".$user['player_id']."\"';>";
             echo "<img src='".UserSkin()."pic/abort.gif' alt='".loca("ALLY_MEMBERS_KICK")."' border='0' ></a>";
             echo "<a onmouseover=\"return overlib('<font color=white>".loca("ALLY_MEMBERS_SET_RANK")."</font>', WIDTH, 100);\" onmouseout='return nd();' alt='".loca("ALLY_MEMBERS_SET_RANK")."' href=\"index.php?page=allianzen&session=$session&a=7&u=".$user['player_id']."\">";
             echo "<img src=\"".UserSkin()."pic/key.gif\" alt='".loca("ALLY_MEMBERS_SET_RANK")."' border=0></a>&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -174,7 +175,7 @@ function PageAlly_MemberSettings () : void
             {
                 $rank_result = EnumRanks ( $ally['ally_id'] );
                 $rows = dbrows ($rank_result);
-                echo "<form action=\"index.php?page=allianzen&session=$session&a=16&u=$selected_user\" method=POST><tr><th colspan=3>".va(loca("ALLY_MEMBERS_RANK_TO"), $user['oname'])."</th><th><select name=\"newrang\">";
+                echo "<form action=\"index.php?page=allianzen&session=$session&a=16&u=$selected_user\" method=POST><tr><th colspan=3>".va(loca("ALLY_MEMBERS_RANK_TO"), htmlspecialchars($user['oname']))."</th><th><select name=\"newrang\">";
                 while ($rows--)
                 {
                     $user_rank = dbarray ( $rank_result );

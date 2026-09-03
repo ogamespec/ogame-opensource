@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>OGame 0.84 Open Source — Year 2026 Digest</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* Palette and art of the classic "Evolution" skin (docs/assets/evolution). */
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+    font-size: 13px; line-height: 1.5;
+    color: #e6ebfb;
+    background-color: #040e1e;
+    background-image: url("assets/evolution/img/background.jpg");
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: top right;
+  }
+  a { color: #8fc7ff; }
+  a:hover { color: #cfe6ff; }
+
+  #topbar {
+    background: rgba(10, 24, 46, 0.94);
+    border-bottom: 1px solid #415680;
+    padding: 10px 18px;
+    position: sticky; top: 0; z-index: 50;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+  }
+  #topbar .t { font-weight: bold; font-size: 15px; color: #fff; }
+  #topbar .t small { display: block; font-weight: normal; font-size: 11px; color: #9fb4d8; }
+  #topbar .langs { margin-left: auto; }
+  #topbar .langs a {
+    color: #e6ebfb; text-decoration: none; border: 1px solid #415680;
+    background: #1d2c47; padding: 2px 8px; border-radius: 3px;
+  }
+  #topbar .langs a:hover { background: #344566; }
+
+  #resstrip { text-align: right; padding: 4px 14px 0 0; }
+  #resstrip img { vertical-align: middle; margin: 0 2px; }
+
+  #wrap { max-width: 1180px; margin: 0 auto; padding: 16px; display: flex; gap: 18px; align-items: flex-start; }
+  #nav {
+    width: 250px; flex: 0 0 250px; position: sticky; top: 70px;
+    background: rgba(9, 20, 40, 0.92);
+    border: 1px solid #415680; border-radius: 4px; padding: 10px 0;
+    max-height: calc(100vh - 90px); overflow: auto;
+  }
+  #nav ul { list-style: none; margin: 0; padding: 0; }
+  #nav li { margin: 0; }
+  #nav a {
+    display: block; padding: 4px 12px; text-decoration: none;
+    color: #c8d6f0; border-left: 2px solid transparent;
+  }
+  #nav a:hover { background: #1a2a47; border-left-color: #8fc7ff; }
+  #nav .hdr { padding: 6px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #7d95bf; }
+
+  #content { flex: 1 1 auto; min-width: 0; }
+  section {
+    background: rgba(9, 20, 40, 0.88);
+    border: 1px solid #415680; border-radius: 4px;
+    margin-bottom: 14px; padding: 14px 18px;
+  }
+  h1, h2, h3 { color: #ffffff; }
+  h1 { font-size: 24px; margin: 0 0 2px 0; }
+  h2 { font-size: 17px; border-bottom: 1px solid #415680; padding-bottom: 5px; margin-top: 26px; }
+  h2:first-child { margin-top: 0; }
+  h3 { font-size: 14px; margin-bottom: 4px; }
+  h2 img, h3 img { vertical-align: -3px; margin-right: 5px; }
+  code, pre { font-family: Consolas, "Courier New", monospace; font-size: 12px; }
+  code { background: #12203a; padding: 0 3px; border-radius: 2px; color: #ffd98c; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0; }
+  th, td { border: 1px solid #415680; padding: 5px 8px; text-align: left; vertical-align: top; font-size: 12px; }
+  th { background: #1a2a47; color: #fff; }
+  tr:nth-child(even) td { background: rgba(26, 42, 71, 0.35); }
+  ul, ol { margin: 6px 0 6px 20px; padding: 0; }
+  li { margin: 3px 0; }
+  blockquote { margin: 8px 0; padding: 6px 12px; background: #12203a; border-left: 4px solid #7fc36a; }
+  .statbox { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+  .stat {
+    flex: 1 1 150px; min-width: 150px; text-align: center;
+    background: rgba(18, 32, 58, 0.92); border: 1px solid #415680; border-radius: 4px; padding: 10px 6px;
+  }
+  .stat b { display: block; font-size: 20px; color: #7fc36a; }
+  .stat span { font-size: 11px; color: #9fb4d8; }
+  .tag {
+    display: inline-block; background: #1a2a47; border: 1px solid #415680;
+    color: #8fc7ff; border-radius: 3px; font-size: 11px; padding: 0 5px; margin: 0 2px;
+  }
+  .tag a { color: #8fc7ff; text-decoration: none; }
+  .tag a:hover { color: #cfe6ff; text-decoration: underline; }
+  .month { color: #ffd98c; font-weight: bold; white-space: nowrap; }
+  .ok { color: #7fc36a; font-weight: bold; }
+  .lead { font-size: 14px; }
+  footer { text-align: center; color: #7d95bf; font-size: 11px; padding: 10px 0 30px; }
+  @media (max-width: 900px) {
+    #wrap { flex-direction: column; }
+    #nav { width: 100%; flex: none; position: static; max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div class="t">OGame 0.84 Open Source
+    <small>Year 2026 Digest &mdash; everything that changed in the code</small>
+  </div>
+  <div class="langs">
+    <a href="index-en.html">Docs</a>
+    <a href="digest-2026-ru.html">Русский</a>
+    <a href="mod-manual-en.html">Mod manual</a>
+    <a href="https://github.com/ogamespec/ogame-opensource">GitHub</a>
+  </div>
+</div>
+
+<div id="resstrip" title="Art of the Evolution skin">
+  <img src="assets/evolution/images/metall.gif" alt="Metal"><img src="assets/evolution/images/kristall.gif" alt="Crystal"><img src="assets/evolution/images/deuterium.gif" alt="Deuterium"><img src="assets/evolution/images/energie.gif" alt="Energy">
+</div>
+
+<div id="wrap">
+  <nav id="nav">
+    <ul>
+      <li class="hdr">Contents</li>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#stats">The year in numbers</a></li>
+      <li><a href="#timeline">Timeline</a></li>
+      <li><a href="#architecture">Engine architecture</a></li>
+      <li><a href="#mods">Mods: framework and content</a></li>
+      <li><a href="#fixes">Security and fixes</a></li>
+      <li><a href="#testing">Testing</a></li>
+      <li><a href="#docs">Documentation and quality</a></li>
+      <li><a href="#localization">Localization</a></li>
+      <li><a href="#deployment">Deployment and PHP 8.x</a></li>
+      <li><a href="#team">Team and links</a></li>
+    </ul>
+  </nav>
+
+  <div id="content">
+
+    <section id="overview">
+      <h2><img src="assets/evolution/images/energie.gif" alt="">Overview</h2>
+      <p class="lead">In 2026 <a href="https://github.com/ogamespec/ogame-opensource">OGame 0.84 Open Source</a> &mdash; a faithful revival of the classic
+      OGame v0.84 with its original 2000s design &mdash; went through two intense development waves:
+      <b>January&ndash;February</b> and <b>August&ndash;September</b>. In that time the master branch absorbed
+      <b>559 commits</b> from <b>82 merged pull requests</b> (about +434&nbsp;thousand / &minus;82&nbsp;thousand lines across
+      ~1,448 files).</p>
+      <p>The year&rsquo;s headline achievements:</p>
+      <ul>
+        <li>A real <b>mod subsystem</b>: self-contained mods with hooks, an admin mod panel, and four bundled
+            mods &mdash; <b>GalaxyTool</b>, <b>Space Storm</b>, <b>Deep Space Horror</b> and the minimal example <b>BogusMod</b>.</li>
+        <li>A deep <b>architecture refactoring</b>: modular game core, typed core methods, a unified page router,
+            and the long-running separation of page controllers from page views (MVC migration).</li>
+        <li><b>Golden-page regression testing</b>: full-page HTML snapshots of every game page rendered on an
+            in-memory SQLite engine, for all seven supported languages, compared against the preserved OldDesign snapshots.</li>
+        <li><b>Security and stability fixes</b>, including the XSS in alliance names, crashes after attacks, the
+            original OGame missile (IPM) algorithm, and dozens of gameplay bugs.</li>
+        <li>Full <b>developer documentation</b>: the Mod Developer Manual (HTML + wiki), Doxygen docs for the game
+            core, PHPStan-clean code, and test suites bundled inside the mods themselves.</li>
+      </ul>
+      <p>All issue and pull-request numbers below link to the repository on GitHub. The digest is compiled
+      from the master-branch history and the current state of the code as of <b>September 3, 2026</b>.</p>
+    </section>
+
+    <section id="stats">
+      <h2><img src="assets/evolution/images/metall.gif" alt="">The year in numbers</h2>
+      <div class="statbox">
+        <div class="stat"><b>559</b><span>commits merged into master</span></div>
+        <div class="stat"><b>82</b><span>pull requests merged</span></div>
+        <div class="stat"><b>1,448</b><span>files changed</span></div>
+        <div class="stat"><b>+434k / −82k</b><span>lines added / removed</span></div>
+        <div class="stat"><b>4</b><span>bundled mods</span></div>
+        <div class="stat"><b>707</b><span>golden HTML snapshots</span></div>
+        <div class="stat"><b>7</b><span>languages covered by tests</span></div>
+        <div class="stat"><b>2</b><span>development waves</span></div>
+      </div>
+      <p>Activity rhythm of the year (commits on master per month):</p>
+      <table>
+        <tr><th>Month</th><th>Commits</th><th>What dominated</th></tr>
+        <tr><td class="month">January</td><td>292</td><td>Core modularization, router, Space Storm, Resource-as-GameObject, Deep Space Horror, start of MVC migration</td></tr>
+        <tr><td class="month">February</td><td>160</td><td>Space Storm wave 1, GalaxyTool-as-mod, limits, crash fixes, MVC migration</td></tr>
+        <tr><td class="month">March</td><td>6</td><td>End of wave 1 (last MVC merge March 6)</td></tr>
+        <tr><td class="month">June</td><td>6</td><td>fleet_templates and changelog pages go MVC, migration plan written</td></tr>
+        <tr><td class="month">August</td><td>66</td><td>In-memory SQLite backend, golden pages, MVC alignment, Doxygen, XSS fixes, PHPStan cleanup</td></tr>
+        <tr><td class="month">September (1&ndash;3)</td><td>29</td><td>Golden pages for all languages, IPM algorithm, Space Storm &amp; Deep Space Horror completion, Mod manual</td></tr>
+      </table>
+      <p>Wave 1 (PR&nbsp;#167&ndash;#247) ran January 9 &ndash; March 6 and rebuilt the engine foundations.
+      Wave 2 (PR&nbsp;#250&ndash;#286) ran August 18 &ndash; September 3 and brought the test harness, the
+      final round of bug fixes and the documentation. The repository itself is used as a live testing ground
+      by the team: much of the code in 2026 was written and reviewed with the help of AI coding agents
+      (commit trailers of the form <code>Co-authored-by: DeepSeek Harness &lt;deepseek-harness@noreply.local&gt;</code>).</p>
+    </section>
+
+    <section id="timeline">
+      <h2><img src="assets/evolution/images/kristall.gif" alt="">Timeline</h2>
+      <table>
+        <tr><th style="width:150px">When</th><th>What happened (merged pull requests / master commits)</th></tr>
+        <tr>
+          <td class="month">Jan 9&ndash;11</td>
+          <td>Separate core modules (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/167">#167</a></span>),
+              complete typization of core methods (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/169">#169</a></span>),
+              unified page router (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/171">#171</a></span>) &mdash; the foundations of the new core are laid in three days.</td>
+        </tr>
+        <tr>
+          <td class="month">Jan 12 &ndash; Feb 15</td>
+          <td><b>Space Storm</b> mod series (<span class="tag">#173</span> <span class="tag">#177</span>&ndash;<span class="tag">#193</span>
+              <span class="tag">#209</span>&ndash;<span class="tag">#230</span>): global storm events, the &ldquo;Reality Stabilizer&rdquo;
+              building, battle and economy hooks &mdash; the first large stress test of the mod system.</td>
+        </tr>
+        <tr>
+          <td class="month">Jan 18 &ndash; Feb 1</td>
+          <td><b>Resource as GameObject</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/181">#181</a></span>
+              <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/186">#186</a></span>
+              <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/194">#194</a></span>
+              <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/206">#206</a></span>):
+              unified economics for the resources and imperium pages, fleet resource handling, new production hooks.</td>
+        </tr>
+        <tr>
+          <td class="month">Jan 26 &ndash; Mar 6</td>
+          <td><b>Page controller / view separation</b> begins (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/195">#195</a></span>
+              and later <span class="tag">#208</span> <span class="tag">#234</span>&ndash;<span class="tag">#247</span>):
+              resources page first (Jan 26), then overview, notes, admin pages, buildings, techtree.</td>
+        </tr>
+        <tr>
+          <td class="month">Jan 27 &ndash; Feb 2</td>
+          <td><b>Deep Space Horror</b> mod series (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/196">#196</a></span>
+              <span class="tag">#199</span>&ndash;<span class="tag">#207</span>): three roaming monsters, Abyss portals,
+              carpet-bombing multi-battles, trophies and respawn &mdash; the mod system&rsquo;s second big test (custom galaxy objects, new units, custom missions).</td>
+        </tr>
+        <tr>
+          <td class="month">Feb 7&ndash;8</td>
+          <td><b>GalaxyTool becomes a built-in mod</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/214">#214</a></span>
+              <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/216">#216</a></span>
+              <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/217">#217</a></span>) &mdash; a mod with its own game page and admin section, in six languages.</td>
+        </tr>
+        <tr>
+          <td class="month">Feb 10</td>
+          <td>Limits and balance (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/221">#221</a></span>):
+              <code>battle_max</code> setting, building/research cap at level 99; CRON check in the admin queue page.</td>
+        </tr>
+        <tr>
+          <td class="month">Feb 14&ndash;15</td>
+          <td>Crash after espionage (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/228">#228</a></span>),
+              crash after attack (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/231">#231</a></span>),
+              project-name localization (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/233">#233</a></span>) fixed.</td>
+        </tr>
+        <tr>
+          <td class="month">Feb 16&ndash;24</td>
+          <td>More MVC pages (ally submodules split, techtree), fixed Graviton research, fixed IPM decrease, fixed expedition battle,
+              Rocket attack fix.</td>
+        </tr>
+        <tr>
+          <td class="month">Jun 25</td>
+          <td>Direct master commits: <code>fleet_templates</code> and <code>changelog</code> pages go MVC;
+              the MVC migration plan and development plans are drafted (kept on the 191 branch); LF line endings enforced
+              (<code>.gitattributes</code>).</td>
+        </tr>
+        <tr>
+          <td class="month">Aug 18</td>
+          <td>Alternate in-memory DB backend, SQLite via PDO (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/250">#250</a></span>)
+              and the first golden-page suite on it (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/251">#251</a></span>).</td>
+        </tr>
+        <tr>
+          <td class="month">Aug 19</td>
+          <td>Full golden coverage of all game pages (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/257">#257</a></span>),
+              golden tests for POST pages (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/259">#259</a></span>);
+              regressions from the MVC refactoring found and fixed.</td>
+        </tr>
+        <tr>
+          <td class="month">Aug 20</td>
+          <td>MVC pages aligned with master (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/260">#260</a></span>),
+              Doxygen docs for <code>game/core</code> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/262">#262</a></span>),
+              XSS fixes in alliance names and notes (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/263">#263</a></span>
+              <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/264">#264</a></span>),
+              all PHPStan errors fixed (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/266">#266</a></span>).</td>
+        </tr>
+        <tr>
+          <td class="month">Sep 1</td>
+          <td>Golden pages for all seven languages (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/270">#270</a></span>),
+              comparison with the preserved OldDesign snapshots (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/271">#271</a></span>),
+              the original OGame missile attack algorithm restored (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/272">#272</a></span>).</td>
+        </tr>
+        <tr>
+          <td class="month">Sep 2</td>
+          <td>Space Storm completed (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/273">#273</a></span>&ndash;<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/275">#275</a></span>),
+              negative resources as admin fixed (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/276">#276</a></span>),
+              merchant &ldquo;max&rdquo; button fixed (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/277">#277</a></span>),
+              expedition visit cooldown to Farspace (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/278">#278</a></span>),
+              statistics updated right after a missile attack (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/283">#283</a></span>),
+              Deep Space Horror audit (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/284">#284</a></span>).</td>
+        </tr>
+        <tr>
+          <td class="month">Sep 3</td>
+          <td>Mod Developer Manual published (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/286">#286</a></span>)
+              &mdash; HTML manual with Evolution styling in <code>docs/</code>, full wiki page on modding.</td>
+        </tr>
+      </table>
+    </section>
+
+    <section id="architecture">
+      <h2><img src="assets/evolution/images/deuterium.gif" alt="">Engine architecture</h2>
+      <p>2026 opened with an intensive engine refactoring that ran from January to March and continued in waves
+      through August. It made the old codebase substantially more maintainable without changing the gameplay.</p>
+
+      <h3>Separate core modules <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/167">#167</a></span></h3>
+      <p>Early January: 27 engine modules were moved out of the web-accessible <code>game/</code> root into a
+      self-contained <code>game/core/</code> (36 flat PHP modules + <code>.htaccess</code> denying web access), loaded
+      in dependency order by the <code>core.php</code> bootstrap. Modules are focused files with a clear
+      responsibility: database (<code>db.php</code> facade + <code>db_mysql.php</code>/<code>db_sqlite.php</code>),
+      user, planet, fleet, queue, production, battle, messages, alliance, mods, utils and more. Later the unified
+      object registry <code>techs.php</code> (GIDs, maps, <code>IsBuilding</code>/<code>IsFleet</code>/&hellip;) and the
+      constants file <code>defs.php</code> were added, the alliance engine was split into
+      <code>ally.php</code>/<code>allyapps.php</code>/<code>allyranks.php</code>/<code>buddy.php</code> submodules,
+      and the DB layer gained the SQLite backend used by the tests.</p>
+
+      <h3>Complete typization of core methods <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/169">#169</a></span></h3>
+      <p>All core methods received full PHP type declarations (parameter and return types). Together with PHPStan
+      (see below) this turned a dynamically-typed legacy codebase into one where most type errors are caught at
+      analysis time, before they can reach a running universe.</p>
+
+      <h3>Unified page router <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/171">#171</a></span></h3>
+      <p>Routing is now data-driven through <code>game/router.json</code>: <code>index.php</code> became a single front
+      controller that maps <code>?page=&hellip;</code> keys to handlers via a declarative table (path, loca, flags,
+      and a new <code>"mvc": true</code> marker), and mods can add routes through the <code>route</code> hook. The admin
+      panel got its own second router, <code>game/pages_admin/admin_router.json</code> (26 <code>?mode</code> entries,
+      <code>route_admin</code> hook). Today <b>37 page keys</b> are routed; <b>31 are MVC pages</b> and only 6 remain
+      old-style &mdash; the admin shell itself and the special bare/external pages
+      <code>ainfo</code>, <code>bericht</code>, <code>logout</code>, <code>phalanx</code>, <code>pranger</code>.</p>
+
+      <h3>Page controller / view separation (MVC) <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/191">#191</a></span></h3>
+      <p>The year&rsquo;s longest-running refactoring. Game pages previously mixed request handling, business logic
+      and HTML output in single files. Now each page is a class in <code>game/pages/</code> extending the abstract
+      <code>Page</code>: <code>controller()</code> handles the GET/POST logic and returns whether to render,
+      <code>view()</code> renders; the front controller calls them inside the shared page lifecycle. Migration on
+      master, verified by the <code>"mvc": true</code> flag in <code>router.json</code>: 0 before Jan 26 &rarr; 1
+      (Jan 26, <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/195">#195</a></span>,
+      resources) &rarr; 2 (Feb 3, <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/208">#208</a></span>)
+      &rarr; 7 (Feb 16, <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/234">#234</a></span>:
+      +overview, notes, buildings, techtree) &mdash; stayed 7 through March
+      (<span class="tag">#235</span>&ndash;<span class="tag">#247</span> were fixes) &mdash; then jumped to <b>31 of 37
+      routed pages</b> on August 20 (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/260">#260</a></span>,
+      bulk conversion plus regression fixes so the golden snapshot suite passes). All 26 admin modes were converted
+      as well (classes <code>Admin_*</code>). The last six old-style entries are deliberately bare/external pages:
+      the admin shell and <code>ainfo</code>, <code>bericht</code>, <code>logout</code>, <code>phalanx</code>, <code>pranger</code>.
+      The migration plan itself was drafted on June 25 (kept on the branch, not merged into master&rsquo;s tree).</p>
+
+      <h3>Resource as GameObject <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/180">#180</a></span></h3>
+      <p>January: resources stopped being three hard-coded numbers and became first-class game objects, each with
+      its own GID (<code>GID_RC_METAL=700</code>, <code>GID_RC_CRYSTAL=701</code>, <code>GID_RC_DEUTERIUM=702</code>,
+      <code>GID_RC_ENERGY=703</code>, <code>GID_RC_DM=704</code>). <code>techs.php</code> gained
+      <code>IsResource()</code> and typed resource maps; unified price/duration/production math and fleet
+      transport/capture handling let resources flow through every object-generic mechanism, and new hooks
+      (<code>add_resources</code>, <code>page_resources_get_bonus</code>, <code>page_buildings_get_bonus</code>)
+      give mods and pages one shared production pipeline (documented in <code>wiki/ru/resources.md</code>).</p>
+
+      <h3>Why it matters</h3>
+      <p>These changes are the precondition for everything else in this digest: a typed, modular, router-driven
+      core with separated controllers is what makes the mod subsystem, the golden tests and the PHPStan-clean
+      state possible at all &mdash; and it lets contributors touch one page without breaking the whole game.</p>
+    </section>
+
+    <section id="mods">
+      <h2><img src="assets/evolution/images/metall.gif" alt="">Mods: framework and content</h2>
+      <p>The mod subsystem is the big gameplay story of 2026. A mod is a self-contained folder under
+      <code>game/mods/</code> declaring a class that extends <code>GameMod</code> (<code>game/core/mods.php</code>).
+      The core finds mods by folder, loads them in activation order, and calls their <em>hooks</em> at fixed points
+      of the engine &mdash; from queue events and production bonuses to fleet missions and battle statistics.
+      Mods are installed by an administrator through the new admin section (<code>pages_admin/admin_mods.php</code>),
+      which appends them to the <code>modlist</code> setting and calls <code>install()</code>. Full reference:
+      the <a href="mod-manual-en.html">Mod Developer Manual</a> and <a href="../wiki/en/mods.md">wiki/en/mods.md</a>.</p>
+
+      <h3>GalaxyTool <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/214">#214</a></span>
+          <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/216">#216</a></span>
+          <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/217">#217</a></span></h3>
+      <p>February: the Galaxytool &mdash; previously an always-on core feature &mdash; became a <b>built-in but optional
+      mod</b> with its own game page (<code>pages/galaxytool.php</code>) and admin section, localized in six languages
+      (de, en, es, fr, it, ru). A periodic queue event (weekly by default) writes snapshots of the universe into
+      <code>temp/</code> (galaxy coordinates, top-1000 statistics, alliance statistics), and the user page lists
+      growing/falling/inactive players against the previous snapshot. Administrators tune the refresh period
+      (1&ndash;30 days) on the new <code>admin_galaxytool.php</code> page; the mod must be enabled per universe and
+      no GalaxyTool code remains outside the mod folder. The same branch also migrated the whole admin area to MVC
+      (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/216">#216</a></span>) and added
+      the <code>route_admin</code> hook (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/217">#217</a></span>).</p>
+
+      <h3>Space Storm <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/172">#172</a></span></h3>
+      <p>Started in January and completed in September, Space Storm is a demonstration mod that stress-tests the
+      engine&rsquo;s global modifiers (its Readme stresses it is an engine testbed, not balanced content). A periodic
+      global event &mdash; the <b>Cosmic Storm</b> &mdash; ticks hourly and changes the rules of the whole universe: one or
+      more of <b>ten effects</b> (fleet speed &minus;30&ndash;50%; 5% instant arrival / 1% lost for 1&ndash;2 hours; armor
+      &minus;20% &amp; shields +30%; doubled fuel consumption &amp; +25% deuterium output; spy reports delayed 1&ndash;5 min
+      &amp; espionage &minus;2; <b>Energy Collapse</b> with &minus;40% energy and a chance to freeze a random
+      building/research; defense shields +10%; 20% of output converted to a random resource; Transport between own
+      planets disabled; attackers lose 5% of their fleet after a win). A new planetary building, the
+      <b>Reality Stabilizer</b> (<code>GID_B_REALITY_STAB</code>), can only be built during a storm (+0.5% energy per
+      level); each completed level <b>imprints the active storm type</b> on the planet and unlocks per-level counters
+      for those effects. All of it is implemented purely through hooks &mdash; battle effects scale unit stats per
+      battle on the battle-engine frontend (<code>battle_unit_stats</code>), the engine backend is untouched.
+      Development milestones: January wave
+      (<span class="tag">#173</span>&ndash;<span class="tag">#193</span>: skeleton, table-driven requirements, first
+      mechanics, <code>can_build</code>/<code>build_end</code>/<code>page_infos</code> hooks), February wave
+      (<span class="tag">#209</span>&ndash;<span class="tag">#230</span>: bonus panel, production/fuel hooks, the core
+      <b>queue-freeze feature</b> <code>FreezeQueue</code> in <span class="tag">#213</span>, fleet/spy hooks, the
+      production-at-storage-cap guard), and the September completion
+      (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/273">#273</a></span>&ndash;
+      <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/275">#275</a></span>): all ten
+      effects and stabilizer counters finalized, en/de localization added (languages now ru/en/de),
+      <b>auto-unfreeze on Energy Collapse</b> (frozen tasks unfreeze when energy recovers) and <b>stabilizer spy
+      protection</b> via the new <code>spy_protection</code> hook (+1 espionage defense per 2 stabilizer levels),
+      and the tests moved inside the mod as a standalone PHPUnit suite.</p>
+
+      <h3>Deep Space Horror <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/189">#189</a></span></h3>
+      <p>Three giant space monsters &mdash; the <b>Amoeba</b> (&ldquo;Planktonic Devourer&rdquo;), the <b>Guardian</b>
+      (&ldquo;Wandering Monolith&rdquo;) and the <b>Leviathan</b> (&ldquo;Galactic Juggernaut&rdquo;) &mdash; roam the universe.
+      Each is simultaneously a galaxy &ldquo;planet&rdquo;-object and a fleet, exists in a single instance per universe, and
+      carries unique artwork. A monster&rsquo;s fleet flies (mission &ldquo;Preparing the hyperjump&rdquo;) to its Abyss
+      <b>Portal</b>; on arrival it destroys the portal, occupies the spot and, if inhabited planets are in range, an
+      automatic <b>carpet-bombing battle</b> begins against every regular planet in a radius around the portal
+      (P&plusmn;1 / P&plusmn;2 / P&plusmn;3 by monster), including defenses and ACS holding fleets, with more rounds than
+      a normal fight (+1/+2/+3). Movement between portals follows per-monster AI: the Amoeba drifts nearby, the
+      Guardian walks a predictable spiral across the galaxy, the Leviathan jumps to random galaxies.</p>
+      <p>The battles run through the battle engine&rsquo;s frontend with no backend edits &mdash; the January wave even
+      included a <b>massive BattleEngine rework</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/199">#199</a></span>:
+      PHP battle core and the C++ BattleEngine rewritten) plus unified battle reports and debris calculations,
+      which the mod then uses. If defenders destroy the monster, its remains are distributed between the
+      participants <b>proportionally to their contribution</b> (Amoeba 2.5M deuterium, Guardian 10M crystal,
+      Leviathan 40M metal), personal &ldquo;Abyss Trophy&rdquo; messages are sent and a universe-wide broadcast announces
+      the kill; slain monsters respawn at a random point after 24&ndash;72 real hours via a one-shot queue event.
+      Languages: ru + en.</p>
+      <p>In September the mod was audited (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/284">#284</a></span>):
+      battle losses are now written back end-to-end, the trophy is distributed and respawns scheduled
+      (the core helper <code>SetPlanetFleetDefense</code> only writes columns a planet actually has), a
+      <b>standalone PHPUnit suite</b> with 38 tests (25 pure-logic + 13 DB, running on in-memory SQLite) now ships
+      inside the mod, and the 670-line development log was rewritten into a readable structured Readme with
+      English localization added.</p>
+
+      <h3>BogusMod</h3>
+      <p>Added in early January as the minimal example: one DB column, its own resource, a menu item and a page &mdash;
+      the &ldquo;hello world&rdquo; of the mod system.</p>
+    </section>
+
+    <section id="fixes">
+      <h2><img src="assets/evolution/images/kristall.gif" alt="">Security and fixes</h2>
+      <h3>Security</h3>
+      <ul>
+        <li><b>XSS in alliance name and notes</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/165">#165</a></span>,
+            merged <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/263">#263</a></span>
+            <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/264">#264</a></span>):
+            alliance names/tags and notes, player names, ACS union names and buddy/note text are now HTML-escaped at
+            output across ~30 pages; notes are stored raw and escaped on render (previously double-encoded).
+            Stored-XSS paths closed; <code>XssTest</code> regression suite added.</li>
+        <li><b>Empty-session fix and <code>CheckParameters</code> during install</b> (Sep): an empty session string can
+            no longer authenticate as the technical logged-out account, guests hitting internal pages are redirected
+            home, and the installer validates all fields/ranges and DB reachability before touching tables.</li>
+        <li>DB credentials no longer leak: backtraces use <code>DEBUG_BACKTRACE_IGNORE_ARGS</code>
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/245">#245</a></span>),
+            <code>AddDBRow</code> escapes strings via <code>mysqli_real_escape_string</code>, mysqli exceptions are
+            not thrown during connect (Mar).</li>
+      </ul>
+      <h3>Combat</h3>
+      <ul>
+        <li><b>Original OGame missile (IPM) algorithm restored</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/61">#61</a></span>,
+            merged <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/272">#272</a></span>):
+            ABMs intercept IPMs 1:1 and leftover damage destroys the defender&rsquo;s stored missiles once all defenses are gone.</li>
+        <li><b>Statistics update immediately after a missile attack</b>
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/145">#145</a></span>,
+            merged <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/283">#283</a></span>):
+            attacker (IPM cost) and defender (destroyed defenses) scores adjust at once, not at the next full recalculation.</li>
+        <li>Rocket attack fixes (Feb): IPM damage used the hardcoded unit 503 instead of <code>GID_D_IPM</code> and the
+            overview event list read the wrong variable; launching IPMs now really decrements the planet&rsquo;s stored
+            missile count (wrong array key).</li>
+        <li>Crash after an attack fixed (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/231">#231</a></span>);
+            crash after espionage fixed (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/228">#228</a></span>
+            &mdash; the spy report read a non-existent energy field and <code>rand()</code> got a float bound); expedition
+            battle fixed (missing unit-list guards); <code>AddShipyard</code> and Graviton research fixed (stale planet
+            reads, cost deductions against non-stored resources).</li>
+        <li><code>battle_max</code> setting, hard caps <code>MAX_BUILDINGS_LEVEL</code>/<code>MAX_RESEARCH_LEVEL = 99</code>,
+            enforced in the queue and UI (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/221">#221</a></span>);
+            ACS, expedition battles and fleet dispatch reject fleets above <code>battle_max</code> with localized errors.</li>
+      </ul>
+      <h3>Economy and planets</h3>
+      <ul>
+        <li><b>Negative planet resources when playing as admin</b> fixed
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/117">#117</a></span>,
+            merged <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/276">#276</a></span>):
+            resource add/subtract clamps results at zero in PHP, plunder and debris harvesting guard negative inputs;
+            <code>SetPlanetFleetDefense</code> only writes columns the planet actually has.</li>
+        <li>Merchant &ldquo;max&rdquo; button no longer exceeds storage capacity
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/82">#82</a></span>,
+            merged <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/277">#277</a></span>):
+            trades cap to free storage and the capacity check compared crystal against the metal cap &mdash; fixed.</li>
+        <li>Production above the storage cap no longer ticks (Feb); <code>IsEnoughResources</code> checks player and
+            planet resources separately (Jan); dark matter exposed as the <code>GID_RC_DM</code> resource (Feb);
+            officer expiry moved from global queue events to reliable per-user timers (Jan); debris cleanup uses the
+            unified metal/crystal columns (Jan); logout page honors the player&rsquo;s skin (Feb).</li>
+      </ul>
+      <h3>Exploration</h3>
+      <ul>
+        <li><b>Expedition visit counter with a cooldown to Farspace</b> and Farspace cleanup
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/174">#174</a></span>,
+            merged <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/278">#278</a></span>):
+            a position can be visited ~3&times;/hour without extra depletion; unused Farspace objects are cleaned by a
+            dedicated weekly queue task &mdash; both visible in the admin queue page.</li>
+      </ul>
+      <h3>Stability and admin</h3>
+      <ul>
+        <li>PHP 8.x warning cleanup ran all year (deprecated float&rarr;int conversions, undefined keys,
+            <code>unserialize()</code>, mysqli reporting).</li>
+        <li>Admin: &ldquo;Check CRON&rdquo; button in the admin queue page, cron robustness, Botstrat editor with JSON
+            import/export, null-safe planet-name helpers (<code>AdminPlanetName</code>, user list shows &ldquo;&ndash;&rdquo;
+            for accounts without a home planet), the Source-Check integrity page comparing engine/page file checksums,
+            and vacation mode via a reusable <code>EnableVacation</code> method.</li>
+      </ul>
+    </section>
+
+    <section id="testing">
+      <h2><img src="assets/evolution/images/deuterium.gif" alt="">Testing</h2>
+      <p>Before August, the project had only a handful of ad-hoc tests. In two weeks the team built a real
+      regression harness that today renders whole pages and compares them against golden snapshots.</p>
+      <ul>
+        <li><b>In-memory DB backend for tests</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/250">#250</a></span>):
+            <code>db.php</code> became a facade choosing between the live mysqli backend and the new
+            <code>db_sqlite.php</code> (PDO SQLite, in-memory), selected via <code>DB_CONNECTION=sqlite</code>.
+            It translates MySQL-isms (LOCK TABLES, <code>SET @var:=</code>, AUTO_INCREMENT) so the real game code and
+            schema run in PHPUnit <b>without a MySQL server</b>; <code>FixtureBuilder</code> fills a full 3-player
+            universe fixture (moons, in-flight fleets, queues, messages, alliance, bans, debris&hellip;).</li>
+        <li><b>Golden Pages suite</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/251">#251</a></span>
+            <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/257">#257</a></span>
+            <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/259">#259</a></span>
+            <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/270">#270</a></span>
+            <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/271">#271</a></span>):
+            <code>GoldenPagesTest</code> (122 test methods) boots pages exactly like <code>game/index.php</code>
+            (router, auth, mods, loca), normalizes volatile output (timestamps, sessions, IDs, localized durations)
+            and compares the HTML with stored snapshots; <code>UPDATE_GOLDEN=1</code> regenerates them. Coverage:
+            <b>707 snapshot files = 101 HTML per language &times; 7 languages</b> (de, en, es, fr, it, jp, ru),
+            including <b>~25 POST-request scenarios</b> for every POST page (fleet recall, shipyard builds, trader
+            exchange, IPM launch, alliance actions&hellip;) and guard tests that enforce every routed page and every
+            POST page has a snapshot. On September 1 the snapshots were compared against the <b>OldDesign</b>
+            archive (the classic design preserved in the external <code>ogamespec/OldDesign</code> repo) to prove
+            layout parity, and missing <code>jp_jp</code> loca was completed. The suite immediately caught
+            regressions introduced by the MVC refactoring &mdash; which were then fixed.</li>
+        <li><b>Unit tests for the fixes</b>: RocketAttack, RocketAttackStats, TraderStorage, NegativeResources,
+            Farspace, Xss, Notes, Homepage and DbSqlite tests (11 classes, 191 test methods in total) cover the
+            specific bugs listed in the previous section.</li>
+        <li><b>Per-mod standalone PHPUnit suites</b>: Space Storm (22 test methods) and Deep Space Horror
+            (38 test methods) each ship <code>testing/</code> with their own <code>phpunit.xml</code>, bootstrap and
+            DB tests on the in-memory SQLite backend
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/275">#275</a></span>,
+            <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/284">#284</a></span>),
+            so mod development does not pollute the project-wide suite.</li>
+        <li>PHPUnit updated to 10.5.62 (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/198">#198</a></span>).</li>
+      </ul>
+    </section>
+
+    <section id="docs">
+      <h2><img src="assets/evolution/images/energie.gif" alt="">Documentation and quality</h2>
+      <ul>
+        <li><b>Mod Developer Manual</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/286">#286</a></span>):
+            <a href="mod-manual-en.html">mod-manual-en.html</a> / <a href="mod-manual-ru.html">mod-manual-ru.html</a> in
+            Evolution styling plus <a href="../wiki/en/mods.md">wiki/en/mods.md</a> and <a href="../wiki/ru/mods.md">wiki/ru/mods.md</a>
+            &mdash; a 13-section guide with the folder layout, the <code>GameMod</code> API, mod pages and admin
+            routing, localization, queue events and a full 38-hook reference with call sites, plus real-mod scenarios.</li>
+        <li><b>Doxygen documentation for <code>game/core</code></b>
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/262">#262</a></span>):
+            +4,200 lines of API comments across 37 core files (Doxyfile in the repo root, output gitignored).</li>
+        <li><b>PHPStan cleanup</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/266">#266</a></span>):
+            level-8 analysis of <code>game/</code> and <code>wwwroot/</code> (config from January) reached
+            <b>zero errors</b> in August &mdash; the committed report shrank from 5,671 lines (Jan) to
+            &ldquo;[OK] No errors&rdquo;. Real bugs surfaced by the analyzer (an unquoted array key, a
+            <code>filectime()</code> typo, a removed <code>each()</code>, missing <code>__DIR__</code>) were fixed, and
+            intentional structures flagged as dead code were restored with ignore markers.</li>
+        <li><b>Wiki</b>: new pages and big updates through the year &mdash; mods manual (en+ru), golden-pages testing,
+            install (incl. Docker), feed, queue, bonuses and more.</li>
+        <li><b>Readmes rewritten</b>: Deep Space Horror got a full readable document in September
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/284">#284</a></span>);
+            Space Storm&rsquo;s Readme documents every effect and hook.</li>
+      </ul>
+    </section>
+
+    <section id="localization">
+      <h2><img src="assets/evolution/images/deuterium.gif" alt="">Localization</h2>
+      <ul>
+        <li><b>Project-name localization</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/233">#233</a></span>):
+            <code>OGAME_INT</code> / <code>OGAME_LOC</code> macros let the game&rsquo;s name and interface text be
+            localized per language.</li>
+        <li>Registration flow localized and stabilized: <code>REG_NEW</code>, <code>REG_CHANGE</code>,
+            <code>REG_GREET_MAIL</code>, <code>REG_GREET_MSG</code>, <code>REG_FORGOT</code>,
+            <code>EMAIL_BARRIERFREI</code>; <code>isValidEmail</code> moved into utils; registration and
+            maintenance pages reworked.</li>
+        <li>Mod locales: Space Storm in en/de/ru, Deep Space Horror in en/ru, GalaxyTool in six languages.</li>
+        <li>Golden-page snapshots in all seven languages keep translations honest page by page.</li>
+      </ul>
+    </section>
+
+    <section id="deployment">
+      <h2><img src="assets/evolution/images/metall.gif" alt="">Deployment and PHP 8.x</h2>
+      <ul>
+        <li><b>Docker</b>: the Dockerfile and deployment story were overhauled (Jan&ndash;Sep) &mdash;
+            <code>compose.yaml</code>, battle engine inside the container, install checks; the wiki gained a full
+            <a href="../wiki/en/install_docker.md">Docker install guide</a> and links to community deployments.</li>
+        <li><b>PHP 8.x compatibility</b>: all 8.x/8.2 deprecation warnings (float-to-int, <code>unserialize</code>,
+            mysqli reporting) fixed through the year; <code>php.ini</code> guidance updated.</li>
+        <li><b>git hygiene</b>: LF line endings enforced via <code>.gitattributes</code>; PHPStan and PHPUnit
+            configs and reports versioned with the code.</li>
+      </ul>
+    </section>
+
+    <section id="team">
+      <h2><img src="assets/evolution/images/kristall.gif" alt="">Team and links</h2>
+      <p>Repository: <a href="https://github.com/ogamespec/ogame-opensource">github.com/ogamespec/ogame-opensource</a>.
+      Main development and code review: <b>ogamespec</b>. A substantial part of the 2026 work was executed with
+      the help of AI coding agents whose commits carry the trailer
+      <code>Co-authored-by: DeepSeek Harness &lt;deepseek-harness@noreply.local&gt;</code> &mdash; this digest itself was
+      compiled by such an agent on the branch <code>282-digest-year-2026</code> (issue
+      <a href="https://github.com/ogamespec/ogame-opensource/issues/282">#282</a>).</p>
+      <ul>
+        <li>Issues and pull requests: <a href="https://github.com/ogamespec/ogame-opensource/issues">issues</a> / <a href="https://github.com/ogamespec/ogame-opensource/pulls">pulls</a></li>
+        <li>Docs: <a href="mod-manual-en.html">Mod Developer Manual (EN)</a> · <a href="mod-manual-ru.html">Mod Developer Manual (RU)</a> · <a href="../wiki/en/mods.md">wiki/en/mods.md</a></li>
+        <li>This digest: <a href="digest-2026-ru.html">Русская версия</a></li>
+      </ul>
+    </section>
+
+  </div>
+</div>
+
+<footer>OGame 0.84 Open Source · Year 2026 Digest · skin Evolution · <a href="https://github.com/ogamespec/ogame-opensource">github.com/ogamespec/ogame-opensource</a><br>
+Co-authors: ogamespec · DeepSeek Harness AI agent</footer>
+</body>
+</html>

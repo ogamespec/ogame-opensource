@@ -3,8 +3,8 @@
 // Einstellungen
 
 $LOCA["de"]["OPTIONS_USER"] = "Userdaten";
-$LOCA["de"]["OPTIONS_USER_NAME"] = "Username";
-$LOCA["de"]["OPTIONS_USER_PASS"] = "Password";
+$LOCA["de"]["OPTIONS_USER_NAME"] = "Benutzername";
+$LOCA["de"]["OPTIONS_USER_PASS"] = "Passwort";
 $LOCA["de"]["OPTIONS_USER_OLDPASS"] = "Passwort";
 $LOCA["de"]["OPTIONS_USER_NEWPASS1"] = "Neues Passwort (min. 8 Zeichen)";
 $LOCA["de"]["OPTIONS_USER_NEWPASS2"] = "Neues Passwort (Wiederholung)";

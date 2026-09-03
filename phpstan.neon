@@ -1,14 +1,12 @@
 parameters:
   level: 8
   paths:
-    - feed
     - game
     - wwwroot
   excludePaths:
     - BattleEngine/*
     - download/*
-    - imgstore/*
-    - Wiki/*
+    - wiki/*
     - game/css/*
     - game/js/*
     - game/img/*
@@ -18,7 +16,9 @@ parameters:
     - wwwroot/css/*
     - wwwroot/js/*
     - wwwroot/img/*
-    - game/core/bbcode.php
   ignoreErrors:
     - identifier: missingType.iterableValue
+    # config.php is generated at install time (see Dockerfile: persistent_configs), so it is absent in the repository.
+    - '#Path in require_once\(\) "\.\.?/config\.php" is not a file or it does not exist\.#'
+    - '#Path in require_once\(\) "config\.php" is not a file or it does not exist\.#'
   reportUnmatchedIgnoredErrors: false

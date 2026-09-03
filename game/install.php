@@ -25,13 +25,175 @@ $InstallError = "<font color=gold>".loca('INSTALL_TIP')."</font>";
 function uniurl () : string {
     $host = $_SERVER['HTTP_HOST'] . $_SERVER["SCRIPT_NAME"];
     $pos = strrpos ( $host, "/game/install.php" );
-    return substr ( $host, 0, $pos );
+    return substr ( $host, 0, (int) $pos );
 }
 
-// TBD: Check the settings of the universe.
+/**
+ * Validates the universe installation parameters submitted by the form.
+ *
+ * Checks the presence of all required fields, the ranges of the numeric
+ * settings and the format of the special fields (table prefix, start page
+ * address, admin e-mail and password). It also verifies that the universe
+ * and master databases are reachable, so that the installation cannot die
+ * halfway through (after dropping tables) on bad connection settings.
+ *
+ * On failure, all found errors are written to $InstallError and the form is
+ * shown again; on success returns true and the installation proceeds.
+ */
 function CheckParameters () : bool
 {
     global $InstallError;
+
+    $errs = array ();
+
+    // Trimmed POST value of the given field ("" when absent).
+    $post = function ( string $key ) : string {
+        return trim ( (string) ( $_POST[$key] ?? "" ) );
+    };
+
+    // ------------------------------------------------------------------
+    // Required fields.
+    // ------------------------------------------------------------------
+
+    $required = array (
+        'startpage' => 'INSTALL_STARTPAGE',
+        'db_host' => 'INSTALL_DB_HOST',
+        'db_user' => 'INSTALL_DB_USER',
+        'db_name' => 'INSTALL_DB_NAME',
+        'db_prefix' => 'INSTALL_DB_PREFIX',
+        'db_secret' => 'INSTALL_DB_SECRET',
+        'admin_email' => 'INSTALL_ADMIN_EMAIL',
+        'admin_pass' => 'INSTALL_ADMIN_PASS',
+    );
+    foreach ( $required as $field => $loca_key ) {
+        if ( $post($field) === "" ) {
+            $errs[] = va ( loca('INSTALL_ERR_REQUIRED'), loca($loca_key) );
+        }
+    }
+
+    // The external battle engine path is only needed when the PHP engine is off.
+    if ( $post('php_battle') !== 'on' && $post('uni_battle_engine') === "" ) {
+        $errs[] = va ( loca('INSTALL_ERR_REQUIRED'), loca('INSTALL_UNI_BATTLE') );
+    }
+
+    // Master database settings are required only when the universe is being
+    // registered in the master database.
+    if ( $post('mdb_enable') === 'on' ) {
+        foreach ( array (
+            'mdb_host' => 'INSTALL_MDB_HOST',
+            'mdb_user' => 'INSTALL_MDB_USER',
+            'mdb_name' => 'INSTALL_MDB_NAME',
+        ) as $field => $loca_key ) {
+            if ( $post($field) === "" ) {
+                $errs[] = va ( loca('INSTALL_ERR_REQUIRED'), loca($loca_key) );
+            }
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Integer fields and their allowed ranges.
+    // ------------------------------------------------------------------
+
+    $ints = array (
+        'uni_num' => array ( 'INSTALL_UNI_NUM', 1, 999 ),
+        'uni_speed' => array ( 'INSTALL_UNI_SPEED', 1, 10000 ),
+        'uni_fspeed' => array ( 'INSTALL_UNI_FLEETSPEED', 1, 10000 ),
+        'uni_galaxies' => array ( 'INSTALL_UNI_G', 1, 9 ),
+        'uni_systems' => array ( 'INSTALL_UNI_S', 1, 999 ),
+        'uni_maxusers' => array ( 'INSTALL_UNI_USERS', 1, 10000000 ),
+        'start_dm' => array ( 'INSTALL_UNI_START_DM', 0, 2147483647 ),
+        'uni_acs' => array ( 'INSTALL_UNI_ACS', 0, 50 ),
+        'uni_fid' => array ( 'INSTALL_UNI_FID', 0, 100 ),
+        'uni_did' => array ( 'INSTALL_UNI_DID', 0, 100 ),
+        'battle_max' => array ( 'INSTALL_UNI_BATTLE_MAX', 1, BATTLE_MAX_UNITS ),
+        'max_werf' => array ( 'INSTALL_MAX_WERF', 1, 1000000 ),
+        'feedage' => array ( 'INSTALL_FEED_AGE', 1, 2147483647 ),
+    );
+    foreach ( $ints as $field => $spec ) {
+        list ( $loca_key, $min, $max ) = $spec;
+        $v = $post($field);
+        if ( $v === "" ) {
+            $errs[] = va ( loca('INSTALL_ERR_REQUIRED'), loca($loca_key) );
+        }
+        else if ( !preg_match ( '/^\d+$/', $v ) ) {
+            $errs[] = va ( loca('INSTALL_ERR_INT'), loca($loca_key) );
+        }
+        else {
+            $n = (int) $v;
+            if ( $n < $min ) $errs[] = va ( loca('INSTALL_ERR_MIN'), loca($loca_key), (string) $min );
+            else if ( $n > $max ) $errs[] = va ( loca('INSTALL_ERR_MAX'), loca($loca_key), (string) $max );
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Special fields.
+    // ------------------------------------------------------------------
+
+    // The table prefix becomes a part of the SQL table names.
+    $db_prefix = $post('db_prefix');
+    if ( $db_prefix !== "" && !preg_match ( '/^[A-Za-z0-9_]+$/', $db_prefix ) ) {
+        $errs[] = loca('INSTALL_ERR_PREFIX');
+    }
+
+    // The start page is used in redirects, so it must be an URL or a host name.
+    $startpage = $post('startpage');
+    if ( $startpage !== "" && !preg_match ( '#^https?://[^\s]+$#i', $startpage ) && !preg_match ( '/^[A-Za-z0-9.\-]+$/', $startpage ) ) {
+        $errs[] = va ( loca('INSTALL_ERR_URL'), loca('INSTALL_STARTPAGE') );
+    }
+
+    // Administrator e-mail.
+    $admin_email = $post('admin_email');
+    if ( $admin_email !== "" && !filter_var ( $admin_email, FILTER_VALIDATE_EMAIL ) ) {
+        $errs[] = va ( loca('INSTALL_ERR_EMAIL'), loca('INSTALL_ADMIN_EMAIL') );
+    }
+
+    // The password length is checked the same way as in the registration.
+    $admin_pass = $post('admin_pass');
+    if ( $admin_pass !== "" && strlen ( $admin_pass ) < 8 ) {
+        $errs[] = loca('INSTALL_ERR_PASS_LONG');
+    }
+
+    // ------------------------------------------------------------------
+    // Database reachability. The installer cannot create the databases
+    // itself, so a wrong host/credentials/DB name must be caught here,
+    // before any table is dropped.
+    // ------------------------------------------------------------------
+    // Database reachability. The installer cannot create the databases
+    // itself, so a wrong host/credentials/DB name must be caught here,
+    // before any table is dropped. The default mysqli report mode throws
+    // exceptions, so switch it off first (like dbconnect() does).
+    // ------------------------------------------------------------------
+
+    mysqli_report ( MYSQLI_REPORT_OFF );
+
+    $test = @mysqli_connect ( $post('db_host'), $post('db_user'), $post('db_pass') );
+    if ( $test === false ) {
+        $errs[] = va ( loca('INSTALL_ERR_DBCONNECT'), loca('INSTALL_ERR_DB_UNI'), (string) mysqli_connect_error() );
+    }
+    else {
+        if ( !@mysqli_select_db ( $test, $post('db_name') ) ) {
+            $errs[] = va ( loca('INSTALL_ERR_DB_SELECT'), loca('INSTALL_ERR_DB_UNI'), (string) mysqli_error ( $test ) );
+        }
+        mysqli_close ( $test );
+    }
+
+    if ( $post('mdb_enable') === 'on' ) {
+        $test = @mysqli_connect ( $post('mdb_host'), $post('mdb_user'), $post('mdb_pass') );
+        if ( $test === false ) {
+            $errs[] = va ( loca('INSTALL_ERR_DBCONNECT'), loca('INSTALL_ERR_DB_MDB'), (string) mysqli_connect_error() );
+        }
+        else {
+            if ( !@mysqli_select_db ( $test, $post('mdb_name') ) ) {
+                $errs[] = va ( loca('INSTALL_ERR_DB_SELECT'), loca('INSTALL_ERR_DB_MDB'), (string) mysqli_error ( $test ) );
+            }
+            mysqli_close ( $test );
+        }
+    }
+
+    if ( count ( $errs ) > 0 ) {
+        $InstallError = "<font color=red>" . implode ( "<br>", $errs ) . "</font>";
+        return false;
+    }
 
     return true;
 }
@@ -42,9 +204,6 @@ if (file_exists ("config.php"))
     echo "<html><head><meta http-equiv='refresh' content='0;url=index.php' /></head><body></body></html>";
     exit ();
 }
-
-// Database tables
-include "core/install_tabs.php";
 
 // -------------------------------------------------------------------------------------------------------------------------
 
@@ -63,24 +222,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
 
     // Delete all tables and create new empty tables.
     InitDB ();
-
-    foreach ( $tabs as $tabname => $tab )
-    {
-        $opt = " (";
-        $first = true;
-        foreach ( $tab as $row => $type )
-        {
-            if ( !$first ) $opt .= ", ";
-            if ( $first ) $first = false;
-            $opt .= "`".$row."`" . " " . $type;
-        }
-        $opt .= ")";
-
-        $query = 'DROP TABLE IF EXISTS '.$db_prefix.$tabname;
-        dbquery ($query, TRUE);
-        $query = 'CREATE TABLE '.$db_prefix.$tabname.$opt." CHARACTER SET utf8 COLLATE utf8_general_ci";
-        dbquery ($query, TRUE);
-    }
+    CreateDBTables ();
 
     // Create the universe.
     $uni = array ( 
@@ -112,6 +254,7 @@ if ( key_exists("install", $_POST) && CheckParameters() )
         'ext_rules' => $_POST["ext_rules"],
         'ext_impressum' => $_POST["ext_impressum"],
         'php_battle' => (key_exists("php_battle", $_POST) && $_POST["php_battle"]==="on"?1:0),
+        'battle_max' => intval ($_POST["battle_max"]),
         'force_lang' => (key_exists("force_lang", $_POST) && $_POST["force_lang"]==="on"?1:0),
         'max_werf' => intval($_POST["max_werf"]),
         'feedage' => intval($_POST["feedage"]),
@@ -221,6 +364,9 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     if ($mdb_enable)
     {
         $mdb_connect = @mysqli_connect($_POST["mdb_host"], $_POST["mdb_user"], $_POST["mdb_pass"]);
+        if (!$mdb_connect) {
+            die("Unable to establish connection to MySQL");
+        }
         $mdb_select = @mysqli_select_db($mdb_connect, $_POST["mdb_name"]);
         $query = "SELECT id FROM unis";
         $result = mysqli_query ( $mdb_connect, $query);
@@ -288,7 +434,7 @@ $info = " <img src='img/r5.png' />";
 <td style="vertical-align: top;">
 <table>
 <tr><td>&nbsp;</td></tr>
-<tr><td><?php echo loca('INSTALL_STARTPAGE');?></td><td><input type=text value='<?php echo rtrim(hostname(), '/');?>' class='text' name='startpage'></td></tr>
+<tr><td><?php echo loca('INSTALL_STARTPAGE');?></td><td><input type=text value='<?php echo (isset($_SERVER['HTTPS']) ? "https://" : "http://") . ($_SERVER['HTTP_HOST'] ?? '') . "/";?>' class='text' name='startpage'></td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan=2 class='c'><?php echo loca('INSTALL_DB');?></td></tr>
 <tr><td><?php echo loca('INSTALL_DB_HOST');?></td><td><input type=text value='localhost' class='text' name='db_host'></td></tr>
@@ -325,6 +471,7 @@ $info = " <img src='img/r5.png' />";
 <tr><td><?php echo loca('INSTALL_UNI_MOONS');?></td><td><input type=checkbox class='text' name='uni_moons' CHECKED></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_BATTLE');?><a title='<?php echo loca('INSTALL_TIP11');?>'><?php echo $info;?></a></td><td><input type=text value='../cgi-bin/battle' class='text' name='uni_battle_engine'></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_PHP_BATTLE');?></td><td><input type=checkbox class='text' name='php_battle' CHECKED></td></tr>
+<tr><td><?php echo loca('INSTALL_UNI_BATTLE_MAX');?></td><td><input type=text value='<?=BATTLE_MAX_UNITS;?>' class='text' name='battle_max'></td></tr>
 <tr><td><?php echo loca('INSTALL_UNI_FORCE_LANG');?></td><td><input type=checkbox class='text' name='force_lang' ></td></tr>
 <tr><td><?php echo loca('INSTALL_MAX_WERF');?></td><td><input type=text value='999' class='text' name='max_werf'></td></tr>
 <tr><td><?php echo loca('INSTALL_FEED_AGE');?></td><td><input type=text value='60' class='text' name='feedage'></td></tr>

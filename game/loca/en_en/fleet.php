@@ -44,6 +44,7 @@ $LOCA["en"]["FLEET1_AMOUNT"] = "Available";
 $LOCA["en"]["FLEET1_SPEED"] = "Speed";
 $LOCA["en"]["FLEET1_CLEAR"] = "no ships";
 $LOCA["en"]["FLEET1_ALL_SHIPS"] = "all ships";
+$LOCA["en"]["FLEET1_ALL"] = "All";
 $LOCA["en"]["FLEET1_TEMPLATE"] = "Standard fleets";  	// TODO: Not sure
 $LOCA["en"]["FLEET1_NEXT"] = "continue";
 
@@ -119,6 +120,7 @@ $LOCA["en"]["FLEET_ERR_EXP_LIMIT"] = "Too many simultaneous expeditions";
 $LOCA["en"]["FLEET_ERR_EXP_REQUIRED"] = "The expedition must consist of at least one human-controlled ship.";
 $LOCA["en"]["FLEET_ERR_EXP_INVALID"] = "The purpose of the expedition is invalid!";
 $LOCA["en"]["FLEET_ERR_ORDER"] = "You need to choose an mission!";
+$LOCA["en"]["FLEET_ERR_BATTLE_MAX"] = "Unit limit reached!";
 
 $LOCA["en"]["FLEET_SEND_ERROR"] = " The fleet could not be dispatched!";
 

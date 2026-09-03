@@ -2,139 +2,139 @@
 
 // Registration, login, forgot email send
 
-$LOCA["es"]["REG_MAIL_TITLE"] = "Overview";
-$LOCA["es"]["REG_MAIL_SEND"] = "Send Password";
-$LOCA["es"]["REG_MAIL_NOTE"] = "Please enter your email-address";
-$LOCA["es"]["REG_MAIL_EMAIL"] = "E-Mail:";
-$LOCA["es"]["REG_MAIL_SUBMIT"] = "send login data";
+$LOCA["es"]["REG_MAIL_TITLE"] = "Visión general";
+$LOCA["es"]["REG_MAIL_SEND"] = "Enviar contraseña";
+$LOCA["es"]["REG_MAIL_NOTE"] = "Por favor, introduce tu dirección de correo electrónico";
+$LOCA["es"]["REG_MAIL_EMAIL"] = "Correo electrónico:";
+$LOCA["es"]["REG_MAIL_SUBMIT"] = "enviar datos de acceso";
 
-$LOCA["es"]["REG_FORGOT_TITLE"] = "Send OGame Password";
-$LOCA["es"]["REG_FORGOT_ERROR"] = "This email-address doesn't exist as a permanent or variable address";
-$LOCA["es"]["REG_FORGOT_OK"] = "Your password has been sent to #1.";
-$LOCA["es"]["REG_FORGOT_SUBJ"] = "OGame password";
-$LOCA["es"]["REG_FORGOT_MAIL"] = "Hi #1,\n\n" .
-"your password for OGame Universe #2 is:\n\n" .
+$LOCA["es"]["REG_FORGOT_TITLE"] = "Enviar contraseña de #1";
+$LOCA["es"]["REG_FORGOT_ERROR"] = "Esta dirección de correo electrónico no existe como dirección permanente o variable";
+$LOCA["es"]["REG_FORGOT_OK"] = "Tu contraseña ha sido enviada a #1.";
+$LOCA["es"]["REG_FORGOT_SUBJ"] = "contraseña de #1";
+$LOCA["es"]["REG_FORGOT_MAIL"] = "Hola #1,\n\n" .
+"tu contraseña para el Universo #2 de #5 es:\n\n" .
 "#3\n\n" .
-"You may log in at #4 with this login data.\n\n" .
-"We only send passwords to the E-Mail address entered in your account. Please ignore this email if you didn't request it.\n\n" .
-"We wish you good success while playing OGame!\n\n" .
-"Your OGame-Team";
+"Puedes iniciar sesión en #4 con estos datos de acceso.\n\n" .
+"Solo enviamos contraseñas a la dirección de correo electrónico registrada en tu cuenta. Ignora este correo si no lo has solicitado.\n\n" .
+"¡Te deseamos mucho éxito jugando a #5!\n\n" .
+"Tu equipo de #5";
 
 // Session error on page load
 
-$LOCA["es"]["REG_SESSION_INVALID"] = "The session is invalid.";
-$LOCA["es"]["REG_SESSION_ERROR"] = "An error occurred";
+$LOCA["es"]["REG_SESSION_INVALID"] = "La sesión no es válida.";
+$LOCA["es"]["REG_SESSION_ERROR"] = "Se ha producido un error";
 $LOCA["es"]["REG_SESSION_ERROR_BODY"] = "    <br /><br />
-    The session is invalid.<br/><br/>This can be due to several reasons: 
-<br>- You logged into the same account several times; 
-<br>- Your IP address has changed since the last time you logged in; 
-<br>- You are accessing the Internet through AOL or a proxy. Turn off IP verification in the \"Settings\" menu of your account.    
+    La sesión no es válida.<br/><br/>Esto puede deberse a varias razones: 
+<br>- Has iniciado sesión en la misma cuenta varias veces; 
+<br>- Tu dirección IP ha cambiado desde la última vez que iniciaste sesión; 
+<br>- Estás accediendo a Internet a través de AOL o de un proxy. Desactiva la verificación de IP en el menú \"Ajustes\" de tu cuenta.    
     <br /><br />
 ";
 
-$LOCA["es"]["REG_NOT_ACTIVATED"] = "Your game account has not been activated yet. Go to <a href=index.php?page=options&session=#1>Settings</a>, enter your e-mail address and receive an activation link to it";
-$LOCA["es"]["REG_PENDING_DELETE"] = "Your account has been put up for deletion. Deletion date: #1";
+$LOCA["es"]["REG_NOT_ACTIVATED"] = "Tu cuenta de juego aún no ha sido activada. Ve a <a href=index.php?page=options&session=#1>Ajustes</a>, introduce tu dirección de correo electrónico y recibirás un enlace de activación";
+$LOCA["es"]["REG_PENDING_DELETE"] = "Tu cuenta ha sido marcada para su eliminación. Fecha de eliminación: #1";
 
 // Player tries to write without account activation
-$LOCA["es"]["REG_NOT_ACTIVATED_MESSAGE"] = "This feature is only available after account activation.";
+$LOCA["es"]["REG_NOT_ACTIVATED_MESSAGE"] = "Esta función solo está disponible después de la activación de la cuenta.";
 
 // errorpage
 
 $LOCA["es"]["REG_ERROR"] = "Error";
-$LOCA["es"]["REG_ERROR_21"] = "You tried to enter universe #1 under nickname #2.";
-$LOCA["es"]["REG_ERROR_22"] = "This account does not exist or you have entered your password incorrectly. ";
-$LOCA["es"]["REG_ERROR_23"] = "Enter <a href='#1'>the correct password</a> or use <a href='mail.php'>password recovery</a>.";
-$LOCA["es"]["REG_ERROR_24"] = "You can also create a <a href='new.php'>new account</a>.";
-$LOCA["es"]["REG_ERROR_31"] = "This account has been locked to #1, see more details below <a href=../pranger.php>here</a>.<br> If you have any questions, please contact the person who blocked you <a href='#'>operator</a>.<br><br>WARNING: commander status is not terminated when blocked, termination is done separately!";
+$LOCA["es"]["REG_ERROR_21"] = "Has intentado entrar en el universo #1 con el apodo #2.";
+$LOCA["es"]["REG_ERROR_22"] = "Esta cuenta no existe o has introducido tu contraseña incorrectamente. ";
+$LOCA["es"]["REG_ERROR_23"] = "Introduce <a href='#1'>la contraseña correcta</a> o utiliza <a href='mail.php'>la recuperación de contraseña</a>.";
+$LOCA["es"]["REG_ERROR_24"] = "También puedes crear una <a href='new.php'>cuenta nueva</a>.";
+$LOCA["es"]["REG_ERROR_31"] = "Esta cuenta ha sido bloqueada hasta #1; consulta más detalles <a href=../pranger.php>aquí</a>.<br> Si tienes alguna pregunta, ponte en contacto con la persona que te bloqueó, el <a href='#'>operador</a>.<br><br>ADVERTENCIA: el estado de comandante no se cancela al ser bloqueado; la cancelación se realiza por separado!";
 
 // new.php
 
-$LOCA["es"]["REG_NEW_ERROR_AGB"] = "In order to start the game you must accept the Basic Policies!";
-$LOCA["es"]["REG_NEW_ERROR_IP"] = "Registration from one IP not more than once per 10 minutes!";
-$LOCA["es"]["REG_NEW_ERROR_CHARS"] = "Name #1 contains invalid characters or too few/many characters!";
-$LOCA["es"]["REG_NEW_ERROR_EXISTS"] = "Name #1 already exists";
-$LOCA["es"]["REG_NEW_ERROR_EMAIL"] = "Address #1 is invalid!";
-$LOCA["es"]["REG_NEW_ERROR_EMAIL_EXISTS"] = "Address #1 already exists!";
-$LOCA["es"]["REG_NEW_ERROR_MAX_PLAYERS"] = "The maximum number of players (#1) has been reached!";
-$LOCA["es"]["REG_NEW_TITLE"] = "OGame Universe #1 Registration";
-$LOCA["es"]["REG_NEW_SUCCESS"] = "Registration was a success!";
-$LOCA["es"]["REG_NEW_TEXT"] = "Congratulations, <span class='fine'>#1</span>!<br /><br />You've successfully registered with OGame. (<span class='fine'>#2</span>). <br />\n".
-            "You'll soon receive <span class='fine'>#3</span> an e-mail with a password and some important links.<br />\n".
-            "In order to play, you must be logged in via <a href='#4'>home page</a>.<br />\n".
-            "In the subsequent picture you will see how to do it correctly.<br /><br />\n" .
-            "<center><a href='#5' style='text-decoration: underline;font-size: large;'>Let's go!</a></center><br /><br /> \n" .
-            "Good luck<br /> \n" .
-            "Your OGame team</th>";
-$LOCA["es"]["REG_NEW_UNI"] = "Universe #1";
-$LOCA["es"]["REG_NEW_CHOOSE_UNI"] = "Choose the universe";
-$LOCA["es"]["REG_NEW_NAME"] = "Enter name";
-$LOCA["es"]["REG_NEW_PASSWORD"] = "And the password sent!";
+$LOCA["es"]["REG_NEW_ERROR_AGB"] = "¡Para poder empezar a jugar debes aceptar las Normas Básicas!";
+$LOCA["es"]["REG_NEW_ERROR_IP"] = "¡Registro desde una misma IP no más de una vez cada 10 minutos!";
+$LOCA["es"]["REG_NEW_ERROR_CHARS"] = "¡El nombre #1 contiene caracteres no válidos o demasiados/pocos caracteres!";
+$LOCA["es"]["REG_NEW_ERROR_EXISTS"] = "El nombre #1 ya existe";
+$LOCA["es"]["REG_NEW_ERROR_EMAIL"] = "¡La dirección #1 no es válida!";
+$LOCA["es"]["REG_NEW_ERROR_EMAIL_EXISTS"] = "¡La dirección #1 ya existe!";
+$LOCA["es"]["REG_NEW_ERROR_MAX_PLAYERS"] = "¡Se ha alcanzado el número máximo de jugadores (#1)!";
+$LOCA["es"]["REG_NEW_TITLE"] = "Registro en el Universo #1 de #2";
+$LOCA["es"]["REG_NEW_SUCCESS"] = "¡El registro se ha completado con éxito!";
+$LOCA["es"]["REG_NEW_TEXT"] = "¡Enhorabuena, <span class='fine'>Universo #1</span>!<br /><br />Te has registrado con éxito en #6. (<span class='fine'>#2</span>). <br />\n".
+            "Pronto recibirás <span class='fine'>#3</span> un correo electrónico con una contraseña y algunos enlaces importantes.<br />\n".
+            "Para poder jugar, debes iniciar sesión a través de la <a href='#4'>página de inicio</a>.<br />\n".
+            "En la imagen siguiente verás cómo hacerlo correctamente.<br /><br />\n" .
+            "<center><a href='#5' style='text-decoration: underline;font-size: large;'>¡Vamos!</a></center><br /><br /> \n" .
+            "Buena suerte<br /> \n" .
+            "Tu equipo de #6</th>";
+$LOCA["es"]["REG_NEW_UNI"] = "Universo #1";
+$LOCA["es"]["REG_NEW_CHOOSE_UNI"] = "Elige el universo";
+$LOCA["es"]["REG_NEW_NAME"] = "Introduce el nombre";
+$LOCA["es"]["REG_NEW_PASSWORD"] = "¡Y la contraseña enviada!";
 $LOCA["es"]["REG_NEW_ERROR"] = "Error";
-$LOCA["es"]["REG_NEW_PLAYER_INFO"] = "Player information";
-$LOCA["es"]["REG_NEW_PLAYER_NAME"] = "In-game name";
-$LOCA["es"]["REG_NEW_PLAYER_EMAIL"] = "Email";
-$LOCA["es"]["REG_NEW_ACCEPT"] = "I agree with";
-$LOCA["es"]["REG_NEW_AGB"] = "Basic Regulations";
-$LOCA["es"]["REG_NEW_SUBMIT"] = "Sign up";
-$LOCA["es"]["REG_NEW_INFO"] = "Info";
+$LOCA["es"]["REG_NEW_PLAYER_INFO"] = "Información del jugador";
+$LOCA["es"]["REG_NEW_PLAYER_NAME"] = "Nombre en el juego";
+$LOCA["es"]["REG_NEW_PLAYER_EMAIL"] = "Correo electrónico";
+$LOCA["es"]["REG_NEW_ACCEPT"] = "Estoy de acuerdo con";
+$LOCA["es"]["REG_NEW_AGB"] = "Normas Básicas";
+$LOCA["es"]["REG_NEW_SUBMIT"] = "Registrarse";
+$LOCA["es"]["REG_NEW_INFO"] = "Información";
 
 $LOCA["es"]["REG_NEW_MESSAGE_0"] = "OK";
-$LOCA["es"]["REG_NEW_MESSAGE_101"] = "Such a name already exists!";
-$LOCA["es"]["REG_NEW_MESSAGE_102"] = "This address is already in use!";
-$LOCA["es"]["REG_NEW_MESSAGE_103"] = "Name must be between 3 and 20 characters long!";
-$LOCA["es"]["REG_NEW_MESSAGE_104"] = "The address is invalid!";
-$LOCA["es"]["REG_NEW_MESSAGE_105"] = "Player's name is fine";
-$LOCA["es"]["REG_NEW_MESSAGE_106"] = "The address is fine";
-$LOCA["es"]["REG_NEW_MESSAGE_107"] = "The address is invalid!";
-$LOCA["es"]["REG_NEW_MESSAGE_108"] = "Registration from one IP not more than once per 10 minutes!";
-$LOCA["es"]["REG_NEW_MESSAGE_109"] = "The maximum number of players has been reached!";
-$LOCA["es"]["REG_NEW_MESSAGE_201"] = "Name in Game: <br />This is the name of your character in the game. No two names can be the same in the same universe.";
-$LOCA["es"]["REG_NEW_MESSAGE_202"] = "Email: <br />Your password will be sent to this address. If you enter a wrong or invalid address, you will not be able to play.";
+$LOCA["es"]["REG_NEW_MESSAGE_101"] = "¡Ese nombre ya existe!";
+$LOCA["es"]["REG_NEW_MESSAGE_102"] = "¡Esta dirección ya está en uso!";
+$LOCA["es"]["REG_NEW_MESSAGE_103"] = "¡El nombre debe tener entre 3 y 20 caracteres!";
+$LOCA["es"]["REG_NEW_MESSAGE_104"] = "¡La dirección no es válida!";
+$LOCA["es"]["REG_NEW_MESSAGE_105"] = "El nombre del jugador es correcto";
+$LOCA["es"]["REG_NEW_MESSAGE_106"] = "La dirección es correcta";
+$LOCA["es"]["REG_NEW_MESSAGE_107"] = "¡La dirección no es válida!";
+$LOCA["es"]["REG_NEW_MESSAGE_108"] = "¡Registro desde una misma IP no más de una vez cada 10 minutos!";
+$LOCA["es"]["REG_NEW_MESSAGE_109"] = "¡Se ha alcanzado el número máximo de jugadores!";
+$LOCA["es"]["REG_NEW_MESSAGE_201"] = "Nombre en el juego: <br />Este es el nombre de tu personaje en el juego. No puede haber dos nombres iguales en el mismo universo.";
+$LOCA["es"]["REG_NEW_MESSAGE_202"] = "Correo electrónico: <br />Tu contraseña se enviará a esta dirección. Si introduces una dirección incorrecta o no válida, no podrás jugar.";
 $LOCA["es"]["REG_NEW_MESSAGE_203"] = "";
-$LOCA["es"]["REG_NEW_MESSAGE_204"] = "In order to start the game you must agree to the Basic Regulations.";
+$LOCA["es"]["REG_NEW_MESSAGE_204"] = "Para poder empezar a jugar debes aceptar las Normas Básicas.";
 
 // user.php
 
-$LOCA["es"]["REG_GREET_MAIL_SUBJ"] = "Welcome to OGame ";
-$LOCA["es"]["REG_GREET_MAIL_BODY"] = "Greetings #1,\n\n" .
-            "You've decided to create your own empire in #2 of the OGame universe!\n\n" .
-            "Click on this link to activate your account:\n" .
+$LOCA["es"]["REG_GREET_MAIL_SUBJ"] = "¡Bienvenido a #1!";
+$LOCA["es"]["REG_GREET_MAIL_BODY"] = "Saludos #1,\n\n" .
+            "¡Has decidido crear tu propio imperio en #2 del universo #7!\n\n" .
+            "Haz clic en este enlace para activar tu cuenta:\n" .
             "#3\n\n" .
-            "Your gaming credentials:\n" .
-            "Player name: #4\n" .
-            "Password: #5\n" .
-            "Universe: #6\n\n\n";
-$LOCA["es"]["REG_GREET_MAIL_BOARD"] = "If you need help or advice from other emperors, you can find it all in our forum (#1).\n\n";
-$LOCA["es"]["REG_GREET_MAIL_TUTORIAL"] = "Here (#1) is all the information gathered by players and team members to help newcomers understand the game as quickly as possible.\n\n";
-$LOCA["es"]["REG_GREET_MAIL_FOOTER"] = "We wish you success in building your empire and good luck in the upcoming battles!\n\nYour OGame team";
+            "Tus credenciales de juego:\n" .
+            "Nombre de jugador: #4\n" .
+            "Contraseña: #5\n" .
+            "Universo: #6\n\n\n";
+$LOCA["es"]["REG_GREET_MAIL_BOARD"] = "Si necesitas ayuda o consejo de otros emperadores, puedes encontrar todo en nuestro foro (#1).\n\n";
+$LOCA["es"]["REG_GREET_MAIL_TUTORIAL"] = "Aquí (#1) encontrarás toda la información recopilada por jugadores y miembros del equipo para ayudar a los nuevos jugadores a entender el juego lo antes posible.\n\n";
+$LOCA["es"]["REG_GREET_MAIL_FOOTER"] = "¡Te deseamos éxito en la construcción de tu imperio y buena suerte en las próximas batallas!\n\nTu equipo de #1";
 
-$LOCA["es"]["REG_CHANGE_MAIL_SUBJ"] = "Your in-game e-mail address has been changed ";
-$LOCA["es"]["REG_CHANGE_MAIL_BODY"] = "Greetings #1,\n\n" .
-            "The temporary e-mail address of your account in the #2 universe has been changed in the settings to #3.\n" .
-            "If you don't change it within a week, it will become permanent.\n\n" .
-            "Confirm your new e-mail address using the following link to continue playing without any problems:\n\n" .
+$LOCA["es"]["REG_CHANGE_MAIL_SUBJ"] = "Tu dirección de correo electrónico del juego ha sido cambiada ";
+$LOCA["es"]["REG_CHANGE_MAIL_BODY"] = "Saludos #1,\n\n" .
+            "La dirección de correo electrónico temporal de tu cuenta en el universo #2 ha sido cambiada en los ajustes a #3.\n" .
+            "Si no la cambias en el plazo de una semana, se convertirá en permanente.\n\n" .
+            "Confirma tu nueva dirección de correo electrónico mediante el siguiente enlace para seguir jugando sin problemas:\n\n" .
             "#4\n\n" .
-            "Your OGame team";
+            "Tu equipo de #5";
 
-$LOCA["es"]["REG_GREET_MSG_SUBJ"] = "Welcome to OGame!";
-$LOCA["es"]["REG_GREET_MSG_TEXT"] = "Welcome to [b]OGame[/b] !\n" .
+$LOCA["es"]["REG_GREET_MSG_SUBJ"] = "¡Bienvenido a #1!";
+$LOCA["es"]["REG_GREET_MSG_TEXT"] = "¡Bienvenido a [b]#3[/b]!\n" .
         "\n" .
-        "First you need to develop the mines.\n" .
-        "You can do this in the \"Buildings\" menu.\n" .
-        "Select a metal mine and press \"build\".\n" .
-        "Now you have some time to familiarize yourself with the game.\n" .
-        "You can find help for the game at these links: \n" .
+        "Primero necesitas desarrollar las minas.\n" .
+        "Puedes hacerlo en el menú \"Edificios\".\n" .
+        "Selecciona una mina de metal y pulsa \"construir\".\n" .
+        "Ahora tienes algo de tiempo para familiarizarte con el juego.\n" .
+        "Puedes encontrar ayuda para el juego en estos enlaces: \n" .
         "[url=#1/]Tutorial[/url]\n" .
-        "[url=#2/]Forum[/url]\n" .
+        "[url=#2/]Foro[/url]\n" .
         "\n" .
-        "In the meantime, your mine should be built by now.\n" .
-        "The mines need energy to operate, so build a solar power plant to get it.\n" .
-        "To do this, go back to the \"Buildings\" menu and click on the power plant.\n" .
-        "To see how far you've come in your development, go to the \"Technology\" menu.\n" .
-        "So, your victorious march through the universe has begun... Good luck!\n";
+        "Mientras tanto, tu mina ya debería estar construida.\n" .
+        "Las minas necesitan energía para funcionar, así que construye una planta de energía solar para obtenerla.\n" .
+        "Para ello, vuelve al menú \"Edificios\" y haz clic en la planta de energía.\n" .
+        "Para ver hasta dónde has llegado en tu desarrollo, ve al menú \"Tecnología\".\n" .
+        "Así que tu marcha victoriosa por el universo ha comenzado... ¡Buena suerte!\n";
 
 // logout
 
-$LOCA["es"]["REG_LOGOUT"] = "See you soon!!";
+$LOCA["es"]["REG_LOGOUT"] = "¡¡Hasta pronto!!";
 
 ?>

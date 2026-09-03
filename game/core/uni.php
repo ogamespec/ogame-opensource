@@ -1,8 +1,16 @@
 <?php
-
+/**
+ * @file uni.php
+ * @brief Universe and galaxy data.
+ * @details Provides helpers for universe configuration, galaxy dimensions and planet coordinates.
+ */
 // Managing the parameters of the universe.
 
-// Load the Universe.
+/**
+ * Load the universe configuration row.
+ *
+ * @return mixed The universe settings as an array, or false if it does not exist.
+ */
 function LoadUniverse () : mixed
 {
     global $db_prefix;
@@ -11,7 +19,14 @@ function LoadUniverse () : mixed
     return dbarray ($result);
 }
 
-// Update News.
+/**
+ * Update the news texts and set how long they stay active.
+ *
+ * @param string $news1 First news text.
+ * @param string $news2 Second news text.
+ * @param int $days Number of days the news remains active.
+ * @return void
+ */
 function UpdateNews (string $news1, string $news2, int $days) : void
 {
     global $db_prefix;
@@ -20,7 +35,11 @@ function UpdateNews (string $news1, string $news2, int $days) : void
     dbquery ($query);
 }
 
-// Take out the news.
+/**
+ * Disable the news by clearing its expiry timestamp.
+ *
+ * @return void
+ */
 function DisableNews () : void
 {
     global $db_prefix;
@@ -28,20 +47,54 @@ function DisableNews () : void
     dbquery ($query);
 }
 
-// Set the parameters of the universe (all at the same time)
-function SetUniParam (int $speed, int $fspeed, int $acs, int $fid, int $did, int $defrepair, int $defrepair_delta, int $galaxies, int $systems, int $rapid, int $moons, int $freeze, string $lang, string $battle_engine, int $php_battle, int $force_lang, int $start_dm, int $max_werf, int $feedage) : void
+/**
+ * Set all universe parameters at once and reload the cached universe data.
+ *
+ * @param int $speed Economy speed of the universe.
+ * @param int $fspeed Fleet speed of the universe.
+ * @param int $acs Whether ACS attacks are allowed.
+ * @param int $fid Debris percentage for fleet units.
+ * @param int $did Debris percentage for defense units.
+ * @param int $defrepair Whether defense repair is enabled.
+ * @param int $defrepair_delta Percentage of defenses repaired after a battle.
+ * @param int $galaxies Number of galaxies.
+ * @param int $systems Number of systems per galaxy.
+ * @param int $rapid Whether rapidfire is enabled.
+ * @param int $moons Maximum number of moons per planet.
+ * @param int $freeze Whether the universe is frozen (no fleet movement).
+ * @param string $lang Default language of the universe.
+ * @param string $battle_engine Battle engine to use.
+ * @param int $php_battle Whether the PHP battle engine is used.
+ * @param int $battle_max Maximum number of units on one side in battle.
+ * @param int $force_lang Whether the language is forced for all players.
+ * @param int $start_dm Starting Dark Matter for new players.
+ * @param int $max_werf Maximum number of units in a shipyard order.
+ * @param int $feedage Maximum age of the news feed in days.
+ * @return void
+ */
+function SetUniParam (int $speed, int $fspeed, int $acs, int $fid, int $did, int $defrepair, int $defrepair_delta, int $galaxies, int $systems, int $rapid, int $moons, int $freeze, string $lang, string $battle_engine, int $php_battle, int $battle_max, int $force_lang, int $start_dm, int $max_werf, int $feedage) : void
 {
     global $db_prefix;
     global $GlobalUni;
     
-    $query = "UPDATE ".$db_prefix."uni SET lang='".$lang."', battle_engine='".$battle_engine."', freeze=$freeze, speed=$speed, fspeed=$fspeed, acs=$acs, fid=$fid, did=$did, defrepair=$defrepair, defrepair_delta=$defrepair_delta, galaxies=$galaxies, systems=$systems, rapid=$rapid, moons=$moons, php_battle=$php_battle, force_lang=$force_lang, start_dm=$start_dm, max_werf=$max_werf, feedage=$feedage";
+    $query = "UPDATE ".$db_prefix."uni SET lang='".$lang."', battle_engine='".$battle_engine."', freeze=$freeze, speed=$speed, fspeed=$fspeed, acs=$acs, fid=$fid, did=$did, defrepair=$defrepair, defrepair_delta=$defrepair_delta, galaxies=$galaxies, systems=$systems, rapid=$rapid, moons=$moons, php_battle=$php_battle, battle_max=$battle_max, force_lang=$force_lang, start_dm=$start_dm, max_werf=$max_werf, feedage=$feedage";
     dbquery ($query);
 
     $GlobalUni = LoadUniverse ();
 }
 
-// Set external links for the following menu items: Forum, Discord (new, since the forum format of communication is becoming less and less relevant), Tutorial, Rules, About Us.
-// An empty string hides the menu item.
+/**
+ * Set external links for the menu items Forum, Discord, Tutorial, Rules and About Us.
+ *
+ * An empty string hides the corresponding menu item.
+ *
+ * @param string $ext_board URL of the forum.
+ * @param string $ext_discord URL of the Discord server.
+ * @param string $ext_tutorial URL of the tutorial page.
+ * @param string $ext_rules URL of the rules page.
+ * @param string $ext_impressum URL of the about us page.
+ * @return void
+ */
 function SetExtLinks(string $ext_board, string $ext_discord, string $ext_tutorial, string $ext_rules, string $ext_impressum) : void
 {
     global $db_prefix;
@@ -53,7 +106,12 @@ function SetExtLinks(string $ext_board, string $ext_discord, string $ext_tutoria
     $GlobalUni = LoadUniverse ();
 }
 
-// Set the maximum number of users (administrators and operators do not count)
+/**
+ * Set the maximum number of registered users; administrators and operators do not count.
+ *
+ * @param int $maxusers New maximum number of users; ignored when not positive.
+ * @return void
+ */
 function SetMaxUsers (int $maxusers) : void
 {
     global $db_prefix;
@@ -67,7 +125,11 @@ function SetMaxUsers (int $maxusers) : void
     }
 }
 
-// Reset game hack attempts counter (called during relogin)
+/**
+ * Reset the game's hack attempt counter; called during relogin.
+ *
+ * @return void
+ */
 function ResetHackCounter () : void
 {
     global $db_prefix;
@@ -75,7 +137,11 @@ function ResetHackCounter () : void
     dbquery ($query);
 }
 
-// Increment the game's hack attempt counter.
+/**
+ * Increment the game's hack attempt counter.
+ *
+ * @return void
+ */
 function IncrementHackCounter () : void
 {
     global $db_prefix;

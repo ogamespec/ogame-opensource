@@ -2,7 +2,7 @@
 
 // 左メニュー.
 
-$LOCA["jp"]["MENU_DIS"] = "視覚障害のある選手に関する問題は、下記までお問い合わせください barrierefrei@ogame.de.";
+$LOCA["jp"]["MENU_DIS"] = "視覚障害のある選手に関する問題は、下記までお問い合わせください #1.";
 $LOCA["jp"]["MENU_UNIVERSE"] = "ユニバース";
 $LOCA["jp"]["MENU_OVERVIEW"] = "レビュー";
 $LOCA["jp"]["MENU_ADMIN"] = "* 管理者 *";
@@ -30,5 +30,29 @@ $LOCA["jp"]["MENU_LOGOUT"] = "出力";
 $LOCA["jp"]["MENU_RULES"] = "ルール";
 $LOCA["jp"]["MENU_IMPRESSUM"] = "会社概要";
 $LOCA["jp"]["MENU_DISCORD"] = "ディスコード"; 		// 新しい。Discordのリンクはフォーラムのリンクの後に挿入されます。
+
+// メニューのホットキー
+
+$LOCA["jp"]["HK_OVERVIEW"] = "o";
+$LOCA["jp"]["HK_EMPIRE"] = "e";
+$LOCA["jp"]["HK_BUILDING"] = "b";
+$LOCA["jp"]["HK_RESOURCES"] = "r";
+$LOCA["jp"]["HK_RESEARCH"] = "c";
+$LOCA["jp"]["HK_SHIPYARD"] = "s";
+$LOCA["jp"]["HK_FLEET"] = "f";
+$LOCA["jp"]["HK_TECHTREE"] = "t";
+$LOCA["jp"]["HK_GALAXY"] = "g";
+$LOCA["jp"]["HK_DEFENSE"] = "d";
+$LOCA["jp"]["HK_ALLY"] = "a";
+$LOCA["jp"]["HK_BOARD"] = "1";
+$LOCA["jp"]["HK_PAYMENT"] = "i";
+$LOCA["jp"]["HK_STAT"] = "k";
+$LOCA["jp"]["HK_SEARCH"] = "h";
+$LOCA["jp"]["HK_TUTORIAL"] = "2";
+$LOCA["jp"]["HK_MESSAGES"] = "m";
+$LOCA["jp"]["HK_NOTES"] = "n";
+$LOCA["jp"]["HK_BUDDY"] = "u";
+$LOCA["jp"]["HK_OPTIONS"] = "p";
+$LOCA["jp"]["HK_LOGOUT"] = "q";
 
 ?>

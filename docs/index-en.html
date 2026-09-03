@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>OGame 0.84 Open Source — Documentation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* Palette and art of the classic "Evolution" skin (assets/evolution). */
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+    font-size: 14px; line-height: 1.55;
+    color: #e6ebfb;
+    background-color: #040e1e;
+    background-image: url("assets/evolution/img/background.jpg");
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: top right;
+  }
+  a { color: #8fc7ff; }
+  a:hover { color: #cfe6ff; }
+
+  #topbar {
+    background: rgba(10, 24, 46, 0.94);
+    border-bottom: 1px solid #415680;
+    padding: 10px 18px;
+    position: sticky; top: 0; z-index: 50;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+  }
+  #topbar .t { font-weight: bold; font-size: 15px; color: #fff; }
+  #topbar .t small { display: block; font-weight: normal; font-size: 11px; color: #9fb4d8; }
+  #topbar .langs { margin-left: auto; }
+  #topbar .langs a {
+    color: #e6ebfb; text-decoration: none; border: 1px solid #415680;
+    background: #1d2c47; padding: 2px 8px; border-radius: 3px;
+  }
+  #topbar .langs a:hover { background: #344566; }
+
+  #resstrip { text-align: right; padding: 4px 14px 0 0; }
+  #resstrip img { vertical-align: middle; margin: 0 2px; }
+
+  #wrap { max-width: 1080px; margin: 0 auto; padding: 18px 16px; }
+  section {
+    background: rgba(9, 20, 40, 0.88);
+    border: 1px solid #415680; border-radius: 4px;
+    margin-bottom: 16px; padding: 16px 20px;
+  }
+  h1 { font-size: 26px; margin: 0 0 4px 0; color: #fff; }
+  h2 {
+    font-size: 17px; color: #fff; margin: 4px 0 10px 0;
+    border-bottom: 1px solid #415680; padding-bottom: 5px;
+  }
+  h2 img { vertical-align: -3px; margin-right: 5px; }
+  .tagline { color: #9fb4d8; font-size: 13px; margin: 0 0 10px 0; }
+  .lead { font-size: 14px; margin: 8px 0; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin: 12px 0; }
+  .card {
+    display: block; text-decoration: none;
+    background: rgba(18, 32, 58, 0.92);
+    border: 1px solid #415680; border-radius: 4px;
+    padding: 14px 16px; transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .card:hover { background: #1d2f55; border-color: #8fc7ff; }
+  .card .ico { font-size: 22px; }
+  .card h3 { color: #fff; margin: 6px 0 4px 0; font-size: 15px; }
+  .card p { margin: 0; color: #c8d6f0; font-size: 12.5px; }
+  .card .go { display: inline-block; margin-top: 8px; color: #8fc7ff; font-size: 12px; }
+  .card:hover .go { color: #cfe6ff; }
+
+  ul { margin: 6px 0 6px 20px; padding: 0; }
+  li { margin: 3px 0; }
+  code { background: #12203a; padding: 0 3px; border-radius: 2px; color: #ffd98c; font-size: 12.5px; }
+  footer { text-align: center; color: #7d95bf; font-size: 11px; padding: 6px 0 30px; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div class="t">OGame 0.84 Open Source
+    <small>Project documentation — digest &amp; mod developer manual</small>
+  </div>
+  <div class="langs">
+    <a href="index.html">Русский</a>
+    <a href="https://github.com/ogamespec/ogame-opensource">GitHub</a>
+  </div>
+</div>
+
+<div id="resstrip" title="Art of the Evolution skin">
+  <img src="assets/evolution/images/metall.gif" alt="Metal"><img src="assets/evolution/images/kristall.gif" alt="Crystal"><img src="assets/evolution/images/deuterium.gif" alt="Deuterium"><img src="assets/evolution/images/energie.gif" alt="Energy">
+</div>
+
+<div id="wrap">
+
+  <section>
+    <h1>OGame 0.84 Open Source</h1>
+    <p class="tagline">Project documentation · pages styled with the classic &ldquo;Evolution&rdquo; skin art</p>
+    <p class="lead"><a href="https://github.com/ogamespec/ogame-opensource">OGame 0.84 Open Source</a> is a faithful
+    revival of the classic OGame v0.84 with its original 2000s design. This folder (<code>docs/</code>) is the
+    project&rsquo;s documentation site: open its root and your browser will show this page (<code>index.html</code>)
+    automatically.</p>
+    <p class="lead">Here are the key 2026 documents: the <b>yearly digest of all changes</b> (Russian and English)
+    and the <b>Mod Developer Manual</b> — the full description of the mod API and engine hooks.</p>
+  </section>
+
+  <section>
+    <h2><img src="assets/evolution/images/energie.gif" alt="">Documents</h2>
+    <div class="cards">
+      <a class="card" href="digest-2026-en.html">
+        <div class="ico">📰</div>
+        <h3>Year 2026 Digest (EN)</h3>
+        <p>Everything that changed in 2026: engine refactoring, the mod subsystem, security and gameplay fixes,
+           golden-page testing, localization and docs — with a timeline and PR links.</p>
+        <span class="go">Open the digest →</span>
+      </a>
+      <a class="card" href="digest-2026-ru.html">
+        <div class="ico">📰</div>
+        <h3>Дайджест 2026 года (RU)</h3>
+        <p>Все правки года: рефакторинг архитектуры, подсистема модов, исправления и безопасность,
+           golden-тестирование, локализация и документация — с хронологией и ссылками на PR.</p>
+        <span class="go">Открыть дайджест →</span>
+      </a>
+      <a class="card" href="mod-manual-en.html">
+        <div class="ico">🛠️</div>
+        <h3>Mod Developer Manual (EN)</h3>
+        <p>How the mod subsystem works: folder layout, GameMod API, the full hook reference with call sites,
+           mod pages and admin routing, localization and tests &mdash; with real repo mods as examples.</p>
+        <span class="go">Open the manual →</span>
+      </a>
+      <a class="card" href="mod-manual-ru.html">
+        <div class="ico">🛠️</div>
+        <h3>Руководство мододела (RU)</h3>
+        <p>Устройство подсистемы модов, класс GameMod, все хуки с местами вызова, страницы и админ-роутинг модов,
+           локализация, тесты — на примерах модов репозитория.</p>
+        <span class="go">Открыть руководство →</span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2><img src="assets/evolution/images/metall.gif" alt="">About the project</h2>
+    <ul>
+      <li>A revived <b>OGame v0.84</b>: gameplay mechanics, resource costs, production timings and the home-planet
+          distribution algorithm are preserved; the design is the original one.</li>
+      <li>The code is PHP 8.x, lives in <code>game/</code>; mods live in <code>game/mods/</code>; tests and golden
+          snapshots live in <code>testing/</code>.</li>
+      <li>Installation: guides in the <a href="https://github.com/ogamespec/ogame-opensource/tree/master/wiki/en">repository wiki</a>
+          (including <a href="https://github.com/ogamespec/ogame-opensource/blob/master/wiki/en/install_docker.md">Docker</a>).</li>
+      <li>Questions and ideas — in <a href="https://github.com/ogamespec/ogame-opensource/issues">issues</a> on GitHub,
+          community chat — on <a href="https://discord.gg/xpCV3McAj2">Discord</a>.</li>
+    </ul>
+  </section>
+
+</div>
+
+<footer>OGame 0.84 Open Source · Documentation · skin Evolution ·
+<a href="https://github.com/ogamespec/ogame-opensource">github.com/ogamespec/ogame-opensource</a></footer>
+</body>
+</html>

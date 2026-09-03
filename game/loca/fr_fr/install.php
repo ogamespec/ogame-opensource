@@ -32,14 +32,15 @@ $LOCA["fr"]["INSTALL_UNI_USERS"] = "Utilisateurs max";
 $LOCA["fr"]["INSTALL_UNI_START_DM"] = "La quantité de Matière Noire de départ";
 $LOCA["fr"]["INSTALL_UNI_ACS"] = "ACS";
 $LOCA["fr"]["INSTALL_UNI_FID"] = "Flotte en débris (%)";
-$LOCA["fr"]["INSTALL_UNI_DID"] = "Défense in debris (%)";
+$LOCA["fr"]["INSTALL_UNI_DID"] = "Défense dans les débris (%)";
 $LOCA["fr"]["INSTALL_UNI_RAPID"] = "Rapidfire";
 $LOCA["fr"]["INSTALL_UNI_MOONS"] = "Lunes et Etoiles de la Mort";
 $LOCA["fr"]["INSTALL_UNI_BATTLE"] = "Chemin vers le moteur de bataille";
 $LOCA["fr"]["INSTALL_UNI_PHP_BATTLE"] = "Utiliser le moteur de bataille à base PHP";
+$LOCA["fr"]["INSTALL_UNI_BATTLE_MAX"] = "Nombre maximal d'unités d'un côté";
 $LOCA["fr"]["INSTALL_UNI_FORCE_LANG"] = "Obligé d'utiliser le langage de l'univers";
-$LOCA["fr"]["INSTALL_MAX_WERF"] = "Maximum number of units in a shipyard order";
-$LOCA["fr"]["INSTALL_FEED_AGE"] = "RSS/Atom refresh period in minutes for Commander";
+$LOCA["fr"]["INSTALL_MAX_WERF"] = "Nombre maximal d'unités dans une commande de chantier spatial";
+$LOCA["fr"]["INSTALL_FEED_AGE"] = "Période d'actualisation RSS/Atom en minutes pour le Commandant";
 
 $LOCA["fr"]["INSTALL_ADMIN"] = "Compte Admin";
 $LOCA["fr"]["INSTALL_ADMIN_EMAIL"] = "E-Mail";
@@ -64,5 +65,18 @@ $LOCA["fr"]["INSTALL_DONE"] ="Installation terminée. Fichier de config créé."
 
 $LOCA["fr"]["INSTALL_EXTERNAL_LINKS"] = "Liens externes";
 $LOCA["fr"]["INSTALL_EXTERNAL_LINKS_TIP"] = "Si aucun lien externe n’est spécifié (chaîne vide), l’élément correspondant dans le menu sera absent.";
+
+$LOCA["fr"]["INSTALL_ERR_REQUIRED"] = "Le champ \"#1\" ne doit pas être vide.";
+$LOCA["fr"]["INSTALL_ERR_INT"] = "Le champ \"#1\" doit être un nombre entier.";
+$LOCA["fr"]["INSTALL_ERR_MIN"] = "Le champ \"#1\" doit être au moins #2.";
+$LOCA["fr"]["INSTALL_ERR_MAX"] = "Le champ \"#1\" ne doit pas dépasser #2.";
+$LOCA["fr"]["INSTALL_ERR_EMAIL"] = "Le champ \"#1\" doit être une adresse e-mail valide.";
+$LOCA["fr"]["INSTALL_ERR_PASS_LONG"] = "Le mot de passe administrateur doit contenir au moins 8 caractères.";
+$LOCA["fr"]["INSTALL_ERR_PREFIX"] = "Le préfixe des tables ne peut contenir que des lettres latines, des chiffres et des tirets bas.";
+$LOCA["fr"]["INSTALL_ERR_URL"] = "Le champ \"#1\" doit être une URL valide ou un nom d’hôte.";
+$LOCA["fr"]["INSTALL_ERR_DBCONNECT"] = "Impossible de se connecter à la #1 : #2";
+$LOCA["fr"]["INSTALL_ERR_DB_SELECT"] = "Impossible de sélectionner la #1 : #2";
+$LOCA["fr"]["INSTALL_ERR_DB_UNI"] = "base de données de l’univers";
+$LOCA["fr"]["INSTALL_ERR_DB_MDB"] = "base de données maître";
 
 ?>

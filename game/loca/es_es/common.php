@@ -2,7 +2,10 @@
 
 // Common strings. Occur on most pages.
 
-$LOCA["es"]["PAGE_TITLE"] = "Universo #1 OGame";
+$LOCA["es"]["OGAME_INT"] = "OGame";
+$LOCA["es"]["OGAME_LOC"] = "OGame";
+
+$LOCA["es"]["PAGE_TITLE"] = "Universo #1 #2";
 
 $LOCA["es"]["NAME_".GID_RC_METAL] = "Metal";
 $LOCA["es"]["NAME_".GID_RC_CRYSTAL] = "Cristal";

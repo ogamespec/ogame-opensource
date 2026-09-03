@@ -15,7 +15,6 @@ RUN chmod 644 /etc/msmtprc
 COPY ./wwwroot /var/www/html
 COPY ./download /var/www/html/download
 # Universe (game) files
-COPY ./feed /var/www/html/feed
 COPY ./game /var/www/html/game
 
 # PHP extensions
@@ -29,9 +28,13 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zlib1g-dev \
     libonig-dev \
+    msmtp \
     && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 RUN docker-php-ext-install gd
+# NOTE: sqlite3 and pdo_sqlite are already compiled into the php:8.2-apache base
+# image (and their sources are no longer shipped in /usr/src/php), so they must
+# NOT be listed here or docker-php-ext-install fails with "Cannot find config.m4".
 RUN docker-php-ext-install mbstring mysqli pdo pdo_mysql
 
 # To prevent configuration files from being destroyed after redeployment, you need to make them symbolic links, and drag the configs themselves into the volume
@@ -45,8 +48,12 @@ RUN ln -s /var/www/html/persistent_configs/game_config.php /var/www/html/game/co
 
 RUN chown -R www-data:www-data /var/www/html
 
+# RUN apt-get update && apt-get install -y cron
+# COPY cronfile /etc/cron.d/cronfile
+# RUN chmod 0644 /etc/cron.d/cronfile
+# RUN crontab /etc/cron.d/cronfile
+# CMD ["cron", "-f"]
+
 # C battle engine
-COPY ./BattleEngine /var/www/BattleEngine
-RUN gcc /var/www/BattleEngine/*.c -lm -o /usr/lib/cgi-bin/battle
+RUN g++ /var/www/html/game/battle/*.cpp -lm -o /usr/lib/cgi-bin/battle
 RUN chmod 755 /usr/lib/cgi-bin/battle
-RUN rm -rf /var/www/BattleEngine

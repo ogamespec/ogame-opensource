@@ -1,6 +1,8 @@
 <?php
 
 /** @var string $db_prefix */
+/** @var array $GlobalUni */
+/** @var string $session */
 
 // Pillar of Shame.
 
@@ -10,6 +12,11 @@ $limit = 50;    // Entries per page.
 $internal = key_exists ( 'session', $_GET );
 
 // Fixed version of the date
+/**
+ * @param string $fmt
+ * @param int $timestamp
+ * @return string
+ */
 function MyDate ( $fmt, $timestamp )
 {
     $date = new DateTime ('@' . $timestamp);

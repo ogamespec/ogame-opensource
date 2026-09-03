@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file defs.php
+ * @brief Game constants and definitions.
+ * @details Declares the numeric constants used for planet types, fleet mission types and other game-wide identifiers.
+ */
 // Various engine definitions, previously scattered across all modules, are now in one place.
 
 // Rank Mask.
@@ -52,6 +56,12 @@ const PTYP_ABANDONED = 10004;           // abandoned colony (instead of the bugg
 const PTYP_FARSPACE = 20000;        // infinite distances (for expeditions)
 const PTYP_CUSTOM = 20001;          // All values >= are considered custom galaxy objects added by mods
 
+// Game planet type. Used for in-game display in various places (galaxy, flotten2, imperium). May not match the PTYP definition. See `GetPlanetType` method (planet.php)
+const GAME_PTYP_PLANET = 1; 	// PTYP_PLANET + PTYP_DEST_PLANET + PTYP_COLONY_PHANTOM + PTYP_ABANDONED + PTYP_FARSPACE
+const GAME_PTYP_DF = 2; 		// PTYP_DF
+const GAME_PTYP_MOON = 3;  		// PTYP_MOON + PTYP_DEST_MOON
+// All custom planet types (PTYP_CUSTOM) = game planet types
+
 // Queue task type
 // For some reason during the development phase, the identifiers were made strings. TODO: Change them to INT type (but this would require a clean reinstall of the Universe)
 const QTYP_UNBAN = "UnbanPlayer";               // unban player
@@ -73,6 +83,8 @@ const QTYP_FLEET = "Fleet";                     // Fleet task / IPM attack (sub_
 const QTYP_DEBUG = "Debug";                     // debug event
 const QTYP_AI = "AI";                           // tasks for bot (sub_id - strategy number, obj_id - current block number)
 const QTYP_COUPON = "Coupon";                   // Coupon crediting (the handler is located in coupon.php)
+const QTYP_FARSPACE_COOLDOWN = "FarspaceCooldown";   // expedition visit counter cooldown on farspace objects
+const QTYP_CLEAN_FARSPACE = "CleanFarspace";     // farspace object cleanup (weekly)
 
 // Queue task priorities
 const QUEUE_PRIO_LOWEST = 0;            // Consider it no priority
@@ -84,7 +96,9 @@ const QUEUE_PRIO_RECALC_POINTS = 500;
 const QUEUE_PRIO_UPDATE_STATS = 510;
 const QUEUE_PRIO_COUPON = 520;
 const QUEUE_PRIO_CLEAN_DEBRIS = 600;
+const QUEUE_PRIO_FARSPACE_COOLDOWN = 610;
 const QUEUE_PRIO_CLEAN_PLANETS = 700;
+const QUEUE_PRIO_CLEAN_FARSPACE = 710;
 const QUEUE_PRIO_RELOGIN = 777;
 const QUEUE_PRIO_CLEAN_PLAYERS = 900;
 const QUEUE_PRIO_BOT = 1000;
@@ -113,6 +127,10 @@ const USER_OFFICER_ENGINEER = 3;
 const USER_OFFICER_GEOLOGE = 4;
 const USER_OFFICER_TECHNOCRATE = 5;
 
+const USER_TYPE_PLAYER = 0; 		// Regular player or bot
+const USER_TYPE_GO = 1;  			// The game operator, has limited capabilities in the admin panel.
+const USER_TYPE_ADMIN = 2; 			// Administrator (Legor, space)
+
 // Default flags after creating a player
 const USER_FLAG_DEFAULT = USER_FLAG_SHOW_ESPIONAGE_BUTTON | USER_FLAG_SHOW_WRITE_MESSAGE_BUTTON | USER_FLAG_SHOW_BUDDY_BUTTON | USER_FLAG_SHOW_ROCKET_ATTACK_BUTTON | USER_FLAG_SHOW_VIEW_REPORT_BUTTON;
 
@@ -131,10 +149,24 @@ const GALAXY_PHANTOM_DEBRIS = 300;          // If the total resource value is < 
 
 const TRADER_DM = 2500;             // Cost of calling a Merchant
 
+// Expedition visit counter cooldown (issue #174). The visit counter is stored as
+// the metal value on the farspace object and decreases by EXPEDITION_COOLDOWN_PER_HOUR
+// every EXPEDITION_COOLDOWN_PERIOD seconds, so a position can be visited 3 times an
+// hour without increasing its depletion.
+const EXPEDITION_COOLDOWN_PERIOD = 3600;    // how often the visit counter cools down (seconds)
+const EXPEDITION_COOLDOWN_PER_HOUR = 3;     // how much the visit counter cools down each tick
+
 const MAX_PLANET = 9;           // Maximum number of planets a player can own (home + colonies), not greater (<= this value)
+const MAX_BUILDINGS_LEVEL = 99;  	// Maximum building level on the planet
+const MAX_RESEARCH_LEVEL = 99; 		// Maximum research level
+const MAX_SHIPYARD_ORDERS = 99;  	// Maximum number of orders at the shipyard (queue)
 
 const RF_MAX = 5000;            // Maximum rapidfire value (if > this value, then error)
 const RF_DICE = 100000;        	// Number of dice faces for a rapid-fire throw (1d`RF_DICE)
 const BATTLE_MAX_ROUND = 6; 		// The default value for the number of rounds for the battle engine
+const BATTLE_MAX_UNITS = 1000000; 	// Maximum number of units on one side (default). You can change it by setting uni['battle_max']
+
+const EMAIL_BARRIERFREI = "barrierefrei@ogame.de";  		// Special mail for visually impaired people. There were definitely a lot of such players playing the classic 0.84.
+const FORBIDDEN_LOGINS = "adolf,hitler,fick,legor,aleena,ogame,kkk,osama,bin,laden,porn,sex,hentai,god,allah,putin,nazi,gameforge,stalin,goebbels,saddam,space,admin";
 
 ?>

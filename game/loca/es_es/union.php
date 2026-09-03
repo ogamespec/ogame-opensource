@@ -2,12 +2,12 @@
 
 // Everything about the ACS.
 
-$LOCA["es"]["ACS_MAX_USERS"] = "A maximum of #1 players can participate!";
-$LOCA["es"]["ACS_USER_NOT_FOUND"] = "User not found";
-$LOCA["es"]["ACS_ALREADY_ADDED"] = "Such a user has already been added to the union";
+$LOCA["es"]["ACS_MAX_USERS"] = "¡Pueden participar un máximo de #1 jugadores!";
+$LOCA["es"]["ACS_USER_NOT_FOUND"] = "Usuario no encontrado";
+$LOCA["es"]["ACS_ALREADY_ADDED"] = "Ese usuario ya ha sido añadido a la flota conjunta";
 
-$LOCA["es"]["ACS_INVITE_SUBJ"] = "Invitation to joint attack";
-$LOCA["es"]["ACS_INVITE_TEXT1"] = "#1 invites you to mission #2 against player #3 on the planet";
-$LOCA["es"]["ACS_INVITE_TEXT2"] = "Fleet arrival is scheduled for #1. WARNING: arrival time may change due to the speed of other fleets involved!";
+$LOCA["es"]["ACS_INVITE_SUBJ"] = "Invitación a ataque conjunto";
+$LOCA["es"]["ACS_INVITE_TEXT1"] = "#1 te invita a la misión #2 contra el jugador #3 en el planeta";
+$LOCA["es"]["ACS_INVITE_TEXT2"] = "La llegada de la flota está prevista para #1. ADVERTENCIA: la hora de llegada puede cambiar debido a la velocidad de otras flotas implicadas!";
 
 ?>

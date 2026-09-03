@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>OGame 0.84 Open Source — Руководство разработчика модификаций</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* Оформление в духе скина Evolution (тёмно-синяя палитра OGame). */
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+    font-size: 13px; line-height: 1.45;
+    color: #e6ebfb;
+    background-color: #040e1e;
+    background-image: url("assets/evolution/img/background.jpg");
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: top right;
+  }
+  a { color: #8fc7ff; }
+  a:hover { color: #cfe6ff; }
+
+  #topbar {
+    background: rgba(10, 24, 46, 0.92);
+    border-bottom: 1px solid #415680;
+    padding: 10px 18px;
+    position: sticky; top: 0; z-index: 50;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+  }
+  #topbar .t { font-weight: bold; font-size: 15px; color: #fff; }
+  #topbar .t small { display: block; font-weight: normal; font-size: 11px; color: #9fb4d8; }
+  #topbar .langs { margin-left: auto; }
+  #topbar .langs a {
+    color: #e6ebfb; text-decoration: none; border: 1px solid #415680;
+    background: #1d2c47; padding: 2px 8px; border-radius: 3px;
+  }
+  #topbar .langs a:hover { background: #344566; }
+
+  #wrap { max-width: 1180px; margin: 0 auto; padding: 16px; display: flex; gap: 18px; align-items: flex-start; }
+  #nav {
+    width: 250px; flex: 0 0 250px; position: sticky; top: 70px;
+    background: rgba(9, 20, 40, 0.92);
+    border: 1px solid #415680; border-radius: 4px; padding: 10px 0 10px 0;
+    max-height: calc(100vh - 90px); overflow: auto;
+  }
+  #nav ul { list-style: none; margin: 0; padding: 0; }
+  #nav li { margin: 0; }
+  #nav a {
+    display: block; padding: 4px 12px; text-decoration: none;
+    color: #c8d6f0; border-left: 2px solid transparent;
+  }
+  #nav a:hover { background: #1a2a47; border-left-color: #8fc7ff; }
+  #nav .hdr { padding: 6px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #7d95bf; }
+
+  #content { flex: 1 1 auto; min-width: 0; }
+  section {
+    background: rgba(9, 20, 40, 0.88);
+    border: 1px solid #415680; border-radius: 4px;
+    margin-bottom: 14px; padding: 14px 18px;
+  }
+  h1, h2, h3 { color: #ffffff; }
+  h1 { font-size: 22px; margin-top: 0; }
+  h2 { font-size: 17px; border-bottom: 1px solid #415680; padding-bottom: 5px; }
+  h3 { font-size: 14px; margin-bottom: 4px; }
+  h2 .n, h3 .n { color: #7fc36a; }
+  code, pre {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+  }
+  code { background: #12203a; padding: 0 3px; border-radius: 2px; color: #ffd98c; }
+  pre {
+    background: #0a1526; border: 1px solid #2c4268;
+    border-radius: 4px; padding: 10px; overflow-x: auto;
+    color: #d7e3f5; line-height: 1.35;
+  }
+  pre code { background: none; padding: 0; color: inherit; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0; }
+  th, td { border: 1px solid #415680; padding: 5px 8px; text-align: left; vertical-align: top; font-size: 12px; }
+  th { background: #1a2a47; color: #fff; }
+  tr:nth-child(even) td { background: rgba(26, 42, 71, 0.35); }
+  blockquote {
+    margin: 8px 0; padding: 6px 12px;
+    background: #12203a; border-left: 4px solid #7fc36a;
+  }
+  img.screenshot { max-width: 100%; border: 1px solid #415680; margin: 6px 0; }
+  .tags { color: #9fb4d8; font-size: 12px; }
+  footer { text-align: center; color: #7d95bf; font-size: 11px; padding: 10px 0 30px; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div class="t">OGame 0.84 Open Source
+    <small>Руководство разработчика модификаций — API, хуки, примеры</small>
+  </div>
+  <div class="langs">
+    <a href="index.html">Документация</a>
+    <a href="mod-manual-en.html">English</a>
+    <a href="../wiki/ru/mods.md">Wiki (MD)</a>
+    <a href="https://github.com/ogamespec/ogame-opensource/tree/master/game/mods">Примеры модов</a>
+  </div>
+</div>
+
+<div id="wrap">
+  <nav id="nav">
+    <div class="hdr">Содержание</div>
+    <ul>
+      <li><a href="#s1">1. Введение</a></li>
+      <li><a href="#s2">2. Структура папки мода</a></li>
+      <li><a href="#s3">3. manifest.json</a></li>
+      <li><a href="#s4">4. main.php и класс GameMod</a></li>
+      <li><a href="#s5">5. Страницы мода</a></li>
+      <li><a href="#s6">6. Локализация</a></li>
+      <li><a href="#s7">7. События в очереди</a></li>
+      <li><a href="#s8">8. Хуки</a></li>
+      <li><a href="#s9">9. Расширенные сценарии</a></li>
+      <li><a href="#s10">10. Тестирование</a></li>
+      <li><a href="#s11">11. Публикация</a></li>
+      <li><a href="#s12">12. Админка и функции</a></li>
+      <li><a href="#s13">13. Сводная таблица хуков</a></li>
+    </ul>
+  </nav>
+
+  <div id="content">
+
+  <section id="s1">
+    <h1><span class="n"></span>Руководство разработчика модификаций</h1>
+    <p>Модификации (моды) расширяют игру, <b>не меняя исходный код базового
+    движка</b>. Мод — самодостаточная папка в <code>game/mods/</code>, содержащая
+    класс-наследник <code>GameMod</code> (ядро: <code>game/core/mods.php</code>),
+    метаданные, локализацию, страницы и ресурсы.</p>
+    <p>В репозитории живут четыре эталонных мода:</p>
+    <table>
+      <tr><th>Мод</th><th>Чему учит</th></tr>
+      <tr><td><code>BogusMod</code></td><td>Минимум: колонка БД, свой ресурс, пункт меню, страница, периодическое событие</td></tr>
+      <tr><td><code>GalaxyTool</code></td><td>Инструмент: игровая страница + раздел админки, 6 языков</td></tr>
+      <tr><td><code>SpaceStorm</code></td><td>Новое здание, правки глобальных таблиц, экономические и боевые хуки, тесты</td></tr>
+      <tr><td><code>DeepSpaceHorror</code></td><td>Кастомные объекты галактики, новые юниты, кастомные миссии флота, тесты</td></tr>
+    </table>
+    <p class="tags">Полная версия документа — на вики проекта: <a href="../wiki/ru/mods.md">wiki/ru/mods.md</a> и <a href="../wiki/en/mods.md">wiki/en/mods.md</a>.</p>
+  </section>
+
+  <section id="s2">
+    <h2><span class="n">2.</span> Структура папки мода</h2>
+    <table>
+      <tr><th>Путь</th><th>Назначение</th></tr>
+      <tr><td><code>main.php</code></td><td>Обязателен. Константы мода и класс <code>&lt;ИмяМода&gt; extends GameMod</code></td></tr>
+      <tr><td><code>manifest.json</code></td><td>Обязателен. Метаданные для админки</td></tr>
+      <tr><td><code>Readme.md</code></td><td>Описание мода (как в <code>DeepSpaceHorror/Readme.md</code>)</td></tr>
+      <tr><td><code>img/bg.png</code></td><td>Картинка-подложка (600×200) карточки мода в админке</td></tr>
+      <tr><td><code>loca/&lt;lang&gt;_&lt;lang&gt;/…</code></td><td>Локализация мода</td></tr>
+      <tr><td><code>pages/</code>, <code>pages_admin/</code></td><td>PHP-файлы игровых и админ-страниц</td></tr>
+      <tr><td><code>testing/</code></td><td>Собственный PHPUnit-набор мода</td></tr>
+    </table>
+    <blockquote>Папки с исходниками (<code>pages/</code>, <code>pages_admin/</code>,
+    <code>loca/</code>) закрываются от браузера файлом <code>.htaccess</code>:
+    <code>Order allow,deny&nbsp;&nbsp;Deny from all</code>. Папка <code>img/</code> остаётся
+    открытой — на неё ссылаются страницы.</blockquote>
+  </section>
+
+  <section id="s3">
+    <h2><span class="n">3.</span> manifest.json</h2>
+<pre>{
+  "name": "My Awesome Mod",
+  "version": "1.0.0",
+  "author": "YourName",
+  "description": "Добавляет новые возможности для игроков",
+  "website": "https://github.com/yourname/mod-name"
+}</pre>
+    <p>По этим данным админка строит карточку мода (функция <code>ModsGetInfo</code>).
+    Если <code>manifest.json</code> отсутствует — мод считается невалидным и убирается из списка.</p>
+  </section>
+
+  <section id="s4">
+    <h2><span class="n">4.</span> main.php и класс GameMod</h2>
+    <p>Имя класса = имя папки с заглавной буквы (<code>ModInitOne</code> делает
+    <code>ucfirst($modname)</code>). Три обязательных метода:</p>
+    <table>
+      <tr><th>Метод</th><th>Когда</th><th>Что делает</th></tr>
+      <tr><td><code>install()</code></td><td>один раз при активации</td><td>колонки/таблицы БД (<code>ALTER TABLE</code> под <code>LockTables()</code>), свои события очереди</td></tr>
+      <tr><td><code>uninstall()</code></td><td>один раз при деактивации</td><td>убирает свои колонки, события, объекты</td></tr>
+      <tr><td><code>init()</code></td><td>каждый запрос, пока мод активен</td><td><code>loca_add()</code>; дополнение глобальных таблиц движка</td></tr>
+    </table>
+<pre>public function install() : void {
+    global $db_prefix;
+    LockTables();
+    $query = "ALTER TABLE ".$db_prefix."users ADD COLUMN tritium INT DEFAULT 0;";
+    dbquery ($query);
+    // своё периодическое событие, если ещё не заведено
+    $query = "SELECT * FROM ".$db_prefix."queue WHERE type = '".QTYP_ADD_TRITIUM."'";
+    $result = dbquery ($query);
+    if ( dbrows ($result) == 0 ) {
+        AddQueue (USER_SPACE, QTYP_ADD_TRITIUM, 0, 0, 0, time(), 3600);
+    }
+    UnlockTables();
+}</pre>
+    <h3>Глобальные таблицы, которые мод дополняет в init()</h3>
+    <p>Объявлены в <code>game/core/techs.php</code> и <code>game/core/prod.php</code>.</p>
+    <table>
+      <tr><th>Переменная</th><th>Содержимое</th></tr>
+      <tr><td><code>$buildmap</code> / <code>$resmap</code> / <code>$fleetmap</code> / <code>$defmap</code> / <code>$rakmap</code></td><td>ID построек / исследований / кораблей / обороны / ракет</td></tr>
+      <tr><td><code>$initial</code></td><td>Стоимость объектов: <code>$initial[GID] = [GID_RC_METAL=&gt;…, 'factor'=&gt;N]</code></td></tr>
+      <tr><td><code>$UnitParam</code></td><td>Характеристики юнита: <code>[структура, щит, атака, груз, скорость, расход]</code></td></tr>
+      <tr><td><code>$RapidFire</code></td><td>Скорострел: <code>$RapidFire[$gid][$target] = N</code></td></tr>
+      <tr><td><code>$requirements</code></td><td>Дерево требований: <code>$requirements[GID] = [GID_B_RES_LAB=&gt;3]</code></td></tr>
+      <tr><td><code>$CanBuildTab</code></td><td>Что строить для типа объекта: <code>$CanBuildTab[PTYP_PLANET][] = GID</code></td></tr>
+      <tr><td><code>$PlanetProd</code></td><td>Правила производства/потребления по объектам</td></tr>
+    </table>
+    <p>Пример — «добавить здание» (из <code>SpaceStorm</code>): колонка в
+    <code>planets</code> (install), та же колонка в <code>install_tabs_included()</code>,
+    в <code>init()</code> — <code>$buildmap[]</code>, <code>$initial[]</code>,
+    <code>$requirements[]</code>, <code>$CanBuildTab[]</code>; локали <code>NAME_&lt;GID&gt;</code> /
+    <code>LONG_&lt;GID&gt;</code>; картинка через <code>get_object_image()</code>.</p>
+  </section>
+
+  <section id="s5">
+    <h2><span class="n">5.</span> Страницы мода</h2>
+    <p>Роутер игры — JSON <code>game/router.json</code>. Хук <code>route</code> вызывается
+    в <code>game/index.php</code> после загрузки роутера:</p>
+<pre>public function route(array &amp;$router) : bool {
+    $router['tipoftheday'] = array (
+        'path' =&gt; "mods/BogusMod/pages/tipoftheday.php",
+        'loca' =&gt; [ "menu" ]
+    );
+    return false;   // не останавливаем цепочку
+}</pre>
+    <p>Ключи записи роутера: <code>path</code>, <code>loca[]</code> (обязательны);
+    <code>external</code> (страница для гостей), <code>menu</code>/<code>header</code>
+    (скрыть левое меню/верхнюю панель), <code>bare</code> (без обрамления),
+    <code>mvc</code> (страница — класс <code>Page</code>), <code>admin_update_queue</code>,
+    <code>update_activity</code>, <code>redirect_page</code>/<code>redirect_sec</code>.
+    По умолчанию страница с сессией получает стандартное обрамление игры.</p>
+    <p>Классический файл страницы просто включается движком; доступны глобалы
+    <code>$now</code>, <code>$aktplanet</code>, <code>$session</code>, <code>$GlobalUser</code>,
+    <code>$GlobalUni</code>, <code>$PageMessage</code>, <code>$PageError</code>. Пример —
+    весь файл <code>pages/tipoftheday.php</code> из <code>BogusMod</code>:</p>
+<pre>&lt;?=loca("BOGUS_MOD_TIP1");?&gt;</pre>
+    <p><b>Админка</b> — свой роутер <code>pages_admin/admin_router.json</code>; разделы
+    мод добавляет хуком <code>route_admin</code>, класс страницы называется
+    <code>Admin_&lt;Раздел&gt;</code> и наследует <code>Page</code> (пример:
+    <code>GalaxyTool/pages_admin/admin_galaxytool.php</code>).</p>
+  </section>
+
+  <section id="s6">
+    <h2><span class="n">6.</span> Локализация</h2>
+    <p>Секции локали подключаются через <code>loca_add($section, $lang, $dir)</code>;
+    для мода третий параметр — <code>__DIR__</code>, файлы лежат в
+    <code>loca/&lt;lang&gt;_&lt;lang&gt;/&lt;section&gt;.php</code>:</p>
+<pre>public function init() : void {
+    global $GlobalUni;
+    loca_add ("bogusmod", $GlobalUni['lang'], __DIR__);
+}</pre>
+<pre>&lt;?php
+$LOCA["ru"]["BOGUS_MOD_TRITIUM"]   = "Тритий";
+$LOCA["ru"]["BOGUS_MOD_MENU_ITEM"] = "Совет дня";
+?&gt;</pre>
+    <p>Чтение: <code>loca($key)</code> (текущий язык) и <code>loca_lang($key, $lang)</code>.
+    Имена игровых объектов — ключи <code>NAME_&lt;GID&gt;</code> / <code>LONG_&lt;GID&gt;</code>;
+    свои ключи лучше с префиксом мода (<code>STORM_*</code>, <code>LEVI_*</code>).</p>
+  </section>
+
+  <section id="s7">
+    <h2><span class="n">7.</span> События в очереди</h2>
+    <p>Вся временная логика — очередь событий (таблица <code>queue</code>,
+    <code>game/core/queue.php</code>). API: <code>AddQueue()</code>,
+    <code>RemoveQueue()</code>, <code>ProlongQueue()</code>. Событие с незнакомым
+    ядру <code>type</code> передаётся хуку <code>update_queue</code>; если ни один мод
+    его не обработал — событие удаляется с записью в лог.</p>
+<pre>public function update_queue(array &amp;$queue) : bool {
+    global $db_prefix;
+    if ($queue['type'] === QTYP_ADD_TRITIUM) {           // "AddTritium"
+        $query = "UPDATE ".$db_prefix."users SET tritium = tritium + 1;";
+        dbquery ( $query );
+        ProlongQueue ($queue['task_id'], 3600);          // продлить: событие периодическое
+        return true;                                     // обработано
+    }
+    return false;                                        // не наше — дальше по списку
+}</pre>
+    <p>Глобальные события заводятся на технический аккаунт <code>USER_SPACE</code>.
+    Обработка очереди запускается действиями игроков и <code>cron.php</code>.</p>
+  </section>
+
+  <section id="s8">
+    <h2><span class="n">8.</span> Хуки</h2>
+    <h3>8.1. Механизм и правила</h3>
+    <p>Хуки — методы <code>GameMod</code>, вызываемые ядром. Они исполняются для всех
+    активных модов в порядке активации; <b>первый вернувший <code>true</code>
+    останавливает цепочку</b> (<code>false</code> — «продолжить»). Параметры-ссылки —
+    выходные данные. Объявления всех хуков: <code>game/core/mods.php</code>.</p>
+
+    <h3>8.2. Меню, ресурсы, бонусы</h3>
+    <p><code>add_menuitems(&amp;$json)</code> — пункт левого меню
+    (типы: <code>internal</code>, <code>external</code>, <code>img</code>,
+    <code>popup</code>, <code>internal_buggy</code>);</p>
+<pre>public function add_menuitems(array &amp;$json) : bool {
+    array_insert_after_key ($json, "options", "tipoftheday",
+        array ('type' =&gt; 'internal', 'page' =&gt; 'tipoftheday', 'loca' =&gt; 'BOGUS_MOD_MENU_ITEM') );
+    return false;
+}</pre>
+    <p><code>add_resources(&amp;$json, $planet)</code> — ресурс в панели ресурсов
+    (запись: <code>skin</code>, <code>img</code>, <code>loca</code>, <code>val</code>,
+    <code>color</code>); <code>add_bonuses(&amp;$bonuses)</code> — бонус в шапке
+    (запись: <code>href</code>, <code>img</code>, <code>alt</code>, <code>overlib</code>).</p>
+
+    <h3>8.3–8.4. Контент и хуки страниц</h3>
+    <p><code>begin_content()</code>/<code>end_content()</code> — echo до/после контента
+    страницы. Хуки <code>page_*</code>:</p>
+    <table>
+      <tr><th>Хук</th><th>Что позволяет</th></tr>
+      <tr><td><code>page_buildings_get_bonus($id, &amp;$bonuses)</code></td><td>доп. бонусы объекта на страницах построек/инфо</td></tr>
+      <tr><td><code>page_flotten1_get_bonus($param, &amp;$bonuses)</code></td><td>бонусы первой страницы флота</td></tr>
+      <tr><td><code>page_flotten2_planet_types(&amp;$types)</code> / <code>page_flottenversand_ajax_spy_planets(&amp;$types)</code></td><td>типы целей флота и шпионажа</td></tr>
+      <tr><td><code>page_galaxy_custom_object($planet, &amp;$info)</code></td><td>кастомный объект галактики: <code>$info['overlib']</code> + <code>true</code></td></tr>
+      <tr><td><code>page_infos($id, &amp;$planet)</code></td><td>доп. инфо объекта (можно echo)</td></tr>
+      <tr><td><code>page_overview_get_bonus($param, &amp;$bonuses)</code> / <code>page_resources_get_bonus($param, &amp;$bonuses)</code></td><td>бонусы обзора и «Сырья»</td></tr>
+    </table>
+
+    <h3>8.5. Изображения</h3>
+    <p><code>get_object_image($id, &amp;$img)</code> (объект 120×120),
+    <code>get_planet_small_image($type, &amp;$img)</code>,
+    <code>get_planet_image($type, &amp;$img)</code> — вернуть свой путь в
+    <code>$img['path']</code> и <code>true</code>. Типы объектов галактики — в
+    <code>game/core/defs.php</code>; <b>типы &gt;= <code>PTYP_CUSTOM</code> (20001)
+    зарезервированы для объектов модов</b>.</p>
+
+    <h3>8.6. Экономика</h3>
+    <p><code>bonus_prod($param, &amp;$bonus)</code>/<code>bonus_cons(...)</code> — мод
+    добавляет <b>множитель</b> в список факторов (<code>$param</code> содержит
+    <code>uni</code>, <code>user</code>, <code>planet</code>, <code>rc</code>);
+    <code>prod_post_process(&amp;$planet, &amp;$eco)</code> — пост-обработка балансов.</p>
+
+    <h3>8.7. Постройки и исследования</h3>
+    <p><code>can_build(&amp;$info)</code>/<code>can_research(&amp;$info)</code> — после
+    стандартных проверок; запрет: <code>$info['result'] = 'ключ_ошибки'; return true;</code>.
+    <code>build_end($planet_id, &amp;$queue)</code>/<code>research_end(&amp;$queue)</code> —
+    завершение стройки/исследования.</p>
+
+    <h3>8.8. Флот и шпионаж</h3>
+    <p><code>fleet_available_missions($param, &amp;$missions)</code> — список миссий;
+    <code>bonus_fleet_speed</code>/<code>bonus_fleet_cons</code>/<code>bonus_max_fleet</code> —
+    правят <code>$bonus['value']</code>; <code>bonus_technology($id, &amp;$bonus)</code> —
+    правят <code>$bonus['level']</code> (шпионаж); <code>spy_protection($args, &amp;$bonus)</code> —
+    защита цели (<code>$args['planet']</code>, <code>$args['target_user']</code>).</p>
+    <p><code>fleet_handler($param)</code> — <b>кастомные миссии флота</b>: срабатывает для
+    неизвестных ядру миссий (<code>&gt;= FTYP_CUSTOM</code>, 1000) из
+    <code>Queue_Fleet_End</code>. В <code>$param</code> — <code>queue</code>,
+    <code>fleet_obj</code>, <code>fleet</code>, <code>origin</code>, <code>target</code>.
+    Вернуть <code>true</code>, если миссия ваша. После вызова ядро удаляет строку флота и
+    событие — если миссия должна продолжаться (возврат), создавайте новый флот/событие сами.</p>
+
+    <h3>8.9. Бой</h3>
+    <p><code>battle_unit_stats($args, &amp;$unit_param)</code> — масштабирование
+    характеристик юнитов для <b>конкретного боя</b> (изменения временные, восстанавливаются
+    сразу после сериализации); <code>battle_post_process(&amp;$res)</code> — после боя
+    (результат, раунды, <code>$res['extra']</code>).</p>
+
+    <h3>8.10. База данных</h3>
+    <p><code>install_tabs_included(&amp;$tabs)</code> — объявить колонки мода в схеме
+    (<code>game/core/install_tabs.php</code>): <code>$tabs['users']['tritium'] = 'INT DEFAULT 0';</code>.
+    <code>add_db_row(&amp;$row, $tabname)</code> — докинуть поля при вставке через
+    <code>AddDBRow</code>; <code>lock_tables(&amp;$tabs)</code> — таблицы в блокировку.
+    Доступны <code>dbquery()</code>/<code>dbrows()</code>/<code>dbarray()</code>;
+    не забывайте префикс <code>$db_prefix</code>.</p>
+  </section>
+
+  <section id="s9">
+    <h2><span class="n">9.</span> Расширенные сценарии</h2>
+    <h3>Кастомные объекты галактики (DeepSpaceHorror)</h3>
+    <p>Объект — обычная строка <code>planets</code> с <code>type &gt;= PTYP_CUSTOM</code>,
+    владелец — <code>USER_SPACE</code>; галактика рисует его отдельной колонкой
+    (<code>EnumCustomPlanetsGalaxy</code>, <code>ShowCustomObjects</code>). Мод задаёт
+    типы/юнитов/миссию константами, создаёт объекты в <code>install()</code>, регистрирует
+    юнитов в <code>init()</code>, отдаёт картинки хуками, показывает overlib хуком
+    <code>page_galaxy_custom_object</code>, обрабатывает бой в <code>fleet_handler</code>
+    и возрождение — событием очереди.</p>
+    <h3>Мод-инструмент (GalaxyTool)</h3>
+    <p>Своя страница игрока + раздел админки (<code>Admin_GalaxyTool</code>) + колонка
+    <code>uni.galaxytool_update</code> + еженедельное событие пересборки снимков галактики.</p>
+    <h3>Шпаргалка «как добавить…»</h3>
+    <table>
+      <tr><th>Хочу</th><th>Что делать</th></tr>
+      <tr><td>Ресурс-счётчик</td><td>колонка БД + <code>add_resources</code> + событие начисления</td></tr>
+      <tr><td>Здание</td><td>колонка <code>planets</code> + <code>install_tabs_included</code> + <code>$buildmap</code>/<code>$initial</code>/<code>$requirements</code>/<code>$CanBuildTab</code> + локали + картинка</td></tr>
+      <tr><td>Корабль / оборону</td><td>колонки <code>fleet</code> + <code>$fleetmap</code>/<code>$UnitParam</code>/<code>$RapidFire</code></td></tr>
+      <tr><td>Объект галактики</td><td>тип &gt;= <code>PTYP_CUSTOM</code> + планета <code>USER_SPACE</code> + хуки картинок/галактики</td></tr>
+      <tr><td>Страницу</td><td><code>route</code> + <code>add_menuitems</code> + локали</td></tr>
+      <tr><td>Раздел админки</td><td><code>route_admin</code> + класс <code>Admin_&lt;Mode&gt;</code></td></tr>
+      <tr><td>Периодическое действие</td><td><code>AddQueue</code> + <code>update_queue</code> + <code>ProlongQueue</code></td></tr>
+    </table>
+  </section>
+
+  <section id="s10">
+    <h2><span class="n">10.</span> Тестирование</h2>
+    <p>Мод носит свой PHPUnit-набор в <code>testing/</code> (так сделано в
+    <code>SpaceStorm</code> и <code>DeepSpaceHorror</code>):</p>
+<pre>game/mods/&lt;Name&gt;/testing/
+├── phpunit.xml      # конфигурация набора
+├── bootstrap.php    # ядро + мод на in-memory SQLite
+├── &lt;Name&gt;Test.php
+└── &lt;Name&gt;DbTest.php</pre>
+    <p><code>bootstrap.php</code> подключает <code>vendor/autoload.php</code>, задаёт
+    <code>DB_CONNECTION=sqlite</code>/<code>DB_DATABASE=:memory:</code>, делает
+    <code>chdir</code> в <code>game/</code> и включает <code>core/core.php</code> и
+    <code>main.php</code> мода. Запуск:</p>
+<pre>vendor/bin/phpunit -c game/mods/SpaceStorm/testing/phpunit.xml</pre>
+    <p>DB-тесты строят минимальную вселенную настоящими функциями
+    (<code>CreateDBTables()</code>, <code>AddDBRow()</code>). «Случайность» выносится в
+    переопределяемые методы (напр. <code>Rnd()</code> в DeepSpaceHorror).</p>
+  </section>
+
+  <section id="s11">
+    <h2><span class="n">11.</span> Публикация и сопровождение</h2>
+    <ul>
+      <li><b>Readme.md</b> внутри мода — описание, установка, правила, список хуков (образец: <code>DeepSpaceHorror/Readme.md</code>);</li>
+      <li><b>Версия</b> — в <code>manifest.json</code>; продумайте миграцию БД при изменении схемы;</li>
+      <li><b>Деактивация</b> — <code>uninstall()</code> возвращает игру в исходное состояние;</li>
+      <li><b>Совместимость</b> — движок 0.84, версия ядра <code>$CoreVersion</code>.</li>
+    </ul>
+  </section>
+
+  <section id="s12">
+    <h2><span class="n">12.</span> Админка и функции управления</h2>
+    <p>Раздел <b>Моды</b> админки (<code>admin_mods.php</code>): слева — установленные
+    (порядок = порядок активации хуков), справа — доступные; карточка мода — фон
+    <code>img/bg.png</code> и метаданные:</p>
+    <img class="screenshot" src="assets/admin_mods.png" alt="Панель управления модами в админке">
+    <p>Функции управления (<code>game/core/mods.php</code>): <code>ModsInit()</code>,
+    <code>ModInitOne()</code>, <code>ModInstallOne()</code>, <code>ModsInstall()</code>,
+    <code>ModsRemove()</code>, <code>ModsMoveUp()</code>/<code>ModsMoveDown()</code>,
+    <code>ModsList()</code>, <code>ModsGetInfo()</code>.</p>
+    <p>Диспетчеры хуков: <code>ModsExec</code>, <code>ModsExecArr</code>,
+    <code>ModsExecRef</code>, <code>ModsExecRefArr</code>, <code>ModsExecArrRef</code>,
+    <code>ModsExecRefRef</code>, <code>ModsExecIntRef</code>, <code>ModsExecRefStr</code> —
+    обходят моды в порядке активации, останавливаются на первом <code>true</code>.</p>
+  </section>
+
+  <section id="s13">
+    <h2><span class="n">13.</span> Сводная таблица хуков</h2>
+    <table>
+      <tr><th>Хук</th><th>Точка вызова в ядре</th><th>Смысл</th></tr>
+      <tr><td><code>route</code></td><td><code>index.php</code></td><td>страницы игры</td></tr>
+      <tr><td><code>route_admin</code></td><td><code>pages_admin/admin.php</code></td><td>разделы админки</td></tr>
+      <tr><td><code>update_queue</code></td><td><code>queue.php</code></td><td>кастомные события очереди</td></tr>
+      <tr><td><code>add_resources</code></td><td><code>page.php</code></td><td>панель ресурсов</td></tr>
+      <tr><td><code>add_menuitems</code></td><td><code>page.php</code></td><td>левое меню</td></tr>
+      <tr><td><code>add_bonuses</code></td><td><code>page.php</code></td><td>бонусы в шапке</td></tr>
+      <tr><td><code>lock_tables</code></td><td><code>db_mysql.php</code>/<code>db_sqlite.php</code></td><td>таблицы в блокировку</td></tr>
+      <tr><td><code>install_tabs_included</code></td><td><code>db.php</code>, <code>admin_db.php</code></td><td>схема БД мода</td></tr>
+      <tr><td><code>get_planet_small_image</code> / <code>get_planet_image</code> / <code>get_object_image</code></td><td><code>page.php</code></td><td>картинки объектов</td></tr>
+      <tr><td><code>begin_content</code> / <code>end_content</code></td><td><code>page.php</code></td><td>контент до/после страницы</td></tr>
+      <tr><td><code>add_db_row</code></td><td><code>db_mysql.php</code>/<code>db_sqlite.php</code></td><td>доп. поля вставляемой строки</td></tr>
+      <tr><td><code>can_build</code> / <code>can_research</code></td><td><code>queue.php</code></td><td>запрет/разрешение</td></tr>
+      <tr><td><code>build_end</code> / <code>research_end</code></td><td><code>queue.php</code></td><td>завершение стройки/исследования</td></tr>
+      <tr><td><code>fleet_available_missions</code></td><td><code>fleet.php</code></td><td>список миссий флота</td></tr>
+      <tr><td><code>fleet_handler</code></td><td><code>fleet.php</code></td><td>кастомная миссия флота</td></tr>
+      <tr><td><code>prod_post_process</code></td><td><code>prod.php</code></td><td>пост-обработка производства</td></tr>
+      <tr><td><code>battle_post_process</code> / <code>battle_unit_stats</code></td><td><code>battle.php</code></td><td>бой: после / до (параметры юнитов)</td></tr>
+      <tr><td><code>page_buildings_get_bonus</code></td><td><code>buildings.php</code>, <code>b_building.php</code></td><td>бонусы объекта</td></tr>
+      <tr><td><code>page_flotten1_get_bonus</code></td><td><code>flotten1.php</code></td><td>бонусы флота (шаг 1)</td></tr>
+      <tr><td><code>page_flotten2_planet_types</code></td><td><code>flotten2.php</code></td><td>типы целей флота</td></tr>
+      <tr><td><code>page_flottenversand_ajax_spy_planets</code></td><td><code>flottenversand_ajax.php</code></td><td>типы целей шпионажа (AJAX)</td></tr>
+      <tr><td><code>page_infos</code></td><td><code>infos.php</code></td><td>инфо объекта</td></tr>
+      <tr><td><code>page_galaxy_custom_object</code></td><td><code>galaxy.php</code></td><td>объекты галактики модов</td></tr>
+      <tr><td><code>page_overview_get_bonus</code> / <code>page_resources_get_bonus</code></td><td><code>overview.php</code> / <code>resources.php</code></td><td>бонусы страниц</td></tr>
+      <tr><td><code>bonus_technology</code></td><td><code>fleet.php</code>, <code>event_list.php</code></td><td>уровень технологии</td></tr>
+      <tr><td><code>spy_protection</code></td><td><code>fleet.php</code></td><td>защита от шпионажа</td></tr>
+      <tr><td><code>bonus_prod</code> / <code>bonus_cons</code></td><td><code>prod.php</code></td><td>множители производства/потребления</td></tr>
+      <tr><td><code>bonus_max_fleet</code> / <code>bonus_fleet_cons</code> / <code>bonus_fleet_speed</code></td><td><code>fleet.php</code></td><td>флот: максимум/расход/скорость</td></tr>
+    </table>
+    <p>Объявления всех хуков с описанием параметров — в классе <code>GameMod</code>
+    (<code>game/core/mods.php</code>). Эта страница — краткая версия
+    <a href="../wiki/ru/mods.md">wiki/ru/mods.md</a>.</p>
+  </section>
+
+  </div>
+</div>
+
+<footer>OGame 0.84 Open Source · Руководство разработчика модификаций · скин Evolution · <a href="https://github.com/ogamespec/ogame-opensource">github.com/ogamespec/ogame-opensource</a></footer>
+</body>
+</html>

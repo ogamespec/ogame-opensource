@@ -4,50 +4,50 @@
 
 // messages
 
-$LOCA["fr"]["MSG_FOLDER1"] = "Шпионские доклады";
-$LOCA["fr"]["MSG_FOLDER2"] = "Боевые доклады";
-$LOCA["fr"]["MSG_FOLDER3"] = "Сообщения экспедиции";
-$LOCA["fr"]["MSG_FOLDER4"] = "Сообщения альянса";
-$LOCA["fr"]["MSG_FOLDER5"] = "Личные сообщения";
-$LOCA["fr"]["MSG_FOLDER6"] = "Прочее";
+$LOCA["fr"]["MSG_FOLDER1"] = "Rapports d'espionnage";
+$LOCA["fr"]["MSG_FOLDER2"] = "Rapports de combat";
+$LOCA["fr"]["MSG_FOLDER3"] = "Messages d'expédition";
+$LOCA["fr"]["MSG_FOLDER4"] = "Messages d'alliance";
+$LOCA["fr"]["MSG_FOLDER5"] = "Messages personnels";
+$LOCA["fr"]["MSG_FOLDER6"] = "Autre";
 
-$LOCA["fr"]["MSG_DELETE_MARKED"] = "Удалить выделенные сообщения";
-$LOCA["fr"]["MSG_DELETE_UNMARKED"] = "Удалить все невыделенные сообщения";
-$LOCA["fr"]["MSG_DELETE_SHOWN"] = "Удалить все показанные сообщения ";
-$LOCA["fr"]["MSG_DELETE_ALL"] = "Удалить все сообщения";
+$LOCA["fr"]["MSG_DELETE_MARKED"] = "Supprimer les messages sélectionnés";
+$LOCA["fr"]["MSG_DELETE_UNMARKED"] = "Supprimer tous les messages non sélectionnés";
+$LOCA["fr"]["MSG_DELETE_SHOWN"] = "Supprimer tous les messages affichés ";
+$LOCA["fr"]["MSG_DELETE_ALL"] = "Supprimer tous les messages";
 
-$LOCA["fr"]["MSG_MESSAGES"] = "Сообщения";
-$LOCA["fr"]["MSG_FOLDER_SHOW"] = "Показать";
-$LOCA["fr"]["MSG_FOLDER_TYPE"] = "Тип";
-$LOCA["fr"]["MSG_FOLDER_STAT"] = "Всего / Новые";
-$LOCA["fr"]["MSG_ACTION"] = "Действие";
-$LOCA["fr"]["MSG_DATE"] = "Дата";
-$LOCA["fr"]["MSG_FROM"] = "От";
-$LOCA["fr"]["MSG_SUBJ"] = "Тема";
+$LOCA["fr"]["MSG_MESSAGES"] = "Messages";
+$LOCA["fr"]["MSG_FOLDER_SHOW"] = "Afficher";
+$LOCA["fr"]["MSG_FOLDER_TYPE"] = "Type";
+$LOCA["fr"]["MSG_FOLDER_STAT"] = "Total / Nouveaux";
+$LOCA["fr"]["MSG_ACTION"] = "Action";
+$LOCA["fr"]["MSG_DATE"] = "Date";
+$LOCA["fr"]["MSG_FROM"] = "De";
+$LOCA["fr"]["MSG_SUBJ"] = "Sujet";
 
 $LOCA["fr"]["MSG_SUBMIT"] = "ok";
 
-$LOCA["fr"]["MSG_PARTIAL_ESPIONAGE"] = " Разведданные показывать частично ";
+$LOCA["fr"]["MSG_PARTIAL_ESPIONAGE"] = " Afficher partiellement les données d'espionnage ";
 
-$LOCA["fr"]["MSG_REPORT"] = "Сообщить оператору";
-$LOCA["fr"]["MSG_REPORT_DB_ERROR"] = "Database error!";
-$LOCA["fr"]["MSG_REPORT_SUCCESS"] = "Report sent!";
-$LOCA["fr"]["MSG_REPORT_EXISTS"] = "The report has already been sent earlier!";
-$LOCA["fr"]["MSG_OPER"] = "Операторы";
-$LOCA["fr"]["MSG_OPER_TEXT"] = "Вопрос от #1 из #2-й вселенной";
-$LOCA["fr"]["MSG_OPER_PM"] = "Написать сообщение";
+$LOCA["fr"]["MSG_REPORT"] = "Signaler à l'opérateur";
+$LOCA["fr"]["MSG_REPORT_DB_ERROR"] = "Erreur de base de données !";
+$LOCA["fr"]["MSG_REPORT_SUCCESS"] = "Rapport envoyé !";
+$LOCA["fr"]["MSG_REPORT_EXISTS"] = "Le rapport a déjà été envoyé plus tôt !";
+$LOCA["fr"]["MSG_OPER"] = "Opérateurs";
+$LOCA["fr"]["MSG_OPER_TEXT"] = "Question de #1 depuis l'univers #2";
+$LOCA["fr"]["MSG_OPER_PM"] = "Écrire un message";
 
-// writemessages
+// écriture de messages
 
-$LOCA["fr"]["WRITE_MSG_ERROR_NO_SUBJ"] = "Не хватает темы";
-$LOCA["fr"]["WRITE_MSG_ERROR_NO_BODY"] = "А где же сообщение?";
-$LOCA["fr"]["WRITE_MSG_SUCCESS"] = "Сообщение отправлено";
-$LOCA["fr"]["WRITE_MSG_WRITE"] = "Написать сообщение";
-$LOCA["fr"]["WRITE_MSG_USER"] = "Получатель";
-$LOCA["fr"]["WRITE_MSG_SUBJ"] = "Тема";
-$LOCA["fr"]["WRITE_MSG_DEFAULT_SUBJ"] = "Без темы";
-$LOCA["fr"]["WRITE_MSG_CHAR_COUNT"] = " Сообщение(#1 / #2 символов) ";
-$LOCA["fr"]["WRITE_MSG_SUBMIT"] = "Отправить";
+$LOCA["fr"]["WRITE_MSG_ERROR_NO_SUBJ"] = "Le sujet est manquant";
+$LOCA["fr"]["WRITE_MSG_ERROR_NO_BODY"] = "Et le message alors ?";
+$LOCA["fr"]["WRITE_MSG_SUCCESS"] = "Message envoyé";
+$LOCA["fr"]["WRITE_MSG_WRITE"] = "Écrire un message";
+$LOCA["fr"]["WRITE_MSG_USER"] = "Destinataire";
+$LOCA["fr"]["WRITE_MSG_SUBJ"] = "Sujet";
+$LOCA["fr"]["WRITE_MSG_DEFAULT_SUBJ"] = "Sans sujet";
+$LOCA["fr"]["WRITE_MSG_CHAR_COUNT"] = " Message(#1 / #2 caractères) ";
+$LOCA["fr"]["WRITE_MSG_SUBMIT"] = "Envoyer";
 $LOCA["fr"]["WRITE_MSG_ALT_REPLY"] = "Réponse";
 
 ?>

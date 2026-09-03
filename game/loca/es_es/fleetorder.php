@@ -1,18 +1,18 @@
 <?php
 
-// Fleet order
+// Orden de la flota
 
-$LOCA["es"]["FLEET_ORDER_1"] = "Attack";
-$LOCA["es"]["FLEET_ORDER_2"] = "Joint attack";
-$LOCA["es"]["FLEET_ORDER_3"] = "Transport";
-$LOCA["es"]["FLEET_ORDER_4"] = "Station";
-$LOCA["es"]["FLEET_ORDER_5"] = "Defend";
-$LOCA["es"]["FLEET_ORDER_6"] = "Espionage";
-$LOCA["es"]["FLEET_ORDER_7"] = "Colonise";
-$LOCA["es"]["FLEET_ORDER_8"] = "Recycle";
-$LOCA["es"]["FLEET_ORDER_9"] = "Destroy";
-$LOCA["es"]["FLEET_ORDER_15"] ="Expedition";
-$LOCA["es"]["FLEET_ORDER_20"] ="Missile Attack";
-$LOCA["es"]["FLEET_ORDER_21"] ="Attack";  			// An attack that has become the leading attack of the ACS
+$LOCA["es"]["FLEET_ORDER_1"] = "Ataque";
+$LOCA["es"]["FLEET_ORDER_2"] = "Ataque conjunto";
+$LOCA["es"]["FLEET_ORDER_3"] = "Transporte";
+$LOCA["es"]["FLEET_ORDER_4"] = "Estacionar";
+$LOCA["es"]["FLEET_ORDER_5"] = "Defender";
+$LOCA["es"]["FLEET_ORDER_6"] = "Espionaje";
+$LOCA["es"]["FLEET_ORDER_7"] = "Colonizar";
+$LOCA["es"]["FLEET_ORDER_8"] = "Reciclar";
+$LOCA["es"]["FLEET_ORDER_9"] = "Destruir";
+$LOCA["es"]["FLEET_ORDER_15"] ="Expedición";
+$LOCA["es"]["FLEET_ORDER_20"] ="Ataque con misiles";
+$LOCA["es"]["FLEET_ORDER_21"] ="Ataque";  			// Un ataque que se ha convertido en el ataque principal del ACS
 
 ?>

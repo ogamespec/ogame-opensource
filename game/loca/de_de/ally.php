@@ -39,7 +39,7 @@ $LOCA["de"]["ALLY_APPLY_WITHDRAW"] = "Antrag zurückziehen";
 
 $LOCA["de"]["ALLY_NEW_DEFAULT_TEXT"] = "Willkommen auf der Seite der Allianz";
 $LOCA["de"]["ALLY_NEW_RANK_FOUNDER"] = "Gründer";
-$LOCA["de"]["ALLY_NEW_RANK_NEWCOMER"] = "Newcomer";
+$LOCA["de"]["ALLY_NEW_RANK_NEWCOMER"] = "Neuling";
 
 // ranks
 
@@ -93,7 +93,7 @@ $LOCA["de"]["ALLY_CIRC_TO"] = "Empfänger";
 $LOCA["de"]["ALLY_CIRC_ALL"] = "Alle Spieler";
 $LOCA["de"]["ALLY_CIRC_RANK"] = "Nur bis zu einem bestimmten Rang: #1";
 $LOCA["de"]["ALLY_CIRC_MESSAGE"] = "Text der Nachricht (#1 / #2 Sym.)";
-$LOCA["de"]["ALLY_CIRC_SEND"] = "Submit";
+$LOCA["de"]["ALLY_CIRC_SEND"] = "Senden";
 
 // settings
 

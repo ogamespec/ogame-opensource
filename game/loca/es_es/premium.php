@@ -2,53 +2,53 @@
 
 // Officer's casino.
 
-$LOCA["es"]["PREM_HEAD1"] = "To the wise lord ...";
-$LOCA["es"]["PREM_HEAD2"] = "... need smarts <b><font size=4>advisors.</font></b>";
+$LOCA["es"]["PREM_HEAD1"] = "Al sabio señor ...";
+$LOCA["es"]["PREM_HEAD2"] = "... le hacen falta <b><font size=4>consejeros</font></b> inteligentes.";
 
-$LOCA["es"]["PREM_DM_INFO"] = "Dark matter is a substance that can only be stored for a few standard years at great expense. It can be used to extract incredible amounts of energy. The method of its extraction is very difficult and dangerous, so it is very highly valued.";
-$LOCA["es"]["PREM_DM_NOTE"] = "With this substance, officers and commanders can be hired.";
-$LOCA["es"]["PREM_DM_GET"] = "Get the dark matter";
+$LOCA["es"]["PREM_DM_INFO"] = "La materia oscura es una sustancia que solo se puede almacenar durante unos pocos años estándar a un gran costo. Se puede utilizar para extraer cantidades increíbles de energía. El método de su extracción es muy difícil y peligroso, por lo que es muy valorada.";
+$LOCA["es"]["PREM_DM_NOTE"] = "Con esta sustancia se pueden contratar oficiales y comandantes.";
+$LOCA["es"]["PREM_DM_GET"] = "Obtener la materia oscura";
 
-$LOCA["es"]["PREM_OFICEERS"] = "Officers";
+$LOCA["es"]["PREM_OFICEERS"] = "Oficiales";
 
-$LOCA["es"]["PREM_COMMANDER"] = "OGame Commander";
-$LOCA["es"]["PREM_COMMANDER_INFO"] = "The rank of commander has proven itself time and time again in modern combat. Thanks to the simplified structure, your orders can be executed faster, allowing you to maintain control of your entire empire! You will be able to develop strategies that allow you to always be one step ahead of the enemy.";
-$LOCA["es"]["PREM_COMMANDER_NOTE"] = "Build queue, empire overview, enhanced galaxy overview, message filter, no ads";
+$LOCA["es"]["PREM_COMMANDER"] = "Comandante";
+$LOCA["es"]["PREM_COMMANDER_INFO"] = "El rango de comandante se ha demostrado una y otra vez en el combate moderno. Gracias a la estructura simplificada, tus órdenes pueden ejecutarse más rápido, ¡lo que te permite mantener el control de todo tu imperio! Podrás desarrollar estrategias que te permitan estar siempre un paso por delante del enemigo.";
+$LOCA["es"]["PREM_COMMANDER_NOTE"] = "Cola de construcción, resumen del imperio, vista de galaxia mejorada, filtro de mensajes, sin anuncios";
 
-$LOCA["es"]["PREM_ADMIRAL"] = "Admiral";
-$LOCA["es"]["PREM_ADMIRAL_INFO"] = "The Admiral is a war-tested veteran and a brilliant strategist. Even in the hottest battles, he does not lose his overview and maintains contact with his subordinate admirals. A wise ruler can fully rely on him in battle and thus use more ships for combat.";
-$LOCA["es"]["PREM_ADMIRAL_NOTE"] = "&nbsp;Max. number of fleets +2";
+$LOCA["es"]["PREM_ADMIRAL"] = "Almirante";
+$LOCA["es"]["PREM_ADMIRAL_INFO"] = "El almirante es un veterano probado en la guerra y un brillante estratega. Incluso en las batallas más reñidas no pierde la visión general y mantiene el contacto con sus almirantes subordinados. Un gobernante sabio puede confiar plenamente en él en la batalla y así usar más naves para el combate.";
+$LOCA["es"]["PREM_ADMIRAL_NOTE"] = "&nbsp;Número máx. de flotas +2";
 
-$LOCA["es"]["PREM_ENGINEER"] = "Engineer";
-$LOCA["es"]["PREM_ENGINEER_INFO"] = "An engineer is an energy management specialist. In peacetime, he increases the level of energy grids on colonies. In the event of an attack, he supplies the energy systems of planetary defenses and prevents overloading, resulting in a much lower casualty rate in combat.";
-$LOCA["es"]["PREM_ENGINEER_NOTE"] = "Reduces defense losses by half+10% more energy";
+$LOCA["es"]["PREM_ENGINEER"] = "Ingeniero";
+$LOCA["es"]["PREM_ENGINEER_INFO"] = "Un ingeniero es un especialista en gestión de energía. En tiempos de paz, aumenta el nivel de las redes de energía en las colonias. En caso de ataque, suministra energía a los sistemas de defensa planetaria y evita las sobrecargas, lo que resulta en una tasa de bajas mucho menor en combate.";
+$LOCA["es"]["PREM_ENGINEER_NOTE"] = "Reduce las pérdidas de defensa a la mitad +10% más de energía";
 
-$LOCA["es"]["PREM_GEOLOGE"] = "Geologist";
-$LOCA["es"]["PREM_GEOLOGE_INFO"] = "Geologist is a recognized expert in astromineralogy and -crystallography. With his team of metallurgists and chemists, he supports interplanetary governments in developing new sources of resources and optimizing their purification.";
-$LOCA["es"]["PREM_GEOLOGE_NOTE"] = "+10% mine income";
+$LOCA["es"]["PREM_GEOLOGE"] = "Geólogo";
+$LOCA["es"]["PREM_GEOLOGE_INFO"] = "El geólogo es un experto reconocido en astromineralogía y astrocristalografía. Con su equipo de metalúrgicos y químicos, apoya a los gobiernos interplanetarios en el desarrollo de nuevas fuentes de recursos y en la optimización de su purificación.";
+$LOCA["es"]["PREM_GEOLOGE_NOTE"] = "+10% de ingresos de las minas";
 
-$LOCA["es"]["PREM_TECHNOCRATE"] = "Technocrat";
-$LOCA["es"]["PREM_TECHNOCRATE_INFO"] = "The Technocrat Guild are brilliant scientists, and they can always be found where the edge of the technically possible ends. Their code can never be cracked by any normal person, and by their mere presence they inspire the scientists of the Empire.";
-$LOCA["es"]["PREM_TECHNOCRATE_NOTE"] = "+2 level of espionage, 25% less research time";
+$LOCA["es"]["PREM_TECHNOCRATE"] = "Tecnócrata";
+$LOCA["es"]["PREM_TECHNOCRATE_INFO"] = "La Hermandad de los Tecnócratas está formada por científicos brillantes, y siempre se les puede encontrar donde termina el límite de lo técnicamente posible. Su código nunca puede ser descifrado por una persona normal, y con su mera presencia inspiran a los científicos del Imperio.";
+$LOCA["es"]["PREM_TECHNOCRATE_NOTE"] = "+2 nivel de espionaje, 25% menos de tiempo de investigación";
 
-$LOCA["es"]["PREM_WEEK"] = "1 week for";
-$LOCA["es"]["PREM_3MONTH"] = "3 months/months for";
+$LOCA["es"]["PREM_WEEK"] = "1 semana por";
+$LOCA["es"]["PREM_3MONTH"] = "3 meses por";
 $LOCA["es"]["PREM_TOTAL"] = "total";
 
-$LOCA["es"]["PREM_INACTIVE"] = "<font color=red>Inactive</font>";
-$LOCA["es"]["PREM_ACTIVE"] = "<strong><font color=lime>Active</font> more #1 days</strong>";
+$LOCA["es"]["PREM_INACTIVE"] = "<font color=red>Inactivo</font>";
+$LOCA["es"]["PREM_ACTIVE"] = "<strong><font color=lime>Activo</font> #1 días más</strong>";
 
-$LOCA["es"]["PREM_NOTENOUGH"] = "Not enough dark matter!";
-$LOCA["es"]["PREM_OK"] = "The renewal was successful!";
+$LOCA["es"]["PREM_NOTENOUGH"] = "¡No hay suficiente materia oscura!";
+$LOCA["es"]["PREM_OK"] = "¡La renovación se ha realizado correctamente!";
 
 // payment
 
-$LOCA["es"]["PAY_INVALID_CODE"] = "Incorrect code or coupon already redeemed";
-$LOCA["es"]["PAY_CREDIT"] = "Redeem!";
-$LOCA["es"]["PAY_USE"] = "Use coupon.";
-$LOCA["es"]["PAY_ENTER"] = "Enter your coupon code here.";
-$LOCA["es"]["PAY_COUPON_CODE"] = "Coupon Code:";
-$LOCA["es"]["PAY_ERROR"] = "Coupon Error:";
-$LOCA["es"]["PAY_CHECK"] = "Check coupon";
+$LOCA["es"]["PAY_INVALID_CODE"] = "Código incorrecto o cupón ya canjeado";
+$LOCA["es"]["PAY_CREDIT"] = "¡Canjear!";
+$LOCA["es"]["PAY_USE"] = "Usar cupón.";
+$LOCA["es"]["PAY_ENTER"] = "Introduce aquí tu código de cupón.";
+$LOCA["es"]["PAY_COUPON_CODE"] = "Código de cupón:";
+$LOCA["es"]["PAY_ERROR"] = "Error de cupón:";
+$LOCA["es"]["PAY_CHECK"] = "Verificar cupón";
 
 ?>

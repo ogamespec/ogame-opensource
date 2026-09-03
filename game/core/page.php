@@ -1,9 +1,23 @@
 <?php
-
+/**
+ * @file page.php
+ * @brief Common page elements.
+ * @details Builds the shared parts of game pages: the left menu, the resource bar, planet images and page layout helpers.
+ */
 // Common elements of game pages (left menu, resource bar, etc.)
 
+/**
+ * Timestamp of the page start, used to measure the page generation time.
+ */
 $pagetime = 0;
 
+/**
+ * Builds the HTML image tag for a building image.
+ *
+ * @param string $skinpath Base path to the skin directory.
+ * @param int $id Building object ID.
+ * @return string HTML img tag for the building image.
+ */
 function GetObjectImage (string $skinpath, int $id) : string
 {
     $img_path = $skinpath."gebaeude/".$id.".gif";
@@ -14,7 +28,13 @@ function GetObjectImage (string $skinpath, int $id) : string
     return "<img border='0' src=\"".$img_path."\" align='top' width='120' height='120'>";
 }
 
-// Get a small picture of the planet.
+/**
+ * Gets a small picture of the planet.
+ *
+ * @param string $skinpath Base path to the skin directory.
+ * @param array $planet Planet data (type, position and planet_id).
+ * @return string Path to the small planet image.
+ */
 function GetPlanetSmallImage (string $skinpath, array $planet) : string
 {
     $img = array();
@@ -37,7 +57,13 @@ function GetPlanetSmallImage (string $skinpath, array $planet) : string
     else return "img/admin_planets.png";        // Special objects of the galaxy (destroyed planets, etc.)
 }
 
-// Get a big picture of the planet.
+/**
+ * Gets a big picture of the planet.
+ *
+ * @param string $skinpath Base path to the skin directory.
+ * @param array $planet Planet data (type, position and planet_id).
+ * @return string Path to the big planet image.
+ */
 function GetPlanetImage (string $skinpath, array $planet) : string
 {
     $img = array();
@@ -60,6 +86,11 @@ function GetPlanetImage (string $skinpath, array $planet) : string
     else return "img/admin_planets.png";        // Special objects of the galaxy (destroyed planets, etc.)
 }
 
+/**
+ * Returns the skin path of the current user.
+ *
+ * @return string Skin directory path used by the current user.
+ */
 function UserSkin () : string
 {
     global $GlobalUser;
@@ -67,12 +98,23 @@ function UserSkin () : string
     else return hostname () . "evolution/";
 }
 
+/**
+ * Outputs the HTML page header with the head section, header bar and left menu.
+ *
+ * @param string $page Current page name used in generated links.
+ * @param bool $noheader Whether to suppress the top header bar.
+ * @param bool $leftmenu Whether to display the left menu.
+ * @param string $redirect_page Page to redirect to after a delay.
+ * @param int $redirect_sec Delay in seconds before the redirect.
+ * @return void
+ */
 function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, string $redirect_page="", int $redirect_sec=0) : void
 {
     global $pagetime;
     global $GlobalUser;
     global $GlobalUni;
     global $aktplanet;
+    global $session;
 
     BrowseHistory ();
 
@@ -88,14 +130,14 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
     echo " <head>\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/default.css' />\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/formate.css' />\n";
-    echo "  <script language=\"JavaScript\">var session=\"".$GlobalUser['session']."\";</script>\n";
+    echo "  <script language=\"JavaScript\">var session=\"$session\";</script>\n";
     echo "  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n";
     if ( $redirect_page !== "" ) {
-        echo "  <meta http-equiv=\"refresh\" content=\"".$redirect_sec."; URL=index.php?page=".$redirect_page."&session=".$GlobalUser['session']."&redirect=1\">\n\n";
+        echo "  <meta http-equiv=\"refresh\" content=\"".$redirect_sec."; URL=index.php?page=".$redirect_page."&session=$session&redirect=1\">\n\n";
     }
     echo "<link rel='stylesheet' type='text/css' href='css/combox.css'>\n";
     echo "<link rel='stylesheet' type='text/css' href='".UserSkin()."formate.css' />\n";
-    echo "<title>".va(loca("PAGE_TITLE"), $uni)."</title>\n";
+    echo "<title>".va(loca("PAGE_TITLE"), $uni, loca("OGAME_LOC"))."</title>\n";
     echo "  <script src='js/utilities.js' type='text/javascript'></script>\n";
     echo "  <script language='JavaScript'>\n";
     echo "  </script>\n";
@@ -124,10 +166,7 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
         echo "<table class='header'>\n";
         echo "<tr class='header' >\n";
         PlanetsDropList ($page);
-        ResourceList ($aktplanet, 
-            (int)floor($aktplanet[GID_RC_METAL]), (int)floor($aktplanet[GID_RC_CRYSTAL]), (int)floor($aktplanet[GID_RC_DEUTERIUM]), 
-            (int)$aktplanet['e'], (int)$aktplanet[GID_RC_ENERGY], 
-            $GlobalUser['dm']+$GlobalUser['dmfree'], $aktplanet['mmax'], $aktplanet['kmax'], $aktplanet['dmax']);
+        ResourceList ($aktplanet, $GlobalUser[GID_RC_DM]);
         BonusList ();
         echo "</tr>\n";
         echo "</table>\n";
@@ -139,6 +178,13 @@ function PageHeader (string $page, bool $noheader=false, bool $leftmenu=true, st
     echo "<!-- END LEFTMENU -->\n\n";
 }
 
+/**
+ * Finds the moon located at the same coordinates as the given planet.
+ *
+ * @param array $plist List of planets to search through.
+ * @param array $planet Planet whose coordinates are matched.
+ * @return mixed The matching moon data, or null if no moon exists.
+ */
 function DropListHasMoon (array $plist, array $planet) : mixed
 {
     foreach ( $plist as $i=>$p )
@@ -150,6 +196,12 @@ function DropListHasMoon (array $plist, array $planet) : mixed
     return null;
 }
 
+/**
+ * Outputs the planet selector drop-down list used in the header.
+ *
+ * @param string $page Current page name used in the option links.
+ * @return void
+ */
 function PlanetsDropList (string $page) : void
 {
     global $GlobalUser;
@@ -201,6 +253,12 @@ function PlanetsDropList (string $page) : void
     echo "</select></table></td></tr></table></td>\n\n";
 }
 
+/**
+ * Loads and decodes a JSON schema file, aborting the script on error.
+ *
+ * @param string $path Path to the JSON file.
+ * @return array Decoded JSON contents as an associative array.
+ */
 function LoadJsonFirst (string $path) : array
 {
     $json_contents = file_get_contents($path);
@@ -214,38 +272,55 @@ function LoadJsonFirst (string $path) : array
     return $json;
 }
 
-function ResourceList (array $aktplanet, int $m, int $k, int $d, int $enow, int $emax, int $dm, int $mmax, int $kmax, int $dmax) : void
+/**
+ * Outputs the resource bar with resource icons, names and current values.
+ *
+ * @param array $planet Current planet data including balances.
+ * @param int $dm Current amount of dark matter.
+ * @return void
+ */
+function ResourceList (array $planet, int $dm) : void
 {
     global $GlobalUser;
+    global $resourcemap;
+    global $resourcesWithNonZeroDerivative;
     $sess = $GlobalUser['session'];
-
-    $mcol = $kcol = $dcol = $ecol = "";
-    if ($m >= $mmax) $mcol = "#ff0000";
-    if ($k >= $kmax) $kcol = "#ff0000";
-    if ($d >= $dmax) $dcol = "#ff0000";
-    if ($enow < 0) $ecol = "#ff0000";
 
     $json = LoadJsonFirst ("pages/res_panel.json");
 
-    $json['metall']['val'] = $m;
-    $json['metall']['color'] = $mcol;
-    $json['kristall']['val'] = $k;
-    $json['kristall']['color'] = $kcol;
-    $json['deuterium']['val'] = $d;
-    $json['deuterium']['color'] = $dcol;
-    $json['dm']['val'] = $dm;
-    $json['energie']['val'] = $enow;
-    $json['energie']['val2'] = $emax;
-    $json['energie']['color'] = $ecol;
+    foreach ($resourcemap as $i=>$rc) {
+        if (!isset($planet['balance'][$rc])) continue;
 
-    ModsExecRefArr ('add_resources', $json, $aktplanet);
+        $deriv = in_array ($rc, $resourcesWithNonZeroDerivative, true);
+        if ($deriv) {
+
+            $val = (int)floor ($planet[$rc]);
+            $cap = isset($planet['max'.$rc]) ? $planet['max'.$rc] : PHP_INT_MAX;
+            $color = $val >= $cap ? "#ff0000" : "";
+            $json[$rc]['val'] = $val;
+            $json[$rc]['color'] = $color;
+        }
+        else {
+
+            $val = (int)$planet['balance'][$rc];
+            $val2 = (int)$planet['net_prod'][$rc];
+            $color = $val < 0 ? "#ff0000" : "";
+            $json[$rc]['val'] = $val;
+            $json[$rc]['val2'] = $val2;
+            $json[$rc]['color'] = $color;
+        }
+    }
+
+    $json[GID_RC_DM]['val'] = $dm;
+
+    ModsExecRefArr ('add_resources', $json, $planet);
 
     //print_r ($json);
 
     // Row 1 (Icons)
     echo "<td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >\n";
     echo "<tr class='header'>\n";
-    foreach ($json as $res) {
+    foreach ($json as $i=>$res) {
 
         echo "<td align='center' width='85' class='header'>\n";
         if (key_exists('href', $res)) {
@@ -269,14 +344,14 @@ function ResourceList (array $aktplanet, int $m, int $k, int $d, int $enow, int 
 
     // Row 2 (Names)
     echo "<tr class='header'>\n";
-    foreach ($json as $res) {
+    foreach ($json as $i=>$res) {
         echo "    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>".loca($res['loca'])."</font></b></i></td>\n";
     }
     echo "</tr>\n";
 
     // Row 3 (Values)
     echo "<tr class='header'>\n";
-    foreach ($json as $res) {
+    foreach ($json as $i=>$res) {
         $col = "";
         if ($res['color'] !== "") {
             $col = "color='".$res['color']."'";
@@ -292,6 +367,16 @@ function ResourceList (array $aktplanet, int $m, int $k, int $d, int $enow, int 
     echo "</table></td>\n";
 }
 
+/**
+ * Builds the display data for one officer (bonus) entry.
+ *
+ * @param int $now Current timestamp used to check the officer status.
+ * @param int $who Officer constant identifying the officer.
+ * @param string $img_base Base image name of the officer icon.
+ * @param string $loca_id Localization key of the officer name.
+ * @param string|null $loca_info Localization key of additional info, or null.
+ * @return array Bonus entry data (href, accesskey, img, alt, overlib).
+ */
 function GetOfficerBonus (int $now, int $who, string $img_base, string $loca_id, string|null $loca_info) : array
 {
     global $GlobalUser;
@@ -328,7 +413,14 @@ function GetOfficerBonus (int $now, int $who, string $img_base, string $loca_id,
     return $res;
 }
 
-// Previously, this panel was used only for officers; after the addition of the modding engine, it is now called the "Bonus Panel" and displays various account "bonuses" (officers are a special case).
+/**
+ * Outputs the bonus panel listing all account bonuses.
+ *
+ * Previously this panel was used only for officers; after the addition of the
+ * modding engine it displays various account bonuses (officers are a special case).
+ *
+ * @return void
+ */
 function BonusList () : void
 {
     $now = time ();
@@ -373,6 +465,33 @@ function BonusList () : void
     echo "</tr></table></td>\n\n";
 }
 
+/**
+ * Renders the HTML string showing the bonuses in the page header.
+ *
+ * @param array $bonuses Bonus entries with text, color, img, alt, overlib and width.
+ * @return string HTML markup of the bonus images.
+ */
+function GetBonusesInHeader (array &$bonuses) : string {
+
+    $res = "";
+
+    foreach ($bonuses as $i=>$bonus) {
+
+        if ($bonus['text'] !== "") {
+            $res .= "<b><font style=\"color:".$bonus['color'].";\">".$bonus['text']."</font></b>";
+        }
+        $res .= " <img border=\"0\" alt=\"".$bonus['alt']."\" src=\"".$bonus['img']."\" ";
+        $res .= "onmouseover='return overlib(\"".$bonus['overlib']."\", WIDTH, ".$bonus['width'].");' onmouseout=\"return nd();\" width=\"20\" height=\"20\" style=\"vertical-align:middle;\">";
+    }
+
+    return $res;
+}
+
+/**
+ * Outputs the left menu with the navigation entries from the menu JSON file.
+ *
+ * @return void
+ */
 function LeftMenu () : void
 {
     global $GlobalUser;
@@ -395,14 +514,14 @@ function LeftMenu () : void
     echo "</script>\n";
     echo "<center>\n\n";
     echo "<div id='menu'>\n";
-    echo "<a href='mailto:barrierefrei@ogame.de' title='".loca("MENU_DIS")."' style='width:1px;'></a>\n";
+    echo "<a href='mailto:barrierefrei@ogame.de' title='".va(loca("MENU_DIS"),EMAIL_BARRIERFREI)."' style='width:1px;'></a>\n";
     echo "<p style='width:110px;'><NOBR>".loca("MENU_UNIVERSE")." ".$uni." (<a href='index.php?page=changelog&session=".$sess."'>v 0.84</a>)</NOBR></p>\n";
     echo "<table width='110' cellspacing='0' cellpadding='0'>\n";
 
     $json = LoadJsonFirst ("pages/leftmenu.json");
 
     // Admin Area
-    if ($GlobalUser['admin'] == 0) {
+    if ($GlobalUser['admin'] == USER_TYPE_PLAYER) {
         if (isset($json["admin"])) {
             unset ($json["admin"]);
         }
@@ -557,6 +676,16 @@ function LeftMenu () : void
     echo "    </div>\n";
 }
 
+/**
+ * Outputs the page footer with message and error boxes and the layout scripts.
+ *
+ * @param string $msg Message text to display.
+ * @param string $error Error text to display.
+ * @param bool $popup Whether the page is displayed as a popup.
+ * @param int $headerH Header height in pixels used for the layout.
+ * @param bool $nores Whether the message box position is not reset.
+ * @return void
+ */
 function PageFooter (string $msg="", string $error="", bool $popup=false, int $headerH=81, bool $nores=false) : void
 {
     global $pagetime;
@@ -631,6 +760,11 @@ function PageFooter (string $msg="", string $error="", bool $popup=false, int $h
     echo "</body></html>\n";
 }
 
+/**
+ * Outputs an error page for invalid sessions and logs the error to the database.
+ *
+ * @return void
+ */
 function InvalidSessionPage () : void
 {
     global $GlobalUser;
@@ -648,7 +782,7 @@ function InvalidSessionPage () : void
     echo "  <link rel='stylesheet' type='text/css' href='css/default.css' />\n";
     echo "  <link rel='stylesheet' type='text/css' href='css/formate.css' />\n";
     echo "  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />\n";
-    echo "  <title>".va(loca_lang("PAGE_TITLE", $GlobalUser['lang']), $uni)."</title>\n";
+    echo "  <title>".va(loca_lang("PAGE_TITLE", $GlobalUser['lang']), $uni, loca_lang("OGAME_LOC", $GlobalUser['lang']))."</title>\n";
     echo " </head>\n";
     echo " <body>\n";
     echo "  <center><font size='3'><b>    <br /><br />\n";
@@ -657,6 +791,13 @@ function InvalidSessionPage () : void
     echo "    Error-ID: ".$id."  </b></font></center> </body></html>\n";
 }
 
+/**
+ * Redirects the browser to another game page and stops the script execution.
+ *
+ * @param string $page Target page name.
+ * @param string $param Additional URL parameters.
+ * @return never
+ */
 function MyGoto (string $page, string $param="") : never
 {
     global $GlobalUser;
@@ -666,6 +807,11 @@ function MyGoto (string $page, string $param="") : never
     die ( "<html><head><meta http-equiv='refresh' content='0;url=$url' /></head><body></body></html>" );
 }
 
+/**
+ * Opens the content area div and executes the begin_content mod hook.
+ *
+ * @return void
+ */
 function BeginContent () : void
 {
     echo "<!-- CONTENT AREA -->\n";
@@ -674,6 +820,11 @@ function BeginContent () : void
     ModsExec ('begin_content');
 }
 
+/**
+ * Closes the content area div and executes the end_content mod hook.
+ *
+ * @return void
+ */
 function EndContent () : void
 {
     ModsExec ('end_content');
@@ -682,6 +833,12 @@ function EndContent () : void
     echo "<!-- END CONTENT AREA -->\n\n";
 }
 
+/**
+ * Returns a link to the galaxy view showing the planet coordinates.
+ *
+ * @param array $planet Planet data with g, s and p coordinates.
+ * @return string HTML link to the galaxy view, or an empty string.
+ */
 function ShowGalaxy (array $planet) : string {
 
     if ($planet) {
@@ -690,12 +847,25 @@ function ShowGalaxy (array $planet) : string {
     else return "";
 }
 
+/**
+ * Base class for game pages providing the controller and view methods.
+ */
 abstract class Page {
 
+    /**
+     * Handles the page logic and reports whether the view may be shown.
+     *
+     * @return bool True if the view should be displayed.
+     */
     public function controller () : bool {
         return true;
     }
 
+    /**
+     * Renders the page content.
+     *
+     * @return void
+     */
     public function view () : void {
     }
 }

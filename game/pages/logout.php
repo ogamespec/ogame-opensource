@@ -1,7 +1,5 @@
 <?php
 
-/** @var array $GlobalUser */
-
 // Logout
 
 Logout ( $_GET['session'] );
@@ -10,7 +8,7 @@ Logout ( $_GET['session'] );
 <html>
  <head>
  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
- <link rel="stylesheet" type="text/css" href="<?=hostname();?>evolution/formate.css" />
+ <link rel="stylesheet" type="text/css" href="<?=UserSkin();?>formate.css" />
   <meta http-equiv="refresh" content="3;URL=index.php" />
   <title>Logout</title>
 

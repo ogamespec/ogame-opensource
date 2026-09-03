@@ -2,7 +2,10 @@
 
 // Stringhe comuni. Sono presenti nella maggior parte delle pagine.
 
-$LOCA["it"]["PAGE_TITLE"] = "OGame Universo #1";
+$LOCA["it"]["OGAME_INT"] = "OGame";
+$LOCA["it"]["OGAME_LOC"] = "OGame";
+
+$LOCA["it"]["PAGE_TITLE"] = "#2 Universo #1";
 
 $LOCA["it"]["NAME_".GID_RC_METAL] = "Metallo";
 $LOCA["it"]["NAME_".GID_RC_CRYSTAL] = "Cristallo";
@@ -12,7 +15,7 @@ $LOCA["it"]["NAME_".GID_RC_DM] = "Materia Oscura";
 
 $LOCA["it"]["PLANET_HOME"] = "Pianeta Madre";
 $LOCA["it"]["PLANET_COLONY"] = "Colonia";
-$LOCA["it"]["PLANET_PHANTOM"] = "Planet";
+$LOCA["it"]["PLANET_PHANTOM"] = "Pianeta";
 $LOCA["it"]["PLANET_ABANDONED"] = "Pianeta abbandonato";   	// fixed 10th planet colony phantom ("overlib" bug)
 $LOCA["it"]["PLANET_DESTROYED"] = "Pianeta distrutto";
 $LOCA["it"]["MOON"] = "Luna";
@@ -27,7 +30,7 @@ $LOCA["it"]["TIME_SEC"] = "s";
 
 // Comandante e ufficiali.
 
-$LOCA["it"]["PR_COMA" ] = "Commander";
+$LOCA["it"]["PR_COMA" ] = "Comandante";
 $LOCA["it"]["PR_ADMIRAL" ] = "Ammiraglio";
 $LOCA["it"]["PR_ENGINEER" ] = "Ingegnere";
 $LOCA["it"]["PR_GEOLOGIST" ] = "Geologo";

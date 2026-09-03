@@ -82,7 +82,7 @@ $LOCA["ru"]["OPTIONS_ACTIVATE_EMAIL"] = "Используйте введённы
 $LOCA["ru"]["OPTIONS_ACTIVATE_INFO"] = "Ваш игровой акаунт ещё не активирован. Тут Вы можете заказать письмо с активационной ссылкой.";
 $LOCA["ru"]["OPTIONS_ACTIVATE_SUBMIT"] = "Заказать активационную ссылку";
 
-$LOCA["ru"]["OPTIONS_FEED"] = "Newsfeed";
+$LOCA["ru"]["OPTIONS_FEED"] = "Лента новостей";
 $LOCA["ru"]["OPTIONS_FEED_ACTIVATE"] = "Активировать";
 $LOCA["ru"]["OPTIONS_FEED_ACTIVATED"] = "Активно";
 $LOCA["ru"]["OPTIONS_FEED_FORMAT"] = "Формат";

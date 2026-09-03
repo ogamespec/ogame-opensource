@@ -46,10 +46,10 @@ function AllyPage_CircularMessage () : void
                 $user = dbarray ($result);
                 loca_add ("ally", $user['lang']);
                 SendMessage ( $user['player_id'], 
-                                       va ( loca_lang("ALLY_MSG_FROM", $user['lang']), $ally['tag'] ),
-                                       va ( loca_lang("ALLY_MSG_CIRC_SUBJ", $user['lang']), $ally['tag'] ), 
-                                       va ( loca_lang("ALLY_MSG_CIRC_TEXT", $user['lang']), $GlobalUser['oname'], $text ), MTYP_ALLY );
-                echo $user['oname'] . "<br>\n";
+                                       va ( loca_lang("ALLY_MSG_FROM", $user['lang']), htmlspecialchars($ally['tag']) ),
+                                       va ( loca_lang("ALLY_MSG_CIRC_SUBJ", $user['lang']), htmlspecialchars($ally['tag']) ), 
+                                       va ( loca_lang("ALLY_MSG_CIRC_TEXT", $user['lang']), htmlspecialchars($GlobalUser['oname']), $text ), MTYP_ALLY );
+                echo htmlspecialchars($user['oname']) . "<br>\n";
             }
 ?>
 </th></tr>
@@ -91,7 +91,7 @@ function AllyPage_CircularMessage () : void
     }
 ?>
 </select></th></tr>
-<tr><th><?=va(loca("ALLY_CIRC_MESSAGE"), "<span id=\"cntChars\">0</span>", $MAXCHARS);?></th><th><textarea name=text cols=60 rows=10 onkeyup="javascript:cntchar(<?=loca($MAXCHARS);?>)"></textarea></th></tr>
+<tr><th><?=va(loca("ALLY_CIRC_MESSAGE"), "<span id=\"cntChars\">0</span>", $MAXCHARS);?></th><th><textarea name=text cols=60 rows=10 onkeyup="javascript:cntchar(<?=loca((string) $MAXCHARS);?>)"></textarea></th></tr>
 <tr><th colspan=2><input type=submit value="<?=loca("ALLY_CIRC_SEND");?>"></th></tr></table></center></form>
 <?php
 }

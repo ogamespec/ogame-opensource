@@ -1,0 +1,389 @@
+<html>
+ <head>
+  <link rel='stylesheet' type='text/css' href='css/default.css' />
+  <link rel='stylesheet' type='text/css' href='css/formate.css' />
+  <script language="JavaScript">var session="0000000003e9";</script>
+  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+<link rel='stylesheet' type='text/css' href='css/combox.css'>
+<link rel='stylesheet' type='text/css' href='http://localhost/evolution/formate.css' />
+<title>ユニバース 1 OGame</title>
+  <script src='js/utilities.js' type='text/javascript'></script>
+  <script language='JavaScript'>
+  </script>
+<script type='text/javascript' src='js/overLib/overlib.js'></script>
+<!-- HEADER -->
+
+<script language='JavaScript'>
+function onBodyLoad() {
+    window.setTimeout('reloadImages()', 100);
+}
+function reloadImages() {
+    for (var i = 0; i < document.images.length; ++i) {
+      if ((document.images[i].className == 'reloadimage') && (document.images[i].title != '')) {
+        document.images[i].src = document.images[i].title;
+      }
+    }
+}
+</script>
+</head>
+<body style='overflow: hidden;' onload='onBodyLoad();' onunload='' >
+<div id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>
+<div id='header_top'><center>
+<table class='header'>
+<tr class='header' >
+<td class='header' style='width:5;' >
+<table class='header'>
+<tr class='header'>
+<td class='header'><img src='http://localhost/evolution/planeten/small/s_dschjungelplanet02.jpg' width='50' height='50'></td>
+<td class='header'>
+<table class='header'>
+<select size='1' onchange='haha(this)'>
+    <option value='index.php?page=infos&session=0000000003e9&cp=1&gid=3' selected>Home  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=1&gid=3' >[1:1:4]</a></option>
+    <option value='index.php?page=infos&session=0000000003e9&cp=10&gid=3' >Moon  <a href='index.php?page=galaxy&galaxy=1&system=1&position=4&session=0000000003e9&cp=10&gid=3' >[1:1:4]</a></option>
+    <option value='index.php?page=infos&session=0000000003e9&cp=2&gid=3' >Colony A  <a href='index.php?page=galaxy&galaxy=1&system=1&position=5&session=0000000003e9&cp=2&gid=3' >[1:1:5]</a></option>
+    <option value='index.php?page=infos&session=0000000003e9&cp=3&gid=3' >Colony B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=3&gid=3' >[1:2:4]</a></option>
+    <option value='index.php?page=infos&session=0000000003e9&cp=11&gid=3' >Moon B  <a href='index.php?page=galaxy&galaxy=1&system=2&position=4&session=0000000003e9&cp=11&gid=3' >[1:2:4]</a></option>
+</select></table></td></tr></table></td>
+
+<td class='header'><table class='header' id='resources' border='0' cellspacing='0' cellpadding='0' padding-right='30' >
+<tr class='header'>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/metall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/kristall.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/deuterium.gif' width='42' height='22'>
+</td>
+<td align='center' width='85' class='header'>
+<a href=index.php?page=micropayment&session=0000000003e9>
+<img border='0' src='img/dm_klein_2.jpg' width='42' height='22' title='ダークマター'></a>
+</td>
+<td align='center' width='85' class='header'>
+<img border='0' src='http://localhost/evolution/images/energie.gif' width='42' height='22'>
+</td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>メタル</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>クリスタル</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>重水素</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>ダークマター</font></b></i></td>
+    <td align='center' class='header' width='85'><i><b><font color='#ffffff'>エネルギー</font></b></i></td>
+</tr>
+<tr class='header'>
+    <td align='center' class='header' width='90'><font >25.047</font></td>
+    <td align='center' class='header' width='90'><font >15.016</font></td>
+    <td align='center' class='header' width='90'><font >8.003</font></td>
+    <td align='center' class='header' width='90'><font color='#FFFFFF'>1.500</font></td>
+    <td align='center' class='header' width='90'><font >359</font>/529</td>
+</tr>
+</table></td>
+<td class='header'>
+<table class='header' align=left>
+<tr class='header'>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/commander_ikon.gif' width='32' height='32' alt='オジェム指揮官'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>オジェム指揮官</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/admiral_ikon.gif' width='32' height='32' alt='提督'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>提督</font><br><font size=1 color=skyblue>&amp;nbsp;最大フリート数 +2</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/ingenieur_ikon.gif' width='32' height='32' alt='エンジニア'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>エンジニア</font><br><font size=1 color=skyblue>ディフェンスロスを半減+エネルギー10%増加</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/geologe_ikon.gif' width='32' height='32' alt='地質学者'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>地質学者</font><br><font size=1 color=skyblue>鉱山収入+10</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+    <td align='center' width='35' class='header'>
+    <a href='index.php?page=micropayment&session=0000000003e9' accesskey='i' >
+  <img border='0' src='img/technokrat_ikon.gif' width='32' height='32' alt='テクノクラート'
+  onmouseover="return overlib('<center><font size=1 color=white><b>&lt;font color=lime&gt;アクティブ&lt;/font&gt; あと365日<br>テクノクラート</font><br><font size=1 color=skyblue>スパイ活動レベル+2、調査時間25%短縮</font><br><br><a href=index.php?page=micropayment&session=0000000003e9><font size=1 color=lime>それを延長する！</b></font></a></center>', LEFT, WIDTH, 150);" onmouseout='return nd();'>
+    </a></td>
+
+<td align='center' class='header'></td></tr></table></td>
+
+</tr>
+</table>
+</div><!-- END HEADER -->
+
+<!-- LEFTMENU -->
+
+   <div id='leftmenu'>
+
+<script language='JavaScript'>
+function fenster(target_url,win_name) {
+  var new_win = window.open(target_url,win_name,'scrollbars=yes,menubar=no,top=0,left=0,toolbar=no,width=550,height=280,resizable=yes');
+  new_win.focus();
+}
+</script>
+<center>
+
+<div id='menu'>
+<a href='mailto:barrierefrei@ogame.de' title='視覚障害のある選手に関する問題は、下記までお問い合わせください barrierefrei@ogame.de.' style='width:1px;'></a>
+<p style='width:110px;'><NOBR>ユニバース 1 (<a href='index.php?page=changelog&session=0000000003e9'>v 0.84</a>)</NOBR></p>
+<table width='110' cellspacing='0' cellpadding='0'>
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/ogame-produktion.jpg' width='110' height='40' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=overview&session=0000000003e9' accesskey="o">レビュー</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=imperium&session=0000000003e9&planettype=1&no_header=1' accesskey="e">帝国</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=b_building&session=0000000003e9' accesskey="b">建物</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=resources&session=0000000003e9' accesskey="r">原材料</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=trader&session=0000000003e9' accesskey=""><font color='FF8900'>贖い主</font></a> <!-- TODO Loca Keys -->
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Forschung' accesskey="c">リサーチ</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Flotte' accesskey="s">造船所</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=flotten1&session=0000000003e9&mode=Flotte' accesskey="f">フリート</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=techtree&session=0000000003e9' accesskey="t">テクノロジー</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=galaxy&session=0000000003e9&no_header=1' accesskey="g">ギャラクシー</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buildings&session=0000000003e9&mode=Verteidigung' accesskey="d">ディフェンス</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/info-help.jpg' width='110' height='19' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=allianzen&session=0000000003e9' accesskey="a">私の同盟</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+    <td align=center>
+     <a id='darkmatter2' style='cursor:pointer; width:110px;'
+         href='index.php?page=micropayment&session=0000000003e9' accesskey="i"><b>オフィサーズ・カジノ</a></b>
+    </div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=statistics&session=0000000003e9' accesskey="k">統計</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=suche&session=0000000003e9' accesskey="h">検索</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td><img src='http://localhost/evolution/gfx/user-menu.jpg' width='110' height='35' /></td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=messages&session=0000000003e9&dsp=1' accesskey="m">メッセージ</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='#' onclick='fenster("index.php?page=notizen&session=0000000003e9&no_header=1", "Notizen");' accesskey="n">備考</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=buddy&session=0000000003e9' accesskey="u">友人</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=options&session=0000000003e9' accesskey="p">設定</a>
+    </font></div>
+  </td>
+ </tr>
+
+ <tr>
+  <td>
+   <div align="center"><font color="#FFFFFF">
+     <a href='index.php?page=logout&session=0000000003e9' accesskey="q">出力</a>
+    </font></div>
+  </td>
+ </tr>
+
+ </table>
+ </center>
+    </div>
+<!-- END LEFTMENU -->
+
+<!-- CONTENT AREA -->
+<div id='content'>
+<center>
+<table width="519">
+<tr><td class="c">重水素合成装置</td></tr>
+<tr><th><table>
+<tr><td><img border='0' src="http://localhost/evolution/gebaeude/3.gif" align='top' width='120' height='120'></td>
+<td>重水素（Deuterium）は、重水素（heavy hydrogen）とも呼ばれる水素の安定同位体で、コロニーの海洋中に水素約6500原子につき1個の割合（約154 PPM）で天然に存在します。したがって重水素は全体の約0.015％（重量比では0.030％）を占めます。重水素は、特別に設計された遠心分離機を使って水から重水素を分離できる特殊な合成装置によって処理されます。合成装置をアップグレードすると、処理できる重水素の量を増やすことができます。重水素は、感覚ファランクスによるスキャンの実行、銀河の観測、艦船の燃料、そして特殊な研究のアップグレードの実行に使用されます。</td></tr>
+</table></th></tr>
+<tr><th><p><center><table border=1 ><tr><td class='c'>レベル</td><td class='c'>1時間あたりの生産量</td><td class='c'>差</td><td class='c'>エネルギーバランス</td><td class='c'>差</td> 
+<tr> <th> 1</th> <th> 12</th> <th> <font color="#FF0000">-14</font></th> <th> -22</th> <th> <font color="#00FF00">27</font> </th> </tr> 
+<tr> <th> <font color=#FF0000>2</font></th> <th> 26</th> <th> 0</th> <th> -49</th> <th> 0 </th> </tr> 
+<tr> <th> 3</th> <th> 42</th> <th> <font color="#00FF00">16</font></th> <th> -80</th> <th> <font color="#FF0000">-31</font> </th> </tr> 
+<tr> <th> 4</th> <th> 62</th> <th> <font color="#00FF00">36</font></th> <th> -118</th> <th> <font color="#FF0000">-69</font> </th> </tr> 
+<tr> <th> 5</th> <th> 86</th> <th> <font color="#00FF00">60</font></th> <th> -162</th> <th> <font color="#FF0000">-113</font> </th> </tr> 
+<tr> <th> 6</th> <th> 113</th> <th> <font color="#00FF00">88</font></th> <th> -213</th> <th> <font color="#FF0000">-164</font> </th> </tr> 
+<tr> <th> 7</th> <th> 146</th> <th> <font color="#00FF00">120</font></th> <th> -273</th> <th> <font color="#FF0000">-224</font> </th> </tr> 
+<tr> <th> 8</th> <th> 183</th> <th> <font color="#00FF00">157</font></th> <th> -343</th> <th> <font color="#FF0000">-294</font> </th> </tr> 
+<tr> <th> 9</th> <th> 227</th> <th> <font color="#00FF00">201</font></th> <th> -425</th> <th> <font color="#FF0000">-376</font> </th> </tr> 
+<tr> <th> 10</th> <th> 277</th> <th> <font color="#00FF00">251</font></th> <th> -519</th> <th> <font color="#FF0000">-470</font> </th> </tr> 
+<tr> <th> 11</th> <th> 335</th> <th> <font color="#00FF00">309</font></th> <th> -628</th> <th> <font color="#FF0000">-579</font> </th> </tr> 
+<tr> <th> 12</th> <th> 402</th> <th> <font color="#00FF00">377</font></th> <th> -754</th> <th> <font color="#FF0000">-705</font> </th> </tr> 
+<tr> <th> 13</th> <th> 479</th> <th> <font color="#00FF00">454</font></th> <th> -898</th> <th> <font color="#FF0000">-849</font> </th> </tr> 
+<tr> <th> 14</th> <th> 568</th> <th> <font color="#00FF00">542</font></th> <th> -1.064</th> <th> <font color="#FF0000">-1.015</font> </th> </tr> 
+<tr> <th> 15</th> <th> 670</th> <th> <font color="#00FF00">644</font></th> <th> -1.254</th> <th> <font color="#FF0000">-1.205</font> </th> </tr> 
+</table></center></tr></th></table>
+<table width=519 >
+<tr><td class=c align=center><a href="index.php?page=b_building&session=0000000003e9&techid=3&modus=destroy&planet=1">解体: 重水素合成装置 レベル 2 を破壊しますか?</a></td></tr>
+<br><tr><th>必要 メタル:<b>225</b> クリスタル:<b>75</b> <tr><th><br>解体の所要時間:  2分 24秒<br></th></tr></table>
+<br><br><br><br>
+</center>
+</div>
+<!-- END CONTENT AREA -->
+
+
+
+<script>
+messageboxHeight=0;
+errorboxHeight=0;
+contentbox = document.getElementById('content');
+</script>
+<div id='messagebox'><center></center></div>
+<div id='errorbox'><center></center></div>
+<script>
+headerHeight = 81;
+errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
+contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
+if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;
+if(document.getElementById('resources')) {   document.getElementById('resources').style.width=(window.innerWidth*0.4);}}
+ else {
+if (document.body.offsetWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(document.body.offsetHeight)-messagebox.offsetHeight-headerHeight-errorbox.offsetHeight-20;document.getElementById('resources').style.width=(document.body.offsetWidth*0.4);
+}for (var i = 0; i < document.links.length; ++i) {
+  if (document.links[i].href.search(/.*redir\.php\?url=.*/) != -1) {
+    document.links[i].target = '_blank';
+  }
+}
+</script>
+<style>
+.layer {
+    z-index:999999999;
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 757px; 
+    height: 475px; 
+    background-color: #040e1e;
+    border: 3px double orange;
+    padding: 0;
+    opacity: .90;
+}
+</style>
+</body></html>

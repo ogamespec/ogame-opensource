@@ -8,16 +8,16 @@ $LOCA["jp"]["REG_MAIL_NOTE"] = "有効なゲーム内住所を入力してくだ
 $LOCA["jp"]["REG_MAIL_EMAIL"] = "E-Mail:";
 $LOCA["jp"]["REG_MAIL_SUBMIT"] = "データ送信";
 
-$LOCA["jp"]["REG_FORGOT_TITLE"] = "OGameパスワードの送信";
+$LOCA["jp"]["REG_FORGOT_TITLE"] = "#1 パスワードの送信";
 $LOCA["jp"]["REG_FORGOT_ERROR"] = "パーマネントアドレスが間違っています。";
 $LOCA["jp"]["REG_FORGOT_OK"] = "パスワードは #1.";
-$LOCA["jp"]["REG_FORGOT_SUBJ"] = "OGameのパスワード";
+$LOCA["jp"]["REG_FORGOT_SUBJ"] = "#1のパスワード";
 $LOCA["jp"]["REG_FORGOT_MAIL"] = "#1、ようこそ！\n\n" .
 "パスワード#3を入力しなければ、#2の宇宙には戻れない。\n\n" .
 "パスワードは、アカウントプロファイルに記載されたアドレスにのみ送信されます。\n\n" .
 "パスワード回復をご注文されていない場合は、このメールを無視してください。\n\n" .
 "幸運を祈る,\n\n" .
-"あなたのOGameチーム.";
+"あなたのO#5チーム.";
 
 // ページ読み込み時のセッションエラー
 
@@ -55,15 +55,15 @@ $LOCA["jp"]["REG_NEW_ERROR_EXISTS"] = "名前#1はすでに存在する";
 $LOCA["jp"]["REG_NEW_ERROR_EMAIL"] = "アドレス#1は無効です！";
 $LOCA["jp"]["REG_NEW_ERROR_EMAIL_EXISTS"] = "アドレス#1はすでに存在する！";
 $LOCA["jp"]["REG_NEW_ERROR_MAX_PLAYERS"] = "最大到達選手数 (#1)!";
-$LOCA["jp"]["REG_NEW_TITLE"] = "OGame ユニバース #1 登録";
+$LOCA["jp"]["REG_NEW_TITLE"] = "#2 ユニバース #1 登録";
 $LOCA["jp"]["REG_NEW_SUCCESS"] = "登録はうまくいった！";
-$LOCA["jp"]["REG_NEW_TEXT"] = "おめでとう, <span class='fine'>#1</span>!<br /><br />あなたはOGameへの登録に成功しました (<span class='fine'>#2</span>). <br />\n".
+$LOCA["jp"]["REG_NEW_TEXT"] = "おめでとう, <span class='fine'>ユニバース #1</span>!<br /><br />あなたは#6への登録に成功しました (<span class='fine'>#2</span>). <br />\n".
             "あなたが受け取るのは <span class='fine'>#3</span> パスワードといくつかの重要なリンクが記載された電子メール。<br />\n".
             "プレイするには、以下の方法でログインする必要があります <a href='#4'>ホームページ</a>.<br />\n".
             "この後の写真で、正しいやり方をご覧いただきたい。<br /><br />\n" .
             "<center><a href='#5' style='text-decoration: underline;font-size: large;'>行こう！</a></center><br /><br /> \n" .
             "幸運を祈る<br /> \n" .
-            "あなたのOGameチーム</th>";
+            "あなたの#6チーム</th>";
 $LOCA["jp"]["REG_NEW_UNI"] = "ユニバース #1";
 $LOCA["jp"]["REG_NEW_CHOOSE_UNI"] = "宇宙を選ぶ";
 $LOCA["jp"]["REG_NEW_NAME"] = "名前を入力";
@@ -94,9 +94,9 @@ $LOCA["jp"]["REG_NEW_MESSAGE_204"] = "ゲームを開始するには、基本レ
 
 // user.php
 
-$LOCA["jp"]["REG_GREET_MAIL_SUBJ"] = "OGameへようこそ ";
+$LOCA["jp"]["REG_GREET_MAIL_SUBJ"] = "#1へようこそ ";
 $LOCA["jp"]["REG_GREET_MAIL_BODY"] = "ご挨拶 #1,\n\n" .
-            "あなたはOGameユニバースの#2に自分の帝国を作ることを決めた！\n\n" .
+            "あなたは#7ユニバースの#2に自分の帝国を作ることを決めた！\n\n" .
             "アカウントを有効化するには、このリンクをクリックしてください：\n" .
             "#3\n\n" .
             "あなたの試合の詳細：\n" .
@@ -105,7 +105,7 @@ $LOCA["jp"]["REG_GREET_MAIL_BODY"] = "ご挨拶 #1,\n\n" .
             "ユニバース: #6\n\n\n";
 $LOCA["jp"]["REG_GREET_MAIL_BOARD"] = "他の皇帝からの助けやアドバイスが必要な場合は、私たちのフォーラムで見つけることができます (#1).\n\n";
 $LOCA["jp"]["REG_GREET_MAIL_TUTORIAL"] = "ここでは（#1）、新参者ができるだけ早くゲームを理解できるよう、選手やチームメンバーが集めたすべての情報を紹介する。\n\n";
-$LOCA["jp"]["REG_GREET_MAIL_FOOTER"] = "我々は、あなた方の帝国建設が成功し、今後の戦いで幸運がもたらされることを祈っている！\n\nあなたのOGameチーム";
+$LOCA["jp"]["REG_GREET_MAIL_FOOTER"] = "我々は、あなた方の帝国建設が成功し、今後の戦いで幸運がもたらされることを祈っている！\n\nあなたの#1チーム";
 
 $LOCA["jp"]["REG_CHANGE_MAIL_SUBJ"] = "ゲーム内のメールアドレスが変更されました ";
 $LOCA["jp"]["REG_CHANGE_MAIL_BODY"] = "ご挨拶 #1,\n\n" .
@@ -113,10 +113,10 @@ $LOCA["jp"]["REG_CHANGE_MAIL_BODY"] = "ご挨拶 #1,\n\n" .
             "1週間以内に変更しなければ、永久に残ってしまう。\n\n" .
             "問題なくプレーを続けるために、以下のリンクから新しいメールアドレスを確認してください：\n\n" .
             "#4\n\n" .
-            "あなたのOGameチーム";
+            "あなたの#5チーム";
 
-$LOCA["jp"]["REG_GREET_MSG_SUBJ"] = "OGameへようこそ！";
-$LOCA["jp"]["REG_GREET_MSG_TEXT"] = "ようこそ[b]OGame[/b]へ !\n" .
+$LOCA["jp"]["REG_GREET_MSG_SUBJ"] = "#1へようこそ！";
+$LOCA["jp"]["REG_GREET_MSG_TEXT"] = "ようこそ[b]#3[/b]へ !\n" .
         "\n" .
         "まずは鉱山を開発する必要がある。\n" .
         "これは \"Buildings\" メニューでできる。\n" .

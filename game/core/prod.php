@@ -1,9 +1,21 @@
 <?php
-
-// Auxiliary functions for the economic part of OGame.
+/**
+ * @file prod.php
+ * @brief Resource production calculations.
+ * @details Computes resource production, consumption, bonuses and balances for every resource type of a planet.
+ */
+// Auxiliary functions for the economic part of the game.
 
 // Calculation of cost, build time and required conditions.
 
+/**
+ * Checks whether an object can be built on a planet and all its requirements are met.
+ *
+ * @param array $user The player data.
+ * @param array $planet The planet data.
+ * @param int $id The object id to check.
+ * @return bool True when the object is available, false otherwise.
+ */
 function TechMeetRequirement ( array $user, array $planet, int $id ) : bool
 {
     global $CanBuildTab;
@@ -35,6 +47,13 @@ function TechMeetRequirement ( array $user, array $planet, int $id ) : bool
     return true;
 }
 
+/**
+ * Calculates the resource cost of an object at the given level.
+ *
+ * @param int $id The object id.
+ * @param int $lvl The target level.
+ * @return array The resource costs keyed by resource id.
+ */
 function TechPrice ( int $id, int $lvl ) : array
 {
     global $initial, $resourcemap;
@@ -55,6 +74,12 @@ function TechPrice ( int $id, int $lvl ) : array
     return $res;
 }
 
+/**
+ * Converts a resource cost into score points.
+ *
+ * @param array $cost The resource costs keyed by resource id.
+ * @return int The cost in points.
+ */
 function TechPriceInPoints (array $cost) : int
 {
     global $scoreResources;
@@ -65,7 +90,17 @@ function TechPriceInPoints (array $cost) : int
     return (int)$points;
 }
 
-// Time to produce a $id level $lvl tech in seconds. b1 - robots/shipyard/reslab. b2 - nanites (0 for research). const_factor - see in defs.php
+/**
+ * Calculates the time to produce an object at the given level, in seconds.
+ *
+ * @param int $id The object id.
+ * @param int $lvl The target level.
+ * @param int $const_factor Build time divisor, see defs.php.
+ * @param int $b1 Building level of robots, shipyard or research lab.
+ * @param int $b2 Nanite factory level (0 for research).
+ * @param float $speed The universe speed.
+ * @return int The production duration in seconds.
+ */
 function TechDuration ( int $id, int $lvl, int $const_factor, int $b1, int $b2, float $speed ) : int
 {
     $res = TechPrice ( $id, $lvl );
@@ -75,9 +110,16 @@ function TechDuration ( int $id, int $lvl, int $const_factor, int $b1, int $b2, 
     return (int)$secs;
 }
 
-// IGN Calculation.
-// Attach +IGN laboratories of maximum level to the current laboratory.
-// The output is the overall level of the "virtual" lab.
+/**
+ * Calculates the effective research lab level with Intergalactic Research Network bonuses.
+ *
+ * Attaches up to +IGN laboratories of maximum level to the current laboratory.
+ * The output is the overall level of the "virtual" lab.
+ *
+ * @param int $planetid Id of the researching planet.
+ * @param int $id The research object id.
+ * @return int The overall level of the virtual lab.
+ */
 function ResearchNetwork ( int $planetid, int $id ) : int
 {
     global $db_prefix;
@@ -110,28 +152,52 @@ function ResearchNetwork ( int $planetid, int $id ) : int
     return $reslab;
 }
 
+/**
+ * Checks whether the player and planet hold enough resources to pay a cost.
+ *
+ * @param array $user The player data.
+ * @param array $planet The planet data.
+ * @param array $cost The resource costs keyed by resource id.
+ * @return bool True when all resources are sufficient, false otherwise.
+ */
 function IsEnoughResources (array $user, array $planet, array $cost) : bool
 {
     foreach ($cost as $rc=>$value) {
-        if ($value > 0 && isset($user[$rc])) {
-            if ($user[$rc] < $value) return false;
+        if (isset($user[$rc])) {
+            if ($value > 0 && $user[$rc] < $value) {
+                return false;
+            }
+        }
+        else if (isset($planet[$rc])) {
+            if ($value > 0 && $planet[$rc] < $value) {
+                return false;
+            }
+        }
+        else {
+            return false;      // An unknown resource type that neither the player nor the planet has.
         }
     }
-    foreach ($cost as $rc=>$value) {
-        if ($value > 0 && isset($planet[$rc])) {
-            if ($planet[$rc] < $value) return false;
-        }
-    }
+    // All conditions are met, all resources are sufficient.
     return true;
 }
 
 // Anything related to resource production and calculation.
 
-// Get the size of the storages.
+/**
+ * Returns the storage capacity for the given storage level.
+ *
+ * @param int $lvl The storage building level.
+ * @return int The storage capacity.
+ */
 function store_capacity (int $lvl) : int {
     return 100000 + 50000 * (int)(ceil (pow (1.6, $lvl) - 1));
 }
 
+/**
+ * Production and consumption rules per building, keyed by building id.
+ * Each rule maps a resource id to a closure returning the produced or
+ * consumed amount for the given ($uni, $user, $planet).
+ */
 $PlanetProd = [
 
     GID_B_METAL_MINE => [
@@ -142,7 +208,7 @@ $PlanetProd = [
         ],
         'cons' => [
             GID_RC_ENERGY => function ($uni, $user, $planet) {
-                return ceil (10 * $planet[GID_B_METAL_MINE] * pow (1.1, $planet[GID_B_METAL_MINE]));
+                return ceil (10 * $planet[GID_B_METAL_MINE] * pow (1.1, $planet[GID_B_METAL_MINE]) * $planet['prod'.GID_B_METAL_MINE]);
             }
         ]
     ],
@@ -155,7 +221,7 @@ $PlanetProd = [
         ],
         'cons' => [
             GID_RC_ENERGY => function ($uni, $user, $planet) {
-                return ceil (10 * $planet[GID_B_CRYS_MINE] * pow (1.1, $planet[GID_B_CRYS_MINE]));
+                return ceil (10 * $planet[GID_B_CRYS_MINE] * pow (1.1, $planet[GID_B_CRYS_MINE]) * $planet['prod'.GID_B_CRYS_MINE]);
             }
         ]
     ],
@@ -168,7 +234,7 @@ $PlanetProd = [
         ],
         'cons' => [
             GID_RC_ENERGY => function ($uni, $user, $planet) {
-                return ceil (20 * $planet[GID_B_DEUT_SYNTH] * pow (1.1, $planet[GID_B_DEUT_SYNTH]));
+                return ceil (20 * $planet[GID_B_DEUT_SYNTH] * pow (1.1, $planet[GID_B_DEUT_SYNTH]) * $planet['prod'.GID_B_DEUT_SYNTH]);
             }
         ]
     ],
@@ -208,9 +274,19 @@ $PlanetProd = [
 
 ];
 
+/**
+ * Collects the production bonus factors for a resource.
+ *
+ * @param array $uni The universe data.
+ * @param array $user The player data.
+ * @param array $planet The planet data.
+ * @param int $rc The resource id.
+ * @param array $prod_bonus List of bonus factors, appended to by reference.
+ * @return void
+ */
 function ProdBonus (array $uni, array $user, array $planet, int $rc, array &$prod_bonus) : void {
 
-    // A production bonus offered by the original OGame 0.84 mechanic. The bonus is not necessarily positive.
+    // A production bonus offered by the original 0.84 mechanic. The bonus is not necessarily positive.
     $prem = PremiumStatus ($user);
     switch ($rc) {
 
@@ -234,9 +310,19 @@ function ProdBonus (array $uni, array $user, array $planet, int $rc, array &$pro
     ModsExecArrRef ('bonus_prod', $param, $prod_bonus);
 }
 
+/**
+ * Collects the consumption bonus factors for a resource.
+ *
+ * @param array $uni The universe data.
+ * @param array $user The player data.
+ * @param array $planet The planet data.
+ * @param int $rc The resource id.
+ * @param array $cons_bonus List of bonus factors, appended to by reference.
+ * @return void
+ */
 function ConsBonus (array $uni, array $user, array $planet, int $rc, array &$cons_bonus) : void {
 
-    // A bonus to consumption offered by the original OGame 0.84 mechanic. The bonus is not necessarily positive.
+    // A bonus to consumption offered by the original 0.84 mechanic. The bonus is not necessarily positive.
     // none.
 
     $param = [];
@@ -247,17 +333,28 @@ function ConsBonus (array $uni, array $user, array $planet, int $rc, array &$con
     ModsExecArrRef ('bonus_cons', $param, $cons_bonus);
 }
 
+/**
+ * Computes production, consumption and balance for every resource of a planet.
+ *
+ * @param array $uni The universe data.
+ * @param array $user The player data.
+ * @param array $planet The planet data; production fields are written into it.
+ * @return void
+ */
 function ProdResources (array $uni, array $user, array &$planet) : void {
 
     global $prodPriority, $PlanetProd;
+    global $naturalProduction;
 
-    $prod = [];                 // Производство ресурса по каждому типу игрового объекта
-    $prod_with_bonus = [];      // Производство ресурса по каждому типу игрового объекта (с учётом бонуса)
-    $cons = [];                 // Потребление ресурса по каждому типу игрового объекта
-    $cons_with_bonus = [];      // Потребление ресурса по каждому типу игрового объекта (с учётом бонуса)
-    $net_prod = [];             // Общее производство указанного ресурса
-    $net_cons = [];             // Общее потребление указанного ресурса
-    $balance = [];              // Баланс указанного ресурса (производство - потребление)
+    $eco = array();
+
+    $eco['prod'] = [];                 // Resource production per game object type
+    $eco['prod_with_bonus'] = [];      // Resource production per game object type (including bonus)
+    $eco['cons'] = [];                 // Resource consumption per game object type
+    $eco['cons_with_bonus'] = [];      // Resource consumption per game object type (including bonus)
+    $eco['net_prod'] = [];             // Total production of the resource
+    $eco['net_cons'] = [];             // Total consumption of the resource
+    $eco['balance'] = [];              // Balance of the resource (production - consumption)
 
     foreach ($prodPriority as $i=>$rc) {
 
@@ -266,17 +363,17 @@ function ProdResources (array $uni, array $user, array &$planet) : void {
         // Get production bonus
         $prod_bonus = [];
         ProdBonus ($uni, $user, $planet, $rc, $prod_bonus);
-        $net_prod[$rc] = 0;
+        $eco['net_prod'][$rc] = 0;
 
         foreach ($PlanetProd as $gid=>$rules) {
             if (isset($rules['prod'][$rc])) {
                 $res = $rules['prod'][$rc] ($uni, $user, $planet);
-                $prod[$gid] = $res;
+                $eco['prod'][$gid] = $res;
                 foreach ($prod_bonus as $n=>$factor) {
                     $res *= $factor;
                 }
-                $prod_with_bonus[$gid] = $res;
-                $net_prod[$rc] += $res;
+                $eco['prod_with_bonus'][$gid] = $res;
+                $eco['net_prod'][$rc] += ceil ($res);
             }
         }
 
@@ -285,60 +382,114 @@ function ProdResources (array $uni, array $user, array &$planet) : void {
         // Get consumption bonus
         $cons_bonus = [];
         ConsBonus ($uni, $user, $planet, $rc, $cons_bonus);
-        $net_cons[$rc] = 0;
+        $eco['net_cons'][$rc] = 0;
 
         foreach ($PlanetProd as $gid=>$rules) {
             if (isset($rules['cons'][$rc])) {
                 $res = $rules['cons'][$rc] ($uni, $user, $planet);
-                $cons[$gid] = $res;
+                $eco['cons'][$gid] = $res;
                 foreach ($cons_bonus as $n=>$factor) {
                     $res *= $factor;
                 }
-                $cons_with_bonus[$gid] = $res;
-                $net_cons[$rc] += $res;
+                $eco['cons_with_bonus'][$gid] = $res;
+                $eco['net_cons'][$rc] += ceil ($res);
             }
         }
 
-        $balance[$rc] = floor ($net_prod[$rc] - $net_cons[$rc]);
+        $eco['balance'][$rc] = floor ($eco['net_prod'][$rc] - $eco['net_cons'][$rc]);
 
         // *** POST-PROCESSING
         // Any special actions with the planet that affect resource production (Natural production, Production coefficient)
 
         switch ($rc) {
             case GID_RC_METAL:
-                $net_prod[$rc] += 20 * $uni['speed'];
-                break;
             case GID_RC_CRYSTAL:
-                $net_prod[$rc] += 10 * $uni['speed'];
+            case GID_RC_DEUTERIUM:
+                if (isset($naturalProduction[$rc])) {
+                    $eco['net_prod'][$rc] += $naturalProduction[$rc] * $uni['speed'];
+                }
                 break;
             case GID_RC_ENERGY:
                 $planet['factor'] = 1;
-                if ( $balance[$rc] < 0 ) $planet['factor'] = max (0, 1 - abs ($balance[$rc]) / $net_cons[$rc]);
+                if ( $eco['balance'][$rc] < 0 ) $planet['factor'] = max (0, 1 - abs ($eco['balance'][$rc]) / $eco['net_cons'][$rc]);
                 break;
         }
+
+        $eco['balance'][$rc] = floor ($eco['net_prod'][$rc] - $eco['net_cons'][$rc]);
     }
 
-    $planet['prod'] = $prod;
-    $planet['prod_with_bonus'] = $prod_with_bonus;
-    $planet['cons'] = $cons;
-    $planet['cons_with_bonus'] = $cons_with_bonus;
-    $planet['net_prod'] = $net_prod;
-    $planet['net_cons'] = $net_cons;
-    $planet['balance'] = $balance;
+    // Mods post-processing
+    ModsExecRefRef ('prod_post_process', $planet, $eco);
+
+    $planet['prod'] = $eco['prod'];
+    $planet['prod_with_bonus'] = $eco['prod_with_bonus'];
+    $planet['cons'] = $eco['cons'];
+    $planet['cons_with_bonus'] = $eco['cons_with_bonus'];
+    $planet['net_prod'] = $eco['net_prod'];
+    $planet['net_cons'] = $eco['net_cons'];
+    $planet['balance'] = $eco['balance'];
 }
 
-// Get the state of the planet (array) and update resource production from planet's lastpeek until $time_to. Limit storage capacity.
-// NOTE: The calculation excludes external events, such as the end of officers' actions, attack of another player, completion of building construction, etc.
+/**
+ * Resets the planet production fields to zero.
+ *
+ * @param array $planet The planet data to reset.
+ * @return void
+ */
+function SetDefaultProduction (array &$planet) : void {
+    global $prodPriority;
+
+    $planet['factor'] = 0;
+
+    $eco = array();
+
+    $eco['prod'] = [];
+    $eco['prod_with_bonus'] = [];
+    $eco['cons'] = [];
+    $eco['cons_with_bonus'] = [];
+    $eco['net_prod'] = [];
+    $eco['net_cons'] = [];
+    $eco['balance'] = [];
+
+    foreach ($prodPriority as $i=>$rc) {
+        $eco['net_prod'][$rc] = 0;
+        $eco['net_cons'][$rc] = 0;
+        $eco['balance'][$rc] = 0;
+    }
+
+    $planet['prod'] = $eco['prod'];
+    $planet['prod_with_bonus'] = $eco['prod_with_bonus'];
+    $planet['cons'] = $eco['cons'];
+    $planet['cons_with_bonus'] = $eco['cons_with_bonus'];
+    $planet['net_prod'] = $eco['net_prod'];
+    $planet['net_cons'] = $eco['net_cons'];
+    $planet['balance'] = $eco['balance'];
+}
+
+/**
+ * Updates the planet state and resource production from lastpeek up to the given time.
+ *
+ * Resource growth is limited by storage capacity. NOTE: the calculation excludes
+ * external events, such as the end of officers' actions, attacks by another player,
+ * or completion of building construction.
+ *
+ * @param int $planet_id Id of the planet to update.
+ * @param int $time_to The target timestamp.
+ * @return array|null The updated planet data, or null when the planet does not exist.
+ */
 function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
 {
     global $db_prefix, $GlobalUni;
+    global $storagemap;
+    global $resourcesWithNonZeroDerivative;
 
     $planet = LoadPlanetById ($planet_id);
     if ($planet == null) return null;
     if ( $planet['type'] != PTYP_PLANET ) {
-        $planet['mmax'] = $planet['kmax'] = $planet['dmax'] = 0;
-        $planet['factor'] = 0;
-        $planet['e'] = $planet['econs'] = $planet[GID_RC_ENERGY] = 0;
+        foreach ($storagemap as $rc=>$gid) {
+            $planet['max'.$rc] = 0;
+        }
+        SetDefaultProduction ($planet);
         return $planet;        // NOT a planet
     }
     $user = LoadUser ( $planet['owner_id'] );
@@ -351,37 +502,47 @@ function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
 
     // Update the state of the planet
 
-    $planet['mmax'] = store_capacity ( $planet[GID_B_METAL_STOR] );
-    $planet['kmax'] = store_capacity ( $planet[GID_B_CRYS_STOR] );
-    $planet['dmax'] = store_capacity ( $planet[GID_B_DEUT_STOR] );
+    foreach ($storagemap as $rc=>$gid) {
+        $planet['max'.$rc] = store_capacity ( $planet[$gid] );
+    }
 
     $time_from = $planet['lastpeek'];
     $diff = $time_to - $time_from;
 
-    $hourly = $planet['balance'][GID_RC_METAL];
-    $planet[GID_RC_METAL] = min ($planet[GID_RC_METAL] + ($hourly * $diff) / 3600, $planet['mmax']);
+    // Calculate resource growth (only for resources that change over time)
+    $update_query = "";
+    foreach ($resourcesWithNonZeroDerivative as $i=>$rc) {
 
-    $hourly = $planet['balance'][GID_RC_CRYSTAL];
-    $planet[GID_RC_CRYSTAL] = min ($planet[GID_RC_CRYSTAL] + ($hourly * $diff) / 3600, $planet['kmax']);
-
-    $hourly = $planet['balance'][GID_RC_DEUTERIUM];
-    $planet[GID_RC_DEUTERIUM] = min ($planet[GID_RC_DEUTERIUM] + ($hourly * $diff) / 3600, $planet['dmax']);
+        $hourly = $planet['balance'][$rc];
+        $cap = isset($planet['max'.$rc]) ? $planet['max'.$rc] : PHP_INT_MAX;
+        if ($planet[$rc] < $cap) {
+            // Resource growth is capped by storage (top) and never negative
+            // (bottom). A planet with a negative balance (e.g. deuterium
+            // consumed by a fusion reactor) must not fall below zero, or the
+            // stored resources become negative (issue #117).
+            $planet[$rc] = max (0, min ($planet[$rc] + ($hourly * $diff) / 3600, $cap));
+            $update_query .= "`".$rc."` = ".$planet[$rc].", ";
+        }
+    }
 
     $planet_id = $planet['planet_id'];
-    $query = "UPDATE ".$db_prefix."planets SET `".GID_RC_METAL."` = ".$planet[GID_RC_METAL].", `".GID_RC_CRYSTAL."` = ".$planet[GID_RC_CRYSTAL].", `".GID_RC_DEUTERIUM."` = ".$planet[GID_RC_DEUTERIUM].", lastpeek = ".$time_to." WHERE planet_id = $planet_id";
+    $query = "UPDATE ".$db_prefix."planets SET $update_query lastpeek = ".$time_to." WHERE planet_id = $planet_id";
     dbquery ($query);
     $planet['lastpeek'] = $time_to;
 
-    // Deprecated
-
-    $planet[GID_RC_ENERGY] = $planet['net_prod'][GID_RC_ENERGY];
-    $planet['e'] = $planet['balance'][GID_RC_ENERGY];
-    $planet['econs'] = $planet['net_cons'][GID_RC_ENERGY];
+    // TODO: Still needed for IsEnoughResources method :(
+    // Set energy as a virtual resource, obtained only when calling GetUpdatePlanet. Loading a raw planet using the LoadPlanetById method will not provide energy.
+    $planet[GID_RC_ENERGY] = $planet['balance'][GID_RC_ENERGY];
 
     return $planet;
 }
 
-// The cost of the planet in points.
+/**
+ * Calculates the point cost of a planet, including its buildings, fleet and defense.
+ *
+ * @param array $planet The planet data.
+ * @return array Point totals keyed by points, fpoints, fleet_pts and defense_pts.
+ */
 function PlanetPrice (array $planet) : array
 {
     $pp = array ();
@@ -431,7 +592,12 @@ function PlanetPrice (array $planet) : array
     return $pp;
 }
 
-// Fleet cost
+/**
+ * Calculates the point cost of a fleet.
+ *
+ * @param array $fleet_obj The fleet data keyed by ship id.
+ * @return array Point totals keyed by points and fpoints.
+ */
 function FleetPrice ( array $fleet_obj ) : array
 {
     global $fleetmap;

@@ -2,7 +2,10 @@
 
 // よくある線。ほとんどのページにある。
 
-$LOCA["jp"]["PAGE_TITLE"] = "ユニバース #1 OGame";
+$LOCA["jp"]["OGAME_INT"] = "OGame";
+$LOCA["jp"]["OGAME_LOC"] = "OGame";
+
+$LOCA["jp"]["PAGE_TITLE"] = "ユニバース #1 #2";
 
 $LOCA["jp"]["NAME_".GID_RC_METAL] = "メタル";
 $LOCA["jp"]["NAME_".GID_RC_CRYSTAL] = "クリスタル";

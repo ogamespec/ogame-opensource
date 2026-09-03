@@ -2,8 +2,8 @@
 
 // Opzioni
 
-$LOCA["it"]["OPTIONS_USER"] = "User Data";
-$LOCA["it"]["OPTIONS_USER_NAME"] = "Username";
+$LOCA["it"]["OPTIONS_USER"] = "Dati utente";
+$LOCA["it"]["OPTIONS_USER_NAME"] = "Nome utente";
 $LOCA["it"]["OPTIONS_USER_PASS"] = "Password";
 $LOCA["it"]["OPTIONS_USER_OLDPASS"] = "Vecchia Password";
 $LOCA["it"]["OPTIONS_USER_NEWPASS1"] = "Nuova Password (min. 8 caratteri)";
@@ -13,7 +13,7 @@ $LOCA["it"]["OPTIONS_USER_EMAIL_TIP"] = "Puoi cambiare indirizzo email in qualsi
 $LOCA["it"]["OPTIONS_USER_PEMAIL"] = "Indirizzo Email permanente";
 
 $LOCA["it"]["OPTIONS_GENERAL"] = "Opzioni Generali";
-$LOCA["it"]["OPTIONS_GENERAL_LANG"] = "Language:";
+$LOCA["it"]["OPTIONS_GENERAL_LANG"] = "Lingua:";
 $LOCA["it"]["OPTIONS_GENERAL_ORDER"] = "Ordina pianeti per:";
 $LOCA["it"]["OPTIONS_GENERAL_ORDER1"] = "Data di colonizzazione";
 $LOCA["it"]["OPTIONS_GENERAL_ORDER2"] = "Coordinate";
@@ -22,7 +22,7 @@ $LOCA["it"]["OPTIONS_GENERAL_ORDERBY"] = "Sequenziale:";
 $LOCA["it"]["OPTIONS_GENERAL_ORDERBY1"] = "crescente";
 $LOCA["it"]["OPTIONS_GENERAL_ORDERBY2"] = "decrescente";
 $LOCA["it"]["OPTIONS_GENERAL_SKINPATH"] = "Percorso skin (es. C:/XXX/skin/)";
-$LOCA["it"]["OPTIONS_GENERAL_DOWNLOAD"] = "download";
+$LOCA["it"]["OPTIONS_GENERAL_DOWNLOAD"] = "scarica";
 $LOCA["it"]["OPTIONS_GENERAL_SHOWSKIN"] = "Mostra Skin";
 $LOCA["it"]["OPTIONS_GENERAL_DEACTIP"] = "Disabilita controllo IP";
 $LOCA["it"]["OPTIONS_GENERAL_DEACTIP_TIP"] = "Per disabilitare il controllo IP occorre autorizzazione di un Game Operator!";
@@ -30,7 +30,7 @@ $LOCA["it"]["OPTIONS_GENERAL_DEACTIP_TIP"] = "Per disabilitare il controllo IP o
 $LOCA["it"]["OPTIONS_GALAXY"] = "Opzioni Galassia";
 $LOCA["it"]["OPTIONS_GALAXY_SPIES"] = "Numero sonde spia";
 $LOCA["it"]["OPTIONS_GALAXY_SPIES_TIP"] = "Numero di sonde spia da inviare quando si spia da galassia.";
-$LOCA["it"]["OPTIONS_GALAXY_TOOLTIPTIME"] = "Show tooltip for";
+$LOCA["it"]["OPTIONS_GALAXY_TOOLTIPTIME"] = "Mostra suggerimento per";
 $LOCA["it"]["OPTIONS_GALAXY_MAXMSG"] = "Messaggi massimi di flotta";
 $LOCA["it"]["OPTIONS_GALAXY_KEYS"] = "Azioni scorciatoie";
 $LOCA["it"]["OPTIONS_GALAXY_SHOWKEYS"] = "Conferma";
@@ -51,16 +51,16 @@ $LOCA["it"]["OPTIONS_ACCOUNT_DEL_TIP"] = "Spuntando questa casella il tuo accoun
 
 $LOCA["it"]["OPTIONS_APPLY"] = "salva cambiamenti";
 
-$LOCA["it"]["OPTIONS_MSG_SKIN"] = "Notice: This is an external skin path. Your session-ID could be readout by the external server!";
+$LOCA["it"]["OPTIONS_MSG_SKIN"] = "Attenzione: questo è un percorso skin esterno. Il tuo ID di sessione potrebbe essere letto dal server esterno!";
 $LOCA["it"]["OPTIONS_MSG_UNSAFE"] = "E\' stata inserita una password insicura, riprovare";
-$LOCA["it"]["OPTIONS_MSG_SIMPLE"] = "You want to use an insecure password, please try a saver one.";
+$LOCA["it"]["OPTIONS_MSG_SIMPLE"] = "Vuoi usare una password non sicura, prova a usarne una più sicura.";
 $LOCA["it"]["OPTIONS_MSG_NAME"] = "Username cambiato con successo. Questo &egrave; possibile solo una volta a settimana. Effettua nuovamente il login.";
 $LOCA["it"]["OPTIONS_MSG_EMAIL"] = "Email cambiata con successo. Questo indirizzo diventer&agrave; permanente fra 7 giorni.";
 $LOCA["it"]["OPTIONS_MSG_PASS"] = "Password cambiata con successo";
 $LOCA["it"]["OPTIONS_MSG_VMENABLED"] = "Modalit&agrave; vacanza attiva almeno fino al:";
 $LOCA["it"]["OPTIONS_MSG_VMDISABLED"] = "Bentornato dalla vacanza #1. Non dimenticare di fare ripartire la produzione dei tuoi pianeti.";
 $LOCA["it"]["OPTIONS_MSG_DEL"] = "Hai richiesto la cancellazione account. Il tuo account sar&agrave; cancellato il:";
-$LOCA["it"]["OPTIONS_MSG_DEACTIP"] = "You have changed the setting for the IP Check. Please log in again.";
+$LOCA["it"]["OPTIONS_MSG_DEACTIP"] = "Hai modificato l'impostazione del controllo IP. Effettua nuovamente il login.";
 $LOCA["it"]["OPTIONS_MSG_VALIDATE"] = "Hai richiesto la convalida account. Controlla il tuo indirizzo email e clicca sul link che ti &egrave; stato inviato.";
 
 $LOCA["it"]["OPTIONS_ERR_NEEDPASS"] = "Devi inserire la password per poter cambiare indirizzo email.";
@@ -84,10 +84,13 @@ $LOCA["it"]["OPTIONS_ACTIVATE_SUBMIT"] = "Link di attivazione dell'ordine";
 
 $LOCA["it"]["OPTIONS_FEED"] = "Newsfeed";
 $LOCA["it"]["OPTIONS_FEED_ACTIVATE"] = "Attivare";
-$LOCA["it"]["OPTIONS_FEED_ACTIVATED"] = "Activated";
-$LOCA["it"]["OPTIONS_FEED_FORMAT"] = "Format";
-$LOCA["it"]["OPTIONS_FEED_LINK"] = "Link to Feed";
-$LOCA["it"]["OPTIONS_FEED_SHOW"] = "show";
-$LOCA["it"]["OPTIONS_FEED_PROHIBITED"] = "Feed is prohibited by Universe settings!";
+$LOCA["it"]["OPTIONS_FEED_ACTIVATED"] = "Attivato";
+$LOCA["it"]["OPTIONS_FEED_FORMAT"] = "Formato";
+$LOCA["it"]["OPTIONS_FEED_LINK"] = "Link al feed";
+$LOCA["it"]["OPTIONS_FEED_SHOW"] = "mostra";
+$LOCA["it"]["OPTIONS_FEED_PROHIBITED"] = "Il feed è proibito dalle impostazioni dell'universo!";
+
+$LOCA["it"]["OPTIONS_OPER"] = "Impostazioni operatore";
+$LOCA["it"]["OPTIONS_OPER_HIDE_EMAIL"] = "Nascondi l'email nella pagina dei messaggi ai giocatori";
 
 ?>

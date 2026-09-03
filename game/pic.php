@@ -3,7 +3,10 @@
 header('Location: '.$_REQUEST['url']);
 die ();
 
-// Script to display pictures and scan them for malware.
+/*
+ * Dead code: the old picture-serving implementation.
+ * Kept for reference — the current behavior is a plain redirect (above).
+ * Previously this script displayed pictures and scanned them for malware.
 
 if ( !key_exists ('url', $_GET)) die ();
 
@@ -26,4 +29,4 @@ else
     header ('Content-type: text/html');
     echo "<font color=red><b>Графика недоступна</b></font>";
 }
-?>
+*/

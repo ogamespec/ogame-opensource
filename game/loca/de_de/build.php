@@ -53,7 +53,8 @@ $LOCA["de"]["BUILD_ERROR_NO_SUCH_BUILDING"] = "Sie haben keine Gebäude dieses T
 $LOCA["de"]["BUILD_ERROR_RESEARCH_ALREADY"] = "Die Forschung ist bereits im Gange!";
 $LOCA["de"]["BUILD_ERROR_RESEARCH_LAB_BUILDING"] = "Das Forschungslabor wird gerade aufgerüstet!";
 $LOCA["de"]["BUILD_ERROR_RESEARCH_LAB_BUILDING"] = "Das Forschungslabor wird gerade aufgerüstet!";
-$LOCA["de"]["BUILD_ERROR_RESEARCH_VACATION"] = "Forschung ist im Urlaubsmodus (RO) nicht möglich.";
+$LOCA["de"]["BUILD_ERROR_RESEARCH_VACATION"] = "Forschung ist im Urlaubsmodus (VM) nicht möglich.";
+$LOCA["de"]["BUILD_ERROR_MAX_LEVEL"] = "Maximaler Füllstand erreicht.";
 
 $LOCA["de"]["BUILD_ERROR_SHIPYARD_BUSY"] = "Es können keine Schiffe oder Verteidigungsanlagen gebaut werden, während die Werft oder die Nanitenfabrik aufgerüstet wird.";
 $LOCA["de"]["BUILD_ERROR_VACATION"] = "Urlaubsmodus Minimum auf #1";

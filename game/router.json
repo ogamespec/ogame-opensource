@@ -3,7 +3,7 @@
 		"path": "pages_admin/admin.php",
 		"admin_update_queue": false,
 		"loca": [ "menu", "fleetorder", "admin", "install" ],
-		"header": false
+		"bare": true
 	},
 	"ainfo": {
 		"path": "pages/ainfo.php",
@@ -14,11 +14,13 @@
 	},
 	"allianzdepot": {
 		"path": "pages/allianzdepot.php",
-		"loca": [ "menu" ]
+		"loca": [ "menu" ],
+		"mvc": true
 	},
 	"allianzen": {
 		"path": "pages/allianzen.php",
-		"loca": [ "menu", "ally" ]
+		"loca": [ "menu", "ally" ],
+		"mvc": true
 	},
 	"b_building": {
 		"path": "pages/b_building.php",
@@ -34,59 +36,72 @@
 	},
 	"bewerben": {
 		"path": "pages/bewerben.php",
-		"loca": [ "menu", "ally" ]
+		"loca": [ "menu", "ally" ],
+		"mvc": true
 	},
 	"bewerbungen": {
 		"path": "pages/bewerbungen.php",
-		"loca": [ "menu", "ally" ]
+		"loca": [ "menu", "ally" ],
+		"mvc": true
 	},
 	"buddy": {
 		"path": "pages/buddy.php",
-		"loca": [ "menu", "buddy" ]
+		"loca": [ "menu", "buddy" ],
+		"mvc": true
 	},
 	"buildings": {
 		"path": "pages/buildings.php",
-		"loca": [ "menu", "techshort", "build", "premium" ]
+		"loca": [ "menu", "techshort", "build", "premium" ],
+		"mvc": true
 	},
 	"changelog": {
 		"path": "pages/changelog.php",
-		"loca": [ "menu", "changelog" ]
+		"loca": [ "menu", "changelog" ],
+		"mvc": true
 	},
 	"fleet_templates": {
 		"path": "pages/fleet_templates.php",
-		"loca": [ "menu", "fleet" ]
+		"loca": [ "menu", "fleet" ],
+		"mvc": true
 	},
 	"flotten1": {
 		"path": "pages/flotten1.php",
-		"loca": [ "menu", "fleetorder", "fleet" ]
+		"loca": [ "menu", "fleetorder", "fleet" ],
+		"mvc": true
 	},
 	"flotten2": {
 		"path": "pages/flotten2.php",
-		"loca": [ "menu", "fleetorder", "fleet" ]
+		"loca": [ "menu", "fleetorder", "fleet" ],
+		"mvc": true
 	},
 	"flotten3": {
 		"path": "pages/flotten3.php",
-		"loca": [ "menu", "fleetorder", "fleet" ]
+		"loca": [ "menu", "fleetorder", "fleet" ],
+		"mvc": true
 	},
 	"flottenversand": {
 		"path": "pages/flottenversand.php",
 		"loca": [ "menu", "fleetorder", "fleet" ],
 		"redirect_page": "flotten1",
-		"redirect_sec": 1
+		"redirect_sec": 1,
+		"mvc": true
 	},
 	"galaxy": {
 		"path": "pages/galaxy.php",
 		"loca": [ "menu", "galaxy", "espionage" ],
-		"header": false
+		"header": false,
+		"mvc": true
 	},
 	"imperium": {
 		"path": "pages/imperium.php",
 		"loca": [ "menu", "empire" ],
-		"header": false
+		"header": false,
+		"mvc": true
 	},
 	"infos": {
 		"path": "pages/infos.php",
-		"loca": [ "menu", "techlong", "jumpgate", "infos" ]
+		"loca": [ "menu", "techlong", "jumpgate", "infos" ],
+		"mvc": true
 	},
 	"logout": {
 		"path": "pages/logout.php",
@@ -97,31 +112,37 @@
 	},
 	"messages": {
 		"path": "pages/messages.php",
-		"loca": [ "menu", "messages" ]
+		"loca": [ "menu", "messages" ],
+		"mvc": true
 	},
 	"micropayment": {
 		"path": "pages/micropayment.php",
-		"loca": [ "menu", "premium" ]
+		"loca": [ "menu", "premium" ],
+		"mvc": true
 	},
 	"notizen": {
 		"path": "pages/notizen.php",
 		"loca": [ "notes" ],
 		"header": false,
-		"menu": false
+		"menu": false,
+		"mvc": true
 	},
 	"options": {
 		"path": "pages/options.php",
-		"loca": [ "menu", "options" ]
+		"loca": [ "menu", "options" ],
+		"mvc": true
 	},
 	"overview": {
 		"path": "pages/overview.php",
 		"admin_update_queue": false,
 		"update_activity": false,
-		"loca": [ "menu", "fleetorder", "overview", "events" ]
+		"loca": [ "menu", "fleetorder", "overview", "events", "techshort" ],
+		"mvc": true
 	},
 	"payment": {
 		"path": "pages/payment.php",
-		"loca": [ "menu", "premium" ]
+		"loca": [ "menu", "premium" ],
+		"mvc": true
 	},
 	"phalanx": {
 		"path": "pages/phalanx.php",
@@ -137,7 +158,8 @@
 	},
 	"renameplanet": {
 		"path": "pages/renameplanet.php",
-		"loca": [ "menu", "renameplanet" ]
+		"loca": [ "menu", "renameplanet" ],
+		"mvc": true
 	},
 	"resources": {
 		"path": "pages/resources.php",
@@ -146,30 +168,37 @@
 	},
 	"sprungtor": {
 		"path": "pages/sprungtor.php",
-		"loca": [ "menu", "jumpgate" ]
+		"loca": [ "menu", "jumpgate" ],
+		"mvc": true
 	},
 	"statistics": {
 		"path": "pages/statistics.php",
-		"loca": [ "menu", "statistics" ]
+		"loca": [ "menu", "statistics" ],
+		"mvc": true
 	},
 	"suche": {
 		"path": "pages/suche.php",
-		"loca": [ "menu", "search" ]
+		"loca": [ "menu", "search" ],
+		"mvc": true
 	},
 	"techtree": {
 		"path": "pages/techtree.php",
-		"loca": [ "menu", "techtree" ]
+		"loca": [ "menu", "techtree" ],
+		"mvc": true
 	},
 	"techtreedetails": {
 		"path": "pages/techtreedetails.php",
-		"loca": [ "menu", "techtree" ]
+		"loca": [ "menu", "techtree" ],
+		"mvc": true
 	},
 	"trader": {
 		"path": "pages/trader.php",
-		"loca": [ "menu", "trader" ]
+		"loca": [ "menu", "trader" ],
+		"mvc": true
 	},
 	"writemessages": {
 		"path": "pages/writemessages.php",
-		"loca": [ "menu", "messages" ]
+		"loca": [ "menu", "messages" ],
+		"mvc": true
 	}
 }

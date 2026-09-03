@@ -4,6 +4,7 @@
 /** @var array $GlobalUni */
 /** @var array $aktplanet */
 /** @var array $transportableResources */
+/** @var array $fleetmap */
 
 // Fast dispatch of fleets from the Galaxy via AJAX.
 
@@ -75,10 +76,8 @@ if ( $GlobalUser['vacation'] ) AjaxSendError (605);    // user in vacation mode
 // Check for available slots
 $result = EnumOwnFleetQueue ( $GlobalUser['player_id'] );
 $nowfleet = dbrows ($result);
-$maxfleet = $GlobalUser[GID_R_COMPUTER] + 1;
-
-$prem = PremiumStatus ($GlobalUser);
-if ( $prem['admiral'] ) $maxfleet += 2;
+$maxfleet = $maxfleet_no_bonus = 0;
+GetMaxFleet ($GlobalUser, $aktplanet, $maxfleet, $maxfleet_no_bonus);
 
 if ( $nowfleet >= $maxfleet ) AjaxSendError (612);
 
@@ -90,15 +89,11 @@ if ( $target == NULL )
     else AjaxSendError ();    // no debris field
 }
 
-$target_user = LoadUser ( $target['owner_id'] );
+$target_user = LoadUser ( $target['owner_id'] ) ?? array ();
 
 $probes = $aktplanet[GID_F_PROBE];
 $recyclers = $aktplanet[GID_F_RECYCLER];
 $missiles = $aktplanet[GID_D_IPM];
-
-if ( ( 
-( $GlobalUser['ally_id'] == $target_user['ally_id'] && $GlobalUser['ally_id'] > 0 )   || 
- IsBuddy ( $GlobalUser['player_id'],  $target_user['player_id']) ) ) $BlockAttack = 0;
 
 /* ************ ESPIONAGE ************  */
 
@@ -107,8 +102,8 @@ if ( $order == FTYP_SPY )
     $amount = min ($aktplanet[GID_F_PROBE], $shipcount);
 
     if ( $target['owner_id'] == $GlobalUser['player_id'] ) AjaxSendError ();    // Own planet
-    if ( $GlobalUser['noattack'] || $BlockAttack ) AjaxSendError ();    // Attack ban
-    if ( $target_user['admin'] > 0 && $target_user['player_id'] != USER_SPACE ) AjaxSendError ();    // the administration can't be scanned (except space)
+    if ( $GlobalUser['noattack'] ) AjaxSendError ();    // Attack ban
+    if ( $target_user['admin'] > USER_TYPE_PLAYER && $target_user['player_id'] != USER_SPACE ) AjaxSendError ();    // the administration can't be scanned (except space)
     if ( IsPlayerNewbie ($target_user['player_id']) ) AjaxSendError (603);    // newbie protection
     if ( IsPlayerStrong ($target_user['player_id']) ) AjaxSendError (604);    // strong protection
     if ( $target_user['vacation'] ) AjaxSendError (605);    // user in vacation mode
@@ -149,9 +144,9 @@ if ( $order == FTYP_RECYCLE )
 
 // Calculate distance, flight time, and deuterium costs.
 $dist = FlightDistance ( $aktplanet['g'], $aktplanet['s'], $aktplanet['p'], $galaxy, $system, $planet );
-$slowest_speed = FlightSpeed ( $fleet, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE] );
+$slowest_speed = FlightSpeed ( $fleet, $GlobalUser, $aktplanet );
 $flighttime = FlightTime ( $dist, $slowest_speed, $speed, $unispeed );
-$arr = FlightCons ( $fleet, $dist, $flighttime, $GlobalUser[GID_R_COMBUST_DRIVE], $GlobalUser[GID_R_IMPULSE_DRIVE], $GlobalUser[GID_R_HYPER_DRIVE], $unispeed );
+$arr = FlightCons ( $fleet, $dist, $flighttime, $GlobalUser, $aktplanet, $unispeed );
 $cons = $arr['fleet'] + $arr['probes'];
 
 if ( $aktplanet[GID_RC_DEUTERIUM] < $cons ) AjaxSendError (613);        // not enough deut to fly.
@@ -160,7 +155,7 @@ if ( $cargo < $cons ) AjaxSendError (615);        // there's no room in the carg
 // Fleet lock
 $fleetlock = "temp/fleetlock_" . $aktplanet['planet_id'];
 if ( file_exists ($fleetlock) ) {
-    $fileCreationTime = filectime($filename);
+    $fileCreationTime = filectime($fleetlock);
     if ((time() - $fileCreationTime) < 3) {
         AjaxSendError ();
     } else {
@@ -168,14 +163,14 @@ if ( file_exists ($fleetlock) ) {
     }
 }
 $f = fopen ( $fleetlock, 'w' );
-fclose ($f);
+if ( $f !== false ) fclose ($f);
 
 // Send in the fleet.
 $resources = array ();
 foreach ($transportableResources as $i=>$rc) {
     $resources[$rc] = 0;
 }
-$fleet_id = DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, $resources, $cons, time(), 0 );
+$fleet_id = DispatchFleet ( $fleet, $aktplanet, $target, $order, $flighttime, $resources, (int)$cons, time(), 0 );
 if ($fleet_id == 0) {
     unlink ( $fleetlock );
     AjaxSendError (611);    // no ships to send

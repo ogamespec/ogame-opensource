@@ -2,16 +2,16 @@
 
 // Pillar of Shame.
 
-$LOCA["es"]["PRANGER_TITLE"] = "OGame Pillory Universe #1";
-$LOCA["es"]["PRANGER_INFO"] = "Here is a list of players who have been banned, until when and for what reason. 
-<br />Blocking by the Admin Council and the system is NOT negotiable. 
-<br />Attention! Your message will be processed faster with an automatic subject line.";
-$LOCA["es"]["PRANGER_WHEN"] = "Ban Date";
-$LOCA["es"]["PRANGER_OPER"] = "Admin Name";
-$LOCA["es"]["PRANGER_USER"] = "Player Name";
-$LOCA["es"]["PRANGER_UNTIL"] = "Blocked Until";
-$LOCA["es"]["PRANGER_REASON"] = "Reason";
-$LOCA["es"]["PRANGER_PREV"] = "Previous #1";
-$LOCA["es"]["PRANGER_NEXT"] = "Next #1";
+$LOCA["es"]["PRANGER_TITLE"] = "Picota de OGame Universo #1";
+$LOCA["es"]["PRANGER_INFO"] = "Aquí tienes una lista de jugadores que han sido baneados, hasta cuándo y por qué motivo. 
+<br />El bloqueo por parte del Consejo de Administración y del sistema NO es negociable. 
+<br />¡Atención! Tu mensaje será procesado más rápido con una línea de asunto automática.";
+$LOCA["es"]["PRANGER_WHEN"] = "Fecha de expulsión";
+$LOCA["es"]["PRANGER_OPER"] = "Nombre del administrador";
+$LOCA["es"]["PRANGER_USER"] = "Nombre del jugador";
+$LOCA["es"]["PRANGER_UNTIL"] = "Bloqueado hasta";
+$LOCA["es"]["PRANGER_REASON"] = "Motivo";
+$LOCA["es"]["PRANGER_PREV"] = "Anterior #1";
+$LOCA["es"]["PRANGER_NEXT"] = "Siguiente #1";
 
 ?>

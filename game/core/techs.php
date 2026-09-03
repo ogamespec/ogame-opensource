@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @file techs.php
+ * @brief Technology definitions and research.
+ * @details Defines the technology tree, research costs, requirements and the effects of each technology level.
+ */
 // This module is a unification of what was previously scattered throughout all parts of the game (id.php, unit.php, prod.php, techtree)
 // Here you will find various definitions of game object properties that can be changed by modifications.
 
@@ -79,31 +83,60 @@ const GID_RC_DM = 704;          // Dark Matter
 
 const GID_MAX = 0xffff;         // Game object ID value must not be > this value (restriction) 
 
+/**
+ * Checks whether the given object ID is a building.
+ *
+ * @param int $gid Game object ID.
+ * @return bool True if the ID is a building.
+ */
 function IsBuilding (int $gid) : bool
 {
     global $buildmap;
     return in_array($gid, $buildmap, true);
 }
 
+/**
+ * Checks whether the given object ID is a research (technology).
+ *
+ * @param int $gid Game object ID.
+ * @return bool True if the ID is a research.
+ */
 function IsResearch (int $gid) : bool
 {
     global $resmap;
     return in_array($gid, $resmap, true);
 }
 
+/**
+ * Checks whether the given object ID is a fleet ship.
+ *
+ * @param int $gid Game object ID.
+ * @return bool True if the ID is a fleet ship.
+ */
 function IsFleet (int $gid) : bool
 {
     global $fleetmap;
     return in_array($gid, $fleetmap, true);
 }
 
+/**
+ * Checks whether the given object ID is a defense structure.
+ *
+ * @param int $gid Game object ID.
+ * @return bool True if the ID is a defense structure.
+ */
 function IsDefense (int $gid) : bool
 {
     global $defmap;
     return in_array($gid, $defmap, true);
 }
 
-// Defense, but no missiles
+/**
+ * Checks whether the given object ID is a defense structure, but not a missile.
+ *
+ * @param int $gid Game object ID.
+ * @return bool True if the ID is a non-missile defense structure.
+ */
 function IsDefenseNoRak (int $gid) : bool
 {
     global $defmap, $rakmap;
@@ -111,6 +144,12 @@ function IsDefenseNoRak (int $gid) : bool
     return in_array($gid, $defmap_norak, true);
 }
 
+/**
+ * Checks whether the given object ID is a resource.
+ *
+ * @param int $gid Game object ID.
+ * @return bool True if the ID is a resource.
+ */
 function IsResource (int $gid) : bool
 {
     global $resourcemap;
@@ -119,22 +158,68 @@ function IsResource (int $gid) : bool
 
 // Arrays of objects that are very commonly used elsewhere.
 
+/**
+ * IDs of all buildings.
+ */
 $buildmap = array ( GID_B_METAL_MINE, GID_B_CRYS_MINE, GID_B_DEUT_SYNTH, GID_B_SOLAR, GID_B_FUSION, GID_B_ROBOTS, GID_B_NANITES, GID_B_SHIPYARD, GID_B_METAL_STOR, GID_B_CRYS_STOR, GID_B_DEUT_STOR, GID_B_RES_LAB, GID_B_TERRAFORMER, GID_B_ALLY_DEPOT, GID_B_LUNAR_BASE, GID_B_PHALANX, GID_B_JUMP_GATE, GID_B_MISS_SILO );
+/**
+ * IDs of all research (technologies).
+ */
 $resmap = array ( GID_R_ESPIONAGE, GID_R_COMPUTER, GID_R_WEAPON, GID_R_SHIELD, GID_R_ARMOUR, GID_R_ENERGY, GID_R_HYPERSPACE, GID_R_COMBUST_DRIVE, GID_R_IMPULSE_DRIVE, GID_R_HYPER_DRIVE, GID_R_LASER_TECH, GID_R_ION_TECH, GID_R_PLASMA_TECH, GID_R_IGN, GID_R_EXPEDITION, GID_R_GRAVITON );
+/**
+ * IDs of all fleet ships.
+ */
 $fleetmap = array ( GID_F_SC, GID_F_LC, GID_F_LF, GID_F_HF, GID_F_CRUISER, GID_F_BATTLESHIP, GID_F_COLON, GID_F_RECYCLER, GID_F_PROBE, GID_F_BOMBER, GID_F_SAT, GID_F_DESTRO, GID_F_DEATHSTAR, GID_F_BATTLECRUISER );
+/**
+ * IDs of all defense structures (including missiles).
+ */
 $defmap = array ( GID_D_RL, GID_D_LL, GID_D_HL, GID_D_GAUSS, GID_D_ION, GID_D_PLASMA, GID_D_SDOME, GID_D_LDOME, GID_D_ABM, GID_D_IPM );
+/**
+ * IDs of all missile defense objects.
+ */
 $rakmap = array ( GID_D_ABM, GID_D_IPM );
+/**
+ * IDs of all resources.
+ */
 $resourcemap = array ( GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM, GID_RC_ENERGY, GID_RC_DM );
+/**
+ * Maps each resource ID to the ID of its storage building.
+ */
+$storagemap = array (GID_RC_METAL=>GID_B_METAL_STOR, GID_RC_CRYSTAL=>GID_B_CRYS_STOR, GID_RC_DEUTERIUM=>GID_B_DEUT_STOR);
 // Scoring resources (usually metal, crystal, deuterium)
+/**
+ * IDs of the resources counted in the player score.
+ */
 $scoreResources = array(GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
 // Transported resources (usually energy and DM are not transported)
+/**
+ * IDs of the resources that can be transported by ships.
+ */
 $transportableResources = array(GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
 // Resources that convert into debris fields
+/**
+ * IDs of the resources that convert into debris fields.
+ */
 $debrisResources = array (GID_RC_METAL, GID_RC_CRYSTAL);
+// Resources that are constantly increasing (have a first derivative with respect to time)
+/**
+ * IDs of the resources that are constantly produced (non-zero time derivative).
+ */
+$resourcesWithNonZeroDerivative = array (GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
+/**
+ * Resource IDs in the order of production priority.
+ */
 $prodPriority = array (GID_RC_ENERGY, GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM);
+/**
+ * Natural base production amount per resource.
+ */
+$naturalProduction = array (GID_RC_METAL => 20, GID_RC_CRYSTAL => 10);
 
 // Level 1 cost.
 // Factor in the exponential growth of technology. OGame is a game of exponential.
+/**
+ * Level 1 costs and the growth factor for each game object.
+ */
 $initial = array (
     // Buildings
     GID_B_METAL_MINE => array (GID_RC_METAL=>60, GID_RC_CRYSTAL=>15, 'factor'=>1.5),
@@ -206,6 +291,9 @@ $initial = array (
 
 
 // Fleet and Defense Parameters.
+/**
+ * Combat and movement parameters (structure, shield, attack, cargo capacity, speed, consumption) of fleet and defense objects.
+ */
 $UnitParam = array (        // structure, shield, attack, cargo capacity, speed, consumption
     GID_F_SC => array ( 4000, 10, 5, 5000, 5000, 10 ),
     GID_F_LC => array ( 12000, 25, 5, 25000, 7500, 50 ),
@@ -236,6 +324,9 @@ $UnitParam = array (        // structure, shield, attack, cargo capacity, speed,
 );
 
 // Rapid-fire settings.
+/**
+ * Rapid-fire chances of each ship against other objects.
+ */
 $RapidFire = array (
     GID_F_SC => array ( GID_F_PROBE => 5, GID_F_SAT => 5 ),
     GID_F_LC => array ( GID_F_PROBE => 5, GID_F_SAT => 5 ),
@@ -265,6 +356,9 @@ $RapidFire = array (
 );
 
 // A list of what-what-it-requires objects.
+/**
+ * Requirements (object ID => required level) to build or research each object.
+ */
 $requirements = array (
 
     GID_B_METAL_MINE => array (),
@@ -329,6 +423,9 @@ $requirements = array (
 );
 
 // An array that defines which buildings can be built for the specified planet type.
+/**
+ * Buildings that can be built on each planet type.
+ */
 $CanBuildTab = array (
 
     PTYP_MOON => array ( GID_B_ROBOTS, GID_B_SHIPYARD, GID_B_METAL_STOR, GID_B_CRYS_STOR, GID_B_DEUT_STOR, GID_B_LUNAR_BASE, GID_B_PHALANX, GID_B_JUMP_GATE),
