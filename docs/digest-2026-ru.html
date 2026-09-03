@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>OGame 0.84 Open Source — Дайджест 2026 года</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* Палитра и арт классического скина «Evolution» (docs/assets/evolution). */
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; padding: 0;
+    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+    font-size: 13px; line-height: 1.5;
+    color: #e6ebfb;
+    background-color: #040e1e;
+    background-image: url("assets/evolution/img/background.jpg");
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: top right;
+  }
+  a { color: #8fc7ff; }
+  a:hover { color: #cfe6ff; }
+
+  #topbar {
+    background: rgba(10, 24, 46, 0.94);
+    border-bottom: 1px solid #415680;
+    padding: 10px 18px;
+    position: sticky; top: 0; z-index: 50;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+  }
+  #topbar .t { font-weight: bold; font-size: 15px; color: #fff; }
+  #topbar .t small { display: block; font-weight: normal; font-size: 11px; color: #9fb4d8; }
+  #topbar .langs { margin-left: auto; }
+  #topbar .langs a {
+    color: #e6ebfb; text-decoration: none; border: 1px solid #415680;
+    background: #1d2c47; padding: 2px 8px; border-radius: 3px;
+  }
+  #topbar .langs a:hover { background: #344566; }
+
+  #resstrip { text-align: right; padding: 4px 14px 0 0; }
+  #resstrip img { vertical-align: middle; margin: 0 2px; }
+
+  #wrap { max-width: 1180px; margin: 0 auto; padding: 16px; display: flex; gap: 18px; align-items: flex-start; }
+  #nav {
+    width: 250px; flex: 0 0 250px; position: sticky; top: 70px;
+    background: rgba(9, 20, 40, 0.92);
+    border: 1px solid #415680; border-radius: 4px; padding: 10px 0;
+    max-height: calc(100vh - 90px); overflow: auto;
+  }
+  #nav ul { list-style: none; margin: 0; padding: 0; }
+  #nav li { margin: 0; }
+  #nav a {
+    display: block; padding: 4px 12px; text-decoration: none;
+    color: #c8d6f0; border-left: 2px solid transparent;
+  }
+  #nav a:hover { background: #1a2a47; border-left-color: #8fc7ff; }
+  #nav .hdr { padding: 6px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #7d95bf; }
+
+  #content { flex: 1 1 auto; min-width: 0; }
+  section {
+    background: rgba(9, 20, 40, 0.88);
+    border: 1px solid #415680; border-radius: 4px;
+    margin-bottom: 14px; padding: 14px 18px;
+  }
+  h1, h2, h3 { color: #ffffff; }
+  h1 { font-size: 24px; margin: 0 0 2px 0; }
+  h2 { font-size: 17px; border-bottom: 1px solid #415680; padding-bottom: 5px; margin-top: 26px; }
+  h2:first-child { margin-top: 0; }
+  h3 { font-size: 14px; margin-bottom: 4px; }
+  h2 img, h3 img { vertical-align: -3px; margin-right: 5px; }
+  code, pre { font-family: Consolas, "Courier New", monospace; font-size: 12px; }
+  code { background: #12203a; padding: 0 3px; border-radius: 2px; color: #ffd98c; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0; }
+  th, td { border: 1px solid #415680; padding: 5px 8px; text-align: left; vertical-align: top; font-size: 12px; }
+  th { background: #1a2a47; color: #fff; }
+  tr:nth-child(even) td { background: rgba(26, 42, 71, 0.35); }
+  ul, ol { margin: 6px 0 6px 20px; padding: 0; }
+  li { margin: 3px 0; }
+  blockquote { margin: 8px 0; padding: 6px 12px; background: #12203a; border-left: 4px solid #7fc36a; }
+  .statbox { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+  .stat {
+    flex: 1 1 150px; min-width: 150px; text-align: center;
+    background: rgba(18, 32, 58, 0.92); border: 1px solid #415680; border-radius: 4px; padding: 10px 6px;
+  }
+  .stat b { display: block; font-size: 20px; color: #7fc36a; }
+  .stat span { font-size: 11px; color: #9fb4d8; }
+  .tag {
+    display: inline-block; background: #1a2a47; border: 1px solid #415680;
+    color: #8fc7ff; border-radius: 3px; font-size: 11px; padding: 0 5px; margin: 0 2px;
+  }
+  .tag a { color: #8fc7ff; text-decoration: none; }
+  .tag a:hover { color: #cfe6ff; text-decoration: underline; }
+  .month { color: #ffd98c; font-weight: bold; white-space: nowrap; }
+  .ok { color: #7fc36a; font-weight: bold; }
+  .lead { font-size: 14px; }
+  footer { text-align: center; color: #7d95bf; font-size: 11px; padding: 10px 0 30px; }
+  @media (max-width: 900px) {
+    #wrap { flex-direction: column; }
+    #nav { width: 100%; flex: none; position: static; max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div class="t">OGame 0.84 Open Source
+    <small>Дайджест 2026 года — что изменилось в коде</small>
+  </div>
+  <div class="langs">
+    <a href="digest-2026-en.html">English</a>
+    <a href="mod-manual-ru.html">Руководство мододела</a>
+    <a href="https://github.com/ogamespec/ogame-opensource">GitHub</a>
+  </div>
+</div>
+
+<div id="resstrip" title="Арт скина Evolution">
+  <img src="assets/evolution/images/metall.gif" alt="Металл"><img src="assets/evolution/images/kristall.gif" alt="Кристалл"><img src="assets/evolution/images/deuterium.gif" alt="Дейтерий"><img src="assets/evolution/images/energie.gif" alt="Энергия">
+</div>
+
+<div id="wrap">
+  <nav id="nav">
+    <ul>
+      <li class="hdr">Содержание</li>
+      <li><a href="#overview">Обзор</a></li>
+      <li><a href="#stats">Год в цифрах</a></li>
+      <li><a href="#timeline">Хронология</a></li>
+      <li><a href="#architecture">Архитектура движка</a></li>
+      <li><a href="#mods">Моды: подсистема и контент</a></li>
+      <li><a href="#fixes">Безопасность и исправления</a></li>
+      <li><a href="#testing">Тестирование</a></li>
+      <li><a href="#docs">Документация и качество</a></li>
+      <li><a href="#localization">Локализация</a></li>
+      <li><a href="#deployment">Развёртывание и PHP 8.x</a></li>
+      <li><a href="#team">Команда и ссылки</a></li>
+    </ul>
+  </nav>
+
+  <div id="content">
+
+    <section id="overview">
+      <h2><img src="assets/evolution/images/energie.gif" alt="">Обзор</h2>
+      <p class="lead">В 2026 году <a href="https://github.com/ogamespec/ogame-opensource">OGame 0.84 Open Source</a> —
+      возрождённый классический OGame v0.84 с оригинальным дизайном нулевых — прошёл через две интенсивные волны
+      разработки: <b>январь&ndash;февраль</b> и <b>август&ndash;сентябрь</b>. За это время в ветку master влито
+      <b>559 коммитов</b> из <b>82 смерженных pull request&rsquo;ов</b> (около +434&nbsp;тыс. / &minus;82&nbsp;тыс. строк
+      в ~1 448 файлах).</p>
+      <p>Главные итоги года:</p>
+      <ul>
+        <li>Настоящая <b>подсистема модов</b>: самодостаточные моды с хуками, админ-панель модов и четыре
+            мода в репозитории — <b>GalaxyTool</b>, <b>«Космический Шторм» (Space Storm)</b>,
+            <b>«Чудовища Бездны» (Deep Space Horror)</b> и минимальный пример <b>BogusMod</b>.</li>
+        <li>Глубокий <b>рефакторинг архитектуры</b>: модульное ядро, типизация методов, единый роутер страниц
+            и долгая миграция разделения контроллера страницы и представления (MVC).</li>
+        <li><b>Golden-тестирование страниц</b>: полные HTML-снимки всех страниц игры, рендер на in-memory
+            SQLite-движке, семь поддерживаемых языков и сравнение с сохранёнными снимками OldDesign.</li>
+        <li><b>Исправления безопасности и стабильности</b>: XSS в именах альянсов, краши после атак,
+            восстановление оригинального алгоритма ракетной атаки (IPM) и десятки игровых багов.</li>
+        <li>Полная <b>документация разработчика</b>: руководство мододела (HTML + wiki), Doxygen-документация
+            игрового ядра, код без ошибок PHPStan и тестовые наборы внутри самих модов.</li>
+      </ul>
+      <p>Все номера issue и pull request&rsquo;ов ниже ведут на репозиторий GitHub. Дайджест собран по истории
+      ветки master и текущему состоянию кода по состоянию на <b>3 сентября 2026 года</b>.</p>
+    </section>
+
+    <section id="stats">
+      <h2><img src="assets/evolution/images/metall.gif" alt="">Год в цифрах</h2>
+      <div class="statbox">
+        <div class="stat"><b>559</b><span>коммитов влито в master</span></div>
+        <div class="stat"><b>82</b><span>pull request&rsquo;а смержено</span></div>
+        <div class="stat"><b>1 448</b><span>файлов изменено</span></div>
+        <div class="stat"><b>+434k / −82k</b><span>строк добавлено / удалено</span></div>
+        <div class="stat"><b>4</b><span>мода в репозитории</span></div>
+        <div class="stat"><b>707</b><span>golden-снимков HTML</span></div>
+        <div class="stat"><b>7</b><span>языков под тестами</span></div>
+        <div class="stat"><b>2</b><span>волны разработки</span></div>
+      </div>
+      <p>Ритм активности года (коммиты в master по месяцам):</p>
+      <table>
+        <tr><th>Месяц</th><th>Коммитов</th><th>Что преобладало</th></tr>
+        <tr><td class="month">Январь</td><td>292</td><td>Модульность ядра, роутер, Space Storm, «Ресурс как игровой объект», Deep Space Horror, старт MVC-миграции</td></tr>
+        <tr><td class="month">Февраль</td><td>160</td><td>Первая волна Space Storm, GalaxyTool-мод, лимиты, фиксы крашей, MVC-миграция</td></tr>
+        <tr><td class="month">Март</td><td>6</td><td>Конец первой волны (последний MVC-мерж — 6 марта)</td></tr>
+        <tr><td class="month">Июнь</td><td>6</td><td>Страницы fleet_templates и changelog на MVC, написан план миграции</td></tr>
+        <tr><td class="month">Август</td><td>66</td><td>In-memory SQLite-бэкенд, golden-тесты, выравнивание MVC, Doxygen, фиксы XSS, зачистка PHPStan</td></tr>
+        <tr><td class="month">Сентябрь (1&ndash;3)</td><td>29</td><td>Golden-тесты на всех языках, алгоритм IPM, завершение Space Storm и Deep Space Horror, руководство мододела</td></tr>
+      </table>
+      <p>Первая волна (PR&nbsp;#167&ndash;#247) шла с 9 января по 6 марта и перестроила фундамент движка.
+      Вторая волна (PR&nbsp;#250&ndash;#286) — с 18 августа по 3 сентября: тестовый каркас, финальный раунд
+      исправлений и документация. Репозиторий используется командой как живой полигон: заметная часть кода
+      2026 года написана и отревьюена с помощью ИИ-агентов (в трейлерах коммитов вида
+      <code>Co-authored-by: DeepSeek Harness &lt;deepseek-harness@noreply.local&gt;</code>).</p>
+    </section>
+
+    <section id="timeline">
+      <h2><img src="assets/evolution/images/kristall.gif" alt="">Хронология</h2>
+      <table>
+        <tr><th style="width:150px">Когда</th><th>Что произошло (смерженные PR / коммиты в master)</th></tr>
+        <tr>
+          <td class="month">9&ndash;11 января</td>
+          <td>Разделение ядра на модули (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/167">#167</a></span>),
+              полная типизация методов ядра (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/169">#169</a></span>),
+              единый роутер страниц (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/171">#171</a></span>) —
+              фундамент нового ядра заложен за три дня.</td>
+        </tr>
+        <tr>
+          <td class="month">12 янв &ndash; 15 фев</td>
+          <td>Серия мода <b>Space Storm</b> (<span class="tag">#173</span> <span class="tag">#177</span>&ndash;<span class="tag">#193</span>
+              <span class="tag">#209</span>&ndash;<span class="tag">#230</span>): глобальные штормовые события, постройка
+              «Стабилизатор Реальности», боевые и экономические хуки — первая большая проверка системы модов.</td>
+        </tr>
+        <tr>
+          <td class="month">18 янв &ndash; 1 фев</td>
+          <td><b>Ресурс как игровой объект</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/181">#181</a></span>
+              <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/186">#186</a></span>
+              <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/194">#194</a></span>
+              <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/206">#206</a></span>):
+              единая экономика страниц ресурсов и империи, обработка ресурсов флотами, новые хуки производства.</td>
+        </tr>
+        <tr>
+          <td class="month">26 янв &ndash; 6 мар</td>
+          <td>Начало <b>разделения контроллера и представления страницы</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/195">#195</a></span>
+              и далее <span class="tag">#208</span> <span class="tag">#234</span>&ndash;<span class="tag">#247</span>):
+              первой переведена страница ресурсов (26 янв), затем обзор, заметки, админ-страницы, постройки, дерево технологий.</td>
+        </tr>
+        <tr>
+          <td class="month">27 янв &ndash; 2 фев</td>
+          <td>Серия мода <b>Deep Space Horror</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/196">#196</a></span>
+              <span class="tag">#199</span>&ndash;<span class="tag">#207</span>): три блуждающих чудовища, порталы Бездны,
+              ковровые бомбардировки, трофеи и возрождение — второй большой тест системы модов (свои объекты галактики,
+              юниты и миссии).</td>
+        </tr>
+        <tr>
+          <td class="month">7&ndash;8 февраля</td>
+          <td><b>GalaxyTool становится встроенным модом</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/214">#214</a></span>
+              <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/216">#216</a></span>
+              <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/217">#217</a></span>) —
+              мод со своей игровой и админ-страницей на шести языках.</td>
+        </tr>
+        <tr>
+          <td class="month">10 февраля</td>
+          <td>Лимиты и баланс (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/221">#221</a></span>):
+              настройка <code>battle_max</code>, предел 99-го уровня для построек и исследований; проверка CRON на админ-странице очереди.</td>
+        </tr>
+        <tr>
+          <td class="month">14&ndash;15 февраля</td>
+          <td>Исправлены краш после шпионажа (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/228">#228</a></span>),
+              краш после атаки (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/231">#231</a></span>)
+              и локализация имени проекта (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/233">#233</a></span>).</td>
+        </tr>
+        <tr>
+          <td class="month">16&ndash;24 февраля</td>
+          <td>Ещё страницы на MVC (разделение альянса на подмодули, techtree), исправлены исследование «Гравитон»,
+              уменьшение IPM, бой экспедиций; фикс ракетной атаки.</td>
+        </tr>
+        <tr>
+          <td class="month">25 июня</td>
+          <td>Прямые коммиты в master: страницы <code>fleet_templates</code> и <code>changelog</code> на MVC;
+              набросан план MVC-миграции и планы разработки (хранились в ветке 191); введены LF-окончания строк
+              (<code>.gitattributes</code>).</td>
+        </tr>
+        <tr>
+          <td class="month">18 августа</td>
+          <td>Альтернативный in-memory бэкенд БД — SQLite через PDO (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/250">#250</a></span>)
+              и первый golden-набор на нём (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/251">#251</a></span>).</td>
+        </tr>
+        <tr>
+          <td class="month">19 августа</td>
+          <td>Полное golden-покрытие всех страниц игры (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/257">#257</a></span>),
+              golden-тесты POST-страниц (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/259">#259</a></span>);
+              найдены и исправлены регрессии от MVC-рефакторинга.</td>
+        </tr>
+        <tr>
+          <td class="month">20 августа</td>
+          <td>MVC-страницы приведены в соответствие с master (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/260">#260</a></span>),
+              Doxygen-документация для <code>game/core</code> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/262">#262</a></span>),
+              исправление XSS в именах альянсов и заметках (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/263">#263</a></span>
+              <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/264">#264</a></span>),
+              исправлены все ошибки PHPStan (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/266">#266</a></span>).</td>
+        </tr>
+        <tr>
+          <td class="month">1 сентября</td>
+          <td>Golden-тесты на всех семи языках (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/270">#270</a></span>),
+              сравнение с сохранёнными снимками OldDesign (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/271">#271</a></span>),
+              восстановлен оригинальный алгоритм ракетной атаки OGame (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/272">#272</a></span>).</td>
+        </tr>
+        <tr>
+          <td class="month">2 сентября</td>
+          <td>Завершён Space Storm (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/273">#273</a></span>&ndash;<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/275">#275</a></span>),
+              исправлены отрицательные ресурсы админа (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/276">#276</a></span>),
+              кнопка «максимум» у торговца (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/277">#277</a></span>),
+              кулдаун экспедиций в Дальний космос (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/278">#278</a></span>),
+              мгновенное обновление статистики после ракетной атаки (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/283">#283</a></span>),
+              аудит Deep Space Horror (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/284">#284</a></span>).</td>
+        </tr>
+        <tr>
+          <td class="month">3 сентября</td>
+          <td>Опубликовано руководство мододела (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/286">#286</a></span>) —
+              HTML-руководство в стиле Evolution в <code>docs/</code> и полная wiki-страница о модах.</td>
+        </tr>
+      </table>
+    </section>
+
+    <section id="architecture">
+      <h2><img src="assets/evolution/images/deuterium.gif" alt="">Архитектура движка</h2>
+      <p>2026 год начался с интенсивного рефакторинга движка, который шёл с января по март и волнами продолжался
+      до августа. Он сделал старую кодовую базу заметно более поддерживаемой, не меняя игровую механику.</p>
+
+      <h3>Разделение ядра на модули <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/167">#167</a></span></h3>
+      <p>Начало января: 27 модулей движка переехали из веб-доступного корня <code>game/</code> в самодостаточный
+      <code>game/core/</code> (36 плоских PHP-модулей + <code>.htaccess</code>, запрещающий веб-доступ), загружаемых
+      в порядке зависимостей бутстрапом <code>core.php</code>. Каждый модуль — сфокусированный файл с ясной зоной
+      ответственности: база данных (<code>db.php</code>-фасад + <code>db_mysql.php</code>/<code>db_sqlite.php</code>),
+      пользователь, планета, флот, очередь, производство, бой, сообщения, альянсы, моды, утилиты и другие. Позже
+      появились единый реестр игровых объектов <code>techs.php</code> (GID, карты, <code>IsBuilding</code>/<code>IsFleet</code>/&hellip;)
+      и файл констант <code>defs.php</code>, движок альянсов разделён на подмодули
+      <code>ally.php</code>/<code>allyapps.php</code>/<code>allyranks.php</code>/<code>buddy.php</code>,
+      а слой БД обзавёлся SQLite-бэкендом для тестов.</p>
+
+      <h3>Полная типизация методов ядра <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/169">#169</a></span></h3>
+      <p>Все методы ядра получили полные PHP-типы (типы параметров и возвращаемых значений). Вместе с PHPStan
+      (см. ниже) это превратило динамически типизированную легаси-базу в код, где большинство ошибок типов
+      ловится на этапе анализа, не доходя до работающей вселенной.</p>
+
+      <h3>Единый роутер страниц <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/171">#171</a></span></h3>
+      <p>Маршрутизация стала управляться данными через <code>game/router.json</code>: <code>index.php</code> стал
+      единым фронт-контроллером, который сопоставляет ключи <code>?page=&hellip;</code> обработчикам по декларативной
+      таблице (путь, лока, флаги и новый маркер <code>"mvc": true</code>), а моды могут добавлять маршруты через хук
+      <code>route</code>. У админ-панели появился собственный второй роутер —
+      <code>game/pages_admin/admin_router.json</code> (26 записей <code>?mode</code>, хук <code>route_admin</code>).
+      Сегодня маршрутизировано <b>37 ключей страниц</b>; <b>31 — MVC-страницы</b>, и лишь 6 остаются в старом стиле —
+      сама оболочка админки и специальные «голые»/внешние страницы
+      <code>ainfo</code>, <code>bericht</code>, <code>logout</code>, <code>phalanx</code>, <code>pranger</code>.</p>
+
+      <h3>Разделение контроллера и представления страницы (MVC) <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/191">#191</a></span></h3>
+      <p>Самый долгий рефакторинг года. Раньше игровые страницы смешивали обработку запроса, бизнес-логику и
+      HTML-вывод в одном файле. Теперь каждая страница — класс в <code>game/pages/</code>, наследующий абстрактный
+      <code>Page</code>: <code>controller()</code> обрабатывает GET/POST-логику и возвращает, нужно ли рендерить,
+      <code>view()</code> рендерит; фронт-контроллер вызывает их внутри общего жизненного цикла страницы. Миграция
+      в master, подтверждённая флагом <code>"mvc": true</code> в <code>router.json</code>: 0 до 26 января &rarr; 1
+      (26 янв, <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/195">#195</a></span>,
+      ресурсы) &rarr; 2 (3 фев, <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/208">#208</a></span>)
+      &rarr; 7 (16 фев, <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/234">#234</a></span>:
+      +обзор, заметки, постройки, techtree) — и оставалось 7 весь март
+      (<span class="tag">#235</span>&ndash;<span class="tag">#247</span> были фиксами) — затем скачок до <b>31 из 37
+      маршрутизированных страниц</b> 20 августа (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/260">#260</a></span>:
+      массовый перевод плюс исправление регрессий, чтобы golden-набор проходил). Переведены и все 26 админ-режимов
+      (классы <code>Admin_*</code>). Последние шесть записей старого стиля — намеренно «голые»/внешние страницы:
+      оболочка админки и <code>ainfo</code>, <code>bericht</code>, <code>logout</code>, <code>phalanx</code>, <code>pranger</code>.
+      План миграции был набросан 25 июня (хранился в ветке, в дерево master не попал).</p>
+
+      <h3>Ресурс как игровой объект <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/180">#180</a></span></h3>
+      <p>Январь: ресурсы перестали быть тремя захардкоженными числами и стали полноценными игровыми объектами,
+      каждый со своим GID (<code>GID_RC_METAL=700</code>, <code>GID_RC_CRYSTAL=701</code>,
+      <code>GID_RC_DEUTERIUM=702</code>, <code>GID_RC_ENERGY=703</code>, <code>GID_RC_DM=704</code>).
+      <code>techs.php</code> получил <code>IsResource()</code> и типизированные карты ресурсов; унифицированные
+      математика цен/длительности/производства и обработка ресурсов флотами позволяют ресурсам течь через все
+      объектно-обобщённые механизмы, а новые хуки (<code>add_resources</code>,
+      <code>page_resources_get_bonus</code>, <code>page_buildings_get_bonus</code>) дают модам и страницам единый
+      конвейер производства (документировано в <code>wiki/ru/resources.md</code>).</p>
+
+      <h3>Почему это важно</h3>
+      <p>Эти изменения — предпосылка всего остального в дайджесте: типизированное, модульное ядро с роутером и
+      разделёнными контроллерами делает возможными подсистему модов, golden-тесты и чистое состояние PHPStan —
+      и позволяет вносить правки в одну страницу, не ломая всю игру.</p>
+    </section>
+
+    <section id="mods">
+      <h2><img src="assets/evolution/images/metall.gif" alt="">Моды: подсистема и контент</h2>
+      <p>Подсистема модов — главная игровая история 2026 года. Мод — это самодостаточная папка в
+      <code>game/mods/</code> с классом, наследующим <code>GameMod</code> (<code>game/core/mods.php</code>):
+      <code>main.php</code>, <code>manifest.json</code> и опционально свои <code>pages/</code>, <code>pages_admin/</code>,
+      <code>loca/</code>, <code>img/</code>, <code>testing/</code>. Ядро само находит моды по папкам, загружает их в
+      порядке активации и вызывает их <em>хуки</em> в фиксированных точках движка — от событий очереди и бонусов
+      производства до миссий флотов и боевых характеристик. Моды регистрируются по вселенной списком
+      <code>uni.modlist</code>; администратор устанавливает/удаляет/переставляет их через новый админ-раздел
+      (<code>pages_admin/admin_mods.php</code>, функции <code>ModsList</code>/<code>ModsInstall</code>/<code>ModsRemove</code>),
+      после чего вызывается <code>install()</code> (ALTER TABLE, события очереди, <code>loca_add</code>).
+      Полный справочник — <a href="mod-manual-ru.html">руководство мододела</a>
+      и <a href="../wiki/ru/mods.md">wiki/ru/mods.md</a>.</p>
+
+      <h3>GalaxyTool <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/214">#214</a></span>
+          <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/216">#216</a></span>
+          <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/217">#217</a></span></h3>
+      <p>Февраль: Galaxytool — раньше безусловная функция ядра — стал <b>встроенным, но опциональным модом</b> со
+      своей игровой страницей (<code>pages/galaxytool.php</code>) и админ-разделом, локализованный на шести языках
+      (de, en, es, fr, it, ru). Периодическое событие очереди (по умолчанию еженедельно) пишет снимки вселенной
+      в <code>temp/</code> (координаты галактики, статистика топ-1000, статистика альянсов), а игровая страница
+      показывает растущих/падающих/неактивных игроков относительно предыдущего снимка. Администратор настраивает
+      период обновления (1&ndash;30 дней) на новой странице <code>admin_galaxytool.php</code>; мод включается по
+      вселенной, и кода GalaxyTool вне папки мода не осталось. Ветка заодно перевела всю админ-область на MVC
+      (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/216">#216</a></span>) и добавила
+      хук <code>route_admin</code> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/217">#217</a></span>).</p>
+
+      <h3>Space Storm <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/172">#172</a></span></h3>
+      <p>Начат в январе и завершён в сентябре: демонстрационный мод, который нагружает глобальные модификаторы
+      движка (в Readme прямо сказано — это тестовый полигон механик движка, а не сбалансированный контент).
+      Периодическое глобальное событие — <b>Космический Шторм</b> — тикает каждый час и меняет правила всей
+      вселенной: один или несколько из <b>десяти эффектов</b> (скорость флотов &minus;30&ndash;50%; 5% мгновенного
+      прибытия / 1% потери на 1&ndash;2 часа; броня &minus;20% и щиты +30%; удвоенный расход топлива и +25% добычи
+      дейтерия; отчёты шпионажа с задержкой 1&ndash;5 мин и шпионаж &minus;2; <b>Энергетический Коллапс</b> с &minus;40%
+      энергии и шансом заморозить случайную постройку/исследование; +10% к щитам обороны; конверсия 20% добычи
+      в случайный ресурс; отключённый «Транспорт» между своими планетами; потери атакующего 5% флота после победы).
+      Новое планетарное здание — <b>Стабилизатор Реальности</b> (<code>GID_B_REALITY_STAB</code>) — можно строить
+      только во время шторма (+0.5% энергии за уровень); каждый завершённый уровень <b>«запечатлевает» активный
+      тип шторма</b> на планете и открывает поуровневые контр-эффекты для этих эффектов. Всё реализовано чисто
+      через хуки: боевые эффекты масштабируют статы юнитов по каждому бою на фронтенде боевого движка
+      (<code>battle_unit_stats</code>), бэкенд движка не тронут. Вехи: январская волна
+      (<span class="tag">#173</span>&ndash;<span class="tag">#193</span>: скелет, табличные требования, первые
+      механики, хуки <code>can_build</code>/<code>build_end</code>/<code>page_infos</code>), февральская
+      (<span class="tag">#209</span>&ndash;<span class="tag">#230</span>: панель бонусов, хуки производства/топлива,
+      базовая фича <b>заморозки очереди</b> <code>FreezeQueue</code> в <span class="tag">#213</span>, флот/шпион-хуки,
+      защита от производства выше склада) и сентябрьское завершение
+      (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/273">#273</a></span>&ndash;
+      <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/275">#275</a></span>): все десять
+      эффектов и счётчики стабилизатора доведены до ума, добавлена локализация en/de (языки теперь ru/en/de),
+      <b>авто-разморозка при энергоколлапсе</b> (замороженные задачи размораживаются при восстановлении энергии)
+      и <b>шпион-защита стабилизатора</b> через новый хук <code>spy_protection</code> (+1 уровень защиты шпионажа
+      за каждые 2 уровня), а тесты вынесены внутрь мода как самостоятельный PHPUnit-набор.</p>
+
+      <h3>Deep Space Horror <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/189">#189</a></span></h3>
+      <p>Три гигантских космических чудовища — <b>Амёба</b> («Планктонный Пожиратель»), <b>Страж</b>
+      («Блуждающий Монолит») и <b>Левиафан</b> («Галактический Исполин») — блуждают по вселенной. Каждое —
+      одновременно объект-«планета» галактики и флот, существует в единственном экземпляре на вселенную и несёт
+      уникальный арт. Флот чудовища летит (миссия «Подготовка к гиперпереходу») к своему <b>Порталу Бездны</b>;
+      по прибытии портал уничтожается, чудовище занимает точку и, если рядом есть обитаемые планеты, начинается
+      автоматический бой — <b>ковровая бомбардировка</b> всех обычных планет в радиусе от портала
+      (P&plusmn;1 / P&plusmn;2 / P&plusmn;3 в зависимости от чудовища), включая оборону и союзные флоты в ожидании (ACS),
+      с бо́льшим числом раундов, чем в обычном бою (+1/+2/+3). Перемещение между порталами подчиняется ИИ каждого
+      чудовища: Амёба дрейфует рядом, Страж идёт по предсказуемой спирали через галактику, Левиафан прыгает
+      в случайные галактики.</p>
+      <p>Бои идут через фронтенд боевого движка без правок бэкенда — более того, январская волна включала
+      <b>масштабную переработку BattleEngine</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/199">#199</a></span>:
+      переписаны PHP-ядро боя и C++-движок) плюс унификацию боевых отчётов и расчёта обломков, которыми мод затем
+      пользуется. Если защитники уничтожили чудовище, его останки распределяются между участниками
+      <b>пропорционально вкладу</b> (Амёба — 2,5 млн дейтерия, Страж — 10 млн кристалла, Левиафан — 40 млн металла),
+      каждому отправляется личное сообщение «Трофей Бездны», а на всю вселенную уходит броадкаст об уничтожении;
+      убитые чудовища возрождаются в случайной точке через 24&ndash;72 реальных часа через одноразовое событие
+      очереди. Языки: ru + en.</p>
+      <p>В сентябре мод прошёл аудит (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/284">#284</a></span>):
+      потери защитников теперь списываются сквозным образом, трофей распределяется, возрождение планируется
+      (хелпер ядра <code>SetPlanetFleetDefense</code> пишет только существующие колонки), внутри мода появился
+      <b>самостоятельный PHPUnit-набор</b> из 38 тестов (25 логики + 13 на in-memory SQLite), а журнал разработки
+      на 670 строк переписан в читаемый структурированный Readme с добавлением английской локализации.</p>
+
+      <h3>BogusMod</h3>
+      <p>Добавлен в начале января как минимальный пример: одна колонка БД, свой ресурс, пункт меню и страница —
+      «hello world» системы модов.</p>
+    </section>
+
+    <section id="fixes">
+      <h2><img src="assets/evolution/images/kristall.gif" alt="">Безопасность и исправления</h2>
+      <h3>Безопасность</h3>
+      <ul>
+        <li><b>XSS в имени альянса и заметках</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/165">#165</a></span>,
+            мерж <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/263">#263</a></span>
+            <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/264">#264</a></span>):
+            имена/теги альянсов и заметки, имена игроков, имена ACS-союзов и тексты друзей/заметок теперь
+            HTML-экранируются на выводе примерно на 30 страницах; заметки хранятся как есть и экранируются при
+            рендере (раньше — двойное кодирование). Пути хранения XSS закрыты; добавлен регрессионный набор
+            <code>XssTest</code>.</li>
+        <li><b>Фикс пустой сессии и <code>CheckParameters</code> при установке</b> (сентябрь): пустая строка сессии
+            больше не аутентифицируется как технический «разлогиненный» аккаунт, гости на внутренних страницах
+            редиректятся домой, а установщик проверяет все поля/диапазоны и доступность БД до изменения таблиц.</li>
+        <li>Утечки учётных данных БД закрыты: back trace использует <code>DEBUG_BACKTRACE_IGNORE_ARGS</code>
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/245">#245</a></span>),
+            <code>AddDBRow</code> экранирует строки через <code>mysqli_real_escape_string</code>, исключения mysqli
+            при подключении не выбрасываются (март).</li>
+      </ul>
+      <h3>Бой</h3>
+      <ul>
+        <li><b>Восстановлен оригинальный алгоритм ракетной атаки OGame (IPM)</b>
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/61">#61</a></span>,
+            мерж <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/272">#272</a></span>):
+            ПРО перехватывают МБР 1:1, а остаточный урон после уничтожения обороны разрушает и хранящиеся у
+            защитника ракеты.</li>
+        <li><b>Статистика обновляется сразу после ракетной атаки</b>
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/145">#145</a></span>,
+            мерж <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/283">#283</a></span>):
+            очки атакующего (стоимость МБР) и защитника (уничтоженная оборона) корректируются немедленно, а не при
+            следующем полном пересчёте.</li>
+        <li>Фиксы ракет (февраль): урон МБР считался по захардкоженному юниту 503 вместо <code>GID_D_IPM</code>, а
+            список событий обзора читал не ту переменную; запуск МБР теперь действительно уменьшает запас ракет
+            планеты (неверный ключ массива).</li>
+        <li>Исправлены краш после атаки (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/231">#231</a></span>)
+            и краш после шпионажа (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/228">#228</a></span> —
+            отчёт шпионажа читал несуществующее поле энергии, а <code>rand()</code> получал дробную границу); бой
+            экспедиций (защита от отсутствующих записей юнитов); <code>AddShipyard</code> и исследование «Гравитон»
+            (устаревшие чтения планеты, списание стоимости с нехранимых ресурсов).</li>
+        <li>Настройка <code>battle_max</code> и жёсткие пределы <code>MAX_BUILDINGS_LEVEL</code>/<code>MAX_RESEARCH_LEVEL = 99</code>,
+            применяемые в очереди и UI (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/221">#221</a></span>);
+            ACS, бои экспедиций и отправка флотов отклоняют флоты выше <code>battle_max</code> с локализованными ошибками.</li>
+      </ul>
+      <h3>Экономика и планеты</h3>
+      <ul>
+        <li><b>Отрицательные ресурсы планеты при игре за админа</b> исправлены
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/117">#117</a></span>,
+            мерж <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/276">#276</a></span>):
+            сложение/вычитание ресурсов зажимается на нуле в PHP, грабёж и сбор обломков защищены от отрицательных
+            входов; <code>SetPlanetFleetDefense</code> пишет только те колонки, что есть у планеты.</li>
+        <li>Кнопка «максимум» у торговца больше не превышает вместимость складов
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/82">#82</a></span>,
+            мерж <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/277">#277</a></span>):
+            сделки ограничиваются свободным складом, а проверка сравнивала кристалл с лимитом металла — исправлено.</li>
+        <li>Производство выше вместимости склада больше не тикает (февраль); <code>IsEnoughResources</code> проверяет
+            ресурсы игрока и планеты раздельно (январь); тёмная материя выведена как ресурс <code>GID_RC_DM</code>
+            (февраль); истечение офицеров перенесено с глобальных событий очереди на надёжные таймеры пользователя
+            (январь); очистка обломков использует унифицированные колонки (январь); страница выхода уважает скин
+            игрока (февраль).</li>
+      </ul>
+      <h3>Экспедиции</h3>
+      <ul>
+        <li><b>Счётчик посещений экспедиций с кулдауном в Дальний космос</b> и очистка Дальнего космоса
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/issues/174">#174</a></span>,
+            мерж <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/278">#278</a></span>):
+            позицию можно посещать ~3 раза/час без лишнего истощения; неиспользуемые объекты Дальнего космоса
+            убирает отдельная еженедельная задача очереди — обе задачи видны на админ-странице очереди.</li>
+      </ul>
+      <h3>Стабильность и админка</h3>
+      <ul>
+        <li>Зачистка предупреждений PHP 8.x шла весь год (устаревшие float&rarr;int, неопределённые ключи,
+            <code>unserialize()</code>, отчёты mysqli).</li>
+        <li>Админка: кнопка «Check CRON» на странице очереди, устойчивость cron, редактор Botstrat с JSON-импортом/
+            экспортом, null-безопасные хелперы имён планет (<code>AdminPlanetName</code>; в списке пользователей у
+            аккаунтов без родной планеты показывается «&ndash;»), страница Source-Check с контрольными суммами файлов
+            движка/страниц и режим отпуска через переиспользуемый метод <code>EnableVacation</code>.</li>
+      </ul>
+    </section>
+
+    <section id="testing">
+      <h2><img src="assets/evolution/images/deuterium.gif" alt="">Тестирование</h2>
+      <p>До августа у проекта были лишь единичные ad-hoc тесты. За две недели команда построила настоящий
+      регрессионный каркас, который сегодня рендерит целые страницы и сравнивает их с эталонными снимками.</p>
+      <ul>
+        <li><b>In-memory бэкенд БД для тестов</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/250">#250</a></span>):
+            <code>db.php</code> стал фасадом между живым mysqli-бэкендом и новым <code>db_sqlite.php</code>
+            (PDO SQLite, in-memory), выбираемым через <code>DB_CONNECTION=sqlite</code>. Он переводит MySQL-идиомы
+            (LOCK TABLES, <code>SET @var:=</code>, AUTO_INCREMENT), так что настоящий игровой код и схема работают
+            в PHPUnit <b>без MySQL-сервера</b>; <code>FixtureBuilder</code> наполняет полную вселенную-фикстуру на
+            3 игроков (луны, летящие флоты, очереди, сообщения, альянс, баны, обломки&hellip;).</li>
+        <li><b>Golden-набор страниц</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/251">#251</a></span>
+            <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/257">#257</a></span>
+            <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/259">#259</a></span>
+            <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/270">#270</a></span>
+            <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/271">#271</a></span>):
+            <code>GoldenPagesTest</code> (122 тест-метода) загружает страницы ровно как <code>game/index.php</code>
+            (роутер, аутентификация, моды, лока), нормализует изменчивый вывод (таймстампы, сессии, ID,
+            локализованные длительности) и сравнивает HTML с сохранёнными снимками; <code>UPDATE_GOLDEN=1</code>
+            перегенерирует их. Покрытие: <b>707 файлов снимков = 101 HTML на язык &times; 7 языков</b>
+            (de, en, es, fr, it, jp, ru), включая <b>~25 POST-сценариев</b> для каждой POST-страницы (отзыв флота,
+            постройка на верфи, обмен у торговца, запуск МБР, действия альянса&hellip;) и guard-тесты, которые
+            следят, что у каждой маршрутизированной и каждой POST-страницы есть снимок. 1 сентября снимки сравнили
+            с архивом <b>OldDesign</b> (классический дизайн, сохранённый во внешнем репозитории
+            <code>ogamespec/OldDesign</code>), доказав паритет вёрстки, и дозаполнили недостающую локаль
+            <code>jp_jp</code>. Набор сразу поймал регрессии, внесённые MVC-рефакторингом, — их затем исправили.</li>
+        <li><b>Юнит-тесты под фиксы</b>: RocketAttack, RocketAttackStats, TraderStorage, NegativeResources,
+            Farspace, Xss, Notes, Homepage и DbSqlite (11 классов, 191 тест-метод суммарно) покрывают конкретные
+            баги из предыдущего раздела.</li>
+        <li><b>Самостоятельные PHPUnit-наборы внутри модов</b>: Space Storm (22 тест-метода) и Deep Space Horror
+            (38 тест-методов) поставляют <code>testing/</code> со своим <code>phpunit.xml</code>, bootstrap и
+            DB-тестами на in-memory SQLite
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/275">#275</a></span>,
+            <span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/284">#284</a></span>) —
+            разработка модов не засоряет общий набор проекта.</li>
+        <li>PHPUnit обновлён до 10.5.62 (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/198">#198</a></span>).</li>
+      </ul>
+    </section>
+
+    <section id="docs">
+      <h2><img src="assets/evolution/images/energie.gif" alt="">Документация и качество</h2>
+      <ul>
+        <li><b>Руководство мододела</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/286">#286</a></span>):
+            <a href="mod-manual-ru.html">mod-manual-ru.html</a> / <a href="mod-manual-en.html">mod-manual-en.html</a>
+            в стиле Evolution плюс <a href="../wiki/ru/mods.md">wiki/ru/mods.md</a> и <a href="../wiki/en/mods.md">wiki/en/mods.md</a> —
+            руководство из 13 разделов: структура папок, API <code>GameMod</code>, страницы модов и админ-роутинг,
+            локализация, события очереди и полный справочник из 38 хуков с местами вызова, плюс сценарии реальных модов.</li>
+        <li><b>Doxygen-документация для <code>game/core</code></b>
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/262">#262</a></span>):
+            +4 200 строк API-комментариев в 37 файлах ядра (Doxyfile в корне, вывод в .gitignore).</li>
+        <li><b>Зачистка PHPStan</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/266">#266</a></span>):
+            анализ уровня 8 для <code>game/</code> и <code>wwwroot/</code> (конфиг с января) в августе доведён до
+            <b>нуля ошибок</b> — версионируемый отчёт сжался с 5 671 строки (январь) до «[OK] No errors».
+            Анализатор вскрыл реальные баги (некавыченный ключ массива, опечатка <code>filectime()</code>, удалённый
+            <code>each()</code>, потерянный <code>__DIR__</code>) — их исправили, а намеренные конструкции, помеченные
+            как мёртвый код, восстановили с ignore-маркерами.</li>
+        <li><b>Wiki</b>: за год добавлены и сильно обновлены страницы — руководство по модам (en+ru),
+            golden-тестирование, установка (включая Docker), feed, очередь, бонусы и другие.</li>
+        <li><b>Переписанные Readme</b>: Deep Space Horror получил полный читаемый документ в сентябре
+            (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/284">#284</a></span>);
+            Readme Space Storm документирует каждый эффект и хук.</li>
+      </ul>
+    </section>
+
+    <section id="localization">
+      <h2><img src="assets/evolution/images/deuterium.gif" alt="">Локализация</h2>
+      <ul>
+        <li><b>Локализация имени проекта</b> (<span class="tag"><a href="https://github.com/ogamespec/ogame-opensource/pull/233">#233</a></span>):
+            макросы <code>OGAME_INT</code> / <code>OGAME_LOC</code> позволяют локализовать название игры и тексты
+            интерфейса по языкам.</li>
+        <li>Локализован и стабилизирован процесс регистрации: <code>REG_NEW</code>, <code>REG_CHANGE</code>,
+            <code>REG_GREET_MAIL</code>, <code>REG_GREET_MSG</code>, <code>REG_FORGOT</code>,
+            <code>EMAIL_BARRIERFREI</code>; <code>isValidEmail</code> перенесён в утилиты; переработаны страницы
+            регистрации и обслуживания.</li>
+        <li>Локали модов: Space Storm на en/de/ru, Deep Space Horror на en/ru, GalaxyTool на шести языках.</li>
+        <li>Golden-снимки на семи языках держат переводы честными — страница за страницей.</li>
+      </ul>
+    </section>
+
+    <section id="deployment">
+      <h2><img src="assets/evolution/images/metall.gif" alt="">Развёртывание и PHP 8.x</h2>
+      <ul>
+        <li><b>Docker</b>: Dockerfile и история развёртывания переработаны (январь&ndash;сентябрь) —
+            <code>compose.yaml</code>, боевой движок внутри контейнера, проверки при установке; в wiki появилось
+            полное <a href="../wiki/en/install_docker.md">руководство по установке в Docker</a> и ссылки на
+            сообщество.</li>
+        <li><b>Совместимость с PHP 8.x</b>: в течение года исправлены все предупреждения 8.x/8.2 (float→int,
+            <code>unserialize</code>, отчёты mysqli); обновлены рекомендации <code>php.ini</code>.</li>
+        <li><b>Гигиена git</b>: LF-окончания строк закреплены через <code>.gitattributes</code>; конфиги и отчёты
+            PHPStan и PHPUnit версионируются вместе с кодом.</li>
+      </ul>
+    </section>
+
+    <section id="team">
+      <h2><img src="assets/evolution/images/kristall.gif" alt="">Команда и ссылки</h2>
+      <p>Репозиторий: <a href="https://github.com/ogamespec/ogame-opensource">github.com/ogamespec/ogame-opensource</a>.
+      Основная разработка и ревью кода: <b>ogamespec</b>. Заметная часть работы 2026 года выполнена с помощью
+      ИИ-агентов, чьи коммиты несут трейлер
+      <code>Co-authored-by: DeepSeek Harness &lt;deepseek-harness@noreply.local&gt;</code> — этот дайджест также
+      собран таким агентом в ветке <code>282-digest-year-2026</code> (issue
+      <a href="https://github.com/ogamespec/ogame-opensource/issues/282">#282</a>).</p>
+      <ul>
+        <li>Issues и pull request&rsquo;ы: <a href="https://github.com/ogamespec/ogame-opensource/issues">issues</a> / <a href="https://github.com/ogamespec/ogame-opensource/pulls">pulls</a></li>
+        <li>Документация: <a href="mod-manual-ru.html">Руководство мододела (RU)</a> · <a href="mod-manual-en.html">Руководство мододела (EN)</a> · <a href="../wiki/en/mods.md">wiki/en/mods.md</a></li>
+        <li>Этот дайджест: <a href="digest-2026-en.html">English version</a></li>
+      </ul>
+    </section>
+
+  </div>
+</div>
+
+<footer>OGame 0.84 Open Source · Дайджест 2026 года · скин Evolution · <a href="https://github.com/ogamespec/ogame-opensource">github.com/ogamespec/ogame-opensource</a><br>
+Соавторы: ogamespec · ИИ-агент DeepSeek Harness</footer>
+</body>
+</html>
