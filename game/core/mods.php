@@ -5,7 +5,7 @@
  * @details Discovers installed modifications, hooks into their entry points and executes mod-defined callbacks at the appropriate places in the game core.
  */
 // Mods support.
-// https://github.com/ogamespec/ogame-opensource/blob/master/Wiki/en/mods.md
+// https://github.com/ogamespec/ogame-opensource/blob/master/wiki/ru/mods.md
 
 /**
  * List of initialized mod instances, keyed by mod name.
