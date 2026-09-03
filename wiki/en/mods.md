@@ -33,7 +33,8 @@ game/mods/
 ├── BogusMod/          # демо-мод: новый ресурс, пункт меню, своя страница
 ├── GalaxyTool/        # инструмент с игровой и админ-страницей
 ├── SpaceStorm/        # «Космический шторм»: новая механика + новое здание
-└── DeepSpaceHorror/   # «Глубокий космос»: монстры, кастомные объекты, миссии
+├── DeepSpaceHorror/   # «Глубокий космос»: монстры, кастомные объекты, миссии
+└── Wanderer/          # «Странствующий Торговец»: режим игрока, станция, торговля
 ```
 
 The mod declares a class inheriting the abstract class `GameMod` (file
@@ -41,7 +42,7 @@ The mod declares a class inheriting the abstract class `GameMod` (file
 loads it, and calls its methods at the right moments. The base engine does not
 change — instead, calls of **hooks** are placed in it (see section 8).
 
-The repository already contains four mods that serve as reference examples and
+The repository already contains five mods that serve as reference examples and
 cover almost all capabilities of the system. Their code is the best "living"
 documentation:
 
@@ -51,6 +52,7 @@ documentation:
 | `GalaxyTool` | A tool mod: its own game page and its own admin section, 6 locale languages |
 | `SpaceStorm` | A new building, edits to the engine's global tables, battle/economic hooks, tests |
 | `DeepSpaceHorror` | Custom galaxy objects, new units, custom fleet missions, image hooks, tests |
+| `Wanderer` | A whole second game mode: per-user mode switch, custom galaxy object, own pages/economy/jumps/orders, three new engine hooks, tests |
 
 ### 1.2. How a mod gets into the game
 
@@ -1103,6 +1105,14 @@ their call sites in the core and their meaning:
 | `bonus_max_fleet` | `fleet.php` (`GetMaxFleet`) | maximum fleets |
 | `bonus_fleet_cons` | `fleet.php` (`FleetCons`) | ship fuel consumption |
 | `bonus_fleet_speed` | `fleet.php` (`FleetSpeed`) | ship speed |
+| `skip_planet_update` | `prod.php` (`GetUpdatePlanet`) | freeze a planet: credit no production (empire conservation, the Wanderer game mode) |
+| `page_veto` | `index.php` (before the page is rendered) | take over a page request entirely (blocking classic sections in another game mode) |
+| `fleet_dispatch_veto` | `fleet.php` (`DispatchFleet`, outbound missions) | forbid dispatching a new fleet (protection of mod objects — the station, wanderer planets) |
+
+> The `skip_planet_update`, `page_veto` and `fleet_dispatch_veto` hooks were
+> added for the `Wanderer` (Rogue Trader) mod; they fire through the standard
+> `ModsExecRef`/`ModsExecArr` dispatchers and change nothing when the mod is
+> not installed.
 
 ## Links
 

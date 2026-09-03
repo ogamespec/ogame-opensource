@@ -485,6 +485,28 @@ function DispatchFleet (array $fleet, array $origin, array $target, int $order, 
     $prio = QUEUE_PRIO_FLEET + $order;
     $flight_time = $seconds;
 
+    // Mods may veto the dispatch of a new outbound fleet (e.g. to protect
+    // their custom galaxy objects or inactive empires). Return flights
+    // (mission >= FTYP_RETURN) and custom missions (>= FTYP_CUSTOM) are
+    // never vetoed.
+    if ( $order < FTYP_RETURN ) {
+        $veto_param = array (
+            'fleet'     => $fleet,
+            'origin'    => $origin,
+            'target'    => $target,
+            'mission'   => $order,
+            'seconds'   => $seconds,
+            'resources' => $resources,
+            'cons'      => $cons,
+            'when'      => $when,
+        );
+        if ( ModsExecArr ('fleet_dispatch_veto', $veto_param) ) {
+            Debug ( "Fleet dispatch vetoed by a modification (mission $order, target " .
+                    $target['name'] . " [" . $target['g'] . ":" . $target['s'] . ":" . $target['p'] . "])." );
+            return 0;
+        }
+    }
+
     // Add the fleet.
     $fleet_obj = array ( 'owner_id' => $origin['owner_id'], 'union_id' => $union_id,
         'fuel' => $cons, 'mission' => $order, 
