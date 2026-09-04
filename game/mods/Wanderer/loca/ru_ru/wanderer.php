@@ -10,6 +10,7 @@ $LOCA['ru']['WANDERER_MENU_STATION'] = 'Станция';
 $LOCA['ru']['WANDERER_MENU_MODULES'] = 'Модули';
 $LOCA['ru']['WANDERER_MENU_LAB'] = 'Лаборатория';
 $LOCA['ru']['WANDERER_MENU_NAV'] = 'Навигация';
+$LOCA['ru']['WANDERER_MENU_GALAXY'] = 'Галактика';
 $LOCA['ru']['WANDERER_MENU_MARKET'] = 'Биржа';
 $LOCA['ru']['WANDERER_MENU_LEAVE'] = 'Вернуться в Империю';
 
@@ -18,6 +19,10 @@ $LOCA['ru']['WANDERER_GALAXY_STATION'] = 'Бродячая станция';
 $LOCA['ru']['WANDERER_GALAXY_CAPTAIN'] = 'Капитан:';
 $LOCA['ru']['WANDERER_GALAXY_MESSAGE'] = 'Написать сообщение';
 $LOCA['ru']['WANDERER_GALAXY_EXCHANGE'] = 'Биржа странников';
+$LOCA['ru']['WANDERER_GALAXY_TITLE'] = 'Карта галактики';
+$LOCA['ru']['WANDERER_GALAXY_READONLY'] = 'режим наблюдения: без платы дейтерия и действий';
+$LOCA['ru']['WANDERER_GALAXY_OWN'] = 'Моя станция';
+$LOCA['ru']['WANDERER_GALAXY_OBSERVE'] = 'Наблюдение';
 
 // --- Общее ---
 $LOCA['ru']['WANDERER_DEFAULT_NAME'] = 'Станция-Скиталец';
@@ -54,27 +59,27 @@ $LOCA['ru']['WANDERER_MOD_CORE_DESC'] = 'Основа станции. Опред
 $LOCA['ru']['WANDERER_MOD_MINE_M'] = 'Рудный модуль';
 $LOCA['ru']['WANDERER_MOD_MINE_K'] = 'Кристальный модуль';
 $LOCA['ru']['WANDERER_MOD_MINE_D'] = 'Дейтериевый модуль';
-$LOCA['ru']['WANDERER_MOD_MINE_DESC'] = 'Добыча: %1$s/ч (на следующем уровне %2$s/ч)';
+$LOCA['ru']['WANDERER_MOD_MINE_DESC'] = 'Добыча: #1/ч (на следующем уровне #2/ч)';
 $LOCA['ru']['WANDERER_MOD_SOLAR'] = 'Солнечные батареи';
-$LOCA['ru']['WANDERER_MOD_SOLAR_DESC'] = '+%1$d%% к производству станции';
+$LOCA['ru']['WANDERER_MOD_SOLAR_DESC'] = '+#1% к производству станции';
 $LOCA['ru']['WANDERER_MOD_CARGO'] = 'Грузовой отсек';
-$LOCA['ru']['WANDERER_MOD_CARGO_DESC'] = 'Вместимость трюмов: %1$s';
+$LOCA['ru']['WANDERER_MOD_CARGO_DESC'] = 'Вместимость трюмов: #1';
 $LOCA['ru']['WANDERER_MOD_ENGINE'] = 'Прыжковый двигатель';
-$LOCA['ru']['WANDERER_MOD_ENGINE_DESC'] = '-%1$d%% топлива прыжка, -%2$d%% перезарядки';
+$LOCA['ru']['WANDERER_MOD_ENGINE_DESC'] = '-#1% топлива прыжка, -#2% перезарядки';
 $LOCA['ru']['WANDERER_MOD_LAB'] = 'Лабораторный модуль';
-$LOCA['ru']['WANDERER_MOD_LAB_DESC'] = '+%1$d%% к скорости исследований, открывает уровни исследований';
+$LOCA['ru']['WANDERER_MOD_LAB_DESC'] = '+#1% к скорости исследований, открывает уровни исследований';
 $LOCA['ru']['WANDERER_MOD_HOLD'] = 'Торговые доки';
 $LOCA['ru']['WANDERER_MOD_HOLD_DESC'] = '+1 слот заказа на бирже за уровень';
 
 // --- Исследования ---
 $LOCA['ru']['WANDERER_RES_NAV'] = 'Навигация';
-$LOCA['ru']['WANDERER_RES_NAV_DESC'] = '-%1$d%% топлива прыжка, -%2$d%% перезарядки';
+$LOCA['ru']['WANDERER_RES_NAV_DESC'] = '-#1% топлива прыжка, -#2% перезарядки';
 $LOCA['ru']['WANDERER_RES_TRADE'] = 'Торговое право';
-$LOCA['ru']['WANDERER_RES_TRADE_DESC'] = 'комиссия Гильдии ниже на %1$d%%';
+$LOCA['ru']['WANDERER_RES_TRADE_DESC'] = 'комиссия Гильдии ниже на #1%';
 $LOCA['ru']['WANDERER_RES_SCAN'] = 'Секторное сканирование';
 $LOCA['ru']['WANDERER_RES_SCAN_DESC'] = 'Виден прогноз цен всех секторов';
 $LOCA['ru']['WANDERER_RES_INDUSTRY'] = 'Промышленные технологии';
-$LOCA['ru']['WANDERER_RES_INDUSTRY_DESC'] = '+%1$d%% к производству станции';
+$LOCA['ru']['WANDERER_RES_INDUSTRY_DESC'] = '+#1% к производству станции';
 $LOCA['ru']['WANDERER_LAB_NEEDED'] = 'Нет лаборатории';
 $LOCA['ru']['WANDERER_LAB_NEEDED_TEXT'] = 'Постройте Лабораторный модуль в разделе «Модули» — без него исследования невозможны.';
 $LOCA['ru']['WANDERER_LAB_REQ'] = 'Нужна лаборатория';

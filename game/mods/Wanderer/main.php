@@ -190,6 +190,14 @@ class Wanderer extends GameMod {
             );
         }
 
+        // The observer galaxy needs the core galaxy texts (GALAXY_* keys).
+        $router['wanderer_galaxy'] = array (
+            'path'   => "mods/Wanderer/pages/wanderer_galaxy.php",
+            'loca'   => array ( 'menu', 'galaxy' ),
+            'header' => false,
+            'mvc'    => true,
+        );
+
         // The exchange works for every player (classic empire included), the
         // mode switch page is the entry/exit point.
         $router['wanderer_market'] = array (
@@ -253,6 +261,7 @@ class Wanderer extends GameMod {
                 'wanderer_mods'    => array ( 'type' => 'internal', 'page' => 'wanderer_mods', 'loca' => 'WANDERER_MENU_MODULES' ),
                 'wanderer_lab'     => array ( 'type' => 'internal', 'page' => 'wanderer_lab', 'loca' => 'WANDERER_MENU_LAB' ),
                 'wanderer_nav'     => array ( 'type' => 'internal', 'page' => 'wanderer_nav', 'loca' => 'WANDERER_MENU_NAV' ),
+                'wanderer_galaxy'  => array ( 'type' => 'internal', 'page' => 'wanderer_galaxy', 'loca' => 'WANDERER_MENU_GALAXY' ),
                 'wanderer_market'  => array ( 'type' => 'internal', 'page' => 'wanderer_market', 'loca' => 'WANDERER_MENU_MARKET' ),
                 'messages'         => array ( 'type' => 'internal', 'page' => 'messages', 'param' => '&dsp=1', 'loca' => 'MENU_MESSAGES' ),
                 'options'          => array ( 'type' => 'internal', 'page' => 'options', 'loca' => 'MENU_OPTIONS' ),
@@ -339,6 +348,9 @@ class Wanderer extends GameMod {
 
     /**
      * Hook: page_galaxy_custom_object — station info panel in the galaxy.
+     *
+     * The content is injected into onmouseover='return overlib("...")' by the
+     * galaxy page, so it must not contain quote characters.
      */
     public function page_galaxy_custom_object (array $planet, array &$info) : bool {
         global $GlobalUser;
@@ -348,15 +360,16 @@ class Wanderer extends GameMod {
         $user = LoadUser ( intval ( $planet['owner_id'] ) );
         $captain = $user !== null ? htmlspecialchars ( $user['oname'] ) : '';
         $sess = htmlspecialchars ( (string)( $GlobalUser['session'] ?? '' ) );
+        $owner_id = intval ( $planet['owner_id'] );
 
         $info['overlib'] = "<table width=240><tr><td class=c colspan=2>".
             loca ( "WANDERER_GALAXY_STATION" )." ".htmlspecialchars ( (string)$planet['name'] ).
             " [".intval($planet['g']).":".intval($planet['s']).":".intval($planet['p'])."]</td></tr>".
             "<tr><th width=80><img src=mods/Wanderer/img/s1.jpg height=75 width=75></th>".
             "<th align=left><font color=orange>".loca ( "WANDERER_GALAXY_CAPTAIN" )."</font> ".$captain."<br><br>".
-            "<a href='index.php?page=writemessages&amp;session=".$sess."&amp;messageziel=".intval($planet['owner_id'])."'>".
+            "<a href=index.php?page=writemessages&amp;session=".$sess."&amp;messageziel=".$owner_id.">".
             loca ( "WANDERER_GALAXY_MESSAGE" )."</a><br>".
-            "<a href='index.php?page=wanderer_market&amp;session=".$sess."'>".
+            "<a href=index.php?page=wanderer_market&amp;session=".$sess.">".
             loca ( "WANDERER_GALAXY_EXCHANGE" )."</a>".
             "</th></tr></table>";
 
