@@ -10,6 +10,7 @@ $LOCA['en']['WANDERER_MENU_STATION'] = 'Station';
 $LOCA['en']['WANDERER_MENU_MODULES'] = 'Modules';
 $LOCA['en']['WANDERER_MENU_LAB'] = 'Laboratory';
 $LOCA['en']['WANDERER_MENU_NAV'] = 'Navigation';
+$LOCA['en']['WANDERER_MENU_GALAXY'] = 'Galaxy';
 $LOCA['en']['WANDERER_MENU_MARKET'] = 'Exchange';
 $LOCA['en']['WANDERER_MENU_LEAVE'] = 'Return to the Empire';
 
@@ -18,6 +19,10 @@ $LOCA['en']['WANDERER_GALAXY_STATION'] = 'Wandering station';
 $LOCA['en']['WANDERER_GALAXY_CAPTAIN'] = 'Captain:';
 $LOCA['en']['WANDERER_GALAXY_MESSAGE'] = 'Write a message';
 $LOCA['en']['WANDERER_GALAXY_EXCHANGE'] = 'Rogue Trader Exchange';
+$LOCA['en']['WANDERER_GALAXY_TITLE'] = 'Galaxy map';
+$LOCA['en']['WANDERER_GALAXY_READONLY'] = 'observer mode: no deuterium fee, no actions';
+$LOCA['en']['WANDERER_GALAXY_OWN'] = 'My station';
+$LOCA['en']['WANDERER_GALAXY_OBSERVE'] = 'Observe';
 
 // --- Common ---
 $LOCA['en']['WANDERER_DEFAULT_NAME'] = 'Rogue Station';
@@ -54,27 +59,27 @@ $LOCA['en']['WANDERER_MOD_CORE_DESC'] = 'The heart of the station. Determines th
 $LOCA['en']['WANDERER_MOD_MINE_M'] = 'Ore module';
 $LOCA['en']['WANDERER_MOD_MINE_K'] = 'Crystal module';
 $LOCA['en']['WANDERER_MOD_MINE_D'] = 'Deuterium module';
-$LOCA['en']['WANDERER_MOD_MINE_DESC'] = 'Output: %1$s/h (next level %2$s/h)';
+$LOCA['en']['WANDERER_MOD_MINE_DESC'] = 'Output: #1/h (next level #2/h)';
 $LOCA['en']['WANDERER_MOD_SOLAR'] = 'Solar collectors';
-$LOCA['en']['WANDERER_MOD_SOLAR_DESC'] = '+%1$d%% station production';
+$LOCA['en']['WANDERER_MOD_SOLAR_DESC'] = '+#1% station production';
 $LOCA['en']['WANDERER_MOD_CARGO'] = 'Cargo hold';
-$LOCA['en']['WANDERER_MOD_CARGO_DESC'] = 'Cargo capacity: %1$s';
+$LOCA['en']['WANDERER_MOD_CARGO_DESC'] = 'Cargo capacity: #1';
 $LOCA['en']['WANDERER_MOD_ENGINE'] = 'Jump drive';
-$LOCA['en']['WANDERER_MOD_ENGINE_DESC'] = '-%1$d%% jump fuel, -%2$d%% cooldown';
+$LOCA['en']['WANDERER_MOD_ENGINE_DESC'] = '-#1% jump fuel, -#2% cooldown';
 $LOCA['en']['WANDERER_MOD_LAB'] = 'Laboratory module';
-$LOCA['en']['WANDERER_MOD_LAB_DESC'] = '+%1$d%% research speed, unlocks research levels';
+$LOCA['en']['WANDERER_MOD_LAB_DESC'] = '+#1% research speed, unlocks research levels';
 $LOCA['en']['WANDERER_MOD_HOLD'] = 'Trade docks';
 $LOCA['en']['WANDERER_MOD_HOLD_DESC'] = '+1 exchange order slot per level';
 
 // --- Research ---
 $LOCA['en']['WANDERER_RES_NAV'] = 'Navigation';
-$LOCA['en']['WANDERER_RES_NAV_DESC'] = '-%1$d%% jump fuel, -%2$d%% cooldown';
+$LOCA['en']['WANDERER_RES_NAV_DESC'] = '-#1% jump fuel, -#2% cooldown';
 $LOCA['en']['WANDERER_RES_TRADE'] = 'Trade rights';
-$LOCA['en']['WANDERER_RES_TRADE_DESC'] = 'Guild commission %1$d%% lower';
+$LOCA['en']['WANDERER_RES_TRADE_DESC'] = 'Guild commission #1% lower';
 $LOCA['en']['WANDERER_RES_SCAN'] = 'Sector scanning';
 $LOCA['en']['WANDERER_RES_SCAN_DESC'] = 'Price forecasts of all sectors are visible';
 $LOCA['en']['WANDERER_RES_INDUSTRY'] = 'Industrial technology';
-$LOCA['en']['WANDERER_RES_INDUSTRY_DESC'] = '+%1$d%% station production';
+$LOCA['en']['WANDERER_RES_INDUSTRY_DESC'] = '+#1% station production';
 $LOCA['en']['WANDERER_LAB_NEEDED'] = 'No laboratory';
 $LOCA['en']['WANDERER_LAB_NEEDED_TEXT'] = 'Build the Laboratory module in the Modules section — research is impossible without it.';
 $LOCA['en']['WANDERER_LAB_REQ'] = 'Laboratory required';
