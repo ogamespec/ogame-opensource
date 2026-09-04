@@ -168,6 +168,14 @@ if ($pk != false) {
         $header = $menu = false;
     }
 
+    // Mods may veto the page request (e.g. a game mode that replaces the
+    // classic pages). When a mod takes over the request it renders its own
+    // output (or redirects) and returns true — the engine stops here.
+    if (ModsExecArr ('page_veto', array ( 'page' => $pk ))) {
+        ob_end_flush ();
+        exit ();
+    }
+
     // By default, the page does not reload itself. The exception is the fleet dispatch page (flottenversand).
     $redirect_page = "";
     if (key_exists('redirect_page', $router[$pk])) {

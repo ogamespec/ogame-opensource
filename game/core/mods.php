@@ -5,7 +5,7 @@
  * @details Discovers installed modifications, hooks into their entry points and executes mod-defined callbacks at the appropriate places in the game core.
  */
 // Mods support.
-// https://github.com/ogamespec/ogame-opensource/blob/master/Wiki/en/mods.md
+// https://github.com/ogamespec/ogame-opensource/blob/master/wiki/ru/mods.md
 
 /**
  * List of initialized mod instances, keyed by mod name.
@@ -449,6 +449,56 @@ abstract class GameMod {
      * @return bool True if the hook changed the bonus.
      */
     public function bonus_fleet_speed (array $param, array &$bonus) : bool {
+        return false;
+    }
+
+    /**
+     * Hook: lets a mod freeze the planet update (production) of a planet.
+     *
+     * Called from GetUpdatePlanet() for every regular planet (PTYP_PLANET)
+     * right before its production is computed and credited. The planet row is
+     * passed by reference; when the hook returns true the engine treats the
+     * planet as frozen — it is returned with default (zero) production and no
+     * resources are credited, the same way non-planet galaxy objects are
+     * handled. Used by game modes that leave the classic empire inactive.
+     *
+     * @param array $planet The planet row, passed by reference.
+     * @return bool True when the planet update is frozen.
+     */
+    public function skip_planet_update(array &$planet) : bool {
+        return false;
+    }
+
+    /**
+     * Hook: lets a mod veto (take over) a page request.
+     *
+     * Called from index.php for every routed page request after the session
+     * context is prepared and before the page is rendered. The parameter array
+     * carries the requested page name (key: page). A mod that takes over the
+     * request renders its own output (or redirects) and returns true — the
+     * engine stops processing the request.
+     *
+     * @param array $param Request context (key: page).
+     * @return bool True when the mod handled the request itself.
+     */
+    public function page_veto(array $param) : bool {
+        return false;
+    }
+
+    /**
+     * Hook: lets a mod veto the dispatch of a new fleet.
+     *
+     * Called from DispatchFleet() for outbound missions (mission < FTYP_RETURN)
+     * right before the fleet is written to the database. The parameter array
+     * carries the fleet composition (key: fleet), the origin and target planet
+     * rows (keys: origin, target), the mission (key: mission) and the dispatch
+     * parameters (seconds, resources, cons, when). Return fleets and custom
+     * missions are never vetoed. A vetoed dispatch is aborted and returns 0.
+     *
+     * @param array $param Dispatch context.
+     * @return bool True to veto the dispatch.
+     */
+    public function fleet_dispatch_veto(array $param) : bool {
         return false;
     }
 }
