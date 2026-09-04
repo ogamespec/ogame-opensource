@@ -13,8 +13,8 @@ class Admin_Userlogs extends Page {
         // POST request processing.
         if ( method () === "POST" && $GlobalUser['admin'] >= USER_TYPE_GO )
         {
-            $name = $_POST['name'];
-            $type = $_POST['type'];
+            $name = $_POST['name'] ?? '';
+            $type = $_POST['type'] ?? '';
             $period = intval($_POST['days'])*24*60*60 + intval($_POST['hours'])*60*60;
             $arr = date_parse_from_format ( "j.n.Y", $_POST['since']);
             $since = mktime ( 0, 0, 0, (int) $arr['month'], (int) $arr['day'], (int) $arr['year'] );
@@ -31,7 +31,7 @@ class Admin_Userlogs extends Page {
 
             // Step 2: select the events of the specified category for the time interval
             foreach ( $users as $i=>$user ) {
-                if ( $type !== "ALL" ) $tstr = "AND type = '".$type."'";
+                if ( $type !== "ALL" && $type !== "" ) $tstr = "AND type = '".addslashes($type)."'";
                 else $tstr = "";
                 $query = "SELECT * FROM ".$db_prefix."userlogs WHERE owner_id = ".$user['player_id']." AND (date >= ".$since." AND date <= ".($since+$period).") ".$tstr." ORDER BY date ASC";
                 $result = dbquery ($query);

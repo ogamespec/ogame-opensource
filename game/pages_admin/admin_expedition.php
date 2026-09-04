@@ -8,9 +8,12 @@ class Admin_Expedition extends Page {
     private string $pie_values = "";
 
     public function controller () : bool {
+        global $GlobalUser;
 
-        // POST request processing.
-        if ( method () === "POST" )
+        // POST request processing. Expedition simulation with an unbounded
+        // iteration count is a CPU-heavy action and the settings are global,
+        // so only full administrators may change them.
+        if ( method () === "POST" && $GlobalUser['admin'] >= USER_TYPE_ADMIN )
         {
 
             // Simulate expeditions

@@ -27,7 +27,8 @@ class Bewerben extends Page {
         // Send an application
         if ( method() === "POST" && key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_SUBMIT") && ($this->ally['open'] ?? 0) ) {
             $text = $_POST['text'];
-            $text = addslashes ( $text );
+            // Store the text raw (AddApplication/AddDBRow handles SQL escaping;
+            // HTML escaping happens at output time).
             AddApplication ( $this->ally['ally_id'], $GlobalUser['player_id'], $text );
             // The pre-MVC page rendered a "submitted" block here instead of
             // redirecting, so mark the application as submitted and let view()

@@ -23,24 +23,36 @@ class Buddy extends Page {
             $from = $GlobalUser['player_id'];
             $to = intval ($_GET['buddy_id']);
             if ($from != $to) {
-                $buddy_id = AddBuddy ( $from, $to, $_POST['text']);
+                // The request text is stored raw (buddy table + message body) and
+                // echoed as HTML in the inbox and buddy lists, so it must be
+                // sanitized the same way writemessages sanitizes PM text.
+                $text = (string) ($_POST['text'] ?? '');
+                $text = str_replace ( '\"', "&quot;", bb($text) );
+                $text = str_replace ( '\'', "&rsquo;", $text );
+                $text = str_replace ( '\`', "&lsquo;", $text );
+                $buddy_id = AddBuddy ( $from, $to, $text);
                 if ($buddy_id == 0) $PageError = loca("BUDDY_ALREADY_SENT");
-                else SendMessage ( $to, htmlspecialchars($GlobalUser['oname']), loca("BUDDY_REQUEST"), $_POST['text'], MTYP_PM );
+                else SendMessage ( $to, htmlspecialchars($GlobalUser['oname']), loca("BUDDY_REQUEST"), $text, MTYP_PM );
             }
         }
-        // Accept the request
+        // Accept the request (only the recipient may accept).
         else if ( $this->action == 2 && key_exists('buddy_id', $_GET) && $_GET['buddy_id']) {
             $buddy_id = intval ($_GET['buddy_id']);
             $buddy = LoadBuddy ($buddy_id);
-            AcceptBuddy ($buddy_id);
-            SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va(loca("BUDDY_MSG_ADDED"), htmlspecialchars($GlobalUser['oname'])), MTYP_PM);
+            // The pending request must be addressed to the current player.
+            if ( $buddy && $buddy['request_to'] == $GlobalUser['player_id'] ) {
+                AcceptBuddy ($buddy_id);
+                SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va(loca("BUDDY_MSG_ADDED"), htmlspecialchars($GlobalUser['oname'])), MTYP_PM);
+            }
         }
-        // Reject the request
+        // Reject the request (only the recipient may reject).
         else if ( $this->action == 3 && key_exists('buddy_id', $_GET) && $_GET['buddy_id']) {
             $buddy_id = intval ($_GET['buddy_id']);
             $buddy = LoadBuddy ($buddy_id);
-            RemoveBuddy ($buddy_id);
-            SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va(loca("BUDDY_MSG_DECLINED"), htmlspecialchars($GlobalUser['oname'])), MTYP_PM);
+            if ( $buddy && $buddy['request_to'] == $GlobalUser['player_id'] ) {
+                RemoveBuddy ($buddy_id);
+                SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va(loca("BUDDY_MSG_DECLINED"), htmlspecialchars($GlobalUser['oname'])), MTYP_PM);
+            }
         }
         // Withdraw your request.
         else if ( $this->action == 4 && key_exists('buddy_id', $_GET) && $_GET['buddy_id']) {

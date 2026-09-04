@@ -1410,14 +1410,20 @@ class GoldenPagesTest extends TestCase
     }
 
     /**
-     * Test the admin page (renders the admin Home panel even for a regular
-     * player -- the redirect is a non-fatal meta refresh).
+     * Test the admin page as a regular player: the router entry is reachable
+     * with a valid session, but pages_admin/admin.php redirects regular
+     * players away (RedirectHome + return) so no admin content leaks to them.
      */
     #[DataProvider('languages')]
     public function testAdminPage(): void
     {
         $html = $this->renderPage('admin', [], 0);
         $this->assertStringContainsString('<html', $html);
+        // A regular player must never see the admin panel (issue #281 audit:
+        // the old code only echoed a meta refresh and then rendered the whole
+        // admin Home panel with its mode links into the response body).
+        $this->assertStringNotContainsString('mode=Bans', $html);
+        $this->assertStringNotContainsString('AdminPanel', $html);
         $this->compareOrSaveGolden('admin', 0, $html);
     }
 

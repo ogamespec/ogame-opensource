@@ -257,7 +257,7 @@ function GetHoldingFleets (int $planet_id) : mixed
 {
     global $db_prefix;
     $uni = LoadUniverse ();    // limit the number of fleets to the universe settings
-    $max = max (0, $uni['acs'] * $uni['acs'] - 1);
+    $max = max (0, $uni['acs'] * $uni['acs']);
     $query = "SELECT * FROM ".$db_prefix."fleet WHERE mission = ".(FTYP_ORBITING+FTYP_ACS_HOLD)." AND target_planet = $planet_id LIMIT $max";
     $result = dbquery ($query);
     return $result;

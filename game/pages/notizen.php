@@ -15,11 +15,10 @@ class Notizen extends Page {
         {
             // Store the note text as-is (only SQL-escaped here); HTML
             // escaping happens at output time so the stored data stays raw.
+            // AddNote escapes through AddDBRow and UpdateNote escapes on its
+            // own, so no extra addslashes is applied on the page.
             $title = $_POST['betreff'];
             $text = $_POST['text'];
-
-            $title = addslashes ( $title );
-            $text = addslashes ( $text );
 
             if ( intval($_POST['s']) == 1 ) AddNote ( $GlobalUser['player_id'], $title, $text, intval($_POST['u']) );
             else if ( intval($_POST['s']) == 2 ) UpdateNote ( $GlobalUser['player_id'], intval($_POST['n']), $title, $text, intval($_POST['u']) );
