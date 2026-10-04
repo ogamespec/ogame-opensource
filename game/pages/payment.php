@@ -13,25 +13,27 @@ class Payment extends Page {
         global $GlobalUni;
 
         if ( method() === "POST" ) {
-            $code = $_POST['couponcode'];
-            if (!empty($code)) {
-                SecurityCheck ( '/[\-0-9A-Z]{24}/', $code, loca_lang ("DEBUG_PAYMENT_MANI_COUPON", $GlobalUni['lang']) );
+            $code = strtoupper ( trim ( (string) ($_POST['couponcode'] ?? '') ) );
+            if ( $code !== '' && !preg_match ( '/^[0-9A-Z]{4}(-[0-9A-Z]{4}){4}$/', $code ) ) {
+                $this->CouponError = loca("PAY_INVALID_CODE");
             }
 
-            if ( $_POST['action'] === "check" ) {
-                $id = CheckCoupon ( $code );
-                if ( $id ) {
-                    $this->ShowActivateDlg = true;
-                    $this->coupon = LoadCoupon ($id);
+            if ( $this->CouponError === '' ) {
+                if ( $_POST['action'] === "check" ) {
+                    $id = CheckCoupon ( $code );
+                    if ( $id ) {
+                        $this->ShowActivateDlg = true;
+                        $this->coupon = LoadCoupon ($id);
+                    }
+                    else $this->CouponError = loca("PAY_INVALID_CODE");
+
+                    //Код более не действителен.
+                    //Неверный код
                 }
-                else $this->CouponError = loca("PAY_INVALID_CODE");
-
-                //Код более не действителен.
-                //Неверный код
-            }
-            else if ( $_POST['action'] === "activate" ) {
-                ActivateCoupon ( $GlobalUser, $code );
-                MyGoto ( "micropayment" );
+                else if ( $_POST['action'] === "activate" ) {
+                    ActivateCoupon ( $GlobalUser, $code );
+                    MyGoto ( "micropayment" );
+                }
             }
         }
 

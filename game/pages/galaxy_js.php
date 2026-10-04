@@ -194,12 +194,12 @@
 
   function changeSlots(slotsInUse) {
       var e = document.getElementById('slots');
-      e.innerHTML = slotsInUse;
+      if (e) e.innerHTML = slotsInUse;
   }
 
   function setShips(ship, count) {
       var e = document.getElementById(ship);
-      e.innerHTML = count;
+      if (e) e.innerHTML = count;
   }
 
   function cursorevent(evt) {

@@ -147,7 +147,7 @@ class Infos extends Page {
             else if ( $gid == GID_B_METAL_STOR || $gid == GID_B_CRYS_STOR || $gid == GID_B_DEUT_STOR ) {
                 $this->DisplayStorageTable ($gid);
             }
-            else if ( $gid == GID_B_ALLY_DEPOT ) {
+            else if ( $gid == GID_B_ALLY_DEPOT && $aktplanet[GID_B_ALLY_DEPOT] > 0 ) {
                 $this->DisplayAllianceDepot ();
             }
             else if ( $gid == GID_B_MISS_SILO && $aktplanet[GID_B_MISS_SILO] > 0) {

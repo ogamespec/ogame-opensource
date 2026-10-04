@@ -22,7 +22,7 @@ $tab_users = array (    // Users
     'player_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'regdate'=>'INT UNSIGNED', 'ally_id'=>'INT', 'joindate'=>'INT UNSIGNED', 'allyrank'=>'INT',
     'session'=>'CHAR(12)', 'private_session'=>'CHAR(32)', 'name'=>'CHAR(20)', 'oname'=>'CHAR(20)', 'name_changed'=>'INT', 'name_until'=>'INT UNSIGNED', 'password'=>'CHAR(32)', 'temp_pass'=>'CHAR(32)', 'pemail'=>'CHAR(50)', 'email'=>'CHAR(50)',
     'email_changed'=>'INT', 'email_until'=>'INT UNSIGNED', 'disable'=>'INT', 'disable_until'=>'INT UNSIGNED', 'vacation'=>'INT', 'vacation_until'=>'INT UNSIGNED', 'banned'=>'INT', 'banned_until'=>'INT UNSIGNED', 'noattack'=>'INT', 'noattack_until'=>'INT UNSIGNED',
-    'lastlogin'=>'INT UNSIGNED', 'lastclick'=>'INT UNSIGNED', 'ip_addr'=>'CHAR(15)', 'validated'=>'INT', 'validatemd'=>'CHAR(32)', 'hplanetid'=>'INT', 'admin'=>'INT', 'sortby'=>'INT', 'sortorder'=>'INT',
+    'lastlogin'=>'INT UNSIGNED', 'lastclick'=>'INT UNSIGNED', 'ip_addr'=>'VARCHAR(45)', 'validated'=>'INT', 'validatemd'=>'CHAR(32)', 'hplanetid'=>'INT', 'admin'=>'INT', 'sortby'=>'INT', 'sortorder'=>'INT',
     'skin'=>'CHAR(80)', 'useskin'=>'INT', 'deact_ip'=>'INT', 'maxspy'=>'INT', 'maxfleetmsg'=>'INT', 'lang'=>'CHAR(4)', 'aktplanet'=>'INT',
     'dm'=>'INT UNSIGNED', 'dmfree'=>'INT UNSIGNED', 'sniff'=>'INT', 'debug'=>'INT', 'trader'=>'INT', 'rate_m'=>'DOUBLE', 'rate_k'=>'DOUBLE', 'rate_d'=>'DOUBLE',
     'score1'=>'BIGINT', 'score2'=>'INT', 'score3'=>'INT', 'place1'=>'INT', 'place2'=>'INT', 'place3'=>'INT',
@@ -233,7 +233,7 @@ $tab_fleetlogs = array (    // Flight logs
 
 /** Schema of the IP logs table. */
 $tab_iplogs = array (    // IP Logs
-    'log_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'ip'=>'CHAR(16)', 'user_id'=>'INT', 'reg'=>'INT', 'date'=>'INT UNSIGNED'
+    'log_id'=>'INT AUTO_INCREMENT PRIMARY KEY', 'ip'=>'VARCHAR(45)', 'user_id'=>'INT', 'reg'=>'INT', 'date'=>'INT UNSIGNED'
 );
 
 /** Schema of the Pillar of Shame (bans) table. */

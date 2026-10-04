@@ -458,7 +458,7 @@ function CreateColonyPhantom (int $g, int $s, int $p, int $owner_id) : int
     $planet = array(
         'name' => loca("PLANET_PHANTOM"), 'type' => PTYP_COLONY_PHANTOM, 'g' => $g, 's' => $s, 'p' => $p, 'owner_id' => $owner_id, 'diameter' => 0, 'temp' => 0, 'fields' => 0, 'maxfields' => 0, 'date' => time(),
         GID_RC_METAL => 0, GID_RC_CRYSTAL => 0, GID_RC_DEUTERIUM => 0,
-        'lastpeek' => 0, 'lastakt' => 0, 'gate_until' => 0, 'remove' => 0 );
+        'lastpeek' => 0, 'lastakt' => 0, 'gate_until' => 0, 'remove' => time() + 24*3600 );
     $id = AddDBRow ( $planet, 'planets' );
     return $id;
 }
@@ -550,8 +550,9 @@ function DestroyMoon (int $moon_id, int $when, int $fleet_id) : void
     global $db_prefix;
 
     $moon = LoadPlanetById ( $moon_id );
+    if ( $moon == null ) return;
     $planet = LoadPlanet ( $moon['g'], $moon['s'], $moon['p'], 1 );
-    if ( $moon == null || $planet == null ) return;
+    if ( $planet == null ) return;
 
     // Recall foreign fleets flying to the destroyed moon (except for the fleet flying to destroy the moon - its return is controlled by the caller)
     $query = "SELECT * FROM ".$db_prefix."fleet WHERE owner_id <> ".$planet['owner_id']." AND target_planet = $moon_id AND fleet_id <> $fleet_id;";

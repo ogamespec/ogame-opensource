@@ -22,6 +22,8 @@ class Admin_Bans extends Page {
 
             if ( $_GET['action'] === 'search' )    {        // Search results
 
+                $text = addslashes ((string) ($_POST['text'] ?? ""));
+
                 switch ( intval ( $_POST['searchby'] ) )
                 {
                     case 0 :        // Banned with VM
@@ -38,14 +40,14 @@ class Admin_Bans extends Page {
                         $query = "SELECT * FROM ".$db_prefix."users WHERE regdate >= $when";
                         break;
                     case 4 :        // User name (approximate)
-                        $query = "SELECT * FROM ".$db_prefix."users WHERE oname LIKE '".$_POST['text']."%' ";
+                        $query = "SELECT * FROM ".$db_prefix."users WHERE oname LIKE '".$text."%' ";
                         break;
                     case 5 :        // Alliance Tag
-                        $query = "SELECT ally_id FROM ".$db_prefix."ally WHERE tag LIKE '%".$_POST['text']."%' ";
+                        $query = "SELECT ally_id FROM ".$db_prefix."ally WHERE tag LIKE '%".$text."%' ";
                         $query = "SELECT * FROM ".$db_prefix."users WHERE ally_id = ANY ($query) ";
                         break;
                     case 6 :        // Same email address
-                        $query = "SELECT * FROM ".$db_prefix."users WHERE email LIKE '%".$_POST['text']."%' OR pemail LIKE '%".$_POST['text']."%' ";
+                        $query = "SELECT * FROM ".$db_prefix."users WHERE email LIKE '%".$text."%' OR pemail LIKE '%".$text."%' ";
                         break;
                     case 7 :        // Same IP
                         $query = "SELECT * FROM ".$db_prefix."users AS t1 INNER JOIN ( 

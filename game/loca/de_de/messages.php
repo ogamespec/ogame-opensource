@@ -40,6 +40,7 @@ $LOCA["de"]["MSG_OPER_PM"] = "Nachricht schreiben";
 // schreibe nachrichten
 
 $LOCA["de"]["WRITE_MSG_ERROR_NO_SUBJ"] = "Fehlendes Thema";
+$LOCA["de"]["WRITE_MSG_ERROR_NO_USER"] = "Kein solcher Spieler";
 $LOCA["de"]["WRITE_MSG_ERROR_NO_BODY"] = "Wo ist die Nachricht?";
 $LOCA["de"]["WRITE_MSG_SUCCESS"] = "Nachricht gesendet";
 $LOCA["de"]["WRITE_MSG_WRITE"] = "Nachricht schreiben";

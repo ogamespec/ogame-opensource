@@ -500,7 +500,7 @@ function setUnions(cnt) {
 
             inSpeedLimit = isInSpeedLimit(flightTime(thisgalaxy, thissystem, thisplanet,
             targetgalaxy, targetsystem, targetplanet,
-            spd, speedfactor), time);
+            spd, maxspeed(), speedfactor), time);
             //      alert ("in here" + inSpeedLimit);
             if (inSpeedLimit == 2) {
                 document.getElementById("union"+i).innerHTML =

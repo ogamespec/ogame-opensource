@@ -60,6 +60,11 @@ function ExecuteBlock (array $queue, array $block, array $childs ) : void
     switch ( $block['category'] )
     {
         case "Start":
+            if ( !count($childs) ) {
+                RemoveQueue ( $queue['task_id'] );
+                Debug ( "Bot block \"".$block['key']."\" has no outgoing link." );
+                break;
+            }
             $block_id = $childs[0]['to'];
             AddBotQueue ( $BotID, $strat_id, $block_id, $BotNow, 0 );
             RemoveQueue ( $queue['task_id'] );
@@ -70,6 +75,11 @@ function ExecuteBlock (array $queue, array $block, array $childs ) : void
             break;
 
         case "Label":     // Start execution of a new block chain
+            if ( !count($childs) ) {
+                RemoveQueue ( $queue['task_id'] );
+                Debug ( "Bot block \"".$block['key']."\" has no outgoing link." );
+                break;
+            }
             // Select from all descendants the one that comes from the bottom of the block (fromPort="B")
             $block_id = $childs[0]['to'];
             foreach ( $childs as $i=>$child ) {
@@ -150,6 +160,11 @@ function ExecuteBlock (array $queue, array $block, array $childs ) : void
             break;
 
         default:    // Regular block, single output.
+            if ( !count($childs) ) {
+                RemoveQueue ( $queue['task_id'] );
+                Debug ( "Bot block \"".$block['key']."\" has no outgoing link." );
+                break;
+            }
             $sleep = eval ( $block['text'] . ";" );
             if ( $sleep == NULL ) $sleep = 0;
             $block_id = $childs[0]['to'];
@@ -244,8 +259,10 @@ function Queue_Bot_End (array $queue) : void
         $strat = json_decode ( $row['source'], true );
         $strat_id = $row['id'];
 
+        $found = false;
         foreach ( $strat['nodeDataArray'] as $i=>$arr ) {
             if ( $arr['key'] == $queue['obj_id'] ) {
+                $found = true;
                 $block = $arr;
 
                 $childs = array ();
@@ -258,8 +275,16 @@ function Queue_Bot_End (array $queue) : void
             }
         }
 
+        if ( !$found ) {
+            RemoveQueue ( $queue['task_id'] );
+            Debug ( "Bot block ".$queue['obj_id']." not found in strategy ".$queue['sub_id'] );
+        }
+
     }
-    else Debug ( "Failed to load the program " . $queue['sub_id'] );
+    else {
+        RemoveQueue ( $queue['task_id'] );
+        Debug ( "Failed to load the program " . $queue['sub_id'] );
+    }
 }
 
 // Bot Variables.

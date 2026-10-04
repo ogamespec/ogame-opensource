@@ -67,11 +67,13 @@ class GalaxyTool extends GameMod {
 
     public function update_queue(array &$queue) : bool {
         global $db_prefix;
+        global $GlobalUni;
         if ($queue['type'] === QTYP_GALAXY_TOOL) {
 
             $this->GalaxyToolUpdate ();
 
-            ProlongQueue ($queue['task_id'], GALAXY_TOOL_PERIOD_SECONDS);
+            $days = isset($GlobalUni['galaxytool_update']) ? max ( 1, min ( 30, (int)$GlobalUni['galaxytool_update'] ) ) : GALAXY_TOOL_PERIOD_DAYS;
+            ProlongQueue ($queue['task_id'], $days * 24 * 60 * 60);
             return true;
         }
         else {

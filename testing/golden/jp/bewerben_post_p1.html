@@ -316,9 +316,11 @@ function fenster(target_url,win_name) {
 <center>
             <h1>登録</h1>
             <table width=519>
-            <form action="index.php?page=allianzen&session=0000000003ea" method=POST>
-            <tr><th colspan=2>あなたの申請は保存されました。承認または拒否された場合に返答が届きます。</th></tr>
-            <tr><th colspan=2><input type=submit value="OK"></th></tr>
+            <form action="index.php?page=bewerben&session=0000000003ea&allyid=1" method=POST>
+            <tr><td class=c colspan=2>同盟申請 [TST] を作成</td></tr>
+            <tr><th>メッセージ (<span id="cntChars">0</span> / 6000文字)</th><th><textarea name="text" cols=40 rows=10 onkeyup="javascript:cntchar(6000)">Please introduce yourself.</textarea></th></tr>
+            <tr><th>ちょっとしたヒント</th><th><input type=submit name="weiter" value="サンプル"></th></tr>
+            <tr><th colspan=2><input type=submit name="weiter" value="送信"></th></tr>
             </table></form></center><br><br><br><br>
             </center>
 </div>
@@ -332,9 +334,10 @@ errorboxHeight=0;
 contentbox = document.getElementById('content');
 </script>
 <div id='messagebox'><center></center></div>
-<div id='errorbox'><center></center></div>
+<div id='errorbox'><center>同盟 [TST] に申請することはできません</center></div>
 <script>
 headerHeight = 81;
+errorbox.style.display='block';
 errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
 contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
 if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;

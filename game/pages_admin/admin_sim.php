@@ -112,7 +112,7 @@ class Admin_BattleSim extends Page {
             $this->battle_result = BATTLE_RESULT_AWON;
             if ( key_exists ('debug', $_POST) && $_POST['debug'] === "on" ) $this->debug = true;
             else $this->debug = false;
-            if ( $_POST['rapid'] === "on" ) $this->rf = true;
+            if ( ($_POST['rapid'] ?? "") === "on" ) $this->rf = true;
             else $this->rf = false;
             if ( $_POST['fid'] === "" ) $this->fid = 0;
             else $this->fid = intval ($_POST['fid']);

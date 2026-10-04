@@ -63,11 +63,12 @@ class DeepSpaceHorror extends GameMod {
         global $GlobalUni;
         loca_add ("leviathans", $GlobalUni['lang'], __DIR__);
 
-        // Респаунить левиафанов
+        // Респаунить левиафанов (только отсутствующих: переустановка мода без
+        // чистого удаления не должна плодить дубликаты монстров и порталов)
 
-        $this->CreateLeviathan (PTYP_LEVI_AMOEBA);
-        $this->CreateLeviathan (PTYP_LEVI_GUARDIAN);
-        $this->CreateLeviathan (PTYP_LEVI_JUGGERNAUT);
+        if (!$this->LeviathanExists (PTYP_LEVI_AMOEBA)) $this->CreateLeviathan (PTYP_LEVI_AMOEBA);
+        if (!$this->LeviathanExists (PTYP_LEVI_GUARDIAN)) $this->CreateLeviathan (PTYP_LEVI_GUARDIAN);
+        if (!$this->LeviathanExists (PTYP_LEVI_JUGGERNAUT)) $this->CreateLeviathan (PTYP_LEVI_JUGGERNAUT);
 
         UnlockTables ();
     }
@@ -134,12 +135,19 @@ class DeepSpaceHorror extends GameMod {
     }
 
     public function init() : void {
-        global $fleetmap, $UnitParam, $RapidFire, $requirements;
+        global $fleetmap, $UnitParam, $RapidFire, $requirements, $initial;
 
         // Добавить новые юниты в игру. TODO: Таблицы придумывала нейросеть, скорее всего потребуют подстройки.
 
         $fleetmap[] = GID_LEVI_AMOEBA;
         $UnitParam[GID_LEVI_AMOEBA] = array ( 250000000, 10000, 5000, 0, 100, 0 );
+
+        // Цены монстров нужны движку (TechPrice/CalcLosses), иначе потери
+        // атакующей стороны считаются нулевыми.
+
+        $initial[GID_LEVI_AMOEBA] = array ( GID_RC_METAL => 250000000, GID_RC_CRYSTAL => 10000, GID_RC_DEUTERIUM => 5000, 'factor' => 2 );
+        $initial[GID_LEVI_GUARDIAN] = array ( GID_RC_METAL => 600000000, GID_RC_CRYSTAL => 100000, GID_RC_DEUTERIUM => 50000, 'factor' => 2 );
+        $initial[GID_LEVI_JUGGERNAUT] = array ( GID_RC_METAL => 1200000000, GID_RC_CRYSTAL => 500000, GID_RC_DEUTERIUM => 250000, 'factor' => 2 );
         $RapidFire[GID_LEVI_AMOEBA] = array (
             GID_F_SC => 1000,
             GID_F_LC => 1000,
@@ -271,6 +279,17 @@ class DeepSpaceHorror extends GameMod {
             $p = $this->Rnd (1, 15);
         }
 
+        // Координаты монстра должны быть свободны: не создавать его поверх
+        // существующей планеты (в том числе другого монстра или портала).
+
+        $tries = 0;
+        while (!$this->IsCoordFree ($g, $s, $p) && $tries < 100) {
+            $g = $this->Rnd (1, $GlobalUni['galaxies']);
+            $s = $this->Rnd (1, $GlobalUni['systems']);
+            $p = $this->Rnd (1, 15);
+            $tries++;
+        }
+
         $origin = array(
             'name' => $origin_name, 'type' => $type, 'g' => $g, 's' => $s, 'p' => $p, 
             'owner_id' => USER_SPACE, 'diameter' => LEVI_DIAMETER, 'temp' => LEVI_TEMP, 'fields' => 0, 'maxfields' => 0, 'date' => $now,
@@ -280,7 +299,7 @@ class DeepSpaceHorror extends GameMod {
 
         // Портал (точка выхода)
 
-        $coords = $this->DeterminePortalCoords ($gid, $origin);
+        $coords = $this->FindFreePortalCoords ($gid, $origin);
 
         $target_name = loca_lang ("PLANET_".PTYP_LEVI_PORTAL, $GlobalUni['lang']);
 
@@ -323,12 +342,18 @@ class DeepSpaceHorror extends GameMod {
                         }
                         $coords['p'] = $this->Rnd (1, 15);
                     }
+                    // Позиция не должна совпадать с исходной: прыжок не может быть нулевым.
+                    $tries = 0;
+                    while ($coords['p'] == ($origin['p'] ?? 0) && $tries < 15) {
+                        $coords['p'] = $this->Rnd (1, 15);
+                        $tries++;
+                    }
                     break;
                 // Движется по спирали. Начинает с края галактики (например, G=1, S=1, P=1). 
                 // Сначала проходит все Позиции (P) в системе, затем переходит на следующую Систему (S).
                 // Дойдя до конца галактики (напр., S=499), увеличивает Галактику (G) на 1 и начинает движение в обратном направлении по системам (с 499 до 1).
                 case GID_LEVI_GUARDIAN:
-                    $retrograde = $origin['g'] % 2 != 0;    // было в обратном направлении?
+                    $retrograde = $origin['g'] % 2 == 0;    // было в обратном направлении?
                     $coords['g'] = $origin['g'];
                     $coords['s'] = $origin['s'];
                     $coords['p'] = $origin['p'] + 1;
@@ -341,7 +366,7 @@ class DeepSpaceHorror extends GameMod {
                         if ($coords['g'] > $GlobalUni['galaxies']) {
                             $coords['g'] = 1;
                         }
-                        $retrograde = $coords['g'] % 2 != 0;    // стало в обратном направлении?
+                        $retrograde = $coords['g'] % 2 == 0;    // стало в обратном направлении?
                         $coords['s'] = $retrograde ? $GlobalUni['systems'] : 1;
                     }
                     break;
@@ -360,6 +385,29 @@ class DeepSpaceHorror extends GameMod {
                     break;
         }
 
+        return $coords;
+    }
+
+    /**
+     * Проверяет, свободны ли координаты (нет ли в этой точке планеты или объекта).
+     */
+    private function IsCoordFree (int $g, int $s, int $p) : bool {
+        global $db_prefix;
+        $result = dbquery ("SELECT planet_id FROM ".$db_prefix."planets WHERE g = $g AND s = $s AND p = $p LIMIT 1;");
+        return dbrows ($result) == 0;
+    }
+
+    /**
+     * Подбирает свободные координаты для портала: пока точка занята, продолжает
+     * движение по правилам портала (не более 100 попыток).
+     */
+    private function FindFreePortalCoords (int $gid, array $origin) : array {
+        $coords = $this->DeterminePortalCoords ($gid, $origin);
+        $tries = 0;
+        while (!$this->IsCoordFree ($coords['g'], $coords['s'], $coords['p']) && $tries < 100) {
+            $coords = $this->DeterminePortalCoords ($gid, $coords);
+            $tries++;
+        }
         return $coords;
     }
 
@@ -631,7 +679,7 @@ class DeepSpaceHorror extends GameMod {
 
         // Создать новый портал (точку выхода для следующего прыжка)
 
-        $coords = $this->DeterminePortalCoords ($gid, $old_portal);
+        $coords = $this->FindFreePortalCoords ($gid, $old_portal);
 
         $name = loca_lang ("PLANET_".PTYP_LEVI_PORTAL, $GlobalUni['lang']);
 
@@ -751,6 +799,9 @@ class DeepSpaceHorror extends GameMod {
                 $d[$dnum]['id'] = $fleet_obj['fleet_id'];
                 $d[$dnum]['pf'] = BATTLE_PTCP_FLEET;    // fleet  
                 $d[$dnum]['points'] = $d[$dnum]['fpoints'] = 0;
+                // Планета вылета нужна для выдачи трофея: после writeback
+                // уничтоженные флоты удаляются и LoadFleet уже ничего не вернёт.
+                $d[$dnum]['start_planet'] = (int)$fleet_obj['start_planet'];
 
                 $dnum++;
             }
@@ -980,6 +1031,7 @@ class DeepSpaceHorror extends GameMod {
     private function LeviathanLootTargetPlanet (array $user) : int {
         if (!isset($user['id'])) return 0;
         if (isset($user['pf']) && $user['pf'] == BATTLE_PTCP_PLANET) return (int)$user['id'];
+        if (isset($user['start_planet'])) return (int)$user['start_planet'];
         $fleet_obj = LoadFleet ( (int)$user['id'] );
         if ($fleet_obj == null) return 0;
         return (int)$fleet_obj['start_planet'];

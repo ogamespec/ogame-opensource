@@ -78,7 +78,7 @@ class Admin_Users extends Page {
                 $query .= "sortby = ".intval ($_POST['settings_sort']).", ";
                 $query .= "sortorder = ".intval ($_POST['settings_order']).", ";
                 $query .= "skin = '".$_POST['dpath']."', ";
-                $query .= "useskin = ".($_POST['design']==="on"?1:0).", ";
+                $query .= "useskin = ".(($_POST['design'] ?? "")==="on"?1:0).", ";
                 $query .= "deact_ip = ".(key_exists('deact_ip', $_POST) && $_POST['deact_ip']==="on"?1:0).", ";
                 $query .= "maxspy = ".intval ($_POST['spio_anz']).", ";
                 $query .= "maxfleetmsg = ".intval ($_POST['settings_fleetactions'])." ";

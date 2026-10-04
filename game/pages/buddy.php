@@ -59,7 +59,7 @@ class Buddy extends Page {
             $buddy_id = intval ($_GET['buddy_id']);
             $buddy = LoadBuddy ($buddy_id);
             // only your own
-            if ( $buddy['request_from'] == $GlobalUser['player_id'] ) {
+            if ( $buddy && $buddy['request_from'] == $GlobalUser['player_id'] ) {
                 RemoveBuddy ($buddy_id);
                 SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_REQUEST"), va (loca("BUDDY_MSG_RECALLED"), htmlspecialchars($GlobalUser['oname'])), MTYP_PM );
             }
@@ -69,11 +69,11 @@ class Buddy extends Page {
             $buddy_id = intval ($_GET['buddy_id']);
             $buddy = LoadBuddy ($buddy_id);
             // only your own
-            if ($buddy['request_from'] == $GlobalUser['player_id'] ) {
+            if ($buddy && $buddy['request_from'] == $GlobalUser['player_id'] ) {
                 RemoveBuddy ($buddy_id);
                 SendMessage ( $buddy['request_to'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va (loca("BUDDY_MSG_DELETED"), htmlspecialchars($GlobalUser['oname'])), MTYP_PM );
             }
-            if ($buddy['request_to'] == $GlobalUser['player_id'] ) {
+            if ($buddy && $buddy['request_to'] == $GlobalUser['player_id'] ) {
                 RemoveBuddy ($buddy_id);
                 SendMessage ( $buddy['request_from'], loca("BUDDY_LIST"), loca("BUDDY_CONFIRM"), va (loca("BUDDY_MSG_DELETED"), htmlspecialchars($GlobalUser['oname'])), MTYP_PM );
             }

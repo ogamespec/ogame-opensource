@@ -76,5 +76,7 @@ if ( $msg['owner_id'] != $player_id ) {
 $subj = preg_replace('/<a[^>]*>(.*?)<\/a>/is', '$1', $msg['subj']);
 $text = preg_replace('/<a[^>]*>(.*?)<\/a>/is', '$1', $msg['text']);
 
+header ("Content-Type: text/html; charset=UTF-8");
+
 ?>
 <html><head><title><?=htmlspecialchars($subj, ENT_QUOTES);?></title></head><body><h1><?=htmlspecialchars($subj, ENT_QUOTES);?></h1><p><?=nl2br(htmlspecialchars($text, ENT_QUOTES));?></p><body></html>

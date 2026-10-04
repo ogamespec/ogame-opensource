@@ -276,7 +276,7 @@ function CreateUser ( string $name, string $pass, string $email, bool $bot=false
 
     // Delete an inactivated user after 3 days.
 
-    SetVar ( $id, "TimeLimit", (string)(3*365*24*60*60) );
+    SetVar ( $id, "TimeLimit", (string)(3*24*60*60) );
 
     RecalcRanks ();
 

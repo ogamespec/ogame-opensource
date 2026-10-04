@@ -33,7 +33,7 @@ class Admin_Expedition extends Page {
                 $result[EXP_FLEET] = 0;
                 $result[EXP_TRADER] = 0;            
 
-                $expcount = intval ($_POST['expcount']);
+                $expcount = min (100000, max (1, intval ($_POST['expcount'])));
                 for ($i=0; $i<$expcount; $i++) {
 
                     $visits = 0;

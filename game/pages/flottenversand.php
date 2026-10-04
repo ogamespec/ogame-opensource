@@ -71,7 +71,7 @@ class Flottenversand extends Page {
         {
             $this->fleet[$gid] = 0;
             if (isset($aktplanet[$gid])) {
-                if ( key_exists("ship$gid", $_POST) ) $this->fleet[$gid] = min ( $aktplanet[$gid], intval($_POST["ship$gid"]) );
+                if ( key_exists("ship$gid", $_POST) ) $this->fleet[$gid] = min ( $aktplanet[$gid], abs(intval($_POST["ship$gid"])) );
             }
         }
         $this->fleet[GID_F_SAT] = 0;        // solar satellites can't fly.
@@ -82,8 +82,9 @@ class Flottenversand extends Page {
         // Output the text of the fleet dispatch error.
         if ( $GlobalUni['freeze'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_FREEZE")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
 
-        // The fleet can only be sent from a planet of the current player.
-        if ( $this->origin == null || $this->origin['owner_id'] != $GlobalUser['player_id'] ) {
+        // The fleet can only be sent from the planet of the current player
+        // that is currently selected (the origin must be the page's own planet).
+        if ( $this->origin == null || $this->origin['owner_id'] != $GlobalUser['player_id'] || $this->origin['planet_id'] != $aktplanet['planet_id'] ) {
             $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_INVALID")."</span></th>\n  </tr>\n"; $this->FleetError = true;
         }
 
@@ -190,7 +191,7 @@ class Flottenversand extends Page {
             case FTYP_ATTACK:        // Attack
                 if ( $this->target == NULL ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_INVALID")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
 
-                if ( IsPlayerNewbie ($this->target['owner_id']) || IsPlayerStrong ($this->target['owner_id']) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_NOOB")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
+                else if ( IsPlayerNewbie ($this->target['owner_id']) || IsPlayerStrong ($this->target['owner_id']) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_NOOB")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ( $this->target['owner_id'] == $this->origin['owner_id'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_OWN_PLANET")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($GlobalUser['noattack']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util']))."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($this->numships > $GlobalUni['battle_max']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_BATTLE_MAX")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
@@ -225,18 +226,18 @@ class Flottenversand extends Page {
             case FTYP_ACS_HOLD:        // ACS Hold
                 $maxhold_fleets = $GlobalUni['acs'] * $GlobalUni['acs'];
                 $maxhold_users = $GlobalUni['acs'];
-                if ( IsPlayerNewbie ($this->target['owner_id']) || IsPlayerStrong ($this->target['owner_id']) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_NOOB")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 if ( $this->target == NULL ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_INVALID")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-                if ( GetHoldingFleetsCount ($this->target['planet_id']) >= $maxhold_fleets ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".va(loca("FLEET_ERR_HOLD_FLEET_LIMIT"), $maxhold_fleets)."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-                if ( $this->numships + GetHoldingUnitsCount($this->target['planet_id']) > $GlobalUni['battle_max'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_BATTLE_MAX")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-                if ( ! CanStandHold ( $this->target['planet_id'], $this->origin['owner_id'], $maxhold_users ) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".va(loca("FLEET_ERR_HOLD_PLAYER_LIMIT"), $maxhold_users)."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-                if ( ! ( ( $this->origin_user['ally_id'] == $this->target_user['ally_id'] && $this->origin_user['ally_id'] > 0 )   || IsBuddy ( $this->origin_user['player_id'],  $this->target_user['player_id']) ) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_HOLD_ALLY")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
+                else if ( IsPlayerNewbie ($this->target['owner_id']) || IsPlayerStrong ($this->target['owner_id']) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_NOOB")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
+                else if ( GetHoldingFleetsCount ($this->target['planet_id']) >= $maxhold_fleets ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".va(loca("FLEET_ERR_HOLD_FLEET_LIMIT"), $maxhold_fleets)."</span></th>\n  </tr>\n"; $this->FleetError = true; }
+                else if ( $this->numships + GetHoldingUnitsCount($this->target['planet_id']) > $GlobalUni['battle_max'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_BATTLE_MAX")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
+                else if ( ! CanStandHold ( $this->target['planet_id'], $this->origin['owner_id'], $maxhold_users ) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".va(loca("FLEET_ERR_HOLD_PLAYER_LIMIT"), $maxhold_users)."</span></th>\n  </tr>\n"; $this->FleetError = true; }
+                else if ( ! ( ( $this->origin_user['ally_id'] == $this->target_user['ally_id'] && $this->origin_user['ally_id'] > 0 )   || IsBuddy ( $this->origin_user['player_id'],  $this->target_user['player_id']) ) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_HOLD_ALLY")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 break;
 
             case FTYP_SPY:        // Espionage
                 if ( $this->target == NULL ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_INVALID")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
 
-                if ( $this->target['owner_id'] == $this->origin['owner_id'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_SPY_OWN")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
+                else if ( $this->target['owner_id'] == $this->origin['owner_id'] ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_SPY_OWN")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ( IsPlayerNewbie ($this->target['owner_id']) || IsPlayerStrong ($this->target['owner_id']) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_SPY_NOOB")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ( $this->fleet[GID_F_PROBE] == 0 ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_SPY_REQUIRED")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($GlobalUser['noattack']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util']))."</span></th>\n  </tr>\n"; $this->FleetError = true; }
@@ -245,7 +246,7 @@ class Flottenversand extends Page {
 
             case FTYP_COLONIZE:        // Colonize
                 if ( $this->fleet[GID_F_COLON] == 0 ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_COLONY_REQUIRED")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
-                else if (HasPlanet (intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet'])) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_COLONY_EXISTS")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
+                else if ($this->SlotOccupied (intval($_POST['galaxy']), intval($_POST['system']), intval($_POST['planet'])) ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_COLONY_EXISTS")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ( !$this->FleetError ) {
                     // If a colonizer is sent - add a colonization phantom. Only
                     // when no earlier check failed, otherwise the phantom row
@@ -263,7 +264,7 @@ class Flottenversand extends Page {
             case FTYP_DESTROY:        // Destroy (moon)
                 if ( $this->target == NULL ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_INVALID")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
 
-                if ( $this->fleet[GID_F_DEATHSTAR] == 0 ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_DESTROY_REQUIRED")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
+                else if ( $this->fleet[GID_F_DEATHSTAR] == 0 ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_DESTROY_REQUIRED")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($this->target['type'] != PTYP_MOON ) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_DESTROY_MOON")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($GlobalUser['noattack']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".va ( loca("FLEET_ERR_ATTACK_BAN_PLAYER"), date ( "d.m.Y H:i:s", $GlobalUser['noattack_util']))."</span></th>\n  </tr>\n"; $this->FleetError = true; }
                 else if ($this->numships > $GlobalUni['battle_max']) { $this->FleetErrorText .= "   <tr height=\"20\">\n   <th><span class=\"error\">".loca("FLEET_ERR_BATTLE_MAX")."</span></th>\n  </tr>\n"; $this->FleetError = true; }
@@ -414,6 +415,27 @@ class Flottenversand extends Page {
            </table>
         <br><br><br><br>
         <?php
+    }
+
+    /**
+     * Check if the given coordinates are already claimed by any planet object.
+     *
+     * Unlike HasPlanet() (which only matches real, destroyed and abandoned
+     * planets), an in-flight colonization phantom or an expedition's far-space
+     * object also occupies the slot, so a second colony ship can not be sent
+     * to coordinates that are already taken.
+     *
+     * @param int $g Galaxy coordinate.
+     * @param int $s System coordinate.
+     * @param int $p Position coordinate.
+     * @return bool True if the coordinates are occupied.
+     */
+    private function SlotOccupied (int $g, int $s, int $p) : bool {
+        global $db_prefix;
+        $query = "SELECT * FROM ".$db_prefix."planets WHERE g=$g AND s=$s AND p=$p AND ( type = ".PTYP_PLANET." OR type = ".PTYP_DEST_PLANET." OR type = ".PTYP_ABANDONED." OR type = ".PTYP_COLONY_PHANTOM." OR type = ".PTYP_FARSPACE." );";
+        $result = dbquery ($query);
+        if ( dbrows ($result) ) return true;
+        else return false;
     }
 
     private bool $FleetError = false;

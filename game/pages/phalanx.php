@@ -59,7 +59,7 @@ require_once "phalanx_events.php";
     $target = LoadPlanetById ( intval($_GET['spid']) );
 
     $outofrange = false;                    // Check the radius of the phalanx
-    if ( $aktplanet['g'] != $target['g'] || $aktplanet[GID_B_PHALANX] <= 0 )  $outofrange = true;
+    if ( $target == null || $aktplanet['g'] != $target['g'] || $aktplanet[GID_B_PHALANX] <= 0 )  $outofrange = true;
     else {
         $range = GetPhalanxRadius((int)$aktplanet[GID_B_PHALANX]);
         if ( abs($aktplanet['s'] - $target['s']) > $range) $outofrange = true;
@@ -73,7 +73,11 @@ require_once "phalanx_events.php";
     else
 */
 
-    if ( $aktplanet[GID_B_PHALANX] <= 0 )        // Attempting a phalanx scan from a planet or another moon without a phalanx
+    if ( $target == null )                        // Target planet does not exist
+    {
+        echo "<font color=#FF0000>".loca("PHALANX_ERR_MISSING")."</font>";
+    }
+    else if ( $aktplanet[GID_B_PHALANX] <= 0 )        // Attempting a phalanx scan from a planet or another moon without a phalanx
     {
         echo "<font color=#FF0000>".loca("PHALANX_ERR_MISSING")."</font>";
     }

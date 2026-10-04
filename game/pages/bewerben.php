@@ -11,6 +11,7 @@ class Bewerben extends Page {
     public function controller () : bool {
         global $GlobalUser;
         global $session;
+        global $PageError;
 
         if ( ! $GlobalUser['validated'] ) Error ( loca("ALLY_APPU_NOT_ACTIVATED") );
 
@@ -26,14 +27,20 @@ class Bewerben extends Page {
 
         // Send an application
         if ( method() === "POST" && key_exists('weiter', $_POST) && $_POST['weiter'] === loca("ALLY_APPU_SUBMIT") && ($this->ally['open'] ?? 0) ) {
-            $text = $_POST['text'];
-            // Store the text raw (AddApplication/AddDBRow handles SQL escaping;
-            // HTML escaping happens at output time).
-            AddApplication ( $this->ally['ally_id'], $GlobalUser['player_id'], $text );
-            // The pre-MVC page rendered a "submitted" block here instead of
-            // redirecting, so mark the application as submitted and let view()
-            // render the confirmation.
-            $this->submitted = true;
+            if ( intval($GlobalUser['ally_id']) != 0 || GetUserApplication ( intval($GlobalUser['player_id']) ) > 0 ) {
+                // Already a member of an alliance or already applied: refuse the duplicate.
+                $PageError = va(loca("ALLY_APPU_FORBIDDEN"), htmlspecialchars($this->ally['tag'] ?? ""));
+            }
+            else {
+                $text = $_POST['text'];
+                // Store the text raw (AddApplication/AddDBRow handles SQL escaping;
+                // HTML escaping happens at output time).
+                AddApplication ( $this->ally['ally_id'], $GlobalUser['player_id'], $text );
+                // The pre-MVC page rendered a "submitted" block here instead of
+                // redirecting, so mark the application as submitted and let view()
+                // render the confirmation.
+                $this->submitted = true;
+            }
         }
 
         return true;

@@ -4,7 +4,7 @@
 /** @var string $session */
 
 $msg = LoadMessage ( intval($_GET['bericht']) );
-if ( ! is_array ($msg) ) return;    // unknown report id — nothing to show
+if ( ! is_array ($msg) || ! in_array ( intval($msg['pm']), array ( MTYP_SPY_REPORT, MTYP_BATTLE_REPORT_TEXT ), true ) ) return;    // only real reports are shown here
 
 ?>
 

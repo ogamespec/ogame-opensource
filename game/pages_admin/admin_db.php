@@ -29,12 +29,19 @@ class Admin_DB extends Page {
         // GET request processing.
         if ( method() === "GET" )
         {
+            // Never trust the file name from the request: only a plain backup
+            // file name inside temp/ may be restored or deleted.
+            $fname = basename ((string) ($_GET['fname'] ?? ""));
             if (key_exists('action', $_GET) && $_GET['action'] === "restore") {
-                $this->RestoreBackup ($_GET['fname']);
+                if ( preg_match ('/^backup_[0-9_]+\.json$/', $fname) ) {
+                    $this->RestoreBackup ($fname);
+                }
             }
             if (key_exists('action', $_GET) && $_GET['action'] === "delete") {
-                $this->DeleteBackup ($_GET['fname']);
-            }        
+                if ( preg_match ('/^backup_[0-9_]+\.json$/', $fname) ) {
+                    $this->DeleteBackup ($fname);
+                }
+            }
         }
 
         return true;
@@ -210,8 +217,8 @@ class Admin_DB extends Page {
     private function DeleteBackup (string $fname) : void
     {
         global $PageMessage, $PageError;
-        $fname = "temp/" . $fname;
-        if (strstr ($fname, "backup") && file_exists($fname)) {
+        $fname = "temp/" . basename ($fname);
+        if (preg_match ('/^temp\/backup_[0-9_]+\.json$/', $fname) && file_exists($fname)) {
             unlink ($fname);
             $PageMessage .= va(loca("ADM_DB_BACKUP_DELETED"), $fname);
         }
@@ -222,9 +229,14 @@ class Admin_DB extends Page {
 
     private function RestoreBackup (string $fname) : void
     {
-        global $PageMessage;
+        global $PageMessage, $PageError;
         LockTables ();
-        $fname = "temp/" . $fname;
+        $fname = "temp/" . basename ($fname);
+        if ( !preg_match ('/^temp\/backup_[0-9_]+\.json$/', $fname) ) {
+            $PageError .= va(loca("ADM_DB_BACKUP_NOT_FOUND"), $fname);
+            UnlockTables ();
+            return;
+        }
         $source = file_get_contents ($fname);
         if ($source === false) {
             $PageMessage .= va(loca("ADM_DB_BACKUP_NOT_FOUND"), $fname);

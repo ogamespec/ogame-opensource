@@ -36,23 +36,28 @@ if ( method() === "POST" )        // Register a player.
     $now = time ();
     $last = GetLastRegistrationByIP ( $ip );
 
+    // Escaped copies for the pages below: the name and the e-mail are echoed
+    // back to the user, so the raw POST values must not become markup.
+    $character_esc = htmlspecialchars ( (string) ($_POST['character'] ?? ''), ENT_QUOTES );
+    $email_esc = htmlspecialchars ( (string) ($_POST['email'] ?? ''), ENT_QUOTES );
+
     if ( !key_exists ( "agb", $_POST ) ) {
         $error = loca("REG_NEW_ERROR_AGB");
         $agbclass = "error";
     }
 
     else if ( ( $now - $last ) < 10 * 60 && !localhost($ip) ) $error = loca("REG_NEW_ERROR_IP");
-    else if ( mb_strlen ($_POST['character']) < 3 || mb_strlen ($_POST['character']) > 20 || preg_match ('/[;,<>()\`\"\']/', $_POST['character']) ) $error = va ( loca("REG_NEW_ERROR_CHARS"), $_POST['character'] );
-    else if ( IsUserExist ( $_POST['character'])) $error = va ( loca("REG_NEW_ERROR_EXISTS"), $_POST['character'] ) ;
-    else if ( !isValidEmail ($_POST['email']) ) $error = va ( loca("REG_NEW_ERROR_EMAIL"), $_POST['email'] ) ;
-    else if ( IsEmailExist ( $_POST['email'])) $error = va ( loca("REG_NEW_ERROR_EMAIL_EXISTS"), $_POST['email'] );
+    else if ( mb_strlen ($_POST['character']) < 3 || mb_strlen ($_POST['character']) > 20 || preg_match ('/[;,<>()\`\"\']/', $_POST['character']) ) $error = va ( loca("REG_NEW_ERROR_CHARS"), $character_esc );
+    else if ( IsUserExist ( $_POST['character'])) $error = va ( loca("REG_NEW_ERROR_EXISTS"), $character_esc ) ;
+    else if ( !isValidEmail ($_POST['email']) ) $error = va ( loca("REG_NEW_ERROR_EMAIL"), $email_esc ) ;
+    else if ( IsEmailExist ( $_POST['email'])) $error = va ( loca("REG_NEW_ERROR_EMAIL_EXISTS"), $email_esc );
     else if ( GetUsersCount() >= $GlobalUni['maxusers']) $error = va (loca("REG_NEW_ERROR_MAX_PLAYERS"), $GlobalUni['maxusers']);
 
     $forbidden = explode ( ",", FORBIDDEN_LOGINS );
     $lower = mb_strtolower ($_POST['character'], 'UTF-8');
     foreach ( $forbidden as $i=>$name) {
         if ( strpos($lower, $name) !== false ) {
-            $error = va ( loca("REG_NEW_ERROR_CHARS"), $_POST['character'] );
+            $error = va ( loca("REG_NEW_ERROR_CHARS"), $character_esc );
             break;
         }
     }
@@ -81,9 +86,9 @@ if ( method() === "POST" )        // Register a player.
 <th style="text-align: left;">
 <?php
     echo va(loca("REG_NEW_TEXT"),
-        $_POST['character'],
+        $character_esc,
         $uninum,
-        $_POST['email'],
+        $email_esc,
         $StartPage,
         $StartPage,
         loca("OGAME_LOC")
@@ -93,7 +98,7 @@ if ( method() === "POST" )        // Register a player.
 </table>
 <div style="position:relative; width: 700px; height: 300px; color: #000000; text-align: left; border: 1px solid #415680;"><a href="<?=hostname();?>"><img src="login.jpg" width="700" height="300" alt="" /></a>
 	<div style="position:absolute; top:135px; left:170px; width:130px; height:16px;"><?=va(loca("REG_NEW_UNI"), $uninum);?></div>
-	<div style="position:absolute; top:135px; left:345px; width:85px; height:16px;"><?=$_POST['character'];?></div>
+	<div style="position:absolute; top:135px; left:345px; width:85px; height:16px;"><?=$character_esc;?></div>
 
 	<div style="position:absolute; top:135px; left:435px; width:85px; height:16px;">********</div>
 

@@ -316,9 +316,11 @@ function fenster(target_url,win_name) {
 <center>
             <h1>S'inscrire</h1>
             <table width=519>
-            <form action="index.php?page=allianzen&session=0000000003ea" method=POST>
-            <tr><th colspan=2>Votre candidature a été enregistrée. Vous recevrez une réponse qu'elle soit acceptée ou rejetée.</th></tr>
-            <tr><th colspan=2><input type=submit value="OK"></th></tr>
+            <form action="index.php?page=bewerben&session=0000000003ea&allyid=1" method=POST>
+            <tr><td class=c colspan=2>Écrire une candidature à l'alliance [TST]</td></tr>
+            <tr><th>Message (<span id="cntChars">0</span> / 6000 caractères)</th><th><textarea name="text" cols=40 rows=10 onkeyup="javascript:cntchar(6000)">Please introduce yourself.</textarea></th></tr>
+            <tr><th>Petite aide</th><th><input type=submit name="weiter" value="Exemple"></th></tr>
+            <tr><th colspan=2><input type=submit name="weiter" value="Envoyer"></th></tr>
             </table></form></center><br><br><br><br>
             </center>
 </div>
@@ -332,9 +334,10 @@ errorboxHeight=0;
 contentbox = document.getElementById('content');
 </script>
 <div id='messagebox'><center></center></div>
-<div id='errorbox'><center></center></div>
+<div id='errorbox'><center>Il n'est pas possible de postuler à l'alliance [TST]</center></div>
 <script>
 headerHeight = 81;
+errorbox.style.display='block';
 errorbox.style.top=parseInt(headerHeight+messagebox.offsetHeight+5)+'px';
 contentbox.style.top=parseInt(headerHeight+errorbox.offsetHeight+messagebox.offsetHeight+10)+'px';
 if (navigator.appName=='Netscape'){if (window.innerWidth<1020){document.body.scroll='no';}   contentbox.style.height=parseInt(window.innerHeight)-messagebox.offsetHeight-errorbox.offsetHeight-headerHeight-20;

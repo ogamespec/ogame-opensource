@@ -124,6 +124,8 @@ class Statistics extends Page {
                 RecalcAllyStats ();
                 RecalcAllyRanks ();
 
+                $per_member = key_exists('sort_per_member', $_REQUEST) ? intval($_REQUEST['sort_per_member']) : 0;
+
                 // "Own position" (start=-1) means the block around the user's alliance.
                 if ( $start <= 0 ) {
                     $own_ally = LoadAlly ( intval($GlobalUser['ally_id']) );
@@ -135,9 +137,18 @@ class Statistics extends Page {
                     else $start = 1;
                 }
 
-                if ( $type === "fleet" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE place2 >= $start AND place2 < ".($start+100)." ORDER BY place2;";
-                else if ( $type === "research" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE place3 >= $start AND place3 < ".($start+100)." ORDER BY place3;";
-                else $query = "SELECT * FROM ".$db_prefix."ally WHERE place1 >= $start AND place1 < ".($start+100)." ORDER BY place1;";
+                if ( $per_member ) {
+                    // Sort the block by the score per member (the score column matching the selected type).
+                    $members_sql = "(SELECT COUNT(*) FROM ".$db_prefix."users u WHERE u.ally_id = a.ally_id)";
+                    if ( $type === "fleet" ) $query = "SELECT * FROM ".$db_prefix."ally a WHERE place2 >= $start AND place2 < ".($start+100)." ORDER BY score2 * 1.0 / (CASE WHEN $members_sql > 0 THEN $members_sql ELSE 1 END) DESC;";
+                    else if ( $type === "research" ) $query = "SELECT * FROM ".$db_prefix."ally a WHERE place3 >= $start AND place3 < ".($start+100)." ORDER BY score3 * 1.0 / (CASE WHEN $members_sql > 0 THEN $members_sql ELSE 1 END) DESC;";
+                    else $query = "SELECT * FROM ".$db_prefix."ally a WHERE place1 >= $start AND place1 < ".($start+100)." ORDER BY score1 * 1.0 / (CASE WHEN $members_sql > 0 THEN $members_sql ELSE 1 END) DESC;";
+                }
+                else {
+                    if ( $type === "fleet" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE place2 >= $start AND place2 < ".($start+100)." ORDER BY place2;";
+                    else if ( $type === "research" ) $query = "SELECT * FROM ".$db_prefix."ally WHERE place3 >= $start AND place3 < ".($start+100)." ORDER BY place3;";
+                    else $query = "SELECT * FROM ".$db_prefix."ally WHERE place1 >= $start AND place1 < ".($start+100)." ORDER BY place1;";
+                }
 
                 $result = dbquery ($query);
                 $rows = dbrows ($result);

@@ -47,8 +47,13 @@ class Writemessages extends Page {
             $this->betreff = $subj;
             if ($subj === "") $this->write_error = "<center><font color=#FF0000>".loca("WRITE_MSG_ERROR_NO_SUBJ")."</font><br/><br/></center>\n";
             else if ($text === "") $this->write_error .= "<center><font color=#FF0000>".loca("WRITE_MSG_ERROR_NO_BODY")."</font><br/><br/></center>\n";
+            else if ($this->user === null) {
+                $this->write_error = "<center><font color=#FF0000>".loca("WRITE_MSG_ERROR_NO_USER")."</font><br/><br/></center>\n";
+            }
             else {
-                if ( $this->user !== null && $this->user['useskin'] ) $skin = $this->user['skin'];
+                // $this->user is guaranteed non-null here: the recipient was
+                // checked by the $this->user === null branch above.
+                if ( $this->user['useskin'] ) $skin = $this->user['skin'];
                 else $skin = hostname () . "evolution/";
 
                 $text = str_replace ( '\"', "&quot;", bb($text) );

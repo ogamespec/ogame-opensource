@@ -24,8 +24,6 @@ function dbquery (string $query, bool $mute=false) : mysqli_result|bool
     $query_log .= $query . "<br>\n";
     $result = @mysqli_query($db_connect, $query);
     if (!$result && $mute==false) {
-        echo "$query <br>";
-        echo mysqli_error($db_connect);
         // Debug()/BackTrace() are defined in the game core, which is not
         // loaded on the start page, so log plainly instead of calling them.
         error_log (mysqli_error($db_connect) . "<br>" . $query);
@@ -44,7 +42,7 @@ function dbarray (mysqli_result $query) : array|false
     global $db_connect;
     $result = @mysqli_fetch_assoc($query);
     if (!$result) {
-        echo mysqli_error($db_connect);
+        error_log (mysqli_error($db_connect));
         return false;
     }
     else return $result;

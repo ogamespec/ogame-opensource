@@ -19,10 +19,17 @@
  * @param int $ally_id ID of the alliance to apply to.
  * @param int $player_id ID of the applying player.
  * @param string $text Application text.
- * @return int ID of the newly created application.
+ * @return int ID of the newly created application, or 0 if a duplicate application exists.
  */
 function AddApplication (int $ally_id, int $player_id, string $text) : int
 {
+    global $db_prefix;
+
+    // Refuse a duplicate application of the same player to the same alliance.
+    $query = "SELECT * FROM ".$db_prefix."allyapps WHERE ally_id = $ally_id AND player_id = $player_id";
+    $result = dbquery ($query);
+    if ( dbrows ($result) ) return 0;
+
     $app = array ( 'ally_id' => $ally_id, 'player_id' => $player_id, 'text' => $text, 'date' => time() );
     $id = AddDBRow ( $app, "allyapps" );
     return $id;

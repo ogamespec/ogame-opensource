@@ -91,6 +91,8 @@ function RemoveUnion (int $union_id) : void
 function RenameUnion (int $union_id, string $name) : void
 {
     global $db_prefix;
+    // The name is interpolated into raw SQL, so it is escaped here.
+    $name = addslashes ($name);
     $query = "UPDATE ".$db_prefix."union SET name = '".$name."' WHERE union_id = " . intval ($union_id);
     dbquery ($query);
 }
@@ -123,6 +125,7 @@ function AddUnionMember (int $union_id, string $name) : string
 
     // Find a user
     $name = mb_strtolower ($name, 'UTF-8');
+    $name = addslashes ($name);    // the name is interpolated into raw SQL
     $query = "SELECT * FROM ".$db_prefix."users WHERE name = '".$name."' LIMIT 1";
     $result = dbquery ($query);
     if (dbrows ($result) == 0) return loca("ACS_USER_NOT_FOUND");
@@ -135,8 +138,8 @@ function AddUnionMember (int $union_id, string $name) : string
     }
 
     // Add the user to the ACS union and send them an invitation message.
-    $union['player'][$union['players']] = $user['player_id'];
-    $query = "UPDATE ".$db_prefix."union SET players = '".implode(",", $union['player'])."' WHERE union_id = $union_id";
+    $union['player'][$union['players']] = intval ($user['player_id']);
+    $query = "UPDATE ".$db_prefix."union SET players = '".implode(",", array_map('intval', $union['player']))."' WHERE union_id = $union_id";
     dbquery ($query);
 
     $target_player = LoadUser ( $union['target_player'] );

@@ -57,6 +57,8 @@ class SpaceStorm extends GameMod {
 
         // Add new columns
         $query = "ALTER TABLE ".$db_prefix."uni ADD COLUMN storm INT DEFAULT 0;";
+        dbquery ($query);
+        $query = "ALTER TABLE ".$db_prefix."uni ADD COLUMN storm_frozen TEXT;";
         dbquery ($query);        
         $query = "ALTER TABLE ".$db_prefix."planets ADD COLUMN `".GID_B_REALITY_STAB."` INT DEFAULT 0;";
         dbquery ($query);
@@ -85,6 +87,8 @@ class SpaceStorm extends GameMod {
         // Remove columns
         $query = "ALTER TABLE ".$db_prefix."uni DROP COLUMN storm;";
         dbquery ($query);
+        $query = "ALTER TABLE ".$db_prefix."uni DROP COLUMN storm_frozen;";
+        dbquery ($query);
         $query = "ALTER TABLE ".$db_prefix."planets DROP COLUMN `".GID_B_REALITY_STAB."`;";
         dbquery ($query);
         $query = "ALTER TABLE ".$db_prefix."planets DROP COLUMN `s".GID_B_REALITY_STAB."`;";
@@ -101,6 +105,7 @@ class SpaceStorm extends GameMod {
 
     public function install_tabs_included (array &$tabs) : bool {
         $tabs['uni']['storm'] = 'INT DEFAULT 0';
+        $tabs['uni']['storm_frozen'] = 'TEXT';
         $tabs['planets'][GID_B_REALITY_STAB] = 'INT DEFAULT 0';
         $tabs['planets']['s'.GID_B_REALITY_STAB] = 'INT DEFAULT 0';
         return false;
@@ -223,20 +228,70 @@ class SpaceStorm extends GameMod {
 
         $task_id = $ids[mt_rand (0, count ($ids) - 1)];
         FreezeQueue ($task_id, true);
+        $this->RememberFrozenTask ($task_id);
     }
 
-    // Снять заморозку со всех построек/исследований (когда Энергетический Коллапс закончился).
+    // Снять заморозку с построек/исследований, замороженных модом (когда Энергетический Коллапс закончился).
+    // Задачи, замороженные администратором вручную, не размораживаются.
     private function UnfreezeAll () : void {
 
         global $db_prefix;
-        $result = dbquery ("SELECT task_id FROM ".$db_prefix."queue WHERE freeze = 1 AND type IN ('".QTYP_BUILD."','".QTYP_DEMOLISH."','".QTYP_RESEARCH."')");
-        if ($result == null) return;
+        $ids = $this->GetFrozenTasks ();
 
-        $rows = dbrows ($result);
-        while ($rows--) {
-            $row = dbarray ($result);
-            FreezeQueue ($row['task_id'], false);
+        // Учёт заморозок недоступен (БД не обновлена до новой схемы) - снять все заморозки, как раньше.
+        if ($ids === null) {
+            $ids = [];
+            $result = dbquery ("SELECT task_id FROM ".$db_prefix."queue WHERE freeze = 1 AND type IN ('".QTYP_BUILD."','".QTYP_DEMOLISH."','".QTYP_RESEARCH."')");
+            if ($result == null) return;
+
+            $rows = dbrows ($result);
+            while ($rows--) {
+                $row = dbarray ($result);
+                $ids[] = (int)$row['task_id'];
+            }
         }
+
+        foreach ($ids as $task_id) {
+            FreezeQueue ($task_id, false);
+        }
+
+        $this->SetFrozenTasks ([]);
+    }
+
+    // Запомнить задачу, замороженную модом (список хранится в uni.storm_frozen).
+    private function RememberFrozenTask (int $task_id) : void {
+
+        $ids = $this->GetFrozenTasks ();
+        if ($ids === null) return;
+
+        if (!in_array ($task_id, $ids, true)) {
+            $ids[] = $task_id;
+            $this->SetFrozenTasks ($ids);
+        }
+    }
+
+    // Список задач, замороженных модом. null - учёт недоступен (старая схема БД).
+    private function GetFrozenTasks () : ?array {
+
+        global $db_prefix;
+        $result = dbquery ("SELECT storm_frozen FROM ".$db_prefix."uni LIMIT 1", true);
+        if ($result == null || $result === true) return null;
+        if (dbrows ($result) == 0) return [];
+
+        $row = dbarray ($result);
+        $ids = [];
+        foreach (explode (",", (string)($row['storm_frozen'] ?? "")) as $id) {
+            if (ctype_digit ($id)) $ids[] = (int)$id;
+        }
+        return $ids;
+    }
+
+    // Сохранить список задач, замороженных модом.
+    private function SetFrozenTasks (array $ids) : void {
+
+        global $db_prefix;
+        $query = "UPDATE ".$db_prefix."uni SET storm_frozen = '".implode (",", $ids)."'";
+        dbquery ($query, true);
     }
 
     // Снять заморозку со всех построек/исследований конкретной планеты (энергия восстановлена).
@@ -338,7 +393,7 @@ class SpaceStorm extends GameMod {
     // Проверка на возможность строительства Стабилизатора реальности (можно только во время шторма)
     public function can_build(array &$info) : bool {
         $storm = $this->GetStorm();
-        if ($info['id'] == GID_B_REALITY_STAB && $storm == 0) {
+        if ($info['id'] == GID_B_REALITY_STAB && $storm == 0 && empty($info['destroy'])) {
             $info['result'] = loca ("STORM_REQUIRED");
             return true;
         }
@@ -351,7 +406,7 @@ class SpaceStorm extends GameMod {
         global $db_prefix;
         $id = $queue['obj_id'];
         $storm = $this->GetStorm();
-        if ($id == GID_B_REALITY_STAB && $storm != 0) {
+        if ($id == GID_B_REALITY_STAB && ($storm != 0 || $queue['type'] === QTYP_DEMOLISH)) {
             $demolish = $queue['type'] === QTYP_DEMOLISH;
             $planet = LoadPlanetById ( $planet_id );
             $mask = $planet['s'.GID_B_REALITY_STAB];
@@ -408,7 +463,7 @@ class SpaceStorm extends GameMod {
     // Применить бонус хроношпиоского сбоя в местах, где получается Шпионаж
     public function bonus_technology (int $id, array &$bonus) : bool {
         $storm = $this->GetStorm();
-        if ($id == GID_R_ESPIONAGE && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0) {
+        if ($id == GID_R_ESPIONAGE && ($storm & SPACE_STORM_MASK_CHRONO_SPY) != 0 && (($bonus['side'] ?? 'origin') === 'origin')) {
             $bonus['level'] -= 2;
         }
         return false;
@@ -805,7 +860,7 @@ class SpaceStorm extends GameMod {
             }
         }
 
-        if ($units_lost) {
+        if ($total_units_lost) {
 
             loca_add ( "technames", $GlobalUni['lang'] );
             loca_add ( "space_storm", $GlobalUni['lang'], __DIR__);

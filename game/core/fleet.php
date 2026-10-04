@@ -694,6 +694,8 @@ function LaunchRockets ( array $origin, array $target, int $seconds, int $amount
     $uni = LoadUniverse ( );
     if ( $uni['freeze'] ) return 0;
 
+    if ( $origin['g'] != $target['g'] ) return 0;    // Missiles can only reach targets in their own galaxy.
+
     if ( $amount > $origin[GID_D_IPM] ) return 0;    // You can't launch more missiles than there are rockets on the planet.
 
     $now = time ();
@@ -1054,9 +1056,11 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
 
     $bonus = array();
     $bonus['level'] = $origin_tech;
+    $bonus['side'] = 'origin';    // Tag the call so mods can tell the two sides apart.
     ModsExecIntRef ('bonus_technology', GID_R_ESPIONAGE, $bonus);
     $origin_tech = max ($bonus['level'], 0);
     $bonus['level'] = $target_tech;
+    $bonus['side'] = 'target';
     ModsExecIntRef ('bonus_technology', GID_R_ESPIONAGE, $bonus);
     $target_tech = max ($bonus['level'], 0);
 

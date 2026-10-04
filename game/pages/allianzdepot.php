@@ -31,10 +31,9 @@ class Allianzdepot extends Page {
 
             $fleet_obj = dbarray ( $result );
             $queue = GetFleetQueue ( $fleet_obj['fleet_id'] );
+            if ( $queue === false || $queue === null ) continue;    // no queue task: nothing to prolong, do not charge deuterium
             $user = LoadUser ($fleet_obj['owner_id']);
-            if ($user == null) {
-                $user = array (GID_R_COMBUST_DRIVE => 0, GID_R_IMPULSE_DRIVE => 0, GID_R_HYPER_DRIVE => 0);
-            }
+            if ($user == null) continue;    // same row handling as the infos.php depot form
 
             // Calculate fleet consumption per hour.
             $cons = 0;

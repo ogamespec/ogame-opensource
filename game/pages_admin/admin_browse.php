@@ -5,6 +5,12 @@
 class Admin_Browse extends Page {
 
     public function controller () : bool {
+        global $GlobalUser;
+
+        // The sniffed request log may contain any player data, so viewing it
+        // is restricted to full administrators.
+        if ( $GlobalUser['admin'] < USER_TYPE_ADMIN ) return true;
+
         return true;
     }
 
@@ -28,13 +34,13 @@ class Admin_Browse extends Page {
             if ( $user === null ) { continue; }
 ?>
             <tr><td><table>
-            <tr> <th> <?=htmlspecialchars($user['oname']);?> </th> <th> <?=$log['url'];?> </th> </tr>
+            <tr> <th> <?=htmlspecialchars($user['oname']);?> </th> <th> <?=htmlspecialchars((string)$log['url'], ENT_QUOTES);?> </th> </tr>
             <tr> <th rowspan=2>
-            <?=$log['method'];?><br>
+            <?=htmlspecialchars((string)$log['method'], ENT_QUOTES);?><br>
             <?=date ("d M Y", $log['date']);?><br>
             <?=date ("H:i:s", $log['date']);?>
-            </th> <th> <?php print_r( unserialize($log['getdata']) );?> </th> </tr>
-            <tr> <th> <?php print_r( unserialize($log['postdata']) );?> </th> </tr>
+            </th> <th> <pre><?=htmlspecialchars(var_export(unserialize($log['getdata']), true), ENT_QUOTES);?></pre> </th> </tr>
+            <tr> <th> <pre><?=htmlspecialchars(var_export(unserialize($log['postdata']), true), ENT_QUOTES);?></pre> </th> </tr>
             </table></td></tr>
 
 <?php
