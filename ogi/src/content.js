@@ -20,7 +20,8 @@
     }
 
     // The pages the extension knows how to read.
-    const HANDLERS = ['messages', 'bericht', 'galaxy', 'options', 'statistics', 'overview'];
+    const HANDLERS = ['messages', 'bericht', 'galaxy', 'options', 'statistics', 'overview',
+        'imperium', 'flotten1', 'flotten2', 'flotten3'];
 
     /**
      * The extension API (`chrome` in Chromium browsers, `browser` in Firefox).
@@ -190,6 +191,10 @@
             options: OGI.mountOptions,
             statistics: OGI.mountStatistics,
             overview: OGI.mountOverview,
+            imperium: OGI.mountImperium,
+            flotten1: OGI.mountFleet,
+            flotten2: OGI.mountFleet,
+            flotten3: OGI.mountFleet,
         };
         const handler = handlers[page];
         info.handler = typeof handler === 'function' ? page : null;

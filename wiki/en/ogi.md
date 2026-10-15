@@ -34,6 +34,9 @@ the modern game.
 | Fleet save timers and the hostile warning | `parsers/overview.js`, `pages/overview.js` |
 | Activity tracking and the galaxy marks | `parsers/galaxy.js`, `pages/galaxy.js` |
 | Needs calculator (resource lock) | `analyze/needs.js`, `parsers/resbar.js` |
+| Empire (planets, stock, production, fields, object levels) | `parsers/imperium.js`, `pages/imperium.js` |
+| Farm list (targets ranked by profit) | `analyze/farms.js`, the Farm list tab |
+| Fleet dispatcher helpers (all ships, cargo, speed, targets) | `pages/fleet.js` |
 | Settings with export/import | `lib/settings.js`, `pages/options.js` |
 
 ## What was not ported (and why)

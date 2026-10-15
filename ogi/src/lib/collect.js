@@ -14,6 +14,7 @@
     const battleParser = typeof require === 'function' ? require('../parsers/battle.js') : root.OGI;
     const textParser = typeof require === 'function' ? require('../parsers/texts.js') : root.OGI;
     const statisticsParser = typeof require === 'function' ? require('../parsers/statistics.js') : root.OGI;
+    const imperiumParser = typeof require === 'function' ? require('../parsers/imperium.js') : root.OGI;
 
     // Message folders of the 0.84 messages page (game/pages/messages.php).
     const FOLDERS = [1, 2, 3, 4, 5, 0];
@@ -325,6 +326,34 @@
             return { rows: parsed.rows.length, self: self };
         }
 
+        /**
+         * Read the empire page: the own planets with their resources, production and
+         * object levels.
+         *
+         * @param {string} pageHtml Page source.
+         * @returns {{planets: number}} Result.
+         */
+        function ingestImperiumPage(pageHtml) {
+            const parsed = imperiumParser.parseImperiumPage(pageHtml, ctx);
+            const stamp = timestamp();
+            const selfName = (store.data().meta && store.data().meta.selfName) || null;
+
+            // The own planets belong in the planet database as well: the empire page
+            // is the only page that lists them all with their names.
+            for (const planet of parsed.planets) {
+                if (!planet.coords) continue;
+                store.observePlanet({
+                    coords: planet.coords,
+                    name: planet.name,
+                    owner: selfName,
+                    date: stamp,
+                    type: null,
+                });
+            }
+            store.setEmpire(parsed, stamp);
+            return { planets: parsed.planets.length };
+        }
+
         return {
             FOLDERS: FOLDERS,
             ctx: ctx,
@@ -332,6 +361,7 @@
             ingestMessagesPage: ingestMessagesPage,
             ingestReportPage: ingestReportPage,
             ingestStatisticsPage: ingestStatisticsPage,
+            ingestImperiumPage: ingestImperiumPage,
             ingestStatisticsPage: ingestStatisticsPage,
             addSpy: addSpy,
             addExpedition: addExpedition,

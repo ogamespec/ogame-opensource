@@ -35,16 +35,27 @@
     /**
      * Split the page into its `<!-- ## Title -->` sections.
      *
+     * The engine emits an empty marker before and after every title
+     * (`<!-- ## --> <!-- ## Name --> <!-- ## --> <tr>…`), so the body of an empty
+     * marker belongs to the section that is currently open — skipping those would
+     * throw away the actual content.
+     *
      * @param {string} source Page source.
      * @returns {Object<string, string>} Section name to HTML.
      */
     function splitSections(source) {
         const out = {};
         const parts = String(source).split(/<!--\s*##\s*([^>]*?)\s*-->/);
+        let current = null;
         for (let i = 1; i < parts.length; i += 2) {
             const title = parts[i].trim();
-            if (!title) continue;
-            out[title] = (out[title] || '') + parts[i + 1];
+            const body = parts[i + 1] || '';
+            if (title) {
+                current = title;
+                out[current] = (out[current] || '') + body;
+            } else if (current) {
+                out[current] += body;
+            }
         }
         return out;
     }

@@ -40,6 +40,8 @@
         // Planet database state (the filter is not worth persisting).
         let planetFilter = '';
         let favoritesOnly = false;
+        // Farm list filters.
+        const farmFilters = { maxAgeHours: 168, inactiveOnly: false, minLoot: 0 };
 
         // The panel goes to the very top of the content area on purpose: the 0.84
         // content pane (#content) is absolutely positioned with its own scrollbar,
@@ -67,6 +69,10 @@
                 loca: ctx.loca,
                 filter: planetFilter,
                 favoritesOnly: favoritesOnly,
+                session: ctx.session,
+                maxAgeHours: farmFilters.maxAgeHours,
+                inactiveOnly: farmFilters.inactiveOnly,
+                minLoot: farmFilters.minLoot,
             });
             host.innerHTML = panel.html;
             wire();
@@ -116,6 +122,19 @@
                         const patch = {};
                         patch[this.getAttribute('data-ogi-need')] = this.value;
                         OGI.write(store, patch);
+                        render();
+                    });
+                }
+            }
+            // Farm list: age, activity and loot filters.
+            if (tab === 'farms') {
+                const fields = host.querySelectorAll('[data-ogi-farm]');
+                for (let i = 0; i < fields.length; i++) {
+                    fields[i].addEventListener('change', function () {
+                        const kind = this.getAttribute('data-ogi-farm');
+                        if (kind === 'maxAge') farmFilters.maxAgeHours = parseInt(this.value, 10) || 168;
+                        else if (kind === 'minLoot') farmFilters.minLoot = parseInt(this.value, 10) || 0;
+                        else farmFilters.inactiveOnly = this.checked;
                         render();
                     });
                 }

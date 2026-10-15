@@ -45,6 +45,8 @@
         { id: 'planets', key: 'TAB_PLANETS', icon: 'planets' },
         { id: 'totals', key: 'TAB_TOTALS', icon: 'totals' },
         { id: 'stats', key: 'TAB_STATS', icon: 'stats' },
+        { id: 'empire', key: 'TAB_EMPIRE', icon: 'empire' },
+        { id: 'farms', key: 'TAB_FARMS', icon: 'farms' },
         { id: 'needs', key: 'TAB_NEEDS', icon: 'needs' },
         { id: 'settings', key: 'TAB_SETTINGS', icon: 'settings' },
     ];
@@ -823,6 +825,132 @@
     }
 
     /**
+     * Empire: the own planets with their stock, production and fields, from the
+     * snapshot the imperium page provides.
+     *
+     * @param {object} data Store data.
+     * @param {object} options Options: i18n, loca, lang.
+     * @returns {string} HTML.
+     */
+    function imperiumSection(data, options) {
+        const t = options.i18n;
+        const empire = data.empire;
+        if (!empire || !empire.planets || !empire.planets.length) {
+            return '<div class="ogi-note">' + ui.esc(t('EMP_NO_DATA')) + '</div>';
+        }
+
+        const rows = empire.planets.map(function (planet) {
+            const coords = planet.coords ? planet.coords.g + ':' + planet.coords.s + ':' + planet.coords.p : '-';
+            function amount(gid) {
+                const value = planet.resources[gid];
+                if (!value) return '-';
+                const production = value.production === null || value.production === undefined
+                    ? ''
+                    : ' <span class="ogi-info">+' + ui.num(value.production) + '</span>';
+                return resource(gid, ui.num(value.amount)) + production;
+            }
+            const fields = planet.fields && planet.fields.max
+                ? ui.num(planet.fields.used) + ' / ' + ui.num(planet.fields.max)
+                : '-';
+            return [
+                ui.esc(planet.name || '-'),
+                ui.esc(coords),
+                ui.esc(fields),
+                amount(700),
+                amount(701),
+                amount(702),
+                amount(703),
+            ];
+        });
+
+        const sums = empire.sums && empire.sums.resources ? empire.sums.resources : {};
+        const totalRow = ['<b>' + ui.esc(t('EMP_TOTAL')) + '</b>', '', ''];
+        for (const gid of [700, 701, 702]) {
+            const name = objectName(gid, options);
+            const value = sums[name] || sums[String(gid)];
+            totalRow.push(value ? resource(gid, ui.num(value.amount)) : '-');
+        }
+        totalRow.push('');
+
+        return ui.table([
+            t('COL_PLANET'), t('COL_COORDS'), t('EMP_FIELDS'),
+            objectName(700, options), objectName(701, options), objectName(702, options), objectName(703, options),
+        ], rows.concat([totalRow])) +
+            '<div class="ogi-status">' + ui.esc(t('EMP_UPDATED', { T: formatDate(empire.t) })) + '</div>';
+    }
+
+    /**
+     * Farm list: the planets worth flying to, ranked by what can be carried away.
+     *
+     * @param {object} data Store data.
+     * @param {object} options Options: i18n, unitsData, settings, session, farms
+     *        (pre-built rows), maxAgeHours, inactiveOnly, minLoot.
+     * @returns {string} HTML.
+     */
+    function farmSection(data, options) {
+        const t = options.i18n;
+        const farms = typeof require === 'function' ? require('../analyze/farms.js') : root.OGI;
+        const settingsLib = typeof require === 'function' ? require('./settings.js') : root.OGI;
+        const settings = options.settings || settingsLib.read({ data: function () { return data; } });
+        const rows = options.farms || farms.farmList(data, {
+            unitsData: options.unitsData,
+            settings: settings,
+            now: options.now,
+            maxAgeHours: options.maxAgeHours,
+            inactiveOnly: options.inactiveOnly,
+            minLoot: options.minLoot,
+        });
+
+        const out = [];
+        out.push('<div class="ogi-settings-block">');
+        out.push('<label class="ogi-check">' + ui.esc(t('FARM_MAX_AGE')) + ': ' +
+            '<input type="number" min="1" max="720" data-ogi-farm="maxAge" value="' +
+            ui.esc(options.maxAgeHours === undefined ? 168 : options.maxAgeHours) + '" size="4" /> ' +
+            ui.esc(t('FARM_HOURS')) + ' ' +
+            '<label class="ogi-check ogi-inline"><input type="checkbox" data-ogi-farm="inactive"' +
+            (options.inactiveOnly ? ' checked' : '') + ' /> ' + ui.esc(t('FARM_INACTIVE')) + '</label> ' +
+            '<label class="ogi-check ogi-inline">' + ui.esc(t('FARM_MIN_LOOT')) + ': ' +
+            '<input type="number" min="0" step="1000" data-ogi-farm="minLoot" value="' +
+            ui.esc(options.minLoot === undefined ? 0 : options.minLoot) + '" size="6" /></label></label>');
+        out.push('</div>');
+
+        if (!rows.length) {
+            out.push('<div class="ogi-note">' + ui.esc(t('FARM_NO_TARGETS')) + '</div>');
+            return out.join('');
+        }
+
+        const session = options.session || '';
+        const links = farms.targetLinks;
+        const table = rows.map(function (row) {
+            const url = links(row, session);
+            const actions = [
+                '<a href="' + ui.esc(url.attack) + '" title="' + ui.esc(t('FARM_ATTACK')) + '">' + glyph('attack') + '</a>',
+                '<a href="' + ui.esc(url.transport) + '" title="' + ui.esc(t('FARM_TRANSPORT')) + '">' + glyph('transportSmall') + '</a>',
+                '<a href="' + ui.esc(url.spy) + '" title="' + ui.esc(t('FARM_SPY')) + '">' + glyph('spySmall') + '</a>',
+            ].join(' ');
+            return [
+                ui.esc(row.key),
+                ui.esc(row.player || '-'),
+                ui.num(row.ageHours) + ' ' + ui.esc(t('FARM_HOURS')),
+                '<b>' + ui.num(row.loot.total) + '</b>',
+                ui.num(row.needed.smallCargo) + ' / ' + ui.num(row.needed.largeCargo),
+                ui.num(row.fleetValue),
+                ui.num(row.defenceValue),
+                row.debris.total ? ui.num(row.debris.total) + ' (' + ui.num(row.recyclers) + ')' : '-',
+                row.active ? ui.tag(t('ACTIVE'), 'bad') : ui.tag(t('INACTIVE'), 'good'),
+                actions,
+            ];
+        });
+
+        out.push(ui.table([
+            t('COL_COORDS'), t('COL_PLAYER'), t('FARM_AGE'), t('COL_LOOT'),
+            'SC / LC', t('COL_FLEETVAL'), t('COL_DEFVAL'), t('COL_DEBRIS'), t('COL_ACTIVITY'), '',
+        ], table));
+        out.push('<div class="ogi-status">' + ui.num(rows.length) + '</div>');
+        return out.join('');
+    }
+
+    /**
      * Render the whole analyzer panel.
      *
      * @param {object} data Store data.
@@ -855,6 +983,8 @@
             case 'planets': body += planetSection(data, opt); break;            case 'totals': body += totalsSection(data, opt); break;
             case 'stats': body += statsSection(data, opt); break;
             case 'needs': body += needsSection(data, opt); break;
+            case 'empire': body += imperiumSection(data, opt); break;
+            case 'farms': body += farmSection(data, opt); break;
             case 'settings': body += settingsSection(data, opt); break;
             case 'spy':
             default: body += spySection(data, opt); break;
@@ -898,6 +1028,8 @@
         bar: bar,
         needsSection: needsSection,
         welcomePanel: welcomePanel,
+        imperiumSection: imperiumSection,
+        farmSection: farmSection,
         planetSection: planetSection,
         formatCountdown: formatCountdown,
         objectName: objectName,
