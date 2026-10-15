@@ -55,9 +55,21 @@
         if (content.firstChild) content.insertBefore(host, content.firstChild);
         else content.appendChild(host);
 
-        // The page that is already open needs no request at all.
-        const parsed = collector.ingestStatisticsPage(ctx.source, {});
-        rows = OGI.statisticsRows(OGI.parseStatisticsPage(ctx.source, {}).rows, store.data());
+        // The page that is already open needs no request at all. Each step is
+        // guarded separately: a failure must say which part broke instead of only
+        // "the statistics handler failed" (that is how a database written by an
+        // older version of the extension looked like a mystery).
+        try {
+            collector.ingestStatisticsPage(ctx.source, {});
+        } catch (error) {
+            console.warn('[OGI] statistics: reading the open page failed:', error);
+        }
+        try {
+            rows = OGI.statisticsRows(OGI.parseStatisticsPage(ctx.source, {}).rows, store.data());
+        } catch (error) {
+            console.warn('[OGI] statistics: building the rank table failed:', error);
+            rows = [];
+        }
 
         function render() {
             const actions = [
@@ -119,6 +131,6 @@
         }
 
         render();
-        if (!parsed.rows && ctx.session) load(-1);
+
     };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

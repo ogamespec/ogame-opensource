@@ -99,8 +99,65 @@
             activity: {},   // "g:s:p" -> observations
             favorites: { planets: {}, players: {} },
             notes: {},      // "g:s:p" -> free text
+            empire: null,   // last snapshot of the empire page (own planets)
             meta: { lastCrawl: null, lastScan: null, spiesSeen: 0, battlesSeen: 0 },
         };
+    }
+
+    /**
+     * Bring a stored database up to the current shape.
+     *
+     * The extension grows collections over time (the statistics history, favourites,
+     * notes and the empire snapshot were added after the first release), and a
+     * database written by an older version simply lacks them. Without this the first
+     * write into a missing collection throws, which is exactly what happened on a
+     * live server; here every missing part is created and every value of the wrong
+     * type is replaced by an empty one.
+     *
+     * @param {object} parsed Stored data.
+     * @param {string} [universe] Universe label.
+     * @returns {object} Usable database.
+     */
+    function migrate(parsed, universe) {
+        const data = emptyData(universe);
+        const arrays = ['spies', 'expeditions', 'combats', 'harvests', 'trades'];
+        const maps = ['messages', 'planets', 'players', 'stats', 'activity', 'notes'];
+
+        for (const key of arrays) {
+            data[key] = Array.isArray(parsed[key]) ? parsed[key] : [];
+        }
+        for (const key of maps) {
+            const source = parsed[key];
+            data[key] = source && typeof source === 'object' && !Array.isArray(source) ? source : {};
+        }
+        data.favorites = parsed.favorites && typeof parsed.favorites === 'object' ? parsed.favorites : {};
+        data.favorites.planets = data.favorites.planets && typeof data.favorites.planets === 'object' ? data.favorites.planets : {};
+        data.favorites.players = data.favorites.players && typeof data.favorites.players === 'object' ? data.favorites.players : {};
+        data.meta = parsed.meta && typeof parsed.meta === 'object' ? parsed.meta : {};
+        if (parsed.settings && typeof parsed.settings === 'object') data.settings = parsed.settings;
+        data.empire = parsed.empire && typeof parsed.empire === 'object' ? parsed.empire : null;
+        data.universe = parsed.universe || universe || null;
+        data.lang = parsed.lang || null;
+
+        // Entries of the wrong type (a truncated write, a hand-edited database) are
+        // dropped instead of breaking every page that reads them.
+        for (const name of Object.keys(data.players)) {
+            if (!data.players[name] || typeof data.players[name] !== 'object') delete data.players[name];
+        }
+        for (const name of Object.keys(data.stats)) {
+            if (!Array.isArray(data.stats[name])) delete data.stats[name];
+        }
+        for (const coords of Object.keys(data.planets)) {
+            if (!data.planets[coords] || typeof data.planets[coords] !== 'object') delete data.planets[coords];
+            else {
+                if (!Array.isArray(data.planets[coords].names)) data.planets[coords].names = [];
+                if (!Array.isArray(data.planets[coords].owners)) data.planets[coords].owners = [];
+            }
+        }
+        for (const coords of Object.keys(data.activity)) {
+            if (!Array.isArray(data.activity[coords])) delete data.activity[coords];
+        }
+        return data;
     }
 
     /**
@@ -112,7 +169,9 @@
     function createStore(options) {
         const opt = options || {};
         const storage = opt.storage || memoryStorage();
-        const key = opt.key || storageKey(opt.universe);
+        // The host is part of the key: two different servers (or a live server and a
+        // local test universe) must never share a database.
+        const key = opt.key || storageKey(opt.universe, opt.host);
         let data = null;
 
         function load() {
@@ -127,7 +186,7 @@
                 try {
                     const parsed = JSON.parse(raw);
                     if (parsed && parsed.version === VERSION) {
-                        data = parsed;
+                        data = migrate(parsed, opt.universe);
                         return data;
                     }
                 } catch (e) {
@@ -364,6 +423,23 @@
         }
 
         /**
+         * Store the empire snapshot (the own planets with their resources and
+         * production) that the imperium page provides.
+         *
+         * @param {object} snapshot Parsed empire page.
+         * @param {number} [stamp] Timestamp of the snapshot.
+         */
+        function setEmpire(snapshot, stamp) {
+            if (!snapshot) return;
+            db().empire = {
+                t: stamp || Math.floor(Date.now() / 1000),
+                planets: snapshot.planets || [],
+                sums: snapshot.sums || {},
+            };
+            save();
+        }
+
+        /**
          * Is a planet or a player marked as a favourite?
          *
          * @param {string} kind "planets" or "players".
@@ -441,6 +517,7 @@
             toggleFavorite: toggleFavorite,
             getNote: getNote,
             setNote: setNote,
+            setEmpire: setEmpire,
             reset: reset,
         };
     }
@@ -449,6 +526,7 @@
         VERSION: VERSION,
         LIMITS: LIMITS,
         memoryStorage: memoryStorage,
+        migrate: migrate,
         safeStorage: safeStorage,
         storageKey: storageKey,
         emptyData: emptyData,
