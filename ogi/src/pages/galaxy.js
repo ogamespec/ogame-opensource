@@ -56,6 +56,49 @@
 
         if (!observed) return;
 
+        // Mark the rows the database knows something about: a favourite star, the
+        // age of the last spy report and how many sessions were observed. The
+        // markers are appended to the name cell, the game's own markup is untouched.
+        const settings = OGI.read(ctx.store);
+        if (settings.highlightGalaxy) {
+            const rows = document.querySelectorAll('tr');
+            for (let i = 0; i < rows.length; i++) {
+                const nameCell = rows[i].querySelector('span.normal');
+                if (!nameCell || nameCell.getAttribute('data-ogi-marked') === '1') continue;
+                const coordsLink = rows[i].querySelector('a[href*="showGalaxy"], a[onclick*="showGalaxy"]');
+                const coordsMatch = /(\d+):(\d+):(\d+)/.exec(coordsLink ? coordsLink.textContent : '');
+                const playerName = (nameCell.textContent || '').trim();
+                const key = coordsMatch ? coordsMatch[1] + ':' + coordsMatch[2] + ':' + coordsMatch[3] : null;
+                const data = ctx.store.data();
+                const known = (data.players || {})[playerName];
+                if (!known && !(key && (data.planets || {})[key])) continue;
+
+                const marks = [];
+                if (settings.highlightFavorites &&
+                    ((data.favorites || {}).players || {})[playerName]) marks.push('★');
+                if (key && (data.planets || {})[key]) {
+                    const spies = (data.spies || []).filter(function (spy) {
+                        return spy.coords && (spy.coords.g + ':' + spy.coords.s + ':' + spy.coords.p) === key;
+                    });
+                    if (spies.length) {
+                        const hours = Math.max(0, Math.round((now - spies[0].date) / 3600));
+                        marks.push('○' + OGI.esc(hours < 48 ? hours + 'h' : Math.round(hours / 24) + 'd'));
+                    }
+                    const activity = OGI.activitySummary((data.activity || {})[key]);
+                    if (activity.sessions) marks.push('∪' + OGI.esc(activity.sessions));
+                }
+                if (!marks.length) continue;
+
+                nameCell.setAttribute('data-ogi-marked', '1');
+                const mark = document.createElement('span');
+                mark.className = 'ogi-galaxy-mark';
+                mark.textContent = ' ' + marks.join(' ');
+                nameCell.parentNode.appendChild(mark);
+            }
+        }
+
+        if (settings.tooltips) OGI.attachTooltips(document, ctx);
+
         // A short note in the old style, so the player sees that the system was
         // recorded. It goes to the top of the content area: the galaxy table is
         // long and the content pane has its own scrollbar.

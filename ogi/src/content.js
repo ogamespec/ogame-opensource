@@ -196,6 +196,16 @@
         } catch (error) {
             console.warn('[OGI] ' + page + ' handler failed:', error);
         }
+
+        // Player and planet tooltips are attached to any game page: the data comes
+        // from the database, not from the page.
+        try {
+            if (OGI.read(store).tooltips && typeof OGI.attachTooltips === 'function') {
+                OGI.attachTooltips(document, ctx);
+            }
+        } catch (error) {
+            console.warn('[OGI] tooltips failed:', error);
+        }
     }
 
     if (document.readyState === 'loading') {

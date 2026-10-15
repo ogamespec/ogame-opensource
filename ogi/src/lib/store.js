@@ -97,6 +97,8 @@
             players: {},    // player name -> player history
             stats: {},      // player name -> points history (statistics page snapshots)
             activity: {},   // "g:s:p" -> observations
+            favorites: { planets: {}, players: {} },
+            notes: {},      // "g:s:p" -> free text
             meta: { lastCrawl: null, lastScan: null, spiesSeen: 0, battlesSeen: 0 },
         };
     }
@@ -361,6 +363,63 @@
             save();
         }
 
+        /**
+         * Is a planet or a player marked as a favourite?
+         *
+         * @param {string} kind "planets" or "players".
+         * @param {string} key Coordinates or player name.
+         * @returns {boolean} True when it is a favourite.
+         */
+        function isFavorite(kind, key) {
+            const favorites = db().favorites || {};
+            const bucket = favorites[kind] || {};
+            return !!bucket[key];
+        }
+
+        /**
+         * Toggle the favourite mark of a planet or a player.
+         *
+         * @param {string} kind "planets" or "players".
+         * @param {string} key Coordinates or player name.
+         * @returns {boolean} The new state.
+         */
+        function toggleFavorite(kind, key) {
+            const data_ = db();
+            if (!data_.favorites) data_.favorites = { planets: {}, players: {} };
+            if (!data_.favorites[kind]) data_.favorites[kind] = {};
+            const bucket = data_.favorites[kind];
+            if (bucket[key]) delete bucket[key];
+            else bucket[key] = true;
+            save();
+            return !!bucket[key];
+        }
+
+        /**
+         * Read the note of a planet.
+         *
+         * @param {string} key Coordinates.
+         * @returns {string} Note text.
+         */
+        function getNote(key) {
+            const notes = db().notes || {};
+            return notes[key] || '';
+        }
+
+        /**
+         * Write the note of a planet (an empty text removes it).
+         *
+         * @param {string} key Coordinates.
+         * @param {string} text Note.
+         */
+        function setNote(key, text) {
+            const data_ = db();
+            if (!data_.notes) data_.notes = {};
+            const value = String(text || '').trim();
+            if (value === '') delete data_.notes[key];
+            else data_.notes[key] = value;
+            save();
+        }
+
         return {
             VERSION: VERSION,
             LIMITS: LIMITS,
@@ -378,6 +437,10 @@
             observePlayer: observePlayer,
             observeStats: observeStats,
             observeActivity: observeActivity,
+            isFavorite: isFavorite,
+            toggleFavorite: toggleFavorite,
+            getNote: getNote,
+            setNote: setNote,
             reset: reset,
         };
     }

@@ -242,3 +242,48 @@
 .ogi-bar.ogi-history .ogi-bar-fill {
     background-color: #4a4a4a;
 }
+
+/* Fleet events, hostile warning and the galaxy markers. */
+.ogi-alert {
+    border: 1px solid #ff3030;
+    padding: 3px;
+    margin-bottom: 4px;
+    color: #ff6060;
+}
+
+.ogi-galaxy-mark {
+    color: #ff8900;
+    font-size: 10px;
+}
+
+#ogi-tooltip {
+    position: fixed;
+    z-index: 10000;
+    max-width: 430px;
+    padding: 2px;
+    background-color: #000000;
+    border: 1px solid #4a4a4a;
+    pointer-events: none;
+}
+
+#ogi-tooltip .ogi-table {
+    width: auto;
+}
+
+/* Planet database controls. */
+.ogi-inline {
+    display: inline;
+}
+
+.ogi-note-input {
+    width: 90px;
+    background-color: #101010;
+    color: #ffffff;
+    border: 1px solid #4a4a4a;
+}
+
+#ogi-overview-host,
+#ogi-stats-host {
+    width: 519px;
+    margin-bottom: 6px;
+}

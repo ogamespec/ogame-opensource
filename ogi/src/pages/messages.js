@@ -37,6 +37,9 @@
         let tab = 'spy';
         let status = '';
         let scanning = false;
+        // Planet database state (the filter is not worth persisting).
+        let planetFilter = '';
+        let favoritesOnly = false;
 
         // The panel goes to the very top of the content area on purpose: the 0.84
         // content pane (#content) is absolutely positioned with its own scrollbar,
@@ -61,6 +64,9 @@
                 lang: ctx.lang,
                 status: status,
                 collapsed: collapsed(),
+                loca: ctx.loca,
+                filter: planetFilter,
+                favoritesOnly: favoritesOnly,
             });
             host.innerHTML = panel.html;
             wire();
@@ -111,6 +117,47 @@
                         patch[this.getAttribute('data-ogi-need')] = this.value;
                         OGI.write(store, patch);
                         render();
+                    });
+                }
+            }
+            // Planet database: filter, favourites-only, favourite toggles and notes.
+            if (tab === 'planets') {
+                const filterField = host.querySelector('[data-ogi-planet-filter]');
+                if (filterField) {
+                    filterField.addEventListener('input', function () {
+                        planetFilter = this.value;
+                        // Re-rendering on every keystroke would steal the focus, so
+                        // only the tables are rebuilt.
+                        const position = this.selectionStart;
+                        render();
+                        const again = host.querySelector('[data-ogi-planet-filter]');
+                        if (again) {
+                            again.focus();
+                            again.setSelectionRange(position, position);
+                        }
+                    });
+                }
+                const favOnly = host.querySelector('[data-ogi-planet-fav]');
+                if (favOnly) {
+                    favOnly.addEventListener('change', function () {
+                        favoritesOnly = this.checked;
+                        render();
+                    });
+                }
+                const favButtons = host.querySelectorAll('[data-ogi-fav]');
+                for (let i = 0; i < favButtons.length; i++) {
+                    favButtons[i].addEventListener('click', function (event) {
+                        event.preventDefault();
+                        const value = this.getAttribute('data-ogi-fav');
+                        if (value.indexOf('player:') === 0) store.toggleFavorite('players', value.slice(7));
+                        else store.toggleFavorite('planets', value);
+                        render();
+                    });
+                }
+                const noteFields = host.querySelectorAll('[data-ogi-note]');
+                for (let i = 0; i < noteFields.length; i++) {
+                    noteFields[i].addEventListener('change', function () {
+                        store.setNote(this.getAttribute('data-ogi-note'), this.value);
                     });
                 }
             }

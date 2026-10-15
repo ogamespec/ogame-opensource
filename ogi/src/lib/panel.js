@@ -219,51 +219,121 @@
     }
 
     /**
-     * Planets and players the extension has seen.
+     * The planet and player database: everything the extension has seen, with a
+     * filter, favourite marks and notes (OGI's galaxy database, kept in the browser).
      *
      * @param {object} data Store data.
-     * @param {object} options Options: i18n.
+     * @param {object} options Options: i18n, filter, favoritesOnly.
      * @returns {string} HTML.
      */
     function planetSection(data, options) {
         const t = options.i18n;
         const planets = data.planets || {};
+        const favorites = (data.favorites || {}).planets || {};
+        const notes = data.notes || {};
+        const filter = (options.filter || '').trim().toLowerCase();
+        const favoritesOnly = !!options.favoritesOnly;
+        const out = [];
+
+        out.push('<div class="ogi-settings-block">');
+        out.push('<label class="ogi-check">' + ui.esc(t('PL_FILTER')) + ': ' +
+            '<input type="text" data-ogi-planet-filter="1" value="' + ui.esc(options.filter || '') + '" size="24" /> ' +
+            '<label class="ogi-check ogi-inline"><input type="checkbox" data-ogi-planet-fav="1"' +
+            (favoritesOnly ? ' checked' : '') + ' /> ' + ui.esc(t('PL_FAVORITES_ONLY')) + '</label></label>');
+        out.push('</div>');
+
         const rows = [];
         const keys = Object.keys(planets).sort(function (a, b) {
+            const favoriteDiff = (favorites[b] ? 1 : 0) - (favorites[a] ? 1 : 0);
+            if (favoriteDiff !== 0) return favoriteDiff;
             return (planets[b].lastSeen || 0) - (planets[a].lastSeen || 0);
         });
+
+        let shown = 0;
         for (const key of keys) {
             const planet = planets[key];
+            const names = (planet.names || []).join(', ');
+            const owners = (planet.owners || []).join(', ');
+            const haystack = (key + ' ' + names + ' ' + owners).toLowerCase();
+            if (filter && haystack.indexOf(filter) === -1) continue;
+            if (favoritesOnly && !favorites[key]) continue;
+
             const activity = analyze.activitySummary((data.activity || {})[key]);
             const activityText = activity.observations === 0
                 ? ui.esc(t('NEVER'))
                 : (activity.activeNow ? ui.tag(t('ACTIVE'), 'good') : ui.esc(formatDate(activity.last)));
+
+            const spies = (data.spies || []).filter(function (spy) {
+                return spy.coords && coordsText(spy.coords) === key;
+            });
+            const lastSpy = spies.length ? spies[0] : null;
+
             rows.push([
+                '<a href="#" class="ogi-action" data-ogi-fav="' + ui.esc(key) + '">' +
+                    (favorites[key] ? '★' : '☆') + '</a>',
                 ui.esc(key),
-                ui.esc((planet.names || []).join(', ') || '-'),
-                ui.esc((planet.owners || []).join(', ') || '-'),
-                ui.esc(formatDate(planet.lastSeen)),
+                ui.esc(planet.type === 'moon' ? t('PL_MOON') : t('PL_PLANET')),
+                ui.esc(names || '-'),
+                ui.esc(owners || '-'),
+                lastSpy ? ui.esc(formatDate(lastSpy.date)) : '-',
                 ui.num(planet.reports),
                 activityText,
-                ui.num(activity.sessions),
+                '<input type="text" class="ogi-note-input" data-ogi-note="' + ui.esc(key) + '" value="' +
+                    ui.esc(notes[key] || '') + '" size="10" />',
             ]);
+            shown++;
         }
 
         const players = data.players || {};
-        const playerRows = Object.keys(players).sort().map(function (name) {
+        const playerFavorites = (data.favorites || {}).players || {};
+        const playerRows = Object.keys(players).sort(function (a, b) {
+            const favoriteDiff = (playerFavorites[b] ? 1 : 0) - (playerFavorites[a] ? 1 : 0);
+            if (favoriteDiff !== 0) return favoriteDiff;
+            return (players[b].points || 0) - (players[a].points || 0);
+        }).filter(function (name) {
+            if (favoritesOnly && !playerFavorites[name]) return false;
+            if (!filter) return true;
+            return name.toLowerCase().indexOf(filter) !== -1 ||
+                ((players[name].coords || []).join(' ').toLowerCase().indexOf(filter) !== -1);
+        }).map(function (name) {
             const player = players[name];
+            const account = analyze.accountBreakdown(data, name);
             return [
+                '<a href="#" class="ogi-action" data-ogi-fav="player:' + ui.esc(name) + '">' +
+                    (playerFavorites[name] ? '★' : '☆') + '</a>',
                 ui.esc(name),
-                ui.esc(formatDate(player.lastSeen)),
+                ui.esc(player.ally || '-'),
+                account.rank === null ? '-' : ui.num(account.rank),
                 player.points === null || player.points === undefined ? '-' : ui.num(player.points),
-                ui.esc((player.coords || []).join(', ') || '-'),
+                account.fleet === null ? '-' : ui.num(account.fleet),
+                account.research === null ? '-' : ui.num(account.research),
+                ui.esc(player.home ? coordsText(player.home) : ((player.coords || []).join(', ') || '-')),
+                ui.esc(formatDate(player.lastSeen)),
             ];
         });
 
-        return ui.table([
-            t('COL_COORDS'), t('COL_NAMES'), t('COL_OWNERS'), t('COL_LASTSEEN'),
-            t('COL_REPORTS'), t('COL_ACTIVITY'), t('COL_SESSIONS'),
-        ], rows) + '<br>' + ui.table([t('COL_PLAYER'), t('COL_LASTSEEN'), 'Points', t('COL_COORDS')], playerRows);
+        out.push(ui.table([
+            '★', t('COL_COORDS'), t('PL_PLANET'), t('COL_NAMES'), t('COL_OWNERS'),
+            t('TT_LAST_SPY'), t('COL_REPORTS'), t('COL_ACTIVITY'), t('PL_NOTE'),
+        ], rows));
+        out.push('<div class="ogi-status">' + ui.num(shown) + ' / ' + ui.num(keys.length) + '</div>');
+
+        out.push('<br>' + ui.table([
+            '★', t('COL_PLAYER'), t('COL_ALLY'), t('COL_RANK'), t('STAT_POINTS'),
+            t('STAT_FLEET_POINTS'), t('STAT_RESEARCH_POINTS'), t('COL_HOME'), t('COL_LASTSEEN'),
+        ], playerRows));
+        return out.join('');
+    }
+
+    /**
+     * Coordinates of a stored spy report as text.
+     *
+     * @param {object} coords Coordinates.
+     * @returns {string} "g:s:p".
+     */
+    function coordsText(coords) {
+        if (!coords) return '';
+        return coords.g + ':' + coords.s + ':' + coords.p;
     }
 
     /**
@@ -720,8 +790,7 @@
             case 'combats': body += combatSection(data, opt); break;
             case 'harvests': body += harvestSection(data, opt); break;
             case 'trades': body += tradeSection(data, opt); break;
-            case 'planets': body += planetSection(data, opt); break;
-            case 'totals': body += totalsSection(data, opt); break;
+            case 'planets': body += planetSection(data, opt); break;            case 'totals': body += totalsSection(data, opt); break;
             case 'stats': body += statsSection(data, opt); break;
             case 'needs': body += needsSection(data, opt); break;
             case 'settings': body += settingsSection(data, opt); break;
@@ -766,6 +835,7 @@
         summaryLine: summaryLine,
         bar: bar,
         needsSection: needsSection,
+        planetSection: planetSection,
         formatCountdown: formatCountdown,
         objectName: objectName,
         fleetSection: fleetSection,

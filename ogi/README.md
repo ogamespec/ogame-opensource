@@ -18,13 +18,19 @@ game, from the pages the player opens:
 
 | Feature (ported from OGI) | 0.84 data source |
 |---|---|
-| **Spy report database** with loot, maximum loot, required cargo ships and fleet/defence value | `page=bericht&bericht=<id>` popups and the reports inlined into the message list |
+| **Spy report database** with loot, maximum loot, required cargo ships, fleet/defence value and the debris the scanned fleet would leave behind | `page=bericht&bericht=<id>` popups and the reports inlined into the message list |
 | **Expedition analyzer** — outcome, size and the found resources / dark matter / ships, summed per day | `MTYP_EXP` messages (`game/loca/<lang>/expedition.php` templates) |
 | **Combat analyzer** — wins/losses/draws, loot, own and enemy losses, debris, net result per day | battle report links in the message list plus the report popup |
-| **Recycling analyzer** — recycled metal/crystal per day | the "Intelligence" messages (`FLEET_RECYCLE`) |
+| **Recycling analyzer** — recycled metal/crystal per day; `CalcDebris` in the battle reports | the "Intelligence" messages (`FLEET_RECYCLE`) and the destroyed units of a report |
 | **Transport ledger** — what left and what arrived, per day | transport arrival and delivery messages (`FLEET_TRANSPORT_*`) |
-| **Planet and player history** — names, owners, moons, report counts | spy reports and the galaxy page |
-| **Activity tracking** — `(*)` (under 15 min) and `(n min)` markers over time | the galaxy page (`game/pages/galaxy.php`) |
+| **Planet and player database** — names, owners, moons, report counts, last spy age, activity, favourites, notes, filter | spy reports, the galaxy page and the statistics page |
+| **Account breakdown by points** — points, fleets, research and economy+defence, with the points history | the three views of `page=statistics` (read with the page's own POST form) |
+| **Player statistics on hover** — hover a player name or a coordinate anywhere in the game | the extension's own database |
+| **Fleet save timers** — every fleet in the air with its exact arrival time and a live countdown | `overview_events.php` (the `star` attribute of the timer element) |
+| **Hostile warning** — incoming attacks and espionage marked and warned about | the same event list |
+| **Activity tracking** — `(*)` (under 15 min) and `(n min)` markers over time, plus marks in the galaxy rows | the galaxy page (`game/pages/galaxy.php`) |
+| **Needs calculator** — cost of the next levels of any building/research/ship/defence, what is missing against the current stock | `page=resources`-style objects from `game/core/techs.php` and the header resource bar |
+| **Settings** — trade rate, standard unit base, debris factors, history length, auto-scan, report limit, tooltips, galaxy marking, hostile warning, export/import | the game's own Options page and the Settings tab |
 
 The panel is rendered in the markup of the old design (`table.header`, `td.c`,
 bare links), so it looks like a native 0.84 page instead of a modern overlay.
@@ -39,9 +45,13 @@ top of the content area**:
 | Page | What appears | Where exactly |
 |---|---|---|
 | Toolbar button (any tab) | A popup with the extension version, the state of the current tab (game page, page name, universe, language, storage, panel) and the collected report counts | The browser toolbar |
-| `page=messages` | The analyzer panel: actions (`Expand`/`Collapse`, `Scan message folders`, `Clear database`), a one-line summary, the tabs (Spy reports, Expeditions, Combats, Recycling, Transport, Planets & players, Totals) and the table of the active tab | The first element of `#content`, above the message table |
+| `page=messages` | The analyzer panel: actions (`Expand`/`Collapse`, `Scan message folders`, `Clear database`), a one-line summary and the tabs Spy reports, Expeditions, Combats, Recycling, Transport, Planets & players, Totals, Statistics, Needs, Settings | The first element of `#content`, above the message table |
+| `page=overview` | The fleets in the air with live countdowns to their exact arrival time and a red warning for hostile fleets | The first element of `#content` |
+| `page=statistics` | The own account breakdown, the points history and the rank table; `Update own rank block` / `Load the top 100` read the other views of the page | The first element of `#content` |
+| `page=options` | The settings panel (the same form as the Settings tab) | The first element of `#content` |
 | `page=bericht` (report popup) | An info box with the maximum loot, the needed cargo ships and the fleet/defence value of the scanned planet | Above the report body, inside the popup window |
-| `page=galaxy` | A one-line note about how many planets/moons were recorded | The first element of `#content` |
+| `page=galaxy` | A note about how many planets/moons were recorded, orange marks (`★` favourite, `○12h` age of the last spy report, `∪5` observed sessions) next to known players, and tooltips | The first element of `#content`, marks inside the galaxy rows |
+| Any game page | Hover tooltips with everything known about a player or a planet | On names and coordinates the database knows |
 
 The rest of the UI lives inside the game pages; on any other page the toolbar
 popup is the only surface, and it reports `Game page: no`. The panel state
@@ -192,10 +202,10 @@ ogi/
 │   │   └── i18n.js            # panel strings (en / ru / de)
 │   ├── parsers/               # messages, spy report, battle report, text messages, galaxy
 │   ├── analyze/index.js       # loot, needed cargos, daily sums, activity history
-│   ├── pages/                 # messages / bericht / galaxy handlers
+│   ├── pages/                 # messages / bericht / galaxy / overview / statistics / options handlers
 │   └── content.js             # entry point
 ├── tools/build-data.js        # regenerates src/data/*.js from the game sources
-└── tests/                     # node --test (34 tests)
+└── tests/                     # node --test (90 tests)
 ```
 
 ### Parsing instead of an API
@@ -254,7 +264,7 @@ node --test "ogi/tests/**/*.test.js"
 cd ogi && node --test
 ```
 
-34 tests, no dependencies (Node's built-in test runner). They check the parsers
+90 tests, no dependencies (Node's built-in test runner). They check the parsers
 against the project's own golden snapshots (`testing/golden/<lang>/…`) for seven
 languages, the analyzers, the storage, the panel rendering (including HTML
 escaping of player controlled names) and the packaging — the last one loads all
