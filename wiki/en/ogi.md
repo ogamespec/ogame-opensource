@@ -74,6 +74,22 @@ game pages ──► parsers/ ──► lib/collect.js ──► lib/store.js �
 Details, screenshots of the workflow and the exact formulas are in the
 [extension README](../../ogi/README.md).
 
+## Where the controls appear
+
+The 0.84 content pane (`#content`) is absolutely positioned with its own
+scrollbar, so a panel appended to the end of a page would sit below the message
+table and stay invisible. The extension therefore puts its controls at the **very
+top of the content area**:
+
+| Page | What appears | Where exactly |
+|---|---|---|
+| `page=messages` | The analyzer panel: actions (`Expand`/`Collapse`, `Scan message folders`, `Clear database`), a summary line, the tabs and the table of the active tab | The first element of `#content`, above the message table |
+| `page=bericht` (report popup) | The maximum loot, the needed cargo ships and the fleet/defence value of the scanned planet | Above the report body |
+| `page=galaxy` | A note about how many planets and moons were recorded | The first element of `#content` |
+
+There is no toolbar button (the manifest declares no `action`): the whole UI lives
+inside the game pages, and the collapsed/expanded state is remembered per universe.
+
 ## Testing
 
 ```bash

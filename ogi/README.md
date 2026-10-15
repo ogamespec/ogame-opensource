@@ -26,9 +26,29 @@ game, from the pages the player opens:
 | **Planet and player history** — names, owners, moons, report counts | spy reports and the galaxy page |
 | **Activity tracking** — `(*)` (under 15 min) and `(n min)` markers over time | the galaxy page (`game/pages/galaxy.php`) |
 
-The panel is injected below the message table and rendered in the markup of the
-old design (`table.header`, `td.c`, bare links), so it looks like a native 0.84
-page instead of a modern overlay.
+The panel is rendered in the markup of the old design (`table.header`, `td.c`,
+bare links), so it looks like a native 0.84 page instead of a modern overlay.
+
+## Where the controls are
+
+The 0.84 content pane (`#content`) is absolutely positioned with its own
+scrollbar, so a panel appended to the end of a page would sit below the message
+table and stay invisible. The extension therefore puts its controls at the **very
+top of the content area**:
+
+| Page | What appears | Where exactly |
+|---|---|---|
+| `page=messages` | The analyzer panel: actions (`Expand`/`Collapse`, `Scan message folders`, `Clear database`), a one-line summary, the tabs (Spy reports, Expeditions, Combats, Recycling, Transport, Planets & players, Totals) and the table of the active tab | The first element of `#content`, above the message table |
+| `page=bericht` (report popup) | An info box with the maximum loot, the needed cargo ships and the fleet/defence value of the scanned planet | Above the report body, inside the popup window |
+| `page=galaxy` | A one-line note about how many planets/moons were recorded | The first element of `#content` |
+
+There is **no toolbar button**: the manifest declares no `action`, so nothing is
+added to the browser toolbar — the UI lives inside the game pages. The panel
+state (collapsed or not) is remembered per universe.
+
+On the messages page the panel scans the six message folders on the first visit;
+`Scan message folders` repeats it at any time, and `Collapse` shrinks the panel to
+the title, the actions and the summary line.
 
 ## What is deliberately **not** ported
 
@@ -53,9 +73,9 @@ The extension is a plain unpacked Manifest V3 extension, no build step:
 2. **Firefox**: `about:debugging#/runtime/this-firefox` → *Load Temporary
    Add-on* → select `ogi/manifest.json`.
 
-Then open the game, go to **Messages** and use *Scan message folders* in the
-panel. The data stays in the browser (`localStorage`, one database per game host
-and universe).
+Then open the game, go to **Messages** and use the panel at the top of the page
+(*Scan message folders*). The data stays in the browser (`localStorage`, one
+database per game host and universe).
 
 > The manifest declares `<all_urls>` so the extension works on any 0.84 server;
 > the content script does nothing unless the page title looks like a 0.84 game

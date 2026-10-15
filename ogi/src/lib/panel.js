@@ -281,16 +281,36 @@
     }
 
     /**
+     * One line summary of the database, shown in the collapsed panel.
+     *
+     * @param {object} data Store data.
+     * @param {function} t Translator.
+     * @returns {string} HTML.
+     */
+    function summaryLine(data, t) {
+        return ui.esc(t('SUMMARY', {
+            S: (data.spies || []).length,
+            C: (data.combats || []).length,
+            E: (data.expeditions || []).length,
+            H: (data.harvests || []).length,
+            T: (data.trades || []).length,
+            P: Object.keys(data.planets || {}).length,
+        }));
+    }
+
+    /**
      * Render the whole analyzer panel.
      *
      * @param {object} data Store data.
-     * @param {object} options Options: lang, tab, i18n, unitsData, cargo, filter, status, scanning.
+     * @param {object} options Options: lang, tab, i18n, unitsData, cargo, filter,
+     *        status, collapsed.
      * @returns {{tabs: string, body: string, html: string}} Panel parts.
      */
     function renderAnalyzer(data, options) {
         const opt = options || {};
         const t = opt.i18n;
         const active = opt.tab || 'spy';
+        const collapsed = !!opt.collapsed;
         const tabs = ui.tabs(TABS.map(function (tab) {
             return { id: tab.id, title: t(tab.key) };
         }), active);
@@ -315,6 +335,8 @@
         }
 
         const actions = [
+            '<a href="#" class="ogi-action" data-ogi-action="toggle">' +
+                ui.esc(t(collapsed ? 'ACTION_EXPAND' : 'ACTION_COLLAPSE')) + '</a>',
             '<a href="#" class="ogi-action" data-ogi-action="scan">' + ui.esc(t('ACTION_SCAN')) + '</a>',
             '<a href="#" class="ogi-action" data-ogi-action="clear">' + ui.esc(t('ACTION_CLEAR')) + '</a>',
         ].join(' | ');
@@ -325,7 +347,13 @@
         return {
             tabs: tabs,
             body: body,
-            html: ui.panel(t('TITLE'), status + tabs + body, { actions: actions, id: 'ogi-panel' }),
+            summary: summaryLine(data, t),
+            html: ui.panel(t('TITLE'), status + tabs + body, {
+                actions: actions,
+                summary: summaryLine(data, t),
+                collapsed: collapsed,
+                id: 'ogi-panel',
+            }),
         };
     }
 
@@ -333,6 +361,7 @@
         TABS: TABS,
         formatDate: formatDate,
         combatResult: combatResult,
+        summaryLine: summaryLine,
         renderAnalyzer: renderAnalyzer,
         sections: {
             spy: spySection,

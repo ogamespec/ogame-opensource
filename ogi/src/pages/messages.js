@@ -38,10 +38,21 @@
         let status = '';
         let scanning = false;
 
+        // The panel goes to the very top of the content area on purpose: the 0.84
+        // content pane (#content) is absolutely positioned with its own scrollbar,
+        // so anything appended to the end of the page sits below the message table
+        // and is invisible until the player scrolls all the way down.
         const host = document.createElement('div');
         host.id = 'ogi-host';
         const content = document.getElementById('content') || document.body;
-        content.appendChild(host);
+        if (content.firstChild) content.insertBefore(host, content.firstChild);
+        else content.appendChild(host);
+
+        function collapsed() {
+            const data = store.data();
+            if (!data.meta) data.meta = {};
+            return !!data.meta.analyzerCollapsed;
+        }
 
         function render() {
             const panel = OGI.renderAnalyzer(store.data(), {
@@ -49,6 +60,7 @@
                 tab: tab,
                 lang: ctx.lang,
                 status: status,
+                collapsed: collapsed(),
             });
             host.innerHTML = panel.html;
             wire();
@@ -72,6 +84,12 @@
                     else if (action === 'clear') {
                         store.reset();
                         status = i18n('MSG_CLEARED');
+                        render();
+                    } else if (action === 'toggle') {
+                        const data = store.data();
+                        if (!data.meta) data.meta = {};
+                        data.meta.analyzerCollapsed = !data.meta.analyzerCollapsed;
+                        store.save();
                         render();
                     }
                 });

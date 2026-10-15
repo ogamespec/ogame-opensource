@@ -286,3 +286,18 @@ test('panel: player controlled text is escaped', function () {
     assert.equal(rendered.html.indexOf('<script>'), -1);
     assert.ok(rendered.html.indexOf('&lt;script&gt;') !== -1);
 });
+
+test('panel: the collapsed panel keeps the title, the actions and the summary', function () {
+    const store = makeStore();
+    collectMessages(store);
+    const t = i18n.createI18n('en');
+    const open = panel.renderAnalyzer(store.data(), { i18n: t, tab: 'spy', lang: 'en' });
+    const closed = panel.renderAnalyzer(store.data(), { i18n: t, tab: 'spy', lang: 'en', collapsed: true });
+
+    assert.ok(open.html.indexOf('ogi-tabs') !== -1, 'the open panel shows the tabs');
+    assert.equal(closed.html.indexOf('ogi-tabs'), -1, 'the collapsed panel hides the tabs');
+    assert.ok(closed.html.indexOf(t('ACTION_EXPAND')) !== -1, 'the collapsed panel offers to expand');
+    assert.ok(open.html.indexOf(t('ACTION_COLLAPSE')) !== -1, 'the open panel offers to collapse');
+    assert.ok(closed.summary.indexOf('Spy 1') !== -1, 'the summary counts the collected reports');
+    assert.ok(closed.html.indexOf('data-ogi-action="toggle"') !== -1);
+});

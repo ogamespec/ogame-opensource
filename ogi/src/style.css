@@ -17,6 +17,12 @@
 
 #ogi-host {
     width: 519px;
+    margin-bottom: 6px;
+}
+
+.ogi-summary {
+    color: #9f9f9f;
+    padding: 2px 4px;
 }
 
 .ogi-panel table.header {

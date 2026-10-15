@@ -37,7 +37,7 @@
     }
 
     /**
-     * Append a small info box to the report page.
+     * Show a small info box at the top of the report page.
      *
      * @param {string} html Inner HTML.
      */
@@ -46,7 +46,10 @@
         const host = document.createElement('div');
         host.id = 'ogi-report-info';
         host.innerHTML = html;
-        (table && table.parentNode ? table.parentNode : document.body).appendChild(host);
+        // Above the report: the popup window is small (550x280) and a report is
+        // longer than it, so a box at the bottom would not be seen at all.
+        if (table && table.parentNode) table.parentNode.insertBefore(host, table);
+        else document.body.appendChild(host);
     }
 
     /**

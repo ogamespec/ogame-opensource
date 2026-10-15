@@ -65,8 +65,9 @@
      * Render the frame of the analyzer panel.
      *
      * @param {string} title Panel title.
-     * @param {string} bodyHtml Inner HTML.
-     * @param {object} [options] Options: id, actions (HTML).
+     * @param {string} bodyHtml Inner HTML (tabs and tables).
+     * @param {object} [options] Options: id, actions (HTML), summary (HTML),
+     *        collapsed (render only the title, the actions and the summary).
      * @returns {string} HTML.
      */
     function panel(title, bodyHtml, options) {
@@ -79,7 +80,12 @@
         if (opt.actions) {
             out.push('<tr><td colspan="2" class="ogi-actions">' + opt.actions + '</td></tr>');
         }
-        out.push('<tr><td colspan="2" class="ogi-body">' + bodyHtml + '</td></tr>');
+        if (opt.summary) {
+            out.push('<tr><td colspan="2" class="ogi-summary">' + opt.summary + '</td></tr>');
+        }
+        if (!opt.collapsed) {
+            out.push('<tr><td colspan="2" class="ogi-body">' + bodyHtml + '</td></tr>');
+        }
         out.push('</table>');
         out.push('</div>');
         return out.join('');
