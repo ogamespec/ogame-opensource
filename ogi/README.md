@@ -106,6 +106,23 @@ If a server runs an **older or newer revision** of the sources, regenerate the
 data files from that revision (`node ogi/tools/build-data.js`); otherwise some
 report strings may not match and the affected reports are skipped.
 
+### Known console messages that are not the extension's
+
+`[Violation] Permissions policy violation: unload is not allowed in this document.`
+
+This comes from the engine itself: every framed 0.84 page sets an `unload`
+handler in its body tag (`game/core/page.php`: `<body … onunload='' >`, the same
+in `game/pages/phalanx.php` and the GalaxyTool). Modern Chrome reports the
+deprecated `unload` permission as a policy violation. The extension registers no
+`unload`/`beforeunload` handlers at all, and the message appears with the
+extension disabled as well.
+
+If a message names a different policy (`storage-access`, for example), it means
+the browser denied the extension's `localStorage`: the store then probes the
+storage and falls back to an in-memory database, so the panel keeps working but
+the collected reports are not persisted between pages. That happens in sandboxed
+frames and with "block all cookies" enabled.
+
 ## How it works
 
 ```

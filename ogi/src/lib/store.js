@@ -40,6 +40,31 @@
     }
 
     /**
+     * Check that a Web Storage object is really usable.
+     *
+     * Browsers deny storage in several situations (a sandboxed frame, blocked
+     * third-party storage, "block all cookies"): merely reading
+     * `window.localStorage` can throw a SecurityError, and the first write can
+     * throw a QuotaExceededError. The extension must degrade to an in-memory
+     * database instead of breaking the game page, so the candidate is probed.
+     *
+     * @param {object} candidate Storage object (may be undefined).
+     * @returns {object|null} The storage when it works, null otherwise.
+     */
+    function safeStorage(candidate) {
+        try {
+            if (!candidate) return null;
+            const probe = '__ogi_probe__';
+            candidate.setItem(probe, '1');
+            if (candidate.getItem(probe) !== '1') return null;
+            candidate.removeItem(probe);
+            return candidate;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    /**
      * Build the storage key of a universe.
      *
      * @param {string} universe Universe label ("Uni1").
@@ -87,7 +112,13 @@
         let data = null;
 
         function load() {
-            const raw = storage.getItem(key);
+            let raw = null;
+            try {
+                raw = storage.getItem(key);
+            } catch (error) {
+                // Blocked storage: keep the data of this page only.
+                raw = null;
+            }
             if (raw) {
                 try {
                     const parsed = JSON.parse(raw);
@@ -310,6 +341,7 @@
         VERSION: VERSION,
         LIMITS: LIMITS,
         memoryStorage: memoryStorage,
+        safeStorage: safeStorage,
         storageKey: storageKey,
         emptyData: emptyData,
         createStore: createStore,

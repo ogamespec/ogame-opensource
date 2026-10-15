@@ -287,6 +287,38 @@ test('panel: player controlled text is escaped', function () {
     assert.ok(rendered.html.indexOf('&lt;script&gt;') !== -1);
 });
 
+test('store: a blocked or broken storage never breaks the page', function () {
+    // Browsers can deny storage entirely (sandboxed frame, blocked cookies); even
+    // reading window.localStorage throws then, and the first write can throw a
+    // quota error.
+    const throwing = {
+        getItem: function () { throw new Error('SecurityError'); },
+        setItem: function () { throw new Error('QuotaExceededError'); },
+        removeItem: function () { throw new Error('SecurityError'); },
+    };
+    assert.equal(storeModule.safeStorage(throwing), null);
+    assert.equal(storeModule.safeStorage(null), null);
+
+    const working = storeModule.memoryStorage();
+    assert.equal(storeModule.safeStorage(working), working);
+
+    const store = storeModule.createStore({ universe: 'Uni1', host: 'localhost', storage: throwing });
+    assert.doesNotThrow(function () { store.load(); });
+    assert.doesNotThrow(function () { store.push('spies', { date: 1 }); });
+    assert.equal(store.data().spies.length, 1, 'the data of the page is still usable');
+    assert.doesNotThrow(function () { store.save(); });
+
+    // Without a storage at all the store falls back to memory.
+    const memoryStore = storeModule.createStore({ universe: 'Uni1', host: 'localhost' });
+    assert.doesNotThrow(function () { memoryStore.load(); });
+    assert.doesNotThrow(function () { memoryStore.save(); });
+
+    // The universe hint survives a broken storage as well.
+    const detect = require('../src/lib/detect.js');
+    assert.doesNotThrow(function () { detect.saveUniverseHint(null, 'host', 'uni1'); });
+    assert.equal(detect.loadUniverseHint(null, 'host'), null);
+});
+
 test('panel: the collapsed panel keeps the title, the actions and the summary', function () {
     const store = makeStore();
     collectMessages(store);

@@ -19,17 +19,34 @@
         return;
     }
 
+    /**
+     * The browser storage, or null when it is blocked (a sandboxed frame, blocked
+     * third-party storage, "block all cookies"). Reading `window.localStorage` can
+     * throw by itself, so even the property access is guarded.
+     *
+     * @returns {object|null} Usable storage.
+     */
+    function browserStorage() {
+        try {
+            return OGI.safeStorage(window.localStorage);
+        } catch (error) {
+            console.warn('[OGI] localStorage is not available, data will not persist:', error);
+            return null;
+        }
+    }
+
     function boot() {
         const source = document.documentElement ? document.documentElement.outerHTML : '';
         const page = OGI.currentPage(window.location.search, window.location.pathname);
         if (!OGI.looksLikeGamePage(source, page)) return;
 
+        const storage = browserStorage();
         let universe = OGI.detectUniverse(source, document.title);
         if (universe) {
             // The report popup has no left menu: remember the universe for it.
-            OGI.saveUniverseHint(window.localStorage, window.location.host, universe);
+            OGI.saveUniverseHint(storage, window.location.host, universe);
         } else {
-            universe = OGI.loadUniverseHint(window.localStorage, window.location.host);
+            universe = OGI.loadUniverseHint(storage, window.location.host);
         }
 
         const loca = OGI.createLoca(OGI.LOCA);
@@ -37,7 +54,7 @@
         const store = OGI.createStore({
             universe: universe,
             host: window.location.host,
-            storage: window.localStorage,
+            storage: storage,
         });
         store.load();
         const lang = store.data().lang || detected.lang || 'en';
