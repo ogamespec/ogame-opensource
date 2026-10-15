@@ -70,16 +70,28 @@
     }
 
     /**
-     * Answer the toolbar popup with the decision made about this page. Read only:
-     * nothing is collected or sent anywhere on request.
+     * Answer the toolbar popup on this page: its status, and a request to show the
+     * first-run panel again. Nothing is collected or sent anywhere on request.
+     *
+     * @param {object} ctx Extension context.
      */
-    function listenToPopup() {
+    function listenToPopup(ctx) {
         const api = runtimeApi();
         if (!api || !api.runtime.onMessage) return;
         api.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-            if (!message || message.type !== 'ogi-status') return false;
-            sendResponse(OGI.buildStatus(OGI.lastBoot || {}));
-            return true;
+            if (!message) return false;
+            if (message.type === 'ogi-status') {
+                sendResponse(OGI.buildStatus(OGI.lastBoot || {}));
+                return true;
+            }
+            if (message.type === 'ogi-welcome') {
+                OGI.write(ctx.store, { welcomeSeen: false });
+                sendResponse({ ok: true });
+                // Reload so the panel appears on top of a freshly rendered page.
+                window.location.reload();
+                return true;
+            }
+            return false;
         });
     }
 
@@ -182,7 +194,7 @@
         const handler = handlers[page];
         info.handler = typeof handler === 'function' ? page : null;
         report(info);
-        listenToPopup();
+        listenToPopup(ctx);
         if (typeof handler !== 'function') {
             if (page) {
                 console.info('[OGI] page "' + page + '" is a game page but has no handler (supported: ' +
@@ -205,6 +217,51 @@
             }
         } catch (error) {
             console.warn('[OGI] tooltips failed:', error);
+        }
+
+        // First run: say what this is and where the controls are (once per universe,
+        // until the player hides it; the toolbar popup can bring it back).
+        try {
+            if (!OGI.read(store).welcomeSeen) mountWelcome(ctx, page);
+        } catch (error) {
+            console.warn('[OGI] welcome panel failed:', error);
+        }
+    }
+
+    /**
+     * Show the first-run panel at the very top of the content area.
+     *
+     * @param {object} ctx Extension context.
+     * @param {string|null} page Current game page.
+     */
+    function mountWelcome(ctx, page) {
+        const host = document.createElement('div');
+        host.id = 'ogi-welcome-host';
+        host.innerHTML = OGI.welcomePanel(ctx.store.data(), { i18n: ctx.i18n });
+
+        const content = document.getElementById('content') || document.body;
+        if (content.firstChild) content.insertBefore(host, content.firstChild);
+        else content.appendChild(host);
+
+        const actions = host.querySelectorAll('[data-ogi-action]');
+        for (let i = 0; i < actions.length; i++) {
+            actions[i].addEventListener('click', function (event) {
+                event.preventDefault();
+                const action = this.getAttribute('data-ogi-action');
+                if (action === 'welcome-close') {
+                    OGI.write(ctx.store, { welcomeSeen: true });
+                } else {
+                    // "Scan" jumps to the messages page, which scans on arrival.
+                    OGI.write(ctx.store, { welcomeSeen: true, autoScan: true });
+                    if (page !== 'messages' && ctx.session) {
+                        window.location.href = 'index.php?page=messages&dsp=1&session=' +
+                            encodeURIComponent(ctx.session);
+                        return;
+                    }
+                    OGI.write(ctx.store, { welcomeSeen: false });
+                }
+                host.parentNode.removeChild(host);
+            });
         }
     }
 

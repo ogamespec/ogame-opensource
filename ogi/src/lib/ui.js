@@ -72,10 +72,12 @@
      */
     function panel(title, bodyHtml, options) {
         const opt = options || {};
+        const icons = typeof require === 'function' ? require('./icons.js') : root.OGI;
+        const logo = icons && icons.icon ? icons.icon('planets', { size: 14 }) : '';
         const out = [];
         out.push('<div class="ogi-panel" id="' + esc(opt.id || 'ogi-panel') + '">');
         out.push('<table class="header" width="519"><tr><td class="c" colspan="2">');
-        out.push('<b>OGame Infinity 0.84 — ' + esc(title) + '</b>');
+        out.push(logo + ' <b>OGame Infinity 0.84</b> — ' + esc(title));
         out.push('</td></tr>');
         if (opt.actions) {
             out.push('<tr><td colspan="2" class="ogi-actions">' + opt.actions + '</td></tr>');
@@ -94,16 +96,18 @@
     /**
      * Render a tab bar.
      *
-     * @param {Array<{id: string, title: string}>} tabs Tabs.
+     * @param {Array<{id: string, title: string, icon: (string|undefined)}>} tabs Tabs.
      * @param {string} active Active tab id.
      * @returns {string} HTML.
      */
     function tabs(tabs, active) {
+        const icons = typeof require === 'function' ? require('./icons.js') : root.OGI;
         const out = ['<div class="ogi-tabs">'];
         for (const tab of tabs) {
             const isActive = tab.id === active;
+            const glyph = tab.icon && icons && icons.icon ? icons.icon(tab.icon, { size: 13 }) : '';
             out.push('<a href="#" class="' + (isActive ? 'ogi-tab-active' : 'ogi-tab') +
-                '" data-ogi-tab="' + esc(tab.id) + '">' + esc(tab.title) + '</a>');
+                '" data-ogi-tab="' + esc(tab.id) + '">' + glyph + esc(tab.title) + '</a>');
         }
         out.push('</div>');
         return out.join('');

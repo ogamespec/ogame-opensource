@@ -243,6 +243,34 @@
     background-color: #4a4a4a;
 }
 
+/* Inline SVG icon set (lib/icons.js). */
+.ogi-icon {
+    vertical-align: -2px;
+    margin-right: 2px;
+}
+
+.ogi-tabs .ogi-icon {
+    margin-right: 3px;
+}
+
+.ogi-welcome-list {
+    margin: 4px 0 4px 16px;
+    padding: 0;
+}
+
+.ogi-welcome-list li {
+    padding: 1px 0;
+}
+
+#ogi-welcome-host {
+    width: 519px;
+    margin-bottom: 6px;
+}
+
+#ogi-tooltip .ogi-icon {
+    margin-right: 3px;
+}
+
 /* Fleet events, hostile warning and the galaxy markers. */
 .ogi-alert {
     border: 1px solid #ff3030;

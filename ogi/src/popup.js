@@ -14,6 +14,7 @@
     const statusHost = document.getElementById('ogi-popup-status');
     const noteHost = document.getElementById('ogi-popup-note');
     const refresh = document.getElementById('ogi-popup-refresh');
+    const welcome = document.getElementById('ogi-popup-welcome');
 
     /**
      * The extension API of the current browser.
@@ -128,5 +129,24 @@
     }
 
     refresh.addEventListener('click', function () { load(); });
+
+    // Ask the content script of the active tab to show the first-run panel again
+    // (the panel and its settings live with the page, not with the popup).
+    welcome.addEventListener('click', function () {
+        promisify(function (done) {
+            return api().tabs.query({ active: true, currentWindow: true }, done);
+        }).then(function (tabs) {
+            const tab = tabs && tabs[0];
+            if (!tab || tab.id === undefined) throw new Error('no active tab');
+            return promisify(function (done) {
+                return api().tabs.sendMessage(tab.id, { type: 'ogi-welcome' }, done);
+            });
+        }).then(function () {
+            noteHost.textContent = 'The panel is back on the game page.';
+        }).catch(function () {
+            noteHost.textContent = 'Open a game page first: the panel is drawn inside the game.';
+        });
+    });
+
     load();
 })();

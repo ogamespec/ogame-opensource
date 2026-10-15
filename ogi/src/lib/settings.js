@@ -34,6 +34,7 @@
         needGid: 1,                 // needs calculator: last chosen object
         needFrom: 0,                // needs calculator: current level
         needTo: 1,                  // needs calculator: target level
+        welcomeSeen: false,         // has the player closed the first-run panel?
     };
 
     const NUMERIC_RANGES = {

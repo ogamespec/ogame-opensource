@@ -11,18 +11,42 @@
     const ui = typeof require === 'function' ? require('./ui.js') : root.OGI;
     const analyze = typeof require === 'function' ? require('../analyze/index.js') : root.OGI;
     const numbers = typeof require === 'function' ? require('./numbers.js') : root.OGI;
+    const icons = typeof require === 'function' ? require('./icons.js') : root.OGI;
+
+    /**
+     * Shortcut for an icon of the panel's own set.
+     *
+     * @param {string} name Icon name.
+     * @param {number} [size] Size in pixels.
+     * @returns {string} Inline SVG.
+     */
+    function glyph(name, size) {
+        return icons && icons.icon ? icons.icon(name, { size: size || 13 }) : '';
+    }
+
+    /**
+     * Shortcut for a resource icon and an amount, as the game draws its resources.
+     *
+     * @param {number} gid Resource id.
+     * @param {number|string} amount Value.
+     * @returns {string} HTML.
+     */
+    function resource(gid, amount) {
+        return glyph('metal') === '' ? String(amount)
+            : (icons.resourceIcon(gid, { size: 11 }) + ' ' + amount);
+    }
 
     const TABS = [
-        { id: 'spy', key: 'TAB_SPY' },
-        { id: 'expeditions', key: 'TAB_EXP' },
-        { id: 'combats', key: 'TAB_COMBAT' },
-        { id: 'harvests', key: 'TAB_HARVEST' },
-        { id: 'trades', key: 'TAB_TRADE' },
-        { id: 'planets', key: 'TAB_PLANETS' },
-        { id: 'totals', key: 'TAB_TOTALS' },
-        { id: 'stats', key: 'TAB_STATS' },
-        { id: 'needs', key: 'TAB_NEEDS' },
-        { id: 'settings', key: 'TAB_SETTINGS' },
+        { id: 'spy', key: 'TAB_SPY', icon: 'spy' },
+        { id: 'expeditions', key: 'TAB_EXP', icon: 'expedition' },
+        { id: 'combats', key: 'TAB_COMBAT', icon: 'combat' },
+        { id: 'harvests', key: 'TAB_HARVEST', icon: 'recycle' },
+        { id: 'trades', key: 'TAB_TRADE', icon: 'transport' },
+        { id: 'planets', key: 'TAB_PLANETS', icon: 'planets' },
+        { id: 'totals', key: 'TAB_TOTALS', icon: 'totals' },
+        { id: 'stats', key: 'TAB_STATS', icon: 'stats' },
+        { id: 'needs', key: 'TAB_NEEDS', icon: 'needs' },
+        { id: 'settings', key: 'TAB_SETTINGS', icon: 'settings' },
     ];
 
     /**
@@ -89,9 +113,9 @@
                 ui.esc(coords),
                 ui.esc(spy.planet || '-'),
                 ui.esc(spy.player || '-'),
-                ui.num(spy.resources.metal),
-                ui.num(spy.resources.crystal),
-                ui.num(spy.resources.deuterium),
+                resource(700, ui.num(spy.resources.metal)),
+                resource(701, ui.num(spy.resources.crystal)),
+                resource(702, ui.num(spy.resources.deuterium)),
                 '<b>' + ui.num(spy.resources.total) + '</b>',
                 ui.num(spy.maxLoot.total) + debris,
                 ui.num(spy.needed.smallCargo) + ' / ' + ui.num(spy.needed.largeCargo),
@@ -270,7 +294,7 @@
 
             rows.push([
                 '<a href="#" class="ogi-action" data-ogi-fav="' + ui.esc(key) + '">' +
-                    (favorites[key] ? '★' : '☆') + '</a>',
+                    glyph(favorites[key] ? 'favorite' : 'favoriteOff') + '</a>',
                 ui.esc(key),
                 ui.esc(planet.type === 'moon' ? t('PL_MOON') : t('PL_PLANET')),
                 ui.esc(names || '-'),
@@ -300,7 +324,7 @@
             const account = analyze.accountBreakdown(data, name);
             return [
                 '<a href="#" class="ogi-action" data-ogi-fav="player:' + ui.esc(name) + '">' +
-                    (playerFavorites[name] ? '★' : '☆') + '</a>',
+                    glyph(playerFavorites[name] ? 'favorite' : 'favoriteOff') + '</a>',
                 ui.esc(name),
                 ui.esc(player.ally || '-'),
                 account.rank === null ? '-' : ui.num(account.rank),
@@ -622,7 +646,7 @@
         const hostiles = events.filter(function (event) { return event.hostile; });
         if (hostiles.length && settings.notifyHostile) {
             out.push('<div class="ogi-alert">');
-            out.push('<b>' + ui.esc(t('OV_HOSTILE')) + '</b>');
+            out.push('<b>' + glyph('warning', 14) + ' ' + ui.esc(t('OV_HOSTILE')) + '</b>');
             for (const event of hostiles.slice(0, 5)) {
                 const route = event.coords && event.coords.length
                     ? event.coords[event.coords.length - 1].text
@@ -645,7 +669,8 @@
                 return ui.num(event.ships[gid]) + ' ' + ui.esc(objectName(gid, options));
             }).join(', ');
             const route = (event.coords || []).map(function (coords) { return ui.esc(coords.text); }).join(' → ');
-            const arrow = event.direction === 'returning' ? '◀ ' : (event.direction === 'holding' ? '● ' : '▶ ');
+            const arrow = event.direction === 'returning' ? glyph('transportSmall')
+                : (event.direction === 'holding' ? glyph('clock') : glyph('ship'));
             return [
                 '<span data-ogi-countdown="' + ui.esc(event.endsAt) + '">' +
                     ui.esc(formatCountdown(event.endsAt, now)) + '</span>',
@@ -761,6 +786,43 @@
     }
 
     /**
+     * First-run panel: what the extension is, where its controls are and what to do
+     * first. Shown once per universe until the player hides it (setting
+     * `welcomeSeen`), and reachable again from the toolbar popup.
+     *
+     * @param {object} data Store data.
+     * @param {object} options Options: i18n.
+     * @returns {string} HTML.
+     */
+    function welcomePanel(data, options) {
+        const t = options.i18n;
+        const steps = [
+            ['spy', t('WELCOME_STEP1')],
+            ['stats', t('WELCOME_STEP2')],
+            ['planets', t('WELCOME_STEP3')],
+            ['settings', t('WELCOME_STEP4')],
+        ];
+        const body = [
+            '<div class="ogi-note">' + ui.esc(t('WELCOME_INTRO')) + '</div>',
+            '<div class="ogi-settings-block"><b>' + glyph('farms', 13) + ' ' + ui.esc(t('WELCOME_STEPS')) + '</b>',
+            '<ul class="ogi-welcome-list">',
+        ];
+        for (const step of steps) {
+            body.push('<li>' + glyph(step[0], 13) + ' ' + ui.esc(step[1]) + '</li>');
+        }
+        body.push('</ul></div>');
+        body.push('<div class="ogi-note">' + ui.esc(t('WELCOME_MORE')) + '</div>');
+
+        return ui.panel(t('WELCOME_TITLE'), body.join(''), {
+            id: 'ogi-welcome',
+            actions: '<a href="#" class="ogi-action" data-ogi-action="welcome-scan">' +
+                ui.esc(t('ACTION_SCAN')) + '</a> | ' +
+                '<a href="#" class="ogi-action" data-ogi-action="welcome-close">' +
+                ui.esc(t('WELCOME_DISMISS')) + '</a>',
+        });
+    }
+
+    /**
      * Render the whole analyzer panel.
      *
      * @param {object} data Store data.
@@ -774,7 +836,7 @@
         const active = opt.tab || 'spy';
         const collapsed = !!opt.collapsed;
         const tabs = ui.tabs(TABS.map(function (tab) {
-            return { id: tab.id, title: t(tab.key) };
+            return { id: tab.id, title: t(tab.key), icon: tab.icon };
         }), active);
 
         let body = '';
@@ -835,6 +897,7 @@
         summaryLine: summaryLine,
         bar: bar,
         needsSection: needsSection,
+        welcomePanel: welcomePanel,
         planetSection: planetSection,
         formatCountdown: formatCountdown,
         objectName: objectName,
