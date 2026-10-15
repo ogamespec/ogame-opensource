@@ -74,6 +74,31 @@ game pages ──► parsers/ ──► lib/collect.js ──► lib/store.js �
 Details, screenshots of the workflow and the exact formulas are in the
 [extension README](../../ogi/README.md).
 
+## Compatibility with live servers
+
+The extension targets any server running this engine (0.84), in any of its
+languages:
+
+- the game page is recognized by the engine's own markers, **not by the title**:
+  `PAGE_TITLE` is localized (`Uni1 OGame`, `Вселенная 1 ОГейм`, `ユニバース 1 OGame`,
+  `Univers 1`, `OGame Universo 1`) and the report popup has no left menu — the
+  universe comes from the menu when it is there and is remembered per host for the
+  popup (`src/lib/detect.js`);
+- all seven server languages (de, en, es, fr, it, jp, ru) are supported, because the
+  parser strings come from the server's own `game/loca`;
+- the game may be served inside a frame (`all_frames` is enabled) and the report
+  opens in its own window;
+- the message folders are read with same-origin requests carrying the session
+  cookie. If a content security policy blocks them, the extension still parses the
+  page that is already open — the inlined spy reports and the messages of the
+  visible folder are collected anyway;
+- messages added by modifications are simply not classified: only the base engine's
+  message kinds are known.
+
+On a server running a different revision of the sources, regenerate the data files
+from that revision (`node ogi/tools/build-data.js`), otherwise some report strings
+will not match and those reports are skipped.
+
 ## Where the controls appear
 
 The 0.84 content pane (`#content`) is absolutely positioned with its own

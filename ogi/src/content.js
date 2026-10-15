@@ -2,8 +2,9 @@
  * OGame Infinity 0.84 — content script entry point.
  *
  * Loaded on every page; it first makes sure the page really is an OGame 0.84
- * server (the title is "Uni<N> <game name>", see game/core/page.php) and then hands
- * control to the handler of the current page.
+ * server (see lib/detect.js — the title is localized, so the detection uses the
+ * engine's own markers instead) and then hands control to the handler of the
+ * current page.
  *
  * The extension never talks to the server on its own: it reads the pages the
  * player opens and the message folders it is allowed to fetch, exactly like the
@@ -18,46 +19,18 @@
         return;
     }
 
-    /**
-     * Universe label of the page ("Uni1"), taken from the page title.
-     *
-     * @param {string} title Document title.
-     * @returns {string|null} Universe label.
-     */
-    function detectUniverse(title) {
-        const match = /(Uni\s*\d+)/i.exec(String(title || ''));
-        return match ? match[1].replace(/\s+/g, '') : null;
-    }
-
-    /**
-     * Session id of the page: 0.84 puts it into a global script variable
-     * (`var session="0000000003e9";`), which is not visible from the isolated
-     * world of a content script, so it is read from the page source.
-     *
-     * @param {string} source Page source.
-     * @returns {string|null} Session id.
-     */
-    function detectSession(source) {
-        const match = /var\s+session\s*=\s*["']([^"']+)["']/.exec(source);
-        return match ? match[1] : null;
-    }
-
-    /**
-     * Current game page name (the `page=` parameter).
-     *
-     * @returns {string|null} Page name.
-     */
-    function currentPage() {
-        const match = /[?&]page=([a-z0-9_]+)/i.exec(window.location.search);
-        if (match) return match[1].toLowerCase();
-        if (/index\.php\s*$/.test(window.location.pathname)) return 'overview';
-        return null;
-    }
-
     function boot() {
         const source = document.documentElement ? document.documentElement.outerHTML : '';
-        const universe = detectUniverse(document.title) || detectUniverse(source);
-        if (!universe) return;
+        const page = OGI.currentPage(window.location.search, window.location.pathname);
+        if (!OGI.looksLikeGamePage(source, page)) return;
+
+        let universe = OGI.detectUniverse(source, document.title);
+        if (universe) {
+            // The report popup has no left menu: remember the universe for it.
+            OGI.saveUniverseHint(window.localStorage, window.location.host, universe);
+        } else {
+            universe = OGI.loadUniverseHint(window.localStorage, window.location.host);
+        }
 
         const loca = OGI.createLoca(OGI.LOCA);
         const detected = loca.detectLanguage(source);
@@ -79,8 +52,9 @@
             lang: lang,
             i18n: OGI.createI18n(lang),
             store: store,
-            page: currentPage(),
-            session: detectSession(source),
+            page: page,
+            universe: universe,
+            session: OGI.detectSession(source),
             source: source,
         };
 
@@ -89,13 +63,13 @@
             bericht: OGI.mountBericht,
             galaxy: OGI.mountGalaxy,
         };
-        const handler = handlers[ctx.page];
+        const handler = handlers[page];
         if (typeof handler !== 'function') return;
 
         try {
             handler(ctx);
         } catch (error) {
-            console.warn('[OGI] ' + ctx.page + ' handler failed:', error);
+            console.warn('[OGI] ' + page + ' handler failed:', error);
         }
     }
 

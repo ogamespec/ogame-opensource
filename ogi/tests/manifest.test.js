@@ -20,6 +20,9 @@ const manifest = JSON.parse(fs.readFileSync(path.join(OGI_ROOT, 'manifest.json')
 test('manifest: every declared file exists', function () {
     assert.equal(manifest.manifest_version, 3);
     assert.ok(manifest.content_scripts.length >= 1);
+    // The game of a 0.84 server can be served inside a frame (the original client
+    // used framesets), so the handler has to run in frames as well.
+    assert.equal(manifest.content_scripts[0].all_frames, true);
     for (const entry of manifest.content_scripts) {
         for (const file of entry.js || []) {
             assert.ok(fs.existsSync(path.join(OGI_ROOT, file)), 'missing script ' + file);

@@ -99,6 +99,10 @@
         /**
          * Read the message folders, then the reports they link to.
          *
+         * The page that is already open is read first, without a single request:
+         * if the server (or a content security policy) blocks the extra requests,
+         * the reports visible in the current folder are still collected.
+         *
          * @returns {Promise<void>} Completion.
          */
         async function scan() {
@@ -107,17 +111,27 @@
             status = i18n('MSG_SCANNING');
             render();
 
-            if (!ctx.session) {
-                status = i18n('MSG_NO_SESSION');
-                scanning = false;
-                render();
-                return;
-            }
-
             const collector = OGI.createCollector({ loca: ctx.loca, lang: ctx.lang, store: store });
             const pending = [];
             let added = 0;
             let parsed = 0;
+
+            try {
+                const result = collector.ingestMessagesPage(ctx.source, { pm: null });
+                added += result.added;
+                parsed += result.parsed;
+                for (const report of result.reports) pending.push(report);
+            } catch (error) {
+                console.warn('[OGI] the open page could not be read:', error);
+            }
+
+            if (!ctx.session) {
+                store.save();
+                status = i18n('MSG_DONE', { N: added, T: store.data().spies.length + store.data().combats.length });
+                scanning = false;
+                render();
+                return;
+            }
 
             for (const pm of OGI.FOLDERS) {
                 const url = 'index.php?page=messages&dsp=1&pm=' + pm + '&session=' + encodeURIComponent(ctx.session);

@@ -17,6 +17,7 @@
 				"src/lib/html.js",
 				"src/lib/templates.js",
 				"src/lib/store.js",
+				"src/lib/detect.js",
 				"src/lib/i18n.js",
 				"src/lib/ui.js",
 				"src/parsers/messages.js",
@@ -36,7 +37,7 @@
 				"src/style.css"
 			],
 			"run_at": "document_idle",
-			"all_frames": false
+			"all_frames": true
 		}
 	],
 	"browser_specific_settings": {

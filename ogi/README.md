@@ -78,9 +78,33 @@ Then open the game, go to **Messages** and use the panel at the top of the page
 database per game host and universe).
 
 > The manifest declares `<all_urls>` so the extension works on any 0.84 server;
-> the content script does nothing unless the page title looks like a 0.84 game
-> ("Uni1 …"). If you prefer, narrow `content_scripts.matches` in
-> `manifest.json` to your own server before loading it.
+> the content script does nothing unless the page looks like a 0.84 game page.
+> If you prefer, narrow `content_scripts.matches` in `manifest.json` to your own
+> server before loading it.
+
+### Which servers it works on
+
+Any server running this codebase (0.84), in any of its languages:
+
+- the game page is recognized by the engine's own markers, **not by the page
+  title** — `PAGE_TITLE` is localized (`Uni1 OGame`, `Вселенная 1 ОГейм`,
+  `ユニバース 1 OGame`, `Univers 1`, `OGame Universo 1`), and the report popup has
+  no left menu at all: the universe is taken from the left menu when present and
+  remembered per host for the popup (see `src/lib/detect.js`);
+- all seven languages of the server (de, en, es, fr, it, jp, ru) are supported by
+  the parsers, because the strings come from the server's own `game/loca`;
+- the game may be served inside a frame (`all_frames`), and the report popup is a
+  separate window;
+- the message folders are read with same-origin requests carrying the session
+  cookie. If a content security policy blocks them, the extension still reads the
+  page that is already open — the inlined spy reports and the messages of the
+  visible folder are collected anyway;
+- messages added by modifications are simply not classified: the extension only
+  knows the message kinds of the base engine.
+
+If a server runs an **older or newer revision** of the sources, regenerate the
+data files from that revision (`node ogi/tools/build-data.js`); otherwise some
+report strings may not match and the affected reports are skipped.
 
 ## How it works
 
