@@ -38,6 +38,13 @@ game, from the pages the player opens:
 The panel is rendered in the markup of the old design (`table.header`, `td.c`,
 bare links), so it looks like a native 0.84 page instead of a modern overlay.
 
+Every panel is mounted through `lib/mount.js`: the 0.84 pages wrap their content in
+`<center>` inside `#content`, so the extension inserts `<center><div id="ogi-…">`
+in front of it and matches the width of the table on that page (519 px on the
+message, overview, fleet and options pages, 525 px on statistics, 750 px on the
+empire page). A plain block would stick to the left edge of the content pane and
+look displaced next to the game's own, centered tables.
+
 ## Where the controls are
 
 The 0.84 content pane (`#content`) is absolutely positioned with its own

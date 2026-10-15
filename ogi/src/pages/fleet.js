@@ -127,11 +127,8 @@
     OGI.mountFleet = function (ctx) {
         const i18n = ctx.i18n;
         const t = i18n;
-        const host = document.createElement('div');
-        host.id = 'ogi-fleet-host';
         const content = document.getElementById('content') || document.body;
-        if (content.firstChild) content.insertBefore(host, content.firstChild);
-        else content.appendChild(host);
+        const host = OGI.mountHost(content, 'ogi-fleet-host');
 
         function actions() {
             const buttons = [];

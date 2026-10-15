@@ -249,6 +249,21 @@
     margin-right: 2px;
 }
 
+/*
+ * The panels are mounted inside <center> (lib/mount.js) so they line up with the
+ * game's own tables, which the 0.84 pages also center inside #content. Only the
+ * block itself is centered: the host is an inline-block and resets the inherited
+ * text alignment, so the game's own `th`/`td.c` rules keep working inside the panel.
+ */
+.ogi-center {
+    text-align: center;
+}
+
+.ogi-center > div {
+    display: inline-block;
+    text-align: left;
+}
+
 .ogi-tabs .ogi-icon {
     margin-right: 3px;
 }
@@ -320,6 +335,22 @@
 
 #ogi-overview-host,
 #ogi-stats-host {
+    width: 519px;
+    margin-bottom: 6px;
+}
+
+/* Match the width of the game's own table on those pages. */
+#ogi-stats-host {
+    width: 525px;
+}
+
+#ogi-empire-host {
+    width: 750px;
+}
+
+#ogi-host,
+#ogi-fleet-host,
+#ogi-options-host {
     width: 519px;
     margin-bottom: 6px;
 }

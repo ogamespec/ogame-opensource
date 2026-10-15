@@ -67,16 +67,21 @@
      * @param {string} title Panel title.
      * @param {string} bodyHtml Inner HTML (tabs and tables).
      * @param {object} [options] Options: id, actions (HTML), summary (HTML),
-     *        collapsed (render only the title, the actions and the summary).
+     *        collapsed (render only the title, the actions and the summary),
+     *        width (pixels, the game uses 519 on most pages, 525 on statistics and
+     *        750 on the empire page).
      * @returns {string} HTML.
      */
     function panel(title, bodyHtml, options) {
         const opt = options || {};
         const icons = typeof require === 'function' ? require('./icons.js') : root.OGI;
         const logo = icons && icons.icon ? icons.icon('planets', { size: 14 }) : '';
+        // Matching the width of the game's own table on that page keeps the panel
+        // flush with the content below it.
+        const width = opt.width || 519;
         const out = [];
         out.push('<div class="ogi-panel" id="' + esc(opt.id || 'ogi-panel') + '">');
-        out.push('<table class="header" width="519"><tr><td class="c" colspan="2">');
+        out.push('<table class="header" width="' + width + '"><tr><td class="c" colspan="2">');
         out.push(logo + ' <b>OGame Infinity 0.84</b> — ' + esc(title));
         out.push('</td></tr>');
         if (opt.actions) {

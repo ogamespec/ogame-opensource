@@ -240,13 +240,9 @@
      * @param {string|null} page Current game page.
      */
     function mountWelcome(ctx, page) {
-        const host = document.createElement('div');
-        host.id = 'ogi-welcome-host';
-        host.innerHTML = OGI.welcomePanel(ctx.store.data(), { i18n: ctx.i18n });
-
         const content = document.getElementById('content') || document.body;
-        if (content.firstChild) content.insertBefore(host, content.firstChild);
-        else content.appendChild(host);
+        const host = OGI.mountHost(content, 'ogi-welcome-host');
+        host.innerHTML = OGI.welcomePanel(ctx.store.data(), { i18n: ctx.i18n });
 
         const actions = host.querySelectorAll('[data-ogi-action]');
         for (let i = 0; i < actions.length; i++) {
@@ -265,7 +261,7 @@
                     }
                     OGI.write(ctx.store, { welcomeSeen: false });
                 }
-                host.parentNode.removeChild(host);
+                OGI.unmountHost(host);
             });
         }
     }

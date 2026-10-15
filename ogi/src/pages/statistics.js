@@ -49,11 +49,8 @@
         let rows = [];
         let busy = false;
 
-        const host = document.createElement('div');
-        host.id = 'ogi-stats-host';
         const content = document.getElementById('content') || document.body;
-        if (content.firstChild) content.insertBefore(host, content.firstChild);
-        else content.appendChild(host);
+        const host = OGI.mountHost(content, 'ogi-stats-host');
 
         // The page that is already open needs no request at all. Each step is
         // guarded separately: a failure must say which part broke instead of only
@@ -79,7 +76,7 @@
             host.innerHTML = OGI.panel(i18n('TAB_STATS'),
                 (status ? '<div class="ogi-status">' + OGI.esc(status) + '</div>' : '') +
                 OGI.statsSection(store.data(), { i18n: i18n, rows: rows, historyDays: OGI.read(store).historyDays }),
-                { id: 'ogi-stats', actions: actions });
+                { id: 'ogi-stats', actions: actions, width: 525 });
             wire();
         }
 

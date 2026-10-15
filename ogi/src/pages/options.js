@@ -149,11 +149,8 @@
      * @param {object} ctx Extension context.
      */
     OGI.mountOptions = function (ctx) {
-        const host = document.createElement('div');
-        host.id = 'ogi-options-host';
         const content = document.getElementById('content') || document.body;
-        if (content.firstChild) content.insertBefore(host, content.firstChild);
-        else content.appendChild(host);
+        const host = OGI.mountHost(content, 'ogi-options-host');
         OGI.mountSettingsPanel(host, ctx);
     };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

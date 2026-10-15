@@ -24,18 +24,14 @@
             console.warn('[OGI] empire: reading the page failed:', error);
         }
 
-        const host = document.createElement('div');
-        host.id = 'ogi-empire-host';
+        const content = document.getElementById('content') || document.body;
+        const host = OGI.mountHost(content, 'ogi-empire-host');
         try {
             host.innerHTML = OGI.panel(ctx.i18n('TAB_EMPIRE'),
                 OGI.imperiumSection(ctx.store.data(), { i18n: ctx.i18n, loca: ctx.loca, lang: ctx.lang }),
-                { id: 'ogi-empire' });
+                { id: 'ogi-empire', width: 750 });
         } catch (error) {
             console.warn('[OGI] empire: building the panel failed:', error);
         }
-
-        const content = document.getElementById('content') || document.body;
-        if (content.firstChild) content.insertBefore(host, content.firstChild);
-        else content.appendChild(host);
     };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

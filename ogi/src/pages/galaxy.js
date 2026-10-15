@@ -109,13 +109,10 @@
         // A short note in the old style, so the player sees that the system was
         // recorded. It goes to the top of the content area: the galaxy table is
         // long and the content pane has its own scrollbar.
-        const note = document.createElement('div');
-        note.id = 'ogi-galaxy-note';
+        const content = document.getElementById('content') || document.body;
+        const note = OGI.mountHost(content, 'ogi-galaxy-note');
         note.className = 'ogi-note';
         note.innerHTML = 'OGame Infinity 0.84: ' + observed + ' / ' +
             OGI.esc(ctx.i18n('TAB_PLANETS'));
-        const content = document.getElementById('content') || document.body;
-        if (content.firstChild) content.insertBefore(note, content.firstChild);
-        else content.appendChild(note);
     };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

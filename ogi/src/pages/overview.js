@@ -87,11 +87,8 @@
         ctx.store.save();
         collector.setNow(Math.floor(Date.now() / 1000));
 
-        const host = document.createElement('div');
-        host.id = 'ogi-overview-host';
         const content = document.getElementById('content') || document.body;
-        if (content.firstChild) content.insertBefore(host, content.firstChild);
-        else content.appendChild(host);
+        const host = OGI.mountHost(content, 'ogi-overview-host');
 
         function render(status) {
             host.innerHTML = OGI.fleetPanel(ctx.store.data(), {

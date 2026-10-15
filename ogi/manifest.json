@@ -26,6 +26,7 @@
 				"src/lib/settings.js",
 				"src/lib/tooltips.js",
 				"src/lib/icons.js",
+				"src/lib/mount.js",
 				"src/lib/i18n.js",
 				"src/lib/ui.js",
 				"src/parsers/messages.js",

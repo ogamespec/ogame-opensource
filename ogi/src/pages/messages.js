@@ -47,11 +47,8 @@
         // content pane (#content) is absolutely positioned with its own scrollbar,
         // so anything appended to the end of the page sits below the message table
         // and is invisible until the player scrolls all the way down.
-        const host = document.createElement('div');
-        host.id = 'ogi-host';
         const content = document.getElementById('content') || document.body;
-        if (content.firstChild) content.insertBefore(host, content.firstChild);
-        else content.appendChild(host);
+        const host = OGI.mountHost(content, 'ogi-host');
 
         function collapsed() {
             const data = store.data();
