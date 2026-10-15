@@ -20,6 +20,7 @@
         { id: 'trades', key: 'TAB_TRADE' },
         { id: 'planets', key: 'TAB_PLANETS' },
         { id: 'totals', key: 'TAB_TOTALS' },
+        { id: 'stats', key: 'TAB_STATS' },
         { id: 'settings', key: 'TAB_SETTINGS' },
     ];
 
@@ -388,6 +389,102 @@
     }
 
     /**
+     * A proportional bar with a label, used for the point breakdown and the history.
+     *
+     * @param {number} value Value.
+     * @param {number} max Maximum of the scale.
+     * @param {string} label Text inside the bar.
+     * @param {string} [className] Extra class.
+     * @returns {string} HTML.
+     */
+    function bar(value, max, label, className) {
+        const percent = max > 0 ? Math.max(0, Math.min(100, Math.round((value / max) * 100))) : 0;
+        return '<div class="ogi-bar ' + ui.esc(className || '') + '">' +
+            '<div class="ogi-bar-fill" style="width:' + percent + '%"></div>' +
+            '<span class="ogi-bar-label">' + label + '</span></div>';
+    }
+
+    /**
+     * Statistics: the own account breakdown by points plus the ranks of the last
+     * parsed view (game/pages/statistics.php).
+     *
+     * @param {object} data Store data.
+     * @param {object} options Options: i18n, rows, showActions.
+     * @returns {string} HTML.
+     */
+    function statsSection(data, options) {
+        const t = options.i18n;
+        const selfName = (data.meta && data.meta.selfName) || null;
+        const out = [];
+
+        if (!selfName) {
+            out.push('<div class="ogi-note">' + ui.esc(t('STAT_NO_DATA')) + '</div>');
+        } else {
+            const account = analyze.accountBreakdown(data, selfName);
+            const total = account.points === null ? 0 : account.points;
+            const categories = [
+                [t('STAT_ECO_DEF'), account.economy === null ? 0 : account.economy, 'ogi-eco'],
+                [t('STAT_FLEET_POINTS'), account.fleet === null ? 0 : account.fleet, 'ogi-fleet'],
+                [t('STAT_RESEARCH_POINTS'), account.research === null ? 0 : account.research, 'ogi-research'],
+            ];
+            const max = Math.max(total, categories[0][1], categories[1][1], categories[2][1], 1);
+
+            out.push('<div class="ogi-settings-block"><b>' + ui.esc(t('STAT_OWN')) + ': ' + ui.esc(selfName) + '</b>');
+            out.push(ui.keyValue([
+                [ui.esc(t('STAT_POINTS')), ui.num(account.points)],
+                [ui.esc(t('COL_RANK')), ui.num(account.rank)],
+            ]));
+            for (const entry of categories) {
+                out.push(bar(entry[1], max, ui.esc(entry[0]) + ': ' + ui.num(entry[1]), entry[2]));
+            }
+            out.push('</div>');
+
+            const history = analyze.historySeries(data, selfName, options.historyDays || 60).slice(-20);
+            if (history.length > 1) {
+                const points = history.map(function (entry) { return entry.points === undefined ? 0 : entry.points; });
+                const historyMax = Math.max.apply(null, points.concat([1]));
+                out.push('<div class="ogi-settings-block"><b>' + ui.esc(t('STAT_HISTORY')) + '</b>');
+                for (const entry of history) {
+                    out.push(bar(entry.points === undefined ? 0 : entry.points, historyMax,
+                        ui.esc(formatDate(entry.t)) + ' — ' + ui.num(entry.points) +
+                        (entry.rank === undefined ? '' : ' (' + ui.esc(t('COL_RANK')) + ' ' + ui.num(entry.rank) + ')'),
+                        'ogi-history'));
+                }
+                out.push('</div>');
+            }
+        }
+
+        const rows = options.rows || [];
+        if (rows.length) {
+            const table = rows.map(function (row) {
+                const delta = row.delta
+                    ? (row.delta.sign === '+' ? ui.tag('+' + row.delta.value, 'good')
+                        : (row.delta.sign === '-' ? ui.tag('-' + row.delta.value, 'bad') : ui.tag('*', 'neutral')))
+                    : '-';
+                const name = row.self ? '<b>' + ui.esc(row.player) + '</b>'
+                    : (row.sameAlliance ? '<span class="ogi-info">' + ui.esc(row.player) + '</span>' : ui.esc(row.player));
+                const coords = row.coords ? row.coords.g + ':' + row.coords.s + ':' + row.coords.p : '-';
+                return [
+                    ui.num(row.rank) + ' ' + delta,
+                    name,
+                    ui.esc(row.ally || '-'),
+                    ui.esc(coords),
+                    ui.num(row.points),
+                    ui.num(row.fleet),
+                    ui.num(row.research),
+                    ui.num(row.economy),
+                ];
+            });
+            out.push(ui.table([
+                t('COL_RANK'), t('COL_PLAYER'), t('COL_ALLY'), t('COL_COORDS'), t('STAT_POINTS'),
+                t('STAT_FLEET_POINTS'), t('STAT_RESEARCH_POINTS'), t('STAT_ECO_DEF'),
+            ], table));
+        }
+
+        return out.join('');
+    }
+
+    /**
      * Render the whole analyzer panel.
      *
      * @param {object} data Store data.
@@ -419,6 +516,7 @@
             case 'trades': body += tradeSection(data, opt); break;
             case 'planets': body += planetSection(data, opt); break;
             case 'totals': body += totalsSection(data, opt); break;
+            case 'stats': body += statsSection(data, opt); break;
             case 'settings': body += settingsSection(data, opt); break;
             case 'spy':
             default: body += spySection(data, opt); break;
@@ -459,6 +557,8 @@
         formatDate: formatDate,
         combatResult: combatResult,
         summaryLine: summaryLine,
+        bar: bar,
+        statsSection: statsSection,
         settingsSection: settingsSection,
         settingsPanel: settingsPanel,
         renderAnalyzer: renderAnalyzer,

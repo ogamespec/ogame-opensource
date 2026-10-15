@@ -31,6 +31,7 @@
 				"src/parsers/battle.js",
 				"src/parsers/texts.js",
 				"src/parsers/galaxy.js",
+				"src/parsers/statistics.js",
 				"src/analyze/index.js",
 				"src/lib/collect.js",
 				"src/lib/panel.js",
@@ -38,6 +39,7 @@
 				"src/pages/bericht.js",
 				"src/pages/galaxy.js",
 				"src/pages/options.js",
+				"src/pages/statistics.js",
 				"src/content.js"
 			],
 			"css": [

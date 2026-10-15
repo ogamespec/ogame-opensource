@@ -394,6 +394,94 @@
     }
 
     /**
+     * The account breakdown by points.
+     *
+     * The 0.84 statistics page knows three values per player: the total points
+     * (`type=ressources`), the fleet points and the research points. Everything the
+     * account holds beyond fleets and research is economy plus defence, which is
+     * what the fourth column shows.
+     *
+     * @param {object} data Store data.
+     * @param {string} name Player name.
+     * @returns {object} Breakdown.
+     */
+    function accountBreakdown(data, name) {
+        const history = ((data && data.stats && data.stats[name]) || []).slice();
+        const players = (data && data.players) || {};
+        const player = players[name] || {};
+        let points = player.points === undefined ? null : player.points;
+        let rank = player.rank === undefined ? null : player.rank;
+        let fleet = null;
+        let research = null;
+
+        for (let i = history.length - 1; i >= 0; i--) {
+            const entry = history[i];
+            if (points === null && entry.points !== undefined) points = entry.points;
+            if (rank === null && entry.rank !== undefined) rank = entry.rank;
+            if (fleet === null && entry.fleet !== undefined) fleet = entry.fleet;
+            if (research === null && entry.research !== undefined) research = entry.research;
+            if (points !== null && fleet !== null && research !== null) break;
+        }
+
+        const fleetValue = fleet === null ? 0 : fleet;
+        const researchValue = research === null ? 0 : research;
+        return {
+            name: name,
+            points: points,
+            rank: rank,
+            fleet: fleet,
+            research: research,
+            economy: points === null ? null : Math.max(0, points - fleetValue - researchValue),
+            history: history,
+        };
+    }
+
+    /**
+     * The statistics history of a player within a number of days.
+     *
+     * @param {object} data Store data.
+     * @param {string} name Player name.
+     * @param {number} [days] How many days back to keep.
+     * @returns {Array} History entries, oldest first.
+     */
+    function historySeries(data, name, days) {
+        const limit = days === undefined ? 60 : days;
+        // The caller may pass an explicit "now" through the last history entry, so
+        // the series is stable in tests.
+        const history = ((data && data.stats && data.stats[name]) || []);
+        const last = history[history.length - 1];
+        const reference = last && last.t ? last.t : Math.floor(Date.now() / 1000);
+        const since = reference - limit * 86400;
+        return history.filter(function (entry) { return entry.t >= since; });
+    }
+
+    /**
+     * The rows of a statistics view, enriched with the known account values.
+     *
+     * @param {Array} rows Rows of one statistics view.
+     * @param {object} data Store data.
+     * @returns {Array} Enriched rows.
+     */
+    function statisticsRows(rows, data) {
+        return (rows || []).map(function (row) {
+            const breakdown = accountBreakdown(data, row.player);
+            return {
+                rank: row.rank,
+                delta: row.delta,
+                player: row.player,
+                self: row.self,
+                sameAlliance: row.sameAlliance,
+                coords: row.coords,
+                ally: row.ally,
+                points: row.points,
+                fleet: breakdown.fleet,
+                research: breakdown.research,
+                economy: breakdown.economy,
+            };
+        });
+    }
+
+    /**
      * Observed activity of a planet or moon (the 0.84 galaxy page marks activity
      * with "(*)" for less than 15 minutes and "(N min)" up to an hour).
      *
@@ -454,6 +542,9 @@
         harvestStats: harvestStats,
         tradeStats: tradeStats,
         totals: totals,
+        accountBreakdown: accountBreakdown,
+        historySeries: historySeries,
+        statisticsRows: statisticsRows,
         activitySummary: activitySummary,
     };
 

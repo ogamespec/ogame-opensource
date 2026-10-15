@@ -13,6 +13,7 @@
     const spyParser = typeof require === 'function' ? require('../parsers/spy.js') : root.OGI;
     const battleParser = typeof require === 'function' ? require('../parsers/battle.js') : root.OGI;
     const textParser = typeof require === 'function' ? require('../parsers/texts.js') : root.OGI;
+    const statisticsParser = typeof require === 'function' ? require('../parsers/statistics.js') : root.OGI;
 
     // Message folders of the 0.84 messages page (game/pages/messages.php).
     const FOLDERS = [1, 2, 3, 4, 5, 0];
@@ -268,12 +269,70 @@
             return addSpy(record);
         }
 
+        /**
+         * Read a statistics page and store what it tells about every player.
+         *
+         * @param {string} pageHtml Page source.
+         * @param {object} [pageOptions] Options: who, type, start.
+         * @returns {{rows: number, self: object|null}} Result.
+         */
+        function ingestStatisticsPage(pageHtml, pageOptions) {
+            const pageOpt = pageOptions || {};
+            const parsed = statisticsParser.parseStatisticsPage(pageHtml, pageOpt);
+            const stamp = timestamp();
+            let self = null;
+
+            for (const row of parsed.rows) {
+                const observed = {
+                    name: row.player,
+                    date: stamp,
+                    rank: parsed.type === 'ressources' ? row.rank : null,
+                    ally: row.ally,
+                    home: row.coords,
+                    coords: row.coords,
+                };
+                if (parsed.type === 'ressources') observed.points = row.points;
+                store.observePlayer(observed);
+
+                const snapshot = { t: stamp };
+                if (parsed.type === 'ressources') {
+                    snapshot.points = row.points;
+                    snapshot.rank = row.rank;
+                } else if (parsed.type === 'fleet') {
+                    snapshot.fleet = row.points;
+                    snapshot.fleetRank = row.rank;
+                } else if (parsed.type === 'research') {
+                    snapshot.research = row.points;
+                    snapshot.researchRank = row.rank;
+                }
+                store.observeStats(row.player, snapshot);
+
+                if (row.self) {
+                    self = Object.assign({}, row, { type: parsed.type });
+                    store.data().meta.selfName = row.player;
+                    if (row.coords) {
+                        store.observePlanet({
+                            coords: row.coords,
+                            owner: row.player,
+                            date: stamp,
+                        });
+                    }
+                }
+            }
+
+            store.data().meta.lastStats = stamp;
+            store.save();
+            return { rows: parsed.rows.length, self: self };
+        }
+
         return {
             FOLDERS: FOLDERS,
             ctx: ctx,
             setNow: function (value) { now = value; },
             ingestMessagesPage: ingestMessagesPage,
             ingestReportPage: ingestReportPage,
+            ingestStatisticsPage: ingestStatisticsPage,
+            ingestStatisticsPage: ingestStatisticsPage,
             addSpy: addSpy,
             addExpedition: addExpedition,
             addCombat: addCombat,

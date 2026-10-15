@@ -22,6 +22,7 @@
         activity: 500,
         planets: 5000,
         players: 1000,
+        stats: 1000,
     };
 
     /**
@@ -94,6 +95,7 @@
             messages: {},   // "kind:id" -> timestamp, for deduplication
             planets: {},    // "g:s:p" -> planet history
             players: {},    // player name -> player history
+            stats: {},      // player name -> points history (statistics page snapshots)
             activity: {},   // "g:s:p" -> observations
             meta: { lastCrawl: null, lastScan: null, spiesSeen: 0, battlesSeen: 0 },
         };
@@ -265,7 +267,8 @@
         /**
          * Update the history of a player.
          *
-         * @param {object} observed Observed player: name, points, status, planets.
+         * @param {object} observed Observed player: name, points, rank, fleet,
+         *        research, status, ally, home coords.
          */
         function observePlayer(observed) {
             if (!observed || !observed.name) return;
@@ -275,17 +278,58 @@
                 firstSeen: observed.date || Math.floor(Date.now() / 1000),
                 lastSeen: 0,
                 points: null,
+                rank: null,
                 status: null,
+                ally: null,
+                home: null,
                 coords: [],
             };
             entry.lastSeen = Math.max(entry.lastSeen, observed.date || Math.floor(Date.now() / 1000));
             if (observed.points !== undefined && observed.points !== null) entry.points = observed.points;
+            if (observed.rank !== undefined && observed.rank !== null) entry.rank = observed.rank;
             if (observed.status) entry.status = observed.status;
+            if (observed.ally) entry.ally = observed.ally;
+            if (observed.home) entry.home = observed.home;
             if (observed.coords) {
                 const text = observed.coords.g + ':' + observed.coords.s + ':' + observed.coords.p;
                 if (entry.coords.indexOf(text) === -1) entry.coords.push(text);
             }
             players[observed.name] = entry;
+        }
+
+        /**
+         * Record a statistics snapshot of a player.
+         *
+         * The statistics page has three separate views (points, fleets, research)
+         * that the extension reads one after another; a snapshot taken within a
+         * quarter of an hour is merged into the previous entry, so one visit to the
+         * page produces one history point and not three.
+         *
+         * @param {string} name Player name.
+         * @param {object} snapshot Fields: t, points, rank, fleet, fleetRank,
+         *        research, researchRank.
+         */
+        function observeStats(name, snapshot) {
+            if (!name || !snapshot) return;
+            const stats = db().stats;
+            const list = stats[name] || (stats[name] = []);
+            const fields = ['points', 'rank', 'fleet', 'fleetRank', 'research', 'researchRank'];
+            const values = {};
+            for (const field of fields) {
+                if (snapshot[field] !== undefined && snapshot[field] !== null) values[field] = snapshot[field];
+            }
+            if (!Object.keys(values).length) return;
+
+            const t = snapshot.t || Math.floor(Date.now() / 1000);
+            const last = list[list.length - 1];
+            if (last && t - last.t <= 900) {
+                Object.assign(last, values);
+                return;
+            }
+            const entry = Object.assign({ t: t }, values);
+            list.push(entry);
+            list.sort(function (a, b) { return a.t - b.t; });
+            if (list.length > LIMITS.stats) list.splice(0, list.length - LIMITS.stats);
         }
 
         /**
@@ -332,6 +376,7 @@
             updateRecord: updateRecord,
             observePlanet: observePlanet,
             observePlayer: observePlayer,
+            observeStats: observeStats,
             observeActivity: observeActivity,
             reset: reset,
         };

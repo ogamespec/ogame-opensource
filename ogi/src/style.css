@@ -197,3 +197,48 @@
     padding: 2px 8px;
     cursor: pointer;
 }
+
+/* Statistics: point breakdown and history bars. */
+#ogi-stats-host {
+    width: 519px;
+    margin-bottom: 6px;
+}
+
+.ogi-bar {
+    position: relative;
+    height: 13px;
+    margin: 2px 0;
+    background-color: #101010;
+    border: 1px solid #1f1f1f;
+}
+
+.ogi-bar-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #4a4a4a;
+}
+
+.ogi-bar-label {
+    position: relative;
+    padding-left: 3px;
+    line-height: 13px;
+    color: #ffffff;
+}
+
+.ogi-bar.ogi-eco .ogi-bar-fill {
+    background-color: #2f7f2f;
+}
+
+.ogi-bar.ogi-fleet .ogi-bar-fill {
+    background-color: #7f2f2f;
+}
+
+.ogi-bar.ogi-research .ogi-bar-fill {
+    background-color: #2f4f7f;
+}
+
+.ogi-bar.ogi-history .ogi-bar-fill {
+    background-color: #4a4a4a;
+}
