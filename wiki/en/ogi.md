@@ -22,14 +22,19 @@ the modern game.
 
 | OGI feature | 0.84 implementation |
 |---|---|
-| Spy report table (loot, ratio, needed cargo) | `parsers/spy.js`, `analyze/index.js` |
+| Spy report table (loot, ratio, needed cargo, debris of the scanned fleet) | `parsers/spy.js`, `analyze/index.js`, `analyze/recycling.js` |
 | Spy report database and target history | `lib/store.js`, `lib/collect.js` |
 | Expedition analyzer (12 outcome families, size, findings) | `parsers/texts.js` |
 | Fight analyzer (loot, losses, debris, net) | `parsers/battle.js` |
-| Harvest (recycling) analyzer | `parsers/texts.js` |
+| Harvest (recycling) analyzer and the `CalcDebris` port | `parsers/texts.js`, `analyze/recycling.js` |
 | Trade / transport ledger | `parsers/texts.js` |
-| Player / planet history ("stalk") | `parsers/galaxy.js`, `lib/store.js` |
-| Activity tracking | `parsers/galaxy.js` |
+| Planet database (favourites, notes, filter, last spy age) | `lib/panel.js`, `lib/store.js` |
+| Player statistics on hover | `lib/tooltips.js` |
+| Account breakdown by points and the points history | `parsers/statistics.js`, `analyze/index.js` |
+| Fleet save timers and the hostile warning | `parsers/overview.js`, `pages/overview.js` |
+| Activity tracking and the galaxy marks | `parsers/galaxy.js`, `pages/galaxy.js` |
+| Needs calculator (resource lock) | `analyze/needs.js`, `parsers/resbar.js` |
+| Settings with export/import | `lib/settings.js`, `pages/options.js` |
 
 ## What was not ported (and why)
 
@@ -109,9 +114,13 @@ top of the content area**:
 | Page | What appears | Where exactly |
 |---|---|---|
 | Toolbar button (any tab) | A popup with the version, the state of the tab (game page, page name, universe, language, storage, panel) and the collected report counts | The browser toolbar |
-| `page=messages` | The analyzer panel: actions (`Expand`/`Collapse`, `Scan message folders`, `Clear database`), a summary line, the tabs and the table of the active tab | The first element of `#content`, above the message table |
+| `page=messages` | The analyzer panel with the tabs Spy reports, Expeditions, Combats, Recycling, Transport, Planets & players, Totals, Statistics, Needs, Settings, plus a filter and a favourites-only switch in the planet database | The first element of `#content`, above the message table |
+| `page=overview` | The fleets in the air with live countdowns to their exact arrival time and a red warning (and an optional desktop notification) for hostile fleets | The first element of `#content` |
+| `page=statistics` | The own account breakdown (points, fleets, research, economy+defence), the points history and the rank table; the other rank blocks and categories are read on demand | The first element of `#content` |
+| `page=options` | The settings panel | The first element of `#content` |
 | `page=bericht` (report popup) | The maximum loot, the needed cargo ships and the fleet/defence value of the scanned planet | Above the report body |
-| `page=galaxy` | A note about how many planets and moons were recorded | The first element of `#content` |
+| `page=galaxy` | A note about the recorded objects, marks next to known players (`★` favourite, `○12h` age of the last spy report, `∪5` observed sessions) and tooltips | The first element of `#content`, marks inside the rows |
+| Any game page | Hover tooltips with everything known about a player or a planet | On names and coordinates the database knows |
 
 The rest of the UI lives inside the game pages; on any other page the toolbar
 popup is the only surface and reports `Game page: no`. The collapsed/expanded state

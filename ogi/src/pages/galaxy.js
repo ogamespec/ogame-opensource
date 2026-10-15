@@ -90,6 +90,13 @@
                 if (!marks.length) continue;
 
                 nameCell.setAttribute('data-ogi-marked', '1');
+                // Colour the name itself: favourites gold, planets with a recent
+                // spy report hot.
+                if (settings.highlightFavorites && ((data.favorites || {}).players || {})[playerName]) {
+                    nameCell.className += ' ogi-mark-fav';
+                } else if (marks.length) {
+                    nameCell.className += ' ogi-mark-known';
+                }
                 const mark = document.createElement('span');
                 mark.className = 'ogi-galaxy-mark';
                 mark.textContent = ' ' + marks.join(' ');

@@ -256,6 +256,14 @@
     font-size: 10px;
 }
 
+.ogi-mark-fav {
+    color: #ffd700 !important;
+}
+
+.ogi-mark-known {
+    color: #9fe89f;
+}
+
 #ogi-tooltip {
     position: fixed;
     z-index: 10000;

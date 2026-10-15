@@ -28,6 +28,46 @@
     }
 
     /**
+     * Show a browser notification for a hostile fleet, once per event.
+     *
+     * The notification is only used when the page is in the background (a fleet
+     * arriving at a tab nobody is looking at is exactly the case worth a desktop
+     * notification); everything is wrapped, because browsers may deny the API
+     * entirely and that must never break the game page.
+     *
+     * @param {object} ctx Extension context.
+     * @param {Array} events Fleet events.
+     */
+    function notifyHostiles(ctx, events) {
+        const settings = OGI.read(ctx.store);
+        if (!settings.notifyHostile) return;
+        if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+        if (typeof document.hasFocus === 'function' && document.hasFocus()) return;
+
+        const data = ctx.store.data();
+        if (!data.meta.notified) data.meta.notified = {};
+        let sent = 0;
+        for (const event of events) {
+            if (!event.hostile) continue;
+            if (data.meta.notified[event.id]) continue;
+            const target = event.coords && event.coords.length ? event.coords[event.coords.length - 1].text : '';
+            try {
+                new Notification('OGame Infinity 0.84 — ' + ctx.i18n('OV_HOSTILE'), {
+                    body: (event.missionText || event.mission || '?') + ' ' + target + ' — ' +
+                        ctx.i18n('OV_LEFT') + ' ' + OGI.formatCountdown(event.endsAt),
+                    tag: 'ogi-hostile-' + event.id,
+                });
+                data.meta.notified[event.id] = true;
+                sent++;
+            } catch (error) {
+                console.warn('[OGI] notification failed:', error);
+                return;
+            }
+        }
+        if (sent) ctx.store.save();
+    }
+
+    /**
      * Handle the overview page.
      *
      * @param {object} ctx Extension context.
@@ -64,6 +104,10 @@
         }
 
         render();
+
+        // Warn about hostile fleets: a banner in the panel is always there, the
+        // desktop notification only when the page is in the background.
+        notifyHostiles(ctx, parsed.events);
 
         // A light ticker: it stops by itself when the panel is gone (the game
         // reloads parts of the page, and the player may navigate away).
