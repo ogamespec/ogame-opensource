@@ -99,6 +99,7 @@
             activity: {},   // "g:s:p" -> observations
             favorites: { planets: {}, players: {} },
             notes: {},      // "g:s:p" -> free text
+            plan: {},       // gid -> { from, to, kind, name, locked } (the resource plan)
             empire: null,   // last snapshot of the empire page (own planets)
             meta: { lastCrawl: null, lastScan: null, spiesSeen: 0, battlesSeen: 0 },
         };
@@ -121,7 +122,7 @@
     function migrate(parsed, universe) {
         const data = emptyData(universe);
         const arrays = ['spies', 'expeditions', 'combats', 'harvests', 'trades'];
-        const maps = ['messages', 'planets', 'players', 'stats', 'activity', 'notes'];
+        const maps = ['messages', 'planets', 'players', 'stats', 'activity', 'notes', 'plan'];
 
         for (const key of arrays) {
             data[key] = Array.isArray(parsed[key]) ? parsed[key] : [];
@@ -440,6 +441,65 @@
         }
 
         /**
+         * The resource plan: `{ gid: { from, to, kind, name, locked } }`.
+         *
+         * @returns {object} Plan (live object, write through the setters below).
+         */
+        function getPlan() {
+            const store = db();
+            if (!store.plan || typeof store.plan !== 'object') store.plan = {};
+            return store.plan;
+        }
+
+        /**
+         * Remember the target of one object in the plan.
+         *
+         * @param {number} gid Object id.
+         * @param {object} entry Entry: from, to, kind, name, locked.
+         */
+        function setPlanEntry(gid, entry) {
+            const plan = getPlan();
+            const key = String(gid);
+            const current = plan[key] || {};
+            plan[key] = {
+                from: entry.from !== undefined ? entry.from : (current.from || 0),
+                to: entry.to !== undefined ? entry.to : (current.to || 0),
+                kind: entry.kind || current.kind || 'building',
+                name: entry.name || current.name || null,
+                locked: entry.locked !== undefined ? !!entry.locked : !!current.locked,
+            };
+            save();
+        }
+
+        /**
+         * Drop one object from the plan.
+         *
+         * @param {number} gid Object id.
+         */
+        function removePlanEntry(gid) {
+            const plan = getPlan();
+            delete plan[String(gid)];
+            save();
+        }
+
+        /**
+         * Unlock every object without forgetting the chosen targets.
+         */
+        function unlockPlan() {
+            const plan = getPlan();
+            for (const key of Object.keys(plan)) plan[key].locked = false;
+            save();
+        }
+
+        /**
+         * Forget the whole plan.
+         */
+        function clearPlan() {
+            db().plan = {};
+            save();
+        }
+
+        /**
          * Is a planet or a player marked as a favourite?
          *
          * @param {string} kind "planets" or "players".
@@ -517,6 +577,11 @@
             toggleFavorite: toggleFavorite,
             getNote: getNote,
             setNote: setNote,
+            getPlan: getPlan,
+            setPlanEntry: setPlanEntry,
+            removePlanEntry: removePlanEntry,
+            unlockPlan: unlockPlan,
+            clearPlan: clearPlan,
             setEmpire: setEmpire,
             reset: reset,
         };

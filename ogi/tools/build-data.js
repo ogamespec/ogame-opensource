@@ -39,6 +39,7 @@ const SECTIONS = [
     'messages',     // MSG_* — message list
     'events',       // EVENT_* — overview event list
     'galaxy',       // GALAXY_* — galaxy tooltips (planet, moon, debris field)
+    'build',        // BUILD_* — the build pages (level, price, duration, buttons)
 ];
 
 // Languages supported by the game core (see game/core/loca.php, game/loca/).

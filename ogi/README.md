@@ -33,6 +33,7 @@ game, from the pages the player opens:
 | **Empire** — every own planet with its stock, production, fields and object levels, plus the totals | `page=imperium` (the section landmarks of `imperium.php`) |
 | **Farm list** — targets ranked by the maximum loot, with the age of the report, the needed cargo ships, the debris they would leave and their activity | the collected spy reports plus the galaxy activity |
 | **Fleet dispatcher helpers** — select all ships, live capacity/consumption, fill the cargo up to the capacity, speed presets (100/50/10 %) and target shortcuts | the game's own `flotten1` / `flotten2` / `flotten3` forms |
+| **Resource plan on the build pages** — a level stepper next to every building, research, ship and defence unit with the cost of the chosen target, what is still missing for it, a padlock that locks the object into the plan, and a summary of the whole plan against the resources of the planet | the rows of `page=buildings` (level from `BUILD_LEVEL`, stock from `BUILD_SHIPYARD_UNITS`), the costs from `game/core/techs.php`, the stock from the resource bar |
 | **Settings** — trade rate, standard unit base, debris factors, history length, auto-scan, report limit, tooltips, galaxy marking, hostile warning, export/import | the game's own Options page and the Settings tab |
 
 The panel is rendered in the markup of the old design (`table.header`, `td.c`,
@@ -57,6 +58,7 @@ top of the content area**:
 | Toolbar button (any tab) | A popup with the extension version, the state of the current tab (game page, page name, universe, language, storage, panel), the collected report counts, the first steps and a button that brings the in-game welcome panel back | The browser toolbar |
 | `page=messages` | The analyzer panel: actions (`Expand`/`Collapse`, `Scan message folders`, `Clear database`), a one-line summary and the tabs Spy reports, Expeditions, Combats, Recycling, Transport, Planets & players, Totals, Statistics, Empire, Farm list, Needs, Settings | The first element of `#content`, above the message table |
 | `page=imperium` | The empire snapshot (planets with stock, production and fields) | The first element of `#content` |
+| `page=buildings` (Постройки, Исследования, Верфь, Оборона) | A stepper (`«`/`−`/`+`/`»`) and a padlock in every object row, with the cost of the chosen target and what is missing for it, plus the plan summary above the list | A new cell in every row, the summary as the first element of `#content` |
 | `page=flotten1` / `flotten2` / `flotten3` | The fleet helper: selection buttons, live capacity and fuel, cargo filling, speed presets and the five best targets of the farm list | The first element of `#content` |
 | `page=overview` | The fleets in the air with live countdowns to their exact arrival time and a red warning for hostile fleets | The first element of `#content` |
 | `page=statistics` | The own account breakdown, the points history and the rank table; `Update own rank block` / `Load the top 100` read the other views of the page | The first element of `#content` |
@@ -217,7 +219,7 @@ ogi/
 │   ├── pages/                 # messages / bericht / galaxy / overview / statistics / options handlers
 │   └── content.js             # entry point
 ├── tools/build-data.js        # regenerates src/data/*.js from the game sources
-└── tests/                     # node --test (112 tests)
+└── tests/                     # node --test (128 tests)
 ```
 
 ### Parsing instead of an API
@@ -276,7 +278,7 @@ node --test "ogi/tests/**/*.test.js"
 cd ogi && node --test
 ```
 
-112 tests, no dependencies (Node's built-in test runner). They check the parsers
+128 tests, no dependencies (Node's built-in test runner). They check the parsers
 against the project's own golden snapshots (`testing/golden/<lang>/…`) for seven
 languages, the analyzers, the storage, the panel rendering (including HTML
 escaping of player controlled names) and the packaging — the last one loads all

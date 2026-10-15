@@ -37,6 +37,7 @@ the modern game.
 | Empire (planets, stock, production, fields, object levels) | `parsers/imperium.js`, `pages/imperium.js` |
 | Farm list (targets ranked by profit) | `analyze/farms.js`, the Farm list tab |
 | Fleet dispatcher helpers (all ships, cargo, speed, targets) | `pages/fleet.js` |
+| Resource plan on the build pages (level steppers, costs, padlocks, summary) | `parsers/buildpage.js`, `analyze/plan.js`, `pages/build.js` |
 | Settings with export/import | `lib/settings.js`, `pages/options.js` |
 
 ## What was not ported (and why)

@@ -72,6 +72,18 @@
         logout: '<path d="M6.4 2.4H3.2v11.2h3.2" fill="none" stroke="currentColor" stroke-width="1.4"/>' +
             '<path d="M7 8h7M11.4 5.6 13.8 8l-2.4 2.4" fill="none" stroke="currentColor" stroke-width="1.4"/>',
 
+        // The resource plan: the padlock of the original extension and the steppers.
+        lock: '<rect x="3.2" y="7" width="9.6" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.3"/>' +
+            '<path d="M5.6 7V5.2a2.4 2.4 0 0 1 4.8 0V7" fill="none" stroke="currentColor" stroke-width="1.3"/>' +
+            '<circle cx="8" cy="10.4" r="1" fill="currentColor"/>',
+        unlock: '<rect x="3.2" y="7" width="9.6" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.3"/>' +
+            '<path d="M5.6 7V5.2a2.4 2.4 0 0 1 4.8 0" fill="none" stroke="currentColor" stroke-width="1.3"/>' +
+            '<circle cx="8" cy="10.4" r="1" fill="currentColor"/>',
+        minus: '<path d="M3.5 8h9" fill="none" stroke="currentColor" stroke-width="1.8"/>',
+        plus: '<path d="M3.5 8h9M8 3.5v9" fill="none" stroke="currentColor" stroke-width="1.8"/>',
+        first: '<path d="M11 3.5 6 8l5 4.5z" fill="currentColor"/><path d="M5 3.5v9" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+        last: '<path d="M5 3.5 10 8l-5 4.5z" fill="currentColor"/><path d="M11 3.5v9" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+
         // Resources (the colours of the 0.84 resource bar).
         metal: '<path d="M8 1.8 14 8l-6 6.2L2 8z" fill="#b9b9b9"/>',
         crystal: '<path d="M8 1.8 14 8l-6 6.2L2 8z" fill="#8fd3ff"/>',

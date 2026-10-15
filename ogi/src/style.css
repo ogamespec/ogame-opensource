@@ -264,6 +264,59 @@
     text-align: left;
 }
 
+/* Build pages: the per-row stepper, the padlock and the plan summary. */
+.ogi-build-td {
+    vertical-align: top;
+    padding-left: 4px;
+    white-space: nowrap;
+}
+
+.ogi-build-cell {
+    font-size: 11px;
+    line-height: 15px;
+}
+
+.ogi-stepper {
+    white-space: nowrap;
+}
+
+.ogi-stepper a.ogi-step,
+.ogi-stepper a.ogi-lock {
+    color: #9f9f9f;
+    text-decoration: none;
+    padding: 0 2px;
+}
+
+.ogi-stepper a.ogi-step:hover,
+.ogi-stepper a.ogi-lock:hover {
+    color: #ffffff;
+}
+
+.ogi-stepper .ogi-step-target {
+    display: inline-block;
+    min-width: 22px;
+    color: #ffffff;
+    text-align: center;
+}
+
+.ogi-stepper a.ogi-lock {
+    margin-left: 4px;
+    color: #ffd700;
+}
+
+.ogi-build-cost {
+    color: #9f9f9f;
+}
+
+.ogi-build-missing {
+    color: #ff6060;
+}
+
+#ogi-plan-host {
+    width: 530px;
+    margin-bottom: 6px;
+}
+
 .ogi-tabs .ogi-icon {
     margin-right: 3px;
 }

@@ -951,6 +951,143 @@
     }
 
     /**
+     * The level stepper and the padlock of one build page row.
+     *
+     * This is what the original extension shows next to every building, research,
+     * ship and defence unit: step the target up and down, see what that target costs
+     * (and what is still missing), and lock it into the resource plan.
+     *
+     * @param {object} row Parsed build row: gid, name, kind, level, stock.
+     * @param {object} options Options: i18n, unitsData, plan, stock.
+     * @returns {string} HTML for the extra cell of the row.
+     */
+    function buildControl(row, options) {
+        const t = options.i18n;
+        const plan = typeof require === 'function' ? require('../analyze/plan.js') : root.OGI;
+        const needsLib = typeof require === 'function' ? require('../analyze/needs.js') : root.OGI;
+        const stored = (options.plan || {})[String(row.gid)] || {};
+        const byLevel = plan.byLevel(row.kind);
+        const current = byLevel ? (row.level === null || row.level === undefined ? 0 : row.level) : (row.stock || 0);
+        const target = stored.to === undefined || stored.to === null ? current : stored.to;
+        const entry = {
+            gid: row.gid,
+            kind: row.kind,
+            name: row.name,
+            from: byLevel ? (stored.from === undefined ? current : stored.from) : current,
+            to: target,
+        };
+        const cost = plan.entryCost(entry, options.unitsData);
+        const totals = { metal: cost.metal, crystal: cost.crystal, deuterium: cost.deuterium, energy: cost.energy };
+        const deficits = plan.planDeficits(totals, options.stock || {});
+
+        const out = [];
+        out.push('<div class="ogi-build-cell">');
+        out.push('<div class="ogi-stepper">');
+        out.push('<a href="#" class="ogi-step" data-ogi-step="' + row.gid + ':-10" title="' +
+            ui.esc(t('PLAN_STEP_DOWN10')) + '">' + glyph('first', 11) + '</a>');
+        out.push('<a href="#" class="ogi-step" data-ogi-step="' + row.gid + ':-1" title="' +
+            ui.esc(t('PLAN_STEP_DOWN')) + '">' + glyph('minus', 11) + '</a>');
+        out.push('<b class="ogi-step-target">' + ui.num(target) + '</b>');
+        out.push('<a href="#" class="ogi-step" data-ogi-step="' + row.gid + ':1" title="' +
+            ui.esc(t('PLAN_STEP_UP')) + '">' + glyph('plus', 11) + '</a>');
+        out.push('<a href="#" class="ogi-step" data-ogi-step="' + row.gid + ':10" title="' +
+            ui.esc(t('PLAN_STEP_UP10')) + '">' + glyph('last', 11) + '</a>');
+        out.push('<a href="#" class="ogi-lock" data-ogi-lock="' + row.gid + '" title="' +
+            ui.esc(stored.locked ? t('PLAN_UNLOCK') : t('PLAN_LOCK')) + '">' +
+            glyph(stored.locked ? 'lock' : 'unlock', 13) + '</a>');
+        out.push('</div>');
+
+        if (target > entry.from) {
+            out.push('<div class="ogi-build-cost">' + ui.esc(t('PLAN_COST_FOR', {
+                N: (byLevel ? (entry.from + 1) + '–' + target : target - entry.from),
+            })) + ': ' + resource(700, ui.num(cost.metal)) + ' ' +
+                resource(701, ui.num(cost.crystal)) + ' ' +
+                (cost.deuterium ? resource(702, ui.num(cost.deuterium)) + ' ' : '') +
+                (cost.energy ? resource(703, ui.num(cost.energy)) : '') + '</div>');
+            if (!deficits.complete) {
+                out.push('<div class="ogi-build-missing">' + ui.esc(t('PLAN_MISSING')) + ': ' +
+                    (deficits.metal ? resource(700, ui.num(deficits.metal)) + ' ' : '') +
+                    (deficits.crystal ? resource(701, ui.num(deficits.crystal)) + ' ' : '') +
+                    (deficits.deuterium ? resource(702, ui.num(deficits.deuterium)) + ' ' : '') +
+                    (deficits.energy ? resource(703, ui.num(deficits.energy)) : '') + '</div>');
+            }
+        } else if (byLevel) {
+            out.push('<div class="ogi-build-cost">' + ui.esc(t('PLAN_NEXT_LEVEL')) + ': ' +
+                resource(700, ui.num(needsLib.levelCost(row.gid, entry.from + 1, options.unitsData).metal)) + ' ' +
+                resource(701, ui.num(needsLib.levelCost(row.gid, entry.from + 1, options.unitsData).crystal)) + '</div>');
+        }
+        out.push('</div>');
+        return out.join('');
+    }
+
+    /**
+     * The summary of the resource plan: what is locked, what it costs and what is
+     * still missing against the resources of the current planet.
+     *
+     * @param {object} data Store data.
+     * @param {object} options Options: i18n, unitsData, stock, plan.
+     * @returns {string} HTML.
+     */
+    function planSection(data, options) {
+        const t = options.i18n;
+        const plan = typeof require === 'function' ? require('../analyze/plan.js') : root.OGI;
+        const summary = plan.planSummary(options.plan || data.plan || {}, {
+            unitsData: options.unitsData,
+            stock: options.stock || plan.stockOf(data),
+        });
+
+        if (!summary.entries.length) {
+            return '<div class="ogi-note">' + ui.esc(t('PLAN_EMPTY')) + '</div>';
+        }
+
+        const stock = summary.deficits.stock;
+        const rows = summary.entries.map(function (entry) {
+            return [
+                '<a href="index.php?page=infos&gid=' + entry.gid + '">' + ui.esc(entry.name || ('#' + entry.gid)) + '</a>',
+                entry.byLevel
+                    ? ui.num(entry.from) + ' → <b>' + ui.num(entry.to) + '</b>'
+                    : ui.num(entry.from) + ' → <b>' + ui.num(entry.to) + '</b>',
+                glyph('lock', 12),
+                resource(700, ui.num(entry.cost.metal)),
+                resource(701, ui.num(entry.cost.crystal)),
+                entry.cost.deuterium ? resource(702, ui.num(entry.cost.deuterium)) : '-',
+                entry.cost.energy ? resource(703, ui.num(entry.cost.energy)) : '-',
+            ];
+        });
+
+        const totals = summary.totals;
+        const totalRow = [
+            '<b>' + ui.esc(t('PLAN_TOTAL')) + '</b>', '', '',
+            resource(700, ui.num(totals.metal)),
+            resource(701, ui.num(totals.crystal)),
+            totals.deuterium ? resource(702, ui.num(totals.deuterium)) : '-',
+            totals.energy ? resource(703, ui.num(totals.energy)) : '-',
+        ];
+        const stockRow = [
+            ui.esc(t('PLAN_STOCK')), '', '',
+            resource(700, ui.num(stock.metal)),
+            resource(701, ui.num(stock.crystal)),
+            resource(702, ui.num(stock.deuterium)),
+            resource(703, ui.num(stock.energy)),
+        ];
+        const missingRow = [
+            '<b>' + ui.esc(t('PLAN_MISSING')) + '</b>', '', '',
+            summary.deficits.metal ? resource(700, ui.num(summary.deficits.metal)) : '✓',
+            summary.deficits.crystal ? resource(701, ui.num(summary.deficits.crystal)) : '✓',
+            summary.deficits.deuterium ? resource(702, ui.num(summary.deficits.deuterium)) : '✓',
+            summary.deficits.energy ? resource(703, ui.num(summary.deficits.energy)) : '✓',
+        ];
+
+        const out = [];
+        out.push(ui.table([t('COL_OBJECT'), t('PLAN_LEVEL'), '', t('COL_METAL'), t('COL_CRYSTAL'),
+            t('COL_DEUT'), t('COL_ENERGY')], rows.concat([totalRow, stockRow, missingRow])));
+        out.push('<div class="ogi-status">' + ui.esc(summary.deficits.complete
+            ? t('PLAN_COMPLETE')
+            : t('PLAN_INCOMPLETE', { N: ui.num(summary.deficits.missing) })) + '</div>');
+        return out.join('');
+    }
+
+    /**
      * Render the whole analyzer panel.
      *
      * @param {object} data Store data.
@@ -1028,6 +1165,8 @@
         bar: bar,
         needsSection: needsSection,
         welcomePanel: welcomePanel,
+        buildControl: buildControl,
+        planSection: planSection,
         imperiumSection: imperiumSection,
         farmSection: farmSection,
         planetSection: planetSection,
