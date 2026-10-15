@@ -118,6 +118,97 @@
         return { attackers: attackers, defenders: defenders };
     }
 
+    // A participant group of BattleReport(): the table with the composition before
+    // the battle (one per side) and one table per side and round. The unit tables
+    // inside a participant slot are plain "<table border=1>", so the width tells
+    // the groups and the unit tables apart.
+    const GROUP_TAG = /<table\b(?=[^>]*\bborder\s*=\s*["']?1["']?\b)(?=[^>]*\bwidth\s*=\s*["']?100%)[^>]*>/gi;
+
+    /**
+     * Split a report into its participant groups.
+     *
+     * @param {string} source Report HTML.
+     * @returns {string[]} Groups in the order of the report: attackers before,
+     *          defenders before, attackers of round 1, defenders of round 1, …
+     */
+    function splitGroups(source) {
+        const starts = [];
+        const re = new RegExp(GROUP_TAG.source, 'gi');
+        let match;
+        while ((match = re.exec(source)) !== null) starts.push(match.index);
+        const groups = [];
+        for (let i = 0; i < starts.length; i++) {
+            groups.push(source.slice(starts[i], i + 1 < starts.length ? starts[i + 1] : source.length));
+        }
+        return groups;
+    }
+
+    /**
+     * Sort the groups of a report by the side they belong to. The first group of
+     * every side is the composition before the battle, the last one is the
+     * composition after the final round.
+     *
+     * @param {string[]} groups Groups of `splitGroups`.
+     * @param {object} ctx Context: loca, lang.
+     * @returns {{attackers: Array<Array>, defenders: Array<Array>}} Groups per side.
+     */
+    function groupSides(groups, ctx) {
+        const attackers = [];
+        const defenders = [];
+        for (let i = 0; i < groups.length; i++) {
+            const parsed = parseParticipants(groups[i], ctx);
+            if (parsed.attackers.length) attackers.push(parsed.attackers);
+            else if (parsed.defenders.length) defenders.push(parsed.defenders);
+        }
+        return { attackers: attackers, defenders: defenders };
+    }
+
+    /**
+     * Units destroyed by one side: the composition before the battle minus the
+     * composition in the last group of that side. A participant that shows
+     * "destroyed" has no unit table at all, so everything it had counts as lost;
+     * differences are never negative. A participant that has no slot in the last
+     * group at all is treated the same way (a real report always prints a slot for
+     * every participant of every round, so this only covers damaged reports).
+     *
+     * @param {Array<Array>} sideGroups Groups of one side (first = before, last = after).
+     * @returns {Array<{name: string, coords: object, units: Object<string, number>}>} Losses.
+     */
+    function destroyedOf(sideGroups) {
+        if (!sideGroups.length) return [];
+        const before = sideGroups[0];
+        const after = sideGroups[sideGroups.length - 1];
+        return before.map(function (participant, index) {
+            const last = (after[index] && after[index].units) || {};
+            const units = {};
+            for (const gid of Object.keys(participant.units)) {
+                const initial = participant.units[gid] || 0;
+                const remaining = last[gid] === undefined ? 0 : last[gid];
+                const lost = Math.max(0, initial - remaining);
+                if (lost > 0) units[gid] = lost;
+            }
+            return { name: participant.name, coords: participant.coords, units: units };
+        });
+    }
+
+    /**
+     * Losses and round count of a report, derived from its group structure.
+     *
+     * @param {string} source Report HTML.
+     * @param {object} ctx Context: loca, lang.
+     * @returns {{roundCount: number, destroyed: {attackers: Array, defenders: Array}}} Losses.
+     */
+    function parseDestroyed(source, ctx) {
+        const sides = groupSides(splitGroups(source), ctx);
+        return {
+            roundCount: Math.max(0, sides.attackers.length - 1, sides.defenders.length - 1),
+            destroyed: {
+                attackers: destroyedOf(sides.attackers),
+                defenders: destroyedOf(sides.defenders),
+            },
+        };
+    }
+
     /**
      * Parse a battle report.
      *
@@ -141,6 +232,8 @@
             repaired: false,
             lost: false,
             rounds: 0,
+            roundCount: 0,
+            destroyed: { attackers: [], defenders: [] },
         };
 
         if (loca) {
@@ -200,6 +293,12 @@
             const participants = parseParticipants(source, { loca: loca, lang: lang });
             result.attackers = participants.attackers;
             result.defenders = participants.defenders;
+
+            // Losses per participant and the number of rounds, from the group
+            // structure of the report (see parseDestroyed).
+            const losses = parseDestroyed(source, { loca: loca, lang: lang });
+            result.roundCount = losses.roundCount;
+            result.destroyed = losses.destroyed;
         } else {
             result.attackers = [];
             result.defenders = [];
@@ -213,6 +312,8 @@
         parseBattleReport: parseBattleReport,
         parseParticipants: parseParticipants,
         parseUnits: parseUnits,
+        splitGroups: splitGroups,
+        parseDestroyed: parseDestroyed,
     };
 
     root.OGI = Object.assign(root.OGI || {}, api);

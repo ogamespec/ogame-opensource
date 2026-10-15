@@ -20,7 +20,7 @@
     }
 
     // The pages the extension knows how to read.
-    const HANDLERS = ['messages', 'bericht', 'galaxy', 'options', 'statistics'];
+    const HANDLERS = ['messages', 'bericht', 'galaxy', 'options', 'statistics', 'overview'];
 
     /**
      * The extension API (`chrome` in Chromium browsers, `browser` in Firefox).
@@ -150,6 +150,15 @@
         info.counts = OGI.counts(store.data());
         info.session = !!OGI.detectSession(source);
 
+        // The resource bar of the current page is the only place the extension can
+        // learn the player's stock from; the needs calculator uses it.
+        const resources = OGI.parseResourceBar(source);
+        if (resources) {
+            store.data().meta.stock = resources;
+            store.data().meta.stockAt = Math.floor(Date.now() / 1000);
+            store.save();
+        }
+
         const ctx = {
             OGI: OGI,
             loca: loca,
@@ -168,6 +177,7 @@
             galaxy: OGI.mountGalaxy,
             options: OGI.mountOptions,
             statistics: OGI.mountStatistics,
+            overview: OGI.mountOverview,
         };
         const handler = handlers[page];
         info.handler = typeof handler === 'function' ? page : null;

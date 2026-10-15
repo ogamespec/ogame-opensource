@@ -31,6 +31,9 @@
         debrisFactorDef: 0,         // % of the lost defence that becomes debris
         deuteriumInDebris: false,   // does deuterium end up in the debris field
         historyDays: 60,            // how long the statistics history is kept
+        needGid: 1,                 // needs calculator: last chosen object
+        needFrom: 0,                // needs calculator: current level
+        needTo: 1,                  // needs calculator: target level
     };
 
     const NUMERIC_RANGES = {
@@ -39,6 +42,9 @@
         debrisFactor: [0, 100],
         debrisFactorDef: [0, 100],
         historyDays: [7, 365],
+        needGid: [1, 100000],
+        needFrom: [0, 100],
+        needTo: [1, 100],
     };
 
     /**

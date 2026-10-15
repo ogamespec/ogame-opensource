@@ -21,6 +21,7 @@
         { id: 'planets', key: 'TAB_PLANETS' },
         { id: 'totals', key: 'TAB_TOTALS' },
         { id: 'stats', key: 'TAB_STATS' },
+        { id: 'needs', key: 'TAB_NEEDS' },
         { id: 'settings', key: 'TAB_SETTINGS' },
     ];
 
@@ -62,6 +63,9 @@
     function spySection(data, options) {
         const opt = options || {};
         const t = opt.i18n;
+        const recycling = typeof require === 'function' ? require('../analyze/recycling.js') : root.OGI;
+        const settingsLib = typeof require === 'function' ? require('./settings.js') : root.OGI;
+        const settings = settingsLib.read({ data: function () { return data; } });
         const rows = analyze.spyTable(data, { unitsData: opt.unitsData, cargo: opt.cargo, limit: opt.limit || 100 });
         const filter = (opt.filter || '').toLowerCase();
         const out = [];
@@ -69,6 +73,17 @@
             const coords = spy.coords ? spy.coords.g + ':' + spy.coords.s + ':' + spy.coords.p : '-';
             const haystack = (coords + ' ' + (spy.planet || '') + ' ' + (spy.player || '')).toLowerCase();
             if (filter && haystack.indexOf(filter) === -1) continue;
+
+            // What the scanned fleet and defence would leave behind if it were
+            // destroyed — the 0.84 equivalent of OGI's recycling yield warning.
+            const fleetDebris = recycling.recyclingYield(spy.fleet || {}, opt.unitsData, settings);
+            const defenceDebris = recycling.recyclingYield(spy.defence || {}, opt.unitsData, settings);
+            const debrisTotal = fleetDebris.total + defenceDebris.total;
+            const debris = debrisTotal > 0
+                ? '<br><span class="ogi-info">' + ui.esc(t('COL_DEBRIS')) + ' ' + ui.num(debrisTotal) +
+                    ' (' + ui.num(recycling.recyclersNeeded(debrisTotal, opt.unitsData)) + ')</span>'
+                : '';
+
             out.push([
                 ui.esc(formatDate(spy.date)),
                 ui.esc(coords),
@@ -78,7 +93,7 @@
                 ui.num(spy.resources.crystal),
                 ui.num(spy.resources.deuterium),
                 '<b>' + ui.num(spy.resources.total) + '</b>',
-                ui.num(spy.maxLoot.total),
+                ui.num(spy.maxLoot.total) + debris,
                 ui.num(spy.needed.smallCargo) + ' / ' + ui.num(spy.needed.largeCargo),
                 ui.num(spy.fleetValue.total),
                 ui.num(spy.defenceValue.total),
@@ -485,6 +500,197 @@
     }
 
     /**
+     * Countdown text of a timestamp.
+     *
+     * @param {number} endsAt Unix seconds.
+     * @param {number} [now] Current time (for tests).
+     * @returns {string} "MM:SS" or "H:MM:SS".
+     */
+    function formatCountdown(endsAt, now) {
+        const reference = now === undefined ? Math.floor(Date.now() / 1000) : now;
+        let seconds = Math.max(0, (endsAt || 0) - reference);
+        const hours = Math.floor(seconds / 3600);
+        seconds -= hours * 3600;
+        const minutes = Math.floor(seconds / 60);
+        seconds -= minutes * 60;
+        const pad = function (value) { return String(value).padStart(2, '0'); };
+        return (hours > 0 ? hours + ':' : '') + pad(minutes) + ':' + pad(seconds);
+    }
+
+    /**
+     * Localized name of a game object.
+     *
+     * @param {string|number} gid Object id.
+     * @param {object} options Options: loca, lang.
+     * @returns {string} Name.
+     */
+    function objectName(gid, options) {
+        if (options && options.loca && options.lang) {
+            const name = options.loca.get(options.lang, 'NAME_' + gid);
+            if (name) return name;
+        }
+        return String(gid);
+    }
+
+    /**
+     * The fleets in the air with live countdowns to their exact arrival time
+     * (game/pages/overview_events.php — the `star` attribute of the timer element).
+     *
+     * @param {object} data Store data.
+     * @param {object} options Options: i18n, events, loca, lang, now.
+     * @returns {string} HTML.
+     */
+    function fleetSection(data, options) {
+        const t = options.i18n;
+        const events = options.events || [];
+        const now = options.now === undefined ? Math.floor(Date.now() / 1000) : options.now;
+        const settings = typeof require === 'function'
+            ? require('./settings.js').read({ data: function () { return data; } })
+            : root.OGI.read({ data: function () { return data; } });
+        const out = [];
+
+        const hostiles = events.filter(function (event) { return event.hostile; });
+        if (hostiles.length && settings.notifyHostile) {
+            out.push('<div class="ogi-alert">');
+            out.push('<b>' + ui.esc(t('OV_HOSTILE')) + '</b>');
+            for (const event of hostiles.slice(0, 5)) {
+                const route = event.coords && event.coords.length
+                    ? event.coords[event.coords.length - 1].text
+                    : '-';
+                out.push('<div>' + ui.esc((event.missionText || event.mission || '?') + ' ' + route + ' — ' +
+                    t('OV_LEFT') + ' ') +
+                    '<span data-ogi-countdown="' + ui.esc(event.endsAt) + '">' +
+                    ui.esc(formatCountdown(event.endsAt, now)) + '</span></div>');
+            }
+            out.push('</div>');
+        }
+
+        if (!events.length) {
+            out.push('<div class="ogi-note">' + ui.esc(t('OV_NO_EVENTS')) + '</div>');
+            return out.join('');
+        }
+
+        const rows = events.map(function (event) {
+            const ships = Object.keys(event.ships || {}).map(function (gid) {
+                return ui.num(event.ships[gid]) + ' ' + ui.esc(objectName(gid, options));
+            }).join(', ');
+            const route = (event.coords || []).map(function (coords) { return ui.esc(coords.text); }).join(' → ');
+            const arrow = event.direction === 'returning' ? '◀ ' : (event.direction === 'holding' ? '● ' : '▶ ');
+            return [
+                '<span data-ogi-countdown="' + ui.esc(event.endsAt) + '">' +
+                    ui.esc(formatCountdown(event.endsAt, now)) + '</span>',
+                event.hostile ? ui.tag(event.missionText || event.mission || '?', 'bad')
+                    : ui.esc(event.missionText || event.mission || '?'),
+                ui.esc(arrow) + route,
+                ships || (event.shipCount !== null && event.shipCount !== undefined
+                    ? ui.num(event.shipCount) + ' ' + ui.esc(t('OV_UNKNOWN_FLEET'))
+                    : '-'),
+                event.cargo ? ui.num(event.cargo.total) : '-',
+            ];
+        });
+
+        out.push(ui.table([
+            t('OV_LEFT'), t('OV_MISSION'), t('OV_ROUTE'), t('OV_SHIPS'), t('COL_CARGO'),
+        ], rows));
+        return out.join('');
+    }
+
+    /**
+     * Standalone panel with the fleets in the air (overview page).
+     *
+     * @param {object} data Store data.
+     * @param {object} options Options: i18n, events, loca, lang, now, status.
+     * @returns {string} HTML.
+     */
+    function fleetPanel(data, options) {
+        const t = options.i18n;
+        const status = options.status
+            ? '<div class="ogi-status">' + ui.esc(options.status) + '</div>'
+            : '';
+        return ui.panel(t('OV_TITLE'), status + fleetSection(data, options), { id: 'ogi-fleets' });
+    }
+
+    /**
+     * Needs calculator: how much of what is still missing for the next levels.
+     *
+     * The stock comes from the resource bar of the last game page the player opened
+     * (parsers/resbar.js), the costs from the generated object tables
+     * (src/data/units.js) and the formula from analyze/needs.js.
+     *
+     * @param {object} data Store data.
+     * @param {object} options Options: i18n, loca, lang, unitsData.
+     * @returns {string} HTML.
+     */
+    function needsSection(data, options) {
+        const t = options.i18n;
+        const settingsLib = typeof require === 'function' ? require('./settings.js') : root.OGI;
+        const needsLib = typeof require === 'function' ? require('../analyze/needs.js') : root.OGI;
+        const units = options.unitsData || (typeof require === 'function' ? require('../data/units.js') : root.OGI.UNITS);
+        const settings = settingsLib.merge(settingsLib.DEFAULTS, data.settings || {});
+        const gid = settings.needGid;
+        const fromLevel = settings.needFrom;
+        const toLevel = Math.max(fromLevel + 1, settings.needTo);
+
+        function group(label, ids) {
+            return '<optgroup label="' + ui.esc(label) + '">' + (ids || []).map(function (id) {
+                return '<option value="' + ui.esc(id) + '"' + (id === gid ? ' selected' : '') + '>' +
+                    ui.esc(objectName(id, options)) + '</option>';
+            }).join('') + '</optgroup>';
+        }
+
+        const out = [];
+        out.push('<div class="ogi-settings-block">');
+        out.push('<label class="ogi-check">' + ui.esc(t('NEED_OBJECT')) + ': <select data-ogi-need="needGid">' +
+            group(t('NEED_GROUP_BUILDINGS'), units.lists.buildings) +
+            group(t('NEED_GROUP_RESEARCH'), units.lists.research) +
+            group(t('NEED_GROUP_SHIPS'), units.lists.fleet) +
+            group(t('NEED_GROUP_DEFENCE'), units.lists.defence) +
+            '</select></label>');
+        out.push('<label class="ogi-check">' + ui.esc(t('NEED_FROM')) + ': ' +
+            '<input type="number" min="0" max="100" data-ogi-need="needFrom" value="' + ui.esc(fromLevel) + '" size="4" /> ' +
+            ui.esc(t('NEED_TO')) + ': ' +
+            '<input type="number" min="1" max="100" data-ogi-need="needTo" value="' + ui.esc(toLevel) + '" size="4" /></label>');
+        out.push('</div>');
+
+        const cost = needsLib.levelCost(gid, toLevel, units);
+        const total = needsLib.totalCost(gid, fromLevel, toLevel, units);
+        const stock = (data.meta && data.meta.stock) || null;
+        const result = needsLib.needs(stock || {}, total, {});
+
+        out.push(ui.keyValue([
+            [ui.esc(t('NEED_COST_LEVEL')) + ' ' + ui.num(toLevel),
+                ui.num(cost.metal) + ' / ' + ui.num(cost.crystal) + ' / ' + ui.num(cost.deuterium) +
+                (cost.energy ? ' / ' + ui.num(cost.energy) + ' ' + ui.esc(t('NEED_ENERGY')) : '')],
+            [ui.esc(t('NEED_COST_TOTAL')) + ' ' + ui.num(fromLevel) + '→' + ui.num(toLevel),
+                ui.num(total.metal) + ' / ' + ui.num(total.crystal) + ' / ' + ui.num(total.deuterium)],
+        ]));
+
+        const rows = [];
+        const resources = [['metal', 700], ['crystal', 701], ['deuterium', 702], ['energy', 703]];
+        for (const resource of resources) {
+            const needed = total[resource[0]] || 0;
+            if (!needed) continue;
+            const have = stock ? (stock[resource[0]] || 0) : 0;
+            rows.push([
+                ui.esc(objectName(resource[1], options)),
+                ui.num(needed),
+                stock ? ui.num(have) : ui.esc(t('NEED_UNKNOWN')),
+                stock ? '<b>' + ui.num(result[resource[0]] || 0) + '</b>' : '-',
+            ]);
+        }
+        out.push(ui.table([t('COL_RESOURCE'), t('COL_NEEDED'), t('NEED_HAVE'), t('NEED_MISSING')], rows));
+
+        if (!stock) {
+            out.push('<div class="ogi-note">' + ui.esc(t('NEED_NO_STOCK')) + '</div>');
+        } else {
+            out.push('<div class="ogi-note">' +
+                (result.affordable ? ui.tag(t('NEED_ENOUGH'), 'good') : ui.tag(t('NEED_SHORT'), 'bad')) + ' ' +
+                ui.esc(t('NEED_STOCK_AGE', { T: formatDate(data.meta.stockAt || 0) })) + '</div>');
+        }
+        return out.join('');
+    }
+
+    /**
      * Render the whole analyzer panel.
      *
      * @param {object} data Store data.
@@ -517,6 +723,7 @@
             case 'planets': body += planetSection(data, opt); break;
             case 'totals': body += totalsSection(data, opt); break;
             case 'stats': body += statsSection(data, opt); break;
+            case 'needs': body += needsSection(data, opt); break;
             case 'settings': body += settingsSection(data, opt); break;
             case 'spy':
             default: body += spySection(data, opt); break;
@@ -558,6 +765,11 @@
         combatResult: combatResult,
         summaryLine: summaryLine,
         bar: bar,
+        needsSection: needsSection,
+        formatCountdown: formatCountdown,
+        objectName: objectName,
+        fleetSection: fleetSection,
+        fleetPanel: fleetPanel,
         statsSection: statsSection,
         settingsSection: settingsSection,
         settingsPanel: settingsPanel,

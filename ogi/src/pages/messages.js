@@ -101,6 +101,19 @@
                     render();
                 });
             }
+            // The needs calculator keeps its choice in the settings, so the panel
+            // can be re-rendered from scratch on every change.
+            if (tab === 'needs') {
+                const fields = host.querySelectorAll('[data-ogi-need]');
+                for (let i = 0; i < fields.length; i++) {
+                    fields[i].addEventListener('change', function () {
+                        const patch = {};
+                        patch[this.getAttribute('data-ogi-need')] = this.value;
+                        OGI.write(store, patch);
+                        render();
+                    });
+                }
+            }
         }
 
         /**

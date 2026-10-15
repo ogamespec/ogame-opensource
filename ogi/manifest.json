@@ -32,7 +32,11 @@
 				"src/parsers/texts.js",
 				"src/parsers/galaxy.js",
 				"src/parsers/statistics.js",
+				"src/parsers/overview.js",
+				"src/parsers/resbar.js",
 				"src/analyze/index.js",
+				"src/analyze/needs.js",
+				"src/analyze/recycling.js",
 				"src/lib/collect.js",
 				"src/lib/panel.js",
 				"src/pages/messages.js",
@@ -40,6 +44,7 @@
 				"src/pages/galaxy.js",
 				"src/pages/options.js",
 				"src/pages/statistics.js",
+				"src/pages/overview.js",
 				"src/content.js"
 			],
 			"css": [
