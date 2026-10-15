@@ -29,6 +29,8 @@ test('manifest: every declared file exists', function () {
     assert.ok(fs.existsSync(path.join(OGI_ROOT, manifest.action.default_popup)), 'missing popup page');
     const popup = fs.readFileSync(path.join(OGI_ROOT, manifest.action.default_popup), 'utf8');
     assert.ok(popup.indexOf('popup.js') !== -1, 'the popup page must load its script');
+    assert.ok(popup.indexOf('lib/icons.js') !== -1, 'the popup uses the same icon set');
+    assert.ok(fs.existsSync(path.join(OGI_ROOT, 'src', 'lib', 'icons.js')), 'the icon set exists');
     for (const entry of manifest.content_scripts) {
         for (const file of entry.js || []) {
             assert.ok(fs.existsSync(path.join(OGI_ROOT, file)), 'missing script ' + file);

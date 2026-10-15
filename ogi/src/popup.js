@@ -50,18 +50,30 @@
      *
      * @param {string} label Label.
      * @param {string} value Value.
+     * @param {string} [iconName] Icon of the row.
      * @returns {HTMLElement} Row.
      */
-    function row(label, value) {
+    function row(label, value, iconName) {
         const element = document.createElement('div');
         element.className = 'ogi-popup-row';
         const left = document.createElement('span');
-        left.textContent = label;
+        left.innerHTML = (iconName && window.OGI && window.OGI.icon ? window.OGI.icon(iconName, { size: 12 }) : '') +
+            escapeHtml(label);
         const right = document.createElement('span');
         right.textContent = value;
         element.appendChild(left);
         element.appendChild(right);
         return element;
+    }
+
+    /**
+     * Escape a label for the innerHTML of a row.
+     *
+     * @param {string} text Text.
+     * @returns {string} Escaped text.
+     */
+    function escapeHtml(text) {
+        return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
     /**
@@ -72,19 +84,19 @@
      */
     function render(status, version) {
         statusHost.textContent = '';
-        statusHost.appendChild(row('Version', status.version || version));
-        statusHost.appendChild(row('Game page', status.game ? 'yes' : 'no'));
-        statusHost.appendChild(row('Page', status.page || '—'));
-        statusHost.appendChild(row('Universe', status.universe || '—'));
-        statusHost.appendChild(row('Language', status.lang || '—'));
-        statusHost.appendChild(row('Storage', status.storage ? 'ok' : 'in memory'));
-        statusHost.appendChild(row('Panel', status.handler || 'none'));
-        statusHost.appendChild(row('Session', status.session ? 'found' : 'missing'));
+        statusHost.appendChild(row('Version', status.version || version, 'settings'));
+        statusHost.appendChild(row('Game page', status.game ? 'yes' : 'no', 'planets'));
+        statusHost.appendChild(row('Page', status.page || '—', 'galaxy'));
+        statusHost.appendChild(row('Universe', status.universe || '—', 'empire'));
+        statusHost.appendChild(row('Language', status.lang || '—', 'stats'));
+        statusHost.appendChild(row('Storage', status.storage ? 'ok' : 'in memory', 'recycler'));
+        statusHost.appendChild(row('Panel', status.handler || 'none', 'spy'));
+        statusHost.appendChild(row('Session', status.session ? 'found' : 'missing', 'clock'));
 
         const counts = status.counts || {};
-        statusHost.appendChild(row('Spy reports', String(counts.spies === undefined ? 0 : counts.spies)));
-        statusHost.appendChild(row('Combats', String(counts.combats === undefined ? 0 : counts.combats)));
-        statusHost.appendChild(row('Expeditions', String(counts.expeditions === undefined ? 0 : counts.expeditions)));
+        statusHost.appendChild(row('Spy reports', String(counts.spies === undefined ? 0 : counts.spies), 'spy'));
+        statusHost.appendChild(row('Combats', String(counts.combats === undefined ? 0 : counts.combats), 'combat'));
+        statusHost.appendChild(row('Expeditions', String(counts.expeditions === undefined ? 0 : counts.expeditions), 'expedition'));
 
         if (!status.game) {
             noteHost.textContent = 'This tab is not an OGame 0.84 page. ' +

@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "OGame Infinity 0.84",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Message analyzers, spy report database and planet/player history for OGame 0.84 servers. Client-side port of the OGame Infinity extension.",
 	"author": "DeepSeek",
 	"action": {
