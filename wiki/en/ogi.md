@@ -77,7 +77,7 @@ Details, screenshots of the workflow and the exact formulas are in the
 ## Testing
 
 ```bash
-cd ogi && node --test
+node --test "ogi/tests/**/*.test.js"     # from the repository root
 ```
 
 The suite uses the repository's own golden snapshots

@@ -136,6 +136,10 @@ supports exactly the languages the server ships (de, en, es, fr, it, jp, ru).
 ## Tests
 
 ```bash
+# from the repository root
+node --test "ogi/tests/**/*.test.js"
+
+# or from this folder
 cd ogi && node --test
 ```
 
