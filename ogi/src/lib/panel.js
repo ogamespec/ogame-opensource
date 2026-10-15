@@ -1088,6 +1088,105 @@
     }
 
     /**
+     * Profitability: what to build next, ranked by payback time.
+     *
+     * The tiles follow the original extension: the object image of the game, the
+     * current and the next level, the cost, the production the level adds and the time
+     * it needs to pay for itself.
+     *
+     * @param {object} data Store data.
+     * @param {object} options Options: i18n, unitsData, levels, factors, energyTech,
+     *        engineer, names, rate, filter, page (name of the planet).
+     * @returns {string} HTML.
+     */
+    function paybackSection(data, options) {
+        const t = options.i18n;
+        const payback = typeof require === 'function' ? require('../analyze/payback.js') : root.OGI;
+        const production = typeof require === 'function' ? require('../analyze/production.js') : root.OGI;
+        const settingsLib = typeof require === 'function' ? require('./settings.js') : root.OGI;
+        const settings = options.settings || settingsLib.read({ data: function () { return data; } });
+        const rate = options.rate || (settings.tradeRate && settings.tradeRate.length === 3 ? settings.tradeRate : undefined);
+
+        const levels = options.levels || {};
+        const names = options.names || {};
+        const context = {
+            rate: rate,
+            factors: options.factors,
+            energyTech: options.energyTech,
+            engineer: options.engineer,
+            unitsData: options.unitsData,
+            names: names,
+        };
+        const rows = payback.recommendations(levels, Object.assign({}, context, { filter: options.filter }));
+
+        const out = [];
+        if (!rows.length && !Object.keys(levels).length) {
+            out.push('<div class="ogi-note">' + ui.esc(t('PAY_NO_DATA')) + '</div>');
+            return out.join('');
+        }
+        if (!rows.length) {
+            out.push('<div class="ogi-note">' + ui.esc(t('PAY_NO_RESULT')) + '</div>');
+        }
+
+        out.push('<div class="ogi-payback-controls">');
+        out.push('<span class="ogi-payback-rate">' + ui.esc(t('PAY_RATE')) + ': ' +
+            resource(700, '×' + ((rate || payback.DEFAULT_RATE)[0])) + ' ' +
+            resource(701, '×' + ((rate || payback.DEFAULT_RATE)[1])) + ' ' +
+            resource(702, '×' + ((rate || payback.DEFAULT_RATE)[2])) + '</span> ');
+        out.push('<label class="ogi-check">' + ui.esc(t('PAY_FILTER')) + ': ' +
+            '<input type="number" min="1" max="365" size="4" data-ogi-payback="filter" value="' +
+            ui.esc(options.filter === undefined ? '' : options.filter) + '" /> ' + ui.esc(t('PAY_DAYS')) + '</label>');
+        out.push('</div>');
+
+        if (rows.length) {
+            out.push('<div class="ogi-tiles">');
+            for (const row of rows) {
+                out.push('<div class="ogi-tile" title="' + ui.esc((row.name || ('#' + row.gid)) + ': ' +
+                    ui.num(row.cost.metal) + ' / ' + ui.num(row.cost.crystal) + ' / ' + ui.num(row.cost.deuterium)) + '">');
+                out.push('<img src="gebaeude/' + row.gid + '.gif" width="48" height="48" alt="" />');
+                out.push('<div class="ogi-tile-level">' + ui.num(row.level) + ' → <b>' + ui.num(row.nextLevel) + '</b></div>');
+                out.push('<div class="ogi-tile-cost">' + resource(700, ui.num(row.cost.metal)) + ' ' +
+                    resource(701, ui.num(row.cost.crystal)) +
+                    (row.cost.deuterium ? ' ' + resource(702, ui.num(row.cost.deuterium)) : '') + '</div>');
+                out.push('<div class="ogi-tile-gain">+' + ui.num(row.gain.amount) + '/' + ui.esc(t('FARM_HOURS')) +
+                    ' ' + (row.gain.resource ? resource(row.gain.resource, '') : '') + '</div>');
+                out.push('<div class="ogi-tile-payback">' + ui.esc(t('PAY_PAYBACK')) + ': ' +
+                    (row.paybackDays >= 1 ? ui.num(Math.round(row.paybackDays * 10) / 10) + ' ' + ui.esc(t('PAY_DAYS'))
+                        : ui.num(Math.round(row.payback)) + ' ' + ui.esc(t('FARM_HOURS'))) + '</div>');
+                if (row.energyBalance) {
+                    out.push('<div class="ogi-tile-energy">' + resource(703, ui.num(row.energyBalance)) + '</div>');
+                }
+                out.push('</div>');
+            }
+            out.push('</div>');
+        }
+
+        // Power plants produce no tradeable resource, so they are listed apart with the
+        // energy they add instead of a payback time.
+        const power = [];
+        for (const gid of production.POWER) {
+            const level = levels[gid];
+            if (!(level > 0)) continue;
+            const gain = payback.at(gid, level + 1, context).amount - payback.at(gid, level, context).amount;
+            if (!gain) continue;
+            power.push('<div class="ogi-tile">' +
+                '<img src="gebaeude/' + gid + '.gif" width="48" height="48" alt="" />' +
+                '<div class="ogi-tile-level">' + ui.num(level) + ' → <b>' + ui.num(level + 1) + '</b></div>' +
+                '<div class="ogi-tile-gain">' + resource(703, '+' + ui.num(gain)) + '</div></div>');
+        }
+        if (power.length) {
+            out.push('<div class="ogi-status">' + ui.esc(t('PAY_POWER')) + '</div>');
+            out.push('<div class="ogi-tiles">' + power.join('') + '</div>');
+        }
+
+        out.push('<div class="ogi-note">' + ui.esc(t('PAY_NOTE')) + '</div>');
+        if (options.page) {
+            out.push('<div class="ogi-status">' + ui.esc(options.page) + '</div>');
+        }
+        return out.join('');
+    }
+
+    /**
      * Render the whole analyzer panel.
      *
      * @param {object} data Store data.
@@ -1167,6 +1266,7 @@
         welcomePanel: welcomePanel,
         buildControl: buildControl,
         planSection: planSection,
+        paybackSection: paybackSection,
         imperiumSection: imperiumSection,
         farmSection: farmSection,
         planetSection: planetSection,

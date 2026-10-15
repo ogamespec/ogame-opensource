@@ -317,6 +317,63 @@
     margin-bottom: 6px;
 }
 
+#ogi-payback-host {
+    width: 530px;
+    margin-bottom: 6px;
+}
+
+/* Profitability: the tile grid of the recommended development. */
+.ogi-payback-controls {
+    padding: 3px 0;
+}
+
+.ogi-payback-rate {
+    color: #ffffff;
+}
+
+.ogi-tiles {
+    display: block;
+    padding: 3px 0;
+}
+
+.ogi-tile {
+    display: inline-block;
+    width: 76px;
+    margin: 2px;
+    padding: 2px;
+    vertical-align: top;
+    text-align: center;
+    background-color: #101010;
+    border: 1px solid #4a4a4a;
+}
+
+.ogi-tile img {
+    display: block;
+    margin: 0 auto;
+}
+
+.ogi-tile-level {
+    color: #ffd700;
+    font-size: 11px;
+}
+
+.ogi-tile-cost,
+.ogi-tile-gain,
+.ogi-tile-payback,
+.ogi-tile-energy {
+    font-size: 10px;
+    line-height: 13px;
+    color: #cfcfcf;
+}
+
+.ogi-tile-payback {
+    color: #9fe89f;
+}
+
+.ogi-tile .ogi-icon {
+    margin-right: 0;
+}
+
 .ogi-tabs .ogi-icon {
     margin-right: 3px;
 }

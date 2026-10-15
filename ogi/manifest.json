@@ -36,6 +36,7 @@
 				"src/parsers/galaxy.js",
 				"src/parsers/statistics.js",
 				"src/parsers/buildpage.js",
+				"src/parsers/prodpage.js",
 				"src/parsers/imperium.js",
 				"src/parsers/overview.js",
 				"src/parsers/resbar.js",
@@ -43,6 +44,8 @@
 				"src/analyze/needs.js",
 				"src/analyze/recycling.js",
 				"src/analyze/plan.js",
+				"src/analyze/production.js",
+				"src/analyze/payback.js",
 				"src/analyze/farms.js",
 				"src/lib/collect.js",
 				"src/lib/panel.js",
@@ -55,6 +58,7 @@
 				"src/pages/imperium.js",
 				"src/pages/fleet.js",
 				"src/pages/build.js",
+				"src/pages/prod.js",
 				"src/content.js"
 			],
 			"css": [

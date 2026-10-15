@@ -208,7 +208,7 @@
             }
         }
 
-        return { planets: planets, sums: sums(sections) };
+        return { planets: planets, sums: sums(sections, context) };
     }
 
     /**
@@ -251,19 +251,23 @@
      * Read the sum column of every section.
      *
      * @param {Object<string, string>} sections Sections.
-     * @returns {object} Sums.
+     * @param {object} [ctx] Context: loca, lang.
+     * @returns {object} Sums, keyed by resource id (plus the localized labels).
      */
-    function sums(sections) {
-        const out = { resources: {}, fields: null };
+    function sums(sections, ctx) {
+        const out = { resources: {}, byLabel: {}, fields: null };
         for (const row of matrixRows(sections['Resources (without Energy)'] || '')) {
             if (row.sum === null) continue;
             const parts = String(row.sum).split('/');
             const amount = numbers.parseGameNumber(parts[0]);
             const production = parts.length > 1 ? numbers.parseGameNumber(parts[1]) : NaN;
-            out.resources[row.label] = {
+            const value = {
                 amount: isNaN(amount) ? 0 : amount,
                 production: isNaN(production) ? null : production,
             };
+            out.byLabel[row.label] = value;
+            const gid = resourceGid(row, ctx || {});
+            if (gid !== null) out.resources[gid] = value;
         }
         const fieldRows = matrixRows(sections.Fields || '');
         if (fieldRows.length) out.fields = html.normalizeText(fieldRows[0].sum || '');

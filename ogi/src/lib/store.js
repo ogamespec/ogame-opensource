@@ -100,6 +100,7 @@
             favorites: { planets: {}, players: {} },
             notes: {},      // "g:s:p" -> free text
             plan: {},       // gid -> { from, to, kind, name, locked } (the resource plan)
+            production: null, // last snapshot of the production page (Сырьё)
             empire: null,   // last snapshot of the empire page (own planets)
             meta: { lastCrawl: null, lastScan: null, spiesSeen: 0, battlesSeen: 0 },
         };
@@ -137,6 +138,7 @@
         data.meta = parsed.meta && typeof parsed.meta === 'object' ? parsed.meta : {};
         if (parsed.settings && typeof parsed.settings === 'object') data.settings = parsed.settings;
         data.empire = parsed.empire && typeof parsed.empire === 'object' ? parsed.empire : null;
+        data.production = parsed.production && typeof parsed.production === 'object' ? parsed.production : null;
         data.universe = parsed.universe || universe || null;
         data.lang = parsed.lang || null;
 
@@ -441,6 +443,35 @@
         }
 
         /**
+         * Remember what the production page of a planet showed: the levels, the
+         * production factors recovered from the server's own numbers, the implied
+         * energy technology and the officers that are active.
+         *
+         * @param {object} snapshot Parsed production page.
+         */
+        function setProduction(snapshot) {
+            if (!snapshot) return;
+            db().production = {
+                t: Math.floor(Date.now() / 1000),
+                levels: snapshot.levels || {},
+                factors: snapshot.factors || {},
+                energyTech: snapshot.energyTech || 0,
+                officers: snapshot.officers || {},
+                planet: snapshot.planet || null,
+            };
+            save();
+        }
+
+        /**
+         * The last production snapshot.
+         *
+         * @returns {object|null} Snapshot.
+         */
+        function getProduction() {
+            return db().production || null;
+        }
+
+        /**
          * The resource plan: `{ gid: { from, to, kind, name, locked } }`.
          *
          * @returns {object} Plan (live object, write through the setters below).
@@ -577,6 +608,8 @@
             toggleFavorite: toggleFavorite,
             getNote: getNote,
             setNote: setNote,
+            getProduction: getProduction,
+            setProduction: setProduction,
             getPlan: getPlan,
             setPlanEntry: setPlanEntry,
             removePlanEntry: removePlanEntry,
