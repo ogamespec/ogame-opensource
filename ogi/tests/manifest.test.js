@@ -45,11 +45,18 @@ test('scripts: load in manifest order and expose the extension API', function ()
             setItem: function (key, value) { storage[key] = String(value); },
             removeItem: function (key) { delete storage[key]; },
         },
-        location: { search: '', pathname: '/', host: 'localhost' },
+        location: { search: '', pathname: '/', host: 'localhost', href: 'https://localhost/index.php' },
         document: {
             readyState: 'complete',
-            title: 'Uni1 OGame',
-            documentElement: { outerHTML: '<html><head><title>Uni1 OGame</title></head><body></body></html>' },
+            // A minimal but realistic page of a Russian universe: the detection must
+            // work without the English title and without the left menu markup.
+            title: 'Вселенная 1 ОГейм',
+            documentElement: {
+                outerHTML: '<html><head><title>Вселенная 1 ОГейм</title></head><body>' +
+                    '<script>var session="abc";</script>' +
+                    '<a href="index.php?page=messages&session=abc">Messages</a>' +
+                    "<div id='content'></div></body></html>",
+            },
             addEventListener: function () {},
             getElementById: function () { return null; },
             querySelector: function () { return null; },
@@ -83,10 +90,22 @@ test('scripts: load in manifest order and expose the extension API', function ()
         'LOCA', 'UNITS', 'parseSpyReport', 'parseBattleReport', 'parseExpedition', 'parseGalaxyPage',
         'parseMessagesPage', 'createLoca', 'createStore', 'createCollector', 'spyAnalysis',
         'renderAnalyzer', 'createI18n', 'mountMessages', 'mountBericht', 'mountGalaxy',
+        'looksLikeGamePage', 'detectUniverse', 'currentPage', 'lastBoot',
     ]) {
         assert.ok(OGI[name], 'OGI.' + name + ' is missing');
     }
     assert.ok(Object.keys(OGI.LOCA.languages).length === 7);
+
+    // The content script decided about the page it was loaded into and said so in
+    // the console; the decision is also available for inspection in the isolated
+    // world of the extension (OGI.lastBoot). The sandbox document is a Russian
+    // universe, which used to be invisible to the extension.
+    assert.equal(OGI.lastBoot.game, true, 'the sandbox document looks like a game page');
+    assert.equal(OGI.lastBoot.universe, 'uni1', 'the universe is read from the localized title');
+    assert.equal(OGI.lastBoot.lang, 'ru', 'the page language is detected');
+    assert.equal(OGI.lastBoot.storage, true, 'the storage stub was accepted');
+    assert.equal(OGI.lastBoot.page, null, 'the sandbox URL has no page parameter');
+    assert.equal(OGI.lastBoot.handler, null, 'no handler for a page without a name');
 });
 
 test('scripts: the extension stores data of the visited universe', function () {

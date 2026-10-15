@@ -79,12 +79,35 @@
     }
 
     // Marker keys used to detect the language of a rendered page. They are short,
-    // distinctive labels that appear on the messages page and in the reports.
+    // distinctive labels that appear on the messages page and in the reports; the
+    // menu label is added because the page title carries it as well
+    // ("Вселенная 1 ОГейм", "Universum" ...), which is what makes the detection
+    // work on pages with almost no text of their own (a report popup).
     const LANGUAGE_MARKERS = [
+        'MENU_UNIVERSE', 'PLANET_HOME',
         'MSG_ACTION', 'MSG_DATE', 'MSG_FROM', 'MSG_SUBJ',
         'SPY_M', 'SPY_K', 'SPY_FLEET', 'SPY_DEFENSE',
         'BATTLE_ATTACKER', 'BATTLE_DEFENDER', 'FLEET_MESSAGE_FROM',
     ];
+
+    /**
+     * Does a text contain a marker?
+     *
+     * ASCII markers are matched on word boundaries: "Univers" (fr) must not match
+     * the "Universo" (es/it) or "Universum" (de) of another language, otherwise
+     * every language would score on every page.
+     *
+     * @param {string} haystack Normalized text.
+     * @param {string} needle Normalized marker.
+     * @returns {boolean} True when the marker occurs.
+     */
+    function containsMarker(haystack, needle) {
+        if (!needle) return false;
+        if (/^[\x20-\x7e]+$/.test(needle)) {
+            return new RegExp('(?<![A-Za-z])' + escapeRegex(needle) + '(?![A-Za-z])').test(haystack);
+        }
+        return haystack.indexOf(needle) !== -1;
+    }
 
     /**
      * Wrap the generated locale data (src/data/loca.js) into a small lookup API.
@@ -201,7 +224,7 @@
                     const value = get(lang, key);
                     if (value === null) continue;
                     const needle = html.normalizeText(value);
-                    if (needle.length >= 4 && normalized.indexOf(needle) !== -1) score++;
+                    if (needle.length >= 4 && containsMarker(normalized, needle)) score++;
                 }
                 scores[lang] = score;
                 if (score > bestScore) {
@@ -229,6 +252,7 @@
         templateToRegex: templateToRegex,
         matchTemplate: matchTemplate,
         createLoca: createLoca,
+        containsMarker: containsMarker,
         LANGUAGE_MARKERS: LANGUAGE_MARKERS,
     };
 

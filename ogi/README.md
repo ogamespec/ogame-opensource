@@ -123,6 +123,42 @@ storage and falls back to an in-memory database, so the panel keeps working but
 the collected reports are not persisted between pages. That happens in sandboxed
 frames and with "block all cookies" enabled.
 
+### Troubleshooting: an empty console
+
+Every page logs exactly one line, so "nothing in the console" is never ambiguous:
+
+```
+[OGI 1.0.0] https://oldogame.ru/…/index.php?page=messages&session=… · page=messages · game=yes · universe=uni1 · lang=ru · storage=ok · handler=messages
+```
+
+- `game=no` (printed with `console.debug`, so switch the DevTools log level to
+  *Verbose* to see it) — the page is not a 0.84 game page, nothing is done;
+- `game=yes` and `handler=none` — the extension works, but this page has no UI
+  (only `messages`, `bericht` and `galaxy` have one);
+- `handler=messages` — the panel is in the document; if it is not visible, the
+  panel is collapsed, or the page was served from the cache — reload it;
+- `storage=memory` — the browser denied `localStorage`; the panel works but does
+  not remember anything between pages;
+- **no `[OGI]` line at all** — the content script was never injected:
+  - reload the extension in `chrome://extensions` / `about:debugging` after any
+    change to its files (unpacked extensions do not reload themselves);
+  - *Details → Site access* must not be limited to "on click" for the game host;
+  - a page opened as `file://…` requires the "Allow access to file URLs" toggle —
+    for a local server use `http://localhost/…` instead;
+  - the game must be open in this browser profile.
+
+The definitive check is the extension's own console context: in DevTools open the
+context dropdown next to the console prompt and pick **OGame Infinity 0.84**, then
+type `OGI.lastBoot`. It shows what the script decided for the current page:
+
+```js
+OGI.lastBoot
+// {version: "1.0.0", href: "…", page: "messages", game: true, universe: "uni1",
+//  lang: "ru", storage: true, handler: "messages"}
+```
+
+If `OGI` is undefined in that context, the script did not run at all.
+
 ## How it works
 
 ```

@@ -31,6 +31,7 @@ const path = require('path');
 const SECTIONS = [
     'common',       // NAME_<gid> — full object names, resource names
     'technames',    // NAME_<gid> — object names used on the pages
+    'menu',         // MENU_* — left menu labels (also used for language detection)
     'espionage',    // SPY_* — spy report layout
     'battlereport', // BATTLE_*, SNAME_* — battle report layout
     'expedition',   // EXP_* — expedition result texts

@@ -98,10 +98,24 @@ test('templates turn localization strings into capture groups', function () {
 });
 
 test('language detection picks the language of the page', function () {
-    for (const lang of ['en', 'ru', 'de', 'fr']) {
+    for (const lang of ['en', 'ru', 'de', 'fr', 'es', 'it', 'jp']) {
         const source = helpers.readGolden(lang, 'messages_p0.html');
         assert.equal(loca.detectLanguage(source).lang, lang);
     }
+});
+
+test('language detection uses word boundaries and the page title', function () {
+    // "Univers" (fr) must not match the "Universo" (es/it) or "Universum" (de) of
+    // another language.
+    assert.equal(templates.containsMarker('Universo 1 OGame', 'Univers'), false);
+    assert.equal(templates.containsMarker('Univers 1 OGame', 'Univers'), true);
+    assert.equal(templates.containsMarker('Universum 1 OGame', 'Univers'), false);
+
+    // A page with almost no text of its own (a report popup) is still detected
+    // through the localized menu label it carries in the title.
+    const sparse = '<html><head><title>Вселенная 1 ОГейм</title></head><body>' +
+        '<script>var session="abc";</script></body></html>';
+    assert.equal(loca.detectLanguage(sparse).lang, 'ru');
 });
 
 test('html helpers tolerate the broken 0.84 markup', function () {

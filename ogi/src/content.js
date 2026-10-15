@@ -19,6 +19,26 @@
         return;
     }
 
+    // The pages the extension knows how to read.
+    const HANDLERS = ['messages', 'bericht', 'galaxy'];
+
+    /**
+     * Version of the loaded extension (works in Chrome and Firefox; the test
+     * sandbox has no extension API and gets "dev").
+     *
+     * @returns {string} Version.
+     */
+    function extensionVersion() {
+        try {
+            const runtime = typeof chrome !== 'undefined' && chrome.runtime ? chrome.runtime
+                : (typeof browser !== 'undefined' && browser.runtime ? browser.runtime : null);
+            const manifest = runtime && runtime.getManifest ? runtime.getManifest() : null;
+            return manifest && manifest.version ? manifest.version : 'dev';
+        } catch (error) {
+            return 'dev';
+        }
+    }
+
     /**
      * The browser storage, or null when it is blocked (a sandboxed frame, blocked
      * third-party storage, "block all cookies"). Reading `window.localStorage` can
@@ -35,12 +55,49 @@
         }
     }
 
+    /**
+     * Record what the extension decided about this page, so that the console shows
+     * whether it ran at all (an empty console is the only symptom of a content
+     * script that was never injected).
+     *
+     * @param {object} info Decision.
+     */
+    function report(info) {
+        const text = '[OGI ' + info.version + '] ' + info.href +
+            ' · page=' + (info.page || '-') + ' · game=' + (info.game ? 'yes' : 'no') +
+            ' · universe=' + (info.universe || '-') + ' · lang=' + (info.lang || '-') +
+            ' · storage=' + (info.storage ? 'ok' : 'memory') +
+            ' · handler=' + (info.handler || 'none');
+        if (info.game) console.info(text);
+        else console.debug(text);
+    }
+
     function boot() {
+        const version = extensionVersion();
         const source = document.documentElement ? document.documentElement.outerHTML : '';
         const page = OGI.currentPage(window.location.search, window.location.pathname);
-        if (!OGI.looksLikeGamePage(source, page)) return;
+        const info = {
+            version: version,
+            href: window.location.href,
+            page: page,
+            game: false,
+            universe: null,
+            lang: null,
+            storage: false,
+            handler: null,
+        };
+        OGI.lastBoot = info;
+
+        info.game = OGI.looksLikeGamePage(source, page);
+        if (!info.game) {
+            // Not a game page: nothing to do, but the console still shows that the
+            // content script ran (visible with the "Verbose" log level).
+            report(info);
+            return;
+        }
 
         const storage = browserStorage();
+        info.storage = !!storage;
         let universe = OGI.detectUniverse(source, document.title);
         if (universe) {
             // The report popup has no left menu: remember the universe for it.
@@ -48,6 +105,7 @@
         } else {
             universe = OGI.loadUniverseHint(storage, window.location.host);
         }
+        info.universe = universe;
 
         const loca = OGI.createLoca(OGI.LOCA);
         const detected = loca.detectLanguage(source);
@@ -62,6 +120,7 @@
             store.data().lang = lang;
             store.save();
         }
+        info.lang = lang;
 
         const ctx = {
             OGI: OGI,
@@ -81,7 +140,15 @@
             galaxy: OGI.mountGalaxy,
         };
         const handler = handlers[page];
-        if (typeof handler !== 'function') return;
+        info.handler = typeof handler === 'function' ? page : null;
+        report(info);
+        if (typeof handler !== 'function') {
+            if (page) {
+                console.info('[OGI] page "' + page + '" is a game page but has no handler (supported: ' +
+                    HANDLERS.join(', ') + ')');
+            }
+            return;
+        }
 
         try {
             handler(ctx);
