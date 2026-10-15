@@ -1,0 +1,139 @@
+/*
+ * OGame Infinity 0.84 — panel styling.
+ *
+ * The palette and the typography follow the 0.84 design that the game itself uses
+ * (css/default.css of the Evolution skin: black background, grey table headers,
+ * white text, yellow links), so the injected panel looks like a native page and
+ * not like a modern overlay.
+ */
+
+#ogi-host,
+#ogi-report-info {
+    margin-top: 8px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #ffffff;
+}
+
+#ogi-host {
+    width: 519px;
+}
+
+.ogi-panel table.header {
+    border-collapse: collapse;
+}
+
+.ogi-panel td.c,
+.ogi-panel th {
+    padding: 2px 4px;
+}
+
+.ogi-actions {
+    text-align: center;
+    padding: 3px;
+}
+
+.ogi-actions a.ogi-action {
+    color: #ff8900;
+    text-decoration: none;
+}
+
+.ogi-actions a.ogi-action:hover {
+    text-decoration: underline;
+}
+
+.ogi-body {
+    padding: 4px;
+}
+
+.ogi-tabs {
+    padding-bottom: 4px;
+    border-bottom: 1px solid #4a4a4a;
+    margin-bottom: 6px;
+}
+
+.ogi-tabs a.ogi-tab,
+.ogi-tabs a.ogi-tab-active {
+    padding: 1px 5px;
+    margin-right: 4px;
+    text-decoration: none;
+}
+
+.ogi-tabs a.ogi-tab {
+    color: #9f9f9f;
+}
+
+.ogi-tabs a.ogi-tab-active {
+    color: #ffffff;
+    background-color: #4a4a4a;
+}
+
+.ogi-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 6px;
+}
+
+.ogi-table th {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    text-align: left;
+    font-weight: normal;
+    padding: 2px 4px;
+    border: 1px solid #1f1f1f;
+}
+
+.ogi-table td {
+    padding: 1px 4px;
+    border: 1px solid #1f1f1f;
+    white-space: nowrap;
+}
+
+.ogi-table tr:nth-child(even) td {
+    background-color: #101010;
+}
+
+.ogi-kv {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.ogi-kv td {
+    padding: 1px 4px;
+    border-bottom: 1px solid #1f1f1f;
+}
+
+.ogi-kv td.ogi-key {
+    color: #9f9f9f;
+    width: 45%;
+}
+
+.ogi-tag {
+    padding: 0 3px;
+}
+
+.ogi-good {
+    color: #00ff00;
+}
+
+.ogi-bad {
+    color: #ff3030;
+}
+
+.ogi-info {
+    color: #00bfff;
+}
+
+.ogi-neutral {
+    color: #c0c0c0;
+}
+
+.ogi-note,
+.ogi-status {
+    color: #c0c0c0;
+    padding: 3px 0;
+}
+
+#ogi-galaxy-note {
+    color: #9f9f9f;
+}

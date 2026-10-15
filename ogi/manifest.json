@@ -1,0 +1,48 @@
+{
+	"manifest_version": 3,
+	"name": "OGame Infinity 0.84",
+	"version": "1.0.0",
+	"description": "Message analyzers, spy report database and planet/player history for OGame 0.84 servers. Client-side port of the OGame Infinity extension.",
+	"author": "DeepSeek",
+	"content_scripts": [
+		{
+			"matches": [
+				"http://*/*",
+				"https://*/*"
+			],
+			"js": [
+				"src/data/loca.js",
+				"src/data/units.js",
+				"src/lib/numbers.js",
+				"src/lib/html.js",
+				"src/lib/templates.js",
+				"src/lib/store.js",
+				"src/lib/i18n.js",
+				"src/lib/ui.js",
+				"src/parsers/messages.js",
+				"src/parsers/spy.js",
+				"src/parsers/battle.js",
+				"src/parsers/texts.js",
+				"src/parsers/galaxy.js",
+				"src/analyze/index.js",
+				"src/lib/collect.js",
+				"src/lib/panel.js",
+				"src/pages/messages.js",
+				"src/pages/bericht.js",
+				"src/pages/galaxy.js",
+				"src/content.js"
+			],
+			"css": [
+				"src/style.css"
+			],
+			"run_at": "document_idle",
+			"all_frames": false
+		}
+	],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "ogi-084@ogame-opensource",
+			"strict_min_version": "115.0"
+		}
+	}
+}

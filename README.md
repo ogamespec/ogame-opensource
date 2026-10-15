@@ -52,6 +52,7 @@ Need help setting up the game? You have the following options:
 - Original home-planet distribution algorithm and spy protection
 - Fixed several original game bugs (buggy 10th planets, recalled ACS delay, buggy fleet return activity, etc.)
 - Original expedition with triple Dark Matter chance
+- **OGame Infinity 0.84** — a browser extension with message analyzers (spy reports, expeditions, combats, recycling, transport), a spy report database and planet/player history (see [`ogi/`](/ogi/README.md), issue [#130](/../../issues/130))
 - Open source!
 - …and many more!
 

@@ -11,6 +11,9 @@
 (function (root) {
     'use strict';
 
+    // A tag longer than this is not a tag but broken markup (see eachTag).
+    const TAG_LIMIT = 400;
+
     const NAMED_ENTITIES = {
         amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ',
         auml: 'ä', ouml: 'ö', uuml: 'ü', Auml: 'Ä', Ouml: 'Ö', Uuml: 'Ü',
@@ -68,38 +71,144 @@
     }
 
     /**
-     * Split a fragment into <tr> blocks. Rows never nest, so a non-greedy scan is
-     * safe even for the malformed 0.84 markup.
+     * Walk the tags of a fragment, ignoring anything inside attribute values.
+     *
+     * 0.84 puts whole HTML documents into `onmouseover` attributes (the galaxy
+     * tooltips contain nested tables with their own </tr>), so a plain regular
+     * expression cannot tell a real closing tag from one inside a tooltip.
+     *
+     * @param {string} html HTML fragment.
+     * @param {function(string, boolean, string, number, number): void} onTag
+     *        Callback: tag name (lower case), is it a closing tag, the attribute
+     *        text, the tag start index and the index after the tag.
+     */
+    function eachTag(html, onTag) {
+        const source = String(html === null || html === undefined ? '' : html);
+        let i = 0;
+        while (i < source.length) {
+            const lt = source.indexOf('<', i);
+            if (lt === -1) return;
+            const next = source[lt + 1];
+            if (next === '!' || next === '?') {
+                const end = source.indexOf('>', lt + 2);
+                i = end === -1 ? source.length : end + 1;
+                continue;
+            }
+            let j = lt + 1;
+            let closing = false;
+            if (source[j] === '/') { closing = true; j++; }
+            if (!/[a-zA-Z]/.test(source[j] || '')) { i = lt + 1; continue; }
+            const nameStart = j;
+            while (j < source.length && /[a-zA-Z0-9:_-]/.test(source[j])) j++;
+            const name = source.slice(nameStart, j).toLowerCase();
+            // Read the rest of the tag respecting quoted attribute values. The
+            // 0.84 markup breaks its own quoting (an apostrophe inside a
+            // single-quoted onmouseover, see the activity tooltip of a spy
+            // report), so the scan recovers the way a browser does: it stops at a
+            // "<" outside quotes and gives up on absurdly long "tags".
+            let quote = null;
+            let end = -1;
+            let nextTag = -1;
+            for (let k = j; k < source.length && k - j < TAG_LIMIT; k++) {
+                const ch = source[k];
+                if (quote) {
+                    if (ch === quote) quote = null;
+                    continue;
+                }
+                if (ch === '"' || ch === "'") { quote = ch; continue; }
+                if (ch === '<') { nextTag = k; break; }
+                if (ch === '>') { end = k; break; }
+            }
+            if (end === -1) {
+                // Not a usable tag: treat the "<" as text and keep scanning.
+                i = nextTag === -1 ? lt + 1 : nextTag;
+                continue;
+            }
+            onTag(name, closing, source.slice(j, end), lt, end + 1);
+            i = end + 1;
+        }
+    }
+
+    /**
+     * Split a fragment into <tr> blocks, keeping the attributes of every row.
+     *
+     * A row ends at the first real `</tr>`: 0.84 emits its report rows with an
+     * unbalanced structure (a nested table or a stray `</tr>`), so nesting cannot
+     * be used, but tags inside attributes are ignored thanks to `eachTag`.
+     *
+     * @param {string} html HTML fragment.
+     * @returns {Array<{attrs: string, html: string}>} Rows.
+     */
+    function rowsEx(html) {
+        const source = String(html === null || html === undefined ? '' : html);
+        const out = [];
+        let depth = 0;
+        let start = -1;
+        let attrs = '';
+        eachTag(source, function (name, closing, tagAttrs, tagStart, tagEnd) {
+            if (name !== 'tr') return;
+            if (!closing) {
+                if (depth === 0) {
+                    start = tagEnd;
+                    attrs = tagAttrs;
+                }
+                depth++;
+                return;
+            }
+            if (depth === 0) return;
+            depth--;
+            if (depth === 0 && start !== -1) {
+                out.push({ attrs: attrs, html: source.slice(start, tagStart) });
+                start = -1;
+                attrs = '';
+            }
+        });
+        return out;
+    }
+
+    /**
+     * Inner HTML of every <tr> block.
      *
      * @param {string} html HTML fragment.
      * @returns {string[]} Inner HTML of every row.
      */
     function rows(html) {
-        const out = [];
-        const re = /<tr\b[^>]*>([\s\S]*?)<\/tr>/gi;
-        let match;
-        while ((match = re.exec(html)) !== null) out.push(match[1]);
-        return out;
+        return rowsEx(html).map(function (row) { return row.html; });
     }
 
     /**
-     * Split a row (or table) into cells.
+     * Split a row (or a fragment) into its cells. Cells are matched with the
+     * tag scanner, so a `<td>` containing a nested table stays one cell and a
+     * `</td>` inside a tooltip attribute is ignored.
      *
      * @param {string} rowHtml Row HTML.
-     * @returns {Array<{tag: string, attrs: string, html: string, text: string}>} Cells.
+     * @returns {Array<{tag: string, attrs: string, html: string, text: string, start: number, end: number}>} Cells.
      */
     function cells(rowHtml) {
+        const source = String(rowHtml === null || rowHtml === undefined ? '' : rowHtml);
         const out = [];
-        const re = /<(th|td)\b([^>]*)>([\s\S]*?)<\/\1>/gi;
-        let match;
-        while ((match = re.exec(rowHtml)) !== null) {
-            out.push({
-                tag: match[1].toLowerCase(),
-                attrs: match[2],
-                html: match[3],
-                text: normalizeText(match[3]),
-            });
-        }
+        let depth = 0;
+        let current = null;
+        eachTag(source, function (name, closing, attrs, tagStart, tagEnd) {
+            if (name !== 'td' && name !== 'th') return;
+            if (!closing) {
+                if (depth === 0) current = { tag: name, attrs: attrs, start: tagStart, contentStart: tagEnd };
+                depth++;
+                return;
+            }
+            if (depth === 0) return;
+            depth--;
+            if (depth === 0 && current) {
+                // The content runs from the end of the opening tag: searching for
+                // the first ">" would stop inside a tooltip attribute.
+                current.html = source.slice(current.contentStart, tagStart);
+                current.text = normalizeText(current.html);
+                current.tagStart = current.start;
+                current.end = tagEnd;
+                out.push(current);
+                current = null;
+            }
+        });
         return out;
     }
 
@@ -114,42 +223,32 @@
     function findCell(html, wantedText) {
         const wanted = normalizeText(wantedText);
         if (wanted === '') return null;
-        const re = /<(th|td)\b[^>]*>([\s\S]*?)<\/\1>/gi;
-        let match;
-        while ((match = re.exec(html)) !== null) {
-            const text = normalizeText(match[2]);
-            if (text === wanted || (text.length > wanted.length && text.indexOf(wanted) === 0)) {
-                return {
-                    start: match.index,
-                    end: match.index + match[0].length,
-                    html: match[2],
-                    text: text,
-                };
+        const list = cells(html);
+        for (const cell of list) {
+            if (cell.text === wanted || (cell.text.length > wanted.length && cell.text.indexOf(wanted) === 0)) {
+                return { start: cell.tagStart, end: cell.end, html: cell.html, text: cell.text };
             }
         }
         return null;
     }
 
     /**
-     * Collect <td>value</td><td>amount</td> pairs (the layout of every 0.84
-     * report table) until the given stopping tag.
+     * Collect <td>name</td><td>amount</td> pairs (the layout of every 0.84 report
+     * table) until the given stopping tag.
      *
      * @param {string} html HTML fragment that starts right after a table header cell.
      * @param {string} [stopTag] Tag that ends the scan, "</table>" by default.
      * @returns {Array<{name: string, value: string}>} Pairs.
      */
     function pairs(html, stopTag) {
-        const stop = stopTag || '</table>';
-        const stopIndex = html.toLowerCase().indexOf(stop.toLowerCase());
-        const scope = stopIndex === -1 ? html : html.slice(0, stopIndex);
+        const source = String(html === null || html === undefined ? '' : html);
+        const stop = (stopTag || '</table>').toLowerCase();
+        const stopIndex = source.toLowerCase().indexOf(stop);
+        const scope = stopIndex === -1 ? source : source.slice(0, stopIndex);
+        const list = cells(scope);
         const out = [];
-        const re = /<td\b[^>]*>([\s\S]*?)<\/td>\s*<td\b[^>]*>([\s\S]*?)<\/td>/gi;
-        let match;
-        while ((match = re.exec(scope)) !== null) {
-            out.push({
-                name: normalizeText(match[1]),
-                value: normalizeText(match[2]),
-            });
+        for (let i = 0; i + 1 < list.length; i += 2) {
+            out.push({ name: list[i].text, value: list[i + 1].text });
         }
         return out;
     }
@@ -191,16 +290,45 @@
         return decodeEntities(match[4]);
     }
 
+    /**
+     * Slice the content of a cell that may contain nested tables (a message body
+     * with an inlined spy report, for example). The cell ends at the first </td>
+     * that is not nested inside a table.
+     *
+     * @param {string} source Page or fragment source.
+     * @param {number} start Index of the first character after the opening tag.
+     * @returns {string} Cell content.
+     */
+    function cellContent(source, start) {
+        const re = /<(\/?)(table|td)\b[^>]*>/gi;
+        re.lastIndex = start;
+        let depth = 0;
+        let match;
+        while ((match = re.exec(source)) !== null) {
+            const closing = match[1] === '/';
+            const tag = match[2].toLowerCase();
+            if (tag === 'table') {
+                depth += closing ? -1 : 1;
+            } else if (closing && depth <= 0) {
+                return source.slice(start, match.index);
+            }
+        }
+        return source.slice(start);
+    }
+
     const api = {
         decodeEntities: decodeEntities,
         stripTags: stripTags,
         normalizeText: normalizeText,
         rows: rows,
+        rowsEx: rowsEx,
+        eachTag: eachTag,
         cells: cells,
         findCell: findCell,
         pairs: pairs,
         coordinates: coordinates,
         attribute: attribute,
+        cellContent: cellContent,
     };
 
     root.OGI = Object.assign(root.OGI || {}, api);

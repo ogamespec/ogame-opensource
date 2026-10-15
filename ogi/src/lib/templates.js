@@ -14,7 +14,9 @@
 (function (root) {
     'use strict';
 
-    const html = root.OGI || (typeof require === 'function' ? require('./html.js') : null);
+    // In the browser the helpers are already attached to the shared OGI
+    // namespace (the manifest loads them first); in Node they are required.
+    const html = typeof require === 'function' ? require('./html.js') : root.OGI;
 
     /**
      * Escape a string for use inside a regular expression.

@@ -37,6 +37,7 @@ const SECTIONS = [
     'fleetmsg',     // FLEET_* — fleet messages (transport, recycle, deploy, return)
     'messages',     // MSG_* — message list
     'events',       // EVENT_* — overview event list
+    'galaxy',       // GALAXY_* — galaxy tooltips (planet, moon, debris field)
 ];
 
 // Languages supported by the game core (see game/core/loca.php, game/loca/).
@@ -45,6 +46,7 @@ const LANGUAGES = ['de', 'en', 'es', 'fr', 'it', 'jp', 'ru'];
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const LOCA_ROOT = path.join(REPO_ROOT, 'game', 'loca');
 const OUT_FILE = path.resolve(__dirname, '..', 'src', 'data', 'loca.js');
+const UNITS_FILE = path.resolve(__dirname, '..', 'src', 'data', 'units.js');
 
 // Sources of the game's global constants. Locale keys and values are built from
 // them (for example $LOCA["en"]["NAME_".GID_RC_METAL] = "Metal";), so without the
@@ -298,6 +300,173 @@ function parseLocaFile(source, constants) {
 }
 
 /**
+ * Read the body of a PHP `array ( ... )` assignment of a global variable.
+ *
+ * @param {string} source PHP source.
+ * @param {string} varName Variable name without the dollar sign.
+ * @returns {string|null} Body between the outermost parentheses.
+ */
+function readArrayBody(source, varName) {
+    const re = new RegExp('\\$' + varName + '\\s*=\\s*array\\s*\\(');
+    const match = re.exec(source);
+    if (!match) return null;
+    const bodyStart = match.index + match[0].length;
+    let depth = 0;
+    for (let i = match.index; i < source.length; i++) {
+        const ch = source[i];
+        if (ch === '(') depth++;
+        else if (ch === ')') {
+            depth--;
+            if (depth === 0) return source.slice(bodyStart, i);
+        }
+    }
+    return null;
+}
+
+/**
+ * Split a PHP array body into its top level entries.
+ *
+ * @param {string} body Array body.
+ * @returns {string[]} Entries.
+ */
+function splitTopLevel(body) {
+    const out = [];
+    // Comments inside the arrays ("// Ships", "/* Buildings */") would otherwise
+    // end up glued to the first entry after them.
+    const source = String(body).replace(/\/\/[^\n\r]*/g, '').replace(/\/\*[\s\S]*?\*\//g, '');
+    let depth = 0;
+    let inDouble = false;
+    let inSingle = false;
+    let current = '';
+    for (let i = 0; i < source.length; i++) {
+        const ch = source[i];
+        if (inDouble) {
+            current += ch;
+            if (ch === '\\') { current += body[i + 1] || ''; i++; continue; }
+            if (ch === '"') inDouble = false;
+            continue;
+        }
+        if (inSingle) {
+            current += ch;
+            if (ch === '\\') { current += body[i + 1] || ''; i++; continue; }
+            if (ch === "'") inSingle = false;
+            continue;
+        }
+        if (ch === '"') { inDouble = true; current += ch; continue; }
+        if (ch === "'") { inSingle = true; current += ch; continue; }
+        if (ch === '(' || ch === '[') depth++;
+        if (ch === ')' || ch === ']') depth--;
+        if (ch === ',' && depth === 0) {
+            out.push(current.trim());
+            current = '';
+            continue;
+        }
+        current += ch;
+    }
+    if (current.trim() !== '') out.push(current.trim());
+    return out;
+}
+
+/**
+ * Resolve a PHP constant name (or literal) into a string.
+ *
+ * @param {string} token Token.
+ * @param {Object<string, string|number>} constants Constants table.
+ * @returns {string|null} Value.
+ */
+function resolveToken(token, constants) {
+    const text = String(token).trim();
+    if (/^-?\d+$/.test(text)) return text;
+    const quoted = /^'([^']*)'$/.exec(text) || /^"([^"]*)"$/.exec(text);
+    if (quoted) return quoted[1];
+    if (Object.prototype.hasOwnProperty.call(constants, text)) return String(constants[text]);
+    return null;
+}
+
+/**
+ * Extract the game's object tables (unit lists, costs and parameters) from the
+ * engine sources, so the extension can value a scanned fleet or defence without
+ * duplicating any numbers by hand.
+ *
+ * @param {Object<string, string|number>} constants Constants table.
+ * @returns {object} Object tables.
+ */
+function buildUnits(constants) {
+    const techs = path.join(REPO_ROOT, 'game', 'core', 'techs.php');
+    const source = fs.readFileSync(techs, 'utf8');
+    const out = { costs: {}, params: {}, factor: {}, lists: {} };
+
+    // Object lists: $fleetmap = array ( GID_F_SC, ... );
+    const lists = {
+        fleet: 'fleetmap',
+        defence: 'defmap',
+        missiles: 'rakmap',
+        buildings: 'buildmap',
+        research: 'resmap',
+        resources: 'resourcemap',
+    };
+    for (const name of Object.keys(lists)) {
+        const body = readArrayBody(source, lists[name]);
+        if (!body) continue;
+        const ids = [];
+        for (const entry of splitTopLevel(body)) {
+            const id = resolveToken(entry, constants);
+            if (id !== null && /^\d+$/.test(id)) ids.push(parseInt(id, 10));
+        }
+        out.lists[name] = ids;
+    }
+
+    // Costs: $initial = array ( GID_F_SC => array (GID_RC_METAL=>2000, ...), ... );
+    const initialBody = readArrayBody(source, 'initial');
+    if (initialBody) {
+        for (const entry of splitTopLevel(initialBody)) {
+            const match = /^([A-Za-z_][A-Za-z0-9_]*|\d+)\s*=>\s*array\s*\(([\s\S]*)\)$/.exec(entry);
+            if (!match) continue;
+            const id = resolveToken(match[1], constants);
+            if (id === null) continue;
+            const cost = { metal: 0, crystal: 0, deuterium: 0, energy: 0 };
+            let factor = null;
+            for (const inner of splitTopLevel(match[2])) {
+                const pair = /^('?[A-Za-z_][A-Za-z0-9_]*'?|"[^"]*"|\d+)\s*=>\s*(-?\d+(?:\.\d+)?)$/.exec(inner);
+                if (!pair) continue;
+                const key = resolveToken(pair[1], constants);
+                const amount = parseFloat(pair[2]);
+                if (key === 'factor') { factor = amount; continue; }
+                if (key === String(constants.GID_RC_METAL)) cost.metal = amount;
+                else if (key === String(constants.GID_RC_CRYSTAL)) cost.crystal = amount;
+                else if (key === String(constants.GID_RC_DEUTERIUM)) cost.deuterium = amount;
+                else if (key === String(constants.GID_RC_ENERGY)) cost.energy = amount;
+            }
+            out.costs[id] = cost;
+            if (factor !== null) out.factor[id] = factor;
+        }
+    }
+
+    // Parameters: $UnitParam = array ( GID_F_SC => array ( 4000, 10, 5, 5000, 5000, 10 ), ... );
+    const paramsBody = readArrayBody(source, 'UnitParam');
+    if (paramsBody) {
+        for (const entry of splitTopLevel(paramsBody)) {
+            const match = /^([A-Za-z_][A-Za-z0-9_]*|\d+)\s*=>\s*array\s*\(([\s\S]*)\)$/.exec(entry);
+            if (!match) continue;
+            const id = resolveToken(match[1], constants);
+            if (id === null) continue;
+            const values = splitTopLevel(match[2]).map(function (value) { return parseInt(value, 10); });
+            if (values.length < 6) continue;
+            out.params[id] = {
+                structure: values[0],
+                shield: values[1],
+                attack: values[2],
+                cargo: values[3],
+                speed: values[4],
+                cons: values[5],
+            };
+        }
+    }
+
+    return out;
+}
+
+/**
  * Build the whole data file.
  *
  * @returns {{ data: object, stats: object }}
@@ -346,8 +515,8 @@ function main() {
         '/**',
         ' * OGame Infinity 0.84 — generated locale data. DO NOT EDIT.',
         ' *',
-        ' * Extracted from game/loca/<lang>_<lang>/ by ogi/tools/build-loca.js.',
-        ' * Regenerate with:  node ogi/tools/build-loca.js',
+        ' * Extracted from game/loca/<lang>_<lang>/ by ogi/tools/build-data.js.',
+        ' * Regenerate with:  node ogi/tools/build-data.js',
         ' */',
         '(function (root) {',
         "    'use strict';",
@@ -359,6 +528,27 @@ function main() {
     ].join('\n');
     fs.writeFileSync(OUT_FILE, banner, 'utf8');
 
+    // Object tables (costs, cargo capacities, object lists) of the engine.
+    const units = buildUnits(parseConstants(CONST_SOURCES));
+    const unitsBanner = [
+        '/**',
+        ' * OGame Infinity 0.84 — generated object tables. DO NOT EDIT.',
+        ' *',
+        ' * Costs and parameters of ships, defence, buildings and research, extracted',
+        ' * from game/core/techs.php by ogi/tools/build-data.js.',
+        ' * Regenerate with:  node ogi/tools/build-data.js',
+        ' */',
+        '(function (root) {',
+        "    'use strict';",
+        '    const UNITS = ' + JSON.stringify(units, null, 1).replace(/\n/g, '\n    ') + ';',
+        "    root.OGI = Object.assign(root.OGI || {}, { UNITS: UNITS });",
+        "    if (typeof module === 'object' && module.exports) module.exports = UNITS;",
+        "})(typeof globalThis !== 'undefined' ? globalThis : this);",
+        '',
+    ].join('\n');
+    fs.mkdirSync(path.dirname(UNITS_FILE), { recursive: true });
+    fs.writeFileSync(UNITS_FILE, unitsBanner, 'utf8');
+
     const rel = path.relative(REPO_ROOT, OUT_FILE).replace(/\\/g, '/');
     console.log('Wrote ' + rel);
     for (const lang of Object.keys(stats.languages)) {
@@ -369,10 +559,23 @@ function main() {
         console.log('  key collisions with different values: ' + stats.collisions.length);
         for (const c of stats.collisions.slice(0, 20)) console.log('    ' + c);
     }
+    console.log('Wrote ' + path.relative(REPO_ROOT, UNITS_FILE).replace(/\\/g, '/') +
+        ' (' + Object.keys(units.costs).length + ' costs, ' + Object.keys(units.params).length + ' parameter sets, ' +
+        (units.lists.fleet || []).length + ' ships, ' + (units.lists.defence || []).length + ' defence units)');
 }
 
 if (require.main === module) {
     main();
 }
 
-module.exports = { parseLocaFile, evalPhpString, decodeDoubleQuoted, build, SECTIONS, LANGUAGES, OUT_FILE };
+module.exports = {
+    parseLocaFile,
+    evalPhpString,
+    decodeDoubleQuoted,
+    build,
+    buildUnits,
+    SECTIONS,
+    LANGUAGES,
+    OUT_FILE,
+    UNITS_FILE,
+};

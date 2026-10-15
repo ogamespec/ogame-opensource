@@ -1,0 +1,199 @@
+/**
+ * OGame Infinity 0.84 — user interface strings.
+ *
+ * The panel texts, in the three languages the game itself fully supports
+ * (README: Russian, English, German). The data strings of the game are taken from
+ * src/data/loca.js; only the extension's own labels live here.
+ */
+(function (root) {
+    'use strict';
+
+    const STRINGS = {
+        en: {
+            TITLE: 'Message analyzer',
+            TAB_SPY: 'Spy reports',
+            TAB_EXP: 'Expeditions',
+            TAB_COMBAT: 'Combats',
+            TAB_HARVEST: 'Recycling',
+            TAB_TRADE: 'Transport',
+            TAB_PLANETS: 'Planets & players',
+            TAB_TOTALS: 'Totals',
+            ACTION_SCAN: 'Scan message folders',
+            ACTION_CLEAR: 'Clear database',
+            COL_DATE: 'Date',
+            COL_COORDS: 'Coordinates',
+            COL_PLANET: 'Planet',
+            COL_PLAYER: 'Player',
+            COL_METAL: 'Metal',
+            COL_CRYSTAL: 'Crystal',
+            COL_DEUT: 'Deut.',
+            COL_TOTAL: 'Total',
+            COL_LOOT: 'Loot (max)',
+            COL_NEEDED: 'Needed',
+            COL_FLEETVAL: 'Fleet value',
+            COL_DEFVAL: 'Defence value',
+            COL_DAY: 'Day',
+            COL_COUNT: 'Messages',
+            COL_WIN: 'Won',
+            COL_LOSS: 'Lost',
+            COL_DRAW: 'Draw',
+            COL_OWNLOSS: 'Own losses',
+            COL_ENEMYLOSS: 'Enemy losses',
+            COL_DEBRIS: 'Debris',
+            COL_NET: 'Net',
+            COL_IN: 'Received',
+            COL_OUT: 'Sent',
+            COL_BALANCE: 'Balance',
+            COL_LASTSEEN: 'Last seen',
+            COL_REPORTS: 'Reports',
+            COL_ACTIVITY: 'Activity',
+            COL_NAMES: 'Names',
+            COL_OWNERS: 'Owners',
+            COL_SESSIONS: 'Sessions',
+            COL_RECYCLERS: 'Recyclers',
+            COL_TYPE: 'Result',
+            COL_SHIPS: 'Ships found',
+            COL_DM: 'Dark matter',
+            MSG_SCANNING: 'Reading the message folders...',
+            MSG_EMPTY: 'No data yet. Open the messages page to collect reports.',
+            MSG_DONE: 'Scan finished: {N} new messages, {T} stored reports.',
+            MSG_CLEARED: 'Database cleared.',
+            MSG_NO_SESSION: 'No game session found on this page.',
+            ACTIVE: 'active',
+            INACTIVE: 'idle',
+            NEVER: 'never',
+        },
+        ru: {
+            TITLE: 'Анализ сообщений',
+            TAB_SPY: 'Шпионаж',
+            TAB_EXP: 'Экспедиции',
+            TAB_COMBAT: 'Бои',
+            TAB_HARVEST: 'Переработка',
+            TAB_TRADE: 'Транспорт',
+            TAB_PLANETS: 'Планеты и игроки',
+            TAB_TOTALS: 'Итоги',
+            ACTION_SCAN: 'Просканировать папки сообщений',
+            ACTION_CLEAR: 'Очистить базу',
+            COL_DATE: 'Дата',
+            COL_COORDS: 'Координаты',
+            COL_PLANET: 'Планета',
+            COL_PLAYER: 'Игрок',
+            COL_METAL: 'Металл',
+            COL_CRYSTAL: 'Кристалл',
+            COL_DEUT: 'Дейтерий',
+            COL_TOTAL: 'Всего',
+            COL_LOOT: 'Добыча (макс.)',
+            COL_NEEDED: 'Нужно',
+            COL_FLEETVAL: 'Стоимость флота',
+            COL_DEFVAL: 'Стоимость обороны',
+            COL_DAY: 'День',
+            COL_COUNT: 'Сообщений',
+            COL_WIN: 'Победы',
+            COL_LOSS: 'Поражения',
+            COL_DRAW: 'Ничьи',
+            COL_OWNLOSS: 'Свои потери',
+            COL_ENEMYLOSS: 'Потери врага',
+            COL_DEBRIS: 'Обломки',
+            COL_NET: 'Итог',
+            COL_IN: 'Получено',
+            COL_OUT: 'Отправлено',
+            COL_BALANCE: 'Баланс',
+            COL_LASTSEEN: 'Замечен',
+            COL_REPORTS: 'Отчётов',
+            COL_ACTIVITY: 'Активность',
+            COL_NAMES: 'Названия',
+            COL_OWNERS: 'Владельцы',
+            COL_SESSIONS: 'Сессий',
+            COL_RECYCLERS: 'Переработчики',
+            COL_TYPE: 'Результат',
+            COL_SHIPS: 'Найдено кораблей',
+            COL_DM: 'Тёмная материя',
+            MSG_SCANNING: 'Чтение папок сообщений...',
+            MSG_EMPTY: 'Данных пока нет. Откройте страницу сообщений, чтобы собрать отчёты.',
+            MSG_DONE: 'Сканирование завершено: новых сообщений {N}, отчётов в базе {T}.',
+            MSG_CLEARED: 'База очищена.',
+            MSG_NO_SESSION: 'На этой странице не найдена игровая сессия.',
+            ACTIVE: 'активен',
+            INACTIVE: 'не активен',
+            NEVER: 'никогда',
+        },
+        de: {
+            TITLE: 'Nachrichten-Analyse',
+            TAB_SPY: 'Spionage',
+            TAB_EXP: 'Expeditionen',
+            TAB_COMBAT: 'Kämpfe',
+            TAB_HARVEST: 'Recycling',
+            TAB_TRADE: 'Transport',
+            TAB_PLANETS: 'Planeten & Spieler',
+            TAB_TOTALS: 'Summen',
+            ACTION_SCAN: 'Nachrichtenordner lesen',
+            ACTION_CLEAR: 'Datenbank leeren',
+            COL_DATE: 'Datum',
+            COL_COORDS: 'Koordinaten',
+            COL_PLANET: 'Planet',
+            COL_PLAYER: 'Spieler',
+            COL_METAL: 'Metall',
+            COL_CRYSTAL: 'Kristall',
+            COL_DEUT: 'Deut.',
+            COL_TOTAL: 'Gesamt',
+            COL_LOOT: 'Beute (max.)',
+            COL_NEEDED: 'Benötigt',
+            COL_FLEETVAL: 'Flottenwert',
+            COL_DEFVAL: 'Verteidigungswert',
+            COL_DAY: 'Tag',
+            COL_COUNT: 'Nachrichten',
+            COL_WIN: 'Gewonnen',
+            COL_LOSS: 'Verloren',
+            COL_DRAW: 'Unentschieden',
+            COL_OWNLOSS: 'Eigene Verluste',
+            COL_ENEMYLOSS: 'Feindverluste',
+            COL_DEBRIS: 'Trümmer',
+            COL_NET: 'Saldo',
+            COL_IN: 'Erhalten',
+            COL_OUT: 'Gesendet',
+            COL_BALANCE: 'Bilanz',
+            COL_LASTSEEN: 'Zuletzt gesehen',
+            COL_REPORTS: 'Berichte',
+            COL_ACTIVITY: 'Aktivität',
+            COL_NAMES: 'Namen',
+            COL_OWNERS: 'Besitzer',
+            COL_SESSIONS: 'Sitzungen',
+            COL_RECYCLERS: 'Recycler',
+            COL_TYPE: 'Ergebnis',
+            COL_SHIPS: 'Gefundene Schiffe',
+            COL_DM: 'Dunkle Materie',
+            MSG_SCANNING: 'Nachrichtenordner werden gelesen...',
+            MSG_EMPTY: 'Noch keine Daten. Öffne die Nachrichtenseite, um Berichte zu sammeln.',
+            MSG_DONE: 'Scan beendet: {N} neue Nachrichten, {T} Berichte gespeichert.',
+            MSG_CLEARED: 'Datenbank geleert.',
+            MSG_NO_SESSION: 'Auf dieser Seite wurde keine Spielsitzung gefunden.',
+            ACTIVE: 'aktiv',
+            INACTIVE: 'inaktiv',
+            NEVER: 'nie',
+        },
+    };
+
+    /**
+     * Create a translator for a language (falls back to English, then to the key).
+     *
+     * @param {string} lang Language code.
+     * @returns {function(string, object=): string} Translator.
+     */
+    function createI18n(lang) {
+        const table = STRINGS[lang] || STRINGS.en;
+        return function (key, values) {
+            let text = table[key] !== undefined ? table[key] : (STRINGS.en[key] !== undefined ? STRINGS.en[key] : key);
+            if (values) {
+                for (const name of Object.keys(values)) {
+                    text = text.split('{' + name + '}').join(String(values[name]));
+                }
+            }
+            return text;
+        };
+    }
+
+    const api = { STRINGS: STRINGS, createI18n: createI18n };
+
+    root.OGI = Object.assign(root.OGI || {}, api);
+    if (typeof module === 'object' && module.exports) module.exports = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
