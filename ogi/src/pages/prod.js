@@ -72,7 +72,12 @@
         }
 
         render();
-        console.info('[OGI] production page: ' + page.rows.length + ' objects, planet=' + page.planet +
-            ', energy tech=' + page.energyTech);
+        console.info('[OGI] production page: ' + page.rows.length + ' objects' +
+            (page.rows.length ? ' [' + page.rows.map(function (row) { return row.gid + '@' + row.level; }).join(', ') + ']' : '') +
+            ' · planet=' + page.planet + ' · energy tech=' + page.energyTech +
+            ' · officers=' + (page.officers.geologist ? 'geologist' : '-') + '/' + (page.officers.engineer ? 'engineer' : '-') +
+            (page.tolerant ? ' · read with the tolerant pass' : '') +
+            (page.unknown && page.unknown.length ? ' · unknown names: ' + page.unknown.join(' | ') : '') +
+            (page.rows.length ? '' : ' · the page does not look like the Supplies table'));
     };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

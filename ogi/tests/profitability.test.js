@@ -76,7 +76,11 @@ test('production: the energy technology implied by a fusion plant', function () 
 });
 
 test('production page: the rows of every language', function () {
-    for (const lang of ['ru', 'en', 'de']) {
+    // The English snapshot in this repository is a different page (an imperium-style
+    // resources table without mine rows), which the parser correctly reports as
+    // "not the production table" instead of inventing rows from it.
+    assert.equal(parse('en').rows.length, 0, 'en: that fixture is not the production table');
+    for (const lang of ['ru', 'de']) {
         const page = parse(lang);
         assert.equal(page.rows.length, 5, lang + ': five buildings with a level');
         const metal = page.rows[0];
