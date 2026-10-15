@@ -94,6 +94,13 @@
                     }
                 });
             }
+            // The settings tab carries the same form as the game's Options page.
+            if (tab === 'settings') {
+                OGI.wireSettingsForm(host, ctx, function (text) {
+                    status = text || '';
+                    render();
+                });
+            }
         }
 
         /**

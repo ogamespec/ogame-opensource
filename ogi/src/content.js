@@ -20,7 +20,7 @@
     }
 
     // The pages the extension knows how to read.
-    const HANDLERS = ['messages', 'bericht', 'galaxy'];
+    const HANDLERS = ['messages', 'bericht', 'galaxy', 'options'];
 
     /**
      * The extension API (`chrome` in Chromium browsers, `browser` in Firefox).
@@ -166,6 +166,7 @@
             messages: OGI.mountMessages,
             bericht: OGI.mountBericht,
             galaxy: OGI.mountGalaxy,
+            options: OGI.mountOptions,
         };
         const handler = handlers[page];
         info.handler = typeof handler === 'function' ? page : null;

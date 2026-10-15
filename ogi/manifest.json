@@ -23,6 +23,7 @@
 				"src/lib/store.js",
 				"src/lib/detect.js",
 				"src/lib/status.js",
+				"src/lib/settings.js",
 				"src/lib/i18n.js",
 				"src/lib/ui.js",
 				"src/parsers/messages.js",
@@ -36,6 +37,7 @@
 				"src/pages/messages.js",
 				"src/pages/bericht.js",
 				"src/pages/galaxy.js",
+				"src/pages/options.js",
 				"src/content.js"
 			],
 			"css": [

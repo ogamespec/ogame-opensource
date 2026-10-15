@@ -20,6 +20,7 @@
         { id: 'trades', key: 'TAB_TRADE' },
         { id: 'planets', key: 'TAB_PLANETS' },
         { id: 'totals', key: 'TAB_TOTALS' },
+        { id: 'settings', key: 'TAB_SETTINGS' },
     ];
 
     /**
@@ -299,6 +300,94 @@
     }
 
     /**
+     * Settings form: every control carries `data-ogi-setting`, which is what the
+     * page wiring listens to (see src/pages/options.js).
+     *
+     * @param {object} data Store data.
+     * @param {object} options Options: i18n.
+     * @returns {string} HTML.
+     */
+    function settingsSection(data, options) {
+        const t = options.i18n;
+        const settings = (typeof require === 'function'
+            ? require('./settings.js').merge(require('./settings.js').DEFAULTS, data.settings || {})
+            : root.OGI.merge(root.OGI.DEFAULTS, data.settings || {}));
+
+        function checkbox(key, label) {
+            return '<label class="ogi-check"><input type="checkbox" data-ogi-setting="' + ui.esc(key) + '"' +
+                (settings[key] ? ' checked' : '') + ' /> ' + ui.esc(label) + '</label>';
+        }
+
+        function number(key, label, min, max) {
+            return '<label class="ogi-check">' + ui.esc(label) + ': ' +
+                '<input type="number" data-ogi-setting="' + ui.esc(key) + '" value="' + ui.esc(settings[key]) +
+                '" min="' + ui.esc(min) + '" max="' + ui.esc(max) + '" size="4" /></label>';
+        }
+
+        function select(key, label, entries) {
+            const options = entries.map(function (entry) {
+                return '<option value="' + ui.esc(entry[0]) + '"' +
+                    (String(settings[key]) === String(entry[0]) ? ' selected' : '') + '>' + ui.esc(entry[1]) + '</option>';
+            }).join('');
+            return '<label class="ogi-check">' + ui.esc(label) + ': <select data-ogi-setting="' + ui.esc(key) + '">' +
+                options + '</select></label>';
+        }
+
+        const rate = settings.tradeRate;
+        const out = [];
+        out.push('<div class="ogi-settings">');
+        out.push('<div class="ogi-settings-block">');
+        out.push('<label class="ogi-check">' + ui.esc(t('SET_TRADE_RATE')) + ': ' +
+            '<input type="number" step="0.1" min="0.1" max="100" data-ogi-setting="tradeRate" data-ogi-rate="0" value="' + ui.esc(rate[0]) + '" size="4" /> : ' +
+            '<input type="number" step="0.1" min="0.1" max="100" data-ogi-setting="tradeRate" data-ogi-rate="1" value="' + ui.esc(rate[1]) + '" size="4" /> : ' +
+            '<input type="number" step="0.1" min="0.1" max="100" data-ogi-setting="tradeRate" data-ogi-rate="2" value="' + ui.esc(rate[2]) + '" size="4" />' +
+            '</label>');
+        out.push(select('standardUnitBase', t('SET_UNIT_BASE'), [
+            [0, t('SET_UNIT_BASE_METAL')],
+            [1, t('SET_UNIT_BASE_CRYSTAL')],
+            [2, t('SET_UNIT_BASE_DEUT')],
+        ]));
+        out.push('</div>');
+
+        out.push('<div class="ogi-settings-block">');
+        out.push(number('debrisFactor', t('SET_DEBRIS'), 0, 100));
+        out.push(number('debrisFactorDef', t('SET_DEBRIS_DEF'), 0, 100));
+        out.push(checkbox('deuteriumInDebris', t('SET_DEBRIS_DEUT')));
+        out.push(number('historyDays', t('SET_HISTORY'), 7, 365));
+        out.push('</div>');
+
+        out.push('<div class="ogi-settings-block">');
+        out.push(checkbox('autoScan', t('SET_AUTO_SCAN')));
+        out.push(number('reportLimit', t('SET_REPORT_LIMIT'), 0, 200));
+        out.push(checkbox('tooltips', t('SET_TOOLTIPS')));
+        out.push(checkbox('highlightGalaxy', t('SET_HIGHLIGHT')));
+        out.push(checkbox('highlightFavorites', t('SET_FAVORITES')));
+        out.push(checkbox('notifyHostile', t('SET_NOTIFY')));
+        out.push('</div>');
+        out.push('</div>');
+        return out.join('');
+    }
+
+    /**
+     * Standalone settings panel (used by the game's Options page).
+     *
+     * @param {object} data Store data.
+     * @param {object} options Options: i18n, status.
+     * @returns {string} HTML.
+     */
+    function settingsPanel(data, options) {
+        const t = options.i18n;
+        const status = options.status
+            ? '<div class="ogi-status">' + ui.esc(options.status) + '</div>'
+            : '';
+        return ui.panel(t('SET_PAGE_TITLE'), status + settingsSection(data, options), {
+            id: 'ogi-settings',
+            actions: '<a href="#" class="ogi-action" data-ogi-action="export">' + ui.esc(t('SET_EXPORT')) + '</a> | ' +
+                '<a href="#" class="ogi-action" data-ogi-action="reset">' + ui.esc(t('SET_RESET')) + '</a>',
+        });
+    }
+
+    /**
      * Render the whole analyzer panel.
      *
      * @param {object} data Store data.
@@ -330,16 +419,24 @@
             case 'trades': body += tradeSection(data, opt); break;
             case 'planets': body += planetSection(data, opt); break;
             case 'totals': body += totalsSection(data, opt); break;
+            case 'settings': body += settingsSection(data, opt); break;
             case 'spy':
             default: body += spySection(data, opt); break;
         }
 
-        const actions = [
-            '<a href="#" class="ogi-action" data-ogi-action="toggle">' +
-                ui.esc(t(collapsed ? 'ACTION_EXPAND' : 'ACTION_COLLAPSE')) + '</a>',
-            '<a href="#" class="ogi-action" data-ogi-action="scan">' + ui.esc(t('ACTION_SCAN')) + '</a>',
-            '<a href="#" class="ogi-action" data-ogi-action="clear">' + ui.esc(t('ACTION_CLEAR')) + '</a>',
-        ].join(' | ');
+        const actions = active === 'settings'
+            ? [
+                '<a href="#" class="ogi-action" data-ogi-action="save">' + ui.esc(t('SET_SAVE')) + '</a>',
+                '<a href="#" class="ogi-action" data-ogi-action="reset">' + ui.esc(t('SET_RESET')) + '</a>',
+                '<a href="#" class="ogi-action" data-ogi-action="export">' + ui.esc(t('SET_EXPORT')) + '</a>',
+                '<a href="#" class="ogi-action" data-ogi-action="import">' + ui.esc(t('SET_IMPORT')) + '</a>',
+            ].join(' | ')
+            : [
+                '<a href="#" class="ogi-action" data-ogi-action="toggle">' +
+                    ui.esc(t(collapsed ? 'ACTION_EXPAND' : 'ACTION_COLLAPSE')) + '</a>',
+                '<a href="#" class="ogi-action" data-ogi-action="scan">' + ui.esc(t('ACTION_SCAN')) + '</a>',
+                '<a href="#" class="ogi-action" data-ogi-action="clear">' + ui.esc(t('ACTION_CLEAR')) + '</a>',
+            ].join(' | ');
         const status = opt.status
             ? '<div class="ogi-status">' + ui.esc(opt.status) + '</div>'
             : '';
@@ -362,6 +459,8 @@
         formatDate: formatDate,
         combatResult: combatResult,
         summaryLine: summaryLine,
+        settingsSection: settingsSection,
+        settingsPanel: settingsPanel,
         renderAnalyzer: renderAnalyzer,
         sections: {
             spy: spySection,

@@ -143,3 +143,57 @@
 #ogi-galaxy-note {
     color: #9f9f9f;
 }
+
+/* Settings form (analyzer tab and the game's Options page). */
+#ogi-options-host {
+    margin-bottom: 8px;
+}
+
+.ogi-settings-block {
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #1f1f1f;
+}
+
+.ogi-check {
+    display: block;
+    padding: 1px 0;
+}
+
+.ogi-check input[type="number"] {
+    width: 62px;
+    background-color: #101010;
+    color: #ffffff;
+    border: 1px solid #4a4a4a;
+}
+
+.ogi-settings select {
+    background-color: #101010;
+    color: #ffffff;
+    border: 1px solid #4a4a4a;
+}
+
+.ogi-export,
+.ogi-import {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 4px;
+    background-color: #101010;
+    color: #c0c0c0;
+    border: 1px solid #4a4a4a;
+    font-family: Consolas, monospace;
+    font-size: 10px;
+}
+
+.ogi-export + .ogi-note {
+    padding: 2px 0;
+}
+
+.ogi-panel button {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    border: 1px solid #1f1f1f;
+    margin-top: 4px;
+    padding: 2px 8px;
+    cursor: pointer;
+}
