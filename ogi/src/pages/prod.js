@@ -56,6 +56,7 @@
                     energyTech: page.energyTech,
                     engineer: page.officers.engineer,
                     filter: filter,
+                    unknown: page.unknown,
                     page: page.planet ? t('PAY_PLANET', { T: page.planet }) : null,
                 }),
                 { id: 'ogi-payback', width: 530 });

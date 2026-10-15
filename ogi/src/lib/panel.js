@@ -1122,6 +1122,12 @@
         const out = [];
         if (!rows.length && !Object.keys(levels).length) {
             out.push('<div class="ogi-note">' + ui.esc(t('PAY_NO_DATA')) + '</div>');
+            // Say what was actually seen: without this a page whose table differs from
+            // the expected one looks exactly like a page that was never opened.
+            if (options.unknown && options.unknown.length) {
+                out.push('<div class="ogi-status">' + ui.esc(t('PAY_UNKNOWN')) + ': ' +
+                    options.unknown.map(function (name) { return ui.esc(name); }).join(' | ') + '</div>');
+            }
             return out.join('');
         }
         if (!rows.length) {

@@ -141,7 +141,9 @@
             const cells = html.cells(chunk);
             if (cells.length < 5) continue;
             const text = html.normalizeText(cells[0].text);
-            const match = pattern.exec(text);
+            // The level is normally part of the name cell, but some revisions print it in
+            // a cell of its own, so the whole row is searched as well.
+            const match = pattern.exec(text) || pattern.exec(html.normalizeText(chunk));
             if (!match) continue;
             const name = text.replace(/\([^)]*\)?\s*$/, '').replace(/\s*\d+\s*$/, '').trim();
             const gid = objectGid(name, ctx);
@@ -188,15 +190,16 @@
             const label = html.normalizeText(cells[labelIndex].text);
             // The engine always prints the level word next to the name, so the tolerant
             // path insists on it too — that is what keeps unrelated tables (resource
-            // summaries of other pages) from being read as mines.
-            const match = levelRegexp(ctx).exec(label);
+            // summaries of other pages) from being read as mines. The level may sit in a
+            // cell of its own, so the whole row is searched as well.
+            const match = levelRegexp(ctx).exec(label) || levelRegexp(ctx).exec(html.normalizeText(chunk));
             const name = label.replace(/\([^)]*\)?\s*$/, '').replace(/\s*\d+\s*$/, '').trim();
             if (!name) continue;
 
             let gid = objectGid(name, ctx);
             if (gid === null || gid >= 700) gid = guessGid(cells, name, seen, labelIndex);
             if (gid === null) {
-                unknown.push(name);
+                if (unknown.length < 6) unknown.push(name);
                 continue;
             }
             if (seen[gid]) continue;
