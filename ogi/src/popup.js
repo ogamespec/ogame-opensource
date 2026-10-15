@@ -12,9 +12,41 @@
     'use strict';
 
     const statusHost = document.getElementById('ogi-popup-status');
+    const stepsHost = document.getElementById('ogi-popup-steps');
     const noteHost = document.getElementById('ogi-popup-note');
     const refresh = document.getElementById('ogi-popup-refresh');
     const welcome = document.getElementById('ogi-popup-welcome');
+
+    /**
+     * Translator of the popup: the interface follows the browser language when the
+     * extension knows it, otherwise English.
+     *
+     * @returns {function(string, object=): string} Translator.
+     */
+    function translator() {
+        const OGI = window.OGI || {};
+        if (!OGI.createI18n) return function (key) { return key; };
+        const short = String(navigator.language || 'en').slice(0, 2).toLowerCase();
+        const known = ['en', 'ru', 'de'];
+        return OGI.createI18n(known.indexOf(short) === -1 ? 'en' : short);
+    }
+
+    /**
+     * Render the "first steps" block: the same three steps the in-game welcome panel
+     * shows, so the popup explains the extension on its own.
+     */
+    function renderSteps() {
+        const OGI = window.OGI || {};
+        const t = translator();
+        if (!stepsHost) return;
+        const steps = ['WELCOME_STEP1', 'WELCOME_STEP2', 'WELCOME_STEP3'];
+        const list = steps.map(function (key) {
+            return '<li>' + (OGI.icon ? OGI.icon('planets', { size: 11 }) : '') + ' ' +
+                escapeHtml(t(key)) + '</li>';
+        }).join('');
+        stepsHost.innerHTML = '<div class="ogi-popup-steps-title">' + escapeHtml(t('WELCOME_STEPS')) +
+            '</div><ul class="ogi-popup-steps-list">' + list + '</ul>';
+    }
 
     /**
      * The extension API of the current browser.
@@ -161,4 +193,5 @@
     });
 
     load();
+    renderSteps();
 })();

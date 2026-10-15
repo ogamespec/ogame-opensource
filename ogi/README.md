@@ -47,7 +47,7 @@ top of the content area**:
 
 | Page | What appears | Where exactly |
 |---|---|---|
-| Toolbar button (any tab) | A popup with the extension version, the state of the current tab (game page, page name, universe, language, storage, panel) and the collected report counts | The browser toolbar |
+| Toolbar button (any tab) | A popup with the extension version, the state of the current tab (game page, page name, universe, language, storage, panel), the collected report counts, the first steps and a button that brings the in-game welcome panel back | The browser toolbar |
 | `page=messages` | The analyzer panel: actions (`Expand`/`Collapse`, `Scan message folders`, `Clear database`), a one-line summary and the tabs Spy reports, Expeditions, Combats, Recycling, Transport, Planets & players, Totals, Statistics, Empire, Farm list, Needs, Settings | The first element of `#content`, above the message table |
 | `page=imperium` | The empire snapshot (planets with stock, production and fields) | The first element of `#content` |
 | `page=flotten1` / `flotten2` / `flotten3` | The fleet helper: selection buttons, live capacity and fuel, cargo filling, speed presets and the five best targets of the farm list | The first element of `#content` |
@@ -210,7 +210,7 @@ ogi/
 │   ├── pages/                 # messages / bericht / galaxy / overview / statistics / options handlers
 │   └── content.js             # entry point
 ├── tools/build-data.js        # regenerates src/data/*.js from the game sources
-└── tests/                     # node --test (108 tests)
+└── tests/                     # node --test (112 tests)
 ```
 
 ### Parsing instead of an API
@@ -269,7 +269,7 @@ node --test "ogi/tests/**/*.test.js"
 cd ogi && node --test
 ```
 
-108 tests, no dependencies (Node's built-in test runner). They check the parsers
+112 tests, no dependencies (Node's built-in test runner). They check the parsers
 against the project's own golden snapshots (`testing/golden/<lang>/…`) for seven
 languages, the analyzers, the storage, the panel rendering (including HTML
 escaping of player controlled names) and the packaging — the last one loads all

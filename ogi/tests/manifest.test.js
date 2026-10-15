@@ -30,6 +30,8 @@ test('manifest: every declared file exists', function () {
     const popup = fs.readFileSync(path.join(OGI_ROOT, manifest.action.default_popup), 'utf8');
     assert.ok(popup.indexOf('popup.js') !== -1, 'the popup page must load its script');
     assert.ok(popup.indexOf('lib/icons.js') !== -1, 'the popup uses the same icon set');
+    assert.ok(popup.indexOf('lib/i18n.js') !== -1, 'the popup renders the first steps in the browser language');
+    assert.ok(popup.indexOf('ogi-popup-steps') !== -1, 'the popup has a first steps block');
     assert.ok(fs.existsSync(path.join(OGI_ROOT, 'src', 'lib', 'icons.js')), 'the icon set exists');
     for (const entry of manifest.content_scripts) {
         for (const file of entry.js || []) {
