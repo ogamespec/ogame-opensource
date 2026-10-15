@@ -4,6 +4,10 @@
 	"version": "1.0.0",
 	"description": "Message analyzers, spy report database and planet/player history for OGame 0.84 servers. Client-side port of the OGame Infinity extension.",
 	"author": "DeepSeek",
+	"action": {
+		"default_title": "OGame Infinity 0.84",
+		"default_popup": "src/popup.html"
+	},
 	"content_scripts": [
 		{
 			"matches": [
@@ -18,6 +22,7 @@
 				"src/lib/templates.js",
 				"src/lib/store.js",
 				"src/lib/detect.js",
+				"src/lib/status.js",
 				"src/lib/i18n.js",
 				"src/lib/ui.js",
 				"src/parsers/messages.js",

@@ -23,16 +23,30 @@
     const HANDLERS = ['messages', 'bericht', 'galaxy'];
 
     /**
+     * The extension API (`chrome` in Chromium browsers, `browser` in Firefox).
+     *
+     * @returns {object|null} Runtime API or null outside of an extension.
+     */
+    function runtimeApi() {
+        try {
+            if (typeof chrome !== 'undefined' && chrome.runtime) return chrome;
+            if (typeof browser !== 'undefined' && browser.runtime) return browser;
+        } catch (error) {
+            // Not an extension context.
+        }
+        return null;
+    }
+
+    /**
      * Version of the loaded extension (works in Chrome and Firefox; the test
      * sandbox has no extension API and gets "dev").
      *
      * @returns {string} Version.
      */
     function extensionVersion() {
+        const api = runtimeApi();
         try {
-            const runtime = typeof chrome !== 'undefined' && chrome.runtime ? chrome.runtime
-                : (typeof browser !== 'undefined' && browser.runtime ? browser.runtime : null);
-            const manifest = runtime && runtime.getManifest ? runtime.getManifest() : null;
+            const manifest = api && api.runtime.getManifest ? api.runtime.getManifest() : null;
             return manifest && manifest.version ? manifest.version : 'dev';
         } catch (error) {
             return 'dev';
@@ -56,18 +70,29 @@
     }
 
     /**
+     * Answer the toolbar popup with the decision made about this page. Read only:
+     * nothing is collected or sent anywhere on request.
+     */
+    function listenToPopup() {
+        const api = runtimeApi();
+        if (!api || !api.runtime.onMessage) return;
+        api.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+            if (!message || message.type !== 'ogi-status') return false;
+            sendResponse(OGI.buildStatus(OGI.lastBoot || {}));
+            return true;
+        });
+    }
+
+    /**
      * Record what the extension decided about this page, so that the console shows
-     * whether it ran at all (an empty console is the only symptom of a content
-     * script that was never injected).
+     * whether it ran at all (an empty console used to be the only symptom of a
+     * content script that was never injected).
      *
      * @param {object} info Decision.
      */
     function report(info) {
-        const text = '[OGI ' + info.version + '] ' + info.href +
-            ' · page=' + (info.page || '-') + ' · game=' + (info.game ? 'yes' : 'no') +
-            ' · universe=' + (info.universe || '-') + ' · lang=' + (info.lang || '-') +
-            ' · storage=' + (info.storage ? 'ok' : 'memory') +
-            ' · handler=' + (info.handler || 'none');
+        OGI.lastBoot = info;
+        const text = '[OGI ' + info.version + '] ' + info.href + ' · ' + OGI.describe(info);
         if (info.game) console.info(text);
         else console.debug(text);
     }
@@ -85,8 +110,9 @@
             lang: null,
             storage: false,
             handler: null,
+            session: false,
+            counts: OGI.counts(null),
         };
-        OGI.lastBoot = info;
 
         info.game = OGI.looksLikeGamePage(source, page);
         if (!info.game) {
@@ -121,6 +147,8 @@
             store.save();
         }
         info.lang = lang;
+        info.counts = OGI.counts(store.data());
+        info.session = !!OGI.detectSession(source);
 
         const ctx = {
             OGI: OGI,
@@ -142,6 +170,7 @@
         const handler = handlers[page];
         info.handler = typeof handler === 'function' ? page : null;
         report(info);
+        listenToPopup();
         if (typeof handler !== 'function') {
             if (page) {
                 console.info('[OGI] page "' + page + '" is a game page but has no handler (supported: ' +

@@ -38,13 +38,14 @@ top of the content area**:
 
 | Page | What appears | Where exactly |
 |---|---|---|
+| Toolbar button (any tab) | A popup with the extension version, the state of the current tab (game page, page name, universe, language, storage, panel) and the collected report counts | The browser toolbar |
 | `page=messages` | The analyzer panel: actions (`Expand`/`Collapse`, `Scan message folders`, `Clear database`), a one-line summary, the tabs (Spy reports, Expeditions, Combats, Recycling, Transport, Planets & players, Totals) and the table of the active tab | The first element of `#content`, above the message table |
 | `page=bericht` (report popup) | An info box with the maximum loot, the needed cargo ships and the fleet/defence value of the scanned planet | Above the report body, inside the popup window |
 | `page=galaxy` | A one-line note about how many planets/moons were recorded | The first element of `#content` |
 
-There is **no toolbar button**: the manifest declares no `action`, so nothing is
-added to the browser toolbar — the UI lives inside the game pages. The panel
-state (collapsed or not) is remembered per universe.
+The rest of the UI lives inside the game pages; on any other page the toolbar
+popup is the only surface, and it reports `Game page: no`. The panel state
+(collapsed or not) is remembered per universe.
 
 On the messages page the panel scans the six message folders on the first visit;
 `Scan message folders` repeats it at any time, and `Collapse` shrinks the panel to
@@ -76,6 +77,12 @@ The extension is a plain unpacked Manifest V3 extension, no build step:
 Then open the game, go to **Messages** and use the panel at the top of the page
 (*Scan message folders*). The data stays in the browser (`localStorage`, one
 database per game host and universe).
+
+The toolbar button of the extension opens a small popup with the version, the
+state of the current tab (game page or not, page name, universe, language,
+storage, panel) and the number of collected reports. It works even when the page
+itself is not injected, so it answers "is the extension running at all?" without
+the console.
 
 > The manifest declares `<all_urls>` so the extension works on any 0.84 server;
 > the content script does nothing unless the page looks like a 0.84 game page.
@@ -146,6 +153,13 @@ Every page logs exactly one line, so "nothing in the console" is never ambiguous
   - a page opened as `file://…` requires the "Allow access to file URLs" toggle —
     for a local server use `http://localhost/…` instead;
   - the game must be open in this browser profile.
+
+The quickest check is the toolbar popup: it shows the version and, in the
+*Content script* row, either the state of the page or `not running`. A stale
+build is recognizable by the version number, and in the extension's console
+context by `typeof OGI.looksLikeGamePage` — a loaded extension older than the
+current sources has `OGI` defined but no such function (and no `OGI.lastBoot`), so
+reload the extension and press F5 on the page.
 
 The definitive check is the extension's own console context: in DevTools open the
 context dropdown next to the console prompt and pick **OGame Infinity 0.84**, then

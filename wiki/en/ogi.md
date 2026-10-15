@@ -108,12 +108,14 @@ top of the content area**:
 
 | Page | What appears | Where exactly |
 |---|---|---|
+| Toolbar button (any tab) | A popup with the version, the state of the tab (game page, page name, universe, language, storage, panel) and the collected report counts | The browser toolbar |
 | `page=messages` | The analyzer panel: actions (`Expand`/`Collapse`, `Scan message folders`, `Clear database`), a summary line, the tabs and the table of the active tab | The first element of `#content`, above the message table |
 | `page=bericht` (report popup) | The maximum loot, the needed cargo ships and the fleet/defence value of the scanned planet | Above the report body |
 | `page=galaxy` | A note about how many planets and moons were recorded | The first element of `#content` |
 
-There is no toolbar button (the manifest declares no `action`): the whole UI lives
-inside the game pages, and the collapsed/expanded state is remembered per universe.
+The rest of the UI lives inside the game pages; on any other page the toolbar
+popup is the only surface and reports `Game page: no`. The collapsed/expanded state
+is remembered per universe.
 
 ## Testing
 

@@ -23,6 +23,12 @@ test('manifest: every declared file exists', function () {
     // The game of a 0.84 server can be served inside a frame (the original client
     // used framesets), so the handler has to run in frames as well.
     assert.equal(manifest.content_scripts[0].all_frames, true);
+    // The toolbar button is the visible proof that the extension is loaded and the
+    // only surface outside of the game pages.
+    assert.equal(manifest.action.default_popup, 'src/popup.html');
+    assert.ok(fs.existsSync(path.join(OGI_ROOT, manifest.action.default_popup)), 'missing popup page');
+    const popup = fs.readFileSync(path.join(OGI_ROOT, manifest.action.default_popup), 'utf8');
+    assert.ok(popup.indexOf('popup.js') !== -1, 'the popup page must load its script');
     for (const entry of manifest.content_scripts) {
         for (const file of entry.js || []) {
             assert.ok(fs.existsSync(path.join(OGI_ROOT, file)), 'missing script ' + file);
@@ -90,7 +96,7 @@ test('scripts: load in manifest order and expose the extension API', function ()
         'LOCA', 'UNITS', 'parseSpyReport', 'parseBattleReport', 'parseExpedition', 'parseGalaxyPage',
         'parseMessagesPage', 'createLoca', 'createStore', 'createCollector', 'spyAnalysis',
         'renderAnalyzer', 'createI18n', 'mountMessages', 'mountBericht', 'mountGalaxy',
-        'looksLikeGamePage', 'detectUniverse', 'currentPage', 'lastBoot',
+        'looksLikeGamePage', 'detectUniverse', 'currentPage', 'lastBoot', 'buildStatus', 'describe',
     ]) {
         assert.ok(OGI[name], 'OGI.' + name + ' is missing');
     }
@@ -106,6 +112,16 @@ test('scripts: load in manifest order and expose the extension API', function ()
     assert.equal(OGI.lastBoot.storage, true, 'the storage stub was accepted');
     assert.equal(OGI.lastBoot.page, null, 'the sandbox URL has no page parameter');
     assert.equal(OGI.lastBoot.handler, null, 'no handler for a page without a name');
+    assert.equal(OGI.lastBoot.session, true, 'the session variable was found');
+    assert.equal(OGI.lastBoot.counts.spies, 0, 'an empty database is reported');
+
+    // What the toolbar popup receives.
+    const status = OGI.buildStatus(OGI.lastBoot);
+    assert.equal(status.game, true);
+    assert.equal(status.universe, 'uni1');
+    assert.equal(status.lang, 'ru');
+    assert.equal(status.version, 'dev');
+    assert.ok(OGI.describe(status).indexOf('game=yes') !== -1);
 });
 
 test('scripts: the extension stores data of the visited universe', function () {
