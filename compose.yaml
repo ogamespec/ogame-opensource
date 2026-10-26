@@ -31,7 +31,7 @@ services:
       - "1025:1025"
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin
     container_name: phpmyadmin
     environment:
       PMA_HOST: mysql
