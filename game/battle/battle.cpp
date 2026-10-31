@@ -186,17 +186,17 @@ TechParam* GetUnitParam(uint16_t id)
 
 int32_t get_hullmax(uint16_t id, Slot* slot) {
     TechParam* techParam = GetUnitParam(id);
-    return techParam->structure * 0.1f * (10 + slot->armor) / 10;
+    return (int32_t)(techParam->structure * 0.1f * (10 + slot->armor) / 10);
 }
 
 int32_t get_shieldmax(uint16_t id, Slot* slot) {
     TechParam* techParam = GetUnitParam(id);
-    return techParam->shield * (10 + slot->shld) / 10;
+    return (int32_t)(techParam->shield * (10 + slot->shld) / 10);
 }
 
 int32_t get_apower(uint16_t id, Slot* slot) {
     TechParam* techParam = GetUnitParam(id);
-    return techParam->attack * (10 + slot->weap) / 10;
+    return (int32_t)(techParam->attack * (10 + slot->weap) / 10);
 }
 
 // Allocate memory for units and set initial values
@@ -253,7 +253,7 @@ long UnitShoot (Unit *a, Slot* aslot, Unit *b, Slot* bslot, uint64_t *absorbed )
             b->shield = 0;
         }
         else {
-            b->shield -= depleted * prc;
+            b->shield -= (int32_t)(depleted * prc);
             *absorbed += (uint64_t)apower;
         }
     }
@@ -261,7 +261,7 @@ long UnitShoot (Unit *a, Slot* aslot, Unit *b, Slot* bslot, uint64_t *absorbed )
     b_hullmax = get_hullmax(b->obj_type, &bslot[b->slot_id]);
 
     if (b->hull <= b_hullmax * 0.7 && b->shield == 0) {    // Blow it up.
-        if (MyRand (0, 99) >= ((b->hull * 100) / b_hullmax) || b->hull == 0) {
+        if ((int32_t)MyRand (0, 99) >= ((b->hull * 100) / b_hullmax) || b->hull == 0) {
             b->exploded = 1;
         }
     }
