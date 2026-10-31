@@ -22,7 +22,7 @@ class Admin_Errors extends Page {
             while ($rows--)
             {
                 $msg = dbarray ( $result );
-                if ( $_POST["delmes".$msg['error_id']] === "on" || $_POST['deletemessages'] === "deleteall" )
+                if ( ($_POST["delmes".$msg['error_id']] ?? "") === "on" || ($_POST['deletemessages'] ?? "") === "deleteall" )
                 {
                     $query = "DELETE FROM ".$db_prefix."errors WHERE error_id = " . $msg['error_id'];
                     dbquery ($query);

@@ -40,6 +40,7 @@ $LOCA["en"]["MSG_OPER_PM"] = "Write message";
 // writemessages
 
 $LOCA["en"]["WRITE_MSG_ERROR_NO_SUBJ"] = "Missing topic";
+$LOCA["en"]["WRITE_MSG_ERROR_NO_USER"] = "No such player";
 $LOCA["en"]["WRITE_MSG_ERROR_NO_BODY"] = "Where's the message?";
 $LOCA["en"]["WRITE_MSG_SUCCESS"] = "Message sent";
 $LOCA["en"]["WRITE_MSG_WRITE"] = "Write message";

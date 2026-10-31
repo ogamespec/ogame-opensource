@@ -183,10 +183,10 @@ class Admin_Checksum extends Page {
     public function view () : void {
         global $session;
 
-        $engine_md = unserialize ( (string) file_get_contents ('temp/engine.md5') );
-        $page_md = unserialize ( (string) file_get_contents ('temp/page.md5') );
-        $page_admin_md = unserialize ( (string) file_get_contents ('temp/page_admin.md5') );
-        $reg_md = unserialize ( (string) file_get_contents ('temp/reg.md5') );
+        $engine_md = unserialize ( (string) file_get_contents ('temp/engine.md5') ) ?: [];
+        $page_md = unserialize ( (string) file_get_contents ('temp/page.md5') ) ?: [];
+        $page_admin_md = unserialize ( (string) file_get_contents ('temp/page_admin.md5') ) ?: [];
+        $reg_md = unserialize ( (string) file_get_contents ('temp/reg.md5') ) ?: [];
 
 ?>
 <h2><?=loca("ADM_CSUM_ENGINE");?></h2>
@@ -217,8 +217,12 @@ class Admin_Checksum extends Page {
     foreach ( $this->page_admin_files as $i=>$filename ) {
         $md = md5_file($filename) ;
         echo "<tr><td>$filename</td><td>$md</td>";
-        if ( $page_admin_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
-        else echo "<td><font color=red><b>BAD</b></font></td>";
+        if ( key_exists($filename, $page_admin_md) )
+        {
+            if ( $page_admin_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
+            else echo "<td><font color=red><b>BAD</b></font></td>";
+        }
+        else echo "<td><font color=red><b>UNVERSIONED</b></font></td>";
         echo "</tr>";
     }
 ?>
@@ -232,8 +236,12 @@ class Admin_Checksum extends Page {
     foreach ( $this->page_files as $i=>$filename ) {
         $md = md5_file($filename) ;
         echo "<tr><td>$filename</td><td>$md</td>";
-        if ( $page_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
-        else echo "<td><font color=red><b>BAD</b></font></td>";
+        if ( key_exists($filename, $page_md) )
+        {
+            if ( $page_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
+            else echo "<td><font color=red><b>BAD</b></font></td>";
+        }
+        else echo "<td><font color=red><b>UNVERSIONED</b></font></td>";
         echo "</tr>";
     }
 ?>
@@ -247,8 +255,12 @@ class Admin_Checksum extends Page {
     foreach ( $this->reg_files as $i=>$filename ) {
         $md = md5_file($filename) ;
         echo "<tr><td>$filename</td><td>$md</td>";
-        if ( $reg_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
-        else echo "<td><font color=red><b>BAD</b></font></td>";
+        if ( key_exists($filename, $reg_md) )
+        {
+            if ( $reg_md[$filename] === $md ) echo "<td><font color=lime><b>OK</b></font></td>";
+            else echo "<td><font color=red><b>BAD</b></font></td>";
+        }
+        else echo "<td><font color=red><b>UNVERSIONED</b></font></td>";
         echo "</tr>";
     }
 ?>

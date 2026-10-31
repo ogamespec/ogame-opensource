@@ -60,8 +60,10 @@ class Admin_Users extends Page {
                     $query .= "vacation = 1, vacation_until = " . ($now+((2*24*60*60)/ $speed)) .", ";
                 }
                 else $query .= "vacation = 0, ";
-                if ( key_exists('banned', $_POST) && $_POST['banned'] !== "on" ) $query .= "banned = 0, ";
-                if ( key_exists('noattack', $_POST) && $_POST['noattack'] !== "on" ) $query .= "noattack = 0, ";
+                if ( key_exists('banned', $_POST) && $_POST['banned'] === "on" ) $query .= "banned = 1, ";
+                else $query .= "banned = 0, ";
+                if ( key_exists('noattack', $_POST) && $_POST['noattack'] === "on" ) $query .= "noattack = 1, ";
+                else $query .= "noattack = 0, ";
 
                 $query .= "pemail = '".$_POST['pemail']."', ";
                 $query .= "email = '".$_POST['email']."', ";
@@ -76,7 +78,7 @@ class Admin_Users extends Page {
                 $query .= "sortby = ".intval ($_POST['settings_sort']).", ";
                 $query .= "sortorder = ".intval ($_POST['settings_order']).", ";
                 $query .= "skin = '".$_POST['dpath']."', ";
-                $query .= "useskin = ".($_POST['design']==="on"?1:0).", ";
+                $query .= "useskin = ".(($_POST['design'] ?? "")==="on"?1:0).", ";
                 $query .= "deact_ip = ".(key_exists('deact_ip', $_POST) && $_POST['deact_ip']==="on"?1:0).", ";
                 $query .= "maxspy = ".intval ($_POST['spio_anz']).", ";
                 $query .= "maxfleetmsg = ".intval ($_POST['settings_fleetactions'])." ";
@@ -106,7 +108,10 @@ class Admin_Users extends Page {
                 $p = $_POST['p'];    if ($p === "" ) $p = 1;
                 if ( ! HasPlanet ( $g, $s, $p ) ) { 
                     $planet_id = CreatePlanet ($g, $s, $p, $_GET['player_id'] );
-                    $query = "UPDATE ".$db_prefix."planets SET mprod = 0, kprod = 0, dprod = 0 WHERE planet_id = " . $planet_id;
+                    // The mine production multipliers are stored in the prod1..prod212
+                    // columns (install_tabs.php); the old mprod/kprod/dprod names no
+                    // longer exist. "Stop the mines production" = set the mine rates to 0.
+                    $query = "UPDATE ".$db_prefix."planets SET prod".GID_B_METAL_MINE." = 0, prod".GID_B_CRYS_MINE." = 0, prod".GID_B_DEUT_SYNTH." = 0 WHERE planet_id = " . $planet_id;
                     dbquery ( $query );
                 }
             }

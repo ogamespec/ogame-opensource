@@ -11,6 +11,8 @@ class Buildings extends Page {
         global $PageError;
         global $now;
 
+        $mode = $_GET['mode'] ?? '';
+
         // POST request processing.
         if ( method () === "POST" && !$GlobalUser['vacation'] )
         {
@@ -55,7 +57,7 @@ class Buildings extends Page {
         // GET request processing.
         if ( method () === "GET"  && !$GlobalUser['vacation'] )
         {
-            if ( $_GET['mode'] === "Forschung" ) {
+            if ( $mode === "Forschung" ) {
                 $result = GetResearchQueue ( $GlobalUser['player_id'] );
                 $resqueue = dbarray ($result);
                 if ( $resqueue == null )        // The research is not in progress (run)
@@ -86,6 +88,8 @@ class Buildings extends Page {
         global $defmap;
         global $resmap;
 
+        $mode = $_GET['mode'] ?? '';
+
 echo "<title> \n";
 echo loca("BUILD_BUILDINGS_HEAD") . "\n";
 echo "</title> \n";
@@ -97,7 +101,7 @@ echo "</script> \n";
 
 // ************************************************ Shipyard ************************************************ 
 
-if ( $_GET['mode'] === "Flotte" )
+if ( $mode === "Flotte" )
 {
     $prem = PremiumStatus ($GlobalUser);
 
@@ -115,7 +119,7 @@ if ( $_GET['mode'] === "Flotte" )
     if ( $GlobalUser['vacation'] ) {
         echo "<font color=#FF0000><center>".va(loca("BUILD_ERROR_VACATION"), date ("Y-m-d H:i:s", $GlobalUser['vacation_until']))."</center></font>";
     }
-    echo "<form action=index.php?page=buildings&session=$session&mode=".$_GET['mode']." method=post>";
+    echo "<form action=index.php?page=buildings&session=$session&mode=".$mode." method=post>";
     echo "<table align=top><tr><td style='background-color:transparent;'>  ";
     if ( $GlobalUser['useskin'] ) echo "<table width=\"530\">\n";
     else echo "<table width=\"468\">\n";
@@ -185,7 +189,7 @@ if ( $_GET['mode'] === "Flotte" )
 
 // ************************************************ Defense ************************************************ 
 
-if ( $_GET['mode'] === "Verteidigung" )
+if ( $mode === "Verteidigung" )
 {
     $prem = PremiumStatus ($GlobalUser);
 
@@ -203,7 +207,7 @@ if ( $_GET['mode'] === "Verteidigung" )
     if ( $GlobalUser['vacation'] ) {
         echo "<font color=#FF0000><center>".va(loca("BUILD_ERROR_VACATION"), date ("Y-m-d H:i:s", $GlobalUser['vacation_until']))."</center></font>";
     }
-    echo "<form action=index.php?page=buildings&session=$session&mode=".$_GET['mode']." method=post>";
+    echo "<form action=index.php?page=buildings&session=$session&mode=".$mode." method=post>";
     echo "<table align=top><tr><td style='background-color:transparent;'>  ";
     if ( $GlobalUser['useskin'] ) echo "<table width=\"530\">\n";
     else echo "<table width=\"468\">\n";
@@ -277,7 +281,7 @@ if ( $_GET['mode'] === "Verteidigung" )
 
 // ************************************************ Research ************************************************ 
 
-if ( $_GET['mode'] === "Forschung" )
+if ( $mode === "Forschung" )
 {
     $prem = PremiumStatus ($GlobalUser);
     if ( $prem['technocrat'] ) $r_factor = 1.1;
@@ -414,10 +418,10 @@ if ( $_GET['mode'] === "Forschung" )
 // ***********************************************************************
 
 echo "</table>";
-if ( $_GET['mode'] === "Verteidigung" || $_GET['mode'] === "Flotte" ) echo "</form>";
+if ( $mode === "Verteidigung" || $mode === "Flotte" ) echo "</form>";
 echo "</table>\n";
 
-if ( $_GET['mode'] === "Verteidigung" || $_GET['mode'] === "Flotte" )
+if ( $mode === "Verteidigung" || $mode === "Flotte" )
 {
     $result = GetShipyardQueue ($aktplanet['planet_id']);
     $rows = dbrows ($result);

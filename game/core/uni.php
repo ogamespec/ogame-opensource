@@ -31,6 +31,9 @@ function UpdateNews (string $news1, string $news2, int $days) : void
 {
     global $db_prefix;
     $until = time () + $days * 24 * 60 * 60;
+    // Escape the free-form texts: they are interpolated into raw SQL.
+    $news1 = addslashes ($news1);
+    $news2 = addslashes ($news2);
     $query = "UPDATE ".$db_prefix."uni SET news1 = '".$news1."', news2 = '".$news2."', news_until = $until";
     dbquery ($query);
 }
@@ -76,7 +79,11 @@ function SetUniParam (int $speed, int $fspeed, int $acs, int $fid, int $did, int
 {
     global $db_prefix;
     global $GlobalUni;
-    
+
+    // Escape the string parameters: they are interpolated into raw SQL.
+    $lang = addslashes ($lang);
+    $battle_engine = addslashes ($battle_engine);
+
     $query = "UPDATE ".$db_prefix."uni SET lang='".$lang."', battle_engine='".$battle_engine."', freeze=$freeze, speed=$speed, fspeed=$fspeed, acs=$acs, fid=$fid, did=$did, defrepair=$defrepair, defrepair_delta=$defrepair_delta, galaxies=$galaxies, systems=$systems, rapid=$rapid, moons=$moons, php_battle=$php_battle, battle_max=$battle_max, force_lang=$force_lang, start_dm=$start_dm, max_werf=$max_werf, feedage=$feedage";
     dbquery ($query);
 
@@ -99,6 +106,13 @@ function SetExtLinks(string $ext_board, string $ext_discord, string $ext_tutoria
 {
     global $db_prefix;
     global $GlobalUni;
+
+    // Escape the free-form URLs: they are interpolated into raw SQL.
+    $ext_board = addslashes ($ext_board);
+    $ext_discord = addslashes ($ext_discord);
+    $ext_tutorial = addslashes ($ext_tutorial);
+    $ext_rules = addslashes ($ext_rules);
+    $ext_impressum = addslashes ($ext_impressum);
 
     $query = "UPDATE ".$db_prefix."uni SET ext_board='".$ext_board."', ext_discord='".$ext_discord."', ext_tutorial='".$ext_tutorial."', ext_rules='".$ext_rules."', ext_impressum='".$ext_impressum."'";
     dbquery ($query);

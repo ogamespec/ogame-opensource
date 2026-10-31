@@ -40,6 +40,7 @@ $LOCA["it"]["MSG_OPER_PM"] = "Scrivi un messaggio";
 // writemessages
 
 $LOCA["it"]["WRITE_MSG_ERROR_NO_SUBJ"] = "Nessun oggetto inserito";
+$LOCA["it"]["WRITE_MSG_ERROR_NO_USER"] = "Giocatore inesistente";
 $LOCA["it"]["WRITE_MSG_ERROR_NO_BODY"] = "Nessun testo inserito";
 $LOCA["it"]["WRITE_MSG_SUCCESS"] = "Messaggio inviato!";
 $LOCA["it"]["WRITE_MSG_WRITE"] = "Invio messaggio";

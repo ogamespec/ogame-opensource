@@ -137,7 +137,7 @@ function CheckParameters () : bool
 
     // The start page is used in redirects, so it must be an URL or a host name.
     $startpage = $post('startpage');
-    if ( $startpage !== "" && !preg_match ( '#^https?://[^\s]+$#i', $startpage ) && !preg_match ( '/^[A-Za-z0-9.\-]+$/', $startpage ) ) {
+    if ( $startpage !== "" && !preg_match ( '#^https?://[A-Za-z0-9.\-/_]+$#i', $startpage ) && !preg_match ( '/^[A-Za-z0-9.\-]+$/', $startpage ) ) {
         $errs[] = va ( loca('INSTALL_ERR_URL'), loca('INSTALL_STARTPAGE') );
     }
 
@@ -383,20 +383,23 @@ if ( key_exists("install", $_POST) && CheckParameters() )
     if ($file == FALSE) $InstallError = loca('INSTALL_ERROR1');
     else
     {
+        // Every value is written as a var_export() literal, so a quote,
+        // backslash or $ in a password cannot break the generated file
+        // or inject PHP code into it.
         fwrite ($file, "<?php\r\n");
         fwrite ($file, "// DO NOT MODIFY!\r\n");
-        fwrite ($file, "$"."StartPage=\"". $_POST["startpage"] ."\";\r\n");
-        fwrite ($file, "$"."db_host=\"". $_POST["db_host"] ."\";\r\n");
-        fwrite ($file, "$"."db_user=\"". $_POST["db_user"] ."\";\r\n");
-        fwrite ($file, "$"."db_pass=\"". $_POST["db_pass"] ."\";\r\n");
-        fwrite ($file, "$"."db_name=\"". $_POST["db_name"] ."\";\r\n");
-        fwrite ($file, "$"."db_prefix=\"". $_POST["db_prefix"] ."\";\r\n");
-        fwrite ($file, "$"."db_secret=\"". $_POST["db_secret"] ."\";\r\n");
+        fwrite ($file, "\$StartPage=". var_export ( (string) $_POST["startpage"], true ) .";\r\n");
+        fwrite ($file, "\$db_host=". var_export ( (string) $_POST["db_host"], true ) .";\r\n");
+        fwrite ($file, "\$db_user=". var_export ( (string) $_POST["db_user"], true ) .";\r\n");
+        fwrite ($file, "\$db_pass=". var_export ( (string) $_POST["db_pass"], true ) .";\r\n");
+        fwrite ($file, "\$db_name=". var_export ( (string) $_POST["db_name"], true ) .";\r\n");
+        fwrite ($file, "\$db_prefix=". var_export ( (string) $_POST["db_prefix"], true ) .";\r\n");
+        fwrite ($file, "\$db_secret=". var_export ( (string) $_POST["db_secret"], true ) .";\r\n");
         fwrite ($file, "$"."mdb_enable=". $mdb_enable .";\r\n");
-        fwrite ($file, "$"."mdb_host=\"". $_POST["mdb_host"] ."\";\r\n");
-        fwrite ($file, "$"."mdb_user=\"". $_POST["mdb_user"] ."\";\r\n");
-        fwrite ($file, "$"."mdb_pass=\"". $_POST["mdb_pass"] ."\";\r\n");
-        fwrite ($file, "$"."mdb_name=\"". $_POST["mdb_name"] ."\";\r\n");
+        fwrite ($file, "\$mdb_host=". var_export ( (string) $_POST["mdb_host"], true ) .";\r\n");
+        fwrite ($file, "\$mdb_user=". var_export ( (string) $_POST["mdb_user"], true ) .";\r\n");
+        fwrite ($file, "\$mdb_pass=". var_export ( (string) $_POST["mdb_pass"], true ) .";\r\n");
+        fwrite ($file, "\$mdb_name=". var_export ( (string) $_POST["mdb_name"], true ) .";\r\n");
         fwrite ($file, "?>");
         fclose ($file);
         $InstallError = "<font color=lime>".loca('INSTALL_DONE')."</font>";

@@ -342,15 +342,21 @@ function PhalanxEventList (int $planet_id) : void
         sksort ( $task, 'end_time', true);        // Sort by time of arrival.
         $now = time ();
 
+        // Number the countdown boxes with a dedicated running counter ($n):
+        // t() in utilities.js expects exactly the ids bxx1..bxx(anz). Rows
+        // whose end time already passed are skipped, so the array key ($i)
+        // would leave holes and break every countdown.
+        $n = 0;
         foreach ($task as $i=>$t)
         {
             $seconds = max($t['end_time']-$now, 0);
             if ( $seconds <= 0 ) continue;
+            $n++;
             if ($t['fleets'] > 1) echo "<tr class=''>\n";
             else if ($t['fleet'][0]['dir'] == 0) echo "<tr class='flight'>\n";
             else if ($t['fleet'][0]['dir'] == 1) echo "<tr class='return'>\n";
             else if ($t['fleet'][0]['dir'] == 2) echo "<tr class='holding'>\n";
-            echo "<th><div id='bxx".($i+1)."' title='".$seconds."'star='".$t['end_time']."'></div></th>\n";
+            echo "<th><div id='bxx".$n."' title='".$seconds."'star='".$t['end_time']."'></div></th>\n";
             echo "<th colspan='3'>";
             for ($fl=0; $fl<$t['fleets']; $fl++)
             {

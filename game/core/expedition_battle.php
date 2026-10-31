@@ -241,12 +241,12 @@ function ExpeditionBattle ( int $fleet_id, bool $pirates, int $level, int $when 
         $mailbox[ $user['player_id'] ] = true;
     }
 
-    // Update the battle report log
+    // Update the battle report log (use the universe language battle report)
     loca_add ( "fleetmsg", $GlobalUni['lang'] );
     $subj = "<a href=\"#\" onclick=\"fenster(\'index.php?page=admin&session={PUBLIC_SESSION}&mode=BattleReport&bericht=$battle_id\', \'Bericht_Kampf\');\" ><span class=\"".$a_result[$battle_result]."\">" .
         loca_lang("FLEET_MESSAGE_BATTLE", $GlobalUni['lang']) . 
         " [".$target_planet['g'].":".$target_planet['s'].":".$target_planet['p']."] (V:".nicenum($dloss).",A:".nicenum($aloss).")</span></a>";
-    $query = "UPDATE ".$db_prefix."battledata SET title = '".$subj."', report = '".$text."' WHERE battle_id = $battle_id;";
+    $query = "UPDATE ".$db_prefix."battledata SET title = '".$subj."', report = '".$battle_text[$GlobalUni['lang']]."' WHERE battle_id = $battle_id;";
     dbquery ( $query );
 
     // Clean up old battle reports

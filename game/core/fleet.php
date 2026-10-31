@@ -694,6 +694,8 @@ function LaunchRockets ( array $origin, array $target, int $seconds, int $amount
     $uni = LoadUniverse ( );
     if ( $uni['freeze'] ) return 0;
 
+    if ( $origin['g'] != $target['g'] ) return 0;    // Missiles can only reach targets in their own galaxy.
+
     if ( $amount > $origin[GID_D_IPM] ) return 0;    // You can't launch more missiles than there are rockets on the planet.
 
     $now = time ();
@@ -956,9 +958,15 @@ function GetHoldingFleetsCount (int $planet_id) : int
 function CanStandHold ( int $planet_id, int $player_id, int $maxhold_users ) : bool
 {
     global $db_prefix;
-    $query = "SELECT owner_id FROM ".$db_prefix."fleet WHERE (mission = ".FTYP_ACS_HOLD." OR mission = ".(FTYP_ACS_HOLD+FTYP_ORBITING).") AND target_planet = $planet_id;";
+    // $maxhold_users is a per-player limit: count the distinct players that
+    // already hold fleets on the planet, not the number of fleet rows.
+    $query = "SELECT COUNT(DISTINCT owner_id) AS hold_users FROM ".$db_prefix."fleet WHERE (mission = ".FTYP_ACS_HOLD." OR mission = ".(FTYP_ACS_HOLD+FTYP_ORBITING).") AND target_planet = $planet_id;";
     $result = dbquery ($query);
-    return dbrows ($result) < $maxhold_users;
+    if ( $result ) {
+        $row = dbarray ($result);
+        return intval($row['hold_users']) < $maxhold_users;
+    }
+    return true;
 }
 
 /**
@@ -1048,9 +1056,11 @@ function SpyArrive (array $queue, array $fleet_obj, array $fleet, array $origin,
 
     $bonus = array();
     $bonus['level'] = $origin_tech;
+    $bonus['side'] = 'origin';    // Tag the call so mods can tell the two sides apart.
     ModsExecIntRef ('bonus_technology', GID_R_ESPIONAGE, $bonus);
     $origin_tech = max ($bonus['level'], 0);
     $bonus['level'] = $target_tech;
+    $bonus['side'] = 'target';
     ModsExecIntRef ('bonus_technology', GID_R_ESPIONAGE, $bonus);
     $target_tech = max ($bonus['level'], 0);
 
@@ -1245,6 +1255,7 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
 {
     global $db_prefix;
     global $fleetmap;
+    global $transportableResources;
 
     $origin_user = LoadUser ( $origin['owner_id'] );
     if ($origin_user == null) return;
@@ -1281,6 +1292,20 @@ function ColonizationArrive (array $queue, array $fleet_obj, array $fleet, array
                 $cost = TechPrice ( GID_F_COLON, 1 );
                 AdjustStats ( $origin['owner_id'], TechPriceInPoints($cost), 1, 0, '-' );
                 RecalcRanks ();
+            }
+
+            // Deposit the resources carried by the colony fleet on the new
+            // colony (classic behavior: the cargo seeds the colony). The
+            // return flight carries nothing back.
+            if ( $id > 0 ) {
+                $cargo = array();
+                foreach ( $transportableResources as $i=>$rc ) {
+                    $cargo[$rc] = isset($fleet_obj[$rc]) ? $fleet_obj[$rc] : 0;
+                }
+                AdjustResources ( $cargo, $id, '+' );
+                foreach ( $transportableResources as $i=>$rc ) {
+                    if (isset($fleet_obj[$rc])) $fleet_obj[$rc] = 0;
+                }
             }
         }
 
@@ -1460,7 +1485,11 @@ function Queue_Fleet_End (array $queue) : void
     global $fleetmap;
     global $transportableResources;
     $fleet_obj = LoadFleet ( $queue['sub_id'] );
-    if ( $fleet_obj == null ) return;
+    if ( $fleet_obj == null ) {
+        // The fleet row is already gone: only its queue task is left, so it must not fire again.
+        RemoveQueue ( $queue['task_id'] );
+        return;
+    }
 
     foreach ($transportableResources as $i=>$rc) {
         if (isset($fleet_obj[$rc])) {
@@ -1473,9 +1502,36 @@ function Queue_Fleet_End (array $queue) : void
 
     // Update resource production on planets
     $origin = GetUpdatePlanet ( $fleet_obj['start_planet'], $queue['end'] );
-    if ($origin == null) return;
     $target = GetUpdatePlanet ( $fleet_obj['target_planet'], $queue['end'] );
-    if ($target == null) return;
+
+    // The origin is where a returning fleet lands (CommonReturn restores the
+    // ships there). When the origin no longer exists there is nowhere to
+    // restore to, so drop the fleet and its task instead of leaving them
+    // orphaned (the queue dispatcher would otherwise re-fire them forever).
+    if ($origin == null) {
+        DeleteFleet ($fleet_obj['fleet_id']);
+        RemoveQueue ( $queue['task_id'] );
+        return;
+    }
+
+    // A return flight (mission between FTYP_RETURN and FTYP_ORBITING) lands at
+    // the origin (CommonReturn restores the ships to start_planet); the
+    // recorded target only feeds the report text. If the destination row is
+    // gone (e.g. a moon destroyed by a graviton while the fleet was still
+    // inbound/recalled), anchor the report on the origin so the ships are
+    // restored instead of the event being dropped forever.
+    if ( $target == null && $fleet_obj['mission'] >= FTYP_RETURN && $fleet_obj['mission'] < FTYP_ORBITING ) {
+        $target = $origin;
+    }
+    if ($target == null) {
+        // An outbound mission whose destination disappeared: there is no
+        // meaningful arrival, so drop the fleet and its task instead of
+        // leaving them orphaned (the queue dispatcher would otherwise
+        // re-fire them forever).
+        DeleteFleet ($fleet_obj['fleet_id']);
+        RemoveQueue ( $queue['task_id'] );
+        return;
+    }
 
     switch ( $fleet_obj['mission'] )
     {

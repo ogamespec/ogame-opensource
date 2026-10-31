@@ -50,6 +50,10 @@ class Sprungtor extends Page {
         }
 
         if ( $PageError === "" ) {
+            if ( $now < $source['gate_until'] || $now < $target['gate_until'] ) $PageError .= "<center>\n".va(loca("GATE_NOT_READY"), date ('i\m\i\n s\s\e\c', max($source['gate_until'],$target['gate_until']) - $now))."<br></center>\n";
+        }
+
+        if ( $PageError === "" ) {
             if ( $total == 0 ) $PageError .= "<center>\n".loca("GATE_ERR_SHIPS")."<br></center>\n";
         }
 

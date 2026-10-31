@@ -78,6 +78,21 @@ class Options extends Page {
                     EnableVacation ($GlobalUser['player_id'], 0, false);
                     $PageError = va ( loca("OPTIONS_MSG_VMDISABLED"), htmlspecialchars($GlobalUser['oname']) ) . "\n<br/>\n";
                 }
+
+                // Set the account for deletion
+                if ( key_exists('db_deaktjava', $_POST) && $_POST['db_deaktjava'] === "on" && $GlobalUser['disable'] == 0 ) {
+                    $disable_until = $now + (7 * 24 * 60 * 60);
+                    dbquery ( "UPDATE ".$db_prefix."users SET disable=1,disable_until=$disable_until WHERE player_id=".intval($GlobalUser['player_id']) );
+                    $GlobalUser['disable'] = 1;
+                    $GlobalUser['disable_until'] = $disable_until;
+                }
+
+                // Cancel account deletion
+                if ( !key_exists("db_deaktjava", $_POST) && $GlobalUser['disable'] ) {
+                    dbquery ( "UPDATE ".$db_prefix."users SET disable=0,disable_until=0 WHERE player_id=".intval($GlobalUser['player_id']) );
+                    $GlobalUser['disable'] = 0;
+                    $GlobalUser['disable_until'] = 0;
+                }
             }
         }
         // Regular menu
@@ -142,18 +157,6 @@ class Options extends Page {
                     }
                 }
 
-                // Activate vacation mode
-                if ( key_exists('urlaubs_modus', $_POST) && $_POST['urlaubs_modus'] === "on" && $GlobalUser['vacation'] == 0 ) {
-                    // at least 12 hours
-                    $vacation_min = max ( 12*60*60, (2 * 24 * 60 * 60) / $speed);
-                    $vacation_until = $now + $vacation_min;
-                    if ( CanEnableVacation ($GlobalUser['player_id']) ) {
-                        EnableVacation ($GlobalUser['player_id'], $vacation_until, true);
-                        MyGoto ( "options" );
-                    }
-                    else $PageError = loca ("OPTIONS_ERR_VM");
-                }
-
                 // Set the account for deletion
                 if ( key_exists('db_deaktjava', $_POST) && $_POST['db_deaktjava'] === "on" && $GlobalUser['disable'] == 0 ) {
                     $disable_until = $now + (7 * 24 * 60 * 60);
@@ -173,7 +176,7 @@ class Options extends Page {
 
                 // Save skin path + checkbox show/disable skin.
                 // TODO : OPTIONS_MSG_SKIN
-                $design_path = SecureText($_POST['dpath']);
+                $design_path = SecureText($_POST['dpath'] ?? '');
                 ChangeSkinPath ( $GlobalUser['player_id'], $design_path );
                 $enable_design = key_exists('design', $_POST) ? ($_POST['design']==="on"?true:false) : false;
                 EnableSkin ( $GlobalUser['player_id'], $enable_design );
@@ -181,11 +184,11 @@ class Options extends Page {
                 $lang = key_exists("lang", $_POST) ? substr ( addslashes($_POST['lang']), 0, 2 ) : $GlobalUni['lang'];
                 // If the admin has forbidden users to choose a language, then force set them to the Universe language.
                 if ($GlobalUni['force_lang']) $lang = $GlobalUni['lang'];
-                $sortby = min ( max(0, intval($_POST['settings_sort'])), 2);
-                $sortorder = min ( max(0, intval($_POST['settings_order'])), 1);
+                $sortby = min ( max(0, intval($_POST['settings_sort'] ?? 0)), 2);
+                $sortorder = min ( max(0, intval($_POST['settings_order'] ?? 0)), 1);
                 $deactip = (int) key_exists ( 'noipcheck', $_POST );
-                $maxspy = min( max (1, intval($_POST['spio_anz'])), 99);
-                $maxfleetmsg = min( max (1, intval($_POST['settings_fleetactions'])), 99);
+                $maxspy = min( max (1, intval($_POST['spio_anz'] ?? 1)), 99);
+                $maxfleetmsg = min( max (1, intval($_POST['settings_fleetactions'] ?? 1)), 99);
                 $query = "UPDATE ".$db_prefix."users SET deact_ip=$deactip, sortby=$sortby, sortorder=$sortorder, maxspy=$maxspy, maxfleetmsg=$maxfleetmsg, lang='".$lang."' WHERE player_id=".intval($GlobalUser['player_id']);
                 dbquery ($query);
                 $GlobalUser['sortby'] = $sortby;
@@ -196,6 +199,18 @@ class Options extends Page {
                 $GlobalUser['deact_ip'] = $deactip;
                 $GlobalUser['skin'] = $design_path;
                 $GlobalUser['useskin'] = ($enable_design?1:0);
+
+                // Activate vacation mode
+                if ( key_exists('urlaubs_modus', $_POST) && $_POST['urlaubs_modus'] === "on" && $GlobalUser['vacation'] == 0 ) {
+                    // at least 12 hours
+                    $vacation_min = max ( 12*60*60, (2 * 24 * 60 * 60) / $speed);
+                    $vacation_until = $now + $vacation_min;
+                    if ( CanEnableVacation ($GlobalUser['player_id']) ) {
+                        EnableVacation ($GlobalUser['player_id'], $vacation_until, true);
+                        MyGoto ( "options" );
+                    }
+                    else $PageError = loca ("OPTIONS_ERR_VM");
+                }
 
                 $prem = PremiumStatus ($GlobalUser);
                 // Flags -- process only with Commander enabled

@@ -63,6 +63,20 @@ function dbquery (string $query, bool $mute=false) : mixed
 }
 
 /**
+ * Returns the number of rows affected by the last INSERT/UPDATE/DELETE query.
+ *
+ * Used instead of a backend-specific call (e.g. mysqli_affected_rows) so the
+ * game code keeps working on both database backends.
+ *
+ * @return int Number of rows affected by the last write query.
+ */
+function dbaffected () : int
+{
+    global $db_connect;
+    return (int) @mysqli_affected_rows ($db_connect);
+}
+
+/**
  * Returns the number of rows in a query result.
  *
  * @param mixed $result Query result resource.

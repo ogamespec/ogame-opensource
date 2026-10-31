@@ -19,12 +19,18 @@
  * $query_log accumulates them, $db_connect holds the active PDO connection
  * and $MDB_link is the master database link (unused in the SQLite backend).
  */
-global $query_counter, $query_log, $db_connect, $MDB_link;
+global $query_counter, $query_log, $db_connect, $MDB_link, $db_affected_rows;
 
 $query_counter = 0;
 $query_log = "";
 $db_connect = 0;
 $MDB_link = 0;
+
+/**
+ * Number of rows affected by the last INSERT/UPDATE/DELETE query, exposed
+ * through dbaffected() so the game code needs no backend-specific call.
+ */
+$db_affected_rows = 0;
 
 /**
  * Result wrapper for SELECT-like queries.
@@ -92,10 +98,13 @@ function dbconnect (string $db_host, string $db_user, string $db_pass, string $d
  */
 function dbquery (string $query, bool $mute=false) : mixed
 {
-    global $query_counter, $query_log, $db_connect;
+    global $query_counter, $query_log, $db_connect, $db_affected_rows;
 
     $query_counter ++;
     $query_log .= $query . "<br>\n";
+
+    // Reset the write counter: only a successful write query updates it.
+    $db_affected_rows = 0;
 
     $q = trim ($query);
 
@@ -122,6 +131,7 @@ function dbquery (string $query, bool $mute=false) : mixed
             $rows = $stmt->fetchAll (PDO::FETCH_ASSOC);
             return new SQLiteDBResult ($rows);
         }
+        $db_affected_rows = $stmt->rowCount ();
         return true;
     }
     catch (PDOException $e) {
@@ -131,6 +141,20 @@ function dbquery (string $query, bool $mute=false) : mixed
         }
         return false;
     }
+}
+
+/**
+ * Returns the number of rows affected by the last INSERT/UPDATE/DELETE query.
+ *
+ * Mirrors dbaffected() of the MySQL backend so the game code can stay
+ * backend-agnostic.
+ *
+ * @return int Number of rows affected by the last write query.
+ */
+function dbaffected () : int
+{
+    global $db_affected_rows;
+    return (int) $db_affected_rows;
 }
 
 /**

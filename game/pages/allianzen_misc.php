@@ -206,6 +206,15 @@ function AllyPage_Takeover () : void
     if ( $_GET['a'] == 18 && key_exists('s', $_REQUEST) && $_REQUEST['s'] == 1)
     {
         $now = time ();
+        // Only the founder (owner) may transfer founder status. Checking only
+        // ARANK_RIGHT_HAND is not enough: the "right hand" rank itself holds
+        // that right, so any right-hand member could POST a self-takeover
+        // (uid = own id) and become the new owner without the founder acting.
+        if ( $GlobalUser['player_id'] != $ally['owner_id'] )
+        {
+            $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
+            return;
+        }
         $myrank = LoadRank ( $ally['ally_id'], $GlobalUser['allyrank'] );
         if ( ! ($myrank['rights'] & ARANK_RIGHT_HAND) ) $PageError = "<center>\n".loca("ALLY_NO_WAY")."<br></center>";
         else

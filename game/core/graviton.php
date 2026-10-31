@@ -111,10 +111,15 @@ function GravitonAttack (array $fleet_obj, array $fleet, int $when) : int
             $result  = GRAVI_MOON_DESTR | GRAVI_FLEET_DESTR;
     }
 
-    // Recalculate stats if a fleet was blown up by a failed graviton attack
+    // Recalculate stats if a fleet was blown up by a failed graviton attack.
+    // Battle losses of the same fleet were already subtracted separately by
+    // StartBattle (CalcLosses + AdjustStats), so only the price of the ships
+    // that survived the battle rounds and were destroyed by the graviton
+    // explosion must be deducted here -- otherwise the losses are counted
+    // twice.
     if (($result & GRAVI_FLEET_DESTR) != 0) {
 
-        $price = FleetPrice ( $fleet_obj );
+        $price = FleetPrice ( $fleet );
         AdjustStats ( $fleet_obj['owner_id'], $price['points'], $price['fpoints'], 0, '-' );
         RecalcRanks ();
     }

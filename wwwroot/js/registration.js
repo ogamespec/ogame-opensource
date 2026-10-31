@@ -83,7 +83,7 @@ function remoteCheckEmail() {
 }
 
 function checkAGB() {
-    if (document.registerForm.elements[3].checked == true) {
+    if (document.registerForm.agb.checked == true) {
         return 0;
     } else{
         return 1;
@@ -95,10 +95,10 @@ function checkData() {
     if (checkUsername.lastcheck == "0"
         && checkEmail.lastcheck == "0"
         && !checkAGB()) {
-        document.forms[0].elements[4].disabled = false;
+        document.getElementById('register_submit').disabled = false;
         
     } else {
-        document.forms[0].elements[4].disabled = true;
+        document.getElementById('register_submit').disabled = true;
             //document.write(document.forms[0].elements[3].value);
     }
     

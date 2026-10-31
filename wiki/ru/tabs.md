@@ -110,7 +110,7 @@
 |**Q** noattack_until|INT UNSIGNED|Когда заканчивается запрет на атаки time()|
 |lastlogin|INT UNSIGNED|Последняя дата входа в игру | 
 |lastclick|INT UNSIGNED|Последний щелчок мышкой, для определения активности игрока | 
-|ip_addr|CHAR(15)|IP адрес пользователя | 
+|ip_addr|VARCHAR(45)|IP адрес пользователя | 
 |validated|INT|Пользователь активирован. Если пользователь не активирован, то ему запрещено посылать игровые сообщения и заявки в альянсы. | 
 |validatemd|CHAR(32)|Код активации | 
 |hplanetid|INT|Порядковый номер Главной планеты | 
@@ -448,7 +448,7 @@ const USER_FLAG_FEED_ATOM = 0x10000;                // 0 - use RSS format, 1 - u
 |Столбец|Тип|Описание|
 |---|---|---|
 |log_id|INT AUTO_INCREMENT PRIMARY KEY| | 
-|ip|CHAR(16)| | 
+|ip|VARCHAR(45)| | 
 |user_id|INT| | 
 |reg|INT| | 
 |date|INT UNSIGNED| |

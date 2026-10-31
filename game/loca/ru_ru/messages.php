@@ -40,6 +40,7 @@ $LOCA["ru"]["MSG_OPER_PM"] = "Написать сообщение";
 // writemessages
 
 $LOCA["ru"]["WRITE_MSG_ERROR_NO_SUBJ"] = "Не хватает темы";
+$LOCA["ru"]["WRITE_MSG_ERROR_NO_USER"] = "Такого игрока нет";
 $LOCA["ru"]["WRITE_MSG_ERROR_NO_BODY"] = "А где же сообщение?";
 $LOCA["ru"]["WRITE_MSG_SUCCESS"] = "Сообщение отправлено";
 $LOCA["ru"]["WRITE_MSG_WRITE"] = "Написать сообщение";

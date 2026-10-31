@@ -40,6 +40,7 @@ $LOCA["es"]["MSG_OPER_PM"] = "Escribir mensaje";
 // writemessages
 
 $LOCA["es"]["WRITE_MSG_ERROR_NO_SUBJ"] = "Falta el asunto";
+$LOCA["es"]["WRITE_MSG_ERROR_NO_USER"] = "No existe ese jugador";
 $LOCA["es"]["WRITE_MSG_ERROR_NO_BODY"] = "¿Dónde está el mensaje?";
 $LOCA["es"]["WRITE_MSG_SUCCESS"] = "Mensaje enviado";
 $LOCA["es"]["WRITE_MSG_WRITE"] = "Escribir mensaje";

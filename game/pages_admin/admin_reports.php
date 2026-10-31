@@ -20,7 +20,7 @@ class Admin_Reports extends Page {
             while ($rows--)
             {
                 $msg = dbarray ( $result );
-                if ( $_POST["delmes".$msg['id']] === "on" || $_POST['deletemessages'] === "deleteall" )
+                if ( ($_POST["delmes".$msg['id']] ?? "") === "on" || ($_POST['deletemessages'] ?? "") === "deleteall" )
                 {
                     $query = "DELETE FROM ".$db_prefix."reports WHERE id = " . $msg['id'];
                     dbquery ($query);

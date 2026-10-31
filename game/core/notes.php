@@ -93,6 +93,11 @@ function UpdateNote ( int $player_id, int $note_id, string $subj, string $text, 
     if ($prio < 0) $prio = 0;
     if ($prio > 2) $prio = 2;
 
+    // UpdateNote interpolates the values into raw SQL (unlike AddNote, which
+    // goes through AddDBRow and its escaping), so the values are escaped here.
+    $subj = addslashes ($subj);
+    $text = addslashes ($text);
+
     $query = "UPDATE ".$db_prefix."notes SET subj = '".$subj."', text = '".$text."', textsize = '".mb_strlen($text, "UTF-8")."', prio = '".$prio."', date = '".time()."' WHERE owner_id = $player_id AND note_id = $note_id";
     dbquery ($query);
 }

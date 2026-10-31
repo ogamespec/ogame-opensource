@@ -8,5 +8,6 @@ $LOCA["jp"]["AINFO_NAME"] = "名前";
 $LOCA["jp"]["AINFO_MEMBERS"] = "メンバー";
 $LOCA["jp"]["AINFO_HOMEPAGE"] = "ホームページ";
 $LOCA["jp"]["AINFO_PREV"] = "旧:";
+$LOCA["jp"]["AINFO_NOT_FOUND"] = "同盟が見つかりません";
 
 ?>

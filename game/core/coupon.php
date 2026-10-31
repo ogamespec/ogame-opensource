@@ -94,6 +94,7 @@ function CheckCoupon (string $code) : int
 {
     if ( MDBConnect() )
     {
+        $code = addslashes ($code);
         $query = "SELECT * FROM coupons WHERE used = 0 AND code = '".$code."' LIMIT 1";
         $result = MDBQuery ($query );
         if (MDBRows ($result) )
@@ -159,7 +160,7 @@ function AddCoupon (int $dm) : string|null
             $code = substr( chunk_split ( strtoupper( substr(base_convert(sha1(uniqid((string)mt_rand()) . $db_secret), 16, 36), 0, 20) ), 4, '-' ) , 0, -1);
             if ( CheckCoupon ($code) == 0 ) break;
         }
-        if ( $timeout == 0 ) return null;
+        if ( $timeout < 0 ) return null;
         $query = "INSERT INTO coupons VALUES (NULL, '".$code."', ".intval($dm).", 0, 0, 0, '' )";
         MDBQuery ($query);
         return $code;
@@ -183,7 +184,7 @@ function ActivateCoupon (array $user, string $code) : bool
         $id = CheckCoupon ($code);
         if ( $id ) {
             $coupon = LoadCoupon ($id);
-            $query = "UPDATE coupons SET used=1, user_uni=".$GlobalUni['num'].", user_id=".$user['player_id'].", user_name='".$user['oname']."' WHERE id = $id";    // redeem coupon
+            $query = "UPDATE coupons SET used=1, user_uni=".$GlobalUni['num'].", user_id=".$user['player_id'].", user_name='".addslashes ($user['oname'])."' WHERE id = $id";    // redeem coupon
             MDBQuery ($query);
             $query = "UPDATE ".$db_prefix."users SET dm = dm + ".$coupon['amount']." WHERE player_id = " . $user['player_id'];    // add a paid DM user.
             dbquery ($query);

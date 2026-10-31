@@ -81,17 +81,14 @@ function PlayerDetails (int $player_id) : void
 
     echo "<td class=b><b>".loca("GALATOOL_MOONS")."</b>:";
     echo "<table>";
-    if ( key_exists($planet['num'], $moons) )
+    foreach ( $planets as $id=>$planet )
     {
-        foreach ( $planets as $id=>$planet )
-        {
-            if ( $moons[$planet['num']]['present'] == 1 ) {
-                echo "<tr><td align=center><img src=\"". GetPlanetSmallImage ( hostname () . "/evolution/", $moons[$planet['num']] ) . "\" height=30px><br>\n";
-                echo $moons[$planet['num']]['name'] . "</td></tr>";
-            }
-            else {
-                echo "<tr><td height=\"45px\"></td></tr>";
-            }
+        if ( key_exists($planet['num'], $moons) && $moons[$planet['num']]['present'] == 1 ) {
+            echo "<tr><td align=center><img src=\"". GetPlanetSmallImage ( hostname () . "/evolution/", $moons[$planet['num']] ) . "\" height=30px><br>\n";
+            echo $moons[$planet['num']]['name'] . "</td></tr>";
+        }
+        else {
+            echo "<tr><td height=\"45px\"></td></tr>";
         }
     }
     echo "</table></td>";
@@ -99,7 +96,7 @@ function PlayerDetails (int $player_id) : void
     echo "</tr></table>";
 }
 
-if ( file_exists('galaxy.txt') ) $last_update = filemtime ( 'galaxy.txt' );
+if ( file_exists(GALATOOL_BASE_DIR_NAME . '/galaxy.txt') ) $last_update = filemtime ( GALATOOL_BASE_DIR_NAME . '/galaxy.txt' );
 else $last_update = 0;
 
 if ( $last_update) echo "<br>".va ( loca("GALATOOL_DATE"), date ( "d.m.Y H:i:s", $last_update )) . "<br>";
@@ -127,8 +124,9 @@ foreach ( $stats as $id=>$user )
     $delta[$id] = array ();
     $delta[$id]['id'] = $id;
     $delta[$id]['name'] = $user['name'];
-    $delta[$id]['delta_score'] = $user['points'] - $old_stats[$id]['points'];
-    $delta[$id]['delta_fleet'] = $user['fpoints'] - $old_stats[$id]['fpoints'];
+    $old = $old_stats[$id] ?? array ();
+    $delta[$id]['delta_score'] = $user['points'] - ($old['points'] ?? 0);
+    $delta[$id]['delta_fleet'] = $user['fpoints'] - ($old['fpoints'] ?? 0);
     $delta[$id]['active'] = !$user['i'] && !$user['iI'] && !$user['b'] && !$user['v'];
     $delta[$id]['i'] = $user['i'];
     $delta[$id]['iI'] = $user['iI'];
@@ -181,7 +179,7 @@ $count = 0;
 foreach ( $delta as $id=>$user)
 {
     $d = $user['delta_score'];
-    if ($d == 0 || !$user['active'] )
+    if (( $d == 0 && key_exists($id, $old_stats) ) || !$user['active'] )
     {
         if (!$first) echo ", ";
         else $first = false;

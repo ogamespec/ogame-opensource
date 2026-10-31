@@ -99,8 +99,6 @@ function SendMessage (int $player_id, string $from, string $subj, string $text, 
         //$text = bb ($text);
     }
 
-    $text = addslashes($text);
-
     // Get the number of messages for the user.
     $query = "SELECT * FROM ".$db_prefix."messages WHERE owner_id = $player_id";
     $result = dbquery ($query);

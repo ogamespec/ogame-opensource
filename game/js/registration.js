@@ -90,10 +90,10 @@ function checkData() {
 	if (checkUsername.lastcheck == "0"
 		&& checkEmail.lastcheck == "0"
 		&& !checkAGB()) {
-		document.forms[0].elements[4].disabled = false;
+		document.forms[0].elements[3].disabled = false;
 		
 	} else {
-		document.forms[0].elements[4].disabled = true;
+		document.forms[0].elements[3].disabled = true;
 			//document.write(document.forms[0].elements[3].value);
 	}
 	

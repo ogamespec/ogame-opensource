@@ -43,22 +43,22 @@ loca_add ( "reg", $loca_lang, "../" );
    <td class="c" align="center" ><font color="red"><?=loca("REG_ERROR");?></font></td>
   </tr>
   <tr>
-  <th class="errormessage"><?=va(loca("REG_ERROR_21"), $_GET['arg1'], $_GET['arg2']);?></th>
+  <th class="errormessage"><?=va(loca("REG_ERROR_21"), htmlspecialchars((string)($_GET['arg1'] ?? ''), ENT_QUOTES), htmlspecialchars((string)($_GET['arg2'] ?? ''), ENT_QUOTES));?></th>
   </tr>
   <tr>
 <?php
 
-    switch ( $_GET['errorcode'] )
+    switch ( $_GET['errorcode'] ?? '' )
     {
         case '2':
 ?>
-   <th class='errormessage'><?=loca("REG_ERROR_22");?><br><?=va(loca("REG_ERROR_23"), $StartPage);?><br><?=loca("REG_ERROR_24");?></th>
+   <th class='errormessage'><?=loca("REG_ERROR_22");?><br><?=va(loca("REG_ERROR_23"), htmlspecialchars($StartPage, ENT_QUOTES));?><br><?=loca("REG_ERROR_24");?></th>
 <?php
         break;
 
         case '3':
 ?>
-   <th class='errormessage'><?=va(loca("REG_ERROR_31"), $_GET['arg3']);?></th>
+   <th class='errormessage'><?=va(loca("REG_ERROR_31"), htmlspecialchars((string)($_GET['arg3'] ?? ''), ENT_QUOTES));?></th>
 <?php
         break;
     }

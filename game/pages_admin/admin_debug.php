@@ -48,7 +48,7 @@ class Admin_Debug extends Page {
         }
         else
         {
-            $query = "SELECT * FROM ".$db_prefix."debug WHERE text LIKE '%".$filter."%' ORDER BY date DESC, error_id DESC LIMIT " . $message_limit;
+            $query = "SELECT * FROM ".$db_prefix."debug WHERE text LIKE '%".addslashes($filter)."%' ORDER BY date DESC, error_id DESC LIMIT " . $message_limit;
         }
         $this->result = dbquery ($query);
 

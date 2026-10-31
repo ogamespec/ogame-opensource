@@ -798,7 +798,6 @@ Soruyorsundur kendine bunu sana niye anlattigimi. Söyle desem: Sana burada beni
 // <a href="#" onclick="javascript:setlang('tw');"><img src="img/flags/tw.gif" alt="Taiwan" title="Taiwan"></a>                 -- TODO
 
     // Start page language
-    if ( !isset ($_COOKIE['ogamelang']) ) $LocaLang = "en";
-    else $LocaLang = $_COOKIE['ogamelang'];
-//    if ($LocaLang !== 'de' && $LocaLang !== 'en' && $LocaLang !== 'ru') $LocaLang = "en";        // restrict unsupported languages
+    $LocaLang = "en";
+    if ( isset ($_COOKIE['ogamelang']) && in_array ($_COOKIE['ogamelang'], array ('de','en','fr','it','ru','tr'), true) ) $LocaLang = $_COOKIE['ogamelang'];
 
