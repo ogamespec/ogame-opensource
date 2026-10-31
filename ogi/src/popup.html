@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>OGame Infinity 0.84</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 8px;
+            width: 330px;
+            background-color: #000000;
+            color: #ffffff;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 11px;
+        }
+        h1 {
+            font-size: 12px;
+            margin: 0 0 6px 0;
+        }
+        .ogi-popup-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #1f1f1f;
+            padding: 2px 0;
+        }
+        .ogi-popup-row span:first-child {
+            color: #9f9f9f;
+        }
+        .ogi-popup-note {
+            color: #9f9f9f;
+            margin-top: 6px;
+        }
+        .ogi-popup-steps-title {
+            margin-top: 8px;
+            color: #9f9f9f;
+        }
+        .ogi-popup-steps-list {
+            margin: 3px 0 0 14px;
+            padding: 0;
+        }
+        .ogi-popup-steps-list li {
+            padding: 1px 0;
+        }
+        button {
+            margin-top: 8px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>OGame Infinity 0.84</h1>
+    <div id="ogi-popup-status">…</div>
+    <div id="ogi-popup-steps"></div>
+    <button id="ogi-popup-refresh">Refresh</button>
+    <button id="ogi-popup-welcome">Show the first-run panel again</button>
+    <div class="ogi-popup-note" id="ogi-popup-note"></div>
+    <script src="lib/icons.js"></script>
+    <script src="lib/i18n.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

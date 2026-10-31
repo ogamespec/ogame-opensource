@@ -1,0 +1,77 @@
+{
+	"manifest_version": 3,
+	"name": "OGame Infinity 0.84",
+	"version": "1.1.0",
+	"description": "Message analyzers, spy report database and planet/player history for OGame 0.84 servers. Client-side port of the OGame Infinity extension.",
+	"author": "DeepSeek",
+	"action": {
+		"default_title": "OGame Infinity 0.84",
+		"default_popup": "src/popup.html"
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"http://*/*",
+				"https://*/*"
+			],
+			"js": [
+				"src/data/loca.js",
+				"src/data/units.js",
+				"src/lib/numbers.js",
+				"src/lib/html.js",
+				"src/lib/templates.js",
+				"src/lib/store.js",
+				"src/lib/detect.js",
+				"src/lib/status.js",
+				"src/lib/settings.js",
+				"src/lib/tooltips.js",
+				"src/lib/icons.js",
+				"src/lib/mount.js",
+				"src/lib/i18n.js",
+				"src/lib/ui.js",
+				"src/parsers/messages.js",
+				"src/parsers/spy.js",
+				"src/parsers/battle.js",
+				"src/parsers/texts.js",
+				"src/parsers/galaxy.js",
+				"src/parsers/statistics.js",
+				"src/parsers/buildpage.js",
+				"src/parsers/prodpage.js",
+				"src/parsers/imperium.js",
+				"src/parsers/overview.js",
+				"src/parsers/resbar.js",
+				"src/analyze/index.js",
+				"src/analyze/needs.js",
+				"src/analyze/recycling.js",
+				"src/analyze/plan.js",
+				"src/analyze/production.js",
+				"src/analyze/payback.js",
+				"src/analyze/farms.js",
+				"src/lib/collect.js",
+				"src/lib/panel.js",
+				"src/pages/messages.js",
+				"src/pages/bericht.js",
+				"src/pages/galaxy.js",
+				"src/pages/options.js",
+				"src/pages/statistics.js",
+				"src/pages/overview.js",
+				"src/pages/imperium.js",
+				"src/pages/fleet.js",
+				"src/pages/build.js",
+				"src/pages/prod.js",
+				"src/content.js"
+			],
+			"css": [
+				"src/style.css"
+			],
+			"run_at": "document_idle",
+			"all_frames": true
+		}
+	],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "ogi-084@ogame-opensource",
+			"strict_min_version": "115.0"
+		}
+	}
+}
