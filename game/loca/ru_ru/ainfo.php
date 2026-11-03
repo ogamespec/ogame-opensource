@@ -8,5 +8,6 @@ $LOCA["ru"]["AINFO_NAME"] = "Название:";
 $LOCA["ru"]["AINFO_MEMBERS"] = "Численность:";
 $LOCA["ru"]["AINFO_HOMEPAGE"] = "Домашняя страница";
 $LOCA["ru"]["AINFO_PREV"] = "бывш.";
+$LOCA["ru"]["AINFO_NOT_FOUND"] = "Альянс не найден";
 
 ?>

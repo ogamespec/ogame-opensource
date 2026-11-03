@@ -8,5 +8,6 @@ $LOCA["es"]["AINFO_NAME"] = "Nombre";
 $LOCA["es"]["AINFO_MEMBERS"] = "Miembros";
 $LOCA["es"]["AINFO_HOMEPAGE"] = "Sitio web";
 $LOCA["es"]["AINFO_PREV"] = "ant.";
+$LOCA["es"]["AINFO_NOT_FOUND"] = "Alianza no encontrada";
 
 ?>

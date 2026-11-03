@@ -40,6 +40,7 @@ $LOCA["jp"]["MSG_OPER_PM"] = "メッセージを書く";
 // メッセージを書く
 
 $LOCA["jp"]["WRITE_MSG_ERROR_NO_SUBJ"] = "件名がありません";
+$LOCA["jp"]["WRITE_MSG_ERROR_NO_USER"] = "そのようなプレイヤーは存在しません";
 $LOCA["jp"]["WRITE_MSG_ERROR_NO_BODY"] = "メッセージはどこですか？";
 $LOCA["jp"]["WRITE_MSG_SUCCESS"] = "メッセージが送信されました";
 $LOCA["jp"]["WRITE_MSG_WRITE"] = "メッセージを書く";

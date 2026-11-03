@@ -2,4 +2,4 @@
 
 Тестовые наборы данных для проверки боевого движка.
 
-Test datasets to validate the combat engine.
+Test datasets to validate the battle engine.

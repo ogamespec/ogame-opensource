@@ -3,3 +3,4 @@
 .phpunit.result.cache
 /html
 /latex
+audit_reports/
